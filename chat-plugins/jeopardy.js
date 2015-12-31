@@ -81,7 +81,7 @@ let JeopardyQuestions = (function () {
 			answer: this.grid[category][question].answer,
 			points: calculatePoints(category, question),
 			isDailyDouble: this.grid[category][question].isDailyDouble,
-			isRevealed: this.revealedGrid[category][question]
+			isRevealed: this.revealedGrid[category][question],
 		};
 	};
 	JeopardyQuestions.prototype.setQuestion = function (category, question, value) {
@@ -172,7 +172,7 @@ let Jeopardy = (function () {
 			isAnswered: false,
 			points: 0,
 			finalWager: -1,
-			finalAnswer: ""
+			finalAnswer: "",
 		});
 		this.room.add("User " + targetUser.name + " has joined the Jeopardy match.");
 	};
@@ -756,7 +756,7 @@ let commands = {
 		if (!jeopardy) return this.sendReply("There is no Jeopardy match currently in this room.");
 
 		jeopardy.wager(user, target, this);
-	}
+	},
 };
 
 let jeopardyRoom = Rooms.get('academics');
@@ -765,12 +765,12 @@ if (jeopardyRoom) {
 		jeopardies = jeopardyRoom.plugin.jeopardies;
 	} else {
 		jeopardyRoom.plugin = {
-			'jeopardies': jeopardies
+			'jeopardies': jeopardies,
 		};
 	}
 }
 
 exports.commands = {
 	'jp': 'jeopardy',
-	'jeopardy': commands
+	'jeopardy': commands,
 };

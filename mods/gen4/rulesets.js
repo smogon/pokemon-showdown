@@ -15,6 +15,6 @@ exports.BattleFormats = {
 					if (set.evs[stat] > 100) return ["Arceus may not have more than 100 of any EVs in Generation 4."];
 				}
 			}
-		}
-	}
+		},
+	},
 };

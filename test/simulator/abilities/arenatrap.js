@@ -18,7 +18,7 @@ describe('Arena Trap', function () {
 			{species: "Claydol", ability: 'levitate', moves: ['rest']},
 			{species: "Dusknoir", ability: 'frisk', moves: ['rest']},
 			{species: "Magnezone", ability: 'magnetpull', moves: ['magnetrise']},
-			{species: "Vaporeon", ability: 'waterabsorb', moves: ['roar']}
+			{species: "Vaporeon", ability: 'waterabsorb', moves: ['roar']},
 		]);
 		battle.choose('p2', 'switch 2');
 		battle.commitDecisions();

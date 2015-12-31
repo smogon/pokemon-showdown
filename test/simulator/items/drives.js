@@ -18,7 +18,7 @@ describe('Drives', function () {
 				battle.join('p1', 'Guest 1', 1, [{species: 'Genesect', ability: 'frisk', item: id, moves: ['recover']}]);
 				battle.join('p2', 'Guest 2', 1, [
 					{species: 'Fennekin', ability: 'magician', moves: ['mysticalfire']},
-					{species: 'Abra', ability: 'synchronize', moves: ['thief', 'trick', 'knockoff']}
+					{species: 'Abra', ability: 'synchronize', moves: ['thief', 'trick', 'knockoff']},
 				]);
 				battle.commitDecisions();
 				assert.strictEqual(battle.p1.active[0].item, id);

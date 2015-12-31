@@ -13,7 +13,7 @@ describe('Shadow Tag', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: "Wobbuffet", ability: 'shadowtag', moves: ['counter']}]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: "Tornadus", ability: 'defiant', moves: ['tailwind']},
-			{species: "Heatran", ability: 'flashfire', moves: ['roar']}
+			{species: "Heatran", ability: 'flashfire', moves: ['roar']},
 		]);
 		battle.choose('p2', 'switch 2');
 		battle.commitDecisions();
@@ -25,7 +25,7 @@ describe('Shadow Tag', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: "Wobbuffet", ability: 'shadowtag', moves: ['counter']}]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: "Tornadus", ability: 'defiant', moves: ['uturn']},
-			{species: "Heatran", ability: 'flashfire', moves: ['roar']}
+			{species: "Heatran", ability: 'flashfire', moves: ['roar']},
 		]);
 		battle.commitDecisions();
 		battle.choose('p2', 'switch 2');
@@ -37,7 +37,7 @@ describe('Shadow Tag', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: "Wobbuffet", ability: 'shadowtag', moves: ['counter']}]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: "Gothitelle", ability: 'shadowtag', moves: ['psychic']},
-			{species: "Heatran", ability: 'flashfire', moves: ['roar']}
+			{species: "Heatran", ability: 'flashfire', moves: ['roar']},
 		]);
 		battle.choose('p2', 'switch 2');
 		battle.commitDecisions();
@@ -49,7 +49,7 @@ describe('Shadow Tag', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: "Wobbuffet", ability: 'shadowtag', moves: ['counter']}]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: "Gengar", ability: 'levitate', moves: ['curse']},
-			{species: "Heatran", ability: 'flashfire', moves: ['roar']}
+			{species: "Heatran", ability: 'flashfire', moves: ['roar']},
 		]);
 		battle.choose('p2', 'switch 2');
 		battle.commitDecisions();

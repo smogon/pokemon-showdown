@@ -161,7 +161,7 @@ let LoginServer = module.exports = (function () {
 		requestOptions.method = 'post';
 		requestOptions.headers = {
 			'Content-Type': 'application/x-www-form-urlencoded',
-			'Content-Length': postData.length
+			'Content-Length': postData.length,
 		};
 
 		let req = null;

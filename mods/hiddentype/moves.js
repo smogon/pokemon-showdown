@@ -19,17 +19,17 @@ exports.BattleMovedex = {
 						type: source.baseHpType,
 						suppressed: false,
 						isAdded: typeData.isAdded,
-						isCustom: true
+						isCustom: true,
 					});
 				} else {
 					if (typeData.suppressed) continue;
 					source.typesData.push({
 						type: typeData.type,
 						suppressed: false,
-						isAdded: typeData.isAdded
+						isAdded: typeData.isAdded,
 					});
 				}
 			}
-		}
-	}
+		},
+	},
 };

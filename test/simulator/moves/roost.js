@@ -54,11 +54,11 @@ describe('Roost', function () {
 		battle = BattleEngine.Battle.construct('battle-roost-latency', 'doublescustomgame');
 		battle.join('p1', 'Guest 1', 1, [
 			{species: "Pidgeot", item: 'laggingtail', ability: 'victorystar', moves: ['aircutter']},
-			{species: "Gligar", item: 'laggingtail', ability: 'immunity', moves: ['earthquake']}
+			{species: "Gligar", item: 'laggingtail', ability: 'immunity', moves: ['earthquake']},
 		]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: "Kecleon", ability: 'colorchange', moves: ['roost']},
-			{species: "Venusaur", ability: 'chlorophyll', moves: ['earthquake']}
+			{species: "Venusaur", ability: 'chlorophyll', moves: ['earthquake']},
 		]);
 		battle.commitDecisions();
 

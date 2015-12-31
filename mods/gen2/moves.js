@@ -7,7 +7,7 @@
 exports.BattleMovedex = {
 	aeroblast: {
 		inherit: true,
-		critRatio: 3
+		critRatio: 3,
 	},
 	bellydrum: {
 		inherit: true,
@@ -21,7 +21,7 @@ exports.BattleMovedex = {
 			}
 			this.directDamage(target.maxhp / 2);
 			this.boost({atk: 12});
-		}
+		},
 	},
 	counter: {
 		inherit: true,
@@ -34,15 +34,15 @@ exports.BattleMovedex = {
 		beforeTurnCallback: function () {},
 		onTryHit: function () {},
 		effect: {},
-		priority: -1
+		priority: -1,
 	},
 	crabhammer: {
 		inherit: true,
-		critRatio: 3
+		critRatio: 3,
 	},
 	crosschop: {
 		inherit: true,
-		critRatio: 3
+		critRatio: 3,
 	},
 	dig: {
 		inherit: true,
@@ -62,8 +62,8 @@ exports.BattleMovedex = {
 				if (move.id === 'earthquake' || move.id === 'magnitude') {
 					return this.chainModify(2);
 				}
-			}
-		}
+			},
+		},
 	},
 	encore: {
 		inherit: true,
@@ -109,18 +109,18 @@ exports.BattleMovedex = {
 						pokemon.disableMove(pokemon.moveset[i].id);
 					}
 				}
-			}
-		}
+			},
+		},
 	},
 	explosion: {
 		inherit: true,
 		basePower: 250,
-		noSketch: true
+		noSketch: true,
 	},
 	flail: {
 		inherit: true,
 		noDamageVariance: true,
-		willCrit: false
+		willCrit: false,
 	},
 	fly: {
 		inherit: true,
@@ -137,8 +137,8 @@ exports.BattleMovedex = {
 				if (move.id === 'gust' || move.id === 'twister') {
 					return this.chainModify(2);
 				}
-			}
-		}
+			},
+		},
 	},
 	focusenergy: {
 		inherit: true,
@@ -149,8 +149,8 @@ exports.BattleMovedex = {
 			onModifyMovePriority: 1,
 			onModifyMove: function (move) {
 				move.critRatio += 1;
-			}
-		}
+			},
+		},
 	},
 	highjumpkick: {
 		inherit: true,
@@ -159,7 +159,7 @@ exports.BattleMovedex = {
 				let damage = this.getDamage(source, target, move, true);
 				this.damage(this.clampIntRange(damage / 8, 1), source, source, 'highjumpkick');
 			}
-		}
+		},
 	},
 	jumpkick: {
 		inherit: true,
@@ -168,11 +168,11 @@ exports.BattleMovedex = {
 				let damage = this.getDamage(source, target, move, true);
 				this.damage(this.clampIntRange(damage / 8, 1), source, source, 'jumpkick');
 			}
-		}
+		},
 	},
 	karatechop: {
 		inherit: true,
-		critRatio: 3
+		critRatio: 3,
 	},
 	leechseed: {
 		inherit: true,
@@ -192,8 +192,8 @@ exports.BattleMovedex = {
 				if (damage) {
 					this.heal(damage, leecher, pokemon);
 				}
-			}
-		}
+			},
+		},
 	},
 	lightscreen: {
 		inherit: true,
@@ -206,8 +206,8 @@ exports.BattleMovedex = {
 			onResidualOrder: 21,
 			onEnd: function (side) {
 				this.add('-sideend', side, 'move: Light Screen');
-			}
-		}
+			},
+		},
 	},
 	lowkick: {
 		inherit: true,
@@ -218,8 +218,8 @@ exports.BattleMovedex = {
 		},
 		secondary: {
 			chance: 30,
-			volatileStatus: 'flinch'
-		}
+			volatileStatus: 'flinch',
+		},
 	},
 	metronome: {
 		inherit: true,
@@ -230,7 +230,7 @@ exports.BattleMovedex = {
 				if (i !== move.id) continue;
 				if (move.isNonstandard) continue;
 				let noMetronome = {
-					counter:1, destinybond:1, detect:1, endure:1, metronome:1, mimic:1, mirrorcoat:1, protect:1, sketch:1, sleeptalk:1, struggle:1, thief:1
+					counter:1, destinybond:1, detect:1, endure:1, metronome:1, mimic:1, mirrorcoat:1, protect:1, sketch:1, sleeptalk:1, struggle:1, thief:1,
 				};
 				if (!noMetronome[move.id] && move.num < 252) {
 					moves.push(move.id);
@@ -241,7 +241,7 @@ exports.BattleMovedex = {
 			if (!randomMove) return false;
 			this.useMove(randomMove, target);
 		},
-		noSketch: true
+		noSketch: true,
 	},
 	mirrorcoat: {
 		inherit: true,
@@ -262,13 +262,13 @@ exports.BattleMovedex = {
 					this.effectData.position = source.position;
 					this.effectData.damage = 2 * damage;
 				}
-			}
+			},
 		},
-		priority: -1
+		priority: -1,
 	},
 	mimic: {
 		inherit: true,
-		noSketch: true
+		noSketch: true,
 	},
 	mirrormove: {
 		inherit: true,
@@ -280,7 +280,7 @@ exports.BattleMovedex = {
 			}
 			this.useMove(foe.lastMove, pokemon);
 		},
-		noSketch: true
+		noSketch: true,
 	},
 	moonlight: {
 		inherit: true,
@@ -292,7 +292,7 @@ exports.BattleMovedex = {
 			} else {
 				this.heal(pokemon.maxhp / 2);
 			}
-		}
+		},
 	},
 	morningsun: {
 		inherit: true,
@@ -304,7 +304,7 @@ exports.BattleMovedex = {
 			} else {
 				this.heal(pokemon.maxhp / 2);
 			}
-		}
+		},
 	},
 	outrage: {
 		inherit: true,
@@ -315,7 +315,7 @@ exports.BattleMovedex = {
 			if (pokemon.volatiles['lockedmove'] && pokemon.volatiles['lockedmove'].duration === 1) {
 				pokemon.removeVolatile('lockedmove');
 			}
-		}
+		},
 	},
 	petaldance: {
 		inherit: true,
@@ -326,36 +326,36 @@ exports.BattleMovedex = {
 			if (pokemon.volatiles['lockedmove'] && pokemon.volatiles['lockedmove'].duration === 1) {
 				pokemon.removeVolatile('lockedmove');
 			}
-		}
+		},
 	},
 	poisongas: {
 		inherit: true,
-		ignoreImmunity: false
+		ignoreImmunity: false,
 	},
 	poisonpowder: {
 		inherit: true,
-		ignoreImmunity: false
+		ignoreImmunity: false,
 	},
 	psywave: {
 		inherit: true,
 		damageCallback: function (pokemon) {
 			return this.random(1, pokemon.level + Math.floor(pokemon.level / 2));
-		}
+		},
 	},
 	rage: {
 		// TODO
 		// Rage boosts in Gens 2-4 is for the duration of Rage only
 		// Disable does not build
-		inherit: true
+		inherit: true,
 	},
 	razorleaf: {
 		inherit: true,
-		critRatio: 3
+		critRatio: 3,
 	},
 	razorwind: {
 		inherit: true,
 		accuracy: 75,
-		critRatio: 3
+		critRatio: 3,
 	},
 	reflect: {
 		inherit: true,
@@ -368,8 +368,8 @@ exports.BattleMovedex = {
 			onResidualOrder: 21,
 			onEnd: function (side) {
 				this.add('-sideend', side, 'Reflect');
-			}
-		}
+			},
+		},
 	},
 	rest: {
 		inherit: true,
@@ -382,12 +382,12 @@ exports.BattleMovedex = {
 			this.heal(target.maxhp);
 			this.add('-status', target, 'slp', '[from] move: Rest');
 		},
-		secondary: false
+		secondary: false,
 	},
 	reversal: {
 		inherit: true,
 		noDamageVariance: true,
-		willCrit: false
+		willCrit: false,
 	},
 	roar: {
 		inherit: true,
@@ -397,28 +397,28 @@ exports.BattleMovedex = {
 				if (this.queue[i].choice === 'move' || this.queue[i].choice === 'switch') return false;
 			}
 		},
-		priority: -1
+		priority: -1,
 	},
 	selfdestruct: {
 		inherit: true,
 		basePower: 200,
-		noSketch: true
+		noSketch: true,
 	},
 	sketch: {
 		inherit: true,
 		onHit: function () {
 			// Sketch always fails in Link Battles
 			this.add('-nothing');
-		}
+		},
 	},
 	skyattack: {
 		inherit: true,
 		critRatio: 1,
-		secondary: {}
+		secondary: {},
 	},
 	slash: {
 		inherit: true,
-		critRatio: 3
+		critRatio: 3,
 	},
 	sleeptalk: {
 		inherit: true,
@@ -428,7 +428,7 @@ exports.BattleMovedex = {
 				let move = pokemon.moveset[i].id;
 				let NoSleepTalk = {
 					bide:1, dig:1, fly:1, metronome:1, mirrormove:1,
-					skullbash:1, skyattack:1, sleeptalk:1, solarbeam:1, razorwind:1
+					skullbash:1, skyattack:1, sleeptalk:1, solarbeam:1, razorwind:1,
 				};
 				if (move && !NoSleepTalk[move]) {
 					moves.push(move);
@@ -439,12 +439,12 @@ exports.BattleMovedex = {
 			if (!randomMove) return false;
 			this.useMove(randomMove, pokemon);
 		},
-		noSketch: true
+		noSketch: true,
 	},
 	solarbeam: {
 		inherit: true,
 		// Rain weakening done directly in the damage formula
-		onBasePower: function () {}
+		onBasePower: function () {},
 	},
 	spikes: {
 		inherit: true,
@@ -462,8 +462,8 @@ exports.BattleMovedex = {
 				if (!pokemon.runImmunity('Ground')) return;
 				let damageAmounts = [0, 3];
 				this.damage(damageAmounts[this.effectData.layers] * pokemon.maxhp / 24);
-			}
-		}
+			},
+		},
 	},
 	substitute: {
 		inherit: true,
@@ -490,7 +490,7 @@ exports.BattleMovedex = {
 				}
 				if (move.category === 'Status') {
 					let SubBlocked = {
-						leechseed:1, lockon:1, mindreader:1, nightmare:1, painsplit:1, sketch:1
+						leechseed:1, lockon:1, mindreader:1, nightmare:1, painsplit:1, sketch:1,
 					};
 					if (move.id === 'swagger') {
 						// this is safe, move is a copy
@@ -531,8 +531,8 @@ exports.BattleMovedex = {
 			},
 			onEnd: function (target) {
 				this.add('-end', target, 'Substitute');
-			}
-		}
+			},
+		},
 	},
 	synthesis: {
 		inherit: true,
@@ -544,7 +544,7 @@ exports.BattleMovedex = {
 			} else {
 				this.heal(pokemon.maxhp / 2);
 			}
-		}
+		},
 	},
 	thrash: {
 		inherit: true,
@@ -555,15 +555,15 @@ exports.BattleMovedex = {
 			if (pokemon.volatiles['lockedmove'] && pokemon.volatiles['lockedmove'].duration === 1) {
 				pokemon.removeVolatile('lockedmove');
 			}
-		}
+		},
 	},
 	toxic: {
 		inherit: true,
-		ignoreImmunity: false
+		ignoreImmunity: false,
 	},
 	transform: {
 		inherit: true,
-		noSketch: true
+		noSketch: true,
 	},
 	triattack: {
 		inherit: true,
@@ -580,8 +580,8 @@ exports.BattleMovedex = {
 						target.trySetStatus('frz', source);
 					}
 				}
-			}
-		}
+			},
+		},
 	},
 	whirlwind: {
 		inherit: true,
@@ -591,6 +591,6 @@ exports.BattleMovedex = {
 				if (this.queue[i].choice === 'move' || this.queue[i].choice === 'switch') return false;
 			}
 		},
-		priority: -1
-	}
+		priority: -1,
+	},
 };

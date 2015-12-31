@@ -11,7 +11,7 @@ exports.BattleAbilities = {
 				target.setBoost({atk: 6});
 				this.add('-setboost', target, 'atk', 12, '[from] ability: Anger Point');
 			}
-		}
+		},
 	},
 	"flowergift": {
 		inherit: true,
@@ -24,7 +24,7 @@ exports.BattleAbilities = {
 			if (this.isWeather('sunnyday')) {
 				return this.chainModify(1.5);
 			}
-		}
+		},
 	},
 	"forewarn": {
 		inherit: true,
@@ -51,7 +51,7 @@ exports.BattleAbilities = {
 			if (!warnMoves.length) return;
 			let warnMove = warnMoves[this.random(warnMoves.length)];
 			this.add('-activate', pokemon, 'ability: Forewarn', warnMove);
-		}
+		},
 	},
 	"leafguard": {
 		inherit: true,
@@ -61,14 +61,14 @@ exports.BattleAbilities = {
 			} else if (this.isWeather('sunnyday')) {
 				return false;
 			}
-		}
+		},
 	},
 	"lightningrod": {
 		inherit: true,
 		desc: "During double battles, this Pokemon draws any single-target Electric-type attack to itself. If an opponent uses an Electric-type attack that affects multiple Pokemon, those targets will be hit. This ability does not affect Electric Hidden Power or Judgment.",
 		shortDesc: "This Pokemon draws Electric moves to itself.",
 		onTryHit: function () {},
-		rating: 0
+		rating: 0,
 	},
 	"magicguard": {
 		//desc: "",
@@ -86,7 +86,7 @@ exports.BattleAbilities = {
 		id: "magicguard",
 		name: "Magic Guard",
 		rating: 4.5,
-		num: 98
+		num: 98,
 	},
 	"minus": {
 		desc: "This Pokemon's Special Attack receives a 50% boost in double battles if its partner has the Plus ability.",
@@ -105,7 +105,7 @@ exports.BattleAbilities = {
 		id: "minus",
 		name: "Minus",
 		rating: 0,
-		num: 58
+		num: 58,
 	},
 	"normalize": {
 		inherit: true,
@@ -114,7 +114,7 @@ exports.BattleAbilities = {
 			if (move.id !== 'struggle') {
 				move.type = 'Normal';
 			}
-		}
+		},
 	},
 	"pickup": {
 		desc: "No in-battle effect.",
@@ -122,7 +122,7 @@ exports.BattleAbilities = {
 		id: "pickup",
 		name: "Pickup",
 		rating: 0,
-		num: 53
+		num: 53,
 	},
 	"plus": {
 		desc: "This Pokemon's Special Attack receives a 50% boost in double battles if its partner has the Minus ability.",
@@ -141,7 +141,7 @@ exports.BattleAbilities = {
 		id: "plus",
 		name: "Plus",
 		rating: 0,
-		num: 57
+		num: 57,
 	},
 	"pressure": {
 		desc: "If this Pokemon is the target of another Pokemon's move, that move loses one additional PP.",
@@ -156,7 +156,7 @@ exports.BattleAbilities = {
 		id: "pressure",
 		name: "Pressure",
 		rating: 1.5,
-		num: 46
+		num: 46,
 	},
 	"serenegrace": {
 		inherit: true,
@@ -167,7 +167,7 @@ exports.BattleAbilities = {
 					move.secondaries[i].chance *= 2;
 				}
 			}
-		}
+		},
 	},
 	"simple": {
 		shortDesc: "If this Pokemon's stat stages are raised or lowered, the effect is doubled instead.",
@@ -179,7 +179,7 @@ exports.BattleAbilities = {
 		id: "simple",
 		name: "Simple",
 		rating: 4,
-		num: 86
+		num: 86,
 	},
 	"stench": {
 		desc: "No in-battle effect.",
@@ -187,18 +187,18 @@ exports.BattleAbilities = {
 		id: "stench",
 		name: "Stench",
 		rating: 0,
-		num: 1
+		num: 1,
 	},
 	"stormdrain": {
 		inherit: true,
 		desc: "During double battles, this Pokemon draws any single-target Water-type attack to itself. If an opponent uses an Water-type attack that affects multiple Pokemon, those targets will be hit. This ability does not affect Water Hidden Power, Judgment or Weather Ball.",
 		shortDesc: "This Pokemon draws Water moves to itself.",
 		onTryHit: function () {},
-		rating: 0
+		rating: 0,
 	},
 	"sturdy": {
 		inherit: true,
-		onDamage: function () {}
+		onDamage: function () {},
 	},
 	"synchronize": {
 		inherit: true,
@@ -209,7 +209,7 @@ exports.BattleAbilities = {
 			if (id === 'slp' || id === 'frz') return;
 			if (id === 'tox') id = 'psn';
 			source.trySetStatus(id);
-		}
+		},
 	},
 	"trace": {
 		inherit: true,
@@ -224,7 +224,7 @@ exports.BattleAbilities = {
 			if (pokemon.setAbility(ability)) {
 				this.add('-ability', pokemon, ability, '[from] ability: Trace', '[of] ' + target);
 			}
-		}
+		},
 	},
 	"wonderguard": {
 		inherit: true,
@@ -235,6 +235,6 @@ exports.BattleAbilities = {
 				this.add('-activate', target, 'ability: Wonder Guard');
 				return null;
 			}
-		}
-	}
+		},
+	},
 };

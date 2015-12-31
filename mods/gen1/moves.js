@@ -8,7 +8,7 @@
 exports.BattleMovedex = {
 	acid: {
 		inherit: true,
-		target: "normal"
+		target: "normal",
 	},
 	amnesia: {
 		inherit: true,
@@ -16,17 +16,17 @@ exports.BattleMovedex = {
 		shortDesc: "Boosts the user's Special by 2.",
 		boosts: {
 			spd: 2,
-			spa: 2
-		}
+			spa: 2,
+		},
 	},
 	aurorabeam: {
 		inherit: true,
 		secondary: {
 			chance: 10,
 			boosts: {
-				atk: -1
-			}
-		}
+				atk: -1,
+			},
+		},
 	},
 	bide: {
 		inherit: true,
@@ -102,16 +102,16 @@ exports.BattleMovedex = {
 						pokemon.disableMove(moves[i].id);
 					}
 				}
-			}
+			},
 		},
-		type: "???" // Will look as Normal but it's STAB-less
+		type: "???", // Will look as Normal but it's STAB-less
 	},
 	bind: {
 		inherit: true,
 		ignoreImmunity: true,
 		volatileStatus: 'partiallytrapped',
 		self: {
-			volatileStatus: 'partialtrappinglock'
+			volatileStatus: 'partialtrappinglock',
 		},
 		onBeforeMove: function (pokemon, target, move) {
 			// Removes must recharge volatile even if it misses
@@ -129,24 +129,24 @@ exports.BattleMovedex = {
 					target.volatiles['partiallytrapped'].duration = 2;
 				}
 			}
-		}
+		},
 	},
 	bite: {
 		inherit: true,
 		secondary: {
 			chance: 10,
-			volatileStatus: 'flinch'
+			volatileStatus: 'flinch',
 		},
-		type: "Normal"
+		type: "Normal",
 	},
 	blizzard: {
 		inherit: true,
 		accuracy: 90,
-		target: "normal"
+		target: "normal",
 	},
 	bubble: {
 		inherit: true,
-		target: "normal"
+		target: "normal",
 	},
 	clamp: {
 		inherit: true,
@@ -154,7 +154,7 @@ exports.BattleMovedex = {
 		pp: 10,
 		volatileStatus: 'partiallytrapped',
 		self: {
-			volatileStatus: 'partialtrappinglock'
+			volatileStatus: 'partialtrappinglock',
 		},
 		onBeforeMove: function (pokemon, target, move) {
 			// Removes must recharge volatile even if it misses
@@ -172,7 +172,7 @@ exports.BattleMovedex = {
 					target.volatiles['partiallytrapped'].duration = 2;
 				}
 			}
-		}
+		},
 	},
 	conversion: {
 		inherit: true,
@@ -197,8 +197,8 @@ exports.BattleMovedex = {
 			},
 			onModifyPokemon: function (pokemon) {
 				pokemon.typesData = this.effectData.typesData;
-			}
-		}
+			},
+		},
 	},
 	counter: {
 		inherit: true,
@@ -215,11 +215,11 @@ exports.BattleMovedex = {
 			}
 			this.add('-fail', pokemon);
 			return false;
-		}
+		},
 	},
 	crabhammer: {
 		inherit: true,
-		critRatio: 2
+		critRatio: 2,
 	},
 	dig: {
 		inherit: true,
@@ -239,8 +239,8 @@ exports.BattleMovedex = {
 					this.add('-message', 'The foe ' + target.name + ' can\'t be hit underground!');
 					return null;
 				}
-			}
-		}
+			},
+		},
 	},
 	disable: {
 		inherit: true,
@@ -278,30 +278,30 @@ exports.BattleMovedex = {
 						pokemon.disableMove(moves[i].id);
 					}
 				}
-			}
-		}
+			},
+		},
 	},
 	dizzypunch: {
 		inherit: true,
 		desc: "Deals damage to the target.",
 		shortDesc: "Deals damage.",
-		secondary: false
+		secondary: false,
 	},
 	doubleedge: {
 		inherit: true,
 		basePower: 100,
 		desc: "Deals damage to the target. If the target lost HP, the user takes recoil damage equal to 25% that HP, rounded half up, but not less than 1HP.",
 		shortDesc: "Has 25% recoil.",
-		recoil: [25, 100]
+		recoil: [25, 100],
 	},
 	dragonrage: {
 		inherit: true,
-		basePower: 1
+		basePower: 1,
 	},
 	explosion: {
 		inherit: true,
 		basePower: 170,
-		target: "normal"
+		target: "normal",
 	},
 	fireblast: {
 		inherit: true,
@@ -309,8 +309,8 @@ exports.BattleMovedex = {
 		shortDesc: "30% chance to burn the target.",
 		secondary: {
 			chance: 30,
-			status: 'brn'
-		}
+			status: 'brn',
+		},
 	},
 	firespin: {
 		inherit: true,
@@ -318,7 +318,7 @@ exports.BattleMovedex = {
 		basePower: 15,
 		volatileStatus: 'partiallytrapped',
 		self: {
-			volatileStatus: 'partialtrappinglock'
+			volatileStatus: 'partialtrappinglock',
 		},
 		onBeforeMove: function (pokemon, target, move) {
 			// Removes must recharge volatile even if it misses
@@ -336,7 +336,7 @@ exports.BattleMovedex = {
 					target.volatiles['partiallytrapped'].duration = 2;
 				}
 			}
-		}
+		},
 	},
 	fly: {
 		inherit: true,
@@ -357,8 +357,8 @@ exports.BattleMovedex = {
 					this.add('-message', 'The foe ' + target.name + ' can\'t be hit while flying!');
 					return null;
 				}
-			}
-		}
+			},
+		},
 	},
 	focusenergy: {
 		inherit: true,
@@ -369,12 +369,12 @@ exports.BattleMovedex = {
 				this.add('-start', pokemon, 'move: Focus Energy');
 			},
 			// This does nothing as it's dealt with on critical hit calculation.
-			onModifyMove: function () {}
-		}
+			onModifyMove: function () {},
+		},
 	},
 	glare: {
 		inherit: true,
-		ignoreImmunity: true
+		ignoreImmunity: true,
 	},
 	growth: {
 		inherit: true,
@@ -382,12 +382,12 @@ exports.BattleMovedex = {
 		shortDesc: "Boosts the user's Special by 1.",
 		boosts: {
 			spa: 1,
-			spd: 1
-		}
+			spd: 1,
+		},
 	},
 	gust: {
 		inherit: true,
-		type: "Normal"
+		type: "Normal",
 	},
 	haze: {
 		inherit: true,
@@ -420,7 +420,7 @@ exports.BattleMovedex = {
 				}
 			}
 		},
-		target: "self"
+		target: "self",
 	},
 	highjumpkick: {
 		inherit: true,
@@ -430,12 +430,12 @@ exports.BattleMovedex = {
 			if (target.type !== 'ghost') {
 				this.directDamage(1, source);
 			}
-		}
+		},
 	},
 	hyperbeam: {
 		inherit: true,
 		desc: "Deals damage to a target. If this move is successful, the user must recharge on the following turn and cannot make a move, unless the opponent faints or a Substitute is destroyed.",
-		shortDesc: "User cannot move next turn unless target or substitute faints."
+		shortDesc: "User cannot move next turn unless target or substitute faints.",
 	},
 	jumpkick: {
 		inherit: true,
@@ -443,12 +443,12 @@ exports.BattleMovedex = {
 		shortDesc: "User takes 1 HP damage if miss.",
 		onMoveFail: function (target, source, move) {
 			this.damage(1, source);
-		}
+		},
 	},
 	karatechop: {
 		inherit: true,
 		critRatio: 2,
-		type: "Normal"
+		type: "Normal",
 	},
 	leechseed: {
 		inherit: true,
@@ -473,8 +473,8 @@ exports.BattleMovedex = {
 				let toLeech = this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1) * toxicCounter;
 				let damage = this.damage(toLeech, pokemon, leecher);
 				if (damage) this.heal(damage, leecher, pokemon);
-			}
-		}
+			},
+		},
 	},
 	lightscreen: {
 		num: 113,
@@ -498,10 +498,10 @@ exports.BattleMovedex = {
 		effect: {
 			onStart: function (pokemon) {
 				this.add('-start', pokemon, 'Light Screen');
-			}
+			},
 		},
 		target: "self",
-		type: "Psychic"
+		type: "Psychic",
 	},
 	metronome: {
 		inherit: true,
@@ -512,7 +512,7 @@ exports.BattleMovedex = {
 				if (i !== move.id) continue;
 				if (move.isNonstandard) continue;
 				let noMetronome = {
-					metronome:1, struggle:1
+					metronome:1, struggle:1,
 				};
 				if (!noMetronome[move.id] && move.num <= 165) {
 					moves.push(move.id);
@@ -525,7 +525,7 @@ exports.BattleMovedex = {
 		},
 		secondary: false,
 		target: "self",
-		type: "Normal"
+		type: "Normal",
 	},
 	mimic: {
 		inherit: true,
@@ -546,11 +546,11 @@ exports.BattleMovedex = {
 				target: move.target,
 				disabled: false,
 				used: false,
-				virtual: true
+				virtual: true,
 			};
 			source.moves[moveslot] = toId(move.name);
 			this.add('-start', source, 'Mimic', move.name);
-		}
+		},
 	},
 	mirrormove: {
 		inherit: true,
@@ -560,19 +560,19 @@ exports.BattleMovedex = {
 				return false;
 			}
 			this.useMove(foe.lastMove, pokemon);
-		}
+		},
 	},
 	nightshade: {
 		inherit: true,
 		ignoreImmunity: true,
-		basePower: 1
+		basePower: 1,
 	},
 	poisonsting: {
 		inherit: true,
 		secondary: {
 			chance: 20,
-			status: 'psn'
-		}
+			status: 'psn',
+		},
 	},
 	psychic: {
 		inherit: true,
@@ -582,18 +582,18 @@ exports.BattleMovedex = {
 			chance: 33,
 			boosts: {
 				spd: -1,
-				spa: -1
-			}
-		}
+				spa: -1,
+			},
+		},
 	},
 	psywave: {
 		inherit: true,
-		basePower: 1
+		basePower: 1,
 	},
 	rage: {
 		inherit: true,
 		self: {
-			volatileStatus: 'rage'
+			volatileStatus: 'rage',
 		},
 		effect: {
 			// Rage lock
@@ -611,18 +611,18 @@ exports.BattleMovedex = {
 				if (target.boosts.atk < 6 && move.category !== 'Status') {
 					this.boost({atk:1});
 				}
-			}
-		}
+			},
+		},
 	},
 	razorleaf: {
 		inherit: true,
 		critRatio: 2,
-		target: "normal"
+		target: "normal",
 	},
 	razorwind: {
 		inherit: true,
 		critRatio: 1,
-		target: "normal"
+		target: "normal",
 	},
 	recover: {
 		inherit: true,
@@ -633,7 +633,7 @@ exports.BattleMovedex = {
 				return false;
 			}
 			this.heal(Math.floor(target.maxhp / 2), target, target);
-		}
+		},
 	},
 	reflect: {
 		num: 115,
@@ -657,11 +657,11 @@ exports.BattleMovedex = {
 		effect: {
 			onStart: function (pokemon) {
 				this.add('-start', pokemon, 'Reflect');
-			}
+			},
 		},
 		secondary: false,
 		target: "self",
-		type: "Psychic"
+		type: "Psychic",
 	},
 	rest: {
 		inherit: true,
@@ -676,7 +676,7 @@ exports.BattleMovedex = {
 			target.statusData.startTime = 2;
 			this.heal(target.maxhp); // Aeshetic only as the healing happens after you fall asleep in-game
 			this.add('-status', target, 'slp', '[from] move: Rest');
-		}
+		},
 	},
 	roar: {
 		inherit: true,
@@ -685,33 +685,33 @@ exports.BattleMovedex = {
 		isViable: false,
 		forceSwitch: false,
 		onTryHit: function () {},
-		priority: 0
+		priority: 0,
 	},
 	rockslide: {
 		inherit: true,
 		desc: "Deals damage to a foe.",
 		shortDesc: "Deals damage.",
 		secondary: false,
-		target: "normal"
+		target: "normal",
 	},
 	rockthrow: {
 		inherit: true,
-		accuracy: 65
+		accuracy: 65,
 	},
 	sandattack: {
 		inherit: true,
 		ignoreImmunity: true,
-		type: "Normal"
+		type: "Normal",
 	},
 	seismictoss: {
 		inherit: true,
 		ignoreImmunity: true,
-		basePower: 1
+		basePower: 1,
 	},
 	selfdestruct: {
 		inherit: true,
 		basePower: 130,
-		target: "normal"
+		target: "normal",
 	},
 	skullbash: {
 		inherit: true,
@@ -727,11 +727,11 @@ exports.BattleMovedex = {
 			}
 			attacker.addVolatile('twoturnmove', defender);
 			return null;
-		}
+		},
 	},
 	slash: {
 		inherit: true,
-		critRatio: 2
+		critRatio: 2,
 	},
 	softboiled: {
 		inherit: true,
@@ -742,11 +742,11 @@ exports.BattleMovedex = {
 				return false;
 			}
 			this.heal(Math.floor(target.maxhp / 2), target, target);
-		}
+		},
 	},
 	struggle: {
 		inherit: true,
-		onModifyMove: function () {}
+		onModifyMove: function () {},
 	},
 	substitute: {
 		num: 164,
@@ -792,7 +792,7 @@ exports.BattleMovedex = {
 					// In gen 1 it only blocks:
 					// poison, confusion, secondary effect confusion, stat reducing moves and Leech Seed.
 					let SubBlocked = {
-						lockon:1, meanlook:1, mindreader:1, nightmare:1
+						lockon:1, meanlook:1, mindreader:1, nightmare:1,
 					};
 					if (move.status === 'psn' || move.status === 'tox' || (move.boosts && target !== source) || move.volatileStatus === 'confusion' || SubBlocked[move.id]) {
 						return false;
@@ -828,23 +828,23 @@ exports.BattleMovedex = {
 			},
 			onEnd: function (target) {
 				this.add('-end', target, 'Substitute');
-			}
+			},
 		},
 		secondary: false,
 		target: "self",
-		type: "Normal"
+		type: "Normal",
 	},
 	superfang: {
 		inherit: true,
 		ignoreImmunity: true,
-		basePower: 1
+		basePower: 1,
 	},
 	thunder: {
 		inherit: true,
 		secondary: {
 			chance: 10,
-			status: 'par'
-		}
+			status: 'par',
+		},
 	},
 	thunderwave: {
 		inherit: true,
@@ -854,11 +854,11 @@ exports.BattleMovedex = {
 				this.add('-immune', target, '[msg]');
 				return null;
 			}
-		}
+		},
 	},
 	triattack: {
 		inherit: true,
-		secondary: false
+		secondary: false,
 	},
 	whirlwind: {
 		inherit: true,
@@ -868,11 +868,11 @@ exports.BattleMovedex = {
 		isViable: false,
 		forceSwitch: false,
 		onTryHit: function () {},
-		priority: 0
+		priority: 0,
 	},
 	wingattack: {
 		inherit: true,
-		basePower: 35
+		basePower: 35,
 	},
 	wrap: {
 		inherit: true,
@@ -880,7 +880,7 @@ exports.BattleMovedex = {
 		ignoreImmunity: true,
 		volatileStatus: 'partiallytrapped',
 		self: {
-			volatileStatus: 'partialtrappinglock'
+			volatileStatus: 'partialtrappinglock',
 		},
 		onBeforeMove: function (pokemon, target, move) {
 			// Removes must recharge volatile even if it misses
@@ -898,6 +898,6 @@ exports.BattleMovedex = {
 					target.volatiles['partiallytrapped'].duration = 2;
 				}
 			}
-		}
-	}
+		},
+	},
 };

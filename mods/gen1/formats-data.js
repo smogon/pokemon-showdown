@@ -3,682 +3,682 @@
 exports.BattleFormatsData = {
 	bulbasaur: {
 		randomBattleMoves: ["razorleaf", "sleeppowder", "swordsdance", "bodyslam", "toxic", "leechseed"],
-		tier: "LC"
+		tier: "LC",
 	},
 	ivysaur: {
 		randomBattleMoves: ["razorleaf", "sleeppowder", "swordsdance", "bodyslam", "toxic", "leechseed"],
-		tier: "UU"
+		tier: "UU",
 	},
 	venusaur: {
 		randomBattleMoves: ["razorleaf", "sleeppowder", "swordsdance", "bodyslam", "toxic", "leechseed"],
-		tier: "UU"
+		tier: "UU",
 	},
 	charmander: {
 		randomBattleMoves: ["fireblast", "bodyslam", "swordsdance", "submission", "substitute", "slash", "seismictoss"],
-		tier: "LC"
+		tier: "LC",
 	},
 	charmeleon: {
 		randomBattleMoves: ["fireblast", "bodyslam", "swordsdance", "submission", "substitute", "slash", "seismictoss"],
-		tier: "UU"
+		tier: "UU",
 	},
 	charizard: {
 		randomBattleMoves: ["fireblast", "earthquake", "bodyslam", "swordsdance", "hyperbeam"],
-		tier: "UU"
+		tier: "UU",
 	},
 	squirtle: {
 		randomBattleMoves: ["surf", "blizzard", "bodyslam", "mimic"],
-		tier: "LC"
+		tier: "LC",
 	},
 	wartortle: {
 		randomBattleMoves: ["surf", "blizzard", "bodyslam", "mimic", "hydropump", "rest"],
-		tier: "UU"
+		tier: "UU",
 	},
 	blastoise: {
 		randomBattleMoves: ["surf", "blizzard", "bodyslam", "mimic", "hydropump", "rest", "earthquake", "hyperbeam"],
-		tier: "UU"
+		tier: "UU",
 	},
 	caterpie: {
 		randomBattleMoves:["stringshot", "tackle"],
-		tier: "LC"
+		tier: "LC",
 	},
 	metapod: {
 		randomBattleMoves:["stringshot", "tackle", "harden"],
-		tier: "UU"
+		tier: "UU",
 	},
 	butterfree: {
 		randomBattleMoves: ["psychic", "megadrain", "sleeppowder", "stunspore"],
-		tier: "NU"
+		tier: "NU",
 	},
 	weedle: {
 		randomBattleMoves: ["poisonsting", "stringshot"],
-		tier: "LC"
+		tier: "LC",
 	},
 	kakuna: {
 		randomBattleMoves: ["poisonsting", "stringshot", "harden"],
-		tier: "UU"
+		tier: "UU",
 	},
 	beedrill: {
 		randomBattleMoves: ["twineedle", "hyperbeam", "swordsdance", "agility"],
-		tier: "NU"
+		tier: "NU",
 	},
 	pidgey: {
 		randomBattleMoves: ["agility", "mimic", "mirrormove", "skyattack", "rest", "reflect", "sandattack"],
 		essentialMove: "doubleedge",
-		tier: "LC"
+		tier: "LC",
 	},
 	pidgeotto: {
 		randomBattleMoves: ["agility", "mimic", "mirrormove", "skyattack", "rest", "reflect"],
 		essentialMove: "doubleedge",
-		tier: "NFE"
+		tier: "NFE",
 	},
 	pidgeot: {
 		randomBattleMoves: ["hyperbeam", "agility", "mimic", "mirrormove", "skyattack", "rest", "reflect"],
 		essentialMove: "doubleedge",
-		tier: "NU"
+		tier: "NU",
 	},
 	rattata: {
 		randomBattleMoves: ["bodyslam", "blizzard", "bubblebeam", "thunderbolt"],
 		essentialMove: "superfang",
-		tier: "LC"
+		tier: "LC",
 	},
 	raticate: {
 		randomBattleMoves: ["bodyslam", "hyperbeam", "blizzard", "bubblebeam"],
 		essentialMove: "superfang",
-		tier: "UU"
+		tier: "UU",
 	},
 	spearow: {
 		randomBattleMoves: ["drillpeck", "doubleedge", "mirrormove", "agility"],
-		tier: "LC"
+		tier: "LC",
 	},
 	fearow: {
 		randomBattleMoves: ["drillpeck", "doubleedge", "hyperbeam", "mirrormove"],
 		eventPokemon: [
-			{"generation": 1, "level": 20, "moves":["growl", "leer", "furyattack", "payday"]}
+			{"generation": 1, "level": 20, "moves":["growl", "leer", "furyattack", "payday"]},
 		],
-		tier: "NU"
+		tier: "NU",
 	},
 	ekans: {
 		randomBattleMoves: ["glare", "earthquake", "bodyslam", "rockslide"],
-		tier: "LC"
+		tier: "LC",
 	},
 	arbok: {
 		randomBattleMoves: ["earthquake", "glare", "hyperbeam", "bodyslam", "rockslide"],
-		tier: "NU"
+		tier: "NU",
 	},
 	pikachu: {
 		randomBattleMoves: ["thunderbolt", "thunderwave", "surf", "bodyslam", "agility", "thunder"],
 		eventPokemon: [
 			{"generation": 1, "level": 5, "moves":["surf"]},
 			{"generation": 1, "level": 5, "moves":["fly"]},
-			{"generation": 1, "level": 5, "moves":["thundershock", "growl", "surf"]}
+			{"generation": 1, "level": 5, "moves":["thundershock", "growl", "surf"]},
 		],
-		tier: "LC"
+		tier: "LC",
 	},
 	raichu: {
 		randomBattleMoves: ["thunderbolt", "thunderwave", "bodyslam", "agility", "hyperbeam", "thunder"],
 		essentialMove: "surf",
-		tier: "UU"
+		tier: "UU",
 	},
 	sandshrew: {
 		randomBattleMoves: ["swordsdance", "bodyslam", "rockslide", "substitute"],
 		essentialMove: "earthquake",
-		tier: "LC"
+		tier: "LC",
 	},
 	sandslash: {
 		randomBattleMoves: ["swordsdance", "hyperbeam", "bodyslam", "rockslide", "substitute"],
 		essentialMove: "earthquake",
-		tier: "UU"
+		tier: "UU",
 	},
 	nidoranf: {
 		randomBattleMoves: ["bodyslam", "doubleedge", "leer", "rest", "substitute"],
-		tier: "LC"
+		tier: "LC",
 	},
 	nidorina: {
 		randomBattleMoves: ["bodyslam", "blizzard", "thunder", "thunderbolt", "bubblebeam", "doubleedge", "leer", "rest", "substitute"],
-		tier: "NFE"
+		tier: "NFE",
 	},
 	nidoqueen: {
 		randomBattleMoves: ["blizzard", "thunder", "thunderbolt", "bodyslam"],
 		essentialMove: "earthquake",
-		tier: "UU"
+		tier: "UU",
 	},
 	nidoranm: {
 		randomBattleMoves: ["bodyslam", "doubleedge", "leer", "rest", "substitute"],
-		tier: "LC"
+		tier: "LC",
 	},
 	nidorino: {
 		randomBattleMoves: ["bodyslam", "blizzard", "thunder", "thunderbolt", "bubblebeam", "doubleedge", "leer", "rest", "substitute"],
-		tier: "NFE"
+		tier: "NFE",
 	},
 	nidoking: {
 		randomBattleMoves: ["blizzard", "thunder", "thunderbolt", "bodyslam"],
 		essentialMove: "earthquake",
-		tier: "UU"
+		tier: "UU",
 	},
 	clefairy: {
 		randomBattleMoves: ["blizzard", "bodyslam", "thunderwave", "thunderbolt", "counter", "sing", "thunder", "metronome"],
-		tier: "LC"
+		tier: "LC",
 	},
 	clefable: {
 		randomBattleMoves: ["blizzard", "icebeam", "bodyslam", "hyperbeam", "thunderwave", "thunderbolt", "counter", "sing", "thunder"],
-		tier: "UU"
+		tier: "UU",
 	},
 	vulpix: {
 		randomBattleMoves: ["bodyslam", "confuseray", "reflect", "toxic"],
 		essentialMove: "fireblast",
-		tier: "LC"
+		tier: "LC",
 	},
 	ninetales: {
 		randomBattleMoves: ["bodyslam", "confuseray", "doubleedge", "hyperbeam", "reflect", "toxic"],
 		essentialMove: "fireblast",
-		tier: "UU"
+		tier: "UU",
 	},
 	jigglypuff: {
 		randomBattleMoves: ["thunderwave", "bodyslam", "doubleedge", "bubblebeam", "sing", "disable", "defensecurl"],
-		tier: "LC"
+		tier: "LC",
 	},
 	wigglytuff: {
 		randomBattleMoves: ["thunderwave", "bodyslam", "doubleedge", "hyperbeam", "blizzard", "bubblebeam", "sing"],
-		tier: "NU"
+		tier: "NU",
 	},
 	zubat: {
 		randomBattleMoves: ["screech", "confuseray", "doubleedge", "supersonic", "megadrain", "leechlife", "toxic"],
-		tier: "LC"
+		tier: "LC",
 	},
 	golbat: {
 		randomBattleMoves: ["screech", "confuseray", "doubleedge", "hyperbeam", "megadrain"],
-		tier: "NU"
+		tier: "NU",
 	},
 	oddish: {
 		randomBattleMoves: ["sleeppowder", "swordsdance", "doubleedge", "megadrain", "toxic"],
-		tier: "LC"
+		tier: "LC",
 	},
 	gloom: {
 		randomBattleMoves: ["sleeppowder", "swordsdance", "doubleedge", "megadrain"],
-		tier: "NFE"
+		tier: "NFE",
 	},
 	vileplume: {
 		randomBattleMoves: ["sleeppowder", "swordsdance", "bodyslam", "megadrain"],
-		tier: "NU"
+		tier: "NU",
 	},
 	paras: {
 		randomBattleMoves: ["stunspore", "swordsdance", "spore", "slash", "megadrain", "doubleedge", "growth", "toxic"],
 		essentialMove: "bodyslam",
-		tier: "LC"
+		tier: "LC",
 	},
 	parasect: {
 		randomBattleMoves: ["stunspore", "swordsdance", "spore", "slash", "megadrain", "doubleedge", "growth", "hyperbeam", "toxic"],
 		essentialMove: "bodyslam",
-		tier: "NU"
+		tier: "NU",
 	},
 	venonat: {
 		randomBattleMoves: ["psychic", "megadrain", "sleeppowder", "stunspore", "toxic"],
-		tier: "LC"
+		tier: "LC",
 	},
 	venomoth: {
 		randomBattleMoves: ["psychic", "megadrain", "sleeppowder", "stunspore"],
-		tier: "UU"
+		tier: "UU",
 	},
 	diglett: {
 		randomBattleMoves: ["slash", "sandattack", "mimic", "substitute"],
 		essentialMove: "earthquake",
-		tier: "LC"
+		tier: "LC",
 	},
 	dugtrio: {
 		randomBattleMoves: ["slash", "sandattack", "mimic", "substitute"],
 		essentialMove: "earthquake",
-		tier: "UU"
+		tier: "UU",
 	},
 	meowth: {
 		randomBattleMoves: ["bubblebeam", "bodyslam", "screech", "thunderbolt", "payday"],
 		essentialMove: "slash",
-		tier: "LC"
+		tier: "LC",
 	},
 	persian: {
 		randomBattleMoves: ["bubblebeam", "hyperbeam", "bodyslam", "screech", "thunderbolt"],
 		essentialMove: "slash",
-		tier: "OU"
+		tier: "OU",
 	},
 	psyduck: {
 		randomBattleMoves: ["blizzard", "icebeam", "surf", "bodyslam", "rest"],
 		essentialMove: "amnesia",
 		eventPokemon: [
-			{"generation": 1, "level": 15, "moves":["scratch", "amnesia"]}
+			{"generation": 1, "level": 15, "moves":["scratch", "amnesia"]},
 		],
-		tier: "LC"
+		tier: "LC",
 	},
 	golduck: {
 		randomBattleMoves: ["blizzard", "icebeam", "surf", "bodyslam", "rest"],
 		essentialMove: "amnesia",
-		tier: "UU"
+		tier: "UU",
 	},
 	mankey: {
 		randomBattleMoves: ["submission", "rockslide", "bodyslam", "megakick"],
-		tier: "LC"
+		tier: "LC",
 	},
 	primeape: {
 		randomBattleMoves: ["submission", "rockslide", "bodyslam", "hyperbeam", "megakick"],
-		tier: "NU"
+		tier: "NU",
 	},
 	growlithe: {
 		randomBattleMoves: ["fireblast", "bodyslam", "mimic", "reflect"],
-		tier: "LC"
+		tier: "LC",
 	},
 	arcanine: {
 		randomBattleMoves: ["fireblast", "bodyslam", "hyperbeam", "mimic", "reflect"],
-		tier: "UU"
+		tier: "UU",
 	},
 	poliwag: {
 		randomBattleMoves: ["blizzard", "hypnosis", "surf", "psychic"],
 		essentialMove: "amnesia",
-		tier: "LC"
+		tier: "LC",
 	},
 	poliwhirl: {
 		randomBattleMoves: ["blizzard", "hypnosis", "surf", "psychic"],
 		essentialMove: "amnesia",
-		tier: "UU"
+		tier: "UU",
 	},
 	poliwrath: {
 		randomBattleMoves: ["blizzard", "hypnosis", "surf", "submission"],
 		essentialMove: "amnesia",
-		tier: "UU"
+		tier: "UU",
 	},
 	abra: {
 		randomBattleMoves: ["psychic", "thunderwave", "reflect", "seismictoss"],
-		tier: "LC"
+		tier: "LC",
 	},
 	kadabra: {
 		randomBattleMoves: ["recover", "thunderwave", "reflect", "seismictoss"],
 		essentialMove: "psychic",
-		tier: "UU"
+		tier: "UU",
 	},
 	alakazam: {
 		randomBattleMoves: ["recover", "thunderwave", "reflect", "seismictoss"],
 		essentialMove: "psychic",
-		tier: "OU"
+		tier: "OU",
 	},
 	machop: {
 		randomBattleMoves: ["bodyslam", "earthquake", "submission", "counter", "doubleedge", "leer", "megakick", "rockslide"],
-		tier: "LC"
+		tier: "LC",
 	},
 	machoke: {
 		randomBattleMoves: ["bodyslam", "earthquake", "submission", "counter", "doubleedge", "leer", "megakick", "rockslide"],
-		tier: "UU"
+		tier: "UU",
 	},
 	machamp: {
 		randomBattleMoves: ["bodyslam", "earthquake", "hyperbeam", "submission", "rockslide"],
-		tier: "NU"
+		tier: "NU",
 	},
 	bellsprout: {
 		randomBattleMoves: ["razorleaf", "swordsdance", "bodyslam", "toxic", "stunspore"],
 		essentialMove: "sleeppowder",
-		tier: "LC"
+		tier: "LC",
 	},
 	weepinbell: {
 		randomBattleMoves: ["sleeppowder", "swordsdance", "bodyslam", "toxic", "stunspore"],
 		essentialMove: "razorleaf",
-		tier: "UU"
+		tier: "UU",
 	},
 	victreebel: {
 		randomBattleMoves: ["sleeppowder", "swordsdance", "bodyslam", "hyperbeam", "stunspore"],
 		essentialMove: "razorleaf",
-		tier: "UU"
+		tier: "UU",
 	},
 	tentacool: {
 		randomBattleMoves: ["swordsdance", "doubleedge", "blizzard", "hydropump", "mimic", "barrier"],
-		tier: "LC"
+		tier: "LC",
 	},
 	tentacruel: {
 		randomBattleMoves: ["swordsdance", "blizzard", "hyperbeam", "hydropump", "surf"],
-		tier: "UU"
+		tier: "UU",
 	},
 	geodude: {
 		randomBattleMoves: ["bodyslam", "earthquake", "rockslide", "explosion"],
-		tier: "LC"
+		tier: "LC",
 	},
 	graveler: {
 		randomBattleMoves: ["bodyslam", "earthquake", "rockslide", "explosion"],
-		tier: "UU"
+		tier: "UU",
 	},
 	golem: {
 		randomBattleMoves: ["explosion", "bodyslam", "earthquake", "rockslide"],
-		tier: "OU"
+		tier: "OU",
 	},
 	ponyta: {
 		randomBattleMoves: ["fireblast", "agility", "bodyslam", "growl", "reflect", "substitute", "toxic"],
-		tier: "LC"
+		tier: "LC",
 	},
 	rapidash: {
 		randomBattleMoves: ["agility", "bodyslam", "growl", "hyperbeam", "reflect", "substitute", "toxic"],
 		essentialMove: "fireblast",
 		eventPokemon: [
-			{"generation": 1, "level": 40, "moves":["ember", "firespin", "stomp", "payday"]}
+			{"generation": 1, "level": 40, "moves":["ember", "firespin", "stomp", "payday"]},
 		],
-		tier: "NU"
+		tier: "NU",
 	},
 	slowpoke: {
 		randomBattleMoves: ["amnesia", "surf", "thunderwave", "rest"],
-		tier: "LC"
+		tier: "LC",
 	},
 	slowbro: {
 		randomBattleMoves: ["amnesia", "surf", "thunderwave", "rest"],
-		tier: "OU"
+		tier: "OU",
 	},
 	magnemite: {
 		randomBattleMoves: ["thunderwave", "thunder", "thunderbolt", "mimic", "doubleedge"],
-		tier: "LC"
+		tier: "LC",
 	},
 	magneton: {
 		randomBattleMoves: ["thunderwave", "mimic", "doubleedge", "hyperbeam"],
 		essentialMove: "thunderbolt",
-		tier: "NU"
+		tier: "NU",
 	},
 	farfetchd: {
 		randomBattleMoves: ["sandattack", "substitute", "swordsdance", "bodyslam", "toxic"],
 		essentialMove: "slash",
-		tier: "NU"
+		tier: "NU",
 	},
 	doduo: {
 		randomBattleMoves: ["drillpeck", "bodyslam", "mimic", "doubleedge", "agility", "growl", "reflect"],
-		tier: "LC"
+		tier: "LC",
 	},
 	dodrio: {
 		randomBattleMoves: ["drillpeck", "bodyslam", "hyperbeam", "mimic"],
-		tier: "UU"
+		tier: "UU",
 	},
 	seel: {
 		randomBattleMoves: ["surf", "blizzard", "bodyslam", "mimic"],
-		tier: "LC"
+		tier: "LC",
 	},
 	dewgong: {
 		randomBattleMoves: ["surf", "blizzard", "bodyslam", "mimic"],
-		tier: "UU"
+		tier: "UU",
 	},
 	grimer: {
 		randomBattleMoves: ["sludge", "bodyslam", "megadrain", "screech"],
 		essentialMove: "explosion",
-		tier: "LC"
+		tier: "LC",
 	},
 	muk: {
 		randomBattleMoves: ["sludge", "bodyslam", "megadrain", "screech"],
 		essentialMove: "explosion",
-		tier: "NU"
+		tier: "NU",
 	},
 	shellder: {
 		randomBattleMoves: ["surf", "blizzard", "icebeam", "explosion", "withdraw", "toxic", "supersonic"],
-		tier: "LC"
+		tier: "LC",
 	},
 	cloyster: {
 		randomBattleMoves: ["surf", "blizzard", "icebeam", "hyperbeam", "explosion", "toxic"],
-		tier: "OU"
+		tier: "OU",
 	},
 	gastly: {
 		randomBattleMoves: ["explosion", "thunderbolt", "megadrain", "psychic", "confuseray"],
 		essentialMove: "hypnosis",
-		tier: "LC"
+		tier: "LC",
 	},
 	haunter: {
 		randomBattleMoves: ["explosion", "thunderbolt", "megadrain", "psychic", "confuseray"],
 		essentialMove: "hypnosis",
-		tier: "UU"
+		tier: "UU",
 	},
 	gengar: {
 		randomBattleMoves: ["explosion", "thunderbolt", "megadrain", "psychic"],
 		essentialMove: "hypnosis",
-		tier: "OU"
+		tier: "OU",
 	},
 	onix: {
 		randomBattleMoves: ["earthquake", "explosion", "rockslide", "toxic"],
-		tier: "NU"
+		tier: "NU",
 	},
 	drowzee: {
 		randomBattleMoves: ["hypnosis", "psychic", "thunderwave", "counter", "rest"],
-		tier: "LC"
+		tier: "LC",
 	},
 	hypno: {
 		randomBattleMoves: ["hypnosis", "thunderwave", "counter", "rest"],
 		essentialMove: "psychic",
-		tier: "UU"
+		tier: "UU",
 	},
 	krabby: {
 		randomBattleMoves: ["bodyslam", "crabhammer", "swordsdance", "blizzard"],
-		tier: "LC"
+		tier: "LC",
 	},
 	kingler: {
 		randomBattleMoves: ["bodyslam", "hyperbeam", "swordsdance", "blizzard"],
 		essentialMove: "crabhammer",
-		tier: "UU"
+		tier: "UU",
 	},
 	voltorb: {
 		randomBattleMoves: ["thunder", "thunderbolt", "thunderwave", "screech", "flash", "reflect"],
 		essentialMove: "explosion",
-		tier: "LC"
+		tier: "LC",
 	},
 	electrode: {
 		randomBattleMoves: ["thunder", "thunderbolt", "thunderwave", "screech", "flash", "reflect"],
 		essentialMove: "explosion",
-		tier: "NU"
+		tier: "NU",
 	},
 	exeggcute: {
 		randomBattleMoves: ["sleeppowder", "explosion", "eggbomb", "megadrain", "stunspore"],
 		essentialMove: "psychic",
-		tier: "LC"
+		tier: "LC",
 	},
 	exeggutor: {
 		randomBattleMoves: ["psychic", "explosion", "eggbomb", "hyperbeam", "megadrain", "stunspore"],
 		essentialMove: "sleeppowder",
-		tier: "OU"
+		tier: "OU",
 	},
 	cubone: {
 		randomBattleMoves: ["earthquake", "blizzard", "bodyslam", "seismictoss"],
-		tier: "LC"
+		tier: "LC",
 	},
 	marowak: {
 		randomBattleMoves: ["earthquake", "blizzard", "bodyslam", "seismictoss"],
-		tier: "NU"
+		tier: "NU",
 	},
 	hitmonlee: {
 		randomBattleMoves: ["bodyslam", "counter", "highjumpkick", "mimic", "seismictoss", "substitute"],
-		tier: "NU"
+		tier: "NU",
 	},
 	hitmonchan: {
 		randomBattleMoves: ["bodyslam", "submission", "seismictoss", "counter"],
-		tier: "NU"
+		tier: "NU",
 	},
 	lickitung: {
 		randomBattleMoves: ["swordsdance", "earthquake", "hyperbeam", "bodyslam"],
-		tier: "NU"
+		tier: "NU",
 	},
 	koffing: {
 		randomBattleMoves: ["sludge", "thunder", "thunderbolt", "fireblast"],
 		essentialMove: "explosion",
-		tier: "LC"
+		tier: "LC",
 	},
 	weezing: {
 		randomBattleMoves: ["sludge", "thunder", "thunderbolt", "fireblast"],
 		essentialMove: "explosion",
-		tier: "NU"
+		tier: "NU",
 	},
 	rhyhorn: {
 		randomBattleMoves: ["earthquake", "rockslide", "substitute", "bodyslam"],
-		tier: "LC"
+		tier: "LC",
 	},
 	rhydon: {
 		randomBattleMoves: ["earthquake", "rockslide", "substitute", "bodyslam"],
-		tier: "OU"
+		tier: "OU",
 	},
 	chansey: {
 		randomBattleMoves: ["icebeam", "counter", "thunderwave", "thunderbolt", "reflect"],
 		essentialMove: "softboiled",
-		tier: "OU"
+		tier: "OU",
 	},
 	tangela: {
 		randomBattleMoves: ["sleeppowder", "hyperbeam", "stunspore", "megadrain", "growth", "swordsdance", "bodyslam"],
-		tier: "UU"
+		tier: "UU",
 	},
 	kangaskhan: {
 		randomBattleMoves: ["bodyslam", "hyperbeam", "counter", "earthquake", "surf"],
-		tier: "UU"
+		tier: "UU",
 	},
 	horsea: {
 		randomBattleMoves: ["smokescreen", "hydropump", "surf", "blizzard", "mimic"],
-		tier: "LC"
+		tier: "LC",
 	},
 	seadra: {
 		randomBattleMoves: ["smokescreen", "hydropump", "surf", "blizzard", "mimic"],
-		tier: "NU"
+		tier: "NU",
 	},
 	goldeen: {
 		randomBattleMoves: ["surf", "blizzard", "agility", "doubleedge", "toxic", "supersonic"],
-		tier: "LC"
+		tier: "LC",
 	},
 	seaking: {
 		randomBattleMoves: ["surf", "blizzard", "hyperbeam", "doubleedge"],
-		tier: "NU"
+		tier: "NU",
 	},
 	staryu: {
 		randomBattleMoves: ["blizzard", "thunderbolt", "thunderwave", "surf"],
 		essentialMove: "recover",
-		tier: "LC"
+		tier: "LC",
 	},
 	starmie: {
 		randomBattleMoves: ["blizzard", "thunderbolt", "thunderwave", "surf"],
 		essentialMove: "recover",
-		tier: "OU"
+		tier: "OU",
 	},
 	mrmime: {
 		randomBattleMoves: ["psychic", "thunderwave", "thunderbolt", "seismictoss"],
-		tier: "UU"
+		tier: "UU",
 	},
 	scyther: {
 		randomBattleMoves: ["slash", "swordsdance", "agility", "hyperbeam"],
-		tier: "NU"
+		tier: "NU",
 	},
 	jynx: {
 		randomBattleMoves: ["lovelykiss", "blizzard", "psychic", "mimic"],
-		tier: "OU"
+		tier: "OU",
 	},
 	electabuzz: {
 		randomBattleMoves: ["thunderbolt", "thunderwave", "psychic", "seismictoss"],
-		tier: "UU"
+		tier: "UU",
 	},
 	magmar: {
 		randomBattleMoves: ["confuseray", "fireblast", "bodyslam", "hyperbeam", "mimic"],
-		tier: "NU"
+		tier: "NU",
 	},
 	pinsir: {
 		randomBattleMoves: ["swordsdance", "hyperbeam", "bodyslam", "submission"],
-		tier: "UU"
+		tier: "UU",
 	},
 	tauros: {
 		randomBattleMoves: ["bodyslam", "hyperbeam", "earthquake", "blizzard"],
-		tier: "OU"
+		tier: "OU",
 	},
 	magikarp: {
 		randomBattleMoves: ["splash", "dragonrage"],
 		eventPokemon: [
-			{"generation": 1, "level": 5, "moves":["dragonrage"]}
+			{"generation": 1, "level": 5, "moves":["dragonrage"]},
 		],
-		tier: "LC"
+		tier: "LC",
 	},
 	gyarados: {
 		randomBattleMoves: ["blizzard", "surf", "thunderbolt", "bodyslam", "hyperbeam"],
-		tier: "UU"
+		tier: "UU",
 	},
 	lapras: {
 		randomBattleMoves: ["confuseray", "blizzard", "icebeam", "rest", "thunderbolt", "bodyslam"],
-		tier: "OU"
+		tier: "OU",
 	},
 	ditto: {
 		randomBattleMoves: ["transform"],
-		tier: "NU"
+		tier: "NU",
 	},
 	eevee: {
 		randomBattleMoves: ["doubleedge", "growl", "mimic", "reflect", "sandattack", "tailwhip", "toxic"],
 		essentialMove: "bodyslam",
-		tier: "LC"
+		tier: "LC",
 	},
 	vaporeon: {
 		randomBattleMoves: ["rest", "hydropump", "surf", "blizzard", "bodyslam", "mimic"],
-		tier: "UU"
+		tier: "UU",
 	},
 	jolteon: {
 		randomBattleMoves: ["thunderwave", "pinmissile", "bodyslam", "doublekick", "sandattack"],
 		essentialMove: "thunderbolt",
-		tier: "OU"
+		tier: "OU",
 	},
 	flareon: {
 		randomBattleMoves: ["fireblast", "bodyslam", "hyperbeam", "quickattack"],
-		tier: "NU"
+		tier: "NU",
 	},
 	porygon: {
 		randomBattleMoves: ["thunderwave", "thunderbolt", "blizzard", "icebeam", "doubleedge", "hyperbeam", "sharpen", "psychic", "agility", "triattack"],
 		essentialMove: "recover",
-		tier: "UU"
+		tier: "UU",
 	},
 	omanyte: {
 		randomBattleMoves: ["hydropump", "surf", "mimic", "rest", "seismictoss"],
 		essentialMove: "blizzard",
-		tier: "LC"
+		tier: "LC",
 	},
 	omastar: {
 		randomBattleMoves: ["hydropump", "surf", "mimic", "rest", "seismictoss"],
 		essentialMove: "blizzard",
-		tier: "NU"
+		tier: "NU",
 	},
 	kabuto: {
 		randomBattleMoves: ["swordsdance", "bodyslam", "surf", "toxic", "harden", "slash"],
-		tier: "LC"
+		tier: "LC",
 	},
 	kabutops: {
 		randomBattleMoves: ["swordsdance", "bodyslam", "surf", "hyperbeam"],
-		tier: "UU"
+		tier: "UU",
 	},
 	aerodactyl: {
 		randomBattleMoves: ["skyattack", "reflect", "doubleedge", "hyperbeam"],
-		tier: "NU"
+		tier: "NU",
 	},
 	snorlax: {
 		randomBattleMoves: ["blizzard", "icebeam", "bodyslam", "thunderbolt", "rest", "selfdestruct", "hyperbeam", "surf", "earthquake"],
 		essentialMove: "amnesia",
-		tier: "OU"
+		tier: "OU",
 	},
 	articuno: {
 		randomBattleMoves: ["blizzard", "rest", "reflect", "icebeam", "mimic"],
-		tier: "OU"
+		tier: "OU",
 	},
 	zapdos: {
 		randomBattleMoves: ["thunderbolt", "drillpeck", "thunderwave", "agility"],
-		tier: "OU"
+		tier: "OU",
 	},
 	moltres: {
 		randomBattleMoves: ["agility", "hyperbeam", "reflect", "skyattack", "substitute", "toxic"],
 		essentialMove: "fireblast",
-		tier: "UU"
+		tier: "UU",
 	},
 	dratini: {
 		randomBattleMoves: ["agility", "hyperbeam", "blizzard", "surf", "bodyslam", "icebeam", "substitute", "thunder", "thunderwave", "thunderbolt"],
-		tier: "LC"
+		tier: "LC",
 	},
 	dragonair: {
 		randomBattleMoves: ["agility", "hyperbeam", "blizzard", "surf", "bodyslam", "icebeam", "substitute", "thunder", "thunderwave", "thunderbolt"],
-		tier: "UU"
+		tier: "UU",
 	},
 	dragonite: {
 		randomBattleMoves: ["agility", "hyperbeam", "blizzard", "surf", "bodyslam", "icebeam", "substitute", "thunder", "thunderwave", "thunderbolt"],
-		tier: "OU"
+		tier: "OU",
 	},
 	mewtwo: {
 		randomBattleMoves: ["recover", "blizzard", "thunderbolt", "amnesia", "icebeam", "rest", "barrier", "thunderwave", "bodyslam", "hyperbeam"],
 		essentialMove: "psychic",
-		tier: "Uber"
+		tier: "Uber",
 	},
 	mew: {
 		randomBattleMoves: ["thunderwave", "horndrill", "fissure", "softboiled", "thunderbolt", "blizzard", "psychic", "swordsdance", "earthquake", "hyperbeam", "swift", "explosion"],
 		eventPokemon: [
-			{"generation": 1, "level": 5, "moves":["pound"]}
+			{"generation": 1, "level": 5, "moves":["pound"]},
 		],
 		eventOnly: true,
-		tier: "Uber"
-	}
+		tier: "Uber",
+	},
 };

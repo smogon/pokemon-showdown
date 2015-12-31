@@ -5,7 +5,7 @@ let battle;
 
 let adderMoves = [
 	{name: 'Trick-or-Treat', type: 'Ghost'},
-	{name: 'Forest\'s Curse', type: 'Grass'}
+	{name: 'Forest\'s Curse', type: 'Grass'},
 ];
 
 describe('Type addition', function () {

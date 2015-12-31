@@ -16,7 +16,7 @@ describe('Most status moves', function () {
 			{species: "Dusknoir", ability: 'frisk', moves: ['shadowpunch']},
 			{species: "Slaking", ability: 'truant', moves: ['shadowclaw']},
 			{species: "Tornadus", ability: 'prankster', moves: ['tailwind']},
-			{species: "Unown", ability: 'levitate', moves: ['hiddenpower']}
+			{species: "Unown", ability: 'levitate', moves: ['hiddenpower']},
 		]);
 		battle.commitDecisions();
 		assert.strictEqual(battle.p2.active[0].item, '');
@@ -43,7 +43,7 @@ describe('Most status moves', function () {
 			{species: "Zapdos", ability: 'pressure', moves: ['charge']},
 			{species: "Emboar", ability: 'blaze', moves: ['sleeptalk']},
 			{species: "Muk", ability: 'stench', moves: ['shadowsneak']},
-			{species: "Aron", ability: 'sturdy', moves: ['magnetrise']}
+			{species: "Aron", ability: 'sturdy', moves: ['magnetrise']},
 		]);
 		battle.commitDecisions();
 		assert.strictEqual(battle.p2.active[0].status, '');

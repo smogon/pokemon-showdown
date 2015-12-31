@@ -79,10 +79,10 @@ module.exports = function (context) {
 			if (node.consequent.loc.end.line >= node.alternate.loc.start.line - 1) {
 				context.report({
 					node: node.alternate,
-					message: "Nested conditional must span across multiple lines."
+					message: "Nested conditional must span across multiple lines.",
 				});
 			}
-		}
+		},
 	};
 };
 

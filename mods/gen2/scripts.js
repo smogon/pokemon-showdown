@@ -57,7 +57,7 @@ exports.BattleScripts = {
 			}
 
 			return stat;
-		}
+		},
 	},
 	// Battle scripts.
 	runMove: function (move, pokemon, target, sourceEffect) {
@@ -290,7 +290,7 @@ exports.BattleScripts = {
 				basePower: move,
 				type: '???',
 				category: 'Physical',
-				flags: {}
+				flags: {},
 			};
 		}
 
@@ -635,11 +635,11 @@ exports.BattleScripts = {
 
 		// Moves that boost Attack:
 		let PhysicalSetup = {
-			swordsdance:1, sharpen:1
+			swordsdance:1, sharpen:1,
 		};
 		// Moves which boost Special Attack:
 		let SpecialSetup = {
-			amnesia:1, growth:1
+			amnesia:1, growth:1,
 		};
 
 		do {
@@ -819,13 +819,13 @@ exports.BattleScripts = {
 			UU: 85,
 			BL: 83,
 			OU: 79,
-			Uber: 74
+			Uber: 74,
 		};
 		// Hollistic judgment.
 		let customScale = {
 			Caterpie: 99, Kakuna: 99, Magikarp: 99, Metapod: 99, Weedle: 99, Pichu: 99, Smoochum: 99,
 			Clefairy: 95, "Farfetch'd": 99, Igglybuff: 99, Jigglypuff: 99, Ditto: 99, Mewtwo: 70,
-			Dragonite: 85, Cloyster: 83, Staryu: 90
+			Dragonite: 85, Cloyster: 83, Staryu: 90,
 		};
 		let level = levelScale[template.tier] || 90;
 		if (customScale[template.name]) level = customScale[template.name];
@@ -839,7 +839,7 @@ exports.BattleScripts = {
 			item: item,
 			level: level,
 			shiny: false,
-			gender: 'M'
+			gender: 'M',
 		};
-	}
+	},
 };

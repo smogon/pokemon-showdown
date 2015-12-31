@@ -77,7 +77,7 @@ exports.BattleFormats = {
 			set.shiny = false;
 
 			return problems;
-		}
+		},
 	},
 	standard: {
 		effectType: 'Banlist',
@@ -90,7 +90,7 @@ exports.BattleFormats = {
 			'Eevee + Tackle + Growl',
 			'Vaporeon + Tackle + Growl',
 			'Jolteon + Tackle + Growl', 'Jolteon + Focus Energy + Thunder Shock',
-			'Flareon + Tackle + Growl', 'Flareon + Focus Energy + Ember'
+			'Flareon + Tackle + Growl', 'Flareon + Focus Energy + Ember',
 		],
 		onValidateSet: function (set) {
 			// limit one of each move in Standard
@@ -106,6 +106,6 @@ exports.BattleFormats = {
 				}
 			}
 			set.moves = moves;
-		}
-	}
+		},
+	},
 };

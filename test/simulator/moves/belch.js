@@ -41,7 +41,7 @@ describe('Belch', function () {
 		battle = BattleEngine.Battle.construct();
 		battle.join('p1', 'Guest 1', 1, [
 			{species: 'Swalot', ability: 'gluttony', item: 'lumberry', moves: ['belch', 'uturn']},
-			{species: 'Swalot', ability: 'gluttony', moves: ['toxic']}
+			{species: 'Swalot', ability: 'gluttony', moves: ['toxic']},
 		]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Registeel', ability: 'prankster', moves: ['rest', 'thunderwave']}]);
 		battle.choose('p2', 'move 2');

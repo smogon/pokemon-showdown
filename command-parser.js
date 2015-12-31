@@ -62,7 +62,7 @@ fs.readdirSync(path.resolve(__dirname, 'chat-plugins')).forEach(function (file) 
 
 let modlog = exports.modlog = {
 	lobby: fs.createWriteStream(path.resolve(__dirname, 'logs/modlog/modlog_lobby.txt'), {flags:'a+'}),
-	battle: fs.createWriteStream(path.resolve(__dirname, 'logs/modlog/modlog_battle.txt'), {flags:'a+'})
+	battle: fs.createWriteStream(path.resolve(__dirname, 'logs/modlog/modlog_battle.txt'), {flags:'a+'}),
 };
 
 let writeModlog = exports.writeModlog = function (roomid, text) {
@@ -351,7 +351,7 @@ let Context = exports.Context = (function () {
 			'imageshack.us': 1,
 			'deviantart.net': 1,
 			'd.pr': 1,
-			'pokefans.net': 1
+			'pokefans.net': 1,
 		};
 		if (domain in approvedDomains) {
 			return '//' + uri;
@@ -551,7 +551,7 @@ let parse = exports.parse = function (message, room, user, connection, levelsDee
 
 	let context = new Context({
 		target: target, room: room, user: user, connection: connection, cmd: cmd, message: message,
-		namespaces: namespaces, cmdToken: cmdToken, levelsDeep: levelsDeep
+		namespaces: namespaces, cmdToken: cmdToken, levelsDeep: levelsDeep,
 	});
 
 	if (commandHandler) {

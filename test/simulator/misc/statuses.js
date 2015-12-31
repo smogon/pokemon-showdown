@@ -75,7 +75,7 @@ describe('Toxic Poison', function () {
 		battle = BattleEngine.Battle.construct();
 		battle.join('p1', 'Guest 1', 1, [
 			{species: 'Chansey', ability: 'serenegrace', moves: ['counter']},
-			{species: 'Snorlax', ability: 'immunity', moves: ['curse']}
+			{species: 'Snorlax', ability: 'immunity', moves: ['curse']},
 		]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Crobat', ability: 'infiltrator', moves: ['toxic', 'whirlwind']}]);
 		for (let i = 0; i < 4; i++) {

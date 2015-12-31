@@ -65,7 +65,7 @@ exports.start = function (prefix, suffix, evalFunction) {
 				} catch (e) {
 					callback(e);
 				}
-			}
+			},
 		}).on('exit', socket.end.bind(socket));
 		socket.on('error', socket.destroy.bind(socket));
 	}).listen(name, function () {
