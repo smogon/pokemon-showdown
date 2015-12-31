@@ -275,11 +275,13 @@ Validator = (function () {
 		}
 
 		let nameTemplate = tools.getTemplate(set.name);
-		if (nameTemplate.exists && nameTemplate.name.toLowerCase() === set.name.toLowerCase()) set.name = null;
+		if (nameTemplate.exists && nameTemplate.name.toLowerCase() === set.name.toLowerCase()) {
+			set.name = null;
+		}
 		set.species = set.species;
-		set.name = set.name || set.species;
+		set.name = set.name || set.baseSpecies;
 		let name = set.species;
-		if (set.species !== set.name) name = set.name + " (" + set.species + ")";
+		if (set.species !== set.name && set.baseSpecies !== set.name) name = set.name + " (" + set.species + ")";
 		let isHidden = false;
 		let lsetData = {set:set, format:format};
 		if (flags) Object.merge(lsetData, flags);

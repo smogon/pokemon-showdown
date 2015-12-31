@@ -142,10 +142,10 @@ BattlePokemon = (function () {
 			this.baseTemplate = this.battle.getTemplate('Unown');
 		}
 		this.species = this.baseTemplate.species;
-		if (set.name === set.species || !set.name || !set.species) {
-			set.name = this.species;
+		if (set.name === set.species || !set.name) {
+			set.name = this.baseTemplate.baseSpecies;
 		}
-		this.name = (set.name || set.species || 'Bulbasaur').substr(0, 20);
+		this.name = set.name.substr(0, 20);
 		this.speciesid = toId(this.species);
 		this.template = this.baseTemplate;
 		this.moves = [];

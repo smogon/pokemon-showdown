@@ -800,7 +800,7 @@ exports.BattleScripts = {
 			let shiny = !this.random(1024);
 
 			team.push({
-				name: poke,
+				name: template.baseSpecies,
 				item: item,
 				ability: ability,
 				moves: moves,
@@ -920,7 +920,7 @@ exports.BattleScripts = {
 			let shiny = !this.random(1024);
 
 			team.push({
-				name: pokemon,
+				name: template.baseSpecies,
 				item: item,
 				ability: ability,
 				moves: m,
@@ -1081,7 +1081,7 @@ exports.BattleScripts = {
 	randomSet: function (template, slot, teamDetails) {
 		if (slot === undefined) slot = 1;
 		let baseTemplate = (template = this.getTemplate(template));
-		let name = template.name;
+		let name = template.baseSpecies;
 
 		if (!template.exists || (!template.randomBattleMoves && !template.learnset)) {
 			// GET IT? UNOWN? BECAUSE WE CAN'T TELL WHAT THE POKEMON IS
@@ -2327,7 +2327,7 @@ exports.BattleScripts = {
 	},
 	randomDoublesSet: function (template, slot, teamDetails) {
 		let baseTemplate = (template = this.getTemplate(template));
-		let name = template.name;
+		let name = template.baseSpecies;
 
 		if (!template.exists || (!template.randomDoubleBattleMoves && !template.randomBattleMoves && !template.learnset)) {
 			template = this.getTemplate('unown');
@@ -3246,7 +3246,7 @@ exports.BattleScripts = {
 		}
 
 		return {
-			name: setData.set.name || setData.set.species,
+			name: setData.set.name || template.baseSpecies,
 			species: setData.set.species,
 			gender: setData.set.gender || template.gender || (this.random() ? 'M' : 'F'),
 			item: setData.set.item || '',
