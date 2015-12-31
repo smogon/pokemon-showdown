@@ -387,6 +387,7 @@ exports.commands = {
 
 	deregisterchatroom: function (target, room, user) {
 		if (!this.can('makeroom')) return;
+		this.errorReply("NOTE: You probably want to use `/deleteroom` now that it exists.");
 		let id = toId(target);
 		if (!id) return this.parse('/help deregisterchatroom');
 		let targetRoom = Rooms.search(id);
@@ -399,7 +400,45 @@ exports.commands = {
 		}
 		return this.errorReply("The room '" + target + "' isn't registered.");
 	},
-	deregisterchatroomhelp: ["/deregisterchatroom [roomname] - Deletes room [roomname] after the next server restart. Requires: ~"],
+	deregisterchatroomhelp: ["/deregisterchatroom [roomname] - Deletes room [roomname] after the next server restart. Requires: & ~"],
+
+	deletechatroom: 'deleteroom',
+	deletegroupchat: 'deleteroom',
+	deleteroom: function (target, room, user) {
+		if (!this.can('makeroom')) return;
+		let roomid = target.trim();
+		if (!roomid) return this.parse('/help deleteroom');
+		let targetRoom = Rooms.search(roomid);
+		if (!targetRoom) return this.errorReply("The room '" + target + "' doesn't exist.");
+		target = targetRoom.title || targetRoom.id;
+
+		if (room.id === 'global') {
+			return this.errorReply("This room can't be deleted.");
+		}
+
+		if (room.chatRoomData) {
+			if (room.isPrivate) {
+				if (Rooms.get('upperstaff')) {
+					Rooms.get('upperstaff').add('|raw|<div class="broadcast-red">Private chat room deleted: <b>' + Tools.escapeHTML(target) + '</b></div>').update();
+				}
+			} else {
+				if (Rooms.get('staff')) {
+					Rooms.get('staff').add('|raw|<div class="broadcast-red">Public chat room deleted: <b>' + Tools.escapeHTML(target) + '</b></div>').update();
+				}
+				if (Rooms.get('upperstaff')) {
+					Rooms.get('upperstaff').add('|raw|<div class="broadcast-red">Public chat room deleted: <b>' + Tools.escapeHTML(target) + '</b></div>').update();
+				}
+			}
+		}
+
+		room.add("|raw|<div class=\"broadcast-red\"><b>This room has been deleted.</b></div>");
+		room.update(); // |expire| needs to be its own message
+		room.add("|expire|This room has been deleted.");
+		this.sendReply("The room '" + target + "' was deleted.");
+		room.update();
+		room.destroy();
+	},
+	deleteroomhelp: ["/deleteroom [roomname] - Deletes room [roomname]. Requires: & ~"],
 
 	hideroom: 'privateroom',
 	hiddenroom: 'privateroom',
