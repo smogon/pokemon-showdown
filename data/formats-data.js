@@ -111,7 +111,7 @@ exports.BattleFormatsData = {
 		tier: "NFE"
 	},
 	butterfree: {
-		randomBattleMoves: ["quiverdance","roost","bugbuzz","substitute","sleeppowder","psychic","shadowball"],
+		randomBattleMoves: ["sleeppowder","quiverdance","bugbuzz","psychic","gigadrain","substitute"],
 		randomDoubleBattleMoves: ["quiverdance","bugbuzz","substitute","sleeppowder","psychic","shadowball","protect"],
 		eventPokemon: [
 			{"generation":3,"level":30,"moves":["morningsun","psychic","sleeppowder","aerialace"]}
@@ -2257,8 +2257,8 @@ exports.BattleFormatsData = {
 		tier: "NFE"
 	},
 	beautifly: {
-		randomBattleMoves: ["quiverdance","bugbuzz","gigadrain","hiddenpowerrock","psychic","aircutter"],
-		randomDoubleBattleMoves: ["quiverdance","bugbuzz","gigadrain","hiddenpowerrock","psychic","aircutter","tailwind","stringshot","protect"],
+		randomBattleMoves: ["quiverdance","bugbuzz","aircutter","psychic","gigadrain","hiddenpowerrock"],
+		randomDoubleBattleMoves: ["quiverdance","bugbuzz","gigadrain","hiddenpowerrock","aircutter","tailwind","stringshot","protect"],
 		tier: "PU"
 	},
 	cascoon: {
@@ -2379,8 +2379,8 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	masquerain: {
-		randomBattleMoves: ["quiverdance","bugbuzz","airslash","hydropump","roost","substitute","batonpass","stickyweb"],
-		randomDoubleBattleMoves: ["hydropump","bugbuzz","airslash","quiverdance","substitute","tailwind","roost","strugglebug","protect"],
+		randomBattleMoves: ["quiverdance","bugbuzz","airslash","hydropump","roost","batonpass","stickyweb"],
+		randomDoubleBattleMoves: ["hydropump","bugbuzz","airslash","quiverdance","tailwind","roost","strugglebug","protect"],
 		tier: "PU"
 	},
 	shroomish: {
