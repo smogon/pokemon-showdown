@@ -59,7 +59,7 @@ exports.BattleScripts = {
 			this.recalculateStats();
 			this.update();
 			return changed;
-		}
+		},
 	},
 	// Battle scripts.
 	runMove: function (move, pokemon, target, sourceEffect) {
@@ -411,7 +411,7 @@ exports.BattleScripts = {
 				basePower: move,
 				type: '???',
 				category: 'Physical',
-				flags: {}
+				flags: {},
 			};
 		}
 
@@ -709,5 +709,5 @@ exports.BattleScripts = {
 		if (target.fainted) this.faint(target);
 
 		return damage;
-	}
+	},
 };

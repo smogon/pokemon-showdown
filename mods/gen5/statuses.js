@@ -5,7 +5,7 @@ exports.BattleStatuses = {
 		inherit: true,
 		onSwitchIn: function (target) {
 			this.effectData.time = this.effectData.startTime;
-		}
+		},
 	},
 	partiallytrapped: {
 		inherit: true,
@@ -19,7 +19,7 @@ exports.BattleStatuses = {
 			} else {
 				this.damage(pokemon.maxhp / 16);
 			}
-		}
+		},
 	},
 	stall: {
 		// Protect, Detect, Endure counter
@@ -44,7 +44,7 @@ exports.BattleStatuses = {
 				this.effectData.counter *= 2;
 			}
 			this.effectData.duration = 2;
-		}
+		},
 	},
 	gem: {
 		duration: 1,
@@ -52,6 +52,6 @@ exports.BattleStatuses = {
 		onBasePower: function (basePower, user, target, move) {
 			this.debug('Gem Boost');
 			return this.chainModify(1.5);
-		}
-	}
+		},
+	},
 };

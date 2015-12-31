@@ -12,12 +12,12 @@ describe('Quash', function () {
 		battle = BattleEngine.Battle.construct('battle-quash-1', 'doublescustomgame');
 		battle.join('p1', 'Guest 1', 1, [
 			{species: "Sableye", ability: 'prankster', moves: ['quash']},
-			{species: "Aggron", ability: 'sturdy', moves: ['earthquake']}
+			{species: "Aggron", ability: 'sturdy', moves: ['earthquake']},
 		]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: "Arceus", ability: 'multitype', moves: ['voltswitch']},
 			{species: "Aerodactyl", ability: 'unnerve', moves: ['swift']},
-			{species: "Rotom", ability: 'levitate', moves: ['thunderbolt']}
+			{species: "Rotom", ability: 'levitate', moves: ['thunderbolt']},
 		]);
 		battle.commitDecisions(); // Team Preview
 		battle.choose('p1', 'move 1 2, move 1');
@@ -30,12 +30,12 @@ describe('Quash', function () {
 		battle = BattleEngine.Battle.construct('battle-quash-2', 'doublescustomgame');
 		battle.join('p1', 'Guest 1', 1, [
 			{species: "Sableye", ability: 'prankster', moves: ['quash']},
-			{species: "Aggron", ability: 'sturdy', moves: ['earthquake']}
+			{species: "Aggron", ability: 'sturdy', moves: ['earthquake']},
 		]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: "Arceus", ability: 'multitype', moves: ['voltswitch']},
 			{species: "Aerodactyl", ability: 'unnerve', moves: ['extremespeed']},
-			{species: "Rotom", ability: 'levitate', moves: ['thunderbolt']}
+			{species: "Rotom", ability: 'levitate', moves: ['thunderbolt']},
 		]);
 		battle.commitDecisions(); // Team Preview
 		battle.choose('p1', 'move 1 2, move 1');

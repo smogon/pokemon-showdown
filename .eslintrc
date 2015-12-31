@@ -1,8 +1,4 @@
-'use strict';
-
-const os = require('os');
-
-module.exports = {
+{
 	"env": {
 		"node": true
 	},
@@ -12,7 +8,7 @@ module.exports = {
 		"Tournaments": false, "Dnsbl": false, "Cidr": false, "Sockets": false, "TeamValidator": false, "Ladders": false
 	},
 	"rules": {
-		"comma-dangle": [2, "never"],
+		"comma-dangle": [2, "always-multiline"],
 		"no-cond-assign": [2, "except-parens"],
 		"no-console": 0,
 		"no-constant-condition": 0,
@@ -114,14 +110,12 @@ module.exports = {
 		"comma-style": [2, "last"],
 		"computed-property-spacing": [2, "never"],
 		"consistent-this": 0,
-		"eol-last": os.EOL === '\n' ? [2, "unix"] : 0,
 		"func-names": 0,
 		"func-style": 0,
 		"id-length": 0,
 		"id-match": 0,
 		"indent": [2, "tab"],
 		"key-spacing": 0,
-		"linebreak-style": os.EOL === '\n' ? [2, "unix"] : 0,
 		"lines-around-comment": 0,
 		"max-nested-callbacks": 0,
 		"new-cap": [2, {"newIsCap": true, "capIsNew": false}],
@@ -141,12 +135,13 @@ module.exports = {
 		"no-trailing-spaces": 2,
 		"no-underscore-dangle": 0,
 		"no-unneeded-ternary": 2,
+		"no-var": 2,
 		"object-curly-spacing": [2, "never"],
 		"one-var": 0,
 		"operator-assignment": 0,
 		"operator-linebreak": [2, "after"],
 		"padded-blocks": [2, "never"],
-		"quote-props": [2, "as-needed", {"keywords": true, "unnecessary": false}],
+		"quote-props": 0,
 		"quotes": 0,
 		"require-jsdoc": 0,
 		"semi-spacing": [2, {"before": false, "after": true}],
@@ -163,6 +158,11 @@ module.exports = {
 		"spaced-comment": 0,
 		"wrap-regex": 0,
 
-		"validate-conditionals": 2
+		"validate-conditionals": 2,
+	},
+	"ecmaFeatures": {
+		"blockBindings": true,
+		"classes": true,
+		"octalLiterals": true
 	}
-};
+}

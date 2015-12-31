@@ -22,7 +22,7 @@ describe('Iron Ball', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: "Smeargle", ability: 'owntempo', item: 'laggingtail', moves: ['earthquake']}]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: "Aerodactyl", ability: 'pressure', item: 'ironball', moves: ['stealthrock']},
-			{species: "Tropius", ability: 'harvest', item: 'ironball', moves: ['leechseed']}
+			{species: "Tropius", ability: 'harvest', item: 'ironball', moves: ['leechseed']},
 		]);
 		battle.commitDecisions();
 		// Earthquake neutral on Aerodactyl
@@ -40,7 +40,7 @@ describe('Iron Ball', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: "Smeargle", ability: 'owntempo', item: 'laggingtail', moves: ['earthquake', 'gravity']}]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: "Aerodactyl", ability: 'shellarmor', item: 'ironball', moves: ['stealthrock']},
-			{species: "Tropius", ability: 'shellarmor', item: 'ironball', moves: ['leechseed']}
+			{species: "Tropius", ability: 'shellarmor', item: 'ironball', moves: ['leechseed']},
 		]);
 		// Set up Gravity
 		battle.choose('p1', 'move 2');
@@ -62,7 +62,7 @@ describe('Iron Ball', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: "Smeargle", ability: 'owntempo', item: 'laggingtail', moves: ['earthquake']}]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: "Rotom", ability: 'levitate', item: 'ironball', moves: ['rest']},
-			{species: "Parasect", ability: 'levitate', item: 'ironball', moves: ['rest']}
+			{species: "Parasect", ability: 'levitate', item: 'ironball', moves: ['rest']},
 		]);
 		battle.commitDecisions();
 		assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));

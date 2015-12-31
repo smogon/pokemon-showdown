@@ -289,7 +289,7 @@ exports.commands = {
 
 		'': function (target, room, user) {
 			return this.parse('/help hangman');
-		}
+		},
 	},
 
 	hangmanhelp: ["/hangman allows users to play the popular game hangman in PS rooms.",
@@ -309,5 +309,5 @@ exports.commands = {
 		room.game.guess(target, user);
 	},
 	guesshelp: ["/guess - Shortcut for /hangman guess.", "/hangman guess [letter] - Makes a guess for the letter entered.",
-					"/hangman guess [word] - Same as a letter, but guesses an entire word."]
+					"/hangman guess [word] - Same as a letter, but guesses an entire word."],
 };

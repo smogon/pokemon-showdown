@@ -48,7 +48,7 @@ let RoundRobin = (function () {
 		data.type = 'table';
 		data.tableHeaders = {
 			cols: this.users.slice(0),
-			rows: this.users.slice(0)
+			rows: this.users.slice(0),
 		};
 		data.tableContents = this.users.map(function (userA, row) {
 			return this.users.map(function (userB, col) {

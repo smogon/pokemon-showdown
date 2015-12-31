@@ -15,7 +15,7 @@ describe('Ring Target', function () {
 			{species: "Thundurus", ability: 'prankster', item: 'ringtarget', moves: ['rest']},
 			{species: "Drifblim", ability: 'unburden', item: 'ringtarget', moves: ['rest']},
 			{species: "Girafarig", ability: 'innerfocus', item: 'ringtarget', moves: ['rest']},
-			{species: "Absol", ability: 'superluck', item: 'ringtarget', moves: ['rest']}
+			{species: "Absol", ability: 'superluck', item: 'ringtarget', moves: ['rest']},
 		]);
 		battle.commitDecisions();
 		assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));

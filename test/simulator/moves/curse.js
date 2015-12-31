@@ -47,7 +47,7 @@ describe('Curse', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: "Blastoise", ability: 'torrent', item: '', moves: ['curse', 'reflecttype']}]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: "Zoroark", ability: 'illusion', item: '', moves: ['nastyplot']},
-			{species: "Gengar", ability: 'levitate', item: '', moves: ['spite']}
+			{species: "Gengar", ability: 'levitate', item: '', moves: ['spite']},
 		]);
 		battle.choose('p1', 'move 2'); // Reflect Type!
 		battle.commitDecisions();
@@ -96,15 +96,15 @@ describe('XY/ORAS Curse targetting when becoming Ghost the same turn', function 
 
 	let doublesTeams = [[
 		{species: "Kecleon", ability: 'colorchange', item: 'laggingtail', moves: ['curse', 'calmmind']},
-		{species: "Greninja", ability: 'torrent', item: '', moves: ['growl', 'mudsport']}
+		{species: "Greninja", ability: 'torrent', item: '', moves: ['growl', 'mudsport']},
 	], [
 		{species: "Raikou", ability: 'pressure', item: '', moves: ['aurasphere', 'calmmind']},
-		{species: "Gastly", ability: 'levitate', item: '', moves: ['lick', 'calmmind']}
+		{species: "Gastly", ability: 'levitate', item: '', moves: ['lick', 'calmmind']},
 	]];
 
 	let triplesTeams = [
 		doublesTeams[0].concat({species: "Metapod", ability: 'shedskin', item: '', moves: ['harden', 'stringshot']}),
-		doublesTeams[1].concat({species: "Kakuna", ability: 'shedskin', item: '', moves: ['harden', 'stringshot']})
+		doublesTeams[1].concat({species: "Kakuna", ability: 'shedskin', item: '', moves: ['harden', 'stringshot']}),
 	];
 
 	function runDoublesTest(battle, curseUser) {

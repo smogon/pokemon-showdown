@@ -57,5 +57,5 @@ exports.commands = {
 			if (!broadcasting) return connection.sendTo(room, "|raw|<div class=\"infobox\">" + htmlReply + "</div>");
 			room.addRaw("<div class=\"infobox\">" + htmlReply + "</div>").update();
 		}.once());
-	}
+	},
 };

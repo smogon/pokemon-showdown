@@ -27,7 +27,7 @@ exports.BattleScripts = {
 			def: 85,
 			spa: 85,
 			spd: 85,
-			spe: 85
+			spe: 85,
 		};
 		let ivs = {
 			hp: 31,
@@ -35,7 +35,7 @@ exports.BattleScripts = {
 			def: 31,
 			spa: 31,
 			spd: 31,
-			spe: 31
+			spe: 31,
 		};
 		let hasType = {};
 		hasType[template.types[0]] = true;
@@ -57,10 +57,10 @@ exports.BattleScripts = {
 
 		let SetupException = {
 			extremespeed:1, suckerpunch:1, superpower:1,
-			dracometeor:1, leafstorm:1, overheat:1
+			dracometeor:1, leafstorm:1, overheat:1,
 		};
 		let counterAbilities = {
-			'Adaptability':1, 'Contrary':1, 'Hustle':1, 'Iron Fist':1, 'Sheer Force':1, 'Skill Link':1
+			'Adaptability':1, 'Contrary':1, 'Hustle':1, 'Iron Fist':1, 'Sheer Force':1, 'Skill Link':1,
 		};
 
 		let hasMove, counter;
@@ -367,7 +367,7 @@ exports.BattleScripts = {
 				def: 31,
 				spa: 31,
 				spd: 31,
-				spe: 31
+				spe: 31,
 			};
 		}
 
@@ -591,10 +591,10 @@ exports.BattleScripts = {
 			BL2: 78,
 			RU: 79,
 			BL3: 80,
-			NU: 81
+			NU: 81,
 		};
 		let customScale = {
-			Blaziken: 74, 'Deoxys-Defense': 74, Landorus: 74, Manaphy: 74, Thundurus: 74, 'Tornadus-Therian': 74, Unown: 85
+			Blaziken: 74, 'Deoxys-Defense': 74, Landorus: 74, Manaphy: 74, Thundurus: 74, 'Tornadus-Therian': 74, Unown: 85,
 		};
 		let level = levelScale[template.tier] || 75;
 		if (customScale[template.name]) level = customScale[template.name];
@@ -613,7 +613,7 @@ exports.BattleScripts = {
 			ivs: ivs,
 			item: item,
 			level: level,
-			shiny: !this.random(1024)
+			shiny: !this.random(1024),
 		};
 	},
 	randomTeam: function (side) {
@@ -725,5 +725,5 @@ exports.BattleScripts = {
 			}
 		}
 		return pokemon;
-	}
+	},
 };

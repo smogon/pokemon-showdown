@@ -31,7 +31,7 @@ exports.BattleStatuses = {
 			}
 			this.effectData.skippedTime = 0;
 			return false;
-		}
+		},
 	},
 	frz: {
 		inherit: true,
@@ -48,31 +48,31 @@ exports.BattleStatuses = {
 			if (move.thawsTarget || move.type === 'Fire' && move.category !== 'Status' && move.id !== 'hiddenpower' && move.id !== 'weatherball') {
 				target.cureStatus();
 			}
-		}
+		},
 	},
 	trapped: {
 		inherit: true,
-		noCopy: false
+		noCopy: false,
 	},
 	trapper: {
 		inherit: true,
-		noCopy: false
+		noCopy: false,
 	},
 	partiallytrapped: {
 		inherit: true,
 		durationCallback: function (target, source) {
 			if (source.hasItem('gripclaw')) return 6;
 			return this.random(3, 7);
-		}
+		},
 	},
 	sandstorm: {
 		inherit: true,
-		onModifySpD: function () { }
+		onModifySpD: function () { },
 	},
 	stall: {
 		// In gen 3, the chance of protect succeeding does not fall below 1/8.
 		// See http://upokecenter.dreamhosters.com/dex/?lang=en&move=182
 		inherit: true,
-		counterMax: 8
-	}
+		counterMax: 8,
+	},
 };

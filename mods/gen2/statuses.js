@@ -11,7 +11,7 @@ exports.BattleStatuses = {
 		},
 		onAfterSwitchInSelf: function (pokemon) {
 			this.damage(pokemon.maxhp / 8);
-		}
+		},
 	},
 	par: {
 		inherit: true,
@@ -21,7 +21,7 @@ exports.BattleStatuses = {
 				this.add('cant', pokemon.id, 'par');
 				return false;
 			}
-		}
+		},
 	},
 	slp: {
 		effectType: 'Status',
@@ -42,7 +42,7 @@ exports.BattleStatuses = {
 				return;
 			}
 			return false;
-		}
+		},
 	},
 	frz: {
 		inherit: true,
@@ -57,7 +57,7 @@ exports.BattleStatuses = {
 		},
 		onResidual: function (pokemon) {
 			if (this.random(256) < 25) pokemon.cureStatus();
-		}
+		},
 	},
 	psn: {
 		effectType: 'Status',
@@ -69,7 +69,7 @@ exports.BattleStatuses = {
 		},
 		onAfterSwitchInSelf: function (pokemon) {
 			this.damage(pokemon.maxhp / 8);
-		}
+		},
 	},
 	tox: {
 		effectType: 'Status',
@@ -90,7 +90,7 @@ exports.BattleStatuses = {
 		},
 		onAfterSwitchInSelf: function (pokemon) {
 			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
-		}
+		},
 	},
 	confusion: {
 		inherit: true,
@@ -120,13 +120,13 @@ exports.BattleStatuses = {
 			}
 			this.directDamage(this.getDamage(pokemon, pokemon, 40));
 			return false;
-		}
+		},
 	},
 	partiallytrapped: {
 		inherit: true,
 		durationCallback: function (target, source) {
 			return this.random(3, 6);
-		}
+		},
 	},
 	lockedmove: {
 		// Outrage, Thrash, Petal Dance...
@@ -156,13 +156,13 @@ exports.BattleStatuses = {
 				this.debug('Forcing into ' + move.id);
 				this.changeDecision(pokemon, {move: move.id});
 			}
-		}
+		},
 	},
 	sandstorm: {
 		inherit: true,
 		onWeather: function (target) {
 			this.damage(target.maxhp / 8);
-		}
+		},
 	},
 	stall: {
 		duration: 2,
@@ -182,6 +182,6 @@ exports.BattleStatuses = {
 				if (this.effectData.counter < 0) this.effectData.counter = 0;
 			}
 			this.effectData.duration = 255;
-		}
-	}
+		},
+	},
 };

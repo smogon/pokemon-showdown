@@ -803,6 +803,6 @@ exports.commands = {
 				Rooms.global.writeChatRoomData();
 			}
 			return this.sendReply("Mafia has been enabled for this room.");
-		}
-	}
+		},
+	},
 };

@@ -6,15 +6,15 @@ exports.BattleAbilities = {
 		desc: "When this Pokemon enters the field, it identifies the opponent's held item; in double battles, the held item of an unrevealed, randomly selected opponent is identified.",
 		shortDesc: "On switch-in, this Pokemon identifies a random foe's held item.",
 		onStart: function (pokemon) {
-			var target = pokemon.side.foe.randomActive();
+			let target = pokemon.side.foe.randomActive();
 			if (target && target.item) {
 				this.add('-item', target, target.getItem().name, '[from] ability: Frisk', '[of] ' + pokemon);
 			}
-		}
+		},
 	},
 	"keeneye": {
 		inherit: true,
-		onModifyMove: function () {}
+		onModifyMove: function () {},
 	},
 	"oblivious": {
 		inherit: true,
@@ -31,26 +31,26 @@ exports.BattleAbilities = {
 				this.add('-immune', pokemon, '[msg]', '[from] Oblivious');
 				return null;
 			}
-		}
+		},
 	},
 	"overcoat": {
 		inherit: true,
-		onTryHit: function () {}
+		onTryHit: function () {},
 	},
 	"sapsipper": {
 		inherit: true,
 		desc: "This Pokemon is immune to Grass moves. If hit by a Grass move, its Attack is increased by one stage (once for each hit of Bullet Seed). Does not affect Aromatherapy.",
-		onAllyTryHitSide: function () {}
+		onAllyTryHitSide: function () {},
 	},
 	"serenegrace": {
 		inherit: true,
 		onModifyMove: function (move) {
 			if (move.secondaries && move.id !== 'secretpower') {
 				this.debug('doubling secondary chance');
-				for (var i = 0; i < move.secondaries.length; i++) {
+				for (let i = 0; i < move.secondaries.length; i++) {
 					move.secondaries[i].chance *= 2;
 				}
 			}
-		}
-	}
+		},
+	},
 };

@@ -1,18 +1,20 @@
+'use strict';
+
 exports.BattlePokedex = {
 	genesectdouse: {
 		inherit: true,
-		types: ["Bug","Water"]
+		types: ["Bug", "Water"],
 	},
 	genesectshock: {
 		inherit: true,
-		types: ["Bug","Electric"]
+		types: ["Bug", "Electric"],
 	},
 	genesectburn: {
 		inherit: true,
-		types: ["Bug","Fire"]
+		types: ["Bug", "Fire"],
 	},
 	genesectchill: {
 		inherit: true,
-		types: ["Bug","Ice"]
-	}
+		types: ["Bug", "Ice"],
+	},
 };

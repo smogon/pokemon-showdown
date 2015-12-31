@@ -36,11 +36,11 @@ describe('Trick Room', function () {
 		battle = BattleEngine.Battle.construct();
 		battle.join('p1', 'Guest 1', 1, [
 			{species: 'Bronzong', ability: 'heatproof', moves: ['trickroom', 'explosion']},
-			{species: 'Hippowdon', ability: 'sandstream', moves: ['protect']}
+			{species: 'Hippowdon', ability: 'sandstream', moves: ['protect']},
 		]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: 'Ninjask', ability: 'speedboost', moves: ['shellsmash']},
-			{species: 'Ninetales', ability: 'drought', moves: ['protect']}
+			{species: 'Ninetales', ability: 'drought', moves: ['protect']},
 		]);
 		battle.commitDecisions();
 		battle.choose('p1', 'move 2');

@@ -20,7 +20,7 @@ describe('Ingrain', function () {
 		battle = BattleEngine.Battle.construct();
 		battle.join('p1', 'Guest 1', 1, [
 			{species: 'Cradily', ability: 'stormdrain', moves: ['ingrain']},
-			{species: 'Pikachu', ability: 'static', moves: ['thunder']}
+			{species: 'Pikachu', ability: 'static', moves: ['thunder']},
 		]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Arcanine', ability: 'flashfire', moves: ['sleeptalk', 'roar']}]);
 		battle.choose('p2', 'move 2');

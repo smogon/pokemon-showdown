@@ -260,7 +260,7 @@ let commands = {
 		let options = {
 			prize: target[0],
 			question: target[1],
-			answers: QuestionGiveAway.sanitizeAnswers(target[2])
+			answers: QuestionGiveAway.sanitizeAnswers(target[2]),
 		};
 		if (!Object.keys(options.answers).length) return this.sendReply("You must specify at least one answer and it cannot contain any special characters.");
 
@@ -316,7 +316,7 @@ let commands = {
 		if (target.length !== 2) return this.sendReply("Invalid arguments specified - /lottery giver, prize, max winners");
 		let options = {
 			prize: target[0],
-			maxwinners: parseInt(target[1], 10)
+			maxwinners: parseInt(target[1], 10),
 		};
 		if (options.maxwinners > 10 || options.maxwinners < 1 || isNaN(options.maxwinners)) return this.sendReply("The lottery giveaway can have a minimum of 1 and a maximum of 10 winners.");
 
@@ -405,7 +405,7 @@ let commands = {
 			'- help staff - shows giveaway staff commands (Requires: % @ # & ~)';
 		}
 		this.sendReplyBox(reply);
-	}
+	},
 };
 
 exports.commands = {
@@ -413,5 +413,5 @@ exports.commands = {
 	'ga': commands.guess,
 	'gh': commands.help,
 	'qg': commands.question,
-	'lg': commands.lottery
+	'lg': commands.lottery,
 };

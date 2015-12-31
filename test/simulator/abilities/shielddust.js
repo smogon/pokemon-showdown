@@ -12,11 +12,11 @@ describe('Shield Dust', function () {
 		battle = BattleEngine.Battle.construct('battle-shielddust', 'doublescustomgame');
 		battle.join('p1', 'Guest 1', 1, [
 			{species: 'Latios', ability: 'noguard', moves: ['snarl']},
-			{species: 'Latias', ability: 'levitate', moves: ['roost']}
+			{species: 'Latias', ability: 'levitate', moves: ['roost']},
 		]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: 'Xerneas', ability: 'shielddust', moves: ['roost']},
-			{species: 'Yveltal', ability: 'pressure', moves: ['roost']}
+			{species: 'Yveltal', ability: 'pressure', moves: ['roost']},
 		]);
 		battle.commitDecisions(); // Team Preview
 		battle.commitDecisions();

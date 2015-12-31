@@ -23,7 +23,7 @@ exports.BattleStatuses = {
 		},
 		onEnd: function (target) {
 			this.battle.add('-curestatus', target, 'frz');
-		}
+		},
 	},
 	lockedmove: {
 		// Outrage, Thrash, Petal Dance...
@@ -45,7 +45,7 @@ exports.BattleStatuses = {
 		},
 		onLockMove: function (pokemon) {
 			return pokemon.lastMove;
-		}
+		},
 	},
 	confusion: {
 		// this is a volatile status
@@ -69,7 +69,7 @@ exports.BattleStatuses = {
 				return;
 			}
 			this.directDamage(this.getDamage(pokemon, pokemon, 30));
-		}
+		},
 	},
 
 	// weather!
@@ -88,7 +88,7 @@ exports.BattleStatuses = {
 				this.debug('rain fire suppress');
 				return basePower * 0.5;
 			}
-		}
+		},
 	},
 	sunnyday: {
 		inherit: true,
@@ -104,13 +104,13 @@ exports.BattleStatuses = {
 				this.debug('Sunny Day water suppress');
 				return basePower * 0.5;
 			}
-		}
+		},
 	},
 
 	// intrinsics!
 
 	bidestall: {
-		duration: 3
+		duration: 3,
 	},
 
 	unown: {
@@ -127,7 +127,7 @@ exports.BattleStatuses = {
 		onModifyPokemon: function (pokemon) {
 			if (pokemon.transformed) return;
 			pokemon.setType(pokemon.hpType || 'Dark');
-		}
+		},
 	},
 	bronzong: {
 		// Bronzong: Heatproof
@@ -139,7 +139,7 @@ exports.BattleStatuses = {
 				pokemon.ability = 'heatproof';
 				pokemon.baseAbility = 'heatproof';
 			}
-		}
+		},
 	},
 	weezing: {
 		// Weezing: Aftermath
@@ -151,7 +151,7 @@ exports.BattleStatuses = {
 				pokemon.ability = 'aftermath';
 				pokemon.baseAbility = 'aftermath';
 			}
-		}
+		},
 	},
 	flygon: {
 		// Flygon: Compoundeyes
@@ -163,7 +163,7 @@ exports.BattleStatuses = {
 				pokemon.ability = 'compoundeyes';
 				pokemon.baseAbility = 'compoundeyes';
 			}
-		}
+		},
 	},
 	eelektross: {
 		// Eelektross: Poison Heal
@@ -175,7 +175,7 @@ exports.BattleStatuses = {
 				pokemon.ability = 'poisonheal';
 				pokemon.baseAbility = 'poisonheal';
 			}
-		}
+		},
 	},
 	claydol: {
 		// Claydol: Filter
@@ -187,7 +187,7 @@ exports.BattleStatuses = {
 				pokemon.ability = 'filter';
 				pokemon.baseAbility = 'filter';
 			}
-		}
+		},
 	},
 	gengar: {
 		// Gengar: Cursed Body
@@ -199,7 +199,7 @@ exports.BattleStatuses = {
 				pokemon.ability = 'cursedbody';
 				pokemon.baseAbility = 'cursedbody';
 			}
-		}
+		},
 	},
 	mismagius: {
 		// Mismagius: Cursed Body
@@ -211,7 +211,7 @@ exports.BattleStatuses = {
 				pokemon.ability = 'cursedbody';
 				pokemon.baseAbility = 'cursedbody';
 			}
-		}
+		},
 	},
 	mesprit: {
 		// Mesprit: Serene Grace
@@ -223,7 +223,7 @@ exports.BattleStatuses = {
 				pokemon.ability = 'serenegrace';
 				pokemon.baseAbility = 'serenegrace';
 			}
-		}
+		},
 	},
 	uxie: {
 		// Uxie: Synchronize
@@ -235,7 +235,7 @@ exports.BattleStatuses = {
 				pokemon.ability = 'synchronize';
 				pokemon.baseAbility = 'synchronize';
 			}
-		}
+		},
 	},
 	azelf: {
 		// Azelf: Steadfast
@@ -247,7 +247,7 @@ exports.BattleStatuses = {
 				pokemon.ability = 'steadfast';
 				pokemon.baseAbility = 'steadfast';
 			}
-		}
+		},
 	},
 	hydreigon: {
 		// Hydreigon: Sheer Force
@@ -259,7 +259,7 @@ exports.BattleStatuses = {
 				pokemon.ability = 'sheerforce';
 				pokemon.baseAbility = 'sheerforce';
 			}
-		}
+		},
 	},
 	cryogonal: {
 		// Cryogonal: infinite hail, Ice Body
@@ -282,7 +282,7 @@ exports.BattleStatuses = {
 				pokemon.ability = 'icebody';
 				pokemon.baseAbility = 'icebody';
 			}
-		}
+		},
 	},
 	probopass: {
 		// Probopass: infinite sand
@@ -296,7 +296,7 @@ exports.BattleStatuses = {
 				};
 				move.target = 'self';
 			}
-		}
+		},
 	},
 	phione: {
 		// Phione: infinite rain
@@ -310,6 +310,6 @@ exports.BattleStatuses = {
 				};
 				move.target = 'self';
 			}
-		}
-	}
+		},
+	},
 };

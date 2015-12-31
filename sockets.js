@@ -18,7 +18,7 @@ global.Config = require('./config/config');
 
 if (cluster.isMaster) {
 	cluster.setupMaster({
-		exec: require('path').resolve(__dirname, 'sockets.js')
+		exec: require('path').resolve(__dirname, 'sockets.js'),
 	});
 
 	let workers = exports.workers = {};
@@ -210,7 +210,7 @@ if (cluster.isMaster) {
 			if (severity === 'error') console.log('ERROR: ' + message);
 		},
 		prefix: '/showdown',
-		websocket: !Config.disablewebsocket
+		websocket: !Config.disablewebsocket,
 	});
 
 	let sockets = {};

@@ -12,7 +12,7 @@ exports.BattleStatuses = {
 		},
 		onAfterSwitchInSelf: function (pokemon) {
 			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
-		}
+		},
 	},
 	par: {
 		effectType: 'Status',
@@ -33,7 +33,7 @@ exports.BattleStatuses = {
 				pokemon.removeVolatile('partialtrappinglock');
 				return false;
 			}
-		}
+		},
 	},
 	slp: {
 		effectType: 'Status',
@@ -52,7 +52,7 @@ exports.BattleStatuses = {
 		},
 		onAfterMoveSelf: function (pokemon) {
 			if (pokemon.statusData.time <= 0) pokemon.cureStatus();
-		}
+		},
 	},
 	frz: {
 		effectType: 'Status',
@@ -69,7 +69,7 @@ exports.BattleStatuses = {
 			if (move.type === 'Fire' && move.category !== 'Status') {
 				target.cureStatus();
 			}
-		}
+		},
 	},
 	psn: {
 		effectType: 'Status',
@@ -82,7 +82,7 @@ exports.BattleStatuses = {
 		},
 		onAfterSwitchInSelf: function (pokemon) {
 			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
-		}
+		},
 	},
 	tox: {
 		effectType: 'Status',
@@ -99,7 +99,7 @@ exports.BattleStatuses = {
 			pokemon.addVolatile('residualdmg');
 			pokemon.volatiles['residualdmg'].counter = 1;
 			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
-		}
+		},
 	},
 	partiallytrapped: {
 		duration: 2,
@@ -117,6 +117,6 @@ exports.BattleStatuses = {
 		},
 		onEnd: function (pokemon) {
 			this.add('-end', pokemon, this.effectData.sourceEffect, '[partiallytrapped]');
-		}
-	}
+		},
+	},
 };

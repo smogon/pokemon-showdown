@@ -15,12 +15,12 @@ describe('Rage Powder', function () {
 		battle.join('p1', 'Guest 1', 1, [
 			{species: 'Amoonguss', ability: 'overcoat', item: 'safetygoggles', moves: ['ragepowder']},
 			{species: 'Venusaur', ability: 'overcoat', moves: ['growth']},
-			{species: 'Ivysaur', ability: 'overcoat', moves: ['growth']}
+			{species: 'Ivysaur', ability: 'overcoat', moves: ['growth']},
 		]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: 'Abra', ability: 'synchronize', moves: ['absorb']},
 			{species: 'Kadabra', ability: 'synchronize', moves: ['absorb']},
-			{species: 'Alakazam', ability: 'synchronize', moves: ['absorb']}
+			{species: 'Alakazam', ability: 'synchronize', moves: ['absorb']},
 		]);
 		battle.commitDecisions();
 		let hitCount = [0, 0, 0];
@@ -48,12 +48,12 @@ describe('Rage Powder', function () {
 		battle.join('p1', 'Guest 1', 1, [
 			{species: 'Amoonguss', ability: 'overcoat', moves: ['growth']},
 			{species: 'Venusaur', ability: 'overcoat', moves: ['ragepowder']},
-			{species: 'Ivysaur', ability: 'overcoat', moves: ['growth']}
+			{species: 'Ivysaur', ability: 'overcoat', moves: ['growth']},
 		]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: 'Squirtle', ability: 'naturalcure', moves: ['absorb']},
 			{species: 'Escavalier', ability: 'overcoat', moves: ['absorb']},
-			{species: 'Alakazam', ability: 'synchronize', item: 'safetygoggles', moves: ['absorb']}
+			{species: 'Alakazam', ability: 'synchronize', item: 'safetygoggles', moves: ['absorb']},
 		]);
 		battle.commitDecisions();
 		let hitCount = [0, 0, 0];
