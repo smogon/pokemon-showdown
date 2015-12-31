@@ -10,6 +10,8 @@ const permission = 'ban';
 const deadImage = '<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-dead.png" />';
 const meetingMsg = {town: 'The town has lynched a suspect!', mafia: 'The mafia strikes again!'};
 
+const defaultSettings = {anonvotes: false, allowwills: false};
+
 class MafiaPlayer extends Rooms.RoomGamePlayer {
 	constructor(user, game) {
 		super(user, game);
@@ -175,7 +177,7 @@ class MafiaPlayer extends Rooms.RoomGamePlayer {
 }
 
 class Mafia extends Rooms.RoomGame {
-	constructor(room, max, roles, allowWills, anonVotes) {
+	constructor(room, max, roles, settings) {
 		super(room);
 
 		if (room.gameNumber) {
@@ -186,7 +188,7 @@ class Mafia extends Rooms.RoomGame {
 
 		this.gameid = 'mafia';
 		this.title = 'Mafia';
-		this.allowRenames = false;
+		this.allowRenames = true;
 		this.playerCap = max;
 		this.PlayerClass = MafiaPlayer;
 
@@ -194,8 +196,9 @@ class Mafia extends Rooms.RoomGame {
 		this.day = 1;
 		this.gamestate = 'pregame';
 		this.timer = null;
-		this.allowWills = allowWills;
-		this.anonVotes = anonVotes;
+
+		this.allowWills = settings.allowwills;
+		this.anonVotes = settings.anonvotes;
 
 		this.roleString = this.roles.reduce((function (prev, cur, index, array) {
 			if (index === array.length - 1) {
@@ -577,23 +580,64 @@ exports.commands = {
 	mafia: {
 		create: 'new',
 		new: function (target, room, user) {
-			let params = target.split(',').map(function (param) { return param.toLowerCase().trim(); });
-
 			if (!this.can(permission, null, room)) return false;
 			if (!room.mafiaEnabled) return this.errorReply("Mafia is disabled for this room.");
 			if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
 			if (room.game) return this.errorReply("There is already a game in progress in this room.");
 
-			// TODO: make a generator for a default setup.
-			if (!params) return this.errorReply("No roles entered.");
+			// Check if input is a JSON object. If it is, use the parser for json input.
+			let targetObj;
+			try {
+				targetObj = JSON.parse(target);
+			} catch (e) {}
 
-			for (let i = 0; i < params.length; i++) {
-				if (!(params[i] in MafiaData.MafiaClasses)) {
-					return this.errorReply(Tools.escapeHTML(params[i]) + " is not a valid mafia class.");
+			if (targetObj) {
+				if (!(targetObj.classes && Object.keys(targetObj.classes).length)) return this.errorReply("Invalid input.");
+
+				let roleList = [];
+
+				for (let i in targetObj.classes) {
+					if (!MafiaData.MafiaClasses.hasOwnProperty(i)) {
+						return this.errorReply(Tools.escapeHTML(i) + " is not a valid mafia class.");
+					}
+
+					let amt = parseInt(Tools.getString(targetObj.classes[i]));
+					if (isNaN(amt) || amt < 0 || amt > 25) return this.errorReply("Invalid amount for class " + Tools.escapeHTML(i));
+
+					for (let j = 0; j < amt; j++) {
+						roleList.push(i);
+					}
 				}
-			}
 
-			room.game = new Mafia(room, params.length, params);
+				let settings = {};
+
+				if (targetObj.settings) {
+					for (let i in defaultSettings) {
+						if (i in targetObj.settings) {
+							settings[i] = !!targetObj.settings[i];
+						} else {
+							settings[i] = defaultSettings[i];
+						}
+					}
+				} else {
+					settings = defaultSettings;
+				}
+
+				room.game = new Mafia(room, roleList.length, roleList, settings);
+			} else {
+				let params = target.split(',').map(function (param) { return param.toLowerCase().trim(); });
+
+				// TODO: make a generator for a default setup.
+				if (!params) return this.errorReply("No roles entered.");
+
+				for (let i = 0; i < params.length; i++) {
+					if (!MafiaData.MafiaClasses.hasOwnProperty(params[i])) {
+						return this.errorReply(Tools.escapeHTML(params[i]) + " is not a valid mafia class.");
+					}
+				}
+
+				room.game = new Mafia(room, params.length, params, defaultSettings);
+			}
 
 			return this.privateModCommand("(A game of mafia was started by " + user.name + ".)");
 		},
