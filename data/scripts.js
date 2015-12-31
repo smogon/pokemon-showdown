@@ -1302,7 +1302,7 @@ exports.BattleScripts = {
 
 				// Bit redundant to have both
 				// Attacks:
-				case 'bugbite': case 'bugbuzz':
+				case 'bugbite': case 'bugbuzz': case 'signalbeam':
 					if (hasMove['uturn'] && !counter.setupType) rejected = true;
 					break;
 				case 'darkpulse':
