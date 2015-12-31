@@ -94,15 +94,17 @@ Pokémon Showdown currently supports, in order of preference:
 
  - Chrome
  - Firefox
- - Safari
- - Chrome/Firefox/Safari for various mobile devices
  - Opera
- - Firefox for Android
+ - Safari 5+
+ - IE11+
+ - Chrome/Firefox/Safari for various mobile devices
+
+Pokémon Showdown is usable, but expect degraded performance and certain features not to work in:
+
+ - Safari 4+
  - IE9+
 
-IE8 support can technically be added without too much difficulty, but it doesn't run PS fast enough to be usable.
-
-As for older browsers (Firefox 3.6), I won't go out of my way to support them, but if there's a simple fix, you can suggest it to me and I'll implement it.
+Pokémon Showdown is mostly developed on Chrome, and Chrome or the desktop client is required for certain features like dragging-and-dropping teams from PS to your computer. However, bugs reported on any supported browser will usually be fixed pretty quickly.
 
 
 Community
