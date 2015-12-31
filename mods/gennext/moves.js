@@ -149,7 +149,7 @@ exports.BattleMovedex = {
 				if (target === source || move.flags['authentic'] || move.infiltrates) {
 					return;
 				}
-				var damage = this.getDamage(source, target, move);
+				let damage = this.getDamage(source, target, move);
 				if (!damage) {
 					return null;
 				}
@@ -192,7 +192,7 @@ exports.BattleMovedex = {
 			onTryHit: function (target, source, move) {
 				if (target.volatiles.substitute || !move.flags['protect']) return;
 				this.add('-activate', target, 'Protect');
-				var lockedmove = source.getVolatile('lockedmove');
+				let lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
 					// Outrage counter is reset
 					if (source.volatiles['lockedmove'].duration === 2) {
@@ -214,7 +214,7 @@ exports.BattleMovedex = {
 			onTryHit: function (target, source, move) {
 				if (target.volatiles.substitute || !move.flags['protect'] || move.category === 'Status') return;
 				this.add('-activate', target, 'Protect');
-				var lockedmove = source.getVolatile('lockedmove');
+				let lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
 					// Outrage counter is reset
 					if (source.volatiles['lockedmove'].duration === 2) {
@@ -631,7 +631,7 @@ exports.BattleMovedex = {
 						return false;
 					}
 					this.add('-end', pokemon, 'Bide');
-					var target = this.effectData.sourceSide.active[this.effectData.sourcePosition];
+					let target = this.effectData.sourceSide.active[this.effectData.sourcePosition];
 					this.moveHit(target, pokemon, 'bide', {damage: this.effectData.totalDamage * 2});
 					return false;
 				}
@@ -718,14 +718,14 @@ exports.BattleMovedex = {
 			if (pokemon.baseTemplate.species !== 'Meloetta' || pokemon.transformed) {
 				return;
 			}
-			var natureChange = {
+			let natureChange = {
 				'Modest': 'Adamant',
 				'Adamant': 'Modest',
 				'Timid': 'Jolly',
 				'Jolly': 'Timid'
 			};
-			var tmpAtkEVs;
-			var Atk2SpA;
+			let tmpAtkEVs;
+			let Atk2SpA;
 			if (pokemon.template.speciesid === 'meloettapirouette' && pokemon.formeChange('Meloetta')) {
 				this.add('-formechange', pokemon, 'Meloetta');
 				tmpAtkEVs = pokemon.set.evs.atk;
@@ -793,7 +793,7 @@ exports.BattleMovedex = {
 				this.add('-sidestart', side, 'move: Stealth Rock');
 			},
 			onSwitchIn: function (pokemon) {
-				var factor = 2;
+				let factor = 2;
 				if (pokemon.hasType('Flying')) factor = 4;
 				this.damage(pokemon.maxhp * factor / 16);
 			}
@@ -827,15 +827,15 @@ exports.BattleMovedex = {
 			chance: 100,
 			self: {
 				onHit: function (target, source) {
-					var stats = [];
-					for (var stat in target.boosts) {
+					let stats = [];
+					for (let stat in target.boosts) {
 						if (stat !== 'accuracy' && stat !== 'evasion' && stat !== 'atk' && target.boosts[stat] < 6) {
 							stats.push(stat);
 						}
 					}
 					if (stats.length) {
-						var randomStat = stats[this.random(stats.length)];
-						var boost = {};
+						let randomStat = stats[this.random(stats.length)];
+						let boost = {};
 						boost[randomStat] = 1;
 						this.boost(boost);
 					} else {
@@ -857,15 +857,15 @@ exports.BattleMovedex = {
 			chance: 100,
 			self: {
 				onHit: function (target, source) {
-					var stats = [];
-					for (var stat in target.boosts) {
+					let stats = [];
+					for (let stat in target.boosts) {
 						if (stat !== 'accuracy' && stat !== 'evasion' && stat !== 'atk' && target.boosts[stat] < 6) {
 							stats.push(stat);
 						}
 					}
 					if (stats.length) {
-						var randomStat = stats[this.random(stats.length)];
-						var boost = {};
+						let randomStat = stats[this.random(stats.length)];
+						let boost = {};
 						boost[randomStat] = 1;
 						this.boost(boost);
 					} else {
@@ -881,15 +881,15 @@ exports.BattleMovedex = {
 			chance: 100,
 			self: {
 				onHit: function (target, source) {
-					var stats = [];
-					for (var stat in target.boosts) {
+					let stats = [];
+					for (let stat in target.boosts) {
 						if (stat !== 'accuracy' && stat !== 'evasion' && stat !== 'atk' && target.boosts[stat] < 6) {
 							stats.push(stat);
 						}
 					}
 					if (stats.length) {
-						var randomStat = stats[this.random(stats.length)];
-						var boost = {};
+						let randomStat = stats[this.random(stats.length)];
+						let boost = {};
 						boost[randomStat] = 1;
 						this.boost(boost);
 					} else {
@@ -1048,7 +1048,7 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 80,
 		onBasePower: function (power, user) {
-			var GossamerWingUsers = {"Butterfree":1, "Venomoth":1, "Masquerain":1, "Dustox":1, "Beautifly":1, "Mothim":1, "Lilligant":1, "Volcarona":1, "Vivillon":1};
+			let GossamerWingUsers = {"Butterfree":1, "Venomoth":1, "Masquerain":1, "Dustox":1, "Beautifly":1, "Mothim":1, "Lilligant":1, "Volcarona":1, "Vivillon":1};
 			if (user.hasItem('stick') && GossamerWingUsers[user.template.species]) {
 				return power * 1.5;
 			}
@@ -1237,13 +1237,13 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 30,
 		onBasePower: function (power, user) {
-			var doubled = false;
+			let doubled = false;
 			if (user.removeVolatile('leechseed')) {
 				this.add('-end', user, 'Leech Seed', '[from] move: Rapid Spin', '[of] ' + user);
 				doubled = true;
 			}
-			var sideConditions = {spikes:1, toxicspikes:1, stealthrock:1};
-			for (var i in sideConditions) {
+			let sideConditions = {spikes:1, toxicspikes:1, stealthrock:1};
+			for (let i in sideConditions) {
 				if (user.side.removeSideCondition(i)) {
 					this.add('-sideend', user.side, this.getEffect(i).name, '[from] move: Rapid Spin', '[of] ' + user);
 					doubled = true;
@@ -1889,7 +1889,7 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		onModifyMove: function (move, user) {
 			if (user.illusion) {
-				var illusionMoves = user.illusion.moves.filter(function (move) {
+				let illusionMoves = user.illusion.moves.filter(function (move) {
 					return this.getMove(move).category !== 'Status';
 				}, this);
 				if (!illusionMoves.length) return;
@@ -1949,7 +1949,7 @@ exports.BattleMovedex = {
 		secondary: {
 			chance: 10,
 			onHit: function (target, source) {
-				var result = this.random(3);
+				let result = this.random(3);
 				if (result === 0) {
 					target.trySetStatus('brn', source);
 				} else if (result === 1) {

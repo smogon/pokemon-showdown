@@ -3,7 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 
-function loadTests (desc, dir) {
+function loadTests(desc, dir) {
 	let contents = fs.readdirSync(path.join(__dirname, dir));
 	describe(desc, function () {
 		for (let i = 0; i < contents.length; i++) {

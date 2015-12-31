@@ -261,8 +261,8 @@ exports.BattleItems = {
 			return this.chainModify(1.5);
 		},
 		onDisableMove: function (pokemon) {
-			var moves = pokemon.moveset;
-			for (var i = 0; i < moves.length; i++) {
+			let moves = pokemon.moveset;
+			for (let i = 0; i < moves.length; i++) {
 				if (this.getMove(moves[i].move).category === 'Status') {
 					pokemon.disableMove(moves[i].id);
 				}
@@ -376,7 +376,7 @@ exports.BattleItems = {
 		},
 		onTryHealPriority: 1,
 		onTryHeal: function (damage, target, source, effect) {
-			var heals = {drain: 1, leechseed: 1, ingrain: 1, aquaring: 1};
+			let heals = {drain: 1, leechseed: 1, ingrain: 1, aquaring: 1};
 			if (heals[effect.id]) {
 				return Math.ceil((damage * 1.3) - 0.5); // Big Root rounds half down
 			}
@@ -489,7 +489,7 @@ exports.BattleItems = {
 			}
 		},
 		onPrimal: function (pokemon) {
-			var template = this.getTemplate('Kyogre-Primal');
+			let template = this.getTemplate('Kyogre-Primal');
 			pokemon.formeChange(template);
 			pokemon.baseTemplate = template;
 			pokemon.details = template.species + (pokemon.level === 100 ? '' : ', L' + pokemon.level) + (pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
@@ -2192,7 +2192,7 @@ exports.BattleItems = {
 		onModifyMove: function (move) {
 			if (move.category !== "Status") {
 				if (!move.secondaries) move.secondaries = [];
-				for (var i = 0; i < move.secondaries.length; i++) {
+				for (let i = 0; i < move.secondaries.length; i++) {
 					if (move.secondaries[i].volatileStatus === 'flinch') return;
 				}
 				move.secondaries.push({
@@ -2312,7 +2312,7 @@ exports.BattleItems = {
 			type: "Fighting"
 		},
 		onUpdate: function (pokemon) {
-			var move = pokemon.getMoveData(pokemon.lastMove);
+			let move = pokemon.getMoveData(pokemon.lastMove);
 			if (move && move.pp === 0) {
 				pokemon.addVolatile('leppaberry');
 				pokemon.volatiles['leppaberry'].move = move;
@@ -2320,13 +2320,13 @@ exports.BattleItems = {
 			}
 		},
 		onEat: function (pokemon) {
-			var move;
+			let move;
 			if (pokemon.volatiles['leppaberry']) {
 				move = pokemon.volatiles['leppaberry'].move;
 				pokemon.removeVolatile('leppaberry');
 			} else {
-				var pp = 99;
-				for (var moveid in pokemon.moveset) {
+				let pp = 99;
+				for (let moveid in pokemon.moveset) {
 					if (pokemon.moveset[moveid].pp < pp) {
 						move = pokemon.moveset[moveid];
 						pp = move.pp;
@@ -2337,9 +2337,9 @@ exports.BattleItems = {
 			if (move.pp > move.maxpp) move.pp = move.maxpp;
 			this.add('-activate', pokemon, 'item: Leppa Berry', move.move);
 			if (pokemon.item !== 'leppaberry') {
-				var foeActive = pokemon.side.foe.active;
-				var foeIsStale = false;
-				for (var i = 0; i < 1; i++) {
+				let foeActive = pokemon.side.foe.active;
+				let foeIsStale = false;
+				for (let i = 0; i < 1; i++) {
 					if (foeActive.isStale >= 2) {
 						foeIsStale = true;
 						break;
@@ -2744,10 +2744,10 @@ exports.BattleItems = {
 		fling: {
 			basePower: 10,
 			effect: function (pokemon) {
-				var conditions = ['attract', 'taunt', 'encore', 'torment', 'disable', 'healblock'];
-				for (var i = 0; i < conditions.length; i++) {
+				let conditions = ['attract', 'taunt', 'encore', 'torment', 'disable', 'healblock'];
+				for (let i = 0; i < conditions.length; i++) {
 					if (pokemon.volatiles[conditions[i]]) {
-						for (var j = 0; j < conditions.length; j++) {
+						for (let j = 0; j < conditions.length; j++) {
 							pokemon.removeVolatile(conditions[j]);
 							if (conditions[i] === 'attract' && conditions[j] === 'attract') {
 								this.add('-end', pokemon, 'move: Attract', '[from] item: Mental Herb');
@@ -2759,11 +2759,11 @@ exports.BattleItems = {
 			}
 		},
 		onUpdate: function (pokemon) {
-			var conditions = ['attract', 'taunt', 'encore', 'torment', 'disable', 'healblock'];
-			for (var i = 0; i < conditions.length; i++) {
+			let conditions = ['attract', 'taunt', 'encore', 'torment', 'disable', 'healblock'];
+			for (let i = 0; i < conditions.length; i++) {
 				if (pokemon.volatiles[conditions[i]]) {
 					if (!pokemon.useItem()) return;
-					for (var j = 0; j < conditions.length; j++) {
+					for (let j = 0; j < conditions.length; j++) {
 						pokemon.removeVolatile(conditions[j]);
 						if (conditions[i] === 'attract' && conditions[j] === 'attract') {
 							this.add('-end', pokemon, 'move: Attract', '[from] item: Mental Herb');
@@ -2853,8 +2853,8 @@ exports.BattleItems = {
 				this.effectData.lastMove = move.id;
 			},
 			onModifyDamage: function (damage, source, target, move) {
-				var numConsecutive = this.effectData.numConsecutive > 5 ? 5 : this.effectData.numConsecutive;
-				var dmgMod = [0x1000, 0x1333, 0x1666, 0x1999, 0x1CCC, 0x2000];
+				let numConsecutive = this.effectData.numConsecutive > 5 ? 5 : this.effectData.numConsecutive;
+				let dmgMod = [0x1000, 0x1333, 0x1666, 0x1999, 0x1CCC, 0x2000];
 				return this.chainModify([dmgMod[numConsecutive], 0x1000]);
 			}
 		},
@@ -3586,7 +3586,7 @@ exports.BattleItems = {
 		onModifyMove: function (move) {
 			if (move.category !== "Status") {
 				if (!move.secondaries) move.secondaries = [];
-				for (var i = 0; i < move.secondaries.length; i++) {
+				for (let i = 0; i < move.secondaries.length; i++) {
 					if (move.secondaries[i].volatileStatus === 'flinch') return;
 				}
 				move.secondaries.push({
@@ -3643,7 +3643,7 @@ exports.BattleItems = {
 			}
 		},
 		onPrimal: function (pokemon) {
-			var template = this.getTemplate('Groudon-Primal');
+			let template = this.getTemplate('Groudon-Primal');
 			pokemon.formeChange(template);
 			pokemon.baseTemplate = template;
 			pokemon.details = template.species + (pokemon.level === 100 ? '' : ', L' + pokemon.level) + (pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
@@ -4334,15 +4334,15 @@ exports.BattleItems = {
 			}
 		},
 		onEat: function (pokemon) {
-			var stats = [];
-			for (var stat in pokemon.boosts) {
+			let stats = [];
+			for (let stat in pokemon.boosts) {
 				if (stat !== 'accuracy' && stat !== 'evasion' && pokemon.boosts[stat] < 6) {
 					stats.push(stat);
 				}
 			}
 			if (stats.length) {
-				var randomStat = stats[this.random(stats.length)];
-				var boost = {};
+				let randomStat = stats[this.random(stats.length)];
+				let boost = {};
 				boost[randomStat] = 2;
 				this.boost(boost);
 			}
@@ -4414,7 +4414,7 @@ exports.BattleItems = {
 		},
 		onHit: function (target, source, move) {
 			if (source && source !== target && !source.item && move && move.flags['contact']) {
-				var barb = target.takeItem();
+				let barb = target.takeItem();
 				source.setItem(barb);
 				// no message for Sticky Barb changing hands
 			}
@@ -4718,9 +4718,9 @@ exports.BattleItems = {
 		fling: {
 			basePower: 10,
 			effect: function (pokemon) {
-				var activate = false;
-				var boosts = {};
-				for (var i in pokemon.boosts) {
+				let activate = false;
+				let boosts = {};
+				for (let i in pokemon.boosts) {
 					if (pokemon.boosts[i] < 0) {
 						activate = true;
 						boosts[i] = 0;
@@ -4732,9 +4732,9 @@ exports.BattleItems = {
 			}
 		},
 		onUpdate: function (pokemon) {
-			var activate = false;
-			var boosts = {};
-			for (var i in pokemon.boosts) {
+			let activate = false;
+			let boosts = {};
+			for (let i in pokemon.boosts) {
 				if (pokemon.boosts[i] < 0) {
 					activate = true;
 					boosts[i] = 0;
@@ -5077,7 +5077,7 @@ exports.BattleItems = {
 			type: "Fighting"
 		},
 		onUpdate: function (pokemon) {
-			var move = pokemon.getMoveData(pokemon.lastMove);
+			let move = pokemon.getMoveData(pokemon.lastMove);
 			if (move && move.pp === 0) {
 				pokemon.addVolatile('leppaberry');
 				pokemon.volatiles['leppaberry'].move = move;
@@ -5085,13 +5085,13 @@ exports.BattleItems = {
 			}
 		},
 		onEat: function (pokemon) {
-			var move;
+			let move;
 			if (pokemon.volatiles['leppaberry']) {
 				move = pokemon.volatiles['leppaberry'].move;
 				pokemon.removeVolatile('leppaberry');
 			} else {
-				var pp = 99;
-				for (var moveid in pokemon.moveset) {
+				let pp = 99;
+				for (let moveid in pokemon.moveset) {
 					if (pokemon.moveset[moveid].pp < pp) {
 						move = pokemon.moveset[moveid];
 						pp = move.pp;
@@ -5102,9 +5102,9 @@ exports.BattleItems = {
 			if (move.pp > move.maxpp) move.pp = move.maxpp;
 			this.add('-activate', pokemon, 'item: Leppa Berry', move.move);
 			if (pokemon.item !== 'leppaberry') {
-				var foeActive = pokemon.side.foe.active;
-				var foeIsStale = false;
-				for (var i = 0; i < 1; i++) {
+				let foeActive = pokemon.side.foe.active;
+				let foeIsStale = false;
+				for (let i = 0; i < 1; i++) {
 					if (foeActive.isStale >= 2) {
 						foeIsStale = true;
 						break;
