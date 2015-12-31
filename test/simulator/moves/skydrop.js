@@ -23,7 +23,7 @@ describe('Sky Drop', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: "Aerodactyl", ability: 'unnerve', moves: ['skydrop']}]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: "Lairon", ability: 'sturdy', moves: ['bulkup']},
-			{species: "Aggron", ability: 'sturdy', moves: ['bulkup']}
+			{species: "Aggron", ability: 'sturdy', moves: ['bulkup']},
 		]);
 		battle.commitDecisions();
 		battle.choose('p2', 'switch 2');
@@ -36,12 +36,12 @@ describe('Sky Drop', function () {
 		battle.join('p1', 'Guest 1', 1, [
 			{species: "Aerodactyl", ability: 'unnerve', moves: ['skydrop']},
 			{species: "Machamp", ability: 'noguard', moves: ['circlethrow']},
-			{species: "Kabutops", ability: 'swiftswim', moves: ['shellsmash']}
+			{species: "Kabutops", ability: 'swiftswim', moves: ['shellsmash']},
 		]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: "Armaldo", ability: 'battlearmor', moves: ['bulkup']},
 			{species: "Aggron", ability: 'noguard', moves: ['dragontail']},
-			{species: "Omastar", ability: 'swiftswim', moves: ['shellsmash']}
+			{species: "Omastar", ability: 'swiftswim', moves: ['shellsmash']},
 		]);
 		battle.commitDecisions(); // Team Preview
 		battle.choose('p1', 'move 1 1, move 1 1');
@@ -78,11 +78,11 @@ describe('Sky Drop', function () {
 		battle = BattleEngine.Battle.construct('battle-skydrop-faint', 'doublescustomgame');
 		battle.join('p1', 'Guest 1', 1, [
 			{species: "Aerodactyl", ability: 'unnerve', moves: ['skydrop']},
-			{species: "Kyogre", ability: 'noguard', moves: ['scald']}
+			{species: "Kyogre", ability: 'noguard', moves: ['scald']},
 		]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: "Lairon", ability: 'sturdy', moves: ['bulkup']},
-			{species: "Aggron", ability: 'sturdy', moves: ['bulkup']}
+			{species: "Aggron", ability: 'sturdy', moves: ['bulkup']},
 		]);
 		battle.commitDecisions(); // Team Preview
 		battle.choose('p1', 'move 1 1, move 1 -1');
@@ -125,11 +125,11 @@ describe('Sky Drop', function () {
 		battle = BattleEngine.Battle.construct('battle-skydrop-ally', 'doublescustomgame');
 		battle.join('p1', 'Guest 1', 1, [
 			{species: "Aerodactyl", ability: 'unnerve', moves: ['skydrop']},
-			{species: "Smeargle", ability: 'owntempo', moves: ['spore']}
+			{species: "Smeargle", ability: 'owntempo', moves: ['spore']},
 		]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: "Lairon", ability: 'sturdy', moves: ['bulkup']},
-			{species: "Aggron", ability: 'sturdy', moves: ['bulkup']}
+			{species: "Aggron", ability: 'sturdy', moves: ['bulkup']},
 		]);
 		battle.commitDecisions(); // Team Preview
 		battle.choose('p1', 'move 1 -2, move 1 1');
@@ -141,11 +141,11 @@ describe('Sky Drop', function () {
 		battle = BattleEngine.Battle.construct('battle-skydrop-allyswitch', 'doublescustomgame');
 		battle.join('p1', 'Guest 1', 1, [
 			{species: "Aerodactyl", ability: 'unnerve', moves: ['skydrop']},
-			{species: "Smeargle", ability: 'owntempo', moves: ['splash']}
+			{species: "Smeargle", ability: 'owntempo', moves: ['splash']},
 		]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: "Lairon", ability: 'sturdy', moves: ['bulkup']},
-			{species: "Aggron", ability: 'sturdy', moves: ['bulkup', 'allyswitch']}
+			{species: "Aggron", ability: 'sturdy', moves: ['bulkup', 'allyswitch']},
 		]);
 		battle.commitDecisions(); // Team Preview
 		battle.choose('p1', 'move 1 1, move 1 2');
@@ -160,11 +160,11 @@ describe('Sky Drop', function () {
 		battle = BattleEngine.Battle.construct('battle-skydrop-followme', 'doublescustomgame');
 		battle.join('p1', 'Guest 1', 1, [
 			{species: "Aerodactyl", ability: 'unnerve', moves: ['skydrop']},
-			{species: "Smeargle", ability: 'owntempo', moves: ['splash']}
+			{species: "Smeargle", ability: 'owntempo', moves: ['splash']},
 		]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: "Lairon", ability: 'sturdy', moves: ['bulkup']},
-			{species: "Aggron", ability: 'sturdy', moves: ['bulkup', 'followme']}
+			{species: "Aggron", ability: 'sturdy', moves: ['bulkup', 'followme']},
 		]);
 		battle.commitDecisions(); // Team Preview
 		battle.choose('p1', 'move 1 1, move 1 2');
@@ -179,11 +179,11 @@ describe('Sky Drop', function () {
 		battle = BattleEngine.Battle.construct('battle-skydrop-miss', 'doublescustomgame');
 		battle.join('p1', 'Guest 1', 1, [
 			{species: "Aerodactyl", ability: 'unnerve', moves: ['skydrop']},
-			{species: "Kabutops", ability: 'swiftswim', moves: ['aquajet']}
+			{species: "Kabutops", ability: 'swiftswim', moves: ['aquajet']},
 		]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: "Lairon", ability: 'sturdy', moves: ['bulkup']},
-			{species: "Azumarill", ability: 'thickfat', moves: ['aquajet']}
+			{species: "Azumarill", ability: 'thickfat', moves: ['aquajet']},
 		]);
 		battle.on('Damage', battle.getFormat(), function (damage, target, source, effect) {
 			// mod Sky Drop to deal no damage
@@ -203,11 +203,11 @@ describe('Sky Drop', function () {
 		battle = BattleEngine.Battle.construct('battle-skydrop-gravity', 'doublescustomgame');
 		battle.join('p1', 'Guest 1', 1, [
 			{species: "Aerodactyl", ability: 'unnerve', moves: ['skydrop']},
-			{species: "Jirachi", ability: 'serenegrace', moves: ['gravity']}
+			{species: "Jirachi", ability: 'serenegrace', moves: ['gravity']},
 		]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: "Lairon", ability: 'sturdy', moves: ['bulkup']},
-			{species: "Aggron", ability: 'sturdy', moves: ['bulkup']}
+			{species: "Aggron", ability: 'sturdy', moves: ['bulkup']},
 		]);
 		battle.commitDecisions(); // Team Preview
 		battle.choose('p1', 'move 1 1, move 1');
@@ -236,12 +236,12 @@ describe('Sky Drop [Gen 5]', function () {
 			battle.join('p1', 'Guest 1', 1, [
 				{species: "Aerodactyl", ability: 'unnerve', moves: ['rockpolish', 'skydrop', 'dig']},
 				{species: "Arceus", ability: 'multitype', moves: ['recover', 'gravity']},
-				{species: "Aggron", ability: 'sturdy', moves: ['rest']}
+				{species: "Aggron", ability: 'sturdy', moves: ['rest']},
 			]);
 			battle.join('p2', 'Guest 2', 1, [
 				{species: "Magikarp", ability: 'owntempo', moves: ['sleeptalk', 'tackle']},
 				{species: "Deoxys-Attack", ability: 'sturdy', moves: ['nastyplot', 'thunderbolt', 'roar']},
-				{species: "Azurill", ability: 'thickfat', moves: ['watersport']}
+				{species: "Azurill", ability: 'thickfat', moves: ['watersport']},
 			]);
 			battle.commitDecisions(); // Team Preview
 			battle.choose('p1', 'move 2 1, move 2');

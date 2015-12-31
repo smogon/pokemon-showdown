@@ -25,8 +25,8 @@ exports.BattleTypeChart = {
 			"Poison": 1,
 			"Psychic": 0,
 			"Rock": 1,
-			"Water": 0
-		}
+			"Water": 0,
+		},
 	},
 	"Fire": {
 		damageTaken: {
@@ -44,8 +44,8 @@ exports.BattleTypeChart = {
 			"Poison": 0,
 			"Psychic": 0,
 			"Rock": 1,
-			"Water": 1
-		}
+			"Water": 1,
+		},
 	},
 	"Ghost": {
 		damageTaken: {
@@ -63,8 +63,8 @@ exports.BattleTypeChart = {
 			"Poison": 2,
 			"Psychic": 0,
 			"Rock": 0,
-			"Water": 0
-		}
+			"Water": 0,
+		},
 	},
 	"Ice": {
 		damageTaken: {
@@ -85,8 +85,8 @@ exports.BattleTypeChart = {
 			"Psychic": 0,
 			"Rock": 1,
 			"Steel": 1,
-			"Water": 0
-		}
+			"Water": 0,
+		},
 	},
 	"Poison": {
 		damageTaken: {
@@ -106,8 +106,8 @@ exports.BattleTypeChart = {
 			"Poison": 2,
 			"Psychic": 1,
 			"Rock": 0,
-			"Water": 0
-		}
+			"Water": 0,
+		},
 	},
 	"Psychic": {
 		damageTaken: {
@@ -125,9 +125,9 @@ exports.BattleTypeChart = {
 			"Poison": 0,
 			"Psychic": 2,
 			"Rock": 0,
-			"Water": 0
-		}
+			"Water": 0,
+		},
 	},
 	"Dark": null,
-	"Steel": null
+	"Steel": null,
 };

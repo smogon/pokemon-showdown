@@ -12,7 +12,7 @@ describe('Suction Cups', function () {
 		battle = BattleEngine.Battle.construct();
 		battle.join('p1', 'Guest 1', 1, [
 			{species: 'Shuckle', ability: 'suctioncups', moves: ['rapidspin']},
-			{species: 'Forretress', ability: 'sturdy', moves: ['rapidspin']}
+			{species: 'Forretress', ability: 'sturdy', moves: ['rapidspin']},
 		]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Smeargle', ability: 'noguard', item: 'redcard', moves: ['healpulse', 'dragontail', 'circlethrow', 'roar']}]);
 		battle.commitDecisions();

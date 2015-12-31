@@ -3,15 +3,15 @@
 exports.BattleMovedex = {
 	acidarmor: {
 		inherit: true,
-		pp: 40
+		pp: 40,
 	},
 	aircutter: {
 		inherit: true,
-		basePower: 55
+		basePower: 55,
 	},
 	airslash: {
 		inherit: true,
-		pp: 20
+		pp: 20,
 	},
 	aromatherapy: {
 		inherit: true,
@@ -21,7 +21,7 @@ exports.BattleMovedex = {
 				side.pokemon[i].status = '';
 			}
 			this.add('-cureteam', source, '[from] move: Aromatherapy');
-		}
+		},
 	},
 	assist: {
 		inherit: true,
@@ -34,7 +34,7 @@ exports.BattleMovedex = {
 				for (let i = 0; i < pokemon.moves.length; i++) {
 					let move = pokemon.moves[i];
 					let noAssist = {
-						assist:1, bestow:1, chatter:1, circlethrow:1, copycat:1, counter:1, covet:1, destinybond:1, detect:1, dragontail:1, endure:1, feint:1, focuspunch:1, followme:1, helpinghand:1, mefirst:1, metronome:1, mimic:1, mirrorcoat:1, mirrormove:1, naturepower:1, protect:1, ragepowder:1, sketch:1, sleeptalk:1, snatch:1, struggle:1, switcheroo:1, thief:1, transform:1, trick:1
+						assist:1, bestow:1, chatter:1, circlethrow:1, copycat:1, counter:1, covet:1, destinybond:1, detect:1, dragontail:1, endure:1, feint:1, focuspunch:1, followme:1, helpinghand:1, mefirst:1, metronome:1, mimic:1, mirrorcoat:1, mirrormove:1, naturepower:1, protect:1, ragepowder:1, sketch:1, sleeptalk:1, snatch:1, struggle:1, switcheroo:1, thief:1, transform:1, trick:1,
 					};
 					if (move && !noAssist[move]) {
 						moves.push(move);
@@ -47,7 +47,7 @@ exports.BattleMovedex = {
 				return false;
 			}
 			this.useMove(randomMove, target);
-		}
+		},
 	},
 	assurance: {
 		inherit: true,
@@ -58,39 +58,39 @@ exports.BattleMovedex = {
 				return 100;
 			}
 			return 50;
-		}
+		},
 	},
 	aurasphere: {
 		inherit: true,
-		basePower: 90
+		basePower: 90,
 	},
 	barrier: {
 		inherit: true,
-		pp: 30
+		pp: 30,
 	},
 	bestow: {
 		inherit: true,
-		flags: {protect: 1, mirror: 1}
+		flags: {protect: 1, mirror: 1},
 	},
 	bind: {
 		inherit: true,
-		desc: "Deals damage to one adjacent target and prevents it from switching for four or five turns; seven turns if the user is holding Grip Claw. Causes damage to the target equal to 1/16 of its maximum HP (1/8 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Rapid Spin. This effect is not stackable or reset by using this or another partial-trapping move. Makes contact."
+		desc: "Deals damage to one adjacent target and prevents it from switching for four or five turns; seven turns if the user is holding Grip Claw. Causes damage to the target equal to 1/16 of its maximum HP (1/8 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Rapid Spin. This effect is not stackable or reset by using this or another partial-trapping move. Makes contact.",
 	},
 	blizzard: {
 		inherit: true,
-		basePower: 120
+		basePower: 120,
 	},
 	block: {
 		inherit: true,
-		flags: {protect: 1, reflectable: 1, mirror: 1}
+		flags: {protect: 1, reflectable: 1, mirror: 1},
 	},
 	bubble: {
 		inherit: true,
-		basePower: 20
+		basePower: 20,
 	},
 	bugbuzz: {
 		inherit: true,
-		flags: {protect: 1, mirror: 1, sound: 1}
+		flags: {protect: 1, mirror: 1, sound: 1},
 	},
 	camouflage: {
 		inherit: true,
@@ -99,11 +99,11 @@ exports.BattleMovedex = {
 		onHit: function (target) {
 			if (!target.setType('Ground')) return false;
 			this.add('-start', target, 'typechange', 'Ground');
-		}
+		},
 	},
 	charm: {
 		inherit: true,
-		type: "Normal"
+		type: "Normal",
 	},
 	chatter: {
 		inherit: true,
@@ -115,13 +115,13 @@ exports.BattleMovedex = {
 		},
 		secondary: {
 			chance: 10,
-			volatileStatus: 'confusion'
+			volatileStatus: 'confusion',
 		},
-		flags: {protect: 1, mirror: 1, sound: 1, distance: 1}
+		flags: {protect: 1, mirror: 1, sound: 1, distance: 1},
 	},
 	clamp: {
 		inherit: true,
-		desc: "Deals damage to one adjacent target and prevents it from switching for four or five turns; seven turns if the user is holding Grip Claw. Causes damage to the target equal to 1/16 of its maximum HP (1/8 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Rapid Spin. This effect is not stackable or reset by using this or another partial-trapping move. Makes contact."
+		desc: "Deals damage to one adjacent target and prevents it from switching for four or five turns; seven turns if the user is holding Grip Claw. Causes damage to the target equal to 1/16 of its maximum HP (1/8 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Rapid Spin. This effect is not stackable or reset by using this or another partial-trapping move. Makes contact.",
 	},
 	conversion: {
 		inherit: true,
@@ -141,7 +141,7 @@ exports.BattleMovedex = {
 
 			if (!target.setType(type)) return false;
 			this.add('-start', target, 'typechange', type);
-		}
+		},
 	},
 	copycat: {
 		inherit: true,
@@ -153,20 +153,20 @@ exports.BattleMovedex = {
 				return false;
 			}
 			this.useMove(this.lastMove, pokemon);
-		}
+		},
 	},
 	cottonspore: {
 		inherit: true,
 		onTryHit: function () {},
-		target: "normal"
+		target: "normal",
 	},
 	covet: {
 		inherit: true,
-		pp: 40
+		pp: 40,
 	},
 	crabhammer: {
 		inherit: true,
-		basePower: 90
+		basePower: 90,
 	},
 	defog: {
 		inherit: true,
@@ -180,36 +180,36 @@ exports.BattleMovedex = {
 					this.add('-sideend', pokemon.side, this.getEffect(i).name, '[from] move: Defog', '[of] ' + pokemon);
 				}
 			}
-		}
+		},
 	},
 	dracometeor: {
 		inherit: true,
-		basePower: 140
+		basePower: 140,
 	},
 	dragonpulse: {
 		inherit: true,
-		basePower: 90
+		basePower: 90,
 	},
 	echoedvoice: {
 		inherit: true,
-		flags: {protect: 1, mirror: 1, sound: 1}
+		flags: {protect: 1, mirror: 1, sound: 1},
 	},
 	energyball: {
 		inherit: true,
-		basePower: 80
+		basePower: 80,
 	},
 	extrasensory: {
 		inherit: true,
-		pp: 30
+		pp: 30,
 	},
 	finalgambit: {
 		inherit: true,
 		desc: "Deals damage to one adjacent target equal to the user's current HP. If this move is successful, the user faints. Makes contact.",
-		flags: {contact: 1, protect: 1}
+		flags: {contact: 1, protect: 1},
 	},
 	fireblast: {
 		inherit: true,
-		basePower: 120
+		basePower: 120,
 	},
 	firepledge: {
 		inherit: true,
@@ -220,23 +220,23 @@ exports.BattleMovedex = {
 				return 150;
 			}
 			return 50;
-		}
+		},
 	},
 	firespin: {
 		inherit: true,
-		desc: "Deals damage to one adjacent target and prevents it from switching for four or five turns; seven turns if the user is holding Grip Claw. Causes damage to the target equal to 1/16 of its maximum HP (1/8 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Rapid Spin. This effect is not stackable or reset by using this or another partial-trapping move."
+		desc: "Deals damage to one adjacent target and prevents it from switching for four or five turns; seven turns if the user is holding Grip Claw. Causes damage to the target equal to 1/16 of its maximum HP (1/8 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Rapid Spin. This effect is not stackable or reset by using this or another partial-trapping move.",
 	},
 	flamethrower: {
 		inherit: true,
-		basePower: 95
+		basePower: 95,
 	},
 	followme: {
 		inherit: true,
-		priority: 3
+		priority: 3,
 	},
 	frostbreath: {
 		inherit: true,
-		basePower: 40
+		basePower: 40,
 	},
 	furycutter: {
 		inherit: true,
@@ -257,8 +257,8 @@ exports.BattleMovedex = {
 					this.effectData.multiplier <<= 1;
 				}
 				this.effectData.duration = 2;
-			}
-		}
+			},
+		},
 	},
 	futuresight: {
 		inherit: true,
@@ -279,20 +279,20 @@ exports.BattleMovedex = {
 					category: "Special",
 					flags: {},
 					ignoreImmunity: false,
-					type: 'Psychic'
-				}
+					type: 'Psychic',
+				},
 			};
 			this.add('-start', source, 'move: Future Sight');
 			return null;
-		}
+		},
 	},
 	glare: {
 		inherit: true,
-		accuracy: 90
+		accuracy: 90,
 	},
 	grasswhistle: {
 		inherit: true,
-		flags: {protect: 1, reflectable: 1, mirror: 1, sound: 1}
+		flags: {protect: 1, reflectable: 1, mirror: 1, sound: 1},
 	},
 	grasspledge: {
 		inherit: true,
@@ -303,23 +303,23 @@ exports.BattleMovedex = {
 				return 150;
 			}
 			return 50;
-		}
+		},
 	},
 	growl: {
 		inherit: true,
-		flags: {protect: 1, reflectable: 1, mirror: 1, sound: 1}
+		flags: {protect: 1, reflectable: 1, mirror: 1, sound: 1},
 	},
 	growth: {
 		inherit: true,
-		pp: 40
+		pp: 40,
 	},
 	gunkshot: {
 		inherit: true,
-		accuracy: 70
+		accuracy: 70,
 	},
 	healbell: {
 		inherit: true,
-		flags: {protect: 1, mirror: 1, sound: 1}
+		flags: {protect: 1, mirror: 1, sound: 1},
 	},
 	healblock: {
 		inherit: true,
@@ -355,17 +355,17 @@ exports.BattleMovedex = {
 			onEnd: function (pokemon) {
 				this.add('-end', pokemon, 'move: Heal Block');
 			},
-			onTryHeal: false
-		}
+			onTryHeal: false,
+		},
 	},
 	healpulse: {
 		inherit: true,
 		heal: [1, 2],
-		onHit: function () {}
+		onHit: function () {},
 	},
 	heatwave: {
 		inherit: true,
-		basePower: 100
+		basePower: 100,
 	},
 	hex: {
 		inherit: true,
@@ -373,7 +373,7 @@ exports.BattleMovedex = {
 		basePowerCallback: function (pokemon, target) {
 			if (target.status) return 100;
 			return 50;
-		}
+		},
 	},
 	hiddenpower: {
 		inherit: true,
@@ -382,87 +382,87 @@ exports.BattleMovedex = {
 			return pokemon.hpPower || 70;
 		},
 		desc: "Deals damage to one adjacent target. This move's type and power depend on the user's individual values (IVs). Power varies between 30 and 70, and type can be any but Normal.",
-		shortDesc: "Varies in power and type based on the user's IVs."
+		shortDesc: "Varies in power and type based on the user's IVs.",
 	},
 	hiddenpowerbug: {
 		inherit: true,
-		basePower: 70
+		basePower: 70,
 	},
 	hiddenpowerdark: {
 		inherit: true,
-		basePower: 70
+		basePower: 70,
 	},
 	hiddenpowerdragon: {
 		inherit: true,
-		basePower: 70
+		basePower: 70,
 	},
 	hiddenpowerelectric: {
 		inherit: true,
-		basePower: 70
+		basePower: 70,
 	},
 	hiddenpowerfighting: {
 		inherit: true,
-		basePower: 70
+		basePower: 70,
 	},
 	hiddenpowerfire: {
 		inherit: true,
-		basePower: 70
+		basePower: 70,
 	},
 	hiddenpowerflying: {
 		inherit: true,
-		basePower: 70
+		basePower: 70,
 	},
 	hiddenpowerghost: {
 		inherit: true,
-		basePower: 70
+		basePower: 70,
 	},
 	hiddenpowergrass: {
 		inherit: true,
-		basePower: 70
+		basePower: 70,
 	},
 	hiddenpowerground: {
 		inherit: true,
-		basePower: 70
+		basePower: 70,
 	},
 	hiddenpowerice: {
 		inherit: true,
-		basePower: 70
+		basePower: 70,
 	},
 	hiddenpowerpoison: {
 		inherit: true,
-		basePower: 70
+		basePower: 70,
 	},
 	hiddenpowerpsychic: {
 		inherit: true,
-		basePower: 70
+		basePower: 70,
 	},
 	hiddenpowerrock: {
 		inherit: true,
-		basePower: 70
+		basePower: 70,
 	},
 	hiddenpowersteel: {
 		inherit: true,
-		basePower: 70
+		basePower: 70,
 	},
 	hiddenpowerwater: {
 		inherit: true,
-		basePower: 70
+		basePower: 70,
 	},
 	hurricane: {
 		inherit: true,
-		basePower: 120
+		basePower: 120,
 	},
 	hydropump: {
 		inherit: true,
-		basePower: 120
+		basePower: 120,
 	},
 	hypervoice: {
 		inherit: true,
-		flags: {protect: 1, mirror: 1, sound: 1}
+		flags: {protect: 1, mirror: 1, sound: 1},
 	},
 	icebeam: {
 		inherit: true,
-		basePower: 95
+		basePower: 95,
 	},
 	incinerate: {
 		inherit: true,
@@ -474,48 +474,48 @@ exports.BattleMovedex = {
 			if (item.isBerry && pokemon.takeItem(source)) {
 				this.add('-enditem', pokemon, item.name, '[from] move: Incinerate');
 			}
-		}
+		},
 	},
 	knockoff: {
 		inherit: true,
 		basePower: 20,
 		desc: "Deals damage to one adjacent target and causes it to drop its held item. This move cannot force Pokemon with the Ability Sticky Hold to lose their held item, or force a Giratina, an Arceus, or a Genesect to lose their Griseous Orb, Plate, or Drive, respectively. Items lost to this move cannot be regained with Recycle. Makes contact.",
 		shortDesc: "Removes the target's held item.",
-		onBasePower: function () {}
+		onBasePower: function () {},
 	},
 	leafstorm: {
 		inherit: true,
-		basePower: 140
+		basePower: 140,
 	},
 	lick: {
 		inherit: true,
-		basePower: 20
+		basePower: 20,
 	},
 	lowsweep: {
 		inherit: true,
-		basePower: 60
+		basePower: 60,
 	},
 	magicroom: {
 		inherit: true,
-		priority: 0
+		priority: 0,
 	},
 	magmastorm: {
 		inherit: true,
 		desc: "Deals damage to one adjacent target and prevents it from switching for four or five turns; seven turns if the user is holding Grip Claw. Causes damage to the target equal to 1/16 of its maximum HP (1/8 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Rapid Spin. This effect is not stackable or reset by using this or another partial-trapping move.",
-		basePower: 120
+		basePower: 120,
 	},
 	meanlook: {
 		inherit: true,
-		flags: {protect: 1, reflectable: 1, mirror: 1}
+		flags: {protect: 1, reflectable: 1, mirror: 1},
 	},
 	metalsound: {
 		inherit: true,
-		flags: {protect: 1, reflectable: 1, mirror: 1, sound: 1}
+		flags: {protect: 1, reflectable: 1, mirror: 1, sound: 1},
 	},
 	meteormash: {
 		inherit: true,
 		accuracy: 85,
-		basePower: 100
+		basePower: 100,
 	},
 	metronome: {
 		inherit: true,
@@ -526,7 +526,7 @@ exports.BattleMovedex = {
 				if (i !== move.id) continue;
 				if (move.isNonstandard) continue;
 				let noMetronome = {
-					afteryou:1, assist:1, bestow:1, chatter:1, copycat:1, counter:1, covet:1, destinybond:1, detect:1, endure:1, feint:1, focuspunch:1, followme:1, freezeschok:1, helpinghand:1, iceburn:1, mefirst:1, metronome:1, mimic:1, mirrorcoat:1, mirrormove:1, naturepower:1, protect:1, quash:1, quickguard:1, ragepowder:1, relicsong:1, secretsword:1, sketch:1, sleeptalk:1, snarl:1, snatch:1, snore:1, struggle:1, switcheroo:1, technoblast:1, thief:1, transform:1, trick:1, vcreate:1, wideguard:1
+					afteryou:1, assist:1, bestow:1, chatter:1, copycat:1, counter:1, covet:1, destinybond:1, detect:1, endure:1, feint:1, focuspunch:1, followme:1, freezeschok:1, helpinghand:1, iceburn:1, mefirst:1, metronome:1, mimic:1, mirrorcoat:1, mirrormove:1, naturepower:1, protect:1, quash:1, quickguard:1, ragepowder:1, relicsong:1, secretsword:1, sketch:1, sleeptalk:1, snarl:1, snatch:1, snore:1, struggle:1, switcheroo:1, technoblast:1, thief:1, transform:1, trick:1, vcreate:1, wideguard:1,
 				};
 				if (!noMetronome[move.id] && move.num < 560) {
 					moves.push(move.id);
@@ -536,7 +536,7 @@ exports.BattleMovedex = {
 			if (moves.length) randomMove = moves[this.random(moves.length)];
 			if (!randomMove) return false;
 			this.useMove(randomMove, target);
-		}
+		},
 	},
 	minimize: {
 		inherit: true,
@@ -548,12 +548,12 @@ exports.BattleMovedex = {
 				if (move.id in {'stomp':1, 'steamroller':1}) {
 					return this.chainModify(2);
 				}
-			}
-		}
+			},
+		},
 	},
 	moonlight: {
 		inherit: true,
-		type: "Normal"
+		type: "Normal",
 	},
 	mudsport: {
 		num: 300,
@@ -579,15 +579,15 @@ exports.BattleMovedex = {
 			onBasePowerPriority: 1,
 			onAnyBasePower: function (basePower, user, target, move) {
 				if (move.type === 'Electric') return this.chainModify([0x548, 0x1000]); // The Mud Sport modifier is slightly higher than the usual 0.33 modifier (0x547)
-			}
+			},
 		},
 		secondary: false,
 		target: "all",
-		type: "Ground"
+		type: "Ground",
 	},
 	muddywater: {
 		inherit: true,
-		basePower: 95
+		basePower: 95,
 	},
 	naturepower: {
 		inherit: true,
@@ -597,47 +597,47 @@ exports.BattleMovedex = {
 		onHit: function (pokemon) {
 			this.useMove('earthquake', pokemon);
 		},
-		target: "self"
+		target: "self",
 	},
 	overheat: {
 		inherit: true,
-		basePower: 140
+		basePower: 140,
 	},
 	perishsong: {
 		inherit: true,
-		flags: {sound: 1, distance: 1}
+		flags: {sound: 1, distance: 1},
 	},
 	pinmissile: {
 		inherit: true,
 		accuracy: 85,
-		basePower: 14
+		basePower: 14,
 	},
 	poisonfang: {
 		inherit: true,
 		secondary: {
 			chance: 30,
-			status: 'tox'
-		}
+			status: 'tox',
+		},
 	},
 	poisongas: {
 		inherit: true,
-		accuracy: 80
+		accuracy: 80,
 	},
 	poisonpowder: {
 		inherit: true,
-		onTryHit: function () {}
+		onTryHit: function () {},
 	},
 	powergem: {
 		inherit: true,
-		basePower: 70
+		basePower: 70,
 	},
 	psychoshift: {
 		inherit: true,
-		accuracy: 90
+		accuracy: 90,
 	},
 	psywave: {
 		inherit: true,
-		accuracy: 80
+		accuracy: 80,
 	},
 	quickguard: {
 		inherit: true,
@@ -670,8 +670,8 @@ exports.BattleMovedex = {
 					}
 				}
 				return null;
-			}
-		}
+			},
+		},
 	},
 	ragepowder: {
 		num: 476,
@@ -688,42 +688,42 @@ exports.BattleMovedex = {
 		volatileStatus: 'followme',
 		secondary: false,
 		target: "self",
-		type: "Bug"
+		type: "Bug",
 	},
 	relicsong: {
 		inherit: true,
-		flags: {protect: 1, mirror: 1, sound: 1}
+		flags: {protect: 1, mirror: 1, sound: 1},
 	},
 	roar: {
 		inherit: true,
 		accuracy: 100,
-		flags: {protect: 1, reflectable: 1, mirror: 1, sound: 1, authentic: 1}
+		flags: {protect: 1, reflectable: 1, mirror: 1, sound: 1, authentic: 1},
 	},
 	rocktomb: {
 		inherit: true,
 		accuracy: 80,
 		basePower: 50,
-		pp: 10
+		pp: 10,
 	},
 	round: {
 		inherit: true,
-		flags: {protect: 1, mirror: 1, sound: 1}
+		flags: {protect: 1, mirror: 1, sound: 1},
 	},
 	sandtomb: {
 		inherit: true,
-		desc: "Deals damage to one adjacent target and prevents it from switching for four or five turns; seven turns if the user is holding Grip Claw. Causes damage to the target equal to 1/16 of its maximum HP (1/8 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Rapid Spin. This effect is not stackable or reset by using this or another partial-trapping move."
+		desc: "Deals damage to one adjacent target and prevents it from switching for four or five turns; seven turns if the user is holding Grip Claw. Causes damage to the target equal to 1/16 of its maximum HP (1/8 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Rapid Spin. This effect is not stackable or reset by using this or another partial-trapping move.",
 	},
 	sacredsword: {
 		inherit: true,
-		pp: 20
+		pp: 20,
 	},
 	scald: {
 		inherit: true,
-		thawsTarget: false
+		thawsTarget: false,
 	},
 	screech: {
 		inherit: true,
-		flags: {protect: 1, reflectable: 1, mirror: 1, sound: 1}
+		flags: {protect: 1, reflectable: 1, mirror: 1, sound: 1},
 	},
 	secretpower: {
 		inherit: true,
@@ -731,13 +731,13 @@ exports.BattleMovedex = {
 		secondary: {
 			chance: 30,
 			boosts: {
-				accuracy: -1
-			}
-		}
+				accuracy: -1,
+			},
+		},
 	},
 	sing: {
 		inherit: true,
-		flags: {protect: 1, reflectable: 1, mirror: 1, sound: 1}
+		flags: {protect: 1, reflectable: 1, mirror: 1, sound: 1},
 	},
 	skillswap: {
 		inherit: true,
@@ -750,12 +750,12 @@ exports.BattleMovedex = {
 			this.add('-activate', source, 'move: Skill Swap', this.getAbility(targetAbility), this.getAbility(sourceAbility), '[of] ' + target);
 			source.setAbility(targetAbility);
 			target.setAbility(sourceAbility);
-		}
+		},
 	},
 	skullbash: {
 		inherit: true,
 		basePower: 100,
-		pp: 15
+		pp: 15,
 	},
 	skydrop: {
 		inherit: true,
@@ -778,11 +778,11 @@ exports.BattleMovedex = {
 				source.addVolatile('twoturnmove', target);
 				return null;
 			}
-		}
+		},
 	},
 	sleeppowder: {
 		inherit: true,
-		onTryHit: function () {}
+		onTryHit: function () {},
 	},
 	smellingsalts: {
 		inherit: true,
@@ -790,44 +790,44 @@ exports.BattleMovedex = {
 		basePowerCallback: function (pokemon, target) {
 			if (target.status === 'par') return 120;
 			return 60;
-		}
+		},
 	},
 	smog: {
 		inherit: true,
-		basePower: 20
+		basePower: 20,
 	},
 	snarl: {
 		inherit: true,
-		flags: {protect: 1, mirror: 1, sound: 1}
+		flags: {protect: 1, mirror: 1, sound: 1},
 	},
 	snore: {
 		inherit: true,
 		basePower: 40,
-		flags: {protect: 1, mirror: 1, sound: 1}
+		flags: {protect: 1, mirror: 1, sound: 1},
 	},
 	spore: {
 		inherit: true,
-		onTryHit: function () {}
+		onTryHit: function () {},
 	},
 	stormthrow: {
 		inherit: true,
-		basePower: 40
+		basePower: 40,
 	},
 	stringshot: {
 		inherit: true,
 		desc: "Lowers all adjacent foes' Speed by 1 stage. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves.",
 		shortDesc: "Lowers the foe(s) Speed by 1.",
 		boosts: {
-			spe: -1
-		}
+			spe: -1,
+		},
 	},
 	strugglebug: {
 		inherit: true,
-		basePower: 30
+		basePower: 30,
 	},
 	stunspore: {
 		inherit: true,
-		onTryHit: function () {}
+		onTryHit: function () {},
 	},
 	substitute: {
 		inherit: true,
@@ -872,75 +872,75 @@ exports.BattleMovedex = {
 			},
 			onEnd: function (target) {
 				this.add('-end', target, 'Substitute');
-			}
-		}
+			},
+		},
 	},
 	submission: {
 		inherit: true,
-		pp: 25
+		pp: 25,
 	},
 	supersonic: {
 		inherit: true,
-		flags: {protect: 1, reflectable: 1, mirror: 1, sound: 1}
+		flags: {protect: 1, reflectable: 1, mirror: 1, sound: 1},
 	},
 	surf: {
 		inherit: true,
-		basePower: 95
+		basePower: 95,
 	},
 	sweetkiss: {
 		inherit: true,
-		type: "Normal"
+		type: "Normal",
 	},
 	sweetscent: {
 		inherit: true,
 		desc: "Lowers all adjacent foes' evasion by 1 stage. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves.",
 		shortDesc: "Lowers the foe(s) evasion by 1.",
 		boosts: {
-			evasion: -1
-		}
+			evasion: -1,
+		},
 	},
 	swordsdance: {
 		inherit: true,
-		pp: 30
+		pp: 30,
 	},
 	synchronoise: {
 		inherit: true,
 		basePower: 70,
-		pp: 15
+		pp: 15,
 	},
 	tailwind: {
 		inherit: true,
-		pp: 30
+		pp: 30,
 	},
 	technoblast: {
 		inherit: true,
-		basePower: 85
+		basePower: 85,
 	},
 	thief: {
 		inherit: true,
 		basePower: 40,
-		pp: 10
+		pp: 10,
 	},
 	thunder: {
 		inherit: true,
-		basePower: 120
+		basePower: 120,
 	},
 	thunderbolt: {
 		inherit: true,
-		basePower: 95
+		basePower: 95,
 	},
 	uproar: {
 		inherit: true,
-		flags: {protect: 1, mirror: 1, sound: 1}
+		flags: {protect: 1, mirror: 1, sound: 1},
 	},
 	toxic: {
 		inherit: true,
-		onModifyMove: function () {}
+		onModifyMove: function () {},
 	},
 	vinewhip: {
 		inherit: true,
 		basePower: 35,
-		pp: 15
+		pp: 15,
 	},
 	wakeupslap: {
 		inherit: true,
@@ -948,7 +948,7 @@ exports.BattleMovedex = {
 		basePowerCallback: function (pokemon, target) {
 			if (target.status === 'slp') return 120;
 			return 60;
-		}
+		},
 	},
 	waterpledge: {
 		inherit: true,
@@ -959,7 +959,7 @@ exports.BattleMovedex = {
 				return 150;
 			}
 			return 50;
-		}
+		},
 	},
 	watersport: {
 		num: 346,
@@ -985,16 +985,16 @@ exports.BattleMovedex = {
 			onBasePowerPriority: 1,
 			onAnyBasePower: function (basePower, user, target, move) {
 				if (move.type === 'Fire') return this.chainModify([0x548, 0x1000]); // The Water Sport modifier is slightly higher than the usual 0.33 modifier (0x547)
-			}
+			},
 		},
 		secondary: false,
 		target: "all",
-		type: "Water"
+		type: "Water",
 	},
 	whirlwind: {
 		inherit: true,
 		accuracy: 100,
-		flags: {protect: 1, reflectable: 1, mirror: 1, authentic: 1}
+		flags: {protect: 1, reflectable: 1, mirror: 1, authentic: 1},
 	},
 	wideguard: {
 		inherit: true,
@@ -1005,22 +1005,22 @@ exports.BattleMovedex = {
 		},
 		onHitSide: function (side, source) {
 			source.addVolatile('stall');
-		}
+		},
 	},
 	whirlpool: {
 		inherit: true,
-		desc: "Deals damage to one adjacent target and prevents it from switching for four or five turns; seven turns if the user is holding Grip Claw. Power doubles if the target is using Dive. Causes damage to the target equal to 1/16 of its maximum HP (1/8 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Rapid Spin. This effect is not stackable or reset by using this or another partial-trapping move."
+		desc: "Deals damage to one adjacent target and prevents it from switching for four or five turns; seven turns if the user is holding Grip Claw. Power doubles if the target is using Dive. Causes damage to the target equal to 1/16 of its maximum HP (1/8 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Rapid Spin. This effect is not stackable or reset by using this or another partial-trapping move.",
 	},
 	willowisp: {
 		inherit: true,
-		accuracy: 75
+		accuracy: 75,
 	},
 	wonderroom: {
 		inherit: true,
-		priority: -7
+		priority: -7,
 	},
 	wrap: {
 		inherit: true,
-		desc: "Deals damage to one adjacent target and prevents it from switching for four or five turns; seven turns if the user is holding Grip Claw. Causes damage to the target equal to 1/16 of its maximum HP (1/8 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Rapid Spin. This effect is not stackable or reset by using this or another partial-trapping move. Makes contact."
-	}
+		desc: "Deals damage to one adjacent target and prevents it from switching for four or five turns; seven turns if the user is holding Grip Claw. Causes damage to the target equal to 1/16 of its maximum HP (1/8 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Rapid Spin. This effect is not stackable or reset by using this or another partial-trapping move. Makes contact.",
+	},
 };

@@ -20,8 +20,8 @@ exports.BattleTypeChart = {
 			"Psychic": 0,
 			"Rock": 0,
 			"Steel": 2,
-			"Water": 0
-		}
+			"Water": 0,
+		},
 	},
 	"Ghost": {
 		inherit: true,
@@ -42,8 +42,8 @@ exports.BattleTypeChart = {
 			"Psychic": 0,
 			"Rock": 0,
 			"Steel": 0,
-			"Water": 0
-		}
+			"Water": 0,
+		},
 	},
 	"Grass": {
 		inherit: true,
@@ -64,8 +64,8 @@ exports.BattleTypeChart = {
 			"Psychic": 0,
 			"Rock": 0,
 			"Steel": 0,
-			"Water": 2
-		}
+			"Water": 2,
+		},
 	},
 	"Steel": {
 		inherit: true,
@@ -89,8 +89,8 @@ exports.BattleTypeChart = {
 			"Psychic": 2,
 			"Rock": 2,
 			"Steel": 2,
-			"Water": 0
-		}
+			"Water": 0,
+		},
 	},
-	"Fairy": null
+	"Fairy": null,
 };

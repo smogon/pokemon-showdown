@@ -91,7 +91,7 @@ describe('Transform', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: "Ditto", ability: 'limber', moves: ['transform']}]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: "Zoroark", ability: 'illusion', moves: ['rest']},
-			{species: "Mewtwo", ability: 'pressure', moves: ['rest']}
+			{species: "Mewtwo", ability: 'pressure', moves: ['rest']},
 		]);
 		battle.commitDecisions();
 		assert.notStrictEqual(battle.p1.active[0].template, battle.p2.active[0].template);
@@ -102,7 +102,7 @@ describe('Transform', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: "Ditto", ability: 'limber', moves: ['transform']}]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: "Magikarp", ability: 'rattled', moves: ['splash']},
-			{species: "Mew", ability: 'synchronize', moves: ['transform']}
+			{species: "Mew", ability: 'synchronize', moves: ['transform']},
 		]);
 		battle.commitDecisions();
 		assert.strictEqual(battle.p1.active[0].template, battle.p2.active[0].template);

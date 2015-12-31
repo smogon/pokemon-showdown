@@ -49,7 +49,7 @@ exports.BattleLearnsets = {
 		tackle: ["1L1", "2L1", "2S0"],
 		takedown: ["1M"],
 		toxic: ["1M", "2M"],
-		vinewhip: ["1L13", "2L10"]
+		vinewhip: ["1L13", "2L10"],
 	}},
 	ivysaur: {learnset: {
 		attract: ["2M"],
@@ -93,7 +93,7 @@ exports.BattleLearnsets = {
 		tackle: ["1L1", "2L1"],
 		takedown: ["1M"],
 		toxic: ["1M", "2M"],
-		vinewhip: ["1L13", "2L10"]
+		vinewhip: ["1L13", "2L10"],
 	}},
 	venusaur: {learnset: {
 		attract: ["2M"],
@@ -139,7 +139,7 @@ exports.BattleLearnsets = {
 		tackle: ["1L1", "2L1"],
 		takedown: ["1M"],
 		toxic: ["1M", "2M"],
-		vinewhip: ["1L1", "1L13", "2L1", "2L10"]
+		vinewhip: ["1L1", "1L13", "2L1", "2L10"],
 	}},
 	charmander: {learnset: {
 		ancientpower: ["2E"],
@@ -201,7 +201,7 @@ exports.BattleLearnsets = {
 		swift: ["1M", "2M"],
 		swordsdance: ["1M"],
 		takedown: ["1M"],
-		toxic: ["1M", "2M"]
+		toxic: ["1M", "2M"],
 	}},
 	charmeleon: {learnset: {
 		attract: ["2M"],
@@ -256,7 +256,7 @@ exports.BattleLearnsets = {
 		swift: ["1M", "2M"],
 		swordsdance: ["1M"],
 		takedown: ["1M"],
-		toxic: ["1M", "2M"]
+		toxic: ["1M", "2M"],
 	}},
 	charizard: {learnset: {
 		attract: ["2M"],
@@ -319,7 +319,7 @@ exports.BattleLearnsets = {
 		swordsdance: ["1M"],
 		takedown: ["1M"],
 		toxic: ["1M", "2M"],
-		wingattack: ["2L36", "2S0"]
+		wingattack: ["2L36", "2S0"],
 	}},
 	squirtle: {learnset: {
 		attract: ["2M"],
@@ -381,7 +381,7 @@ exports.BattleLearnsets = {
 		watergun: ["1L15", "1M", "2L13"],
 		whirlpool: ["2M"],
 		withdraw: ["1L28", "2L10"],
-		zapcannon: ["2S0"]
+		zapcannon: ["2S0"],
 	}},
 	wartortle: {learnset: {
 		attract: ["2M"],
@@ -436,7 +436,7 @@ exports.BattleLearnsets = {
 		waterfall: ["2M"],
 		watergun: ["1L15", "1M", "2L13"],
 		whirlpool: ["2M"],
-		withdraw: ["1L31", "2L10"]
+		withdraw: ["1L31", "2L10"],
 	}},
 	blastoise: {learnset: {
 		attract: ["2M"],
@@ -495,14 +495,14 @@ exports.BattleLearnsets = {
 		waterfall: ["2M"],
 		watergun: ["1L1", "1L15", "1M", "2L13", "2S0"],
 		whirlpool: ["2M"],
-		withdraw: ["1L31", "2L1", "2L10"]
+		withdraw: ["1L31", "2L1", "2L10"],
 	}},
 	caterpie: {learnset: {
 		stringshot: ["1L1", "2L1"],
-		tackle: ["1L1", "2L1"]
+		tackle: ["1L1", "2L1"],
 	}},
 	metapod: {learnset: {
-		harden: ["1L1", "1L7", "2L1", "2L7"]
+		harden: ["1L1", "1L7", "2L1", "2L7"],
 	}},
 	butterfree: {learnset: {
 		attract: ["2M"],
@@ -546,14 +546,14 @@ exports.BattleLearnsets = {
 		takedown: ["1M"],
 		teleport: ["1M"],
 		toxic: ["1M", "2M"],
-		whirlwind: ["1L26", "1M", "1L23", "2L23"]
+		whirlwind: ["1L26", "1M", "1L23", "2L23"],
 	}},
 	weedle: {learnset: {
 		poisonsting: ["1L1", "2L1"],
-		stringshot: ["1L1", "2L1"]
+		stringshot: ["1L1", "2L1"],
 	}},
 	kakuna: {learnset: {
-		harden: ["1L1", "2L1", "2L7"]
+		harden: ["1L1", "2L1", "2L7"],
 	}},
 	beedrill: {learnset: {
 		agility: ["1L35", "2L40"],
@@ -592,7 +592,7 @@ exports.BattleLearnsets = {
 		swordsdance: ["1M"],
 		takedown: ["1M"],
 		toxic: ["1M", "2M"],
-		twineedle: ["1L20", "2L20"]
+		twineedle: ["1L20", "2L20"],
 	}},
 	pidgey: {learnset: {
 		agility: ["1L36", "2L37"],
@@ -634,7 +634,7 @@ exports.BattleLearnsets = {
 		thief: ["2M"],
 		toxic: ["1M", "2M"],
 		whirlwind: ["1L19", "1M", "2L21"],
-		wingattack: ["1L28", "2L29"]
+		wingattack: ["1L28", "2L29"],
 	}},
 	pidgeotto: {learnset: {
 		agility: ["1L40", "2L43"],
@@ -673,7 +673,7 @@ exports.BattleLearnsets = {
 		thief: ["2M"],
 		toxic: ["1M", "2M"],
 		whirlwind: ["1L21", "1M", "2L23"],
-		wingattack: ["1L31", "2L33"]
+		wingattack: ["1L31", "2L33"],
 	}},
 	pidgeot: {learnset: {
 		agility: ["1L44", "2L46"],
@@ -713,7 +713,7 @@ exports.BattleLearnsets = {
 		thief: ["2M"],
 		toxic: ["1M", "2M"],
 		whirlwind: ["1L21", "1M", "2L23"],
-		wingattack: ["1L31", "2L33"]
+		wingattack: ["1L31", "2L33"],
 	}},
 	rattata: {learnset: {
 		attract: ["2M"],
@@ -765,7 +765,7 @@ exports.BattleLearnsets = {
 		thunder: ["1M", "2M"],
 		thunderbolt: ["1M"],
 		toxic: ["1M", "2M"],
-		watergun: ["1M"]
+		watergun: ["1M"],
 	}},
 	raticate: {learnset: {
 		attract: ["2M"],
@@ -817,7 +817,7 @@ exports.BattleLearnsets = {
 		thunder: ["1M", "2M"],
 		thunderbolt: ["1M", "2T"],
 		toxic: ["1M", "2M"],
-		watergun: ["1M"]
+		watergun: ["1M"],
 	}},
 	spearow: {learnset: {
 		agility: ["1L36", "2L43"],
@@ -862,7 +862,7 @@ exports.BattleLearnsets = {
 		thief: ["2M"],
 		toxic: ["1M", "2M"],
 		triattack: ["2E"],
-		whirlwind: ["1M"]
+		whirlwind: ["1M"],
 	}},
 	fearow: {learnset: {
 		agility: ["1L43", "2L47"],
@@ -903,7 +903,7 @@ exports.BattleLearnsets = {
 		takedown: ["1M"],
 		thief: ["2M"],
 		toxic: ["1M", "2M"],
-		whirlwind: ["1M"]
+		whirlwind: ["1M"],
 	}},
 	ekans: {learnset: {
 		acid: ["1L38", "2L37"],
@@ -950,7 +950,7 @@ exports.BattleLearnsets = {
 		takedown: ["1M"],
 		thief: ["2M"],
 		toxic: ["1M", "2M"],
-		wrap: ["1L1", "2L1"]
+		wrap: ["1L1", "2L1"],
 	}},
 	arbok: {learnset: {
 		acid: ["1L47", "2L43"],
@@ -993,7 +993,7 @@ exports.BattleLearnsets = {
 		takedown: ["1M"],
 		thief: ["2M"],
 		toxic: ["1M", "2M"],
-		wrap: ["1L1", "2L1"]
+		wrap: ["1L1", "2L1"],
 	}},
 	pichu: {learnset: {
 		attract: ["2M"],
@@ -1034,7 +1034,7 @@ exports.BattleLearnsets = {
 		thundershock: ["2L1", "2S0", "2S1", "2S2", "2S3"],
 		thunderwave: ["2L8"],
 		toxic: ["2M"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	pikachu: {learnset: {
 		agility: ["1L33", "2L33"],
@@ -1088,7 +1088,7 @@ exports.BattleLearnsets = {
 		thundershock: ["1L1", "1S2", "2L1"],
 		thunderwave: ["1L9", "1M", "1L8", "2L8"],
 		toxic: ["1M", "2M"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	raichu: {learnset: {
 		attract: ["2M"],
@@ -1139,7 +1139,7 @@ exports.BattleLearnsets = {
 		thundershock: ["1L1", "2L1"],
 		thunderwave: ["1L1", "1M"],
 		toxic: ["1M", "2M"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	sandshrew: {learnset: {
 		attract: ["2M"],
@@ -1194,7 +1194,7 @@ exports.BattleLearnsets = {
 		swordsdance: ["1M"],
 		takedown: ["1M"],
 		thief: ["2M"],
-		toxic: ["1M", "2M"]
+		toxic: ["1M", "2M"],
 	}},
 	sandslash: {learnset: {
 		attract: ["2M"],
@@ -1245,7 +1245,7 @@ exports.BattleLearnsets = {
 		swordsdance: ["1M"],
 		takedown: ["1M"],
 		thief: ["2M"],
-		toxic: ["1M", "2M"]
+		toxic: ["1M", "2M"],
 	}},
 	nidoranf: {learnset: {
 		attract: ["2M"],
@@ -1297,7 +1297,7 @@ exports.BattleLearnsets = {
 		thief: ["2M"],
 		thunder: ["1M", "2M"],
 		thunderbolt: ["1M", "2T"],
-		toxic: ["1M", "2M"]
+		toxic: ["1M", "2M"],
 	}},
 	nidorina: {learnset: {
 		attract: ["2M"],
@@ -1346,7 +1346,7 @@ exports.BattleLearnsets = {
 		thunder: ["1M", "2M"],
 		thunderbolt: ["1M", "2T"],
 		toxic: ["1M", "2M"],
-		watergun: ["1M"]
+		watergun: ["1M"],
 	}},
 	nidoqueen: {learnset: {
 		attract: ["2M"],
@@ -1414,7 +1414,7 @@ exports.BattleLearnsets = {
 		thunderbolt: ["1M", "2T"],
 		thunderpunch: ["2M"],
 		toxic: ["1M", "2M"],
-		watergun: ["1M"]
+		watergun: ["1M"],
 	}},
 	nidoranm: {learnset: {
 		amnesia: ["2E"],
@@ -1466,7 +1466,7 @@ exports.BattleLearnsets = {
 		thief: ["2M"],
 		thunder: ["1M", "2M"],
 		thunderbolt: ["1M", "2T"],
-		toxic: ["1M", "2M"]
+		toxic: ["1M", "2M"],
 	}},
 	nidorino: {learnset: {
 		attract: ["2M"],
@@ -1514,7 +1514,7 @@ exports.BattleLearnsets = {
 		thunder: ["1M", "2M"],
 		thunderbolt: ["1M", "2T"],
 		toxic: ["1M", "2M"],
-		watergun: ["1M"]
+		watergun: ["1M"],
 	}},
 	nidoking: {learnset: {
 		attract: ["2M"],
@@ -1582,7 +1582,7 @@ exports.BattleLearnsets = {
 		thunderbolt: ["1M", "2T"],
 		thunderpunch: ["2M"],
 		toxic: ["1M", "2M"],
-		watergun: ["1M"]
+		watergun: ["1M"],
 	}},
 	cleffa: {learnset: {
 		amnesia: ["2E"],
@@ -1631,7 +1631,7 @@ exports.BattleLearnsets = {
 		sweetkiss: ["2L13"],
 		swift: ["2S2"],
 		toxic: ["2M"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	clefairy: {learnset: {
 		attract: ["2M"],
@@ -1702,7 +1702,7 @@ exports.BattleLearnsets = {
 		toxic: ["1M", "2M"],
 		triattack: ["1M"],
 		watergun: ["1M"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	clefable: {learnset: {
 		attract: ["2M"],
@@ -1770,7 +1770,7 @@ exports.BattleLearnsets = {
 		toxic: ["1M", "2M"],
 		triattack: ["1M"],
 		watergun: ["1M"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	vulpix: {learnset: {
 		attract: ["2M"],
@@ -1813,7 +1813,7 @@ exports.BattleLearnsets = {
 		swift: ["1M", "2M"],
 		tailwhip: ["1L1", "2L1"],
 		takedown: ["1M"],
-		toxic: ["1M", "2M"]
+		toxic: ["1M", "2M"],
 	}},
 	ninetales: {learnset: {
 		attract: ["2M"],
@@ -1852,7 +1852,7 @@ exports.BattleLearnsets = {
 		swift: ["1M", "2M"],
 		tailwhip: ["1L1"],
 		takedown: ["1M"],
-		toxic: ["1M", "2M"]
+		toxic: ["1M", "2M"],
 	}},
 	igglybuff: {learnset: {
 		attract: ["2M"],
@@ -1896,7 +1896,7 @@ exports.BattleLearnsets = {
 		swagger: ["2M"],
 		sweetkiss: ["2L14"],
 		toxic: ["2M"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	jigglypuff: {learnset: {
 		attract: ["2M"],
@@ -1961,7 +1961,7 @@ exports.BattleLearnsets = {
 		toxic: ["1M", "2M"],
 		triattack: ["1M"],
 		watergun: ["1M"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	wigglytuff: {learnset: {
 		attract: ["2M"],
@@ -2026,7 +2026,7 @@ exports.BattleLearnsets = {
 		toxic: ["1M", "2M"],
 		triattack: ["1M"],
 		watergun: ["1M"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	zubat: {learnset: {
 		attract: ["2M"],
@@ -2068,7 +2068,7 @@ exports.BattleLearnsets = {
 		thief: ["2M"],
 		toxic: ["1M", "2M"],
 		whirlwind: ["1M", "2E"],
-		wingattack: ["1L28", "2L27"]
+		wingattack: ["1L28", "2L27"],
 	}},
 	golbat: {learnset: {
 		attract: ["2M"],
@@ -2107,7 +2107,7 @@ exports.BattleLearnsets = {
 		thief: ["2M"],
 		toxic: ["1M", "2M"],
 		whirlwind: ["1M"],
-		wingattack: ["1L32", "2L30"]
+		wingattack: ["1L32", "2L30"],
 	}},
 	crobat: {learnset: {
 		attract: ["2M"],
@@ -2138,7 +2138,7 @@ exports.BattleLearnsets = {
 		swift: ["2M"],
 		thief: ["2M"],
 		toxic: ["2M"],
-		wingattack: ["2L30"]
+		wingattack: ["2L30"],
 	}},
 	oddish: {learnset: {
 		absorb: ["1L1", "2L1", "2S0"],
@@ -2180,7 +2180,7 @@ exports.BattleLearnsets = {
 		swordsdance: ["1M", "2E"],
 		synthesis: ["2E"],
 		takedown: ["1M"],
-		toxic: ["1M", "2M"]
+		toxic: ["1M", "2M"],
 	}},
 	gloom: {learnset: {
 		absorb: ["1L1", "2L1"],
@@ -2218,7 +2218,7 @@ exports.BattleLearnsets = {
 		sweetscent: ["2L1", "2L7", "2M"],
 		swordsdance: ["1M"],
 		takedown: ["1M"],
-		toxic: ["1M", "2M"]
+		toxic: ["1M", "2M"],
 	}},
 	vileplume: {learnset: {
 		absorb: ["2L1"],
@@ -2257,7 +2257,7 @@ exports.BattleLearnsets = {
 		sweetscent: ["2L1", "2M"],
 		swordsdance: ["1M"],
 		takedown: ["1M"],
-		toxic: ["1M", "2M"]
+		toxic: ["1M", "2M"],
 	}},
 	paras: {learnset: {
 		attract: ["2M"],
@@ -2309,7 +2309,7 @@ exports.BattleLearnsets = {
 		synthesis: ["2S0"],
 		takedown: ["1M"],
 		thief: ["2M"],
-		toxic: ["1M", "2M"]
+		toxic: ["1M", "2M"],
 	}},
 	parasect: {learnset: {
 		attract: ["2M"],
@@ -2354,7 +2354,7 @@ exports.BattleLearnsets = {
 		swordsdance: ["1M"],
 		takedown: ["1M"],
 		thief: ["2M"],
-		toxic: ["1M", "2M"]
+		toxic: ["1M", "2M"],
 	}},
 	venonat: {learnset: {
 		attract: ["2M"],
@@ -2399,7 +2399,7 @@ exports.BattleLearnsets = {
 		tackle: ["1L1", "2L1"],
 		takedown: ["1M"],
 		thief: ["2M"],
-		toxic: ["1M", "2M"]
+		toxic: ["1M", "2M"],
 	}},
 	venomoth: {learnset: {
 		attract: ["2M"],
@@ -2447,7 +2447,7 @@ exports.BattleLearnsets = {
 		teleport: ["1M"],
 		thief: ["2M"],
 		toxic: ["1M", "2M"],
-		whirlwind: ["1M"]
+		whirlwind: ["1M"],
 	}},
 	diglett: {learnset: {
 		ancientpower: ["2E"],
@@ -2489,7 +2489,7 @@ exports.BattleLearnsets = {
 		swagger: ["2M"],
 		takedown: ["1M"],
 		thief: ["2M"],
-		toxic: ["1M", "2M"]
+		toxic: ["1M", "2M"],
 	}},
 	dugtrio: {learnset: {
 		attract: ["2M"],
@@ -2528,7 +2528,7 @@ exports.BattleLearnsets = {
 		takedown: ["1M"],
 		thief: ["2M"],
 		toxic: ["1M", "2M"],
-		triattack: ["2L1"]
+		triattack: ["2L1"],
 	}},
 	meowth: {learnset: {
 		amnesia: ["2E"],
@@ -2581,7 +2581,7 @@ exports.BattleLearnsets = {
 		thunderbolt: ["1M", "2T"],
 		toxic: ["1M", "2M"],
 		watergun: ["1M"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	persian: {learnset: {
 		attract: ["2M"],
@@ -2632,7 +2632,7 @@ exports.BattleLearnsets = {
 		thunderbolt: ["1M", "2T"],
 		toxic: ["1M", "2M"],
 		watergun: ["1M"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	psyduck: {learnset: {
 		amnesia: ["1S0"],
@@ -2698,7 +2698,7 @@ exports.BattleLearnsets = {
 		triattack: ["2S2"],
 		waterfall: ["2M"],
 		watergun: ["1M"],
-		whirlpool: ["2M"]
+		whirlpool: ["2M"],
 	}},
 	golduck: {learnset: {
 		attract: ["2M"],
@@ -2756,7 +2756,7 @@ exports.BattleLearnsets = {
 		toxic: ["1M", "2M"],
 		waterfall: ["2M"],
 		watergun: ["1M"],
-		whirlpool: ["2M"]
+		whirlpool: ["2M"],
 	}},
 	mankey: {learnset: {
 		attract: ["2M"],
@@ -2818,7 +2818,7 @@ exports.BattleLearnsets = {
 		thunder: ["1M", "2M"],
 		thunderbolt: ["1M", "2T"],
 		thunderpunch: ["2M"],
-		toxic: ["1M", "2M"]
+		toxic: ["1M", "2M"],
 	}},
 	primeape: {learnset: {
 		attract: ["2M"],
@@ -2877,7 +2877,7 @@ exports.BattleLearnsets = {
 		thunder: ["1M", "2M"],
 		thunderbolt: ["1M", "2T"],
 		thunderpunch: ["2M"],
-		toxic: ["1M", "2M"]
+		toxic: ["1M", "2M"],
 	}},
 	growlithe: {learnset: {
 		agility: ["1L39", "2L42"],
@@ -2921,7 +2921,7 @@ exports.BattleLearnsets = {
 		swift: ["1M", "2M"],
 		takedown: ["1L30", "1M", "2L26"],
 		thrash: ["2E"],
-		toxic: ["1M", "2M"]
+		toxic: ["1M", "2M"],
 	}},
 	arcanine: {learnset: {
 		attract: ["2M"],
@@ -2962,7 +2962,7 @@ exports.BattleLearnsets = {
 		swift: ["1M", "2M"],
 		takedown: ["1L1", "1M", "2L1"],
 		teleport: ["1M"],
-		toxic: ["1M", "2M"]
+		toxic: ["1M", "2M"],
 	}},
 	poliwag: {learnset: {
 		amnesia: ["1L38"],
@@ -3012,7 +3012,7 @@ exports.BattleLearnsets = {
 		toxic: ["1M", "2M"],
 		waterfall: ["2M"],
 		watergun: ["1L19", "1M", "2L13"],
-		whirlpool: ["2M"]
+		whirlpool: ["2M"],
 	}},
 	poliwhirl: {learnset: {
 		amnesia: ["1L41"],
@@ -3068,7 +3068,7 @@ exports.BattleLearnsets = {
 		toxic: ["1M", "2M"],
 		waterfall: ["2M"],
 		watergun: ["1L1", "1L19", "1M", "2L1", "2L13"],
-		whirlpool: ["2M"]
+		whirlpool: ["2M"],
 	}},
 	poliwrath: {learnset: {
 		attract: ["2M"],
@@ -3123,7 +3123,7 @@ exports.BattleLearnsets = {
 		toxic: ["1M", "2M"],
 		waterfall: ["2M"],
 		watergun: ["1L1", "1L19", "1M", "2L1"],
-		whirlpool: ["2M"]
+		whirlpool: ["2M"],
 	}},
 	abra: {learnset: {
 		attract: ["2M"],
@@ -3176,7 +3176,7 @@ exports.BattleLearnsets = {
 		thunderwave: ["1M"],
 		toxic: ["1M", "2M"],
 		triattack: ["1M"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	kadabra: {learnset: {
 		attract: ["2M"],
@@ -3232,7 +3232,7 @@ exports.BattleLearnsets = {
 		thunderwave: ["1M"],
 		toxic: ["1M", "2M"],
 		triattack: ["1M"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	alakazam: {learnset: {
 		attract: ["2M"],
@@ -3289,7 +3289,7 @@ exports.BattleLearnsets = {
 		thunderwave: ["1M"],
 		toxic: ["1M", "2M"],
 		triattack: ["1M"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	machop: {learnset: {
 		attract: ["2M"],
@@ -3349,7 +3349,7 @@ exports.BattleLearnsets = {
 		thrash: ["2S1"],
 		thunderpunch: ["2M"],
 		toxic: ["1M", "2M"],
-		vitalthrow: ["2L31"]
+		vitalthrow: ["2L31"],
 	}},
 	machoke: {learnset: {
 		attract: ["2M"],
@@ -3403,7 +3403,7 @@ exports.BattleLearnsets = {
 		thief: ["2M"],
 		thunderpunch: ["2M"],
 		toxic: ["1M", "2M"],
-		vitalthrow: ["2L34"]
+		vitalthrow: ["2L34"],
 	}},
 	machamp: {learnset: {
 		attract: ["2M"],
@@ -3458,7 +3458,7 @@ exports.BattleLearnsets = {
 		thief: ["2M"],
 		thunderpunch: ["2M"],
 		toxic: ["1M", "2M"],
-		vitalthrow: ["2L34"]
+		vitalthrow: ["2L34"],
 	}},
 	bellsprout: {learnset: {
 		acid: ["1L26", "2L23"],
@@ -3503,7 +3503,7 @@ exports.BattleLearnsets = {
 		takedown: ["1M"],
 		toxic: ["1M", "2M"],
 		vinewhip: ["1L1", "2L1", "2S0", "2S1"],
-		wrap: ["1L13", "2L11"]
+		wrap: ["1L13", "2L11"],
 	}},
 	weepinbell: {learnset: {
 		acid: ["1L29", "2L24"],
@@ -3543,7 +3543,7 @@ exports.BattleLearnsets = {
 		takedown: ["1M"],
 		toxic: ["1M", "2M"],
 		vinewhip: ["1L1", "2L1"],
-		wrap: ["1L1", "1L13", "2L1", "2L11"]
+		wrap: ["1L1", "1L13", "2L1", "2L11"],
 	}},
 	victreebel: {learnset: {
 		acid: ["1L1"],
@@ -3583,7 +3583,7 @@ exports.BattleLearnsets = {
 		takedown: ["1M"],
 		toxic: ["1M", "2M"],
 		vinewhip: ["2L1"],
-		wrap: ["1L13"]
+		wrap: ["1L13"],
 	}},
 	tentacool: {learnset: {
 		acid: ["1L1", "2L19"],
@@ -3633,7 +3633,7 @@ exports.BattleLearnsets = {
 		toxic: ["1M", "2M"],
 		watergun: ["1L22", "1M"],
 		whirlpool: ["2M"],
-		wrap: ["1L13", "2L30"]
+		wrap: ["1L13", "2L30"],
 	}},
 	tentacruel: {learnset: {
 		acid: ["1L1", "2L19"],
@@ -3678,7 +3678,7 @@ exports.BattleLearnsets = {
 		toxic: ["1M", "2M"],
 		watergun: ["1L22", "1M"],
 		whirlpool: ["2M"],
-		wrap: ["1L1", "1L13", "2L30"]
+		wrap: ["1L1", "1L13", "2L30"],
 	}},
 	geodude: {learnset: {
 		attract: ["2M"],
@@ -3728,7 +3728,7 @@ exports.BattleLearnsets = {
 		swagger: ["2M"],
 		tackle: ["1L1", "2L1", "2S0"],
 		takedown: ["1M"],
-		toxic: ["1M", "2M"]
+		toxic: ["1M", "2M"],
 	}},
 	graveler: {learnset: {
 		attract: ["2M"],
@@ -3777,7 +3777,7 @@ exports.BattleLearnsets = {
 		swagger: ["2M"],
 		tackle: ["1L1", "2L1"],
 		takedown: ["1M"],
-		toxic: ["1M", "2M"]
+		toxic: ["1M", "2M"],
 	}},
 	golem: {learnset: {
 		attract: ["2M"],
@@ -3830,7 +3830,7 @@ exports.BattleLearnsets = {
 		swagger: ["2M"],
 		tackle: ["1L1", "2L1"],
 		takedown: ["1M"],
-		toxic: ["1M", "2M"]
+		toxic: ["1M", "2M"],
 	}},
 	ponyta: {learnset: {
 		agility: ["1L48", "2L43"],
@@ -3875,7 +3875,7 @@ exports.BattleLearnsets = {
 		tailwhip: ["1L30", "2L8"],
 		takedown: ["1L43", "1M", "2L34"],
 		thrash: ["2E"],
-		toxic: ["1M", "2M"]
+		toxic: ["1M", "2M"],
 	}},
 	rapidash: {learnset: {
 		agility: ["1L55", "2L47"],
@@ -3916,7 +3916,7 @@ exports.BattleLearnsets = {
 		tackle: ["2L1"],
 		tailwhip: ["1L1", "1L30", "2L1", "2L8"],
 		takedown: ["1L47", "1M", "2L34"],
-		toxic: ["1M", "2M"]
+		toxic: ["1M", "2M"],
 	}},
 	slowpoke: {learnset: {
 		amnesia: ["1L40", "2L43"],
@@ -3979,7 +3979,7 @@ exports.BattleLearnsets = {
 		toxic: ["1M", "2M"],
 		triattack: ["1M"],
 		watergun: ["1L33", "1M", "2L15"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	slowbro: {learnset: {
 		amnesia: ["1L44", "2L46"],
@@ -4049,7 +4049,7 @@ exports.BattleLearnsets = {
 		triattack: ["1M"],
 		watergun: ["1L33", "1M", "2L1", "2L15"],
 		withdraw: ["1L37", "2L37"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	magnemite: {learnset: {
 		agility: ["2S0"],
@@ -4086,7 +4086,7 @@ exports.BattleLearnsets = {
 		thundershock: ["1L25", "2L6"],
 		thunderwave: ["1L35", "1M", "2L21"],
 		toxic: ["1M", "2M"],
-		zapcannon: ["2L45", "2M"]
+		zapcannon: ["2L45", "2M"],
 	}},
 	magneton: {learnset: {
 		bide: ["1M"],
@@ -4124,7 +4124,7 @@ exports.BattleLearnsets = {
 		thunderwave: ["1L38", "1M", "2L21"],
 		toxic: ["1M", "2M"],
 		triattack: ["2L35"],
-		zapcannon: ["2L53", "2M"]
+		zapcannon: ["2L53", "2M"],
 	}},
 	farfetchd: {learnset: {
 		agility: ["1L31", "2L31", "2S0"],
@@ -4176,7 +4176,7 @@ exports.BattleLearnsets = {
 		takedown: ["1M"],
 		thief: ["2M"],
 		toxic: ["1M", "2M"],
-		whirlwind: ["1M"]
+		whirlwind: ["1M"],
 	}},
 	doduo: {learnset: {
 		agility: ["1L44", "2L37"],
@@ -4221,7 +4221,7 @@ exports.BattleLearnsets = {
 		thief: ["2M"],
 		toxic: ["1M", "2M"],
 		triattack: ["1L40", "1M", "2L21"],
-		whirlwind: ["1M"]
+		whirlwind: ["1M"],
 	}},
 	dodrio: {learnset: {
 		agility: ["1L51", "2L47"],
@@ -4261,7 +4261,7 @@ exports.BattleLearnsets = {
 		thief: ["2M"],
 		toxic: ["1M", "2M"],
 		triattack: ["1L45", "1M", "2L21"],
-		whirlwind: ["1M"]
+		whirlwind: ["1M"],
 	}},
 	seel: {learnset: {
 		attract: ["2M"],
@@ -4307,7 +4307,7 @@ exports.BattleLearnsets = {
 		toxic: ["1M", "2M"],
 		waterfall: ["2M"],
 		watergun: ["1M"],
-		whirlpool: ["2M"]
+		whirlpool: ["2M"],
 	}},
 	dewgong: {learnset: {
 		attract: ["2M"],
@@ -4347,7 +4347,7 @@ exports.BattleLearnsets = {
 		toxic: ["1M", "2M"],
 		waterfall: ["2M"],
 		watergun: ["1M"],
-		whirlpool: ["2M"]
+		whirlpool: ["2M"],
 	}},
 	grimer: {learnset: {
 		acidarmor: ["1L55", "2L40"],
@@ -4395,7 +4395,7 @@ exports.BattleLearnsets = {
 		thunderbolt: ["1M", "2T"],
 		thunderpunch: ["2M"],
 		toxic: ["1M", "2M"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	muk: {learnset: {
 		acidarmor: ["1L60", "2L45"],
@@ -4441,7 +4441,7 @@ exports.BattleLearnsets = {
 		thunderbolt: ["1M", "2T"],
 		thunderpunch: ["2M"],
 		toxic: ["1M", "2M"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	shellder: {learnset: {
 		attract: ["2M"],
@@ -4485,7 +4485,7 @@ exports.BattleLearnsets = {
 		triattack: ["1M"],
 		watergun: ["1M"],
 		whirlpool: ["2M"],
-		withdraw: ["1L1", "2L1"]
+		withdraw: ["1L1", "2L1"],
 	}},
 	cloyster: {learnset: {
 		attract: ["2M"],
@@ -4527,7 +4527,7 @@ exports.BattleLearnsets = {
 		triattack: ["1M"],
 		watergun: ["1M"],
 		whirlpool: ["2M"],
-		withdraw: ["1L1", "2L1"]
+		withdraw: ["1L1", "2L1"],
 	}},
 	gastly: {learnset: {
 		attract: ["2M"],
@@ -4571,7 +4571,7 @@ exports.BattleLearnsets = {
 		thunder: ["1M", "2M"],
 		thunderbolt: ["1M", "2T"],
 		toxic: ["1M", "2M"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	haunter: {learnset: {
 		attract: ["2M"],
@@ -4613,7 +4613,7 @@ exports.BattleLearnsets = {
 		thunder: ["1M", "2M"],
 		thunderbolt: ["1M", "2T"],
 		toxic: ["1M", "2M"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	gengar: {learnset: {
 		attract: ["2M"],
@@ -4673,7 +4673,7 @@ exports.BattleLearnsets = {
 		thunderbolt: ["1M", "2T"],
 		thunderpunch: ["2M"],
 		toxic: ["1M", "2M"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	onix: {learnset: {
 		attract: ["2M"],
@@ -4718,7 +4718,7 @@ exports.BattleLearnsets = {
 		swagger: ["2M"],
 		tackle: ["1L1", "2L1", "2S0"],
 		takedown: ["1M"],
-		toxic: ["1M", "2M"]
+		toxic: ["1M", "2M"],
 	}},
 	drowzee: {learnset: {
 		amnesia: ["2S0"],
@@ -4776,7 +4776,7 @@ exports.BattleLearnsets = {
 		thunderwave: ["1M"],
 		toxic: ["1M", "2M"],
 		triattack: ["1M"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	hypno: {learnset: {
 		attract: ["2M"],
@@ -4832,7 +4832,7 @@ exports.BattleLearnsets = {
 		thunderwave: ["1M"],
 		toxic: ["1M", "2M"],
 		triattack: ["1M"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	krabby: {learnset: {
 		amnesia: ["2E"],
@@ -4882,7 +4882,7 @@ exports.BattleLearnsets = {
 		toxic: ["1M", "2M"],
 		vicegrip: ["1L20", "2L12"],
 		watergun: ["1M"],
-		whirlpool: ["2M"]
+		whirlpool: ["2M"],
 	}},
 	kingler: {learnset: {
 		attract: ["2M"],
@@ -4927,7 +4927,7 @@ exports.BattleLearnsets = {
 		toxic: ["1M", "2M"],
 		vicegrip: ["1L1", "1L20", "2L1", "2L12"],
 		watergun: ["1M"],
-		whirlpool: ["2M"]
+		whirlpool: ["2M"],
 	}},
 	voltorb: {learnset: {
 		agility: ["2S0"],
@@ -4965,7 +4965,7 @@ exports.BattleLearnsets = {
 		thunderbolt: ["1M", "2T"],
 		thunderwave: ["1M"],
 		toxic: ["1M", "2M"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	electrode: {learnset: {
 		bide: ["1M"],
@@ -5004,7 +5004,7 @@ exports.BattleLearnsets = {
 		thunderbolt: ["1M", "2T"],
 		thunderwave: ["1M"],
 		toxic: ["1M", "2M"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	exeggcute: {learnset: {
 		ancientpower: ["2E"],
@@ -5055,7 +5055,7 @@ exports.BattleLearnsets = {
 		takedown: ["1M"],
 		teleport: ["1M"],
 		thief: ["2M"],
-		toxic: ["1M", "2M"]
+		toxic: ["1M", "2M"],
 	}},
 	exeggutor: {learnset: {
 		attract: ["2M"],
@@ -5101,7 +5101,7 @@ exports.BattleLearnsets = {
 		takedown: ["1M"],
 		teleport: ["1M"],
 		thief: ["2M"],
-		toxic: ["1M", "2M"]
+		toxic: ["1M", "2M"],
 	}},
 	cubone: {learnset: {
 		ancientpower: ["2E"],
@@ -5167,7 +5167,7 @@ exports.BattleLearnsets = {
 		thrash: ["1L38", "2L37"],
 		thunderpunch: ["2M"],
 		toxic: ["1M", "2M"],
-		watergun: ["1M"]
+		watergun: ["1M"],
 	}},
 	marowak: {learnset: {
 		attract: ["2M"],
@@ -5227,7 +5227,7 @@ exports.BattleLearnsets = {
 		thrash: ["1L41", "2L46"],
 		thunderpunch: ["2M"],
 		toxic: ["1M", "2M"],
-		watergun: ["1M"]
+		watergun: ["1M"],
 	}},
 	tyrogue: {learnset: {
 		attract: ["2M"],
@@ -5257,7 +5257,7 @@ exports.BattleLearnsets = {
 		swift: ["2M"],
 		tackle: ["2L1", "2S0", "2S1"],
 		thief: ["2M"],
-		toxic: ["2M"]
+		toxic: ["2M"],
 	}},
 	hitmonlee: {learnset: {
 		attract: ["2M"],
@@ -5304,7 +5304,7 @@ exports.BattleLearnsets = {
 		swift: ["1M", "2M"],
 		takedown: ["1M"],
 		thief: ["2M"],
-		toxic: ["1M", "2M"]
+		toxic: ["1M", "2M"],
 	}},
 	hitmonchan: {learnset: {
 		agility: ["1L1", "2L7"],
@@ -5349,7 +5349,7 @@ exports.BattleLearnsets = {
 		takedown: ["1M"],
 		thief: ["2M"],
 		thunderpunch: ["1L43", "2L26", "2M"],
-		toxic: ["1M", "2M"]
+		toxic: ["1M", "2M"],
 	}},
 	hitmontop: {learnset: {
 		agility: ["2L37"],
@@ -5381,7 +5381,7 @@ exports.BattleLearnsets = {
 		swift: ["2M"],
 		thief: ["2M"],
 		toxic: ["2M"],
-		triplekick: ["2L49"]
+		triplekick: ["2L49"],
 	}},
 	lickitung: {learnset: {
 		attract: ["2M"],
@@ -5453,7 +5453,7 @@ exports.BattleLearnsets = {
 		thunderpunch: ["2M"],
 		toxic: ["1M", "2M"],
 		watergun: ["1M"],
-		wrap: ["1L1", "2L25"]
+		wrap: ["1L1", "2L25"],
 	}},
 	koffing: {learnset: {
 		attract: ["2M"],
@@ -5494,7 +5494,7 @@ exports.BattleLearnsets = {
 		thunder: ["1M", "2M"],
 		thunderbolt: ["1M", "2T"],
 		toxic: ["1M", "2M"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	weezing: {learnset: {
 		attract: ["2M"],
@@ -5532,7 +5532,7 @@ exports.BattleLearnsets = {
 		thunder: ["1M", "2M"],
 		thunderbolt: ["1M", "2T"],
 		toxic: ["1M", "2M"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	rhyhorn: {learnset: {
 		attract: ["2M"],
@@ -5589,7 +5589,7 @@ exports.BattleLearnsets = {
 		thunder: ["1M", "2M"],
 		thunderbolt: ["1M", "2T"],
 		toxic: ["1M", "2M"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	rhydon: {learnset: {
 		attract: ["2M"],
@@ -5654,7 +5654,7 @@ exports.BattleLearnsets = {
 		thunderpunch: ["2M"],
 		toxic: ["1M", "2M"],
 		watergun: ["1M"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	chansey: {learnset: {
 		attract: ["2M"],
@@ -5728,7 +5728,7 @@ exports.BattleLearnsets = {
 		toxic: ["1M", "2M"],
 		triattack: ["1M"],
 		watergun: ["1M"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	blissey: {learnset: {
 		attract: ["2M"],
@@ -5777,7 +5777,7 @@ exports.BattleLearnsets = {
 		thunder: ["2M"],
 		thunderbolt: ["2T"],
 		toxic: ["2M"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	tangela: {learnset: {
 		absorb: ["1L29", "1L27", "2L10"],
@@ -5827,7 +5827,7 @@ exports.BattleLearnsets = {
 		takedown: ["1M"],
 		thief: ["2M"],
 		toxic: ["1M", "2M"],
-		vinewhip: ["1L29", "2L19"]
+		vinewhip: ["1L29", "2L19"],
 	}},
 	kangaskhan: {learnset: {
 		attract: ["2M"],
@@ -5897,7 +5897,7 @@ exports.BattleLearnsets = {
 		thunderpunch: ["2M"],
 		toxic: ["1M", "2M"],
 		watergun: ["1M"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	horsea: {learnset: {
 		agility: ["1L37", "2L36"],
@@ -5944,7 +5944,7 @@ exports.BattleLearnsets = {
 		twister: ["2L29"],
 		waterfall: ["2M"],
 		watergun: ["1L30", "1M", "2L22"],
-		whirlpool: ["2M"]
+		whirlpool: ["2M"],
 	}},
 	seadra: {learnset: {
 		agility: ["1L41", "2L40"],
@@ -5985,7 +5985,7 @@ exports.BattleLearnsets = {
 		twister: ["2L29"],
 		waterfall: ["2M"],
 		watergun: ["1L30", "1M", "2L1", "2L22"],
-		whirlpool: ["2M"]
+		whirlpool: ["2M"],
 	}},
 	kingdra: {learnset: {
 		agility: ["2L40"],
@@ -6018,7 +6018,7 @@ exports.BattleLearnsets = {
 		twister: ["2L29"],
 		waterfall: ["2M"],
 		watergun: ["2L1", "2L22"],
-		whirlpool: ["2M"]
+		whirlpool: ["2M"],
 	}},
 	goldeen: {learnset: {
 		agility: ["1L54", "2L52"],
@@ -6061,7 +6061,7 @@ exports.BattleLearnsets = {
 		takedown: ["1M"],
 		toxic: ["1M", "2M"],
 		waterfall: ["1L37", "2L38", "2M"],
-		watergun: ["1M"]
+		watergun: ["1M"],
 	}},
 	seaking: {learnset: {
 		agility: ["1L54", "2L61"],
@@ -6101,7 +6101,7 @@ exports.BattleLearnsets = {
 		takedown: ["1M"],
 		toxic: ["1M", "2M"],
 		waterfall: ["1L39", "2L41", "2M"],
-		watergun: ["1M"]
+		watergun: ["1M"],
 	}},
 	staryu: {learnset: {
 		attract: ["2M"],
@@ -6152,7 +6152,7 @@ exports.BattleLearnsets = {
 		waterfall: ["2M"],
 		watergun: ["1L17", "1M", "2L7"],
 		whirlpool: ["2M"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	starmie: {learnset: {
 		attract: ["2M"],
@@ -6203,7 +6203,7 @@ exports.BattleLearnsets = {
 		waterfall: ["2M"],
 		watergun: ["1L1", "1M"],
 		whirlpool: ["2M"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	mrmime: {learnset: {
 		attract: ["2M"],
@@ -6267,7 +6267,7 @@ exports.BattleLearnsets = {
 		thunderpunch: ["2M"],
 		thunderwave: ["1M"],
 		toxic: ["1M", "2M"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	scyther: {learnset: {
 		agility: ["1L42", "2L24"],
@@ -6315,7 +6315,7 @@ exports.BattleLearnsets = {
 		takedown: ["1M"],
 		thief: ["2M"],
 		toxic: ["1M", "2M"],
-		wingattack: ["1L50", "2L30"]
+		wingattack: ["1L50", "2L30"],
 	}},
 	scizor: {learnset: {
 		agility: ["2L24"],
@@ -6351,7 +6351,7 @@ exports.BattleLearnsets = {
 		swift: ["2M"],
 		swordsdance: ["2L42"],
 		thief: ["2M"],
-		toxic: ["2M"]
+		toxic: ["2M"],
 	}},
 	smoochum: {learnset: {
 		attract: ["2M"],
@@ -6392,7 +6392,7 @@ exports.BattleLearnsets = {
 		sweetkiss: ["2L9"],
 		sweetscent: ["2M"],
 		thief: ["2M"],
-		toxic: ["2M"]
+		toxic: ["2M"],
 	}},
 	jynx: {learnset: {
 		attract: ["2M"],
@@ -6450,7 +6450,7 @@ exports.BattleLearnsets = {
 		thief: ["2M"],
 		thrash: ["1L47"],
 		toxic: ["1M", "2M"],
-		watergun: ["1M"]
+		watergun: ["1M"],
 	}},
 	elekid: {learnset: {
 		attract: ["2M"],
@@ -6491,7 +6491,7 @@ exports.BattleLearnsets = {
 		thunderbolt: ["2L41", "2T"],
 		thunderpunch: ["2L9", "2M"],
 		toxic: ["2M"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	electabuzz: {learnset: {
 		attract: ["2M"],
@@ -6548,7 +6548,7 @@ exports.BattleLearnsets = {
 		thundershock: ["1L34"],
 		thunderwave: ["1M"],
 		toxic: ["1M", "2M"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	magby: {learnset: {
 		attract: ["2M"],
@@ -6587,7 +6587,7 @@ exports.BattleLearnsets = {
 		swagger: ["2M"],
 		thief: ["2M"],
 		thunderpunch: ["2M"],
-		toxic: ["2M"]
+		toxic: ["2M"],
 	}},
 	magmar: {learnset: {
 		attract: ["2M"],
@@ -6638,7 +6638,7 @@ exports.BattleLearnsets = {
 		teleport: ["1M"],
 		thief: ["2M"],
 		thunderpunch: ["2M"],
-		toxic: ["1M", "2M"]
+		toxic: ["1M", "2M"],
 	}},
 	pinsir: {learnset: {
 		attract: ["2M"],
@@ -6680,7 +6680,7 @@ exports.BattleLearnsets = {
 		takedown: ["1M"],
 		thief: ["2M"],
 		toxic: ["1M", "2M"],
-		vicegrip: ["1L1", "2L1", "2S0"]
+		vicegrip: ["1L1", "2L1", "2S0"],
 	}},
 	tauros: {learnset: {
 		attract: ["2M"],
@@ -6730,7 +6730,7 @@ exports.BattleLearnsets = {
 		thunder: ["1M", "2M"],
 		thunderbolt: ["1M", "2T"],
 		toxic: ["1M", "2M"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	magikarp: {learnset: {
 		bubble: ["2S1"],
@@ -6738,7 +6738,7 @@ exports.BattleLearnsets = {
 		flail: ["2L30"],
 		reversal: ["2S2"],
 		splash: ["1L1", "2L1", "2S1", "2S2"],
-		tackle: ["1L15", "2L15"]
+		tackle: ["1L15", "2L15"],
 	}},
 	gyarados: {learnset: {
 		attract: ["2M"],
@@ -6790,7 +6790,7 @@ exports.BattleLearnsets = {
 		waterfall: ["2M"],
 		watergun: ["1M"],
 		whirlpool: ["2M"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	lapras: {learnset: {
 		attract: ["2M"],
@@ -6849,10 +6849,10 @@ exports.BattleLearnsets = {
 		toxic: ["1M", "2M"],
 		watergun: ["1L1", "1M", "2L1", "2S0", "2S1"],
 		whirlpool: ["2M"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	ditto: {learnset: {
-		transform: ["1L1", "2L1"]
+		transform: ["1L1", "2L1"],
 	}},
 	eevee: {learnset: {
 		attract: ["2M"],
@@ -6895,7 +6895,7 @@ exports.BattleLearnsets = {
 		tackle: ["1L1", "2L1", "2S0"],
 		tailwhip: ["1L31", "1L1", "2L1", "2S0"],
 		takedown: ["1L45", "1M", "1L42", "2L42"],
-		toxic: ["1M", "2M"]
+		toxic: ["1M", "2M"],
 	}},
 	vaporeon: {learnset: {
 		acidarmor: ["1L42", "1L47", "2L47"],
@@ -6947,7 +6947,7 @@ exports.BattleLearnsets = {
 		toxic: ["1M", "2M"],
 		waterfall: ["2M"],
 		watergun: ["1L1", "1L31", "1M", "1L16", "2L16"],
-		whirlpool: ["2M"]
+		whirlpool: ["2M"],
 	}},
 	jolteon: {learnset: {
 		agility: ["1L44", "1L47", "2L47"],
@@ -6994,7 +6994,7 @@ exports.BattleLearnsets = {
 		thundershock: ["1L1", "1L31", "1L16", "2L16"],
 		thunderwave: ["1L40", "1M", "1L42", "2L42"],
 		toxic: ["1M", "2M"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	flareon: {learnset: {
 		attract: ["2M"],
@@ -7040,7 +7040,7 @@ exports.BattleLearnsets = {
 		tailwhip: ["1L37", "1L1", "2L1"],
 		takedown: ["1M"],
 		toxic: ["1M", "2M"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	espeon: {learnset: {
 		attract: ["2M"],
@@ -7078,7 +7078,7 @@ exports.BattleLearnsets = {
 		tackle: ["2L1"],
 		tailwhip: ["2L1"],
 		toxic: ["2M"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	umbreon: {learnset: {
 		attract: ["2M"],
@@ -7119,7 +7119,7 @@ exports.BattleLearnsets = {
 		tackle: ["2L1"],
 		tailwhip: ["2L1"],
 		toxic: ["2M"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	porygon: {learnset: {
 		agility: ["1L35", "2L9"],
@@ -7171,7 +7171,7 @@ exports.BattleLearnsets = {
 		thunderwave: ["1M"],
 		toxic: ["1M", "2M"],
 		triattack: ["1L42", "1M", "2L36"],
-		zapcannon: ["2L44", "2M"]
+		zapcannon: ["2L44", "2M"],
 	}},
 	porygon2: {learnset: {
 		agility: ["2L9"],
@@ -7210,7 +7210,7 @@ exports.BattleLearnsets = {
 		thunderbolt: ["2T"],
 		toxic: ["2M"],
 		triattack: ["2L36"],
-		zapcannon: ["2L44", "2M"]
+		zapcannon: ["2L44", "2M"],
 	}},
 	omanyte: {learnset: {
 		ancientpower: ["2L49"],
@@ -7259,7 +7259,7 @@ exports.BattleLearnsets = {
 		toxic: ["1M", "2M"],
 		watergun: ["1L1", "1M", "2L19"],
 		whirlpool: ["2M"],
-		withdraw: ["1L1", "2L1", "2S0"]
+		withdraw: ["1L1", "2L1", "2S0"],
 	}},
 	omastar: {learnset: {
 		ancientpower: ["2L54"],
@@ -7308,7 +7308,7 @@ exports.BattleLearnsets = {
 		toxic: ["1M", "2M"],
 		watergun: ["1L1", "1M", "2L19"],
 		whirlpool: ["2M"],
-		withdraw: ["1L1", "2L1"]
+		withdraw: ["1L1", "2L1"],
 	}},
 	kabuto: {learnset: {
 		absorb: ["1L34", "2L10"],
@@ -7357,7 +7357,7 @@ exports.BattleLearnsets = {
 		takedown: ["1M"],
 		thief: ["2M"],
 		toxic: ["1M", "2M"],
-		watergun: ["1M"]
+		watergun: ["1M"],
 	}},
 	kabutops: {learnset: {
 		absorb: ["1L1", "1L34", "2L1", "2L10"],
@@ -7412,7 +7412,7 @@ exports.BattleLearnsets = {
 		thief: ["2M"],
 		toxic: ["1M", "2M"],
 		watergun: ["1M"],
-		whirlpool: ["2M"]
+		whirlpool: ["2M"],
 	}},
 	aerodactyl: {learnset: {
 		agility: ["1L1", "2L8"],
@@ -7462,7 +7462,7 @@ exports.BattleLearnsets = {
 		takedown: ["1L45", "1M", "2L43"],
 		toxic: ["1M", "2M"],
 		whirlwind: ["1M", "2E"],
-		wingattack: ["1L1", "2L1", "2S0"]
+		wingattack: ["1L1", "2L1", "2S0"],
 	}},
 	snorlax: {learnset: {
 		amnesia: ["1L1", "2L8"],
@@ -7535,7 +7535,7 @@ exports.BattleLearnsets = {
 		thunderpunch: ["2M"],
 		toxic: ["1M", "2M"],
 		watergun: ["1M"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	articuno: {learnset: {
 		agility: ["1L55", "2L25", "2S0"],
@@ -7581,7 +7581,7 @@ exports.BattleLearnsets = {
 		takedown: ["1M"],
 		toxic: ["1M", "2M"],
 		watergun: ["1M"],
-		whirlwind: ["1M"]
+		whirlwind: ["1M"],
 	}},
 	zapdos: {learnset: {
 		agility: ["1L55", "2L25", "2S0"],
@@ -7626,7 +7626,7 @@ exports.BattleLearnsets = {
 		thunderwave: ["1M", "2L13", "2S0"],
 		toxic: ["1M", "2M"],
 		whirlwind: ["1M"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	moltres: {learnset: {
 		agility: ["1L55", "2L25", "2S0"],
@@ -7670,7 +7670,7 @@ exports.BattleLearnsets = {
 		takedown: ["1M"],
 		toxic: ["1M", "2M"],
 		whirlwind: ["1M"],
-		wingattack: ["2L1"]
+		wingattack: ["2L1"],
 	}},
 	dratini: {learnset: {
 		agility: ["1L20", "2L36"],
@@ -7728,7 +7728,7 @@ exports.BattleLearnsets = {
 		waterfall: ["2M"],
 		watergun: ["1M"],
 		wrap: ["1L1", "2L1", "2S0", "2S1"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	dragonair: {learnset: {
 		agility: ["1L20", "2L38"],
@@ -7781,7 +7781,7 @@ exports.BattleLearnsets = {
 		waterfall: ["2M"],
 		watergun: ["1M"],
 		wrap: ["1L1", "2L1"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	dragonite: {learnset: {
 		agility: ["1L1", "1L20", "2L38"],
@@ -7848,7 +7848,7 @@ exports.BattleLearnsets = {
 		whirlpool: ["2M"],
 		wingattack: ["2L55"],
 		wrap: ["1L1", "2L1"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	mewtwo: {learnset: {
 		amnesia: ["1L81", "2L77"],
@@ -7922,7 +7922,7 @@ exports.BattleLearnsets = {
 		toxic: ["1M", "2M"],
 		triattack: ["1M"],
 		watergun: ["1M"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	mew: {learnset: {
 		ancientpower: ["2L50"],
@@ -8022,7 +8022,7 @@ exports.BattleLearnsets = {
 		watergun: ["1M"],
 		whirlpool: ["2M"],
 		whirlwind: ["1M"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	chikorita: {learnset: {
 		ancientpower: ["2E"],
@@ -8063,7 +8063,7 @@ exports.BattleLearnsets = {
 		synthesis: ["2L22"],
 		tackle: ["2L1", "2S0"],
 		toxic: ["2M"],
-		vinewhip: ["2E"]
+		vinewhip: ["2E"],
 	}},
 	bayleef: {learnset: {
 		attract: ["2M"],
@@ -8100,7 +8100,7 @@ exports.BattleLearnsets = {
 		sweetscent: ["2M"],
 		synthesis: ["2L23"],
 		tackle: ["2L1"],
-		toxic: ["2M"]
+		toxic: ["2M"],
 	}},
 	meganium: {learnset: {
 		attract: ["2M"],
@@ -8139,7 +8139,7 @@ exports.BattleLearnsets = {
 		sweetscent: ["2M"],
 		synthesis: ["2L23", "2S0"],
 		tackle: ["2L1"],
-		toxic: ["2M"]
+		toxic: ["2M"],
 	}},
 	cyndaquil: {learnset: {
 		attract: ["2M"],
@@ -8178,7 +8178,7 @@ exports.BattleLearnsets = {
 		swift: ["2L36", "2M"],
 		tackle: ["2L1", "2S0"],
 		thrash: ["2E"],
-		toxic: ["2M"]
+		toxic: ["2M"],
 	}},
 	quilava: {learnset: {
 		attract: ["2M"],
@@ -8215,7 +8215,7 @@ exports.BattleLearnsets = {
 		swagger: ["2M"],
 		swift: ["2L42", "2M"],
 		tackle: ["2L1"],
-		toxic: ["2M"]
+		toxic: ["2M"],
 	}},
 	typhlosion: {learnset: {
 		attract: ["2M"],
@@ -8257,7 +8257,7 @@ exports.BattleLearnsets = {
 		swift: ["2L45", "2M"],
 		tackle: ["2L1"],
 		thunderpunch: ["2M"],
-		toxic: ["2M"]
+		toxic: ["2M"],
 	}},
 	totodile: {learnset: {
 		ancientpower: ["2E"],
@@ -8301,7 +8301,7 @@ exports.BattleLearnsets = {
 		thrash: ["2E"],
 		toxic: ["2M"],
 		watergun: ["2L13"],
-		whirlpool: ["2M"]
+		whirlpool: ["2M"],
 	}},
 	croconaw: {learnset: {
 		attract: ["2M"],
@@ -8343,7 +8343,7 @@ exports.BattleLearnsets = {
 		swagger: ["2M"],
 		toxic: ["2M"],
 		watergun: ["2L13"],
-		whirlpool: ["2M"]
+		whirlpool: ["2M"],
 	}},
 	feraligatr: {learnset: {
 		attract: ["2M"],
@@ -8387,7 +8387,7 @@ exports.BattleLearnsets = {
 		swagger: ["2M"],
 		toxic: ["2M"],
 		watergun: ["2L1", "2L13", "2S0"],
-		whirlpool: ["2M"]
+		whirlpool: ["2M"],
 	}},
 	sentret: {learnset: {
 		amnesia: ["2L41"],
@@ -8431,7 +8431,7 @@ exports.BattleLearnsets = {
 		tackle: ["2L1", "2S0"],
 		thief: ["2M"],
 		thunderpunch: ["2M"],
-		toxic: ["2M"]
+		toxic: ["2M"],
 	}},
 	furret: {learnset: {
 		amnesia: ["2L48"],
@@ -8471,7 +8471,7 @@ exports.BattleLearnsets = {
 		swift: ["2M"],
 		thief: ["2M"],
 		thunderpunch: ["2M"],
-		toxic: ["2M"]
+		toxic: ["2M"],
 	}},
 	hoothoot: {learnset: {
 		attract: ["2M"],
@@ -8511,7 +8511,7 @@ exports.BattleLearnsets = {
 		thief: ["2M"],
 		toxic: ["2M"],
 		whirlwind: ["2E"],
-		wingattack: ["2E"]
+		wingattack: ["2E"],
 	}},
 	noctowl: {learnset: {
 		attract: ["2M"],
@@ -8545,7 +8545,7 @@ exports.BattleLearnsets = {
 		tackle: ["2L1"],
 		takedown: ["2L33"],
 		thief: ["2M"],
-		toxic: ["2M"]
+		toxic: ["2M"],
 	}},
 	ledyba: {learnset: {
 		agility: ["2L43"],
@@ -8585,7 +8585,7 @@ exports.BattleLearnsets = {
 		tackle: ["2L1", "2S0"],
 		thief: ["2M"],
 		thunderpunch: ["2M"],
-		toxic: ["2M"]
+		toxic: ["2M"],
 	}},
 	ledian: {learnset: {
 		agility: ["2L51"],
@@ -8623,7 +8623,7 @@ exports.BattleLearnsets = {
 		tackle: ["2L1"],
 		thief: ["2M"],
 		thunderpunch: ["2M"],
-		toxic: ["2M"]
+		toxic: ["2M"],
 	}},
 	spinarak: {learnset: {
 		agility: ["2L45"],
@@ -8662,7 +8662,7 @@ exports.BattleLearnsets = {
 		sunnyday: ["2M"],
 		swagger: ["2M"],
 		thief: ["2M"],
-		toxic: ["2M"]
+		toxic: ["2M"],
 	}},
 	ariados: {learnset: {
 		agility: ["2L53"],
@@ -8696,7 +8696,7 @@ exports.BattleLearnsets = {
 		sunnyday: ["2M"],
 		swagger: ["2M"],
 		thief: ["2M"],
-		toxic: ["2M"]
+		toxic: ["2M"],
 	}},
 	chinchou: {learnset: {
 		attract: ["2M"],
@@ -8731,7 +8731,7 @@ exports.BattleLearnsets = {
 		waterfall: ["2M"],
 		watergun: ["2L17"],
 		whirlpool: ["2M"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	lanturn: {learnset: {
 		attract: ["2M"],
@@ -8765,7 +8765,7 @@ exports.BattleLearnsets = {
 		waterfall: ["2M"],
 		watergun: ["2L17"],
 		whirlpool: ["2M"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	togepi: {learnset: {
 		attract: ["2M"],
@@ -8810,7 +8810,7 @@ exports.BattleLearnsets = {
 		sweetkiss: ["2L18"],
 		swift: ["2M"],
 		toxic: ["2M"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	togetic: {learnset: {
 		attract: ["2M"],
@@ -8853,7 +8853,7 @@ exports.BattleLearnsets = {
 		sweetkiss: ["2L18"],
 		swift: ["2M"],
 		toxic: ["2M"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	natu: {learnset: {
 		attract: ["2M"],
@@ -8891,7 +8891,7 @@ exports.BattleLearnsets = {
 		swift: ["2M"],
 		teleport: ["2L20"],
 		thief: ["2M"],
-		toxic: ["2M"]
+		toxic: ["2M"],
 	}},
 	xatu: {learnset: {
 		attract: ["2M"],
@@ -8925,7 +8925,7 @@ exports.BattleLearnsets = {
 		swift: ["2M"],
 		teleport: ["2L20"],
 		thief: ["2M"],
-		toxic: ["2M"]
+		toxic: ["2M"],
 	}},
 	mareep: {learnset: {
 		attract: ["2M"],
@@ -8960,7 +8960,7 @@ exports.BattleLearnsets = {
 		thundershock: ["2L9"],
 		thunderwave: ["2L16"],
 		toxic: ["2M"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	flaaffy: {learnset: {
 		attract: ["2M"],
@@ -8995,7 +8995,7 @@ exports.BattleLearnsets = {
 		thundershock: ["2L1", "2L9"],
 		thunderwave: ["2L18"],
 		toxic: ["2M"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	ampharos: {learnset: {
 		attract: ["2M"],
@@ -9031,7 +9031,7 @@ exports.BattleLearnsets = {
 		thundershock: ["2L1", "2L9"],
 		thunderwave: ["2L1", "2L18"],
 		toxic: ["2M"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	bellossom: {learnset: {
 		absorb: ["2L1"],
@@ -9056,7 +9056,7 @@ exports.BattleLearnsets = {
 		sunnyday: ["2M"],
 		swagger: ["2M"],
 		sweetscent: ["2L1", "2M"],
-		toxic: ["2M"]
+		toxic: ["2M"],
 	}},
 	marill: {learnset: {
 		amnesia: ["2E"],
@@ -9102,7 +9102,7 @@ exports.BattleLearnsets = {
 		toxic: ["2M"],
 		waterfall: ["2M"],
 		watergun: ["2L10"],
-		whirlpool: ["2M"]
+		whirlpool: ["2M"],
 	}},
 	azumarill: {learnset: {
 		attract: ["2M"],
@@ -9140,7 +9140,7 @@ exports.BattleLearnsets = {
 		toxic: ["2M"],
 		waterfall: ["2M"],
 		watergun: ["2L1", "2L10"],
-		whirlpool: ["2M"]
+		whirlpool: ["2M"],
 	}},
 	sudowoodo: {learnset: {
 		attract: ["2M"],
@@ -9180,7 +9180,7 @@ exports.BattleLearnsets = {
 		swagger: ["2M"],
 		thief: ["2M"],
 		thunderpunch: ["2M"],
-		toxic: ["2M"]
+		toxic: ["2M"],
 	}},
 	politoed: {learnset: {
 		attract: ["2M"],
@@ -9218,7 +9218,7 @@ exports.BattleLearnsets = {
 		toxic: ["2M"],
 		waterfall: ["2M"],
 		watergun: ["2L1"],
-		whirlpool: ["2M"]
+		whirlpool: ["2M"],
 	}},
 	hoppip: {learnset: {
 		agility: ["2S0"],
@@ -9258,7 +9258,7 @@ exports.BattleLearnsets = {
 		synthesis: ["2L1", "2L5", "2S0"],
 		tackle: ["2L10"],
 		tailwhip: ["2L5"],
-		toxic: ["2M"]
+		toxic: ["2M"],
 	}},
 	skiploom: {learnset: {
 		attract: ["2M"],
@@ -9290,7 +9290,7 @@ exports.BattleLearnsets = {
 		synthesis: ["2L1", "2L5"],
 		tackle: ["2L1", "2L10"],
 		tailwhip: ["2L1", "2L5"],
-		toxic: ["2M"]
+		toxic: ["2M"],
 	}},
 	jumpluff: {learnset: {
 		attract: ["2M"],
@@ -9323,7 +9323,7 @@ exports.BattleLearnsets = {
 		synthesis: ["2L1", "2L5"],
 		tackle: ["2L1", "2L10"],
 		tailwhip: ["2L1", "2L5"],
-		toxic: ["2M"]
+		toxic: ["2M"],
 	}},
 	aipom: {learnset: {
 		agility: ["2L46", "2E"],
@@ -9374,7 +9374,7 @@ exports.BattleLearnsets = {
 		thunderbolt: ["2T"],
 		thunderpunch: ["2M"],
 		toxic: ["2M"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	sunkern: {learnset: {
 		absorb: ["2L1", "2S0"],
@@ -9401,7 +9401,7 @@ exports.BattleLearnsets = {
 		swagger: ["2M"],
 		sweetscent: ["2M"],
 		synthesis: ["2L31"],
-		toxic: ["2M"]
+		toxic: ["2M"],
 	}},
 	sunflora: {learnset: {
 		absorb: ["2L1"],
@@ -9429,7 +9429,7 @@ exports.BattleLearnsets = {
 		sunnyday: ["2L19", "2M"],
 		swagger: ["2M"],
 		sweetscent: ["2M"],
-		toxic: ["2M"]
+		toxic: ["2M"],
 	}},
 	yanma: {learnset: {
 		attract: ["2M"],
@@ -9464,7 +9464,7 @@ exports.BattleLearnsets = {
 		thief: ["2M"],
 		toxic: ["2M"],
 		whirlwind: ["2E"],
-		wingattack: ["2L37"]
+		wingattack: ["2L37"],
 	}},
 	wooper: {learnset: {
 		amnesia: ["2L21"],
@@ -9507,7 +9507,7 @@ exports.BattleLearnsets = {
 		tailwhip: ["2L1", "2S0", "2S1"],
 		toxic: ["2M"],
 		watergun: ["2L1", "2S0", "2S1"],
-		whirlpool: ["2M"]
+		whirlpool: ["2M"],
 	}},
 	quagsire: {learnset: {
 		amnesia: ["2L23"],
@@ -9547,7 +9547,7 @@ exports.BattleLearnsets = {
 		tailwhip: ["2L1"],
 		toxic: ["2M"],
 		watergun: ["2L1"],
-		whirlpool: ["2M"]
+		whirlpool: ["2M"],
 	}},
 	murkrow: {learnset: {
 		attract: ["2M"],
@@ -9587,7 +9587,7 @@ exports.BattleLearnsets = {
 		thief: ["2M"],
 		toxic: ["2M"],
 		whirlwind: ["2E"],
-		wingattack: ["2E"]
+		wingattack: ["2E"],
 	}},
 	slowking: {learnset: {
 		attract: ["2M"],
@@ -9635,7 +9635,7 @@ exports.BattleLearnsets = {
 		toxic: ["2M"],
 		watergun: ["2L15"],
 		whirlpool: ["2M"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	misdreavus: {learnset: {
 		attract: ["2M"],
@@ -9676,17 +9676,17 @@ exports.BattleLearnsets = {
 		thunder: ["2M"],
 		thunderbolt: ["2T"],
 		toxic: ["2M"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	unown: {learnset: {
-		hiddenpower: ["2L1"]
+		hiddenpower: ["2L1"],
 	}},
 	wobbuffet: {learnset: {
 		counter: ["2L1"],
 		destinybond: ["2L1", "2S0"],
 		mimic: ["2S0"],
 		mirrorcoat: ["2L1", "2S0"],
-		safeguard: ["2L1", "2S0"]
+		safeguard: ["2L1", "2S0"],
 	}},
 	girafarig: {learnset: {
 		agility: ["2L20"],
@@ -9731,7 +9731,7 @@ exports.BattleLearnsets = {
 		thunder: ["2M"],
 		thunderbolt: ["2T"],
 		toxic: ["2M"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	pineco: {learnset: {
 		attract: ["2M"],
@@ -9768,7 +9768,7 @@ exports.BattleLearnsets = {
 		swift: ["2E"],
 		tackle: ["2L1", "2S0"],
 		takedown: ["2L15"],
-		toxic: ["2M"]
+		toxic: ["2M"],
 	}},
 	forretress: {learnset: {
 		attract: ["2M"],
@@ -9802,7 +9802,7 @@ exports.BattleLearnsets = {
 		sweetscent: ["2M"],
 		tackle: ["2L1"],
 		takedown: ["2L15"],
-		toxic: ["2M"]
+		toxic: ["2M"],
 	}},
 	dunsparce: {learnset: {
 		ancientpower: ["2E"],
@@ -9848,7 +9848,7 @@ exports.BattleLearnsets = {
 		thunder: ["2M"],
 		thunderbolt: ["2T"],
 		toxic: ["2M"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	gligar: {learnset: {
 		attract: ["2M"],
@@ -9888,7 +9888,7 @@ exports.BattleLearnsets = {
 		swift: ["2M"],
 		thief: ["2M"],
 		toxic: ["2M"],
-		wingattack: ["2E", "2S0"]
+		wingattack: ["2E", "2S0"],
 	}},
 	steelix: {learnset: {
 		attract: ["2M"],
@@ -9926,7 +9926,7 @@ exports.BattleLearnsets = {
 		sunnyday: ["2M"],
 		swagger: ["2M"],
 		tackle: ["2L1"],
-		toxic: ["2M"]
+		toxic: ["2M"],
 	}},
 	snubbull: {learnset: {
 		attract: ["2M"],
@@ -9976,7 +9976,7 @@ exports.BattleLearnsets = {
 		thunderbolt: ["2T"],
 		thunderpunch: ["2M"],
 		toxic: ["2M"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	granbull: {learnset: {
 		attract: ["2M"],
@@ -10019,7 +10019,7 @@ exports.BattleLearnsets = {
 		thunderbolt: ["2T"],
 		thunderpunch: ["2M"],
 		toxic: ["2M"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	qwilfish: {learnset: {
 		attract: ["2M"],
@@ -10060,7 +10060,7 @@ exports.BattleLearnsets = {
 		toxic: ["2M"],
 		waterfall: ["2M"],
 		watergun: ["2L19"],
-		whirlpool: ["2M"]
+		whirlpool: ["2M"],
 	}},
 	shuckle: {learnset: {
 		attract: ["2M"],
@@ -10094,7 +10094,7 @@ exports.BattleLearnsets = {
 		sweetscent: ["2E"],
 		toxic: ["2M"],
 		withdraw: ["2L1"],
-		wrap: ["2L9"]
+		wrap: ["2L9"],
 	}},
 	heracross: {learnset: {
 		attract: ["2M"],
@@ -10130,7 +10130,7 @@ exports.BattleLearnsets = {
 		tackle: ["2L1", "2S0"],
 		takedown: ["2L35"],
 		thief: ["2M"],
-		toxic: ["2M"]
+		toxic: ["2M"],
 	}},
 	sneasel: {learnset: {
 		agility: ["2L41"],
@@ -10184,7 +10184,7 @@ exports.BattleLearnsets = {
 		swagger: ["2M"],
 		swift: ["2M"],
 		thief: ["2M"],
-		toxic: ["2M"]
+		toxic: ["2M"],
 	}},
 	teddiursa: {learnset: {
 		attract: ["2M"],
@@ -10232,7 +10232,7 @@ exports.BattleLearnsets = {
 		thrash: ["2L50"],
 		thunderpunch: ["2M"],
 		toxic: ["2M"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	ursaring: {learnset: {
 		attract: ["2M"],
@@ -10274,7 +10274,7 @@ exports.BattleLearnsets = {
 		thrash: ["2L59"],
 		thunderpunch: ["2M"],
 		toxic: ["2M"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	slugma: {learnset: {
 		acidarmor: ["2E"],
@@ -10304,7 +10304,7 @@ exports.BattleLearnsets = {
 		snore: ["2M"],
 		sunnyday: ["2M"],
 		swagger: ["2M"],
-		toxic: ["2M"]
+		toxic: ["2M"],
 	}},
 	magcargo: {learnset: {
 		amnesia: ["2L29"],
@@ -10336,7 +10336,7 @@ exports.BattleLearnsets = {
 		strength: ["2M"],
 		sunnyday: ["2M"],
 		swagger: ["2M"],
-		toxic: ["2M"]
+		toxic: ["2M"],
 	}},
 	swinub: {learnset: {
 		amnesia: ["2L55"],
@@ -10373,7 +10373,7 @@ exports.BattleLearnsets = {
 		tackle: ["2L1", "2S0"],
 		takedown: ["2L28", "2E"],
 		toxic: ["2M"],
-		whirlwind: ["2S0"]
+		whirlwind: ["2S0"],
 	}},
 	piloswine: {learnset: {
 		amnesia: ["2L70"],
@@ -10407,7 +10407,7 @@ exports.BattleLearnsets = {
 		strength: ["2M"],
 		swagger: ["2M"],
 		takedown: ["2L28"],
-		toxic: ["2M"]
+		toxic: ["2M"],
 	}},
 	corsola: {learnset: {
 		amnesia: ["2E"],
@@ -10449,7 +10449,7 @@ exports.BattleLearnsets = {
 		swagger: ["2M"],
 		tackle: ["2L1"],
 		toxic: ["2M"],
-		whirlpool: ["2M"]
+		whirlpool: ["2M"],
 	}},
 	remoraid: {learnset: {
 		amnesia: ["2S0"],
@@ -10486,7 +10486,7 @@ exports.BattleLearnsets = {
 		thief: ["2M"],
 		toxic: ["2M"],
 		watergun: ["2L1", "2S0", "2S1"],
-		whirlpool: ["2M"]
+		whirlpool: ["2M"],
 	}},
 	octillery: {learnset: {
 		attract: ["2M"],
@@ -10518,7 +10518,7 @@ exports.BattleLearnsets = {
 		thief: ["2M"],
 		toxic: ["2M"],
 		watergun: ["2L1"],
-		whirlpool: ["2M"]
+		whirlpool: ["2M"],
 	}},
 	delibird: {learnset: {
 		attract: ["2M"],
@@ -10551,7 +10551,7 @@ exports.BattleLearnsets = {
 		swagger: ["2M"],
 		swift: ["2M"],
 		thief: ["2M"],
-		toxic: ["2M"]
+		toxic: ["2M"],
 	}},
 	mantine: {learnset: {
 		agility: ["2L32"],
@@ -10589,7 +10589,7 @@ exports.BattleLearnsets = {
 		twister: ["2E"],
 		waterfall: ["2M"],
 		whirlpool: ["2M"],
-		wingattack: ["2L40"]
+		wingattack: ["2L40"],
 	}},
 	skarmory: {learnset: {
 		agility: ["2L25"],
@@ -10623,7 +10623,7 @@ exports.BattleLearnsets = {
 		swift: ["2L19", "2M"],
 		thief: ["2M"],
 		toxic: ["2M"],
-		whirlwind: ["2E"]
+		whirlwind: ["2E"],
 	}},
 	houndour: {learnset: {
 		attract: ["2M"],
@@ -10667,7 +10667,7 @@ exports.BattleLearnsets = {
 		swagger: ["2M"],
 		swift: ["2M"],
 		thief: ["2M"],
-		toxic: ["2M"]
+		toxic: ["2M"],
 	}},
 	houndoom: {learnset: {
 		attract: ["2M"],
@@ -10706,7 +10706,7 @@ exports.BattleLearnsets = {
 		swagger: ["2M"],
 		swift: ["2M"],
 		thief: ["2M"],
-		toxic: ["2M"]
+		toxic: ["2M"],
 	}},
 	phanpy: {learnset: {
 		absorb: ["2S0"],
@@ -10742,7 +10742,7 @@ exports.BattleLearnsets = {
 		tackle: ["2L1", "2S0", "2S1"],
 		takedown: ["2L25"],
 		toxic: ["2M"],
-		watergun: ["2E"]
+		watergun: ["2E"],
 	}},
 	donphan: {learnset: {
 		attract: ["2M"],
@@ -10773,7 +10773,7 @@ exports.BattleLearnsets = {
 		strength: ["2M"],
 		sunnyday: ["2M"],
 		swagger: ["2M"],
-		toxic: ["2M"]
+		toxic: ["2M"],
 	}},
 	stantler: {learnset: {
 		attract: ["2M"],
@@ -10815,10 +10815,10 @@ exports.BattleLearnsets = {
 		tackle: ["2L1", "2S0"],
 		takedown: ["2L40"],
 		thief: ["2M"],
-		toxic: ["2M"]
+		toxic: ["2M"],
 	}},
 	smeargle: {learnset: {
-		sketch: ["2L1", "2L11", "2L21", "2L31", "2L41", "2L51", "2L61", "2L71", "2L81", "2L91"]
+		sketch: ["2L1", "2L11", "2L21", "2L31", "2L41", "2L51", "2L61", "2L71", "2L81", "2L91"],
 	}},
 	miltank: {learnset: {
 		attract: ["2M"],
@@ -10870,7 +10870,7 @@ exports.BattleLearnsets = {
 		thunderbolt: ["2T"],
 		thunderpunch: ["2M"],
 		toxic: ["2M"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	raikou: {learnset: {
 		bite: ["2L1"],
@@ -10910,7 +10910,7 @@ exports.BattleLearnsets = {
 		thunderbolt: ["2T"],
 		thundershock: ["2L11", "2S0"],
 		toxic: ["2M"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	entei: {learnset: {
 		bite: ["2L1"],
@@ -10948,7 +10948,7 @@ exports.BattleLearnsets = {
 		sunnyday: ["2M"],
 		swagger: ["2L61", "2M"],
 		swift: ["2M"],
-		toxic: ["2M"]
+		toxic: ["2M"],
 	}},
 	suicune: {learnset: {
 		aurorabeam: ["2L41"],
@@ -10991,7 +10991,7 @@ exports.BattleLearnsets = {
 		toxic: ["2M"],
 		waterfall: ["2M"],
 		watergun: ["2L11", "2S0"],
-		whirlpool: ["2M"]
+		whirlpool: ["2M"],
 	}},
 	larvitar: {learnset: {
 		ancientpower: ["2E"],
@@ -11028,7 +11028,7 @@ exports.BattleLearnsets = {
 		sunnyday: ["2M"],
 		swagger: ["2M"],
 		thrash: ["2L29"],
-		toxic: ["2M"]
+		toxic: ["2M"],
 	}},
 	pupitar: {learnset: {
 		attract: ["2M"],
@@ -11059,7 +11059,7 @@ exports.BattleLearnsets = {
 		sunnyday: ["2M"],
 		swagger: ["2M"],
 		thrash: ["2L29"],
-		toxic: ["2M"]
+		toxic: ["2M"],
 	}},
 	tyranitar: {learnset: {
 		attract: ["2M"],
@@ -11105,7 +11105,7 @@ exports.BattleLearnsets = {
 		swagger: ["2M"],
 		thrash: ["2L29"],
 		thunderbolt: ["2T"],
-		toxic: ["2M"]
+		toxic: ["2M"],
 	}},
 	lugia: {learnset: {
 		aeroblast: ["2L1", "2S0"],
@@ -11158,7 +11158,7 @@ exports.BattleLearnsets = {
 		waterfall: ["2M"],
 		whirlpool: ["2M"],
 		whirlwind: ["2L77"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	hooh: {learnset: {
 		ancientpower: ["2L88"],
@@ -11206,7 +11206,7 @@ exports.BattleLearnsets = {
 		thunderbolt: ["2T"],
 		toxic: ["2M"],
 		whirlwind: ["2L77"],
-		zapcannon: ["2M"]
+		zapcannon: ["2M"],
 	}},
 	celebi: {learnset: {
 		ancientpower: ["2L20"],
@@ -11246,6 +11246,6 @@ exports.BattleLearnsets = {
 		swagger: ["2M"],
 		sweetscent: ["2M"],
 		swift: ["2M"],
-		toxic: ["2M"]
-	}}
+		toxic: ["2M"],
+	}},
 };

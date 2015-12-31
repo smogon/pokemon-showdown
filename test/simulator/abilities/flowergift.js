@@ -12,11 +12,11 @@ describe('Flower Gift', function () {
 		battle = BattleEngine.Battle.construct('battle-flowergift-boost', 'doublescustomgame');
 		battle.join('p1', 'Guest 1', 1, [
 			{species: "Cherrim", ability: 'flowergift', moves: ['healbell']},
-			{species: "Snorlax", ability: 'immunity', moves: ['healbell']}
+			{species: "Snorlax", ability: 'immunity', moves: ['healbell']},
 		]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: "Blissey", ability: 'serenegrace', moves: ['healbell']},
-			{species: "Blissey", ability: 'serenegrace', moves: ['healbell']}
+			{species: "Blissey", ability: 'serenegrace', moves: ['healbell']},
 		]);
 		battle.commitDecisions();
 		let cherAtk = battle.p1.active[0].getStat('atk');
@@ -36,11 +36,11 @@ describe('Flower Gift', function () {
 		battle = BattleEngine.Battle.construct('battle-flowergift-boost', 'doublescustomgame');
 		battle.join('p1', 'Guest 1', 1, [
 			{species: "Cherrim", ability: 'serenegrace', moves: ['transform']},
-			{species: "Snorlax", ability: 'immunity', moves: ['healbell']}
+			{species: "Snorlax", ability: 'immunity', moves: ['healbell']},
 		]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: "Blissey", ability: 'flowergift', moves: ['healbell']},
-			{species: "Blissey", ability: 'flowergift', moves: ['healbell']}
+			{species: "Blissey", ability: 'flowergift', moves: ['healbell']},
 		]);
 		battle.commitDecisions();
 		battle.choose('p1', 'move 1 1, move 1');

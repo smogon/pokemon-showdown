@@ -31,7 +31,7 @@ exports.BattleStatuses = {
 		},
 		onAfterSwitchInSelf: function (pokemon) {
 			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
-		}
+		},
 	},
 	par: {
 		effectType: 'Status',
@@ -55,7 +55,7 @@ exports.BattleStatuses = {
 		},
 		onSwitchIn: function (pokemon) {
 			pokemon.addVolatile('parspeeddrop');
-		}
+		},
 	},
 	slp: {
 		effectType: 'Status',
@@ -76,7 +76,7 @@ exports.BattleStatuses = {
 		},
 		onAfterMoveSelf: function (pokemon) {
 			if (pokemon.statusData.time <= 0) pokemon.cureStatus();
-		}
+		},
 	},
 	frz: {
 		effectType: 'Status',
@@ -93,7 +93,7 @@ exports.BattleStatuses = {
 			if (move.type === 'Fire' && move.category !== 'Status') {
 				target.cureStatus();
 			}
-		}
+		},
 	},
 	psn: {
 		effectType: 'Status',
@@ -111,7 +111,7 @@ exports.BattleStatuses = {
 		},
 		onAfterSwitchInSelf: function (pokemon) {
 			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
-		}
+		},
 	},
 	tox: {
 		effectType: 'Status',
@@ -131,7 +131,7 @@ exports.BattleStatuses = {
 		},
 		onAfterSwitchInSelf: function (pokemon) {
 			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
-		}
+		},
 	},
 	confusion: {
 		// this is a volatile status
@@ -178,7 +178,7 @@ exports.BattleStatuses = {
 				return false;
 			}
 			return;
-		}
+		},
 	},
 	flinch: {
 		duration: 1,
@@ -189,7 +189,7 @@ exports.BattleStatuses = {
 			}
 			this.add('cant', pokemon, 'flinch');
 			return false;
-		}
+		},
 	},
 	trapped: {
 		noCopy: true,
@@ -199,7 +199,7 @@ exports.BattleStatuses = {
 				return;
 			}
 			pokemon.trapped = true;
-		}
+		},
 	},
 	partiallytrapped: {
 		duration: 2,
@@ -213,7 +213,7 @@ exports.BattleStatuses = {
 		},
 		onEnd: function (pokemon) {
 			this.add('-end', pokemon, this.effectData.sourceEffect, '[partiallytrapped]');
-		}
+		},
 	},
 	partialtrappinglock: {
 		durationCallback: function () {
@@ -238,14 +238,14 @@ exports.BattleStatuses = {
 					moves[i].disabled = true;
 				}
 			}
-		}
+		},
 	},
 	lockedmove: {
 		// Outrage, Thrash, Petal Dance...
 		inherit: true,
 		durationCallback: function () {
 			return this.random(3, 5);
-		}
+		},
 	},
 	futuremove: {
 		// this is a side condition
@@ -293,7 +293,7 @@ exports.BattleStatuses = {
 			if (finished) {
 				side.removeSideCondition('futuremove');
 			}
-		}
+		},
 	},
 	stall: {
 		// Protect, Detect, Endure counter
@@ -318,6 +318,6 @@ exports.BattleStatuses = {
 				this.effectData.counter *= 2;
 			}
 			this.effectData.duration = 2;
-		}
-	}
+		},
+	},
 };

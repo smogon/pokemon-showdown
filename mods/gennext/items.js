@@ -6,48 +6,48 @@ exports.BattleItems = {
 		name: "Burn Drive",
 		spritenum: 103,
 		fling: {
-			basePower: 70
+			basePower: 70,
 		},
 		onBasePower: function (basePower, user, target, move) {
 		},
 		onDrive: 'Fire',
-		desc: "Changes Genesect to Genesect-Burn."
+		desc: "Changes Genesect to Genesect-Burn.",
 	},
 	"chilldrive": {
 		id: "chilldrive",
 		name: "Chill Drive",
 		spritenum: 103,
 		fling: {
-			basePower: 70
+			basePower: 70,
 		},
 		onBasePower: function (basePower, user, target, move) {
 		},
 		onDrive: 'Ice',
-		desc: "Changes Genesect to Genesect-Chill."
+		desc: "Changes Genesect to Genesect-Chill.",
 	},
 	"dousedrive": {
 		id: "dousedrive",
 		name: "Douse Drive",
 		spritenum: 103,
 		fling: {
-			basePower: 70
+			basePower: 70,
 		},
 		onBasePower: function (basePower, user, target, move) {
 		},
 		onDrive: 'Water',
-		desc: "Changes Genesect to Genesect-Douse."
+		desc: "Changes Genesect to Genesect-Douse.",
 	},
 	"shockdrive": {
 		id: "shockdrive",
 		name: "Shock Drive",
 		spritenum: 103,
 		fling: {
-			basePower: 70
+			basePower: 70,
 		},
 		onBasePower: function (basePower, user, target, move) {
 		},
 		onDrive: 'Electric',
-		desc: "Changes Genesect to Genesect-Shock."
+		desc: "Changes Genesect to Genesect-Shock.",
 	},
 	"widelens": {
 		inherit: true,
@@ -55,7 +55,7 @@ exports.BattleItems = {
 			if (typeof accuracy === 'number') {
 				return accuracy * 1.3;
 			}
-		}
+		},
 	},
 	"zoomlens": {
 		inherit: true,
@@ -64,7 +64,7 @@ exports.BattleItems = {
 				this.debug('Zoom Lens boosting accuracy');
 				return accuracy * 1.6;
 			}
-		}
+		},
 	},
 	"bigroot": {
 		inherit: true,
@@ -79,7 +79,7 @@ exports.BattleItems = {
 			if (pokemon.hasType('Grass')) {
 				this.heal(pokemon.maxhp / 16);
 			}
-		}
+		},
 	},
 	"blacksludge": {
 		inherit: true,
@@ -91,14 +91,14 @@ exports.BattleItems = {
 			} else {
 				this.damage(pokemon.maxhp / 8);
 			}
-		}
+		},
 	},
 	"focusband": {
 		id: "focusband",
 		name: "Focus Band",
 		spritenum: 150,
 		fling: {
-			basePower: 10
+			basePower: 10,
 		},
 		onDamage: function (damage, target, source, effect) {
 			let types = target.getTypes();
@@ -115,7 +115,7 @@ exports.BattleItems = {
 		},
 		num: 230,
 		gen: 2,
-		desc: "Holder has a 10% chance to survive an attack that would KO it with 1HP."
+		desc: "Holder has a 10% chance to survive an attack that would KO it with 1HP.",
 	},
 	"wiseglasses": {
 		inherit: true,
@@ -127,7 +127,7 @@ exports.BattleItems = {
 				}
 				return basePower * 1.1;
 			}
-		}
+		},
 	},
 	"muscleband": {
 		inherit: true,
@@ -139,13 +139,13 @@ exports.BattleItems = {
 				}
 				return basePower * 1.1;
 			}
-		}
+		},
 	},
 	"stick": {
 		id: "stick",
 		name: "Stick",
 		fling: {
-			basePower: 60
+			basePower: 60,
 		},
 		spritenum: 475,
 		// The Stick is a stand-in for a number of pokemon-exclusive items
@@ -206,6 +206,6 @@ exports.BattleItems = {
 		// 		this.heal(this.clampIntRange(pokemon.maxhp / 16, 1));
 		// 	}
 		// },
-		desc: "Raises Farfetch'd's critical hit rate two stages."
-	}
+		desc: "Raises Farfetch'd's critical hit rate two stages.",
+	},
 };

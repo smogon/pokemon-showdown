@@ -55,7 +55,7 @@ if (!process.send) {
 		} catch (e) {}
 		process.send({
 			success: success,
-			guid: message.guid
+			guid: message.guid,
 		});
 	});
 

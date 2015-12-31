@@ -38,7 +38,7 @@ describe('Simple [Gen 4]', function () {
 		battle = BattleEngine.Battle.construct('battle-simple-dpp-batonpass', 'gen4customgame');
 		battle.join('p1', 'Guest 1', 1, [
 			{species: "Sableye", ability: 'prankster', moves: ['batonpass']},
-			{species: "Bibarel", ability: 'simple', moves: ['protect']}
+			{species: "Bibarel", ability: 'simple', moves: ['protect']},
 		]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Gyarados", ability: 'intimidate', moves: ['splash']}]);
 		battle.commitDecisions();

@@ -20,8 +20,8 @@ exports.BattleTypeChart = {
 			"Psychic": 0,
 			"Rock": 1,
 			"Steel": 2,
-			"Water": 1
-		}
+			"Water": 1,
+		},
 	},
 	"Ice": {
 		inherit: true,
@@ -42,8 +42,8 @@ exports.BattleTypeChart = {
 			"Psychic": 0,
 			"Rock": 1,
 			"Steel": 1,
-			"Water": 0
-		}
+			"Water": 0,
+		},
 	},
 	"Steel": {
 		inherit: true,
@@ -66,7 +66,7 @@ exports.BattleTypeChart = {
 			"Psychic": 2,
 			"Rock": 2,
 			"Steel": 2,
-			"Water": 0
-		}
-	}
+			"Water": 0,
+		},
+	},
 };

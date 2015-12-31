@@ -178,7 +178,7 @@ describe('Heal Block [Gen 4]', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: 'Spiritomb', ability: 'pressure', moves: ['healblock', 'shadowball']}]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: 'Abra', level: 1, ability: 'synchronize', item: 'leftovers', moves: ['teleport', 'endure']},
-			{species: 'Abra', level: 1, ability: 'synchronize', item: 'sitrusberry', moves: ['teleport', 'endure']}
+			{species: 'Abra', level: 1, ability: 'synchronize', item: 'sitrusberry', moves: ['teleport', 'endure']},
 		]);
 		battle.commitDecisions();
 		battle.choose('p1', 'move 2');

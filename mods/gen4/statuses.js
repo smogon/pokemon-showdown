@@ -8,7 +8,7 @@ exports.BattleStatuses = {
 				this.add('cant', pokemon, 'par');
 				return false;
 			}
-		}
+		},
 	},
 	slp: {
 		effectType: 'Status',
@@ -32,7 +32,7 @@ exports.BattleStatuses = {
 				return;
 			}
 			return false;
-		}
+		},
 	},
 	frz: {
 		inherit: true,
@@ -44,27 +44,27 @@ exports.BattleStatuses = {
 			if (move.flags['defrost']) return;
 			this.add('cant', pokemon, 'frz');
 			return false;
-		}
+		},
 	},
 	trapped: {
 		inherit: true,
-		noCopy: false
+		noCopy: false,
 	},
 	trapper: {
 		inherit: true,
-		noCopy: false
+		noCopy: false,
 	},
 	partiallytrapped: {
 		inherit: true,
 		durationCallback: function (target, source) {
 			if (source.hasItem('gripclaw')) return 6;
 			return this.random(3, 7);
-		}
+		},
 	},
 	stall: {
 		// In gen 4, the chance of protect succeeding does not fall below 1/8.
 		// See http://upokecenter.dreamhosters.com/dex/?lang=en&move=182
 		inherit: true,
-		counterMax: 8
-	}
+		counterMax: 8,
+	},
 };

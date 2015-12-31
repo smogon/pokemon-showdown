@@ -126,5 +126,5 @@ exports.BattleScripts = {
 		for (let i in this.data.FormatsData) {
 			this.modData('FormatsData', i).unreleasedHidden = false;
 		}
-	}
+	},
 };

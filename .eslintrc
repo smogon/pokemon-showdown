@@ -8,7 +8,7 @@
 		"Tournaments": false, "Dnsbl": false, "Cidr": false, "Sockets": false, "TeamValidator": false, "Ladders": false
 	},
 	"rules": {
-		"comma-dangle": [2, "never"],
+		"comma-dangle": [2, "always-multiline"],
 		"no-cond-assign": [2, "except-parens"],
 		"no-console": 0,
 		"no-constant-condition": 0,

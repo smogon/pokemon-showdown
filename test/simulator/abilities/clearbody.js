@@ -61,7 +61,7 @@ describe('Clear Body', function () {
 		battle = BattleEngine.Battle.construct();
 		battle.join('p1', 'Guest 1', 1, [
 			{species: 'Metagross', ability: 'clearbody', moves: ['sleeptalk']},
-			{species: 'Metagross', ability: 'clearbody', moves: ['sleeptalk']}
+			{species: 'Metagross', ability: 'clearbody', moves: ['sleeptalk']},
 		]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Haxorus', ability: 'moldbreaker', moves: ['roar', 'stickyweb']}]);
 		battle.choose('p2', 'move 2');

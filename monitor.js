@@ -233,7 +233,7 @@ const Monitor = module.exports = { // eslint-disable-line no-unused-vars
 			this.cmds[ip] = 1;
 			this.cmdsTimes[ip] = now;
 		}
-	}
+	},
 };
 
 Monitor.cleanInterval = setInterval(Monitor.clean, 6 * 60 * 60 * 1000);

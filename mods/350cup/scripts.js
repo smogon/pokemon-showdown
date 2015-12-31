@@ -13,5 +13,5 @@ exports.BattleScripts = {
 			}
 		}
 		this.modData('Pokedex', 'shedinja').baseStats['hp'] = 1;
-	}
+	},
 };

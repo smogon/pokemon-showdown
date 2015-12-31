@@ -12,7 +12,7 @@ describe('Magic Guard', function () {
 		battle = BattleEngine.Battle.construct();
 		battle.join('p1', 'Guest 1', 1, [
 			{species: 'Magikarp', ability: 'swiftswim', moves: ['splash']},
-			{species: 'Clefable', ability: 'magicguard', item: 'lifeorb', moves: ['doubleedge']}
+			{species: 'Clefable', ability: 'magicguard', item: 'lifeorb', moves: ['doubleedge']},
 		]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Crobat', ability: 'roughskin', moves: ['spikes', 'toxic']}]);
 		battle.commitDecisions();
@@ -28,7 +28,7 @@ describe('Magic Guard', function () {
 		battle = BattleEngine.Battle.construct();
 		battle.join('p1', 'Guest 1', 1, [
 			{species: 'Magikarp', ability: 'swiftswim', moves: ['splash']},
-			{species: 'Clefable', ability: 'magicguard', moves: ['doubleedge']}
+			{species: 'Clefable', ability: 'magicguard', moves: ['doubleedge']},
 		]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Haxorus', ability: 'moldbreaker', moves: ['stealthrock', 'roar']}]);
 		battle.commitDecisions();

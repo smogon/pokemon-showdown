@@ -16,7 +16,7 @@ describe('Trapping Moves', function () {
 			battle.join('p1', 'Guest 1', 1, [{species: "Smeargle", ability: 'prankster', moves: [toId(trappers[i])]}]);
 			battle.join('p2', 'Guest 2', 1, [
 				{species: "Tangrowth", ability: 'leafguard', moves: ['swordsdance']},
-				{species: "Starmie", ability: 'illuminate', moves: ['reflecttype']}
+				{species: "Starmie", ability: 'illuminate', moves: ['reflecttype']},
 			]);
 			battle.commitDecisions();
 			battle.choose('p2', 'switch 2');
@@ -29,7 +29,7 @@ describe('Trapping Moves', function () {
 			battle.join('p1', 'Guest 1', 1, [{species: "Smeargle", ability: 'prankster', moves: [toId(trappers[i])]}]);
 			battle.join('p2', 'Guest 2', 1, [
 				{species: "Tangrowth", ability: 'leafguard', moves: ['batonpass']},
-				{species: "Starmie", ability: 'illuminate', moves: ['reflecttype']}
+				{species: "Starmie", ability: 'illuminate', moves: ['reflecttype']},
 			]);
 			battle.commitDecisions();
 			battle.choose('p2', 'switch 2');
@@ -41,7 +41,7 @@ describe('Trapping Moves', function () {
 			battle.join('p1', 'Guest 1', 1, [{species: "Smeargle", ability: 'prankster', moves: [toId(trappers[i])]}]);
 			battle.join('p2', 'Guest 2', 1, [
 				{species: "Gourgeist", ability: 'insomnia', moves: ['synthesis']},
-				{species: "Starmie", ability: 'illuminate', moves: ['reflecttype']}
+				{species: "Starmie", ability: 'illuminate', moves: ['reflecttype']},
 			]);
 			battle.commitDecisions();
 			battle.choose('p2', 'switch 2');
@@ -53,11 +53,11 @@ describe('Trapping Moves', function () {
 			battle = BattleEngine.Battle.construct();
 			battle.join('p1', 'Guest 1', 1, [
 				{species: "Smeargle", ability: 'prankster', moves: [toId(trappers[i])]},
-				{species: "Kyurem", ability: 'pressure', moves: ['rest']}
+				{species: "Kyurem", ability: 'pressure', moves: ['rest']},
 			]);
 			battle.join('p2', 'Guest 2', 1, [
 				{species: "Tangrowth", ability: 'leafguard', moves: ['roar']},
-				{species: "Starmie", ability: 'illuminate', moves: ['reflecttype']}
+				{species: "Starmie", ability: 'illuminate', moves: ['reflecttype']},
 			]);
 			battle.commitDecisions();
 			battle.choose('p2', 'switch 2');
@@ -90,7 +90,7 @@ describe('Partial Trapping Moves', function () {
 			battle.join('p1', 'Guest 1', 1, [{species: "Smeargle", ability: 'noguard', moves: [toId(partialtrappers[i])]}]);
 			battle.join('p2', 'Guest 2', 1, [
 				{species: "Blissey", ability: 'naturalcure', moves: ['healbell']},
-				{species: "Starmie", ability: 'illuminate', moves: ['reflecttype']}
+				{species: "Starmie", ability: 'illuminate', moves: ['reflecttype']},
 			]);
 			battle.commitDecisions();
 			battle.choose('p2', 'switch 2');
@@ -103,7 +103,7 @@ describe('Partial Trapping Moves', function () {
 			battle.join('p1', 'Guest 1', 1, [{species: "Smeargle", ability: 'noguard', moves: [toId(partialtrappers[i])]}]);
 			battle.join('p2', 'Guest 2', 1, [
 				{species: "Blissey", ability: 'naturalcure', moves: ['batonpass']},
-				{species: "Starmie", ability: 'illuminate', moves: ['reflecttype']}
+				{species: "Starmie", ability: 'illuminate', moves: ['reflecttype']},
 			]);
 			battle.commitDecisions();
 			battle.choose('p2', 'switch 2');
@@ -115,7 +115,7 @@ describe('Partial Trapping Moves', function () {
 			battle.join('p1', 'Guest 1', 1, [{species: "Smeargle", ability: 'noguard', moves: [toId(partialtrappers[i])]}]);
 			battle.join('p2', 'Guest 2', 1, [
 				{species: "Dusknoir", ability: 'frisk', moves: ['sleeptalk']},
-				{species: "Starmie", ability: 'illuminate', moves: ['reflecttype']}
+				{species: "Starmie", ability: 'illuminate', moves: ['reflecttype']},
 			]);
 			battle.commitDecisions();
 			battle.choose('p2', 'switch 2');
@@ -127,11 +127,11 @@ describe('Partial Trapping Moves', function () {
 			battle = BattleEngine.Battle.construct();
 			battle.join('p1', 'Guest 1', 1, [
 				{species: "Smeargle", ability: 'noguard', moves: [toId(partialtrappers[i])]},
-				{species: "Kyurem", ability: 'pressure', moves: ['rest']}
+				{species: "Kyurem", ability: 'pressure', moves: ['rest']},
 			]);
 			battle.join('p2', 'Guest 2', 1, [
 				{species: "Blissey", ability: 'naturalcure', moves: ['roar']},
-				{species: "Starmie", ability: 'illuminate', moves: ['reflecttype']}
+				{species: "Starmie", ability: 'illuminate', moves: ['reflecttype']},
 			]);
 			battle.commitDecisions();
 			battle.choose('p2', 'switch 2');
@@ -143,11 +143,11 @@ describe('Partial Trapping Moves', function () {
 			battle = BattleEngine.Battle.construct();
 			battle.join('p1', 'Guest 1', 1, [
 				{species: "Smeargle", ability: 'noguard', moves: [toId(partialtrappers[i])]},
-				{species: "Kyurem", ability: 'pressure', moves: ['rest']}
+				{species: "Kyurem", ability: 'pressure', moves: ['rest']},
 			]);
 			battle.join('p2', 'Guest 2', 1, [
 				{species: "Blissey", ability: 'naturalcure', moves: ['rapidspin']},
-				{species: "Starmie", ability: 'illuminate', moves: ['reflecttype']}
+				{species: "Starmie", ability: 'illuminate', moves: ['reflecttype']},
 			]);
 			battle.commitDecisions();
 			battle.choose('p2', 'switch 2');

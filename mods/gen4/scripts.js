@@ -7,5 +7,5 @@ exports.BattleScripts = {
 		for (let i in this.data.Pokedex) {
 			delete this.data.Pokedex[i].abilities['H'];
 		}
-	}
+	},
 };

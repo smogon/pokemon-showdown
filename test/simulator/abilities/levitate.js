@@ -36,7 +36,7 @@ describe('Levitate', function () {
 		battle = BattleEngine.Battle.construct();
 		battle.join('p1', 'Guest 1', 1, [
 			{species: 'Cresselia', ability: 'levitate', moves: ['sleeptalk']},
-			{species: 'Cresselia', ability: 'levitate', moves: ['sleeptalk']}
+			{species: 'Cresselia', ability: 'levitate', moves: ['sleeptalk']},
 		]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Haxorus', ability: 'moldbreaker', moves: ['roar', 'spikes']}]);
 		battle.choose('p2', 'move 2');
@@ -49,7 +49,7 @@ describe('Levitate', function () {
 		battle = BattleEngine.Battle.construct();
 		battle.join('p1', 'Guest 1', 1, [
 			{species: 'Cresselia', ability: 'levitate', item: 'ejectbutton', moves: ['sleeptalk']},
-			{species: 'Cresselia', ability: 'levitate', moves: ['sleeptalk']}
+			{species: 'Cresselia', ability: 'levitate', moves: ['sleeptalk']},
 		]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Haxorus', ability: 'moldbreaker', moves: ['tackle', 'spikes']}]);
 		battle.choose('p2', 'move 2');
@@ -64,7 +64,7 @@ describe('Levitate', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: 'Forretress', ability: 'levitate', item: 'redcard', moves: ['spikes']}]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: 'Haxorus', ability: 'moldbreaker', item: 'laggingtail', moves: ['tackle']},
-			{species: 'Rotom', ability: 'levitate', moves: ['rest']}
+			{species: 'Rotom', ability: 'levitate', moves: ['rest']},
 		]);
 		battle.commitDecisions();
 		assert.strictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
@@ -80,7 +80,7 @@ describe('Levitate [Gen 4]', function () {
 		battle = BattleEngine.Battle.construct('battle-dpp-levitate', 'gen4customgame');
 		battle.join('p1', 'Guest 1', 1, [
 			{species: 'Cresselia', ability: 'levitate', moves: ['sleeptalk']},
-			{species: 'Cresselia', ability: 'levitate', moves: ['sleeptalk']}
+			{species: 'Cresselia', ability: 'levitate', moves: ['sleeptalk']},
 		]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Rampardos', ability: 'moldbreaker', moves: ['roar', 'spikes']}]);
 		battle.choose('p2', 'move 2');
