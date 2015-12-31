@@ -24,7 +24,7 @@ let MafiaFunctions = {
 	},
 	killTarget: function (target) {
 		target.kill('The werewolf has eaten a tasty snack!');
-	}
+	},
 };
 
 // Every role has a side they belong to, as well as all functions they have. These functions are objects with the targeting mechanics and a callback.
@@ -34,14 +34,14 @@ exports.MafiaClasses = {
 		name: "Villager",
 		side: 'town',
 		image: '<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-villager.png" />',
-		flavorText: 'You are a villager. You live peacefully in the town, which with the mafia activity hasn\'t been all too peaceful, actually.'
+		flavorText: 'You are a villager. You live peacefully in the town, which with the mafia activity hasn\'t been all too peaceful, actually.',
 	},
 
 	mafia: {
 		name: "Mafia",
 		side: 'mafia',
 		image: '<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-mafia.png" />',
-		flavorText: 'You are a member of the mafia. Every night, you get together with the other mafia members to eliminate someone in the town. The townsfolk aren\'t all that happy with that, however.'
+		flavorText: 'You are a member of the mafia. Every night, you get together with the other mafia members to eliminate someone in the town. The townsfolk aren\'t all that happy with that, however.',
 	},
 
 	hooker: {
@@ -53,8 +53,8 @@ exports.MafiaClasses = {
 		onNight: {
 			target: {side: 'any', count: 'single'},
 			priority: 5,
-			callback: MafiaFunctions.roleBlock
-		}
+			callback: MafiaFunctions.roleBlock,
+		},
 	},
 
 	doctor: {
@@ -66,8 +66,8 @@ exports.MafiaClasses = {
 		onNight: {
 			target: {side: 'any', count: 'single'},
 			priority: 4,
-			callback: MafiaFunctions.protect
-		}
+			callback: MafiaFunctions.protect,
+		},
 	},
 
 	cop: {
@@ -79,8 +79,8 @@ exports.MafiaClasses = {
 		onNight: {
 			target: {side: 'any', count: 'single'},
 			priority: -1,
-			callback: MafiaFunctions.copReport
-		}
+			callback: MafiaFunctions.copReport,
+		},
 	},
 
 	werewolf: {
@@ -93,7 +93,7 @@ exports.MafiaClasses = {
 		onNight: {
 			target: {side: 'any', count: 'single'},
 			priority: 2,
-			callback: MafiaFunctions.killTarget
-		}
-	}
+			callback: MafiaFunctions.killTarget,
+		},
+	},
 };

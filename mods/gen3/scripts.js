@@ -16,5 +16,5 @@ exports.BattleScripts = {
 				this.modData('Movedex', i).category = newCategory;
 			}
 		}
-	}
+	},
 };

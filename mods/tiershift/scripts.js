@@ -15,7 +15,7 @@ exports.BattleScripts = {
 				this.typesData.push({
 					type: this.types[i],
 					suppressed: false,
-					isAdded: false
+					isAdded: false,
 				});
 			}
 			if (!dontRecalculateStats) {
@@ -29,7 +29,7 @@ exports.BattleScripts = {
 					'PU': 20,
 					'NFE': 20,
 					'LC Uber': 20,
-					'LC': 20
+					'LC': 20,
 				};
 				let tier = template.tier;
 				if (this.set.item) {
@@ -60,6 +60,6 @@ exports.BattleScripts = {
 				this.speed = this.stats.spe;
 			}
 			return true;
-		}
-	}
+		},
+	},
 };

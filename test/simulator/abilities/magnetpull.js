@@ -13,7 +13,7 @@ describe('Magnet Pull', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: "Magnezone", ability: 'magnetpull', moves: ['soak', 'charge']}]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: "Heatran", ability: 'flashfire', moves: ['curse']},
-			{species: "Starmie", ability: 'illuminate', moves: ['reflecttype']}
+			{species: "Starmie", ability: 'illuminate', moves: ['reflecttype']},
 		]);
 		battle.choose('p2', 'switch 2');
 		battle.commitDecisions();
@@ -33,7 +33,7 @@ describe('Magnet Pull', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: "Magnezone", ability: 'magnetpull', moves: ['toxic']}]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: "Heatran", ability: 'flashfire', moves: ['batonpass']},
-			{species: "Tentacruel", ability: 'clearbody', moves: ['rapidspin']}
+			{species: "Tentacruel", ability: 'clearbody', moves: ['rapidspin']},
 		]);
 		battle.commitDecisions();
 		battle.choose('p2', 'switch 2');
@@ -45,7 +45,7 @@ describe('Magnet Pull', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: "Magnezone", ability: 'magnetpull', moves: ['substitute']}]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: "Aegislash", ability: 'stancechange', moves: ['swordsdance']},
-			{species: "Arcanine", ability: 'flashfire', moves: ['roar']}
+			{species: "Arcanine", ability: 'flashfire', moves: ['roar']},
 		]);
 		battle.choose('p2', 'switch 2');
 		battle.commitDecisions();

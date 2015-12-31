@@ -3,38 +3,38 @@
 exports.BattleFormatsData = {
 	aegislash: {
 		inherit: true,
-		tier: 'OU'
+		tier: 'OU',
 	},
 	blaziken: {
 		inherit: true,
-		tier: 'OU'
+		tier: 'OU',
 	},
 	genesect: {
 		inherit: true,
-		tier: 'OU'
+		tier: 'OU',
 	},
 	landorus: {
 		inherit: true,
-		tier: 'OU'
+		tier: 'OU',
 	},
 	deoxysdefense: {
 		inherit: true,
-		tier: 'Uber'
+		tier: 'Uber',
 	},
 	deoxysspeed: {
 		inherit: true,
-		tier: 'Uber'
+		tier: 'Uber',
 	},
 	hoopaunbound: {
 		inherit: true,
-		tier: 'Uber'
+		tier: 'Uber',
 	},
 	kyurem: {
 		inherit: true,
-		tier: 'Uber'
+		tier: 'Uber',
 	},
 	kyuremblack: {
 		inherit: true,
-		tier: 'Uber'
-	}
+		tier: 'Uber',
+	},
 };

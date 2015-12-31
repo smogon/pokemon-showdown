@@ -19,6 +19,6 @@ exports.BattleFormats = {
 				}
 			}
 			set.moves = moves;
-		}
-	}
+		},
+	},
 };

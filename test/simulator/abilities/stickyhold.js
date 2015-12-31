@@ -13,7 +13,7 @@ describe('Sticky Hold', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: 'Shuckle', ability: 'stickyhold', item: 'razzberry', moves: ['recover']}]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: 'Fennekin', ability: 'magician', moves: ['grassknot']},
-			{species: 'Smeargle', ability: 'synchronize', moves: ['thief', 'knockoff', 'switcheroo', 'bugbite']}
+			{species: 'Smeargle', ability: 'synchronize', moves: ['thief', 'knockoff', 'switcheroo', 'bugbite']},
 		]);
 		battle.commitDecisions();
 		assert.strictEqual(battle.p1.active[0].item, 'razzberry');

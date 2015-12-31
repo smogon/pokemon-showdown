@@ -7,19 +7,19 @@ exports.BattleItems = {
 			if (move && user.template.species === 'Dialga' && (move.type === 'Steel' || move.type === 'Dragon')) {
 				return this.chainModify(1.2);
 			}
-		}
+		},
 	},
 	"choiceband": {
 		inherit: true,
-		onStart: function () { }
+		onStart: function () { },
 	},
 	"choicescarf": {
 		inherit: true,
-		onStart: function () { }
+		onStart: function () { },
 	},
 	"choicespecs": {
 		inherit: true,
-		onStart: function () { }
+		onStart: function () { },
 	},
 	"custapberry": {
 		id: "custapberry",
@@ -28,11 +28,11 @@ exports.BattleItems = {
 		isBerry: true,
 		naturalGift: {
 			basePower: 80,
-			type: "Ghost"
+			type: "Ghost",
 		},
 		onBeforeTurn: function (pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.ability === 'gluttony')) {
-				var decision = this.willMove(pokemon);
+				let decision = this.willMove(pokemon);
 				if (!decision) return;
 				this.insertQueue({
 					choice: 'event',
@@ -40,19 +40,19 @@ exports.BattleItems = {
 					priority: decision.priority + 0.1,
 					pokemon: decision.pokemon,
 					move: decision.move,
-					target: decision.target
+					target: decision.target,
 				});
 			}
 		},
 		onCustap: function (pokemon) {
-			var decision = this.willMove(pokemon);
+			let decision = this.willMove(pokemon);
 			this.debug('custap decision: ' + decision);
 			if (decision) {
 				pokemon.eatItem();
 			}
 		},
 		onEat: function (pokemon) {
-			var decision = this.willMove(pokemon);
+			let decision = this.willMove(pokemon);
 			this.debug('custap eaten: ' + decision);
 			if (decision) {
 				this.cancelDecision(pokemon);
@@ -60,7 +60,7 @@ exports.BattleItems = {
 				this.runDecision(decision);
 			}
 		},
-		desc: "Activates at 25% HP. Next move used goes first. One-time use."
+		desc: "Activates at 25% HP. Next move used goes first. One-time use.",
 	},
 	"deepseascale": {
 		inherit: true,
@@ -68,7 +68,7 @@ exports.BattleItems = {
 			if (pokemon.template.species === 'Clamperl') {
 				return this.chainModify(2);
 			}
-		}
+		},
 	},
 	"deepseatooth": {
 		inherit: true,
@@ -76,7 +76,7 @@ exports.BattleItems = {
 			if (pokemon.template.species === 'Clamperl') {
 				return this.chainModify(2);
 			}
-		}
+		},
 	},
 	"focussash": {
 		inherit: true,
@@ -96,8 +96,8 @@ exports.BattleItems = {
 			},
 			onAfterMoveSecondary: function (target, source, move) {
 				target.removeVolatile('focussash');
-			}
-		}
+			},
+		},
 	},
 	"griseousorb": {
 		inherit: true,
@@ -105,12 +105,12 @@ exports.BattleItems = {
 			if (user.template.num === 487 && (move.type === 'Ghost' || move.type === 'Dragon')) {
 				return this.chainModify(1.2);
 			}
-		}
+		},
 	},
 	"ironball": {
 		inherit: true,
 		onEffectiveness: function () {},
-		desc: "Holder's Speed is halved and it becomes grounded."
+		desc: "Holder's Speed is halved and it becomes grounded.",
 	},
 	"jabocaberry": {
 		inherit: true,
@@ -121,14 +121,14 @@ exports.BattleItems = {
 					this.damage(source.maxhp / 8, source, target, null, true);
 				}
 			}
-		}
+		},
 	},
 	"lifeorb": {
 		id: "lifeorb",
 		name: "Life Orb",
 		spritenum: 249,
 		fling: {
-			basePower: 30
+			basePower: 30,
 		},
 		onBasePower: function (basePower, user, target) {
 			if (!target.volatiles['substitute']) {
@@ -143,11 +143,11 @@ exports.BattleItems = {
 					this.damage(source.maxhp / 10, source, source, this.getItem('lifeorb'));
 					source.removeVolatile('lifeorb');
 				}
-			}
+			},
 		},
 		num: 270,
 		gen: 4,
-		desc: "Holder's damaging moves do 1.3x damage; loses 1/10 max HP after the attack."
+		desc: "Holder's damaging moves do 1.3x damage; loses 1/10 max HP after the attack.",
 	},
 	"lightball": {
 		inherit: true,
@@ -155,7 +155,7 @@ exports.BattleItems = {
 			if (pokemon.template.species === 'Pikachu') {
 				return this.chainModify(2);
 			}
-		}
+		},
 	},
 	"luckypunch": {
 		inherit: true,
@@ -163,7 +163,7 @@ exports.BattleItems = {
 			if (user.template.species === 'Chansey') {
 				move.critRatio += 2;
 			}
-		}
+		},
 	},
 	"lustrousorb": {
 		inherit: true,
@@ -171,7 +171,7 @@ exports.BattleItems = {
 			if (move && user.template.species === 'Palkia' && (move.type === 'Water' || move.type === 'Dragon')) {
 				return this.chainModify(1.2);
 			}
-		}
+		},
 	},
 	"mentalherb": {
 		id: "mentalherb",
@@ -183,7 +183,7 @@ exports.BattleItems = {
 				if (pokemon.removeVolatile('attract')) {
 					this.add('-end', pokemon, 'move: Attract', '[from] item: Mental Herb');
 				}
-			}
+			},
 		},
 		onUpdate: function (pokemon) {
 			if (pokemon.volatiles.attract && pokemon.useItem()) {
@@ -191,7 +191,7 @@ exports.BattleItems = {
 				this.add('-end', pokemon, 'move: Attract', '[from] item: Mental Herb');
 			}
 		},
-		desc: "Cures infatuation. One-time use."
+		desc: "Cures infatuation. One-time use.",
 	},
 	"metronome": {
 		inherit: true,
@@ -208,8 +208,8 @@ exports.BattleItems = {
 					this.effectData.numConsecutive++;
 				}
 				return basePower * (1 + (this.effectData.numConsecutive / 10));
-			}
-		}
+			},
+		},
 	},
 	"rowapberry": {
 		inherit: true,
@@ -220,7 +220,7 @@ exports.BattleItems = {
 					this.damage(source.maxhp / 8, source, target, null, true);
 				}
 			}
-		}
+		},
 	},
 	"stick": {
 		inherit: true,
@@ -228,7 +228,7 @@ exports.BattleItems = {
 			if (user.template.species === 'Farfetch\'d') {
 				move.critRatio += 2;
 			}
-		}
+		},
 	},
 	"thickclub": {
 		inherit: true,
@@ -236,6 +236,6 @@ exports.BattleItems = {
 			if (pokemon.template.species === 'Cubone' || pokemon.template.species === 'Marowak') {
 				return this.chainModify(2);
 			}
-		}
-	}
+		},
+	},
 };

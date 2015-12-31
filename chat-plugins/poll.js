@@ -269,7 +269,7 @@ exports.commands = {
 
 		'': function (target, room, user) {
 			this.parse('/help poll');
-		}
+		},
 	},
 	pollhelp: ["/poll allows rooms to run their own polls. These polls are limited to one poll at a time per room.",
 				"Accepts the following commands:",
@@ -278,5 +278,5 @@ exports.commands = {
 				"/poll timer [minutes] - Sets the poll to automatically end after [minutes]. Requires: % @ # & ~",
 				"/poll results - Shows the results of the poll without voting. NOTE: you can't go back and vote after using this.",
 				"/poll display - Displays the poll",
-				"/poll end - Ends a poll and displays the results. Requires: % @ # & ~"]
+				"/poll end - Ends a poll and displays the results. Requires: % @ # & ~"],
 };

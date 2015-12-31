@@ -21,7 +21,7 @@ function toArtistId(artist) { // toId would return '' for foreign/sadistic artis
 let artistOfTheDay = {
 	pendingNominations: false,
 	nominations: new Map(),
-	removedNominators: []
+	removedNominators: [],
 };
 
 let theStudio = Rooms.get('thestudio');
@@ -259,7 +259,7 @@ let commands = {
 	},
 	quotehelp:  [
 		"/aotd quote - View the current Artist Quote of the Day.",
-		"/aotd quote [quote] - Set the Artist Quote of the Day. Requires: # & ~"
+		"/aotd quote [quote] - Set the Artist Quote of the Day. Requires: # & ~",
 	],
 
 	'': function (target, room) {
@@ -272,7 +272,7 @@ let commands = {
 		if (room.id !== 'thestudio') return this.errorReply('This command can only be used in The Studio.');
 		if (!room.chatRoomData || !this.canBroadcast()) return false;
 		this.sendReply("Use /help aotd to view help for all commands, or /help aotd [command] for help on a specific command.");
-	}
+	},
 };
 
 exports.commands = {
@@ -288,6 +288,6 @@ exports.commands = {
 		"- /aotd prenom [artist] - Nominate an artist for the Artist of the Day between nomination periods.",
 		"- /aotd set [artist] - Set the Artist of the Day. Requires: % @ # & ~",
 		"- /aotd quote - View the current Artist Quote of the Day.",
-		"- /aotd quote [quote] - Set the Artist Quote of the Day. Requires: # & ~"
-	]
+		"- /aotd quote [quote] - Set the Artist Quote of the Day. Requires: # & ~",
+	],
 };

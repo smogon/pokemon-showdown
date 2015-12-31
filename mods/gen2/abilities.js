@@ -11,6 +11,6 @@ exports.BattleAbilities = {
 		id: "none",
 		name: "None",
 		rating: 1,
-		num: 1
-	}
+		num: 1,
+	},
 };

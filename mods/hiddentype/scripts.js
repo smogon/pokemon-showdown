@@ -14,7 +14,7 @@ exports.BattleScripts = {
 				this.typesData.push({
 					type: this.types[i],
 					suppressed: false,
-					isAdded: false
+					isAdded: false,
 				});
 			}
 			if (this.types.indexOf(this.baseHpType) < 0) {
@@ -22,7 +22,7 @@ exports.BattleScripts = {
 					type: this.baseHpType,
 					suppressed: false,
 					isAdded: true,
-					isCustom: true
+					isCustom: true,
 				});
 			}
 
@@ -65,13 +65,13 @@ exports.BattleScripts = {
 						type: this.baseHpType,
 						suppressed: false,
 						isAdded: typeData.isAdded,
-						isCustom: true
+						isCustom: true,
 					});
 				} else {
 					this.typesData.push({
 						type: typeData.type,
 						suppressed: false,
-						isAdded: typeData.isAdded
+						isAdded: typeData.isAdded,
 					});
 				}
 			}
@@ -96,7 +96,7 @@ exports.BattleScripts = {
 					pp: move.noPPBoosts ? moveData.maxpp : 5,
 					maxpp: this.battle.gen >= 5 ? (move.noPPBoosts ? moveData.maxpp : 5) : (this.battle.gen <= 2 ? move.pp : moveData.maxpp),
 					target: moveData.target,
-					disabled: false
+					disabled: false,
 				});
 				this.moves.push(toId(moveName));
 			}
@@ -107,6 +107,6 @@ exports.BattleScripts = {
 			this.setAbility(pokemon.ability);
 			this.update();
 			return true;
-		}
-	}
+		},
+	},
 };

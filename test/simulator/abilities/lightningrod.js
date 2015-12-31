@@ -31,12 +31,12 @@ describe('Lightning Rod', function () {
 		battle.join('p1', 'Guest 1', 1, [
 			{species: 'Manectric', ability: 'lightningrod', moves: ['sleeptalk']},
 			{species: 'Electrode', ability: 'static', moves: ['thunderbolt']},
-			{species: 'Electrode', ability: 'static', moves: ['thunderbolt']}
+			{species: 'Electrode', ability: 'static', moves: ['thunderbolt']},
 		]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: 'Electrode', ability: 'static', moves: ['thunderbolt']},
 			{species: 'Electrode', ability: 'static', moves: ['thunderbolt']},
-			{species: 'Electrode', ability: 'static', moves: ['thunderbolt']}
+			{species: 'Electrode', ability: 'static', moves: ['thunderbolt']},
 		]);
 		battle.commitDecisions(); // Team Preview
 		battle.choose('p1', 'move 1, move 1 1, move 1 1');
@@ -50,11 +50,11 @@ describe('Lightning Rod', function () {
 		battle = BattleEngine.Battle.construct('battle-moldbreaker-lightningrod', 'doublescustomgame');
 		battle.join('p1', 'Guest 1', 1, [
 			{species: 'Manectric', ability: 'lightningrod', moves: ['endure']},
-			{species: 'Manaphy', ability: 'hydration', moves: ['tailglow']}
+			{species: 'Manaphy', ability: 'hydration', moves: ['tailglow']},
 		]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: 'Haxorus', ability: 'moldbreaker', moves: ['thunderpunch']},
-			{species: 'Zekrom', ability: 'teravolt', moves: ['shockwave']}
+			{species: 'Zekrom', ability: 'teravolt', moves: ['shockwave']},
 		]);
 		battle.commitDecisions(); // Team Preview
 		battle.choose('p2', 'move 1 1, move 1 2');

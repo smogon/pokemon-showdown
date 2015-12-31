@@ -144,7 +144,7 @@ class Ladder {
 			for (let i = 0; i < ladder.length; i++) {
 				let row = ladder[i];
 				buf += '<tr><td>' + [
-					i + 1, row[2], '<strong>' + Math.round(row[1]) + '</strong>', row[3], row[4], row[5]
+					i + 1, row[2], '<strong>' + Math.round(row[1]) + '</strong>', row[3], row[4], row[5],
 				].join('</td><td>') + '</td></tr>';
 			}
 			return [formatid, buf];

@@ -32,7 +32,7 @@ module.exports = (function () {
 		'Formats': 'rulesets.js',
 		'FormatsData': 'formats-data.js',
 		'Learnsets': 'learnsets.js',
-		'Aliases': 'aliases.js'
+		'Aliases': 'aliases.js',
 	};
 
 	let BattleNatures = dataFiles.Natures = {
@@ -60,7 +60,7 @@ module.exports = (function () {
 		relaxed: {name:"Relaxed", plus:'def', minus:'spe'},
 		sassy: {name:"Sassy", plus:'spd', minus:'spe'},
 		serious: {name:"Serious"},
-		timid: {name:"Timid", plus:'spe', minus:'atk'}
+		timid: {name:"Timid", plus:'spe', minus:'atk'},
 	};
 
 	function tryRequire(filePath) {
@@ -383,11 +383,11 @@ module.exports = (function () {
 				if (!effect.effectType) effect.effectType = 'Format';
 			} else if (id === 'recoil') {
 				effect = {
-					effectType: 'Recoil'
+					effectType: 'Recoil',
 				};
 			} else if (id === 'drain') {
 				effect = {
-					effectType: 'Drain'
+					effectType: 'Drain',
 				};
 			}
 			if (!effect.id) effect.id = id;
@@ -677,7 +677,7 @@ module.exports = (function () {
 				searchResults.push({
 					exactMatch: !isInexact,
 					searchType: searchTypes[searchIn[i]],
-					name: res.name
+					name: res.name,
 				});
 			}
 		}
@@ -892,7 +892,7 @@ module.exports = (function () {
 					def: Number(evs[2]) || 0,
 					spa: Number(evs[3]) || 0,
 					spd: Number(evs[4]) || 0,
-					spe: Number(evs[5]) || 0
+					spe: Number(evs[5]) || 0,
 				};
 			}
 			i = j + 1;
@@ -914,7 +914,7 @@ module.exports = (function () {
 					def: ivs[2] === '' ? 31 : Number(ivs[2]) || 0,
 					spa: ivs[3] === '' ? 31 : Number(ivs[3]) || 0,
 					spd: ivs[4] === '' ? 31 : Number(ivs[4]) || 0,
-					spe: ivs[5] === '' ? 31 : Number(ivs[5]) || 0
+					spe: ivs[5] === '' ? 31 : Number(ivs[5]) || 0,
 				};
 			}
 			i = j + 1;

@@ -372,7 +372,7 @@ exports.commands = {
 			isPersonal: true,
 			isPrivate: privacySettings[privacy],
 			auth: {},
-			introMessage: '<h2 style="margin-top:0">' + titleHTML + '</h2><p>There are several ways to invite people:<br />- in this chat: <code>/invite USERNAME</code><br />- anywhere in PS: link to <code>&lt;&lt;' + roomid + '>></code>' + (groupChatURL ? '<br />- outside of PS: link to <a href="' + groupChatURL + '">' + groupChatURL + '</a>' : '') + '</p><p>This room will expire after 40 minutes of inactivity or when the server is restarted.</p><p style="margin-bottom:0"><button name="send" value="/roomhelp">Room management</button>'
+			introMessage: '<h2 style="margin-top:0">' + titleHTML + '</h2><p>There are several ways to invite people:<br />- in this chat: <code>/invite USERNAME</code><br />- anywhere in PS: link to <code>&lt;&lt;' + roomid + '>></code>' + (groupChatURL ? '<br />- outside of PS: link to <a href="' + groupChatURL + '">' + groupChatURL + '</a>' : '') + '</p><p>This room will expire after 40 minutes of inactivity or when the server is restarted.</p><p style="margin-bottom:0"><button name="send" value="/roomhelp">Room management</button>',
 		});
 		if (targetRoom) {
 			// The creator is RO.
@@ -2265,7 +2265,7 @@ exports.commands = {
 			loghash: datahash,
 			p1: players[0],
 			p2: players[1],
-			format: room.format
+			format: room.format,
 		}, function (success) {
 			if (success && success.errorip) {
 				connection.popup("This server's request IP " + success.errorip + " is not a registered server.");
@@ -2273,7 +2273,7 @@ exports.commands = {
 			}
 			connection.send('|queryresponse|savereplay|' + JSON.stringify({
 				log: data,
-				id: room.id.substr(7)
+				id: room.id.substr(7),
 			}));
 		});
 	},
@@ -2568,7 +2568,7 @@ exports.commands = {
 			if (!trustable || !targetUser) {
 				connection.send('|queryresponse|userdetails|' + JSON.stringify({
 					userid: toId(target),
-					rooms: false
+					rooms: false,
 				}));
 				return false;
 			}
@@ -2590,13 +2590,13 @@ exports.commands = {
 			let userdetails = {
 				userid: targetUser.userid,
 				avatar: targetUser.avatar,
-				rooms: roomList
+				rooms: roomList,
 			};
 			connection.send('|queryresponse|userdetails|' + JSON.stringify(userdetails));
 		} else if (cmd === 'roomlist') {
 			if (!trustable) return false;
 			connection.send('|queryresponse|roomlist|' + JSON.stringify({
-				rooms: Rooms.global.getRoomList(target)
+				rooms: Rooms.global.getRoomList(target),
 			}));
 		} else if (cmd === 'rooms') {
 			if (!trustable) return false;
@@ -2704,6 +2704,6 @@ exports.commands = {
 				this.errorReply("Help for the command '" + target + "' was not found. Try /help for general help");
 			}
 		}
-	}
+	},
 
 };

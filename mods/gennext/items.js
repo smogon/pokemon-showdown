@@ -6,48 +6,48 @@ exports.BattleItems = {
 		name: "Burn Drive",
 		spritenum: 103,
 		fling: {
-			basePower: 70
+			basePower: 70,
 		},
 		onBasePower: function (basePower, user, target, move) {
 		},
 		onDrive: 'Fire',
-		desc: "Changes Genesect to Genesect-Burn."
+		desc: "Changes Genesect to Genesect-Burn.",
 	},
 	"chilldrive": {
 		id: "chilldrive",
 		name: "Chill Drive",
 		spritenum: 103,
 		fling: {
-			basePower: 70
+			basePower: 70,
 		},
 		onBasePower: function (basePower, user, target, move) {
 		},
 		onDrive: 'Ice',
-		desc: "Changes Genesect to Genesect-Chill."
+		desc: "Changes Genesect to Genesect-Chill.",
 	},
 	"dousedrive": {
 		id: "dousedrive",
 		name: "Douse Drive",
 		spritenum: 103,
 		fling: {
-			basePower: 70
+			basePower: 70,
 		},
 		onBasePower: function (basePower, user, target, move) {
 		},
 		onDrive: 'Water',
-		desc: "Changes Genesect to Genesect-Douse."
+		desc: "Changes Genesect to Genesect-Douse.",
 	},
 	"shockdrive": {
 		id: "shockdrive",
 		name: "Shock Drive",
 		spritenum: 103,
 		fling: {
-			basePower: 70
+			basePower: 70,
 		},
 		onBasePower: function (basePower, user, target, move) {
 		},
 		onDrive: 'Electric',
-		desc: "Changes Genesect to Genesect-Shock."
+		desc: "Changes Genesect to Genesect-Shock.",
 	},
 	"widelens": {
 		inherit: true,
@@ -55,7 +55,7 @@ exports.BattleItems = {
 			if (typeof accuracy === 'number') {
 				return accuracy * 1.3;
 			}
-		}
+		},
 	},
 	"zoomlens": {
 		inherit: true,
@@ -64,7 +64,7 @@ exports.BattleItems = {
 				this.debug('Zoom Lens boosting accuracy');
 				return accuracy * 1.6;
 			}
-		}
+		},
 	},
 	"bigroot": {
 		inherit: true,
@@ -79,7 +79,7 @@ exports.BattleItems = {
 			if (pokemon.hasType('Grass')) {
 				this.heal(pokemon.maxhp / 16);
 			}
-		}
+		},
 	},
 	"blacksludge": {
 		inherit: true,
@@ -91,17 +91,17 @@ exports.BattleItems = {
 			} else {
 				this.damage(pokemon.maxhp / 8);
 			}
-		}
+		},
 	},
 	"focusband": {
 		id: "focusband",
 		name: "Focus Band",
 		spritenum: 150,
 		fling: {
-			basePower: 10
+			basePower: 10,
 		},
 		onDamage: function (damage, target, source, effect) {
-			var types = target.getTypes();
+			let types = target.getTypes();
 			if (types.length === 1 && types[0] === 'Fighting' &&
 					effect && effect.effectType === 'Move' &&
 					target.useItem()) {
@@ -115,37 +115,37 @@ exports.BattleItems = {
 		},
 		num: 230,
 		gen: 2,
-		desc: "Holder has a 10% chance to survive an attack that would KO it with 1HP."
+		desc: "Holder has a 10% chance to survive an attack that would KO it with 1HP.",
 	},
 	"wiseglasses": {
 		inherit: true,
 		onBasePower: function (basePower, user, target, move) {
 			if (move.category === 'Special') {
-				var types = user.getTypes();
+				let types = user.getTypes();
 				if (types.length === 1 && types[0] === 'Psychic') {
 					return basePower * 1.2;
 				}
 				return basePower * 1.1;
 			}
-		}
+		},
 	},
 	"muscleband": {
 		inherit: true,
 		onBasePower: function (basePower, user, target, move) {
 			if (move.category === 'Physical') {
-				var types = user.getTypes();
+				let types = user.getTypes();
 				if (types.length === 1 && types[0] === 'Fighting') {
 					return basePower * 1.2;
 				}
 				return basePower * 1.1;
 			}
-		}
+		},
 	},
 	"stick": {
 		id: "stick",
 		name: "Stick",
 		fling: {
-			basePower: 60
+			basePower: 60,
 		},
 		spritenum: 475,
 		// The Stick is a stand-in for a number of pokemon-exclusive items
@@ -179,7 +179,7 @@ exports.BattleItems = {
 			}
 		},
 		onFoeBasePower: function (basePower, attacker, defender, move) {
-			var GossamerWingUsers = {"Butterfree":1, "Masquerain":1, "Beautifly":1, "Mothim":1, "Vivillon":1};
+			let GossamerWingUsers = {"Butterfree":1, "Masquerain":1, "Beautifly":1, "Mothim":1, "Vivillon":1};
 			if (GossamerWingUsers[defender.template.species]) {
 				if (move.type === 'Rock' || move.type === 'Electric' || move.type === 'Ice') {
 					this.add('-message', "The attack was weakened by GoassamerWing!");
@@ -188,7 +188,7 @@ exports.BattleItems = {
 			}
 		},
 		onDamage: function (damage, defender, attacker, effect) {
-			var GossamerWingUsers = {"Butterfree":1, "Masquerain":1, "Beautifly":1, "Mothim":1, "Vivillon":1};
+			let GossamerWingUsers = {"Butterfree":1, "Masquerain":1, "Beautifly":1, "Mothim":1, "Vivillon":1};
 			if (GossamerWingUsers[defender.template.species]) {
 				if (effect && effect.id === 'stealthrock') {
 					return damage / 2;
@@ -196,7 +196,7 @@ exports.BattleItems = {
 			}
 		},
 		onAfterMoveSecondarySelf: function (source, target, move) {
-			var GossamerWingUsers = {"Butterfree":1, "Masquerain":1, "Beautifly":1, "Mothim":1, "Vivillon":1, "Venomoth":1, "Volcarona":1, "Dustox": 1, "Lilligant":1};
+			let GossamerWingUsers = {"Butterfree":1, "Masquerain":1, "Beautifly":1, "Mothim":1, "Vivillon":1, "Venomoth":1, "Volcarona":1, "Dustox": 1, "Lilligant":1};
 			if (move && move.effectType === 'Move' && move.category === 'Status' && GossamerWingUsers[source.template.species]) {
 				this.heal(source.maxhp / 16);
 			}
@@ -206,6 +206,6 @@ exports.BattleItems = {
 		// 		this.heal(this.clampIntRange(pokemon.maxhp / 16, 1));
 		// 	}
 		// },
-		desc: "Raises Farfetch'd's critical hit rate two stages."
-	}
+		desc: "Raises Farfetch'd's critical hit rate two stages.",
+	},
 };

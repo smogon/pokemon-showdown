@@ -113,7 +113,7 @@ exports.BattleFormats = {
 			set.nature = 'Serious';
 
 			return problems;
-		}
+		},
 	},
 	standard: {
 		effectType: 'Banlist',
@@ -128,7 +128,7 @@ exports.BattleFormats = {
 			'Sleep Powder + Perish Song + Mean Look',
 			'Sleep Powder + Perish Song + Spider Web',
 			'Spore + Perish Song + Mean Look',
-			'Spore + Perish Song + Spider Web'
+			'Spore + Perish Song + Spider Web',
 		],
 		onValidateSet: function (set) {
 			// limit one of each move in Standard
@@ -144,6 +144,6 @@ exports.BattleFormats = {
 				}
 			}
 			set.moves = moves;
-		}
-	}
+		},
+	},
 };

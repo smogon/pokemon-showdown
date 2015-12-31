@@ -25,7 +25,7 @@ describe('Stealth Rock', function () {
 			{species: "Staraptor", moves: ['roost']},
 			{species: "Chansey", moves: ['wish']},
 			{species: "Hitmonchan", moves: ['rest']},
-			{species: "Steelix", moves: ['rest']}
+			{species: "Steelix", moves: ['rest']},
 		]);
 		battle.choose('p1', 'move 2');
 		battle.commitDecisions();

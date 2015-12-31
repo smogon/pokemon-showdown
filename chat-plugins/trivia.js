@@ -11,7 +11,7 @@ const fs = require('fs');
 const MODES = {
 	first: 'First',
 	timer: 'Timer',
-	number: 'Number'
+	number: 'Number',
 };
 
 const CATEGORIES = {
@@ -19,13 +19,13 @@ const CATEGORIES = {
 	pokemon: 'Pok\u00e9mon',
 	sg: 'Science & Geography',
 	sh: 'Society & Humanities',
-	random: 'Random'
+	random: 'Random',
 };
 
 const SCORE_CAPS = {
 	short: 20,
 	medium: 35,
-	long: 50
+	long: 50,
 };
 
 const QUESTION_PERIOD = 15 * 1000;
@@ -130,7 +130,7 @@ if (triviaRoom) {
 		triviaRoom.plugin = {
 			data: triviaData,
 			write: writeTriviaData,
-			trivia: trivia
+			trivia: trivia,
 		};
 		let questionWorkshop = Rooms('questionworkshop');
 		if (questionWorkshop) questionWorkshop.plugin = triviaRoom.plugin;
@@ -169,7 +169,7 @@ let Trivia = (function () {
 		let scoreData = {
 			score: 0,
 			correctAnswers: 0,
-			answered: false
+			answered: false,
 		};
 		if (this.mode !== 'first') {
 			if (this.mode === 'timer') scoreData.points = 0;
@@ -669,7 +669,7 @@ let commands = {
 			category: category,
 			question: question,
 			answers: answers,
-			user: user.userid
+			user: user.userid,
 		};
 
 		if (cmd === 'add') {
@@ -880,7 +880,7 @@ let commands = {
 	},
 	qshelp: [
 		"/trivia qs - View the distribution of questions in the question database.",
-		"/trivia qs [category] - View the questions in the specified category. Requires: % @ # & ~"
+		"/trivia qs [category] - View the questions in the specified category. Requires: % @ # & ~",
 	],
 
 	// informational commands
@@ -953,7 +953,7 @@ let commands = {
 
 		return this.sendReply(buffer);
 	},
-	ladderhelp: ["/trivia ladder - View information about the top 15 users on the trivia leaderboard."]
+	ladderhelp: ["/trivia ladder - View information about the top 15 users on the trivia leaderboard."],
 };
 
 exports.commands = {
@@ -989,6 +989,6 @@ exports.commands = {
 		"- /trivia status - View information about any ongoing trivia game.",
 		"- /trivia players - View the list of the players in the current trivia game.",
 		"- /trivia rank [username] - View the rank of the specified user. If none is given, view your own.",
-		"- /trivia ladder - View information about the top 15 users on the trivia leaderboard."
-	]
+		"- /trivia ladder - View information about the top 15 users on the trivia leaderboard.",
+	],
 };
