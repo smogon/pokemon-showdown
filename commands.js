@@ -412,12 +412,12 @@ exports.commands = {
 		if (!targetRoom) return this.errorReply("The room '" + target + "' doesn't exist.");
 		target = targetRoom.title || targetRoom.id;
 
-		if (room.id === 'global') {
+		if (targetRoom.id === 'global') {
 			return this.errorReply("This room can't be deleted.");
 		}
 
-		if (room.chatRoomData) {
-			if (room.isPrivate) {
+		if (targetRoom.chatRoomData) {
+			if (targetRoom.isPrivate) {
 				if (Rooms.get('upperstaff')) {
 					Rooms.get('upperstaff').add('|raw|<div class="broadcast-red">Private chat room deleted: <b>' + Tools.escapeHTML(target) + '</b></div>').update();
 				}
@@ -431,12 +431,12 @@ exports.commands = {
 			}
 		}
 
-		room.add("|raw|<div class=\"broadcast-red\"><b>This room has been deleted.</b></div>");
-		room.update(); // |expire| needs to be its own message
-		room.add("|expire|This room has been deleted.");
+		targetRoom.add("|raw|<div class=\"broadcast-red\"><b>This room has been deleted.</b></div>");
+		targetRoom.update(); // |expire| needs to be its own message
+		targetRoom.add("|expire|This room has been deleted.");
 		this.sendReply("The room '" + target + "' was deleted.");
-		room.update();
-		room.destroy();
+		targetRoom.update();
+		targetRoom.destroy();
 	},
 	deleteroomhelp: ["/deleteroom [roomname] - Deletes room [roomname]. Requires: & ~"],
 
