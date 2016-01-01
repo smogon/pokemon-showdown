@@ -49424,7 +49424,7 @@ exports.BattleLearnsets = {
 		wish: ["6L20"],
 		worryseed: ["6T"],
 	}},
-	floetteeternalflower: {learnset: {
+	floetteeternal: {learnset: {
 		aromatherapy: ["6L38"],
 		attract: ["6M"],
 		calmmind: ["6M"],

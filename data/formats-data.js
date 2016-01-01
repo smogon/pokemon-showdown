@@ -5034,7 +5034,7 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["moonblast", "toxic", "wish", "psychic", "aromatherapy", "protect", "calmmind"],
 		tier: "NFE",
 	},
-	floetteeternalflower: {
+	floetteeternal: {
 		randomBattleMoves: ["lightofruin", "psychic", "hiddenpowerfire", "hiddenpowerground", "moonblast"],
 		randomDoubleBattleMoves: ["lightofruin", "dazzlinggleam", "wish", "psychic", "aromatherapy", "protect", "calmmind"],
 		isUnreleased: true,
