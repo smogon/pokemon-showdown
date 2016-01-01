@@ -2998,7 +2998,7 @@ exports.BattlePokedex = {
 		weightkg: 5,
 		color: "Black",
 		eggGroups: ["Undiscovered"],
-		otherForms: ["unownb", "unownc", "unownd", "unowne", "unownf", "unowng", "unownh", "unowni", "unownj", "unownk", "unownl", "unownm", "unownn", "unowno", "unownp", "unownq", "unownr", "unowns", "unownt", "unownu", "unownv", "unownw", "unownx", "unowny", "unownz", "unownem", "unownqm"],
+		otherForms: ["unownb", "unownc", "unownd", "unowne", "unownf", "unowng", "unownh", "unowni", "unownj", "unownk", "unownl", "unownm", "unownn", "unowno", "unownp", "unownq", "unownr", "unowns", "unownt", "unownu", "unownv", "unownw", "unownx", "unowny", "unownz", "unownexclamation", "unownquestion"],
 	},
 	wobbuffet: {
 		num: 202,
@@ -10217,6 +10217,7 @@ exports.BattlePokedex = {
 		prevo: "spewpa",
 		evoLevel: 12,
 		eggGroups: ["Bug"],
+		otherForms: ["vivillonarchipelago", "vivilloncontinental", "vivillonelegant", "vivillongarden", "vivillonhighplains", "vivillonicysnow", "vivillonjungle", "vivillonmarine", "vivillonmodern", "vivillonmonsoon", "vivillonocean", "vivillonpolar", "vivillonriver", "vivillonsandstorm", "vivillonsavanna", "vivillonsun", "vivillontundra"],
 	},
 	litleo: {
 		num: 667,
@@ -10256,6 +10257,7 @@ exports.BattlePokedex = {
 		color: "White",
 		evos: ["floette"],
 		eggGroups: ["Fairy"],
+		otherForms: ["flabebeblue", "flabebeorange", "flabebewhite", "flabebeyellow"],
 	},
 	floette: {
 		num: 670,
@@ -10272,9 +10274,10 @@ exports.BattlePokedex = {
 		evos: ["florges"],
 		evoLevel: 19,
 		eggGroups: ["Fairy"],
+		otherForms: ["floetteblue", "floetteorange", "floettewhite", "floetteyellow"],
 		otherFormes: ["floetteeternal"],
 	},
-	floetteeternalflower: {
+	floetteeternal: {
 		num: 670,
 		species: "Floette-Eternal",
 		baseSpecies: "Floette",
@@ -10302,6 +10305,7 @@ exports.BattlePokedex = {
 		prevo: "floette",
 		evoLevel: 19,
 		eggGroups: ["Fairy"],
+		otherForms: ["florgesblue", "florgesorange", "florgeswhite", "florgesyellow"],
 	},
 	skiddo: {
 		num: 672,
