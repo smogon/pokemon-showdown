@@ -389,73 +389,58 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
-		name: "350 Cup",
+		name: "Gods and Followers",
 		desc: [
-			"Pok&eacute;mon with a base stat total of 350 or lower get their stats doubled.",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3512945/\">350 Cup</a>",
+			"The Pok&eacute;mon in the first slot is the God; the Followers must share a type with the God. If the God Pok&eacute;mon faints, the Followers are inflicted with Curse.",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3512945/\">Gods and Followers</a>",
 		],
 		section: "OM of the Month",
 		column: 2,
 
-		mod: '350cup',
-		ruleset: ['Ubers', 'Evasion Moves Clause'],
-		banlist: ['Abra', 'Cranidos', 'Darumaka', 'Gastly', 'Pawniard', 'Rufflet', 'Smeargle', 'Spritzee', 'DeepSeaScale', 'DeepSeaTooth', 'Light Ball', 'Thick Club'],
-		onValidateSet: function (set) {
-			const template = Tools.getTemplate(set.species);
-			const item = this.getItem(set.item);
-			if (item.name === 'Eviolite' && Object.values(template.baseStats).sum() <= 350) {
-				return ['Eviolite is banned on Pok\u00E9mon with 350 or lower BST.'];
+		ruleset: ['Pokemon', 'Standard', 'Swagger Clause', 'Baton Pass Clause', 'Team Preview', 'Gods and Followers Clause'],
+		banlist: [],
+		onValidateTeam: function (team) {
+			if (!team[0]) return;
+			let template = this.getTemplate(team[0].species);
+			let typeTable = template.types;
+			for (let i = 1; i < team.length; i++) {
+				template = this.getTemplate(team[i].species);
+				if (template.tier === 'Uber') return [template.species + " is only allowed as the God."];
+				if (!template.types || !typeTable.intersect(template.types).length) return ["Followers must share a type with the God."];
+				let item = toId(team[i].item);
+				if (item && item in {gengarite:1, kangaskhanite:1, lucarionite:1, mawilite:1, salamencite:1, souldew:1}) return [team[i].item + " is only allowed on the God."];
+				if (toId(team[i].ability) === 'shadowtag') return [team[i].ability + " is only allowed on the God."];
+			}
+		},
+		onFaint: function (pokemon) {
+			if (pokemon.side.pokemonLeft > 1 && pokemon.side.god === pokemon) {
+				this.add('-message', pokemon.name + " has fallen! " + pokemon.side.name + "'s team has been Cursed!");
+			}
+		},
+		onSwitchIn: function (pokemon) {
+			if (pokemon.side.god.hp === 0) {
+				pokemon.addVolatile('curse', pokemon);
 			}
 		},
 	},
 	{
-		name: "LC Extended",
+		name: "Monogen",
 		desc: [
-			"LC but with Pok&eacute;mon being able to learn all moves from their evolutions.",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3557568/\">LC Extended</a>",
+			"All Pok&eacute;mon on a team must be from the same generation.",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3516475/\">Monogen</a>",
 		],
 		section: "OM of the Month",
 
-		ruleset: ['Pokemon', 'Standard', 'Baton Pass Clause', 'Team Preview'],
-		banlist: ['Dragon Rage', 'Sonic Boom', 'Swagger'],
-		validateSet: function (set, teamHas) {
-			const species = set.species || set.name;
-			let template = Tools.getTemplate(species);
-			if (template.prevo) {
-				return [species + " isn't the first in its evolution family."];
+		ruleset: ['OU'],
+		banlist: [],
+		onValidateTeam: function (team) {
+			if (!team[0]) return;
+			let gen = this.getTemplate(team[0].species).gen;
+			if (!gen) return ["Your team must be from the same generation."];
+			for (let i = 1; i < team.length; i++) {
+				let template = this.getTemplate(team[i].species);
+				if (template.gen !== gen) return ["Your team must be from the same generation."];
 			}
-			if (!template.nfe) {
-				return [species + " doesn't have an evolution family."];
-			}
-			if (template.tier === 'LC Uber' || template.species in {'Fletchling':1, 'Gligar':1, 'Misdreavus':1, 'Scyther':1, 'Sneasel':1, 'Tangela':1}) {
-				return [species + " is banned from LC Extended."];
-			}
-			const ability = set.ability;
-			if (Object.values(template.abilities).indexOf(ability) < 0 || ability === 'Moody') {
-				return [species + " doesn't have a legal ability."];
-			}
-			const level = set.level;
-			let problems;
-			while (template.evos.length) {
-				let evos = template.evos;
-				for (let i = 0; i < evos.length; i++) {
-					template = Tools.getTemplate(evos[i]);
-					set.species = template.species;
-					set.ability = template.abilities[0];
-					set.level = template.evoLevel;
-					problems = this.validateSet(set, teamHas) || [];
-					if (!problems.length) {
-						set.species = species;
-						set.ability = ability;
-						set.level = Tools.clampIntRange(level, 1, 5);
-						return;
-					}
-				}
-			}
-			for (let i = 0; i < problems.length; i++) {
-				problems[i] = problems[i].replace(template.species, species);
-			}
-			return problems;
 		},
 	},
 	/*{
