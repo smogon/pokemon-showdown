@@ -906,7 +906,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 3, "level": 46, "moves":["refresh", "psychic", "hypnosis", "ancientpower"]},
 		],
-		tier: "PU",
+		tier: "BL4",
 	},
 	cubone: {
 		randomBattleMoves: ["substitute", "bonemerang", "doubleedge", "rockslide", "firepunch", "earthquake"],
@@ -2401,7 +2401,7 @@ exports.BattleFormatsData = {
 	},
 	vigoroth: {
 		randomBattleMoves: ["bulkup", "return", "earthquake", "firepunch", "suckerpunch", "slackoff", "icepunch", "lowkick"],
-		tier: "NFE",
+		tier: "BL4",
 	},
 	slaking: {
 		randomBattleMoves: ["earthquake", "pursuit", "nightslash", "doubleedge", "retaliate"],
