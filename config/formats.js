@@ -392,7 +392,7 @@ exports.Formats = [
 		name: "Gods and Followers",
 		desc: [
 			"The Pok&eacute;mon in the first slot is the God; the Followers must share a type with the God. If the God Pok&eacute;mon faints, the Followers are inflicted with Curse.",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3512945/\">Gods and Followers</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3545230/\">Gods and Followers</a>",
 		],
 		section: "OM of the Month",
 		column: 2,
