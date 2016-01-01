@@ -639,12 +639,4 @@ exports.BattleFormats = {
 			}
 		},
 	},
-	godsandfollowersclause: {
-		effectType: 'Rule',
-		onStart: function () {
-			for (let i = 0; i < this.sides.length; i++) {
-				this.sides[i].god = this.sides[i].pokemon[0];
-			}
-		},
-	},
 };
