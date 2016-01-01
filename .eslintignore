@@ -1,2 +1,3 @@
 tournaments/lib/**
 config/config.js
+logs/**
