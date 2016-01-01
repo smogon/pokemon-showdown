@@ -412,6 +412,11 @@ exports.Formats = [
 				if (toId(team[i].ability) === 'shadowtag') return [team[i].ability + " is only allowed on the God."];
 			}
 		},
+		onBegin: function () {
+			for (let i = 0; i < this.sides.length; i++) {
+				this.sides[i].god = this.sides[i].pokemon[0];
+			}
+		},
 		onFaint: function (pokemon) {
 			if (pokemon.side.pokemonLeft > 1 && pokemon.side.god === pokemon) {
 				this.add('-message', pokemon.name + " has fallen! " + pokemon.side.name + "'s team has been Cursed!");
