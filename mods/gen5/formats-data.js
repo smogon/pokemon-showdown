@@ -1145,6 +1145,7 @@ exports.BattleFormatsData = {
 			{"generation": 5, "level": 70, "isHidden": false, "moves":["psystrike", "shadowball", "aurasphere", "electroball"], "pokeball": "cherishball"},
 			{"generation": 5, "level": 100, "nature": "Timid", "isHidden": true, "moves":["psystrike", "icebeam", "healpulse", "hurricane"], "pokeball": "cherishball"},
 		],
+		eventOnlyHidden: true,
 		tier: "Uber",
 	},
 	mew: {
