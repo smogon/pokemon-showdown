@@ -131,7 +131,7 @@ function canTalk(user, room, connection, message, targetUser) {
 		}
 
 		// remove zalgo
-		message = message.replace(/[\u0300-\u036f\u0483-\u0489\u064b-\u065f\u0670\u0E31\u0E34-\u0E3A\u0E47-\u0E4E]{3,}/g, '');
+		message = message.replace(/[\u0300-\u036f\u0483-\u0489\u0610-\u0615\u064B-\u065F\u0670\u06D6-\u06DC\u06DF-\u06ED\u0E31\u0E34-\u0E3A\u0E47-\u0E4E]{3,}/g, '');
 		if (/[\u239b-\u23b9]/.test(message)) {
 			this.errorReply("Your message contains banned characters.");
 			return false;
