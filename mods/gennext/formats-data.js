@@ -9,11 +9,31 @@ exports.BattleFormatsData = {
 		inherit: true,
 		tier: 'OU',
 	},
+	blazikenmega: {
+		inherit: true,
+		tier: 'OU',
+	},
 	genesect: {
 		inherit: true,
 		tier: 'OU',
 	},
+	gengarmega: {
+		inherit: true,
+		tier: 'OU',
+	},
+	kangaskhanmega: {
+		inherit: true,
+		tier: 'OU',
+	},
 	landorus: {
+		inherit: true,
+		tier: 'OU',
+	},
+	mawilemega: {
+		inherit: true,
+		tier: 'OU',
+	},
+	salamencemega: {
 		inherit: true,
 		tier: 'OU',
 	},
