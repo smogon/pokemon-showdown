@@ -353,6 +353,7 @@ exports.BattleAbilities = {
 		},
 	},
 	"weakarmor": {
+		inherit: true,
 		onDamage: function (damage, target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
 				this.add('-message', "Its damage was reduced by Weak Armor!");
@@ -477,6 +478,8 @@ exports.BattleAbilities = {
 		},
 	},
 	"truant": {
+		inherit: true,
+		onBeforeMove: function () {},
 		onModifyMove: function (move, pokemon) {
 			if (!move.self) move.self = {};
 			if (!move.self.volatileStatus) move.self.volatileStatus = 'truant';
@@ -577,6 +580,8 @@ exports.BattleAbilities = {
 		},
 	},
 	"shadowtag": {
+		desc: "For the first turn after this Pokemon switches in, prevent adjacent opposing Pokemon from choosing to switch out unless they are immune to trapping or also have this Ability.",
+		shortDesc: "Prevents adjacent foes from choosing to switch for one turn.",
 		onStart: function (pokemon) {
 			pokemon.addVolatile('shadowtag');
 		},
@@ -598,5 +603,9 @@ exports.BattleAbilities = {
 				pokemon.maybeTrapped = true;
 			}
 		},
+		id: "shadowtag",
+		name: "Shadow Tag",
+		rating: 5,
+		num: 23,
 	},
 };
