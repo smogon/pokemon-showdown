@@ -448,13 +448,22 @@ exports.Formats = [
 			}
 		},
 	},
-	/*{
-		name: "[Seasonal] Super Squad Smackdown",
+	{
+		name: "[Seasonal] Polar Opposites",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3491902/\">Seasonal Ladder</a>"],
 		section: "OM of the Month",
-		team: 'randomSeasonalHero',
-		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod', 'Cancel Mod']
-	},*/
+		team: 'randomSeasonalPolar',
+		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod', 'Cancel Mod'],
+		onNegateImmunity: function (pokemon, type) {
+			if (type in this.data.TypeChart && this.runEvent('Immunity', pokemon, null, null, type)) return false;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		},
+	},
 	{
 		name: "CAP",
 		desc: [
