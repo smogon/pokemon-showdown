@@ -171,7 +171,7 @@ exports.BattleMovedex = {
 	defog: {
 		inherit: true,
 		desc: "Lowers one adjacent target's evasion by 1 stage. Whether or not the target's evasion was affected, the effects of Reflect, Light Screen, Safeguard, Mist, Spikes, Toxic Spikes, and Stealth Rock end for the target's side. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves. Ignores a target's Substitute, although a Substitute will still block the evasion lowering.",
-		shortDesc: "Removes target's hazards, lowers evasion by 1.",
+		shortDesc: "Removes hazards/screens affecting foe, -1 evasion.",
 		onHit: function (pokemon) {
 			if (!pokemon.volatiles['substitute']) this.boost({evasion:-1});
 			let sideConditions = {reflect:1, lightscreen:1, safeguard:1, mist:1, spikes:1, toxicspikes:1, stealthrock:1};
