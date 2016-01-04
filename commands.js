@@ -1502,7 +1502,7 @@ exports.commands = {
 			if (error) return this.errorReply(error);
 		}
 
-		target = target.toLowerCase();
+		target = target.toLowerCase().trim();
 		let currentModchat = room.modchat;
 		switch (target) {
 		case 'off':
@@ -1521,6 +1521,7 @@ exports.commands = {
 			/* falls through */
 		default: {
 			if (!Config.groups[target]) {
+				return this.errorReply("The rank '" + target + '" was unrecognized as a modchat level.');
 				return this.parse('/help modchat');
 			}
 			if (Config.groupsranking.indexOf(target) > 1 && !user.can('modchatall', null, room)) {
