@@ -801,6 +801,7 @@ exports.BattleScripts = {
 
 			team.push({
 				name: template.baseSpecies,
+				species: template.species,
 				item: item,
 				ability: ability,
 				moves: moves,
@@ -921,6 +922,7 @@ exports.BattleScripts = {
 
 			team.push({
 				name: template.baseSpecies,
+				species: template.species,
 				item: item,
 				ability: ability,
 				moves: m,
@@ -1081,13 +1083,13 @@ exports.BattleScripts = {
 	randomSet: function (template, slot, teamDetails) {
 		if (slot === undefined) slot = 1;
 		let baseTemplate = (template = this.getTemplate(template));
-		let name = template.baseSpecies;
+		let species = template.species;
 
 		if (!template.exists || (!template.randomBattleMoves && !template.learnset)) {
 			// GET IT? UNOWN? BECAUSE WE CAN'T TELL WHAT THE POKEMON IS
 			template = this.getTemplate('unown');
 
-			let stack = 'Template incompatible with random battles: ' + name;
+			let stack = 'Template incompatible with random battles: ' + species;
 			let fakeErr = {stack: stack};
 			require('../crashlogger.js')(fakeErr, 'The randbat set generator');
 		}
@@ -1096,7 +1098,7 @@ exports.BattleScripts = {
 
 		if (template.battleOnly) {
 			// Only change the species. The template has custom moves, and may have different typing and requirements.
-			name = template.baseSpecies;
+			species = template.baseSpecies;
 		}
 		let battleForme = this.checkBattleForme(template);
 		if (battleForme && battleForme.tier !== 'AG' && (battleForme.isMega ? !teamDetails.megaCount : this.random(2))) {
@@ -1997,7 +1999,8 @@ exports.BattleScripts = {
 		}
 
 		return {
-			name: name,
+			name: template.baseSpecies,
+			species: species,
 			moves: moves,
 			ability: ability,
 			evs: evs,
@@ -2327,12 +2330,12 @@ exports.BattleScripts = {
 	},
 	randomDoublesSet: function (template, slot, teamDetails) {
 		let baseTemplate = (template = this.getTemplate(template));
-		let name = template.baseSpecies;
+		let species = template.species;
 
 		if (!template.exists || (!template.randomDoubleBattleMoves && !template.randomBattleMoves && !template.learnset)) {
 			template = this.getTemplate('unown');
 
-			let stack = 'Template incompatible with random battles: ' + name;
+			let stack = 'Template incompatible with random battles: ' + species;
 			let fakeErr = {stack: stack};
 			require('../crashlogger.js')(fakeErr, 'The doubles randbat set generator');
 		}
@@ -2341,7 +2344,7 @@ exports.BattleScripts = {
 
 		if (template.battleOnly) {
 			// Only change the species. The template has custom moves, and may have different typing and requirements.
-			name = template.baseSpecies;
+			species = template.baseSpecies;
 		}
 		let battleForme = this.checkBattleForme(template);
 		if (battleForme && (battleForme.isMega ? !teamDetails.megaCount : this.random(2))) {
@@ -3168,7 +3171,8 @@ exports.BattleScripts = {
 		let level = 70 + Math.floor(((600 - this.clampIntRange(bst, 300, 600)) / 10.34));
 
 		return {
-			name: name,
+			name: template.baseSpecies,
+			species: species,
 			moves: moves,
 			ability: ability,
 			evs: evs,
