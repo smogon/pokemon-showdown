@@ -977,7 +977,7 @@ exports.commands = {
 		Rooms.global.autojoinRooms(user, connection);
 		let targets = target.split(',');
 		let autojoins = [];
-		if (targets.length > 9 || Object.keys(connection.rooms).length > 1) return;
+		if (targets.length > 11 || Object.keys(connection.rooms).length > 1) return;
 		for (let i = 0; i < targets.length; i++) {
 			if (user.tryJoinRoom(targets[i], connection) === null) {
 				autojoins.push(targets[i]);
