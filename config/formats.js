@@ -397,7 +397,7 @@ exports.Formats = [
 		section: "OM of the Month",
 		column: 2,
 
-		ruleset: ['Pokemon', 'Standard', 'Swagger Clause', 'Baton Pass Clause', 'Team Preview', 'Gods and Followers Clause', 'Mega Rayquaza Clause'],
+		ruleset: ['Pokemon', 'Standard', 'Swagger Clause', 'Baton Pass Clause', 'Team Preview', 'Mega Rayquaza Clause'],
 		banlist: [],
 		onValidateTeam: function (team) {
 			if (!team[0]) return;
