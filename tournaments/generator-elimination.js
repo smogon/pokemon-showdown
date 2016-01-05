@@ -18,7 +18,7 @@ let Elimination = (function () {
 		if (typeof maxSubtrees === 'string' && maxSubtrees.toLowerCase() === 'infinity') {
 			maxSubtrees = Infinity;
 		} else if (typeof maxSubtrees !== 'number') {
-			maxSubtrees = parseInt(maxSubtrees, 10);
+			maxSubtrees = parseInt(maxSubtrees);
 		}
 		if (!maxSubtrees || maxSubtrees < 1) maxSubtrees = 1;
 
