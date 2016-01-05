@@ -841,7 +841,7 @@ User = (function () {
 		}
 
 		let expiry = Config.tokenexpiry || 25 * 60 * 60;
-		if (Math.abs(parseInt(tokenDataSplit[3], 10) - Date.now() / 1000) > expiry) {
+		if (Math.abs(parseInt(tokenDataSplit[3]) - Date.now() / 1000) > expiry) {
 			console.log('stale assertion: ' + tokenData);
 			this.send('|nametaken|' + name + "|Your assertion is stale. This usually means that the clock on the server computer is incorrect. If this is your server, please set the clock to the correct time.");
 			return;
