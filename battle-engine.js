@@ -512,7 +512,7 @@ BattlePokemon = (function () {
 				target = this.battle.resolveTarget(this, move);
 			}
 			if (target.side.active.length > 1) {
-				target = this.battle.runEvent('RedirectTarget', this, this, move, target);
+				target = this.battle.priorityEvent('RedirectTarget', this, this, move, target);
 			}
 			targets = [target];
 
@@ -2267,7 +2267,7 @@ Battle = (function () {
 	 *   variables that are passed as arguments to the event handler, but
 	 *   they're useful for functions called by the event handler.
 	 */
-	Battle.prototype.runEvent = function (eventid, target, source, effect, relayVar, onEffect) {
+	Battle.prototype.runEvent = function (eventid, target, source, effect, relayVar, onEffect, fastExit) {
 		if (this.eventDepth >= 8) {
 			// oh fuck
 			this.add('message', 'STACK LIMIT EXCEEDED');
@@ -2370,7 +2370,7 @@ Battle = (function () {
 
 			if (returnVal !== undefined) {
 				relayVar = returnVal;
-				if (!relayVar) break;
+				if (!relayVar || fastExit) break;
 				if (hasRelayVar) {
 					args[0] = relayVar;
 				}
@@ -2385,6 +2385,13 @@ Battle = (function () {
 		this.event = parentEvent;
 
 		return relayVar;
+	};
+	/**
+	 * priorityEvent works just like runEvent, except it exits and returns
+	 * on the first non-undefined value instead of only on null/false.
+	 */
+	Battle.prototype.priorityEvent = function (eventid, target, source, effect, relayVar, onEffect) {
+		return this.runEvent(eventid, target, source, effect, relayVar, onEffect, true);
 	};
 	Battle.prototype.resolveLastPriority = function (statuses, callbackType) {
 		let order = false;
