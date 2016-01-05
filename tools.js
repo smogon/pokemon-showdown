@@ -928,7 +928,7 @@ module.exports = (function () {
 			// level
 			j = buf.indexOf('|', i);
 			if (j < 0) return;
-			if (i !== j) set.level = parseInt(buf.substring(i, j), 10);
+			if (i !== j) set.level = parseInt(buf.substring(i, j));
 			i = j + 1;
 
 			// happiness

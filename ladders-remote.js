@@ -47,7 +47,7 @@ Ladder.prototype.getRating = function (userid) {
 				return resolve(1000);
 			}
 
-			let mmr = parseInt(data, 10);
+			let mmr = parseInt(data);
 			if (isNaN(mmr)) return resolve(1000);
 			if (user.userid !== userid) return reject(new Error("Expired rating"));
 
