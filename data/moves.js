@@ -5835,9 +5835,10 @@ exports.BattleMovedex = {
 		onHit: function (pokemon, source) {
 			let side = pokemon.side;
 			for (let i = 0; i < side.pokemon.length; i++) {
+				if (side.pokemon[i].hasAbility('soundproof')) continue;
 				side.pokemon[i].status = '';
 			}
-			this.add('-cureteam', source, '[from] move: HealBell');
+			this.add('-cureteam', source, '[from] move: Heal Bell');
 		},
 		target: "allyTeam",
 		type: "Normal",
@@ -9575,7 +9576,7 @@ exports.BattleMovedex = {
 				for (let j = 0; j < this.sides[i].active.length; j++) {
 					if (this.sides[i].active[j]) {
 						if (this.sides[i].active[j].hasAbility('soundproof')) {
-							this.add('-immune', this.sides[i].active[j], '[msg]');
+							this.add('-immune', this.sides[i].active[j], '[msg]', '[from] ability: Soundproof');
 							result = true;
 						} else if (!this.sides[i].active[j].volatiles['perishsong']) {
 							this.sides[i].active[j].addVolatile('perishsong');
