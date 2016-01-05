@@ -26,7 +26,7 @@ class Tournament {
 		this.allowRenames = false;
 		this.players = Object.create(null);
 		this.playerCount = 0;
-		this.playerCap = parseInt(playerCap) || Config.tournamentDefaultPlayerCap || 0;
+		this.playerCap = parseInt(playerCap, 10) || Config.tournamentDefaultPlayerCap || 0;
 
 		this.format = format;
 		this.generator = generator;
@@ -836,7 +836,7 @@ let commands = {
 			if (params.length < 1) {
 				return this.sendReply("Usage: " + cmd + " <type> [, <comma-separated arguments>]");
 			}
-			let playerCap = parseInt(params.splice(1, 1));
+			let playerCap = parseInt(params.splice(1, 1), 10);
 			let generator = createTournamentGenerator(params.shift(), params, this);
 			if (generator && tournament.setGenerator(generator, this)) {
 				if (playerCap && playerCap >= 2) {
