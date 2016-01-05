@@ -50,11 +50,11 @@ describe('Lightning Rod', function () {
 		battle = BattleEngine.Battle.construct('battle-lightningrod-speed', 'doublescustomgame');
 		battle.join('p1', 'Guest 1', 1, [
 			{species: 'Manectric', ability: 'lightningrod', moves: ['sleeptalk']},
-			{species: 'Manectric', ability: 'lightningrod', moves: ['sleeptalk']}
+			{species: 'Manectric', ability: 'lightningrod', moves: ['sleeptalk']},
 		]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: 'Electrode', ability: 'static', moves: ['thunderbolt']},
-			{species: 'Electrode', ability: 'static', moves: ['thunderbolt']}
+			{species: 'Electrode', ability: 'static', moves: ['thunderbolt']},
 		]);
 		battle.commitDecisions(); // Team Preview
 		battle.p1.active[0].boostBy({spe: 6});
@@ -68,11 +68,11 @@ describe('Lightning Rod', function () {
 		battle = BattleEngine.Battle.construct('battle-lightningrod-followme', 'doublescustomgame');
 		battle.join('p1', 'Guest 1', 1, [
 			{species: 'Manectric', ability: 'lightningrod', moves: ['sleeptalk']},
-			{species: 'Manectric', ability: 'static', moves: ['followme']}
+			{species: 'Manectric', ability: 'static', moves: ['followme']},
 		]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: 'Electrode', ability: 'static', moves: ['thunderbolt']},
-			{species: 'Electrode', ability: 'static', moves: ['thunderbolt']}
+			{species: 'Electrode', ability: 'static', moves: ['thunderbolt']},
 		]);
 		battle.commitDecisions(); // Team Preview
 		battle.p1.active[0].boostBy({spe: 6});
