@@ -46,6 +46,42 @@ describe('Lightning Rod', function () {
 		assert.notStrictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 
+	it('should redirect to the fastest Pokemon with the ability', function () {
+		battle = BattleEngine.Battle.construct('battle-lightningrod-speed', 'doublescustomgame');
+		battle.join('p1', 'Guest 1', 1, [
+			{species: 'Manectric', ability: 'lightningrod', moves: ['sleeptalk']},
+			{species: 'Manectric', ability: 'lightningrod', moves: ['sleeptalk']}
+		]);
+		battle.join('p2', 'Guest 2', 1, [
+			{species: 'Electrode', ability: 'static', moves: ['thunderbolt']},
+			{species: 'Electrode', ability: 'static', moves: ['thunderbolt']}
+		]);
+		battle.commitDecisions(); // Team Preview
+		battle.p1.active[0].boostBy({spe: 6});
+		battle.choose('p1', 'move 1, move 1');
+		battle.choose('p2', 'move 1 1, move 1 2');
+		assert.strictEqual(battle.p1.active[0].boosts['spa'], 2);
+		assert.strictEqual(battle.p1.active[1].boosts['spa'], 0);
+	});
+
+	it('should not redirect if another Pokemon has used Follow Me', function () {
+		battle = BattleEngine.Battle.construct('battle-lightningrod-followme', 'doublescustomgame');
+		battle.join('p1', 'Guest 1', 1, [
+			{species: 'Manectric', ability: 'lightningrod', moves: ['sleeptalk']},
+			{species: 'Manectric', ability: 'static', moves: ['followme']}
+		]);
+		battle.join('p2', 'Guest 2', 1, [
+			{species: 'Electrode', ability: 'static', moves: ['thunderbolt']},
+			{species: 'Electrode', ability: 'static', moves: ['thunderbolt']}
+		]);
+		battle.commitDecisions(); // Team Preview
+		battle.p1.active[0].boostBy({spe: 6});
+		battle.choose('p1', 'move 1, move 1');
+		battle.choose('p2', 'move 1 2, move 1 1');
+		assert.strictEqual(battle.p1.active[0].boosts['spa'], 0);
+		assert.notStrictEqual(battle.p1.active[1].hp, battle.p1.active[1].maxhp);
+	});
+
 	it('should have its Electric-type immunity and its ability to redirect moves suppressed by Mold Breaker', function () {
 		battle = BattleEngine.Battle.construct('battle-moldbreaker-lightningrod', 'doublescustomgame');
 		battle.join('p1', 'Guest 1', 1, [
