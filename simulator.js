@@ -235,11 +235,11 @@ class Battle {
 			break;
 
 		case 'inactiveside':
-			this.inactiveSide = parseInt(lines[2]);
+			this.inactiveSide = parseInt(lines[2], 10);
 			break;
 
 		case 'score':
-			this.score = [parseInt(lines[2]), parseInt(lines[3])];
+			this.score = [parseInt(lines[2], 10), parseInt(lines[3], 10)];
 			break;
 		}
 		Monitor.activeIp = null;
