@@ -53,4 +53,9 @@ exports.BattleAbilities = {
 			}
 		},
 	},
+	"soundproof": {
+		inherit: true,
+		shortDesc: "This Pokemon is immune to sound-based moves, except Heal Bell.",
+		onAllyTryHitSide: function () {},
+	},
 };

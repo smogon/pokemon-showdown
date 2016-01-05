@@ -2511,6 +2511,11 @@ exports.BattleAbilities = {
 				return null;
 			}
 		},
+		onAllyTryHitSide: function (target, source, move) {
+			if (move.flags['sound']) {
+				this.add('-immune', this.effectData.target, '[msg]', '[from] ability: Soundproof');
+			}
+		},
 		id: "soundproof",
 		name: "Soundproof",
 		rating: 2,
