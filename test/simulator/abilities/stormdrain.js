@@ -41,11 +41,11 @@ describe('Storm Drain', function () {
 		battle = BattleEngine.Battle.construct('battle-doubles-stormdrain-speed', 'doublescustomgame');
 		battle.join('p1', 'Guest 1', 1, [
 			{species: 'Gastrodon', ability: 'stormdrain', moves: ['sleeptalk']},
-			{species: 'Gastrodon', ability: 'stormdrain', moves: ['sleeptalk']}
+			{species: 'Gastrodon', ability: 'stormdrain', moves: ['sleeptalk']},
 		]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: 'Azumarill', ability: 'thickfat', moves: ['waterfall']},
-			{species: 'Azumarill', ability: 'thickfat', moves: ['waterfall']}
+			{species: 'Azumarill', ability: 'thickfat', moves: ['waterfall']},
 		]);
 		battle.commitDecisions(); // Team Preview
 		battle.p1.active[0].boostBy({spe: 6});
@@ -59,11 +59,11 @@ describe('Storm Drain', function () {
 		battle = BattleEngine.Battle.construct('battle-stormdrain-followme', 'doublescustomgame');
 		battle.join('p1', 'Guest 1', 1, [
 			{species: 'Gastrodon', ability: 'stormdrain', moves: ['sleeptalk']},
-			{species: 'Azumarill', ability: 'thickfat', moves: ['followme']}
+			{species: 'Azumarill', ability: 'thickfat', moves: ['followme']},
 		]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: 'Azumarill', ability: 'thickfat', moves: ['aquajet']},
-			{species: 'Azumarill', ability: 'thickfat', moves: ['aquajet']}
+			{species: 'Azumarill', ability: 'thickfat', moves: ['aquajet']},
 		]);
 		battle.commitDecisions(); // Team Preview
 		battle.p1.active[0].boostBy({spe: 6});
