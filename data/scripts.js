@@ -3197,14 +3197,19 @@ exports.BattleScripts = {
 		let baseFormes = {};
 		let uberCount = 0;
 		let puCount = 0;
+		let weakCount = 0;
 		let teamDetails = {};
 
 		while (pokemonPool.length && pokemonLeft < 6) {
 			let template = this.getTemplate(this.sampleNoReplace(pokemonPool));
 			if (!template.exists) continue;
+			let types = template.types.sort().join('/');
 
 			// Limit to one of each species (Species Clause)
 			if (baseFormes[template.baseSpecies]) continue;
+
+			// Limit to 2 Water/Ice Pokemon (double weakness to Ice in an Ice-dominant format)
+			if (weakCount > 2 && types === 'Ice/Water' && this.random(5) >= 1) continue;
 
 			let tier = template.tier;
 			switch (tier) {
@@ -3237,6 +3242,7 @@ exports.BattleScripts = {
 
 			// Now that our Pokemon has passed all checks, we can increment our counters
 			baseFormes[template.baseSpecies] = 1;
+			if (types === 'Ice/Water') weakCount++;
 			pokemonLeft++;
 
 			// Increment Uber/NU counters
