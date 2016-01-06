@@ -197,14 +197,17 @@ BattlePokemon = (function () {
 			for (let i = 0; i < this.set.moves.length; i++) {
 				let move = this.battle.getMove(this.set.moves[i]);
 				if (!move.id) continue;
-				if (move.id === 'hiddenpower') {
-					if (!this.set.ivs || Object.values(this.set.ivs).every(31)) {
-						if (this.battle.gen && this.battle.gen === 2) {
-							this.set.ivs = this.battle.getType(move.type).HPdvs;
-							for (let i in this.set.ivs) {
-								this.set.ivs[i] *= 2;
+				if (move.id === 'hiddenpower' && move.type !== 'Normal') {
+					if (this.battle.gen && this.battle.gen === 2) {
+						if (!this.set.ivs || Math.min.apply(Math, Object.values(this.set.ivs)) >= 30) {
+							let HPdvs = this.battle.getType(move.type).HPdvs;
+							this.set.ivs = {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30};
+							for (let i in HPdvs) {
+								this.set.ivs[i] *= HPdvs[i] * 2;
 							}
-						} else {
+						}
+					} else {
+						if (!this.set.ivs || Object.values(this.set.ivs).every(31)) {
 							this.set.ivs = this.battle.getType(move.type).HPivs;
 						}
 					}
