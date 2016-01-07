@@ -2,30 +2,12 @@
 
 const assert = require('assert');
 const path = require('path');
-const net = require('net');
 const fs = require('fs');
 const Module = require('module');
 
 const mock = require('mock-fs');
 
 const noop = function () {};
-
-let testPort;
-function getPort(callback) {
-	let port = testPort;
-	let server = net.createServer();
-
-	server.listen(port, function (err) {
-		server.once('close', function onclose() {
-			callback(port);
-		});
-		server.close();
-	});
-	server.on('error', function (err) {
-		testPort++;
-		getPort(callback);
-	});
-}
 
 function getDirTypedContentsSync(dir, forceType) {
 	// Return value can be fed to mock-fs
@@ -98,12 +80,6 @@ before('initialization', function (done) {
 		chatRoomsData.loaded = true;
 	} catch (e) {}
 
-	// Don't listen at SSL port
-	config.ssl = null;
-
-	// Actually, don't listen at any port for now
-	config.workers = 0;
-
 	// Don't try to write to file system
 	config.logladderip = false;
 	config.logchallenges = false;
@@ -161,17 +137,7 @@ before('initialization', function (done) {
 	});
 	mock(fsSandbox);
 
-	// Make sure that there are no net conflicts with an active server
-	if (typeof config.testport !== 'undefined' || config.workers === 0) {
-		config.port = config.testport;
-		init(done);
-	} else {
-		testPort = config.port;
-		getPort(function (port) {
-			config.port = port;
-			init(done);
-		});
-	}
+	init(done);
 });
 
 describe('Native timer/event loop globals', function () {

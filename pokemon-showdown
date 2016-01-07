@@ -1,3 +1,21 @@
 #!/usr/bin/env node
+'use strict';
 
-require('./app.js');
+// Make sure our dependencies are available, and install them if they
+// aren't
+
+try {
+	require('sugar');
+} catch (e) {
+	let command = 'npm install --production';
+	console.log('Installing dependencies: `' + command + '`...');
+	require('child_process').spawnSync('sh', ['-c', command], {stdio: 'inherit'});
+}
+
+// start the server
+
+let port;
+if (process.argv[2]) {
+	port = parseInt(process.argv[2]); // eslint-disable-line radix
+}
+require('./app.js').listen(port);
