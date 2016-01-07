@@ -59,10 +59,29 @@ if (cluster.isMaster) {
 		});
 	};
 
-	let workerCount = typeof Config.workers !== 'undefined' ? Config.workers : 1;
-	for (let i = 0; i < workerCount; i++) {
-		spawnWorker();
-	}
+	exports.listen = function (port, bindAddress, workerCount) {
+		if (port !== undefined && !isNaN(port)) {
+			Config.port = port;
+			Config.ssl = null;
+		} else {
+			port = Config.port;
+			// Autoconfigure the app when running in cloud hosting environments:
+			try {
+				let cloudenv = require('cloud-env');
+				bindAddress = cloudenv.get('IP', bindAddress);
+				port = cloudenv.get('PORT', port);
+			} catch (e) {}
+		}
+		if (bindAddress !== undefined) {
+			Config.bindaddress = bindAddress;
+		}
+		if (workerCount === undefined) {
+			workerCount = (Config.workers !== undefined ? Config.workers : 1);
+		}
+		for (let i = 0; i < workerCount; i++) {
+			spawnWorker();
+		}
+	};
 
 	exports.killWorker = function (worker) {
 		let idd = worker.id + '-';
