@@ -38,21 +38,17 @@ Replace `LOCATION` with the location Pokémon Showdown is in (ending up with, fo
 
 This will set your command line's location to Pokémon Showdown's folder. You'll have to do this each time you open a command line to run commands for Pokémon Showdown.
 
-To install dependencies, run the command:
-
-    npm install --production
-
 Copy `config/config-example.js` into `config/config.js`, and edit as you please.
 
 Congratulations, you're done setting up Pokémon Showdown.
 
 Now, to start Pokémon Showdown, run the command:
 
-    node app.js
+    ./pokemon-showdown
 
 You can also specify a port:
 
-    node app.js 8000
+    ./pokemon-showdown 8000
 
 Visit your server at `http://SERVER:8000`
 
