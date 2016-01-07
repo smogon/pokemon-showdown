@@ -454,6 +454,9 @@ exports.Formats = [
 		section: "OM of the Month",
 		team: 'randomSeasonalPolar',
 		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod', 'Cancel Mod'],
+		onBegin: function () {
+			this.add('-message', "NOTE: This is an Inverse Battle! Type effectivenesses are reversed!");
+		},
 		onNegateImmunity: function (pokemon, type) {
 			if (type in this.data.TypeChart && this.runEvent('Immunity', pokemon, null, null, type)) return false;
 		},
