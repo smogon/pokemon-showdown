@@ -10,7 +10,7 @@ const permission = 'ban';
 const deadImage = '<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-dead.png" />';
 const meetingMsg = {town: 'The town has lynched a suspect!', mafia: 'The mafia strikes again!'};
 
-const defaultSettings = {anonvotes: false, allowwills: false};
+const defaultSettings = {anonVotes: false, allowWills: false};
 
 class MafiaPlayer extends Rooms.RoomGamePlayer {
 	constructor(user, game) {
@@ -197,8 +197,9 @@ class Mafia extends Rooms.RoomGame {
 		this.gamestate = 'pregame';
 		this.timer = null;
 
-		this.allowWills = settings.allowwills;
-		this.anonVotes = settings.anonvotes;
+		for (let i in settings) {
+			this[i] = settings[i];
+		}
 
 		this.roleString = this.roles.reduce((function (prev, cur, index, array) {
 			if (index === array.length - 1) {
@@ -209,6 +210,24 @@ class Mafia extends Rooms.RoomGame {
 		}), '');
 
 		this.room.send('|uhtml|mafia' + this.room.gameNumber + 'pregame|' + this.pregameWindow(false));
+	}
+
+	exportGame() {
+		let gameObj = {classes: {}, settings: {}};
+
+		for (let i = 0; i < this.roles.length; i++) {
+			if (this.roles[i] in gameObj.classes) {
+				gameObj.classes[this.roles[i]]++;
+			} else {
+				gameObj.classes[this.roles[i]] = 1;
+			}
+		}
+
+		for (let i in defaultSettings) {
+			gameObj.settings[i] = this[i];
+		}
+
+		return JSON.stringify(gameObj);
 	}
 
 	onRename(user, oldUserid, isJoining) {
@@ -352,10 +371,12 @@ class Mafia extends Rooms.RoomGame {
 	// Gamestate handling:
 
 	start() {
+		let rolesLeft = this.roles;
+
 		for (let i in this.players) {
-			let index = Math.floor(Math.random(this.roles.length));
-			this.players[i].class = MafiaData.MafiaClasses[this.roles[index]];
-			this.roles.splice(index, 1);
+			let index = Math.floor(Math.random(rolesLeft.length));
+			this.players[i].class = MafiaData.MafiaClasses[rolesLeft[index]];
+			rolesLeft.splice(index, 1);
 			if (!this.players[i].class.atStart) {
 				this.players[i].getRole();
 			}
@@ -744,6 +765,14 @@ exports.commands = {
 					room.game.updatePregame();
 				}
 			}
+		},
+
+		export: function (target, room, user) {
+			if (!room.game || room.game.gameid !== 'mafia') return this.errorReply("There is no game of mafia running in this room.");
+			if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
+			if (!this.can(permission, null, room)) return false;
+
+			return this.sendReply("/mafia new " + room.game.exportGame());
 		},
 
 		target: function (target, room, user) {
