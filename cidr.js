@@ -25,7 +25,7 @@ let getPattern = exports.getPattern = function (cidr) {
 	let index = cidr.indexOf('/');
 	if (index > 0) {
 		let subnet = ipToLong(cidr.substr(0, index));
-		let bits = parseInt(cidr.substr(index + 1), 10);
+		let bits = parseInt(cidr.substr(index + 1));
 		let mask = -1 << (32 - bits);
 		return [subnet & mask, mask];
 	}

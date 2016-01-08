@@ -310,7 +310,7 @@ let GlobalRoom = (function () {
 		// but this is okay to prevent race conditions as we start up PS
 		this.lastBattle = 0;
 		try {
-			this.lastBattle = parseInt(fs.readFileSync('logs/lastbattle.txt', 'utf8'), 10) || 0;
+			this.lastBattle = parseInt(fs.readFileSync('logs/lastbattle.txt', 'utf8')) || 0;
 		} catch (e) {} // file doesn't exist [yet]
 
 		this.chatRoomData = [];

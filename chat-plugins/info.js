@@ -219,7 +219,7 @@ exports.commands = {
 		let buffer = '';
 		let targetId = toId(target);
 		if (!targetId) return this.parse('/help data');
-		let targetNum = parseInt(targetId, 10);
+		let targetNum = parseInt(targetId);
 		if (!isNaN(targetNum)) {
 			for (let p in Tools.data.Pokedex) {
 				let pokemon = Tools.getTemplate(p);
@@ -440,7 +440,7 @@ exports.commands = {
 				}
 
 				if (target.substr(0, 3) === 'gen' && Number.isInteger(parseFloat(target.substr(3)))) target = target.substr(3).trim();
-				let targetInt = parseInt(target, 10);
+				let targetInt = parseInt(target);
 				if (0 < targetInt && targetInt < 7) {
 					if (!validParameter("gens", target, isNotSearch)) return;
 					orGroup.gens[target] = !isNotSearch;
@@ -457,7 +457,7 @@ exports.commands = {
 
 				if (target.substr(0, 6) === 'random' && cmd === 'randpoke') {
 					//validation for this is in the /randpoke command
-					randomOutput = parseInt(target.substr(6), 10);
+					randomOutput = parseInt(target.substr(6));
 					orGroup.skip = true;
 					continue;
 				}
@@ -1227,7 +1227,7 @@ exports.commands = {
 					if (searchedWords[k].substr(searchedWords[k].length - 2) === 'bp' && searchedWords[k].length > 2) searchedWords[k] = searchedWords[k].substr(0, searchedWords[k].length - 2);
 					if (Number.isInteger(Number(searchedWords[k]))) {
 						if (basePower) return this.sendReplyBox("Only specify a number for base power once.");
-						basePower = parseInt(searchedWords[k], 10);
+						basePower = parseInt(searchedWords[k]);
 					}
 				}
 			}
@@ -1259,7 +1259,7 @@ exports.commands = {
 					if (searchedWords[k].substr(searchedWords[k].length - 2) === 'bp' && searchedWords[k].length > 2) searchedWords[k] = searchedWords[k].substr(0, searchedWords[k].length - 2);
 					if (Number.isInteger(Number(searchedWords[k]))) {
 						if (basePower) return this.sendReplyBox("Only specify a number for base power once.");
-						basePower = parseInt(searchedWords[k], 10);
+						basePower = parseInt(searchedWords[k]);
 					}
 				}
 			}
@@ -1757,7 +1757,7 @@ exports.commands = {
 					lvlSet = true;
 					continue;
 				} else if (lowercase.startsWith('lv') || lowercase.startsWith('level')) {
-					level = parseInt(targets[i].replace(/\D/g, ''), 10);
+					level = parseInt(targets[i].replace(/\D/g, ''));
 					lvlSet = true;
 					if (level < 1 || level > 9999) {
 						return this.sendReplyBox('Invalid value for level: ' + level);
@@ -1811,7 +1811,7 @@ exports.commands = {
 
 			if (!ivSet) {
 				if (lowercase.endsWith('iv') || lowercase.endsWith('ivs')) {
-					iv = parseInt(targets[i], 10);
+					iv = parseInt(targets[i]);
 					ivSet = true;
 
 					if (isNaN(iv)) {
@@ -1829,7 +1829,7 @@ exports.commands = {
 					ev = 0;
 					evSet = true;
 				} else if (lowercase.endsWith('ev') || lowercase.endsWith('evs')) {
-					ev = parseInt(targets[i], 10);
+					ev = parseInt(targets[i]);
 					evSet = true;
 
 					if (isNaN(ev)) {
@@ -1858,11 +1858,11 @@ exports.commands = {
 					modifier = 1;
 					modSet = true;
 				} else if (targets[i].charAt(0) === '+') {
-					modifier = parseInt(targets[i].charAt(1), 10);
+					modifier = parseInt(targets[i].charAt(1));
 					modSet = true;
 				} else if (targets[i].charAt(0) === '-') {
 					positiveMod = false;
-					modifier = parseInt(targets[i].charAt(1), 10);
+					modifier = parseInt(targets[i].charAt(1));
 					modSet = true;
 				}
 				if (isNaN(modifier)) {
@@ -1882,7 +1882,7 @@ exports.commands = {
 				}
 			}
 
-			let tempStat = parseInt(targets[i], 10);
+			let tempStat = parseInt(targets[i]);
 
 			if (!isNaN(tempStat) && !baseSet && tempStat > 0 && tempStat < 256) {
 				statValue = tempStat;
