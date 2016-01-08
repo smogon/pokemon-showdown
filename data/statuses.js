@@ -209,7 +209,7 @@ exports.BattleStatuses = {
 			this.add('-end', pokemon, this.effectData.sourceEffect, '[partiallytrapped]');
 		},
 		onTrapPokemon: function (pokemon) {
-			pokemon.tryTrap();
+			if (this.effectData.source && this.effectData.source.isActive) pokemon.tryTrap();
 		},
 	},
 	lockedmove: {
