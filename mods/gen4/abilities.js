@@ -189,6 +189,16 @@ exports.BattleAbilities = {
 		rating: 0,
 		num: 1,
 	},
+	"stickyhold": {
+		inherit: true,
+		onTakeItem: function (item, pokemon, source) {
+			if (this.suppressingAttackEvents() && pokemon !== this.activePokemon) return;
+			if ((source && source !== pokemon) || this.activeMove.id === 'knockoff') {
+				this.add('-activate', pokemon, 'ability: Sticky Hold');
+				return false;
+			}
+		},
+	},
 	"stormdrain": {
 		inherit: true,
 		desc: "During double battles, this Pokemon draws any single-target Water-type attack to itself. If an opponent uses an Water-type attack that affects multiple Pokemon, those targets will be hit. This ability does not affect Water Hidden Power, Judgment or Weather Ball.",
