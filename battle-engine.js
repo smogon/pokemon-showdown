@@ -655,6 +655,8 @@ BattlePokemon = (function () {
 			if (this.trapped) data.trapped = true;
 		}
 
+		if (this.canMegaEvo && !lockedMove) data.canMegaEvo = true;
+
 		return data;
 	};
 	BattlePokemon.prototype.isLastActive = function () {
@@ -1444,7 +1446,6 @@ BattleSide = (function () {
 				baseAbility: pokemon.baseAbility,
 				item: pokemon.item,
 				pokeball: pokemon.pokeball,
-				canMegaEvo: !!pokemon.canMegaEvo,
 			});
 		}
 		return data;
