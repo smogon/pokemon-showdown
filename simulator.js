@@ -138,7 +138,8 @@ class Battle {
 
 		this.id = room.id;
 		this.room = room;
-		this.title = "Battle";
+		this.title = Tools.getFormat(format).name;
+		if (!this.title.endsWith(" Battle")) this.title += " Battle";
 		this.allowRenames = !rated;
 
 		this.format = toId(format);
