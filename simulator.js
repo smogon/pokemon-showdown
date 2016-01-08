@@ -78,6 +78,7 @@ class BattlePlayer {
 		this.name = user.name;
 		this.game = game;
 		user.games[this.game.id] = this.game;
+		user.updateSearch();
 
 		this.slot = slot;
 		this.slotNum = Number(slot.charAt(1)) - 1;
@@ -93,6 +94,7 @@ class BattlePlayer {
 		let user = Users(this.userid);
 		if (user) {
 			delete user.games[this.game.id];
+			user.updateSearch();
 			for (let j = 0; j < user.connections.length; j++) {
 				let connection = user.connections[j];
 				Sockets.subchannelMove(connection.worker, this.game.id, '0', connection.socketid);

@@ -1074,6 +1074,7 @@ User = (function () {
 				room.game.onUpdateConnection(this, connection);
 			}
 		}
+		this.updateSearch(true, connection);
 	};
 	User.prototype.debugData = function () {
 		let str = '' + this.group + this.name + ' (' + this.userid + ')';
@@ -1517,6 +1518,21 @@ User = (function () {
 		this.send('|updatechallenges|' + JSON.stringify({
 			challengesFrom: Object.map(this.challengesFrom, 'format'),
 			challengeTo: challengeTo,
+		}));
+	};
+	User.prototype.updateSearch = function (onlyIfExists, connection) {
+		let games = {};
+		let atLeastOne = false;
+		for (let roomid in this.games) {
+			games[roomid] = this.games[roomid].title;
+			atLeastOne = true;
+		}
+		if (!atLeastOne) games = null;
+		let searching = Object.keys(this.searching);
+		if (onlyIfExists && !searching.length && !atLeastOne) return;
+		(connection || this).send('|updatesearch|' + JSON.stringify({
+			searching: searching,
+			games: games,
 		}));
 	};
 	User.prototype.makeChallenge = function (user, format/*, isPrivate*/) {
