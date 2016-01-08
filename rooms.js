@@ -534,7 +534,7 @@ let GlobalRoom = (function () {
 			}
 		}
 
-		user.send('|updatesearch|' + JSON.stringify({searching: Object.keys(user.searching)}));
+		user.updateSearch();
 		return true;
 	};
 	GlobalRoom.prototype.searchBattle = function (user, formatid) {
@@ -546,9 +546,6 @@ let GlobalRoom = (function () {
 	};
 	GlobalRoom.prototype.finishSearchBattle = function (user, formatid, result) {
 		if (!result) return;
-
-		// tell the user they've started searching
-		user.send('|updatesearch|' + JSON.stringify({searching: Object.keys(user.searching).concat(formatid)}));
 
 		let newSearch = {
 			userid: '',
@@ -608,8 +605,6 @@ let GlobalRoom = (function () {
 				let usersToUpdate = [user, searchUser];
 				for (let j = 0; j < 2; j++) {
 					delete usersToUpdate[j].searching[formatid];
-					let searchedFormats = Object.keys(usersToUpdate[j].searching);
-					usersToUpdate[j].send('|updatesearch|' + JSON.stringify({searching: searchedFormats}));
 				}
 				formatSearches.splice(i, 1);
 				this.startBattle(searchUser, user, formatid, search.team, newSearch.team, {rated: true});
@@ -618,6 +613,7 @@ let GlobalRoom = (function () {
 		}
 		user.searching[formatid] = 1;
 		formatSearches.push(newSearch);
+		user.updateSearch();
 	};
 	GlobalRoom.prototype.periodicMatch = function () {
 		for (let formatid in this.searches) {
@@ -632,12 +628,6 @@ let GlobalRoom = (function () {
 				let search = formatSearches[i];
 				let searchUser = Users.getExact(search.userid);
 				if (this.matchmakingOK(search, longestSearch, searchUser, longestSearcher, formatid)) {
-					let usersToUpdate = [longestSearcher, searchUser];
-					for (let j = 0; j < 2; j++) {
-						delete usersToUpdate[j].searching[formatid];
-						let searchedFormats = Object.keys(usersToUpdate[j].searching);
-						usersToUpdate[j].send('|updatesearch|' + JSON.stringify({searching: searchedFormats}));
-					}
 					formatSearches.splice(i, 1);
 					formatSearches.splice(0, 1);
 					this.startBattle(searchUser, longestSearcher, formatid, search.team, longestSearch.team, {rated: true});

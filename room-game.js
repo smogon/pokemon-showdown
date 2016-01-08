@@ -25,10 +25,14 @@ class RoomGamePlayer {
 		this.name = user.name;
 		this.game = game;
 		user.games[this.game.id] = this.game;
+		user.updateSearch();
 	}
 	destroy() {
 		let user = Users.getExact(this.userid);
-		if (user) delete user.games[this.game.id];
+		if (user) {
+			delete user.games[this.game.id];
+			user.updateSearch();
+		}
 	}
 
 	toString() {
