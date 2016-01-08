@@ -190,7 +190,7 @@ exports.commands = {
 				return;
 			}
 
-			let parsed = parseInt(target, 10);
+			let parsed = parseInt(target);
 			if (isNaN(parsed)) return this.errorReply("To vote, specify the number of the option.");
 
 			if (!room.poll.options.has(parsed)) return this.sendReply("Option not in poll.");
