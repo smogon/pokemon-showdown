@@ -208,6 +208,7 @@ class Battle {
 			if (!this.ended) {
 				this.ended = true;
 				this.room.win(lines[2]);
+				this.removeAllPlayers();
 			}
 			break;
 
@@ -348,6 +349,14 @@ class Battle {
 		delete this.players[user.userid];
 		this.playerCount--;
 		return true;
+	}
+
+	removeAllPlayers() {
+		for (let i in this.players) {
+			this.players[i].destroy();
+			delete this.players[i];
+			this.playerCount--;
+		}
 	}
 
 	destroy() {
