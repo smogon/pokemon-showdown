@@ -602,10 +602,8 @@ let GlobalRoom = (function () {
 			let search = formatSearches[i];
 			let searchUser = Users.getExact(search.userid);
 			if (this.matchmakingOK(search, newSearch, searchUser, user, formatid)) {
-				let usersToUpdate = [user, searchUser];
-				for (let j = 0; j < 2; j++) {
-					delete usersToUpdate[j].searching[formatid];
-				}
+				delete user.searching[formatid];
+				delete searchUser.searching[formatid];
 				formatSearches.splice(i, 1);
 				this.startBattle(searchUser, user, formatid, search.team, newSearch.team, {rated: true});
 				return;
@@ -628,6 +626,8 @@ let GlobalRoom = (function () {
 				let search = formatSearches[i];
 				let searchUser = Users.getExact(search.userid);
 				if (this.matchmakingOK(search, longestSearch, searchUser, longestSearcher, formatid)) {
+					delete longestSearcher.searching[formatid];
+					delete searchUser.searching[formatid];
 					formatSearches.splice(i, 1);
 					formatSearches.splice(0, 1);
 					this.startBattle(searchUser, longestSearcher, formatid, search.team, longestSearch.team, {rated: true});
