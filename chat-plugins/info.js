@@ -117,9 +117,10 @@ exports.commands = {
 			for (let i = 0; i < Rooms.global.chatRooms.length; i++) {
 				let thisRoom = Rooms.global.chatRooms[i];
 				if (!thisRoom || thisRoom.isPrivate === true) continue;
-				if (thisRoom.bannedIps && (targetUser.latestIp in thisRoom.bannedIps || targetUser.userid in thisRoom.bannedUsers)) {
+				let roomBanned = ((thisRoom.bannedIps && thisRoom.bannedIps[targetUser.latestIp]) || (thisRoom.bannedUsers && thisRoom.bannedUsers[targetUser.userid]));
+				if (roomBanned) {
 					if (bannedFrom) bannedFrom += ", ";
-					bannedFrom += '<a href="/' + thisRoom + '">' + thisRoom + '</a>';
+					bannedFrom += '<a href="/' + thisRoom + '">' + thisRoom + '</a> (' + roomBanned + ')';
 				}
 			}
 			if (bannedFrom) buf += '<br />Banned from: ' + bannedFrom;
