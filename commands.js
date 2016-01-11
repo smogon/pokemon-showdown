@@ -2468,7 +2468,7 @@ exports.commands = {
 			return this.popupReply("The user '" + this.targetUsername + "' is not accepting challenges right now.");
 		}
 		if (user.challengeTo) {
-			return this.popupReply("You're already challenging '" + user.challengeTo + "'. Cancel that challenge before challenging someone else.");
+			return this.popupReply("You're already challenging '" + user.challengeTo.to + "'. Cancel that challenge before challenging someone else.");
 		}
 		if (Config.pmmodchat) {
 			let userGroup = user.group;
