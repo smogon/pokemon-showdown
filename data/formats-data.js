@@ -5408,6 +5408,17 @@ exports.BattleFormatsData = {
 		isNonstandard: true,
 		tier: "CAP",
 	},
+	crucibelle: {
+		randomBattleMoves: ["headsmash", "gunkshot", "coil", "lowkick", "uturn", "stealthrock"],
+		isNonstandard: true,
+		tier: "CAP",
+	},
+	crucibellemega: {
+		randomBattleMoves: ["headsmash", "gunkshot", "coil", "woodhammer", "lowkick", "uturn"],
+		requiredItem: "Crucibellite",
+		isNonstandard: true,
+		tier: "CAP",
+	},
 	syclant: {
 		randomBattleMoves: ["bugbuzz", "icebeam", "blizzard", "earthpower", "spikes", "superpower", "tailglow", "uturn", "focusblast"],
 		isNonstandard: true,
