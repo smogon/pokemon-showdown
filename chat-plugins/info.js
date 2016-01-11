@@ -702,6 +702,29 @@ exports.commands = {
 			results.push(dex[mon].species);
 		}
 
+		let moveGroups = searches
+			.filter(function (alts) {
+				return Object.any(alts.moves, function (move, isSearch) {
+					return isSearch;
+				});
+			})
+			.map(function (alts) {
+				return Object.keys(alts.moves);
+			});
+		if (moveGroups.length >= 2) {
+			results = results.filter(function (mon) {
+				let lsetData = {fastCheck: true, set: {}};
+				for (let group = 0; group < moveGroups.length; group++) {
+					for (let i = 0; i < moveGroups[group].length; i++) {
+						let problem = TeamValidator.checkLearnsetSync('anythinggoes', moveGroups[group][i], mon, lsetData);
+						if (!problem) break;
+						if (i === moveGroups[group].length - 1) return;
+					}
+				}
+				return true;
+			});
+		}
+
 		if (randomOutput && randomOutput < results.length) {
 			results = results.randomize().slice(0, randomOutput);
 		}
