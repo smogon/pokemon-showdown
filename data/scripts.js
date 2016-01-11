@@ -715,8 +715,8 @@ exports.BattleScripts = {
 			}
 
 			// Make sure forme/item combo is correct
-			while ((poke === 'Arceus' && item.substr(-5) === 'plate') ||
-					(poke === 'Giratina' && item === 'griseousorb') ||
+			while ((poke === 'Giratina' && item === 'griseousorb') ||
+					(poke === 'Arceus' && item.substr(-5) === 'plate') ||
 					(poke === 'Genesect' && item.substr(-5) === 'drive')) {
 				item = items[this.random(items.length)];
 			}
@@ -738,6 +738,9 @@ exports.BattleScripts = {
 				pool = Object.keys(this.data.Movedex).exclude('chatter', 'struggle', 'magikarpsrevenge');
 			} else if (template.learnset) {
 				pool = Object.keys(template.learnset);
+				if (template.species.substr(0, 6) === 'Rotom-' || template.species.substr(0, 10) === 'Pumpkaboo-') {
+					pool = pool.union(Object.keys(this.getTemplate(template.baseSpecies).learnset));
+				}
 			} else {
 				pool = Object.keys(this.getTemplate(template.baseSpecies).learnset);
 			}
