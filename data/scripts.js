@@ -983,8 +983,8 @@ exports.BattleScripts = {
 		};
 		// Moves that shouldn't be the only STAB moves:
 		let NoStab = {
-			aquajet:1, bounce:1, fakeout:1, flamecharge:1, iceshard:1, pursuit:1, quickattack:1, skyattack:1,
-			chargebeam:1, clearsmog:1, eruption:1, vacuumwave:1, waterspout:1,
+			aquajet:1, bounce:1, chargebeam:1, clearsmog:1, eruption:1, fakeout:1, flamecharge:1, iceshard:1, pursuit:1,
+			quickattack:1, skyattack:1, suckerpunch:1, vacuumwave:1, waterspout:1,
 		};
 
 		// Iterate through all moves we've chosen so far and keep track of what they do:
