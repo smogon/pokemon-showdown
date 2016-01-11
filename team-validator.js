@@ -693,9 +693,9 @@ Validator = (function () {
 					} else if (learned.charAt(1) === 'E') {
 						// egg moves:
 						//   only if that was the source
-						if (learned.charAt(0) === '6') {
+						if (learned.charAt(0) === '6' || lsetData.fastCheck) {
 							// gen 6 doesn't have egg move incompatibilities except for certain cases with baby Pokemon
-							learned = '6E' + (template.prevo ? template.id : '');
+							learned = learned.charAt(0) + 'E' + (template.prevo ? template.id : '');
 							sources.push(learned);
 							continue;
 						}
