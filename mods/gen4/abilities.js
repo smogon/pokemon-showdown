@@ -111,7 +111,7 @@ exports.BattleAbilities = {
 		inherit: true,
 		onCheckShow: function (pokemon) {},
 		onSwitchOut: function (pokemon) {
-			if (!pokemon.status) return;
+			if (!pokemon.status || pokemon.status === 'fnt') return;
 
 			// Because statused/unstatused pokemon are shown after every switch
 			// in gen 3-4, Natural Cure's curing is always known to both players
