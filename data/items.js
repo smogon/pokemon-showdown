@@ -5196,4 +5196,22 @@ exports.BattleItems = {
 		isNonstandard: 'gen2',
 		desc: "(Gen 2) Holder is cured if it is poisoned. Single use.",
 	},
+
+	// CAP items
+
+	"crucibellite": {
+		id: "crucibellite",
+		name: "Crucibellite",
+		spritenum: 577,
+		megaStone: "Crucibelle-Mega",
+		megaEvolves: "Crucibelle",
+		onTakeItem: function (item, source) {
+			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			return true;
+		},
+		num: -1,
+		gen: 6,
+		isNonstandard: true,
+		desc: "If holder is a Crucibelle, this item allows it to Mega Evolve in battle.",
+	},
 };
