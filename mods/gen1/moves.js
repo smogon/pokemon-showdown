@@ -402,7 +402,7 @@ exports.BattleMovedex = {
 
 					if (pokemon !== source) {
 						// Clears the status from the opponent
-						pokemon.clearStatus();
+						pokemon.setStatus('');
 					}
 					if (pokemon.status === 'tox') {
 						pokemon.setStatus('psn');
