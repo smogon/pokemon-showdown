@@ -395,7 +395,7 @@ exports.Formats = [
 		column: 2,
 
 		ruleset: ['Pokemon', 'Standard', 'Swagger Clause', 'Baton Pass Clause', 'Team Preview', 'Mega Rayquaza Clause'],
-		banlist: [],
+		banlist: ['Geomancy'],
 		onValidateTeam: function (team) {
 			if (!team[0]) return;
 			let template = this.getTemplate(team[0].species);
