@@ -218,7 +218,7 @@ BattlePokemon = (function () {
 					id: move.id,
 					pp: (move.noPPBoosts ? move.pp : move.pp * 8 / 5),
 					maxpp: (move.noPPBoosts ? move.pp : move.pp * 8 / 5),
-					target: (move.nonGhostTarget && !this.hasType('Ghost') ? move.nonGhostTarget : move.target),
+					target: move.target,
 					disabled: false,
 					used: false,
 				});
@@ -615,12 +615,18 @@ BattlePokemon = (function () {
 				moveName = 'Hidden Power ' + this.hpType;
 				if (this.battle.gen < 6) moveName += ' ' + this.hpPower;
 			}
+			let target = move.target;
+			if (move.id === 'curse') {
+				if (!this.hasType('Ghost')) {
+					target = this.battle.getMove('curse').nonGhostTarget || move.target;
+				}
+			}
 			moves.push({
 				move: moveName,
 				id: move.id,
 				pp: move.pp,
 				maxpp: move.maxpp,
-				target: move.target,
+				target: target,
 				disabled: move.disabled,
 			});
 		}
