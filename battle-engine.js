@@ -4009,7 +4009,7 @@ Battle = (function () {
 					// in gen 2-4, the switch still happens
 					decision.priority = -101;
 					this.queue.unshift(decision);
-					this.debug('Pursuit target fainted');
+					this.add('-hint', 'Pursuit target fainted, switch continues in gen 2-4');
 					break;
 				}
 				// in gen 5+, the switch is cancelled
@@ -4017,7 +4017,7 @@ Battle = (function () {
 				break;
 			}
 			if (decision.target.isActive) {
-				this.debug('Switch target is already active');
+				this.add('-hint', 'Switch failed; switch target is already active');
 				break;
 			}
 			if (decision.choice === 'switch' && decision.pokemon.activeTurns === 1) {
@@ -4030,6 +4030,11 @@ Battle = (function () {
 					}
 				}
 			}
+
+			if (decision.choice === 'switch' && decision.pokemon.status && this.data.Abilities.naturalcure) {
+				this.singleEvent('CheckShow', this.data.Abilities.naturalcure, null, decision.pokemon);
+			}
+
 			this.switchIn(decision.target, decision.pokemon.position);
 			break;
 		case 'runSwitch':
