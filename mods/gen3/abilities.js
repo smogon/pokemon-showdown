@@ -64,6 +64,19 @@ exports.BattleAbilities = {
 		rating: 3.5,
 		num: 32,
 	},
+	"naturalcure": {
+		inherit: true,
+		onCheckShow: function (pokemon) {},
+		onSwitchOut: function (pokemon) {
+			if (!pokemon.status) return;
+
+			// Because statused/unstatused pokemon are shown after every switch
+			// in gen 3-4, Natural Cure's curing is always known to both players
+
+			this.add('-curestatus', pokemon, pokemon.status, '[from] ability: Natural Cure');
+			pokemon.setStatus('');
+		},
+	},
 	"pickup": {
 		inherit: true,
 		onResidualOrder: null,
