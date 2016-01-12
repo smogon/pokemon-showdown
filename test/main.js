@@ -85,6 +85,9 @@ before('initialization', function (done) {
 	config.logchallenges = false;
 	config.logchat = false;
 
+	// Don't create a REPL
+	require('./../repl.js').start = noop;
+
 	// Sandbox file system: it's possible for a production server to be running in the same directory.
 	// And using a sandbox is safer anyway.
 	const fsSandbox = {
