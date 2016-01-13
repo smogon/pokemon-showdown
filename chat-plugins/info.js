@@ -586,6 +586,7 @@ exports.commands = {
 				dex[pokemon] = template;
 			}
 		}
+		dex = JSON.parse(JSON.stringify(dex)); // Don't modify the original template (when compiling learnsets)
 
 		let learnSetsCompiled = false;
 		//ensure searches with the least alternatives are run first
