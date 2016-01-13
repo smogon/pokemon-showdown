@@ -290,9 +290,6 @@ exports.BattleMovedex = {
 	doubleedge: {
 		inherit: true,
 		basePower: 100,
-		desc: "Deals damage to the target. If the target lost HP, the user takes recoil damage equal to 25% that HP, rounded half up, but not less than 1HP.",
-		shortDesc: "Has 25% recoil.",
-		recoil: [25, 100],
 	},
 	dragonrage: {
 		inherit: true,
