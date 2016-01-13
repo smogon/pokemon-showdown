@@ -4012,7 +4012,10 @@ Battle = (function () {
 			break;
 		case 'instaswitch':
 		case 'switch':
-			if (decision.pokemon) {
+			if (decision.choice === 'switch' && decision.pokemon.status && this.data.Abilities.naturalcure) {
+				this.singleEvent('CheckShow', this.data.Abilities.naturalcure, null, decision.pokemon);
+			}
+			if (decision.pokemon.hp) {
 				decision.pokemon.beingCalledBack = true;
 				let lastMove = this.getMove(decision.pokemon.lastMove);
 				if (lastMove.selfSwitch !== 'copyvolatile') {
@@ -4032,9 +4035,9 @@ Battle = (function () {
 					// a switch-out.
 					break;
 				}
-				this.singleEvent('End', this.getAbility(decision.pokemon.ability), decision.pokemon.abilityData, decision.pokemon);
 			}
-			if (decision.pokemon && !decision.pokemon.hp && !decision.pokemon.fainted) {
+			this.singleEvent('End', this.getAbility(decision.pokemon.ability), decision.pokemon.abilityData, decision.pokemon);
+			if (!decision.pokemon.hp && !decision.pokemon.fainted) {
 				// a pokemon fainted from Pursuit before it could switch
 				if (this.gen <= 4) {
 					// in gen 2-4, the switch still happens
@@ -4060,10 +4063,6 @@ Battle = (function () {
 						break;
 					}
 				}
-			}
-
-			if (decision.choice === 'switch' && decision.pokemon.status && this.data.Abilities.naturalcure) {
-				this.singleEvent('CheckShow', this.data.Abilities.naturalcure, null, decision.pokemon);
 			}
 
 			this.switchIn(decision.target, decision.pokemon.position);
