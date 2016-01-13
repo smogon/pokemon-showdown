@@ -64,6 +64,23 @@ describe('Lightning Rod', function () {
 		assert.strictEqual(battle.p1.active[1].boosts['spa'], 0);
 	});
 
+	it('should redirect to the Pokemon having the ability longest', function () {
+		battle = BattleEngine.Battle.construct('battle-lightningrod-speed', 'doublescustomgame');
+		battle.join('p1', 'Guest 1', 1, [
+			{species: 'Meloetta', ability: 'serenegrace', moves: ['roleplay']},
+			{species: 'Pikachu', ability: 'lightningrod', moves: ['sleeptalk']},
+		]);
+		battle.join('p2', 'Guest 2', 1, [
+			{species: 'Pichu', ability: 'static', moves: ['thunderbolt']},
+			{species: 'Pichu', ability: 'static', moves: ['thunderbolt']},
+		]);
+		battle.commitDecisions(); // Team Preview
+		battle.choose('p1', 'move 1 -2, move 1');
+		battle.choose('p2', 'move 1 1, move 1 2');
+		assert.strictEqual(battle.p1.active[0].boosts['spa'], 0);
+		assert.strictEqual(battle.p1.active[1].boosts['spa'], 2);
+	});
+
 	it('should not redirect if another Pokemon has used Follow Me', function () {
 		battle = BattleEngine.Battle.construct('battle-lightningrod-followme', 'doublescustomgame');
 		battle.join('p1', 'Guest 1', 1, [

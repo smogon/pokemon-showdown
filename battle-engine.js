@@ -335,6 +335,7 @@ BattlePokemon = (function () {
 	BattlePokemon.prototype.hpType = 'Dark';
 	BattlePokemon.prototype.hpPower = 60;
 	BattlePokemon.prototype.speed = 0;
+	BattlePokemon.prototype.abilityOrder = 0;
 
 	BattlePokemon.prototype.toString = function () {
 		let fullname = this.fullname;
@@ -1160,6 +1161,7 @@ BattlePokemon = (function () {
 		if (ability.id && this.battle.gen > 3) {
 			this.battle.singleEvent('Start', ability, this.abilityData, this, source, effect);
 		}
+		this.abilityOrder = this.battle.abilityOrder++;
 		return oldAbility;
 	};
 	BattlePokemon.prototype.getAbility = function () {
@@ -1729,6 +1731,8 @@ Battle = (function () {
 	Battle.prototype.supportCancel = false;
 	Battle.prototype.events = null;
 
+	Battle.prototype.abilityOrder = 0;
+
 	Battle.prototype.toString = function () {
 		return 'Battle: ' + this.format;
 	};
@@ -2040,8 +2044,8 @@ Battle = (function () {
 		}
 	};
 
-	// bubbles up
-	Battle.comparePriority = function (a, b) { // intentionally not in Battle.prototype
+	// intentionally not in Battle.prototype
+	Battle.comparePriority = function (a, b) {
 		a.priority = a.priority || 0;
 		a.subPriority = a.subPriority || 0;
 		a.speed = a.speed || 0;
@@ -2069,6 +2073,23 @@ Battle = (function () {
 			return -(b.subOrder - a.subOrder);
 		}
 		return Math.random() - 0.5;
+	};
+	// also not in Battle.prototype
+	Battle.compareRedirectOrder = function (a, b) {
+		a.priority = a.priority || 0;
+		a.speed = a.speed || 0;
+		b.priority = b.priority || 0;
+		b.speed = b.speed || 0;
+		if (b.priority - a.priority) {
+			return b.priority - a.priority;
+		}
+		if (b.speed - a.speed) {
+			return b.speed - a.speed;
+		}
+		if (b.thing.abilityOrder - a.thing.abilityOrder) {
+			return -(b.thing.abilityOrder - a.thing.abilityOrder);
+		}
+		return 0;
 	};
 	Battle.prototype.getResidualStatuses = function (thing, callbackType) {
 		let statuses = this.getRelevantEffectsInner(thing || this, callbackType || 'residualCallback', null, null, false, true, 'duration');
@@ -2288,6 +2309,11 @@ Battle = (function () {
 		}
 		if (!target) target = this;
 		let statuses = this.getRelevantEffects(target, 'on' + eventid, 'onSource' + eventid, source);
+		if (fastExit) {
+			statuses.sort(Battle.compareRedirectOrder);
+		} else {
+			statuses.sort(Battle.comparePriority);
+		}
 		let hasRelayVar = true;
 		effect = this.getEffect(effect);
 		let args = [target, source, effect];
@@ -2425,7 +2451,6 @@ Battle = (function () {
 	// bubbles up to parents
 	Battle.prototype.getRelevantEffects = function (thing, callbackType, foeCallbackType, foeThing) {
 		let statuses = this.getRelevantEffectsInner(thing, callbackType, foeCallbackType, foeThing, true, false);
-		statuses.sort(Battle.comparePriority);
 		//if (statuses[0]) this.debug('match ' + callbackType + ': ' + statuses[0].status.id);
 		return statuses;
 	};
@@ -4050,6 +4075,7 @@ Battle = (function () {
 			decision.pokemon.isStarted = true;
 			if (!decision.pokemon.fainted) {
 				this.singleEvent('Start', decision.pokemon.getAbility(), decision.pokemon.abilityData, decision.pokemon);
+				decision.pokemon.abilityOrder = this.abilityOrder++;
 				this.singleEvent('Start', decision.pokemon.getItem(), decision.pokemon.itemData, decision.pokemon);
 			}
 			delete decision.pokemon.draggedIn;
