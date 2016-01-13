@@ -335,6 +335,7 @@ BattlePokemon = (function () {
 	BattlePokemon.prototype.hpType = 'Dark';
 	BattlePokemon.prototype.hpPower = 60;
 	BattlePokemon.prototype.speed = 0;
+	BattlePokemon.prototype.turnSwitchedIn = 0;
 
 	BattlePokemon.prototype.toString = function () {
 		let fullname = this.fullname;
@@ -869,6 +870,7 @@ BattlePokemon = (function () {
 		this.lastAttackedBy = null;
 		this.newlySwitched = true;
 		this.beingCalledBack = false;
+		this.turnSwitchedIn = this.battle.turn;
 
 		this.formeChange(this.baseTemplate);
 
