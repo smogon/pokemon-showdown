@@ -65,6 +65,11 @@ exports.BattleMovedex = {
 			},
 		},
 	},
+	doubleedge: {
+		inherit: true,
+		shortDesc: "Has 25% recoil.",
+		recoil: [25, 100],
+	},
 	encore: {
 		inherit: true,
 		effect: {
