@@ -26,6 +26,14 @@ You can use your own computer as a server, but for other people to connect to yo
 Installing
 ------------------------------------------------------------------------
 
+    ./pokemon-showdown
+
+(Requires Node.js 4+)
+
+
+Detailed installation instructions
+------------------------------------------------------------------------
+
 Pokémon Showdown requires you to have [Node.js][5] installed, 4.x or later. (Alternatively, most versions of [io.js][6] also work, but is not recommended.)
 
 Next, obtain a copy of Pokémon Showdown. If you're reading this outside of GitHub, you've probably already done this. If you're reading this in GitHub, there's a "Save" icon button near the top right (next to "Download ZIP"), or if you're really lazy, you can use the "Download ZIP" button. I recommend the Save method - it's more time-consuming to set up, but much easier to update.
@@ -44,11 +52,13 @@ Congratulations, you're done setting up Pokémon Showdown.
 
 Now, to start Pokémon Showdown, run the command:
 
-    ./pokemon-showdown
+    node pokemon-showdown
+
+(If you're not on Windows, we recommend doing `./pokemon-showdown` instead.)
 
 You can also specify a port:
 
-    ./pokemon-showdown 8000
+    node pokemon-showdown 8000
 
 Visit your server at `http://SERVER:8000`
 
