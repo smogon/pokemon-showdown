@@ -42,13 +42,17 @@ Copy `config/config-example.js` into `config/config.js`, and edit as you please.
 
 Congratulations, you're done setting up Pokémon Showdown.
 
+Then you need to install node modules by doing:
+
+    npm install
+
 Now, to start Pokémon Showdown, run the command:
 
-    ./pokemon-showdown
+    node app.js
 
 You can also specify a port:
 
-    ./pokemon-showdown 8000
+    node app.js 8000
 
 Visit your server at `http://SERVER:8000`
 
