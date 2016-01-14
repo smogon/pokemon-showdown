@@ -1044,34 +1044,6 @@ let BattleRoom = (function () {
 		if (p2active && !p1active) return 0;
 		return this.battle.inactiveSide;
 	};
-	BattleRoom.prototype.forfeit = function (user, message, side) {
-		if (!this.battle || this.battle.ended || !this.battle.started) return false;
-
-		if (!message) message = ' forfeited.';
-
-		if (side === undefined) {
-			if (user in this.game.players) side = this.game.players[user].slotNum;
-		}
-		if (side === undefined) return false;
-
-		let ids = ['p1', 'p2'];
-		let otherids = ['p2', 'p1'];
-
-		let name = 'Player ' + (side + 1);
-		if (user) {
-			name = user.name;
-		} else if (this.rated) {
-			name = this.rated[ids[side]];
-		}
-
-		this.add('|-message|' + name + message);
-		this.battle.endType = 'forfeit';
-		this.battle.send('win', otherids[side]);
-		rooms.global.battleCount += (this.battle.active ? 1 : 0) - (this.active ? 1 : 0);
-		this.active = this.battle.active;
-		this.update();
-		return true;
-	};
 	BattleRoom.prototype.sendPlayer = function (num, message) {
 		let player = this.getPlayer(num);
 		if (!player) return false;
@@ -1266,14 +1238,6 @@ let BattleRoom = (function () {
 		} else {
 			return "Only the user who set modchat and global staff can change modchat levels in battle rooms";
 		}
-	};
-	BattleRoom.prototype.decision = function (user, choice, data) {
-		this.battle.sendFor(user, choice, data);
-		if (this.active !== this.battle.active) {
-			rooms.global.battleCount += (this.battle.active ? 1 : 0) - (this.active ? 1 : 0);
-			this.active = this.battle.active;
-		}
-		this.update();
 	};
 	BattleRoom.prototype.onConnect = function (user, connection) {
 		this.sendUser(connection, '|init|battle\n|title|' + this.title + '\n' + this.getLogForUser(user).join('\n'));

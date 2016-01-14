@@ -186,6 +186,12 @@ class Battle {
 		if (!this.p2 || !this.p2.active) return false;
 		return true;
 	}
+	choose(user, data) {
+		this.sendFor(user, 'choose', data);
+	}
+	undo(user, data) {
+		this.sendFor(user, 'undo', data);
+	}
 
 	receive(lines) {
 		Monitor.activeIp = this.activeIp;
@@ -269,7 +275,7 @@ class Battle {
 		let player = this.players[oldid];
 		if (player) {
 			if (!this.allowRenames && user.userid !== oldid) {
-				this.room.forfeit(user, " forfeited by changing their name.");
+				this.forfeit(user, " forfeited by changing their name.");
 				return;
 			}
 			if (!this.players[user]) {
@@ -312,6 +318,31 @@ class Battle {
 	}
 	tie() {
 		this.send('tie');
+	}
+	forfeit(user, message, side) {
+		if (this.ended || !this.started) return false;
+
+		if (!message) message = ' forfeited.';
+
+		if (side === undefined) {
+			if (user in this.players) side = this.players[user].slotNum;
+		}
+		if (side === undefined) return false;
+
+		let ids = ['p1', 'p2'];
+		let otherids = ['p2', 'p1'];
+
+		let name = 'Player ' + (side + 1);
+		if (user) {
+			name = user.name;
+		} else if (this.rated) {
+			name = this.rated[ids[side]];
+		}
+
+		this.room.add('|-message|' + name + message);
+		this.endType = 'forfeit';
+		this.send('win', otherids[side]);
+		return true;
 	}
 
 	addPlayer(user) {

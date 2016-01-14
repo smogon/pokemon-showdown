@@ -2244,12 +2244,69 @@ exports.commands = {
 	 *********************************************************/
 
 	forfeit: function (target, room, user) {
-		if (!room.battle) {
-			return this.errorReply("There's nothing to forfeit here.");
+		// backwards-compatible for /hotpatch chat
+		if (room.forfeit && !room.forfeit(user)) return this.errorReply("You can't forfeit this battle.");
+
+		if (!room.game) return this.errorReply("This room doesn't have an active game.");
+		if (!room.game.forfeit) {
+			return this.errorReply("This kind of game can't be forfeited.");
 		}
-		if (!room.forfeit(user)) {
-			return this.errorReply("You can't forfeit this battle.");
+		if (!room.game.forfeit(user)) {
+			return this.errorReply("Forfeit failed.");
 		}
+	},
+
+	choose: function (target, room, user) {
+		// backwards-compatible for /hotpatch chat
+		if (room.battle && room.battle.sendFor) room.battle.sendFor(user, 'choose', target);
+
+		if (!room.game) return this.errorReply("This room doesn't have an active game.");
+		if (!room.game.choose) return this.errorReply("This game doesn't support /choose");
+
+		room.game.choose(user, target);
+	},
+
+	mv: 'move',
+	attack: 'move',
+	move: function (target, room, user) {
+		// backwards-compatible for /hotpatch chat
+		if (room.battle && room.battle.sendFor) room.battle.sendFor(user, 'choose', 'move ' + target);
+
+		if (!room.game) return this.errorReply("This room doesn't have an active game.");
+		if (!room.game.choose) return this.errorReply("This game doesn't support /choose");
+
+		room.game.choose(user, 'move ' + target);
+	},
+
+	sw: 'switch',
+	switch: function (target, room, user) {
+		// backwards-compatible for /hotpatch chat
+		if (room.battle && room.battle.sendFor) room.battle.sendFor(user, 'choose', 'switch ' + parseInt(target));
+
+		if (!room.game) return this.errorReply("This room doesn't have an active game.");
+		if (!room.game.choose) return this.errorReply("This game doesn't support /choose");
+
+		room.game.choose(user, 'switch ' + parseInt(target));
+	},
+
+	team: function (target, room, user) {
+		// backwards-compatible for /hotpatch chat
+		if (room.battle && room.battle.sendFor) room.battle.sendFor(user, 'choose', 'team ' + target);
+
+		if (!room.game) return this.errorReply("This room doesn't have an active game.");
+		if (!room.game.choose) return this.errorReply("This game doesn't support /choose");
+
+		room.game.choose(user, 'team ' + target);
+	},
+
+	undo: function (target, room, user) {
+		// backwards-compatible for /hotpatch chat
+		if (room.battle && room.battle.sendFor) room.battle.sendFor(user, 'undo', target);
+
+		if (!room.game) return this.errorReply("This room doesn't have an active game.");
+		if (!room.game.undo) return this.errorReply("This game doesn't support /undo");
+
+		room.game.undo(user, target);
 	},
 
 	savereplay: function (target, room, user, connection) {
@@ -2279,39 +2336,6 @@ exports.commands = {
 				id: room.id.substr(7),
 			}));
 		});
-	},
-
-	mv: 'move',
-	attack: 'move',
-	move: function (target, room, user) {
-		if (!room.decision) return this.errorReply("You can only do this in battle rooms.");
-
-		room.decision(user, 'choose', 'move ' + target);
-	},
-
-	sw: 'switch',
-	switch: function (target, room, user) {
-		if (!room.decision) return this.errorReply("You can only do this in battle rooms.");
-
-		room.decision(user, 'choose', 'switch ' + parseInt(target));
-	},
-
-	choose: function (target, room, user) {
-		if (!room.decision) return this.errorReply("You can only do this in battle rooms.");
-
-		room.decision(user, 'choose', target);
-	},
-
-	undo: function (target, room, user) {
-		if (!room.decision) return this.errorReply("You can only do this in battle rooms.");
-
-		room.decision(user, 'undo', target);
-	},
-
-	team: function (target, room, user) {
-		if (!room.decision) return this.errorReply("You can only do this in battle rooms.");
-
-		room.decision(user, 'choose', 'team ' + target);
 	},
 
 	addplayer: function (target, room, user) {
