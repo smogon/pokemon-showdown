@@ -1455,6 +1455,24 @@ exports.commands = {
 	},
 	promotehelp: ["/promote [username], [group] - Promotes the user to the specified group. Requires: & ~"],
 
+	confirmuser: function (target) {
+		if (!target) return this.parse('/help confirmuser');
+		if (!this.can('promote')) return;
+
+		target = this.splitTarget(target, true);
+		let targetUser = this.targetUser;
+		let userid = toId(this.targetUsername);
+		let name = targetUser ? targetUser.name : this.targetUsername;
+
+		if (!userid) return this.parse('/help confirmuser');
+		if (!targetUser) return this.errorReply("User '" + targetUser.name + "' is not online.");
+
+		if (targetUser.confirmed) return this.errorReply("User '" + targetUser.name + "' is already confirmed.");
+
+		targetUser.setGroup(' ', true);
+	},
+	confirmuserhelp: ["/confirmuser [username] - Confirms the user (makes them immune to locks). Requires: & ~"],
+
 	globaldemote: 'demote',
 	demote: function (target) {
 		if (!target) return this.parse('/help demote');
