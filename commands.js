@@ -2262,9 +2262,6 @@ exports.commands = {
 	 *********************************************************/
 
 	forfeit: function (target, room, user) {
-		// backwards-compatible for /hotpatch chat
-		if (room.forfeit && !room.forfeit(user)) return this.errorReply("You can't forfeit this battle.");
-
 		if (!room.game) return this.errorReply("This room doesn't have an active game.");
 		if (!room.game.forfeit) {
 			return this.errorReply("This kind of game can't be forfeited.");
@@ -2275,9 +2272,6 @@ exports.commands = {
 	},
 
 	choose: function (target, room, user) {
-		// backwards-compatible for /hotpatch chat
-		if (room.battle && room.battle.sendFor) room.battle.sendFor(user, 'choose', target);
-
 		if (!room.game) return this.errorReply("This room doesn't have an active game.");
 		if (!room.game.choose) return this.errorReply("This game doesn't support /choose");
 
@@ -2287,9 +2281,6 @@ exports.commands = {
 	mv: 'move',
 	attack: 'move',
 	move: function (target, room, user) {
-		// backwards-compatible for /hotpatch chat
-		if (room.battle && room.battle.sendFor) room.battle.sendFor(user, 'choose', 'move ' + target);
-
 		if (!room.game) return this.errorReply("This room doesn't have an active game.");
 		if (!room.game.choose) return this.errorReply("This game doesn't support /choose");
 
@@ -2298,9 +2289,6 @@ exports.commands = {
 
 	sw: 'switch',
 	switch: function (target, room, user) {
-		// backwards-compatible for /hotpatch chat
-		if (room.battle && room.battle.sendFor) room.battle.sendFor(user, 'choose', 'switch ' + parseInt(target));
-
 		if (!room.game) return this.errorReply("This room doesn't have an active game.");
 		if (!room.game.choose) return this.errorReply("This game doesn't support /choose");
 
@@ -2308,9 +2296,6 @@ exports.commands = {
 	},
 
 	team: function (target, room, user) {
-		// backwards-compatible for /hotpatch chat
-		if (room.battle && room.battle.sendFor) room.battle.sendFor(user, 'choose', 'team ' + target);
-
 		if (!room.game) return this.errorReply("This room doesn't have an active game.");
 		if (!room.game.choose) return this.errorReply("This game doesn't support /choose");
 
@@ -2318,9 +2303,6 @@ exports.commands = {
 	},
 
 	undo: function (target, room, user) {
-		// backwards-compatible for /hotpatch chat
-		if (room.battle && room.battle.sendFor) room.battle.sendFor(user, 'undo', target);
-
 		if (!room.game) return this.errorReply("This room doesn't have an active game.");
 		if (!room.game.undo) return this.errorReply("This game doesn't support /undo");
 
