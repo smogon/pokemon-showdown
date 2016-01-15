@@ -1106,7 +1106,7 @@ let BattleRoom = (function () {
 			}
 		}
 
-		this.forfeit(this.getPlayer(inactiveSide), ' lost due to inactivity.', inactiveSide);
+		this.battle.forfeit(this.getPlayer(inactiveSide), ' lost due to inactivity.', inactiveSide);
 		this.resetUser = '';
 	};
 	BattleRoom.prototype.requestKickInactive = function (user, force) {
