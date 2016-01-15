@@ -448,7 +448,7 @@ class Tournament {
 			this.generator.setUserBusy(matchFrom.to, false);
 			this.inProgressMatches.set(user, null);
 			delete matchFrom.room.tour;
-			matchFrom.room.forfeit(user);
+			matchFrom.room.battle.forfeit(user);
 		}
 
 		let matchTo = null;
@@ -459,7 +459,7 @@ class Tournament {
 			this.generator.setUserBusy(matchTo, false);
 			let matchRoom = this.inProgressMatches.get(matchTo).room;
 			delete matchRoom.tour;
-			matchRoom.forfeit(user);
+			matchRoom.battle.forfeit(user);
 			this.inProgressMatches.set(matchTo, null);
 		}
 
