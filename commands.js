@@ -1465,9 +1465,9 @@ exports.commands = {
 		let name = targetUser ? targetUser.name : this.targetUsername;
 
 		if (!userid) return this.parse('/help confirmuser');
-		if (!targetUser) return this.errorReply("User '" + targetUser.name + "' is not online.");
+		if (!targetUser) return this.errorReply("User '" + name + "' is not online.");
 
-		if (targetUser.confirmed) return this.errorReply("User '" + targetUser.name + "' is already confirmed.");
+		if (targetUser.confirmed) return this.errorReply("User '" + name + "' is already confirmed.");
 
 		targetUser.setGroup(' ', true);
 	},
