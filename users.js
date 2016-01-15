@@ -1162,6 +1162,8 @@ User = (function () {
 		if (this.registered) {
 			if (forceConfirmed || this.group !== Config.groupsranking[0]) {
 				usergroups[this.userid] = this.group + this.name;
+				this.confirmed = this.userid;
+				this.autoconfirmed = this.userid;
 			} else {
 				delete usergroups[this.userid];
 			}
