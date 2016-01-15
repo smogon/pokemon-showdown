@@ -204,6 +204,8 @@ New mechanic: Signature Pokémon:
   - Snorlax: Snore (100 base power)
 
   - Persian: Slash (60 base power 30% -1 Def)
+  
+  - Gallade: Psycho Cut
 
 - Again, note that while the Signature Pokémon will get the 1.5x damage boost,
   all Pokémon will get the other changes to the move listed above.
