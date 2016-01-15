@@ -57,8 +57,6 @@ exports.BattlePokedex = {
 		heightm: 2.4,
 		weightkg: 155.5,
 		color: "Green",
-		prevo: "ivysaur",
-		evoLevel: 32,
 		eggGroups: ["Monster", "Grass"],
 	},
 	charmander: {
@@ -117,8 +115,6 @@ exports.BattlePokedex = {
 		heightm: 1.7,
 		weightkg: 110.5,
 		color: "Red",
-		prevo: "charmeleon",
-		evoLevel: 36,
 		eggGroups: ["Monster", "Dragon"],
 	},
 	charizardmegay: {
@@ -134,8 +130,6 @@ exports.BattlePokedex = {
 		heightm: 1.7,
 		weightkg: 100.5,
 		color: "Red",
-		prevo: "charmeleon",
-		evoLevel: 36,
 		eggGroups: ["Monster", "Dragon"],
 	},
 	squirtle: {
@@ -194,8 +188,6 @@ exports.BattlePokedex = {
 		heightm: 1.6,
 		weightkg: 101.1,
 		color: "Blue",
-		prevo: "wartortle",
-		evoLevel: 36,
 		eggGroups: ["Monster", "Water 1"],
 	},
 	caterpie: {
@@ -289,8 +281,6 @@ exports.BattlePokedex = {
 		heightm: 1.4,
 		weightkg: 40.5,
 		color: "Yellow",
-		prevo: "kakuna",
-		evoLevel: 10,
 		eggGroups: ["Bug"],
 	},
 	pidgey: {
@@ -345,8 +335,6 @@ exports.BattlePokedex = {
 		heightm: 2.2,
 		weightkg: 50.5,
 		color: "Brown",
-		prevo: "pidgeotto",
-		evoLevel: 36,
 		eggGroups: ["Flying"],
 	},
 	rattata: {
@@ -1073,8 +1061,6 @@ exports.BattlePokedex = {
 		heightm: 1.2,
 		weightkg: 48,
 		color: "Brown",
-		prevo: "kadabra",
-		evoLevel: 16,
 		eggGroups: ["Human-Like"],
 	},
 	machop: {
@@ -1285,8 +1271,6 @@ exports.BattlePokedex = {
 		heightm: 2,
 		weightkg: 120,
 		color: "Pink",
-		prevo: "slowpoke",
-		evoLevel: 37,
 		eggGroups: ["Monster", "Water 1"],
 	},
 	magnemite: {
@@ -1480,8 +1464,6 @@ exports.BattlePokedex = {
 		heightm: 1.4,
 		weightkg: 40.5,
 		color: "Purple",
-		prevo: "haunter",
-		evoLevel: 25,
 		eggGroups: ["Amorphous"],
 	},
 	onix: {
@@ -1993,8 +1975,6 @@ exports.BattlePokedex = {
 		heightm: 6.5,
 		weightkg: 305,
 		color: "Blue",
-		prevo: "magikarp",
-		evoLevel: 20,
 		eggGroups: ["Water 2", "Dragon"],
 	},
 	lapras: {
@@ -2737,8 +2717,6 @@ exports.BattlePokedex = {
 		heightm: 1.4,
 		weightkg: 61.5,
 		color: "Yellow",
-		prevo: "flaaffy",
-		evoLevel: 30,
 		eggGroups: ["Monster", "Field"],
 	},
 	bellossom: {
@@ -3098,8 +3076,6 @@ exports.BattlePokedex = {
 		heightm: 10.5,
 		weightkg: 740,
 		color: "Gray",
-		prevo: "onix",
-		evoLevel: 1,
 		eggGroups: ["Mineral"],
 	},
 	snubbull: {
@@ -3166,8 +3142,6 @@ exports.BattlePokedex = {
 		heightm: 2,
 		weightkg: 125,
 		color: "Red",
-		prevo: "scyther",
-		evoLevel: 1,
 		eggGroups: ["Bug"],
 	},
 	shuckle: {
@@ -3405,8 +3379,6 @@ exports.BattlePokedex = {
 		heightm: 1.9,
 		weightkg: 49.5,
 		color: "Black",
-		prevo: "houndour",
-		evoLevel: 24,
 		eggGroups: ["Field"],
 	},
 	kingdra: {
@@ -3664,8 +3636,6 @@ exports.BattlePokedex = {
 		heightm: 2.5,
 		weightkg: 255,
 		color: "Green",
-		prevo: "pupitar",
-		evoLevel: 55,
 		eggGroups: ["Monster"],
 	},
 	lugia: {
@@ -3760,8 +3730,6 @@ exports.BattlePokedex = {
 		heightm: 1.9,
 		weightkg: 55.2,
 		color: "Green",
-		prevo: "grovyle",
-		evoLevel: 36,
 		eggGroups: ["Monster", "Dragon"],
 	},
 	torchic: {
@@ -3820,8 +3788,6 @@ exports.BattlePokedex = {
 		heightm: 1.9,
 		weightkg: 52,
 		color: "Red",
-		prevo: "combusken",
-		evoLevel: 36,
 		eggGroups: ["Field"],
 	},
 	mudkip: {
@@ -3880,8 +3846,6 @@ exports.BattlePokedex = {
 		heightm: 1.9,
 		weightkg: 102,
 		color: "Blue",
-		prevo: "marshtomp",
-		evoLevel: 36,
 		eggGroups: ["Monster", "Water 1"],
 	},
 	poochyena: {
@@ -4180,8 +4144,6 @@ exports.BattlePokedex = {
 		heightm: 1.6,
 		weightkg: 48.4,
 		color: "White",
-		prevo: "kirlia",
-		evoLevel: 30,
 		eggGroups: ["Amorphous"],
 	},
 	surskit: {
@@ -4534,8 +4496,6 @@ exports.BattlePokedex = {
 		heightm: 2.2,
 		weightkg: 395,
 		color: "Gray",
-		prevo: "lairon",
-		evoLevel: 42,
 		eggGroups: ["Monster"],
 	},
 	meditite: {
@@ -4576,8 +4536,6 @@ exports.BattlePokedex = {
 		heightm: 1.3,
 		weightkg: 31.5,
 		color: "Red",
-		prevo: "meditite",
-		evoLevel: 37,
 		eggGroups: ["Human-Like"],
 	},
 	electrike: {
@@ -4618,8 +4576,6 @@ exports.BattlePokedex = {
 		heightm: 1.8,
 		weightkg: 44,
 		color: "Yellow",
-		prevo: "electrike",
-		evoLevel: 26,
 		eggGroups: ["Field"],
 	},
 	plusle: {
@@ -4745,8 +4701,6 @@ exports.BattlePokedex = {
 		heightm: 2.5,
 		weightkg: 130.3,
 		color: "Blue",
-		prevo: "carvanha",
-		evoLevel: 30,
 		eggGroups: ["Water 2"],
 	},
 	wailmer: {
@@ -4812,8 +4766,6 @@ exports.BattlePokedex = {
 		heightm: 2.5,
 		weightkg: 320.5,
 		color: "Red",
-		prevo: "numel",
-		evoLevel: 33,
 		eggGroups: ["Field"],
 	},
 	torkoal: {
@@ -4965,8 +4917,6 @@ exports.BattlePokedex = {
 		heightm: 1.5,
 		weightkg: 20.6,
 		color: "Blue",
-		prevo: "swablu",
-		evoLevel: 35,
 		eggGroups: ["Flying", "Dragon"],
 	},
 	zangoose: {
@@ -5274,8 +5224,6 @@ exports.BattlePokedex = {
 		heightm: 1.2,
 		weightkg: 13,
 		color: "Black",
-		prevo: "shuppet",
-		evoLevel: 37,
 		eggGroups: ["Amorphous"],
 	},
 	duskull: {
@@ -5404,8 +5352,6 @@ exports.BattlePokedex = {
 		heightm: 2.1,
 		weightkg: 350.2,
 		color: "Gray",
-		prevo: "snorunt",
-		evoLevel: 42,
 		eggGroups: ["Fairy", "Mineral"],
 	},
 	spheal: {
@@ -5561,8 +5507,6 @@ exports.BattlePokedex = {
 		heightm: 1.8,
 		weightkg: 112.6,
 		color: "Blue",
-		prevo: "shelgon",
-		evoLevel: 50,
 		eggGroups: ["Dragon"],
 	},
 	beldum: {
@@ -5621,8 +5565,6 @@ exports.BattlePokedex = {
 		heightm: 2.5,
 		weightkg: 942.9,
 		color: "Blue",
-		prevo: "metang",
-		evoLevel: 45,
 		eggGroups: ["Mineral"],
 	},
 	regirock: {
@@ -6495,8 +6437,6 @@ exports.BattlePokedex = {
 		heightm: 1.3,
 		weightkg: 28.3,
 		color: "Brown",
-		prevo: "buneary",
-		evoLevel: 2,
 		eggGroups: ["Field", "Human-Like"],
 	},
 	mismagius: {
@@ -6727,8 +6667,6 @@ exports.BattlePokedex = {
 		heightm: 1.9,
 		weightkg: 95,
 		color: "Blue",
-		prevo: "gabite",
-		evoLevel: 48,
 		eggGroups: ["Monster", "Dragon"],
 	},
 	munchlax: {
@@ -6785,8 +6723,6 @@ exports.BattlePokedex = {
 		heightm: 1.3,
 		weightkg: 57.5,
 		color: "Blue",
-		prevo: "riolu",
-		evoLevel: 2,
 		eggGroups: ["Field", "Human-Like"],
 	},
 	hippopotas: {
@@ -6950,8 +6886,6 @@ exports.BattlePokedex = {
 		heightm: 2.7,
 		weightkg: 185,
 		color: "White",
-		prevo: "snover",
-		evoLevel: 40,
 		eggGroups: ["Monster", "Grass"],
 	},
 	weavile: {
@@ -7175,8 +7109,6 @@ exports.BattlePokedex = {
 		heightm: 1.6,
 		weightkg: 56.4,
 		color: "White",
-		prevo: "kirlia",
-		evoLevel: 20,
 		eggGroups: ["Amorphous"],
 	},
 	probopass: {
