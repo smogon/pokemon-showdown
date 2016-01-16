@@ -1563,7 +1563,7 @@ exports.commands = {
 			this.add("|raw|<div class=\"broadcast-red\"><b>Moderated chat was set to " + modchat + "!</b><br />Only users of rank " + modchat + " and higher can talk.</div>");
 		}
 		if (room.battle && !room.modchat && !user.can('modchat')) room.requestModchat(null);
-		this.logModCommand(user.name + " set modchat to " + room.modchat);
+		this.privateModCommand("(" + user.name + " set modchat to " + room.modchat + ")");
 
 		if (room.chatRoomData) {
 			room.chatRoomData.modchat = room.modchat;
