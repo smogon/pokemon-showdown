@@ -4654,6 +4654,9 @@ exports.BattleMovedex = {
 		volatileStatus: 'followme',
 		effect: {
 			duration: 1,
+			onStart: function (pokemon) {
+				this.add('-start', pokemon, 'move: Follow Me');
+			},
 			onFoeRedirectTargetPriority: 1,
 			onFoeRedirectTarget: function (target, source, source2, move) {
 				if (this.validTarget(this.effectData.target, source, move.target)) {
