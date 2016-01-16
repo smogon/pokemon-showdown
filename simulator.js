@@ -181,10 +181,17 @@ class Battle {
 		this.send.apply(this, [action, player.slot].concat(slice.call(arguments, 2)));
 	}
 	checkActive() {
-		if (this.ended || !this.started) return false;
-		if (!this.p1 || !this.p1.active) return false;
-		if (!this.p2 || !this.p2.active) return false;
-		return true;
+		let active = true;
+		if (this.ended || !this.started) {
+			active = false;
+		} else if (!this.p1 || !this.p1.active) {
+			active = false;
+		} else if (!this.p2 || !this.p2.active) {
+			active = false;
+		}
+		Rooms.global.battleCount += (active ? 1 : 0) - (this.active ? 1 : 0);
+		this.room.active = active;
+		this.active = active;
 	}
 	choose(user, data) {
 		this.sendFor(user, 'choose', data);
@@ -197,7 +204,7 @@ class Battle {
 		Monitor.activeIp = this.activeIp;
 		switch (lines[1]) {
 		case 'update':
-			this.active = this.checkActive();
+			this.checkActive();
 			this.room.push(lines.slice(2));
 			this.room.update();
 			if (this.inactiveQueued) {
@@ -209,13 +216,13 @@ class Battle {
 		case 'winupdate':
 			this.room.push(lines.slice(3));
 			this.started = true;
-			this.active = false;
 			this.inactiveSide = -1;
 			if (!this.ended) {
 				this.ended = true;
 				this.room.win(lines[2]);
 				this.removeAllPlayers();
 			}
+			this.checkActive();
 			break;
 
 		case 'sideupdate': {
@@ -392,6 +399,10 @@ class Battle {
 
 	destroy() {
 		this.send('dealloc');
+		if (this.active) {
+			Rooms.global.battleCount += -1;
+			this.active = false;
+		}
 
 		for (let i in this.players) {
 			this.players[i].destroy();
