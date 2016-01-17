@@ -1495,6 +1495,9 @@ exports.BattleScripts = {
 					if (counter.Physical + counter.Special < 2 || hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					if (!hasAbility['Chlorophyll'] && !hasAbility['Flower Gift'] && !hasMove['solarbeam']) rejected = true;
 					break;
+				case 'disable':
+					if (!hasMove['substitute']) rejected = true;
+					break;
 				case 'stunspore': case 'thunderwave':
 					if (counter.setupType || !!counter['speedsetup'] || (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
 					if (hasMove['discharge'] || hasMove['gyroball'] || hasMove['spore'] || hasMove['toxic'] || hasMove['trickroom'] || hasMove['yawn']) rejected = true;
@@ -2644,6 +2647,9 @@ exports.BattleScripts = {
 					break;
 				case 'substitute':
 					if (hasMove['uturn'] || hasMove['voltswitch'] || hasMove['pursuit']) rejected = true;
+					break;
+				case 'disable':
+					if (!hasMove['substitute']) rejected = true;
 					break;
 				case 'fakeout':
 					if (hasMove['trick'] || hasMove['switcheroo']) rejected = true;
