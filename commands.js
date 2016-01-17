@@ -2363,22 +2363,26 @@ exports.commands = {
 	},
 	addplayerhelp: ["/addplayer [username] - Allow the specified user to join the battle as a player."],
 
-	joinbattle: function (target, room, user) {
-		if (!room.joinBattle) return this.errorReply("You can only do this in battle rooms.");
-		if (!user.can('joinbattle', null, room)) return this.popupReply("You must be a set as a player to join a battle you didn't start. Ask a player to use /addplayer on you to join this battle.");
+	joinbattle: 'joingame',
+	joingame: function (target, room, user) {
+		if (!room.game) return this.errorReply("This room doesn't have an active game.");
+		if (!room.game.joinGame) return this.errorReply("This game doesn't support /joingame");
 
-		room.joinBattle(user);
+		room.game.joinGame(user);
 	},
 
-	partbattle: 'leavebattle',
-	leavebattle: function (target, room, user) {
-		if (!room.leaveBattle) return this.errorReply("You can only do this in battle rooms.");
+	leavebattle: 'leavegame',
+	partbattle: 'leavegame',
+	leavegame: function (target, room, user) {
+		if (!room.game) return this.errorReply("This room doesn't have an active game.");
+		if (!room.game.leaveGame) return this.errorReply("This game doesn't support /leavegame");
 
-		room.leaveBattle(user);
+		room.game.leaveGame(user);
 	},
 
-	kickbattle: function (target, room, user) {
-		if (!room.leaveBattle) return this.errorReply("You can only do this in battle rooms.");
+	kickbattle: 'kickgame',
+	kickgame: function (target, room, user) {
+		if (!room.battle) return this.errorReply("You can only do this in battle rooms.");
 		if (room.battle.tour || room.battle.rated) return this.errorReply("You can only do this in unrated non-tour battles.");
 
 		target = this.splitTarget(target);
@@ -2388,7 +2392,7 @@ exports.commands = {
 		}
 		if (!this.can('kick', targetUser)) return false;
 
-		if (room.leaveBattle(targetUser)) {
+		if (room.game.leaveGame(targetUser)) {
 			this.addModCommand("" + targetUser.name + " was kicked from a battle by " + user.name + (target ? " (" + target + ")" : ""));
 		} else {
 			this.sendReply("/kickbattle - User isn't in battle.");

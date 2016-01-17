@@ -806,11 +806,11 @@ let GlobalRoom = (function () {
 		}
 		this.lastBattle = i;
 		rooms.global.writeNumRooms();
-		newRoom = this.addRoom('battle-' + formaturlid + '-' + i, format, p1, p2, options);
+		newRoom = Rooms.createBattle('battle-' + formaturlid + '-' + i, format, p1, p2, options);
 		p1.joinRoom(newRoom);
 		p2.joinRoom(newRoom);
-		newRoom.joinBattle(p1, p1team);
-		newRoom.joinBattle(p2, p2team);
+		newRoom.battle.addPlayer(p1, p1team);
+		newRoom.battle.addPlayer(p2, p2team);
 		this.cancelSearch(p1);
 		this.cancelSearch(p2);
 		if (Config.reportbattles && rooms.lobby) {
@@ -824,10 +824,6 @@ let GlobalRoom = (function () {
 			this.ladderIpLog.write(p2.userid + ': ' + p2.latestIp + '\n');
 		}
 		return newRoom;
-	};
-	GlobalRoom.prototype.addRoom = function (room, format, p1, p2, options) {
-		room = Rooms.createBattle(room, format, p1, p2, options);
-		return room;
 	};
 	GlobalRoom.prototype.chat = function (user, message, connection) {
 		if (rooms.lobby) return rooms.lobby.chat(user, message, connection);
@@ -1283,39 +1279,6 @@ let BattleRoom = (function () {
 		}
 		this.update();
 		this.kickInactiveUpdate();
-	};
-	BattleRoom.prototype.joinBattle = function (user, team) {
-		if (this.battle.playerCount >= 2) {
-			user.popup("This battle already has two players.");
-			return false;
-		}
-
-		if (!this.battle.addPlayer(user, team)) {
-			user.popup("Failed to join battle.");
-			return false;
-		}
-		this.auth[user.userid] = '\u2605';
-		if (this.game.active) {
-			this.title = "" + this.battle.p1.name + " vs. " + this.battle.p2.name;
-			this.send('|title|' + this.title);
-		}
-		this.update();
-		this.kickInactiveUpdate();
-	};
-	BattleRoom.prototype.leaveBattle = function (user) {
-		if (!user) return false; // ...
-		if (this.rated || this.tour) {
-			user.popup("Players can't be swapped out in a " + (this.tour ? "tournament" : "rated") + " battle.");
-			return false;
-		}
-		if (!this.battle.removePlayer(user)) {
-			user.popup("Failed to leave battle.");
-			return false;
-		}
-		this.auth[user.userid] = '+';
-		this.update();
-		this.kickInactiveUpdate();
-		return true;
 	};
 	BattleRoom.prototype.expire = function () {
 		this.send('|expire|');

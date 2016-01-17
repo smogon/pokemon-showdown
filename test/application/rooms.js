@@ -41,8 +41,6 @@ describe('Rooms features', function () {
 			options.forEach(function (option) {
 				room = Rooms.global.startBattle(p1, p2, 'customgame', packedTeam, packedTeam, option);
 				assert.ok(room.battle.p1 && room.battle.p2); // Automatically joined
-				// assert.ok(room.joinBattle(p1, packedTeam));
-				// assert.ok(room.joinBattle(p2, packedTeam));
 			});
 		});
 	});
