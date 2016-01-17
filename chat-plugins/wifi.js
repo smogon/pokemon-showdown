@@ -47,7 +47,7 @@ let QuestionGiveAway = (function () {
 		this.room.addRaw("<center><div class='broadcast-blue'><font size='3'><b>It's giveaway time!</b></font><br/>" +
 			"<font size='1'>Question Giveaway started by " + Tools.escapeHTML(host.name) + "</font><br/><br/>" +
 			"<b>" + Tools.escapeHTML(giver.name) + "</b> will be giving away a <b>" + Tools.escapeHTML(this.prize) + "!</b><br/>" +
-			"The question will be displayed in one minute!"
+			"The question will be displayed in one minute! Use /ga to answer."
 		).update();
 		this.startTimer = setTimeout(this.start.bind(this), 1000 * 60);
 
