@@ -58,11 +58,18 @@ exports.BattleScripts = {
 		this.modData('Learnsets', 'mantine').learnset.octazooka = ['5L100'];
 		this.modData('Learnsets', 'mantine').learnset.stockpile = ['5L100'];
 
-		// Aipom: eggSketch! :D
+		// eggSketch! :D
 		this.modData('Learnsets', 'aipom').learnset.sketch = ['5E'];
+		this.modData('Learnsets', 'spinda').learnset.sketch = ['5E'];
+		this.modData('Learnsets', 'mimejr').learnset.sketch = ['5E'];
 
-		// Spinda: free Superpower
+		// Spinda: Contrary
+		this.modData('Learnsets', 'spinda').learnset.vcreate = ['5L100'];
 		this.modData('Learnsets', 'spinda').learnset.superpower = ['5L100'];
+		this.modData('Learnsets', 'spinda').learnset.closecombat = ['5L100'];
+		this.modData('Learnsets', 'spinda').learnset.overheat = ['5L100'];
+		this.modData('Learnsets', 'spinda').learnset.leafstorm = ['5L100'];
+		this.modData('Learnsets', 'spinda').learnset.dracometeor = ['5L100'];
 
 		// Venusaur
 		this.modData('Pokedex', 'venusaur').abilities['1'] = 'Leaf Guard';
