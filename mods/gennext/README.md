@@ -213,8 +213,9 @@ New mechanic: Signature Pokémon:
 
 New mechanic: Intrinsics:
 
-- Pokémon that previously get Levitate are now immune to Ground intrinsically.
-  Instead, they get new abilities in addition to their Ground immunity:
+- Pokémon that previously get Levitate are now immune to Ground intrinsically, although
+  Mold Breaker still bypasses this immunity. Instead, many of them get new abilities
+  in addition to their Ground immunity:
 
   - Azelf: Steadfast
 
@@ -235,6 +236,8 @@ New mechanic: Intrinsics:
   - Mesprit: Serene Grace
 
   - Mismagius: Cursed Body
+
+  - Rotom (all formes): Trace
 
   - Unown: Shadow Tag
 
