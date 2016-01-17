@@ -199,6 +199,39 @@ class Battle {
 	undo(user, data) {
 		this.sendFor(user, 'undo', data);
 	}
+	joinGame(user, team) {
+		if (this.playerCount >= 2) {
+			user.popup("This battle already has two players.");
+			return false;
+		}
+		if (!user.can('joinbattle', null, this.room)) {
+			user.popup("You must be a set as a player to join a battle you didn't start. Ask a player to use /addplayer on you to join this battle.");
+			return false;
+		}
+
+		if (!this.addPlayer(user, team)) {
+			user.popup("Failed to join battle.");
+			return false;
+		}
+		this.room.update();
+		this.room.kickInactiveUpdate();
+		return true;
+	}
+	leaveGame(user) {
+		if (!user) return false; // ...
+		if (this.room.rated || this.room.tour) {
+			user.popup("Players can't be swapped out in a " + (this.room.tour ? "tournament" : "rated") + " battle.");
+			return false;
+		}
+		if (!this.removePlayer(user)) {
+			user.popup("Failed to leave battle.");
+			return false;
+		}
+		this.room.auth[user.userid] = '+';
+		this.room.update();
+		this.room.kickInactiveUpdate();
+		return true;
+	}
 
 	receive(lines) {
 		Monitor.activeIp = this.activeIp;
@@ -352,13 +385,18 @@ class Battle {
 		return true;
 	}
 
-	addPlayer(user) {
+	addPlayer(user, team) {
 		if (user.userid in this.players) return false;
 		if (this.playerCount >= this.playerCap) return false;
-		let player = this.makePlayer.apply(this, arguments);
+		let player = this.makePlayer(user, team);
 		if (!player) return false;
 		this.players[user.userid] = player;
 		this.playerCount++;
+		this.room.auth[user.userid] = '\u2605';
+		if (this.playerCount >= 2) {
+			this.room.title = "" + this.p1.name + " vs. " + this.p2.name;
+			this.room.send('|title|' + this.room.title);
+		}
 		return true;
 	}
 

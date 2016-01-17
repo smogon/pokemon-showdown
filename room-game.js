@@ -111,6 +111,12 @@ class RoomGame {
 	// undo(user, text)
 	//   Called when a user uses /undo [text]
 
+	// joinGame(user, text)
+	//   Called when a user uses /joingame [text]
+
+	// leaveGame(user, text)
+	//   Called when a user uses /leavegame [text]
+
 	// Events:
 
 	// Note:
