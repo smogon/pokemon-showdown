@@ -122,6 +122,13 @@ exports.BattleScripts = {
 		this.modData('Pokedex', 'uxie').abilities['1'] = 'Synchronize';
 		this.modData('Pokedex', 'azelf').abilities['1'] = 'Steadfast';
 		this.modData('Pokedex', 'hydreigon').abilities['1'] = 'Sheer Force';
+		// Rotoms
+		this.modData('Pokedex', 'rotom').abilities['1'] = 'Trace';
+		this.modData('Pokedex', 'rotomwash').abilities['1'] = 'Trace';
+		this.modData('Pokedex', 'rotomheat').abilities['1'] = 'Trace';
+		this.modData('Pokedex', 'rotommow').abilities['1'] = 'Trace';
+		this.modData('Pokedex', 'rotomfrost').abilities['1'] = 'Trace';
+		this.modData('Pokedex', 'rotomfan').abilities['1'] = 'Trace';
 
 		// Adaptability change
 		this.modData('Pokedex', 'crawdaunt').abilities['H'] = 'Tough Claws';

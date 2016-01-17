@@ -261,6 +261,78 @@ exports.BattleStatuses = {
 			}
 		},
 	},
+	rotom: {
+		// All Rotoms: Trace
+		onImmunity: function (type, pokemon) {
+			if (type === 'Ground' && (!this.suppressingAttackEvents() || this.activePokemon === pokemon)) return false;
+		},
+		onStart: function (pokemon) {
+			if (pokemon.ability === 'levitate') {
+				pokemon.ability = 'trace';
+				pokemon.baseAbility = 'trace';
+			}
+		},
+	},
+	rotomheat: {
+		// All Rotoms: Trace
+		onImmunity: function (type, pokemon) {
+			if (type === 'Ground' && (!this.suppressingAttackEvents() || this.activePokemon === pokemon)) return false;
+		},
+		onStart: function (pokemon) {
+			if (pokemon.ability === 'levitate') {
+				pokemon.ability = 'trace';
+				pokemon.baseAbility = 'trace';
+			}
+		},
+	},
+	rotomwash: {
+		// All Rotoms: Trace
+		onImmunity: function (type, pokemon) {
+			if (type === 'Ground' && (!this.suppressingAttackEvents() || this.activePokemon === pokemon)) return false;
+		},
+		onStart: function (pokemon) {
+			if (pokemon.ability === 'levitate') {
+				pokemon.ability = 'trace';
+				pokemon.baseAbility = 'trace';
+			}
+		},
+	},
+	rotomfan: {
+		// All Rotoms: Trace
+		onImmunity: function (type, pokemon) {
+			if (type === 'Ground' && (!this.suppressingAttackEvents() || this.activePokemon === pokemon)) return false;
+		},
+		onStart: function (pokemon) {
+			if (pokemon.ability === 'levitate') {
+				pokemon.ability = 'trace';
+				pokemon.baseAbility = 'trace';
+			}
+		},
+	},
+	rotomfrost: {
+		// All Rotoms: Trace
+		onImmunity: function (type, pokemon) {
+			if (type === 'Ground' && (!this.suppressingAttackEvents() || this.activePokemon === pokemon)) return false;
+		},
+		onStart: function (pokemon) {
+			if (pokemon.ability === 'levitate') {
+				pokemon.ability = 'trace';
+				pokemon.baseAbility = 'trace';
+			}
+		},
+	},
+	rotommow: {
+		// All Rotoms: Trace
+		onImmunity: function (type, pokemon) {
+			if (type === 'Ground' && (!this.suppressingAttackEvents() || this.activePokemon === pokemon)) return false;
+		},
+		onStart: function (pokemon) {
+			if (pokemon.ability === 'levitate') {
+				pokemon.ability = 'trace';
+				pokemon.baseAbility = 'trace';
+			}
+		},
+	},
 	cryogonal: {
 		// Cryogonal: infinite hail, Ice Body
 		onModifyMove: function (move) {
