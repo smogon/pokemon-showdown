@@ -275,26 +275,6 @@ exports.Formats = [
 		requirePentagon: true,
 	},
 	{
-		name: "Battle Spot Special 13",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3555571/\">Battle Spot Special Season 13</a>"],
-		section: "ORAS Doubles",
-
-		gameType: 'doubles',
-		maxForcedLevel: 50,
-		teamLength: {
-			validate: [4, 6],
-			battle: 4,
-		},
-		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview'],
-		requirePentagon: true,
-		onValidateSet: function (set) {
-			if (set.item) {
-				const item = this.getItem(set.item);
-				if (item.megaStone) return ["Mega Stones are not permitted."];
-			}
-		},
-	},
-	{
 		name: "Doubles Hackmons Cup",
 		section: "ORAS Doubles",
 
