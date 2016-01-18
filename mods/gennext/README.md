@@ -480,6 +480,8 @@ Minor ability changes:
 
 - Gluttony allows a Pokémon to use a Berry twice
 
+- Heatproof now grants the user immunity to Fire and burns
+
 - Guts, Quick Feet, and Toxic Boost take half damage from poisoning
 
 - Guts, Quick Feet, and Flare Boost take half damage from burns
