@@ -47,7 +47,7 @@ exports.BattleFormatsData = {
 	},
 	hoopaunbound: {
 		inherit: true,
-		tier: 'Uber',
+		tier: 'OU',
 	},
 	kyurem: {
 		inherit: true,

@@ -505,7 +505,7 @@ Minor item changes:
 Bans:
 
 - The OU banlist (i.e. Pokémon considered Uber) is now:
-  - Every Pokémon with over 600 BST except Slaking and Regigigas
+  - Every Pokémon with over 600 BST except Slaking, Regigigas, and Hoopa-Unbound
   - Deoxys (all formes)
   - Darkrai
   - Shaymin-Sky
