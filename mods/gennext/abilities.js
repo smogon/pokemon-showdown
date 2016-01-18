@@ -252,11 +252,8 @@ exports.BattleAbilities = {
 	},
 	"heatproof": {
 		inherit: true,
-		onSourceBasePower: function (basePower, attacker, defender, move) {
-			if (move.type === 'Fire') {
-				this.add('-message', "The attack was weakened by Heatproof!");
-				return basePower / 2;
-			}
+		onImmunity: function (type, pokemon) {
+			if (type === 'Fire' || type === 'brn') return false;
 		},
 	},
 	"reckless": {
