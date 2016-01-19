@@ -1787,6 +1787,10 @@ exports.BattleMovedex = {
 	Justification:
 	- more metagame variety is always good
 	******************************************************************/
+	psychocut: {
+		inherit: true,
+		basePower: 90,
+	},
 	twineedle: {
 		inherit: true,
 		accuracy: true,

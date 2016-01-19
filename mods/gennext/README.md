@@ -315,6 +315,8 @@ Minor move changes:
 - Cut and Rock Smash are 50 base power and now have a 100% chance of
   lowering foe's Def
 
+- Psycho Cut's Base Power is now 90
+
 - Drill Peck, Needle Arm, Attack Order, and Leaf Blade's Base
   Powers are now 100
 
