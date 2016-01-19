@@ -130,6 +130,14 @@ exports.commands = {
 	whoishelp: ["/whois - Get details on yourself: alts, group, IP address, and rooms.",
 		"/whois [username] - Get details on a username: alts (Requires: % @ & ~), group, IP address (Requires: @ & ~), and rooms."],
 
+	logs: function (target, room, user) {
+		if (!user.isStaff && !user.isSysop) return;
+		if (room.id === 'staff' && !this.canBroadcast()) return;
+
+		this.sendReplyBox('Room chat logs: <a href="http://logs.psim.us:8080/">http://logs.psim.us:8080/</a>');
+	},
+	logshelp: ["/logs - Get the link to this server's rooms' chat logs. Requires: % @ & ~"],
+
 	host: function (target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help host');
 		if (!this.can('rangeban')) return;
