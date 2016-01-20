@@ -103,15 +103,18 @@ exports.BattleScripts = {
 		}
 
 		let targets = pokemon.getMoveTargets(move, target);
-		let extraPP = 0;
-		for (let i = 0; i < targets.length; i++) {
-			let ppDrop = this.singleEvent('DeductPP', targets[i].getAbility(), targets[i].abilityData, targets[i], pokemon, move);
-			if (ppDrop !== true) {
-				extraPP += ppDrop || 0;
+
+		if (!sourceEffect) {
+			let extraPP = 0;
+			for (let i = 0; i < targets.length; i++) {
+				let ppDrop = this.singleEvent('DeductPP', targets[i].getAbility(), targets[i].abilityData, targets[i], pokemon, move);
+				if (ppDrop !== true) {
+					extraPP += ppDrop || 0;
+				}
 			}
-		}
-		if (extraPP > 0) {
-			pokemon.deductPP(move, extraPP);
+			if (extraPP > 0) {
+				pokemon.deductPP(move, extraPP);
+			}
 		}
 
 		if (!this.runEvent('TryMove', pokemon, target, move)) {
