@@ -248,15 +248,31 @@ class Mafia extends Rooms.RoomGame {
 
 	forfeit(user) {
 		if (!(user.userid in this.players)) return false;
+		if (this.gamestate === 'pregame') return false;
 
-		if (this.gamestate === 'pregame') {
-			this.removePlayer(user);
-			this.updatePregame();
-		} else {
-			this.players[user.userid].eliminate();
-		}
-
+		this.players[user.userid].eliminate();
 		return true;
+	}
+
+	joinGame(user, text) {
+		if (this.gamestate !== 'pregame') return user.sendTo(this.room, "The game has started already.");
+
+		if (this.addPlayer(user)) {
+			this.updatePregame();
+			if (this.playerCount === this.playerCap) {
+				this.start();
+			}
+		} else {
+			return user.sendTo(this.room, "You're already in the game.");
+		}
+	}
+
+	leaveGame(user, text) {
+		if (!(user.userid in this.players)) return false;
+		if (this.gamestate !== 'pregame') return user.sendTo(this.room, "The game has started already. If you wish to give up, use /forfeit.");
+
+		this.removePlayer(user);
+		this.updatePregame();
 	}
 
 	choose(user, target) {
@@ -310,9 +326,9 @@ class Mafia extends Rooms.RoomGame {
 		if (this.anonVotes) output += 'Votes are anonymous. ';
 
 		if (joined) {
-			output += '<br/><button value="/forfeit" name="send">Leave</button>';
+			output += '<br/><button value="/leavegame" name="send">Leave</button>';
 		} else {
-			output += '<br/><button value="/mafia join" name="send">Join</button>';
+			output += '<br/><button value="/joingame" name="send">Join</button>';
 		}
 
 		return output + '</center></div>';
@@ -683,21 +699,6 @@ exports.commands = {
 			}
 
 			return this.privateModCommand("(A game of mafia was started by " + user.name + ".)");
-		},
-
-		join: function (target, room, user) {
-			if (!room.game || room.game.gameid !== 'mafia') return this.errorReply("There is no game of mafia running in this room.");
-			if (room.game.gamestate !== 'pregame') return this.errorReply("The game has started already.");
-			if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
-
-			if (room.game.addPlayer(user)) {
-				room.game.updatePregame();
-				if (room.game.playerCount === room.game.playerCap) {
-					room.game.start();
-				}
-			} else {
-				return this.errorReply("You're already in the game.");
-			}
 		},
 
 		display: function (target, room, user) {
