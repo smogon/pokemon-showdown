@@ -14444,12 +14444,7 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1},
-		onModifyMove: function (move, pokemon) {
-			if (pokemon.hasType('Poison')) {
-				move.accuracy = true;
-				move.alwaysHit = true;
-			}
-		},
+		// No Guard-like effect for Poison-type users implemented in BattleScripts#tryMoveHit
 		status: 'tox',
 		secondary: false,
 		target: "normal",

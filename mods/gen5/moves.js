@@ -940,10 +940,6 @@ exports.BattleMovedex = {
 		inherit: true,
 		flags: {protect: 1, mirror: 1, sound: 1},
 	},
-	toxic: {
-		inherit: true,
-		onModifyMove: function () {},
-	},
 	vinewhip: {
 		inherit: true,
 		basePower: 35,
