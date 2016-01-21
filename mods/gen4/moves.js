@@ -402,11 +402,11 @@ exports.BattleMovedex = {
 	},
 	endeavor: {
 		inherit: true,
-		damageCallback: function (pokemon, target) {
-			if (target.hp > pokemon.hp) {
-				return target.hp - pokemon.hp;
+		onTry: function (pokemon, target) {
+			if (pokemon.hp >= target.hp) {
+				this.add('-fail', pokemon);
+				return null;
 			}
-			return false;
 		},
 	},
 	explosion: {
