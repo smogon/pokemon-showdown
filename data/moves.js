@@ -3588,11 +3588,7 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 0,
 		damageCallback: function (pokemon, target) {
-			if (target.hp > pokemon.hp) {
-				return target.hp - pokemon.hp;
-			}
-			this.add('-immune', target, '[msg]');
-			return null;
+			return target.hp - pokemon.hp;
 		},
 		category: "Physical",
 		desc: "Deals damage to the target equal to (target's current HP - user's current HP). The target is unaffected if its current HP is less than or equal to the user's current HP.",
@@ -3602,6 +3598,12 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
+		onTry: function (pokemon, target) {
+			if (pokemon.hp >= target.hp) {
+				this.add('-immune', target, '[msg]');
+				return null;
+			}
+		},
 		secondary: false,
 		target: "normal",
 		type: "Normal",
