@@ -2493,7 +2493,7 @@ exports.BattleAbilities = {
 		effect: {
 			duration: 5,
 			onStart: function (target) {
-				this.add('-start', target, 'Slow Start');
+				this.add('-start', target, 'ability: Slow Start');
 			},
 			onModifyAtkPriority: 5,
 			onModifyAtk: function (atk, pokemon) {
