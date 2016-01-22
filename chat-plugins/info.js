@@ -1932,7 +1932,7 @@ exports.commands = {
 		if (calcHP) {
 			output = (((iv + (2 * statValue) + (ev / 4) + 100) * level) / 100) + 10;
 		} else {
-			output = Math.floor((((iv + (2 * statValue) + (ev / 4)) * level) / 100) + 5) * nature;
+			output = Math.floor(nature * Math.floor((((iv + (2 * statValue) + (ev / 4)) * level) / 100) + 5));
 			if (positiveMod) {
 				output *= (2 + modifier) / 2;
 			} else {
