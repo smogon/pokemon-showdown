@@ -545,7 +545,9 @@ class Mafia extends Rooms.RoomGame {
 
 	setTimer(mins) {
 		this.timer = setTimeout((function () {
-			this.announcementWindow('', '10 seconds left!');
+			for (let i in this.players) {
+				this.players[i].sendRoom("10 seconds left!");
+			}
 			this.timer = setTimeout((function () {
 				this.progress();
 			}).bind(this), 10000);
