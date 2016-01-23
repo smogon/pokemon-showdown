@@ -614,7 +614,10 @@ exports.Formats = [
 	},
 	{
 		name: "LC UU",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3523929/\">LC UU</a>"],
+		desc: [
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3562639/\">LC UU</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3562640/\">LC UU Viability Ranking</a>",
+		],
 		section: "Other Metagames",
 
 		maxLevel: 5,
@@ -624,7 +627,7 @@ exports.Formats = [
 			'Gastly', 'Gothita', 'Houndour', 'Larvesta', 'Magnemite', 'Mienfoo', 'Munchlax', 'Omanyte', 'Onix', 'Pancham',
 			'Pawniard', 'Ponyta', 'Porygon', 'Pumpkaboo-Super', 'Scraggy', 'Shellder', 'Skrelp', 'Snivy', 'Snubbull',
 			'Spritzee', 'Staryu', 'Stunky', 'Surskit', 'Timburr', 'Tirtouga', 'Vullaby', 'Vulpix', 'Zigzagoon',
-			'Shell Smash',
+			'Shell Smash', 'Sticky Web',
 		],
 	},
 	{
