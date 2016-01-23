@@ -14199,7 +14199,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1, nonsky: 1},
 		isUnreleased: true,
 		onHit: function (target, source, move) {
-			target.addVolatile('trapped', source, move, 'trapper');
+			if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
 		},
 		secondary: false,
 		target: "allAdjacentFoes",
