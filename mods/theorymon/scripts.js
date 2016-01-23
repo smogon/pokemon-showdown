@@ -61,5 +61,6 @@ exports.BattleScripts = {
 		this.modData('Learnsets', 'tentacruel').learnset.recover = ['6T'];
 		this.modData('Pokedex', 'stunfisk').abilities['1'] = 'Regenerator';
 		this.modData('Learnsets', 'stunfisk').learnset.voltswitch = ['6T'];
+		this.modData('Pokedex', 'crobat').abilities['1'] = 'Intimidate';
 	},
 };

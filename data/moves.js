@@ -3588,11 +3588,7 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 0,
 		damageCallback: function (pokemon, target) {
-			if (target.hp > pokemon.hp) {
-				return target.hp - pokemon.hp;
-			}
-			this.add('-immune', target, '[msg]');
-			return null;
+			return target.hp - pokemon.hp;
 		},
 		category: "Physical",
 		desc: "Deals damage to the target equal to (target's current HP - user's current HP). The target is unaffected if its current HP is less than or equal to the user's current HP.",
@@ -3602,6 +3598,12 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
+		onTry: function (pokemon, target) {
+			if (pokemon.hp >= target.hp) {
+				this.add('-immune', target, '[msg]');
+				return null;
+			}
+		},
 		secondary: false,
 		target: "normal",
 		type: "Normal",
@@ -4475,7 +4477,7 @@ exports.BattleMovedex = {
 			for (let sideSlot = 0; sideSlot < this.sides.length; sideSlot++) {
 				let sideActive = this.sides[sideSlot].active;
 				for (let activeSlot = 0; activeSlot < sideActive.length; activeSlot++) {
-					if (sideActive[activeSlot] && sideActive[activeSlot].hasType('Grass')) {
+					if (sideActive[activeSlot] && sideActive[activeSlot].isActive && sideActive[activeSlot].hasType('Grass')) {
 						// This move affects every Grass-type Pokemon in play.
 						targets.push(sideActive[activeSlot]);
 					}
@@ -4654,6 +4656,9 @@ exports.BattleMovedex = {
 		volatileStatus: 'followme',
 		effect: {
 			duration: 1,
+			onStart: function (pokemon) {
+				this.add('-start', pokemon, 'move: Follow Me');
+			},
 			onFoeRedirectTargetPriority: 1,
 			onFoeRedirectTarget: function (target, source, source2, move) {
 				if (this.validTarget(this.effectData.target, source, move.target)) {
@@ -5756,7 +5761,7 @@ exports.BattleMovedex = {
 			this.add('-clearallboost');
 			for (let i = 0; i < this.sides.length; i++) {
 				for (let j = 0; j < this.sides[i].active.length; j++) {
-					if (this.sides[i].active[j]) this.sides[i].active[j].clearBoosts();
+					if (this.sides[i].active[j] && this.sides[i].active[j].isActive) this.sides[i].active[j].clearBoosts();
 				}
 			}
 		},
@@ -9574,7 +9579,7 @@ exports.BattleMovedex = {
 			let message = false;
 			for (let i = 0; i < this.sides.length; i++) {
 				for (let j = 0; j < this.sides[i].active.length; j++) {
-					if (this.sides[i].active[j]) {
+					if (this.sides[i].active[j] && this.sides[i].active[j].isActive) {
 						if (this.sides[i].active[j].hasAbility('soundproof')) {
 							this.add('-immune', this.sides[i].active[j], '[msg]', '[from] ability: Soundproof');
 							result = true;
@@ -11418,7 +11423,7 @@ exports.BattleMovedex = {
 			for (let sideSlot = 0; sideSlot < this.sides.length; sideSlot++) {
 				let sideActive = this.sides[sideSlot].active;
 				for (let activeSlot = 0; activeSlot < sideActive.length; activeSlot++) {
-					if (!sideActive[activeSlot]) continue;
+					if (!sideActive[activeSlot] || !sideActive[activeSlot].isActive) continue;
 					if (!sideActive[activeSlot].runImmunity('Ground')) {
 						this.add('-immune', sideActive[activeSlot], '[msg]');
 						anyAirborne = true;
@@ -14441,12 +14446,7 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1},
-		onModifyMove: function (move, pokemon) {
-			if (pokemon.hasType('Poison')) {
-				move.accuracy = true;
-				move.alwaysHit = true;
-			}
-		},
+		// No Guard-like effect for Poison-type users implemented in BattleScripts#tryMoveHit
 		status: 'tox',
 		secondary: false,
 		target: "normal",

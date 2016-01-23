@@ -22,16 +22,11 @@ describe('Simulator abstraction layer features', function () {
 
 			it('should not get players out of sync in rated battles on rename', function () {
 				// Regression test for 47263c8749
-				// Since updated to new API used by room battles.
 				let packedTeam = 'Weavile||lifeorb||swordsdance,knockoff,iceshard,iciclecrash|Jolly|,252,,,4,252|||||';
 				p1 = new User();
 				p2 = new User();
 				p1.forceRename("Missingno."); // Don't do this at home
 				room = Rooms.global.startBattle(p1, p2, '', packedTeam, packedTeam, {rated: true});
-				if (!room.active) {
-					room.joinBattle(p1, packedTeam);
-					room.joinBattle(p2, packedTeam);
-				}
 				p1.resetName();
 				for (let i = 0; i < room.battle.playerNames.length; i++) {
 					let playerName = room.battle.playerNames[i];

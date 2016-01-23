@@ -275,26 +275,6 @@ exports.Formats = [
 		requirePentagon: true,
 	},
 	{
-		name: "Battle Spot Special 13",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3555571/\">Battle Spot Special Season 13</a>"],
-		section: "ORAS Doubles",
-
-		gameType: 'doubles',
-		maxForcedLevel: 50,
-		teamLength: {
-			validate: [4, 6],
-			battle: 4,
-		},
-		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview'],
-		requirePentagon: true,
-		onValidateSet: function (set) {
-			if (set.item) {
-				const item = this.getItem(set.item);
-				if (item.megaStone) return ["Mega Stones are not permitted."];
-			}
-		},
-	},
-	{
 		name: "Doubles Hackmons Cup",
 		section: "ORAS Doubles",
 
@@ -403,7 +383,7 @@ exports.Formats = [
 			for (let i = 1; i < team.length; i++) {
 				template = this.getTemplate(team[i].species);
 				if (template.tier === 'Uber') return [template.species + " is only allowed as the God."];
-				if (!template.types || !typeTable.intersect(template.types).length) return ["Followers must share a type with the God."];
+				if (!typeTable || !template.types || !typeTable.intersect(template.types).length) return ["Followers must share a type with the God."];
 				let item = toId(team[i].item);
 				if (item && item in {gengarite:1, kangaskhanite:1, lucarionite:1, mawilite:1, salamencite:1, souldew:1}) return [team[i].item + " is only allowed on the God."];
 				if (toId(team[i].ability) === 'shadowtag') return [team[i].ability + " is only allowed on the God."];
@@ -520,7 +500,7 @@ exports.Formats = [
 			battle: 1,
 		},
 		ruleset: ['Pokemon', 'Moody Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Swagger Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
-		banlist: ['Illegal', 'Unreleased', 'Arceus', 'Blaziken', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Dialga', 'Giratina', 'Giratina-Origin',
+		banlist: ['Illegal', 'Unreleased', 'Arceus', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Dialga', 'Giratina', 'Giratina-Origin',
 			'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-White', 'Lugia', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Shaymin-Sky',
 			'Xerneas', 'Yveltal', 'Zekrom', 'Focus Sash', 'Kangaskhanite', 'Soul Dew', 'Perish Song',
 		],
@@ -630,7 +610,7 @@ exports.Formats = [
 		section: "Other Metagames",
 
 		ruleset: ['OU'],
-		banlist: ['Ignore STAB Moves', 'Aerodactylite', 'Altarianite', "King's Rock", 'Metagrossite', 'Razor Fang'],
+		banlist: ['Ignore STAB Moves', 'Diggersby', 'Aerodactylite', 'Altarianite', "King's Rock", 'Metagrossite', 'Razor Fang'],
 	},
 	{
 		name: "LC UU",

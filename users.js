@@ -1162,6 +1162,8 @@ User = (function () {
 		if (this.registered) {
 			if (forceConfirmed || this.group !== Config.groupsranking[0]) {
 				usergroups[this.userid] = this.group + this.name;
+				this.confirmed = this.userid;
+				this.autoconfirmed = this.userid;
 			} else {
 				delete usergroups[this.userid];
 			}
@@ -1524,7 +1526,8 @@ User = (function () {
 		let games = {};
 		let atLeastOne = false;
 		for (let roomid in this.games) {
-			games[roomid] = this.games[roomid].title;
+			let game = this.games[roomid];
+			games[roomid] = game.title + (game.allowRenames ? '' : '*');
 			atLeastOne = true;
 		}
 		if (!atLeastOne) games = null;

@@ -91,6 +91,32 @@ class RoomGame {
 		return true;
 	}
 
+	// Commands:
+
+	// These are all optional to implement:
+
+	// forfeit(user)
+	//   Called when a user uses /forfeit
+	//   Also planned to be used for some force-forfeit situations, such
+	//   as when a user changes their name and .allowRenames === false
+	//   This is strongly recommended to be supported, as the user is
+	//   extremely unlikely to keep playing after this function is
+	//   called.
+
+	// choose(user, text)
+	//   Called when a user uses /choose [text]
+	//   If you have buttons, you are recommended to use this interface
+	//   instead of making your own commands.
+
+	// undo(user, text)
+	//   Called when a user uses /undo [text]
+
+	// joinGame(user, text)
+	//   Called when a user uses /joingame [text]
+
+	// leaveGame(user, text)
+	//   Called when a user uses /leavegame [text]
+
 	// Events:
 
 	// Note:

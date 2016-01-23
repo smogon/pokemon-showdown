@@ -103,15 +103,18 @@ exports.BattleScripts = {
 		}
 
 		let targets = pokemon.getMoveTargets(move, target);
-		let extraPP = 0;
-		for (let i = 0; i < targets.length; i++) {
-			let ppDrop = this.singleEvent('DeductPP', targets[i].getAbility(), targets[i].abilityData, targets[i], pokemon, move);
-			if (ppDrop !== true) {
-				extraPP += ppDrop || 0;
+
+		if (!sourceEffect) {
+			let extraPP = 0;
+			for (let i = 0; i < targets.length; i++) {
+				let ppDrop = this.singleEvent('DeductPP', targets[i].getAbility(), targets[i].abilityData, targets[i], pokemon, move);
+				if (ppDrop !== true) {
+					extraPP += ppDrop || 0;
+				}
 			}
-		}
-		if (extraPP > 0) {
-			pokemon.deductPP(move, extraPP);
+			if (extraPP > 0) {
+				pokemon.deductPP(move, extraPP);
+			}
 		}
 
 		if (!this.runEvent('TryMove', pokemon, target, move)) {
@@ -263,7 +266,7 @@ exports.BattleScripts = {
 		} else {
 			accuracy = this.runEvent('ModifyAccuracy', target, pokemon, move, accuracy);
 		}
-		if (move.alwaysHit) {
+		if (move.alwaysHit || (move.id === 'toxic' && this.gen >= 6 && pokemon.hasType('Poison'))) {
 			accuracy = true; // bypasses ohko accuracy modifiers
 		} else {
 			accuracy = this.runEvent('Accuracy', target, pokemon, move, accuracy);
