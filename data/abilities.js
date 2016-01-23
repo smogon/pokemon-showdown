@@ -282,17 +282,7 @@ exports.BattleAbilities = {
 		desc: "If this Pokemon eats a Berry, it restores 1/3 of its maximum HP, rounded down, in addition to the Berry's effect.",
 		shortDesc: "If this Pokemon eats a Berry, it restores 1/3 of its max HP after the Berry's effect.",
 		onEatItem: function (item, pokemon) {
-			let targets = pokemon.side.foe.active;
-			let unnervecheck = false;
-			for (let i = 0; i < targets.length; i++) {
-				if (!targets[i] || targets[i].fainted) continue;
-				if (targets[i].ability.toString() === 'unnerve') {
-					unnervecheck = true;
-				}
-			}
-			if (unnervecheck === false) {
-				this.heal(pokemon.maxhp / 3);
-			}
+			this.heal(pokemon.maxhp / 3);
 		},
 		id: "cheekpouch",
 		name: "Cheek Pouch",
@@ -347,6 +337,7 @@ exports.BattleAbilities = {
 			let type = move.type;
 			if (target.isActive && move.effectType === 'Move' && move.category !== 'Status' && type !== '???' && !target.hasType(type)) {
 				if (!target.setType(type)) return false;
+				this.add('-ability', target, 'colorchange', '[silent]');
 				this.add('-start', target, 'typechange', type, '[from] Color Change');
 				target.update();
 			}
@@ -756,6 +747,7 @@ exports.BattleAbilities = {
 		effect: {
 			noCopy: true, // doesn't get copied by Baton Pass
 			onStart: function (target) {
+				this.add('-ability', target, 'flashfire', '[silent]');
 				this.add('-start', target, 'ability: Flash Fire');
 			},
 			onModifyAtkPriority: 5,
@@ -2114,6 +2106,7 @@ exports.BattleAbilities = {
 			let type = move.type;
 			if (type && type !== '???' && source.getTypes().join() !== type) {
 				if (!source.setType(type)) return;
+				this.add('-ability', source, 'protean', '[silent]');
 				this.add('-start', source, 'typechange', type, '[from] Protean');
 			}
 		},
@@ -2503,6 +2496,7 @@ exports.BattleAbilities = {
 		effect: {
 			duration: 5,
 			onStart: function (target) {
+				this.add('-ability', target, 'slowstart', '[silent]');
 				this.add('-start', target, 'ability: Slow Start');
 			},
 			onModifyAtkPriority: 5,
