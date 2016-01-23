@@ -14,6 +14,21 @@ let MafiaFunctions = {
 			return 'After investigating ' + target.name + ' you find out they\'re not sided with the village or mafia.';
 		}
 	},
+	naiveReport: function (target) {
+		return 'After investigating ' + target.name + ' you find out they\'re sided with the village.';
+	},
+	paranoidReport: function (target) {
+		return 'After investigating ' + target.name + ' you find out they\'re sided with the mafia.';
+	},
+	insaneReport: function (target) {
+		if (target.class.side === 'mafia') {
+			return 'After investigating ' + target.name + ' you find out they\'re sided with the village.';
+		} else if (target.class.side === 'town') {
+			return 'After investigating ' + target.name + ' you find out they\'re sided with the mafia.';
+		} else {
+			return 'After investigating ' + target.name + ' you find out they\'re not sided with the village or mafia.';
+		}
+	},
 	roleBlock: function (target) {
 		target.roleBlocked = true;
 		return 'You visit ' + target.name + ' during the night.';
@@ -80,6 +95,45 @@ exports.MafiaClasses = {
 			target: {side: 'any', count: 'single'},
 			priority: -1,
 			callback: MafiaFunctions.copReport,
+		},
+	},
+
+	paranoidcop: {
+		name: "Cop",
+		side: 'town',
+		image: '<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-cop.png" />',
+		flavorText: 'You are the cop. Every night, you can visit someone in town. When the night is over, you\'ll receive a report with that person\'s alignment.',
+
+		onNight: {
+			target: {side: 'any', count: 'single'},
+			priority: -1,
+			callback: MafiaFunctions.paranoidReport,
+		},
+	},
+
+	insanecop: {
+		name: "Cop",
+		side: 'town',
+		image: '<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-cop.png" />',
+		flavorText: 'You are the cop. Every night, you can visit someone in town. When the night is over, you\'ll receive a report with that person\'s alignment.',
+
+		onNight: {
+			target: {side: 'any', count: 'single'},
+			priority: -1,
+			callback: MafiaFunctions.insaneReport,
+		},
+	},
+
+	naivecop: {
+		name: "Cop",
+		side: 'town',
+		image: '<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-cop.png" />',
+		flavorText: 'You are the cop. Every night, you can visit someone in town. When the night is over, you\'ll receive a report with that person\'s alignment.',
+
+		onNight: {
+			target: {side: 'any', count: 'single'},
+			priority: -1,
+			callback: MafiaFunctions.naiveReport,
 		},
 	},
 
