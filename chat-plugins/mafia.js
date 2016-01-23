@@ -285,9 +285,9 @@ class Mafia extends Rooms.RoomGame {
 
 		if (player in this.players || player === 'none') {
 			if (cmd === 'target') {
-				this.players[user.userid].onReceiveTarget(player);
+				return this.players[user.userid].onReceiveTarget(player);
 			} else if (cmd === 'vote') {
-				this.players[user.userid].onReceiveVote(player);
+				return this.players[user.userid].onReceiveVote(player);
 			}
 		}
 
@@ -379,7 +379,7 @@ class Mafia extends Rooms.RoomGame {
 
 		for (let i in this.players) {
 			let player = this.players[i];
-			if (this.voters.indexOf(player) > -1) {
+			if (this.voters.indexOf(player) > -1 && !this.voting) {
 				player.sendRoom('|uhtmlchange|mafia' + this.room.gameNumber + 'vote' + this.gamestate + this.day + '|' + this.mafiaWindow(player.class.image, text));
 			}
 		}
@@ -411,7 +411,7 @@ class Mafia extends Rooms.RoomGame {
 		let rolesLeft = this.roles;
 
 		for (let i in this.players) {
-			let index = Math.floor(Math.random(rolesLeft.length));
+			let index = Math.floor(Math.random() * rolesLeft.length);
 			this.players[i].class = MafiaData.MafiaClasses[rolesLeft[index]];
 			rolesLeft.splice(index, 1);
 			if (!this.players[i].class.atStart) {
@@ -545,7 +545,9 @@ class Mafia extends Rooms.RoomGame {
 
 	setTimer(mins) {
 		this.timer = setTimeout((function () {
-			this.announcementWindow('', '10 seconds left!');
+			for (let i in this.players) {
+				this.players[i].sendRoom("10 seconds left!");
+			}
 			this.timer = setTimeout((function () {
 				this.progress();
 			}).bind(this), 10000);
