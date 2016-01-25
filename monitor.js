@@ -91,7 +91,7 @@ const Monitor = module.exports = { // eslint-disable-line no-unused-vars
 			} else if (this.connections[ip] > 500) {
 				if (this.connections[ip] % 500 === 0) {
 					let c = this.connections[ip] / 500;
-					if (c < 5 || c % 2 === 0 && c < 10 || c % 5 === 0) {
+					if (c === 2 || c === 4 || c === 10 || c === 20 || c % 40 === 0) {
 						this.adminlog('[ResourceMonitor] Banned IP ' + ip + ' has connected ' + this.connections[ip] + ' times in the last ' + duration.duration() + name);
 					}
 				}
