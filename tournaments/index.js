@@ -1082,14 +1082,15 @@ CommandParser.commands.tournamenthelp = function (target, room, user) {
 		"- settype &lt;type> [, &lt;comma-separated arguments>]: Modifies the type of tournament after it's been created, but before it has started.<br />" +
 		"- end/stop/delete: Forcibly ends the tournament in the current room.<br />" +
 		"- begin/start: Starts the tournament in the current room.<br />" +
+		"- autostart/setautostart &lt;on|minutes|off>: Sets the automatic start timeout.<br />" +
 		"- dq/disqualify &lt;user>: Disqualifies a user.<br />" +
 		"- autodq/setautodq &lt;minutes|off>: Sets the automatic disqualification timeout.<br />" +
 		"- runautodq: Manually run the automatic disqualifier.<br />" +
-		"- scouting: Specifies whether joining tournament matches while in a tournament is allowed.<br />" +
-		"- modjoin: Specifies whether players can modjoin their battles.<br />" +
+		"- scouting &lt;allow|disallow>: Specifies whether joining tournament matches while in a tournament is allowed.<br />" +
+		"- modjoin &lt;allow|disallow>: Specifies whether players can modjoin their battles.<br />" +
 		"- getusers: Lists the users in the current tournament.<br />" +
-		"- on/off: Enables/disables allowing mods to start tournaments.<br />" +
-		"More detailed help can be found <a href=\"https://gist.github.com/verbiage/0846a552595349032fbe\">here</a>"
+		"- on/off: Enables/disables allowing mods to start tournaments in the current room.<br />" +
+		"More detailed help can be found <a href=\"https://gist.github.com/sirDonovan/130324abcd06254cf501\">here</a>"
 	);
 };
 
