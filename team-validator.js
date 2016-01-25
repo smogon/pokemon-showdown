@@ -445,11 +445,34 @@ Validator = (function () {
 					let eventTemplate = tools.getTemplate(splitSource[1]);
 					if (eventTemplate.eventPokemon) eventData = eventTemplate.eventPokemon[parseInt(splitSource[0])];
 					if (eventData) {
-						if (eventData.nature && eventData.nature !== set.nature) {
-							problems.push(name + " must have a " + eventData.nature + " nature because it has a move only available from a specific event.");
+						if (eventData.level && set.level < eventData.level) {
+							problems.push(name + " must be at least level " + eventData.level + " because it has a move only available from a specific event.");
 						}
 						if (eventData.shiny && !set.shiny) {
 							problems.push(name + " must be shiny because it has a move only available from a specific event.");
+						}
+						if (eventData.gender) {
+							set.gender = eventData.gender;
+						}
+						if (eventData.nature && eventData.nature !== set.nature) {
+							problems.push(name + " must have a " + eventData.nature + " nature because it has a move only available from a specific event.");
+						}
+						if (eventData.ivs) {
+							if (!set.ivs) set.ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
+							let statTable = {atk:'Attack', def:'Defense', spa:'Special Attack', spd:'Special Defense', spe:'Speed'};
+							for (let i in eventData.ivs) {
+								if (set.ivs[i] !== eventData.ivs[i]) {
+									problems.push(name + " must have " + eventData.ivs[i] + " " + statTable[i] + " IVs because it has a move only available from a specific event.");
+								}
+							}
+						} else if (set.ivs && eventData.generation >= 6 && (template.eggGroups[0] === 'Undiscovered' || template.species === 'Manaphy') && !template.prevo && !template.nfe &&
+							template.species !== 'Unown' && template.baseSpecies !== 'Pikachu' && (template.baseSpecies !== 'Diancie' || !set.shiny)) {
+							// Legendary Pokemon must have at least 3 perfect IVs in gen 6
+							let perfectIVs = 0;
+							for (let i in set.ivs) {
+								if (set.ivs[i] >= 31) perfectIVs++;
+							}
+							if (perfectIVs < 3) problems.push(name + " has less than three perfect IVs.");
 						}
 						if (eventData.generation < 5) eventData.isHidden = false;
 						if (eventData.isHidden !== undefined && eventData.isHidden !== isHidden) {
@@ -458,34 +481,25 @@ Validator = (function () {
 						if (tools.gen <= 5 && eventData.abilities && eventData.abilities.indexOf(ability.id) < 0 && (template.species === eventTemplate.species || tools.getAbility(set.ability).gen <= eventData.generation)) {
 							problems.push(name + " must have " + eventData.abilities.join(" or ") + " because it has a move only available from a specific event.");
 						}
-						if (eventData.gender) {
-							set.gender = eventData.gender;
-						}
-						if (eventData.level && set.level < eventData.level) {
-							problems.push(name + " must be at least level " + eventData.level + " because it has a move only available from a specific event.");
-						}
-						// Legendary Pokemon must have at least 3 perfect IVs in gen 6
-						if (set.ivs && eventData.generation >= 6 && (template.eggGroups[0] === 'Undiscovered' || template.species === 'Manaphy') && !template.prevo && !template.nfe &&
-							// exceptions
-							template.species !== 'Unown' && template.baseSpecies !== 'Pikachu' && (template.baseSpecies !== 'Diancie' || !set.shiny)) {
-							let perfectIVs = 0;
-							for (let i in set.ivs) {
-								if (set.ivs[i] >= 31) perfectIVs++;
-							}
-							if (perfectIVs < 3) problems.push(name + " has less than three perfect IVs.");
-						}
 					}
 					isHidden = false;
 				}
 			} else if (banlistTable['illegal'] && (template.eventOnly || template.eventOnlyHidden && isHidden)) {
 				let eventPokemon = !template.learnset && template.baseSpecies !== template.species ? tools.getTemplate(template.baseSpecies).eventPokemon : template.eventPokemon;
 				let legal = false;
+				events:
 				for (let i = 0; i < eventPokemon.length; i++) {
 					let eventData = eventPokemon[i];
 					if (format.requirePentagon && eventData.generation < 6) continue;
 					if (eventData.level && set.level < eventData.level) continue;
 					if ((eventData.shiny && !set.shiny) || (!eventData.shiny && set.shiny)) continue;
 					if (eventData.nature && set.nature !== eventData.nature) continue;
+					if (eventData.ivs) {
+						if (!set.ivs) set.ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
+						for (let i in eventData.ivs) {
+							if (set.ivs[i] !== eventData.ivs[i]) continue events;
+						}
+					}
 					if (eventData.isHidden !== undefined && isHidden !== eventData.isHidden) continue;
 					legal = true;
 					if (eventData.gender) set.gender = eventData.gender;
