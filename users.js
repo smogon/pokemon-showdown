@@ -27,7 +27,8 @@
 
 const THROTTLE_DELAY = 600;
 const THROTTLE_BUFFER_LIMIT = 6;
-const THROTTLE_MULTILINE_WARN = 4;
+const THROTTLE_MULTILINE_WARN = 3;
+const THROTTLE_MULTILINE_WARN_STAFF = 6;
 
 const fs = require('fs');
 
@@ -355,7 +356,8 @@ Users.socketReceive = function (worker, workerid, socketid, message) {
 		return;
 	}
 	lines = lines.split('\n');
-	if (lines.length >= THROTTLE_MULTILINE_WARN) {
+	if (!lines[lines.length - 1]) lines.pop();
+	if (lines.length > (user.isStaff ? THROTTLE_MULTILINE_WARN_STAFF : THROTTLE_MULTILINE_WARN)) {
 		connection.popup("You're sending too many lines at once. Try using a paste service like [[Pastebin]].");
 		return;
 	}
@@ -1625,6 +1627,9 @@ User = (function () {
 			return false; // but end the loop here
 		}
 
+		let throttleDelay = THROTTLE_DELAY;
+		if (this.group !== ' ') throttleDelay /= 2;
+
 		if (this.chatQueueTimeout) {
 			if (!this.chatQueue) this.chatQueue = []; // this should never happen
 			if (this.chatQueue.length >= THROTTLE_BUFFER_LIMIT - 1) {
@@ -1635,11 +1640,11 @@ User = (function () {
 			} else {
 				this.chatQueue.push([message, room, connection]);
 			}
-		} else if (now < this.lastChatMessage + THROTTLE_DELAY) {
+		} else if (now < this.lastChatMessage + throttleDelay) {
 			this.chatQueue = [[message, room, connection]];
 			this.chatQueueTimeout = setTimeout(
 				this.processChatQueue.bind(this),
-				THROTTLE_DELAY - (now - this.lastChatMessage));
+				throttleDelay - (now - this.lastChatMessage));
 		} else {
 			this.lastChatMessage = now;
 			Monitor.activeIp = connection.ip;
@@ -1662,9 +1667,12 @@ User = (function () {
 		toChat[1].chat(this, toChat[0], toChat[2]);
 		Monitor.activeIp = null;
 
+		let throttleDelay = THROTTLE_DELAY;
+		if (this.group !== ' ') throttleDelay /= 2;
+
 		if (this.chatQueue && this.chatQueue.length) {
 			this.chatQueueTimeout = setTimeout(
-				this.processChatQueue.bind(this), THROTTLE_DELAY);
+				this.processChatQueue.bind(this), throttleDelay);
 		} else {
 			this.chatQueue = null;
 			this.chatQueueTimeout = null;
