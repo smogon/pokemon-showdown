@@ -1750,8 +1750,8 @@ exports.commands = {
 		"Adding the parameter 'all' or 'table' will display the information with a table of all type combinations."],
 
 	statcalc: function (target, room, user) {
-		if (!this.canBroadcast()) return;
 		if (!target) return this.parse("/help statcalc");
+		if (!this.canBroadcast()) return;
 
 		let targets = target.split(' ');
 
