@@ -722,6 +722,7 @@ exports.commands = {
 
 		room.auth[targetUser.userid] = '#';
 		this.addModCommand("" + name + " was appointed Room Owner by " + user.name + ".");
+		targetUser.popup("You were appointed Room Owner by " + user.name + " in " + room.id + ".");
 		room.onUpdateIdentity(targetUser);
 		Rooms.global.writeChatRoomData();
 	},
@@ -744,7 +745,10 @@ exports.commands = {
 
 		delete room.auth[userid];
 		this.sendReply("(" + name + " is no longer Room Owner.)");
-		if (targetUser) targetUser.updateIdentity();
+		if (targetUser) {
+			targetUser.popup("You are no longer a Room Owner of " + room.id + ". (Demoted by " + user.name + ".)");
+			targetUser.updateIdentity();
+		}
 		if (room.chatRoomData) {
 			Rooms.global.writeChatRoomData();
 		}
@@ -813,13 +817,22 @@ exports.commands = {
 			room.auth[userid] = nextGroup;
 		}
 
+		// Only show popup if: user is online and in the room, the room is public, and not a groupchat or a battle.
+		let needsPopup = targetUser && room.users[targetUser.userid] && !room.isPrivate && !room.isPersonal && !room.battle;
+
 		if (nextGroup in Config.groups && currentGroup in Config.groups && Config.groups[nextGroup].rank < Config.groups[currentGroup].rank) {
+			if (targetUser && room.users[targetUser.userid] && !Config.groups[nextGroup].modlog) {
+				// if the user can't see the demotion message (i.e. rank < %), it is shown in the chat
+				targetUser.send(">" + room.id + "\n(You were demoted to Room " + groupName + " by " + user.name + ".)");
+			}
 			this.privateModCommand("(" + name + " was demoted to Room " + groupName + " by " + user.name + ".)");
-			if (targetUser && Rooms.rooms[room.id].users[targetUser.userid]) targetUser.popup("You were demoted to Room " + groupName + " by " + user.name + ".");
+			if (needsPopup) targetUser.popup("You were demoted to Room " + groupName + " by " + user.name + " in " + room.id + ".");
 		} else if (nextGroup === '#') {
 			this.addModCommand("" + name + " was promoted to " + groupName + " by " + user.name + ".");
+			if (needsPopup) targetUser.popup("You were promoted to " + groupName + " by " + user.name + " in " + room.id + ".");
 		} else {
 			this.addModCommand("" + name + " was promoted to Room " + groupName + " by " + user.name + ".");
+			if (needsPopup) targetUser.popup("You were promoted to Room " + groupName + " by " + user.name + " in " + room.id + ".");
 		}
 
 		if (targetUser) targetUser.updateIdentity(room.id);
@@ -1461,6 +1474,7 @@ exports.commands = {
 			if (targetUser) targetUser.popup("You were demoted to " + groupName + " by " + user.name + ".");
 		} else {
 			this.addModCommand("" + name + " was promoted to " + groupName + " by " + user.name + ".");
+			if (targetUser) targetUser.popup("You were promoted to " + groupName + " by " + user.name + ".");
 		}
 
 		if (targetUser) targetUser.updateIdentity();
