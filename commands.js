@@ -62,7 +62,6 @@ exports.commands = {
 		if (!buffer.length) buffer = "This server has no global authority.";
 		connection.popup(buffer.join("\n\n"));
 	},
-
 	authhelp: ["/auth - Show global staff for the server.",
 		"/auth [room] - Show what roomauth a room has.",
 		"/auth [user] - Show what global and roomauth a user has."],
@@ -843,7 +842,7 @@ exports.commands = {
 		if (target) targetRoom = Rooms.search(target);
 		let unavailableRoom = targetRoom && (targetRoom !== room && (targetRoom.modjoin || targetRoom.staffRoom) && !user.can('makeroom'));
 		if (!targetRoom || unavailableRoom) return this.errorReply("The room '" + target + "' does not exist.");
--		if (!targetRoom.auth) return this.sendReply("/roomauth - The room '" + (targetRoom.title ? targetRoom.title : target) + "' isn't designed for per-room moderation and therefore has no auth list." + userLookup);
+		if (!targetRoom.auth) return this.sendReply("/roomauth - The room '" + (targetRoom.title ? targetRoom.title : target) + "' isn't designed for per-room moderation and therefore has no auth list." + userLookup);
 
 		let rankLists = {};
 		for (let u in targetRoom.auth) {
@@ -2390,11 +2389,13 @@ exports.commands = {
 		room.game.joinGame(user);
 	},
 
-	partbattle: 'leavebattle',
-	leavebattle: function (target, room, user) {
-		if (!room.leaveBattle) return this.errorReply("You can only do this in battle rooms.");
+	leavebattle: 'leavegame',
+	partbattle: 'leavegame',
+	leavegame: function (target, room, user) {
+		if (!room.game) return this.errorReply("This room doesn't have an active game.");
+		if (!room.game.leaveGame) return this.errorReply("This game doesn't support /leavegame");
 
-		room.leaveBattle(user);
+		room.game.leaveGame(user);
 	},
 
 	kickbattle: 'kickgame',
