@@ -722,6 +722,7 @@ exports.commands = {
 
 		room.auth[targetUser.userid] = '#';
 		this.addModCommand("" + name + " was appointed Room Owner by " + user.name + ".");
+		targetUser.popup("You were appointed Room Owner by " + user.name + "in " + room + ".");
 		room.onUpdateIdentity(targetUser);
 		Rooms.global.writeChatRoomData();
 	},
@@ -744,6 +745,7 @@ exports.commands = {
 
 		delete room.auth[userid];
 		this.sendReply("(" + name + " is no longer Room Owner.)");
+		targetUser.popup("You are no longer Room Owner of " + room + ". (Demoted by " + user.name + ".)");
 		if (targetUser) targetUser.updateIdentity();
 		if (room.chatRoomData) {
 			Rooms.global.writeChatRoomData();
@@ -818,8 +820,10 @@ exports.commands = {
 			if (targetUser && Rooms.rooms[room.id].users[targetUser.userid]) targetUser.popup("You were demoted to Room " + groupName + " by " + user.name + ".");
 		} else if (nextGroup === '#') {
 			this.addModCommand("" + name + " was promoted to " + groupName + " by " + user.name + ".");
+			targetUser.popup("You were promoted to " + groupName + " by " + user.name + ".");
 		} else {
 			this.addModCommand("" + name + " was promoted to Room " + groupName + " by " + user.name + ".");
+			targetUser.popup("You were promoted to Room " + groupName + " by " + user.name + " in " + room + ".");
 		}
 
 		if (targetUser) targetUser.updateIdentity(room.id);
@@ -1461,6 +1465,7 @@ exports.commands = {
 			if (targetUser) targetUser.popup("You were demoted to " + groupName + " by " + user.name + ".");
 		} else {
 			this.addModCommand("" + name + " was promoted to " + groupName + " by " + user.name + ".");
+			if (targetUser) targetUser.popup("You were promoted to " + groupName + " by " + user.name + ".");
 		}
 
 		if (targetUser) targetUser.updateIdentity();
@@ -1505,6 +1510,7 @@ exports.commands = {
 		}
 
 		this.addModCommand("" + name + " was promoted to " + (Config.groups[nextGroup].name || "regular user") + " by " + user.name + ".");
+		targetUser.popup("You were promoted to " + (Config.groups[nextGroup].name || "regular user") + " by " + user.name + "in " + room + ".");
 	},
 
 	devoice: 'deauth',
