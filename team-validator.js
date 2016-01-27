@@ -448,8 +448,8 @@ Validator = (function () {
 						if (eventData.level && set.level < eventData.level) {
 							problems.push(name + " must be at least level " + eventData.level + " because it has a move only available from a specific event.");
 						}
-						if (eventData.shiny && !set.shiny) {
-							problems.push(name + " must be shiny because it has a move only available from a specific event.");
+						if ((eventData.shiny && !set.shiny) || (!eventData.shiny && set.shiny)) {
+							problems.push(name + " must " + (eventData.shiny ? "" : "not ") + "be shiny because it has a move only available from a specific event.");
 						}
 						if (eventData.gender) {
 							set.gender = eventData.gender;
