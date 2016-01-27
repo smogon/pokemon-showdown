@@ -283,7 +283,7 @@ exports.commands = {
 				};
 				if (pokemon.eggGroups) details["Egg Group(s)"] = pokemon.eggGroups.join(", ");
 				if (!pokemon.evos.length) {
-					details["<font color=#585858>Does Not Evolve</font>"] = "";
+					details['<font color="#686868">Does Not Evolve</font>'] = "";
 				} else {
 					details["Evolution"] = pokemon.evos.map(function (evo) {
 						evo = Tools.getTemplate(evo);
@@ -297,19 +297,19 @@ exports.commands = {
 					"Gen": move.gen,
 				};
 
-				if (move.secondary || move.secondaries) details["<font color=black>&#10003; Secondary effect</font>"] = "";
-				if (move.flags['contact']) details["<font color=black>&#10003; Contact</font>"] = "";
-				if (move.flags['sound']) details["<font color=black>&#10003; Sound</font>"] = "";
-				if (move.flags['bullet']) details["<font color=black>&#10003; Bullet</font>"] = "";
-				if (move.flags['pulse']) details["<font color=black>&#10003; Pulse</font>"] = "";
-				if (!move.flags['protect'] && !/(ally|self)/i.test(move.target)) details["<font color=black>&#10003; Bypasses Protect</font>"] = "";
-				if (move.flags['authentic']) details["<font color=black>&#10003; Bypasses Substitutes</font>"] = "";
-				if (move.flags['defrost']) details["<font color=black>&#10003; Thaws user</font>"] = "";
-				if (move.flags['bite']) details["<font color=black>&#10003; Bite</font>"] = "";
-				if (move.flags['punch']) details["<font color=black>&#10003; Punch</font>"] = "";
-				if (move.flags['powder']) details["<font color=black>&#10003; Powder</font>"] = "";
-				if (move.flags['reflectable']) details["<font color=black>&#10003; Bounceable</font>"] = "";
-				if (move.flags['gravity']) details["<font color=black>&#10007; Suppressed by Gravity</font>"] = "";
+				if (move.secondary || move.secondaries) details["&#10003; Secondary effect"] = "";
+				if (move.flags['contact']) details["&#10003; Contact"] = "";
+				if (move.flags['sound']) details["&#10003; Sound"] = "";
+				if (move.flags['bullet']) details["&#10003; Bullet"] = "";
+				if (move.flags['pulse']) details["&#10003; Pulse"] = "";
+				if (!move.flags['protect'] && !/(ally|self)/i.test(move.target)) details["&#10003; Bypasses Protect"] = "";
+				if (move.flags['authentic']) details["&#10003; Bypasses Substitutes"] = "";
+				if (move.flags['defrost']) details["&#10003; Thaws user"] = "";
+				if (move.flags['bite']) details["&#10003; Bite"] = "";
+				if (move.flags['punch']) details["&#10003; Punch"] = "";
+				if (move.flags['powder']) details["&#10003; Powder"] = "";
+				if (move.flags['reflectable']) details["&#10003; Bounceable"] = "";
+				if (move.flags['gravity']) details["&#10007; Suppressed by Gravity"] = "";
 
 				if (move.id === 'snatch') isSnatch = true;
 				if (move.id === 'mirrormove') isMirrorMove = true;
@@ -353,7 +353,8 @@ exports.commands = {
 			}
 
 			buffer += '|raw|<font size="1">' + Object.keys(details).map(function (detail) {
-				return '<font color=#585858>' + detail + (details[detail] !== '' ? ':</font> ' + details[detail] : '</font>');
+				if (!details[detail]) return detail;
+				return '<font color="#686868">' + detail + ':</font> ' + details[detail];
 			}).join("&nbsp;|&ThickSpace;") + '</font>';
 
 			if (isSnatch) buffer += '&nbsp;|&ThickSpace;<a href="https://pokemonshowdown.com/dex/moves/snatch"><font size="1">Snatchable Moves</font></a>';
