@@ -62,6 +62,7 @@ exports.commands = {
 		if (!buffer.length) buffer = "This server has no global authority.";
 		connection.popup(buffer.join("\n\n"));
 	},
+
 	authhelp: ["/auth - Show global staff for the server.",
 		"/auth [room] - Show what roomauth a room has.",
 		"/auth [user] - Show what global and roomauth a user has."],
@@ -722,6 +723,7 @@ exports.commands = {
 
 		room.auth[targetUser.userid] = '#';
 		this.addModCommand("" + name + " was appointed Room Owner by " + user.name + ".");
+		targetUser.popup("You were appointed Room Owner by " + user.name + "in " + room + ".");
 		room.onUpdateIdentity(targetUser);
 		Rooms.global.writeChatRoomData();
 	},
@@ -744,6 +746,7 @@ exports.commands = {
 
 		delete room.auth[userid];
 		this.sendReply("(" + name + " is no longer Room Owner.)");
+		targetUser.popup("You are no longer Room Owner of " + room + ". (Demoted by " + user.name + ".)");
 		if (targetUser) targetUser.updateIdentity();
 		if (room.chatRoomData) {
 			Rooms.global.writeChatRoomData();
@@ -818,8 +821,10 @@ exports.commands = {
 			if (targetUser && Rooms.rooms[room.id].users[targetUser.userid]) targetUser.popup("You were demoted to Room " + groupName + " by " + user.name + ".");
 		} else if (nextGroup === '#') {
 			this.addModCommand("" + name + " was promoted to " + groupName + " by " + user.name + ".");
+			targetUser.popup("You were promoted to " + groupName + " by " + user.name + ".");
 		} else {
 			this.addModCommand("" + name + " was promoted to Room " + groupName + " by " + user.name + ".");
+			targetUser.popup("You were promoted to Room " + groupName + " by " + user.name + " in " + room + ".");
 		}
 
 		if (targetUser) targetUser.updateIdentity(room.id);
@@ -838,7 +843,7 @@ exports.commands = {
 		if (target) targetRoom = Rooms.search(target);
 		let unavailableRoom = targetRoom && (targetRoom !== room && (targetRoom.modjoin || targetRoom.staffRoom) && !user.can('makeroom'));
 		if (!targetRoom || unavailableRoom) return this.errorReply("The room '" + target + "' does not exist.");
-		if (!targetRoom.auth) return this.sendReply("/roomauth - The room '" + (targetRoom.title ? targetRoom.title : target) + "' isn't designed for per-room moderation and therefore has no auth list." + userLookup);
+-		if (!targetRoom.auth) return this.sendReply("/roomauth - The room '" + (targetRoom.title ? targetRoom.title : target) + "' isn't designed for per-room moderation and therefore has no auth list." + userLookup);
 
 		let rankLists = {};
 		for (let u in targetRoom.auth) {
@@ -1461,6 +1466,7 @@ exports.commands = {
 			if (targetUser) targetUser.popup("You were demoted to " + groupName + " by " + user.name + ".");
 		} else {
 			this.addModCommand("" + name + " was promoted to " + groupName + " by " + user.name + ".");
+			if (targetUser) targetUser.popup("You were promoted to " + groupName + " by " + user.name + ".");
 		}
 
 		if (targetUser) targetUser.updateIdentity();
@@ -1505,6 +1511,7 @@ exports.commands = {
 		}
 
 		this.addModCommand("" + name + " was promoted to " + (Config.groups[nextGroup].name || "regular user") + " by " + user.name + ".");
+		targetUser.popup("You were promoted to " + (Config.groups[nextGroup].name || "regular user") + " by " + user.name + "in " + room + ".");
 	},
 
 	devoice: 'deauth',
@@ -2383,13 +2390,11 @@ exports.commands = {
 		room.game.joinGame(user);
 	},
 
-	leavebattle: 'leavegame',
-	partbattle: 'leavegame',
-	leavegame: function (target, room, user) {
-		if (!room.game) return this.errorReply("This room doesn't have an active game.");
-		if (!room.game.leaveGame) return this.errorReply("This game doesn't support /leavegame");
+	partbattle: 'leavebattle',
+	leavebattle: function (target, room, user) {
+		if (!room.leaveBattle) return this.errorReply("You can only do this in battle rooms.");
 
-		room.game.leaveGame(user);
+		room.leaveBattle(user);
 	},
 
 	kickbattle: 'kickgame',
