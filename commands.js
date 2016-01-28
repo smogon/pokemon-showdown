@@ -526,6 +526,7 @@ exports.commands = {
 				this.addModCommand("" + user.name + " turned on modjoin.");
 			} else if (target in Config.groups) {
 				if (room.battle && !this.can('makeroom')) return;
+				if (room.isPersonal && !user.can('makeroom') && target !== '+') return this.errorReply("/modjoin - Access denied from setting modjoin past + in group chats.");
 				room.modjoin = target;
 				this.addModCommand("" + user.name + " set modjoin to " + target + ".");
 			} else {
