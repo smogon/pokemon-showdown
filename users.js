@@ -1663,6 +1663,7 @@ User = (function () {
 		if (!this.chatQueue) return; // this should never happen
 		let toChat = this.chatQueue.shift();
 
+		this.lastChatMessage = new Date().getTime();
 		Monitor.activeIp = toChat[2].ip;
 		toChat[1].chat(this, toChat[0], toChat[2]);
 		Monitor.activeIp = null;
