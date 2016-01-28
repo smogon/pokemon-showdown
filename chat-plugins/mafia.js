@@ -485,6 +485,10 @@ class Mafia extends Rooms.RoomGame {
 				toKill.kill(meetingMsg[this.meeting]);
 			}
 
+			if (this.meeting === 'town' && toKill.class.onLynch) {
+				toKill.class.onLynch();
+			}
+
 			this.meeting = null;
 		}
 
@@ -533,12 +537,11 @@ class Mafia extends Rooms.RoomGame {
 			break;
 		case 'night':
 			this.gamestate = 'day';
-			this.gameEvent('onDay', 0.5);
 			break;
 		case 'day':
 			this.gamestate = 'lynch';
 			this.townMeeting();
-			this.gameEvent('onLynch', 2);
+			this.gameEvent('onDay', 2);
 			break;
 		case 'lynch':
 			this.day++;
