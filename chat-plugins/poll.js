@@ -83,7 +83,7 @@ class Poll {
 			i = iter.next();
 			c++;
 		}
-		if (option === 0 && !ended) output += '<div><small>(You can\'t vote after viewing results)</small></div>'
+		if (option === 0 && !ended) output += '<div><small>(You can\'t vote after viewing results)</small></div>';
 		output += '</div>';
 
 		return output;
