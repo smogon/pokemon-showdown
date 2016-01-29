@@ -10452,6 +10452,7 @@ exports.BattleMovedex = {
 			onBeforeSwitchOut: function (pokemon) {
 				this.debug('Pursuit start');
 				let sources = this.effectData.sources;
+				this.add('-activate', pokemon, 'move: Pursuit');
 				for (let i = 0; i < sources.length; i++) {
 					if (sources[i].moveThisTurn || sources[i].fainted) continue;
 					this.cancelMove(sources[i]);
