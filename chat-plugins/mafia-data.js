@@ -6,9 +6,11 @@
 // Target is a MafiaPlayer object.
 let MafiaFunctions = {
 	copReport: function (target) {
-		if (target.class.side === 'town') {
+		let side = target.class.appearAs || target.class.side;
+
+		if (side === 'town') {
 			return 'After investigating ' + target.name + ' you find out they\'re sided with the village.';
-		} else if (target.class.side === 'mafia') {
+		} else if (side === 'mafia') {
 			return 'After investigating ' + target.name + ' you find out they\'re sided with the mafia.';
 		} else {
 			return 'After investigating ' + target.name + ' you find out they\'re not sided with the village or mafia.';
@@ -21,9 +23,11 @@ let MafiaFunctions = {
 		return 'After investigating ' + target.name + ' you find out they\'re sided with the mafia.';
 	},
 	insaneReport: function (target) {
-		if (target.class.side === 'mafia') {
+		let side = target.class.appearAs || target.class.side;
+
+		if (side === 'mafia') {
 			return 'After investigating ' + target.name + ' you find out they\'re sided with the village.';
-		} else if (target.class.side === 'town') {
+		} else if (side === 'town') {
 			return 'After investigating ' + target.name + ' you find out they\'re sided with the mafia.';
 		} else {
 			return 'After investigating ' + target.name + ' you find out they\'re not sided with the village or mafia.';
@@ -39,6 +43,9 @@ let MafiaFunctions = {
 	},
 	killTarget: function (target) {
 		target.kill('The werewolf has eaten a tasty snack!');
+	},
+	foolWin: function () {
+		this.game.end('<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-fool.png" />', "The fool has been lynched and is victorious!");
 	},
 };
 
@@ -149,5 +156,28 @@ exports.MafiaClasses = {
 			priority: 2,
 			callback: MafiaFunctions.killTarget,
 		},
+	},
+
+	fool: {
+		name: "Fool",
+		side: 'town',
+		image: '<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-fool.png" />',
+		flavorText: 'You are the fool. You\'re sided with the town, but only truly win if you get lynched.',
+
+		onLynch: MafiaFunctions.foolWin,
+	},
+
+	godfather: {
+		name: "Godfather",
+		side: 'mafia',
+		image: '<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-godfather.png" />',
+		flavorText: 'You are the godfather. You\'re sided with the mafia, but appear as a villager on cop reports.',
+	},
+
+	mayor: {
+		name: "Mayor",
+		side: 'town',
+		image: '<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-mayor.png" />',
+		flavorText: 'You are the mayor. You\'re sided with the town, but your votes count twice during town meetings.',
 	},
 };
