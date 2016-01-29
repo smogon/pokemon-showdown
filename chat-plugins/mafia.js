@@ -148,12 +148,17 @@ class MafiaPlayer extends Rooms.RoomGamePlayer {
 			return;
 		}
 
+		let numVotes = 1;
+
+		if (this.class.numVotes) numVotes = this.class.numVotes;
+
 		if (target in this.validVotes || target === 'none') {
 			if (target !== 'none') {
 				if (this.game.currentVote[target]) {
-					this.game.currentVote[target].push(this.name);
+					this.game.currentVote[target].voters.push(this.name);
+					this.game.currentVote[target].votes += numVotes;
 				} else {
-					this.game.currentVote[target] = [this.name];
+					this.game.currentVote[target] = {votes: numVotes, voters: [this.name]};
 				}
 			}
 
@@ -368,7 +373,7 @@ class Mafia extends Rooms.RoomGame {
 		for (let i in this.currentVote) {
 			text += Tools.escapeHTML(this.players[i].name) + ': ';
 			if (this.anonVotes) {
-				text += this.currentVote[i] + ' votes.';
+				text += this.currentVote[i].votes + ' votes.';
 			} else {
 				text += this.currentVote[i].join(',');
 			}
@@ -389,9 +394,9 @@ class Mafia extends Rooms.RoomGame {
 		let max = 0;
 		let toKill = null;
 		for (let i in this.currentVote) {
-			if (this.currentVote[i].length > max) {
+			if (this.currentVote[i].votes > max) {
 				toKill = i;
-			} else if (this.currentVote[i].length === max) {
+			} else if (this.currentVote[i].votes === max) {
 				toKill = null;
 			}
 		}
@@ -480,6 +485,10 @@ class Mafia extends Rooms.RoomGame {
 				toKill.kill(meetingMsg[this.meeting]);
 			}
 
+			if (this.meeting === 'town' && toKill.class.onLynch) {
+				toKill.class.onLynch();
+			}
+
 			this.meeting = null;
 		}
 
@@ -528,12 +537,11 @@ class Mafia extends Rooms.RoomGame {
 			break;
 		case 'night':
 			this.gamestate = 'day';
-			this.gameEvent('onDay', 0.5);
 			break;
 		case 'day':
 			this.gamestate = 'lynch';
 			this.townMeeting();
-			this.gameEvent('onLynch', 2);
+			this.gameEvent('onDay', 2);
 			break;
 		case 'lynch':
 			this.day++;
