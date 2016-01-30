@@ -157,14 +157,16 @@ exports.BattleFormats = {
 			}
 
 			// Legendary Pokemon must have at least 3 perfect IVs in gen 6
-			if (set.ivs && this.gen >= 6 && (template.gen >= 6 || format.requirePentagon) && (template.eggGroups[0] === 'Undiscovered' || template.species === 'Manaphy') && !template.prevo && !template.nfe &&
+			let baseTemplate = this.getTemplate(template.baseSpecies);
+			if (set.ivs && this.gen >= 6 && (baseTemplate.gen >= 6 || format.requirePentagon) && (template.eggGroups[0] === 'Undiscovered' || template.species === 'Manaphy') && !template.prevo && !template.nfe &&
 				// exceptions
 				template.species !== 'Unown' && template.baseSpecies !== 'Pikachu' && (template.baseSpecies !== 'Diancie' || !set.shiny)) {
 				let perfectIVs = 0;
 				for (let i in set.ivs) {
 					if (set.ivs[i] >= 31) perfectIVs++;
 				}
-				if (perfectIVs < 3) problems.push((set.name || set.species) + " has less than three perfect IVs.");
+				let reason = (format.requirePentagon ? " and this format requires gen 6 pokemon" : " in gen 6");
+				if (perfectIVs < 3) problems.push((set.name || set.species) + " must have at least three perfect IVs because it's a legendary/baby" + reason + ".");
 			}
 
 			// limit one of each move
