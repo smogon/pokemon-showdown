@@ -165,8 +165,8 @@ exports.BattleFormats = {
 				for (let i in set.ivs) {
 					if (set.ivs[i] >= 31) perfectIVs++;
 				}
-				let reason = (format.requirePentagon ? " and this format requires gen 6 pokemon" : " in gen 6");
-				if (perfectIVs < 3) problems.push((set.name || set.species) + " must have at least three perfect IVs because it's a legendary/baby" + reason + ".");
+				let reason = (format.requirePentagon ? " and this format requires gen 6 Pokémon" : " in gen 6");
+				if (perfectIVs < 3) problems.push((set.name || set.species) + " must have at least three perfect IVs because it's a legendary" + reason + ".");
 			}
 
 			// limit one of each move
