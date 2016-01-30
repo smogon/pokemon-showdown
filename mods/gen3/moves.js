@@ -357,7 +357,7 @@ exports.BattleMovedex = {
 			if (pokemon.volatiles['focuspunch'] && pokemon.volatiles['focuspunch'].lostFocus) {
 				this.attrLastMove('[still]');
 				this.add('cant', pokemon, 'Focus Punch', 'Focus Punch');
-				return true;
+				return false;
 			}
 		},
 	},
