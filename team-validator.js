@@ -472,7 +472,7 @@ Validator = (function () {
 							for (let i in set.ivs) {
 								if (set.ivs[i] >= 31) perfectIVs++;
 							}
-							if (perfectIVs < 3) problems.push(name + " must have at least three perfect IVs because it's a legendary/baby and it has a move only available from a specific event.");
+							if (perfectIVs < 3) problems.push(name + " must have at least three perfect IVs because it's a legendary and it has a move only available from a gen 6 event.");
 						}
 						if (eventData.generation < 5) eventData.isHidden = false;
 						if (eventData.isHidden !== undefined && eventData.isHidden !== isHidden) {
