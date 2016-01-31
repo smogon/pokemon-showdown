@@ -658,7 +658,6 @@ Validator = (function () {
 		template = tools.getTemplate(template);
 
 		lsetData = lsetData || {};
-		lsetData.eggParents = lsetData.eggParents || [];
 		let set = (lsetData.set || (lsetData.set = {}));
 		let format = (lsetData.format || (lsetData.format = {}));
 		let alreadyChecked = {};
@@ -810,8 +809,6 @@ Validator = (function () {
 							// must be able to breed with father
 							if (!dexEntry.eggGroups.intersect(eggGroups).length) continue;
 
-							lsetData.hasEggMove = move;
-							lsetData.eggParents.push(dexEntry.species);
 							// we can breed with it
 							atLeastOne = true;
 							sources.push(learned + dexEntry.id);
