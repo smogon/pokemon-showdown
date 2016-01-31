@@ -11148,7 +11148,7 @@ exports.BattlePokedex = {
 		types: ["Rock", "Poison"],
 		genderRatio: {M: 0.25, F: 0.75},
 		baseStats: {hp: 106, atk: 105, def: 65, spa: 75, spd: 85, spe: 104},
-		abilities: {0: "Regenerator", 1: "Mold Breaker"},
+		abilities: {0: "Regenerator", 1: "Mold Breaker", H: "Liquid Ooze"},
 		heightm: 1.3,
 		weightkg: 23.6,
 		color: "Purple",
