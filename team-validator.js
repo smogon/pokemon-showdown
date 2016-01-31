@@ -654,7 +654,8 @@ Validator = (function () {
 	Validator.prototype.checkLearnset = function (move, template, lsetData) {
 		let tools = this.tools;
 
-		move = toId(move);
+		let moveid = toId(move);
+		move = tools.getMove(moveid);
 		template = tools.getTemplate(template);
 
 		lsetData = lsetData || {};
@@ -699,14 +700,16 @@ Validator = (function () {
 		// limitedEgg is false if there are any legal non-egg sources for the move, and true otherwise
 		let limitedEgg = null;
 
+		let tradebackEligible = false;
 		do {
 			alreadyChecked[template.speciesid] = true;
+			if (tools.gen === 2 && template.gen === 1) tradebackEligible = true;
 			// STABmons hack to avoid copying all of validateSet to formats
-			if (format.banlistTable && format.banlistTable['ignorestabmoves'] && !(move in {'bellydrum':1, 'chatter':1, 'darkvoid':1, 'geomancy':1, 'shellsmash':1})) {
+			if (format.banlistTable && format.banlistTable['ignorestabmoves'] && !(moveid in {'bellydrum':1, 'chatter':1, 'darkvoid':1, 'geomancy':1, 'shellsmash':1})) {
 				let types = template.types;
 				if (template.species === 'Shaymin') types = ['Grass', 'Flying'];
 				if (template.baseSpecies === 'Hoopa') types = ['Psychic', 'Ghost', 'Dark'];
-				if (types.indexOf(tools.getMove(move).type) >= 0) return false;
+				if (types.indexOf(move.type) >= 0) return false;
 			}
 			if (!template.learnset) {
 				if (template.baseSpecies !== template.species) {
@@ -720,11 +723,11 @@ Validator = (function () {
 				break;
 			}
 
-			if (template.learnset[move] || template.learnset['sketch']) {
+			if (template.learnset[moveid] || template.learnset['sketch']) {
 				sometimesPossible = true;
-				let lset = template.learnset[move];
+				let lset = template.learnset[moveid];
 				if (!lset || template.speciesid === 'smeargle') {
-					if (tools.getMove(move).noSketch) return true;
+					if (move.noSketch) return true;
 					lset = template.learnset['sketch'];
 					sketch = true;
 				}
@@ -741,10 +744,10 @@ Validator = (function () {
 					}
 					if (!template.isNonstandard) {
 						// HMs can't be transferred
-						if (tools.gen >= 4 && learned.charAt(0) <= 3 && move in {'cut':1, 'fly':1, 'surf':1, 'strength':1, 'flash':1, 'rocksmash':1, 'waterfall':1, 'dive':1}) continue;
-						if (tools.gen >= 5 && learned.charAt(0) <= 4 && move in {'cut':1, 'fly':1, 'surf':1, 'strength':1, 'rocksmash':1, 'waterfall':1, 'rockclimb':1}) continue;
+						if (tools.gen >= 4 && learned.charAt(0) <= 3 && moveid in {'cut':1, 'fly':1, 'surf':1, 'strength':1, 'flash':1, 'rocksmash':1, 'waterfall':1, 'dive':1}) continue;
+						if (tools.gen >= 5 && learned.charAt(0) <= 4 && moveid in {'cut':1, 'fly':1, 'surf':1, 'strength':1, 'rocksmash':1, 'waterfall':1, 'rockclimb':1}) continue;
 						// Defog and Whirlpool can't be transferred together
-						if (tools.gen >= 5 && move in {'defog':1, 'whirlpool':1} && learned.charAt(0) <= 4) blockedHM = true;
+						if (tools.gen >= 5 && moveid in {'defog':1, 'whirlpool':1} && learned.charAt(0) <= 4) blockedHM = true;
 					}
 					if (learned.substr(0, 2) in {'4L':1, '5L':1, '6L':1}) {
 						// gen 4-6 level-up moves
@@ -804,13 +807,17 @@ Validator = (function () {
 							// only basic pokemon have egg moves, so by now all evolutions should be in alreadyChecked
 							if (!fromSelf && alreadyChecked[dexEntry.speciesid]) continue;
 							// father must be able to learn the move
-							if (!fromSelf && !dexEntry.learnset[move] && !dexEntry.learnset['sketch']) continue;
+							if (!fromSelf && !dexEntry.learnset[moveid] && !dexEntry.learnset['sketch']) continue;
 
 							// must be able to breed with father
 							if (!dexEntry.eggGroups.intersect(eggGroups).length) continue;
 
 							// we can breed with it
 							atLeastOne = true;
+							if (tradebackEligible && move.gen <= 1) {
+								// can tradeback
+								sources.push('1ET' + dexEntry.id);
+							}
 							sources.push(learned + dexEntry.id);
 							if (limitedEgg !== false) limitedEgg = true;
 						}
@@ -825,6 +832,10 @@ Validator = (function () {
 						//   only if that was the source
 						// Event Pokémon:
 						//	Available as long as the past gen can get the Pokémon and then trade it back.
+						if (tradebackEligible && move.gen <= 1) {
+							// can tradeback
+							sources.push('1ST' + learned.slice(2) + ' ' + template.id);
+						}
 						sources.push(learned + ' ' + template.id);
 					} else if (learned.charAt(1) === 'D') {
 						// DW moves:
@@ -850,7 +861,7 @@ Validator = (function () {
 				}
 				if (getGlitch) {
 					sourcesBefore = Math.max(sourcesBefore, 4);
-					if (tools.getMove(move).gen < 5) {
+					if (move.gen < 5) {
 						limit1 = false;
 					}
 				}
@@ -873,13 +884,13 @@ Validator = (function () {
 			if (lsetData.sketchMove) {
 				return {type:'oversketched', maxSketches: 1};
 			}
-			lsetData.sketchMove = move;
+			lsetData.sketchMove = moveid;
 		}
 
 		if (blockedHM) {
 			// Limit one of Defog/Whirlpool to be transferred
 			if (lsetData.hm) return {type:'incompatible'};
-			lsetData.hm = move;
+			lsetData.hm = moveid;
 		}
 
 		// Now that we have our list of possible sources, intersect it with the current list
@@ -935,7 +946,7 @@ Validator = (function () {
 			// 'self' is a possible entry (namely, ExtremeSpeed on Dragonite) meaning it's always
 			// incompatible with any other egg move
 			if (!lsetData.limitedEgg) lsetData.limitedEgg = [];
-			lsetData.limitedEgg.push(limitedEgg === true ? move : limitedEgg);
+			lsetData.limitedEgg.push(limitedEgg === true ? moveid : limitedEgg);
 		}
 
 		return false;
