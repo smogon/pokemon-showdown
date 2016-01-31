@@ -176,6 +176,9 @@ if (require.main === module) {
 Tools.includeFormats();
 Rooms.global.formatListText = Rooms.global.getFormatListText();
 
+// TODO: support on-demand includeMods()
+Tools.includeMods();
+
 global.TeamValidator = require('./team-validator.js');
 
 // load ipbans at our leisure
