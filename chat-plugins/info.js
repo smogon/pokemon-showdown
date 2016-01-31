@@ -1432,12 +1432,8 @@ exports.commands = {
 					if (source.substr(2)) buffer += ": " + source.substr(2);
 				}
 			}
-			if (lsetData.sourcesBefore) {
-				if (!(cmd.substring(0, 3) in {'rby':1, 'gsc':1})) {
-					buffer += "<li>any generation before " + (lsetData.sourcesBefore + 1);
-				} else if (!lsetData.sources) {
-					buffer += "<li>gen " + lsetData.sourcesBefore;
-				}
+			if (sourcesBefore) {
+				buffer += "<li>any generation before " + (sourcesBefore + 1);
 			}
 			buffer += "</ul>";
 		}
