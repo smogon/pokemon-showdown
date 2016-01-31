@@ -435,6 +435,70 @@ Validator = (function () {
 				}
 			}
 
+			if (lsetData.limitedEgg && lsetData.limitedEgg.length > 1 && !lsetData.sourcesBefore && lsetData.sources) {
+				// console.log("limitedEgg 1: " + lsetData.limitedEgg);
+				// Multiple gen 2-5 egg moves
+				// This code hasn't been closely audited for multi-gen interaction, but
+				// since egg moves don't get removed between gens, it's unlikely to have
+				// any serious problems.
+				let limitedEgg = lsetData.limitedEgg.unique();
+				if (limitedEgg.length > 1 && limitedEgg.indexOf('self') >= 0) {
+					// Self-moves are always incompatible with anything else
+					problems.push(name + "'s egg moves are incompatible.");
+				} else {
+					// Doing a full validation of the possible egg parents takes way too much
+					// CPU power (and is in NP), so we're just gonna use a heuristic:
+					// They're probably incompatible if all potential fathers learn more than
+					// one limitedEgg move from another egg.
+					let validFatherExists = false;
+					for (let i = 0; i < lsetData.sources.length; i++) {
+						let eggGen = parseInt(lsetData.sources[i].charAt(0));
+						if (lsetData.sources[i].charAt(1) !== 'E' || eggGen === 6) {
+							// (There is a way to obtain this pokemon without past-gen breeding.)
+							// In theory, limitedEgg should not exist in this case.
+							throw new Error("invalid limitedEgg on " + name + ": " + limitedEgg + " with " + lsetData.sources[i]);
+						}
+						let potentialFather = tools.getTemplate(lsetData.sources[i].slice(2));
+						let restrictedSources = 0;
+						for (let j = 0; j < limitedEgg.length; j++) {
+							let moveid = limitedEgg[j];
+							let fatherSources = potentialFather.learnset[moveid];
+							if (!fatherSources) throw new Error("Egg move father " + potentialFather.id + " can't learn " + moveid);
+							let hasUnrestrictedSource = false;
+							let hasSource = false;
+							for (let k = 0; k < fatherSources.length; k++) {
+								// Triply nested loop! Fortunately, all the loops are designed
+								// to be as short as possible.
+								if (fatherSources[k].charAt(0) > eggGen) continue;
+								hasSource = true;
+								if (fatherSources[k].charAt(1) !== 'E' && fatherSources[k].charAt(1) !== 'S') {
+									hasUnrestrictedSource = true;
+									break;
+								}
+							}
+							if (!hasSource) {
+								// no match for the current gen; early escape
+								restrictedSources = 10;
+								break;
+							}
+							if (!hasUnrestrictedSource) restrictedSources++;
+							if (restrictedSources > 1) break;
+						}
+						if (restrictedSources <= 1) {
+							validFatherExists = true;
+							// console.log("valid father: " + potentialFather.id);
+							break;
+						}
+					}
+					if (!validFatherExists) {
+						// Could not find a valid father using our heuristic.
+						// TODO: hardcode false positives for our heuristic
+						// in theory, this heuristic doesn't have false negatives
+						problems.push(name + "'s past gen egg moves " + limitedEgg.map(function (id) { return tools.getMove(id).name; }).join(', ') + " do not have a valid father. (Is this incorrect? If so, post the chainbreeding instructions in Bug Reports)");
+					}
+				}
+			}
+
 			if (lsetData.sources && lsetData.sources.length === 1 && !lsetData.sourcesBefore) {
 				// we're restricted to a single source
 				let source = lsetData.sources[0];
@@ -628,9 +692,13 @@ Validator = (function () {
 		let sources = [];
 		// the equivalent of adding "every source at or before this gen" to sources
 		let sourcesBefore = 0;
+		if (lsetData.sourcesBefore === undefined) lsetData.sourcesBefore = 6;
 		let noPastGen = !!format.requirePentagon;
-		// since Gen 3, Pokemon cannot be traded to past generations
-		let noFutureGen = tools.gen >= 3 ? true : !!(format.banlistTable && format.banlistTable['tradeback']);
+		// Pokemon cannot be traded to past generations except in Gen 1 Tradeback
+		let noFutureGen = !(format.banlistTable && format.banlistTable['tradeback']);
+		// if a move can only be learned from a gen 2-5 egg, we have to check chainbreeding validity
+		// limitedEgg is false if there are any legal non-egg sources for the move, and true otherwise
+		let limitedEgg = null;
 
 		do {
 			alreadyChecked[template.speciesid] = true;
@@ -688,13 +756,14 @@ Validator = (function () {
 						if (!template.gender || template.gender === 'F') {
 							// available as egg move
 							learned = learned.charAt(0) + 'Eany';
+							limitedEgg = false;
 						} else {
 							// this move is unavailable, skip it
 							continue;
 						}
 					}
 					if (learned.charAt(1) in {L:1, M:1, T:1}) {
-						if (learned.charAt(0) === '6') {
+						if (parseInt(learned.charAt(0)) === tools.gen) {
 							// current-gen TM or tutor moves:
 							//   always available
 							return false;
@@ -703,7 +772,6 @@ Validator = (function () {
 						//   available as long as the source gen was or was before this gen
 						limit1 = false;
 						sourcesBefore = Math.max(sourcesBefore, parseInt(learned.charAt(0)));
-						if (tools.gen === 2 && lsetData.hasGen2Move && parseInt(learned.charAt(0)) === 1) lsetData.blockedGen2Move = true;
 					} else if (learned.charAt(1) === 'E') {
 						// egg moves:
 						//   only if that was the source
@@ -711,6 +779,7 @@ Validator = (function () {
 							// gen 6 doesn't have egg move incompatibilities except for certain cases with baby Pokemon
 							learned = learned.charAt(0) + 'E' + (template.prevo ? template.id : '');
 							sources.push(learned);
+							limitedEgg = false;
 							continue;
 						}
 						// it's a past gen; egg moves can only be inherited from the father
@@ -735,68 +804,31 @@ Validator = (function () {
 							// unless it's supposed to be self-breedable, can't inherit from self, prevos, etc
 							// only basic pokemon have egg moves, so by now all evolutions should be in alreadyChecked
 							if (!fromSelf && alreadyChecked[dexEntry.speciesid]) continue;
-							// father must be able to learn the move, unless this is chainbreeding
+							// father must be able to learn the move
 							if (!fromSelf && !dexEntry.learnset[move] && !dexEntry.learnset['sketch']) continue;
 
 							// must be able to breed with father
 							if (!dexEntry.eggGroups.intersect(eggGroups).length) continue;
 
-							if (tools.gen === 2 && dexEntry.gen <= 2 && lsetData.hasEggMove && lsetData.hasEggMove !== move) {
-								// If the mon already has an egg move by a father, other different father can't give it another egg move.
-								if (lsetData.eggParents.indexOf(dexEntry.species) >= 0) {
-									// We have to test here that the father of both moves doesn't get both by egg breeding
-									let learnsFrom = false;
-									let lsetToCheck = (dexEntry.learnset[lsetData.hasEggMove]) ? dexEntry.learnset[lsetData.hasEggMove] : dexEntry.learnset['sketch'];
-									if (!lsetToCheck || !lsetToCheck.length) continue;
-									for (let ltype = 0; ltype < lsetToCheck.length; ltype++) {
-										// Save first learning type. After that, only save it if we have egg and it's not egg.
-										learnsFrom = !learnsFrom || learnsFrom === 'E' ? lsetToCheck[ltype].charAt(1) : learnsFrom;
-									}
-									// If the previous egg move was learnt by the father through an egg as well:
-									if (learnsFrom === 'E') {
-										let secondLearnsFrom = false;
-										let lsetToCheck = (dexEntry.learnset[move]) ? dexEntry.learnset[move] : dexEntry.learnset['sketch'];
-										// Have here either the move learnset or sketch learnset for Smeargle.
-										if (lsetToCheck) {
-											for (let ltype = 0; ltype < lsetToCheck.length; ltype++) {
-												// Save first learning type. After that, only save it if we have egg and it's not egg.
-												secondLearnsFrom = !secondLearnsFrom || secondLearnsFrom === 'E' ? dexEntry.learnset[move][ltype].charAt(1) : secondLearnsFrom;
-											}
-											// Ok, both moves are learnt by father through an egg, therefor, it's impossible.
-											if (secondLearnsFrom === 'E') {
-												lsetData.blockedGen2Move = true;
-												continue;
-											}
-										}
-									}
-								} else {
-									lsetData.blockedGen2Move = true;
-									continue;
-								}
-							}
 							lsetData.hasEggMove = move;
 							lsetData.eggParents.push(dexEntry.species);
-							// Check if it has a move that needs to come from a prior gen to this egg move.
-							lsetData.hasGen2Move = lsetData.hasGen2Move || (tools.gen === 2 && tools.getMove(move).gen === 2);
-							lsetData.blockedGen2Move = lsetData.hasGen2Move && tools.gen === 2 && (lsetData.sourcesBefore ? lsetData.sourcesBefore : sourcesBefore) > 0 && (lsetData.sourcesBefore ? lsetData.sourcesBefore : sourcesBefore) < parseInt(learned.charAt(0));
 							// we can breed with it
 							atLeastOne = true;
 							sources.push(learned + dexEntry.id);
+							if (limitedEgg !== false) limitedEgg = true;
 						}
-						// chainbreeding with itself from earlier gen
-						if (!atLeastOne) sources.push(learned + template.id);
-						// Egg move tradeback for gens 1 and 2.
-						if (!noFutureGen) sourcesBefore = Math.max(sourcesBefore, parseInt(learned.charAt(0)));
+						// chainbreeding with itself
+						// e.g. ExtremeSpeed Dragonite
+						if (!atLeastOne) {
+							sources.push(learned + template.id);
+							limitedEgg = 'self';
+						}
 					} else if (learned.charAt(1) === 'S') {
 						// event moves:
 						//   only if that was the source
 						// Event Pokémon:
 						//	Available as long as the past gen can get the Pokémon and then trade it back.
 						sources.push(learned + ' ' + template.id);
-						if (!noFutureGen) sourcesBefore = Math.max(sourcesBefore, parseInt(learned.charAt(0)));
-						// Check if it has a move that needs to come from a prior gen to this event move.
-						lsetData.hasGen2Move = lsetData.hasGen2Move || (tools.gen === 2 && tools.getMove(move).gen === 2);
-						lsetData.blockedGen2Move = lsetData.hasGen2Move && tools.gen === 2 && (lsetData.sourcesBefore ? lsetData.sourcesBefore : sourcesBefore) > 0 && (lsetData.sourcesBefore ? lsetData.sourcesBefore : sourcesBefore) < parseInt(learned.charAt(0));
 					} else if (learned.charAt(1) === 'D') {
 						// DW moves:
 						//   only if that was the source
@@ -853,11 +885,6 @@ Validator = (function () {
 			lsetData.hm = move;
 		}
 
-		if (lsetData.blockedGen2Move) {
-			// Limit Gen 2 egg moves on gen 1 when move doesn't exist
-			return {type:'incompatible'};
-		}
-
 		// Now that we have our list of possible sources, intersect it with the current list
 		if (!sourcesBefore && !sources.length) {
 			if (noPastGen && sometimesPossible) return {type:'pokebank'};
@@ -887,7 +914,7 @@ Validator = (function () {
 						lsetData.sources.push(learned);
 					}
 				}
-				if (!sourcesBefore) delete lsetData.sourcesBefore;
+				if (!sourcesBefore) lsetData.sourcesBefore = 0;
 			}
 		}
 		if (sources) {
@@ -903,7 +930,15 @@ Validator = (function () {
 		}
 
 		if (sourcesBefore) {
-			lsetData.sourcesBefore = Math.min(sourcesBefore, lsetData.sourcesBefore || 6);
+			lsetData.sourcesBefore = Math.min(sourcesBefore, lsetData.sourcesBefore);
+		}
+
+		if (limitedEgg) {
+			// lsetData.limitedEgg = [moveid] of egg moves with potential breeding incompatibilities
+			// 'self' is a possible entry (namely, ExtremeSpeed on Dragonite) meaning it's always
+			// incompatible with any other egg move
+			if (!lsetData.limitedEgg) lsetData.limitedEgg = [];
+			lsetData.limitedEgg.push(limitedEgg === true ? move : limitedEgg);
 		}
 
 		return false;
