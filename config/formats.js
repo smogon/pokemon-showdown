@@ -146,6 +146,24 @@ exports.Formats = [
 		requirePentagon: true,
 	},
 	{
+		name: "Kanto Classic",
+		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3563162/\">Kanto Classic</a>"],
+		section: "ORAS Singles",
+
+		maxForcedLevel: 50,
+		teamLength: {
+			validate: [6, 6],
+		},
+		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview'],
+		onValidateSet: function (set) {
+			let template = this.getTemplate(set.species || set.name);
+			if (template.num > 149) {
+				return [set.species + " is banned by Kanto Classic."];
+			}
+			set.item = '';
+		},
+	},
+	{
 		name: "Custom Game",
 		section: "ORAS Singles",
 
