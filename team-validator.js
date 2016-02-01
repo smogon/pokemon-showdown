@@ -735,19 +735,24 @@ Validator = (function () {
 
 				for (let i = 0, len = lset.length; i < len; i++) {
 					let learned = lset[i];
-					if (noPastGen && learned.charAt(0) !== '6') continue;
-					if (noFutureGen && parseInt(learned.charAt(0)) > tools.gen) continue;
-					if (learned.charAt(0) !== '6' && isHidden && !tools.mod('gen' + learned.charAt(0)).getTemplate(template.species).abilities['H']) {
+					let learnedGen = learned.charAt(0);
+					if (noPastGen && learnedGen !== '6') continue;
+					if (noFutureGen && parseInt(learnedGen) > tools.gen) continue;
+
+					// redundant
+					if (learnedGen <= sourcesBefore) continue;
+
+					if (learnedGen !== '6' && isHidden && !tools.mod('gen' + learnedGen).getTemplate(template.species).abilities['H']) {
 						// check if the Pokemon's hidden ability was available
 						incompatibleHidden = true;
 						continue;
 					}
 					if (!template.isNonstandard) {
 						// HMs can't be transferred
-						if (tools.gen >= 4 && learned.charAt(0) <= 3 && moveid in {'cut':1, 'fly':1, 'surf':1, 'strength':1, 'flash':1, 'rocksmash':1, 'waterfall':1, 'dive':1}) continue;
-						if (tools.gen >= 5 && learned.charAt(0) <= 4 && moveid in {'cut':1, 'fly':1, 'surf':1, 'strength':1, 'rocksmash':1, 'waterfall':1, 'rockclimb':1}) continue;
+						if (tools.gen >= 4 && learnedGen <= 3 && moveid in {'cut':1, 'fly':1, 'surf':1, 'strength':1, 'flash':1, 'rocksmash':1, 'waterfall':1, 'dive':1}) continue;
+						if (tools.gen >= 5 && learnedGen <= 4 && moveid in {'cut':1, 'fly':1, 'surf':1, 'strength':1, 'rocksmash':1, 'waterfall':1, 'rockclimb':1}) continue;
 						// Defog and Whirlpool can't be transferred together
-						if (tools.gen >= 5 && moveid in {'defog':1, 'whirlpool':1} && learned.charAt(0) <= 4) blockedHM = true;
+						if (tools.gen >= 5 && moveid in {'defog':1, 'whirlpool':1} && learnedGen <= 4) blockedHM = true;
 					}
 					if (learned.substr(0, 2) in {'4L':1, '5L':1, '6L':1}) {
 						// gen 4-6 level-up moves
@@ -757,7 +762,7 @@ Validator = (function () {
 						}
 						if (!template.gender || template.gender === 'F') {
 							// available as egg move
-							learned = learned.charAt(0) + 'Eany';
+							learned = learnedGen + 'Eany';
 							limitedEgg = false;
 						} else {
 							// this move is unavailable, skip it
@@ -765,7 +770,7 @@ Validator = (function () {
 						}
 					}
 					if (learned.charAt(1) in {L:1, M:1, T:1}) {
-						if (parseInt(learned.charAt(0)) === tools.gen) {
+						if (parseInt(learnedGen) === tools.gen) {
 							// current-gen TM or tutor moves:
 							//   always available
 							return false;
@@ -773,14 +778,14 @@ Validator = (function () {
 						// past-gen level-up, TM, or tutor moves:
 						//   available as long as the source gen was or was before this gen
 						limit1 = false;
-						sourcesBefore = Math.max(sourcesBefore, parseInt(learned.charAt(0)));
+						sourcesBefore = Math.max(sourcesBefore, parseInt(learnedGen));
 						limitedEgg = false;
 					} else if (learned.charAt(1) === 'E') {
 						// egg moves:
 						//   only if that was the source
-						if (learned.charAt(0) === '6' || lsetData.fastCheck) {
+						if (learnedGen === '6' || lsetData.fastCheck) {
 							// gen 6 doesn't have egg move incompatibilities except for certain cases with baby Pokemon
-							learned = learned.charAt(0) + 'E' + (template.prevo ? template.id : '');
+							learned = learnedGen + 'E' + (template.prevo ? template.id : '');
 							sources.push(learned);
 							limitedEgg = false;
 							continue;
@@ -799,7 +804,7 @@ Validator = (function () {
 							// can't inherit from CAP pokemon
 							if (dexEntry.isNonstandard) continue;
 							// can't breed mons from future gens
-							if (dexEntry.gen > parseInt(learned.charAt(0))) continue;
+							if (dexEntry.gen > parseInt(learnedGen)) continue;
 							// father must be male
 							if (dexEntry.gender === 'N' || dexEntry.gender === 'F') continue;
 							// can't inherit from dex entries with no learnsets
@@ -815,7 +820,7 @@ Validator = (function () {
 
 							// we can breed with it
 							atLeastOne = true;
-							if (tradebackEligible && learned.charAt(0) === '2' && move.gen <= 1) {
+							if (tradebackEligible && learnedGen === '2' && move.gen <= 1) {
 								// can tradeback
 								sources.push('1ET' + dexEntry.id);
 							}
@@ -833,7 +838,7 @@ Validator = (function () {
 						//   only if that was the source
 						// Event Pokémon:
 						//	Available as long as the past gen can get the Pokémon and then trade it back.
-						if (tradebackEligible && learned.charAt(0) === '2' && move.gen <= 1) {
+						if (tradebackEligible && learnedGen === '2' && move.gen <= 1) {
 							// can tradeback
 							sources.push('1ST' + learned.slice(2) + ' ' + template.id);
 						}
@@ -904,11 +909,10 @@ Validator = (function () {
 		if (sourcesBefore || lsetData.sourcesBefore) {
 			// having sourcesBefore is the equivalent of having everything before that gen
 			// in sources, so we fill the other array in preparation for intersection
-			let learned;
 			if (sourcesBefore && lsetData.sources) {
 				if (!sources) sources = [];
 				for (let i = 0, len = lsetData.sources.length; i < len; i++) {
-					learned = lsetData.sources[i];
+					let learned = lsetData.sources[i];
 					if (parseInt(learned.charAt(0)) <= sourcesBefore) {
 						sources.push(learned);
 					}
@@ -918,8 +922,9 @@ Validator = (function () {
 			if (lsetData.sourcesBefore && sources) {
 				if (!lsetData.sources) lsetData.sources = [];
 				for (let i = 0, len = sources.length; i < len; i++) {
-					learned = sources[i];
-					if (parseInt(learned.charAt(0)) <= lsetData.sourcesBefore) {
+					let learned = sources[i];
+					let sourceGen = parseInt(learned.charAt(0));
+					if (sourceGen <= lsetData.sourcesBefore && sourceGen > sourcesBefore) {
 						lsetData.sources.push(learned);
 					}
 				}
