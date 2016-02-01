@@ -504,6 +504,19 @@ exports.Formats = [
 
 		ruleset: ['OU'],
 		banlist: [],
+		onValidateTeam: function (team, format) {
+			let fakeCount = 0;
+			let move = {};
+			for (let i = 0; i < team.length; i++) {
+				if (team[i].moves) {
+					for (let j = 0; j < team[i].moves.length; j++) {
+						move = this.getMove(team[i].moves[j]);
+						if (move.id === "fakeout" && fakeCount > 0) return ["You are limited to one user of Fake Out per team.", "(" + (team[i].name || team[i].species) + " has Fake Out)"];
+						if (move.id === "fakeout") fakeCount += 1;
+					}
+				}
+			}
+		},
 		onModifyMove: function (move) {
 			let validTargets = {"normal":1, "any":1, "randomNormal":1, "allAdjacent":1, "allAdjacentFoes":1};
 			if (move.target && !move.nonGhostTarget && (move.target in validTargets)) move.selfSwitch = true;
