@@ -774,6 +774,7 @@ Validator = (function () {
 						//   available as long as the source gen was or was before this gen
 						limit1 = false;
 						sourcesBefore = Math.max(sourcesBefore, parseInt(learned.charAt(0)));
+						limitedEgg = false;
 					} else if (learned.charAt(1) === 'E') {
 						// egg moves:
 						//   only if that was the source
