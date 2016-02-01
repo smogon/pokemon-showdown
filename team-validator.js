@@ -458,11 +458,11 @@ Validator = (function () {
 							// In theory, limitedEgg should not exist in this case.
 							throw new Error("invalid limitedEgg on " + name + ": " + limitedEgg + " with " + lsetData.sources[i]);
 						}
-						let potentialFather = tools.getTemplate(lsetData.sources[i].slice(2));
+						let potentialFather = tools.getTemplate(lsetData.sources[i].slice(lsetData.sources[i].charAt(2) === 'T' ? 3 : 2));
 						let restrictedSources = 0;
 						for (let j = 0; j < limitedEgg.length; j++) {
 							let moveid = limitedEgg[j];
-							let fatherSources = potentialFather.learnset[moveid];
+							let fatherSources = potentialFather.learnset[moveid] || potentialFather.learnset['sketch'];
 							if (!fatherSources) throw new Error("Egg move father " + potentialFather.id + " can't learn " + moveid);
 							let hasUnrestrictedSource = false;
 							let hasSource = false;
