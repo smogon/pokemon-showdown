@@ -391,7 +391,7 @@ exports.Formats = [
 
 		mod: 'mixandmega',
 		ruleset: ['Ubers', 'Baton Pass Clause'],
-		banlist: ['Gengarite', 'Shadow Tag', 'Dynamic Punch', 'Zap Cannon'],
+		banlist: ['Gengarite', 'Shadow Tag', 'Dynamic Punch', 'Electrify', 'Zap Cannon'],
 		onValidateTeam: function (team, format) {
 			let itemTable = {};
 			for (let i = 0; i < team.length; i++) {
