@@ -814,7 +814,7 @@ Validator = (function () {
 
 							// we can breed with it
 							atLeastOne = true;
-							if (tradebackEligible && move.gen <= 1) {
+							if (tradebackEligible && learned.charAt(0) === '2' && move.gen <= 1) {
 								// can tradeback
 								sources.push('1ET' + dexEntry.id);
 							}
@@ -832,7 +832,7 @@ Validator = (function () {
 						//   only if that was the source
 						// Event Pokémon:
 						//	Available as long as the past gen can get the Pokémon and then trade it back.
-						if (tradebackEligible && move.gen <= 1) {
+						if (tradebackEligible && learned.charAt(0) === '2' && move.gen <= 1) {
 							// can tradeback
 							sources.push('1ST' + learned.slice(2) + ' ' + template.id);
 						}
