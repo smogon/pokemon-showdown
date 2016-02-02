@@ -1382,7 +1382,8 @@ exports.commands = {
 		let template = Tools.getTemplate(targets[0]);
 		let move = {};
 		let problem;
-		let format = {rby:'gen1ou', gsc:'gen2ou', adv:'gen3ou', dpp:'gen4ou', bw2:'gen5ou'}[cmd.substring(0, 3)];
+		let gen = ({rby:1, gsc:2, adv:3, dpp:4, bw2:5}[cmd.substring(0, 3)] || 6);
+		let format = 'gen' + gen + 'ou';
 		let all = (cmd === 'learnall');
 		if (cmd === 'learn5') lsetData.set.level = 5;
 		if (cmd === 'g6learn') lsetData.format = {noPokebank: true};
@@ -1395,7 +1396,7 @@ exports.commands = {
 			return this.errorReply("You must specify at least one move.");
 		}
 
-		for (let i = 1, len = targets.length; i < len; ++i) {
+		for (let i = 1, len = targets.length; i < len; i++) {
 			move = Tools.getMove(targets[i]);
 			if (!move.exists) {
 				return this.errorReply("Move '" + move.id + "' not found.");
@@ -1403,13 +1404,14 @@ exports.commands = {
 			problem = TeamValidator.checkLearnsetSync(format, move, template.species, lsetData);
 			if (problem) break;
 		}
-		let buffer = template.name + (problem ? " <span class=\"message-learn-cannotlearn\">can't</span> learn " : " <span class=\"message-learn-canlearn\">can</span> learn ") + (targets.length > 2 ? "these moves" : move.name);
-		if (format) buffer += ' on ' + cmd.substring(0, 3).toUpperCase();
+		let buffer = "";
+		if (format) buffer += "In Gen " + gen + ", ";
+		buffer += "" + template.name + (problem ? " <span class=\"message-learn-cannotlearn\">can't</span> learn " : " <span class=\"message-learn-canlearn\">can</span> learn ") + (targets.length > 2 ? "these moves" : move.name);
 		if (!problem) {
 			let sourceNames = {E:"egg", S:"event", D:"dream world", X:"egg, traded back", Y: "event, traded back"};
 			let sourcesBefore = lsetData.sourcesBefore;
-			if (sourcesBefore >= 6) sourcesBefore = 0;
-			if (lsetData.sources || sourcesBefore) buffer += " only when obtained from:<ul class=\"message-learn-list\">";
+			if (lsetData.sources || sourcesBefore < gen) buffer += " only when obtained";
+			buffer += " from:<ul class=\"message-learn-list\">";
 			if (lsetData.sources) {
 				let sources = lsetData.sources.map(function (source) {
 					if (source.slice(0, 3) === '1ET') {
@@ -1443,7 +1445,7 @@ exports.commands = {
 				}
 			}
 			if (sourcesBefore) {
-				buffer += "<li>any generation before " + (sourcesBefore + 1);
+				buffer += "<li>" + (sourcesBefore < gen ? "gen " + sourcesBefore + " or earlier" : "anywhere") + " (all moves are level-up/tutor/TM/HM in gen " + Math.min(gen, sourcesBefore) + (sourcesBefore < gen ? " to " + gen : "") + ")";
 			}
 			buffer += "</ul>";
 		}
