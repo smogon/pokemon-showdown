@@ -452,6 +452,7 @@ Validator = (function () {
 					// one limitedEgg move from another egg.
 					let validFatherExists = false;
 					for (let i = 0; i < lsetData.sources.length; i++) {
+						if (lsetData.sources[i].charAt(1) === 'S') continue;
 						let eggGen = parseInt(lsetData.sources[i].charAt(0));
 						if (lsetData.sources[i].charAt(1) !== 'E' || eggGen === 6) {
 							// (There is a way to obtain this pokemon without past-gen breeding.)
@@ -494,7 +495,14 @@ Validator = (function () {
 						// Could not find a valid father using our heuristic.
 						// TODO: hardcode false positives for our heuristic
 						// in theory, this heuristic doesn't have false negatives
-						problems.push(name + "'s past gen egg moves " + limitedEgg.map(function (id) { return tools.getMove(id).name; }).join(', ') + " do not have a valid father. (Is this incorrect? If so, post the chainbreeding instructions in Bug Reports)");
+						let newSources = [];
+						for (let i = 0; i < lsetData.sources.length; i++) {
+							if (lsetData.sources[i].charAt(1) === 'S') {
+								newSources.push(lsetData.sources[i]);
+							}
+						}
+						lsetData.sources = newSources;
+						if (!newSources.length) problems.push(name + "'s past gen egg moves " + limitedEgg.map(function (id) { return tools.getMove(id).name; }).join(', ') + " do not have a valid father. (Is this incorrect? If so, post the chainbreeding instructions in Bug Reports)");
 					}
 				}
 			}
