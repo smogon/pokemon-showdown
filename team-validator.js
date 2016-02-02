@@ -548,10 +548,27 @@ Validator = (function () {
 						}
 						if (eventData.generation < 5) eventData.isHidden = false;
 						if (eventData.isHidden !== undefined && eventData.isHidden !== isHidden) {
-							problems.push(name + (isHidden ? " can't have" : " must have") + " its hidden ability because it has a move only available from a specific event.");
+							problems.push(name + (isHidden ? " can't have" : " must have") + " its hidden ability because it has a move only available from a specific " + tools.getAbility(eventData.abilities[0]).name + " " + eventTemplate.species + " event.");
 						}
-						if (tools.gen <= 5 && eventData.abilities && eventData.abilities.indexOf(ability.id) < 0 && (template.species === eventTemplate.species || tools.getAbility(set.ability).gen <= eventData.generation)) {
-							problems.push(name + " must have " + eventData.abilities.join(" or ") + " because it has a move only available from a specific event.");
+						if (tools.gen <= 5 && eventData.abilities && eventData.abilities.length === 1 && !eventData.isHidden) {
+							if (template.species === eventTemplate.species) {
+								// has not evolved, abilities must match
+								if (ability.id !== eventData.abilities[0]) {
+									problems.push(name + " must have " + tools.getAbility(eventData.abilities[0]).name + " because it has a move only available from a specific event.");
+								}
+							} else {
+								// has evolved
+								let ability1 = tools.getAbility(eventTemplate.abilities['1']);
+								if (ability1.gen && eventData.generation >= ability1.gen) {
+									// pokemon had 2 available abilities in the gen the event happened
+									// ability is restricted to a single ability slot
+									let requiredAbilitySlot = (toId(eventData.abilities[0]) === ability1.id ? 1 : 0);
+									let requiredAbility = toId(template.abilities[requiredAbilitySlot] || template.abilities['0']);
+									if (ability.id !== requiredAbility) {
+										problems.push(name + " must have " + tools.getAbility(requiredAbility).name + " because it has a move only available from a specific " + tools.getAbility(eventData.abilities[0]).name + " " + eventTemplate.species + " event.");
+									}
+								}
+							}
 						}
 					}
 					isHidden = false;
