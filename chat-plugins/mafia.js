@@ -375,7 +375,7 @@ class Mafia extends Rooms.RoomGame {
 			if (this.anonVotes) {
 				text += this.currentVote[i].votes + ' votes.';
 			} else {
-				text += this.currentVote[i].join(',');
+				text += this.currentVote[i].voters.join(',');
 			}
 			text += '<br/>';
 		}
