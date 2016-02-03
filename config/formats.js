@@ -536,7 +536,7 @@ exports.Formats = [
 			}
 		},
 		onModifyMove: function (move) {
-			let validTargets = {"normal":1, "any":1, "randomNormal":1, "allAdjacent":1, "allAdjacentFoes":1};
+			let validTargets = {"normal":1, "any":1, "randomNormal":1, "allAdjacent":1, "allAdjacentFoes":1, "scripted":1};
 			if (move.target && !move.nonGhostTarget && (move.target in validTargets)) move.selfSwitch = true;
 		},
 	},
