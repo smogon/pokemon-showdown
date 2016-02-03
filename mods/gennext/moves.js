@@ -908,9 +908,9 @@ exports.BattleMovedex = {
 	******************************************************************/
 	avalanche: {
 		inherit: true,
-		basePowerCallback: function (pokemon, source) {
-			if ((source.lastDamage > 0 && pokemon.lastAttackedBy && pokemon.lastAttackedBy.thisTurn)) {
-				this.debug('Boosted for getting hit by ' + pokemon.lastAttackedBy.move);
+		basePowerCallback: function (pokemon, target) {
+			if (pokemon.volatiles['revenge'] && pokemon.volatiles['revenge'].damagedBy && pokemon.volatiles['revenge'].damagedBy.indexOf(target) >= 0) {
+				this.debug('Boosted for getting hit by ' + target.lastMove);
 				return this.isWeather('hail') ? 180 : 120;
 			}
 			return this.isWeather('hail') ? 90 : 60;
