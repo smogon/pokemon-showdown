@@ -16,6 +16,16 @@
 const cluster = require('cluster');
 global.Config = require('./config/config');
 
+function sendWorker(worker, message) {
+	if (!worker.process.connected) {
+		// worker crashed, exit instead of crashlooping
+		console.trace("A worker process abruptly crashed.");
+		console.log(Object.keys(worker));
+		process.exit(1);
+	}
+	worker.send(message);
+}
+
 if (cluster.isMaster) {
 	cluster.setupMaster({
 		exec: require('path').resolve(__dirname, 'sockets.js'),
@@ -111,34 +121,34 @@ if (cluster.isMaster) {
 	};
 
 	exports.socketSend = function (worker, socketid, message) {
-		worker.send('>' + socketid + '\n' + message);
+		sendWorker(worker, '>' + socketid + '\n' + message);
 	};
 	exports.socketDisconnect = function (worker, socketid) {
-		worker.send('!' + socketid);
+		sendWorker(worker, '!' + socketid);
 	};
 
 	exports.channelBroadcast = function (channelid, message) {
 		for (let workerid in workers) {
-			workers[workerid].send('#' + channelid + '\n' + message);
+			sendWorker(workers[workerid], '#' + channelid + '\n' + message);
 		}
 	};
 	exports.channelSend = function (worker, channelid, message) {
-		worker.send('#' + channelid + '\n' + message);
+		sendWorker(worker, '#' + channelid + '\n' + message);
 	};
 	exports.channelAdd = function (worker, channelid, socketid) {
-		worker.send('+' + channelid + '\n' + socketid);
+		sendWorker(worker, '+' + channelid + '\n' + socketid);
 	};
 	exports.channelRemove = function (worker, channelid, socketid) {
-		worker.send('-' + channelid + '\n' + socketid);
+		sendWorker(worker, '-' + channelid + '\n' + socketid);
 	};
 
 	exports.subchannelBroadcast = function (channelid, message) {
 		for (let workerid in workers) {
-			workers[workerid].send(':' + channelid + '\n' + message);
+			sendWorker(workers[workerid], ':' + channelid + '\n' + message);
 		}
 	};
 	exports.subchannelMove = function (worker, channelid, subchannelid, socketid) {
-		worker.send('.' + channelid + '\n' + subchannelid + '\n' + socketid);
+		sendWorker(worker, '.' + channelid + '\n' + subchannelid + '\n' + socketid);
 	};
 } else {
 	// is worker

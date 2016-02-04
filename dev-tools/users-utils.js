@@ -5,6 +5,7 @@ let EventEmitter = require('events').EventEmitter;
 function createWorker() {
 	let fakeWorker = new EventEmitter();
 	fakeWorker.send = function () {};
+	fakeWorker.process = {connected: true};
 	Sockets.workers[fakeWorker.id] = fakeWorker;
 	return fakeWorker;
 }
