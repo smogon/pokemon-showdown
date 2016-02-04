@@ -3690,7 +3690,7 @@ exports.BattleMovedex = {
 		onHit: function (target, source) {
 			let oldAbility = target.setAbility(source.ability);
 			if (oldAbility) {
-				this.add('-ability', target, target.ability, '[from] move: Entrainment');
+				this.add('-ability', target, this.getAbility(target.ability).name, '[from] move: Entrainment');
 				return;
 			}
 			return false;
@@ -11284,7 +11284,7 @@ exports.BattleMovedex = {
 		onHit: function (target, source) {
 			let oldAbility = source.setAbility(target.ability);
 			if (oldAbility) {
-				this.add('-ability', source, source.ability, '[from] move: Role Play', '[of] ' + target);
+				this.add('-ability', source, this.getAbility(source.ability).name, '[from] move: Role Play', '[of] ' + target);
 				return;
 			}
 			return false;
