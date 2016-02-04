@@ -16,16 +16,6 @@
 const cluster = require('cluster');
 global.Config = require('./config/config');
 
-function sendWorker(worker, message) {
-	if (!worker.process.connected) {
-		// worker crashed, exit instead of crashlooping
-		console.trace("A worker process abruptly crashed.");
-		console.log(Object.keys(worker));
-		process.exit(1);
-	}
-	worker.send(message);
-}
-
 if (cluster.isMaster) {
 	cluster.setupMaster({
 		exec: require('path').resolve(__dirname, 'sockets.js'),
@@ -68,6 +58,28 @@ if (cluster.isMaster) {
 			}
 		});
 	};
+
+	cluster.on('disconnect', function (worker) {
+		// worker crashed, try our best to clean up
+		require('./crashlogger.js')(new Error("Worker " + worker.id + " abruptly died"), "The main process");
+
+		// this could get called during cleanup; prevent it from crashing
+		worker.send = function () {};
+
+		let count = 0;
+		Users.connections.forEach(function (connection, connectionid) {
+			if (connection.worker === worker) {
+				Users.socketDisconnect(worker, worker.id, connection.socketid);
+				count++;
+			}
+		});
+		console.error("" + count + " connections were lost.");
+
+		// don't delete the worker, so we can investigate it if necessary.
+
+		// attempt to recover
+		spawnWorker();
+	});
 
 	exports.listen = function (port, bindAddress, workerCount) {
 		if (port !== undefined && !isNaN(port)) {
@@ -121,34 +133,34 @@ if (cluster.isMaster) {
 	};
 
 	exports.socketSend = function (worker, socketid, message) {
-		sendWorker(worker, '>' + socketid + '\n' + message);
+		worker.send('>' + socketid + '\n' + message);
 	};
 	exports.socketDisconnect = function (worker, socketid) {
-		sendWorker(worker, '!' + socketid);
+		worker.send('!' + socketid);
 	};
 
 	exports.channelBroadcast = function (channelid, message) {
 		for (let workerid in workers) {
-			sendWorker(workers[workerid], '#' + channelid + '\n' + message);
+			workers[workerid].send('#' + channelid + '\n' + message);
 		}
 	};
 	exports.channelSend = function (worker, channelid, message) {
-		sendWorker(worker, '#' + channelid + '\n' + message);
+		worker.send('#' + channelid + '\n' + message);
 	};
 	exports.channelAdd = function (worker, channelid, socketid) {
-		sendWorker(worker, '+' + channelid + '\n' + socketid);
+		worker.send('+' + channelid + '\n' + socketid);
 	};
 	exports.channelRemove = function (worker, channelid, socketid) {
-		sendWorker(worker, '-' + channelid + '\n' + socketid);
+		worker.send('-' + channelid + '\n' + socketid);
 	};
 
 	exports.subchannelBroadcast = function (channelid, message) {
 		for (let workerid in workers) {
-			sendWorker(workers[workerid], ':' + channelid + '\n' + message);
+			workers[workerid].send(':' + channelid + '\n' + message);
 		}
 	};
 	exports.subchannelMove = function (worker, channelid, subchannelid, socketid) {
-		sendWorker(worker, '.' + channelid + '\n' + subchannelid + '\n' + socketid);
+		worker.send('.' + channelid + '\n' + subchannelid + '\n' + socketid);
 	};
 } else {
 	// is worker
