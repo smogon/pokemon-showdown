@@ -137,13 +137,10 @@ if (!process.send) {
 		try {
 			problems = validators[format].validateTeam(parsedTeam);
 		} catch (err) {
-			let stack = err.stack + '\n\n' +
-					'Additional information:\n' +
-					'format = ' + format + '\n' +
-					'team = ' + message.substr(pipeIndex2 + 1) + '\n';
-			let fakeErr = {stack: stack};
-
-			require('./crashlogger.js')(fakeErr, 'A team validation');
+			require('./crashlogger.js')(err, 'A team validation', {
+				format: format,
+				team: message.substr(pipeIndex2 + 1),
+			});
 			problems = ["Your team crashed the team validator. We've been automatically notified and will fix this crash, but you should use a different team for now."];
 		}
 

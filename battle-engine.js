@@ -19,7 +19,7 @@ global.Config = require('./config/config.js');
 if (Config.crashguard) {
 	// graceful crash - allow current battles to finish before restarting
 	process.on('uncaughtException', function (err) {
-		require('./crashlogger.js')(err, 'A simulator process', true);
+		require('./crashlogger.js')(err, 'A simulator process');
 		/* let stack = ("" + err.stack).escapeHTML().split("\n").slice(0, 2).join("<br />");
 		if (Rooms.lobby) {
 			Rooms.lobby.addRaw('<div><b>THE SERVER HAS CRASHED:</b> ' + stack + '<br />Please restart the server.</div>');
@@ -54,12 +54,9 @@ process.on('message', function (message) {
 			try {
 				Battles[data[0]] = Battle.construct(data[0], data[2], data[3]);
 			} catch (err) {
-				let stack = err.stack + '\n\n' +
-						'Additional information:\n' +
-						'message = ' + message;
-				let fakeErr = {stack: stack};
-
-				if (!require('./crashlogger.js')(fakeErr, 'A battle')) {
+				if (require('./crashlogger.js')(err, 'A battle', {
+					message: message,
+				}) === 'lockdown') {
 					let ministack = ("" + err.stack).escapeHTML().split("\n").slice(0, 2).join("<br />");
 					process.send(data[0] + '\nupdate\n|html|<div class="broadcast-red"><b>A BATTLE PROCESS HAS CRASHED:</b> ' + ministack + '</div>');
 				} else {
@@ -71,12 +68,9 @@ process.on('message', function (message) {
 		if (Battles[data[0]] && Battles[data[0]].destroy) {
 			Battles[data[0]].destroy();
 		} else {
-			let stack = '\n\n' +
-					'Additional information:\n' +
-					'message = ' + message;
-			let fakeErr = {stack: stack};
-
-			require('./crashlogger.js')(fakeErr, 'A battle');
+			require('./crashlogger.js')(new Error("Invalid dealloc"), 'A battle', {
+				message: message,
+			});
 		}
 		delete Battles[data[0]];
 	} else {
@@ -87,13 +81,11 @@ process.on('message', function (message) {
 			try {
 				battle.receive(data, more);
 			} catch (err) {
-				let stack = err.stack + '\n\n' +
-						'Additional information:\n' +
-						'message = ' + message + '\n' +
-						'currentRequest = ' + prevRequest + '\n\n' +
-						'Log:\n' + battle.log.join('\n').replace(/\n\|split\n[^\n]*\n[^\n]*\n[^\n]*\n/g, '\n');
-				let fakeErr = {stack: stack};
-				require('./crashlogger.js')(fakeErr, 'A battle');
+				require('./crashlogger.js')(err, 'A battle', {
+					message: message,
+					currentRequest: prevRequest,
+					log: '\n' + battle.log.join('\n').replace(/\n\|split\n[^\n]*\n[^\n]*\n[^\n]*\n/g, '\n'),
+				});
 
 				let logPos = battle.log.length;
 				battle.add('html', '<div class="broadcast-red"><b>The battle crashed</b><br />You can keep playing but it might crash again.</div>');
@@ -4683,7 +4675,7 @@ Battle = (function () {
 			let side = this[slot];
 			if (!side) {
 				console.log('**** ' + slot + ' tried to leave before it was possible in ' + this.id);
-				require('./crashlogger.js')({stack: '**** ' + slot + ' tried to leave before it was possible in ' + this.id}, 'A simulator process');
+				require('./crashlogger.js')(new Error('**** ' + slot + ' tried to leave before it was possible in ' + this.id), 'A simulator process');
 				return;
 			}
 
