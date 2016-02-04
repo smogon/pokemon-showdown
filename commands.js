@@ -2186,9 +2186,7 @@ exports.commands = {
 			this.sendReply('||<< ' + eval(target));
 			/* eslint-enable no-unused-vars */
 		} catch (e) {
-			this.sendReply('||<< error: ' + e.message);
-			let stack = '||' + ('' + e.stack).replace(/\n/g, '\n||');
-			connection.sendTo(room, stack);
+			this.sendReply('|| << ' + ('' + e.stack).replace(/\n *at Context\.exports\.commands\.eval [\s\S]*/m, '').replace(/\n/g, '\n||'));
 		}
 	},
 
