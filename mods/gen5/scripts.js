@@ -10,9 +10,8 @@ exports.BattleScripts = {
 		if (!template.exists || (!template.randomBattleMoves && !template.learnset)) {
 			template = this.getTemplate('unown');
 
-			let stack = 'Template incompatible with random battles: ' + name;
-			let fakeErr = {stack: stack};
-			require('./../../crashlogger.js')(fakeErr, 'The randbat set generator');
+			let err = new Error('Template incompatible with random battles: ' + name);
+			require('./../../crashlogger.js')(err, 'The randbat set generator');
 		}
 
 		if (template.battleOnly) name = template.baseSpecies;

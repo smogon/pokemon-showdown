@@ -10,44 +10,53 @@
 
 'use strict';
 
-exports = module.exports = (function () {
-	const logPath = require('path').resolve(__dirname, 'logs/errors.txt');
-	let lastCrashLog = 0;
-	let transport;
+const CRASH_EMAIL_THROTTLE = 5 * 60 * 1000; // 5 minutes
 
-	return function (err, description, isException) {
-		const datenow = Date.now();
-		console.log("\nCRASH: " + (err.stack || err) + "\n");
-		require('fs').createWriteStream(logPath, {'flags': 'a'}).on("open", function (fd) {
-			this.write("\n" + err.stack + "\n");
-			this.end();
-		}).on("error", function (err) {
-			console.log("\nSUBCRASH: " + err.stack + "\n");
-		});
-		if (Config.crashguardemail && ((datenow - lastCrashLog) > 1000 * 60 * 5)) {
-			lastCrashLog = datenow;
-			try {
-				if (!transport) transport = require('nodemailer').createTransport(Config.crashguardemail.options);
-			} catch (e) {
-				console.log("Could not start nodemailer - try `npm install` if you want to use it");
-			}
-			if (transport) {
-				transport.sendMail({
-					from: Config.crashguardemail.from,
-					to: Config.crashguardemail.to,
-					subject: Config.crashguardemail.subject,
-					text: description + " crashed " + (exports.hadException ? "again " : "") + "with this stack trace:\n" + (err.stack || err),
-				}, function (err) {
-					if (err) console.log("Error sending email: " + err);
-				});
-			}
+const logPath = require('path').resolve(__dirname, 'logs/errors.txt');
+let lastCrashLog = 0;
+let transport;
+
+exports = module.exports = function (err, description, data) {
+	const datenow = Date.now();
+
+	let stack = (err.stack || err);
+	if (data) {
+		stack += '\n\nAdditional information:\n';
+		for (let k in data) {
+			stack += "  " + k + " = " + data[k] + "\n";
 		}
-		if (isException) {
-			exports.hadException = true;
+	}
+
+	console.error("\nCRASH: " + stack + "\n");
+	require('fs').createWriteStream(logPath, {'flags': 'a'}).on("open", function (fd) {
+		this.write("\n" + stack + "\n");
+		this.end();
+	}).on("error", function (err) {
+		console.error("\nSUBCRASH: " + err.stack + "\n");
+	});
+
+	if (Config.crashguardemail && ((datenow - lastCrashLog) > CRASH_EMAIL_THROTTLE)) {
+		lastCrashLog = datenow;
+		try {
+			if (!transport) transport = require('nodemailer').createTransport(Config.crashguardemail.options);
+		} catch (e) {
+			console.error("Could not start nodemailer - try `npm install` if you want to use it");
 		}
-		if (process.uptime() > 60 * 60) {
-			// no need to lock down the server
-			return true;
+		if (transport) {
+			transport.sendMail({
+				from: Config.crashguardemail.from,
+				to: Config.crashguardemail.to,
+				subject: Config.crashguardemail.subject,
+				text: description + " crashed " + (exports.hadException ? "again " : "") + "with this stack trace:\n" + stack,
+			}, function (err) {
+				if (err) console.error("Error sending email: " + err);
+			});
 		}
-	};
-})();
+	}
+
+	exports.hadException = true;
+	if (process.uptime() < 60 * 60) {
+		// lock down the server
+		return 'lockdown';
+	}
+};
