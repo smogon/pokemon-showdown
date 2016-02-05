@@ -661,6 +661,7 @@ let GlobalRoom = (function () {
 	};
 	GlobalRoom.prototype.addChatRoom = function (title) {
 		let id = toId(title);
+		if (id === 'battles' || id === 'rooms' || id === 'ladder' || id === 'teambuilder') return false;
 		if (rooms[id]) return false;
 
 		let chatRoomData = {
