@@ -890,6 +890,7 @@ let commands = {
 				}
 			} else {
 				if (option === '0' || option === 'infinity' || option === 'off' || option === 'false' || option === 'stop' || option === 'remove') {
+					if (!tournament.autostartcap) return this.errorReply("The tournament autostart cap is already disabled for this tournament.");
 					params[0] = 'off';
 					tournament.autostartcap = false;
 				}
@@ -909,8 +910,9 @@ let commands = {
 				}
 			}
 			if (params[0].toLowerCase() === 'infinity' || params[0] === '0') params[0] = 'off';
-			let timeout = params[0].toLowerCase() === 'off' ? Infinity : params[0];
-			if (tournament.setAutoDisqualifyTimeout(timeout * 60 * 1000, this)) {
+			let timeout = params[0].toLowerCase() === 'off' ? Infinity : params[0] * 60 * 1000;
+			if (timeout === tournament.autoDisqualifyTimeout) return this.errorReply("The automatic tournament disqualify timer is already set to " + params[0] + " minutes.");
+			if (tournament.setAutoDisqualifyTimeout(timeout, this)) {
 				this.privateModCommand("(The tournament auto disqualify timer was set to " + params[0] + " by " + user.name + ")");
 			}
 		},
@@ -931,11 +933,13 @@ let commands = {
 
 			let option = params[0].toLowerCase();
 			if (option === 'on' || option === 'true' || option === 'allow' || option === 'allowed') {
+				if (tournament.scouting) return this.errorReply("Scouting for this tournament is already set to allowed.");
 				tournament.scouting = true;
 				tournament.modjoin = false;
 				this.room.add('|tournament|scouting|allow');
 				this.privateModCommand("(The tournament was set to allow scouting by " + user.name + ")");
 			} else if (option === 'off' || option === 'false' || option === 'disallow' || option === 'disallowed') {
+				if (!tournament.scouting) return this.errorReply("Scouting for this tournament is already disabled.");
 				tournament.scouting = false;
 				tournament.modjoin = true;
 				this.room.add('|tournament|scouting|disallow');
@@ -956,10 +960,12 @@ let commands = {
 
 			let option = params[0].toLowerCase();
 			if (option === 'on' || option === 'true' || option === 'allow' || option === 'allowed') {
+				if (tournament.modjoin) return this.errorReply("Modjoining is already allowed for this tournament.");
 				tournament.modjoin = true;
 				this.room.add('Modjoining is now allowed (Players can modjoin their tournament battles).');
 				this.privateModCommand("(The tournament was set to allow modjoin by " + user.name + ")");
 			} else if (option === 'off' || option === 'false' || option === 'disallow' || option === 'disallowed') {
+				if (!tournament.modjoin) return this.errorReply("Modjoining is already not allowed for this tournament.");
 				tournament.modjoin = false;
 				this.room.add('Modjoining is now banned (Players cannot modjoin their tournament battles).');
 				this.privateModCommand("(The tournament was set to disallow modjoin by " + user.name + ")");
