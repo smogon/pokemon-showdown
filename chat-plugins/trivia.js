@@ -183,7 +183,7 @@ let Trivia = (function () {
 		if (this.participants.size < 3) return output.sendReply("The trivia game requires at least three participants in order to run.");
 
 		let userid = toId(target);
-		if (!userid) return output.sendReply("User '" + target + "' does not exist.");
+		if (!userid) return output.sendReply("User '" + target + "' not found.");
 		if (!this.participants.has(userid)) return output.sendReply("User '" + target + "' is not a participant in this trivia game.");
 
 		let responderIndex = this.participants.delete(userid).responderIndex;
