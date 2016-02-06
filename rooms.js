@@ -478,10 +478,9 @@ let GlobalRoom = (function () {
 	};
 
 	GlobalRoom.prototype.getRoomList = function (filter) {
-		let roomList = {};
-		let total = 0;
+		let rooms = [];
 		let skipCount = 0;
-		if (this.battleCount > 150) {
+		if (this.battleCount > 150 && !filter) {
 			skipCount = this.battleCount - 150;
 		}
 		for (let i in Rooms.rooms) {
@@ -489,18 +488,22 @@ let GlobalRoom = (function () {
 			if (!room || !room.active || room.isPrivate) continue;
 			if (filter && filter !== room.format && filter !== true) continue;
 			if (skipCount && skipCount--) continue;
+
+			rooms.push(room);
+		}
+
+		let roomTable = {};
+		for (let i = rooms.length - 1; i >= rooms.length - 100 && i >= 0; i--) {
+			let room = rooms[i];
 			let roomData = {};
 			if (room.active && room.battle) {
 				if (room.battle.p1) roomData.p1 = room.battle.p1.name;
 				if (room.battle.p2) roomData.p2 = room.battle.p2.name;
 			}
 			if (!roomData.p1 || !roomData.p2) continue;
-			roomList[room.id] = roomData;
-
-			total++;
-			if (total >= 100) break;
+			roomTable[room.id] = roomData;
 		}
-		return roomList;
+		return roomTable;
 	};
 	GlobalRoom.prototype.getRooms = function (user) {
 		let roomsData = {official:[], chat:[], userCount: this.userCount, battleCount: this.battleCount};
