@@ -149,7 +149,20 @@ BattlePokemon = (function () {
 		this.level = this.battle.clampIntRange(set.forcedLevel || set.level || 100, 1, 9999);
 
 		let genders = {M:'M', F:'F'};
-		this.gender = this.template.gender || genders[set.gender] || (Math.random() * 2 < 1 ? 'M' : 'F');
+		let rulesetContainsIllegal = false;
+		let format = this.battle.getFormat();
+		if (format && format.ruleset) {
+			for (let i = 0; i < format.ruleset.length; i++) {
+				if (format.ruleset[i].indexOf('Standard') > -1) {
+					rulesetContainsIllegal = true;
+				}
+			}
+		}
+		if (rulesetContainsIllegal) {
+			this.gender = this.template.gender || genders[set.gender] || (Math.random() * 2 < 1 ? 'M' : 'F');
+		} else {
+			this.gender = genders[set.gender] || this.template.gender || (Math.random() * 2 < 1 ? 'M' : 'F');
+		}
 		if (this.gender === 'N') this.gender = '';
 		this.happiness = typeof set.happiness === 'number' ? this.battle.clampIntRange(set.happiness, 0, 255) : 255;
 		this.pokeball = this.set.pokeball || 'pokeball';
