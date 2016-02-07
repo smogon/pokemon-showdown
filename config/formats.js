@@ -119,7 +119,7 @@ exports.Formats = [
 		ruleset: ['Pokemon', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
 		banlist: ['Unreleased', 'Illegal'],
 	},
-	{
+	/*{
 		name: "CAP Crucibelle Playtest",
 		section: "ORAS Singles",
 
@@ -128,7 +128,7 @@ exports.Formats = [
 			'Syclant', 'Revenankh', 'Pyroak', 'Fidgit', 'Stratagem', 'Arghonaut', 'Kitsunoh', 'Cyclohm', 'Colossoil', 'Krilowatt', 'Voodoom',
 			'Tomohawk', 'Necturna', 'Mollux', 'Aurumoth', 'Malaconda', 'Cawmodore', 'Volkraken', 'Plasmanta', 'Naviathan',
 		],
-	},
+	},*/
 	{
 		name: "Battle Spot Singles",
 		desc: [
@@ -569,7 +569,7 @@ exports.Formats = [
 		column: 2,
 
 		ruleset: ['OU'],
-		banlist: ['Allow CAP', 'Crucibelle'],
+		banlist: ['Allow CAP'],
 	},
 	{
 		name: "Battle Factory",
