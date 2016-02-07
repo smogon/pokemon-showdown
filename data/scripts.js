@@ -1436,6 +1436,9 @@ exports.BattleScripts = {
 				case 'explosion':
 					if (counter.setupType || (hasAbility['Refrigerate'] && hasMove['freezedry']) || hasMove['wish']) rejected = true;
 					break;
+				case 'extremespeed':
+					if (counter.setupType !== 'Physical' && hasMove['vacuumwave']) rejected = true;
+					break;
 				case 'hiddenpower':
 					if ((counter.damagingMoves.length < 2 && !counter.stab) || (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
 					break;
