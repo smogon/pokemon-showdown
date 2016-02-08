@@ -65,7 +65,7 @@ exports.BattleStatuses = {
 			this.effectData.startTime = this.random(1, 7);
 			this.effectData.time = this.effectData.startTime;
 		},
-		onBeforeMovePriority: 2,
+		onBeforeMovePriority: 10,
 		onBeforeMove: function (pokemon, target, move) {
 			pokemon.statusData.time--;
 			if (pokemon.statusData.time > 0) {
@@ -83,7 +83,7 @@ exports.BattleStatuses = {
 		onStart: function (target) {
 			this.add('-status', target, 'frz');
 		},
-		onBeforeMovePriority: 2,
+		onBeforeMovePriority: 10,
 		onBeforeMove: function (pokemon, target, move) {
 			this.add('cant', pokemon, 'frz');
 			pokemon.lastMove = '';
@@ -148,6 +148,7 @@ exports.BattleStatuses = {
 		onEnd: function (target) {
 			this.add('-end', target, 'confusion');
 		},
+		onBeforeMovePriority: 3,
 		onBeforeMove: function (pokemon, target) {
 			pokemon.volatiles.confusion.time--;
 			if (!pokemon.volatiles.confusion.time) {
@@ -182,7 +183,7 @@ exports.BattleStatuses = {
 	},
 	flinch: {
 		duration: 1,
-		onBeforeMovePriority: 1,
+		onBeforeMovePriority: 4,
 		onBeforeMove: function (pokemon) {
 			if (!this.runEvent('Flinch', pokemon)) {
 				return;
@@ -203,10 +204,10 @@ exports.BattleStatuses = {
 	},
 	partiallytrapped: {
 		duration: 2,
-		onBeforeMovePriority: 1,
 		onStart: function (target, source, effect) {
 			this.add('-activate', target, 'move: ' + effect, '[of] ' + source);
 		},
+		onBeforeMovePriority: 4,
 		onBeforeMove: function (pokemon) {
 			this.add('cant', pokemon, 'partiallytrapped');
 			return false;
