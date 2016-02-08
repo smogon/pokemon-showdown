@@ -266,7 +266,7 @@ exports.BattleAbilities = {
 		num: 66,
 	},
 	"bulletproof": {
-		shortDesc: "This Pokemon is immune to bullet moves.",
+		shortDesc: "This Pokemon is immune to ball, bomb, and bullet moves.",
 		onTryHit: function (pokemon, target, move) {
 			if (move.flags['bullet']) {
 				this.add('-immune', pokemon, '[msg]', '[from] ability: Bulletproof');
