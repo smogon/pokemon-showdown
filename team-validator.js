@@ -449,7 +449,7 @@ Validator = (function () {
 					// one limitedEgg move from another egg.
 					let validFatherExists = false;
 					for (let i = 0; i < lsetData.sources.length; i++) {
-						if (lsetData.sources[i].charAt(1) === 'S') continue;
+						if (lsetData.sources[i].charAt(1) === 'S' || lsetData.sources[i].charAt(1) === 'D') continue;
 						let eggGen = parseInt(lsetData.sources[i].charAt(0));
 						if (lsetData.sources[i].charAt(1) !== 'E' || eggGen === 6) {
 							// (There is a way to obtain this pokemon without past-gen breeding.)
