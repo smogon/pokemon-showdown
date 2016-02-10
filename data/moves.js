@@ -8482,7 +8482,7 @@ exports.BattleMovedex = {
 			}
 			let randomMove = '';
 			if (moves.length) {
-				moves.sort(function (a, b) {return a.num - b.num;});
+				moves.sort((a, b) => a.num - b.num);
 				randomMove = moves[this.random(moves.length)].id;
 			}
 			if (!randomMove) {

@@ -32,7 +32,7 @@ describe('Immunity', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: 'Snorlax', ability: 'immunity', moves: ['curse']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Crobat', ability: 'moldbreaker', moves: ['toxic']}]);
 		battle.commitDecisions();
-		assert.strictEqual(battle.log.filter(function (line) {return line.match(/-status\|.*\|tox/);}).length, 1);
+		assert.strictEqual(battle.log.filter(line => line.match(/-status\|.*\|tox/)).length, 1);
 		assert.strictEqual(battle.p1.active[0].status, '');
 	});
 });

@@ -161,8 +161,10 @@
 		"validate-conditionals": 2,
 	},
 	"ecmaFeatures": {
+		"arrowFunctions": true,
 		"blockBindings": true,
 		"classes": true,
+		"forOf": true,
 		"octalLiterals": true
 	}
 }

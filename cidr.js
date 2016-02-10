@@ -39,21 +39,17 @@ let getPattern = exports.getPattern = function (cidr) {
  */
 let checker = exports.checker = function (cidr) {
 	if (!cidr || !cidr.length) {
-		return function () {
-			return false;
-		};
+		return () => false;
 	}
 
 	let patterns;
 	if (Array.isArray(cidr)) {
-		patterns = cidr.map(getPattern).filter(function (x) {
-			return x;
-		});
+		patterns = cidr.map(getPattern).filter(x => x);
 	} else {
 		patterns = [getPattern(cidr)];
 	}
 
-	return function (ip) {
+	return ip => {
 		let longip = ipToLong(ip);
 		for (let i = 0; i < patterns.length; ++i) {
 			let pattern = patterns[i];

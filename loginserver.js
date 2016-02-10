@@ -66,22 +66,22 @@ class LoginServerInstance {
 				dataString += '&' + i + '=' + encodeURIComponent('' + data[i]);
 			}
 		}
-		let req = http.get(url.parse(this.uri + 'action.php?act=' + action + '&serverid=' + Config.serverid + '&servertoken=' + encodeURIComponent(Config.servertoken) + '&nocache=' + new Date().getTime() + dataString), function (res) {
+		let req = http.get(url.parse(this.uri + 'action.php?act=' + action + '&serverid=' + Config.serverid + '&servertoken=' + encodeURIComponent(Config.servertoken) + '&nocache=' + new Date().getTime() + dataString), res => {
 			let buffer = '';
 			res.setEncoding('utf8');
 
-			res.on('data', function (chunk) {
+			res.on('data', chunk => {
 				buffer += chunk;
 			});
 
-			res.on('end', function () {
+			res.on('end', () => {
 				let data = parseJSON(buffer).json;
 				setImmediate(callback, data, res.statusCode);
 				this.openRequests--;
 			});
 		});
 
-		req.on('error', function (error) {
+		req.on('error', error => {
 			setImmediate(callback, null, null, error);
 			this.openRequests--;
 		});
@@ -98,7 +98,7 @@ class LoginServerInstance {
 			callback = data;
 			data = null;
 		}
-		if (typeof callback === 'undefined') callback = function () {};
+		if (typeof callback === 'undefined') callback = () => {};
 		if (this.disabled) {
 			setImmediate(callback, null, null, new Error("Ladder disabled"));
 			return;
@@ -116,11 +116,10 @@ class LoginServerInstance {
 		// if we already have it going or the request queue is empty no need to do anything
 		if (this.openRequests || this.requestTimer || !this.requestQueue.length) return;
 
-		this.requestTimer = setTimeout(this.makeRequests.bind(this), LOGIN_SERVER_BATCH_TIME);
+		this.requestTimer = setTimeout(() => this.makeRequests(), LOGIN_SERVER_BATCH_TIME);
 	}
 	makeRequests() {
 		this.requestTimer = null;
-		let self = this;
 		let requests = this.requestQueue;
 		this.requestQueue = [];
 
@@ -143,34 +142,34 @@ class LoginServerInstance {
 		};
 
 		let req = null;
-		let onReqError = function onReqError(error) {
-			if (self.requestTimeoutTimer) {
-				clearTimeout(self.requestTimeoutTimer);
-				self.requestTimeoutTimer = null;
+		let onReqError = (error => {
+			if (this.requestTimeoutTimer) {
+				clearTimeout(this.requestTimeoutTimer);
+				this.requestTimeoutTimer = null;
 			}
 			req.abort();
 			for (let i = 0, len = requestCallbacks.length; i < len; i++) {
 				setImmediate(requestCallbacks[i], null, null, error);
 			}
-			self.requestEnd(error);
-		}.once();
+			this.requestEnd(error);
+		}).once();
 
-		req = http.request(requestOptions, function onResponse(res) {
-			if (self.requestTimeoutTimer) {
-				clearTimeout(self.requestTimeoutTimer);
-				self.requestTimeoutTimer = null;
+		req = http.request(requestOptions, res => {
+			if (this.requestTimeoutTimer) {
+				clearTimeout(this.requestTimeoutTimer);
+				this.requestTimeoutTimer = null;
 			}
 			let buffer = '';
 			res.setEncoding('utf8');
 
-			res.on('data', function onData(chunk) {
+			res.on('data', chunk => {
 				buffer += chunk;
 			});
 
-			let endReq = function endRequest() {
-				if (self.requestTimeoutTimer) {
-					clearTimeout(self.requestTimeoutTimer);
-					self.requestTimeoutTimer = null;
+			let endReq = (() => {
+				if (this.requestTimeoutTimer) {
+					clearTimeout(this.requestTimeoutTimer);
+					this.requestTimeoutTimer = null;
 				}
 				//console.log('RESPONSE: ' + buffer);
 				let data = parseJSON(buffer).json;
@@ -181,12 +180,12 @@ class LoginServerInstance {
 						setImmediate(requestCallbacks[i], null, res.statusCode, new Error("Corruption"));
 					}
 				}
-				self.requestEnd();
-			}.once();
+				this.requestEnd();
+			}).once();
 			res.on('end', endReq);
 			res.on('close', endReq);
 
-			self.requestTimeoutTimer = setTimeout(function onDataTimeout() {
+			this.requestTimeoutTimer = setTimeout(() => {
 				if (res.connection) res.connection.destroy();
 				endReq();
 			}, LOGIN_SERVER_TIMEOUT);
@@ -194,7 +193,7 @@ class LoginServerInstance {
 
 		req.on('error', onReqError);
 
-		req.setTimeout(LOGIN_SERVER_TIMEOUT, function onResponseTimeout() {
+		req.setTimeout(LOGIN_SERVER_TIMEOUT, () => {
 			onReqError(new TimeoutError("Response not received"));
 		});
 
@@ -228,7 +227,7 @@ LoginServer.TimeoutError = TimeoutError;
 if (Config.remoteladder) LoginServer.ladderupdateServer = new LoginServerInstance();
 LoginServer.prepreplayServer = new LoginServerInstance();
 
-require('fs').watchFile('./config/custom.css', function (curr, prev) {
-	LoginServer.request('invalidatecss', {}, function () {});
+require('fs').watchFile('./config/custom.css', (curr, prev) => {
+	LoginServer.request('invalidatecss', {}, () => {});
 });
-LoginServer.request('invalidatecss', {}, function () {});
+LoginServer.request('invalidatecss', {}, () => {});

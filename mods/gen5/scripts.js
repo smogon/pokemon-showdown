@@ -370,9 +370,8 @@ exports.BattleScripts = {
 			};
 		}
 
-		let abilities = Object.values(baseTemplate.abilities).sort(function (a, b) {
-			return this.getAbility(b).rating - this.getAbility(a).rating;
-		}.bind(this));
+		let abilities = Object.values(baseTemplate.abilities);
+		abilities.sort((a, b) => this.getAbility(b).rating - this.getAbility(a).rating);
 		let ability0 = this.getAbility(abilities[0]);
 		let ability1 = this.getAbility(abilities[1]);
 		let ability2 = this.getAbility(abilities[2]);

@@ -51,10 +51,10 @@ let commands = exports.commands = Object.clone(baseCommands);
 // info always goes first so other plugins can shadow it
 Object.merge(commands, require('./chat-plugins/info.js').commands);
 
-fs.readdirSync(path.resolve(__dirname, 'chat-plugins')).forEach(function (file) {
-	if (file.substr(-3) !== '.js' || file === 'info.js') return;
+for (let file of fs.readdirSync(path.resolve(__dirname, 'chat-plugins'))) {
+	if (file.substr(-3) !== '.js' || file === 'info.js') continue;
 	Object.merge(commands, require('./chat-plugins/' + file).commands);
-});
+}
 
 /*********************************************************
  * Modlog
@@ -158,7 +158,7 @@ function canTalk(user, room, connection, message, targetUser) {
 	return true;
 }
 
-let Context = exports.Context = (function () {
+let Context = exports.Context = (() => {
 	function Context(options) {
 		this.cmd = options.cmd || '';
 		this.cmdToken = options.cmdToken || '';
@@ -591,7 +591,7 @@ let parse = exports.parse = function (message, room, user, connection, levelsDee
 };
 
 exports.package = {};
-fs.readFile(path.resolve(__dirname, 'package.json'), function (err, data) {
+fs.readFile(path.resolve(__dirname, 'package.json'), (err, data) => {
 	if (err) return;
 	exports.package = JSON.parse(data);
 });

@@ -13,7 +13,7 @@ describe('Type addition', function () {
 		battle.destroy();
 	});
 
-	adderMoves.forEach(function (moveData) {
+	for (let moveData of adderMoves) {
 		describe(moveData.name, function () {
 			it('should add ' + moveData.type + ' type to its target', function () {
 				battle = BattleEngine.Battle.construct();
@@ -39,7 +39,7 @@ describe('Type addition', function () {
 				assert.deepEqual(battle.p2.active[0].getTypes(), ['Normal', moveData.type]);
 			});
 
-			adderMoves.forEach(function (moveData2) {
+			for (let moveData2 of adderMoves) {
 				if (moveData.name === moveData2.name) {
 					it('should fail on repeated use', function () {
 						battle = BattleEngine.Battle.construct();
@@ -64,7 +64,7 @@ describe('Type addition', function () {
 						assert.deepEqual(battle.p2.active[0].getTypes(), ['Psychic', moveData.type]);
 					});
 				}
-			});
+			}
 		});
-	});
+	}
 });

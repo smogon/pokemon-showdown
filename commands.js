@@ -53,11 +53,11 @@ exports.commands = {
 			}
 		}
 
-		let buffer = Object.keys(rankLists).sort(function (a, b) {
-			return (Config.groups[b] || {rank: 0}).rank - (Config.groups[a] || {rank: 0}).rank;
-		}).map(function (r) {
-			return (Config.groups[r] ? Config.groups[r].name + "s (" + r + ")" : r) + ":\n" + rankLists[r].sortBy(toId).join(", ");
-		});
+		let buffer = Object.keys(rankLists).sort((a, b) =>
+			(Config.groups[b] || {rank: 0}).rank - (Config.groups[a] || {rank: 0}).rank
+		).map(r =>
+			(Config.groups[r] ? Config.groups[r].name + "s (" + r + ")" : r) + ":\n" + rankLists[r].sortBy(toId).join(", ")
+		);
 
 		if (!buffer.length) buffer = "This server has no global authority.";
 		connection.popup(buffer.join("\n\n"));
@@ -860,12 +860,11 @@ exports.commands = {
 			rankLists[targetRoom.auth[u]].push(u);
 		}
 
-		let buffer = Object.keys(rankLists).sort(function (a, b) {
-			return (Config.groups[b] || {rank:0}).rank - (Config.groups[a] || {rank:0}).rank;
-		}).map(function (r) {
-			let roomRankList = rankLists[r].sort().map(function (s) {
-				return s in targetRoom.users ? "**" + s + "**" : s;
-			});
+		let buffer = Object.keys(rankLists).sort((a, b) =>
+			(Config.groups[b] || {rank:0}).rank - (Config.groups[a] || {rank:0}).rank
+		).map(r => {
+			let roomRankList = rankLists[r].sort();
+			roomRankList = roomRankList.map(s => s in targetRoom.users ? "**" + s + "**" : s);
 			return (Config.groups[r] ? Config.groups[r].name + "s (" + r + ")" : r) + ":\n" + roomRankList.join(", ");
 		});
 
@@ -1278,12 +1277,9 @@ exports.commands = {
 		let alts = targetUser.getAlts();
 		let acAccount = (targetUser.autoconfirmed !== targetUser.userid && targetUser.autoconfirmed);
 		if (alts.length) {
-			let guests = 0;
-			alts = alts.filter(function (alt) {
-				if (alt.substr(0, 6) !== 'Guest ') return true;
-				guests++;
-				return false;
-			});
+			let guests = alts.length;
+			alts = alts.filter(alt => alt.substr(0, 6) !== 'Guest ');
+			guests -= alts.length;
 			this.privateModCommand("(" + targetUser.name + "'s " + (acAccount ? " ac account: " + acAccount + ", " : "") + "banned alts: " + alts.join(", ") + (guests ? " [" + guests + " guests]" : "") + ")");
 			for (let i = 0; i < alts.length; ++i) {
 				this.add('|unlink|' + toId(alts[i]));
@@ -1774,7 +1770,7 @@ exports.commands = {
 		}
 
 		// Execute the file search to see modlog
-		require('child_process').exec(command, function (error, stdout, stderr) {
+		require('child_process').exec(command, (error, stdout, stderr) => {
 			if (error && stderr) {
 				connection.popup("/modlog empty on " + roomNames + " or erred");
 				console.log("/modlog error: " + error);
@@ -1783,7 +1779,7 @@ exports.commands = {
 			if (stdout && hideIps) {
 				stdout = stdout.replace(/\([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+\)/g, '');
 			}
-			stdout = stdout.split('\n').map(function (line) {
+			stdout = stdout.split('\n').map(line => {
 				let bracketIndex = line.indexOf(']');
 				let parenIndex = line.indexOf(')');
 				if (bracketIndex < 0) return Tools.escapeHTML(line);
@@ -2038,15 +2034,15 @@ exports.commands = {
 			process.exit();
 			return;
 		}
-		room.destroyLog(function () {
+		room.destroyLog(() => {
 			room.logEntry(user.name + " used /kill");
-		}, function () {
+		}, () => {
 			process.exit();
 		});
 
 		// Just in the case the above never terminates, kill the process
 		// after 10 seconds.
-		setTimeout(function () {
+		setTimeout(() => {
 			process.exit();
 		}, 10000);
 	},
@@ -2056,7 +2052,7 @@ exports.commands = {
 		if (!this.can('hotpatch')) return false;
 
 		connection.sendTo(room, "Loading ipbans.txt...");
-		fs.readFile('config/ipbans.txt', function (err, data) {
+		fs.readFile('config/ipbans.txt', (err, data) => {
 			if (err) return;
 			data = ('' + data).split('\n');
 			let rangebans = [];
@@ -2098,7 +2094,7 @@ exports.commands = {
 		connection.sendTo(room, "updating...");
 
 		let exec = require('child_process').exec;
-		exec('git diff-index --quiet HEAD --', function (error) {
+		exec('git diff-index --quiet HEAD --', error => {
 			let cmd = 'git pull --rebase';
 			if (error) {
 				if (error.code === 1) {
@@ -2109,9 +2105,9 @@ exports.commands = {
 					// `git` on the PATH (which would be error.code === 127).
 					connection.sendTo(room, "" + error);
 					logQueue.push("" + error);
-					logQueue.forEach(function (line) {
+					for (let line of logQueue) {
 						room.logEntry(line);
-					});
+					}
 					CommandParser.updateServerLock = false;
 					return;
 				}
@@ -2119,14 +2115,14 @@ exports.commands = {
 			let entry = "Running `" + cmd + "`";
 			connection.sendTo(room, entry);
 			logQueue.push(entry);
-			exec(cmd, function (error, stdout, stderr) {
-				("" + stdout + stderr).split("\n").forEach(function (s) {
+			exec(cmd, (error, stdout, stderr) => {
+				for (let s of ("" + stdout + stderr).split("\n")) {
 					connection.sendTo(room, s);
 					logQueue.push(s);
-				});
-				logQueue.forEach(function (line) {
+				}
+				for (let line of logQueue) {
 					room.logEntry(line);
-				});
+				}
 				CommandParser.updateServerLock = false;
 			});
 		});
@@ -2167,7 +2163,7 @@ exports.commands = {
 
 		connection.sendTo(room, "$ " + target);
 		let exec = require('child_process').exec;
-		exec(target, function (error, stdout, stderr) {
+		exec(target, (error, stdout, stderr) => {
 			connection.sendTo(room, ("" + stdout + stderr));
 		});
 	},
@@ -2232,7 +2228,7 @@ exports.commands = {
 			if (/^[0-9]+$/.test(input)) {
 				return '.pokemon[' + (parseInt(input) - 1) + ']';
 			}
-			return ".pokemon.find(function(p){return p.speciesid==='" + toId(targets[1]) + "'})";
+			return ".pokemon.find(p => p.speciesid==='" + toId(targets[1]) + "')";
 		}
 		switch (cmd) {
 		case 'hp':
@@ -2356,7 +2352,7 @@ exports.commands = {
 			p1: players[0],
 			p2: players[1],
 			format: room.format,
-		}, function (success) {
+		}, success => {
 			if (success && success.errorip) {
 				connection.popup("This server's request IP " + success.errorip + " is not a registered server.");
 				return;
@@ -2536,7 +2532,7 @@ exports.commands = {
 				return false;
 			}
 		}
-		user.prepBattle(Tools.getFormat(target).id, 'challenge', connection, function (result) {
+		user.prepBattle(Tools.getFormat(target).id, 'challenge', connection, result => {
 			if (result) user.makeChallenge(targetUser, target);
 		});
 	},
@@ -2575,7 +2571,7 @@ exports.commands = {
 			this.popupReply(target + " cancelled their challenge before you could accept it.");
 			return false;
 		}
-		user.prepBattle(Tools.getFormat(format).id, 'challenge', connection, function (result) {
+		user.prepBattle(Tools.getFormat(format).id, 'challenge', connection, result => {
 			if (result) user.acceptChallengeFrom(userid);
 		});
 	},
@@ -2600,7 +2596,7 @@ exports.commands = {
 		let format = originalFormat.effectType === 'Format' ? originalFormat : Tools.getFormat('Anything Goes');
 		if (format.effectType !== 'Format') return this.popupReply("Please provide a valid format.");
 
-		TeamValidator.validateTeam(format.id, user.team, function (success, details) {
+		TeamValidator.validateTeam(format.id, user.team, (success, details) => {
 			let matchMessage = (originalFormat === format ? "" : "The format '" + originalFormat.name + "' was not found.");
 			if (success) {
 				connection.popup("" + (matchMessage ? matchMessage + "\n\n" : "") + "Your team is valid for " + format.name + ".");
@@ -2669,7 +2665,7 @@ exports.commands = {
 			));
 		} else if (cmd === 'laddertop') {
 			if (!trustable) return false;
-			Ladders(target).getTop().then(function (result) {
+			Ladders(target).getTop().then(result => {
 				connection.send('|queryresponse|laddertop|' + JSON.stringify(result));
 			});
 		} else {

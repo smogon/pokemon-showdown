@@ -37,11 +37,11 @@ Ladder.prototype.getRating = function (userid) {
 	if (user && user.mmrCache[formatid]) {
 		return Promise.resolve(user.mmrCache[formatid]);
 	}
-	return new Promise(function (resolve, reject) {
+	return new Promise((resolve, reject) => {
 		LoginServer.request('mmr', {
 			format: formatid,
 			user: userid,
-		}, function (data, statusCode, error) {
+		}, (data, statusCode, error) => {
 			if (!data) return resolve(1000);
 			if (data.errorip) {
 				return resolve(1000);
@@ -67,7 +67,7 @@ Ladder.prototype.updateRating = function (p1name, p2name, p1score, room) {
 		p2: p2name,
 		score: p1score,
 		format: formatid,
-	}, function (data, statusCode, error) {
+	}, (data, statusCode, error) => {
 		if (!room.battle) {
 			console.log('room expired before ladder update was received');
 			return;

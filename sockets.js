@@ -27,7 +27,7 @@ if (cluster.isMaster) {
 		let worker = cluster.fork({PSPORT: Config.port, PSBINDADDR: Config.bindaddress || '', PSNOSSL: Config.ssl ? 0 : 1});
 		let id = worker.id;
 		workers[id] = worker;
-		worker.on('message', function (data) {
+		worker.on('message', data => {
 			// console.log('master received: ' + data);
 			switch (data.charAt(0)) {
 			case '*': {
@@ -59,15 +59,15 @@ if (cluster.isMaster) {
 		});
 	};
 
-	cluster.on('disconnect', function (worker) {
+	cluster.on('disconnect', worker => {
 		// worker crashed, try our best to clean up
 		require('./crashlogger.js')(new Error("Worker " + worker.id + " abruptly died"), "The main process");
 
 		// this could get called during cleanup; prevent it from crashing
-		worker.send = function () {};
+		worker.send = () => {};
 
 		let count = 0;
-		Users.connections.forEach(function (connection, connectionid) {
+		Users.connections.forEach(connection => {
 			if (connection.worker === worker) {
 				Users.socketDisconnect(worker, worker.id, connection.socketid);
 				count++;
@@ -108,7 +108,7 @@ if (cluster.isMaster) {
 	exports.killWorker = function (worker) {
 		let idd = worker.id + '-';
 		let count = 0;
-		Users.connections.forEach(function (connection, connectionid) {
+		Users.connections.forEach((connection, connectionid) => {
 			if (connectionid.substr(idd.length) === idd) {
 				Users.socketDisconnect(worker, worker.id, connection.socketid);
 				count++;
@@ -186,7 +186,7 @@ if (cluster.isMaster) {
 
 	if (Config.crashguard) {
 		// graceful crash
-		process.on('uncaughtException', function (err) {
+		process.on('uncaughtException', err => {
 			require('./crashlogger.js')(err, 'Socket process ' + cluster.worker.id + ' (' + process.pid + ')', true);
 		});
 	}
@@ -197,43 +197,41 @@ if (cluster.isMaster) {
 		appssl = require('https').createServer(Config.ssl.options);
 	}
 	try {
-		(function () {
-			let nodestatic = require('node-static');
-			let cssserver = new nodestatic.Server('./config');
-			let avatarserver = new nodestatic.Server('./config/avatars');
-			let staticserver = new nodestatic.Server('./static');
-			let staticRequestHandler = function (request, response) {
-				// console.log("static rq: " + request.socket.remoteAddress + ":" + request.socket.remotePort + " -> " + request.socket.localAddress + ":" + request.socket.localPort + " - " + request.method + " " + request.url + " " + request.httpVersion + " - " + request.rawHeaders.join('|'));
-				request.resume();
-				request.addListener('end', function () {
-					if (Config.customhttpresponse &&
-							Config.customhttpresponse(request, response)) {
-						return;
+		let nodestatic = require('node-static');
+		let cssserver = new nodestatic.Server('./config');
+		let avatarserver = new nodestatic.Server('./config/avatars');
+		let staticserver = new nodestatic.Server('./static');
+		let staticRequestHandler = (request, response) => {
+			// console.log("static rq: " + request.socket.remoteAddress + ":" + request.socket.remotePort + " -> " + request.socket.localAddress + ":" + request.socket.localPort + " - " + request.method + " " + request.url + " " + request.httpVersion + " - " + request.rawHeaders.join('|'));
+			request.resume();
+			request.addListener('end', () => {
+				if (Config.customhttpresponse &&
+						Config.customhttpresponse(request, response)) {
+					return;
+				}
+				let server;
+				if (request.url === '/custom.css') {
+					server = cssserver;
+				} else if (request.url.substr(0, 9) === '/avatars/') {
+					request.url = request.url.substr(8);
+					server = avatarserver;
+				} else {
+					if (/^\/([A-Za-z0-9][A-Za-z0-9-]*)\/?$/.test(request.url)) {
+						request.url = '/';
 					}
-					let server;
-					if (request.url === '/custom.css') {
-						server = cssserver;
-					} else if (request.url.substr(0, 9) === '/avatars/') {
-						request.url = request.url.substr(8);
-						server = avatarserver;
-					} else {
-						if (/^\/([A-Za-z0-9][A-Za-z0-9-]*)\/?$/.test(request.url)) {
-							request.url = '/';
-						}
-						server = staticserver;
+					server = staticserver;
+				}
+				server.serve(request, response, (e, res) => {
+					if (e && (e.status === 404)) {
+						staticserver.serveFile('404.html', 404, {}, request, response);
 					}
-					server.serve(request, response, function (e, res) {
-						if (e && (e.status === 404)) {
-							staticserver.serveFile('404.html', 404, {}, request, response);
-						}
-					});
 				});
-			};
-			app.on('request', staticRequestHandler);
-			if (appssl) {
-				appssl.on('request', staticRequestHandler);
-			}
-		})();
+			});
+		};
+		app.on('request', staticRequestHandler);
+		if (appssl) {
+			appssl.on('request', staticRequestHandler);
+		}
 	} catch (e) {
 		console.log('Could not start node-static - try `npm install` if you want to use it');
 	}
@@ -247,7 +245,7 @@ if (cluster.isMaster) {
 
 	let server = sockjs.createServer({
 		sockjs_url: "//play.pokemonshowdown.com/js/lib/sockjs-0.3.min.js",
-		log: function (severity, message) {
+		log: (severity, message) => {
 			if (severity === 'error') console.log('ERROR: ' + message);
 		},
 		prefix: '/showdown',
@@ -282,7 +280,7 @@ if (cluster.isMaster) {
 	};
 	let interval = setInterval(sweepClosedSockets, 1000 * 60 * 10); // eslint-disable-line no-unused-vars
 
-	process.on('message', function (data) {
+	process.on('message', data => {
 		// console.log('worker received: ' + data);
 		let socket = null, socketid = '';
 		let channel = null, channelid = '';
@@ -422,14 +420,14 @@ if (cluster.isMaster) {
 		}
 	});
 
-	process.on('disconnect', function () {
+	process.on('disconnect', () => {
 		process.exit();
 	});
 
 	// this is global so it can be hotpatched if necessary
 	let isTrustedProxyIp = Cidr.checker(Config.proxyip);
 	let socketCounter = 0;
-	server.on('connection', function (socket) {
+	server.on('connection', socket => {
 		if (!socket) {
 			// For reasons that are not entirely clear, SockJS sometimes triggers
 			// this event with a null `socket` argument.
@@ -459,7 +457,7 @@ if (cluster.isMaster) {
 
 		process.send('*' + socketid + '\n' + socket.remoteAddress);
 
-		socket.on('data', function (message) {
+		socket.on('data', message => {
 			// drop empty messages (DDoS?)
 			if (!message) return;
 			// drop legacy JSON messages
@@ -471,7 +469,7 @@ if (cluster.isMaster) {
 			process.send('<' + socketid + '\n' + message);
 		});
 
-		socket.on('close', function () {
+		socket.on('close', () => {
 			process.send('!' + socketid);
 			delete sockets[socketid];
 			for (let channelid in channels) {
@@ -492,5 +490,5 @@ if (cluster.isMaster) {
 
 	console.log('Test your server at http://' + (Config.bindaddress === '0.0.0.0' ? 'localhost' : Config.bindaddress) + ':' + Config.port);
 
-	require('./repl.js').start('sockets-', cluster.worker.id + '-' + process.pid, function (cmd) { return eval(cmd); });
+	require('./repl.js').start('sockets-', cluster.worker.id + '-' + process.pid, cmd => eval(cmd));
 }

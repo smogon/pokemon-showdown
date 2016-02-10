@@ -28,10 +28,11 @@ exports = module.exports = function (err, description, data) {
 	}
 
 	console.error("\nCRASH: " + stack + "\n");
-	require('fs').createWriteStream(logPath, {'flags': 'a'}).on("open", function (fd) {
-		this.write("\n" + stack + "\n");
-		this.end();
-	}).on("error", function (err) {
+	let out = require('fs').createWriteStream(logPath, {'flags': 'a'});
+	out.on("open", fd => {
+		out.write("\n" + stack + "\n");
+		out.end();
+	}).on("error", err => {
 		console.error("\nSUBCRASH: " + err.stack + "\n");
 	});
 
@@ -48,7 +49,7 @@ exports = module.exports = function (err, description, data) {
 				to: Config.crashguardemail.to,
 				subject: Config.crashguardemail.subject,
 				text: description + " crashed " + (exports.hadException ? "again " : "") + "with this stack trace:\n" + stack,
-			}, function (err) {
+			}, err => {
 				if (err) console.error("Error sending email: " + err);
 			});
 		}
