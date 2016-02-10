@@ -178,7 +178,7 @@ describe('XY/ORAS Curse targetting when becoming Ghost the same turn', function 
 		runDoublesTest(battle, battle.p1.active[1]);
 	});
 
-	[0, 1, 2].forEach(function (cursePos) {
+	for (let cursePos of [0, 1, 2]) {
 		it('should target an opponent in Triples even if the user is on position ' + cursePos, function () {
 			battle = BattleEngine.Battle.construct('battle-cursetest-' + (3 + cursePos), 'triplescustomgame');
 			let p1team = triplesTeams[0].slice(1);
@@ -191,5 +191,5 @@ describe('XY/ORAS Curse targetting when becoming Ghost the same turn', function 
 			battle.commitDecisions();
 			runTriplesTest(battle, battle.p1.active[cursePos]);
 		});
-	});
+	}
 });

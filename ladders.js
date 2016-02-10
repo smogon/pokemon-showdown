@@ -47,22 +47,20 @@ class Ladder {
 		if (this.formatid in ladderCaches) {
 			let cachedLadder = ladderCaches[this.formatid];
 			if (cachedLadder.then) {
-				let self = this;
-				return cachedLadder.then(function (ladder) {
-					self.loadedLadder = ladder;
+				return cachedLadder.then(ladder => {
+					this.loadedLadder = ladder;
 					return ladder;
 				});
 			} else {
 				return Promise.resolve(this.loadedLadder = cachedLadder);
 			}
 		}
-		let self = this;
-		return (ladderCaches[this.formatid] = new Promise(function (resolve, reject) {
-			fs.readFile('config/ladders/' + self.formatid + '.tsv', function (err, data) {
+		return (ladderCaches[this.formatid] = new Promise((resolve, reject) => {
+			fs.readFile('config/ladders/' + this.formatid + '.tsv', (err, data) => {
 				if (err) {
-					self.loadedLadder = ladderCaches[self.formatid] = [];
-					// console.log('Ladders(' + self.formatid + ') err loading tsv: ' + JSON.stringify(self.loadedLadder));
-					resolve(self.loadedLadder);
+					this.loadedLadder = ladderCaches[this.formatid] = [];
+					// console.log('Ladders(' + this.formatid + ') err loading tsv: ' + JSON.stringify(this.loadedLadder));
+					resolve(this.loadedLadder);
 					return;
 				}
 				let ladder = [];
@@ -73,9 +71,9 @@ class Ladder {
 					let row = line.split('\t');
 					ladder.push([toId(row[1]), Number(row[0]), row[1], Number(row[2]), Number(row[3]), Number(row[4]), row[5]]);
 				}
-				self.loadedLadder = ladderCaches[self.formatid] = ladder;
-				// console.log('Ladders(' + self.formatid + ') loaded tsv: ' + JSON.stringify(self.loadedLadder));
-				resolve(self.loadedLadder);
+				this.loadedLadder = ladderCaches[this.formatid] = ladder;
+				// console.log('Ladders(' + this.formatid + ') loaded tsv: ' + JSON.stringify(this.loadedLadder));
+				resolve(this.loadedLadder);
 			});
 		}));
 	}
@@ -90,9 +88,8 @@ class Ladder {
 		if (this.saving) return;
 		this.saving = true;
 		if (!this.loadedLadder) {
-			let self = this;
-			this.ladder.then(function () {
-				self.save();
+			this.ladder.then(() => {
+				this.save();
 			});
 			return;
 		}
@@ -137,7 +134,7 @@ class Ladder {
 	getTop() {
 		let formatid = this.formatid;
 		let name = Tools.getFormat(formatid).name;
-		return this.ladder.then(function (ladder) {
+		return this.ladder.then(ladder => {
 			let buf = '<h3>' + name + ' Top 100</h3>';
 			buf += '<table>';
 			buf += '<tr><th>' + ['', 'Username', '<abbr title="Elo rating">Elo</abbr>', 'W', 'L', 'T'].join('</th><th>') + '</th></tr>';
@@ -160,12 +157,11 @@ class Ladder {
 		if (user && user.mmrCache[formatid]) {
 			return Promise.resolve(user.mmrCache[formatid]);
 		}
-		let self = this;
-		return this.ladder.then(function () {
+		return this.ladder.then(() => {
 			if (user.userid !== userid) return;
-			let index = self.indexOfUser(userid);
+			let index = this.indexOfUser(userid);
 			if (index < 0) return (user.mmrCache[formatid] = 1000);
-			return (user.mmrCache[formatid] = self.loadedLadder[index][1]);
+			return (user.mmrCache[formatid] = this.loadedLadder[index][1]);
 		});
 	}
 
@@ -217,58 +213,57 @@ class Ladder {
 	 */
 	updateRating(p1name, p2name, p1score, room) {
 		let formatid = this.formatid;
-		let self = this;
-		this.ladder.then(function () {
+		this.ladder.then(() => {
 			let p1newElo, p2newElo;
 			try {
-				let p1index = self.indexOfUser(p1name, true);
-				let p1elo = self.loadedLadder[p1index][1];
+				let p1index = this.indexOfUser(p1name, true);
+				let p1elo = this.loadedLadder[p1index][1];
 
-				let p2index = self.indexOfUser(p2name, true);
-				let p2elo = self.loadedLadder[p2index][1];
+				let p2index = this.indexOfUser(p2name, true);
+				let p2elo = this.loadedLadder[p2index][1];
 
-				self.updateRow(self.loadedLadder[p1index], p1score, p2elo);
-				self.updateRow(self.loadedLadder[p2index], 1 - p1score, p1elo);
+				this.updateRow(this.loadedLadder[p1index], p1score, p2elo);
+				this.updateRow(this.loadedLadder[p2index], 1 - p1score, p1elo);
 
-				p1newElo = self.loadedLadder[p1index][1];
-				p2newElo = self.loadedLadder[p2index][1];
+				p1newElo = this.loadedLadder[p1index][1];
+				p2newElo = this.loadedLadder[p2index][1];
 
-				// console.log('L: ' + self.loadedLadder.map(r => ''+Math.round(r[1])+' '+r[2]).join('\n'));
+				// console.log('L: ' + this.loadedLadder.map(r => ''+Math.round(r[1])+' '+r[2]).join('\n'));
 
 				// move p1 to its new location
 				let newIndex = p1index;
-				while (newIndex > 0 && self.loadedLadder[newIndex - 1][1] <= p1newElo) newIndex--;
-				while (newIndex === p1index || (self.loadedLadder[newIndex] && self.loadedLadder[newIndex][1] > p1newElo)) newIndex++;
+				while (newIndex > 0 && this.loadedLadder[newIndex - 1][1] <= p1newElo) newIndex--;
+				while (newIndex === p1index || (this.loadedLadder[newIndex] && this.loadedLadder[newIndex][1] > p1newElo)) newIndex++;
 				// console.log('ni='+newIndex+', p1i='+p1index);
 				if (newIndex !== p1index && newIndex !== p1index + 1) {
-					let row = self.loadedLadder.splice(p1index, 1)[0];
+					let row = this.loadedLadder.splice(p1index, 1)[0];
 					// adjust for removed row
 					if (newIndex > p1index) newIndex--;
 					if (p2index > p1index) p2index--;
 
-					self.loadedLadder.splice(newIndex, 0, row);
+					this.loadedLadder.splice(newIndex, 0, row);
 					// adjust for inserted row
 					if (p2index >= newIndex) p2index++;
 				}
 
 				// move p2
 				newIndex = p2index;
-				while (newIndex > 0 && self.loadedLadder[newIndex - 1][1] <= p2newElo) newIndex--;
-				while (newIndex === p2index || (self.loadedLadder[newIndex] && self.loadedLadder[newIndex][1] > p2newElo)) newIndex++;
+				while (newIndex > 0 && this.loadedLadder[newIndex - 1][1] <= p2newElo) newIndex--;
+				while (newIndex === p2index || (this.loadedLadder[newIndex] && this.loadedLadder[newIndex][1] > p2newElo)) newIndex++;
 				// console.log('ni='+newIndex+', p2i='+p2index);
 				if (newIndex !== p2index && newIndex !== p2index + 1) {
-					let row = self.loadedLadder.splice(p2index, 1)[0];
+					let row = this.loadedLadder.splice(p2index, 1)[0];
 					// adjust for removed row
 					if (newIndex > p2index) newIndex--;
 
-					self.loadedLadder.splice(newIndex, 0, row);
+					this.loadedLadder.splice(newIndex, 0, row);
 				}
 
 				let p1 = Users.getExact(p1name);
 				if (p1) p1.mmrCache[formatid] = +p1newElo;
 				let p2 = Users.getExact(p2name);
 				if (p2) p2.mmrCache[formatid] = +p2newElo;
-				self.save();
+				this.save();
 
 				if (!room.battle) {
 					console.log('room expired before ladder update was received');

@@ -20,7 +20,7 @@ let dns = require('dns');
 
 let Dnsbl = module.exports;
 
-let dnsblCache = exports.cache = new Map();
+let dnsblCache = Dnsbl.cache = new Map();
 dnsblCache.set('127.0.0.1', false);
 
 function queryDnsblLoop(ip, callback, reversedIpDot, index) {
@@ -31,7 +31,7 @@ function queryDnsblLoop(ip, callback, reversedIpDot, index) {
 		return;
 	}
 	let blocklist = BLOCKLISTS[index];
-	dns.resolve4(reversedIpDot + blocklist, function (err, addresses) {
+	dns.resolve4(reversedIpDot + blocklist, (err, addresses) => {
 		if (!err) {
 			// blocked
 			dnsblCache.set(ip, blocklist);
@@ -50,7 +50,7 @@ function queryDnsblLoop(ip, callback, reversedIpDot, index) {
  * if the passed IP is in a blocklist, or boolean false if the IP is
  * not in any blocklist.
  */
-exports.query = function queryDnsbl(ip, callback) {
+Dnsbl.query = function queryDnsbl(ip, callback) {
 	if (dnsblCache.has(ip)) {
 		callback(dnsblCache.get(ip));
 		return;
@@ -180,7 +180,7 @@ Dnsbl.reverse = function reverseDns(ip, callback) {
 			return;
 		}
 	}
-	return require('dns').reverse(ip, function (err, hosts) {
+	return require('dns').reverse(ip, (err, hosts) => {
 		if (!hosts || !hosts[0]) {
 			if (ip.startsWith('50.')) {
 				hosts = ['comcast.net.res-nohost'];

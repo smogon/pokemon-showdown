@@ -138,18 +138,18 @@ class Hangman extends Rooms.RoomGame {
 		let wordString = this.wordSoFar.join('');
 		if (result === 1) {
 			let word = this.word;
-			wordString = wordString.replace(/_+/g, function (match, offset) {
-				return '<font color="#7af87a">' + word.substr(offset, match.length) + '</font>';
-			});
+			wordString = wordString.replace(/_+/g, (match, offset) =>
+				'<font color="#7af87a">' + word.substr(offset, match.length) + '</font>'
+			);
 		}
 
 		if (this.hint) output += '<div>(Hint: ' + Tools.escapeHTML(this.hint) + ')</div>';
 		output += '<p style="font-weight:bold;font-size:12pt;letter-spacing:3pt">' + wordString + '</p>';
 		if (this.guesses.length) {
 			if (this.letterGuesses.length) {
-				output += 'Letters: ' + this.letterGuesses.map(function (g) {
-					return '<strong' + (g[1] === '1' ? '' : ' style="color: #DBA"') + '>' + Tools.escapeHTML(g[0]) + '</strong>';
-				}).join(', ');
+				output += 'Letters: ' + this.letterGuesses.map(g =>
+					'<strong' + (g[1] === '1' ? '' : ' style="color: #DBA"') + '>' + Tools.escapeHTML(g[0]) + '</strong>'
+				).join(', ');
 			}
 			if (result === 2) {
 				output += '<br />Winner: ' + Tools.escapeHTML(this.lastGuesser);
@@ -210,7 +210,7 @@ exports.commands = {
 			let word = params[0].replace(/[^A-Za-z '-]/g, '');
 			if (word.replace(/ /g, '').length < 1) return this.errorReply("Enter a valid word");
 			if (word.length > 30) return this.errorReply("Phrase must be less than 30 characters.");
-			if (word.split(' ').some(function (w) { return w.length > 20; })) return this.errorReply("Each word in the phrase must be less than 20 characters.");
+			if (word.split(' ').some(w => w.length > 20)) return this.errorReply("Each word in the phrase must be less than 20 characters.");
 			if (!/[a-zA-Z]/.test(word)) return this.errorReply("Word must contain at least one letter.");
 
 			let hint;

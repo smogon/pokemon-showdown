@@ -13,7 +13,7 @@ let TournamentGenerators = {
 exports.tournaments = {};
 
 function usersToNames(users) {
-	return users.map(function (user) { return user.name; });
+	return users.map(user => user.name);
 }
 
 class Tournament {
@@ -74,7 +74,7 @@ class Tournament {
 		}
 
 		let isErrored = false;
-		this.generator.getUsers().forEach(function (user) {
+		this.generator.getUsers().forEach(user => {
 			let error = generator.addUser(user);
 			if (typeof error === 'string') {
 				output.sendReply('|tournament|error|' + error);
@@ -94,7 +94,7 @@ class Tournament {
 	forceEnd() {
 		if (this.isTournamentStarted) {
 			if (this.autoDisqualifyTimer) clearTimeout(this.autoDisqualifyTimer);
-			this.inProgressMatches.forEach(function (match) {
+			this.inProgressMatches.forEach(match => {
 				if (match) {
 					delete match.room.tour;
 					match.room.addRaw("<div class=\"broadcast-red\"><b>The tournament was forcefully ended.</b><br />You can finish playing, but this battle is no longer considered a tournament battle.</div>");
@@ -150,10 +150,10 @@ class Tournament {
 		if (this.isBracketInvalidated) {
 			if (Date.now() < this.lastBracketUpdate + BRACKET_MINIMUM_UPDATE_INTERVAL) {
 				if (this.bracketUpdateTimer) clearTimeout(this.bracketUpdateTimer);
-				this.bracketUpdateTimer = setTimeout(function () {
+				this.bracketUpdateTimer = setTimeout(() => {
 					this.bracketUpdateTimer = null;
 					this.update();
-				}.bind(this), BRACKET_MINIMUM_UPDATE_INTERVAL);
+				}, BRACKET_MINIMUM_UPDATE_INTERVAL);
 			} else {
 				this.lastBracketUpdate = Date.now();
 
@@ -167,12 +167,12 @@ class Tournament {
 			this.availableMatchesCache = this.getAvailableMatches();
 			this.isAvailableMatchesInvalidated = false;
 
-			this.availableMatchesCache.challenges.forEach(function (opponents, user) {
+			this.availableMatchesCache.challenges.forEach((opponents, user) => {
 				user.sendTo(this.room, '|tournament|update|' + JSON.stringify({challenges: usersToNames(opponents)}));
-			}, this);
-			this.availableMatchesCache.challengeBys.forEach(function (opponents, user) {
+			});
+			this.availableMatchesCache.challengeBys.forEach((opponents, user) => {
 				user.sendTo(this.room, '|tournament|update|' + JSON.stringify({challengeBys: usersToNames(opponents)}));
-			}, this);
+			});
 		}
 		this.room.send('|tournament|updateEnd');
 	}
@@ -180,7 +180,7 @@ class Tournament {
 	purgeGhostUsers() {
 		// "Ghost" users sometimes end up in the tournament because they've merged with another user.
 		// This function is to remove those ghost users from the tournament.
-		this.generator.getUsers(true).forEach(function (user) {
+		this.generator.getUsers(true).forEach(user => {
 			let realUser = Users.getExact(user.userid);
 			if (!realUser || realUser !== user) {
 				// The two following functions are called without their second argument,
@@ -194,7 +194,7 @@ class Tournament {
 				}
 				this.room.update();
 			}
-		}, this);
+		});
 	}
 
 	removeBannedUser(user) {
@@ -301,17 +301,17 @@ class Tournament {
 
 				if (node.team) node.team = node.team.name;
 
-				node.children.forEach(function (child) {
+				node.children.forEach(child => {
 					queue.push(child);
 				});
 			}
 		} else if (data.type === 'table') {
 			if (this.isTournamentStarted) {
-				data.tableContents.forEach(function (row, r) {
+				data.tableContents.forEach((row, r) => {
 					let pendingChallenge = this.pendingChallenges.get(data.tableHeaders.rows[r]);
 					let inProgressMatch = this.inProgressMatches.get(data.tableHeaders.rows[r]);
 					if (pendingChallenge || inProgressMatch) {
-						row.forEach(function (cell, c) {
+						row.forEach((cell, c) => {
 							if (!cell) return;
 
 							if (pendingChallenge && data.tableHeaders.cols[c] === pendingChallenge.to) {
@@ -324,7 +324,7 @@ class Tournament {
 							}
 						});
 					}
-				}, this);
+				});
 			}
 			data.tableHeaders.cols = usersToNames(data.tableHeaders.cols);
 			data.tableHeaders.rows = usersToNames(data.tableHeaders.rows);
@@ -354,14 +354,14 @@ class Tournament {
 		this.disqualifiedUsers = new Map();
 		this.isAutoDisqualifyWarned = new Map();
 		this.lastActionTimes = new Map();
-		users.forEach(function (user) {
+		users.forEach(user => {
 			this.availableMatches.set(user, new Map());
 			this.inProgressMatches.set(user, null);
 			this.pendingChallenges.set(user, null);
 			this.disqualifiedUsers.set(user, false);
 			this.isAutoDisqualifyWarned.set(user, false);
 			this.lastActionTimes.set(user, Date.now());
-		}, this);
+		});
 
 		this.isTournamentStarted = true;
 		if (this.autoStartTimeout) clearTimeout(this.autoStartTimeout);
@@ -383,7 +383,7 @@ class Tournament {
 		let challengeBys = new Map();
 		let oldAvailableMatches = new Map();
 
-		users.forEach(function (user) {
+		users.forEach(user => {
 			challenges.set(user, []);
 			challengeBys.set(user, []);
 
@@ -394,20 +394,20 @@ class Tournament {
 				availableMatches.clear();
 			}
 			oldAvailableMatches.set(user, oldAvailableMatch);
-		}, this);
+		});
 
-		matches.forEach(function (match) {
+		matches.forEach(match => {
 			challenges.get(match[0]).push(match[1]);
 			challengeBys.get(match[1]).push(match[0]);
 
 			this.availableMatches.get(match[0]).set(match[1], true);
-		}, this);
+		});
 
-		this.availableMatches.forEach(function (availableMatches, user) {
+		this.availableMatches.forEach((availableMatches, user) => {
 			if (oldAvailableMatches.get(user)) return;
 
 			if (availableMatches.size) this.lastActionTimes.set(user, Date.now());
-		}, this);
+		});
 
 		return {
 			challenges: challenges,
@@ -452,7 +452,7 @@ class Tournament {
 		}
 
 		let matchTo = null;
-		this.inProgressMatches.forEach(function (match, userFrom) {
+		this.inProgressMatches.forEach((match, userFrom) => {
 			if (match && match.to === user) matchTo = userFrom;
 		});
 		if (matchTo) {
@@ -493,7 +493,7 @@ class Tournament {
 		if (timeout === Infinity) {
 			this.room.add('|tournament|autostart|off');
 		} else {
-			this.autoStartTimeout = setTimeout(this.startTournament.bind(this, output), timeout);
+			this.autoStartTimeout = setTimeout(() => this.startTournament(output), timeout);
 			this.room.add('|tournament|autostart|on|' + timeout);
 		}
 
@@ -522,7 +522,7 @@ class Tournament {
 			return false;
 		}
 		if (this.autoDisqualifyTimer) clearTimeout(this.autoDisqualifyTimer);
-		this.lastActionTimes.forEach(function (time, user) {
+		this.lastActionTimes.forEach((time, user) => {
 			let availableMatches = false;
 			if (this.availableMatches.get(user).size) availableMatches = true;
 			let pendingChallenge = this.pendingChallenges.get(user);
@@ -545,8 +545,8 @@ class Tournament {
 			} else {
 				this.isAutoDisqualifyWarned.set(user, false);
 			}
-		}, this);
-		if (this.autoDisqualifyTimeout !== Infinity && !this.isEnded) this.autoDisqualifyTimer = setTimeout(this.runAutoDisqualify.bind(this), this.autoDisqualifyTimeout);
+		});
+		if (this.autoDisqualifyTimeout !== Infinity && !this.isEnded) this.autoDisqualifyTimer = setTimeout(() => this.runAutoDisqualify(), this.autoDisqualifyTimeout);
 	}
 
 	challenge(from, to, output) {
@@ -572,7 +572,7 @@ class Tournament {
 		this.purgeGhostUsers();
 		this.update();
 
-		from.prepBattle(this.format, 'tournament', from, this.finishChallenge.bind(this, from, to, output));
+		from.prepBattle(this.format, 'tournament', from, () => this.finishChallenge(from, to, output));
 	}
 	finishChallenge(from, to, output, result) {
 		if (!result) {
@@ -623,7 +623,7 @@ class Tournament {
 		let challenge = this.pendingChallenges.get(user);
 		if (!challenge || !challenge.from) return;
 
-		user.prepBattle(this.format, 'tournament', user, this.finishAcceptChallenge.bind(this, user, challenge));
+		user.prepBattle(this.format, 'tournament', user, () => this.finishAcceptChallenge(user, challenge));
 	}
 	finishAcceptChallenge(user, challenge, result) {
 		if (!result) return;
@@ -757,7 +757,7 @@ function createTournament(room, format, generator, playerCap, isRated, args, out
 	format = Tools.getFormat(format);
 	if (format.effectType !== 'Format' || !format.tournamentShow) {
 		output.errorReply(format.id + " is not a valid tournament format.");
-		output.errorReply("Valid formats: " + Object.values(Tools.data.Formats).filter(function (f) { return f.effectType === 'Format' && f.tournamentShow; }).map('name').join(", "));
+		output.errorReply("Valid formats: " + Object.values(Tools.data.Formats).filter(f => f.effectType === 'Format' && f.tournamentShow).map('name').join(", "));
 		return;
 	}
 	if (!TournamentGenerators[toId(generator)]) {
@@ -989,15 +989,15 @@ CommandParser.commands.tournaments = 'tournament';
 CommandParser.commands.tournament = function (paramString, room, user) {
 	let cmdParts = paramString.split(' ');
 	let cmd = cmdParts.shift().trim().toLowerCase();
-	let params = cmdParts.join(' ').split(',').map(function (param) { return param.trim(); });
+	let params = cmdParts.join(' ').split(',').map(param => param.trim());
 	if (!params[0]) params = [];
 
 	if (cmd === '') {
 		if (!this.canBroadcast()) return;
-		this.sendReply('|tournaments|info|' + JSON.stringify(Object.keys(exports.tournaments).filter(function (tournament) {
+		this.sendReply('|tournaments|info|' + JSON.stringify(Object.keys(exports.tournaments).filter(tournament => {
 			tournament = exports.tournaments[tournament];
 			return !tournament.room.isPrivate && !tournament.room.isPersonal && !tournament.room.staffRoom;
-		}).map(function (tournament) {
+		}).map(tournament => {
 			tournament = exports.tournaments[tournament];
 			return {room: tournament.room.id, format: tournament.format, generator: tournament.generator.name, isStarted: tournament.isTournamentStarted};
 		})));

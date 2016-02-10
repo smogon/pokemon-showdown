@@ -2449,9 +2449,7 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon is not affected by the secondary effect of another Pokemon's attack.",
 		onModifySecondaries: function (secondaries) {
 			this.debug('Shield Dust prevent secondary');
-			return secondaries.filter(function (effect) {
-				return !!effect.self;
-			});
+			return secondaries.filter(effect => !!effect.self);
 		},
 		id: "shielddust",
 		name: "Shield Dust",

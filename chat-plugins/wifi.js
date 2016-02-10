@@ -32,7 +32,7 @@ if (wifiRoom) {
 	}
 }
 
-let QuestionGiveAway = (function () {
+let QuestionGiveAway = (() => {
 	function QuestionGiveAway(host, giver, room, options) {
 		this.host = host;
 		this.giver = giver;
@@ -49,7 +49,7 @@ let QuestionGiveAway = (function () {
 			"<b>" + Tools.escapeHTML(giver.name) + "</b> will be giving away a <b>" + Tools.escapeHTML(this.prize) + "!</b><br/>" +
 			"The question will be displayed in one minute! Use /ga to answer."
 		).update();
-		this.startTimer = setTimeout(this.start.bind(this), 1000 * 60);
+		this.startTimer = setTimeout(() => this.start(), 1000 * 60);
 
 		this.excluded = {};
 		this.excluded[host.userid] = 1;
@@ -102,7 +102,7 @@ let QuestionGiveAway = (function () {
 			"<div class='broadcast-blue'>Giveaway Question: <b>" + this.question + "</b><br/>" +
 			"use /ga to guess."
 		).update();
-		this.endTimer = setTimeout(this.onEnd.bind(this), 1000 * 60 * 10);
+		this.endTimer = setTimeout(() => this.onEnd(), 1000 * 60 * 10);
 	};
 	QuestionGiveAway.prototype.onEnd = function (force) {
 		if (force) {
@@ -131,18 +131,18 @@ let QuestionGiveAway = (function () {
 
 	QuestionGiveAway.sanitizeAnswers = function (target) {
 		let ret = {};
-		target.split("/").forEach(function (ans) {
+		for (let ans of target.split("/")) {
 			ans = ans.replace(/[^a-z0-9 ]+/ig, "").trim();
-			if (!toId(ans)) return;
+			if (!toId(ans)) continue;
 			ret[toId(ans)] = ans.toLowerCase();
-		});
+		}
 		return ret;
 	};
 
 	return QuestionGiveAway;
 })();
 
-let LotteryGiveAway = (function () {
+let LotteryGiveAway = (() => {
 	function LotteryGiveAway(host, giver, room, options) {
 		this.host = host;
 		this.giver = giver;
@@ -161,7 +161,7 @@ let LotteryGiveAway = (function () {
 			'<font size="1"><b><u>Note:</u> Please do not join if you don\'t have a 3DS and a copy of Pok&eacute;mon XY or ORAS';
 		this.room.addRaw(this.reminder).update();
 
-		this.drawTimer = setTimeout(this.drawLottery.bind(this), 1000 * 60 * 2);
+		this.drawTimer = setTimeout(() => this.drawLottery(), 1000 * 60 * 2);
 
 		this.excluded = {};
 		this.excluded[host.userid] = 1;
@@ -255,7 +255,7 @@ let commands = {
 		let targetUser = this.targetUser;
 		if (!targetUser || !targetUser.connected) return this.errorReply("User '" + this.targetUsername + "' is not online.");
 
-		target = target.split(',').map(function (val) { return val.trim(); });
+		target = target.split(',').map(val => val.trim());
 		if (target.length !== 3) return this.errorReply("Invalid arguments specified - /question giver, prize, question, answer(s)");
 		let options = {
 			prize: target[0],
@@ -312,7 +312,7 @@ let commands = {
 		let targetUser = this.targetUser;
 		if (!targetUser || !targetUser.connected) return this.errorReply("User '" + this.targetUsername + "' is not online.");
 
-		target = target.split(',').map(function (val) { return val.trim(); });
+		target = target.split(',').map(val => val.trim());
 		if (target.length !== 2) return this.errorReply("Invalid arguments specified - /lottery giver, prize, max winners");
 		let options = {
 			prize: target[0],

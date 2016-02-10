@@ -41,7 +41,7 @@ exports.commands = {
 			return this.errorReply('You must specify three hints and three answers.');
 		}
 		if (cmd === 'startofficialhunt') {
-			scavengers.blitz = setTimeout(function () {
+			scavengers.blitz = setTimeout(() => {
 				scavengers.blitz = null;
 			}, 60000);
 		}

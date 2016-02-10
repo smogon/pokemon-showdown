@@ -42,7 +42,7 @@ if (!Array.isArray(triviaData.ladder)) triviaData.ladder = [];
 if (!Array.isArray(triviaData.questions)) triviaData.questions = [];
 if (!Array.isArray(triviaData.submissions)) triviaData.submissions = [];
 
-let writeTriviaData = (function () {
+let writeTriviaData = (() => {
 	let writing = false;
 	let writePending = false; // whether or not a new write is pending
 
@@ -60,9 +60,9 @@ let writeTriviaData = (function () {
 		}
 		writing = true;
 		let data = JSON.stringify(triviaData, null, 2);
-		fs.writeFile('config/chat-plugins/triviadata.json.0', data, function () {
+		fs.writeFile('config/chat-plugins/triviadata.json.0', data, () => {
 			// rename is atomic on POSIX, but will throw an error on Windows
-			fs.rename('config/chat-plugins/triviadata.json.0', 'config/chat-plugins/triviadata.json', function (err) {
+			fs.rename('config/chat-plugins/triviadata.json.0', 'config/chat-plugins/triviadata.json', err => {
 				if (err) {
 					// This should only happen on Windows
 					fs.writeFile('config/chat-plugins/triviadata.json', data, finishWriting);
@@ -137,7 +137,7 @@ if (triviaRoom) {
 	}
 }
 
-let Trivia = (function () {
+let Trivia = (() => {
 	function Trivia(mode, category, scoreCap, room) {
 		this.room = room;
 		this.mode = mode;
@@ -189,7 +189,7 @@ let Trivia = (function () {
 		let responderIndex = this.participants.delete(userid).responderIndex;
 		if (this.phase === 'question' && responderIndex >= 0) {
 			this.responderIndex--;
-			this.participants.forEach(function (scoreData) {
+			this.participants.forEach(scoreData => {
 				if (scoreData.responderIndex > responderIndex) {
 					scoreData.responderIndex--;
 				}
@@ -233,14 +233,14 @@ let Trivia = (function () {
 
 		switch (this.mode) {
 		case 'first':
-			this.phaseTimeout = setTimeout(this.noAnswer.bind(this), QUESTION_PERIOD);
+			this.phaseTimeout = setTimeout(() => this.noAnswer(), QUESTION_PERIOD);
 			break;
 		case 'timer':
 			this.askedAt = Date.now();
-			this.phaseTimeout = setTimeout(this.timerAnswers.bind(this), QUESTION_PERIOD);
+			this.phaseTimeout = setTimeout(() => this.timerAnswers(), QUESTION_PERIOD);
 			break;
 		case 'number':
-			this.phaseTimeout = setTimeout(this.numberAnswers.bind(this), QUESTION_PERIOD);
+			this.phaseTimeout = setTimeout(() => this.numberAnswers(), QUESTION_PERIOD);
 			break;
 		}
 	};
@@ -320,7 +320,7 @@ let Trivia = (function () {
 			"Answer" + (this.currentAnswer.length > 1 ? "s: " : ": ") + this.currentAnswer.join(", ") + "<br />" +
 			"Nobody gained any points.</div>"
 		).update();
-		this.phaseTimeout = setTimeout(this.askQuestion.bind(this), INTERMISSION_PERIOD);
+		this.phaseTimeout = setTimeout(() => this.askQuestion(), INTERMISSION_PERIOD);
 	};
 
 	Trivia.prototype.firstAnswer = function (user) {
@@ -351,7 +351,7 @@ let Trivia = (function () {
 
 		buffer += "They gained <strong>5</strong> points!</div>";
 		this.room.addRaw(buffer);
-		this.phaseTimeout = setTimeout(this.askQuestion.bind(this), INTERMISSION_PERIOD);
+		this.phaseTimeout = setTimeout(() => this.askQuestion(), INTERMISSION_PERIOD);
 	};
 
 	Trivia.prototype.timerAnswers = function () {
@@ -406,7 +406,7 @@ let Trivia = (function () {
 
 		buffer += "</table></div>";
 		this.room.addRaw(buffer).update();
-		this.phaseTimeout = setTimeout(this.askQuestion.bind(this), INTERMISSION_PERIOD);
+		this.phaseTimeout = setTimeout(() => this.askQuestion(), INTERMISSION_PERIOD);
 	};
 
 	Trivia.prototype.numberAnswers = function () {
@@ -454,7 +454,7 @@ let Trivia = (function () {
 		buffer += (this.correctResponders > 1 ? "Each of them" : "They") + " gained <strong>" + points + "</strong> point" + (points > 1 ? "s!</div>" : "!</div>");
 		this.correctResponders = 0;
 		this.room.addRaw(buffer).update();
-		this.phaseTimeout = setTimeout(this.askQuestion.bind(this), INTERMISSION_PERIOD);
+		this.phaseTimeout = setTimeout(() => this.askQuestion(), INTERMISSION_PERIOD);
 	};
 
 	Trivia.prototype.stalemate = function () {
@@ -487,9 +487,7 @@ let Trivia = (function () {
 		let leaders = Object.keys(leaderboard);
 		let ladder = triviaData.ladder = [];
 		for (let i = 0; i < 3; i++) {
-			leaders.sort(function (a, b) {
-				return leaderboard[b][i] - leaderboard[a][i];
-			});
+			leaders.sort((a, b) => leaderboard[b][i] - leaderboard[a][i]);
 
 			let max = Infinity;
 			let rank = 0;
@@ -537,7 +535,7 @@ let Trivia = (function () {
 
 		let participants = [];
 		let buffer = "There " + (participantsLen > 1 ? "are <strong>" + participantsLen + "</strong> players" : "is <strong>1</strong> player") + " participating in this trivia game:<br />";
-		this.participants.forEach(function (scoreData, participantid) {
+		this.participants.forEach((scoreData, participantid) => {
 			let participant = Users(participantid);
 			participants.push(participant ? participant.name : participantid);
 		});
@@ -768,11 +766,8 @@ let commands = {
 				indices.splice(i, 1);
 			}
 
-			indices = indices.sort(function (a, b) {
-				return a - b;
-			}).filter(function (entry, index) {
-				return !index || indices[index - 1] !== entry;
-			});
+			indices.sort((a, b) => a - b);
+			indices = indices.filter((entry, index) => !index || indices[index - 1] !== entry);
 
 			let indicesLen = indices.length;
 			if (!indicesLen) return this.errorReply("'" + target + "' is not a valid set of submission index numbers. View /trivia review and /help trivia for more information.");

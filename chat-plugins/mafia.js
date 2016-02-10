@@ -204,13 +204,13 @@ class Mafia extends Rooms.RoomGame {
 			this[i] = settings[i];
 		}
 
-		this.roleString = this.roles.reduce((function (prev, cur, index, array) {
+		this.roleString = this.roles.reduce((prev, cur, index, array) => {
 			if (index === array.length - 1) {
 				return prev + MafiaData.MafiaClasses[cur].name;
 			} else {
 				return prev + MafiaData.MafiaClasses[cur].name + ', ';
 			}
-		}), '');
+		}, '');
 
 		this.room.send('|uhtml|mafia' + this.room.gameNumber + 'pregame|' + this.pregameWindow(false));
 	}
@@ -552,14 +552,14 @@ class Mafia extends Rooms.RoomGame {
 	}
 
 	setTimer(mins) {
-		this.timer = setTimeout((function () {
+		this.timer = setTimeout(() => {
 			for (let i in this.players) {
 				this.players[i].sendRoom("10 seconds left!");
 			}
-			this.timer = setTimeout((function () {
+			this.timer = setTimeout(() => {
 				this.progress();
-			}).bind(this), 10000);
-		}).bind(this), ((mins -  0.167) * 60000));
+			}, 10000);
+		}, ((mins -  0.167) * 60000));
 	}
 
 	// Meetings:
@@ -633,9 +633,9 @@ class Mafia extends Rooms.RoomGame {
 			}
 		}
 
-		this.executionOrder.sort(function (a, b) {
-			return (b.class[event].priority - a.class[event].priority);
-		});
+		this.executionOrder.sort((a, b) =>
+			b.class[event].priority - a.class[event].priority
+		);
 
 		if (this.executionOrder.length || this.currentVote) {
 			this.setTimer(timer);
@@ -694,7 +694,7 @@ exports.commands = {
 
 				room.game = new Mafia(room, roleList.length, roleList, settings);
 			} else {
-				let params = target.split(',').map(function (param) { return param.toLowerCase().trim(); });
+				let params = target.split(',').map(param => param.toLowerCase().trim());
 
 				// TODO: make a generator for a default setup.
 				if (!params) return this.errorReply("No roles entered.");

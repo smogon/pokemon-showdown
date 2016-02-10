@@ -12,7 +12,7 @@ const nameMap = {
 	// Feel free to add more
 };
 
-let Elimination = (function () {
+let Elimination = (() => {
 	function Elimination(maxSubtrees) {
 		maxSubtrees = maxSubtrees || 1;
 		if (typeof maxSubtrees === 'string' && maxSubtrees.toLowerCase() === 'infinity') {
@@ -74,7 +74,7 @@ let Elimination = (function () {
 	};
 	Elimination.prototype.getUsers = function (remaining) {
 		let users = [];
-		this.users.forEach(function (value, key) {
+		this.users.forEach((value, key) => {
 			if (remaining && (value.isEliminated || value.isDisqualified)) return;
 			users.push(key);
 		});
@@ -82,7 +82,7 @@ let Elimination = (function () {
 	};
 
 	Elimination.prototype.generateBracket = function () {
-		this.getUsers().randomize().forEach(function (user) {
+		this.getUsers().randomize().forEach(user => {
 			if (!this.tree) {
 				this.tree = {
 					tree: new TreeNode(null, {user: user}),
@@ -108,7 +108,7 @@ let Elimination = (function () {
 				this.tree.currentLayerLeafNodes = this.tree.nextLayerLeafNodes;
 				this.tree.nextLayerLeafNodes = [];
 			}
-		}, this);
+		});
 	};
 	Elimination.prototype.getBracketData = function () {
 		let rootNode = {children: []};
@@ -132,7 +132,7 @@ let Elimination = (function () {
 					}
 				}
 
-				frame.fromNode.forEachChild(function (child) {
+				frame.fromNode.forEachChild(child => {
 					queue.push({fromNode: child, toNode: node});
 				});
 			}
@@ -145,7 +145,7 @@ let Elimination = (function () {
 	};
 	Elimination.prototype.freezeBracket = function () {
 		this.isBracketFrozen = true;
-		this.users.forEach(function (user) {
+		this.users.forEach(user => {
 			user.isBusy = false;
 			user.isDisqualified = false;
 			user.loseCount = 0;
@@ -217,7 +217,7 @@ let Elimination = (function () {
 				newTree.nextLayerLeafNodes = [];
 			}
 
-			newTree.tree.traverse(function (node) {
+			newTree.tree.traverse(node => {
 				if (node.getValue().fromNode) {
 					node.getValue().fromNode.getValue().onLoseNode = node;
 					delete node.getValue().fromNode;
@@ -230,7 +230,7 @@ let Elimination = (function () {
 			this.tree.tree = newRoot;
 		}
 
-		this.tree.tree.traverse(function (node) {
+		this.tree.tree.traverse(node => {
 			if (!node.isLeaf() && node.getChildAt(0).getValue().user && node.getChildAt(1).getValue().user) {
 				node.getValue().state = 'available';
 			}
@@ -247,7 +247,7 @@ let Elimination = (function () {
 		// The user either has a single available battle or no available battles
 		let match = null;
 		let result;
-		this.tree.tree.traverse(function (node) {
+		this.tree.tree.traverse(node => {
 			if (node.getValue().state === 'available') {
 				if (node.getChildAt(0).getValue().user === user) {
 					match = [user, node.getChildAt(1).getValue().user];
@@ -284,7 +284,7 @@ let Elimination = (function () {
 		if (!this.isBracketFrozen) return 'BracketNotFrozen';
 
 		let matches = [];
-		this.tree.tree.traverse(function (node) {
+		this.tree.tree.traverse(node => {
 			if (node.getValue().state === 'available') {
 				let userA = node.getChildAt(0).getValue().user;
 				let userB = node.getChildAt(1).getValue().user;
@@ -292,7 +292,7 @@ let Elimination = (function () {
 					matches.push([userA, userB]);
 				}
 			}
-		}, this);
+		});
 		return matches;
 	};
 	Elimination.prototype.setMatchResult = function (match, result, score) {
@@ -303,7 +303,7 @@ let Elimination = (function () {
 		if (!this.users.has(match[0]) || !this.users.has(match[1])) return 'UserNotAdded';
 
 		let targetNode = null;
-		this.tree.tree.traverse(function (node) {
+		this.tree.tree.traverse(node => {
 			if (node.getValue().state === 'available' &&
 				node.getChildAt(0).getValue().user === match[0] &&
 				node.getChildAt(1).getValue().user === match[1]) {

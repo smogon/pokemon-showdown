@@ -1893,9 +1893,7 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		onModifyMove: function (move, user) {
 			if (user.illusion) {
-				let illusionMoves = user.illusion.moves.filter(function (move) {
-					return this.getMove(move).category !== 'Status';
-				}, this);
+				let illusionMoves = user.illusion.moves.filter(move => this.getMove(move).category !== 'Status');
 				if (!illusionMoves.length) return;
 				move.name = this.getMove(illusionMoves[this.random(illusionMoves.length)]).name;
 			}

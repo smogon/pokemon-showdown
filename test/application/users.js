@@ -24,7 +24,7 @@ describe('Users features', function () {
 		});
 		describe('User', function () {
 			describe('#disconnectAll', function () {
-				[1, 2].forEach(function (totalConnections) {
+				for (let totalConnections of [1, 2]) {
 					it('should drop all ' + totalConnections + ' connection(s) and mark as inactive', function () {
 						let user = new User();
 						let iterations = totalConnections;
@@ -59,7 +59,7 @@ describe('Users features', function () {
 							assert.strictEqual(connections[i].user, null);
 						}
 					});
-				});
+				}
 			});
 			describe('#ban', function () {
 				afterEach(function () {
@@ -69,14 +69,14 @@ describe('Users features', function () {
 				});
 
 				it('should disconnect every user at that IP', function () {
-					let users = ['127.0.0.1', '127.0.0.1'].map(function (ip) {return new User(new Connection(ip));});
+					let users = ['127.0.0.1', '127.0.0.1'].map(ip => new User(new Connection(ip)));
 					users[0].ban();
 					assert.strictEqual(users[0].connected, false);
 					assert.strictEqual(users[1].connected, false);
 				});
 
 				it('should not disconnect users at other IPs', function () {
-					let users = ['127.0.0.1', '127.0.0.2'].map(function (ip) {return new User(new Connection(ip));});
+					let users = ['127.0.0.1', '127.0.0.2'].map(ip => new User(new Connection(ip)));
 					users[0].ban();
 					assert.strictEqual(users[1].connected, true);
 				});
