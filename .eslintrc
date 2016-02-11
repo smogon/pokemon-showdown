@@ -103,6 +103,8 @@
 		"no-new-require": 2,
 
 		"array-bracket-spacing": [2, "never"],
+		"arrow-parens": [2, "as-needed"],
+		"arrow-spacing": [2, {"before": true, "after": true}],
 		"block-spacing": 0,
 		"brace-style": [2, "1tbs", {"allowSingleLine": true}],
 		"camelcase": 0,
