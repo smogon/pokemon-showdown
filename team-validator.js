@@ -289,7 +289,9 @@ class Validator {
 				// since egg moves don't get removed between gens, it's unlikely to have
 				// any serious problems.
 				let limitedEgg = lsetData.limitedEgg.unique();
-				if (limitedEgg.length > 1 && limitedEgg.indexOf('self') >= 0) {
+				if (limitedEgg.length <= 1) {
+					// Only one source, can't conflict with anything else
+				} else if (limitedEgg.indexOf('self') >= 0) {
 					// Self-moves are always incompatible with anything else
 					problems.push(name + "'s egg moves are incompatible.");
 				} else {
