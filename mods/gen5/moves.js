@@ -734,11 +734,13 @@ exports.BattleMovedex = {
 	},
 	secretpower: {
 		inherit: true,
-		onHit: function () {},
-		secondary: {
-			chance: 30,
-			boosts: {
-				accuracy: -1,
+		effect: {
+			duration: 1,
+			onAfterMoveSecondarySelf: function (source, target, move) {
+				if (this.random(10) < 3) {
+					this.boost({accuracy: -1}, target, source);
+				}
+				source.removeVolatile('secretpower');
 			},
 		},
 	},
