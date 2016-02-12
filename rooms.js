@@ -455,7 +455,7 @@ let GlobalRoom = (() => {
 		let curSection = '';
 		for (let i in Tools.data.Formats) {
 			let format = Tools.data.Formats[i];
-			if (!format.challengeShow && !format.searchShow && !format.tournamentShow) continue;
+			if (!format.challengeShow && !format.searchShow && !format.tournamentShow || format.isCustomGameFormat) continue;
 
 			let section = format.section;
 			if (section === undefined) section = format.mod;

@@ -12,7 +12,6 @@ describe('Battle#on', function () {
 		battle = BattleEngine.Battle.construct('battle-1', 'customgame');
 		battle.join('p1', 'Guest 1', 1, [{species: 'Pidgeot', ability: 'keeneye', moves: ['bulkup']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Talonflame', ability: 'galewings', moves: ['peck']}]);
-		battle.commitDecisions(); // Team Preview
 		let eventCount = 0;
 		let eventCount2 = 0;
 		battle.on('Hit', battle.getFormat(), function () {
@@ -35,7 +34,6 @@ describe('Battle#on', function () {
 		battle = BattleEngine.Battle.construct('battle-2', 'customgame');
 		battle.join('p1', 'Guest 1', 1, [{species: 'Pidgeot', ability: 'keeneye', moves: ['bulkup']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Talonflame', ability: 'galewings', moves: ['peck']}]);
-		battle.commitDecisions(); // Team Preview
 		let eventCount = 0;
 		let callback = function (count) {
 			return function () {

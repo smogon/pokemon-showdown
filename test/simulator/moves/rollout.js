@@ -17,7 +17,6 @@ for (let i = 0; i < moves.length; i++) {
 			battle = BattleEngine.Battle.construct('battle-rollout', 'customgame');
 			battle.join('p1', 'Guest 1', 1, [{species: 'Shuckle', ability: 'gluttony', moves: [id]}]);
 			battle.join('p2', 'Guest 2', 1, [{species: 'Steelix', ability: 'noguard', moves: ['recover']}]);
-			battle.commitDecisions(); // Team Preview
 
 			let ebp = 30;
 			let count = 0;
@@ -41,7 +40,6 @@ for (let i = 0; i < moves.length; i++) {
 			battle = BattleEngine.Battle.construct('battle-rollout-miss', 'customgame');
 			battle.join('p1', 'Guest 1', 1, [{species: 'Shuckle', ability: 'gluttony', moves: [id]}]);
 			battle.join('p2', 'Guest 2', 1, [{species: 'Steelix', ability: 'furcoat', moves: ['recover']}]);
-			battle.commitDecisions(); // Team Preview
 
 			let ebp = 30;
 			let count = 0;
@@ -71,7 +69,6 @@ for (let i = 0; i < moves.length; i++) {
 			battle = BattleEngine.Battle.construct('battle-rollout-para', 'customgame');
 			battle.join('p1', 'Guest 1', 1, [{species: 'Shuckle', ability: 'gluttony', moves: [id]}]);
 			battle.join('p2', 'Guest 2', 1, [{species: 'Steelix', ability: 'noguard', moves: ['recover']}]);
-			battle.commitDecisions(); // Team Preview
 
 			let ebp = 30;
 			let count = 0;
@@ -99,7 +96,6 @@ for (let i = 0; i < moves.length; i++) {
 			battle = BattleEngine.Battle.construct('battle-defensecurl', 'customgame');
 			battle.join('p1', 'Guest 1', 1, [{species: 'Shuckle', ability: 'gluttony', moves: [id, 'defensecurl']}]);
 			battle.join('p2', 'Guest 2', 1, [{species: 'Steelix', ability: 'noguard', moves: ['recover']}]);
-			battle.commitDecisions(); // Team Preview
 
 			let runCount = 0;
 			battle.on('BasePower', battle.getFormat(), function (basePower) {
@@ -117,7 +113,6 @@ for (let i = 0; i < moves.length; i++) {
 			battle = BattleEngine.Battle.construct('battle-parentalbond', 'customgame');
 			battle.join('p1', 'Guest 1', 1, [{species: 'Shuckle', ability: 'parentalbond', moves: [id]}]);
 			battle.join('p2', 'Guest 2', 1, [{species: 'Steelix', ability: 'noguard', moves: ['recover']}]);
-			battle.commitDecisions(); // Team Preview
 
 			let hitCount = 0;
 			battle.on('BasePower', battle.getFormat(), function (basePower) {

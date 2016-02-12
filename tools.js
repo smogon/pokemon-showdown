@@ -407,10 +407,17 @@ module.exports = (() => {
 				name = this.data.Aliases[id];
 				id = toId(name);
 			}
+			let allowCache = true;
+			let customGame = id.match(/(.*?customgame)(\d+)/);
+			if (customGame) {
+				if (this.data.Formats[id]) return this.data.Formats[id];
+				id = customGame[1];
+				allowCache = false;
+			}
 			effect = {};
 			if (id && this.data.Formats[id]) {
 				effect = this.data.Formats[id];
-				if (effect.cached) return effect;
+				if (effect.cached && allowCache) return effect;
 				effect.cached = true;
 				effect.name = effect.name || this.data.Formats[id].name;
 				if (!effect.mod) effect.mod = 'base';
@@ -422,6 +429,38 @@ module.exports = (() => {
 			effect.toString = this.effectToString;
 			if (!effect.category) effect.category = 'Effect';
 			if (!effect.effectType) effect.effectType = 'Effect';
+
+			// Custom Game creation
+			if (customGame) {
+				effect = Object.clone(effect, true);
+				effect.id += customGame[2];
+				effect.isCustomGameFormat = true;
+				effect.cached = true;
+				delete effect.banlistTable;
+				effect.banlist = [];
+
+				let options = [
+					// Cartridge limitations
+					{option: 'Pokemon', type: 'ruleset'},
+					// Legal Pokemon
+					{option: ['Illegal', 'Unreleased'], type: 'banlist'},
+					// Team Preview
+					{option: 'Team Preview', type: 'ruleset'},
+					// Sleep Clause Mod
+					{option: 'Sleep Clause Mod', type: 'ruleset'},
+				];
+
+				customGame = parseInt(customGame[2]);
+				for (let i = 0; i < options.length; i++) {
+					if (!(customGame & (1 << i))) continue;
+					effect[options[i].type] = effect[options[i].type].concat(options[i].option);
+				}
+
+				effect.ruleset = effect.ruleset.unique();
+				effect.banlist = effect.banlist.unique();
+
+				this.data.Formats[effect.id] = effect;
+			}
 		}
 		return effect;
 	};
