@@ -204,16 +204,10 @@ exports.BattleStatuses = {
 	},
 	partiallytrapped: {
 		duration: 2,
-		onStart: function (target, source, effect) {
-			this.add('-activate', target, 'move: ' + effect, '[of] ' + source);
-		},
 		onBeforeMovePriority: 4,
 		onBeforeMove: function (pokemon) {
 			this.add('cant', pokemon, 'partiallytrapped');
 			return false;
-		},
-		onEnd: function (pokemon) {
-			this.add('-end', pokemon, this.effectData.sourceEffect, '[partiallytrapped]');
 		},
 	},
 	partialtrappinglock: {
