@@ -10,7 +10,7 @@ const permission = 'ban';
 const deadImage = '<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-dead.png" />';
 const meetingMsg = {town: 'The town has lynched a suspect!', mafia: 'The mafia strikes again!'};
 
-const defaultSettings = {anonVotes: false, allowWills: false};
+const defaultSettings = {anonVotes: false, allowWills: false, autoModchat: false};
 
 class MafiaPlayer extends Rooms.RoomGamePlayer {
 	constructor(user, game) {
@@ -335,6 +335,7 @@ class Mafia extends Rooms.RoomGame {
 
 		if (this.allowWills) output += 'Wills are allowed. ';
 		if (this.anonVotes) output += 'Votes are anonymous. ';
+		if (this.autoModchat) output += 'Modchat is automatically set to + at night. ';
 
 		if (joined) {
 			output += '<br/><button value="/leavegame" name="send">Leave</button>';
@@ -441,6 +442,9 @@ class Mafia extends Rooms.RoomGame {
 		clearTimeout(this.timer);
 		this.timer = null;
 		this.room.game = null;
+		if (this.autoModchat && this.oldModchat && this.room.modchat === '+') {
+			this.room.modchat = this.oldModchat;
+		}
 		this.destroy();
 	}
 
@@ -450,6 +454,9 @@ class Mafia extends Rooms.RoomGame {
 		clearTimeout(this.timer);
 		this.timer = null;
 		this.room.game = null;
+		if (this.autoModchat && this.oldModchat && this.room.modchat === '+') {
+			this.room.modchat = this.oldModchat;
+		}
 		this.destroy();
 	}
 
@@ -540,12 +547,13 @@ class Mafia extends Rooms.RoomGame {
 		}
 
 		switch (this.gamestate) {
-		case 'initial':
-			this.gamestate = 'night';
-			this.mafiaMeeting();
-			this.gameEvent('onNight', 2);
-			break;
 		case 'night':
+			if (this.autoModchat) {
+				if (this.room.modchat === '+') {
+					this.room.modchat = this.oldModchat;
+				}
+				delete this.oldModchat;
+			}
 			this.gamestate = 'day';
 			break;
 		case 'day':
@@ -555,7 +563,13 @@ class Mafia extends Rooms.RoomGame {
 			break;
 		case 'lynch':
 			this.day++;
+			// falls through
+		case 'initial':
 			this.gamestate = 'night';
+			if (this.autoModchat) {
+				this.oldModchat = this.room.modchat;
+				this.room.modchat = '+';
+			}
 			this.mafiaMeeting();
 			this.gameEvent('onNight', 2);
 		}
@@ -793,6 +807,29 @@ exports.commands = {
 					this.errorReply("Anonymous votes are already disabled.");
 				} else {
 					room.game.anonVotes = false;
+					room.game.updatePregame();
+				}
+			}
+		},
+
+		automodchat: function (target, room, user) {
+			if (!room.game || room.game.gameid !== 'mafia') return this.errorReply("There is no game of mafia running in this room.");
+			if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
+			if (!this.can(permission, null, room)) return false;
+			if (room.game.gamestate !== 'pregame') return this.errorReply("The game has started already.");
+
+			if (target === 'on' || target === 'enable') {
+				if (room.game.autoModchat) {
+					this.errorReply("Automatic modchat is already enabled.");
+				} else {
+					room.game.autoModchat = true;
+					room.game.updatePregame();
+				}
+			} else if (target === 'off' || target === 'disable') {
+				if (!room.game.autoModchat) {
+					this.errorReply("Automatic modchat is already disabled.");
+				} else {
+					room.game.autoModchat = false;
 					room.game.updatePregame();
 				}
 			}
