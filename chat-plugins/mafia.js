@@ -22,6 +22,11 @@ class MafiaPlayer extends Rooms.RoomGamePlayer {
 
 	event(event) {
 		if (this.class[event].target) {
+			if (this.class[event].oneshot) {
+				if (!this.used) this.used = {};
+				if (this.used[event]) return;
+				this.using = event;
+			}
 			this.targeting = true;
 			this.toExecute = this.class[event].callback;
 			if (this.class[event].target.count === 'single') {
@@ -123,6 +128,7 @@ class MafiaPlayer extends Rooms.RoomGamePlayer {
 		if (target in this.validTargets || target === 'none') {
 			this.targeting = false;
 			if (target === 'none') {
+				if (this.using) delete this.using;
 				this.toExecute = null;
 			} else {
 				this.target = this.game.players[target];
@@ -461,6 +467,10 @@ class Mafia extends Rooms.RoomGame {
 					player.roleBlocked = false;
 					player.toExecute = null;
 				} else {
+					if (player.using) {
+						player.used[player.using] = 1;
+						delete player.using;
+					}
 					let output;
 					if (player.target) {
 						output = Tools.escapeHTML(player.toExecute(player.target));
