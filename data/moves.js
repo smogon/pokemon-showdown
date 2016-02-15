@@ -11727,23 +11727,31 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onHit: function (target, pokemon) {
-			pokemon.addVolatile('secretpower');
+		onModifyMove: function (move, pokemon) {
+			if (this.isTerrain('')) return;
+			move.secondaries = [];
+			if (this.isTerrain('electricterrain')) {
+				move.secondaries.push({
+					chance: 30,
+					status: 'par',
+				});
+			} else if (this.isTerrain('grassyterrain')) {
+				move.secondaries.push({
+					chance: 30,
+					status: 'slp',
+				});
+			} else if (this.isTerrain('mistyterrain')) {
+				move.secondaries.push({
+					chance: 30,
+					boosts: {
+						spa: -1,
+					},
+				});
+			}
 		},
-		effect: {
-			duration: 1,
-			onAfterMoveSecondarySelf: function (source, target, move) {
-				if (this.random(10) < 3) {
-					if (this.isTerrain('') || this.isTerrain('electricterrain')) {
-						target.trySetStatus('par', source, move);
-					} else if (this.isTerrain('grassyterrain')) {
-						target.trySetStatus('slp', source, move);
-					} else if (this.isTerrain('mistyterrain')) {
-						this.boost({spa: -1}, target, source);
-					}
-				}
-				source.removeVolatile('secretpower');
-			},
+		secondary: {
+			chance: 30,
+			status: 'par',
 		},
 		target: "normal",
 		type: "Normal",

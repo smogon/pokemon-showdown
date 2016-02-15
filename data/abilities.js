@@ -1893,9 +1893,16 @@ exports.BattleAbilities = {
 			onBasePowerPriority: 8,
 			onBasePower: function (basePower) {
 				if (this.effectData.hit) {
+					this.effectData.hit++;
 					return this.chainModify(0.5);
 				} else {
-					this.effectData.hit = true;
+					this.effectData.hit = 1;
+				}
+			},
+			onSourceModifySecondaries: function (secondaries, target, source, move) {
+				if (move.id === 'secretpower' && this.effectData.hit < 2) {
+					// hack to prevent accidentally suppressing King's Rock/Razor Fang
+					return secondaries.filter(effect => effect.volatileStatus === 'flinch');
 				}
 			},
 		},
