@@ -118,6 +118,12 @@ class Poll {
 		}
 	}
 
+	updateFor(user) {
+		if (user.userid in this.voters) {
+			user.sendTo(this.room, '|uhtmlchange|poll' + this.room.pollNumber + '|' + this.generateResults(false, this.voters[user.userid]));
+		}
+	}
+
 	display() {
 		let votes = this.generateVotes();
 
