@@ -58,7 +58,42 @@ exports.BattleMovedex = {
 	beatup: {
 		inherit: true,
 		basePower: 10,
-		basePowerCallback: undefined,
+		basePowerCallback: function (pokemon, target) {
+			pokemon.addVolatile('beatup');
+			if (!pokemon.side.pokemon[pokemon.volatiles.beatup.index]) return null;
+			return 10;
+		},
+		desc: "Does one hit for the user and each other unfainted non-egg active and non-active Pokemon on the user's side without a status problem.",
+		onModifyMove: function (move, pokemon) {
+			move.type = '???';
+			move.category = 'Physical';
+		},
+		effect: {
+			duration: 1,
+			onStart: function (pokemon) {
+				this.effectData.index = 0;
+				while (!pokemon.side.pokemon[this.effectData.index] || pokemon.side.pokemon[this.effectData.index].fainted || pokemon.side.pokemon[this.effectData.index].status) {
+					this.effectData.index++;
+				}
+			},
+			onRestart: function (pokemon) {
+				do {
+					this.effectData.index++;
+					if (this.effectData.index >= 6) break;
+				} while (!pokemon.side.pokemon[this.effectData.index] || pokemon.side.pokemon[this.effectData.index].fainted || pokemon.side.pokemon[this.effectData.index].status);
+			},
+			onModifyAtkPriority: -101,
+			onModifyAtk: function (atk, pokemon) {
+				this.add('-activate', pokemon, 'move: Beat Up', '[of] ' + pokemon.side.pokemon[this.effectData.index].name);
+				this.event.modifier = 1;
+				return pokemon.side.pokemon[this.effectData.index].template.baseStats.atk;
+			},
+			onFoeModifyDefPriority: -101,
+			onFoeModifyDef: function (def, pokemon) {
+				this.event.modifier = 1;
+				return pokemon.template.baseStats.def;
+			},
+		},
 	},
 	bide: {
 		inherit: true,
