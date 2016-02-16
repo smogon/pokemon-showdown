@@ -2340,8 +2340,7 @@ exports.commands = {
 
 	savereplay: function (target, room, user, connection) {
 		if (!room || !room.battle) return;
-		let logidx = 0; // spectator log (no exact HP)
-		let data = room.getLog(logidx).join("\n");
+		let data = room.getLog(0).join("\n"); // spectator log (no exact HP)
 		let datahash = crypto.createHash('md5').update(data.replace(/[^(\x20-\x7F)]+/g, '')).digest('hex');
 		let players = room.battle.playerNames;
 		LoginServer.request('prepreplay', {
