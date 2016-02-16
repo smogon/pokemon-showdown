@@ -1897,7 +1897,7 @@ exports.BattleScripts = {
 			item = 'Light Clay';
 		} else if (ability === 'Iron Barbs' || ability === 'Rough Skin') {
 			item = 'Rocky Helmet';
-		} else if (counter.Physical + counter.Special >= 4 && (template.baseStats.def + template.baseStats.spd > 189 || hasMove['rapidspin'])) {
+		} else if (counter.Physical + counter.Special >= 4 && template.baseStats.spd > 55 && (template.baseStats.def + template.baseStats.spd > 189 || hasMove['rapidspin'])) {
 			item = 'Assault Vest';
 		} else if (counter.damagingMoves.length >= 4) {
 			item = (!!counter['Normal'] || (hasMove['suckerpunch'] && !hasType['Dark'])) ? 'Life Orb' : 'Expert Belt';
