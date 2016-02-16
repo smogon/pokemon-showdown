@@ -965,7 +965,7 @@ let BattleRoom = (() => {
 	};
 	// logNum = 0    : spectator log
 	// logNum = 1, 2 : player log
-	// logNum = 3    : replay log
+	// logNum = 3    : debug log
 	BattleRoom.prototype.getLog = function (logNum) {
 		let log = [];
 		for (let i = 0; i < this.log.length; ++i) {
@@ -980,7 +980,6 @@ let BattleRoom = (() => {
 		return log;
 	};
 	BattleRoom.prototype.getLogForUser = function (user) {
-		if (this.game.ended) return this.getLog(3);
 		if (!(user in this.game.players)) return this.getLog(0);
 		return this.getLog(this.game.players[user].slotNum + 1);
 	};
