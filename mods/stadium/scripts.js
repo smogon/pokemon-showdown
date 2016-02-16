@@ -256,15 +256,12 @@ exports.BattleScripts = {
 			move.ignoreImmunity = (move.category === 'Status');
 		}
 
-		// We get the sub to the target to see if it existed
-		let targetSub = (target) ? target.volatiles['substitute'] : false;
-		let targetHadSub = (targetSub !== null && targetSub !== false && (typeof targetSub !== 'undefined'));
-
 		if (target) {
 			hitResult = this.singleEvent('TryHit', moveData, {}, target, pokemon, move);
 
-			// Handle here the applying of partial trapping moves to Pokémon with Substitute
-			if (targetSub && moveData.volatileStatus && moveData.volatileStatus === 'partiallytrapped') {
+			// Partial trapping moves still apply their volatile to Pokémon behind a Sub
+			let targetHadSub = (target && target.volatiles['substitute']);
+			if (targetHadSub && moveData.volatileStatus && moveData.volatileStatus === 'partiallytrapped') {
 				target.addVolatile(moveData.volatileStatus, pokemon, move);
 			}
 
