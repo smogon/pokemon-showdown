@@ -2874,7 +2874,8 @@ exports.BattleAbilities = {
 			if (!source || source === target) return;
 			if (effect && effect.id === 'toxicspikes') return;
 			if (status.id === 'slp' || status.id === 'frz') return;
-			source.trySetStatus(status, target);
+			if (source.trySetStatus(status, target)) return;
+			this.add('-immune', source, '[msg]', '[from] ability: Synchronize', '[of] ' + target);
 		},
 		id: "synchronize",
 		name: "Synchronize",
