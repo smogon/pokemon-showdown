@@ -963,9 +963,9 @@ let BattleRoom = (() => {
 		}
 		this.update();
 	};
-	// logNum = 0    : spectator log
-	// logNum = 1, 2 : player log
-	// logNum = 3    : debug log
+	// logNum = 0    : spectator log (no exact HP)
+	// logNum = 1, 2 : player log (exact HP for that player)
+	// logNum = 3    : debug log (exact HP for all players)
 	BattleRoom.prototype.getLog = function (logNum) {
 		let log = [];
 		for (let i = 0; i < this.log.length; ++i) {
