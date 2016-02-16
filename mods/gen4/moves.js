@@ -196,8 +196,8 @@ exports.BattleMovedex = {
 	},
 	crushgrip: {
 		inherit: true,
-		basePowerCallback: function (pokemon) {
-			return Math.floor(pokemon.hp * 120 / pokemon.maxhp) + 1;
+		basePowerCallback: function (pokemon, target) {
+			return Math.floor(target.hp * 120 / target.maxhp) + 1;
 		},
 	},
 	curse: {
