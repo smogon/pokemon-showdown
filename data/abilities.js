@@ -706,7 +706,7 @@ exports.BattleAbilities = {
 		onAfterDamage: function (damage, target, source, move) {
 			if (move && move.flags['contact']) {
 				if (this.random(10) < 3) {
-					source.trySetStatus('brn', target, move);
+					source.trySetStatus('brn', target);
 				}
 			}
 		},
@@ -2023,7 +2023,7 @@ exports.BattleAbilities = {
 		onAfterDamage: function (damage, target, source, move) {
 			if (move && move.flags['contact']) {
 				if (this.random(10) < 3) {
-					source.trySetStatus('psn', target, move);
+					source.trySetStatus('psn', target);
 				}
 			}
 		},
@@ -2652,10 +2652,10 @@ exports.BattleAbilities = {
 	},
 	"static": {
 		shortDesc: "30% chance a Pokemon making contact with this Pokemon will be paralyzed.",
-		onAfterDamage: function (damage, target, source, effect) {
-			if (effect && effect.flags['contact']) {
+		onAfterDamage: function (damage, target, source, move) {
+			if (move && move.flags['contact']) {
 				if (this.random(10) < 3) {
-					source.trySetStatus('par', target, effect);
+					source.trySetStatus('par', target);
 				}
 			}
 		},

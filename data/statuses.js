@@ -6,9 +6,11 @@ exports.BattleStatuses = {
 		onStart: function (target, source, sourceEffect) {
 			if (sourceEffect && sourceEffect.id === 'flameorb') {
 				this.add('-status', target, 'brn', '[from] item: Flame Orb');
-				return;
+			} else if (sourceEffect && sourceEffect.effectType === 'Ability') {
+				this.add('-status', target, 'brn', '[from] ability: ' + sourceEffect.name, '[of] ' + source);
+			} else {
+				this.add('-status', target, 'brn');
 			}
-			this.add('-status', target, 'brn');
 		},
 		// Damage reduction is handled directly in the battle-engine.js damage function
 		onResidualOrder: 9,
@@ -18,8 +20,12 @@ exports.BattleStatuses = {
 	},
 	par: {
 		effectType: 'Status',
-		onStart: function (target) {
-			this.add('-status', target, 'par');
+		onStart: function (target, source, sourceEffect) {
+			if (sourceEffect && sourceEffect.effectType === 'Ability') {
+				this.add('-status', target, 'par', '[from] ability: ' + sourceEffect.name, '[of] ' + source);
+			} else {
+				this.add('-status', target, 'par');
+			}
 		},
 		onModifySpe: function (spe, pokemon) {
 			if (!pokemon.hasAbility('quickfeet')) {
@@ -36,8 +42,12 @@ exports.BattleStatuses = {
 	},
 	slp: {
 		effectType: 'Status',
-		onStart: function (target) {
-			this.add('-status', target, 'slp');
+		onStart: function (target, source, sourceEffect) {
+			if (sourceEffect && sourceEffect.effectType === 'Ability') {
+				this.add('-status', target, 'slp', '[from] ability: ' + sourceEffect.name, '[of] ' + source);
+			} else {
+				this.add('-status', target, 'slp');
+			}
 			// 1-3 turns
 			this.effectData.startTime = this.random(2, 5);
 			this.effectData.time = this.effectData.startTime;
@@ -61,8 +71,12 @@ exports.BattleStatuses = {
 	},
 	frz: {
 		effectType: 'Status',
-		onStart: function (target) {
-			this.add('-status', target, 'frz');
+		onStart: function (target, source, sourceEffect) {
+			if (sourceEffect && sourceEffect.effectType === 'Ability') {
+				this.add('-status', target, 'frz', '[from] ability: ' + sourceEffect.name, '[of] ' + source);
+			} else {
+				this.add('-status', target, 'frz');
+			}
 			if (target.template.species === 'Shaymin-Sky' && target.baseTemplate.baseSpecies === 'Shaymin') {
 				let template = this.getTemplate('Shaymin');
 				target.formeChange(template);
@@ -98,8 +112,12 @@ exports.BattleStatuses = {
 	},
 	psn: {
 		effectType: 'Status',
-		onStart: function (target) {
-			this.add('-status', target, 'psn');
+		onStart: function (target, source, sourceEffect) {
+			if (sourceEffect && sourceEffect.effectType === 'Ability') {
+				this.add('-status', target, 'psn', '[from] ability: ' + sourceEffect.name, '[of] ' + source);
+			} else {
+				this.add('-status', target, 'psn');
+			}
 		},
 		onResidualOrder: 9,
 		onResidual: function (pokemon) {
@@ -112,9 +130,11 @@ exports.BattleStatuses = {
 			this.effectData.stage = 0;
 			if (sourceEffect && sourceEffect.id === 'toxicorb') {
 				this.add('-status', target, 'tox', '[from] item: Toxic Orb');
-				return;
+			} else if (sourceEffect && sourceEffect.effectType === 'Ability') {
+				this.add('-status', target, 'tox', '[from] ability: ' + sourceEffect.name, '[of] ' + source);
+			} else {
+				this.add('-status', target, 'tox');
 			}
-			this.add('-status', target, 'tox');
 		},
 		onSwitchIn: function () {
 			this.effectData.stage = 0;
