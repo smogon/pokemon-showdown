@@ -223,14 +223,14 @@ exports.BattleStatuses = {
 		onStart: function (target, source, effect) {
 			this.effectData.move = effect.id;
 		},
-		onModifyPokemon: function (pokemon) {
+		onDisableMove: function (pokemon) {
 			if (!pokemon.hasMove(this.effectData.move)) {
 				return;
 			}
 			let moves = pokemon.moveset;
 			for (let i = 0; i < moves.length; i++) {
 				if (moves[i].id !== this.effectData.move) {
-					moves[i].disabled = true;
+					pokemon.disableMove(moves[i].id);
 				}
 			}
 		},
