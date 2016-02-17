@@ -335,7 +335,7 @@ BattlePokemon = (() => {
 		if (this.illusion) return this.illusion.details + '|' + this.getHealth(side);
 		return this.details + '|' + this.getHealth(side);
 	};
-	BattlePokemon.prototype.update = function () {
+	BattlePokemon.prototype.updateSpeed = function () {
 		this.speed = this.getDecisionSpeed();
 	};
 	BattlePokemon.prototype.calculateStat = function (statName, boost, modifier) {
@@ -650,20 +650,17 @@ BattlePokemon = (() => {
 			}
 			if (delta) changed = true;
 		}
-		this.update();
 		return changed;
 	};
 	BattlePokemon.prototype.clearBoosts = function () {
 		for (let i in this.boosts) {
 			this.boosts[i] = 0;
 		}
-		this.update();
 	};
 	BattlePokemon.prototype.setBoost = function (boost) {
 		for (let i in boost) {
 			this.boosts[i] = boost[i];
 		}
-		this.update();
 	};
 	BattlePokemon.prototype.copyVolatileFrom = function (pokemon) {
 		this.clearVolatile();
@@ -679,7 +676,6 @@ BattlePokemon = (() => {
 			}
 		}
 		pokemon.clearVolatile();
-		this.update();
 		for (let i in this.volatiles) {
 			this.battle.singleEvent('Copy', this.getVolatile(i), this.volatiles[i], this);
 		}
@@ -760,7 +756,6 @@ BattlePokemon = (() => {
 			}
 		}
 
-		this.update();
 		return true;
 	};
 	BattlePokemon.prototype.formeChange = function (template, dontRecalculateStats) {
@@ -993,7 +988,6 @@ BattlePokemon = (() => {
 			this.statusData = prevStatusData;
 			return false;
 		}
-		this.update();
 		if (status.id && !this.battle.runEvent('AfterSetStatus', this, source, sourceEffect, status)) {
 			return false;
 		}
@@ -1192,7 +1186,6 @@ BattlePokemon = (() => {
 			this.volatiles[status].linkedPokemon = source;
 			this.volatiles[status].linkedStatus = linkedStatus;
 		}
-		this.update();
 		return true;
 	};
 	BattlePokemon.prototype.getVolatile = function (status) {
@@ -1211,7 +1204,6 @@ BattlePokemon = (() => {
 		if (linkedPokemon && linkedPokemon.volatiles[linkedStatus]) {
 			linkedPokemon.removeVolatile(linkedStatus);
 		}
-		this.update();
 		return true;
 	};
 	// "static" function
@@ -1441,7 +1433,6 @@ BattleSide = (() => {
 			delete this.sideConditions[status.id];
 			return false;
 		}
-		this.battle.update();
 		return true;
 	};
 	BattleSide.prototype.getSideCondition = function (status) {
@@ -1454,7 +1445,6 @@ BattleSide = (() => {
 		if (!this.sideConditions[status.id]) return false;
 		this.battle.singleEvent('End', status, this.sideConditions[status.id], this);
 		delete this.sideConditions[status.id];
-		this.battle.update();
 		return true;
 	};
 	BattleSide.prototype.send = function () {
@@ -1815,7 +1805,6 @@ Battle = (() => {
 			this.weatherData = prevWeatherData;
 			return false;
 		}
-		this.update();
 		return true;
 	};
 	Battle.prototype.clearWeather = function () {
@@ -1868,7 +1857,6 @@ Battle = (() => {
 			this.terrainData = prevTerrainData;
 			return false;
 		}
-		this.update();
 		return true;
 	};
 	Battle.prototype.clearTerrain = function () {
@@ -1916,7 +1904,6 @@ Battle = (() => {
 			delete this.pseudoWeather[status.id];
 			return false;
 		}
-		this.update();
 		return true;
 	};
 	Battle.prototype.getPseudoWeather = function (status) {
@@ -1929,7 +1916,6 @@ Battle = (() => {
 		if (!this.pseudoWeather[status.id]) return false;
 		this.singleEvent('End', status, this.pseudoWeather[status.id], this);
 		delete this.pseudoWeather[status.id];
-		this.update();
 		return true;
 	};
 	Battle.prototype.suppressingAttackEvents = function () {
@@ -1954,9 +1940,6 @@ Battle = (() => {
 		this.activeMove = move;
 		this.activePokemon = pokemon;
 		this.activeTarget = target;
-
-		// Mold Breaker and the like
-		this.update();
 	};
 	Battle.prototype.clearActiveMove = function (failed) {
 		if (this.activeMove) {
@@ -1966,20 +1949,17 @@ Battle = (() => {
 			this.activeMove = null;
 			this.activePokemon = null;
 			this.activeTarget = null;
-
-			// Mold Breaker and the like, again
-			this.update();
 		}
 	};
 
-	Battle.prototype.update = function () {
+	Battle.prototype.updateSpeed = function () {
 		let actives = this.p1.active;
 		for (let i = 0; i < actives.length; i++) {
-			if (actives[i]) actives[i].update();
+			if (actives[i]) actives[i].updateSpeed();
 		}
 		actives = this.p2.active;
 		for (let i = 0; i < actives.length; i++) {
-			if (actives[i]) actives[i].update();
+			if (actives[i]) actives[i].updateSpeed();
 		}
 	};
 
@@ -2238,6 +2218,10 @@ Battle = (() => {
 	 *   they're useful for functions called by the event handler.
 	 */
 	Battle.prototype.runEvent = function (eventid, target, source, effect, relayVar, onEffect, fastExit) {
+		// if (Battle.eventCounter) {
+		// 	if (!Battle.eventCounter[eventid]) Battle.eventCounter[eventid] = 0;
+		// 	Battle.eventCounter[eventid]++;
+		// }
 		if (this.eventDepth >= 8) {
 			// oh fuck
 			this.add('message', 'STACK LIMIT EXCEEDED');
@@ -2609,7 +2593,6 @@ Battle = (() => {
 			type = this.currentRequest;
 			requestDetails = this.currentRequestDetails;
 		}
-		this.update();
 
 		// default to no request
 		let p1request = null;
@@ -2775,7 +2758,6 @@ Battle = (() => {
 			pokemon.moveset[m].used = false;
 		}
 		this.add('switch', pokemon, pokemon.getDetails);
-		pokemon.update();
 		this.insertQueue({pokemon: pokemon, choice: 'runSwitch'});
 	};
 	Battle.prototype.canSwitch = function (side) {
@@ -2843,7 +2825,6 @@ Battle = (() => {
 			pokemon.moveset[m].used = false;
 		}
 		this.add('drag', pokemon, pokemon.getDetails);
-		pokemon.update();
 		if (this.gen >= 5) {
 			this.runEvent('SwitchIn', pokemon);
 			if (!pokemon.hp) return true;
@@ -3807,6 +3788,7 @@ Battle = (() => {
 			return;
 		}
 
+		if (decision.pokemon) decision.pokemon.updateSpeed();
 		this.resolvePriority(decision);
 		for (let i = 0; i < this.queue.length; i++) {
 			if (Battle.comparePriority(decision, this.queue[i]) < 0) {
@@ -4043,6 +4025,7 @@ Battle = (() => {
 		case 'residual':
 			this.add('');
 			this.clearActiveMove(true);
+			this.updateSpeed();
 			this.residualEvent('Residual');
 			break;
 		}
@@ -4184,6 +4167,8 @@ Battle = (() => {
 		}
 	};
 	Battle.prototype.commitDecisions = function () {
+		this.updateSpeed();
+
 		let oldQueue = this.queue;
 		this.queue = [];
 		for (let i = 0; i < this.sides.length; i++) {

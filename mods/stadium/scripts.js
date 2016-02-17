@@ -57,7 +57,6 @@ exports.BattleScripts = {
 				if (delta) changed = true;
 			}
 			this.recalculateStats();
-			this.update();
 			return changed;
 		},
 	},
