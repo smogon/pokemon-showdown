@@ -9,22 +9,7 @@ exports.BattleScripts = {
 			this.illusion = null;
 			this.template = template;
 			this.types = template.types;
-			this.typesData = [];
-			for (let i = 0, l = this.types.length; i < l; i++) {
-				this.typesData.push({
-					type: this.types[i],
-					suppressed: false,
-					isAdded: false,
-				});
-			}
-			if (this.types.indexOf(this.baseHpType) < 0) {
-				this.typesData.push({
-					type: this.baseHpType,
-					suppressed: false,
-					isAdded: true,
-					isCustom: true,
-				});
-			}
+			this.addedType = this.baseHpType;
 
 			if (!dontRecalculateStats) {
 				for (let statName in this.stats) {
@@ -53,27 +38,13 @@ exports.BattleScripts = {
 				return false;
 			}
 			this.transformed = true;
-			let typeMap = {};
-			this.typesData = [];
-			for (let i = 0, l = pokemon.typesData.length; i < l; i++) {
-				let typeData = pokemon.typesData[i];
-				if (typeMap[typeData.type]) continue;
-				typeMap[typeData.type] = true;
-
-				if (typeData.isCustom) {
-					this.typesData.push({
-						type: this.baseHpType,
-						suppressed: false,
-						isAdded: typeData.isAdded,
-						isCustom: true,
-					});
-				} else {
-					this.typesData.push({
-						type: typeData.type,
-						suppressed: false,
-						isAdded: typeData.isAdded,
-					});
-				}
+			this.types = pokemon.types;
+			if (pokemon.addedType !== pokemon.hpType) {
+				this.addedType = pokemon.addedType;
+			} else if (this.types.indexOf(this.hpType) < 0) {
+				this.addedType = this.hpType;
+			} else {
+				this.addedType = '';
 			}
 			for (let statName in this.stats) {
 				this.stats[statName] = pokemon.stats[statName];

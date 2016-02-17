@@ -9,15 +9,7 @@ exports.BattleScripts = {
 			this.illusion = null;
 			this.template = template;
 			this.types = template.types;
-			this.typesData = [];
-			this.types = template.types;
-			for (let i = 0, l = this.types.length; i < l; i++) {
-				this.typesData.push({
-					type: this.types[i],
-					suppressed: false,
-					isAdded: false,
-				});
-			}
+			this.addedType = '';
 			if (!dontRecalculateStats) {
 				let boosts = {
 					'UU': 5,

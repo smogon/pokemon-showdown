@@ -123,8 +123,6 @@ exports.BattleStatuses = {
 				pokemon.ability = 'shadowtag';
 				pokemon.baseAbility = 'shadowtag';
 			}
-		},
-		onModifyPokemon: function (pokemon) {
 			if (pokemon.transformed) return;
 			pokemon.setType(pokemon.hpType || 'Dark');
 		},

@@ -179,25 +179,9 @@ exports.BattleMovedex = {
 		volatileStatus: 'conversion',
 		accuracy: true,
 		target: "normal",
-		effect: {
-			noCopy: true,
-			onStart: function (target, source) {
-				this.effectData.typesData = [];
-				for (let i = 0, l = target.typesData.length; i < l; i++) {
-					this.effectData.typesData.push(Object.clone(target.typesData[i]));
-				}
-				this.add('-start', source, 'typechange', target.getTypes(true).join(', '), '[from] move: Conversion', '[of] ' + target);
-			},
-			onRestart: function (target, source) {
-				this.effectData.typesData = [];
-				for (let i = 0, l = target.typesData.length; i < l; i++) {
-					this.effectData.typesData.push(Object.clone(target.typesData[i]));
-				}
-				this.add('-start', source, 'typechange', target.getTypes(true).join(', '), '[from] move: Conversion', '[of] ' + target);
-			},
-			onModifyPokemon: function (pokemon) {
-				pokemon.typesData = this.effectData.typesData;
-			},
+		onHit: function (target, source) {
+			source.types = target.types;
+			this.add('-start', source, 'typechange', source.types.join(', '), '[from] move: Conversion', '[of] ' + source);
 		},
 	},
 	counter: {

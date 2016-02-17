@@ -10876,15 +10876,8 @@ exports.BattleMovedex = {
 		onHit: function (target, source) {
 			if (source.template && source.template.num === 493) return false;
 			this.add('-start', source, 'typechange', '[from] move: Reflect Type', '[of] ' + target);
-			source.typesData = [];
-			for (let i = 0, l = target.typesData.length; i < l; i++) {
-				if (target.typesData[i].suppressed) continue;
-				source.typesData.push({
-					type: target.typesData[i].type,
-					suppressed: false,
-					isAdded: target.typesData[i].isAdded,
-				});
-			}
+			source.types = target.getTypes(true);
+			source.addedType = target.addedType;
 		},
 		secondary: false,
 		target: "normal",
@@ -11378,30 +11371,7 @@ exports.BattleMovedex = {
 		},
 		effect: {
 			duration: 1,
-			onStart: function (pokemon) {
-				for (let i = 0, l = pokemon.typesData.length; i < l; i++) {
-					if (pokemon.typesData[i].type === 'Flying') {
-						pokemon.typesData[i].suppressed = true;
-						break;
-					}
-				}
-			},
-			onModifyPokemon: function (pokemon) {
-				for (let i = 0, l = pokemon.typesData.length; i < l; i++) {
-					if (pokemon.typesData[i].type === 'Flying') {
-						pokemon.typesData[i].suppressed = true;
-						break;
-					}
-				}
-			},
-			onEnd: function (pokemon) {
-				for (let i = 0, l = pokemon.typesData.length; i < l; i++) {
-					if (pokemon.typesData[i].type === 'Flying') {
-						pokemon.typesData[i].suppressed = false;
-						break;
-					}
-				}
-			},
+			// implemented in BattlePokemon#getTypes
 		},
 		secondary: false,
 		target: "self",

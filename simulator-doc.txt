@@ -194,9 +194,3 @@ setAbility() {
 weather() {
 	[Weather]
 }
-
-updatePokemon() {
-	for every pokemon:
-		[ModifyStats] (A)
-		[ModifyPokemon] (A)
-}
