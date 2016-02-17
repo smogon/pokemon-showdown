@@ -175,15 +175,7 @@ BattlePokemon = (() => {
 		this.speciesData = {id: this.speciesid};
 
 		this.types = this.baseTemplate.types;
-		this.typesData = [];
-
-		for (let i = 0, l = this.types.length; i < l; i++) {
-			this.typesData.push({
-				type: this.types[i],
-				suppressed: false,
-				isAdded: false,
-			});
-		}
+		this.addedType = '';
 
 		if (this.set.moves) {
 			for (let i = 0; i < this.set.moves.length; i++) {
@@ -292,6 +284,7 @@ BattlePokemon = (() => {
 		this.isStaleHP = this.maxhp;
 		this.isStalePPTurns = 0;
 
+		// Transform copies IVs in gen 4 and earlier, so we track the base IVs/HP-type/power
 		this.baseIvs = this.set.ivs;
 		this.baseHpType = this.hpType;
 		this.baseHpPower = this.hpPower;
@@ -343,32 +336,6 @@ BattlePokemon = (() => {
 		return this.details + '|' + this.getHealth(side);
 	};
 	BattlePokemon.prototype.update = function () {
-		// Change formes based on held items (for Transform)
-		// Only ever relevant in Generation 4 since Generation 3 didn't have item-based forme changes
-		if (this.battle.gen === 4) {
-			if (this.template.num === 487) {
-				// Giratina formes
-				if (this.template.species === 'Giratina' && this.item === 'griseousorb') {
-					this.formeChange('Giratina-Origin');
-					this.battle.add('-formechange', this, 'Giratina-Origin');
-				} else if (this.template.species === 'Giratina-Origin' && this.item !== 'griseousorb') {
-					this.formeChange('Giratina');
-					this.battle.add('-formechange', this, 'Giratina');
-				}
-			}
-			if (this.template.num === 493) {
-				// Arceus formes
-				let item = Tools.getItem(this.item);
-				let targetForme = (item && item.onPlate ? 'Arceus-' + item.onPlate : 'Arceus');
-				if (this.template.species !== targetForme) {
-					this.formeChange(targetForme);
-					this.battle.add('-formechange', this, targetForme);
-				}
-			}
-		}
-
-		this.battle.runEvent('ModifyPokemon', this);
-
 		this.speed = this.getDecisionSpeed();
 	};
 	BattlePokemon.prototype.calculateStat = function (statName, boost, modifier) {
@@ -729,14 +696,10 @@ BattlePokemon = (() => {
 			return false;
 		}
 		this.transformed = true;
-		this.typesData = [];
-		for (let i = 0, l = pokemon.typesData.length; i < l; i++) {
-			this.typesData.push({
-				type: pokemon.typesData[i].type,
-				suppressed: false,
-				isAdded: pokemon.typesData[i].isAdded,
-			});
-		}
+
+		this.types = pokemon.types.slice();
+		this.addedType = pokemon.addedType;
+
 		for (let statName in this.stats) {
 			this.stats[statName] = pokemon.stats[statName];
 		}
@@ -772,6 +735,31 @@ BattlePokemon = (() => {
 			this.battle.add('-transform', this, pokemon);
 		}
 		this.setAbility(pokemon.ability);
+
+		// Change formes based on held items (for Transform)
+		// Only ever relevant in Generation 4 since Generation 3 didn't have item-based forme changes
+		if (this.battle.gen === 4) {
+			if (this.template.num === 487) {
+				// Giratina formes
+				if (this.template.species === 'Giratina' && this.item === 'griseousorb') {
+					this.formeChange('Giratina-Origin');
+					this.battle.add('-formechange', this, 'Giratina-Origin');
+				} else if (this.template.species === 'Giratina-Origin' && this.item !== 'griseousorb') {
+					this.formeChange('Giratina');
+					this.battle.add('-formechange', this, 'Giratina');
+				}
+			}
+			if (this.template.num === 493) {
+				// Arceus formes
+				let item = Tools.getItem(this.item);
+				let targetForme = (item && item.onPlate ? 'Arceus-' + item.onPlate : 'Arceus');
+				if (this.template.species !== targetForme) {
+					this.formeChange(targetForme);
+					this.battle.add('-formechange', this, targetForme);
+				}
+			}
+		}
+
 		this.update();
 		return true;
 	};
@@ -781,16 +769,10 @@ BattlePokemon = (() => {
 		if (!template.abilities) return false;
 		this.illusion = null;
 		this.template = template;
+
 		this.types = template.types;
-		this.typesData = [];
-		this.types = template.types;
-		for (let i = 0, l = this.types.length; i < l; i++) {
-			this.typesData.push({
-				type: this.types[i],
-				suppressed: false,
-				isAdded: false,
-			});
-		}
+		this.addedType = '';
+
 		if (!dontRecalculateStats) {
 			for (let statName in this.stats) {
 				let stat = this.template.baseStats[statName];
@@ -1265,35 +1247,28 @@ BattlePokemon = (() => {
 		// Arceus first type cannot be normally changed
 		if (!enforce && this.template.num === 493) return false;
 
-		this.typesData = [{
-			type: newType,
-			suppressed: false,
-			isAdded: false,
-		}];
+		this.types = [newType];
+		this.addedType = '';
 
 		return true;
 	};
 	BattlePokemon.prototype.addType = function (newType) {
 		// removes any types added previously and adds another one
 
-		this.typesData = this.typesData.filter(typeData => !typeData.isAdded).concat([{
-			type: newType,
-			suppressed: false,
-			isAdded: true,
-		}]);
+		this.addedType = newType;
 
 		return true;
 	};
-	BattlePokemon.prototype.getTypes = function (getAll) {
-		let types = [];
-		for (let i = 0, l = this.typesData.length; i < l; i++) {
-			if (getAll || !this.typesData[i].suppressed) {
-				types.push(this.typesData[i].type);
-			}
+	BattlePokemon.prototype.getTypes = function (excludeAdded) {
+		let types = this.types;
+		if (!excludeAdded && this.addedType) {
+			types = types.concat(this.addedType);
+		}
+		if ('roost' in this.volatiles) {
+			types = types.filter(type => type !== 'Flying');
 		}
 		if (types.length) return types;
-		if (this.battle.gen >= 5) return ['Normal'];
-		return ['???'];
+		return (this.battle.gen >= 5 ? ['Normal'] : ['???']);
 	};
 	BattlePokemon.prototype.isGrounded = function () {
 		if (!this.hasType('Flying') && this.battle.runEvent('Immunity', this, null, null, 'Ground')) return true;
@@ -2314,7 +2289,6 @@ Battle = (() => {
 					Heal: 1,
 					SetStatus: 1,
 					CriticalHit: 1,
-					ModifyPokemon: 1,
 					ModifyAtk: 1, ModifyDef: 1, ModifySpA: 1, ModifySpD: 1, ModifySpe: 1, ModifyAccuracy: 1,
 					ModifyBoost: 1,
 					ModifyDamage: 1,
@@ -2328,9 +2302,7 @@ Battle = (() => {
 					DragOut: 1,
 				};
 				if (eventid in AttackingEvents) {
-					if (eventid !== 'ModifyPokemon') {
-						this.debug(eventid + ' handler suppressed by Mold Breaker');
-					}
+					this.debug(eventid + ' handler suppressed by Mold Breaker');
 					continue;
 				} else if (eventid === 'Damage' && effect && effect.effectType === 'Move') {
 					this.debug(eventid + ' handler suppressed by Mold Breaker');
@@ -2338,12 +2310,12 @@ Battle = (() => {
 				}
 			}
 			if (eventid !== 'Start' && eventid !== 'SwitchIn' && eventid !== 'TakeItem' && status.effectType === 'Item' && (thing instanceof BattlePokemon) && thing.ignoringItem()) {
-				if (eventid !== 'ModifyPokemon' && eventid !== 'Update') {
+				if (eventid !== 'Update') {
 					this.debug(eventid + ' handler suppressed by Embargo, Klutz or Magic Room');
 				}
 				continue;
 			} else if (eventid !== 'End' && status.effectType === 'Ability' && (thing instanceof BattlePokemon) && thing.ignoringAbility()) {
-				if (eventid !== 'ModifyPokemon' && eventid !== 'Update') {
+				if (eventid !== 'Update') {
 					this.debug(eventid + ' handler suppressed by Gastro Acid');
 				}
 				continue;
