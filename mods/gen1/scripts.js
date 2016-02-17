@@ -63,7 +63,6 @@ exports.BattleScripts = {
 					}
 				}
 			}
-			this.update();
 			return changed;
 		},
 	},
@@ -475,7 +474,6 @@ exports.BattleScripts = {
 					if (pokemon.side.foe.active[0].status === 'brn') {
 						pokemon.side.foe.active[0].modifyStat('atk', 0.5);
 					}
-					pokemon.side.foe.active[0].update();
 				}
 			}
 			if (moveData.heal && !target.fainted) {

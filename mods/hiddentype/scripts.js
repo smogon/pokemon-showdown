@@ -76,7 +76,6 @@ exports.BattleScripts = {
 			}
 			this.battle.add('-transform', this, pokemon);
 			this.setAbility(pokemon.ability);
-			this.update();
 			return true;
 		},
 	},

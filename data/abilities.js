@@ -339,7 +339,6 @@ exports.BattleAbilities = {
 			if (target.isActive && move.effectType === 'Move' && move.category !== 'Status' && type !== '???' && !target.hasType(type)) {
 				if (!target.setType(type)) return false;
 				this.add('-start', target, 'typechange', type, '[from] Color Change');
-				target.update();
 			}
 		},
 		id: "colorchange",
@@ -475,9 +474,6 @@ exports.BattleAbilities = {
 			if (pokemon.hp <= pokemon.maxhp / 2) {
 				return this.chainModify(0.5);
 			}
-		},
-		onResidual: function (pokemon) {
-			pokemon.update();
 		},
 		id: "defeatist",
 		name: "Defeatist",
@@ -1931,7 +1927,6 @@ exports.BattleAbilities = {
 			randomTarget.lastItem = '';
 			let item = pokemon.getItem();
 			this.add('-item', pokemon, item, '[from] Pickup');
-			if (item.isBerry) pokemon.update();
 		},
 		id: "pickup",
 		name: "Pickup",
