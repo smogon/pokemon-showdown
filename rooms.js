@@ -1548,7 +1548,7 @@ let ChatRoom = (() => {
 		if (!this.checkBanned(user, oldid)) {
 			return;
 		}
-		if (this.poll && user.userid in this.poll.voters) this.poll.displayTo(user, connection)
+		if (this.poll && user.userid in this.poll.voters) this.poll.updateFor(user);
 		if (this.game && this.game.onRename) this.game.onRename(user, oldid, joining);
 		return user;
 	};
