@@ -342,13 +342,7 @@ BattlePokemon = (() => {
 		if (this.illusion) return this.illusion.details + '|' + this.getHealth(side);
 		return this.details + '|' + this.getHealth(side);
 	};
-	BattlePokemon.prototype.update = function (init) {
-		this.maybeDisabled = false;
-		for (let i in this.moveset) {
-			if (this.moveset[i]) this.moveset[i].disabled = false;
-		}
-		if (init) return;
-
+	BattlePokemon.prototype.update = function () {
 		// Change formes based on held items (for Transform)
 		// Only ever relevant in Generation 4 since Generation 3 didn't have item-based forme changes
 		if (this.battle.gen === 4) {
@@ -862,8 +856,6 @@ BattlePokemon = (() => {
 		this.beingCalledBack = false;
 
 		this.formeChange(this.baseTemplate);
-
-		this.update(init);
 	};
 	BattlePokemon.prototype.hasType = function (type) {
 		if (!type) return false;
@@ -2926,6 +2918,10 @@ Battle = (() => {
 				pokemon.usedItemThisTurn = false;
 				pokemon.newlySwitched = false;
 				pokemon.disabledMoves = {};
+				pokemon.maybeDisabled = false;
+				for (let i in pokemon.moveset) {
+					if (pokemon.moveset[i]) pokemon.moveset[i].disabled = false;
+				}
 				this.runEvent('DisableMove', pokemon);
 				if (!pokemon.ateBerry) pokemon.disableMove('belch');
 				if (pokemon.lastAttackedBy) {
