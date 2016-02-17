@@ -204,7 +204,7 @@ exports.commands = {
 			if (!this.can(permission, null, room)) return false;
 			if (room.hangmanDisabled) return this.errorReply("Hangman is disabled for this room.");
 			if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
-			if (room.game) return this.errorReply("There is already a game in progress in this room.");
+			if (room.game) return this.errorReply("There is already a game of " + room.game.title + " in progress in this room.");
 
 			if (!params) return this.errorReply("No word entered.");
 			let word = params[0].replace(/[^A-Za-z '-]/g, '');
