@@ -587,7 +587,7 @@ let GlobalRoom = (() => {
 
 		user1.lastMatch = user2.userid;
 		user2.lastMatch = user1.userid;
-		return true;
+		return Math.min(search1.rating, search2.rating) || 1;
 	};
 	GlobalRoom.prototype.addSearch = function (newSearch, user, formatid) {
 		// Filter racing conditions
@@ -601,11 +601,12 @@ let GlobalRoom = (() => {
 		for (let i = 0; i < formatSearches.length; i++) {
 			let search = formatSearches[i];
 			let searchUser = Users.getExact(search.userid);
-			if (this.matchmakingOK(search, newSearch, searchUser, user, formatid)) {
+			let minRating = this.matchmakingOK(search, newSearch, searchUser, user, formatid);
+			if (minRating) {
 				delete user.searching[formatid];
 				delete searchUser.searching[formatid];
 				formatSearches.splice(i, 1);
-				this.startBattle(searchUser, user, formatid, search.team, newSearch.team, {rated: true});
+				this.startBattle(searchUser, user, formatid, search.team, newSearch.team, {rated: minRating});
 				return;
 			}
 		}
@@ -625,12 +626,13 @@ let GlobalRoom = (() => {
 			for (let i = 1; i < formatSearches.length; i++) {
 				let search = formatSearches[i];
 				let searchUser = Users.getExact(search.userid);
-				if (this.matchmakingOK(search, longestSearch, searchUser, longestSearcher, formatid)) {
+				let minRating = this.matchmakingOK(search, longestSearch, searchUser, longestSearcher, formatid);
+				if (minRating) {
 					delete longestSearcher.searching[formatid];
 					delete searchUser.searching[formatid];
 					formatSearches.splice(i, 1);
 					formatSearches.splice(0, 1);
-					this.startBattle(searchUser, longestSearcher, formatid, search.team, longestSearch.team, {rated: true});
+					this.startBattle(searchUser, longestSearcher, formatid, search.team, longestSearch.team, {rated: minRating});
 					return;
 				}
 			}
@@ -857,22 +859,13 @@ let BattleRoom = (() => {
 
 		let rated;
 		if (options.rated && Tools.getFormat(formatid).rated !== false) {
-			rated = {
-				p1: p1.userid,
-				p2: p2.userid,
-				format: format,
-			};
+			rated = options.rated;
 		} else {
 			rated = false;
 		}
 
 		if (options.tour) {
-			this.tour = {
-				p1: p1.userid,
-				p2: p2.userid,
-				format: format,
-				tour: options.tour,
-			};
+			this.tour = options.tour;
 		} else {
 			this.tour = false;
 		}
@@ -914,32 +907,25 @@ let BattleRoom = (() => {
 
 		// Check if the battle was rated to update the ladder, return its response, and log the battle.
 		if (this.rated) {
-			let rated = this.rated;
 			this.rated = false;
 
-			if (winnerid === rated.p1) {
+			if (winnerid === this.p1.userid) {
 				p1score = 1;
-			} else if (winnerid === rated.p2) {
+			} else if (winnerid === this.p2.userid) {
 				p1score = 0;
 			}
 
-			let p1 = Users.getExact(rated.p1);
-			let p1name = p1 ? p1.name : rated.p1;
-			let p2 = Users.getExact(rated.p2);
-			let p2name = p2 ? p2.name : rated.p2;
+			let p1name = this.p1.name;
+			let p2name = this.p2.name;
 
 			//update.updates.push('[DEBUG] uri: ' + Config.loginserver + 'action.php?act=ladderupdate&serverid=' + Config.serverid + '&p1=' + encodeURIComponent(p1) + '&p2=' + encodeURIComponent(p2) + '&score=' + p1score + '&format=' + toId(rated.format) + '&servertoken=[token]');
 
-			if (!rated.p1 || !rated.p2) {
-				this.push('|raw|ERROR: Ladder not updated: a player does not exist');
-			} else {
-				winner = Users.get(winnerid);
-				if (winner && !winner.registered) {
-					this.sendUser(winner, '|askreg|' + winner.userid);
-				}
-				// update rankings
-				Ladders(rated.format).updateRating(p1name, p2name, p1score, this);
+			winner = Users.get(winnerid);
+			if (winner && !winner.registered) {
+				this.sendUser(winner, '|askreg|' + winner.userid);
 			}
+			// update rankings
+			Ladders(this.battle.format).updateRating(p1name, p2name, p1score, this);
 		} else if (Config.logchallenges) {
 			// Log challenges if the challenge logging config is enabled.
 			if (winnerid === this.p1.userid) {
@@ -958,8 +944,7 @@ let BattleRoom = (() => {
 		}
 		if (this.tour) {
 			winner = Users.get(winner);
-			let tour = this.tour.tour;
-			tour.onBattleWin(this, winner);
+			this.tour.onBattleWin(this, winner);
 		}
 		this.update();
 	};
