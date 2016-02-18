@@ -22,12 +22,11 @@ global.Config = require('./config/config');
 
 if (!process.send) {
 	let workers = exports.workers = {};
-	let worker;
+	let nextId = 0;
 
 	let spawnWorker = exports.spawnWorker = function () {
-		if (worker) return;
-		worker = require('child_process').fork('sockets-nocluster.js', {PSPORT: Config.port, PSBINDADDR: Config.bindaddress || '', PSNOSSL: Config.ssl ? 0 : 1});
-		if (!worker.id) worker.id = '1';
+		let worker = require('child_process').fork('sockets-nocluster.js', {PSPORT: Config.port, PSBINDADDR: Config.bindaddress || '', PSNOSSL: Config.ssl ? 0 : 1});
+		if (!worker.id) worker.id = '' + (++nextId);
 		let id = worker.id;
 		workers[id] = worker;
 		worker.on('message', data => {
