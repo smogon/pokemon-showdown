@@ -378,10 +378,8 @@ class Battle {
 		let otherids = ['p2', 'p1'];
 
 		let name = 'Player ' + (side + 1);
-		if (user) {
-			name = user.name;
-		} else if (this.rated) {
-			name = this.rated[ids[side]];
+		if (this[ids[side]]) {
+			name = this[ids[side]].name;
 		}
 
 		this.room.add('|-message|' + name + message);
