@@ -14140,13 +14140,12 @@ exports.BattleMovedex = {
 		onEffectiveness: function (typeMod, type, move) {
 			if (move.type !== 'Ground') return;
 			let target = this.activeTarget;
-			// only the attack that grounds the target ignores effectiveness
-			// if called from a chat plugin, don't ignore effectiveness
+			// ignore effectiveness if the target is Flying type and immune to Ground
 			if (!target.runImmunity('Ground')) {
-				target.addVolatile('smackdown');
 				if (target.hasType('Flying')) return 0;
 			}
 		},
+		volatileStatus: 'smackdown',
 		ignoreImmunity: {'Ground': true},
 		secondary: false,
 		target: "allAdjacentFoes",
