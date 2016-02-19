@@ -693,7 +693,7 @@ BattlePokemon = (() => {
 		}
 		this.transformed = true;
 
-		this.types = pokemon.types.slice();
+		this.types = pokemon.types;
 		this.addedType = pokemon.addedType;
 
 		for (let statName in this.stats) {
@@ -1260,7 +1260,7 @@ BattlePokemon = (() => {
 			types = types.filter(type => type !== 'Flying');
 		}
 		if (types.length) return types;
-		return (this.battle.gen >= 5 ? ['Normal'] : ['???']);
+		return [this.battle.gen >= 5 ? 'Normal' : '???'];
 	};
 	BattlePokemon.prototype.isGrounded = function () {
 		if ('gravity' in this.battle.pseudoWeather) return true;
@@ -2905,8 +2905,8 @@ Battle = (() => {
 				pokemon.newlySwitched = false;
 				pokemon.disabledMoves = {};
 				pokemon.maybeDisabled = false;
-				for (let i in pokemon.moveset) {
-					if (pokemon.moveset[i]) pokemon.moveset[i].disabled = false;
+				for (let entry of pokemon.moveset) {
+					if (entry) entry.disabled = false;
 				}
 				this.runEvent('DisableMove', pokemon);
 				if (!pokemon.ateBerry) pokemon.disableMove('belch');
@@ -2924,29 +2924,26 @@ Battle = (() => {
 					this.runEvent('MaybeTrapPokemon', pokemon);
 				}
 				// Disable the faculty to cancel switches if a foe may have a trapping ability
-				for (let i = 0; i < this.sides.length; ++i) {
-					let side = this.sides[i];
-					if (side === pokemon.side) continue;
-					for (let j = 0; j < side.active.length; ++j) {
-						let source = side.active[j];
-						if (!source || source.fainted) continue;
-						let template = (source.illusion || source).template;
-						if (!template.abilities) continue;
-						for (let k in template.abilities) {
-							let ability = template.abilities[k];
-							if (ability === source.ability) {
-								// pokemon event was already run above so we don't need
-								// to run it again.
-								continue;
-							}
-							if (k === 'H' && template.unreleasedHidden) {
-								// unreleased hidden ability
-								continue;
-							}
-							if (pokemon.runStatusImmunity('trapped')) {
-								this.singleEvent('FoeMaybeTrapPokemon',
-									this.getAbility(ability), {}, pokemon, source);
-							}
+				let foeSide = pokemon.side.foe;
+				for (let k = 0; k < foeSide.active.length; ++k) {
+					let source = foeSide.active[k];
+					if (!source || source.fainted) continue;
+					let template = (source.illusion || source).template;
+					if (!template.abilities) continue;
+					for (let abilitySlot in template.abilities) {
+						let ability = template.abilities[abilitySlot];
+						if (ability === source.ability) {
+							// pokemon event was already run above so we don't need
+							// to run it again.
+							continue;
+						}
+						if (abilitySlot === 'H' && template.unreleasedHidden) {
+							// unreleased hidden ability
+							continue;
+						}
+						if (pokemon.runStatusImmunity('trapped')) {
+							this.singleEvent('FoeMaybeTrapPokemon',
+								this.getAbility(ability), {}, pokemon, source);
 						}
 					}
 				}
