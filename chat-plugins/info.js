@@ -2258,6 +2258,28 @@ exports.commands = {
 		);
 	},
 
+	processes: function (target, room, user) {
+		if (!this.can('lockdown')) return false;
+		let buf = "<strong>" + process.pid + "</strong> - Main<br />";
+		for (let i in Sockets.workers) {
+			let worker = Sockets.workers[i];
+			buf += "<strong>" + (worker.pid || worker.process.pid) + "</strong> - Sockets " + i + "<br />";
+		}
+		{
+			let i = 0;
+			for (let process of Simulator.SimulatorProcess.processes) {
+				buf += "<strong>" + process.process.pid + "</strong> - Simulator " + (i++) + "<br />";
+			}
+		}
+		{
+			let i = 0;
+			for (let process of TeamValidator.ValidatorProcess.processes) {
+				buf += "<strong>" + process.process.pid + "</strong> - Validator " + (i++) + "<br />";
+			}
+		}
+		this.sendReplyBox(buf);
+	},
+
 	rule: 'rules',
 	rules: function (target, room, user) {
 		if (!target) {
