@@ -2081,7 +2081,7 @@ exports.BattleMovedex = {
 			spe: -2,
 		},
 		onTryHit: function (target) {
-			if (!target.runImmunity('powder')) {
+			if (!target.runStatusImmunity('powder')) {
 				this.add('-immune', target, '[msg]');
 				return null;
 			}
@@ -5437,9 +5437,7 @@ exports.BattleMovedex = {
 					pokemon.disableMove(m);
 				}
 			},
-			onNegateImmunity: function (pokemon, type) {
-				if (type === 'Ground') return false;
-			},
+			// groundedness implemented in battle.engine.js:BattlePokemon#isGrounded
 			onBeforeMovePriority: 6,
 			onBeforeMove: function (pokemon, target, move) {
 				if (move.flags['gravity']) {
@@ -7125,9 +7123,7 @@ exports.BattleMovedex = {
 			onTrapPokemon: function (pokemon) {
 				pokemon.tryTrap();
 			},
-			onNegateImmunity: function (pokemon, type) {
-				if (type === 'Ground') return false;
-			},
+			// groundedness implemented in battle.engine.js:BattlePokemon#isGrounded
 			onDragOut: function (pokemon) {
 				this.add('-activate', pokemon, 'move: Ingrain');
 				return null;
@@ -9846,7 +9842,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {powder: 1, protect: 1, reflectable: 1, mirror: 1},
 		onTryHit: function (target) {
-			if (!target.runImmunity('powder')) {
+			if (!target.runStatusImmunity('powder')) {
 				this.add('-immune', target, '[msg]');
 				return null;
 			}
@@ -9924,7 +9920,7 @@ exports.BattleMovedex = {
 		priority: 1,
 		flags: {powder: 1, protect: 1, reflectable: 1, mirror: 1, authentic: 1},
 		onTryHit: function (target) {
-			if (!target.runImmunity('powder')) {
+			if (!target.runStatusImmunity('powder')) {
 				this.add('-immune', target, '[msg]');
 				return null;
 			}
@@ -10647,7 +10643,7 @@ exports.BattleMovedex = {
 			},
 			onFoeRedirectTargetPriority: 1,
 			onFoeRedirectTarget: function (target, source, source2, move) {
-				if (source.runImmunity('powder') && this.validTarget(this.effectData.target, source, move.target)) {
+				if (source.runStatusImmunity('powder') && this.validTarget(this.effectData.target, source, move.target)) {
 					this.debug("Rage Powder redirected target of move");
 					return this.effectData.target;
 				}
@@ -12449,7 +12445,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {powder: 1, protect: 1, reflectable: 1, mirror: 1},
 		onTryHit: function (target) {
-			if (!target.runImmunity('powder')) {
+			if (!target.runStatusImmunity('powder')) {
 				this.add('-immune', target, '[msg]');
 				return null;
 			}
@@ -12597,9 +12593,7 @@ exports.BattleMovedex = {
 					this.add('-start', pokemon, 'Smack Down');
 				}
 			},
-			onNegateImmunity: function (pokemon, type) {
-				if (type === 'Ground') return false;
-			},
+			// groundedness implemented in battle.engine.js:BattlePokemon#isGrounded
 		},
 		secondary: false,
 		target: "normal",
@@ -13075,7 +13069,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {powder: 1, protect: 1, reflectable: 1, mirror: 1},
 		onTryHit: function (target) {
-			if (!target.runImmunity('powder')) {
+			if (!target.runStatusImmunity('powder')) {
 				this.add('-immune', target, '[msg]');
 				return null;
 			}
@@ -13414,7 +13408,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {powder: 1, protect: 1, reflectable: 1, mirror: 1},
 		onTryHit: function (target) {
-			if (!target.runImmunity('powder')) {
+			if (!target.runStatusImmunity('powder')) {
 				this.add('-immune', target, '[msg]');
 				return null;
 			}
@@ -14148,10 +14142,11 @@ exports.BattleMovedex = {
 			let target = this.activeTarget;
 			// only the attack that grounds the target ignores effectiveness
 			// if called from a chat plugin, don't ignore effectiveness
-			if (!this.runEvent || !this.runEvent('NegateImmunity', target, 'Ground')) return;
-			if (!this.getImmunity('Ground', target)) return 0;
+			if (!target.runImmunity('Ground')) {
+				target.addVolatile('smackdown');
+				if (target.hasType('Flying')) return 0;
+			}
 		},
-		volatileStatus: 'smackdown',
 		ignoreImmunity: {'Ground': true},
 		secondary: false,
 		target: "allAdjacentFoes",
@@ -15598,7 +15593,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, reflectable: 1, mirror: 1},
 		volatileStatus: 'yawn',
 		onTryHit: function (target) {
-			if (target.status || !target.runImmunity('slp')) {
+			if (target.status || !target.runStatusImmunity('slp')) {
 				return false;
 			}
 		},

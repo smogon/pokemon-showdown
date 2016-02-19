@@ -563,9 +563,7 @@ exports.Formats = [
 		onBegin: function () {
 			this.add('-message', "NOTE: This is an Inverse Battle! Type effectivenesses are reversed!");
 		},
-		onNegateImmunity: function (pokemon, type) {
-			if (type in this.data.TypeChart && this.runEvent('Immunity', pokemon, null, null, type)) return false;
-		},
+		onNegateImmunity: false,
 		onEffectiveness: function (typeMod, target, type, move) {
 			// The effectiveness of Freeze Dry on Water isn't reverted
 			if (move && move.id === 'freezedry' && type === 'Water') return;
@@ -691,9 +689,7 @@ exports.Formats = [
 			'Ho-Oh', 'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Lugia', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Serperior',
 			'Shaymin-Sky', 'Snorlax', 'Xerneas', 'Yveltal', 'Zekrom', 'Gengarite', 'Kangaskhanite', 'Salamencite', 'Soul Dew', 'Shadow Tag',
 		],
-		onNegateImmunity: function (pokemon, type) {
-			if (type in this.data.TypeChart && this.runEvent('Immunity', pokemon, null, null, type)) return false;
-		},
+		onNegateImmunity: false,
 		onEffectiveness: function (typeMod, target, type, move) {
 			// The effectiveness of Freeze Dry on Water isn't reverted
 			if (move && move.id === 'freezedry' && type === 'Water') return;

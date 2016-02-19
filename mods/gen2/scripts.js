@@ -485,7 +485,7 @@ exports.BattleScripts = {
 		if (damage !== 0) damage = this.clampIntRange(damage, 1);
 
 		if (effect.id !== 'struggle-recoil') { // Struggle recoil is not affected by effects
-			if (effect.effectType === 'Weather' && !target.runImmunity(effect.id)) {
+			if (effect.effectType === 'Weather' && !target.runStatusImmunity(effect.id)) {
 				this.debug('weather immunity');
 				return 0;
 			}
