@@ -17,6 +17,10 @@ describe('Wonder Guard', function () {
 			battle.commitDecisions();
 			assert.strictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 		}
+		// Thousand Arrows shouldn't add the Smack Down volatile if blocked by Wonder Guard
+		battle.choose('p2', 'move 3');
+		battle.commitDecisions();
+		assert.strictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 	});
 
 	it('should not make the user immune to status moves', function () {
