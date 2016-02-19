@@ -23,7 +23,7 @@ if (!process.send) {
 	let callbacks = {};
 	let callbackData = {};
 
-	let child = require('child_process').fork('verifier.js', {cwd: __dirname});
+	let child = exports.child = require('child_process').fork('verifier.js', {cwd: __dirname});
 	exports.verify = function (data, signature, callback) {
 		let localGuid = guid++;
 		callbacks[localGuid] = callback;
