@@ -876,7 +876,7 @@ BattlePokemon = (() => {
 		return d;
 	};
 	BattlePokemon.prototype.tryTrap = function (isHidden) {
-		if (this.runImmunity('trapped')) {
+		if (this.runStatusImmunity('trapped')) {
 			if (this.trapped && isHidden) return true;
 			this.trapped = isHidden ? 'hidden' : true;
 			return true;
@@ -957,7 +957,7 @@ BattlePokemon = (() => {
 
 		if (!ignoreImmunities && status.id) {
 			// the game currently never ignores immunities
-			if (!this.runImmunity(status.id === 'tox' ? 'psn' : status.id)) {
+			if (!this.runStatusImmunity(status.id === 'tox' ? 'psn' : status.id)) {
 				this.battle.debug('immune to status');
 				return false;
 			}
@@ -1152,7 +1152,7 @@ BattlePokemon = (() => {
 			if (!status.onRestart) return false;
 			return this.battle.singleEvent('Restart', status, this.volatiles[status.id], this, source, sourceEffect);
 		}
-		if (!this.runImmunity(status.id)) return false;
+		if (!this.runStatusImmunity(status.id)) return false;
 		result = this.battle.runEvent('TryAddVolatile', this, source, sourceEffect, status);
 		if (!result) {
 			this.battle.debug('add volatile [' + status.id + '] interrupted');
@@ -1263,8 +1263,15 @@ BattlePokemon = (() => {
 		return (this.battle.gen >= 5 ? ['Normal'] : ['???']);
 	};
 	BattlePokemon.prototype.isGrounded = function () {
-		if (!this.hasType('Flying') && this.battle.runEvent('Immunity', this, null, null, 'Ground')) return true;
-		return !!(this.hasItem('ironball') || this.volatiles['ingrain'] || this.volatiles['smackdown'] || this.battle.getPseudoWeather('gravity'));
+		if ('gravity' in this.battle.pseudoWeather) return true;
+		if ('ingrain' in this.volatiles) return true;
+		if ('smackdown' in this.volatiles) return true;
+		if (this.hasItem('ironball')) return true;
+		if ('magnetrise' in this.volatiles) return false;
+		if ('telekinesis' in this.volatiles) return false;
+		if (this.hasAbility('levitate') && !this.battle.suppressingAttackEvents()) return null;
+		if (this.hasItem('airballoon')) return false;
+		return !this.hasType('Flying');
 	};
 	BattlePokemon.prototype.isSemiInvulnerable = function () {
 		if (this.volatiles['fly'] || this.volatiles['bounce'] || this.volatiles['skydrop'] || this.volatiles['dive'] || this.volatiles['dig'] || this.volatiles['phantomforce'] || this.volatiles['shadowforce']) {
@@ -1288,15 +1295,41 @@ BattlePokemon = (() => {
 		return totalTypeMod;
 	};
 	BattlePokemon.prototype.runImmunity = function (type, message) {
-		if (this.fainted) {
-			return false;
-		}
 		if (!type || type === '???') {
 			return true;
 		}
+		if (!(type in this.battle.data.TypeChart)) throw new Error("Use runStatusImmunity for " + type);
+		if (this.fainted) {
+			return false;
+		}
+		let isGrounded;
+		if (type === 'Ground') {
+			isGrounded = this.isGrounded();
+			if (isGrounded === null) {
+				if (message) {
+					this.battle.add('-immune', this, '[msg]', '[from] ability: Levitate');
+				}
+				return false;
+			}
+		}
 		if (!this.battle.runEvent('NegateImmunity', this, type)) return true;
+		if ((isGrounded === undefined && !this.battle.getImmunity(type, this)) || isGrounded === false) {
+			if (message) {
+				this.battle.add('-immune', this, '[msg]');
+			}
+			return false;
+		}
+		return true;
+	};
+	BattlePokemon.prototype.runStatusImmunity = function (type, message) {
+		if (this.fainted) {
+			return false;
+		}
+		if (!type) {
+			return true;
+		}
 		if (!this.battle.getImmunity(type, this)) {
-			this.battle.debug('natural immunity');
+			this.battle.debug('natural status immunity');
 			if (message) {
 				this.battle.add('-immune', this, '[msg]');
 			}
@@ -1304,7 +1337,7 @@ BattlePokemon = (() => {
 		}
 		let immunity = this.battle.runEvent('Immunity', this, null, null, type);
 		if (!immunity) {
-			this.battle.debug('artificial immunity');
+			this.battle.debug('artificial status immunity');
 			if (message && immunity !== null) {
 				this.battle.add('-immune', this, '[msg]');
 			}
@@ -2887,7 +2920,7 @@ Battle = (() => {
 
 				pokemon.trapped = pokemon.maybeTrapped = false;
 				this.runEvent('TrapPokemon', pokemon);
-				if (pokemon.runImmunity('trapped')) {
+				if (pokemon.runStatusImmunity('trapped')) {
 					this.runEvent('MaybeTrapPokemon', pokemon);
 				}
 				// Disable the faculty to cancel switches if a foe may have a trapping ability
@@ -2910,7 +2943,7 @@ Battle = (() => {
 								// unreleased hidden ability
 								continue;
 							}
-							if (pokemon.runImmunity('trapped')) {
+							if (pokemon.runStatusImmunity('trapped')) {
 								this.singleEvent('FoeMaybeTrapPokemon',
 									this.getAbility(ability), {}, pokemon, source);
 							}
@@ -3178,7 +3211,7 @@ Battle = (() => {
 		if (damage !== 0) damage = this.clampIntRange(damage, 1);
 
 		if (effect.id !== 'struggle-recoil') { // Struggle recoil is not affected by effects
-			if (effect.effectType === 'Weather' && !target.runImmunity(effect.id)) {
+			if (effect.effectType === 'Weather' && !target.runStatusImmunity(effect.id)) {
 				this.debug('weather immunity');
 				return 0;
 			}

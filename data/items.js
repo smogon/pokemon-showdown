@@ -129,9 +129,7 @@ exports.BattleItems = {
 				this.add('-item', target, 'Air Balloon');
 			}
 		},
-		onImmunity: function (type) {
-			if (type === 'Ground') return false;
-		},
+		// airborneness implemented in battle-engine.js:BattlePokemon#isGrounded
 		onAfterDamage: function (damage, target, source, effect) {
 			this.debug('effect: ' + effect.id);
 			if (effect.effectType === 'Move' && effect.id !== 'confused') {
@@ -2033,11 +2031,9 @@ exports.BattleItems = {
 		},
 		onEffectiveness: function (typeMod, target, type, move) {
 			if (target.volatiles['ingrain'] || target.volatiles['smackdown'] || this.getPseudoWeather('gravity')) return;
-			if (move.type === 'Ground' && !this.getImmunity(move.type, target)) return 0;
+			if (move.type === 'Ground' && target.hasType('Flying')) return 0;
 		},
-		onNegateImmunity: function (pokemon, type) {
-			if (type === 'Ground') return false;
-		},
+		// airborneness negation implemented in battle-engine.js:BattlePokemon#isGrounded
 		onModifySpe: function (spe) {
 			return this.chainModify(0.5);
 		},
@@ -3697,9 +3693,7 @@ exports.BattleItems = {
 		fling: {
 			basePower: 10,
 		},
-		onNegateImmunity: function (pokemon, type) {
-			if (type in this.data.TypeChart && this.runEvent('Immunity', pokemon, null, null, type)) return false;
-		},
+		onNegateImmunity: false,
 		num: 543,
 		gen: 5,
 		desc: "The holder's type immunities granted solely by its typing are negated.",
