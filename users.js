@@ -1266,8 +1266,7 @@ User = (() => {
 		}
 		let makeRoom = this.can('makeroom');
 		if (room.tour && !makeRoom) {
-			let tour = room.tour.tour;
-			let errorMessage = tour.onBattleJoin(room, this);
+			let errorMessage = room.tour.onBattleJoin(room, this);
 			if (errorMessage) {
 				connection.sendTo(roomid, "|noinit|joinfailed|" + errorMessage);
 				return false;
