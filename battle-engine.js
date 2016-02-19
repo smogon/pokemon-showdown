@@ -1262,16 +1262,18 @@ BattlePokemon = (() => {
 		if (types.length) return types;
 		return [this.battle.gen >= 5 ? 'Normal' : '???'];
 	};
-	BattlePokemon.prototype.isGrounded = function () {
+	BattlePokemon.prototype.isGrounded = function (negateImmunity) {
 		if ('gravity' in this.battle.pseudoWeather) return true;
 		if ('ingrain' in this.volatiles) return true;
 		if ('smackdown' in this.volatiles) return true;
-		if (this.hasItem('ironball')) return true;
+		let item = (this.ignoringItem() ? '' : this.item);
+		if (item === 'ironball') return true;
 		if ('magnetrise' in this.volatiles) return false;
 		if ('telekinesis' in this.volatiles) return false;
+		if (item === 'airballoon') return false;
+		if (!negateImmunity && this.hasType('Flying')) return false;
 		if (this.hasAbility('levitate') && !this.battle.suppressingAttackEvents()) return null;
-		if (this.hasItem('airballoon')) return false;
-		return !this.hasType('Flying');
+		return true;
 	};
 	BattlePokemon.prototype.isSemiInvulnerable = function () {
 		if (this.volatiles['fly'] || this.volatiles['bounce'] || this.volatiles['skydrop'] || this.volatiles['dive'] || this.volatiles['dig'] || this.volatiles['phantomforce'] || this.volatiles['shadowforce']) {
@@ -1303,8 +1305,9 @@ BattlePokemon = (() => {
 			return false;
 		}
 		let isGrounded;
+		let negateResult = this.battle.runEvent('NegateImmunity', this, type);
 		if (type === 'Ground') {
-			isGrounded = this.isGrounded();
+			isGrounded = this.isGrounded(!negateResult);
 			if (isGrounded === null) {
 				if (message) {
 					this.battle.add('-immune', this, '[msg]', '[from] ability: Levitate');
@@ -1312,7 +1315,7 @@ BattlePokemon = (() => {
 				return false;
 			}
 		}
-		if (!this.battle.runEvent('NegateImmunity', this, type)) return true;
+		if (!negateResult) return true;
 		if ((isGrounded === undefined && !this.battle.getImmunity(type, this)) || isGrounded === false) {
 			if (message) {
 				this.battle.add('-immune', this, '[msg]');
