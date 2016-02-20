@@ -7024,7 +7024,7 @@ exports.BattleMovedex = {
 				let foeMoves = this.effectData.source.moveset;
 				for (let f = 0; f < foeMoves.length; f++) {
 					if (foeMoves[f].id === 'struggle') continue;
-					pokemon.disableMove(foeMoves[f].id, true);
+					pokemon.disableMove(foeMoves[f].id, 'hidden');
 				}
 				pokemon.maybeDisabled = true;
 			},
