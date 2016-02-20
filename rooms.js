@@ -817,7 +817,11 @@ let GlobalRoom = (() => {
 		this.cancelSearch(p1);
 		this.cancelSearch(p2);
 		if (Config.reportbattles && rooms.lobby) {
-			rooms.lobby.add('|b|' + newRoom.id + '|' + p1.getIdentity() + '|' + p2.getIdentity());
+			let reportRoom = Rooms(Config.reportbattles === true ? 'lobby' : Config.reportbattles);
+			if (reportRoom) {
+				reportRoom.add('|b|' + newRoom.id + '|' + p1.getIdentity() + '|' + p2.getIdentity());
+				reportRoom.update();
+			}
 		}
 		if (Config.logladderip && options.rated) {
 			if (!this.ladderIpLog) {
