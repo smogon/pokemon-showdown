@@ -204,12 +204,12 @@ BattlePokemon = (() => {
 					maxpp: (move.noPPBoosts ? move.pp : move.pp * 8 / 5),
 					target: move.target,
 					disabled: false,
+					disabledSource: '',
 					used: false,
 				});
 				this.moves.push(move.id);
 			}
 		}
-		this.disabledMoves = {};
 
 		this.canMegaEvo = this.battle.canMegaEvo(this);
 
@@ -539,56 +539,58 @@ BattlePokemon = (() => {
 		if (lockedMove) {
 			lockedMove = toId(lockedMove);
 			this.trapped = true;
-		}
-		if (lockedMove === 'recharge') {
+			if (lockedMove === 'recharge') {
+				return [{
+					move: 'Recharge',
+					id: 'recharge',
+				}];
+			}
+			for (let i = 0; i < this.moveset.length; i++) {
+				let moveEntry = this.moveset[i];
+				if (moveEntry.id !== lockedMove) continue;
+				return [{
+					move: moveEntry.move,
+					id: moveEntry.id,
+				}];
+			}
+			// does this happen?
 			return [{
-				move: 'Recharge',
-				id: 'recharge',
+				move: this.battle.getMove(lockedMove).name,
+				id: lockedMove,
 			}];
 		}
 		let moves = [];
 		let hasValidMove = false;
 		for (let i = 0; i < this.moveset.length; i++) {
-			let move = this.moveset[i];
-			if (lockedMove) {
-				if (lockedMove === move.id) {
-					return [{
-						move: move.move,
-						id: move.id,
-					}];
-				}
-				continue;
+			let moveEntry = this.moveset[i];
+			let disabled = moveEntry.disabled;
+			if (disabled === 'hidden' && restrictData) {
+				disabled = false;
+			} else if (moveEntry.pp <= 0) {
+				disabled = true;
 			}
-			if (this.disabledMoves[move.id] && (!restrictData || !this.disabledMoves[move.id].isHidden) || move.pp <= 0 && (this.battle.gen !== 1 || !this.volatiles['partialtrappinglock'])) {
-				move.disabled = !restrictData && this.disabledMoves[move.id] && this.disabledMoves[move.id].isHidden ? 'hidden' : true;
-			} else if (!move.disabled || move.disabled === 'hidden' && restrictData) {
+			if (!disabled) {
 				hasValidMove = true;
 			}
-			let moveName = move.move;
-			if (move.id === 'hiddenpower') {
+			let moveName = moveEntry.move;
+			if (moveEntry.id === 'hiddenpower') {
 				moveName = 'Hidden Power ' + this.hpType;
 				if (this.battle.gen < 6) moveName += ' ' + this.hpPower;
 			}
-			let target = move.target;
-			if (move.id === 'curse') {
+			let target = moveEntry.target;
+			if (moveEntry.id === 'curse') {
 				if (!this.hasType('Ghost')) {
-					target = this.battle.getMove('curse').nonGhostTarget || move.target;
+					target = this.battle.getMove('curse').nonGhostTarget || moveEntry.target;
 				}
 			}
 			moves.push({
 				move: moveName,
-				id: move.id,
-				pp: move.pp,
-				maxpp: move.maxpp,
+				id: moveEntry.id,
+				pp: moveEntry.pp,
+				maxpp: moveEntry.maxpp,
 				target: target,
-				disabled: move.disabled,
+				disabled: disabled,
 			});
-		}
-		if (lockedMove) {
-			return [{
-				move: this.battle.getMove(lockedMove).name,
-				id: lockedMove,
-			}];
 		}
 		if (hasValidMove) return moves;
 
@@ -898,13 +900,14 @@ BattlePokemon = (() => {
 			sourceEffect = this.battle.effect;
 		}
 		moveid = toId(moveid);
-		if (moveid.substr(0, 11) === 'hiddenpower') moveid = 'hiddenpower';
 
-		if (this.disabledMoves[moveid] && !this.disabledMoves[moveid].isHidden) return;
-		this.disabledMoves[moveid] = {
-			isHidden: !!isHidden,
-			sourceEffect: sourceEffect,
-		};
+		for (let move of this.moveset) {
+			if (move.id === moveid && move.disabled !== true) {
+				move.disabled = (isHidden || true);
+				move.disabledSource = (sourceEffect ? sourceEffect.fullname : '');
+				break;
+			}
+		}
 	};
 	// returns the amount of damage actually healed
 	BattlePokemon.prototype.heal = function (d) {
@@ -2905,13 +2908,15 @@ Battle = (() => {
 				pokemon.moveThisTurn = '';
 				pokemon.usedItemThisTurn = false;
 				pokemon.newlySwitched = false;
-				pokemon.disabledMoves = {};
+
 				pokemon.maybeDisabled = false;
 				for (let entry of pokemon.moveset) {
-					if (entry) entry.disabled = false;
+					entry.disabled = false;
+					entry.disabledSource = '';
 				}
 				this.runEvent('DisableMove', pokemon);
 				if (!pokemon.ateBerry) pokemon.disableMove('belch');
+
 				if (pokemon.lastAttackedBy) {
 					if (pokemon.lastAttackedBy.pokemon.isActive) {
 						pokemon.lastAttackedBy.thisTurn = false;
@@ -4514,17 +4519,19 @@ Battle = (() => {
 					// At least a move is valid. Check if the chosen one is.
 					// This may include Struggle in Hackmons.
 					let isEnabled = false;
+					let disabledSource = '';
 					for (let j = 0; j < moves.length; j++) {
 						if (moves[j].id !== moveid) continue;
 						if (!moves[j].disabled) {
 							isEnabled = true;
 							break;
+						} else if (moves[j].disabledSource) {
+							disabledSource = moves[j].disabledSource;
 						}
 					}
 					if (!isEnabled) {
 						// request a different choice
-						let sourceEffect = pokemon.disabledMoves[moveid] && pokemon.disabledMoves[moveid].sourceEffect;
-						side.emitCallback('cant', pokemon, sourceEffect ? sourceEffect.fullname : '', moveid);
+						side.emitCallback('cant', pokemon, disabledSource, moveid);
 						return false;
 					}
 					// the chosen move is valid
