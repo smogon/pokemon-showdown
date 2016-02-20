@@ -1302,7 +1302,10 @@ BattlePokemon = (() => {
 		if (!type || type === '???') {
 			return true;
 		}
-		if (!(type in this.battle.data.TypeChart)) throw new Error("Use runStatusImmunity for " + type);
+		if (!(type in this.battle.data.TypeChart)) {
+			if (type === 'Fairy' || type === 'Dark' || type === 'Steel') return true;
+			throw new Error("Use runStatusImmunity for " + type);
+		}
 		if (this.fainted) {
 			return false;
 		}
