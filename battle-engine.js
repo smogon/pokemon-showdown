@@ -1268,12 +1268,11 @@ BattlePokemon = (() => {
 		if ('smackdown' in this.volatiles) return true;
 		let item = (this.ignoringItem() ? '' : this.item);
 		if (item === 'ironball') return true;
-		if ('magnetrise' in this.volatiles) return false;
-		if ('telekinesis' in this.volatiles) return false;
-		if (item === 'airballoon') return false;
 		if (!negateImmunity && this.hasType('Flying')) return false;
 		if (this.hasAbility('levitate') && !this.battle.suppressingAttackEvents()) return null;
-		return true;
+		if ('magnetrise' in this.volatiles) return false;
+		if ('telekinesis' in this.volatiles) return false;
+		return item !== 'airballoon';
 	};
 	BattlePokemon.prototype.isSemiInvulnerable = function () {
 		if (this.volatiles['fly'] || this.volatiles['bounce'] || this.volatiles['skydrop'] || this.volatiles['dive'] || this.volatiles['dig'] || this.volatiles['phantomforce'] || this.volatiles['shadowforce']) {
