@@ -168,6 +168,7 @@ Contributors
 - Jacob Zimmer [SolarisFox] - Development
 - Neil Rashbrook [urkerab] - Development
 - Robin Vandenbrande [Quinella] - Development
+- [Ridaz] - Art (battle animations)
 
 Special thanks
 
