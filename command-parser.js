@@ -283,6 +283,7 @@ let Context = exports.Context = (() => {
 		return CommandParser.parse(message, room || this.room, this.user, this.connection, this.levelsDeep + 1);
 	};
 	Context.prototype.run = function (targetCmd, inNamespace) {
+		if (targetCmd === 'constructor') return this.sendReply("Access denied.");
 		let commandHandler;
 		if (typeof targetCmd === 'function') {
 			commandHandler = targetCmd;
@@ -518,6 +519,9 @@ let parse = exports.parse = function (message, room, user, connection, levelsDee
 	let commandHandler;
 
 	do {
+		if (toId(cmd) === 'constructor') {
+			return connection.sendTo(room, "Error: Access denied.");
+		}
 		commandHandler = currentCommands[cmd];
 		if (typeof commandHandler === 'string') {
 			// in case someone messed up, don't loop
