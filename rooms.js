@@ -818,7 +818,7 @@ let GlobalRoom = (() => {
 		newRoom.battle.addPlayer(p2, p2team);
 		this.cancelSearch(p1);
 		this.cancelSearch(p2);
-		if (Config.reportbattles && rooms.lobby) {
+		if (Config.reportbattles) {
 			let reportRoom = Rooms(Config.reportbattles === true ? 'lobby' : Config.reportbattles);
 			if (reportRoom) {
 				reportRoom.add('|b|' + newRoom.id + '|' + p1.getIdentity() + '|' + p2.getIdentity());
