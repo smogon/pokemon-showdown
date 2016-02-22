@@ -95,12 +95,11 @@ exports.Formats = [
 		banlist: ['RU', 'BL3'],
 	},
 	{
-		name: "NU (current)",
+		name: "NU (suspect test)",
 		section: "ORAS Singles",
 
-		challengeShow: false,
-		ruleset: ['RU'],
-		banlist: ['RU', 'BL3'],
+		ruleset: ['NU'],
+		banlist: ['Sawk'],
 	},
 	{
 		name: "PU",
