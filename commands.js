@@ -1760,15 +1760,39 @@ exports.commands = {
 		if (isWin) {
 			command = path.normalize(__dirname + '/lib/winmodlog') + ' tail ' + lines + ' ' + filename;
 		} else {
-			command = 'tail -' + lines + ' ' + filename;
+			command = 'tail -' + lines + ' ' + filename + ' | tac';
 		}
 		let grepLimit = 100;
+		let strictMatch = false;
 		if (wordSearch) { // searching for a word instead
-			if (target.match(/^["'].+["']$/)) target = target.substring(1, target.length - 1);
-			if (isWin) {
-				command = path.normalize(__dirname + '/lib/winmodlog') + ' ws ' + grepLimit + ' "' + target.replace(/%/g, "%%").replace(/([\^"&<>\|])/g, "^$1") + '" ' + filename;
+			let searchString = target;
+			strictMatch = true; // search for a 1:1 match?
+
+			if (searchString.match(/^["'].+["']$/)) {
+				searchString = searchString.substring(1, searchString.length - 1);
+			} else if (isWin) {  // ID search with RegEx isn't implemented for windows yet (feel free to add it to winmodlog.cmd)
+				target = '"' + target + '"';  // add quotes to target so the caller knows they are getting a strict match
 			} else {
-				command = "awk '{print NR,$0}' " + filename + " | sort -nr | cut -d' ' -f2- | grep -m" + grepLimit + " -i '" + target.replace(/\\/g, '\\\\\\\\').replace(/["'`]/g, '\'\\$&\'').replace(/[\{\}\[\]\(\)\$\^\.\?\+\-\*]/g, '[$&]') + "'";
+				// search for ID: allow any number of non-word characters (\W*) in between the letters we have to match.
+				// i.e. if searching for "myUsername", also match on "My User-Name".
+				// note that this doesn't really add a lot of unwanted results, since we use \b..\b
+				target = toId(target);
+				searchString = '\\b' + target.split('').join('\\W*') + '\\b';
+				strictMatch = false;
+			}
+
+			if (isWin) {
+				if (strictMatch) {
+					command = path.normalize(__dirname + '/lib/winmodlog') + ' ws ' + grepLimit + ' "' + searchString.replace(/%/g, "%%").replace(/([\^"&<>\|])/g, "^$1") + '" ' + filename;
+				} else {
+					// doesn't happen. ID search with RegEx isn't implemented for windows yet (feel free to add it to winmodlog.cmd and call it from here)
+				}
+			} else {
+				if (strictMatch) {
+					command = "awk '{print NR,$0}' " + filename + " | sort -nr | cut -d' ' -f2- | grep -m" + grepLimit + " -i '" + searchString.replace(/\\/g, '\\\\\\\\').replace(/["'`]/g, '\'\\$&\'').replace(/[\{\}\[\]\(\)\$\^\.\?\+\-\*]/g, '[$&]') + "'";
+				} else {
+					command = "awk '{print NR,$0}' " + filename + " | sort -nr | cut -d' ' -f2- | grep -m" + grepLimit + " -Ei '" + searchString + "'";
+				}
 			}
 		}
 
@@ -1804,9 +1828,11 @@ exports.commands = {
 				}
 			} else {
 				if (!stdout) {
-					connection.popup("No moderator actions containing '" + target + "' were found on " + roomNames + ".");
+					connection.popup("No moderator actions containing " + target + " were found on " + roomNames + "." +
+					                 strictMatch ? "" : " Add quotes to the search parameter to search for a phrase, rather than a user.");
 				} else {
-					connection.popup("|wide||html|<p>The last " + grepLimit + " logged actions containing '" + target + "' on " + roomNames + ":</p>" + stdout);
+					connection.popup("|wide||html|<p>The last " + grepLimit + " logged actions containing " + target + " on " + roomNames + "." +
+					                 (strictMatch ? "" : " Add quotes to the search parameter to search for a phrase, rather than a user.") + "</p>" + stdout);
 				}
 			}
 		});
