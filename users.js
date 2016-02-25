@@ -1120,11 +1120,14 @@ User = (() => {
 		this.connected = false;
 		this.lastConnected = Date.now();
 		if (!this.registered) {
+			// for "safety"
 			this.group = Config.groupsranking[0];
 			this.isSysop = false; // should never happen
 			this.isStaff = false;
-			this.autoconfirmed = '';
-			this.confirmed = '';
+			// This isn't strictly necessary since we don't reuse User objects
+			// for PS, but just in case.
+			// We're not resetting .confirmed/.autoconfirmed so those accounts
+			// can still be locked after logout.
 		}
 	};
 	User.prototype.onDisconnect = function (connection) {
