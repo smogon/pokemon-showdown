@@ -769,7 +769,7 @@ exports.Formats = [
 			battle: 2,
 		},
 		ruleset: ['Doubles OU'],
-		banlist: ['Perish Song'],
+		banlist: ['Kangaskhanite', 'Perish Song'],
 	},
 	{
 		name: "Averagemons",
