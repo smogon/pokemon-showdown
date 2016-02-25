@@ -417,7 +417,7 @@ let GlobalRoom = (() => {
 		})();
 
 		// init users
-		this.users = {};
+		this.users = Object.create(null);
 		this.userCount = 0; // cache of `Object.size(this.users)`
 		this.maxUsers = 0;
 		this.maxUsersDate = 0;
