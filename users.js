@@ -1582,9 +1582,14 @@ User = (() => {
 		let toChat = this.chatQueue.shift();
 
 		this.lastChatMessage = new Date().getTime();
-		Monitor.activeIp = toChat[2].ip;
-		toChat[1].chat(this, toChat[0], toChat[2]);
-		Monitor.activeIp = null;
+
+		if (toChat[1].users) {
+			Monitor.activeIp = toChat[2].ip;
+			toChat[1].chat(this, toChat[0], toChat[2]);
+			Monitor.activeIp = null;
+		} else {
+			// room is expired, do nothing
+		}
 
 		let throttleDelay = THROTTLE_DELAY;
 		if (this.group !== ' ') throttleDelay /= 2;
