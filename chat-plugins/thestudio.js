@@ -240,7 +240,7 @@ let commands = {
 				"\"" + room.chatRoomData.artistQuoteOfTheDay + "\""
 			);
 		}
-		if (!this.can('ban', null, room)) return false;
+		if (!this.can('mute', null, room)) return false;
 		if (target === 'off' || target === 'disable' || target === 'reset') {
 			if (!room.chatRoomData.artistQuoteOfTheDay) return this.sendReply("The Artist Quote of the Day has already been reset.");
 			delete room.chatRoomData.artistQuoteOfTheDay;
