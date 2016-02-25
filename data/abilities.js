@@ -3316,9 +3316,10 @@ exports.BattleAbilities = {
 				return false;
 			}
 		},
-		onImmunity: function (type, target) {
-			if (type === 'Rock' && !target.activeTurns) {
-				return false;
+		onTryHit: function (target, source, move) {
+			if (move.type === 'Rock' && !target.activeTurns) {
+				this.add('-immune', target, '[msg]', '[from] ability: Mountaineer');
+				return null;
 			}
 		},
 		id: "mountaineer",
