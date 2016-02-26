@@ -1559,6 +1559,7 @@ exports.BattleScripts = {
 					(hasType['Dragon'] && !counter['Dragon'] && !hasAbility['Aerilate'] && !hasAbility['Pixilate'] && !hasMove['rest'] && !hasMove['sleeptalk']) ||
 					(hasType['Electric'] && !counter['Electric']) ||
 					(hasType['Fighting'] && !counter['Fighting'] && counter.setupType) ||
+					(hasType['Flying'] && !!counter['Flying'] && !hasType['Normal'] && !hasType['Poison'] && !hasType['Psychic'] && counter.Status < 3 && !hasAbility['Aerilate'] && template.types.length > 1 && counter.stab < 2) ||
 					(hasType['Fire'] && !counter['Fire']) ||
 					(hasType['Ground'] && !counter['Ground'] && (counter.setupType || counter['speedsetup'])) ||
 					(hasType['Ice'] && !counter['Ice']) ||
@@ -1632,6 +1633,11 @@ exports.BattleScripts = {
 				}
 			}
 		} while (moves.length < 4 && movePool.length);
+
+		// Moveset modifications
+		if (hasMove['autotomize'] && hasMove['heavyslam']) {
+			moves[moves.indexOf('autotomize')] = 'rockpolish';
+		}
 
 		// If Hidden Power has been removed, reset the IVs
 		if (!hasMove['hiddenpower']) {
