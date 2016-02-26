@@ -240,6 +240,9 @@ exports.replsocketmode = 0o600;
 //     - tournaments: creating tournaments (/tour new, settype etc.)
 //     - tournamentsmoderation: /tour dq, autodq, end etc.
 //     - tournamentsmanagement: enable/disable tournaments.
+//     - minigame: make minigames (hangman, polls, etc.).
+//     - game: make games.
+//     - gamemanagement: enable/disable games and minigames.
 exports.grouplist = [
 	{
 		symbol: '~',
@@ -268,6 +271,7 @@ exports.grouplist = [
 		disableladder: true,
 		globalonly: true,
 		tournamentsmanagement: true,
+		gamemanagement: true,
 	},
 	{
 		symbol: '#',
@@ -282,6 +286,7 @@ exports.grouplist = [
 		modchatall: true,
 		roomonly: true,
 		tournamentsmanagement: true,
+		gamemanagement: true,
 	},
 	{
 		symbol: '\u2605',
@@ -307,6 +312,7 @@ exports.grouplist = [
 		ip: true,
 		alts: '@u',
 		tournaments: true,
+		game: true,
 	},
 	{
 		symbol: '%',
@@ -328,6 +334,7 @@ exports.grouplist = [
 		tournamentsmoderation: true,
 		jeopardy: true,
 		joinbattle: true,
+		minigame: true,
 	},
 	{
 		symbol: '+',
