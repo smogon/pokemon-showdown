@@ -2543,7 +2543,7 @@ exports.BattleFormatsData = {
 		tier: "NFE",
 	},
 	aggron: {
-		randomBattleMoves: ["autotomize", "headsmash", "earthquake", "lowkick", "heavyslam", "aquatail", "stealthrock"],
+		randomBattleMoves: ["rockpolish", "headsmash", "earthquake", "lowkick", "heavyslam", "aquatail", "stealthrock"],
 		randomDoubleBattleMoves: ["rockslide", "headsmash", "earthquake", "lowkick", "heavyslam", "aquatail", "stealthrock", "protect"],
 		eventPokemon: [
 			{"generation": 3, "level": 100, "moves":["irontail", "protect", "metalsound", "doubleedge"]},
