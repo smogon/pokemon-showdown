@@ -1499,6 +1499,7 @@ exports.commands = {
 		if (targetUser.confirmed) return this.errorReply("User '" + name + "' is already confirmed.");
 
 		targetUser.setGroup(' ', true);
+		this.sendReply("User '" + name + "' is now confirmed.");
 	},
 	confirmuserhelp: ["/confirmuser [username] - Confirms the user (makes them immune to locks). Requires: & ~"],
 
