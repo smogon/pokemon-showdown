@@ -1791,7 +1791,7 @@ Users.socketReceive = function (worker, workerid, socketid, message) {
 		if (user.chat(lines[i], room, connection) === false) break;
 	}
 	let deltaTime = Date.now() - startTime;
-	if (deltaTime > 500) {
+	if (deltaTime > 1000) {
 		Monitor.warn("[slow] " + deltaTime + "ms - " + user.name + " <" + connection.ip + ">: " + message);
 	}
 };
