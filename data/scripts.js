@@ -1555,6 +1555,7 @@ exports.BattleScripts = {
 					(hasAbility['Dark Aura'] && !counter['Dark']) ||
 					(hasAbility['Gale Wings'] && !counter['Flying']) ||
 					(hasAbility['Guts'] && hasType['Normal'] && movePool.indexOf('facade') >= 0) ||
+					(hasAbility['Stance Change'] && !counter.setupType && movePool.indexOf('kingsshield') >= 0) ||
 					(hasType['Dark'] && hasMove['suckerpunch'] && counter.stab < template.types.length) ||
 					(hasType['Dragon'] && !counter['Dragon'] && !hasAbility['Aerilate'] && !hasAbility['Pixilate'] && !hasMove['rest'] && !hasMove['sleeptalk']) ||
 					(hasType['Electric'] && !counter['Electric']) ||
@@ -1641,14 +1642,7 @@ exports.BattleScripts = {
 
 		// If Hidden Power has been removed, reset the IVs
 		if (!hasMove['hiddenpower']) {
-			ivs = {
-				hp: 31,
-				atk: 31,
-				def: 31,
-				spa: 31,
-				spd: 31,
-				spe: 31,
-			};
+			ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
 		}
 
 		let abilities = Object.values(baseTemplate.abilities);
@@ -1909,7 +1903,7 @@ exports.BattleScripts = {
 			item = (!!counter['Normal'] || (hasMove['suckerpunch'] && !hasType['Dark'])) ? 'Life Orb' : 'Expert Belt';
 		} else if (counter.damagingMoves.length >= 3 && !!counter['speedsetup'] && template.baseStats.hp + template.baseStats.def + template.baseStats.spd >= 300) {
 			item = 'Weakness Policy';
-		} else if (counter.damagingMoves.length >= 3 && ability !== 'Sturdy' && !hasMove['dragontail'] && !hasMove['superfang']) {
+		} else if (counter.damagingMoves.length >= 3 && ability !== 'Sturdy' && !hasMove['dragontail'] && !hasMove['foulplay'] && !hasMove['superfang']) {
 			item = (template.baseStats.hp + template.baseStats.def + template.baseStats.spd < 285 || !!counter['speedsetup'] || hasMove['trickroom']) ? 'Life Orb' : 'Leftovers';
 		} else if (template.species === 'Palkia' && (hasMove['dracometeor'] || hasMove['spacialrend']) && hasMove['hydropump']) {
 			item = 'Lustrous Orb';
