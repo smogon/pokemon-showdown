@@ -59,29 +59,29 @@ if (!process.send) {
 			// unhandled
 			}
 		});
-	};
 
-	/* worker.on('disconnect', worker => {
-		// worker crashed, try our best to clean up
-		require('./crashlogger.js')(new Error("Worker " + worker.id + " abruptly died"), "The main process");
+		worker.on('disconnect', () => {
+			// worker crashed, try our best to clean up
+			require('./crashlogger.js')(new Error("Worker " + worker.id + " abruptly died"), "The main process");
 
-		// this could get called during cleanup; prevent it from crashing
-		worker.send = () => {};
+			// this could get called during cleanup; prevent it from crashing
+			worker.send = () => {};
 
-		let count = 0;
-		Users.connections.forEach(connection => {
-			if (connection.worker === worker) {
-				Users.socketDisconnect(worker, worker.id, connection.socketid);
-				count++;
-			}
+			let count = 0;
+			Users.connections.forEach(connection => {
+				if (connection.worker === worker) {
+					Users.socketDisconnect(worker, worker.id, connection.socketid);
+					count++;
+				}
+			});
+			console.error("" + count + " connections were lost.");
+
+			// don't delete the worker, so we can investigate it if necessary.
+
+			// attempt to recover
+			spawnWorker();
 		});
-		console.error("" + count + " connections were lost.");
-
-		// don't delete the worker, so we can investigate it if necessary.
-
-		// attempt to recover
-		spawnWorker();
-	}); */
+	};
 
 	exports.listen = function (port, bindAddress, workerCount) {
 		if (port !== undefined && !isNaN(port)) {
