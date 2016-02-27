@@ -1833,7 +1833,7 @@ exports.commands = {
 			} else {
 				if (!stdout) {
 					connection.popup("No moderator actions containing " + target + " were found on " + roomNames + "." +
-					                 strictMatch ? "" : " Add quotes to the search parameter to search for a phrase, rather than a user.");
+					                 (strictMatch ? "" : " Add quotes to the search parameter to search for a phrase, rather than a user."));
 				} else {
 					connection.popup("|wide||html|<p>The last " + grepLimit + " logged actions containing " + target + " on " + roomNames + "." +
 					                 (strictMatch ? "" : " Add quotes to the search parameter to search for a phrase, rather than a user.") + "</p>" + stdout);
