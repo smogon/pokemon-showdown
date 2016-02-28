@@ -237,7 +237,7 @@ let Context = exports.Context = (() => {
 		if (typeof user === 'string') {
 			buf += "[" + toId(user) + "]";
 		} else {
-			let userid = this.getLastIdOf(user);
+			let userid = user.getLastId();
 			buf += "[" + userid + "]";
 			if (user.autoconfirmed && user.autoconfirmed !== userid) buf += " ac:[" + user.autoconfirmed + "]";
 		}
@@ -432,9 +432,6 @@ let Context = exports.Context = (() => {
 		}
 		this.splitTarget(target, exactName);
 		return this.targetUser;
-	};
-	Context.prototype.getLastIdOf = function (user) {
-		return (user.named ? user.userid : (Object.keys(user.prevNames).last() || user.userid));
 	};
 	Context.prototype.splitTarget = function (target, exactName) {
 		let commaIndex = target.indexOf(',');

@@ -1201,6 +1201,14 @@ class User {
 		});
 		return alts;
 	}
+	getLastName() {
+		if (this.named) return this.name;
+		return "[" + (Object.keys(this.prevNames).last() || this.name) + "]";
+	}
+	getLastId() {
+		if (this.named) return this.userid;
+		return Object.keys(this.prevNames).last() || this.userid;
+	}
 	ban(noRecurse, userid) {
 		// recurse only once; the root for-loop already bans everything with your IP
 		if (!userid) userid = this.userid;
