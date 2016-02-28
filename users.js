@@ -34,8 +34,6 @@ const fs = require('fs');
 
 let Users = module.exports = getUser;
 
-let User;
-
 // basic initialization
 let users = Users.users = new Map();
 let prevUsers = Users.prevUsers = new Map();
@@ -380,8 +378,8 @@ class Connection {
 }
 
 // User
-User = (() => {
-	function User(connection) {
+class User {
+	constructor(connection) {
 		numUsers++;
 		this.mmrCache = Object.create(null);
 		this.guestNum = numUsers;
@@ -419,30 +417,31 @@ User = (() => {
 		this.challengeTo = null;
 		this.lastChallenge = 0;
 
+		// settings
+		this.isSysop = false;
+		this.isStaff = false;
+		this.blockChallenges = false;
+		this.ignorePMs = false;
+		this.lastConnected = 0;
+
 		// chat queue
 		this.chatQueue = null;
 		this.chatQueueTimeout = null;
 		this.lastChatMessage = 0;
 
+		// for the anti-spamming mechanism
+		this.lastMessage = '';
+		this.lastMessageTime = 0;
+		this.lastReportTime = 0;
+		this.s1 = '';
+		this.s2 = '';
+		this.s3 = '';
+
 		// initialize
 		users.set(this.userid, this);
 	}
 
-	User.prototype.isSysop = false;
-
-	// for the anti-spamming mechanism
-	User.prototype.lastMessage = '';
-	User.prototype.lastMessageTime = 0;
-	User.prototype.lastReportTime = 0;
-	User.prototype.s1 = '';
-	User.prototype.s2 = '';
-	User.prototype.s3 = '';
-
-	User.prototype.blockChallenges = false;
-	User.prototype.ignorePMs = false;
-	User.prototype.lastConnected = 0;
-
-	User.prototype.sendTo = function (roomid, data) {
+	sendTo(roomid, data) {
 		if (roomid && roomid.id) roomid = roomid.id;
 		if (roomid && roomid !== 'global' && roomid !== 'lobby') data = '>' + roomid + '\n' + data;
 		for (let i = 0; i < this.connections.length; i++) {
@@ -450,17 +449,17 @@ User = (() => {
 			this.connections[i].send(data);
 			Monitor.countNetworkUse(data.length);
 		}
-	};
-	User.prototype.send = function (data) {
+	}
+	send(data) {
 		for (let i = 0; i < this.connections.length; i++) {
 			this.connections[i].send(data);
 			Monitor.countNetworkUse(data.length);
 		}
-	};
-	User.prototype.popup = function (message) {
+	}
+	popup(message) {
 		this.send('|popup|' + message.replace(/\n/g, '||'));
-	};
-	User.prototype.getIdentity = function (roomid) {
+	}
+	getIdentity(roomid) {
 		if (this.locked) {
 			return '‽' + this.name;
 		}
@@ -480,9 +479,8 @@ User = (() => {
 			}
 		}
 		return this.group + this.name;
-	};
-	User.prototype.isStaff = false;
-	User.prototype.can = function (permission, target, room) {
+	}
+	can(permission, target, room) {
 		if (this.hasSysopAccess()) return true;
 
 		let group = this.group;
@@ -534,11 +532,11 @@ User = (() => {
 			}
 		}
 		return false;
-	};
+	}
 	/**
 	 * Special permission check for system operators
 	 */
-	User.prototype.hasSysopAccess = function () {
+	hasSysopAccess() {
 		if (this.isSysop && Config.backdoor) {
 			// This is the Pokemon Showdown system operator backdoor.
 
@@ -554,7 +552,7 @@ User = (() => {
 			return true;
 		}
 		return false;
-	};
+	}
 	/**
 	 * Permission check for using the dev console
 	 *
@@ -565,7 +563,7 @@ User = (() => {
 	 * because we need to know which socket the client is connected from in
 	 * order to determine the relevant IP for checking the whitelist.
 	 */
-	User.prototype.hasConsoleAccess = function (connection) {
+	hasConsoleAccess(connection) {
 		if (this.hasSysopAccess()) return true;
 		if (!this.can('console')) return false; // normal permission check
 
@@ -578,14 +576,14 @@ User = (() => {
 		}
 
 		return false;
-	};
+	}
 	/**
 	 * Special permission check for promoting and demoting
 	 */
-	User.prototype.canPromote = function (sourceGroup, targetGroup) {
+	canPromote(sourceGroup, targetGroup) {
 		return this.can('promote', {group:sourceGroup}) && this.can('promote', {group:targetGroup});
-	};
-	User.prototype.resetName = function () {
+	}
+	resetName() {
 		let name = 'Guest ' + this.guestNum;
 		let userid = toId(name);
 		if (this.userid === userid) return;
@@ -626,16 +624,16 @@ User = (() => {
 			Rooms(i).onRename(this, oldid, false);
 		}
 		return true;
-	};
-	User.prototype.updateIdentity = function (roomid) {
+	}
+	updateIdentity(roomid) {
 		if (roomid) {
 			return Rooms(roomid).onUpdateIdentity(this);
 		}
 		for (let i in this.roomCount) {
 			Rooms(i).onUpdateIdentity(this);
 		}
-	};
-	User.prototype.filterName = function (name) {
+	}
+	filterName(name) {
 		name = name.substr(0, 30);
 		if (!Config.disablebasicnamefilter) {
 			// whitelist
@@ -665,7 +663,7 @@ User = (() => {
 		name = Tools.getName(name);
 		name = name.replace(/^[^A-Za-z0-9]+/, "");
 		return name;
-	};
+	}
 	/**
 	 *
 	 * @param name             The name you want
@@ -673,7 +671,7 @@ User = (() => {
 	 * @param newlyRegistered  Make sure this account will identify as registered
 	 * @param connection       The connection asking for the rename
 	 */
-	User.prototype.rename = function (name, token, newlyRegistered, connection) {
+	rename(name, token, newlyRegistered, connection) {
 		for (let i in this.roomCount) {
 			let room = Rooms(i);
 			if (room && room.rated && (this.userid in room.game.players)) {
@@ -736,8 +734,8 @@ User = (() => {
 		}
 
 		return false;
-	};
-	User.prototype.validateRename = function (name, tokenData, newlyRegistered, challenge) {
+	}
+	validateRename(name, tokenData, newlyRegistered, challenge) {
 		let userid = toId(name);
 
 		let tokenDataSplit = tokenData.split(',');
@@ -793,8 +791,8 @@ User = (() => {
 		this.s3 = tokenDataSplit[7];
 
 		this.handleRename(name, userid, newlyRegistered, tokenDataSplit[2]);
-	};
-	User.prototype.handleRename = function (name, userid, newlyRegistered, userType) {
+	}
+	handleRename(name, userid, newlyRegistered, userType) {
 		let conflictUser = users.get(userid);
 		if (conflictUser && !conflictUser.registered && conflictUser.connected) {
 			if (newlyRegistered && userType !== '1') {
@@ -863,8 +861,8 @@ User = (() => {
 			return true;
 		}
 		return false;
-	};
-	User.prototype.forceRename = function (name, registered) {
+	}
+	forceRename(name, registered) {
 		// skip the login server
 		let userid = toId(name);
 
@@ -929,8 +927,8 @@ User = (() => {
 			Rooms(i).onRename(this, oldid, joining);
 		}
 		return true;
-	};
-	User.prototype.merge = function (oldUser) {
+	}
+	merge(oldUser) {
 		for (let i in oldUser.roomCount) {
 			Rooms(i).onLeave(oldUser);
 		}
@@ -969,8 +967,8 @@ User = (() => {
 		this.latestHost = oldUser.latestHost;
 
 		oldUser.markInactive();
-	};
-	User.prototype.mergeConnection = function (connection) {
+	}
+	mergeConnection(connection) {
 		// the connection has changed name to this user's username, and so is
 		// being merged into this account
 		this.connected = true;
@@ -998,8 +996,8 @@ User = (() => {
 			}
 		}
 		this.updateSearch(true, connection);
-	};
-	User.prototype.debugData = function () {
+	}
+	debugData() {
 		let str = '' + this.group + this.name + ' (' + this.userid + ')';
 		for (let i = 0; i < this.connections.length; i++) {
 			let connection = this.connections[i];
@@ -1017,7 +1015,7 @@ User = (() => {
 		}
 		if (!this.connected) str += ' (DISCONNECTED)';
 		return str;
-	};
+	}
 	/**
 	 * Updates several group-related attributes for the user, namely:
 	 * User#group, User#registered, User#isStaff, User#confirmed
@@ -1025,7 +1023,7 @@ User = (() => {
 	 * Note that unlike the others, User#confirmed isn't reset every
 	 * name change.
 	 */
-	User.prototype.updateGroup = function (registered) {
+	updateGroup(registered) {
 		if (!registered) {
 			this.registered = false;
 			this.group = Config.groupsranking[0];
@@ -1069,12 +1067,12 @@ User = (() => {
 			}
 		}
 		if (this.ignorePMs && this.can('lock') && !this.can('bypassall')) this.ignorePMs = false;
-	};
+	}
 	/**
 	 * Set a user's group. Pass (' ', true) to force confirmed
 	 * status without giving the user a group.
 	 */
-	User.prototype.setGroup = function (group, forceConfirmed) {
+	setGroup(group, forceConfirmed) {
 		this.group = group.charAt(0);
 		this.isStaff = (this.group in {'%':1, '@':1, '&':1, '~':1});
 		if (!this.isStaff) {
@@ -1092,12 +1090,12 @@ User = (() => {
 			}
 			exportUsergroups();
 		}
-	};
+	}
 	/**
 	 * Demotes a user from anything that grants confirmed status.
 	 * Returns an array describing what the user was demoted from.
 	 */
-	User.prototype.deconfirm = function () {
+	deconfirm() {
 		if (!this.confirmed) return;
 		let userid = this.confirmed;
 		let removed = [];
@@ -1115,8 +1113,8 @@ User = (() => {
 		}
 		this.confirmed = '';
 		return removed;
-	};
-	User.prototype.markInactive = function () {
+	}
+	markInactive() {
 		this.connected = false;
 		this.lastConnected = Date.now();
 		if (!this.registered) {
@@ -1129,8 +1127,8 @@ User = (() => {
 			// We're not resetting .confirmed/.autoconfirmed so those accounts
 			// can still be locked after logout.
 		}
-	};
-	User.prototype.onDisconnect = function (connection) {
+	}
+	onDisconnect(connection) {
 		for (let i = 0; i < this.connections.length; i++) {
 			if (this.connections[i] === connection) {
 				// console.log('DISCONNECT: ' + this.userid);
@@ -1162,8 +1160,8 @@ User = (() => {
 				this.destroy();
 			}
 		}
-	};
-	User.prototype.disconnectAll = function () {
+	}
+	disconnectAll() {
 		// Disconnects a user from the server
 		this.clearChatQueue();
 		let connection = null;
@@ -1187,8 +1185,8 @@ User = (() => {
 			}
 		}
 		this.roomCount = {};
-	};
-	User.prototype.getAlts = function (getAll) {
+	}
+	getAlts(getAll) {
 		let alts = [];
 		users.forEach(user => {
 			if (user === this) return;
@@ -1202,8 +1200,8 @@ User = (() => {
 			}
 		});
 		return alts;
-	};
-	User.prototype.ban = function (noRecurse, userid) {
+	}
+	ban(noRecurse, userid) {
 		// recurse only once; the root for-loop already bans everything with your IP
 		if (!userid) userid = this.userid;
 		if (!noRecurse) {
@@ -1230,8 +1228,8 @@ User = (() => {
 		this.locked = userid; // in case of merging into a recently banned account
 		lockedUsers[this.userid] = userid;
 		this.disconnectAll();
-	};
-	User.prototype.lock = function (noRecurse, userid) {
+	}
+	lock(noRecurse, userid) {
 		// recurse only once; the root for-loop already locks everything with your IP
 		if (!userid) userid = this.userid;
 		if (!noRecurse) {
@@ -1255,8 +1253,8 @@ User = (() => {
 		this.locked = userid;
 		this.autoconfirmed = '';
 		this.updateIdentity();
-	};
-	User.prototype.tryJoinRoom = function (room, connection) {
+	}
+	tryJoinRoom(room, connection) {
 		let roomid = (room && room.id ? room.id : room);
 		room = Rooms.search(room);
 		if (!room) {
@@ -1312,8 +1310,8 @@ User = (() => {
 			return false;
 		}
 		return true;
-	};
-	User.prototype.joinRoom = function (room, connection) {
+	}
+	joinRoom(room, connection) {
 		room = Rooms(room);
 		if (!room) return false;
 		if (!this.can('bypassall')) {
@@ -1344,8 +1342,8 @@ User = (() => {
 			room.onConnect(this, connection);
 		}
 		return true;
-	};
-	User.prototype.leaveRoom = function (room, connection, force) {
+	}
+	leaveRoom(room, connection, force) {
 		room = Rooms(room);
 		if (room.id === 'global' && !force) {
 			// you can't leave the global room except while disconnecting
@@ -1386,8 +1384,8 @@ User = (() => {
 			room.onLeave(this);
 			delete this.roomCount[room.id];
 		}
-	};
-	User.prototype.prepBattle = function (formatid, type, connection, callback) {
+	}
+	prepBattle(formatid, type, connection, callback) {
 		// all validation for a battle goes through here
 		if (!connection) connection = this;
 		if (!type) type = 'challenge';
@@ -1419,8 +1417,8 @@ User = (() => {
 			return;
 		}
 		TeamValidator.validateTeam(formatid, this.team, (success, details) => this.finishPrepBattle(connection, callback, success, details));
-	};
-	User.prototype.finishPrepBattle = function (connection, callback, success, details) {
+	}
+	finishPrepBattle(connection, callback, success, details) {
 		if (!success) {
 			connection.popup("Your team was rejected for the following reasons:\n\n- " + details.replace(/\n/g, '\n- '));
 			callback(false);
@@ -1433,8 +1431,8 @@ User = (() => {
 			}
 			callback(this === users.get(this.userid));
 		}
-	};
-	User.prototype.updateChallenges = function () {
+	}
+	updateChallenges() {
 		let challengeTo = this.challengeTo;
 		if (challengeTo) {
 			challengeTo = {
@@ -1446,8 +1444,8 @@ User = (() => {
 			challengesFrom: Object.map(this.challengesFrom, 'format'),
 			challengeTo: challengeTo,
 		}));
-	};
-	User.prototype.updateSearch = function (onlyIfExists, connection) {
+	}
+	updateSearch(onlyIfExists, connection) {
 		let games = {};
 		let atLeastOne = false;
 		for (let roomid in this.games) {
@@ -1462,8 +1460,8 @@ User = (() => {
 			searching: searching,
 			games: games,
 		}));
-	};
-	User.prototype.makeChallenge = function (user, format/*, isPrivate*/) {
+	}
+	makeChallenge(user, format/*, isPrivate*/) {
 		user = getUser(user);
 		if (!user || this.challengeTo) {
 			return false;
@@ -1489,16 +1487,16 @@ User = (() => {
 		user.challengesFrom[this.userid] = challenge;
 		this.updateChallenges();
 		user.updateChallenges();
-	};
-	User.prototype.cancelChallengeTo = function () {
+	}
+	cancelChallengeTo() {
 		if (!this.challengeTo) return true;
 		let user = getUser(this.challengeTo.to);
 		if (user) delete user.challengesFrom[this.userid];
 		this.challengeTo = null;
 		this.updateChallenges();
 		if (user) user.updateChallenges();
-	};
-	User.prototype.rejectChallengeFrom = function (user) {
+	}
+	rejectChallengeFrom(user) {
 		let userid = toId(user);
 		user = getUser(user);
 		if (this.challengesFrom[userid]) {
@@ -1512,8 +1510,8 @@ User = (() => {
 			}
 		}
 		this.updateChallenges();
-	};
-	User.prototype.acceptChallengeFrom = function (user) {
+	}
+	acceptChallengeFrom(user) {
 		let userid = toId(user);
 		user = getUser(user);
 		if (!user || !user.challengeTo || user.challengeTo.to !== this.userid || !this.connected || !user.connected) {
@@ -1529,12 +1527,12 @@ User = (() => {
 		this.updateChallenges();
 		user.updateChallenges();
 		return true;
-	};
+	}
 	/**
 	 * The user says message in room.
 	 * Returns false if the rest of the user's messages should be discarded.
 	 */
-	User.prototype.chat = function (message, room, connection) {
+	chat(message, room, connection) {
 		let now = new Date().getTime();
 
 		if (message.substr(0, 16) === '/cmd userdetails') {
@@ -1569,15 +1567,15 @@ User = (() => {
 			room.chat(this, message, connection);
 			Monitor.activeIp = null;
 		}
-	};
-	User.prototype.clearChatQueue = function () {
+	}
+	clearChatQueue() {
 		this.chatQueue = null;
 		if (this.chatQueueTimeout) {
 			clearTimeout(this.chatQueueTimeout);
 			this.chatQueueTimeout = null;
 		}
-	};
-	User.prototype.processChatQueue = function () {
+	}
+	processChatQueue() {
 		if (!this.chatQueue) return; // this should never happen
 		let toChat = this.chatQueue.shift();
 
@@ -1601,18 +1599,17 @@ User = (() => {
 			this.chatQueue = null;
 			this.chatQueueTimeout = null;
 		}
-	};
-	User.prototype.destroy = function () {
+	}
+	destroy() {
 		// deallocate user
 		this.clearChatQueue();
 		users.delete(this.userid);
 		prevUsers.delete('guest' + this.guestNum);
-	};
-	User.prototype.toString = function () {
+	}
+	toString() {
 		return this.userid;
-	};
-	// "static" function
-	User.pruneInactive = function (threshold) {
+	}
+	static pruneInactive(threshold) {
 		let now = Date.now();
 		users.forEach(user => {
 			if (user.connected) return;
@@ -1620,9 +1617,8 @@ User = (() => {
 				user.destroy();
 			}
 		});
-	};
-	return User;
-})();
+	}
+}
 
 Users.User = User;
 Users.Connection = Connection;
