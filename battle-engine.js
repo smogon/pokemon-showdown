@@ -2941,20 +2941,25 @@ Battle = (() => {
 					let template = (source.illusion || source).template;
 					if (!template.abilities) continue;
 					for (let abilitySlot in template.abilities) {
-						let ability = template.abilities[abilitySlot];
-						if (ability === source.ability) {
+						let abilityName = template.abilities[abilitySlot];
+						if (abilityName === source.ability) {
 							// pokemon event was already run above so we don't need
 							// to run it again.
 							continue;
 						}
-						if (abilitySlot === 'H' && template.unreleasedHidden) {
+						let banlistTable = this.getFormat().banlistTable;
+						if (banlistTable && !('illegal' in banlistTable) && !this.getFormat().team) {
+							// hackmons format
+							continue;
+						} else if (abilitySlot === 'H' && template.unreleasedHidden) {
 							// unreleased hidden ability
 							continue;
 						}
-						if (pokemon.runStatusImmunity('trapped')) {
-							this.singleEvent('FoeMaybeTrapPokemon',
-								this.getAbility(ability), {}, pokemon, source);
-						}
+						let ability = this.getAbility(abilityName);
+						if (banlistTable && ability.id in banlistTable) continue;
+						if (!pokemon.runStatusImmunity('trapped')) continue;
+						this.singleEvent('FoeMaybeTrapPokemon',
+							ability, {}, pokemon, source);
 					}
 				}
 
