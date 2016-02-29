@@ -68,18 +68,24 @@ exports.commands = {
 
 	me: function (target, room, user, connection) {
 		// By default, /me allows a blank message
-		if (target) target = this.canTalk(target);
+		if (!target) target = '';
+		target = this.canTalk('/me ' + target);
 		if (!target) return;
 
-		return '/me ' + target;
+		return target;
 	},
 
 	mee: function (target, room, user, connection) {
 		// By default, /mee allows a blank message
-		if (target) target = this.canTalk(target);
+		if (!target) target = '';
+		target = target.trim();
+		if (/[A-Za-z]/.test(target.charAt(0))) {
+			return this.errorReply("To prevent confusion, /mee can't start with a letter.");
+		}
+		target = this.canTalk('/mee ' + target);
 		if (!target) return;
 
-		return '/mee ' + target;
+		return target;
 	},
 
 	avatar: function (target, room, user) {

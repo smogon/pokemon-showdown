@@ -491,12 +491,14 @@ let parse = exports.parse = function (message, room, user, connection, levelsDee
 		}
 	}
 
-	if (message.substr(0, 3) === '>> ') {
+	if (message.slice(0, 3) === '>> ') {
 		// multiline eval
-		message = '/eval ' + message.substr(3);
-	} else if (message.substr(0, 4) === '>>> ') {
+		message = '/eval ' + message.slice(3);
+	} else if (message.slice(0, 4) === '>>> ') {
 		// multiline eval
-		message = '/evalbattle ' + message.substr(4);
+		message = '/evalbattle ' + message.slice(4);
+	} else if (message.slice(0, 3) === '/me' && /[^A-Za-z]/.test(message.charAt(3))) {
+		message = '/mee ' + message.slice(3);
 	}
 
 	if (VALID_COMMAND_TOKENS.includes(message.charAt(0)) && message.charAt(1) !== message.charAt(0)) {
