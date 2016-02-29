@@ -497,7 +497,7 @@ let parse = exports.parse = function (message, room, user, connection, levelsDee
 	} else if (message.slice(0, 4) === '>>> ') {
 		// multiline eval
 		message = '/evalbattle ' + message.slice(4);
-	} else if (message.slice(0, 3) === '/me' && /[^A-Za-z0-9]/.test(message.charAt(3))) {
+	} else if (message.slice(0, 3) === '/me' && /[^A-Za-z0-9 ]/.test(message.charAt(3))) {
 		message = '/mee ' + message.slice(3);
 	}
 
