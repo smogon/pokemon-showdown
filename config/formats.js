@@ -418,7 +418,10 @@ exports.Formats = [
 	},
 	{
 		name: "Unreleased OU",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3566186/\">Unreleased OU</a>"],
+		desc: [
+			"Standard OU including unreleased Pokémon, abilities and items, and moves obtained from RBY.",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3566186/\">Unreleased OU</a>",
+		],
 		section: "OM of the Month",
 
 		mod: 'unreleased',
