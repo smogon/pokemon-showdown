@@ -413,7 +413,6 @@ exports.Formats = [
 		onBasePowerPriority: 9,
 		onBasePower: function (basePower, attacker, defender, move) {
 			if (!move.isMetagamiate) return;
-			console.log(move.type);
 			return this.chainModify([0x14CD, 0x1000]);
 		},
 	},
