@@ -545,20 +545,185 @@ exports.Formats = [
 		},
 	},
 	{
-		name: "[Seasonal] Polar Opposites",
+		name: "[Seasonal] Dimension Doom",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3491902/\">Seasonal Ladder</a>"],
 		section: "OM of the Month",
-		team: 'randomSeasonalPolar',
+		team: 'randomSeasonalDimensional',
 		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod', 'Cancel Mod'],
 		onBegin: function () {
-			this.add('-message', "NOTE: This is an Inverse Battle! Type effectivenesses are reversed!");
+			this.add('-message', "The world is about to end!");
+			let allPokemon = this.p1.pokemon.concat(this.p2.pokemon);
+			for (let i = 0, len = allPokemon.length; i < len; i++) {
+				let pokemon = allPokemon[i];
+				if (pokemon.set.signatureMove) {
+					let last = pokemon.moves.length - 1;
+					if (pokemon.moves[last]) {
+						pokemon.moves[last] = toId(pokemon.set.signatureMove);
+						pokemon.moveset[last].move = pokemon.set.signatureMove;
+						pokemon.baseMoveset[last].move = pokemon.set.signatureMove;
+					}
+				}
+			}
 		},
-		onNegateImmunity: false,
-		onEffectiveness: function (typeMod, target, type, move) {
-			// The effectiveness of Freeze Dry on Water isn't reverted
-			if (move && move.id === 'freezedry' && type === 'Water') return;
-			if (move && !this.getImmunity(move, type)) return 1;
-			return -typeMod;
+		onSwitchIn: function (pokemon) {
+			let name = toId(pokemon.illusion ? pokemon.illusion.name : pokemon.name);
+			if (name === 'rick') {
+				this.add('-message', 'WUBBA LUBBA DUB DUB!!');
+			}
+			if (name === 'morty') {
+				this.add('-message', "I-I'm not sure t-this is a good idea, Rick!");
+			}
+			if (name === 'mrmeeseks') {
+				this.add('-message', "Hi! I'm Mr. Meeseks! Look at me!");
+			}
+			if (name === 'birdperson') {
+				this.add('-message', "It's been a tough mating season for birdperson.");
+			}
+			if (name === 'squanch') {
+				this.add('-message', "You're getting squanched, squanch!");
+			}
+			if (name === 'mortyjr') {
+				this.add('-message', 'The government is lame!');
+			}
+			if (name === 'dipper') {
+				this.add('-message', 'A mystery to solve!');
+			}
+			if (name === 'mabel') {
+				this.add('-message', 'Yay! Splinters!');
+			}
+			if (name === 'stanley') {
+				this.add('-message', 'Discount punches! No refunds!');
+			}
+			if (name === 'stanford') {
+				this.add('-message', 'Being a hero means fighting back even when it seems impossible.');
+			}
+			if (name === 'snowball') {
+				this.add('-message', 'You may call me snowball, because my fur is white and pretty.');
+			}
+			if (name === 'billcipher') {
+				this.add('-message', 'Let the weirdmaggedon start! HAHAHA!');
+			}
+			if (name === 'lilgideon') {
+				this.add('-message', 'I can buy and sell you, old man!');
+			}
+		},
+		onModifyMove: function (move, pokemon) {
+			let name = toId(pokemon.illusion ? pokemon.illusion.name : pokemon.name);
+			if (move.id === 'watergun' && name in {'rick':1, 'evilrick':1}) {
+				move.name = 'Portal Gun';
+				move.type = 'Psychic';
+				move.basePower = 66;
+				move.accuracy = true;
+				move.onTryHit = function (target, source, move) {
+					this.attrLastMove('[still]');
+					this.add('-anim', source, "Hyper Beam", target);
+				};
+				switch (this.random(6)) {
+				case 0:
+					move.volatileStatus = 'confusion';
+					move.onHit = function () {
+						this.add('-message', "This weird dimension confuses you!");
+					};
+					break;
+				case 1:
+					move.category = 'embargo';
+					move.onHit = function () {
+						this.add('-message', "Your item got sucked by the dimension hole!");
+					};
+					break;
+				case 2:
+					move.forceSwitch = true;
+					move.onHit = function () {
+						this.add('-message', "You got sucked into the portal!");
+					};
+					break;
+				case 3:
+					move.basePower = 150;
+					move.type = 'Fire';
+					move.onHit = function () {
+						this.add('-message', "Flames came out of the portal gun!");
+					};
+					break;
+				case 4:
+					move.basePower = 130;
+					move.type = 'Poison';
+					move.status = 'tox';
+					move.onHit = function () {
+						this.add('-message', "Toxic air came out of the portal gun!");
+					};
+					break;
+				case 5:
+					move.basePower = 45;
+					move.multihit = 3;
+					move.type = 'Bug';
+					move.onHit = function () {
+						this.add('-message', "Tentacles came out of the portal gun!");
+					};
+					break;
+				}
+			}
+			if (move.id === 'outrage' && name === 'morty') {
+				move.name = 'Morty Rage';
+				move.type = 'Fighting';
+				move.basePower = 200;
+				move.onTryHit = function (target, source, move) {
+					this.attrLastMove('[still]');
+					this.add('-anim', source, "Outrage", target);
+					this.add('-message', 'Morty grew tired of your shennanigans!');
+				};
+			}
+			if (move.id === 'kinesis' && name === 'evilmorty') {
+				move.name = 'Mind Control';
+				move.volatileStatus = 'confusion';
+				move.category = 'Special';
+				move.type = 'Fire';
+				move.basePower = 50;
+				move.boosts = {accuracy: -1};
+			}
+			if (move.id === 'dreameater' && name === 'scaryterry') {
+				move.name = 'Super Dream Eater';
+				move.onTryHit = function (target, source, move) {
+					this.attrLastMove('[still]');
+					this.add('-anim', source, "Hyper Beam", target);
+				};
+				move.onBasePower = function (basePower, attacker, defender) {
+					if (defender.status && defender.status === 'slp') {
+						return this.chainModify(2);
+					}
+				};
+			}
+			if (move.id === 'bulkup' && name === 'squanchy') {
+				move.name = 'Squanch Up';
+				move.boosts = {atk: 2, def: 2};
+			}
+			if (move.id === 'recycle') {
+				move.name = 'Pines Recycle';
+				move.heal = [2, 3];
+			}
+			if (move.id === 'psychic' && name === 'mabel') {
+				move.name = 'Grappling Hook';
+				move.basePower = 110;
+				move.heal = [2, 3];
+				this.add('-message', 'GRAPPLING HOOK!');
+			}
+			if (move.id === 'thunder' && name === 'billcipher') {
+				move.name = 'Bill Thunder';
+				move.basePower = 200;
+			}
+			if (move.id === 'tackle' && name === 'stanley') {
+				move.name = 'Baseball Bat';
+				move.basePower = 135;
+				move.volatileStatus = 'confusion';
+			}
+			if (move.id === 'hyperbeam' && name === 'stanford') {
+				move.name = 'Dimensional Sniper';
+				move.category = 'Physical';
+				move.basePower = 300;
+				move.onTryHit = function (target, source, move) {
+					this.attrLastMove('[still]');
+					this.add('-anim', source, "Origin Pulse", target);
+				};
+			}
 		},
 	},
 	{
