@@ -4659,7 +4659,7 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 1,
 			onStart: function (pokemon) {
-				this.add('-start', pokemon, 'move: Follow Me');
+				this.add('-singleturn', pokemon, 'move: Follow Me');
 			},
 			onFoeRedirectTargetPriority: 1,
 			onFoeRedirectTarget: function (target, source, source2, move) {
@@ -10639,7 +10639,7 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 1,
 			onStart: function (pokemon) {
-				this.add('-start', pokemon, 'move: Rage Powder');
+				this.add('-singleturn', pokemon, 'move: Rage Powder');
 			},
 			onFoeRedirectTargetPriority: 1,
 			onFoeRedirectTarget: function (target, source, source2, move) {
