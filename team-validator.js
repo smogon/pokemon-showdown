@@ -219,7 +219,7 @@ class Validator {
 				if (ability.name === template.abilities['H']) {
 					isHidden = true;
 
-					if (template.unreleasedHidden && banlistTable['illegal']) {
+					if (template.unreleasedHidden && banlistTable['Unreleased']) {
 						problems.push(name + "'s hidden ability is unreleased.");
 					} else if (tools.gen === 5 && set.level < 10 && (template.maleOnlyHidden || template.gender === 'N')) {
 						problems.push(name + " must be at least level 10 with its hidden ability.");
