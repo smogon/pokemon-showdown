@@ -2150,7 +2150,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
 		onHit: function (target, source) {
-			if (source.item) {
+			if (source.item || source.volatiles['gem']) {
 				return;
 			}
 			let yourItem = target.takeItem(source);
@@ -14106,7 +14106,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
 		onHit: function (target, source) {
-			if (source.item) {
+			if (source.item || source.volatiles['gem']) {
 				return;
 			}
 			let yourItem = target.takeItem(source);
