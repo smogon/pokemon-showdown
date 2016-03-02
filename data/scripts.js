@@ -3208,7 +3208,7 @@ exports.BattleScripts = {
 		let mons = {
 			'Rick': {species: 'alakazam', ability: 'regenerator', item: 'lifeorb', gender: 'M', moves: ['psystrike', 'recover', 'aurasphere', 'watergun'], signatureMove: 'Portal Gun'},
 			'Morty': {species: 'machop', ability: 'furcoat', item: 'leftovers', gender: 'M', moves: ['bodyslam', 'highjumpkick', 'stockpile', 'outrage'], signatureMove: 'Morty Rage'},
-			'Summer': {species: 'kirlia', ability: 'drought', item: 'brightpowder', gender: 'F', moves: ['moonblast', 'psystrike', 'moonlight', 'chatter']},
+			'Summer': {species: 'kirlia', ability: 'drought', item: 'brightpowder', gender: 'F', moves: ['moonblast', 'psystrike', 'moonlight', 'chatter'], signatureMove: 'Teen Problems'},
 			'Mr. Meeseks': {species: 'deoxys', ability: 'wonderguard', item: 'blacksludge', gender: 'N', moves: ['copycat', 'assist', 'partingshot', 'thunderwave']},
 			'Scary Terry': {species: 'excadrill', ability: 'baddreams', item: 'earthplate', gender: 'M', moves: ['spore', 'precipiceblades', 'slash', 'dreameater'], signatureMove: 'Super Dream Eater'},
 			'Dr. Xenon Bloom': {species: 'reuniclus', ability: 'waterabsorb', item: 'choicespecs', gender: 'M', moves: ['psyshock', 'aurasphere', 'sludgebomb', 'shadowball']},

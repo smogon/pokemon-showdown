@@ -588,8 +588,12 @@ exports.Formats = [
 			if (move.id === 'psychic' && name === 'mabel') {
 				move.name = 'Grappling Hook';
 				move.basePower = 110;
-				move.heal = [2, 3];
-				this.add('-message', 'GRAPPLING HOOK!');
+				move.drain = [2, 3];
+				move.onTryHit = function (target, source, move) {
+					this.attrLastMove('[still]');
+					this.add('-anim', source, "Hyper Beam", target);
+					this.add('-message', 'GRAPPLING HOOK!');
+				};
 			}
 			if (move.id === 'thunder' && name === 'billcipher') {
 				move.name = 'Bill Thunder';
@@ -607,6 +611,15 @@ exports.Formats = [
 				move.onTryHit = function (target, source, move) {
 					this.attrLastMove('[still]');
 					this.add('-anim', source, "Origin Pulse", target);
+				};
+			}
+			if (move.id === 'chatter' && name === 'summer') {
+				move.name = 'Teen Problems';
+				move.basePower = 90;
+				move.onTryHit = function (target, source, move) {
+					this.attrLastMove('[still]');
+					this.add('-anim', source, "Meteor Mash", target);
+					this.add('-message', 'This is so embarrasing!');
 				};
 			}
 		},
