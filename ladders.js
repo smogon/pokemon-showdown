@@ -291,6 +291,35 @@ class Ladder {
 			}
 		});
 	}
+
+	/**
+	 * Returns a promise for a <tr> with all ratings for the current format.
+	 */
+	visualize(username) {
+		return this.ladder.then(() => {
+			let index = this.indexOfUser(username, false);
+
+			if (index < 0) return '';
+
+			let ratings = this.loadedLadder[index];
+
+			let output = '<tr><td>' + this.formatid + '</td><td><strong>' + Math.round(ratings[1]) + '</strong></td>';
+			return output + '<td>' + ratings[3] + '</td><td>' + ratings[4] + '</td><td>' + (ratings[3] + ratings[4]) + '</td></tr>';
+		});
+	}
+
+	/**
+	 * Returns a Promise for an array of strings of <tr>s for ladder ratings of the user
+	 */
+	static visualizeAll(username) {
+		let ratings = [];
+		for (let i in Tools.data.Formats) {
+			if (Tools.data.Formats[i].searchShow) {
+				ratings.push(Ladders(i).visualize(username));
+			}
+		}
+		return Promise.all(ratings);
+	}
 }
 
 function getLadder(formatid) {
@@ -298,3 +327,4 @@ function getLadder(formatid) {
 }
 
 Ladders.Ladder = Ladder;
+Ladders.visualizeAll = Ladder.visualizeAll;

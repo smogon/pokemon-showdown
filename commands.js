@@ -278,6 +278,26 @@ exports.commands = {
 	},
 	backhelp: ["/back - Unblocks challenges and/or private messages, if either are blocked."],
 
+	rank: function (target, room, user) {
+		if (!target) target = user.name;
+
+		Ladders.visualizeAll(target).then(values => {
+			let buffer = '<div class="ladder"><table>';
+			buffer += '<tr><td colspan="8">User: <strong>' + Tools.escapeHTML(target) + '</strong></td></tr>';
+
+			let ratings = values.join('');
+			if (!ratings) {
+				buffer += '<tr><td colspan="8"><em>This user has not played any ladder games yet.</em></td></tr>';
+			} else {
+				buffer += '<tr><th>Format</th><th><abbr title="Elo rating">Elo</abbr></th><th>W</th><th>L</th><th>Total</th>';
+				buffer += ratings;
+			}
+			buffer += '</table></div>';
+
+			this.sendReply('|raw|' + buffer);
+		});
+	},
+
 	makeprivatechatroom: 'makechatroom',
 	makechatroom: function (target, room, user, connection, cmd) {
 		if (!this.can('makeroom')) return;
