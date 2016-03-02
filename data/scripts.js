@@ -140,7 +140,10 @@ exports.BattleScripts = {
 				this.add('-notarget');
 				return true;
 			}
-			if (targets.length > 1) move.spreadHit = true;
+			if (targets.length > 1) {
+				this.attrLastMove('[spread]');
+				move.spreadHit = true;
+			}
 			damage = 0;
 			for (let i = 0; i < targets.length; i++) {
 				let hitResult = this.tryMoveHit(targets[i], pokemon, move, true);
