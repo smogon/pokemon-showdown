@@ -117,3 +117,7 @@ Ladder.prototype.updateRating = function (p1name, p2name, p1score, room) {
 		}
 	});
 };
+
+exports.visualizeAll = function (username) {
+	return Promise.resolve(["<tr><td><strong>Please use the official client at play.pokemonshowdown.com</strong></td></tr>"]);
+};
