@@ -3145,8 +3145,9 @@ exports.BattleFormatsData = {
 		randomDoubleBattleMoves: ["stealthrock", "thunderwave", "stoneedge", "drainpunch", "curse", "rockslide", "protect"],
 		eventPokemon: [
 			{"generation": 3, "level": 40, "moves":["curse", "superpower", "ancientpower", "hyperbeam"]},
+			{"generation": 6, "level": 50, "isHidden": true, "moves":["explosion", "icepunch", "stoneedge", "hammerarm"]},
 		],
-		unreleasedHidden: true,
+		eventOnlyHidden: true,
 		tier: "NU",
 	},
 	regice: {
@@ -3154,8 +3155,9 @@ exports.BattleFormatsData = {
 		randomDoubleBattleMoves: ["thunderwave", "icebeam", "thunderbolt", "icywind", "protect", "focusblast", "rockpolish"],
 		eventPokemon: [
 			{"generation": 3, "level": 40, "moves":["curse", "superpower", "ancientpower", "hyperbeam"]},
+			{"generation": 6, "level": 50, "isHidden": true, "moves":["thunderbolt", "amnesia", "icebeam", "hail"]},
 		],
-		unreleasedHidden: true,
+		eventOnlyHidden: true,
 		tier: "PU",
 	},
 	registeel: {
@@ -3163,8 +3165,9 @@ exports.BattleFormatsData = {
 		randomDoubleBattleMoves: ["stealthrock", "ironhead", "curse", "rest", "thunderwave", "protect", "seismictoss"],
 		eventPokemon: [
 			{"generation": 3, "level": 40, "moves":["curse", "superpower", "ancientpower", "hyperbeam"]},
+			{"generation": 6, "level": 50, "isHidden": true, "moves":["ironhead", "rockslide", "gravity", "irondefense"]},
 		],
-		unreleasedHidden: true,
+		eventOnlyHidden: true,
 		tier: "RU",
 	},
 	latias: {
