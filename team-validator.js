@@ -569,7 +569,7 @@ class Validator {
 		if (lsetData.sourcesBefore === undefined) lsetData.sourcesBefore = 6;
 		let noPastGen = !!format.requirePentagon;
 		// Pokemon cannot be traded to past generations except in Gen 1 Tradeback
-		let noFutureGen = !(format.banlistTable && format.banlistTable['tradeback']);
+		let noFutureGen = !(format.banlistTable && format.banlistTable['allowtradeback']);
 		// if a move can only be learned from a gen 2-5 egg, we have to check chainbreeding validity
 		// limitedEgg is false if there are any legal non-egg sources for the move, and true otherwise
 		let limitedEgg = null;
