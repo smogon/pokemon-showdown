@@ -140,16 +140,18 @@ exports.BattleScripts = {
 				this.add('-notarget');
 				return true;
 			}
-			if (targets.length > 1) {
-				this.attrLastMove('[spread]');
-				move.spreadHit = true;
-			}
+			if (targets.length > 1) move.spreadHit = true;
 			damage = 0;
+			let hitTargets = [];
 			for (let i = 0; i < targets.length; i++) {
 				let hitResult = this.tryMoveHit(targets[i], pokemon, move, true);
-				if (hitResult || hitResult === 0 || hitResult === undefined) moveResult = true;
+				if (hitResult || hitResult === 0 || hitResult === undefined) {
+					moveResult = true;
+					hitTargets.push(targets[i].toString().substr(0, 3));
+				}
 				damage += hitResult || 0;
 			}
+			if (move.spreadHit) this.attrLastMove('[spread] ' + hitTargets.join(','));
 			if (!pokemon.hp) pokemon.faint();
 		} else {
 			target = targets[0];
