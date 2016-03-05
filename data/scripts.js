@@ -671,14 +671,15 @@ exports.BattleScripts = {
 		return !!firstForme.isMega;
 	},
 	getTeam: function (side, team) {
-		let format = side.battle.getFormat();
-		if (typeof format.team === 'string' && format.team.substr(0, 6) === 'random') {
-			return this[format.team + 'Team'](side);
-		} else if (team) {
-			return team;
-		} else {
-			return this.randomTeam(side);
-		}
+		const format = side.battle.getFormat();
+		const teamGenerator = typeof format.team === 'string' && format.team.startsWith('random') ? format.team + 'Team' : '';
+		if (!teamGenerator && team) return team;
+		// Reinitialize the RNG seed to create random teams.
+		this.startingSeed = this.startingSeed.concat(this.generateSeed());
+		team = this[teamGenerator || 'randomTeam'](side);
+		// Restore the default seed
+		this.seed = this.startingSeed.slice(0, 4);
+		return team;
 	},
 	randomCCTeam: function (side) {
 		let team = [];
@@ -3352,12 +3353,10 @@ exports.BattleScripts = {
 		let forceResult = (depth >= 4);
 
 		let availableTiers = ['Uber', 'OU', 'UU', 'RU', 'NU', 'PU'];
-		let chosenTier;
-
-		let currentSeed = this.seed.slice();
-		this.seed = this.startingSeed.slice();
-		chosenTier = availableTiers[this.random(availableTiers.length)];
-		this.seed = currentSeed;
+		const prevSeed = this.seed;
+		this.seed = this.startingSeed.slice(0, 4);
+		const chosenTier = availableTiers[this.random(availableTiers.length)];
+		this.seed = prevSeed;
 
 		let pokemonLeft = 0;
 		let pokemon = [];
