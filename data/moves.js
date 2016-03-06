@@ -9929,7 +9929,7 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 1,
 			onStart: function (target) {
-				this.add('-start', target, 'Powder');
+				this.add('-singleturn', target, 'Powder');
 			},
 			onTryMove: function (pokemon, target, move) {
 				if (move.type === 'Fire') {
