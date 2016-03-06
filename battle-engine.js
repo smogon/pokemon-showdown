@@ -276,7 +276,7 @@ BattlePokemon = (() => {
 		}
 
 		this.maxhp = Math.floor(Math.floor(2 * this.template.baseStats['hp'] + this.set.ivs['hp'] + Math.floor(this.set.evs['hp'] / 4) + 100) * this.level / 100 + 10);
-		if (this.template.baseStats['hp'] === 1) this.maxhp = 1; // shedinja
+		if (this.speciesid === 'shedinja') this.maxhp = 1;
 		this.hp = this.hp || this.maxhp;
 
 		this.isStale = 0;
