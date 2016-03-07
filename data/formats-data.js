@@ -4217,7 +4217,7 @@ exports.BattleFormatsData = {
 	},
 	gurdurr: {
 		randomBattleMoves: ["bulkup", "machpunch", "drainpunch", "icepunch", "knockoff"],
-		tier: "NU",
+		tier: "RU",
 	},
 	conkeldurr: {
 		randomBattleMoves: ["bulkup", "drainpunch", "icepunch", "knockoff", "machpunch"],
