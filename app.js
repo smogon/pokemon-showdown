@@ -57,7 +57,7 @@ const path = require('path');
 // aren't
 
 try {
-	require('sugar');
+	require.resolve('sugar-deprecated');
 } catch (e) {
 	if (require.main !== module) throw new Error("Dependencies unmet");
 

@@ -13,7 +13,7 @@
 
 'use strict';
 
-require('sugar');
+require('sugar-deprecated')(require('./crashlogger.js'));
 const fs = require('fs');
 const path = require('path');
 
