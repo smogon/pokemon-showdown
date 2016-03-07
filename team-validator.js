@@ -922,7 +922,7 @@ if (!process.send) {
 		return synchronousValidators[format].checkLearnset(move, template, lsetData);
 	};
 } else {
-	require('sugar');
+	require('sugar-deprecated')(require('./crashlogger.js'));
 	global.Config = require('./config/config.js');
 
 	if (Config.crashguard) {

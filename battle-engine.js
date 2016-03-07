@@ -12,7 +12,7 @@
 
 'use strict';
 
-require('sugar');
+require('sugar-deprecated')(require('./crashlogger.js'));
 
 global.Config = require('./config/config.js');
 
