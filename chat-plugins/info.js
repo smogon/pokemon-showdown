@@ -572,7 +572,7 @@ exports.commands = {
 			if (source.effectType !== 'Move' || source.category !== 'Status' && (source.basePower || source.basePowerCallback)) {
 				for (let i = 0; i < defender.types.length; i++) {
 					let baseMod = Tools.getEffectiveness(source, defender.types[i]);
-					let moveMod = source.id !== 'thousandarrows' && source.onEffectiveness && source.onEffectiveness.call(Tools, baseMod, defender.types[i], source);
+					let moveMod = source.onEffectiveness && source.onEffectiveness.call(Tools, baseMod, defender.types[i], source);
 					totalTypeMod += typeof moveMod === 'number' ? moveMod : baseMod;
 				}
 			}
@@ -633,7 +633,7 @@ exports.commands = {
 					} else {
 						if (!Tools.getImmunity(move.type, type) && !move.ignoreImmunity) continue;
 						let baseMod = Tools.getEffectiveness(move, type);
-						let moveMod = move.id !== 'thousandarrows' && move.onEffectiveness && move.onEffectiveness.call(Tools, baseMod, type, move);
+						let moveMod = move.onEffectiveness && move.onEffectiveness.call(Tools, baseMod, type, move);
 						eff = typeof moveMod === 'number' ? moveMod : baseMod;
 					}
 					if (eff > bestCoverage[type]) bestCoverage[type] = eff;
