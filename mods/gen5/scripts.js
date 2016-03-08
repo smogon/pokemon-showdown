@@ -451,11 +451,6 @@ exports.BattleScripts = {
 			}
 		}
 
-		if (hasMove['gyroball'] || hasMove['trickroom']) {
-			ivs.spe = 0;
-			evs.spe = 0;
-		}
-
 		item = 'Leftovers';
 		if (template.requiredItem) {
 			item = template.requiredItem;
@@ -569,7 +564,7 @@ exports.BattleScripts = {
 			item = 'Leftovers';
 		} else if (hasType['Poison']) {
 			item = 'Black Sludge';
-		} else if (this.getEffectiveness('Ground', template) >= 1 && ability !== 'Levitate' && !hasMove['magnetrise']) {
+		} else if (this.getImmunity('Ground', template) && this.getEffectiveness('Ground', template) >= 1 && ability !== 'Levitate' && !hasMove['magnetrise']) {
 			item = 'Air Balloon';
 		} else if (counter.Status <= 1 && ability !== 'Sturdy' && !hasMove['rapidspin']) {
 			item = 'Life Orb';
@@ -601,6 +596,11 @@ exports.BattleScripts = {
 		if (!counter['Physical']) {
 			evs.atk = 0;
 			ivs.atk = hasMove['hiddenpower'] ? ivs.atk - 30 : 0;
+		}
+
+		if (hasMove['gyroball'] || hasMove['trickroom']) {
+			evs.spe = 0;
+			ivs.spe = 0;
 		}
 
 		return {
