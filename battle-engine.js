@@ -276,20 +276,7 @@ BattlePokemon = (() => {
 		}
 
 		this.maxhp = Math.floor(Math.floor(2 * this.template.baseStats['hp'] + this.set.ivs['hp'] + Math.floor(this.set.evs['hp'] / 4) + 100) * this.level / 100 + 10);
-
-		// The Shedinja 1 HP exception
-
-		// The games implement this as a hardcoded check for Shedinja, but as a
-		// convenience for mods (specifically, so it's easier to give Shedinja
-		// more than 1 HP, and so it's easier to give other Pokemon 1 HP), we've
-		// made it so Pokemon will have 1 max HP if and only if their base HP
-		// stat is 1.
-
-		// If you need to override this behavior (i.e. to use a base 1 HP
-		// Pokemon with its HP calculated by the regular formula), use an
-		// `if (init)` block in clearVolatile.
-
-		if (this.template.baseStats['hp'] === 1) this.maxhp = 1;
+		if (this.template.maxHP) this.maxhp = this.template.maxHP; // Shedinja
 
 		this.hp = this.hp || this.maxhp;
 
