@@ -36,8 +36,8 @@ let triviaData = {};
 try {
 	triviaData = require('../config/chat-plugins/triviadata.json');
 } catch (e) {} // file doesn't exist or contains invalid JSON
-if (!Object.isObject(triviaData)) triviaData = {};
-if (!Object.isObject(triviaData.leaderboard)) triviaData.leaderboard = {};
+if (!triviaData || typeof triviaData !== 'object') triviaData = {};
+if (!triviaData || typeof triviaData.leaderboard !== 'object') triviaData.leaderboard = {};
 if (!Array.isArray(triviaData.ladder)) triviaData.ladder = [];
 if (!Array.isArray(triviaData.questions)) triviaData.questions = [];
 if (!Array.isArray(triviaData.submissions)) triviaData.submissions = [];
@@ -204,9 +204,9 @@ let Trivia = (() => {
 		if (this.participants.size < 3) return output.sendReply("Not enough users have signed up yet! Trivia games require at least three participants to run.");
 
 		if (this.category === 'random') {
-			this.currentQuestions = triviaData.questions.randomize();
+			this.currentQuestions = Tools.shuffle(triviaData.questions.slice());
 		} else {
-			this.currentQuestions = sliceCategory(this.category).randomize();
+			this.currentQuestions = Tools.shuffle(sliceCategory(this.category).slice());
 		}
 
 		if (!this.currentQuestions.length) {

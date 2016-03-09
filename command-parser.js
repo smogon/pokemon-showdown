@@ -44,16 +44,16 @@ const path = require('path');
  *********************************************************/
 
 let baseCommands = exports.baseCommands = require('./commands.js').commands;
-let commands = exports.commands = Object.clone(baseCommands);
+let commands = exports.commands = Object.assign({}, baseCommands);
 
 // Install plug-in commands
 
 // info always goes first so other plugins can shadow it
-Object.merge(commands, require('./chat-plugins/info.js').commands);
+Object.assign(commands, require('./chat-plugins/info.js').commands);
 
 for (let file of fs.readdirSync(path.resolve(__dirname, 'chat-plugins'))) {
 	if (file.substr(-3) !== '.js' || file === 'info.js') continue;
-	Object.merge(commands, require('./chat-plugins/' + file).commands);
+	Object.assign(commands, require('./chat-plugins/' + file).commands);
 }
 
 /*********************************************************
@@ -606,7 +606,7 @@ exports.uncacheTree = function (root) {
 		for (let i = 0; i < uncache.length; ++i) {
 			if (require.cache[uncache[i]]) {
 				newuncache.push.apply(newuncache,
-					require.cache[uncache[i]].children.map('id')
+					require.cache[uncache[i]].children.map(toId)
 				);
 				delete require.cache[uncache[i]];
 			}

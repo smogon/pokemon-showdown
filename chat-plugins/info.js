@@ -1692,7 +1692,8 @@ exports.commands = {
 		let options = target.split(',');
 		if (options.length < 2) return this.parse('/help pick');
 		if (!this.canBroadcast()) return false;
-		return this.sendReplyBox('<em>We randomly picked:</em> ' + Tools.escapeHTML(options.sample().trim()));
+		const pickedOption = options[Math.floor(Math.random() * options.length)];
+		return this.sendReplyBox('<em>We randomly picked:</em> ' + Tools.escapeHTML(pickedOption).trim());
 	},
 	pickrandomhelp: ["/pick [option], [option], ... - Randomly selects an item from a list containing 2 or more elements."],
 

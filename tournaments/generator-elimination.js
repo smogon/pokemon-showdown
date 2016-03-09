@@ -82,7 +82,7 @@ let Elimination = (() => {
 	};
 
 	Elimination.prototype.generateBracket = function () {
-		this.getUsers().randomize().forEach(user => {
+		Tools.shuffle(this.getUsers()).forEach(user => {
 			if (!this.tree) {
 				this.tree = {
 					tree: new TreeNode(null, {user: user}),
