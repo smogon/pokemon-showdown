@@ -21,7 +21,7 @@ if (Config.crashguard) {
 	// graceful crash - allow current battles to finish before restarting
 	process.on('uncaughtException', err => {
 		require('./crashlogger.js')(err, 'A simulator process');
-		/* let stack = ("" + err.stack).escapeHTML().split("\n").slice(0, 2).join("<br />");
+		/* let stack = Tools.escapeHTML(err.stack).split("\n").slice(0, 2).join("<br />");
 		if (Rooms.lobby) {
 			Rooms.lobby.addRaw('<div><b>THE SERVER HAS CRASHED:</b> ' + stack + '<br />Please restart the server.</div>');
 			Rooms.lobby.addRaw('<div>You will not be able to talk in the lobby or start new battles until the server restarts.</div>');
@@ -58,7 +58,7 @@ process.on('message', message => {
 				if (require('./crashlogger.js')(err, 'A battle', {
 					message: message,
 				}) === 'lockdown') {
-					let ministack = ("" + err.stack).escapeHTML().split("\n").slice(0, 2).join("<br />");
+					let ministack = Tools.escapeHTML(err.stack).split("\n").slice(0, 2).join("<br />");
 					process.send(data[0] + '\nupdate\n|html|<div class="broadcast-red"><b>A BATTLE PROCESS HAS CRASHED:</b> ' + ministack + '</div>');
 				} else {
 					process.send(data[0] + '\nupdate\n|html|<div class="broadcast-red"><b>The battle crashed!</b><br />Don\'t worry, we\'re working on fixing it.</div>');
