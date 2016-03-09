@@ -1842,8 +1842,8 @@ exports.commands = {
 				let bracketIndex = line.indexOf(']');
 				let parenIndex = line.indexOf(')');
 				if (bracketIndex < 0) return Tools.escapeHTML(line);
-				let time = line.slice(1, bracketIndex);
-				let timestamp = new Date(time).format('{yyyy}-{MM}-{dd} {hh}:{mm}{tt}');
+				const time = line.slice(1, bracketIndex);
+				let timestamp = Tools.toTimeStamp(new Date(time), {hour12: true});
 				parenIndex = line.indexOf(')');
 				let roomid = line.slice(bracketIndex + 3, parenIndex);
 				if (!hideIps && Config.modloglink) {

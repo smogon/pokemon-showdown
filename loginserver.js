@@ -142,7 +142,11 @@ class LoginServerInstance {
 		};
 
 		let req = null;
-		let onReqError = (error => {
+
+		let hadError = false;
+		let onReqError = error => {
+			if (hadError) return;
+			hadError = true;
 			if (this.requestTimeoutTimer) {
 				clearTimeout(this.requestTimeoutTimer);
 				this.requestTimeoutTimer = null;
@@ -152,7 +156,7 @@ class LoginServerInstance {
 				setImmediate(requestCallbacks[i], null, null, error);
 			}
 			this.requestEnd(error);
-		}).once();
+		};
 
 		req = http.request(requestOptions, res => {
 			if (this.requestTimeoutTimer) {
@@ -166,7 +170,10 @@ class LoginServerInstance {
 				buffer += chunk;
 			});
 
-			let endReq = (() => {
+			let requestEnded = false;
+			let endReq = () => {
+				if (requestEnded) return;
+				requestEnded = true;
 				if (this.requestTimeoutTimer) {
 					clearTimeout(this.requestTimeoutTimer);
 					this.requestTimeoutTimer = null;
@@ -181,7 +188,7 @@ class LoginServerInstance {
 					}
 				}
 				this.requestEnd();
-			}).once();
+			};
 			res.on('end', endReq);
 			res.on('close', endReq);
 
