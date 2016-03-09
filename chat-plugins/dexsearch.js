@@ -73,7 +73,7 @@ exports.commands = {
 				}
 
 				if (target in allColours) {
-					target = target.capitalize();
+					target = target.charAt(0).toUpperCase() + target.slice(1);
 					if (!validParameter("colors", target, isNotSearch)) return;
 					orGroup.colors[target] = !isNotSearch;
 					continue;
@@ -904,7 +904,7 @@ exports.commands = {
 			let type = "";
 
 			for (let k = 0; k < searchedWords.length; k++) {
-				searchedWords[k] = searchedWords[k].capitalize();
+				searchedWords[k] = searchedWords[k].charAt(0).toUpperCase() + searchedWords[k].slice(1);
 				if (searchedWords[k] in Tools.data.TypeChart) {
 					if (type) return this.sendReplyBox("Only specify natural gift type once.");
 					type = searchedWords[k];

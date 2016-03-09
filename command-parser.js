@@ -306,7 +306,7 @@ let Context = exports.Context = (() => {
 				room: this.room.id,
 				message: this.message,
 			}) === 'lockdown') {
-				let ministack = ("" + err.stack).escapeHTML().split("\n").slice(0, 2).join("<br />");
+				let ministack = Tools.escapeHTML(err.stack).split("\n").slice(0, 2).join("<br />");
 				if (Rooms.lobby) Rooms.lobby.send('|html|<div class="broadcast-red"><b>POKEMON SHOWDOWN HAS CRASHED:</b> ' + ministack + '</div>');
 			} else {
 				this.sendReply('|html|<div class="broadcast-red"><b>Pokemon Showdown crashed!</b><br />Don\'t worry, we\'re working on fixing it.</div>');

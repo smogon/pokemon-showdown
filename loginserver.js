@@ -216,7 +216,7 @@ class LoginServerInstance {
 		this.requestTimerPoke();
 	}
 	getLog() {
-		return this.requestLog + (this.lastRequest ? ' (' + (Date.now() - this.lastRequest).duration() + ' since last request)' : '');
+		return this.requestLog + (this.lastRequest ? ' (' + Tools.toDurationString(Date.now() - this.lastRequest) + ' since last request)' : '');
 	}
 }
 

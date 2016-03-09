@@ -688,7 +688,17 @@ module.exports = (() => {
 
 	Tools.prototype.escapeHTML = function (str) {
 		if (!str) return '';
-		return ('' + str).escapeHTML();
+		return ('' + str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;').replace(/\//g, '&#x2f;');
+	};
+
+	Tools.prototype.toDurationString = function (number) {
+		// TODO: replace by Intl.DurationFormat or equivalent when it becomes available (ECMA-402)
+		// https://github.com/tc39/ecma402/issues/47
+		const date = new Date(+number);
+		const parts = [date.getUTCFullYear() - 1970, date.getUTCMonth(), date.getUTCDate() - 1, date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds()];
+		const unitNames = ["second", "minute", "hour", "day", "month", "year"];
+		const positiveIndex = parts.findIndex(elem => elem > 0);
+		return parts.slice(positiveIndex).reverse().map((value, index) => value ? value + " " + unitNames[index] + (value > 1 ? "s" : "") : "").reverse().join(" ").trim();
 	};
 
 	Tools.prototype.dataSearch = function (target, searchIn, isInexact) {
