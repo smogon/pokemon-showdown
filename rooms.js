@@ -418,7 +418,7 @@ let GlobalRoom = (() => {
 
 		// init users
 		this.users = Object.create(null);
-		this.userCount = 0; // cache of `Object.size(this.users)`
+		this.userCount = 0; // cache of `size(this.users)`
 		this.maxUsers = 0;
 		this.maxUsersDate = 0;
 
@@ -1320,7 +1320,7 @@ let ChatRoom = (() => {
 	function ChatRoom(roomid, title, options) {
 		Room.call(this, roomid, title);
 		if (options) {
-			Object.merge(this, options);
+			Object.assign(this, options);
 			if (!this.isPersonal) this.chatRoomData = options;
 		}
 

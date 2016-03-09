@@ -131,7 +131,7 @@ class Validator {
 		if (set.species !== set.name && set.baseSpecies !== set.name) name = set.name + " (" + set.species + ")";
 		let isHidden = false;
 		let lsetData = {set:set, format:format};
-		if (flags) Object.merge(lsetData, flags);
+		if (flags) Object.assign(lsetData, flags);
 
 		let setHas = {};
 
@@ -288,7 +288,7 @@ class Validator {
 				// This code hasn't been closely audited for multi-gen interaction, but
 				// since egg moves don't get removed between gens, it's unlikely to have
 				// any serious problems.
-				let limitedEgg = lsetData.limitedEgg.unique();
+				let limitedEgg = Array.from(new Set(lsetData.limitedEgg));
 				if (limitedEgg.length <= 1) {
 					// Only one source, can't conflict with anything else
 				} else if (limitedEgg.indexOf('self') >= 0) {
@@ -671,6 +671,7 @@ class Validator {
 						if (eggGroups[0] === 'Undiscovered') eggGroups = tools.getTemplate(template.evos[0]).eggGroups;
 						let atLeastOne = false;
 						let fromSelf = (learned.substr(1) === 'Eany');
+						let eggGroupsSet = new Set(eggGroups);
 						learned = learned.substr(0, 2);
 						// loop through pokemon for possible fathers to inherit the egg move from
 						for (let templateid in tools.data.Pokedex) {
@@ -690,7 +691,7 @@ class Validator {
 							if (!fromSelf && !dexEntry.learnset[moveid] && !dexEntry.learnset['sketch']) continue;
 
 							// must be able to breed with father
-							if (!dexEntry.eggGroups.intersect(eggGroups).length) continue;
+							if (!dexEntry.eggGroups.some(eggGroup => eggGroupsSet.has(eggGroup))) continue;
 
 							// we can breed with it
 							atLeastOne = true;
@@ -807,13 +808,14 @@ class Validator {
 		}
 		if (sources) {
 			if (lsetData.sources) {
-				let intersectSources = lsetData.sources.intersect(sources);
+				let sourcesSet = new Set(sources);
+				let intersectSources = lsetData.sources.filter(source => sourcesSet.has(source));
 				if (!intersectSources.length && !(sourcesBefore && lsetData.sourcesBefore)) {
 					return {type:'incompatible'};
 				}
 				lsetData.sources = intersectSources;
 			} else {
-				lsetData.sources = sources.unique();
+				lsetData.sources = Array.from(new Set(sources));
 			}
 		}
 
@@ -923,6 +925,8 @@ if (!process.send) {
 	};
 } else {
 	require('sugar-deprecated')(require('./crashlogger.js'));
+	require('object.values').shim();
+
 	global.Config = require('./config/config.js');
 
 	if (Config.crashguard) {
