@@ -89,12 +89,12 @@ exports.BattleItems = {
 		effect: {
 			duration: 1,
 			onDamage: function (damage, target, source, effect) {
-				if (effect && effect.effectType === 'Move' && damage >= target.hp && target.useItem()) {
-					target.removeVolatile('focussash');
+				if (effect && effect.effectType === 'Move' && damage >= target.hp) {
 					return target.hp - 1;
 				}
 			},
-			onAfterMoveSecondary: function (target, source, move) {
+			onAfterMoveSecondary: function (target) {
+				target.useItem();
 				target.removeVolatile('focussash');
 			},
 		},
