@@ -86,13 +86,13 @@ const Monitor = module.exports = { // eslint-disable-line no-unused-vars
 		if (ip in this.connections && duration < 30 * 60 * 1000) {
 			this.connections[ip]++;
 			if (this.connections[ip] === 500) {
-				this.adminlog('[ResourceMonitor] IP ' + ip + ' has been banned for connection flooding (' + this.connections[ip] + ' times in the last ' + duration.duration() + name + ')');
+				this.adminlog('[ResourceMonitor] IP ' + ip + ' has been banned for connection flooding (' + this.connections[ip] + ' times in the last ' + Tools.toDurationString(duration) + name + ')');
 				return true;
 			} else if (this.connections[ip] > 500) {
 				if (this.connections[ip] % 500 === 0) {
 					let c = this.connections[ip] / 500;
 					if (c === 2 || c === 4 || c === 10 || c === 20 || c % 40 === 0) {
-						this.adminlog('[ResourceMonitor] Banned IP ' + ip + ' has connected ' + this.connections[ip] + ' times in the last ' + duration.duration() + name);
+						this.adminlog('[ResourceMonitor] Banned IP ' + ip + ' has connected ' + this.connections[ip] + ' times in the last ' + Tools.toDurationString(duration) + name);
 					}
 				}
 				return true;
@@ -112,9 +112,9 @@ const Monitor = module.exports = { // eslint-disable-line no-unused-vars
 		if (ip in this.battles && duration < 30 * 60 * 1000) {
 			this.battles[ip]++;
 			if (duration < 5 * 60 * 1000 && this.battles[ip] % 15 === 0) {
-				this.log('[ResourceMonitor] IP ' + ip + ' has battled ' + this.battles[ip] + ' times in the last ' + duration.duration() + name);
+				this.log('[ResourceMonitor] IP ' + ip + ' has battled ' + this.battles[ip] + ' times in the last ' + Tools.toDurationString(duration) + name);
 			} else if (this.battles[ip] % 75 === 0) {
-				this.log('[ResourceMonitor] IP ' + ip + ' has battled ' + this.battles[ip] + ' times in the last ' + duration.duration() + name);
+				this.log('[ResourceMonitor] IP ' + ip + ' has battled ' + this.battles[ip] + ' times in the last ' + Tools.toDurationString(duration) + name);
 			}
 		} else {
 			this.battles[ip] = 1;
@@ -217,12 +217,12 @@ const Monitor = module.exports = { // eslint-disable-line no-unused-vars
 			this.cmds[ip]++;
 			if (duration < 60 * 1000 && this.cmds[ip] % 5 === 0) {
 				if (this.cmds[ip] >= 3) {
-					if (this.cmds[ip] % 30 === 0) this.log('CMD command from ' + ip + ' blocked for ' + this.cmds[ip] + 'th use in the last ' + duration.duration() + name);
+					if (this.cmds[ip] % 30 === 0) this.log('CMD command from ' + ip + ' blocked for ' + this.cmds[ip] + 'th use in the last ' + Tools.toDurationString(duration) + name);
 					return true;
 				}
-				this.log('[ResourceMonitor] IP ' + ip + ' has used CMD command ' + this.cmds[ip] + ' times in the last ' + duration.duration() + name);
+				this.log('[ResourceMonitor] IP ' + ip + ' has used CMD command ' + this.cmds[ip] + ' times in the last ' + Tools.toDurationString(duration) + name);
 			} else if (this.cmds[ip] % 15 === 0) {
-				this.log('CMD command from ' + ip + ' blocked for ' + this.cmds[ip] + 'th use in the last ' + duration.duration() + name);
+				this.log('CMD command from ' + ip + ' blocked for ' + this.cmds[ip] + 'th use in the last ' + Tools.toDurationString(duration) + name);
 				return true;
 			}
 		} else if (this.cmdsTotal.count > 8000) {

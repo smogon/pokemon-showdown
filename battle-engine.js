@@ -12,7 +12,8 @@
 
 'use strict';
 
-require('sugar');
+require('sugar-deprecated')(require('./crashlogger.js'));
+require('object.values').shim();
 
 global.Config = require('./config/config.js');
 
@@ -20,7 +21,7 @@ if (Config.crashguard) {
 	// graceful crash - allow current battles to finish before restarting
 	process.on('uncaughtException', err => {
 		require('./crashlogger.js')(err, 'A simulator process');
-		/* let stack = ("" + err.stack).escapeHTML().split("\n").slice(0, 2).join("<br />");
+		/* let stack = Tools.escapeHTML(err.stack).split("\n").slice(0, 2).join("<br />");
 		if (Rooms.lobby) {
 			Rooms.lobby.addRaw('<div><b>THE SERVER HAS CRASHED:</b> ' + stack + '<br />Please restart the server.</div>');
 			Rooms.lobby.addRaw('<div>You will not be able to talk in the lobby or start new battles until the server restarts.</div>');
@@ -57,7 +58,7 @@ process.on('message', message => {
 				if (require('./crashlogger.js')(err, 'A battle', {
 					message: message,
 				}) === 'lockdown') {
-					let ministack = ("" + err.stack).escapeHTML().split("\n").slice(0, 2).join("<br />");
+					let ministack = Tools.escapeHTML(err.stack).split("\n").slice(0, 2).join("<br />");
 					process.send(data[0] + '\nupdate\n|html|<div class="broadcast-red"><b>A BATTLE PROCESS HAS CRASHED:</b> ' + ministack + '</div>');
 				} else {
 					process.send(data[0] + '\nupdate\n|html|<div class="broadcast-red"><b>The battle crashed!</b><br />Don\'t worry, we\'re working on fixing it.</div>');
@@ -118,7 +119,7 @@ BattlePokemon = (() => {
 		this.battle = side.battle;
 
 		let pokemonScripts = this.battle.data.Scripts.pokemon;
-		if (pokemonScripts) Object.merge(this, pokemonScripts);
+		if (pokemonScripts) Object.assign(this, pokemonScripts);
 
 		if (typeof set === 'string') set = {name: set};
 
@@ -182,8 +183,9 @@ BattlePokemon = (() => {
 				let move = this.battle.getMove(this.set.moves[i]);
 				if (!move.id) continue;
 				if (move.id === 'hiddenpower' && move.type !== 'Normal') {
+					const ivValues = this.set.ivs && Object.values(this.set.ivs);
 					if (this.battle.gen && this.battle.gen <= 2) {
-						if (!this.set.ivs || Math.min.apply(Math, Object.values(this.set.ivs)) >= 30) {
+						if (!ivValues || Math.min.apply(null, ivValues) >= 30) {
 							let HPdvs = this.battle.getType(move.type).HPdvs;
 							this.set.ivs = {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30};
 							for (let i in HPdvs) {
@@ -191,7 +193,7 @@ BattlePokemon = (() => {
 							}
 						}
 					} else {
-						if (!this.set.ivs || Object.values(this.set.ivs).every(31)) {
+						if (!ivValues || ivValues.every(val => val === 31)) {
 							this.set.ivs = this.battle.getType(move.type).HPivs;
 						}
 					}
@@ -381,7 +383,7 @@ BattlePokemon = (() => {
 
 		// stat boosts
 		if (!unboosted) {
-			let boosts = this.battle.runEvent('ModifyBoost', this, null, null, Object.clone(this.boosts));
+			let boosts = this.battle.runEvent('ModifyBoost', this, null, null, Object.assign({}, this.boosts));
 			let boost = boosts[statName];
 			let boostTable = [1, 1.5, 2, 2.5, 3, 3.5, 4];
 			if (boost > 6) boost = 6;
@@ -671,7 +673,7 @@ BattlePokemon = (() => {
 		for (let i in pokemon.volatiles) {
 			if (this.battle.getEffect(i).noCopy) continue;
 			// shallow clones
-			this.volatiles[i] = Object.clone(pokemon.volatiles[i]);
+			this.volatiles[i] = Object.assign({}, pokemon.volatiles[i]);
 			if (this.volatiles[i].linkedPokemon) {
 				delete pokemon.volatiles[i].linkedPokemon;
 				delete pokemon.volatiles[i].linkedStatus;
@@ -1366,7 +1368,7 @@ BattlePokemon = (() => {
 BattleSide = (() => {
 	function BattleSide(name, battle, n, team) {
 		let sideScripts = battle.data.Scripts.side;
-		if (sideScripts) Object.merge(this, sideScripts);
+		if (sideScripts) Object.assign(this, sideScripts);
 
 		this.getChoice = (this.getChoice || BattleSide.getChoice).bind(this);
 
@@ -2654,7 +2656,7 @@ Battle = (() => {
 				let active = this.p1.active[i];
 				switchTable.push(!!(active && active.switchFlag));
 			}
-			if (switchTable.any(true)) {
+			if (switchTable.some(flag => flag === true)) {
 				this.p1.currentRequest = 'switch';
 				p1request = {forceSwitch: switchTable, side: this.p1.getData(), rqid: this.rqid};
 			}
@@ -2663,7 +2665,7 @@ Battle = (() => {
 				let active = this.p2.active[i];
 				switchTable.push(!!(active && active.switchFlag));
 			}
-			if (switchTable.any(true)) {
+			if (switchTable.some(flag => flag === true)) {
 				this.p2.currentRequest = 'switch';
 				p2request = {forceSwitch: switchTable, side: this.p2.getData(), rqid: this.rqid};
 			}
@@ -3094,7 +3096,7 @@ Battle = (() => {
 			}
 		}
 
-		if (this.gameType === 'triples' && this.sides.map('pokemonLeft').count(1) === this.sides.length) {
+		if (this.gameType === 'triples' && !this.sides.filter(side => side.pokemonLeft > 1).length) {
 			// If both sides have one Pokemon left in triples and they are not adjacent, they are both moved to the center.
 			let center = false;
 			for (let i = 0; i < this.sides.length; i++) {
@@ -3174,7 +3176,7 @@ Battle = (() => {
 		if (!target || !target.hp) return 0;
 		if (!target.isActive) return false;
 		effect = this.getEffect(effect);
-		boost = this.runEvent('Boost', target, source, effect, Object.clone(boost));
+		boost = this.runEvent('Boost', target, source, effect, Object.assign({}, boost));
 		let success = false;
 		let boosted = false;
 		for (let i in boost) {
@@ -3278,7 +3280,7 @@ Battle = (() => {
 		if (!effect.flags) effect.flags = {};
 
 		if (instafaint && !target.hp) {
-			this.debug('instafaint: ' + this.faintQueue.map('target').map('name'));
+			this.debug('instafaint: ' + this.faintQueue.map(entry => entry.target).map(pokemon => pokemon.name));
 			this.faintMessages(true);
 		} else {
 			damage = this.runEvent('AfterDamage', target, source, effect, damage);

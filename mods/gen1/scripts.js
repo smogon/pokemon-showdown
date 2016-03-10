@@ -585,7 +585,7 @@ exports.BattleScripts = {
 		}
 		if (!target || !target.hp) return 0;
 		effect = this.getEffect(effect);
-		boost = this.runEvent('Boost', target, source, effect, Object.clone(boost));
+		boost = this.runEvent('Boost', target, source, effect, Object.assign({}, boost));
 		for (let i in boost) {
 			let currentBoost = {};
 			currentBoost[i] = boost[i];

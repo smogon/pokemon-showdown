@@ -8,6 +8,8 @@
 
 const http = require('http');
 
+function noop() {}
+
 function wikiaSearch(subdomain, query, callback) {
 	http.get('http://' + subdomain + '.wikia.com/api/v1/Search/List/?query=' + encodeURIComponent(query) + '&limit=1', res => {
 		let buffer = '';
@@ -28,7 +30,10 @@ function wikiaSearch(subdomain, query, callback) {
 
 			return callback(null, result.items[0]);
 		});
-	}).on('error', callback);
+	}).once('error', function (err) {
+		callback(err);
+		this.on('error', noop);
+	});
 }
 
 exports.commands = {
@@ -42,7 +47,7 @@ exports.commands = {
 		let subdomain = (cmd === 'yugioh' || cmd === 'ygo') ? 'yugioh' : 'mtg';
 		let query = target.trim();
 
-		wikiaSearch(subdomain, query, ((err, data) => {
+		wikiaSearch(subdomain, query, (err, data) => {
 			if (err) {
 				if (err instanceof SyntaxError || err.message === 'Malformed data') {
 					if (!broadcasting) return connection.sendTo(room, "Error: something went wrong in the request: " + err.message);
@@ -56,6 +61,6 @@ exports.commands = {
 			let htmlReply = "<strong>Best result for " + Tools.escapeHTML(query) + ":</strong><br/><a href=\"" + Tools.escapeHTML(entryUrl) + "\">" + Tools.escapeHTML(entryTitle) + "</a>";
 			if (!broadcasting) return connection.sendTo(room, "|raw|<div class=\"infobox\">" + htmlReply + "</div>");
 			room.addRaw("<div class=\"infobox\">" + htmlReply + "</div>").update();
-		}).once());
+		});
 	},
 };

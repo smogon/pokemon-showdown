@@ -13,7 +13,9 @@
 
 'use strict';
 
-require('sugar');
+require('sugar-deprecated')(require('./crashlogger.js'));
+require('object.values').shim();
+
 const fs = require('fs');
 const path = require('path');
 
@@ -73,6 +75,18 @@ module.exports = (() => {
 		}
 	}
 
+	function deepClone(obj) {
+		if (typeof obj === 'function') return obj;
+		if (obj === null || typeof obj !== 'object') return obj;
+		if (Array.isArray(obj)) return obj.map(deepClone);
+		const clone = Object.create(Object.getPrototypeOf(obj));
+		const keys = Object.keys(obj);
+		for (let i = 0; i < keys.length; i++) {
+			clone[keys[i]] = deepClone(obj[keys[i]]);
+		}
+		return clone;
+	}
+
 	function Tools(mod) {
 		if (!mod) mod = 'base';
 		this.isBase = (mod === 'base');
@@ -110,7 +124,7 @@ module.exports = (() => {
 	Tools.prototype.modData = function (dataType, id) {
 		if (this.isBase) return this.data[dataType][id];
 		if (this.data[dataType][id] !== moddedTools[this.parentMod].data[dataType][id]) return this.data[dataType][id];
-		return (this.data[dataType][id] = Object.clone(this.data[dataType][id], true));
+		return (this.data[dataType][id] = deepClone(this.data[dataType][id]));
 	};
 
 	Tools.prototype.effectToString = function () {
@@ -244,10 +258,10 @@ module.exports = (() => {
 			}
 			name = template.species || template.name || name;
 			if (this.data.FormatsData[id]) {
-				Object.merge(template, this.data.FormatsData[id]);
+				Object.assign(template, this.data.FormatsData[id]);
 			}
 			if (this.data.Learnsets[id]) {
-				Object.merge(template, this.data.Learnsets[id]);
+				Object.assign(template, this.data.Learnsets[id]);
 			}
 			if (!template.id) template.id = id;
 			if (!template.name) template.name = name;
@@ -360,7 +374,7 @@ module.exports = (() => {
 	Tools.prototype.getMoveCopy = function (move) {
 		if (move && move.isCopy) return move;
 		move = this.getMove(move);
-		let moveCopy = Object.clone(move, true);
+		let moveCopy = deepClone(move);
 		moveCopy.isCopy = true;
 		return moveCopy;
 	};
@@ -606,6 +620,17 @@ module.exports = (() => {
 		return banlistTable;
 	};
 
+	Tools.prototype.shuffle = function (arr) {
+		// In-place shuffle by Fisher-Yates algorithm
+		for (let i = arr.length - 1; i > 0; i--) {
+			let j = Math.floor(Math.random() * (i + 1));
+			let temp = arr[i];
+			arr[i] = arr[j];
+			arr[j] = temp;
+		}
+		return arr;
+	};
+
 	Tools.prototype.levenshtein = function (s, t, l) { // s = string 1, t = string 2, l = limit
 		// Original levenshtein distance function by James Westgate, turned out to be the fastest
 		let d = []; // 2d matrix
@@ -663,7 +688,30 @@ module.exports = (() => {
 
 	Tools.prototype.escapeHTML = function (str) {
 		if (!str) return '';
-		return ('' + str).escapeHTML();
+		return ('' + str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;').replace(/\//g, '&#x2f;');
+	};
+
+	Tools.prototype.toTimeStamp = function (date, options) {
+		// Return a timestamp in the form {yyyy}-{MM}-{dd} {hh}:{mm}:{ss}.
+		// Optionally reports hours in mod-12 format.
+		const isHour12 = options && options.hour12;
+		let parts = [date.getFullYear(), date.getMonth() + 1, date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()];
+		if (isHour12) {
+			parts.push(parts[3] >= 12 ? 'pm' : 'am');
+			parts[3] = parts[3] % 12 || 12;
+		}
+		parts = parts.map(val => val < 10 ? '0' + val : '' + val);
+		return parts.slice(0, 3).join("-") + " " + parts.slice(3, 6).join(":") + (isHour12 ? " " + parts[6] : "");
+	};
+
+	Tools.prototype.toDurationString = function (number) {
+		// TODO: replace by Intl.DurationFormat or equivalent when it becomes available (ECMA-402)
+		// https://github.com/tc39/ecma402/issues/47
+		const date = new Date(+number);
+		const parts = [date.getUTCFullYear() - 1970, date.getUTCMonth(), date.getUTCDate() - 1, date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds()];
+		const unitNames = ["second", "minute", "hour", "day", "month", "year"];
+		const positiveIndex = parts.findIndex(elem => elem > 0);
+		return parts.slice(positiveIndex).reverse().map((value, index) => value ? value + " " + unitNames[index] + (value > 1 ? "s" : "") : "").reverse().join(" ").trim();
 	};
 
 	Tools.prototype.dataSearch = function (target, searchIn, isInexact) {
@@ -993,32 +1041,37 @@ module.exports = (() => {
 			}
 			let BattleData = maybeData['Battle' + dataType];
 			if (!BattleData || typeof BattleData !== 'object') throw new TypeError("Exported property `Battle" + dataType + "`from `" + './data/' + dataFiles[dataType] + "` must be an object except `null`.");
-			if (BattleData !== data[dataType]) data[dataType] = Object.merge(BattleData, data[dataType]);
+			if (BattleData !== data[dataType]) data[dataType] = Object.assign(BattleData, data[dataType]);
 		}
 		if (this.isBase) {
 			// Formats are inherited by mods
 			this.includeFormats();
 		} else {
 			for (let dataType of dataTypes) {
-				let parentTypedData = parentTools.data[dataType];
-				if (!data[dataType]) data[dataType] = {};
-				for (let key in parentTypedData) {
-					if (data[dataType][key] === null) {
+				const parentTypedData = parentTools.data[dataType];
+				const childTypedData = data[dataType] || (data[dataType] = {});
+				for (let entryId in parentTypedData) {
+					if (childTypedData[entryId] === null) {
 						// null means don't inherit
-						delete data[dataType][key];
-					} else if (!(key in data[dataType])) {
+						delete childTypedData[entryId];
+					} else if (!(entryId in childTypedData)) {
 						// If it doesn't exist it's inherited from the parent data
 						if (dataType === 'Pokedex') {
 							// Pokedex entries can be modified too many different ways
-							data[dataType][key] = Object.clone(parentTypedData[key], true);
+							childTypedData[entryId] = deepClone(parentTypedData[entryId]);
 						} else {
-							data[dataType][key] = parentTypedData[key];
+							childTypedData[entryId] = parentTypedData[entryId];
 						}
-					} else if (data[dataType][key] && data[dataType][key].inherit) {
+					} else if (childTypedData[entryId] && childTypedData[entryId].inherit) {
 						// {inherit: true} can be used to modify only parts of the parent data,
 						// instead of overwriting entirely
-						delete data[dataType][key].inherit;
-						Object.merge(data[dataType][key], parentTypedData[key], false, false);
+						delete childTypedData[entryId].inherit;
+
+						// Merge parent into children entry, preserving existing childs' properties.
+						for (let key in parentTypedData[entryId]) {
+							if (key in childTypedData[entryId]) continue;
+							childTypedData[entryId][key] = parentTypedData[entryId][key];
+						}
 					}
 				}
 			}

@@ -605,7 +605,8 @@ exports.commands = {
 		}
 
 		for (let i = 0; i < targets.length; i++) {
-			let move = targets[i].trim().capitalize();
+			let move = targets[i].trim();
+			move = move.charAt(0).toUpperCase() + move.slice(1).toLowerCase();
 			if (move === 'Table' || move === 'All') {
 				if (this.broadcasting) return this.sendReplyBox("The full table cannot be broadcast.");
 				dispTable = true;
@@ -976,7 +977,7 @@ exports.commands = {
 			let uptimeHours = Math.floor(uptime / (60 * 60)) - uptimeDays * 24;
 			if (uptimeHours) uptimeText += ", " + uptimeHours + " " + (uptimeHours === 1 ? "hour" : "hours");
 		} else {
-			uptimeText = uptime.seconds().duration();
+			uptimeText = Tools.toDurationString(uptime * 1000);
 		}
 		this.sendReplyBox("Uptime: <b>" + uptimeText + "</b>");
 	},
@@ -1193,7 +1194,9 @@ exports.commands = {
 		if (!totalMatches) return this.sendReply("No " + (target ? "matched " : "") + "formats found.");
 		if (totalMatches === 1) {
 			let format = Tools.getFormat(Object.values(sections)[0].formats[0]);
-			if (!format.desc) return this.sendReplyBox("No description found for this " + (format.gameType || "singles").capitalize() + " " + format.section + " format.");
+			let formatType = (format.gameType || "singles");
+			formatType = formatType.charAt(0).toUpperCase() + formatType.slice(1).toLowerCase();
+			if (!format.desc) return this.sendReplyBox("No description found for this " + formatType + " " + format.section + " format.");
 			return this.sendReplyBox(format.desc.join("<br />"));
 		}
 
@@ -1692,7 +1695,8 @@ exports.commands = {
 		let options = target.split(',');
 		if (options.length < 2) return this.parse('/help pick');
 		if (!this.canBroadcast()) return false;
-		return this.sendReplyBox('<em>We randomly picked:</em> ' + Tools.escapeHTML(options.sample().trim()));
+		const pickedOption = options[Math.floor(Math.random() * options.length)];
+		return this.sendReplyBox('<em>We randomly picked:</em> ' + Tools.escapeHTML(pickedOption).trim());
 	},
 	pickrandomhelp: ["/pick [option], [option], ... - Randomly selects an item from a list containing 2 or more elements."],
 
