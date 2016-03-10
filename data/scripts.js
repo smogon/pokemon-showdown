@@ -643,18 +643,23 @@ exports.BattleScripts = {
 		if (!isValid) selectedAbilities.push(selectedAbility);
 		return isValid;
 	},
-	sampleNoReplace: function (list) {
-		// The cute code to sample no replace is:
-		//   return list.splice(this.random(length), 1)[0];
-		// However manually removing the element is twice as fast.
-		// In fact, we don't even need to keep the array in order, so
-		// we just replace the removed element with the last element.
+	fastPop: function (list, index) {
+		// Remove an element from a list and return it. Beware that the
+		// array will not stay in order; the last element in the array
+		// will take the removed element's place instead.
 		let length = list.length;
-		let index = this.random(length);
 		let element = list[index];
 		list[index] = list[length - 1];
 		list.pop();
 		return element;
+	},
+	sampleNoReplace: function (list) {
+		// The cute code to sample no replace is:
+		//   return list.splice(this.random(list.length), 1)[0];
+		// However, manually removing the element is twice as fast,
+		// and becomes even faster if we don't care about order.
+		let index = this.random(list.length);
+		return this.fastPop(list, index);
 	},
 	checkBattleForme: function (template) {
 		// If the Pokémon has a Mega or Primal alt forme, that's its preferred battle forme.
@@ -1157,6 +1162,14 @@ exports.BattleScripts = {
 			if (movePool[i].substr(0, 11) === 'hiddenpower') availableHP++;
 		}
 
+		// Moves that boost Attack:
+		let PhysicalSetup = {
+			bellydrum:1, bulkup:1, coil:1, curse:1, dragondance:1, honeclaws:1, howl:1, poweruppunch:1, shiftgear:1, swordsdance:1,
+		};
+		// Moves which boost Special Attack:
+		let SpecialSetup = {
+			calmmind:1, chargebeam:1, geomancy:1, nastyplot:1, quiverdance:1, tailglow:1,
+		};
 		// These moves can be used even if we aren't setting up to use them:
 		let SetupException = {
 			closecombat:1, extremespeed:1, suckerpunch:1, superpower:1,
@@ -1196,6 +1209,18 @@ exports.BattleScripts = {
 			}
 
 			counter = this.queryMoves(moves, hasType, hasAbility, movePool);
+
+			// Remove future setup moves from the pool:
+			if (counter.setupType) {
+				// Start from the end to ensure that fastPop replaces the move with a previously-approved move
+				for (let j = movePool.length - 1; j >= 0; j--) {
+					let movename = movePool[j];
+					if ((PhysicalSetup[movename] && counter.setupType !== 'Physical') ||
+						(SpecialSetup[movename] && counter.setupType !== 'Special')) {
+						this.fastPop(movePool, j);
+					}
+				}
+			}
 
 			// Iterate through the moves again, this time to cull them:
 			for (let k = 0; k < moves.length; k++) {
