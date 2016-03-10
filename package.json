@@ -5,7 +5,8 @@
   "version": "0.10.2",
   "dependencies": {
     "sockjs": "0.3.15",
-    "sugar": "1.4.1"
+    "sugar-deprecated": "0.0.1",
+    "object.values": "1.0.3"
   },
   "optionalDependencies": {
     "cloud-env": "0.1.1",

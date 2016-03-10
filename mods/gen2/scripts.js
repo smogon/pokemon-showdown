@@ -525,7 +525,7 @@ exports.BattleScripts = {
 		}
 
 		if (target.fainted || target.hp <= 0) {
-			this.debug('instafaint: ' + this.faintQueue.map('target').map('name'));
+			this.debug('instafaint: ' + this.faintQueue.map(entry => entry.target).map(pokemon => pokemon.name));
 			this.faintMessages(true);
 			target.faint();
 		} else {

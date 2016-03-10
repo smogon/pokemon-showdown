@@ -418,7 +418,7 @@ let GlobalRoom = (() => {
 
 		// init users
 		this.users = Object.create(null);
-		this.userCount = 0; // cache of `Object.size(this.users)`
+		this.userCount = 0; // cache of `size(this.users)`
 		this.maxUsers = 0;
 		this.maxUsersDate = 0;
 
@@ -1005,9 +1005,10 @@ let BattleRoom = (() => {
 		logData.endType = this.battle.endType;
 		if (!p1rating) logData.ladderError = true;
 		logData.log = BattleRoom.prototype.getLog.call(logData, 3); // replay log (exact damage)
-		let date = new Date();
-		let logfolder = date.format('{yyyy}-{MM}');
-		let logsubfolder = date.format('{yyyy}-{MM}-{dd}');
+		const date = new Date();
+		const logsubfolder = Tools.toTimeStamp(date).split(' ')[0];
+		const logfolder = logsubfolder.split('-', 2).join('-');
+
 		let curpath = 'logs/' + logfolder;
 		fs.mkdir(curpath, '0755', () => {
 			let tier = this.format.toLowerCase().replace(/[^a-z0-9]+/g, '');
@@ -1320,7 +1321,7 @@ let ChatRoom = (() => {
 	function ChatRoom(roomid, title, options) {
 		Room.call(this, roomid, title);
 		if (options) {
-			Object.merge(this, options);
+			Object.assign(this, options);
 			if (!this.isPersonal) this.chatRoomData = options;
 		}
 
@@ -1333,7 +1334,7 @@ let ChatRoom = (() => {
 		if (Config.logchat) {
 			this.rollLogFile(true);
 			this.logEntry = function (entry, date) {
-				let timestamp = (new Date()).format('{HH}:{mm}:{ss} ');
+				const timestamp = Tools.toTimeStamp(new Date()).split(' ')[1] + ' ';
 				entry = entry.replace(/<img[^>]* src="data:image\/png;base64,[^">]+"[^>]*>/g, '');
 				this.logFile.write(timestamp + entry + '\n');
 			};
@@ -1372,10 +1373,11 @@ let ChatRoom = (() => {
 		let date = new Date();
 		let basepath = 'logs/chat/' + this.id + '/';
 		mkdir(basepath, '0755', () => {
-			let path = date.format('{yyyy}-{MM}');
+			const dateString = Tools.toTimeStamp(date).split(' ')[0];
+			let path = dateString.split('-', 2).join('-');
 			mkdir(basepath + path, '0755', () => {
 				if (this.destroyingLog) return;
-				path += '/' + date.format('{yyyy}-{MM}-{dd}') + '.txt';
+				path += '/' + dateString + '.txt';
 				if (path !== this.logFilename) {
 					this.logFilename = path;
 					if (this.logFile) this.logFile.destroySoon();
@@ -1394,9 +1396,9 @@ let ChatRoom = (() => {
 						} catch (e) {} // OS doesn't support atomic rename
 					} catch (e) {} // OS doesn't support symlinks
 				}
-				let timestamp = +date;
-				date.advance('1 hour').reset('minutes').advance('1 second');
-				setTimeout(() => this.rollLogFile(), +date - timestamp);
+				let currentTime = date.getTime();
+				let nextHour = new Date(date.setMinutes(60)).setSeconds(1);
+				setTimeout(() => this.rollLogFile(), nextHour - currentTime);
 			});
 		});
 	};

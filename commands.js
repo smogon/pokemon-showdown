@@ -56,7 +56,7 @@ exports.commands = {
 		let buffer = Object.keys(rankLists).sort((a, b) =>
 			(Config.groups[b] || {rank: 0}).rank - (Config.groups[a] || {rank: 0}).rank
 		).map(r =>
-			(Config.groups[r] ? Config.groups[r].name + "s (" + r + ")" : r) + ":\n" + rankLists[r].sortBy(toId).join(", ")
+			(Config.groups[r] ? Config.groups[r].name + "s (" + r + ")" : r) + ":\n" + rankLists[r].sort((a, b) => toId(a).localeCompare(toId(b))).join(", ")
 		);
 
 		if (!buffer.length) buffer = "This server has no global authority.";
@@ -1146,8 +1146,8 @@ exports.commands = {
 			return this.addModCommand("" + targetUser.name + " would be muted by " + user.name + problem + "." + (target ? " (" + target + ")" : ""));
 		}
 
-		if (targetUser in room.users) targetUser.popup("|modal|" + user.name + " has muted you in " + room.id + " for " + muteDuration.duration() + ". " + target);
-		this.addModCommand("" + targetUser.name + " was muted by " + user.name + " for " + muteDuration.duration() + "." + (target ? " (" + target + ")" : ""));
+		if (targetUser in room.users) targetUser.popup("|modal|" + user.name + " has muted you in " + room.id + " for " + Tools.toDurationString(muteDuration) + ". " + target);
+		this.addModCommand("" + targetUser.name + " was muted by " + user.name + " for " + Tools.toDurationString(muteDuration) + "." + (target ? " (" + target + ")" : ""));
 		if (targetUser.autoconfirmed && targetUser.autoconfirmed !== targetUser.userid) this.privateModCommand("(" + targetUser.name + "'s ac account: " + targetUser.autoconfirmed + ")");
 		let userid = targetUser.getLastId();
 		this.add('|unlink|' + userid);
@@ -1842,8 +1842,8 @@ exports.commands = {
 				let bracketIndex = line.indexOf(']');
 				let parenIndex = line.indexOf(')');
 				if (bracketIndex < 0) return Tools.escapeHTML(line);
-				let time = line.slice(1, bracketIndex);
-				let timestamp = new Date(time).format('{yyyy}-{MM}-{dd} {hh}:{mm}{tt}');
+				const time = line.slice(1, bracketIndex);
+				let timestamp = Tools.toTimeStamp(new Date(time), {hour12: true});
 				parenIndex = line.indexOf(')');
 				let roomid = line.slice(bracketIndex + 3, parenIndex);
 				if (!hideIps && Config.modloglink) {

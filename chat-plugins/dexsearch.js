@@ -73,7 +73,7 @@ exports.commands = {
 				}
 
 				if (target in allColours) {
-					target = target.capitalize();
+					target = target.charAt(0).toUpperCase() + target.slice(1);
 					if (!validParameter("colors", target, isNotSearch)) return;
 					orGroup.colors[target] = !isNotSearch;
 					continue;
@@ -228,36 +228,29 @@ exports.commands = {
 		dex = JSON.parse(JSON.stringify(dex)); // Don't modify the original template (when compiling learnsets)
 
 		let learnSetsCompiled = false;
-		//ensure searches with the least alternatives are run first
-		searches.sort((a, b) => {
-			let aCount = 0, bCount = 0;
-			for (let cat in a) {
-				if (typeof a[cat] === "object") aCount += Object.size(a[cat]);
-			}
-			for (let cat in b) {
-				if (typeof b[cat] === "object") bCount += Object.size(b[cat]);
-			}
-			return aCount - bCount;
-		});
+
+		// Prioritize searches with the least alternatives.
+		const accumulateKeyCount = (count, searchData) => count + (typeof searchData === 'object' ? Object.keys(searchData).length : 0);
+		searches.sort((a, b) => Object.values(a).reduce(accumulateKeyCount, 0) - Object.values(b).reduce(accumulateKeyCount, 0));
 
 		for (let group = 0; group < searches.length; group++) {
 			let alts = searches[group];
 			if (alts.skip) continue;
 			for (let mon in dex) {
 				let matched = false;
-				if (Object.size(alts.gens) > 0) {
-					if (alts.gens[dex[mon].gen] || (Object.count(alts.gens, false) > 0 &&
-						alts.gens[dex[mon].gen] !== false)) continue;
+				if (Object.keys(alts.gens).length) {
+					if (alts.gens[dex[mon].gen]) continue;
+					if (Object.values(alts.gens).indexOf(false) >= 0 && alts.gens[dex[mon].gen] !== false) continue;
 				}
 
-				if (Object.size(alts.colors) > 0) {
-					if (alts.colors[dex[mon].color] || (Object.count(alts.colors, false) > 0 &&
-						alts.colors[dex[mon].color] !== false)) continue;
+				if (Object.keys(alts.colors).length) {
+					if (alts.colors[dex[mon].color]) continue;
+					if (Object.values(alts.colors).indexOf(false) >= 0 && alts.colors[dex[mon].color] !== false) continue;
 				}
 
-				if (Object.size(alts.tiers) > 0) {
-					if (alts.tiers[dex[mon].tier.toLowerCase()] || (Object.count(alts.tiers, false) > 0 &&
-						alts.tiers[dex[mon].tier.toLowerCase()] !== false)) continue;
+				if (Object.keys(alts.tiers).length) {
+					if (alts.tiers[dex[mon].tier.toLowerCase()]) continue;
+					if (Object.values(alts.tiers).indexOf(false) >= 0 && alts.tiers[dex[mon].tier.toLowerCase()] !== false) continue;
 				}
 
 				for (let type in alts.types) {
@@ -269,7 +262,7 @@ exports.commands = {
 				if (matched) continue;
 
 				for (let ability in alts.abilities) {
-					if (alts.abilities[ability] === (Object.count(dex[mon].abilities, ability) > 0)) {
+					if (Object.values(dex[mon].abilities).indexOf(ability) >= 0 === alts.abilities[ability]) {
 						matched = true;
 						break;
 					}
@@ -343,11 +336,7 @@ exports.commands = {
 		}
 
 		let moveGroups = searches
-			.filter(alts => {
-				return Object.any(alts.moves, (move, isSearch) => {
-					return isSearch;
-				});
-			})
+			.filter(alts => Object.keys(alts.moves).some(move => alts.moves[move]))
 			.map(alts => Object.keys(alts.moves));
 		if (moveGroups.length >= 2) {
 			results = results.filter(mon => {
@@ -364,7 +353,7 @@ exports.commands = {
 		}
 
 		if (randomOutput && randomOutput < results.length) {
-			results = results.randomize().slice(0, randomOutput);
+			results = Tools.shuffle(results).slice(0, randomOutput);
 		}
 
 		let resultsStr = this.broadcasting ? "" : ("<font color=#999999>" + Tools.escapeHTML(message) + ":</font><br>");
@@ -488,7 +477,7 @@ exports.commands = {
 
 			let template = Tools.getTemplate(target);
 			if (template.exists) {
-				if (Object.size(lsetData) !== 0) return this.sendReplyBox("A search can only include one Pok\u00e9mon learnset.");
+				if (Object.keys(lsetData).length) return this.sendReplyBox("A search can only include one Pok\u00e9mon learnset.");
 				if (!template.learnset) template = Tools.getTemplate(template.baseSpecies);
 				lsetData = template.learnset;
 				targetMon = template.name;
@@ -621,7 +610,9 @@ exports.commands = {
 			return this.sendReplyBox("'" + Tools.escapeHTML(oldTarget) + "' could not be found in any of the search categories.");
 		}
 
-		if (showAll && Object.size(searches) === 0 && !targetMon) return this.sendReplyBox("No search parameters other than 'all' were found. Try '/help movesearch' for more information on this command.");
+		if (showAll && !Object.keys(searches).length && !targetMon) {
+			return this.sendReplyBox("No search parameters other than 'all' were found. Try '/help movesearch' for more information on this command.");
+		}
 
 		let dex = {};
 		if (targetMon) {
@@ -641,7 +632,7 @@ exports.commands = {
 			case 'category':
 				for (let move in dex) {
 					if (searches[search][String(dex[move][search])] === false ||
-						Object.count(searches[search], true) > 0 && !searches[search][String(dex[move][search])]) {
+						Object.values(searches[search]).indexOf(true) >= 0 && !searches[search][String(dex[move][search])]) {
 						delete dex[move];
 					}
 				}
@@ -913,7 +904,7 @@ exports.commands = {
 			let type = "";
 
 			for (let k = 0; k < searchedWords.length; k++) {
-				searchedWords[k] = searchedWords[k].capitalize();
+				searchedWords[k] = searchedWords[k].charAt(0).toUpperCase() + searchedWords[k].slice(1);
 				if (searchedWords[k] in Tools.data.TypeChart) {
 					if (type) return this.sendReplyBox("Only specify natural gift type once.");
 					type = searchedWords[k];
