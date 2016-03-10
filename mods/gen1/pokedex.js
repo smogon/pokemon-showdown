@@ -1593,7 +1593,7 @@ exports.BattlePokedex = {
 		species: "Horsea",
 		types: ["Water"],
 		gender: "N",
-		baseStats: {hp: 30, atk: 40, def: 70, spa: 70, spd: 79, spe: 60},
+		baseStats: {hp: 30, atk: 40, def: 70, spa: 70, spd: 70, spe: 60},
 		abilities: {},
 		heightm: 0.4,
 		weightkg: 8,
