@@ -238,17 +238,17 @@ exports.commands = {
 			if (alts.skip) continue;
 			for (let mon in dex) {
 				let matched = false;
-				if (Object.keys(alts.gens).length) {
+				if (alts.gens && Object.keys(alts.gens).length) {
 					if (alts.gens[dex[mon].gen]) continue;
 					if (Object.values(alts.gens).indexOf(false) >= 0 && alts.gens[dex[mon].gen] !== false) continue;
 				}
 
-				if (Object.keys(alts.colors).length) {
+				if (alts.colors && Object.keys(alts.colors).length) {
 					if (alts.colors[dex[mon].color]) continue;
 					if (Object.values(alts.colors).indexOf(false) >= 0 && alts.colors[dex[mon].color] !== false) continue;
 				}
 
-				if (Object.keys(alts.tiers).length) {
+				if (alts.tiers && Object.keys(alts.tiers).length) {
 					if (alts.tiers[dex[mon].tier.toLowerCase()]) continue;
 					if (Object.values(alts.tiers).indexOf(false) >= 0 && alts.tiers[dex[mon].tier.toLowerCase()] !== false) continue;
 				}
@@ -336,7 +336,7 @@ exports.commands = {
 		}
 
 		let moveGroups = searches
-			.filter(alts => Object.keys(alts.moves).some(move => alts.moves[move]))
+			.filter(alts => alts.moves && Object.keys(alts.moves).some(move => alts.moves[move]))
 			.map(alts => Object.keys(alts.moves));
 		if (moveGroups.length >= 2) {
 			results = results.filter(mon => {
