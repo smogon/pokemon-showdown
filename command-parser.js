@@ -344,7 +344,7 @@ class CommandContext {
 			'deviantart.net': 1,
 			'd.pr': 1,
 			'pokefans.net': 1,
-		}
+		};
 		if (domain in approvedDomains) {
 			return '//' + uri;
 		}
