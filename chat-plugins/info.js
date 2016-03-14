@@ -1291,6 +1291,9 @@ exports.commands = {
 				buf += "<strong>" + process.process.pid + "</strong> - Validator " + (i++) + "<br />";
 			}
 		}
+		if (Tools.dexsearchProcess) {
+			buf += "<strong>" + Tools.dexsearchProcess.pid + "</strong> - Dexsearch<br />";
+		}
 		this.sendReplyBox(buf);
 	},
 
