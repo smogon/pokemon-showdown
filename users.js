@@ -726,7 +726,7 @@ class User {
 			let tokenData = token.substr(0, tokenSemicolonPos);
 			let tokenSig = token.substr(tokenSemicolonPos + 1);
 
-			Verifier.verify(tokenData, tokenSig, (success, tokenData) => {
+			Verifier.verify(tokenData, tokenSig).then(success => {
 				if (!success) {
 					console.log('verify failed: ' + token);
 					console.log('challenge was: ' + challenge);

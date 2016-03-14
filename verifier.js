@@ -20,21 +20,22 @@ if (!process.send) {
 	// This is the parent
 
 	let guid = 1;
-	let callbacks = {};
-	let callbackData = {};
+	let resolvers = Object.create(null);
 
 	let child = exports.child = require('child_process').fork('verifier.js', {cwd: __dirname});
-	exports.verify = function (data, signature, callback) {
-		let localGuid = guid++;
-		callbacks[localGuid] = callback;
-		callbackData[localGuid] = data;
-		child.send({data: data, sig: signature, guid: localGuid});
+
+	exports.verify = function (data, signature) {
+		return new Promise((resolve, reject) => {
+			let localGuid = guid++;
+			resolvers[localGuid] = resolve;
+			child.send({data: data, sig: signature, guid: localGuid});
+		});
 	};
+
 	child.on('message', response => {
-		if (callbacks[response.guid]) {
-			callbacks[response.guid](response.success, callbackData[response.guid]);
-			delete callbacks[response.guid];
-			delete callbackData[response.guid];
+		if (response.guid in resolvers) {
+			resolvers[response.guid](response.success);
+			delete resolvers[response.guid];
 		}
 	});
 } else {
