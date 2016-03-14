@@ -4607,6 +4607,11 @@ Battle = (() => {
 	Battle.prototype.attrLastMove = function () {
 		this.log[this.lastMoveLine] += '|' + Array.prototype.slice.call(arguments).join('|');
 	};
+	Battle.prototype.retargetLastMove = function (newTarget) {
+		let parts = this.log[this.lastMoveLine].split('|');
+		parts[4] = newTarget;
+		this.log[this.lastMoveLine] = parts.join('|');
+	};
 	Battle.prototype.debug = function (activity) {
 		if (this.getFormat().debug) {
 			this.add('debug', activity);
