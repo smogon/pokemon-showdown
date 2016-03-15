@@ -731,9 +731,11 @@ let GlobalRoom = (() => {
 				continue;
 			}
 			if (room.staffAutojoin === true && user.isStaff ||
-					typeof room.staffAutojoin === 'string' && room.staffAutojoin.indexOf(user.group) >= 0) {
+					typeof room.staffAutojoin === 'string' && room.staffAutojoin.indexOf(user.group) >= 0 ||
+					room.auth && user.userid in room.auth) {
 				// if staffAutojoin is true: autojoin if isStaff
 				// if staffAutojoin is String: autojoin if user.group in staffAutojoin
+				// if staffAutojoin is anything truthy: autojoin if user has any roomauth
 				user.joinRoom(room.id, connection);
 			}
 		}
