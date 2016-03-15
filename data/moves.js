@@ -741,8 +741,8 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 60,
 		basePowerCallback: function (pokemon, target) {
-			if (target.lastDamage > 0 && pokemon.lastAttackedBy && pokemon.lastAttackedBy.thisTurn && pokemon.lastAttackedBy.pokemon === target) {
-				this.debug('Boosted for getting hit by ' + pokemon.lastAttackedBy.move);
+			if (pokemon.volatiles['revenge'] && pokemon.volatiles['revenge'].damagedBy && pokemon.volatiles['revenge'].damagedBy.indexOf(target) >= 0) {
+				this.debug('Boosted for getting hit by ' + target.lastMove);
 				return 120;
 			}
 			return 60;
@@ -756,6 +756,9 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: -4,
 		flags: {contact: 1, protect: 1, mirror: 1},
+		beforeTurnCallback: function (pokemon) {
+			pokemon.addVolatile('revenge');
+		},
 		secondary: false,
 		target: "normal",
 		type: "Ice",
@@ -11009,8 +11012,8 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 60,
 		basePowerCallback: function (pokemon, target) {
-			if (target.lastDamage > 0 && pokemon.lastAttackedBy && pokemon.lastAttackedBy.thisTurn && pokemon.lastAttackedBy.pokemon === target) {
-				this.debug('Boosted for getting hit by ' + pokemon.lastAttackedBy.move);
+			if (pokemon.volatiles['revenge'] && pokemon.volatiles['revenge'].damagedBy && pokemon.volatiles['revenge'].damagedBy.indexOf(target) >= 0) {
+				this.debug('Boosted for getting hit by ' + target.lastMove);
 				return 120;
 			}
 			return 60;
@@ -11023,6 +11026,18 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: -4,
 		flags: {contact: 1, protect: 1, mirror: 1},
+		beforeTurnCallback: function (pokemon) {
+			pokemon.addVolatile('revenge');
+		},
+		effect: {
+			duration: 1,
+			onHit: function (pokemon, source, move) {
+				if (this.effectData.damagedBy === undefined) this.effectData.damagedBy = [];
+				if (move.category !== 'Status') {
+					this.effectData.damagedBy.push(source);
+				}
+			},
+		},
 		secondary: false,
 		target: "normal",
 		type: "Fighting",
