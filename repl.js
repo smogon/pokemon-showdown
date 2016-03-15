@@ -1,6 +1,6 @@
 'use strict';
 
-const REPL_ENABLED = false;
+const REPL_ENABLED = true;
 
 const fs = require('fs');
 const path = require('path');
