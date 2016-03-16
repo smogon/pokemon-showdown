@@ -5,7 +5,7 @@
 // aren't
 
 try {
-	require('sugar-deprecated');
+	require.resolve('object.values');
 } catch (e) {
 	let command = 'npm install --production';
 	console.log('Installing dependencies: `' + command + '`...');
