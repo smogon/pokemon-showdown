@@ -545,7 +545,7 @@ let GlobalRoom = (() => {
 
 		formatid = Tools.getFormat(formatid).id;
 
-		user.prepBattle(formatid, 'search', null, result => this.finishSearchBattle(user, formatid, result));
+		user.prepBattle(formatid, 'search', null).then(result => this.finishSearchBattle(user, formatid, result));
 	};
 	GlobalRoom.prototype.finishSearchBattle = function (user, formatid, result) {
 		if (!result) return;

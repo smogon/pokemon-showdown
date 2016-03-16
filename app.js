@@ -175,6 +175,7 @@ Tools.includeFormats();
 Rooms.global.formatListText = Rooms.global.getFormatListText();
 
 global.TeamValidator = require('./team-validator.js');
+TeamValidator.PM.spawn();
 
 // load ipbans at our leisure
 fs.readFile(path.resolve(__dirname, 'config/ipbans.txt'), (err, data) => {

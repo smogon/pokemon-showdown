@@ -9,6 +9,9 @@
 
 'use strict';
 
+let TeamValidator = module.exports = getValidator;
+let PM;
+
 class Validator {
 	constructor(format) {
 		this.format = Tools.getFormat(format);
@@ -19,6 +22,10 @@ class Validator {
 		let format = Tools.getFormat(this.format);
 		if (format.validateTeam) return format.validateTeam.call(this, team);
 		return this.baseValidateTeam(team);
+	}
+
+	prepTeam(team) {
+		return PM.send(team);
 	}
 
 	baseValidateTeam(team) {
@@ -834,96 +841,121 @@ class Validator {
 		return false;
 	}
 }
+TeamValidator.Validator = Validator;
 
-if (!process.send) {
-	let validationCount = 0;
-	let pendingValidations = {};
+function getValidator(format) {
+	return new Validator(format);
+}
 
-	let ValidatorProcess = (() => {
-		function ValidatorProcess() {
-			this.process = require('child_process').fork('team-validator.js', {cwd: __dirname});
-			this.process.on('message', message => {
-				// Protocol:
-				// success: "[id]|1[details]"
-				// failure: "[id]|0[details]"
-				let pipeIndex = message.indexOf('|');
-				let id = message.substr(0, pipeIndex);
-				let success = (message.charAt(pipeIndex + 1) === '1');
+/*********************************************************
+ * Process manager
+ *********************************************************/
 
-				if (pendingValidations[id]) {
-					ValidatorProcess.release(this);
-					pendingValidations[id](success, message.substr(pipeIndex + 2));
-					delete pendingValidations[id];
-				}
-			});
+class ValidatorProcess {
+	constructor() {
+		this.load = 0;
+		this.active = true;
+		this.process = require('child_process').fork('team-validator.js', {cwd: __dirname});
+		this.process.on('message', message => {
+			// Protocol:
+			// success: "[id]|1[details]"
+			// failure: "[id]|0[details]"
+			let pipeIndex = message.indexOf('|');
+			let id = message.substr(0, pipeIndex);
+
+			if (id in PM.pendingValidations) {
+				PM.release(this);
+				PM.pendingValidations[id](message.slice(pipeIndex + 1));
+				delete PM.pendingValidations[id];
+			}
+		});
+	}
+}
+TeamValidator.ValidatorProcess = ValidatorProcess;
+
+TeamValidator.PM = PM = {
+	processes: [],
+	validationCount: 0,
+	pendingValidations: {},
+
+	spawn() {
+		let num = 1;
+		if (typeof Config.validatorprocesses === 'number') {
+			num = Config.validatorprocesses;
 		}
-		ValidatorProcess.prototype.load = 0;
-		ValidatorProcess.prototype.active = true;
-		ValidatorProcess.processes = [];
-		ValidatorProcess.spawn = function () {
-			let num = Config.validatorprocesses || 1;
-			for (let i = 0; i < num; ++i) {
-				this.processes.push(new ValidatorProcess());
+		for (let i = this.processes.length; i < num; ++i) {
+			this.processes.push(new ValidatorProcess());
+		}
+	},
+
+	respawn() {
+		for (let process of this.processes.splice(0)) {
+			process.active = false;
+			if (!process.load) process.process.disconnect();
+		}
+		this.spawn();
+	},
+	acquire() {
+		let process = this.processes[0];
+		for (let i = 1; i < this.processes.length; ++i) {
+			if (this.processes[i].load < process.load) {
+				process = this.processes[i];
 			}
-		};
-		ValidatorProcess.respawn = function () {
-			for (let process of this.processes.splice(0)) {
-				process.active = false;
-				if (!process.load) process.process.disconnect();
-			}
-			this.spawn();
-		};
-		ValidatorProcess.acquire = function () {
-			let process = this.processes[0];
-			for (let i = 1; i < this.processes.length; ++i) {
-				if (this.processes[i].load < process.load) {
-					process = this.processes[i];
-				}
-			}
-			++process.load;
-			return process;
-		};
-		ValidatorProcess.release = function (process) {
-			--process.load;
-			if (!process.load && !process.active) {
-				process.process.disconnect();
-			}
-		};
-		ValidatorProcess.send = function (format, team, callback) {
-			let process = this.acquire();
-			pendingValidations[validationCount] = callback;
+		}
+		++process.load;
+		return process;
+	},
+	release(process) {
+		--process.load;
+		if (!process.load && !process.active) {
+			process.process.disconnect();
+		}
+	},
+	send(format, team) {
+		if (!this.processes) {
+			// synchronously!
+			return Promise.resolve(this.receive(format, team));
+		}
+		let process = this.acquire();
+		return new Promise((resolve, reject) => {
+			this.pendingValidations[this.validationCount] = resolve;
 			try {
-				process.process.send('' + validationCount + '|' + format + '|' + team);
+				process.process.send('' + this.validationCount + '|' + format + '|' + team);
 			} catch (e) {}
-			++validationCount;
-		};
-		return ValidatorProcess;
-	})();
+			++this.validationCount;
+		});
+	},
+	receive(format, team) {
+		// protocol:
+		// "[id]|[format]|[team]"
+		let parsedTeam = Tools.fastUnpackTeam(team);
 
-	// Create the initial set of validator processes.
-	ValidatorProcess.spawn();
+		let problems;
+		try {
+			problems = TeamValidator(format).validateTeam(parsedTeam);
+		} catch (err) {
+			require('./crashlogger.js')(err, 'A team validation', {
+				format: format,
+				team: team,
+			});
+			problems = ["Your team crashed the team validator. We've been automatically notified and will fix this crash, but you should use a different team for now."];
+		}
 
-	exports.ValidatorProcess = ValidatorProcess;
-	exports.pendingValidations = pendingValidations;
+		if (problems && problems.length) {
+			return '0' + problems.join('\n');
+		} else {
+			let packedTeam = Tools.packTeam(parsedTeam);
+			// console.log('FROM: ' + message.substr(pipeIndex2 + 1));
+			// console.log('TO: ' + packedTeam);
+			return '1' + packedTeam;
+		}
+	},
+};
 
-	exports.validateTeam = function (format, team, callback) {
-		ValidatorProcess.send(format, team, callback);
-	};
 
-	let synchronousValidators = {};
-	exports.validateTeamSync = function (format, team) {
-		if (!synchronousValidators[format]) synchronousValidators[format] = new Validator(format);
-		return synchronousValidators[format].validateTeam(team);
-	};
-	exports.validateSetSync = function (format, set, teamHas) {
-		if (!synchronousValidators[format]) synchronousValidators[format] = new Validator(format);
-		return synchronousValidators[format].validateSet(set, teamHas);
-	};
-	exports.checkLearnsetSync = function (format, move, template, lsetData) {
-		if (!synchronousValidators[format]) synchronousValidators[format] = new Validator(format);
-		return synchronousValidators[format].checkLearnset(move, template, lsetData);
-	};
-} else {
+if (process.send && module === process.mainModule) {
+	// This is a child process!
+
 	require('sugar-deprecated')(require('./crashlogger.js'));
 	Object.defineProperty(Object, 'values', {writable: true, configurable: true, value: require('object.values')});
 
@@ -940,43 +972,17 @@ if (!process.send) {
 
 	require('./repl.js').start('team-validator-', process.pid, cmd => eval(cmd));
 
-	let validators = {};
-
-	let respond = (id, success, details) => {
-		process.send(id + (success ? '|1' : '|0') + details);
-	};
-
 	process.on('message', message => {
 		// protocol:
 		// "[id]|[format]|[team]"
 		let pipeIndex = message.indexOf('|');
 		let pipeIndex2 = message.indexOf('|', pipeIndex + 1);
 		let id = message.substr(0, pipeIndex);
+
 		let format = message.substr(pipeIndex + 1, pipeIndex2 - pipeIndex - 1);
+		let team = message.substr(pipeIndex2 + 1);
 
-		if (!validators[format]) validators[format] = new Validator(format);
-		let parsedTeam = [];
-		parsedTeam = Tools.fastUnpackTeam(message.substr(pipeIndex2 + 1));
-
-		let problems;
-		try {
-			problems = validators[format].validateTeam(parsedTeam);
-		} catch (err) {
-			require('./crashlogger.js')(err, 'A team validation', {
-				format: format,
-				team: message.substr(pipeIndex2 + 1),
-			});
-			problems = ["Your team crashed the team validator. We've been automatically notified and will fix this crash, but you should use a different team for now."];
-		}
-
-		if (problems && problems.length) {
-			respond(id, false, problems.join('\n'));
-		} else {
-			let packedTeam = Tools.packTeam(parsedTeam);
-			// console.log('FROM: ' + message.substr(pipeIndex2 + 1));
-			// console.log('TO: ' + packedTeam);
-			respond(id, true, packedTeam);
-		}
+		process.send(id + '|' + PM.receive(format, team));
 	});
 
 	process.on('disconnect', () => {

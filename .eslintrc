@@ -167,6 +167,7 @@
 		"blockBindings": true,
 		"classes": true,
 		"forOf": true,
-		"octalLiterals": true
+		"octalLiterals": true,
+		"objectLiteralShorthandMethods": true
 	}
 }
