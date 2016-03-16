@@ -38,13 +38,10 @@ function wikiaSearch(subdomain, query, callback) {
 
 exports.commands = {
 	ygo: 'yugioh',
-	mtg: 'yugioh',
-	magic: 'yugioh',
-	yugioh: function (target, room, user, connection, cmd) {
-		if (room.id !== 'tcgtabletop') return this.errorReply("This command can only be used in the TCG & Tabletop room.");
+	yugioh: function (target, room, user, connection) {
 		if (!this.canBroadcast()) return;
 		let broadcasting = this.broadcasting;
-		let subdomain = (cmd === 'yugioh' || cmd === 'ygo') ? 'yugioh' : 'mtg';
+		let subdomain = 'yugioh';
 		let query = target.trim();
 
 		wikiaSearch(subdomain, query, (err, data) => {
