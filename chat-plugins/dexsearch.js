@@ -153,6 +153,14 @@ if (!process.send) {
 } else {
 	// This is the child
 
+	global.Config = require('../config/config.js');
+
+	if (Config.crashguard) {
+		process.on('uncaughtException', err => {
+			require('./crashlogger.js')(err, 'A dexsearch process', true);
+		});
+	}
+
 	global.Tools = require('../tools.js');
 	global.toId = Tools.getId;
 	Tools.includeData();
