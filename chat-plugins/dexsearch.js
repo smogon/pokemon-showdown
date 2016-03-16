@@ -157,7 +157,7 @@ if (!process.send) {
 
 	if (Config.crashguard) {
 		process.on('uncaughtException', err => {
-			require('./crashlogger.js')(err, 'A dexsearch process', true);
+			require('../crashlogger.js')(err, 'A dexsearch process', true);
 		});
 	}
 
