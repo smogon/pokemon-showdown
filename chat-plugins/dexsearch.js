@@ -490,7 +490,7 @@ if (!process.send) {
 				let lsetData = {fastCheck: true, set: {}};
 				for (let group = 0; group < moveGroups.length; group++) {
 					for (let i = 0; i < moveGroups[group].length; i++) {
-						let problem = TeamValidator.checkLearnsetSync('anythinggoes', moveGroups[group][i], mon, lsetData);
+						let problem = TeamValidator('anythinggoes').checkLearnset(moveGroups[group][i], mon, lsetData);
 						if (!problem) break;
 						if (i === moveGroups[group].length - 1) return;
 					}

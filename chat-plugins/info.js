@@ -408,7 +408,7 @@ exports.commands = {
 			if (!move.exists) {
 				return this.errorReply("Move '" + move.id + "' not found.");
 			}
-			problem = TeamValidator.checkLearnsetSync(format, move, template.species, lsetData);
+			problem = TeamValidator(format).checkLearnset(move, template.species, lsetData);
 			if (problem) break;
 		}
 		let buffer = "";
@@ -1287,7 +1287,7 @@ exports.commands = {
 		}
 		{
 			let i = 0;
-			for (let process of TeamValidator.ValidatorProcess.processes) {
+			for (let process of TeamValidator.PM.processes) {
 				buf += "<strong>" + process.process.pid + "</strong> - Validator " + (i++) + "<br />";
 			}
 		}
