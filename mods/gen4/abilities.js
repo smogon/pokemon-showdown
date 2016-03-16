@@ -122,7 +122,6 @@ exports.BattleAbilities = {
 	},
 	"normalize": {
 		inherit: true,
-		onModifyMovePriority: -1,
 		onModifyMove: function (move) {
 			if (move.id !== 'struggle') {
 				move.type = 'Normal';
