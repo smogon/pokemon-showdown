@@ -25,7 +25,7 @@ class Validator {
 	}
 
 	prepTeam(team) {
-		return PM.send(team);
+		return PM.send(this.format, team);
 	}
 
 	baseValidateTeam(team) {
