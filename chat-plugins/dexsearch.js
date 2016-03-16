@@ -164,6 +164,7 @@ if (!process.send) {
 	global.Tools = require('../tools.js');
 	global.toId = Tools.getId;
 	Tools.includeData();
+	global.TeamValidator = require('../team-validator.js');
 
 	let runDexsearch = function (target, cmd, canAll, message) {
 		let searches = [];
