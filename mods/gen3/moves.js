@@ -71,16 +71,22 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 1,
 			onStart: function (pokemon) {
-				this.effectData.index = 0;
-				while (!pokemon.side.pokemon[this.effectData.index] || pokemon.side.pokemon[this.effectData.index].fainted || pokemon.side.pokemon[this.effectData.index].status) {
-					this.effectData.index++;
+				let index = 0;
+				let team = pokemon.side.pokemon;
+				while (!team[index] || team[index].fainted || team[index].status) {
+					index++;
+					if (index >= team.length) break;
 				}
+				this.effectData.index = index;
 			},
 			onRestart: function (pokemon) {
+				let index = this.effectData.index;
+				let team = pokemon.side.pokemon;
 				do {
-					this.effectData.index++;
-					if (this.effectData.index >= 6) break;
-				} while (!pokemon.side.pokemon[this.effectData.index] || pokemon.side.pokemon[this.effectData.index].fainted || pokemon.side.pokemon[this.effectData.index].status);
+					index++;
+					if (index >= team.length) break;
+				} while (!team[index] || team[index].fainted || team[index].status);
+				this.effectData.index = index;
 			},
 			onModifyAtkPriority: -101,
 			onModifyAtk: function (atk, pokemon) {
