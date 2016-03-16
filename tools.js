@@ -13,7 +13,6 @@
 
 'use strict';
 
-require('sugar-deprecated')(require('./crashlogger.js'));
 Object.defineProperty(Object, 'values', {writable: true, configurable: true, value: require('object.values')});
 
 const fs = require('fs');

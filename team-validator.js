@@ -956,7 +956,6 @@ TeamValidator.PM = PM = {
 if (process.send && module === process.mainModule) {
 	// This is a child process!
 
-	require('sugar-deprecated')(require('./crashlogger.js'));
 	Object.defineProperty(Object, 'values', {writable: true, configurable: true, value: require('object.values')});
 
 	global.Config = require('./config/config.js');
