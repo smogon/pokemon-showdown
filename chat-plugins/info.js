@@ -1758,7 +1758,7 @@ exports.commands = {
 			if (message.charAt(0) === '!') this.broadcasting = true;
 		} else {
 			if (!this.can('declare', null, room)) return;
-			if (!this.canBroadcast('!htmlbox')) return;
+			if (!this.canBroadcast(false, '!htmlbox')) return;
 		}
 
 		this.sendReplyBox(target);
