@@ -1674,6 +1674,7 @@ exports.BattleFormatsData = {
 			{"generation": 3, "level": 37, "gender": "F", "moves":["thunder", "thundershock", "thunderwave", "cottonspore"]},
 			{"generation": 3, "level": 10, "gender": "M", "moves":["tackle", "growl", "thundershock"]},
 			{"generation": 3, "level": 17, "moves":["healbell", "thundershock", "thunderwave", "bodyslam"]},
+			{"generation": 6, "level": 10, "isHidden": false, "moves":["holdback", "tackle", "thunderwave", "thundershock"], "pokeball": "cherishball"},
 		],
 		tier: "LC",
 	},
