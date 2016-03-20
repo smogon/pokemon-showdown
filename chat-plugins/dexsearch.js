@@ -31,8 +31,7 @@ if (!process.send) {
 		ds: 'dexsearch',
 		dsearch: 'dexsearch',
 		dexsearch: function (target, room, user, connection, cmd, message) {
-			if (!this.canBroadcast()) return;
-
+			if (!this.canBroadcast(true)) return;
 			if (!target) return this.parse('/help dexsearch');
 
 			queryChild({
@@ -40,12 +39,14 @@ if (!process.send) {
 				cmd: 'dexsearch',
 				canAll: (!this.broadcasting || room.isPersonal),
 				message: (this.broadcasting ? "" : message),
-			}).then(message => {
-				if (message.reply) {
-					this.sendReplyBox(message.reply);
-				} else if (message.parse) {
-					this.parse(message.parse);
+			}).then(response => {
+				if (!this.canBroadcast()) return;
+				if (response.reply) {
+					this.sendReplyBox(response.reply);
+				} else if (response.dt) {
+					CommandParser.commands.data.call(this, response.dt, room, user, connection, 'dt');
 				}
+				room.update();
 			});
 		},
 
@@ -63,6 +64,7 @@ if (!process.send) {
 		rollpokemon: 'randompokemon',
 		randpoke: 'randompokemon',
 		randompokemon: function (target, room, user, connection, cmd, message) {
+			if (!this.canBroadcast(true)) return;
 			let targets = target.split(",");
 			let targetsBuffer = [];
 			let qty;
@@ -85,12 +87,14 @@ if (!process.send) {
 				cmd: 'randpoke',
 				canAll: (!this.broadcasting || room.isPersonal),
 				message: (this.broadcasting ? "" : message),
-			}).then(message => {
-				if (message.reply) {
-					this.sendReplyBox(message.reply);
-				} else if (message.parse) {
-					this.parse(message.parse);
+			}).then(response => {
+				if (!this.canBroadcast()) return;
+				if (response.reply) {
+					this.sendReplyBox(response.reply);
+				} else if (response.dt) {
+					CommandParser.commands.data.call(this, response.dt, room, user, connection, 'dt');
 				}
+				room.update();
 			});
 		},
 		randompokemonhelp: ["/randompokemon - Generates random Pok\u00e9mon based on given search conditions.",
@@ -100,8 +104,7 @@ if (!process.send) {
 		ms: 'movesearch',
 		msearch: 'movesearch',
 		movesearch: function (target, room, user, connection, cmd, message) {
-			if (!this.canBroadcast()) return;
-
+			if (!this.canBroadcast(true)) return;
 			if (!target) return this.parse('/help movesearch');
 
 			queryChild({
@@ -109,12 +112,14 @@ if (!process.send) {
 				cmd: 'movesearch',
 				canAll: (!this.broadcasting || room.isPersonal),
 				message: (this.broadcasting ? "" : message),
-			}).then(message => {
-				if (message.reply) {
-					this.sendReplyBox(message.reply);
-				} else if (message.parse) {
-					this.parse(message.parse);
+			}).then(response => {
+				if (!this.canBroadcast()) return;
+				if (response.reply) {
+					this.sendReplyBox(response.reply);
+				} else if (response.dt) {
+					CommandParser.commands.data.call(this, response.dt, room, user, connection, 'dt');
 				}
+				room.update();
 			});
 		},
 		movesearchhelp: ["/movesearch [parameter], [parameter], [parameter], ... - Searches for moves that fulfill the selected criteria.",
@@ -129,20 +134,27 @@ if (!process.send) {
 
 		isearch: 'itemsearch',
 		itemsearch: function (target, room, user, connection, cmd, message) {
+			if (!this.canBroadcast(true)) return;
+			if (this.broadcasting && !user.can('broadcast', null, room)) {
+				this.errorReply("You need to be voiced to broadcast this command's information.");
+				this.errorReply("To see it for yourself, use: /" + message.substr(1));
+				return false;
+			}
 			if (!target) return this.parse('/help itemsearch');
-			if (!this.canBroadcast()) return;
 
 			queryChild({
 				target: target,
 				cmd: 'itemsearch',
 				canAll: (!this.broadcasting || room.isPersonal),
 				message: (this.broadcasting ? "" : message),
-			}).then(message => {
-				if (message.reply) {
-					this.sendReplyBox(message.reply);
-				} else if (message.parse) {
-					this.parse(message.parse);
+			}).then(response => {
+				if (!this.canBroadcast()) return;
+				if (response.reply) {
+					this.sendReplyBox(response.reply);
+				} else if (response.dt) {
+					CommandParser.commands.data.call(this, response.dt, room, user, connection, 'dt');
 				}
+				room.update();
 			});
 		},
 		itemsearchhelp: ["/itemsearch [move description] - finds items that match the given key words.",
@@ -521,7 +533,7 @@ if (!process.send) {
 				resultsStr += results.slice(0, RESULTS_MAX_LENGTH).join(", ") + ", and " + (results.length - RESULTS_MAX_LENGTH) + " more. <font color=#999999>Redo the search with 'all' as a search parameter to show all results.</font>";
 			}
 		} else if (results.length === 1) {
-			return {parse: '/dt ' + results[0]};
+			return {dt: results[0]};
 		} else {
 			resultsStr += "No Pok&eacute;mon found.";
 		}
@@ -1092,7 +1104,6 @@ if (!process.send) {
 		let response = {id: message.id};
 		switch (message.cmd) {
 		case 'randpoke':
-			//falls through
 		case 'dexsearch':
 			response.value = runDexsearch(message.target, message.cmd, message.canAll, message.message);
 			break;
