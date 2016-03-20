@@ -2136,6 +2136,7 @@ exports.BattleFormatsData = {
 			{"generation": 3, "level": 70, "moves":["swift", "sunnyday", "fireblast", "recover"]},
 			{"generation": 3, "level": 70, "moves":["recover", "fireblast", "sunnyday", "swift"]},
 			{"generation": 5, "level": 5, "isHidden": true, "moves":["whirlwind", "weatherball"], "pokeball": "dreamball"},
+			{"generation": 6, "level": 50, "shiny": true, "isHidden": false, "moves":["sacredfire", "bravebird", "recover", "celebrate"], "pokeball": "cherishball"},
 		],
 		eventOnlyHidden: true,
 		tier: "Uber",
