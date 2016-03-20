@@ -129,7 +129,7 @@ Commands have access to the following functions:
 
 		if (!this.can('potd')) return false;
 
-`this.canBroadcast()`
+`this.canBroadcast(checkOnly)`
 *	Signifies that a message can be broadcast, as long as the user has
 	permission to. This will check to see if the user used `!command`
 	instead of `/command`. If so, it will check to see if the user has
@@ -137,13 +137,14 @@ Commands have access to the following functions:
 	not. Otherwise, it will add the message to the room, and turn on the
 	flag `this.broadcasting`, so that `this.sendReply` and `this.sendReplyBox`
 	will broadcast to the room instead of just the user that used the
-	command.
+	command. If checkOnly is set to true, it returns without putting anything
+	in the room.
 
 	Should usually be near the top of the command, like:
 
 		if (!this.canBroadcast()) return false;
 
-`this.canBroadcast(suppressMessage)`
+`this.canBroadcast(checkOnly, suppressMessage)`
 *	Functionally the same as `this.canBroadcast()`. However, it will look as
 	if the user had written the text `suppressMessage`.
 
@@ -162,7 +163,7 @@ Commands have access to the following functions:
 	If it has a falsy value, the check won't be attached to any room.
 	In addition to running the checks from `this.canTalk()`, it also checks
 	to see if the message has any banned words, is too long, or was just
-	sent by the user. Returns the filtered message, or a falsy value if the 
+	sent by the user. Returns the filtered message, or a falsy value if the
 	user can't speak.
 
 	Should usually be near the top of the command, like:
