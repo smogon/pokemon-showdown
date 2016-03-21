@@ -12,8 +12,6 @@
 
 'use strict';
 
-require('object.values').shim();
-
 global.Config = require('./config/config.js');
 
 if (Config.crashguard) {

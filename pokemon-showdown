@@ -5,7 +5,7 @@
 // aren't
 
 try {
-	require.resolve('object.values');
+	require.resolve('sockjs');
 } catch (e) {
 	let command = 'npm install --production';
 	console.log('Installing dependencies: `' + command + '`...');
