@@ -13,7 +13,7 @@
 
 'use strict';
 
-Object.defineProperty(Object, 'values', {writable: true, configurable: true, value: require('object.values')});
+require('object.values').shim();
 
 const fs = require('fs');
 const path = require('path');
