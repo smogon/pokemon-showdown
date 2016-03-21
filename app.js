@@ -57,7 +57,7 @@ const path = require('path');
 // aren't
 
 try {
-	require.resolve('object.values');
+	require.resolve('sockjs');
 } catch (e) {
 	if (require.main !== module) throw new Error("Dependencies unmet");
 

@@ -956,8 +956,6 @@ TeamValidator.PM = PM = {
 if (process.send && module === process.mainModule) {
 	// This is a child process!
 
-	require('object.values').shim();
-
 	global.Config = require('./config/config.js');
 
 	if (Config.crashguard) {
