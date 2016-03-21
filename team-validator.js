@@ -912,7 +912,7 @@ TeamValidator.PM = PM = {
 		}
 	},
 	send(format, team) {
-		if (!this.processes) {
+		if (!this.processes.length) {
 			// synchronously!
 			return Promise.resolve(this.receive(format, team));
 		}
