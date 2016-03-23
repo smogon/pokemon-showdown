@@ -718,7 +718,8 @@ exports.commands = {
 			} else {
 				let params = target.split(',').map(param => param.toLowerCase().trim());
 
-				// TODO: make a generator for a default setup.
+				if (params[0] === 'dethy') params = ['goon', 'cop', 'insanecop', 'paranoidcop', 'naivecop'];
+
 				if (!params) return this.errorReply("No roles entered.");
 
 				for (let i = 0; i < params.length; i++) {
