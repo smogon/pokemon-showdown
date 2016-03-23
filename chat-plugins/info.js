@@ -12,6 +12,8 @@
 
 'use strict';
 
+const path = require('path');
+
 exports.commands = {
 
 	ip: 'whois',
@@ -1279,20 +1281,21 @@ exports.commands = {
 			let worker = Sockets.workers[i];
 			buf += "<strong>" + (worker.pid || worker.process.pid) + "</strong> - Sockets " + i + "<br />";
 		}
+
 		{
 			let i = 0;
 			for (let process of Simulator.SimulatorProcess.processes) {
 				buf += "<strong>" + process.process.pid + "</strong> - Simulator " + (i++) + "<br />";
 			}
 		}
-		{
+
+		const ProcessManager = require('./../process-manager');
+		for (let managerData of ProcessManager.cache) {
 			let i = 0;
-			for (let process of TeamValidator.PM.processes) {
-				buf += "<strong>" + process.process.pid + "</strong> - Validator " + (i++) + "<br />";
+			let processType = path.basename(managerData[1]);
+			for (let process of managerData[0].processes) {
+				buf += "<strong>" + process.process.pid + "</strong> - " + processType + " " + (i++) + "<br />";
 			}
-		}
-		if (Tools.dexsearchProcess) {
-			buf += "<strong>" + Tools.dexsearchProcess.pid + "</strong> - Dexsearch<br />";
 		}
 		this.sendReplyBox(buf);
 	},
