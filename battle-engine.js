@@ -4051,7 +4051,7 @@ Battle = (() => {
 			delete decision.pokemon.draggedIn;
 			break;
 		case 'runPrimal':
-			this.singleEvent('Primal', decision.pokemon.getItem(), decision.pokemon.itemData, decision.pokemon);
+			if (!decision.pokemon.transformed) this.singleEvent('Primal', decision.pokemon.getItem(), decision.pokemon.itemData, decision.pokemon);
 			break;
 		case 'shift': {
 			if (!decision.pokemon.isActive) return false;
