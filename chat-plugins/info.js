@@ -1282,13 +1282,6 @@ exports.commands = {
 			buf += "<strong>" + (worker.pid || worker.process.pid) + "</strong> - Sockets " + i + "<br />";
 		}
 
-		{
-			let i = 0;
-			for (let process of Simulator.SimulatorProcess.processes) {
-				buf += "<strong>" + process.process.pid + "</strong> - Simulator " + (i++) + "<br />";
-			}
-		}
-
 		const ProcessManager = require('./../process-manager');
 		for (let managerData of ProcessManager.cache) {
 			let i = 0;
