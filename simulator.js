@@ -13,67 +13,25 @@
 
 'use strict';
 
-let battles = Object.create(null);
+const ProcessManager = require('./process-manager');
 
-class SimulatorProcess {
-	constructor() {
-		this.load = 0;
-		this.active = true;
-
-		this.process = require('child_process').fork('battle-engine.js', {cwd: __dirname});
-		this.process.on('message', message => {
-			let lines = message.split('\n');
-			let battle = battles[lines[0]];
-			if (battle) {
-				battle.receive(lines);
-			}
-		});
-	}
-	send(data) {
-		this.process.send(data);
-	}
-	static init(num) {
-		this.processes = [];
-		if (num === undefined) num = Config.simulatorprocesses || 1;
-		this.spawn(num);
-	}
-	static spawn(num) {
-		for (let i = this.processes.length; i < num; ++i) {
-			this.processes.push(new SimulatorProcess());
-		}
-	}
-	static reinit() {
-		for (let process of this.processes) {
-			process.active = false;
-			if (!process.load) process.process.disconnect();
-		}
-		this.init();
-	}
-	static acquire() {
-		let process = this.processes[0];
-		for (let i = 1; i < this.processes.length; ++i) {
-			if (this.processes[i].load < process.load) {
-				process = this.processes[i];
-			}
-		}
-		process.load++;
-		return process;
-	}
-	static release(process) {
-		process.load--;
-		if (!process.load && !process.active) {
-			process.process.disconnect();
-		}
-	}
-	static eval(code) {
+const SimulatorProcess = new ProcessManager({
+	maxProcesses: Config.simulatorprocesses,
+	execFile: 'battle-engine.js',
+	onMessageUpstream: function (message) {
+		let lines = message.split('\n');
+		let battle = this.pendingTasks.get(lines[0]);
+		if (battle) battle.receive(lines);
+	},
+	eval: function (code) {
 		for (let process of this.processes) {
 			process.send('|eval|' + code);
 		}
-	}
-}
+	},
+});
 
 // Create the initial set of simulator processes.
-SimulatorProcess.init();
+SimulatorProcess.spawn();
 
 let slice = Array.prototype.slice;
 
@@ -137,10 +95,6 @@ class BattlePlayer {
 
 class Battle {
 	constructor(room, format, rated) {
-		if (battles[room.id]) {
-			throw new Error("Battle with ID " + room.id + " already exists.");
-		}
-
 		this.id = room.id;
 		this.room = room;
 		this.title = Tools.getFormat(format).name;
@@ -170,9 +124,12 @@ class Battle {
 		this.inactiveQueued = false;
 
 		this.process = SimulatorProcess.acquire();
-		this.send('init', this.format, rated ? '1' : '');
+		if (this.process.pendingTasks.has(room.id)) {
+			throw new Error("Battle with ID " + room.id + " already exists.");
+		}
 
-		battles[room.id] = this;
+		this.send('init', this.format, rated ? '1' : '');
+		this.process.pendingTasks.set(room.id, this);
 	}
 
 	send() {
@@ -450,18 +407,16 @@ class Battle {
 		}
 		this.players = null;
 		this.room = null;
-		SimulatorProcess.release(this.process);
+		this.process.pendingTasks.delete(this.id);
+		this.process.release();
 		this.process = null;
-		delete battles[this.id];
 	}
 }
 
 exports.BattlePlayer = BattlePlayer;
 exports.Battle = Battle;
-exports.battles = battles;
 exports.SimulatorProcess = SimulatorProcess;
 
 exports.create = function (id, format, rated, room) {
-	if (battles[id]) return battles[id];
 	return new Battle(room, format, rated);
 };
