@@ -38,25 +38,24 @@ function wikiaSearch(subdomain, query, callback) {
 
 exports.commands = {
 	ygo: 'yugioh',
-	yugioh: function (target, room, user, connection) {
+	yugioh: function (target, room, user) {
 		if (!this.canBroadcast()) return;
-		let broadcasting = this.broadcasting;
 		let subdomain = 'yugioh';
 		let query = target.trim();
 
 		wikiaSearch(subdomain, query, (err, data) => {
 			if (err) {
 				if (err instanceof SyntaxError || err.message === 'Malformed data') {
-					if (!broadcasting) return connection.sendTo(room, "Error: something went wrong in the request: " + err.message);
+					if (!this.broadcasting) return this.sendReply("Error: something went wrong in the request: " + err.message);
 					return room.add("Error: Something went wrong in the request: " + err.message).update();
 				}
-				if (!broadcasting) return connection.sendTo(room, "Error: " + err.message);
+				if (!this.broadcasting) return this.sendReply("Error: " + err.message);
 				return room.add("Error: " + err.message).update();
 			}
 			let entryUrl = Tools.getString(data.url);
 			let entryTitle = Tools.getString(data.title);
 			let htmlReply = "<strong>Best result for " + Tools.escapeHTML(query) + ":</strong><br/><a href=\"" + Tools.escapeHTML(entryUrl) + "\">" + Tools.escapeHTML(entryTitle) + "</a>";
-			if (!broadcasting) return connection.sendTo(room, "|raw|<div class=\"infobox\">" + htmlReply + "</div>");
+			if (!this.broadcasting) return this.sendReply("|raw|<div class=\"infobox\">" + htmlReply + "</div>");
 			room.addRaw("<div class=\"infobox\">" + htmlReply + "</div>").update();
 		});
 	},
