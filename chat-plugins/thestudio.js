@@ -6,14 +6,6 @@
 
 'use strict';
 
-function toArrayOfArrays(map) {
-	let ret = [];
-	map.forEach((value, key) => {
-		ret.push([value, key]);
-	});
-	return ret;
-}
-
 function toArtistId(artist) { // toId would return '' for foreign/sadistic artists
 	return artist.toLowerCase().replace(/\s/g, '').replace(/\b&\b/g, '');
 }
@@ -63,8 +55,8 @@ let commands = {
 		if (!artistOfTheDay.pendingNominations) return this.sendReply("Nominations for the Artist of the Day are not in progress.");
 		if (!artistOfTheDay.nominations.size) return this.sendReply("No nominations have been submitted yet.");
 
-		let nominations = toArrayOfArrays(artistOfTheDay.nominations);
-		let artist = nominations[~~(Math.random() * nominations.length)][0];
+		let nominations = Array.from(artistOfTheDay.nominations);
+		let artist = nominations[~~(Math.random() * nominations.length)][1];
 		artistOfTheDay.pendingNominations = false;
 		artistOfTheDay.nominations.clear();
 		artistOfTheDay.removedNominators = [];
@@ -178,12 +170,12 @@ let commands = {
 		if (!this.canBroadcast()) return false;
 		if (!artistOfTheDay.nominations.size) return this.sendReplyBox("No nominations have been submitted yet.");
 
-		let nominations = toArrayOfArrays(artistOfTheDay.nominations).sort((a, b) => a[0].localeCompare(b[0]));
+		let nominations = Array.from(artistOfTheDay.nominations).sort((a, b) => a[1].localeCompare(b[1]));
 
 		buffer += "Current nominations (" + nominations.length + "):";
 		for (let i = 0; i < nominations.length; i++) {
 			buffer += "<br />" +
-				"- " + Tools.escapeHTML(nominations[i][0]) + " (submitted by " + Tools.escapeHTML(nominations[i][1].name) + ")";
+				"- " + Tools.escapeHTML(nominations[i][1]) + " (submitted by " + Tools.escapeHTML(nominations[i][0].name) + ")";
 		}
 
 		this.sendReplyBox(buffer);
