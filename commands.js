@@ -1887,13 +1887,17 @@ exports.commands = {
 		if (target === 'chat' || target === 'commands') {
 			if (Monitor.hotpatchLock) return this.errorReply("Hotpatch has been disabled. (" + Monitor.hotpatchLock + ")");
 			try {
+				const ProcessManagers = require('./process-manager').cache;
+				for (let PM of ProcessManagers.keys()) {
+					if (PM.isChatBased) {
+						PM.unspawn();
+						ProcessManagers.delete(PM);
+					}
+				}
+
 				CommandParser.uncacheTree('./command-parser.js');
 				delete require.cache[require.resolve('./commands.js')];
 				delete require.cache[require.resolve('./chat-plugins/info.js')];
-				if (Tools.dexsearchProcess) {
-					Tools.dexsearchProcess.kill();
-					Tools.dexsearchProcess = null;
-				}
 				delete require.cache[require.resolve('./chat-plugins/dexsearch.js')];
 				global.CommandParser = require('./command-parser.js');
 
