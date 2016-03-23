@@ -1025,6 +1025,36 @@ CommandParser.commands.tournament = function (paramString, room, user) {
 			Rooms.global.writeChatRoomData();
 		}
 		return this.sendReply("Tournaments disabled.");
+	} else if (cmd === 'announce' || cmd === 'announcements') {
+		if (!this.can('tournamentsmanagement', null, room)) return;
+		if (room.isPrivate || room.isPersonal || room.staffRoom) {
+			return this.sendReply("Tournaments in this room cannot be announced.");
+		}
+		if (params.length < 1) {
+			if (room.tourAnnouncements) {
+				return this.sendReply("Tournament announcements are enabled.");
+			} else {
+				return this.sendReply("Tournament announcements are disabled.");
+			}
+		}
+
+		let option = params[0].toLowerCase();
+		if (option === 'on' || option === 'enable') {
+			if (room.tourAnnouncements) return this.errorReply("Tournament announcements are already enabled.");
+			room.tourAnnouncements = true;
+			this.privateModCommand("(Tournament announcements were enabled by " + user.name + ")");
+		} else if (option === 'off' || option === 'disable') {
+			if (!room.tourAnnouncements) return this.errorReply("Tournament announcements are already disabled.");
+			room.tourAnnouncements = false;
+			this.privateModCommand("(Tournament announcements were disabled by " + user.name + ")");
+		} else {
+			return this.sendReply("Usage: " + cmd + " <on|off>");
+		}
+
+		if (room.chatRoomData) {
+			room.chatRoomData.tourAnnouncements = room.tourAnnouncements;
+			Rooms.global.writeChatRoomData();
+		}
 	} else if (cmd === 'create' || cmd === 'new') {
 		if (room.toursEnabled) {
 			if (!this.can('tournaments', null, room)) return;
@@ -1040,9 +1070,9 @@ CommandParser.commands.tournament = function (paramString, room, user) {
 		let tour = createTournament(room, params.shift(), params.shift(), params.shift(), Config.istournamentsrated, params, this);
 		if (tour) {
 			this.privateModCommand("(" + user.name + " created a tournament in " + tour.format + " format.)");
-			if (Config.tourannouncements && Config.tourannouncements.indexOf(room.id) >= 0) {
+			if (room.tourAnnouncements) {
 				let tourRoom = Rooms.search(Config.tourroom || 'tournaments');
-				if (tourRoom) tourRoom.addRaw('<div class="infobox"><a href="/' + room.id + '" class="ilink"><strong>' + Tools.escapeHTML(Tools.getFormat(tour.format).name) + '</strong> tournament created in <strong>' + Tools.escapeHTML(room.title) + '</strong>.</a></div>');
+				if (tourRoom && tourRoom !== room) tourRoom.addRaw('<div class="infobox"><a href="/' + room.id + '" class="ilink"><strong>' + Tools.escapeHTML(Tools.getFormat(tour.format).name) + '</strong> tournament created in <strong>' + Tools.escapeHTML(room.title) + '</strong>.</a></div>').update();
 			}
 		}
 	} else {
@@ -1096,6 +1126,7 @@ CommandParser.commands.tournamenthelp = function (target, room, user) {
 		"- modjoin &lt;allow|disallow>: Specifies whether players can modjoin their battles.<br />" +
 		"- getusers: Lists the users in the current tournament.<br />" +
 		"- on/off: Enables/disables allowing mods to start tournaments in the current room.<br />" +
+		"- announce/announcements &lt;on|off>: Enables/disables tournament announcements for the current room.<br />" +
 		"More detailed help can be found <a href=\"https://gist.github.com/sirDonovan/130324abcd06254cf501\">here</a>"
 	);
 };
