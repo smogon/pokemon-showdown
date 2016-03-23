@@ -175,6 +175,7 @@ exports.MafiaClasses = {
 		side: 'mafia',
 		image: '<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-godfather.png" />',
 		flavorText: 'You are the godfather. You\'re sided with the mafia, but appear as a villager on cop reports.',
+		appearAs: 'town',
 	},
 
 	mayor: {
