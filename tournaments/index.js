@@ -1027,7 +1027,7 @@ CommandParser.commands.tournament = function (paramString, room, user) {
 		return this.sendReply("Tournaments disabled.");
 	} else if (cmd === 'announce' || cmd === 'announcements') {
 		if (!this.can('tournamentsmanagement', null, room)) return;
-		if (room.isPrivate || room.isPersonal || room.staffRoom) {
+		if (Config.tourannouncements.indexOf(room.id) < 0) {
 			return this.sendReply("Tournaments in this room cannot be announced.");
 		}
 		if (params.length < 1) {
