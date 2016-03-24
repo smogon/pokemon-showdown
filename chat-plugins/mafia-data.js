@@ -110,6 +110,7 @@ exports.MafiaClasses = {
 
 	paranoidcop: {
 		name: "Cop",
+		pregameName: "Paranoid Cop",
 		side: 'town',
 		image: '<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-cop.png" />',
 		flavorText: 'You are the cop. Every night, you can visit someone in town. When the night is over, you\'ll receive a report with that person\'s alignment.',
@@ -123,6 +124,7 @@ exports.MafiaClasses = {
 
 	insanecop: {
 		name: "Cop",
+		pregameName: "Insane Cop",
 		side: 'town',
 		image: '<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-cop.png" />',
 		flavorText: 'You are the cop. Every night, you can visit someone in town. When the night is over, you\'ll receive a report with that person\'s alignment.',
@@ -136,6 +138,7 @@ exports.MafiaClasses = {
 
 	naivecop: {
 		name: "Cop",
+		pregameName: "Naive Cop",
 		side: 'town',
 		image: '<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-cop.png" />',
 		flavorText: 'You are the cop. Every night, you can visit someone in town. When the night is over, you\'ll receive a report with that person\'s alignment.',

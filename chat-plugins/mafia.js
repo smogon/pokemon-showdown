@@ -209,10 +209,11 @@ class Mafia extends Rooms.RoomGame {
 		}
 
 		this.roleString = this.roles.reduce((prev, cur, index, array) => {
+			let roleName = MafiaData.MafiaClasses[cur].pregameName || MafiaData.MafiaClasses[cur].name;
 			if (index === array.length - 1) {
-				return prev + MafiaData.MafiaClasses[cur].name;
+				return prev + roleName;
 			} else {
-				return prev + MafiaData.MafiaClasses[cur].name + ', ';
+				return prev + roleName + ', ';
 			}
 		}, '');
 
