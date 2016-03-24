@@ -1039,7 +1039,7 @@ class User {
 			this.group = Config.groupsranking[0];
 			for (let i = 0; i < Rooms.global.chatRooms.length; i++) {
 				let room = Rooms.global.chatRooms[i];
-				if (!room.isPrivate && room.auth && this.userid in room.auth && room.auth[this.userid] !== '+') {
+				if (!room.isPrivate && !room.isPersonal && room.auth && this.userid in room.auth && room.auth[this.userid] !== '+') {
 					this.confirmed = this.userid;
 					this.autoconfirmed = this.userid;
 					break;
