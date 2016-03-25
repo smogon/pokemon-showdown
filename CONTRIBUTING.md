@@ -21,7 +21,10 @@ The first line of the commit summary should be under 50 characters long.
 
 The first letter of a commit summary should be capitalized (unless the first word starts with a number or is case-sensitive, e.g. `ls`).
 
+The commit summary should not end in a period.
+
 BAD: `refactor users to use classes`  
+BAD: `Refactor Users to use classes.`
 GOOD: `Refactor Users to use classes`
 
 If the first word is a verb, it should be in imperative mood (the first word doesn't have to be a verb, but we recommend it).
