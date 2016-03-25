@@ -2327,7 +2327,6 @@ Battle = (() => {
 					TryHit: 1,
 					TryHitSide: 1,
 					TryMove: 1,
-					Hit: 1,
 					Boost: 1,
 					DragOut: 1,
 				};
