@@ -46,8 +46,11 @@ exports.commands = {
 		wikiaSearch(subdomain, query, (err, data) => {
 			if (err) {
 				if (err instanceof SyntaxError || err.message === 'Malformed data') {
-					if (!this.broadcasting) return this.sendReply("Error: something went wrong in the request: " + err.message);
+					if (!this.broadcasting) return this.sendReply("Error: Something went wrong in the request: " + err.message);
 					return room.add("Error: Something went wrong in the request: " + err.message).update();
+				} else if (err.message === 'Not found') {
+					if (!this.broadcasting) return this.sendReply("|raw|<div class=\"infobox\">No results found.</div>");
+					return room.addRaw("<div class=\"infobox\">No results found.</div>").update();
 				}
 				if (!this.broadcasting) return this.sendReply("Error: " + err.message);
 				return room.add("Error: " + err.message).update();
