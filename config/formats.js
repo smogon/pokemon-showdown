@@ -34,6 +34,16 @@ exports.Formats = [
 		],
 		section: "ORAS Singles",
 
+		searchShow: false,
+		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
+		banlist: ['Uber', 'Shadow Tag', 'Soul Dew'],
+	},
+	{
+		name: "OU (suspect test)",
+		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3568442/\">ORAS OU Suspect Process, Round 6/a>"],
+		section: "ORAS Singles",
+
+		challengeShow: false,
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
 		banlist: ['Uber', 'Shadow Tag', 'Soul Dew'],
 	},
