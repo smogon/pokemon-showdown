@@ -110,12 +110,12 @@ exports.BattleMovedex = {
 		num: 512,
 		accuracy: 100,
 		basePower: 55,
-		basePowerCallback: function (pokemon) {
+		basePowerCallback: function (pokemon, target, move) {
 			if (!pokemon.item) {
 				this.debug("Power doubled for no item");
-				return 110;
+				return move.basePower * 2;
 			}
-			return 55;
+			return move.basePower;
 		},
 		category: "Physical",
 		desc: "Power doubles if the user has no held item.",
@@ -519,12 +519,12 @@ exports.BattleMovedex = {
 		num: 372,
 		accuracy: 100,
 		basePower: 60,
-		basePowerCallback: function (pokemon, target) {
+		basePowerCallback: function (pokemon, target, move) {
 			if (pokemon.volatiles.assurance && pokemon.volatiles.assurance.hurt) {
 				this.debug('Boosted for being damaged this turn');
-				return 120;
+				return move.basePower * 2;
 			}
-			return 60;
+			return move.basePower;
 		},
 		category: "Physical",
 		desc: "Power doubles if the target has already taken damage this turn, other than direct damage from Belly Drum, confusion, Curse, or Pain Split.",
@@ -740,12 +740,12 @@ exports.BattleMovedex = {
 		num: 419,
 		accuracy: 100,
 		basePower: 60,
-		basePowerCallback: function (pokemon, target) {
+		basePowerCallback: function (pokemon, target, move) {
 			if (target.lastDamage > 0 && pokemon.lastAttackedBy && pokemon.lastAttackedBy.thisTurn && pokemon.lastAttackedBy.pokemon === target) {
 				this.debug('Boosted for getting hit by ' + pokemon.lastAttackedBy.move);
-				return 120;
+				return move.basePower * 2;
 			}
-			return 60;
+			return move.basePower;
 		},
 		category: "Physical",
 		desc: "Power doubles if the user was hit by the target this turn.",
@@ -3703,8 +3703,8 @@ exports.BattleMovedex = {
 		num: 284,
 		accuracy: 100,
 		basePower: 150,
-		basePowerCallback: function (pokemon) {
-			return 150 * pokemon.hp / pokemon.maxhp;
+		basePowerCallback: function (pokemon, target, move) {
+			return move.basePower * pokemon.hp / pokemon.maxhp;
 		},
 		category: "Special",
 		desc: "Power is equal to (user's current HP * 150 / user's maximum HP), rounded down, but not less than 1.",
@@ -4900,7 +4900,7 @@ exports.BattleMovedex = {
 			if (!pokemon.volatiles.furycutter) {
 				pokemon.addVolatile('furycutter');
 			}
-			return 40 * pokemon.volatiles.furycutter.multiplier;
+			return this.clampIntRange(40 * pokemon.volatiles.furycutter.multiplier, 40, 160);
 		},
 		category: "Physical",
 		desc: "Power doubles with each successful hit, up to a maximum of 160 power; resets to 40 power if the move misses or another move is used.",
@@ -6167,9 +6167,9 @@ exports.BattleMovedex = {
 		num: 506,
 		accuracy: 100,
 		basePower: 65,
-		basePowerCallback: function (pokemon, target) {
-			if (target.status) return 130;
-			return 65;
+		basePowerCallback: function (pokemon, target, move) {
+			if (target.status) return move.basePower * 2;
+			return move.basePower;
 		},
 		category: "Special",
 		desc: "Power doubles if the target has a major status condition.",
@@ -6787,11 +6787,10 @@ exports.BattleMovedex = {
 		num: 301,
 		accuracy: 90,
 		basePower: 30,
-		basePowerCallback: function (pokemon, target) {
-			let bp = 30;
-			let bpTable = [30, 60, 120, 240, 480];
+		basePowerCallback: function (pokemon, target, move) {
+			let bp = move.basePower;
 			if (pokemon.volatiles.iceball && pokemon.volatiles.iceball.hitCount) {
-				bp = (bpTable[pokemon.volatiles.iceball.hitCount] || 30);
+				bp *= Math.pow(2, pokemon.volatiles.iceball.hitCount);
 			}
 			pokemon.addVolatile('iceball');
 			if (pokemon.volatiles.defensecurl) {
@@ -9519,17 +9518,13 @@ exports.BattleMovedex = {
 		num: 371,
 		accuracy: 100,
 		basePower: 50,
-		basePowerCallback: function (pokemon, target) {
-			if (target.newlySwitched) {
-				this.debug('Payback NOT boosted on a switch');
-				return 50;
-			}
-			if (this.willMove(target)) {
+		basePowerCallback: function (pokemon, target, move) {
+			if (target.newlySwitched || this.willMove(target)) {
 				this.debug('Payback NOT boosted');
-				return 50;
+				return move.basePower;
 			}
 			this.debug('Payback damage boost');
-			return 100;
+			return move.basePower * 2;
 		},
 		category: "Physical",
 		desc: "Power doubles if the target moves before the user; power is not doubled if the target switches out.",
@@ -10415,13 +10410,13 @@ exports.BattleMovedex = {
 		num: 228,
 		accuracy: 100,
 		basePower: 40,
-		basePowerCallback: function (pokemon, target) {
+		basePowerCallback: function (pokemon, target, move) {
 			// You can't get here unless the pursuit succeeds
 			if (target.beingCalledBack) {
 				this.debug('Pursuit damage boost');
-				return 80;
+				return move.basePower * 2;
 			}
-			return 40;
+			return move.basePower;
 		},
 		category: "Physical",
 		desc: "If an adjacent foe switches out this turn, this move hits that Pokemon before it leaves the field, even if it was not the original target. If the user moves after a foe using Parting Shot, U-turn, or Volt Switch, but not Baton Pass, it will hit that foe before it leaves the field. Power doubles and no accuracy check is done if the user hits a foe switching out, and the user's turn is over; if a foe faints from this, the replacement Pokemon does not become active until the end of the turn.",
@@ -11008,12 +11003,12 @@ exports.BattleMovedex = {
 		num: 279,
 		accuracy: 100,
 		basePower: 60,
-		basePowerCallback: function (pokemon, target) {
+		basePowerCallback: function (pokemon, target, move) {
 			if (target.lastDamage > 0 && pokemon.lastAttackedBy && pokemon.lastAttackedBy.thisTurn && pokemon.lastAttackedBy.pokemon === target) {
 				this.debug('Boosted for getting hit by ' + pokemon.lastAttackedBy.move);
-				return 120;
+				return move.basePower * 2;
 			}
-			return 60;
+			return move.basePower;
 		},
 		category: "Physical",
 		desc: "Power doubles if the user was hit by the target this turn.",
@@ -11306,11 +11301,10 @@ exports.BattleMovedex = {
 		num: 205,
 		accuracy: 90,
 		basePower: 30,
-		basePowerCallback: function (pokemon, target) {
-			let bp = 30;
-			let bpTable = [30, 60, 120, 240, 480];
+		basePowerCallback: function (pokemon, target, move) {
+			let bp = move.basePower;
 			if (pokemon.volatiles.rollout && pokemon.volatiles.rollout.hitCount) {
-				bp = (bpTable[pokemon.volatiles.rollout.hitCount] || 30);
+				bp *= Math.pow(2, pokemon.volatiles.rollout.hitCount);
 			}
 			pokemon.addVolatile('rollout');
 			if (pokemon.volatiles.defensecurl) {
@@ -11418,9 +11412,9 @@ exports.BattleMovedex = {
 		basePower: 60,
 		basePowerCallback: function (target, source, move) {
 			if (move.sourceEffect === 'round') {
-				return 120;
+				return move.basePower * 2;
 			}
-			return 60;
+			return move.basePower;
 		},
 		category: "Special",
 		desc: "If there are other active Pokemon that chose this move for use this turn, those Pokemon take their turn immediately after the user, in Speed order, and this move's power is 120 for each other user.",
@@ -12605,9 +12599,9 @@ exports.BattleMovedex = {
 		num: 265,
 		accuracy: 100,
 		basePower: 70,
-		basePowerCallback: function (pokemon, target) {
-			if (target.status === 'par') return 140;
-			return 70;
+		basePowerCallback: function (pokemon, target, move) {
+			if (target.status === 'par') return move.basePower * 2;
+			return move.basePower;
 		},
 		category: "Physical",
 		desc: "Power doubles if the target is paralyzed. If the user has not fainted, the target is cured of paralysis.",
@@ -13262,8 +13256,8 @@ exports.BattleMovedex = {
 		num: 500,
 		accuracy: 100,
 		basePower: 20,
-		basePowerCallback: function (pokemon) {
-			return 20 + 20 * pokemon.positiveBoosts();
+		basePowerCallback: function (pokemon, target, move) {
+			return move.basePower + 20 * pokemon.positiveBoosts();
 		},
 		category: "Special",
 		desc: "Power is equal to 20+(X*20), where X is the user's total stat stage changes that are greater than 0.",
@@ -14977,9 +14971,9 @@ exports.BattleMovedex = {
 		num: 358,
 		accuracy: 100,
 		basePower: 70,
-		basePowerCallback: function (pokemon, target) {
-			if (target.status === 'slp') return 140;
-			return 70;
+		basePowerCallback: function (pokemon, target, move) {
+			if (target.status === 'slp') return move.basePower * 2;
+			return move.basePower;
 		},
 		category: "Physical",
 		desc: "Power doubles if the target is asleep. If the user has not fainted, the target wakes up.",
@@ -15144,8 +15138,8 @@ exports.BattleMovedex = {
 		num: 323,
 		accuracy: 100,
 		basePower: 150,
-		basePowerCallback: function (pokemon) {
-			return 150 * pokemon.hp / pokemon.maxhp;
+		basePowerCallback: function (pokemon, target, move) {
+			return move.basePower * pokemon.hp / pokemon.maxhp;
 		},
 		category: "Special",
 		desc: "Power is equal to (user's current HP * 150 / user's maximum HP), rounded down, but not less than 1.",
@@ -15201,9 +15195,9 @@ exports.BattleMovedex = {
 		num: 311,
 		accuracy: 100,
 		basePower: 50,
-		basePowerCallback: function () {
-			if (this.weather) return 100;
-			return 50;
+		basePowerCallback: function (pokemon, target, move) {
+			if (this.weather) return move.basePower * 2;
+			return move.basePower;
 		},
 		category: "Special",
 		desc: "Power doubles during weather effects and this move's type changes to match; Ice type during Hail, Water type during Rain Dance, Rock type during Sandstorm, and Fire type during Sunny Day.",
