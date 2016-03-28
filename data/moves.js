@@ -4896,11 +4896,11 @@ exports.BattleMovedex = {
 		num: 210,
 		accuracy: 95,
 		basePower: 40,
-		basePowerCallback: function (pokemon) {
+		basePowerCallback: function (pokemon, target, move) {
 			if (!pokemon.volatiles.furycutter) {
 				pokemon.addVolatile('furycutter');
 			}
-			return this.clampIntRange(40 * pokemon.volatiles.furycutter.multiplier, 40, 160);
+			return this.clampIntRange(move.basePower * pokemon.volatiles.furycutter.multiplier, 1, 160);
 		},
 		category: "Physical",
 		desc: "Power doubles with each successful hit, up to a maximum of 160 power; resets to 40 power if the move misses or another move is used.",
