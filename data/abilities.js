@@ -1925,7 +1925,7 @@ exports.BattleAbilities = {
 			pokemon.setItem(randomTarget.lastItem);
 			randomTarget.lastItem = '';
 			let item = pokemon.getItem();
-			this.add('-item', pokemon, item, '[from] Pickup');
+			this.add('-item', pokemon, item, '[from] ability: Pickup');
 		},
 		id: "pickup",
 		name: "Pickup",
