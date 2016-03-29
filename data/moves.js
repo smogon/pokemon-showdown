@@ -4430,6 +4430,9 @@ exports.BattleMovedex = {
 			let item = this.getItem(source.volatiles['fling'].item);
 			this.add("-enditem", source, item.name, '[from] move: Fling');
 		},
+		onAfterMove: function (pokemon) {
+			pokemon.removeVolatile('fling');
+		},
 		effect: {
 			duration: 1,
 			onStart: function (pokemon) {
