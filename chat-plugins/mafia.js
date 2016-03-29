@@ -554,6 +554,7 @@ class Mafia extends Rooms.RoomGame {
 				delete this.oldModchat;
 			}
 			this.gamestate = 'day';
+			this.setTimer(0.5);
 			break;
 		case 'day':
 			this.gamestate = 'lynch';
