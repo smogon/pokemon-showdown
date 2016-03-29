@@ -238,6 +238,14 @@ class Mafia extends Rooms.RoomGame {
 		return JSON.stringify(gameObj);
 	}
 
+	onJoin(user) {
+		if (user.userid in this.players) {
+			user.sendTo(this.room, '|uhtml|mafia' + this.room.gameNumber + 'pregame|' + this.pregameWindow(true));
+		} else {
+			user.sendTo(this.room, '|uhtml|mafia' + this.room.gameNumber + 'pregame|' + this.pregameWindow(false));
+		}
+	}
+
 	onRename(user, oldUserid, isJoining) {
 		if (!(oldUserid in this.players)) return;
 
