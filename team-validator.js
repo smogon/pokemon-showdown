@@ -25,7 +25,7 @@ class Validator {
 	}
 
 	prepTeam(team) {
-		return PM.send(this.format, team);
+		return PM.send(this.format.id, team);
 	}
 
 	baseValidateTeam(team) {
@@ -851,83 +851,37 @@ function getValidator(format) {
  * Process manager
  *********************************************************/
 
-class ValidatorProcess {
-	constructor() {
-		this.load = 0;
-		this.active = true;
-		this.process = require('child_process').fork('team-validator.js', {cwd: __dirname});
-		this.process.on('message', message => {
-			// Protocol:
-			// success: "[id]|1[details]"
-			// failure: "[id]|0[details]"
-			let pipeIndex = message.indexOf('|');
-			let id = message.substr(0, pipeIndex);
+const ProcessManager = require('./process-manager');
 
-			if (id in PM.pendingValidations) {
-				PM.release(this);
-				PM.pendingValidations[id](message.slice(pipeIndex + 1));
-				delete PM.pendingValidations[id];
-			}
-		});
-	}
-}
-TeamValidator.ValidatorProcess = ValidatorProcess;
+PM = TeamValidator.PM = new ProcessManager({
+	maxProcesses: global.Config && Config.validatorprocesses,
+	execFile: 'team-validator.js',
+	onMessageUpstream: function (message) {
+		// Protocol:
+		// success: "[id]|1[details]"
+		// failure: "[id]|0[details]"
+		let pipeIndex = message.indexOf('|');
+		let id = +message.substr(0, pipeIndex);
 
-TeamValidator.PM = PM = {
-	processes: [],
-	validationCount: 0,
-	pendingValidations: {},
-
-	spawn() {
-		let num = 1;
-		if (typeof Config.validatorprocesses === 'number') {
-			num = Config.validatorprocesses;
-		}
-		for (let i = this.processes.length; i < num; ++i) {
-			this.processes.push(new ValidatorProcess());
+		if (this.pendingTasks.has(id)) {
+			this.pendingTasks.get(id)(message.slice(pipeIndex + 1));
+			this.pendingTasks.delete(id);
+			this.release();
 		}
 	},
-
-	respawn() {
-		for (let process of this.processes.splice(0)) {
-			process.active = false;
-			if (!process.load) process.process.disconnect();
-		}
-		this.spawn();
-	},
-	acquire() {
-		let process = this.processes[0];
-		for (let i = 1; i < this.processes.length; ++i) {
-			if (this.processes[i].load < process.load) {
-				process = this.processes[i];
-			}
-		}
-		++process.load;
-		return process;
-	},
-	release(process) {
-		--process.load;
-		if (!process.load && !process.active) {
-			process.process.disconnect();
-		}
-	},
-	send(format, team) {
-		if (!this.processes.length) {
-			// synchronously!
-			return Promise.resolve(this.receive(format, team));
-		}
-		let process = this.acquire();
-		return new Promise((resolve, reject) => {
-			this.pendingValidations[this.validationCount] = resolve;
-			try {
-				process.process.send('' + this.validationCount + '|' + format + '|' + team);
-			} catch (e) {}
-			++this.validationCount;
-		});
-	},
-	receive(format, team) {
+	onMessageDownstream: function (message) {
 		// protocol:
 		// "[id]|[format]|[team]"
+		let pipeIndex = message.indexOf('|');
+		let pipeIndex2 = message.indexOf('|', pipeIndex + 1);
+		let id = message.substr(0, pipeIndex);
+
+		let format = message.substr(pipeIndex + 1, pipeIndex2 - pipeIndex - 1);
+		let team = message.substr(pipeIndex2 + 1);
+
+		process.send(id + '|' + this.receive(format, team));
+	},
+	receive: function (format, team) {
 		let parsedTeam = Tools.fastUnpackTeam(team);
 
 		let problems;
@@ -950,8 +904,7 @@ TeamValidator.PM = PM = {
 			return '1' + packedTeam;
 		}
 	},
-};
-
+});
 
 if (process.send && module === process.mainModule) {
 	// This is a child process!
@@ -969,20 +922,6 @@ if (process.send && module === process.mainModule) {
 
 	require('./repl.js').start('team-validator-', process.pid, cmd => eval(cmd));
 
-	process.on('message', message => {
-		// protocol:
-		// "[id]|[format]|[team]"
-		let pipeIndex = message.indexOf('|');
-		let pipeIndex2 = message.indexOf('|', pipeIndex + 1);
-		let id = message.substr(0, pipeIndex);
-
-		let format = message.substr(pipeIndex + 1, pipeIndex2 - pipeIndex - 1);
-		let team = message.substr(pipeIndex2 + 1);
-
-		process.send(id + '|' + PM.receive(format, team));
-	});
-
-	process.on('disconnect', () => {
-		process.exit();
-	});
+	process.on('message', message => PM.onMessageDownstream(message));
+	process.on('disconnect', () => process.exit());
 }
