@@ -438,6 +438,7 @@ class Mafia extends Rooms.RoomGame {
 			}
 		}
 
+		this.room.send('|uhtmlchange|mafia' + this.room.gameNumber + 'pregame|<div class="infobox">The game has started!</div>');
 		this.allowRenames = false;
 		this.gamestate = 'initial';
 		this.gameEvent('atStart', 1);
