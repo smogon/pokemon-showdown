@@ -168,6 +168,7 @@ exports.Formats = [
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3568427/\">Flash Clash</a>"],
 		section: 'ORAS Singles',
 
+		maxForcedLevel: 50,
 		teamLength: {
 			validate: [1, 6],
 			battle: 1,
