@@ -346,7 +346,7 @@ exports.BattleScripts = {
 		}
 
 		if (move.recoil && totalDamage) {
-			this.damage(this.clampIntRange(Math.round(totalDamage * move.recoil[0] / move.recoil[1]), 1), pokemon, target, 'recoil');
+			this.damage(this.calcRecoilDamage(totalDamage, move), pokemon, target, 'recoil');
 		}
 
 		if (target && pokemon !== target) target.gotAttacked(move, damage, pokemon);
@@ -584,6 +584,10 @@ exports.BattleScripts = {
 			pokemon.switchFlag = move.selfSwitch;
 		}
 		return damage;
+	},
+
+	calcRecoilDamage: function (damageDealt, move) {
+		return this.clampIntRange(Math.round(damageDealt * move.recoil[0] / move.recoil[1]), 1);
 	},
 
 	canMegaEvo: function (pokemon) {
