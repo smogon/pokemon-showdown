@@ -568,14 +568,12 @@ class Mafia extends Rooms.RoomGame {
 			this.setTimer(0.5);
 			break;
 		case 'day':
+		case 'initial':
 			this.gamestate = 'lynch';
 			this.townMeeting();
 			this.gameEvent('onDay', 2);
 			break;
 		case 'lynch':
-			this.day++;
-			// falls through
-		case 'initial':
 			this.gamestate = 'night';
 			if (this.autoModchat) {
 				this.oldModchat = this.room.modchat;
