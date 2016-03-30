@@ -238,11 +238,11 @@ class Mafia extends Rooms.RoomGame {
 		return JSON.stringify(gameObj);
 	}
 
-	onJoin(user) {
+	onConnect(user, connection) {
 		if (user.userid in this.players) {
-			user.sendTo(this.room, '|uhtml|mafia' + this.room.gameNumber + 'pregame|' + this.pregameWindow(true));
+			connection.sendTo(this.room, '|uhtml|mafia' + this.room.gameNumber + 'pregame|' + this.pregameWindow(true));
 		} else {
-			user.sendTo(this.room, '|uhtml|mafia' + this.room.gameNumber + 'pregame|' + this.pregameWindow(false));
+			connection.sendTo(this.room, '|uhtml|mafia' + this.room.gameNumber + 'pregame|' + this.pregameWindow(false));
 		}
 	}
 
@@ -475,28 +475,30 @@ class Mafia extends Rooms.RoomGame {
 			}
 		}
 
-		for (let i = 0; i < this.executionOrder.length; i++) {
-			let player = this.executionOrder[i];
-			if (player.toExecute) {
-				if (player.roleBlocked) {
-					player.roleBlocked = false;
-					player.toExecute = null;
-				} else {
-					if (player.using) {
-						player.used[player.using] = 1;
-						delete player.using;
-					}
-					let output;
-					if (player.target) {
-						output = Tools.escapeHTML(player.toExecute(player.target));
+		if (this.executionOrder) {
+			for (let i = 0; i < this.executionOrder.length; i++) {
+				let player = this.executionOrder[i];
+				if (player.toExecute) {
+					if (player.roleBlocked) {
+						player.roleBlocked = false;
+						player.toExecute = null;
 					} else {
-						output = Tools.escapeHTML(player.toExecute());
-					}
+						if (player.using) {
+							player.used[player.using] = 1;
+							delete player.using;
+						}
+						let output;
+						if (player.target) {
+							output = Tools.escapeHTML(player.toExecute(player.target));
+						} else {
+							output = Tools.escapeHTML(player.toExecute());
+						}
 
-					if (output) {
-						player.playerWindow(player.class.image, output);
+						if (output) {
+							player.playerWindow(player.class.image, output);
+						}
+						player.toExecute = null;
 					}
-					player.toExecute = null;
 				}
 			}
 		}
