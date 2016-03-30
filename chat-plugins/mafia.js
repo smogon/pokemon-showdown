@@ -49,6 +49,7 @@ class MafiaPlayer extends Rooms.RoomGamePlayer {
 
 		this.game.announcementWindow(deadImage, message);
 		this.game.playerCount--;
+		this.game.dead.push(this.name);
 		delete this.game.players[this.userid];
 		this.destroy();
 	}
@@ -60,6 +61,7 @@ class MafiaPlayer extends Rooms.RoomGamePlayer {
 			this.game.announcementWindow(deadImage, Tools.escapeHTML(this.name + ', the ' + this.class.name) + ' was eliminated from the game.');
 		}
 		this.game.playerCount--;
+		this.game.dead.push(this.name);
 		delete this.game.players[this.userid];
 		this.destroy();
 	}
@@ -203,6 +205,7 @@ class Mafia extends Rooms.RoomGame {
 		this.day = 1;
 		this.gamestate = 'pregame';
 		this.timer = null;
+		this.dead = [];
 
 		for (let i in settings) {
 			this[i] = settings[i];
@@ -370,7 +373,7 @@ class Mafia extends Rooms.RoomGame {
 	// Simple window, used for announcements and the likes.
 	mafiaWindow(image, content) {
 		let output = '<div class="broadcast-blue">';
-		output += '<h3>' + ((this.gamestate === 'day' || this.gamestate === 'lynch') ? 'Day ' : 'Night ') + this.day + '</h3>';
+		output += '<h3>' + ((this.gamestate === 'night') ? 'Night ' : 'Day ') + this.day + '</h3>';
 		output += '<table><tr><td style="text-align:center;">' + image + '</td><td style="text-align:center;width:100%;">';
 		output += content;
 		output += '</td></tr></table></div>';
@@ -382,6 +385,28 @@ class Mafia extends Rooms.RoomGame {
 		this.room.update();
 	}
 
+	displayGamestate() {
+		let alive = [];
+		let mafia = [];
+
+		for (let i in this.players) {
+			alive.push(this.players[i].name);
+			if (this.players[i].class.side === 'mafia') {
+				mafia.push(this.players[i].name);
+			}
+		}
+
+		let content = '<strong>Roles:</strong> ' + this.roleString + '<br/><strong>Alive:</strong> ' + alive.join(', ') + '<br/><strong>Dead:</strong> ' + this.dead.join(', ');
+
+		for (let i in this.players) {
+			if (this.players[i].class.side === 'mafia') {
+				this.players[i].sendRoom('|html|' + this.mafiaWindow(this.players[i].class.image, content + '<br/><strong>Mafia:</strong> ' + mafia.join(', ')));
+			} else {
+				this.players[i].sendRoom('|html|' + this.mafiaWindow(this.players[i].class.image, content));
+			}
+		}
+	}
+
 	updateVotes() {
 		let text = '';
 		for (let i in this.currentVote) {
@@ -389,7 +414,7 @@ class Mafia extends Rooms.RoomGame {
 			if (this.anonVotes) {
 				text += this.currentVote[i].votes + ' votes.';
 			} else {
-				text += this.currentVote[i].voters.join(',');
+				text += this.currentVote[i].voters.join(', ');
 			}
 			text += '<br/>';
 		}
@@ -441,7 +466,7 @@ class Mafia extends Rooms.RoomGame {
 		this.room.send('|uhtmlchange|mafia' + this.room.gameNumber + 'pregame|<div class="infobox">The game has started!</div>');
 		this.allowRenames = false;
 		this.gamestate = 'initial';
-		this.gameEvent('atStart', 1);
+		this.progress();
 	}
 
 	end(image, content) {
@@ -558,17 +583,19 @@ class Mafia extends Rooms.RoomGame {
 
 		switch (this.gamestate) {
 		case 'night':
-			if (this.autoModchat) {
+			if (this.autoModchat && this.day) {
 				if (this.room.modchat === '+') {
 					this.room.modchat = this.oldModchat;
 				}
 				delete this.oldModchat;
 			}
+			// falls through
+		case 'initial':
 			this.gamestate = 'day';
+			this.displayGamestate();
 			this.setTimer(0.5);
 			break;
 		case 'day':
-		case 'initial':
 			this.gamestate = 'lynch';
 			this.townMeeting();
 			this.gameEvent('onDay', 2);
