@@ -396,11 +396,11 @@ class Mafia extends Rooms.RoomGame {
 			}
 		}
 
-		let content = '<strong>Roles:</strong> ' + this.roleString + '<br/><strong>Alive:</strong> ' + alive.join(', ') + '<br/><strong>Dead:</strong> ' + this.dead.join(', ');
+		let content = '<strong>Roles:</strong> ' + this.roleString + '<br/><strong>Alive:</strong> ' + Tools.escapeHTML(alive.join(', ')) + '<br/><strong>Dead:</strong> ' + Tools.escapeHTML(this.dead.join(', '));
 
 		for (let i in this.players) {
 			if (this.players[i].class.side === 'mafia') {
-				this.players[i].sendRoom('|html|' + this.mafiaWindow(this.players[i].class.image, content + '<br/><strong>Mafia:</strong> ' + mafia.join(', ')));
+				this.players[i].sendRoom('|html|' + this.mafiaWindow(this.players[i].class.image, content + '<br/><strong>Mafia:</strong> ' + Tools.escapeHTML(mafia.joi0n(', '))));
 			} else {
 				this.players[i].sendRoom('|html|' + this.mafiaWindow(this.players[i].class.image, content));
 			}
