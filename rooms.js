@@ -102,7 +102,7 @@ let Room = (() => {
 
 		message = CommandParser.parse(message, this, user, connection);
 
-		if (message && message !== true) {
+		if (message && message !== true && typeof message.then !== 'function') {
 			this.add('|c|' + user.getIdentity(this.id) + '|' + message);
 		}
 		this.update();
