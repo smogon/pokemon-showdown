@@ -92,7 +92,9 @@ if (Config.watchconfig) {
 			global.Config = require('./config/config.js');
 			if (global.Users) Users.cacheGroupData();
 			console.log('Reloaded config/config.js');
-		} catch (e) {}
+		} catch (e) {
+			console.log('Error reloading config/config.js: ' + e.stack);
+		}
 	});
 }
 
