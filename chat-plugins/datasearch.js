@@ -1,8 +1,9 @@
 /**
- * Dexsearch commands
+ * Data searching commands.
  * Pokemon Showdown - http://pokemonshowdown.com/
  *
- * Commands for advanced searching for pokemon, moves, and items.
+ * Commands for advanced searching for pokemon, moves, items and learnsets.
+ * These commands run on a seperate process if possible, and execute synchronously otherwise.
  *
  * @license MIT license
  */
@@ -50,6 +51,9 @@ const PM = exports.PM = new ProcessManager({
 			break;
 		case 'itemsearch':
 			result = runItemsearch(data.target, data.cmd, data.canAll, data.message);
+			break;
+		case 'learn':
+			result = runLearn(data.target, data.message);
 			break;
 		default:
 			result = null;
@@ -193,6 +197,42 @@ exports.commands = {
 	"Command accepts natural language. (tip: fewer words tend to work better)",
 	"Searches with \"fling\" in them will find items with the specified Fling behavior.",
 	"Searches with \"natural gift\" in them will find items with the specified Natural Gift behavior."],
+
+	learnset: 'learn',
+	learnall: 'learn',
+	learn5: 'learn',
+	g6learn: 'learn',
+	rbylearn: 'learn',
+	gsclearn: 'learn',
+	advlearn: 'learn',
+	dpplearn: 'learn',
+	bw2learn: 'learn',
+	learn: function (target, room, user, connection, cmd, message) {
+		if (!this.canBroadcast(true)) return;
+		if (this.broadcasting && !user.can('broadcast', null, room)) {
+			this.errorReply("You need to be voiced to broadcast this command's information.");
+			this.errorReply("To see it for yourself, use: /" + message.substr(1));
+			return false;
+		}
+
+		if (!target) return this.parse('/help learn');
+
+		runSearch({
+			target: target,
+			cmd: 'learn',
+			message: cmd,
+		}).then(response => {
+			if (!this.canBroadcast()) return;
+			if (response.reply) {
+				this.sendReplyBox(response.reply);
+			} else if (response.error) {
+				this.errorReply(response.error);
+			}
+			room.update();
+		});
+	},
+	learnhelp: ["/learn [pokemon], [move, move, ...] - Displays how a Pok\u00e9mon can learn the given moves, if it can at all.",
+		"!learn [pokemon], [move, move, ...] - Show everyone that information. Requires: + % @ # & ~"],
 };
 
 if (process.send && module === process.mainModule) {
@@ -1137,6 +1177,82 @@ function runItemsearch(target, cmd, canAll, message) {
 		resultsStr += "No items found. Try a more general search";
 	}
 	return {reply: resultsStr};
+}
+
+function runLearn(target, cmd) {
+	let lsetData = {set:{}};
+	let targets = target.split(',');
+	let template = Tools.getTemplate(targets[0]);
+	let move = {};
+	let problem;
+	let gen = ({rby:1, gsc:2, adv:3, dpp:4, bw2:5}[cmd.substring(0, 3)] || 6);
+	let format = 'gen' + gen + 'ou';
+	let all = (cmd === 'learnall');
+	if (cmd === 'learn5') lsetData.set.level = 5;
+	if (cmd === 'g6learn') lsetData.format = {noPokebank: true};
+
+	if (!template.exists) {
+		return {error: "Pok\u00e9mon '" + template.id + "' not found."};
+	}
+
+	if (targets.length < 2) {
+		return {error: "You must specify at least one move."};
+	}
+
+	for (let i = 1, len = targets.length; i < len; i++) {
+		move = Tools.getMove(targets[i]);
+		if (!move.exists) {
+			return {error: "Move '" + move.id + "' not found."};
+		}
+		problem = TeamValidator(format).checkLearnset(move, template.species, lsetData);
+		if (problem) break;
+	}
+	let buffer = "";
+	if (format) buffer += "In Gen " + gen + ", ";
+	buffer += "" + template.name + (problem ? " <span class=\"message-learn-cannotlearn\">can't</span> learn " : " <span class=\"message-learn-canlearn\">can</span> learn ") + (targets.length > 2 ? "these moves" : move.name);
+	if (!problem) {
+		let sourceNames = {E:"egg", S:"event", D:"dream world", X:"egg, traded back", Y: "event, traded back"};
+		let sourcesBefore = lsetData.sourcesBefore;
+		if (lsetData.sources || sourcesBefore < gen) buffer += " only when obtained";
+		buffer += " from:<ul class=\"message-learn-list\">";
+		if (lsetData.sources) {
+			let sources = lsetData.sources.map(source => {
+				if (source.slice(0, 3) === '1ET') {
+					return '2X' + source.slice(3);
+				}
+				if (source.slice(0, 3) === '1ST') {
+					return '2Y' + source.slice(3);
+				}
+				return source;
+			}).sort();
+			let prevSourceType;
+			let prevSourceCount = 0;
+			for (let i = 0, len = sources.length; i < len; ++i) {
+				let source = sources[i];
+				if (source.substr(0, 2) === prevSourceType) {
+					if (prevSourceCount < 0) {
+						buffer += ": " + source.substr(2);
+					} else if (all || prevSourceCount < 3) {
+						buffer += ", " + source.substr(2);
+					} else if (prevSourceCount === 3) {
+						buffer += ", ...";
+					}
+					++prevSourceCount;
+					continue;
+				}
+				prevSourceType = source.substr(0, 2);
+				prevSourceCount = source.substr(2) ? 0 : -1;
+				buffer += "<li>gen " + source.charAt(0) + " " + sourceNames[source.charAt(1)];
+				if (prevSourceType === '5E' && template.maleOnlyHidden) buffer += " (cannot have hidden ability)";
+				if (source.substr(2)) buffer += ": " + source.substr(2);
+			}
+		}
+		if (sourcesBefore) {
+			buffer += "<li>" + (sourcesBefore < gen ? "gen " + sourcesBefore + " or earlier" : "anywhere") + " (all moves are level-up/tutor/TM/HM in gen " + Math.min(gen, sourcesBefore) + (sourcesBefore < gen ? " to " + gen : "") + ")";
+		}
+		buffer += "</ul>";
+	}
+	return {reply: buffer};
 }
 
 function runSearch(query) {
