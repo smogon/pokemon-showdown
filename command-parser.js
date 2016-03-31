@@ -172,10 +172,10 @@ class CommandContext {
 	}
 	canBroadcast(checkOnly, suppressMessage) {
 		let message = this.canTalk(this.message);
+		if (!message) return false;
 		let normalized = message.toLowerCase().replace(/[^a-z0-9\s!,]/g, '');
 
 		if (!this.broadcasting && this.cmdToken === BROADCAST_TOKEN) {
-			if (!message) return false;
 			if (!this.user.can('broadcast', null, this.room)) {
 				this.errorReply("You need to be voiced to broadcast this command's information.");
 				this.errorReply("To see it for yourself, use: /" + message.substr(1));
