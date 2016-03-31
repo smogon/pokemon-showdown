@@ -1670,12 +1670,3 @@ exports.commands = {
 	},
 	htmlboxhelp: ["/htmlbox [message] - Displays a message, parsing HTML code contained. Requires: ~ # with global authority"],
 };
-
-process.nextTick(() => {
-	// This slow operation is done *after* we start listening for connections
-	// to the server. Anybody who connects while data is loading will
-	// have to wait a couple seconds before they are able to join the server, but
-	// at least they probably won't receive a connection error message.
-
-	Tools.includeMods();
-});
