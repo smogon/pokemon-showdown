@@ -403,39 +403,190 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
-		name: "Metagamiate",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3502303/\">Metagamiate</a>"],
+		name: "Ability Unity",
+		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3507278/\">Ability Unity</a>"],
 		section: "OM of the Month",
 		column: 2,
 
 		ruleset: ['OU'],
-		banlist: ['Dragonite', 'Kyurem-Black'],
-		onModifyMovePriority: -1,
-		onModifyMove: function (move, pokemon) {
-			if (move.type === 'Normal' && move.id !== 'hiddenpower' && !pokemon.hasAbility(['aerilate', 'pixilate', 'refrigerate'])) {
-				let types = pokemon.getTypes();
-				let type = types.length < 2 || !pokemon.set.shiny ? types[0] : types[1];
-				move.type = type;
-				move.isMetagamiate = true;
+		banlist: ['Ignore Illegal Abilities', 'Archeops', 'Regigigas', 'Slaking'],
+		onValidateTeam: function (team) {
+			let problems = [];
+			let pokedex = Object.keys(Tools.data.Pokedex);
+			let bannedAbilities = {'Aerilate': 1, 'Arena Trap': 1, 'Fur Coat': 1, 'Huge Power': 1, 'Imposter': 1, 'Parental Bond': 1, 'Prankster': 1, 'Pure Power': 1, 'Shadow Tag': 1, 'Simple':1, 'Speed Boost': 1};
+			for (let i = 0; i < team.length; i++) {
+				let template = this.getTemplate(team[i].species);
+				let ability = team[i].ability;
+				if (!ability) {
+					problems.push(template.species + " needs to have an ability.");
+					continue;
+				}
+				let sources = pokedex.filter(pokemon => template.types.sort().toString() === Tools.data.Pokedex[pokemon].types.sort().toString() && Object.values(Tools.data.Pokedex[pokemon].abilities).indexOf(ability) >= 0);
+				if (!sources.length) {
+					problems.push(template.species + " cannot obtain the ability " + ability + ".");
+					continue;
+				}
+				if (ability in bannedAbilities) {
+					let legalAbility = false;
+					for (let i in template.abilities) {
+						if (ability === template.abilities[i]) legalAbility = true;
+					}
+					if (!legalAbility) problems.push('The ability ' + ability + ' is banned on Pok\u00e9mon that do not naturally have it.');
+				}
 			}
-		},
-		onBasePowerPriority: 8,
-		onBasePower: function (basePower, attacker, defender, move) {
-			if (!move.isMetagamiate) return;
-			return this.chainModify([0x14CD, 0x1000]);
+			return problems;
 		},
 	},
 	{
-		name: "Unreleased OU",
-		desc: [
-			"Standard OU including unreleased Pokémon, abilities and items, and moves obtained from RBY.",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3566186/\">Unreleased OU</a>",
-		],
+		name: "Megamons",
+		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3566648/\">Megamons</a>"],
 		section: "OM of the Month",
 
-		mod: 'unreleased',
-		ruleset: ['Pokemon', 'Species Clause', 'Nickname Clause', 'Moody Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Swagger Clause', 'Baton Pass Clause', 'Sleep Clause Mod', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
-		banlist: ['Illegal', 'Uber', 'Shadow Tag', 'Soul Dew'],
+		ruleset: ['Species Clause', 'Nickname Clause', 'Moody Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Swagger Clause', 'Mega Rayquaza Clause', 'Sleep Clause Mod', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
+		banlist: ['Unreleased', 'Illegal', 'Gengar-Mega', 'Mewtwo-Mega-X', 'Mewtwo-Mega-Y', 'Soul Dew'],
+		onValidateTeam: function (team) {
+			let problems = [];
+			let kyurems = 0;
+			for (let i = 0; i < team.length; i++) {
+				if (team[i].species === 'Kyurem-White' || team[i].species === 'Kyurem-Black') {
+					if (kyurems > 0) {
+						problems.push('You cannot have more than one Kyurem-Black/Kyurem-White.');
+						break;
+					}
+					kyurems++;
+				}
+			}
+			return problems;
+		},
+		onChangeSet: function (set, format) {
+			let item = this.getItem(set.item);
+			let template = this.getTemplate(set.species);
+			let problems = [];
+			let totalEV = 0;
+
+			if (set.species === set.name) delete set.name;
+			if (set.moves) {
+				for (let i = 0; i < set.moves.length; i++) {
+					let move = this.getMove(set.moves[i]);
+					if (move.isNonstandard) {
+						problems.push(move.name + ' does not exist.');
+					}
+				}
+			}
+			if (set.moves && set.moves.length > 4) {
+				problems.push((set.name || set.species) + ' has more than four moves.');
+			}
+			if (set.level && set.level > 100) {
+				problems.push((set.name || set.species) + ' is higher than level 100.');
+			}
+
+			if (template.isNonstandard) {
+				problems.push(set.species + ' does not exist.');
+			}
+			if (this.getAbility(set.ability).isNonstandard) {
+				problems.push(set.ability + ' does not exist.');
+			}
+			if (item.isNonstandard) {
+				if (item.isNonstandard === 'gen2') {
+					problems.push(item.name + ' does not exist outside of gen 2.');
+				} else {
+					problems.push(item.name + ' does not exist.');
+				}
+			}
+			for (let k in set.evs) {
+				if (typeof set.evs[k] !== 'number' || set.evs[k] < 0) {
+					set.evs[k] = 0;
+				}
+				totalEV += set.evs[k];
+			}
+			if (totalEV > 510) {
+				problems.push((set.name || set.species) + " has more than 510 total EVs.");
+			}
+
+			if (template.gender) {
+				if (set.gender !== template.gender) {
+					set.gender = template.gender;
+				}
+			} else {
+				if (set.gender !== 'M' && set.gender !== 'F') {
+					set.gender = undefined;
+				}
+			}
+
+			let baseTemplate = this.getTemplate(template.baseSpecies);
+			if (set.ivs && baseTemplate.gen >= 6 && (template.eggGroups[0] === 'Undiscovered' || template.species === 'Manaphy') && !template.prevo && !template.nfe && template.species !== 'Unown' && template.baseSpecies !== 'Pikachu' && (template.baseSpecies !== 'Diancie' || !set.shiny)) {
+				let perfectIVs = 0;
+				for (let i in set.ivs) {
+					if (set.ivs[i] >= 31) perfectIVs++;
+				}
+				if (perfectIVs < 3) problems.push((set.name || set.species) + " must have at least three perfect IVs because it's a legendary in gen 6.");
+			}
+
+			let moves = [];
+			if (set.moves) {
+				let hasMove = {};
+				for (let i = 0; i < set.moves.length; i++) {
+					let move = this.getMove(set.moves[i]);
+					let moveid = move.id;
+					if (hasMove[moveid]) continue;
+					hasMove[moveid] = true;
+					moves.push(set.moves[i]);
+				}
+			}
+			set.moves = moves;
+
+			let battleForme = template.battleOnly && template.species;
+			if (battleForme && !template.isMega) {
+				if (template.requiredAbility && set.ability !== template.requiredAbility) {
+					problems.push("" + template.species + " transforms in-battle with " + template.requiredAbility + "."); // Darmanitan-Zen
+				}
+				if (template.requiredItem && item.name !== template.requiredItem) {
+					problems.push("" + template.species + " transforms in-battle with " + template.requiredItem + '.'); // Primal
+				}
+				if (template.requiredMove && set.moves.indexOf(toId(template.requiredMove)) < 0) {
+					problems.push("" + template.species + " transforms in-battle with " + template.requiredMove + "."); // Meloetta-Pirouette
+				}
+				if (!format.noChangeForme) set.species = template.baseSpecies; // Fix forme for Aegislash, Castform, etc.
+			} else {
+				if (template.requiredItem && item.name !== template.requiredItem && !template.isMega) {
+					problems.push("" + (set.name || set.species) + " needs to hold " + template.requiredItem + '.'); // Plate/Drive/Griseous Orb
+				}
+				if (template.requiredMove && set.moves.indexOf(toId(template.requiredMove)) < 0) {
+					problems.push("" + (set.name || set.species) + " needs to have the move " + template.requiredMove + "."); // Keldeo-Resolute
+				}
+
+				if (item.forcedForme && template.species === this.getTemplate(item.forcedForme).baseSpecies && !format.noChangeForme) {
+					set.species = item.forcedForme;
+				}
+			}
+
+			if (set.species !== template.species) {
+				template = this.getTemplate(set.species);
+				if (!format.noChangeAbility) {
+					let legalAbility = false;
+					for (let i in template.abilities) {
+						if (template.abilities[i] !== set.ability) continue;
+						legalAbility = true;
+						break;
+					}
+					if (!legalAbility) {
+						set.ability = template.abilities['0'];
+					}
+				}
+			}
+
+			if (set.shiny && template.unobtainableShiny) {
+				problems.push("It's currently not possible to get a shiny " + template.species + ".");
+			}
+
+			return problems;
+		},
+		onSwitchIn: function (pokemon) {
+			let item = pokemon.getItem();
+			if (item.megaEvolves && pokemon.template.species === item.megaEvolves) {
+				pokemon.canMegaEvo = item.megaStone;
+			}
+		},
 	},
 	{
 		name: "[Seasonal] Dimension Doom",
