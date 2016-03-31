@@ -1898,7 +1898,6 @@ exports.commands = {
 				CommandParser.uncacheTree('./command-parser.js');
 				delete require.cache[require.resolve('./commands.js')];
 				delete require.cache[require.resolve('./chat-plugins/info.js')];
-				delete require.cache[require.resolve('./chat-plugins/dexsearch.js')];
 				global.CommandParser = require('./command-parser.js');
 
 				let runningTournaments = Tournaments.tournaments;
