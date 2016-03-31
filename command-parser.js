@@ -190,9 +190,8 @@ class CommandContext {
 				this.add('|c|' + this.user.getIdentity(this.room.id) + '|' + (suppressMessage || message));
 				this.room.lastBroadcast = normalized;
 				this.room.lastBroadcastTime = Date.now();
-
-				this.broadcasting = true;
 			}
+			this.broadcasting = true;
 		}
 		return true;
 	}

@@ -71,7 +71,7 @@ exports.commands = {
 		if (!this.canBroadcast(true)) return;
 		if (!target) return this.parse('/help dexsearch');
 
-		runSearch({
+		return runSearch({
 			target: target,
 			cmd: 'dexsearch',
 			canAll: (!this.broadcasting || room.isPersonal),
@@ -119,7 +119,7 @@ exports.commands = {
 		}
 		if (!qty) targetsBuffer.push("random1");
 
-		runSearch({
+		return runSearch({
 			target: targetsBuffer.join(","),
 			cmd: 'randpoke',
 			canAll: (!this.broadcasting || room.isPersonal),
@@ -144,7 +144,7 @@ exports.commands = {
 		if (!this.canBroadcast(true)) return;
 		if (!target) return this.parse('/help movesearch');
 
-		runSearch({
+		return runSearch({
 			target: target,
 			cmd: 'movesearch',
 			canAll: (!this.broadcasting || room.isPersonal),
@@ -172,14 +172,9 @@ exports.commands = {
 	isearch: 'itemsearch',
 	itemsearch: function (target, room, user, connection, cmd, message) {
 		if (!this.canBroadcast(true)) return;
-		if (this.broadcasting && !user.can('broadcast', null, room)) {
-			this.errorReply("You need to be voiced to broadcast this command's information.");
-			this.errorReply("To see it for yourself, use: /" + message.substr(1));
-			return false;
-		}
 		if (!target) return this.parse('/help itemsearch');
 
-		runSearch({
+		return runSearch({
 			target: target,
 			cmd: 'itemsearch',
 			canAll: (!this.broadcasting || room.isPersonal),
@@ -210,12 +205,6 @@ exports.commands = {
 	bw2learn: 'learn',
 	learn: function (target, room, user, connection, cmd, message) {
 		if (!this.canBroadcast(true)) return;
-		if (this.broadcasting && !user.can('broadcast', null, room)) {
-			this.errorReply("You need to be voiced to broadcast this command's information.");
-			this.errorReply("To see it for yourself, use: /" + message.substr(1));
-			return false;
-		}
-
 		if (!target) return this.parse('/help learn');
 
 		return runSearch({
