@@ -256,6 +256,8 @@ if (process.send && module === process.mainModule) {
 	process.on('disconnect', () => process.exit());
 
 	require('../repl.js').start('dexsearch', cmd => eval(cmd));
+} else if (!PM.maxProcesses) {
+	process.nextTick(() => Tools.includeMods());
 }
 
 function runDexsearch(target, cmd, canAll, message) {

@@ -1670,3 +1670,5 @@ exports.commands = {
 	},
 	htmlboxhelp: ["/htmlbox [message] - Displays a message, parsing HTML code contained. Requires: ~ # with global authority"],
 };
+
+process.nextTick(() => Tools.includeData());
