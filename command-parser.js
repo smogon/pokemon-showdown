@@ -171,8 +171,10 @@ class CommandContext {
 		return true;
 	}
 	canBroadcast(checkOnly, suppressMessage) {
+		let message = this.canTalk(this.message);
+		let normalized = message.toLowerCase().replace(/[^a-z0-9\s!,]/g, '');
+
 		if (!this.broadcasting && this.cmdToken === BROADCAST_TOKEN) {
-			let message = this.canTalk(this.message);
 			if (!message) return false;
 			if (!this.user.can('broadcast', null, this.room)) {
 				this.errorReply("You need to be voiced to broadcast this command's information.");
@@ -181,18 +183,17 @@ class CommandContext {
 			}
 
 			// broadcast cooldown
-			let normalized = message.toLowerCase().replace(/[^a-z0-9\s!,]/g, '');
 			if (this.room.lastBroadcast === normalized &&
 					this.room.lastBroadcastTime >= Date.now() - BROADCAST_COOLDOWN) {
 				this.errorReply("You can't broadcast this because it was just broadcast.");
 				return false;
 			}
-			if (!checkOnly) {
-				this.add('|c|' + this.user.getIdentity(this.room.id) + '|' + (suppressMessage || message));
-				this.room.lastBroadcast = normalized;
-				this.room.lastBroadcastTime = Date.now();
-			}
 			this.broadcasting = true;
+		}
+		if (this.broadcasting && !checkOnly) {
+			this.add('|c|' + this.user.getIdentity(this.room.id) + '|' + (suppressMessage || message));
+			this.room.lastBroadcast = normalized;
+			this.room.lastBroadcastTime = Date.now();
 		}
 		return true;
 	}
