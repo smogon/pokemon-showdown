@@ -104,9 +104,10 @@ class CommandContext {
 	}
 	errorReply(message) {
 		if (this.pmTarget) {
-			this.connection.send('|pm|' + this.user.getIdentity() + '|' + (this.pmTarget.getIdentity ? this.pmTarget.getIdentity() : ' ' + this.pmTarget) + '|/error ' + message);
+			let prefix = '|pm|' + this.user.getIdentity() + '|' + (this.pmTarget.getIdentity ? this.pmTarget.getIdentity() : ' ' + this.pmTarget) + '|/error ';
+			this.connection.send(prefix + message.replace(/\n/g, prefix));
 		} else {
-			this.sendReply('|html|<div class="message-error">' + Tools.escapeHTML(message) + '</div>');
+			this.sendReply('|html|<div class="message-error">' + Tools.escapeHTML(message).replace(/\n/g, '<br />') + '</div>');
 		}
 	}
 	sendReplyBox(html) {
