@@ -3,7 +3,7 @@
  * Pokemon Showdown - http://pokemonshowdown.com/
  *
  * Commands for advanced searching for pokemon, moves, items and learnsets.
- * These commands run on a seperate process if possible, and execute synchronously otherwise.
+ * These commands run on a child process by default.
  *
  * @license MIT license
  */
@@ -12,10 +12,11 @@
 
 const ProcessManager = require('./../process-manager');
 
+const MAX_PROCESSES = 1;
 const RESULTS_MAX_LENGTH = 10;
 
 const PM = exports.PM = new ProcessManager({
-	maxProcesses: 1,
+	maxProcesses: MAX_PROCESSES,
 	execFile: __filename,
 	onMessageUpstream: function (message) {
 		// Protocol:
