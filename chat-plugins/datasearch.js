@@ -217,7 +217,7 @@ exports.commands = {
 
 		if (!target) return this.parse('/help learn');
 
-		runSearch({
+		return runSearch({
 			target: target,
 			cmd: 'learn',
 			message: cmd,
