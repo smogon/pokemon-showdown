@@ -249,6 +249,7 @@ if (process.send && module === process.mainModule) {
 	global.Tools = require('../tools.js');
 	global.toId = Tools.getId;
 	Tools.includeData();
+	Tools.includeMods();
 	global.TeamValidator = require('../team-validator.js');
 
 	process.on('message', message => PM.onMessageDownstream(message));
@@ -1191,8 +1192,12 @@ function runLearn(target, cmd) {
 	if (cmd === 'learn5') lsetData.set.level = 5;
 	if (cmd === 'g6learn') lsetData.format = {noPokebank: true};
 
-	if (!template.exists) {
+	if (!template.exists || template.id === 'missingno') {
 		return {error: "Pok\u00e9mon '" + template.id + "' not found."};
+	}
+
+	if (template.gen > gen) {
+		return {error: template.name + " didn't exist yet in generation " + gen + "."};
 	}
 
 	if (targets.length < 2) {
@@ -1201,8 +1206,11 @@ function runLearn(target, cmd) {
 
 	for (let i = 1, len = targets.length; i < len; i++) {
 		move = Tools.getMove(targets[i]);
-		if (!move.exists) {
+		if (!move.exists || move.id === 'magikarpsrevenge') {
 			return {error: "Move '" + move.id + "' not found."};
+		}
+		if (move.gen > gen) {
+			return {error: move.name + " didn't exist yet in generation " + gen + "."};
 		}
 		problem = TeamValidator(format).checkLearnset(move, template.species, lsetData);
 		if (problem) break;
