@@ -3616,8 +3616,8 @@ exports.BattleScripts = {
 		let pool = [
 			'azumarill', 'azurill', 'blaziken', 'braixen', 'blitzle', 'bouffalant', 'castform', 'charizard', 'charmander',
 			'charmeleon', 'chimchar', 'combusken', 'cyndaquil', 'deerling', 'delphox', 'dragonair', 'emboar', 'fennekin',
-			'girafarig', 'goodra', 'goomy', 'heatmor', 'infernape', 'linoone', 'marrill', 'metang', 'mightyena', 'miltank',
-			'monferno', 'oddish', 'pansear', 'pignite', 'qwilava', 'sawsbuck', 'shelgon', 'simisear', 'skiddoo', 'sliggoo',
+			'girafarig', 'goodra', 'goomy', 'heatmor', 'infernape', 'linoone', 'marill', 'metang', 'mightyena', 'miltank',
+			'monferno', 'oddish', 'pansear', 'pignite', 'quilava', 'sawsbuck', 'shelgon', 'simisear', 'skiddo', 'sliggoo',
 			'stantler', 'tepig', 'torchic', 'torkoal', 'typhlosion', 'watchog', 'zebstrika', 'zweilous',
 		];
 		let sapSippers = {
