@@ -403,6 +403,25 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
+		name: "Shitmons",
+		desc: ["&bullet; <a href='http://www.smogon.com/forums/threads/3534206'>OM of the Decade</a>"],
+		section: "OM of the Decade",
+		column: 2,
+
+		gameType: 'doubles',
+		team: 'randomShitmons',
+		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
+	},
+	{
+		name: "Weedmons",
+		desc: ["&bullet; <a href='http://www.smogon.com/forums/threads/3534206'>OM of the Decade</a>"],
+		section: "OM of the Decade",
+
+		team: 'randomWeedmons',
+		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
+		banlist: ['Uber', 'Shadow Tag', 'Soul Dew'],
+	},
+	{
 		name: "Ability Unity",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3507278/\">Ability Unity</a>"],
 		section: "OM of the Month",
