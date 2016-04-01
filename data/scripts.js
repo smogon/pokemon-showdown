@@ -3563,7 +3563,7 @@ exports.BattleScripts = {
 			let template = this.getTemplate(id);
 			if (template.species in {'Honedge':1, 'Doublade':1, 'Aegislash':1, 'Kitsunoh':1}) continue;
 			let bst = template.baseStats.hp + template.baseStats.atk + template.baseStats.def + template.baseStats.spa + template.baseStats.spd + template.baseStats.spe;
-			if (template.species !== 'Pichu-Spiky-eared' && bst < 600) {
+			if (template.species !== 'Pichu-Spiky-eared' && bst <= 600) {
 				formes[hasDexNumber[template.num]].push(template.species);
 			}
 		}
