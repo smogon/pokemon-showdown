@@ -19,7 +19,7 @@ exports.BattleAliases = {
 	"vgc": "VGC 2016",
 	"bsdoubles": "Battle Spot Doubles",
 	"bstriples": "Battle Spot Triples",
-	"seasonal": "[Seasonal] Dimension Doom",
+	"seasonal": "[Seasonal] Super Staff Bros. Melee",
 	"createapokemon": "CAP",
 	"2v2": "2v2 Doubles",
 	"cc1v1": "Challenge Cup 1v1",
