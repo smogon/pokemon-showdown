@@ -1275,7 +1275,7 @@ exports.Formats = [
 				this.add('c|@scpinion|/me welcomes funbro');
 			}
 			if (name === 'scythernoswiping') {
-				this.add('c|+Scyther NO Swiping|/me prepares to swipe victory');
+				this.add('c|%Scyther NO Swiping|/me prepares to swipe victory');
 			}
 			if (name === 'shrang') {
 				this.add('raw| [15:30] @<b>Scrappie</b>: It is I, the great and powerful shrang, who is superior to you proles in every conceivable way.');
@@ -1770,7 +1770,7 @@ exports.Formats = [
 				this.add("c|@scpinion|guys, I don't even know how to pronounce scpinion");
 			}
 			if (name === 'scythernoswiping') {
-				this.add('c|+Scyther NO Swiping|Aww man!');
+				this.add('c|%Scyther NO Swiping|Aww man!');
 			}
 			if (name === 'shrang') {
 				this.add('c|@shrang|FUCKING 2 YO KID');
