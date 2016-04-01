@@ -1666,7 +1666,7 @@ exports.Formats = [
 				this.add('c|+Juanma|Your mom gazed back into me.');
 			}
 			if (name === 'kalalokki') {
-				this.add('c|+Kalalokki|(•_•)');
+				this.add('c|+Kalalokki|(⌐■_■)');
 				this.add('c|+Kalalokki|( •_•)>⌐■-■');
 				this.add('c|+Kalalokki|(x_x)');
 			}
