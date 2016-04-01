@@ -3747,7 +3747,7 @@ exports.BattleMovedex = {
 		},
 		onAfterMoveSecondarySelf: function (source, target, move) {
 			if (move.hits && move.hits === 3 && toId(source.name) === 'scythernoswiping') {
-				this.add('c|+Scyther NO Swiping|Oh baby a triple!!!');
+				this.add('c|%Scyther NO Swiping|Oh baby a triple!!!');
 			}
 		},
 		onEffectiveness: function (typeMod) {
