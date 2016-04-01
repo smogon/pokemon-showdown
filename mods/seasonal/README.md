@@ -972,7 +972,7 @@ EVs: 4 HP, 252 SpA, 252 Spe, Nature: Timid
 
 - Rest
 - Sleep Talk
-- Fur Coat
+- Quiver Dance
 - Wyvern's Wind - 10 PP Flying\Special 80\90%, -6 prio. Forces out opponent.
 
 ### Jetpack
@@ -1695,7 +1695,7 @@ EVs: 252 HP, 252 Atk, 4 Def, Nature: Adamant
 - Swords Dance
 - Gear Grind
 - Sacred Sword \ X-Scissor \ Knock Off
-- SPOOPY EDGE CUT - 30 PP Ghost\Physical 80\100%. Makes contact. Sharply lowers own accuracy.
+- SPOOPY EDGE CUT - 30 PP, +1 prio Ghost\Physical 80\100%. Makes contact. Sharply lowers own accuracy.
 
 ### Teremiare
 Zorua @ Red Card
