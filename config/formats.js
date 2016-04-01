@@ -1210,7 +1210,7 @@ exports.Formats = [
 				this.add('c|+MattL|If you strike me down, I shall become more powerful than you can possibly imagine.');
 			}
 			if (name === 'mcmeghan') {
-				this.add("c|@McMeghan|A Game of Odds");
+				this.add("c|&McMeghan|A Game of Odds");
 			}
 			if (name === 'megazard') {
 				this.add('c|+Megazard|New tricks');
@@ -1267,9 +1267,9 @@ exports.Formats = [
 				this.add("c|+SailorCosmos|Cosmos Prism Power Make Up!");
 			}
 			if (name === 'scotteh') {
-				this.add('c|@Scotteh|─────▄▄████▀█▄');
-				this.add('c|@Scotteh|───▄██████████████████▄');
-				this.add('c|@Scotteh|─▄█████.▼.▼.▼.▼.▼.▼.▼');
+				this.add('c|&Scotteh|─────▄▄████▀█▄');
+				this.add('c|&Scotteh|───▄██████████████████▄');
+				this.add('c|&Scotteh|─▄█████.▼.▼.▼.▼.▼.▼.▼');
 			}
 			if (name === 'scpinion') {
 				this.add('c|@scpinion|/me welcomes funbro');
@@ -1314,7 +1314,7 @@ exports.Formats = [
 			}
 			if (name === 'spy') {
 				sentences = ['curry consumer', 'try to keep up', 'fucking try to knock me down', 'Sometimes I slather myself in vasoline and pretend I\'m a slug', 'I\'m really feeling it!'];
-				this.add('c|@Spy|' + sentences[this.random(5)]);
+				this.add('c|+Spy|' + sentences[this.random(5)]);
 			}
 			if (name === 'starmei') {
 				this.add('c|+Starmei|Starmei wins again');
@@ -1653,7 +1653,7 @@ exports.Formats = [
 				this.add("raw|<div class=\"broadcast-red\"><b>The server is restarting soon.</b><br />Please finish your battles quickly. No new battles can be started until the server resets in a few minutes.</div>");
 			}
 			if (name === 'jdarden') {
-				this.add('c|+jdarden|;-;7');
+				this.add('c|@jdarden|;-;7');
 			}
 			if (name === 'jetpack') {
 				this.add('c|+Jetpack|You shouldn\'t of done that. ;_;');
@@ -1704,7 +1704,7 @@ exports.Formats = [
 				this.add('c|+MattL|Forgive me. I feel it again... the call from the light.');
 			}
 			if (name === 'mcmeghan') {
-				this.add("c|@McMeghan|Out-odded");
+				this.add("c|&McMeghan|Out-odded");
 			}
 			if (name === 'megazard') {
 				this.add('c|+Megazard|Old dog');
@@ -1792,7 +1792,7 @@ exports.Formats = [
 			}
 			if (name === 'spy') {
 				sentences = ['lolhax', 'crit mattered', 'bruh cum @ meh', '>thinking Pokemon takes any skill'];
-				this.add('c|@Spy|' + sentences[this.random(4)]);
+				this.add('c|+Spy|' + sentences[this.random(4)]);
 			}
 			if (name === 'snobalt') {
 				this.add('c|+Snobalt|Blasphemy!');
