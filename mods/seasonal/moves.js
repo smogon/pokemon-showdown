@@ -3710,7 +3710,7 @@ exports.BattleMovedex = {
 			let moves = [];
 			for (let i = 0; i < pokemon.moveset.length; i++) {
 				let move = pokemon.moveset[i].id;
-				if (move && move !== 'sleeptalk') moves.push(move);
+				if (move && move !== 'sleepwalk') moves.push(move);
 			}
 			let move = '';
 			if (moves.length) move = moves[this.random(moves.length)];
