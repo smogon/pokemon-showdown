@@ -1267,9 +1267,9 @@ exports.Formats = [
 				this.add("c|+SailorCosmos|Cosmos Prism Power Make Up!");
 			}
 			if (name === 'scotteh') {
-				this.add('c|@Scotteh|─────▄▄████▀█▄');
-				this.add('c|@Scotteh|───▄██████████████████▄');
-				this.add('c|@Scotteh|─▄█████.▼.▼.▼.▼.▼.▼.▼');
+				this.add('c|&Scotteh|─────▄▄████▀█▄');
+				this.add('c|&Scotteh|───▄██████████████████▄');
+				this.add('c|&Scotteh|─▄█████.▼.▼.▼.▼.▼.▼.▼');
 			}
 			if (name === 'scpinion') {
 				this.add('c|@scpinion|/me welcomes funbro');
@@ -1400,11 +1400,11 @@ exports.Formats = [
 				pokemon.phraseIndex = this.random(3);
 				//  Zeb's faint and entry phrases correspond to each other.
 				if (pokemon.phraseIndex === 2) {
-					this.add('c|@Zebraiken|bzzt n_n');
+					this.add('c|&Zebraiken|bzzt n_n');
 				} else if (pokemon.phraseIndex === 1) {
-					this.add('c|@Zebraiken|bzzt *_*');
+					this.add('c|&Zebraiken|bzzt *_*');
 				} else {
-					this.add('c|@Zebraiken|bzzt o_o');
+					this.add('c|&Zebraiken|bzzt o_o');
 				}
 			}
 			if (name === 'zeroluxgiven') {
@@ -1881,12 +1881,12 @@ exports.Formats = [
 			}
 			if (name === 'zebraiken') {
 				if (pokemon.phraseIndex === 2) {
-					this.add('c|@Zebraiken|bzzt u_u');
+					this.add('c|&Zebraiken|bzzt u_u');
 				} else if (pokemon.phraseIndex === 1) {
-					this.add('c|@Zebraiken|bzzt ._.');
+					this.add('c|&Zebraiken|bzzt ._.');
 				} else {
 					// Default faint.
-					this.add('c|@Zebraiken|bzzt x_x');
+					this.add('c|&Zebraiken|bzzt x_x');
 				}
 			}
 			if (name === 'zeroluxgiven') {
