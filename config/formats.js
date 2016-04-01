@@ -599,8 +599,7 @@ exports.Formats = [
 		onBegin: function () {
 			this.add("raw|Super Staff Bros. <b>MELEEEEEEEEEEEEEE</b>!!");
 			this.add('message', "SURVIVAL! GET READY FOR THE NEXT BATTLE!");
-			// Delete this next thing for main when done.
-			this.add("raw|<font color='red'><b>PLEASE REPORT BUGS, MISTAKES, CHANGES, AND ANYTHING ON STAFF FORUMS ON SEASONAL THREAD.</b></font>");
+			this.add('raw|You can find the documentation for this format <a href="https://github.com/Zarel/Pokemon-Showdown/blob/master/mods/seasonal/README.md">here</a>.');
 
 			let globalRenamedMoves = {};
 			let customRenamedMoves = {};
