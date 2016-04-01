@@ -125,8 +125,8 @@ exports.commands = {
 			canAll: (!this.broadcasting || room.isPersonal),
 			message: (this.broadcasting ? "" : message),
 		}).then(response => {
-			if (!this.canBroadcast()) return;
 			if (response.reply) {
+				if (!this.canBroadcast()) return;
 				this.sendReplyBox(response.reply);
 			} else if (response.dt) {
 				CommandParser.commands.data.call(this, response.dt, room, user, connection, 'dt');
