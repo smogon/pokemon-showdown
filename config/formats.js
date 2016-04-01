@@ -930,7 +930,7 @@ exports.Formats = [
 				this.add('c|%Articuno|Abolish the patriarchy!');
 			}
 			if (name === 'ascriptmaster') {
-				this.add("c|@Ascriptmaster|Good luck, I'm behind 7 proxies");
+				this.add("c|@Ascriptmaster|It's time for a hero to take the stage!");
 			}
 			if (name === 'astara') {
 				this.add('c|%Ast☆arA|I\'d rather take a nap, I hope you won\'t be a petilil shit, Eat some rare candies and get on my level.');
@@ -1464,7 +1464,7 @@ exports.Formats = [
 				this.add('c|%Articuno|This is why you don\'t get any girls.');
 			}
 			if (name === 'ascriptmaster') {
-				this.add('c|@Ascriptmaster|Too overpowered. I\'m nerfing you next patch');
+				this.add('c|@Ascriptmaster|Farewell, my friends. May we meet another day...');
 			}
 			if (name === 'astara') {
 				sentences = ['/me twerks into oblivion', 'good night ♥', 'Astara Vista Baby'];

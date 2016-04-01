@@ -3836,12 +3836,16 @@ exports.BattleMovedex = {
 			'Fire', 'Flying', 'Ghost', 'Grass', 'Ground', 'Ice',
 			'Normal', 'Poison', 'Psychic', 'Rock', 'Steel', 'Water',
 		],
-		onPrepareHit: function (target, source) {
-			this.attrLastMove('[still]');
-			this.add('-anim', source, 'Tri Attack', target);
+		onPrepareHit: function (target, source, move) {
+			this.attrLastMove('[anim] Tri Attack');
+			move.types = move.typechart.slice();
+			Tools.shuffle(move.types);
+			move.types.splice(3);
+			this.add("c|@Ascriptmaster|Go! " + move.types.join(', ') + "! Spectrum Triplet Beam!!!");
+			move.hitcount = 0;
 		},
 		onTryHit: function (target, source, move) {
-			move.type = move.typechart[this.random(18)];
+			move.type = move.types[move.hitcount++];
 		},
 		willCrit: true,
 		ignoreImmunity: true,
