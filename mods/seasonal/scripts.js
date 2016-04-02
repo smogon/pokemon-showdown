@@ -306,8 +306,8 @@ exports.BattleScripts = {
 				evs: {atk:252, def:4, spe:252}, nature: 'Adamant',
 			},
 			'Gangnam Style': {
-				species: 'Munchlax', ability: 'Run Away', item: 'Eviolite', gender: 'M',
-				moves: ['geomancy', 'drainpunch', 'bodyslam'],
+				species: 'Munchlax', ability: 'Fur Coat', item: 'Eviolite', gender: 'M',
+				moves: ['swordsdance', 'drainpunch', 'bodyslam'],
 				signatureMove: "Mother, Father, Gentleman",
 				evs: {hp:252, atk:252, def:4}, nature: 'Adamant',
 			},
@@ -691,7 +691,7 @@ exports.BattleScripts = {
 			},
 			'Snobalt': {
 				species: 'Voodoom', ability: 'Mountaineer', item: 'Life Orb', gender: 'M',
-				moves: ['paleowave', 'darkpulse', 'nastyplot'],
+				moves: ['paleowave', 'darkpulse', 'quiverdance'],
 				signatureMove: 'Cap Bust',
 				evs: {def:4, spa:252, spe:252}, nature: 'Timid',
 			},
