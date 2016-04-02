@@ -3,6 +3,11 @@
 // The server port - the port to run Pokemon Showdown under
 exports.port = 8000;
 
+// The server id - the id specified in the server registration.
+//   This should be set properly especially when there are more than one
+//   pokemon showdown server running from the same IP
+exports.serverid = '';
+
 // proxyip - proxy IPs with trusted X-Forwarded-For headers
 //   This can be either false (meaning not to trust any proxies) or an array
 //   of strings. Each string should be either an IP address or a subnet given
@@ -23,24 +28,24 @@ exports.potd = '';
 exports.crashguard = true;
 
 // login server data - don't forget the http:// and the trailing slash
-//   This is the URL of the user database and ladder mentioned earlier.
+//   This is the URL of the user database and ladder.
 //   Don't change this setting - there aren't any other login servers right now
 exports.loginserver = 'http://play.pokemonshowdown.com/';
-exports.loginserverkeyalgo = "RSA-SHA1";
+exports.loginserverkeyalgo = 'RSA-SHA1';
 exports.loginserverpublickeyid = 2;
-exports.loginserverpublickey = "-----BEGIN RSA PUBLIC KEY-----\n" +
-	"MIICCgKCAgEAtFldA2rTCsPgqsp1odoH9vwhf5+QGIlOJO7STyY73W2+io33cV7t\n" +
-	"ReNuzs75YBkZ3pWoDn2be0eb2UqO8dM3xN419FdHNORQ897K9ogoeSbLNQwyA7XB\n" +
-	"N/wpAg9NpNu00wce2zi3/+4M/2H+9vlv2/POOj1epi6cD5hjVnAuKsuoGaDcByg2\n" +
-	"EOullPh/00TkEkcyYtaBknZpED0lt/4ekw16mjHKcbo9uFiw+tu5vv7DXOkfciW+\n" +
-	"9ApyYbNksC/TbDIvJ2RjzR9G33CPE+8J+XbS7U1jPvdFragCenz+B3AiGcPZwT66\n" +
-	"dvHAOYRus/w5ELswOVX/HvHUb/GRrh4blXWUDn4KpjqtlwqY4H2oa+h9tEENCk8T\n" +
-	"BWmv3gzGBM5QcehNsyEi9+1RUAmknqJW0QOC+kifbjbo/qtlzzlSvtbr4MwghCFe\n" +
-	"1EfezeNAtqwvICznq8ebsGETyPSqI7fSbpmVULkKbebSDw6kqDnQso3iLjSX9K9C\n" +
-	"0rwxwalCs/YzgX9Eq4jdx6yAHd7FNGEx4iu8qM78c7GKCisygZxF8kd0B7V7a5UO\n" +
-	"wdlWIlTxJ2dfCnnJBFEt/wDsL54q8KmGbzOTvRq5uz/tMvs6ycgLVgA9r1xmVU+1\n" +
-	"6lMr2wdSzyG7l3X3q1XyQ/CT5IP4unFs5HKpG31skxlfXv5a7KW5AfsCAwEAAQ==\n" +
-	"-----END RSA PUBLIC KEY-----\n";
+exports.loginserverpublickey = '-----BEGIN RSA PUBLIC KEY-----\n' +
+	'MIICCgKCAgEAtFldA2rTCsPgqsp1odoH9vwhf5+QGIlOJO7STyY73W2+io33cV7t\n' +
+	'ReNuzs75YBkZ3pWoDn2be0eb2UqO8dM3xN419FdHNORQ897K9ogoeSbLNQwyA7XB\n' +
+	'N/wpAg9NpNu00wce2zi3/+4M/2H+9vlv2/POOj1epi6cD5hjVnAuKsuoGaDcByg2\n' +
+	'EOullPh/00TkEkcyYtaBknZpED0lt/4ekw16mjHKcbo9uFiw+tu5vv7DXOkfciW+\n' +
+	'9ApyYbNksC/TbDIvJ2RjzR9G33CPE+8J+XbS7U1jPvdFragCenz+B3AiGcPZwT66\n' +
+	'dvHAOYRus/w5ELswOVX/HvHUb/GRrh4blXWUDn4KpjqtlwqY4H2oa+h9tEENCk8T\n' +
+	'BWmv3gzGBM5QcehNsyEi9+1RUAmknqJW0QOC+kifbjbo/qtlzzlSvtbr4MwghCFe\n' +
+	'1EfezeNAtqwvICznq8ebsGETyPSqI7fSbpmVULkKbebSDw6kqDnQso3iLjSX9K9C\n' +
+	'0rwxwalCs/YzgX9Eq4jdx6yAHd7FNGEx4iu8qM78c7GKCisygZxF8kd0B7V7a5UO\n' +
+	'wdlWIlTxJ2dfCnnJBFEt/wDsL54q8KmGbzOTvRq5uz/tMvs6ycgLVgA9r1xmVU+1\n' +
+	'6lMr2wdSzyG7l3X3q1XyQ/CT5IP4unFs5HKpG31skxlfXv5a7KW5AfsCAwEAAQ==\n' +
+	'-----END RSA PUBLIC KEY-----\n';
 
 // crashguardemail - if the server has been running for more than an hour
 //   and crashes, send an email using these settings, rather than locking down
@@ -58,7 +63,7 @@ exports.loginserverpublickey = "-----BEGIN RSA PUBLIC KEY-----\n" +
 	},
 	from: 'crashlogger@example.com',
 	to: 'admin@example.com',
-	subject: 'Pokemon Showdown has crashed!'
+	subject: "Pokemon Showdown has crashed!"
 };**/
 
 // basic name filter - removes characters used for impersonation
@@ -211,133 +216,144 @@ exports.replsocketmode = 0o600;
 //     - roomonly: forces the group to be a per-room moderation rank only.
 //     - globalonly: forces the group to be a global rank only.
 //   All the possible permissions are as follows:
-//     - console: Developer console (>>).
-//     - lockdown: /lockdown and /endlockdown commands.
-//     - hotpatch: /hotpatch, /crashfixed and /savelearnsets commands.
-//     - ignorelimits: Ignore limits such as chat message length.
-//     - promote: Promoting and demoting. Will only work if the target user's current
-//                  group and target group are both in jurisdiction.
-//     - room<rank>: /roompromote to <rank> (eg. roomvoice)
-//     - makeroom: Create/delete chatrooms, and set modjoin/roomdesc/privacy
-//     - editroom: Set modjoin/privacy only for battles/groupchats
-//     - ban: Banning and unbanning.
-//     - mute: Muting and unmuting.
-//     - lock: locking (ipmute) and unlocking.
-//     - receivemutedpms: Receive PMs from muted users.
-//     - forcerename: /fr command.
-//     - redirect: /redir command.
-//     - ip: IP checking.
-//     - alts: Alt checking.
-//     - modlog: view the moderator logs.
-//     - broadcast: Broadcast informational commands.
-//     - declare: /declare command.
+//     - alts: Ability to check alts.
 //     - announce: /announce command.
-//     - modchat: Set modchat.
-//     - potd: Set PotD.
-//     - forcewin: /forcewin command.
-//     - battlemessage: /a command.
-//     - tournaments: creating tournaments (/tour new, settype etc.)
-//     - tournamentsmoderation: /tour dq, autodq, end etc.
-//     - tournamentsmanagement: enable/disable tournaments.
+//     - ban: Banning and unbanning.
+//     - broadcast: Broadcast informational commands.
+//     - bypassall: Bypass all limitations.
+//     - bypassblocks: Bypass blocks such as your challenge being blocked.
+//     - console: Developer console (also requires IP or userid in the `consoleIps` array).
+//     - declare: /declare command and the ability to change room descriptions and intros.
+//     - disableladder: /disableladder and /enable ladder commands.
+//     - editroom: Set modjoin/privacy only for battles/groupchats
+//     - forcepromote: Ability to promote a user even if they're offline and unauthed.
+//     - forcerename: /forcerename command.
+//     - forcewin: /forcewin and /forcetie command.
+//     - game: Make games.
+//     - gamemanagement: Enable/disable games and minigames.
+//     - gdeclare: /gdeclare and /cdeclare commands.
+//     - hotpatch: /hotpatch, /updateserver, /crashfixed and /refreshpage commands.
+//     - ignorelimits: Ignore limits such as chat message length.
+//     - ip: Ability to check IPs.
+//     - joinbattle: Ability to join an existing battle as a player.
+//     - kick: /kickbattle command.
+//     - lock: Locking (ipmute) and unlocking.
+//     - lockdown: /lockdown, /endlockdown and /kill commands.
+//     - makeroom: Create/delete chatrooms, and set modjoin/roomdesc/privacy
 //     - minigame: make minigames (hangman, polls, etc.).
-//     - game: make games.
-//     - gamemanagement: enable/disable games and minigames.
+//     - modchat: Set modchat to the second lowest ranked group.
+//     - modchatall: Set modchat to all available groups.
+//     - modlog: View the moderator logs.
+//     - mute: Muting and unmuting.
+//     - potd: Set the Pokemon of the Day.
+//     - privateroom: /privateroom and /modjoin commands.
+//     - promote: Global promoting and demoting. Will only work if both to and from groups are in jurisdiction.
+//     - rangeban: /ipban command.
+//     - rawpacket: Ability to add a raw packet into the room's packet log (/a).
+//     - redirect: /redir command.
+//     - room<rank>: /roompromote to <rank> (eg. roomvoice)
+//     - timer: Ability to forcibly start and stop the inactive timer in battle rooms with the /timer command.
+//     - tournaments: Creating tournaments (/tour new, settype etc.)
+//     - tournamentsmanagement: Enable/disable tournaments.
+//     - tournamentsmoderation: /tour dq, autodq, end etc.
+//     - warn: /warn command.
 exports.grouplist = [
 	{
 		symbol: '~',
-		id: "admin",
+		id: 'admin',
 		name: "Administrator",
-		root: true,
 		globalonly: true,
+		root: true,
 	},
 	{
 		symbol: '&',
-		id: "leader",
+		id: 'leader',
 		name: "Leader",
+		globalonly: true,
 		inherit: '@',
 		jurisdiction: '@u',
-		promote: 'u',
-		roomowner: true,
-		roommod: true,
-		roomdriver: true,
-		forcewin: true,
 		declare: true,
-		modchatall: true,
-		rangeban: true,
-		makeroom: true,
-		editroom: true,
-		potd: true,
 		disableladder: true,
-		globalonly: true,
-		tournamentsmanagement: true,
+		editroom: true,
+		forcewin: true,
 		gamemanagement: true,
+		makeroom: true,
+		modchatall: true,
+		potd: true,
+		promote: 'u',
+		rangeban: true,
+		roomdriver: true,
+		roommod: true,
+		roomowner: true,
+		tournamentsmanagement: true,
 	},
 	{
 		symbol: '#',
-		id: "owner",
+		id: 'owner',
 		name: "Room Owner",
+		roomonly: true,
 		inherit: '@',
 		jurisdiction: 'u',
-		roommod: true,
-		roomdriver: true,
-		editroom: true,
 		declare: true,
-		modchatall: true,
-		roomonly: true,
-		tournamentsmanagement: true,
+		editroom: true,
 		gamemanagement: true,
+		modchatall: true,
+		roomdriver: true,
+		roommod: true,
+		tournamentsmanagement: true,
 	},
 	{
 		symbol: '\u2605',
-		id: "player",
+		id: 'player',
 		name: "Player",
-		inherit: '+',
-		roomvoice: true,
-		modchat: true,
 		roomonly: true,
+		inherit: '+',
 		editroom: true,
 		joinbattle: true,
+		modchat: true,
+		roomvoice: true,
 	},
 	{
 		symbol: '@',
-		id: "mod",
+		id: 'mod',
 		name: "Moderator",
 		inherit: '%',
 		jurisdiction: 'u',
+		alts: '@u',
 		ban: true,
+		forcerename: true,
+		game: true,
+		ip: true,
 		modchat: true,
 		roomvoice: true,
-		forcerename: true,
-		ip: true,
-		alts: '@u',
 		tournaments: true,
-		game: true,
 	},
 	{
 		symbol: '%',
-		id: "driver",
+		id: 'driver',
 		name: "Driver",
 		inherit: '+',
 		jurisdiction: 'u',
-		announce: true,
-		warn: '\u2605u',
-		kick: true,
-		mute: '\u2605u',
-		lock: true,
-		forcerename: true,
-		timer: true,
-		modlog: true,
 		alts: '%u',
+		announce: true,
 		bypassblocks: 'u%@&~',
-		receiveauthmessages: true,
-		tournamentsmoderation: true,
+		forcerename: true,
 		jeopardy: true,
 		joinbattle: true,
+		kick: true,
+		lock: true,
 		minigame: true,
+		modlog: true,
+		mute: '\u2605u',
+		receiveauthmessages: true,
+		redirect: '\u2605u',
+		timer: true,
+		tournamentsmoderation: true,
+		warn: '\u2605u',
 	},
 	{
 		symbol: '+',
-		id: "voice",
+		id: 'voice',
 		name: "Voice",
 		inherit: ' ',
 		alts: 's',
