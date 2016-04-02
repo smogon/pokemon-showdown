@@ -1662,16 +1662,11 @@ exports.commands = {
 
 	htmlbox: function (target, room, user, connection, cmd, message) {
 		if (!target) return this.parse('/help htmlbox');
+		if (!this.can('declare', null, room)) return;
+		if (!this.runBroadcast('!htmlbox')) return;
+
 		target = this.canHTML(target);
 		if (!target) return;
-
-		if (user.userid === 'github') {
-			if (!this.can('announce', null, room)) return;
-			if (message.charAt(0) === '!') this.broadcasting = true;
-		} else {
-			if (!this.can('declare', null, room)) return;
-			if (!this.runBroadcast('!htmlbox')) return;
-		}
 
 		this.sendReplyBox(target);
 	},
