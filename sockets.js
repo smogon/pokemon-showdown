@@ -249,7 +249,6 @@ if (cluster.isMaster) {
 			if (severity === 'error') console.log('ERROR: ' + message);
 		},
 		prefix: '/showdown',
-		websocket: !Config.disablewebsocket,
 	});
 
 	let sockets = {};
