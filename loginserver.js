@@ -40,7 +40,7 @@ function parseJSON(json) {
 
 class LoginServerInstance {
 	constructor() {
-		this.uri = Config.loginserver;
+		this.uri = Config.loginserver.uri;
 		this.requestQueue = [];
 
 		this.requestTimer = null;
