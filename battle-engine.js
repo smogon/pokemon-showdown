@@ -33,7 +33,6 @@ require('./repl.js').start('battle-engine-', process.pid, cmd => eval(cmd));
 // Receive and process a message sent using Simulator.prototype.send in
 // another process.
 process.on('message', message => {
-	//console.log('CHILD MESSAGE RECV: "' + message + '"');
 	let nlIndex = message.indexOf("\n");
 	let more = '';
 	if (nlIndex > 0) {
@@ -341,7 +340,6 @@ BattlePokemon = (() => {
 		let stat = this.stats[statName];
 
 		// stat boosts
-		// boost = this.boosts[statName];
 		let boosts = {};
 		boosts[statName] = boost;
 		boosts = this.battle.runEvent('ModifyBoost', this, null, null, boosts);
@@ -1384,7 +1382,6 @@ BattleSide = (() => {
 
 		this.team = this.battle.getTeam(this, team);
 		for (let i = 0; i < this.team.length && i < 6; i++) {
-			//console.log("NEW POKEMON: " + (this.team[i] ? this.team[i].name : '[unidentified]'));
 			this.pokemon.push(new BattlePokemon(this.team[i], this));
 		}
 		this.pokemonLeft = this.pokemon.length;
@@ -2106,7 +2103,6 @@ Battle = (() => {
 			this.add('message', 'Parent event: ' + this.event.id);
 			throw new Error("Stack overflow");
 		}
-		//this.add('Event: ' + eventid + ' (depth ' + this.eventDepth + ')');
 		effect = this.getEffect(effect);
 		let hasRelayVar = true;
 		if (relayVar === undefined) {
@@ -2259,10 +2255,6 @@ Battle = (() => {
 	 *   they're useful for functions called by the event handler.
 	 */
 	Battle.prototype.runEvent = function (eventid, target, source, effect, relayVar, onEffect, fastExit) {
-		// if (Battle.eventCounter) {
-		// 	if (!Battle.eventCounter[eventid]) Battle.eventCounter[eventid] = 0;
-		// 	Battle.eventCounter[eventid]++;
-		// }
 		if (this.eventDepth >= 8) {
 			// oh fuck
 			this.add('message', 'STACK LIMIT EXCEEDED');
@@ -2281,7 +2273,6 @@ Battle = (() => {
 		let hasRelayVar = true;
 		effect = this.getEffect(effect);
 		let args = [target, source, effect];
-		//console.log('Event: ' + eventid + ' (depth ' + this.eventDepth + ') t:' + target.id + ' s:' + (!source || source.id) + ' e:' + effect.id);
 		if (relayVar === undefined || relayVar === null) {
 			relayVar = true;
 			hasRelayVar = false;
@@ -4622,7 +4613,6 @@ Battle = (() => {
 			if (this.started) {
 				this.p2.name = name;
 			} else {
-				//console.log("NEW SIDE: " + name);
 				this.p2 = new BattleSide(name, this, 1, team);
 				this.sides[1] = this.p2;
 			}
@@ -4633,7 +4623,6 @@ Battle = (() => {
 			if (this.started) {
 				this.p1.name = name;
 			} else {
-				//console.log("NEW SIDE: " + name);
 				this.p1 = new BattleSide(name, this, 0, team);
 				this.sides[0] = this.p1;
 			}

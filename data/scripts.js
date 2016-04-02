@@ -2841,7 +2841,6 @@ exports.BattleScripts = {
 		} while (moves.length < 4 && movePool.length);
 
 		// any moveset modification goes here
-		//moves[0] = 'safeguard';
 		let changedMove = false;
 		if (template.requiredItem && template.requiredItem.slice(-5) === 'Drive' && !hasMove['technoblast']) {
 			delete hasMove[this.getMove(moves[3]).id];
@@ -3234,7 +3233,6 @@ exports.BattleScripts = {
 	randomFactorySets: require('./factory-sets.json'),
 	randomFactorySet: function (template, slot, teamData, tier) {
 		let speciesId = toId(template.species);
-		// let flags = this.randomFactorySets[tier][speciesId].flags;
 		let setList = this.randomFactorySets[tier][speciesId].sets;
 		let effectivePool, priorityPool;
 

@@ -59,7 +59,6 @@ class Ladder {
 			fs.readFile('config/ladders/' + this.formatid + '.tsv', (err, data) => {
 				if (err) {
 					this.loadedLadder = ladderCaches[this.formatid] = [];
-					// console.log('Ladders(' + this.formatid + ') err loading tsv: ' + JSON.stringify(this.loadedLadder));
 					resolve(this.loadedLadder);
 					return;
 				}
@@ -72,7 +71,6 @@ class Ladder {
 					ladder.push([toId(row[1]), Number(row[0]), row[1], Number(row[2]), Number(row[3]), Number(row[4]), row[5]]);
 				}
 				this.loadedLadder = ladderCaches[this.formatid] = ladder;
-				// console.log('Ladders(' + this.formatid + ') loaded tsv: ' + JSON.stringify(this.loadedLadder));
 				resolve(this.loadedLadder);
 			});
 		}));
@@ -228,13 +226,10 @@ class Ladder {
 				p1newElo = this.loadedLadder[p1index][1];
 				p2newElo = this.loadedLadder[p2index][1];
 
-				// console.log('L: ' + this.loadedLadder.map(r => ''+Math.round(r[1])+' '+r[2]).join('\n'));
-
 				// move p1 to its new location
 				let newIndex = p1index;
 				while (newIndex > 0 && this.loadedLadder[newIndex - 1][1] <= p1newElo) newIndex--;
 				while (newIndex === p1index || (this.loadedLadder[newIndex] && this.loadedLadder[newIndex][1] > p1newElo)) newIndex++;
-				// console.log('ni='+newIndex+', p1i='+p1index);
 				if (newIndex !== p1index && newIndex !== p1index + 1) {
 					let row = this.loadedLadder.splice(p1index, 1)[0];
 					// adjust for removed row
@@ -250,7 +245,6 @@ class Ladder {
 				newIndex = p2index;
 				while (newIndex > 0 && this.loadedLadder[newIndex - 1][1] <= p2newElo) newIndex--;
 				while (newIndex === p2index || (this.loadedLadder[newIndex] && this.loadedLadder[newIndex][1] > p2newElo)) newIndex++;
-				// console.log('ni='+newIndex+', p2i='+p2index);
 				if (newIndex !== p2index && newIndex !== p2index + 1) {
 					let row = this.loadedLadder.splice(p2index, 1)[0];
 					// adjust for removed row

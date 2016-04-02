@@ -630,7 +630,6 @@ class User {
 		this.isSysop = false;
 
 		for (let i = 0; i < this.connections.length; i++) {
-			// console.log('' + name + ' renaming: connection ' + i + ' of ' + this.connections.length);
 			let initdata = '|updateuser|' + this.name + '|' + (false ? '1' : '0') + '|' + this.avatar;
 			this.connections[i].send(initdata);
 		}
@@ -915,7 +914,6 @@ class User {
 		}
 
 		for (let i = 0; i < this.connections.length; i++) {
-			//console.log('' + name + ' renaming: socket ' + i + ' of ' + this.connections.length);
 			let initdata = '|updateuser|' + this.name + '|' + (true ? '1' : '0') + '|' + this.avatar;
 			this.connections[i].send(initdata);
 		}
@@ -971,7 +969,6 @@ class User {
 		// being merged into this account
 		this.connected = true;
 		this.connections.push(connection);
-		//console.log('' + this.name + ' merging: connection ' + connection.socket.id);
 		let initdata = '|updateuser|' + this.name + '|' + (true ? '1' : '0') + '|' + this.avatar;
 		connection.send(initdata);
 		connection.user = this;
@@ -1130,7 +1127,6 @@ class User {
 	onDisconnect(connection) {
 		for (let i = 0; i < this.connections.length; i++) {
 			if (this.connections[i] === connection) {
-				// console.log('DISCONNECT: ' + this.userid);
 				if (this.connections.length <= 1) {
 					this.markInactive();
 				}
@@ -1166,7 +1162,6 @@ class User {
 		let connection = null;
 		this.markInactive();
 		for (let i = this.connections.length - 1; i >= 0; i--) {
-			// console.log('DESTROY: ' + this.userid);
 			connection = this.connections[i];
 			for (let j in connection.rooms) {
 				this.leaveRoom(connection.rooms[j], connection, true);
@@ -1712,7 +1707,6 @@ Users.socketConnect = function (worker, workerid, socketid, ip) {
 			user.disconnectAll();
 		} else if (connection.user) {	// if user is still connected
 			connection.challenge = buffer.toString('hex');
-			// console.log('JOIN: ' + connection.user.name + ' [' + connection.challenge.substr(0, 15) + '] [' + socket.id + ']');
 			let keyid = Config.loginserverpublickeyid || 0;
 			connection.sendTo(null, '|challstr|' + keyid + '|' + connection.challenge);
 		}

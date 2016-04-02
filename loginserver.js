@@ -178,7 +178,6 @@ class LoginServerInstance {
 					clearTimeout(this.requestTimeoutTimer);
 					this.requestTimeoutTimer = null;
 				}
-				//console.log('RESPONSE: ' + buffer);
 				let data = parseJSON(buffer).json;
 				for (let i = 0, len = requestCallbacks.length; i < len; i++) {
 					if (data) {

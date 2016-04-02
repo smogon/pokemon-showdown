@@ -341,7 +341,6 @@ exports.commands = {
 		if (!user.confirmed) {
 			return this.errorReply("You must be global voice or roomdriver+ in some public room to make a groupchat.");
 		}
-		// if (!this.can('makegroupchat')) return false;
 		if (target.length > 64) return this.errorReply("Title must be under 32 characters long.");
 		let targets = target.split(',', 2);
 

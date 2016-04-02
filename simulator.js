@@ -364,7 +364,6 @@ class Battle {
 		let slotNum = 0;
 		while (this['p' + (slotNum + 1)]) slotNum++;
 		let slot = 'p' + (slotNum + 1);
-		// console.log('joining: ' + user.name + ' ' + slot);
 
 		let player = new BattlePlayer(user, this, slot);
 		this[slot] = player;
