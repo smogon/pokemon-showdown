@@ -421,7 +421,7 @@ exports.Formats = [
 					problems.push(template.species + " needs to have an ability.");
 					continue;
 				}
-				let sources = pokedex.filter(pokemon => template.types.sort().toString() === Tools.data.Pokedex[pokemon].types.sort().toString() && Object.values(Tools.data.Pokedex[pokemon].abilities).indexOf(ability) >= 0);
+				let sources = pokedex.filter(pokemon => Tools.data.Pokedex[pokemon].num > 0 && template.types.sort().toString() === Tools.data.Pokedex[pokemon].types.sort().toString() && Object.values(Tools.data.Pokedex[pokemon].abilities).indexOf(ability) >= 0);
 				if (!sources.length) {
 					problems.push(template.species + " cannot obtain the ability " + ability + ".");
 					continue;
