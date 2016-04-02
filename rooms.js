@@ -850,7 +850,7 @@ let GlobalRoom = (() => {
 let BattleRoom = (() => {
 	function BattleRoom(roomid, format, p1, p2, options) {
 		Room.call(this, roomid, "" + p1.name + " vs. " + p2.name);
-		this.modchat = (Config.battlemodchat || false);
+		this.modchat = (Config.modchat.battle || false);
 		this.reportJoins = Config.reportbattlejoins;
 
 		format = '' + (format || '');
@@ -1329,7 +1329,7 @@ let ChatRoom = (() => {
 		this.logFile = null;
 		this.logFilename = '';
 		this.destroyingLog = false;
-		if (!this.modchat) this.modchat = (Config.chatmodchat || false);
+		if (!this.modchat) this.modchat = (Config.modchat.chat || false);
 
 		if (Config.logchat) {
 			this.rollLogFile(true);

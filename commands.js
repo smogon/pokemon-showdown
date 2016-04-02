@@ -156,10 +156,10 @@ exports.commands = {
 			return this.errorReply("User " + this.targetUsername + " is offline.");
 		}
 
-		if (Config.pmmodchat) {
+		if (Config.modchat.pm) {
 			let userGroup = user.group;
-			if (Config.groupsranking.indexOf(userGroup) < Config.groupsranking.indexOf(Config.pmmodchat)) {
-				let groupName = Config.groups[Config.pmmodchat].name || Config.pmmodchat;
+			if (Config.groupsranking.indexOf(userGroup) < Config.groupsranking.indexOf(Config.modchat.pm)) {
+				let groupName = Config.groups[Config.modchat.pm].name || Config.modchat.pm;
 				this.errorReply("Because moderated chat is set, you must be of rank " + groupName + " or higher to PM users.");
 				return false;
 			}
@@ -2781,10 +2781,10 @@ exports.commands = {
 	cancelsearch: 'search',
 	search: function (target, room, user) {
 		if (target) {
-			if (Config.pmmodchat) {
+			if (Config.modchat.pm) {
 				let userGroup = user.group;
-				if (Config.groupsranking.indexOf(userGroup) < Config.groupsranking.indexOf(Config.pmmodchat)) {
-					let groupName = Config.groups[Config.pmmodchat].name || Config.pmmodchat;
+				if (Config.groupsranking.indexOf(userGroup) < Config.groupsranking.indexOf(Config.modchat.pm)) {
+					let groupName = Config.groups[Config.modchat.pm].name || Config.modchat.pm;
 					this.popupReply("Because moderated chat is set, you must be of rank " + groupName + " or higher to search for a battle.");
 					return false;
 				}
@@ -2808,10 +2808,10 @@ exports.commands = {
 		if (user.challengeTo) {
 			return this.popupReply("You're already challenging '" + user.challengeTo.to + "'. Cancel that challenge before challenging someone else.");
 		}
-		if (Config.pmmodchat) {
+		if (Config.modchat.pm) {
 			let userGroup = user.group;
-			if (Config.groupsranking.indexOf(userGroup) < Config.groupsranking.indexOf(Config.pmmodchat)) {
-				let groupName = Config.groups[Config.pmmodchat].name || Config.pmmodchat;
+			if (Config.groupsranking.indexOf(userGroup) < Config.groupsranking.indexOf(Config.modchat.pm)) {
+				let groupName = Config.groups[Config.modchat.pm].name || Config.modchat.pm;
 				this.popupReply("Because moderated chat is set, you must be of rank " + groupName + " or higher to challenge users.");
 				return false;
 			}
