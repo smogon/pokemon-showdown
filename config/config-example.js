@@ -231,6 +231,7 @@ exports.replsocketmode = 0o600;
 //     - symbol: Specifies the symbol of the group (as shown in front of the username)
 //     - id: Specifies an id for the group.
 //     - name: Specifies the human-readable name for the group.
+//     - description: Specifies the description for the group.
 //     - root: If this is true, the group can do anything.
 //     - inherit: The group uses the group specified's permissions if it cannot
 //                  find the permission in the current group. Never make the graph
@@ -290,6 +291,7 @@ exports.grouplist = [
 		symbol: '~',
 		id: 'admin',
 		name: "Administrator",
+		description: "They can do anything, like change what this message says",
 		globalonly: true,
 		root: true,
 	},
@@ -297,6 +299,7 @@ exports.grouplist = [
 		symbol: '&',
 		id: 'leader',
 		name: "Leader",
+		description: "The above, and they can promote to moderator and force ties",
 		globalonly: true,
 		inherit: '@',
 		jurisdiction: '@u',
@@ -319,6 +322,7 @@ exports.grouplist = [
 		symbol: '#',
 		id: 'owner',
 		name: "Room Owner",
+		description: "They are leaders of the room and can almost totally control it",
 		roomonly: true,
 		inherit: '@',
 		jurisdiction: 'u',
@@ -334,6 +338,7 @@ exports.grouplist = [
 		symbol: '\u2605',
 		id: 'player',
 		name: "Player",
+		description: "They are the players currently battling, and can promote room voices",
 		roomonly: true,
 		inherit: '+',
 		editroom: true,
@@ -345,6 +350,7 @@ exports.grouplist = [
 		symbol: '@',
 		id: 'mod',
 		name: "Moderator",
+		description: "The above, and they can ban users",
 		inherit: '%',
 		jurisdiction: 'u',
 		alts: '@u',
@@ -360,6 +366,7 @@ exports.grouplist = [
 		symbol: '%',
 		id: 'driver',
 		name: "Driver",
+		description: "The above, and they can mute. Global % can also lock users and check for alts",
 		inherit: '+',
 		jurisdiction: 'u',
 		alts: '%u',
@@ -383,6 +390,7 @@ exports.grouplist = [
 		symbol: '+',
 		id: 'voice',
 		name: "Voice",
+		description: "They can use ! commands like !groups, and talk during moderated chat",
 		inherit: ' ',
 		alts: 's',
 		broadcast: true,
