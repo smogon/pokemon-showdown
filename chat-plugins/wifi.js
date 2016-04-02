@@ -361,7 +361,7 @@ let commands = {
 		if (room.id !== 'wifi') return this.errorReply("This command can only be used in the Wi-Fi room.");
 		let giveaway = giveaways[room.id];
 		if (!giveaway) return this.errorReply("There is no giveaway going on at the moment.");
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		if (giveaway.type === 'question') {
 			if (giveaway.phase !== 'started') return this.errorReply("The giveaway has not started yet.");
 			this.sendReply("|html|<div class='broadcast-blue'><font size='1'>Question Giveaway started by " + Tools.escapeHTML(giveaway.host.name) + "</font><br/>" +
@@ -390,7 +390,7 @@ let commands = {
 		case 'game':
 		case 'giveaway':
 		case 'user':
-			if (!this.canBroadcast()) return;
+			if (!this.runBroadcast()) return;
 			reply = '<strong>Giveaway participation commands: </strong> (start with /giveaway, except for /ga) <br />' +
 			        '- guess or /ga <em>answer</em> - Guesses the answer for a question giveaway<br />' +
 			        '- viewanswer - Shows the answer in a question giveaway (only to host/giver)<br />' +
@@ -399,7 +399,7 @@ let commands = {
 			        '- leave or leavelottery - Leaves a lottery giveaway<br />';
 			break;
 		default:
-			if (!this.canBroadcast()) return;
+			if (!this.runBroadcast()) return;
 			reply = '<b>Wi-Fi room Giveaway help and info</b><br />' +
 			'- help user - shows list of participation commands<br />' +
 			'- help staff - shows giveaway staff commands (Requires: % @ # & ~)';

@@ -274,7 +274,7 @@ exports.commands = {
 
 		display: function (target, room, user) {
 			if (!room.game || room.game.title !== 'Hangman') return this.errorReply("There is no game of hangman running in this room.");
-			if (!this.canBroadcast()) return;
+			if (!this.runBroadcast()) return;
 			room.update();
 
 			room.game.display(user, this.broadcasting);

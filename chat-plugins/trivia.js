@@ -822,7 +822,7 @@ let commands = {
 		let buffer = "|raw|<div class=\"ladder\"><table>";
 
 		if (!target) {
-			if (!this.canBroadcast()) return false;
+			if (!this.runBroadcast()) return false;
 
 			let questions = triviaData.questions;
 			let questionsLen = questions.length;
@@ -882,7 +882,7 @@ let commands = {
 	'': 'status',
 	status: function (target, room, user) {
 		if (room.id !== 'trivia') return this.errorReply('This command can only be used in Trivia.');
-		if (!this.canBroadcast()) return false;
+		if (!this.runBroadcast()) return false;
 		let trivium = trivia[room.id];
 		if (!trivium) return this.errorReply("There is no trivia game in progress.");
 		trivium.getStatus(this, user);
@@ -891,7 +891,7 @@ let commands = {
 
 	players: function (target, room) {
 		if (room.id !== 'trivia') return this.errorReply('This command can only be used in Trivia.');
-		if (!this.canBroadcast()) return false;
+		if (!this.runBroadcast()) return false;
 		let trivium = trivia[room.id];
 		if (!trivium) return this.errorReply("There is no trivia game in progress.");
 		trivium.getParticipants(this);
@@ -926,7 +926,7 @@ let commands = {
 
 	ladder: function (target, room) {
 		if (room.id !== 'trivia') return this.errorReply('This command can only be used in Trivia.');
-		if (!this.canBroadcast()) return false;
+		if (!this.runBroadcast()) return false;
 
 		let ladder = triviaData.ladder;
 		let leaderboard = triviaData.leaderboard;

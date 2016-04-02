@@ -238,7 +238,7 @@ exports.commands = {
 				room.add("The poll timer was turned on: the poll will end in " + timeout + " minute(s).");
 				return this.privateModCommand("(The poll timer was set to " + timeout + " minute(s) by " + user.name + ".)");
 			} else {
-				if (!this.canBroadcast()) return;
+				if (!this.runBroadcast()) return;
 				if (room.poll.timeout) {
 					return this.sendReply("The poll timer is on and will end in " + room.poll.timeoutMins + " minute(s).");
 				} else {
@@ -272,7 +272,7 @@ exports.commands = {
 		show: 'display',
 		display: function (target, room, user, connection) {
 			if (!room.poll) return this.errorReply("There is no poll running in this room.");
-			if (!this.canBroadcast()) return;
+			if (!this.runBroadcast()) return;
 			room.update();
 
 			if (this.broadcasting) {
