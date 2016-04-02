@@ -465,12 +465,6 @@ class User {
 
 		return false;
 	}
-	/**
-	 * Special permission check for promoting and demoting
-	 */
-	canPromote(sourceGroup, targetGroup) {
-		return this.can('promote', {group:sourceGroup}) && this.can('promote', {group:targetGroup});
-	}
 	resetName() {
 		let name = 'Guest ' + this.guestNum;
 		let userid = toId(name);

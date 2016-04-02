@@ -775,40 +775,8 @@ exports.commands = {
 		}
 	},
 
-	roomowner: function (target, room, user) {
-		if (!room.chatRoomData) {
-			return this.sendReply("/roomowner - This room isn't designed for per-room moderation to be added");
-		}
-		if (!target) return this.parse('/help roomowner');
-		target = this.splitTarget(target, true);
-		let targetUser = this.targetUser;
-		let name = this.targetUsername;
-		let userid = toId(name);
-
-		if (!Users.isUsernameKnown(userid)) {
-			return this.errorReply("User '" + this.targetUsername + "' is offline and unrecognized, and so can't be promoted.");
-		}
-
-		if (!this.can('makeroom')) return false;
-
-		if (!room.auth) room.auth = room.chatRoomData.auth = {};
-
-		room.auth[userid] = '#';
-		this.addModCommand("" + name + " was appointed Room Owner by " + user.name + ".");
-		if (targetUser) {
-			targetUser.popup("You were appointed Room Owner by " + user.name + " in " + room.id + ".");
-			room.onUpdateIdentity(targetUser);
-		}
-		Rooms.global.writeChatRoomData();
-	},
-	roomownerhelp: ["/roomowner [username] - Appoints [username] as a room owner. Requires: & ~"],
-
 	roomdemote: 'roompromote',
 	roompromote: function (target, room, user, connection, cmd) {
-		if (!room.auth) {
-			this.sendReply("/roompromote - This room isn't designed for per-room moderation");
-			return this.sendReply("Before setting room mods, you need to set it up with /roomowner");
-		}
 		if (!target) return this.parse('/help roompromote');
 
 		target = this.splitTarget(target, true);
@@ -833,27 +801,38 @@ exports.commands = {
 		if (!Config.groups[nextGroup]) {
 			return this.errorReply("Group '" + nextGroup + "' does not exist.");
 		}
-
 		if (Config.groups[nextGroup].globalonly || (Config.groups[nextGroup].battleonly && !room.battle)) {
 			return this.errorReply("Group 'room" + Config.groups[nextGroup].id + "' does not exist as a room rank.");
 		}
 
-		let groupName = Config.groups[nextGroup].name || "regular user";
-		if ((room.auth[userid] || Config.groupsranking[0]) === nextGroup) {
+		if (!room.auth && nextGroup !== '#') {
+			this.sendReply("/roompromote - This room isn't designed for per-room moderation");
+			return this.sendReply("Before setting room auth, you need to set it up with /room" + Config.groups['#'].id);
+		}
+
+		let groupName = Config.groups[nextGroup].name;
+		if (!groupName) {
+			groupName = "regular room user";
+		} else if (!groupName.startsWith("Room")) {
+			groupName = "Room " + groupName;
+		}
+
+		if (((room.auth && room.auth[userid]) || Config.groupsranking[0]) === nextGroup) {
 			return this.errorReply("User '" + name + "' is already a " + groupName + " in this room.");
 		}
 		if (!user.can('makeroom')) {
-			if (currentGroup !== ' ' && !user.can('room' + (Config.groups[currentGroup] ? Config.groups[currentGroup].id : 'voice'), null, room)) {
-				return this.errorReply("/" + cmd + " - Access denied for promoting/demoting from " + (Config.groups[currentGroup] ? Config.groups[currentGroup].name : "an undefined group") + ".");
+			if (!user.can('roompromote', {group: currentGroup}, room)) {
+				return this.errorReply("/" + cmd + " - Access denied for removing " + ((Config.groups[currentGroup] ? Config.groups[currentGroup].name : "an undefined group") || "regular user") + ".");
 			}
-			if (nextGroup !== ' ' && !user.can('room' + Config.groups[nextGroup].id, null, room)) {
-				return this.errorReply("/" + cmd + " - Access denied for promoting/demoting to " + Config.groups[nextGroup].name + ".");
+			if (!user.can('roompromote', {group: nextGroup}, room)) {
+				return this.errorReply("/" + cmd + " - Access denied for giving " + groupName + ".");
 			}
 		}
 		if (targetUser && targetUser.locked && !room.isPrivate && !room.battle && !room.isPersonal && (nextGroup === '%' || nextGroup === '@')) {
 			return this.errorReply("Locked users can't be promoted.");
 		}
 
+		if (!room.auth) room.auth = room.chatRoomData.auth = {};
 		if (nextGroup === ' ') {
 			delete room.auth[userid];
 		} else {
@@ -866,16 +845,13 @@ exports.commands = {
 		if (nextGroup in Config.groups && currentGroup in Config.groups && Config.groups[nextGroup].rank < Config.groups[currentGroup].rank) {
 			if (targetUser && room.users[targetUser.userid] && !Config.groups[nextGroup].modlog) {
 				// if the user can't see the demotion message (i.e. rank < %), it is shown in the chat
-				targetUser.send(">" + room.id + "\n(You were demoted to Room " + groupName + " by " + user.name + ".)");
+				targetUser.send(">" + room.id + "\n(You were demoted to " + groupName + " by " + user.name + ".)");
 			}
-			this.privateModCommand("(" + name + " was demoted to Room " + groupName + " by " + user.name + ".)");
-			if (needsPopup) targetUser.popup("You were demoted to Room " + groupName + " by " + user.name + " in " + room.id + ".");
-		} else if (nextGroup === '#') {
+			this.privateModCommand("(" + name + " was demoted to " + groupName + " by " + user.name + ".)");
+			if (needsPopup) targetUser.popup("You were demoted to " + groupName + " by " + user.name + " in " + room.id + ".");
+		} else {
 			this.addModCommand("" + name + " was promoted to " + groupName + " by " + user.name + ".");
 			if (needsPopup) targetUser.popup("You were promoted to " + groupName + " by " + user.name + " in " + room.id + ".");
-		} else {
-			this.addModCommand("" + name + " was promoted to Room " + groupName + " by " + user.name + ".");
-			if (needsPopup) targetUser.popup("You were promoted to Room " + groupName + " by " + user.name + " in " + room.id + ".");
 		}
 
 		if (targetUser) targetUser.updateIdentity(room.id);
@@ -1572,8 +1548,11 @@ exports.commands = {
 		if (currentGroup === nextGroup) {
 			return this.errorReply("User '" + name + "' is already a " + groupName);
 		}
-		if (!user.canPromote(currentGroup, nextGroup)) {
-			return this.errorReply("/" + cmd + " - Access denied.");
+		if (!user.can('promote', {group: currentGroup})) {
+			return this.errorReply("/" + cmd + " - Access denied for removing " + (Config.groups[currentGroup].name || "regular user") + ".");
+		}
+		if (!user.can('promote', {group: nextGroup})) {
+			return this.errorReply("/" + cmd + " - Access denied for giving " + groupName + ".");
 		}
 
 		if (!Users.isUsernameKnown(userid)) {

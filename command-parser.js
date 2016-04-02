@@ -623,18 +623,20 @@ let parse = exports.parse = function (message, room, user, connection, levelsDee
 		return context.run(commandHandler);
 	} else {
 		// Check for mod/demod/admin/deadmin/etc depending on the group ids
+		let prefix = '';
+		let promoteCmd = cmd;
+		if (promoteCmd.startsWith('global')) {
+			prefix = 'global';
+			promoteCmd = promoteCmd.slice(6);
+		} else if (promoteCmd.startsWith('room')) {
+			prefix = 'room';
+			promoteCmd = promoteCmd.slice(4);
+		}
 		for (let g in Config.groups) {
-			let groupid = Config.groups[g].id;
-			if (cmd === groupid) {
-				return parse('/promote ' + toId(target) + ', ' + g, room, user, connection, levelsDeep + 1);
-			} else if (cmd === 'global' + groupid) {
-				return parse('/globalpromote ' + toId(target) + ', ' + g, room, user, connection, levelsDeep + 1);
-			} else if (cmd === 'de' + groupid || cmd === 'un' + groupid || cmd === 'globalde' + groupid || cmd === 'deglobal' + groupid) {
-				return parse('/demote ' + toId(target), room, user, connection, levelsDeep + 1);
-			} else if (cmd === 'room' + groupid) {
-				return parse('/roompromote ' + toId(target) + ', ' + g, room, user, connection, levelsDeep + 1);
-			} else if (cmd === 'roomde' + groupid || cmd === 'deroom' + groupid || cmd === 'roomun' + groupid) {
-				return parse('/roomdemote ' + toId(target), room, user, connection, levelsDeep + 1);
+			let groupId = Config.groups[g].id;
+			let isDemote = promoteCmd === 'de' + groupId || promoteCmd === 'un' + groupId;
+			if (promoteCmd === groupId || isDemote) {
+				return parse('/' + prefix + (isDemote ? 'demote' : 'promote') + ' ' + toId(target) + (isDemote ? '' : ',' + g), room, user, connection, levelsDeep + 1);
 			}
 		}
 

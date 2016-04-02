@@ -284,7 +284,7 @@ exports.replsocketmode = 0o600;
 //     - rangeban: /ipban command.
 //     - rawpacket: Ability to add a raw packet into the room's packet log (/a).
 //     - redirect: /redir command.
-//     - room<rank>: /roompromote to <rank> (eg. roomvoice)
+//     - roompromote: Room counterpart to the global `promote` permission.
 //     - timer: Ability to forcibly start and stop the inactive timer in battle rooms with the /timer command.
 //     - tournaments: Creating tournaments (/tour new, settype etc.)
 //     - tournamentsmanagement: Enable/disable tournaments.
@@ -317,9 +317,6 @@ exports.grouplist = [
 		potd: true,
 		promote: 'u',
 		rangeban: true,
-		roomdriver: true,
-		roommod: true,
-		roomowner: true,
 		tournamentsmanagement: true,
 	},
 	{
@@ -334,8 +331,7 @@ exports.grouplist = [
 		editroom: true,
 		gamemanagement: true,
 		modchatall: true,
-		roomdriver: true,
-		roommod: true,
+		roompromote: 'u',
 		tournamentsmanagement: true,
 	},
 	{
@@ -348,7 +344,7 @@ exports.grouplist = [
 		editroom: true,
 		joinbattle: true,
 		modchat: true,
-		roomvoice: true,
+		roompromote: '\u2605u',
 	},
 	{
 		symbol: '@',
@@ -363,7 +359,7 @@ exports.grouplist = [
 		game: true,
 		ip: true,
 		modchat: true,
-		roomvoice: true,
+		roompromote: '+ ',
 		tournaments: true,
 	},
 	{
