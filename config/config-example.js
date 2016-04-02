@@ -1,12 +1,19 @@
 'use strict';
 
-// The server port - the port to run Pokemon Showdown under
+// The bind address and port - the address and port the server listens under
+//   for incoming connections
+exports.bindaddress = '0.0.0.0';
 exports.port = 8000;
 
 // The server id - the id specified in the server registration.
 //   This should be set properly especially when there are more than one
 //   pokemon showdown server running from the same IP
 exports.serverid = '';
+
+// The server token - a token used for ladder requests to identify the server.
+//   Usually this isn't needed since the server id is usually enough, but can
+//   be used when the servers incoming IP doesn't match its outgoing
+exports.servertoken = '';
 
 // proxyip - proxy IPs with trusted X-Forwarded-For headers
 //   This can be either false (meaning not to trust any proxies) or an array
@@ -46,6 +53,11 @@ exports.loginserverpublickey = '-----BEGIN RSA PUBLIC KEY-----\n' +
 	'wdlWIlTxJ2dfCnnJBFEt/wDsL54q8KmGbzOTvRq5uz/tMvs6ycgLVgA9r1xmVU+1\n' +
 	'6lMr2wdSzyG7l3X3q1XyQ/CT5IP4unFs5HKpG31skxlfXv5a7KW5AfsCAwEAAQ==\n' +
 	'-----END RSA PUBLIC KEY-----\n';
+
+// tokenexpiry - how long the server will deem a user login token from the login
+//   server to be valid for.
+//   Defaults to 25 hours to account for servers with inaccurate time.
+exports.tokenexpiry = 25 * 60 * 60;
 
 // crashguardemail - if the server has been running for more than an hour
 //   and crashes, send an email using these settings, rather than locking down
@@ -118,6 +130,9 @@ exports.pmmodchat = false;
 //   This setting can also be turned on with the command /forcetimer.
 exports.forcetimer = false;
 
+// automatically save a replay when battles end
+exports.autosavereplays = false;
+
 // backdoor - allows Pokemon Showdown system operators to provide technical
 //            support for your server
 //   This backdoor gives system operators (such as Zarel) console admin
@@ -127,6 +142,10 @@ exports.forcetimer = false;
 //   etc. If you do not trust Pokemon Showdown with admin access, you should
 //   disable this feature.
 exports.backdoor = true;
+
+// quietconsole - reduces some console spew like room creation and banned users
+//   trying to connect
+exports.quietconsole = false;
 
 // List of IPs and user IDs with dev console (>> and >>>) access.
 // The console is incredibly powerful because it allows the execution of
@@ -156,10 +175,15 @@ exports.logchallenges = false;
 // lobby log. This has no effect if `logchat` is disabled.
 exports.loguserstats = 1000 * 60 * 10; // 10 minutes
 
+// logladderip - whether to log rated battle's player's IPs
+exports.logladderip = false;
+
+// workers - the number of processes to use for receiving connections
 // validatorprocesses - the number of processes to use for validating teams
 // simulatorprocesses - the number of processes to use for handling battles
-// You should leave both of these at 1 unless your server has a very large
+// You should leave all of these at 1 unless your server has a very large
 // amount of traffic (i.e. hundreds of concurrent battles).
+exports.workers = 1;
 exports.validatorprocesses = 1;
 exports.simulatorprocesses = 1;
 
@@ -179,9 +203,13 @@ exports.customavatars = {
 	//'userid': 'customavatar.png'
 };
 
+// istournamentsrated - whether tournament battles are rated by default
+// tournamentDefaultPlayerCap - tournament default player cap. 0 to disable
 // tourroom - specify a room to receive tournament announcements (defaults to
 // the room 'tournaments').
 // tourannouncements - announcements are only allowed in these rooms
+exports.istournamentsrated = false;
+exports.tournamentDefaultPlayerCap = 0;
 exports.tourroom = '';
 exports.tourannouncements = [/* roomids */];
 
