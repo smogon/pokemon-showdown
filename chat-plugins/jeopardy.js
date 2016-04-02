@@ -487,7 +487,7 @@ function renderGrid(questions, mode) {
 
 let commands = {
 	help: function () {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 
 		this.sendReplyBox(
 			"All commands are run under /jeopardy or /jp. For example, /jeopardy viewgrid.<br />" +
@@ -510,7 +510,7 @@ let commands = {
 
 	'': 'viewgrid',
 	viewgrid: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 
 		let jeopardy = jeopardies[room.id];
 		let questions = null;

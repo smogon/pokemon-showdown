@@ -39,12 +39,12 @@ function wikiaSearch(subdomain, query, callback) {
 exports.commands = {
 	ygo: 'yugioh',
 	yugioh: function (target, room, user) {
-		if (!this.canBroadcast(true)) return;
+		if (!this.canBroadcast()) return;
 		let subdomain = 'yugioh';
 		let query = target.trim();
 
 		wikiaSearch(subdomain, query, (err, data) => {
-			if (!this.canBroadcast()) return;
+			if (!this.runBroadcast()) return;
 			if (err) {
 				if (err instanceof SyntaxError || err.message === 'Malformed data') {
 					if (!this.broadcasting) return this.sendReply("Error: Something went wrong in the request: " + err.message);

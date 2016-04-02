@@ -68,16 +68,16 @@ exports.commands = {
 	ds: 'dexsearch',
 	dsearch: 'dexsearch',
 	dexsearch: function (target, room, user, connection, cmd, message) {
-		if (!this.canBroadcast(true)) return;
+		if (!this.canBroadcast()) return;
 		if (!target) return this.parse('/help dexsearch');
 
 		return runSearch({
 			target: target,
 			cmd: 'dexsearch',
-			canAll: (!this.broadcasting || room.isPersonal),
-			message: (this.broadcasting ? "" : message),
+			canAll: (!this.broadcastMessage || room.isPersonal),
+			message: (this.broadcastMessage ? "" : message),
 		}).then(response => {
-			if (!this.canBroadcast()) return;
+			if (!this.runBroadcast()) return;
 			if (response.reply) {
 				this.sendReplyBox(response.reply);
 			} else if (response.dt) {
@@ -101,7 +101,7 @@ exports.commands = {
 	rollpokemon: 'randompokemon',
 	randpoke: 'randompokemon',
 	randompokemon: function (target, room, user, connection, cmd, message) {
-		if (!this.canBroadcast(true)) return;
+		if (!this.canBroadcast()) return;
 		let targets = target.split(",");
 		let targetsBuffer = [];
 		let qty;
@@ -122,11 +122,11 @@ exports.commands = {
 		return runSearch({
 			target: targetsBuffer.join(","),
 			cmd: 'randpoke',
-			canAll: (!this.broadcasting || room.isPersonal),
-			message: (this.broadcasting ? "" : message),
+			canAll: (!this.broadcastMessage || room.isPersonal),
+			message: (this.broadcastMessage ? "" : message),
 		}).then(response => {
 			if (response.reply) {
-				if (!this.canBroadcast()) return;
+				if (!this.runBroadcast()) return;
 				this.sendReplyBox(response.reply);
 			} else if (response.dt) {
 				CommandParser.commands.data.call(this, response.dt, room, user, connection, 'dt');
@@ -141,16 +141,16 @@ exports.commands = {
 	ms: 'movesearch',
 	msearch: 'movesearch',
 	movesearch: function (target, room, user, connection, cmd, message) {
-		if (!this.canBroadcast(true)) return;
+		if (!this.canBroadcast()) return;
 		if (!target) return this.parse('/help movesearch');
 
 		return runSearch({
 			target: target,
 			cmd: 'movesearch',
-			canAll: (!this.broadcasting || room.isPersonal),
-			message: (this.broadcasting ? "" : message),
+			canAll: (!this.broadcastMessage || room.isPersonal),
+			message: (this.broadcastMessage ? "" : message),
 		}).then(response => {
-			if (!this.canBroadcast()) return;
+			if (!this.runBroadcast()) return;
 			if (response.reply) {
 				this.sendReplyBox(response.reply);
 			} else if (response.dt) {
@@ -171,16 +171,16 @@ exports.commands = {
 
 	isearch: 'itemsearch',
 	itemsearch: function (target, room, user, connection, cmd, message) {
-		if (!this.canBroadcast(true)) return;
+		if (!this.canBroadcast()) return;
 		if (!target) return this.parse('/help itemsearch');
 
 		return runSearch({
 			target: target,
 			cmd: 'itemsearch',
-			canAll: (!this.broadcasting || room.isPersonal),
-			message: (this.broadcasting ? "" : message),
+			canAll: (!this.broadcastMessage || room.isPersonal),
+			message: (this.broadcastMessage ? "" : message),
 		}).then(response => {
-			if (!this.canBroadcast()) return;
+			if (!this.runBroadcast()) return;
 			if (response.reply) {
 				this.sendReplyBox(response.reply);
 			} else if (response.dt) {
@@ -204,7 +204,7 @@ exports.commands = {
 	dpplearn: 'learn',
 	bw2learn: 'learn',
 	learn: function (target, room, user, connection, cmd, message) {
-		if (!this.canBroadcast(true)) return;
+		if (!this.canBroadcast()) return;
 		if (!target) return this.parse('/help learn');
 
 		return runSearch({
@@ -212,7 +212,7 @@ exports.commands = {
 			cmd: 'learn',
 			message: cmd,
 		}).then(response => {
-			if (!this.canBroadcast()) return;
+			if (!this.runBroadcast()) return;
 			if (response.reply) {
 				this.sendReplyBox(response.reply);
 			} else if (response.error) {

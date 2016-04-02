@@ -170,31 +170,54 @@ class CommandContext {
 		}
 		return true;
 	}
-	canBroadcast(checkOnly, suppressMessage) {
-		let message = this.canTalk(this.message);
-		if (!message) return false;
-		let normalized = message.toLowerCase().replace(/[^a-z0-9\s!,]/g, '');
-
+	canBroadcast() {
 		if (!this.broadcasting && this.cmdToken === BROADCAST_TOKEN) {
+			if (this.user.broadcasting) {
+				this.errorReply("You can't broadcast another command too soon.");
+				return false;
+			}
+
+			let message = this.canTalk(this.message);
+			if (!message) return false;
 			if (!this.user.can('broadcast', null, this.room)) {
 				this.errorReply("You need to be voiced to broadcast this command's information.");
-				this.errorReply("To see it for yourself, use: /" + message.substr(1));
+				this.errorReply("To see it for yourself, use: /" + this.message.substr(1));
 				return false;
 			}
 
 			// broadcast cooldown
-			if (this.room.lastBroadcast === normalized &&
+			let broadcastMessage = message.toLowerCase().replace(/[^a-z0-9\s!,]/g, '');
+
+			if (this.room.lastBroadcast === this.broadcastMessage &&
 					this.room.lastBroadcastTime >= Date.now() - BROADCAST_COOLDOWN) {
 				this.errorReply("You can't broadcast this because it was just broadcast.");
 				return false;
 			}
-			this.broadcasting = true;
+
+			this.message = message;
+			this.broadcastMessage = broadcastMessage;
+			this.user.broadcasting = true;
 		}
-		if (this.broadcasting && !checkOnly) {
-			this.add('|c|' + this.user.getIdentity(this.room.id) + '|' + (suppressMessage || message));
-			this.room.lastBroadcast = normalized;
-			this.room.lastBroadcastTime = Date.now();
+		return true;
+	}
+	runBroadcast(suppressMessage) {
+		if (this.broadcasting || this.cmdToken !== BROADCAST_TOKEN) {
+			// Already being broadcast, or the user doesn't intend to broadcast.
+			return true;
 		}
+
+		if (!this.broadcastMessage) {
+			// Permission hasn't been checked yet. Do it now.
+			if (!this.canBroadcast()) return false;
+		}
+
+		this.add('|c|' + this.user.getIdentity(this.room.id) + '|' + (suppressMessage || this.message));
+		this.room.lastBroadcast = this.broadcastMessage;
+		this.room.lastBroadcastTime = Date.now();
+
+		this.broadcasting = true;
+		this.user.broadcasting = false;
+
 		return true;
 	}
 	parse(message, inNamespace, room) {
