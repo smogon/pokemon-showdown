@@ -9,6 +9,19 @@ exports.BattleStatuses = {
 			move.stab = 2;
 		},
 	},
+	// Snobalt
+	amityabsorb: {
+		effectType: 'Ability',
+		name: 'Amity Absorb',
+		onTryHit: function (target, source, move) {
+			if (target !== source && move.type === 'Fairy') {
+				if (!this.heal(target.maxhp / 4)) {
+					this.add('-immune', target, '[msg]', '[from] ability: Amity Absorb');
+				}
+				return null;
+			}
+		},
+	},
 	// manu 11
 	arachnophobia: {
 		effectType: 'Ability',
@@ -211,7 +224,7 @@ exports.BattleStatuses = {
 		name: 'Gonna Make You Sweat',
 		onResidual: function (pokemon) {
 			if (!pokemon.hp) return;
-			this.heal(this.modify(pokemon.maxhp, 0.15));
+			this.heal(this.modify(pokemon.maxhp, 0.33));
 		},
 	},
 	// Winry
@@ -372,19 +385,6 @@ exports.BattleStatuses = {
 		},
 		onModifySpA: function () {
 			return this.chainModify(3);
-		},
-	},
-	// Snobalt
-	whitemagic: {
-		effectType: 'Ability',
-		name: 'White Magic',
-		onTryHit: function (target, source, move) {
-			if (target !== source && move.type === 'Fairy') {
-				if (!this.boost({spe:1})) {
-					this.add('-immune', target, '[msg]', '[from] ability: White Magic');
-				}
-				return null;
-			}
 		},
 	},
 	// Weathers

@@ -684,13 +684,13 @@ EVs: 252 Atk, 4 Def, 252 Spe, Nature: Adamant
 ### Gangnam Style
 Munchlax @ Eviolite
 
-Ability: Run Away
+Ability: Fur Coat
 
-Innate Ability: Gonna Make You Sweat - Recovers 15% HP each turn.
+Innate Ability: Gonna Make You Sweat - Recovers 33% HP each turn.
 
 EVs: 252 HP, 252 Atk, 4 Def, Nature: Adamant
 
-- Geomancy
+- Swords Dance
 - Drain Punch
 - Body Slam
 - Mother, Father, Gentleman - 15 PP Dark\Physical 70\100%. Hits 3 times. Makes contact.
@@ -997,7 +997,7 @@ EVs: 4 HP, 252 SpA, 252 Spe, IVs: 0 Atk, Nature: Modest
 - Thunderbolt
 - Hurricane
 - Quiver Dance
-- Gaster Blaster - Electric-type Hyper Beam. No recharge if this move knocks out an opponent.
+- Gaster Blaster - Electric-type Hyper Beam, 165bp, 100% acc. No recharge if this move knocks out an opponent.
 
 ### Juanma
 Heatran @ Charcoal
@@ -1518,8 +1518,8 @@ EVs: 4 Def, 252 SpA, 252 Spe, Nature: Timid
 
 - Paleo Wave
 - Dark Pulse
-- Nasty Plot
-- Cap Bust - 15 PP Fighting\Special 90\100%. Super effective against Fairy-types.
+- Quiver Dance
+- Cap Bust - 15 PP Fighting\Special 90\100%. Super effective against Fairy-types. Drains 50% of the damage done.
 
 ### Snowy
 Snover @ Focus Sash
