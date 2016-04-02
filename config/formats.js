@@ -1215,8 +1215,8 @@ exports.Formats = [
 			if (name === 'overneat') {
 				this.add('c|+Overneat|tsk, tsk, is going to be funny');
 			}
-			if (name === 'phable') {
-				this.add('c|%Phable|I sexually identify as a hazard setter');
+			if (name === 'paradise') {
+				this.add('c|%Paradise~|I sexually identify as a hazard setter');
 			}
 			if (name === 'pikachuun') {
 				sentences = ['Reisen is best waifu', 'Hey look I coded myself into the game', 'sup (\'.w.\')'];
@@ -1341,7 +1341,7 @@ exports.Formats = [
 			}
 			if (name === 'uselesstrainer') {
 				sentences = ['huehuehuehue', 'PIZA', 'SPAGUETI', 'RAVIOLI RAVIOLI GIVE ME THE FORMUOLI', 'get ready for PUN-ishment', 'PIU\' RUSPE PER TUTTI, E I MARO\'???'];
-				this.add('c|%useless trainer|' + sentences[this.random(6)]);
+				this.add('c|@useless trainer|' + sentences[this.random(6)]);
 			}
 			if (name === 'vapo') {
 				this.add('c|%Vapo|/me vapes');
@@ -1712,8 +1712,8 @@ exports.Formats = [
 			if (name === 'overneat') {
 				this.add('c|+Overneat|Ugh! I failed you Iya-sama');
 			}
-			if (name === 'phable') {
-				this.add('c|%Phable|RIP THE DREAM');
+			if (name === 'paradise') {
+				this.add('c|%Paradise~|RIP THE DREAM');
 			}
 			if (name === 'pikachuun') {
 				sentences = ['press f to pay respects ;_;7', 'this wouldn\'t have happened in my version', 'wait we were battling?'];
@@ -1832,7 +1832,7 @@ exports.Formats = [
 			}
 			if (name === 'uselesstrainer') {
 				sentences = ['TIME TO SET UP', 'One day I\'ll become a beautiful butterfly'];
-				this.add('c|%useless trainer|' + sentences[this.random(2)]);
+				this.add('c|@useless trainer|' + sentences[this.random(2)]);
 			}
 			if (name === 'vapo') {
 				this.add('c|%Vapo|( ; _> ;)');
