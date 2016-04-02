@@ -206,15 +206,16 @@ exports.customavatars = {
 	//'userid': 'customavatar.png'
 };
 
-// istournamentsrated - whether tournament battles are rated by default
-// tournamentDefaultPlayerCap - tournament default player cap. 0 to disable
-// tourroom - specify a room to receive tournament announcements (defaults to
-// the room 'tournaments').
-// tourannouncements - announcements are only allowed in these rooms
-exports.istournamentsrated = false;
-exports.tournamentDefaultPlayerCap = 0;
-exports.tourroom = '';
-exports.tourannouncements = [/* roomids */];
+exports.tournaments = {
+	// whether tournament battles are rated by default
+	defaultRated: false,
+	// default player cap. 0 to disable
+	defaultPlayerCap: 0,
+	// a room to receive tournament announcements
+	room: 'tournaments',
+	// tournament announcements are only allowed from these rooms
+	announcements: [/* roomids */],
+};
 
 // appealurl - specify a URL containing information on how users can appeal
 // disciplinary actions on your section. You can also leave this blank, in

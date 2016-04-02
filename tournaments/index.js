@@ -30,7 +30,7 @@ class Tournament {
 		this.allowRenames = false;
 		this.players = Object.create(null);
 		this.playerCount = 0;
-		this.playerCap = parseInt(playerCap) || Config.tournamentDefaultPlayerCap || 0;
+		this.playerCap = parseInt(playerCap) || Config.tournaments.defaultPlayerCap || 0;
 
 		this.format = format;
 		this.generator = generator;
@@ -38,7 +38,7 @@ class Tournament {
 		this.scouting = true;
 		this.modjoin = false;
 		this.autostartcap = false;
-		if (Config.tournamentDefaultPlayerCap && this.playerCap > Config.tournamentDefaultPlayerCap) {
+		if (Config.tournaments.defaultPlayerCap && this.playerCap > Config.tournaments.defaultPlayerCap) {
 			Monitor.log('[TourMonitor] Room ' + room.id + ' starting a tour over default cap (' + this.playerCap + ')');
 		}
 
@@ -916,7 +916,7 @@ let commands = {
 			if (generator && tournament.setGenerator(generator, this)) {
 				if (playerCap && playerCap >= 2) {
 					tournament.playerCap = playerCap;
-					if (Config.tournamentDefaultPlayerCap && tournament.playerCap > Config.tournamentDefaultPlayerCap) {
+					if (Config.tournaments.defaultPlayerCap && tournament.playerCap > Config.tournaments.defaultPlayerCap) {
 						Monitor.log('[TourMonitor] Room ' + tournament.room.id + ' starting a tour over default cap (' + tournament.playerCap + ')');
 					}
 				} else if (tournament.playerCap && !playerCap) {
@@ -1105,7 +1105,7 @@ CommandParser.commands.tournament = function (paramString, room, user) {
 		return this.sendReply("Tournaments disabled.");
 	} else if (cmd === 'announce' || cmd === 'announcements') {
 		if (!this.can('tournamentsmanagement', null, room)) return;
-		if (!Config.tourannouncements.includes(room.id)) {
+		if (Config.tournaments.announcements.includes(room.id)) {
 			return this.errorReply("Tournaments in this room cannot be announced.");
 		}
 		if (params.length < 1) {
@@ -1145,11 +1145,11 @@ CommandParser.commands.tournament = function (paramString, room, user) {
 			return this.sendReply("Usage: " + cmd + " <format>, <type> [, <comma-separated arguments>]");
 		}
 
-		let tour = createTournament(room, params.shift(), params.shift(), params.shift(), Config.istournamentsrated, params, this);
+		let tour = createTournament(room, params.shift(), params.shift(), params.shift(), Config.tournaments.defaultRated, params, this);
 		if (tour) {
 			this.privateModCommand("(" + user.name + " created a tournament in " + tour.format + " format.)");
 			if (room.tourAnnouncements) {
-				let tourRoom = Rooms.search(Config.tourroom || 'tournaments');
+				let tourRoom = Rooms.search(Config.tournaments.room || 'tournaments');
 				if (tourRoom && tourRoom !== room) tourRoom.addRaw('<div class="infobox"><a href="/' + room.id + '" class="ilink"><strong>' + Tools.escapeHTML(Tools.getFormat(tour.format).name) + '</strong> tournament created in <strong>' + Tools.escapeHTML(room.title) + '</strong>.</a></div>').update();
 			}
 		}
