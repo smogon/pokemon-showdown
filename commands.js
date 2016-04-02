@@ -1116,7 +1116,7 @@ exports.commands = {
 		if (!targetRoom || targetRoom.modjoin) {
 			return this.errorReply("The room '" + target + "' does not exist.");
 		}
-		if (!this.can('warn', targetUser, room) || !this.can('warn', targetUser, targetRoom)) return false;
+		if (!this.can('redirect', targetUser, room) || !this.can('redirect', targetUser, targetRoom)) return false;
 		if (!targetUser || !targetUser.connected) {
 			return this.errorReply("User " + this.targetUsername + " not found.");
 		}
