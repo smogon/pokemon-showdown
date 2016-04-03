@@ -770,7 +770,7 @@ exports.Formats = [
 			if (name === 'galbia' || name === 'aurora') {
 				this.setWeather('sandstorm');
 			}
-			if (name === 'gangnamstyle') {
+			if (name === 'rodan') {
 				pokemon.addVolatile('gonnamakeyousweat', pokemon);
 			}
 			if (name === 'giagantic') {
@@ -1042,8 +1042,8 @@ exports.Formats = [
 			if (name === 'galom') {
 				this.add('c|+Galom|To the end.');
 			}
-			if (name === 'gangnamstyle') { // don't delete
-				this.add("c|+Gangnam Style|Here I Come, Rougher Than The Rest of 'Em.");
+			if (name === 'rodan') { // don't delete
+				this.add("c|+RODAN|Here I Come, Rougher Than The Rest of 'Em.");
 			}
 			if (name === 'geoffbruedly') {
 				this.add("c|%GeoffBruedly|FOR WINRY");
@@ -1573,8 +1573,8 @@ exports.Formats = [
 			if (name === 'galom') {
 				this.add('c|+Galom|GAME OVER.');
 			}
-			if (name === 'gangnamstyle') {
-				this.add("c|+Gangnam Style|The Great Emeralds power allows me to feel... ");
+			if (name === 'rodan') {
+				this.add("c|+RODAN|The Great Emeralds power allows me to feel... ");
 			}
 			if (name === 'geoffbruedly') {
 				this.add("c|%GeoffBruedly|IM SORRY WINRY");
@@ -1745,8 +1745,8 @@ exports.Formats = [
 				this.add("c|+SailorCosmos|Cosmos Gorgeous Retreat!");
 			}
 			if (name === 'scotteh') {
-				this.add('-message', '▄███████▄.▲.▲.▲.▲.▲.▲');
-				this.add('-message', '█████████████████████▀▀');
+				this.add('c|&Scotteh|▄███████▄.▲.▲.▲.▲.▲.▲');
+				this.add('c|&Scotteh|█████████████████████▀▀');
 			}
 			if (name === 'scpinion') {
 				this.add("c|@scpinion|guys, I don't even know how to pronounce scpinion");

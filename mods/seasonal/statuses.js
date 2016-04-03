@@ -219,13 +219,13 @@ exports.BattleStatuses = {
 		},
 		// Actual implementation in formats.js
 	},
-	// Gangnam Style
+	// RODAN
 	gonnamakeyousweat: {
 		effectType: 'Ability',
 		name: 'Gonna Make You Sweat',
 		onResidual: function (pokemon) {
 			if (!pokemon.hp) return;
-			this.heal(this.modify(pokemon.maxhp, 0.33));
+			this.heal(this.modify(pokemon.maxhp, 0.25));
 		},
 	},
 	// Winry
@@ -379,13 +379,13 @@ exports.BattleStatuses = {
 			this.add('-message', source.name + " is high on Weed!");
 		},
 		onModifySpe: function () {
-			return this.chainModify(2);
+			return this.chainModify(1.5);
 		},
 		onModifyAtk: function () {
-			return this.chainModify(3);
+			return this.chainModify(2);
 		},
 		onModifySpA: function () {
-			return this.chainModify(3);
+			return this.chainModify(2);
 		},
 	},
 	// Weathers
