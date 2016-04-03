@@ -40,6 +40,7 @@ exports.BattleStatuses = {
 	ascriptinnate: {
 		effectType: 'Ability',
 		onStart: function (target, source) {
+			source.setType('Electric');
 			this.add('-start', source, 'typechange', 'Electric');
 			this.useMove('magnetrise', source);
 		},
