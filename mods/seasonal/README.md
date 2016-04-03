@@ -681,20 +681,6 @@ EVs: 252 Atk, 4 Def, 252 Spe, Nature: Adamant
 - Knock Off
 - Dragon Slayer - 10 PP Steel\Physical 110\100%. Super effective against Dragon-type. Makes contact.
 
-### Gangnam Style
-Munchlax @ Eviolite
-
-Ability: Fur Coat
-
-Innate Ability: Gonna Make You Sweat - Recovers 33% HP each turn.
-
-EVs: 252 HP, 252 Atk, 4 Def, Nature: Adamant
-
-- Swords Dance
-- Drain Punch
-- Body Slam
-- Mother, Father, Gentleman - 15 PP Dark\Physical 70\100%. Hits 3 times. Makes contact.
-
 ### GeoffBruedly
 Whiscash @ Leftovers
 
@@ -1365,6 +1351,20 @@ EVs: 252 HP, 252 Atk, 4 Def, Nature: Adamant
 - Outrage
 - Land Before Time - 15 PP Rock\Physical 125\90%. Makes contact. 35% flinch.
 
+### RODAN
+Munchlax @ Eviolite
+
+Ability: Fur Coat
+
+Innate Ability: Gonna Make You Sweat - Recovers 25% HP each turn.
+
+EVs: 252 HP, 252 Atk, 4 Def, Nature: Adamant
+
+- Swords Dance
+- Drain Punch
+- Body Slam
+- Mother, Father, Gentleman - 15 PP Dark\Physical 70\100%. Hits 3 times. Makes contact.
+
 ### RosieTheVenusaur
 Venusaur @ Leftovers
 
@@ -1581,7 +1581,7 @@ Weedle @ Focus Sash
 
 Ability: Shield Dust
 
-Innate Ability: Weed - Grants 3x offenses and 2x speed.
+Innate Ability: Weed - Grants 2x offenses and 1.5x speed.
 
 EVs: 4 Def, 252 SpA, 252 Spe, Nature: Timid
 
@@ -1866,7 +1866,7 @@ EVs: 248 HP, 252 Atk, 8 Spe, Nature: Adamant
 - Dragon Ascent
 - Sacred Fire
 - Roost
-- Go Inda Like Linda - 30 PP. Boosts Atk and Speed by 3 stages.
+- Go Inda Like Linda - 30 PP. Boosts Atk and Speed by 2 stages.
 
 ### Zarel
 Meloetta <s>@ Your Mom</s>

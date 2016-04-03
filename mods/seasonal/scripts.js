@@ -305,11 +305,11 @@ exports.BattleScripts = {
 				signatureMove: "Dragon Slayer",
 				evs: {atk:252, def:4, spe:252}, nature: 'Adamant',
 			},
-			'Gangnam Style': {
+			'RODAN': {
 				species: 'Munchlax', ability: 'Fur Coat', item: 'Eviolite', gender: 'M',
 				moves: ['swordsdance', 'drainpunch', 'bodyslam'],
 				signatureMove: "Mother, Father, Gentleman",
-				evs: {hp:252, atk:252, def:4}, nature: 'Adamant',
+				evs: {hp:252, atk:252, spd:4}, nature: 'Adamant',
 			},
 			'GeoffBruedly': {
 				species: 'Whiscash', ability: 'Baitkai', item: 'Leftovers', gender: 'F', shiny: true,
