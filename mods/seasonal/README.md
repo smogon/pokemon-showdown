@@ -1116,18 +1116,6 @@ Other Possible Moves:
 - Recover
 - Tail Glow
 
-### m00ns
-Wobbuffet @ Leftovers
-
-Ability: Shadow Tag
-
-EVs: 52 HP, 232 Def, 224 SpD, IVs: 0 Atk, Nature: Bold
-
-- Counter
-- Mirror Coat
-- Encore
-- oh - 30 PP, 100% acc. Lowers opponent offenses, boosts user speed.
-
 ### macle
 Greninja @ Life Orb
 
@@ -1632,6 +1620,19 @@ EVs: 248 HP, 4 Def, 252 Spe, Nature: Timid
 - Recover
 - Nuzzle
 - RKO Outta Nowhere - 35 PP, Water-type equivalent of Psywave.
+
+### starry
+Wobbuffet @ Leftovers
+
+Ability: Shadow Tag
+
+EVs: 52 HP, 232 Def, 224 SpD, IVs: 0 Atk, Nature: Bold
+
+- Counter
+- Mirror Coat
+- Encore
+- oh - 30 PP, 100% acc. Lowers opponent offenses, boosts user speed.
+
 
 ### Steamroll
 Growlithe @ Life Orb

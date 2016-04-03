@@ -2736,7 +2736,7 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Ghost",
 	},
-	// m00ns
+	// starry
 	oh: {
 		accuracy: 100,
 		category: "Status",
