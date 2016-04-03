@@ -509,12 +509,6 @@ exports.BattleScripts = {
 				signatureMove: "Gravity Storm",
 				evs: {hp:188, spa:252, spe:68}, nature: 'Modest',
 			},
-			'm00ns': {
-				species: 'Wobbuffet', ability: 'Shadow Tag', item: 'Leftovers', gender: 'F',
-				moves: ['counter', 'mirrorcoat', 'encore'],
-				signatureMove: "oh",
-				evs: {hp:52, def:232, spd:224}, ivs: {atk:0}, nature: 'Bold',
-			},
 			'macle': {
 				species: 'Greninja', ability: 'Protean', item: 'Life Orb', gender: 'M',
 				moves: ['closecombat', 'vcreate', 'steameruption'],
@@ -742,6 +736,12 @@ exports.BattleScripts = {
 				moves: ['cosmicpower', 'recover', 'nuzzle'],
 				signatureMove: "RKO Outta Nowhere",
 				evs: {hp:248, def:4, spe:252}, nature: 'Timid',
+			},
+			'starry': {
+				species: 'Wobbuffet', ability: 'Shadow Tag', item: 'Leftovers', gender: 'F',
+				moves: ['counter', 'mirrorcoat', 'encore'],
+				signatureMove: "oh",
+				evs: {hp:52, def:232, spd:224}, ivs: {atk:0}, nature: 'Bold',
 			},
 			'Steamroll': {
 				species: 'Growlithe', ability: 'Adaptability', item: 'Life Orb', gender: 'M',

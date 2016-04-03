@@ -1175,9 +1175,6 @@ exports.Formats = [
 				sentences = ["This is divine retribution!", "I will handle this myself!", "Let battle commence!"];
 				this.add('c|@Lyto|' + sentences[this.random(3)]);
 			}
-			if (name === 'm00ns') {
-				this.add('c|%m00ns|oh');
-			}
 			if (name === 'macle') {
 				this.add("c|+macle|Follow the Frog Blog");
 			}
@@ -1303,6 +1300,9 @@ exports.Formats = [
 			}
 			if (name === 'starmei') {
 				this.add('c|+Starmei|Starmei wins again');
+			}
+			if (name === 'starry') {
+				this.add('c|%starry|oh');
 			}
 			if (name === 'steamroll') {
 				this.add('c|@Steamroll|Banhammer ready!');
@@ -1697,9 +1697,6 @@ exports.Formats = [
 			if (name === 'mizuhime') {
 				this.add('c|+Mizuhime|I got Gimped.');
 			}
-			if (name === 'm00ns') {
-				this.add('c|%m00ns|o-oh');
-			}
 			if (name === 'nv') {
 				this.add('c|+nv|Too cute for this game ;~;');
 			}
@@ -1795,6 +1792,9 @@ exports.Formats = [
 			}
 			if (name === 'starmei') {
 				this.add('c|+Starmei|//message AM, must be nice being this lucky');
+			}
+			if (name === 'starry') {
+				this.add('c|%starry|o-oh');
 			}
 			if (name === 'steamroll') {
 				this.add('c|@Steamroll|Not my problem anymore!');
