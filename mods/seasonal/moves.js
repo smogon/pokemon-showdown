@@ -1546,22 +1546,8 @@ exports.BattleMovedex = {
 			if (ppData && ppData.pp) {
 				ppData.pp = Math.round(ppData.pp * 10 + this.random(3) + 5) / 10;
 			}
-			let moves = [];
-			for (let i in exports.BattleMovedex) {
-				let move = exports.BattleMovedex[i];
-				if (i !== move.id) continue;
-				if (move.isNonstandard) continue;
-				moves.push(move);
-			}
-			let randomMove = false;
-			if (moves.length) {
-				moves.sort((a, b) => a.num - b.num);
-				randomMove = moves[this.random(moves.length)].id;
-			}
-			if (!randomMove) {
-				return false;
-			}
-			this.useMove(randomMove, target);
+			const moves = Object.keys(exports.BattleMovedex);
+			this.useMove(moves[this.random(moves.length)], target);
 		},
 		onTryHit: function (target, source, effect) {
 			if (!source.isActive) return null;
@@ -1596,14 +1582,12 @@ exports.BattleMovedex = {
 					// Why not?
 					"shiny", "randomly", "'); DROP TABLE colors; --", "Ho-Oh", "blue screen",
 				];
-				let colorText = [];
-				let used = {};
-				for (let i = 0; i < this.random(3) + 1; i++) {
-					let dice = this.random(colors.length);
-					if (!(dice in used)) {
-						colorText.push(colors[dice]);
-						used[dice] = true;
-					}
+				const colorText = [];
+				const times = this.random(3) + 1;
+				for (let i = 0; i < times; i++) {
+					const dice = this.random(colors.length);
+					colorText.push(colors[dice]);
+					colors.splice(dice, 1);
 				}
 				this.add('-message', "Ho-Oh is now colored " + colorText.join(" and ") + "! As well as every other \u3069\u25C0mon.");
 			},
