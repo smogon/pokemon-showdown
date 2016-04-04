@@ -213,7 +213,7 @@ exports.BattleScripts = {
 				species: 'Azumarill', ability: 'Pure Power', item: 'Sitrus Berry', gender: 'M',
 				moves: ['aquajet', 'knockoff', 'bellydrum'],
 				signatureMove: "Fairy Type Song",
-				evs: {hp:64, def:4, atk:252, spe:188}, nature: 'Adamant',
+				evs: {hp:68, atk:252, spe:188}, nature: 'Adamant',
 			},
 			'DMT': {
 				species: 'Shedinja', ability: 'Wonder Guard', item: 'Focus Sash',
