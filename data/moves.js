@@ -10756,15 +10756,17 @@ exports.BattleMovedex = {
 		flags: {charge: 1, protect: 1, mirror: 1},
 		onTry: function (attacker, defender, move) {
 			if (attacker.volatiles['twoturnmove']) {
-				if (attacker.volatiles['twoturnmove'].duration === 1) {
-					return;
-				} else {
-					return null;
-				}
+				if (attacker.volatiles['twoturnmove'].duration === 2) return null;
+				attacker.removeVolatile(move.id);
+				return;
 			}
 			this.add('-prepare', attacker, move.name, defender);
 			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 				this.add('-anim', attacker, move.name, defender);
+				if (move.spreadHit) {
+					attacker.addVolatile('twoturnmove', defender);
+					attacker.volatiles['twoturnmove'].duration = 1;
+				}
 				return;
 			}
 			attacker.addVolatile('twoturnmove', defender);
