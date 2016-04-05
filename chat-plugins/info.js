@@ -1410,8 +1410,8 @@ exports.commands = {
 			return this.sendReplyBox("Pok&eacute;mon, item, move, ability, or format not found for generation " + generation.toUpperCase() + ".");
 		}
 	},
-	smogdexhelp: ["/analysis [pokemon], [generation] - Links to the Smogon University analysis for this Pok\u00e9mon in the given generation.",
-		"!analysis [pokemon], [generation] - Shows everyone this link. Requires: + % @ # & ~"],
+	smogdexhelp: ["/analysis [pokemon], [generation], [format] - Links to the Smogon University analysis for this Pok\u00e9mon in the given generation.",
+		"!analysis [pokemon], [generation], [format] - Shows everyone this link. Requires: + % @ # & ~"],
 
 	veekun: function (target, broadcast, user) {
 		if (!this.runBroadcast()) return;
