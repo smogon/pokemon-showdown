@@ -97,8 +97,8 @@ exports.BattleMovedex = {
 		isNonstandard: true,
 		isViable: true,
 		name: "Army of Mushrooms",
-		pp: 10,
-		priority: 1,
+		pp: 5,
+		priority: -1,
 		flags: {snatch: 1},
 		beforeTurnCallback: function (pokemon) {
 			this.boost({def: 1, spd: 1}, pokemon, pokemon, 'mushroom army');
@@ -643,8 +643,8 @@ exports.BattleMovedex = {
 		isNonstandard: true,
 		name: "Cathy",
 		pp: 10,
-		priority: 0,
-		flags: {heal: 1},
+		priority: 0.1,
+		flags: {heal: 1, mirror: 1},
 		onPrepareHit: function (target, source) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Judgment", target);
@@ -665,7 +665,7 @@ exports.BattleMovedex = {
 				return false;
 			}
 		},
-		heal: [1, 2],
+		heal: [13, 20],
 		secondary: false,
 		target: "self",
 		type: "Normal",
@@ -1467,7 +1467,7 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		ignoreImmunity: {'Dark': true},
+		ignoreImmunity: {'Psychic': true},
 		onPrepareHit: function (target, source) {
 			if (toId(source.name) === 'sigilyph') {
 				this.add('c|@Sigilyph|**SOOOOGOOOOLOOOOPH**');
@@ -2592,7 +2592,6 @@ exports.BattleMovedex = {
 		onHit: function (target, source) {
 			source.side.addSideCondition('reflect', source);
 			source.side.addSideCondition('lightscreen', source);
-			source.side.addSideCondition('luckychant', source);
 			source.side.addSideCondition('safeguard', source);
 		},
 		secondary: false,
@@ -3318,6 +3317,7 @@ exports.BattleMovedex = {
 		},
 		selfSwitch: true,
 		secondary: false,
+		ignoreImmunity: true,
 		target: "normal",
 		onPrepareHit: function (target, source) {
 			this.attrLastMove('[still]');
@@ -4169,7 +4169,7 @@ exports.BattleMovedex = {
 	swagplant: {
 		accuracy: 90,
 		basePower: 150,
-		category: "Special",
+		category: "Physical",
 		id: "swagplant",
 		isViable: true,
 		isNonstandard: true,
