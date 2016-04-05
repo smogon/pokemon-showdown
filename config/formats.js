@@ -1539,9 +1539,8 @@ exports.Formats = [
 				this.add('c|+sparkyboTTT|nice 1');
 			}
 			if (name === 'eeveegeneral') {
-				sentences = ["Electrolyte is in charge", "/me secretly cries", "inap!"];
-				this.add("c|~Eevee General|bye room");
-				this.add("c|!Eevee General|" + sentences[this.random(3)]);
+				sentences = ["bye room, Electrolyte is in charge", "/me secretly cries", "inap!"];
+				this.add("c|~Eevee General|" + sentences[this.random(3)]);
 			}
 			if (name === 'eyan') {
 				this.add("c|@Eyan|;-;7");
