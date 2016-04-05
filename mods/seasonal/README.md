@@ -1,8 +1,6 @@
 ﻿Super Staff Bros. MELEE
 ========================================================================
 
-(WIP)
-
 Roster
 ------------------------------------------------------------------------
 
@@ -16,7 +14,7 @@ EVs: 248 HP, 8 Def, 252 SpD, Nature: Careful
 - Will-O-Wisp
 - Recover
 - Seed Bomb
-- Needs More Screens - 5 (no boosts) PP, uses Magic Coat, Lucky Chant, Safeguard, Reflect and Light Screen.
+- Needs More Screens - 5 (no boosts) PP, uses Magic Coat, Safeguard, Reflect and Light Screen.
 
 ### Ace
 Salamence @ Salamencite
@@ -477,7 +475,7 @@ Azumarill @ Sitrus Berry
 
 Ability: Pure Power
 
-EVs: 64 HP, 4 Def, 252 Atk, 188 Spe, Nature: Adamant
+EVs: 68 HP, 252 Atk, 188 Spe, Nature: Adamant
 
 - Aqua Jet
 - Knock Off
@@ -746,7 +744,7 @@ EVs: 252 Atk, 4 Def, 252 Spe, Nature: Jolly
 ### Halite
 Glaceon @ Leftovers
 
-Ability: Lightly Salted - This Pokemon's physical moves turn into special moves. Contact moves may freeze (10%). Status moves gain +1 priority.
+Ability: Lightly Salted - This Pokemon's physical moves turn into special moves. Contact moves may freeze (18%). Status moves gain +1 priority.
 
 EVs: 252 HP, 216 Def, 200 SpA, Nature: Modest
 
@@ -897,7 +895,7 @@ EVs: 252 Atk, 4 Def, 252 Spe, Nature: Adamant
 - Brave Bird
 - Sucker Punch
 - Knock Off
-- Cathy - Recover, in addition uses Accupressure.
+- Cathy - 10 PP, moves first in same priority bracket. Raises random stat by 2 stages and heals 65% of the user's maximum HP.
 
 ### Iyarito
 Gastly @ Life Orb
@@ -911,10 +909,12 @@ EVs: 200 SpA, 80 SpD, 228 Spe, Nature: Timid
 - Dazzling Gleam
 - Tomala wey - 5 (no boosts) PP, Protect-based move. User gains Quiver Dance boost.
 
-### Innovamania
+### innovamania
 Arceus @ Black Glasses
 
 Ability: Pick Up
+
+Innate Ability: Automatically sets Healing Wish on fainting, among other things.
 
 EVs: 4 HP, 252 Atk, 252 Spe, Nature: Jolly
 
@@ -1372,7 +1372,7 @@ Ability: Moxie
 
 EVs: 252 HP, 252 Atk, 4 Def, Nature: Adamant
 
-- Swag Plant - Frenzy Plant. Boosts user's attack and defense. 100% confusion.
+- Swag Plant - Physical variant of Frenzy Plant. Boosts user's attack and defense. 100% confusion.
 
 Other Possible Moves:
 
@@ -1500,7 +1500,7 @@ Voodoom @ Life Orb
 
 Ability: Mountaineer
 
-Innate Ability: White Magic - Grants Fairy immunity. Boosts speed when hit by Fairy-type move.
+Innate Ability: Amity Absorb - Heals 25% when hit by Fairy-type attack.
 
 EVs: 4 Def, 252 SpA, 252 Spe, Nature: Timid
 
@@ -1560,7 +1560,7 @@ EVs: 252 HP, 128 Def, 128 SpD, Nature: Sassy
  - Baton Pass can pass almost all Innate Abilities.
 - Ingrain
 - Substitute
-- Army of Mushrooms - 10 PP, boosts defenses at beginning of turn. Uses Sleep Powder, Powder and Leech Seed when the actual move is used. Ignores Prankster.
+- Army of Mushrooms - 5 PP, boosts defenses at beginning of turn. Uses Sleep Powder, Powder and Leech Seed when the actual move is used. Ignores Prankster.
 
 ### sparktrain
 Seel @ Life Orb
@@ -1581,7 +1581,7 @@ Weedle @ Focus Sash
 
 Ability: Shield Dust
 
-Innate Ability: Weed - Grants 2x offenses and 1.5x speed.
+Innate Ability: Weed - Grants 2.5x offenses and 1.75x speed.
 
 EVs: 4 Def, 252 SpA, 252 Spe, Nature: Timid
 
