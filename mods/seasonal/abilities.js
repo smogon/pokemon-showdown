@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 exports.BattleAbilities = {
 	// GeoffBruedley
@@ -112,7 +112,7 @@ exports.BattleAbilities = {
 				move.secondaries = [];
 			}
 			move.secondaries.push({
-				chance: 10,
+				chance: 18,
 				status: 'frz',
 			});
 		},

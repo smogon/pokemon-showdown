@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 exports.BattleStatuses = {
 	// Innate abilities
@@ -379,13 +379,13 @@ exports.BattleStatuses = {
 			this.add('-message', source.name + " is high on Weed!");
 		},
 		onModifySpe: function () {
-			return this.chainModify(1.5);
+			return this.chainModify(1.75);
 		},
 		onModifyAtk: function () {
-			return this.chainModify(2);
+			return this.chainModify(2.5);
 		},
 		onModifySpA: function () {
-			return this.chainModify(2);
+			return this.chainModify(2.5);
 		},
 	},
 	// Weathers
