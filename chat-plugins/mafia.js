@@ -159,13 +159,11 @@ class MafiaPlayer extends Rooms.RoomGamePlayer {
 		if (this.class.numVotes) numVotes = this.class.numVotes;
 
 		if (target in this.validVotes || target === 'none') {
-			if (target !== 'none') {
-				if (this.game.currentVote[target]) {
-					this.game.currentVote[target].voters.push(this.name);
-					this.game.currentVote[target].votes += numVotes;
-				} else {
-					this.game.currentVote[target] = {votes: numVotes, voters: [this.name]};
-				}
+			if (this.game.currentVote[target]) {
+				this.game.currentVote[target].voters.push(this.name);
+				this.game.currentVote[target].votes += numVotes;
+			} else {
+				this.game.currentVote[target] = {votes: numVotes, voters: [this.name]};
 			}
 
 			this.voting = false;
@@ -410,7 +408,7 @@ class Mafia extends Rooms.RoomGame {
 	updateVotes() {
 		let text = '';
 		for (let i in this.currentVote) {
-			text += Tools.escapeHTML(this.players[i].name) + ': ';
+			text += (i === 'none' ? 'Abstain' : Tools.escapeHTML(this.players[i].name)) + ': ';
 			if (this.anonVotes) {
 				text += this.currentVote[i].votes + ' votes.';
 			} else {
@@ -435,14 +433,16 @@ class Mafia extends Rooms.RoomGame {
 		for (let i in this.currentVote) {
 			if (this.currentVote[i].votes > max) {
 				toKill = i;
+				max = this.currentVote[i].votes;
 			} else if (this.currentVote[i].votes === max) {
 				toKill = null;
+				max = this.currentVote[i].votes;
 			}
 		}
 
 		this.currentVote = null;
 
-		if (toKill) {
+		if (toKill && toKill !== 'none') {
 			return this.players[toKill];
 		} else {
 			return false;
@@ -535,10 +535,10 @@ class Mafia extends Rooms.RoomGame {
 
 			if (toKill) {
 				toKill.kill(meetingMsg[this.meeting]);
-			}
 
-			if (this.meeting === 'town' && toKill.class.onLynch) {
-				toKill.class.onLynch();
+				if (this.meeting === 'town' && toKill.class.onLynch) {
+					toKill.class.onLynch();
+				}
 			}
 
 			this.meeting = null;
