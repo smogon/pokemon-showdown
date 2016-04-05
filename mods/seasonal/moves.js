@@ -15,7 +15,7 @@ exports.BattleMovedex = {
 		boosts: {atk: -1, spa: -1},
 		secondary: false,
 		onHit: function (target, source) {
-			target.trySetStatus('psn', source);  // Doesn't use the status property to prevent the move
+			target.trySetStatus('tox', source);  // Doesn't use the status property to prevent the move
 			target.addVolatile('taunt', source); // from failing before executing all actions.
 			if (source.name === 'Eevee General') this.add("c|~Eevee General|Sorry but I have to go! Please submit your request in <<adminrequests>> and we'll look at it soon.");
 		},
