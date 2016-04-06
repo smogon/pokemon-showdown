@@ -271,9 +271,8 @@ function runDexsearch(target, cmd, canAll, message) {
 					for (let currentParam in group[cat]) {
 						if (group[cat][currentParam] !== isNotSearch) return "A pokemon cannot have multiple " + cat + ".";
 					}
-				} else {
-					continue;
 				}
+				continue;
 			}
 			if (group[cat][param] === isNotSearch) {
 				return "A search cannot both include and exclude '" + input + "'.";
