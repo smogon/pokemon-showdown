@@ -253,7 +253,7 @@ if (process.send && module === process.mainModule) {
 
 function runDexsearch(target, cmd, canAll, message) {
 	let searches = [];
-	let allTiers = {'uber':1, 'ou':1, 'bl':1, 'uu':1, 'bl2':1, 'ru':1, 'bl3':1, 'nu':1, 'bl4':1, 'pu':1, 'nfe':1, 'lc uber':1, 'lc':1, 'cap':1};
+	let allTiers = {'uber':'Uber', 'ou':'OU', 'bl':"BL", 'uu':'UU', 'bl2':"BL2", 'ru':'RU', 'bl3':"BL3", 'nu':'NU', 'bl4':"BL4", 'pu':'PU', 'nfe':'NFE', 'lc uber':"LC Uber", 'lc':'LC', 'cap':"CAP"};
 	let allColours = {'green':1, 'red':1, 'blue':1, 'white':1, 'brown':1, 'yellow':1, 'purple':1, 'pink':1, 'gray':1, 'black':1};
 	let allStats = {'hp':1, 'atk':1, 'def':1, 'spa':1, 'spd':1, 'spe':1, 'bst':1};
 	let showAll = false;
@@ -305,9 +305,10 @@ function runDexsearch(target, cmd, canAll, message) {
 			}
 
 			if (target in allTiers) {
-				if (target === "cap") {
-					if (capSearch === isNotSearch) return {reply: "A search cannot both include and exclude 'cap'."};
-					if (parameters.length > 1) return {reply: "The parameter 'cap' cannot have alternative parameters"};
+				target = allTiers[target];
+				if (target === "CAP") {
+					if (parameters.length > 1) return {reply: "The parameter 'CAP' cannot have alternative parameters"};
+					if (capSearch === isNotSearch) return {reply: "A search cannot both include and exclude 'CAP'."};
 					capSearch = !isNotSearch;
 				}
 				let invalid = validParameter("tiers", target, isNotSearch, target);
@@ -514,8 +515,10 @@ function runDexsearch(target, cmd, canAll, message) {
 			}
 
 			if (alts.tiers && Object.keys(alts.tiers).length) {
-				if (alts.tiers[dex[mon].tier.toLowerCase()]) continue;
-				if (Object.values(alts.tiers).indexOf(false) >= 0 && alts.tiers[dex[mon].tier.toLowerCase()] !== false) continue;
+				if (alts.tiers[dex[mon].tier]) continue;
+				if (Object.values(alts.tiers).indexOf(false) >= 0 && alts.tiers[dex[mon].tier] !== false) continue;
+				// some LC Pokemon are also in other tiers and need to be handled separately
+				if (alts.tiers.LC && !dex[mon].prevo && dex[mon].nfe && Tools.data.Formats.lc.banlist.indexOf(dex[mon].species) < 0) continue;
 			}
 
 			for (let type in alts.types) {
