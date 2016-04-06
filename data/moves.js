@@ -13557,7 +13557,7 @@ exports.BattleMovedex = {
 		accuracy: 90,
 		basePower: 0,
 		damageCallback: function (pokemon, target) {
-			return target.hp / 2;
+			return this.clampIntRange(Math.floor(target.hp / 2), 1);
 		},
 		category: "Physical",
 		desc: "Deals damage to the target equal to half of its current HP, rounded down, but not less than 1 HP.",
