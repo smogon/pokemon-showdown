@@ -959,6 +959,7 @@ exports.Formats = [
 			}
 			if (name === 'bumbadadabum') {
 				this.add('c|@bumbadadabum|Time for card games on motorcycles!');
+				if (pokemon.side.foe.active.length && pokemon.side.foe.active[0].name === 'Scotteh') this.add('c|@bumbadadabum|Also, fuck you Scotteh');
 			}
 			if (name === 'bummer') {
 				this.add("c|&Bummer|Oh hi.");
@@ -1254,6 +1255,7 @@ exports.Formats = [
 			if (name === 'scotteh') {
 				this.add('c|&Scotteh|─────▄▄████▀█▄');
 				this.add('c|&Scotteh|───▄██████████████████▄');
+				if (pokemon.side.foe.active.length && pokemon.side.foe.active[0].name === 'bumbadadabum') this.add('c|@bumbadadabum|Fuck you Scotteh');
 				this.add('c|&Scotteh|─▄█████.▼.▼.▼.▼.▼.▼.▼');
 			}
 			if (name === 'scpinion') {
