@@ -88,10 +88,11 @@ exports.commands = {
 	},
 
 	dexsearchhelp: ["/dexsearch [parameter], [parameter], [parameter], ... - Searches for Pok\u00e9mon that fulfill the selected criteria",
-		"Search categories are: type, tier, color, moves, ability, gen, recovery, priority, stat.",
+		"Search categories are: type, tier, color, moves, ability, gen, resists, recovery, priority, stat.",
 		"Valid colors are: green, red, blue, white, brown, yellow, purple, pink, gray and black.",
 		"Valid tiers are: Uber/OU/BL/UU/BL2/RU/BL3/NU/BL4/PU/NFE/LC/CAP.",
 		"Types must be followed by ' type', e.g., 'dragon type'.",
+		"'resists' followed by a type will show Pok\u00e9mon that resist that typing, e.g., 'resists normal'.",
 		"Inequality ranges use the characters '>=' for '≥' and '<=' for '≤', e.g., 'hp <= 95' searches all Pok\u00e9mon with HP less than or equal to 95.",
 		"Parameters can be excluded through the use of '!', e.g., '!water type' excludes all water types.",
 		"The parameter 'mega' can be added to search for Mega Evolutions only, and the parameter 'NFE' can be added to search not-fully evolved Pok\u00e9mon only.",
@@ -260,15 +261,24 @@ function runDexsearch(target, cmd, canAll, message) {
 	let capSearch = null;
 	let randomOutput = 0;
 
-	let validParameter = (cat, param, isNotSearch) => {
+	let validParameter = (cat, param, isNotSearch, input) => {
+		let uniqueTraits = {'colors':1, 'gens':1};
 		for (let h = 0; h < searches.length; h++) {
 			let group = searches[h];
 			if (group[cat] === undefined) continue;
-			if (group[cat][param] === undefined) continue;
+			if (group[cat][param] === undefined) {
+				if (cat in uniqueTraits) {
+					for (let currentParam in group[cat]) {
+						if (group[cat][currentParam] !== isNotSearch) return "A pokemon cannot have multiple " + cat + ".";
+					}
+				} else {
+					continue;
+				}
+			}
 			if (group[cat][param] === isNotSearch) {
-				return "A search cannot both include and exclude '" + param + "'.";
+				return "A search cannot both include and exclude '" + input + "'.";
 			} else {
-				return "The search included '" + (isNotSearch ? "!" : "") + param + "' more than once.";
+				return "The search included '" + (isNotSearch ? "!" : "") + input + "' more than once.";
 			}
 		}
 		return false;
@@ -289,7 +299,7 @@ function runDexsearch(target, cmd, canAll, message) {
 
 			let targetAbility = Tools.getAbility(target);
 			if (targetAbility.exists) {
-				let invalid = validParameter("abilities", targetAbility, isNotSearch);
+				let invalid = validParameter("abilities", targetAbility, isNotSearch, targetAbility);
 				if (invalid) return {reply: invalid};
 				orGroup.abilities[targetAbility] = !isNotSearch;
 				continue;
@@ -297,10 +307,11 @@ function runDexsearch(target, cmd, canAll, message) {
 
 			if (target in allTiers) {
 				if (target === "cap") {
+					if (capSearch === isNotSearch) return {reply: "A search cannot both include and exclude 'cap'."};
 					if (parameters.length > 1) return {reply: "The parameter 'cap' cannot have alternative parameters"};
 					capSearch = !isNotSearch;
 				}
-				let invalid = validParameter("tiers", target, isNotSearch);
+				let invalid = validParameter("tiers", target, isNotSearch, target);
 				if (invalid) return {reply: invalid};
 				orGroup.tiers[target] = !isNotSearch;
 				continue;
@@ -308,18 +319,18 @@ function runDexsearch(target, cmd, canAll, message) {
 
 			if (target in allColours) {
 				target = target.charAt(0).toUpperCase() + target.slice(1);
-				let invalid = validParameter("colors", target, isNotSearch);
+				let invalid = validParameter("colors", target, isNotSearch, target);
 				if (invalid) return {reply: invalid};
 				orGroup.colors[target] = !isNotSearch;
 				continue;
 			}
 
-			if (target.substr(0, 3) === 'gen' && Number.isInteger(parseFloat(target.substr(3)))) target = target.substr(3).trim();
-			let targetInt = parseInt(target);
+			let targetInt = 0;
+			if (target.substr(0, 3) === 'gen' && Number.isInteger(parseFloat(target.substr(3)))) targetInt = parseInt(target.substr(3).trim());
 			if (0 < targetInt && targetInt < 7) {
-				let invalid = validParameter("gens", target, isNotSearch);
+				let invalid = validParameter("gens", targetInt, isNotSearch, target);
 				if (invalid) return {reply: invalid};
-				orGroup.gens[target] = !isNotSearch;
+				orGroup.gens[targetInt] = !isNotSearch;
 				continue;
 			}
 
@@ -339,6 +350,7 @@ function runDexsearch(target, cmd, canAll, message) {
 			}
 
 			if (target === 'megas' || target === 'mega') {
+				if (megaSearch === isNotSearch) return {reply: "A search cannot include and exclude 'mega'."};
 				if (parameters.length > 1) return {reply: "The parameter 'mega' cannot have alternative parameters"};
 				megaSearch = !isNotSearch;
 				orGroup.skip = true;
@@ -349,7 +361,7 @@ function runDexsearch(target, cmd, canAll, message) {
 				if (parameters.length > 1) return {reply: "The parameter 'recovery' cannot have alternative parameters"};
 				let recoveryMoves = ["recover", "roost", "moonlight", "morningsun", "synthesis", "milkdrink", "slackoff", "softboiled", "wish", "healorder"];
 				for (let k = 0; k < recoveryMoves.length; k++) {
-					let invalid = validParameter("moves", recoveryMoves[k], isNotSearch);
+					let invalid = validParameter("moves", recoveryMoves[k], isNotSearch, target);
 					if (invalid) return {reply: invalid};
 					if (isNotSearch) {
 						let bufferObj = {moves: {}};
@@ -369,7 +381,7 @@ function runDexsearch(target, cmd, canAll, message) {
 					let moveData = Tools.getMove(move);
 					if (moveData.category === "Status" || moveData.id === "bide") continue;
 					if (moveData.priority > 0) {
-						let invalid = validParameter("moves", move, isNotSearch);
+						let invalid = validParameter("moves", move, isNotSearch, target);
 						if (invalid) return {reply: invalid};
 						if (isNotSearch) {
 							let bufferObj = {moves: {}};
@@ -386,15 +398,19 @@ function runDexsearch(target, cmd, canAll, message) {
 
 			if (target.substr(0, 8) === 'resists ') {
 				let targetResist = target.substr(8, 1).toUpperCase() + target.substr(9);
-				let invalid = validParameter("resists", targetResist, isNotSearch);
-				if (invalid) return {reply: invalid};
-				orGroup.resists[targetResist] = !isNotSearch;
-				continue;
+				if (targetResist in Tools.data.TypeChart) {
+					let invalid = validParameter("resists", targetResist, isNotSearch, target);
+					if (invalid) return {reply: invalid};
+					orGroup.resists[targetResist] = !isNotSearch;
+					continue;
+				} else {
+					return {reply: "'" + targetResist + "' is not a recognized type."};
+				}
 			}
 
 			let targetMove = Tools.getMove(target);
 			if (targetMove.exists) {
-				let invalid = validParameter("moves", targetMove.id, isNotSearch);
+				let invalid = validParameter("moves", targetMove.id, isNotSearch, target);
 				if (invalid) return {reply: invalid};
 				orGroup.moves[targetMove.id] = !isNotSearch;
 				continue;
@@ -404,10 +420,12 @@ function runDexsearch(target, cmd, canAll, message) {
 			if (typeIndex >= 0) {
 				target = target.charAt(0).toUpperCase() + target.substring(1, typeIndex);
 				if (target in Tools.data.TypeChart) {
-					let invalid = validParameter("types", target, isNotSearch);
+					let invalid = validParameter("types", target, isNotSearch, target + ' type');
 					if (invalid) return {reply: invalid};
 					orGroup.types[target] = !isNotSearch;
 					continue;
+				} else {
+					return {reply: "'" + target + "' is not a recognized type."};
 				}
 			}
 
