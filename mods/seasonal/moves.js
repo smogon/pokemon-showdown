@@ -3937,7 +3937,7 @@ exports.BattleMovedex = {
 	splatter: {
 		accuracy: 100,
 		basePower: 200,
-		category: "Physical",
+		category: "Special",
 		id: "splatter",
 		isViable: true,
 		isNonstandard: true,
@@ -3951,10 +3951,7 @@ exports.BattleMovedex = {
 			this.add('-anim', source, "Explosion", source);
 			this.add('-anim', target, "Rototiller", target);
 		},
-		secondary: {
-			chance: 100,
-			volatileStatus: 'splatter',
-		},
+		volatileStatus: 'splatter',
 		effect: {
 			duration: 2,
 			onStart: function (pokemon) {
@@ -3969,7 +3966,8 @@ exports.BattleMovedex = {
 				pokemon.tryTrap();
 			},
 		},
-		target: "normal",
+		secondary: false,
+		target: "allAdjacentFoes",
 		type: "Bug",
 	},
 	// Jack Higgins

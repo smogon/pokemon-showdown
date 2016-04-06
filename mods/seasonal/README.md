@@ -319,7 +319,7 @@ EVs: 4 Atk, 252 SpA, 252 Spe, Nature: Naive
 - Spiky Shield \ Toxic
 - Infestation \ Magma Storm \ Sand Tomb \ Whirlpool
 - U-turn \ Conversion2
-- Splatter - 40 PP, Bug\Physical, 200\100% prio +1. The user faints. The target is trapped during the following turn and its speed is lowered.
+- Splatter - 40 PP, Bug\Special, 200\100% prio +1. The user faints. The target is trapped during the following turn and its speed is lowered.
 
 ### bondie
 Krabby @ Eviolite
