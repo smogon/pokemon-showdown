@@ -930,7 +930,7 @@ exports.Formats = [
 				this.add('c|@Aurora|Best of luck to all competitors!');
 			}
 			if (name === 'awu') {
-				this.add('c|+awu|Fite me irl bruh.');
+				this.add('c|%awu|Fite me irl bruh.');
 			}
 			if (name === 'beowulf') {
 				this.add('c|@Beowulf|Grovel peasant, you are in the presence of the RNGesus');
@@ -1469,7 +1469,7 @@ exports.Formats = [
 				this.add('c|@Aurora|are you serious you\'re so bad oh my god haxed ughhhhh');
 			}
 			if (name === 'awu') {
-				this.add("c|+awu|No need for goodbye. I'll see you on the flip side.");
+				this.add("c|%awu|No need for goodbye. I'll see you on the flip side.");
 			}
 			if (name === 'beowulf') {
 				this.add('c|@Beowulf|There is no need to be mad');
