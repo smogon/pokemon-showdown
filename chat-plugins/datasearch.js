@@ -10,6 +10,17 @@
 
 'use strict';
 
+let resolvers = {};
+let queryId = 1;
+let queryChild = function (query) {
+let localQueryId = queryId++;
+query.id = localQueryId;
+return new Promise((resolve, reject) => {
+	resolvers[localQueryId] = resolve;
+	Tools.dexsearchProcess.send(query);
+});
+};
+
 const ProcessManager = require('./../process-manager');
 
 const MAX_PROCESSES = 1;
