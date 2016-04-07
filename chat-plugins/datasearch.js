@@ -82,7 +82,7 @@ exports.commands = {
 		if (!this.canBroadcast()) return;
 		if (!target) return this.parse('/help dexsearch');
 
-		return runSearch({
+		queryChild({
 			target: target,
 			cmd: 'dexsearch',
 			canAll: (!this.broadcastMessage || room.isPersonal),
