@@ -1802,6 +1802,8 @@ exports.commands = {
 
 			if (searchString.match(/^["'].+["']$/)) {
 				searchString = searchString.substring(1, searchString.length - 1);
+			} else if (searchString.includes('_')) {
+				// do an exact search, the approximate search fails for underscores
 			} else if (isWin) {  // ID search with RegEx isn't implemented for windows yet (feel free to add it to winmodlog.cmd)
 				target = '"' + target + '"';  // add quotes to target so the caller knows they are getting a strict match
 			} else {
