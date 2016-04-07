@@ -10,6 +10,11 @@
 
 'use strict';
 
+const ProcessManager = require('./../process-manager');
+
+const MAX_PROCESSES = 1;
+const RESULTS_MAX_LENGTH = 10;
+
 let resolvers = {};
 let queryId = 1;
 let queryChild = function (query) {
@@ -20,11 +25,6 @@ return new Promise((resolve, reject) => {
 	Tools.dexsearchProcess.send(query);
 });
 };
-
-const ProcessManager = require('./../process-manager');
-
-const MAX_PROCESSES = 1;
-const RESULTS_MAX_LENGTH = 10;
 
 const PM = exports.PM = new ProcessManager({
 	maxProcesses: MAX_PROCESSES,
