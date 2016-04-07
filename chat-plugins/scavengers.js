@@ -55,7 +55,7 @@ exports.commands = {
 		if (room.id !== 'scavengers') return this.errorReply('This command can only be used in the Scavengers room.');
 		if (scavengers.status !== 'on') return this.errorReply('There is no active scavenger hunt.');
 		if (user.userid in scavengers.participants) return this.errorReply('You are already participating in the current scavenger hunt.');
-		scavengers.participants[user.userid] = {room: 0};
+		scavengers.participants[user.userid] = {room: 0, startTime: Date.now()};
 		this.sendReply('You joined the scavenger hunt! Use the command /scavenge to answer. The first hint is: ' + scavengers.hints[0]);
 	},
 	scavenge: function (target, room, user) {
@@ -76,6 +76,7 @@ exports.commands = {
 				let result = '<em>' + Tools.escapeHTML(user.name) + '</em> has finished the hunt ';
 				result += (position === 1) ? 'and is the winner!' : (position === 2) ? 'in 2nd place!' : (position === 3) ? 'in 3rd place!' : 'in ' + position + 'th place!';
 				result += (position < 4 && scavengers.blitz ? ' [BLITZ]' : '');
+				result += ' (' + Tools.toDurationString(Date.now() - scavengers.participants[user.userid].startTime) + ')';
 				Rooms.rooms.scavengers.addRaw('<div class="broadcast-blue"><strong>' + result + '</strong></div>');
 			}
 		} else {
