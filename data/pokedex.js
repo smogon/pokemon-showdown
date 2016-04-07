@@ -8546,7 +8546,7 @@ exports.BattlePokedex = {
 		formeLetter: "Z",
 		types: ["Fire", "Psychic"],
 		baseStats: {hp: 105, atk: 30, def: 105, spa: 140, spd: 105, spe: 55},
-		abilities: {0: "Sheer Force", H: "Zen Mode"},
+		abilities: {0: "Zen Mode"},
 		heightm: 1.3,
 		weightkg: 92.9,
 		color: "Red",
