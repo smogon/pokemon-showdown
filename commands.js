@@ -59,7 +59,7 @@ exports.commands = {
 			(Config.groups[r] ? Config.groups[r].name + "s (" + r + ")" : r) + ":\n" + rankLists[r].sort((a, b) => toId(a).localeCompare(toId(b))).join(", ")
 		);
 
-		if (!buffer.length) buffer = "This server has no global authority.";
+		if (!buffer.length) return connection.popup("This server has no global authority.");
 		connection.popup(buffer.join("\n\n"));
 	},
 	authhelp: ["/auth - Show global staff for the server.",
