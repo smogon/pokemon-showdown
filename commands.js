@@ -146,15 +146,12 @@ exports.commands = {
 			return this.parse('/help msg');
 		}
 		this.pmTarget = (targetUser || this.targetUsername);
-		if (!targetUser || !targetUser.connected) {
-			if (targetUser && !targetUser.connected) {
-				this.errorReply("User " + this.targetUsername + " is offline.");
-				return;
-			} else {
-				this.errorReply("User " + this.targetUsername + " not found. Did you misspell their name?");
-				return this.parse('/help msg');
-			}
-			return;
+		if (!targetUser) {
+			this.errorReply("User " + this.targetUsername + " not found. Did you misspell their name?");
+			return this.parse('/help msg');
+		}
+		if (!targetUser.connected) {
+			return this.errorReply("User " + this.targetUsername + " is offline.");
 		}
 
 		if (Config.pmmodchat) {
