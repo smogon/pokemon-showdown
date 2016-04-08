@@ -17,8 +17,12 @@ let artistOfTheDay = {
 };
 
 let theStudio = Rooms.get('thestudio');
-if (theStudio && !theStudio.plugin) {
-	theStudio.plugin = artistOfTheDay;
+if (theStudio) {
+	if (theStudio.plugin) {
+		artistOfTheDay = theStudio.plugin;
+	} else {
+		theStudio.plugin = artistOfTheDay;
+	}
 }
 
 let commands = {
