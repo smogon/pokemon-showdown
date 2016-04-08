@@ -1485,6 +1485,10 @@ exports.commands = {
 		if (!Config.groups[nextGroup]) {
 			return this.errorReply("Group '" + nextGroup + "' does not exist.");
 		}
+		if (!cmd.startsWith('global')) {
+			let groupid = Config.groups[nextGroup].id;
+			return this.errorReply('Did you mean "/room' + groupid + '" or "/global' + groupid + '"?');
+		}
 		if (Config.groups[nextGroup].roomonly) {
 			return this.errorReply("Group '" + nextGroup + "' does not exist as a global rank.");
 		}
