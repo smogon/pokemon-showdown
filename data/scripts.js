@@ -327,9 +327,33 @@ exports.BattleScripts = {
 			for (i = 0; i < hits && target.hp && pokemon.hp; i++) {
 				if (pokemon.status === 'slp' && !isSleepUsable) break;
 
-				if (move.multiaccuracy && i > 0 && accuracy !== true && this.random(100) >= accuracy) {
-					// TODO: Investigate whether Triple Kick only uses initial accuracy for each accuracy check as assumed here.
-					break;
+				if (move.multiaccuracy && i > 0) {
+					accuracy = move.accuracy;
+					if (accuracy !== true) {
+						if (!move.ignoreAccuracy) {
+							boosts = this.runEvent('ModifyBoost', pokemon, null, null, Object.assign({}, pokemon.boosts));
+							boost = this.clampIntRange(boosts['accuracy'], -6, 6);
+							if (boost > 0) {
+								accuracy *= boostTable[boost];
+							} else {
+								accuracy /= boostTable[-boost];
+							}
+						}
+						if (!move.ignoreEvasion) {
+							boosts = this.runEvent('ModifyBoost', target, null, null, Object.assign({}, target.boosts));
+							boost = this.clampIntRange(boosts['evasion'], -6, 6);
+							if (boost > 0) {
+								accuracy /= boostTable[boost];
+							} else if (boost < 0) {
+								accuracy *= boostTable[-boost];
+							}
+						}
+					}
+					accuracy = this.runEvent('ModifyAccuracy', target, pokemon, move, accuracy);
+					if (!move.alwaysHit) {
+						accuracy = this.runEvent('Accuracy', target, pokemon, move, accuracy);
+						if (accuracy !== true && this.random(100) >= accuracy) break;
+					}
 				}
 
 				moveDamage = this.moveHit(target, pokemon, move);
