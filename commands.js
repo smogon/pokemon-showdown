@@ -154,7 +154,6 @@ exports.commands = {
 				this.errorReply("User " + this.targetUsername + " not found. Did you misspell their name?");
 				return this.parse('/help msg');
 			}
-			return;
 		}
 
 		if (Config.pmmodchat) {
