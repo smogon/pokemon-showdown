@@ -1189,6 +1189,7 @@ exports.BattleAbilities = {
 		desc: "On switch-in, this Pokemon Transforms into the opposing Pokemon that is facing it. If there is no Pokemon at that position, this Pokemon does not Transform.",
 		shortDesc: "On switch-in, this Pokemon Transforms into the opposing Pokemon that is facing it.",
 		onStart: function (pokemon) {
+			if (this.activeMove && this.activeMove.id === 'skillswap') return;
 			let target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
 			if (target) {
 				pokemon.transformInto(target, pokemon, this.getAbility('imposter'));
