@@ -1103,7 +1103,7 @@ exports.Formats = [
 				this.add("c|+Jasmine|I'm still relevant!");
 			}
 			if (name === 'jdarden') {
-				this.add('c|+jdarden|Did someone call for some BALK?');
+				this.add('c|@jdarden|Did someone call for some BALK?');
 			}
 			if (name === 'jetpack') {
 				this.add('c|+Jetpack|You\'ve met with a terrible fate, haven\'t you?');
