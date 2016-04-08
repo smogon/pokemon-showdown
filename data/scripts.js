@@ -327,6 +327,11 @@ exports.BattleScripts = {
 			for (i = 0; i < hits && target.hp && pokemon.hp; i++) {
 				if (pokemon.status === 'slp' && !isSleepUsable) break;
 
+				if (move.multiaccuracy && i > 0 && accuracy !== true && this.random(100) >= accuracy) {
+					// TODO: Investigate whether Triple Kick only uses initial accuracy for each accuracy check as assumed here.
+					break;
+				}
+
 				moveDamage = this.moveHit(target, pokemon, move);
 				if (moveDamage === false) break;
 				if (nullDamage && (moveDamage || moveDamage === 0 || moveDamage === undefined)) nullDamage = false;
