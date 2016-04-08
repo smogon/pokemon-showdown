@@ -77,7 +77,7 @@ exports.commands = {
 				let result = '<em>' + Tools.escapeHTML(user.name) + '</em> has finished the hunt ';
 				result += (position === 1) ? 'and is the winner!' : (position === 2) ? 'in 2nd place!' : (position === 3) ? 'in 3rd place!' : 'in ' + position + 'th place!';
 				result += (position < 4 && scavengers.blitz ? ' [BLITZ]' : '');
-				result += ' (' + Tools.toDurationString(Date.now() - scavengers.startTime) + ')';
+				result += ' (' + Tools.toDurationString(Date.now() - scavengers.startTime, {hhmmss: true}) + ')';
 				Rooms.rooms.scavengers.addRaw('<div class="broadcast-blue"><strong>' + result + '</strong></div>');
 			}
 		} else {

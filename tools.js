@@ -710,13 +710,17 @@ module.exports = (() => {
 		return parts.slice(0, 3).join("-") + " " + parts.slice(3, 6).join(":") + (isHour12 ? " " + parts[6] : "");
 	};
 
-	Tools.prototype.toDurationString = function (number) {
+	Tools.prototype.toDurationString = function (number, options) {
 		// TODO: replace by Intl.DurationFormat or equivalent when it becomes available (ECMA-402)
 		// https://github.com/tc39/ecma402/issues/47
 		const date = new Date(+number);
 		const parts = [date.getUTCFullYear() - 1970, date.getUTCMonth(), date.getUTCDate() - 1, date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds()];
 		const unitNames = ["second", "minute", "hour", "day", "month", "year"];
 		const positiveIndex = parts.findIndex(elem => elem > 0);
+		if (options && options.hhmmss) {
+			let string = parts.slice(positiveIndex).map(value => value < 10 ? "0" + value : "" + value).join(":");
+			return string.length === 2 ? "00:" + string : string;
+		}
 		return parts.slice(positiveIndex).reverse().map((value, index) => value ? value + " " + unitNames[index] + (value > 1 ? "s" : "") : "").reverse().join(" ").trim();
 	};
 
