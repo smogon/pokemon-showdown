@@ -741,49 +741,26 @@ exports.commands = {
 		if (!target) return this.parse('/help roomowner');
 		target = this.splitTarget(target, true);
 		let targetUser = this.targetUser;
+		let name = this.targetUsername;
+		let userid = toId(name);
 
-		if (!targetUser) return this.errorReply("User '" + this.targetUsername + "' is not online.");
+		if (!Users.isUsernameKnown(userid)) {
+			return this.errorReply("User '" + this.targetUsername + "' is offline and unrecognized, and so can't be promoted.");
+		}
 
 		if (!this.can('makeroom')) return false;
 
 		if (!room.auth) room.auth = room.chatRoomData.auth = {};
 
-		let name = targetUser.name;
-
-		room.auth[targetUser.userid] = '#';
+		room.auth[userid] = '#';
 		this.addModCommand("" + name + " was appointed Room Owner by " + user.name + ".");
-		targetUser.popup("You were appointed Room Owner by " + user.name + " in " + room.id + ".");
-		room.onUpdateIdentity(targetUser);
+		if (targetUser) {
+			targetUser.popup("You were appointed Room Owner by " + user.name + " in " + room.id + ".");
+			room.onUpdateIdentity(targetUser);
+		}
 		Rooms.global.writeChatRoomData();
 	},
-	roomownerhelp: ["/roomowner [username] - Appoints [username] as a room owner. Removes official status. Requires: & ~"],
-
-	roomdeowner: 'deroomowner',
-	deroomowner: function (target, room, user) {
-		if (!room.auth) {
-			return this.sendReply("/roomdeowner - This room isn't designed for per-room moderation");
-		}
-		if (!target) return this.parse('/help roomdeowner');
-		target = this.splitTarget(target, true);
-		let targetUser = this.targetUser;
-		let name = this.targetUsername;
-		let userid = toId(name);
-		if (!userid || userid === '') return this.errorReply("User '" + name + "' not found.");
-
-		if (room.auth[userid] !== '#') return this.errorReply("User '" + name + "' is not a room owner.");
-		if (!this.can('makeroom')) return false;
-
-		delete room.auth[userid];
-		this.sendReply("(" + name + " is no longer Room Owner.)");
-		if (targetUser) {
-			targetUser.popup("You are no longer a Room Owner of " + room.id + ". (Demoted by " + user.name + ".)");
-			targetUser.updateIdentity();
-		}
-		if (room.chatRoomData) {
-			Rooms.global.writeChatRoomData();
-		}
-	},
-	deroomownerhelp: ["/roomdeowner [username] - Removes [username]'s status as a room owner. Requires: & ~"],
+	roomownerhelp: ["/roomowner [username] - Appoints [username] as a room owner. Requires: & ~"],
 
 	roomdemote: 'roompromote',
 	roompromote: function (target, room, user, connection, cmd) {
@@ -799,16 +776,14 @@ exports.commands = {
 		let name = targetUser ? targetUser.name : this.targetUsername;
 
 		if (!userid) return this.parse('/help roompromote');
-		if (!room.auth || !room.auth[userid]) {
-			if (!targetUser) {
-				return this.errorReply("User '" + name + "' is offline and unauthed, and so can't be promoted.");
-			}
-			if (!targetUser.registered) {
-				return this.errorReply("User '" + name + "' is unregistered, and so can't be promoted.");
-			}
+		if (!targetUser && !Users.isUsernameKnown(userid)) {
+			return this.errorReply("User '" + name + "' is offline and unrecognized, and so can't be promoted.");
+		}
+		if (targetUser && !targetUser.registered) {
+			return this.errorReply("User '" + name + "' is unregistered, and so can't be promoted.");
 		}
 
-		let currentGroup = ((room.auth && room.auth[userid]) || (room.isPrivate !== true && targetUser.group) || ' ');
+		let currentGroup = ((room.auth && room.auth[userid]) || (room.isPrivate !== true && Users.usergroups[userid]) || ' ');
 		let nextGroup = target;
 		if (target === 'deauth') nextGroup = Config.groupsranking[0];
 		if (!nextGroup) {
@@ -1501,9 +1476,13 @@ exports.commands = {
 			return this.errorReply("/" + cmd + " - Access denied.");
 		}
 
-		if (!Users.setOfflineGroup(name, nextGroup)) {
-			return this.sendReply("/promote - WARNING: This user is offline and could be unregistered. Use /forcepromote if you're sure you want to risk it.");
+		if (!Users.isUsernameKnown(userid)) {
+			return this.errorReply("/globalpromote - WARNING: '" + name + "' is offline and unrecognized. The username might be misspelled (either by you or the person or told you) or unregistered. Use /forcepromote if you're sure you want to risk it.");
 		}
+		if (targetUser && !targetUser.registered) {
+			return this.errorReply("User '" + name + "' is unregistered, and so can't be promoted.");
+		}
+		Users.setOfflineGroup(name, nextGroup);
 		if (Config.groups[nextGroup].rank < Config.groups[currentGroup].rank) {
 			this.privateModCommand("(" + name + " was demoted to " + groupName + " by " + user.name + ".)");
 			if (targetUser) targetUser.popup("You were demoted to " + groupName + " by " + user.name + ".");
@@ -1550,9 +1529,10 @@ exports.commands = {
 		let nextGroup = target;
 		if (!Config.groups[nextGroup]) return this.errorReply("Group '" + nextGroup + "' does not exist.");
 
-		if (!Users.setOfflineGroup(name, nextGroup, true)) {
+		if (Users.isUsernameKnown(name)) {
 			return this.errorReply("/forcepromote - Don't forcepromote unless you have to.");
 		}
+		Users.setOfflineGroup(name, nextGroup);
 
 		this.addModCommand("" + name + " was promoted to " + (Config.groups[nextGroup].name || "regular user") + " by " + user.name + ".");
 	},
