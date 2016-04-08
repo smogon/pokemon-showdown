@@ -579,8 +579,10 @@ let parse = exports.parse = function (message, room, user, connection, levelsDee
 		// Check for mod/demod/admin/deadmin/etc depending on the group ids
 		for (let g in Config.groups) {
 			let groupid = Config.groups[g].id;
-			if (cmd === groupid || cmd === 'global' + groupid) {
+			if (cmd === groupid) {
 				return parse('/promote ' + toId(target) + ', ' + g, room, user, connection, levelsDeep + 1);
+			} else if (cmd === 'global' + groupid) {
+				return parse('/globalpromote ' + toId(target) + ', ' + g, room, user, connection, levelsDeep + 1);
 			} else if (cmd === 'de' + groupid || cmd === 'un' + groupid || cmd === 'globalde' + groupid || cmd === 'deglobal' + groupid) {
 				return parse('/demote ' + toId(target), room, user, connection, levelsDeep + 1);
 			} else if (cmd === 'room' + groupid) {
