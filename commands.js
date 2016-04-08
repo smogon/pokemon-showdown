@@ -658,6 +658,20 @@ exports.commands = {
 			Rooms.global.writeChatRoomData();
 		}
 	},
+	deletetopic: 'deleteroomintro',
+	deleteroomintro: function (target, room, user) {
+		if (!this.can('declare', null, room)) return false;
+		if (!room.introMessage) return this.errorReply("This room does not have a introduction set.");
+
+		this.privateModCommand("(" + user.name + " deleted the roomintro.)");
+		this.logEntry(target);
+
+		delete room.introMessage;
+		if (room.chatRoomData) {
+			delete room.chatRoomData.introMessage;
+			Rooms.global.writeChatRoomData();
+		}
+	},
 
 	stafftopic: 'staffintro',
 	staffintro: function (target, room, user) {
@@ -690,6 +704,20 @@ exports.commands = {
 
 		if (room.chatRoomData) {
 			room.chatRoomData.staffMessage = room.staffMessage;
+			Rooms.global.writeChatRoomData();
+		}
+	},
+	deletestafftopic: 'deletestaffintro',
+	deletestaffintro: function (target, room, user) {
+		if (!this.can('ban', null, room)) return false;
+		if (!room.staffMessage) return this.errorReply("This room does not have a staff introduction set.");
+
+		this.privateModCommand("(" + user.name + " deleted the staffintro.)");
+		this.logEntry(target);
+
+		delete room.staffMessage;
+		if (room.chatRoomData) {
+			delete room.chatRoomData.staffMessage;
 			Rooms.global.writeChatRoomData();
 		}
 	},
