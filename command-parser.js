@@ -466,7 +466,7 @@ class CommandContext {
 		let targetUser = Users.get(this.inputUsername, exactName);
 		if (targetUser) {
 			this.targetUser = targetUser;
-			this.targetUsername = this.inputUsername = targetUser.name;
+			this.targetUsername = targetUser.name;
 		} else {
 			this.targetUser = null;
 			this.targetUsername = this.inputUsername;
