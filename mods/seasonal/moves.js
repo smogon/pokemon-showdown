@@ -2721,7 +2721,7 @@ exports.BattleMovedex = {
 		pp: 40,
 		priority: 0,
 		flags: {authentic: 1},
-		onPrepareHit: function (target, source) {
+		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
 			if (!this.canSwitch(source.side)) {
 				delete move.selfdestruct;
