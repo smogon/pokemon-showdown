@@ -468,7 +468,7 @@ EVs: 4 HP, 252 Atk, 252 Spe, Nature: Adamant
 - Dragon Ascent
 - Wild Charge
 - U-turn
-- Mono Flying - 20 PP. For 5 turns, change all Pokemon to pure Flying-type.
+- Mono Flying - 20 PP. For 5 turns, change all Pokemon to pure Flying-type.  Clears side conditions like Defog.
 
 ### Dirpz
 Azumarill @ Sitrus Berry
@@ -1066,12 +1066,12 @@ Togekiss @ Leftovers
 
 Ability: Parental Bond
 
-EVs: 252 HP, 196 SpD, 60 Spe, Nature: Calm
+EVs: 248 HP, 184 SpD, 76 Spe, Nature: Jolly
 
 - Super Fang
 - Cotton Guard \ Roost
 - Seismic Toss \ Night Shade
-- Next Level Strats - 5 (no boosts) PP, boosts user speed and advances 10 levels. Stats and damage formula calculations are not affected by level increase.
+- Next Level Strats - 25 PP, boosts user speed and advances 40 levels (Level 300 max). Stats and damage formula calculations are not affected by level increase.
 
 ### LJ
 Giratina-Origin @ Griseous Orb
@@ -1469,7 +1469,7 @@ EVs: 252 SpA, 4 SpD, 252 Spe, IVs: 0 Atk, Nature: Timid
 - Aeroblast
 - Blue Flare
 - Night Daze
-- Gamma Ray Burst - 5 PP Psychic\Special 350\90%. User faints.
+- Gamma Ray Burst - 5 PP Psychic\Special 350\90%. User faints. Clears side conditions like Defog.
 
 ### sirDonovan
 Togetic @ Eviolite
@@ -1790,7 +1790,7 @@ EVs: 252 Atk, 252 SpA, 4 Spe, Nature: Serious
 - Sticky Web
 - String Shot
 - Tackle
-- Of Curse - 40 PP, bypasses Subs, lowers target offenses by 2 stages. The user faints, and the incoming teammate traps the opponent.
+- Of Curse - 40 PP, always hits, bypasses Sub. Lowers target offenses by 2 stages. The user faints, but it passes down Mean Look and Lunar Dance to the next Pokemon.
 
 ### Vapo
 Vaporeon @ Splash Plate
