@@ -1433,6 +1433,7 @@ exports.BattleMovedex = {
 			if (source.hp && item.isBerry && target.takeItem(source)) {
 				this.add('-enditem', target, item.name, '[from] stealeat', '[move] Bug Bite', '[of] ' + source);
 				this.singleEvent('Eat', item, null, source, null, null);
+				this.runEvent('EatItem', source, null, null, item);
 				source.ateBerry = true;
 			}
 		},
@@ -4445,6 +4446,7 @@ exports.BattleMovedex = {
 				if (item.isBerry && item.id !== 'enigmaberry') {
 					move.onHit = function (foe) {
 						this.singleEvent('Eat', item, null, foe, null, null);
+						this.runEvent('EatItem', foe, null, null, item);
 						foe.ateBerry = true;
 					};
 				} else if (item.fling.effect) {
@@ -9765,6 +9767,7 @@ exports.BattleMovedex = {
 			if (source.hp && item.isBerry && target.takeItem(source)) {
 				this.add('-enditem', target, item.name, '[from] stealeat', '[move] Pluck', '[of] ' + source);
 				this.singleEvent('Eat', item, null, source, null, null);
+				this.runEvent('EatItem', source, null, null, item);
 				source.ateBerry = true;
 			}
 		},
