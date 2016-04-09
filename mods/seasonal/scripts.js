@@ -193,7 +193,7 @@ exports.BattleScripts = {
 			},
 			'CoolStoryBrobat': {
 				species: 'Crobat', ability: 'Gale Wings', item: 'Black Glasses', gender: 'M',
-				moves: ['knockoff', 'bulkup', 'roost', 'closecombat', 'defog'],
+				moves: [['roost', 'bulkup', 'closecombat'][this.random(3)], 'knockoff', 'defog'],
 				baseSignatureMove: 'bravebird', signatureMove: "Brave Bat",
 				evs: {hp:4, atk:252, spe:252}, nature: 'Jolly',
 			},
@@ -366,8 +366,8 @@ exports.BattleScripts = {
 				evs: {atk:252, def:4, spe:252}, nature: 'Jolly',
 			},
 			'HeaLnDeaL': {
-				species: 'Magmar', ability: 'Fur Coat', item: 'Eviolite', gender: 'M',
-				moves: ['quiverdance', 'healorder', 'seedflare'],
+				species: 'Magmar', ability: 'Fur Coat', item: 'Mental Herb', gender: 'M',
+				moves: ['calmmind', 'healbell', 'seedflare'],
 				signatureMove: "Boober's Oblivion",
 				evs: {hp:252, def:4, spa:252}, ivs: {atk:0}, nature: 'Modest',
 			},
@@ -495,7 +495,7 @@ exports.BattleScripts = {
 				species: 'Togekiss', ability: 'Parental Bond', item: 'Leftovers', gender: 'M',
 				moves: ['superfang', ['roost', 'cottonguard'][this.random(2)], ['seismictoss', 'nightshade'][this.random(2)]],
 				signatureMove: "Next Level Strats",
-				evs: {hp:252, spd:196, spe:60}, nature: 'Calm',
+				evs: {hp:248, spd:184, spe:76}, nature: 'Jolly',
 			},
 			'LJ': {
 				species: 'Giratina-Origin', ability: 'Levitate', item: 'Griseous Orb', gender: 'M',
@@ -673,7 +673,7 @@ exports.BattleScripts = {
 			},
 			'sirDonovan': {
 				species: 'Togetic', ability: 'Gale Wings', item: 'Eviolite', gender: 'M',
-				moves: ['roost', 'hurricane', 'charm'],
+				moves: ['roost', 'hurricane', ['charm', 'defog'][this.random(2)]],
 				signatureMove: "Ladies First",
 				evs: {hp:252, spa:252, spe:4}, nature: 'Modest',
 			},
@@ -793,7 +793,7 @@ exports.BattleScripts = {
 			},
 			'Trickster': {
 				species: 'Whimsicott', ability: 'Illuminate', item: 'Quick Claw', gender: 'M',
-				moves: ['substitute', 'sing', 'gigadrain'],
+				moves: [['substitute', 'defog'][this.random(2)], 'sing', 'gigadrain'],
 				signatureMove: "Sacred Spear Explosion",
 				evs: {hp:252, def:4, spe:252}, nature: 'Timid',
 			},
