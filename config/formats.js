@@ -417,7 +417,7 @@ exports.Formats = [
 					problems.push(template.species + " cannot obtain the ability " + ability + ".");
 					continue;
 				}
-				if (ability in {'Aerilate': 1, 'Arena Trap': 1, 'Fur Coat': 1, 'Huge Power': 1, 'Imposter': 1, 'Parental Bond': 1, 'Pure Power': 1, 'Shadow Tag': 1, 'Simple':1, 'Speed Boost': 1}) {
+				if (ability in {'Aerilate': 1, 'Arena Trap': 1, 'Fur Coat': 1, 'Huge Power': 1, 'Imposter': 1, 'Parental Bond': 1, 'Pure Power': 1, 'Simple':1, 'Speed Boost': 1}) {
 					let legalAbility = false;
 					for (let i in template.abilities) {
 						if (ability === template.abilities[i]) legalAbility = true;
