@@ -801,7 +801,7 @@ EVs: 252 HP, 4 Def, 252 SpA, IVs: 0 Atk, Nature: Modest
 - Quiver Dance
 - Heal Order
 - Seed Flare
-- Boober's Oblivion - 10 PP Fire\Special 80\100%. Heals user by 75% of damage dealt. User faints if used 3 times in a row.
+- Boober's Oblivion - 10 PP Fire\Special 80\100%. Heals user by 2/3 of damage dealt. User faints if used 3 times in a row.
 
 ### HiMyNamesL
 Darmanitan-Zen @ Lum Berry
@@ -1033,7 +1033,7 @@ EVs: 4 Def, 252 Atk, 252 Spe, Nature: Adamant
 - Ice Shard
 - Icicle Spear
 - Mach Punch \ Pursuit \ Knock Off
-- Pixel Protection - 10 PP. Protect-based move. Only works on first turn out. Boosts Def by 4 and SpD by 2.
+- Pixel Protection - 10 PP. Protect-based move. Only works once per outing. Boosts Def by 4 and SpD by 2.
 
 ### LegitimateUsername
 Shuckle @ Leftovers
@@ -1745,7 +1745,7 @@ Innate Ability: Swaps stat changes with opponent on switch in.
 
 EVs: 252 HP, 4 Def, 252 Spe, Nature: Timid
 
-- Substitute
+- Substitute \ Defog
 - Sing
 - Giga Drain
 - Sacred Spear Explosion - 10 PP, Fairy\Special 100\100%. + Steel type. 30% burn.

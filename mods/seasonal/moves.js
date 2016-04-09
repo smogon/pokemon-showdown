@@ -327,7 +327,7 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, heal: 1},
-		drain: [3, 4],
+		drain: [2, 3],
 		onPrepareHit: function (target, source) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Eruption", target);
@@ -541,13 +541,11 @@ exports.BattleMovedex = {
 			this.add('-anim', source, "Night Slash", target);
 		},
 		onHit: function (target, source) {
-			if (source.hp) {
-				const sideConditions = {'spikes': 1, 'toxicspikes': 1, 'burnspikes': 1, 'stealthrock': 1, 'stickyweb': 1};
-				for (let i in sideConditions) {
-					if (source.side.removeSideCondition(i)) {
-						this.add('-sideend', source.side, this.getEffect(i).name, '[from] move: Buzz Axe Rampage', '[of] ' + source);
-						target.side.addSideCondition(i, source);
-					}
+			const sideConditions = {'spikes': 1, 'toxicspikes': 1, 'burnspikes': 1, 'stealthrock': 1, 'stickyweb': 1};
+			for (let i in sideConditions) {
+				if (source.side.removeSideCondition(i)) {
+					this.add('-sideend', source.side, this.getEffect(i).name, '[from] move: Buzz Axe Rampage', '[of] ' + source);
+					target.side.addSideCondition(i, source);
 				}
 			}
 		},
@@ -1477,9 +1475,24 @@ exports.BattleMovedex = {
 			this.add('-anim', source, "Explosion", source);
 			this.add('-anim', source, "Light of Ruin", target);
 		},
+		onAfterMoveSecondarySelf: function (source, target) {
+			let removeTarget = {reflect:1, lightscreen:1, safeguard:1, mist:1, spikes:1, toxicspikes:1, burnspikes:1, stealthrock:1, stickyweb:1};
+			let removeAll = {spikes:1, toxicspikes:1, burnspikes:1, stealthrock:1, stickyweb:1};
+			for (let targetCondition in removeTarget) {
+				if (target.side.removeSideCondition(targetCondition)) {
+					if (!removeAll[targetCondition]) continue;
+					this.add('-sideend', target.side, this.getEffect(targetCondition).name, '[from] move: Defog', '[of] ' + target);
+				}
+			}
+			for (let sideCondition in removeAll) {
+				if (source.side.removeSideCondition(sideCondition)) {
+					this.add('-sideend', source.side, this.getEffect(sideCondition).name, '[from] move: Defog', '[of] ' + source);
+				}
+			}
+		},
 		selfdestruct: true,
 		secondary: false,
-		target: "allAdjacent",
+		target: "allAdjacentFoes",
 		type: "Psychic",
 	},
 	// Joim
@@ -2476,12 +2489,25 @@ exports.BattleMovedex = {
 			} else {
 				this.addPseudoWeather('monoflying', source);
 			}
+			let removeTarget = {reflect:1, lightscreen:1, safeguard:1, mist:1, spikes:1, toxicspikes:1, burnspikes:1, stealthrock:1, stickyweb:1};
+			let removeAll = {spikes:1, toxicspikes:1, burnspikes:1, stealthrock:1, stickyweb:1};
+			for (let targetCondition in removeTarget) {
+				let foe = source.side.foe;
+				if (foe.removeSideCondition(targetCondition)) {
+					if (!removeAll[targetCondition]) continue;
+					this.add('-sideend', foe, this.getEffect(targetCondition).name, '[from] move: Defog', '[of] ' + foe.active[0]);
+				}
+			}
+			for (let sideCondition in removeAll) {
+				if (source.side.removeSideCondition(sideCondition)) {
+					this.add('-sideend', source.side, this.getEffect(sideCondition).name, '[from] move: Defog', '[of] ' + source);
+				}
+			}
 		},
 		effect: {
 			duration: 5,
 			onStart: function () {
 				this.add('message', 'All active Pokemon became pure Flying-type!');
-				// Only aesthetic; actual implementation below
 				for (let s in this.sides) {
 					const thisSide = this.sides[s];
 					for (let p in thisSide.active) {
@@ -2605,8 +2631,7 @@ exports.BattleMovedex = {
 		id: "nextlevelstrats",
 		isNonstandard: true,
 		name: "Next Level Strats",
-		pp: 5,
-		noPPBoosts: true,
+		pp: 25,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, snatch: 1},
 		boosts: {spe: 1},
@@ -2614,13 +2639,11 @@ exports.BattleMovedex = {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Follow Me", target);
 		},
-		onTryHit: function (pokemon) {
-			if (pokemon.level >= 200) return false;
-		},
 		onHit: function (pokemon) {
-			pokemon.level += 10;
-			if (pokemon.level > 200) pokemon.level = 200;
-			this.add('-message', 'Level 51 advanced 10 levels! It is now level ' + pokemon.level + '!');
+			if (pokemon.level < 300) {
+				pokemon.level += 40;
+				this.add('-message', pokemon.name + ' advanced 40 levels! It is now level ' + pokemon.level + '!');
+			}
 		},
 		secondary: false,
 		target: "self",
@@ -2700,21 +2723,28 @@ exports.BattleMovedex = {
 		flags: {authentic: 1},
 		onPrepareHit: function (target, source) {
 			this.attrLastMove('[still]');
+			if (!this.canSwitch(source.side)) {
+				delete move.selfdestruct;
+				return false;
+			}
 			this.add('-anim', source, "Torment", source);
 			this.add('-anim', source, "Grudge", source);
 			this.add('-anim', source, "Explosion", source);
 		},
+		self: {sideCondition: 'ofcurse'},
 		effect: {
 			duration: 2,
-			onStart: function (pokemon) {
-				this.add('-start', pokemon, 'Of Curse');
-				this.add('message', 'Of curse you cannot switch.');
+			onStart: function (side, source) {
+				side.addSideCondition('lunardance', source);
 			},
-			onEnd: function (pokemon) {
-				this.add('-end', pokemon, 'Of Curse');
+			onSwitchIn: function (pokemon) {
+				pokemon.side.removeSideCondition('ofcurse');
 			},
-			onTrapPokemon: function (pokemon) {
-				pokemon.tryTrap();
+			onEnd: function (side) {
+				const foes = side.foe.active;
+				if (side.active.length && side.active[0].hp && foes.length && foes[0].hp) {
+					foes[0].addVolatile('trapped', side.active[0], 'meanlook', 'trapper');
+				}
 			},
 		},
 		boosts: {
@@ -2845,44 +2875,27 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 4,
 		flags: {},
-		stallingMove: true,
-		volatileStatus: 'protect',
-		self: {boosts: {def:4, spd:2}},
-		onPrepareHit: function (pokemon) {
-			return !!this.willAct() && this.runEvent('StallMove', pokemon);
+		volatileStatus: 'pixelprotection',
+		effect: {
+			onStart: function (pokemon) {
+				pokemon.addVolatile('protect');
+			},
 		},
-		onTryHit: function (pokemon) {
-			if (pokemon.volatiles['pixels']) {
-				this.add('-hint', "Pixel Protection only works once per outing.");
-				return false;
-			}
+		onPrepareHit: function (pokemon) {
 			this.attrLastMove('[still]');
 			this.add('-anim', pokemon, "Moonblast", pokemon);
-			return !!this.willAct() && this.runEvent('StallMove', pokemon);
+			return !!this.willAct();
 		},
-		onHit: function (pokemon) {
-			if (pokemon.volatiles['pixels']) return false;
-			pokemon.addVolatile('pixels');
-			pokemon.addVolatile('stall');
-		},
-		effect: {
-			duration: 1,
-			onStart: function (target) {
-				this.add('-singleturn', target, 'Protect');
-			},
-			onTryHitPriority: 3,
-			onTryHit: function (target, source, move) {
-				if (!move.flags['protect']) return;
-				this.add('-activate', target, 'Protect');
-				let lockedmove = source.getVolatile('lockedmove');
-				if (lockedmove) {
-					// Outrage counter is reset
-					if (source.volatiles['lockedmove'].duration === 2) {
-						delete source.volatiles['lockedmove'];
-					}
-				}
+		onTry: function (pokemon) {
+			if (pokemon.volatiles['pixelprotection']) {
+				this.add('-fail', pokemon);
+				this.add('-hint', "Pixel Protection only works once per outing.");
 				return null;
-			},
+			}
+		},
+		boosts: {
+			def: 4,
+			spd: 2,
 		},
 		secondary: false,
 		target: "self",
@@ -3044,16 +3057,21 @@ exports.BattleMovedex = {
 		pp: 40,
 		priority: 4,
 		flags: {},
-		volatileStatus: 'protect',
+		volatileStatus: 'praiserufflets',
+		effect: {
+			onStart: function (pokemon) {
+				pokemon.addVolatile('protect');
+			},
+		},
 		onPrepareHit: function (pokemon) {
 			this.attrLastMove('[still]');
 			this.add('-anim', pokemon, "Growth", pokemon);
 			return !!this.willAct();
 		},
 		onTry: function (pokemon) {
-			if (pokemon.activeTurns > 1) {
+			if (pokemon.volatiles['praiserufflets']) {
 				this.add('-fail', pokemon);
-				this.add('-hint', "Praise Rufflets only works on your first turn out.");
+				this.add('-hint', "Praise Rufflets only works once per outing.");
 				return null;
 			}
 		},
