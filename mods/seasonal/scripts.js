@@ -143,8 +143,8 @@ exports.BattleScripts = {
 				signatureMove: "Splatter",
 				evs: {atk:4, spa:252, spe:252}, nature: 'Naive',
 			},
-			'bondie': {
-				species: 'Krabby', ability: 'Shell Armor', item: 'Eviolite', gender: 'M',
+			'Bondie': {
+				species: 'Krabby', ability: 'Shell Armor', item: 'Leftovers', gender: 'M',
 				moves: ['crabhammer', 'icepunch', 'autotomize'],
 				signatureMove: "Claw Guard",
 				evs: {hp:4, atk:252, spe:252}, nature: 'Adamant',
