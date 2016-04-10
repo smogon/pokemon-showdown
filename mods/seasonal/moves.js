@@ -160,7 +160,7 @@ exports.BattleMovedex = {
 		flags: {authentic: 1, mirror: 1},
 		onPrepareHit: function (target, source) {
 			this.attrLastMove('[still]');
-			this.add('-anim', source, "Luster Purge", target);
+			this.add('-anim', source, "Night Shade", target);
 		},
 		ignoreDefensive: true,
 		secondary: false,
@@ -212,13 +212,13 @@ exports.BattleMovedex = {
 			this.add('-anim', source, "Draco Meteor", target);
 		},
 		onHit: function (target) {
-			let targets = target.side.pokemon.filter(pokemon => !(pokemon.fainted || pokemon === target));
+			let targets = target.side.pokemon.filter(pokemon => !(pokemon === target));
 			targets.sort(() => (Math.round(Math.random()) - 0.5));
-			let lowestpct = 1, pokemon = target, candidate;
+			let highestpct = 0, pokemon = target, candidate;
 			for (let i = 0; i < targets.length; i++) {
 				candidate = targets[i];
-				if (candidate.hp / candidate.maxhp <= lowestpct && candidate.hp / candidate.maxhp >= 0.11) {
-					lowestpct = candidate.hp / candidate.maxhp;
+				if (candidate.hp / candidate.maxhp > highestpct && candidate.hp > 1) {
+					highestpct = candidate.hp / candidate.maxhp;
 					pokemon = candidate;
 				}
 			}
@@ -702,20 +702,53 @@ exports.BattleMovedex = {
 		priority: 4,
 		flags: {},
 		stallingMove: true,
-		volatileStatus: 'protect',
+		volatileStatus: 'clawguard',
 		onPrepareHit: function (pokemon) {
 			this.attrLastMove('[still]');
 			this.add('-anim', pokemon, "Agility", pokemon);
 			return !!this.willAct() && this.runEvent('StallMove', pokemon);
 		},
 		onHit: function (pokemon) {
-			pokemon.addVolatile('rage');
+			pokemon.addVolatile('clawguardprotect');
 			pokemon.addVolatile('stall');
+			this.add('-singleturn', pokemon, 'Protect');
+		},
+		effect: {
+			onStart: function (pokemon) {
+				this.effectData.stage = 0;
+				this.add('-start', pokemon, 'Rage');
+			},
+			onHit: function (target, source, move) {
+				if (move.category === 'Status' || !target.hp || target === source || this.effectData.stage > 5) return;
+				this.effectData.stage++;
+				this.add('-anim', target, "Torment", target);
+				this.add('-message', 'Its rage is building up! (Rage × ' + this.effectData.stage + ')');
+			},
+			onModifyAtk: function (atk) {
+				return atk + this.modify(atk, this.effectData.stage, 2);
+			},
+			onTryHitPriority: 3,
+			onTryHit: function (target, source, move) {
+				if (!target.volatiles['clawguardprotect']) return;
+				target.removeVolatile('clawguardprotect');
+				if (!move.flags['protect'] || move.category === 'Status') return;
+				this.add('-activate', target, 'Protect');
+				let lockedmove = source.getVolatile('lockedmove');
+				if (lockedmove) {
+					// Outrage counter is reset
+					if (source.volatiles['lockedmove'].duration === 2) {
+						delete source.volatiles['lockedmove'];
+					}
+				}
+				return null;
+			},
+			onResidual: function (pokemon) {
+				pokemon.removeVolatile('clawguardprotect');
+			},
 		},
 		boosts: {
 			atk: 1,
 			def: 1,
-			accuracy: 1,
 		},
 		secondary: false,
 		target: "self",
