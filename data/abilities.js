@@ -2476,6 +2476,9 @@ exports.BattleAbilities = {
 			if (move.multihit && move.multihit.length) {
 				move.multihit = move.multihit[1];
 			}
+			if (move.multiaccuracy) {
+				delete move.multiaccuracy;
+			}
 		},
 		id: "skilllink",
 		name: "Skill Link",
