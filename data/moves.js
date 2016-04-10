@@ -14639,7 +14639,8 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		multihit: [3, 3],
+		multihit: 3,
+		multiaccuracy: true,
 		effect: {
 			duration: 1,
 			onStart: function () {
