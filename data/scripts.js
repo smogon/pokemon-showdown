@@ -1434,7 +1434,7 @@ exports.BattleScripts = {
 					if (hasMove['freezedry']) rejected = true;
 					break;
 				case 'bodyslam':
-					if (hasMove['glare']) rejected = true;
+					if (hasMove['glare'] || hasMove['headbutt']) rejected = true;
 					break;
 				case 'endeavor':
 					if (slot > 0) rejected = true;
