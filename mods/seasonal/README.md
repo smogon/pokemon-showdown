@@ -322,7 +322,7 @@ EVs: 4 Atk, 252 SpA, 252 Spe, Nature: Naive
 - Splatter - 40 PP, Bug\Special, 200\100% prio +1. The user faints. The target is trapped during the following turn and its speed is lowered.
 
 ### bondie
-Krabby @ Eviolite
+Krabby @ Leftovers
 
 Ability: Shell Armor
 
@@ -333,7 +333,7 @@ EVs: 4 HP, 252 Atk, 252 Spe, Nature: Adamant
 - Crabhammer
 - Ice Punch
 - Autotomize
-- Claw Guard - 5 (no boost) PP, Protect-based move. The user gains a Coil boost and the Rage status.
+- Claw Guard - 5 (no boost) PP, Protect-based move, does not protect against status. Boosts attack and defense, the user gets Rage until switched out.
 
 ### boTTT
 Regigigas @ Leftovers \ Chesto Berry

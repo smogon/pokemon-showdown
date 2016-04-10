@@ -940,7 +940,7 @@ exports.Formats = [
 				this.add('c|+bludz|420 blaze it');
 			}
 			if (name === 'bondie') {
-				this.add('c|+bondie|__(\\/) snip snip (\\/)__');
+				this.add('c|+Bondie|__(\\/) snip snip (\\/)__');
 			}
 			if (name === 'bottt') {
 				this.add('c|boTTT|Beep, boop');
@@ -1481,7 +1481,7 @@ exports.Formats = [
 				this.add('c|+bludz|zzz');
 			}
 			if (name === 'bondie') {
-				this.add('c|+bondie|Sigh...');
+				this.add('c|+Bondie|Sigh...');
 			}
 			if (name === 'bottt') {
 				this.add("c| boTTT|No longer being maintained...");
@@ -1943,10 +1943,10 @@ exports.Formats = [
 
 							this.add("c|\u2605" + swapmon1.side.name + "|Bye-bye, " + swapmon2.name + "!");
 							this.add("c|\u2605" + swapmon2.side.name + "|Bye-bye, " + swapmon1.name + "!");
-							this.add('-anim', swapmon1.side.active, "Luster Purge", swapmon2.side.active);
+							this.add('-anim', swapmon1.side.active, "Healing Wish", swapmon2.side.active);
 							this.add('-anim', swapmon2.side.active, "Aura Sphere", swapmon2.side.active);
 							this.add('message', swapmon2.side.name + " received " + swapmon2.name + "! Take good care of " + swapmon2.name + "!");
-							this.add('-anim', swapmon2.side.active, "Luster Purge", swapmon1.side.active);
+							this.add('-anim', swapmon2.side.active, "Healing Wish", swapmon1.side.active);
 							this.add('-anim', swapmon1.side.active, "Aura Sphere", swapmon1.side.active);
 							this.add('message', swapmon1.side.name + " received " + swapmon1.name + "! Take good care of " + swapmon1.name + "!");
 
