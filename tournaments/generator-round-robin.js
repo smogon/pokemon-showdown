@@ -18,26 +18,14 @@ let RoundRobin = (function () {
 
 	RoundRobin.prototype.addUser = function (user) {
 		if (this.isBracketFrozen) return 'BracketFrozen';
-
-		if (this.users.indexOf(user) >= 0) return 'UserAlreadyAdded';
-
 		this.users.push(user);
 	};
 	RoundRobin.prototype.removeUser = function (user) {
 		if (this.isBracketFrozen) return 'BracketFrozen';
-
-		let userIndex = this.users.indexOf(user);
-		if (userIndex < 0) return 'UserNotAdded';
-
-		this.users.splice(userIndex, 1);
+		this.users.splice(this.users.indexOf(user), 1);
 	};
 	RoundRobin.prototype.replaceUser = function (user, replacementUser) {
-		let userIndex = this.users.indexOf(user);
-		if (userIndex < 0) return 'UserNotAdded';
-
-		if (this.users.indexOf(replacementUser) >= 0) return 'UserAlreadyAdded';
-
-		this.users[userIndex] = replacementUser;
+		this.users[this.users.indexOf(user)] = replacementUser;
 	};
 	RoundRobin.prototype.getUsers = function () {
 		return this.users.slice(0);
@@ -92,7 +80,6 @@ let RoundRobin = (function () {
 		if (!this.isBracketFrozen) return 'BracketNotFrozen';
 
 		let userIndex = this.users.indexOf(user);
-		if (userIndex < 0) return 'UserNotAdded';
 
 		this.matches[userIndex].forEach((match, col) => {
 			if (!match || match.state !== 'available') return;
@@ -115,17 +102,11 @@ let RoundRobin = (function () {
 	};
 	RoundRobin.prototype.getUserBusy = function (user) {
 		if (!this.isBracketFrozen) return 'BracketNotFrozen';
-
-		let userIndex = this.users.indexOf(user);
-		if (userIndex < 0) return 'UserNotAdded';
-		return this.isUsersBusy[userIndex];
+		return this.isUsersBusy[this.users.indexOf(user)];
 	};
 	RoundRobin.prototype.setUserBusy = function (user, isBusy) {
 		if (!this.isBracketFrozen) return 'BracketNotFrozen';
-
-		let userIndex = this.users.indexOf(user);
-		if (userIndex < 0) return 'UserNotAdded';
-		this.isUsersBusy[userIndex] = isBusy;
+		this.isUsersBusy[this.users.indexOf(user)] = isBusy;
 	};
 
 	RoundRobin.prototype.getAvailableMatches = function () {
