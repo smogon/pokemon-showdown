@@ -705,10 +705,14 @@ class Tournament {
 	onRename(user, oldid, joining) {
 		if (!(oldid in this.players)) return;
 
-		this.players[user.userid] = this.players[oldid];
-		this.players[user.userid].userid = user.userid;
-		this.players[user.userid].name = user.name;
-		delete this.players[oldid];
+		if (user.userid === oldid) {
+			this.players[user.userid].name = user.name;
+		} else {
+			this.players[user.userid] = this.players[oldid];
+			this.players[user.userid].userid = user.userid;
+			this.players[user.userid].name = user.name;
+			delete this.players[oldid];
+		}
 
 		this.updateFor(user);
 	}
