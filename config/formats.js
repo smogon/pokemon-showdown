@@ -391,7 +391,7 @@ exports.Formats = [
 		column: 2,
 
 		ruleset: ['OU'],
-		banlist: ['Ignore Illegal Abilities', 'Archeops', 'Regigigas', 'Slaking'],
+		banlist: ['Ignore Illegal Abilities', 'Archeops', 'Chatot', 'Regigigas', 'Slaking'],
 		onValidateTeam: function (team) {
 			let problems = [];
 			let pokedex = Object.keys(Tools.data.Pokedex);
