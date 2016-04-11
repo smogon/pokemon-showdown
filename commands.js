@@ -1491,6 +1491,7 @@ exports.commands = {
 		}
 		if (!cmd.startsWith('global')) {
 			let groupid = Config.groups[nextGroup].id;
+			if (!groupid && nextGroup === Config.groupsranking[0]) groupid = 'deauth';
 			return this.errorReply('Did you mean "/room' + groupid + '" or "/global' + groupid + '"?');
 		}
 		if (Config.groups[nextGroup].roomonly) {
@@ -1569,6 +1570,13 @@ exports.commands = {
 	devoice: 'deauth',
 	deauth: function (target, room, user) {
 		return this.parse('/demote ' + target + ', deauth');
+	},
+
+	deglobalvoice: 'globaldeauth',
+	deglobalauth: 'globaldeauth',
+	globaldevoice: 'globaldeauth',
+	globaldeauth: function (target, room, user) {
+		return this.parse('/globaldemote ' + target + ', deauth');
 	},
 
 	deroomvoice: 'roomdeauth',
