@@ -2781,8 +2781,8 @@ exports.BattleAbilities = {
 	},
 	"superluck": {
 		shortDesc: "This Pokemon's critical hit ratio is raised by 1 stage.",
-		onModifyMove: function (move) {
-			move.critRatio++;
+		onModifyCritRatio: function (critRatio) {
+			return critRatio + 1;
 		},
 		id: "superluck",
 		name: "Super Luck",
