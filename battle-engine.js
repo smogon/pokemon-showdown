@@ -3448,18 +3448,19 @@ Battle = (() => {
 		basePower = this.clampIntRange(basePower, 1);
 
 		let critMult;
+		let critRatio = this.runEvent('ModifyCritRatio', pokemon, target, move, move.critRatio || 0);
 		if (this.gen <= 5) {
-			move.critRatio = this.clampIntRange(move.critRatio, 0, 5);
+			critRatio = this.clampIntRange(critRatio, 0, 5);
 			critMult = [0, 16, 8, 4, 3, 2];
 		} else {
-			move.critRatio = this.clampIntRange(move.critRatio, 0, 4);
+			critRatio = this.clampIntRange(critRatio, 0, 4);
 			critMult = [0, 16, 8, 2, 1];
 		}
 
 		move.crit = move.willCrit || false;
 		if (move.willCrit === undefined) {
-			if (move.critRatio) {
-				move.crit = (this.random(critMult[move.critRatio]) === 0);
+			if (critRatio) {
+				move.crit = (this.random(critMult[critRatio]) === 0);
 			}
 		}
 

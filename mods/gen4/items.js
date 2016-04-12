@@ -160,9 +160,9 @@ exports.BattleItems = {
 	},
 	"luckypunch": {
 		inherit: true,
-		onModifyMove: function (move, user) {
+		onModifyCritRatio: function (critRatio, user) {
 			if (user.template.species === 'Chansey') {
-				move.critRatio += 2;
+				return critRatio + 2;
 			}
 		},
 	},
@@ -225,9 +225,9 @@ exports.BattleItems = {
 	},
 	"stick": {
 		inherit: true,
-		onModifyMove: function (move, user) {
+		onModifyCritRatio: function (critRatio, user) {
 			if (user.template.species === 'Farfetch\'d') {
-				move.critRatio += 2;
+				return critRatio + 2;
 			}
 		},
 	},
