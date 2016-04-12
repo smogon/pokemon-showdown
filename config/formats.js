@@ -1271,9 +1271,9 @@ exports.Formats = [
 				this.add('c|+Sonired|~');
 			}
 			if (name === 'spacebass') {
-				this.add('c|%SpaceBass|He aims his good ear best he can towards conversation and sometimes leans in awkward toward your seat');
-				this.add('c|%SpaceBass|And if by chance one feels their space too invaded, then try your best to calmly be discreet');
-				this.add('c|%SpaceBass|Because this septic breathed man that stands before you is a champion from days gone by');
+				this.add('c|@SpaceBass|He aims his good ear best he can towards conversation and sometimes leans in awkward toward your seat');
+				this.add('c|@SpaceBass|And if by chance one feels their space too invaded, then try your best to calmly be discreet');
+				this.add('c|@SpaceBass|Because this septic breathed man that stands before you is a champion from days gone by');
 			}
 			if (name === 'sparktrain') {
 				this.add('c|+sparktrain|hi');
@@ -1777,9 +1777,9 @@ exports.Formats = [
 				this.add('c|+Snowy|i never understood this i always hear them be like "yo whats up monica" "u tryna blaze monica"');
 			}
 			if (name === 'spacebass') {
-				this.add('c|%SpaceBass|And the tales of whales and woe off his liquored toungue will flow, the light will soft white twinkle off the cataracts in his eye');
-				this.add("c|%SpaceBass|So if by chance you're cornered near the bathroom, or he blocks you sprawled in his aisle seat");
-				this.add("c|%SpaceBass|Embrace the chance to hear some tales of greatness, 'cause he's the most interesting ball of toxins you're ever apt to meet");
+				this.add('c|@SpaceBass|And the tales of whales and woe off his liquored toungue will flow, the light will soft white twinkle off the cataracts in his eye');
+				this.add("c|@SpaceBass|So if by chance you're cornered near the bathroom, or he blocks you sprawled in his aisle seat");
+				this.add("c|@SpaceBass|Embrace the chance to hear some tales of greatness, 'cause he's the most interesting ball of toxins you're ever apt to meet");
 			}
 			if (name === 'specsmegabeedrill') {
 				this.add('c|+SpecsMegaBeedrill|Tryhard.');
