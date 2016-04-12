@@ -95,6 +95,13 @@ class CommandContext {
 		this.targetUser = null;
 	}
 
+	updateBanwords() {
+		if (this.room.banwords && this.room.banwords.length) {
+			this.room.banwordRegex = new RegExp('(?:\\b|(?!\\w))(?:' + this.room.banwords.join('|') + ')(?:\\b|\\B(?!\\w))', 'i');
+		} else {
+			this.room.banwordRegex = true;
+		}
+	}
 	sendReply(data) {
 		if (this.broadcasting) {
 			this.room.add(data);
@@ -318,6 +325,12 @@ class CommandContext {
 			message = message.replace(/[\u0300-\u036f\u0483-\u0489\u0610-\u0615\u064B-\u065F\u0670\u06D6-\u06DC\u06DF-\u06ED\u0E31\u0E34-\u0E3A\u0E47-\u0E4E]{3,}/g, '');
 			if (/[\u239b-\u23b9]/.test(message)) {
 				this.errorReply("Your message contains banned characters.");
+				return false;
+			}
+
+			if (!this.room.banwordRegex) this.updateBanwords();
+			if (this.room.banwordRegex !== true && this.room.banwordRegex.test(message) && !user.can('mute', null, this.room)) {
+				this.errorReply("Your message contained banned words.");
 				return false;
 			}
 
