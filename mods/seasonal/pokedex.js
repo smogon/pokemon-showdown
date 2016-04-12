@@ -14,6 +14,7 @@ exports.BattlePokedex = {
 	// qtrx
 	missingno: {
 		inherit: true,
+		abilities: {0: "Oblivious"},
 		basespecies: "Unown",
 		forme: "Mega",
 		formeLetter: "M",
