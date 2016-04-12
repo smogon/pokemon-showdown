@@ -212,7 +212,7 @@ class Tournament {
 		if (!isAllowAlts) {
 			let users = this.generator.getUsers();
 			for (let i = 0; i < users.length; i++) {
-				let otherUser = Users.getExact(users[i].userid);
+				let otherUser = Users.get(users[i].userid);
 				if (otherUser && otherUser.latestIp === user.latestIp) {
 					output.sendReply('|tournament|error|AltUserAlreadyAdded');
 					return;
@@ -720,7 +720,7 @@ class Tournament {
 		if (this.scouting || this.isEnded || user.latestIp === room.p1.latestIp || user.latestIp === room.p2.latestIp) return;
 		let users = this.generator.getUsers(true);
 		for (let i = 0; i < users.length; i++) {
-			let otherUser = Users.getExact(users[i].userid);
+			let otherUser = Users.get(users[i].userid);
 			if (otherUser && otherUser.latestIp === user.latestIp) {
 				return "Scouting is banned: tournament players can't watch other tournament battles.";
 			}
