@@ -1764,7 +1764,7 @@ EVs: 252 HP, 252 Atk \ SpA, 4 SpD, Nature: Adamant \ Modest
 - Spikes
 - Power Whip \ Seed Flare
 - Spiky Shield
-- SPIKEY RAIN - 10 PP. Field move lasting 5 turns, boosting defenses of Grass-types by 50%, power of Grass-type moves by 50% and +2 priority to Grass-type moves.
+- SPIKEY RAIN - 10 PP. +1 priority. Field move lasting 5 turns, boosting defenses of Grass-types by 50%, power of Grass-type moves by 50% and +2 priority to Grass-type moves.
 
 ### urkerab
 Skuntank @ Razor Claw
