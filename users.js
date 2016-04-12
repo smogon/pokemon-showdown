@@ -90,7 +90,9 @@ let getExactUser = Users.getExact = function (name) {
 let bannedIps = Users.bannedIps = Object.create(null);
 let bannedUsers = Users.bannedUsers = Object.create(null);
 let lockedIps = Users.lockedIps = Object.create(null);
+let nameLockedIps = Users.nameLockedIps = Object.create(null);
 let lockedUsers = Users.lockedUsers = Object.create(null);
+let nameLockedUsers = Users.nameLockedUsers = Object.create(null);
 let lockedRanges = Users.lockedRanges = Object.create(null);
 let rangelockedUsers = Users.rangeLockedUsers = Object.create(null);
 
@@ -116,8 +118,12 @@ function checkBanned(ip) {
 function checkLocked(ip) {
 	return ipSearch(ip, lockedIps);
 }
+function checkNameLocked(ip) {
+	return ipSearch(ip, nameLockedIps);
+}
 Users.checkBanned = checkBanned;
 Users.checkLocked = checkLocked;
+Users.checkNameLocked = checkNameLocked;
 
 // Defined in commands.js
 Users.checkRangeBanned = function () {};
@@ -212,10 +218,36 @@ function unlockRange(range) {
 	delete lockedRanges[range];
 	delete rangelockedUsers[range];
 }
+function unnamelock(name) {
+	let userid = toId(name);
+	let user = getUser(userid);
+	let unnamelocked = '';
+	if (user) {
+		if (user.userid === userid) name = user.name;
+		if (user.namelocked) {
+			user.namelocked = false;
+			user.updateIdentity();
+			unnamelocked = name;
+		}
+	}
+	for (let ip in nameLockedIps) {
+		if (ip in user.ips) {
+			delete Users.nameLockedIps[ip];
+		}
+	}
+	for (let id in nameLockedUsers) {
+		if (nameLockedUsers[id] === userid || id === userid) {
+			delete nameLockedUsers[id];
+			unnamelocked = id;
+		}
+	}
+	return unnamelocked;
+}
 Users.unban = unban;
 Users.unlock = unlock;
 Users.lockRange = lockRange;
 Users.unlockRange = unlockRange;
+Users.unnamelock = unnamelock;
 
 /*********************************************************
  * User groups
@@ -419,6 +451,7 @@ class User {
 		this.latestIp = connection.ip;
 
 		this.locked = Users.checkLocked(connection.ip);
+		this.namelocked = Users.checkNameLocked(connection.ip);
 		this.prevNames = Object.create(null);
 		this.roomCount = Object.create(null);
 
@@ -477,6 +510,9 @@ class User {
 	getIdentity(roomid) {
 		if (this.locked) {
 			return '‽' + this.name;
+		}
+		if (this.namelocked) {
+			return '✖' + this.name;
 		}
 		if (roomid) {
 			let room = Rooms.rooms[roomid];
@@ -628,6 +664,7 @@ class User {
 		this.group = Config.groupsranking[0];
 		this.isStaff = false;
 		this.isSysop = false;
+		this.namelocked = false;
 
 		for (let i = 0; i < this.connections.length; i++) {
 			// console.log('' + name + ' renaming: connection ' + i + ' of ' + this.connections.length);
@@ -638,6 +675,20 @@ class User {
 		for (let i in this.roomCount) {
 			Rooms(i).onRename(this, oldid, false);
 		}
+		return true;
+	}
+	lockName() {
+		let userid = this.userid;
+		for (let ip in this.ips) {
+			nameLockedIps[ip] = userid;
+		}
+		if (this.autoconfirmed) nameLockedUsers[this.autoconfirmed] = userid;
+		nameLockedUsers[this.userid] = userid;
+		this.namelocked = userid;
+		this.forceRename('Guest ' + this.guestNum, false);
+		this.named = true;
+		this.updateIdentity();
+
 		return true;
 	}
 	updateIdentity(roomid) {
@@ -687,6 +738,12 @@ class User {
 	 * @param connection       The connection asking for the rename
 	 */
 	rename(name, token, newlyRegistered, connection) {
+		if (this.namelocked) {
+			this.popup("You can't change your name because you're namelocked.");
+			this.forceRename('Guest ' + this.guestNum, false);
+			this.named = true;
+			return false;
+		}
 		for (let i in this.roomCount) {
 			let room = Rooms(i);
 			if (room && room.rated && (this.userid in room.game.players)) {
@@ -919,6 +976,12 @@ class User {
 			if (lockedUsers[userid] !== userid) bannedUnder = ' because of rule-breaking by your alt account ' + lockedUsers[userid];
 			this.send("|popup|Your username (" + name + ") is locked" + bannedUnder + "'. Your lock will expire in a few days." + (Config.appealurl ? " Or you can appeal at:\n" + Config.appealurl : ""));
 			this.lock(true, userid);
+		}
+		if (registered && userid in nameLockedUsers) {
+			let bannedUnder = '';
+			if (lockedUsers[userid] !== userid) bannedUnder = ' because of rule-breaking by your alt account ' + lockedUsers[userid];
+			this.send("|popup|Your are namelocked" + bannedUnder + "'. Your namelock will expire in a few days.");
+			this.lockName();
 		}
 		if (this.group === Config.groupsranking[0]) {
 			let range = this.locked || Users.shortenHost(this.latestHost);
