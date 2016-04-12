@@ -446,9 +446,13 @@ exports.BattleMovedex = {
 				this.damage(source.maxhp / 2, source, source, 'brokenwand');
 				return false;
 			}
-			this.useMove('thunderbolt', source);
-			this.heal(source.maxhp * 0.10, source, source);
-			this.useMove('icebeam', source);
+			if (source.side.foe.active[0].hp) this.useMove('thunderbolt', source);
+			if (!source.hp) return;
+			if (source.side.foe.active[0].hp) {
+				this.heal(source.maxhp * 0.10, source, source);
+				this.useMove('icebeam', source);
+				if (!source.hp) return;
+			}
 			this.useMove('calmmind', source);
 			this.useMove('spikes', source);
 		},
