@@ -150,9 +150,9 @@ exports.BattleItems = {
 		spritenum: 475,
 		// The Stick is a stand-in for a number of pokemon-exclusive items
 		// introduced with Gen Next
-		onModifyMove: function (move, user) {
+		onModifyCritRatio: function (critRatio, user) {
 			if (user.template.species === 'Farfetch\'d') {
-				move.critRatio += 2;
+				return critRatio + 2;
 			}
 		},
 		onModifyDef: function (def, pokemon) {

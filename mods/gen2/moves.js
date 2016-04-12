@@ -151,9 +151,8 @@ exports.BattleMovedex = {
 			onStart: function (pokemon) {
 				this.add('-start', pokemon, 'move: Focus Energy');
 			},
-			onModifyMovePriority: 1,
-			onModifyMove: function (move) {
-				move.critRatio += 1;
+			onModifyCritRatio: function (critRatio) {
+				return critRatio + 1;
 			},
 		},
 	},
