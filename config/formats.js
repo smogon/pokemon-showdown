@@ -1049,7 +1049,7 @@ exports.Formats = [
 			if (name === 'halite') {
 				this.add('c|@Halite|You’re gonna get haxxed kid :^)');
 			}
-			if (name === 'hannah') {
+			if (name === 'hannahh') {
 				this.add('c|+Hannahh|♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥');
 			}
 			if (name === 'hashtag') {
