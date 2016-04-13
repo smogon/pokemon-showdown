@@ -111,6 +111,10 @@ Dnsbl.reverse = function reverseDns(ip, callback) {
 			callback(null, ['privatelayer.proxy-nohost']);
 			return;
 		}
+		if (ip.startsWith('185.86.148.') || ip.startsWith('185.86.149.')) {
+			callback(null, ['yourserver.se.proxy-nohost']);
+			return;
+		}
 		if (rangeLeaseweb(ip) || rangeLeaseweb2(ip) || rangeLeaseweb3(ip) || rangeVoxility(ip)) {
 			callback(null, ['zenmate.proxy-nohost']);
 			return;
