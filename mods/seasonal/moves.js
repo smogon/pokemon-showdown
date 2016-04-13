@@ -446,9 +446,13 @@ exports.BattleMovedex = {
 				this.damage(source.maxhp / 2, source, source, 'brokenwand');
 				return false;
 			}
-			this.useMove('thunderbolt', source);
-			this.heal(source.maxhp * 0.10, source, source);
-			this.useMove('icebeam', source);
+			if (source.side.foe.active[0].hp) this.useMove('thunderbolt', source);
+			if (!source.hp) return;
+			if (source.side.foe.active[0].hp) {
+				this.heal(source.maxhp * 0.10, source, source);
+				this.useMove('icebeam', source);
+				if (!source.hp) return;
+			}
 			this.useMove('calmmind', source);
 			this.useMove('spikes', source);
 		},
@@ -969,7 +973,7 @@ exports.BattleMovedex = {
 	},
 	// Mizuhime
 	doublelaser: {
-		accuracy: 95,
+		accuracy: 90,
 		basePower: 75,
 		category: "Special",
 		id: "doublelaser",
@@ -979,6 +983,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {pulse: 1, protect: 1, mirror: 1},
 		multihit: 2,
+		multiaccuracy: true,
 		onPrepareHit: function (target, source) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Water Pulse", target);
@@ -1142,14 +1147,15 @@ exports.BattleMovedex = {
 	},
 	// Marshmallon
 	excuse: {
-		accuracy: 100,
+		accuracy: 90,
 		basePower: 0,
 		category: "Status",
 		id: "excuse",
 		isNonstandard: true,
 		isViable: true,
 		name: "Excuse",
-		pp: 10,
+		pp: 5,
+		noPPBoosts: true,
 		priority: 2,
 		flags: {protect: 1, reflectable: 1, mirror: 1, authentic: 1},
 		onHit: function (pokemon) {
@@ -1414,7 +1420,7 @@ exports.BattleMovedex = {
 	// flying kebab
 	frozenkebabskewers: {
 		accuracy: 100,
-		basePower: 20,
+		basePower: 25,
 		category: "Physical",
 		id: "frozenkebabskewers",
 		isViable: true,
@@ -1430,7 +1436,7 @@ exports.BattleMovedex = {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Icicle Spear", target);
 		},
-		onTryHit: function (target, source) {
+		onAfterMoveSecondarySelf: function (source) {
 			if (source.boosts['atk'] < 2) this.boost({atk: 1}, source, source);
 			this.boost({spe: 1}, source, source);
 		},
@@ -1447,13 +1453,13 @@ exports.BattleMovedex = {
 	// biggie
 	foodrush: {
 		accuracy: 90,
-		basePower: 100,
+		basePower: 90,
 		category: "Physical",
 		id: "foodrush",
 		isNonstandard: true,
 		isViable: true,
 		name: "Food Rush",
-		pp: 10,
+		pp: 5,
 		priority: -6,
 		flags: {contact: 1, protect: 1, mirror: 1},
 		forceSwitch: true,
@@ -2883,7 +2889,7 @@ exports.BattleMovedex = {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Spike Cannon", target);
 		},
-		multihit: [2, 5],
+		multihit: [3, 5],
 		secondary: {
 			chance: 100,
 			self: {
@@ -3192,11 +3198,11 @@ exports.BattleMovedex = {
 		onModifyMove: function (move) {
 			move.type = "???";
 			const rand = this.random(20);
-			if (rand < 9) {
+			if (rand < 10) {
 				move.damageCallback = function (source, target) {
 					return Math.max(target.hp / 2, target.maxhp / 4);
 				};
-			} else if (rand < 11) {
+			} else if (rand < 12) {
 				move.onHit = function (target, source) {
 					this.attrLastMove('[still]');
 					this.add('-anim', source, "Explosion", target);
@@ -3227,7 +3233,7 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {snatch: 1, heal: 1},
-		heal: [1, 2],
+		heal: [1, 3],
 		boosts: {spa:1, spd:1},
 		secondary: false,
 		onPrepareHit: function (target, source) {
@@ -3354,7 +3360,7 @@ exports.BattleMovedex = {
 	// Quite Quiet
 	retreat: {
 		accuracy: 100,
-		basePower: 60,
+		basePower: 55,
 		category: "Special",
 		id: "retreat",
 		isNonstandard: true,
@@ -3832,7 +3838,10 @@ exports.BattleMovedex = {
 				pokemon.removeVolatile('lockedmove');
 			}
 		},
-		secondary: false,
+		secondary: {
+			chance: 15,
+			status: 'brn',
+		},
 		target: "randomNormal",
 		type: "Fire",
 	},
@@ -3941,7 +3950,7 @@ exports.BattleMovedex = {
 		isNonstandard: true,
 		name: "SPIKEY RAIN",
 		pp: 10,
-		priority: 0,
+		priority: 1,
 		terrain: 'spikeyrain',
 		flags: {},
 		onPrepareHit: function (target, source) {
