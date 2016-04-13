@@ -306,7 +306,7 @@ exports.BattleScripts = {
 				evs: {atk:252, def:4, spe:252}, nature: 'Adamant',
 			},
 			'RODAN': {
-				species: 'Munchlax', ability: 'Fur Coat', item: 'Eviolite', gender: 'M',
+				species: 'Munchlax', ability: 'Guts', item: 'Eviolite', gender: 'M',
 				moves: ['swordsdance', 'drainpunch', 'bodyslam'],
 				signatureMove: "Mother, Father, Gentleman",
 				evs: {hp:252, atk:252, spd:4}, nature: 'Adamant',
