@@ -2735,6 +2735,7 @@ exports.commands = {
 			let userdetails = {
 				userid: targetUser.userid,
 				avatar: targetUser.avatar,
+				group: targetUser.group,
 				rooms: roomList,
 			};
 			connection.send('|queryresponse|userdetails|' + JSON.stringify(userdetails));
