@@ -144,10 +144,10 @@ exports.BattleScripts = {
 				evs: {atk:4, spa:252, spe:252}, nature: 'Naive',
 			},
 			'Bondie': {
-				species: 'Krabby', ability: 'Shell Armor', item: 'Leftovers', gender: 'M',
+				species: 'Krabby', ability: 'Shell Armor', item: 'Eviolite', gender: 'M',
 				moves: ['crabhammer', 'icepunch', 'autotomize'],
 				signatureMove: "Claw Guard",
-				evs: {hp:4, atk:252, spe:252}, nature: 'Adamant',
+				evs: {hp:4, atk:252, spe:252}, nature: 'Jolly',
 			},
 			'boTTT': {
 				species: 'Regigigas', ability: ['Scrappy', 'Magic Guard'][this.random(2)], item: (variant ? 'Leftovers' : 'Chesto Berry'), gender: 'N', shiny: variant,
@@ -277,7 +277,7 @@ exports.BattleScripts = {
 			},
 			'Freeroamer': {
 				species: 'Lucario', ability: 'Justified', item: 'Lucarionite', gender: 'M',
-				moves: ['crunch', 'jumpkick', 'extremespeed'],
+				moves: ['crunch', 'sacredsword', 'extremespeed'],
 				signatureMove: 'Screw This Matchup',
 				evs: {atk:252, spd:4, spe:252}, nature: 'Jolly',
 			},
@@ -306,7 +306,7 @@ exports.BattleScripts = {
 				evs: {atk:252, def:4, spe:252}, nature: 'Adamant',
 			},
 			'RODAN': {
-				species: 'Munchlax', ability: 'Fur Coat', item: 'Eviolite', gender: 'M',
+				species: 'Munchlax', ability: 'Guts', item: 'Eviolite', gender: 'M',
 				moves: ['swordsdance', 'drainpunch', 'bodyslam'],
 				signatureMove: "Mother, Father, Gentleman",
 				evs: {hp:252, atk:252, spd:4}, nature: 'Adamant',
@@ -522,8 +522,8 @@ exports.BattleScripts = {
 				evs: {def:4, spa:252, spe:252}, nature: 'Timid',
 			},
 			'Marshmallon': {
-				species: 'Marshtomp', ability: 'Shadow Tag', item: 'Eviolite', gender: 'M',
-				moves: ['earthquake', 'softboiled', 'spikyshield'],
+				species: 'Marshtomp', ability: 'Arena Trap', item: 'Eviolite', gender: 'M',
+				moves: ['thousandarrows', 'morningsun', 'kingsshield'],
 				signatureMove: 'Excuse',
 				evs: {hp:252, def:24, spd:232}, nature: 'Impish',
 			},
@@ -703,7 +703,7 @@ exports.BattleScripts = {
 			},
 			'Sonired': {
 				species: 'Anorith', ability: 'Sniper', item: 'Choice Band', gender: ['M', 'F', 'N'][this.random(3)],
-				moves: ['stoneedge', 'megahorn', 'knockoff'],
+				moves: ['rockslide', 'megahorn', 'knockoff'],
 				signatureMove: "God Turn",
 				evs: {def:4, atk:252, spe:252}, nature: 'Jolly',
 			},
@@ -799,9 +799,9 @@ exports.BattleScripts = {
 			},
 			'unfixable': {
 				species: 'Cacnea', ability: 'Water Absorb', item: 'Eviolite', gender: 'F',
-				moves: variant ? ['spikes', 'seedbomb', 'swordsdance'] : ['spikes', 'bulletseed', 'destinybond'],
+				moves: ['spikes', 'spikyshield', variant ? 'powerwhip' : 'seedflare'],
 				signatureMove: 'SPIKEY RAIN',
-				evs: {atk:252, def:4, spd:252}, nature: variant ? 'Adamant' : 'Jolly',
+				evs: variant ? {hp:252, atk:252, spd:4} : {hp:252, spa:252, spd:4}, nature: variant ? 'Adamant' : 'Modest',
 			},
 			'urkerab': {
 				species: 'Skuntank', ability: 'Sniper', item: 'Razor Claw', gender: 'M',

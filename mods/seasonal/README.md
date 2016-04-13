@@ -269,7 +269,7 @@ Ability: Fur Coat
 
 EVs: 4 HP, 252 Atk, 252 SpD, Nature: Adamant
 
-- Food Rush - 10 PP Normal\Physical 100\90% prio -6. Forces switch. Makes contact.
+- Food Rush - 5 PP Normal\Physical 90\90% prio -6. Forces switch. Makes contact.
 
 Other Possible Moves:
 
@@ -321,14 +321,14 @@ EVs: 4 Atk, 252 SpA, 252 Spe, Nature: Naive
 - U-turn \ Conversion2
 - Splatter - 40 PP, Bug\Special, 200\100% prio +1. The user faints. The target is trapped during the following turn and its speed is lowered.
 
-### bondie
-Krabby @ Leftovers
+### Bondie
+Krabby @ Eviolite
 
 Ability: Shell Armor
 
 Innate Ability: Crab Stance - Raises defenses when hit. Raises offenses with each attack.
 
-EVs: 4 HP, 252 Atk, 252 Spe, Nature: Adamant
+EVs: 4 HP, 252 Atk, 252 Spe, Nature: Jolly
 
 - Crabhammer
 - Ice Punch
@@ -597,7 +597,7 @@ EVs: 252 Atk, 4 SpD, 252 Spe, Nature: Jolly
 - Water Shuriken
 - Bullet Seed \ Rock Blast
 - Icicle Spear
-- Frozen Kebab Skewers - 5 (no boosts) PP, Ice\Physical 20\100%, 2 hits, +1 prio, + Rock type. Each hit boosts own Atk and Spe (cannot boost Atk past +2). Ignores Protect, Sub or defensive boosts. 10% freeze.
+- Frozen Kebab Skewers - 5 (no boosts) PP, Ice\Physical 25\100%, 2 hits, +1 prio, + Rock type. Boosts own Atk and Spe 1 stage each (cannot boost Atk past +2). Ignores Protect, Sub or defensive boosts. 10% freeze.
 
 ### Former Hope
 Froslass @ Focus Sash
@@ -625,7 +625,7 @@ Ability: Justified
 EVs: 252 Atk, 4 SpD, 252 Spe, Nature: Jolly
 
 - Crunch
-- Jump Kick
+- Sacred Sword
 - Extreme Speed
 - Screw This Matchup - 5 PP. Boosts Atk by 2. If applicable, swaps user's secondary type with the opponent's primary type. If these are the same, only suppresses the user's secondary type.
 
@@ -813,7 +813,7 @@ EVs: 252 SpA, 4 SpD, 252 Spe, IVs: 0 Atk, Nature: Timid
 - Volt Switch
 - Solar Beam
 - Psychic
-- Solar Storm - 10 PP Fire\Special 120\100%. Sets Sunny Day before the move. The user goes on a rampage for 2-3 turns.
+- Solar Storm - 10 PP Fire\Special 120\100%. Sets Sunny Day before the move. The user goes on a rampage for 2-3 turns. 15% burn.
 
 ### Hippopotas
 Hippopotas @ Eviolite
@@ -990,12 +990,14 @@ Heatran @ Charcoal
 
 Ability: Levitate
 
+Innate Ability: This Pokemon is immune to Fire-type attacks.
+
 EVs: 252 HP, 4 Def, 252 SpA, IVs: 0 Atk, Nature: Modest
 
 - Eruption
 - Steam Eruption
 - Quiver Dance
-- Gaster Blaster - 5 PP Fire\Special 110 pwr. Always hits. Lowers own speed. 66% Burn. Torments and confuses opponent. Bypasses Protect and Subs.
+- Exception - 5 PP Fire\Special 110 pwr. Always hits. Lowers own speed. 66% Burn. Torments and confuses opponent. Bypasses Protect and Subs.
 
 ### Kalalokki
 Wingull @ Life Orb
@@ -1131,16 +1133,16 @@ EVs: 4 Def, 252 SpA, 252 Spe, Nature: Timid
 ### Marshmallon
 Marshtomp @ Eviolite
 
-Ability: Shadow Tag
+Ability: Arena Trap
 
-Innate Ability: Boosts defense by 2 on switch in.
+Innate Ability: Boosts defense on switch in.
 
 EVs: 252 HP, 24 Def, 232 SpD, Nature: Impish
 
-- Earthquake
-- Softboiled
-- Spiky Shield
-- Excuse - 10 PP, prio +2. Confuses and Taunts opponent.
+- Thousand Arrows
+- Morning Sun
+- King's Shield
+- Excuse - 5 (no boosts) PP, 90% acc, prio +2. Confuses and Taunts opponent.
 
 ### MattL
 Swampert @ Swampertite
@@ -1190,7 +1192,7 @@ EVs: 4 HP, 252 SpA, 252 Spe, Nature: Timid
 - Spacial Rend
 - Thunder
 - Sheer Cold
-- Double Laser - 40 PP Water\Special 75\95%. Hits twice.
+- Double Laser - 40 PP Water\Special 75\90%. Hits twice with two accuracy checks.
 
 ### nv
 Larvitar @ Eviolite
@@ -1268,8 +1270,8 @@ EVs: 4 Def, 252 SpA, 252 Spe, Nature: Modest
 - Ice Beam
 - Pure Skill - 5 PP, ???-type\Special. Always hits.
  - (10%) User faints.
- - (45%) Attempts to half target health, but at least does 25% damage.
- - (45%) Deals damage with 255 base power. Lowers own SpA and accuracy afterwards.
+ - (50%) Attempts to half target health, but at least does 25% damage.
+ - (40%) Deals damage with 255 base power. Lowers own SpA and accuracy afterwards.
 
 ### pluviometer
 Mismagius @ Life Orb
@@ -1289,7 +1291,7 @@ Unown @ Keyboard - Item is the equivalent of a mega stone and therefore inviolab
 - Mega evolves into Missingno. 
  - Type: Normal\Bird
  - Base Stats: HP 48, Atk 136, Def 0, SpA 6, SpD 255, Spe 29
- - Ability: No Ability
+ - Ability: Oblivious
 
 Ability: Sturdy
 
@@ -1311,7 +1313,7 @@ EVs: 4 Def, 252 SpA, 252 Spe, Nature: Timid
 - Stealth Rock
 - Perish Song
 - Nuzzle
-- Retreat - Volt Switch, with 60 power. Always 2x effective.
+- Retreat - Volt Switch, with 55 power. Always 2x effective.
 
 ### Raseri
 Musharna @ Leftovers
@@ -1325,7 +1327,7 @@ EVs: 248 HP, 252 Def, 8 SpD, Nature: Bold
 - Barrier
 - Stored Power
 - Moonblast
-- Purify Soul - Recover, in addition uses Calm Mind.
+- Purify Soul - 10 PP, boosts SpA and SpD, heals 1/3 of max HP.
 
 ### Raven
 Yveltal @ Sharp Beak
@@ -1542,7 +1544,7 @@ Innate Ability: Weak Skin - Boosts Atk and Spe, lowers defenses on switch-in.
 
 EVs: 4 Def, 252 Atk, 252 Spe, Nature: Jolly
 
-- Stone Edge
+- Rock Slide
 - Megahorn
 - Knock Off
 - God Turn - U-turn followed by Baton Pass.
@@ -1574,7 +1576,7 @@ EVs: 232 HP, 252 Atk, 24 SpD, Nature: Adamant
 - Fake Out
 - Extreme Speed
 - Precipice Blades
-- Pill Frenzy - 30 PP Water\Physical 50\100%. Hits 2 - 5 times. Bullet-based. Boosts self speed and lowers self evasion with each hit.
+- Pill Frenzy - 30 PP Water\Physical 50\100%. Hits 3 - 5 times. Bullet-based. Boosts self speed and lowers self evasion with each hit.
 
 ### SpecsMegaBeedrill
 Weedle @ Focus Sash
@@ -1757,12 +1759,12 @@ Ability: Water Absorb
 
 Innate Ability: Iron Barbs
 
-EVs: 252 Atk, 4 Def, 252 SpD, Nature: Adamant \ Jolly
+EVs: 252 HP, 252 Atk \ SpA, 4 SpD, Nature: Adamant \ Modest
 
 - Spikes
-- Seed Bomb \ Bullet Seed
-- Swords Dance \ Destiny Bond
-- SPIKEY RAIN - 10 PP. Field move lasting 5 turns, boosting defenses of Grass-types by 50%, power of Grass-type moves by 50% and +2 priority to Grass-type moves.
+- Power Whip \ Seed Flare
+- Spiky Shield
+- SPIKEY RAIN - 10 PP. +1 priority. Field move lasting 5 turns, boosting defenses of Grass-types by 50%, power of Grass-type moves by 50% and +2 priority to Grass-type moves.
 
 ### urkerab
 Skuntank @ Razor Claw
