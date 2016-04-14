@@ -729,7 +729,7 @@ class Tournament {
 	onBattleWin(room, winner) {
 		let from = this.players[room.p1.userid];
 		let to = this.players[room.p2.userid];
-		winner = this.players[winner.userid];
+		if (winner) winner = this.players[winner.userid];
 
 		let result = 'draw';
 		if (from === winner) {
