@@ -26,8 +26,8 @@ exports.BattleMovedex = {
 	counter: {
 		inherit: true,
 		damageCallback: function (pokemon, target) {
-			if (pokemon.lastAttackedBy && pokemon.lastAttackedBy.thisTurn && (this.getCategory(pokemon.lastAttackedBy.move) === 'Physical' || this.getMove(pokemon.lastAttackedBy.move).id === 'hiddenpower') && target.lastMove !== 'sleeptalk') {
-				return 2 * pokemon.lastAttackedBy.damage;
+			if (pokemon.hurtBy && pokemon.hurtBy.thisTurn && (this.getCategory(pokemon.hurtBy.move) === 'Physical' || this.getMove(pokemon.hurtBy.move).id === 'hiddenpower') && target.lastMove !== 'sleeptalk') {
+				return 2 * pokemon.hurtBy.damage;
 			}
 			return false;
 		},

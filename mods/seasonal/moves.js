@@ -4125,7 +4125,7 @@ exports.BattleMovedex = {
 		secondary: {
 			chance: 100,
 			onHit: function (target, source) {
-				if (target.lastDamage > 0 && source.lastAttackedBy && source.lastAttackedBy.thisTurn && source.lastAttackedBy.pokemon === target) {
+				if (target.lastDamage > 0 && source.hurtBy && source.hurtBy.thisTurn && source.hurtBy.pokemon === target) {
 					if (this.random(100) < 30) {
 						target.addVolatile('confusion');
 					}

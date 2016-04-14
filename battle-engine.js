@@ -309,7 +309,7 @@ BattlePokemon = (() => {
 	BattlePokemon.prototype.moveThisTurn = '';
 
 	BattlePokemon.prototype.lastDamage = 0;
-	BattlePokemon.prototype.lastAttackedBy = null;
+	BattlePokemon.prototype.hurtBy = null;
 	BattlePokemon.prototype.usedItemThisTurn = false;
 	BattlePokemon.prototype.newlySwitched = false;
 	BattlePokemon.prototype.beingCalledBack = false;
@@ -523,7 +523,7 @@ BattlePokemon = (() => {
 	BattlePokemon.prototype.gotAttacked = function (move, damage, source) {
 		if (!damage) damage = 0;
 		move = this.battle.getMove(move);
-		this.lastAttackedBy = {
+		this.hurtBy = {
 			pokemon: source,
 			damage: damage,
 			move: move.id,
@@ -830,7 +830,7 @@ BattlePokemon = (() => {
 		this.moveThisTurn = '';
 
 		this.lastDamage = 0;
-		this.lastAttackedBy = null;
+		this.hurtBy = null;
 		this.newlySwitched = true;
 		this.beingCalledBack = false;
 
@@ -2925,11 +2925,11 @@ Battle = (() => {
 				this.runEvent('DisableMove', pokemon);
 				if (!pokemon.ateBerry) pokemon.disableMove('belch');
 
-				if (pokemon.lastAttackedBy) {
-					if (pokemon.lastAttackedBy.pokemon.isActive) {
-						pokemon.lastAttackedBy.thisTurn = false;
+				if (pokemon.hurtBy) {
+					if (pokemon.hurtBy.pokemon.isActive) {
+						pokemon.hurtBy.thisTurn = false;
 					} else {
-						pokemon.lastAttackedBy = null;
+						pokemon.hurtBy = null;
 					}
 				}
 
