@@ -718,11 +718,7 @@ exports.Formats = [
 
 			// Add here special typings, done for flavour mainly.
 			if (name === 'ascriptmaster') {
-				pokemon.typesData = [{
-					type: 'Electric',
-					suppressed: false,
-					isAdded: false,
-				}];
+				pokemon.setType('Electric');
 				pokemon.addVolatile('ascriptinnate', pokemon);
 			}
 
