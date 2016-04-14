@@ -1031,7 +1031,7 @@ exports.Formats = [
 				this.add("c|%GeoffBruedly|FOR WINRY");
 			}
 			if (name === 'giagantic') {
-				this.add("c|+Giagantic|e.e");
+				this.add("c|%Giagantic|e.e");
 			}
 			if (name === 'golui') {
 				this.add("c|+Golui|Golly gee");
@@ -1566,7 +1566,7 @@ exports.Formats = [
 				this.add("c|%GeoffBruedly|IM SORRY WINRY");
 			}
 			if (name === 'giagantic') {
-				this.add("c|+Giagantic|x.x");
+				this.add("c|%Giagantic|x.x");
 			}
 			if (name === 'golui') {
 				this.add("c|+Golui|Freeze in hell");
