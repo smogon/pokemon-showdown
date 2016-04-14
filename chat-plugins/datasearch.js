@@ -518,7 +518,7 @@ function runDexsearch(target, cmd, canAll, message) {
 				if (alts.tiers[dex[mon].tier]) continue;
 				if (Object.values(alts.tiers).indexOf(false) >= 0 && alts.tiers[dex[mon].tier] !== false) continue;
 				// some LC Pokemon are also in other tiers and need to be handled separately
-				if (alts.tiers.LC && !dex[mon].prevo && dex[mon].nfe && Tools.data.Formats.lc.banlist.indexOf(dex[mon].species) < 0) continue;
+				if (alts.tiers.LC && !dex[mon].prevo && dex[mon].nfe && dex[mon].tier !== 'LC Uber' && Tools.data.Formats.lc.banlist.indexOf(dex[mon].species) < 0) continue;
 			}
 
 			for (let type in alts.types) {
