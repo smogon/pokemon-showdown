@@ -145,8 +145,8 @@ exports.BattleMovedex = {
 	counter: {
 		inherit: true,
 		damageCallback: function (pokemon) {
-			if (pokemon.lastAttackedBy && pokemon.lastAttackedBy.thisTurn && (this.getCategory(pokemon.lastAttackedBy.move) === 'Physical' || this.getMove(pokemon.lastAttackedBy.move).id === 'hiddenpower')) {
-				return 2 * pokemon.lastAttackedBy.damage;
+			if (pokemon.hurtBy && pokemon.hurtBy.thisTurn && (this.getCategory(pokemon.hurtBy.move) === 'Physical' || this.getMove(pokemon.hurtBy.move).id === 'hiddenpower')) {
+				return 2 * pokemon.hurtBy.damage;
 			}
 			return false;
 		},
@@ -549,10 +549,10 @@ exports.BattleMovedex = {
 		onTryHit: function () { },
 		onHit: function (pokemon) {
 			let noMirror = {assist:1, curse:1, doomdesire:1, focuspunch:1, futuresight:1, magiccoat:1, metronome:1, mimic:1, mirrormove:1, naturepower:1, psychup:1, roleplay:1, sketch:1, sleeptalk:1, spikes:1, spitup:1, taunt:1, teeterdance:1, transform:1};
-			if (!pokemon.lastAttackedBy || !pokemon.lastAttackedBy.pokemon.lastMove || noMirror[pokemon.lastAttackedBy.move] || !pokemon.lastAttackedBy.pokemon.hasMove(pokemon.lastAttackedBy.move)) {
+			if (!pokemon.hurtBy || !pokemon.hurtBy.pokemon.lastMove || noMirror[pokemon.hurtBy.move] || !pokemon.hurtBy.pokemon.hasMove(pokemon.hurtBy.move)) {
 				return false;
 			}
-			this.useMove(pokemon.lastAttackedBy.move, pokemon);
+			this.useMove(pokemon.hurtBy.move, pokemon);
 		},
 		target: "self",
 	},

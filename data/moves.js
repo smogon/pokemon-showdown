@@ -741,8 +741,8 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 60,
 		basePowerCallback: function (pokemon, target, move) {
-			if (target.lastDamage > 0 && pokemon.lastAttackedBy && pokemon.lastAttackedBy.thisTurn && pokemon.lastAttackedBy.pokemon === target) {
-				this.debug('Boosted for getting hit by ' + pokemon.lastAttackedBy.move);
+			if (target.lastDamage > 0 && pokemon.hurtBy && pokemon.hurtBy.thisTurn && pokemon.hurtBy.pokemon === target) {
+				this.debug('Boosted for getting hit by ' + pokemon.hurtBy.move);
 				return move.basePower * 2;
 			}
 			return move.basePower;
@@ -11012,8 +11012,8 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 60,
 		basePowerCallback: function (pokemon, target, move) {
-			if (target.lastDamage > 0 && pokemon.lastAttackedBy && pokemon.lastAttackedBy.thisTurn && pokemon.lastAttackedBy.pokemon === target) {
-				this.debug('Boosted for getting hit by ' + pokemon.lastAttackedBy.move);
+			if (target.lastDamage > 0 && pokemon.hurtBy && pokemon.hurtBy.thisTurn && pokemon.hurtBy.pokemon === target) {
+				this.debug('Boosted for getting hit by ' + pokemon.hurtBy.move);
 				return move.basePower * 2;
 			}
 			return move.basePower;
