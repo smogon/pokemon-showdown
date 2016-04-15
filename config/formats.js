@@ -1376,7 +1376,7 @@ exports.Formats = [
 				}
 			}
 			if (name === 'zeroluxgiven') {
-				this.add('c|+Zero Lux Given|This should be an electrifying battle!');
+				this.add('c|%Zero Lux Given|This should be an electrifying battle!');
 			}
 			if (name === 'zodiax') {
 				this.add('c|%Zodiax|Introducing 7 time Grand Champion to the battle!');
@@ -1865,7 +1865,7 @@ exports.Formats = [
 				}
 			}
 			if (name === 'zeroluxgiven') {
-				this.add('c|+Zero Lux Given|I\'ve been beaten, what a shock!');
+				this.add('c|%Zero Lux Given|I\'ve been beaten, what a shock!');
 			}
 			if (name === 'zodiax') {
 				this.add('c|%Zodiax|We need to go full out again soon...');
