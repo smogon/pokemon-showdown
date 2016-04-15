@@ -57,6 +57,7 @@ exports.BattleFormats = {
 			'Zygarde',
 			'Diancie',
 			'Hoopa', 'Hoopa-Unbound',
+			'Volcanion',
 		],
 	},
 	standarddoubles: {
