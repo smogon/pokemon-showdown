@@ -8,7 +8,8 @@ let RoundRobin = (function () {
 		this.isUsersBusy = null;
 		this.matches = null;
 		this.userScores = null;
-		this.pendingMatches = 0;
+		this.pendingMatches = new Map();
+		this.totalPendingMatches = 0;
 
 		if (isDoubles) this.name = "Double " + this.name;
 	}
@@ -19,13 +20,18 @@ let RoundRobin = (function () {
 	RoundRobin.prototype.addUser = function (user) {
 		if (this.isBracketFrozen) return 'BracketFrozen';
 		this.users.push(user);
+		this.pendingMatches.set(user, 0);
 	};
 	RoundRobin.prototype.removeUser = function (user) {
 		if (this.isBracketFrozen) return 'BracketFrozen';
 		this.users.splice(this.users.indexOf(user), 1);
+		this.pendingMatches.delete(user);
 	};
 	RoundRobin.prototype.replaceUser = function (user, replacementUser) {
 		this.users[this.users.indexOf(user)] = replacementUser;
+		let pendingMatches = this.pendingMatches.get(user);
+		this.pendingMatches.set(replacementUser, pendingMatches);
+		this.pendingMatches.delete(user);
 	};
 	RoundRobin.prototype.getUsers = function () {
 		return this.users.slice(0);
@@ -69,7 +75,11 @@ let RoundRobin = (function () {
 			this.users.map((userB, col) => {
 				if (!this.isDoubles && col >= row) return null;
 				if (userA === userB) return null;
-				++this.pendingMatches;
+				let pendingMatchesA = this.pendingMatches.get(userA);
+				this.pendingMatches.set(userA, ++pendingMatchesA);
+				let pendingMatchesB = this.pendingMatches.get(userB);
+				this.pendingMatches.set(userB, ++pendingMatchesB);
+				++this.totalPendingMatches;
 				return {state: 'available'};
 			})
 		);
@@ -87,7 +97,7 @@ let RoundRobin = (function () {
 			match.result = 'loss';
 			match.score = [0, 1];
 			++this.userScores[col];
-			--this.pendingMatches;
+			--this.totalPendingMatches;
 		});
 
 		this.matches.forEach((challenges, row) => {
@@ -97,8 +107,10 @@ let RoundRobin = (function () {
 			match.result = 'win';
 			match.score = [1, 0];
 			++this.userScores[row];
-			--this.pendingMatches;
+			--this.totalPendingMatches;
 		});
+
+		user.destroy();
 	};
 	RoundRobin.prototype.getUserBusy = function (user) {
 		if (!this.isBracketFrozen) return 'BracketNotFrozen';
@@ -128,8 +140,10 @@ let RoundRobin = (function () {
 
 		if (!(result in {win:1, loss:1, draw:1})) return 'InvalidMatchResult';
 
-		let userIndexA = this.users.indexOf(match[0]);
-		let userIndexB = this.users.indexOf(match[1]);
+		let userA = match[0];
+		let userB = match[1];
+		let userIndexA = this.users.indexOf(userA);
+		let userIndexB = this.users.indexOf(userB);
 		if (userIndexA < 0 || userIndexB < 0) return 'UserNotAdded';
 
 		match = this.matches[userIndexA][userIndexB];
@@ -150,11 +164,18 @@ let RoundRobin = (function () {
 		match.score = score.slice(0);
 		this.userScores[userIndexA] += virtualScore[0];
 		this.userScores[userIndexB] += virtualScore[1];
-		--this.pendingMatches;
+		--this.totalPendingMatches;
+
+		let pendingMatchesA = this.pendingMatches.get(userA);
+		if (--pendingMatchesA === 0) userA.destroy();
+		this.pendingMatches.set(userA, pendingMatchesA);
+		let pendingMatchesB = this.pendingMatches.get(userB);
+		if (--pendingMatchesB === 0) userB.destroy();
+		this.pendingMatches.set(userB, pendingMatchesB);
 	};
 
 	RoundRobin.prototype.isTournamentEnded = function () {
-		return this.isBracketFrozen && this.pendingMatches === 0;
+		return this.isBracketFrozen && this.totalPendingMatches === 0;
 	};
 
 	RoundRobin.prototype.getResults = function () {
