@@ -2575,7 +2575,7 @@ exports.BattleMovedex = {
 					for (let p in thisSide.active) {
 						const pokemon = thisSide.active[p];
 						if ((pokemon.types[0] === 'Flying' && !pokemon.types[1]) || !pokemon.hp) continue;
-						pokemon.setType(pokemon.template.types, true);
+						pokemon.setType(pokemon.template.types.join('/'), true);
 						this.add('-end', pokemon, 'typechange');
 					}
 				}
