@@ -233,6 +233,7 @@ let Elimination = (() => {
 		if (!this.isBracketFrozen) return 'BracketNotFrozen';
 
 		this.users.get(user).isDisqualified = true;
+		user.destroy();
 
 		// The user either has a single available battle or no available battles
 		let match = null;
@@ -318,7 +319,10 @@ let Elimination = (() => {
 
 		let loserData = this.users.get(loser);
 		++loserData.loseCount;
-		if (loserData.loseCount === this.maxSubtrees) loserData.isEliminated = true;
+		if (loserData.loseCount === this.maxSubtrees) {
+			loserData.isEliminated = true;
+			loser.destroy();
+		}
 
 		if (targetNode.getParent()) {
 			let userA = targetNode.getParent().getChildAt(0).getValue().user;
