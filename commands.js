@@ -918,25 +918,25 @@ exports.commands = {
 		if (group) {
 			buffer.push('Global auth: ' + group.charAt(0));
 		}
-		for (let i = 0; i < Rooms.global.chatRooms.length; i++) {
-			let curRoom = Rooms.global.chatRooms[i];
+		for (let id in Rooms.rooms) {
+			let curRoom = Rooms.rooms[id];
 			if (!curRoom.auth || curRoom.isPrivate) continue;
 			group = curRoom.auth[targetId];
 			if (!group) continue;
-			innerBuffer.push(group + curRoom.id);
+			innerBuffer.push(group + id);
 		}
 		if (innerBuffer.length) {
 			buffer.push('Room auth: ' + innerBuffer.join(', '));
 		}
 		if (targetId === user.userid || user.can('lock')) {
 			innerBuffer = [];
-			for (let i = 0; i < Rooms.global.chatRooms.length; i++) {
-				let curRoom = Rooms.global.chatRooms[i];
+			for (let id in Rooms.rooms) {
+				let curRoom = Rooms.rooms[id];
 				if (!curRoom.auth || !curRoom.isPrivate) continue;
 				if (curRoom.isPrivate === true) continue;
 				let auth = curRoom.auth[targetId];
 				if (!auth) continue;
-				innerBuffer.push(auth + curRoom.id);
+				innerBuffer.push(auth + id);
 			}
 			if (innerBuffer.length) {
 				buffer.push('Hidden room auth: ' + innerBuffer.join(', '));
