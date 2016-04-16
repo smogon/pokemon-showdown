@@ -627,7 +627,7 @@ Ability: Justified
 EVs: 252 Atk, 4 SpD, 252 Spe, Nature: Jolly
 
 - Crunch
-- Sacred Sword
+- Sky Uppercut
 - Extreme Speed
 - Screw This Matchup - 5 PP. Boosts Atk by 2. If applicable, swaps user's secondary type with the opponent's primary type. If these are the same, only suppresses the user's secondary type.
 
@@ -768,16 +768,18 @@ EVs: 240 HP, 252 SpA, 16 Spe, Nature: Modest
 - Sparkle Rain - 5 PP Normal\Special 75\100%. + Fire type. 30% sleep.
 
 ### Hashtag
-Ursaring @ Choice Scarf
+Ursaring @ Choice Band
 
 Ability: Scrappy
+
+Innate Ability: Boosts speed by 1 on switch in.
 
 EVs: 4 HP, 252 Atk, 252 Spe, Nature: Jolly
 
 - Thousand Arrows
 - Explosion
 - U-turn
-- GOTTA GO STRATS - 10 PP Normal\Physical 130\85%. Boosts attack by 2 if this move knocks out a Pokemon. Makes contact.
+- GOTTA GO STRATS - 10 PP Normal\Physical 100\90%. Boosts attack by 2 if this move knocks out a Pokemon. Makes contact.
 
 ### Haund
 Swellow @ Toxic Orb
