@@ -226,7 +226,7 @@ exports.Formats = [
 			'Gardevoir-Mega', 'Gardevoirite', 'Gengar', 'Greninja', 'Gyarados', 'Heatran', 'Hoopa-Unbound', 'Hydreigon', 'Jirachi',
 			'Kangaskhan-Mega', 'Kangaskhanite', 'Keldeo', 'Kyurem-Black', 'Landorus-Therian', 'Latios', 'Ludicolo', 'Mawile-Mega', 'Mawilite',
 			'Mew', 'Milotic', 'Ninetales', 'Politoed', 'Rotom-Wash', 'Scrafty', 'Shaymin-Sky', 'Suicune', 'Sylveon', 'Talonflame',
-			'Terrakion', 'Thundurus', 'Togekiss', 'Tyranitar', 'Venusaur', 'Victini', 'Weavile', 'Whimsicott', 'Zapdos',
+			'Terrakion', 'Thundurus', 'Togekiss', 'Tyranitar', 'Venusaur', 'Victini', 'Volcanion', 'Weavile', 'Whimsicott', 'Zapdos',
 		],
 	},
 	{
