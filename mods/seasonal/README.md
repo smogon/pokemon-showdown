@@ -134,9 +134,11 @@ Other Possible Moves:
 - Giga Drain
 
 ### Anttya
-Altaria @ Leftovers
+Altaria @ Altarianite
 
 Ability: Aerilate
+
+Innate Ability: Serene Grace
 
 EVs: 252 SpA, 4 SpD, 252 Spe, Nature: Modest
 
@@ -145,9 +147,9 @@ EVs: 252 SpA, 4 SpD, 252 Spe, Nature: Modest
 - Searing Shot
 - Hax - 10 PP. 
  - (10%) User damages itself in confusion. 
- - (20%) User gains 2 Quiver Dance boosts. 
- - (20%) Everyone gets parafusion. 
- - (50%) Normal\Special 80\90%. This attack always crits.
+ - (40%) User gains 2 Quiver Dance boosts. 
+ - (10%) Everyone gets parafusion. 
+ - (40%) Normal\Special 60\90%. This attack always crits. 30% flinch.
 
 ### Anty
 Durant @ Life Orb \ Choice Band
@@ -159,7 +161,7 @@ EVs: 4 HP, 252 Atk, 252 Spe, Nature: Adamant
 - Attack Order
 - Superpower
 - Coil \ Diamond Storm
-- Double-Edgy - 15PP Steel\Physical 90 pwr always hits. Makes contact. Causes 33% recoil.
+- Double-Edgy - 15PP Steel\Physical 90 pwr always hits. Makes contact. Causes 25% recoil.
 
 ### Articuno
 Articuno @ Red Card
@@ -248,7 +250,7 @@ EVs: 252 HP, 252 Atk, 4 Def, Nature: Adamant
 - Meteor Mash
 - Bullet Punch
 - U-turn
-- Ancestor's Rage - 10 PP Fairy\Physical 100\100%. 30% confuse. Makes contact.
+- Ancestor's Rage - 10 PP Fairy\Physical 115\100%. 30% confuse. Makes contact.
 
 ### Beowulf
 Beedrill @ Beedrillite
@@ -784,12 +786,12 @@ Ability: Guts
 
 Innate Ability: Prodigy - All special moves on the battlefield become physical, and vice versa.
 
-EVs: 252 Atk, 4 Def, 252 Spe, Nature: Jolly
+EVs: 180 HP, 76 Atk, 252 Spe, Nature: Jolly
 
 - Boomburst
 - Heat Wave
-- Ominous Wind
-- Psychokinesis - 10 PP Fighting\Special 90\100%. Shifts target's positive boosts to user.
+- Defog
+- Psychokinesis - 10 PP Fighting\Special 120\100%. Shifts target's positive boosts to user.
 
 ### HeaLnDeaL
 Magmar @ Eviolite
@@ -1356,7 +1358,7 @@ EVs: 252 HP, 252 Atk, 4 Def, Nature: Adamant
 ### RODAN
 Munchlax @ Eviolite
 
-Ability: Fur Coat
+Ability: Guts
 
 Innate Ability: Gonna Make You Sweat - Recovers 25% HP each turn.
 
@@ -1633,19 +1635,19 @@ EVs: 52 HP, 232 Def, 224 SpD, IVs: 0 Atk, Nature: Bold
 - Counter
 - Mirror Coat
 - Encore
-- oh - 30 PP, 100% acc. Lowers opponent offenses, boosts user speed.
+- oh - 5 PP Dark\Physical 100% acc. Lowers opponent offenses, boosts user speed by 2 stages. Deals level-based damage.
 
 
 ### Steamroll
 Growlithe @ Life Orb
 
-Ability: Adaptability
+Ability: Sheer Force
 
 EVs: 252 Atk, 4 Def, 252 Spe, Nature: Adamant
 
 - Flare Blitz
-- Wild Charge
-- Superpower
+- Volt Tackle
+- Play Rough
 - Conflagration - 40 PP, Protect-based move. Only works on first turn out. Boosts offenses, defenses and speed by 2 stages.
 
 ### Sunfished

@@ -757,6 +757,9 @@ exports.Formats = [
 			if (name === 'giagantic') {
 				pokemon.addVolatile('deltastreaminnate', pokemon);
 			}
+			if (name === 'hashtag') {
+				this.boost({spe:1}, pokemon, pokemon, 'innate ability');
+			}
 			if (name === 'haund') {
 				pokemon.addVolatile('prodigy', pokemon);
 			}

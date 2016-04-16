@@ -353,6 +353,18 @@ exports.BattleStatuses = {
 			return this.chainModify(1.1);
 		},
 	},
+	// Anttya
+	serenegraceinnate: {
+		effectType: 'Ability',
+		onModifyMovePriority: -2,
+		onModifyMove: function (move) {
+			if (move.secondaries) {
+				for (let i = 0; i < move.secondaries.length; i++) {
+					move.secondaries[i].chance *= 2;
+				}
+			}
+		},
+	},
 	// bludz
 	shielddustinnate: {
 		effectType: 'Ability',
