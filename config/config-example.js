@@ -18,8 +18,8 @@ exports.potd = '';
 // crash guard - write errors to log file instead of crashing
 //   This is normally not recommended - if Node wants to crash, the
 //   server needs to be restarted
-//   Unfortunately, socket.io bug 409 requires some sort of crash guard
-//   https://github.com/LearnBoost/socket.io/issues/609
+//   However, most people want the server to stay online even if there is a
+//   crash, so this option is provided
 exports.crashguard = true;
 
 // login server data - don't forget the http:// and the trailing slash
