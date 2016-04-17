@@ -1605,7 +1605,6 @@ exports.commands = {
 		case 'off':
 		case 'false':
 		case 'no':
-		case ' ':
 			room.modchat = false;
 			break;
 		case 'ac':
