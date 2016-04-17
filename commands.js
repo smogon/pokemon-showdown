@@ -494,6 +494,7 @@ exports.commands = {
 		case 'privateroom':
 			return this.parse('/help privateroom');
 		case 'publicroom':
+			if (room.isPersonal) return this.errorReply("This room can't be made public.");
 			setting = false;
 			break;
 		case 'secretroom':
