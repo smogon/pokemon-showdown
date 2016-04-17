@@ -4472,6 +4472,7 @@ exports.BattleMovedex = {
 			return 0;
 		},
 		secondary: false,
+		ignoreImmunity: {'Psychic': true},
 		target: "normal",
 		type: "Psychic",
 	},
