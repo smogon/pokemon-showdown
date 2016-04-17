@@ -77,12 +77,6 @@ exports.disablebasicnamefilter = false;
 //   getting more than 80 or so users.
 exports.reportjoins = true;
 
-// report joins and leaves periodically - sends silent join and leave messages in batches
-//   This setting will only be effective if `reportjoins` is set to false, and users will
-//   only be able to see the messages if they have the /showjoins client-side setting enabled.
-//   Set this to a positive amount of milliseconds if you want to enable this feature.
-exports.reportjoinsperiod = 0;
-
 // report battles - shows messages like "OU battle started" in the lobby
 //   This feature can lag larger servers - turn this off if your server is
 //   getting more than 160 or so users.

@@ -1345,25 +1345,9 @@ let ChatRoom = (() => {
 				this.logUserStatsInterval = setInterval(() => this.logUserStats(), Config.loguserstats);
 			}
 		}
-
-		if (Config.reportjoinsperiod) {
-			this.userList = this.getUserList();
-			this.reportJoinsQueue = [];
-		}
 	}
 	ChatRoom.prototype = Object.create(Room.prototype);
 	ChatRoom.prototype.type = 'chat';
-
-	ChatRoom.prototype.reportRecentJoins = function () {
-		delete this.reportJoinsInterval;
-		if (!this.reportJoinsQueue || this.reportJoinsQueue.length === 0) {
-			// nothing to report
-			return;
-		}
-		this.userList = this.getUserList();
-		this.send(this.reportJoinsQueue.join('\n'));
-		this.reportJoinsQueue.length = 0;
-	};
 
 	ChatRoom.prototype.rollLogFile = function (sync) {
 		let mkdir = sync ? (path, mode, callback) => {
@@ -1460,29 +1444,12 @@ let ChatRoom = (() => {
 			return;
 		}
 		entry = '|' + type.toUpperCase() + '|' + entry;
-		if (this.reportJoinsQueue) {
-			if (!this.reportJoinsInterval) {
-				this.reportJoinsInterval = setTimeout(
-					() => this.reportRecentJoins(), Config.reportjoinsperiod
-				);
-			}
-
-			this.reportJoinsQueue.push(entry);
-		} else {
-			this.send(entry);
-		}
+		this.send(entry);
 		this.logEntry(entry);
 	};
 	ChatRoom.prototype.update = function () {
 		if (this.log.length <= this.lastUpdate) return;
 		let entries = this.log.slice(this.lastUpdate);
-		if (this.reportJoinsQueue && this.reportJoinsQueue.length) {
-			clearInterval(this.reportJoinsInterval);
-			delete this.reportJoinsInterval;
-			Array.prototype.unshift.apply(entries, this.reportJoinsQueue);
-			this.reportJoinsQueue.length = 0;
-			this.userList = this.getUserList();
-		}
 		let update = entries.join('\n');
 		if (this.log.length > 100) {
 			this.log.splice(0, this.log.length - 100);
@@ -1513,7 +1480,7 @@ let ChatRoom = (() => {
 		return message;
 	};
 	ChatRoom.prototype.onConnect = function (user, connection) {
-		let userList = this.userList ? this.userList : this.getUserList();
+		let userList = this.getUserList();
 		this.sendUser(connection, '|init|chat\n|title|' + this.title + '\n' + userList + '\n' + this.getLogSlice(-100).join('\n') + this.getIntroMessage(user));
 		if (this.poll) this.poll.onConnect(user, connection);
 		if (this.game && this.game.onConnect) this.game.onConnect(user, connection);
@@ -1598,10 +1565,6 @@ let ChatRoom = (() => {
 			clearTimeout(this.expireTimer);
 		}
 		this.expireTimer = null;
-		if (this.reportJoinsInterval) {
-			clearInterval(this.reportJoinsInterval);
-		}
-		this.reportJoinsInterval = null;
 		if (this.logUserStatsInterval) {
 			clearInterval(this.logUserStatsInterval);
 		}
