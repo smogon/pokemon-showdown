@@ -170,14 +170,14 @@ class CommandContext {
 		}
 		return true;
 	}
-	canBroadcast() {
+	canBroadcast(suppressMessage) {
 		if (!this.broadcasting && this.cmdToken === BROADCAST_TOKEN) {
 			if (this.user.broadcasting) {
 				this.errorReply("You can't broadcast another command too soon.");
 				return false;
 			}
 
-			let message = this.canTalk(this.message);
+			let message = this.canTalk(suppressMessage || this.message);
 			if (!message) return false;
 			if (!this.user.can('broadcast', null, this.room)) {
 				this.errorReply("You need to be voiced to broadcast this command's information.");
@@ -208,7 +208,7 @@ class CommandContext {
 
 		if (!this.broadcastMessage) {
 			// Permission hasn't been checked yet. Do it now.
-			if (!this.canBroadcast()) return false;
+			if (!this.canBroadcast(suppressMessage)) return false;
 		}
 
 		this.add('|c|' + this.user.getIdentity(this.room.id) + '|' + (suppressMessage || this.message));
