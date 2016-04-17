@@ -427,6 +427,11 @@ class Tournament {
 	}
 
 	disqualifyUser(userid, output, reason) {
+		if (!this.isTournamentStarted) {
+			output.sendReply('|tournament|error|NotStarted');
+			return false;
+		}
+
 		if (!(userid in this.players)) {
 			output.sendReply('|tournament|error|UserNotAdded');
 			return false;
