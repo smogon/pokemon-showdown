@@ -994,8 +994,6 @@ Heatran @ Charcoal
 
 Ability: Levitate
 
-Innate Ability: This Pokemon is immune to Fire-type attacks.
-
 EVs: 252 HP, 4 Def, 252 SpA, IVs: 0 Atk, Nature: Modest
 
 - Eruption
