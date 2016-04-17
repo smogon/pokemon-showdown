@@ -1848,7 +1848,7 @@ exports.BattleMovedex = {
 			target.addVolatile('confusion', source);
 			let reset = false;
 			for (let boost in target.boosts) {
-				if (target.boosts[boost] !== 0) {
+				if (target.boosts[boost] > 0) {
 					target.boosts[boost] = 0;
 					this.add('-setboost', target, boost, 0);
 					reset = true;

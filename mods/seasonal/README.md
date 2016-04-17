@@ -1201,14 +1201,14 @@ Larvitar @ Eviolite
 
 Ability: Solid Rock
 
-Innate Ability: Cuteness - Boosts own offenses, defenses and speed on switch in.
+Innate Ability: Cuteness - Lowers opponent offenses, defenses and speed on switch in. Own attack and defense are boosted by 80%.
 
 EVs: 252 HP, 252 Atk, 4 Spe, Nature: Adamant
 
 - Precipice Blades
 - Diamond Storm
 - Megahorn
-- Hamster Dance - 10 PP, 100% acc, confuses opponent. Removes all stat changes from opponent.
+- Hamster Dance - 10 PP, 100% acc, confuses opponent. Removes positive boosts from opponent.
 
 ### Omega-Xis
 Genesect @ Expert Belt
