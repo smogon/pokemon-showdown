@@ -161,7 +161,7 @@ exports.commands = {
 		});
 	},
 	movesearchhelp: ["/movesearch [parameter], [parameter], [parameter], ... - Searches for moves that fulfill the selected criteria.",
-		"Search categories are: type, category, flag, status inflicted, type boosted, and numeric range for base power, pp, and accuracy.",
+		"Search categories are: type, category, contest condition, flag, status inflicted, type boosted, and numeric range for base power, pp, and accuracy.",
 		"Types must be followed by ' type', e.g., 'dragon type'.",
 		"Stat boosts must be preceded with 'boosts ', e.g., 'boosts attack' searches for moves that boost the attack stat.",
 		"Inequality ranges use the characters '>' and '<' though they behave as '≥' and '≤', e.g., 'bp > 100' searches for all moves equal to and greater than 100 base power.",
@@ -656,6 +656,7 @@ function runMovesearch(target, cmd, canAll, message) {
 	let targets = target.split(',');
 	let searches = {};
 	let allCategories = {'physical':1, 'special':1, 'status':1};
+	let allContestTypes = {'beautiful':1, 'clever':1, 'cool':1, 'cute':1, 'tough':1};
 	let allProperties = {'basePower':1, 'accuracy':1, 'priority':1, 'pp':1};
 	let allFlags = {'authentic':1, 'bite':1, 'bullet':1, 'contact':1, 'defrost':1, 'powder':1, 'pulse':1, 'punch':1, 'secondary':1, 'snatch':1, 'sound':1};
 	let allStatus = {'psn':1, 'tox':1, 'brn':1, 'par':1, 'frz':1, 'slp':1};
@@ -688,6 +689,14 @@ function runMovesearch(target, cmd, canAll, message) {
 			if (!searches['category']) searches['category'] = {};
 			if ((searches['category'][target] && isNotSearch) || (searches['category'][target] === false && !isNotSearch)) return {reply: 'A search cannot both exclude and include a category.'};
 			searches['category'][target] = !isNotSearch;
+			continue;
+		}
+
+		if (target in allContestTypes) {
+			target = target.charAt(0).toUpperCase() + target.substr(1);
+			if (!searches['contestType']) searches['contestType'] = {};
+			if ((searches['contestType'][target] && isNotSearch) || (searches['contestType'][target] === false && !isNotSearch)) return {reply: 'A search cannot both exclude and include a contest condition.'};
+			searches['contestType'][target] = !isNotSearch;
 			continue;
 		}
 
@@ -869,6 +878,7 @@ function runMovesearch(target, cmd, canAll, message) {
 		switch (search) {
 		case 'type':
 		case 'category':
+		case 'contestType':
 			for (let move in dex) {
 				if (searches[search][String(dex[move][search])] === false ||
 					Object.values(searches[search]).indexOf(true) >= 0 && !searches[search][String(dex[move][search])]) {
