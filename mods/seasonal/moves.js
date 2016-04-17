@@ -2553,7 +2553,8 @@ exports.BattleMovedex = {
 					for (let p in thisSide.active) {
 						const pokemon = thisSide.active[p];
 						if ((pokemon.types[0] === 'Flying' && !pokemon.types[1]) || !pokemon.hp) continue;
-						pokemon.setType('Flying', true);
+						pokemon.types = ['Flying'];
+						pokemon.addedType = '';
 						this.add('-start', pokemon, 'typechange', 'Flying');
 					}
 				}
@@ -2561,12 +2562,14 @@ exports.BattleMovedex = {
 			onResidualOrder: 90,
 			onUpdate: function (pokemon) {
 				if ((pokemon.types[0] === 'Flying' && !pokemon.types[1]) || !pokemon.hp) return;
-				pokemon.setType('Flying', true);
+				pokemon.types = ['Flying'];
+				pokemon.addedType = '';
 				this.add('-start', pokemon, 'typechange', 'Flying');
 			},
 			onSwitchIn: function (pokemon) {
 				if ((pokemon.types[0] === 'Flying' && !pokemon.types[1]) || !pokemon.hp) return;
-				pokemon.setType('Flying', true);
+				pokemon.types = ['Flying'];
+				pokemon.addedType = '';
 				this.add('-start', pokemon, 'typechange', 'Flying');
 			},
 			onEnd: function () {
@@ -2576,7 +2579,7 @@ exports.BattleMovedex = {
 					for (let p in thisSide.active) {
 						const pokemon = thisSide.active[p];
 						if ((pokemon.template.types[0] === 'Flying' && !pokemon.template.types[1]) || !pokemon.hp) continue;
-						pokemon.setType(pokemon.template.types, true);
+						pokemon.types = pokemon.template.types;
 						this.add('-end', pokemon, 'typechange');
 					}
 				}
