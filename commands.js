@@ -2068,7 +2068,7 @@ exports.commands = {
 		}
 		if (Rooms.global.lockdown === true) {
 			for (let id in Rooms.rooms) {
-				if (id !== 'global') Rooms.rooms[id].addRaw("<div class=\"broadcast-green\"><b>The server shutdown was canceled.</b></div>");
+				if (id !== 'global') Rooms.rooms[id].addRaw("<div class=\"broadcast-green\"><b>The server restart was canceled.</b></div>");
 			}
 		} else {
 			this.sendReply("Preparation for the server shutdown was canceled.");
