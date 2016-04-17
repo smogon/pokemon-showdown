@@ -1233,11 +1233,11 @@ BattlePokemon = (() => {
 		if (this.status) hpstring += ' ' + this.status;
 		return hpstring;
 	};
-	BattlePokemon.prototype.setType = function (newType, enforce) {
+	BattlePokemon.prototype.setType = function (newTypes, enforce) {
 		// Arceus first type cannot be normally changed
 		if (!enforce && this.template.num === 493) return false;
 
-		this.types = [newType];
+		this.types = newTypes.split('/');
 		this.addedType = '';
 
 		return true;
