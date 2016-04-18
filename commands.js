@@ -969,6 +969,7 @@ exports.commands = {
 	roomban: function (target, room, user, connection) {
 		if (!target) return this.parse('/help roomban');
 		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
+		if (!this.can('ban', null, room)) return false;
 
 		target = this.splitTarget(target);
 		let targetUser = this.targetUser;
@@ -1019,6 +1020,7 @@ exports.commands = {
 			return this.errorReply("Room bans are not meant to be used in room " + room.id + ".");
 		}
 		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
+		if (!this.can('ban', null, room)) return false;
 
 		this.splitTarget(target, true);
 		let targetUser = this.targetUser;
@@ -1074,6 +1076,7 @@ exports.commands = {
 	warn: function (target, room, user) {
 		if (!target) return this.parse('/help warn');
 		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
+		if (!this.can('warn', null, room)) return false;
 		if (room.isPersonal && !user.can('warn')) return this.errorReply("Warning is unavailable in group chats.");
 
 		target = this.splitTarget(target);
@@ -1130,6 +1133,7 @@ exports.commands = {
 	mute: function (target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help mute');
 		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
+		if (!this.can('mute', null, room)) return false;
 
 		target = this.splitTarget(target);
 		let targetUser = this.targetUser;
@@ -1190,6 +1194,7 @@ exports.commands = {
 	ipmute: 'lock',
 	lock: function (target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help lock');
+		if (!this.can('lock')) return false;
 
 		target = this.splitTarget(target);
 		let targetUser = this.targetUser;
@@ -1273,6 +1278,7 @@ exports.commands = {
 	b: 'ban',
 	ban: function (target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help ban');
+		if (!this.can('ban')) return false;
 
 		target = this.splitTarget(target);
 		let targetUser = this.targetUser;
@@ -1716,6 +1722,7 @@ exports.commands = {
 	fr: 'forcerename',
 	forcerename: function (target, room, user) {
 		if (!target) return this.parse('/help forcerename');
+		if (!this.can('forcerename')) return false;
 
 		let reason = this.splitTarget(target, true);
 		let targetUser = this.targetUser;
