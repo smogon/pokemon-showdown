@@ -418,22 +418,22 @@ exports.commands = {
 	},
 	makegroupchathelp: ["/makegroupchat [roomname], [hidden|private] - Creates a group chat named [roomname]. Leave off privacy to default to hidden. Requires global voice or roomdriver+ in a public room to make a groupchat."],
 
-	deregisterchatroom: function (target, room, user) {
-		if (!this.can('makeroom')) return;
-		this.errorReply("NOTE: You probably want to use `/deleteroom` now that it exists.");
-		let id = toId(target);
-		if (!id) return this.parse('/help deregisterchatroom');
-		let targetRoom = Rooms.search(id);
-		if (!targetRoom) return this.errorReply("The room '" + target + "' doesn't exist.");
-		target = targetRoom.title || targetRoom.id;
-		if (Rooms.global.deregisterChatRoom(id)) {
-			this.sendReply("The room '" + target + "' was deregistered.");
-			this.sendReply("It will be deleted as of the next server restart.");
-			return;
-		}
-		return this.errorReply("The room '" + target + "' isn't registered.");
-	},
-	deregisterchatroomhelp: ["/deregisterchatroom [roomname] - Deletes room [roomname] after the next server restart. Requires: & ~"],
+	// deregisterchatroom: function (target, room, user) {
+	//	if (!this.can('makeroom')) return;
+	//	this.errorReply("NOTE: You probably want to use `/deleteroom` now that it exists.");
+	//	let id = toId(target);
+	//	if (!id) return this.parse('/help deregisterchatroom');
+	//	let targetRoom = Rooms.search(id);
+	//	if (!targetRoom) return this.errorReply("The room '" + target + "' doesn't exist.");
+	//	target = targetRoom.title || targetRoom.id;
+	//	if (Rooms.global.deregisterChatRoom(id)) {
+	//		this.sendReply("The room '" + target + "' was deregistered.");
+	//		this.sendReply("It will be deleted as of the next server restart.");
+	//		return;
+	//	}
+	//	return this.errorReply("The room '" + target + "' isn't registered.");
+	// },
+	// deregisterchatroomhelp: ["/deregisterchatroom [roomname] - Deletes room [roomname] after the next server restart. Requires: & ~"],
 
 	deletechatroom: 'deleteroom',
 	deletegroupchat: 'deleteroom',
