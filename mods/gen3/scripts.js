@@ -17,4 +17,8 @@ exports.BattleScripts = {
 			}
 		}
 	},
+
+	calcRecoilDamage: function (damageDealt, move) {
+		return this.clampIntRange(Math.floor(damageDealt * move.recoil[0] / move.recoil[1]), 1);
+	},
 };

@@ -273,6 +273,10 @@ exports.BattleMovedex = {
 			return null;
 		},
 	},
+	doubleedge: {
+		inherit: true,
+		recoil: [1, 3],
+	},
 	dreameater: {
 		inherit: true,
 		desc: "Deals damage to one adjacent target, if it is asleep and does not have a Substitute. The user recovers half of the HP lost by the target, rounded up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down.",
