@@ -148,6 +148,10 @@ exports.BattleMovedex = {
 		inherit: true,
 		accuracy: 80,
 	},
+	bravebird: {
+		inherit: true,
+		recoil: [1, 3],
+	},
 	brickbreak: {
 		inherit: true,
 		desc: "Reflect and Light Screen are removed from the target's field even if the attack misses or the target is a Ghost-type.",
@@ -339,6 +343,10 @@ exports.BattleMovedex = {
 			return null;
 		},
 	},
+	doubleedge: {
+		inherit: true,
+		recoil: [1, 3],
+	},
 	drainpunch: {
 		inherit: true,
 		basePower: 60,
@@ -471,6 +479,10 @@ exports.BattleMovedex = {
 			}
 			return 20;
 		},
+	},
+	flareblitz: {
+		inherit: true,
+		recoil: [1, 3],
 	},
 	focuspunch: {
 		inherit: true,
@@ -1214,6 +1226,10 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 50,
 	},
+	volttackle: {
+		inherit: true,
+		recoil: [1, 3],
+	},
 	whirlpool: {
 		inherit: true,
 		accuracy: 70,
@@ -1240,6 +1256,10 @@ exports.BattleMovedex = {
 				}
 			},
 		},
+	},
+	woodhammer: {
+		inherit: true,
+		recoil: [1, 3],
 	},
 	worryseed: {
 		inherit: true,
