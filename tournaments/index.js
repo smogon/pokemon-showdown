@@ -1001,9 +1001,9 @@ let commands = {
 		setscouting: function (tournament, user, params, cmd) {
 			if (params.length < 1) {
 				if (tournament.scouting) {
-					return this.sendReply("This tournament allows spectating other battles while in the tournament.");
+					return this.sendReply("This tournament allows spectating other battles while in a tournament.");
 				} else {
-					return this.sendReply("This tournament disallows spectating other battles while in the tournament.");
+					return this.sendReply("This tournament disallows spectating other battles while in a tournament.");
 				}
 			}
 
