@@ -494,7 +494,6 @@ exports.commands = {
 		case 'privateroom':
 			return this.parse('/help privateroom');
 		case 'publicroom':
-			if (room.isPersonal) return this.errorReply("This room can't be made public.");
 			setting = false;
 			break;
 		case 'secretroom':
@@ -513,6 +512,7 @@ exports.commands = {
 		}
 
 		if (target === 'off' || !setting) {
+			if (room.isPersonal) return this.errorReply("This room can't be made public.");
 			delete room.isPrivate;
 			this.addModCommand("" + user.name + " made this room public.");
 			if (room.chatRoomData) {
