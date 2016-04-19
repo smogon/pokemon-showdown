@@ -1432,6 +1432,7 @@ exports.BattleFormatsData = {
 			{"generation": 6, "level": 70, "isHidden": true, "moves":["freezedry", "icebeam", "hail", "reflect"], "pokeball": "cherishball"},
 		],
 		eventOnlyHidden: true,
+		unobtainableShinyPentagon: true,
 		tier: "PU",
 	},
 	zapdos: {
@@ -1443,6 +1444,7 @@ exports.BattleFormatsData = {
 			{"generation": 6, "level": 70, "isHidden": true, "moves":["discharge", "thundershock", "raindance", "agility"], "pokeball": "cherishball"},
 		],
 		eventOnlyHidden: true,
+		unobtainableShinyPentagon: true,
 		tier: "UU",
 	},
 	moltres: {
@@ -1454,6 +1456,7 @@ exports.BattleFormatsData = {
 			{"generation": 6, "level": 70, "isHidden": true, "moves":["skyattack", "heatwave", "sunnyday", "safeguard"], "pokeball": "cherishball"},
 		],
 		eventOnlyHidden: true,
+		unobtainableShinyPentagon: true,
 		tier: "BL2",
 	},
 	dratini: {
@@ -1488,6 +1491,7 @@ exports.BattleFormatsData = {
 			{"generation": 5, "level": 100, "nature": "Timid", "ivs": {"spa": 31, "spe": 31}, "isHidden": true, "moves":["psystrike", "icebeam", "healpulse", "hurricane"], "pokeball": "cherishball"},
 		],
 		eventOnlyHidden: true,
+		unobtainableShinyPentagon: true,
 		tier: "Uber",
 	},
 	mewtwomegax: {
@@ -3215,6 +3219,7 @@ exports.BattleFormatsData = {
 			{"generation": 5, "level": 100, "moves":["waterspout", "thunder", "icebeam", "sheercold"], "pokeball": "cherishball"},
 			{"generation": 6, "level": 100, "nature": "Timid", "moves":["waterspout", "thunder", "sheercold", "icebeam"], "pokeball": "cherishball"},
 		],
+		unobtainableShinyPentagon: true,
 		tier: "Uber",
 	},
 	kyogreprimal: {
@@ -3230,6 +3235,7 @@ exports.BattleFormatsData = {
 			{"generation": 5, "level": 100, "moves":["eruption", "hammerarm", "earthpower", "solarbeam"], "pokeball": "cherishball"},
 			{"generation": 6, "level": 100, "nature": "Adamant", "moves":["firepunch", "solarbeam", "hammerarm", "rockslide"], "pokeball": "cherishball"},
 		],
+		unobtainableShinyPentagon: true,
 		tier: "Uber",
 	},
 	groudonprimal: {
@@ -3246,6 +3252,7 @@ exports.BattleFormatsData = {
 			{"generation": 6, "level": 70, "shiny": true, "moves":["dragonpulse", "thunder", "twister", "extremespeed"], "pokeball": "cherishball"},
 			{"generation": 6, "level": 70, "shiny": true, "moves":["dragonascent", "dragonclaw", "extremespeed", "dragondance"], "pokeball": "cherishball"},
 		],
+		unobtainableShinyPentagon: true,
 		tier: "Uber",
 	},
 	rayquazamega: {
@@ -3299,6 +3306,7 @@ exports.BattleFormatsData = {
 			{"generation": 4, "level": 50, "moves":["psychoboost", "leer", "wrap", "nightshade"]},
 			{"generation": 5, "level": 100, "moves":["nastyplot", "darkpulse", "recover", "psychoboost"], "pokeball": "duskball"},
 		],
+		unobtainableShinyPentagon: true,
 		tier: "Uber",
 	},
 	deoxysattack: {
