@@ -134,9 +134,11 @@ Other Possible Moves:
 - Giga Drain
 
 ### Anttya
-Altaria @ Leftovers
+Altaria @ Altarianite
 
 Ability: Aerilate
+
+Innate Ability: Serene Grace
 
 EVs: 252 SpA, 4 SpD, 252 Spe, Nature: Modest
 
@@ -145,9 +147,9 @@ EVs: 252 SpA, 4 SpD, 252 Spe, Nature: Modest
 - Searing Shot
 - Hax - 10 PP. 
  - (10%) User damages itself in confusion. 
- - (20%) User gains 2 Quiver Dance boosts. 
- - (20%) Everyone gets parafusion. 
- - (50%) Normal\Special 80\90%. This attack always crits.
+ - (40%) User gains 2 Quiver Dance boosts. 
+ - (10%) Everyone gets parafusion. 
+ - (40%) Normal\Special 60\90%. This attack always crits. 30% flinch.
 
 ### Anty
 Durant @ Life Orb \ Choice Band
@@ -159,7 +161,7 @@ EVs: 4 HP, 252 Atk, 252 Spe, Nature: Adamant
 - Attack Order
 - Superpower
 - Coil \ Diamond Storm
-- Double-Edgy - 15PP Steel\Physical 90 pwr always hits. Makes contact. Causes 33% recoil.
+- Double-Edgy - 15PP Steel\Physical 90 pwr always hits. Makes contact. Causes 25% recoil.
 
 ### Articuno
 Articuno @ Red Card
@@ -248,7 +250,7 @@ EVs: 252 HP, 252 Atk, 4 Def, Nature: Adamant
 - Meteor Mash
 - Bullet Punch
 - U-turn
-- Ancestor's Rage - 10 PP Fairy\Physical 100\100%. 30% confuse. Makes contact.
+- Ancestor's Rage - 10 PP Fairy\Physical 115\100%. 30% confuse. Makes contact.
 
 ### Beowulf
 Beedrill @ Beedrillite
@@ -625,7 +627,7 @@ Ability: Justified
 EVs: 252 Atk, 4 SpD, 252 Spe, Nature: Jolly
 
 - Crunch
-- Sacred Sword
+- Sky Uppercut
 - Extreme Speed
 - Screw This Matchup - 5 PP. Boosts Atk by 2. If applicable, swaps user's secondary type with the opponent's primary type. If these are the same, only suppresses the user's secondary type.
 
@@ -766,16 +768,18 @@ EVs: 240 HP, 252 SpA, 16 Spe, Nature: Modest
 - Sparkle Rain - 5 PP Normal\Special 75\100%. + Fire type. 30% sleep.
 
 ### Hashtag
-Ursaring @ Choice Scarf
+Ursaring @ Choice Band
 
 Ability: Scrappy
+
+Innate Ability: Boosts speed by 1 on switch in.
 
 EVs: 4 HP, 252 Atk, 252 Spe, Nature: Jolly
 
 - Thousand Arrows
 - Explosion
 - U-turn
-- GOTTA GO STRATS - 10 PP Normal\Physical 130\85%. Boosts attack by 2 if this move knocks out a Pokemon. Makes contact.
+- GOTTA GO STRATS - 10 PP Normal\Physical 100\90%. Boosts attack by 2 if this move knocks out a Pokemon. Makes contact.
 
 ### Haund
 Swellow @ Toxic Orb
@@ -784,12 +788,12 @@ Ability: Guts
 
 Innate Ability: Prodigy - All special moves on the battlefield become physical, and vice versa.
 
-EVs: 252 Atk, 4 Def, 252 Spe, Nature: Jolly
+EVs: 180 HP, 76 Atk, 252 Spe, Nature: Jolly
 
 - Boomburst
 - Heat Wave
-- Ominous Wind
-- Psychokinesis - 10 PP Fighting\Special 90\100%. Shifts target's positive boosts to user.
+- Defog
+- Psychokinesis - 10 PP Fighting\Special 120\100%. Shifts target's positive boosts to user.
 
 ### HeaLnDeaL
 Magmar @ Eviolite
@@ -989,8 +993,6 @@ EVs: 4 HP, 252 SpA, 252 Spe, IVs: 0 Atk, Nature: Modest
 Heatran @ Charcoal
 
 Ability: Levitate
-
-Innate Ability: This Pokemon is immune to Fire-type attacks.
 
 EVs: 252 HP, 4 Def, 252 SpA, IVs: 0 Atk, Nature: Modest
 
@@ -1199,14 +1201,14 @@ Larvitar @ Eviolite
 
 Ability: Solid Rock
 
-Innate Ability: Cuteness - Boosts own offenses, defenses and speed on switch in.
+Innate Ability: Cuteness - Lowers opponent offenses, defenses and speed on switch in. Own attack and defense are boosted by 80%.
 
 EVs: 252 HP, 252 Atk, 4 Spe, Nature: Adamant
 
 - Precipice Blades
 - Diamond Storm
 - Megahorn
-- Hamster Dance - 10 PP, 100% acc, confuses opponent. Removes all stat changes from opponent.
+- Hamster Dance - 10 PP, 100% acc, confuses opponent. Removes positive boosts from opponent.
 
 ### Omega-Xis
 Genesect @ Expert Belt
@@ -1356,7 +1358,7 @@ EVs: 252 HP, 252 Atk, 4 Def, Nature: Adamant
 ### RODAN
 Munchlax @ Eviolite
 
-Ability: Fur Coat
+Ability: Guts
 
 Innate Ability: Gonna Make You Sweat - Recovers 25% HP each turn.
 
@@ -1633,19 +1635,19 @@ EVs: 52 HP, 232 Def, 224 SpD, IVs: 0 Atk, Nature: Bold
 - Counter
 - Mirror Coat
 - Encore
-- oh - 30 PP, 100% acc. Lowers opponent offenses, boosts user speed.
+- oh - 5 PP Dark\Physical 100% acc. Lowers opponent offenses, boosts user speed by 2 stages. Deals level-based damage.
 
 
 ### Steamroll
 Growlithe @ Life Orb
 
-Ability: Adaptability
+Ability: Sheer Force
 
 EVs: 252 Atk, 4 Def, 252 Spe, Nature: Adamant
 
 - Flare Blitz
-- Wild Charge
-- Superpower
+- Volt Tackle
+- Play Rough
 - Conflagration - 40 PP, Protect-based move. Only works on first turn out. Boosts offenses, defenses and speed by 2 stages.
 
 ### Sunfished
