@@ -1695,11 +1695,9 @@ exports.BattleAbilities = {
 				let curPoke = active[i];
 				// pokemon not statused
 				if (!curPoke || !curPoke.status) {
-					// this.add('-message', "" + curPoke + " skipped: not statused or doesn't exist");
 					continue;
 				}
 				if (curPoke.showCure) {
-					// this.add('-message', "" + curPoke + " skipped: Natural Cure already known");
 					continue;
 				}
 				let template = Tools.getTemplate(curPoke.species);
@@ -1707,25 +1705,20 @@ exports.BattleAbilities = {
 				if (template.abilities['0'] !== 'Natural Cure' &&
 					template.abilities['1'] !== 'Natural Cure' &&
 					template.abilities['H'] !== 'Natural Cure') {
-					// this.add('-message', "" + curPoke + " skipped: no Natural Cure");
 					continue;
 				}
 				// pokemon's ability is known to be Natural Cure
 				if (!template.abilities['1'] && !template.abilities['H']) {
-					// this.add('-message', "" + curPoke + " skipped: only one ability");
 					continue;
 				}
 				// pokemon isn't switching this turn
 				if (curPoke !== pokemon && !this.willSwitch(curPoke)) {
-					// this.add('-message', "" + curPoke + " skipped: not switching");
 					continue;
 				}
 
 				if (curPoke.hasAbility('naturalcure')) {
-					// this.add('-message', "" + curPoke + " confirmed: could be Natural Cure (and is)");
 					cureList.push(curPoke);
 				} else {
-					// this.add('-message', "" + curPoke + " confirmed: could be Natural Cure (but isn't)");
 					noCureCount++;
 				}
 			}

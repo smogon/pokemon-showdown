@@ -806,7 +806,6 @@ let GlobalRoom = (() => {
 			return;
 		}
 
-		//console.log('BATTLE START BETWEEN: ' + p1.userid + ' ' + p2.userid);
 		let i = this.lastBattle + 1;
 		let formaturlid = format.toLowerCase().replace(/[^a-z0-9]+/g, '');
 		while (rooms['battle-' + formaturlid + '-' + i]) {
@@ -857,7 +856,6 @@ let BattleRoom = (() => {
 
 		this.format = format;
 		this.auth = {};
-		//console.log("NEW BATTLE");
 
 		let formatid = toId(format);
 
@@ -928,8 +926,6 @@ let BattleRoom = (() => {
 
 			let p1name = p1.name;
 			let p2name = p2.name;
-
-			//update.updates.push('[DEBUG] uri: ' + Config.loginserver + 'action.php?act=ladderupdate&serverid=' + Config.serverid + '&p1=' + encodeURIComponent(p1) + '&p2=' + encodeURIComponent(p2) + '&score=' + p1score + '&format=' + toId(rated.format) + '&servertoken=[token]');
 
 			winner = Users.get(winnerid);
 			if (winner && !winner.registered) {
@@ -1022,7 +1018,6 @@ let BattleRoom = (() => {
 				});
 			});
 		}); // asychronicity
-		//console.log(JSON.stringify(logData));
 	};
 	BattleRoom.prototype.tryExpire = function () {
 		this.expire();
@@ -1632,7 +1627,6 @@ Rooms.createBattle = function (roomid, format, p1, p2, options) {
 	if (!p1 || !p2) return false;
 	if (!roomid) roomid = 'default';
 	if (!rooms[roomid]) {
-		// console.log("NEW BATTLE ROOM: " + roomid);
 		Monitor.countBattle(p1.latestIp, p1.name);
 		Monitor.countBattle(p2.latestIp, p2.name);
 		rooms[roomid] = new BattleRoom(roomid, format, p1, p2, options);

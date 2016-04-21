@@ -290,7 +290,6 @@ class Validator {
 			}
 
 			if (lsetData.limitedEgg && lsetData.limitedEgg.length > 1 && !lsetData.sourcesBefore && lsetData.sources) {
-				// console.log("limitedEgg 1: " + lsetData.limitedEgg);
 				// Multiple gen 2-5 egg moves
 				// This code hasn't been closely audited for multi-gen interaction, but
 				// since egg moves don't get removed between gens, it's unlikely to have
@@ -343,7 +342,6 @@ class Validator {
 						}
 						if (restrictedSources <= 1) {
 							validFatherExists = true;
-							// console.log("valid father: " + potentialFather.id);
 							break;
 						}
 					}
@@ -899,8 +897,6 @@ PM = TeamValidator.PM = new ProcessManager({
 			return '0' + problems.join('\n');
 		} else {
 			let packedTeam = Tools.packTeam(parsedTeam);
-			// console.log('FROM: ' + message.substr(pipeIndex2 + 1));
-			// console.log('TO: ' + packedTeam);
 			return '1' + packedTeam;
 		}
 	},
