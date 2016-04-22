@@ -734,10 +734,10 @@ class Tournament {
 			}
 		}
 	}
-	onBattleWin(room, winner) {
+	onBattleWin(room, winnerid) {
 		let from = this.players[room.p1.userid];
 		let to = this.players[room.p2.userid];
-		if (winner) winner = this.players[winner.userid];
+		let winner = this.players[winnerid];
 
 		let result = 'draw';
 		if (from === winner) {
@@ -764,7 +764,7 @@ class Tournament {
 		let error = this.generator.setMatchResult([from, to], result, room.battle.score);
 		if (error) {
 			// Should never happen
-			return this.room.add("Unexpected " + error + " from setMatchResult([" + from.userid + ", " + to.userid + "], " + result + ", " + room.battle.score + ") in onBattleWin(" + room.id + ", " + winner.userid + "). Please report this to an admin.").update();
+			return this.room.add("Unexpected " + error + " from setMatchResult([" + from.userid + ", " + to.userid + "], " + result + ", " + room.battle.score + ") in onBattleWin(" + room.id + ", " + winnerid + "). Please report this to an admin.").update();
 		}
 
 		this.room.add('|tournament|battleend|' + from.name + '|' + to.name + '|' + result + '|' + room.battle.score.join(','));
