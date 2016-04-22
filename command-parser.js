@@ -316,7 +316,9 @@ class CommandContext {
 				connection.popup("Your message can't be blank.");
 				return false;
 			}
-			if (message.length > MAX_MESSAGE_LENGTH && !user.can('ignorelimits')) {
+			let length = message.length;
+			length += 10 * message.replace(/[^\ufdfd]*/g, '').length;
+			if (length > MAX_MESSAGE_LENGTH && !user.can('ignorelimits')) {
 				this.errorReply("Your message is too long: " + message);
 				return false;
 			}
