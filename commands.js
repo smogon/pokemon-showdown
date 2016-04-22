@@ -1793,11 +1793,12 @@ exports.commands = {
 
 			room.banwords = room.banwords.concat(words);
 			this.updateBanwords();
-			this.sendReply("Banned phrases succesfully added. The list is currently: " + room.banwords.join(', '));
 			if (words.length > 1) {
-				this.privateModCommand("The banwords '" + words.join(', ') + "' were added by " + user.name + ".");
+				this.privateModCommand("(The banwords '" + words.join(', ') + "' were added by " + user.name + ".)");
+				this.sendReply("Banned phrases succesfully added. The list is currently: " + room.banwords.join(', '));
 			} else {
-				this.privateModCommand("The banword '" + words[0] + "' was added by " + user.name + ".");
+				this.privateModCommand("(The banword '" + words[0] + "' was added by " + user.name + ".)");
+				this.sendReply("Banned phrase succesfully added. The list is currently: " + room.banwords.join(', '));
 			}
 
 			if (room.chatRoomData) {
@@ -1823,11 +1824,12 @@ exports.commands = {
 			}
 
 			this.updateBanwords();
-			this.sendReply("Banned phrases succesfully deleted. The list is currently: " + room.banwords.join(', '));
 			if (words.length > 1) {
-				this.privateModCommand("The banwords '" + words.join(', ') + "' were removed by " + user.name + ".");
+				this.privateModCommand("(The banwords '" + words.join(', ') + "' were removed by " + user.name + ".)");
+				this.sendReply("Banned phrases succesfully deleted. The list is currently: " + room.banwords.join(', '));
 			} else {
-				this.privateModCommand("The banword '" + words[0] + "' was removed by " + user.name + ".");
+				this.privateModCommand("(The banword '" + words[0] + "' was removed by " + user.name + ".)");
+				this.sendReply("Banned phrase succesfully deleted. The list is currently: " + room.banwords.join(', '));
 			}
 
 			if (room.chatRoomData) {
