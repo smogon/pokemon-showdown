@@ -954,8 +954,7 @@ let BattleRoom = (() => {
 			}
 		}
 		if (this.tour) {
-			winner = Users.get(winner);
-			this.tour.onBattleWin(this, winner);
+			this.tour.onBattleWin(this, winnerid);
 		}
 		this.update();
 	};
