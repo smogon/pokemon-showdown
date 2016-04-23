@@ -57,7 +57,7 @@ exports.BattleFormatsData = {
 	},
 	butterfree: {
 		randomBattleMoves: ["stunspore", "sleeppowder", "psychic", "nightmare", "gigadrain"],
-		tier: "UU",
+		tier: "NU",
 	},
 	weedle: {
 		tier: "LC",
@@ -67,7 +67,7 @@ exports.BattleFormatsData = {
 	},
 	beedrill: {
 		randomBattleMoves: ["twineedle", "hiddenpowerrock", "swordsdance", "hiddenpowerground", "sludgebomb", "agility", "return"],
-		tier: "UU",
+		tier: "NU",
 	},
 	pidgey: {
 		tier: "LC",
@@ -77,14 +77,14 @@ exports.BattleFormatsData = {
 	},
 	pidgeot: {
 		randomBattleMoves: ["return", "hiddenpowerflying", "steelwing", "mirrormove", "wingattack", "hiddenpowerground", "toxic"],
-		tier: "UU",
+		tier: "NU",
 	},
 	rattata: {
 		tier: "LC",
 	},
 	raticate: {
 		randomBattleMoves: ["superfang", "substitute", "mimic", "bodyslam"],
-		tier: "UU",
+		tier: "NU",
 	},
 	spearow: {
 		eventPokemon: [
@@ -97,14 +97,14 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 1, "level": 20, "moves":["growl", "leer", "furyattack", "payday"]},
 		],
-		tier: "UU",
+		tier: "NU",
 	},
 	ekans: {
 		tier: "LC",
 	},
 	arbok: {
 		randomBattleMoves: ["sludgebomb", "gigadrain", "earthquake", "screech", "substitute", "glare"],
-		tier: "UU",
+		tier: "NU",
 	},
 	pichu: {
 		eventPokemon: [
@@ -242,28 +242,28 @@ exports.BattleFormatsData = {
 	},
 	parasect: {
 		randomBattleMoves: ["spore", "hiddenpowerbug", "hiddenpowerice", "hiddenpowerfire", "growth", "gigadrain", "stunspore", "swordsdance", "return", "sludgebomb"],
-		tier: "UU",
+		tier: "NU",
 	},
 	venonat: {
 		tier: "LC",
 	},
 	venomoth: {
 		randomBattleMoves: ["curse", "sleeppowder", "stunspore", "hiddenpowerbug", "sludgebomb"],
-		tier: "UU",
+		tier: "NU",
 	},
 	diglett: {
 		tier: "LC",
 	},
 	dugtrio: {
 		randomBattleMoves: ["earthquake", "rockslide", "beatup", "substitute", "sludgebomb"],
-		tier: "UU",
+		tier: "NU",
 	},
 	meowth: {
 		tier: "LC",
 	},
 	persian: {
 		randomBattleMoves: ["bodyslam", "hypnosis", "shadowball", "return", "screech", "thunderbolt", "zapcannon", "swagger", "substitute", "psychup"],
-		tier: "UU",
+		tier: "NU",
 	},
 	psyduck: {
 		eventPokemon: [
@@ -386,7 +386,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 1, "level": 40, "moves":["ember", "firespin", "stomp", "payday"]},
 		],
-		tier: "UU",
+		tier: "NU",
 	},
 	slowpoke: {
 		tier: "LC",
@@ -415,7 +415,7 @@ exports.BattleFormatsData = {
 			{"generation": 2, "level": 5, "moves":["batonpass", "swordsdance", "agility", "slash"]},
 			{"generation": 2, "level": 5, "moves":["peck", "furycutter"]},
 		],
-		tier: "UU",
+		tier: "NU",
 	},
 	doduo: {
 		eventPokemon: [
@@ -435,7 +435,7 @@ exports.BattleFormatsData = {
 	},
 	dewgong: {
 		randomBattleMoves: ["surf", "icebeam", "encore", "rest", "sleeptalk"],
-		tier: "UU",
+		tier: "NU",
 	},
 	grimer: {
 		tier: "LC",
@@ -489,7 +489,7 @@ exports.BattleFormatsData = {
 	},
 	kingler: {
 		randomBattleMoves: ["swordsdance", "doubleedge", "rest", "sleeptalk", "substitute", "surf", "crabhammer", "hiddenpowerfighting", "hiddenpowerground", "hiddenpowerrock"],
-		tier: "UU",
+		tier: "NU",
 	},
 	voltorb: {
 		eventPokemon: [
@@ -534,18 +534,18 @@ exports.BattleFormatsData = {
 	},
 	hitmonchan: {
 		randomBattleMoves: ["highjumpkick", "counter", "curse", "return", "hiddenpowerghost"],
-		tier: "UU",
+		tier: "NU",
 	},
 	hitmontop: {
 		randomBattleMoves: ["highjumpkick", "curse", "rest", "hiddenpowerghost", "return"],
-		tier: "UU",
+		tier: "NU",
 	},
 	lickitung: {
 		randomBattleMoves: ["thunderbolt", "icebeam", "rest", "sleeptalk", "swordsdance", "bodyslam"],
 		eventPokemon: [
 			{"generation": 2, "level": 5, "moves":["lick", "doubleslap"]},
 		],
-		tier: "UU",
+		tier: "NU",
 	},
 	koffing: {
 		tier: "LC",
@@ -576,7 +576,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 2, "level": 5, "moves":["constrict", "sleeppowder", "synthesis"]},
 		],
-		tier: "UU",
+		tier: "NU",
 	},
 	kangaskhan: {
 		randomBattleMoves: ["curse", "roar", "bodyslam", "return", "earthquake", "attract", "substitute", "rest"],
@@ -605,7 +605,7 @@ exports.BattleFormatsData = {
 		tier: "LC",
 	},
 	seaking: {
-		tier: "UU",
+		tier: "NU",
 	},
 	staryu: {
 		eventPokemon: [
@@ -621,7 +621,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 2, "level": 5, "moves":["barrier", "mindreader"]},
 		],
-		tier: "UU",
+		tier: "NU",
 	},
 	scyther: {
 		eventPokemon: [
@@ -696,7 +696,7 @@ exports.BattleFormatsData = {
 		tier: "BL",
 	},
 	ditto: {
-		tier: "UU",
+		tier: "NU",
 	},
 	eevee: {
 		eventPokemon: [
@@ -857,7 +857,7 @@ exports.BattleFormatsData = {
 		tier: "LC",
 	},
 	furret: {
-		tier: "UU",
+		tier: "NU",
 	},
 	hoothoot: {
 		eventPokemon: [
@@ -866,7 +866,7 @@ exports.BattleFormatsData = {
 		tier: "LC",
 	},
 	noctowl: {
-		tier: "UU",
+		tier: "NU",
 	},
 	ledyba: {
 		eventPokemon: [
@@ -875,7 +875,7 @@ exports.BattleFormatsData = {
 		tier: "LC",
 	},
 	ledian: {
-		tier: "UU",
+		tier: "NU",
 	},
 	spinarak: {
 		eventPokemon: [
@@ -884,7 +884,7 @@ exports.BattleFormatsData = {
 		tier: "LC",
 	},
 	ariados: {
-		tier: "UU",
+		tier: "NU",
 	},
 	chinchou: {
 		eventPokemon: [
@@ -899,7 +899,7 @@ exports.BattleFormatsData = {
 		tier: "LC",
 	},
 	togetic: {
-		tier: "UU",
+		tier: "NU",
 	},
 	natu: {
 		eventPokemon: [
@@ -908,7 +908,7 @@ exports.BattleFormatsData = {
 		tier: "LC",
 	},
 	xatu: {
-		tier: "UU",
+		tier: "NU",
 	},
 	mareep: {
 		tier: "LC",
@@ -928,13 +928,13 @@ exports.BattleFormatsData = {
 		tier: "LC",
 	},
 	azumarill: {
-		tier: "UU",
+		tier: "NU",
 	},
 	sudowoodo: {
 		eventPokemon: [
 			{"generation": 2, "level": 5, "moves":["rockthrow", "mimic", "substitute"]},
 		],
-		tier: "UU",
+		tier: "NU",
 	},
 	hoppip: {
 		eventPokemon: [
@@ -952,7 +952,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 2, "level": 5, "moves":["scratch", "tailwhip", "mimic"]},
 		],
-		tier: "UU",
+		tier: "NU",
 	},
 	sunkern: {
 		eventPokemon: [
@@ -961,14 +961,14 @@ exports.BattleFormatsData = {
 		tier: "LC",
 	},
 	sunflora: {
-		tier: "UU",
+		tier: "NU",
 	},
 	yanma: {
 		eventPokemon: [
 			{"generation": 2, "level": 5, "moves":["tackle", "foresight", "steelwing"]},
 			{"generation": 2, "level": 5, "moves":["tackle", "foresight", "sweetkiss"]},
 		],
-		tier: "UU",
+		tier: "NU",
 	},
 	wooper: {
 		eventPokemon: [
@@ -984,7 +984,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 2, "level": 5, "moves":["peck", "beatup"]},
 		],
-		tier: "UU",
+		tier: "NU",
 	},
 	misdreavus: {
 		eventPokemon: [
@@ -993,13 +993,13 @@ exports.BattleFormatsData = {
 		tier: "OU",
 	},
 	unown: {
-		tier: "UU",
+		tier: "NU",
 	},
 	wobbuffet: {
 		eventPokemon: [
 			{"generation": 2, "level": 5, "moves":["mirrorcoat", "safeguard", "destinybond", "mimic"]},
 		],
-		tier: "UU",
+		tier: "NU",
 	},
 	girafarig: {
 		tier: "UU",
@@ -1018,7 +1018,7 @@ exports.BattleFormatsData = {
 			{"generation": 2, "level": 5, "moves":["rage", "defensecurl", "furyattack"]},
 			{"generation": 2, "level": 5, "moves":["rage", "defensecurl", "horndrill"]},
 		],
-		tier: "UU",
+		tier: "NU",
 	},
 	gligar: {
 		eventPokemon: [
@@ -1042,7 +1042,7 @@ exports.BattleFormatsData = {
 		tier: "UU",
 	},
 	shuckle: {
-		tier: "UU",
+		tier: "NU",
 	},
 	heracross: {
 		eventPokemon: [
@@ -1054,7 +1054,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 2, "level": 5, "moves":["scratch", "leer", "moonlight"]},
 		],
-		tier: "UU",
+		tier: "NU",
 	},
 	teddiursa: {
 		eventPokemon: [
@@ -1069,7 +1069,7 @@ exports.BattleFormatsData = {
 		tier: "LC",
 	},
 	magcargo: {
-		tier: "UU",
+		tier: "NU",
 	},
 	swinub: {
 		eventPokemon: [
@@ -1081,7 +1081,7 @@ exports.BattleFormatsData = {
 		tier: "UU",
 	},
 	corsola: {
-		tier: "UU",
+		tier: "NU",
 	},
 	remoraid: {
 		eventPokemon: [
@@ -1091,20 +1091,20 @@ exports.BattleFormatsData = {
 		tier: "LC",
 	},
 	octillery: {
-		tier: "UU",
+		tier: "NU",
 	},
 	delibird: {
 		eventPokemon: [
 			{"generation": 2, "level": 5, "moves":["present", "payday"]},
 			{"generation": 2, "level": 5, "moves":["present", "spikes"]},
 		],
-		tier: "UU",
+		tier: "NU",
 	},
 	mantine: {
 		eventPokemon: [
 			{"generation": 2, "level": 5, "moves":["tackle", "bubble", "gust"]},
 		],
-		tier: "UU",
+		tier: "NU",
 	},
 	skarmory: {
 		eventPokemon: [
@@ -1133,7 +1133,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 2, "level": 5, "moves":["tackle", "safeguard"]},
 		],
-		tier: "UU",
+		tier: "NU",
 	},
 	smeargle: {
 		tier: "UU",
