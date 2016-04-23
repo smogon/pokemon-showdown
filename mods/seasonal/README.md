@@ -5,7 +5,7 @@ Roster
 ------------------------------------------------------------------------
 
 ### Acast
-Gourgeist @ Light Clay
+Gourgeist-Super @ Mental Herb
 
 Ability: Prankster
 
@@ -13,8 +13,8 @@ EVs: 248 HP, 8 Def, 252 SpD, Nature: Careful
 
 - Will-O-Wisp
 - Recover
-- Seed Bomb
-- Needs More Screens - 5 (no boosts) PP, uses Magic Coat, Safeguard, Reflect and Light Screen.
+- Seed Bomb \ Shadow Strike
+- Needs More Screens - 5 (no boosts) PP, uses Magic Coat, Safeguard, Reflect (50% chance) and Light Screen (50% chance).
 
 ### Ace
 Salamence @ Salamencite

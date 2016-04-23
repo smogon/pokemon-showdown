@@ -6,8 +6,8 @@ exports.BattleScripts = {
 		let variant = (this.random(2) === 1);
 		let sets = {
 			'Acast': {
-				species: 'Gourgeist', ability: 'Prankster', item: 'Light Clay', gender: 'M',
-				moves: ['willowisp', 'recover', ['seedbomb', 'shadowclaw'][this.random(2)]],
+				species: 'Gourgeist-Super', ability: 'Prankster', item: 'Mental Herb', gender: 'M',
+				moves: ['willowisp', 'recover', ['seedbomb', 'shadowstrike'][this.random(2)]],
 				signatureMove: 'Needs More Screens',
 				evs: {hp:248, def:8, spd:252}, nature: 'Careful',
 			},

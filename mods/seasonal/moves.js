@@ -2660,8 +2660,8 @@ exports.BattleMovedex = {
 		},
 		onHit: function (target, source) {
 			source.side.addSideCondition('reflect', source);
-			source.side.addSideCondition('lightscreen', source);
-			source.side.addSideCondition('safeguard', source);
+			if (this.random(2) === 1) source.side.addSideCondition('lightscreen', source);
+			if (this.random(2) === 1) source.side.addSideCondition('safeguard', source);
 		},
 		secondary: false,
 		target: "self",
