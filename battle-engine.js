@@ -458,12 +458,16 @@ BattlePokemon = (() => {
 			}
 			break;
 		default:
+			let selectedTarget = target;
 			if (!target || (target.fainted && target.side !== this.side)) {
 				// If a targeted foe faints, the move is retargeted
 				target = this.battle.resolveTarget(this, move);
 			}
 			if (target.side.active.length > 1) {
 				target = this.battle.priorityEvent('RedirectTarget', this, this, move, target);
+			}
+			if (selectedTarget !== target) {
+				this.battle.retargetLastMove(target);
 			}
 			targets = [target];
 

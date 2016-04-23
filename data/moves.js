@@ -4861,7 +4861,6 @@ exports.BattleMovedex = {
 			onFoeRedirectTarget: function (target, source, source2, move) {
 				if (this.validTarget(this.effectData.target, source, move.target)) {
 					this.debug("Follow Me redirected target of move");
-					this.retargetLastMove(this.effectData.target);
 					return this.effectData.target;
 				}
 			},
@@ -11080,7 +11079,6 @@ exports.BattleMovedex = {
 			onFoeRedirectTarget: function (target, source, source2, move) {
 				if (source.runStatusImmunity('powder') && this.validTarget(this.effectData.target, source, move.target)) {
 					this.debug("Rage Powder redirected target of move");
-					this.retargetLastMove(this.effectData.target);
 					return this.effectData.target;
 				}
 			},
