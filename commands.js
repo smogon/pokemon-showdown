@@ -1781,7 +1781,7 @@ exports.commands = {
 					if (!user.can('makechatroom')) return this.errorReply("Regex banwords are only allowed for leaders or above.");
 
 					try {
-						let test = new RegExp(words[i]);
+						let test = new RegExp(words[i]); // eslint-disable-line no-unused-vars
 					} catch (e) {
 						return this.errorReply(e.message.substr(0, 28) === 'Invalid regular expression: ' ? e.message : 'Invalid regular expression: /' + words[i] + '/: ' + e.message);
 					}
