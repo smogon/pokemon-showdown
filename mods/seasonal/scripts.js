@@ -367,7 +367,7 @@ exports.BattleScripts = {
 			},
 			'HeaLnDeaL': {
 				species: 'Magmar', ability: 'Fur Coat', item: 'Mental Herb', gender: 'M',
-				moves: ['calmmind', 'healbell', 'seedflare'],
+				moves: ['quiverdance', 'healbell', 'seedflare'],
 				signatureMove: "Boober's Oblivion",
 				evs: {hp:252, def:4, spa:252}, ivs: {atk:0}, nature: 'Modest',
 			},
