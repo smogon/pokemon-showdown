@@ -802,8 +802,8 @@ Ability: Fur Coat
 
 EVs: 252 HP, 4 Def, 252 SpA, IVs: 0 Atk, Nature: Modest
 
-- Quiver Dance
-- Heal Order
+- Calm Mind
+- Heal Bell
 - Seed Flare
 - Boober's Oblivion - 10 PP Fire\Special 80\100%. Heals user by 2/3 of damage dealt. User faints if used 3 times in a row.
 
