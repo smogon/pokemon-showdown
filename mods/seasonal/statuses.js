@@ -40,7 +40,7 @@ exports.BattleStatuses = {
 	ascriptinnate: {
 		effectType: 'Ability',
 		onStart: function (target, source) {
-			source.setType('Electric');
+			source.types = ['Electric'];
 			this.add('-start', source, 'typechange', 'Electric');
 			this.useMove('magnetrise', source);
 		},
@@ -339,11 +339,18 @@ exports.BattleStatuses = {
 	// sparktrain
 	refrigerateinnate: {
 		effectType: 'Ability',
+		onSwitchIn: function (pokemon) {
+			if (!pokemon.addType('Ice')) return false;
+			this.add('-start', pokemon, 'typeadd', 'Ice');
+		},
 		onModifyMove: function (move, pokemon) {
 			if (move.type === 'Normal' && move.id !== 'naturalgift') {
 				move.type = 'Ice';
 				if (move.category !== 'Status') pokemon.addVolatile('refrigerate');
 			}
+		},
+		onModifySpD: function () {
+			return this.chainModify(1.6);
 		},
 		name: "Refrigerate",
 	},

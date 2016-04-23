@@ -107,7 +107,7 @@ exports.BattleScripts = {
 				signatureMove: "Aerial Fury",
 				evs: {atk:252, def:4, spe:252}, nature: 'Jolly',
 			},
-			'awu': {
+			'Reisen': {
 				species: 'Mawile', ability: 'Adaptability', item: 'Mawilite', gender: 'F',
 				moves: ['meteormash', 'bulletpunch', 'uturn'],
 				signatureMove: "Ancestor's Rage",
@@ -217,7 +217,7 @@ exports.BattleScripts = {
 			},
 			'DMT': {
 				species: 'Shedinja', ability: 'Wonder Guard', item: 'Focus Sash',
-				moves: ['protect', 'shadowsneak', 'xscissor'],
+				moves: ['rapidspin', 'shadowsneak', 'xscissor'],
 				signatureMove: "Really Big Swords Dance",
 				evs: {atk:252, spa:4, spe:252}, nature: 'Adamant',
 			},
@@ -427,7 +427,7 @@ exports.BattleScripts = {
 			},
 			'Jack Higgins': {
 				species: 'Maractus', ability: 'Chlorophyll', item: 'Focus Sash', gender: 'M',
-				moves: [['eruption', 'blueflare'][this.random(2)], 'seedflare', ['voltswitch', 'synthesis', 'destinybond', 'healingwish', 'growth'][this.random(5)]],
+				moves: [['eruption', 'blueflare'][this.random(2)], 'leafstorm', ['voltswitch', 'synthesis', 'destinybond', 'healingwish', 'growth'][this.random(5)]],
 				signatureMove: "Splinters",
 				evs: {hp:4, spa:252, spe:252}, nature: 'Modest',
 			},
@@ -865,7 +865,7 @@ exports.BattleScripts = {
 			},
 			'Zero Lux Given': {
 				species: 'Luxray', ability: 'Guts', item: 'Flame Orb', gender: 'M',
-				moves: ['fusionbolt', 'facade', 'iciclespear'],
+				moves: ['fusionbolt', 'facade', ['iciclespear', 'petalblizzard'][this.random(2)]],
 				signatureMove: "Pun Ray",
 				evs: {atk:252, def:4, spe:252}, ivs: {spa:0}, nature: 'Adamant',
 			},

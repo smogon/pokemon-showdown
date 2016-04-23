@@ -642,7 +642,7 @@ exports.Formats = [
 					pokemon.setAbility('adaptability');
 					this.add('-ability', pokemon, 'Adaptability');
 				}
-				if (name === 'awu' && pokemon.getAbility().id === 'hugepower') {
+				if (name === 'reisen' && pokemon.getAbility().id === 'hugepower') {
 					pokemon.setAbility('adaptability');
 					this.add('-ability', pokemon, 'Tough Claws');
 				}
@@ -688,7 +688,7 @@ exports.Formats = [
 					pokemon.setAbility('adaptability');
 					this.add('-ability', pokemon, 'Adaptability');
 				}
-				if (name === 'awu' && pokemon.getAbility().id === 'hugepower') {
+				if (name === 'reisen' && pokemon.getAbility().id === 'hugepower') {
 					pokemon.setAbility('adaptability');
 					this.add('-ability', pokemon, 'Tough Claws');
 				}
@@ -716,13 +716,10 @@ exports.Formats = [
 				pokemon.canMegaEvo = this.canMegaEvo(pokemon);
 			}
 
-			// Add here special typings, done for flavour mainly.
+			// Innate effects.
 			if (name === 'ascriptmaster') {
-				pokemon.setType('Electric');
 				pokemon.addVolatile('ascriptinnate', pokemon);
 			}
-
-			// Innate effects.
 			if (name === 'atomicllamas') {
 				pokemon.addVolatile('baddreamsinnate', pokemon);
 			}
@@ -910,8 +907,8 @@ exports.Formats = [
 			if (name === 'aurora') {
 				this.add('c|@Aurora|Best of luck to all competitors!');
 			}
-			if (name === 'awu') {
-				this.add('c|%awu|Fite me irl bruh.');
+			if (name === 'reisen') {
+				this.add('c|%Reisen|Fite me irl bruh.');
 			}
 			if (name === 'beowulf') {
 				this.add('c|@Beowulf|Grovel peasant, you are in the presence of the RNGesus');
@@ -1454,8 +1451,8 @@ exports.Formats = [
 			if (name === 'aurora') {
 				this.add('c|@Aurora|are you serious you\'re so bad oh my god haxed ughhhhh');
 			}
-			if (name === 'awu') {
-				this.add("c|%awu|No need for goodbye. I'll see you on the flip side.");
+			if (name === 'reisen') {
+				this.add("c|%Reisen|No need for goodbye. I'll see you on the flip side.");
 			}
 			if (name === 'beowulf') {
 				this.add('c|@Beowulf|There is no need to be mad');
