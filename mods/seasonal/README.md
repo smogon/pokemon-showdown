@@ -145,10 +145,10 @@ EVs: 252 SpA, 4 SpD, 252 Spe, Nature: Modest
 - Roost
 - Tri Attack
 - Searing Shot
-- Hax - 10 PP. 
- - (10%) User damages itself in confusion. 
- - (40%) User gains 2 Quiver Dance boosts. 
- - (10%) Everyone gets parafusion. 
+- Hax - 10 PP.
+ - (10%) User damages itself in confusion.
+ - (40%) User gains 2 Quiver Dance boosts.
+ - (10%) Everyone gets parafusion.
  - (40%) Normal\Special 60\90%. This attack always crits. 30% flinch.
 
 ### Anty
@@ -399,7 +399,7 @@ EVs: 4 HP, 252 Atk, 252 Spe, Nature: Adamant
 Other Possible Moves:
 
 - Precipice Blades
-- Recover 
+- Recover
 - Stockpile
 - Swords Dance
 - Explosion
@@ -1290,7 +1290,7 @@ EVs: 4 HP, 252 SpA, 252 Spe, IVs: 0 Atk, Nature: Timid
 ### qtrx
 Unown @ Keyboard - Item is the equivalent of a mega stone and therefore inviolable.
 
-- Mega evolves into Missingno. 
+- Mega evolves into Missingno.
  - Type: Normal\Bird
  - Base Stats: HP 48, Atk 136, Def 0, SpA 6, SpD 255, Spe 29
  - Ability: Oblivious
@@ -1303,7 +1303,7 @@ EVs: 252 HP, 4 Atk, 252 SpA, IVs: 0 Spe, Nature: Quiet
 
 - Learns no natural moves.
 - Hidden Power Normal - 65 PP. Uses random Hidden Power. Hits 3 - 6 times.
- - When Mega-evolved: forces opponent out, then user switches out. After the turn, the user and the original opponent are traded for each other. If opponent is anchored, uses Perish Song. If either team has less than 2 Pokemon left, uses Explosion. 
+ - When Mega-evolved: forces opponent out, then user switches out. After the turn, the user and the original opponent are traded for each other. If opponent is anchored, uses Perish Song. If either team has less than 2 Pokemon left, uses Explosion.
 
 ### Quite Quiet
 Heliolisk @ Life Orb
