@@ -1075,7 +1075,10 @@ BattlePokemon = (() => {
 	BattlePokemon.prototype.setItem = function (item, source, effect) {
 		if (!this.hp || !this.isActive) return false;
 		item = this.battle.getItem(item);
-		if (item.id === 'leppaberry') {
+
+		let effectid;
+		if (effect) effectid = effect.id;
+		if (item.id === 'leppaberry' && effectid !== 'trick' && effectid !== 'switcheroo') {
 			this.isStale = 2;
 			this.isStaleSource = 'getleppa';
 		}
