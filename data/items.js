@@ -2335,8 +2335,8 @@ exports.BattleItems = {
 			if (pokemon.item !== 'leppaberry') {
 				let foeActive = pokemon.side.foe.active;
 				let foeIsStale = false;
-				for (let i = 0; i < 1; i++) {
-					if (foeActive.isStale >= 2) {
+				for (let i = 0; i < foeActive.length; i++) {
+					if (foeActive[i].hp && foeActive[i].isStale >= 2) {
 						foeIsStale = true;
 						break;
 					}
