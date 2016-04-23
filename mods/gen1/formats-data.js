@@ -303,11 +303,11 @@ exports.BattleFormatsData = {
 	},
 	machoke: {
 		randomBattleMoves: ["bodyslam", "earthquake", "submission", "counter", "doubleedge", "leer", "megakick", "rockslide"],
-		tier: "UU",
+		tier: "NU",
 	},
 	machamp: {
 		randomBattleMoves: ["bodyslam", "earthquake", "hyperbeam", "submission", "rockslide"],
-		tier: "NU",
+		tier: "UU",
 	},
 	bellsprout: {
 		randomBattleMoves: ["razorleaf", "swordsdance", "bodyslam", "toxic", "stunspore"],
@@ -322,7 +322,7 @@ exports.BattleFormatsData = {
 	victreebel: {
 		randomBattleMoves: ["sleeppowder", "swordsdance", "bodyslam", "hyperbeam", "stunspore"],
 		essentialMove: "razorleaf",
-		tier: "UU",
+		tier: "OU",
 	},
 	tentacool: {
 		randomBattleMoves: ["swordsdance", "doubleedge", "blizzard", "hydropump", "mimic", "barrier"],
