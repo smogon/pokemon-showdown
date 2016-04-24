@@ -1240,11 +1240,17 @@ BattlePokemon = (() => {
 		if (this.status) hpstring += ' ' + this.status;
 		return hpstring;
 	};
+	/**
+	 * Sets a type (except on Arceus, who resists type changes)
+	 * newType can be an array, but this is for OMs only. The game in
+	 * reality doesn't support setting a type to more than one type.
+	 */
 	BattlePokemon.prototype.setType = function (newType, enforce) {
 		// Arceus first type cannot be normally changed
 		if (!enforce && this.template.num === 493) return false;
 
-		this.types = [newType];
+		if (!newType) throw new Error("Must pass type to setType");
+		this.types = (typeof newType === 'string' ? [newType] : newType);
 		this.addedType = '';
 
 		return true;
