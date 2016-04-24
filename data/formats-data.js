@@ -3252,7 +3252,6 @@ exports.BattleFormatsData = {
 			{"generation": 6, "level": 70, "shiny": true, "moves":["dragonpulse", "thunder", "twister", "extremespeed"], "pokeball": "cherishball"},
 			{"generation": 6, "level": 70, "shiny": true, "moves":["dragonascent", "dragonclaw", "extremespeed", "dragondance"], "pokeball": "cherishball"},
 		],
-		unobtainableShinyPentagon: true,
 		tier: "Uber",
 	},
 	rayquazamega: {
