@@ -8258,7 +8258,7 @@ exports.BattleMovedex = {
 				}
 				let newMove = this.getMoveCopy(move.id);
 				newMove.hasBounced = true;
-				this.useMove(newMove, target, source);
+				this.useMove(newMove, this.effectData.target, source);
 				return null;
 			},
 		},
