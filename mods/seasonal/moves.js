@@ -482,10 +482,10 @@ exports.BattleMovedex = {
 		onAfterMoveSecondarySelf: function (source) {
 			if (source.types[1]) {
 				if (source.types[1] === 'Flying') {
-					source.types = [source.types[0], 'Electric'];
+					source.setType([source.types[0], 'Electric']);
 					this.add('-start', source, 'typechange', source.types[0] + '/Electric');
 				} else if (source.types[1] === 'Electric') {
-					source.types = [source.types[0], 'Flying'];
+					source.setType([source.types[0], 'Flying']);
 					this.add('-start', source, 'typechange', source.types[0] + '/Flying');
 				}
 			}
@@ -2553,8 +2553,7 @@ exports.BattleMovedex = {
 					for (let p in thisSide.active) {
 						const pokemon = thisSide.active[p];
 						if ((pokemon.types[0] === 'Flying' && !pokemon.types[1]) || !pokemon.hp) continue;
-						pokemon.types = ['Flying'];
-						pokemon.addedType = '';
+						pokemon.setType('Flying');
 						this.add('-start', pokemon, 'typechange', 'Flying');
 					}
 				}
@@ -2562,14 +2561,12 @@ exports.BattleMovedex = {
 			onResidualOrder: 90,
 			onUpdate: function (pokemon) {
 				if ((pokemon.types[0] === 'Flying' && !pokemon.types[1]) || !pokemon.hp) return;
-				pokemon.types = ['Flying'];
-				pokemon.addedType = '';
+				pokemon.setType('Flying');
 				this.add('-start', pokemon, 'typechange', 'Flying');
 			},
 			onSwitchIn: function (pokemon) {
 				if ((pokemon.types[0] === 'Flying' && !pokemon.types[1]) || !pokemon.hp) return;
-				pokemon.types = ['Flying'];
-				pokemon.addedType = '';
+				pokemon.setType('Flying');
 				this.add('-start', pokemon, 'typechange', 'Flying');
 			},
 			onEnd: function () {
@@ -2579,7 +2576,7 @@ exports.BattleMovedex = {
 					for (let p in thisSide.active) {
 						const pokemon = thisSide.active[p];
 						if ((pokemon.template.types[0] === 'Flying' && !pokemon.template.types[1]) || !pokemon.hp) continue;
-						pokemon.types = pokemon.template.types;
+						pokemon.setType(pokemon.template.types);
 						this.add('-end', pokemon, 'typechange');
 					}
 				}
@@ -3551,37 +3548,37 @@ exports.BattleMovedex = {
 			if (foes.length && foes[0].hp) {
 				const opponent = foes[0];
 				if (opponent.types[0] === source.types[1]) {
-					source.types = [source.types[0]];
+					source.setType(source.types[0]);
 					this.add('-start', source, 'typechange', source.types[0]);
 				} else if (opponent.types[0] === source.types[0]) {
 					if (opponent.types[1]) {
 						if (opponent.types[1] === source.types[1]) {
-							opponent.types = [source.types[1]];
+							opponent.setType(source.types[1]);
 							this.add('-start', opponent, 'typechange', opponent.types[0]);
 						} else {
-							opponent.types = [source.types[1], opponent.types[1]];
+							opponent.setType([source.types[1], opponent.types[1]]);
 							this.add('-start', opponent, 'typechange', opponent.types[0] + '/' + opponent.types[1]);
 						}
 					} else {
-						opponent.types = [source.types[1]];
+						opponent.setType(source.types[1]);
 						this.add('-start', opponent, 'typechange', opponent.types[0]);
 					}
-					source.types = [source.types[0]];
+					source.setType(source.types[0]);
 					this.add('-start', source, 'typechange', source.types[0]);
 				} else {
 					const mytype = source.types[1];
-					source.types = [source.types[0], opponent.types[0]];
+					source.setType([source.types[0], opponent.types[0]]);
 					this.add('-start', source, 'typechange', source.types[0] + '/' + source.types[1]);
 					if (opponent.types[1]) {
 						if (opponent.types[1] === mytype) {
-							opponent.types = [mytype];
+							opponent.setType(mytype);
 							this.add('-start', opponent, 'typechange', opponent.types[0]);
 						} else {
-							opponent.types = [mytype, opponent.types[1]];
+							source.setType([mytype, opponent.types[1]]);
 							this.add('-start', opponent, 'typechange', opponent.types[0] + '/' + opponent.types[1]);
 						}
 					} else {
-						opponent.types = [mytype];
+						opponent.setType(mytype);
 						this.add('-start', opponent, 'typechange', opponent.types[0]);
 					}
 				}
