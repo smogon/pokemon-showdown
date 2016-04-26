@@ -1268,7 +1268,9 @@ exports.BattleScripts = {
 
 				// Set up once and only if we have the moves for it
 				case 'bellydrum': case 'bulkup': case 'coil': case 'curse': case 'dragondance': case 'honeclaws': case 'swordsdance':
-					if (counter.setupType !== 'Physical' || counter['physicalsetup'] > 1) rejected = true;
+					if (counter.setupType !== 'Physical' || counter['physicalsetup'] > 1) {
+						if (!hasMove['growth'] || hasMove['sunnyday']) rejected = true;
+					}
 					if (counter.Physical + counter['physicalpool'] < 2 && !hasMove['batonpass'] && (!hasMove['rest'] || !hasMove['sleeptalk'])) rejected = true;
 					isSetup = true;
 					break;
