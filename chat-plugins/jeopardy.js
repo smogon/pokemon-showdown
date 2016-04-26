@@ -133,7 +133,7 @@ let Jeopardy = (() => {
 		let checks = Array.prototype.slice.call(arguments, 2);
 
 		let currentCheck = '';
-		while (!!(currentCheck = checks.pop())) {
+		while ((currentCheck = checks.pop())) {
 			switch (currentCheck) {
 			case 'started':
 				if (this.isStarted) break;

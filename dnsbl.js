@@ -35,11 +35,10 @@ function queryDnsblLoop(ip, callback, reversedIpDot, index) {
 		if (!err) {
 			// blocked
 			dnsblCache.set(ip, blocklist);
-			callback(blocklist);
-		} else {
-			// not blocked, try next blocklist
-			queryDnsblLoop(ip, callback, reversedIpDot, index + 1);
+			return callback(blocklist);
 		}
+		// not blocked, try next blocklist
+		queryDnsblLoop(ip, callback, reversedIpDot, index + 1);
 	});
 }
 

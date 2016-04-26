@@ -61,9 +61,9 @@ exports.start = function (prefix, suffix, evalFunction) {
 			output: socket,
 			eval: (cmd, context, filename, callback) => {
 				try {
-					callback(null, evalFunction(cmd));
+					return callback(null, evalFunction(cmd));
 				} catch (e) {
-					callback(e);
+					return callback(e);
 				}
 			},
 		}).on('exit', () => socket.end());

@@ -387,7 +387,7 @@ exports.BattleScripts = {
 				species: 'Mr. Mime', ability: 'Prankster', item: 'Leftovers', gender: 'M',
 				moves: ['batonpass', ['substitute', 'milkdrink'][this.random(2)], 'encore'],
 				signatureMove: "Meme Mime",
-				evs: {hp:252, def:4, spe:252},  ivs: {atk:0, spa:0}, nature: 'Timid',
+				evs: {hp:252, def:4, spe:252}, ivs: {atk:0, spa:0}, nature: 'Timid',
 			},
 			'ih8ih8sn0w': {
 				species: 'Deoxys-Speed', ability: 'Pressure', item: 'Leftovers', gender: 'N', shiny: true,

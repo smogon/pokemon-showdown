@@ -760,10 +760,15 @@ exports.BattleScripts = {
 			}
 
 			// Make sure forme/item combo is correct
-			while ((poke === 'Giratina' && item === 'griseousorb') ||
-					(poke === 'Arceus' && item.substr(-5) === 'plate') ||
-					(poke === 'Genesect' && item.substr(-5) === 'drive')) {
-				item = items[this.random(items.length)];
+			switch (poke) {
+			case 'Giratina':
+				while (item === 'griseousorb') item = items[this.random(items.length)];
+				break;
+			case 'Arceus':
+				while (item.substr(-5) === 'plate') item = items[this.random(items.length)];
+				break;
+			case 'Genesect':
+				while (item.substr(-5) === 'drive') item = items[this.random(items.length)];
 			}
 
 			// Random ability
@@ -917,12 +922,12 @@ exports.BattleScripts = {
 
 			// Random unique moves
 			let m = [];
-			while (true) {
+			do {
 				let moveid = this.sampleNoReplace(movePool);
 				if (!this.data.Movedex[moveid].isNonstandard && (moveid === 'hiddenpower' || moveid.substr(0, 11) !== 'hiddenpower')) {
-					if (m.push(moveid) >= 4) break;
+					m.push(moveid);
 				}
-			}
+			} while (m.length < 4);
 
 			// Random EVs
 			let evs = {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0};
@@ -1311,7 +1316,7 @@ exports.BattleScripts = {
 					if (counter.setupType || !!counter['speedsetup'] || (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
 					break;
 				case 'healbell':
-					if (!!counter['speedsetup']) rejected = true;
+					if (counter['speedsetup']) rejected = true;
 					break;
 				case 'healingwish': case 'memento':
 					if (counter.setupType || !!counter['recovery'] || hasMove['substitute']) rejected = true;
