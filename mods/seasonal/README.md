@@ -5,7 +5,7 @@ Roster
 ------------------------------------------------------------------------
 
 ### Acast
-Gourgeist @ Light Clay
+Gourgeist-Super @ Mental Herb
 
 Ability: Prankster
 
@@ -13,8 +13,8 @@ EVs: 248 HP, 8 Def, 252 SpD, Nature: Careful
 
 - Will-O-Wisp
 - Recover
-- Seed Bomb
-- Needs More Screens - 5 (no boosts) PP, uses Magic Coat, Safeguard, Reflect and Light Screen.
+- Seed Bomb \ Shadow Strike
+- Needs More Screens - 5 (no boosts) PP, uses Magic Coat, Safeguard, Reflect (50% chance) and Light Screen (50% chance).
 
 ### Ace
 Salamence @ Salamencite
@@ -240,7 +240,7 @@ EVs: 252 Atk, 4 Def, 252 Spe, Nature: Jolly
 - Rock Polish
 - Aerial Fury - 10 PP Flying\Physical 100\100%. Makes contact.
 
-### awu
+### Reisen
 Mawile @ Mawilite - Mega Ability: Tough Claws
 
 Ability: Adaptability
@@ -271,7 +271,7 @@ Ability: Fur Coat
 
 EVs: 4 HP, 252 Atk, 252 SpD, Nature: Adamant
 
-- Food Rush - 5 PP Normal\Physical 90\90% prio -6. Forces switch. Makes contact.
+- Food Rush - 5 (no boosts) PP Normal\Physical 75\90% prio -6. Forces switch. Makes contact.
 
 Other Possible Moves:
 
@@ -491,7 +491,7 @@ Ability: Wonder Guard
 
 EVs: 252 Atk, 4 SpA, 252 Spe, Nature: Adamant
 
-- Protect
+- Rapid Spin
 - Shadow Sneak
 - X-Scissor
 - Really Big Swords Dance - 20 PP. Boosts Atk by 4 stages.
@@ -937,9 +937,9 @@ Innate Ability: Drought
 EVs: 4 HP, 252 SpA, 252 Spe, Nature: Timid
 
 - Eruption \ Blue Flare
-- Seed Flare
+- Leaf Storm
 - Volt Switch \ Synthesis \ Destiny Bond \ Growth \ Healing Wish
-- Splinters - 10 PP Rock\Physical 90\100%. 3 hits, each hit setting either Spikes or Toxic Spikes randomly. Causes the target to get splinters, losing 1/16 HP each turn.
+- Splinters - 10 PP Rock\Physical 80\100%. 3 hits, each hit setting either Spikes or Toxic Spikes randomly. Causes the target to get splinters, losing 1/16 HP each turn.
 
 ### Jasmine
 Mew @ Focus Sash
@@ -1025,7 +1025,7 @@ EVs: 252 SpA, 4 SpD, 252 Spe, Nature: Timid
 - Protect
 - Stored Power
 - Energy Ball \ Flamethrower \ Scald
-- Broken Wand - 10 PP. May fail and half user's HP (14%). Uses Thunderbolt, Ice Beam, Calm Mind and Spikes. Recovers 10% HP.
+- Broken Wand - 10 PP. May fail and half user's HP (14%). Uses Thunderbolt, Ice Beam, Calm Mind and Spikes.
 
 ### Layell
 Sneasel @ King's Rock
@@ -1569,9 +1569,11 @@ EVs: 252 HP, 128 Def, 128 SpD, Nature: Sassy
 ### sparktrain
 Seel @ Life Orb
 
+Type: Water \ Ice
+
 Ability: Regenerator
 
-Innate Ability: Refrigerate
+Innate Ability: Refrigerate; SpD is boosted by 60%.
 
 EVs: 232 HP, 252 Atk, 24 SpD, Nature: Adamant
 
@@ -1898,7 +1900,7 @@ EVs: 4 Atk, 252 SpA, 252 Spe, Nature: Hasty
 
 - Thunder
 - Fire Blast \ Focus Blast \ High Jump Kick \ Head Smash
-- Blizzard \ Icicle Crash \ Sleep Powder
+- Blizzard \ Icicle Crash \ Lovely Kiss
 - bzzt - 5 (no boosts) PP, Protect-based move. Boosts offenses. Sound-based.
 
 ### Zero Lux Given
@@ -1910,7 +1912,7 @@ EVs: 252 Atk, 4 Def, 252 Spe, IVs: 0 SpA, Nature: Adamant
 
 - Fusion Bolt
 - Facade
-- Icicle Spear
+- Icicle Spear \ Petal Blizzard
 - Pun Ray - 20 PP Flying\Physical 80\100%, 100% confusion.
 
 ### Zodiax

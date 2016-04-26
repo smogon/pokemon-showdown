@@ -449,7 +449,6 @@ exports.BattleMovedex = {
 			if (source.side.foe.active[0].hp) this.useMove('thunderbolt', source);
 			if (!source.hp) return;
 			if (source.side.foe.active[0].hp) {
-				this.heal(source.maxhp * 0.10, source, source);
 				this.useMove('icebeam', source);
 				if (!source.hp) return;
 			}
@@ -483,10 +482,10 @@ exports.BattleMovedex = {
 		onAfterMoveSecondarySelf: function (source) {
 			if (source.types[1]) {
 				if (source.types[1] === 'Flying') {
-					source.types = [source.types[0], 'Electric'];
+					source.setType([source.types[0], 'Electric']);
 					this.add('-start', source, 'typechange', source.types[0] + '/Electric');
 				} else if (source.types[1] === 'Electric') {
-					source.types = [source.types[0], 'Flying'];
+					source.setType([source.types[0], 'Flying']);
 					this.add('-start', source, 'typechange', source.types[0] + '/Flying');
 				}
 			}
@@ -1453,13 +1452,14 @@ exports.BattleMovedex = {
 	// biggie
 	foodrush: {
 		accuracy: 90,
-		basePower: 90,
+		basePower: 75,
 		category: "Physical",
 		id: "foodrush",
 		isNonstandard: true,
 		isViable: true,
 		name: "Food Rush",
 		pp: 5,
+		noPPBoosts: true,
 		priority: -6,
 		flags: {contact: 1, protect: 1, mirror: 1},
 		forceSwitch: true,
@@ -2553,8 +2553,7 @@ exports.BattleMovedex = {
 					for (let p in thisSide.active) {
 						const pokemon = thisSide.active[p];
 						if ((pokemon.types[0] === 'Flying' && !pokemon.types[1]) || !pokemon.hp) continue;
-						pokemon.types = ['Flying'];
-						pokemon.addedType = '';
+						pokemon.setType('Flying');
 						this.add('-start', pokemon, 'typechange', 'Flying');
 					}
 				}
@@ -2562,14 +2561,12 @@ exports.BattleMovedex = {
 			onResidualOrder: 90,
 			onUpdate: function (pokemon) {
 				if ((pokemon.types[0] === 'Flying' && !pokemon.types[1]) || !pokemon.hp) return;
-				pokemon.types = ['Flying'];
-				pokemon.addedType = '';
+				pokemon.setType('Flying');
 				this.add('-start', pokemon, 'typechange', 'Flying');
 			},
 			onSwitchIn: function (pokemon) {
 				if ((pokemon.types[0] === 'Flying' && !pokemon.types[1]) || !pokemon.hp) return;
-				pokemon.types = ['Flying'];
-				pokemon.addedType = '';
+				pokemon.setType('Flying');
 				this.add('-start', pokemon, 'typechange', 'Flying');
 			},
 			onEnd: function () {
@@ -2579,7 +2576,7 @@ exports.BattleMovedex = {
 					for (let p in thisSide.active) {
 						const pokemon = thisSide.active[p];
 						if ((pokemon.template.types[0] === 'Flying' && !pokemon.template.types[1]) || !pokemon.hp) continue;
-						pokemon.types = pokemon.template.types;
+						pokemon.setType(pokemon.template.types);
 						this.add('-end', pokemon, 'typechange');
 					}
 				}
@@ -2660,8 +2657,8 @@ exports.BattleMovedex = {
 		},
 		onHit: function (target, source) {
 			source.side.addSideCondition('reflect', source);
-			source.side.addSideCondition('lightscreen', source);
-			source.side.addSideCondition('safeguard', source);
+			if (this.random(2) === 1) source.side.addSideCondition('lightscreen', source);
+			if (this.random(2) === 1) source.side.addSideCondition('safeguard', source);
 		},
 		secondary: false,
 		target: "self",
@@ -3551,37 +3548,37 @@ exports.BattleMovedex = {
 			if (foes.length && foes[0].hp) {
 				const opponent = foes[0];
 				if (opponent.types[0] === source.types[1]) {
-					source.setType(source.types[0], true);
+					source.setType(source.types[0]);
 					this.add('-start', source, 'typechange', source.types[0]);
 				} else if (opponent.types[0] === source.types[0]) {
 					if (opponent.types[1]) {
 						if (opponent.types[1] === source.types[1]) {
-							opponent.setType(source.types[1], true);
+							opponent.setType(source.types[1]);
 							this.add('-start', opponent, 'typechange', opponent.types[0]);
 						} else {
-							opponent.types = [source.types[1], opponent.types[1]];
+							opponent.setType([source.types[1], opponent.types[1]]);
 							this.add('-start', opponent, 'typechange', opponent.types[0] + '/' + opponent.types[1]);
 						}
 					} else {
-						opponent.setType(source.types[1], true);
+						opponent.setType(source.types[1]);
 						this.add('-start', opponent, 'typechange', opponent.types[0]);
 					}
-					source.setType(source.types[0], true);
+					source.setType(source.types[0]);
 					this.add('-start', source, 'typechange', source.types[0]);
 				} else {
 					const mytype = source.types[1];
-					source.types = [source.types[0], opponent.types[0]];
+					source.setType([source.types[0], opponent.types[0]]);
 					this.add('-start', source, 'typechange', source.types[0] + '/' + source.types[1]);
 					if (opponent.types[1]) {
 						if (opponent.types[1] === mytype) {
-							opponent.setType(mytype, true);
+							opponent.setType(mytype);
 							this.add('-start', opponent, 'typechange', opponent.types[0]);
 						} else {
-							opponent.types = [mytype, opponent.types[1]];
+							source.setType([mytype, opponent.types[1]]);
 							this.add('-start', opponent, 'typechange', opponent.types[0] + '/' + opponent.types[1]);
 						}
 					} else {
-						opponent.setType(mytype, true);
+						opponent.setType(mytype);
 						this.add('-start', opponent, 'typechange', opponent.types[0]);
 					}
 				}
@@ -4039,7 +4036,7 @@ exports.BattleMovedex = {
 	// Jack Higgins
 	splinters: {
 		accuracy: 100,
-		basePower: 90,
+		basePower: 80,
 		category: "Physical",
 		id: "splinters",
 		isViable: true,
