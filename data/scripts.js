@@ -1553,6 +1553,10 @@ exports.BattleScripts = {
 				case 'sunnyday':
 					if (counter.Physical + counter.Special < 2 || hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					if (!hasAbility['Chlorophyll'] && !hasAbility['Flower Gift'] && !hasMove['solarbeam']) rejected = true;
+					if (rejected && movePool.length > 1) {
+						let weatherball = movePool.indexOf('weatherball');
+						if (weatherball >= 0) this.fastPop(movePool, weatherball);
+					}
 					break;
 				case 'stunspore': case 'thunderwave':
 					if (counter.setupType || !!counter['speedsetup'] || (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
