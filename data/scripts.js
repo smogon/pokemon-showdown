@@ -676,6 +676,16 @@ exports.BattleScripts = {
 		if (!isValid) selectedAbilities.push(selectedAbility);
 		return isValid;
 	},
+	fastPop: function (list, index) {
+		// If an array doesn't need to be in order, replacing the
+		// element at the given index with the removed element
+		// is much, much faster than using list.splice(index, 1).
+		let length = list.length;
+		let element = list[index];
+		list[index] = list[length - 1];
+		list.pop();
+		return element;
+	},
 	sampleNoReplace: function (list) {
 		// The cute code to sample no replace is:
 		//   return list.splice(this.random(length), 1)[0];
@@ -684,10 +694,7 @@ exports.BattleScripts = {
 		// we just replace the removed element with the last element.
 		let length = list.length;
 		let index = this.random(length);
-		let element = list[index];
-		list[index] = list[length - 1];
-		list.pop();
-		return element;
+		return this.fastPop(list, index);
 	},
 	checkBattleForme: function (template) {
 		// If the Pokémon has a Mega or Primal alt forme, that's its preferred battle forme.
@@ -1264,7 +1271,7 @@ exports.BattleScripts = {
 					if (!hasMove['rest']) rejected = true;
 					if (movePool.length > 1) {
 						let rest = movePool.indexOf('rest');
-						if (rest >= 0) movePool.splice(rest, 1);
+						if (rest >= 0) this.fastPop(movePool, rest);
 					}
 					break;
 				case 'storedpower':
@@ -1273,7 +1280,9 @@ exports.BattleScripts = {
 
 				// Set up once and only if we have the moves for it
 				case 'bellydrum': case 'bulkup': case 'coil': case 'curse': case 'dragondance': case 'honeclaws': case 'swordsdance':
-					if (counter.setupType !== 'Physical' || counter['physicalsetup'] > 1) rejected = true;
+					if (counter.setupType !== 'Physical' || counter['physicalsetup'] > 1) {
+						if (!hasMove['growth'] || hasMove['sunnyday']) rejected = true;
+					}
 					if (counter.Physical + counter['physicalpool'] < 2 && !hasMove['batonpass'] && (!hasMove['rest'] || !hasMove['sleeptalk'])) rejected = true;
 					isSetup = true;
 					break;
@@ -1513,7 +1522,7 @@ exports.BattleScripts = {
 				case 'psyshock':
 					if (movePool.length > 1) {
 						let psychic = movePool.indexOf('psychic');
-						if (psychic >= 0) movePool.splice(psychic, 1);
+						if (psychic >= 0) this.fastPop(movePool, psychic);
 					}
 					break;
 				case 'zenheadbutt':
@@ -1549,6 +1558,10 @@ exports.BattleScripts = {
 				case 'sunnyday':
 					if (counter.Physical + counter.Special < 2 || hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					if (!hasAbility['Chlorophyll'] && !hasAbility['Flower Gift'] && !hasMove['solarbeam']) rejected = true;
+					if (rejected && movePool.length > 1) {
+						let weatherball = movePool.indexOf('weatherball');
+						if (weatherball >= 0) this.fastPop(movePool, weatherball);
+					}
 					break;
 				case 'stunspore': case 'thunderwave':
 					if (counter.setupType || !!counter['speedsetup'] || (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
@@ -1629,7 +1642,7 @@ exports.BattleScripts = {
 						if (movePool.length < 2) {
 							rejected = false;
 						} else {
-							movePool.splice(sleeptalk, 1);
+							this.fastPop(movePool, sleeptalk);
 						}
 					}
 				}
