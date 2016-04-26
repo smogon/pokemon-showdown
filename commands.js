@@ -310,27 +310,26 @@ exports.commands = {
 		if (!id) return this.parse('/help makechatroom');
 		// Check if the name already exists as a room or alias
 		if (Rooms.search(id)) return this.errorReply("The room '" + target + "' already exists.");
-		if (Rooms.global.addChatRoom(target)) {
-			if (cmd === 'makeprivatechatroom') {
-				let targetRoom = Rooms.search(target);
-				targetRoom.isPrivate = true;
-				targetRoom.chatRoomData.isPrivate = true;
-				Rooms.global.writeChatRoomData();
-				if (Rooms.get('upperstaff')) {
-					Rooms.get('upperstaff').add('|raw|<div class="broadcast-green">Private chat room created: <b>' + Tools.escapeHTML(target) + '</b></div>').update();
-				}
-				return this.sendReply("The private chat room '" + target + "' was created.");
-			} else {
-				if (Rooms.get('staff')) {
-					Rooms.get('staff').add('|raw|<div class="broadcast-green">Public chat room created: <b>' + Tools.escapeHTML(target) + '</b></div>').update();
-				}
-				if (Rooms.get('upperstaff')) {
-					Rooms.get('upperstaff').add('|raw|<div class="broadcast-green">Public chat room created: <b>' + Tools.escapeHTML(target) + '</b></div>').update();
-				}
-				return this.sendReply("The chat room '" + target + "' was created.");
+		if (!Rooms.global.addChatRoom(target)) return this.errorReply("An error occurred while trying to create the room '" + target + "'.");
+
+		if (cmd === 'makeprivatechatroom') {
+			let targetRoom = Rooms.search(target);
+			targetRoom.isPrivate = true;
+			targetRoom.chatRoomData.isPrivate = true;
+			Rooms.global.writeChatRoomData();
+			if (Rooms.get('upperstaff')) {
+				Rooms.get('upperstaff').add('|raw|<div class="broadcast-green">Private chat room created: <b>' + Tools.escapeHTML(target) + '</b></div>').update();
 			}
+			this.sendReply("The private chat room '" + target + "' was created.");
+		} else {
+			if (Rooms.get('staff')) {
+				Rooms.get('staff').add('|raw|<div class="broadcast-green">Public chat room created: <b>' + Tools.escapeHTML(target) + '</b></div>').update();
+			}
+			if (Rooms.get('upperstaff')) {
+				Rooms.get('upperstaff').add('|raw|<div class="broadcast-green">Public chat room created: <b>' + Tools.escapeHTML(target) + '</b></div>').update();
+			}
+			this.sendReply("The chat room '" + target + "' was created.");
 		}
-		return this.errorReply("An error occurred while trying to create the room '" + target + "'.");
 	},
 	makechatroomhelp: ["/makechatroom [roomname] - Creates a new room named [roomname]. Requires: & ~"],
 
@@ -2919,13 +2918,9 @@ exports.commands = {
 					if (!namespace[targets[i]]) return this.errorReply("Help for the command '" + target + "' was not found. Try /help for general help");
 					namespace = namespace[targets[i]];
 				}
-				if (typeof namespace[helpCmd] === 'object') {
-					return this.sendReply(namespace[helpCmd].join('\n'));
-				} else if (typeof namespace[helpCmd] === 'function') {
-					return this.parse('/' + targets.slice(0, targets.length - 1).concat(helpCmd).join(' '));
-				} else {
-					return this.errorReply("Help for the command '" + target + "' was not found. Try /help for general help");
-				}
+				if (typeof namespace[helpCmd] === 'object') return this.sendReply(namespace[helpCmd].join('\n'));
+				if (typeof namespace[helpCmd] === 'function') return this.parse('/' + targets.slice(0, targets.length - 1).concat(helpCmd).join(' '));
+				return this.errorReply("Help for the command '" + target + "' was not found. Try /help for general help");
 			} else {
 				helpCmd = target + 'help';
 			}
