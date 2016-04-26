@@ -5622,7 +5622,8 @@ exports.BattleMovedex = {
 			},
 			onStart: function () {
 				this.add('-fieldstart', 'move: Gravity');
-				for (let side of this.sides) for (let pokemon of side.pokemon) {
+				const allActivePokemon = this.sides[0].active.concat(this.sides[1].active);
+				for (let pokemon of allActivePokemon) {
 					let applies = false;
 					if (pokemon.removeVolatile('bounce') || pokemon.removeVolatile('fly')) {
 						applies = true;
