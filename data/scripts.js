@@ -676,6 +676,16 @@ exports.BattleScripts = {
 		if (!isValid) selectedAbilities.push(selectedAbility);
 		return isValid;
 	},
+	fastPop: function (list, index) {
+		// If an array doesn't need to be in order, replacing the
+		// element at the given index with the removed element
+		// is much, much faster than using list.splice(index, 1).
+		let length = list.length;
+		let element = list[index];
+		list[index] = list[length - 1];
+		list.pop();
+		return element;
+	},
 	sampleNoReplace: function (list) {
 		// The cute code to sample no replace is:
 		//   return list.splice(this.random(length), 1)[0];
@@ -684,10 +694,7 @@ exports.BattleScripts = {
 		// we just replace the removed element with the last element.
 		let length = list.length;
 		let index = this.random(length);
-		let element = list[index];
-		list[index] = list[length - 1];
-		list.pop();
-		return element;
+		return this.fastPop(list, index);
 	},
 	checkBattleForme: function (template) {
 		// If the Pokémon has a Mega or Primal alt forme, that's its preferred battle forme.
@@ -1259,7 +1266,7 @@ exports.BattleScripts = {
 					if (!hasMove['rest']) rejected = true;
 					if (movePool.length > 1) {
 						let rest = movePool.indexOf('rest');
-						if (rest >= 0) movePool.splice(rest, 1);
+						if (rest >= 0) this.fastPop(movePool, rest);
 					}
 					break;
 				case 'storedpower':
@@ -1510,7 +1517,7 @@ exports.BattleScripts = {
 				case 'psyshock':
 					if (movePool.length > 1) {
 						let psychic = movePool.indexOf('psychic');
-						if (psychic >= 0) movePool.splice(psychic, 1);
+						if (psychic >= 0) this.fastPop(movePool, psychic);
 					}
 					break;
 				case 'zenheadbutt':
@@ -1626,7 +1633,7 @@ exports.BattleScripts = {
 						if (movePool.length < 2) {
 							rejected = false;
 						} else {
-							movePool.splice(sleeptalk, 1);
+							this.fastPop(movePool, sleeptalk);
 						}
 					}
 				}
