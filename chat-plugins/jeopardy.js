@@ -433,7 +433,7 @@ let Jeopardy = (() => {
 
 	Jeopardy.prototype.end = function () {
 		let results = [];
-		for (let data, usersIterator = this.users.entries(); !!(data = usersIterator.next().value);) { // Replace with for-of loop when available
+		for (let data of this.users) {
 			results.push({user: data[0], points: data[1].points});
 		}
 		results.sort((a, b) => b.points - a.points);

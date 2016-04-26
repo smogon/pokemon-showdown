@@ -134,7 +134,7 @@ let commands = {
 
 		let userid = user.userid;
 		let latestIp = user.latestIp;
-		for (let data, nominationsIterator = artistOfTheDay.nominations.entries(); !!(data = nominationsIterator.next().value);) { // replace with for-of loop once available
+		for (let data of artistOfTheDay.nominations) {
 			let nominator = data[0];
 			if (nominator.ips[latestIp] && nominator.userid !== userid || alts.indexOf(nominator.name) >= 0) return this.sendReply("You have already submitted a nomination for the Artist of the Day under the name " + nominator.name + ".");
 			if (toArtistId(data[1]) === nominationId) return this.sendReply("" + target + " has already been nominated.");
@@ -199,7 +199,7 @@ let commands = {
 		let userid = toId(name);
 		if (!userid) return this.errorReply("'" + name + "' is not a valid username.");
 
-		for (let nominator, nominatorsIterator = artistOfTheDay.nominations.keys(); !!(nominator = nominatorsIterator.next().value);) { // replace with for-of loop once available
+		for (let nominator of artistOfTheDay.nominations.keys()) {
 			if (nominator.userid === userid) {
 				artistOfTheDay.nominations.delete(nominator);
 				artistOfTheDay.removedNominators.push(nominator);
