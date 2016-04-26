@@ -13,7 +13,7 @@ describe('Shed Shell', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: "Gothitelle", ability: 'shadowtag', moves: ['calmmind']}]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: "Starmie", ability: 'naturalcure', item: 'shedshell', moves: ['recover']},
-			{species: "Heatran", ability: 'flashfire',  moves: ['rest']},
+			{species: "Heatran", ability: 'flashfire', moves: ['rest']},
 		]);
 		battle.choose('p2', 'switch 2');
 		battle.commitDecisions();
@@ -25,7 +25,7 @@ describe('Shed Shell', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: "Gengar", ability: 'levitate', moves: ['meanlook']}]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: "Venusaur", ability: 'overgrow', item: 'shedshell', moves: ['ingrain']},
-			{species: "Heatran", ability: 'flashfire',  moves: ['rest']},
+			{species: "Heatran", ability: 'flashfire', moves: ['rest']},
 		]);
 		battle.commitDecisions();
 		battle.choose('p2', 'switch 2');
@@ -38,7 +38,7 @@ describe('Shed Shell', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: "Dragonite", ability: 'multiscale', moves: ['skydrop']}]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: "Magnezone", ability: 'sturdy', item: 'shedshell', moves: ['sleeptalk']},
-			{species: "Heatran", ability: 'flashfire',  moves: ['rest']},
+			{species: "Heatran", ability: 'flashfire', moves: ['rest']},
 		]);
 		battle.commitDecisions();
 		battle.choose('p2', 'switch 2');

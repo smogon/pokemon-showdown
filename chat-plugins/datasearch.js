@@ -625,7 +625,7 @@ function runDexsearch(target, cmd, canAll, message) {
 				for (let i = 0; i < moveGroups[group].length; i++) {
 					let problem = TeamValidator('anythinggoes').checkLearnset(moveGroups[group][i], mon, lsetData);
 					if (!problem) break;
-					if (i === moveGroups[group].length - 1) return;
+					if (i === moveGroups[group].length - 1) return false;
 				}
 			}
 			return true;

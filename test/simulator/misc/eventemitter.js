@@ -37,14 +37,14 @@ describe('Battle#on', function () {
 		battle.join('p2', 'Guest 2', 1, [{species: 'Talonflame', ability: 'galewings', moves: ['peck']}]);
 		battle.commitDecisions(); // Team Preview
 		let eventCount = 0;
-		let callback = function (count) {
+		let modHandler = function (count) {
 			return function () {
 				assert.strictEqual(eventCount, count);
 				eventCount++;
 			};
 		};
 		for (let i = 0; i < 9; i++) {
-			battle.on('ModifyDamage', battle.getFormat(), -i, callback(i));
+			battle.on('ModifyDamage', battle.getFormat(), -i, modHandler(i));
 		}
 		battle.commitDecisions();
 		assert.strictEqual(eventCount, 9);

@@ -247,7 +247,7 @@ module.exports = (() => {
 			if (!this.data.Pokedex[id]) {
 				if (id.startsWith('mega') && this.data.Pokedex[id.slice(4) + 'mega']) {
 					id = id.slice(4) + 'mega';
-				} else if (id.startsWith('m') && this.data.Pokedex[id.slice(1) + 'mega'])  {
+				} else if (id.startsWith('m') && this.data.Pokedex[id.slice(1) + 'mega']) {
 					id = id.slice(1) + 'mega';
 				} else if (id.startsWith('primal') && this.data.Pokedex[id.slice(6) + 'primal']) {
 					id = id.slice(6) + 'primal';

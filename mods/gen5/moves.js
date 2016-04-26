@@ -133,6 +133,7 @@ exports.BattleMovedex = {
 				if (move.id !== 'conversion' && !target.hasType(move.type)) {
 					return move.type;
 				}
+				return '';
 			}).filter(type => type);
 			if (!possibleTypes.length) {
 				return false;

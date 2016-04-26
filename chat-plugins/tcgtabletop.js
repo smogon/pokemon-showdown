@@ -31,8 +31,8 @@ function wikiaSearch(subdomain, query, callback) {
 			return callback(null, result.items[0]);
 		});
 	}).once('error', function (err) {
-		callback(err);
 		this.on('error', noop);
+		callback(err);
 	});
 }
 

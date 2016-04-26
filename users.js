@@ -59,9 +59,11 @@ function getUser(name, exactName) {
 	if (name && name.userid) return name;
 	let userid = toId(name);
 	let i = 0;
-	while (!exactName && userid && !users.has(userid) && i < 1000) {
-		userid = prevUsers.get(userid);
-		i++;
+	if (!exactName) {
+		while (userid && !users.has(userid) && i < 1000) {
+			userid = prevUsers.get(userid);
+			i++;
+		}
 	}
 	return users.get(userid);
 }
@@ -631,7 +633,7 @@ class User {
 
 		for (let i = 0; i < this.connections.length; i++) {
 			// console.log('' + name + ' renaming: connection ' + i + ' of ' + this.connections.length);
-			let initdata = '|updateuser|' + this.name + '|' + (false ? '1' : '0') + '|' + this.avatar;
+			let initdata = '|updateuser|' + this.name + '|' + ('0' /* not named */) + '|' + this.avatar;
 			this.connections[i].send(initdata);
 		}
 		this.named = false;
@@ -916,7 +918,7 @@ class User {
 
 		for (let i = 0; i < this.connections.length; i++) {
 			//console.log('' + name + ' renaming: socket ' + i + ' of ' + this.connections.length);
-			let initdata = '|updateuser|' + this.name + '|' + (true ? '1' : '0') + '|' + this.avatar;
+			let initdata = '|updateuser|' + this.name + '|' + ('1' /* named */) + '|' + this.avatar;
 			this.connections[i].send(initdata);
 		}
 		let joining = !this.named;
@@ -972,7 +974,7 @@ class User {
 		this.connected = true;
 		this.connections.push(connection);
 		//console.log('' + this.name + ' merging: connection ' + connection.socket.id);
-		let initdata = '|updateuser|' + this.name + '|' + (true ? '1' : '0') + '|' + this.avatar;
+		let initdata = '|updateuser|' + this.name + '|' + ('1' /* named */) + '|' + this.avatar;
 		connection.send(initdata);
 		connection.user = this;
 		for (let i in connection.rooms) {

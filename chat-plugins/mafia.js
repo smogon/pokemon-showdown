@@ -619,7 +619,7 @@ class Mafia extends Rooms.RoomGame {
 			this.timer = setTimeout(() => {
 				this.progress();
 			}, 10000);
-		}, ((mins -  0.167) * 60000));
+		}, ((mins - 0.167) * 60000));
 	}
 
 	// Meetings:
