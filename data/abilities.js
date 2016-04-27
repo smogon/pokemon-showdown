@@ -3122,7 +3122,7 @@ exports.BattleAbilities = {
 	},
 	"unnerve": {
 		shortDesc: "While this Pokemon is active, it prevents opposing Pokemon from using their Berries.",
-		onStart: function (pokemon) {
+		onTrySwitchIn: function (pokemon) {
 			this.add('-ability', pokemon, 'Unnerve', pokemon.side.foe);
 		},
 		onFoeTryEatItem: false,
