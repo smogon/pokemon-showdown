@@ -1559,8 +1559,12 @@ exports.BattleScripts = {
 					if (counter.Physical + counter.Special < 2 || hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					if (!hasAbility['Chlorophyll'] && !hasAbility['Flower Gift'] && !hasMove['solarbeam']) rejected = true;
 					if (rejected && movePool.length > 1) {
-						let weatherball = movePool.indexOf('weatherball');
-						if (weatherball >= 0) this.fastPop(movePool, weatherball);
+						let solarbeam = movePool.indexOf('solarbeam');
+						if (solarbeam >= 0) this.fastPop(movePool, solarbeam);
+						if (movePool.length > 1) {
+							let weatherball = movePool.indexOf('weatherball');
+							if (weatherball >= 0) this.fastPop(movePool, weatherball);
+						}
 					}
 					break;
 				case 'stunspore': case 'thunderwave':
