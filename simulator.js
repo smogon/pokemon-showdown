@@ -272,27 +272,27 @@ class Battle {
 	onUpdateConnection(user, connection) {
 		this.onConnect(user, connection);
 	}
-	onRename(user, oldid) {
-		if (user.userid === oldid) return;
-		let player = this.players[oldid];
-		if (player) {
-			if (!this.allowRenames && user.userid !== oldid) {
-				this.forfeit(user, " forfeited by changing their name.");
-				return;
+	onRename(user, oldUserid) {
+		if (user.userid === oldUserid) return;
+		if (!(oldUserid in this.players)) {
+			if (user.userid in this.players) {
+				// this handles a user renaming themselves into a user in the
+				// battle (e.g. by using /nick)
+				this.onConnect(user);
 			}
-			if (!this.players[user]) {
-				this.players[user] = player;
-				player.userid = user.userid;
-				player.name = user.name;
-				delete this.players[oldid];
-				player.simSend('rename', user.name, user.avatar);
-			}
+			return;
 		}
-		if (!player && user in this.players) {
-			// this handles a user renaming themselves into a user in the
-			// battle (e.g. by using /nick)
-			this.onConnect(user);
+		if (!this.allowRenames) {
+			this.forfeit(user, " forfeited by changing their name.");
+			return;
 		}
+		if (user.userid in this.players) return;
+		let player = this.players[oldUserid];
+		this.players[user.userid] = player;
+		player.userid = user.userid;
+		player.name = user.name;
+		delete this.players[oldUserid];
+		player.simSend('rename', user.name, user.avatar);
 	}
 	onJoin(user) {
 		let player = this.players[user];
