@@ -1085,7 +1085,7 @@ BattlePokemon = (() => {
 		item = this.battle.getItem(item);
 
 		let effectid;
-		if (effect) effectid = effect.id;
+		if (this.battle.effect) effectid = this.battle.effect.id;
 		if (item.id === 'leppaberry' && effectid !== 'trick' && effectid !== 'switcheroo') {
 			this.isStale = 2;
 			this.isStaleSource = 'getleppa';
