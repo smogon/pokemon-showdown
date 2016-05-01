@@ -212,6 +212,18 @@ Other Possible Moves:
 - Scald
 - Recover
 
+### Asty
+Seismitoad @ Red Card
+
+Ability: Asty Absorb (Sap Sipper + Water Absorb)
+
+EVs: 50 HP, 156 Atk, 50 Def, 50 SpD, Nature: Adamant
+
+- Recover
+- Drain Punch
+- Earthquake
+- Amphibian Toxic - 5 PP 50 BP (Physical) Poison type. Inflicts Toxic to the user while also layering 2 sets of toxic spikes.
+
 ### atomicllamas
 Jynx @ Focus Sash
 
@@ -1418,9 +1430,10 @@ Ability: Fur Coat
 
 EVs: 252 Def, 4 SpA, 252 Spe, Nature: Bold
 
-- Slack Off
-- Amnesia
-- Steam Eruption
+- Ice Beam
+- Scald
+- Recover
+- Nasty Plot
 - Geomagnetic Storm - Electric-type equivalent of Boomburst. Not sound-based.
 
 ### scpinion
@@ -1691,6 +1704,18 @@ EVs: 252 HP, 156 Atk, 32 Def, 72 SpD, IVs: 1 SpA, 9 Spe, Nature: Brave
 - Shadow Force
 - Shadow Sneak \ Leech Seed \ Refresh \ Power-up Punch
 - I Want You Back - 10 PP Rock\Physical 96\100%. Sets rocks. Heals user by 75% of damage dealt.
+
+### TEG
+Thundurus @ Random Plate (except Sky or Zap)
+
+Ability: Hidden Type (Basically Multitype)
+
+EVs: 252 SpA, 4 SpD, 252 SpA, Nature: Timid
+
+- Judgment
+- Oblivion Wing
+- Volt Switch
+- Bad Code - 10 PP / 70 BP / 100% ACC, Special Electric: Gives target a reverse Acupressure effect (-2 in one stat, +1 in another randomly), adds Gastro Acid.
 
 ### Temporaryanonymous
 Doublade @ Eviolite
