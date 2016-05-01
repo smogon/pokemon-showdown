@@ -64,6 +64,30 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Dragon",
 	},
+	// Asty
+	amphibiantoxic: {
+		accuracy: 100,
+		basePower: 50,
+		category: "Physical",
+		id: "amphibiantoxic",
+		isNonstandard: true,
+		isViable: true,
+		name: "Amphibian Toxic",
+		pp: 5,
+		priority: 0,
+		flags: {bullet: 1, protect: 1, mirror: 1},
+		secondary: {
+			chance: 100,
+			status: 'tox',
+		},
+		onHit: function (pokemon) {
+			pokemon.side.addSideCondition('toxicspikes');
+			pokemon.side.addSideCondition('toxicspikes');
+		},
+		target: "normal",
+		type: "Poison",
+		contestType: "Tough",
+	},
 	// awu
 	ancestorsrage: {
 		accuracy: 100,
@@ -194,6 +218,44 @@ exports.BattleMovedex = {
 		secondary: false,
 		target: "normal",
 		type: "Dragon",
+	},
+	// TEG
+	badcode: {
+		accuracy: 100,
+		basePower: 70,
+		category: "Special",
+		id: "badcode",
+		isNonstandard: true,
+		isViable: true,
+		name: "Bad Code",
+		pp: 15,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onHit: function (target, source) {
+			let stats = [];
+			let boost = {};
+			for (let statPlus in source.boosts) {
+				if (source.boosts[statPlus] < 6) {
+					stats.push(statPlus);
+				}
+			}
+			let randomStat = stats.length ? stats[this.random(stats.length)] : "";
+			if (randomStat) boost[randomStat] = 1;
+
+			stats = [];
+			for (let statMinus in source.boosts) {
+				if (source.boosts[statMinus] > -6 && statMinus !== randomStat) {
+					stats.push(statMinus);
+				}
+			}
+			randomStat = stats.length ? stats[this.random(stats.length)] : "";
+			if (randomStat) boost[randomStat] = -2;
+
+			this.boost(boost, source, source);
+		},
+		volatileStatus: 'gastroacid',
+		target: "normal",
+		type: "Electric",
 	},
 	// shrang
 	banword: {
@@ -431,7 +493,7 @@ exports.BattleMovedex = {
 	brokenwand: {
 		accuracy: true,
 		basePower: 0,
-		category: "Status",
+		category: "Special",
 		id: "brokenwand",
 		isViable: true,
 		isNonstandard: true,
@@ -440,18 +502,15 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {mirror: 1, snatch: 1},
 		onHit: function (target, source) {
-			let dice = this.random(7);
-			if (dice === 3) {
+			if (this.random(100) < 20) {
 				this.add('-message', "Broken Wand backfired!");
-				this.damage(source.maxhp / 2, source, source, 'brokenwand');
+				this.damage(source.maxhp * 0.75, source, source, 'brokenwand');
 				return false;
 			}
 			if (source.side.foe.active[0].hp) this.useMove('thunderbolt', source);
-			if (!source.hp) return;
-			if (source.side.foe.active[0].hp) {
-				this.useMove('icebeam', source);
-				if (!source.hp) return;
-			}
+			if (!source.hp || !source.side.foe.active[0].hp) return;
+			this.useMove('icebeam', source);
+			if (!source.hp || !source.side.foe.active[0].hp) return;
 			this.useMove('calmmind', source);
 			this.useMove('spikes', source);
 		},
@@ -4427,7 +4486,7 @@ exports.BattleMovedex = {
 		},
 		secondary: false,
 		target: "normal",
-		type: "Normal",
+		type: "Fairy",
 	},
 	// Sweep
 	wave: {

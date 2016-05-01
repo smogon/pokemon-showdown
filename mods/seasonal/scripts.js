@@ -95,6 +95,12 @@ exports.BattleScripts = {
 				signatureMove: 'Star Bolt Desperation',
 				evs: {hp:4, spa:252, spe:252}, nature: 'Modest',
 			},
+			'Asty': {
+				species: 'Seismitoad', ability: 'Asty Absorb', item: 'Red Card', gender: 'M', shiny: true,
+				moves: ['recover', 'drainpunch', 'earthquake'],
+				signatureMove: 'Amphibian Toxic',
+				evs: {hp:252, atk:156, def:50, spd:50}, nature: 'Adamant',
+			},
 			'atomicllamas': {
 				species: 'Jynx', ability: 'Snow Warning', item: 'Focus Sash', gender: 'M',
 				moves: ['lovelykiss', 'blizzard', 'aurasphere'],
@@ -767,6 +773,16 @@ exports.BattleScripts = {
 				signatureMove: 'I Want You Back',
 				evs: {hp:252, atk:156, def:32, spd:72}, ivs: {spa:1, spe:9}, nature: 'Brave',
 			},
+			'TEG': {
+				species: 'Thundurus', ability: 'Hidden Type', gender: 'M',
+				item: [
+					'Draco', 'Dread', 'Earth', 'Fist', 'Flame', 'Icicle', 'Insect', 'Iron',
+					'Meadow', 'Mind', 'Pixie', 'Splash', 'Spooky', 'Stone', 'Toxic',
+				][this.random(15)] + ' Plate',
+				moves: ['judgment', 'oblivionwing', 'voltswitch'],
+				signatureMove: 'Bad Code',
+				evs: {spa:252, spd:4, spe:252}, nature: 'Timid',
+			},
 			'Temporaryanonymous': {
 				species: 'Doublade', ability: 'Tough Claws', item: 'Eviolite', gender: 'M',
 				moves: ['swordsdance', ['xscissor', 'sacredsword', 'knockoff'][this.random(3)], 'geargrind'],
@@ -865,7 +881,7 @@ exports.BattleScripts = {
 			},
 			'Zero Lux Given': {
 				species: 'Luxray', ability: 'Guts', item: 'Flame Orb', gender: 'M',
-				moves: ['fusionbolt', 'facade', ['iciclespear', 'petalblizzard'][this.random(2)]],
+				moves: ['fusionbolt', 'facade', ['iceshard', 'petalblizzard'][this.random(2)]],
 				signatureMove: "Pun Ray",
 				evs: {atk:252, def:4, spe:252}, ivs: {spa:0}, nature: 'Adamant',
 			},

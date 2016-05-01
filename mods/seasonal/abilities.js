@@ -1,6 +1,29 @@
 'use strict';
 
 exports.BattleAbilities = {
+	// Asty
+	astyabsorb: {
+		onTryHit: function (target, source, move) {
+			if (target !== source && move.type === 'Water') {
+				if (!this.heal(target.maxhp / 4)) {
+					this.add('-immune', target, '[msg]', '[from] ability: Asty Absorb');
+				}
+				return null;
+			}
+			if (target !== source && move.type === 'Grass') {
+				if (!this.boost({atk:1})) {
+					this.add('-immune', target, '[msg]', '[from] ability: Asty Absorb');
+				}
+				return null;
+			}
+		},
+		onAllyTryHitSide: function (target, source, move) {
+			if (target === this.effectData.target || target.side !== source.side) return;
+			if (move.type === 'Grass') {
+				this.boost({atk:1}, this.effectData.target);
+			}
+		},
+	},
 	// GeoffBruedley
 	baitkai: {
 		onAfterDamage: function (damage, target, source, move) {
@@ -31,6 +54,22 @@ exports.BattleAbilities = {
 		id: "gravitationalfield",
 		name: "Gravitational Field",
 		rating: 4,
+	},
+	// TEG
+	hiddentype: {
+		onSwitchInPriority: 101,
+		onSwitchIn: function (pokemon) {
+			let type = 'Normal';
+			type = pokemon.getItem().onPlate;
+			if (!type || type === true) {
+				type = 'Normal';
+			}
+			pokemon.addType(type);
+			this.add('-start', pokemon, 'typeadd', type, '[from] ability: Hidden Type');
+		},
+		id: "hiddentype",
+		name: "Hidden Type",
+		rating: 5,
 	},
 	// Snowy
 	holyhail: {

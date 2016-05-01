@@ -765,6 +765,9 @@ exports.Formats = [
 			if (name === 'astara') {
 				this.add('c|%Ast☆arA|I\'d rather take a nap, I hope you won\'t be a petilil shit, Eat some rare candies and get on my level.');
 			}
+			if (name === 'asty') {
+				this.add('c|@Asty|Top kek :^)');
+			}
 			if (name === 'atomicllamas') {
 				this.add('c|&atomicllamas|(celebrate)(dog)(celebrate)');
 			}
@@ -1166,6 +1169,9 @@ exports.Formats = [
 			if (name === 'talkingtree') {
 				this.add('c|+talkingtree|I am Groot n_n');
 			}
+			if (name === 'teg') {
+				this.add("c|+TEG|It's __The__ Eevee General");
+			}
 			if (name === 'temporaryanonymous') {
 				sentences = ['Hey, hey, can I gently scramble your insides (just for laughs)? ``hahahaha``', 'check em', 'If you strike me down, I shall become more powerful than you can possibly imagine! I have a strong deathrattle effect and I cannot be silenced!'];
 				this.add('c|@Temporaryanonymous|' + sentences[this.random(3)]);
@@ -1223,7 +1229,7 @@ exports.Formats = [
 				}
 			}
 			if (name === 'xjoelituh') {
-				this.add("c|+xJoelituh|I won't be haxed again, you will be the next one. UUUUUU");
+				this.add("c|%xJoelituh|I won't be haxed again, you will be the next one. UUUUUU");
 			}
 			if (name === 'xshiba') { // dd
 				this.add("c|+xShiba|LINDA IS INDA");
@@ -1308,6 +1314,9 @@ exports.Formats = [
 			if (name === 'astara') {
 				sentences = ['/me twerks into oblivion', 'good night ♥', 'Astara Vista Baby'];
 				this.add('c|%Ast☆arA|' + sentences[this.random(3)]);
+			}
+			if (name === 'asty') {
+				this.add('c|@Asty|Bottom kek :^(');
 			}
 			if (name === 'atomicllamas') {
 				this.add('c|&atomicllamas|(puke)');
@@ -1668,6 +1677,10 @@ exports.Formats = [
 			if (name === 'talkingtree') {
 				this.add('c|+talkingtree|I am Groot u_u');
 			}
+			if (name === 'teg') {
+				sentences = ['Save me, Joim!', 'Arcticblast is the worst OM leader in history'];
+				this.add('c|+TEG|' + sentences[this.random(2)]);
+			}
 			if (name === 'temporaryanonymous') {
 				sentences = [';_;7', 'This kills the tempo', 'I\'m kill. rip.', 'S-senpai! Y-you\'re being too rough! >.<;;;;;;;;;;;;;;;;;', 'A-at least you checked my dubs right?', 'B-but that\'s impossible! This can\'t be! AAAAAAAAAAAAAAAAAAAAAAAAAAAAAHHHHHHHHHHHHHHHHGH'];
 				this.add('c|@Temporaryanonymous|' + sentences[this.random(6)]);
@@ -1714,7 +1727,7 @@ exports.Formats = [
 				}
 			}
 			if (name === 'xjoelituh') {
-				this.add("c|+xJoelituh|THAT FOR SURE MATTERED. Blame Nayuki. I'm going to play CSGO then.");
+				this.add("c|%xJoelituh|THAT FOR SURE MATTERED. Blame Nayuki. I'm going to play CSGO then.");
 			}
 			if (name === 'xshiba') {
 				this.add("c|+xShiba|Lol that feeling when you just win but get haxed..");
