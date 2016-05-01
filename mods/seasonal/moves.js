@@ -234,8 +234,8 @@ exports.BattleMovedex = {
 		onHit: function (target, source) {
 			let stats = [];
 			let boost = {};
-			for (let statPlus in source.boosts) {
-				if (source.boosts[statPlus] < 6) {
+			for (let statPlus in target.boosts) {
+				if (target.boosts[statPlus] < 6) {
 					stats.push(statPlus);
 				}
 			}
@@ -243,15 +243,15 @@ exports.BattleMovedex = {
 			if (randomStat) boost[randomStat] = 1;
 
 			stats = [];
-			for (let statMinus in source.boosts) {
-				if (source.boosts[statMinus] > -6 && statMinus !== randomStat) {
+			for (let statMinus in target.boosts) {
+				if (target.boosts[statMinus] > -6 && statMinus !== randomStat) {
 					stats.push(statMinus);
 				}
 			}
 			randomStat = stats.length ? stats[this.random(stats.length)] : "";
 			if (randomStat) boost[randomStat] = -2;
 
-			this.boost(boost, source, source);
+			this.boost(boost, target, source);
 		},
 		volatileStatus: 'gastroacid',
 		target: "normal",
