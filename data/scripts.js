@@ -651,6 +651,8 @@ exports.BattleScripts = {
 		for (let i = 0; i < side.pokemon.length; i++) {
 			side.pokemon[i].canMegaEvo = false;
 		}
+
+		this.runEvent('AfterMega', pokemon);
 		return true;
 	},
 
