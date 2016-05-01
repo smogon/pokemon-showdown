@@ -1900,7 +1900,7 @@ exports.Formats = [
 		desc: [
 			"All Pok&eacute;mon on a team must share a type.",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3544507/\">Monotype</a>",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3550310/\">Monotype Resources</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3565113/\">Monotype Viability Ranking</a>",
 		],
 		section: "Other Metagames",
 
