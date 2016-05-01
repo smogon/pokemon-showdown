@@ -223,6 +223,7 @@ function unlockRange(range) {
 function unnamelock(name) {
 	let userid = toId(name);
 	let user = getUser(userid);
+	let namelockedId = toId(user.namelocked);
 	let unnamelocked = '';
 	if (user) {
 		if (user.userid === userid) name = user.name;
@@ -237,8 +238,9 @@ function unnamelock(name) {
 			delete Users.nameLockedIps[ip];
 		}
 	}
+	// Delete from name locked users the original locked name, found in name.namelocked
 	for (let id in nameLockedUsers) {
-		if (nameLockedUsers[id] === userid || id === userid) {
+		if (nameLockedUsers[id] === namelockedId || id === namelockedId) {
 			delete nameLockedUsers[id];
 			unnamelocked = id;
 		}
@@ -432,7 +434,8 @@ class User {
 		this.mmrCache = Object.create(null);
 		this.guestNum = numUsers;
 		this.name = 'Guest ' + numUsers;
-		this.named = false;
+		this.namelocked = Users.checkNameLocked(connection.ip);
+		this.named = !!this.namelocked;
 		this.registered = false;
 		this.userid = toId(this.name);
 		this.group = Config.groupsranking[0];
@@ -453,7 +456,6 @@ class User {
 		this.latestIp = connection.ip;
 
 		this.locked = Users.checkLocked(connection.ip);
-		this.namelocked = Users.checkNameLocked(connection.ip);
 		this.prevNames = Object.create(null);
 		this.roomCount = Object.create(null);
 
@@ -967,8 +969,8 @@ class User {
 		}
 		if (registered && userid in nameLockedUsers) {
 			let bannedUnder = '';
-			if (lockedUsers[userid] !== userid) bannedUnder = ' because of rule-breaking by your alt account ' + lockedUsers[userid];
-			this.send("|popup|Your are namelocked" + bannedUnder + "'. Your namelock will expire in a few days.");
+			if (nameLockedUsers[userid] !== userid) bannedUnder = ' because of rule-breaking by your alt account ' + nameLockedUsers[userid];
+			this.send("|popup|You are namelocked" + bannedUnder + ". Your namelock will expire in a few days.");
 			this.lockName();
 		}
 		if (this.group === Config.groupsranking[0]) {
