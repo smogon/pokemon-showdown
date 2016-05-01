@@ -395,6 +395,50 @@ exports.Formats = [
 		banlist: ['Eviolite'],
 	},
 	{
+		name: "Type Reflector",
+		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3567348/\">Type Reflector</a>"],
+		section: "OM of the Month",
+
+		ruleset: ['OU'],
+		banlist: ['Shedinja'],
+		onBegin: function () {
+			for (let i = 0; i < this.sides.length; i++) {
+				this.sides[i].pokemon[0].isReflector = true;
+				this.sides[i].reflectedType = this.sides[i].pokemon[0].types[0];
+			}
+		},
+		onSwitchInPriority: 2,
+		onSwitchIn: function (pokemon) {
+			if (pokemon.isReflector) return;
+			let type = pokemon.side.reflectedType;
+			if (pokemon.types.indexOf(type) > 0) return;
+			if (pokemon.template.isMega && pokemon.types.join() !== this.getTemplate(pokemon.template.baseSpecies).types.join()) return;
+			if (pokemon.types.length > 1 && pokemon.types[0] === type) {
+				pokemon.setType(pokemon.types[0]);
+				this.add('-start', pokemon, 'typechange', pokemon.types[0], null);
+			} else {
+				pokemon.setType(pokemon.types[0]);
+				pokemon.addType(type);
+				this.add('-start', pokemon, 'typechange', pokemon.types[0], null);
+				this.add('-start', pokemon, 'typeadd', type, null);
+			}
+		},
+		onAfterMega: function (pokemon) {
+			if (pokemon.isReflector) return;
+			let type = pokemon.side.reflectedType;
+			if (pokemon.types.indexOf(type) > 0 || pokemon.types.join() !== this.getTemplate(pokemon.template.baseSpecies).types.join()) return;
+			if (pokemon.types.length > 1 && pokemon.types[0] === type) {
+				pokemon.setType(pokemon.types[0]);
+				this.add('-start', pokemon, 'typechange', pokemon.types[0], null);
+			} else {
+				pokemon.setType(pokemon.types[0]);
+				pokemon.addType(type);
+				this.add('-start', pokemon, 'typechange', pokemon.types[0], null);
+				this.add('-start', pokemon, 'typeadd', type, null);
+			}
+		},
+	},
+	{
 		name: "[Seasonal] Super Staff Bros. Melee",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3491902/\">Seasonal Ladder</a>"],
 		section: "OM of the Month",
