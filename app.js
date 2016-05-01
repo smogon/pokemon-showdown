@@ -113,6 +113,8 @@ global.Ladders = require(Config.remoteladder ? './ladders-remote.js' : './ladder
 
 global.Users = require('./users.js');
 
+global.Punishments = require('./punishments.js');
+
 global.Rooms = require('./rooms.js');
 
 delete process.send; // in case we're a child process
@@ -190,11 +192,11 @@ fs.readFile(path.resolve(__dirname, 'config/ipbans.txt'), (err, data) => {
 		if (!data[i]) continue;
 		if (data[i].includes('/')) {
 			rangebans.push(data[i]);
-		} else if (!Users.bannedIps[data[i]]) {
-			Users.bannedIps[data[i]] = '#ipban';
+		} else if (!Punishments.bannedIps[data[i]]) {
+			Punishments.bannedIps[data[i]] = '#ipban';
 		}
 	}
-	Users.checkRangeBanned = Cidr.checker(rangebans);
+	Punishments.checkRangeBanned = Cidr.checker(rangebans);
 });
 
 /*********************************************************
