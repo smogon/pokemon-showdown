@@ -2296,6 +2296,9 @@ exports.BattleScripts = {
 			// Only certain NFE Pokemon are allowed
 			if (template.evos.length && !allowedNFE[template.species]) continue;
 
+			// Slaking, without ability swap or a similar gimmick, makes the battle 5v6 at best
+			if (template.species === 'Slaking') continue;
+
 			let tier = template.tier;
 			switch (tier) {
 			case 'CAP':
