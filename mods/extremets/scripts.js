@@ -32,10 +32,10 @@ exports.BattleScripts = {
 				}
 				if (tier.charAt(0) === '(') tier = tier.slice(1, -1);
 				let boost = (tier in boosts) ? boosts[tier] : 0;
-				if (this.set.ability in {'Drizzle': 1, 'Drought': 1}) {
+				if (this.set.ability in {'Drizzle': 1, 'Drought': 1, 'Shadow Tag': 1}) {
 					boost = 0;
 				} else if (this.set.moves.indexOf('chatter') >= 0) {
-					boost = 15;
+					boost = 30;
 				}
 
 				let boostedHP = Math.floor(Math.floor(2 * (this.template.baseStats['hp'] + boost) + this.set.ivs['hp'] + Math.floor(this.set.evs['hp'] / 4) + 100) * this.level / 100 + 10);
