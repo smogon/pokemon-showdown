@@ -92,7 +92,7 @@ class Validator {
 		return problems;
 	}
 
-	validateSet(set, teamHas, flags) {
+	validateSet(set, teamHas, template) {
 		let format = this.format;
 		let tools = this.tools;
 
@@ -101,11 +101,13 @@ class Validator {
 			return ["This is not a Pokemon."];
 		}
 
-		let template = tools.getTemplate(Tools.getString(set.species));
-		if (!template.exists) {
-			return ["The Pokemon '" + set.species + "' does not exist."];
+		if (!template) {
+			template = tools.getTemplate(Tools.getString(set.species));
+			if (!template.exists) {
+				return ["The Pokemon '" + set.species + "' does not exist."];
+			}
+			set.species = template.species;
 		}
-		set.species = template.species;
 
 		set.name = tools.getName(set.name);
 		let item = tools.getItem(Tools.getString(set.item));
@@ -138,7 +140,6 @@ class Validator {
 		if (set.species !== set.name && set.baseSpecies !== set.name) name = set.name + " (" + set.species + ")";
 		let isHidden = false;
 		let lsetData = {set:set, format:format};
-		if (flags) Object.assign(lsetData, flags);
 
 		let setHas = {};
 
@@ -158,7 +159,6 @@ class Validator {
 		if (format.onChangeSet) {
 			problems = problems.concat(format.onChangeSet.call(tools, set, format, setHas, teamHas) || []);
 		}
-		template = tools.getTemplate(set.species);
 		item = tools.getItem(set.item);
 		if (item.id && !item.exists) {
 			return ['"' + set.item + "' is an invalid item."];
