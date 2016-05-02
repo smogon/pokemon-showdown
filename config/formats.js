@@ -156,7 +156,6 @@ exports.Formats = [
 			battle: 3,
 		},
 		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview'],
-		requirePentagon: true,
 		onValidateSet: function (set) {
 			let problems = [];
 			let template = this.getTemplate(set.species || set.name);
