@@ -414,14 +414,11 @@ exports.Formats = [
 			if (pokemon.types.indexOf(type) > 0 || pokemon.types.length === 1 && pokemon.types[0] === type) return;
 			if (pokemon.template.isMega && pokemon.types.join() !== this.getTemplate(pokemon.template.baseSpecies).types.join()) return;
 			if (pokemon.types.length > 1 && pokemon.types[0] === type) {
-				pokemon.setType(pokemon.types[0]);
-				this.add('-start', pokemon, 'typechange', pokemon.types[0], null);
+				pokemon.setType(type);
 			} else {
-				pokemon.setType(pokemon.types[0]);
-				pokemon.addType(type);
-				this.add('-start', pokemon, 'typechange', pokemon.types[0], null);
-				this.add('-start', pokemon, 'typeadd', type, null);
+				pokemon.setType([pokemon.types[0], type]);
 			}
+			this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), null);
 		},
 		onAfterMega: function (pokemon) {
 			if (pokemon.isReflector) return;
@@ -429,14 +426,11 @@ exports.Formats = [
 			if (pokemon.types.indexOf(type) > 0 || pokemon.types.length === 1 && pokemon.types[0] === type) return;
 			if (pokemon.types.join() !== this.getTemplate(pokemon.template.baseSpecies).types.join()) return;
 			if (pokemon.types.length > 1 && pokemon.types[0] === type) {
-				pokemon.setType(pokemon.types[0]);
-				this.add('-start', pokemon, 'typechange', pokemon.types[0], null);
+				pokemon.setType(type);
 			} else {
-				pokemon.setType(pokemon.types[0]);
-				pokemon.addType(type);
-				this.add('-start', pokemon, 'typechange', pokemon.types[0], null);
-				this.add('-start', pokemon, 'typeadd', type, null);
+				pokemon.setType([pokemon.types[0], type]);
 			}
+			this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), null);
 		},
 	},
 	{
