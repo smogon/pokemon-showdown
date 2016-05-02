@@ -146,6 +146,31 @@ exports.Formats = [
 		requirePentagon: true,
 	},
 	{
+		name: "Johto Classic",
+		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3571393/\">Johto Classic</a>"],
+		section: "ORAS Singles",
+
+		maxForcedLevel: 50,
+		teamLength: {
+			validate: [3, 6],
+			battle: 3,
+		},
+		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview'],
+		requirePentagon: true,
+		onValidateSet: function (set) {
+			let problems = [];
+			let template = this.getTemplate(set.species || set.name);
+			if (template.num > 251) {
+				problems.push(template.species + " is banned by Johto Classic.");
+			}
+			let item = this.getItem(set.item);
+			if (item.megaStone) {
+				problems.push(item.name + " is banned by Johto Classic.");
+			}
+			return problems;
+		},
+	},
+	{
 		name: "Custom Game",
 		section: "ORAS Singles",
 
