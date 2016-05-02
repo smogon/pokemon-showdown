@@ -70,20 +70,20 @@ describe('Users features', function () {
 
 				it('should disconnect every user at that IP', function () {
 					let users = ['127.0.0.1', '127.0.0.1'].map(ip => new User(new Connection(ip)));
-					users[0].ban();
+					Punishments.ban(users[0]);
 					assert.strictEqual(users[0].connected, false);
 					assert.strictEqual(users[1].connected, false);
 				});
 
 				it('should not disconnect users at other IPs', function () {
 					let users = ['127.0.0.1', '127.0.0.2'].map(ip => new User(new Connection(ip)));
-					users[0].ban();
+					Punishments.ban(users[0]);
 					assert.strictEqual(users[1].connected, true);
 				});
 
 				it('should update IP count properly', function () {
 					let user = new User();
-					user.ban();
+					Punishments.ban(user);
 					for (let ip in user.ips) {
 						assert.strictEqual(user.ips[ip], 0);
 					}
