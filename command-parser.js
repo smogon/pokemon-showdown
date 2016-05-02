@@ -330,8 +330,8 @@ class CommandContext {
 				return false;
 			}
 
-			if (!this.room.banwordRegex) this.updateBanwords();
-			if (this.room.banwordRegex !== true && this.room.banwordRegex.test(message) && !user.can('mute', null, this.room)) {
+			if (!room.banwordRegex) this.updateBanwords();
+			if (room.banwordRegex !== true && room.banwordRegex.test(message) && !user.can('mute', null, room)) {
 				this.errorReply("Your message contained banned words.");
 				return false;
 			}
