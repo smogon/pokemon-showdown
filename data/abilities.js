@@ -1703,9 +1703,7 @@ exports.BattleAbilities = {
 				}
 				let template = Tools.getTemplate(curPoke.species);
 				// pokemon can't get Natural Cure
-				if (template.abilities['0'] !== 'Natural Cure' &&
-					template.abilities['1'] !== 'Natural Cure' &&
-					template.abilities['H'] !== 'Natural Cure') {
+				if (Object.values(template.abilities).indexOf('Natural Cure') < 0) {
 					// this.add('-message', "" + curPoke + " skipped: no Natural Cure");
 					continue;
 				}

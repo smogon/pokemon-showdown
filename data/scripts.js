@@ -781,13 +781,7 @@ exports.BattleScripts = {
 			}
 
 			// Random ability
-			let abilities = [template.abilities['0']];
-			if (template.abilities['1']) {
-				abilities.push(template.abilities['1']);
-			}
-			if (template.abilities['H']) {
-				abilities.push(template.abilities['H']);
-			}
+			let abilities = Object.values(template.abilities);
 			let ability = abilities[this.random(abilities.length)];
 
 			// Four random unique moves from the movepool
