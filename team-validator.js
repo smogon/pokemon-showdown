@@ -218,9 +218,7 @@ class Validator {
 			} else if (!banlistTable['ignoreillegalabilities']) {
 				if (!ability.name) {
 					problems.push(name + " needs to have an ability.");
-				} else if (ability.name !== template.abilities['0'] &&
-					ability.name !== template.abilities['1'] &&
-					ability.name !== template.abilities['H']) {
+				} else if (Object.values(template.abilities).indexOf(ability.name) < 0) {
 					problems.push(name + " can't have " + set.ability + ".");
 				}
 				if (ability.name === template.abilities['H']) {
