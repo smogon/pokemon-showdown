@@ -14,6 +14,8 @@
  */
 
 let Punishments = module.exports;
+let fs = require('fs');
+let path = require('path');
 
 /*********************************************************
  * Locks and bans
@@ -27,6 +29,30 @@ let lockedUsers = Punishments.lockedUsers = Object.create(null);
 let nameLockedUsers = Punishments.nameLockedUsers = Object.create(null);
 let lockedRanges = Punishments.lockedRanges = Object.create(null);
 let rangelockedUsers = Punishments.rangeLockedUsers = Object.create(null);
+
+// load ipbans at our leisure
+let loadBanlist = Punishments.loadBanlist = function () {
+	return new Promise(function (resolve, reject) {
+		fs.readFile(path.resolve(__dirname, 'config/ipbans.txt'), (err, data) => {
+			if (err) return reject(err);
+			data = ('' + data).split("\n");
+			let rangebans = [];
+			for (let i = 0; i < data.length; i++) {
+				data[i] = data[i].split('#')[0].trim();
+				if (!data[i]) continue;
+				if (data[i].includes('/')) {
+					rangebans.push(data[i]);
+				} else if (!bannedIps[data[i]]) {
+					bannedIps[data[i]] = '#ipban';
+				}
+			}
+			Punishments.checkRangeBanned = Cidr.checker(rangebans);
+			resolve();
+		});
+	});
+};
+
+setImmediate(loadBanlist);
 
 /**
  * Searches for IP in table.
