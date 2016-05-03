@@ -159,6 +159,7 @@ class Validator {
 		if (format.onChangeSet) {
 			problems = problems.concat(format.onChangeSet.call(tools, set, format, setHas, teamHas) || []);
 		}
+		template = tools.getTemplate(set.species);
 		item = tools.getItem(set.item);
 		if (item.id && !item.exists) {
 			return ['"' + set.item + "' is an invalid item."];
