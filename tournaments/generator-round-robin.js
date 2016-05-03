@@ -1,6 +1,6 @@
 'use strict';
 
-let RoundRobin = (function () {
+module.exports = (() => {
 	function RoundRobin(isDoubles) {
 		this.isDoubles = !!isDoubles;
 		this.isBracketFrozen = false;
@@ -202,5 +202,3 @@ let RoundRobin = (function () {
 
 	return RoundRobin;
 })();
-
-exports.RoundRobin = RoundRobin;
