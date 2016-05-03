@@ -42,22 +42,27 @@ const PM = exports.PM = new ProcessManager({
 	},
 	receive: function (data) {
 		let result;
-		switch (data.cmd) {
-		case 'randpoke':
-		case 'dexsearch':
-			result = runDexsearch(data.target, data.cmd, data.canAll, data.message);
-			break;
-		case 'movesearch':
-			result = runMovesearch(data.target, data.cmd, data.canAll, data.message);
-			break;
-		case 'itemsearch':
-			result = runItemsearch(data.target, data.cmd, data.canAll, data.message);
-			break;
-		case 'learn':
-			result = runLearn(data.target, data.message);
-			break;
-		default:
-			result = null;
+		try {
+			switch (data.cmd) {
+			case 'randpoke':
+			case 'dexsearch':
+				result = runDexsearch(data.target, data.cmd, data.canAll, data.message);
+				break;
+			case 'movesearch':
+				result = runMovesearch(data.target, data.cmd, data.canAll, data.message);
+				break;
+			case 'itemsearch':
+				result = runItemsearch(data.target, data.cmd, data.canAll, data.message);
+				break;
+			case 'learn':
+				result = runLearn(data.target, data.message);
+				break;
+			default:
+				result = null;
+			}
+		} catch (err) {
+			require('./../crashlogger.js')(err, 'A search query', data);
+			result = {error: "Sorry! Our search engine crashed on your query. We've been automatically notified and will fix this crash."};
 		}
 		return result;
 	},
@@ -78,6 +83,7 @@ exports.commands = {
 			message: (this.broadcastMessage ? "" : message),
 		}).then(response => {
 			if (!this.runBroadcast()) return;
+			if (response.error) return this.errorReply(response.error);
 			if (response.reply) {
 				this.sendReplyBox(response.reply);
 			} else if (response.dt) {
@@ -126,8 +132,9 @@ exports.commands = {
 			canAll: (!this.broadcastMessage || room.isPersonal),
 			message: (this.broadcastMessage ? "" : message),
 		}).then(response => {
+			if (!this.runBroadcast()) return;
+			if (response.error) return this.errorReply(response.error);
 			if (response.reply) {
-				if (!this.runBroadcast()) return;
 				this.sendReplyBox(response.reply);
 			} else if (response.dt) {
 				CommandParser.commands.data.call(this, response.dt, room, user, connection, 'dt');
@@ -152,6 +159,7 @@ exports.commands = {
 			message: (this.broadcastMessage ? "" : message),
 		}).then(response => {
 			if (!this.runBroadcast()) return;
+			if (response.error) return this.errorReply(response.error);
 			if (response.reply) {
 				this.sendReplyBox(response.reply);
 			} else if (response.dt) {
@@ -182,6 +190,7 @@ exports.commands = {
 			message: (this.broadcastMessage ? "" : message),
 		}).then(response => {
 			if (!this.runBroadcast()) return;
+			if (response.error) return this.errorReply(response.error);
 			if (response.reply) {
 				this.sendReplyBox(response.reply);
 			} else if (response.dt) {
@@ -214,10 +223,9 @@ exports.commands = {
 			message: cmd,
 		}).then(response => {
 			if (!this.runBroadcast()) return;
+			if (response.error) return this.errorReply(response.error);
 			if (response.reply) {
 				this.sendReplyBox(response.reply);
-			} else if (response.error) {
-				this.errorReply(response.error);
 			}
 			room.update();
 		});
