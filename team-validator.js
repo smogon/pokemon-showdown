@@ -134,7 +134,6 @@ class Validator {
 		if (nameTemplate.exists && nameTemplate.name.toLowerCase() === set.name.toLowerCase()) {
 			set.name = null;
 		}
-		set.species = set.species;
 		set.name = set.name || set.baseSpecies;
 		let name = set.species;
 		if (set.species !== set.name && set.baseSpecies !== set.name) name = set.name + " (" + set.species + ")";
@@ -159,7 +158,7 @@ class Validator {
 		if (format.onChangeSet) {
 			problems = problems.concat(format.onChangeSet.call(tools, set, format, setHas, teamHas) || []);
 		}
-		template = tools.getTemplate(set.species);
+		if (toId(set.species) !== template.speciesid) template = tools.getTemplate(set.species);
 		item = tools.getItem(set.item);
 		if (item.id && !item.exists) {
 			return ['"' + set.item + "' is an invalid item."];
