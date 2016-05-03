@@ -1841,7 +1841,7 @@ exports.commands = {
 			}
 
 			room.banwords = room.banwords.concat(words);
-			this.updateBanwords();
+			room.banwordRegex = null;
 			if (words.length > 1) {
 				this.privateModCommand("(The banwords '" + words.join(', ') + "' were added by " + user.name + ".)");
 				this.sendReply("Banned phrases succesfully added. The list is currently: " + room.banwords.join(', '));
@@ -1872,7 +1872,7 @@ exports.commands = {
 				room.banwords.splice(index, 1);
 			}
 
-			this.updateBanwords();
+			room.banwordRegex = null;
 			if (words.length > 1) {
 				this.privateModCommand("(The banwords '" + words.join(', ') + "' were removed by " + user.name + ".)");
 				this.sendReply("Banned phrases succesfully deleted. The list is currently: " + room.banwords.join(', '));
