@@ -21,7 +21,7 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "test": "eslint --rulesdir=dev-tools/eslint --cache . && mocha"
+    "test": "eslint --rulesdir=dev-tools/eslint --cache *.js chat-plugins/ config/ data/ dev-tools/ mods/ tournaments/ test/ && mocha"
   },
   "bin": "./pokemon-showdown",
   "homepage": "http://pokemonshowdown.com",
