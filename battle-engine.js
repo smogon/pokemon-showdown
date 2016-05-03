@@ -125,7 +125,7 @@ BattlePokemon = (() => {
 			this.battle.debug('Unidentified species: ' + this.species);
 			this.baseTemplate = this.battle.getTemplate('Unown');
 		}
-		this.species = this.baseTemplate.species;
+		this.species = Tools.getSpecies(set.species);
 		if (set.name === set.species || !set.name) {
 			set.name = this.baseTemplate.baseSpecies;
 		}

@@ -106,8 +106,8 @@ class Validator {
 			if (!template.exists) {
 				return ["The Pokemon '" + set.species + "' does not exist."];
 			}
-			set.species = template.species;
 		}
+		set.species = Tools.getSpecies(set.species);
 
 		set.name = tools.getName(set.name);
 		let item = tools.getItem(Tools.getString(set.item));
