@@ -95,12 +95,20 @@ class CommandContext {
 		this.targetUser = null;
 	}
 
-	updateBanwords() {
-		if (this.room.banwords && this.room.banwords.length) {
-			this.room.banwordRegex = new RegExp('(?:\\b|(?!\\w))(?:' + this.room.banwords.join('|') + ')(?:\\b|\\B(?!\\w))', 'i');
-		} else {
-			this.room.banwordRegex = true;
+	checkBanwords(room, message) {
+		if (!room) return true;
+		if (!room.banwordRegex) {
+			if (room.banwords && room.banwords.length) {
+				room.banwordRegex = new RegExp('(?:\\b|(?!\\w))(?:' + room.banwords.join('|') + ')(?:\\b|\\B(?!\\w))', 'i');
+			} else {
+				room.banwordRegex = true;
+			}
 		}
+		if (!message) return true;
+		if (room.banwordRegex !== true && room.banwordRegex.test(message)) {
+			return false;
+		}
+		return true;
 	}
 	sendReply(data) {
 		if (this.broadcasting) {
@@ -330,8 +338,7 @@ class CommandContext {
 				return false;
 			}
 
-			if (!this.room.banwordRegex) this.updateBanwords();
-			if (this.room.banwordRegex !== true && this.room.banwordRegex.test(message) && !user.can('mute', null, this.room)) {
+			if (!this.checkBanwords(room, message) && !user.can('mute', null, room)) {
 				this.errorReply("Your message contained banned words.");
 				return false;
 			}
