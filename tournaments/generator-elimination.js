@@ -12,7 +12,7 @@ const nameMap = {
 	// Feel free to add more
 };
 
-let Elimination = (() => {
+module.exports = (() => {
 	function Elimination(maxSubtrees) {
 		maxSubtrees = maxSubtrees || 1;
 		if (typeof maxSubtrees === 'string' && maxSubtrees.toLowerCase() === 'infinity') {
@@ -393,5 +393,3 @@ let Elimination = (() => {
 
 	return Elimination;
 })();
-
-exports.Elimination = Elimination;
