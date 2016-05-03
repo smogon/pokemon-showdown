@@ -34,7 +34,7 @@ let rangelockedUsers = Punishments.rangeLockedUsers = Object.create(null);
  * For instance, if IP is '1.2.3.4', will return the value corresponding
  * to any of the keys in table match '1.2.3.4', '1.2.3.*', '1.2.*', or '1.*'
  */
-function ipSearch(ip, table) {
+Punishments.ipSearch = function (ip, table) {
 	if (table[ip]) return table[ip];
 	let dotIndex = ip.lastIndexOf('.');
 	for (let i = 0; i < 4 && dotIndex > 0; i++) {
@@ -43,24 +43,21 @@ function ipSearch(ip, table) {
 		dotIndex = ip.lastIndexOf('.');
 	}
 	return false;
-}
-function checkBanned(ip) {
-	return ipSearch(ip, bannedIps);
-}
-function checkLocked(ip) {
-	return ipSearch(ip, lockedIps);
-}
-function checkNameLocked(ip) {
-	return ipSearch(ip, nameLockedIps);
-}
-Punishments.checkBanned = checkBanned;
-Punishments.checkLocked = checkLocked;
-Punishments.checkNameLocked = checkNameLocked;
+};
+Punishments.checkBanned = function (ip) {
+	return this.ipSearch(ip, bannedIps);
+};
+Punishments.checkLocked = function (ip) {
+	return this.ipSearch(ip, lockedIps);
+};
+Punishments.checkNameLocked = function (ip) {
+	return this.ipSearch(ip, nameLockedIps);
+};
 
 // Defined in commands.js
 Punishments.checkRangeBanned = function () {};
 
-function ban(user, noRecurse, name) {
+Punishments.ban = function (user, noRecurse, name) {
 	if (!name) name = user.userid;
 
 	if (!noRecurse) {
@@ -68,7 +65,7 @@ function ban(user, noRecurse, name) {
 			if (user === thisUser || thisUser.confirmed) return;
 			for (let myIp in thisUser.ips) {
 				if (myIp in user.ips) {
-					ban(thisUser, true, name);
+					this.ban(thisUser, true, name);
 					return;
 				}
 			}
@@ -87,8 +84,8 @@ function ban(user, noRecurse, name) {
 	user.locked = name; // in case of merging into a recently banned account
 	lockedUsers[user.userid] = name;
 	user.disconnectAll();
-}
-function unban(name) {
+};
+Punishments.unban = function (name) {
 	let success;
 	let userid = toId(name);
 	for (let ip in bannedIps) {
@@ -105,8 +102,8 @@ function unban(name) {
 	}
 	if (success) return name;
 	return false;
-}
-function lock(user, noRecurse, name) {
+};
+Punishments.lock = function (user, noRecurse, name) {
 	if (!name) name = user.userid;
 
 	if (!noRecurse) {
@@ -114,7 +111,7 @@ function lock(user, noRecurse, name) {
 			if (user === thisUser || thisUser.confirmed) return;
 			for (let myIp in thisUser.ips) {
 				if (myIp in user.ips) {
-					ban(thisUser, true, name);
+					this.ban(thisUser, true, name);
 					return;
 				}
 			}
@@ -130,8 +127,8 @@ function lock(user, noRecurse, name) {
 	user.locked = name;
 	user.autoconfirmed = '';
 	user.updateIdentity();
-}
-function unlock(name, unlocked, noRecurse) {
+};
+Punishments.unlock = function (name, unlocked, noRecurse) {
 	let userid = toId(name);
 	let user = Users(userid);
 	let userips = null;
@@ -147,10 +144,10 @@ function unlock(name, unlocked, noRecurse) {
 	}
 	for (let ip in lockedIps) {
 		if (userips && (ip in user.ips) && lockedIps[ip] !== userid) {
-			unlocked = unlock(Users.lockedIps[ip], unlocked, true); // avoid infinite recursion
+			unlocked = this.unlock(lockedIps[ip], unlocked, true); // avoid infinite recursion
 		}
-		if (Users.lockedIps[ip] === userid) {
-			delete Users.lockedIps[ip];
+		if (lockedIps[ip] === userid) {
+			delete lockedIps[ip];
 			unlocked = unlocked || {};
 			unlocked[name] = 1;
 		}
@@ -163,8 +160,8 @@ function unlock(name, unlocked, noRecurse) {
 		}
 	}
 	return unlocked;
-}
-function lockRange(range, ip) {
+};
+Punishments.lockRange = function (range, ip) {
 	if (lockedRanges[range]) return;
 	rangelockedUsers[range] = {};
 	if (ip) {
@@ -186,10 +183,10 @@ function lockRange(range, ip) {
 
 	let time = 90 * 60 * 1000;
 	lockedRanges[range] = setTimeout(() => {
-		unlockRange(range);
+		this.unlockRange(range);
 	}, time);
-}
-function unlockRange(range) {
+};
+Punishments.unlockRange = function (range) {
 	if (!lockedRanges[range]) return;
 	clearTimeout(lockedRanges[range]);
 	for (let i in rangelockedUsers[range]) {
@@ -202,8 +199,8 @@ function unlockRange(range) {
 	if (lockedIps[range]) delete lockedIps[range];
 	delete lockedRanges[range];
 	delete rangelockedUsers[range];
-}
-function lockName(user) {
+};
+Punishments.lockName = function (user) {
 	let userid = user.userid;
 	for (let ip in user.ips) {
 		nameLockedIps[ip] = userid;
@@ -216,8 +213,8 @@ function lockName(user) {
 	user.updateIdentity();
 
 	return true;
-}
-function unnamelock(name) {
+};
+Punishments.unnamelock = function (name) {
 	let userid = toId(name);
 	let user = Users(userid);
 	let namelockedId = toId(user.namelocked);
@@ -243,13 +240,4 @@ function unnamelock(name) {
 		}
 	}
 	return unnamelocked;
-}
-
-Punishments.ban = ban;
-Punishments.unban = unban;
-Punishments.lock = lock;
-Punishments.unlock = unlock;
-Punishments.lockRange = lockRange;
-Punishments.unlockRange = unlockRange;
-Punishments.lockName = lockName;
-Punishments.unnamelock = unnamelock;
+};
