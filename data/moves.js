@@ -10469,7 +10469,6 @@ exports.BattleMovedex = {
 				pokemon.stats.def = newdef;
 			},
 			onCopy: function (pokemon) {
-				this.add('-start', pokemon, 'Power Trick');
 				let newatk = pokemon.stats.def;
 				let newdef = pokemon.stats.atk;
 				pokemon.stats.atk = newatk;
