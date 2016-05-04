@@ -122,11 +122,11 @@ let commands = {
 		if (!artistOfTheDay.pendingNominations) return this.sendReply("Nominations for the Artist of the Day are not in progress.");
 
 		let removedNominators = artistOfTheDay.removedNominators;
-		if (removedNominators.indexOf(user) >= 0) return this.sendReply("Since your nomination has been removed, you cannot submit another artist until the next round.");
+		if (removedNominators.includes(user)) return this.sendReply("Since your nomination has been removed, you cannot submit another artist until the next round.");
 
 		let alts = user.getAlts();
 		for (let i = 0; i < removedNominators.length; i++) {
-			if (alts.indexOf(removedNominators[i].name) >= 0) return this.sendReply("Since your nomination has been removed, you cannot submit another artist until the next round.");
+			if (alts.includes(removedNominators[i].name)) return this.sendReply("Since your nomination has been removed, you cannot submit another artist until the next round.");
 		}
 
 		let nominationId = toArtistId(target);
@@ -136,7 +136,7 @@ let commands = {
 		let latestIp = user.latestIp;
 		for (let data of artistOfTheDay.nominations) {
 			let nominator = data[0];
-			if (nominator.ips[latestIp] && nominator.userid !== userid || alts.indexOf(nominator.name) >= 0) return this.sendReply("You have already submitted a nomination for the Artist of the Day under the name " + nominator.name + ".");
+			if (nominator.ips[latestIp] && nominator.userid !== userid || alts.includes(nominator.name)) return this.sendReply("You have already submitted a nomination for the Artist of the Day under the name " + nominator.name + ".");
 			if (toArtistId(data[1]) === nominationId) return this.sendReply("" + target + " has already been nominated.");
 		}
 

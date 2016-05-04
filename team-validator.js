@@ -218,7 +218,7 @@ class Validator {
 			} else if (!banlistTable['ignoreillegalabilities']) {
 				if (!ability.name) {
 					problems.push(name + " needs to have an ability.");
-				} else if (Object.values(template.abilities).indexOf(ability.name) < 0) {
+				} else if (!Object.values(template.abilities).includes(ability.name)) {
 					problems.push(name + " can't have " + set.ability + ".");
 				}
 				if (ability.name === template.abilities['H']) {
@@ -296,7 +296,7 @@ class Validator {
 				let limitedEgg = Array.from(new Set(lsetData.limitedEgg));
 				if (limitedEgg.length <= 1) {
 					// Only one source, can't conflict with anything else
-				} else if (limitedEgg.indexOf('self') >= 0) {
+				} else if (limitedEgg.includes('self')) {
 					// Self-moves are always incompatible with anything else
 					problems.push(name + "'s egg moves are incompatible.");
 				} else {
@@ -588,7 +588,7 @@ class Validator {
 				let types = template.types;
 				if (template.species === 'Shaymin') types = ['Grass', 'Flying'];
 				if (template.baseSpecies === 'Hoopa') types = ['Psychic', 'Ghost', 'Dark'];
-				if (types.indexOf(move.type) >= 0) return false;
+				if (types.includes(move.type)) return false;
 			}
 			if (!template.learnset) {
 				if (template.baseSpecies !== template.species) {

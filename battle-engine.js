@@ -805,7 +805,7 @@ BattlePokemon = (() => {
 			evasion: 0,
 		};
 
-		if (this.battle.gen === 1 && this.baseMoves.indexOf('mimic') >= 0 && !this.transformed) {
+		if (this.battle.gen === 1 && this.baseMoves.includes('mimic') && !this.transformed) {
 			let moveslot = this.baseMoves.indexOf('mimic');
 			let mimicPP = this.moveset[moveslot] ? this.moveset[moveslot].pp : 16;
 			this.moveset = this.baseMoveset.slice();
@@ -845,7 +845,7 @@ BattlePokemon = (() => {
 				if (this.hasType(type[i])) return true;
 			}
 		} else {
-			if (this.getTypes().indexOf(type) >= 0) return true;
+			if (this.getTypes().includes(type)) return true;
 		}
 		return false;
 	};
@@ -1108,7 +1108,7 @@ BattlePokemon = (() => {
 		if (!Array.isArray(item)) {
 			return ownItem === toId(item);
 		}
-		return (item.map(toId).indexOf(ownItem) >= 0);
+		return item.map(toId).includes(ownItem);
 	};
 	BattlePokemon.prototype.clearItem = function () {
 		return this.setItem('');
@@ -1140,7 +1140,7 @@ BattlePokemon = (() => {
 		if (!Array.isArray(ability)) {
 			return ownAbility === toId(ability);
 		}
-		return (ability.map(toId).indexOf(ownAbility) >= 0);
+		return ability.map(toId).includes(ownAbility);
 	};
 	BattlePokemon.prototype.clearAbility = function () {
 		return this.setAbility('');
@@ -1880,7 +1880,7 @@ Battle = (() => {
 		if (!Array.isArray(weather)) {
 			return ourWeather === toId(weather);
 		}
-		return (weather.map(toId).indexOf(ourWeather) >= 0);
+		return weather.map(toId).includes(ourWeather);
 	};
 	Battle.prototype.getWeather = function () {
 		return this.getEffect(this.weather);
@@ -1932,7 +1932,7 @@ Battle = (() => {
 		if (!Array.isArray(terrain)) {
 			return ourTerrain === toId(terrain);
 		}
-		return (terrain.map(toId).indexOf(ourTerrain) >= 0);
+		return terrain.map(toId).includes(ourTerrain);
 	};
 	Battle.prototype.getTerrain = function () {
 		return this.getEffect(this.terrain);

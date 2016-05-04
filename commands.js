@@ -48,7 +48,7 @@ exports.commands = {
 			let rank = Users.usergroups[u].charAt(0);
 			if (rank === ' ' || rank === '+') continue;
 			// In case the usergroups.csv file is not proper, we check for the server ranks.
-			if (ranks.indexOf(rank) >= 0) {
+			if (ranks.includes(rank)) {
 				let name = Users.usergroups[u].substr(1);
 				if (!rankLists[rank]) rankLists[rank] = [];
 				if (name) rankLists[rank].push(name);

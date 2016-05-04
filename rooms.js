@@ -731,7 +731,7 @@ let GlobalRoom = (() => {
 				continue;
 			}
 			if (room.staffAutojoin === true && user.isStaff ||
-					typeof room.staffAutojoin === 'string' && room.staffAutojoin.indexOf(user.group) >= 0 ||
+					typeof room.staffAutojoin === 'string' && room.staffAutojoin.includes(user.group) ||
 					room.auth && user.userid in room.auth) {
 				// if staffAutojoin is true: autojoin if isStaff
 				// if staffAutojoin is String: autojoin if user.group in staffAutojoin
