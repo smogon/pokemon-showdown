@@ -24,6 +24,10 @@ let Rooms = module.exports = getRoom;
 Rooms.rooms = new Map();
 Rooms.aliases = new Map();
 
+/*********************************************************
+ * the Room object.
+ *********************************************************/
+
 let Room = (() => {
 	function Room(roomid, title) {
 		this.id = roomid;
@@ -34,8 +38,6 @@ let Room = (() => {
 
 		this.log = [];
 
-		this.bannedUsers = Object.create(null);
-		this.bannedIps = Object.create(null);
 		this.muteQueue = [];
 		this.muteTimer = null;
 	}
@@ -112,75 +114,10 @@ let Room = (() => {
 		return this.id;
 	};
 
-	// roomban handling
-	Room.prototype.isRoomBanned = function (user) {
-		if (!user) return;
-		if (this.bannedUsers) {
-			if (user.userid in this.bannedUsers) {
-				return this.bannedUsers[user.userid];
-			}
-			if (user.autoconfirmed in this.bannedUsers) {
-				return this.bannedUsers[user.autoconfirmed];
-			}
-		}
-		if (this.bannedIps) {
-			for (let ip in user.ips) {
-				if (ip in this.bannedIps) return this.bannedIps[ip];
-			}
-		}
-	};
-	Room.prototype.roomBan = function (user, noRecurse, userid) {
-		if (!userid) userid = user.userid;
-		let alts;
-		if (!noRecurse) {
-			alts = [];
-			Users.users.forEach(otherUser => {
-				if (otherUser === user) return;
-				for (let myIp in user.ips) {
-					if (myIp in otherUser.ips) {
-						alts.push(otherUser.name);
-						this.roomBan(otherUser, true, userid);
-						return;
-					}
-				}
-			});
-		}
-		this.bannedUsers[userid] = userid;
-		if (user.autoconfirmed) this.bannedUsers[user.autoconfirmed] = userid;
-		if (this.game && this.game.removeBannedUser) {
-			this.game.removeBannedUser(user);
-		}
-		for (let ip in user.ips) {
-			this.bannedIps[ip] = userid;
-		}
-		if (!user.can('bypassall')) user.leaveRoom(this.id);
-		return alts;
-	};
-	Room.prototype.unRoomBan = function (userid, noRecurse) {
-		userid = toId(userid);
-		let successUserid = false;
-		for (let i in this.bannedUsers) {
-			let entry = this.bannedUsers[i];
-			if (i === userid || entry === userid) {
-				delete this.bannedUsers[i];
-				successUserid = entry;
-				if (!noRecurse && entry !== userid) {
-					this.unRoomBan(entry, true);
-				}
-			}
-		}
-		for (let i in this.bannedIps) {
-			if (this.bannedIps[i] === userid) {
-				delete this.bannedIps[i];
-				successUserid = userid;
-			}
-		}
-		return successUserid;
-	};
 	Room.prototype.checkBanned = function (user) {
-		let userid = this.isRoomBanned(user);
+		let userid = Punishments.checkRoomBanned(user, this.id);
 		if (userid) {
-			this.roomBan(user, true, userid);
+			Punishments.roomBan(this, user, true, userid);
 			return false;
 		}
 		return true;

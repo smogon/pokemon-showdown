@@ -144,7 +144,23 @@ exports.commands = {
 			for (let i = 0; i < Rooms.global.chatRooms.length; i++) {
 				let thisRoom = Rooms.global.chatRooms[i];
 				if (!thisRoom || thisRoom.isPrivate === true) continue;
-				let roomBanned = ((thisRoom.bannedIps && thisRoom.bannedIps[targetUser.latestIp]) || (thisRoom.bannedUsers && thisRoom.bannedUsers[targetUser.userid]));
+				let roomBanned = false;
+				let punishment = Punishments.roombannedIps.get(thisRoom.id + '|' + targetUser.latestIp);
+				if (punishment) {
+					if (Date.now() < punishment[2]) {
+						roomBanned = true;
+					} else {
+						Punishments.roombannedIps.delete(thisRoom.id + '|' + targetUser.latestIp);
+					}
+				}
+				punishment = Punishments.roombannedUserids.get(thisRoom.id + '|' + targetUser.userid);
+				if (punishment) {
+					if (Date.now() < punishment[2]) {
+						roomBanned = true;
+					} else {
+						Punishments.roombannedUserids.delete(thisRoom.id + '|' + targetUser.userid);
+					}
+				}
 				if (roomBanned) {
 					if (bannedFrom) bannedFrom += `, `;
 					bannedFrom += `<a href="/${thisRoom}">${thisRoom}</a> (${roomBanned})`;
