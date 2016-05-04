@@ -495,7 +495,7 @@ exports.commands = {
 			factor = Math.pow(2, totalTypeMod);
 		}
 
-		let hasThousandArrows = source.id === 'thousandarrows' && defender.types.indexOf('Flying') >= 0;
+		let hasThousandArrows = source.id === 'thousandarrows' && defender.types.includes('Flying');
 		let additionalInfo = hasThousandArrows ? "<br>However, Thousand Arrows will be 1x effective on the first hit." : "";
 
 		this.sendReplyBox("" + atkName + " is " + factor + "x effective against " + defName + "." + additionalInfo);
@@ -798,10 +798,10 @@ exports.commands = {
 					}
 
 					if (!natureSet) {
-						if (targets[i].indexOf('+') > -1) {
+						if (targets[i].includes('+')) {
 							nature = 1.1;
 							natureSet = true;
-						} else if (targets[i].indexOf('-') > -1) {
+						} else if (targets[i].includes('-')) {
 							nature = 0.9;
 							natureSet = true;
 						}

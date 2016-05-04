@@ -24,6 +24,14 @@ if (!Object.values) {
 		return values;
 	};
 }
+// shim Array.prototype.includes
+if (!Array.prototype.includes) {
+	Object.defineProperty(Array.prototype, 'includes', { // eslint-disable-line no-extend-native
+		value: function (object) {
+			return this.indexOf(object) !== -1;
+		},
+	});
+}
 
 module.exports = (() => {
 	let moddedTools = {};
@@ -614,7 +622,7 @@ module.exports = (() => {
 					if (banlistTable['Rule:' + toId(subformat.ruleset[i])]) continue;
 
 					banlistTable['Rule:' + toId(subformat.ruleset[i])] = subformat.ruleset[i];
-					if (format.ruleset.indexOf(subformat.ruleset[i]) < 0) format.ruleset.push(subformat.ruleset[i]);
+					if (!format.ruleset.includes(subformat.ruleset[i])) format.ruleset.push(subformat.ruleset[i]);
 
 					let subsubformat = this.getFormat(subformat.ruleset[i]);
 					if (subsubformat.ruleset || subsubformat.banlist) {

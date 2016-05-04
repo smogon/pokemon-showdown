@@ -65,15 +65,15 @@ class Hangman extends Rooms.RoomGame {
 
 	guessLetter(letter, guesser) {
 		letter = letter.toUpperCase();
-		if (this.guesses.indexOf(letter) >= 0) return false;
-		if (this.word.toUpperCase().indexOf(letter) > -1) {
+		if (this.guesses.includes(letter)) return false;
+		if (this.word.toUpperCase().includes(letter)) {
 			for (let i = 0; i < this.word.length; i++) {
 				if (this.word[i].toUpperCase() === letter) {
 					this.wordSoFar[i] = this.word[i];
 				}
 			}
 
-			if (this.wordSoFar.indexOf('_') < 0) {
+			if (!this.wordSoFar.includes('_')) {
 				this.incorrectGuesses = -1;
 				this.guesses.push(letter);
 				this.letterGuesses.push(letter + '1');
@@ -126,7 +126,7 @@ class Hangman extends Rooms.RoomGame {
 
 		if (this.incorrectGuesses === maxMistakes) {
 			result = 1;
-		} else if (this.wordSoFar.indexOf('_') < 0) {
+		} else if (!this.wordSoFar.includes('_')) {
 			result = 2;
 		}
 

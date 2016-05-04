@@ -192,7 +192,7 @@ const Monitor = module.exports = { // eslint-disable-line no-unused-vars
 				bytes += value.length * 2;
 			} else if (typeof value === 'number') {
 				bytes += 8;
-			} else if (typeof value === 'object' && objectList.indexOf(value) < 0) {
+			} else if (typeof value === 'object' && !objectList.includes(value)) {
 				objectList.push(value);
 				for (let i in value) stack.push(value[i]);
 			}

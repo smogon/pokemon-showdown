@@ -408,13 +408,13 @@ class User {
 			if (typeof jurisdiction !== 'string') {
 				return !!jurisdiction;
 			}
-			if (jurisdiction.indexOf(targetGroup) >= 0) {
+			if (jurisdiction.includes(targetGroup)) {
 				return true;
 			}
-			if (jurisdiction.indexOf('s') >= 0 && target === this) {
+			if (jurisdiction.includes('s') && target === this) {
 				return true;
 			}
-			if (jurisdiction.indexOf('u') >= 0 && Config.groupsranking.indexOf(group) > Config.groupsranking.indexOf(targetGroup)) {
+			if (jurisdiction.includes('u') && Config.groupsranking.indexOf(group) > Config.groupsranking.indexOf(targetGroup)) {
 				return true;
 			}
 		}
@@ -455,10 +455,10 @@ class User {
 		if (!this.can('console')) return false; // normal permission check
 
 		let whitelist = Config.consoleips || ['127.0.0.1'];
-		if (whitelist.indexOf(connection.ip) >= 0) {
+		if (whitelist.includes(connection.ip)) {
 			return true; // on the IP whitelist
 		}
-		if (whitelist.indexOf(this.userid) >= 0) {
+		if (whitelist.includes(this.userid)) {
 			return true; // on the userid whitelist
 		}
 
