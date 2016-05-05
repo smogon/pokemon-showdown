@@ -2171,6 +2171,9 @@ exports.BattleScripts = {
 			case 'Meloetta':
 				if (this.random(2) >= 1) continue;
 				break;
+			case 'Meowstic':
+				if (this.random(2) >= 1) continue;
+				break;
 			case 'Pikachu':
 				// Pikachu is not a viable NFE Pokemon
 				continue;
