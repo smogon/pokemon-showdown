@@ -395,7 +395,7 @@ exports.Formats = [
 		column: 2,
 
 		mod: 'extremets',
-		ruleset: ['Ubers'],
+		ruleset: ['Ubers', 'Baton Pass Clause'],
 		banlist: ['Eviolite'],
 	},
 	{
