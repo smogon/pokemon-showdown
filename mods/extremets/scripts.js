@@ -38,8 +38,9 @@ exports.BattleScripts = {
 					boost = 30;
 				}
 
-				let boostedHP = Math.floor(Math.floor(2 * (this.template.baseStats['hp'] + boost) + this.set.ivs['hp'] + Math.floor(this.set.evs['hp'] / 4) + 100) * this.level / 100 + 10);
-				if (this.maxhp > 1 && this.maxhp < boostedHP) this.hp = this.maxhp = boostedHP;
+				let hp = this.battle.clampIntRange(this.template.baseStats['hp'] + boost, 1, 255);
+				hp = Math.floor(Math.floor(2 * hp + this.set.ivs['hp'] + Math.floor(this.set.evs['hp'] / 4) + 100) * this.level / 100 + 10);
+				if (this.maxhp > 1 && this.maxhp < hp) this.hp = this.maxhp = hp;
 
 				for (let statName in this.stats) {
 					let stat = this.template.baseStats[statName];
