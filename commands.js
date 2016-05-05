@@ -1754,7 +1754,7 @@ exports.commands = {
 		}
 		if (!this.can('forcerename', targetUser)) return false;
 
-		this.addModCommand("" + targetUser.name + " was namelocked by " + user.name + "." + (reason ? ": " + reason : ""));
+		this.addModCommand("" + targetUser.name + " was namelocked by " + user.name + "." + (reason ? " (" + reason + ")" : ""));
 		this.globalModlog("NAMELOCK", targetUser, " by " + user.name + (reason ? ": " + reason : ""));
 		Rooms.global.cancelSearch(targetUser);
 		Punishments.lockName(targetUser);
