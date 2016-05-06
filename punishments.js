@@ -137,7 +137,7 @@ Punishments.lock = function (user, noRecurse, name) {
 			if (user === thisUser || thisUser.confirmed) return;
 			for (let myIp in thisUser.ips) {
 				if (myIp in user.ips) {
-					this.ban(thisUser, true, name);
+					this.lock(thisUser, true, name);
 					return;
 				}
 			}
