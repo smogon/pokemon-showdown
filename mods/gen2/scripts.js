@@ -292,6 +292,7 @@ exports.BattleScripts = {
 				basePower: move,
 				type: '???',
 				category: 'Physical',
+				willCrit: false,
 				flags: {},
 			};
 		}

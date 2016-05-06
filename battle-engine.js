@@ -3415,6 +3415,7 @@ Battle = (() => {
 				basePower: move,
 				type: '???',
 				category: 'Physical',
+				willCrit: false,
 				flags: {},
 			};
 		}
