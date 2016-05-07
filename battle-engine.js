@@ -4052,6 +4052,7 @@ Battle = (() => {
 			this.switchIn(decision.target, decision.pokemon.position);
 			break;
 		case 'runSwitch':
+			this.runEvent('TrySwitchIn', decision.pokemon);
 			this.runEvent('SwitchIn', decision.pokemon);
 			if (this.gen <= 2 && !decision.pokemon.side.faintedThisTurn && decision.pokemon.draggedIn !== this.turn) this.runEvent('AfterSwitchInSelf', decision.pokemon);
 			if (!decision.pokemon.hp) break;
@@ -4098,6 +4099,7 @@ Battle = (() => {
 			let pokemon = this.p1.active[i];
 			if (pokemon.forceSwitchFlag) {
 				if (pokemon.hp) this.dragIn(pokemon.side, pokemon.position);
+				runEvent('TrySwitchIn', pokemon);
 				pokemon.forceSwitchFlag = false;
 			}
 		}
