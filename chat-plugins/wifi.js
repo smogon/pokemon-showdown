@@ -120,8 +120,8 @@ let QuestionGiveAway = (() => {
 				for (let i in this.answers) {
 					ans.push(this.answers[i]);
 				}
-				this.room.addRaw("<div class='broadcast-blue'><b>" + Tools.escapeHTML(this.winner.name) + "</b> guessed the correct answer.</b> Congratulations!<br/>" +
-					"Correct answer(s): " + ans.join(','));
+				this.room.addRaw("<div class='broadcast-blue'><b>" + Tools.escapeHTML(this.winner.name) + "</b> won " + Tools.escapeHTML(this.giver.name) + "'s giveaway. Congratulations!<br/>" +
+					"Correct answer(s): " + ans.join(', '));
 				if (this.winner.connected) this.winner.popup('You have won the giveaway. PM **' + Tools.escapeHTML(this.giver.name) + '** to claim your prize!');
 			}
 		}
@@ -220,7 +220,7 @@ let LotteryGiveAway = (() => {
 			let multiWin = finallist.length > 1;
 			finallist = finallist.join(', ');
 			this.room.addRaw(
-				"<div class='broadcast-blue'><font size='2'><b>Lottery Draw: </b></font>" + this.totalusers + " users have joined the lottery.<br/>" +
+				"<div class='broadcast-blue'><font size='2'><b>Lottery Draw: </b></font>" + this.totalusers + " joined " + Tools.escapeHTML(this.giver.name) + "'s giveaway.<br/>" +
 				"Our lucky winner" + (multiWin ? "s" : "") + ": <b>" + Tools.escapeHTML(finallist) + "!</b> Congratulations!"
 			).update();
 
