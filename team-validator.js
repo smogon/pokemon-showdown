@@ -374,7 +374,7 @@ class Validator {
 						if (eventData.level && set.level < eventData.level) {
 							problems.push(name + " must be at least level " + eventData.level + " because it has a move only available from a specific event.");
 						}
-						if ((eventData.shiny && !set.shiny) || (!eventData.shiny && set.shiny)) {
+						if ((eventData.shiny === true && !set.shiny) || (!eventData.shiny && set.shiny)) {
 							problems.push(name + " must " + (eventData.shiny ? "" : "not ") + "be shiny because it has a move only available from a specific event.");
 						}
 						if (eventData.gender) {
@@ -435,7 +435,7 @@ class Validator {
 					let eventData = eventPokemon[i];
 					if (format.requirePentagon && eventData.generation < 6) continue;
 					if (eventData.level && set.level < eventData.level) continue;
-					if ((eventData.shiny && !set.shiny) || (!eventData.shiny && set.shiny)) continue;
+					if ((eventData.shiny === true && !set.shiny) || (!eventData.shiny && set.shiny)) continue;
 					if (eventData.nature && set.nature !== eventData.nature) continue;
 					if (eventData.ivs) {
 						if (!set.ivs) set.ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
