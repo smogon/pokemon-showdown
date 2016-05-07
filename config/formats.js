@@ -112,7 +112,7 @@ exports.Formats = [
 		name: "Anything Goes",
 		desc: [
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3523229/\">Anything Goes</a>",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3548945/\">Anything Goes Resources</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3548945/\">AG Resources</a>",
 		],
 		section: "ORAS Singles",
 
@@ -1866,7 +1866,7 @@ exports.Formats = [
 		desc: [
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3489849/\">Balanced Hackmons</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3566051/\">BH Suspects and Bans</a>",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3547823/\">BH Viability Ranking</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3571384/\">BH Resources</a>",
 		],
 		section: "Other Metagames",
 
