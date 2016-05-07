@@ -795,7 +795,7 @@ class User {
 			let range = this.locked || Users.shortenHost(this.latestHost);
 			if (Punishments.lockedRanges[range]) {
 				this.send("|popup|You are in a range that has been temporarily locked from talking in chats and PMing regular users.");
-				Punishments.rangelockedUsers[range][this.userid] = 1;
+				Punishments.rangeLockedUsers[range][this.userid] = 1;
 				this.locked = '#range';
 			}
 		} else if (this.locked && (this.locked === '#range' || Punishments.lockedRanges[this.locked])) {
@@ -1564,7 +1564,7 @@ Users.socketConnect = function (worker, workerid, socketid, ip) {
 				let shortHost = Users.shortenHost(hosts[0]);
 				if (Punishments.lockedRanges[shortHost]) {
 					user.send("|popup|You are locked because someone on your ISP has spammed, and your ISP does not give us any way to tell you apart from them.");
-					Punishments.rangelockedUsers[shortHost][user.userid] = 1;
+					Punishments.rangeLockedUsers[shortHost][user.userid] = 1;
 					user.locked = '#range';
 					user.updateIdentity();
 				}
