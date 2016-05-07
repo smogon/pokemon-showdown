@@ -793,12 +793,14 @@ exports.BattleMovedex = {
 				} else {
 					this.add('-activate', target, 'Substitute', '[damage]');
 				}
-				if (move.recoil) {
-					this.damage(Math.round(damage * move.recoil[0] / move.recoil[1]), source, target, 'recoil');
-				}
-				// Attacker does not heal from drain if substitute breaks
-				if (move.drain && target.volatiles['substitute'] && target.volatiles['substitute'].hp > 0) {
-					this.heal(Math.ceil(damage * move.drain[0] / move.drain[1]), source, target, 'drain');
+				// Drain/recoil does not happen if the substitute breaks
+				if (target.volatiles['substitute']) {
+					if (move.recoil) {
+						this.damage(Math.round(damage * move.recoil[0] / move.recoil[1]), source, target, 'recoil');
+					}
+					if (move.drain) {
+						this.heal(Math.ceil(damage * move.drain[0] / move.drain[1]), source, target, 'drain');
+					}
 				}
 				this.runEvent('AfterSubDamage', target, source, move, damage);
 				// Add here counter damage
