@@ -28,7 +28,7 @@ let nameLockedIps = Punishments.nameLockedIps = Object.create(null);
 let lockedUsers = Punishments.lockedUsers = Object.create(null);
 let nameLockedUsers = Punishments.nameLockedUsers = Object.create(null);
 let lockedRanges = Punishments.lockedRanges = Object.create(null);
-let rangelockedUsers = Punishments.rangeLockedUsers = Object.create(null);
+let rangeLockedUsers = Punishments.rangeLockedUsers = Object.create(null);
 
 // load ipbans at our leisure
 let loadBanlist = Punishments.loadBanlist = function () {
@@ -189,7 +189,7 @@ Punishments.unlock = function (name, unlocked, noRecurse) {
 };
 Punishments.lockRange = function (range, ip) {
 	if (lockedRanges[range]) return;
-	rangelockedUsers[range] = {};
+	rangeLockedUsers[range] = {};
 	if (ip) {
 		lockedIps[range] = range;
 		ip = range.slice(0, -1);
@@ -201,7 +201,7 @@ Punishments.lockRange = function (range, ip) {
 		} else {
 			if (range !== Users.shortenHost(curUser.latestHost)) return;
 		}
-		rangelockedUsers[range][curUser.userid] = 1;
+		rangeLockedUsers[range][curUser.userid] = 1;
 		curUser.locked = '#range';
 		curUser.send("|popup|You are locked because someone on your ISP has spammed, and your ISP does not give us any way to tell you apart from them.");
 		curUser.updateIdentity();
@@ -215,7 +215,7 @@ Punishments.lockRange = function (range, ip) {
 Punishments.unlockRange = function (range) {
 	if (!lockedRanges[range]) return;
 	clearTimeout(lockedRanges[range]);
-	for (let i in rangelockedUsers[range]) {
+	for (let i in rangeLockedUsers[range]) {
 		let user = Users(i);
 		if (user) {
 			user.locked = false;
@@ -224,7 +224,7 @@ Punishments.unlockRange = function (range) {
 	}
 	if (lockedIps[range]) delete lockedIps[range];
 	delete lockedRanges[range];
-	delete rangelockedUsers[range];
+	delete rangeLockedUsers[range];
 };
 Punishments.lockName = function (user) {
 	let userid = user.userid;
