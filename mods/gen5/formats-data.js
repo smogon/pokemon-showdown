@@ -170,13 +170,6 @@ exports.BattleFormatsData = {
 		],
 		tier: "LC",
 	},
-	pichuspikyeared: {
-		eventPokemon: [
-			{"generation": 4, "level": 30, "gender": "F", "nature": "Naughty", "moves":["helpinghand", "volttackle", "swagger", "painsplit"]},
-		],
-		eventOnly: true,
-		tier: "Illegal",
-	},
 	pikachu: {
 		randomBattleMoves: ["thunderbolt", "volttackle", "voltswitch", "grassknot", "hiddenpowerice", "brickbreak", "extremespeed", "encore", "substitute"],
 		eventPokemon: [
@@ -1669,7 +1662,6 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["toxic", "dragontail", "roost", "substitute", "whirlwind", "icebeam"],
 		eventPokemon: [
 			{"generation": 3, "level": 70, "moves":["swift", "raindance", "hydropump", "recover"]},
-			{"generation": 3, "level": 70, "moves":["recover", "hydropump", "raindance", "swift"]},
 			{"generation": 3, "level": 50, "moves":["psychoboost", "earthquake", "hydropump", "featherdance"]},
 			{"generation": 5, "level": 5, "isHidden": true, "moves":["whirlwind", "weatherball"], "pokeball": "dreamball"},
 		],
@@ -1680,7 +1672,6 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["substitute", "sacredfire", "bravebird", "earthquake", "roost"],
 		eventPokemon: [
 			{"generation": 3, "level": 70, "moves":["swift", "sunnyday", "fireblast", "recover"]},
-			{"generation": 3, "level": 70, "moves":["recover", "fireblast", "sunnyday", "swift"]},
 			{"generation": 5, "level": 5, "isHidden": true, "moves":["whirlwind", "weatherball"], "pokeball": "dreamball"},
 		],
 		eventOnlyHidden: true,
@@ -1695,7 +1686,7 @@ exports.BattleFormatsData = {
 			{"generation": 3, "level": 30, "moves":["healbell", "safeguard", "ancientpower", "futuresight"]},
 			{"generation": 4, "level": 50, "moves":["leafstorm", "recover", "nastyplot", "healingwish"], "pokeball": "cherishball"},
 		],
-		unobtainableShiny: true,
+		eventOnly: true,
 		tier: "OU",
 	},
 	treecko: {
@@ -2329,17 +2320,6 @@ exports.BattleFormatsData = {
 	castform: {
 		tier: "NU",
 	},
-	castformsunny: {
-		randomBattleMoves: ["sunnyday", "weatherball", "solarbeam", "icebeam"],
-		battleOnly: true,
-	},
-	castformrainy: {
-		randomBattleMoves: ["raindance", "weatherball", "thunder", "hurricane"],
-		battleOnly: true,
-	},
-	castformsnowy: {
-		battleOnly: true,
-	},
 	kecleon: {
 		randomBattleMoves: ["stealthrock", "recover", "return", "thunderwave", "suckerpunch"],
 		tier: "NU",
@@ -2808,9 +2788,6 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["sunnyday", "solarbeam", "weatherball", "hiddenpowerice"],
 		tier: "NU",
 	},
-	cherrimsunshine: {
-		battleOnly: true,
-	},
 	shellos: {
 		randomBattleMoves: ["scald", "clearsmog", "recover", "toxic", "icebeam"],
 		tier: "LC",
@@ -3116,100 +3093,68 @@ exports.BattleFormatsData = {
 		tier: "Uber",
 	},
 	arceusbug: {
+		inherit: true,
 		randomBattleMoves: ["swordsdance", "xscissor", "stoneedge", "recover", "calmmind", "judgment", "icebeam", "fireblast"],
-		requiredItem: "Insect Plate",
-		eventOnly: true,
-		tier: "Uber",
 	},
 	arceusdark: {
+		inherit: true,
 		randomBattleMoves: ["calmmind", "judgment", "recover", "refresh"],
-		requiredItem: "Dread Plate",
-		eventOnly: true,
-		tier: "Uber",
 	},
 	arceusdragon: {
+		inherit: true,
 		randomBattleMoves: ["swordsdance", "outrage", "extremespeed", "earthquake", "recover"],
-		requiredItem: "Draco Plate",
-		eventOnly: true,
-		tier: "Uber",
 	},
 	arceuselectric: {
+		inherit: true,
 		randomBattleMoves: ["calmmind", "judgment", "recover", "icebeam"],
-		requiredItem: "Zap Plate",
-		eventOnly: true,
-		tier: "Uber",
 	},
 	arceusfighting: {
+		inherit: true,
 		randomBattleMoves: ["calmmind", "judgment", "icebeam", "darkpulse", "recover", "toxic"],
-		requiredItem: "Fist Plate",
-		eventOnly: true,
-		tier: "Uber",
 	},
 	arceusfire: {
+		inherit: true,
 		randomBattleMoves: ["calmmind", "flamethrower", "fireblast", "thunderbolt", "recover"],
-		requiredItem: "Flame Plate",
-		eventOnly: true,
-		tier: "Uber",
 	},
 	arceusflying: {
+		inherit: true,
 		randomBattleMoves: ["calmmind", "judgment", "refresh", "recover"],
-		requiredItem: "Sky Plate",
-		eventOnly: true,
-		tier: "Uber",
 	},
 	arceusghost: {
+		inherit: true,
 		randomBattleMoves: ["calmmind", "judgment", "focusblast", "flamethrower", "recover", "swordsdance", "shadowclaw", "brickbreak", "willowisp", "roar"],
-		requiredItem: "Spooky Plate",
-		eventOnly: true,
-		tier: "Uber",
 	},
 	arceusgrass: {
+		inherit: true,
 		randomBattleMoves: ["calmmind", "icebeam", "judgment", "earthpower", "recover", "stealthrock", "thunderwave"],
-		requiredItem: "Meadow Plate",
-		eventOnly: true,
-		tier: "Uber",
 	},
 	arceusground: {
+		inherit: true,
 		randomBattleMoves: ["swordsdance", "earthquake", "stoneedge", "recover", "calmmind", "judgment", "icebeam", "stealthrock"],
-		requiredItem: "Earth Plate",
-		eventOnly: true,
-		tier: "Uber",
 	},
 	arceusice: {
+		inherit: true,
 		randomBattleMoves: ["calmmind", "judgment", "icebeam", "thunderbolt", "focusblast", "recover"],
-		requiredItem: "Icicle Plate",
-		eventOnly: true,
-		tier: "Uber",
 	},
 	arceuspoison: {
+		inherit: true,
 		randomBattleMoves: ["calmmind", "judgment", "sludgebomb", "focusblast", "fireblast", "recover", "willowisp", "icebeam", "stealthrock"],
-		requiredItem: "Toxic Plate",
-		eventOnly: true,
-		tier: "Uber",
 	},
 	arceuspsychic: {
+		inherit: true,
 		randomBattleMoves: ["calmmind", "psyshock", "focusblast", "recover", "willowisp", "judgment"],
-		requiredItem: "Mind Plate",
-		eventOnly: true,
-		tier: "Uber",
 	},
 	arceusrock: {
+		inherit: true,
 		randomBattleMoves: ["calmmind", "judgment", "recover", "willowisp", "swordsdance", "stoneedge", "earthquake", "refresh"],
-		requiredItem: "Stone Plate",
-		eventOnly: true,
-		tier: "Uber",
 	},
 	arceussteel: {
+		inherit: true,
 		randomBattleMoves: ["calmmind", "judgment", "recover", "roar", "willowisp", "swordsdance", "ironhead"],
-		requiredItem: "Iron Plate",
-		eventOnly: true,
-		tier: "Uber",
 	},
 	arceuswater: {
+		inherit: true,
 		randomBattleMoves: ["swordsdance", "waterfall", "extremespeed", "dragonclaw", "recover", "calmmind", "judgment", "icebeam", "fireblast"],
-		requiredItem: "Splash Plate",
-		eventOnly: true,
-		tier: "Uber",
 	},
 	victini: {
 		randomBattleMoves: ["vcreate", "boltstrike", "uturn", "psychic", "focusblast", "blueflare"],
@@ -3510,10 +3455,6 @@ exports.BattleFormatsData = {
 			{"generation": 5, "level": 35, "isHidden": true, "moves":["thrash", "bellydrum", "flareblitz", "hammerarm"]},
 		],
 		tier: "UU",
-	},
-	darmanitanzen: {
-		requiredAbility: "Zen Mode",
-		battleOnly: true,
 	},
 	maractus: {
 		randomBattleMoves: ["spikes", "gigadrain", "leechseed", "hiddenpowerfire", "toxic"],
@@ -4014,10 +3955,6 @@ exports.BattleFormatsData = {
 		eventOnly: true,
 		tier: "UU",
 	},
-	meloettapirouette: {
-		requiredMove: "Relic Song",
-		battleOnly: true,
-	},
 	genesect: {
 		randomBattleMoves: ["uturn", "bugbuzz", "icebeam", "flamethrower", "thunderbolt"],
 		eventPokemon: [
@@ -4043,10 +3980,6 @@ exports.BattleFormatsData = {
 	genesectshock: {
 		eventOnly: true,
 		requiredItem: "Shock Drive",
-	},
-	missingno: {
-		isNonstandard: true,
-		tier: "",
 	},
 	tomohawk: {
 		isNonstandard: true,
