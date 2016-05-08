@@ -1,9 +1,6 @@
 'use strict';
 
 exports.BattleFormatsData = {
-	missingno: {
-		inherit: true,
-	},
 	bulbasaur: {
 		inherit: true,
 		randomBattleMoves: ["sleeppowder", "gigadrain", "growth", "hiddenpowerfire", "hiddenpowerice", "sludgebomb", "swordsdance", "powerwhip", "leechseed", "synthesis"],
