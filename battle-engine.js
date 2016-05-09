@@ -940,9 +940,7 @@ BattlePokemon = (() => {
 		return d;
 	};
 	BattlePokemon.prototype.trySetStatus = function (status, source, sourceEffect) {
-		if (!this.hp) return false;
-		if (this.status) return false;
-		return this.setStatus(status, source, sourceEffect);
+		return this.setStatus(this.status || status, source, sourceEffect);
 	};
 	BattlePokemon.prototype.cureStatus = function () {
 		if (!this.hp) return false;
@@ -960,20 +958,31 @@ BattlePokemon = (() => {
 			if (!sourceEffect) sourceEffect = this.battle.effect;
 		}
 
+		if (this.status === status.id) {
+			if (sourceEffect && sourceEffect.status === this.status) {
+				this.battle.add('-fail', this, this.status);
+			} else if (sourceEffect && sourceEffect.status) {
+				this.battle.add('-fail', this);
+			}
+			return false;
+		}
+
 		if (!ignoreImmunities && status.id) {
 			// the game currently never ignores immunities
 			if (!this.runStatusImmunity(status.id === 'tox' ? 'psn' : status.id)) {
 				this.battle.debug('immune to status');
+				if (sourceEffect && sourceEffect.status) this.battle.add('-immune', this, '[msg]');
 				return false;
 			}
 		}
-
-		if (this.status === status.id) return false;
 		let prevStatus = this.status;
 		let prevStatusData = this.statusData;
-		if (status.id && !this.battle.runEvent('SetStatus', this, source, sourceEffect, status)) {
-			this.battle.debug('set status [' + status.id + '] interrupted');
-			return false;
+		if (status.id) {
+			let result = this.battle.runEvent('SetStatus', this, source, sourceEffect, status);
+			if (!result) {
+				this.battle.debug('set status [' + status.id + '] interrupted');
+				return result;
+			}
 		}
 
 		this.status = status.id;

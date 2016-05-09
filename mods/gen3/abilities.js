@@ -31,7 +31,7 @@ exports.BattleAbilities = {
 		onAfterDamage: function (damage, target, source, move) {
 			if (move && move.flags['contact']) {
 				if (this.random(3) < 1) {
-					source.trySetStatus('brn', target, move);
+					source.trySetStatus('brn', target);
 				}
 			}
 		},
@@ -88,7 +88,7 @@ exports.BattleAbilities = {
 		onAfterDamage: function (damage, target, source, move) {
 			if (move && move.flags['contact']) {
 				if (this.random(3) < 1) {
-					source.trySetStatus('psn', target, move);
+					source.trySetStatus('psn', target);
 				}
 			}
 		},
@@ -127,7 +127,7 @@ exports.BattleAbilities = {
 		onAfterDamage: function (damage, target, source, effect) {
 			if (effect && effect.flags['contact']) {
 				if (this.random(3) < 1) {
-					source.trySetStatus('par', target, effect);
+					source.trySetStatus('par', target);
 				}
 			}
 		},
