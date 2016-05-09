@@ -23204,7 +23204,7 @@ exports.BattleLearnsets = {
 		swagger: ["6M", "5M", "4M", "3T"],
 		swift: ["4T", "3T"],
 		tackle: ["6L1", "5L1", "5D", "4L1", "3L1", "3S0", "3S1"],
-		tailwhip: ["6L5", "5L5", "4L5", "3L5", "3S0"],
+		tailwhip: ["6L5", "5L5", "4L5", "3L5", "3S0", "3S1"],
 		takedown: ["6L31"],
 		thief: ["6M", "5M", "4M", "3M"],
 		thunder: ["6M", "5M", "4M", "3M"],
