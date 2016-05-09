@@ -87,7 +87,7 @@ exports.Formats = [
 	{
 		name: "PU",
 		desc: [
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3560703/\">np: PU Stage 6</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3571964/\">np: PU Stage 7</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3528743/\">PU Viability Ranking</a>",
 		],
 		section: "ORAS Singles",
