@@ -51,7 +51,7 @@ exports.Formats = [
 	{
 		name: "UU",
 		desc: [
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3557948/\">np: UU Stage 6</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3571928/\">np: UU Stage 7</a>",
 			"&bullet; <a href=\"https://www.smogon.com/dex/xy/tags/uu/\">UU Banlist</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3555277/\">UU Viability Ranking</a>",
 		],
