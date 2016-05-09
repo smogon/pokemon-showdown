@@ -2113,6 +2113,10 @@ exports.commands = {
 		} else if (target === 'learnsets' || target === 'validator') {
 			TeamValidator.PM.respawn();
 			return this.sendReply("The team validator has been hotpatched. Any battles started after now will have teams be validated according to the new code.");
+		} else if (target === 'punishments') {
+			delete require.cache[require.resolve('./punishments.js')];
+			global.Punishments = require('./punishments.js');
+			return this.sendReply("Punishments have been hot-patched.");
 		} else if (target.startsWith('disable')) {
 			if (Monitor.hotpatchLock) return this.errorReply("Hotpatch is already disabled.");
 			let reason = target.split(', ')[1];
