@@ -2116,7 +2116,7 @@ exports.commands = {
 		} else if (target === 'punishments') {
 			delete require.cache[require.resolve('./punishments.js')];
 			global.Punishments = require('./punishments.js');
-			return this.sendReply("Punishments have been hot-patched.");
+			return this.sendReply("Punishments have been hotpatched.");
 		} else if (target.startsWith('disable')) {
 			if (Monitor.hotpatchLock) return this.errorReply("Hotpatch is already disabled.");
 			let reason = target.split(', ')[1];
