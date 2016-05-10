@@ -427,7 +427,7 @@ class Validator {
 					}
 					isHidden = false;
 				}
-			} else if (banlistTable['illegal'] && (template.eventOnly || template.eventOnlyHidden && isHidden)) {
+			} else if (banlistTable['illegal'] && template.eventOnly) {
 				let eventPokemon = !template.learnset && template.baseSpecies !== template.species ? tools.getTemplate(template.baseSpecies).eventPokemon : template.eventPokemon;
 				let legal = false;
 				events:
@@ -447,7 +447,7 @@ class Validator {
 					legal = true;
 					if (eventData.gender) set.gender = eventData.gender;
 				}
-				if (!legal) problems.push(template.species + (template.eventOnlyHidden ? "'s hidden ability" : "") + " is only obtainable via event - it needs to match one of its events.");
+				if (!legal) problems.push(template.species + " is only obtainable via event - it needs to match one of its events.");
 			}
 			if (isHidden && lsetData.sourcesBefore) {
 				if (!lsetData.sources && lsetData.sourcesBefore < 5) {
