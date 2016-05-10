@@ -128,7 +128,7 @@ exports.BattleFormatsData = {
 	},
 	pichuspikyeared: {
 		eventPokemon: [
-			{"generation": 4, "level": 30, "gender": "F", "nature": "Naughty", "moves":["helpinghand", "volttackle", "swagger", "painsplit"]},
+			{"generation": 4, "level": 30, "nature": "Naughty", "moves":["helpinghand", "volttackle", "swagger", "painsplit"]},
 		],
 		eventOnly: true,
 		tier: "NU",
@@ -916,7 +916,6 @@ exports.BattleFormatsData = {
 	mew: {
 		inherit: true,
 		randomBattleMoves: ["taunt", "willowisp", "roost", "psychic", "nastyplot", "aurasphere", "shadowball", "fireblast", "swordsdance", "superpower", "zenheadbutt", "calmmind", "batonpass", "rockpolish", "substitute", "toxic", "explosion", "icebeam", "thunderbolt", "earthquake", "uturn", "stealthrock", "transform"],
-		eventOnly: true,
 		tier: "Uber",
 	},
 	chikorita: {
@@ -2513,7 +2512,6 @@ exports.BattleFormatsData = {
 	manaphy: {
 		inherit: true,
 		randomBattleMoves: ["tailglow", "surf", "icebeam", "grassknot"],
-		eventOnly: true,
 		tier: "Uber",
 	},
 	darkrai: {
