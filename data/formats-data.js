@@ -3871,6 +3871,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 4, "level": 47, "shiny": 1, "moves":["metalclaw", "ancientpower", "dragonclaw", "roaroftime"]},
 			{"generation": 4, "level": 70, "shiny": 1, "moves":["roaroftime", "healblock", "earthpower", "slash"]},
+			{"generation": 4, "level": 1, "shiny": 1, "moves":["dragonbreath", "scaryface"]},
 			{"generation": 5, "level": 5, "isHidden": true, "moves":["dragonbreath", "scaryface"], "pokeball": "dreamball"},
 			{"generation": 5, "level": 100, "shiny": true, "isHidden": false, "moves":["dragonpulse", "dracometeor", "aurasphere", "roaroftime"], "pokeball": "cherishball"},
 			{"generation": 6, "level": 50, "shiny": 1, "isHidden": false, "moves":["aurasphere", "irontail", "roaroftime", "flashcannon"]},
@@ -3885,6 +3886,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 4, "level": 47, "shiny": 1, "moves":["waterpulse", "ancientpower", "dragonclaw", "spacialrend"]},
 			{"generation": 4, "level": 70, "shiny": 1, "moves":["spacialrend", "healblock", "earthpower", "slash"]},
+			{"generation": 4, "level": 1, "shiny": 1, "moves":["dragonbreath", "scaryface"]},
 			{"generation": 5, "level": 5, "isHidden": true, "moves":["dragonbreath", "scaryface"], "pokeball": "dreamball"},
 			{"generation": 5, "level": 100, "shiny": true, "isHidden": false, "moves":["hydropump", "dracometeor", "spacialrend", "aurasphere"], "pokeball": "cherishball"},
 			{"generation": 6, "level": 50, "shiny": 1, "isHidden": false, "moves":["earthpower", "aurasphere", "spacialrend", "hydropump"]},
@@ -3926,6 +3928,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 4, "level": 70, "shiny": 1, "moves":["shadowforce", "healblock", "earthpower", "slash"]},
 			{"generation": 4, "level": 47, "shiny": 1, "moves":["ominouswind", "ancientpower", "dragonclaw", "shadowforce"]},
+			{"generation": 4, "level": 1, "shiny": 1, "moves":["dragonbreath", "scaryface"]},
 			{"generation": 5, "level": 5, "isHidden": true, "moves":["dragonbreath", "scaryface"], "pokeball": "dreamball"},
 			{"generation": 5, "level": 100, "shiny": true, "isHidden": false, "moves":["dragonpulse", "dragonclaw", "aurasphere", "shadowforce"], "pokeball": "cherishball"},
 			{"generation": 6, "level": 50, "shiny": 1, "isHidden": false, "moves":["aurasphere", "shadowclaw", "shadowforce", "hex"]},
