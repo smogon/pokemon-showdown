@@ -1627,24 +1627,21 @@ Battle = (() => {
 	let Battle = {};
 
 	Battle.construct = (() => {
-		let battleProtoCache = {};
+		let battleProtoCache = new Map();
 		return (roomid, formatarg, rated) => {
-			let battle = Object.create((() => {
-				if (battleProtoCache[formatarg] !== undefined) {
-					return battleProtoCache[formatarg];
-				}
-
+			let format = Tools.getFormat(formatarg);
+			let mod = format.mod || 'base';
+			if (!battleProtoCache.has(mod)) {
 				// Scripts overrides Battle overrides Scripts overrides Tools
-				let tools = Tools.mod(formatarg);
+				let tools = Tools.mod(mod);
 				let proto = Object.create(tools);
-				for (let i in Battle.prototype) {
-					proto[i] = Battle.prototype[i];
-				}
+				Object.assign(proto, Battle.prototype);
 				let battle = Object.create(proto);
 				tools.install(battle);
-				return (battleProtoCache[formatarg] = battle);
-			})());
-			Battle.prototype.init.call(battle, roomid, formatarg, rated);
+				battleProtoCache.set(mod, battle);
+			}
+			let battle = Object.create(battleProtoCache.get(mod));
+			Battle.prototype.init.call(battle, roomid, format, rated);
 			return battle;
 		};
 	})();
@@ -1656,9 +1653,7 @@ Battle = (() => {
 
 	Battle.prototype = {};
 
-	Battle.prototype.init = function (roomid, formatarg, rated) {
-		let format = Tools.getFormat(formatarg);
-
+	Battle.prototype.init = function (roomid, format, rated) {
 		this.log = [];
 		this.sides = [null, null];
 		this.roomid = roomid;
