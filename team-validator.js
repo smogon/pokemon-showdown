@@ -430,7 +430,6 @@ class Validator {
 			} else if (banlistTable['illegal'] && template.eventOnly) {
 				let eventPokemon = !template.learnset && template.baseSpecies !== template.species ? tools.getTemplate(template.baseSpecies).eventPokemon : template.eventPokemon;
 				let legal = false;
-				if (!eventPokemon) eventPokemon = tools.getTemplate(template.baseSpecies).eventPokemon;
 				events:
 				for (let i = 0; i < eventPokemon.length; i++) {
 					let eventData = eventPokemon[i];
