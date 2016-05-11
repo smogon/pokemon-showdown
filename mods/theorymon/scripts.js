@@ -59,8 +59,8 @@ exports.BattleScripts = {
 		this.modData('Pokedex', 'xatu').types = ['Steel', 'Flying'];
 		this.modData('Learnsets', 'xatu').learnset.flashcannon = ['6T'];
 		this.modData('Pokedex', 'meloetta').abilities['1'] = 'Prankster';
-		this.modData('Learnsets', 'meloetta').learnset.naturepower = ['6T'];
 		this.modData('Learnsets', 'escavalier').learnset.trickroom = ['6T'];
 		this.modData('Learnsets', 'escavalier').learnset.uturn = ['6T'];
+		this.modData('Pokedex', 'cresselia').types = ['Fairy', 'Ghost'];
 	},
 };
