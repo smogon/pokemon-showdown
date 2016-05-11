@@ -534,6 +534,7 @@ class Validator {
 		let tools = this.tools;
 
 		let moveid = toId(move);
+		if (moveid === 'constructor') return true;
 		move = tools.getMove(moveid);
 		template = tools.getTemplate(template);
 
