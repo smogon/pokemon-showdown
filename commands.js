@@ -1206,8 +1206,8 @@ exports.commands = {
 		let name = targetUser.getLastName();
 		let userid = targetUser.getLastId();
 
-		if ((targetUser.locked || Punishments.checkBanned(targetUser.latestIp)) && !target) {
-			let problem = " but was already " + (targetUser.locked ? "locked" : "banned");
+		if (targetUser.locked && !target) {
+			let problem = " but was already locked";
 			return this.privateModCommand("(" + name + " would be locked by " + user.name + problem + ".)");
 		}
 
@@ -1245,7 +1245,7 @@ exports.commands = {
 		if (userid !== toId(this.inputUsername)) this.add('|unlink|hide|' + toId(this.inputUsername));
 
 		this.globalModlog("LOCK", targetUser, " by " + user.name + (target ? ": " + target : ""));
-		Punishments.lock(targetUser, false, userid);
+		Punishments.lock(targetUser);
 		return true;
 	},
 	lockhelp: ["/lock OR /l [username], [reason] - Locks the user from talking in all chats. Requires: % @ & ~"],
@@ -1263,8 +1263,7 @@ exports.commands = {
 		let unlocked = Punishments.unlock(target);
 
 		if (unlocked) {
-			let names = Object.keys(unlocked);
-			this.addModCommand(names.join(", ") + " " + ((names.length > 1) ? "were" : "was") +
+			this.addModCommand(unlocked.join(", ") + " " + ((unlocked.length > 1) ? "were" : "was") +
 				" unlocked by " + user.name + "." + reason);
 			if (!reason) this.globalModlog("UNLOCK", target, " by " + user.name);
 			if (targetUser) targetUser.popup("" + user.name + " has unlocked you.");
@@ -1333,7 +1332,7 @@ exports.commands = {
 
 		this.add('|unlink|hide|' + userid);
 		if (userid !== toId(this.inputUsername)) this.add('|unlink|hide|' + toId(this.inputUsername));
-		Punishments.ban(targetUser, false, userid);
+		Punishments.ban(targetUser);
 		this.globalModlog("BAN", targetUser, " by " + user.name + (target ? ": " + target : ""));
 		return true;
 	},
@@ -1437,7 +1436,7 @@ exports.commands = {
 		if (!this.can('rangeban')) return false;
 
 		let isIp = (target.slice(-1) === '*');
-		let range = (isIp ? target : Users.shortenHost(target));
+		let range = (isIp ? target : Punishments.shortenHost(target));
 		if (Punishments.lockedRanges[range]) return this.errorReply("The range " + range + " has already been temporarily locked.");
 
 		Punishments.lockRange(range, isIp);
@@ -1449,7 +1448,7 @@ exports.commands = {
 		if (!target) return this.errorReply("Please specify a range to unlock.");
 		if (!this.can('rangeban')) return false;
 
-		let range = (target.slice(-1) === '*' ? target : Users.shortenHost(target));
+		let range = (target.slice(-1) === '*' ? target : Punishments.shortenHost(target));
 		if (!Punishments.lockedRanges[range]) return this.errorReply("The range " + range + " is not locked.");
 
 		Punishments.unlockRange(range);
@@ -1757,7 +1756,7 @@ exports.commands = {
 		this.addModCommand("" + targetUser.name + " was namelocked by " + user.name + "." + (reason ? " (" + reason + ")" : ""));
 		this.globalModlog("NAMELOCK", targetUser, " by " + user.name + (reason ? ": " + reason : ""));
 		Rooms.global.cancelSearch(targetUser);
-		Punishments.lockName(targetUser);
+		Punishments.namelock(targetUser);
 		targetUser.popup("|modal|" + user.name + " has locked your name and you can't change names anymore" + (reason ? ": " + reason : "."));
 		return true;
 	},
