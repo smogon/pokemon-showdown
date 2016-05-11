@@ -17,21 +17,124 @@ let Punishments = module.exports;
 let fs = require('fs');
 let path = require('path');
 
+const PUNISHMENT_FILE = path.resolve(__dirname, 'config/punishments.tsv');
+
+const RANGELOCK_DURATION = 60 * 60 * 1000; // 1 hour
+const LOCK_DURATION = 37 * 60 * 60 * 1000; // 37 hours
+const BAN_DURATION = 7 * 24 * 60 * 60 * 1000; // 1 week
+
+// a punishment is an array: [punishType, userid, expireTime, reason]
+
+// ips is an ip:punishment Map
+Punishments.ips = new Map();
+
+// userids is a userid:punishment Map
+Punishments.userids = new Map();
+
+// hosts is a hosts:punishment Map
+Punishments.hosts = new Map();
+
 /*********************************************************
- * Locks and bans
+ * Persistence
  *********************************************************/
 
-let bannedIps = Punishments.bannedIps = Object.create(null);
-let bannedUsers = Punishments.bannedUsers = Object.create(null);
-let lockedIps = Punishments.lockedIps = Object.create(null);
-let nameLockedIps = Punishments.nameLockedIps = Object.create(null);
-let lockedUsers = Punishments.lockedUsers = Object.create(null);
-let nameLockedUsers = Punishments.nameLockedUsers = Object.create(null);
-let lockedRanges = Punishments.lockedRanges = Object.create(null);
-let rangeLockedUsers = Punishments.rangeLockedUsers = Object.create(null);
+// punishType is an allcaps string, one of:
+//   'LOCK'
+//   'BAN'
+//   'NAMELOCK'
 
-// load ipbans at our leisure
-let loadBanlist = Punishments.loadBanlist = function () {
+// punishments.tsv is in the format:
+// punishType, userid, ips/usernames, expiration time
+
+Punishments.loadPunishments = function () {
+	fs.readFile(PUNISHMENT_FILE, (err, data) => {
+		if (err) return;
+		data = ('' + data).split("\n");
+		for (let i = 0; i < data.length; i++) {
+			if (!data[i] || data[i] === '\r') continue;
+			let row = data[i].trim().split("\t");
+			if (row[0] === "Punishment") continue;
+			let keys = row[2].split(',').concat(row[1]);
+
+			let punishment = [row[0], row[1], Number(row[3])].concat(row.slice(4));
+			if (Date.now() >= punishment[2]) {
+				continue;
+			}
+			for (let j = 0; j < keys.length; j++) {
+				let key = keys[i];
+				if (key.includes('.')) {
+					Punishments.ips.set(key, punishment);
+				} else {
+					Punishments.userids.set(key, punishment);
+				}
+			}
+		}
+	});
+};
+
+Punishments.savePunishments = function () {
+	let saveTable = new Map();
+	Punishments.ips.forEach((punishment, ip) => {
+		if (Date.now() >= punishment[2]) {
+			Punishments.ips.delete(ip);
+			return;
+		}
+		let id = punishment[1];
+		if (id.charAt(0) === '#') return;
+		let entry = saveTable.get(id);
+
+		if (entry) {
+			entry.keys.push(ip);
+			return;
+		}
+
+		entry = {
+			keys: [ip],
+			punishType: punishment[0],
+			rest: punishment.slice(2),
+		};
+		saveTable.set(id, entry);
+	});
+	Punishments.userids.forEach((punishment, userid) => {
+		if (Date.now() >= punishment[2]) {
+			Punishments.userids.delete(userid);
+			return;
+		}
+		let id = punishment[1];
+		let entry = saveTable.get(id);
+
+		if (!entry) {
+			entry = {
+				keys: [],
+				punishType: punishment[0],
+				rest: punishment.slice(2),
+			};
+			saveTable.set(id, entry);
+		}
+
+		if (userid !== id) entry.keys.push(userid);
+	});
+
+	let buf = 'Punishment\tUser ID\tIPs and alts\tExpires\r\n';
+	saveTable.forEach((entry, id) => {
+		buf += Punishments.renderEntry(entry, id);
+	});
+
+	fs.writeFile(PUNISHMENT_FILE, buf, () => {});
+};
+
+Punishments.appendPunishment = function (entry, id) {
+	if (id.charAt(0) === '#') return;
+	let buf = Punishments.renderEntry(entry, id);
+	fs.appendFile(PUNISHMENT_FILE, buf, () => {});
+};
+
+Punishments.renderEntry = function (entry, id) {
+	let row = [entry.punishType, id, entry.keys.join(',')].concat(entry.rest);
+	return row.join('\t') + '\r\n';
+};
+
+Punishments.loadBanlist = function () {
 	return new Promise(function (resolve, reject) {
 		fs.readFile(path.resolve(__dirname, 'config/ipbans.txt'), (err, data) => {
 			if (err) return reject(err);
@@ -42,8 +145,8 @@ let loadBanlist = Punishments.loadBanlist = function () {
 				if (!data[i]) continue;
 				if (data[i].includes('/')) {
 					rangebans.push(data[i]);
-				} else if (!bannedIps[data[i]]) {
-					bannedIps[data[i]] = '#ipban';
+				} else if (!Punishments.ips.has(data[i])) {
+					Punishments.ips.set(data[i], ['BAN', '#ipban', Infinity]);
 				}
 			}
 			Punishments.checkRangeBanned = Cidr.checker(rangebans);
@@ -52,218 +155,360 @@ let loadBanlist = Punishments.loadBanlist = function () {
 	});
 };
 
-setImmediate(loadBanlist);
+setImmediate(() => {
+	Punishments.loadPunishments();
+	Punishments.loadBanlist();
+});
+
+/*********************************************************
+ * Adding and removing
+ *********************************************************/
+
+Punishments.punish = function (user, punishment, noRecurse) {
+	let keys = noRecurse;
+	if (!keys) {
+		keys = new Set();
+	}
+	if (!noRecurse) {
+		Users.users.forEach(curUser => {
+			if (user === curUser || curUser.confirmed) return;
+			for (let myIp in curUser.ips) {
+				if (myIp in user.ips) {
+					this.punish(curUser, punishment, keys);
+					return;
+				}
+			}
+		});
+		Punishments.userids.set(user.userid, punishment);
+	}
+
+	for (let ip in user.ips) {
+		Punishments.ips.set(ip, punishment);
+		keys.add(ip);
+	}
+	if (user.autoconfirmed) {
+		Punishments.userids.set(user.autoconfirmed, punishment);
+		keys.add(user.autoconfirmed);
+	}
+	if (user.confirmed) {
+		Punishments.userids.set(user.confirmed, punishment);
+		keys.add(user.confirmed);
+	}
+	if (!noRecurse) {
+		keys.delete(punishment[1]);
+		Punishments.appendPunishment({
+			keys: Array.from(keys),
+			punishType: punishment[0],
+			rest: punishment.slice(2),
+		}, punishment[1]);
+	}
+};
+Punishments.unpunish = function (id, punishType, noRecurse) {
+	id = toId(id);
+	let punishment = Punishments.userids.get(id);
+	if (punishment) {
+		id = punishment[1];
+	}
+	// in theory we can stop here if punishment doesn't exist, but
+	// in case of inconsistent state, we'll try anyway
+
+	let success = false;
+	Punishments.ips.forEach((punishment, key) => {
+		if (punishment[1] === id && punishment[0] === punishType) {
+			Punishments.ips.delete(key);
+			success = id;
+		}
+	});
+	Punishments.userids.forEach((punishment, key) => {
+		if (punishment[1] === id && punishment[0] === punishType) {
+			Punishments.userids.delete(key);
+			success = id;
+		}
+	});
+	if (success) {
+		Punishments.savePunishments();
+	}
+	return success;
+};
+
+Punishments.ban = function (user, expireTime, reason) {
+	let id;
+	if (typeof user === 'string') {
+		id = toId(user);
+		user = Users.get(user);
+	} else {
+		id = user.getLastId();
+	}
+
+	if (!expireTime) expireTime = Date.now() + BAN_DURATION;
+	let punishment = ['BAN', id, expireTime].concat(Array.prototype.slice.call(arguments, 3));
+	Punishments.punish(user, punishment);
+
+	let affected = user.getAltUsers(false, true);
+	for (let curUser of affected) {
+		curUser.locked = id;
+		curUser.disconnectAll();
+	}
+};
+Punishments.unban = function (name) {
+	let success = Punishments.unpunish(name, 'BAN');
+	return success;
+};
+Punishments.lock = function (user, expireTime, reason) {
+	let id;
+	if (typeof user === 'string') {
+		id = toId(user);
+		user = Users.get(user);
+	} else {
+		id = user.getLastId();
+	}
+
+	if (!expireTime) expireTime = Date.now() + LOCK_DURATION;
+	let punishment = ['LOCK', id, expireTime].concat(Array.prototype.slice.call(arguments, 3));
+	Punishments.punish(user, punishment);
+
+	let affected = user.getAltUsers(false, true);
+	for (let curUser of affected) {
+		curUser.locked = id;
+		curUser.updateIdentity();
+	}
+};
+Punishments.unlock = function (name) {
+	let user = Users(name);
+	let id = toId(name);
+	let success = [];
+	if (user && user.locked) {
+		id = user.locked;
+		user.locked = false;
+		user.updateIdentity();
+		success.push(user.getLastName());
+		Users.users.forEach(curUser => {
+			if (curUser.locked === id) {
+				curUser.locked = false;
+				curUser.updateIdentity();
+				success.push(curUser.getLastName());
+			}
+		});
+	}
+	if (Punishments.unpunish(name, 'LOCK')) {
+		if (!success.length) success.push(name);
+	}
+	if (!success.length) return false;
+	if (!success.some(v => toId(v) === id)) {
+		success.push(id);
+	}
+	return success;
+};
+Punishments.namelock = function (user, expireTime, reason) {
+	let id;
+	if (typeof user === 'string') {
+		id = toId(user);
+		user = Users.get(user);
+	} else {
+		id = user.getLastId();
+	}
+
+	if (!expireTime) expireTime = Date.now() + LOCK_DURATION;
+	let punishment = ['NAMELOCK', id, expireTime].concat(Array.prototype.slice.call(arguments, 3));
+	Punishments.punish(user, punishment);
+
+	let affected = user.getAltUsers(false, true);
+	for (let curUser of affected) {
+		curUser.locked = id;
+		curUser.namelocked = id;
+		curUser.resetName();
+		curUser.updateIdentity();
+	}
+};
+Punishments.unnamelock = function (name) {
+	let user = Users(name);
+	let id = toId(name);
+	let success = [];
+	if (user && user.locked) {
+		id = user.locked;
+		user.locked = false;
+		user.updateIdentity();
+		success.push(user.getLastName());
+		Users.users.forEach(curUser => {
+			if (curUser.locked === id) {
+				curUser.locked = false;
+				curUser.updateIdentity();
+				success.push(curUser.getLastName());
+			}
+		});
+	}
+	if (Punishments.unpunish(name, 'NAMELOCK')) {
+		if (!success.length) success.push(name);
+	}
+	if (!success.length) return false;
+	if (!success.some(v => toId(v) === id)) {
+		success.push(id);
+	}
+	return success;
+};
+
+Punishments.lockRange = function (range, isIp) {
+	let punishment = ['LOCK', '#rangelock', RANGELOCK_DURATION];
+	if (isIp) {
+		Punishments.ips.set(range, punishment);
+	} else {
+		Punishments.hosts.set(range, punishment);
+	}
+};
+
+/*********************************************************
+ * Checking
+ *********************************************************/
 
 /**
- * Searches for IP in table.
+ * Searches for IP in Punishments.ips
  *
  * For instance, if IP is '1.2.3.4', will return the value corresponding
  * to any of the keys in table match '1.2.3.4', '1.2.3.*', '1.2.*', or '1.*'
  */
-Punishments.ipSearch = function (ip, table) {
-	if (table[ip]) return table[ip];
+Punishments.ipSearch = function (ip) {
+	let punishment = Punishments.ips.get(ip);
+	if (punishment) {
+		if (Date.now() < punishment[2]) return punishment;
+		Punishments.ips.delete(ip);
+	}
 	let dotIndex = ip.lastIndexOf('.');
 	for (let i = 0; i < 4 && dotIndex > 0; i++) {
 		ip = ip.substr(0, dotIndex);
-		if (table[ip + '.*']) return table[ip + '.*'];
+		punishment = Punishments.ips.get(ip + '.*');
+		if (punishment) {
+			if (Date.now() < punishment[2]) return punishment;
+			Punishments.ips.delete(ip + '.*');
+		}
 		dotIndex = ip.lastIndexOf('.');
 	}
 	return false;
 };
-Punishments.checkBanned = function (ip) {
-	return this.ipSearch(ip, bannedIps);
-};
-Punishments.checkLocked = function (ip) {
-	return this.ipSearch(ip, lockedIps);
-};
-Punishments.checkNameLocked = function (ip) {
-	return this.ipSearch(ip, nameLockedIps);
+
+Punishments.shortenHost = function (host) {
+	if (host.slice(-7) === '-nohost') return host;
+	let dotLoc = host.lastIndexOf('.');
+	let tld = host.substr(dotLoc);
+	if (tld === '.uk' || tld === '.au' || tld === '.br') dotLoc = host.lastIndexOf('.', dotLoc - 1);
+	dotLoc = host.lastIndexOf('.', dotLoc - 1);
+	return host.substr(dotLoc + 1);
 };
 
-// Defined in commands.js
+// Defined in Punishments.loadBanlist
 Punishments.checkRangeBanned = function () {};
 
-Punishments.ban = function (user, noRecurse, name) {
-	if (!name) name = user.userid;
+Punishments.checkName = function (user, registered) {
+	let userid = user.userid;
+	let punishment = Punishments.userids.get(userid);
+	if (!punishment) return;
 
-	if (!noRecurse) {
-		Users.users.forEach(thisUser => {
-			if (user === thisUser || thisUser.confirmed) return;
-			for (let myIp in thisUser.ips) {
-				if (myIp in user.ips) {
-					this.ban(thisUser, true, name);
-					return;
+	let id = punishment[0];
+	let punishUserid = punishment[1];
+	let expireTime = punishment[2];
+
+	if (Date.now() >= expireTime) {
+		Punishments.userids.delete(user.userid);
+		return;
+	}
+
+	if (registered && id === 'BAN') {
+		let bannedUnder = '';
+		if (punishUserid !== userid) bannedUnder = ' because of rule-breaking by your alt account ' + punishUserid;
+		user.send("|popup|Your username (" + user.name + ") is banned" + bannedUnder + "'. Your ban will expire in a few days." + (Config.appealurl ? " Or you can appeal at:\n" + Config.appealurl : ""));
+		Punishments.ban(user);
+		return;
+	}
+	if (id === 'NAMELOCK') {
+		let bannedUnder = '';
+		if (punishUserid !== userid) bannedUnder = ' because of rule-breaking by your alt account ' + punishUserid;
+		user.send("|popup|Your are namelocked" + bannedUnder + "'. Your namelock will expire in a few days.");
+		Punishments.namelock(user);
+	} else {
+		let bannedUnder = '';
+		if (punishUserid !== userid) bannedUnder = ' because of rule-breaking by your alt account ' + punishUserid;
+		user.send("|popup|Your username (" + user.name + ") is locked" + bannedUnder + "'. Your lock will expire in a few days." + (Config.appealurl ? " Or you can appeal at:\n" + Config.appealurl : ""));
+		Punishments.lock(user);
+	}
+	// if (user.group === Config.groupsranking[0]) {
+	// 	let range = user.locked || Punishments.shortenHost(user.latestHost);
+	// 	if (Punishments.lockedRanges[range]) {
+	// 		user.send("|popup|You are in a range that has been temporarily locked from talking in chats and PMing regular users.");
+	// 		Punishments.rangeLockedUsers[range][user.userid] = 1;
+	// 		user.locked = '#range';
+	// 	}
+	// } else if (user.locked && (user.locked === '#range' || Punishments.lockedRanges[user.locked])) {
+	// 	user.locked = false;
+	// }
+};
+
+Punishments.checkIp = function (user, connection) {
+	let ip = connection.ip;
+	let punishment = Punishments.ipSearch(ip);
+
+	if (punishment) {
+		user.locked = punishment[1];
+		if (punishment[0] === 'NAMELOCK') {
+			user.namelocked = punishment[1];
+		}
+	}
+
+	Dnsbl.reverse(ip, (err, hosts) => {
+		if (hosts && hosts[0]) {
+			user.latestHost = hosts[0];
+			if (Config.hostfilter) Config.hostfilter(hosts[0], user, connection);
+			if (user.named && !user.locked && user.group === Config.groupsranking[0]) {
+				let shortHost = Punishments.shortenHost(hosts[0]);
+				let punishment = Punishments.hosts.get(shortHost);
+				if (punishment) {
+					user.send("|popup|You are locked because someone on your ISP has spammed, and your ISP does not give us any way to tell you apart from them.");
+					Punishments.rangeLockedUsers[shortHost][user.userid] = 1;
+					user.locked = '#range';
+					user.updateIdentity();
 				}
 			}
-		});
-		lockedUsers[name] = name;
-	}
-
-	for (let ip in user.ips) {
-		bannedIps[ip] = name;
-	}
-	if (user.autoconfirmed) bannedUsers[user.autoconfirmed] = name;
-	if (user.registered) {
-		bannedUsers[user.userid] = name;
-		user.autoconfirmed = '';
-	}
-	user.locked = name; // in case of merging into a recently banned account
-	lockedUsers[user.userid] = name;
-	user.disconnectAll();
-};
-Punishments.unban = function (name) {
-	let success;
-	let userid = toId(name);
-	for (let ip in bannedIps) {
-		if (bannedIps[ip] === userid) {
-			delete bannedIps[ip];
-			success = true;
-		}
-	}
-	for (let id in bannedUsers) {
-		if (bannedUsers[id] === userid || id === userid) {
-			delete bannedUsers[id];
-			success = true;
-		}
-	}
-	if (success) return name;
-	return false;
-};
-Punishments.lock = function (user, noRecurse, name) {
-	if (!name) name = user.userid;
-
-	if (!noRecurse) {
-		Users.users.forEach(thisUser => {
-			if (user === thisUser || thisUser.confirmed) return;
-			for (let myIp in thisUser.ips) {
-				if (myIp in user.ips) {
-					this.lock(thisUser, true, name);
-					return;
-				}
-			}
-		});
-		lockedUsers[name] = name;
-	}
-
-	for (let ip in user.ips) {
-		lockedIps[ip] = name;
-	}
-	if (user.autoconfirmed) lockedUsers[user.autoconfirmed] = name;
-	lockedUsers[user.userid] = name;
-	user.locked = name;
-	user.autoconfirmed = '';
-	user.updateIdentity();
-};
-Punishments.unlock = function (name, unlocked, noRecurse) {
-	let userid = toId(name);
-	let user = Users(userid);
-	let userips = null;
-	if (user) {
-		if (user.userid === userid) name = user.name;
-		if (user.locked) {
-			user.locked = false;
-			user.updateIdentity();
-			unlocked = unlocked || {};
-			unlocked[name] = 1;
-		}
-		if (!noRecurse) userips = user.ips;
-	}
-	for (let ip in lockedIps) {
-		if (userips && (ip in user.ips) && lockedIps[ip] !== userid) {
-			unlocked = this.unlock(lockedIps[ip], unlocked, true); // avoid infinite recursion
-		}
-		if (lockedIps[ip] === userid) {
-			delete lockedIps[ip];
-			unlocked = unlocked || {};
-			unlocked[name] = 1;
-		}
-	}
-	for (let id in lockedUsers) {
-		if (lockedUsers[id] === userid || id === userid) {
-			delete lockedUsers[id];
-			unlocked = unlocked || {};
-			unlocked[name] = 1;
-		}
-	}
-	return unlocked;
-};
-Punishments.lockRange = function (range, ip) {
-	if (lockedRanges[range]) return;
-	rangeLockedUsers[range] = {};
-	if (ip) {
-		lockedIps[range] = range;
-		ip = range.slice(0, -1);
-	}
-	Users.users.forEach(curUser => {
-		if (!curUser.named || curUser.locked || curUser.confirmed) return;
-		if (ip) {
-			if (!curUser.latestIp.startsWith(ip)) return;
 		} else {
-			if (range !== Users.shortenHost(curUser.latestHost)) return;
+			if (Config.hostfilter) Config.hostfilter('', user, connection);
 		}
-		rangeLockedUsers[range][curUser.userid] = 1;
-		curUser.locked = '#range';
-		curUser.send("|popup|You are locked because someone on your ISP has spammed, and your ISP does not give us any way to tell you apart from them.");
-		curUser.updateIdentity();
 	});
 
-	let time = 90 * 60 * 1000;
-	lockedRanges[range] = setTimeout(() => {
-		this.unlockRange(range);
-	}, time);
-};
-Punishments.unlockRange = function (range) {
-	if (!lockedRanges[range]) return;
-	clearTimeout(lockedRanges[range]);
-	for (let i in rangeLockedUsers[range]) {
-		let user = Users(i);
-		if (user) {
-			user.locked = false;
-			user.updateIdentity();
+	Dnsbl.query(connection.ip, isBlocked => {
+		if (isBlocked) {
+			if (connection.user && !connection.user.locked && !connection.user.autoconfirmed) {
+				connection.user.semilocked = '#dnsbl';
+			}
 		}
-	}
-	if (lockedIps[range]) delete lockedIps[range];
-	delete lockedRanges[range];
-	delete rangeLockedUsers[range];
+	});
 };
-Punishments.lockName = function (user) {
-	let userid = user.userid;
-	for (let ip in user.ips) {
-		nameLockedIps[ip] = userid;
-	}
-	if (user.autoconfirmed) nameLockedUsers[user.autoconfirmed] = userid;
-	nameLockedUsers[user.userid] = userid;
-	user.namelocked = userid;
-	user.forceRename('Guest ' + user.guestNum, false);
-	user.named = true;
-	user.updateIdentity();
 
-	return true;
-};
-Punishments.unnamelock = function (name) {
-	let userid = toId(name);
-	let user = Users(userid);
-	let namelockedId = toId(user.namelocked);
-	let unnamelocked = '';
-	if (user) {
-		if (user.userid === userid) name = user.name;
-		if (user.namelocked) {
-			user.namelocked = false;
-			user.updateIdentity();
-			unnamelocked = name;
-		}
+// Connection flood table. Separate table from IP bans.
+let cfloods = new Set();
+
+/**
+ * IP bans need to be checked separately since we don't even want to
+ * make a User object if an IP is banned.
+ */
+Punishments.checkIpBanned = function (connection) {
+	let ip = connection.ip;
+	if (cfloods.has(ip) || (Monitor.countConnection(ip) && cfloods.add(ip))) {
+		connection.send("|popup||modal|PS is under heavy load and cannot accommodate your connection right now.");
+		return '#cflood';
 	}
-	for (let ip in nameLockedIps) {
-		if (ip in user.ips) {
-			delete nameLockedIps[ip];
-		}
+
+	let banned = false;
+	let punishment = Punishments.ipSearch(ip);
+	if (punishment && punishment[0] === 'BAN') {
+		banned = punishment[1];
+	} else if (Punishments.checkRangeBanned(ip)) {
+		banned = '#ipban';
 	}
-	// Delete from name locked users the original locked name, found in name.namelocked
-	for (let id in nameLockedUsers) {
-		if (nameLockedUsers[id] === namelockedId || id === namelockedId) {
-			delete nameLockedUsers[id];
-			unnamelocked = id;
-		}
+	if (!banned) return false;
+
+	if (banned === '#ipban') {
+		connection.send("|popup||modal|Your IP (" + ip + ") is not allowed to connect to PS, because it has been used to spam, hack, or otherwise attack our server.||Make sure you are not using any proxies to connect to PS.");
+	} else {
+		connection.send("|popup||modal|Your IP (" + ip + ") was banned while using the username '" + banned + "'. Your ban will expire in a few days.||" + (Config.appealurl ? " Or you can appeal at:\n" + Config.appealurl : ""));
 	}
-	return unnamelocked;
+	if (!Config.quietconsole) console.log('CONNECT BLOCKED - IP BANNED: ' + ip + ' (' + banned + ')');
+
+	return banned;
 };
