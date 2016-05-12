@@ -97,10 +97,12 @@ class QuestionGiveaway extends Giveaway {
 		if (!this.answered[user.userid]) this.answered[user.userid] = 0;
 		if (this.answered[user.userid] >= 3) return user.sendTo(this.room, "You have already guessed three times. You cannot guess anymore in this giveaway.");
 
-		if (this.answers.indexOf(toId(guess)) > -1) {
-			this.winner = user;
-			this.clearTimer();
-			return this.end();
+		for (let i = 0; i < this.answers.length; i++) {
+			if (toId(this.answers[i]) === toId(guess)) {
+				this.winner = user;
+				this.clearTimer();
+				return this.end();
+			}
 		}
 
 		this.joined[user.latestIp] = user.userid;
