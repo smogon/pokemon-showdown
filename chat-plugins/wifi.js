@@ -246,9 +246,8 @@ class LotteryGiveaway extends Giveaway {
 			this.room.send("The giveaway was forcibly ended.");
 		} else {
 			this.phase = 'ended';
-			this.send('<p style="text-align:center;font-size:12pt;font-weight:bold;">Lottery Draw</p><p style="text-align:center;">' + Object.keys(this.joined).length + " users joined " + Tools.escapeHTML(this.giver.name) + "'s giveaway for: <b>" + Tools.escapeHTML(this.prize) + "</b><br/>" +
-				"Our lucky winner" + (this.winners.length > 1 ? "s" : "") + ": <b>" + this.winners.reduce((prev, cur, index, array) => (index === array.length - 1 ? cur.name : cur.name + ', '), '') + "!</b> Congratulations!");
-
+			this.send('<p style="text-align:center;font-size:12pt;font-weight:bold;">Lottery Draw</p><p style="text-align:center;">' + Object.keys(this.joined).length + " users joined " + Tools.escapeHTML(this.giver.name) + "'s giveaway for: <b>" + this.prize + "</b><br/>" +
+				"Our lucky winner" + (this.winners.length > 1 ? "s" : "") + ": <b>" + this.winners.reduce((prev, cur, index, array) => (index === array.length - 1 ? cur.name : cur.name + ', '), '') + "!</b> Congratulations!</p>");
 			for (let i = 0; i < this.winners.length; i++) {
 				if (this.winners[i].connected) this.winners[i].popup("You have won the lottery giveaway! PM **" + this.giver.name + "** to claim your prize!");
 			}
