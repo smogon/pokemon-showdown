@@ -1346,7 +1346,7 @@ exports.commands = {
 		let name = targetUser.getLastName();
 		let userid = targetUser.getLastId();
 
-		if (Punishments.checkBanned(targetUser.latestIp) && !target && !targetUser.connected) {
+		if (Punishments.getPunishType(userid) === 'BANNED' && !target && !targetUser.connected) {
 			let problem = " but was already banned";
 			return this.privateModCommand("(" + name + " would be banned by " + user.name + problem + ".)");
 		}
@@ -1857,7 +1857,7 @@ exports.commands = {
 			return false;
 		}
 
-		if (targetUser.locked || Punishments.checkBanned(targetUser.latestIp)) {
+		if (targetUser.locked) {
 			hidetype = 'hide|';
 		} else if ((room.bannedUsers[toId(name)] && room.bannedIps[targetUser.latestIp]) || user.can('rangeban')) {
 			hidetype = 'roomhide|';

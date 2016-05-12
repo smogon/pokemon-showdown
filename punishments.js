@@ -205,7 +205,7 @@ Punishments.punish = function (user, punishment, noRecurse) {
 };
 Punishments.unpunish = function (id, punishType, noRecurse) {
 	id = toId(id);
-	let punishment = Punishments.userids.get(id);
+	let punishment = Punishments.useridSearch(id);
 	if (punishment) {
 		id = punishment[1];
 	}
@@ -360,6 +360,16 @@ Punishments.lockRange = function (range, isIp) {
  * Checking
  *********************************************************/
 
+Punishments.getPunishType = function (name) {
+	let punishment = Punishments.useridSearch(toId(name));
+	if (punishment) return punishment[0];
+	let user = Users.get(name);
+	if (!user) return;
+	punishment = Punishments.ipSearch(user.latestIp);
+	if (punishment) return punishment[0];
+	return '';
+};
+
 /**
  * Searches for IP in Punishments.ips
  *
@@ -385,6 +395,15 @@ Punishments.ipSearch = function (ip) {
 	return false;
 };
 
+Punishments.useridSearch = function (userid) {
+	let punishment = Punishments.userids.get(userid);
+	if (punishment) {
+		if (Date.now() < punishment[2]) return punishment;
+		Punishments.userids.delete(userid);
+	}
+	return false;
+};
+
 Punishments.shortenHost = function (host) {
 	if (host.slice(-7) === '-nohost') return host;
 	let dotLoc = host.lastIndexOf('.');
@@ -399,17 +418,11 @@ Punishments.checkRangeBanned = function () {};
 
 Punishments.checkName = function (user, registered) {
 	let userid = user.userid;
-	let punishment = Punishments.userids.get(userid);
+	let punishment = Punishments.useridSearch(userid);
 	if (!punishment) return;
 
 	let id = punishment[0];
 	let punishUserid = punishment[1];
-	let expireTime = punishment[2];
-
-	if (Date.now() >= expireTime) {
-		Punishments.userids.delete(user.userid);
-		return;
-	}
 
 	if (registered && id === 'BAN') {
 		let bannedUnder = '';
