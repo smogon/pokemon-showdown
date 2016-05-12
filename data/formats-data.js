@@ -5208,13 +5208,19 @@ exports.BattleFormatsData = {
 	vivillon: {
 		randomBattleMoves: ["sleeppowder", "quiverdance", "hurricane", "bugbuzz", "substitute"],
 		randomDoubleBattleMoves: ["sleeppowder", "quiverdance", "hurricane", "bugbuzz", "roost", "protect"],
+		tier: "NU",
+	},
+	vivillonfancy: {
 		eventPokemon: [
-			// Poké Ball pattern
-			{"generation": 6, "level": 12, "gender": "M", "isHidden": false, "moves":["stunspore", "gust", "lightscreen", "strugglebug"], "pokeball": "cherishball"},
-			// Fancy pattern
 			{"generation": 6, "level": 12, "isHidden": false, "moves":["gust", "lightscreen", "strugglebug", "holdhands"], "pokeball": "cherishball"},
 		],
-		tier: "NU",
+		eventOnly: true,
+	},
+	vivillonpokeball: {
+		eventPokemon: [
+			{"generation": 6, "level": 12, "isHidden": false, "moves":["stunspore", "gust", "lightscreen", "strugglebug"]},
+		],
+		eventOnly: true,
 	},
 	litleo: {
 		randomBattleMoves: ["hypervoice", "fireblast", "willowisp", "bulldoze", "yawn"],
