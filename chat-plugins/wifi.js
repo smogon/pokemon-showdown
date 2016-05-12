@@ -246,7 +246,7 @@ class LotteryGiveaway extends Giveaway {
 			this.room.send("The giveaway was forcibly ended.");
 		} else {
 			this.phase = 'ended';
-			this.send("<div class='broadcast-blue'><font size='2'><b>Lottery Draw: </b></font>" + Object.keys(this.joined).length + " users joined " + Tools.escapeHTML(this.giver.name) + "'s giveaway.<br/>" +
+			this.send('<p style="text-align:center;font-size:12pt;font-weight:bold;">Lottery Draw</p><p style="text-align:center;">' + Object.keys(this.joined).length + " users joined " + Tools.escapeHTML(this.giver.name) + "'s giveaway for: <b>" + this.prize + "</b><br/>" +
 				"Our lucky winner" + (this.winners.length > 1 ? "s" : "") + ": <b>" + this.winners.reduce((prev, cur, index, array) => (index === array.length - 1 ? cur.name : cur.name + ', '), '') + "!</b> Congratulations!");
 
 			for (let i = 0; i < this.winners.length; i++) {
