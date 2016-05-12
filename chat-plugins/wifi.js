@@ -261,13 +261,14 @@ let commands = {
 	quiz: 'question',
 	qg: 'question',
 	question: function (target, room, user) {
-		if (room.id !== 'wifi' || !this.can('warn', null, room) || !target) return false;
+		if (room.id !== 'wifi' || !target) return false;
 		if (room.giveaway) return this.errorReply("There is already a giveaway going on!");
 
 		let params = target.split(target.includes('|') ? '|' : ',').map(param => param.trim());
 		if (params.length < 4) return this.errorReply("Invalid arguments specified - /question giver, prize, question, answer(s)");
 		let targetUser = Users(params[0]);
 		if (!targetUser || !targetUser.connected) return this.errorReply("User '" + params[0] + "' is not online.");
+		if (!this.can('warn', null, room) && !(this.can('broadcast', null, room) && user === targetUser)) return this.errorReply("Permission denied.");
 		if (!targetUser.autoconfirmed) return this.errorReply("User '" + targetUser.name + "' needs to be autoconfirmed to give something away.");
 
 		room.giveaway = new QuestionGiveaway(user, targetUser, room, params[1], params[2], params.slice(3).join(','));
@@ -315,7 +316,7 @@ let commands = {
 		if (params.length < 2) return this.errorReply("Invalid arguments specified - /lottery giver, prize [, maxwinners]");
 		let targetUser = Users(params[0]);
 		if (!targetUser || !targetUser.connected) return this.errorReply("User '" + params[0] + "' is not online.");
-		if (!this.can('warn', null, room) || !(this.can('broadcast', null, room) && user === targetUser)) return this.errorReply("Permission denied.");
+		if (!this.can('warn', null, room) && !(this.can('broadcast', null, room) && user === targetUser)) return this.errorReply("Permission denied.");
 		if (!targetUser.autoconfirmed) return this.errorReply("User '" + targetUser.name + "' needs to be autoconfirmed to give something away.");
 
 		let numWinners = 1;
