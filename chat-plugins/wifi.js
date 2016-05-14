@@ -247,11 +247,11 @@ class LotteryGiveaway extends Giveaway {
 		} else {
 			this.phase = 'ended';
 			this.send('<p style="text-align:center;font-size:12pt;font-weight:bold;">Lottery Draw</p><p style="text-align:center;">' + Object.keys(this.joined).length + " users joined " + Tools.escapeHTML(this.giver.name) + "'s giveaway for: <b>" + this.prize + "</b><br/>" +
-				"Our lucky winner" + (this.winners.length > 1 ? "s" : "") + ": <b>" + this.winners.reduce((prev, cur, index, array) => (index === array.length - 1 ? cur.name : cur.name + ', '), '') + "!</b> Congratulations!</p>");
+				"Our lucky winner" + (this.winners.length > 1 ? "s" : "") + ": <b>" + Tools.escapeHTML(this.winners.reduce((prev, cur, index, array) => prev + cur.name + (index === array.length - 1 ? "" : ', '), '')) + "!</b> Congratulations!</p>");
 			for (let i = 0; i < this.winners.length; i++) {
 				if (this.winners[i].connected) this.winners[i].popup("You have won the lottery giveaway! PM **" + this.giver.name + "** to claim your prize!");
 			}
-			if (this.giver.connected) this.giver.popup("The following users have won your lottery giveaway:\n" + this.winners.reduce((prev, cur, index, array) => (index === array.length - 1 ? cur.name : cur.name + ', '), ''));
+			if (this.giver.connected) this.giver.popup("The following users have won your lottery giveaway:\n" + Tools.escapeHTML(this.winners.reduce((prev, cur, index, array) => prev + cur.name + (index === array.length - 1 ? "" : ', '), '')));
 		}
 		delete this.room.giveaway;
 	}
