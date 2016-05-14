@@ -157,7 +157,10 @@ Punishments.loadBanlist = function () {
 
 setImmediate(() => {
 	Punishments.loadPunishments();
-	Punishments.loadBanlist();
+	Punishments.loadBanlist().catch(err => {
+		if (err.code === 'ENOENT') return;
+		throw err;
+	});
 });
 
 /*********************************************************
