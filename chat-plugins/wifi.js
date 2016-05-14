@@ -6,6 +6,8 @@
 
 'use strict';
 
+let banned = Object.create(null);
+
 class Giveaway {
 	constructor(host, giver, room, prize) {
 		if (room.gaNumber) {
@@ -22,6 +24,7 @@ class Giveaway {
 		this.excluded = {};
 		this.excluded[host.latestIp] = host.userid;
 		this.excluded[giver.latestIp] = giver.userid;
+		Object.assign(this.excluded, banned);
 
 		this.joined = {};
 	}
@@ -45,10 +48,28 @@ class Giveaway {
 
 	checkJoined(user) {
 		for (let ip in this.joined) {
-			if (user.latestIp === ip) return true;
-			if (this.joined[ip] in user.prevNames) return true;
+			if (user.latestIp === ip) return ip;
+			if (this.joined[ip] in user.prevNames) return this.joined[ip];
 		}
 		return false;
+	}
+
+	banUser(user) {
+		for (let ip in this.joined) {
+			if (user.latestIp === ip || this.joined[ip] in user.prevNames) {
+				this.excluded[ip] = this.joined[ip];
+				if (this.generateReminder) user.sendTo(this.room, '|uhtmlchange|giveaway' + this.room.gaNumber + this.phase + '|<div class="broadcast-blue">' + this.generateReminder() + '</div>');
+				delete this.joined[ip];
+			}
+		}
+	}
+
+	unbanUser(user) {
+		for (let ip in this.excluded) {
+			if (user.latestIp === ip || this.joined[ip] in user.prevNames) {
+				delete this.excluded[ip];
+			}
+		}
 	}
 
 	checkExcluded(user) {
@@ -356,12 +377,50 @@ let commands = {
 		}
 	},
 	// general.
+	ban: function (target, room, user) {
+		if (!target) return false;
+		if (room.id !== 'wifi') return this.errorReply("This command can only be used in the Wi-Fi room.");
+		if (!this.can('warn', null, room)) return false;
+
+		target = this.splitTarget(target);
+		let targetUser = this.targetUser;
+		if (!targetUser) return this.errorReply("User '" + this.targetUsername + "' not found.");
+		if (target.length > 300) {
+			return this.errorReply("The reason is too long. It cannot exceed 300 characters.");
+		}
+		if (targetUser.latestIp in banned || Object.values(banned).indexOf(toId(targetUser)) > -1) return this.errorReply("User '" + this.targetUsername + "' is already banned from entering giveaways.");
+		banned[targetUser.latestIp] = toId(targetUser);
+		if (room.giveaway) room.giveaway.banUser(targetUser);
+		this.addModCommand("" + targetUser.name + " was banned from entering giveaways by " + user.name + "." + (target ? " (" + target + ")" : ""));
+	},
+	unban: function (target, room, user) {
+		if (!target) return false;
+		if (room.id !== 'wifi') return this.errorReply("This command can only be used in the Wi-Fi room.");
+		if (!this.can('warn', null, room)) return false;
+
+		this.splitTarget(target);
+		let targetUser = this.targetUser;
+		if (!targetUser) return this.errorReply("User '" + this.targetUsername + "' not found.");
+		if (!(targetUser.latestIp in banned)) {
+			if (Object.values(banned).indexOf(toId(targetUser)) < 0) return this.errorReply("User '" + this.targetUsername + "' isn't banned from entering giveaways.");
+
+			for (let ip in banned) {
+				if (banned[ip] === toId(targetUser)) delete banned[ip];
+			}
+		}
+		delete banned[targetUser.latestIp];
+		if (room.giveaway) room.giveaway.unbanUser(targetUser);
+		this.addModCommand("" + targetUser.name + " was unbanned from entering giveaways by " + user.name + ".");
+	},
 	stop: 'end',
 	end: function (target, room, user) {
 		if (room.id !== 'wifi') return this.errorReply("This command can only be used in the Wi-Fi room.");
 		if (!room.giveaway) return this.errorReply("There is no giveaway going on at the moment.");
 		if (!this.can('warn', null, room) && user.userid !== room.giveaway.host.userid) return false;
 
+		if (target && target.length > 300) {
+			return this.errorReply("The reason is too long. It cannot exceed 300 characters.");
+		}
 		room.giveaway.end(true);
 		this.privateModCommand("(The giveaway was forcibly ended by " + user.name + (target ? ": " + target : "") + ")");
 	},
@@ -387,11 +446,12 @@ let commands = {
 		case 'staff':
 			if (!this.can('warn', null, room)) return;
 			reply = '<strong>Staff commands:</strong><br />' +
-			        '- question or qg <em>User, Prize, Question, Answer</em> - Start a new question giveaway (Requires: % @ # & ~)<br />' +
-			        '- lottery or lg <em>User, Prize[, Number of Winners]</em> - Starts a lottery giveaway (Requires: % @ # & ~)<br />' +
+			        '- question or qg <em>User | Prize | Question | Answer[,Answer2,Answer3]</em> - Start a new question giveaway (voices can only host for themselves, staff can for all users) (Requires: + % @ # & ~)<br />' +
+			        '- lottery or lg <em>User | Prize[| Number of Winners]</em> - Starts a lottery giveaway (voices can only host for themselves, staff can for all users) (Requires: + % @ # & ~)<br />' +
 			        '- changequestion - Changes the question of a question giveaway (Requires: giveaway host)<br />' +
 			        '- changeanswer - Changes the answer of a question giveaway (Requires: giveaway host)<br />' +
 					'- viewanswer - Shows the answer in a question giveaway (only to giveaway host/giver)<br />' +
+					'- ban - Temporarily bans a user from entering giveaways (Requires: % @ # & ~)<br />' +
 			        '- end - Forcibly ends the current giveaway (Requires: % @ # & ~)<br />';
 			break;
 		case 'game':
