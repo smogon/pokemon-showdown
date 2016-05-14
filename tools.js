@@ -27,6 +27,7 @@ if (!Object.values) {
 // shim Array.prototype.includes
 if (!Array.prototype.includes) {
 	Object.defineProperty(Array.prototype, 'includes', { // eslint-disable-line no-extend-native
+		writable: true, configurable: true,
 		value: function (object) {
 			return this.indexOf(object) !== -1;
 		},
