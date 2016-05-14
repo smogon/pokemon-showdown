@@ -703,7 +703,7 @@ class User {
 			} else if (userType === '5') {
 				Punishments.lock(this, Date.now() + PERMALOCK_CACHE_TIME, "Permalock");
 			} else if (userType === '6') {
-				Punishments.lock(this, Date.now() + PERMALOCK_CACHE_TIME, "Permaban");
+				Punishments.ban(this, Date.now() + PERMALOCK_CACHE_TIME, "Permaban");
 			}
 		}
 		let user = users.get(userid);
