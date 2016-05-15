@@ -398,6 +398,16 @@ exports.Formats = [
 		banlist: ['Eviolite'],
 	},
 	{
+		name: "Anything Goes Extreme Tier Shift",
+		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3540047/\">Extreme Tier Shift</a>"],
+		section: "OM of the Month",
+		column: 2,
+
+		mod: 'extremets',
+		ruleset: ['Pokemon', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
+		banlist: ['Unreleased', 'Illegal'],
+	},
+	{
 		name: "Type Reflector",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3567348/\">Type Reflector</a>"],
 		section: "OM of the Month",
