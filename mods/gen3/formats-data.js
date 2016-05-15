@@ -320,11 +320,11 @@ exports.BattleFormatsData = {
 		tier: "LC",
 	},
 	machoke: {
-		inherit: true,
 		randomBattleMoves: ["dynamicpunch", "payback", "bulkup", "icepunch", "rockslide", "bulletpunch"],
 		tier: "NFE",
 	},
 	machamp: {
+		inherit: true,
 		randomBattleMoves: ["dynamicpunch", "payback", "bulkup", "icepunch", "stoneedge", "bulletpunch"],
 		tier: "BL",
 	},
@@ -439,11 +439,11 @@ exports.BattleFormatsData = {
 		tier: "LC",
 	},
 	haunter: {
-		inherit: true,
 		randomBattleMoves: ["shadowball", "sludgebomb", "hiddenpowerfighting", "thunderbolt", "substitute", "disable", "painsplit", "hypnosis", "gigadrain", "trick"],
 		tier: "NFE",
 	},
 	gengar: {
+		inherit: true,
 		randomBattleMoves: ["shadowball", "sludgebomb", "focusblast", "thunderbolt", "substitute", "disable", "painsplit", "hypnosis", "gigadrain", "trick"],
 		tier: "OU",
 	},
