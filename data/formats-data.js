@@ -202,7 +202,7 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["coil", "gunkshot", "glare", "suckerpunch", "earthquake", "rest"],
 		randomDoubleBattleMoves: ["gunkshot", "seedbomb", "suckerpunch", "aquatail", "earthquake", "rest", "rockslide", "protect"],
 		eventPokemon: [
-			{"generation": 3, "level": 14, "abilities":["shedskin"], "moves":["leer", "wrap", "poisonsting", "bite"]},
+			{"generation": 3, "level": 14, "gender": "F", "nature": "Docile", "ivs": {"hp": 26, "atk": 28, "def": 6, "spa": 14, "spd": 30, "spe": 11}, "abilities":["shedskin"], "moves":["leer", "wrap", "poisonsting", "bite"]},
 			{"generation": 3, "level": 10, "gender": "M", "moves":["wrap", "leer", "poisonsting"]},
 		],
 		tier: "LC",
@@ -346,7 +346,7 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["earthquake", "rockslide", "swordsdance", "rapidspin", "xscissor", "stealthrock", "toxic", "knockoff"],
 		randomDoubleBattleMoves: ["earthquake", "rockslide", "swordsdance", "xscissor", "knockoff", "protect"],
 		eventPokemon: [
-			{"generation": 3, "level": 12, "moves":["scratch", "defensecurl", "sandattack", "poisonsting"]},
+			{"generation": 3, "level": 12, "gender": "M", "nature": "Docile", "ivs": {"hp": 4, "atk": 23, "def": 8, "spa": 31, "spd": 1, "spe": 25}, "moves":["scratch", "defensecurl", "sandattack", "poisonsting"]},
 		],
 		tier: "LC",
 	},
@@ -404,7 +404,7 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["flamethrower", "fireblast", "willowisp", "energyball", "substitute", "toxic", "hypnosis", "painsplit"],
 		randomDoubleBattleMoves: ["heatwave", "fireblast", "willowisp", "energyball", "substitute", "protect"],
 		eventPokemon: [
-			{"generation": 3, "level": 18, "moves":["tailwhip", "roar", "quickattack", "willowisp"]},
+			{"generation": 3, "level": 18, "gender": "F", "nature": "Quirky", "ivs": {"hp": 15, "atk": 6, "def": 3, "spa": 25, "spd": 13, "spe": 22}, "moves":["tailwhip", "roar", "quickattack", "willowisp"]},
 			{"generation": 3, "level": 18, "moves":["charm", "heatwave", "ember", "dig"]},
 		],
 		tier: "LC",
@@ -457,7 +457,7 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["gigadrain", "sludgebomb", "synthesis", "sleeppowder", "stunspore", "toxic", "hiddenpowerfire", "leechseed", "dazzlinggleam", "sunnyday"],
 		randomDoubleBattleMoves: ["gigadrain", "sludgebomb", "sleeppowder", "stunspore", "protect", "hiddenpowerfire", "leechseed", "dazzlinggleam", "sunnyday"],
 		eventPokemon: [
-			{"generation": 3, "level": 26, "moves":["poisonpowder", "stunspore", "sleeppowder", "acid"]},
+			{"generation": 3, "level": 26, "gender": "M", "nature": "Quirky", "ivs": {"hp": 23, "atk": 24, "def": 20, "spa": 21, "spd": 9, "spe": 16}, "moves":["poisonpowder", "stunspore", "sleeppowder", "acid"]},
 			{"generation": 3, "level": 5, "shiny": 1, "moves":["absorb", "leechseed"]},
 		],
 		tier: "LC",
@@ -542,7 +542,7 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["hydropump", "scald", "icebeam", "hiddenpowergrass", "crosschop", "encore", "psychic", "signalbeam"],
 		randomDoubleBattleMoves: ["hydropump", "scald", "icebeam", "hiddenpowergrass", "crosschop", "encore", "psychic", "signalbeam", "surf", "icywind", "protect"],
 		eventPokemon: [
-			{"generation": 3, "level": 27, "abilities":["damp"], "moves":["tailwhip", "confusion", "disable"]},
+			{"generation": 3, "level": 27, "gender": "M", "nature": "Lax", "ivs": {"hp": 31, "atk": 16, "def": 12, "spa": 29, "spd": 31, "spe": 14}, "abilities":["damp"], "moves":["tailwhip", "confusion", "disable", "screech"]},
 			{"generation": 3, "level": 5, "shiny": 1, "moves":["watersport", "scratch", "tailwhip", "mudsport"]},
 		],
 		tier: "LC",
@@ -572,7 +572,7 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["flareblitz", "wildcharge", "hiddenpowergrass", "closecombat", "morningsun", "willowisp", "toxic", "flamethrower"],
 		randomDoubleBattleMoves: ["flareblitz", "wildcharge", "hiddenpowergrass", "closecombat", "willowisp", "snarl", "heatwave", "helpinghand", "protect"],
 		eventPokemon: [
-			{"generation": 3, "level": 32, "abilities":["intimidate"], "moves":["leer", "odorsleuth", "takedown", "flamewheel"]},
+			{"generation": 3, "level": 32, "gender": "F", "nature": "Quiet", "ivs": {"hp": 11, "atk": 24, "def": 28, "spa": 1, "spd": 20, "spe": 2}, "abilities":["intimidate"], "moves":["leer", "odorsleuth", "takedown", "flamewheel"]},
 			{"generation": 3, "level": 10, "gender": "M", "moves":["bite", "roar", "ember"]},
 			{"generation": 3, "level": 28, "moves":["charm", "flamethrower", "bite", "takedown"]},
 		],
@@ -645,7 +645,6 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["dynamicpunch", "bulkup", "icepunch", "rockslide", "bulletpunch", "poweruppunch", "knockoff"],
 		randomDoubleBattleMoves: ["dynamicpunch", "protect", "icepunch", "rockslide", "bulletpunch", "knockoff"],
 		eventPokemon: [
-			{"generation": 3, "level": 38, "abilities":["guts"], "moves":["seismictoss", "foresight", "revenge", "vitalthrow"]},
 			{"generation": 5, "level": 30, "isHidden": false, "moves":["lowsweep", "foresight", "seismictoss", "revenge"], "pokeball": "cherishball"},
 		],
 		tier: "PU",
@@ -653,6 +652,9 @@ exports.BattleFormatsData = {
 	machamp: {
 		randomBattleMoves: ["dynamicpunch", "icepunch", "stoneedge", "bulletpunch", "knockoff", "substitute"],
 		randomDoubleBattleMoves: ["dynamicpunch", "protect", "icepunch", "stoneedge", "rockslide", "bulletpunch", "knockoff", "wideguard"],
+		eventPokemon: [
+			{"generation": 3, "level": 38, "gender": "M", "nature": "Quiet", "ivs": {"hp": 9, "atk": 23, "def": 25, "spa": 20, "spd": 15, "spe": 10}, "abilities":["guts"], "moves":["seismictoss", "foresight", "revenge", "vitalthrow"]},
+		],
 		tier: "UU",
 	},
 	bellsprout: {
@@ -719,7 +721,7 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["scald", "aquatail", "zenheadbutt", "thunderwave", "toxic", "slackoff", "trickroom"],
 		randomDoubleBattleMoves: ["scald", "aquatail", "zenheadbutt", "thunderwave", "slackoff", "trickroom", "protect"],
 		eventPokemon: [
-			{"generation": 3, "level": 31, "abilities":["oblivious"], "moves":["watergun", "confusion", "disable", "headbutt"]},
+			{"generation": 3, "level": 31, "gender": "F", "nature": "Naive", "ivs": {"hp": 17, "atk": 11, "def": 19, "spa": 20, "spd": 5, "spe": 10}, "abilities":["oblivious"], "moves":["watergun", "confusion", "disable", "headbutt"]},
 			{"generation": 3, "level": 10, "gender": "M", "moves":["curse", "yawn", "tackle", "growl"]},
 			{"generation": 5, "level": 30, "isHidden": false, "moves":["confusion", "disable", "headbutt", "waterpulse"], "pokeball": "cherishball"},
 		],
@@ -814,7 +816,7 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["shellsmash", "hydropump", "razorshell", "rockblast", "iciclespear", "rapidspin"],
 		randomDoubleBattleMoves: ["shellsmash", "hydropump", "razorshell", "rockblast", "iciclespear", "protect"],
 		eventPokemon: [
-			{"generation": 3, "level": 24, "abilities":["shellarmor"], "moves":["withdraw", "iciclespear", "supersonic", "aurorabeam"]},
+			{"generation": 3, "level": 24, "gender": "F", "nature": "Brave", "ivs": {"hp": 5, "atk": 19, "def": 18, "spa": 5, "spd": 11, "spe": 13}, "abilities":["shellarmor"], "moves":["withdraw", "iciclespear", "supersonic", "aurorabeam"]},
 			{"generation": 3, "level": 10, "gender": "M", "abilities":["shellarmor"], "moves":["tackle", "withdraw", "iciclespear"]},
 			{"generation": 3, "level": 29, "abilities":["shellarmor"], "moves":["refresh", "takedown", "surf", "aurorabeam"]},
 		],
@@ -837,7 +839,6 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["shadowball", "sludgebomb", "dazzlinggleam", "substitute", "destinybond"],
 		randomDoubleBattleMoves: ["shadowball", "sludgebomb", "hiddenpowerfighting", "thunderbolt", "substitute", "disable", "taunt", "hypnosis", "gigadrain", "trick", "dazzlinggleam", "protect"],
 		eventPokemon: [
-			{"generation": 3, "level": 23, "moves":["spite", "curse", "nightshade", "confuseray"]},
 			{"generation": 5, "level": 30, "moves":["confuseray", "suckerpunch", "shadowpunch", "payback"], "pokeball": "cherishball"},
 		],
 		tier: "NU",
@@ -846,6 +847,7 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["shadowball", "sludgewave", "focusblast", "substitute", "disable", "painsplit", "willowisp"],
 		randomDoubleBattleMoves: ["shadowball", "sludgebomb", "focusblast", "substitute", "disable", "taunt", "hypnosis", "willowisp", "dazzlinggleam", "protect"],
 		eventPokemon: [
+			{"generation": 3, "level": 23, "gender": "F", "nature": "Hardy", "ivs": {"hp": 19, "atk": 14, "def": 0, "spa": 14, "spd": 17, "spe": 27}, "moves":["spite", "curse", "nightshade", "confuseray"]},
 			{"generation": 6, "level": 25, "nature": "Timid", "moves":["psychic", "confuseray", "suckerpunch", "shadowpunch"], "pokeball": "cherishball"},
 			{"generation": 6, "level": 25, "moves":["nightshade", "confuseray", "suckerpunch", "shadowpunch"], "pokeball": "cherishball"},
 			{"generation": 6, "level": 50, "moves":["shadowball", "sludgebomb", "willowisp", "destinybond"], "pokeball": "cherishball"},
@@ -1107,7 +1109,7 @@ exports.BattleFormatsData = {
 		randomDoubleBattleMoves: ["scald", "thunderbolt", "icebeam", "protect", "recover", "dazzlinggleam", "hydropump"],
 		eventPokemon: [
 			{"generation": 3, "level": 50, "moves":["minimize", "lightscreen", "cosmicpower", "hydropump"]},
-			{"generation": 3, "level": 18, "abilities":["illuminate"], "moves":["tackle", "watergun", "rapidspin", "recover"]},
+			{"generation": 3, "level": 18, "nature": "Timid", "ivs": {"hp": 10, "atk": 3, "def": 22, "spa": 24, "spd": 3, "spe": 18}, "abilities":["illuminate"], "moves":["harden", "watergun", "rapidspin", "recover"]},
 		],
 		tier: "LC",
 	},
@@ -1246,9 +1248,9 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["rockclimb", "earthquake", "zenheadbutt", "rockslide", "doubleedge"],
 		randomDoubleBattleMoves: ["return", "earthquake", "zenheadbutt", "rockslide", "stoneedge", "protect", "doubleedge"],
 		eventPokemon: [
-			{"generation": 3, "level": 25, "gender": "M", "abilities":["intimidate"], "moves":["rage", "hornattack", "scaryface", "pursuit"]},
-			{"generation": 3, "level": 10, "gender": "M", "abilities":["intimidate"], "moves":["tackle", "tailwhip", "rage", "hornattack"]},
-			{"generation": 3, "level": 46, "gender": "M", "abilities":["intimidate"], "moves":["refresh", "earthquake", "tailwhip", "bodyslam"]},
+			{"generation": 3, "level": 25, "nature": "Docile", "ivs": {"hp": 14, "atk": 19, "def": 12, "spa": 17, "spd": 5, "spe": 26}, "abilities":["intimidate"], "moves":["rage", "hornattack", "scaryface", "pursuit"], "pokeball": "safariball"},
+			{"generation": 3, "level": 10, "abilities":["intimidate"], "moves":["tackle", "tailwhip", "rage", "hornattack"]},
+			{"generation": 3, "level": 46, "abilities":["intimidate"], "moves":["refresh", "earthquake", "tailwhip", "bodyslam"]},
 		],
 		tier: "NU",
 	},
