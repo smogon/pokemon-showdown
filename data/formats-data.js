@@ -1058,7 +1058,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 3, "level": 5, "shiny": 1, "abilities":["earlybird"], "moves":["yawn", "wish"]},
 			{"generation": 3, "level": 10, "abilities":["earlybird"], "moves":["cometpunch", "leer", "bite"]},
-			{"generation": 3, "level": 36, "abilities":["earlybird"], "moves":["sing", "earthquake", "tailwhip", "dizzypunch"]},
+			{"generation": 3, "level": 35, "abilities":["earlybird"], "moves":["sing", "earthquake", "tailwhip", "dizzypunch"]},
 			{"generation": 6, "level": 50, "isHidden": false, "abilities":["scrappy"], "moves":["fakeout", "return", "earthquake", "suckerpunch"], "pokeball": "cherishball"},
 		],
 		tier: "NU",
@@ -1861,7 +1861,7 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["rapidspin", "toxicspikes", "spikes", "bugbite", "stealthrock"],
 		eventPokemon: [
 			{"generation": 3, "level": 10, "gender": "M", "moves":["tackle", "protect", "selfdestruct"]},
-			{"generation": 3, "level": 22, "moves":["refresh", "pinmissile", "spikes", "counter"]},
+			{"generation": 3, "level": 20, "moves":["refresh", "pinmissile", "spikes", "counter"]},
 		],
 		tier: "LC",
 	},
@@ -1950,7 +1950,7 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["swordsdance", "protect", "facade", "closecombat", "firepunch", "crunch", "playrough", "gunkshot"],
 		eventPokemon: [
 			{"generation": 3, "level": 10, "gender": "M", "abilities":["pickup"], "moves":["scratch", "leer", "lick"]},
-			{"generation": 3, "level": 11, "abilities":["pickup"], "moves":["refresh", "metalclaw", "leer", "return"]},
+			{"generation": 3, "level": 11, "abilities":["pickup"], "moves":["refresh", "metalclaw", "lick", "return"]},
 		],
 		tier: "LC",
 	},
@@ -3067,7 +3067,7 @@ exports.BattleFormatsData = {
 	snorunt: {
 		randomBattleMoves: ["spikes", "icebeam", "iceshard", "shadowball", "toxic"],
 		eventPokemon: [
-			{"generation": 3, "level": 22, "abilities":["innerfocus"], "moves":["sing", "waterpulse", "bite", "icywind"]},
+			{"generation": 3, "level": 20, "abilities":["innerfocus"], "moves":["sing", "waterpulse", "bite", "icywind"]},
 		],
 		tier: "LC",
 	},
