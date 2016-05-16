@@ -1917,7 +1917,7 @@ exports.Formats = [
 
 		mod: 'tiershift',
 		ruleset: ['OU'],
-		banlist: ['Swift Swim'],
+		banlist: [],
 	},
 	{
 		name: "OU (no Mega)",
