@@ -618,12 +618,12 @@ exports.BattleScripts = {
 		let pokemonLeft = 0;
 		let pokemon = [];
 
-		let excludedTiers = {'LC':1, 'LC Uber':1, 'NFE':1, 'CAP':1};
+		let excludedTiers = {'NFE':1, 'LC Uber':1, 'LC':1};
 
 		let pokemonPool = [];
 		for (let id in this.data.FormatsData) {
 			let template = this.getTemplate(id);
-			if (!excludedTiers[template.tier] && template.randomBattleMoves) {
+			if (!template.isNonstandard && !excludedTiers[template.tier] && template.randomBattleMoves) {
 				pokemonPool.push(id);
 			}
 		}
@@ -637,8 +637,8 @@ exports.BattleScripts = {
 
 		while (pokemonPool.length && pokemonLeft < 6) {
 			let template = this.getTemplate(this.sampleNoReplace(pokemonPool));
-			// Limit to one of each species; Spiky-eared Pichu is not available
-			if (!template.exists || template.gen >= this.gen || baseFormes[template.baseSpecies] || template.species === 'Pichu-Spiky-eared') continue;
+			// Limit to one of each species
+			if (!template.exists || template.gen >= this.gen || baseFormes[template.baseSpecies]) continue;
 
 			let tier = template.tier;
 			switch (tier) {
