@@ -3350,7 +3350,7 @@ exports.BattleScripts = {
 			moves: moves,
 		};
 	},
-	randomFactoryTeam: function (side, depth) {
+	randomFactoryTeam: function (side, format, depth) {
 		if (!depth) depth = 0;
 		let forceResult = (depth >= 4);
 
@@ -3471,15 +3471,15 @@ exports.BattleScripts = {
 				}
 			}
 		}
-		if (pokemon.length < 6) return this.randomFactoryTeam(side, ++depth);
+		if (pokemon.length < 6) return this.randomFactoryTeam(side, format, ++depth);
 
 		// Quality control
 		if (!teamData.forceResult) {
 			for (let requiredFamily in requiredMoveFamilies) {
-				if (!teamData.has[requiredFamily]) return this.randomFactoryTeam(side, ++depth);
+				if (!teamData.has[requiredFamily]) return this.randomFactoryTeam(side, format, ++depth);
 			}
 			for (let type in teamData.weaknesses) {
-				if (teamData.weaknesses[type] >= 3) return this.randomFactoryTeam(side, ++depth);
+				if (teamData.weaknesses[type] >= 3) return this.randomFactoryTeam(side, format, ++depth);
 			}
 		}
 
