@@ -743,7 +743,7 @@ exports.Formats = [
 				this.add('c|+AM|Lucky and Bad');
 			}
 			if (name === 'andy') {
-				this.add('c|%AndrewGoncel|:I');
+				this.add('c|%Andy|:I');
 			}
 			if (name === 'antemortem') {
 				this.add('c|&antemortem|I Am Here To Oppress Users');
@@ -1292,7 +1292,7 @@ exports.Formats = [
 				this.add('c|+AM|RIP');
 			}
 			if (name === 'andy') {
-				this.add('c|%AndrewGoncel|wow r00d! :c');
+				this.add('c|%Andy|wow r00d! :c');
 			}
 			if (name === 'antemortem') {
 				this.add('c|&antemortem|FUCKING CAMPAIGNERS');
