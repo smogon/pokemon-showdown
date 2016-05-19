@@ -488,7 +488,7 @@ exports.BattleFormats = {
 					BPcount++;
 				}
 				if (BPcount > 1) {
-					return [team[i].name + " has Baton Pass, but you are limited to one Baton Pass user by Baton Pass Clause."];
+					return [(team[i].name || team[i].species) + " has Baton Pass, but you are limited to one Baton Pass user by Baton Pass Clause."];
 				}
 			}
 		},
