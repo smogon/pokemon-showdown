@@ -41,6 +41,7 @@ if (!triviaData || typeof triviaData.leaderboard !== 'object') triviaData.leader
 if (!Array.isArray(triviaData.ladder)) triviaData.ladder = [];
 if (!Array.isArray(triviaData.questions)) triviaData.questions = [];
 if (!Array.isArray(triviaData.submissions)) triviaData.submissions = [];
+if (typeof triviaData.version !== 'number') triviaData.version = 0;
 
 let writeTriviaData = (() => {
 	let writing = false;
