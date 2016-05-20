@@ -61,7 +61,7 @@ Punishments.loadPunishments = function () {
 				continue;
 			}
 			for (let j = 0; j < keys.length; j++) {
-				let key = keys[i];
+				let key = keys[j];
 				if (key.includes('.')) {
 					Punishments.ips.set(key, punishment);
 				} else {
