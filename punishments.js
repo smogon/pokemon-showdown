@@ -414,7 +414,6 @@ Punishments.checkName = function (user, registered) {
 
 	let id = punishment[0];
 	let punishUserid = punishment[1];
-	let expireTime = punishment[2];
 
 	if (registered && id === 'BAN') {
 		let bannedUnder = '';
