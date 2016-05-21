@@ -234,14 +234,8 @@ Punishments.unpunish = function (id, punishType, noRecurse) {
 	return success;
 };
 
-Punishments.ban = function (user, expireTime, reason) {
-	let id;
-	if (typeof user === 'string') {
-		id = toId(user);
-		user = Users.get(user);
-	} else {
-		id = user.getLastId();
-	}
+Punishments.ban = function (user, expireTime, reason, id) {
+	if (!id) id = user.getLastId();
 
 	if (!expireTime) expireTime = Date.now() + BAN_DURATION;
 	let punishment = ['BAN', id, expireTime].concat(Array.prototype.slice.call(arguments, 3));
@@ -257,14 +251,8 @@ Punishments.unban = function (name) {
 	let success = Punishments.unpunish(name, 'BAN');
 	return success;
 };
-Punishments.lock = function (user, expireTime, reason) {
-	let id;
-	if (typeof user === 'string') {
-		id = toId(user);
-		user = Users.get(user);
-	} else {
-		id = user.getLastId();
-	}
+Punishments.lock = function (user, expireTime, reason, id) {
+	if (!id) id = user.getLastId();
 
 	if (!expireTime) expireTime = Date.now() + LOCK_DURATION;
 	let punishment = ['LOCK', id, expireTime].concat(Array.prototype.slice.call(arguments, 3));
@@ -285,7 +273,7 @@ Punishments.unlock = function (name) {
 		user.locked = false;
 		user.updateIdentity();
 		success.push(user.getLastName());
-		Users.users.forEach(curUser => {
+		if (id.charAt(0) !== '#') Users.users.forEach(curUser => {
 			if (curUser.locked === id) {
 				curUser.locked = false;
 				curUser.updateIdentity();
@@ -302,14 +290,8 @@ Punishments.unlock = function (name) {
 	}
 	return success;
 };
-Punishments.namelock = function (user, expireTime, reason) {
-	let id;
-	if (typeof user === 'string') {
-		id = toId(user);
-		user = Users.get(user);
-	} else {
-		id = user.getLastId();
-	}
+Punishments.namelock = function (user, expireTime, reason, id) {
+	if (!id) id = user.getLastId();
 
 	if (!expireTime) expireTime = Date.now() + LOCK_DURATION;
 	let punishment = ['NAMELOCK', id, expireTime].concat(Array.prototype.slice.call(arguments, 3));
@@ -330,12 +312,14 @@ Punishments.unnamelock = function (name) {
 	if (user && user.locked) {
 		id = user.locked;
 		user.locked = false;
-		user.updateIdentity();
+		user.namelocked = false;
+		user.resetName();
 		success.push(user.getLastName());
-		Users.users.forEach(curUser => {
+		if (id.charAt(0) !== '#') Users.users.forEach(curUser => {
 			if (curUser.locked === id) {
 				curUser.locked = false;
-				curUser.updateIdentity();
+				curUser.namelocked = false;
+				curUser.resetName();
 				success.push(curUser.getLastName());
 			}
 		});
@@ -426,24 +410,37 @@ Punishments.checkName = function (user, registered) {
 
 	let id = punishment[0];
 	let punishUserid = punishment[1];
+	let expireTime = punishment[2];
 
 	if (registered && id === 'BAN') {
 		let bannedUnder = '';
 		if (punishUserid !== userid) bannedUnder = ' because of rule-breaking by your alt account ' + punishUserid;
 		user.send("|popup|Your username (" + user.name + ") is banned" + bannedUnder + "'. Your ban will expire in a few days." + (Config.appealurl ? " Or you can appeal at:\n" + Config.appealurl : ""));
-		Punishments.ban(user);
+		Punishments.punish(user, punishment);
+		user.disconnectAll();
 		return;
 	}
 	if (id === 'NAMELOCK') {
 		let bannedUnder = '';
 		if (punishUserid !== userid) bannedUnder = ' because of rule-breaking by your alt account ' + punishUserid;
 		user.send("|popup|Your are namelocked" + bannedUnder + "'. Your namelock will expire in a few days.");
-		Punishments.namelock(user);
+		Punishments.punish(user, punishment);
+		user.locked = punishUserid;
+		user.namelocked = punishUserid;
+		user.resetName();
+		user.updateIdentity();
 	} else {
 		let bannedUnder = '';
 		if (punishUserid !== userid) bannedUnder = ' because of rule-breaking by your alt account ' + punishUserid;
 		user.send("|popup|Your username (" + user.name + ") is locked" + bannedUnder + "'. Your lock will expire in a few days." + (Config.appealurl ? " Or you can appeal at:\n" + Config.appealurl : ""));
-		Punishments.lock(user);
+		Punishments.punish(user, punishment);
+		user.locked = punishUserid;
+		user.updateIdentity();
+	}
+	if (user.namelocked) {
+		user.popup("You can't change your name because you're namelocked.");
+		user.resetName();
+		user.updateIdentity();
 	}
 	// if (user.group === Config.groupsranking[0]) {
 	// 	let range = user.locked || Punishments.shortenHost(user.latestHost);
