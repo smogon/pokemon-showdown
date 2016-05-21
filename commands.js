@@ -2103,6 +2103,7 @@ exports.commands = {
 		if (staff) staff.add("(" + user.name + " used /hotpatch " + target + ")").update();
 
 		if (target === 'chat' || target === 'commands') {
+			if (Monitor.hotpatchLockChat) return this.errorReply("Hotpatch has been disabled for chat. (" + Monitor.hotpatchLockChat + ")");
 			try {
 				const ProcessManagers = require('./process-manager').cache;
 				for (let PM of ProcessManagers.keys()) {
@@ -2171,6 +2172,12 @@ exports.commands = {
 			delete require.cache[require.resolve('./punishments.js')];
 			global.Punishments = require('./punishments.js');
 			return this.sendReply("Punishments have been hotpatched.");
+		} else if (target.startsWith('disablechat')) {
+			if (Monitor.hotpatchLockChat) return this.errorReply("Hotpatch is already disabled.");
+			let reason = target.split(', ')[1];
+			if (!reason) return this.errorReply("Usage: /hotpatch disablechat, [reason]");
+			Monitor.hotpatchLockChat = reason;
+			return this.sendReply("You have disabled hotpatch until the next server restart.");
 		} else if (target.startsWith('disable')) {
 			let reason = target.split(', ')[1];
 			if (!reason) return this.errorReply("Usage: /hotpatch disable, [reason]");
