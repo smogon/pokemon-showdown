@@ -271,7 +271,7 @@ exports.BattleFormatsData = {
 			{"generation": 6, "level": 10, "gender": "F", "isHidden": false, "moves":["playnice", "charm", "nuzzle", "sweetkiss"], "pokeball": "cherishball"},
 			{"generation": 6, "level": 50, "gender": "M", "nature": "Naughty", "isHidden": false, "moves":["thunderbolt", "quickattack", "irontail", "electroball"], "pokeball": "cherishball"},
 			{"generation": 6, "level": 10, "shiny": true, "isHidden": false, "moves":["teeterdance", "playnice", "tailwhip", "nuzzle"], "pokeball": "cherishball"},
-			{"generation": 6, "level": 10, "ivs": {"hp": 25}, "isHidden": true, "moves":["fakeout", "encore", "volttackle", "endeavor"], "pokeball": "cherishball"},
+			{"generation": 6, "level": 10, "perfectIVs": 2, "isHidden": true, "moves":["fakeout", "encore", "volttackle", "endeavor"], "pokeball": "cherishball"},
 			{"generation": 6, "level": 99, "isHidden": false, "moves":["happyhour", "playnice", "holdhands", "flash"], "pokeball": "cherishball"},
 			{"generation": 6, "level": 10, "isHidden": false, "moves":["fly", "surf", "agility", "celebrate"], "pokeball": "cherishball"},
 			{"generation": 6, "level": 10, "isHidden": false, "moves":["bestow", "holdhands", "return", "playnice"], "pokeball": "healball"},
