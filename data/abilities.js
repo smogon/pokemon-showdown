@@ -1177,8 +1177,11 @@ exports.BattleAbilities = {
 				pokemon.cureStatus();
 			}
 		},
-		onImmunity: function (type) {
-			if (type === 'psn') return false;
+		onSetStatus: function (status, target, source, effect) {
+			if (status.id !== 'psn' && status.id !== 'tox') return;
+			if (!effect || !effect.status) return false;
+			this.add('-immune', target, '[msg]', '[from] ability: Immunity');
+			return false;
 		},
 		id: "immunity",
 		name: "Immunity",
@@ -1227,8 +1230,11 @@ exports.BattleAbilities = {
 				pokemon.cureStatus();
 			}
 		},
-		onImmunity: function (type, pokemon) {
-			if (type === 'slp') return false;
+		onSetStatus: function (status, target, source, effect) {
+			if (status.id !== 'slp') return;
+			if (!effect || !effect.status) return false;
+			this.add('-immune', target, '[msg]', '[from] ability: Insomnia');
+			return false;
 		},
 		id: "insomnia",
 		name: "Insomnia",
@@ -1330,14 +1336,16 @@ exports.BattleAbilities = {
 	"leafguard": {
 		desc: "If Sunny Day is active, this Pokemon cannot gain a major status condition and Rest will fail for it.",
 		shortDesc: "If Sunny Day is active, this Pokemon cannot be statused and Rest will fail for it.",
-		onSetStatus: function (pokemon) {
+		onSetStatus: function (status, target, source, effect) {
 			if (this.isWeather(['sunnyday', 'desolateland'])) {
+				if (effect && effect.status) this.add('-immune', target, '[msg]', '[from] ability: Leaf Guard');
 				return false;
 			}
 		},
 		onTryHit: function (target, source, move) {
 			if (move && move.id === 'yawn' && this.isWeather(['sunnyday', 'desolateland'])) {
-				return false;
+				this.add('-immune', target, '[msg]', '[from] ability: Leaf Guard');
+				return null;
 			}
 		},
 		id: "leafguard",
@@ -1397,8 +1405,11 @@ exports.BattleAbilities = {
 				pokemon.cureStatus();
 			}
 		},
-		onImmunity: function (type, pokemon) {
-			if (type === 'par') return false;
+		onSetStatus: function (status, target, source, effect) {
+			if (status.id !== 'par') return;
+			if (!effect || !effect.status) return false;
+			this.add('-immune', target, '[msg]', '[from] ability: Limber');
+			return false;
 		},
 		id: "limber",
 		name: "Limber",
@@ -2869,8 +2880,8 @@ exports.BattleAbilities = {
 			if (!source || source === target) return;
 			if (effect && effect.id === 'toxicspikes') return;
 			if (status.id === 'slp' || status.id === 'frz') return;
-			if (source.trySetStatus(status, target)) return;
-			this.add('-immune', source, '[msg]', '[from] ability: Synchronize', '[of] ' + target);
+			this.add('-activate', target, 'ability: Synchronize');
+			source.trySetStatus(status, target, {status: status.id});
 		},
 		id: "synchronize",
 		name: "Synchronize",
@@ -3149,8 +3160,11 @@ exports.BattleAbilities = {
 				pokemon.cureStatus();
 			}
 		},
-		onImmunity: function (type) {
-			if (type === 'slp') return false;
+		onSetStatus: function (status, target, source, effect) {
+			if (status.id !== 'slp') return;
+			if (!effect || !effect.status) return false;
+			this.add('-immune', target, '[msg]', '[from] ability: Vital Spirit');
+			return false;
 		},
 		id: "vitalspirit",
 		name: "Vital Spirit",
@@ -3197,8 +3211,11 @@ exports.BattleAbilities = {
 				pokemon.cureStatus();
 			}
 		},
-		onImmunity: function (type, pokemon) {
-			if (type === 'brn') return false;
+		onSetStatus: function (status, target, source, effect) {
+			if (status.id !== 'brn') return;
+			if (!effect || !effect.status) return false;
+			this.add('-immune', target, '[msg]', '[from] ability: Water Veil');
+			return false;
 		},
 		id: "waterveil",
 		name: "Water Veil",

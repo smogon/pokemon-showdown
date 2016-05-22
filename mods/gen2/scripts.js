@@ -186,17 +186,9 @@ exports.BattleScripts = {
 				didSomething = true;
 			}
 			if (moveData.status) {
-				if (!target.status) {
-					hitResult = target.setStatus(moveData.status, pokemon, move);
-					didSomething = didSomething || hitResult;
-				} else if (!isSecondary) {
-					if (target.status === moveData.status) {
-						this.add('-fail', target, target.status);
-					} else {
-						this.add('-fail', target);
-					}
-					return false;
-				}
+				hitResult = target.trySetStatus(moveData.status, pokemon, move);
+				if (!hitResult && move.status) return hitResult;
+				didSomething = didSomething || hitResult;
 			}
 			if (moveData.forceStatus) {
 				hitResult = target.setStatus(moveData.forceStatus, pokemon, move);

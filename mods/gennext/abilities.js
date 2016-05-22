@@ -108,7 +108,7 @@ exports.BattleAbilities = {
 		onAfterDamage: function (damage, target, source, move) {
 			if (move && move.flags['contact'] && this.isWeather('hail')) {
 				if (this.random(10) < 3) {
-					source.trySetStatus('frz', target, move);
+					source.trySetStatus('frz', target);
 				}
 			}
 		},
@@ -124,7 +124,7 @@ exports.BattleAbilities = {
 		inherit: true,
 		onAfterDamage: function (damage, target, source, move) {
 			if (move && move.flags['contact']) {
-				source.trySetStatus('par', target, move);
+				source.trySetStatus('par', target);
 			}
 		},
 	},
@@ -140,7 +140,7 @@ exports.BattleAbilities = {
 		inherit: true,
 		onAfterDamage: function (damage, target, source, move) {
 			if (move && move.flags['contact']) {
-				source.trySetStatus('psn', target, move);
+				source.trySetStatus('psn', target);
 			}
 		},
 	},
