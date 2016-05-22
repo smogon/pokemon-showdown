@@ -1592,6 +1592,9 @@ exports.BattleScripts = {
 				if (!counter.recovery && template.baseStats.hp >= 165 && movePool.includes('wish')) {
 					if (move.category === 'Status' || !hasType[move.type] && !move.damage) rejected = true;
 				}
+				if (template.nfe && !isSetup && !counter.recovery && !!counter['Status'] && (movePool.includes('recover') || movePool.includes('roost'))) {
+					if (move.category === 'Status' || !hasType[move.type]) rejected = true;
+				}
 
 				// This move doesn't satisfy our setup requirements:
 				if ((move.category === 'Physical' && counter.setupType === 'Special') || (move.category === 'Special' && counter.setupType === 'Physical')) {
@@ -1888,13 +1891,9 @@ exports.BattleScripts = {
 				item = 'Choice Scarf';
 			}
 		} else if (template.evos.length) {
-			item = 'Eviolite';
+			item = (ability === 'Technician' && counter.Physical >= 4) ? 'Choice Band' : 'Eviolite';
 		} else if (hasMove['shellsmash']) {
-			if (ability === 'Solid Rock' && counter['priority']) {
-				item = 'Weakness Policy';
-			} else {
-				item = 'White Herb';
-			}
+			item = (ability === 'Solid Rock' && counter['priority']) ? 'Weakness Policy' : 'White Herb';
 		} else if (ability === 'Magic Guard' || ability === 'Sheer Force') {
 			item = 'Life Orb';
 		} else if (hasMove['bellydrum']) {
