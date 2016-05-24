@@ -103,7 +103,12 @@ let Room = (() => {
 		message = CommandParser.parse(message, this, user, connection);
 
 		if (message && message !== true && typeof message.then !== 'function') {
-			this.add('|c|' + user.getIdentity(this.id) + '|' + message);
+			let emoticons = Wisp.parseEmoticons(user.getIdentity(this.roomid), message);
+			if (emoticons && !this.disableEmoticons) {
+				this.addRaw(emoticons);
+			} else {
+				this.add('|c|' + user.getIdentity(this.id) + '|' + message);
+			}
 		}
 		this.update();
 	};
@@ -1500,7 +1505,7 @@ let ChatRoom = (() => {
 	};
 	ChatRoom.prototype.getIntroMessage = function (user) {
 		let message = '';
-		if (this.introMessage) message += '\n|raw|<div class="infobox infobox-roomintro"><div' + (!this.isOfficial ? ' class="infobox-limited"' : '') + '>' + this.introMessage + '</div>';
+		if (this.introMessage) message += '\n|raw|<div class="infobox infobox-roomintro">' + this.introMessage + '</div>';
 		if (this.staffMessage && user.can('mute', null, this)) message += (message ? '<br />' : '\n|raw|<div class="infobox">') + '(Staff intro:)<br /><div>' + this.staffMessage + '</div>';
 		if (this.modchat) {
 			message += (message ? '<br />' : '\n|raw|<div class="infobox">') + '<div class="broadcast-red">' +

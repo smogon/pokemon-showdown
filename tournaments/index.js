@@ -795,6 +795,73 @@ class Tournament {
 			generator: this.generator.name,
 			bracketData: this.getBracketData(),
 		}));
+
+		let data = {results: this.generator.getResults().map(usersToNames), bracketData: this.getBracketData()};
+		let data2 = data;
+		data = data['results'].toString();
+		let winner = '';
+
+		if (data.indexOf(',') >= 0) {
+			data = data.split(',');
+			winner = data[0];
+		} else {
+			winner = data;
+		}
+
+		let tourSize = this.generator.users.size;
+		try { // this code is a bigger mess than I remember... I should clean it up some day.
+			let runnerUp = false;
+
+			// there's probably a better way to do this but I'm lazy
+			if (data2['bracketData']['rootNode']) {
+				if (data2['bracketData']['rootNode']['children']) {
+					if (data2['bracketData']['rootNode']['children'][0]['team'] !== winner) runnerUp = data2['bracketData']['rootNode']['children'][0]['team'];
+					if (data2['bracketData']['rootNode']['children'][1]['team'] !== winner) runnerUp = data2['bracketData']['rootNode']['children'][1]['team'];
+				}
+			}
+
+			let firstMoney = false;
+			let secondMoney = false;
+			let firstBuck;
+			let secondBuck;
+
+			if (this.room.isOfficial && tourSize >= 8) {
+				firstMoney = Math.round(tourSize / 10);
+				secondMoney = Math.round(firstMoney / 2);
+				firstBuck = 'buck';
+				secondBuck = 'buck';
+			}
+
+			/*if (toId(this.generator.name).substr(5) === 'buyin') {
+				this.room.tournamentPool -= Math.round(this.room.tournamentPool * 0.10);
+				firstMoney = Math.round(this.room.tournamentPool / 1.5);
+				secondMoney = Math.floor(this.room.tournamentPool - firstMoney);
+				firstBuck = 'buck';
+				secondBuck = 'buck';
+			}*/
+
+			if (firstMoney) {
+				if (firstMoney > 1) firstBuck = 'bucks';
+				if (secondMoney > 1) secondBuck = 'bucks';
+				this.room.add('|raw|<b><font color="' + Wisp.hashColor(winner) + '">' + Tools.escapeHTML(winner) + '</font> has also won <font color=#b30000>' + firstMoney + '</font> ' + firstBuck + ' for winning the tournament!</b>');
+				if (runnerUp) this.room.add('|raw|<b><font color="' + Wisp.hashColor(runnerUp) + '">' + Tools.escapeHTML(runnerUp) + '</font> has also won <font color=#b30000>' + secondMoney + '</font> ' + secondBuck + ' for coming in second!</b>');
+				Economy.writeMoney(toId(winner), firstMoney, () => {
+					Economy.readMoney(toId(winner), newMoney => {
+						Economy.logTransaction(winner + ' has won ' + firstMoney + ' ' + firstBuck + ' from a tournament in ' + this.room.title + '. They now have ' + newMoney);
+						if (runnerUp) {
+							Economy.writeMoney(toId(runnerUp), secondMoney, () => {
+								Economy.readMoney(toId(runnerUp), newMoney2 => {
+									Economy.logTransaction(runnerUp + ' has won ' + secondMoney + ' ' + secondBuck + ' from a tournament in ' + this.room.title + '. They now have ' + newMoney2);
+								});
+							});
+						}
+					});
+				});
+			}
+		} catch (e) {
+			console.log('Error giving bucks for tournaments: ' + e.stack);
+		}
+
 		this.isEnded = true;
 		if (this.autoDisqualifyTimer) clearTimeout(this.autoDisqualifyTimer);
 		delete exports.tournaments[this.room.id];

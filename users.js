@@ -359,6 +359,8 @@ class User {
 			if (room.isMuted(this)) {
 				return '!' + this.name;
 			}
+			if (this.hideauth) return ' ' + this.name;
+			if (this.customSymbol) return this.customSymbol + this.name;
 			if (room && room.auth) {
 				if (room.auth[this.userid]) {
 					return room.auth[this.userid] + this.name;
@@ -366,6 +368,8 @@ class User {
 				if (room.isPrivate === true) return ' ' + this.name;
 			}
 		}
+		if (this.hideauth) return ' ' + this.name;
+		if (this.customSymbol) return this.customSymbol + this.name;
 		return this.group + this.name;
 	}
 	can(permission, target, room) {
@@ -737,6 +741,7 @@ class User {
 		return false;
 	}
 	forceRename(name, registered) {
+		Wisp.updateSeen(name);
 		// skip the login server
 		let userid = toId(name);
 
@@ -986,6 +991,7 @@ class User {
 		}
 	}
 	onDisconnect(connection) {
+		Wisp.updateSeen(this.userid);
 		for (let i = 0; i < this.connections.length; i++) {
 			if (this.connections[i] === connection) {
 				// console.log('DISCONNECT: ' + this.userid);
@@ -1164,6 +1170,7 @@ class User {
 	leaveRoom(room, connection, force) {
 		room = Rooms(room);
 		if (room.id === 'global' && !force) {
+			Wisp.updateSeen(this.userid);
 			// you can't leave the global room except while disconnecting
 			return false;
 		}
