@@ -233,7 +233,13 @@ exports.commands = {
 			}
 		}
 
-		if (!message) message = '|pm|' + user.getIdentity() + '|' + targetUser.getIdentity() + '|' + target;
+		if (!message) {
+			let emoticons = Wisp.parseEmoticons(user.getIdentity(room.id), target);
+			if (emoticons) {
+				target = "/html " + emoticons;
+			}
+			message = '|pm|' + user.getIdentity() + '|' + targetUser.getIdentity() + '|' + target;
+		}
 		user.send(message);
 		if (targetUser !== user) targetUser.send(message);
 		targetUser.lastPM = user.userid;
