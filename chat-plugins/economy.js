@@ -488,6 +488,7 @@ exports.commands = {
 			let output = '<table border="1" cellspacing ="0" cellpadding="3"><tr><th>Rank</th><th>Name</th><th>Bucks</th></tr>';
 			let count = 1;
 			for (let u in rows) {
+				if (!rows[u].bucks || rows[u].bucks < 1) continue;
 				let username;
 				if (rows[u].name !== null) {
 					username = rows[u].name;
