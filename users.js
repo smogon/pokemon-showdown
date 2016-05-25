@@ -359,7 +359,7 @@ class User {
 			if (room.isMuted(this)) {
 				return '!' + this.name;
 			}
-			if (this.hideauth) return ' ' + this.name;
+			if (this.hideauth) return this.hideauth + this.name;
 			if (this.customSymbol) return this.customSymbol + this.name;
 			if (room && room.auth) {
 				if (room.auth[this.userid]) {
@@ -368,7 +368,7 @@ class User {
 				if (room.isPrivate === true) return ' ' + this.name;
 			}
 		}
-		if (this.hideauth) return ' ' + this.name;
+		if (this.hideauth) return this.hideauth + this.name;
 		if (this.customSymbol) return this.customSymbol + this.name;
 		return this.group + this.name;
 	}

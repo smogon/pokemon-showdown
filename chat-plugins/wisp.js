@@ -50,7 +50,7 @@ exports.commands = {
 	},
 
 	def: 'define',
-	define: function(target, room, user) {
+	define: function (target, room, user) {
 		if (!target) return this.sendReply('Usage: /define <word>');
 		target = toId(target);
 		if (target > 50) return this.sendReply('/define <word> - word can not be longer than 50 characters.');
@@ -86,6 +86,35 @@ exports.commands = {
 				}
 			});
 		});
+	},
+
+	showauth: 'hideauth',
+	show: 'hideauth',
+	hide: 'hideauth',
+	hideauth: function (target, room, user, connection, cmd) {
+		if (!user.can('lock')) return this.sendReply("/hideauth - access denied.");
+		if (cmd === 'show' || cmd === 'showauth') {
+			delete user.hideauth;
+			user.updateIdentity();
+			return this.sendReply("You have revealed your auth symbol.");
+		}
+		let tar = ' ';
+		if (target) {
+			target = target.trim();
+			if (Config.groupsranking.indexOf(target) > -1 && target !== '#') {
+				if (Config.groupsranking.indexOf(target) <= Config.groupsranking.indexOf(user.group)) {
+					tar = target;
+				} else {
+					this.sendReply('The group symbol you have tried to use is of a higher authority than you have access to. Defaulting to \' \' instead.');
+				}
+			} else {
+				this.sendReply('You have tried to use an invalid character as your auth symbol. Defaulting to \' \' instead.');
+			}
+		}
+		user.hideauth = tar;
+		user.updateIdentity();
+		this.sendReply('You are now hiding your auth symbol as \'' + tar + '\'.');
+		this.logModCommand(user.name + ' is hiding auth symbol as \'' + tar + '\'');
 	},
 };
 
