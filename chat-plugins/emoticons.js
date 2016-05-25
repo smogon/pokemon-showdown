@@ -33,7 +33,7 @@ function parseEmoticons(user, message) {
 	let html = user.charAt(0) + '<button style="border:none;background:none;padding:0;font-family:Verdana,sans-serif;font-size:12px;" name="parseCommand" value="/user ' + toId(user) + '">' + '<b><font color="' + Wisp.hashColor(toId(user)) + '">' + Tools.escapeHTML(user.substr(1)) + ':</font></b></button> ';
 	if (emoteRegex.test(message)) {
 		message = Tools.escapeHTML(message).replace(emoteRegex, function (match) {
-			return '<img src="' + emoticons[match] + '" title="' + emoticons[match] + '" height="32" width="32">';
+			return '<img src="' + emoticons[match] + '" title="' + emoticons[match] + '" height="40" width="40">';
 		});
 		return html + message;
 	}
@@ -90,7 +90,7 @@ exports.commands = {
 		case 'list':
 			if (!this.runBroadcast()) return;
 			let reply = "<b><u>Emoticons (" + Object.keys(emoticons).length + ")</u></b><br />";
-			for (let emote in emoticons) reply += "(" + emote + " <img src=\"" + emoticons[emote] + "\" height=\"32\" width=\"32\">) ";
+			for (let emote in emoticons) reply += "(" + emote + " <img src=\"" + emoticons[emote] + "\" height=\"40\" width=\"40\">) ";
 			this.sendReplyBox(reply);
 			break;
 
