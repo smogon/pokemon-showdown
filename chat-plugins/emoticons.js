@@ -88,7 +88,7 @@ exports.commands = {
 
 		case 'view':
 		case 'list':
-			if (!this.canBroadcast()) return;
+			if (!this.runBroadcast()) return;
 			let reply = "<b><u>Emoticons (" + Object.keys(emoticons).length + ")</u></b><br />";
 			for (let emote in emoticons) reply += "(" + emote + " <img src=\"" + emoticons[emote] + "\">) ";
 			this.sendReplyBox(reply);
@@ -96,7 +96,7 @@ exports.commands = {
 
 		default:
 		case 'help':
-			if (!this.canBroadcast()) return;
+			if (!this.runBroadcast()) return;
 			this.sendReplyBox(
 				"Emoticon Commands:<br />" +
 				"<small>/emoticon may be substituted with /emoticons, /emotes, or /emote</small><br />" +

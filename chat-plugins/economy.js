@@ -91,7 +91,7 @@ exports.commands = {
 	atm: 'wallet',
 	wallet: function (target, room, user) {
 		if (!target) target = user.name;
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		let userid = toId(target);
 		if (userid.length < 1) return this.sendReply("/wallet - Please specify a user.");
 		if (userid.length > 19) return this.sendReply("/wallet - [user] can't be longer than 19 characters.");
@@ -289,7 +289,7 @@ exports.commands = {
 	},
 
 	shop: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox('<center><h4><b><u>' + shopTitle + '</u></b></h4><table border="1" cellspacing ="0" cellpadding="3"><tr><th>Item</th><th>Description</th><th>Price</th></tr>' +
 			'<tr><td>Custom Symbol</td><td>Buys a custom symbol to go in front of your name. (Temporary until restart)</td><td>5</td></tr>' +
 			'<tr><td>League Room</td><td>Purchases a room for your league. May be deleted if league becomes inactive.</td><td>5</td></tr>' +
@@ -321,7 +321,7 @@ exports.commands = {
 		case 'list':
 		case 'view':
 		default:
-			if (!this.canBroadcast()) return;
+			if (!this.runBroadcast()) return;
 			if (room.shopList.length < 1) return this.sendReplyBox('<center><b><u>This shop has no items!</u></b></center>');
 			let output = '<center><h4><b><u><font color="#24678d">' + Tools.escapeHTML(room.title) + '\'s Shop</font></u></b></h4><table border="1" cellspacing ="0" cellpadding="3"><tr><th>Item</th><th>Description</th><th>Price</th></tr>';
 			for (let u in room.shopList) {
@@ -380,7 +380,7 @@ exports.commands = {
 			});
 			break;
 		case 'help':
-			if (!this.canBroadcast()) return;
+			if (!this.runBroadcast()) return;
 			this.sendReplyBox('The following is a list of league shop commands: <br />' +
 				'/leagueshop view/list - Shows a complete list of shop items.`<br />' +
 				'/leagueshop add [item name], [description], [price] - Adds an item to the shop.<br />' +
@@ -443,7 +443,7 @@ exports.commands = {
 	},
 
 	bucks: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 
 		Wisp.database.all("SELECT SUM(bucks) FROM users;", (err, rows) => {
 			if (err) return console.log("bucks1: " + err);
@@ -478,7 +478,7 @@ exports.commands = {
 		if (!target) target = 10;
 		target = Number(target);
 		if (isNaN(target)) target = 10;
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		if (this.broadcasting && target > 10) target = 10; // limit to 10 while broadcasting
 		if (target > 500) target = 500;
 
@@ -534,7 +534,7 @@ exports.commands = {
 		if (!target) target = user.name;
 		if (toId(target).length > 19) return this.sendReply("Usernames may not be more than 19 characters long.");
 		if (toId(target).length < 1) return this.sendReply(target + " is not a valid username.");
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		let targetUser = Users.get(target);
 		let username = (targetUser ? targetUser.name : target);
 		let userid = toId(username);
@@ -573,7 +573,7 @@ exports.commands = {
 	},
 
 	economycode: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox("Economy code by: <a href=\"https://gist.github.com/jd4564/d6e8f4140b7abc9295e1\">jd</a>");
 	},
 };
