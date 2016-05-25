@@ -88,6 +88,44 @@ exports.commands = {
 		});
 	},
 
+	u: 'urbandefine',
+	ud: 'urbandefine',
+	urbandefine: function (target, room, user) {
+		if (!this.runBroadcast()) return;
+		if (!target) return this.parse('/help urbandefine');
+		if (target.toString() > 50) return this.sendReply('Phrase can not be longer than 50 characters.');
+		let self = this;
+		let options = {
+			host: 'api.urbandictionary.com',
+			port: 80,
+			path: '/v0/define?term=' + encodeURIComponent(target),
+			term: target,
+		};
+
+		http.get(options, res => {
+			let data = '';
+			res.on('data', chunk => {
+				data += chunk;
+			}).on('end', () => {
+				data = JSON.parse(data);
+				let definitions = data['list'];
+				if (data['result_type'] === 'no_results') {
+					this.sendReplyBox('No results for <b>"' + Tools.escapeHTML(target) + '"</b>.');
+					return room.update();
+				} else {
+					if (!definitions[0]['word'] || !definitions[0]['definition']) {
+						self.sendReplyBox('No results for <b>"' + Tools.escapeHTML(target) + '"</b>.');
+						return room.update();
+					}
+					let output = '<b>' + Tools.escapeHTML(definitions[0]['word']) + ':</b> ' + Tools.escapeHTML(definitions[0]['definition']).replace(/\r\n/g, '<br />').replace(/\n/g, ' ');
+					if (output.length > 400) output = output.slice(0, 400) + '...';
+					this.sendReplyBox(output);
+					return room.update();
+				}
+			});
+		});
+	},
+
 	showauth: 'hideauth',
 	show: 'hideauth',
 	hide: 'hideauth',
