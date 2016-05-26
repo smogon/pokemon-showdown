@@ -405,10 +405,6 @@ class Validator {
 								problems.push(name + " must have at least three perfect IVs because it's a legendary and it has a move only available from a gen 6 event.");
 							}
 						}
-						if (eventData.generation < 5) eventData.isHidden = false;
-						if (eventData.isHidden !== undefined && eventData.isHidden !== isHidden) {
-							problems.push(name + (isHidden ? " can't have" : " must have") + " its hidden ability because it has a move only available from a specific " + eventTemplate.species + " event.");
-						}
 						if (tools.gen <= 5 && eventData.abilities && eventData.abilities.length === 1 && !eventData.isHidden) {
 							if (template.species === eventTemplate.species) {
 								// has not evolved, abilities must match
@@ -549,9 +545,9 @@ class Validator {
 		let alreadyChecked = {};
 		let level = set.level || 100;
 
+		let incompatibleAbility = false;
 		let isHidden = false;
 		if (set.ability && tools.getAbility(set.ability).name === template.abilities['H']) isHidden = true;
-		let incompatibleHidden = false;
 
 		let limit1 = true;
 		let sketch = false;
@@ -629,7 +625,7 @@ class Validator {
 
 					if (learnedGen !== '6' && isHidden && !tools.mod('gen' + learnedGen).getTemplate(template.species).abilities['H']) {
 						// check if the Pokemon's hidden ability was available
-						incompatibleHidden = true;
+						incompatibleAbility = true;
 						continue;
 					}
 					if (!template.isNonstandard) {
@@ -728,6 +724,12 @@ class Validator {
 							// can tradeback
 							sources.push('1ST' + learned.slice(2) + ' ' + template.id);
 						}
+						// The event ability must match the Pokémon's
+						let hiddenAbility = template.eventPokemon[learned.substr(2)].isHidden || false;
+						if (hiddenAbility !== isHidden) {
+							incompatibleAbility = true;
+							continue;
+						}
 						sources.push(learned + ' ' + template.id);
 					} else if (learned.charAt(1) === 'D') {
 						// DW moves:
@@ -788,7 +790,7 @@ class Validator {
 		// Now that we have our list of possible sources, intersect it with the current list
 		if (!sourcesBefore && !sources.length) {
 			if (noPastGen && sometimesPossible) return {type:'pokebank'};
-			if (incompatibleHidden) return {type:'incompatible'};
+			if (incompatibleAbility) return {type:'incompatible'};
 			return true;
 		}
 		if (!sources.length) sources = null;
