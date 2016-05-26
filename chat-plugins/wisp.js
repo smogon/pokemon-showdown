@@ -9,6 +9,11 @@ let mainColors = {};
 Wisp.customColors = {};
 let regdateCache = {};
 Users.vips = [];
+let polltiers = ['Random Battle', 'Anything Goes', 'Ubers', 'OverUsed', 'Underused',
+	'RarelyUsed', 'NeverUsed', 'PU', 'LC', 'Random Doubles Battle', 'VGC 2016',
+	'Battle Spot Doubles', 'Random Triples Battle', 'Challenge Cup 1v1', 'Balanced Hackmons',
+	'1v1, Monotype', 'Inverse Battle', 'Almost Any Ability', 'STABmons', 'Hackmons Cup',
+	'[Seasonal]', 'Battle Factory', 'Doubles OU', 'CAP', 'Gen 5 OU'];
 
 exports.commands = {
 	lastseen: 'seen',
@@ -153,6 +158,54 @@ exports.commands = {
 		user.updateIdentity();
 		this.sendReply('You are now hiding your auth symbol as \'' + tar + '\'.');
 		this.logModCommand(user.name + ' is hiding auth symbol as \'' + tar + '\'');
+	},
+
+	rpoll: 'roompoll',
+	roompoll: function (target, room, user) {
+		if (!target) {
+			if (!this.can('broadcast', null, room) || room.battle) return false;
+			if (!room.RPoll) return this.parse('/help roompoll');
+			return this.parse('/poll create ' + room.RPoll);
+		}
+		let parts = target.split(" ");
+		let action = toId(parts[0] || " ");
+		let details = parts.slice(1).join(" ");
+		if (action === "help") return this.parse('/help roompoll');
+		if (action === "change" || action === "set") {
+			if (!this.can('declare', null, room) || room.battle) return false;
+			if (!toId(details || " ")) return this.parse('/help roompoll');
+			if (details.split(",").length < 3) return this.errorReply("You did not include enough arguments for the poll.");
+			room.RPoll = details.replace(/^\/poll/i, "");
+			if (room.chatRoomData) {
+				room.chatRoomData.RPoll = room.RPoll;
+				Rooms.global.writeChatRoomData();
+			}
+			return this.sendReply("The roompoll has been set.");
+		}
+		if (action === 'view') {
+			if (!this.can('declare', null, room)) return false;
+			if (!room.RPoll) return this.errorReply("No roompoll has been set yet.");
+			return this.sendReply("The roompoll is: /poll create " + room.RPoll);
+		}
+		if (action === 'end') {
+			if (!this.can('broadcast', null, room) || room.battle) return false;
+			return this.parse('/poll end');
+		} else {
+			return this.errorReply("This is not a valid roompoll command, do '/roompoll help' for more information");
+		}
+	},
+	roompollhelp: ["- /roompoll - creates a new roompoll. (Start poll with '/roompoll', display poll with '!pr', end poll with '/endpoll'). Requires: + $ % @ # & ~",
+		"- /roompoll set/change [details] - sets the roompoll. Requires: # & ~",
+		"- /roompoll view - displays the command for the current roompoll. Requires: # & ~"],
+
+	formatpoll: 'tierpoll',
+	tpoll: 'tierpoll',
+	tierspoll: 'tierpoll',
+	tierpoll: function (target, room, user) {
+		if (room.battle) return false;
+		if (!this.can('broadcast', null, room)) return false;
+		if (room.game && room.id === 'lobby') return this.errorReply("Polls cannot be created in Lobby when there is a room game in progress.");
+		this.parse('/poll create Tier for the next tournament?, ' + polltiers.join(', '));
 	},
 };
 
