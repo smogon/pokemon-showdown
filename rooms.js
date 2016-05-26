@@ -105,7 +105,17 @@ let Room = (() => {
 		if (message && message !== true && typeof message.then !== 'function') {
 			let emoticons = Wisp.parseEmoticons(user.getIdentity(this.roomid), message);
 			if (emoticons && !this.disableEmoticons) {
-				this.addRaw(emoticons);
+				for (let u in this.users) {
+					let curUser = Users(u);
+					if (!curUser || !curUser.connected) continue;
+					if (Wisp.ignoreEmotes[curUser.userid]) {
+						curUser.sendTo(this, '|c|' + user.getIdentity(this.id) + '|' + message);
+						continue;
+					}
+					curUser.sendTo(this, (this.battle ? "|raw|" : "|uhtml|" + user.userid + "|") + emoticons);
+				}
+				this.log.push((this.battle ? "|raw|" : "|uhtml|" + user.userid + "|") + emoticons);
+				this.lastUpdate = this.log.length;
 			} else {
 				this.add('|c|' + user.getIdentity(this.id) + '|' + message);
 			}
