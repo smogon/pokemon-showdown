@@ -104,6 +104,8 @@ if (Config.watchconfig) {
  
 global.sqlite3 = require('sqlite3');
 
+global.Db = require('origindb')('config/db');
+
 global.Monitor = require('./monitor.js');
 
 global.Tools = require('./tools.js');
