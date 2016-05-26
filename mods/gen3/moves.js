@@ -721,6 +721,7 @@ exports.BattleMovedex = {
 		inherit: true,
 		pp: 10,
 		effect: {
+			noCopy: true,
 			onStart: function (target) {
 				this.effectData.layers = 1;
 				this.add('-start', target, 'stockpile' + this.effectData.layers);
