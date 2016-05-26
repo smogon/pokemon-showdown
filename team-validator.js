@@ -724,11 +724,13 @@ class Validator {
 							// can tradeback
 							sources.push('1ST' + learned.slice(2) + ' ' + template.id);
 						}
-						// The event ability must match the Pokémon's
-						let hiddenAbility = template.eventPokemon[learned.substr(2)].isHidden || false;
-						if (hiddenAbility !== isHidden) {
-							incompatibleAbility = true;
-							continue;
+						if (set.ability) {
+							// The event ability must match the Pokémon's
+							let hiddenAbility = template.eventPokemon[learned.substr(2)].isHidden || false;
+							if (hiddenAbility !== isHidden) {
+								incompatibleAbility = true;
+								continue;
+							}
 						}
 						sources.push(learned + ' ' + template.id);
 					} else if (learned.charAt(1) === 'D') {
