@@ -825,8 +825,8 @@ class Tournament {
 			let firstBuck;
 			let secondBuck;
 
-			if (this.room.isOfficial && tourSize >= 8) {
-				firstMoney = Math.round(tourSize / 10);
+			if (this.room.isOfficial && tourSize >= 4) {
+				firstMoney = Math.round(tourSize / 4);
 				secondMoney = Math.round(firstMoney / 2);
 				firstBuck = 'buck';
 				secondBuck = 'buck';
@@ -861,7 +861,7 @@ class Tournament {
 		} catch (e) {
 			console.log('Error giving bucks for tournaments: ' + e.stack);
 		}
-		
+
 		if (this.room.isOfficial && tourSize >= 4) {
 			try {
 				let tourRarity = tourCard(tourSize, toId(winner));
