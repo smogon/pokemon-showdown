@@ -1090,8 +1090,8 @@ let commands = {
 					targetUser.popup('You have a tournament battle in the room "' + tournament.room.title + '". If you do not start soon you may be disqualified.');
 				}
 			}
-			tournament.room.addRaw('<b>Players have been reminded of their tournament battles by ' + user.name + '.</b>');
-			if (offlineUsers.length > 0 && offlineUsers !== '') tournament.room.addRaw('<b>The following users are currently offline: ' + offlineUsers + '.</b>');
+			tournament.room.addRaw('<b>Players have been reminded of their tournament battles by ' + Tools.escapeHTML(user.name) + '.</b>');
+			if (offlineUsers.length > 0 && offlineUsers !== '') tournament.room.addRaw('<b>The following users are currently offline: ' + offlineUsers.join(', ') + '.</b>');
 		},
 		scout: 'setscouting',
 		scouting: 'setscouting',
