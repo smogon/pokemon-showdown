@@ -128,7 +128,7 @@ exports.BattleFormatsData = {
 	},
 	pichuspikyeared: {
 		eventPokemon: [
-			{"generation": 4, "level": 30, "nature": "Naughty", "moves":["helpinghand", "volttackle", "swagger", "painsplit"]},
+			{"generation": 4, "level": 30, "gender": "F", "nature": "Naughty", "moves":["helpinghand", "volttackle", "swagger", "painsplit"]},
 		],
 		eventOnly: true,
 		tier: "NU",

@@ -2578,7 +2578,6 @@ exports.BattlePokedex = {
 		forme: "Spiky-eared",
 		formeLetter: "S",
 		types: ["Electric"],
-		gender: "F",
 		baseStats: {hp: 20, atk: 40, def: 15, spa: 35, spd: 35, spe: 60},
 		abilities: {0: "Static"},
 		heightm: 0.3,
