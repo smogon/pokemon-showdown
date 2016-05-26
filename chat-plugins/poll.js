@@ -172,6 +172,8 @@ class Poll {
 	}
 }
 
+exports.Poll = Poll;
+
 exports.commands = {
 	poll: {
 		htmlcreate: 'new',
