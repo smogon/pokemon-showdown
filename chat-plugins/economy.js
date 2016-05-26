@@ -29,7 +29,7 @@ let Economy = global.Economy = {
 		userid = toId(userid);
 		Wisp.database.all("SELECT * FROM users WHERE userid=$userid", {$userid: userid}, function (err, rows) {
 			if (err) return console.log(err);
-			callback((rows[0] ? rows[0].bucks : 0));
+			callback(((rows[0] && rows[0].bucks) ? rows[0].bucks : 0));
 		});
 	},
 	writeMoney: function (userid, amount, callback) {
