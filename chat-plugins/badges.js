@@ -39,7 +39,7 @@ exports.commands = {
 			let badgeName = Tools.escapeHTML(parts[1].trim());
 			let description = Tools.escapeHTML(parts[2].trim());
 			let img = parts[3].trim();
-			if (Db('badgeData').has(userid)) return this.errorReply('This badge already exists.');
+			if (Db('badgeData').has(badgeName)) return this.errorReply('This badge already exists.');
 			Db('badgeData').set(badgeName, [description, img]);
 			this.logModCommand(user.name + " created the badge '" + badgeName + ".");
 			this.sendReply("The badge '" + badgeName + "' was successfully created.");
