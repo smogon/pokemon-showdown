@@ -542,6 +542,21 @@ exports.commands = {
 		if (targetUser) {
 			avatar = (isNaN(targetUser.avatar) ? "http://" + serverIp + ":" + Config.port + "/avatars/" + targetUser.avatar : "http://play.pokemonshowdown.com/sprites/trainers/" + targetUser.avatar + ".png");
 		}
+		let badges = () => {
+			let badges = Db('userBadges').get(userid);
+			let css = 'border:none;background:none;padding:0;';
+			if (typeof badges !== 'undefined' && badges !== null) {
+				let output = ' <table style="' + css + '"> <tr>';
+				for (let i = 0; i < badges.length; i++) {
+					if (i !== 0 && i % 4 === 0) output += '</tr> <tr>';
+					output += '<td><button style="' + css + '" name="send" value="/badges info, ' + badges[i] + '">' +
+					'<img src="' + Db('badgeData').get(badges[i])[1] + '" height="16" width="16" alt="' + badges[i] + '" title="' + badges[i] + '" >' + '</button></td>';
+				}
+				output += '</tr> </table>';
+				return output;
+			}
+			return '';
+		};
 
 		let userSymbol = (Users.usergroups[userid] ? Users.usergroups[userid].substr(0, 1) : "Regular User");
 		let userGroup = (Config.groups[userSymbol] ? Config.groups[userSymbol].name : "Regular User");
@@ -559,12 +574,13 @@ exports.commands = {
 				lastOnline = (lastOnline ? moment(lastOnline).format("MMMM Do YYYY, h:mm:ss A") + ' EST. (' + moment(lastOnline).fromNow() + ')' : "Never");
 				if (targetUser && targetUser.connected) lastOnline = '<font color=green>Currently Online</font>';
 				let profile = '';
-				profile += '<img src="' + avatar + '" height=80 width=80 align=left>';
+				profile += '<div style="float: left; width: 75%;"> <img src="' + avatar + '" height=80 width=80 align=left>';
 				profile += '&nbsp;<font color=#b30000><b>Name: </font><b><font color="' + Wisp.hashColor(toId(username)) + '">' + Tools.escapeHTML(username) + '</font></b><br />';
 				profile += '&nbsp;<font color=#b30000><b>Registered: </font></b>' + regdate + '<br />';
 				profile += '&nbsp;<font color=#b30000><b>Rank: </font></b>' + userGroup + (Users.vips[userid] ? ' (<font color=#6390F0><b>VIP User</b></font>)' : '') + '<br />';
 				if (bucks) profile += '&nbsp;<font color=#b30000><b>Bucks: </font></b>' + bucks + '<br />';
 				profile += '&nbsp;<font color=#b30000><b>Last Online: </font></b>' + lastOnline;
+				profile += '</div><div style="float: left; text-align: center; border-radius: 12px; box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2) inset; margin: 2px 2px 2px 0px" class="card-button">' + badges() + '</div>';
 				profile += '<br clear="all">';
 				self.sendReplyBox(profile);
 				room.update();
