@@ -127,9 +127,7 @@ exports.BattleFormatsData = {
 		tier: "LC",
 	},
 	pichuspikyeared: {
-		eventPokemon: [
-			{"generation": 4, "level": 30, "gender": "F", "nature": "Naughty", "moves":["helpinghand", "volttackle", "swagger", "painsplit"]},
-		],
+		inherit: true,
 		eventOnly: true,
 		tier: "NU",
 	},
