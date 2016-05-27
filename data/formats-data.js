@@ -229,7 +229,7 @@ exports.BattleFormatsData = {
 		tier: "LC",
 	},
 	pichuspikyeared: {
-		tier: "Illegal",
+		exists: false,
 	},
 	pikachu: {
 		randomBattleMoves: ["thunderbolt", "volttackle", "voltswitch", "grassknot", "hiddenpowerice", "brickbreak", "extremespeed", "encore", "substitute", "knockoff"],
