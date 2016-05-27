@@ -14,7 +14,7 @@ const polltiers = ['Random Battle', 'Anything Goes', 'Ubers', 'OverUsed', 'Under
 	'Battle Spot Doubles', 'Random Triples Battle', 'Challenge Cup 1v1', 'Balanced Hackmons',
 	'1v1, Monotype', 'Inverse Battle', 'Almost Any Ability', 'STABmons', 'Hackmons Cup',
 	'[Seasonal]', 'Battle Factory', 'Doubles OU', 'CAP', 'Gen 5 OU'];
-	
+
 const bubbleLetterMap = new Map([
 	['a', '\u24D0'], ['b', '\u24D1'], ['c', '\u24D2'], ['d', '\u24D3'], ['e', '\u24D4'], ['f', '\u24D5'], ['g', '\u24D6'], ['h', '\u24D7'], ['i', '\u24D8'], ['j', '\u24D9'], ['k', '\u24DA'], ['l', '\u24DB'], ['m', '\u24DC'],
 	['n', '\u24DD'], ['o', '\u24DE'], ['p', '\u24DF'], ['q', '\u24E0'], ['r', '\u24E1'], ['s', '\u24E2'], ['t', '\u24E3'], ['u', '\u24E4'], ['v', '\u24E5'], ['w', '\u24E6'], ['x', '\u24E7'], ['y', '\u24E8'], ['z', '\u24E9'],
@@ -159,7 +159,7 @@ exports.commands = {
 			});
 		});
 	},
-	
+
 	masspm: 'pmall',
 	pmall: function (target, room, user) {
 		if (!this.can('pmall')) return false;
@@ -207,7 +207,7 @@ exports.commands = {
 		this.privateModCommand('(' + Tools.escapeHTML(user.name) + ' mass PMd: ' + target + ')');
 	},
 	rmallhelp: ["/rmall [message] - Sends a PM to every user in a room."],
-	
+
 	afk: 'away',
 	busy: 'away',
 	work: 'away',
@@ -254,7 +254,7 @@ exports.commands = {
 		user.isAway = true;
 	},
 	awayhelp: ["/away [message] - Sets a users away status."],
-	
+
 	back: function (target, room, user) {
 		if (!user.isAway) return this.sendReply("You are not set as away.");
 		user.isAway = false;
@@ -534,6 +534,14 @@ Object.assign(Wisp, {
 			method: 'GET',
 		};
 		http.get(options);
+	},
+
+	messageSeniorStaff: function (message) {
+		for (let u in Rooms.rooms['global'].users) {
+			let curUser = Users(u);
+			if (!curUser || !curUser.connected || !curUser.can('seniorstaff')) continue;
+			curUser.send('|pm|~Server|~|' + message);
+		}
 	},
 });
 
