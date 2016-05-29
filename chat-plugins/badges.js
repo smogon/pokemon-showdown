@@ -69,11 +69,22 @@ exports.commands = {
 			if (!Db('userBadges').has(userid)) return this.errorReply("This user doesn't have any badges.");
 			userBadges = Db('userBadges').get(userid);
 			selectedBadge = parts[2].trim();
-			if (Db('badgeData').has(userid)) return this.errorReply('This badge already exists.');
 			userBadges = userBadges.filter(b => b !== selectedBadge);
 			Db('userBadges').set(toId(userid), userBadges);
 			this.logModCommand(user.name + " took the badge '" + selectedBadge + "' badge from " + userid + ".");
 			this.sendReply("The '" + selectedBadge + "' badge was taken from '" + userid + "'.");
+			break;
+		case 'delete':
+			if (!this.can('ban')) return false;
+			if (parts.length !== 2) return this.errorReply("Correct command: `/badges deleteall, badgeName`");
+			selectedBadge = parts[1].trim();
+			if (!Db('badgeData').has(selectedBadge)) return this.errorReply("This badge does not exist, please check /badges list");
+			Db('badgeData').delete(selectedBadge);
+			let badgeUserObject = Db('userBadges').object();
+			let users = Object.keys(badgeUserObject);
+			users.forEach(u => Db('userBadges').set(u, (badgeUserObject[u].filter(b => b !== selectedBadge))));
+			this.sendReply("The badge with the name '" + selectedBadge + "' deleted.");
+			this.logModCommand(user.name + " removed the badge '" + selectedBadge + ".");
 			break;
 		default:
 			return this.errorReply("Invalid command. Valid commands are `/badges list`, `/badges info, badgeName`, `/badges set, user, badgeName` and `/badges take, user, badgeName`" +
