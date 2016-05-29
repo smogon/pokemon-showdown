@@ -36,6 +36,7 @@ function generateCSS(name, icon) {
 	name = toId(name);
 	for (let room in Rooms.rooms) {
 		if (Rooms.rooms[room].id === 'global' || Rooms.rooms[room].type !== 'chat' || Rooms.rooms[room].isPersonal) continue;
+		if (!isNaN(Number(Rooms.rooms[room].id.charAt(0)))) continue;
 		rooms.push('#' + Rooms.rooms[room].id + '-userlist-user-' + name);
 	}
 	css = rooms.join(', ');
@@ -46,7 +47,7 @@ function generateCSS(name, icon) {
 exports.commands = {
 	customicon: 'icon',
 	icon: function (target, room, user) {
-		if (!this.can('pban')) return false;
+		if (!this.can('customicon')) return false;
 		target = target.split(',');
 		for (let u in target) target[u] = target[u].trim();
 		if (!target[1]) return this.parse('/help icon');
@@ -56,14 +57,14 @@ exports.commands = {
 			delete icons[toId(target[0])];
 			updateIcons();
 			this.sendReply("You removed " + target[0] + "'s icon.");
-			Rooms('staff').add(user.name + " removed " + target[0] + "'s icon.").update();
+			Rooms('upperstaff').add(user.name + " removed " + target[0] + "'s icon.").update();
 			this.privateModCommand("(" + target[0] + "'s icon was removed by " + user.name + ".)");
 			if (Users(target[0]) && Users(target[0]).connected) Users(target[0]).popup(user.name + " removed your icon.");
 			return;
 		}
 
 		this.sendReply("|raw|You have given <b><font color=" + Wisp.hashColor(Tools.escapeHTML(target[0])) + ">" + Tools.escapeHTML(target[0]) + "</font></b> an icon.");
-		Rooms('staff').add('|raw|<b><font color="' + Wisp.hashColor(Tools.escapeHTML(target[0])) + '">' + Tools.escapeHTML(target[0]) + '</font> has received an icon from ' + Tools.escapeHTML(user.name) + '.</b>').update();
+		Rooms('upperstaff').add('|raw|<b><font color="' + Wisp.hashColor(Tools.escapeHTML(target[0])) + '">' + Tools.escapeHTML(target[0]) + '</font> has received an icon from ' + Tools.escapeHTML(user.name) + '.</b>').update();
 		this.privateModCommand("(" + target[0] + " has recieved icon: '" + target[1] + "' from " + user.name + ".)");
 		icons[toId(target[0])] = target[1];
 		updateIcons();

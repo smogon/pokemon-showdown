@@ -37,6 +37,7 @@ function generateCSS(name, color) {
 	name = toId(name);
 	for (let room in Rooms.rooms) {
 		if (Rooms.rooms[room].id === 'global' || Rooms.rooms[room].type !== 'chat' || Rooms.rooms[room].isPersonal) continue;
+		if (!isNaN(Number(Rooms.rooms[room].id.charAt(0)))) continue;
 		rooms.push('#' + Rooms.rooms[room].id + '-userlist-user-' + name + ' strong em');
 		rooms.push('#' + Rooms.rooms[room].id + '-userlist-user-' + name + ' strong');
 		rooms.push('#' + Rooms.rooms[room].id + '-userlist-user-' + name + ' span');
@@ -51,7 +52,7 @@ function generateCSS(name, color) {
 exports.commands = {
 	customcolour: 'customcolor',
 	customcolor: function (target, room, user) {
-		if (!this.can('pban')) return false;
+		if (!this.can('customcolor')) return false;
 		target = target.split(',');
 		for (let u in target) target[u] = target[u].trim();
 		if (!target[1]) return this.parse('/help customcolor');
@@ -61,14 +62,14 @@ exports.commands = {
 			delete Wisp.customColors[toId(target[0])];
 			updateColor();
 			this.sendReply("You removed " + target[0] + "'s custom color.");
-			Rooms('staff').add(user.name + " removed " + target[0] + "'s custom color.").update();
+			Rooms('upperstaff').add(user.name + " removed " + target[0] + "'s custom color.").update();
 			this.privateModCommand("(" + target[0] + "'s custom color was removed by " + user.name + ".)");
 			if (Users(target[0]) && Users(target[0]).connected) Users(target[0]).popup(user.name + " removed your custom color.");
 			return;
 		}
 
 		this.sendReply("|raw|You have given <b><font color=" + target[1] + ">" + Tools.escapeHTML(target[0]) + "</font></b> a custom color.");
-		Rooms('staff').add('|raw|' + Tools.escapeHTML(target[0]) + " has recieved a <b><font color=" + target[1] + ">custom color</fon></b> from " + Tools.escapeHTML(user.name) + ".").update();
+		Rooms('upperstaff').add('|raw|' + Tools.escapeHTML(target[0]) + " has recieved a <b><font color=" + target[1] + ">custom color</fon></b> from " + Tools.escapeHTML(user.name) + ".").update();
 		this.privateModCommand("(" + target[0] + " has recieved custom color: '" + target[1] + "' from " + user.name + ".)");
 		Wisp.customColors[toId(target[0])] = target[1];
 		updateColor();
