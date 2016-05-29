@@ -4,7 +4,6 @@
 'use strict';
 
 const fs = require('fs');
-require('sugar');
 
 exports.commands = {
 	viewlogs: function (target, room, user) {
