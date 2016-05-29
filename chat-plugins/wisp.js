@@ -618,7 +618,7 @@ Object.assign(Wisp, {
 
 	updateSeen: function (userid) {
 		userid = toId(userid);
-		if (~userid.indexOf('guest')) return false;
+		if (userid.match(/^guest[0-9]/)) return false;
 		let date = Date.now();
 		Wisp.database.all("SELECT * FROM users WHERE userid=$userid", {$userid: userid}, function (err, rows) {
 			if (rows.length < 1) {
