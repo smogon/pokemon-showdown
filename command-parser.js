@@ -429,13 +429,16 @@ class CommandContext {
 	canHTML(html) {
 		html = ('' + (html || '')).trim();
 		if (!html) return '';
+		html = Tools.sanitizeHTML(html, {
+			allowImage: !this.room.isPersonal || this.user.can('announce'),
+			exceptions: this.user.can('lock') ? [
+				'(pm|msg|w|whisper) [^,]{1,18}, [^\n\r\f]{1,128}',
+			] : null,
+		});
+		if (!html) return '';
 		let images = /<img\b[^<>]*/ig;
 		let match;
 		while ((match = images.exec(html))) {
-			if (this.room.isPersonal && !this.user.can('announce')) {
-				this.errorReply("Images are not allowed in personal rooms.");
-				return false;
-			}
 			if (!/width=([0-9]+|"[0-9]+")/i.test(match[0]) || !/height=([0-9]+|"[0-9]+")/i.test(match[0])) {
 				// Width and height are required because most browsers insert the
 				// <img> element before width and height are known, and when the
@@ -461,31 +464,6 @@ class CommandContext {
 		if (/>here.?</i.test(html) || /click here/i.test(html)) {
 			this.errorReply('Do not use "click here"');
 			return false;
-		}
-
-		// check for mismatched tags
-		let tags = html.toLowerCase().match(/<\/?(div|a|button|b|i|u|center|font)\b/g);
-		if (tags) {
-			let stack = [];
-			for (let i = 0; i < tags.length; i++) {
-				let tag = tags[i];
-				if (tag.charAt(1) === '/') {
-					if (!stack.length) {
-						this.errorReply("Extraneous </" + tag.substr(2) + "> without an opening tag.");
-						return false;
-					}
-					if (tag.substr(2) !== stack.pop()) {
-						this.errorReply("Missing </" + tag.substr(2) + "> or it's in the wrong place.");
-						return false;
-					}
-				} else {
-					stack.push(tag.substr(1));
-				}
-			}
-			if (stack.length) {
-				this.errorReply("Missing </" + stack.pop() + ">.");
-				return false;
-			}
 		}
 
 		return html;
