@@ -3043,3 +3043,7 @@ exports.commands = {
 	},
 
 };
+
+process.nextTick(() => {
+	CommandParser.multiLinePattern.register('>>>? ');
+});

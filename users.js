@@ -1538,7 +1538,8 @@ Users.socketReceive = function (worker, workerid, socketid, message) {
 	if (!room) room = Rooms.lobby || Rooms.global;
 	let user = connection.user;
 	if (!user) return;
-	if (lines.substr(0, 3) === '>> ' || lines.substr(0, 4) === '>>> ') {
+
+	if (CommandParser.multiLinePattern.test(lines)) {
 		user.chat(lines, room, connection);
 		return;
 	}
