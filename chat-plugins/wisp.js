@@ -398,6 +398,34 @@ exports.commands = {
 	},
 	kickhelp: ['/kick [user] - Kicks a user from the room.'],
 	roomkickhelp: ['/kick [user] - Kicks a user from the room.'],
+
+	hidetext: function (target, room, user) {
+		if (!target) return this.parse('/help hidetext');
+		this.splitTarget(target);
+		let targetUser = this.targetUser;
+		let name = this.targetUsername;
+		if (!targetUser) return this.errorReply("User '" + name + "' not found.");
+		let userid = targetUser.getLastId();
+		let hidetype = '';
+		if (!user.can('lock', targetUser) && !user.can('ban', targetUser, room)) {
+			this.errorReply("/hidetext - Access denied.");
+			return false;
+		}
+		if (targetUser.locked || Users.checkBanned(targetUser.latestIp)) {
+			hidetype = 'hide|';
+		} else if ((room.bannedUsers[toId(name)] && room.bannedIps[targetUser.latestIp]) || user.can('rangeban')) {
+			hidetype = 'roomhide|';
+		} else {
+			return this.errorReply("User '" + name + "' is not banned from this room or locked.");
+		}
+		this.addModCommand("" + targetUser.name + "'s messages were cleared from room " + room.id + " by " + user.name + ".");
+		this.add('|unlink|' + hidetype + userid);
+		this.add('|uhtmlchange|' + userid + '|');
+		if (userid !== toId(this.inputUsername)) {
+			this.add('|unlink|' + hidetype + toId(this.inputUsername));
+			this.add('|uhtmlchange|' + toId(this.inputUsername) + '|');
+		}
+	},
 };
 
 Object.assign(Wisp, {

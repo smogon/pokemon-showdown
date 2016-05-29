@@ -1322,7 +1322,11 @@ exports.commands = {
 			this.privateModCommand("(" + name + "'s ac account: " + acAccount + ")");
 		}
 		this.add('|unlink|hide|' + userid);
-		if (userid !== toId(this.inputUsername)) this.add('|unlink|hide|' + toId(this.inputUsername));
+		this.add('|uhtmlchange|' + userid + '|');
+		if (userid !== toId(this.inputUsername)) {
+			this.add('|unlink|hide|' + toId(this.inputUsername));
+			this.add('|uhtmlchange|' + toId(this.inputUsername) + '|');
+		}
 
 		this.globalModlog("LOCK", targetUser, " by " + user.name + (target ? ": " + target : ""));
 		Punishments.lock(targetUser);
@@ -1380,7 +1384,11 @@ exports.commands = {
 			this.privateModCommand("(" + name + "'s ac account: " + acAccount + ")");
 		}
 		this.add('|unlink|hide|' + userid);
-		if (userid !== toId(this.inputUsername)) this.add('|unlink|hide|' + toId(this.inputUsername));
+		this.add('|uhtmlchange|' + userid + '|');
+		if (userid !== toId(this.inputUsername)) {
+			this.add('|unlink|hide|' + toId(this.inputUsername));
+			this.add('|uhtmlchange|' + toId(this.inputUsername) + '|');
+		}
 
 		this.globalModlog("WEEKLOCK", targetUser, " by " + user.name + (target ? ": " + target : ""));
 		Punishments.lock(targetUser, Date.now() + 7 * 24 * 60 * 60 * 1000);
@@ -1469,7 +1477,11 @@ exports.commands = {
 		}
 
 		this.add('|unlink|hide|' + userid);
-		if (userid !== toId(this.inputUsername)) this.add('|unlink|hide|' + toId(this.inputUsername));
+		this.add('|uhtmlchange|' + userid + '|');
+		if (userid !== toId(this.inputUsername)) {
+			this.add('|unlink|hide|' + toId(this.inputUsername));
+			this.add('|uhtmlchange|' + toId(this.inputUsername) + '|');
+		}
 		Punishments.ban(targetUser);
 		this.globalModlog("BAN", targetUser, " by " + user.name + (target ? ": " + target : ""));
 		return true;
