@@ -360,6 +360,26 @@ exports.commands = {
 		if (room.game && room.id === 'lobby') return this.errorReply("Polls cannot be created in Lobby when there is a room game in progress.");
 		this.parse('/poll create Tier for the next tournament?, ' + polltiers.join(', '));
 	},
+
+	clearroom:  function (target, room, user) {
+		if (!this.can('clearroom', null, room)) return false;
+		if (room.battle) return this.sendReply("You cannot clearall in battle rooms.");
+		let len = room.log.length;
+		let users = [];
+		while (len--) {
+			room.log[len] = '';
+		}
+		for (let u in room.users) {
+			users.push(u);
+			Users.get(u).leaveRoom(room, Users.get(u).connections[0]);
+		}
+		len = users.length;
+		setTimeout(function () {
+			while (len--) {
+				Users.get(users[len]).joinRoom(room, Users.get(users[len]).connections[0]);
+			}
+		}, 1000);
+	},
 };
 
 Object.assign(Wisp, {
