@@ -173,7 +173,7 @@ class QuestionGiveaway extends Giveaway {
 	static sanitizeAnswers(target) {
 		let ret = [];
 		for (let ans of target.split(",")) {
-			ans = ans.replace(/[^a-z0-9 ]+/ig, "").trim();
+			ans = ans.replace(/[^a-z0-9 .-]+/ig, "").trim();
 			if (!toId(ans)) continue;
 			ret.push(ans);
 		}
