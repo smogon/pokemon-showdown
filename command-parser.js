@@ -39,6 +39,23 @@ const BROADCAST_TOKEN = '!';
 const fs = require('fs');
 const path = require('path');
 
+exports.multiLinePattern = {
+	elements: [],
+	regexp: null,
+	register: function (elem) {
+		if (Array.isArray(elem)) {
+			elem.forEach(elem => this.elements.push(elem));
+		} else {
+			this.elements.push(elem);
+		}
+		this.regexp = new RegExp('^(' + this.elements.map(elem => '(?:' + elem + ')').join('|') + ')', 'i');
+	},
+	test: function (text) {
+		if (!this.regexp) return false;
+		return this.regexp.test(text);
+	},
+};
+
 /*********************************************************
  * Load command files
  *********************************************************/
