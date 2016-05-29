@@ -11,7 +11,7 @@
     "sockjs": "0.3.15",
     "sqlite3": "^3.1.4",
     "uuid": "^2.0.2",
-	"nani": "^1.2.0"
+    "nani": "^1.2.0"
   },
   "optionalDependencies": {
     "cloud-env": "0.1.1",
