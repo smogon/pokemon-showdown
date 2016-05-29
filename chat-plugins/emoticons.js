@@ -111,7 +111,7 @@ exports.commands = {
 			if (!this.runBroadcast()) return;
 			let reply = "<b><u>Emoticons (" + Object.keys(emoticons).length + ")</u></b><br />";
 			for (let emote in emoticons) reply += "(" + emote + " <img src=\"" + emoticons[emote] + "\" height=\"40\" width=\"40\">) ";
-			this.sendReplyBox(reply);
+			this.sendReply('|raw|<div class="infobox infobox-limited">' + reply + '</div>');
 			break;
 
 		case 'ignore':
