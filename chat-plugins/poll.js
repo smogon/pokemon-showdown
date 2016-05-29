@@ -60,7 +60,7 @@ class Poll {
 	generateVotes() {
 		let output = '<div class="infobox"><p style="margin: 2px 0 5px 0"><span style="border:1px solid #6A6;color:#484;border-radius:4px;padding:0 3px"><i class="fa fa-bar-chart"></i> Poll</span> <strong style="font-size:11pt">' + this.getQuestionMarkup() + '</strong></p>';
 		this.options.forEach((option, number) => {
-			output += '<div style="margin-top: 5px"><button value="/poll vote ' + number + '" name="send" title="Vote for ' + number + '. ' + Tools.escapeHTML(option.name) + '">' + number + '. <strong>' + Tools.escapeHTML(option.name) + '</strong></button></div>';
+			output += '<div style="margin-top: 5px"><button value="/poll vote ' + number + '" name="send" title="Vote for ' + number + '. ' + Tools.escapeHTML(option.name) + '">' + number + '. <strong>' + this.getOptionMarkup(option) + '</strong></button></div>';
 		});
 		output += '<div style="margin-top: 7px; padding-left: 12px"><button value="/poll results" name="send" title="View results - you will not be able to vote after viewing results"><small>(View results)</small></button></div>';
 		output += '</div>';
@@ -78,7 +78,7 @@ class Poll {
 		let colors = ['#79A', '#8A8', '#88B'];
 		while (!i.done) {
 			let percentage = Math.round((i.value[1].votes * 100) / (this.totalVotes || 1));
-			output += '<div style="margin-top: 3px">' + i.value[0] + '. <strong>' + (i.value[0] === option ? '<em>' : '') + Tools.escapeHTML(i.value[1].name) + (i.value[0] === option ? '</em>' : '') + '</strong> <small>(' + i.value[1].votes + ' vote' + (i.value[1].votes === 1 ? '' : 's') + ')</small><br /><span style="font-size:7pt;background:' + colors[c % 3] + ';padding-right:' + (percentage * 3) + 'px"></span><small>&nbsp;' + percentage + '%</small></div>';
+			output += '<div style="margin-top: 3px">' + i.value[0] + '. <strong>' + (i.value[0] === option ? '<em>' : '') + this.getOptionMarkup(i.value[1]) + (i.value[0] === option ? '</em>' : '') + '</strong> <small>(' + i.value[1].votes + ' vote' + (i.value[1].votes === 1 ? '' : 's') + ')</small><br /><span style="font-size:7pt;background:' + colors[c % 3] + ';padding-right:' + (percentage * 3) + 'px"></span><small>&nbsp;' + percentage + '%</small></div>';
 			i = iter.next();
 			c++;
 		}
@@ -91,6 +91,11 @@ class Poll {
 	getQuestionMarkup() {
 		if (this.supportHTML) return this.question;
 		return Tools.escapeHTML(this.question);
+	}
+
+	getOptionMarkup(option) {
+		if (this.supportHTML) return option.name;
+		return Tools.escapeHTML(option.name);
 	}
 
 	update() {
@@ -181,8 +186,13 @@ exports.commands = {
 		new: function (target, room, user, connection, cmd, message) {
 			if (!target) return this.parse('/help poll new');
 			if (target.length > 1024) return this.errorReply("Poll too long.");
-			let params = target.split(target.includes('|') ? '|' : ',').map(param => param.trim());
+
 			const supportHTML = cmd === 'htmlcreate';
+			const separator = target.match(/[\n\|,]/);
+			if (!separator) return this.errorReply("Not enough arguments for /poll new.");
+			if (separator[0] !== '\n') target = target.replace(/[\r\n]+/g, '');
+
+			let params = target.split(separator[0]).map(param => param.trim());
 
 			if (!this.can('minigame', null, room)) return false;
 			if (supportHTML && !this.can('declare', null, room)) return false;
@@ -190,15 +200,10 @@ exports.commands = {
 			if (room.poll) return this.errorReply("There is already a poll in progress in this room.");
 			if (params.length < 3) return this.errorReply("Not enough arguments for /poll new.");
 
-			const questionSource = supportHTML ? this.canHTML(params[0]) : params[0];
-			if (!questionSource) return;
+			if (supportHTML) params = params.map(parameter => this.canHTML(parameter));
+			if (params.some(parameter => !parameter)) return;
 
-			let options = [];
-
-			for (let i = 1; i < params.length; i++) {
-				options.push(params[i]);
-			}
-
+			const options = params.splice(1);
 			if (options.length > 8) {
 				return this.errorReply("Too many options for poll (maximum is 8).");
 			}
@@ -310,3 +315,7 @@ exports.commands = {
 				"/poll display - Displays the poll",
 				"/poll end - Ends a poll and displays the results. Requires: % @ # & ~"],
 };
+
+process.nextTick(() => {
+	CommandParser.multiLinePattern.register('/poll (new|create|htmlcreate) ');
+});
