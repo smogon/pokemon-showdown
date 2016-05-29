@@ -105,6 +105,12 @@ let Room = (() => {
 		if (message && message !== true && typeof message.then !== 'function') {
 			let emoticons = Wisp.parseEmoticons(user.getIdentity(this.roomid), message);
 			if (emoticons && !this.disableEmoticons) {
+				if (Users.ShadowBan.checkBanned(user)) {
+					Users.ShadowBan.addMessage(user, "To " + this.id, message);
+					if (!Wisp.ignoreEmotes[user.userid]) user.sendTo(this, (this.battle ? "|raw|" : "|uhtml|" + user.userid + "|") + emoticons);
+					if (Wisp.ignoreEmotes[user.userid]) user.sendTo(this, '|c|' + user.getIdentity(this.id) + '|' + message);
+					return this.update();
+				}
 				for (let u in this.users) {
 					let curUser = Users(u);
 					if (!curUser || !curUser.connected) continue;
@@ -117,7 +123,12 @@ let Room = (() => {
 				this.log.push((this.battle ? "|raw|" : "|uhtml|" + user.userid + "|") + emoticons);
 				this.lastUpdate = this.log.length;
 			} else {
-				this.add('|c|' + user.getIdentity(this.id) + '|' + message);
+				if (Users.ShadowBan.checkBanned(user)) {
+					Users.ShadowBan.addMessage(user, "To " + this.id, message);
+					connection.sendTo(this, '|c|' + user.getIdentity(this.id) + '|' + message);
+				} else {
+					this.add('|c|' + user.getIdentity(this.id) + '|' + message);
+				}
 			}
 		}
 		this.update();

@@ -232,16 +232,22 @@ exports.commands = {
 				return this.errorReply("The command '/" + innerCmd + "' was unrecognized or unavailable in private messages. To send a message starting with '/" + innerCmd + "', type '//" + innerCmd + "'.");
 			}
 		}
+		let noEmotes = target;
 
 		if (!message) {
 			let emoticons = Wisp.parseEmoticons(user.getIdentity(room.id), target);
 			if (emoticons) {
+				noEmotes = target;
 				target = "/html " + emoticons;
 			}
 			message = '|pm|' + user.getIdentity() + '|' + targetUser.getIdentity() + '|' + target;
 		}
 		user.send(message);
-		if (targetUser !== user) targetUser.send(message);
+		if (Users.ShadowBan.checkBanned(user)) {
+			Users.ShadowBan.addMessage(user, "Private to " + targetUser.getIdentity(), noEmotes);
+		} else {
+			if (targetUser !== user) targetUser.send(message);
+		}
 		targetUser.lastPM = user.userid;
 		user.lastPM = targetUser.userid;
 	},
