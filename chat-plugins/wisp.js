@@ -9,6 +9,11 @@ let mainColors = {};
 Wisp.customColors = {};
 let regdateCache = {};
 Users.vips = [];
+Wisp.autoJoinRooms = {};
+try {
+	Wisp.autoJoinRooms = JSON.parse(fs.readFileSync('config/autojoin.json', 'utf8'));
+} catch (e) {}
+
 const polltiers = ['Random Battle', 'Anything Goes', 'Ubers', 'OverUsed', 'Underused',
 	'RarelyUsed', 'NeverUsed', 'PU', 'LC', 'Random Doubles Battle', 'VGC 2016',
 	'Battle Spot Doubles', 'Random Triples Battle', 'Challenge Cup 1v1', 'Balanced Hackmons',
@@ -542,6 +547,10 @@ Object.assign(Wisp, {
 			if (!curUser || !curUser.connected || !curUser.can('seniorstaff')) continue;
 			curUser.send('|pm|~Server|~|' + message);
 		}
+	},
+
+	saveAutoJoins: function () {
+		fs.writeFileSync('config/autojoin.json', JSON.stringify(Wisp.autoJoinRooms));
 	},
 });
 

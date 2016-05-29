@@ -765,6 +765,11 @@ let GlobalRoom = (() => {
 				connection.autojoins = '';
 			}
 		}
+		if (Wisp.autoJoinRooms[user.userid]) {
+			for (let u = 0; u < Wisp.autoJoinRooms[user.userid].length; u++) {
+				user.tryJoinRoom(Wisp.autoJoinRooms[user.userid][u], connection);
+			}
+		}
 	};
 	GlobalRoom.prototype.onConnect = function (user, connection) {
 		let initdata = '|updateuser|' + user.name + '|' + (user.named ? '1' : '0') + '|' + user.avatar + '\n';

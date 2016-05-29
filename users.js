@@ -1086,6 +1086,10 @@ class User {
 				return null;
 			} else {
 				connection.sendTo(roomid, "|noinit|nonexistent|The room '" + roomid + "' does not exist.");
+				if (Wisp.autoJoinRooms[this.userid] && Wisp.autoJoinRooms[this.userid].includes(roomid)) {
+					Wisp.autoJoinRooms[this.userid].splice(Wisp.autoJoinRooms[this.userid].indexOf(roomid), 1);
+					Wisp.saveAutoJoins();
+				}
 				return false;
 			}
 		}
@@ -1110,6 +1114,10 @@ class User {
 					return null;
 				} else if (!this.can('bypassall')) {
 					connection.sendTo(roomid, "|noinit|nonexistent|The room '" + roomid + "' does not exist.");
+					if (Wisp.autoJoinRooms[this.userid] && Wisp.autoJoinRooms[this.userid].includes(room.id)) {
+						Wisp.autoJoinRooms[this.userid].splice(Wisp.autoJoinRooms[this.userid].indexOf(room.id), 1);
+						Wisp.saveAutoJoins();
+					}
 					return false;
 				}
 			}
@@ -1126,6 +1134,10 @@ class User {
 
 		let joinResult = this.joinRoom(room, connection);
 		if (!joinResult) {
+			if (Wisp.autoJoinRooms[this.userid] && Wisp.autoJoinRooms[this.userid].includes(room.id)) {
+				Wisp.autoJoinRooms[this.userid].splice(Wisp.autoJoinRooms[this.userid].indexOf(room.id), 1);
+				Wisp.saveAutoJoins();
+			}
 			if (joinResult === null) {
 				connection.sendTo(roomid, "|noinit|joinfailed|You are banned from the room '" + roomid + "'.");
 				return false;
@@ -1165,6 +1177,15 @@ class User {
 			}
 			connection.joinRoom(room);
 			room.onConnect(this, connection);
+		}
+		if (this.named && this.registered && room.type === 'chat') {
+			if (!Wisp.autoJoinRooms[this.userid]) Wisp.autoJoinRooms[this.userid] = [];
+			if (Wisp.autoJoinRooms[this.userid].length < Config.maxAutoJoinRooms) {
+				if (Wisp.autoJoinRooms[this.userid].indexOf(room.id) === -1) {
+					Wisp.autoJoinRooms[this.userid].push(room.id);
+					Wisp.saveAutoJoins();
+				}
+			}
 		}
 		return true;
 	}
