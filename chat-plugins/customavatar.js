@@ -128,7 +128,8 @@ exports.commands = {
 
 				this.sendReply(userid + "'s custom avatar has been set.");
 
-				Rooms.get('staff').add('|raw|' + Wisp.nameColor(userid, true) + ' has received a custom avatar from ' + Wisp.nameColor(user.name, true)).update();
+				Rooms.get('upperstaff').add('|raw|' + Wisp.nameColor(userid, true) + ' has received a custom avatar from ' + Wisp.nameColor(user.name, true)).update();
+				Wisp.messageSeniorStaff('/html ' + Wisp.nameColor(userid, true) + ' has received a custom avatar from ' + Wisp.nameColor(user.name, true));
 				Users.get(userid).popup('|modal||html|You have received a custom avatar from <b><font color="' + Wisp.hashColor(user.userid) + '">' + Tools.escapeHTML(user.name) + '</font></b>: <img src="' + avatar + '" width="80" height="80">');
 				room.update();
 			}.bind(this));
