@@ -251,7 +251,7 @@ exports.commands = {
 		}
 
 		if (user.can('lock', null, room)) {
-			this.add("|raw|-- <font color='" + Wisp.nameColor(user.userid) + "'><strong>" + Tools.escapeHTML(user.name) + "</strong></font> is now " + target.toLowerCase() + ".");
+			this.add("|raw|-- <font color='" + Wisp.hashColor(user.userid) + "'><strong>" + Tools.escapeHTML(user.name) + "</strong></font> is now " + target.toLowerCase() + ".");
 			this.parse('/hide');
 		}
 		user.forceRename(newName, user.registered);
@@ -268,7 +268,7 @@ exports.commands = {
 		let statusIdx = newName.search(/\s\-\s[\u24B6-\u24E9\u2460-\u2468\u24EA]+$/);
 		if (statusIdx < 0) {
 			user.isAway = false;
-			if (user.can('lock', null, room)) this.add("|raw|-- <font color='" + Wisp.nameColor(user.userid) + "'><strong>" + Tools.escapeHTML(user.name) + "</strong></font> is no longer away.");
+			if (user.can('lock', null, room)) this.add("|raw|-- <font color='" + Wisp.hashColor(user.userid) + "'><strong>" + Tools.escapeHTML(user.name) + "</strong></font> is no longer away.");
 			return false;
 		}
 
@@ -278,7 +278,7 @@ exports.commands = {
 		user.updateIdentity();
 		user.isAway = false;
 		if (user.can('lock', null, room)) {
-			this.add("|raw|-- <font color='" + Wisp.nameColor(user.userid) + "'><strong>" + Tools.escapeHTML(newName) + "</strong></font> is no longer " + status.toLowerCase() + ".");
+			this.add("|raw|-- <font color='" + Wisp.hashColor(user.userid) + "'><strong>" + Tools.escapeHTML(newName) + "</strong></font> is no longer " + status.toLowerCase() + ".");
 			this.parse('/show');
 		}
 	},
