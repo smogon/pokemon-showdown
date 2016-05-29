@@ -1138,6 +1138,7 @@ class User {
 	joinRoom(room, connection) {
 		room = Rooms(room);
 		if (!room) return false;
+		if (room.id === 'upperstaff' && !this.can('seniorstaff')) return false;
 		if (!this.can('bypassall')) {
 			// check if user has permission to join
 			if (room.staffRoom && !this.isStaff) return false;
