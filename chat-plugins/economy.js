@@ -11,16 +11,17 @@ let shopTitle = 'Wisp Shop';
 let serverIp = '158.69.196.64';
 
 let prices = {
-	"customsymbol": 5,
-	"leagueroom": 5,
+	"symbol": 5,
 	"fix": 10,
-	"declare": 15,
-	"poof": 20,
-	"customavatar": 25,
-	"animatedavatar": 35,
+	"declare": 20,
+	"poof": 25,
+	"avatar": 35,
 	"infobox": 40,
+	"emote": 50,
 	"leagueshop": 55,
-	"chatroom": 70,
+	"room": 75,
+	"icon": 100,
+	"color": 150,
 };
 
 let Economy = global.Economy = {
@@ -184,7 +185,7 @@ exports.commands = {
 
 		Economy.readMoney(user.userid, userMoney => {
 			switch (itemid) {
-			case 'customsymbol':
+			case 'symbol':
 				if (userMoney < prices[itemid]) return this.sendReply("You need " + (prices[itemid] - userMoney) + " more bucks to purchase a custom symbol.");
 				Economy.writeMoney(user.userid, prices[itemid] * -1);
 				Economy.logTransaction(user.name + " has purchased a custom symbol for " + prices[itemid] + " bucks.");
@@ -192,25 +193,16 @@ exports.commands = {
 				this.sendReplyBox("You have purchased a custom symbol. You may now use /customsymbol [symbol] to change your symbol.");
 				matched = true;
 				break;
-			case 'customavatar':
+			case 'avatar':
 				if (userMoney < prices[itemid]) return this.sendReply("You need " + (prices[itemid] - userMoney) + " more bucks to purchase a custom avatar.");
 				if (!targetSplit[1]) return this.sendReply("Please specify the image you would like as your avatar with /buy customavatar, image url.");
 				Economy.writeMoney(user.userid, prices[itemid] * -1);
-				Economy.logTransaction(user.name + " has purchased a custom avatar for " + prices[itemid] + " bucks. Image: " + targetSplit[1]);
-				Wisp.messageSeniorStaff(user.name + " has purchased a custom avatar. Image: " + targetSplit[1]);
+				Economy.logTransaction(user.name + " has purchased an avatar for " + prices[itemid] + " bucks. Image: " + targetSplit[1]);
+				Wisp.messageSeniorStaff(user.name + " has purchased an avatar. Image: " + targetSplit[1]);
 				this.sendReply("You have purchased a custom avatar. It will be added shortly.");
 				matched = true;
 				break;
-			case 'animatedavatar':
-				if (userMoney < prices[itemid]) return this.sendReply("You need " + (prices[itemid] - userMoney) + " more bucks to purchase a custom avatar.");
-				if (!targetSplit[1]) return this.sendReply("Please specify the image you would like as your avatar with /buy animatedavatar, image url.");
-				Economy.writeMoney(user.userid, prices[itemid] * -1);
-				Economy.logTransaction(user.name + " has purchased an animated avatar for " + prices[itemid] + " bucks. Image: " + targetSplit[1]);
-				Wisp.messageSeniorStaff(user.name + " has purchased an animated avatar. Image: " + targetSplit[1]);
-				this.sendReply("You have purchased an animated avatar. It will be added shortly");
-				matched = true;
-				break;
-			case 'chatroom':
+			case 'room':
 				if (userMoney < prices[itemid]) return this.sendReply("You need " + (prices[itemid] - userMoney) + " more bucks to purchase a chat room.");
 				if (!targetSplit[1]) return this.sendReply("Please specify a name for the chat room with /buy chatroom, name.");
 				if (Rooms.rooms[toId(targetSplit[1])]) return this.sendReply("You can't purchase a room that already exists.");
@@ -218,16 +210,6 @@ exports.commands = {
 				Economy.logTransaction(user.name + " has purchased a chat room for " + prices[itemid] + " bucks.");
 				Wisp.messageSeniorStaff(user.name + " has purchased a chat room. Name: " + targetSplit[1]);
 				this.sendReply("You've purchased a chat room. You will be notified when it has been created.");
-				matched = true;
-				break;
-			case 'leagueroom':
-				if (userMoney < prices[itemid]) return this.sendReply("You need " + (prices[itemid] - userMoney) + " more bucks to purchase a league room.");
-				if (!targetSplit[1]) return this.sendReply("Please specify your league name with /buy leagueroom, name.");
-				if (Rooms.rooms[toId(targetSplit[1])]) return this.sendReply("You can't purchase a league that already exists.");
-				Economy.writeMoney(user.userid, prices[itemid] * -1);
-				Economy.logTransaction(user.name + " has purchased a league room for " + prices[itemid] + " bucks.");
-				Wisp.messageSeniorStaff(user.name + " has purchased a league room. Name: " + targetSplit[1]);
-				this.sendReply("You've purchased a league room. You will be notified when it has been created.");
 				matched = true;
 				break;
 			case 'poof':
@@ -282,6 +264,33 @@ exports.commands = {
 				targetRoom.chatRoomData.shopList = targetRoom.shopList;
 				Rooms.global.writeChatRoomData();
 				break;
+			case 'emote':
+				if (userMoney < prices[itemid]) return this.sendReply("You need " + (prices[itemid] - userMoney) + " more bucks to purchase an emote.");
+				if (!targetSplit[1]) return this.sendReply("Please specify the image you would like as your emote with /buy emote, image url.");
+				Economy.writeMoney(user.userid, prices[itemid] * -1);
+				Economy.logTransaction(user.name + " has purchased an emote for " + prices[itemid] + " bucks. Image: " + targetSplit[1]);
+				Wisp.messageSeniorStaff(user.name + " has purchased an emote. Image: " + targetSplit[1]);
+				this.sendReply("You have purchased an emote. It will be added shortly.");
+				matched = true;
+				break;
+			case 'icon':
+				if (userMoney < prices[itemid]) return this.sendReply("You need " + (prices[itemid] - userMoney) + " more bucks to purchase an icon.");
+				if (!targetSplit[1]) return this.sendReply("Please specify the image you would like as your icon with /buy icon, image url.");
+				Economy.writeMoney(user.userid, prices[itemid] * -1);
+				Economy.logTransaction(user.name + " has purchased an icon for " + prices[itemid] + " bucks. Image: " + targetSplit[1]);
+				Wisp.messageSeniorStaff(user.name + " has purchased an icon. Image: " + targetSplit[1]);
+				this.sendReply("You have purchased an icon. It will be added shortly.");
+				matched = true;
+				break;
+			case 'color':
+				if (userMoney < prices[itemid]) return this.sendReply("You need " + (prices[itemid] - userMoney) + " more bucks to purchase a custom color.");
+				if (!targetSplit[1]) return this.sendReply("|raw|Please specify the color you would like with /buy color, hexcode. (see: <a href=http://www.colorpicker.com/>http://www.colorpicker.com/</a>)");
+				Economy.writeMoney(user.userid, prices[itemid] * -1);
+				Economy.logTransaction(user.name + " has purchased a custom color for " + prices[itemid] + " bucks. Image: " + targetSplit[1]);
+				Wisp.messageSeniorStaff(user.name + " has purchased a custom color. Color: " + targetSplit[1]);
+				this.sendReply("You have purchased a custom color. It will be added shortly.");
+				matched = true;
+				break;
 			}
 
 			if (matched) return this.sendReply("You now have " + (userMoney - prices[itemid]) + " bucks left.");
@@ -291,16 +300,17 @@ exports.commands = {
 	shop: function (target, room, user) {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox('<center><h4><b><u>' + shopTitle + '</u></b></h4><table border="1" cellspacing ="0" cellpadding="3"><tr><th>Item</th><th>Description</th><th>Price</th></tr>' +
-			'<tr><td>Custom Symbol</td><td>Buys a custom symbol to go in front of your name. (Temporary until restart)</td><td>5</td></tr>' +
-			'<tr><td>League Room</td><td>Purchases a room for your league. May be deleted if league becomes inactive.</td><td>5</td></tr>' +
-			'<tr><td>Fix</td><td>Buys the ability to alter your current custom avatar or infobox (don\'t buy if you have neither)!</td><td>10</td></tr>' +
-			'<tr><td>Declare</td><td>You get the ability to have a message declared in the lobby. This can be used for league advertisement (not server)</td><td>15</td></tr>' +
-			'<tr><td>Poof</td><td>Buy a poof message to be added into the pool of possible poofs</td><td>20</td></tr>' +
-			'<tr><td>Custom Avatar</td><td>Buys a custom avatar to be applied to your name (You supply, must be .png format. Images larger than 80x80 may not show correctly.)</td><td>25</td></tr>' +
-			'<tr><td>Animated Avatar</td><td>Buys an animated avatar to be applied to your name (You supply, must be .gif format. Images larger than 80x80 may not show correctly.)</td><td>35</td></tr>' +
-			'<tr><td>Infobox</td><td>Buys an infobox that will be viewable with a command such as /tailz.</td><td>40</td></tr>' +
-			'<tr><td>League Shop</td><td>Buys a fully customizable shop for your league room. The bucks earned from purchases go to the room founder or room bank.</td><td>55</td></tr>' +
-			'<tr><td>Chat Room</td><td>Buys a chatroom for you to own (comes with a free welcome message)</td><td>70</td></tr>' +
+			'<tr><td>Custom Symbol</td><td>Buys a custom symbol to go in front of your name. (Temporary until restart)</td><td>' + prices['symbol'] + '</td></tr>' +
+			'<tr><td>Fix</td><td>Buys the ability to alter your current custom avatar or infobox (don\'t buy if you have neither)!</td><td>' + prices['fix'] + '</td></tr>' +
+			'<tr><td>Declare</td><td>You get the ability to have a message declared in the lobby. This can be used for league advertisement (not server)</td><td>' + prices['declare'] + '</td></tr>' +
+			'<tr><td>Poof</td><td>Buy a poof message to be added into the pool of possible poofs</td><td>' + prices['poof'] + '</td></tr>' +
+			'<tr><td>Avatar</td><td>Buys a custom avatar to be applied to your name (You supply, must be .png or .gif format. Images larger than 80x80 may not show correctly.)</td><td>' + prices['avatar'] + '</td></tr>' +
+			'<tr><td>Infobox</td><td>Buys an infobox that will be viewable with a command such as /tailz.</td><td>' + prices['infobox'] + '</td></tr>' +
+			'<tr><td>Emote</td><td>Buys an emoticon for you (and everyone else) to use in the chat.</td><td>' + prices['emote'] + '</td></tr>' +
+			'<tr><td>League Shop</td><td>Buys a fully customizable shop for your league room. The bucks earned from purchases go to the room founder or room bank.</td><td>' + prices['leagueshop'] + '</td></tr>' +
+			'<tr><td>Chat Room</td><td>Buys a chatroom for you to own.</td><td>' + prices['room'] + '</td></tr>' +
+			'<tr><td>Icon</td><td>Buys an icon that displays beside your name on the userlist. Size must be 32x32.</td><td>' + prices['icon'] + '</td></tr>' +
+			'<tr><td>Color</td><td>Buys a custom color change for your name. Changes the color of your name on the userlist and in the chat.</td><td>' + prices['color'] + '</td></tr>' +
 			'</table><br />To buy an item from the shop, use /buy [item].<br />All sales final, no refunds will be provided.</center>'
 		);
 	},
