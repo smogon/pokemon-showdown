@@ -359,6 +359,8 @@ class User {
 			if (room.isMuted(this)) {
 				return '!' + this.name;
 			}
+			if (this.hideauth) return this.hideauth + this.name;
+			if (this.customSymbol) return this.customSymbol + this.name;
 			if (room && room.auth) {
 				if (room.auth[this.userid]) {
 					return room.auth[this.userid] + this.name;
@@ -366,6 +368,8 @@ class User {
 				if (room.isPrivate === true) return ' ' + this.name;
 			}
 		}
+		if (this.hideauth) return this.hideauth + this.name;
+		if (this.customSymbol) return this.customSymbol + this.name;
 		return this.group + this.name;
 	}
 	can(permission, target, room) {
@@ -737,6 +741,7 @@ class User {
 		return false;
 	}
 	forceRename(name, registered) {
+		Wisp.updateSeen(name);
 		// skip the login server
 		let userid = toId(name);
 
@@ -986,6 +991,7 @@ class User {
 		}
 	}
 	onDisconnect(connection) {
+		Wisp.updateSeen(this.userid);
 		for (let i = 0; i < this.connections.length; i++) {
 			if (this.connections[i] === connection) {
 				// console.log('DISCONNECT: ' + this.userid);
@@ -1080,6 +1086,10 @@ class User {
 				return null;
 			} else {
 				connection.sendTo(roomid, "|noinit|nonexistent|The room '" + roomid + "' does not exist.");
+				if (Wisp.autoJoinRooms[this.userid] && Wisp.autoJoinRooms[this.userid].includes(roomid)) {
+					Wisp.autoJoinRooms[this.userid].splice(Wisp.autoJoinRooms[this.userid].indexOf(roomid), 1);
+					Wisp.saveAutoJoins();
+				}
 				return false;
 			}
 		}
@@ -1104,6 +1114,10 @@ class User {
 					return null;
 				} else if (!this.can('bypassall')) {
 					connection.sendTo(roomid, "|noinit|nonexistent|The room '" + roomid + "' does not exist.");
+					if (Wisp.autoJoinRooms[this.userid] && Wisp.autoJoinRooms[this.userid].includes(room.id)) {
+						Wisp.autoJoinRooms[this.userid].splice(Wisp.autoJoinRooms[this.userid].indexOf(room.id), 1);
+						Wisp.saveAutoJoins();
+					}
 					return false;
 				}
 			}
@@ -1120,6 +1134,10 @@ class User {
 
 		let joinResult = this.joinRoom(room, connection);
 		if (!joinResult) {
+			if (Wisp.autoJoinRooms[this.userid] && Wisp.autoJoinRooms[this.userid].includes(room.id)) {
+				Wisp.autoJoinRooms[this.userid].splice(Wisp.autoJoinRooms[this.userid].indexOf(room.id), 1);
+				Wisp.saveAutoJoins();
+			}
 			if (joinResult === null) {
 				connection.sendTo(roomid, "|noinit|joinfailed|You are banned from the room '" + roomid + "'.");
 				return false;
@@ -1132,6 +1150,7 @@ class User {
 	joinRoom(room, connection) {
 		room = Rooms(room);
 		if (!room) return false;
+		if (room.id === 'upperstaff' && !this.can('seniorstaff')) return false;
 		if (!this.can('bypassall')) {
 			// check if user has permission to join
 			if (room.staffRoom && !this.isStaff) return false;
@@ -1159,11 +1178,21 @@ class User {
 			connection.joinRoom(room);
 			room.onConnect(this, connection);
 		}
+		if (this.named && this.registered && room.type === 'chat') {
+			if (!Wisp.autoJoinRooms[this.userid]) Wisp.autoJoinRooms[this.userid] = [];
+			if (Wisp.autoJoinRooms[this.userid].length < Config.maxAutoJoinRooms) {
+				if (Wisp.autoJoinRooms[this.userid].indexOf(room.id) === -1) {
+					Wisp.autoJoinRooms[this.userid].push(room.id);
+					Wisp.saveAutoJoins();
+				}
+			}
+		}
 		return true;
 	}
 	leaveRoom(room, connection, force) {
 		room = Rooms(room);
 		if (room.id === 'global' && !force) {
+			Wisp.updateSeen(this.userid);
 			// you can't leave the global room except while disconnecting
 			return false;
 		}

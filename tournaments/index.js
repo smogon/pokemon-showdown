@@ -795,6 +795,82 @@ class Tournament {
 			generator: this.generator.name,
 			bracketData: this.getBracketData(),
 		}));
+
+		let data = {results: this.generator.getResults().map(usersToNames), bracketData: this.getBracketData()};
+		let data2 = data;
+		data = data['results'].toString();
+		let winner = '';
+
+		if (data.indexOf(',') >= 0) {
+			data = data.split(',');
+			winner = data[0];
+		} else {
+			winner = data;
+		}
+
+		let tourSize = this.generator.users.size;
+		try { // this code is a bigger mess than I remember... I should clean it up some day.
+			let runnerUp = false;
+
+			// there's probably a better way to do this but I'm lazy
+			if (data2['bracketData']['rootNode']) {
+				if (data2['bracketData']['rootNode']['children']) {
+					if (data2['bracketData']['rootNode']['children'][0]['team'] !== winner) runnerUp = data2['bracketData']['rootNode']['children'][0]['team'];
+					if (data2['bracketData']['rootNode']['children'][1]['team'] !== winner) runnerUp = data2['bracketData']['rootNode']['children'][1]['team'];
+				}
+			}
+
+			let firstMoney = false;
+			let secondMoney = false;
+			let firstBuck;
+			let secondBuck;
+
+			if (this.room.isOfficial && tourSize >= 4) {
+				firstMoney = Math.round(tourSize / 4);
+				secondMoney = Math.round(firstMoney / 2);
+				firstBuck = 'buck';
+				secondBuck = 'buck';
+			}
+
+			/*if (toId(this.generator.name).substr(5) === 'buyin') {
+				this.room.tournamentPool -= Math.round(this.room.tournamentPool * 0.10);
+				firstMoney = Math.round(this.room.tournamentPool / 1.5);
+				secondMoney = Math.floor(this.room.tournamentPool - firstMoney);
+				firstBuck = 'buck';
+				secondBuck = 'buck';
+			}*/
+
+			if (firstMoney) {
+				if (firstMoney > 1) firstBuck = 'bucks';
+				if (secondMoney > 1) secondBuck = 'bucks';
+				this.room.add('|raw|<b><font color="' + Wisp.hashColor(winner) + '">' + Tools.escapeHTML(winner) + '</font> has also won <font color=#b30000>' + firstMoney + '</font> ' + firstBuck + ' for winning the tournament!</b>');
+				if (runnerUp) this.room.add('|raw|<b><font color="' + Wisp.hashColor(runnerUp) + '">' + Tools.escapeHTML(runnerUp) + '</font> has also won <font color=#b30000>' + secondMoney + '</font> ' + secondBuck + ' for coming in second!</b>');
+				Economy.writeMoney(toId(winner), firstMoney, () => {
+					Economy.readMoney(toId(winner), newMoney => {
+						Economy.logTransaction(winner + ' has won ' + firstMoney + ' ' + firstBuck + ' from a tournament in ' + this.room.title + '. They now have ' + newMoney);
+						if (runnerUp) {
+							Economy.writeMoney(toId(runnerUp), secondMoney, () => {
+								Economy.readMoney(toId(runnerUp), newMoney2 => {
+									Economy.logTransaction(runnerUp + ' has won ' + secondMoney + ' ' + secondBuck + ' from a tournament in ' + this.room.title + '. They now have ' + newMoney2);
+								});
+							});
+						}
+					});
+				});
+			}
+		} catch (e) {
+			console.log('Error giving bucks for tournaments: ' + e.stack);
+		}
+
+		if (this.room.isOfficial && tourSize >= 4) {
+			try {
+				let tourRarity = tourCard(tourSize, toId(winner));
+				this.room.addRaw("<b><font color='#088cc7'>" + Tools.escapeHTML(winner) + "</font> has also won a <font color=" + tourRarity[0] + ">" + tourRarity[1] + "</font> card: <button class='tourcard-btn' style='border-radius: 20px; box-shadow: 1px 1px rgba(255, 255, 255, 0.3) inset, -1px -1px rgba(0, 0, 0, 0.2) inset, 2px 2px 2px rgba(0, 0, 0, 0.5);' name='send' value='/card " + tourRarity[2] + "'>" + tourRarity[3] + "</button> from the tournament.");
+			} catch (e) {
+				console.log('Error giving cards for tournaments: ' + e.stack);
+			}
+		}
+
 		this.isEnded = true;
 		if (this.autoDisqualifyTimer) clearTimeout(this.autoDisqualifyTimer);
 		delete exports.tournaments[this.room.id];
@@ -998,6 +1074,24 @@ let commands = {
 		},
 		runautodq: function (tournament) {
 			tournament.runAutoDisqualify(this);
+		},
+		remind: function (tournament, user) {
+			let users = tournament.generator.getAvailableMatches().toString().split(',');
+			let offlineUsers = [];
+			for (let u in users) {
+				let targetUser = Users.get(users[u]);
+				if (!targetUser) {
+					offlineUsers.push(users[u]);
+					continue;
+				} else if (!targetUser.connected) {
+					offlineUsers.push(targetUser.userid);
+					continue;
+				} else {
+					targetUser.popup('You have a tournament battle in the room "' + tournament.room.title + '". If you do not start soon you may be disqualified.');
+				}
+			}
+			tournament.room.addRaw('<b>Players have been reminded of their tournament battles by ' + Tools.escapeHTML(user.name) + '.</b>');
+			if (offlineUsers.length > 0 && offlineUsers !== '') tournament.room.addRaw('<b>The following users are currently offline: ' + offlineUsers.join(', ') + '.</b>');
 		},
 		scout: 'setscouting',
 		scouting: 'setscouting',

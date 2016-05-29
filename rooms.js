@@ -103,7 +103,33 @@ let Room = (() => {
 		message = CommandParser.parse(message, this, user, connection);
 
 		if (message && message !== true && typeof message.then !== 'function') {
-			this.add('|c|' + user.getIdentity(this.id) + '|' + message);
+			let emoticons = Wisp.parseEmoticons(user.getIdentity(this.roomid), message);
+			if (emoticons && !this.disableEmoticons) {
+				if (Users.ShadowBan.checkBanned(user)) {
+					Users.ShadowBan.addMessage(user, "To " + this.id, message);
+					if (!Wisp.ignoreEmotes[user.userid]) user.sendTo(this, (this.battle ? "|raw|" : "|uhtml|" + user.userid + "|") + emoticons);
+					if (Wisp.ignoreEmotes[user.userid]) user.sendTo(this, '|c|' + user.getIdentity(this.id) + '|' + message);
+					return this.update();
+				}
+				for (let u in this.users) {
+					let curUser = Users(u);
+					if (!curUser || !curUser.connected) continue;
+					if (Wisp.ignoreEmotes[curUser.userid]) {
+						curUser.sendTo(this, '|c|' + user.getIdentity(this.id) + '|' + message);
+						continue;
+					}
+					curUser.sendTo(this, (this.battle ? "|raw|" : "|uhtml|" + user.userid + "|") + emoticons);
+				}
+				this.log.push((this.battle ? "|raw|" : "|uhtml|" + user.userid + "|") + emoticons);
+				this.lastUpdate = this.log.length;
+			} else {
+				if (Users.ShadowBan.checkBanned(user)) {
+					Users.ShadowBan.addMessage(user, "To " + this.id, message);
+					connection.sendTo(this, '|c|' + user.getIdentity(this.id) + '|' + message);
+				} else {
+					this.add('|c|' + user.getIdentity(this.id) + '|' + message);
+				}
+			}
 		}
 		this.update();
 	};
@@ -738,6 +764,7 @@ let GlobalRoom = (() => {
 				// if staffAutojoin is anything truthy: autojoin if user has any roomauth
 				user.joinRoom(room.id, connection);
 			}
+			if (user.can('seniorstaff')) user.joinRoom('upperstaff');
 		}
 		for (let i = 0; i < user.connections.length; i++) {
 			connection = user.connections[i];
@@ -747,6 +774,11 @@ let GlobalRoom = (() => {
 					user.tryJoinRoom(autojoins[j], connection);
 				}
 				connection.autojoins = '';
+			}
+		}
+		if (Wisp.autoJoinRooms[user.userid]) {
+			for (let u = 0; u < Wisp.autoJoinRooms[user.userid].length; u++) {
+				user.tryJoinRoom(Wisp.autoJoinRooms[user.userid][u], connection);
 			}
 		}
 	};
@@ -1500,7 +1532,7 @@ let ChatRoom = (() => {
 	};
 	ChatRoom.prototype.getIntroMessage = function (user) {
 		let message = '';
-		if (this.introMessage) message += '\n|raw|<div class="infobox infobox-roomintro"><div' + (!this.isOfficial ? ' class="infobox-limited"' : '') + '>' + this.introMessage + '</div>';
+		if (this.introMessage) message += '\n|raw|<div class="infobox infobox-roomintro">' + this.introMessage + '</div>';
 		if (this.staffMessage && user.can('mute', null, this)) message += (message ? '<br />' : '\n|raw|<div class="infobox">') + '(Staff intro:)<br /><div>' + this.staffMessage + '</div>';
 		if (this.modchat) {
 			message += (message ? '<br />' : '\n|raw|<div class="infobox">') + '<div class="broadcast-red">' +

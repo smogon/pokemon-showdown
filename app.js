@@ -101,6 +101,10 @@ if (Config.watchconfig) {
 /*********************************************************
  * Set up most of our globals
  *********************************************************/
+ 
+global.sqlite3 = require('sqlite3');
+
+global.Db = require('origindb')('config/db');
 
 global.Monitor = require('./monitor.js');
 
@@ -122,6 +126,8 @@ global.Rooms = require('./rooms.js');
 delete process.send; // in case we're a child process
 global.Verifier = require('./verifier.js');
 Verifier.PM.spawn();
+
+global.Wisp = {};
 
 global.CommandParser = require('./command-parser.js');
 

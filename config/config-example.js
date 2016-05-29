@@ -68,6 +68,8 @@ exports.loginserverpublickey = "-----BEGIN RSA PUBLIC KEY-----\n" +
 //   Greek or Cyrillic.
 exports.disablebasicnamefilter = false;
 
+exports.maxAutoJoinRooms = 8;
+
 // report joins and leaves - shows messages like "<USERNAME> joined"
 //   Join and leave messages are small and consolidated, so there will never
 //   be more than one line of messages.

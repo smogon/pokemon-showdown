@@ -46,7 +46,7 @@ exports.commands = {
 		let ranks = Object.keys(Config.groups);
 		for (let u in Users.usergroups) {
 			let rank = Users.usergroups[u].charAt(0);
-			if (rank === ' ' || rank === '+') continue;
+			if (rank === ' ') continue;
 			// In case the usergroups.csv file is not proper, we check for the server ranks.
 			if (ranks.includes(rank)) {
 				let name = Users.usergroups[u].substr(1);
@@ -232,10 +232,22 @@ exports.commands = {
 				return this.errorReply("The command '/" + innerCmd + "' was unrecognized or unavailable in private messages. To send a message starting with '/" + innerCmd + "', type '//" + innerCmd + "'.");
 			}
 		}
+		let noEmotes = target;
 
-		if (!message) message = '|pm|' + user.getIdentity() + '|' + targetUser.getIdentity() + '|' + target;
+		if (!message) {
+			let emoticons = Wisp.parseEmoticons(user.getIdentity(room.id), target);
+			if (emoticons) {
+				noEmotes = target;
+				target = "/html " + emoticons;
+			}
+			message = '|pm|' + user.getIdentity() + '|' + targetUser.getIdentity() + '|' + target;
+		}
 		user.send(message);
-		if (targetUser !== user) targetUser.send(message);
+		if (Users.ShadowBan.checkBanned(user)) {
+			Users.ShadowBan.addMessage(user, "Private to " + targetUser.getIdentity(), noEmotes);
+		} else {
+			if (targetUser !== user) targetUser.send(message);
+		}
 		targetUser.lastPM = user.userid;
 		user.lastPM = targetUser.userid;
 	},
@@ -604,7 +616,7 @@ exports.commands = {
 			this.sendReplyBox("The room description is: " + Tools.escapeHTML(room.desc));
 			return;
 		}
-		if (!this.can('declare')) return false;
+		if (!this.can('roomdesc', null, room)) return false;
 		if (target.length > 80) return this.errorReply("Error: Room description is too long (must be at most 80 characters).");
 		let normalizedTarget = ' ' + target.toLowerCase().replace('[^a-zA-Z0-9]+', ' ').trim() + ' ';
 
@@ -634,7 +646,7 @@ exports.commands = {
 		if (!target) {
 			if (!this.runBroadcast()) return;
 			if (!room.introMessage) return this.sendReply("This room does not have an introduction set.");
-			this.sendReply('|raw|<div class="infobox infobox-limited">' + room.introMessage + '</div>');
+			this.sendReply('|raw|<div class="infobox">' + room.introMessage + '</div>');
 			if (!this.broadcasting && user.can('declare', null, room)) {
 				this.sendReply('Source:');
 				this.sendReplyBox('<code>/roomintro ' + Tools.escapeHTML(room.introMessage) + '</code>');
@@ -653,7 +665,7 @@ exports.commands = {
 
 		room.introMessage = target;
 		this.sendReply("(The room introduction has been changed to:)");
-		this.sendReply('|raw|<div class="infobox infobox-limited">' + target + '</div>');
+		this.sendReply('|raw|<div class="infobox">' + target + '</div>');
 
 		this.privateModCommand("(" + user.name + " changed the roomintro.)");
 		this.logEntry(target);
@@ -767,11 +779,52 @@ exports.commands = {
 		}
 	},
 
+	roomfounder: function (target, room, user) {
+		if (!room.chatRoomData) {
+			return this.errorReply("/roomfounder - This room isn\'t designed for per-room moderation to be added.");
+		}
+		target = this.splitTarget(target, true);
+		let targetUser = this.targetUser;
+		if (!targetUser) return this.errorReply("User '" + this.targetUsername + "' is not online.");
+		if (!this.can('makeroom')) return false;
+		if (!room.auth) room.auth = room.chatRoomData.auth = {};
+		room.auth[targetUser.userid] = '#';
+		room.founder = targetUser.userid;
+		this.addModCommand(targetUser.name + ' was appointed to Room Founder by ' + user.name + '.');
+		room.onUpdateIdentity(targetUser);
+		room.chatRoomData.founder = room.founder;
+		Rooms.global.writeChatRoomData();
+	},
+
+	roomdefounder: 'deroomfounder',
+	deroomfounder: function (target, room, user) {
+		if (!room.auth) {
+			return this.errorReply("/roomdefounder - This room isn't designed for per-room moderation");
+		}
+		target = this.splitTarget(target, true);
+		let targetUser = this.targetUser;
+		let name = this.targetUsername;
+		let userid = toId(name);
+		if (!userid || userid === '') return this.errorReply("User '" + name + "' does not exist.");
+
+		if (room.auth[userid] !== '#') return this.errorReply("User '" + name + "' is not a room founder.");
+		if (!this.can('makeroom', null, room)) return false;
+
+		delete room.auth[userid];
+		delete room.founder;
+		this.sendReply("(" + name + " is no longer Room Founder.)");
+		if (targetUser) targetUser.updateIdentity();
+		if (room.chatRoomData) {
+			Rooms.global.writeChatRoomData();
+		}
+	},
+
 	roomowner: function (target, room, user) {
 		if (!room.chatRoomData) {
 			return this.sendReply("/roomowner - This room isn't designed for per-room moderation to be added");
 		}
 		if (!target) return this.parse('/help roomowner');
+		if (!room.founder) return this.errorReply('The room needs a room founder before it can have a room owner.');
 		target = this.splitTarget(target, true);
 		let targetUser = this.targetUser;
 		let name = this.targetUsername;
@@ -781,7 +834,7 @@ exports.commands = {
 			return this.errorReply("User '" + this.targetUsername + "' is offline and unrecognized, and so can't be promoted.");
 		}
 
-		if (!this.can('makeroom')) return false;
+		if (room.founder !== user.userid && !this.can('makeroom')) return false;
 
 		if (!room.auth) room.auth = room.chatRoomData.auth = {};
 
@@ -794,6 +847,28 @@ exports.commands = {
 		Rooms.global.writeChatRoomData();
 	},
 	roomownerhelp: ["/roomowner [username] - Appoints [username] as a room owner. Requires: & ~"],
+
+	roomdeowner: 'deroomowner',
+	deroomowner: function (target, room, user) {
+		if (!room.auth) {
+			return this.sendReply("/roomdeowner - This room isn't designed for per-room moderation");
+		}
+		target = this.splitTarget(target, true);
+		let targetUser = this.targetUser;
+		let name = this.targetUsername;
+		let userid = toId(name);
+		if (!userid || userid === '') return this.errorReply("User '" + name + "' does not exist.");
+
+		if (room.auth[userid] !== '#') return this.errorReply("User '" + name + "' is not a room owner.");
+		if (!room.founder || user.userid !== room.founder && !this.can('makeroom', null, room)) return false;
+
+		delete room.auth[userid];
+		this.sendReply("(" + name + " is no longer Room Owner.)");
+		if (targetUser) targetUser.updateIdentity();
+		if (room.chatRoomData) {
+			Rooms.global.writeChatRoomData();
+		}
+	},
 
 	roomdemote: 'roompromote',
 	roompromote: function (target, room, user, connection, cmd) {
@@ -1068,13 +1143,18 @@ exports.commands = {
 			return this.errorReply("The room '" + target + "' does not exist.");
 		}
 		user.leaveRoom(targetRoom || room, connection);
+		if (user.named && user.registered) {
+			if (Wisp.autoJoinRooms[user.userid] && Wisp.autoJoinRooms[user.userid].includes((targetRoom ? targetRoom.id : room.id))) {
+				Wisp.autoJoinRooms[user.userid].splice(Wisp.autoJoinRooms[user.userid].indexOf((targetRoom ? targetRoom.id : room.id)), 1);
+				Wisp.saveAutoJoins();
+			}
+		}
 	},
 
 	/*********************************************************
 	 * Moderating: Punishments
 	 *********************************************************/
 
-	kick: 'warn',
 	k: 'warn',
 	warn: function (target, room, user) {
 		if (!target) return this.parse('/help warn');
@@ -1242,7 +1322,11 @@ exports.commands = {
 			this.privateModCommand("(" + name + "'s ac account: " + acAccount + ")");
 		}
 		this.add('|unlink|hide|' + userid);
-		if (userid !== toId(this.inputUsername)) this.add('|unlink|hide|' + toId(this.inputUsername));
+		this.add('|uhtmlchange|' + userid + '|');
+		if (userid !== toId(this.inputUsername)) {
+			this.add('|unlink|hide|' + toId(this.inputUsername));
+			this.add('|uhtmlchange|' + toId(this.inputUsername) + '|');
+		}
 
 		this.globalModlog("LOCK", targetUser, " by " + user.name + (target ? ": " + target : ""));
 		Punishments.lock(targetUser);
@@ -1300,7 +1384,11 @@ exports.commands = {
 			this.privateModCommand("(" + name + "'s ac account: " + acAccount + ")");
 		}
 		this.add('|unlink|hide|' + userid);
-		if (userid !== toId(this.inputUsername)) this.add('|unlink|hide|' + toId(this.inputUsername));
+		this.add('|uhtmlchange|' + userid + '|');
+		if (userid !== toId(this.inputUsername)) {
+			this.add('|unlink|hide|' + toId(this.inputUsername));
+			this.add('|uhtmlchange|' + toId(this.inputUsername) + '|');
+		}
 
 		this.globalModlog("WEEKLOCK", targetUser, " by " + user.name + (target ? ": " + target : ""));
 		Punishments.lock(targetUser, Date.now() + 7 * 24 * 60 * 60 * 1000);
@@ -1389,7 +1477,11 @@ exports.commands = {
 		}
 
 		this.add('|unlink|hide|' + userid);
-		if (userid !== toId(this.inputUsername)) this.add('|unlink|hide|' + toId(this.inputUsername));
+		this.add('|uhtmlchange|' + userid + '|');
+		if (userid !== toId(this.inputUsername)) {
+			this.add('|unlink|hide|' + toId(this.inputUsername));
+			this.add('|uhtmlchange|' + toId(this.inputUsername) + '|');
+		}
 		Punishments.ban(targetUser);
 		this.globalModlog("BAN", targetUser, " by " + user.name + (target ? ": " + target : ""));
 		return true;
