@@ -426,6 +426,12 @@ exports.commands = {
 			this.add('|uhtmlchange|' + toId(this.inputUsername) + '|');
 		}
 	},
+
+	hex: function (target, room, user) {
+		if (!this.runBroadcast()) return;
+		let targetUser = (target ? target : user.name);
+		this.sendReplyBox('The hex code of ' + Wisp.nameColor(targetUser, true) + ' is: <font color="' + Wisp.hashColor(targetUser) + '"><b>' + Wisp.hashColor(targetUser) + '</b></font>');
+	},
 };
 
 Object.assign(Wisp, {
