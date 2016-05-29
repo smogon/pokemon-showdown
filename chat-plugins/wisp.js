@@ -380,6 +380,24 @@ exports.commands = {
 			}
 		}, 1000);
 	},
+
+	roomkick: 'kick',
+	kick: function (target, room, user) {
+		if (!target) return this.parse('/help kick');
+		if (!this.canTalk()) return false;
+		target = this.splitTarget(target);
+		let targetUser = this.targetUser;
+		if (!targetUser || !targetUser.connected) {
+			return this.errorReply('User "' + this.targetUsername + '" not found.');
+		}
+		if (!this.can('mute', targetUser, room)) return false;
+		if (!(targetUser in room.users)) return this.errorReply("User '" + targetUser + "' is not in this room.");
+		this.addModCommand(targetUser.name + ' was kicked from the room by ' + user.name + '.');
+		targetUser.popup('You were kicked from ' + room.id + ' by ' + user.name + '.');
+		targetUser.leaveRoom(room.id);
+	},
+	kickhelp: ['/kick [user] - Kicks a user from the room.'],
+	roomkickhelp: ['/kick [user] - Kicks a user from the room.'],
 };
 
 Object.assign(Wisp, {
