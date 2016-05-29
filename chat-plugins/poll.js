@@ -66,7 +66,6 @@ class Poll {
 			if (count === 1) output += "<tr>";
 			output += '<td style="border: #FF560E, solid, 1px ; color: white; padding: 3px;"><button style="width: 100%; background-color: #FF560E; border:none; color: #FFC775; font-size: 14px;" value="/poll vote ' + number + '" name="send" title="Vote for ' + number + '. ' + Tools.escapeHTML(option.name) + '"><strong>' + Tools.escapeHTML(option.name) + '</strong></button></td>';
 			if (count >= 4) {
-				console.log('tr');
 				output += "</tr>";
 				count = 0;
 			}
