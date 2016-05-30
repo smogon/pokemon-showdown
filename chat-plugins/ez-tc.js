@@ -52,13 +52,13 @@ exports.commands = {
 		case 'remove':
 			if (!this.can('trainercard')) return false;
 			if (!parts[1]) return this.sendReply("Usage: /trainercard remove, [command name]");
-			commandName = toId(parts[1]);
-			if (!trainerCards[commandName]) return this.sendReply("/trainercards - The command \"" + commandName + "\" does not exist, or was added manually.");
-			delete CommandParser.commands[commandName];
-			delete trainerCards[commandName];
+			let command = toId(parts[1]);
+			if (!trainerCards[command]) return this.sendReply("/trainercards - The command \"" + command + "\" does not exist, or was added manually.");
+			delete CommandParser.commands[command];
+			delete trainerCards[command];
 			saveTrainerCards();
-			this.sendReply("The trainer card \"" + commandName + "\" has been removed.");
-			this.logModCommand(user.name + " removed the trainer card " + commandName);
+			this.sendReply("The trainer card \"" + command + "\" has been removed.");
+			this.logModCommand(user.name + " removed the trainer card " + command);
 			break;
 
 		case 'list':
