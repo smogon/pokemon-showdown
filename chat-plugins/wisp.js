@@ -10,9 +10,15 @@ let mainColors = {};
 Wisp.customColors = {};
 let regdateCache = {};
 Users.vips = [];
+
 Wisp.autoJoinRooms = {};
 try {
 	Wisp.autoJoinRooms = JSON.parse(fs.readFileSync('config/autojoin.json', 'utf8'));
+} catch (e) {}
+
+Wisp.tells = {};
+try {
+	Wisp.tells = JSON.parse(fs.readFileSync('config/tells.json', 'utf*'));
 } catch (e) {}
 
 const polltiers = ['Random Battle', 'Anything Goes', 'Ubers', 'OverUsed', 'Underused',
@@ -38,6 +44,7 @@ const asciiMap = new Map([
 ]);
 
 const MAX_TELLS = 4;
+const MAX_TELL_LENGTH = 500;
 
 function parseStatus(text, encoding) {
 	if (encoding) {
@@ -99,29 +106,26 @@ exports.commands = {
 		if (id === user.userid || (Users(id) && Users(id).userid === user.userid)) return this.sendReply('You can\'t send a message to yourself!');
 		if (Users(id) && Users(id).connected) return this.sendReply('User ' + Users(id).name + ' is currently online. PM them instead.');
 		if (!id || !target) return this.parse('/help tell');
+		if (target.length > MAX_TELL_LENGTH) return this.errorReply("You may not send a tell longer than " + MAX_TELL_LENGTH + " characters.");
 
-		let tells;
-		try {
-			tells = JSON.parse(fs.readFileSync('config/tells.json'));
-		} catch (err) {
-			tells = {};
-		}
-		if (tells[id]) {
+		if (Wisp.tells[id]) {
 			if (!user.can('hotpatch')) {
 				let names = Object.keys(user.prevNames).concat(user.userid);
 				for (let i in names) {
 					let name = names[i];
-					if (tells[id][name] && tells[id][name].length >= MAX_TELLS) return this.sendReply('You may only leave ' + MAX_TELLS + ' messages for a user at a time. Please wait until ' + targetUser + ' comes online and views them before sending more.');
+					if (Wisp.tells[id][name] && Wisp.tells[id][name].length >= MAX_TELLS) return this.sendReply('You may only leave ' + MAX_TELLS + ' messages for a user at a time. Please wait until ' + targetUser + ' comes online and views them before sending more.');
 				}
 			}
-		} else tells[id] = {};
+		} else {
+			Wisp.tells[id] = {};
+		}
 
-		let tell = tells[id][user.userid];
-		let msg = '<span style = "color:gray;"><i>(Sent by ' + user.name + ' on ' + (new Date()).toUTCString() + ')</i></span><br><b><span style = "color:' + Wisp.hashColor(user.userid) + '">' + user.name + ':</span></b> ' + Tools.escapeHTML(target);
-		if (tell) tells[id][user.userid].push(msg);
-		else tells[id][user.userid] = [msg];
+		let tell = Wisp.tells[id][user.userid];
+		let msg = '<span style = "color:gray;"><i>(Sent by ' + user.name + ' on ' + moment().format("ddd, MMMM DD, YYYY HH:mmA ZZ") + ')</i></span><br><b><span style = "color:' + Wisp.hashColor(user.userid) + '">' + user.name + ':</span></b> ' + Tools.escapeHTML(target);
+		if (tell) Wisp.tells[id][user.userid].push(msg);
+		else Wisp.tells[id][user.userid] = [msg];
 
-		fs.writeFileSync('config/tells.json', JSON.stringify(tells));
+		fs.writeFileSync('config/tells.json', JSON.stringify(Wisp.tells));
 		this.sendReply('Your message "' + target + '" has successfully been sent to ' + this.targetUsername + '.');
 	},
 	tellhelp: ['/tell [user], [message] - Leaves a message for an offline user for them to see when they log on next.'],
@@ -726,6 +730,16 @@ Object.assign(Wisp, {
 
 	saveAutoJoins: function () {
 		fs.writeFileSync('config/autojoin.json', JSON.stringify(Wisp.autoJoinRooms));
+	},
+
+	getTells: function (user) {
+		let tell = Wisp.tells[user.userid];
+		if (!tell) return;
+		for (let i in tell) {
+			tell[i].forEach(msg => user.send('|pm| Tells|' + user.getIdentity() + '|/html ' + msg));
+		}
+		delete Wisp.tells[user.userid];
+		fs.writeFileSync('config/tells.json', JSON.stringify(Wisp.tells));
 	},
 });
 
