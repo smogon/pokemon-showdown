@@ -985,7 +985,7 @@ exports.commands = {
 			return;
 		}
 		if (targetRoom !== room) buffer.unshift("" + targetRoom.title + " room auth:");
-		connection.popup(buffer.join("\n\n") + userLookup);
+		connection.popup((targetRoom.founder ? "Room Founder:\n" + (targetRoom.users[targetRoom.founder] ? "**" + targetRoom.founder + "**" : targetRoom.founder) + "\n\n" : '') + buffer.join("\n\n") + userLookup);
 	},
 
 	userauth: function (target, room, user, connection) {
