@@ -1077,7 +1077,7 @@ exports.BattleLearnsets = {
 		strength: ["2M"],
 		submission: ["1M"],
 		substitute: ["1M"],
-		surf: ["1S0", "1S2"],
+		surf: ["1T", "1S0", "1S2"],
 		swagger: ["2M"],
 		swift: ["1L26", "1M", "2M"],
 		tailwhip: ["1L6", "2L6"],
