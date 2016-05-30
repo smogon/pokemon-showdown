@@ -3,7 +3,8 @@
 'use strict';
 
 const INACTIVE_END_TIME = 1 * 60 * 1000; // 1 minute
-const TAX = 0.10; // 10%
+//const TAX = 0.10; // 10%
+const TAX = 0;
 
 function diceImg(num) {
 	switch (num) {
