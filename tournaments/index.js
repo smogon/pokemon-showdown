@@ -825,7 +825,7 @@ class Tournament {
 			let firstBuck;
 			let secondBuck;
 
-			if (this.room.isOfficial && tourSize >= 4) {
+			if ((this.room.isOfficial || this.room.tourBucks) && tourSize >= 4) {
 				firstMoney = Math.round(tourSize / 4);
 				secondMoney = Math.round(firstMoney / 2);
 				firstBuck = 'buck';
