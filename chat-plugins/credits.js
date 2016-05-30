@@ -20,8 +20,8 @@ let prices = {
 	"Gold Ticket": 120,
 	"Ruby Ticket": 200,
 	"Sapphire Ticket": 280,
-	"Emerald Ticket": 400,
-	"Rainbow Ticket": 515,
+	"Rainbow Ticket": 450,
+	"Emerald Ticket": 600,
 };
 
 function readMoney(userid, callback) {
@@ -337,12 +337,12 @@ exports.commands = {
 			'<tr><td>Green Ticket</td><td>Can be exchanged for a recolored avatar, 30 bucks and 2 PSGO packs</td><td>' + prices['Green Ticket'] + '</td></tr>' +
 			'<tr><td>Black Ticket</td><td>Can be exchanged for 100 bucks</td><td>' + prices['Black Ticket'] + '</td></tr>' +
 			'<tr><td>Silver Ticket</td><td>Can be exchanged for 1 PSGO pack and 20 bucks</td><td>' + prices['Silver Ticket'] + '</td></tr>' +
-			'<tr><td>Crystal Ticket</td><td>Can be exchanged for 2 cards from the <button name="send" value="/showcase marketplaceatm">Marketplace ATM showcase</button></td><td>' + prices['Crystal Ticket'] + '</td></tr>' +
+			'<tr><td>Crystal Ticket</td><td>Can be exchanged for 3 cards from the <button name="send" value="/showcase marketplaceatm">Marketplace ATM showcase</button></td><td>' + prices['Crystal Ticket'] + '</td></tr>' +
 			'<tr><td>Gold Ticket</td><td>Can be exchanged for 2 PSGO packs and 50 bucks</td><td>' + prices['Gold Ticket'] + '</td></tr>' +
 			'<tr><td>Ruby ticket</td><td>Can be exchanged for 5 PSGO packs, 50 bucks and an avatar recolor</td><td>' + prices['Ruby Ticket'] + '</td></tr>' +
 			'<tr><td>Sapphire Ticket</td><td>Can be exchanged for 7 PSGO packs and 100 bucks</td><td>' + prices['Sapphire Ticket'] + '</td></tr>' +
-			'<tr><td>Emerald Ticket</td><td>Can be exchanged for 5 PSGO packs, 100 bucks and Marketplace Partner (Can be taken away if necessary)</td><td>' + prices['Emerald Ticket'] + '</td></tr>' +
 			'<tr><td>Rainbow Ticket</td><td>Can be exchanged for 10 PSGO packs and 200 bucks</td><td>' + prices['Rainbow Ticket'] + '</td></tr>' +
+			'<tr><td>Emerald Ticket</td><td>Can be exchanged for 5 PSGO packs, 100 bucks, Marketplace Partner, Custom Title and Partner Badge</td><td>' + prices['Emerald Ticket'] + '</td></tr>' +
 			'</table><br />To buy an item from the shop, use /claim [item].<br />All sales final, no refunds will be provided.</center>'
 		);
 	},
