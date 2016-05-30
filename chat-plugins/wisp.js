@@ -292,15 +292,13 @@ exports.commands = {
 			targetUser.send("|nametaken||Your name conflicts with " + user.name + (user.name.substr(-1) === "s" ? "'" : "'s") + " new away status.");
 		}
 
-		if (user.can('lock', null, room)) {
-			this.add("|raw|-- <font color='" + Wisp.hashColor(user.userid) + "'><strong>" + Tools.escapeHTML(user.name) + "</strong></font> is now " + target.toLowerCase() + ".");
-			this.parse('/hide');
-		}
+		if (user.can('mute', null, room)) this.add("|raw|-- <font color='" + Wisp.hashColor(user.userid) + "'><strong>" + Tools.escapeHTML(user.name) + "</strong></font> is now " + target.toLowerCase() + ".");
+		if (user.can('lock')) this.parse('/hide');
 		user.forceRename(newName, user.registered);
 		user.updateIdentity();
 		user.isAway = true;
 	},
-	awayhelp: ["/away [message] - Sets a users away status."],
+	awayhelp: ["/away [message] - Sets a user's away status."],
 
 	back: function (target, room, user) {
 		if (!user.isAway) return this.sendReply("You are not set as away.");
@@ -310,7 +308,7 @@ exports.commands = {
 		let statusIdx = newName.search(/\s\-\s[\u24B6-\u24E9\u2460-\u2468\u24EA]+$/);
 		if (statusIdx < 0) {
 			user.isAway = false;
-			if (user.can('lock', null, room)) this.add("|raw|-- <font color='" + Wisp.hashColor(user.userid) + "'><strong>" + Tools.escapeHTML(user.name) + "</strong></font> is no longer away.");
+			if (user.can('mute', null, room)) this.add("|raw|-- <font color='" + Wisp.hashColor(user.userid) + "'><strong>" + Tools.escapeHTML(user.name) + "</strong></font> is no longer away.");
 			return false;
 		}
 
@@ -319,10 +317,8 @@ exports.commands = {
 		user.forceRename(newName, user.registered);
 		user.updateIdentity();
 		user.isAway = false;
-		if (user.can('lock', null, room)) {
-			this.add("|raw|-- <font color='" + Wisp.hashColor(user.userid) + "'><strong>" + Tools.escapeHTML(newName) + "</strong></font> is no longer " + status.toLowerCase() + ".");
-			this.parse('/show');
-		}
+		if (user.can('mute', null, room)) this.add("|raw|-- <font color='" + Wisp.hashColor(user.userid) + "'><strong>" + Tools.escapeHTML(newName) + "</strong></font> is no longer " + status.toLowerCase() + ".");
+		if (user.can('lock')) this.parse('/show');
 	},
 	backhelp: ["/back - Sets a users away status back to normal."],
 
