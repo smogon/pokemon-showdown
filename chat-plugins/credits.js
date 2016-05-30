@@ -1,282 +1,421 @@
 'use strict';
 
+Wisp.database = new sqlite3.Database('config/users.db', function () {
+	Wisp.database.run("CREATE TABLE if not exists users (userid TEXT, name TEXT, credits INTEGER, lastSeen INTEGER, onlineTime INTEGER)");
+});
+
 const fs = require('fs');
-let color = require('../config/color');
-let path = require('path');
-let rankLadder = require('../rank-ladder');
 
-let creditShop = [
-    ['Rose Ticket', 'Can be exchanged for 5 bucks ', 15],
-    ['Red Ticket', 'Can be exchanged for one PSGO pack ', 20],
-    ['Cyan Ticket', 'Can be exchanged for 15 bucks ', 30],
-    ['Blue Ticket', 'Can be exchanged for 2 PSGO packs ', 35],
-    ['Orange Ticket', 'Can be exchanged for a recolored avatar and 10 bucks ', 50],
-    ['Violet Ticket', 'Can be exchanged for a recolored avatar, 1 PSGO pack and 20 bucks', 75],
-    ['Yellow Ticket', 'Can be exchanged for 5 PSGO packs', 80],
-    ['White Ticket', 'Can be exchanged for 50 bucks', 90],
-    ['Green Ticket', 'Can be exchanged for a recolored avatar, 30 bucks and 2 PSGO packs', 100],
-    ['Black Ticket', 'Can be exchanged for 100 bucks', 175],
-    ['Silver Ticket', 'Can be exchanged for 1 PSGO pack and 20 bucks', 55],
-    ['Crystal Ticket', 'Can be exchanged for 2 cards from the <button name="send" value="/showcase marketplaceatm">Marketplace ATM showcase</button>', 100],
-    ['Gold Ticket', 'Can be exchanged for 2 PSGO packs and 50 bucks', 120],
-    ['Ruby Ticket', 'Can be exchanged for 5 PSGO packs, 50 bucks and an avatar recolor', 200],
-    ['Sapphire Ticket', 'Can be exchanged for 7 PSGO packs and 100 bucks', 280],
-    ['Emerald Ticket', 'Can be exchanged for 5 PSGO packs, 100 bucks and Marketplace Partner (Can be taken away if necessary)', 400],
-    ['Rainbow Ticket', 'Can be exchanged for 10 PSGO packs and 200 bucks', 515],
-];
+let shopTitle = 'Wisp Credit Shop';
 
-let creditShopDisplay = getShopDisplay(creditShop);
+let prices = {
+	"Rose Ticket": 15,
+	"Red Ticket": 20,
+	"Cyan Ticket": 30,
+	"Blue Ticket": 35,
+	"Orange Ticket": 50,
+	"Violet Ticket": 75,
+	"Yellow Ticket": 80,
+	"White Ticket": 90,
+	"Green Ticket": 100,
+	"Black Ticket": 175,
+	"Silver Ticket": 55,
+	"Crystal Ticket": 100,
+	"Gold Ticket": 120,
+	"Ruby Ticket": 200,
+	"Sapphire Ticket": 280,
+	"Emerald Ticket": 400,
+	"Rainbow Ticket": 515,
+};
 
-function getShopDisplay(creditShop) {
-	let display = '<center><b><font color="red" size="4">Read the description of the ticket you want to buy if you haven\'t already.<br>When you buy your ticket, PM a & or # to claim your reward.</font></b></center></center><div style="box-shadow: 4px 4px 4px #000 inset, -4px -4px 4px #000 inset, 5px 3px 8px rgba(0, 0, 0, 0.6); max-height: 310px; overflow-y: scroll;"><table style="width: 100%; border-collapse: collapse;"><table style="width: 100%; border-collapse: collapse;"><tr><th colspan="3" class="table-header" style="background: -moz-linear-gradient(right, #09263A, #03121C); background: -webkit-linear-gradient(left, #09263A, #03121C); background: -o-linear-gradient(right, #09263A, #03121C); background: linear-gradient(right, #09263A, #03121C); padding: 8px 20px 16px 8px; box-shadow: 0px 0px 4px rgba(255, 255, 255, 0.8) inset; text-shadow: 1px 1px #0A2D43, 2px 2px #0A2D43, 3px 3px #0A2D43, 4px 4px #0A2D43, 5px 5px #0A2D43, 6px 6px #0A2D43, 7px 7px #0A2D43, 8px 8px #0A2D43, 9px 9px #0A2D43, 10px 10px #0A2D43;"><h2>Marketplace Credit Shop</h2></th></tr>' +
-		'<tr><th class="table-header" style="background: -moz-linear-gradient(#173C54, #061C2A); background: -webkit-linear-gradient(#173C54, #061C2A); background: -o-linear-gradient(#173C54, #061C2A); background: linear-gradient(#173C54, #061C2A); box-shadow: 0px 0px 4px rgba(255, 255, 255, 0.8) inset;">Item</th><th class="table-header" style="background: -moz-linear-gradient(#173C54, #061C2A); background: -webkit-linear-gradient(#173C54, #061C2A); background: -o-linear-gradient(#173C54, #061C2A); background: linear-gradient(#173C54, #061C2A); box-shadow: 0px 0px 4px rgba(255, 255, 255, 0.8) inset;">Description</th><th class="table-header" style="background: -moz-linear-gradient(#173C54, #061C2A); background: -webkit-linear-gradient(#173C54, #061C2A); background: -o-linear-gradient(#173C54, #061C2A); background: linear-gradient(#173C54, #061C2A); box-shadow: 0px 0px 4px rgba(255, 255, 255, 0.8) inset;">Cost</th></tr>';
-	let start = 0;
-	while (start < creditShop.length) {
-		display += '<tr><td class="table-option"><button class="table-btn" name="send" value="/claim ' + creditShop[start][0] + '">' + creditShop[start][0] + '</button></td>' +
-			'<td class="table-option">' + creditShop[start][1] + '</td>' +
-			'<td class="table-option">' + creditShop[start][2] + '</td></tr>';
-		start++;
-	}
-	display += '</table></div>';
-	return display;
-}
-
-function currencyName(amount) {
-	let name = " credit";
-	return amount === 1 ? name : name + "s";
-}
-
-function isCredits(credits) {
-	let numCredits = Number(credits);
-	if (isNaN(credits)) return "Must be a number.";
-	if (String(credits).includes('.')) return "Cannot contain a decimal.";
-	if (numCredits < 1) return "Cannot be less than one credit.";
-	return numCredits;
-}
-
-function logCredits(message) {
-	if (!message) return;
-	let file = path.join(__dirname, '../logs/credits.txt');
-	let date = "[" + new Date().toUTCString() + "] ";
-	let msg = message + "\n";
-	fs.appendFile(file, date + msg);
-}
-
-function findItem(item, credits) {
-	let len = creditShop.length;
-	let price = 0;
-	let amount = 0;
-	while (len--) {
-		if (item.toLowerCase() !== creditShop[len][0].toLowerCase()) continue;
-		price = creditShop[len][2];
-		if (price > credits) {
-			amount = price - credits;
-			this.sendReply("You don't have you enough credits for this. You need " + amount + currencyName(amount) + " more to buy " + item + ".");
-			return false;
-		}
-		return price;
-	}
-	this.sendReply(item + " not found in creditshop.");
-}
-
-function handleBoughtItem(item, user, cost) {
-	let msg = '**' + user.name + " has bought " + item + ".**";
-	Rooms.rooms.marketplacestaff.add('|c|~Credit Shop Alert|' + msg);
-	Rooms.rooms.marketplacestaff.update();
-	logMoney(user.name + ' has spent ' + cost + ' credits on a ' + item);
-}
+let Crediteconomy = global.Crediteconomy = {
+	readCred: function (userid, callback) {
+		if (!callback) return false;
+		userid = toId(userid);
+		Wisp.database.all("SELECT * FROM users WHERE userid=$userid", {$userid: userid}, function (err, rows) {
+			if (err) return console.log(err);
+			callback(((rows[0] && rows[0].credits) ? rows[0].credits : 0));
+		});
+	},
+	writeCred: function (userid, amount, callback) {
+		userid = toId(userid);
+		Wisp.database.all("SELECT * FROM users WHERE userid=$userid", {$userid: userid}, function (err, rows) {
+			if (rows.length < 1) {
+				Wisp.database.run("INSERT INTO users(userid, credits) VALUES ($userid, $amount)", {$userid: userid, $amount: amount}, function (err) {
+					if (err) return console.log(err);
+					if (callback) return callback();
+				});
+			} else {
+				amount += rows[0].credits;
+				Wisp.database.run("UPDATE users SET credits=$amount WHERE userid=$userid", {$amount: amount, $userid: userid}, function (err) {
+					if (err) return console.log(err);
+					if (callback) return callback();
+				});
+			}
+		});
+	},
+	logTransaction: function (message) {
+		if (!message) return false;
+		fs.appendFile('logs/transactions.log', '[' + new Date().toUTCString() + '] ' + message + '\n');
+	},
+};
 
 exports.commands = {
-	catm: 'creditatm',
-	creditatm: function (target, room, user) {
-		if (!this.runBroadcast()) return;
-		if (!target) target = user.name;
+	creditlog: function (target, room, user) {
+		if (room.id !== 'marketplace' && room.id !== 'marketplacestaff') return this.errorReply("Credits can only be given out in the Marketplace.");
+		if (!this.can('ban', null, room)) return false;
+		if (!target) return this.sendReply("Usage: /creditlog [number] to view the last x lines OR /creditlog [text] to search for text.");
+		let word = false;
+		if (isNaN(Number(target))) word = true;
+		let lines = fs.readFileSync('logs/transactions.log', 'utf8').split('\n').reverse();
+		let output = '';
+		let count = 0;
+		let regex = new RegExp(target.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'), "gi");
 
-		const targetId = toId(target);
-		if (!targetId) return this.parse('/help creditatm');
-
-		const amount = Db('credits').get(targetId, 0);
-		this.sendReplyBox('<b><font color="' + color(targetId) + '">' + Tools.escapeHTML(target) + '</font></b> has ' + amount + currencyName(amount) + '.');
+		if (word) {
+			output += 'Displaying last 50 lines containing "' + target + '":\n';
+			for (let line in lines) {
+				if (count >= 50) break;
+				if (!~lines[line].search(regex)) continue;
+				output += lines[line] + '\n';
+				count++;
+			}
+		} else {
+			if (target > 100) target = 100;
+			output = lines.slice(0, (lines.length > target ? target : lines.length));
+			output.unshift("Displaying the last " + (lines.length > target ? target : lines.length) + " lines:");
+			output = output.join('\n');
+		}
+		user.popup(output);
 	},
-	creditatmhelp: ["/creditatm [user] - Shows the amount of credits a user has."],
 
+	creditatm: function (target, room, user) {
+		if (!target) target = user.name;
+		if (!this.runBroadcast()) return;
+		let userid = toId(target);
+		if (userid.length < 1) return this.sendReply("/creditatm - Please specify a user.");
+		if (userid.length > 19) return this.sendReply("/creditatm - [user] can't be longer than 19 characters.");
+
+		Crediteconomy.readCred(userid, cred => {
+			this.sendReplyBox(Tools.escapeHTML(target) + " has " + cred + ((cred === 1) ? " credits." : " credits."));
+			if (this.broadcasting) room.update();
+		});
+	},
+
+	gcr: 'givecredits',
 	givecredits: function (target, room, user) {
 		if (room.id !== 'marketplace' && room.id !== 'marketplacestaff') return this.errorReply("Credits can only be given out in the Marketplace.");
 		if (!this.can('ban', null, room)) return false;
-		if (!target || target.indexOf(',') < 0) return this.parse('/help givecredits');
+		if (!target) return this.sendReply("Usage: /givecredits [user], [amount]");
+		let splitTarget = target.split(',');
+		if (!splitTarget[1]) return this.sendReply("Usage: /givecredits [user], [amount]");
+		for (let u in splitTarget) splitTarget[u] = splitTarget[u].trim();
 
-		let parts = target.split(',');
-		let username = parts[0];
-		let uid = toId(username);
-		let amount = isCredits(parts[1]);
+		let targetUser = splitTarget[0];
+		if (toId(targetUser).length < 1) return this.sendReply("/givecredits - [user] may not be blank.");
+		if (toId(targetUser).length > 19) return this.sendReply("/givecredits - [user] can't be longer than 19 characters");
 
-		if (user.userid === username && !this.can('declare', null, room)) return this.errorReply("no");
-		if (amount > 1000) return this.sendReply("You cannot give more than 1,000 credits at a time.");
-		if (username.length >= 19) return this.sendReply("Usernames are required to be less than 19 characters long.");
-		if (typeof amount === 'string') return this.errorReply(amount);
+		let amount = Math.round(Number(splitTarget[1]));
+		if (isNaN(amount)) return this.sendReply("/givecredits - [amount] must be a number.");
+		if (amount > 1000) return this.sendReply("/givecredits - You can't give more than 1000 credits at a time.");
+		if (amount < 1) return this.sendReply("/givecredits - You can't give less than one credits.");
 
-		let total = Db('credits').set(uid, Db('credits').get(uid, 0) + amount).get(uid);
-		amount = amount + currencyName(amount);
-		total = total + currencyName(total);
-		this.sendReply(username + " was given " + amount + ". " + username + " now has " + total + ".");
-		this.privateModCommand(username + " was given " + amount + ". " + username + " now has " + total + ".");
-		if (Users.get(username)) Users.get(username).popup(user.name + " has given you " + amount + ". You now have " + total + ".");
-		logCredits(username + " was given " + amount + " by " + user.name + ".");
+		Crediteconomy.writeCred(targetUser, amount);
+		this.sendReply(Tools.escapeHTML(targetUser) + " has received " + amount + ((amount === 1) ? " credits." : " credits."));
+		Crediteconomy.logTransaction(user.name + " has given " + amount + ((amount === 1) ? " credit " : " credits ") + " to " + targetUser);
 	},
-	givecreditshelp: ["/givecredits [user], [amount] - Give a user a certain amount of credits."],
 
 	takecredits: function (target, room, user) {
-		if (room.id !== 'marketplace' && room.id !== 'marketplacestaff') return this.errorReply("Credits can only be taken in the Marketplace.");
+		if (room.id !== 'marketplace' && room.id !== 'marketplacestaff') return this.errorReply("Credits can only be given out in the Marketplace.");
 		if (!this.can('ban', null, room)) return false;
-		if (!target || target.indexOf(',') < 0) return this.parse('/help takecredits');
+		if (!target) return this.sendReply("Usage: /takecredits [user], [amount]");
+		let splitTarget = target.split(',');
+		if (!splitTarget[1]) return this.sendReply("Usage: /takecredits [user], [amount]");
+		for (let u in splitTarget) splitTarget[u] = splitTarget[u].trim();
 
-		let parts = target.split(',');
-		let username = parts[0];
-		let uid = toId(username);
-		let amount = isCredits(parts[1]);
+		let targetUser = splitTarget[0];
+		if (toId(targetUser).length < 1) return this.sendReply("/takecredits - [user] may not be blank.");
+		if (toId(targetUser).length > 19) return this.sendReply("/takecredits - [user] can't be longer than 19 characters");
 
-		if (amount > Db('credits').get(uid)) return this.sendReply("The user's total credits is less than " + amount + ".");
-		if (amount > 1000) return this.sendReply("You cannot remove more than 1,000 credits at a time.");
-		if (username.length >= 19) return this.sendReply("Usernames are required to be less than 19 characters long.");
-		if (typeof amount === 'string') return this.sendReply(amount);
+		let amount = Math.round(Number(splitTarget[1]));
+		if (isNaN(amount)) return this.sendReply("/takecredits - [amount] must be a number.");
+		if (amount > 1000) return this.sendReply("/takecredits - You can't take more than 1000 credits at a time.");
+		if (amount < 1) return this.sendReply("/takecredits - You can't take less than one credit.");
 
-		let total = Db('credits').set(uid, Db('credits').get(uid, 0) - amount).get(uid);
-		amount = amount + currencyName(amount);
-		total = total + currencyName(total);
-		this.sendReply(username + " lost " + amount + ". " + username + " now has " + total + ".");
-		this.privateModCommand(username + " lost " + amount + ". " + username + " now has " + total + ".");
-		if (Users.get(username)) Users.get(username).popup(user.name + " has taken " + amount + " from you. You now have " + total + ".");
-		logCredits(username + " had " + amount + " taken away by " + user.name + ".");
+		Crediteconomy.writeCred(targetUser, -amount);
+		this.sendReply("You removed " + amount + ((amount === 1) ? " credit " : " credits ") + " from " + Tools.escapeHTML(targetUser));
+		Crediteconomy.logTransaction(user.name + " has taken " + amount + ((amount === 1) ? " credit " : " credits ") + " from " + targetUser);
 	},
-	takecreditshelp: ["/takecredits [user], [amount] - Take a certain amount of credits from a user."],
 
-	resetcredits: function (target, room, user) {
-		if (room.id !== 'marketplace' && room.id !== 'marketplacestaff') return this.errorReply("Credits can only be reset in the Marketplace.");
-		if (!this.can('declare', null, room)) return false;
-		Db('credits').set(toId(target), 0);
-		this.sendReply(target + " now has " + 0 + currencyName(0) + ".");
-		logCredits(user.name + " reset the credits of " + target + ".");
-	},
-	resetcreditshelp: ["/resetcredits [user] - Reset user's credits to zero."],
+	transfercredits: function (target, room, user) {
+		if (!target) return this.sendReply("Usage: /transfercredits [user], [amount]");
+		let splitTarget = target.split(',');
+		for (let u in splitTarget) splitTarget[u] = splitTarget[u].trim();
+		if (!splitTarget[1]) return this.sendReply("Usage: /transfercredits [user], [amount]");
 
-	transfercredits: function (target, room, user, connection, cmd) {
-		if (!target || target.indexOf(',') < 0) return this.parse('/help transfercredits');
+		let targetUser = splitTarget[0];
+		if (toId(targetUser).length < 1) return this.sendReply("/transfercredits - [user] may not be blank.");
+		if (toId(targetUser).length > 19) return this.sendReply("/transfercredits - [user] can't be longer than 19 characters.");
 
-		let parts = target.split(',');
-		let username = parts[0];
-		let uid = toId(username);
-		let amount = isCredits(parts[1]);
+		let amount = Math.round(Number(splitTarget[1]));
+		if (isNaN(amount)) return this.sendReply("/transfercredits - [amount] must be a number.");
+		if (amount > 1000) return this.sendReply("/transfercredits - You can't transfer more than 1000 credits at a time.");
+		if (amount < 1) return this.sendReply("/transfercredits - You can't transfer less than one credit.");
 
-		if (toId(username) === user.userid) return this.sendReply("You cannot transfer to yourself.");
-		if (username.length >= 19) return this.sendReply("Usernames are required to be less than 19 characters long.");
-		if (typeof amount === 'string') return this.sendReply(amount);
-		if (amount > Db('credits').get(user.userid, 0)) return this.errorReply("You cannot transfer more credits than what you have.");
-		if (!Users.get(username) && cmd !== 'transfercredits') return this.errorReply("The target user could not be found");
-		Db('credits')
-			.set(user.userid, Db('credits').get(user.userid) - amount)
-			.set(uid, Db('credits').get(uid, 0) + amount);
-
-		let userTotal = Db('credits').get(user.userid) + currencyName(Db('credits').get(user.userid));
-		let targetTotal = Db('credits').get(uid) + currencyName(Db('credits').get(uid));
-		amount = amount + currencyName(amount);
-
-		this.sendReply("You have successfully transferred " + amount + ". You now have " + userTotal + ".");
-		if (Users.get(username)) Users(username).popup(user.name + " has transferred " + amount + ". You now have " + targetTotal + ".");
-		logCredits(user.name + " transferred " + amount + " to " + username + ". " + user.name + " now has " + userTotal + " and " + username + " now has " + targetTotal + ".");
-	},
-	transfercreditshelp: ["/transfercredits [user], [amount] - Transfer a certain amount of credits to a user."],
-
-	creditslog: function (target, room, user, connection) {
-		if (room.id !== 'marketplace' && room.id !== 'marketplacestaff') return this.errorReply("Credit log can only be used in the Marketplace.");
-		if (!this.can('ban', null, room)) return;
-		let numLines = 14;
-		let matching = true;
-		if (target && /\,/i.test(target)) {
-			let parts = target.split(",");
-			if (!isNaN(parts[parts.length - 1])) {
-				numLines = Number(parts[parts.length - 1]) - 1;
-				target = parts.slice(0, parts.length - 1).join(",");
-			}
-		} else if (target.match(/\d/g) && !isNaN(target)) {
-			numLines = Number(target) - 1;
-			matching = false;
-		}
-		let topMsg = "Displaying the last " + (numLines + 1) + " lines of transactions:\n";
-		let file = path.join(__dirname, '../logs/credits.txt');
-		fs.exists(file, function (exists) {
-			if (!exists) return connection.popup("No transactions.");
-			fs.readFile(file, 'utf8', function (err, data) {
-				data = data.split('\n');
-				if (target && matching) {
-					data = data.filter(function (line) {
-						return line.toLowerCase().indexOf(target.toLowerCase()) >= 0;
-					});
-				}
-				connection.popup('|wide|' + topMsg + data.slice(-(numLines + 1)).join('\n'));
+		Crediteconomy.readCred(user.userid, cred => {
+			if (cred < amount) return this.sendReply("/transfercredits - You can't transfer more credits than you have.");
+			Crediteconomy.writeCred(user.userid, -amount, () => {
+				Crediteconomy.writeCred(targetUser, amount, () => {
+					this.sendReply("You've sent " + amount + ((amount === 1) ? " credit " : " credits ") + " to " + targetUser);
+					Crediteconomy.logTransaction(user.name + " has transfered " + amount + ((amount === 1) ? " credit " : " credits ") + " to " + targetUser);
+					if (Users.getExact(targetUser) && Users.getExact(targetUser)) Users.getExact(targetUser).popup(user.name + " has sent you " + amount + ((amount === 1) ? " credit." : " credits."));
+				});
 			});
 		});
-	},
-	creditsloghelp: ["/creditslog - Displays a log of all transactions in the economy."],
-
-	creditladder: function (target, room, user) {
-		if (room.id !== 'marketplace' && room.id !== 'marketplacestaff') return this.errorReply("Creditladder can only be viewed in the Marketplace.");
-		if (!this.runBroadcast()) return;
-		let keys = Object.keys(Db('credits').object()).map(function (name) {
-			return {name: name, credits: Db('credits').get(name)};
-		});
-		if (!keys.length) return this.sendReplyBox("credits ladder is empty.");
-		keys.sort(function (a, b) { return b.credits - a.credits; });
-		this.sendReplyBox(rankLadder('Credit Ladder', 'credits', keys.slice(0, 100), 'credits'));
-	},
-	creditladderhelp: ["/creditladder - Displays users ranked by the amount of Wisp credits they possess."],
-
-	credits: 'creditsstats',
-	creditsstats: function (target, room, user) {
-		if (room.id !== 'marketplace' && room.id !== 'marketplacestaff') return this.errorReply("Credit stats can only be viewed in the Marketplace.");
-		if (!this.runBroadcast()) return;
-		const users = Object.keys(Db('credits').object());
-		const total = users.reduce(function (acc, cur) {
-			return acc + Db('credits').get(cur);
-		}, 0);
-		let average = Math.floor(total / users.length);
-		let output = "There is " + total + currencyName(total) + " circulating in the economy. ";
-		output += "The average user has " + average + currencyName(average) + ".";
-		this.sendReplyBox(output);
-	},
-	creditsstatshelp: ["/credits - Gives information about the state of the economy."],
-
-	cleancredits: function (target, room, user) {
-		if (!~developers.indexOf(user.userid)) return this.errorReply("/cleancredits - Access denied.");
-		let creditsObject = Db('credits').object();
-		Object.keys(creditsObject)
-			.filter(function (name) {
-				return Db('credits').get(name) < 1;
-			})
-			.forEach(function (name) {
-				delete creditsObject[name];
-			});
-		Db.save();
-		this.sendReply("All users who has less than 1 credit are now removed from the database.");
-	},
-	cleancreditshelp: ["/cleancredits - Cleans credit database by removing users with less than one credit."],
-
-	credit: 'creditshop',
-	creditshop: function (target, room, user) {
-		if (room.id !== 'marketplace' && room.id !== 'marketplacestaff') return this.errorReply("Creditshop can only be viewed in the Marketplace.");
-		if (!this.runBroadcast()) return;
-		return this.sendReply("|raw|" + creditShopDisplay);
 	},
 
 	claim: function (target, room, user) {
-		if (!target) return this.parse('/help claim');
-		let amount = Db('credits').get(user.userid, 0);
-		let cost = findItem.call(this, target, amount);
-		if (!cost) return;
-		let total = Db('credits').set(user.userid, amount - cost).get(user.userid);
-		this.sendReply("You have bought " + target + " for " + cost + currencyName(cost) + ". You now have " + total + currencyName(total) + " left.");
-		room.addRaw(user.name + " has bought <b>" + target + "</b> from the shop.");
-		logCredits(user.name + " has bought " + target + " from the shop. This user now has " + total + currencyName(total) + ".");
-		handleBoughtItem.call(this, target.toLowerCase(), user, cost);
+		if (!target) return this.sendReply("Usage: /claim [item]");
+		let targetSplit = target.split(',');
+		for (let u in targetSplit) targetSplit[u] = targetSplit[u].trim();
+		let item = targetSplit[0];
+		let itemid = toId(item);
+		let matched = false;
+
+		if (!prices[itemid]) return this.sendReply("/claim " + item + " - Item not found.");
+
+		Crediteconomy.readCred(user.userid, userCred => {
+			switch (itemid) {
+			case 'roseticket':
+				if (userCred < prices[itemid]) return this.sendReply("You need " + (prices[itemid] - userCred) + " more credits to purchase a Rose Ticket.");
+				Crediteconomy.writeCred(user.userid, prices[itemid] * -1);
+				Crediteconomy.logTransaction(user.name + " has purchased a Rose Ticket for " + prices[itemid] + " credits.");
+				Rooms.get('marketplacestaff').add('|raw|' + user.name + " has purchased a Rose Ticket.");
+				this.sendReply("You have purchased a Rose Ticket.");
+				matched = true;
+				break;
+			case 'redticket':
+				if (userCred < prices[itemid]) return this.sendReply("You need " + (prices[itemid] - userCred) + " more credits to purchase a Red Ticket.");
+				Crediteconomy.writeCred(user.userid, prices[itemid] * -1);
+				Crediteconomy.logTransaction(user.name + " has purchased a Red Ticket for " + prices[itemid] + " credits.");
+				Rooms.get('marketplacestaff').add('|raw|' + user.name + " has purchased a Red Ticket.");
+				this.sendReply("You have purchased a Red Ticket.");
+				matched = true;
+				break;
+			case 'cyanticket':
+				if (userCred < prices[itemid]) return this.sendReply("You need " + (prices[itemid] - userCred) + " more credits to purchase a Cyan Ticket.");
+				Crediteconomy.writeCred(user.userid, prices[itemid] * -1);
+				Crediteconomy.logTransaction(user.name + " has purchased a Cyan Ticket for " + prices[itemid] + " credits.");
+				Rooms.get('marketplacestaff').add('|raw|' + user.name + " has purchased a Cyan Ticket.");
+				this.sendReply("You have purchased a Cyan Ticket.");
+				matched = true;
+				break;
+			case 'blueticket':
+				if (userCred < prices[itemid]) return this.sendReply("You need " + (prices[itemid] - userCred) + " more credits to purchase a Blue Ticket.");
+				Crediteconomy.writeCred(user.userid, prices[itemid] * -1);
+				Crediteconomy.logTransaction(user.name + " has purchased a Blue Ticket for " + prices[itemid] + " credits.");
+				Rooms.get('marketplacestaff').add('|raw|' + user.name + " has purchased a Blue Ticket.");
+				this.sendReply("You have purchased a Blue Ticket.");
+				matched = true;
+				break;
+			case 'orangeticket':
+				if (userCred < prices[itemid]) return this.sendReply("You need " + (prices[itemid] - userCred) + " more credits to purchase a Orange Ticket.");
+				Crediteconomy.writeCred(user.userid, prices[itemid] * -1);
+				Crediteconomy.logTransaction(user.name + " has purchased a Orange Ticket for " + prices[itemid] + " credits.");
+				Rooms.get('marketplacestaff').add('|raw|' + user.name + " has purchased a Orange Ticket.");
+				this.sendReply("You have purchased a Orange Ticket.");
+				matched = true;
+				break;
+			case 'violetticket':
+				if (userCred < prices[itemid]) return this.sendReply("You need " + (prices[itemid] - userCred) + " more credits to purchase a Violet Ticket.");
+				Crediteconomy.writeCred(user.userid, prices[itemid] * -1);
+				Crediteconomy.logTransaction(user.name + " has purchased a Violet Ticket for " + prices[itemid] + " credits.");
+				Rooms.get('marketplacestaff').add('|raw|' + user.name + " has purchased a Violet Ticket.");
+				this.sendReply("You have purchased a Violet Ticket.");
+				matched = true;
+				break;
+			case 'yellowticket':
+				if (userCred < prices[itemid]) return this.sendReply("You need " + (prices[itemid] - userCred) + " more credits to purchase a Yellow Ticket.");
+				Crediteconomy.writeCred(user.userid, prices[itemid] * -1);
+				Crediteconomy.logTransaction(user.name + " has purchased a Yellow Ticket for " + prices[itemid] + " credits.");
+				Rooms.get('marketplacestaff').add('|raw|' + user.name + " has purchased a Yellow Ticket.");
+				this.sendReply("You have purchased a Yellow Ticket.");
+				matched = true;
+				break;
+			case 'whiteticket':
+				if (userCred < prices[itemid]) return this.sendReply("You need " + (prices[itemid] - userCred) + " more credits to purchase a White Ticket.");
+				Crediteconomy.writeCred(user.userid, prices[itemid] * -1);
+				Crediteconomy.logTransaction(user.name + " has purchased a White Ticket for " + prices[itemid] + " credits.");
+				Rooms.get('marketplacestaff').add('|raw|' + user.name + " has purchased a White Ticket.");
+				this.sendReply("You have purchased a White Ticket.");
+				matched = true;
+				break;
+			case 'greenticket':
+				if (userCred < prices[itemid]) return this.sendReply("You need " + (prices[itemid] - userCred) + " more credits to purchase a Green Ticket.");
+				Crediteconomy.writeCred(user.userid, prices[itemid] * -1);
+				Crediteconomy.logTransaction(user.name + " has purchased a Green Ticket for " + prices[itemid] + " credits.");
+				Rooms.get('marketplacestaff').add('|raw|' + user.name + " has purchased a Green Ticket.");
+				this.sendReply("You have purchased a Green Ticket.");
+				matched = true;
+				break;
+			case 'blackticket':
+				if (userCred < prices[itemid]) return this.sendReply("You need " + (prices[itemid] - userCred) + " more credits to purchase a Black Ticket.");
+				Crediteconomy.writeCred(user.userid, prices[itemid] * -1);
+				Crediteconomy.logTransaction(user.name + " has purchased a Black Ticket for " + prices[itemid] + " credits.");
+				Rooms.get('marketplacestaff').add('|raw|' + user.name + " has purchased a Black Ticket.");
+				this.sendReply("You have purchased a Black Ticket.");
+				matched = true;
+				break;
+			case 'silverticket':
+				if (userCred < prices[itemid]) return this.sendReply("You need " + (prices[itemid] - userCred) + " more credits to purchase a Silver Ticket.");
+				Crediteconomy.writeCred(user.userid, prices[itemid] * -1);
+				Crediteconomy.logTransaction(user.name + " has purchased a Silver Ticket for " + prices[itemid] + " credits.");
+				Rooms.get('marketplacestaff').add('|raw|' + user.name + " has purchased a Silver Ticket.");
+				this.sendReply("You have purchased a Silver Ticket.");
+				matched = true;
+				break;
+			case 'crystalticket':
+				if (userCred < prices[itemid]) return this.sendReply("You need " + (prices[itemid] - userCred) + " more credits to purchase a Crystal Ticket.");
+				Crediteconomy.writeCred(user.userid, prices[itemid] * -1);
+				Crediteconomy.logTransaction(user.name + " has purchased a Crystal Ticket for " + prices[itemid] + " credits.");
+				Rooms.get('marketplacestaff').add('|raw|' + user.name + " has purchased a Crystal Ticket.");
+				this.sendReply("You have purchased a Crystal Ticket.");
+				matched = true;
+				break;
+			case 'goldticket':
+				if (userCred < prices[itemid]) return this.sendReply("You need " + (prices[itemid] - userCred) + " more credits to purchase a Gold Ticket.");
+				Crediteconomy.writeCred(user.userid, prices[itemid] * -1);
+				Crediteconomy.logTransaction(user.name + " has purchased a Gold Ticket for " + prices[itemid] + " credits.");
+				Wisp.messageSeniorStaff(user.name + " has purchased a Gold Ticket.");
+				Rooms.get('marketplacestaff').add('|raw|' + user.name + " has purchased a Gold Ticket.");
+				matched = true;
+				break;
+			case 'rubyticket':
+				if (userCred < prices[itemid]) return this.sendReply("You need " + (prices[itemid] - userCred) + " more credits to purchase a Ruby Ticket.");
+				Crediteconomy.writeCred(user.userid, prices[itemid] * -1);
+				Crediteconomy.logTransaction(user.name + " has purchased a Ruby Ticket for " + prices[itemid] + " credits.");
+				Rooms.get('marketplacestaff').add('|raw|' + user.name + " has purchased a Ruby Ticket.");
+				this.sendReply("You have purchased a Ruby Ticket.");
+				matched = true;
+				break;
+			case 'sapphireticket':
+				if (userCred < prices[itemid]) return this.sendReply("You need " + (prices[itemid] - userCred) + " more credits to purchase a Sapphire Ticket.");
+				Crediteconomy.writeCred(user.userid, prices[itemid] * -1);
+				Crediteconomy.logTransaction(user.name + " has purchased a Sapphire Ticket for " + prices[itemid] + " credits.");
+				Rooms.get('marketplacestaff').add('|raw|' + user.name + " has purchased a Sapphire Ticket.");
+				this.sendReply("You have purchased a Sapphire Ticket.");
+				matched = true;
+				break;
+			case 'emeraldticket':
+				if (userCred < prices[itemid]) return this.sendReply("You need " + (prices[itemid] - userCred) + " more credits to purchase a Emerald Ticket.");
+				Crediteconomy.writeCred(user.userid, prices[itemid] * -1);
+				Crediteconomy.logTransaction(user.name + " has purchased a Emerald Ticket for " + prices[itemid] + " credits.");
+				Rooms.get('marketplacestaff').add('|raw|' + user.name + " has purchased a Emerald Ticket.");
+				this.sendReply("You have purchased a Emerald Ticket.");
+				matched = true;
+				break;
+			case 'rainbowticket':
+				if (userCred < prices[itemid]) return this.sendReply("You need " + (prices[itemid] - userCred) + " more credits to purchase a Rainbow Ticket.");
+				Crediteconomy.writeCred(user.userid, prices[itemid] * -1);
+				Crediteconomy.logTransaction(user.name + " has purchased a Rainbow Ticket for " + prices[itemid] + " credits.");
+				Rooms.get('marketplacestaff').add('|raw|' + user.name + " has purchased a Rainbow Ticket.");
+				this.sendReply("You have purchased a Rainbow Ticket.");
+				matched = true;
+				break;
+
+			}
+
+			if (matched) return this.sendReply("You now have " + (userCred - prices[itemid]) + " credits left.");
+		});
 	},
-	claimhelp: ["/claim [command] - Buys an item from the creditshop."],
+
+	creditshop: function (target, room, user) {
+		if (!this.runBroadcast()) return;
+		this.sendReplyBox('<center><h4><b><u>' + shopTitle + '</u></b></h4><table border="1" cellspacing ="0" cellpadding="3"><tr><th>Item</th><th>Description</th><th>Price</th></tr>' +
+			'<tr><td>Rose Ticket</td><td>Can be exchanged for 5 bucks</td><td>' + prices['symbol'] + '</td></tr>' +
+			'<tr><td>Red TIcket</td><td>Can be exchanged for one PSGO pack</td><td>' + prices['fix'] + '</td></tr>' +
+			'<tr><td>Cyan Ticket</td><td>Can be exchanged for 15 bucks</td><td>' + prices['declare'] + '</td></tr>' +
+			'<tr><td>Blue Ticket</td><td>Can be exchanged for 2 PSGO packs</td><td>' + prices['poof'] + '</td></tr>' +
+			'<tr><td>Orange Ticket</td><td>Can be exchanged for a recolored avatar and 10 bucks</td><td>' + prices['avatar'] + '</td></tr>' +
+			'<tr><td>Violet Ticket</td><td>Can be exchanged for a recolored avatar, 1 PSGO pack and 20 bucks</td><td>' + prices['infobox'] + '</td></tr>' +
+			'<tr><td>Yellow Ticket</td><td>Can be exchanged for 5 PSGO packs</td><td>' + prices['emote'] + '</td></tr>' +
+			'<tr><td>White Ticket</td><td>Can be exchanged for 50 bucks</td><td>' + prices['leagueshop'] + '</td></tr>' +
+			'<tr><td>Green Ticket</td><td>Can be exchanged for a recolored avatar, 30 bucks and 2 PSGO packs</td><td>' + prices['room'] + '</td></tr>' +
+			'<tr><td>Black Ticket</td><td>Can be exchanged for 100 bucks</td><td>' + prices['icon'] + '</td></tr>' +
+			'<tr><td>Silver Ticket</td><td>Can be exchanged for 1 PSGO pack and 20 bucks</td><td>' + prices['color'] + '</td></tr>' +
+			'<tr><td>Crystal Ticket</td><td>Can be exchanged for 2 cards from the <button name="send" value="/showcase marketplaceatm">Marketplace ATM showcase</button></td><td>' + prices['color'] + '</td></tr>' +
+			'<tr><td>Gold Ticket</td><td>Can be exchanged for 2 PSGO packs and 50 bucks</td><td>' + prices['color'] + '</td></tr>' +
+			'<tr><td>Ruby ticket</td><td>Can be exchanged for 5 PSGO packs, 50 bucks and an avatar recolor</td><td>' + prices['color'] + '</td></tr>' +
+			'<tr><td>Sapphire Ticket</td><td>Can be exchanged for 7 PSGO packs and 100 bucks</td><td>' + prices['color'] + '</td></tr>' +
+			'<tr><td>Emerald Ticket</td><td>Can be exchanged for 5 PSGO packs, 100 bucks and Marketplace Partner (Can be taken away if necessary)</td><td>' + prices['color'] + '</td></tr>' +
+			'<tr><td>Rainbow Ticket</td><td>Can be exchanged for 10 PSGO packs and 200 bucks</td><td>' + prices['color'] + '</td></tr>' +
+			'</table><br />To buy an item from the shop, use /claim [item].<br />All sales final, no refunds will be provided.</center>'
+		);
+	},
+
+	credits: function (target, room, user) {
+		if (!this.runBroadcast()) return;
+
+		Wisp.database.all("SELECT SUM(credits) FROM users;", (err, rows) => {
+			if (err) return console.log("credits1: " + err);
+			let totalCredits = rows[0]['SUM(credits)'];
+			Wisp.database.all("SELECT userid, SUM(credits) AS total FROM users GROUP BY credits HAVING TOTAL > 0;", (err, rows) => {
+				if (err) return console.log("credits2: " + err);
+				let userCount = rows.length;
+				Wisp.database.all("SELECT * FROM users ORDER BY credits DESC LIMIT 1;", (err, rows) => {
+					if (err) return console.log("credits3: " + err);
+					let richestUser = rows[0].userid;
+					let richestUserCred = rows[0].credits;
+					if (Users.getExact(richestUser)) richestUser = Users.getExact(richestUser).name;
+					Wisp.database.all("SELECT AVG(credits) FROM users WHERE credits > 0;", (err, rows) => {
+						if (err) return console.log("credits4: " + err);
+						let averageCredits = rows[0]['AVG(credits)'];
+
+						this.sendReplyBox("The richest user is currently <b><font color=#24678d>" + Tools.escapeHTML(richestUser) + "</font></b> with <b><font color=#24678d>" +
+							richestUserCred + "</font></b> credits.</font></b><br />There is a total of <b><font color=#24678d>" +
+							userCount + "</font></b> users with at least one credits.<br /> The average user has " +
+							"<b><font color=#24678d>" + Math.round(averageCredits) + "</font></b> credits.<br /> There is a total of <b><font color=#24678d>" +
+							totalCredits + "</font></b> credits in the economy."
+						);
+						room.update();
+					});
+				});
+			});
+		});
+	},
+
+	luckiestusers: function (target, room, user) {
+		if (!target) target = 10;
+		target = Number(target);
+		if (isNaN(target)) target = 10;
+		if (!this.runBroadcast()) return;
+		if (this.broadcasting && target > 10) target = 10; // limit to 10 while broadcasting
+		if (target > 500) target = 500;
+
+		let self = this;
+
+		function showResults(rows) {
+			let output = '<table border="1" cellspacing ="0" cellpadding="3"><tr><th>Rank</th><th>Name</th><th>Credits</th></tr>';
+			let count = 1;
+			for (let u in rows) {
+				if (!rows[u].credits || rows[u].credits < 1) continue;
+				let username;
+				if (rows[u].name !== null) {
+					username = rows[u].name;
+				} else {
+					username = rows[u].userid;
+				}
+				output += '<tr><td>' + count + '</td><td>' + Tools.escapeHTML(username) + '</td><td>' + rows[u].credits + '</td></tr>';
+				count++;
+			}
+			self.sendReplyBox(output);
+			room.update();
+		}
+
+		Wisp.database.all("SELECT userid, credits, name FROM users ORDER BY credits DESC LIMIT $target;", {$target: target}, function (err, rows) {
+			if (err) return console.log("richestuser: " + err);
+			showResults(rows);
+		});
+	},
+
 };
