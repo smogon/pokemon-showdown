@@ -974,7 +974,7 @@ exports.BattleMovedex = {
 				return false;
 			}
 			if (!target.setItem(yourItem)) {
-				source.item = yourItem;
+				source.item = yourItem.id;
 				return false;
 			}
 			this.add('-item', target, yourItem.name, '[from] move: Bestow', '[of] ' + source);
@@ -14317,8 +14317,8 @@ exports.BattleMovedex = {
 			let myItem = source.takeItem();
 			if (target.item || source.item || (!yourItem && !myItem) ||
 					(myItem.onTakeItem && myItem.onTakeItem(myItem, target) === false)) {
-				if (yourItem) target.item = yourItem;
-				if (myItem) source.item = myItem;
+				if (yourItem) target.item = yourItem.id;
+				if (myItem) source.item = myItem.id;
 				return false;
 			}
 			this.add('-activate', source, 'move: Trick', '[of] ' + target);
@@ -15138,8 +15138,8 @@ exports.BattleMovedex = {
 			let myItem = source.takeItem();
 			if (target.item || source.item || (!yourItem && !myItem) ||
 					(myItem.onTakeItem && myItem.onTakeItem(myItem, target) === false)) {
-				if (yourItem) target.item = yourItem;
-				if (myItem) source.item = myItem;
+				if (yourItem) target.item = yourItem.id;
+				if (myItem) source.item = myItem.id;
 				return false;
 			}
 			this.add('-activate', source, 'move: Trick', '[of] ' + target);
