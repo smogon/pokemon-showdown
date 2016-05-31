@@ -43,16 +43,11 @@ class Dice {
 	}
 
 	join(user, self) {
+		if (this.players.length === 2) return self.errorReply("Two users have already joined this game of dice.");
 		Economy.readMoney(user.userid, money => {
 			if (money < this.bet) return self.sendReply('You don\'t have enough money for this game of dice.');
 			if (this.players.includes(user)) return self.sendReply('You have already joined this game of dice.');
-			if (this.players.length) {
-				let p1 = this.players[0];
-				for (let i in user.getAlts(true)) {
-					if (p1.userid === toId(user.getAlts(true)[i])) return self.errorReply("Your alt '" + user.getAlts(true)[i] + "' has already joined this game of dice.");
-				}
-				if (p1.getAlts(true).map(toId).includes(user.userid)) return self.errorReply("Your alt '" + p1.name + "' has already joined this game of dice.");
-			}
+			if (this.players.length && this.players[0].latestIp === user.latestIp) return self.errorReply("You have already joined this game of dice under the alt '" + this.players[0].name + "'.");
 			this.players.push(user);
 			this.room.add('|uhtmlchange|' + this.room.diceCount + '|' + this.startMessage + '<center>' + Wisp.nameColor(user.name) + ' has joined the game!</center></div>').update();
 			if (this.players.length === 2) this.play();
