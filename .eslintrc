@@ -15,7 +15,7 @@
 		"Config": false, "Monitor": false, "toId": false, "Tools": false, "LoginServer": false,
 		"Users": false, "Punishments": false, "Rooms": false, "Verifier": false, "CommandParser": false, "Simulator": false,
 		"Tournaments": false, "Dnsbl": false, "Cidr": false, "Sockets": false, "TeamValidator": false, "Ladders": false,
-        "Wisp": false, "Economy": true, "sqlite3": true
+        "Wisp": false, "Economy": true, "sqlite3": true, "Db": true
 	},
 	"rules": {
 		"comma-dangle": [2, "always-multiline"],

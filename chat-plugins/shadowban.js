@@ -74,7 +74,7 @@ function intersectAndExclude(a, b) {
 }
 
 let checkBannedCache = {};
-let checkBanned = exports.checkBanned = function (user) {
+exports.checkBanned = function (user) {
 	let userId = toId(user);
 	if (userId in checkBannedCache) return checkBannedCache[userId];
 	//console.log("Shadow ban cache miss:", userId);
@@ -139,7 +139,7 @@ let removeUser = exports.removeUser = function (user) {
 	return targets;
 };
 
-let addMessage = exports.addMessage = function (user, tag, message) {
+exports.addMessage = function (user, tag, message) {
 	room.add('|c|' + user.getIdentity() + '|__(' + tag + ')__ ' + message);
 	room.update();
 };
@@ -191,7 +191,7 @@ exports.commands = {
 		if (!this.can('lock')) return false;
 
 		Users.get(toId(user.name)).send('|popup| Here is a list of sbanned users: \n' + JSON.stringify(Rooms.rooms.shadowbanroom.chatRoomData, null, 2));
-	}
+	},
 };
 
 Users.ShadowBan = exports;

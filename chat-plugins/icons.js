@@ -1,9 +1,7 @@
 'use strict';
 
-let serverid = 'wisp';
 let icons = {};
 const fs = require('fs');
-const http = require('http');
 
 function load() {
 	fs.readFile('config/icons.json', 'utf8', function (err, file) {

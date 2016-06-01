@@ -123,8 +123,11 @@ exports.commands = {
 
 		let tell = Wisp.tells[id][user.userid];
 		let msg = '<span style = "color:gray;"><i>(Sent by ' + user.name + ' on ' + moment().format("ddd, MMMM DD, YYYY HH:mmA ZZ") + ')</i></span><br><b><span style = "color:' + Wisp.hashColor(user.userid) + '">' + user.name + ':</span></b> ' + Tools.escapeHTML(target);
-		if (tell) Wisp.tells[id][user.userid].push(msg);
-		else Wisp.tells[id][user.userid] = [msg];
+		if (tell) {
+			Wisp.tells[id][user.userid].push(msg);
+		} else {
+			Wisp.tells[id][user.userid] = [msg];
+		}
 
 		fs.writeFileSync('config/tells.json', JSON.stringify(Wisp.tells));
 		this.sendReply('Your message "' + target + '" has successfully been sent to ' + this.targetUsername + '.');
@@ -593,9 +596,13 @@ Object.assign(Wisp, {
 		}
 		let lum = (R1 + m) * 0.2126 + (G1 + m) * 0.7152 + (B1 + m) * 0.0722; // 0.05 (dark blue) to 0.93 (yellow)
 		let HLmod = (lum - 0.5) * -100; // -43 (yellow) to 45 (dark blue)
-		if (HLmod > 12) HLmod -= 12;
-		else if (HLmod < -10) HLmod = (HLmod + 10) * 2 / 3;
-		else HLmod = 0;
+		if (HLmod > 12) {
+			HLmod -= 12;
+		} else if (HLmod < -10) {
+			HLmod = (HLmod + 10) * 2 / 3;
+		} else {
+			HLmod = 0;
+		}
 
 		L += HLmod;
 		let Smod = 10 - Math.abs(50 - L);

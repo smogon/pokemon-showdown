@@ -67,7 +67,7 @@ function cacheRarity() {
 	}
 }
 
-global.tourCard = function (tourSize, userid) {
+Wisp.tourCard = function (tourSize, userid) {
 	if (tourSize > 32) tourSize = 32;
 	let tourRarity = tourCardRarity[Math.floor(tourSize / 4)];
 	let cacheValue = rareCache[cleanCard.indexOf(toId(tourRarity))];
@@ -200,7 +200,7 @@ exports.commands = {
 		if (!target) return this.sendReply("/buypack - Buys a pack from the pack shop. Alias: /buypacks");
 		let self = this;
 		let packId = toId(target);
-		Economy.readMoney(user.userid, (amount) => {
+		Economy.readMoney(user.userid, amount => {
 			if (cleanShop.indexOf(packId) < 0) return self.sendReply("This is not a valid pack. Use /packshop to see all packs.");
 			let shopIndex = cleanShop.indexOf(toId(target));
 			if (packId !== 'xybase' && packId !== 'xyfuriousfists' && packId !== 'xyflashfire' && packId !== 'xyphantomforces' && packId !== 'xyroaringskies' && packId !== 'xyprimalclash' && packId !== 'xyancientorigins') return self.sendReply("This pack is not currently in circulation.  Please use /packshop to see the current packs.");
