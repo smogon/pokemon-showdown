@@ -100,6 +100,7 @@ exports.commands = {
 
 	tell: function (target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help tell');
+		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
 		target = this.splitTarget(target);
 		let targetUser = this.targetUsername;
 		let id = toId(targetUser);
