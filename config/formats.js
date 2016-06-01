@@ -2034,9 +2034,9 @@ exports.Formats = [
 		column: 3,
 
 		mod: 'gen1',
-		ruleset: ['OU'],
+		ruleset: ['[Gen 1] OU'],
 		banlist: ['Alakazam', 'Chansey', 'Cloyster', 'Exeggutor', 'Gengar', 'Golem', 'Jolteon', 'Jynx',
-			'Lapras', 'Mew', 'Mewtwo', 'Rhydon', 'Slowbro', 'Snorlax', 'Starmie', 'Tauros', 'Zapdos',
+			'Lapras', 'Rhydon', 'Slowbro', 'Snorlax', 'Starmie', 'Tauros', 'Zapdos',
 		],
 	},
 
