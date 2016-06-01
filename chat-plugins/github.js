@@ -38,7 +38,7 @@ github.on('push', function push(repo, ref, result) {
 		let commitMessage = commit.message;
 		let shortCommit = /.+/.exec(commitMessage)[0];
 		if (commitMessage !== shortCommit) {
-			shortCommit += '&hellip;';
+			shortCommit += '...';
 		}
 		message = "";
 		message += "<font color='FF00FF'>" + Tools.escapeHTML(repo) + "</font>/";
