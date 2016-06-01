@@ -555,6 +555,15 @@ exports.commands = {
 		this.sendReply("Friendcode removed.");
 	},
 
+	togglegdeclares: function (target, room, user) {
+		if (!this.can('declare', null, room)) return false;
+		if (room.isOfficial && this.can('gdeclare')) return this.errorReply("Only global leaders may toggle global declares in official rooms.");
+		let status = !room.disableGlobalDeclares;
+		room.disableGlobalDeclares = status;
+		room.chatRoomData.disableGlobalDeclares = status;
+		Rooms.global.writeChatRoomData();
+		this.privateModCommand("(" + user.name + " has " + (status ? "disabled" : "enabled") + " global declares in this room.)");
+	},
 };
 
 Object.assign(Wisp, {
