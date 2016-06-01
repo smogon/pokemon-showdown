@@ -2036,9 +2036,7 @@ exports.Formats = [
 
 		mod: 'gen1',
 		ruleset: ['[Gen 1] OU'],
-		banlist: ['Alakazam', 'Chansey', 'Cloyster', 'Exeggutor', 'Gengar', 'Golem', 'Jolteon',
-			'Jynx', 'Lapras', 'Rhydon', 'Slowbro', 'Snorlax', 'Starmie', 'Tauros', 'Zapdos',
-		],
+		banlist: ['OU'],
 	},
 
 	// BW2 Singles
