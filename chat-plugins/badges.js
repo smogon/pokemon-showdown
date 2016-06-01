@@ -46,12 +46,12 @@ exports.commands = {
 			break;
 		case 'list':
 			if (!this.runBroadcast()) return;
-			output = '<table> <tr>';
+			output = '<table border="1">';
 			Object.keys(Db('badgeData').object()).forEach((badge) => {
 				let badgeData = Db('badgeData').get(badge);
-				output += '<td>' + badgeImg(badgeData[1], badge) + '</td> <td>' + badge + '</td> <td>' + badgeData[0] + '</td>';
+				output += '<tr><td>' + badgeImg(badgeData[1], badge) + '</td> <td>' + badge + '</td> <td>' + badgeData[0] + '</td><tr>';
 			});
-			output += '</tr> <table>';
+			output += '<table>';
 			this.sendReplyBox(output);
 			break;
 		case 'info':
