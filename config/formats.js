@@ -2159,7 +2159,10 @@ exports.Formats = [
 
 	{
 		name: "[Gen 5] Doubles OU",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3485044/\">BW2 Doubles Viability Ranking</a>"],
+		desc: [
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3533424/\">BW2 Doubles Metagame Discussion</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3533421/\">BW2 Doubles Viability Ranking</a>",
+		],
 		section: 'BW2 Doubles',
 		column: 3,
 
