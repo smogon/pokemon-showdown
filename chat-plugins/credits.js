@@ -5,23 +5,23 @@ const fs = require('fs');
 let shopTitle = 'Wisp Credit Shop';
 
 let prices = {
-	"Rose Ticket": 15,
-	"Red Ticket": 20,
-	"Cyan Ticket": 30,
-	"Blue Ticket": 35,
-	"Orange Ticket": 50,
-	"Violet Ticket": 75,
-	"Yellow Ticket": 80,
-	"White Ticket": 90,
-	"Green Ticket": 100,
-	"Black Ticket": 175,
-	"Silver Ticket": 55,
-	"Crystal Ticket": 100,
-	"Gold Ticket": 120,
-	"Ruby Ticket": 200,
-	"Sapphire Ticket": 280,
-	"Rainbow Ticket": 450,
-	"Emerald Ticket": 600,
+	"roseticket": 15,
+	"redticket": 20,
+	"cyanticket": 30,
+	"blueticket": 35,
+	"orangeticket": 50,
+	"violetticket": 75,
+	"yellowticket": 80,
+	"whiteticket": 90,
+	"greenticket": 100,
+	"blackticket": 175,
+	"silverticket": 55,
+	"crystalticket": 100,
+	"goldticket": 120,
+	"rubyticket": 200,
+	"sapphireticket": 280,
+	"rainbowticket": 450,
+	"emeraldticket": 600,
 };
 
 function readMoney(userid, callback) {
@@ -326,23 +326,23 @@ exports.commands = {
 	creditshop: function (target, room, user) {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox('<center><h4><b><u>' + shopTitle + '</u></b></h4><table border="1" cellspacing ="0" cellpadding="3"><tr><th>Item</th><th>Description</th><th>Price</th></tr>' +
-			'<tr><td>Rose Ticket</td><td>Can be exchanged for 5 bucks</td><td>' + prices['Rose Ticket'] + '</td></tr>' +
-			'<tr><td>Red TIcket</td><td>Can be exchanged for one PSGO pack</td><td>' + prices['Red Ticket'] + '</td></tr>' +
-			'<tr><td>Cyan Ticket</td><td>Can be exchanged for 15 bucks</td><td>' + prices['Cyan Ticket'] + '</td></tr>' +
-			'<tr><td>Blue Ticket</td><td>Can be exchanged for 2 PSGO packs</td><td>' + prices['Blue Ticket'] + '</td></tr>' +
-			'<tr><td>Orange Ticket</td><td>Can be exchanged for a recolored avatar and 10 bucks</td><td>' + prices['Orange Ticket'] + '</td></tr>' +
-			'<tr><td>Violet Ticket</td><td>Can be exchanged for a recolored avatar, 1 PSGO pack and 20 bucks</td><td>' + prices['Violet Ticket'] + '</td></tr>' +
-			'<tr><td>Yellow Ticket</td><td>Can be exchanged for 5 PSGO packs</td><td>' + prices['Yellow Ticket'] + '</td></tr>' +
-			'<tr><td>White Ticket</td><td>Can be exchanged for 50 bucks</td><td>' + prices['White Ticket'] + '</td></tr>' +
-			'<tr><td>Green Ticket</td><td>Can be exchanged for a recolored avatar, 30 bucks and 2 PSGO packs</td><td>' + prices['Green Ticket'] + '</td></tr>' +
-			'<tr><td>Black Ticket</td><td>Can be exchanged for 100 bucks</td><td>' + prices['Black Ticket'] + '</td></tr>' +
-			'<tr><td>Silver Ticket</td><td>Can be exchanged for 1 PSGO pack and 20 bucks</td><td>' + prices['Silver Ticket'] + '</td></tr>' +
-			'<tr><td>Crystal Ticket</td><td>Can be exchanged for 3 cards from the <button name="send" value="/showcase marketplaceatm">Marketplace ATM showcase</button></td><td>' + prices['Crystal Ticket'] + '</td></tr>' +
-			'<tr><td>Gold Ticket</td><td>Can be exchanged for 2 PSGO packs and 50 bucks</td><td>' + prices['Gold Ticket'] + '</td></tr>' +
-			'<tr><td>Ruby ticket</td><td>Can be exchanged for 5 PSGO packs, 50 bucks and an avatar recolor</td><td>' + prices['Ruby Ticket'] + '</td></tr>' +
-			'<tr><td>Sapphire Ticket</td><td>Can be exchanged for 7 PSGO packs and 100 bucks</td><td>' + prices['Sapphire Ticket'] + '</td></tr>' +
-			'<tr><td>Rainbow Ticket</td><td>Can be exchanged for 10 PSGO packs and 200 bucks</td><td>' + prices['Rainbow Ticket'] + '</td></tr>' +
-			'<tr><td>Emerald Ticket</td><td>Can be exchanged for 5 PSGO packs, 100 bucks, Marketplace Partner, Custom Title and Partner Badge</td><td>' + prices['Emerald Ticket'] + '</td></tr>' +
+			'<tr><td>Rose Ticket</td><td>Can be exchanged for 5 bucks</td><td>' + prices['roseticket'] + '</td></tr>' +
+			'<tr><td>Red TIcket</td><td>Can be exchanged for one PSGO pack</td><td>' + prices['redticket'] + '</td></tr>' +
+			'<tr><td>Cyan Ticket</td><td>Can be exchanged for 15 bucks</td><td>' + prices['cyanticket'] + '</td></tr>' +
+			'<tr><td>Blue Ticket</td><td>Can be exchanged for 2 PSGO packs</td><td>' + prices['blueticket'] + '</td></tr>' +
+			'<tr><td>Orange Ticket</td><td>Can be exchanged for a recolored avatar and 10 bucks</td><td>' + prices['orangeticket'] + '</td></tr>' +
+			'<tr><td>Violet Ticket</td><td>Can be exchanged for a recolored avatar, 1 PSGO pack and 20 bucks</td><td>' + prices['violetticket'] + '</td></tr>' +
+			'<tr><td>Yellow Ticket</td><td>Can be exchanged for 5 PSGO packs</td><td>' + prices['yellowticket'] + '</td></tr>' +
+			'<tr><td>White Ticket</td><td>Can be exchanged for 50 bucks</td><td>' + prices['whiteticket'] + '</td></tr>' +
+			'<tr><td>Green Ticket</td><td>Can be exchanged for a recolored avatar, 30 bucks and 2 PSGO packs</td><td>' + prices['greenticket'] + '</td></tr>' +
+			'<tr><td>Black Ticket</td><td>Can be exchanged for 100 bucks</td><td>' + prices['blackticket'] + '</td></tr>' +
+			'<tr><td>Silver Ticket</td><td>Can be exchanged for 1 PSGO pack and 20 bucks</td><td>' + prices['silverticket'] + '</td></tr>' +
+			'<tr><td>Crystal Ticket</td><td>Can be exchanged for 3 cards from the <button name="send" value="/showcase marketplaceatm">Marketplace ATM showcase</button></td><td>' + prices['crystalticket'] + '</td></tr>' +
+			'<tr><td>Gold Ticket</td><td>Can be exchanged for 2 PSGO packs and 50 bucks</td><td>' + prices['goldticket'] + '</td></tr>' +
+			'<tr><td>Ruby ticket</td><td>Can be exchanged for 5 PSGO packs, 50 bucks and an avatar recolor</td><td>' + prices['rubyticket'] + '</td></tr>' +
+			'<tr><td>Sapphire Ticket</td><td>Can be exchanged for 7 PSGO packs and 100 bucks</td><td>' + prices['sapphireticket'] + '</td></tr>' +
+			'<tr><td>Rainbow Ticket</td><td>Can be exchanged for 10 PSGO packs and 200 bucks</td><td>' + prices['rainbowticket'] + '</td></tr>' +
+			'<tr><td>Emerald Ticket</td><td>Can be exchanged for 5 PSGO packs, 100 bucks, Marketplace Partner, Custom Title and Partner Badge</td><td>' + prices['emeraldticket'] + '</td></tr>' +
 			'</table><br />To buy an item from the shop, use /claim [item].<br />All sales final, no refunds will be provided.</center>'
 		);
 	},
