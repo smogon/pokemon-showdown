@@ -637,7 +637,11 @@ exports.commands = {
 			this.sendReply('|raw|<div class="infobox infobox-limited">' + room.introMessage.replace(/\n/g, '') + '</div>');
 			if (!this.broadcasting && user.can('declare', null, room)) {
 				this.sendReply('Source:');
-				this.sendReplyBox('<code>/roomintro ' + Tools.escapeHTML(room.introMessage).replace(/\n/g, '<br />') + '</code>');
+				this.sendReplyBox(
+					'<code>/roomintro ' + Tools.escapeHTML(room.introMessage).split('\n').map(line => {
+						return line.replace(/^(\t+)/, (match, $1) => '&nbsp;'.repeat(4 * $1.length)).replace(/^(\s+)/, (match, $1) => '&nbsp;'.repeat($1.length));
+					}).join('<br />') + '</code>'
+				);
 			}
 			return;
 		}
@@ -686,7 +690,11 @@ exports.commands = {
 			this.sendReply('|raw|<div class="infobox">' + room.staffMessage.replace(/\n/g, '') + '</div>');
 			if (user.can('ban', null, room)) {
 				this.sendReply('Source:');
-				this.sendReplyBox('<code>/staffintro ' + Tools.escapeHTML(room.staffMessage).replace(/\n/g, '<br />') + '</code>');
+				this.sendReplyBox(
+					'<code>/staffintro ' + Tools.escapeHTML(room.staffMessage).split('\n').map(line => {
+						return line.replace(/^(\t+)/, (match, $1) => '&nbsp;'.repeat(4 * $1.length)).replace(/^(\s+)/, (match, $1) => '&nbsp;'.repeat($1.length));
+					}).join('<br />') + '</code>'
+				);
 			}
 			return;
 		}
