@@ -995,7 +995,8 @@ exports.commands = {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(
 			"Pok&eacute;mon Showdown! damage calculator. (Courtesy of Honko)<br />" +
-			"- <a href=\"https://pokemonshowdown.com/damagecalc/\">Damage Calculator</a>"
+			"- <a href=\"https://pokemonshowdown.com/damagecalc/\">Damage Calculator</a>" +
+			"- <a href=\"http://nuggetbridge.com/damagecalc/\">VGC Damage Calculator</a>"
 		);
 	},
 	calchelp: ["/calc - Provides a link to a damage calculator",
