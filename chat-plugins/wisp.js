@@ -562,6 +562,7 @@ exports.commands = {
 	togglegdeclares: function (target, room, user) {
 		if (!this.can('declare', null, room)) return false;
 		if (room.isOfficial && this.can('gdeclare')) return this.errorReply("Only global leaders may toggle global declares in official rooms.");
+		if (!room.chatRoomData) return this.errorReply("You can't toggle global declares in this room.");
 		let status = !room.disableGlobalDeclares;
 		room.disableGlobalDeclares = status;
 		room.chatRoomData.disableGlobalDeclares = status;
