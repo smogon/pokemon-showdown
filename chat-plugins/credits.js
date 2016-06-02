@@ -61,7 +61,7 @@ exports.commands = {
 		if (!target) return this.sendReply("Usage: /creditlog [number] to view the last x lines OR /creditlog [text] to search for text.");
 		let word = false;
 		if (isNaN(Number(target))) word = true;
-		let lines = fs.readFileSync('logs/credit.log', 'utf8').split('\n').reverse();
+		let lines = fs.readFileSync('logs/transactions.log', 'utf8').split('\n').reverse();
 		let output = '';
 		let count = 0;
 		let regex = new RegExp(target.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'), "gi");
