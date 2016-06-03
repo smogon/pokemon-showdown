@@ -228,7 +228,7 @@ class CommandContext {
 
 			this.message = message;
 			this.broadcastMessage = broadcastMessage;
-			this.user.broadcasting = true;
+			this.user.broadcasting = this.cmd;
 		}
 		return true;
 	}
