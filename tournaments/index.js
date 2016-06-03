@@ -26,6 +26,7 @@ class Tournament {
 
 		this.id = room.id;
 		this.room = room;
+		this.prizeMoney = 0;
 		this.title = Tools.getFormat(format).name + ' tournament';
 		this.allowRenames = false;
 		this.players = Object.create(null);
@@ -819,7 +820,10 @@ class Tournament {
 					if (data2['bracketData']['rootNode']['children'][1]['team'] !== winner) runnerUp = data2['bracketData']['rootNode']['children'][1]['team'];
 				}
 			}
-
+			if (this.prizeMoney !== 0) {
+				this.room.add('|raw|<b>' + Wisp.nameColor(winner, false) + ' has won the bucks tournament for <font color=#24678d>' + this.prizeMoney + '</font> bucks!');
+				Economy.writeMoney(toId(winner), Number(this.prizeMoney));
+			}
 			let firstMoney = false;
 			let secondMoney = false;
 			let firstBuck;
@@ -1148,6 +1152,15 @@ let commands = {
 				return this.sendReply("Usage: " + cmd + " <allow|disallow>");
 			}
 		},
+		setprize: 'prizemoney',
+		prizemoney: function (tournament, user, params, cmd) {
+			if (!this.can('pban')) return false;
+			if (!params[0]) return this.sendReply("Usage: " + cmd + " [bucks prize]");
+			let prize = params[0];
+			if (isNaN(prize) || ~prize.indexOf('.') || prize < 1 || prize > 500) return this.errorReply("This amount is not a valid integer that between 1 and 500.");
+			tournament.prizeMoney = prize;
+			this.privateModCommand("(" + user.name + " has set the prize for this tournament to be " + prize + " bucks.)");
+		},
 	},
 };
 
@@ -1295,6 +1308,7 @@ CommandParser.commands.tournamenthelp = function (target, room, user) {
 		"- getusers: Lists the users in the current tournament.<br />" +
 		"- on/off: Enables/disables allowing mods to start tournaments in the current room.<br />" +
 		"- announce/announcements &lt;on|off>: Enables/disables tournament announcements for the current room.<br />" +
+		"- setprize [prize] - Manually sets the prize (bucks) for a tournament. Requires &, ~<br />" +
 		"More detailed help can be found <a href=\"https://www.smogon.com/forums/threads/3570628/#post-6777489\">here</a>"
 	);
 };
