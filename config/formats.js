@@ -366,6 +366,7 @@ exports.Formats = [
 		section: "OM of the Month",
 
 		ruleset: ['OU'],
+		banlist: ['Dragonite'],
 		onModifyMove: function (move, pokemon) {
 			if (pokemon.moves.indexOf(move.id) === 0) {
 				move.type = pokemon.hpType || 'Dark';
