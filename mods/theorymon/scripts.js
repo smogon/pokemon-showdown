@@ -62,5 +62,7 @@ exports.BattleScripts = {
 		this.modData('Learnsets', 'escavalier').learnset.trickroom = ['6T'];
 		this.modData('Learnsets', 'escavalier').learnset.uturn = ['6T'];
 		this.modData('Pokedex', 'cresselia').types = ['Fairy', 'Ghost'];
+		this.modData('Pokedex', 'yanmega').types = ['Bug', 'Ground'];
+		this.modData('Learnsets', 'yanmega').learnset.earthpower = ['6T'];
 	},
 };
