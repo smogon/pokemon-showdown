@@ -125,6 +125,10 @@ exports.BattleScripts = {
 
 		if (move.crit && !suppressMessages) this.add('-crit', target);
 
+		if (pokemon.status === 'brn' && basePower && move.category === 'Physical' && move.id !== 'facade' && !pokemon.hasAbility('guts')) {
+			baseDamage = this.modify(baseDamage, 0.5);
+		}
+
 		baseDamage = this.runEvent('ModifyDamage', pokemon, target, move, baseDamage);
 
 		if (basePower && !Math.floor(baseDamage)) return 1;
