@@ -187,7 +187,7 @@ exports.BattleFormatsData = {
 	},
 	golbat: {
 		randomBattleMoves: ["screech", "confuseray", "doubleedge", "hyperbeam", "megadrain"],
-		tier: "NU",
+		tier: "UU",
 	},
 	oddish: {
 		randomBattleMoves: ["sleeppowder", "swordsdance", "doubleedge", "megadrain", "toxic"],
@@ -258,7 +258,7 @@ exports.BattleFormatsData = {
 	},
 	primeape: {
 		randomBattleMoves: ["submission", "rockslide", "bodyslam", "hyperbeam", "megakick"],
-		tier: "NU",
+		tier: "UU",
 	},
 	growlithe: {
 		randomBattleMoves: ["fireblast", "bodyslam", "mimic", "reflect"],
