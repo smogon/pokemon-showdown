@@ -283,6 +283,7 @@ exports.commands = {
 	backhelp: ["/back - Unblocks challenges and/or private messages, if either are blocked."],
 
 	rank: function (target, room, user) {
+	        if (!this.runBroadcast()) return;
 		if (!target) target = user.name;
 
 		Ladders.visualizeAll(target).then(values => {
