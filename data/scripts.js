@@ -3470,4 +3470,47 @@ exports.BattleScripts = {
 
 		return pokemon;
 	},
+	randomSeasonalJubileeTeam: function (side) {
+		let seasonalPokemonList = [
+			'accelgor', 'aggron', 'arceusbug', 'ariados', 'armaldo', 'aurumoth', 'beautifly', 'beedrill', 'bellossom', 'blastoise',
+			'butterfree', 'castform', 'charizard', 'cherrim', 'crawdaunt', 'crustle', 'delcatty', 'drifblim', 'durant',
+			'dustox', 'escavalier', 'exeggutor', 'floatzel', 'forretress', 'galvantula', 'genesect', 'groudon', 'hariyama', 'heracross',
+			'hooh', 'illumise', 'jumpluff', 'keldeo', 'kingler', 'krabby', 'kricketune', 'krillowatt', 'landorus', 'lapras',
+			'leavanny', 'ledian', 'lilligant', 'ludicolo', 'lunatone', 'machamp', 'machoke', 'machop', 'magmar', 'magmortar',
+			'malaconda', 'manaphy', 'maractus', 'masquerain', 'meganium', 'meloetta', 'moltres', 'mothim', 'ninetales',
+			'ninjask', 'parasect', 'pelipper', 'pikachu', 'pinsir', 'politoed', 'raichu', 'rapidash', 'reshiram', 'rhydon',
+			'rhyperior', 'roserade', 'rotomfan', 'rotomheat', 'rotommow', 'sawsbuck', 'scizor', 'scolipede', 'shedinja',
+			'shuckle', 'slaking', 'snorlax', 'solrock', 'starmie', 'sudowoodo', 'sunflora', 'syclant', 'tentacool', 'tentacruel',
+			'thundurus', 'tornadus', 'tropius', 'vanillish', 'vanillite', 'vanilluxe', 'venomoth', 'venusaur', 'vespiquen',
+			'victreebel', 'vileplume', 'volbeat', 'volcarona', 'wailord', 'wormadam', 'wormadamsandy', 'wormadamtrash', 'yanmega', 'zapdos',
+		];
+		let team = [this.randomSet(this.getTemplate('delibird'), 0)];
+
+		for (let i = 1; i < 6; i++) {
+			let pokemon = this.sampleNoReplace(seasonalPokemonList);
+			let template = this.getTemplate(pokemon);
+			let set = this.randomSet(template, i);
+			if (template.id in {'vanilluxe':1, 'vanillite':1, 'vanillish':1}) {
+				set.moves = ['icebeam', 'weatherball', 'autotomize', 'flashcannon'];
+			}
+			if (template.id in {'pikachu':1, 'raichu':1}) {
+				set.moves = ['thunderbolt', 'surf', 'substitute', 'nastyplot'];
+			}
+			if (template.id in {'rhydon':1, 'rhyperior':1}) {
+				set.moves = ['surf', 'megahorn', 'earthquake', 'rockblast'];
+			}
+			if (template.id === 'reshiram') {
+				set.moves = ['tailwhip', 'dragontail', 'irontail', 'aquatail'];
+			}
+			if (template.id === 'aggron') {
+				set.moves = ['surf', 'earthquake', 'bodyslam', 'rockslide'];
+			}
+			if (template.id === 'hariyama') {
+				set.moves = ['surf', 'closecombat', 'facade', 'fakeout'];
+			}
+			team.push(set);
+		}
+
+		return team;
+	},
 };
