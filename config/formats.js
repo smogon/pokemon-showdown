@@ -77,16 +77,8 @@ exports.Formats = [
 		],
 		section: "ORAS Singles",
 
-		searchShow: false,
 		ruleset: ['UU'],
 		banlist: ['UU', 'BL2'],
-	},
-	{
-		name: "RU (suspect test)",
-		section: "ORAS Singles",
-
-		ruleset: ['RU'],
-		banlist: ['Steelixite', 'Tyrantrum'],
 	},
 	{
 		name: "NU",
