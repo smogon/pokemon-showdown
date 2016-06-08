@@ -479,6 +479,9 @@ module.exports = (() => {
 				name = this.data.Aliases[id];
 				id = toId(name);
 			}
+			if (id && !this.data.Items[id] && this.data.Items[id + 'berry']) {
+				id += 'berry';
+			}
 			item = {};
 			if (id && this.data.Items[id]) {
 				item = this.data.Items[id];
