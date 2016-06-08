@@ -1233,7 +1233,7 @@ exports.BattleItems = {
 		},
 		num: 547,
 		gen: 5,
-		desc: "If holder is hit, it immediately switches out with a chosen ally. Single use.",
+		desc: "If holder survives a hit, it immediately switches out to a chosen ally. Single use.",
 	},
 	"electirizer": {
 		id: "electirizer",
@@ -3627,7 +3627,7 @@ exports.BattleItems = {
 		},
 		num: 542,
 		gen: 5,
-		desc: "If holder is hit, it forces the attacker to switch to a random ally. Single use.",
+		desc: "If holder survives a hit, attacker is forced to switch to a random ally. Single use.",
 	},
 	"redorb": {
 		id: "redorb",
