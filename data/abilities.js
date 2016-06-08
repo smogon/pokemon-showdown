@@ -1022,7 +1022,8 @@ exports.BattleAbilities = {
 				return;
 			}
 			for (let i = 0; i < allyActive.length; i++) {
-				if (allyActive[i] && this.isAdjacent(pokemon, allyActive[i]) && allyActive[i].status && this.random(10) < 3) {
+				if (allyActive[i] && allyActive[i].hp && this.isAdjacent(pokemon, allyActive[i]) && allyActive[i].status && this.random(10) < 10) {
+					this.add('-activate', pokemon, 'ability: Healer');
 					allyActive[i].cureStatus();
 				}
 			}
