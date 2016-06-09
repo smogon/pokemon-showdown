@@ -874,7 +874,11 @@ let commands = {
 		out: 'leave',
 		leave: function (tournament, user) {
 			if (tournament.isTournamentStarted) {
-				tournament.disqualifyUser(user.userid, this);
+				if (tournament.generator.getUsers(true).some(player => player.userid === user.userid)) {
+					tournament.disqualifyUser(user.userid, this);
+				} else {
+					this.errorReply("You have already been eliminated from this tournament.");
+				}
 			} else {
 				tournament.removeUser(user, this);
 			}
