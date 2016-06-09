@@ -187,7 +187,6 @@ module.exports = (() => {
 	 * If we're expecting a string and being given anything that isn't a string
 	 * or a number, it's safe to assume it's an error, and return ''
 	 */
-
 	Tools.prototype.getString = function (str) {
 		if (typeof str === 'string' || typeof str === 'number') return '' + str;
 		return '';
@@ -213,7 +212,6 @@ module.exports = (() => {
 	 * getName also enforces that there are not multiple space characters
 	 * in the name, although this is not strictly necessary for safety.
 	 */
-
 	Tools.prototype.getName = function (name) {
 		if (typeof name !== 'string' && typeof name !== 'number') return '';
 		name = ('' + name).replace(/[\|\s\[\]\,\u202e]+/g, ' ').trim();
