@@ -590,7 +590,8 @@ exports.Formats = [
 		team: 'randomSeasonalJubilee',
 		ruleset: ['Sleep Clause Mod', 'Freeze Clause Mod', 'HP Percentage Mod', 'Cancel Mod'],
 		onBegin: function () {
-			this.add('message', "You were traveling with your fellow Delibird around the world, when your mortal enemy attacked you, seeking revenge since you defeated them on June 2013. Palkia inverted space, so you need to help it reach the south pole before summer starts!");
+			this.add('message', "You are traveling with your fellow Delibird around the world, when your mortal enemy attacks you, seeking revenge since you defeated them on June 2013. Palkia inverted space, so you need to help it reach the south pole before summer starts!");
+			this.add("raw|<font color='red'><b>Don't let your Delibird faint, or you will automatically lose the battle!</b></font>");
 			this.setWeather('Sunny Day');
 			delete this.weatherData.duration;
 		},
@@ -601,16 +602,16 @@ exports.Formats = [
 				let dice = this.random(100);
 				if (dice < 25) {
 					this.setWeather('Rain Dance');
-					weatherMsg = 'a Drizzle';
+					weatherMsg = 'a rainstorm';
 				} else if (dice < 50) {
 					this.setWeather('Sunny Day');
-					weatherMsg = 'a Sunny Day';
+					weatherMsg = 'a heat wave';
 				} else if (dice < 75) {
 					this.setWeather('Hail');
-					weatherMsg = 'Hail';
+					weatherMsg = 'a snowstorm';
 				} else {
 					this.setWeather('Sandstorm');
-					weatherMsg = 'a Sandstorm';
+					weatherMsg = 'a sandstorm';
 				}
 				this.add('-message', "Reshiram caused " + weatherMsg + " with its tail!");
 				delete this.weatherData.duration;
@@ -618,18 +619,18 @@ exports.Formats = [
 
 			if (!pokemon.side.battle.seasonal) pokemon.side.battle.seasonal = {'none':false, 'drizzle':false, 'hail':false};
 			if (pokemon.side.battle.turn >= 4 && pokemon.side.battle.seasonal.none === false) {
-				this.add('-message', "You are travelling south and you have arrived to Sao Paulo! There's a clear sky and the temperature is lower here.");
+				this.add('-message', "You are travelling south and you have arrived in Sao Paulo! There's a clear sky and the temperature is lower here.");
 				this.clearWeather();
 				pokemon.side.battle.seasonal.none = true;
 			}
 			if (pokemon.side.battle.turn >= 8 && pokemon.side.battle.seasonal.drizzle === false) {
-				this.add('-message', "You are travelling further south and you have arrived to Tierra del Fuego in Argentina! It started raining a lot... and it's getting quite cold.");
+				this.add('-message', "You are travelling further south and you have arrived at Tierra del Fuego! It started raining a lot... and it's getting quite cold.");
 				this.setWeather('Rain Dance');
 				delete this.weatherData.duration;
 				pokemon.side.battle.seasonal.drizzle = true;
 			}
 			if (pokemon.side.battle.turn >= 12 && pokemon.side.battle.seasonal.hail === false) {
-				this.add('-message', "You have arrived to the antarctic! Defeat the other trainer so Delibird can be free!");
+				this.add('-message', "You have arrived at the Antarctic! Defeat the other trainer so Delibird can be free!");
 				this.setWeather('Hail');
 				delete this.weatherData.duration;
 				pokemon.side.battle.seasonal.hail = true;
