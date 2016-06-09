@@ -11337,13 +11337,14 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "The user cures its burn, poison, or paralysis.",
-		shortDesc: "Removes status from the user.",
+		shortDesc: "User cures its burn, poison, or paralysis.",
 		id: "refresh",
 		name: "Refresh",
 		pp: 20,
 		priority: 0,
 		flags: {snatch: 1},
 		onHit: function (pokemon) {
+			if (pokemon.status in {'': 1, 'slp': 1, 'frz': 1}) return false;
 			pokemon.cureStatus();
 		},
 		secondary: false,
