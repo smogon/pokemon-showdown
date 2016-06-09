@@ -525,7 +525,6 @@ class User {
 		}
 	}
 	filterName(name) {
-		name = name.substr(0, 30);
 		if (!Config.disablebasicnamefilter) {
 			// whitelist
 			// \u00A1-\u00BF\u00D7\u00F7  Latin punctuation/symbols
@@ -548,11 +547,19 @@ class User {
 			// e-mail address
 			if (name.includes('@') && name.includes('.')) return '';
 		}
+		name = name.replace(/^[^A-Za-z0-9]+/, ""); // remove symbols from start
+
+		// cut name length down to 18 chars
+		if (/[A-Za-z0-9]/.test(name.slice(18))) {
+			name.replace(/[^A-Za-z0-9]+/g, "");
+		} else {
+			name = name.slice(0, 18);
+		}
+
+		name = Tools.getName(name);
 		if (Config.namefilter) {
 			name = Config.namefilter(name, this);
 		}
-		name = Tools.getName(name);
-		name = name.replace(/^[^A-Za-z0-9]+/, "");
 		return name;
 	}
 	/**
@@ -589,8 +596,12 @@ class User {
 			return false;
 		}
 
-		name = this.filterName(name);
 		let userid = toId(name);
+		if (userid.length > 18) {
+			this.send('|nametaken|' + "|Your name must be 18 characters or shorter.");
+			return false;
+		}
+		name = this.filterName(name);
 		if (this.registered) newlyRegistered = false;
 
 		if (!userid) {
