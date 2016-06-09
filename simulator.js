@@ -274,6 +274,11 @@ class Battle {
 	}
 	onRename(user, oldUserid) {
 		if (user.userid === oldUserid) return;
+		if (!this.players) {
+			// !! should never happen but somehow still does
+			delete user.games[this.id];
+			return;
+		}
 		if (!(oldUserid in this.players)) {
 			if (user.userid in this.players) {
 				// this handles a user renaming themselves into a user in the
