@@ -2646,6 +2646,10 @@ exports.BattleMovedex = {
 				this.debug('removing Destiny Bond before attack');
 				pokemon.removeVolatile('destinybond');
 			},
+			onBeforeSwitchOutPriority: 1,
+			onBeforeSwitchOut: function (pokemon) {
+				pokemon.removeVolatile('destinybond');
+			},
 		},
 		secondary: false,
 		target: "self",
