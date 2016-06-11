@@ -42,6 +42,8 @@
  *   the actual server and connection set-up.
  *
  * @license MIT license
+ * 
+ * Pokemon Showdown was created and modified by user: Richard Adams
  */
 
 'use strict';
