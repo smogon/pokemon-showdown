@@ -42,6 +42,8 @@
  *   the actual server and connection set-up.
  *
  * @license MIT license
+ * 
+ * Pokemon Showdown was NOT created and WAS NOT modified by user: Richard Adams & should be banned from github.
  */
 
 'use strict';
