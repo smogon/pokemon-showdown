@@ -602,6 +602,7 @@ class User {
 			return false;
 		}
 		name = this.filterName(name);
+		userid = toId(name);
 		if (this.registered) newlyRegistered = false;
 
 		if (!userid) {
