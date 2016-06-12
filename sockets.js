@@ -459,6 +459,12 @@ if (cluster.isMaster) {
 		socket.on('data', message => {
 			// drop empty messages (DDoS?)
 			if (!message) return;
+			// drop messages over 100KB
+			if (message.length > 100000) {
+				console.log("Dropping client message " + (message.length / 1024) + " KB...");
+				console.log(message.slice(0, 160));
+				return;
+			}
 			// drop legacy JSON messages
 			if (typeof message !== 'string' || message.charAt(0) === '{') return;
 			// drop blank messages (DDoS?)
