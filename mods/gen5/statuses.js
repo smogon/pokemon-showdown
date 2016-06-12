@@ -10,7 +10,7 @@ exports.BattleStatuses = {
 	partiallytrapped: {
 		inherit: true,
 		onResidual: function (pokemon) {
-			if (this.effectData.source && (!this.effectData.source.isActive || this.effectData.source.hp <= 0)) {
+			if (this.effectData.source && (!this.effectData.source.isActive || this.effectData.source.hp <= 0 || !this.effectData.source.activeTurns)) {
 				delete pokemon.volatiles['partiallytrapped'];
 				return;
 			}
