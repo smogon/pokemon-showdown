@@ -551,7 +551,7 @@ class User {
 
 		// cut name length down to 18 chars
 		if (/[A-Za-z0-9]/.test(name.slice(18))) {
-			name.replace(/[^A-Za-z0-9]+/g, "");
+			name = name.replace(/[^A-Za-z0-9]+/g, "");
 		} else {
 			name = name.slice(0, 18);
 		}
@@ -602,7 +602,9 @@ class User {
 			return false;
 		}
 		name = this.filterName(name);
-		userid = toId(name);
+		if (userid !== toId(name)) {
+			name = userid;
+		}
 		if (this.registered) newlyRegistered = false;
 
 		if (!userid) {
