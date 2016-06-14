@@ -1,6 +1,6 @@
 'use strict';
 
-const assert = require('assert');
+const assert = require('./../../assert');
 let battle;
 
 describe('Shell Armor', function () {

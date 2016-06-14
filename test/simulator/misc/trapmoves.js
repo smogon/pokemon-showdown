@@ -1,6 +1,6 @@
 'use strict';
 
-const assert = require('assert');
+const assert = require('./../../assert');
 let battle;
 let trappers = ['Block', 'Mean Look', 'Spider Web', 'Thousand Waves'];
 let partialtrappers = ['Bind', 'Clamp', 'Fire Spin', 'Infestation', 'Magma Storm', 'Sand Tomb', 'Whirlpool', 'Wrap'];

@@ -1,7 +1,7 @@
 'use strict';
 
 let battle;
-const assert = require('assert');
+const assert = require('./../../assert');
 
 describe('Foresight', function () {
 	afterEach(function () {

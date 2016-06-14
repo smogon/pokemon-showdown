@@ -1,6 +1,6 @@
 'use strict';
 
-const assert = require('assert');
+const assert = require('./../../assert');
 let battle;
 let drives = ['Burn Drive', 'Chill Drive', 'Douse Drive', 'Shock Drive'];
 
