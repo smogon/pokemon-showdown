@@ -31,7 +31,7 @@ describe('Sheer Force', function () {
 		battle.commitDecisions();
 		battle.choose('p1', 'move 2');
 		battle.commitDecisions();
-		assert.ok(!battle.p2.active[0].volatiles['confusion']);
+		assert.false(battle.p2.active[0].volatiles['confusion']);
 		assert.strictEqual(battle.p1.active[0].hp, 262);
 	});
 

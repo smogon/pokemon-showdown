@@ -17,7 +17,7 @@ describe('Shell Armor', function () {
 		battle.on('ModifyDamage', battle.getFormat(), function (damage, attacker, defender, move) {
 			if (move.id === 'frostbreath') {
 				successfulEvent = true;
-				assert.ok(!move.crit);
+				assert.false(move.crit);
 			}
 		});
 		battle.commitDecisions();

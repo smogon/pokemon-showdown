@@ -100,9 +100,8 @@ describe('Primordial Sea', function () {
 			{species: "Ho-Oh", ability: 'pressure', moves: ['roost']},
 		]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Lugia", ability: 'pressure', moves: ['roost']}]);
-		battle.choose('p1', 'switch 2');
-		battle.commitDecisions();
-		assert.ok(battle.isWeather(''));
+		battle.p1.chooseSwitch(2);
+		assert.sets(() => battle.isWeather('primordialsea'), false, () => battle.commitDecisions());
 	});
 
 	it('should not cause the Primordial Sea weather to fade if it switches out and another Primordial Sea Pokemon is active', function () {
@@ -112,32 +111,28 @@ describe('Primordial Sea', function () {
 			{species: "Ho-Oh", ability: 'pressure', moves: ['roost']},
 		]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Kyogre", ability: 'primordialsea', moves: ['bulkup']}]);
-		battle.choose('p1', 'switch 2');
-		battle.commitDecisions();
-		assert.ok(battle.isWeather('primordialsea'));
+		battle.p1.chooseSwitch(2);
+		assert.constant(() => battle.isWeather('primordialsea'), () => battle.commitDecisions());
 	});
 
 	it('should cause the Primordial Sea weather to fade if its ability is suppressed and no other Primordial Sea Pokemon are active', function () {
 		battle = BattleEngine.Battle.construct();
 		battle.join('p1', 'Guest 1', 1, [{species: "Kyogre", ability: 'primordialsea', moves: ['helpinghand']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Lugia", ability: 'pressure', moves: ['gastroacid']}]);
-		battle.commitDecisions();
-		assert.ok(battle.isWeather(''));
+		assert.sets(() => battle.isWeather('primordialsea'), false, () => battle.commitDecisions());
 	});
 
 	it('should not cause the Primordial Sea weather to fade if its ability is suppressed and another Primordial Sea Pokemon is active', function () {
 		battle = BattleEngine.Battle.construct();
 		battle.join('p1', 'Guest 1', 1, [{species: "Kyogre", ability: 'primordialsea', moves: ['helpinghand']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Kyogre", ability: 'primordialsea', moves: ['gastroacid']}]);
-		battle.commitDecisions();
-		assert.ok(battle.isWeather('primordialsea'));
+		assert.constant(() => battle.isWeather('primordialsea'), () => battle.commitDecisions());
 	});
 
 	it('should cause the Primordial Sea weather to fade if its ability is changed and no other Primordial Sea Pokemon are active', function () {
 		battle = BattleEngine.Battle.construct();
 		battle.join('p1', 'Guest 1', 1, [{species: "Kyogre", ability: 'primordialsea', moves: ['helpinghand']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Lugia", ability: 'pressure', moves: ['entrainment']}]);
-		battle.commitDecisions();
-		assert.ok(battle.isWeather(''));
+		assert.sets(() => battle.isWeather('primordialsea'), false, () => battle.commitDecisions());
 	});
 });

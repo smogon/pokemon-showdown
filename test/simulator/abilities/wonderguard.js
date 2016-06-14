@@ -18,34 +18,30 @@ describe('Wonder Guard', function () {
 			assert.strictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 		}
 		// Thousand Arrows shouldn't add the Smack Down volatile if blocked by Wonder Guard
-		battle.choose('p2', 'move 3');
-		battle.commitDecisions();
-		assert.strictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
+		battle.p2.chooseMove('thousandarrows');
+		assert.false.hurts(battle.p1.active[0], () => battle.commitDecisions());
 	});
 
 	it('should not make the user immune to status moves', function () {
 		battle = BattleEngine.Battle.construct();
-		battle.join('p1', 'Guest 1', 1, [{species: "Abra", ability: 'wonderguard', moves: ['teleport']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Smeargle", ability: 'noguard', moves: ['poisongas', 'screech', 'healpulse', 'gastroacid']}]);
+		const p1 = battle.join('p1', 'Guest 1', 1, [{species: "Abra", ability: 'wonderguard', moves: ['teleport']}]);
+		const p2 = battle.join('p2', 'Guest 2', 1, [{species: "Smeargle", ability: 'noguard', moves: ['poisongas', 'screech', 'healpulse', 'gastroacid']}]);
+		const target = p1.active[0];
 		battle.commitDecisions();
-		assert.strictEqual(battle.p1.active[0].status, 'psn');
-		battle.choose('p2', 'move 2');
-		battle.commitDecisions();
-		assert.strictEqual(battle.p1.active[0].boosts['def'], -2);
-		battle.choose('p2', 'move 3');
-		battle.commitDecisions();
-		assert.strictEqual(battle.p1.active[0].maxhp - battle.p1.active[0].hp, Math.floor(battle.p1.active[0].maxhp / 8));
-		battle.choose('p2', 'move 4');
-		battle.commitDecisions();
+		assert.strictEqual(target.status, 'psn');
+		p2.chooseMove(2).foe.chooseDefault();
+		assert.statStage(target, 'def', -2);
+		p2.chooseMove('healpulse');
+		assert.hurtsBy(target, -Math.floor(target.maxhp / 8), () => battle.commitDecisions());
+		p2.chooseMove('gastroacid').foe.chooseDefault();
 		assert.ok(battle.p1.active[0].volatiles['gastroacid']);
-		assert.ok(!battle.p1.active[0].hasAbility('wonderguard'));
+		assert.false(battle.p1.active[0].hasAbility('wonderguard'));
 	});
 
 	it('should be suppressed by Mold Breaker', function () {
 		battle = BattleEngine.Battle.construct();
 		battle.join('p1', 'Guest 1', 1, [{species: "Zekrom", ability: 'wonderguard', moves: ['sleeptalk']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Reshiram", ability: 'turboblaze', moves: ['fusionflare']}]);
-		battle.commitDecisions();
-		assert.notStrictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
+		assert.hurts(battle.p1.active[0], () => battle.commitDecisions());
 	});
 });

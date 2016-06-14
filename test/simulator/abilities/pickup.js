@@ -13,7 +13,7 @@ describe('Pickup', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: 'Gourgeist', ability: 'pickup', moves: ['flamethrower']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Paras', ability: 'dryskin', item: 'sitrusberry', moves: ['endure']}]);
 		battle.commitDecisions();
-		assert.strictEqual(battle.p1.active[0].item, 'sitrusberry');
+		assert.holdsItem(battle.p1.active[0], "Pick Up should retrieve consumed Sitrus Berry");
 	});
 
 	it('should pick up flung items', function () {
@@ -21,7 +21,7 @@ describe('Pickup', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: 'Gourgeist', ability: 'pickup', moves: ['endure']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Clefairy', ability: 'unaware', item: 'airballoon', moves: ['fling']}]);
 		battle.commitDecisions();
-		assert.strictEqual(battle.p1.active[0].item, 'airballoon');
+		assert.holdsItem(battle.p1.active[0], "Pick Up should retrieve flung Air Balloon");
 	});
 
 	it('should not pick up an item that was knocked off', function () {
@@ -29,7 +29,7 @@ describe('Pickup', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: 'Ambipom', ability: 'pickup', moves: ['knockoff']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Machamp', ability: 'noguard', item: 'choicescarf', moves: ['bulkup']}]);
 		battle.commitDecisions();
-		assert.strictEqual(battle.p1.active[0].item, '');
+		assert.false.holdsItem(battle.p1.active[0], "Pick Up should not retrieve knocked off Choice Scarf");
 	});
 
 	it('should not pick up a popped Air Balloon', function () {
@@ -37,7 +37,7 @@ describe('Pickup', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: 'Ambipom', ability: 'pickup', moves: ['fakeout']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Scizor', ability: 'swarm', item: 'airballoon', moves: ['roost']}]);
 		battle.commitDecisions();
-		assert.strictEqual(battle.p1.active[0].item, '');
+		assert.false.holdsItem(battle.p1.active[0], "Pick Up should not retrieve popped Air Balloon");
 	});
 
 	it('should not pick up items from Pokemon that have switched out and back in', function () {
@@ -53,9 +53,9 @@ describe('Pickup', function () {
 		]);
 		battle.commitDecisions();
 		battle.commitDecisions();
-		battle.choose('p2', 'switch 3');
-		battle.choose('p2', 'switch 3');
-		assert.strictEqual(battle.p1.active[0].item, '');
+		battle.p2.chooseSwitch(3); // Eject Button activated
+		battle.p2.chooseSwitch(3);
+		assert.false.holdsItem(battle.p1.active[0], "Pick Up should not retrieve Eject Button of returned Clefable");
 	});
 
 	it('should not pick up items from Pokemon that have switched out', function () {
@@ -65,13 +65,12 @@ describe('Pickup', function () {
 			{species: 'Ambipom', ability: 'swarm', item: 'buggem', moves: ['uturn']},
 			{species: 'Dusknoir', ability: 'pressure', item: 'ejectbutton', moves: ['painsplit']},
 		]);
-		battle.choose('p1', 'move synthesis');
+		battle.p1.chooseMove('synthesis').foe.chooseMove('uturn');
+		battle.p2.chooseSwitch(2);
+		assert.false.holdsItem(battle.p1.active[0]);
 		battle.commitDecisions();
 		battle.choose('p2', 'switch 2');
-		assert.strictEqual(battle.p1.active[0].item, '');
-		battle.commitDecisions();
-		battle.choose('p2', 'switch 2');
-		assert.strictEqual(battle.p1.active[0].item, '');
+		assert.false.holdsItem(battle.p1.active[0]);
 	});
 
 	it('should not pick up items that were already retrieved', function () {
@@ -79,7 +78,7 @@ describe('Pickup', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: 'Ambipom', ability: 'pickup', moves: ['return']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Aron', level: 1, ability: 'sturdy', item: 'berryjuice', moves: ['recycle']}]);
 		battle.commitDecisions();
-		assert.notStrictEqual(battle.p1.active[0].item, 'berryjuice');
+		assert.false.holdsItem(battle.p1.active[0]);
 	});
 
 	it('should pick up items from adjacent allies', function () {
@@ -94,7 +93,7 @@ describe('Pickup', function () {
 		]);
 		battle.commitDecisions();
 		battle.commitDecisions();
-		assert.strictEqual(battle.p1.active[0].item, 'berryjuice');
+		assert.holdsItem(battle.p1.active[0]);
 	});
 
 	it('should not pick up items from non-adjacent allies and enemies', function () {
@@ -111,6 +110,6 @@ describe('Pickup', function () {
 		]);
 		battle.commitDecisions();
 		battle.commitDecisions();
-		assert.strictEqual(battle.p1.active[0].item, '');
+		assert.false.holdsItem(battle.p1.active[0]);
 	});
 });

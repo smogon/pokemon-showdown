@@ -1,8 +1,9 @@
 'use strict';
 
 const assert = require('./../../assert');
+const drives = ['Burn Drive', 'Chill Drive', 'Douse Drive', 'Shock Drive'];
+
 let battle;
-let drives = ['Burn Drive', 'Chill Drive', 'Douse Drive', 'Shock Drive'];
 
 describe('Drives', function () {
 	for (let i = 0; i < drives.length; i++) {
@@ -20,18 +21,15 @@ describe('Drives', function () {
 					{species: 'Fennekin', ability: 'magician', moves: ['mysticalfire']},
 					{species: 'Abra', ability: 'synchronize', moves: ['thief', 'trick', 'knockoff']},
 				]);
-				battle.commitDecisions();
-				assert.strictEqual(battle.p1.active[0].item, id);
-				battle.choose('p2', 'switch 2');
-				battle.commitDecisions();
-				battle.commitDecisions();
-				assert.strictEqual(battle.p1.active[0].item, id);
-				battle.choose('p2', 'move 2');
-				battle.commitDecisions();
-				assert.strictEqual(battle.p1.active[0].item, id);
-				battle.choose('p2', 'move 3');
-				battle.commitDecisions();
-				assert.strictEqual(battle.p1.active[0].item, id);
+				const holder = battle.p1.active[0];
+				battle.commitDecisions(); // Fennekin's Magician
+				assert.holdsItem(holder);
+				battle.p2.chooseSwitch(2).foe.chooseDefault();
+
+				for (let i = 1; i <= 3; i++) {
+					battle.p2.chooseMove(i).foe.chooseDefault();
+					assert.holdsItem(holder);
+				}
 			});
 
 			it('should not be removed by Fling if held by a Genesect', function () {
@@ -39,7 +37,7 @@ describe('Drives', function () {
 				battle.join('p1', 'Guest 1', 1, [{species: 'Mawile', ability: 'intimidate', moves: ['swordsdance']}]);
 				battle.join('p2', 'Guest 2', 1, [{species: 'Genesect', ability: 'frisk', item: id, moves: ['fling']}]);
 				battle.commitDecisions();
-				assert.strictEqual(battle.p2.active[0].item, id);
+				assert.holdsItem(battle.p2.active[0]);
 			});
 
 			it('should not be given to a Genesect', function () {
@@ -47,7 +45,7 @@ describe('Drives', function () {
 				battle.join('p1', 'Guest 1', 1, [{species: 'Genesect', ability: 'frisk', moves: ['thief']}]);
 				battle.join('p2', 'Guest 2', 1, [{species: 'Azumarill', ability: 'thickfat', item: id, moves: ['bestow']}]);
 				battle.commitDecisions();
-				assert.strictEqual(battle.p1.active[0].item, '');
+				assert.false.holdsItem(battle.p1.active[0]);
 			});
 
 			it('should be removed if not held by a Genesect', function () {
@@ -55,7 +53,7 @@ describe('Drives', function () {
 				battle.join('p1', 'Guest 1', 1, [{species: 'Genesect', ability: 'frisk', moves: ['knockoff']}]);
 				battle.join('p2', 'Guest 2', 1, [{species: 'Azumarill', ability: 'thickfat', item: id, moves: ['bulkup']}]);
 				battle.commitDecisions();
-				assert.strictEqual(battle.p2.active[0].item, '');
+				assert.false.holdsItem(battle.p2.active[0]);
 			});
 		});
 	}

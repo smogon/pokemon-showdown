@@ -27,18 +27,17 @@ describe('Desolate Land', function () {
 
 	it('should cause Water-type attacks to fail', function () {
 		battle = BattleEngine.Battle.construct();
-		battle.join('p1', 'Guest 1', 1, [{species: "Groudon", ability: 'desolateland', moves: ['helpinghand']}]);
+		const p1 = battle.join('p1', 'Guest 1', 1, [{species: "Groudon", ability: 'desolateland', moves: ['helpinghand']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Blastoise", ability: 'torrent', moves: ['surf']}]);
-		battle.commitDecisions();
-		assert.strictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
+		assert.false.hurts(p1.active[0], () => battle.commitDecisions());
 	});
 
 	it('should not cause Water-type Status moves to fail', function () {
 		battle = BattleEngine.Battle.construct();
 		battle.join('p1', 'Guest 1', 1, [{species: "Groudon", ability: 'desolateland', moves: ['helpinghand']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Blastoise", ability: 'torrent', moves: ['soak']}]);
-		battle.commitDecisions();
-		assert.strictEqual(battle.p1.active[0].types.join(','), 'Water');
+		const soakTarget = battle.p1.active[0];
+		assert.sets(() => soakTarget.getTypes().join('/'), 'Water', () => battle.commitDecisions());
 	});
 
 	it('should prevent moves and abilities from setting the weather to Sunny Day, Rain Dance, Sandstorm, or Hail', function () {
@@ -62,36 +61,31 @@ describe('Desolate Land', function () {
 
 	it('should be treated as Sunny Day for any forme, move or ability that requires it', function () {
 		battle = BattleEngine.Battle.construct();
-		battle.join('p1', 'Guest 1', 1, [{species: "Groudon", ability: 'desolateland', moves: ['helpinghand', 'solarbeam']}]);
-		battle.join('p2', 'Guest 2', 1, [
+		const p1 = battle.join('p1', 'Guest 1', 1, [{species: "Groudon", ability: 'desolateland', moves: ['helpinghand', 'solarbeam']}]);
+		const p2 = battle.join('p2', 'Guest 2', 1, [
 			{species: "Castform", ability: 'forecast', moves: ['weatherball']},
 			{species: "Cherrim", ability: 'flowergift', moves: ['growth']},
 			{species: "Charizard", ability: 'solarpower', moves: ['roost']},
 			{species: "Venusaur", ability: 'chlorophyll', moves: ['growth']},
 			{species: "Toxicroak", ability: 'dryskin', moves: ['bulkup']},
 		]);
-		battle.test = true;
-		battle.p1.active[0].damage = function () {
+		p1.active[0].damage = function () {
 			if (battle.activeMove.id === 'weatherball') {
 				assert.strictEqual(battle.activeMove.type, 'Fire');
 			}
 			return BattleEngine.BattlePokemon.prototype.damage.apply(this, arguments);
 		};
 		battle.commitDecisions();
-		assert.strictEqual(battle.p2.active[0].template.speciesid, 'castformsunny');
-		battle.choose('p2', 'switch 2');
-		battle.commitDecisions();
-		assert.strictEqual(battle.p2.active[0].template.speciesid, 'cherrimsunshine');
-		battle.choose('p2', 'switch 3');
-		battle.commitDecisions();
-		assert.notStrictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
-		battle.choose('p1', 'move 2');
-		battle.choose('p2', 'switch 4');
-		assert.strictEqual(battle.p2.active[0].getStat('spe'), 2 * battle.p2.active[0].stats['spe']);
-		assert.notStrictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
-		battle.choose('p2', 'switch 5');
-		battle.commitDecisions();
-		assert.notStrictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
+		assert.species(p2.active[0], 'Castform-Sunny');
+		p2.chooseSwitch(2).foe.chooseDefault();
+		assert.species(p2.active[0], 'Cherrim-Sunshine');
+		p2.chooseSwitch(3).foe.chooseDefault();
+		assert.false.fullHP(p2.active[0], "Charizard should be hurt by Solar Power");
+		p1.chooseMove(2).foe.chooseSwitch(4);
+		assert.strictEqual(p2.active[0].getStat('spe'), 2 * p2.active[0].stats['spe'], "Venusaur's speed should be doubled by Chlorophyll");
+		assert.false.fullHP(p2.active[0], "Solar Beam should skip its charge turn");
+		p2.chooseSwitch(5).foe.chooseDefault();
+		assert.false.fullHP(p2.active[0], "Toxicroak should be hurt by Dry Skin");
 	});
 
 	it('should cause the Desolate Land weather to fade if it switches out and no other Desolate Land Pokemon are active', function () {
@@ -101,9 +95,8 @@ describe('Desolate Land', function () {
 			{species: "Ho-Oh", ability: 'pressure', moves: ['roost']},
 		]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Lugia", ability: 'pressure', moves: ['roost']}]);
-		battle.choose('p1', 'switch 2');
-		battle.commitDecisions();
-		assert.ok(battle.isWeather(''));
+		battle.p1.chooseSwitch(2);
+		assert.sets(() => battle.isWeather('desolateland'), false, () => battle.commitDecisions());
 	});
 
 	it('should not cause the Desolate Land weather to fade if it switches out and another Desolate Land Pokemon is active', function () {
@@ -113,32 +106,28 @@ describe('Desolate Land', function () {
 			{species: "Ho-Oh", ability: 'pressure', moves: ['roost']},
 		]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Groudon", ability: 'desolateland', moves: ['bulkup']}]);
-		battle.choose('p1', 'switch 2');
-		battle.commitDecisions();
-		assert.ok(battle.isWeather('desolateland'));
+		battle.p2.chooseSwitch(2);
+		assert.constant(() => battle.isWeather('desolateland'), () => battle.commitDecisions());
 	});
 
 	it('should cause the Desolate Land weather to fade if its ability is suppressed and no other Desolate Land Pokemon are active', function () {
 		battle = BattleEngine.Battle.construct();
 		battle.join('p1', 'Guest 1', 1, [{species: "Groudon", ability: 'desolateland', moves: ['helpinghand']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Lugia", ability: 'pressure', moves: ['gastroacid']}]);
-		battle.commitDecisions();
-		assert.ok(battle.isWeather(''));
+		assert.sets(() => battle.isWeather('desolateland'), false, () => battle.commitDecisions());
 	});
 
 	it('should not cause the Desolate Land weather to fade if its ability is suppressed and another Desolate Land Pokemon is active', function () {
 		battle = BattleEngine.Battle.construct();
 		battle.join('p1', 'Guest 1', 1, [{species: "Groudon", ability: 'desolateland', moves: ['helpinghand']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Groudon", ability: 'desolateland', moves: ['gastroacid']}]);
-		battle.commitDecisions();
-		assert.ok(battle.isWeather('desolateland'));
+		assert.constant(() => battle.isWeather('desolateland'), () => battle.commitDecisions());
 	});
 
 	it('should cause the Desolate Land weather to fade if its ability is changed and no other Desolate Land Pokemon are active', function () {
 		battle = BattleEngine.Battle.construct();
 		battle.join('p1', 'Guest 1', 1, [{species: "Groudon", ability: 'desolateland', moves: ['helpinghand']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Lugia", ability: 'pressure', moves: ['entrainment']}]);
-		battle.commitDecisions();
-		assert.ok(battle.isWeather(''));
+		assert.sets(() => battle.isWeather('desolateland'), false, () => battle.commitDecisions());
 	});
 });

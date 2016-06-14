@@ -57,49 +57,44 @@ describe('Delta Stream', function () {
 
 	it('should cause the Delta Stream weather to fade if it switches out and no other Delta Stream Pokemon are active', function () {
 		battle = BattleEngine.Battle.construct();
-		battle.join('p1', 'Guest 1', 1, [
+		const p1 = battle.join('p1', 'Guest 1', 1, [
 			{species: "Rayquaza", ability: 'deltastream', moves: ['helpinghand']},
 			{species: "Ho-Oh", ability: 'pressure', moves: ['roost']},
 		]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Lugia", ability: 'pressure', moves: ['roost']}]);
-		battle.choose('p1', 'switch 2');
-		battle.commitDecisions();
-		assert.ok(battle.isWeather(''));
+		p1.chooseSwitch(2);
+		assert.sets(() => battle.isWeather('deltastream'), false, () => battle.commitDecisions());
 	});
 
 	it('should not cause the Delta Stream weather to fade if it switches out and another Delta Stream Pokemon is active', function () {
 		battle = BattleEngine.Battle.construct();
-		battle.join('p1', 'Guest 1', 1, [
+		const p1 = battle.join('p1', 'Guest 1', 1, [
 			{species: "Rayquaza", ability: 'deltastream', moves: ['helpinghand']},
 			{species: "Ho-Oh", ability: 'pressure', moves: ['roost']},
 		]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Rayquaza", ability: 'deltastream', moves: ['bulkup']}]);
-		battle.choose('p1', 'switch 2');
-		battle.commitDecisions();
-		assert.ok(battle.isWeather('deltastream'));
+		p1.chooseSwitch(2);
+		assert.constant(() => battle.isWeather('deltastream'), () => battle.commitDecisions());
 	});
 
 	it('should cause the Delta Stream weather to fade if its ability is suppressed and no other Delta Stream Pokemon are active', function () {
 		battle = BattleEngine.Battle.construct();
 		battle.join('p1', 'Guest 1', 1, [{species: "Rayquaza", ability: 'deltastream', moves: ['helpinghand']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Lugia", ability: 'pressure', moves: ['gastroacid']}]);
-		battle.commitDecisions();
-		assert.ok(battle.isWeather(''));
+		assert.sets(() => battle.isWeather('deltastream'), false, () => battle.commitDecisions());
 	});
 
 	it('should not cause the Delta Stream weather to fade if its ability is suppressed and another Delta Stream Pokemon is active', function () {
 		battle = BattleEngine.Battle.construct();
 		battle.join('p1', 'Guest 1', 1, [{species: "Rayquaza", ability: 'deltastream', moves: ['helpinghand']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Rayquaza", ability: 'deltastream', moves: ['gastroacid']}]);
-		battle.commitDecisions();
-		assert.ok(battle.isWeather('deltastream'));
+		assert.constant(() => battle.isWeather('deltastream'), () => battle.commitDecisions());
 	});
 
 	it('should cause the Delta Stream weather to fade if its ability is changed and no other Delta Stream Pokemon are active', function () {
 		battle = BattleEngine.Battle.construct();
 		battle.join('p1', 'Guest 1', 1, [{species: "Rayquaza", ability: 'deltastream', moves: ['helpinghand']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Lugia", ability: 'pressure', moves: ['entrainment']}]);
-		battle.commitDecisions();
-		assert.ok(battle.isWeather(''));
+		assert.sets(() => battle.isWeather('deltastream'), false, () => battle.commitDecisions());
 	});
 });

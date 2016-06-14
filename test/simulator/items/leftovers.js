@@ -10,7 +10,7 @@ describe('Leftovers [Gen 2]', function () {
 
 	it('should heal after switch', function () {
 		battle = BattleEngine.Battle.construct('battle-leftovers-gsc', 'gen2customgame');
-		battle.join('p1', 'Guest 1', 1, [
+		const p1 = battle.join('p1', 'Guest 1', 1, [
 			{species: 'Blissey', item: 'leftovers', moves: ['healbell']},
 			{species: 'Magikarp', level: 1, moves: ['splash']},
 		]);
@@ -18,12 +18,10 @@ describe('Leftovers [Gen 2]', function () {
 			{species: "Miltank", moves: ['seismictoss']},
 		]);
 		battle.commitDecisions();
-		assert.strictEqual(battle.p1.active[0].hp, 590);
+		assert.strictEqual(p1.active[0].hp, 590);
 
-		battle.choose('p1', 'switch 2');
-		battle.commitDecisions();
-
-		battle.choose('p1', 'switch 2');
-		assert.strictEqual(battle.p1.active[0].hp, 630);
+		p1.chooseSwitch(2).foe.chooseDefault();
+		p1.chooseSwitch(2).foe.chooseDefault();
+		assert.strictEqual(p1.active[0].hp, 630);
 	});
 });

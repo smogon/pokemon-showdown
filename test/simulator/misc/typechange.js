@@ -19,24 +19,24 @@ describe('Type addition', function () {
 				battle = BattleEngine.Battle.construct();
 				battle.join('p1', 'Guest 1', 1, [{species: "Gourgeist", ability: 'frisk', moves: [moveData.name]}]);
 				battle.join('p2', 'Guest 2', 1, [{species: "Machamp", ability: 'guts', moves: ['crosschop']}]);
-				battle.commitDecisions();
-				assert.deepEqual(battle.p2.active[0].getTypes(), ['Fighting', moveData.type]);
+				const target = battle.p2.active[0];
+				assert.sets(() => target.getTypes().join('/'), `Fighting/${moveData.type}`, () => battle.commitDecisions());
 			});
 
 			it('should not add ' + moveData.type + ' type to ' + moveData.type + ' targets', function () {
 				battle = BattleEngine.Battle.construct();
 				battle.join('p1', 'Guest 1', 1, [{species: "Gourgeist", ability: 'frisk', moves: [moveData.name]}]);
 				battle.join('p2', 'Guest 2', 1, [{species: "Trevenant", ability: 'harvest', moves: ['ingrain']}]);
-				battle.commitDecisions();
-				assert.deepEqual(battle.p2.active[0].getTypes(), ['Ghost', 'Grass']);
+				const target = battle.p2.active[0];
+				assert.constant(() => target.getTypes().join('/'), () => battle.commitDecisions());
 			});
 
 			it('should be able to add ' + moveData.type + ' type to Arceus', function () {
 				battle = BattleEngine.Battle.construct();
 				battle.join('p1', 'Guest 1', 1, [{species: "Gourgeist", ability: 'frisk', moves: [moveData.name]}]);
 				battle.join('p2', 'Guest 2', 1, [{species: "Arceus", ability: 'multitype', moves: ['extremespeed']}]);
-				battle.commitDecisions();
-				assert.deepEqual(battle.p2.active[0].getTypes(), ['Normal', moveData.type]);
+				const target = battle.p2.active[0];
+				assert.sets(() => target.getTypes().join('/'), `Normal/${moveData.type}`, () => battle.commitDecisions());
 			});
 
 			for (let moveData2 of adderMoves) {
@@ -45,10 +45,9 @@ describe('Type addition', function () {
 						battle = BattleEngine.Battle.construct();
 						battle.join('p1', 'Guest 1', 1, [{species: "Gourgeist", ability: 'frisk', moves: [moveData.name]}]);
 						battle.join('p2', 'Guest 2', 1, [{species: "Deoxys-Speed", ability: 'pressure', moves: ['spikes']}]);
+						const target = battle.p2.active[0];
 						battle.commitDecisions();
-						let cachedTypes = battle.p2.active[0].getTypes();
-						battle.commitDecisions();
-						assert.deepEqual(battle.p2.active[0].getTypes(), cachedTypes);
+						assert.constant(() => target.getTypes().join('/'), () => battle.commitDecisions());
 						assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-fail|'));
 					});
 				} else {
@@ -56,12 +55,9 @@ describe('Type addition', function () {
 						battle = BattleEngine.Battle.construct();
 						battle.join('p1', 'Guest 1', 1, [{species: "Gourgeist", ability: 'frisk', moves: [moveData.name, moveData2.name]}]);
 						battle.join('p2', 'Guest 2', 1, [{species: "Deoxys-Speed", ability: 'pressure', moves: ['spikes']}]);
-						battle.choose('p1', 'move 2');
-						battle.commitDecisions();
-						let cachedTypes = battle.p2.active[0].getTypes();
-						battle.commitDecisions();
-						assert.notDeepEqual(battle.p2.active[0].getTypes(), cachedTypes);
-						assert.deepEqual(battle.p2.active[0].getTypes(), ['Psychic', moveData.type]);
+						const target = battle.p2.active[0];
+						battle.p1.chooseMove(2).foe.chooseDefault();
+						assert.sets(() => target.getTypes().join('/'), `Psychic/${moveData.type}`, () => battle.commitDecisions());
 					});
 				}
 			}

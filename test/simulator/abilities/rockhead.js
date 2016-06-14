@@ -12,16 +12,14 @@ describe('Rock Head', function () {
 		battle = BattleEngine.Battle.construct();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Aerodactyl', ability: 'rockhead', moves: ['doubleedge']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Registeel', ability: 'clearbody', moves: ['rest']}]);
-		battle.commitDecisions();
-		assert.strictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
+		assert.false.hurts(battle.p1.active[0], () => battle.commitDecisions());
 	});
 
 	it('should not block recoil if the ability is disabled/removed mid-attack', function () {
 		battle = BattleEngine.Battle.construct();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Aerodactyl', ability: 'rockhead', moves: ['doubleedge']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Registeel', ability: 'mummy', moves: ['rest']}]);
-		battle.commitDecisions();
-		assert.notStrictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
+		assert.hurts(battle.p1.active[0], () => battle.commitDecisions());
 	});
 
 	it('should not block recoil from Struggle', function () {
@@ -29,15 +27,13 @@ describe('Rock Head', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: 'Aerodactyl', ability: 'rockhead', moves: ['roost']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Sableye', ability: 'prankster', moves: ['taunt']}]);
 		battle.commitDecisions();
-		battle.commitDecisions();
-		assert.notStrictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
+		assert.hurts(battle.p1.active[0], () => battle.commitDecisions());
 	});
 
 	it('should not block crash damage', function () {
 		battle = BattleEngine.Battle.construct();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Rampardos', ability: 'rockhead', moves: ['jumpkick']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Sableye', ability: 'prankster', moves: ['taunt']}]);
-		battle.commitDecisions();
-		assert.notStrictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
+		assert.hurts(battle.p1.active[0], () => battle.commitDecisions());
 	});
 });

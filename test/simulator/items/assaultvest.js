@@ -21,7 +21,7 @@ describe('Assault Vest', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: 'Lopunny', ability: 'klutz', item: 'assaultvest', moves: ['trick']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Abra', ability: 'synchronize', item: 'ironball', moves: ['calmmind']}]);
 		battle.commitDecisions();
-		assert.strictEqual(battle.p2.active[0].boosts['spa'], 1);
-		assert.strictEqual(battle.p2.active[0].boosts['spd'], 1);
+		assert.statStage(battle.p2.active[0], 'spa', 1);
+		assert.statStage(battle.p2.active[0], 'spd', 1);
 	});
 });
