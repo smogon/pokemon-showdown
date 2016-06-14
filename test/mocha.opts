@@ -1,3 +1,3 @@
-test/*.js test/application/*.js test/dev-tools/*/*.js test/chat-plugins/*.js
+test/main.js test/application/*.js test/dev-tools/*/*.js test/chat-plugins/*.js
 -R dot
 -u bdd
