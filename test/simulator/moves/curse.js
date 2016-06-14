@@ -96,7 +96,7 @@ describe('XY/ORAS Curse targetting when becoming Ghost the same turn', function 
 
 	let doublesTeams = [[
 		{species: "Kecleon", ability: 'colorchange', item: 'laggingtail', moves: ['curse', 'calmmind']},
-		{species: "Greninja", ability: 'torrent', item: '', moves: ['growl', 'mudsport']},
+		{species: "Sableye", ability: 'prankster', item: '', moves: ['lightscreen', 'mudsport']},
 	], [
 		{species: "Raikou", ability: 'pressure', item: '', moves: ['aurasphere', 'calmmind']},
 		{species: "Gastly", ability: 'levitate', item: '', moves: ['lick', 'calmmind']},
@@ -112,7 +112,7 @@ describe('XY/ORAS Curse targetting when becoming Ghost the same turn', function 
 		let cursePartner = curseUser.side.active[1 - curseUser.position];
 
 		battle.choose('p1', 'move 1, move 1'); // Kecleon uses Curse last in the turn.
-		battle.choose('p2', 'move 1 ' + (curseUser.position + 1) + ', move 1 ' + (curseUser.position + 1)); // Electric attack on Kecleon, then Ghost.
+		battle.choose('p2', 'move 1 ' + (curseUser.position + 1) + ', move 1 ' + (curseUser.position + 1)); // Fighting attack on Kecleon, then Ghost.
 
 		assert.ok(curseUser.hasType('Ghost')); // Curse user must be Ghost
 		assert.ok(curseUser.hp < curseUser.maxhp / 2); // Curse user cut its HP down

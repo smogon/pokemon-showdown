@@ -12,17 +12,17 @@ describe('Klutz', function () {
 		battle = BattleEngine.Battle.construct();
 		battle.join('p1', 'Guest 1', 1, [{species: "Lopunny", ability: 'klutz', item: 'leftovers', moves: ['bellydrum']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Giratina", ability: 'pressure', moves: ['shadowsneak']}]);
-		battle.commitDecisions();
-		assert.strictEqual(battle.p1.active[0].hp, Math.ceil(battle.p1.active[0].maxhp / 2));
+		const klutzMon = battle.p1.active[0];
+		assert.hurtsBy(klutzMon, Math.floor(klutzMon.maxhp / 2), () => battle.commitDecisions(), "Leftovers healing should not apply");
 	});
 
 	it('should prevent items from being consumed', function () {
 		battle = BattleEngine.Battle.construct();
 		battle.join('p1', 'Guest 1', 1, [{species: "Lopunny", level: 1, ability: 'klutz', item: 'sitrusberry', moves: ['endure']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Deoxys", ability: 'noguard', moves: ['psychic']}]);
-		battle.commitDecisions();
-		assert.strictEqual(battle.p1.active[0].hp, 1);
-		assert.strictEqual(battle.p1.active[0].item, 'sitrusberry');
+		const klutzMon = battle.p1.active[0];
+		assert.constant(() => klutzMon.item, () => battle.commitDecisions());
+		assert.strictEqual(klutzMon.hp, 1);
 	});
 
 	it('should ignore the effects of items that disable moves', function () {
@@ -37,24 +37,23 @@ describe('Klutz', function () {
 		battle = BattleEngine.Battle.construct();
 		battle.join('p1', 'Guest 1', 1, [{species: "Genesect", ability: 'klutz', item: 'dousedrive', moves: ['calmmind']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Deoxys", ability: 'noguard', moves: ['trick']}]);
-		battle.commitDecisions();
-		assert.strictEqual(battle.p1.active[0].item, 'dousedrive');
+		const klutzMon = battle.p1.active[0];
+		assert.constant(() => klutzMon.item, () => battle.commitDecisions());
 	});
 
 	it('should cause Fling to fail', function () {
 		battle = BattleEngine.Battle.construct();
 		battle.join('p1', 'Guest 1', 1, [{species: "Lopunny", ability: 'klutz', item: 'seaincense', moves: ['fling']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Deoxys", ability: 'noguard', moves: ['calmmind']}]);
-		battle.commitDecisions();
-		assert.strictEqual(battle.p1.active[0].item, 'seaincense');
+		const klutzMon = battle.p1.active[0];
+		assert.constant(() => klutzMon.item, () => battle.commitDecisions());
 	});
 
 	it('should not prevent Pokemon from Mega Evolving', function () {
 		battle = BattleEngine.Battle.construct();
 		battle.join('p1', 'Guest 1', 1, [{species: "Lopunny", ability: 'klutz', item: 'lopunnite', moves: ['protect']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Deoxys", ability: 'noguard', moves: ['calmmind']}]);
-		battle.choose('p1', 'move 1 mega');
-		battle.commitDecisions();
-		assert.strictEqual(battle.p1.active[0].template.speciesid, 'lopunnymega');
+		battle.p1.chooseMove('protect', 0, true).foe.chooseDefault();
+		assert.species(battle.p1.active[0], 'Lopunny-Mega');
 	});
 });

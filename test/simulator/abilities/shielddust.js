@@ -20,8 +20,8 @@ describe('Shield Dust', function () {
 		]);
 		battle.commitDecisions(); // Team Preview
 		battle.commitDecisions();
-		assert.strictEqual(battle.p2.active[0].boosts['spa'], 0);
-		assert.strictEqual(battle.p2.active[1].boosts['spa'], -1);
+		assert.statStage(battle.p2.active[0], 'spa', 0);
+		assert.statStage(battle.p2.active[1], 'spa', -1);
 	});
 
 	it('should not block secondary effects that affect the user of the move', function () {
@@ -29,7 +29,7 @@ describe('Shield Dust', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: 'Ledian', ability: 'ironfist', moves: ['poweruppunch']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Dustox', ability: 'shielddust', moves: ['roost']}]);
 		battle.commitDecisions();
-		assert.strictEqual(battle.p1.active[0].boosts['atk'], 1);
+		assert.statStage(battle.p1.active[0], 'atk', 1);
 	});
 
 	it('should block added effects from items', function () {
@@ -45,8 +45,8 @@ describe('Shield Dust', function () {
 		});
 		battle.commitDecisions(); // Team Preview
 		battle.commitDecisions();
-		assert.strictEqual(battle.p1.active[0].boosts['spe'], 1);
-		assert.strictEqual(battle.p2.active[0].boosts['def'], 3); // Clefable did not flinch
+		assert.statStage(battle.p1.active[0], 'spe', 1);
+		assert.statStage(battle.p2.active[0], 'def', 3); // Clefable did not flinch
 	});
 
 	it('should block added effects from Fling', function () {
@@ -54,7 +54,7 @@ describe('Shield Dust', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: 'Ledian', ability: 'ironfist', item: 'petayaberry', moves: ['fling']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Dustox', ability: 'shielddust', moves: ['roost']}]);
 		battle.commitDecisions();
-		assert.strictEqual(battle.p2.active[0].boosts['spa'], 1);
+		assert.statStage(battle.p2.active[0], 'spa', 1);
 	});
 
 	it('should not block secondary effects on attacks used by the Pokemon with the ability', function () {
@@ -63,10 +63,9 @@ describe('Shield Dust', function () {
 		battle.join('p2', 'Guest 2', 1, [{species: 'Clefable', ability: 'unaware', moves: ['softboiled']}]);
 		battle.choose('p1', 'move 1');
 		battle.commitDecisions();
-		assert.strictEqual(battle.p1.active[0].boosts['atk'], 1);
-		battle.choose('p1', 'move 2');
-		battle.commitDecisions();
-		assert.strictEqual(battle.p2.active[0].boosts['spa'], -1);
+		assert.statStage(battle.p1.active[0], 'atk', 1);
+		battle.p1.chooseMove(2).foe.chooseDefault();
+		assert.statStage(battle.p2.active[0], 'spa', -1);
 	});
 
 	it('should be negated by Mold Breaker', function () {
@@ -74,6 +73,6 @@ describe('Shield Dust', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: 'Pinsir', ability: 'moldbreaker', moves: ['strugglebug']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Dustox', ability: 'shielddust', moves: ['roost']}]);
 		battle.commitDecisions();
-		assert.strictEqual(battle.p2.active[0].boosts['spa'], -1);
+		assert.statStage(battle.p2.active[0], 'spa', -1);
 	});
 });

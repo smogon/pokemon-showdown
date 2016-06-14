@@ -26,7 +26,7 @@ describe('Flame Orb', function () {
 		battle = BattleEngine.Battle.construct();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Ursaring', ability: 'guts', item: 'flameorb', moves: ['protect']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Magikarp', ability: 'swiftswim', moves: ['splash']}]);
-		battle.commitDecisions();
-		assert.strictEqual(battle.p1.active[0].status, 'brn');
+		const target = battle.p1.active[0];
+		assert.sets(() => target.status, 'brn', () => battle.commitDecisions());
 	});
 });

@@ -15,9 +15,9 @@ describe('Shed Shell', function () {
 			{species: "Starmie", ability: 'naturalcure', item: 'shedshell', moves: ['recover']},
 			{species: "Heatran", ability: 'flashfire', moves: ['rest']},
 		]);
-		battle.choose('p2', 'switch 2');
+		battle.p2.chooseSwitch(2);
 		battle.commitDecisions();
-		assert.strictEqual(battle.p2.active[0].speciesid, 'heatran');
+		assert.species(battle.p2.active[0], 'Heatran');
 	});
 
 	it('should allow Pokemon to escape from most moves that would trap them', function () {
@@ -28,9 +28,9 @@ describe('Shed Shell', function () {
 			{species: "Heatran", ability: 'flashfire', moves: ['rest']},
 		]);
 		battle.commitDecisions();
-		battle.choose('p2', 'switch 2');
+		battle.p2.chooseSwitch(2);
 		battle.commitDecisions();
-		assert.strictEqual(battle.p2.active[0].speciesid, 'heatran');
+		assert.species(battle.p2.active[0], 'Heatran');
 	});
 
 	it('should not allow Pokemon to escape from Sky Drop', function () {
@@ -41,8 +41,8 @@ describe('Shed Shell', function () {
 			{species: "Heatran", ability: 'flashfire', moves: ['rest']},
 		]);
 		battle.commitDecisions();
-		battle.choose('p2', 'switch 2');
+		battle.p2.chooseSwitch(2);
 		battle.commitDecisions();
-		assert.strictEqual(battle.p2.active[0].speciesid, 'magnezone');
+		assert.species(battle.p2.active[0], 'Magnezone');
 	});
 });

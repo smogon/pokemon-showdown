@@ -12,8 +12,7 @@ describe('Sturdy', function () {
 		battle = BattleEngine.Battle.construct();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Aron', level: 1, ability: 'sturdy', moves: ['sleeptalk']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Kyogre', ability: 'noguard', moves: ['sheercold']}]);
-		battle.commitDecisions();
-		assert.strictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
+		assert.false.hurts(battle.p1.active[0], () => battle.commitDecisions());
 	});
 
 	it('should allow its user to survive an attack from full HP', function () {
@@ -37,7 +36,7 @@ describe('Sturdy', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: 'Shedinja', ability: 'sturdy', moves: ['doubleedge']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Klefki', ability: 'prankster', moves: ['reflect']}]);
 		battle.commitDecisions();
-		assert.strictEqual(battle.p1.active[0].hp, 0);
+		assert.fainted(battle.p1.active[0]);
 	});
 
 	it('should not trigger on residual damage', function () {
@@ -45,7 +44,7 @@ describe('Sturdy', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: 'Shedinja', ability: 'sturdy', moves: ['sleeptalk']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Crobat', ability: 'infiltrator', moves: ['toxic']}]);
 		battle.commitDecisions();
-		assert.strictEqual(battle.p1.active[0].hp, 0);
+		assert.fainted(battle.p1.active[0]);
 	});
 
 	it('should be suppressed by Mold Breaker', function () {
@@ -53,6 +52,6 @@ describe('Sturdy', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: 'Paras', ability: 'sturdy', moves: ['sleeptalk']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Reshiram', ability: 'turboblaze', moves: ['fusionflare']}]);
 		battle.commitDecisions();
-		assert.strictEqual(battle.p1.active[0].hp, 0);
+		assert.fainted(battle.p1.active[0]);
 	});
 });

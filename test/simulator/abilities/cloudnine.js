@@ -10,12 +10,11 @@ describe('Cloud Nine', function () {
 
 	it('should treat the weather as none for the purposes of formes, moves and abilities', function () {
 		battle = BattleEngine.Battle.construct();
-		battle.join('p1', 'Guest 1', 1, [{species: 'Golduck', ability: 'cloudnine', moves: ['sunnyday']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: 'Cherrim', ability: 'flowergift', item: 'laggingtail', moves: ['solarbeam']}]);
-		battle.commitDecisions();
-		assert.ok(battle.isWeather('', battle.p2.active[0]));
-		assert.strictEqual(battle.p2.active[0].template.species, 'Cherrim');
-		assert.strictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
+		const p1 = battle.join('p1', 'Guest 1', 1, [{species: 'Golduck', ability: 'cloudnine', moves: ['sunnyday']}]);
+		const p2 = battle.join('p2', 'Guest 2', 1, [{species: 'Cherrim', ability: 'flowergift', item: 'laggingtail', moves: ['solarbeam']}]);
+		assert.false.hurts(p1.active[0], () => battle.commitDecisions()); // Solar Beam must charge
+		assert.ok(battle.isWeather('', p2.active[0]));
+		assert.species(p2.active[0], 'Cherrim');
 	});
 
 	it('should negate the effects of Sun on Fire-type and Water-type attacks', function () {
@@ -50,40 +49,35 @@ describe('Cloud Nine', function () {
 		battle = BattleEngine.Battle.construct();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Tyranitar', ability: 'sandstream', moves: ['dragondance']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Golduck', ability: 'cloudnine', moves: ['calmmind']}]);
-		battle.commitDecisions();
-		assert.strictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
+		assert.false.hurts(battle.p2.active[0], () => battle.commitDecisions());
 	});
 
 	it('should negate the damage-dealing effects of Hail', function () {
 		battle = BattleEngine.Battle.construct();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Abomasnow', ability: 'snowwarning', moves: ['rest']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Golduck', ability: 'cloudnine', moves: ['calmmind']}]);
-		battle.commitDecisions();
-		assert.strictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
+		assert.false.hurts(battle.p2.active[0], () => battle.commitDecisions());
 	});
 
 	it('should not negate Desolate Land\'s ability to prevent other weathers from activating', function () {
 		battle = BattleEngine.Battle.construct();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Golduck', ability: 'cloudnine', moves: ['raindance']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Groudon', ability: 'desolateland', moves: ['sunnyday']}]);
-		battle.commitDecisions();
-		assert.ok(battle.weather, 'desolateland');
+		assert.constant(() => battle.weather, () => battle.commitDecisions());
 	});
 
 	it('should not negate Primordial Sea\'s ability to prevent other weathers from activating', function () {
 		battle = BattleEngine.Battle.construct();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Golduck', ability: 'cloudnine', moves: ['raindance']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Kyogre', ability: 'primordialsea', moves: ['sunnyday']}]);
-		battle.commitDecisions();
-		assert.ok(battle.weather, 'primordialsea');
+		assert.constant(() => battle.weather, () => battle.commitDecisions());
 	});
 
 	it('should not negate Delta Stream\'s ability to prevent other weathers from activating', function () {
 		battle = BattleEngine.Battle.construct();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Golduck', ability: 'cloudnine', moves: ['raindance']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Rayquaza', ability: 'deltastream', moves: ['sunnyday']}]);
-		battle.commitDecisions();
-		assert.ok(battle.weather, 'deltastream');
+		assert.constant(() => battle.weather, () => battle.commitDecisions());
 	});
 
 	it('should still display status of the weather', function () {

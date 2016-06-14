@@ -143,12 +143,12 @@ describe('Pressure [Gen 4]', function () {
 	it('should deduct PP even if the move fails or misses', function () {
 		battle = BattleEngine.Battle.construct('battle-dpp-pressure-miss', 'gen4customgame');
 		battle.join('p1', 'Guest 1', 1, [{species: "Giratina", ability: 'pressure', item: 'laggingtail', moves: ['shadowforce']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Smeargle", ability: 'owntempo', moves: ['doubleedge', 'dragonpulse']}]);
+		const p2 = battle.join('p2', 'Guest 2', 1, [{species: "Smeargle", ability: 'owntempo', moves: ['doubleedge', 'dragonpulse']}]);
 		battle.commitDecisions();
-		assert.strictEqual(battle.p2.active[0].getMoveData(Tools.getMove('doubleedge')).pp, 22);
+		assert.strictEqual(p2.active[0].getMoveData(Tools.getMove('doubleedge')).pp, 22);
 		battle.choose('p2', 'move 2');
 		battle.commitDecisions();
-		assert.strictEqual(battle.p2.active[0].getMoveData(Tools.getMove('dragonpulse')).pp, 14);
+		assert.strictEqual(p2.active[0].getMoveData(Tools.getMove('dragonpulse')).pp, 14);
 	});
 
 	it('should deduct PP for each Pressure Pokemon targetted', function () {

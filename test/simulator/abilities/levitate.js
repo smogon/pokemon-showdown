@@ -12,8 +12,7 @@ describe('Levitate', function () {
 		battle = BattleEngine.Battle.construct();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Rotom', ability: 'levitate', moves: ['sleeptalk']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Aggron', ability: 'sturdy', moves: ['earthquake']}]);
-		battle.commitDecisions();
-		assert.strictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
+		assert.false.hurts(battle.p1.active[0], () => battle.commitDecisions());
 	});
 
 	it('should make the user airborne', function () {
@@ -21,15 +20,14 @@ describe('Levitate', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: 'Unown', ability: 'levitate', moves: ['spore']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Espeon', ability: 'magicbounce', moves: ['electricterrain']}]);
 		battle.commitDecisions();
-		assert.strictEqual(battle.p1.active[0].status, 'slp');
+		assert.strictEqual(battle.p1.active[0].status, 'slp', "Levitate Pokémon should not be awaken by Electric Terrain");
 	});
 
 	it('should have its Ground immunity suppressed by Mold Breaker', function () {
 		battle = BattleEngine.Battle.construct();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Cresselia', ability: 'levitate', moves: ['sleeptalk']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Haxorus', ability: 'moldbreaker', moves: ['earthquake']}]);
-		battle.commitDecisions();
-		assert.notStrictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
+		assert.hurts(battle.p1.active[0], () => battle.commitDecisions());
 	});
 
 	it('should have its airborne property suppressed by Mold Breaker if it is forced out by a move', function () {
@@ -39,10 +37,8 @@ describe('Levitate', function () {
 			{species: 'Cresselia', ability: 'levitate', moves: ['sleeptalk']},
 		]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Haxorus', ability: 'moldbreaker', moves: ['roar', 'spikes']}]);
-		battle.choose('p2', 'move 2');
-		battle.commitDecisions();
-		battle.commitDecisions();
-		assert.notStrictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
+		battle.p2.chooseMove('spikes').foe.chooseDefault();
+		assert.hurts(battle.p1.pokemon[1], () => battle.commitDecisions());
 	});
 
 	it('should not have its airborne property suppressed by Mold Breaker if it switches out via Eject Button', function () {
@@ -52,11 +48,9 @@ describe('Levitate', function () {
 			{species: 'Cresselia', ability: 'levitate', moves: ['sleeptalk']},
 		]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Haxorus', ability: 'moldbreaker', moves: ['tackle', 'spikes']}]);
-		battle.choose('p2', 'move 2');
+		battle.p2.chooseMove('spikes').foe.chooseDefault();
 		battle.commitDecisions();
-		battle.commitDecisions();
-		battle.choose('p1', 'switch 2');
-		assert.strictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
+		assert.false.hurts(battle.p1.pokemon[1], () => battle.p1.chooseSwitch(2));
 	});
 
 	it('should not have its airborne property suppressed by Mold Breaker if that Pokemon is no longer active', function () {
@@ -66,8 +60,7 @@ describe('Levitate', function () {
 			{species: 'Haxorus', ability: 'moldbreaker', item: 'laggingtail', moves: ['tackle']},
 			{species: 'Rotom', ability: 'levitate', moves: ['rest']},
 		]);
-		battle.commitDecisions();
-		assert.strictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
+		assert.false.hurts(battle.p2.active[0], () => battle.commitDecisions());
 	});
 });
 
@@ -83,9 +76,7 @@ describe('Levitate [Gen 4]', function () {
 			{species: 'Cresselia', ability: 'levitate', moves: ['sleeptalk']},
 		]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Rampardos', ability: 'moldbreaker', moves: ['roar', 'spikes']}]);
-		battle.choose('p2', 'move 2');
-		battle.commitDecisions();
-		battle.commitDecisions();
-		assert.strictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
+		battle.p2.chooseMove('spikes').foe.chooseDefault();
+		assert.false.hurts(battle.p1.pokemon[1], () => battle.commitDecisions());
 	});
 });

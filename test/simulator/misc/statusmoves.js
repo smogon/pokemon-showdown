@@ -10,7 +10,7 @@ describe('Most status moves', function () {
 
 	it('should ignore natural type immunities', function () {
 		battle = BattleEngine.Battle.construct();
-		battle.join('p1', 'Guest 1', 1, [{species: "Smeargle", ability: 'prankster', item: 'leftovers', moves: ['gastroacid', 'glare', 'confuseray', 'sandattack']}]);
+		const p1 = battle.join('p1', 'Guest 1', 1, [{species: "Smeargle", ability: 'prankster', item: 'leftovers', moves: ['gastroacid', 'glare', 'confuseray', 'sandattack']}]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: "Klefki", ability: 'magician', happiness: 0, moves: ['return']},
 			{species: "Dusknoir", ability: 'frisk', moves: ['shadowpunch']},
@@ -19,77 +19,73 @@ describe('Most status moves', function () {
 			{species: "Unown", ability: 'levitate', moves: ['hiddenpower']},
 		]);
 		battle.commitDecisions();
-		assert.strictEqual(battle.p2.active[0].item, '');
-		battle.choose('p1', 'move 2');
-		battle.choose('p2', 'switch 2');
+		assert.false.holdsItem(battle.p2.active[0]); // Klefki's Magician suppressed by Gastro Acid.
+		p1.chooseMove('glare').foe.chooseSwitch(2); // Dusknoir
 		assert.strictEqual(battle.p2.active[0].status, 'par');
-		battle.choose('p1', 'move 3');
-		battle.choose('p2', 'switch 3');
+		p1.chooseMove('confuseray').foe.chooseSwitch(3); // Slaking
 		assert.ok(battle.p2.active[0].volatiles['confusion']);
-		battle.choose('p1', 'move 4');
-		battle.choose('p2', 'switch 4');
-		assert.strictEqual(battle.p2.active[0].boosts['accuracy'], -1);
-		battle.choose('p1', 'move 4');
-		battle.choose('p2', 'switch 5');
-		assert.strictEqual(battle.p2.active[0].boosts['accuracy'], -1);
+		p1.chooseMove('sandattack').foe.chooseSwitch(4); // Tornadus
+		assert.statStage(battle.p2.active[0], 'accuracy', -1);
+		p1.chooseMove('sandattack').foe.chooseSwitch(5); // Unown (Levitate)
+		assert.statStage(battle.p2.active[0], 'accuracy', -1);
 	});
 
 	it('should fail when the opposing Pokemon is immune to the status effect it sets', function () {
 		this.timeout(0);
 
 		battle = BattleEngine.Battle.construct();
-		battle.join('p1', 'Guest 1', 1, [{species: "Smeargle", ability: 'noguard', item: 'laggingtail', moves: ['thunderwave', 'willowisp', 'poisongas', 'toxic']}]);
+		const p1 = battle.join('p1', 'Guest 1', 1, [{species: "Smeargle", ability: 'noguard', item: 'laggingtail', moves: ['thunderwave', 'willowisp', 'poisongas', 'toxic']}]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: "Zapdos", ability: 'pressure', moves: ['charge']},
 			{species: "Emboar", ability: 'blaze', moves: ['sleeptalk']},
 			{species: "Muk", ability: 'stench', moves: ['shadowsneak']},
 			{species: "Aron", ability: 'sturdy', moves: ['magnetrise']},
 		]);
-		battle.commitDecisions();
+
+		p1.chooseMove('thunderwave').foe.chooseDefault();
 		assert.strictEqual(battle.p2.active[0].status, '');
 		assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-immune|'));
-		battle.choose('p1', 'move 2');
-		battle.choose('p2', 'switch 2');
+
+		p1.chooseMove('willowisp').foe.chooseSwitch(2); // Emboar
 		assert.strictEqual(battle.p2.active[0].status, '');
 		assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-immune|'));
-		battle.choose('p1', 'move 3');
-		battle.choose('p2', 'switch 3');
+
+		p1.chooseMove('poisongas').foe.chooseSwitch(3); // Muk
 		assert.strictEqual(battle.p2.active[0].status, '');
 		assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-immune|'));
-		battle.choose('p1', 'move 4');
-		battle.commitDecisions();
+
+		p1.chooseMove('toxic').foe.chooseDefault();
 		assert.strictEqual(battle.p2.active[0].status, '');
 		assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-immune|'));
-		battle.choose('p1', 'move 3');
-		battle.choose('p2', 'switch 4');
+
+		p1.chooseMove('poisongas').foe.chooseSwitch(4); // Aron
 		assert.strictEqual(battle.p2.active[0].status, '');
 		assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-immune|'));
-		battle.choose('p1', 'move 4');
-		battle.commitDecisions();
+
+		p1.chooseMove('toxic').foe.chooseDefault();
 		assert.strictEqual(battle.p2.active[0].status, '');
 		assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-immune|'));
 	});
 });
 
 describe('Poison-inflicting status moves [Gen 2]', function () {
+	const POISON_STATUS_MOVES = ['poisonpowder', 'poisongas', 'toxic'];
+
 	afterEach(function () {
 		battle.destroy();
 	});
 
 	it('should not ignore type immunities', function () {
 		battle = BattleEngine.Battle.construct('battle-gsc-psn-steel', 'gen2customgame');
-		battle.join('p1', 'Guest 1', 1, [{species: "Smeargle", moves: ['poisonpowder', 'poisongas', 'toxic']}]);
+		const p1 = battle.join('p1', 'Guest 1', 1, [{species: "Smeargle", moves: POISON_STATUS_MOVES}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Magneton", moves: ['sleeptalk']}]);
 		// Set all moves to perfect accuracy
 		battle.on('Accuracy', battle.getFormat(), true);
 
-		battle.commitDecisions();
-		assert.strictEqual(battle.p2.active[0].status, '');
-		battle.choose('p1', 'move 2');
-		battle.commitDecisions();
-		assert.strictEqual(battle.p2.active[0].status, '');
-		battle.choose('p1', 'move 3');
-		battle.commitDecisions();
-		assert.strictEqual(battle.p2.active[0].status, '');
+		const target = battle.p2.active[0];
+		POISON_STATUS_MOVES.forEach(move => {
+			p1.chooseMove(move);
+			assert.constant(() => target.status, () => battle.commitDecisions());
+		});
 	});
 });
