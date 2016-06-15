@@ -43,7 +43,6 @@ describe('Shield Dust', function () {
 				}
 			}
 		});
-		battle.commitDecisions(); // Team Preview
 		battle.commitDecisions();
 		assert.strictEqual(battle.p1.active[0].boosts['spe'], 1);
 		assert.strictEqual(battle.p2.active[0].boosts['def'], 3); // Clefable did not flinch
