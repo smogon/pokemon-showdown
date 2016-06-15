@@ -240,3 +240,102 @@ describe('Choice parser', function () {
 		}));
 	});
 });
+
+describe('Choice parser internals', function () {
+	afterEach(function () {
+		battle.destroy();
+	});
+
+	it('should allow input of move commands in a per Pokémon basis', function () {
+		battle = BattleEngine.Battle.construct('battle-choose-move', 'doublescustomgame');
+		const p1 = battle.join('p1', 'Guest 1', 1, [
+			{species: "Mew", ability: 'synchronize', moves: ['recover']},
+			{species: "Bulbasaur", ability: 'overgrow', moves: ['growl', 'synthesis']},
+		]);
+		const p2 = battle.join('p2', 'Guest 2', 1, [
+			{species: "Pupitar", ability: 'shedskin', moves: ['surf']}, // faster than Bulbasaur
+			{species: "Arceus", ability: 'multitype', moves: ['calmmind']},
+		]);
+
+		battle.commitDecisions(); // Team Preview
+
+		assert.strictEqual(battle.turn, 1);
+		p1.chooseMove(1).chooseMove(1, 1);
+		p2.chooseMove(1).chooseMove(1);
+
+		assert.strictEqual(battle.turn, 2);
+		assert.statStage(p2.active[0], 'atk', -1);
+		p1.chooseMove('recover').chooseMove('synthesis');
+		p2.chooseMove('surf').chooseMove('calmmind');
+
+		assert.strictEqual(battle.turn, 3);
+		assert.fullHP(p1.active[1]);
+
+		p1.chooseMove('recover').chooseMove('2');
+		p2.chooseMove('1').chooseMove('calmmind');
+
+		assert.strictEqual(battle.turn, 4);
+		assert.fullHP(p1.active[1]);
+	});
+
+	it('should allow input of switch commands in a per Pokémon basis', function () {
+		battle = BattleEngine.Battle.construct('battle-choose-move', 'doublescustomgame');
+		const p1 = battle.join('p1', 'Guest 1', 1, [
+			{species: "Mew", ability: 'synchronize', moves: ['selfdestruct']},
+			{species: "Bulbasaur", ability: 'overgrow', moves: ['selfdestruct']},
+			{species: "Koffing", ability: 'levitate', moves: ['smog']},
+			{species: "Ekans", ability: 'shedskin', moves: ['leer']},
+		]);
+		const p2 = battle.join('p2', 'Guest 2', 1, [
+			{species: "Deoxys-Defense", ability: 'pressure', moves: ['recover']},
+			{species: "Arceus", ability: 'multitype', moves: ['recover']},
+		]);
+
+		battle.commitDecisions(); // Team Preview
+
+		assert.strictEqual(battle.turn, 1);
+		p1.chooseMove('selfdestruct').chooseMove('selfdestruct');
+		p2.chooseMove('recover').chooseMove('recover');
+
+		assert.fainted(p1.active[0]);
+		assert.fainted(p1.active[1]);
+		p1.chooseSwitch(4).chooseSwitch(3);
+		assert.strictEqual(battle.turn, 2);
+		assert.strictEqual(p1.active[0].name, 'Ekans');
+		assert.strictEqual(p1.active[1].name, 'Koffing');
+	});
+
+	it('should allow input of move and switch commands in a per Pokémon basis', function () {
+		battle = BattleEngine.Battle.construct('battle-choose-move', 'doublescustomgame');
+		const p1 = battle.join('p1', 'Guest 1', 1, [
+			{species: "Mew", ability: 'synchronize', moves: ['recover']},
+			{species: "Bulbasaur", ability: 'overgrow', moves: ['growl', 'synthesis']},
+			{species: "Koffing", ability: 'levitate', moves: ['smog']},
+			{species: "Ekans", ability: 'shedskin', moves: ['leer']},
+		]);
+		const p2 = battle.join('p2', 'Guest 2', 1, [
+			{species: "Deoxys-Defense", ability: 'pressure', moves: ['recover']},
+			{species: "Arceus", ability: 'multitype', moves: ['recover']},
+		]);
+
+		battle.commitDecisions(); // Team Preview
+
+		assert.strictEqual(battle.turn, 1);
+		p1.chooseMove(1).chooseSwitch(4);
+		assert(!p2.chooseSwitch(3));
+		p2.chooseMove(1).chooseMove(1);
+
+		assert.strictEqual(battle.turn, 2);
+		assert.strictEqual(p1.active[0].name, 'Mew');
+		assert.strictEqual(p1.active[1].name, 'Ekans');
+
+		p1.chooseSwitch(4).chooseMove(1);
+		assert(!p2.chooseSwitch(3));
+		p2.chooseMove(1).chooseMove(1);
+
+		assert.strictEqual(battle.turn, 3);
+		assert.strictEqual(p1.active[0].name, 'Bulbasaur');
+		assert.strictEqual(p1.active[1].name, 'Ekans');
+	});
+});
+
