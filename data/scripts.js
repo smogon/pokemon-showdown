@@ -1475,7 +1475,7 @@ exports.BattleScripts = {
 					if (counter.setupType !== 'Physical' && hasMove['vacuumwave']) rejected = true;
 					break;
 				case 'hiddenpower':
-					if ((counter.damagingMoves.length < 2 && !counter.stab) || (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
+					if ((counter.damagingMoves.length < 2 && !counter.stab) || hasMove['rest']) rejected = true;
 					break;
 				case 'hypervoice':
 					if (hasMove['naturepower'] || hasMove['return']) rejected = true;
