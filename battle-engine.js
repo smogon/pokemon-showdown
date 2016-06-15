@@ -1781,10 +1781,13 @@ BattleSide = (() => {
 		}
 		this.choiceData.switchCounters.pass[0]++;
 
+		const pokemon = this.active[this.choiceData.choices.length];
+
+		this.choiceData.choices.push('pass');
 		this.choiceData.decisions.push({
 			choice: 'pass',
 			priority: 102,
-			pokemon: this.active[this.choiceData.choices.length],
+			pokemon: pokemon,
 		});
 
 		if (!this.battle.checkDecisions()) return this; // allow chaining

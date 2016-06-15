@@ -337,5 +337,114 @@ describe('Choice parser internals', function () {
 		assert.strictEqual(p1.active[0].name, 'Bulbasaur');
 		assert.strictEqual(p1.active[1].name, 'Ekans');
 	});
+
+	it('should empty the decisions list when undoing a move', function () {
+		battle = BattleEngine.Battle.construct('battle-choose-move', 'doublescustomgame');
+		battle.supportCancel = true;
+		const p1 = battle.join('p1', 'Guest 1', 1, [
+			{species: "Pineco", ability: 'sturdy', moves: ['selfdestruct']},
+			{species: "Geodude", ability: 'sturdy', moves: ['selfdestruct']},
+			{species: "Koffing", ability: 'levitate', moves: ['smog']},
+		]);
+		const p2 = battle.join('p2', 'Guest 2', 1, [
+			{species: "Skarmory", ability: 'sturdy', moves: ['roost']},
+			{species: "Aggron", ability: 'sturdy', moves: ['irondefense']},
+		]);
+
+		battle.commitDecisions(); // Team Preview
+
+		p1.chooseMove(1);
+		assert(p1.choiceData.decisions.length > 0);
+		battle.undoChoice('p1');
+		assert.false(p1.choiceData.decisions.length > 0);
+		p1.chooseDefault();
+		p2.chooseDefault();
+
+		assert.fainted(p1.active[0]);
+		assert.fainted(p1.active[1]);
+	});
+
+	it('should empty the decisions list when undoing a switch', function () {
+		battle = BattleEngine.Battle.construct('battle-choose-move', 'doublescustomgame');
+		battle.supportCancel = true;
+		const p1 = battle.join('p1', 'Guest 1', 1, [
+			{species: "Pineco", ability: 'sturdy', moves: ['selfdestruct']},
+			{species: "Geodude", ability: 'sturdy', moves: ['selfdestruct']},
+			{species: "Koffing", ability: 'levitate', moves: ['smog']},
+		]);
+		battle.join('p2', 'Guest 2', 1, [
+			{species: "Skarmory", ability: 'sturdy', moves: ['roost']},
+			{species: "Aggron", ability: 'sturdy', moves: ['irondefense']},
+		]);
+
+		battle.commitDecisions(); // Team Preview
+
+		battle.commitDecisions();
+
+		p1.chooseSwitch(3);
+		assert(p1.choiceData.decisions.length > 0);
+		battle.undoChoice('p1');
+		assert.false(p1.choiceData.decisions.length > 0);
+		p1.choosePass().chooseSwitch(3);
+
+		assert.fainted(p1.active[0]);
+		assert.species(p1.active[1], 'Koffing');
+	});
+
+	it('should empty the decisions list when undoing a pass', function () {
+		battle = BattleEngine.Battle.construct('battle-choose-move', 'doublescustomgame');
+		battle.supportCancel = true;
+		const p1 = battle.join('p1', 'Guest 1', 1, [
+			{species: "Pineco", ability: 'sturdy', moves: ['selfdestruct']},
+			{species: "Geodude", ability: 'sturdy', moves: ['selfdestruct']},
+			{species: "Koffing", ability: 'levitate', moves: ['smog']},
+		]);
+		battle.join('p2', 'Guest 2', 1, [
+			{species: "Skarmory", ability: 'sturdy', moves: ['roost']},
+			{species: "Aggron", ability: 'sturdy', moves: ['irondefense']},
+		]);
+
+		battle.commitDecisions(); // Team Preview
+
+		battle.commitDecisions();
+
+		p1.choosePass();
+		assert(p1.choiceData.decisions.length > 0);
+		battle.undoChoice('p1');
+		assert.false(p1.choiceData.decisions.length > 0);
+		p1.choosePass().chooseSwitch(3);
+
+		assert.fainted(p1.active[0]);
+		assert.species(p1.active[1], 'Koffing');
+	});
+
+	it('should empty the decisions list when undoing a shift', function () {
+		battle = BattleEngine.Battle.construct('battle-choose-move', 'triplescustomgame');
+		battle.supportCancel = true;
+		const p1 = battle.join('p1', 'Guest 1', 1, [
+			{species: "Pineco", ability: 'sturdy', moves: ['selfdestruct']},
+			{species: "Geodude", ability: 'sturdy', moves: ['selfdestruct']},
+			{species: "Gastly", ability: 'levitate', moves: ['lick']},
+		]);
+		const p2 = battle.join('p2', 'Guest 2', 1, [
+			{species: "Skarmory", ability: 'sturdy', moves: ['roost']},
+			{species: "Aggron", ability: 'sturdy', moves: ['irondefense']},
+			{species: "Golem", ability: 'sturdy', moves: ['defensecurl']},
+		]);
+
+		battle.commitDecisions(); // Team Preview
+
+		p1.chooseShift();
+		assert(p1.choiceData.decisions.length > 0);
+		battle.undoChoice('p1');
+		assert.false(p1.choiceData.decisions.length > 0);
+		p1.chooseMove(1).chooseMove(1).chooseShift();
+		p2.chooseDefault();
+
+		assert.fainted(p1.active[0]);
+		assert.fainted(p1.active[2]);
+		assert.species(p1.active[1], 'Gastly');
+		assert.false.fainted(p1.active[1]);
+	});
 });
 
