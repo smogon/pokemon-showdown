@@ -1525,6 +1525,9 @@ BattleSide = (() => {
 	BattleSide.prototype.emitRequest = function (update) {
 		this.battle.send('request', this.id + "\n" + this.battle.rqid + "\n" + JSON.stringify(update));
 	};
+	BattleSide.prototype.acceptChoice = function (offset, choiceData) {
+		this.battle.send('choice', this.id + "\n" + this.battle.rqid + "\n" + offset + "\n" + JSON.stringify(choiceData));
+	};
 
 	BattleSide.prototype.getDecisionsFinished = function () {
 		if (this.choiceData.decisions === true) return true;
@@ -4660,6 +4663,16 @@ Battle = (() => {
 				if (!side.chooseSkip(pokemon.position, true)) return side.undoChoices(i, choiceIndex);
 				break;
 			}
+		}
+
+		const queuedDecisions = side.choiceData.choices.length;
+		if (queuedDecisions) {
+			side.acceptChoice(queuedDecisions, {
+				done: side.choiceData.choices.map((choice, index) => choice === 'skip' ? '' : '' + index).join(""),
+				leave: Array.from(side.choiceData.leaveIndices).join(""),
+				enter: Array.from(side.choiceData.enterIndices).join(""),
+				team: side.currentRequest === 'teampreview' ? side.choiceData.decisions.map(decision => decision.pokemon.position + 1).join("") : null,
+			});
 		}
 
 		this.checkDecisions();
