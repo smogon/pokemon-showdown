@@ -231,13 +231,30 @@ class Battle {
 		case 'request': {
 			let player = this[lines[2]];
 			let rqid = lines[3];
-			if (player) {
-				this.requests[player.slot] = lines[4];
-				player.sendRoom('|request|' + lines[4]);
-			}
+
 			if (rqid !== this.rqid) {
 				this.rqid = rqid;
 				this.inactiveQueued = true;
+			}
+			if (player) {
+				const isNewRequest = !this.requests[player.slot] || +this.requests[player.slot][0] < +rqid;
+				if (isNewRequest) {
+					player.choiceIndex = 0;
+				}
+				this.requests[player.slot] = [rqid, lines[4]];
+				player.sendRoom('|request|' + (player.choiceIndex ? player.choiceIndex + '|' + player.choiceData + '\n' : '') + lines[4]);
+			}
+			break;
+		}
+
+		case 'choice': {
+			let player = this[lines[2]];
+			let rqid = lines[3];
+			let choiceIndex = +lines[4];
+			let choiceData = lines[5];
+			if (rqid === this.rqid && player) {
+				player.choiceIndex = choiceIndex;
+				player.choiceData = choiceData;
 			}
 			break;
 		}
@@ -266,7 +283,7 @@ class Battle {
 		player.updateSubchannel(connection || user);
 		let request = this.requests[player.slot];
 		if (request) {
-			(connection || user).sendTo(this.id, '|request|' + request);
+			(connection || user).sendTo(this.id, '|request|' + (player.choiceIndex ? player.choiceIndex + '|' + player.choiceData + '\n' : '') + request[1]);
 		}
 	}
 	onUpdateConnection(user, connection) {
