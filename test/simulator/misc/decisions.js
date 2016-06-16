@@ -3,7 +3,7 @@
 const assert = require('./../../assert');
 let battle;
 
-describe('Choice parser', function () {
+describe('Decisions', function () {
 	afterEach(function () {
 		battle.destroy();
 	});
@@ -59,6 +59,45 @@ describe('Choice parser', function () {
 		assert.notStrictEqual(battle.p2.active[0].lastMove, 'struggle');
 	});
 
+	it('should send meaningful feedback to players if they try to switch a trapped Pokémon out', function () {
+		battle = BattleEngine.Battle.construct();
+		battle.join('p1', 'Guest 1', 1, [
+			{species: "Scizor", ability: 'swarm', moves: ['bulletpunch']},
+			{species: "Azumarill", ability: 'sapsipper', moves: ['aquajet']},
+		]);
+		battle.join('p2', 'Guest 2', 1, [{species: "Gothitelle", ability: 'shadowtag', moves: ['calmmind']}]);
+
+		const buffer = [];
+		battle.send = (type, data) => {
+			if (type === 'sideupdate') buffer.push(Array.isArray(data) ? data.join('\n') : data);
+		};
+		battle.choose('p1', 'switch 2');
+		assert(buffer.length >= 1);
+		assert(buffer.some(message => {
+			return message.startsWith('p1\n') && /\btrapped\b/.test(message) && (/\|0\b/.test(message) || /\|p1a\b/.test(message));
+		}));
+	});
+
+	it('should send meaningful feedback to players if they try to use a disabled move', function () {
+		battle = BattleEngine.Battle.construct();
+		battle.join('p1', 'Guest 1', 1, [{species: "Skarmory", ability: 'sturdy', moves: ['spikes', 'roost']}]);
+		battle.join('p2', 'Guest 2', 1, [{species: "Smeargle", ability: 'owntempo', moves: ['imprison', 'spikes']}]);
+
+		battle.commitDecisions();
+
+		const buffer = [];
+		battle.send = (type, data) => {
+			if (type === 'sideupdate') buffer.push(Array.isArray(data) ? data.join('\n') : data);
+		};
+		battle.choose('p1', 'move 1');
+		assert(buffer.length >= 1);
+		assert(buffer.some(message => {
+			return message.startsWith('p1\n') && /\bcant\b/.test(message) && (/\|0\b/.test(message) || /\|p1a\b/.test(message));
+		}));
+	});
+});
+
+describe('Decision extensions', function () {
 	it('should not allow revoking decisions after every player has sent an unrevoked decision', function () {
 		battle = BattleEngine.Battle.construct();
 		battle.join('p1', 'Guest 1', 1, [{species: "Bulbasaur", ability: 'overgrow', moves: ['tackle', 'growl']}]);
@@ -202,46 +241,9 @@ describe('Choice parser', function () {
 		assert.strictEqual(battle.p1.active[0].lastMove, 'tackle');
 		assert.strictEqual(battle.p2.active[0].lastMove, 'growl');
 	});
-
-	it('should send meaningful feedback to players if they try to switch a trapped Pokémon out', function () {
-		battle = BattleEngine.Battle.construct();
-		battle.join('p1', 'Guest 1', 1, [
-			{species: "Scizor", ability: 'swarm', moves: ['bulletpunch']},
-			{species: "Azumarill", ability: 'sapsipper', moves: ['aquajet']},
-		]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Gothitelle", ability: 'shadowtag', moves: ['calmmind']}]);
-
-		const buffer = [];
-		battle.send = (type, data) => {
-			if (type === 'sideupdate') buffer.push(Array.isArray(data) ? data.join('\n') : data);
-		};
-		battle.choose('p1', 'switch 2');
-		assert(buffer.length >= 1);
-		assert(buffer.some(message => {
-			return message.startsWith('p1\n') && /\btrapped\b/.test(message) && (/\|0\b/.test(message) || /\|p1a\b/.test(message));
-		}));
-	});
-
-	it('should send meaningful feedback to players if they try to use a disabled move', function () {
-		battle = BattleEngine.Battle.construct();
-		battle.join('p1', 'Guest 1', 1, [{species: "Skarmory", ability: 'sturdy', moves: ['spikes', 'roost']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Smeargle", ability: 'owntempo', moves: ['imprison', 'spikes']}]);
-
-		battle.commitDecisions();
-
-		const buffer = [];
-		battle.send = (type, data) => {
-			if (type === 'sideupdate') buffer.push(Array.isArray(data) ? data.join('\n') : data);
-		};
-		battle.choose('p1', 'move 1');
-		assert(buffer.length >= 1);
-		assert(buffer.some(message => {
-			return message.startsWith('p1\n') && /\bcant\b/.test(message) && (/\|0\b/.test(message) || /\|p1a\b/.test(message));
-		}));
-	});
 });
 
-describe('Choice parser internals', function () {
+describe('Decision internals', function () {
 	afterEach(function () {
 		battle.destroy();
 	});
