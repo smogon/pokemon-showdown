@@ -1133,8 +1133,8 @@ exports.commands = {
 	},
 
 	roomhelp: function (target, room, user) {
-		if (room.id === 'lobby' || room.battle) return this.sendReply("This command is too spammy for lobby/battles.");
 		if (!this.runBroadcast()) return;
+		if (this.broadcasting && (room.id === 'lobby' || room.battle)) return this.sendReply("This command is too spammy for lobby/battles.");
 		this.sendReplyBox(
 			"Room drivers (%) can use:<br />" +
 			"- /warn OR /k <em>username</em>: warn a user and show the Pok&eacute;mon Showdown rules<br />" +
