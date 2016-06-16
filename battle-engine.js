@@ -1770,16 +1770,13 @@ BattleSide = (() => {
 
 	// Special choices
 	BattleSide.prototype.choosePass = function () {
-		if (this.currentRequest !== 'switch') {
-			this.battle.debug("Can't pass the turn");
-			return false;
+		if (this.currentRequest === 'switch') {
+			if (this.choiceData.switchCounters.pass[0] >= this.choiceData.switchCounters.pass[1]) {
+				this.battle.debug("Can't pass: You can't skip switching Pokémon in needlessly.");
+				return false;
+			}
+			this.choiceData.switchCounters.pass[0]++;
 		}
-
-		if (this.choiceData.switchCounters.pass[0] >= this.choiceData.switchCounters.pass[1]) {
-			this.battle.debug("Can't pass: You can't skip switching Pokémon in needlessly.");
-			return false;
-		}
-		this.choiceData.switchCounters.pass[0]++;
 
 		const pokemon = this.active[this.choiceData.choices.length];
 
@@ -1808,7 +1805,7 @@ BattleSide = (() => {
 			const autoChoices = new Array(this.pokemon.length - choiceOffset);
 			for (let i = choiceOffset; i < this.pokemon.length; i++) {
 				if (!this.pokemon[i]) continue;
-				if (this.pokemon[i].isActive) {
+				if (i < this.active.length) {
 					if (!this.pokemon[i].switchFlag) continue;
 					leaveIndices.push(i);
 				} else {
@@ -1826,7 +1823,7 @@ BattleSide = (() => {
 					pokemon: this.active[leaveIndices[i]],
 					target: this.pokemon[enterIndices[i]],
 				});
-				autoChoices[leaveIndices[i]] = 'switch';
+				autoChoices[leaveIndices[i]] = 'switch ' + (enterIndices[i] + 1);
 			}
 			for (let i = 0; i < willPass.length; i++) {
 				this.choiceData.decisions.push({
@@ -4606,7 +4603,16 @@ Battle = (() => {
 		const choices = new Array(side.currentRequest === 'teampreview' ? 1 : side.active.length);
 
 		for (let i = 0; i < choices.length; i++) {
-			if (i >= parts.length) return null;
+			if (i >= parts.length) {
+				// `parts` can grow due to autocompletion (explained below),
+				// so we can't check this before the loop.
+				// It won't grow at its end, though...
+				if (i < side.active.length && side.currentRequest !== 'team' && (!side.active[i] || (side.currentRequest === 'move' ? side.active[i].fainted : !side.active[i].switchFlag))) {
+					parts.push('pass');
+				} else {
+					return null;
+				}
+			}
 			let choice = parts[i].trim();
 
 			let data = '';
@@ -4629,18 +4635,32 @@ Battle = (() => {
 				if (!side.active[i] || !side.active[i].switchFlag) {
 					// We are going to be friendly towards command-line dubs/triples players,
 					// and automatically fill any mandatory passes.
-					if (choice !== 'pass') parts.splice(i, 0, 'pass');
+					if (choice !== 'pass' && parts.length < choices.length) {
+						parts.splice(i, 0, 'pass');
+						choice = 'pass';
+						data = '';
+					}
+				} else if (choice === 'pass' && side.active.length <= 1) {
+					// Passing only makes sense in the context of a multiple switch-in.
+					return null;
 				}
-				if (choice !== 'switch' && choice !== 'pass' && choice !== 'default') return null;
+				if (choice !== 'switch' && choice !== 'pass' && choice !== 'default') {
+					return null;
+				}
 				break;
 			case 'move':
 				if (!side.active[i] || side.active[i].fainted) {
 					// Ditto. Automatically fill passes.
-					if (choice !== 'pass') parts.splice(i, 0, 'pass');
+					if (choice !== 'pass' && parts.length < choices.length) {
+						parts.splice(i, 0, 'pass');
+						choice = 'pass';
+						data = '';
+					}
+				} else if (choice === 'pass') {
+					return null;
 				}
-				if (!data && (choice !== 'move' && choice !== 'switch' && choice !== 'shift')) {
-					// Fallback
-					choice = 'default';
+				if (choice !== 'move' && choice !== 'switch' && choice !== 'shift' && choice !== 'pass') {
+					return null;
 				}
 				break;
 			}
