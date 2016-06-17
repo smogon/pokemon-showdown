@@ -234,7 +234,7 @@ Punishments.unpunish = function (id, punishType, noRecurse) {
 	return success;
 };
 
-Punishments.ban = function (user, expireTime, reason, id) {
+Punishments.ban = function (user, expireTime, id, reason) {
 	if (!id) id = user.getLastId();
 
 	if (!expireTime) expireTime = Date.now() + BAN_DURATION;
@@ -251,7 +251,7 @@ Punishments.unban = function (name) {
 	let success = Punishments.unpunish(name, 'BAN');
 	return success;
 };
-Punishments.lock = function (user, expireTime, reason, id) {
+Punishments.lock = function (user, expireTime, id, reason) {
 	if (!id) id = user.getLastId();
 
 	if (!expireTime) expireTime = Date.now() + LOCK_DURATION;
@@ -292,7 +292,7 @@ Punishments.unlock = function (name) {
 	}
 	return success;
 };
-Punishments.namelock = function (user, expireTime, reason, id) {
+Punishments.namelock = function (user, expireTime, id, reason) {
 	if (!id) id = user.getLastId();
 
 	if (!expireTime) expireTime = Date.now() + LOCK_DURATION;
