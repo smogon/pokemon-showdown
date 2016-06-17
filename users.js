@@ -709,9 +709,9 @@ class User {
 			} else if (userType === '4') {
 				this.autoconfirmed = userid;
 			} else if (userType === '5') {
-				Punishments.lock(this, Date.now() + PERMALOCK_CACHE_TIME, "Permalock", userid);
+				Punishments.lock(this, Date.now() + PERMALOCK_CACHE_TIME, userid, "Permalocked as " + name);
 			} else if (userType === '6') {
-				Punishments.ban(this, Date.now() + PERMALOCK_CACHE_TIME, "Permaban", userid);
+				Punishments.ban(this, Date.now() + PERMALOCK_CACHE_TIME, userid, "Permabanned as " + name);
 			}
 		}
 		let user = users.get(userid);
