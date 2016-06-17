@@ -1531,6 +1531,7 @@ BattleSide = (() => {
 		return this.choiceData.choices.length >= this.active.length;
 	};
 	BattleSide.prototype.chooseMove = function (data, targetLoc, willMega) {
+		if (!targetLoc) targetLoc = 0;
 		const choosableTargets = {normal:1, any:1, adjacentAlly:1, adjacentAllyOrSelf:1, adjacentFoe:1};
 		const activePokemon = this.active[this.choiceData.choices.length];
 
@@ -1615,7 +1616,7 @@ BattleSide = (() => {
 			this.choiceData.finalDecision = this.choiceData.finalDecision || activePokemon.isLastActive();
 		}
 
-		this.choiceData.choices.push('move ' + moveid + ' ' + targetLoc + (willMega ? ' mega' : ''));
+		this.choiceData.choices.push('move ' + moveid + (targetLoc ? ' ' + targetLoc : '') + (willMega ? ' mega' : ''));
 
 		const decision = [];
 		if (willMega) {
