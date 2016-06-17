@@ -1545,7 +1545,7 @@ BattleSide = (() => {
 		if (typeof data === 'number' || /^[0-9]+$/.test(data)) {
 			// Parse a one-based move index.
 			const moveIndex = +data - 1;
-			if (moveIndex >= requestMoves.length || !requestMoves[moveIndex]) {
+			if (moveIndex < 0 || moveIndex >= requestMoves.length || !requestMoves[moveIndex]) {
 				this.battle.debug("Can't use an unexpected move");
 				return false;
 			}
