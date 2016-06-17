@@ -292,7 +292,6 @@ describe('Choice parser', function () {
 				assert.species(p1.active[1], 'Koffing');
 				assert.false.fainted(p1.active[1]);
 
-				battle.debug = console.log;
 				assert(battle.parseChoice(p1, 'move smog'));
 
 				const validDecisions = ['move smog', 'move 1'];
@@ -444,7 +443,7 @@ describe('Choice parser', function () {
 				}
 			});
 
-			it('should enforce `pass` choices for fainted Pokémon supercali', function () {
+			it('should enforce `pass` choices for fainted Pokémon', function () {
 				battle = common.createBattle({gameType: 'triples'});
 				const p1 = battle.join('p1', 'Guest 1', 1, [
 					{species: "Pineco", ability: 'sturdy', moves: ['selfdestruct']},
@@ -464,7 +463,6 @@ describe('Choice parser', function () {
 
 				const validDecisions = ['move spikes', 'move 1'];
 				validDecisions.forEach(decision => {
-					battle.debug = console.log;
 					assert.strictEqual(serializeChoices(battle.parseChoice(p1, decision)), `pass, ${decision}, pass`);
 					assert.strictEqual(serializeChoices(battle.parseChoice(p1, `pass, ${decision}, pass`)), `pass, ${decision}, pass`);
 					assert.strictEqual(serializeChoices(battle.parseChoice(p1, `pass, ${decision}`)), `pass, ${decision}, pass`);

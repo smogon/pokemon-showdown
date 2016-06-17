@@ -29,12 +29,12 @@ class TestTools {
 
 		this.modPrefix = this.baseFormat.name ? `[${this.baseFormat.name}]` : '';
 		if (!this.modPrefix && !this.tools.isBase) {
-			this.modPrefix = (/^gen\d$/.test(this.currentMod) ? `[Gen ${this.tools.gen}]` : `[${this.currentMod}]`);
+			this.modPrefix = (/^gen\d$/.test(mod) ? `[Gen ${this.tools.gen}]` : `[${mod}]`);
 		}
 
 		// Handle caches
 		this.formats = new Map([['singles', new Map()], ['doubles', new Map()], ['triples', new Map()]]);
-		cache.set(this.baseFormat.id || this.currentMod, this);
+		cache.set(this.baseFormat.id || mod, this);
 	}
 
 	mod(mod) {
@@ -55,12 +55,12 @@ class TestTools {
 			if (property === 'gameType' || !options[property]) continue;
 			mask |= RULE_FLAGS[property];
 		}
-		const gameType = toId(options.gameType || 'singles');
+		const gameType = Tools.getId(options.gameType || 'singles');
 		if (this.formats.get(gameType).has(mask)) return this.formats.get(gameType).get(mask);
 
 		const gameTypePrefix = gameType === 'singles' ? '' : capitalize(gameType);
 		const formatName = [this.modPrefix, gameTypePrefix, "Custom Game", '' + mask].filter(part => part).join(" ");
-		const formatId = toId(formatName);
+		const formatId = Tools.getId(formatName);
 
 		const format = Object.assign(Object.assign({}, this.baseFormat), {
 			id: formatId,
