@@ -25,6 +25,38 @@ describe('Decisions', function () {
 				done();
 			}, 40);
 		});
+
+		it('should allow input of move commands in a per Pokémon basis', function () {
+			battle = common.createBattle({gameType: 'doubles', partialDecisions: true}, [
+				[{species: "Mew", ability: 'synchronize', moves: ['recover']}, {species: "Bulbasaur", ability: 'overgrow', moves: ['growl', 'synthesis']}],
+				[{species: "Pupitar", ability: 'shedskin', moves: ['surf']}, {species: "Arceus", ability: 'multitype', moves: ['calmmind']}],
+				// Pupitar is faster than Bulbasaur
+			]);
+
+			battle.choose('p1', 'move recover');
+			battle.choose('p1', 'move growl');
+			battle.choose('p2', 'move surf');
+			battle.choose('p2', 'move calmmind');
+
+			assert.strictEqual(battle.turn, 2);
+			assert.statStage(battle.p2.active[0], 'atk', -1);
+
+			battle.choose('p1', 'move recover');
+			battle.choose('p1', 'move synthesis');
+			battle.choose('p2', 'move surf');
+			battle.choose('p2', 'move calmmind');
+
+			assert.strictEqual(battle.turn, 3);
+			assert.fullHP(battle.p1.active[1]);
+
+			battle.choose('p1', 'move recover');
+			battle.choose('p1', 'move 2');
+			battle.choose('p2', 'move 1');
+			battle.choose('p2', 'move calmmind');
+
+			assert.strictEqual(battle.turn, 4);
+			assert.fullHP(battle.p1.active[1]);
+		});
 	});
 
 	describe('Move requests', function () {
