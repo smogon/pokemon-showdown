@@ -561,15 +561,7 @@ BattlePokemon = (() => {
 		let hasValidMove = false;
 		for (let i = 0; i < this.moveset.length; i++) {
 			let moveEntry = this.moveset[i];
-			let disabled = moveEntry.disabled;
-			if (disabled === 'hidden' && restrictData) {
-				disabled = false;
-			} else if (moveEntry.pp <= 0) {
-				disabled = true;
-			}
-			if (!disabled) {
-				hasValidMove = true;
-			}
+
 			let moveName = moveEntry.move;
 			if (moveEntry.id === 'hiddenpower') {
 				moveName = 'Hidden Power ' + this.hpType;
@@ -584,6 +576,15 @@ BattlePokemon = (() => {
 				if (!this.hasType('Ghost')) {
 					target = this.battle.getMove('curse').nonGhostTarget || moveEntry.target;
 				}
+			}
+			let disabled = moveEntry.disabled;
+			if (disabled && this.battle.targetTypeChoices(target) || moveEntry.pp <= 0) {
+				disabled = true;
+			} else if (disabled === 'hidden' && restrictData) {
+				disabled = false;
+			}
+			if (!disabled) {
+				hasValidMove = true;
 			}
 			moves.push({
 				move: moveName,
@@ -1532,7 +1533,6 @@ BattleSide = (() => {
 	};
 	BattleSide.prototype.chooseMove = function (data, targetLoc, willMega) {
 		if (!targetLoc) targetLoc = 0;
-		const choosableTargets = {normal:1, any:1, adjacentAlly:1, adjacentAllyOrSelf:1, adjacentFoe:1};
 		const activePokemon = this.active[this.choiceData.choices.length];
 
 		/**
@@ -1550,7 +1550,7 @@ BattleSide = (() => {
 				return false;
 			}
 			moveid = requestMoves[moveIndex].id;
-			if (!targetLoc && this.active.length > 1 && requestMoves[moveIndex].target in choosableTargets) {
+			if (!targetLoc && this.active.length > 1 && this.battle.targetTypeChoices(requestMoves[moveIndex].target)) {
 				this.battle.debug("Can't use the move without a target");
 				return false;
 			}
@@ -1564,7 +1564,7 @@ BattleSide = (() => {
 			let isValidMove = false;
 			for (let i = 0; i < requestMoves.length; i++) {
 				if (requestMoves[i].id !== moveid) continue;
-				if (!targetLoc && this.active.length > 1 && requestMoves[i].target in choosableTargets) {
+				if (!targetLoc && this.active.length > 1 && this.battle.targetTypeChoices(requestMoves[i].target)) {
 					this.battle.debug("Can't use the move without a target");
 					return false;
 				}
