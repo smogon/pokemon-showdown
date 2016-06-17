@@ -3488,26 +3488,29 @@ exports.BattleScripts = {
 
 		for (let i = 1; i < 6; i++) {
 			let pokemon = this.sampleNoReplace(seasonalPokemonList);
-			let template = this.getTemplate(pokemon);
-			let set = this.randomSet(template, i);
+			let template = Object.assign({}, this.getTemplate(pokemon));
+
 			if (template.id in {'vanilluxe':1, 'vanillite':1, 'vanillish':1}) {
-				set.moves = ['icebeam', 'weatherball', 'autotomize', 'flashcannon'];
+				template.randomBattleMoves = ['icebeam', 'weatherball', 'autotomize', 'flashcannon'];
 			}
 			if (template.id in {'pikachu':1, 'raichu':1}) {
-				set.moves = ['thunderbolt', 'surf', 'substitute', 'nastyplot'];
+				template.randomBattleMoves = ['thunderbolt', 'surf', 'substitute', 'nastyplot'];
 			}
 			if (template.id in {'rhydon':1, 'rhyperior':1}) {
-				set.moves = ['surf', 'megahorn', 'earthquake', 'rockblast'];
+				template.randomBattleMoves = ['surf', 'megahorn', 'earthquake', 'rockblast'];
 			}
 			if (template.id === 'reshiram') {
-				set.moves = ['tailwhip', 'dragontail', 'irontail', 'aquatail'];
+				template.randomBattleMoves = ['tailwhip', 'dragontail', 'irontail', 'aquatail'];
 			}
 			if (template.id === 'aggron') {
-				set.moves = ['surf', 'earthquake', 'bodyslam', 'rockslide'];
+				template.randomBattleMoves = ['surf', 'earthquake', 'bodyslam', 'rockslide'];
 			}
 			if (template.id === 'hariyama') {
-				set.moves = ['surf', 'closecombat', 'facade', 'fakeout'];
+				template.randomBattleMoves = ['surf', 'closecombat', 'facade', 'fakeout'];
 			}
+
+			let set = this.randomSet(template, i);
+
 			if (template.id === 'pelipper') {
 				set.ability = 'raindish';
 			}
