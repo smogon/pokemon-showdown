@@ -1770,15 +1770,17 @@ BattleSide = (() => {
 
 	// Special choices
 	BattleSide.prototype.choosePass = function () {
-		if (this.currentRequest === 'switch') {
-			if (this.choiceData.switchCounters.pass[0] >= this.choiceData.switchCounters.pass[1]) {
-				this.battle.debug("Can't pass: You can't skip switching Pokémon in needlessly.");
-				return false;
-			}
-			this.choiceData.switchCounters.pass[0]++;
-		}
-
 		const pokemon = this.active[this.choiceData.choices.length];
+
+		if (this.currentRequest === 'switch') {
+			if (pokemon && pokemon.switchFlag) { // This condition will always happen if called by Battle#choose()
+				if (this.choiceData.switchCounters.pass[0] >= this.choiceData.switchCounters.pass[1]) {
+					this.battle.debug("Can't pass: You can't skip switching Pokémon in needlessly.");
+					return false;
+				}
+				this.choiceData.switchCounters.pass[0]++;
+			}
+		}
 
 		this.choiceData.choices.push('pass');
 		this.choiceData.decisions.push({
