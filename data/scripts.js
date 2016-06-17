@@ -1,5 +1,7 @@
 'use strict';
 
+const CHOOSABLE_TARGETS = new Set(['normal', 'any', 'adjacentAlly', 'adjacentAllyOrSelf', 'adjacentFoe']);
+
 exports.BattleScripts = {
 	gen: 6,
 	runMove: function (move, pokemon, target, sourceEffect) {
@@ -649,6 +651,11 @@ exports.BattleScripts = {
 		if (pokemon1.side === pokemon2.side) return Math.abs(pokemon1.position - pokemon2.position) === 1;
 		return Math.abs(pokemon1.position + pokemon2.position + 1 - pokemon1.side.active.length) <= 1;
 	},
+
+	targetTypeChoices: function (targetType) {
+		return CHOOSABLE_TARGETS.has(targetType);
+	},
+
 	checkAbilities: function (selectedAbilities, defaultAbilities) {
 		if (!selectedAbilities.length) return true;
 		let selectedAbility = selectedAbilities.pop();
