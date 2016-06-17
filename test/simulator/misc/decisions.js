@@ -110,6 +110,45 @@ describe('Decisions', function () {
 			assert.species(battle.p2.active[0], 'Charmeleon');
 		});
 
+		it('should allow shifting the Pokémon on the left to the center', function () {
+			battle = common.createBattle({gameType: 'triples'});
+			const p1 = battle.join('p1', 'Guest 1', 1, [
+				{species: "Pineco", ability: 'sturdy', moves: ['harden']},
+				{species: "Geodude", ability: 'sturdy', moves: ['defensecurl']},
+				{species: "Gastly", ability: 'levitate', moves: ['spite']},
+			]);
+			const p2 = battle.join('p2', 'Guest 2', 1, [
+				{species: "Skarmory", ability: 'sturdy', moves: ['roost']},
+				{species: "Aggron", ability: 'sturdy', moves: ['irondefense']},
+				{species: "Golem", ability: 'sturdy', moves: ['defensecurl']},
+			]);
+			p1.chooseMove(1).chooseMove(1).chooseShift();
+			p2.chooseMove(1).chooseMove(1).chooseShift();
+
+			['Pineco', 'Gastly', 'Geodude'].forEach((species, index) => assert.species(battle.p1.active[index], species));
+			['Skarmory', 'Golem', 'Aggron'].forEach((species, index) => assert.species(battle.p2.active[index], species));
+		});
+
+		it('should allow shifting the Pokémon on the right to the center', function () {
+			battle = common.createBattle({gameType: 'triples'});
+			const p1 = battle.join('p1', 'Guest 1', 1, [
+				{species: "Pineco", ability: 'sturdy', moves: ['harden']},
+				{species: "Geodude", ability: 'sturdy', moves: ['defensecurl']},
+				{species: "Gastly", ability: 'levitate', moves: ['spite']},
+			]);
+			const p2 = battle.join('p2', 'Guest 2', 1, [
+				{species: "Skarmory", ability: 'sturdy', moves: ['roost']},
+				{species: "Aggron", ability: 'sturdy', moves: ['irondefense']},
+				{species: "Golem", ability: 'sturdy', moves: ['defensecurl']},
+			]);
+			p1.chooseShift();
+			p2.chooseShift();
+			battle.commitDecisions();
+
+			['Geodude', 'Pineco', 'Gastly'].forEach((species, index) => assert.species(battle.p1.active[index], species));
+			['Aggron', 'Skarmory', 'Golem'].forEach((species, index) => assert.species(battle.p2.active[index], species));
+		});
+
 		it('should force Struggle usage on move attempt for no valid moves', function () {
 			battle = common.createBattle();
 			battle.join('p1', 'Guest 1', 1, [{species: "Mew", ability: 'synchronize', moves: ['recover']}]);
@@ -299,6 +338,34 @@ describe('Decisions', function () {
 		});
 	});
 
+	describe('Team Preview requests', function () {
+		it('should allow specifying the team order', function () {
+			const TEAMS = [[
+				{species: 'Bulbasaur', ability: 'overgrow', moves: ['tackle']},
+				{species: 'Clefable', ability: 'unaware', moves: ['healingwish']},
+				{species: 'Latias', ability: 'levitate', moves: ['lunardance']},
+				{species: 'Venusaur', ability: 'overgrow', moves: ['tackle']},
+			], [
+				{species: 'Charmander', ability: 'blaze', moves: ['scratch']},
+				{species: 'Clefable', ability: 'unaware', moves: ['healingwish']},
+				{species: 'Latias', ability: 'blaze', moves: ['lunardance']},
+				{species: 'Charizard', ability: 'blaze', moves: ['scratch']},
+			]];
+
+			const BASE_TEAM_ORDER = [[1, 2, 3, 4], [1, 2, 3, 4]];
+			for (let i = 0; i < 10; i++) {
+				const teamOrder = BASE_TEAM_ORDER.map(Tools.shuffle);
+				battle = common.createBattle({preview: true}, TEAMS);
+				battle.p1.chooseTeam(teamOrder[0].join(''));
+				battle.p2.chooseTeam(teamOrder[1].join(''));
+				battle.p1.pokemon.forEach((pokemon, index) => assert.species(pokemon, TEAMS[0][teamOrder[0][index] - 1].species));
+				battle.p2.pokemon.forEach((pokemon, index) => assert.species(pokemon, TEAMS[1][teamOrder[1][index] - 1].species));
+
+				if (i < 9) battle.destroy();
+			}
+		});
+	});
+
 	describe('Logging', function () {
 		it('should privately log the ID of chosen moves', function () {
 			battle = common.createBattle([
@@ -392,6 +459,70 @@ describe('Decisions', function () {
 
 			const logText = battle.log.join('\n');
 			const logs = ['|choice||', '|choice|switch 2|', '|choice||switch 3', '|choice|switch 2|switch 3'];
+			const subString = '|split\n' + logs.join('\n');
+			assert(logText.includes(subString), `${logText} does not include ${subString}`);
+		});
+
+		it('should privately log the team order chosen', function () {
+			battle = common.createBattle({preview: true}, [[
+				{species: 'Bulbasaur', ability: 'overgrow', moves: ['tackle']},
+				{species: 'Clefable', ability: 'unaware', moves: ['healingwish']},
+				{species: 'Latias', ability: 'levitate', moves: ['lunardance']},
+				{species: 'Venusaur', ability: 'overgrow', moves: ['tackle']},
+			], [
+				{species: 'Charmander', ability: 'blaze', moves: ['scratch']},
+				{species: 'Clefable', ability: 'unaware', moves: ['healingwish']},
+				{species: 'Latias', ability: 'blaze', moves: ['lunardance']},
+				{species: 'Charizard', ability: 'blaze', moves: ['scratch']},
+			]]);
+
+			battle.p1.chooseTeam('1342');
+			battle.p2.chooseTeam('1234');
+
+			const logText = battle.log.join('\n');
+			const logs = ['|choice||', '|choice|team 1342|', '|choice||team 1234', '|choice|team 1342|team 1234'];
+			const subString = '|split\n' + logs.join('\n');
+			assert(logText.includes(subString), `${logText} does not include ${subString}`);
+		});
+
+		it('should privately log shifting decisions for the Pokémon on the left', function () {
+			battle = common.createBattle({gameType: 'triples'});
+			const p1 = battle.join('p1', 'Guest 1', 1, [
+				{species: "Pineco", ability: 'sturdy', moves: ['harden']},
+				{species: "Geodude", ability: 'sturdy', moves: ['defensecurl']},
+				{species: "Gastly", ability: 'levitate', moves: ['haze']},
+			]);
+			const p2 = battle.join('p2', 'Guest 2', 1, [
+				{species: "Skarmory", ability: 'sturdy', moves: ['roost']},
+				{species: "Aggron", ability: 'sturdy', moves: ['irondefense']},
+				{species: "Golem", ability: 'sturdy', moves: ['defensecurl']},
+			]);
+			p1.chooseShift(1).chooseMove(1).chooseMove(1);
+			p2.chooseMove(1).chooseMove(1).chooseMove(1);
+
+			const logText = battle.log.join('\n');
+			const logs = ['|choice||', '|choice|shift, move defensecurl, move haze|', '|choice||move roost, move irondefense, move defensecurl', '|choice|shift, move defensecurl, move haze|move roost, move irondefense, move defensecurl'];
+			const subString = '|split\n' + logs.join('\n');
+			assert(logText.includes(subString), `${logText} does not include ${subString}`);
+		});
+
+		it('should privately log shifting decisions for the Pokémon on the right', function () {
+			battle = common.createBattle({gameType: 'triples'});
+			const p1 = battle.join('p1', 'Guest 1', 1, [
+				{species: "Pineco", ability: 'sturdy', moves: ['harden']},
+				{species: "Geodude", ability: 'sturdy', moves: ['defensecurl']},
+				{species: "Gastly", ability: 'levitate', moves: ['haze']},
+			]);
+			const p2 = battle.join('p2', 'Guest 2', 1, [
+				{species: "Skarmory", ability: 'sturdy', moves: ['roost']},
+				{species: "Aggron", ability: 'sturdy', moves: ['irondefense']},
+				{species: "Golem", ability: 'sturdy', moves: ['defensecurl']},
+			]);
+			p1.chooseMove(1).chooseMove(1).chooseShift();
+			p2.chooseMove(1).chooseMove(1).chooseMove(1);
+
+			const logText = battle.log.join('\n');
+			const logs = ['|choice||', '|choice|move harden, move defensecurl, shift|', '|choice||move roost, move irondefense, move defensecurl', '|choice|move harden, move defensecurl, shift|move roost, move irondefense, move defensecurl'];
 			const subString = '|split\n' + logs.join('\n');
 			assert(logText.includes(subString), `${logText} does not include ${subString}`);
 		});
