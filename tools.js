@@ -1155,11 +1155,18 @@ module.exports = (() => {
 			if (format.tournamentShow === undefined) format.tournamentShow = true;
 			if (format.mod === undefined) format.mod = 'base';
 			if (!moddedTools[format.mod]) throw new Error("Format `" + format.name + "` requires nonexistent mod: `" + format.mod + "`");
-			this.data.Formats[id] = format;
+			this.installFormat(id, format);
 		}
 
 		this.formatsLoaded = true;
 		return this;
+	};
+
+	Tools.prototype.installFormat = function (id, format) {
+		this.data.Formats[id] = format;
+		if (!this.isBase) {
+			moddedTools.base.data.Formats[id] = format;
+		}
 	};
 
 	/**
