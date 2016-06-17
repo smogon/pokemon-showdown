@@ -1,6 +1,8 @@
 'use strict';
 
 const assert = require('./../../assert');
+const common = require('./../../common');
+
 let battle;
 
 describe('Unaware', function () {
@@ -9,7 +11,7 @@ describe('Unaware', function () {
 	});
 
 	it('should ignore attack stage changes when Pokemon with it are attacked', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Clefable', ability: 'unaware', moves: ['softboiled']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Hariyama', ability: 'thickfat', moves: ['vitalthrow', 'bellydrum']}]);
 		battle.commitDecisions();
@@ -23,7 +25,7 @@ describe('Unaware', function () {
 	});
 
 	it('should not ignore attack stage changes when Pokemon with it attack', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Clefable', ability: 'unaware', moves: ['moonblast', 'nastyplot']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Registeel', ability: 'prankster', moves: ['splash']}]);
 		battle.commitDecisions();
@@ -38,7 +40,7 @@ describe('Unaware', function () {
 	});
 
 	it('should ignore defense stage changes when Pokemon with it attack', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Clefable', ability: 'unaware', moves: ['moonblast']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Hariyama', ability: 'thickfat', item: 'laggingtail', moves: ['amnesia']}]);
 		battle.commitDecisions();
@@ -51,7 +53,7 @@ describe('Unaware', function () {
 	});
 
 	it('should not ignore defense stage changes when Pokemon with it are attacked', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Clefable', ability: 'unaware', moves: ['irondefense']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Registeel', ability: 'clearbody', moves: ['shadowsneak']}]);
 		battle.commitDecisions();
@@ -64,7 +66,7 @@ describe('Unaware', function () {
 	});
 
 	it('should be suppressed by Mold Breaker', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Clefable', ability: 'unaware', moves: ['splash']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Haxorus', ability: 'moldbreaker', moves: ['shadowsneak']}]);
 		battle.commitDecisions();

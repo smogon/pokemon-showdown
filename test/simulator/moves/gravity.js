@@ -1,6 +1,8 @@
 'use strict';
 
 const assert = require('./../../assert');
+const common = require('./../../common');
+
 let battle;
 
 describe('Gravity', function () {
@@ -9,7 +11,7 @@ describe('Gravity', function () {
 	});
 
 	it('should ground Flying-type Pokemon and remove their Ground immunity', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Aerodactyl', ability: 'pressure', moves: ['gravity']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Aron', ability: 'sturdy', moves: ['earthpower']}]);
 		battle.commitDecisions();
@@ -17,7 +19,7 @@ describe('Gravity', function () {
 	});
 
 	it('should ground Pokemon with Levitate and remove their Ground immunity', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Rotom', ability: 'levitate', moves: ['gravity']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Aron', ability: 'sturdy', moves: ['earthpower']}]);
 		battle.commitDecisions();
@@ -25,7 +27,7 @@ describe('Gravity', function () {
 	});
 
 	it('should interrupt and disable the use of airborne moves', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Spiritomb', ability: 'pressure', moves: ['gravity']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Aerodactyl', ability: 'pressure', moves: ['fly']}]);
 		battle.commitDecisions();

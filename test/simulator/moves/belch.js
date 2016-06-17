@@ -1,6 +1,8 @@
 'use strict';
 
 const assert = require('./../../assert');
+const common = require('./../../common');
+
 let battle;
 
 describe('Belch', function () {
@@ -9,7 +11,7 @@ describe('Belch', function () {
 	});
 
 	it('should be disabled if the user has not consumed a berry', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Swalot', ability: 'gluttony', item: 'lumberry', moves: ['belch', 'stockpile']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Registeel', ability: 'clearbody', item: 'laggingtail', moves: ['thunderwave']}]);
 		battle.commitDecisions();
@@ -19,7 +21,7 @@ describe('Belch', function () {
 	});
 
 	it('should count berries as consumed with Bug Bite or Pluck', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Swalot', ability: 'gluttony', item: 'salacberry', moves: ['belch', 'bugbite']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Swalot', ability: 'gluttony', item: 'salacberry', moves: ['belch', 'pluck']}]);
 		battle.commitDecisions();
@@ -29,7 +31,7 @@ describe('Belch', function () {
 	});
 
 	it('should count berries as consumed when they are Flung', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Swalot', ability: 'gluttony', moves: ['belch', 'stockpile']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Machamp', ability: 'noguard', item: 'salacberry', moves: ['fling']}]);
 		battle.commitDecisions();
@@ -38,7 +40,7 @@ describe('Belch', function () {
 	});
 
 	it('should still count berries as consumed after switch out', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [
 			{species: 'Swalot', ability: 'gluttony', item: 'lumberry', moves: ['belch', 'uturn']},
 			{species: 'Swalot', ability: 'gluttony', moves: ['toxic']},

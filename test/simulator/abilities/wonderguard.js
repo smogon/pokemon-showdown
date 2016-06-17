@@ -1,6 +1,8 @@
 'use strict';
 
 const assert = require('./../../assert');
+const common = require('./../../common');
+
 let battle;
 
 describe('Wonder Guard', function () {
@@ -9,7 +11,7 @@ describe('Wonder Guard', function () {
 	});
 
 	it('should make the user immune to damaging attacks that are not super effective', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Aerodactyl", ability: 'wonderguard', moves: ['sleeptalk']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Smeargle", ability: 'owntempo', moves: ['knockoff', 'flamethrower', 'thousandarrows', 'moonblast']}]);
 		for (let i = 1; i <= 4; i++) {
@@ -23,7 +25,7 @@ describe('Wonder Guard', function () {
 	});
 
 	it('should not make the user immune to status moves', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		const p1 = battle.join('p1', 'Guest 1', 1, [{species: "Abra", ability: 'wonderguard', moves: ['teleport']}]);
 		const p2 = battle.join('p2', 'Guest 2', 1, [{species: "Smeargle", ability: 'noguard', moves: ['poisongas', 'screech', 'healpulse', 'gastroacid']}]);
 		const target = p1.active[0];
@@ -39,7 +41,7 @@ describe('Wonder Guard', function () {
 	});
 
 	it('should be suppressed by Mold Breaker', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Zekrom", ability: 'wonderguard', moves: ['sleeptalk']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Reshiram", ability: 'turboblaze', moves: ['fusionflare']}]);
 		assert.hurts(battle.p1.active[0], () => battle.commitDecisions());

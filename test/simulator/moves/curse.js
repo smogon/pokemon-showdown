@@ -1,6 +1,8 @@
 'use strict';
 
 const assert = require('./../../assert');
+const common = require('./../../common');
+
 let battle;
 
 describe('Curse', function () {
@@ -9,14 +11,14 @@ describe('Curse', function () {
 	});
 
 	it('should request the Ghost target if the user is a known Ghost', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Gengar", ability: 'levitate', item: '', moves: ['curse']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Caterpie", ability: 'shedskin', item: '', moves: ['stringshot']}]);
 		assert.strictEqual(battle.p1.active[0].getRequestData().moves[0].target, 'normal');
 	});
 
 	it('should request the Ghost target after the user becomes Ghost', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Rapidash", ability: 'levitate', item: '', moves: ['curse']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Trevenant", ability: 'shedskin', item: 'laggingtail', moves: ['trickortreat']}]);
 
@@ -26,7 +28,7 @@ describe('Curse', function () {
 	});
 
 	it('should not request a target after the user stops being Ghost', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Gengar", ability: 'levitate', item: '', moves: ['curse']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Jellicent", ability: 'waterabsorb', item: '', moves: ['soak']}]);
 
@@ -36,14 +38,14 @@ describe('Curse', function () {
 	});
 
 	it('should not request a target if the user is a known non-Ghost', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Blastoise", ability: 'torrent', item: '', moves: ['curse']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Caterpie", ability: 'shedskin', item: '', moves: ['stringshot']}]);
 		assert.strictEqual(battle.p1.active[0].getRequestData().moves[0].target, 'self');
 	});
 
 	it('should not request a target if the user is an unknown non-Ghost', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Blastoise", ability: 'torrent', item: '', moves: ['curse', 'reflecttype']}]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: "Zoroark", ability: 'illusion', item: '', moves: ['nastyplot']},
@@ -57,7 +59,7 @@ describe('Curse', function () {
 	});
 
 	it('should curse a non-Ghost user with Protean', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Greninja", ability: 'protean', item: '', moves: ['curse', 'spite']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Caterpie", ability: 'shedskin', item: '', moves: ['stringshot']}]);
 
@@ -73,7 +75,7 @@ describe('Curse', function () {
 	});
 
 	it('should curse the target if a Ghost user has Protean', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Gengar", ability: 'protean', item: '', moves: ['curse', 'spite']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Caterpie", ability: 'shedskin', item: '', moves: ['stringshot']}]);
 
@@ -161,34 +163,25 @@ describe('XY/ORAS Curse targetting when becoming Ghost the same turn', function 
 	}
 
 	it('should target an opponent in Doubles if the user is on left side and becomes Ghost the same turn', function () {
-		battle = BattleEngine.Battle.construct('battle-cursetest-1', 'doublescustomgame');
-		battle.join('p1', 'Guest 1', 1, doublesTeams[0]);
-		battle.join('p2', 'Guest 2', 1, doublesTeams[1]);
-
-		battle.commitDecisions();
+		battle = common.createBattle({gameType: 'doubles'}, doublesTeams.slice());
 		runDoublesTest(battle, battle.p1.active[0]);
 	});
 
 	it.skip('should target the ally in Doubles if the user is on right side and becomes Ghost the same turn', function () {
-		battle = BattleEngine.Battle.construct('battle-cursetest-2', 'doublescustomgame');
-		battle.join('p1', 'Guest 1', 1, doublesTeams[0].reverse());
-		battle.join('p2', 'Guest 2', 1, doublesTeams[1]);
-
-		battle.commitDecisions();
+		battle = common.createBattle({gameType: 'doubles'}, [
+			[doublesTeams[0][1], doublesTeams[0][0]],
+			doublesTeams[1],
+		]);
 		runDoublesTest(battle, battle.p1.active[1]);
 	});
 
 	for (let cursePos of [0, 1, 2]) {
 		it('should target an opponent in Triples even if the user is on position ' + cursePos, function () {
-			battle = BattleEngine.Battle.construct('battle-cursetest-' + (3 + cursePos), 'triplescustomgame');
 			let p1team = triplesTeams[0].slice(1);
 			p1team.splice(cursePos, 0, triplesTeams[0][0]);
 			let p2team = triplesTeams[1].slice();
 
-			battle.join('p1', 'Guest 1', 1, p1team);
-			battle.join('p2', 'Guest 2', 1, p2team);
-
-			battle.commitDecisions();
+			battle = common.createBattle({gameType: 'triples'}, [p1team, p2team]);
 			runTriplesTest(battle, battle.p1.active[cursePos]);
 		});
 	}

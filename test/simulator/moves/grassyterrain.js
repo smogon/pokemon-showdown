@@ -1,6 +1,8 @@
 'use strict';
 
 const assert = require('./../../assert');
+const common = require('./../../common');
+
 let battle;
 
 describe('Grassy Terrain', function () {
@@ -9,7 +11,7 @@ describe('Grassy Terrain', function () {
 	});
 
 	it('should change the current terrain to Grassy Terrain for five turns', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Florges", ability: 'symbiosis', moves: ['mist', 'grassyterrain']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Florges", ability: 'symbiosis', moves: ['mist']}]);
 		battle.choose('p1', 'move 2');
@@ -26,7 +28,7 @@ describe('Grassy Terrain', function () {
 	});
 
 	it('should halve the base power of Earthquake, Bulldoze, Magnitude', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Shaymin", ability: 'naturalcure', moves: ['grassyterrain']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Shaymin-Sky", ability: 'serenegrace', moves: ['leechseed']}]);
 		battle.commitDecisions();
@@ -37,7 +39,7 @@ describe('Grassy Terrain', function () {
 	});
 
 	it('should increase the base power of Grass-type attacks used by grounded Pokemon', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Shaymin", ability: 'naturalcure', moves: ['grassyterrain']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Shaymin-Sky", ability: 'serenegrace', moves: ['leechseed']}]);
 		battle.commitDecisions();
@@ -50,7 +52,7 @@ describe('Grassy Terrain', function () {
 	});
 
 	it('should heal grounded Pokemon by 1/16 of their max HP', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Shaymin", ability: 'naturalcure', moves: ['grassyterrain', 'dragonrage']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Magneton", ability: 'magnetpull', moves: ['magnetrise', 'dragonrage']}]);
 		battle.commitDecisions();
@@ -61,7 +63,7 @@ describe('Grassy Terrain', function () {
 	});
 
 	it('should not affect Pokemon in a semi-invulnerable state', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Smeargle", ability: 'owntempo', moves: ['dragonrage', 'skydrop']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Sableye", ability: 'prankster', moves: ['dragonrage', 'grassyterrain']}]);
 		battle.commitDecisions();
@@ -72,7 +74,7 @@ describe('Grassy Terrain', function () {
 	});
 
 	it('should cause Nature Power to become Energy Ball', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Whimsicott", ability: 'prankster', moves: ['grassyterrain']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Shuckle", ability: 'sturdy', moves: ['naturepower']}]);
 		battle.commitDecisions();

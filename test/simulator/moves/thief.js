@@ -1,6 +1,8 @@
 'use strict';
 
 const assert = require('./../../assert');
+const common = require('./../../common');
+
 let battle;
 
 describe('Thief', function () {
@@ -9,7 +11,7 @@ describe('Thief', function () {
 	});
 
 	it('should steal most items', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Mew", ability: 'synchronize', moves: ['thief']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Blissey", ability: 'naturalcure', item: 'shedshell', moves: ['softboiled']}]);
 		battle.commitDecisions();
@@ -17,7 +19,7 @@ describe('Thief', function () {
 	});
 
 	it('should not steal items if it is holding an item', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Mew", ability: 'synchronize', item: 'focussash', moves: ['thief']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Blissey", ability: 'naturalcure', item: 'shedshell', moves: ['softboiled']}]);
 		battle.commitDecisions();
@@ -25,7 +27,7 @@ describe('Thief', function () {
 	});
 
 	it('should take Life Orb damage from a stolen Life Orb', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Mew", ability: 'synchronize', moves: ['thief']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Blissey", ability: 'naturalcure', item: 'lifeorb', moves: ['softboiled']}]);
 		battle.commitDecisions();

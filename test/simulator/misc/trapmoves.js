@@ -1,6 +1,8 @@
 'use strict';
 
 const assert = require('./../../assert');
+const common = require('./../../common');
+
 let battle;
 let trappers = ['Block', 'Mean Look', 'Spider Web', 'Thousand Waves'];
 let partialtrappers = ['Bind', 'Clamp', 'Fire Spin', 'Infestation', 'Magma Storm', 'Sand Tomb', 'Whirlpool', 'Wrap'];
@@ -12,7 +14,7 @@ describe('Trapping Moves', function () {
 
 	for (let i = 0; i < trappers.length; i++) {
 		it('should prevent Pokemon from switching out normally', function () {
-			battle = BattleEngine.Battle.construct();
+			battle = common.createBattle();
 			battle.join('p1', 'Guest 1', 1, [{species: "Smeargle", ability: 'prankster', moves: [toId(trappers[i])]}]);
 			battle.join('p2', 'Guest 2', 1, [
 				{species: "Tangrowth", ability: 'leafguard', moves: ['swordsdance']},
@@ -25,7 +27,7 @@ describe('Trapping Moves', function () {
 		});
 
 		it('should not prevent Pokemon from switching out using moves', function () {
-			battle = BattleEngine.Battle.construct();
+			battle = common.createBattle();
 			battle.join('p1', 'Guest 1', 1, [{species: "Smeargle", ability: 'prankster', moves: [toId(trappers[i])]}]);
 			battle.join('p2', 'Guest 2', 1, [
 				{species: "Tangrowth", ability: 'leafguard', moves: ['batonpass']},
@@ -37,7 +39,7 @@ describe('Trapping Moves', function () {
 		});
 
 		it('should not prevent Pokemon immune to trapping from switching out', function () {
-			battle = BattleEngine.Battle.construct();
+			battle = common.createBattle();
 			battle.join('p1', 'Guest 1', 1, [{species: "Smeargle", ability: 'prankster', moves: [toId(trappers[i])]}]);
 			battle.join('p2', 'Guest 2', 1, [
 				{species: "Gourgeist", ability: 'insomnia', moves: ['synthesis']},
@@ -50,7 +52,7 @@ describe('Trapping Moves', function () {
 		});
 
 		it('should stop trapping the Pokemon if the user is no longer active', function () {
-			battle = BattleEngine.Battle.construct();
+			battle = common.createBattle();
 			battle.join('p1', 'Guest 1', 1, [
 				{species: "Smeargle", ability: 'prankster', moves: [toId(trappers[i])]},
 				{species: "Kyurem", ability: 'pressure', moves: ['rest']},
@@ -74,7 +76,7 @@ describe('Partial Trapping Moves', function () {
 
 	for (let i = 0; i < partialtrappers.length; i++) {
 		it('should deal 1/8 HP per turn', function () {
-			battle = BattleEngine.Battle.construct();
+			battle = common.createBattle();
 			battle.join('p1', 'Guest 1', 1, [{species: "Smeargle", ability: 'noguard', moves: [toId(partialtrappers[i]), 'rest']}]);
 			battle.join('p2', 'Guest 2', 1, [{species: "Blissey", ability: 'naturalcure', moves: ['healbell']}]);
 			battle.commitDecisions();
@@ -86,7 +88,7 @@ describe('Partial Trapping Moves', function () {
 		});
 
 		it('should prevent Pokemon from switching out normally', function () {
-			battle = BattleEngine.Battle.construct();
+			battle = common.createBattle();
 			battle.join('p1', 'Guest 1', 1, [{species: "Smeargle", ability: 'noguard', moves: [toId(partialtrappers[i])]}]);
 			battle.join('p2', 'Guest 2', 1, [
 				{species: "Blissey", ability: 'naturalcure', moves: ['healbell']},
@@ -99,7 +101,7 @@ describe('Partial Trapping Moves', function () {
 		});
 
 		it('should not prevent Pokemon from switching out using moves', function () {
-			battle = BattleEngine.Battle.construct();
+			battle = common.createBattle();
 			battle.join('p1', 'Guest 1', 1, [{species: "Smeargle", ability: 'noguard', moves: [toId(partialtrappers[i])]}]);
 			battle.join('p2', 'Guest 2', 1, [
 				{species: "Blissey", ability: 'naturalcure', moves: ['batonpass']},
@@ -111,7 +113,7 @@ describe('Partial Trapping Moves', function () {
 		});
 
 		it('should not prevent Pokemon immune to trapping from switching out', function () {
-			battle = BattleEngine.Battle.construct();
+			battle = common.createBattle();
 			battle.join('p1', 'Guest 1', 1, [{species: "Smeargle", ability: 'noguard', moves: [toId(partialtrappers[i])]}]);
 			battle.join('p2', 'Guest 2', 1, [
 				{species: "Dusknoir", ability: 'frisk', moves: ['sleeptalk']},
@@ -124,7 +126,7 @@ describe('Partial Trapping Moves', function () {
 		});
 
 		it('should stop trapping the Pokemon if the user is no longer active', function () {
-			battle = BattleEngine.Battle.construct();
+			battle = common.createBattle();
 			battle.join('p1', 'Guest 1', 1, [
 				{species: "Smeargle", ability: 'noguard', moves: [toId(partialtrappers[i])]},
 				{species: "Kyurem", ability: 'pressure', moves: ['rest']},
@@ -140,7 +142,7 @@ describe('Partial Trapping Moves', function () {
 		});
 
 		it('should stop trapping the Pokemon if the target uses Rapid Spin', function () {
-			battle = BattleEngine.Battle.construct();
+			battle = common.createBattle();
 			battle.join('p1', 'Guest 1', 1, [
 				{species: "Smeargle", ability: 'noguard', moves: [toId(partialtrappers[i])]},
 				{species: "Kyurem", ability: 'pressure', moves: ['rest']},

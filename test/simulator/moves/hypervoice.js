@@ -1,6 +1,8 @@
 'use strict';
 
 const assert = require('./../../assert');
+const common = require('./../../common');
+
 let battle;
 
 describe('Hyper Voice', function () {
@@ -9,7 +11,7 @@ describe('Hyper Voice', function () {
 	});
 
 	it('should pierce through substitutes', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Deoxys-Attack", ability: 'victorystar', item: 'laggingtail', moves: ['splash', 'hypervoice']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Caterpie", level: 2, ability: 'naturalcure', item: 'focussash', moves: ['substitute', 'rest']}]);
 		battle.commitDecisions();
@@ -25,10 +27,10 @@ describe('Hyper Voice [Gen 5]', function () {
 	});
 
 	it('should not pierce through substitutes', function () {
-		battle = BattleEngine.Battle.construct('battle-hypervoice-bw', 'gen5customgame');
-		battle.join('p1', 'Guest 1', 1, [{species: "Deoxys-Attack", ability: 'victorystar', item: 'laggingtail', moves: ['splash', 'hypervoice']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Caterpie", level: 2, ability: 'naturalcure', item: 'focussash', moves: ['substitute', 'rest']}]);
-		battle.commitDecisions();
+		battle = common.gen(5).createBattle([
+			[{species: "Deoxys-Attack", ability: 'victorystar', item: 'laggingtail', moves: ['splash', 'hypervoice']}],
+			[{species: "Caterpie", level: 2, ability: 'naturalcure', item: 'focussash', moves: ['substitute', 'rest']}],
+		]);
 		battle.commitDecisions();
 		battle.choose('p1', 'move 2');
 		battle.choose('p2', 'move 2');

@@ -1,6 +1,8 @@
 'use strict';
 
 const assert = require('./../../assert');
+const common = require('./../../common');
+
 let battle;
 
 describe('Anger Point', function () {
@@ -9,7 +11,7 @@ describe('Anger Point', function () {
 	});
 
 	it('should maximize Attack when hit by a critical hit', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Cryogonal", ability: 'noguard', moves: ['frostbreath']}]);
 		const p2 = battle.join('p2', 'Guest 2', 1, [{species: "Primeape", ability: 'angerpoint', moves: ['endure']}]);
 
@@ -18,7 +20,7 @@ describe('Anger Point', function () {
 	});
 
 	it('should maximize Attack when hit by a critical hit even if the foe has Mold Breaker', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		const p1 = battle.join('p1', 'Guest 1', 1, [{species: "Haxorus", ability: 'moldbreaker', item: 'scopelens', moves: ['focusenergy', 'falseswipe']}]);
 		const p2 = battle.join('p2', 'Guest 2', 1, [{species: "Primeape", ability: 'angerpoint', moves: ['defensecurl']}]);
 
@@ -28,7 +30,7 @@ describe('Anger Point', function () {
 	});
 
 	it('should not maximize Attack when dealing a critical hit', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		const p1 = battle.join('p1', 'Guest 1', 1, [{species: "Cryogonal", ability: 'noguard', moves: ['endure']}]);
 		const p2 = battle.join('p2', 'Guest 2', 1, [{species: "Primeape", ability: 'angerpoint', moves: ['stormthrow']}]);
 
@@ -38,7 +40,7 @@ describe('Anger Point', function () {
 	});
 
 	it('should not maximize Attack when behind a substitute', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Cryogonal", ability: 'noguard', item: 'laggingtail', moves: ['frostbreath']}]);
 		const p2 = battle.join('p2', 'Guest 2', 1, [{species: "Primeape", ability: 'angerpoint', moves: ['substitute']}]);
 

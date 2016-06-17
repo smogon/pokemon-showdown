@@ -1,6 +1,8 @@
 'use strict';
 
 const assert = require('./../../assert');
+const common = require('./../../common');
+
 let battle;
 
 describe('Damp', function () {
@@ -9,7 +11,7 @@ describe('Damp', function () {
 	});
 
 	it('should prevent self-destruction moves from activating', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		const p1 = battle.join('p1', 'Guest 1', 1, [{species: 'Politoed', ability: 'damp', moves: ['calmmind']}]);
 		const p2 = battle.join('p2', 'Guest 2', 1, [{species: 'Electrode', ability: 'static', moves: ['explosion']}]);
 		battle.commitDecisions();
@@ -18,7 +20,7 @@ describe('Damp', function () {
 	});
 
 	it('should prevent Aftermath from activating', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		const p1 = battle.join('p1', 'Guest 1', 1, [{species: 'Poliwrath', ability: 'damp', moves: ['closecombat']}]);
 		const p2 = battle.join('p2', 'Guest 2', 1, [{species: 'Aron', ability: 'aftermath', moves: ['leer']}]);
 		battle.commitDecisions();
@@ -27,7 +29,7 @@ describe('Damp', function () {
 	});
 
 	it('should be suppressed by Mold Breaker', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		const p1 = battle.join('p1', 'Guest 1', 1, [{species: 'Politoed', ability: 'damp', moves: ['calmmind']}]);
 		const p2 = battle.join('p2', 'Guest 2', 1, [{species: 'Electrode', ability: 'moldbreaker', moves: ['explosion']}]);
 		assert.hurts(p1.active[0], () => battle.commitDecisions());

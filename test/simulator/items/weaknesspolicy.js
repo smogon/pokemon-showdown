@@ -1,6 +1,8 @@
 'use strict';
 
 const assert = require('./../../assert');
+const common = require('./../../common');
+
 let battle;
 
 describe('Weakness Policy', function () {
@@ -9,7 +11,7 @@ describe('Weakness Policy', function () {
 	});
 
 	it('should be triggered by super effective hits', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Lucario", ability: 'justified', moves: ['aurasphere']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Blissey", ability: 'naturalcure', item: 'weaknesspolicy', moves: ['softboiled']}]);
 		const holder = battle.p2.active[0];
@@ -20,7 +22,7 @@ describe('Weakness Policy', function () {
 	});
 
 	it('should not be triggered by fixed damage moves', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Lucario", ability: 'justified', moves: ['seismictoss']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Blissey", ability: 'naturalcure', item: 'weaknesspolicy', moves: ['softboiled']}]);
 		const holder = battle.p2.active[0];

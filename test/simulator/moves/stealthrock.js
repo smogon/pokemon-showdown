@@ -1,6 +1,8 @@
 'use strict';
 
 const assert = require('./../../assert');
+const common = require('./../../common');
+
 let battle;
 
 describe('Stealth Rock', function () {
@@ -9,7 +11,7 @@ describe('Stealth Rock', function () {
 	});
 
 	it('should succeed against Substitute', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Smeargle", moves: ['stealthrock']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Ninjask", moves: ['substitute']}]);
 		battle.commitDecisions();
@@ -17,7 +19,7 @@ describe('Stealth Rock', function () {
 	});
 
 	it('should deal damage to Pokemon switching in based on their type effectiveness against Rock-type', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Smeargle", moves: ['splash', 'stealthrock']}]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: "Ninjask", moves: ['protect']},

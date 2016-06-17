@@ -1,6 +1,8 @@
 'use strict';
 
 const assert = require('./../../assert');
+const common = require('./../../common');
+
 let battle;
 
 describe('Arena Trap', function () {
@@ -10,7 +12,7 @@ describe('Arena Trap', function () {
 
 	it('should prevent grounded Pokemon that are not immune to trapping from switching out normally', function () {
 		this.timeout(0);
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		const p1 = battle.join('p1', 'Guest 1', 1, [{species: "Dugtrio", ability: 'arenatrap', moves: ['snore', 'telekinesis', 'gravity']}]);
 		const p2 = battle.join('p2', 'Guest 2', 1, [
 			{species: "Tornadus", ability: 'defiant', moves: ['tailwind']},

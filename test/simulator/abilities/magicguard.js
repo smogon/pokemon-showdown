@@ -1,6 +1,8 @@
 'use strict';
 
 const assert = require('./../../assert');
+const common = require('./../../common');
+
 let battle;
 
 describe('Magic Guard', function () {
@@ -9,7 +11,7 @@ describe('Magic Guard', function () {
 	});
 
 	it('should prevent all non-attack damage', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [
 			{species: 'Magikarp', ability: 'swiftswim', moves: ['splash']},
 			{species: 'Clefable', ability: 'magicguard', item: 'lifeorb', moves: ['doubleedge']},
@@ -24,7 +26,7 @@ describe('Magic Guard', function () {
 	});
 
 	it('should not be suppressed by Mold Breaker', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [
 			{species: 'Magikarp', ability: 'swiftswim', moves: ['splash']},
 			{species: 'Clefable', ability: 'magicguard', moves: ['doubleedge']},

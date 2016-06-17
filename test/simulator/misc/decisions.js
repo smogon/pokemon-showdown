@@ -1,6 +1,8 @@
 'use strict';
 
 const assert = require('./../../assert');
+const common = require('./../../common');
+
 let battle;
 
 describe('Decisions', function () {
@@ -9,7 +11,7 @@ describe('Decisions', function () {
 	});
 
 	it('should wait for players to send their decisions and run them as soon as they are all received', function (done) {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Mew", ability: 'synchronize', moves: ['recover']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Rhydon", ability: 'prankster', moves: ['sketch']}]);
 
@@ -24,7 +26,7 @@ describe('Decisions', function () {
 	});
 
 	it('should force Struggle usage on move attempt for no valid moves', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Mew", ability: 'synchronize', moves: ['recover']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Rhydon", ability: 'prankster', moves: ['sketch']}]);
 
@@ -47,7 +49,7 @@ describe('Decisions', function () {
 	});
 
 	it('should not force Struggle usage on move attempt for valid moves', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Mew", ability: 'synchronize', moves: ['recover']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Rhydon", ability: 'prankster', moves: ['struggle', 'surf']}]);
 
@@ -60,7 +62,7 @@ describe('Decisions', function () {
 	});
 
 	it('should send meaningful feedback to players if they try to switch a trapped Pokémon out', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [
 			{species: "Scizor", ability: 'swarm', moves: ['bulletpunch']},
 			{species: "Azumarill", ability: 'sapsipper', moves: ['aquajet']},
@@ -79,7 +81,7 @@ describe('Decisions', function () {
 	});
 
 	it('should send meaningful feedback to players if they try to use a disabled move', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Skarmory", ability: 'sturdy', moves: ['spikes', 'roost']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Smeargle", ability: 'owntempo', moves: ['imprison', 'spikes']}]);
 
@@ -99,7 +101,7 @@ describe('Decisions', function () {
 
 describe('Decision extensions', function () {
 	it('should not allow revoking decisions after every player has sent an unrevoked decision', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Bulbasaur", ability: 'overgrow', moves: ['tackle', 'growl']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Charmander", ability: 'blaze', moves: ['tackle', 'growl']}]);
 
@@ -115,7 +117,7 @@ describe('Decision extensions', function () {
 	});
 
 	it('should not allow overriding decisions after every player has sent an unrevoked decision', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Bulbasaur", ability: 'overgrow', moves: ['tackle', 'growl']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Charmander", ability: 'blaze', moves: ['tackle', 'growl']}]);
 
@@ -130,7 +132,7 @@ describe('Decision extensions', function () {
 	});
 
 	it('should support revoking decisions', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.supportCancel = true;
 		battle.join('p1', 'Guest 1', 1, [{species: "Bulbasaur", ability: 'overgrow', moves: ['tackle', 'growl']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Charmander", ability: 'blaze', moves: ['tackle', 'growl']}]);
@@ -147,7 +149,7 @@ describe('Decision extensions', function () {
 	});
 
 	it('should support overriding decisions', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.supportCancel = true;
 		battle.join('p1', 'Guest 1', 1, [{species: "Bulbasaur", ability: 'overgrow', moves: ['tackle', 'growl']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Charmander", ability: 'blaze', moves: ['tackle', 'growl']}]);
@@ -163,7 +165,7 @@ describe('Decision extensions', function () {
 	});
 
 	it('should disallow revoking decisions by default', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Bulbasaur", ability: 'overgrow', moves: ['tackle', 'growl']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Charmander", ability: 'blaze', moves: ['tackle', 'growl']}]);
 
@@ -179,7 +181,7 @@ describe('Decision extensions', function () {
 	});
 
 	it('should support revoking decisions on double switches', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.supportCancel = true;
 		battle.join('p1', 'Guest 1', 1, [
 			{species: "Deoxys-Attack", ability: 'pressure', moves: ['explosion']},
@@ -205,7 +207,7 @@ describe('Decision extensions', function () {
 	});
 
 	it('should support overriding decisions on double switches', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.supportCancel = true;
 		battle.join('p1', 'Guest 1', 1, [
 			{species: "Deoxys-Attack", ability: 'pressure', moves: ['explosion']},
@@ -229,7 +231,7 @@ describe('Decision extensions', function () {
 	});
 
 	it('should disallow overriding decisions by default', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Bulbasaur", ability: 'overgrow', moves: ['tackle', 'growl']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Charmander", ability: 'blaze', moves: ['tackle', 'growl']}]);
 
@@ -249,7 +251,7 @@ describe('Decision internals', function () {
 	});
 
 	it('should allow input of move commands in a per Pokémon basis', function () {
-		battle = BattleEngine.Battle.construct('battle-choose-move', 'doublescustomgame');
+		battle = common.createBattle({gameType: 'doubles'});
 		const p1 = battle.join('p1', 'Guest 1', 1, [
 			{species: "Mew", ability: 'synchronize', moves: ['recover']},
 			{species: "Bulbasaur", ability: 'overgrow', moves: ['growl', 'synthesis']},
@@ -258,8 +260,6 @@ describe('Decision internals', function () {
 			{species: "Pupitar", ability: 'shedskin', moves: ['surf']}, // faster than Bulbasaur
 			{species: "Arceus", ability: 'multitype', moves: ['calmmind']},
 		]);
-
-		battle.commitDecisions(); // Team Preview
 
 		assert.strictEqual(battle.turn, 1);
 		p1.chooseMove(1).chooseMove(1, 1);
@@ -281,7 +281,7 @@ describe('Decision internals', function () {
 	});
 
 	it('should allow input of switch commands in a per Pokémon basis', function () {
-		battle = BattleEngine.Battle.construct('battle-choose-move', 'doublescustomgame');
+		battle = common.createBattle({gameType: 'doubles'});
 		const p1 = battle.join('p1', 'Guest 1', 1, [
 			{species: "Mew", ability: 'synchronize', moves: ['selfdestruct']},
 			{species: "Bulbasaur", ability: 'overgrow', moves: ['selfdestruct']},
@@ -292,8 +292,6 @@ describe('Decision internals', function () {
 			{species: "Deoxys-Defense", ability: 'pressure', moves: ['recover']},
 			{species: "Arceus", ability: 'multitype', moves: ['recover']},
 		]);
-
-		battle.commitDecisions(); // Team Preview
 
 		assert.strictEqual(battle.turn, 1);
 		p1.chooseMove('selfdestruct').chooseMove('selfdestruct');
@@ -308,7 +306,7 @@ describe('Decision internals', function () {
 	});
 
 	it('should allow input of move and switch commands in a per Pokémon basis', function () {
-		battle = BattleEngine.Battle.construct('battle-choose-move', 'doublescustomgame');
+		battle = common.createBattle({gameType: 'doubles'});
 		const p1 = battle.join('p1', 'Guest 1', 1, [
 			{species: "Mew", ability: 'synchronize', moves: ['recover']},
 			{species: "Bulbasaur", ability: 'overgrow', moves: ['growl', 'synthesis']},
@@ -319,8 +317,6 @@ describe('Decision internals', function () {
 			{species: "Deoxys-Defense", ability: 'pressure', moves: ['recover']},
 			{species: "Arceus", ability: 'multitype', moves: ['recover']},
 		]);
-
-		battle.commitDecisions(); // Team Preview
 
 		assert.strictEqual(battle.turn, 1);
 		p1.chooseMove(1).chooseSwitch(4);
@@ -341,8 +337,7 @@ describe('Decision internals', function () {
 	});
 
 	it('should empty the decisions list when undoing a move', function () {
-		battle = BattleEngine.Battle.construct('battle-choose-move', 'doublescustomgame');
-		battle.supportCancel = true;
+		battle = common.createBattle({gameType: 'doubles', cancel: true});
 		const p1 = battle.join('p1', 'Guest 1', 1, [
 			{species: "Pineco", ability: 'sturdy', moves: ['selfdestruct']},
 			{species: "Geodude", ability: 'sturdy', moves: ['selfdestruct']},
@@ -352,8 +347,6 @@ describe('Decision internals', function () {
 			{species: "Skarmory", ability: 'sturdy', moves: ['roost']},
 			{species: "Aggron", ability: 'sturdy', moves: ['irondefense']},
 		]);
-
-		battle.commitDecisions(); // Team Preview
 
 		p1.chooseMove(1);
 		assert(p1.choiceData.decisions.length > 0);
@@ -367,8 +360,7 @@ describe('Decision internals', function () {
 	});
 
 	it('should empty the decisions list when undoing a switch', function () {
-		battle = BattleEngine.Battle.construct('battle-choose-move', 'doublescustomgame');
-		battle.supportCancel = true;
+		battle = common.createBattle({gameType: 'doubles', cancel: true});
 		const p1 = battle.join('p1', 'Guest 1', 1, [
 			{species: "Pineco", ability: 'sturdy', moves: ['selfdestruct']},
 			{species: "Geodude", ability: 'sturdy', moves: ['selfdestruct']},
@@ -378,8 +370,6 @@ describe('Decision internals', function () {
 			{species: "Skarmory", ability: 'sturdy', moves: ['roost']},
 			{species: "Aggron", ability: 'sturdy', moves: ['irondefense']},
 		]);
-
-		battle.commitDecisions(); // Team Preview
 
 		battle.commitDecisions();
 
@@ -394,8 +384,7 @@ describe('Decision internals', function () {
 	});
 
 	it('should empty the decisions list when undoing a pass', function () {
-		battle = BattleEngine.Battle.construct('battle-choose-move', 'doublescustomgame');
-		battle.supportCancel = true;
+		battle = common.createBattle({gameType: 'doubles', cancel: true});
 		const p1 = battle.join('p1', 'Guest 1', 1, [
 			{species: "Pineco", ability: 'sturdy', moves: ['selfdestruct']},
 			{species: "Geodude", ability: 'sturdy', moves: ['selfdestruct']},
@@ -405,8 +394,6 @@ describe('Decision internals', function () {
 			{species: "Skarmory", ability: 'sturdy', moves: ['roost']},
 			{species: "Aggron", ability: 'sturdy', moves: ['irondefense']},
 		]);
-
-		battle.commitDecisions(); // Team Preview
 
 		battle.commitDecisions();
 
@@ -421,7 +408,7 @@ describe('Decision internals', function () {
 	});
 
 	it('should empty the decisions list when undoing a shift', function () {
-		battle = BattleEngine.Battle.construct('battle-choose-move', 'triplescustomgame');
+		battle = common.createBattle({gameType: 'triples', cancel: true});
 		battle.supportCancel = true;
 		const p1 = battle.join('p1', 'Guest 1', 1, [
 			{species: "Pineco", ability: 'sturdy', moves: ['selfdestruct']},
@@ -433,8 +420,6 @@ describe('Decision internals', function () {
 			{species: "Aggron", ability: 'sturdy', moves: ['irondefense']},
 			{species: "Golem", ability: 'sturdy', moves: ['defensecurl']},
 		]);
-
-		battle.commitDecisions(); // Team Preview
 
 		p1.chooseShift();
 		assert(p1.choiceData.decisions.length > 0);

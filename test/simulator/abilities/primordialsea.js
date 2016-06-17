@@ -1,6 +1,8 @@
 'use strict';
 
 const assert = require('./../../assert');
+const common = require('./../../common');
+
 let battle;
 
 describe('Primordial Sea', function () {
@@ -9,14 +11,14 @@ describe('Primordial Sea', function () {
 	});
 
 	it('should activate the Primordial Sea weather upon switch-in', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Kyogre", ability: 'primordialsea', moves: ['helpinghand']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Abra", ability: 'magicguard', moves: ['teleport']}]);
 		assert.ok(battle.isWeather('primordialsea'));
 	});
 
 	it('should not increase the power of Water-type attacks', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Kyogre", ability: 'primordialsea', moves: ['helpinghand']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Blastoise", ability: 'torrent', moves: ['waterpledge']}]);
 		battle.commitDecisions();
@@ -26,7 +28,7 @@ describe('Primordial Sea', function () {
 	});
 
 	it('should cause Fire-type attacks to fail', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Kyogre", ability: 'primordialsea', moves: ['helpinghand']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Charizard", ability: 'blaze', moves: ['flamethrower']}]);
 		battle.commitDecisions();
@@ -34,7 +36,7 @@ describe('Primordial Sea', function () {
 	});
 
 	it('should not cause Fire-type Status moves to fail', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Kyogre", ability: 'primordialsea', moves: ['helpinghand']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Charizard", ability: 'noguard', moves: ['willowisp']}]);
 		battle.commitDecisions();
@@ -42,7 +44,7 @@ describe('Primordial Sea', function () {
 	});
 
 	it('should prevent moves and abilities from setting the weather to Sunny Day, Rain Dance, Sandstorm, or Hail', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Kyogre", ability: 'primordialsea', moves: ['helpinghand']}]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: "Abra", ability: 'magicguard', moves: ['teleport']},
@@ -61,7 +63,7 @@ describe('Primordial Sea', function () {
 	});
 
 	it('should be treated as Rain Dance for any forme, move or ability that requires it', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Kyogre", ability: 'primordialsea', moves: ['sonicboom']}]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: "Castform", ability: 'forecast', moves: ['weatherball']},
@@ -94,7 +96,7 @@ describe('Primordial Sea', function () {
 	});
 
 	it('should cause the Primordial Sea weather to fade if it switches out and no other Primordial Sea Pokemon are active', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [
 			{species: "Kyogre", ability: 'primordialsea', moves: ['helpinghand']},
 			{species: "Ho-Oh", ability: 'pressure', moves: ['roost']},
@@ -105,7 +107,7 @@ describe('Primordial Sea', function () {
 	});
 
 	it('should not cause the Primordial Sea weather to fade if it switches out and another Primordial Sea Pokemon is active', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [
 			{species: "Kyogre", ability: 'primordialsea', moves: ['helpinghand']},
 			{species: "Ho-Oh", ability: 'pressure', moves: ['roost']},
@@ -116,21 +118,21 @@ describe('Primordial Sea', function () {
 	});
 
 	it('should cause the Primordial Sea weather to fade if its ability is suppressed and no other Primordial Sea Pokemon are active', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Kyogre", ability: 'primordialsea', moves: ['helpinghand']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Lugia", ability: 'pressure', moves: ['gastroacid']}]);
 		assert.sets(() => battle.isWeather('primordialsea'), false, () => battle.commitDecisions());
 	});
 
 	it('should not cause the Primordial Sea weather to fade if its ability is suppressed and another Primordial Sea Pokemon is active', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Kyogre", ability: 'primordialsea', moves: ['helpinghand']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Kyogre", ability: 'primordialsea', moves: ['gastroacid']}]);
 		assert.constant(() => battle.isWeather('primordialsea'), () => battle.commitDecisions());
 	});
 
 	it('should cause the Primordial Sea weather to fade if its ability is changed and no other Primordial Sea Pokemon are active', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Kyogre", ability: 'primordialsea', moves: ['helpinghand']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Lugia", ability: 'pressure', moves: ['entrainment']}]);
 		assert.sets(() => battle.isWeather('primordialsea'), false, () => battle.commitDecisions());

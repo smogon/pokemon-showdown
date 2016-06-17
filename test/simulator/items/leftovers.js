@@ -1,6 +1,8 @@
 'use strict';
 
 const assert = require('./../../assert');
+const common = require('./../../common');
+
 let battle;
 
 describe('Leftovers [Gen 2]', function () {
@@ -9,7 +11,7 @@ describe('Leftovers [Gen 2]', function () {
 	});
 
 	it('should heal after switch', function () {
-		battle = BattleEngine.Battle.construct('battle-leftovers-gsc', 'gen2customgame');
+		battle = common.gen(2).createBattle();
 		const p1 = battle.join('p1', 'Guest 1', 1, [
 			{species: 'Blissey', item: 'leftovers', moves: ['healbell']},
 			{species: 'Magikarp', level: 1, moves: ['splash']},

@@ -1,6 +1,8 @@
 'use strict';
 
 const assert = require('./../../assert');
+const common = require('./../../common');
+
 let battle;
 
 describe('Magic Bounce', function () {
@@ -11,7 +13,7 @@ describe('Magic Bounce', function () {
 	it('should bounce Growl', function () {
 		// Sanity check: if this test fails, the remaining tests for Magic Bounce may not make sense.
 		// Tests for specific moves belong to the respective moves' test suites.
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Bulbasaur", ability: 'overgrow', moves: ['growl']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Espeon", ability: 'magicbounce', moves: ['futuresight']}]);
 		battle.commitDecisions();
@@ -20,7 +22,7 @@ describe('Magic Bounce', function () {
 	});
 
 	it('should bounce once when target and source share the ability', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Xatu", ability: 'magicbounce', moves: ['roost']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Espeon", ability: 'magicbounce', moves: ['growl']}]);
 		assert.doesNotThrow(() => battle.commitDecisions());
@@ -29,7 +31,7 @@ describe('Magic Bounce', function () {
 	});
 
 	it('should not cause a choice-lock', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [
 			{species: "Spoink", ability: 'thickfat', moves: ['bounce']},
 			{species: "Xatu", item: 'choicescarf', ability: 'magicbounce', moves: ['roost', 'growl']},
@@ -41,7 +43,7 @@ describe('Magic Bounce', function () {
 	});
 
 	it('should be suppressed by Mold Breaker', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Bulbasaur", ability: 'moldbreaker', moves: ['growl']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Espeon", ability: 'magicbounce', moves: ['futuresight']}]);
 		battle.commitDecisions();
