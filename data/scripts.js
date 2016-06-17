@@ -701,12 +701,12 @@ exports.BattleScripts = {
 		return !!firstForme.isMega;
 	},
 	getTeam: function (side, team) {
-		const format = side.battle.getFormat();
+		const format = this.getFormat();
 		const teamGenerator = typeof format.team === 'string' && format.team.startsWith('random') ? format.team + 'Team' : '';
 		if (!teamGenerator && team) return team;
 		// Reinitialize the RNG seed to create random teams.
 		this.startingSeed = this.startingSeed.concat(this.generateSeed());
-		team = this[teamGenerator || 'randomTeam'](side, format.id);
+		team = this[teamGenerator || 'randomTeam'](side);
 		// Restore the default seed
 		this.seed = this.startingSeed.slice(0, 4);
 		return team;
@@ -2070,7 +2070,7 @@ exports.BattleScripts = {
 			shiny: !this.random(1024),
 		};
 	},
-	randomTeam: function (side, format) {
+	randomTeam: function (side) {
 		let pokemonLeft = 0;
 		let pokemon = [];
 
@@ -2084,7 +2084,7 @@ exports.BattleScripts = {
 		let pokemonPool = [];
 		for (let id in this.data.FormatsData) {
 			let template = this.getTemplate(id);
-			if (format === 'monotyperandombattle') {
+			if (this.format === 'monotyperandombattle') {
 				let types = template.types;
 				if (template.battleOnly) types = this.getTemplate(template.baseSpecies).types;
 				if (types.indexOf(type) < 0) continue;
@@ -2189,7 +2189,7 @@ exports.BattleScripts = {
 
 			let types = template.types;
 
-			if (format !== 'monotyperandombattle') {
+			if (this.format !== 'monotyperandombattle') {
 				// Limit 2 of any type
 				let skip = false;
 				for (let t = 0; t < types.length; t++) {
@@ -3335,7 +3335,7 @@ exports.BattleScripts = {
 			moves: moves,
 		};
 	},
-	randomFactoryTeam: function (side, format, depth) {
+	randomFactoryTeam: function (side, depth) {
 		if (!depth) depth = 0;
 		let forceResult = (depth >= 4);
 
@@ -3456,15 +3456,15 @@ exports.BattleScripts = {
 				}
 			}
 		}
-		if (pokemon.length < 6) return this.randomFactoryTeam(side, format, ++depth);
+		if (pokemon.length < 6) return this.randomFactoryTeam(side, ++depth);
 
 		// Quality control
 		if (!teamData.forceResult) {
 			for (let requiredFamily in requiredMoveFamilies) {
-				if (!teamData.has[requiredFamily]) return this.randomFactoryTeam(side, format, ++depth);
+				if (!teamData.has[requiredFamily]) return this.randomFactoryTeam(side, ++depth);
 			}
 			for (let type in teamData.weaknesses) {
-				if (teamData.weaknesses[type] >= 3) return this.randomFactoryTeam(side, format, ++depth);
+				if (teamData.weaknesses[type] >= 3) return this.randomFactoryTeam(side, ++depth);
 			}
 		}
 
