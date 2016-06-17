@@ -1,6 +1,8 @@
 'use strict';
 
 const assert = require('./../../assert');
+const common = require('./../../common');
+
 let battle;
 
 describe('Haze - RBY', function () {
@@ -9,9 +11,10 @@ describe('Haze - RBY', function () {
 	});
 
 	it('should remove stat changes', function () {
-		battle = BattleEngine.Battle.construct('battle-haze-rby', 'gen1customgame');
-		battle.join('p1', 'Guest 1', 1, [{species: "Mew", moves: ['agility', 'haze']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Mewtwo", moves: ['swordsdance', 'splash']}]);
+		battle = common.gen(1).createBattle([
+			[{species: "Mew", moves: ['agility', 'haze']}],
+			[{species: "Mewtwo", moves: ['swordsdance', 'splash']}],
+		]);
 
 		battle.commitDecisions();
 		assert.strictEqual(battle.p1.active[0].boosts.spe, 2);
@@ -24,9 +27,10 @@ describe('Haze - RBY', function () {
 	});
 
 	it('should remove opponent\'s status', function () {
-		battle = BattleEngine.Battle.construct('battle-haze-rby', 'gen1customgame');
-		battle.join('p1', 'Guest 1', 1, [{species: "Mew", moves: ['thunderwave', 'haze']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Mewtwo", moves: ['splash']}]);
+		battle = common.gen(1).createBattle([
+			[{species: "Mew", moves: ['thunderwave', 'haze']}],
+			[{species: "Mewtwo", moves: ['splash']}],
+		]);
 
 		battle.commitDecisions();
 		assert.strictEqual(battle.p2.active[0].status, 'par');
@@ -37,9 +41,10 @@ describe('Haze - RBY', function () {
 	});
 
 	it('should not remove user\'s status', function () {
-		battle = BattleEngine.Battle.construct('battle-haze-rby', 'gen1customgame');
-		battle.join('p1', 'Guest 1', 1, [{species: "Mew", moves: ['thunderwave']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Mewtwo", moves: ['haze']}]);
+		battle = common.gen(1).createBattle([
+			[{species: "Mew", moves: ['thunderwave']}],
+			[{species: "Mewtwo", moves: ['haze']}],
+		]);
 
 		battle.commitDecisions();
 		assert.strictEqual(battle.p2.active[0].status, 'par');
@@ -49,9 +54,10 @@ describe('Haze - RBY', function () {
 	});
 
 	it('should remove focus energy', function () {
-		battle = BattleEngine.Battle.construct('battle-haze-rby', 'gen1customgame');
-		battle.join('p1', 'Guest 1', 1, [{species: "Mew", moves: ['splash']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Mewtwo", moves: ['focusenergy', 'haze']}]);
+		battle = common.gen(1).createBattle([
+			[{species: "Mew", moves: ['splash']}],
+			[{species: "Mewtwo", moves: ['focusenergy', 'haze']}],
+		]);
 
 		battle.commitDecisions();
 		assert.ok(battle.p2.active[0].volatiles['focusenergy']);
@@ -62,9 +68,10 @@ describe('Haze - RBY', function () {
 	});
 
 	it('should remove reflect and light screen', function () {
-		battle = BattleEngine.Battle.construct('battle-haze-rby', 'gen1customgame');
-		battle.join('p1', 'Guest 1', 1, [{species: "Mew", moves: ['reflect', 'lightscreen', 'haze']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Mewtwo", moves: ['splash']}]);
+		battle = common.gen(1).createBattle([
+			[{species: "Mew", moves: ['reflect', 'lightscreen', 'haze']}],
+			[{species: "Mewtwo", moves: ['splash']}],
+		]);
 
 		battle.commitDecisions();
 		assert.ok(battle.p1.active[0].volatiles['reflect']);

@@ -1,6 +1,8 @@
 'use strict';
 
 const assert = require('./../../assert');
+const common = require('./../../common');
+
 let battle;
 
 describe('Magnet Pull', function () {
@@ -9,7 +11,7 @@ describe('Magnet Pull', function () {
 	});
 
 	it('should prevent Steel-type Pokemon from switching out normally', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		const p1 = battle.join('p1', 'Guest 1', 1, [{species: "Magnezone", ability: 'magnetpull', moves: ['soak', 'charge']}]);
 		const p2 = battle.join('p2', 'Guest 2', 1, [
 			{species: "Heatran", ability: 'flashfire', moves: ['curse']},
@@ -27,7 +29,7 @@ describe('Magnet Pull', function () {
 	});
 
 	it('should not prevent Steel-type Pokemon from switching out using moves', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Magnezone", ability: 'magnetpull', moves: ['toxic']}]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: "Heatran", ability: 'flashfire', moves: ['batonpass']},
@@ -39,7 +41,7 @@ describe('Magnet Pull', function () {
 	});
 
 	it('should not prevent Pokemon immune to trapping from switching out', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Magnezone", ability: 'magnetpull', moves: ['substitute']}]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: "Aegislash", ability: 'stancechange', moves: ['swordsdance']},

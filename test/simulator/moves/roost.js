@@ -1,6 +1,8 @@
 'use strict';
 
 const assert = require('./../../assert');
+const common = require('./../../common');
+
 let battle;
 
 describe('Roost', function () {
@@ -9,7 +11,7 @@ describe('Roost', function () {
 	});
 
 	it('should fail if the user is at max HP', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Clefable", item: 'leftovers', ability: 'unaware', moves: ['calmmind']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Dragonite", item: 'laggingtail', ability: 'multiscale', moves: ['roost']}]);
 		battle.commitDecisions();
@@ -17,7 +19,7 @@ describe('Roost', function () {
 	});
 
 	it('should heal the user', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Clefable", ability: 'unaware', moves: ['calmmind', 'hiddenpowergrass']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Dragonite", ability: 'multiscale', moves: ['roost', 'dragondance']}]);
 		battle.choose('p1', 'move 2');
@@ -27,7 +29,7 @@ describe('Roost', function () {
 	});
 
 	it('should suppress user\'s current Flying type if succesful', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Aggron", item: 'leftovers', ability: 'sturdy', moves: ['mudslap', 'hiddenpowergrass']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Aerodactyl", item: 'focussash', ability: 'wonderguard', moves: ['roost', 'doubleedge']}]);
 
@@ -51,7 +53,7 @@ describe('Roost', function () {
 	});
 
 	it('should suppress Flying type yet to be acquired this turn', function () {
-		battle = BattleEngine.Battle.construct('battle-roost-latency', 'doublescustomgame');
+		battle = common.createBattle({gameType: 'doubles'});
 		battle.join('p1', 'Guest 1', 1, [
 			{species: "Pidgeot", item: 'laggingtail', ability: 'victorystar', moves: ['aircutter']},
 			{species: "Gligar", item: 'laggingtail', ability: 'immunity', moves: ['earthquake']},
@@ -60,7 +62,6 @@ describe('Roost', function () {
 			{species: "Kecleon", ability: 'colorchange', moves: ['roost']},
 			{species: "Venusaur", ability: 'chlorophyll', moves: ['earthquake']},
 		]);
-		battle.commitDecisions();
 
 		let hitCount = 0;
 		battle.p2.active[0].damage = function () {
@@ -73,7 +74,7 @@ describe('Roost', function () {
 	});
 
 	it('should treat a pure Flying pokémon as Normal type', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Tornadus", item: 'focussash', ability: 'prankster', moves: ['roost']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Gastly", item: 'laggingtail', ability: 'levitate', moves: ['astonish']}]);
 		battle.commitDecisions();
@@ -88,9 +89,10 @@ describe('Roost - DPP', function () {
 	});
 
 	it('should treat a pure Flying pokémon as `???` type', function () {
-		battle = BattleEngine.Battle.construct('battle-roost-dpp', 'gen4customgame');
-		battle.join('p1', 'Guest 1', 1, [{species: "Arceus-Flying", item: 'skyplate', ability: 'multitype', moves: ['roost']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Gastly", item: 'laggingtail', ability: 'levitate', moves: ['astonish', 'earthpower']}]);
+		battle = common.gen(4).createBattle([
+			[{species: "Arceus-Flying", item: 'skyplate', ability: 'multitype', moves: ['roost']}],
+			[{species: "Gastly", item: 'laggingtail', ability: 'levitate', moves: ['astonish', 'earthpower']}],
+		]);
 
 		battle.commitDecisions();
 		battle.commitDecisions();

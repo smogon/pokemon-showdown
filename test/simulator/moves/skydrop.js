@@ -1,6 +1,8 @@
 'use strict';
 
 const assert = require('./../../assert');
+const common = require('./../../common');
+
 let battle;
 
 describe('Sky Drop', function () {
@@ -9,7 +11,7 @@ describe('Sky Drop', function () {
 	});
 
 	it('should prevent its target from moving when it is caught by the effect', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Aerodactyl", ability: 'unnerve', moves: ['skydrop']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Lairon", ability: 'sturdy', moves: ['tackle']}]);
 		battle.commitDecisions();
@@ -19,7 +21,7 @@ describe('Sky Drop', function () {
 	});
 
 	it('should prevent its target from switching out when it is caught by the effect', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Aerodactyl", ability: 'unnerve', moves: ['skydrop']}]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: "Lairon", ability: 'sturdy', moves: ['bulkup']},
@@ -32,7 +34,7 @@ describe('Sky Drop', function () {
 	});
 
 	it('should prevent both the user and the target from being forced out when caught by the effect', function () {
-		battle = BattleEngine.Battle.construct('battle-skydrop-forceswitch', 'doublescustomgame');
+		battle = common.createBattle({gameType: 'doubles'});
 		battle.join('p1', 'Guest 1', 1, [
 			{species: "Aerodactyl", ability: 'unnerve', moves: ['skydrop']},
 			{species: "Machamp", ability: 'noguard', moves: ['circlethrow']},
@@ -43,7 +45,6 @@ describe('Sky Drop', function () {
 			{species: "Aggron", ability: 'noguard', moves: ['dragontail']},
 			{species: "Omastar", ability: 'swiftswim', moves: ['shellsmash']},
 		]);
-		battle.commitDecisions(); // Team Preview
 		battle.choose('p1', 'move 1 1, move 1 1');
 		battle.choose('p2', 'move 1 1, move 1 1');
 		assert.strictEqual(battle.p1.active[0].template.speciesid, 'aerodactyl');
@@ -51,9 +52,10 @@ describe('Sky Drop', function () {
 	});
 
 	it('should prevent its target from using Mega Evolution when it is caught by the effect', function () {
-		battle = BattleEngine.Battle.construct();
-		battle.join('p1', 'Guest 1', 1, [{species: "Aerodactyl", ability: 'unnerve', moves: ['skydrop']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Manectric", ability: 'intimidate', item: 'manectite', moves: ['charge']}]);
+		battle = common.createBattle([
+			[{species: "Aerodactyl", ability: 'unnerve', moves: ['skydrop']}],
+			[{species: "Manectric", ability: 'intimidate', item: 'manectite', moves: ['charge']}],
+		]);
 		battle.commitDecisions();
 		battle.choose('p2', 'move 1 mega');
 		battle.commitDecisions();
@@ -61,7 +63,7 @@ describe('Sky Drop', function () {
 	});
 
 	it('should prevent its target from activating Stance Change when it is caught by the effect', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Aerodactyl", ability: 'unnerve', moves: ['skydrop']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Aegislash", ability: 'stancechange', moves: ['tackle', 'kingsshield']}]);
 		battle.commitDecisions();
@@ -75,16 +77,10 @@ describe('Sky Drop', function () {
 	});
 
 	it('should free its target and allow it to move if the user faints', function () {
-		battle = BattleEngine.Battle.construct('battle-skydrop-faint', 'doublescustomgame');
-		battle.join('p1', 'Guest 1', 1, [
-			{species: "Aerodactyl", ability: 'unnerve', moves: ['skydrop']},
-			{species: "Kyogre", ability: 'noguard', moves: ['scald']},
+		battle = common.createBattle({gameType: 'doubles'}, [
+			[{species: "Aerodactyl", ability: 'unnerve', moves: ['skydrop']}, {species: "Kyogre", ability: 'noguard', moves: ['scald']}],
+			[{species: "Lairon", ability: 'sturdy', moves: ['bulkup']}, {species: "Aggron", ability: 'sturdy', moves: ['bulkup']}],
 		]);
-		battle.join('p2', 'Guest 2', 1, [
-			{species: "Lairon", ability: 'sturdy', moves: ['bulkup']},
-			{species: "Aggron", ability: 'sturdy', moves: ['bulkup']},
-		]);
-		battle.commitDecisions(); // Team Preview
 		battle.choose('p1', 'move 1 1, move 1 -1');
 		battle.commitDecisions();
 		assert.strictEqual(battle.p1.active[0].lastMove, 'skydrop');
@@ -93,9 +89,10 @@ describe('Sky Drop', function () {
 	});
 
 	it('should pick up Flying-type Pokemon but do no damage', function () {
-		battle = BattleEngine.Battle.construct();
-		battle.join('p1', 'Guest 1', 1, [{species: "Aerodactyl", ability: 'unnerve', moves: ['skydrop']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Salamence", ability: 'intimidate', moves: ['tackle']}]);
+		battle = common.createBattle([
+			[{species: "Aerodactyl", ability: 'unnerve', moves: ['skydrop']}],
+			[{species: "Salamence", ability: 'intimidate', moves: ['tackle']}],
+		]);
 		battle.commitDecisions();
 		assert.strictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 		battle.commitDecisions();
@@ -103,7 +100,7 @@ describe('Sky Drop', function () {
 	});
 
 	it('should fail if the target has a Substitute', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Aerodactyl", ability: 'unnerve', moves: ['honeclaws', 'skydrop']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Lairon", ability: 'sturdy', moves: ['substitute', 'tackle']}]);
 		battle.commitDecisions();
@@ -114,7 +111,7 @@ describe('Sky Drop', function () {
 	});
 
 	it('should fail if the target is heavier than 200kg', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Aerodactyl", ability: 'unnerve', moves: ['skydrop']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Aggron", ability: 'sturdy', moves: ['tackle']}]);
 		battle.commitDecisions();
@@ -122,32 +119,20 @@ describe('Sky Drop', function () {
 	});
 
 	it('should fail if used against an ally', function () {
-		battle = BattleEngine.Battle.construct('battle-skydrop-ally', 'doublescustomgame');
-		battle.join('p1', 'Guest 1', 1, [
-			{species: "Aerodactyl", ability: 'unnerve', moves: ['skydrop']},
-			{species: "Smeargle", ability: 'owntempo', moves: ['spore']},
+		battle = common.createBattle({gameType: 'doubles'}, [
+			[{species: "Aerodactyl", ability: 'unnerve', moves: ['skydrop']}, {species: "Smeargle", ability: 'owntempo', moves: ['spore']}],
+			[{species: "Lairon", ability: 'sturdy', moves: ['bulkup']}, {species: "Aggron", ability: 'sturdy', moves: ['bulkup']}],
 		]);
-		battle.join('p2', 'Guest 2', 1, [
-			{species: "Lairon", ability: 'sturdy', moves: ['bulkup']},
-			{species: "Aggron", ability: 'sturdy', moves: ['bulkup']},
-		]);
-		battle.commitDecisions(); // Team Preview
 		battle.choose('p1', 'move 1 -2, move 1 1');
 		battle.commitDecisions();
 		assert.strictEqual(battle.p2.active[0].status, 'slp');
 	});
 
 	it('should hit its target even if its position changed with Ally Switch', function () {
-		battle = BattleEngine.Battle.construct('battle-skydrop-allyswitch', 'doublescustomgame');
-		battle.join('p1', 'Guest 1', 1, [
-			{species: "Aerodactyl", ability: 'unnerve', moves: ['skydrop']},
-			{species: "Smeargle", ability: 'owntempo', moves: ['splash']},
+		battle = common.createBattle({gameType: 'doubles'}, [
+			[{species: "Aerodactyl", ability: 'unnerve', moves: ['skydrop']}, {species: "Smeargle", ability: 'owntempo', moves: ['splash']}],
+			[{species: "Lairon", ability: 'sturdy', moves: ['bulkup']}, {species: "Aggron", ability: 'sturdy', moves: ['bulkup', 'allyswitch']}],
 		]);
-		battle.join('p2', 'Guest 2', 1, [
-			{species: "Lairon", ability: 'sturdy', moves: ['bulkup']},
-			{species: "Aggron", ability: 'sturdy', moves: ['bulkup', 'allyswitch']},
-		]);
-		battle.commitDecisions(); // Team Preview
 		battle.choose('p1', 'move 1 1, move 1 2');
 		battle.commitDecisions();
 		battle.choose('p2', 'move 1, move 2');
@@ -157,16 +142,10 @@ describe('Sky Drop', function () {
 	});
 
 	it('should hit its target even if Follow Me is used that turn', function () {
-		battle = BattleEngine.Battle.construct('battle-skydrop-followme', 'doublescustomgame');
-		battle.join('p1', 'Guest 1', 1, [
-			{species: "Aerodactyl", ability: 'unnerve', moves: ['skydrop']},
-			{species: "Smeargle", ability: 'owntempo', moves: ['splash']},
+		battle = common.createBattle({gameType: 'doubles'}, [
+			[{species: "Aerodactyl", ability: 'unnerve', moves: ['skydrop']}, {species: "Smeargle", ability: 'owntempo', moves: ['splash']}],
+			[{species: "Lairon", ability: 'sturdy', moves: ['bulkup']}, {species: "Aggron", ability: 'sturdy', moves: ['bulkup', 'followme']}],
 		]);
-		battle.join('p2', 'Guest 2', 1, [
-			{species: "Lairon", ability: 'sturdy', moves: ['bulkup']},
-			{species: "Aggron", ability: 'sturdy', moves: ['bulkup', 'followme']},
-		]);
-		battle.commitDecisions(); // Team Preview
 		battle.choose('p1', 'move 1 1, move 1 2');
 		battle.commitDecisions();
 		battle.choose('p2', 'move 1, move 2');
@@ -176,20 +155,14 @@ describe('Sky Drop', function () {
 	});
 
 	it('should cause most moves aimed at the user or target to miss', function () {
-		battle = BattleEngine.Battle.construct('battle-skydrop-miss', 'doublescustomgame');
-		battle.join('p1', 'Guest 1', 1, [
-			{species: "Aerodactyl", ability: 'unnerve', moves: ['skydrop']},
-			{species: "Kabutops", ability: 'swiftswim', moves: ['aquajet']},
-		]);
-		battle.join('p2', 'Guest 2', 1, [
-			{species: "Lairon", ability: 'sturdy', moves: ['bulkup']},
-			{species: "Azumarill", ability: 'thickfat', moves: ['aquajet']},
+		battle = common.createBattle({gameType: 'doubles'}, [
+			[{species: "Aerodactyl", ability: 'unnerve', moves: ['skydrop']}, {species: "Kabutops", ability: 'swiftswim', moves: ['aquajet']}],
+			[{species: "Lairon", ability: 'sturdy', moves: ['bulkup']}, {species: "Azumarill", ability: 'thickfat', moves: ['aquajet']}],
 		]);
 		battle.on('Damage', battle.getFormat(), function (damage, target, source, effect) {
 			// mod Sky Drop to deal no damage
 			if (effect.id === 'skydrop') return 0;
 		});
-		battle.commitDecisions(); // Team Preview
 		battle.choose('p1', 'move 1 1, move 1 2');
 		battle.choose('p2', 'move 1, move 1 2');
 		// Aerodactyl and Lairon are now airborne from Sky Drop
@@ -200,16 +173,10 @@ describe('Sky Drop', function () {
 	});
 
 	it('should be cancelled by Gravity and allow the target to use its move', function () {
-		battle = BattleEngine.Battle.construct('battle-skydrop-gravity', 'doublescustomgame');
-		battle.join('p1', 'Guest 1', 1, [
-			{species: "Aerodactyl", ability: 'unnerve', moves: ['skydrop']},
-			{species: "Jirachi", ability: 'serenegrace', moves: ['gravity']},
+		battle = common.createBattle({gameType: 'doubles'}, [
+			[{species: "Aerodactyl", ability: 'unnerve', moves: ['skydrop']}, {species: "Jirachi", ability: 'serenegrace', moves: ['gravity']}],
+			[{species: "Lairon", ability: 'sturdy', moves: ['bulkup']}, {species: "Aggron", ability: 'sturdy', moves: ['bulkup']}],
 		]);
-		battle.join('p2', 'Guest 2', 1, [
-			{species: "Lairon", ability: 'sturdy', moves: ['bulkup']},
-			{species: "Aggron", ability: 'sturdy', moves: ['bulkup']},
-		]);
-		battle.commitDecisions(); // Team Preview
 		battle.choose('p1', 'move 1 1, move 1');
 		battle.commitDecisions();
 		assert.strictEqual(battle.p2.active[0].boosts['atk'], 1);
@@ -223,16 +190,17 @@ describe('Sky Drop [Gen 5]', function () {
 	});
 
 	it('should not fail even if the target is heavier than 200kg', function () {
-		battle = BattleEngine.Battle.construct('battle-bw-skydrop-heavy', 'gen5customgame');
-		battle.join('p1', 'Guest 1', 1, [{species: "Aerodactyl", ability: 'unnerve', moves: ['skydrop']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Aggron", ability: 'sturdy', moves: ['tackle']}]);
+		battle = common.gen(5).createBattle([
+			[{species: "Aerodactyl", ability: 'unnerve', moves: ['skydrop']}],
+			[{species: "Aggron", ability: 'sturdy', moves: ['tackle']}],
+		]);
 		battle.commitDecisions();
 		assert.strictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 	});
 
 	describe.skip('Sky Drop Glitch', function () {
 		beforeEach(function () {
-			battle = BattleEngine.Battle.construct('battle-bw-skydrop-gravity', 'gen5doublescustomgame');
+			battle = common.gen(5).createBattle({gameType: 'doubles'});
 			battle.join('p1', 'Guest 1', 1, [
 				{species: "Aerodactyl", ability: 'unnerve', moves: ['rockpolish', 'skydrop', 'dig']},
 				{species: "Arceus", ability: 'multitype', moves: ['recover', 'gravity']},
@@ -243,7 +211,6 @@ describe('Sky Drop [Gen 5]', function () {
 				{species: "Deoxys-Attack", ability: 'sturdy', moves: ['nastyplot', 'thunderbolt', 'roar']},
 				{species: "Azurill", ability: 'thickfat', moves: ['watersport']},
 			]);
-			battle.commitDecisions(); // Team Preview
 			battle.choose('p1', 'move 2 1, move 2');
 			battle.commitDecisions();
 			// Magikarp should now be stuck because of the Sky Drop glitch.

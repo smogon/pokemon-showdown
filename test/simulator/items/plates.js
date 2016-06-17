@@ -1,6 +1,8 @@
 'use strict';
 
 const assert = require('./../../assert');
+const common = require('./../../common');
+
 let battle;
 let plates = ['Draco Plate', 'Dread Plate', 'Earth Plate', 'Fist Plate', 'Flame Plate', 'Icicle Plate',
 				'Insect Plate', 'Iron Plate', 'Meadow Plate', 'Mind Plate', 'Pixie Plate', 'Sky Plate',
@@ -16,7 +18,7 @@ describe('Plates', function () {
 			});
 
 			it('should not be stolen or removed if held by an Arceus', function () {
-				battle = BattleEngine.Battle.construct();
+				battle = common.createBattle();
 				battle.join('p1', 'Guest 1', 1, [{species: 'Arceus', ability: 'frisk', item: id, moves: ['recover']}]);
 				battle.join('p2', 'Guest 2', 1, [
 					{species: 'Fennekin', ability: 'magician', moves: ['mysticalfire']},
@@ -34,7 +36,7 @@ describe('Plates', function () {
 			});
 
 			it('should not be removed by Fling if held by an Arceus', function () {
-				battle = BattleEngine.Battle.construct();
+				battle = common.createBattle();
 				battle.join('p1', 'Guest 1', 1, [{species: 'Mawile', ability: 'intimidate', moves: ['swordsdance']}]);
 				battle.join('p2', 'Guest 2', 1, [{species: 'Arceus', ability: 'frisk', item: id, moves: ['fling']}]);
 				battle.commitDecisions();
@@ -42,7 +44,7 @@ describe('Plates', function () {
 			});
 
 			it('should not be given to an Arceus', function () {
-				battle = BattleEngine.Battle.construct();
+				battle = common.createBattle();
 				battle.join('p1', 'Guest 1', 1, [{species: 'Arceus', ability: 'multitype', moves: ['thief']}]);
 				battle.join('p2', 'Guest 2', 1, [{species: 'Azumarill', ability: 'thickfat', item: id, moves: ['bestow']}]);
 				battle.commitDecisions();
@@ -50,7 +52,7 @@ describe('Plates', function () {
 			});
 
 			it('should be removed if not held by an Arceus', function () {
-				battle = BattleEngine.Battle.construct();
+				battle = common.createBattle();
 				battle.join('p1', 'Guest 1', 1, [{species: 'Arceus', ability: 'multitype', moves: ['knockoff']}]);
 				battle.join('p2', 'Guest 2', 1, [{species: 'Azumarill', ability: 'thickfat', item: id, moves: ['bulkup']}]);
 				battle.commitDecisions();

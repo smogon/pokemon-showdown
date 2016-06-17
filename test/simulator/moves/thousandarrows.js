@@ -1,6 +1,8 @@
 'use strict';
 
 const assert = require('./../../assert');
+const common = require('./../../common');
+
 let battle;
 
 describe('Thousand Arrows', function () {
@@ -9,7 +11,7 @@ describe('Thousand Arrows', function () {
 	});
 
 	it('should hit Flying-type Pokemon and remove their Ground immunity', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Zygarde", ability: 'aurabreak', item: 'laggingtail', moves: ['thousandarrows', 'earthquake']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Tropius", ability: 'harvest', moves: ['synthesis']}]);
 		battle.commitDecisions();
@@ -20,7 +22,7 @@ describe('Thousand Arrows', function () {
 	});
 
 	it('should ignore type effectiveness on the first hit against Flying-type Pokemon', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Zygarde", ability: 'aurabreak', item: 'laggingtail', moves: ['thousandarrows']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Ho-Oh", ability: 'shellarmor', item: 'weaknesspolicy', moves: ['recover']}]);
 		battle.commitDecisions();
@@ -32,7 +34,7 @@ describe('Thousand Arrows', function () {
 	});
 
 	it('should not ignore type effectiveness on the first hit against Flying-type Pokemon with Ring Target', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Zygarde", level: 10, ability: 'aurabreak', item: 'laggingtail', moves: ['thousandarrows']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Ho-Oh", ability: 'wonderguard', item: 'ringtarget', moves: ['recover']}]);
 		battle.commitDecisions();
@@ -40,7 +42,7 @@ describe('Thousand Arrows', function () {
 	});
 
 	it('should not ground or deal neutral damage to Flying-type Pokemon holding an Iron Ball', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Zygarde", level: 10, ability: 'aurabreak', item: 'laggingtail', moves: ['thousandarrows', 'mudslap']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Ho-Oh", ability: 'shellarmor', item: 'ironball', moves: ['recover', 'trick']}]);
 		battle.commitDecisions();
@@ -53,7 +55,7 @@ describe('Thousand Arrows', function () {
 	});
 
 	it('should not ground or deal neutral damage to Flying-type Pokemon affected by Gravity', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Zygarde", level: 10, ability: 'aurabreak', item: 'laggingtail', moves: ['thousandarrows', 'sleeptalk']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Ho-Oh", ability: 'shellarmor', moves: ['recover', 'gravity']}]);
 		battle.choose('p1', 'move 2');
@@ -70,7 +72,7 @@ describe('Thousand Arrows', function () {
 	});
 
 	it('should hit Pokemon with Levitate and remove their Ground immunity', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Zygarde", ability: 'aurabreak', item: 'laggingtail', moves: ['thousandarrows', 'earthquake']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Cresselia", ability: 'levitate', moves: ['recover']}]);
 		battle.commitDecisions();
@@ -81,7 +83,7 @@ describe('Thousand Arrows', function () {
 	});
 
 	it('should hit non-Flying-type Pokemon with Levitate with standard type effectiveness', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Zygarde", ability: 'aurabreak', moves: ['thousandarrows', 'earthquake']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Eelektross", ability: 'levitate', item: 'weaknesspolicy', moves: ['thunderwave']}]);
 		battle.commitDecisions();
@@ -90,7 +92,7 @@ describe('Thousand Arrows', function () {
 	});
 
 	it('should hit Pokemon with Air Balloon', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Zygarde", ability: 'aurabreak', item: 'laggingtail', moves: ['thousandarrows', 'earthquake']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Donphan", ability: 'sturdy', item: 'airballoon', moves: ['stealthrock']}]);
 		battle.commitDecisions();
@@ -101,7 +103,7 @@ describe('Thousand Arrows', function () {
 	});
 
 	it('should not hit Ground-type Pokemon when affected by Electrify', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Zygarde", ability: 'aurabreak', item: 'laggingtail', moves: ['thousandarrows', 'earthquake']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Stunfisk", ability: 'limber', moves: ['electrify']}]);
 		battle.commitDecisions();
@@ -109,7 +111,7 @@ describe('Thousand Arrows', function () {
 	});
 
 	it('should not hit Ghost-type Pokemon when affected by Normalize', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Zygarde", ability: 'normalize', item: 'laggingtail', moves: ['thousandarrows', 'earthquake']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Dusknoir", ability: 'pressure', moves: ['haze']}]);
 		battle.commitDecisions();

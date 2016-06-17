@@ -1,6 +1,8 @@
 'use strict';
 
 const assert = require('./../../assert');
+const common = require('./../../common');
+
 let battle;
 
 describe('Intimidate', function () {
@@ -9,14 +11,14 @@ describe('Intimidate', function () {
 	});
 
 	it('should decrease Atk by 1 level', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Smeargle", ability: 'owntempo', moves: ['sketch']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Gyarados", ability: 'intimidate', moves: ['splash']}]);
 		assert.statStage(battle.p1.active[0], 'atk', -1);
 	});
 
 	it('should be blocked by Substitute', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [
 			{species: "Escavalier", item: 'leftovers', ability: 'shellarmor', moves: ['substitute']},
 		]);
@@ -30,7 +32,7 @@ describe('Intimidate', function () {
 	});
 
 	it('should affect adjacent foes only', function () {
-		battle = BattleEngine.Battle.construct('battle-intimidate-adjacency', 'triplescustomgame');
+		battle = common.createBattle({gameType: 'triples'});
 		const p1 = battle.join('p1', 'Guest 1', 1, [
 			{species: "Bulbasaur", item: 'leftovers', ability: 'overgrow', moves: ['vinewhip']},
 			{species: "Charmander", item: 'leftovers', ability: 'blaze', moves: ['ember']},
@@ -41,14 +43,14 @@ describe('Intimidate', function () {
 			{species: "Mew", ability: 'synchronize', moves: ['softboiled']},
 			{species: "Gyarados", ability: 'intimidate', moves: ['splash']},
 		]);
-		battle.commitDecisions(); // Team Preview
+
 		assert.statStage(p1.active[0], 'atk', -1);
 		assert.statStage(p1.active[1], 'atk', -1);
 		assert.statStage(p1.active[2], 'atk', 0);
 	});
 
 	it('should wait until all simultaneous switch ins at the beginning of a battle have completed before activating', function () {
-		battle = BattleEngine.Battle.construct('battle-intimidate-order1', 'customgame');
+		battle = common.createBattle({preview: true});
 		let p1 = battle.join('p1', 'Guest 1', 1, [{species: "Arcanine", ability: 'intimidate', moves: ['morningsun']}]);
 		let p2 = battle.join('p2', 'Guest 2', 1, [{species: "Gyarados", ability: 'intimidate', moves: ['dragondance']}]);
 		let intimidateCount = 0;
@@ -63,7 +65,7 @@ describe('Intimidate', function () {
 
 		// Do it again with the Pokemon in reverse order
 		battle.destroy();
-		battle = BattleEngine.Battle.construct('battle-intimidate-order2', 'customgame');
+		battle = common.createBattle({preview: true});
 		p1 = battle.join('p1', 'Guest 1', 1, [{species: "Gyarados", ability: 'intimidate', moves: ['dragondance']}]);
 		p2 = battle.join('p2', 'Guest 2', 1, [{species: "Arcanine", ability: 'intimidate', moves: ['morningsun']}]);
 		intimidateCount = 0;
@@ -78,7 +80,7 @@ describe('Intimidate', function () {
 	});
 
 	it('should wait until all simultaneous switch ins after double-KOs have completed before activating', function () {
-		battle = BattleEngine.Battle.construct('battle-intimidate-ko1', 'customgame');
+		battle = common.createBattle({preview: true});
 		const p1 = battle.join('p1', 'Guest 1', 1, [
 			{species: "Blissey", ability: 'naturalcure', moves: ['healingwish']},
 			{species: "Arcanine", ability: 'intimidate', moves: ['healingwish']},

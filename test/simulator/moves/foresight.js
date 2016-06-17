@@ -1,7 +1,9 @@
 'use strict';
 
-let battle;
 const assert = require('./../../assert');
+const common = require('./../../common');
+
+let battle;
 
 describe('Foresight', function () {
 	afterEach(function () {
@@ -9,7 +11,7 @@ describe('Foresight', function () {
 	});
 
 	it('should negate Normal and Fighting immunities', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Smeargle", ability: 'owntempo', moves: ['foresight', 'vitalthrow', 'tackle']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Dusknoir", ability: 'prankster', moves: ['recover']}]);
 		battle.commitDecisions();
@@ -22,7 +24,7 @@ describe('Foresight', function () {
 	});
 
 	it('should ignore the effect of positive evasion stat stages', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Smeargle", ability: 'owntempo', moves: ['avalanche', 'foresight']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Forretress", ability: 'sturdy', moves: ['synthesis']}]);
 		battle.choose('p1', 'move 2');
@@ -35,7 +37,7 @@ describe('Foresight', function () {
 	});
 
 	it('should not ignore the effect of negative evasion stat stages', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Smeargle", ability: 'owntempo', moves: ['zapcannon', 'dynamicpunch', 'foresight']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Zapdos", ability: 'owntempo', moves: ['roost']}]);
 		battle.choose('p1', 'move 3');

@@ -1,7 +1,9 @@
 'use strict';
 
-let battle;
 const assert = require('./../../assert');
+const common = require('./../../common');
+
+let battle;
 
 describe('Ring Target', function () {
 	afterEach(function () {
@@ -9,7 +11,7 @@ describe('Ring Target', function () {
 	});
 
 	it('should negate natural immunities and deal normal type effectiveness with the other type(s)', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Smeargle", ability: 'owntempo', moves: ['earthquake', 'vitalthrow', 'shadowball', 'psychic']}]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: "Thundurus", ability: 'prankster', item: 'ringtarget', moves: ['rest']},
@@ -34,7 +36,7 @@ describe('Ring Target', function () {
 	});
 
 	it('should not affect ability-based immunities', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Hariyama", ability: 'guts', moves: ['earthquake']}]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: "Mismagius", ability: 'levitate', item: 'ringtarget', moves: ['shadowsneak']},

@@ -1,6 +1,8 @@
 'use strict';
 
 const assert = require('./../../assert');
+const common = require('./../../common');
+
 let battle;
 
 describe('Most status moves', function () {
@@ -9,7 +11,7 @@ describe('Most status moves', function () {
 	});
 
 	it('should ignore natural type immunities', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		const p1 = battle.join('p1', 'Guest 1', 1, [{species: "Smeargle", ability: 'prankster', item: 'leftovers', moves: ['gastroacid', 'glare', 'confuseray', 'sandattack']}]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: "Klefki", ability: 'magician', happiness: 0, moves: ['return']},
@@ -33,7 +35,7 @@ describe('Most status moves', function () {
 	it('should fail when the opposing Pokemon is immune to the status effect it sets', function () {
 		this.timeout(0);
 
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		const p1 = battle.join('p1', 'Guest 1', 1, [{species: "Smeargle", ability: 'noguard', item: 'laggingtail', moves: ['thunderwave', 'willowisp', 'poisongas', 'toxic']}]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: "Zapdos", ability: 'pressure', moves: ['charge']},
@@ -76,15 +78,16 @@ describe('Poison-inflicting status moves [Gen 2]', function () {
 	});
 
 	it('should not ignore type immunities', function () {
-		battle = BattleEngine.Battle.construct('battle-gsc-psn-steel', 'gen2customgame');
-		const p1 = battle.join('p1', 'Guest 1', 1, [{species: "Smeargle", moves: POISON_STATUS_MOVES}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Magneton", moves: ['sleeptalk']}]);
+		battle = common.gen(2).createBattle([
+			[{species: "Smeargle", moves: POISON_STATUS_MOVES}],
+			[{species: "Magneton", moves: ['sleeptalk']}],
+		]);
 		// Set all moves to perfect accuracy
 		battle.on('Accuracy', battle.getFormat(), true);
 
 		const target = battle.p2.active[0];
 		POISON_STATUS_MOVES.forEach(move => {
-			p1.chooseMove(move);
+			battle.p1.chooseMove(move);
 			assert.constant(() => target.status, () => battle.commitDecisions());
 		});
 	});

@@ -1,7 +1,9 @@
 'use strict';
 
-let battle;
 const assert = require('./../../assert');
+const common = require('./../../common');
+
+let battle;
 
 describe('Iron Ball', function () {
 	afterEach(function () {
@@ -9,7 +11,7 @@ describe('Iron Ball', function () {
 	});
 
 	it('should reduce halve the holder\'s speed', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Smeargle", ability: 'owntempo', item: 'ironball', moves: ['bestow']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Aerodactyl", ability: 'pressure', moves: ['stealthrock']}]);
 		const target = battle.p2.active[0];
@@ -17,7 +19,7 @@ describe('Iron Ball', function () {
 	});
 
 	it('should negate Ground immunities and deal neutral type effectiveness to Flying-type Pokemon', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Smeargle", ability: 'owntempo', item: 'laggingtail', moves: ['earthquake']}]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: "Aerodactyl", ability: 'pressure', item: 'ironball', moves: ['stealthrock']},
@@ -35,7 +37,7 @@ describe('Iron Ball', function () {
 	});
 
 	it('should not deal neutral type effectiveness to Flying-type Pokemon in Gravity', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Smeargle", ability: 'owntempo', item: 'laggingtail', moves: ['earthquake', 'gravity']}]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: "Aerodactyl", ability: 'shellarmor', item: 'ironball', moves: ['stealthrock']},
@@ -56,7 +58,7 @@ describe('Iron Ball', function () {
 	});
 
 	it('should negate artificial Ground immunities and deal normal type effectiveness', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Smeargle", ability: 'owntempo', item: 'laggingtail', moves: ['earthquake']}]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: "Rotom", ability: 'levitate', item: 'ironball', moves: ['rest']},
@@ -71,7 +73,7 @@ describe('Iron Ball', function () {
 	});
 
 	it('should ground Pokemon that are airborne', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Smeargle", ability: 'owntempo', moves: ['spore']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Thundurus", ability: 'prankster', item: 'ironball', moves: ['electricterrain']}]);
 		battle.commitDecisions();

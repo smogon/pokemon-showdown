@@ -1,6 +1,8 @@
 'use strict';
 
 const assert = require('./../../assert');
+const common = require('./../../common');
+
 let battle;
 
 describe('Shed Shell', function () {
@@ -9,7 +11,7 @@ describe('Shed Shell', function () {
 	});
 
 	it('should allow Pokemon to escape trapping abilities', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Gothitelle", ability: 'shadowtag', moves: ['calmmind']}]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: "Starmie", ability: 'naturalcure', item: 'shedshell', moves: ['recover']},
@@ -21,7 +23,7 @@ describe('Shed Shell', function () {
 	});
 
 	it('should allow Pokemon to escape from most moves that would trap them', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Gengar", ability: 'levitate', moves: ['meanlook']}]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: "Venusaur", ability: 'overgrow', item: 'shedshell', moves: ['ingrain']},
@@ -34,7 +36,7 @@ describe('Shed Shell', function () {
 	});
 
 	it('should not allow Pokemon to escape from Sky Drop', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Dragonite", ability: 'multiscale', moves: ['skydrop']}]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: "Magnezone", ability: 'sturdy', item: 'shedshell', moves: ['sleeptalk']},

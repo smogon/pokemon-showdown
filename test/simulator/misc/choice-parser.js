@@ -1,6 +1,7 @@
 'use strict';
 
 const assert = require('./../../assert');
+const common = require('./../../common');
 const fuzzer = require('fuzzur').mutate;
 
 const FUZZER_ITERATIONS = 20;
@@ -16,13 +17,14 @@ describe('Choice parser', function () {
 	afterEach(() => battle.destroy());
 	describe('Team Preview requests', function () {
 		it('should accept only `team` choices', function () {
-			battle = BattleEngine.Battle.construct('battle-preview', 'customgame');
-			const p1 = battle.join('p1', 'Guest 1', 1, [{species: "Mew", ability: 'synchronize', moves: ['recover']}]);
-			const p2 = battle.join('p2', 'Guest 2', 1, [{species: "Rhydon", ability: 'prankster', moves: ['splash']}]);
+			battle = common.createBattle({preview: true}, [
+				[{species: "Mew", ability: 'synchronize', moves: ['recover']}],
+				[{species: "Rhydon", ability: 'prankster', moves: ['splash']}],
+			]);
 
 			const validDecision = 'team 1';
-			assert(battle.parseChoice(p1, validDecision));
-			assert(battle.parseChoice(p2, validDecision));
+			assert(battle.parseChoice(battle.p1, validDecision));
+			assert(battle.parseChoice(battle.p2, validDecision));
 
 			let remainingIterations = FUZZER_ITERATIONS;
 			while (remainingIterations--) {
@@ -35,9 +37,10 @@ describe('Choice parser', function () {
 		});
 
 		it('should reject empty or non-numerical choice details', function () {
-			battle = BattleEngine.Battle.construct('battle-preview', 'customgame');
-			battle.join('p1', 'Guest 1', 1, [{species: "Mew", ability: 'synchronize', moves: ['recover']}]);
-			battle.join('p2', 'Guest 2', 1, [{species: "Rhydon", ability: 'prankster', moves: ['splash']}]);
+			battle = common.createBattle({preview: true}, [
+				[{species: "Mew", ability: 'synchronize', moves: ['recover']}],
+				[{species: "Rhydon", ability: 'prankster', moves: ['splash']}],
+			]);
 
 			battle.sides.forEach(side => {
 				assert.false(battle.parseChoice(side, 'team'));
@@ -59,7 +62,7 @@ describe('Choice parser', function () {
 	describe('Switch requests', function () {
 		describe('Generic', function () {
 			it('should reject empty or non-numerical input for `switch` choices', function () {
-				battle = BattleEngine.Battle.construct();
+				battle = common.createBattle();
 				const p1 = battle.join('p1', 'Guest 1', 1, [
 					{species: "Mew", ability: 'synchronize', moves: ['lunardance']},
 					{species: "Bulbasaur", ability: 'overgrow', moves: ['tackle', 'growl']},
@@ -86,7 +89,7 @@ describe('Choice parser', function () {
 
 		describe('Singles', function () {
 			it('should accept only `switch` choices', function () {
-				battle = BattleEngine.Battle.construct();
+				battle = common.createBattle();
 				const p1 = battle.join('p1', 'Guest 1', 1, [
 					{species: "Mew", ability: 'synchronize', moves: ['lunardance']},
 					{species: "Bulbasaur", ability: 'overgrow', moves: ['tackle', 'growl']},
@@ -110,7 +113,7 @@ describe('Choice parser', function () {
 
 		describe('Doubles/Triples', function () {
 			it('should accept only `switch` and `pass` choices', function () {
-				battle = BattleEngine.Battle.construct('battle-choose-switch', 'doublescustomgame');
+				battle = common.createBattle({gameType: 'doubles'});
 				const p1 = battle.join('p1', 'Guest 1', 1, [
 					{species: "Pineco", ability: 'sturdy', moves: ['selfdestruct']},
 					{species: "Geodude", ability: 'sturdy', moves: ['selfdestruct']},
@@ -121,8 +124,7 @@ describe('Choice parser', function () {
 					{species: "Aggron", ability: 'sturdy', moves: ['irondefense']},
 					{species: "Ekans", ability: 'shedskin', moves: ['wrap']},
 				]);
-				battle.commitDecisions(); // Team Preview
-				battle.commitDecisions(); // Self-Destruct
+				battle.commitDecisions(); // Both p1 active Pokémon faint
 
 				const validDecisions = ['pass', 'switch 3'];
 				validDecisions.forEach(leftDecision => {
@@ -143,7 +145,7 @@ describe('Choice parser', function () {
 			});
 
 			it('should reject choice details for `pass` choices', function () {
-				battle = BattleEngine.Battle.construct('battle-choose-switch', 'doublescustomgame');
+				battle = common.createBattle({gameType: 'doubles'});
 				const p1 = battle.join('p1', 'Guest 1', 1, [
 					{species: "Pineco", ability: 'sturdy', moves: ['selfdestruct']},
 					{species: "Geodude", ability: 'sturdy', moves: ['selfdestruct']},
@@ -154,9 +156,7 @@ describe('Choice parser', function () {
 					{species: "Aggron", ability: 'sturdy', moves: ['irondefense']},
 					{species: "Ekans", ability: 'shedskin', moves: ['wrap']},
 				]);
-
-				battle.commitDecisions(); // Team Preview
-				battle.commitDecisions(); // Self-Destruct
+				battle.commitDecisions(); // Both p1 active Pokémon faint
 
 				const switchChoice = 'switch 3';
 				const passChoice = 'pass';
@@ -181,7 +181,7 @@ describe('Choice parser', function () {
 	describe('Move requests', function () {
 		describe('Generic', function () {
 			it('should be unaware of disabled moves', function () {
-				battle = BattleEngine.Battle.construct();
+				battle = common.createBattle();
 				const p1 = battle.join('p1', 'Guest 1', 1, [{species: "Mew", item: 'assaultvest', ability: 'shadowtag', moves: ['recover']}]);
 				const p2 = battle.join('p2', 'Guest 2', 1, [{species: "Rhydon", item: 'assaultvest', ability: 'shadowtag', moves: ['splash']}]);
 
@@ -191,7 +191,7 @@ describe('Choice parser', function () {
 			});
 
 			it('should be unaware of trapped Pokémon', function () {
-				battle = BattleEngine.Battle.construct();
+				battle = common.createBattle();
 				battle.join('p1', 'Guest 1', 1, [
 					{species: "Mew", item: 'assaultvest', ability: 'shadowtag', moves: ['recover']},
 					{species: "Bulbasaur", item: '', ability: 'overgrow', moves: ['tackle', 'growl']},
@@ -205,7 +205,7 @@ describe('Choice parser', function () {
 			});
 
 			it('should reject `pass` choices for non-fainted Pokémon', function () {
-				battle = BattleEngine.Battle.construct();
+				battle = common.createBattle();
 				battle.join('p1', 'Guest 1', 1, [{species: "Mew", ability: 'synchronize', moves: ['recover']}]);
 				battle.join('p2', 'Guest 2', 1, [{species: "Rhydon", ability: 'prankster', moves: ['splash']}]);
 
@@ -215,7 +215,7 @@ describe('Choice parser', function () {
 
 		describe('Singles', function () {
 			it('should accept only `move` and `switch` choices', function () {
-				battle = BattleEngine.Battle.construct();
+				battle = common.createBattle();
 				const p1 = battle.join('p1', 'Guest 1', 1, [
 					{species: "Mew", ability: 'synchronize', moves: ['lunardance', 'recover']},
 					{species: "Bulbasaur", ability: 'overgrow', moves: ['tackle', 'growl']},
@@ -244,7 +244,7 @@ describe('Choice parser', function () {
 
 		describe('Doubles', function () {
 			it('should accept only `move` and `switch` choices for healthy Pokémon', function () {
-				battle = BattleEngine.Battle.construct('battle-choose-move', 'doublescustomgame');
+				battle = common.createBattle({gameType: 'doubles'});
 				const p1 = battle.join('p1', 'Guest 1', 1, [
 					{species: "Pineco", ability: 'sturdy', moves: ['selfdestruct']},
 					{species: "Geodude", ability: 'sturdy', moves: ['selfdestruct']},
@@ -255,7 +255,6 @@ describe('Choice parser', function () {
 					{species: "Aggron", ability: 'sturdy', moves: ['irondefense']},
 					{species: "Ekans", ability: 'shedskin', moves: ['wrap']},
 				]);
-				battle.commitDecisions();
 
 				const validDecisions = ['move 1', 'switch 3'];
 				validDecisions.forEach(leftDecision => {
@@ -276,7 +275,7 @@ describe('Choice parser', function () {
 			});
 
 			it('should enforce `pass` choices for fainted Pokémon', function () {
-				battle = BattleEngine.Battle.construct('battle-choose-move', 'doublescustomgame');
+				battle = common.createBattle({gameType: 'doubles'});
 				const p1 = battle.join('p1', 'Guest 1', 1, [
 					{species: "Pineco", ability: 'sturdy', moves: ['selfdestruct']},
 					{species: "Geodude", ability: 'sturdy', moves: ['selfdestruct']},
@@ -286,9 +285,7 @@ describe('Choice parser', function () {
 					{species: "Skarmory", ability: 'sturdy', moves: ['roost']},
 					{species: "Aggron", ability: 'sturdy', moves: ['irondefense']},
 				]);
-
-				battle.commitDecisions(); // Team Preview
-				battle.commitDecisions(); // Self-Destruct
+				battle.commitDecisions(); // Both p1 active Pokémon faint
 				p1.choosePass().chooseSwitch(3); // Koffing switches in at slot #2
 
 				assert.fainted(p1.active[0]);
@@ -316,7 +313,7 @@ describe('Choice parser', function () {
 
 		describe('Triples', function () {
 			it('should accept only `move` and `switch` choices for a healthy Pokémon on the center', function () {
-				battle = BattleEngine.Battle.construct('battle-choose-move', 'triplescustomgame');
+				battle = common.createBattle({gameType: 'triples'});
 				const p1 = battle.join('p1', 'Guest 1', 1, [
 					{species: "Pineco", ability: 'sturdy', moves: ['selfdestruct']},
 					{species: "Geodude", ability: 'sturdy', moves: ['selfdestruct']},
@@ -327,7 +324,6 @@ describe('Choice parser', function () {
 					{species: "Aggron", ability: 'sturdy', moves: ['irondefense']},
 					{species: "Golem", ability: 'sturdy', moves: ['defensecurl']},
 				]);
-				battle.commitDecisions();
 
 				const validDecisions = ['move 1', 'switch 4'];
 				const otherDecisions = ['move 1', 'move 1'];
@@ -350,7 +346,7 @@ describe('Choice parser', function () {
 			});
 
 			it('should accept only `move`, `switch` and `shift` choices for a healthy Pokémon on the left', function () {
-				battle = BattleEngine.Battle.construct('battle-choose-move', 'triplescustomgame');
+				battle = common.createBattle({gameType: 'triples'});
 				const p1 = battle.join('p1', 'Guest 1', 1, [
 					{species: "Pineco", ability: 'sturdy', moves: ['selfdestruct']},
 					{species: "Geodude", ability: 'sturdy', moves: ['selfdestruct']},
@@ -363,7 +359,6 @@ describe('Choice parser', function () {
 					{species: "Golem", ability: 'sturdy', moves: ['defensecurl']},
 					{species: "Magnezone", ability: 'magnetpull', moves: ['discharge']},
 				]);
-				battle.commitDecisions();
 
 				const validDecisions = ['move 1', 'switch 4', 'shift'];
 				const otherDecisions = ['move 1', 'move 1'];
@@ -386,7 +381,7 @@ describe('Choice parser', function () {
 			});
 
 			it('should accept only `move`, `switch` and `shift` choices for a healthy Pokémon on the right', function () {
-				battle = BattleEngine.Battle.construct('battle-choose-move', 'triplescustomgame');
+				battle = common.createBattle({gameType: 'triples'});
 				const p1 = battle.join('p1', 'Guest 1', 1, [
 					{species: "Pineco", ability: 'sturdy', moves: ['selfdestruct']},
 					{species: "Geodude", ability: 'sturdy', moves: ['selfdestruct']},
@@ -399,7 +394,6 @@ describe('Choice parser', function () {
 					{species: "Golem", ability: 'sturdy', moves: ['defensecurl']},
 					{species: "Magnezone", ability: 'magnetpull', moves: ['discharge']},
 				]);
-				battle.commitDecisions();
 
 				const validDecisions = ['move 1', 'switch 4', 'shift'];
 				const otherDecisions = ['move 1', 'move 1'];
@@ -422,7 +416,7 @@ describe('Choice parser', function () {
 			});
 
 			it('should reject choice details for `shift` choices', function () {
-				battle = BattleEngine.Battle.construct('battle-choose-move', 'triplescustomgame');
+				battle = common.createBattle({gameType: 'triples'});
 				battle.join('p1', 'Guest 1', 1, [
 					{species: "Pineco", ability: 'sturdy', moves: ['selfdestruct']},
 					{species: "Geodude", ability: 'sturdy', moves: ['selfdestruct']},
@@ -435,7 +429,6 @@ describe('Choice parser', function () {
 					{species: "Golem", ability: 'sturdy', moves: ['defensecurl']},
 					{species: "Magnezone", ability: 'magnetpull', moves: ['discharge']},
 				]);
-				battle.commitDecisions();
 
 				const validDecision = 'shift';
 				const otherDecisions = ['move 1', 'move 1'];
@@ -452,7 +445,7 @@ describe('Choice parser', function () {
 			});
 
 			it('should enforce `pass` choices for fainted Pokémon supercali', function () {
-				battle = BattleEngine.Battle.construct('battle-choose-move', 'triplescustomgame');
+				battle = common.createBattle({gameType: 'triples'});
 				const p1 = battle.join('p1', 'Guest 1', 1, [
 					{species: "Pineco", ability: 'sturdy', moves: ['selfdestruct']},
 					{species: "Geodude", ability: 'sturdy', moves: ['selfdestruct']},
@@ -464,9 +457,7 @@ describe('Choice parser', function () {
 					{species: "Aggron", ability: 'sturdy', moves: ['irondefense']},
 					{species: "Golem", ability: 'sturdy', moves: ['defensecurl']},
 				]);
-
-				battle.commitDecisions(); // Team Preview
-				battle.commitDecisions(); // Self-Destruct
+				battle.commitDecisions(); // All p1 active Pokémon faint
 
 				p1.choosePass().chooseSwitch(4).chooseDefault(); // Forretress switches in to slot #3
 				assert.species(p1.active[1], 'Forretress');

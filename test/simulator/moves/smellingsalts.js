@@ -1,6 +1,8 @@
 'use strict';
 
 const assert = require('./../../assert');
+const common = require('./../../common');
+
 let battle;
 
 describe('Smelling Salts', function () {
@@ -9,7 +11,7 @@ describe('Smelling Salts', function () {
 	});
 
 	it('should cure a paralyzed target', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Meloetta", ability: 'serenegrace', moves: ['smellingsalts', 'thunderwave']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Dragonite", ability: 'multiscale', moves: ['roost']}]);
 		battle.choose('p1', 'move 2');

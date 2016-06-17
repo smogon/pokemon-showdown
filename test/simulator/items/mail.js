@@ -1,6 +1,8 @@
 'use strict';
 
 const assert = require('./../../assert');
+const common = require('./../../common');
+
 let battle;
 
 describe('Mail', function () {
@@ -9,7 +11,7 @@ describe('Mail', function () {
 	});
 
 	it('should not be stolen by most moves or abilities', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Blissey', ability: 'naturalcure', item: 'mail', moves: ['softboiled']}]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: 'Fennekin', ability: 'magician', moves: ['grassknot']},
@@ -27,7 +29,7 @@ describe('Mail', function () {
 	});
 
 	it('should not be removed by Fling', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Pangoro', ability: 'ironfist', moves: ['swordsdance']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Abra', ability: 'synchronize', item: 'mail', moves: ['fling']}]);
 		const holder = battle.p2.active[0];
@@ -35,7 +37,7 @@ describe('Mail', function () {
 	});
 
 	it('should be removed by Knock Off', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Pangoro', ability: 'ironfist', item: 'mail', moves: ['swordsdance']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Abra', ability: 'synchronize', moves: ['knockoff']}]);
 		const holder = battle.p1.active[0];
@@ -43,7 +45,7 @@ describe('Mail', function () {
 	});
 
 	it('should be stolen by Thief', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Pangoro', ability: 'ironfist', item: 'mail', moves: ['swordsdance']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Abra', ability: 'synchronize', moves: ['thief']}]);
 		const holder = battle.p1.active[0];

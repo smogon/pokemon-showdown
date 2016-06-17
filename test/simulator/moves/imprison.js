@@ -1,6 +1,8 @@
 'use strict';
 
 const assert = require('./../../assert');
+const common = require('./../../common');
+
 let battle;
 
 describe('Imprison', function () {
@@ -9,7 +11,7 @@ describe('Imprison', function () {
 	});
 
 	it('should prevent foes from using moves that the user knows', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Abra', ability: 'prankster', moves: ['imprison', 'calmmind']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Abra', ability: 'synchronize', moves: ['calmmind', 'confusion']}]);
 		battle.commitDecisions();

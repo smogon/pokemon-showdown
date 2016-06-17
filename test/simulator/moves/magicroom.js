@@ -1,6 +1,8 @@
 'use strict';
 
 const assert = require('./../../assert');
+const common = require('./../../common');
+
 let battle;
 
 describe('Magic Room', function () {
@@ -9,7 +11,7 @@ describe('Magic Room', function () {
 	});
 
 	it('should negate residual healing events', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Lopunny", ability: 'limber', item: 'leftovers', moves: ['bellydrum']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Giratina", ability: 'pressure', moves: ['magicroom']}]);
 		battle.commitDecisions();
@@ -17,7 +19,7 @@ describe('Magic Room', function () {
 	});
 
 	it('should prevent items from being consumed', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Lopunny", ability: 'limber', item: 'chopleberry', moves: ['magicroom']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Golem", ability: 'noguard', moves: ['lowkick']}]);
 		battle.commitDecisions();
@@ -25,7 +27,7 @@ describe('Magic Room', function () {
 	});
 
 	it('should ignore the effects of items that disable moves', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Lopunny", ability: 'limber', item: 'assaultvest', moves: ['protect']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Golem", ability: 'noguard', moves: ['magicroom']}]);
 		battle.commitDecisions();
@@ -34,7 +36,7 @@ describe('Magic Room', function () {
 	});
 
 	it('should cause Fling to fail', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Lopunny", ability: 'limber', item: 'seaincense', moves: ['fling']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Sableye", ability: 'prankster', moves: ['magicroom']}]);
 		battle.commitDecisions();
@@ -42,7 +44,7 @@ describe('Magic Room', function () {
 	});
 
 	it('should not prevent Pokemon from Mega Evolving', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Lopunny", ability: 'limber', item: 'lopunnite', moves: ['bulkup']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Golem", ability: 'noguard', moves: ['magicroom', 'rest']}]);
 		battle.commitDecisions();
@@ -52,7 +54,7 @@ describe('Magic Room', function () {
 	});
 
 	it('should not prevent Primal Reversion', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [
 			{species: "Zapdos", ability: 'pressure', moves: ['voltswitch']},
 			{species: "Groudon", ability: 'drought', item: 'redorb', moves: ['protect']},

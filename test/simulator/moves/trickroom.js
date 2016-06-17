@@ -1,6 +1,8 @@
 'use strict';
 
-let assert = require('assert');
+const assert = require('./../../assert');
+const common = require('./../../common');
+
 let battle;
 
 describe('Trick Room', function () {
@@ -9,9 +11,10 @@ describe('Trick Room', function () {
 	});
 
 	it('should cause slower Pokemon to move before faster Pokemon in a priority bracket', function () {
-		battle = BattleEngine.Battle.construct();
-		battle.join('p1', 'Guest 1', 1, [{species: 'Bronzong', ability: 'heatproof', moves: ['spore', 'trickroom']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: 'Ninjask', ability: 'speedboost', moves: ['poisonjab', 'spore']}]);
+		battle = common.createBattle([
+			[{species: 'Bronzong', ability: 'heatproof', moves: ['spore', 'trickroom']}],
+			[{species: 'Ninjask', ability: 'speedboost', moves: ['poisonjab', 'spore']}],
+		]);
 		battle.choose('p1', 'move 2');
 		battle.commitDecisions();
 		battle.choose('p2', 'move 2');
@@ -21,9 +24,10 @@ describe('Trick Room', function () {
 	});
 
 	it('should not allow Pokemon using a lower priority move to act before other Pokemon', function () {
-		battle = BattleEngine.Battle.construct();
-		battle.join('p1', 'Guest 1', 1, [{species: 'Bronzong', ability: 'heatproof', moves: ['spore', 'trickroom']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: 'Ninjask', ability: 'speedboost', moves: ['poisonjab', 'protect']}]);
+		battle = common.createBattle([
+			[{species: 'Bronzong', ability: 'heatproof', moves: ['spore', 'trickroom']}],
+			[{species: 'Ninjask', ability: 'speedboost', moves: ['poisonjab', 'protect']}],
+		]);
 		battle.choose('p1', 'move 2');
 		battle.commitDecisions();
 		battle.choose('p2', 'move 2');
@@ -33,7 +37,7 @@ describe('Trick Room', function () {
 	});
 
 	it('should also affect the activation order for abilities and other non-move actions', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [
 			{species: 'Bronzong', ability: 'heatproof', moves: ['trickroom', 'explosion']},
 			{species: 'Hippowdon', ability: 'sandstream', moves: ['protect']},
@@ -56,10 +60,10 @@ describe('Trick Room', function () {
 	// The following two tests involve the Trick Room glitch, where turn order changes when a Pokemon goes to 1809 speed.
 
 	it('should roll over and cause Pokemon with 1809 or more speed to outspeed Pokemon with 1808 or less', function () {
-		battle = BattleEngine.Battle.construct('battle-trickroom-rollover', 'customgame');
-		battle.join('p1', 'Guest 1', 1, [{species: 'Ninjask', ability: 'swarm', evs: {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 184}, moves: ['protect', 'spore']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: 'Deoxys-Speed', ability: 'pressure', evs: {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 224}, moves: ['spore', 'trickroom']}]);
-		battle.commitDecisions(); // Team Preview
+		battle = common.createBattle([
+			[{species: 'Ninjask', ability: 'swarm', evs: {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 184}, moves: ['protect', 'spore']}],
+			[{species: 'Deoxys-Speed', ability: 'pressure', evs: {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 224}, moves: ['spore', 'trickroom']}],
+		]);
 		battle.choose('p2', 'move 2');
 		battle.commitDecisions(); // Trick Room is now up.
 
@@ -82,10 +86,10 @@ describe('Trick Room', function () {
 	});
 
 	it('should not affect damage dealt by moves whose power is reliant on speed', function () {
-		battle = BattleEngine.Battle.construct('battle-trickroom-gyroball', 'customgame');
-		battle.join('p1', 'Guest 1', 1, [{species: 'Ninjask', ability: 'swarm', evs: {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 184}, item: 'choicescarf', moves: ['earthquake']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: 'Deoxys-Speed', ability: 'levitate', evs: {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 224}, moves: ['gyroball', 'trickroom']}]);
-		battle.commitDecisions(); // Team Preview
+		battle = common.createBattle([
+			[{species: 'Ninjask', ability: 'swarm', evs: {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 184}, item: 'choicescarf', moves: ['earthquake']}],
+			[{species: 'Deoxys-Speed', ability: 'levitate', evs: {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 224}, moves: ['gyroball', 'trickroom']}],
+		]);
 		battle.choose('p2', 'move 2');
 		battle.commitDecisions();
 

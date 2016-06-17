@@ -1,6 +1,8 @@
 'use strict';
 
 const assert = require('./../../assert');
+const common = require('./../../common');
+
 const drives = ['Burn Drive', 'Chill Drive', 'Douse Drive', 'Shock Drive'];
 
 let battle;
@@ -15,7 +17,7 @@ describe('Drives', function () {
 			});
 
 			it('should not be stolen or removed if held by a Genesect', function () {
-				battle = BattleEngine.Battle.construct();
+				battle = common.createBattle();
 				battle.join('p1', 'Guest 1', 1, [{species: 'Genesect', ability: 'frisk', item: id, moves: ['recover']}]);
 				battle.join('p2', 'Guest 2', 1, [
 					{species: 'Fennekin', ability: 'magician', moves: ['mysticalfire']},
@@ -33,7 +35,7 @@ describe('Drives', function () {
 			});
 
 			it('should not be removed by Fling if held by a Genesect', function () {
-				battle = BattleEngine.Battle.construct();
+				battle = common.createBattle();
 				battle.join('p1', 'Guest 1', 1, [{species: 'Mawile', ability: 'intimidate', moves: ['swordsdance']}]);
 				battle.join('p2', 'Guest 2', 1, [{species: 'Genesect', ability: 'frisk', item: id, moves: ['fling']}]);
 				battle.commitDecisions();
@@ -41,7 +43,7 @@ describe('Drives', function () {
 			});
 
 			it('should not be given to a Genesect', function () {
-				battle = BattleEngine.Battle.construct();
+				battle = common.createBattle();
 				battle.join('p1', 'Guest 1', 1, [{species: 'Genesect', ability: 'frisk', moves: ['thief']}]);
 				battle.join('p2', 'Guest 2', 1, [{species: 'Azumarill', ability: 'thickfat', item: id, moves: ['bestow']}]);
 				battle.commitDecisions();
@@ -49,7 +51,7 @@ describe('Drives', function () {
 			});
 
 			it('should be removed if not held by a Genesect', function () {
-				battle = BattleEngine.Battle.construct();
+				battle = common.createBattle();
 				battle.join('p1', 'Guest 1', 1, [{species: 'Genesect', ability: 'frisk', moves: ['knockoff']}]);
 				battle.join('p2', 'Guest 2', 1, [{species: 'Azumarill', ability: 'thickfat', item: id, moves: ['bulkup']}]);
 				battle.commitDecisions();

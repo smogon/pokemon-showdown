@@ -1,6 +1,8 @@
 'use strict';
 
 const assert = require('./../../assert');
+const common = require('./../../common');
+
 let battle;
 
 describe('Transform', function () {
@@ -9,7 +11,7 @@ describe('Transform', function () {
 	});
 
 	it('should copy the Pokemon\'s template', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Ditto", ability: 'limber', moves: ['transform']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Hoopa-Unbound", ability: 'magician', moves: ['rest']}]);
 		battle.commitDecisions();
@@ -17,7 +19,7 @@ describe('Transform', function () {
 	});
 
 	it('should copy all stats except HP', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Ditto", ability: 'limber', moves: ['transform']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Mewtwo", ability: 'pressure', moves: ['rest']}]);
 		battle.commitDecisions();
@@ -31,7 +33,7 @@ describe('Transform', function () {
 	});
 
 	it('should copy all stat changes', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Mew", ability: 'synchronize', item: 'laggingtail', moves: ['calmmind', 'agility', 'transform']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Scolipede", ability: 'swarm', moves: ['honeclaws', 'irondefense', 'doubleteam']}]);
 		for (let i = 1; i <= 3; i++) {
@@ -46,7 +48,7 @@ describe('Transform', function () {
 	});
 
 	it('should copy the target\'s moves with 5 PP each', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Ditto", ability: 'limber', moves: ['transform']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Mew", ability: 'synchronize', moves: ['rest', 'psychic', 'energyball', 'hyperbeam']}]);
 		let p1poke = battle.p1.active[0];
@@ -63,7 +65,7 @@ describe('Transform', function () {
 	});
 
 	it('should copy and activate the target\'s ability', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Ditto", ability: 'limber', moves: ['transform']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Arcanine", ability: 'intimidate', moves: ['rest']}]);
 		battle.commitDecisions();
@@ -71,7 +73,7 @@ describe('Transform', function () {
 	});
 
 	it('should not copy speed boosts from Unburden', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Ditto", ability: 'limber', moves: ['transform']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Hitmonlee", ability: 'unburden', item: 'normalgem', moves: ['feint']}]);
 		battle.commitDecisions();
@@ -79,7 +81,7 @@ describe('Transform', function () {
 	});
 
 	it('should fail against Pokemon with a Substitute', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Ditto", ability: 'limber', moves: ['transform']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Mewtwo", ability: 'pressure', moves: ['substitute']}]);
 		battle.commitDecisions();
@@ -87,7 +89,7 @@ describe('Transform', function () {
 	});
 
 	it('should fail against Pokemon with Illusion active', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Ditto", ability: 'limber', moves: ['transform']}]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: "Zoroark", ability: 'illusion', moves: ['rest']},
@@ -98,7 +100,7 @@ describe('Transform', function () {
 	});
 
 	it('should fail against tranformed Pokemon', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Ditto", ability: 'limber', moves: ['transform']}]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: "Magikarp", ability: 'rattled', moves: ['splash']},
@@ -119,33 +121,37 @@ describe('Transform [Gen 4]', function () {
 	});
 
 	it('should revert Pokemon transformed into Giratina-Origin to Giratina-Alternate if not holding a Griseous Orb', function () {
-		battle = BattleEngine.Battle.construct('battle-transform-gira-a-dpp', 'gen4customgame');
-		battle.join('p1', 'Guest 1', 1, [{species: "Ditto", ability: 'limber', moves: ['transform']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Giratina-Origin", ability: 'levitate', item: 'griseousorb', moves: ['rest']}]);
+		battle = common.gen(4).createBattle([
+			[{species: "Ditto", ability: 'limber', moves: ['transform']}],
+			[{species: "Giratina-Origin", ability: 'levitate', item: 'griseousorb', moves: ['rest']}],
+		]);
 		battle.commitDecisions();
 		assert.strictEqual(battle.p1.active[0].template.species, 'Giratina');
 	});
 
 	it('should cause Pokemon transformed into Giratina-Alternate to become Giratina-Origin if holding a Griseous Orb', function () {
-		battle = BattleEngine.Battle.construct('battle-transform-gira-o-dpp', 'gen4customgame');
-		battle.join('p1', 'Guest 1', 1, [{species: "Ditto", ability: 'limber', item: 'griseousorb', moves: ['transform']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Giratina", ability: 'pressure', moves: ['rest']}]);
+		battle = common.gen(4).createBattle([
+			[{species: "Ditto", ability: 'limber', item: 'griseousorb', moves: ['transform']}],
+			[{species: "Giratina", ability: 'pressure', moves: ['rest']}],
+		]);
 		battle.commitDecisions();
 		assert.strictEqual(battle.p1.active[0].template.species, 'Giratina-Origin');
 	});
 
 	it('should cause Pokemon transformed into Arceus to become an Arceus forme corresponding to its held Plate', function () {
-		battle = BattleEngine.Battle.construct('battle-transform-arceus-dpp', 'gen4customgame');
-		battle.join('p1', 'Guest 1', 1, [{species: "Ditto", ability: 'limber', item: 'flameplate', moves: ['transform']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Arceus-Steel", ability: 'multitype', item: 'ironplate', moves: ['rest']}]);
+		battle = common.gen(4).createBattle([
+			[{species: "Ditto", ability: 'limber', item: 'flameplate', moves: ['transform']}],
+			[{species: "Arceus-Steel", ability: 'multitype', item: 'ironplate', moves: ['rest']}],
+		]);
 		battle.commitDecisions();
 		assert.strictEqual(battle.p1.active[0].template.species, 'Arceus-Fire');
 	});
 
 	it('should succeed against a Substitute', function () {
-		battle = BattleEngine.Battle.construct('battle-transform-substitute-dpp', 'gen4customgame');
-		battle.join('p1', 'Guest 1', 1, [{species: "Ditto", ability: 'limber', moves: ['transform']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Mewtwo", ability: 'pressure', moves: ['substitute']}]);
+		battle = common.gen(4).createBattle([
+			[{species: "Ditto", ability: 'limber', moves: ['transform']}],
+			[{species: "Mewtwo", ability: 'pressure', moves: ['substitute']}],
+		]);
 		battle.commitDecisions();
 		assert.strictEqual(battle.p1.active[0].template, battle.p2.active[0].template);
 	});

@@ -1,6 +1,8 @@
 'use strict';
 
 const assert = require('./../../assert');
+const common = require('./../../common');
+
 let battle;
 
 describe('Shadow Tag', function () {
@@ -9,7 +11,7 @@ describe('Shadow Tag', function () {
 	});
 
 	it('should prevent most Pokemon from switching out normally', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Wobbuffet", ability: 'shadowtag', moves: ['counter']}]);
 		const p2 = battle.join('p2', 'Guest 2', 1, [
 			{species: "Tornadus", ability: 'defiant', moves: ['tailwind']},
@@ -21,7 +23,7 @@ describe('Shadow Tag', function () {
 	});
 
 	it('should not prevent Pokemon from switching out using moves', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Wobbuffet", ability: 'shadowtag', moves: ['counter']}]);
 		const p2 = battle.join('p2', 'Guest 2', 1, [
 			{species: "Tornadus", ability: 'defiant', moves: ['uturn']},
@@ -33,7 +35,7 @@ describe('Shadow Tag', function () {
 	});
 
 	it('should not prevent other Pokemon with Shadow Tag from switching out', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Wobbuffet", ability: 'shadowtag', moves: ['counter']}]);
 		const p2 = battle.join('p2', 'Guest 2', 1, [
 			{species: "Gothitelle", ability: 'shadowtag', moves: ['psychic']},
@@ -45,7 +47,7 @@ describe('Shadow Tag', function () {
 	});
 
 	it('should not prevent Pokemon immune to trapping from switching out', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Wobbuffet", ability: 'shadowtag', moves: ['counter']}]);
 		const p2 = battle.join('p2', 'Guest 2', 1, [
 			{species: "Gengar", ability: 'levitate', moves: ['curse']},

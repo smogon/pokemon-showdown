@@ -1,6 +1,8 @@
 'use strict';
 
 const assert = require('./../../assert');
+const common = require('./../../common');
+
 let battle;
 
 describe('Battle Armor', function () {
@@ -9,10 +11,10 @@ describe('Battle Armor', function () {
 	});
 
 	it('should prevent moves from dealing critical hits', function () {
-		battle = BattleEngine.Battle.construct('battle-battlearmor', 'customgame');
-		battle.join('p1', 'Guest 1', 1, [{species: 'Slowbro', ability: 'battlearmor', moves: ['quickattack']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: 'Cyrogonal', ability: 'noguard', moves: ['frostbreath']}]);
-		battle.commitDecisions(); // Team Preview
+		battle = common.createBattle([
+			[{species: 'Slowbro', ability: 'battlearmor', moves: ['quickattack']}],
+			[{species: 'Cryogonal', ability: 'noguard', moves: ['frostbreath']}],
+		]);
 		let successfulEvent = false;
 		battle.on('ModifyDamage', battle.getFormat(), function (damage, attacker, defender, move) {
 			if (move.id === 'frostbreath') {
@@ -25,9 +27,10 @@ describe('Battle Armor', function () {
 	});
 
 	it('should be suppressed by Mold Breaker', function () {
-		battle = BattleEngine.Battle.construct('battle-battlearmor-moldbreaker', 'customgame');
-		battle.join('p1', 'Guest 1', 1, [{species: 'Slowbro', ability: 'battlearmor', moves: ['quickattack']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: 'Cyrogonal', ability: 'moldbreaker', item: 'zoomlens', moves: ['frostbreath']}]);
+		battle = common.createBattle([
+			[{species: 'Slowbro', ability: 'battlearmor', moves: ['quickattack']}],
+			[{species: 'Cryogonal', ability: 'moldbreaker', item: 'zoomlens', moves: ['frostbreath']}],
+		]);
 		battle.commitDecisions(); // Team Preview
 		let successfulEvent = false;
 		battle.on('ModifyDamage', battle.getFormat(), function (damage, attacker, defender, move) {

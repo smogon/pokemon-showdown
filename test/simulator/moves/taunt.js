@@ -1,6 +1,8 @@
 'use strict';
 
 const assert = require('./../../assert');
+const common = require('./../../common');
+
 let battle;
 
 describe('Taunt', function () {
@@ -9,7 +11,7 @@ describe('Taunt', function () {
 	});
 
 	it('should prevent the target from using Status moves and disable them', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Sableye', ability: 'prankster', moves: ['taunt']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Spiritomb', ability: 'pressure', moves: ['calmmind']}]);
 		battle.commitDecisions();

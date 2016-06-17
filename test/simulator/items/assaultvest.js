@@ -1,6 +1,8 @@
 'use strict';
 
 const assert = require('./../../assert');
+const common = require('./../../common');
+
 let battle;
 
 describe('Assault Vest', function () {
@@ -9,7 +11,7 @@ describe('Assault Vest', function () {
 	});
 
 	it('should disable the use of Status moves', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Abra', ability: 'synchronize', moves: ['teleport']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Abra', ability: 'synchronize', item: 'assaultvest', moves: ['teleport']}]);
 		battle.commitDecisions();
@@ -17,7 +19,7 @@ describe('Assault Vest', function () {
 	});
 
 	it('should not prevent the use of Status moves', function () {
-		battle = BattleEngine.Battle.construct();
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Lopunny', ability: 'klutz', item: 'assaultvest', moves: ['trick']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Abra', ability: 'synchronize', item: 'ironball', moves: ['calmmind']}]);
 		battle.commitDecisions();
