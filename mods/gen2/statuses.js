@@ -6,6 +6,7 @@ exports.BattleStatuses = {
 		onStart: function (target) {
 			this.add('-status', target, 'brn');
 		},
+		onAfterMoveSelfPriority: 3,
 		onAfterMoveSelf: function (pokemon) {
 			this.damage(pokemon.maxhp / 8);
 		},
@@ -64,6 +65,7 @@ exports.BattleStatuses = {
 		onStart: function (target) {
 			this.add('-status', target, 'psn');
 		},
+		onAfterMoveSelfPriority: 3,
 		onAfterMoveSelf: function (pokemon) {
 			this.damage(pokemon.maxhp / 8);
 		},
@@ -77,6 +79,7 @@ exports.BattleStatuses = {
 			this.add('-status', target, 'tox');
 			this.effectData.stage = 0;
 		},
+		onAfterMoveSelfPriority: 3,
 		onAfterMoveSelf: function (pokemon) {
 			if (this.effectData.stage < 15) {
 				this.effectData.stage++;
