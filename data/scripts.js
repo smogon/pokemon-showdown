@@ -1375,7 +1375,7 @@ exports.BattleScripts = {
 					if (hasMove['outrage'] || hasMove['dragontail']) rejected = true;
 					break;
 				case 'dragonpulse': case 'spacialrend':
-					if (hasMove['dracometeor']) rejected = true;
+					if (hasMove['dracometeor'] || hasMove['outrage']) rejected = true;
 					break;
 				case 'outrage':
 					if (hasMove['dracometeor'] && counter.damagingMoves.length < 3) rejected = true;
@@ -1388,6 +1388,7 @@ exports.BattleScripts = {
 					break;
 				case 'thunderbolt':
 					if (hasMove['discharge'] || (hasMove['raindance'] || hasMove['thunder']) || (hasMove['voltswitch'] && hasMove['wildcharge'])) rejected = true;
+					if (hasMove['voltswitch'] && template.types.length > 1 && !counter[template.types.filter(type => type !== 'Electric')[0]]) rejected = true;
 					break;
 				case 'dazzlinggleam':
 					if (hasMove['playrough'] && counter.setupType !== 'Special') rejected = true;
