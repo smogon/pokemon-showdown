@@ -1388,7 +1388,7 @@ exports.BattleScripts = {
 					break;
 				case 'thunderbolt':
 					if (hasMove['discharge'] || (hasMove['raindance'] || hasMove['thunder']) || (hasMove['voltswitch'] && hasMove['wildcharge'])) rejected = true;
-					if (hasMove['voltswitch'] && template.types.length > 1 && !counter[template.types.filter(type => type !== 'Electric')[0]]) rejected = true;
+					if (hasMove['voltswitch'] && template.types.length > 1 && !counter[template.types.find(type => type !== 'Electric')) rejected = true;
 					break;
 				case 'dazzlinggleam':
 					if (hasMove['playrough'] && counter.setupType !== 'Special') rejected = true;
@@ -1489,7 +1489,7 @@ exports.BattleScripts = {
 					if (counter.setupType !== 'Physical' && hasMove['vacuumwave']) rejected = true;
 					break;
 				case 'hiddenpower':
-					if ((counter.damagingMoves.length < 2 && !counter.stab) || hasMove['rest']) rejected = true;
+					if (hasMove['rest'] || !counter.stab && counter.damagingMoves.length < 2) rejected = true;
 					break;
 				case 'hypervoice':
 					if (hasMove['naturepower'] || hasMove['return']) rejected = true;
