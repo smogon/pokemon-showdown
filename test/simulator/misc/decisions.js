@@ -562,144 +562,455 @@ describe('Decisions', function () {
 });
 
 describe('Decision extensions', function () {
-	it('should not allow revoking decisions after every player has sent an unrevoked decision', function () {
-		battle = common.createBattle({cancel: true});
-		battle.join('p1', 'Guest 1', 1, [{species: "Bulbasaur", ability: 'overgrow', moves: ['tackle', 'growl']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Charmander", ability: 'blaze', moves: ['tackle', 'growl']}]);
+	describe('Undo', function () {
+		const MODES = ['revoke', 'override'];
+		for (const mode of MODES) {
+			it(`should disallow to ${mode} decisions after every player has sent an unrevoked decision`, function () {
+				battle = common.createBattle({cancel: true});
+				battle.join('p1', 'Guest 1', 1, [{species: "Bulbasaur", ability: 'overgrow', moves: ['tackle', 'growl']}]);
+				battle.join('p2', 'Guest 2', 1, [{species: "Charmander", ability: 'blaze', moves: ['tackle', 'growl']}]);
 
-		// First turn
-		battle.choose('p1', 'move tackle');
-		battle.choose('p2', 'move growl');
-		battle.undoChoice('p1');
-		battle.choose('p1', 'move growl');
+				battle.choose('p1', 'move tackle');
+				battle.choose('p2', 'move growl');
+				if (mode === 'revoke') battle.undoChoice('p1');
+				battle.choose('p1', 'move growl');
 
-		assert.strictEqual(battle.turn, 2);
-		assert.strictEqual(battle.p1.active[0].lastMove, 'tackle');
-		assert.strictEqual(battle.p2.active[0].lastMove, 'growl');
-	});
+				assert.strictEqual(battle.turn, 2);
+				assert.strictEqual(battle.p1.active[0].lastMove, 'tackle');
+				assert.strictEqual(battle.p2.active[0].lastMove, 'growl');
+			});
 
-	it('should not allow overriding decisions after every player has sent an unrevoked decision', function () {
-		battle = common.createBattle({cancel: true});
-		battle.join('p1', 'Guest 1', 1, [{species: "Bulbasaur", ability: 'overgrow', moves: ['tackle', 'growl']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Charmander", ability: 'blaze', moves: ['tackle', 'growl']}]);
+			it(`should support to ${mode} move decisions`, function () {
+				battle = common.createBattle({cancel: true});
+				battle.join('p1', 'Guest 1', 1, [{species: "Bulbasaur", ability: 'overgrow', moves: ['tackle', 'growl']}]);
+				battle.join('p2', 'Guest 2', 1, [{species: "Charmander", ability: 'blaze', moves: ['tackle', 'growl']}]);
 
-		// First turn
-		battle.choose('p1', 'move tackle');
-		battle.choose('p2', 'move growl');
-		battle.choose('p1', 'move growl');
+				battle.choose('p1', 'move tackle');
+				if (mode === 'revoke') battle.undoChoice('p1');
+				battle.choose('p1', 'move growl');
+				battle.choose('p2', 'move growl');
 
-		assert.strictEqual(battle.turn, 2);
-		assert.strictEqual(battle.p1.active[0].lastMove, 'tackle');
-		assert.strictEqual(battle.p2.active[0].lastMove, 'growl');
-	});
+				assert.strictEqual(battle.turn, 2);
+				assert.strictEqual(battle.p1.active[0].lastMove, 'growl');
+			});
 
-	it('should support revoking decisions', function () {
-		battle = common.createBattle({cancel: true});
-		battle.join('p1', 'Guest 1', 1, [{species: "Bulbasaur", ability: 'overgrow', moves: ['tackle', 'growl']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Charmander", ability: 'blaze', moves: ['tackle', 'growl']}]);
+			it(`should disallow to ${mode} move decisions for maybe-disabled Pokémon`, function () {
+				battle = common.createBattle({cancel: true});
+				battle.join('p1', 'Guest 1', 1, [{species: "Bulbasaur", ability: 'overgrow', moves: ['tackle', 'growl', 'synthesis']}]);
+				battle.join('p2', 'Guest 2', 1, [{species: "Charmander", ability: 'blaze', moves: ['scratch']}]);
 
-		// First turn
-		battle.choose('p1', 'move tackle');
-		battle.undoChoice('p1');
-		battle.choose('p1', 'move growl');
-		battle.choose('p2', 'move growl');
+				const target = battle.p1.active[0];
+				target.maybeDisabled = true;
+				battle.makeRequest();
 
-		assert.strictEqual(battle.turn, 2);
-		assert.strictEqual(battle.p1.active[0].lastMove, 'growl');
-		assert.strictEqual(battle.p2.active[0].lastMove, 'growl');
-	});
+				battle.choose('p1', 'move tackle');
+				if (mode === 'revoke') battle.undoChoice('p1');
+				battle.choose('p1', 'move growl');
+				battle.choose('p2', 'move scratch');
 
-	it('should support overriding decisions', function () {
-		battle = common.createBattle({cancel: true});
-		battle.join('p1', 'Guest 1', 1, [{species: "Bulbasaur", ability: 'overgrow', moves: ['tackle', 'growl']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Charmander", ability: 'blaze', moves: ['tackle', 'growl']}]);
+				assert.strictEqual(target.lastMove, 'tackle');
+			});
 
-		// First turn
-		battle.choose('p1', 'move 1');
-		battle.choose('p1', 'move growl');
-		battle.choose('p2', 'move 2');
+			it(`should disallow to ${mode} move decisions by default`, function () {
+				battle = common.createBattle();
+				battle.join('p1', 'Guest 1', 1, [{species: "Bulbasaur", ability: 'overgrow', moves: ['tackle', 'growl']}]);
+				battle.join('p2', 'Guest 2', 1, [{species: "Charmander", ability: 'blaze', moves: ['tackle', 'growl']}]);
 
-		assert.strictEqual(battle.turn, 2);
-		assert.strictEqual(battle.p1.active[0].lastMove, 'growl');
-		assert.strictEqual(battle.p2.active[0].lastMove, 'growl');
-	});
+				battle.choose('p1', 'move tackle');
+				if (mode === 'revoke') battle.undoChoice('p1');
+				battle.choose('p1', 'move growl');
+				battle.choose('p2', 'move growl');
 
-	it('should disallow revoking decisions by default', function () {
-		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: "Bulbasaur", ability: 'overgrow', moves: ['tackle', 'growl']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Charmander", ability: 'blaze', moves: ['tackle', 'growl']}]);
+				assert.strictEqual(battle.turn, 2);
+				assert.strictEqual(battle.p1.active[0].lastMove, 'tackle');
+				assert.strictEqual(battle.p2.active[0].lastMove, 'growl');
+			});
 
-		// First turn
-		battle.choose('p1', 'move tackle');
-		battle.undoChoice('p1');
-		battle.choose('p1', 'move growl');
-		battle.choose('p2', 'move growl');
+			it(`should support to ${mode} switch decisions on move requests`, function () {
+				const TEAMS = [[
+					{species: 'Bulbasaur', ability: 'overgrow', moves: ['synthesis']},
+					{species: 'Ivysaur', ability: 'overgrow', moves: ['synthesis']},
+					{species: 'Venusaur', ability: 'overgrow', moves: ['synthesis']},
+				], [
+					{species: 'Charmander', ability: 'blaze', moves: ['scratch']},
+				]];
+				battle = common.createBattle({cancel: true}, TEAMS);
 
-		assert.strictEqual(battle.turn, 2);
-		assert.strictEqual(battle.p1.active[0].lastMove, 'tackle');
-		assert.strictEqual(battle.p2.active[0].lastMove, 'growl');
-	});
+				battle.choose('p1', 'switch 2');
+				if (mode === 'revoke') battle.undoChoice('p1');
+				battle.choose('p1', 'move 1');
+				battle.choose('p2', 'move 1');
 
-	it('should support revoking decisions on double switches', function () {
-		battle = common.createBattle({cancel: true});
-		battle.join('p1', 'Guest 1', 1, [
-			{species: "Deoxys-Attack", ability: 'pressure', moves: ['explosion']},
-			{species: "Bulbasaur", ability: 'overgrow', moves: ['tackle']},
-			{species: "Chikorita", ability: 'overgrow', moves: ['tackle']},
-		]);
-		battle.join('p2', 'Guest 2', 1, [
-			{species: "Caterpie", ability: 'shielddust', moves: ['tackle']},
-			{species: "Charmander", ability: 'blaze', moves: ['tackle']},
-		]);
+				['Bulbasaur', 'Ivysaur', 'Venusaur'].forEach((species, index) => assert.species(battle.p1.pokemon[index], species));
+				assert.strictEqual(battle.p1.active[0].lastMove, 'synthesis');
 
-		battle.commitDecisions();
+				battle.destroy();
+				battle = common.createBattle({cancel: true}, TEAMS);
 
-		// First turn
-		battle.choose('p1', 'switch 2');
-		battle.undoChoice('p1');
-		battle.choose('p1', 'switch 3');
-		battle.choose('p2', 'switch 2');
+				battle.choose('p1', 'switch 2');
+				if (mode === 'revoke') battle.undoChoice('p1');
+				battle.choose('p1', 'switch 3');
+				battle.choose('p2', 'move 1');
 
-		assert.strictEqual(battle.turn, 2);
-		assert.strictEqual(battle.p1.active[0].template.species, 'Chikorita');
-		assert.strictEqual(battle.p2.active[0].template.species, 'Charmander');
-	});
+				['Venusaur', 'Ivysaur', 'Bulbasaur'].forEach((species, index) => assert.species(battle.p1.pokemon[index], species));
+			});
 
-	it('should support overriding decisions on double switches', function () {
-		battle = common.createBattle({cancel: true});
-		battle.join('p1', 'Guest 1', 1, [
-			{species: "Deoxys-Attack", ability: 'pressure', moves: ['explosion']},
-			{species: "Bulbasaur", ability: 'overgrow', moves: ['tackle']},
-			{species: "Chikorita", ability: 'overgrow', moves: ['tackle']},
-		]);
-		battle.join('p2', 'Guest 2', 1, [
-			{species: "Caterpie", ability: 'shielddust', moves: ['tackle']},
-			{species: "Charmander", ability: 'blaze', moves: ['tackle']},
-		]);
+			it(`should disallow to ${mode} switch decisions on move requests for maybe-trapped Pokémon`, function () {
+				const TEAMS = [[
+					{species: 'Bulbasaur', ability: 'overgrow', moves: ['synthesis']},
+					{species: 'Ivysaur', ability: 'overgrow', moves: ['synthesis']},
+				], [
+					{species: 'Charmander', ability: 'blaze', moves: ['scratch']},
+				]];
+				battle = common.createBattle({cancel: true}, TEAMS);
 
-		battle.commitDecisions();
+				battle.p1.active[0].maybeTrapped = true;
+				battle.makeRequest();
 
-		battle.choose('p1', 'switch 2');
-		battle.choose('p1', 'switch 3');
-		battle.choose('p2', 'switch 2');
+				battle.choose('p1', 'switch 2');
+				if (mode === 'revoke') battle.undoChoice('p1');
+				battle.choose('p1', 'move 1');
+				battle.choose('p2', 'move 1');
 
-		assert.strictEqual(battle.turn, 2);
-		assert.strictEqual(battle.p1.active[0].template.species, 'Chikorita');
-		assert.strictEqual(battle.p2.active[0].template.species, 'Charmander');
-	});
+				assert.species(battle.p1.active[0], 'Ivysaur');
+			});
 
-	it('should disallow overriding decisions by default', function () {
-		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: "Bulbasaur", ability: 'overgrow', moves: ['tackle', 'growl']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Charmander", ability: 'blaze', moves: ['tackle', 'growl']}]);
+			it.skip(`should disallow to ${mode} switch decisions on move requests for unconfirmed trapping-immune Pokémon that would otherwise be trapped`, function () {
+				battle = common.createBattle({cancel: true}, [
+					[
+						{species: 'Starmie', ability: 'naturalcure', moves: ['reflecttype', 'recover']},
+						{species: 'Mandibuzz', ability: 'overcoat', moves: ['knockoff']},
+					], 	[
+						{species: 'Zoroark', ability: 'illusion', moves: ['shadowball, focusblast']},
+						{species: 'Gengar', ability: 'levitate', moves: ['shadowball, focusblast']},
+						{species: 'Gothitelle', ability: 'competitive', moves: ['calmmind']},
+					],
+				]);
+				const target = battle.p1.active[0];
 
-		battle.choose('p1', 'move 1');
-		battle.choose('p1', 'move growl');
-		battle.choose('p2', 'move 2');
+				battle.p1.chooseMove('reflecttype');
+				battle.p2.chooseSwitch(2);
 
-		assert.strictEqual(battle.turn, 2);
-		assert.strictEqual(battle.p1.active[0].lastMove, 'tackle');
-		assert.strictEqual(battle.p2.active[0].lastMove, 'growl');
+				// The real Gengar comes in, but p1 only sees a Gengar being switched by another Gengar, implying Illusion.
+				// For a naive client, Starmie turns into Ghost/Poison, and it will be correct.
+				assert.strictEqual(target.getTypes().join('/'), 'Ghost/Poison');
+
+				// Trapping with Gengar-Mega is a guaranteed trapping, so we are going to get a very meta
+				// Competitive Gothitelle into the battle field (Frisk is revealed on switch-in).
+				battle.p1.chooseMove('recover');
+				battle.p2.chooseSwitch(3);
+
+				assert(target.maybeTrapped, `${target} should be flagged as maybe trapped`);
+
+				battle.choose('p1', 'switch 2');
+				if (mode === 'revoke') battle.undoChoice('p1');
+				battle.choose('p1', 'move recover');
+				battle.choose('p2', 'move 1');
+
+				assert.species(battle.p1.active[0], 'Mandibuzz');
+			});
+
+			it(`should disallow to ${mode} switch decisions on move requests by default`, function () {
+				const TEAMS = [[
+					{species: 'Bulbasaur', ability: 'overgrow', moves: ['synthesis']},
+					{species: 'Ivysaur', ability: 'overgrow', moves: ['synthesis']},
+					{species: 'Venusaur', ability: 'overgrow', moves: ['synthesis']},
+				], [
+					{species: 'Charmander', ability: 'blaze', moves: ['scratch']},
+				]];
+				battle = common.createBattle(TEAMS);
+
+				battle.choose('p1', 'switch 2');
+				if (mode === 'revoke') battle.undoChoice('p1');
+				battle.choose('p1', 'move 1');
+				battle.choose('p2', 'move 1');
+
+				['Ivysaur', 'Bulbasaur', 'Venusaur'].forEach((species, index) => assert.species(battle.p1.pokemon[index], species));
+
+				battle.destroy();
+				battle = common.createBattle(TEAMS);
+
+				battle.choose('p1', 'switch 2');
+				if (mode === 'revoke') battle.undoChoice('p1');
+				battle.choose('p1', 'switch 3');
+				battle.choose('p2', 'move 1');
+
+				['Ivysaur', 'Bulbasaur', 'Venusaur'].forEach((species, index) => assert.species(battle.p1.pokemon[index], species));
+			});
+
+			it(`should support to ${mode} shift decisions on move requests`, function () {
+				const TEAMS = [[
+					{species: 'Bulbasaur', ability: 'overgrow', moves: ['synthesis']},
+					{species: 'Ivysaur', ability: 'overgrow', moves: ['synthesis']},
+					{species: 'Venusaur', ability: 'overgrow', moves: ['synthesis']},
+				], [
+					{species: 'Aggron', ability: 'sturdy', moves: ['irondefense']},
+					{species: 'Aggron', ability: 'sturdy', moves: ['irondefense']},
+					{species: 'Aggron', ability: 'sturdy', moves: ['irondefense']},
+				]];
+				battle = common.createBattle({gameType: 'triples', cancel: true}, TEAMS);
+
+				battle.choose('p1', 'shift, move 1, move 1');
+				if (mode === 'revoke') battle.undoChoice('p1');
+				battle.choose('p1', 'move 1, move 1, move 1');
+				battle.choose('p2', 'move 1, move 1, move 1');
+
+				['Bulbasaur', 'Ivysaur', 'Venusaur'].forEach((species, index) => assert.species(battle.p1.active[index], species));
+				assert.strictEqual(battle.p1.active[0].lastMove, 'synthesis');
+
+				battle.destroy();
+				battle = common.createBattle({gameType: 'triples', cancel: true}, TEAMS);
+
+				battle.choose('p1', 'move 1, move 1, shift');
+				if (mode === 'revoke') battle.undoChoice('p1');
+				battle.choose('p1', 'move 1, move 1, move 1');
+				battle.choose('p2', 'move 1, move 1, move 1');
+
+				['Bulbasaur', 'Ivysaur', 'Venusaur'].forEach((species, index) => assert.species(battle.p1.active[index], species));
+				assert.strictEqual(battle.p1.active[2].lastMove, 'synthesis');
+			});
+
+			it(`should disallow to ${mode} shift decisions by default`, function () {
+				const TEAMS = [[
+					{species: 'Bulbasaur', ability: 'overgrow', moves: ['synthesis']},
+					{species: 'Ivysaur', ability: 'overgrow', moves: ['growth']},
+					{species: 'Venusaur', ability: 'overgrow', moves: ['synthesis']},
+				], [
+					{species: 'Aggron', ability: 'sturdy', moves: ['irondefense']},
+					{species: 'Aggron', ability: 'sturdy', moves: ['irondefense']},
+					{species: 'Aggron', ability: 'sturdy', moves: ['irondefense']},
+				]];
+				battle = common.createBattle({gameType: 'triples'}, TEAMS);
+
+				battle.choose('p1', 'shift, move 1, move 1');
+				if (mode === 'revoke') battle.undoChoice('p1');
+				battle.choose('p1', 'move 1, move 1, move 1');
+				battle.choose('p2', 'move 1, move 1, move 1');
+
+				['Ivysaur', 'Bulbasaur', 'Venusaur'].forEach((species, index) => assert.species(battle.p1.active[index], species));
+				assert.strictEqual(battle.p1.active[0].lastMove, 'growth');
+
+				battle.destroy();
+				battle = common.createBattle({gameType: 'triples'}, TEAMS);
+
+				battle.choose('p1', 'move 1, move 1, shift');
+				if (mode === 'revoke') battle.undoChoice('p1');
+				battle.choose('p1', 'move 1, move 1, move 1');
+				battle.choose('p2', 'move 1, move 1, move 1');
+
+				['Bulbasaur', 'Venusaur', 'Ivysaur'].forEach((species, index) => assert.species(battle.p1.active[index], species));
+				assert.strictEqual(battle.p1.active[2].lastMove, 'growth');
+			});
+
+			it.skip(`should support to ${mode} switch decisions on switch requests`, function () {
+				// TODO: Support `switch` partial decisions
+				const TEAMS = [[
+					{species: 'Latias', ability: 'levitate', moves: ['lunardance']},
+					{species: 'Clefable', ability: 'unaware', moves: ['healingwish']},
+					{species: 'Ivysaur', ability: 'overgrow', moves: ['tackle']},
+					{species: 'Venusaur', ability: 'overgrow', moves: ['tackle']},
+				], [
+					{species: 'Charmander', ability: 'blaze', moves: ['scratch']},
+					{species: 'Charmeleon', ability: 'blaze', moves: ['scratch']},
+					{species: 'Charizard', ability: 'blaze', moves: ['scratch']},
+				]];
+
+				battle = common.createBattle({gameType: 'doubles', partialDecisions: true, cancel: true}, TEAMS);
+				battle.commitDecisions();
+
+				battle.choose('p1', 'switch 3');
+				if (mode === 'revoke') battle.undoChoice('p1');
+				battle.choose('p1', 'switch 4, switch 3');
+
+				['Venusaur', 'Clefable'].forEach((species, index) => assert.species(battle.p1.active[index], species));
+			});
+
+			it.skip(`should support to ${mode} pass decisions on switch requests`, function () {
+				// TODO: Support `pass` partial decisions
+				const TEAMS = [[
+					{species: 'Latias', ability: 'levitate', moves: ['lunardance']},
+					{species: 'Clefable', ability: 'unaware', moves: ['healingwish']},
+					{species: 'Venusaur', ability: 'overgrow', moves: ['tackle']},
+				], [
+					{species: 'Charmander', ability: 'blaze', moves: ['scratch']},
+					{species: 'Charmeleon', ability: 'blaze', moves: ['scratch']},
+					{species: 'Charizard', ability: 'blaze', moves: ['scratch']},
+				]];
+
+				battle = common.createBattle({gameType: 'doubles', partialDecisions: true, cancel: true}, TEAMS);
+				battle.commitDecisions();
+
+				battle.choose('p1', 'pass');
+				if (mode === 'revoke') battle.undoChoice('p1');
+				battle.choose('p1', 'switch 3, pass');
+
+				['Venusaur', 'Ivysaur'].forEach((species, index) => assert.species(battle.p1.active[index], species));
+			});
+
+			it(`should support to ${mode} switch decisions on double switch requests`, function () {
+				battle = common.createBattle({cancel: true});
+				battle.join('p1', 'Guest 1', 1, [
+					{species: "Deoxys-Attack", ability: 'pressure', moves: ['explosion']},
+					{species: "Bulbasaur", ability: 'overgrow', moves: ['tackle']},
+					{species: "Chikorita", ability: 'overgrow', moves: ['tackle']},
+				]);
+				battle.join('p2', 'Guest 2', 1, [
+					{species: "Caterpie", ability: 'shielddust', moves: ['tackle']},
+					{species: "Charmander", ability: 'blaze', moves: ['tackle']},
+				]);
+
+				battle.commitDecisions();
+
+				battle.choose('p1', 'switch 2');
+				if (mode === 'revoke') battle.undoChoice('p1');
+				battle.choose('p1', 'switch 3');
+				battle.choose('p2', 'switch 2');
+
+				assert.strictEqual(battle.turn, 2);
+				assert.strictEqual(battle.p1.active[0].template.species, 'Chikorita');
+				assert.strictEqual(battle.p2.active[0].template.species, 'Charmander');
+			});
+
+			it(`should support to ${mode} pass decisions on double switch requests`, function () {
+				battle = common.createBattle({cancel: true, gameType: 'doubles'});
+				battle.join('p1', 'Guest 1', 1, [
+					{species: "Deoxys-Attack", ability: 'pressure', moves: ['explosion']},
+					{species: "Bulbasaur", ability: 'overgrow', moves: ['tackle']},
+					{species: "Chikorita", ability: 'overgrow', moves: ['tackle']},
+				]);
+				battle.join('p2', 'Guest 2', 1, [
+					{species: "Caterpie", ability: 'shielddust', moves: ['tackle']},
+					{species: "Charmander", ability: 'blaze', moves: ['tackle']},
+					{species: "Cyndaquil", ability: 'blaze', moves: ['tackle']},
+				]);
+
+				battle.commitDecisions();
+
+				battle.choose('p1', 'pass, switch 3');
+				if (mode === 'revoke') battle.undoChoice('p1');
+				battle.choose('p1', 'switch 3, pass');
+				battle.choose('p2', 'pass, switch 3');
+
+				['Chikorita', 'Bulbasaur'].forEach((species, index) => assert.species(battle.p1.active[index], species));
+			});
+
+			it(`should disallow to ${mode} switch decisions on switch requests by default`, function () {
+				const TEAMS = [[
+					{species: 'Latias', ability: 'levitate', moves: ['lunardance']},
+					{species: 'Clefable', ability: 'unaware', moves: ['healingwish']},
+					{species: 'Ivysaur', ability: 'overgrow', moves: ['tackle']},
+					{species: 'Venusaur', ability: 'overgrow', moves: ['tackle']},
+				], [
+					{species: 'Charmander', ability: 'blaze', moves: ['scratch']},
+					{species: 'Charmeleon', ability: 'blaze', moves: ['scratch']},
+					{species: 'Charizard', ability: 'blaze', moves: ['scratch']},
+				]];
+
+				battle = common.createBattle({gameType: 'doubles', cancel: true}, TEAMS);
+				battle.commitDecisions();
+
+				battle.choose('p1', 'switch 3, switch 4');
+				if (mode === 'revoke') battle.undoChoice('p1');
+				battle.choose('p1', 'switch 4, switch 3');
+
+				['Ivysaur', 'Venusaur'].forEach((species, index) => assert.species(battle.p1.active[index], species));
+			});
+
+			it(`should disallow to ${mode} pass decisions on switch requests by default`, function () {
+				const TEAMS = [[
+					{species: 'Latias', ability: 'levitate', moves: ['lunardance']},
+					{species: 'Clefable', ability: 'overgrow', moves: ['healingwish']},
+					{species: 'Venusaur', ability: 'overgrow', moves: ['tackle']},
+				], [
+					{species: 'Charmander', ability: 'blaze', moves: ['scratch']},
+					{species: 'Charmeleon', ability: 'blaze', moves: ['scratch']},
+					{species: 'Charizard', ability: 'blaze', moves: ['scratch']},
+				]];
+
+				battle = common.createBattle({gameType: 'doubles'}, TEAMS);
+				battle.commitDecisions();
+
+				battle.choose('p1', 'pass, switch 3');
+				if (mode === 'revoke') battle.undoChoice('p1');
+				battle.choose('p1', 'switch 3, pass');
+
+				['Latias', 'Venusaur'].forEach((species, index) => assert.species(battle.p1.active[index], species));
+			});
+
+			it(`should disallow to ${mode} switch decisions on double switch requests by default`, function () {
+				battle = common.createBattle();
+				battle.join('p1', 'Guest 1', 1, [
+					{species: "Deoxys-Attack", ability: 'pressure', moves: ['explosion']},
+					{species: "Bulbasaur", ability: 'overgrow', moves: ['tackle']},
+					{species: "Chikorita", ability: 'overgrow', moves: ['tackle']},
+				]);
+				battle.join('p2', 'Guest 2', 1, [
+					{species: "Caterpie", ability: 'shielddust', moves: ['tackle']},
+					{species: "Charmander", ability: 'blaze', moves: ['tackle']},
+				]);
+
+				battle.commitDecisions();
+
+				battle.choose('p1', 'switch 2');
+				if (mode === 'revoke') battle.undoChoice('p1');
+				battle.choose('p1', 'switch 3');
+				battle.choose('p2', 'switch 2');
+
+				assert.species(battle.p1.active[0], 'Bulbasaur');
+				assert.species(battle.p2.active[0], 'Charmander');
+			});
+
+			it(`should disallow to ${mode} pass decisions on double switch requests by default`, function () {
+				battle = common.createBattle({gameType: 'doubles'});
+				battle.join('p1', 'Guest 1', 1, [
+					{species: "Deoxys-Attack", ability: 'pressure', moves: ['explosion']},
+					{species: "Bulbasaur", ability: 'overgrow', moves: ['tackle']},
+					{species: "Chikorita", ability: 'overgrow', moves: ['tackle']},
+				]);
+				battle.join('p2', 'Guest 2', 1, [
+					{species: "Caterpie", ability: 'shielddust', moves: ['tackle']},
+					{species: "Charmander", ability: 'blaze', moves: ['tackle']},
+					{species: "Cyndaquil", ability: 'blaze', moves: ['tackle']},
+				]);
+
+				battle.commitDecisions();
+
+				battle.choose('p1', 'pass, switch 3');
+				if (mode === 'revoke') battle.undoChoice('p1');
+				battle.choose('p1', 'switch 3, pass');
+				battle.choose('p2', 'pass, switch 3');
+
+				['Deoxys-Attack', 'Chikorita'].forEach((species, index) => assert.species(battle.p1.active[index], species));
+			});
+
+			it(`should support to ${mode} team order decision on team preview requests`, function () {
+				battle = common.createBattle({preview: true, cancel: true}, [
+					[{species: 'Bulbasaur', ability: 'overgrow', moves: ['tackle']}, {species: 'Ivysaur', ability: 'overgrow', moves: ['tackle']}],
+					[{species: 'Charmander', ability: 'blaze', moves: ['scratch']}, {species: 'Charmeleon', ability: 'blaze', moves: ['scratch']}],
+				]);
+
+				battle.choose('p1', 'team 12');
+				if (mode === 'revoke') battle.undoChoice('p1');
+				battle.choose('p1', 'team 21');
+				battle.choose('p2', 'team 12');
+
+				['Ivysaur', 'Bulbasaur'].forEach((species, index) => assert.species(battle.p1.pokemon[index], species));
+			});
+
+			it(`should disallow to ${mode} team order decision on team preview requests by default`, function () {
+				battle = common.createBattle({preview: true}, [
+					[{species: 'Bulbasaur', ability: 'overgrow', moves: ['tackle']}, {species: 'Ivysaur', ability: 'overgrow', moves: ['tackle']}],
+					[{species: 'Charmander', ability: 'blaze', moves: ['scratch']}, {species: 'Charmeleon', ability: 'blaze', moves: ['scratch']}],
+				]);
+
+				battle.choose('p1', 'team 12');
+				if (mode === 'revoke') battle.undoChoice('p1');
+				battle.choose('p1', 'team 21');
+				battle.choose('p2', 'team 12');
+
+				['Bulbasaur', 'Ivysaur'].forEach((species, index) => assert.species(battle.p1.pokemon[index], species));
+			});
+		}
 	});
 });
 
