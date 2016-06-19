@@ -679,7 +679,7 @@ let commands = {
 		let categoryCount = parseInt(params[0]) || MAX_CATEGORY_COUNT;
 		let questionCount = parseInt(params[1]) || MAX_QUESTION_COUNT;
 		if (categoryCount > MAX_CATEGORY_COUNT) return this.sendReply("A match with more than " + MAX_CATEGORY_COUNT + " categories cannot be created.");
-		if (questionCount > MAX_QUESTION_COUNT) return this.sendReply("A match with more than " + MAX_CATEGORY_COUNT + " questions per category cannot be created.");
+		if (questionCount > MAX_QUESTION_COUNT) return this.sendReply("A match with more than " + MAX_QUESTION_COUNT + " questions per category cannot be created.");
 
 		jeopardies[room.id] = new Jeopardy(user, room, categoryCount, questionCount);
 	},
