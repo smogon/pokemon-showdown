@@ -1880,10 +1880,9 @@ exports.BattleAbilities = {
 		onImmunity: function (type, pokemon) {
 			if (type === 'confusion') return false;
 		},
-		onTryHit: function (target, source, move) {
+		onHit: function (target, source, move) {
 			if (move && move.volatileStatus === 'confusion') {
 				this.add('-immune', target, 'confusion', '[from] ability: Own Tempo');
-				return null;
 			}
 		},
 		id: "owntempo",
