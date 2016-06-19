@@ -27,7 +27,7 @@ exports.commands = {
 		if (!targetUser && this.can('lock')) {
 			return this.errorReply("User " + this.targetUsername + " not found.");
 		} else {
-			return false
+			return false;
 		}
 		let showAll = (cmd === 'ip' || cmd === 'whoare' || cmd === 'alt' || cmd === 'alts');
 		if (showAll && !user.confirmed && targetUser !== user) {
