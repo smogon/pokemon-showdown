@@ -578,7 +578,7 @@ BattlePokemon = (() => {
 				}
 			}
 			let disabled = moveEntry.disabled;
-			if (disabled && this.battle.targetTypeChoices(target) || moveEntry.pp <= 0) {
+			if (moveEntry.pp <= 0 || disabled && this.side.active.length >= 2 && this.battle.targetTypeChoices(target)) {
 				disabled = true;
 			} else if (disabled === 'hidden' && restrictData) {
 				disabled = false;
