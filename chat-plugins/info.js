@@ -24,8 +24,10 @@ exports.commands = {
 	whois: function (target, room, user, connection, cmd) {
 		if (room.id === 'staff' && !this.runBroadcast()) return;
 		let targetUser = this.targetUserOrSelf(target, user.group === ' ');
-		if (!targetUser) {
+		if (!targetUser && this.can('lock')) {
 			return this.errorReply("User " + this.targetUsername + " not found.");
+		} else {
+			return false
 		}
 		let showAll = (cmd === 'ip' || cmd === 'whoare' || cmd === 'alt' || cmd === 'alts');
 		if (showAll && !user.confirmed && targetUser !== user) {
