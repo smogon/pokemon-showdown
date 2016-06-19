@@ -26,9 +26,7 @@ exports.commands = {
 		let targetUser = this.targetUserOrSelf(target, user.group === ' ');
 		if (!targetUser && this.can('lock')) {
 			return this.errorReply("User " + this.targetUsername + " not found.");
-		} else {
-			return false;
-		}
+		} 
 		let showAll = (cmd === 'ip' || cmd === 'whoare' || cmd === 'alt' || cmd === 'alts');
 		if (showAll && !user.confirmed && targetUser !== user) {
 			return this.errorReply("/alts - Access denied.");
