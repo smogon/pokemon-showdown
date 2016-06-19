@@ -112,6 +112,48 @@ describe('Decisions', function () {
 			assert.strictEqual(p2active[0].status, 'par');
 		});
 
+		it('should disallow specifying move targets for targetless moves (randomNormal)', function () {
+			battle = common.createBattle({gameType: 'doubles'}, [
+				[{species: "Dragonite", ability: 'multiscale', moves: ['outrage']}, {species: "Blastoise", ability: 'torrent', moves: ['rest']}],
+				[{species: "Tyranitar", ability: 'unnerve', moves: ['dragondance']}, {species: "Zapdos", ability: 'pressure', moves: ['roost']}],
+			]);
+
+			battle.p1.chooseMove('outrage', 1);
+			battle.p1.chooseMove('rest');
+			battle.p2.chooseMove('dragondance');
+			battle.p2.chooseMove('roost');
+
+			assert.notStrictEqual(battle.turn, 2);
+		});
+
+		it('should disallow specifying move targets for targetless moves (scripted)', function () {
+			battle = common.createBattle({gameType: 'doubles'}, [
+				[{species: "Dragonite", ability: 'multiscale', moves: ['counter']}, {species: "Blastoise", ability: 'torrent', moves: ['rest']}],
+				[{species: "Tyranitar", ability: 'unnerve', moves: ['bodyslam']}, {species: "Zapdos", ability: 'pressure', moves: ['drillpeck']}],
+			]);
+
+			battle.p1.chooseMove('counter', 2);
+			battle.p1.chooseMove('rest');
+			battle.p2.chooseMove('bodyslam', 1);
+			battle.p2.chooseMove('drillpeck', 1);
+
+			assert.notStrictEqual(battle.turn, 2);
+		});
+
+		it('should disallow specifying move targets for targetless moves (self)', function () {
+			battle = common.createBattle({gameType: 'doubles'}, [
+				[{species: "Dragonite", ability: 'multiscale', moves: ['roost']}, {species: "Blastoise", ability: 'torrent', moves: ['rest']}],
+				[{species: "Tyranitar", ability: 'unnerve', moves: ['dragondance']}, {species: "Zapdos", ability: 'pressure', moves: ['roost']}],
+			]);
+
+			battle.p1.chooseMove('roost', -2);
+			battle.p1.chooseMove('rest');
+			battle.p2.chooseMove('dragondance');
+			battle.p2.chooseMove('roost');
+
+			assert.notStrictEqual(battle.turn, 2);
+		});
+
 		it('should allow specifying switch targets', function () {
 			battle = common.createBattle([[
 				{species: 'Bulbasaur', ability: 'overgrow', moves: ['tackle']},
@@ -1031,7 +1073,7 @@ describe('Decision internals', function () {
 		]);
 
 		assert.strictEqual(battle.turn, 1);
-		p1.chooseMove(1).chooseMove(1, 1);
+		p1.chooseMove(1).chooseMove(1);
 		p2.chooseMove(1).chooseMove(1);
 
 		assert.strictEqual(battle.turn, 2);

@@ -133,7 +133,7 @@ describe('Sky Drop', function () {
 			[{species: "Aerodactyl", ability: 'unnerve', moves: ['skydrop']}, {species: "Smeargle", ability: 'owntempo', moves: ['splash']}],
 			[{species: "Lairon", ability: 'sturdy', moves: ['bulkup']}, {species: "Aggron", ability: 'sturdy', moves: ['bulkup', 'allyswitch']}],
 		]);
-		battle.choose('p1', 'move 1 1, move 1 2');
+		battle.choose('p1', 'move 1 1, move 1');
 		battle.commitDecisions();
 		battle.choose('p2', 'move 1, move 2');
 		battle.commitDecisions();
@@ -146,7 +146,7 @@ describe('Sky Drop', function () {
 			[{species: "Aerodactyl", ability: 'unnerve', moves: ['skydrop']}, {species: "Smeargle", ability: 'owntempo', moves: ['splash']}],
 			[{species: "Lairon", ability: 'sturdy', moves: ['bulkup']}, {species: "Aggron", ability: 'sturdy', moves: ['bulkup', 'followme']}],
 		]);
-		battle.choose('p1', 'move 1 1, move 1 2');
+		battle.choose('p1', 'move 1 1, move 1');
 		battle.commitDecisions();
 		battle.choose('p2', 'move 1, move 2');
 		battle.commitDecisions();
