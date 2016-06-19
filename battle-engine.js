@@ -1542,6 +1542,7 @@ BattleSide = (() => {
 
 		const requestMoves = activePokemon.getRequestData().moves;
 		let moveid = data;
+		let targetType = '';
 		if (typeof data === 'number' || /^[0-9]+$/.test(data)) {
 			// Parse a one-based move index.
 			const moveIndex = +data - 1;
@@ -1550,10 +1551,7 @@ BattleSide = (() => {
 				return false;
 			}
 			moveid = requestMoves[moveIndex].id;
-			if (!targetLoc && this.active.length > 1 && this.battle.targetTypeChoices(requestMoves[moveIndex].target)) {
-				this.battle.debug("Can't use the move without a target");
-				return false;
-			}
+			targetType = requestMoves[moveIndex].target;
 		} else {
 			// Parse a move ID.
 			// Move names are also allowed, but may cause ambiguity (see client issue #167).
@@ -1561,20 +1559,36 @@ BattleSide = (() => {
 			if (moveid.startsWith('hiddenpower')) {
 				moveid = 'hiddenpower';
 			}
-			let isValidMove = false;
 			for (let i = 0; i < requestMoves.length; i++) {
 				if (requestMoves[i].id !== moveid) continue;
-				if (!targetLoc && this.active.length > 1 && this.battle.targetTypeChoices(requestMoves[i].target)) {
-					this.battle.debug("Can't use the move without a target");
-					return false;
-				}
-				isValidMove = true;
+				targetType = requestMoves[i].target;
 				break;
 			}
-			if (!isValidMove) {
+			if (!targetType) {
 				this.battle.debug("Can't use an unexpected move");
 				return false;
 			}
+		}
+
+		/**
+		 * Validate targetting
+		 */
+
+		if (this.battle.targetTypeChoices(targetType)) {
+			if (!targetLoc && this.active.length >= 2) {
+				this.battle.debug("Can't use the move without a target");
+				return false;
+			}
+		} else {
+			if (targetLoc) {
+				this.battle.debug("Can't specify a target for the move");
+				return false;
+			}
+		}
+
+		if (targetLoc && !this.battle.validTargetLoc(targetLoc, activePokemon, targetType)) {
+			this.battle.debug("Invalid target selected for the move");
+			return false;
 		}
 
 		/**
