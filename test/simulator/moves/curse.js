@@ -167,7 +167,7 @@ describe('XY/ORAS Curse targetting when becoming Ghost the same turn', function 
 		runDoublesTest(battle, battle.p1.active[0]);
 	});
 
-	it.skip('should target the ally in Doubles if the user is on right side and becomes Ghost the same turn', function () {
+	it('should target the ally in Doubles if the user is on right side and becomes Ghost the same turn', function () {
 		battle = common.createBattle({gameType: 'doubles'}, [
 			[doublesTeams[0][1], doublesTeams[0][0]],
 			doublesTeams[1],

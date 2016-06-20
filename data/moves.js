@@ -15147,6 +15147,16 @@ exports.BattleMovedex = {
 			if (target.hasType('Ghost')) return false;
 			if (!target.addType('Ghost')) return false;
 			this.add('-start', target, 'typeadd', 'Ghost', '[from] move: Trick-or-Treat');
+
+			if (target.side.active.length === 2 && target.position === 1) {
+				// Curse Glitch
+				const decision = this.willMove(target);
+				if (decision && decision.move.id === 'curse') {
+					decision.targetLoc = -1;
+					decision.targetSide = target.side;
+					decision.targetPosition = 0;
+				}
+			}
 		},
 		secondary: false,
 		target: "normal",
