@@ -11311,6 +11311,7 @@ exports.BattleMovedex = {
 			this.add('-start', source, 'typechange', '[from] move: Reflect Type', '[of] ' + target);
 			source.types = target.getTypes(true);
 			source.addedType = target.addedType;
+			source.knownType = target.side === source.side;
 		},
 		secondary: false,
 		target: "normal",

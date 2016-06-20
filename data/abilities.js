@@ -160,7 +160,7 @@ exports.BattleAbilities = {
 		onFoeMaybeTrapPokemon: function (pokemon, source) {
 			if (!source) source = this.effectData.target;
 			if (!this.isAdjacent(pokemon, source)) return;
-			if (pokemon.isGrounded()) {
+			if (pokemon.isGrounded(!pokemon.knownType)) { // Negate immunity if the type is unknown
 				pokemon.maybeTrapped = true;
 			}
 		},
@@ -1522,7 +1522,7 @@ exports.BattleAbilities = {
 		},
 		onFoeMaybeTrapPokemon: function (pokemon, source) {
 			if (!source) source = this.effectData.target;
-			if (pokemon.hasType('Steel') && this.isAdjacent(pokemon, source)) {
+			if ((!pokemon.knownType || pokemon.hasType('Steel')) && this.isAdjacent(pokemon, source)) {
 				pokemon.maybeTrapped = true;
 			}
 		},
