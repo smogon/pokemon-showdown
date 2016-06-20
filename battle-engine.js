@@ -701,7 +701,7 @@ BattlePokemon = (() => {
 
 		this.types = pokemon.types;
 		this.addedType = pokemon.addedType;
-		this.knownType = pokemon.knownType;
+		this.knownType = this.side === pokemon.side && pokemon.knownType;
 
 		for (let statName in this.stats) {
 			this.stats[statName] = pokemon.stats[statName];
