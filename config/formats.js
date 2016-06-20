@@ -475,7 +475,7 @@ exports.Formats = [
 
 		mod: 'tiershift',
 		ruleset: ['OU'],
-		banlist: [],
+		banlist: ['Damp Rock'],
 	},
 	{
 		name: "Inverse Battle",
