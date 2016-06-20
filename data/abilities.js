@@ -339,6 +339,16 @@ exports.BattleAbilities = {
 			if (target.isActive && move.effectType === 'Move' && move.category !== 'Status' && type !== '???' && !target.hasType(type)) {
 				if (!target.setType(type)) return false;
 				this.add('-start', target, 'typechange', type, '[from] Color Change');
+
+				if (target.side.active.length === 2 && target.position === 1) {
+					// Curse Glitch
+					const decision = this.willMove(target);
+					if (decision && decision.move.id === 'curse') {
+						decision.targetLoc = -1;
+						decision.targetSide = target.side;
+						decision.targetPosition = 0;
+					}
+				}
 			}
 		},
 		id: "colorchange",
