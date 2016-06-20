@@ -844,51 +844,6 @@ describe('Decision extensions', function () {
 				assert.strictEqual(battle.p1.active[2].lastMove, 'growth');
 			});
 
-			it.skip(`should support to ${mode} switch decisions on switch requests`, function () {
-				// TODO: Support `switch` partial decisions
-				const TEAMS = [[
-					{species: 'Latias', ability: 'levitate', moves: ['lunardance']},
-					{species: 'Clefable', ability: 'unaware', moves: ['healingwish']},
-					{species: 'Ivysaur', ability: 'overgrow', moves: ['tackle']},
-					{species: 'Venusaur', ability: 'overgrow', moves: ['tackle']},
-				], [
-					{species: 'Charmander', ability: 'blaze', moves: ['scratch']},
-					{species: 'Charmeleon', ability: 'blaze', moves: ['scratch']},
-					{species: 'Charizard', ability: 'blaze', moves: ['scratch']},
-				]];
-
-				battle = common.createBattle({gameType: 'doubles', partialDecisions: true, cancel: true}, TEAMS);
-				battle.commitDecisions();
-
-				battle.choose('p1', 'switch 3');
-				if (mode === 'revoke') battle.undoChoice('p1');
-				battle.choose('p1', 'switch 4, switch 3');
-
-				['Venusaur', 'Clefable'].forEach((species, index) => assert.species(battle.p1.active[index], species));
-			});
-
-			it.skip(`should support to ${mode} pass decisions on switch requests`, function () {
-				// TODO: Support `pass` partial decisions
-				const TEAMS = [[
-					{species: 'Latias', ability: 'levitate', moves: ['lunardance']},
-					{species: 'Clefable', ability: 'unaware', moves: ['healingwish']},
-					{species: 'Venusaur', ability: 'overgrow', moves: ['tackle']},
-				], [
-					{species: 'Charmander', ability: 'blaze', moves: ['scratch']},
-					{species: 'Charmeleon', ability: 'blaze', moves: ['scratch']},
-					{species: 'Charizard', ability: 'blaze', moves: ['scratch']},
-				]];
-
-				battle = common.createBattle({gameType: 'doubles', partialDecisions: true, cancel: true}, TEAMS);
-				battle.commitDecisions();
-
-				battle.choose('p1', 'pass');
-				if (mode === 'revoke') battle.undoChoice('p1');
-				battle.choose('p1', 'switch 3, pass');
-
-				['Venusaur', 'Ivysaur'].forEach((species, index) => assert.species(battle.p1.active[index], species));
-			});
-
 			it(`should support to ${mode} switch decisions on double switch requests`, function () {
 				battle = common.createBattle({cancel: true});
 				battle.join('p1', 'Guest 1', 1, [
@@ -1053,6 +1008,51 @@ describe('Decision extensions', function () {
 				['Bulbasaur', 'Ivysaur'].forEach((species, index) => assert.species(battle.p1.pokemon[index], species));
 			});
 		}
+	});
+
+	describe('Undo > Partial Decisions', function () {
+		it(`should support to revoke switch decisions on switch requests`, function () {
+			const TEAMS = [[
+				{species: 'Latias', ability: 'levitate', moves: ['lunardance']},
+				{species: 'Clefable', ability: 'unaware', moves: ['healingwish']},
+				{species: 'Ivysaur', ability: 'overgrow', moves: ['tackle']},
+				{species: 'Venusaur', ability: 'overgrow', moves: ['tackle']},
+			], [
+				{species: 'Charmander', ability: 'blaze', moves: ['scratch']},
+				{species: 'Charmeleon', ability: 'blaze', moves: ['scratch']},
+				{species: 'Charizard', ability: 'blaze', moves: ['scratch']},
+			]];
+
+			battle = common.createBattle({gameType: 'doubles', partialDecisions: true, cancel: true}, TEAMS);
+			battle.commitDecisions();
+
+			battle.choose('p1', 'switch 3'); // Ivysaur
+			battle.undoChoice('p1');
+			battle.choose('p1', 'switch 4, switch 3'); // Venusaur, Ivysaur
+
+			['Venusaur', 'Ivysaur'].forEach((species, index) => assert.species(battle.p1.active[index], species));
+		});
+
+		it(`should support to override pass decisions on switch requests`, function () {
+			const TEAMS = [[
+				{species: 'Latias', ability: 'levitate', moves: ['lunardance']},
+				{species: 'Clefable', ability: 'unaware', moves: ['healingwish']},
+				{species: 'Venusaur', ability: 'overgrow', moves: ['tackle']},
+			], [
+				{species: 'Charmander', ability: 'blaze', moves: ['scratch']},
+				{species: 'Charmeleon', ability: 'blaze', moves: ['scratch']},
+				{species: 'Charizard', ability: 'blaze', moves: ['scratch']},
+			]];
+
+			battle = common.createBattle({gameType: 'doubles', partialDecisions: true, cancel: true}, TEAMS);
+			battle.commitDecisions();
+
+			battle.choose('p1', 'pass');
+			battle.undoChoice('p1');
+			battle.choose('p1', 'switch 3, pass'); // Venusaur
+
+			['Venusaur', 'Clefable'].forEach((species, index) => assert.species(battle.p1.active[index], species));
+		});
 	});
 });
 
