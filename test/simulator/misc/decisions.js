@@ -69,7 +69,7 @@ describe('Decisions', function () {
 
 			const activeMons = battle.sides.map(side => side.active[0]);
 			for (let i = 0; i < 2; i++) {
-				for (let j = 0; i < 2; i++) {
+				for (let j = 0; j < 2; j++) {
 					const beforeHP = activeMons.map(pokemon => pokemon.hp);
 					const beforeAtk = activeMons.map(pokemon => pokemon.boosts.atk);
 					battle.p1.chooseMove(i + 1);
