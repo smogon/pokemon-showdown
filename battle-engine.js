@@ -1529,10 +1529,10 @@ BattleSide = (() => {
 	BattleSide.prototype.getDecisionsFinished = function () {
 		if (this.choiceData.decisions === true) return true;
 		if (this.choiceData.skipsIndices.size) return false;
-		if (this.currentRequest === 'teampreview') return this.choiceData.choices.length >= 1;
+		if (this.currentRequest === 'teampreview') return this.choiceData.choices.length >= this.pokemon.length;
 		return this.choiceData.choices.length >= this.active.length;
 	};
-	BattleSide.prototype.chooseMove = function (data, targetLoc, willMega) {
+	BattleSide.prototype.chooseMove = function (data, targetLoc, willMega, dontPlay) {
 		if (!targetLoc) targetLoc = 0;
 		const activePokemon = this.active[this.choiceData.choices.length];
 
@@ -1650,10 +1650,10 @@ BattleSide = (() => {
 		});
 		this.choiceData.decisions.push(decision);
 
-		if (!this.battle.checkDecisions()) return this; // allow chaining
+		if (!dontPlay && !this.battle.checkDecisions()) return this; // allow chaining
 		return true;
 	};
-	BattleSide.prototype.chooseSwitch = function (data, index) {
+	BattleSide.prototype.chooseSwitch = function (data, index, dontPlay) {
 		const slot = +data - 1;
 		if (slot >= this.pokemon.length || !this.pokemon[slot]) {
 			this.battle.debug("Can't switch: You can't switch to a Pokémon that doesn't exist");
@@ -1706,39 +1706,31 @@ BattleSide = (() => {
 		};
 		this.choiceData.skipsIndices.delete(index);
 
-		if (!this.battle.checkDecisions()) return this; // allow chaining
+		if (!dontPlay && !this.battle.checkDecisions()) return this; // allow chaining
 		return true;
 	};
-	BattleSide.prototype.chooseTeam = function (data) {
-		let dataArr = [0, 1, 2, 3, 4, 5].slice(0, this.pokemon.length);
-		let slotMap = dataArr.slice(); // Inverse of `dataArr` (slotMap[dataArr[x]] === x)
+	BattleSide.prototype.chooseTeam = function (data, dontPlay) {
+		const positions = ('' + data).split('').map(datum => +datum - 1);
 
-		for (let i = 0; i < data.length; i++) {
-			let slot = parseInt(data.charAt(i)) - 1;
-			if (slotMap[slot] < i) return false;
-			if (slot >= this.pokemon.length) return false;
+		for (const pos of positions) {
+			const choiceOffset = this.choiceData.choices.length;
+			if (pos >= this.pokemon.length) return false;
+			if (this.choiceData.decisions.some(decision => decision.pokemon.position === pos)) return false;
 
-			// Keep track of team order so far
-			let tempSlot = dataArr[i];
-			dataArr[i] = slot;
-			dataArr[slotMap[slot]] = tempSlot;
-
-			// Update its inverse
-			slotMap[tempSlot] = slotMap[slot];
-			slotMap[slot] = i;
+			this.choiceData.choices.push('team ' + (pos + 1));
+			this.choiceData.decisions.push({
+				choice: 'team',
+				side: this,
+				index: choiceOffset,
+				pokemon: this.pokemon[pos],
+				priority: -choiceOffset,
+			});
 		}
 
-		this.choiceData.choices.push('team ' + data);
-		this.choiceData.decisions.push({
-			choice: 'team',
-			side: this,
-			team: dataArr,
-		});
-
-		if (!this.battle.checkDecisions()) return this; // allow chaining
+		if (!dontPlay && !this.battle.checkDecisions()) return this; // allow chaining
 		return true;
 	};
-	BattleSide.prototype.chooseShift = function () {
+	BattleSide.prototype.chooseShift = function (dontPlay) {
 		const activePokemon = this.active[this.choiceData.choices.length];
 
 		this.choiceData.choices.push('shift');
@@ -1747,16 +1739,16 @@ BattleSide = (() => {
 			pokemon: activePokemon,
 		});
 
-		if (!this.battle.checkDecisions()) return this; // allow chaining
+		if (!dontPlay && !this.battle.checkDecisions()) return this; // allow chaining
 		return true;
 	};
 
 	BattleSide.prototype.undoChoices = function (count, nextIndex) {
 		if (count === 0 || !this.choiceData.choices.length) return null;
-		if (count === true) {
-			count = this.choiceData.choices.length;
-			nextIndex = count;
-		}
+		if (count === true) count = this.choiceData.choices.length;
+		if (nextIndex === undefined) nextIndex = this.choiceData.choices.length;
+		if (count > nextIndex) return null;
+
 		for (let i = 1; i <= count; i++) {
 			this.undoChoice(nextIndex - i);
 		}
@@ -1783,10 +1775,10 @@ BattleSide = (() => {
 		const canSwitchOut = this.active.filter(pokemon => pokemon && pokemon.switchFlag).length;
 		const canSwitchIn = this.pokemon.slice(this.active.length).filter(pokemon => pokemon && !pokemon.fainted).length;
 		this.choiceData = {
+			finalDecision: false,
 			choices: [],
 			decisions: [],
 
-			finalDecision: false,
 			switchCounters: {
 				'switch': [0, this.battle.currentRequest !== 'switch' ? 0 : Math.min(canSwitchOut, canSwitchIn)],
 				'pass': [0, this.battle.currentRequest !== 'switch' ? 0 : canSwitchOut - Math.min(canSwitchOut, canSwitchIn)],
@@ -1802,7 +1794,7 @@ BattleSide = (() => {
 	};
 
 	// Special choices
-	BattleSide.prototype.choosePass = function (index) {
+	BattleSide.prototype.choosePass = function (index, dontPlay) {
 		if (typeof index === 'undefined') index = this.choiceData.choices.length;
 		if (index < this.choiceData.choices.length && this.choiceData.choices[index] !== 'skip') {
 			this.battle.debug("Can't pass: You can't override the decision for a Pokémon.");
@@ -1829,7 +1821,7 @@ BattleSide = (() => {
 		};
 		this.choiceData.skipsIndices.delete(this.choiceData.choices.length);
 
-		if (!this.battle.checkDecisions()) return this; // allow chaining
+		if (!dontPlay && !this.battle.checkDecisions()) return this; // allow chaining
 		return true;
 	};
 	BattleSide.prototype.chooseSkip = function (index) {
@@ -1858,12 +1850,20 @@ BattleSide = (() => {
 	BattleSide.prototype.chooseDefault = function (dontPlay) {
 		const choiceOffset = this.choiceData.choices.length;
 		if (this.currentRequest === 'teampreview') {
-			this.choiceData.choices.push('team ' + '123456'.slice(0, this.pokemon.length));
-			this.choiceData.decisions.push({
-				choice: 'team',
-				side: this,
-				team: [0, 1, 2, 3, 4, 5].slice(0, this.pokemon.length),
-			});
+			const chosenPositions = new Set(this.choiceData.decisions.map(decision => decision.pokemon.position));
+			const leftPositions = '012345'.slice(0, this.pokemon.length).split('').filter(pos => !chosenPositions.has(pos));
+
+			for (let i = 0; i < leftPositions.length; i++) {
+				const pos = leftPositions[i];
+				this.choiceData.choices.push('team ' + (pos + 1));
+				this.choiceData.decisions.push({
+					choice: 'team',
+					side: this,
+					pokemon: this.pokemon[pos],
+					index: choiceOffset + i,
+					priority: -choiceOffset - i,
+				});
+			}
 		} else if (this.currentRequest === 'switch') {
 			this.choiceData.choices.length = this.active.length;
 			this.choiceData.decisions.length = this.active.length;
@@ -4281,6 +4281,10 @@ Battle = (() => {
 			// I GIVE UP, WILL WRESTLE WITH EVENT SYSTEM LATER
 			let format = this.getFormat();
 
+			// Remove Pokémon duplicates remaining after `team` decisions.
+			this.p1.pokemon = this.p1.pokemon.slice(0, this.p1.pokemonLeft);
+			this.p2.pokemon = this.p2.pokemon.slice(0, this.p2.pokemonLeft);
+
 			if (format.teamLength && format.teamLength.battle) {
 				// Trim the team: not all of the Pokémon brought to Preview will battle.
 				this.p1.pokemon = this.p1.pokemon.slice(0, format.teamLength.battle);
@@ -4330,15 +4334,8 @@ Battle = (() => {
 			this.runEvent(decision.event, decision.pokemon);
 			break;
 		case 'team': {
-			let len = decision.side.pokemon.length;
-			let newPokemon = [null, null, null, null, null, null].slice(0, len);
-			for (let j = 0; j < len; j++) {
-				let i = decision.team[j];
-				newPokemon[j] = decision.side.pokemon[i];
-				newPokemon[j].position = j;
-			}
-			decision.side.pokemon = newPokemon;
-
+			decision.side.pokemon.splice(decision.index, 0, decision.pokemon);
+			decision.pokemon.position = decision.index;
 			// we return here because the update event would crash since there are no active pokemon yet
 			return;
 		}
@@ -4592,7 +4589,7 @@ Battle = (() => {
 
 		for (let i = 0; i < choices.length; i++) {
 			const choiceIndex = i + choiceOffset;
-			const pokemon = side.active[choiceIndex];
+			const pokemon = choiceIndex <= side.active.length ? side.active[choiceIndex] : null;
 			const choice = choices[i][0];
 			let data = choices[i][1];
 
@@ -4606,7 +4603,6 @@ Battle = (() => {
 					pokemon: pokemon,
 					priority: 102,
 				};
-				this.checkDecisions();
 				continue;
 			} else if (side.currentRequest === 'move') {
 				// The same comment regarding passing above applies.
@@ -4615,7 +4611,6 @@ Battle = (() => {
 					side.choiceData.decisions[choiceIndex] = {
 						choice: 'pass',
 					};
-					this.checkDecisions();
 					continue;
 				}
 				// Figure out whether we are locked into a move,
@@ -4630,7 +4625,6 @@ Battle = (() => {
 						targetLoc: lockedMoveTarget || 0,
 						move: lockedMove,
 					};
-					this.checkDecisions();
 					continue;
 				}
 			}
@@ -4644,29 +4638,31 @@ Battle = (() => {
 				}
 				let willMega = data.endsWith(' mega');
 				let move = willMega ? data.slice(0, -5) : data; // `move` is expected to be either a one-based index or a move id
-				if (!side.chooseMove(move.trim(), targetLoc, willMega)) return side.undoChoices(i, choiceIndex);
+				if (!side.chooseMove(move.trim(), targetLoc, willMega, true)) return side.undoChoices(i, choiceIndex);
 				break;
 			}
 			case 'switch':
-				if (!side.chooseSwitch(data, pokemon.position)) return side.undoChoices(i, choiceIndex);
+				if (!side.chooseSwitch(data, pokemon.position, true)) return side.undoChoices(i, choiceIndex);
 				break;
 			case 'shift':
 				if (!side.chooseShift()) return side.undoChoices(i, choiceIndex);
 				break;
 			case 'team':
-				if (!side.chooseTeam(data)) return side.undoChoices(i, choiceIndex);
+				if (!side.chooseTeam(data, true)) return side.undoChoices(i, choiceIndex);
 				break;
 			case 'pass':
-				if (!side.choosePass(pokemon.position)) return side.undoChoices(i, choiceIndex);
+				if (!side.choosePass(pokemon.position, true)) return side.undoChoices(i, choiceIndex);
 				break;
 			case 'default':
-				if (!side.chooseDefault()) return side.undoChoices(i, choiceIndex);
+				if (!side.chooseDefault(true)) return side.undoChoices(i, choiceIndex);
 				break;
 			case 'skip':
-				if (!side.chooseSkip(pokemon.position)) return side.undoChoices(i, choiceIndex);
+				if (!side.chooseSkip(pokemon.position, true)) return side.undoChoices(i, choiceIndex);
 				break;
 			}
 		}
+
+		this.checkDecisions();
 	};
 
 	/**
@@ -4689,21 +4685,31 @@ Battle = (() => {
 		}
 
 		const isPreview = side.currentRequest === 'teampreview'; // Team Preview parsing has lots of nuances
-		const expectedLength = (isPreview ? 1 : side.active.length) - choiceOffset;
+		const expectedLength = (isPreview ? side.pokemon.length : side.active.length) - choiceOffset;
+		if (isPreview) {
+			if (!input.startsWith('team ')) return null;
+			input = input.slice(5);
+		}
 
 		const parts = isPreview && /^[1-9]+$/.test(input) ? input.split('', expectedLength) : input.split(',', expectedLength); // input
 		const choices = new Array(expectedLength); // output
+		const teamSlots = isPreview ? new Set(side.choiceData.decisions.map(decision => decision.pokemon.position + 1)) : null; // for autocompletion
+
+		let hasDefault = false;
 
 		for (let i = 0; i < choices.length; i++) {
 			if (i >= parts.length) {
 				// `parts` can grow due to autocompletion (explained below),
 				// so we can't check this before the loop.
 				// It won't grow at its end, though...
-				if (i < side.active.length && side.currentRequest !== 'team' && (!side.active[i] || (side.currentRequest === 'move' ? side.active[i].fainted : !side.active[i].switchFlag))) {
+				if (i < side.active.length && side.currentRequest !== 'teampreview' && (!side.active[i] || (side.currentRequest === 'move' ? side.active[i].fainted : !side.active[i].switchFlag))) {
 					parts.push('pass');
-				} else {
+				} else if (side.currentRequest !== 'teampreview') {
 					// Incomplete request!
 					return this.supportPartialDecisions ? choices.slice(0, i) : null;
+				} else {
+					choices.splice(i, choices.length - i);
+					break;
 				}
 			}
 			if (i >= side.choiceData.choices.length) {
@@ -4717,11 +4723,17 @@ Battle = (() => {
 			if (firstSpaceIndex >= 0) {
 				data = choice.substr(firstSpaceIndex + 1).trim();
 				choice = choice.substr(0, firstSpaceIndex).trim();
+			} else if (isPreview) {
+				// Support for short notation:
+				// /choose team 1234
+				data = choice;
+				choice = 'team';
 			}
 
 			if (choice === 'default') {
 				// No decisions are allowed after the default.
 				if (i + 1 < parts.length) return null;
+				hasDefault = true;
 			}
 
 			switch (side.currentRequest) {
@@ -4779,7 +4791,9 @@ Battle = (() => {
 				if (!data || data.length >= 2 || /[^1-9]/.test(data)) return null;
 				break;
 			case 'team':
-				if (!data || data.length > side.pokemon.length || /[^1-9]/.test(data)) return null;
+				if (!data || data.length >= 2 || /[^1-9]/.test(data)) return null;
+				if (data > side.pokemon.length || teamSlots.has(+data)) return null;
+				teamSlots.add(+data);
 				break;
 			case 'shift':
 				// Shifting is only a valid choice type in Triples,
@@ -4800,6 +4814,18 @@ Battle = (() => {
 			}
 
 			choices[i] = [choice, data];
+		}
+
+		// Auto-complete multi-slot /team decisions.
+		// Also auto-complete single-slot decisions, if it's Singles and no Pokémon in the team has Illusion.
+		// We should be able to remove this eventually -it really has no place in this function.
+		// TODO: Investigate and patch 3rd party clients that may need this backwards-compat fix.
+		if (side.currentRequest === 'teampreview' && !hasDefault && choices.length < side.pokemon.length) {
+			if (choices.length >= 2 || choices.length >= 1 && side.active.length <= 1 && !side.pokemon.some(pokemon => pokemon.ability === 'illusion')) {
+				for (let i = 1; i <= side.pokemon.length; i++) {
+					if (!teamSlots.has(i)) choices.push(['team', i]);
+				}
+			}
 		}
 
 		return choices;
@@ -4830,7 +4856,7 @@ Battle = (() => {
 
 		this.go();
 	};
-	Battle.prototype.undoChoice = function (sideid) {
+	Battle.prototype.undoChoice = function (sideid, count) {
 		let side = null;
 		if (sideid === 'p1' || sideid === 'p2') side = this[sideid];
 		// The following condition can never occur for the reasons given in
@@ -4844,7 +4870,10 @@ Battle = (() => {
 			return;
 		}
 
-		side.undoChoices(true);
+		const stepsBack = count === undefined ? true : +count;
+		if (stepsBack !== true && isNaN(stepsBack)) return;
+
+		side.undoChoices(stepsBack);
 	};
 	Battle.prototype.checkDecisions = function () {
 		let totalDecisions = 0;
@@ -5005,7 +5034,7 @@ Battle = (() => {
 			break;
 
 		case 'undo':
-			this.undoChoice(data[2]);
+			this.undoChoice(data[2], data[3]);
 			break;
 
 		case 'eval': {
