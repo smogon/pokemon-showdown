@@ -15,7 +15,7 @@ exports.BattleMovedex = {
 			} else {
 				source.addedType = '';
 			}
-			source.knownType = target.side === source.side;
+			source.knownType = target.side === source.side && target.knownType;
 		},
 	},
 };
