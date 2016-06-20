@@ -1528,6 +1528,7 @@ BattleSide = (() => {
 
 	BattleSide.prototype.getDecisionsFinished = function () {
 		if (this.choiceData.decisions === true) return true;
+		if (this.choiceData.skipsIndices.size) return false;
 		if (this.currentRequest === 'teampreview') return this.choiceData.choices.length >= 1;
 		return this.choiceData.choices.length >= this.active.length;
 	};
@@ -1652,7 +1653,7 @@ BattleSide = (() => {
 		if (!this.battle.checkDecisions()) return this; // allow chaining
 		return true;
 	};
-	BattleSide.prototype.chooseSwitch = function (data) {
+	BattleSide.prototype.chooseSwitch = function (data, index) {
 		const slot = +data - 1;
 		if (slot >= this.pokemon.length || !this.pokemon[slot]) {
 			this.battle.debug("Can't switch: You can't switch to a Pokémon that doesn't exist");
@@ -1671,7 +1672,13 @@ BattleSide = (() => {
 			return false;
 		}
 
-		const activePokemon = this.active[this.choiceData.choices.length];
+		if (typeof index === 'undefined') index = this.choiceData.choices.length;
+		if (index < this.choiceData.choices.length && this.choiceData.choices[index] !== 'skip') {
+			this.battle.debug("Can't switch: You can't override the decision for a Pokémon.");
+			return false;
+		}
+
+		const activePokemon = this.active[index];
 		if (this.currentRequest === 'move') {
 			if (activePokemon.trapped) {
 				this.battle.debug("Can't switch: The active Pokémon is trapped");
@@ -1691,12 +1698,13 @@ BattleSide = (() => {
 		this.choiceData.enterIndices.add(slot);
 		this.choiceData.leaveIndices.add(activePokemon.position);
 
-		this.choiceData.choices.push('switch ' + data);
-		this.choiceData.decisions.push({
+		this.choiceData.choices[index] = 'switch ' + data;
+		this.choiceData.decisions[index] = {
 			choice: (this.currentRequest === 'switch' ? 'instaswitch' : 'switch'),
 			pokemon: activePokemon,
 			target: this.pokemon[slot],
-		});
+		};
+		this.choiceData.skipsIndices.delete(index);
 
 		if (!this.battle.checkDecisions()) return this; // allow chaining
 		return true;
@@ -1743,16 +1751,19 @@ BattleSide = (() => {
 		return true;
 	};
 
-	BattleSide.prototype.undoChoices = function (count, index) {
+	BattleSide.prototype.undoChoices = function (count, nextIndex) {
 		if (count === 0 || !this.choiceData.choices.length) return null;
-		if (count === true) count = index = this.choiceData.choices.length;
-		for (let i = 0; i < count; i++) {
-			this.undoChoice(index - count);
+		if (count === true) {
+			count = this.choiceData.choices.length;
+			nextIndex = count;
+		}
+		for (let i = 1; i <= count; i++) {
+			this.undoChoice(nextIndex - i);
 		}
 	};
 
-	BattleSide.prototype.undoChoice = function () {
-		const decision = this.choiceData.decisions.pop();
+	BattleSide.prototype.undoChoice = function (index) {
+		const decision = this.choiceData.decisions.splice(index, 1)[0];
 		if (decision.choice === 'switch' || decision.choice === 'instaswitch') {
 			this.choiceData.enterIndices.delete(decision.target.position);
 			this.choiceData.leaveIndices.delete(this.choiceData.decisions.length);
@@ -1763,8 +1774,10 @@ BattleSide = (() => {
 			if (this.currentRequest === 'switch' && decision.pokemon && decision.pokemon.switchFlag) {
 				this.choiceData.switchCounters.pass[0]--;
 			}
+		} else if (this.currentRequest !== 'switch') {
+			if (index !== this.choiceData.decisions.length) throw new Error(`Undoing decisions except the last during ${this.currentRequest} phase is unsupported (${index} !== ${this.choiceData.decisions.length})`);
 		}
-		this.choiceData.choices.pop();
+		this.choiceData.choices.splice(index, 1);
 	};
 	BattleSide.prototype.clearChoice = function () {
 		const canSwitchOut = this.active.filter(pokemon => pokemon && pokemon.switchFlag).length;
@@ -1784,12 +1797,19 @@ BattleSide = (() => {
 			},
 			enterIndices: new Set(),
 			leaveIndices: new Set(),
+			skipsIndices: new Set(),
 		};
 	};
 
 	// Special choices
-	BattleSide.prototype.choosePass = function () {
-		const pokemon = this.active[this.choiceData.choices.length];
+	BattleSide.prototype.choosePass = function (index) {
+		if (typeof index === 'undefined') index = this.choiceData.choices.length;
+		if (index < this.choiceData.choices.length && this.choiceData.choices[index] !== 'skip') {
+			this.battle.debug("Can't pass: You can't override the decision for a Pokémon.");
+			return false;
+		}
+
+		const pokemon = this.active[index];
 
 		if (this.currentRequest === 'switch') {
 			if (pokemon && pokemon.switchFlag) { // This condition will always happen if called by Battle#choose()
@@ -1801,15 +1821,39 @@ BattleSide = (() => {
 			}
 		}
 
-		this.choiceData.choices.push('pass');
-		this.choiceData.decisions.push({
+		this.choiceData.choices[index] = 'pass';
+		this.choiceData.decisions[index] = {
 			choice: 'pass',
 			priority: 102,
 			pokemon: pokemon,
-		});
+		};
+		this.choiceData.skipsIndices.delete(this.choiceData.choices.length);
 
 		if (!this.battle.checkDecisions()) return this; // allow chaining
 		return true;
+	};
+	BattleSide.prototype.chooseSkip = function (index) {
+		if (this.currentRequest !== 'switch') {
+			this.battle.debug("Can't skip a Pokémon action");
+			return false;
+		}
+		if (this.active.pokemon.filter(pokemon => pokemon && pokemon.switchFlag).length <= 1) {
+			this.battle.debug("Can't skip a Pokémon action except in a multiple K.O.");
+			return false;
+		}
+		if (index !== this.choiceData.choices.length) {
+			return this;
+		}
+
+		this.choiceData.choices.push('skip');
+		this.choiceData.decisions.push({
+			// Should never hit the battle queue
+			choice: 'skip',
+			pokemon: this.active[this.choiceData.choices.length],
+		});
+		this.choiceData.skipsIndices.add(this.choiceData.choices.length);
+
+		return this;
 	};
 	BattleSide.prototype.chooseDefault = function (dontPlay) {
 		const choiceOffset = this.choiceData.choices.length;
@@ -1826,8 +1870,12 @@ BattleSide = (() => {
 			const leaveIndices = [];
 			const enterIndices = [];
 
-			for (let i = choiceOffset; i < this.pokemon.length; i++) {
+			for (let i = 0; i < this.pokemon.length; i++) {
 				if (!this.pokemon[i]) continue;
+				if (i < this.choiceData.choices.length && this.choiceData.choices[i] && this.choiceData.choices[i] !== 'skip') {
+					// Already decided
+					continue;
+				}
 				if (i < this.active.length) {
 					if (!this.pokemon[i].switchFlag || this.choiceData.leaveIndices.has(i)) continue;
 					leaveIndices.push(i);
@@ -4398,6 +4446,9 @@ Battle = (() => {
 			this.updateSpeed();
 			this.residualEvent('Residual');
 			break;
+
+		case 'skip':
+			throw new Error("Decision illegally skipped!");
 		}
 
 		// phazing (Roar, etc)
@@ -4536,9 +4587,12 @@ Battle = (() => {
 		const choices = this.parseChoice(side, input);
 		if (!choices) return; // Malformed input
 
-		const choiceOffset = side.choiceData.choices.length;
+		let choiceOffset = side.choiceData.choices.indexOf('skip');
+		if (choiceOffset < 0) choiceOffset = side.choiceData.choices.length;
+
 		for (let i = 0; i < choices.length; i++) {
-			const pokemon = side.active[i + choiceOffset];
+			const choiceIndex = i + choiceOffset;
+			const pokemon = side.active[choiceIndex];
 			const choice = choices[i][0];
 			let data = choices[i][1];
 
@@ -4546,21 +4600,21 @@ Battle = (() => {
 				// The choice here must be always `pass`, as it was automatically filled by the parser.
 				// Note that this pass isn't included in the `pass` counter, as the player
 				// has no freedom regarding this action.
-				side.choiceData.choices.push('pass');
-				side.choiceData.decisions.push({
+				side.choiceData.choices[choiceIndex] = 'pass';
+				side.choiceData.decisions[choiceIndex] = {
 					choice: 'pass',
 					pokemon: pokemon,
 					priority: 102,
-				});
+				};
 				this.checkDecisions();
 				continue;
 			} else if (side.currentRequest === 'move') {
 				// The same comment regarding passing above applies.
 				if (!pokemon || pokemon.fainted) {
-					side.choiceData.choices.push('pass');
-					side.choiceData.decisions.push({
+					side.choiceData.choices[choiceIndex] = 'pass';
+					side.choiceData.decisions[choiceIndex] = {
 						choice: 'pass',
-					});
+					};
 					this.checkDecisions();
 					continue;
 				}
@@ -4569,13 +4623,13 @@ Battle = (() => {
 				const lockedMove = pokemon.getLockedMove();
 				if (lockedMove) {
 					const lockedMoveTarget = this.runEvent('LockMoveTarget', pokemon);
-					side.choiceData.choices.push('move ' + lockedMove + (typeof lockedMoveTarget === 'number' ? ' ' + lockedMoveTarget : ''));
-					side.choiceData.decisions.push({
+					side.choiceData.choices[choiceIndex] = 'move ' + lockedMove + (typeof lockedMoveTarget === 'number' ? ' ' + lockedMoveTarget : '');
+					side.choiceData.decisions[choiceIndex] = {
 						choice: 'move',
 						pokemon: pokemon,
 						targetLoc: lockedMoveTarget || 0,
 						move: lockedMove,
-					});
+					};
 					this.checkDecisions();
 					continue;
 				}
@@ -4590,23 +4644,26 @@ Battle = (() => {
 				}
 				let willMega = data.endsWith(' mega');
 				let move = willMega ? data.slice(0, -5) : data; // `move` is expected to be either a one-based index or a move id
-				if (!side.chooseMove(move.trim(), targetLoc, willMega)) return side.undoChoices(i, pokemon.position);
+				if (!side.chooseMove(move.trim(), targetLoc, willMega)) return side.undoChoices(i, choiceIndex);
 				break;
 			}
 			case 'switch':
-				if (!side.chooseSwitch(data, pokemon.position)) return side.undoChoices(i, pokemon.position);
+				if (!side.chooseSwitch(data, pokemon.position)) return side.undoChoices(i, choiceIndex);
 				break;
 			case 'shift':
-				if (!side.chooseShift()) return side.undoChoices(i, pokemon.position);
+				if (!side.chooseShift()) return side.undoChoices(i, choiceIndex);
 				break;
 			case 'team':
-				if (!side.chooseTeam(data)) return side.undoChoices(i, pokemon.position);
+				if (!side.chooseTeam(data)) return side.undoChoices(i, choiceIndex);
 				break;
 			case 'pass':
-				if (!side.choosePass(pokemon.position)) return side.undoChoices(i, pokemon.position);
+				if (!side.choosePass(pokemon.position)) return side.undoChoices(i, choiceIndex);
 				break;
 			case 'default':
-				if (!side.chooseDefault()) return side.undoChoices(i, pokemon.position);
+				if (!side.chooseDefault()) return side.undoChoices(i, choiceIndex);
+				break;
+			case 'skip':
+				if (!side.chooseSkip(pokemon.position)) return side.undoChoices(i, choiceIndex);
 				break;
 			}
 		}
@@ -4623,9 +4680,19 @@ Battle = (() => {
 	 */
 
 	Battle.prototype.parseChoice = function (side, input) {
-		const choiceOffset = side.choiceData.choices.length;
-		const parts = input.split(',', (side.currentRequest === 'teampreview' ? 1 : side.active.length) - choiceOffset);
-		const choices = new Array((side.currentRequest === 'teampreview' ? 1 : side.active.length) - choiceOffset);
+		let isOverride = false;
+		let choiceOffset = this.supportPartialDecisions ? side.choiceData.choices.indexOf('skip') : -1;
+		if (choiceOffset >= 0) {
+			isOverride = true;
+		} else {
+			choiceOffset = side.choiceData.choices.length;
+		}
+
+		const isPreview = side.currentRequest === 'teampreview'; // Team Preview parsing has lots of nuances
+		const expectedLength = (isPreview ? 1 : side.active.length) - choiceOffset;
+
+		const parts = isPreview && /^[1-9]+$/.test(input) ? input.split('', expectedLength) : input.split(',', expectedLength); // input
+		const choices = new Array(expectedLength); // output
 
 		for (let i = 0; i < choices.length; i++) {
 			if (i >= parts.length) {
@@ -4638,6 +4705,9 @@ Battle = (() => {
 					// Incomplete request!
 					return this.supportPartialDecisions ? choices.slice(0, i) : null;
 				}
+			}
+			if (i >= side.choiceData.choices.length) {
+				isOverride = false;
 			}
 			let choice = parts[i].trim();
 			let pokemon = side.active[i + choiceOffset];
@@ -4662,7 +4732,7 @@ Battle = (() => {
 				if (!pokemon || !pokemon.switchFlag) {
 					// We are going to be friendly towards command-line dubs/triples players,
 					// and automatically fill any mandatory passes.
-					if (choice !== 'pass' && parts.length < choices.length) {
+					if (choice !== 'pass' && !(choice === 'skip' && isOverride) && parts.length < choices.length) {
 						parts.splice(i, 0, 'pass');
 						choice = 'pass';
 						data = '';
@@ -4671,7 +4741,7 @@ Battle = (() => {
 					// Passing only makes sense in the context of a multiple switch-in.
 					return null;
 				}
-				if (choice !== 'switch' && choice !== 'pass' && choice !== 'default') {
+				if (choice !== 'switch' && choice !== 'pass' && choice !== 'default' && choice !== 'skip') {
 					return null;
 				}
 				break;
@@ -4692,6 +4762,11 @@ Battle = (() => {
 				break;
 			}
 
+			if (isOverride && choice !== 'skip' && side.choiceData.choices[i + choiceOffset] !== 'skip') {
+				// Either the original or the new choice should be a skip.
+				return null;
+			}
+
 			switch (choice) {
 			case 'move':
 				// All sorts of input formats for `move` choices.
@@ -4710,7 +4785,12 @@ Battle = (() => {
 				// Shifting is only a valid choice type in Triples,
 				// and only for the Pokémon on the sides.
 				if (this.gameType !== 'triples' || i + choiceOffset === 1) return null;
-				// falls through
+				if (data) return null;
+				break;
+			case 'skip':
+				if (!this.supportPartialDecisions) return null;
+				if (data) return null;
+				break;
 			case 'pass':
 			case 'default':
 				if (data) return null;
