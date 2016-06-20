@@ -882,21 +882,21 @@ describe('Decision extensions', function () {
 				assert.species(battle.p1.active[0], 'Ivysaur');
 			});
 
-			it.skip(`should disallow to ${mode} switch decisions on move requests for unconfirmed trapping-immune Pokémon that would otherwise be trapped`, function () {
-				battle = common.createBattle({cancel: true}, [
+			it(`should disallow to ${mode} switch decisions on move requests for unconfirmed trapping-immune Pokémon that would otherwise be trapped`, function () {
+				battle = common.createBattle({cancel: true, pokemon: true, legality: true}, [
 					[
 						{species: 'Starmie', ability: 'naturalcure', moves: ['reflecttype', 'recover']},
 						{species: 'Mandibuzz', ability: 'overcoat', moves: ['knockoff']},
 					], 	[
 						{species: 'Zoroark', ability: 'illusion', moves: ['shadowball, focusblast']},
-						{species: 'Gengar', ability: 'levitate', moves: ['shadowball, focusblast']},
 						{species: 'Gothitelle', ability: 'competitive', moves: ['calmmind']},
+						{species: 'Gengar', ability: 'levitate', moves: ['shadowball, focusblast']},
 					],
 				]);
 				const target = battle.p1.active[0];
 
 				battle.p1.chooseMove('reflecttype');
-				battle.p2.chooseSwitch(2);
+				battle.p2.chooseSwitch(3);
 
 				// The real Gengar comes in, but p1 only sees a Gengar being switched by another Gengar, implying Illusion.
 				// For a naive client, Starmie turns into Ghost/Poison, and it will be correct.
@@ -905,7 +905,7 @@ describe('Decision extensions', function () {
 				// Trapping with Gengar-Mega is a guaranteed trapping, so we are going to get a very meta
 				// Competitive Gothitelle into the battle field (Frisk is revealed on switch-in).
 				battle.p1.chooseMove('recover');
-				battle.p2.chooseSwitch(3);
+				battle.p2.chooseSwitch(2);
 
 				assert(target.maybeTrapped, `${target} should be flagged as maybe trapped`);
 

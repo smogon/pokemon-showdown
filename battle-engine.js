@@ -168,6 +168,7 @@ BattlePokemon = (() => {
 
 		this.types = this.baseTemplate.types;
 		this.addedType = '';
+		this.knownType = true;
 
 		if (this.set.moves) {
 			for (let i = 0; i < this.set.moves.length; i++) {
@@ -700,6 +701,7 @@ BattlePokemon = (() => {
 
 		this.types = pokemon.types;
 		this.addedType = pokemon.addedType;
+		this.knownType = pokemon.knownType;
 
 		for (let statName in this.stats) {
 			this.stats[statName] = pokemon.stats[statName];
@@ -772,6 +774,7 @@ BattlePokemon = (() => {
 
 		this.types = template.types;
 		this.addedType = '';
+		this.knownType = true;
 
 		if (!dontRecalculateStats) {
 			for (let statName in this.stats) {
@@ -1266,6 +1269,7 @@ BattlePokemon = (() => {
 		if (!newType) throw new Error("Must pass type to setType");
 		this.types = (typeof newType === 'string' ? [newType] : newType);
 		this.addedType = '';
+		this.knownType = true;
 
 		return true;
 	};
@@ -3304,7 +3308,7 @@ Battle = (() => {
 
 				pokemon.trapped = pokemon.maybeTrapped = false;
 				this.runEvent('TrapPokemon', pokemon);
-				if (pokemon.runStatusImmunity('trapped')) {
+				if (!pokemon.knownType || this.getImmunity('trapped', pokemon)) {
 					this.runEvent('MaybeTrapPokemon', pokemon);
 				}
 				// Disable the faculty to cancel switches if a foe may have a trapping ability
@@ -3331,7 +3335,7 @@ Battle = (() => {
 						}
 						let ability = this.getAbility(abilityName);
 						if (banlistTable && ability.id in banlistTable) continue;
-						if (!pokemon.runStatusImmunity('trapped')) continue;
+						if (pokemon.knownType && !this.getImmunity('trapped', pokemon)) continue;
 						this.singleEvent('FoeMaybeTrapPokemon',
 							ability, {}, pokemon, source);
 					}
