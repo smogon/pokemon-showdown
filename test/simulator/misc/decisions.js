@@ -3,6 +3,99 @@
 const assert = require('./../../assert');
 const common = require('./../../common');
 
+const BASE_TEAM_ORDER = [1, 2, 3, 4, 5, 6];
+
+const SINGLES_TEAMS = {
+	illusion: [[
+		{species: 'Bulbasaur', ability: 'overgrow', moves: ['tackle']},
+		{species: 'Ivysaur', ability: 'overgrow', moves: ['tackle']},
+		{species: 'Venusaur', ability: 'overgrow', moves: ['tackle']},
+		{species: 'Charmander', ability: 'blaze', moves: ['tackle']},
+		{species: 'Charmeleon', ability: 'blaze', moves: ['tackle']},
+		{species: 'Zoroark', ability: 'illusion', moves: ['tackle']},
+	], [
+		{species: 'Squirtle', ability: 'torrent', moves: ['tackle']},
+		{species: 'Wartortle', ability: 'torrent', moves: ['tackle']},
+	]],
+	full: [[
+		{species: 'Bulbasaur', ability: 'overgrow', moves: ['tackle']},
+		{species: 'Ivysaur', ability: 'overgrow', moves: ['tackle']},
+		{species: 'Venusaur', ability: 'overgrow', moves: ['tackle']},
+		{species: 'Charmander', ability: 'blaze', moves: ['tackle']},
+		{species: 'Charmeleon', ability: 'blaze', moves: ['tackle']},
+		{species: 'Charizard', ability: 'blaze', moves: ['tackle']},
+	], [
+		{species: 'Squirtle', ability: 'torrent', moves: ['tackle']},
+		{species: 'Wartortle', ability: 'torrent', moves: ['tackle']},
+	]],
+};
+
+const DOUBLES_TEAMS = {
+	forcePass: [[
+		{species: 'Bulbasaur', ability: 'overgrow', moves: ['lunardance']},
+		{species: 'Clefable', ability: 'unaware', moves: ['healingwish']},
+		{species: 'Latias', ability: 'levitate', moves: ['roost']},
+	], [
+		{species: 'Charmander', ability: 'blaze', moves: ['scratch']},
+		{species: 'Clefable', ability: 'unaware', moves: ['recover']},
+	]],
+	full: [[
+		{species: 'Bulbasaur', ability: 'overgrow', moves: ['tackle']},
+		{species: 'Ivysaur', ability: 'overgrow', moves: ['tackle']},
+		{species: 'Venusaur', ability: 'overgrow', moves: ['tackle']},
+		{species: 'Charmander', ability: 'blaze', moves: ['tackle']},
+		{species: 'Charmeleon', ability: 'blaze', moves: ['tackle']},
+		{species: 'Charizard', ability: 'blaze', moves: ['tackle']},
+	], [
+		{species: 'Squirtle', ability: 'torrent', moves: ['tackle']},
+		{species: 'Wartortle', ability: 'torrent', moves: ['tackle']},
+	]],
+	default: [[
+		{species: 'Latias', ability: 'overgrow', moves: ['lunardance']},
+		{species: 'Clefable', ability: 'unaware', moves: ['healingwish']},
+		{species: 'Bulbasaur', ability: 'levitate', moves: ['synthesis']},
+		{species: 'Venusaur', ability: 'overgrow', moves: ['tackle']},
+	], [
+		{species: 'Charmander', ability: 'blaze', moves: ['scratch']},
+		{species: 'Clefable', ability: 'unaware', moves: ['recover']},
+	]],
+};
+
+const TRIPLES_TEAMS = {
+	forcePass: [[
+		{species: 'Bulbasaur', ability: 'overgrow', moves: ['synthesis']},
+		{species: 'Clefable', ability: 'unaware', moves: ['healingwish']},
+		{species: 'Latias', ability: 'levitate', moves: ['lunardance']},
+		{species: 'Venusaur', ability: 'overgrow', moves: ['synthesis']},
+	], [
+		{species: 'Charmander', ability: 'blaze', moves: ['scratch']},
+		{species: 'Clefable', ability: 'unaware', moves: ['recover']},
+		{species: 'Latias', ability: 'blaze', moves: ['roost']},
+	]],
+	full: [[
+		{species: 'Bulbasaur', ability: 'overgrow', moves: ['tackle']},
+		{species: 'Ivysaur', ability: 'overgrow', moves: ['tackle']},
+		{species: 'Venusaur', ability: 'overgrow', moves: ['tackle']},
+		{species: 'Charmander', ability: 'blaze', moves: ['tackle']},
+		{species: 'Charmeleon', ability: 'blaze', moves: ['tackle']},
+		{species: 'Charizard', ability: 'blaze', moves: ['tackle']},
+	], [
+		{species: 'Squirtle', ability: 'torrent', moves: ['tackle']},
+		{species: 'Wartortle', ability: 'torrent', moves: ['tackle']},
+		{species: 'Blastoise', ability: 'torrent', moves: ['tackle']},
+	]],
+	default: [[
+		{species: 'Bulbasaur', ability: 'overgrow', moves: ['synthesis']},
+		{species: 'Clefable', ability: 'unaware', moves: ['healingwish']},
+		{species: 'Latias', ability: 'levitate', moves: ['roost']},
+		{species: 'Venusaur', ability: 'overgrow', moves: ['synthesis']},
+	], [
+		{species: 'Charmander', ability: 'blaze', moves: ['scratch']},
+		{species: 'Clefable', ability: 'unaware', moves: ['recover']},
+		{species: 'Latias', ability: 'blaze', moves: ['roost']},
+	]],
+};
+
 let battle;
 
 describe('Decisions', function () {
@@ -426,9 +519,8 @@ describe('Decisions', function () {
 				{species: 'Charizard', ability: 'blaze', moves: ['scratch']},
 			]];
 
-			const BASE_TEAM_ORDER = [[1, 2, 3, 4], [1, 2, 3, 4]];
 			for (let i = 0; i < 10; i++) {
-				const teamOrder = BASE_TEAM_ORDER.map(Tools.shuffle);
+				const teamOrder = [BASE_TEAM_ORDER, BASE_TEAM_ORDER].map(teamOrder => Tools.shuffle(teamOrder.slice(0, 4)));
 				battle = common.createBattle({preview: true}, TEAMS);
 				battle.p1.chooseTeam(teamOrder[0].join(''));
 				battle.p2.chooseTeam(teamOrder[1].join(''));
@@ -436,6 +528,79 @@ describe('Decisions', function () {
 				battle.p2.pokemon.forEach((pokemon, index) => assert.species(pokemon, TEAMS[1][teamOrder[1][index] - 1].species));
 
 				if (i < 9) battle.destroy();
+			}
+		});
+
+		it('should autocomplete a single-slot decision in Singles for no Illusion', function () {
+			// Backwards-compatibility with the client. It should be useful for 3rd party bots/clients (Android?)
+			for (let i = 0; i < 5; i++) {
+				battle = common.createBattle({preview: true}, SINGLES_TEAMS.full);
+				const teamOrder = Tools.shuffle(BASE_TEAM_ORDER.slice()).slice(0, 1);
+				const fullTeamOrder = teamOrder.concat(BASE_TEAM_ORDER.filter(elem => !teamOrder.includes(elem)));
+
+				battle.choose('p1', 'team ' + teamOrder.join(''));
+				battle.p2.chooseDefault();
+
+				fullTeamOrder.forEach((oSlot, index) => assert.species(battle.p1.pokemon[index], SINGLES_TEAMS.full[0][oSlot - 1].species));
+
+				if (i < 4) battle.destroy();
+			}
+		});
+
+		it('should allow specifying the team order in a slot-per-slot basis in Singles with Illusion', function () {
+			for (let i = 0; i < 5; i++) {
+				battle = common.createBattle({preview: true}, SINGLES_TEAMS.illusion);
+				const teamOrder = Tools.shuffle(BASE_TEAM_ORDER.slice());
+
+				teamOrder.forEach(slot => battle.choose('p1', 'team ' + slot));
+				battle.p2.chooseDefault();
+
+				teamOrder.forEach((oSlot, index) => assert.species(battle.p1.pokemon[index], SINGLES_TEAMS.illusion[0][oSlot - 1].species));
+
+				if (i < 4) battle.destroy();
+			}
+		});
+
+		it('should allow specifying the team order in a slot-per-slot basis in Doubles', function () {
+			for (let i = 0; i < 5; i++) {
+				battle = common.createBattle({preview: true, gameType: 'doubles'}, DOUBLES_TEAMS.full);
+				const teamOrder = Tools.shuffle(BASE_TEAM_ORDER.slice());
+
+				teamOrder.forEach(slot => battle.choose('p1', 'team ' + slot));
+				battle.p2.chooseDefault();
+
+				teamOrder.forEach((oSlot, index) => assert.species(battle.p1.pokemon[index], DOUBLES_TEAMS.full[0][oSlot - 1].species));
+
+				if (i < 4) battle.destroy();
+			}
+		});
+
+		it('should allow specifying the team order in a slot-per-slot basis in Triples', function () {
+			for (let i = 0; i < 5; i++) {
+				battle = common.createBattle({preview: true, gameType: 'triples'}, TRIPLES_TEAMS.full);
+				const teamOrder = Tools.shuffle(BASE_TEAM_ORDER.slice());
+
+				teamOrder.forEach(slot => battle.choose('p1', 'team ' + slot));
+				battle.p2.chooseDefault();
+
+				teamOrder.forEach((oSlot, index) => assert.species(battle.p1.pokemon[index], TRIPLES_TEAMS.full[0][oSlot - 1].species));
+
+				if (i < 4) battle.destroy();
+			}
+		});
+
+		it('should autocomplete multi-slot decisions', function () {
+			for (let i = 0; i < 5; i++) {
+				battle = common.createBattle({preview: true}, SINGLES_TEAMS.full);
+				const teamOrder = Tools.shuffle(BASE_TEAM_ORDER.slice()).slice(0, 2);
+				const fullTeamOrder = teamOrder.concat(BASE_TEAM_ORDER.filter(elem => !teamOrder.includes(elem)));
+
+				battle.choose('p1', 'team ' + teamOrder.slice(0, 2).join(''));
+				battle.p2.chooseDefault();
+
+				fullTeamOrder.forEach((oSlot, index) => assert.species(battle.p1.pokemon[index], SINGLES_TEAMS.full[0][oSlot - 1].species));
+
+				if (i < 4) battle.destroy();
 			}
 		});
 	});
@@ -554,7 +719,7 @@ describe('Decisions', function () {
 			battle.p2.chooseTeam('1234');
 
 			const logText = battle.log.join('\n');
-			const logs = ['|choice||', '|choice|team 1342|', '|choice||team 1234', '|choice|team 1342|team 1234'];
+			const logs = ['|choice||', '|choice|team 1, team 3, team 4, team 2|', '|choice||team 1, team 2, team 3, team 4', '|choice|team 1, team 3, team 4, team 2|team 1, team 2, team 3, team 4'];
 			const subString = '|split\n' + logs.join('\n');
 			assert(logText.includes(subString), `${logText} does not include ${subString}`);
 		});
@@ -571,7 +736,7 @@ describe('Decisions', function () {
 				{species: "Aggron", ability: 'sturdy', moves: ['irondefense']},
 				{species: "Golem", ability: 'sturdy', moves: ['defensecurl']},
 			]);
-			p1.chooseShift(1).chooseMove(1).chooseMove(1);
+			p1.chooseShift().chooseMove(1).chooseMove(1);
 			p2.chooseMove(1).chooseMove(1).chooseMove(1);
 
 			const logText = battle.log.join('\n');
@@ -992,6 +1157,19 @@ describe('Decision extensions', function () {
 				battle.choose('p2', 'team 12');
 
 				['Ivysaur', 'Bulbasaur'].forEach((species, index) => assert.species(battle.p1.pokemon[index], species));
+				battle.destroy();
+
+				battle = common.createBattle({preview: true, cancel: true}, [
+					[{species: 'Bulbasaur', ability: 'overgrow', moves: ['tackle']}, {species: 'Ivysaur', ability: 'overgrow', moves: ['tackle']}],
+					[{species: 'Charmander', ability: 'blaze', moves: ['scratch']}, {species: 'Charmeleon', ability: 'blaze', moves: ['scratch']}],
+				]);
+
+				battle.choose('p1', 'team 21');
+				if (mode === 'revoke') battle.undoChoice('p1');
+				battle.choose('p1', 'team 12');
+				battle.choose('p2', 'team 12');
+
+				['Bulbasaur', 'Ivysaur'].forEach((species, index) => assert.species(battle.p1.pokemon[index], species));
 			});
 
 			it(`should disallow to ${mode} team order decision on team preview requests by default`, function () {
@@ -1011,47 +1189,130 @@ describe('Decision extensions', function () {
 	});
 
 	describe('Undo > Partial Decisions', function () {
-		it(`should support to revoke switch decisions on switch requests`, function () {
-			const TEAMS = [[
-				{species: 'Latias', ability: 'levitate', moves: ['lunardance']},
-				{species: 'Clefable', ability: 'unaware', moves: ['healingwish']},
-				{species: 'Ivysaur', ability: 'overgrow', moves: ['tackle']},
-				{species: 'Venusaur', ability: 'overgrow', moves: ['tackle']},
-			], [
-				{species: 'Charmander', ability: 'blaze', moves: ['scratch']},
-				{species: 'Charmeleon', ability: 'blaze', moves: ['scratch']},
-				{species: 'Charizard', ability: 'blaze', moves: ['scratch']},
-			]];
+		const DOUBLES = {gameType: 'doubles', cancel: true, partialDecisions: true};
+		const TRIPLES = {gameType: 'triples', cancel: true, partialDecisions: true};
 
-			battle = common.createBattle({gameType: 'doubles', partialDecisions: true, cancel: true}, TEAMS);
-			battle.commitDecisions();
+		it(`should support to revoke move decisions on move requests`, function () {
+			let didFullUndo = false;
+			for (const finalIndex of [0, 0, 1, 2]) {
+				battle = common.createBattle(TRIPLES, TRIPLES_TEAMS.default);
 
-			battle.choose('p1', 'switch 3'); // Ivysaur
-			battle.undoChoice('p1');
-			battle.choose('p1', 'switch 4, switch 3'); // Venusaur, Ivysaur
+				for (let i = 0; i <= finalIndex; i++) {
+					battle.choose('p1', 'move 1');
+				}
+				battle.undoChoice('p1', didFullUndo ? 1 : true);
+				didFullUndo = true;
+				battle.choose('p1', 'switch 4');
+				for (let i = finalIndex + 1; i < 3; i++) {
+					battle.choose('p1', 'move 1');
+				}
 
-			['Venusaur', 'Ivysaur'].forEach((species, index) => assert.species(battle.p1.active[index], species));
+				battle.p2.chooseDefault();
+				assert.species(battle.p1.active[finalIndex], TRIPLES_TEAMS.default[0][3].species);
+
+				if (finalIndex !== 2) battle.destroy();
+			}
 		});
 
-		it(`should support to override pass decisions on switch requests`, function () {
-			const TEAMS = [[
-				{species: 'Latias', ability: 'levitate', moves: ['lunardance']},
-				{species: 'Clefable', ability: 'unaware', moves: ['healingwish']},
-				{species: 'Venusaur', ability: 'overgrow', moves: ['tackle']},
-			], [
-				{species: 'Charmander', ability: 'blaze', moves: ['scratch']},
-				{species: 'Charmeleon', ability: 'blaze', moves: ['scratch']},
-				{species: 'Charizard', ability: 'blaze', moves: ['scratch']},
-			]];
+		it(`should support to revoke switch decisions on move requests`, function () {
+			let didFullUndo = false;
+			for (const finalIndex of [0, 0, 1, 2]) {
+				battle = common.createBattle(TRIPLES, TRIPLES_TEAMS.default);
 
-			battle = common.createBattle({gameType: 'doubles', partialDecisions: true, cancel: true}, TEAMS);
+				for (let i = 0; i < finalIndex; i++) {
+					battle.choose('p1', 'move 1');
+				}
+				battle.choose('p1', 'switch 4');
+				battle.undoChoice('p1', didFullUndo ? 1 : void 0);
+				didFullUndo = true;
+				battle.choose('p1', 'move 1');
+				for (let i = finalIndex + 1; i < 3; i++) {
+					battle.choose('p1', 'move 1');
+				}
+				battle.p2.chooseDefault();
+				assert.strictEqual(battle.p1.active[finalIndex].lastMove, TRIPLES_TEAMS.default[0][finalIndex].moves[0]);
+
+				if (finalIndex !== 2) battle.destroy();
+			}
+		});
+
+		it(`should support to revoke shift decisions on move requests`, function () {
+			battle = common.createBattle(TRIPLES, TRIPLES_TEAMS.default);
+
+			battle.choose('p1', 'shift');
+			battle.undoChoice('p1');
+			for (let i = 0; i < 3; i++) battle.choose('p1', 'move 1');
+			battle.p2.chooseDefault();
+
+			TRIPLES_TEAMS.default[0].slice(0, 3).map(set => set.species).forEach((species, index) => assert.species(battle.p1.active[index], species));
+			battle.destroy();
+
+			battle = common.createBattle(TRIPLES, TRIPLES_TEAMS.default);
+
+			battle.choose('p1', 'shift');
+			battle.undoChoice('p1', 1);
+			for (let i = 0; i < 3; i++) battle.choose('p1', 'move 1');
+			battle.p2.chooseDefault();
+
+			TRIPLES_TEAMS.default[0].slice(0, 3).map(set => set.species).forEach((species, index) => assert.species(battle.p1.active[index], species));
+			battle.destroy();
+
+			battle = common.createBattle(TRIPLES, TRIPLES_TEAMS.default);
+
+			for (let i = 0; i < 2; i++) battle.choose('p1', 'move 1');
+			battle.choose('p1', 'shift');
+			battle.undoChoice('p1', 1);
+			battle.p2.chooseDefault();
+
+			TRIPLES_TEAMS.default[0].slice(0, 3).map(set => set.species).forEach((species, index) => assert.species(battle.p1.active[index], species));
+		});
+
+		it(`should support to revoke switch decisions on switch requests`, function () {
+			battle = common.createBattle(DOUBLES, DOUBLES_TEAMS.default);
+			battle.commitDecisions();
+
+			battle.choose('p1', 'switch 3');
+			battle.undoChoice('p1');
+			battle.choose('p1', 'switch 4, switch 3');
+
+			[DOUBLES_TEAMS.default[0][3], DOUBLES_TEAMS.default[0][2]].map(set => set.species).forEach((species, index) => assert.species(battle.p1.active[index], species));
+		});
+
+		it(`should support to revoke pass decisions on switch requests`, function () {
+			battle = common.createBattle(DOUBLES, DOUBLES_TEAMS.forcePass);
 			battle.commitDecisions();
 
 			battle.choose('p1', 'pass');
 			battle.undoChoice('p1');
-			battle.choose('p1', 'switch 3, pass'); // Venusaur
+			battle.choose('p1', 'switch 3, pass');
 
-			['Venusaur', 'Clefable'].forEach((species, index) => assert.species(battle.p1.active[index], species));
+			[DOUBLES_TEAMS.forcePass[0][2], DOUBLES_TEAMS.forcePass[0][1]].map(set => set.species).forEach((species, index) => assert.species(battle.p1.active[index], species));
+		});
+
+		it(`should support to revoke team order decisions on team preview requests`, function () {
+			const TEAM_ORDER = [1, 2, 3, 4, 5, 6];
+			for (let i = 0; i < 20; i++) {
+				battle = common.createBattle(Object.assign({preview: true}, DOUBLES), DOUBLES_TEAMS.full);
+				const wrongOrder = TEAM_ORDER.slice(0, 1).concat(Tools.shuffle(TEAM_ORDER.slice(1)));
+				const rightOrder = TEAM_ORDER.slice(0, 1).concat(Tools.shuffle(TEAM_ORDER.slice(1)));
+				const divergeIndex = wrongOrder.findIndex((elem, index) => rightOrder[index] !== elem);
+				if (divergeIndex < 0) continue;
+				const finalIndex = divergeIndex + Math.floor(Math.random() * (5 - divergeIndex));
+				const undoSteps = finalIndex - divergeIndex + 1;
+
+				for (let j = 0; j <= finalIndex; j++) {
+					battle.choose('p1', 'team ' + wrongOrder[j]);
+				}
+				battle.undoChoice('p1', undoSteps);
+				for (let j = divergeIndex; j < 6; j++) {
+					battle.choose('p1', 'team ' + rightOrder[j]);
+				}
+				assert(battle.p1.getDecisionsFinished(), `Decisions for ${battle.p1} not finished`);
+				battle.p2.chooseDefault();
+				rightOrder.map(slot => DOUBLES_TEAMS.full[0][slot - 1].species).forEach((species, index) => assert.species(battle.p1.pokemon[index], species));
+
+				if (i < 19) battle.destroy();
+			}
 		});
 	});
 });
