@@ -464,15 +464,18 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {snatch: 1, distance: 1},
 		onHit: function (pokemon, source, move) {
+			this.add('-cureteam', source, '[from] move: Aromatherapy');
 			let side = pokemon.side;
 			for (let i = 0; i < side.pokemon.length; i++) {
 				if (side.pokemon[i] !== source && ((side.pokemon[i].hasAbility('sapsipper')) ||
 						(side.pokemon[i].volatiles['substitute'] && !move.infiltrates))) {
 					continue;
 				}
-				side.pokemon[i].status = '';
+				if (side.pokemon[i].status && side.pokemon[i].hp) {
+					this.add('-curestatus', side.pokemon[i], side.pokemon[i].status);
+					side.pokemon[i].status = '';
+				}
 			}
-			this.add('-cureteam', source, '[from] move: Aromatherapy');
 		},
 		target: "allyTeam",
 		type: "Grass",
@@ -6081,12 +6084,15 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {snatch: 1, sound: 1, distance: 1, authentic: 1},
 		onHit: function (pokemon, source) {
+			this.add('-cureteam', source, '[from] move: Heal Bell');
 			let side = pokemon.side;
 			for (let i = 0; i < side.pokemon.length; i++) {
 				if (side.pokemon[i].hasAbility('soundproof')) continue;
-				side.pokemon[i].status = '';
+				if (side.pokemon[i].status && side.pokemon[i].hp) {
+					this.add('-curestatus', side.pokemon[i], side.pokemon[i].status);
+					side.pokemon[i].status = '';
+				}
 			}
-			this.add('-cureteam', source, '[from] move: Heal Bell');
 		},
 		target: "allyTeam",
 		type: "Normal",
