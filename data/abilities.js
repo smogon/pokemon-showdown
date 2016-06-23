@@ -2663,7 +2663,7 @@ exports.BattleAbilities = {
 		shortDesc: "If Aegislash, changes Forme to Blade before attacks and Shield before King's Shield.",
 		onBeforeMovePriority: 11,
 		onBeforeMove: function (attacker, defender, move) {
-			if (attacker.template.baseSpecies !== 'Aegislash') return;
+			if (attacker.template.baseSpecies !== 'Aegislash' || attacker.transformed) return;
 			if (move.category === 'Status' && move.id !== 'kingsshield') return;
 			let targetSpecies = (move.id === 'kingsshield' ? 'Aegislash' : 'Aegislash-Blade');
 			if (attacker.template.species !== targetSpecies && attacker.formeChange(targetSpecies)) {
@@ -3307,7 +3307,7 @@ exports.BattleAbilities = {
 		shortDesc: "If Darmanitan, at end of turn changes Mode to Standard if > 1/2 max HP, else Zen.",
 		onResidualOrder: 27,
 		onResidual: function (pokemon) {
-			if (pokemon.baseTemplate.species !== 'Darmanitan') {
+			if (pokemon.baseTemplate.species !== 'Darmanitan' || pokemon.transformed) {
 				return;
 			}
 			if (pokemon.hp <= pokemon.maxhp / 2 && pokemon.template.speciesid === 'darmanitan') {

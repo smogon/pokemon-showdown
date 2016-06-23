@@ -737,7 +737,7 @@ BattlePokemon = (() => {
 		} else {
 			this.battle.add('-transform', this, pokemon);
 		}
-		this.setAbility(pokemon.ability);
+		this.setAbility(pokemon.ability, this, {id: 'transform'});
 
 		// Change formes based on held items (for Transform)
 		// Only ever relevant in Generation 4 since Generation 3 didn't have item-based forme changes
@@ -1133,8 +1133,10 @@ BattlePokemon = (() => {
 		if (noForce && oldAbility === ability.id) {
 			return false;
 		}
-		if (ability.id in {illusion:1, multitype:1, stancechange:1}) return false;
-		if (oldAbility in {multitype:1, stancechange:1}) return false;
+		if (!effect || effect.id !== 'transform') {
+			if (ability.id in {illusion:1, multitype:1, stancechange:1}) return false;
+			if (oldAbility in {multitype:1, stancechange:1}) return false;
+		}
 		this.battle.singleEvent('End', this.battle.getAbility(oldAbility), this.abilityData, this, source, effect);
 		this.ability = ability.id;
 		this.abilityData = {id: ability.id, target: this};
