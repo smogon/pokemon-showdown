@@ -349,7 +349,7 @@ class User {
 			return '‽' + this.name;
 		}
 		if (this.namelocked) {
-			return '✖' + this.name;
+			return '‽' + this.name;
 		}
 		if (roomid) {
 			let room = Rooms.rooms[roomid];
