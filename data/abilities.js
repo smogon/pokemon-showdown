@@ -3275,10 +3275,10 @@ exports.BattleAbilities = {
 	"wonderguard": {
 		shortDesc: "This Pokemon can only be damaged by supereffective moves and indirect damage.",
 		onTryHit: function (target, source, move) {
-			if (target === source || move.category === 'Status' || move.type === '???' || move.id === 'struggle' || move.isFutureMove) return;
+			if (target === source || move.category === 'Status' || move.type === '???' || move.id === 'struggle') return;
 			this.debug('Wonder Guard immunity: ' + move.id);
 			if (target.runEffectiveness(move) <= 0) {
-				this.add('-activate', target, 'ability: Wonder Guard');
+				this.add('-immune', target, '[msg]', '[from] ability: Wonder Guard');
 				return null;
 			}
 		},
