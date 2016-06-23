@@ -145,7 +145,8 @@ exports.commands = {
 	host: function (target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help host');
 		if (!this.can('rangeban')) return;
-		if (!/[0-9.]+/.test(target)) return this.errorReply('You must pass a valid IPv4 IP to /host.');
+		target = target.trim();
+		if (!/^[0-9.]+$/.test(target)) return this.errorReply('You must pass a valid IPv4 IP to /host.');
 		Dnsbl.reverse(target, (err, hosts) => {
 			this.sendReply('IP ' + target + ': ' + (hosts ? hosts[0] : 'NULL'));
 		});
