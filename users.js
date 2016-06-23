@@ -1113,7 +1113,8 @@ class User {
 				}
 				userGroup = room.auth[this.userid] || userGroup;
 			}
-			if (Config.groupsranking.indexOf(userGroup) < Config.groupsranking.indexOf(room.modjoin !== true ? room.modjoin : room.modchat)) {
+			let modjoinGroup = room.modjoin !== true ? room.modjoin : room.modchat;
+			if (Config.groupsranking.indexOf(userGroup) < Config.groupsranking.indexOf(modjoinGroup)) {
 				if (!this.named) {
 					return null;
 				} else if (!this.can('bypassall')) {
