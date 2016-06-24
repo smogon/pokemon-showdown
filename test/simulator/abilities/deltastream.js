@@ -21,11 +21,12 @@ describe('Delta Stream', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Tornadus", ability: 'deltastream', item: 'weaknesspolicy', moves: ['recover']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Smeargle", ability: 'owntempo', moves: ['thundershock', 'powdersnow', 'powergem']}]);
-		for (let i = 0; i < 3; i++) {
-			battle.choose('p2', 'move ' + i);
-			battle.commitDecisions();
-			assert.strictEqual(battle.p1.active[0].boosts.atk, 0);
-			assert.strictEqual(battle.p1.active[0].boosts.spa, 0);
+		const pokemon = battle.p1.active[0];
+		for (let i = 1; i <= 3; i++) {
+			battle.p2.chooseMove(i).foe.chooseDefault();
+			assert.statStage(pokemon, 'atk', 0);
+			assert.statStage(pokemon, 'spa', 0);
+			assert.holdsItem(pokemon);
 		}
 	});
 
@@ -34,8 +35,10 @@ describe('Delta Stream', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: "Rayquaza", ability: 'deltastream', item: 'weaknesspolicy', moves: ['recover']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Smeargle", ability: 'owntempo', moves: ['dragonpulse']}]);
 		battle.commitDecisions();
-		assert.strictEqual(battle.p1.active[0].boosts.atk, 2);
-		assert.strictEqual(battle.p1.active[0].boosts.spa, 2);
+		const pokemon = battle.p1.active[0];
+		assert.statStage(pokemon, 'atk', 2);
+		assert.statStage(pokemon, 'spa', 2);
+		assert.false.holdsItem(pokemon);
 	});
 
 	it('should prevent moves and abilities from setting the weather to Sunny Day, Rain Dance, Sandstorm, or Hail', function () {
@@ -49,8 +52,7 @@ describe('Delta Stream', function () {
 			{species: "Abomasnow", ability: 'snowwarning', moves: ['hail']},
 		]);
 		for (let i = 2; i <= 5; i++) {
-			battle.choose('p1', 'switch ' + i);
-			battle.commitDecisions();
+			battle.p2.chooseSwitch(i).chooseDefault();
 			assert.ok(battle.isWeather('deltastream'));
 			battle.commitDecisions();
 			assert.ok(battle.isWeather('deltastream'));
