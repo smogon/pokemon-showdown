@@ -241,6 +241,7 @@ exports.BattleAliases = {
 	"chesto": "Chesto Berry",
 	"chople": "Chople Berry",
 	"custap": "Custap Berry",
+	"ebelt": "Expert Belt",
 	"fightgem": "Fighting Gem",
 	"flightgem": "Flying Gem",
 	"goggles": "Safety Goggles",
