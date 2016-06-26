@@ -519,6 +519,15 @@ class CommandContext {
 		}
 		return target.substr(commaIndex + 1).trim();
 	}
+	splitTargetText(target) {
+		let commaIndex = target.indexOf(',');
+		if (commaIndex < 0) {
+			this.targetUsername = target;
+			return '';
+		}
+		this.targetUsername = target.substr(0, commaIndex);
+		return target.substr(commaIndex + 1).trim();
+	}
 }
 exports.CommandContext = CommandContext;
 

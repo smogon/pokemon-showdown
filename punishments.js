@@ -31,9 +31,6 @@ Punishments.ips = new Map();
 // userids is a userid:punishment Map
 Punishments.userids = new Map();
 
-// hosts is a hosts:punishment Map
-Punishments.hosts = new Map();
-
 /*********************************************************
  * Persistence
  *********************************************************/
@@ -338,13 +335,13 @@ Punishments.unnamelock = function (name) {
 	return success;
 };
 
-Punishments.lockRange = function (range, isIp) {
-	let punishment = ['LOCK', '#rangelock', RANGELOCK_DURATION];
-	if (isIp) {
-		Punishments.ips.set(range, punishment);
-	} else {
-		Punishments.hosts.set(range, punishment);
-	}
+Punishments.lockRange = function (range, reason) {
+	let punishment = ['LOCK', '#rangelock', Date.now() + RANGELOCK_DURATION, reason];
+	Punishments.ips.set(range, punishment);
+};
+Punishments.banRange = function (range, reason) {
+	let punishment = ['BAN', '#rangelock', Date.now() + RANGELOCK_DURATION, reason];
+	Punishments.ips.set(range, punishment);
 };
 
 /*********************************************************
@@ -449,16 +446,6 @@ Punishments.checkName = function (user, registered) {
 		user.resetName();
 		user.updateIdentity();
 	}
-	// if (user.group === Config.groupsranking[0]) {
-	// 	let range = user.locked || Punishments.shortenHost(user.latestHost);
-	// 	if (Punishments.lockedRanges[range]) {
-	// 		user.send("|popup|You are in a range that has been temporarily locked from talking in chats and PMing regular users.");
-	// 		Punishments.rangeLockedUsers[range][user.userid] = 1;
-	// 		user.locked = '#range';
-	// 	}
-	// } else if (user.locked && (user.locked === '#range' || Punishments.lockedRanges[user.locked])) {
-	// 	user.locked = false;
-	// }
 };
 
 Punishments.checkIp = function (user, connection) {
@@ -476,16 +463,6 @@ Punishments.checkIp = function (user, connection) {
 		if (hosts && hosts[0]) {
 			user.latestHost = hosts[0];
 			if (Config.hostfilter) Config.hostfilter(hosts[0], user, connection);
-			if (user.named && !user.locked && user.group === Config.groupsranking[0]) {
-				let shortHost = Punishments.shortenHost(hosts[0]);
-				let punishment = Punishments.hosts.get(shortHost);
-				if (punishment) {
-					user.send("|popup|You are locked because someone on your ISP has spammed, and your ISP does not give us any way to tell you apart from them.");
-					Punishments.rangeLockedUsers[shortHost][user.userid] = 1;
-					user.locked = '#range';
-					user.updateIdentity();
-				}
-			}
 		} else {
 			if (Config.hostfilter) Config.hostfilter('', user, connection);
 		}
