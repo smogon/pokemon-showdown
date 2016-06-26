@@ -1631,7 +1631,7 @@ exports.BattleScripts = {
 					(hasType['Ground'] && !counter['Ground'] && (counter.setupType || counter['speedsetup'])) ||
 					(hasType['Ice'] && !counter['Ice']) ||
 					(hasType['Psychic'] && !!counter['Psychic'] && !hasType['Flying'] && !hasAbility['Pixilate'] && template.types.length > 1 && counter.stab < 2) ||
-					(hasMove['raindance'] && hasType['Water'] && !counter['Water']) ||
+					(hasType['Water'] && !counter['Water'] && (!hasType['Ice'] || !counter['Ice']) && !hasAbility['Protean']) ||
 					(movePool.includes('technoblast') || template.requiredMove && movePool.includes(toId(template.requiredMove)))) &&
 					(counter['physicalsetup'] + counter['specialsetup'] < 2 && (!counter.setupType || counter.setupType === 'Mixed' || (move.category !== counter.setupType && move.category !== 'Status') || counter[counter.setupType] + counter.Status > 3))) {
 					// Reject Status or non-STAB
