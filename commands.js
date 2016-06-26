@@ -1470,55 +1470,66 @@ exports.commands = {
 	},
 	deroomvoiceallhelp: ["/deroomvoiceall - Devoice all roomvoiced users. Requires: # & ~"],
 
+	rangeban: 'banip',
 	banip: function (target, room, user) {
-		target = target.trim();
-		if (!target) {
-			return this.parse('/help banip');
-		}
+		target = this.splitTargetText(target);
+		let targetIp = this.targetUsername.trim();
+		if (!targetIp || !/^[0-9.*]+$/.test(targetIp)) return this.parse('/help banip');
+		if (!target) return this.errorReply("/banip requires a ban reason");
+
 		if (!this.can('rangeban')) return false;
-		if (Punishments.bannedIps[target] === '#ipban') return this.sendReply("The IP " + (target.charAt(target.length - 1) === '*' ? "range " : "") + target + " has already been temporarily banned.");
+		Punishments.ipSearch(targetIp);
+		if (Punishments.ips.has(targetIp)) return this.sendReply("The IP " + (targetIp.charAt(targetIp.length - 1) === '*' ? "range " : "") + targetIp + " has already been temporarily locked/banned.");
 
-		Punishments.bannedIps[target] = '#ipban';
-		this.addModCommand("" + user.name + " temporarily banned the " + (target.charAt(target.length - 1) === '*' ? "IP range" : "IP") + ": " + target);
+		Punishments.banRange(targetIp, target);
+		this.addModCommand("" + user.name + " hour-banned the " + (target.charAt(target.length - 1) === '*' ? "IP range" : "IP") + " " + targetIp + ": " + target);
 	},
-	baniphelp: ["/banip [ip] - Kick users on this IP or IP range from all rooms and bans it. Accepts wildcards to ban ranges. Requires: & ~"],
+	baniphelp: ["/banip [ip] - Globally bans this IP or IP range for an hour. Accepts wildcards to ban ranges. Existing users on the IP will not be banned. Requires: & ~"],
 
+	unrangeban: 'unbanip',
 	unbanip: function (target, room, user) {
 		target = target.trim();
 		if (!target) {
 			return this.parse('/help unbanip');
 		}
 		if (!this.can('rangeban')) return false;
-		if (!Punishments.bannedIps[target]) {
-			return this.errorReply("" + target + " is not a banned IP or IP range.");
+		if (!Punishments.ips.has(target)) {
+			return this.errorReply("" + target + " is not a locked/banned IP or IP range.");
 		}
-		delete Punishments.bannedIps[target];
+		Punishments.ips.delete(target);
 		this.addModCommand("" + user.name + " unbanned the " + (target.charAt(target.length - 1) === '*' ? "IP range" : "IP") + ": " + target);
 	},
-	unbaniphelp: ["/unbanip [ip] - Kick users on this IP or IP range from all rooms and bans it. Accepts wildcards to ban ranges. Requires: & ~"],
+	unbaniphelp: ["/unbanip [ip] - Unbans. Accepts wildcards to ban ranges. Requires: & ~"],
 
-	rangelock: function (target, room, user) {
-		if (!target) return this.errorReply("Please specify a range to lock.");
+	rangelock: 'lockip',
+	lockip: function (target, room, user) {
+		target = this.splitTargetText(target);
+		let targetIp = this.targetUsername.trim();
+		if (!targetIp || !/^[0-9.*]+$/.test(targetIp)) return this.parse('/help lockip');
+		if (!target) return this.errorReply("/lockip requires a lock reason");
+
 		if (!this.can('rangeban')) return false;
+		Punishments.ipSearch(targetIp);
+		if (Punishments.ips.has(targetIp)) return this.sendReply("The IP " + (targetIp.charAt(targetIp.length - 1) === '*' ? "range " : "") + targetIp + " has already been temporarily locked/banned.");
 
-		let isIp = (target.slice(-1) === '*');
-		let range = (isIp ? target : Punishments.shortenHost(target));
-		if (Punishments.lockedRanges[range]) return this.errorReply("The range " + range + " has already been temporarily locked.");
-
-		Punishments.lockRange(range, isIp);
-		this.addModCommand("" + user.name + " temporarily locked the range: " + range);
+		Punishments.lockRange(targetIp, target);
+		this.addModCommand("" + user.name + " hour-locked the " + (target.charAt(target.length - 1) === '*' ? "IP range" : "IP") + " " + targetIp + ": " + target);
 	},
+	lockiphelp: ["/lockip [ip] - Globally locks this IP or IP range for an hour. Accepts wildcards to ban ranges. Existing users on the IP will not be banned. Requires: & ~"],
 
-	unrangelock: 'rangeunlock',
-	rangeunlock: function (target, room, user) {
-		if (!target) return this.errorReply("Please specify a range to unlock.");
+	unrangelock: 'unlockip',
+	rangeunlock: 'unlockip',
+	unlockip: function (target, room, user) {
+		target = target.trim();
+		if (!target) {
+			return this.parse('/help unbanip');
+		}
 		if (!this.can('rangeban')) return false;
-
-		let range = (target.slice(-1) === '*' ? target : Punishments.shortenHost(target));
-		if (!Punishments.lockedRanges[range]) return this.errorReply("The range " + range + " is not locked.");
-
-		Punishments.unlockRange(range);
-		this.addModCommand("" + user.name + " unlocked the range " + range + ".");
+		if (!Punishments.ips.has(target)) {
+			return this.errorReply("" + target + " is not a locked/banned IP or IP range.");
+		}
+		Punishments.ips.delete(target);
+		this.addModCommand("" + user.name + " unlocked the " + (target.charAt(target.length - 1) === '*' ? "IP range" : "IP") + ": " + target);
 	},
 
 	/*********************************************************
