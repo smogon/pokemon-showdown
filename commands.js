@@ -2081,7 +2081,7 @@ exports.commands = {
 				if (!stdout) {
 					connection.popup("The modlog is empty. (Weird.)");
 				} else {
-					connection.popup("|wide||html|<p>The last " + lines + " lines of the Moderator Log of " + roomNames + ":</p>" + stdout);
+					connection.popup("|wide||html|<p>The last " + lines + " lines of the Moderator Log of " + roomNames + ".</p><p><small>[" + Tools.toTimeStamp(new Date(), {hour12: true}) + "] ← current server time</small></p>" + stdout);
 				}
 			} else {
 				if (!stdout) {
@@ -2089,7 +2089,7 @@ exports.commands = {
 					                 (strictMatch ? "" : " Add quotes to the search parameter to search for a phrase, rather than a user."));
 				} else {
 					connection.popup("|wide||html|<p>The last " + grepLimit + " logged actions containing " + target + " on " + roomNames + "." +
-					                 (strictMatch ? "" : " Add quotes to the search parameter to search for a phrase, rather than a user.") + "</p>" + stdout);
+					                 (strictMatch ? "" : " Add quotes to the search parameter to search for a phrase, rather than a user.") + "</p><p><small>[" + Tools.toTimeStamp(new Date(), {hour12: true}) + "] ← current server time</small></p>" + stdout);
 				}
 			}
 		});
