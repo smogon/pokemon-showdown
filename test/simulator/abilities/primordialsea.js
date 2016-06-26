@@ -65,7 +65,7 @@ describe('Primordial Sea', function () {
 
 	it('should be treated as Rain Dance for any forme, move or ability that requires it', function () {
 		battle = common.createBattle();
-		const p1 = battle.join('p1', 'Guest 1', 1, [{species: "Kyogre", ability: 'primordialsea', moves: ['sonicboom']}]);
+		battle.join('p1', 'Guest 1', 1, [{species: "Kyogre", ability: 'primordialsea', moves: ['sonicboom']}]);
 		const p2 = battle.join('p2', 'Guest 2', 1, [
 			{species: "Castform", ability: 'forecast', moves: ['weatherball']},
 			{species: "Kingdra", ability: 'swiftswim', moves: ['focusenergy']},
