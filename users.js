@@ -359,44 +359,32 @@ class User {
 			if (room.isMuted(this)) {
 				return '!' + this.name;
 			}
-			if (room && room.auth) {
-				if (room.auth[this.userid]) {
-					return room.auth[this.userid] + this.name;
-				}
-				if (room.isPrivate === true) return ' ' + this.name;
-			}
+			return room.getAuth(this) + this.name;
 		}
 		return this.group + this.name;
 	}
 	can(permission, target, room) {
 		if (this.hasSysopAccess()) return true;
 
-		let group = this.group;
-		let targetGroup = '';
-		if (target) targetGroup = target.group;
-		let groupData = Config.groups[group];
+		let group, targetGroup;
 
-		if (groupData && groupData['root']) {
-			return true;
+		if (typeof target === 'string') {
+			target = null;
+			targetGroup = target;
 		}
 
 		if (room && room.auth) {
-			if (room.auth[this.userid]) {
-				group = room.auth[this.userid];
-			} else if (room.isPrivate === true) {
-				group = ' ';
-			}
-			groupData = Config.groups[group];
-			if (target) {
-				if (room.auth[target.userid]) {
-					targetGroup = room.auth[target.userid];
-				} else if (room.isPrivate === true) {
-					targetGroup = ' ';
-				}
-			}
+			group = room.getAuth(this);
+			if (target) targetGroup = room.getAuth(target);
+		} else {
+			group = this.group;
+			if (target) targetGroup = target.group;
 		}
 
-		if (typeof target === 'string') targetGroup = target;
+		let groupData = Config.groups[group];
+		if (groupData && groupData['root']) {
+			return true;
+		}
 
 		if (groupData && groupData[permission]) {
 			let jurisdiction = groupData[permission];
@@ -1105,19 +1093,13 @@ class User {
 				return false;
 			}
 		}
-		if (room.modjoin) {
-			let userGroup = this.group;
-			if (room.auth && !makeRoom) {
-				if (room.isPrivate === true) {
-					userGroup = ' ';
-				}
-				userGroup = room.auth[this.userid] || userGroup;
-			}
+		if (room.modjoin && !makeRoom) {
+			let userGroup = room.getAuth(this);
 			let modjoinGroup = room.modjoin !== true ? room.modjoin : room.modchat;
 			if (Config.groupsranking.indexOf(userGroup) < Config.groupsranking.indexOf(modjoinGroup)) {
 				if (!this.named) {
 					return null;
-				} else if (!this.can('bypassall')) {
+				} else {
 					connection.sendTo(roomid, "|noinit|nonexistent|The room '" + roomid + "' does not exist.");
 					return false;
 				}
