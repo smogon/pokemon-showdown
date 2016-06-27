@@ -257,6 +257,32 @@ exports.Formats = [
 		requirePentagon: true,
 	},
 	{
+		name: "Sinnoh Classic",
+		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3575910/\">Sinnoh Classic</a>"],
+		section: "ORAS Doubles",
+
+		gameType: 'doubles',
+		maxForcedLevel: 50,
+		teamLength: {
+			validate: [4, 6],
+			battle: 4,
+		},
+		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview'],
+		banlist: ['Dragonite', 'Tyranitar', 'Heatran'],
+		onValidateSet: function (set) {
+			let problems = [];
+			let template = this.getTemplate(set.species || set.name);
+			if (template.num > 493) {
+				problems.push(template.species + " is banned by Sinnoh Classic.");
+			}
+			let item = this.getItem(set.item);
+			if (item.megaStone) {
+				problems.push(item.name + " is banned by Sinnoh Classic.");
+			}
+			return problems;
+		},
+	},
+	{
 		name: "Doubles Custom Game",
 		section: "ORAS Doubles",
 
