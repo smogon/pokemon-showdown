@@ -126,6 +126,7 @@ exports.commands = {
 
 		if (user.can('alts', targetUser) || (room.isPrivate !== true && user.can('mute', targetUser, room) && targetUser.userid in room.users)) {
 			let bannedFrom = "";
+			let mutedIn = "";
 			for (let i = 0; i < Rooms.global.chatRooms.length; i++) {
 				let thisRoom = Rooms.global.chatRooms[i];
 				if (!thisRoom || thisRoom.isPrivate === true) continue;
@@ -133,9 +134,16 @@ exports.commands = {
 				if (roomBanned) {
 					if (bannedFrom) bannedFrom += ", ";
 					bannedFrom += '<a href="/' + thisRoom + '">' + thisRoom + '</a> (' + roomBanned + ')';
+				} else {
+					let muted = thisRoom.isMuted(targetUser);
+					if (muted) {  // besides roombans, mutes also help to determine if a user is hitting multiple rooms
+						if (mutedIn) mutedIn += ", ";
+						mutedIn += '<a href="/' + thisRoom + '">' + thisRoom + '</a> (' + muted + ')';
+					}
 				}
 			}
 			if (bannedFrom) buf += '<br />Banned from: ' + bannedFrom;
+			if (mutedIn) buf += '<br />Muted in: ' + mutedIn;
 		}
 		this.sendReplyBox(buf);
 	},
