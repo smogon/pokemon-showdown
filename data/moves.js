@@ -5661,9 +5661,10 @@ exports.BattleMovedex = {
 				return accuracy * 5 / 3;
 			},
 			onDisableMove: function (pokemon) {
-				let disabledMoves = {bounce:1, fly:1, flyingpress:1, highjumpkick:1, jumpkick:1, magnetrise:1, skydrop:1, splash:1, telekinesis:1};
-				for (let m in disabledMoves) {
-					pokemon.disableMove(m);
+				for (let i = 0; i < pokemon.moveset.length; i++) {
+					if (this.getMove(pokemon.moveset[i].id).flags['gravity']) {
+						pokemon.disableMove(pokemon.moveset[i].id);
+					}
 				}
 			},
 			// groundedness implemented in battle.engine.js:BattlePokemon#isGrounded
