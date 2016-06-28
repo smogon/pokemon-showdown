@@ -6123,18 +6123,15 @@ exports.BattleMovedex = {
 				this.add('-start', pokemon, 'move: Heal Block');
 			},
 			onDisableMove: function (pokemon) {
-				let disabledMoves = {healingwish:1, lunardance:1, rest:1, swallow:1, wish:1};
-				let move;
 				for (let i = 0; i < pokemon.moveset.length; i++) {
-					if (disabledMoves[pokemon.moveset[i].id] || (move = this.getMove(pokemon.moveset[i].id)).heal || move.drain) {
+					if (this.getMove(pokemon.moveset[i].id).flags['heal']) {
 						pokemon.disableMove(pokemon.moveset[i].id);
 					}
 				}
 			},
 			onBeforeMovePriority: 6,
 			onBeforeMove: function (pokemon, target, move) {
-				let disabledMoves = {healingwish:1, lunardance:1, rest:1, swallow:1, wish:1};
-				if (disabledMoves[move.id] || move.heal || move.drain) {
+				if (move.flags['heal']) {
 					this.add('cant', pokemon, 'move: Heal Block', move);
 					return false;
 				}
