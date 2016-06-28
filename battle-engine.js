@@ -4889,7 +4889,7 @@ Battle = (() => {
 			return;
 		}
 
-		const stepsBack = count === undefined ? true : +count;
+		const stepsBack = count === undefined || count === '' ? true : +count;
 		if (stepsBack !== true && isNaN(stepsBack)) return;
 
 		side.undoChoices(stepsBack);
