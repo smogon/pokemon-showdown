@@ -3557,6 +3557,9 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		volatileStatus: 'electrify',
+		onTryHit: function (target) {
+			if (!this.willMove(target) && target.activeTurns) return false;
+		},
 		effect: {
 			duration: 1,
 			onStart: function (target) {
@@ -4856,6 +4859,9 @@ exports.BattleMovedex = {
 		priority: 2,
 		flags: {},
 		volatileStatus: 'followme',
+		onTryHit: function (target) {
+			if (target.side.active.length < 2) return false;
+		},
 		effect: {
 			duration: 1,
 			onStart: function (pokemon) {
@@ -11066,6 +11072,9 @@ exports.BattleMovedex = {
 		priority: 2,
 		flags: {powder: 1},
 		volatileStatus: 'ragepowder',
+		onTryHit: function (target) {
+			if (target.side.active.length < 2) return false;
+		},
 		effect: {
 			duration: 1,
 			onStart: function (pokemon) {
@@ -14941,13 +14950,14 @@ exports.BattleMovedex = {
 		flags: {protect: 1, reflectable: 1, mirror: 1},
 		onHit: function (target) {
 			let targetBoosts = {};
-
+			let success = false;
 			for (let i in target.boosts) {
+				if (target.boosts[i] === 0) continue;
 				target.boosts[i] = -target.boosts[i];
+				success = true;
 			}
-
+			if (!success) return false;
 			target.setBoost(targetBoosts);
-
 			this.add('-invertboost', target, '[from] move: Topsy-turvy');
 		},
 		secondary: false,
