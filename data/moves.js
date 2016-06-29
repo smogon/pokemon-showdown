@@ -11893,7 +11893,7 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, sound: 1, authentic: 1},
-		onTryHit: function (target, source) {
+		onTry: function () {
 			for (let i = 0; i < this.queue.length; i++) {
 				let decision = this.queue[i];
 				if (!decision.pokemon || !decision.move) continue;
