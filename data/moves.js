@@ -10659,11 +10659,9 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {authentic: 1},
 		onHit: function (target, source) {
-			let targetBoosts = {};
 			for (let i in target.boosts) {
-				targetBoosts[i] = target.boosts[i];
+				source.boosts[i] = target.boosts[i];
 			}
-			source.setBoost(targetBoosts);
 			this.add('-copyboost', source, target, '[from] move: Psych Up');
 		},
 		secondary: false,
@@ -14949,7 +14947,6 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1},
 		onHit: function (target) {
-			let targetBoosts = {};
 			let success = false;
 			for (let i in target.boosts) {
 				if (target.boosts[i] === 0) continue;
@@ -14957,8 +14954,7 @@ exports.BattleMovedex = {
 				success = true;
 			}
 			if (!success) return false;
-			target.setBoost(targetBoosts);
-			this.add('-invertboost', target, '[from] move: Topsy-turvy');
+			this.add('-invertboost', target, '[from] move: Topsy-Turvy');
 		},
 		secondary: false,
 		target: "normal",
