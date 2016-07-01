@@ -366,29 +366,66 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
-		name: "Got Talent",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3569554/\">Got Talent</a>"],
+		name: "Enchanted Items",
+		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3570431/\">Enchanted Items</a>"],
 		section: "OM of the Month",
 		column: 2,
 
-		mod: 'gottalent',
-		ruleset: ['Pokemon', 'Standard', 'Swagger Clause', 'Baton Pass Clause', 'Team Preview'],
-		banlist: ['Arceus', 'Blaziken', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Deoxys-Defense', 'Deoxys-Speed', 'Dialga',
-			'Genesect', 'Giratina', 'Giratina-Origin', 'Greninja', 'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-White', 'Landorus',
-			'Lugia', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Shaymin-Sky', 'Shuckle', 'Xerneas', 'Yveltal', 'Zekrom',
-			'Shadow Tag', 'Speed Boost', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Salamencite', 'Soul Dew',
+		mod: 'enchanteditems',
+		ruleset: ['OU'],
+		banlist: ['Kyurem-Black', 'Shedinja', 'Chatter',
+			'Bug Gem', 'Cover Fossil', 'Dark Gem', 'Dragon Gem', 'Electric Gem', 'Fairy Gem', 'Fire Gem',
+			'Ice Gem', 'Persim Berry', 'Poison Gem', 'Poke Ball', 'Psychic Gem', 'Steel Gem', 'Wave Incense',
 		],
+		onValidateSet: function (set) {
+			let ability = this.getAbility(set.ability);
+			let item = this.getItem(set.item);
+			if (ability.item && ability.item === item.id) {
+				return ["You are not allowed to have " + ability.name + " and " + item.name + " on the same Pokémon."];
+			}
+		},
+		onValidateTeam: function (team) {
+			let abilityTable = {};
+			for (let i = 0; i < team.length; i++) {
+				let ability = this.getAbility(team[i].ability);
+				if (!abilityTable[ability.id]) abilityTable[ability.id] = 0;
+				if (++abilityTable[ability.id] > 2) {
+					return ["You are limited to two of each ability by Ability Clause.", "(You have more than two of " + ability.name + " or " + this.getItem(ability.item).name + ")"];
+				}
+				let item = toId(team[i].item);
+				if (!item) continue;
+				item = this.getItem(item);
+				ability = item.ability;
+				if (!ability) continue;
+				if (!abilityTable[ability]) abilityTable[ability] = 0;
+				if (++abilityTable[ability] > 2) {
+					return ["You are limited to two of each ability by Ability Clause.", "(You have more than two of " + this.getAbility(ability).name + " or " + item.name + ")"];
+				}
+			}
+		},
+		onFaint: function (pokemon) {
+			this.singleEvent('End', this.getItem(pokemon.item), pokemon.itemData, pokemon);
+		},
+		onSwitchOut: function (pokemon) {
+			this.singleEvent('End', this.getItem(pokemon.item), pokemon.itemData, pokemon);
+		},
 	},
 	{
-		name: "Custom Power",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3562927/\">Custom Power</a>"],
+		name: "AAA Ubers",
+		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/posts/6007526/\">AAA Ubers</a>"],
 		section: "OM of the Month",
 
-		ruleset: ['OU'],
-		banlist: ['Dragonite'],
-		onModifyMove: function (move, pokemon) {
-			if (pokemon.moves.indexOf(move.id) === 0) {
-				move.type = pokemon.hpType || 'Dark';
+		ruleset: ['Ubers'],
+		banlist: ['Ignore Illegal Abilities', 'Shedinja'],
+		onValidateSet: function (set) {
+			let bannedAbilities = {'Arena Trap': 1, 'Huge Power': 1, 'Pure Power': 1, 'Shadow Tag': 1, 'Wonder Guard': 1};
+			if (set.ability in bannedAbilities) {
+				let template = this.getTemplate(set.species || set.name);
+				let legalAbility = false;
+				for (let i in template.abilities) {
+					if (set.ability === template.abilities[i]) legalAbility = true;
+				}
+				if (!legalAbility) return ["The ability " + set.ability + " is banned on Pok\u00e9mon that do not naturally have it."];
 			}
 		},
 	},
