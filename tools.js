@@ -34,6 +34,8 @@ if (!Array.prototype.includes) {
 	});
 }
 
+const caja = require('./lib/caja');
+
 module.exports = (() => {
 	let moddedTools = {};
 
@@ -718,6 +720,93 @@ module.exports = (() => {
 		if (!str) return '';
 		return ('' + str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;').replace(/\//g, '&#x2f;');
 	};
+
+	Tools.prototype.sanitizeHTML = (function () {
+		const html4 = caja.html4;
+		const html = caja.html;
+
+		Object.assign(html4.ELEMENTS, {
+			'marquee': 0,
+			'blink': 0,
+		});
+		Object.assign(html4.ATTRIBS, {
+			'marquee::behavior': 0,
+			'marquee::bgcolor': 0,
+			'marquee::direction': 0,
+			'marquee::height': 0,
+			'marquee::hspace': 0,
+			'marquee::loop': 0,
+			'marquee::scrollamount': 0,
+			'marquee::scrolldelay': 0,
+			'marquee::truespeed': 0,
+			'marquee::vspace': 0,
+			'marquee::width': 0,
+		});
+
+		function createReservedValuesSrc(exceptions) {
+			return ('^(' + [
+				// Disallow all commands except for a very specific subset
+				'\(\/|\!)' + '(?!(' + (
+					[].concat(
+						['avatar', 'join', 'leave'].map(cmd => cmd + '|' + cmd + ' [a-zA-Z0-9\-#\s]{1,32}') // commands with targets
+					).concat(
+						['roomauth'] // commands without targets
+					).concat(
+						['[a-z]+ help', 'help[a-z]+'] // generic help commands
+					).concat(
+						exceptions || [] // context-based exceptions
+					).join('|')
+				) + ')$)' + '.*',
+			].join('|') + ')$');
+		}
+
+		const defaultReservedValuesSrc = createReservedValuesSrc();
+		const defaultReservedValues = new RegExp(defaultReservedValuesSrc);
+
+		const reservedValues = new Map([[defaultReservedValuesSrc, defaultReservedValues]]);
+
+		const reservedTokens = new RegExp('^(' + [
+			'ps-room', 'pm-window', 'pm-window-.*',
+			'pm-log-add', 'chat-log-add',
+			'chat-message-.*',
+			'inner',
+			'autofocus',
+			'username',
+			'receive',
+			'parseCommand',
+		].join('|') + ')$');
+
+		const nmTokenPolicy = tokenList => tokenList.split(' ').filter(token => !reservedTokens.test(token)).join(' ');
+		const naiveUriRewriter = uri => uri;
+
+		const tagPolicy = (options, tagName, attribs) => {
+			const effReservedSrc = options.exceptions ? createReservedValuesSrc(options.exceptions) : defaultReservedValuesSrc;
+			const effReserved = (reservedValues.has(effReservedSrc) ? reservedValues : reservedValues.set(effReservedSrc, new RegExp(effReservedSrc))).get(effReservedSrc);
+
+			const removeSrc = tagName === 'img' && !options.allowImage;
+			for (let i = attribs.length - 2; i >= 0; i -= 2) {
+				switch (attribs[i]) {
+				case 'value':
+					if (effReserved.test(attribs[i + 1].trim())) {
+						attribs.splice(i, 2);
+					}
+					break;
+				case 'src': case 'srcset':
+					if (removeSrc) attribs.splice(i, 2);
+					break;
+				}
+			}
+
+			return {
+				'attribs': html.sanitizeAttribs(tagName, attribs, naiveUriRewriter, nmTokenPolicy),
+			};
+		};
+
+		return function (str, options) {
+			str = Tools.prototype.getString(str);
+			return html.sanitizeWithPolicy(str, (tagName, attribs) => tagPolicy(options || {}, tagName, attribs));
+		};
+	})();
 
 	Tools.prototype.toTimeStamp = function (date, options) {
 		// Return a timestamp in the form {yyyy}-{MM}-{dd} {hh}:{mm}:{ss}.

@@ -99,6 +99,7 @@ before('initialization', function (done) {
 			'lastbattle.txt': '0',
 		},
 	};
+	mock.currentSandbox = fsSandbox;
 
 	// Node's module loading system should be backed up by the real file system.
 	Module.__resolveFilename__ = Module._resolveFilename;
