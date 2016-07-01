@@ -37,7 +37,7 @@ describe('Rooms features', function () {
 			let p1 = new User();
 			let p2 = new User();
 			let packedTeam = 'Weavile||lifeorb||swordsdance,knockoff,iceshard,iciclecrash|Jolly|,252,,,4,252|||||';
-			let options = [{rated: false, tour: false}, {rated: false, tour: true}, {rated: true, tour: false}, {rated: true, tour: true}];
+			let options = [{rated: false, tour: false}, {rated: false, tour: {onBattleWin() {}}}, {rated: true, tour: false}, {rated: true, tour: {onBattleWin() {}}}];
 			for (let option of options) {
 				room = Rooms.global.startBattle(p1, p2, 'customgame', packedTeam, packedTeam, option);
 				assert.ok(room.battle.p1 && room.battle.p2); // Automatically joined
