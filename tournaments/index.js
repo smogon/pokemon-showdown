@@ -708,6 +708,9 @@ class Tournament {
 		this.runAutoDisqualify(this.room);
 		this.update();
 	}
+	forfeit(user) {
+		this.disqualifyUser(user.userid, null, "You left the tournament");
+	}
 	onConnect(user, connection) {
 		this.updateFor(user, connection);
 	}
