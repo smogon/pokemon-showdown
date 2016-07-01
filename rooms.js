@@ -966,6 +966,7 @@ let BattleRoom = (() => {
 		}
 		if (this.tour) {
 			this.tour.onBattleWin(this, winnerid);
+			this.tour = null;
 		}
 		this.update();
 	};
@@ -1291,6 +1292,12 @@ let BattleRoom = (() => {
 	};
 	BattleRoom.prototype.destroy = function () {
 		// deallocate ourself
+
+		if (this.tour) {
+			// resolve state of the tournament;
+			this.tour.onBattleWin(this, '');
+			this.tour = null;
+		}
 
 		// remove references to ourself
 		for (let i in this.users) {
