@@ -1424,6 +1424,12 @@ class User {
 	}
 	destroy() {
 		// deallocate user
+		for (let id in this.games) {
+			if (this.games[id].ended) continue;
+			if (this.games[id].forfeit) {
+				this.games[id].forfeit(this);
+			}
+		}
 		this.clearChatQueue();
 		users.delete(this.userid);
 		prevUsers.delete('guest' + this.guestNum);
