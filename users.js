@@ -558,12 +558,11 @@ class User {
 	 * @param connection       The connection asking for the rename
 	 */
 	rename(name, token, newlyRegistered, connection) {
-		for (let i in this.roomCount) {
-			let room = Rooms(i);
-			if (room && room.rated && (this.userid in room.game.players)) {
-				this.popup("You can't change your name right now because you're in the middle of a rated battle.");
-				return false;
-			}
+		for (let id in this.games) {
+			if (this.games[id].ended) continue;
+			if (this.games[id].allowRenames) continue;
+			this.popup("You can't change your name right now because you're in the middle of a rated game.");
+			return false;
 		}
 
 		let challenge = '';
