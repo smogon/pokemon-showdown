@@ -440,7 +440,7 @@ exports.BattleAbilities = {
 		onAnyTryMove: function (target, source, effect) {
 			if (effect.id === 'selfdestruct' || effect.id === 'explosion') {
 				this.attrLastMove('[still]');
-				this.add('-activate', this.effectData.target, 'ability: Damp');
+				this.add('cant', this.effectData.target, 'ability: Damp', effect, '[of] ' + target);
 				return false;
 			}
 		},
