@@ -374,8 +374,8 @@ exports.Formats = [
 		mod: 'enchanteditems',
 		ruleset: ['OU'],
 		banlist: ['Kyurem-Black', 'Shedinja', 'Chatter',
-			'Bug Gem', 'Cover Fossil', 'Dark Gem', 'Dragon Gem', 'Electric Gem', 'Fairy Gem', 'Fire Gem',
-			'Ice Gem', 'Persim Berry', 'Poison Gem', 'Poke Ball', 'Psychic Gem', 'Steel Gem', 'Wave Incense',
+			'Bug Gem', 'Dark Gem', 'Dragon Gem', 'Electric Gem', 'Fairy Gem', 'Fire Gem',
+			'Ice Gem', 'Poison Gem', 'Poke Ball', 'Psychic Gem', 'Steel Gem', 'Wave Incense',
 		],
 		onValidateSet: function (set) {
 			let ability = this.getAbility(set.ability);

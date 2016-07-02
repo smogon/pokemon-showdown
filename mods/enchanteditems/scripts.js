@@ -5,6 +5,7 @@ exports.BattleScripts = {
 		let abilityToItem = {
 			aerilate: 'airballoon',
 			adaptability: 'apicotberry',
+			aftermath: 'premierball',
 			analytic: 'watergem',
 			anticipation: 'blackbelt',
 			arenatrap: 'buggem',
@@ -169,7 +170,6 @@ exports.BattleScripts = {
 			tangledfeet: 'nanabberry',
 			technician: 'nestball',
 			telepathy: 'netball',
-			teravolt: 'nomelberry',
 			thickfat: 'oldamber',
 			tintedlens: 'pamtreberry',
 			torrent: 'parkball',
@@ -177,7 +177,6 @@ exports.BattleScripts = {
 			toxicboost: 'plumefossil',
 			trace: 'pokeball',
 			truant: 'pomegberry',
-			turboblaze: 'premierball',
 			unaware: 'qualotberry',
 			unburden: 'quickball',
 			unnerve: 'rabutaberry',
