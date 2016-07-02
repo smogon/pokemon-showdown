@@ -191,7 +191,7 @@ exports.BattleScripts = {
 			wonderskin: 'sportball',
 			zenmode: 'tamatoberry',
 		};
-		Object.keys(abilityToItem).map(ability => {
+		Object.keys(abilityToItem).forEach(ability => {
 			this.modData("Abilities", ability).item = abilityToItem[ability];
 			let item = this.data.Items[abilityToItem[ability]];
 			this.data.Items[abilityToItem[ability]] = Object.assign({}, this.getAbility(ability), {
