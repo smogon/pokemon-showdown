@@ -5,6 +5,7 @@ exports.BattleScripts = {
 		let abilityToItem = {
 			aerilate: 'airballoon',
 			adaptability: 'apicotberry',
+			analytic: 'watergem',
 			anticipation: 'blackbelt',
 			arenatrap: 'buggem',
 			aromaveil: 'blackglasses',
