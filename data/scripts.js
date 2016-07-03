@@ -3509,7 +3509,6 @@ exports.BattleScripts = {
 		};
 
 		let team = [];
-
 		let typeCount = {};
 		let typeComboCount = {};
 		let baseFormes = {};
@@ -3522,6 +3521,7 @@ exports.BattleScripts = {
 			let pokemon = this.sampleNoReplace(seasonalPokemonList);
 			let template = Object.assign({}, this.getTemplate(pokemon));
 
+			if (!template.randomBattleMoves) template.randomBattleMoves = template.learnset;
 			template.randomBattleMoves = template.randomBattleMoves.filter(move => !forbiddenMoves[move]);
 
 			// Define sets for the Ground/Flying mons that don't have good Flying STAB
