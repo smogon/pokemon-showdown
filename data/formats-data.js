@@ -5036,8 +5036,8 @@ exports.BattleFormatsData = {
 		tier: "Uber",
 	},
 	landorus: {
-		randomBattleMoves: ["calmmind", "rockpolish", "earthpower", "focusblast", "psychic", "sludgewave", "stealthrock", "knockoff"],
-		randomDoubleBattleMoves: ["earthpower", "focusblast", "rockpolish", "hiddenpowerice", "psychic", "sludgebomb", "protect"],
+		randomBattleMoves: ["calmmind", "rockpolish", "earthpower", "focusblast", "psychic", "sludgewave", "stealthrock", "knockoff", "rockslide"],
+		randomDoubleBattleMoves: ["earthpower", "focusblast", "rockpolish", "hiddenpowerice", "psychic", "sludgebomb", "rockslide", "protect"],
 		eventPokemon: [
 			{"generation": 5, "level": 70, "shiny": 1, "isHidden": false, "moves":["rockslide", "earthquake", "sandstorm", "fissure"]},
 			{"generation": 5, "level": 5, "isHidden": true, "moves":["block", "mudshot", "rocktomb"], "pokeball": "dreamball"},
