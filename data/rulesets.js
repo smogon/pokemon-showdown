@@ -504,7 +504,7 @@ exports.BattleFormats = {
 					break;
 				}
 			}
-			let boostSpeed = ['duskball','flamecharge', 'geomancy', 'motordrive', 'rattled', 'speedboost', 'steadfast', 'weakarmor', 'salacberry'];
+			let boostSpeed = ['duskball', 'flamecharge', 'geomancy', 'motordrive', 'rattled', 'speedboost', 'steadfast', 'weakarmor', 'salacberry'];
 			if (!speedBoosted) {
 				for (let i = 0; i < boostSpeed.length; i++) {
 					if (boostSpeed[i] in setHas) {
