@@ -3489,13 +3489,13 @@ exports.BattleScripts = {
 	randomSeasonalFireworksTeam: function (side) {
 		let seasonalPokemonList = [
 			"aerodactyl", "altaria", "archeops", "articuno", "azelf", "beautifly", "braviary", "bronzong",
-			"butterfree", "carvine", "charizard", "chingling", "claydol", "cresselia", "crobat", "cryogonal",
+			"butterfree", "carnivine", "charizard", "chingling", "claydol", "cresselia", "crobat", "cryogonal",
 			"dragonite", "drifblim", "eelektross", "emolga", "fearow", "flygon", "giratinaorigin", "gligar",
 			"gliscor", "gyarados", "honchkrow", "hooh", "hydreigon", "jumpluff", "landorus", "landorustherian",
 			"latias", "latios", "lugia", "lunatone", "mandibuzz", "mantine", "masquerain", "mesprit", "mismagius",
 			"moltres", "mothim", "ninjask", "noctowl", "noivern", "pelipper", "pidgeot", "rayquaza", "rotom",
 			"rotomfan", "rotomfrost", "rotomheat", "rotommow", "rotomwash", "salamence", "scyther", "sigilyph",
-			"skarmory", "solrok", "staraptor", "swanna", "swellow", "swoobat", "talonflame", "thundurus",
+			"skarmory", "solrock", "staraptor", "swanna", "swellow", "swoobat", "talonflame", "thundurus",
 			"thundurustherian", "togekiss", "tornadus", "tornadustherian", "tropius", "unfezant", "uxie",
 			"vespiquen", "vivillon", "weezing", "xatu", "yanma", "yanmega", "yveltal", "zapdos",
 		];
