@@ -1339,7 +1339,6 @@ exports.commands = {
 	unlockhelp: ["/unlock [username] - Unlocks the user. Requires: % @ & ~"],
 
 	forceban: 'ban',
-	b: 'ban',
 	ban: function (target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help ban');
 
@@ -1402,7 +1401,7 @@ exports.commands = {
 		this.globalModlog("BAN", targetUser, " by " + user.name + (target ? ": " + target : ""));
 		return true;
 	},
-	banhelp: ["/ban OR /b [username], [reason] - Kick user from all rooms and ban user's IP address with reason. Requires: @ & ~"],
+	banhelp: ["/ban [username], [reason] - Kick user from all rooms and ban user's IP address with reason. Requires: @ & ~"],
 
 	unban: function (target, room, user) {
 		if (!target) return this.parse('/help unban');
