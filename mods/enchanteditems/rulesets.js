@@ -63,5 +63,5 @@ exports.BattleFormats = {
 
 			return [(set.name || set.species) + " can Baton Pass both Speed and a different stat, which is banned by Baton Pass Clause."];
 		},
-	}
+	},
 };
