@@ -30,7 +30,9 @@ exports.BattleFormats = {
 					break;
 				}
 			}
-			let boostSpeed = ['duskball', 'flamecharge', 'geomancy', 'motordrive', 'rattled', 'speedboost', 'steadfast', 'weakarmor', 'salacberry'];
+			let boostSpeed = ['flamecharge', 'geomancy', 'motordrive', 'rattled', 'speedboost', 'steadfast', 'weakarmor'];
+			let boostSpeedEI = ['cheriberry', 'duskball', 'friendball', 'skullfossil', 'weaknesspolicy'];
+			boostSpeed = boostSpeed.concat(boostSpeedEI);
 			if (!speedBoosted) {
 				for (let i = 0; i < boostSpeed.length; i++) {
 					if (boostSpeed[i] in setHas) {
@@ -50,7 +52,9 @@ exports.BattleFormats = {
 					break;
 				}
 			}
-			let boostNonSpeed = ['acupressure', 'starfberry', 'curse', 'metalclaw', 'meteormash', 'poweruppunch', 'rage', 'rototiller', 'fellstinger', 'bellydrum', 'download', 'justified', 'moxie', 'sapsipper', 'defiant', 'angerpoint', 'cellbattery', 'liechiberry', 'snowball', 'weaknesspolicy', 'diamondstorm', 'flowershield', 'skullbash', 'steelwing', 'stockpile', 'cottonguard', 'ganlonberry', 'keeberry', 'chargebeam', 'fierydance', 'geomancy', 'lightningrod', 'stormdrain', 'competitive', 'absorbbulb', 'petayaberry', 'charge', 'apicotberry', 'luminousmoss', 'marangaberry'];
+			let boostNonSpeed = ['acupressure', 'curse', 'metalclaw', 'meteormash', 'poweruppunch', 'rage', 'rototiller', 'fellstinger', 'bellydrum', 'download', 'justified', 'moxie', 'sapsipper', 'defiant', 'angerpoint', 'diamondstorm', 'flowershield', 'skullbash', 'steelwing', 'stockpile', 'cottonguard', 'chargebeam', 'fierydance', 'geomancy', 'lightningrod', 'stormdrain', 'competitive', 'charge'];
+			let boostNonSpeedEI = ['habanberry', 'salacberry', 'whiteherb', 'rawstberry', 'ganlonberry', 'shucaberry', 'heavyball', 'damprock'];
+			boostNonSpeed = boostNonSpeed.concat(boostNonSpeedEI);
 			if (!nonSpeedBoosted) {
 				for (let i = 0; i < boostNonSpeed.length; i++) {
 					if (boostNonSpeed[i] in setHas) {
