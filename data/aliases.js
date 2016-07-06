@@ -35,7 +35,6 @@ exports.BattleAliases = {
 	// mega evos
 	"maero": "Aerodactyl-Mega",
 	"megaaero": "Aerodactyl-Mega",
-	"megaamph": "Ampharos-Mega",
 	"megabee": "Beedrill-Mega",
 	"megabunny": "Lopunny-Mega",
 	"megabro": "Slowbro-Mega",
@@ -46,7 +45,6 @@ exports.BattleAliases = {
 	"megadrill": "Beedrill-Mega",
 	"megagard": "Gardevoir-Mega",
 	"megagarde": "Gardevoir-Mega",
-	"megagyara": "Gyarados-Mega",
 	"megacross": "Heracross-Mega",
 	"megahera": "Heracross-Mega",
 	"megakanga": "Kangaskhan-Mega",
