@@ -509,7 +509,7 @@ exports.BattleScripts = {
 			}
 
 			if (moveData.boosts && !target.fainted) {
-				hitResult = this.boost(moveData.boosts, target, pokemon, move);
+				hitResult = this.boost(moveData.boosts, target, pokemon, move, isSecondary, isSelf);
 				didSomething = didSomething || hitResult;
 			}
 			if (moveData.heal && !target.fainted) {
