@@ -1376,10 +1376,10 @@ class User {
 				);
 				return false;
 			} else {
-				this.chatQueue.push([message, room, connection]);
+				this.chatQueue.push([message, room.id, connection]);
 			}
 		} else if (now < this.lastChatMessage + throttleDelay) {
-			this.chatQueue = [[message, room, connection]];
+			this.chatQueue = [[message, room.id, connection]];
 			this.chatQueueTimeout = setTimeout(
 				() => this.processChatQueue(),
 				throttleDelay - (now - this.lastChatMessage));
@@ -1403,9 +1403,10 @@ class User {
 
 		this.lastChatMessage = new Date().getTime();
 
-		if (toChat[1].users) {
+		let room = Rooms(toChat[1]);
+		if (room) {
 			Monitor.activeIp = toChat[2].ip;
-			toChat[1].chat(this, toChat[0], toChat[2]);
+			room.chat(this, toChat[0], toChat[2]);
 			Monitor.activeIp = null;
 		} else {
 			// room is expired, do nothing
