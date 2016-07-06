@@ -48,6 +48,9 @@ function init(callback) {
 		this.seed = this.startingSeed = [0x09d56, 0x08642, 0x13656, 0x03653];
 	};
 
+	// Disable writing to modlog
+	require('./../command-parser.js').CommandContext.prototype.logModCommand = noop;
+
 	callback();
 }
 
