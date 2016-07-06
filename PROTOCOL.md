@@ -186,15 +186,20 @@ represented by a space), and the rest of the string being their username.
 > is rated.
 
     |clearpoke
-    |poke|PLAYER|SPECIES
-    |poke|PLAYER|SPECIES
+    |poke|PLAYER|DETAILS|ITEM
+    |poke|PLAYER|DETAILS|ITEM
     ...
     |teampreview
 
 > These messages appear if you're playing a format that uses team previews.
-> `PLAYER` is the player ID (see `|player|`) and `SPECIES` is the
-> species of the Pokémon. `teampreview` commonly appears after `rule`
-> tags instead of after the Pokémon in the team preview.
+> `PLAYER` is the player ID (see `|player|`) and `DETAILS` describes the
+> pokemon. `|teampreview` commonly appears after `|rule` tags instead of
+> immediately after the pokemon list.
+>
+> The format for `DETAILS` is described in `|switch|`, although not
+> everything may be revealed. In particular, forme is sometimes not
+> specified (so Arceus would appear as `Arceus-*` since it's impossible
+> to identify Arceus forme in Team Preview).
 
 `|request|REQUEST`
 
