@@ -108,8 +108,9 @@ class CommandContext {
 		this.user = options.user || null;
 		this.connection = options.connection || null;
 
-		this.targetUserName = '';
 		this.targetUser = null;
+		this.targetUsername = '';
+		this.inputUsername = '';
 	}
 
 	checkBanwords(room, message) {
