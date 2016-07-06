@@ -1438,15 +1438,6 @@ class User {
 	toString() {
 		return this.userid;
 	}
-	static pruneInactive(threshold) {
-		let now = Date.now();
-		users.forEach(user => {
-			if (user.connected) return;
-			if ((now - user.lastConnected) > threshold) {
-				user.destroy();
-			}
-		});
-	}
 }
 
 Users.User = User;
@@ -1456,12 +1447,18 @@ Users.Connection = Connection;
  * Inactive user pruning
  *********************************************************/
 
-Users.pruneInactive = User.pruneInactive;
-Users.pruneInactiveTimer = setInterval(
-	User.pruneInactive,
-	1000 * 60 * 30,
-	Config.inactiveuserthreshold || 1000 * 60 * 60
-);
+Users.pruneInactive = function (threshold) {
+	let now = Date.now();
+	users.forEach(user => {
+		if (user.connected) return;
+		if ((now - user.lastConnected) > threshold) {
+			user.destroy();
+		}
+	});
+};
+Users.pruneInactiveTimer = setInterval(() => {
+	Users.pruneInactive(Config.inactiveuserthreshold || 1000 * 60 * 60);
+}, 1000 * 60 * 30);
 
 /*********************************************************
  * Routing
