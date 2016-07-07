@@ -1,6 +1,10 @@
 'use strict';
 
 exports.BattleItems = {
+	berryjuice: {
+		inherit: true,
+		isUnreleased: false,
+	},
 	dragonfang: {
 		inherit: true,
 		onBasePower: function () {},

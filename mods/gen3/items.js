@@ -1,6 +1,10 @@
 'use strict';
 
 exports.BattleItems = {
+	"berryjuice": {
+		inherit: true,
+		isUnreleased: true,
+	},
 	"blackbelt": {
 		inherit: true,
 		onBasePower: function (basePower, user, target, move) {
