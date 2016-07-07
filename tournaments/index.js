@@ -926,7 +926,9 @@ let commands = {
 				} else if (tournament.playerCap && !playerCap) {
 					tournament.playerCap = 0;
 				}
-				this.sendReply("Tournament set to " + generator.name + (tournament.playerCap ? " with a player cap of " + tournament.playerCap : "") + ".");
+				const capNote = (tournament.playerCap ? " with a player cap of " + tournament.playerCap : "");
+				this.privateModCommand("(" + user.name + " set tournament type to " + generator.name + capNote + ".)");
+				this.sendReply("Tournament set to " + generator.name + capNote + ".");
 			}
 		},
 		end: 'delete',
