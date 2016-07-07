@@ -320,12 +320,8 @@ class CommandContext {
 			}
 			if (room && room.modchat) {
 				let userGroup = user.group;
-				if (room.auth && !user.can('makeroom')) {
-					if (room.auth[user.userid]) {
-						userGroup = room.auth[user.userid];
-					} else if (room.isPrivate === true) {
-						userGroup = ' ';
-					}
+				if (!user.can('makeroom')) {
+					userGroup = room.getAuth(user);
 				}
 				if (room.modchat === 'autoconfirmed') {
 					if (!user.autoconfirmed && userGroup === ' ') {
