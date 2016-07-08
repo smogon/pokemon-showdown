@@ -189,6 +189,8 @@ exports.BattleAliases = {
 	"meowsticmale": "Meowstic",
 
 	// cosmetic formes
+	"burmysandy": "Burmy",
+	"burmytrash": "Burmy",
 	"shelloseast": "Shellos",
 	"shelloswest": "Shellos",
 	"gastrodone": "Gastrodon",
