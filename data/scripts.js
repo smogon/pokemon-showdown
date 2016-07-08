@@ -1376,6 +1376,9 @@ exports.BattleScripts = {
 				case 'dragonclaw':
 					if (hasMove['outrage'] || hasMove['dragontail']) rejected = true;
 					break;
+				case 'dracometeor':
+					if (counter.setupType === 'Physical' && hasMove['outrage']) rejected = true;
+					break;
 				case 'dragonpulse': case 'spacialrend':
 					if (hasMove['dracometeor'] || hasMove['outrage']) rejected = true;
 					break;
