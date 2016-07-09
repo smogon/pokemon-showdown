@@ -2097,13 +2097,14 @@ exports.BattleScripts = {
 		let allowedNFE = {'Chansey':1, 'Doublade':1, 'Gligar':1, 'Porygon2':1, 'Scyther':1};
 
 		// For Monotype
+		let isMonotype = this.format === 'monotyperandombattle';
 		let typePool = Object.keys(this.data.TypeChart);
 		let type = typePool[this.random(typePool.length)];
 
 		let pokemonPool = [];
 		for (let id in this.data.FormatsData) {
 			let template = this.getTemplate(id);
-			if (this.format === 'monotyperandombattle') {
+			if (isMonotype) {
 				let types = template.types;
 				if (template.battleOnly) types = this.getTemplate(template.baseSpecies).types;
 				if (types.indexOf(type) < 0) continue;
@@ -2208,7 +2209,7 @@ exports.BattleScripts = {
 
 			let types = template.types;
 
-			if (this.format !== 'monotyperandombattle') {
+			if (!isMonotype) {
 				// Limit 2 of any type
 				let skip = false;
 				for (let t = 0; t < types.length; t++) {
@@ -2225,13 +2226,15 @@ exports.BattleScripts = {
 			// Illusion shouldn't be the last Pokemon of the team
 			if (set.ability === 'Illusion' && pokemonLeft > 4) continue;
 
-			// Limit 1 of any type combination
-			let typeCombo = types.join();
+			// Limit 1 of any type combination, 2 in monotype
+			let typeCombo = types.sort().join();
 			if (set.ability === 'Drought' || set.ability === 'Drizzle' || set.ability === 'Sand Stream') {
 				// Drought, Drizzle and Sand Stream don't count towards the type combo limit
 				typeCombo = set.ability;
+				if (typeCombo in typeComboCount) continue;
+			} else {
+				if (typeComboCount[typeCombo] >= (isMonotype ? 2 : 1)) continue;
 			}
-			if (typeCombo in typeComboCount) continue;
 
 			// Okay, the set passes, add it to our team
 			pokemon.push(set);
@@ -2248,7 +2251,11 @@ exports.BattleScripts = {
 					typeCount[types[t]] = 1;
 				}
 			}
-			typeComboCount[typeCombo] = 1;
+			if (typeCombo in typeComboCount) {
+				typeComboCount[typeCombo]++;
+			} else {
+				typeComboCount[typeCombo] = 1;
+			}
 
 			// Increment Uber/NU counters
 			if (tier === 'Uber') {
