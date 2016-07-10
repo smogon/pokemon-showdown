@@ -541,6 +541,7 @@ exports.commands = {
 		"/publicroom - Makes a room public. Requires: \u2605 & ~"],
 
 	modjoin: function (target, room, user) {
+		if (!target) return this.parse('/help modjoin');
 		if (room.battle || room.isPersonal) {
 			if (!this.can('editroom', null, room)) return;
 		} else {
@@ -555,7 +556,7 @@ exports.commands = {
 				Rooms.global.writeChatRoomData();
 			}
 		} else {
-			if (target === 'on' || target === 'true' || !target) {
+			if (target === 'on' || target === 'true') {
 				room.modjoin = true;
 				this.addModCommand("" + user.name + " turned on modjoin.");
 			} else if (target in Config.groups) {
@@ -575,6 +576,8 @@ exports.commands = {
 			if (!room.isPrivate) this.parse('/hiddenroom');
 		}
 	},
+	modjoinhelp: ["/modjoin [+|%|@|&|~|#|off] - Sets modjoin. Users lower than the specified rank can't join this room. Requires: # & ~",
+		"/modjoin [on|off] - Sets modjoin. Only users who can speak in modchat can join this room. Requires: # & ~"],
 
 	officialchatroom: 'officialroom',
 	officialroom: function (target, room, user) {
