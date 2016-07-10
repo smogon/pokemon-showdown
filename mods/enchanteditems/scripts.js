@@ -79,7 +79,7 @@ exports.BattleScripts = {
 			keeneye: 'scopelens',
 			klutz: 'seaincense',
 			leafguard: 'sharpbeak',
-			levitate: 'shedshell',
+			levitate: 'nomelberry',
 			lightmetal: 'shellbell',
 			lightningrod: 'shucaberry',
 			limber: 'silkscarf',
