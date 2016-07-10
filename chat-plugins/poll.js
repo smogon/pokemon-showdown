@@ -20,6 +20,8 @@ class Poll {
 		this.totalVotes = 0;
 		this.timeout = null;
 		this.timeoutMins = 0;
+		this.startedTime = Date.now();
+		this.createdUser = questionData.username;
 
 		this.options = new Map();
 		for (let i = 0; i < options.length; i++) {
@@ -59,6 +61,7 @@ class Poll {
 
 	generateVotes() {
 		let output = '<div class="infobox"><p style="margin: 2px 0 5px 0"><span style="border:1px solid #6A6;color:#484;border-radius:4px;padding:0 3px"><i class="fa fa-bar-chart"></i> Poll</span> <strong style="font-size:11pt">' + this.getQuestionMarkup() + '</strong></p>';
+		output += '<br><p align="left">[Total Votes: ' + this.totalVotes + '] <i>(Started by ' + this.startedUser + '.)</i></p>';
 		this.options.forEach((option, number) => {
 			output += '<div style="margin-top: 5px"><button value="/poll vote ' + number + '" name="send" title="Vote for ' + number + '. ' + Tools.escapeHTML(option.name) + '">' + number + '. <strong>' + this.getOptionMarkup(option) + '</strong></button></div>';
 		});
@@ -69,8 +72,10 @@ class Poll {
 	}
 
 	generateResults(ended, option) {
+	        let totalVotes = '<p align="left">[Total Votes: ' + this.totalVotes + '] <i>(Started by ' + this.startedUser + ' ' + Tools.toDurationString(Date.now() - this.startTime) + '.)</i></p>';
 		let icon = '<span style="border:1px solid #' + (ended ? '777;color:#555' : '6A6;color:#484') + ';border-radius:4px;padding:0 3px"><i class="fa fa-bar-chart"></i> ' + (ended ? "Poll ended" : "Poll") + '</span>';
 		let output = '<div class="infobox"><p style="margin: 2px 0 5px 0">' + icon + ' <strong style="font-size:11pt">' + this.getQuestionMarkup() + '</strong></p>';
+		output += totalVotes
 		let iter = this.options.entries();
 
 		let i = iter.next();
