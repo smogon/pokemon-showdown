@@ -84,12 +84,13 @@ exports.Formats = [
 	{
 		name: "NU",
 		desc: [
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3575107/\">np: NU Stage 14</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3576747/\">np: NU Stage 15</a>",
 			"&bullet; <a href=\"https://www.smogon.com/dex/xy/tags/nu/\">NU Banlist</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3555650/\">NU Viability Ranking</a>",
 		],
 		section: "ORAS Singles",
 
+		searchShow: false,
 		ruleset: ['RU'],
 		banlist: ['RU', 'BL3'],
 		onValidateSet: function (set, format, setHas) {
@@ -115,6 +116,14 @@ exports.Formats = [
 				return [(set.name || set.species) + " can Baton Pass Speed boosts, which is banned by NU."];
 			}
 		},
+	},
+	{
+		name: "NU (suspect test)",
+		section: "ORAS Singles",
+
+		challengeShow: false,
+		ruleset: ['NU'],
+		banlist: [],
 	},
 	{
 		name: "PU (suspect test)",
