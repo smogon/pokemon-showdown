@@ -655,7 +655,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 5, "level": 30, "isHidden": false, "moves":["lowsweep", "foresight", "seismictoss", "revenge"], "pokeball": "cherishball"},
 		],
-		tier: "PU",
+		tier: "BL4",
 	},
 	machamp: {
 		randomBattleMoves: ["dynamicpunch", "icepunch", "stoneedge", "bulletpunch", "knockoff", "substitute"],
