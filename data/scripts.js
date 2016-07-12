@@ -1447,7 +1447,7 @@ exports.BattleScripts = {
 				case 'acrobatics':
 					if (hasMove['hurricane'] && counter.setupType !== 'Physical') rejected = true;
 					break;
-				case 'airslash': case 'oblivionwing':
+				case 'airslash': case 'oblivionwing': case 'pluck':
 					if (hasMove['acrobatics'] || hasMove['bravebird'] || hasMove['hurricane']) rejected = true;
 					break;
 				case 'shadowclaw':
