@@ -126,7 +126,7 @@ exports.Formats = [
 		banlist: [],
 	},
 	{
-		name: "PU (suspect test)",
+		name: "PU",
 		desc: [
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3575837/\">np: PU Stage 8</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3528743/\">PU Viability Ranking</a>",
@@ -145,19 +145,9 @@ exports.Formats = [
 		],
 		section: "ORAS Singles",
 
-		searchShow: false,
 		maxLevel: 5,
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
 		banlist: ['LC Uber', 'Gligar', 'Misdreavus', 'Scyther', 'Sneasel', 'Tangela', 'Dragon Rage', 'Sonic Boom', 'Swagger'],
-	},
-	{
-		name: "LC (suspect test)",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3575912/\">LC Suspect</a>"],
-		section: "ORAS Singles",
-
-		challengeShow: false,
-		maxLevel: 5,
-		ruleset: ['LC'],
 	},
 	{
 		name: "CAP",
