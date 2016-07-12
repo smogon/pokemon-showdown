@@ -4561,8 +4561,8 @@ exports.BattleFormatsData = {
 		tier: "LC",
 	},
 	archeops: {
-		randomBattleMoves: ["stoneedge", "rockslide", "earthquake", "uturn", "pluck", "headsmash"],
-		randomDoubleBattleMoves: ["stoneedge", "rockslide", "earthquake", "uturn", "pluck", "tailwind", "taunt", "protect"],
+		randomBattleMoves: ["headsmash", "acrobatics", "stoneedge", "earthquake", "aquatail", "uturn", "tailwind"],
+		randomDoubleBattleMoves: ["stoneedge", "rockslide", "earthquake", "uturn", "acrobatics", "tailwind", "taunt", "protect"],
 		tier: "NU",
 	},
 	trubbish: {
