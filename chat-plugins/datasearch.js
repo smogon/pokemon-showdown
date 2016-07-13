@@ -83,8 +83,9 @@ exports.commands = {
 			message: (this.broadcastMessage ? "" : message),
 		}).then(response => {
 			if (!this.runBroadcast()) return;
-			if (response.error) return this.errorReply(response.error);
-			if (response.reply) {
+			if (response.error) {
+				this.errorReply(response.error);
+			} else if (response.reply) {
 				this.sendReplyBox(response.reply);
 			} else if (response.dt) {
 				CommandParser.commands.data.call(this, response.dt, room, user, connection, 'dt');
@@ -133,8 +134,9 @@ exports.commands = {
 			message: (this.broadcastMessage ? "" : message),
 		}).then(response => {
 			if (!this.runBroadcast()) return;
-			if (response.error) return this.errorReply(response.error);
-			if (response.reply) {
+			if (response.error) {
+				this.errorReply(response.error);
+			} else if (response.reply) {
 				this.sendReplyBox(response.reply);
 			} else if (response.dt) {
 				CommandParser.commands.data.call(this, response.dt, room, user, connection, 'dt');
@@ -159,8 +161,9 @@ exports.commands = {
 			message: (this.broadcastMessage ? "" : message),
 		}).then(response => {
 			if (!this.runBroadcast()) return;
-			if (response.error) return this.errorReply(response.error);
-			if (response.reply) {
+			if (response.error) {
+				this.errorReply(response.error);
+			} else if (response.reply) {
 				this.sendReplyBox(response.reply);
 			} else if (response.dt) {
 				CommandParser.commands.data.call(this, response.dt, room, user, connection, 'dt');
@@ -190,8 +193,9 @@ exports.commands = {
 			message: (this.broadcastMessage ? "" : message),
 		}).then(response => {
 			if (!this.runBroadcast()) return;
-			if (response.error) return this.errorReply(response.error);
-			if (response.reply) {
+			if (response.error) {
+				this.errorReply(response.error);
+			} else if (response.reply) {
 				this.sendReplyBox(response.reply);
 			} else if (response.dt) {
 				CommandParser.commands.data.call(this, response.dt, room, user, connection, 'dt');
@@ -223,8 +227,9 @@ exports.commands = {
 			message: cmd,
 		}).then(response => {
 			if (!this.runBroadcast()) return;
-			if (response.error) return this.errorReply(response.error);
-			if (response.reply) {
+			if (response.error) {
+				this.errorReply(response.error);
+			} else if (response.reply) {
 				this.sendReplyBox(response.reply);
 			}
 			room.update();
