@@ -74,6 +74,21 @@ let writeTriviaData = (() => {
 	};
 })();
 
+if (!triviaData.version) {
+	const now = Date.now();
+	const cb = q => ({
+		question: q.question,
+		answers: q.answers,
+		category: q.category,
+		author: q.user,
+		timestamp: now,
+	});
+	triviaData.questions = triviaData.questions.map(cb);
+	triviaData.submissions = triviaData.submissions.map(cb);
+	triviaData.version = 1;
+	writeTriviaData();
+}
+
 // Binary search for the index at which to splice in new questions in a category,
 // or the index at which to slice up to for a category's questions
 function findEndOfCategory(category, inSubmissions) {
@@ -667,7 +682,8 @@ let commands = {
 			category: category,
 			question: question,
 			answers: answers,
-			user: user.userid,
+			author: user.userid,
+			timestamp: Date.now(),
 		};
 
 		if (cmd === 'add') {
@@ -693,13 +709,13 @@ let commands = {
 		if (!submissionsLen) return this.sendReply("No questions await review.");
 
 		let buffer = "|raw|<div class=\"ladder\"><table>" +
-			"<tr><td colspan=\"4\"><strong>" + submissionsLen + "</strong> questions await review:</td></tr>" +
-			"<tr><th>#</th><th>Category</th><th>Question</th><th>Answer(s)</th><th>Submitted By</th></tr>";
+			"<tr><td colspan=\"6\"><strong>" + submissionsLen + "</strong> questions await review:</td></tr>" +
+			"<tr><th>#</th><th>Category</th><th>Question</th><th>Answer(s)</th><th>Author</th><th>Timestamp</th></tr>";
 
 		let i = 0;
 		while (i < submissionsLen) {
 			let entry = submissions[i];
-			buffer += "<tr><td><strong>" + (++i) + "</strong></td><td>" + entry.category + "</td><td>" + entry.question + "</td><td>" + entry.answers.join(", ") + "</td><td>" + entry.user + "</td></tr>";
+			buffer += "<tr><td><strong>" + (++i) + "</strong></td><td>" + entry.category + "</td><td>" + entry.question + "</td><td>" + entry.answers.join(", ") + "</td><td>" + entry.author + "</td><td>" + (new Date(+entry.timestamp)).toUTCString() + "</tr>";
 		}
 		buffer += "</table></div>";
 
@@ -856,17 +872,18 @@ let commands = {
 		}
 
 		if (user.can('declare', null, room)) {
-			buffer += "<tr><td colspan=\"3\">There are <strong>" + listLen + "</strong> questions in the " + target + " category.</td></tr>" +
-				"<tr><th>#</th><th>Question</th><th>Answer(s)</th></tr>";
+			buffer += "<tr><td colspan=\"5\">There are <strong>" + listLen + "</strong> questions in the " + target + " category.</td></tr>" +
+				"<tr><th>#</th><th>Question</th><th>Answer(s)</th><th>Author</th><th>Timestamp</th></tr>";
 			for (let i = 0; i < listLen; i++) {
 				let entry = list[i];
-				buffer += "<tr><td><strong>" + (i + 1) + "</strong></td><td>" + entry.question + "</td><td>" + entry.answers.join(", ") + "</td><tr>";
+				buffer += "<tr><td><strong>" + (i + 1) + "</strong></td><td>" + entry.question + "</td><td>" + entry.answers.join(", ") + "</td><td>" + entry.author + "</td><td>" + (new Date(+entry.timestamp)).toUTCString() + "</td><tr>";
 			}
 		} else {
-			buffer += "<td colspan=\"2\">There are <strong>" + listLen + "</strong> questions in the " + target + " category.</td></tr>" +
-				"<tr><th>#</th><th>Question</th></tr>";
+			buffer += "<td colspan=\"4\">There are <strong>" + listLen + "</strong> questions in the " + target + " category.</td></tr>" +
+				"<tr><th>#</th><th>Question</th><th>Author</th><th>Timestamp</th></tr>";
 			for (let i = 0; i < listLen; i++) {
-				buffer += "<tr><td><strong>" + (i + 1) + "</strong></td><td>" + list[i].question + "</td></tr>";
+				let entry = list[i];
+				buffer += "<tr><td><strong>" + (i + 1) + "</strong></td><td>" + entry.question + "</td><td>" + entry.author + "</td><td>" + (new Date(+entry.timestamp)).toUTCString() + "</td></tr>";
 			}
 		}
 		buffer += "</table></div>";
