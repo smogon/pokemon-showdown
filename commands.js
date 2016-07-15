@@ -1389,7 +1389,7 @@ exports.commands = {
 		let acAccount = (targetUser.autoconfirmed !== userid && targetUser.autoconfirmed);
 		if (alts.length) {
 			let guests = alts.length;
-			alts = alts.filter(alt => alt.substr(0, 6) !== 'Guest ');
+			alts = alts.filter(alt => alt.substr(0, 7) !== '[Guest ');
 			guests -= alts.length;
 			this.privateModCommand("(" + name + "'s " + (acAccount ? " ac account: " + acAccount + ", " : "") + "banned alts: " + alts.join(", ") + (guests ? " [" + guests + " guests]" : "") + ")");
 			for (let i = 0; i < alts.length; ++i) {
