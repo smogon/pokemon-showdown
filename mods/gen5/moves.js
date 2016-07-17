@@ -492,6 +492,35 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 20,
 	},
+	lightscreen: {
+		inherit: true,
+		effect: {
+			duration: 5,
+			durationCallback: function (target, source, effect) {
+				if (source && source.hasItem('lightclay')) {
+					return 8;
+				}
+				return 5;
+			},
+			onAnyModifyDamage: function (damage, source, target, move) {
+				if (target !== source && target.side === this.effectData.target && this.getCategory(move) === 'Special') {
+					if (!move.crit && !move.infiltrates) {
+						this.debug('Light Screen weaken');
+						if (target.side.active.length > 1) return this.chainModify([0xA8F, 0x1000]);
+						return this.chainModify(0.5);
+					}
+				}
+			},
+			onStart: function (side) {
+				this.add('-sidestart', side, 'move: Light Screen');
+			},
+			onResidualOrder: 21,
+			onResidualSubOrder: 1,
+			onEnd: function (side) {
+				this.add('-sideend', side, 'move: Light Screen');
+			},
+		},
+	},
 	lowsweep: {
 		inherit: true,
 		basePower: 60,
@@ -682,6 +711,34 @@ exports.BattleMovedex = {
 		inherit: true,
 		priority: 3,
 		flags: {},
+	},
+	reflect: {
+		inherit: true,
+		effect: {
+			duration: 5,
+			durationCallback: function (target, source, effect) {
+				if (source && source.hasItem('lightclay')) {
+					return 8;
+				}
+				return 5;
+			},
+			onAnyModifyDamage: function (damage, source, target, move) {
+				if (target !== source && target.side === this.effectData.target && this.getCategory(move) === 'Physical') {
+					if (!move.crit && !move.infiltrates) {
+						this.debug('Reflect weaken');
+						if (target.side.active.length > 1) return this.chainModify([0xA8F, 0x1000]);
+						return this.chainModify(0.5);
+					}
+				}
+			},
+			onStart: function (side) {
+				this.add('-sidestart', side, 'Reflect');
+			},
+			onResidualOrder: 21,
+			onEnd: function (side) {
+				this.add('-sideend', side, 'Reflect');
+			},
+		},
 	},
 	relicsong: {
 		inherit: true,
