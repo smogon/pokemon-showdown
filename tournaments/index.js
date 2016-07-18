@@ -431,25 +431,34 @@ class Tournament {
 	}
 
 	disqualifyUser(userid, output, reason) {
+		let user = Users.get(userid);
+		let sendReply;
+		if (output) {
+			sendReply = msg => output.sendReply(msg);
+		} else if (user) {
+			sendReply = msg => user.sendTo(this.id, msg);
+		} else {
+			sendReply = () => {};
+		}
 		if (!this.isTournamentStarted) {
-			output.sendReply('|tournament|error|NotStarted');
+			sendReply('|tournament|error|NotStarted');
 			return false;
 		}
 
 		if (!(userid in this.players)) {
-			output.sendReply('|tournament|error|UserNotAdded');
+			sendReply('|tournament|error|UserNotAdded');
 			return false;
 		}
 
 		let player = this.players[userid];
 		if (this.disqualifiedUsers.get(player)) {
-			output.sendReply('|tournament|error|AlreadyDisqualified');
+			sendReply('|tournament|error|AlreadyDisqualified');
 			return false;
 		}
 
 		let error = this.generator.disqualifyUser(player);
 		if (error) {
-			output.sendReply('|tournament|error|' + error);
+			sendReply('|tournament|error|' + error);
 			return false;
 		}
 
@@ -491,7 +500,6 @@ class Tournament {
 		}
 
 		this.room.add('|tournament|disqualify|' + player.name);
-		let user = Users.get(userid);
 		if (user) {
 			user.sendTo(this.room, '|tournament|update|{"isJoined":false}');
 			if (reason !== null) user.popup("|modal|You have been disqualified from the tournament in " + this.room.title + (reason ? ":\n\n" + reason : "."));
