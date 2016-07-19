@@ -11992,19 +11992,24 @@ exports.BattleMovedex = {
 			onSetStatus: function (status, target, source, effect) {
 				if (source && target !== source && effect && (!effect.infiltrates || target.side === source.side)) {
 					this.debug('interrupting setStatus');
-					return false;
+					if (effect.id === 'synchronize' || (effect.effectType === 'Move' && !effect.secondaries)) {
+						this.add('-activate', target, 'move: Safeguard');
+					}
+					return null;
 				}
 			},
 			onTryConfusion: function (target, source, effect) {
 				if (source && target !== source && effect && (!effect.infiltrates || target.side === source.side)) {
 					this.debug('interrupting addVolatile');
-					return false;
+					if (!effect.secondaries) this.add('-activate', target, 'move: Safeguard');
+					return null;
 				}
 			},
 			onTryHit: function (target, source, move) {
 				if (move && move.id === 'yawn' && target !== source && (!move.infiltrates || target.side === source.side)) {
 					this.debug('blocking yawn');
-					return false;
+					this.add('-activate', target, 'move: Safeguard');
+					return null;
 				}
 			},
 			onStart: function (side) {
