@@ -1887,8 +1887,8 @@ exports.BattleAbilities = {
 				pokemon.removeVolatile('confusion');
 			}
 		},
-		onImmunity: function (type, pokemon) {
-			if (type === 'confusion') return false;
+		onTryAddVolatile: function (status, pokemon) {
+			if (status.id === 'confusion') return null;
 		},
 		onHit: function (target, source, move) {
 			if (move && move.volatileStatus === 'confusion') {
