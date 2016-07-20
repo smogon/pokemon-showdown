@@ -3514,14 +3514,17 @@ exports.BattleMovedex = {
 			duration: 5,
 			onSetStatus: function (status, target, source, effect) {
 				if (status.id === 'slp' && target.isGrounded() && !target.isSemiInvulnerable()) {
-					this.debug('Interrupting sleep from Electric Terrain');
+					if (effect.effectType === 'Move' && !effect.secondaries) {
+						this.add('-activate', target, 'move: Electric Terrain');
+					}
 					return false;
 				}
 			},
-			onTryHit: function (target, source, move) {
+			onTryAddVolatile: function (status, target) {
 				if (!target.isGrounded() || target.isSemiInvulnerable()) return;
-				if (move && move.id === 'yawn') {
-					return false;
+				if (status.id === 'yawn') {
+					this.add('-activate', target, 'move: Electric Terrain');
+					return null;
 				}
 			},
 			onBasePower: function (basePower, attacker, defender, move) {
@@ -9185,7 +9188,9 @@ exports.BattleMovedex = {
 			duration: 5,
 			onSetStatus: function (status, target, source, effect) {
 				if (!target.isGrounded() || target.isSemiInvulnerable()) return;
-				this.debug('misty terrain preventing status');
+				if (effect.id === 'synchronize' || (effect.effectType === 'Move' && !effect.secondaries)) {
+					this.add('-activate', target, 'move: Misty Terrain');
+				}
 				return false;
 			},
 			onBasePower: function (basePower, attacker, defender, move) {
