@@ -1764,7 +1764,7 @@ exports.commands = {
 		if (!target) return;
 
 		for (let id in Rooms.rooms) {
-			if (id !== 'global') Rooms.rooms[id].addRaw('<div class="broadcast-blue"><b>' + target + '</b></div>');
+			if (id !== 'global') Rooms.rooms[id].addRaw('<div class="broadcast-blue"><b>' + target + '</b></div>').update();
 		}
 		this.logModCommand(user.name + " globally declared " + target);
 	},
@@ -1778,7 +1778,7 @@ exports.commands = {
 		if (!target) return;
 
 		for (let id in Rooms.rooms) {
-			if (id !== 'global' && Rooms.rooms[id].type !== 'battle') Rooms.rooms[id].addRaw('<div class="broadcast-blue"><b>' + target + '</b></div>');
+			if (id !== 'global' && Rooms.rooms[id].type !== 'battle') Rooms.rooms[id].addRaw('<div class="broadcast-blue"><b>' + target + '</b></div>').update();
 		}
 		this.logModCommand(user.name + " globally declared (chat level) " + target);
 	},
@@ -2249,12 +2249,12 @@ exports.commands = {
 		for (let id in Rooms.rooms) {
 			if (id === 'global') continue;
 			let curRoom = Rooms.rooms[id];
-			curRoom.addRaw("<div class=\"broadcast-red\"><b>The server is restarting soon.</b><br />Please finish your battles quickly. No new battles can be started until the server resets in a few minutes.</div>");
+			curRoom.addRaw("<div class=\"broadcast-red\"><b>The server is restarting soon.</b><br />Please finish your battles quickly. No new battles can be started until the server resets in a few minutes.</div>").update();
 			if (curRoom.requestKickInactive && !curRoom.battle.ended) {
 				curRoom.requestKickInactive(user, true);
 				if (curRoom.modchat !== '+') {
 					curRoom.modchat = '+';
-					curRoom.addRaw("<div class=\"broadcast-red\"><b>Moderated chat was set to +!</b><br />Only users of rank + and higher can talk.</div>");
+					curRoom.addRaw("<div class=\"broadcast-red\"><b>Moderated chat was set to +!</b><br />Only users of rank + and higher can talk.</div>").update();
 				}
 			}
 		}
@@ -2278,7 +2278,7 @@ exports.commands = {
 			if (id === 'global') continue;
 			let curRoom = Rooms.rooms[id];
 			if (curRoom.battle) continue;
-			curRoom.addRaw("<div class=\"broadcast-red\"><b>The server is restarting soon.</b><br />Please finish your battles quickly. No new battles can be started until the server resets in a few minutes.</div>");
+			curRoom.addRaw("<div class=\"broadcast-red\"><b>The server is restarting soon.</b><br />Please finish your battles quickly. No new battles can be started until the server resets in a few minutes.</div>").update();
 		}
 
 		this.logEntry(user.name + " used /slowlockdown");
@@ -2292,7 +2292,7 @@ exports.commands = {
 		}
 		if (Rooms.global.lockdown === true) {
 			for (let id in Rooms.rooms) {
-				if (id !== 'global') Rooms.rooms[id].addRaw("<div class=\"broadcast-green\"><b>The server restart was canceled.</b></div>");
+				if (id !== 'global') Rooms.rooms[id].addRaw("<div class=\"broadcast-green\"><b>The server restart was canceled.</b></div>").update();
 			}
 		} else {
 			this.sendReply("Preparation for the server shutdown was canceled.");
@@ -2310,7 +2310,7 @@ exports.commands = {
 		}
 		Config.emergency = true;
 		for (let id in Rooms.rooms) {
-			if (id !== 'global') Rooms.rooms[id].addRaw("<div class=\"broadcast-red\">The server has entered emergency mode. Some features might be disabled or limited.</div>");
+			if (id !== 'global') Rooms.rooms[id].addRaw("<div class=\"broadcast-red\">The server has entered emergency mode. Some features might be disabled or limited.</div>").update();
 		}
 
 		this.logEntry(user.name + " used /emergency");
@@ -2324,7 +2324,7 @@ exports.commands = {
 		}
 		Config.emergency = false;
 		for (let id in Rooms.rooms) {
-			if (id !== 'global') Rooms.rooms[id].addRaw("<div class=\"broadcast-green\"><b>The server is no longer in emergency mode.</b></div>");
+			if (id !== 'global') Rooms.rooms[id].addRaw("<div class=\"broadcast-green\"><b>The server is no longer in emergency mode.</b></div>").update();
 		}
 
 		this.logEntry(user.name + " used /endemergency");
@@ -2440,7 +2440,7 @@ exports.commands = {
 		Rooms.global.lockdown = false;
 		if (Rooms.lobby) {
 			Rooms.lobby.modchat = false;
-			Rooms.lobby.addRaw("<div class=\"broadcast-green\"><b>We fixed the crash without restarting the server!</b><br />You may resume talking in the lobby and starting new battles.</div>");
+			Rooms.lobby.addRaw("<div class=\"broadcast-green\"><b>We fixed the crash without restarting the server!</b><br />You may resume talking in the lobby and starting new battles.</div>").update();
 		}
 		this.logEntry(user.name + " used /crashfixed");
 	},
