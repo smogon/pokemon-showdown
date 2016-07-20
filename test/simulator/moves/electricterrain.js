@@ -67,7 +67,7 @@ describe('Electric Terrain', function () {
 		battle.choose('p1', 'move 2');
 		battle.commitDecisions();
 		assert.strictEqual(battle.p1.active[0].status, '');
-		assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-fail|'));
+		assert.ok(!battle.p2.active[0].volatiles['yawn']);
 	});
 
 	it('should cause Rest to fail on grounded Pokemon', function () {
