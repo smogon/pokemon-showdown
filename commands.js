@@ -1778,7 +1778,7 @@ exports.commands = {
 		if (!target) return;
 
 		for (let id in Rooms.rooms) {
-			if (id !== 'global') if (Rooms.rooms[id].type !== 'battle') Rooms.rooms[id].addRaw('<div class="broadcast-blue"><b>' + target + '</b></div>');
+			if (id !== 'global' && Rooms.rooms[id].type !== 'battle') Rooms.rooms[id].addRaw('<div class="broadcast-blue"><b>' + target + '</b></div>');
 		}
 		this.logModCommand(user.name + " globally declared (chat level) " + target);
 	},
