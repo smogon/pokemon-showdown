@@ -2699,6 +2699,7 @@ Battle = (() => {
 					ModifyDamage: 1,
 					ModifySecondaries: 1,
 					ModifyWeight: 1,
+					TryAddVolatile: 1,
 					TryHit: 1,
 					TryHitSide: 1,
 					TryMove: 1,

@@ -12010,8 +12010,8 @@ exports.BattleMovedex = {
 					return null;
 				}
 			},
-			onTryHit: function (target, source, move) {
-				if (move && move.id === 'yawn' && target !== source && (!move.infiltrates || target.side === source.side)) {
+			onTryAddVolatile: function (status, target, source, move) {
+				if (status.id === 'yawn' && target !== source && (!move.infiltrates || target.side === source.side)) {
 					this.debug('blocking yawn');
 					this.add('-activate', target, 'move: Safeguard');
 					return null;
@@ -15423,11 +15423,6 @@ exports.BattleMovedex = {
 						this.add('-fail', pokemon, 'slp', '[from] Uproar');
 					}
 					return null;
-				}
-			},
-			onAnyTryHit: function (target, source, move) {
-				if (move && move.id === 'yawn') {
-					return false;
 				}
 			},
 		},

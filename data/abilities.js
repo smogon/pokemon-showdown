@@ -1353,8 +1353,8 @@ exports.BattleAbilities = {
 				return false;
 			}
 		},
-		onTryHit: function (target, source, move) {
-			if (move && move.id === 'yawn' && this.isWeather(['sunnyday', 'desolateland'])) {
+		onTryAddVolatile: function (status, target) {
+			if (status.id === 'yawn' && this.isWeather(['sunnyday', 'desolateland'])) {
 				this.add('-immune', target, '[msg]', '[from] ability: Leaf Guard');
 				return null;
 			}
@@ -2848,8 +2848,8 @@ exports.BattleAbilities = {
 				return null;
 			}
 		},
-		onAllyTryHit: function (target, source, move) {
-			if (move && move.id === 'yawn') {
+		onAllyTryAddVolatile: function (status, target) {
+			if (status.id === 'yawn') {
 				this.debug('Sweet Veil blocking yawn');
 				this.add('-activate', this.effectData.target, 'ability: Sweet Veil', '[of] ' + target);
 				return null;
