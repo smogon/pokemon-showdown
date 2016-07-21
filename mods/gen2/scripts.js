@@ -832,7 +832,7 @@ exports.BattleScripts = {
 			item: item,
 			level: level,
 			shiny: false,
-			gender: 'M',
+			gender: template.gender ? template.gender : 'M',
 		};
 	},
 };
