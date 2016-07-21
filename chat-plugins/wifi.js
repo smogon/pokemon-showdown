@@ -446,13 +446,13 @@ let commands = {
 		case 'staff':
 			if (!this.can('warn', null, room)) return;
 			reply = '<strong>Staff commands:</strong><br />' +
-			        '- question or qg <em>User | Prize | Question | Answer[,Answer2,Answer3]</em> - Start a new question giveaway (voices can only host for themselves, staff can for all users) (Requires: + % @ # & ~)<br />' +
-			        '- lottery or lg <em>User | Prize[| Number of Winners]</em> - Starts a lottery giveaway (voices can only host for themselves, staff can for all users) (Requires: + % @ # & ~)<br />' +
+			        '- question or qg <em>User | Prize | Question | Answer[,Answer2,Answer3]</em> - Start a new question giveaway (voices can only host for themselves, staff can for all users) (Requires: + % @ * # & ~)<br />' +
+			        '- lottery or lg <em>User | Prize[| Number of Winners]</em> - Starts a lottery giveaway (voices can only host for themselves, staff can for all users) (Requires: + % @ * # & ~)<br />' +
 			        '- changequestion - Changes the question of a question giveaway (Requires: giveaway host)<br />' +
 			        '- changeanswer - Changes the answer of a question giveaway (Requires: giveaway host)<br />' +
 					'- viewanswer - Shows the answer in a question giveaway (only to giveaway host/giver)<br />' +
-					'- ban - Temporarily bans a user from entering giveaways (Requires: % @ # & ~)<br />' +
-			        '- end - Forcibly ends the current giveaway (Requires: % @ # & ~)<br />';
+					'- ban - Temporarily bans a user from entering giveaways (Requires: % @ * # & ~)<br />' +
+			        '- end - Forcibly ends the current giveaway (Requires: % @ * # & ~)<br />';
 			break;
 		case 'game':
 		case 'giveaway':
@@ -469,7 +469,7 @@ let commands = {
 			if (!this.runBroadcast()) return;
 			reply = '<b>Wi-Fi room Giveaway help and info</b><br />' +
 			'- help user - shows list of participation commands<br />' +
-			'- help staff - shows giveaway staff commands (Requires: % @ # & ~)';
+			'- help staff - shows giveaway staff commands (Requires: % @ * # & ~)';
 		}
 		this.sendReplyBox(reply);
 	},
