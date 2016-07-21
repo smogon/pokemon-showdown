@@ -307,6 +307,7 @@ exports.grouplist = [
 		inherit: '@',
 		jurisdiction: 'u',
 		declare: true,
+		addhtml: true,
 	},
 	{
 		symbol: '@',
