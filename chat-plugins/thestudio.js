@@ -184,7 +184,7 @@ let commands = {
 
 		this.sendReplyBox(buffer);
 	},
-	viewnomshelp: ["/aotd viewnoms - View the current nominations for the Artist of the Day. Requires: % @ # & ~"],
+	viewnomshelp: ["/aotd viewnoms - View the current nominations for the Artist of the Day. Requires: % @ * # & ~"],
 
 	removenom: function (target, room, user) {
 		if (room.id !== 'thestudio') return this.errorReply('This command can only be used in The Studio.');
@@ -209,7 +209,7 @@ let commands = {
 
 		this.sendReply("User '" + name + "' has no nomination for the Artist of the Day.");
 	},
-	removenomhelp: ["/aotd removenom [username] - Remove a user\'s nomination for the Artist of the Day and prevent them from voting again until the next round. Requires: % @ # & ~"],
+	removenomhelp: ["/aotd removenom [username] - Remove a user\'s nomination for the Artist of the Day and prevent them from voting again until the next round. Requires: % @ * # & ~"],
 
 	set: function (target, room, user) {
 		if (room.id !== 'thestudio') return this.errorReply('This command can only be used in The Studio.');
@@ -223,7 +223,7 @@ let commands = {
 		Rooms.global.writeChatRoomData();
 		this.privateModCommand("(" + user.name + " set the Artist of the Day to " + target + ".)");
 	},
-	sethelp: ["/aotd set [artist] - Set the Artist of the Day. Requires: % @ # & ~"],
+	sethelp: ["/aotd set [artist] - Set the Artist of the Day. Requires: % @ * # & ~"],
 
 	quote: function (target, room, user) {
 		if (room.id !== 'thestudio') return this.errorReply('This command can only be used in The Studio.');
@@ -276,13 +276,13 @@ exports.commands = {
 	aotdhelp: [
 		"The Studio: Artist of the Day plugin commands:",
 		"- /aotd - View the Artist of the Day.",
-		"- /aotd start - Start nominations for the Artist of the Day. Requires: % @ # & ~",
+		"- /aotd start - Start nominations for the Artist of the Day. Requires: % @ * # & ~",
 		"- /aotd nom [artist] - Nominate an artist for the Artist of the Day.",
-		"- /aotd viewnoms - View the current nominations for the Artist of the Day. Requires: % @ # & ~",
+		"- /aotd viewnoms - View the current nominations for the Artist of the Day. Requires: % @ * # & ~",
 		"- /aotd removenom [username] - Remove a user's nomination for the Artist of the Day and prevent them from voting again until the next round. Requires: % @ # & ~",
-		"- /aotd end - End nominations for the Artist of the Day and set it to a randomly selected artist. Requires: % @ # & ~",
+		"- /aotd end - End nominations for the Artist of the Day and set it to a randomly selected artist. Requires: % @ * # & ~",
 		"- /aotd prenom [artist] - Nominate an artist for the Artist of the Day between nomination periods.",
-		"- /aotd set [artist] - Set the Artist of the Day. Requires: % @ # & ~",
+		"- /aotd set [artist] - Set the Artist of the Day. Requires: % @ * # & ~",
 		"- /aotd quote - View the current Artist Quote of the Day.",
 		"- /aotd quote [quote] - Set the Artist Quote of the Day. Requires: # & ~",
 	],

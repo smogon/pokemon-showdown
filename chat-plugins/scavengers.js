@@ -144,10 +144,10 @@ exports.commands = {
 			'- /scavengerstatus - Get your current game status<br />' +
 			'<br />' +
 			'<strong>Staff commands:</strong><br />' +
-			'- /starthunt <em>hint, answer, hint, answer, hint, answer</em> - Start a new scavenger hunt (Requires: % @ # & ~)<br />' +
-			'- /startofficialhunt <em>hint, answer, hint, answer, hint, answer</em> - Start an official hunt with 60 seconds blitz period (Requires: % @ # & ~)<br />' +
-			'- /endhunt - Finish the current hunt and announce the winners (Requires: % @ # & ~)<br />' +
-			'- /resethunt - Reset the scavenger hunt to mint status (Requires: % @ # & ~)'
+			'- /starthunt <em>hint, answer, hint, answer, hint, answer</em> - Start a new scavenger hunt (Requires: % @ * # & ~)<br />' +
+			'- /startofficialhunt <em>hint, answer, hint, answer, hint, answer</em> - Start an official hunt with 60 seconds blitz period (Requires: % @ * # & ~)<br />' +
+			'- /endhunt - Finish the current hunt and announce the winners (Requires: % @ * # & ~)<br />' +
+			'- /resethunt - Reset the scavenger hunt to mint status (Requires: % @ * # & ~)'
 		);
 	},
 };

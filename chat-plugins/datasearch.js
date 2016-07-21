@@ -236,7 +236,7 @@ exports.commands = {
 		});
 	},
 	learnhelp: ["/learn [pokemon], [move, move, ...] - Displays how a Pok\u00e9mon can learn the given moves, if it can at all.",
-		"!learn [pokemon], [move, move, ...] - Show everyone that information. Requires: + % @ # & ~"],
+		"!learn [pokemon], [move, move, ...] - Show everyone that information. Requires: + % @ * # & ~"],
 };
 
 if (process.send && module === process.mainModule) {
