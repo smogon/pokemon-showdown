@@ -143,8 +143,11 @@ class CommandContext {
 			this.sendReply('|html|<div class="message-error">' + Tools.escapeHTML(message).replace(/\n/g, '<br />') + '</div>');
 		}
 	}
+	addBox(html) {
+		this.add('|html|<div class="infobox">' + html + '</div>');
+	}
 	sendReplyBox(html) {
-		this.sendReply('|raw|<div class="infobox">' + html + '</div>');
+		this.sendReply('|html|<div class="infobox">' + html + '</div>');
 	}
 	popupReply(message) {
 		this.connection.popup(message);

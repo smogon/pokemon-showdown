@@ -1646,6 +1646,18 @@ exports.commands = {
 
 		this.sendReplyBox(target);
 	},
+	addhtmlbox: function (target, room, user, connection, cmd, message) {
+		if (!target) return this.parse('/help htmlbox');
+		target = this.canHTML(target);
+		if (!target) return;
+		if (!this.can('addhtml', null, room)) return;
+
+		if (!user.can('addhtml')) {
+			target += '<div style="float:right;color:#888;font-size:8pt">[' + Tools.escapeHTML(user.name) + ']</div><div style="clear:both"></div>';
+		}
+
+		this.addBox(target);
+	},
 	htmlboxhelp: ["/htmlbox [message] - Displays a message, parsing HTML code contained. Requires: ~ # with global authority"],
 };
 
