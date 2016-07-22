@@ -3477,7 +3477,7 @@ Battle = (() => {
 					actives.push(this.sides[i].active[j]);
 				}
 			}
-			if (!this.isAdjacent(actives[0], actives[1])) {
+			if (actives.length > 1 && !this.isAdjacent(actives[0], actives[1])) {
 				this.swapPosition(actives[0], 1, '[silent]');
 				this.swapPosition(actives[1], 1, '[silent]');
 				this.add('-center');
