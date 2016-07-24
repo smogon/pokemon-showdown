@@ -270,6 +270,11 @@ class Battle {
 		case 'score':
 			this.score = [parseInt(lines[2]), parseInt(lines[3])];
 			break;
+
+		case 'evalbattle':
+			let user = Users.get(lines[2]);
+			user.sendTo(this.id, lines.slice(3).join('\n'));
+			break;
 		}
 		Monitor.activeIp = null;
 	}
