@@ -18,17 +18,18 @@ class Validator {
 		this.tools = Tools.mod(this.format);
 	}
 
-	validateTeam(team) {
+	validateTeam(team, removeNicknames) {
 		let format = Tools.getFormat(this.format);
-		if (format.validateTeam) return format.validateTeam.call(this, team);
-		return this.baseValidateTeam(team);
+		if (format.validateTeam) return format.validateTeam.call(this, team, removeNicknames);
+		return this.baseValidateTeam(team, removeNicknames);
 	}
 
-	prepTeam(team) {
-		return PM.send(this.format.id, team);
+	prepTeam(team, removeNicknames) {
+		removeNicknames = removeNicknames ? '1' : '0';
+		return PM.send(this.format.id, removeNicknames, team);
 	}
 
-	baseValidateTeam(team) {
+	baseValidateTeam(team, removeNicknames) {
 		let format = this.format;
 		let tools = this.tools;
 
@@ -60,6 +61,7 @@ class Validator {
 			if (setProblems) {
 				problems = problems.concat(setProblems);
 			}
+			if (removeNicknames) team[i].name = team[i].baseSpecies;
 		}
 
 		for (let i = 0; i < format.teamBanTable.length; i++) {
@@ -879,22 +881,26 @@ PM = TeamValidator.PM = new ProcessManager({
 	},
 	onMessageDownstream: function (message) {
 		// protocol:
-		// "[id]|[format]|[team]"
+		// "[id]|[format]|[removeNicknames]|[team]"
 		let pipeIndex = message.indexOf('|');
-		let pipeIndex2 = message.indexOf('|', pipeIndex + 1);
+		let nextPipeIndex = message.indexOf('|', pipeIndex + 1);
 		let id = message.substr(0, pipeIndex);
+		let format = message.substr(pipeIndex + 1, nextPipeIndex - pipeIndex - 1);
 
-		let format = message.substr(pipeIndex + 1, pipeIndex2 - pipeIndex - 1);
-		let team = message.substr(pipeIndex2 + 1);
+		pipeIndex = nextPipeIndex;
+		nextPipeIndex = message.indexOf('|', pipeIndex + 1);
+		let removeNicknames = message.substr(pipeIndex + 1, nextPipeIndex - pipeIndex - 1);
+		let team = message.substr(nextPipeIndex + 1);
 
-		process.send(id + '|' + this.receive(format, team));
+		process.send(id + '|' + this.receive(format, removeNicknames, team));
 	},
-	receive: function (format, team) {
+	receive: function (format, removeNicknames, team) {
 		let parsedTeam = Tools.fastUnpackTeam(team);
+		removeNicknames = removeNicknames === '1';
 
 		let problems;
 		try {
-			problems = TeamValidator(format).validateTeam(parsedTeam);
+			problems = TeamValidator(format).validateTeam(parsedTeam, removeNicknames);
 		} catch (err) {
 			require('./crashlogger.js')(err, 'A team validation', {
 				format: format,
