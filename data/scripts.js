@@ -2225,7 +2225,7 @@ exports.BattleScripts = {
 			if (set.ability === 'Illusion' && pokemon.length > 4) continue;
 
 			// Limit 1 of any type combination, 2 in monotype
-			let typeCombo = types.sort().join();
+			let typeCombo = types.slice().sort().join();
 			if (set.ability === 'Drought' || set.ability === 'Drizzle' || set.ability === 'Sand Stream') {
 				// Drought, Drizzle and Sand Stream don't count towards the type combo limit
 				typeCombo = set.ability;
@@ -2380,7 +2380,7 @@ exports.BattleScripts = {
 			if (set.ability === 'Illusion' && pokemon.length > 4) continue;
 
 			// Limit 1 of any type combination
-			let typeCombo = types.join();
+			let typeCombo = types.slice().sort().join();
 			if (set.ability === 'Drought' || set.ability === 'Drizzle') {
 				// Drought and Drizzle don't count towards the type combo limit
 				typeCombo = set.ability;
@@ -3582,7 +3582,7 @@ exports.BattleScripts = {
 			if (skip) continue;
 
 			// Limit 1 of any type combination
-			let typeCombo = types.join();
+			let typeCombo = types.slice().sort().join();
 			if (typeCombo in typeComboCount) continue;
 
 			// Okay, the set passes, add it to our team
