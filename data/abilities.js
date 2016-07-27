@@ -409,7 +409,7 @@ exports.BattleAbilities = {
 			if (!source || source.volatiles['disable']) return;
 			if (source !== target && move && move.effectType === 'Move') {
 				if (this.random(10) < 3) {
-					source.addVolatile('disable');
+					source.addVolatile('disable', this.effectData.target);
 				}
 			}
 		},
@@ -424,7 +424,7 @@ exports.BattleAbilities = {
 		onAfterDamage: function (damage, target, source, move) {
 			if (move && move.flags['contact']) {
 				if (this.random(10) < 3) {
-					source.addVolatile('attract', target);
+					source.addVolatile('attract', this.effectData.target);
 				}
 			}
 		},
