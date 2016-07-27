@@ -172,9 +172,11 @@ exports.BattleAbilities = {
 	"aromaveil": {
 		desc: "This Pokemon and its allies cannot be affected by Attract, Disable, Encore, Heal Block, Taunt, or Torment.",
 		shortDesc: "Protects user/allies from Attract, Disable, Encore, Heal Block, Taunt, and Torment.",
-		onAllyTryHit: function (target, source, move) {
-			if (move && move.id in {attract:1, disable:1, encore:1, healblock:1, taunt:1, torment:1}) {
-				this.add('-activate', this.effectData.target, 'ability: Aroma Veil', '[of] ' + target);
+		onAllyTryAddVolatile: function (status, target, source, effect) {
+			if (status.id in {attract:1, disable:1, encore:1, healblock:1, taunt:1, torment:1}) {
+				if (effect.effectType === 'Move') {
+					this.add('-activate', this.effectData.target, 'ability: Aroma Veil', '[of] ' + target);
+				}
 				return null;
 			}
 		},
