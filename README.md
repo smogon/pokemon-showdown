@@ -166,6 +166,7 @@ Contributors
 - Cody Thompson [Rising_Dusk] - Development
 - Ian Clail [Layell] - Art (battle graphics, sprites)
 - Jacob Zimmer [SolarisFox] - Development
+- Jeremy Piemonte [panpawn] - Development
 - Neil Rashbrook [urkerab] - Development
 - Robin Vandenbrande [Quinella] - Development
 - [Ridaz] - Art (battle animations)
