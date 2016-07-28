@@ -2202,6 +2202,21 @@ exports.commands = {
 		}
 		this.errorReply("Your hot-patch command was unrecognized.");
 	},
+	hc: function(room, user, cmd) {
+		return this.parse('/hotpatch chat');
+	},
+
+	hf: function(room, user, cmd) {
+		return this.parse('/hotpatch formats');
+	},
+
+	hb: function(room, user, cmd) {
+		return this.parse('/hotpatch battles');
+	},
+
+	hv: function(room, user, cmd) {
+		return this.parse('/hotpatch validator');
+	},
 	hotpatchhelp: ["Hot-patching the game engine allows you to update parts of Showdown without interrupting currently-running battles. Requires: ~",
 		"Hot-patching has greater memory requirements than restarting.",
 		"/hotpatch chat - reload commands.js and the chat-plugins",
