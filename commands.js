@@ -2126,9 +2126,9 @@ exports.commands = {
 		let staff = Rooms('staff');
 		if (staff) staff.add("(" + user.name + " used /hotpatch " + target + ")").update();
 
-		if (target === 'chat' || target === 'commands') {
-			if (Monitor.hotpatchLockChat) return this.errorReply("Hotpatch has been disabled for chat. (" + Monitor.hotpatchLockChat + ")");
-			try {
+		try {
+			if (target === 'chat' || target === 'commands') {
+				if (Monitor.hotpatchLockChat) return this.errorReply("Hotpatch has been disabled for chat. (" + Monitor.hotpatchLockChat + ")");
 				const ProcessManagers = require('./process-manager').cache;
 				for (let PM of ProcessManagers.keys()) {
 					if (PM.isChatBased) {
@@ -2148,24 +2148,16 @@ exports.commands = {
 				Tournaments.tournaments = runningTournaments;
 
 				return this.sendReply("Chat commands have been hot-patched.");
-			} catch (e) {
-				return this.errorReply("Something failed while trying to hotpatch chat: \n" + e.stack);
-			}
-		} else if (target === 'tournaments') {
-			try {
+			} else if (target === 'tournaments') {
 				let runningTournaments = Tournaments.tournaments;
 				CommandParser.uncacheTree('./tournaments');
 				global.Tournaments = require('./tournaments');
 				Tournaments.tournaments = runningTournaments;
 				return this.sendReply("Tournaments have been hot-patched.");
-			} catch (e) {
-				return this.errorReply("Something failed while trying to hotpatch tournaments: \n" + e.stack);
-			}
-		} else if (target === 'battles') {
-			Simulator.SimulatorProcess.respawn();
-			return this.sendReply("Battles have been hotpatched. Any battles started after now will use the new code; however, in-progress battles will continue to use the old code.");
-		} else if (target === 'formats') {
-			try {
+			} else if (target === 'battles') {
+				Simulator.SimulatorProcess.respawn();
+				return this.sendReply("Battles have been hotpatched. Any battles started after now will use the new code; however, in-progress battles will continue to use the old code.");
+			} else if (target === 'formats') {
 				let toolsLoaded = !!Tools.isLoaded;
 				// uncache the tools.js dependency tree
 				CommandParser.uncacheTree('./tools.js');
@@ -2181,32 +2173,32 @@ exports.commands = {
 				Rooms.global.send(Rooms.global.formatListText);
 
 				return this.sendReply("Formats have been hotpatched.");
-			} catch (e) {
-				return this.errorReply("Something failed while trying to hotpatch formats: \n" + e.stack);
+			} else if (target === 'loginserver') {
+				fs.unwatchFile('./config/custom.css');
+				CommandParser.uncacheTree('./loginserver.js');
+				global.LoginServer = require('./loginserver.js');
+				return this.sendReply("The login server has been hotpatched. New login server requests will use the new code.");
+			} else if (target === 'learnsets' || target === 'validator') {
+				TeamValidator.PM.respawn();
+				return this.sendReply("The team validator has been hotpatched. Any battles started after now will have teams be validated according to the new code.");
+			} else if (target === 'punishments') {
+				delete require.cache[require.resolve('./punishments.js')];
+				global.Punishments = require('./punishments.js');
+				return this.sendReply("Punishments have been hotpatched.");
+			} else if (target.startsWith('disablechat')) {
+				if (Monitor.hotpatchLockChat) return this.errorReply("Hotpatch is already disabled.");
+				let reason = target.split(', ')[1];
+				if (!reason) return this.errorReply("Usage: /hotpatch disablechat, [reason]");
+				Monitor.hotpatchLockChat = reason;
+				return this.sendReply("You have disabled hotpatch until the next server restart.");
+			} else if (target.startsWith('disable')) {
+				let reason = target.split(', ')[1];
+				if (!reason) return this.errorReply("Usage: /hotpatch disable, [reason]");
+				Monitor.hotpatchLock = reason;
+				return this.sendReply("You have disabled hotpatch until the next server restart.");
 			}
-		} else if (target === 'loginserver') {
-			fs.unwatchFile('./config/custom.css');
-			CommandParser.uncacheTree('./loginserver.js');
-			global.LoginServer = require('./loginserver.js');
-			return this.sendReply("The login server has been hotpatched. New login server requests will use the new code.");
-		} else if (target === 'learnsets' || target === 'validator') {
-			TeamValidator.PM.respawn();
-			return this.sendReply("The team validator has been hotpatched. Any battles started after now will have teams be validated according to the new code.");
-		} else if (target === 'punishments') {
-			delete require.cache[require.resolve('./punishments.js')];
-			global.Punishments = require('./punishments.js');
-			return this.sendReply("Punishments have been hotpatched.");
-		} else if (target.startsWith('disablechat')) {
-			if (Monitor.hotpatchLockChat) return this.errorReply("Hotpatch is already disabled.");
-			let reason = target.split(', ')[1];
-			if (!reason) return this.errorReply("Usage: /hotpatch disablechat, [reason]");
-			Monitor.hotpatchLockChat = reason;
-			return this.sendReply("You have disabled hotpatch until the next server restart.");
-		} else if (target.startsWith('disable')) {
-			let reason = target.split(', ')[1];
-			if (!reason) return this.errorReply("Usage: /hotpatch disable, [reason]");
-			Monitor.hotpatchLock = reason;
-			return this.sendReply("You have disabled hotpatch until the next server restart.");
+		} catch (e) {
+			return this.errorReply("Something failed while trying to hotpatch " + target + ": \n" + e.stack);
 		}
 		this.errorReply("Your hot-patch command was unrecognized.");
 	},
