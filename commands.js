@@ -549,6 +549,7 @@ exports.commands = {
 		}
 		if (room.tour && !room.tour.modjoin) return this.errorReply("You can't do this in tournaments where modjoin is prohibited.");
 		if (target === 'off' || target === 'false') {
+			if (!room.modjoin) return this.errorReply("Modjoin is already turned off in this room.");
 			delete room.modjoin;
 			this.addModCommand("" + user.name + " turned off modjoin.");
 			if (room.chatRoomData) {
@@ -557,11 +558,13 @@ exports.commands = {
 			}
 		} else {
 			if (target === 'on' || target === 'true') {
+				if (room.modjoin === true) return this.errorReply("Modjoin is already turned on in this room.");
 				room.modjoin = true;
 				this.addModCommand("" + user.name + " turned on modjoin.");
 			} else if (target in Config.groups) {
 				if (room.battle && !this.can('makeroom')) return;
 				if (room.isPersonal && !user.can('makeroom') && target !== '+') return this.errorReply("/modjoin - Access denied from setting modjoin past + in group chats.");
+				if (room.modjoin === target) return this.errorReply("Modjoin is already set to " + target + " in this room.");
 				room.modjoin = target;
 				this.addModCommand("" + user.name + " set modjoin to " + target + ".");
 			} else {
