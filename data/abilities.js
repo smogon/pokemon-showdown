@@ -2066,6 +2066,7 @@ exports.BattleAbilities = {
 			move.secondaries.push({
 				chance: 30,
 				status: 'psn',
+				ability: this.getAbility('poisontouch'),
 			});
 		},
 		id: "poisontouch",
