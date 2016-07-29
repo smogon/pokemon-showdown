@@ -523,7 +523,7 @@ exports.BattleScripts = {
 				didSomething = true;
 			}
 			if (moveData.status) {
-				hitResult = target.trySetStatus(moveData.status, pokemon, move);
+				hitResult = target.trySetStatus(moveData.status, pokemon, moveData.ability ? moveData.ability : move);
 				if (!hitResult && move.status) return hitResult;
 				didSomething = didSomething || hitResult;
 			}
