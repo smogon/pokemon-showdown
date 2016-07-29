@@ -932,7 +932,7 @@ class User {
 	setGroup(group, forceConfirmed) {
 		if (!group) throw new Error("Falsy value passed to setGroup");
 		this.group = group.charAt(0);
-		this.isStaff = (this.group in {'%':1, '@':1, '&':1, '~':1});
+		this.isStaff = (this.group in {'%':1, '@':1, '*':1, '&':1, '~':1});
 		if (!this.isStaff) {
 			let staffRoom = Rooms('staff');
 			this.isStaff = (staffRoom && staffRoom.auth && staffRoom.auth[this.userid]);
