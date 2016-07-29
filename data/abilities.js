@@ -833,8 +833,9 @@ exports.BattleAbilities = {
 			}
 			if (showMsg && !effect.secondaries) this.add('-fail', this.effectData.target, 'unboost', '[from] ability: Flower Veil', '[of] ' + target);
 		},
-		onAllySetStatus: function (status, target) {
+		onAllySetStatus: function (status, target, source, effect) {
 			if (target.hasType('Grass')) {
+				if (!effect || !effect.status) return false;
 				this.add('-activate', this.effectData.target, 'ability: Flower Veil', '[of] ' + target);
 				return null;
 			}
