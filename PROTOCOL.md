@@ -128,6 +128,15 @@ represented by a space), and the rest of the string being their username.
 > We received an HTML message, which should be sanitized and displayed
 > directly in the room's log.
 
+`|uhtml|NAME|HTML`
+
+> We recieved an HTML message (NAME) that can change what it's displaying,
+> this is used in things like our Polls system, for example.
+
+`|uhtmlchange|NAME|HTML`
+
+> Changes the HTML display of the `|uhtml|` message named (NAME).
+
 `|join|USER` or `|j|USER`
 
 > `USER` joined the room.
