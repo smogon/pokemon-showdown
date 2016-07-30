@@ -1027,7 +1027,6 @@ exports.commands = {
 	},
 	banhelp: ["/ban [username] - Bans the user from the room you are in. Requires: @ # & ~"],
 
-	rub: 'unban',
 	roomunban: 'unban',
 	unban: function (target, room, user, connection) {
 		if (!target) return this.parse('/help unban');
