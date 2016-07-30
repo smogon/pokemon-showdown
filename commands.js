@@ -979,6 +979,8 @@ exports.commands = {
 	},
 
 	b: 'ban',
+	rb: 'ban',
+	roomban: 'ban',
 	ban: function (target, room, user, connection) {
 		if (!target) return this.parse('/help ban');
 		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
