@@ -15,7 +15,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 2, "level": 40, "gender": "M", "shiny": true, "moves":["poisonpowder", "sleeppowder", "razorleaf", "sweetscent"]},
 		],
-		tier: "UU",
+		tier: "BL",
 	},
 	charmander: {
 		eventPokemon: [
@@ -122,7 +122,7 @@ exports.BattleFormatsData = {
 			{"generation": 1, "level": 5, "moves":["fly"]},
 			{"generation": 1, "level": 5, "moves":["thundershock", "growl", "surf"]},
 		],
-		tier: "UU",
+		tier: "NFE",
 	},
 	raichu: {
 		randomBattleMoves: ["thunder", "surf", "raindance", "thunderwave", "substitute"],
@@ -282,7 +282,6 @@ exports.BattleFormatsData = {
 	},
 	primeape: {
 		randomBattleMoves: ["crosschop", "rockslide", "hiddenpowerbug", "meditate", "substitute"],
-
 		tier: "UU",
 	},
 	growlithe: {
@@ -318,7 +317,7 @@ exports.BattleFormatsData = {
 		tier: "LC",
 	},
 	kadabra: {
-		tier: "NFE",
+		tier: "UU",
 	},
 	alakazam: {
 		randomBattleMoves: ["recover", "thunderwave", "firepunch", "psychic"],
@@ -559,7 +558,7 @@ exports.BattleFormatsData = {
 	},
 	rhydon: {
 		randomBattleMoves: ["earthquake", "rockslide", "curse", "roar"],
-		tier: "OU",
+		tier: "BL",
 	},
 	chansey: {
 		eventPokemon: [
@@ -742,7 +741,7 @@ exports.BattleFormatsData = {
 	},
 	porygon2: {
 		randomBattleMoves: ["recover", "return", "curse", "icebeam"],
-		tier: "OU",
+		tier: "BL",
 	},
 	omanyte: {
 		eventPokemon: [
@@ -813,7 +812,7 @@ exports.BattleFormatsData = {
 	},
 	dragonite: {
 		randomBattleMoves: ["icebeam", "thunder", "dynamicpunch", "bodyslam", "rest", "haze", "doubleedge", "reflect"],
-		tier: "BL",
+		tier: "OU",
 	},
 	mewtwo: {
 		randomBattleMoves: ["curse", "recover", "submission", "thunderbolt", "psychic", "fireblast", "shadowball"],
@@ -954,7 +953,7 @@ exports.BattleFormatsData = {
 	},
 	ampharos: {
 		randomBattleMoves: ["thunderbolt", "firepunch", "thunderwave", "dynamicpunch", "rest", "sleeptalk"],
-		tier: "BL",
+		tier: "UU",
 	},
 	marill: {
 		eventPokemon: [
@@ -1204,7 +1203,7 @@ exports.BattleFormatsData = {
 	},
 	smeargle: {
 		randomBattleMoves: ["spiderweb", "protect", "disable", "batonpass", "spore", "bellydrum", "agility", "swordsdance", "recover", "encore", "superfang", "spikes", "destinybond", "mirrorcoat"],
-		tier: "UU",
+		tier: "BL",
 	},
 	miltank: {
 		randomBattleMoves: ["healbell", "milkdrink", "growl", "bodyslam"],
