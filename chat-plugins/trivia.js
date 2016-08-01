@@ -307,7 +307,7 @@ class Trivia extends RoomGame {
 			return 'Not enough players have signed up yet! Trivia games require at least ' + MINIMUM_PLAYERS + ' players to begin.';
 		}
 
-		this.broadcast('The trivia game will begin in ' + START_TIMEOUT + ' seconds...');
+		this.broadcast('The trivia game will begin in ' + (START_TIMEOUT / 1000) + ' seconds...');
 		this.phaseTimeout = setTimeout(() => this.askQuestion(), START_TIMEOUT);
 	}
 
@@ -330,15 +330,15 @@ class Trivia extends RoomGame {
 		this.curAnswers = questionObj.answers;
 
 		this.broadcast(
-			'Question: ' + Tools.escapeHTML(this.curQuestion),
+			'Question: ' + this.curQuestion,
 			'Category: ' + CATEGORIES[questionObj.category]
 		);
 
 		this.phaseTimeout = setTimeout(() => this.tallyAnswers(), QUESTION_INTERVAL);
 	}
 
-	// This is a noop here since it'd defined properly by mode decorators later
-	// on. All this is obligated to do is take a user and their answer as args;
+	// This is a noop here since it'd defined properly by subclasses later on.
+	// All this is obligated to do is take a user and their answer as args;
 	// the behaviour of this method can be entirely arbitrary otherwise.
 	answerQuestion() {}
 
@@ -350,12 +350,12 @@ class Trivia extends RoomGame {
 		));
 	}
 
-	// This is a noop here since it'd defined properly by mode decorators later
+	// This is a noop here since it'd defined properly by mode subclasses later
 	// on. This calculates the points a correct responder earns, which is
 	// typically between 1-5.
 	calculatePoints() {}
 
-	// This is a noop here since it's defined properly by mode decorators later
+	// This is a noop here since it's defined properly by mode subclasses later
 	// on. This is obligated to update the game phase, but it can be entirely
 	// arbitrary otherwise.
 	tallyAnswers() {}
@@ -532,7 +532,7 @@ class TimerModeTrivia extends Trivia {
 			let playerAnsweredAt = hrtimeToNanoseconds(player.answeredAt);
 			let diff = playerAnsweredAt - askedAt;
 			let points = this.calculatePoints(diff, totalDiff);
-			player.incrementPoints();
+			player.incrementPoints(points);
 
 			let pointBuffer = innerBuffer.get(points);
 			pointBuffer.push([Tools.escapeHTML(player.name), playerAnsweredAt]);
@@ -809,9 +809,9 @@ const commands = {
 
 		let tarUser;
 		if (target) {
-			this.splitTarget();
+			this.splitTarget(target);
+			if (!this.targetUser) return this.errorReply("User " + target + " does not exist.");
 			tarUser = this.targetUser;
-			if (!tarUser) return this.errorReply("User " + target + " does not exist.");
 		} else {
 			tarUser = user;
 		}
