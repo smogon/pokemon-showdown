@@ -93,6 +93,13 @@ exports.commands = {
 		return target;
 	},
 
+	'battle!': 'battle',
+	battle: function (target, room, user, connection, cmd) {
+		if (cmd === 'battle') return this.sendReply("What?! How are you not more excited to battle?! Try /battle! to show me you're ready.");
+		if (!target) target = "randombattle";
+		return this.parse("/search " + target);
+	},
+
 	avatar: function (target, room, user) {
 		if (!target) return this.parse('/avatars');
 		let parts = target.split(',');
