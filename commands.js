@@ -1768,6 +1768,52 @@ exports.commands = {
 	slowchathelp: ["/slowchat [number] - Sets slowchat in the room for [number] seconds. Must be between 2-60 seconds. Requires @ * # & ~",
 		"/slowchat [off/disable] - Disables slowchat in the room. Requires @ * # & ~"],
 
+	stretching: function (target, room, user) {
+		if (!target) return this.sendReply("Stretching in this room is currently set to: " + (room.stretching ? room.stretching : false));
+		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
+		if (!this.can('editroom', null, room)) return false;
+
+		if (target === 'enable' || target === 'on') {
+			if (room.filterStretching) return this.errorReply("Stretching is already enabled in this room.");
+			room.filterStretching = true;
+		} else if (target === 'disable' || target === 'off') {
+			if (!room.filterStretching) return this.errorReply("Stretching is already disabled in this room.");
+			room.filterStretching = false;
+		} else {
+			return this.parse("/help stretching");
+		}
+		this.privateModCommand("(" + user.name + " set stretching to " + room.stretching + ")");
+
+		if (room.chatRoomData) {
+			room.chatRoomData.filterStretching = room.filterStretching;
+			Rooms.global.writeChatRoomData();
+		}
+	},
+	stretchinghelp: ["/stretching [enable/disable] - Toggles having the server check messages containing too much stretching. Requires "],
+
+	capitals: function (target, room, user) {
+		if (!target) return this.sendReply("Capitals in this room is currently set to: " + (room.capitals ? room.capitals : false));
+		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
+		if (!this.can('editroom', null, room)) return false;
+
+		if (target === 'enable' || target === 'on') {
+			if (room.filterCaps) return this.errorReply("Capitals is already enabled in this room.");
+			room.filterCaps = true;
+		} else if (target === 'disable' || target === 'off') {
+			if (!room.filterCaps) return this.errorReply("Capitals is already disabled in this room.");
+			room.filterCaps = false;
+		} else {
+			return this.parse("/help capitals");
+		}
+		this.privateModCommand("(" + user.name + " set capitals to " + room.capitals + ")");
+
+		if (room.chatRoomData) {
+			room.chatRoomData.filterCaps = room.filterCaps;
+			Rooms.global.writeChatRoomData();
+		}
+	},
+	capitalshelp: ["/capitals [enable/disable] - Toggles having the server check messages containing too many capitals. Requires "],
+
 	declare: function (target, room, user) {
 		if (!target) return this.parse('/help declare');
 		if (!this.can('declare', null, room)) return false;
