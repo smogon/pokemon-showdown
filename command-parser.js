@@ -113,6 +113,13 @@ class CommandContext {
 		this.inputUsername = '';
 	}
 
+	checkSlowchat(room, user) {
+		if (!room || !room.slowchat) return true;
+		let lastActiveSeconds = (Date.now() - user.lastMessageTime) / 1000;
+		if (lastActiveSeconds < room.slowchat) return false;
+		return true;
+	}
+
 	checkBanwords(room, message) {
 		if (!room) return true;
 		if (!room.banwordRegex) {
@@ -362,14 +369,19 @@ class CommandContext {
 				return false;
 			}
 
+			if (!this.checkSlowchat(room, user) && !user.can('mute', null, room)) {
+				this.errorReply("This room has slow-chat enabled. You can only talk once every " + room.slowchat + " seconds.");
+				return false;
+			}
+
 			if (!this.checkBanwords(room, message) && !user.can('mute', null, room)) {
 				this.errorReply("Your message contained banned words.");
 				return false;
 			}
 
-			if (room && room.id === 'lobby') {
+			if (room) {
 				let normalized = message.trim();
-				if ((normalized === user.lastMessage) &&
+				if (room.id === 'lobby' && (normalized === user.lastMessage) &&
 						((Date.now() - user.lastMessageTime) < MESSAGE_COOLDOWN)) {
 					this.errorReply("You can't send the same message again so soon.");
 					return false;

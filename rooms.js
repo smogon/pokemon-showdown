@@ -866,6 +866,7 @@ let BattleRoom = (() => {
 		Room.call(this, roomid, "" + p1.name + " vs. " + p2.name);
 		this.modchat = (Config.battlemodchat || false);
 		this.modjoin = false;
+		this.slowchat = false;
 		this.reportJoins = Config.reportbattlejoins;
 
 		format = '' + (format || '');
