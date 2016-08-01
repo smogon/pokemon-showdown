@@ -24,6 +24,9 @@ const MAX_REASON_LENGTH = 300;
 const MUTE_LENGTH = 7 * 60 * 1000;
 const HOURMUTE_LENGTH = 60 * 60 * 1000;
 
+const SLOWCHAT_MINIMUM = 2;
+const SLOWCHAT_MAXIMUM = 60;
+
 exports.commands = {
 
 	version: function (target, room, user) {
@@ -1735,6 +1738,35 @@ exports.commands = {
 		}
 	},
 	modchathelp: ["/modchat [off/autoconfirmed/+/%/@/*/#/&/~] - Set the level of moderated chat. Requires: *, @ for off/autoconfirmed/+ options, # & ~ for all the options"],
+
+	slowchat: function (target, room, user) {
+		if (!target) return this.sendReply("Slow chat is currently set to: " + (room.slowchat ? room.slowchat : false));
+		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
+		if (!this.can('slowchat', null, room)) return false;
+
+		let targetInt = parseInt(target);
+		if (target === 'off' || target === 'disable') {
+			if (!room.slowchat) return this.errorReply("Slow chat is already disabled in this room.");
+			room.slowchat = false;
+			this.add("|raw|<div class=\"broadcast-blue\"><b>Slow chat was disabled!</b><br />There is no longer a set minimum time between messages.</div>");
+		} else if (targetInt) {
+			if (room.slowchat === targetInt) return this.errorReply("Slow chat is already set for " + room.slowchat + " seconds in this room.");
+			if (targetInt < SLOWCHAT_MINIMUM) targetInt = SLOWCHAT_MINIMUM;
+			if (targetInt > SLOWCHAT_MAXIMUM) targetInt = SLOWCHAT_MAXIMUM;
+			room.slowchat = targetInt;
+			this.add("|raw|<div class=\"broadcast-red\"><b>Slow chat was enabled!</b><br />Messages must have at least " + room.slowchat + " seconds between them.</div>");
+		} else {
+			return this.parse("/help slowchat");
+		}
+		this.privateModCommand("(" + user.name + " set slowchat to " + room.slowchat + ")");
+
+		if (room.chatRoomData) {
+			room.chatRoomData.slowchat = room.slowchat;
+			Rooms.global.writeChatRoomData();
+		}
+	},
+	slowchathelp: ["/slowchat [number] - Sets slowchat in the room for [number] seconds. Must be between 2-60 seconds. Requires @ * # & ~",
+		"/slowchat [off/disable] - Disables slowchat in the room. Requires @ * # & ~"],
 
 	declare: function (target, room, user) {
 		if (!target) return this.parse('/help declare');
