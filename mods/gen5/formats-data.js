@@ -2953,7 +2953,7 @@ exports.BattleFormatsData = {
 	scraggy: {
 		inherit: true,
 		randomBattleMoves: ["dragondance", "icepunch", "highjumpkick", "drainpunch", "rest", "bulkup", "crunch"],
-		tier: "LC",
+		tier: "LC Uber",
 	},
 	scrafty: {
 		inherit: true,
