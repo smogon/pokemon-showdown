@@ -721,14 +721,14 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
-		name: "[Gen 1] UU",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3573896/\">RBY UU</a>"],
+		name: "[Gen 2] UU",
+		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3573896/\">GSC UU</a>"],
 		section: "RoA Spotlight",
 		column: 3,
 
-		mod: 'gen1',
-		ruleset: ['[Gen 1] OU'],
-		banlist: ['OU'],
+		mod: 'gen2',
+		ruleset: ['[Gen 2] OU'],
+		banlist: ['OU', 'BL'],
 	},
 
 	// BW2 Singles
