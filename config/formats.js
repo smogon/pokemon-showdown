@@ -722,7 +722,7 @@ exports.Formats = [
 
 	{
 		name: "[Gen 2] UU",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3573896/\">GSC UU</a>"],
+		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3576710/\">GSC UU</a>"],
 		section: "RoA Spotlight",
 		column: 3,
 
