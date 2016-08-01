@@ -174,6 +174,12 @@ describe('Trivia', function () {
 			this.game.tallyAnswers();
 			assert.strictEqual(this.player.answer, '');
 		});
+
+		it('should not give NaN points to correct responders', function () {
+			this.game.answerQuestion('answer', this.user);
+			this.game.tallyAnswers();
+			assert.ok(!isNaN(this.player.points));
+		});
 	});
 
 	context('timer mode', function () {
@@ -232,6 +238,12 @@ describe('Trivia', function () {
 				done();
 			}.bind(this));
 		});
+
+		it('should not give NaN points to correct responders', function () {
+			this.game.answerQuestion('answer', this.user);
+			this.game.tallyAnswers();
+			assert.ok(!isNaN(this.player.points));
+		});
 	});
 
 	context('number mode', function () {
@@ -274,6 +286,12 @@ describe('Trivia', function () {
 			this.game.answerQuestion('answer', this.user);
 			this.game.tallyAnswers();
 			assert.strictEqual(this.player.correctAnswers, 1);
+		});
+
+		it('should not give NaN points to correct responders', function () {
+			this.game.answerQuestion('answer', this.user);
+			this.game.tallyAnswers();
+			assert.ok(!isNaN(this.player.points));
 		});
 	});
 });
