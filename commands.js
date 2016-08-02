@@ -527,8 +527,21 @@ exports.commands = {
 		}
 
 		if (target === 'off' || !setting) {
+			if (!room.isPrivate) {
+				return this.errorReply("This room is already public.");
+			}
 			if (room.isPersonal) return this.errorReply("This room can't be made public.");
+			if (room.privacySetter && user.can('nooverride', null, room) && !user.can('makeroom')) {
+				if (!room.privacySetter.has(user.userid)) {
+					return this.errorReply("You can't make the room public since you didn't make it private - only " + [...room.privacySetter].join(', ') + " can.");
+				}
+				room.privacySetter.delete(user.userid);
+				if (room.privacySetter.size) {
+					return this.sendReply("You are no longer forcing the room to stay private, but " + [...room.privacySetter].join(', ') + " also needs to use /publicroom to make the room public.");
+				}
+			}
 			delete room.isPrivate;
+			room.privacySetter = null;
 			this.addModCommand("" + user.name + " made this room public.");
 			if (room.chatRoomData) {
 				delete room.chatRoomData.isPrivate;
@@ -536,6 +549,10 @@ exports.commands = {
 			}
 		} else {
 			if (room.isPrivate === setting) {
+				if (room.privacySetter && !room.privacySetter.has(user.userid)) {
+					room.privacySetter.add(user.userid);
+					return this.sendReply("This room is already " + (setting === true ? 'secret' : setting) + ", but is now forced to stay that way until you use /publicroom.");
+				}
 				return this.errorReply("This room is already " + (setting === true ? 'secret' : setting) + ".");
 			}
 			room.isPrivate = setting;
@@ -544,6 +561,7 @@ exports.commands = {
 				room.chatRoomData.isPrivate = setting;
 				Rooms.global.writeChatRoomData();
 			}
+			room.privacySetter = new Set([user.userid]);
 		}
 	},
 	privateroomhelp: ["/secretroom - Makes a room secret. Secret rooms are visible to & and up. Requires: & ~",
