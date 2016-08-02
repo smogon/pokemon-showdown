@@ -2735,6 +2735,7 @@ exports.commands = {
 		room.game.undo(user, target);
 	},
 
+	uploadreplay: 'savereplay',
 	savereplay: function (target, room, user, connection) {
 		if (!room || !room.battle) return;
 		let logidx = Tools.getFormat(room.battle.format).team ? 3 : 0; // retrieve spectator log (0) if there are set privacy concerns
