@@ -381,15 +381,11 @@ exports.Formats = [
 			let species = toId(set.species);
 			let template = this.tools.getTemplate(species);
 			if (!template.exists) return ["" + set.species + " is not a real Pok\u00E9mon."];
+			if (template.battleOnly) template = this.tools.getTemplate(template.baseSpecies);
 			if (template.isUnreleased) return ["" + set.species + " is unreleased."];
 			if (this.tools.getBanlistTable(this.format)[template.id]) return ["" + template.species + " is banned by Follow The Leader."];
-			if (!teamHas.donorTemplate) {
-				if (template.battleOnly) {
-					template = this.tools.getTemplate(template.baseSpecies);
-					if (!Object.values(template.abilities).includes(set.ability)) set.ability = template.abilities['0'];
-				}
-				teamHas.donorTemplate = template;
-			}
+
+			if (!teamHas.donorTemplate) teamHas.donorTemplate = template;
 			let name = set.name;
 			if (name === set.species) delete set.name;
 			set.species = teamHas.donorTemplate.species;
