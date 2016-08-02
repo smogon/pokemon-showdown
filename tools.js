@@ -275,7 +275,7 @@ module.exports = (() => {
 				}
 			}
 			template = {};
-			if (id && this.data.Pokedex[id]) {
+			if (id && id !== 'constructor' && this.data.Pokedex[id]) {
 				template = this.data.Pokedex[id];
 				if (template.cached) return template;
 				template.cached = true;
@@ -347,7 +347,7 @@ module.exports = (() => {
 				let matches = /([a-z]*)([0-9]*)/.exec(id);
 				id = matches[1];
 			}
-			if (id && this.data.Movedex[id]) {
+			if (id && id !== 'constructor' && this.data.Movedex[id]) {
 				move = this.data.Movedex[id];
 				if (move.cached) return move;
 				move.cached = true;
@@ -481,7 +481,7 @@ module.exports = (() => {
 				id += 'berry';
 			}
 			item = {};
-			if (id && this.data.Items[id]) {
+			if (id && id !== 'constructor' && this.data.Items[id]) {
 				item = this.data.Items[id];
 				if (item.cached) return item;
 				item.cached = true;
@@ -517,7 +517,7 @@ module.exports = (() => {
 			let name = (ability || '').trim();
 			let id = toId(name);
 			ability = {};
-			if (id && this.data.Abilities[id]) {
+			if (id && id !== 'constructor' && this.data.Abilities[id]) {
 				ability = this.data.Abilities[id];
 				if (ability.cached) return ability;
 				ability.cached = true;
