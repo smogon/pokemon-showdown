@@ -2748,6 +2748,7 @@ exports.commands = {
 			p1: players[0],
 			p2: players[1],
 			format: room.format,
+			hidden: room.isPrivate ? '1' : '',
 		}, success => {
 			if (success && success.errorip) {
 				connection.popup("This server's request IP " + success.errorip + " is not a registered server.");
