@@ -113,6 +113,25 @@ class CommandContext {
 		this.inputUsername = '';
 	}
 
+	checkFormat(room, message) {
+		if (!room) return false;
+		if (!room.filterStretching && !room.filterCaps) return false;
+		let formatError = false;
+		// Removes extra spaces and null characters
+		message = message.trim().replace(/[ \u0000\u200B-\u200F]+/g, ' ');
+
+		let stretchMatch = room.filterStretching && message.match(/(.+?)\1{7,}/i);
+		let capsMatch = room.filterCaps && message.match(/[A-Z\s]{18,}/);
+		if (stretchMatch) {
+			formatError = "too much stretching.";
+		}
+		if (capsMatch) {
+			formatError = "too many capital letters.";
+		}
+		if (stretchMatch && capsMatch) formatError = "too much stretching and too many capital letters.";
+		return formatError;
+	}
+
 	checkSlowchat(room, user) {
 		if (!room || !room.slowchat) return true;
 		let lastActiveSeconds = (Date.now() - user.lastMessageTime) / 1000;
@@ -366,6 +385,11 @@ class CommandContext {
 			message = message.replace(/[\u0300-\u036f\u0483-\u0489\u0610-\u0615\u064B-\u065F\u0670\u06D6-\u06DC\u06DF-\u06ED\u0E31\u0E34-\u0E3A\u0E47-\u0E4E]{3,}/g, '');
 			if (/[\u239b-\u23b9]/.test(message)) {
 				this.errorReply("Your message contains banned characters.");
+				return false;
+			}
+
+			if (this.checkFormat(room, message) && !user.can('mute', null, room)) {
+				this.errorReply("Your message was not sent because it contained " + this.checkFormat(room, message));
 				return false;
 			}
 
