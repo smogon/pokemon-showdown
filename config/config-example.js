@@ -233,7 +233,6 @@ exports.replsocketmode = 0o600;
 //     - declare: /declare command.
 //     - announce: /announce command.
 //     - modchat: Set modchat.
-//     - slowchat: Set slowchat.
 //     - potd: Set PotD.
 //     - forcewin: /forcewin command.
 //     - battlemessage: /a command.
@@ -319,7 +318,6 @@ exports.grouplist = [
 		jurisdiction: 'u',
 		ban: true,
 		modchat: true,
-		slowchat: true,
 		roomvoice: true,
 		forcerename: true,
 		ip: true,

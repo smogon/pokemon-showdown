@@ -26,6 +26,7 @@ const HOURMUTE_LENGTH = 60 * 60 * 1000;
 
 const SLOWCHAT_MINIMUM = 2;
 const SLOWCHAT_MAXIMUM = 60;
+const SLOWCHAT_USER_REQUIREMENT = 10;
 
 exports.commands = {
 
@@ -1767,7 +1768,7 @@ exports.commands = {
 	slowchat: function (target, room, user) {
 		if (!target) return this.sendReply("Slow chat is currently set to: " + (room.slowchat ? room.slowchat : false));
 		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
-		if (!this.can('slowchat', null, room)) return false;
+		if (!this.can('editroom', null, room)) return false;
 
 		let targetInt = parseInt(target);
 		if (target === 'off' || target === 'disable') {
@@ -1775,6 +1776,7 @@ exports.commands = {
 			room.slowchat = false;
 			this.add("|raw|<div class=\"broadcast-blue\"><b>Slow chat was disabled!</b><br />There is no longer a set minimum time between messages.</div>");
 		} else if (targetInt) {
+			if (room.userCount < SLOWCHAT_USER_REQUIREMENT) return this.errorReply("This room must have at least " + SLOWCHAT_USER_REQUIREMENT + " users to set slowchat; it only has " + room.userCount + " right now.");
 			if (room.slowchat === targetInt) return this.errorReply("Slow chat is already set for " + room.slowchat + " seconds in this room.");
 			if (targetInt < SLOWCHAT_MINIMUM) targetInt = SLOWCHAT_MINIMUM;
 			if (targetInt > SLOWCHAT_MAXIMUM) targetInt = SLOWCHAT_MAXIMUM;
