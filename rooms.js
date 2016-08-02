@@ -867,6 +867,8 @@ let BattleRoom = (() => {
 		this.modchat = (Config.battlemodchat || false);
 		this.modjoin = false;
 		this.slowchat = false;
+		this.filterStretching = false;
+		this.filterCaps = false;
 		this.reportJoins = Config.reportbattlejoins;
 
 		format = '' + (format || '');
@@ -1354,6 +1356,8 @@ let ChatRoom = (() => {
 		this.destroyingLog = false;
 		if (!this.modchat) this.modchat = (Config.chatmodchat || false);
 		if (!this.modjoin) this.modjoin = false;
+		if (!this.filterStretching) this.filterStretching = false;
+		if (!this.filterCaps) this.filterCaps = false;
 
 		if (Config.logchat) {
 			this.rollLogFile(true);
