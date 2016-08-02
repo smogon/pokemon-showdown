@@ -71,6 +71,7 @@ let rangeTelefonica = cidr.checker('181.64.0.0/14');
 let rangeTelstra = cidr.checker('101.160.0.0/11');
 let rangeStarhub = cidr.checker(['27.125.128.0/18', '101.127.0.0/17', '116.88.0.0/17', '122.11.192.0/18', '182.19.128.0/17', '182.55.0.0/16', '183.90.0.0/17', '203.116.122.0/23']);
 let rangeUltrasurf = cidr.checker('65.49.0.0/17');
+let rangeTmobile = cidr.checker('172.32.0.0/11');
 
 Dnsbl.reverse = function reverseDns(ip, callback) {
 	if (ip) {
@@ -78,11 +79,11 @@ Dnsbl.reverse = function reverseDns(ip, callback) {
 			callback(null, ['ideacellular.mobile-nohost']);
 			return;
 		}
-		if (ip.startsWith('172.56.') || ip.startsWith('149.254.')) {
+		if (rangeTmobile(ip) || ip.startsWith('149.254.')) {
 			callback(null, ['tmobile.mobile-nohost']);
 			return;
 		}
-		if (ip.startsWith('167.114.')) {
+		if (ip.startsWith('167.114.') || ip.startsWith('149.56.')) {
 			callback(null, ['ovh.proxy-nohost']);
 			return;
 		}
