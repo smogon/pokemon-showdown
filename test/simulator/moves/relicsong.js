@@ -18,6 +18,14 @@ describe('Relic Song', function () {
 		assert.strictEqual(battle.p1.active[0].template.speciesid, 'meloettapirouette');
 	});
 
+	it('should transform Meloetta-Pirouette into its Aria forme', function () {
+		battle = common.createBattle();
+		battle.join('p1', 'Guest 1', 1, [{species: "Meloetta-Pirouette", ability: 'serenegrace', moves: ['relicsong']}]);
+		battle.join('p2', 'Guest 2', 1, [{species: "Registeel", ability: 'clearbody', moves: ['rest']}]);
+		battle.commitDecisions();
+		assert.strictEqual(battle.p1.active[0].template.speciesid, 'meloetta');
+	});
+
 	it('should pierce through substitutes', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Deoxys-Attack", ability: 'victorystar', item: 'laggingtail', moves: ['splash', 'relicsong']}]);
