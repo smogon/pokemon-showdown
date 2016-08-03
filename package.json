@@ -50,8 +50,8 @@
   "license": "MIT",
   "devDependencies": {
     "eslint": "^3.2.2",
-    "mocha": "^2.4.5",
-    "mock-fs": "^3.8.0",
+    "mocha": "^3.0.0",
+    "mock-fs": "3.10.0",
     "fuzzur": "0.1.2"
   }
 }
