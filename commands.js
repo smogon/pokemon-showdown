@@ -1821,7 +1821,7 @@ exports.commands = {
 			Rooms.global.writeChatRoomData();
 		}
 	},
-	slowchathelp: ["/slowchat [number] - Sets slowchat in the room for [number] seconds. Must be between 2-60 seconds. Requires @ * # & ~",
+	slowchathelp: ["/slowchat [number] - Sets a limit on how often users in the room can send messages, between 2 and 60 seconds. Requires @ * # & ~",
 		"/slowchat [off/disable] - Disables slowchat in the room. Requires @ * # & ~"],
 
 	stretching: function (target, room, user) {
