@@ -371,19 +371,18 @@ exports.Formats = [
 		section: "OM of the Month",
 		column: 2,
 
-		ruleset: ['OU'],
-		banlist: ['Mewtwo', 'Lugia', 'Ho-Oh', 'Blaziken', 'Kyogre', 'Groudon', 'Rayquaza', 'Deoxys', 'Deoxys-Attack', 'Deoxys-Defense', 'Deoxys-Speed',
-			'Dialga', 'Palkia', 'Giratina', 'Giratina-Origin', 'Darkrai', 'Shaymin-Sky', 'Arceus', 'Reshiram', 'Zekrom', 'Landorus', 'Kyurem-White',
-			'Genesect', 'Greninja', 'Xerneas', 'Yveltal', 'Hoopa-Unbound', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Salamencite',
-			'Regigigas', 'Shedinja', 'Slaking', 'Smeargle', 'Arena Trap', 'Huge Power', 'Imposter', 'Pure Power', 'Shadow Tag', 'Chatter',
+		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
+		banlist: ['Regigigas', 'Shedinja', 'Slaking', 'Smeargle', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Salamencite', 'Soul Dew',
+			'Arena Trap', 'Huge Power', 'Imposter', 'Pure Power', 'Shadow Tag', 'Chatter',
 		],
 		validateSet: function (set, teamHas) {
 			let species = toId(set.species);
 			let template = this.tools.getTemplate(species);
 			if (!template.exists) return ["" + set.species + " is not a real Pok\u00E9mon."];
 			if (template.battleOnly) template = this.tools.getTemplate(template.baseSpecies);
-			if (template.isUnreleased) return ["" + set.species + " is unreleased."];
-			if (this.tools.getBanlistTable(this.format)[template.id]) return ["" + template.species + " is banned by Follow The Leader."];
+			if (this.tools.getBanlistTable(this.format)[template.id] || template.tier in {'Uber': 1, 'Unreleased': 1} && template.species !== 'Aegislash') {
+				return ["" + template.species + " is banned by Follow The Leader."];
+			}
 
 			if (!teamHas.donorTemplate) teamHas.donorTemplate = template;
 			let name = set.name;
