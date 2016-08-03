@@ -55,6 +55,8 @@ let MafiaFunctions = {
 // Every role has a side they belong to, as well as all functions they have. These functions are objects with the targeting mechanics and a callback.
 // events are atStart, onNight, onDay, onLynch.
 exports.MafiaClasses = {
+	__proto__:null,
+
 	villager: {
 		name: "Villager",
 		side: 'town',

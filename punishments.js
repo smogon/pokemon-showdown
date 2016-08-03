@@ -132,7 +132,7 @@ Punishments.renderEntry = function (entry, id) {
 };
 
 Punishments.loadBanlist = function () {
-	return new Promise(function (resolve, reject) {
+	return new Promise((resolve, reject) => {
 		fs.readFile(path.resolve(__dirname, 'config/ipbans.txt'), (err, data) => {
 			if (err) return reject(err);
 			data = ('' + data).split("\n");
