@@ -49,7 +49,7 @@
   "private": true,
   "license": "MIT",
   "devDependencies": {
-    "eslint": "^2.8.0",
+    "eslint": "^3.2.2",
     "mocha": "^2.4.5",
     "mock-fs": "^3.8.0",
     "fuzzur": "0.1.2"

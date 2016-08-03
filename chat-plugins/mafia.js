@@ -730,7 +730,7 @@ exports.commands = {
 				let roleList = [];
 
 				for (let i in targetObj.classes) {
-					if (!MafiaData.MafiaClasses.hasOwnProperty(i)) {
+					if (!MafiaData.MafiaClasses[i]) {
 						return this.errorReply(Tools.escapeHTML(i) + " is not a valid mafia class.");
 					}
 
@@ -765,7 +765,7 @@ exports.commands = {
 				if (!params) return this.errorReply("No roles entered.");
 
 				for (let i = 0; i < params.length; i++) {
-					if (!MafiaData.MafiaClasses.hasOwnProperty(params[i])) {
+					if (!MafiaData.MafiaClasses[params[i]]) {
 						return this.errorReply(Tools.escapeHTML(params[i]) + " is not a valid mafia class.");
 					}
 				}
