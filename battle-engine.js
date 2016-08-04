@@ -12,97 +12,7 @@
 
 'use strict';
 
-global.Config = require('./config/config.js');
-
-if (Config.crashguard) {
-	// graceful crash - allow current battles to finish before restarting
-	process.on('uncaughtException', err => {
-		require('./crashlogger.js')(err, 'A simulator process');
-	});
-}
-
-global.Tools = require('./tools.js').includeMods();
-global.toId = Tools.getId;
-
 let Battle, BattleSide, BattlePokemon;
-
-let Battles = Object.create(null);
-
-require('./repl.js').start('battle-engine-', process.pid, cmd => eval(cmd));
-
-// Receive and process a message sent using Simulator.prototype.send in
-// another process.
-process.on('message', message => {
-	//console.log('CHILD MESSAGE RECV: "' + message + '"');
-	let nlIndex = message.indexOf("\n");
-	let more = '';
-	if (nlIndex > 0) {
-		more = message.substr(nlIndex + 1);
-		message = message.substr(0, nlIndex);
-	}
-	let data = message.split('|');
-	if (data[1] === 'init') {
-		if (!Battles[data[0]]) {
-			try {
-				Battles[data[0]] = Battle.construct(data[0], data[2], data[3]);
-			} catch (err) {
-				if (require('./crashlogger.js')(err, 'A battle', {
-					message: message,
-				}) === 'lockdown') {
-					let ministack = Tools.escapeHTML(err.stack).split("\n").slice(0, 2).join("<br />");
-					process.send(data[0] + '\nupdate\n|html|<div class="broadcast-red"><b>A BATTLE PROCESS HAS CRASHED:</b> ' + ministack + '</div>');
-				} else {
-					process.send(data[0] + '\nupdate\n|html|<div class="broadcast-red"><b>The battle crashed!</b><br />Don\'t worry, we\'re working on fixing it.</div>');
-				}
-			}
-		}
-	} else if (data[1] === 'dealloc') {
-		if (Battles[data[0]] && Battles[data[0]].destroy) {
-			Battles[data[0]].destroy();
-		} else {
-			require('./crashlogger.js')(new Error("Invalid dealloc"), 'A battle', {
-				message: message,
-			});
-		}
-		delete Battles[data[0]];
-	} else {
-		let battle = Battles[data[0]];
-		if (battle) {
-			let prevRequest = battle.currentRequest;
-			let prevRequestDetails = battle.currentRequestDetails || '';
-			try {
-				battle.receive(data, more);
-			} catch (err) {
-				require('./crashlogger.js')(err, 'A battle', {
-					message: message,
-					currentRequest: prevRequest,
-					log: '\n' + battle.log.join('\n').replace(/\n\|split\n[^\n]*\n[^\n]*\n[^\n]*\n/g, '\n'),
-				});
-
-				let logPos = battle.log.length;
-				battle.add('html', '<div class="broadcast-red"><b>The battle crashed</b><br />You can keep playing but it might crash again.</div>');
-				let nestedError;
-				try {
-					battle.makeRequest(prevRequest, prevRequestDetails);
-				} catch (e) {
-					nestedError = e;
-				}
-				battle.sendUpdates(logPos);
-				if (nestedError) {
-					throw nestedError;
-				}
-			}
-		} else if (data[1] === 'eval') {
-			try {
-				eval(data[2]);
-			} catch (e) {}
-		}
-	}
-});
-
-process.on('disconnect', () => {
-	process.exit();
-});
 
 BattlePokemon = (() => {
 	function BattlePokemon(set, side) {
@@ -1996,7 +1906,7 @@ Battle = (() => {
 
 	Battle.construct = (() => {
 		let battleProtoCache = new Map();
-		return (roomid, formatarg, rated) => {
+		return (roomid, formatarg, rated, send) => {
 			let format = Tools.getFormat(formatarg);
 			let mod = format.mod || 'base';
 			if (!battleProtoCache.has(mod)) {
@@ -2009,7 +1919,7 @@ Battle = (() => {
 				battleProtoCache.set(mod, battle);
 			}
 			let battle = Object.create(battleProtoCache.get(mod));
-			Battle.prototype.init.call(battle, roomid, format, rated);
+			Battle.prototype.init.call(battle, roomid, format, rated, send);
 			return battle;
 		};
 	})();
@@ -2021,7 +1931,7 @@ Battle = (() => {
 
 	Battle.prototype = {};
 
-	Battle.prototype.init = function (roomid, format, rated) {
+	Battle.prototype.init = function (roomid, format, rated, send) {
 		this.log = [];
 		this.sides = [null, null];
 		this.roomid = roomid;
@@ -2045,6 +1955,10 @@ Battle = (() => {
 		this.messageLog = [];
 
 		this.startingSeed = this.generateSeed();
+
+		if (typeof send === 'function') {
+			this.send = send;
+		}
 	};
 
 	Battle.prototype.turn = 0;
@@ -5013,12 +4927,12 @@ Battle = (() => {
 
 	// IPC
 
+	// This function is overridden in Battle.construct.
 	// Messages sent by this function are received and handled in
 	// Battle.prototype.receive in simulator.js (in another process).
 	Battle.prototype.send = function (type, data) {
-		if (Array.isArray(data)) data = data.join("\n");
-		process.send(this.id + "\n" + type + "\n" + data);
 	};
+
 	// This function is called by this process's 'message' event.
 	Battle.prototype.receive = function (data, more) {
 		this.messageLog.push(data.join(' '));
@@ -5148,9 +5062,6 @@ Battle = (() => {
 
 		// in case the garbage collector really sucks, at least deallocate the log
 		this.log = null;
-
-		// remove from battle list
-		Battles[this.id] = null;
 	};
 	return Battle;
 })();
