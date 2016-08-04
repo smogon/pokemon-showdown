@@ -1099,7 +1099,7 @@ exports.commands = {
 		let userid = room.isRoomBanned(targetUser) || toId(target);
 
 		if (!userid) return this.errorReply("User '" + target + "' is an invalid username.");
-		if (targetUser && !this.can('ban', targetUser, room)) return false;
+		if (!this.can('ban', null, room)) return false;
 		let unbannedUserid = room.unRoomBan(userid);
 		if (!unbannedUserid) return this.errorReply("User " + userid + " is not banned from room " + room.id + ".");
 
