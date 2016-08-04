@@ -28,7 +28,6 @@ function init(callback) {
 	}
 
 	// Turn IPC methods into no-op
-	BattleEngine.Battle.prototype.send = noop;
 	BattleEngine.Battle.prototype.receive = noop;
 
 	let Simulator = global.Simulator;

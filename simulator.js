@@ -13,11 +13,14 @@
 
 'use strict';
 
+global.Config = require('./config/config.js');
+
 const ProcessManager = require('./process-manager');
+const BattleEngine = require('./battle-engine').Battle;
 
 const SimulatorProcess = new ProcessManager({
 	maxProcesses: Config.simulatorprocesses,
-	execFile: 'battle-engine.js',
+	execFile: 'simulator.js',
 	onMessageUpstream: function (message) {
 		let lines = message.split('\n');
 		let battle = this.pendingTasks.get(lines[0]);
@@ -29,9 +32,6 @@ const SimulatorProcess = new ProcessManager({
 		}
 	},
 });
-
-// Create the initial set of simulator processes.
-SimulatorProcess.spawn();
 
 let slice = Array.prototype.slice;
 
@@ -442,3 +442,109 @@ exports.SimulatorProcess = SimulatorProcess;
 exports.create = function (id, format, rated, room) {
 	return new Battle(room, format, rated);
 };
+
+if (process.send && module === process.mainModule) {
+	// This is a child process!
+
+	global.Tools = require('./tools.js').includeMods();
+	global.toId = Tools.getId;
+
+	if (Config.crashguard) {
+		// graceful crash - allow current battles to finish before restarting
+		process.on('uncaughtException', err => {
+			require('./crashlogger.js')(err, 'A simulator process');
+		});
+	}
+
+	require('./repl.js').start('battle-engine-', process.pid, cmd => eval(cmd));
+
+	let Battles = Object.create(null);
+
+	// Receive and process a message sent using Simulator.prototype.send in
+	// another process.
+	process.on('message', message => {
+		//console.log('CHILD MESSAGE RECV: "' + message + '"');
+		let nlIndex = message.indexOf("\n");
+		let more = '';
+		if (nlIndex > 0) {
+			more = message.substr(nlIndex + 1);
+			message = message.substr(0, nlIndex);
+		}
+		let data = message.split('|');
+		if (data[1] === 'init') {
+			if (!Battles[data[0]]) {
+				try {
+					Battles[data[0]] = BattleEngine.construct(data[0], data[2], data[3], sendBattleMessage);
+				} catch (err) {
+					if (require('./crashlogger.js')(err, 'A battle', {
+						message: message,
+					}) === 'lockdown') {
+						let ministack = Tools.escapeHTML(err.stack).split("\n").slice(0, 2).join("<br />");
+						process.send(data[0] + '\nupdate\n|html|<div class="broadcast-red"><b>A BATTLE PROCESS HAS CRASHED:</b> ' + ministack + '</div>');
+					} else {
+						process.send(data[0] + '\nupdate\n|html|<div class="broadcast-red"><b>The battle crashed!</b><br />Don\'t worry, we\'re working on fixing it.</div>');
+					}
+				}
+			}
+		} else if (data[1] === 'dealloc') {
+			if (Battles[data[0]] && Battles[data[0]].destroy) {
+				const id = data[0];
+				Battles[id].destroy();
+
+				// remove from battle list
+				Battles[id] = null;
+			} else {
+				require('./crashlogger.js')(new Error("Invalid dealloc"), 'A battle', {
+					message: message,
+				});
+			}
+			delete Battles[data[0]];
+		} else {
+			let battle = Battles[data[0]];
+			if (battle) {
+				let prevRequest = battle.currentRequest;
+				let prevRequestDetails = battle.currentRequestDetails || '';
+				try {
+					battle.receive(data, more);
+				} catch (err) {
+					require('./crashlogger.js')(err, 'A battle', {
+						message: message,
+						currentRequest: prevRequest,
+						log: '\n' + battle.log.join('\n').replace(/\n\|split\n[^\n]*\n[^\n]*\n[^\n]*\n/g, '\n'),
+					});
+
+					let logPos = battle.log.length;
+					battle.add('html', '<div class="broadcast-red"><b>The battle crashed</b><br />You can keep playing but it might crash again.</div>');
+					let nestedError;
+					try {
+						battle.makeRequest(prevRequest, prevRequestDetails);
+					} catch (e) {
+						nestedError = e;
+					}
+					battle.sendUpdates(logPos);
+					if (nestedError) {
+						throw nestedError;
+					}
+				}
+			} else if (data[1] === 'eval') {
+				try {
+					eval(data[2]);
+				} catch (e) {}
+			}
+		}
+	});
+
+	process.on('disconnect', () => {
+		process.exit();
+	});
+} else {
+	// Create the initial set of simulator processes.
+	SimulatorProcess.spawn();
+}
+
+// Messages sent by this function are received and handled in
+// Battle.prototype.receive in simulator.js (in another process).
+function sendBattleMessage(type, data) {
+	if (Array.isArray(data)) data = data.join("\n");
+	process.send(this.id + "\n" + type + "\n" + data);
+}
