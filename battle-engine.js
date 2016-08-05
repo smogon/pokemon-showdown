@@ -1440,8 +1440,14 @@ BattleSide = (() => {
 	BattleSide.prototype.emitRequest = function (update) {
 		this.battle.send('request', this.id + "\n" + this.battle.rqid + "\n" + JSON.stringify(update));
 	};
-	BattleSide.prototype.acceptChoice = function (offset, choiceData) {
-		this.battle.send('choice', this.id + "\n" + this.battle.rqid + "\n" + offset + "\n" + JSON.stringify(choiceData));
+	BattleSide.prototype.updateChoice = function () {
+		const offset = this.choiceData.choices.length;
+		this.battle.send('choice', this.id + "\n" + this.battle.rqid + "\n" + offset + "\n" + JSON.stringify({
+			done: this.choiceData.choices.map((choice, index) => choice === 'skip' ? '' : '' + index).join(""),
+			leave: Array.from(this.choiceData.leaveIndices).join(""),
+			enter: Array.from(this.choiceData.enterIndices).join(""),
+			team: this.currentRequest === 'teampreview' ? this.choiceData.decisions.map(decision => decision.pokemon.position + 1).join("") : null,
+		}));
 	};
 
 	BattleSide.prototype.getDecisionsFinished = function () {
@@ -4591,16 +4597,7 @@ Battle = (() => {
 			}
 		}
 
-		const queuedDecisions = side.choiceData.choices.length;
-		if (queuedDecisions) {
-			side.acceptChoice(queuedDecisions, {
-				done: side.choiceData.choices.map((choice, index) => choice === 'skip' ? '' : '' + index).join(""),
-				leave: Array.from(side.choiceData.leaveIndices).join(""),
-				enter: Array.from(side.choiceData.enterIndices).join(""),
-				team: side.currentRequest === 'teampreview' ? side.choiceData.decisions.map(decision => decision.pokemon.position + 1).join("") : null,
-			});
-		}
-
+		side.updateChoice();
 		this.checkDecisions();
 	};
 
@@ -4813,6 +4810,7 @@ Battle = (() => {
 		if (stepsBack !== true && isNaN(stepsBack)) return;
 
 		side.undoChoices(stepsBack);
+		side.updateChoice();
 	};
 	Battle.prototype.checkDecisions = function () {
 		let totalDecisions = 0;
