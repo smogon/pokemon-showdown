@@ -1010,27 +1010,26 @@ exports.BattleMovedex = {
 			},
 			onDamagePriority: -101,
 			onDamage: function (damage, target, source, move) {
-				if (!move || move.effectType !== 'Move') return;
-				if (!source || source.side === target.side) return;
+				if (!move || move.effectType !== 'Move' || !source) return;
 				this.effectData.totalDamage += damage;
-				this.effectData.sourcePosition = source.position;
-				this.effectData.sourceSide = source.side;
+				this.effectData.lastDamageSource = source;
 			},
 			onAfterSetStatus: function (status, pokemon) {
 				if (status.id === 'slp') {
 					pokemon.removeVolatile('bide');
 				}
 			},
-			onBeforeMove: function (pokemon) {
+			onBeforeMove: function (pokemon, target, move) {
 				if (this.effectData.duration === 1) {
 					this.add('-end', pokemon, 'Bide');
-					if (!this.effectData.totalDamage) {
+					target = this.effectData.lastDamageSource;
+					if (!target || !this.effectData.totalDamage) {
 						this.add('-fail', pokemon);
 						return false;
 					}
-					let target = this.effectData.sourceSide.active[this.effectData.sourcePosition];
-					if (!target) {
-						this.add('-fail', pokemon);
+					if (!target.isActive) target = this.resolveTarget(pokemon, this.getMove('pound'));
+					if (!this.isAdjacent(pokemon, target)) {
+						this.add('-miss', pokemon, target);
 						return false;
 					}
 					if (!target.runImmunity('Normal')) {
