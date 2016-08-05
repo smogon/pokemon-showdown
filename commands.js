@@ -1825,7 +1825,7 @@ exports.commands = {
 		"/slowchat [off/disable] - Disables slowchat in the room. Requires @ * # & ~"],
 
 	stretching: function (target, room, user) {
-		if (!target) return this.sendReply("Stretching in this room is currently set to: " + (room.stretching ? room.stretching : false));
+		if (!target) return this.sendReply("Stretching in this room is currently set to: " + (room.filterStretching ? room.filterStretching : false));
 		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
 		if (!this.can('editroom', null, room)) return false;
 
@@ -1838,7 +1838,7 @@ exports.commands = {
 		} else {
 			return this.parse("/help stretching");
 		}
-		this.privateModCommand("(" + user.name + " set stretching to " + room.stretching + ")");
+		this.privateModCommand("(" + user.name + " set stretching to " + room.filterStretching + ")");
 
 		if (room.chatRoomData) {
 			room.chatRoomData.filterStretching = room.filterStretching;
@@ -1848,7 +1848,7 @@ exports.commands = {
 	stretchinghelp: ["/stretching [enable/disable] - Toggles having the server check messages containing too much stretching. Requires "],
 
 	capitals: function (target, room, user) {
-		if (!target) return this.sendReply("Capitals in this room is currently set to: " + (room.capitals ? room.capitals : false));
+		if (!target) return this.sendReply("Capitals in this room is currently set to: " + (room.filterCaps ? room.filterCaps : false));
 		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
 		if (!this.can('editroom', null, room)) return false;
 
@@ -1861,7 +1861,7 @@ exports.commands = {
 		} else {
 			return this.parse("/help capitals");
 		}
-		this.privateModCommand("(" + user.name + " set capitals to " + room.capitals + ")");
+		this.privateModCommand("(" + user.name + " set capitals to " + room.filterCaps + ")");
 
 		if (room.chatRoomData) {
 			room.chatRoomData.filterCaps = room.filterCaps;
