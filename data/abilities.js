@@ -787,7 +787,7 @@ exports.BattleAbilities = {
 			delete this.effectData.forme;
 		},
 		onUpdate: function (pokemon) {
-			if (!pokemon.isActive || pokemon.baseTemplate.speciesid !== 'cherrim') return;
+			if (!pokemon.isActive || pokemon.baseTemplate.baseSpecies !== 'Cherrim' || pokemon.transformed) return;
 			if (this.isWeather(['sunnyday', 'desolateland'])) {
 				if (pokemon.template.speciesid !== 'cherrimsunshine') {
 					pokemon.formeChange('Cherrim-Sunshine');
@@ -802,14 +802,14 @@ exports.BattleAbilities = {
 		},
 		onModifyAtkPriority: 3,
 		onAllyModifyAtk: function (atk) {
-			if (this.effectData.target.baseTemplate.speciesid !== 'cherrim') return;
+			if (this.effectData.target.baseTemplate.baseSpecies !== 'Cherrim') return;
 			if (this.isWeather(['sunnyday', 'desolateland'])) {
 				return this.chainModify(1.5);
 			}
 		},
 		onModifySpDPriority: 4,
 		onAllyModifySpD: function (spd) {
-			if (this.effectData.target.baseTemplate.speciesid !== 'cherrim') return;
+			if (this.effectData.target.baseTemplate.baseSpecies !== 'Cherrim') return;
 			if (this.isWeather(['sunnyday', 'desolateland'])) {
 				return this.chainModify(1.5);
 			}
@@ -849,7 +849,7 @@ exports.BattleAbilities = {
 		desc: "If this Pokemon is a Castform, its type changes to the current weather condition's type, except Sandstorm.",
 		shortDesc: "Castform's type changes to the current weather condition's type, except Sandstorm.",
 		onUpdate: function (pokemon) {
-			if (pokemon.baseTemplate.species !== 'Castform' || pokemon.transformed) return;
+			if (pokemon.baseTemplate.baseSpecies !== 'Castform' || pokemon.transformed) return;
 			let forme = null;
 			switch (this.effectiveWeather()) {
 			case 'sunnyday':
@@ -3311,12 +3311,13 @@ exports.BattleAbilities = {
 		shortDesc: "If Darmanitan, at end of turn changes Mode to Standard if > 1/2 max HP, else Zen.",
 		onResidualOrder: 27,
 		onResidual: function (pokemon) {
-			if (pokemon.baseTemplate.species !== 'Darmanitan' || pokemon.transformed) {
+			if (pokemon.baseTemplate.baseSpecies !== 'Darmanitan' || pokemon.transformed) {
 				return;
 			}
 			if (pokemon.hp <= pokemon.maxhp / 2 && pokemon.template.speciesid === 'darmanitan') {
 				pokemon.addVolatile('zenmode');
 			} else if (pokemon.hp > pokemon.maxhp / 2 && pokemon.template.speciesid === 'darmanitanzen') {
+				pokemon.addVolatile('zenmode'); // in case of base Darmanitan-Zen
 				pokemon.removeVolatile('zenmode');
 			}
 		},
@@ -3330,18 +3331,12 @@ exports.BattleAbilities = {
 		},
 		effect: {
 			onStart: function (pokemon) {
-				if (pokemon.formeChange('Darmanitan-Zen')) {
-					this.add('-formechange', pokemon, 'Darmanitan-Zen', '[from] ability: Zen Mode');
-				} else {
-					return false;
-				}
+				if (pokemon.template.speciesid === 'darmanitanzen' || !pokemon.formeChange('Darmanitan-Zen')) return;
+				this.add('-formechange', pokemon, 'Darmanitan-Zen', '[from] ability: Zen Mode');
 			},
 			onEnd: function (pokemon) {
-				if (pokemon.formeChange('Darmanitan')) {
-					this.add('-formechange', pokemon, 'Darmanitan', '[from] ability: Zen Mode');
-				} else {
-					return false;
-				}
+				if (!pokemon.formeChange('Darmanitan')) return;
+				this.add('-formechange', pokemon, 'Darmanitan', '[from] ability: Zen Mode');
 			},
 		},
 		id: "zenmode",
