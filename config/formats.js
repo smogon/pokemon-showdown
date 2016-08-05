@@ -402,7 +402,7 @@ exports.Formats = [
 		section: "OM of the Month",
 
 		ruleset: ['OU'],
-		banlist: ['Talonflame'],
+		banlist: ['Chansey', 'Talonflame'],
 		onBegin: function () {
 			let allPokemon = this.p1.pokemon.concat(this.p2.pokemon);
 			for (let i = 0, len = allPokemon.length; i < len; i++) {
