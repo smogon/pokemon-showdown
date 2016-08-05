@@ -973,7 +973,6 @@ let BattleRoom = (() => {
 		}
 		if (this.tour) {
 			this.tour.onBattleWin(this, winnerid);
-			this.tour = null;
 		}
 		this.update();
 	};
@@ -1302,7 +1301,7 @@ let BattleRoom = (() => {
 
 		if (this.tour) {
 			// resolve state of the tournament;
-			this.tour.onBattleWin(this, '');
+			if (!this.battle.ended) this.tour.onBattleWin(this, '');
 			this.tour = null;
 		}
 
