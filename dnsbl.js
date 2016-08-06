@@ -63,6 +63,7 @@ let cidr = require('./cidr.js');
 let rangeLeaseweb = cidr.checker('207.244.64.0/18');
 let rangeLeaseweb2 = cidr.checker('209.58.128.0/18');
 let rangeLeaseweb3 = cidr.checker('103.254.152.0/22');
+let rangeLeaseweb4 = cidr.checker('108.59.0.0/20');
 let rangeVoxility = cidr.checker('5.254.64.0/20');
 let rangeCenet = cidr.checker('27.111.64.0/21');
 let rangeQlded = cidr.checker('203.104.0.0/20');
@@ -83,7 +84,7 @@ Dnsbl.reverse = function reverseDns(ip, callback) {
 			callback(null, ['tmobile.mobile-nohost']);
 			return;
 		}
-		if (ip.startsWith('167.114.') || ip.startsWith('149.56.')) {
+		if (ip.startsWith('167.114.') || ip.startsWith('149.56.') || ip.startsWith('192.99.')) {
 			callback(null, ['ovh.proxy-nohost']);
 			return;
 		}
@@ -115,7 +116,7 @@ Dnsbl.reverse = function reverseDns(ip, callback) {
 			callback(null, ['yourserver.se.proxy-nohost']);
 			return;
 		}
-		if (rangeLeaseweb(ip) || rangeLeaseweb2(ip) || rangeLeaseweb3(ip) || rangeVoxility(ip)) {
+		if (rangeLeaseweb(ip) || rangeLeaseweb2(ip) || rangeLeaseweb3(ip) || rangeLeaseweb4(ip) || rangeVoxility(ip) || ip.startsWith('23.19.') || ip.startsWith('64.120.') || ip.startsWith('185.9.19.')) {
 			callback(null, ['zenmate.proxy-nohost']);
 			return;
 		}
