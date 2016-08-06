@@ -3103,6 +3103,7 @@ Battle = (() => {
 			pokemon.moveset[m].used = false;
 		}
 		this.add('switch', pokemon, pokemon.getDetails);
+		this.insertQueue({pokemon: pokemon, choice: 'runUnnerve'});
 		this.insertQueue({pokemon: pokemon, choice: 'runSwitch'});
 	};
 	Battle.prototype.canSwitch = function (side) {
@@ -3171,6 +3172,7 @@ Battle = (() => {
 		}
 		this.add('drag', pokemon, pokemon.getDetails);
 		if (this.gen >= 5) {
+			this.singleEvent('PreStart', pokemon.getAbility(), pokemon.abilityData, pokemon);
 			this.runEvent('SwitchIn', pokemon);
 			if (!pokemon.hp) return true;
 			pokemon.isStarted = true;
@@ -4077,6 +4079,7 @@ Battle = (() => {
 					'beforeTurn': 100,
 					'beforeTurnMove': 99,
 					'switch': 7,
+					'runUnnerve': 7.3,
 					'runSwitch': 7.2,
 					'runPrimal': 7.1,
 					'instaswitch': 101,
@@ -4341,6 +4344,9 @@ Battle = (() => {
 			}
 
 			this.switchIn(decision.target, decision.pokemon.position);
+			break;
+		case 'runUnnerve':
+			this.singleEvent('PreStart', decision.pokemon.getAbility(), decision.pokemon.abilityData, decision.pokemon);
 			break;
 		case 'runSwitch':
 			this.runEvent('SwitchIn', decision.pokemon);
