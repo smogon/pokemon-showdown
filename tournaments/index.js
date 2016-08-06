@@ -37,6 +37,7 @@ class Tournament {
 		this.isRated = isRated;
 		this.scouting = true;
 		this.modjoin = false;
+		this.reportjoins = true;
 		this.autostartcap = false;
 		if (Config.tournamentDefaultPlayerCap && this.playerCap > Config.tournamentDefaultPlayerCap) {
 			Monitor.log('[TourMonitor] Room ' + room.id + ' starting a tour over default cap (' + this.playerCap + ')');
@@ -236,7 +237,7 @@ class Tournament {
 
 		this.players[user.userid] = player;
 		this.playerCount++;
-		this.room.add('|tournament|join|' + user.name);
+		if (this.reportjoins) this.room.add('|tournament|join|' + user.name);
 		user.sendTo(this.room, '|tournament|update|{"isJoined":true}');
 		this.isBracketInvalidated = true;
 		this.update();
@@ -262,7 +263,7 @@ class Tournament {
 		this.players[user.userid].destroy();
 		delete this.players[user.userid];
 		this.playerCount--;
-		this.room.add('|tournament|leave|' + user.name);
+		if (this.reportjoins) this.room.add('|tournament|leave|' + user.name);
 		user.sendTo(this.room, '|tournament|update|{"isJoined":false}');
 		this.isBracketInvalidated = true;
 		this.update();
@@ -1072,6 +1073,30 @@ let commands = {
 				return this.sendReply("Usage: " + cmd + " <allow|disallow>");
 			}
 		},
+		reportjoin: 'reportjoins',
+		reportjoins: function (tournament, user, params, cmd) {
+			if (tournament.isTournamentStarted) return this.errorReply("This command can only be used during the signup phase.");
+			if (params.length < 1) {
+				if (tournament.reportjoins) {
+					return this.sendReply("This tournament is currently reporting join/leaves to the chat while in signup phase.");
+				} else {
+					return this.sendReply("This tournament is currently NOT reporting join/leaves to the chat while in signup phase.");
+				}
+			}
+
+			let option = params[0].toLowerCase();
+			if (option === 'on' || option === 'enable') {
+				if (tournament.reportjoins) return this.errorReply("This tournament is already set to report join/leave messages during the signup phase.");
+				tournament.reportjoins = true;
+				this.privateModCommand("(The tournament was set to report users joining/leaving the tournament while in signup phase by " + user.name + ")");
+			} else if (option === 'off' || option === 'disable') {
+				if (!tournament.reportjoins) return this.errorReply("This tournament is already set to not report join/leave messages during the signup phase.");
+				tournament.reportjoins = false;
+				this.privateModCommand("(The tournament was set to NOT report users joining/leaving the tournament while in signup phase by " + user.name + ")");
+			} else {
+				return this.sendReply("Usage: " + cmd + " <on|off>");
+			}
+		},
 	},
 };
 
@@ -1219,6 +1244,7 @@ CommandParser.commands.tournamenthelp = function (target, room, user) {
 		"- getusers: Lists the users in the current tournament.<br />" +
 		"- on/off: Enables/disables allowing mods to start tournaments in the current room.<br />" +
 		"- announce/announcements &lt;on|off>: Enables/disables tournament announcements for the current room.<br />" +
+		"- reportjoin/reportjoins &lt;on|off>: If disabled, then users joining/leaving the tournament during signup phase will not be reported to the chat.<br />" +
 		"More detailed help can be found <a href=\"https://www.smogon.com/forums/threads/3570628/#post-6777489\">here</a>"
 	);
 };
