@@ -1124,6 +1124,10 @@ exports.commands = {
 	j: 'join',
 	join: function (target, room, user, connection) {
 		if (!target) return false;
+		if (target.startsWith('http://')) target = target.slice(7);
+		if (target.startsWith('https://')) target = target.slice(8);
+		if (target.startsWith('play.pokemonshowdown.com/')) target = target.slice(25);
+		if (target.startsWith('psim.us/')) target = target.slice(8);
 		if (user.tryJoinRoom(target, connection) === null) {
 			connection.sendTo(target, "|noinit|namerequired|The room '" + target + "' does not exist or requires a login to join.");
 		}
