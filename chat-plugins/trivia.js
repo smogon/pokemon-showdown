@@ -38,7 +38,7 @@ const INTERMISSION_PHASE = 'intermission';
 const MINIMUM_PLAYERS = 3;
 
 const START_TIMEOUT = 30 * 1000;
-const QUESTION_INTERVAL = 15 * 1000;
+const QUESTION_INTERVAL = 10 * 1000;
 const INTERMISSION_INTERVAL = 30 * 1000;
 
 const MAX_QUESTION_LENGTH = 252;
@@ -295,6 +295,14 @@ class Trivia extends RoomGame {
 		this.kickedUsers.add(user.userid);
 		for (let id in user.prevNames) {
 			this.kickedUsers.add(id);
+		}
+
+		super.removePlayer(user);
+	}
+
+	leave(user) {
+		if (!this.players[user.userid]) {
+			return 'You are not a player in the current trivia game.';
 		}
 
 		super.removePlayer(user);
@@ -755,6 +763,19 @@ const commands = {
 	},
 	kickhelp: ["/trivia kick [username] - Kick players from a trivia game by username. Requires: % @ # & ~"],
 
+	leave: function (target, room, user) {
+		if (room.id !== 'trivia') return this.errorReply("This command can only be used in Trivia.");
+		if (!room.game) return this.errorReply("There is no game of trivia in progress.");
+		if (room.game.gameid !== 'trivia') {
+			return this.errorReply("There is already a game of " + room.game.title + " in progress.");
+		}
+
+		let res = room.game.leave(user);
+		if (typeof res === 'string') return this.errorReply(res);
+		this.sendReply("You have left the current game of trivia.");
+	},
+	leavehelp: ["/trivia leave - Makes the player leave the game."],
+
 	start: function (target, room) {
 		if (room.id !== 'trivia') return this.errorReply("This command can only be used in Trivia.");
 		if (!this.can('broadcast', null, room)) return false;
@@ -1161,6 +1182,7 @@ module.exports = {
 			"- /trivia start - Begin the game once enough users have signed up. Requires: + % @ # & ~",
 			"- /ta [answer] - Answer the current question.",
 			"- /trivia kick [username] - Disqualify a participant from the current trivia game. Requires: % @ # & ~",
+			"- /trivia leave - Makes the player leave the game.",
 			"- /trivia end - End a trivia game. Requires: + % @ # ~",
 			"Question modifying commands:",
 			"- /trivia submit [category] | [question] | [answer1], [answer2] ... [answern] - Add a question to the submission database for staff to review.",

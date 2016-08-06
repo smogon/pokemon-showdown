@@ -121,6 +121,17 @@ describe('Trivia', function () {
 		assert.strictEqual(this.game.playerCount, 0);
 	});
 
+	it('should make players leave the game', function () {
+		this.game.leave(this.user);
+		assert.strictEqual(this.game.players[this.user.userid], undefined);
+	});
+
+	it('should not make users who are not players leave the game', function () {
+		this.game.leave(this.user);
+		let res = this.game.leave(this.user);
+		assert.strictEqual(typeof res, 'string');
+	});
+
 	it('should verify answers correctly', function () {
 		this.game.askQuestion();
 		assert.strictEqual(this.game.verifyAnswer('answer'), true);
