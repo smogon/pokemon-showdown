@@ -745,7 +745,7 @@ class User {
 			return false;
 		}
 
-		if (this.named) this.prevNames[this.userid] = this.name;
+		if (this.named && this.userid !== userid) this.prevNames[this.userid] = this.name;
 		this.name = name;
 
 		let oldid = this.userid;
