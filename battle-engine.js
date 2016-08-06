@@ -375,7 +375,11 @@ BattlePokemon = (() => {
 				target = this.battle.resolveTarget(this, move);
 			}
 			if (target.side.active.length > 1) {
-				target = this.battle.priorityEvent('RedirectTarget', this, this, move, target);
+				if (!move.flags['charge'] || this.volatiles['twoturnmove'] ||
+						(move.id === 'solarbeam' && this.battle.isWeather(['sunnyday', 'desolateland'])) ||
+						(this.hasItem('powerherb') && move.id !== 'skydrop')) {
+					target = this.battle.priorityEvent('RedirectTarget', this, this, move, target);
+				}
 			}
 			if (selectedTarget !== target) {
 				this.battle.retargetLastMove(target);
