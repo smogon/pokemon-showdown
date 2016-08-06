@@ -215,6 +215,15 @@ class Tournament {
 			return;
 		}
 
+		let gameCount = 0;
+		for (let i in user.games) { // eslint-disable-line no-unused-vars
+			gameCount++;
+		}
+		if (gameCount > 4 || Monitor.countPrepBattle(user.latestIp, user.name)) {
+			output.errorReply("Due to high load, you are unable to join this tournament.");
+			return;
+		}
+
 		if (!isAllowAlts) {
 			let users = this.generator.getUsers();
 			for (let i = 0; i < users.length; i++) {
