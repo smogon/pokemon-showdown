@@ -489,8 +489,6 @@ exports.commands = {
 		if (targetUser.ignorePMs) return this.errorReply("This user is currently ignoring PMs.");
 		if (targetUser.locked) return this.errorReply("This user is currently locked, so you cannot send them a pminfobox.");
 
-		target = this.canTalk(target, null, targetUser);
-
 		// Apply the infobox to the message
 		target = '/raw <div class="infobox">' + target + '</div>';
 		let message = '|pm|' + user.getIdentity() + '|' + targetUser.getIdentity() + '|' + target;
