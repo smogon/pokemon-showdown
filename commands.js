@@ -1342,7 +1342,7 @@ exports.commands = {
 	joim: 'join',
 	j: 'join',
 	join: function (target, room, user, connection) {
-		if (!target) return false;
+		if (!target) return this.parse('/help join');
 		if (target.startsWith('http://')) target = target.slice(7);
 		if (target.startsWith('https://')) target = target.slice(8);
 		if (target.startsWith('play.pokemonshowdown.com/')) target = target.slice(25);
@@ -1351,6 +1351,7 @@ exports.commands = {
 			connection.sendTo(target, "|noinit|namerequired|The room '" + target + "' does not exist or requires a login to join.");
 		}
 	},
+	joinhelp: ["/join [roomname] - Attempt to join the room [roomname]."],
 
 	leave: 'part',
 	part: function (target, room, user, connection) {
