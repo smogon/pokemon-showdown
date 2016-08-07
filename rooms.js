@@ -964,6 +964,8 @@ let BattleRoom = (() => {
 			}
 			this.update();
 			this.logBattle(p1score);
+		} else {
+			this.battle.logData = null;
 		}
 		if (Config.autosavereplays) {
 			let uploader = Users.get(winnerid);
@@ -1019,11 +1021,13 @@ let BattleRoom = (() => {
 	};
 	BattleRoom.prototype.logBattle = function (p1score, p1rating, p2rating) {
 		let logData = this.battle.logData;
+		if (!logData) return;
+		this.battle.logData = null; // deallocate to save space
+		logData.log = BattleRoom.prototype.getLog.call(logData, 3); // replay log (exact damage)
 		logData.p1rating = p1rating;
 		logData.p2rating = p2rating;
 		logData.endType = this.battle.endType;
 		if (!p1rating) logData.ladderError = true;
-		logData.log = BattleRoom.prototype.getLog.call(logData, 3); // replay log (exact damage)
 		const date = new Date();
 		const logsubfolder = Tools.toTimeStamp(date).split(' ')[0];
 		const logfolder = logsubfolder.split('-', 2).join('-');
