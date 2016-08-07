@@ -459,13 +459,9 @@ Punishments.checkIp = function (user, connection) {
 		}
 	}
 
-	Dnsbl.reverse(ip, (err, hosts) => {
-		if (hosts && hosts[0]) {
-			user.latestHost = hosts[0];
-			if (Config.hostfilter) Config.hostfilter(hosts[0], user, connection);
-		} else {
-			if (Config.hostfilter) Config.hostfilter('', user, connection);
-		}
+	Dnsbl.reverse(ip).then(host => {
+		if (host) user.latestHost = host;
+		if (Config.hostfilter) Config.hostfilter(host, user, connection);
 	});
 
 	Dnsbl.query(connection.ip, isBlocked => {
