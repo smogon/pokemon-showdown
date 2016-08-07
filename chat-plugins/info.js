@@ -1649,6 +1649,7 @@ exports.commands = {
 	},
 	addhtmlbox: function (target, room, user, connection, cmd, message) {
 		if (!target) return this.parse('/help htmlbox');
+		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
 		target = this.canHTML(target);
 		if (!target) return;
 		if (!this.can('addhtml', null, room)) return;
