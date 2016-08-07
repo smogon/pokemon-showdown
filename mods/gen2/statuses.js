@@ -98,8 +98,6 @@ exports.BattleStatuses = {
 	confusion: {
 		inherit: true,
 		onStart: function (target, source, sourceEffect) {
-			let result = this.runEvent('TryConfusion', target, source, sourceEffect);
-			if (!result) return result;
 			if (sourceEffect && sourceEffect.id === 'lockedmove') {
 				this.add('-start', target, 'confusion', '[silent]');
 			} else {
