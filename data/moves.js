@@ -12017,17 +12017,9 @@ exports.BattleMovedex = {
 					return null;
 				}
 			},
-			onTryConfusion: function (target, source, effect) {
-				if (source && target !== source && effect && (!effect.infiltrates || target.side === source.side)) {
-					this.debug('interrupting addVolatile');
+			onTryAddVolatile: function (status, target, source, effect) {
+				if ((status.id === 'confusion' || status.id === 'yawn') && source && target !== source && effect && (!effect.infiltrates || target.side === source.side)) {
 					if (!effect.secondaries) this.add('-activate', target, 'move: Safeguard');
-					return null;
-				}
-			},
-			onTryAddVolatile: function (status, target, source, move) {
-				if (status.id === 'yawn' && target !== source && (!move.infiltrates || target.side === source.side)) {
-					this.debug('blocking yawn');
-					this.add('-activate', target, 'move: Safeguard');
 					return null;
 				}
 			},
