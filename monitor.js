@@ -236,4 +236,4 @@ const Monitor = module.exports = { // eslint-disable-line no-unused-vars
 	},
 };
 
-Monitor.cleanInterval = setInterval(() => Monitor.clean(), 6 * 60 * 60 * 1000);
+Monitor.cleanInterval = setInterval(() => Monitor.clean(), 2 * 60 * 60 * 1000);
