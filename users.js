@@ -352,7 +352,7 @@ class User {
 			return '‽' + this.name;
 		}
 		if (roomid) {
-			let room = Rooms.rooms[roomid];
+			let room = Rooms(roomid);
 			if (!room) {
 				throw new Error("Room doesn't exist: " + roomid);
 			}
@@ -1110,7 +1110,7 @@ class User {
 			}
 		}
 
-		if (Rooms.aliases[roomid] === room.id) {
+		if (Rooms.aliases.get(roomid) === room.id) {
 			connection.send(">" + roomid + "\n|deinit");
 		}
 

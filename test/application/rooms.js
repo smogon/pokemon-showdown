@@ -17,12 +17,8 @@ describe('Rooms features', function () {
 			});
 		});
 		describe('Rooms.rooms', function () {
-			it('should have null prototype', function () {
-				assert.strictEqual(Object.getPrototypeOf(Rooms.rooms), null);
-			});
-
-			it('should not have a native `constructor`', function () {
-				assert.ok(Rooms.rooms.constructor === undefined || Rooms.rooms.constructor instanceof Rooms.Room);
+			it('should be a Map', function () {
+				assert.ok(Rooms.rooms instanceof Map);
 			});
 		});
 	});
