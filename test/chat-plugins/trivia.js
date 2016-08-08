@@ -1,17 +1,29 @@
 'use strict';
 
 const assert = require('assert');
+const Module = require('module');
 
-const trivia = require('../../chat-plugins/trivia.js');
 const userUtils = require('../../dev-tools/users-utils.js');
-
-const SCORE_CAPS = trivia.SCORE_CAPS;
-const Trivia = trivia.Trivia;
-const FirstModeTrivia = trivia.FirstModeTrivia;
-const TimerModeTrivia = trivia.TimerModeTrivia;
-const NumberModeTrivia = trivia.NumberModeTrivia;
 const User = userUtils.User;
 const Connection = userUtils.Connection;
+
+// We can't import trivia outside of the test suite's context, since the trivia
+// module doesn't have access to any of the globals defined in app.js from this
+// context. For now we'll just construct a skeleton module representing the
+// trivia module and wait...
+const triviaModule = (() => {
+	let pathname = require.resolve('../../chat-plugins/trivia.js');
+	let ret = new Module(pathname, module);
+	Module._preloadModules(ret);
+
+	return ret;
+})();
+
+let SCORE_CAPS;
+let Trivia;
+let FirstModeTrivia;
+let TimerModeTrivia;
+let NumberModeTrivia;
 
 function makeUser(name, connection) {
 	let user = new User(connection);
@@ -22,6 +34,17 @@ function makeUser(name, connection) {
 
 describe('Trivia', function () {
 	before(function () {
+		// ...until we can load the trivia module right before the tests begin,
+		// where the context contains the globals missing from when this was
+		// first defined.
+		triviaModule.load(triviaModule.id);
+
+		SCORE_CAPS = triviaModule.exports.SCORE_CAPS;
+		Trivia = triviaModule.exports.Trivia;
+		FirstModeTrivia = triviaModule.exports.FirstModeTrivia;
+		TimerModeTrivia = triviaModule.exports.TimerModeTrivia;
+		NumberModeTrivia = triviaModule.exports.NumberModeTrivia;
+
 		Rooms.global.addChatRoom('Trivia');
 
 		let room = Rooms('trivia');
