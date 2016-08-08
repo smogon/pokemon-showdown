@@ -50,7 +50,7 @@ exports.commands = {
 		scavengers.answers = [toId(targets[1]), toId(targets[3]), toId(targets[5])];
 		scavengers.startTime = Date.now();
 		let result = (cmd === 'startofficialhunt' ? 'An official' : 'A new') + ' Scavenger Hunt has been started by <em> ' + Tools.escapeHTML(user.name) + '</em>! The first hint is: ' + Tools.escapeHTML(scavengers.hints[0]);
-		Rooms.rooms.scavengers.addRaw('<div class="broadcast-blue"><strong>' + result + '</strong></div>');
+		Rooms('scavengers').addRaw('<div class="broadcast-blue"><strong>' + result + '</strong></div>');
 	},
 	joinhunt: function (target, room, user) {
 		if (room.id !== 'scavengers') return this.errorReply('This command can only be used in the Scavengers room.');
@@ -78,7 +78,7 @@ exports.commands = {
 				result += (position === 1) ? 'and is the winner!' : (position === 2) ? 'in 2nd place!' : (position === 3) ? 'in 3rd place!' : 'in ' + position + 'th place!';
 				result += (position < 4 && scavengers.blitz ? ' [BLITZ]' : '');
 				result += ' (' + Tools.toDurationString(Date.now() - scavengers.startTime, {hhmmss: true}) + ')';
-				Rooms.rooms.scavengers.addRaw('<div class="broadcast-blue"><strong>' + result + '</strong></div>');
+				Rooms('scavengers').addRaw('<div class="broadcast-blue"><strong>' + result + '</strong></div>');
 			}
 		} else {
 			this.sendReply('That is not the answer - try again!');
@@ -126,9 +126,9 @@ exports.commands = {
 		scavengers.participants = {};
 		scavengers.finished = [];
 		if (scavengers.result) {
-			Rooms.rooms.scavengers.addRaw('<div class="broadcast-blue"><strong>' + scavengers.result + '</strong></div>');
+			Rooms('scavengers').addRaw('<div class="broadcast-blue"><strong>' + scavengers.result + '</strong></div>');
 		} else {
-			Rooms.rooms.scavengers.addRaw('<div class="broadcast-blue"><strong>The Scavenger Hunt was reset by <em>' + Tools.escapeHTML(user.name) + '</em>.</strong></div>');
+			Rooms('scavengers').addRaw('<div class="broadcast-blue"><strong>The Scavenger Hunt was reset by <em>' + Tools.escapeHTML(user.name) + '</em>.</strong></div>');
 		}
 		scavengers.result = null;
 	},
