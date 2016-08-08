@@ -7,15 +7,11 @@
 
 const fs = require('fs');
 
-// Hack to allow unit tests to run.
-const RoomGame = require('../room-game.js').RoomGame;
-const RoomGamePlayer = require('../room-game.js').RoomGamePlayer;
-
 const CATEGORIES = {
 	ae: 'Arts and Entertainment',
 	pokemon: 'Pok\u00E9mon',
 	sg: 'Science and Geography',
-	sh: 'Society and History',
+	sh: 'Society and Humanities',
 };
 
 const MODES = {
@@ -132,7 +128,7 @@ function sliceCategory(category) {
 	return questions.slice(sliceFrom, sliceUpTo);
 }
 
-class TriviaPlayer extends RoomGamePlayer {
+class TriviaPlayer extends Rooms.RoomGamePlayer {
 	constructor(user, game) {
 		super(user, game);
 
@@ -161,7 +157,7 @@ class TriviaPlayer extends RoomGamePlayer {
 	}
 }
 
-class Trivia extends RoomGame {
+class Trivia extends Rooms.RoomGame {
 	constructor(room, mode, category, length, questions) {
 		super(room);
 		this.gameid = 'trivia';
