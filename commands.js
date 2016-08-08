@@ -1412,10 +1412,10 @@ exports.commands = {
 		if (targetRoom.isPrivate || targetRoom.isPersonal) {
 			return this.parse('/msg ' + this.targetUsername + ', /invite ' + targetRoom.id);
 		}
-		if (Rooms.rooms[targetRoom.id].users[targetUser.userid]) {
+		if (targetRoom.users[targetUser.userid]) {
 			return this.errorReply("User " + targetUser.name + " is already in the room " + targetRoom.title + "!");
 		}
-		if (!Rooms.rooms[room.id].users[targetUser.userid]) {
+		if (!room.users[targetUser.userid]) {
 			return this.errorReply("User " + this.targetUsername + " is not in the room " + room.id + ".");
 		}
 		if (targetUser.joinRoom(targetRoom.id) === false) return this.errorReply("User " + targetUser.name + " could not be joined to room " + targetRoom.title + ". They could be banned from the room.");
