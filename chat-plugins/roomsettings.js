@@ -127,5 +127,5 @@ exports.commands = {
 			settings.updateSetting(target);
 		}
 	},
-	roomsettingshelp: ["/roomsettings - Shows current rom settings with buttons to change them. Requires # & ~"],
+	roomsettingshelp: ["/roomsettings - Shows current room settings with buttons to change them (if you can)."],
 };
