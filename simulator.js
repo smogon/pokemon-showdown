@@ -458,7 +458,7 @@ if (process.send && module === process.mainModule) {
 
 	require('./repl.js').start('battle-engine-', process.pid, cmd => eval(cmd));
 
-	let Battles = Object.create(null);
+	let Battles = new Map();
 
 	// Receive and process a message sent using Simulator.prototype.send in
 	// another process.
@@ -472,35 +472,35 @@ if (process.send && module === process.mainModule) {
 		}
 		let data = message.split('|');
 		if (data[1] === 'init') {
-			if (!Battles[data[0]]) {
+			const id = data[0];
+			if (!Battles.has(id)) {
 				try {
-					Battles[data[0]] = BattleEngine.construct(data[0], data[2], data[3], sendBattleMessage);
+					Battles.set(id, BattleEngine.construct(id, data[2], data[3], sendBattleMessage));
 				} catch (err) {
 					if (require('./crashlogger.js')(err, 'A battle', {
 						message: message,
 					}) === 'lockdown') {
 						let ministack = Tools.escapeHTML(err.stack).split("\n").slice(0, 2).join("<br />");
-						process.send(data[0] + '\nupdate\n|html|<div class="broadcast-red"><b>A BATTLE PROCESS HAS CRASHED:</b> ' + ministack + '</div>');
+						process.send(id + '\nupdate\n|html|<div class="broadcast-red"><b>A BATTLE PROCESS HAS CRASHED:</b> ' + ministack + '</div>');
 					} else {
-						process.send(data[0] + '\nupdate\n|html|<div class="broadcast-red"><b>The battle crashed!</b><br />Don\'t worry, we\'re working on fixing it.</div>');
+						process.send(id + '\nupdate\n|html|<div class="broadcast-red"><b>The battle crashed!</b><br />Don\'t worry, we\'re working on fixing it.</div>');
 					}
 				}
 			}
 		} else if (data[1] === 'dealloc') {
-			if (Battles[data[0]] && Battles[data[0]].destroy) {
-				const id = data[0];
-				Battles[id].destroy();
+			const id = data[0];
+			if (Battles.has(id)) {
+				Battles.get(id).destroy();
 
 				// remove from battle list
-				Battles[id] = null;
+				Battles.delete(id);
 			} else {
 				require('./crashlogger.js')(new Error("Invalid dealloc"), 'A battle', {
 					message: message,
 				});
 			}
-			delete Battles[data[0]];
 		} else {
-			let battle = Battles[data[0]];
+			let battle = Battles.get(data[0]);
 			if (battle) {
 				let prevRequest = battle.currentRequest;
 				let prevRequestDetails = battle.currentRequestDetails || '';
