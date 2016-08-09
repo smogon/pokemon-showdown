@@ -17,9 +17,73 @@ describe('Users features', function () {
 				assert.strictEqual(Users.get, Users);
 			});
 		});
+		describe('connections', function () {
+			it('should be a Map', function () {
+				assert.ok(Users.connections instanceof Map);
+			});
+		});
 		describe('users', function () {
 			it('should be a Map', function () {
 				assert.ok(Users.users instanceof Map);
+			});
+		});
+		describe('Connection', function () {
+			describe('#onDisconnect', function () {
+				beforeEach(function () {
+					this.connection = new Connection('127.0.0.1');
+					this.connection.user = new User(this.connection);
+					this.connection.user.name = 'Morfent';
+					this.connection.user.userid = 'morfent';
+				});
+
+				afterEach(function () {
+					this.connection.destroy();
+				});
+
+				it('should remove the connection from Users.connections', function () {
+					let connectionid = Users.connections.id;
+					this.connection.destroy();
+					assert.strictEqual(Users.connections.has(connectionid), false);
+				});
+
+				it('should destroy any user on the connection as well', function () {
+					let userid = this.connection.user.userid;
+					this.connection.destroy();
+					assert.strictEqual(Users.users.has(userid), false);
+				});
+			});
+
+			describe('#joinRoom', function () {
+				beforeEach(function () {
+					this.connection = new Connection('127.0.0.1');
+				});
+
+				afterEach(function () {
+					this.connection.destroy();
+				});
+
+				it('should join a room if not already present', function () {
+					this.connection.joinRoom(Rooms.lobby);
+					assert.ok('lobby' in this.connection.rooms);
+				});
+
+				it('should not join a room if already present in it', function () {
+					this.connection.joinRoom(Rooms.lobby);
+
+					let notLobby = {id: 'lobby'};
+					this.connection.joinRoom(notLobby);
+
+					assert.strictEqual(this.connection.rooms.lobby, Rooms.lobby);
+				});
+			});
+
+			describe('#leaveRoom', function () {
+				it('should leave a room that is present', function () {
+					this.connection = new Connection('127.0.0.1');
+					this.connection.joinRoom(Rooms.lobby);
+					this.connection.leaveRoom(Rooms.lobby);
+					assert.ok(!('lobby' in this.connection.rooms));
+				});
 			});
 		});
 		describe('User', function () {
