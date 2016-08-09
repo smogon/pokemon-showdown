@@ -2022,7 +2022,7 @@ exports.commands = {
 		if (!this.can('editroom', null, room)) return false;
 
 		let targetInt = parseInt(target);
-		if (target === 'off' || target === 'disable') {
+		if (target === 'off' || target === 'disable' || target === 'false') {
 			if (!room.slowchat) return this.errorReply("Slow chat is already disabled in this room.");
 			room.slowchat = false;
 			this.add("|raw|<div class=\"broadcast-blue\"><b>Slow chat was disabled!</b><br />There is no longer a set minimum time between messages.</div>");
