@@ -734,23 +734,24 @@ class User {
 			return false;
 		}
 
-		if (this.named && this.userid !== userid) this.prevNames[this.userid] = this.name;
-		this.name = name;
-
 		let oldid = this.userid;
 		if (userid !== this.userid) {
+			Rooms.global.cancelSearch(this);
+
 			if (!Users.move(this, userid)) {
 				return false;
 			}
 
 			// MMR is different for each userid
 			this.mmrCache = {};
-			Rooms.global.cancelSearch(this);
 
 			this.updateGroup(registered);
 		} else if (registered) {
 			this.updateGroup(registered);
 		}
+
+		if (this.named && this.userid !== userid) this.prevNames[this.userid] = this.name;
+		this.name = name;
 
 		let joining = !this.named;
 		this.named = (this.userid.substr(0, 5) !== 'guest');
