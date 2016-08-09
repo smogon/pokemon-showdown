@@ -601,7 +601,7 @@ BattlePokemon = (() => {
 	};
 	BattlePokemon.prototype.transformInto = function (pokemon, user, effect) {
 		let template = pokemon.template;
-		if ((user && user.transformed && this.battle.gen >= 5) && (BattleSide.prototype.chooseMove(willMega))) {
+		if ((user && user.transformed && this.battle.gen >= 5) && (BattleSide.prototype.chooseMove)) {
 			this.transformed = false;
 			this.types = this.types;
 			this.addedType = this.addedType;
