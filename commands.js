@@ -2264,7 +2264,7 @@ exports.commands = {
 
 			for (let i = 0; i < words.length; i++) {
 				if (/[\\^$*+?()|{}[\]]/.test(words[i])) {
-					if (!user.can('makechatroom')) return this.errorReply("Regex banwords are only allowed for leaders or above.");
+					if (!user.can('makeroom')) return this.errorReply("Regex banwords are only allowed for leaders or above.");
 
 					try {
 						let test = new RegExp(words[i]); // eslint-disable-line no-unused-vars
