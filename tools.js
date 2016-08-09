@@ -259,7 +259,7 @@ module.exports = (() => {
 		if (!template || typeof template === 'string') {
 			let name = (template || '').trim();
 			let id = toId(name);
-			if (this.data.Aliases[id]) {
+			if (id !== 'constructor' && this.data.Aliases[id]) {
 				name = this.data.Aliases[id];
 				id = toId(name);
 			}
