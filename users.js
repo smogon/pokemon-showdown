@@ -36,10 +36,50 @@ const fs = require('fs');
 
 let Users = module.exports = getUser;
 
-// basic initialization
+/*********************************************************
+ * Users map
+ *********************************************************/
+
 let users = Users.users = new Map();
 let prevUsers = Users.prevUsers = new Map();
 let numUsers = 0;
+
+// Low-level functions for manipulating Users.users and Users.prevUsers
+// Keeping them all here makes it easy to ensure they stay consistent
+
+Users.move = function (user, newUserid) {
+	if (user.userid === newUserid) return true;
+	if (!user) return false;
+
+	// doing it this way mathematically ensures no cycles
+	prevUsers.delete(newUserid);
+	prevUsers.set(user.userid, newUserid);
+
+	users.delete(user.userid);
+	user.userid = newUserid;
+	users.set(newUserid, user);
+
+	return true;
+};
+Users.add = function (user) {
+	if (user.userid) throw new Error("Adding a user that already exists");
+
+	numUsers++;
+	user.guestNum = numUsers;
+	user.name = 'Guest ' + numUsers;
+	user.userid = toId(user.name);
+
+	if (users.has(user.userid)) throw new Error("userid taken: " + user.userid);
+	users.set(user.userid, user);
+};
+Users.delete = function (user) {
+	prevUsers.delete('guest' + user.guestNum);
+	users.delete(user.userid);
+};
+Users.merge = function (user1, user2) {
+	prevUsers.delete(user2.userid);
+	prevUsers.set(user1.userid, user2.userid);
+};
 
 /**
  * Get a user.
@@ -79,9 +119,9 @@ Users.get = getUser;
  *
  * Like Users.get, but won't track across username changes.
  *
- * You can also pass a boolean as Users.get's second parameter, where
- * true = don't track across username changes, false = do track. This
- * is not recommended since it's less readable.
+ * Users.get(userid or username, true) is equivalent to
+ * Users.getExact(userid or username).
+ * The former is not recommended because it's less readable.
  */
 let getExactUser = Users.getExact = function (name) {
 	return getUser(name, true);
@@ -264,13 +304,12 @@ class Connection {
 // User
 class User {
 	constructor(connection) {
-		numUsers++;
 		this.mmrCache = Object.create(null);
-		this.guestNum = numUsers;
-		this.name = 'Guest ' + numUsers;
-		this.named = !!this.namelocked;
+		this.guestNum = -1;
+		this.name = "";
+		this.named = false;
 		this.registered = false;
-		this.userid = toId(this.name);
+		this.userid = '';
 		this.group = Config.groupsranking[0];
 
 		let trainersprites = [1, 2, 101, 102, 169, 170, 265, 266];
@@ -323,7 +362,7 @@ class User {
 		this.s3 = '';
 
 		// initialize
-		users.set(this.userid, this);
+		Users.add(this);
 	}
 
 	sendTo(roomid, data) {
@@ -472,19 +511,17 @@ class User {
 			if (i > 1000) return false;
 		}
 
+		let oldid = this.userid;
+		if (!Users.move(this, userid)) {
+			return false;
+		}
+
 		// MMR is different for each userid
 		this.mmrCache = {};
 		Rooms.global.cancelSearch(this);
 
-		if (this.named) this.prevNames[this.userid] = this.name;
-		prevUsers.delete(userid);
-		prevUsers.set(this.userid, userid);
-
 		this.name = name;
-		let oldid = this.userid;
-		users.delete(oldid);
-		this.userid = userid;
-		users.set(this.userid, this);
+		if (this.named) this.prevNames[this.userid] = this.name;
 		this.registered = false;
 		this.group = Config.groupsranking[0];
 		this.isStaff = false;
@@ -704,19 +741,11 @@ class User {
 		let user = users.get(userid);
 		if (user && user !== this) {
 			// This user already exists; let's merge
-			if (this === user) {
-				// !!!
-				return false;
-			}
 			user.merge(this);
 
 			user.updateGroup(registered);
 
-			if (userid !== this.userid) {
-				// doing it this way mathematically ensures no cycles
-				prevUsers.delete(userid);
-				prevUsers.set(this.userid, userid);
-			}
+			Users.merge(user, this);
 			for (let i in this.prevNames) {
 				if (!user.prevNames[i]) {
 					user.prevNames[i] = this.prevNames[i];
@@ -750,17 +779,13 @@ class User {
 
 		let oldid = this.userid;
 		if (userid !== this.userid) {
-			// doing it this way mathematically ensures no cycles
-			prevUsers.delete(userid);
-			prevUsers.set(this.userid, userid);
+			if (!Users.move(this, userid)) {
+				return false;
+			}
 
 			// MMR is different for each userid
 			this.mmrCache = {};
 			Rooms.global.cancelSearch(this);
-
-			users.delete(oldid);
-			this.userid = userid;
-			users.set(userid, this);
 
 			this.updateGroup(registered);
 		} else if (registered) {
@@ -1432,8 +1457,7 @@ class User {
 			}
 		}
 		this.clearChatQueue();
-		users.delete(this.userid);
-		prevUsers.delete('guest' + this.guestNum);
+		Users.delete(this);
 	}
 	toString() {
 		return this.userid;
