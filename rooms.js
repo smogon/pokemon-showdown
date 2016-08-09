@@ -873,7 +873,7 @@ let BattleRoom = (() => {
 		format = '' + (format || '');
 
 		this.format = format;
-		this.auth = {};
+		this.auth = Object.create(null);
 		//console.log("NEW BATTLE");
 
 		let formatid = toId(format);
@@ -1356,6 +1356,7 @@ let ChatRoom = (() => {
 		this.logFile = null;
 		this.logFilename = '';
 		this.destroyingLog = false;
+		if (this.auth) Object.setPrototypeOf(this.auth, null);
 		if (!this.modchat) this.modchat = (Config.chatmodchat || false);
 		if (!this.modjoin) this.modjoin = false;
 		if (!this.filterStretching) this.filterStretching = false;

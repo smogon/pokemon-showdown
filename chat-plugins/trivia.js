@@ -27,6 +27,10 @@ const SCORE_CAPS = {
 	long: 50,
 };
 
+Object.setPrototypeOf(CATEGORIES, null);
+Object.setPrototypeOf(MODES, null);
+Object.setPrototypeOf(SCORE_CAPS, null);
+
 const SIGNUP_PHASE = 'signups';
 const QUESTION_PHASE = 'question';
 const INTERMISSION_PHASE = 'intermission';
@@ -34,7 +38,7 @@ const INTERMISSION_PHASE = 'intermission';
 const MINIMUM_PLAYERS = 3;
 
 const START_TIMEOUT = 30 * 1000;
-const QUESTION_INTERVAL = 10 * 1000;
+const QUESTION_INTERVAL = 12 * 1000 + 500;
 const INTERMISSION_INTERVAL = 30 * 1000;
 
 const MAX_QUESTION_LENGTH = 252;
