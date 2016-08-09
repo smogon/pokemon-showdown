@@ -499,47 +499,7 @@ class User {
 		return this.can('promote', {group:sourceGroup}) && this.can('promote', {group:targetGroup});
 	}
 	resetName() {
-		let name = 'Guest ' + this.guestNum;
-		let userid = toId(name);
-		if (this.userid === userid && !(this.named && !this.namelocked)) return;
-
-		let i = 0;
-		while (users.has(userid) && users.get(userid) !== this) {
-			this.guestNum++;
-			name = 'Guest ' + this.guestNum;
-			userid = toId(name);
-			if (i > 1000) return false;
-		}
-
-		let oldid = this.userid;
-		if (!Users.move(this, userid)) {
-			return false;
-		}
-
-		// MMR is different for each userid
-		this.mmrCache = {};
-		Rooms.global.cancelSearch(this);
-
-		this.name = name;
-		if (this.named) this.prevNames[this.userid] = this.name;
-		this.registered = false;
-		this.group = Config.groupsranking[0];
-		this.isStaff = false;
-		this.isSysop = false;
-
-		this.named = !!this.namelocked;
-		for (let i = 0; i < this.connections.length; i++) {
-			// console.log('' + name + ' renaming: connection ' + i + ' of ' + this.connections.length);
-			let initdata = '|updateuser|' + this.name + '|' + (this.named ? '1' : '0') + '|' + this.avatar;
-			this.connections[i].send(initdata);
-		}
-		for (let i in this.games) {
-			this.games[i].onRename(this, oldid, false);
-		}
-		for (let i in this.roomCount) {
-			Rooms(i).onRename(this, oldid, false);
-		}
-		return true;
+		return this.forceRename('Guest ' + this.guestNum);
 	}
 	updateIdentity(roomid) {
 		if (roomid) {
@@ -792,15 +752,18 @@ class User {
 			this.updateGroup(registered);
 		}
 
-		Punishments.checkName(this, registered);
+		let joining = !this.named;
+		this.named = (this.userid.substr(0, 5) !== 'guest');
+
+		if (this.named) Punishments.checkName(this, registered);
+
+		if (this.namelocked) this.named = true;
 
 		for (let i = 0; i < this.connections.length; i++) {
 			//console.log('' + name + ' renaming: socket ' + i + ' of ' + this.connections.length);
-			let initdata = '|updateuser|' + this.name + '|' + ('1' /* named */) + '|' + this.avatar;
+			let initdata = '|updateuser|' + this.name + '|' + (this.named ? '1' : '0') + '|' + this.avatar;
 			this.connections[i].send(initdata);
 		}
-		let joining = !this.named;
-		this.named = (this.userid.substr(0, 5) !== 'guest');
 		for (let i in this.games) {
 			this.games[i].onRename(this, oldid, joining);
 		}
