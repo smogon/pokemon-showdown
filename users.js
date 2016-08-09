@@ -589,7 +589,7 @@ class User {
 			return false;
 		}
 		name = this.filterName(name);
-		if (userid !== toId(name)) {
+		if (name && userid !== toId(name)) {
 			name = userid;
 		}
 		if (this.registered) newlyRegistered = false;
