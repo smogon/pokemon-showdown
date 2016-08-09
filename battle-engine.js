@@ -600,11 +600,10 @@ BattlePokemon = (() => {
 		}
 	};
 	BattlePokemon.prototype.transformInto = function (pokemon, user, effect) {
-		let template = pokemon.template;
-	
-		if ((user && user.transformed && this.battle.gen >= 5)&&(BattleSide.prototype.chooseMove(willMega))) {
+		let template = pokemon.template
+		if ((user && user.transformed && this.battle.gen >= 5) && (BattleSide.prototype.chooseMove(willMega))) {
 			this.transformed = false;
-			this.types = this.types
+			this.types = this.types;
 			this.addedType = this.addedType;
 			this.knownType = this.side === this.side && this.knownType;
 			for (let statName in this.stats) {
