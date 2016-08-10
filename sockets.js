@@ -182,7 +182,7 @@ if (cluster.isMaster) {
 
 	// It's optional if you don't need these features.
 
-	global.Cidr = require('./cidr');
+	global.Dnsbl = require('./dnsbl.js');
 
 	if (Config.crashguard) {
 		// graceful crash
@@ -424,7 +424,7 @@ if (cluster.isMaster) {
 	});
 
 	// this is global so it can be hotpatched if necessary
-	let isTrustedProxyIp = Cidr.checker(Config.proxyip);
+	let isTrustedProxyIp = Dnsbl.checker(Config.proxyip);
 	let socketCounter = 0;
 	server.on('connection', socket => {
 		if (!socket) {
