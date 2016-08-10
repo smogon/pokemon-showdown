@@ -1024,6 +1024,7 @@ exports.BattleMovedex = {
 					this.add('-end', pokemon, 'Bide');
 					target = this.effectData.lastDamageSource;
 					if (!target || !this.effectData.totalDamage) {
+						this.attrLastMove('[still]');
 						this.add('-fail', pokemon);
 						return false;
 					}
