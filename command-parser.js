@@ -115,21 +115,24 @@ class CommandContext {
 
 	checkFormat(room, message) {
 		if (!room) return false;
-		if (!room.filterStretching && !room.filterCaps) return false;
-		let formatError = false;
+		if (!room.filterStretching && !room.filterCaps && !room.filterSpoilers) return false;
+		let formatError = [];
 		// Removes extra spaces and null characters
 		message = message.trim().replace(/[ \u0000\u200B-\u200F]+/g, ' ');
 
 		let stretchMatch = room.filterStretching && message.match(/(.+?)\1{7,}/i);
 		let capsMatch = room.filterCaps && message.match(/[A-Z\s]{18,}/);
+
 		if (stretchMatch) {
-			formatError = "too much stretching.";
+			formatError.push("too much stretching");
 		}
 		if (capsMatch) {
-			formatError = "too many capital letters.";
+			formatError.push("too many capital letters");
 		}
-		if (stretchMatch && capsMatch) formatError = "too much stretching and too many capital letters.";
-		return formatError;
+		if (formatError.length > 0) {
+			return formatError.join(' and ') + ".";
+		}
+		return false;
 	}
 
 	checkSlowchat(room, user) {
