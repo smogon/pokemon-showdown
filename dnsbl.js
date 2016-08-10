@@ -226,13 +226,15 @@ Dnsbl.loadDatacenters = function () {
 	});
 };
 
-let rangeTmobile = Dnsbl.rangeToPattern('172.32.0.0/11');
-let rangeCenet = Dnsbl.rangeToPattern('27.111.64.0/21');
-let rangeQlded = Dnsbl.rangeToPattern('203.104.0.0/20');
-let rangeCathednet = Dnsbl.rangeToPattern('180.95.40.0/21');
-let rangeTelefonica = Dnsbl.rangeToPattern('181.64.0.0/14');
-let rangeStarhub = Dnsbl.rangeToPattern(['27.125.128.0/18', '101.127.0.0/17', '116.88.0.0/17', '122.11.192.0/18', '182.19.128.0/17', '182.55.0.0/16', '183.90.0.0/17', '203.116.122.0/23']);
-let rangeTelstra = Dnsbl.rangeToPattern('101.160.0.0/11');
+let rangeTmobile = Dnsbl.cidrToPattern('172.32.0.0/11');
+let rangeCenet = Dnsbl.cidrToPattern('27.111.64.0/21');
+let rangeQlded = Dnsbl.cidrToPattern('203.104.0.0/20');
+let rangeCathednet = Dnsbl.cidrToPattern('180.95.40.0/21');
+let rangeTelefonica = Dnsbl.cidrToPattern('181.64.0.0/14');
+let rangeStarhub = Dnsbl.cidrToPattern(['27.125.128.0/18', '101.127.0.0/17', '116.88.0.0/17', '122.11.192.0/18', '182.19.128.0/17', '182.55.0.0/16', '183.90.0.0/17', '203.116.122.0/23']);
+let rangeTelstra = Dnsbl.cidrToPattern('101.160.0.0/11');
+
+let rangeOVHres = Dnsbl.rangeToPattern(['109.190.0.0 - 109.190.63.255', '109.190.64.0 - 109.190.127.255', '109.190.128.0 - 109.190.191.255', '109.190.192.0 - 109.190.255.255', '151.80.228.0 - 151.80.228.255', '178.32.37.0 - 178.32.37.255', '178.33.101.0 - 178.33.101.255', '185.15.68.0 - 185.15.69.255', '185.15.70.0 - 185.15.71.255']);
 
 /**
  * Will not reject; IPs with no RDNS entry will resolve to
@@ -248,6 +250,10 @@ Dnsbl.reverse = function reverseDns(ip) {
 			return;
 		}
 		let ipNumber = Dnsbl.ipToNumber(ip);
+		if (Dnsbl.checkPattern(rangeOVHres, ipNumber)) {
+			resolve('ovh.fr.res-nohost');
+			return;
+		}
 		for (let row of Dnsbl.datacenters) {
 			if (ipNumber >= row[0] && ipNumber <= row[1]) {
 				resolve(row[2] + '.proxy-nohost');
