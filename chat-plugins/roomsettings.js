@@ -68,7 +68,7 @@ class RoomSettings {
 		return modjoinOutput.join(" | ");
 	}
 	stretching() {
-		if (!this.user.can('editroom', null, this.room)) return "<button " + DISABLED + ">" + (this.room.stretching ? this.room.stretching : false) + "</button>";
+		if (!this.user.can('editroom', null, this.room)) return "<button " + DISABLED + ">" + (this.room.filterStretching ? this.room.filterStretching : false) + "</button>";
 		if (this.room.filterStretching) {
 			return '<button name="send" value="/roomsetting stretching disable">false</button> | <button ' + DISABLED + '>true</button>';
 		} else {
@@ -76,7 +76,7 @@ class RoomSettings {
 		}
 	}
 	capitals() {
-		if (!this.user.can('editroom', null, this.room)) return "<button " + DISABLED + ">" + (this.room.capitals ? this.room.capitals : false) + "</button>";
+		if (!this.user.can('editroom', null, this.room)) return "<button " + DISABLED + ">" + (this.room.filterCaps ? this.room.filterCaps : false) + "</button>";
 		if (this.room.filterCaps) {
 			return '<button name="send" value="/roomsetting capitals disable">false</button> | <button ' + DISABLED + '>true</button>';
 		} else {

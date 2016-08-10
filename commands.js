@@ -2067,7 +2067,7 @@ exports.commands = {
 			Rooms.global.writeChatRoomData();
 		}
 	},
-	stretchinghelp: ["/stretching [enable/disable] - Toggles having the server check messages containing too much stretching. Requires "],
+	stretchinghelp: ["/stretching [enable/disable] - Toggles having the server check messages containing too much stretching. Requires # & ~"],
 
 	capitals: function (target, room, user) {
 		if (!target) return this.sendReply("Capitals in this room is currently set to: " + (room.filterCaps ? room.filterCaps : false));
@@ -2090,7 +2090,7 @@ exports.commands = {
 			Rooms.global.writeChatRoomData();
 		}
 	},
-	capitalshelp: ["/capitals [enable/disable] - Toggles having the server check messages containing too many capitals. Requires "],
+	capitalshelp: ["/capitals [enable/disable] - Toggles having the server check messages containing too many capitals. Requires # & ~"],
 
 	declare: function (target, room, user) {
 		if (!target) return this.parse('/help declare');
