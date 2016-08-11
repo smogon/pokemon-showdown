@@ -3168,6 +3168,9 @@ exports.BattleAbilities = {
 		onAllyModifyMove: function (move) {
 			if (typeof move.accuracy === 'number') {
 				move.accuracy *= 1.1;
+				if (move.accuracy > 100) {
+					move.accuracy = 100;
+				}
 			}
 		},
 		id: "victorystar",
