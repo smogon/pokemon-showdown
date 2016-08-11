@@ -115,7 +115,7 @@ class CommandContext {
 
 	checkFormat(room, message) {
 		if (!room) return false;
-		if (!room.filterStretching && !room.filterCaps && !room.filterSpoilers) return false;
+		if (!room.filterStretching && !room.filterCaps) return false;
 		let formatError = [];
 		// Removes extra spaces and null characters
 		message = message.trim().replace(/[ \u0000\u200B-\u200F]+/g, ' ');
