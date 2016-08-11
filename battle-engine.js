@@ -682,7 +682,6 @@ BattlePokemon = (() => {
 		template = this.battle.getTemplate(template);
 
 		if (!template.abilities) return false;
-		this.illusion = null;
 		this.template = template;
 
 		this.types = template.types;
@@ -3144,6 +3143,7 @@ Battle = (() => {
 				return false;
 			}
 			this.runEvent('SwitchOut', oldActive);
+			oldActive.illusion = null;
 			this.singleEvent('End', this.getAbility(oldActive.ability), oldActive.abilityData, oldActive);
 			oldActive.isActive = false;
 			oldActive.isStarted = false;
@@ -3544,11 +3544,8 @@ Battle = (() => {
 				this.debug('damage event failed');
 				return damage;
 			}
-			if (target.illusion && effect && effect.effectType === 'Move' && effect.id !== 'confused') {
-				this.debug('illusion cleared');
-				target.illusion = null;
-				this.add('replace', target, target.getDetails);
-				this.add('-end', target, 'Illusion');
+			if (target.illusion && target.hasAbility('Illusion') && effect && effect.effectType === 'Move' && effect.id !== 'confused') {
+				this.singleEvent('End', this.getAbility('Illusion'), target.abilityData, target, source, effect);
 			}
 		}
 		if (damage !== 0) damage = this.clampIntRange(damage, 1);
@@ -4314,6 +4311,7 @@ Battle = (() => {
 					break;
 				}
 			}
+			decision.pokemon.illusion = null;
 			this.singleEvent('End', this.getAbility(decision.pokemon.ability), decision.pokemon.abilityData, decision.pokemon);
 			if (!decision.pokemon.hp && !decision.pokemon.fainted) {
 				// a pokemon fainted from Pursuit before it could switch
