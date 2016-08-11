@@ -2254,7 +2254,7 @@ exports.commands = {
 	banwords: 'banword',
 	banword: {
 		add: function (target, room, user) {
-			if (!target) return this.parse('/help banword');
+			if (!target || target === ' ') return this.parse('/help banword');
 			if (!user.can('declare', null, room)) return;
 
 			if (!room.banwords) room.banwords = [];
