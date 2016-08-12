@@ -3300,7 +3300,7 @@ exports.commands = {
 				}
 				roomList[i] = roomData;
 			}
-			if (!targetUser.roomCount['global']) roomList = false;
+			if (!targetUser.connected) roomList = false;
 			let userdetails = {
 				userid: targetUser.userid,
 				avatar: targetUser.avatar,
