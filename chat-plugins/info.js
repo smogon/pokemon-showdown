@@ -74,12 +74,12 @@ exports.commands = {
 		}
 		buf += '<br />';
 		if (user.can('alts', targetUser) || user.can('alts') && user === targetUser) {
-			let alts = targetUser.getAlts(true);
+			let alts = targetUser.getAltUsers(true);
 			let output = Object.keys(targetUser.prevNames).join(", ");
 			if (output) buf += "<br />Previous names: " + Tools.escapeHTML(output);
 
 			for (let j = 0; j < alts.length; ++j) {
-				let targetAlt = Users.get(alts[j]);
+				let targetAlt = alts[j];
 				if (!targetAlt.named && !targetAlt.connected) continue;
 				if (targetAlt.group === '~' && user.group !== '~') continue;
 
