@@ -550,7 +550,7 @@ module.exports = (() => {
 			let id = toId(type);
 			id = id.charAt(0).toUpperCase() + id.substr(1);
 			type = {};
-			if (id && this.data.TypeChart[id]) {
+			if (id && id !== 'constructor' && this.data.TypeChart[id]) {
 				type = this.data.TypeChart[id];
 				if (type.cached) return type;
 				type.cached = true;
@@ -571,7 +571,7 @@ module.exports = (() => {
 			let name = (nature || '').trim();
 			let id = toId(name);
 			nature = {};
-			if (id && this.data.Natures[id]) {
+			if (id && id !== 'constructor' && this.data.Natures[id]) {
 				nature = this.data.Natures[id];
 				if (nature.cached) return nature;
 				nature.cached = true;
