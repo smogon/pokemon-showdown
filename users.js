@@ -750,11 +750,11 @@ class User {
 			this.updateGroup(registered);
 		}
 
-		if (this.named && this.userid !== userid) this.prevNames[this.userid] = this.name;
+		if (this.named && oldid !== userid) this.prevNames[oldid] = this.name;
 		this.name = name;
 
 		let joining = !this.named;
-		this.named = (this.userid.substr(0, 5) !== 'guest');
+		this.named = (userid.substr(0, 5) !== 'guest');
 
 		if (this.named) Punishments.checkName(this, registered);
 
