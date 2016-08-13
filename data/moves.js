@@ -1033,11 +1033,18 @@ exports.BattleMovedex = {
 						this.add('-miss', pokemon, target);
 						return false;
 					}
-					if (!target.runImmunity('Normal')) {
-						this.add('-immune', target, '[msg]');
-						return false;
-					}
-					this.moveHit(target, pokemon, 'bide', {damage: this.effectData.totalDamage * 2});
+					let moveData = {
+						id: 'bide',
+						name: "Bide",
+						accuracy: true,
+						damage: this.effectData.totalDamage * 2,
+						category: "Physical",
+						priority: 1,
+						flags: {contact: 1, protect: 1},
+						effectType: 'Move',
+						type: 'Normal',
+					};
+					this.tryMoveHit(target, pokemon, moveData);
 					return false;
 				}
 				this.add('-activate', pokemon, 'Bide');
