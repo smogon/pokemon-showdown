@@ -357,6 +357,7 @@ class User {
 		this.lastMessage = '';
 		this.lastMessageTime = 0;
 		this.lastReportTime = 0;
+		this.talkedIn = [];
 		this.s1 = '';
 		this.s2 = '';
 		this.s3 = '';

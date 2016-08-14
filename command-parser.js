@@ -415,6 +415,7 @@ class CommandContext {
 				}
 				user.lastMessage = message;
 				user.lastMessageTime = Date.now();
+				user.talkedIn.push(room.id);
 			}
 
 			if (Config.chatfilter) {
