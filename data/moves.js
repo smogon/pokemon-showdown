@@ -1493,9 +1493,10 @@ exports.BattleMovedex = {
 			let item = target.getItem();
 			if (source.hp && item.isBerry && target.takeItem(source)) {
 				this.add('-enditem', target, item.name, '[from] stealeat', '[move] Bug Bite', '[of] ' + source);
-				this.singleEvent('Eat', item, null, source, null, null);
-				this.runEvent('EatItem', source, null, null, item);
-				source.ateBerry = true;
+				if (this.singleEvent('Eat', item, null, source, null, null)) {
+					this.runEvent('EatItem', source, null, null, item);
+				}
+				if (item.onEat) source.ateBerry = true;
 			}
 		},
 		secondary: false,
@@ -4645,11 +4646,12 @@ exports.BattleMovedex = {
 			onModifyMove: function (move) {
 				let item = this.getItem(this.effectData.item);
 				move.basePower = item.fling.basePower;
-				if (item.isBerry && item.id !== 'enigmaberry') {
+				if (item.isBerry) {
 					move.onHit = function (foe) {
-						this.singleEvent('Eat', item, null, foe, null, null);
-						this.runEvent('EatItem', foe, null, null, item);
-						foe.ateBerry = true;
+						if (this.singleEvent('Eat', item, null, foe, null, null)) {
+							this.runEvent('EatItem', foe, null, null, item);
+						}
+						if (item.onEat) foe.ateBerry = true;
 					};
 				} else if (item.fling.effect) {
 					move.onHit = item.fling.effect;
@@ -10210,9 +10212,10 @@ exports.BattleMovedex = {
 			let item = target.getItem();
 			if (source.hp && item.isBerry && target.takeItem(source)) {
 				this.add('-enditem', target, item.name, '[from] stealeat', '[move] Pluck', '[of] ' + source);
-				this.singleEvent('Eat', item, null, source, null, null);
-				this.runEvent('EatItem', source, null, null, item);
-				source.ateBerry = true;
+				if (this.singleEvent('Eat', item, null, source, null, null)) {
+					this.runEvent('EatItem', source, null, null, item);
+				}
+				if (item.onEat) source.ateBerry = true;
 			}
 		},
 		secondary: false,
