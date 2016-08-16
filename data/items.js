@@ -3182,7 +3182,7 @@ exports.BattleItems = {
 		name: "Park Ball",
 		spritenum: 325,
 		num: 500,
-		gen: 2,
+		gen: 4,
 		desc: "A special Poke Ball for the Pal Park.",
 	},
 	"passhoberry": {
@@ -4335,7 +4335,7 @@ exports.BattleItems = {
 		name: "Sport Ball",
 		spritenum: 465,
 		num: 499,
-		gen: 4,
+		gen: 2,
 		desc: "A special Poke Ball for the Bug-Catching Contest.",
 	},
 	"starfberry": {
