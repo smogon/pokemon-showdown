@@ -57,31 +57,23 @@ if (!Array.isArray(triviaData.submissions)) triviaData.submissions = [];
 
 const writeTriviaData = (() => {
 	let writing = false;
-	let writePending = false; // whether or not a new write is pending
-
-	let finishWriting = function () {
-		writing = false;
-		if (writePending) {
-			writePending = false;
-			writeTriviaData();
-		}
-	};
-	return function () {
+	let writePending = false;
+	return () => {
 		if (writing) {
 			writePending = true;
 			return;
 		}
 		writing = true;
+
 		let data = JSON.stringify(triviaData, null, 2);
+
 		fs.writeFile('config/chat-plugins/triviadata.json.0', data, () => {
-			// rename is atomic on POSIX, but will throw an error on Windows
-			fs.rename('config/chat-plugins/triviadata.json.0', 'config/chat-plugins/triviadata.json', err => {
-				if (err) {
-					// This should only happen on Windows
-					fs.writeFile('config/chat-plugins/triviadata.json', data, finishWriting);
-					return;
+			fs.rename('config/chat-plugins/triviadata.json.0', 'config/chat-plugins/triviadata.json', () => {
+				writing = false;
+				if (writePending) {
+					writePending = false;
+					process.nextTick(() => writeTriviaData());
 				}
-				finishWriting();
 			});
 		});
 	};
