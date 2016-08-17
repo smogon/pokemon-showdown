@@ -366,10 +366,39 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
+		name: "Nature Swap",
+		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3577739/\">Nature Swap</a>"],
+		section: "OM of the Month",
+		column: 2,
+
+		ruleset: ['OU'],
+		banlist: ['Chansey', 'Talonflame'],
+		onBegin: function () {
+			let allPokemon = this.p1.pokemon.concat(this.p2.pokemon);
+			for (let i = 0, len = allPokemon.length; i < len; i++) {
+				let pokemon = allPokemon[i];
+				let nature = pokemon.battle.getNature(pokemon.set.nature);
+				if (nature.plus !== nature.minus) {
+					["baseTemplate", "canMegaEvo"].forEach(key => {
+						if (pokemon[key]) {
+							let template = Object.assign({}, this.getTemplate(pokemon[key]));
+							template.baseStats = Object.assign({}, template.baseStats);
+							let plus = template.baseStats[nature.plus];
+							let minus = template.baseStats[nature.minus];
+							template.baseStats[nature.plus] = minus;
+							template.baseStats[nature.minus] = plus;
+							pokemon[key] = template;
+						}
+					});
+					pokemon.formeChange(pokemon.baseTemplate);
+				}
+			}
+		},
+	},
+	{
 		name: "Follow The Leader",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3565685/\">Follow The Leader</a>"],
 		section: "OM of the Month",
-		column: 2,
 
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
 		banlist: ['Regigigas', 'Shedinja', 'Slaking', 'Smeargle', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Salamencite', 'Soul Dew',
@@ -394,35 +423,6 @@ exports.Formats = [
 			set.name = (name === set.species ? "" : name);
 
 			return problems;
-		},
-	},
-	{
-		name: "Nature Swap",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3577739/\">Nature Swap</a>"],
-		section: "OM of the Month",
-
-		ruleset: ['OU'],
-		banlist: ['Chansey', 'Talonflame'],
-		onBegin: function () {
-			let allPokemon = this.p1.pokemon.concat(this.p2.pokemon);
-			for (let i = 0, len = allPokemon.length; i < len; i++) {
-				let pokemon = allPokemon[i];
-				let nature = pokemon.battle.getNature(pokemon.set.nature);
-				if (nature.plus !== nature.minus) {
-					["baseTemplate", "canMegaEvo"].forEach(key => {
-						if (pokemon[key]) {
-							let template = Object.assign({}, this.getTemplate(pokemon[key]));
-							template.baseStats = Object.assign({}, template.baseStats);
-							let plus = template.baseStats[nature.plus];
-							let minus = template.baseStats[nature.minus];
-							template.baseStats[nature.plus] = minus;
-							template.baseStats[nature.minus] = plus;
-							pokemon[key] = template;
-						}
-					});
-					pokemon.formeChange(pokemon.baseTemplate);
-				}
-			}
 		},
 	},
 	{
