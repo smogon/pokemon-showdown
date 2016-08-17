@@ -402,6 +402,13 @@ class User {
 		}
 		return this.group + this.name;
 	}
+	matchesRank(rank) {
+		if (!rank || rank === ' ') return true;
+		if (rank === 'confirmed') return this.confirmed;
+		if (rank === 'autoconfirmed') return this.autoconfirmed;
+		if (!(rank in Config.groups)) return true;
+		return this.group in Config.groups && Config.groups[this.group].rank >= Config.groups[rank].rank;
+	}
 	can(permission, target, room) {
 		if (this.hasSysopAccess()) return true;
 

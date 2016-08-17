@@ -388,13 +388,9 @@ exports.commands = {
 			return this.errorReply("User " + this.targetUsername + " is offline.");
 		}
 
-		if (Config.pmmodchat) {
-			let userGroup = user.group;
-			if (Config.groupsranking.indexOf(userGroup) < Config.groupsranking.indexOf(Config.pmmodchat)) {
-				let groupName = Config.groups[Config.pmmodchat].name || Config.pmmodchat;
-				this.errorReply("Because moderated chat is set, you must be of rank " + groupName + " or higher to PM users.");
-				return false;
-			}
+		if (Config.pmmodchat && !user.matchesRank(Config.pmmodchat)) {
+			let groupName = Config.groups[Config.pmmodchat] && Config.groups[Config.pmmodchat].name || Config.pmmodchat;
+			return this.errorReply("Because moderated chat is set, you must be of rank " + groupName + " or higher to PM users.");
 		}
 
 		if (user.locked && !targetUser.can('lock')) {
