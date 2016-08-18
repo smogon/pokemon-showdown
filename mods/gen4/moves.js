@@ -27,14 +27,9 @@ exports.BattleMovedex = {
 	},
 	aromatherapy: {
 		inherit: true,
-		onHit: function (pokemon, source) {
+		onHit: function (target, source) {
 			this.add('-cureteam', source, '[from] move: Aromatherapy');
-			let side = pokemon.side;
-			for (let i = 0; i < side.pokemon.length; i++) {
-				if (side.pokemon[i].status && side.pokemon[i].hp) {
-					side.pokemon[i].status = '';
-				}
-			}
+			source.side.pokemon.forEach(pokemon => pokemon.clearStatus());
 		},
 	},
 	assist: {
@@ -573,14 +568,11 @@ exports.BattleMovedex = {
 	},
 	healbell: {
 		inherit: true,
-		onHit: function (pokemon, source) {
-			this.add('-cureteam', source, '[from] move: Heal Bell');
-			let side = pokemon.side;
-			for (let i = 0; i < side.pokemon.length; i++) {
-				if (side.pokemon[i].status && side.pokemon[i].hp) {
-					side.pokemon[i].status = '';
-				}
-			}
+		onHit: function (target, source) {
+			this.add('-activate', source, 'move: Heal Bell');
+			source.side.pokemon.forEach(pokemon => {
+				if (!pokemon.hasAbility('soundproof')) pokemon.cureStatus(true);
+			});
 		},
 	},
 	healblock: {
