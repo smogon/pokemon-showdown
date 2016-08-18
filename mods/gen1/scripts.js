@@ -41,14 +41,17 @@ exports.BattleScripts = {
 		boostBy: function (boost) {
 			let changed = false;
 			for (let i in boost) {
-				this.boosts[i] += boost[i];
+				let delta = boost[i];
+				this.boosts[i] += delta;
 				if (this.boosts[i] > 6) {
+					delta -= this.boosts[i] - 6;
 					this.boosts[i] = 6;
 				}
 				if (this.boosts[i] < -6) {
+					delta -= this.boosts[i] - (-6);
 					this.boosts[i] = -6;
 				}
-				if (this.boosts[i]) {
+				if (delta) {
 					changed = true;
 					// Recalculate the modified stat
 					if (this.stats[i]) {
