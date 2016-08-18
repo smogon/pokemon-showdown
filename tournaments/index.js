@@ -960,7 +960,7 @@ let commands = {
 		begin: 'start',
 		start: function (tournament, user) {
 			if (tournament.startTournament(this)) {
-				this.sendModCommand("(" + user.name + " started the tournament.)");
+				this.room.sendModCommand("(" + user.name + " started the tournament.)");
 			}
 		},
 		dq: 'disqualify',
