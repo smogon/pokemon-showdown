@@ -858,11 +858,11 @@ BattlePokemon = (() => {
 	BattlePokemon.prototype.trySetStatus = function (status, source, sourceEffect) {
 		return this.setStatus(this.status || status, source, sourceEffect);
 	};
-	BattlePokemon.prototype.cureStatus = function () {
+	BattlePokemon.prototype.cureStatus = function (silent) {
 		if (!this.hp) return false;
 		// unlike clearStatus, gives cure message
 		if (this.status) {
-			this.battle.add('-curestatus', this, this.status);
+			this.battle.add('-curestatus', this, this.status, silent ? '[silent]' : '[msg]');
 			this.setStatus('');
 		}
 	};

@@ -167,6 +167,13 @@ exports.BattleMovedex = {
 			},
 		},
 	},
+	healbell: {
+		inherit: true,
+		onHit: function (target, source) {
+			this.add('-cureteam', source, '[from] move: Heal Bell');
+			source.side.pokemon.forEach(pokemon => pokemon.clearStatus());
+		},
+	},
 	highjumpkick: {
 		inherit: true,
 		onMoveFail: function (target, source, move) {
