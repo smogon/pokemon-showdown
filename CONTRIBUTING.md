@@ -24,7 +24,7 @@ The first letter of a commit summary should be capitalized (unless the first wor
 The commit summary should not end in a period.
 
 BAD: `refactor users to use classes`  
-BAD: `Refactor Users to use classes.`
+BAD: `Refactor Users to use classes.`  
 GOOD: `Refactor Users to use classes`
 
 If the first word is a verb, it should be in imperative mood (the first word doesn't have to be a verb, but we recommend it).
@@ -64,7 +64,7 @@ In particular:
 ES5 and ES6
 ------------------------------------------------------------------------
 
-In general, use modern features only if they're supported in Node 4 and reasonably performant.
+In general, use modern features only if they're supported in Node 4 and reasonably performant in the latest version of Node.
 
 - **let, const: ALWAYS** - Supported in Node 4+, good performance.
 
@@ -78,8 +78,6 @@ In general, use modern features only if they're supported in Node 4 and reasonab
 
 - **Map#forEach: ALWAYS** - This is our preferred method of iterating `Map`s.
 
-- **Object.keys: SOMETIMES** - Poor performance. Prefer `for-in` if you're just going to iterate the keys.
-
 - **Object literal functions: ALWAYS** - Supported in Node 4+, good performance.
 
 - **Arrow functions: ALWAYS** - Supported in Node 4+, good performance. Obviously use only for callbacks; don't use in situations where `this` shouldn't be bound.
@@ -88,12 +86,10 @@ In general, use modern features only if they're supported in Node 4 and reasonab
 
 - **Function#bind: ALMOST NEVER** - Horrible performance. Use arrow functions. Basically, never use outside of the (deprecated) trick we use in battle-engine for split logs.
 
-- **classes: USUALLY** - Supported in Node 4+ and good performance, but see subclasses.
-
-- **subclasses: SPARINGLY** - Supported in Node 4+, horrible performance, but often not noticeable considering how rarely most subclassed objects are created.
+- **classes and subclasses: ALWAYS** - Supported in Node 4+ and good performance in Node 6+, please start refactoring existing code over.
 
 - **String#includes: ALWAYS** - Supported in Node 4+, poor performance, but not really noticeable and worth the better readability.
 
-- **Template strings: NEVER** - Horrible performance. Prefer manually stringing strings together with `+`.
+- **Template strings: ALWAYS** - Supported in Node 4+ and good performance in Node 6+, please start refactoring existing code over.
 
 Take "good performance" to mean "approximately on par with ES3" and "great performance" to mean "better than ES3".
