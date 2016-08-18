@@ -48,7 +48,7 @@ function init(callback) {
 	};
 
 	// Disable writing to modlog
-	require('./../command-parser.js').CommandContext.prototype.logModCommand = noop;
+	Rooms.Room.prototype.modlog = noop;
 
 	callback();
 }

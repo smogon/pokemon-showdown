@@ -17,6 +17,7 @@ const REPORT_USER_STATS_INTERVAL = 10 * 60 * 1000;
 const PERIODIC_MATCH_INTERVAL = 60 * 1000;
 
 const fs = require('fs');
+const path = require('path');
 
 let Rooms = module.exports = getRoom;
 
@@ -306,6 +307,19 @@ let Room = (() => {
 		}
 		return successUserid;
 	};
+	Room.prototype.modlog = function (text) {
+		if (!this.modlogStream) return;
+		this.modlogStream.write('[' + (new Date().toJSON()) + '] (' + this.id + ') ' + text + '\n');
+	};
+	Room.prototype.sendModCommand = function (data) {
+		for (let i in this.users) {
+			let user = this.users[i];
+			// hardcoded for performance reasons (this is an inner loop)
+			if (user.isStaff || (this.auth && (this.auth[user.userid] || '+') !== '+')) {
+				user.sendTo(this, data);
+			}
+		}
+	};
 
 	return Room;
 })();
@@ -432,6 +446,9 @@ let GlobalRoom = (() => {
 			() => this.periodicMatch(),
 			PERIODIC_MATCH_INTERVAL
 		);
+
+		// Create writestream for modlog
+		this.modlogStream = fs.createWriteStream(path.resolve(__dirname, 'logs/modlog/modlog_global.txt'), {flags:'a+'});
 	}
 	GlobalRoom.prototype.type = 'global';
 
@@ -844,6 +861,9 @@ let GlobalRoom = (() => {
 			connection.popup("You can't send messages directly to the server.");
 		}
 	};
+	GlobalRoom.prototype.modlog = function (text) {
+		this.modlogStream.write('[' + (new Date().toJSON()) + '] ' + text + '\n');
+	};
 	return GlobalRoom;
 })();
 
@@ -896,6 +916,8 @@ let BattleRoom = (() => {
 		this.disconnectTickDiff = [0, 0];
 
 		if (Config.forcetimer) this.requestKickInactive(false);
+
+		this.modlogStream = Rooms.battleModlogStream;
 	}
 	BattleRoom.prototype = Object.create(Room.prototype);
 	BattleRoom.prototype.type = 'battle';
@@ -1366,6 +1388,12 @@ let ChatRoom = (() => {
 			this.userList = this.getUserList();
 			this.reportJoinsQueue = [];
 		}
+
+		if (this.isPersonal) {
+			this.modlogStream = Rooms.groupchatModlogStream;
+		} else {
+			this.modlogStream = fs.createWriteStream(path.resolve(__dirname, 'logs/modlog/modlog_' + roomid + '.txt'), {flags:'a+'});
+		}
 	}
 	ChatRoom.prototype = Object.create(Room.prototype);
 	ChatRoom.prototype.type = 'chat';
@@ -1659,6 +1687,9 @@ Rooms.createChatRoom = function (roomid, title, data) {
 	Rooms.rooms.set(roomid, room);
 	return room;
 };
+
+Rooms.battleModlogStream = fs.createWriteStream(path.resolve(__dirname, 'logs/modlog/modlog_battle.txt'), {flags:'a+'});
+Rooms.groupchatModlogStream = fs.createWriteStream(path.resolve(__dirname, 'logs/modlog/modlog_groupchat.txt'), {flags:'a+'});
 
 Rooms.global = null;
 Rooms.lobby = null;

@@ -74,22 +74,6 @@ for (let file of fs.readdirSync(path.resolve(__dirname, 'chat-plugins'))) {
 }
 
 /*********************************************************
- * Modlog
- *********************************************************/
-
-let modlog = exports.modlog = {
-	lobby: fs.createWriteStream(path.resolve(__dirname, 'logs/modlog/modlog_lobby.txt'), {flags:'a+'}),
-	battle: fs.createWriteStream(path.resolve(__dirname, 'logs/modlog/modlog_battle.txt'), {flags:'a+'}),
-};
-
-let writeModlog = exports.writeModlog = function (roomid, text) {
-	if (!modlog[roomid]) {
-		modlog[roomid] = fs.createWriteStream(path.resolve(__dirname, 'logs/modlog/modlog_' + roomid + '.txt'), {flags:'a+'});
-	}
-	modlog[roomid].write('[' + (new Date().toJSON()) + '] ' + text + '\n');
-};
-
-/*********************************************************
  * Parser
  *********************************************************/
 
@@ -187,34 +171,13 @@ class CommandContext {
 	send(data) {
 		this.room.send(data);
 	}
-	privateModCommand(data, noLog) {
-		this.sendModCommand(data);
-		this.logEntry(data);
-		this.logModCommand(data);
-	}
 	sendModCommand(data) {
-		let users = this.room.users;
-		let auth = this.room.auth;
-
-		for (let i in users) {
-			let user = users[i];
-			// hardcoded for performance reasons (this is an inner loop)
-			if (user.isStaff || (auth && (auth[user.userid] || '+') !== '+')) {
-				user.sendTo(this.room, data);
-			}
-		}
+		this.room.sendModCommand(data);
 	}
-	logEntry(data) {
-		this.room.logEntry(data);
-	}
-	addModCommand(text, logOnlyText) {
-		this.add(text);
-		this.logModCommand(text + (logOnlyText || ""));
-	}
-	logModCommand(text) {
-		let roomid = (this.room.battle ? 'battle' : this.room.id);
-		if (this.room.isPersonal) roomid = 'groupchat';
-		writeModlog(roomid, '(' + this.room.id + ') ' + text);
+	privateModCommand(data) {
+		this.room.sendModCommand(data);
+		this.logEntry(data);
+		this.room.modlog(data);
 	}
 	globalModlog(action, user, text) {
 		let buf = "(" + this.room.id + ") " + action + ": ";
@@ -226,7 +189,17 @@ class CommandContext {
 			if (user.autoconfirmed && user.autoconfirmed !== userid) buf += " ac:[" + user.autoconfirmed + "]";
 		}
 		buf += text;
-		writeModlog('global', buf);
+		Rooms.global.modlog(buf);
+	}
+	logEntry(data) {
+		this.room.logEntry(data);
+	}
+	addModCommand(text, logOnlyText) {
+		this.add(text);
+		this.room.modlog(text + (logOnlyText || ""));
+	}
+	logModCommand(text) {
+		this.room.modlog(text);
 	}
 	can(permission, target, room) {
 		if (!this.user.can(permission, target, room)) {
