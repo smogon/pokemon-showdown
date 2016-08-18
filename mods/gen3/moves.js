@@ -716,6 +716,29 @@ exports.BattleMovedex = {
 				return true;
 			}
 		},
+		onHit: function (pokemon) {
+			let moves = [];
+			for (let i = 0; i < pokemon.moveset.length; i++) {
+				let move = pokemon.moveset[i].id;
+				let pp = pokemon.moveset[i].pp;
+				let NoSleepTalk = {
+					assist:1, bide:1, focuspunch:1, metronome:1, mirrormove:1, sleeptalk:1, uproar:1,
+				};
+				if (move && !(NoSleepTalk[move] || this.getMove(move).flags['charge'])) {
+					moves.push({move: move, pp: pp});
+				}
+			}
+			let randomMove = '';
+			if (moves.length) randomMove = moves[this.random(moves.length)];
+			if (!randomMove) {
+				return false;
+			}
+			if (!randomMove.pp) {
+				this.add('cant', pokemon, 'nopp', randomMove.move);
+				return;
+			}
+			this.useMove(randomMove.move, pokemon);
+		},
 	},
 	spikes: {
 		inherit: true,
