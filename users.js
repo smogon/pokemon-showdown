@@ -710,8 +710,6 @@ class User {
 			// This user already exists; let's merge
 			user.merge(this);
 
-			user.updateGroup(registered);
-
 			Users.merge(user, this);
 			for (let i in this.prevNames) {
 				if (!user.prevNames[i]) {
@@ -789,6 +787,8 @@ class User {
 		if (!this.locked && oldUser.locked === '#dnsbl') oldUser.locked = false;
 		if (oldUser.locked) this.locked = oldUser.locked;
 		if (oldUser.autoconfirmed) this.autoconfirmed = oldUser.autoconfirmed;
+
+		this.updateGroup(this.registered);
 
 		for (let i = 0; i < oldUser.connections.length; i++) {
 			this.mergeConnection(oldUser.connections[i]);
