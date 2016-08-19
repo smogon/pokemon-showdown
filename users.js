@@ -955,8 +955,6 @@ class User {
 		let removed = [];
 		if (usergroups[userid]) {
 			removed.push(usergroups[userid].charAt(0));
-			delete usergroups[userid];
-			exportUsergroups();
 		}
 		for (let i = 0; i < Rooms.global.chatRooms.length; i++) {
 			let room = Rooms.global.chatRooms[i];
@@ -966,6 +964,7 @@ class User {
 			}
 		}
 		this.confirmed = '';
+		this.setGroup(' ');
 		return removed;
 	}
 	markInactive() {
