@@ -2537,6 +2537,9 @@ exports.commands = {
 				delete require.cache[require.resolve('./punishments.js')];
 				global.Punishments = require('./punishments.js');
 				return this.sendReply("Punishments have been hotpatched.");
+			} else if (target === 'dnsbl') {
+				Dnsbl.loadDatacenters();
+				return this.sendReply("Dnsbl has been hotpatched.");
 			} else if (target.startsWith('disablechat')) {
 				if (Monitor.hotpatchLockChat) return this.errorReply("Hotpatch is already disabled.");
 				let reason = target.split(', ')[1];
@@ -2560,6 +2563,7 @@ exports.commands = {
 		"/hotpatch battles - spawn new simulator processes",
 		"/hotpatch validator - spawn new team validator processes",
 		"/hotpatch formats - reload the tools.js tree, rebuild and rebroad the formats list, and spawn new simulator and team validator processes",
+		"/hotpatch dnsbl - reloads Dnsbl datacenters",
 		"/hotpatch disable, [reason] - disables the use of hotpatch until the next server restart"],
 
 	savelearnsets: function (target, room, user) {
