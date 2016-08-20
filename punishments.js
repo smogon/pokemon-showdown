@@ -418,7 +418,7 @@ Punishments.checkName = function (user, registered) {
 
 	if (registered && id === 'BAN') {
 		let bannedUnder = '';
-		if (punishUserid !== userid) bannedUnder = ' because it has the same IP as banned user: ' + punishUserid;
+		if (punishUserid !== userid) bannedUnder = ' because you have the same IP as banned user: ' + punishUserid;
 		user.send("|popup|Your username (" + user.name + ") is banned" + bannedUnder + "'. Your ban will expire in a few days." + (Config.appealurl ? " Or you can appeal at:\n" + Config.appealurl : ""));
 		Punishments.punish(user, punishment);
 		user.disconnectAll();
@@ -426,8 +426,8 @@ Punishments.checkName = function (user, registered) {
 	}
 	if (id === 'NAMELOCK' || user.namelocked) {
 		let bannedUnder = '';
-		if (punishUserid !== userid) bannedUnder = ' because it has the same IP as banned user: ' + punishUserid;
-		user.send("|popup|You are namelocked" + bannedUnder + "'. Your namelock will expire in a few days.");
+		if (punishUserid !== userid) bannedUnder = ' because you have the same IP as banned user: ' + punishUserid;
+		user.send("|popup|You are namelocked and can't have a username" + bannedUnder + "'. Your namelock will expire in a few days.");
 		if (punishment[2]) Punishments.punish(user, punishment);
 		user.locked = punishUserid;
 		user.namelocked = punishUserid;
@@ -435,15 +435,10 @@ Punishments.checkName = function (user, registered) {
 		user.updateIdentity();
 	} else {
 		let bannedUnder = '';
-		if (punishUserid !== userid) bannedUnder = ' because it has the same IP as banned user: ' + punishUserid;
+		if (punishUserid !== userid) bannedUnder = ' because you have the same IP as banned user: ' + punishUserid;
 		user.send("|popup|Your username (" + user.name + ") is locked" + bannedUnder + "'. Your lock will expire in a few days." + (Config.appealurl ? " Or you can appeal at:\n" + Config.appealurl : ""));
 		Punishments.punish(user, punishment);
 		user.locked = punishUserid;
-		user.updateIdentity();
-	}
-	if (user.namelocked) {
-		user.popup("You can't change your name because you're namelocked.");
-		user.resetName();
 		user.updateIdentity();
 	}
 };
