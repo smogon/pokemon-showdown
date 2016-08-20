@@ -31,7 +31,10 @@ class Ladder {
 	getRating(userid) {
 		let formatid = this.formatid;
 		let user = Users.getExact(userid);
-		if (user && user.mmrCache[formatid]) {
+		if (!user) {
+			return Promise.reject(new Error("Expired rating for " + user));
+		}
+		if (user.mmrCache[formatid]) {
 			return Promise.resolve(user.mmrCache[formatid]);
 		}
 		return new Promise((resolve, reject) => {
