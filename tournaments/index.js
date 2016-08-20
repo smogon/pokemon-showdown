@@ -215,12 +215,9 @@ class Tournament {
 			return;
 		}
 
-		let gameCount = 0;
-		for (let i in user.games) { // eslint-disable-line no-unused-vars
-			gameCount++;
-		}
-		if (gameCount > 4 || Monitor.countPrepBattle(user.latestIp, user.name)) {
-			output.errorReply("Due to high load, you are unable to join this tournament.");
+		let gameCount = Object.keys(user.games).length;
+		if (gameCount > 4) {
+			output.errorReply("Due to high load, you are limited to 4 games at the same time.");
 			return;
 		}
 
