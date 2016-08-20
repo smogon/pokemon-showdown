@@ -204,7 +204,7 @@ exports.commands = {
 		}
 		if (!results.length) {
 			if (!target.includes('.')) return this.errorReply("'" + target + "' is not a valid IP or host.");
-			return this.errorReply("No results found.");
+			return this.sendReply("No results found.");
 		}
 		return this.sendReply(results.join('; '));
 	},
