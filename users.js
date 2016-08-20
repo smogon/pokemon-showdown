@@ -1236,9 +1236,6 @@ class User {
 
 		if (result.length > 1) {
 			this.team = result.slice(1);
-			Monitor.teamValidatorChanged++;
-		} else {
-			Monitor.teamValidatorUnchanged++;
 		}
 		return (this === users.get(this.userid));
 	}

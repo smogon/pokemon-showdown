@@ -3265,7 +3265,6 @@ exports.commands = {
 	query: function (target, room, user, connection) {
 		// Avoid guest users to use the cmd errors to ease the app-layer attacks in emergency mode
 		let trustable = (!Config.emergency || (user.named && user.registered));
-		if (Config.emergency && Monitor.countCmd(connection.ip, user.name)) return false;
 		let spaceIndex = target.indexOf(' ');
 		let cmd = target;
 		if (spaceIndex > 0) {
