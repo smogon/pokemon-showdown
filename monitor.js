@@ -25,7 +25,7 @@ class TimedCounter extends Map {
 	}
 }
 
-const Monitor = module.exports = { // eslint-disable-line no-unused-vars
+const Monitor = module.exports = {
 
 	/*********************************************************
 	 * Logging
