@@ -202,7 +202,10 @@ exports.commands = {
 				}
 			});
 		}
-		if (!results.length) return this.errorReply("No results found.");
+		if (!results.length) {
+			if (!target.includes('.')) return this.errorReply("'" + target + "' is not a valid IP or host.");
+			return this.errorReply("No results found.");
+		}
 		return this.sendReply(results.join('; '));
 	},
 	ipsearchhelp: ["/ipsearch [ip|range|host] - Find all users with specified IP, IP range, or host. Requires: & ~"],
