@@ -499,13 +499,17 @@ exports.BattleFormats = {
 
 			// check if Speed is boosted
 			let speedBoosted = false;
+			let nonSpeedBoosted = false;
 			for (let i = 0; i < set.moves.length; i++) {
 				let move = this.getMove(set.moves[i]);
 				if (move.boosts && move.boosts.spe > 0) {
 					speedBoosted = true;
-					break;
+				}
+				if (move.boosts && (move.boosts.atk > 0 || move.boosts.def > 0 || move.boosts.spa > 0 || move.boosts.spd > 0)) {
+					nonSpeedBoosted = true;
 				}
 			}
+
 			let boostSpeed = ['flamecharge', 'geomancy', 'motordrive', 'rattled', 'speedboost', 'steadfast', 'weakarmor', 'salacberry'];
 			if (!speedBoosted) {
 				for (let i = 0; i < boostSpeed.length; i++) {
@@ -522,14 +526,6 @@ exports.BattleFormats = {
 			}
 
 			// check if non-Speed boosted
-			let nonSpeedBoosted = false;
-			for (let i = 0; i < set.moves.length; i++) {
-				let move = this.getMove(set.moves[i]);
-				if (move.boosts && (move.boosts.atk > 0 || move.boosts.def > 0 || move.boosts.spa > 0 || move.boosts.spd > 0)) {
-					nonSpeedBoosted = true;
-					break;
-				}
-			}
 			let boostNonSpeed = ['acupressure', 'starfberry', 'curse', 'poweruppunch', 'rage', 'rototiller', 'fellstinger', 'bellydrum', 'download', 'justified', 'moxie', 'sapsipper', 'defiant', 'angerpoint', 'cellbattery', 'liechiberry', 'snowball', 'weaknesspolicy', 'diamondstorm', 'flowershield', 'skullbash', 'stockpile', 'cottonguard', 'ganlonberry', 'keeberry', 'chargebeam', 'fierydance', 'geomancy', 'lightningrod', 'stormdrain', 'competitive', 'absorbbulb', 'petayaberry', 'charge', 'apicotberry', 'luminousmoss', 'marangaberry'];
 			if (!nonSpeedBoosted) {
 				for (let i = 0; i < boostNonSpeed.length; i++) {
