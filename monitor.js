@@ -85,13 +85,13 @@ const Monitor = module.exports = { // eslint-disable-line no-unused-vars
 		let count = val[0], duration = val[1];
 		name = (name ? ': ' + name : '');
 		if (count === 500) {
-			this.adminlog('[ResourceMonitor] IP ' + ip + ' has been banned for connection flooding (' + count + ' times in the last ' + Tools.toDurationString(duration) + name + ')');
+			this.adminlog('[ResourceMonitor] IP ' + ip + ' banned for cflooding (' + count + ' times in ' + Tools.toDurationString(duration) + name + ')');
 			return true;
 		} else if (count > 500) {
 			if (count % 500 === 0) {
 				let c = count / 500;
 				if (c === 2 || c === 4 || c === 10 || c === 20 || c % 40 === 0) {
-					this.adminlog('[ResourceMonitor] Banned IP ' + ip + ' has connected ' + count + ' times in the last ' + Tools.toDurationString(duration) + name);
+					this.adminlog('[ResourceMonitor] IP ' + ip + ' still cflooding (' + count + ' times in ' + Tools.toDurationString(duration) + name + ')');
 				}
 			}
 			return true;
