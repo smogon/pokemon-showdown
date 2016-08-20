@@ -2186,6 +2186,7 @@ exports.commands = {
 			return this.errorReply("User '" + this.targetUsername + "' not found.");
 		}
 		if (!this.can('forcerename', targetUser)) return false;
+		if (targetUser.namelocked) return this.errorReply("User '" + target + "' is already namelocked.");
 
 		this.addModCommand("" + targetUser.name + " was namelocked by " + user.name + "." + (reason ? " (" + reason + ")" : ""));
 		this.globalModlog("NAMELOCK", targetUser, " by " + user.name + (reason ? ": " + reason : ""));
