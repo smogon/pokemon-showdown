@@ -11,6 +11,20 @@
 const fs = require('fs');
 const path = require('path');
 
+class TimedCounter extends Map {
+	increment(key, timeLimit) {
+		let val = this.get(key);
+		let now = Date.now();
+		if (!val || now > val[1] + timeLimit) {
+			this.set(key, [1, Date.now()]);
+			return [1, 0];
+		} else {
+			val[0]++;
+			return [val[0], now - val[1]];
+		}
+	}
+}
+
 const Monitor = module.exports = { // eslint-disable-line no-unused-vars
 
 	/*********************************************************
@@ -50,119 +64,78 @@ const Monitor = module.exports = { // eslint-disable-line no-unused-vars
 	 *********************************************************/
 
 	clean: function () {
-		Monitor.networkCount = {};
-		Monitor.networkUse = {};
-		Monitor.battlePrepTimes = {};
-		Monitor.battlePreps = {};
-		Monitor.battleTimes = {};
-		Monitor.battles = {};
-		Monitor.connectionTimes = {};
-		Monitor.connections = {};
+		Monitor.clearNetworkUse();
+		Monitor.battlePreps.clear();
+		Monitor.battles.clear();
+		Monitor.connections.clear();
 		Dnsbl.cache.clear();
 	},
-	connections: {},
-	connectionTimes: {},
-	battles: {},
-	battleTimes: {},
-	battlePreps: {},
-	battlePrepTimes: {},
-	groupChats: {},
-	groupChatTimes: {},
+	connections: new TimedCounter(),
+	battles: new TimedCounter(),
+	battlePreps: new TimedCounter(),
+	groupChats: new TimedCounter(),
 	networkUse: {},
 	networkCount: {},
-	cmds: {},
-	cmdsTimes: {},
-	cmdsTotal: {lastCleanup: Date.now(), count: 0},
-	teamValidatorChanged: 0,
-	teamValidatorUnchanged: 0,
 	hotpatchLock: false,
 	/**
 	 * Counts a connection. Returns true if the connection should be terminated for abuse.
 	 */
 	countConnection: function (ip, name) {
-		let now = Date.now();
-		let duration = now - this.connectionTimes[ip];
+		let val = this.connections.increment(ip, 30 * 60 * 1000);
+		let count = val[0], duration = val[1];
 		name = (name ? ': ' + name : '');
-		if (ip in this.connections && duration < 30 * 60 * 1000) {
-			this.connections[ip]++;
-			if (this.connections[ip] === 500) {
-				this.adminlog('[ResourceMonitor] IP ' + ip + ' has been banned for connection flooding (' + this.connections[ip] + ' times in the last ' + Tools.toDurationString(duration) + name + ')');
-				return true;
-			} else if (this.connections[ip] > 500) {
-				if (this.connections[ip] % 500 === 0) {
-					let c = this.connections[ip] / 500;
-					if (c === 2 || c === 4 || c === 10 || c === 20 || c % 40 === 0) {
-						this.adminlog('[ResourceMonitor] Banned IP ' + ip + ' has connected ' + this.connections[ip] + ' times in the last ' + Tools.toDurationString(duration) + name);
-					}
+		if (count === 500) {
+			this.adminlog('[ResourceMonitor] IP ' + ip + ' has been banned for connection flooding (' + count + ' times in the last ' + Tools.toDurationString(duration) + name + ')');
+			return true;
+		} else if (count > 500) {
+			if (count % 500 === 0) {
+				let c = count / 500;
+				if (c === 2 || c === 4 || c === 10 || c === 20 || c % 40 === 0) {
+					this.adminlog('[ResourceMonitor] Banned IP ' + ip + ' has connected ' + count + ' times in the last ' + Tools.toDurationString(duration) + name);
 				}
-				return true;
 			}
-		} else {
-			this.connections[ip] = 1;
-			this.connectionTimes[ip] = now;
+			return true;
 		}
 	},
 	/**
 	 * Counts a battle. Returns true if the connection should be terminated for abuse.
 	 */
 	countBattle: function (ip, name) {
-		let now = Date.now();
-		let duration = now - this.battleTimes[ip];
+		let val = this.battles.increment(ip, 30 * 60 * 1000);
+		let count = val[0], duration = val[1];
 		name = (name ? ': ' + name : '');
-		if (ip in this.battles && duration < 30 * 60 * 1000) {
-			this.battles[ip]++;
-			if (duration < 5 * 60 * 1000 && this.battles[ip] % 15 === 0) {
-				this.log('[ResourceMonitor] IP ' + ip + ' has battled ' + this.battles[ip] + ' times in the last ' + Tools.toDurationString(duration) + name);
-			} else if (this.battles[ip] % 75 === 0) {
-				this.log('[ResourceMonitor] IP ' + ip + ' has battled ' + this.battles[ip] + ' times in the last ' + Tools.toDurationString(duration) + name);
-			}
-		} else {
-			this.battles[ip] = 1;
-			this.battleTimes[ip] = now;
+		if (duration < 5 * 60 * 1000 && count % 15 === 0) {
+			this.adminlog('[ResourceMonitor] IP ' + ip + ' has battled ' + count + ' times in the last ' + Tools.toDurationString(duration) + name);
+		} else if (count % 75 === 0) {
+			this.adminlog('[ResourceMonitor] IP ' + ip + ' has battled ' + count + ' times in the last ' + Tools.toDurationString(duration) + name);
 		}
 	},
 	/**
 	 * Counts battle prep. Returns true if too much
 	 */
 	countPrepBattle: function (ip) {
-		let now = Date.now();
-		let duration = now - this.battlePrepTimes[ip];
-		if (ip in this.battlePreps && duration < 3 * 60 * 1000) {
-			this.battlePreps[ip]++;
-			if (this.battlePreps[ip] > 6) {
-				return true;
-			}
-		} else {
-			this.battlePreps[ip] = 1;
-			this.battlePrepTimes[ip] = now;
-		}
+		let count = this.battlePreps.increment(ip, 3 * 60 * 1000)[0];
+		if (count > 6) return true;
 	},
 	/**
 	 * Counts group chat creation. Returns true if too much.
 	 */
 	countGroupChat: function (ip) {
-		let now = Date.now();
-		let duration = now - this.groupChatTimes[ip];
-		if (ip in this.groupChats && duration < 60 * 60 * 1000) {
-			this.groupChats[ip]++;
-			if (this.groupChats[ip] > 4) {
-				return true;
-			}
-		} else {
-			this.groupChats[ip] = 1;
-			this.groupChatTimes[ip] = now;
-		}
+		let count = this.groupChats.increment(ip, 60 * 60 * 1000)[0];
+		if (count > 4) return true;
 	},
 	/**
 	 * data
 	 */
 	countNetworkUse: function (size) {
-		if (this.activeIp in this.networkUse) {
-			this.networkUse[this.activeIp] += size;
-			this.networkCount[this.activeIp]++;
-		} else {
-			this.networkUse[this.activeIp] = size;
-			this.networkCount[this.activeIp] = 1;
+		if (Config.emergency) {
+			if (this.activeIp in this.networkUse) {
+				this.networkUse[this.activeIp] += size;
+				this.networkCount[this.activeIp]++;
+			} else {
+				this.networkUse[this.activeIp] = size;
+				this.networkCount[this.activeIp] = 1;
+			}
 		}
 	},
 	writeNetworkUse: function () {
@@ -173,8 +146,10 @@ const Monitor = module.exports = { // eslint-disable-line no-unused-vars
 		fs.writeFile(path.resolve(__dirname, 'logs/networkuse.tsv'), buf);
 	},
 	clearNetworkUse: function () {
-		this.networkUse = {};
-		this.networkCount = {};
+		if (Config.emergency) {
+			this.networkUse = {};
+			this.networkCount = {};
+		}
 	},
 	/**
 	 * Counts roughly the size of an object to have an idea of the server load.
@@ -199,40 +174,6 @@ const Monitor = module.exports = { // eslint-disable-line no-unused-vars
 		}
 
 		return bytes;
-	},
-	/**
-	 * Controls the amount of times a cmd command is used
-	 */
-	countCmd: function (ip, name) {
-		let now = Date.now();
-		let duration = now - this.cmdsTimes[ip];
-		name = (name ? ': ' + name : '');
-		if (!this.cmdsTotal) this.cmdsTotal = {lastCleanup: 0, count: 0};
-		if (now - this.cmdsTotal.lastCleanup > 60 * 1000) {
-			this.cmdsTotal.count = 0;
-			this.cmdsTotal.lastCleanup = now;
-		}
-		this.cmdsTotal.count++;
-		if (ip in this.cmds && duration < 60 * 1000) {
-			this.cmds[ip]++;
-			if (duration < 60 * 1000 && this.cmds[ip] % 5 === 0) {
-				if (this.cmds[ip] >= 3) {
-					if (this.cmds[ip] % 30 === 0) this.log('CMD command from ' + ip + ' blocked for ' + this.cmds[ip] + 'th use in the last ' + Tools.toDurationString(duration) + name);
-					return true;
-				}
-				this.log('[ResourceMonitor] IP ' + ip + ' has used CMD command ' + this.cmds[ip] + ' times in the last ' + Tools.toDurationString(duration) + name);
-			} else if (this.cmds[ip] % 15 === 0) {
-				this.log('CMD command from ' + ip + ' blocked for ' + this.cmds[ip] + 'th use in the last ' + Tools.toDurationString(duration) + name);
-				return true;
-			}
-		} else if (this.cmdsTotal.count > 8000) {
-			// One CMD check per user per minute on average (to-do: make this better)
-			this.log('CMD command for ' + ip + ' blocked because CMD has been used ' + this.cmdsTotal.count + ' times in the last minute.');
-			return true;
-		} else {
-			this.cmds[ip] = 1;
-			this.cmdsTimes[ip] = now;
-		}
 	},
 };
 
