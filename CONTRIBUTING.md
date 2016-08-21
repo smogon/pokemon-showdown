@@ -23,26 +23,26 @@ The first letter of a commit summary should be capitalized (unless the first wor
 
 The commit summary should not end in a period.
 
-BAD: `refactor users to use classes`  
-BAD: `Refactor Users to use classes.`  
-GOOD: `Refactor Users to use classes`
+- BAD: `refactor users to use classes`
+- BAD: `Refactor Users to use classes.`
+- GOOD: `Refactor Users to use classes`
 
 If the first word is a verb, it should be in imperative mood (the first word doesn't have to be a verb, but we recommend it).
 
-BAD: `Adding namefilter`  
-BAD: `Adds namefilter`  
-GOOD: `Add namefilter`
+- BAD: `Adding namefilter`
+- BAD: `Adds namefilter`
+- GOOD: `Add namefilter`
 
 Your commit summary should make it clear what part of the code you're talking about. For instance, if you're editing the Trivia plugin, you might want to add "Trivia: " to the beginning of your commit summary so it's clear.
 
-BAD: `Ban Genesect`  
-GOOD: `Monotype: Ban Genesect` (notice the uppercase "B")  
+- BAD: `Ban Genesect`
+- GOOD: `Monotype: Ban Genesect` (notice the uppercase "B")
 
 Do not make commits to fix commits in your pull request. Just squash/amend them into one commit.
 
-BAD: `Add /lock`, `Fix crash in /lock`, `Fix another crash in /lock` (if these are the same pullreq, they should be the same commit)  
-GOOD: `Add /lock`  
-GOOD: `Fix crash in /lock`
+- BAD: `Add /lock`, `Fix crash in /lock`, `Fix another crash in /lock` (if these are the same pullreq, they should be the same commit)
+- GOOD: `Add /lock`
+- GOOD: `Fix crash in /lock`
 
 You may have more than one commit, as long as they make sense as separate commits, and none of your commits are just fixing an earlier commit in your pull request.
 
