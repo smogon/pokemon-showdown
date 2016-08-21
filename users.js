@@ -964,7 +964,7 @@ class User {
 			}
 		}
 		this.confirmed = '';
-		this.setGroup(' ');
+		this.setGroup(Config.groupsranking[0]);
 		return removed;
 	}
 	markInactive() {
