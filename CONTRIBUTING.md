@@ -72,6 +72,8 @@ In general, use modern features only if they're supported in Node 4 and reasonab
 
 - **Array#forEach: NEVER** - Worse performance than `for-of` on Arrays. See `for-of`.
 
+- **for-in on Arrays: NEVER** - Horrible performance, weird bugs due to string keys, poor interaction with Array prototype modification. Everyone tells you never to do it; we're no different. See `for-of`.
+
 - **Map, Set: SOMETIMES** - Much worse write/iteration performance, much better read performance than `Object.create(null)`. Use whatever's faster for your use case.
 
 - **for-of on Maps: NEVER** - Poor performance. Use `Map#forEach`.
