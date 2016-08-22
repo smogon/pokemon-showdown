@@ -329,7 +329,7 @@ class User {
 		this.locked = false;
 		this.namelocked = false;
 		this.prevNames = Object.create(null);
-		this.roomCount = Object.create(null);
+		this.inRooms = new Set();
 
 		// Table of roomid:game
 		this.games = Object.create(null);
@@ -512,9 +512,9 @@ class User {
 		if (roomid) {
 			return Rooms(roomid).onUpdateIdentity(this);
 		}
-		for (let i in this.roomCount) {
-			Rooms(i).onUpdateIdentity(this);
-		}
+		this.inRooms.forEach(roomid => {
+			Rooms(roomid).onUpdateIdentity(this);
+		});
 	}
 	filterName(name) {
 		if (!Config.disablebasicnamefilter) {
@@ -777,15 +777,15 @@ class User {
 		for (let i in this.games) {
 			this.games[i].onRename(this, oldid, joining);
 		}
-		for (let i in this.roomCount) {
-			Rooms(i).onRename(this, oldid, joining);
-		}
+		this.inRooms.forEach(roomid => {
+			Rooms(roomid).onRename(this, oldid, joining);
+		});
 		return true;
 	}
 	merge(oldUser) {
-		for (let i in oldUser.roomCount) {
-			Rooms(i).onLeave(oldUser);
-		}
+		this.inRooms.forEach(roomid => {
+			Rooms(roomid).onLeave(oldUser);
+		});
 
 		if (this.locked === '#dnsbl' && !oldUser.locked) this.locked = false;
 		if (!this.locked && oldUser.locked === '#dnsbl') oldUser.locked = false;
@@ -797,7 +797,7 @@ class User {
 		for (let i = 0; i < oldUser.connections.length; i++) {
 			this.mergeConnection(oldUser.connections[i]);
 		}
-		oldUser.roomCount = {};
+		oldUser.inRooms.clear();
 		oldUser.connections = [];
 
 		this.s1 = oldUser.s1;
@@ -835,7 +835,7 @@ class User {
 		connection.user = this;
 		for (let i in connection.rooms) {
 			let room = connection.rooms[i];
-			if (!this.roomCount[i]) {
+			if (!this.inRooms.has(i)) {
 				if (room.bannedUsers && (this.userid in room.bannedUsers || this.autoconfirmed in room.bannedUsers)) {
 					// the connection was in a room that this user is banned from
 					room.bannedIps[connection.ip] = room.bannedUsers[this.userid];
@@ -844,9 +844,8 @@ class User {
 					continue;
 				}
 				room.onJoin(this, connection);
-				this.roomCount[i] = 0;
+				this.inRooms.add(i);
 			}
-			this.roomCount[i]++;
 			if (room.game && room.game.onUpdateConnection) {
 				room.game.onUpdateConnection(this, connection);
 			}
@@ -1002,14 +1001,12 @@ class User {
 		}
 		if (!this.connections.length) {
 			// cleanup
-			for (let i in this.roomCount) {
-				if (this.roomCount[i] > 0) {
-					// should never happen.
-					Monitor.debug('!! room miscount: ' + i + ' not left');
-					Rooms(i).onLeave(this);
-				}
-			}
-			this.roomCount = {};
+			this.inRooms.forEach(roomid => {
+				// should never happen.
+				Monitor.debug(`!! room miscount: ${roomid} not left`);
+				Rooms(roomid).onLeave(this);
+			});
+			this.inRooms.clear();
 			if (!this.named && !Object.keys(this.prevNames).length) {
 				// user never chose a name (and therefore never talked/battled)
 				// there's no need to keep track of this user, so we can
@@ -1035,13 +1032,11 @@ class User {
 			// should never happen
 			throw new Error("Failed to drop all connections for " + this.userid);
 		}
-		for (let i in this.roomCount) {
-			if (this.roomCount[i] > 0) {
-				// should never happen.
-				throw new Error("Room miscount: " + i + " not left for " + this.userid);
-			}
-		}
-		this.roomCount = {};
+		this.inRooms.forEach(roomid => {
+			// should never happen.
+			throw new Error(`Room miscount: ${roomid} not left for ${this.userid}`);
+		});
+		this.inRooms.clear();
 	}
 	getAlts(includeConfirmed, forPunishment) {
 		return this.getAltUsers(includeConfirmed, forPunishment).map(user => user.getLastName());
@@ -1145,11 +1140,9 @@ class User {
 			return true;
 		}
 		if (!connection.rooms[room.id]) {
-			if (!this.roomCount[room.id]) {
-				this.roomCount[room.id] = 1;
+			if (!this.inRooms.has(room.id)) {
+				this.inRooms.add(room.id);
 				room.onJoin(this, connection);
-			} else {
-				this.roomCount[room.id]++;
 			}
 			connection.joinRoom(room);
 			room.onConnect(this, connection);
@@ -1162,40 +1155,25 @@ class User {
 			// you can't leave the global room except while disconnecting
 			return false;
 		}
-		for (let i = 0; i < this.connections.length; i++) {
-			if (this.connections[i] === connection || !connection) {
-				if (this.connections[i].rooms[room.id]) {
-					if (this.roomCount[room.id]) {
-						this.roomCount[room.id]--;
-						if (!this.roomCount[room.id]) {
-							room.onLeave(this);
-							delete this.roomCount[room.id];
-						}
-					} else {
-						// should never happen
-						console.log('!! room miscount');
-					}
-					if (!this.connections[i]) {
-						// race condition? This should never happen, but it does.
-						fs.createWriteStream('logs/errors.txt', {'flags': 'a'}).on("open", fd => {
-							this.write("\nconnections = " + JSON.stringify(this.connections) + "\ni = " + i + "\n\n");
-							this.end();
-						});
-					} else {
-						this.connections[i].sendTo(room.id, '|deinit');
-						this.connections[i].leaveRoom(room);
-					}
-				}
-				if (connection) {
-					break;
-				}
-			}
+		if (!this.inRooms.has(room.id)) {
+			return false;
 		}
-		if (!connection && room.id in this.roomCount) {
-			// should also never happen
-			console.log('!! room miscount: ' + room.id + ' not left for ' + this.userid);
+		for (let i = 0; i < this.connections.length; i++) {
+			if (connection && this.connections[i] !== connection) continue;
+			if (this.connections[i].rooms[room.id]) {
+				this.connections[i].sendTo(room.id, '|deinit');
+				this.connections[i].leaveRoom(room);
+			}
+			if (connection) break;
+		}
+
+		let stillInRoom = false;
+		if (connection) {
+			stillInRoom = this.connections.some(connection => room.id in connection.rooms);
+		}
+		if (!stillInRoom) {
 			room.onLeave(this);
-			delete this.roomCount[room.id];
+			this.inRooms.delete(room.id);
 		}
 	}
 	prepBattle(formatid, type, connection) {

@@ -1511,13 +1511,13 @@ exports.commands = {
 		}
 
 		// Destroy personal rooms of the locked user.
-		for (let i in targetUser.roomCount) {
-			if (i === 'global') continue;
-			let targetRoom = Rooms.get(i);
-			if (targetRoom.isPersonal && targetRoom.auth[userid] && targetRoom.auth[userid] === '#') {
+		targetUser.inRooms.forEach(roomid => {
+			if (roomid === 'global') return;
+			let targetRoom = Rooms.get(roomid);
+			if (targetRoom.isPersonal && targetRoom.auth[userid] === '#') {
 				targetRoom.destroy();
 			}
-		}
+		});
 
 		targetUser.popup("|modal|" + user.name + " has locked you from talking in chats, battles, and PMing regular users." + (target ? "\n\nReason: " + target : "") + "\n\nIf you feel that your lock was unjustified, you can still PM staff members (%, @, &, and ~) to discuss it" + (Config.appealurl ? " or you can appeal:\n" + Config.appealurl : ".") + "\n\nYour lock will expire in a few days.");
 
@@ -1570,13 +1570,13 @@ exports.commands = {
 		}
 
 		// Destroy personal rooms of the locked user.
-		for (let i in targetUser.roomCount) {
-			if (i === 'global') continue;
-			let targetRoom = Rooms.get(i);
-			if (targetRoom.isPersonal && targetRoom.auth[userid] && targetRoom.auth[userid] === '#') {
+		targetUser.inRooms.forEach(roomid => {
+			if (roomid === 'global') return;
+			let targetRoom = Rooms.get(roomid);
+			if (targetRoom.isPersonal && targetRoom.auth[userid] === '#') {
 				targetRoom.destroy();
 			}
-		}
+		});
 
 		targetUser.popup("|modal|" + user.name + " has locked you from talking in chats, battles, and PMing regular users for a week." + (target ? "\n\nReason: " + target : "") + "\n\nIf you feel that your lock was unjustified, you can still PM staff members (%, @, &, and ~) to discuss it" + (Config.appealurl ? " or you can appeal:\n" + Config.appealurl : ".") + "\n\nYour lock will expire in a few days.");
 
@@ -1656,13 +1656,13 @@ exports.commands = {
 		}
 
 		// Destroy personal rooms of the banned user.
-		for (let i in targetUser.roomCount) {
-			if (i === 'global') continue;
-			let targetRoom = Rooms.get(i);
-			if (targetRoom.isPersonal && targetRoom.auth[userid] && targetRoom.auth[userid] === '#') {
+		targetUser.inRooms.forEach(roomid => {
+			if (roomid === 'global') return;
+			let targetRoom = Rooms.get(roomid);
+			if (targetRoom.isPersonal && targetRoom.auth[userid] === '#') {
 				targetRoom.destroy();
 			}
-		}
+		});
 
 		targetUser.popup("|modal|" + user.name + " has banned you." + (target ? "\n\nReason: " + target : "") + (Config.appealurl ? "\n\nIf you feel that your ban was unjustified, you can appeal:\n" + Config.appealurl : "") + "\n\nYour ban will expire in a few days.");
 
@@ -3289,13 +3289,13 @@ exports.commands = {
 				return false;
 			}
 			let roomList = {};
-			for (let i in targetUser.roomCount) {
-				if (i === 'global') continue;
-				let targetRoom = Rooms.get(i);
-				if (!targetRoom) continue; // shouldn't happen
+			targetUser.inRooms.forEach(roomid => {
+				if (roomid === 'global') return;
+				let targetRoom = Rooms.get(roomid);
+				if (!targetRoom) return; // shouldn't happen
 				let roomData = {};
 				if (targetRoom.isPrivate) {
-					if (!(i in user.roomCount) && !(i in user.games)) continue;
+					if (!user.inRooms.has(roomid) && !(roomid in user.games)) return;
 					roomData.isPrivate = true;
 				}
 				if (targetRoom.battle) {
@@ -3303,8 +3303,8 @@ exports.commands = {
 					roomData.p1 = battle.p1 ? ' ' + battle.p1.name : '';
 					roomData.p2 = battle.p2 ? ' ' + battle.p2.name : '';
 				}
-				roomList[i] = roomData;
-			}
+				roomList[roomid] = roomData;
+			});
 			if (!targetUser.connected) roomList = false;
 			let userdetails = {
 				userid: targetUser.userid,
