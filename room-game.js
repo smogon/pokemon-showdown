@@ -24,13 +24,13 @@ class RoomGamePlayer {
 		this.userid = user.userid;
 		this.name = user.name;
 		this.game = game;
-		user.games[this.game.id] = this.game;
+		user.games.set(this.game.id, this.game);
 		user.updateSearch();
 	}
 	destroy() {
 		let user = Users.getExact(this.userid);
 		if (user) {
-			delete user.games[this.game.id];
+			user.games.delete(this.game.id);
 			user.updateSearch();
 		}
 	}
@@ -153,7 +153,12 @@ class RoomGame {
 	// need to handle the other events.
 
 	onRename(user, oldUserid) {
-		if (!this.allowRenames) return;
+		if (!this.allowRenames) {
+			if (!(user.userid in this.players)) {
+				user.games.delete(this.id);
+			}
+			return;
+		}
 		if (!(oldUserid in this.players)) return;
 		if (user.userid === oldUserid) {
 			this.players[user.userid].name = user.name;

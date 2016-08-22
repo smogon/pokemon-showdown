@@ -332,7 +332,7 @@ class User {
 		this.inRooms = new Set();
 
 		// Table of roomid:game
-		this.games = Object.create(null);
+		this.games = new Map();
 
 		// searches and challenges
 		this.searching = Object.create(null);
@@ -562,9 +562,10 @@ class User {
 	 * @param connection       The connection asking for the rename
 	 */
 	rename(name, token, newlyRegistered, connection) {
-		for (let id in this.games) {
-			if (this.games[id].ended) continue;
-			if (this.games[id].allowRenames) continue;
+		// this needs to be a for-of because it returns...
+		for (let game of this.games.values()) {
+			if (game.ended) continue; // should never happen
+			if (game.allowRenames) continue;
 			this.popup("You can't change your name right now because you're in the middle of a rated game.");
 			return false;
 		}
@@ -774,9 +775,9 @@ class User {
 			let initdata = '|updateuser|' + this.name + '|' + (this.named ? '1' : '0') + '|' + this.avatar;
 			this.connections[i].send(initdata);
 		}
-		for (let i in this.games) {
-			this.games[i].onRename(this, oldid, joining);
-		}
+		this.games.forEach(game => {
+			game.onRename(this, oldid, joining);
+		});
 		this.inRooms.forEach(roomid => {
 			Rooms(roomid).onRename(this, oldid, joining);
 		});
@@ -1190,7 +1191,7 @@ class User {
 			connection.popup(message);
 			return Promise.resolve(false);
 		}
-		let gameCount = Object.keys(this.games).length;
+		let gameCount = this.games.size;
 		if (gameCount > 4) {
 			connection.popup("Due to high load, you are limited to 4 games at the same time.");
 			return Promise.resolve(false);
@@ -1242,11 +1243,10 @@ class User {
 	updateSearch(onlyIfExists, connection) {
 		let games = {};
 		let atLeastOne = false;
-		for (let roomid in this.games) {
-			let game = this.games[roomid];
+		this.games.forEach((game, roomid) => {
 			games[roomid] = game.title + (game.allowRenames ? '' : '*');
 			atLeastOne = true;
-		}
+		});
 		if (!atLeastOne) games = null;
 		let searching = Object.keys(this.searching);
 		if (onlyIfExists && !searching.length && !atLeastOne) return;
@@ -1397,12 +1397,12 @@ class User {
 	}
 	destroy() {
 		// deallocate user
-		for (let id in this.games) {
-			if (this.games[id].ended) continue;
-			if (this.games[id].forfeit) {
-				this.games[id].forfeit(this);
+		this.games.forEach(game => {
+			if (game.ended) return;
+			if (game.forfeit) {
+				game.forfeit(this);
 			}
-		}
+		});
 		this.clearChatQueue();
 		Users.delete(this);
 	}
