@@ -564,8 +564,11 @@ Punishments.checkIp = function (user, connection) {
 	}
 };
 
-// Connection flood table. Separate table from IP bans.
-let cfloods = new Set();
+/**
+ * Connection flood table. Separate table from IP bans.
+ * @type Set<string>
+ */
+let cfloods = Punishments.cfloods = new Set();
 
 /**
  * IP bans need to be checked separately since we don't even want to
