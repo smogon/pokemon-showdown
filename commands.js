@@ -1602,6 +1602,9 @@ exports.commands = {
 		if (!this.can('lock')) return false;
 
 		let targetUser = Users.get(target);
+		if (targetUser && targetUser.namelocked) {
+			return this.errorReply(`User ${targetUser.name} is namelocked, not locked. Use /unnamelock to unnamelock them.`);
+		}
 		let reason = '';
 		if (targetUser && targetUser.locked && targetUser.locked.charAt(0) === '#') {
 			reason = ' (' + targetUser.locked + ')';
