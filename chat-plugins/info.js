@@ -88,8 +88,17 @@ exports.commands = {
 				output = Object.keys(targetAlt.prevNames).join(", ");
 				if (output) buf += "<br />Previous names: " + output;
 			}
-			if (targetUser.locked) {
-				buf += '<br />Locked: ' + targetUser.locked;
+			if (targetUser.namelocked) {
+				buf += '<br />NAMELOCKED: ' + targetUser.namelocked;
+				let punishment = Punishments.userids.get(targetUser.locked);
+				if (punishment) {
+					let expiresIn = new Date(punishment[2]).getTime() - Date.now();
+					let expiresDays = Math.round(expiresIn / 1000 / 60 / 60 / 24);
+					buf += ' (expires in around ' + expiresDays + ' day' + (expiresDays === 1 ? '' : 's') + ')';
+					if (punishment[3]) buf += ' (reason: ' + punishment[3] + ')';
+				}
+			} else if (targetUser.locked) {
+				buf += '<br />LOCKED: ' + targetUser.locked;
 				switch (targetUser.locked) {
 				case '#dnsbl':
 					buf += " - IP is in a DNS-based blacklist";
