@@ -310,15 +310,17 @@ Punishments.unlock = function (name) {
 	let user = Users(name);
 	let id = toId(name);
 	let success = [];
-	if (user && user.locked) {
+	if (user && user.locked && !user.namelocked) {
 		id = user.locked;
 		user.locked = false;
+		user.namelocked = false;
 		user.updateIdentity();
 		success.push(user.getLastName());
 		if (id.charAt(0) !== '#') {
 			Users.users.forEach(curUser => {
 				if (curUser.locked === id) {
 					curUser.locked = false;
+					curUser.namelocked = false;
 					curUser.updateIdentity();
 					success.push(curUser.getLastName());
 				}
