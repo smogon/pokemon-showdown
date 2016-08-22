@@ -251,6 +251,15 @@ BattlePokemon = (() => {
 		// base stat
 		let stat = this.stats[statName];
 
+		// Wonder Room swaps defenses before calculating anything else
+		if ('wonderroom' in this.battle.pseudoWeather) {
+			if (statName === 'def') {
+				stat = this.stats['spd'];
+			} else if (statName === 'spd') {
+				stat = this.stats['def'];
+			}
+		}
+
 		// stat boosts
 		// boost = this.boosts[statName];
 		let boosts = {};
@@ -282,6 +291,16 @@ BattlePokemon = (() => {
 
 		// base stat
 		let stat = this.stats[statName];
+
+		// Download ignores Wonder Room's effect, but this results in
+		// stat stages being calculated on the opposite defensive stat
+		if (unmodified && 'wonderroom' in this.battle.pseudoWeather) {
+			if (statName === 'def') {
+				statName = 'spd';
+			} else if (statName === 'spd') {
+				statName = 'def';
+			}
+		}
 
 		// stat boosts
 		if (!unboosted) {
