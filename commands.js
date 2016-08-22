@@ -3295,7 +3295,7 @@ exports.commands = {
 				if (!targetRoom) return; // shouldn't happen
 				let roomData = {};
 				if (targetRoom.isPrivate) {
-					if (!user.inRooms.has(roomid) && !(roomid in user.games)) return;
+					if (!user.inRooms.has(roomid) && !user.games.has(roomid)) return;
 					roomData.isPrivate = true;
 				}
 				if (targetRoom.battle) {

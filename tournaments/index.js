@@ -215,7 +215,7 @@ class Tournament {
 			return;
 		}
 
-		let gameCount = Object.keys(user.games).length;
+		let gameCount = user.games.size;
 		if (gameCount > 4) {
 			output.errorReply("Due to high load, you are limited to 4 games at the same time.");
 			return;
