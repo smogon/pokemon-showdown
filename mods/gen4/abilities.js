@@ -13,6 +13,21 @@ exports.BattleAbilities = {
 			}
 		},
 	},
+	"effectspore": {
+		inherit: true,
+		onAfterDamage: function (damage, target, source, move) {
+			if (move && move.flags['contact'] && !source.status) {
+				let r = this.random(100);
+				if (r < 10) {
+					source.setStatus('slp', target);
+				} else if (r < 20) {
+					source.setStatus('par', target);
+				} else if (r < 30) {
+					source.setStatus('psn', target);
+				}
+			}
+		},
+	},
 	"flowergift": {
 		inherit: true,
 		onAllyModifyAtk: function (atk) {
