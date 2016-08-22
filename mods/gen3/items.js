@@ -161,7 +161,7 @@ exports.BattleItems = {
 		inherit: true,
 		onModifyPriority: function (priority, pokemon) {
 			if (this.random(5) === 0) {
-				return priority + 0.1;
+				return Math.round(priority) + 0.1;
 			}
 		},
 	},

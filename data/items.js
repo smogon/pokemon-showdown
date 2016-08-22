@@ -952,12 +952,13 @@ exports.BattleItems = {
 			basePower: 100,
 			type: "Ghost",
 		},
+		onModifyPriorityPriority: -1,
 		onModifyPriority: function (priority, pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				if (pokemon.eatItem()) {
 					this.add('-activate', pokemon, 'Custap Berry');
 					pokemon.removeVolatile('custapberry');
-					return priority + 0.1;
+					return Math.round(priority) + 0.1;
 				}
 			}
 		},
@@ -1587,9 +1588,7 @@ exports.BattleItems = {
 			basePower: 10,
 		},
 		onModifyPriority: function (priority, pokemon) {
-			if (!pokemon.hasAbility('stall')) {
-				return priority - 0.1;
-			}
+			return Math.round(priority) - 0.1;
 		},
 		num: 316,
 		gen: 4,
@@ -2223,9 +2222,7 @@ exports.BattleItems = {
 			basePower: 10,
 		},
 		onModifyPriority: function (priority, pokemon) {
-			if (!pokemon.hasAbility('stall')) {
-				return priority - 0.1;
-			}
+			return Math.round(priority) - 0.1;
 		},
 		num: 279,
 		gen: 4,
@@ -3495,10 +3492,11 @@ exports.BattleItems = {
 	},
 	"quickclaw": {
 		id: "quickclaw",
+		onModifyPriorityPriority: -1,
 		onModifyPriority: function (priority, pokemon) {
 			if (this.random(5) === 0) {
 				this.add('-activate', pokemon, 'item: Quick Claw');
-				return priority + 0.1;
+				return Math.round(priority) + 0.1;
 			}
 		},
 		name: "Quick Claw",
