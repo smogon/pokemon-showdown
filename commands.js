@@ -698,15 +698,15 @@ exports.commands = {
 	deletechatroom: 'deleteroom',
 	deletegroupchat: 'deleteroom',
 	deleteroom: function (target, room, user) {
-		if (room.isPersonal) {
-			if (!this.can('editroom', null, room)) return;
-		} else {
-			if (!this.can('makeroom')) return;
-		}
 		let roomid = target.trim();
 		if (!roomid) return this.parse('/help deleteroom');
 		let targetRoom = Rooms.search(roomid);
 		if (!targetRoom) return this.errorReply("The room '" + target + "' doesn't exist.");
+		if (room.isPersonal) {
+			if (!this.can('editroom', null, targetRoom)) return;
+		} else {
+			if (!this.can('makeroom')) return;
+		}
 		target = targetRoom.title || targetRoom.id;
 
 		if (targetRoom.id === 'global') {
