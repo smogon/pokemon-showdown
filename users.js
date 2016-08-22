@@ -253,7 +253,7 @@ class Connection {
 		this.id = id;
 		this.socketid = socketid;
 		this.worker = worker;
-		this.rooms = {};
+		this.inRooms = new Set();
 
 		this.user = user;
 
@@ -289,13 +289,13 @@ class Connection {
 	}
 
 	joinRoom(room) {
-		if (room.id in this.rooms) return;
-		this.rooms[room.id] = room;
+		if (this.inRooms.has(room.id)) return;
+		this.inRooms.add(room.id);
 		Sockets.channelAdd(this.worker, room.id, this.socketid);
 	}
 	leaveRoom(room) {
-		if (room.id in this.rooms) {
-			delete this.rooms[room.id];
+		if (this.inRooms.has(room.id)) {
+			this.inRooms.delete(room.id);
 			Sockets.channelRemove(this.worker, room.id, this.socketid);
 		}
 	}
@@ -369,7 +369,7 @@ class User {
 		if (roomid && roomid.id) roomid = roomid.id;
 		if (roomid && roomid !== 'global' && roomid !== 'lobby') data = '>' + roomid + '\n' + data;
 		for (let i = 0; i < this.connections.length; i++) {
-			if (roomid && !this.connections[i].rooms[roomid]) continue;
+			if (roomid && !this.connections[i].inRooms.has(roomid)) continue;
 			this.connections[i].send(data);
 			Monitor.countNetworkUse(data.length);
 		}
@@ -833,23 +833,23 @@ class User {
 		let initdata = '|updateuser|' + this.name + '|' + ('1' /* named */) + '|' + this.avatar;
 		connection.send(initdata);
 		connection.user = this;
-		for (let i in connection.rooms) {
-			let room = connection.rooms[i];
-			if (!this.inRooms.has(i)) {
+		connection.inRooms.forEach(roomid => {
+			let room = Rooms(roomid);
+			if (!this.inRooms.has(roomid)) {
 				if (room.bannedUsers && (this.userid in room.bannedUsers || this.autoconfirmed in room.bannedUsers)) {
 					// the connection was in a room that this user is banned from
 					room.bannedIps[connection.ip] = room.bannedUsers[this.userid];
 					connection.sendTo(room.id, '|deinit');
 					connection.leaveRoom(room);
-					continue;
+					return;
 				}
 				room.onJoin(this, connection);
-				this.inRooms.add(i);
+				this.inRooms.add(roomid);
 			}
 			if (room.game && room.game.onUpdateConnection) {
 				room.game.onUpdateConnection(this, connection);
 			}
-		}
+		});
 		this.updateSearch(true, connection);
 	}
 	debugData() {
@@ -858,7 +858,7 @@ class User {
 			let connection = this.connections[i];
 			str += ' socket' + i + '[';
 			let first = true;
-			for (let j in connection.rooms) {
+			for (let j of connection.inRooms) {
 				if (first) {
 					first = false;
 				} else {
@@ -991,9 +991,9 @@ class User {
 				if (this.connections.length <= 1) {
 					this.markInactive();
 				}
-				for (let j in connection.rooms) {
-					this.leaveRoom(connection.rooms[j], connection, true);
-				}
+				connection.inRooms.forEach(roomid => {
+					this.leaveRoom(Rooms(roomid), connection, true);
+				});
 				--this.ips[connection.ip];
 				this.connections.splice(i, 1);
 				break;
@@ -1023,9 +1023,9 @@ class User {
 		for (let i = this.connections.length - 1; i >= 0; i--) {
 			// console.log('DESTROY: ' + this.userid);
 			connection = this.connections[i];
-			for (let j in connection.rooms) {
-				this.leaveRoom(connection.rooms[j], connection, true);
-			}
+			connection.inRooms.forEach(roomid => {
+				this.leaveRoom(Rooms(roomid), connection, true);
+			});
 			connection.destroy();
 		}
 		if (this.connections.length) {
@@ -1133,13 +1133,14 @@ class User {
 			for (let i = 0; i < this.connections.length; i++) {
 				// only join full clients, not pop-out single-room
 				// clients
-				if (this.connections[i].rooms['global']) {
+				// (...no, pop-out rooms haven't been implemented yet)
+				if (this.connections[i].inRooms.has('global')) {
 					this.joinRoom(room, this.connections[i]);
 				}
 			}
 			return true;
 		}
-		if (!connection.rooms[room.id]) {
+		if (!connection.inRooms.has(room.id)) {
 			if (!this.inRooms.has(room.id)) {
 				this.inRooms.add(room.id);
 				room.onJoin(this, connection);
@@ -1160,7 +1161,7 @@ class User {
 		}
 		for (let i = 0; i < this.connections.length; i++) {
 			if (connection && this.connections[i] !== connection) continue;
-			if (this.connections[i].rooms[room.id]) {
+			if (this.connections[i].inRooms.has(room.id)) {
 				this.connections[i].sendTo(room.id, '|deinit');
 				this.connections[i].leaveRoom(room);
 			}
@@ -1169,7 +1170,7 @@ class User {
 
 		let stillInRoom = false;
 		if (connection) {
-			stillInRoom = this.connections.some(connection => room.id in connection.rooms);
+			stillInRoom = this.connections.some(connection => connection.inRooms.has(room.id));
 		}
 		if (!stillInRoom) {
 			room.onLeave(this);
