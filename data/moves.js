@@ -16104,11 +16104,7 @@ exports.BattleMovedex = {
 			onStart: function (side, source) {
 				this.add('-fieldstart', 'move: WonderRoom', '[of] ' + source);
 			},
-			onModifyMovePriority: -100,
-			onModifyMove: function (move) {
-				move.defensiveCategory = ((move.defensiveCategory || this.getCategory(move)) === 'Physical' ? 'Special' : 'Physical');
-				this.debug('Defensive Category: ' + move.defensiveCategory);
-			},
+			// Swapping defenses implemented in battle-engine.js:BattlePokemon#calculateStat and BattlePokemon#getStat
 			onResidualOrder: 24,
 			onEnd: function () {
 				this.add('-fieldend', 'move: Wonder Room');
