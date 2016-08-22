@@ -784,7 +784,7 @@ class User {
 		return true;
 	}
 	merge(oldUser) {
-		this.inRooms.forEach(roomid => {
+		oldUser.inRooms.forEach(roomid => {
 			Rooms(roomid).onLeave(oldUser);
 		});
 
