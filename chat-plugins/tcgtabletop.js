@@ -11,7 +11,7 @@ const http = require('http');
 function noop() {}
 
 function wikiaSearch(subdomain, query, callback) {
-	http.get('http://' + subdomain + '.wikia.com/api/v1/Search/List/?query=' + encodeURIComponent(query) + '&limit=1', res => {
+	http.get(`http://${subdomain}.wikia.com/api/v1/Search/List/?query=${encodeURIComponent(query)}&limit=1`, res => {
 		let buffer = '';
 		res.setEncoding('utf8');
 		res.on('data', data => {
@@ -47,20 +47,20 @@ exports.commands = {
 			if (!this.runBroadcast()) return;
 			if (err) {
 				if (err instanceof SyntaxError || err.message === 'Malformed data') {
-					if (!this.broadcasting) return this.sendReply("Error: Something went wrong in the request: " + err.message);
-					return room.add("Error: Something went wrong in the request: " + err.message).update();
+					if (!this.broadcasting) return this.sendReply(`Error: Something went wrong in the request: ${err.message}`);
+					return room.add(`Error: Something went wrong in the request: ${err.message}`).update();
 				} else if (err.message === 'Not found') {
 					if (!this.broadcasting) return this.sendReply("|raw|<div class=\"infobox\">No results found.</div>");
 					return room.addRaw("<div class=\"infobox\">No results found.</div>").update();
 				}
-				if (!this.broadcasting) return this.sendReply("Error: " + err.message);
-				return room.add("Error: " + err.message).update();
+				if (!this.broadcasting) return this.sendReply(`Error: ${err.message}`);
+				return room.add(`Error: ${err.message}`).update();
 			}
 			let entryUrl = Tools.getString(data.url);
 			let entryTitle = Tools.getString(data.title);
-			let htmlReply = "<strong>Best result for " + Tools.escapeHTML(query) + ":</strong><br/><a href=\"" + Tools.escapeHTML(entryUrl) + "\">" + Tools.escapeHTML(entryTitle) + "</a>";
-			if (!this.broadcasting) return this.sendReply("|raw|<div class=\"infobox\">" + htmlReply + "</div>");
-			room.addRaw("<div class=\"infobox\">" + htmlReply + "</div>").update();
+			let htmlReply = `<strong>Best result for ${Tools.escapeHTML(query)}:</strong><br/><a href="${Tools.escapeHTML(entryUrl)}">${Tools.escapeHTML(entryTitle)}</a>`;
+			if (!this.broadcasting) return this.sendReply(`|raw|<div class="infobox">${htmlReply}</div>`);
+			room.addRaw(`<div class="infobox">${htmlReply}</div>`).update();
 		});
 	},
 };

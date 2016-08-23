@@ -48,7 +48,7 @@ let commands = {
 			"<div class=\"broadcast-blue\"><strong>Nominations for the Artist of the Day have begun!</strong><br />" +
 			"Use /aotd nom to nominate an artist.</div>"
 		);
-		this.privateModCommand("(" + user.name + " began nominations for the Artist of the Day.)");
+		this.privateModCommand(`(${user.name} began nominations for the Artist of the Day.)`);
 	},
 	starthelp: ["/aotd start - Start nominations for the Artist of the Day. Requires: % @ # & ~"],
 
@@ -67,10 +67,9 @@ let commands = {
 		room.chatRoomData.artistOfTheDay = artist;
 		Rooms.global.writeChatRoomData();
 		room.addRaw(
-			"<div class=\"broadcast-blue\"><strong>Nominations for the Artist of the Day have ended!</strong><br />" +
-			"Randomly selected artist: " + Tools.escapeHTML(artist) + "</div>"
+			`<div class="broadcast-blue"><strong>Nominations for the Artist of the Day have ended!</strong><br />Randomly selected artist: ${Tools.escapeHTML(artist)}</div>`
 		);
-		this.privateModCommand("(" + user.name + " ended nominations for the Artist of the Day.)");
+		this.privateModCommand(`(${user.name} ended nominations for the Artist of the Day.)`);
 	},
 	endhelp: ["/aotd end - End nominations for the Artist of the Day and set it to a randomly selected artist. Requires: % @ # & ~"],
 
@@ -84,14 +83,14 @@ let commands = {
 
 		let userid = user.userid;
 		let prenominationId = toArtistId(target);
-		if (!prenominationId) return this.sendReply("" + target + " is not a valid artist name.");
-		if (room.chatRoomData.artistOfTheDay && toArtistId(room.chatRoomData.artistOfTheDay) === prenominationId) return this.sendReply("" + target + " is already the current Artist of the Day.");
+		if (!prenominationId) return this.sendReply(`${target} is not a valid artist name.`);
+		if (room.chatRoomData.artistOfTheDay && toArtistId(room.chatRoomData.artistOfTheDay) === prenominationId) return this.sendReply(`${target} is already the current Artist of the Day.`);
 
 		let prenominations = room.chatRoomData.prenominations;
 		let prenominationIndex = -1;
 		let latestIp = user.latestIp;
 		for (let i = 0; i < prenominations.length; i++) {
-			if (toArtistId(prenominations[i][1]) === prenominationId) return this.sendReply("" + target + " has already been prenominated.");
+			if (toArtistId(prenominations[i][1]) === prenominationId) return this.sendReply(`${target} has already been prenominated.`);
 
 			if (prenominationIndex < 0) {
 				let prenominator = prenominations[i][0];
@@ -105,12 +104,12 @@ let commands = {
 		if (prenominationIndex >= 0) {
 			prenominations[prenominationIndex][1] = target;
 			Rooms.global.writeChatRoomData();
-			return this.sendReply("Your prenomination was changed to " + target + ".");
+			return this.sendReply(`Your prenomination was changed to ${target}.`);
 		}
 
 		prenominations.push([{name: user.name, userid: userid, ips: user.ips}, target]);
 		Rooms.global.writeChatRoomData();
-		this.sendReply("" + target + " was submitted for the next nomination period for the Artist of the Day.");
+		this.sendReply(`${target} was submitted for the next nomination period for the Artist of the Day.`);
 	},
 	prenomhelp: ["/aotd prenom [artist] - Nominate an artist for the Artist of the Day between nomination periods."],
 
@@ -130,17 +129,17 @@ let commands = {
 		}
 
 		let nominationId = toArtistId(target);
-		if (room.chatRoomData.artistOfTheDay && toArtistId(room.chatRoomData.artistOfTheDay) === nominationId) return this.sendReply("" + target + " was the last Artist of the Day.");
+		if (room.chatRoomData.artistOfTheDay && toArtistId(room.chatRoomData.artistOfTheDay) === nominationId) return this.sendReply(`${target} was the last Artist of the Day.`);
 
 		let userid = user.userid;
 		let latestIp = user.latestIp;
 		for (let data of artistOfTheDay.nominations) {
 			let nominator = data[0];
-			if (nominator.ips[latestIp] && nominator.userid !== userid || alts.includes(nominator.name)) return this.sendReply("You have already submitted a nomination for the Artist of the Day under the name " + nominator.name + ".");
-			if (toArtistId(data[1]) === nominationId) return this.sendReply("" + target + " has already been nominated.");
+			if (nominator.ips[latestIp] && nominator.userid !== userid || alts.includes(nominator.name)) return this.sendReply(`You have already submitted a nomination for the Artist of the Day under the name ${nominator.name}.`);
+			if (toArtistId(data[1]) === nominationId) return this.sendReply(`${target} has already been nominated.`);
 		}
 
-		let response = "" + user.name + (artistOfTheDay.nominations.has(user) ? " changed their nomination from " + artistOfTheDay.nominations.get(user) + " to " + target + "." : " nominated " + target + " for the Artist of the Day.");
+		let response = `${user.name}${artistOfTheDay.nominations.has(user) ? " changed their nomination from " + artistOfTheDay.nominations.get(user) + " to " + target + "." : " nominated " + target + " for the Artist of the Day."}`;
 		artistOfTheDay.nominations.set(user, target);
 		room.add(response);
 	},
@@ -163,7 +162,7 @@ let commands = {
 				return 0;
 			});
 
-			buffer += "Current prenominations: (" + prenominations.length + ")";
+			buffer += `Current prenominations: (${prenominations.length})`;
 			for (let i = 0; i < prenominations.length; i++) {
 				buffer += "<br />" +
 					"- " + Tools.escapeHTML(prenominations[i][1]) + " (submitted by " + Tools.escapeHTML(prenominations[i][0].name) + ")";
@@ -176,7 +175,7 @@ let commands = {
 
 		let nominations = Array.from(artistOfTheDay.nominations).sort((a, b) => a[1].localeCompare(b[1]));
 
-		buffer += "Current nominations (" + nominations.length + "):";
+		buffer += `Current nominations (${nominations.length}):`;
 		for (let i = 0; i < nominations.length; i++) {
 			buffer += "<br />" +
 				"- " + Tools.escapeHTML(nominations[i][1]) + " (submitted by " + Tools.escapeHTML(nominations[i][0].name) + ")";
@@ -197,17 +196,17 @@ let commands = {
 		target = this.splitTarget(target);
 		let name = this.targetUsername;
 		let userid = toId(name);
-		if (!userid) return this.errorReply("'" + name + "' is not a valid username.");
+		if (!userid) return this.errorReply(`'${name}' is not a valid username.`);
 
 		for (let nominator of artistOfTheDay.nominations.keys()) {
 			if (nominator.userid === userid) {
 				artistOfTheDay.nominations.delete(nominator);
 				artistOfTheDay.removedNominators.push(nominator);
-				return this.privateModCommand("(" + user.name + " removed " + nominator.name + "'s nomination for the Artist of the Day.)");
+				return this.privateModCommand(`(${user.name} removed ${nominator.name}'s nomination for the Artist of the Day.)`);
 			}
 		}
 
-		this.sendReply("User '" + name + "' has no nomination for the Artist of the Day.");
+		this.sendReply(`User '${name}' has no nomination for the Artist of the Day.`);
 	},
 	removenomhelp: ["/aotd removenom [username] - Remove a user\'s nomination for the Artist of the Day and prevent them from voting again until the next round. Requires: % @ * # & ~"],
 
@@ -221,7 +220,7 @@ let commands = {
 
 		room.chatRoomData.artistOfTheDay = target;
 		Rooms.global.writeChatRoomData();
-		this.privateModCommand("(" + user.name + " set the Artist of the Day to " + target + ".)");
+		this.privateModCommand(`(${user.name} set the Artist of the Day to ${target}.)`);
 	},
 	sethelp: ["/aotd set [artist] - Set the Artist of the Day. Requires: % @ * # & ~"],
 
@@ -240,8 +239,8 @@ let commands = {
 		if (target === 'off' || target === 'disable' || target === 'reset') {
 			if (!room.chatRoomData.artistQuoteOfTheDay) return this.sendReply("The Artist Quote of the Day has already been reset.");
 			delete room.chatRoomData.artistQuoteOfTheDay;
-			this.sendReply("The Artist Quote of the Day was reset by " + Tools.escapeHTML(user.name) + ".");
-			this.logModCommand(user.name + " reset the Artist Quote of the Day.");
+			this.sendReply(`The Artist Quote of the Day was reset by ${Tools.escapeHTML(user.name)}.`);
+			this.logModCommand(`${user.name} reset the Artist Quote of the Day.`);
 			Rooms.global.writeChatRoomData();
 			return;
 		}
@@ -251,7 +250,7 @@ let commands = {
 			"<div class=\"broadcast-blue\"><strong>The Artist Quote of the Day has been updated by " + Tools.escapeHTML(user.name) + ".</strong><br />" +
 			"Quote: " + room.chatRoomData.artistQuoteOfTheDay + "</div>"
 		);
-		this.logModCommand(Tools.escapeHTML(user.name) + " updated the artist quote of the day to \"" + room.chatRoomData.artistQuoteOfTheDay + "\".");
+		this.logModCommand(`${Tools.escapeHTML(user.name)} updated the artist quote of the day to "${room.chatRoomData.artistQuoteOfTheDay}".`);
 	},
 	quotehelp:  [
 		"/aotd quote - View the current Artist Quote of the Day.",
@@ -261,7 +260,7 @@ let commands = {
 	'': function (target, room) {
 		if (room.id !== 'thestudio') return this.errorReply('This command can only be used in The Studio.');
 		if (!room.chatRoomData || !this.runBroadcast()) return false;
-		this.sendReplyBox("The Artist of the Day " + (room.chatRoomData.artistOfTheDay ? "is " + room.chatRoomData.artistOfTheDay + "." : "has not been set yet."));
+		this.sendReplyBox(`The Artist of the Day ${room.chatRoomData.artistOfTheDay ? "is " + room.chatRoomData.artistOfTheDay + "." : "has not been set yet."}`);
 	},
 
 	help: function (target, room) {

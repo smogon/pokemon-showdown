@@ -9,37 +9,37 @@ let MafiaFunctions = {
 		let side = target.class.appearAs || target.class.side;
 
 		if (side === 'town') {
-			return 'After investigating ' + target.name + ' you find out they\'re sided with the village.';
+			return `After investigating ${target.name} you find out they're sided with the village.`;
 		} else if (side === 'mafia') {
-			return 'After investigating ' + target.name + ' you find out they\'re sided with the mafia.';
+			return `After investigating ${target.name} you find out they're sided with the mafia.`;
 		} else {
-			return 'After investigating ' + target.name + ' you find out they\'re not sided with the village or mafia.';
+			return `After investigating ${target.name} you find out they're not sided with the village or mafia.`;
 		}
 	},
 	naiveReport: function (target) {
-		return 'After investigating ' + target.name + ' you find out they\'re sided with the village.';
+		return `After investigating ${target.name} you find out they're sided with the village.`;
 	},
 	paranoidReport: function (target) {
-		return 'After investigating ' + target.name + ' you find out they\'re sided with the mafia.';
+		return `After investigating ${target.name} you find out they're sided with the mafia.`;
 	},
 	insaneReport: function (target) {
 		let side = target.class.appearAs || target.class.side;
 
 		if (side === 'mafia') {
-			return 'After investigating ' + target.name + ' you find out they\'re sided with the village.';
+			return `After investigating ${target.name} you find out they're sided with the village.`;
 		} else if (side === 'town') {
-			return 'After investigating ' + target.name + ' you find out they\'re sided with the mafia.';
+			return `After investigating ${target.name} you find out they're sided with the mafia.`;
 		} else {
-			return 'After investigating ' + target.name + ' you find out they\'re not sided with the village or mafia.';
+			return `After investigating ${target.name} you find out they're not sided with the village or mafia.`;
 		}
 	},
 	roleBlock: function (target) {
 		target.roleBlocked = true;
-		return 'You visit ' + target.name + ' during the night.';
+		return `You visit ${target.name} during the night.`;
 	},
 	protect: function (target) {
 		target.invincible = true;
-		return 'You give ' + target.name + ' their daily dose of medicine to keep them safe and sound.';
+		return `You give ${target.name} their daily dose of medicine to keep them safe and sound.`;
 	},
 	killTarget: function (target) {
 		target.kill('The werewolf has eaten a tasty snack!');

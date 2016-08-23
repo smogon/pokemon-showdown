@@ -25,21 +25,21 @@ exports.commands = {
 		if (room.id === 'staff' && !this.runBroadcast()) return;
 		let targetUser = this.targetUserOrSelf(target, user.group === ' ');
 		if (!targetUser) {
-			return this.errorReply("User " + this.targetUsername + " not found.");
+			return this.errorReply(`User ${this.targetUsername} not found.`);
 		}
 		let showAll = (cmd === 'ip' || cmd === 'whoare' || cmd === 'alt' || cmd === 'alts');
 		if (showAll && !user.confirmed && targetUser !== user) {
 			return this.errorReply("/alts - Access denied.");
 		}
 
-		let buf = '<strong class="username"><small style="display:none">' + targetUser.group + '</small>' + Tools.escapeHTML(targetUser.name) + '</strong> ' + (!targetUser.connected ? ' <em style="color:gray">(offline)</em>' : '');
+		let buf = `<strong class="username"><small style="display:none">${targetUser.group}</small>${Tools.escapeHTML(targetUser.name)}</strong> ${!targetUser.connected ? ' <em style="color:gray">(offline)</em>' : ''}`;
 		let roomauth = '';
 		if (room.auth && targetUser.userid in room.auth) roomauth = room.auth[targetUser.userid];
 		if (Config.groups[roomauth] && Config.groups[roomauth].name) {
-			buf += "<br />" + Config.groups[roomauth].name + " (" + roomauth + ")";
+			buf += `<br />${Config.groups[roomauth].name} (${roomauth})`;
 		}
 		if (Config.groups[targetUser.group] && Config.groups[targetUser.group].name) {
-			buf += "<br />Global " + Config.groups[targetUser.group].name + " (" + targetUser.group + ")";
+			buf += `<br />Global ${Config.groups[targetUser.group].name} (${targetUser.group})`;
 		}
 		if (targetUser.isSysop) {
 			buf += "<br />(Pok&eacute;mon Showdown System Operator)";
@@ -68,7 +68,7 @@ exports.commands = {
 				publicrooms += output;
 			}
 		});
-		buf += '<br />Rooms: ' + (publicrooms || '<em>(no public rooms)</em>');
+		buf += `<br />Rooms: ${publicrooms || '<em>(no public rooms)</em>'}`;
 
 		if (!showAll) {
 			return this.sendReplyBox(buf);
@@ -77,28 +77,28 @@ exports.commands = {
 		if (user.can('alts', targetUser) || user.can('alts') && user === targetUser) {
 			let alts = targetUser.getAltUsers(true);
 			let output = Object.keys(targetUser.prevNames).join(", ");
-			if (output) buf += "<br />Previous names: " + Tools.escapeHTML(output);
+			if (output) buf += `<br />Previous names: ${Tools.escapeHTML(output)}`;
 
 			for (let j = 0; j < alts.length; ++j) {
 				let targetAlt = alts[j];
 				if (!targetAlt.named && !targetAlt.connected) continue;
 				if (targetAlt.group === '~' && user.group !== '~') continue;
 
-				buf += '<br />Alt: <span class="username">' + Tools.escapeHTML(targetAlt.name) + '</span>' + (!targetAlt.connected ? " <em style=\"color:gray\">(offline)</em>" : "");
+				buf += `<br />Alt: <span class="username">${Tools.escapeHTML(targetAlt.name)}</span>${!targetAlt.connected ? " <em style=\"color:gray\">(offline)</em>" : ""}`;
 				output = Object.keys(targetAlt.prevNames).join(", ");
-				if (output) buf += "<br />Previous names: " + output;
+				if (output) buf += `<br />Previous names: ${output}`;
 			}
 			if (targetUser.namelocked) {
-				buf += '<br />NAMELOCKED: ' + targetUser.namelocked;
+				buf += `<br />NAMELOCKED: ${targetUser.namelocked}`;
 				let punishment = Punishments.userids.get(targetUser.locked);
 				if (punishment) {
 					let expiresIn = new Date(punishment[2]).getTime() - Date.now();
 					let expiresDays = Math.round(expiresIn / 1000 / 60 / 60 / 24);
-					buf += ' (expires in around ' + expiresDays + ' day' + (expiresDays === 1 ? '' : 's') + ')';
-					if (punishment[3]) buf += ' (reason: ' + punishment[3] + ')';
+					buf += ` (expires in around ${expiresDays} day${expiresDays === 1 ? '' : 's'})`;
+					if (punishment[3]) buf += ` (reason: ${punishment[3]})`;
 				}
 			} else if (targetUser.locked) {
-				buf += '<br />LOCKED: ' + targetUser.locked;
+				buf += `<br />LOCKED: ${targetUser.locked}`;
 				switch (targetUser.locked) {
 				case '#dnsbl':
 					buf += " - IP is in a DNS-based blacklist";
@@ -114,24 +114,23 @@ exports.commands = {
 				if (punishment) {
 					let expiresIn = new Date(punishment[2]).getTime() - Date.now();
 					let expiresDays = Math.round(expiresIn / 1000 / 60 / 60 / 24);
-					buf += ' (expires in around ' + expiresDays + ' day' + (expiresDays === 1 ? '' : 's') + ')';
-					if (punishment[3]) buf += ' (reason: ' + punishment[3] + ')';
+					buf += ` (expires in around ${expiresDays} day${expiresDays === 1 ? '' : 's'})`;
+					if (punishment[3]) buf += ` (reason: ${punishment[3]})`;
 				}
 			}
 			if (targetUser.semilocked) {
-				buf += '<br />Semilocked: ' + targetUser.semilocked;
+				buf += `<br />Semilocked: ${targetUser.semilocked}`;
 			}
 		}
 		if ((user.can('ip', targetUser) || user === targetUser)) {
 			let ips = Object.keys(targetUser.ips);
-			buf += "<br /> IP" + ((ips.length > 1) ? "s" : "") + ": " + ips.join(", ") +
-					(user.group !== ' ' && targetUser.latestHost ? "<br />Host: " + Tools.escapeHTML(targetUser.latestHost) : "");
+			buf += `<br /> IP${(ips.length > 1) ? "s" : ""}: ${ips.join(", ")}${user.group !== ' ' && targetUser.latestHost ? "<br />Host: " + Tools.escapeHTML(targetUser.latestHost) : ""}`;
 		}
 		if ((user === targetUser || user.can('alts', targetUser)) && hiddenrooms) {
-			buf += '<br />Hidden rooms: ' + hiddenrooms;
+			buf += `<br />Hidden rooms: ${hiddenrooms}`;
 		}
 		if ((user === targetUser || user.can('makeroom')) && privaterooms) {
-			buf += '<br />Private rooms: ' + privaterooms;
+			buf += `<br />Private rooms: ${privaterooms}`;
 		}
 
 		if (user.can('alts', targetUser) || (room.isPrivate !== true && user.can('mute', targetUser, room) && targetUser.userid in room.users)) {
@@ -143,17 +142,17 @@ exports.commands = {
 				let roomBanned = ((thisRoom.bannedIps && thisRoom.bannedIps[targetUser.latestIp]) || (thisRoom.bannedUsers && thisRoom.bannedUsers[targetUser.userid]));
 				if (roomBanned) {
 					if (bannedFrom) bannedFrom += ", ";
-					bannedFrom += '<a href="/' + thisRoom + '">' + thisRoom + '</a> (' + roomBanned + ')';
+					bannedFrom += `<a href="/${thisRoom}">${thisRoom}</a> (${roomBanned})`;
 				} else {
 					let muted = thisRoom.isMuted(targetUser);
 					if (muted) {  // besides roombans, mutes also help to determine if a user is hitting multiple rooms
 						if (mutedIn) mutedIn += ", ";
-						mutedIn += '<a href="/' + thisRoom + '">' + thisRoom + '</a> (' + muted + ')';
+						mutedIn += `<a href="/${thisRoom}">${thisRoom}</a> (${muted})`;
 					}
 				}
 			}
-			if (bannedFrom) buf += '<br />Banned from: ' + bannedFrom;
-			if (mutedIn) buf += '<br />Muted in: ' + mutedIn;
+			if (bannedFrom) buf += `<br />Banned from: ${bannedFrom}`;
+			if (mutedIn) buf += `<br />Muted in: ${mutedIn}`;
 		}
 		this.sendReplyBox(buf);
 	},
@@ -166,7 +165,7 @@ exports.commands = {
 		target = target.trim();
 		if (!/^[0-9.]+$/.test(target)) return this.errorReply('You must pass a valid IPv4 IP to /host.');
 		Dnsbl.reverse(target).then(host => {
-			this.sendReply('IP ' + target + ': ' + (host || "ERROR"));
+			this.sendReply(`IP ${target}: ${host || "ERROR"}`);
 		});
 	},
 	hosthelp: ["/host [ip] - Gets the host for a given IP. Requires: & ~"],
@@ -183,37 +182,37 @@ exports.commands = {
 
 		if (/[a-z]/.test(target)) {
 			// host
-			this.sendReply("Users with host " + target + ":");
+			this.sendReply(`Users with host ${target}:`);
 			Users.users.forEach(curUser => {
 				if (results.length > 100 && !isAll) return;
 				if (!curUser.latestHost || !curUser.latestHost.endsWith(target)) return;
-				results.push((curUser.connected ? " \u25C9 " : " \u25CC ") + " " + curUser.name);
+				results.push(`${curUser.connected ? " \u25C9 " : " \u25CC "} ${curUser.name}`);
 			});
 			if (results.length > 100 && !isAll) {
 				return this.sendReply("More than 100 users match the specified IP range. Use /ipsearchall to retrieve the full list.");
 			}
 		} else if (target.slice(-1) === '*') {
 			// IP range
-			this.sendReply("Users in IP range " + target + ":");
+			this.sendReply(`Users in IP range ${target}:`);
 			target = target.slice(0, -1);
 			Users.users.forEach(curUser => {
 				if (results.length > 100 && !isAll) return;
 				if (!curUser.latestIp.startsWith(target)) return;
-				results.push((curUser.connected ? " \u25C9 " : " \u25CC ") + " " + curUser.name);
+				results.push(`${curUser.connected ? " \u25C9 " : " \u25CC "} ${curUser.name}`);
 			});
 			if (results.length > 100 && !isAll) {
 				return this.sendReply("More than 100 users match the specified IP range. Use /ipsearchall to retrieve the full list.");
 			}
 		} else {
-			this.sendReply("Users with IP " + target + ":");
+			this.sendReply(`Users with IP ${target}:`);
 			Users.users.forEach(curUser => {
 				if (curUser.latestIp === target) {
-					results.push((curUser.connected ? " \u25C9 " : " \u25CC ") + " " + curUser.name);
+					results.push(`${curUser.connected ? " \u25C9 " : " \u25CC "} ${curUser.name}`);
 				}
 			});
 		}
 		if (!results.length) {
-			if (!target.includes('.')) return this.errorReply("'" + target + "' is not a valid IP or host.");
+			if (!target.includes('.')) return this.errorReply(`'${target}' is not a valid IP or host.`);
 			return this.sendReply("No results found.");
 		}
 		return this.sendReply(results.join('; '));
@@ -229,13 +228,13 @@ exports.commands = {
 		if (!target) return this.parse('/help invite');
 		target = this.splitTarget(target);
 		if (!this.targetUser) {
-			return this.errorReply("User " + this.targetUsername + " not found.");
+			return this.errorReply(`User ${this.targetUsername} not found.`);
 		}
 		let targetRoom = (target ? Rooms.search(target) : room);
 		if (!targetRoom) {
-			return this.errorReply("Room " + target + " not found.");
+			return this.errorReply(`Room ${target} not found.`);
 		}
-		return this.parse('/msg ' + this.targetUsername + ', /invite ' + targetRoom.id);
+		return this.parse(`/msg ${this.targetUsername}, /invite ${targetRoom.id}`);
 	},
 	invitehelp: ["/invite [username], [roomname] - Invites the player [username] to join the room [roomname]."],
 
@@ -270,24 +269,24 @@ exports.commands = {
 		if (newTargets && newTargets.length) {
 			for (let i = 0; i < newTargets.length; ++i) {
 				if (!newTargets[i].exactMatch && !i) {
-					buffer = "No Pok\u00e9mon, item, move, ability or nature named '" + target + "' was found. Showing the data of '" + newTargets[0].name + "' instead.\n";
+					buffer = `No Pok\u00e9mon, item, move, ability or nature named '${target}' was found. Showing the data of '${newTargets[0].name}' instead.\n`;
 				}
 				if (newTargets[i].searchType === 'nature') {
 					let nature = Tools.getNature(newTargets[i].name);
-					buffer += "" + nature.name + " nature: ";
+					buffer += `${nature.name} nature: `;
 					if (nature.plus) {
 						let statNames = {'atk': "Attack", 'def': "Defense", 'spa': "Special Attack", 'spd': "Special Defense", 'spe': "Speed"};
-						buffer += "+10% " + statNames[nature.plus] + ", -10% " + statNames[nature.minus] + ".";
+						buffer += `+10% ${statNames[nature.plus]}, -10% ${statNames[nature.minus]}.`;
 					} else {
 						buffer += "No effect.";
 					}
 					return this.sendReply(buffer);
 				} else {
-					buffer += '|c|~|/data-' + newTargets[i].searchType + ' ' + newTargets[i].name + '\n';
+					buffer += `|c|~|/data-${newTargets[i].searchType} ${newTargets[i].name}\n`;
 				}
 			}
 		} else {
-			return this.errorReply("No Pok\u00e9mon, item, move, ability or nature named '" + target + "' was found. (Check your spelling?)");
+			return this.errorReply(`No Pok\u00e9mon, item, move, ability or nature named '${target}' was found. (Check your spelling?)`);
 		}
 
 		if (showDetails) {
@@ -311,8 +310,8 @@ exports.commands = {
 				details = {
 					"Dex#": pokemon.num,
 					"Gen": pokemon.gen,
-					"Height": pokemon.heightm + " m",
-					"Weight": pokemon.weightkg + " kg <em>(" + weighthit + " BP)</em>",
+					"Height": `${pokemon.heightm} m`,
+					"Weight": `${pokemon.weightkg} kg <em>(${weighthit} BP)</em>`,
 					"Dex Colour": pokemon.color,
 				};
 				if (pokemon.eggGroups) details["Egg Group(s)"] = pokemon.eggGroups.join(", ");
@@ -321,7 +320,7 @@ exports.commands = {
 				} else {
 					details["Evolution"] = pokemon.evos.map(evo => {
 						evo = Tools.getTemplate(evo);
-						return evo.name + " (" + evo.evoLevel + ")";
+						return `${evo.name} (${evo.evoLevel})`;
 					}).join(", ");
 				}
 			} else if (newTargets[0].searchType === 'move') {
@@ -425,12 +424,12 @@ exports.commands = {
 			target = pokemon.species;
 		} else if (type1.exists && type2.exists && type1 !== type2) {
 			pokemon = {types: [type1.id, type2.id]};
-			target = type1.id + "/" + type2.id;
+			target = `${type1.id}/${type2.id}`;
 		} else if (type1.exists) {
 			pokemon = {types: [type1.id]};
 			target = type1.id;
 		} else {
-			return this.sendReplyBox("" + Tools.escapeHTML(target) + " isn't a recognized type or pokemon.");
+			return this.sendReplyBox(`${Tools.escapeHTML(target)} isn't a recognized type or pokemon.`);
 		}
 
 		let weaknesses = [];
@@ -445,13 +444,13 @@ exports.commands = {
 					weaknesses.push(type);
 					break;
 				case 2:
-					weaknesses.push("<b>" + type + "</b>");
+					weaknesses.push(`<b>${type}</b>`);
 					break;
 				case -1:
 					resistances.push(type);
 					break;
 				case -2:
-					resistances.push("<b>" + type + "</b>");
+					resistances.push(`<b>${type}</b>`);
 					break;
 				}
 			} else {
@@ -460,10 +459,10 @@ exports.commands = {
 		}
 
 		let buffer = [];
-		buffer.push(pokemon.exists ? "" + target + ' (ignoring abilities):' : '' + target + ':');
-		buffer.push('<span class="message-effect-weak">Weaknesses</span>: ' + (weaknesses.join(', ') || '<font color=#999999>None</font>'));
-		buffer.push('<span class="message-effect-resist">Resistances</span>: ' + (resistances.join(', ') || '<font color=#999999>None</font>'));
-		buffer.push('<span class="message-effect-immune">Immunities</span>: ' + (immunities.join(', ') || '<font color=#999999>None</font>'));
+		buffer.push(pokemon.exists ? `${target} (ignoring abilities):` : `${target}:`);
+		buffer.push(`<span class="message-effect-weak">Weaknesses</span>: ${weaknesses.join(', ') || '<font color=#999999>None</font>'}`);
+		buffer.push(`<span class="message-effect-resist">Resistances</span>: ${resistances.join(', ') || '<font color=#999999>None</font>'}`);
+		buffer.push(`<span class="message-effect-immune">Immunities</span>: ${immunities.join(', ') || '<font color=#999999>None</font>'}`);
 		this.sendReplyBox(buffer.join('<br>'));
 	},
 	weaknesshelp: ["/weakness [pokemon] - Provides a Pok\u00e9mon's resistances, weaknesses, and immunities, ignoring abilities.",
@@ -502,7 +501,7 @@ exports.commands = {
 			} else if (!defender && method in targetMethods) {
 				if (foundData.types) {
 					defender = foundData;
-					defName = foundData.species + " (not counting abilities)";
+					defName = `${foundData.species} (not counting abilities)`;
 				} else {
 					defender = {types: [foundData.id]};
 					defName = foundData.id;
@@ -529,7 +528,7 @@ exports.commands = {
 		let hasThousandArrows = source.id === 'thousandarrows' && defender.types.includes('Flying');
 		let additionalInfo = hasThousandArrows ? "<br>However, Thousand Arrows will be 1x effective on the first hit." : "";
 
-		this.sendReplyBox("" + atkName + " is " + factor + "x effective against " + defName + "." + additionalInfo);
+		this.sendReplyBox(`${atkName} is ${factor}x effective against ${defName}.${additionalInfo}`);
 	},
 	effectivenesshelp: ["/effectiveness [attack], [defender] - Provides the effectiveness of a move or type on another type or a Pok\u00e9mon.",
 		"!effectiveness [attack], [defender] - Shows everyone the effectiveness of a move or type on another type or a Pok\u00e9mon."],
@@ -589,7 +588,7 @@ exports.commands = {
 				continue;
 			}
 
-			return this.errorReply("No type or move '" + targets[i] + "' found.");
+			return this.errorReply(`No type or move '${targets[i]}' found.`);
 		}
 		if (sources.length === 0) return this.errorReply("No moves using a type table for determining damage were specified.");
 		if (sources.length > 4) return this.errorReply("Specify a maximum of 4 moves or types.");
@@ -627,27 +626,27 @@ exports.commands = {
 					superEff.push(type);
 					break;
 				default:
-					throw new Error("/coverage effectiveness of " + bestCoverage[type] + " from parameters: " + target);
+					throw new Error(`/coverage effectiveness of ${bestCoverage[type]} from parameters: ${target}`);
 				}
 			}
-			buffer.push('Coverage for ' + sources.join(' + ') + ':');
-			buffer.push('<b><font color=#559955>Super Effective</font></b>: ' + (superEff.join(', ') || '<font color=#999999>None</font>'));
-			buffer.push('<span class="message-effect-resist">Neutral</span>: ' + (neutral.join(', ') || '<font color=#999999>None</font>'));
-			buffer.push('<span class="message-effect-weak">Resists</span>: ' + (resists.join(', ') || '<font color=#999999>None</font>'));
-			buffer.push('<span class="message-effect-immune">Immunities</span>: ' + (immune.join(', ') || '<font color=#999999>None</font>'));
+			buffer.push(`Coverage for ${sources.join(' + ')}:`);
+			buffer.push(`<b><font color=#559955>Super Effective</font></b>: ${superEff.join(', ') || '<font color=#999999>None</font>'}`);
+			buffer.push(`<span class="message-effect-resist">Neutral</span>: ${neutral.join(', ') || '<font color=#999999>None</font>'}`);
+			buffer.push(`<span class="message-effect-weak">Resists</span>: ${resists.join(', ') || '<font color=#999999>None</font>'}`);
+			buffer.push(`<span class="message-effect-immune">Immunities</span>: ${immune.join(', ') || '<font color=#999999>None</font>'}`);
 			return this.sendReplyBox(buffer.join('<br>'));
 		} else {
 			let buffer = '<div class="scrollable"><table cellpadding="1" width="100%"><tr><th></th>';
 			let icon = {};
 			for (let type in Tools.data.TypeChart) {
-				icon[type] = '<img src="https://play.pokemonshowdown.com/sprites/types/' + type + '.png" width="32" height="14">';
+				icon[type] = `<img src="https://play.pokemonshowdown.com/sprites/types/${type}.png" width="32" height="14">`;
 				// row of icons at top
-				buffer += '<th>' + icon[type] + '</th>';
+				buffer += `<th>${icon[type]}</th>`;
 			}
 			buffer += '</tr>';
 			for (let type1 in Tools.data.TypeChart) {
 				// assembles the rest of the rows
-				buffer += '<tr><th>' + icon[type1] + '</th>';
+				buffer += `<tr><th>${icon[type1]}</th>`;
 				for (let type2 in Tools.data.TypeChart) {
 					let typing;
 					let cell = '<th ';
@@ -657,7 +656,7 @@ exports.commands = {
 						typing = type1;
 						bestEff = bestCoverage[type1];
 					} else {
-						typing = type1 + "/" + type2;
+						typing = `${type1}/${type2}`;
 						for (let i = 0; i < sources.length; i++) {
 							let move = sources[i];
 
@@ -680,21 +679,21 @@ exports.commands = {
 					}
 					switch (bestEff) {
 					case 0:
-						cell += 'bgcolor=#666666 title="' + typing + '"><font color=#000000>' + bestEff + '</font>';
+						cell += `bgcolor=#666666 title="${typing}"><font color=#000000>${bestEff}</font>`;
 						break;
 					case 0.25:
 					case 0.5:
-						cell += 'bgcolor=#AA5544 title="' + typing + '"><font color=#660000>' + bestEff + '</font>';
+						cell += `bgcolor=#AA5544 title="${typing}"><font color=#660000>${bestEff}</font>`;
 						break;
 					case 1:
-						cell += 'bgcolor=#6688AA title="' + typing + '"><font color=#000066>' + bestEff + '</font>';
+						cell += `bgcolor=#6688AA title="${typing}"><font color=#000066>${bestEff}</font>`;
 						break;
 					case 2:
 					case 4:
-						cell += 'bgcolor=#559955 title="' + typing + '"><font color=#003300>' + bestEff + '</font>';
+						cell += `bgcolor=#559955 title="${typing}"><font color=#003300>${bestEff}</font>`;
 						break;
 					default:
-						throw new Error("/coverage effectiveness of " + bestEff + " from parameters: " + target);
+						throw new Error(`/coverage effectiveness of ${bestEff} from parameters: ${target}`);
 					}
 					cell += '</th>';
 					buffer += cell;
@@ -706,7 +705,7 @@ exports.commands = {
 				buffer += "<br><b>Thousand Arrows has neutral type effectiveness on Flying-type Pok\u00e9mon if not already smacked down.";
 			}
 
-			this.sendReplyBox('Coverage for ' + sources.join(' + ') + ':<br>' + buffer);
+			this.sendReplyBox(`Coverage for ${sources.join(' + ')}:<br>${buffer}`);
 		}
 	},
 	coveragehelp: ["/coverage [move 1], [move 2] ... - Provides the best effectiveness match-up against all defending types for given moves or attacking types",
@@ -749,7 +748,7 @@ exports.commands = {
 					level = parseInt(targets[i].replace(/\D/g, ''));
 					lvlSet = true;
 					if (level < 1 || level > 9999) {
-						return this.sendReplyBox('Invalid value for level: ' + level);
+						return this.sendReplyBox(`Invalid value for level: ${level}`);
 					}
 					continue;
 				}
@@ -804,7 +803,7 @@ exports.commands = {
 					ivSet = true;
 
 					if (isNaN(iv)) {
-						return this.sendReplyBox('Invalid value for IVs: ' + Tools.escapeHTML(targets[i]));
+						return this.sendReplyBox(`Invalid value for IVs: ${Tools.escapeHTML(targets[i])}`);
 					}
 
 					continue;
@@ -822,7 +821,7 @@ exports.commands = {
 					evSet = true;
 
 					if (isNaN(ev)) {
-						return this.sendReplyBox('Invalid value for EVs: ' + Tools.escapeHTML(targets[i]));
+						return this.sendReplyBox(`Invalid value for EVs: ${Tools.escapeHTML(targets[i])}`);
 					}
 					if (ev > 255 || ev < 0) {
 						return this.sendReplyBox('The amount of EVs should be between 0 and 255.');
@@ -855,7 +854,7 @@ exports.commands = {
 					modSet = true;
 				}
 				if (isNaN(modifier)) {
-					return this.sendReplyBox('Invalid value for modifier: ' + Tools.escapeHTML(modifier));
+					return this.sendReplyBox(`Invalid value for modifier: ${Tools.escapeHTML(modifier)}`);
 				}
 				if (modifier > 6) {
 					return this.sendReplyBox('Modifier should be a number between -6 and +6');
@@ -903,7 +902,7 @@ exports.commands = {
 				output *= 2 / (2 + modifier);
 			}
 		}
-		return this.sendReplyBox('Base ' + statValue + (calcHP ? ' HP ' : ' ') + 'at level ' + level + ' with ' + iv + ' IVs, ' + ev + (nature === 1.1 ? '+' : (nature === 0.9 ? '-' : '')) + ' EVs' + (modifier > 0 && !calcHP ? ' at ' + (positiveMod ? '+' : '-') + modifier : '') + ': <b>' + Math.floor(output) + '</b>.');
+		return this.sendReplyBox(`Base ${statValue}${calcHP ? ' HP ' : ' '}at level ${level} with ${iv} IVs, ${ev}${nature === 1.1 ? '+' : (nature === 0.9 ? '-' : '')} EVs${modifier > 0 && !calcHP ? ' at ' + (positiveMod ? '+' : '-') + modifier : ''}: <b>${Math.floor(output)}</b>.`);
 	},
 
 	statcalchelp: ["/statcalc [level] [base stat] [IVs] [nature] [EVs] [modifier] (only base stat is required) - Calculates what the actual stat of a Pokémon is with the given parameters. For example, '/statcalc lv50 100 30iv positive 252ev scarf' calculates the speed of a base 100 scarfer with HP Ice in Battle Spot, and '/statcalc uninvested 90 neutral' calculates the attack of an uninvested Crobat.",
@@ -920,13 +919,13 @@ exports.commands = {
 		let uptimeText;
 		if (uptime > 24 * 60 * 60) {
 			let uptimeDays = Math.floor(uptime / (24 * 60 * 60));
-			uptimeText = uptimeDays + " " + (uptimeDays === 1 ? "day" : "days");
+			uptimeText = `${uptimeDays} ${uptimeDays === 1 ? "day" : "days"}`;
 			let uptimeHours = Math.floor(uptime / (60 * 60)) - uptimeDays * 24;
-			if (uptimeHours) uptimeText += ", " + uptimeHours + " " + (uptimeHours === 1 ? "hour" : "hours");
+			if (uptimeHours) uptimeText += `, ${uptimeHours} ${uptimeHours === 1 ? "hour" : "hours"}`;
 		} else {
 			uptimeText = Tools.toDurationString(uptime * 1000);
 		}
-		this.sendReplyBox("Uptime: <b>" + uptimeText + "</b>");
+		this.sendReplyBox(`Uptime: <b>${uptimeText}</b>`);
 	},
 
 	groups: function (target, room, user) {
@@ -1078,16 +1077,16 @@ exports.commands = {
 		if (target === 'all') {
 			// Display OMotM formats, with forum thread links as caption
 			this.parse('/formathelp omofthemonth');
-			if (showMonthly) this.sendReply('|raw|<center>' + monthBuffer + '</center>');
+			if (showMonthly) this.sendReply(`|raw|<center>${monthBuffer}</center>`);
 
 			// Display the rest of OM formats, with OM hub/index forum links as caption
 			this.parse('/formathelp othermetagames');
-			return this.sendReply('|raw|<center>' + buffer + '</center>');
+			return this.sendReply(`|raw|<center>${buffer}</center>`);
 		}
 		if (showMonthly) {
 			this.target = 'omofthemonth';
 			this.run('formathelp');
-			this.sendReply('|raw|<center>' + monthBuffer + '</center>');
+			this.sendReply(`|raw|<center>${monthBuffer}</center>`);
 		} else {
 			this.run('formathelp');
 		}
@@ -1119,7 +1118,7 @@ exports.commands = {
 		let format = Tools.getFormat(targetId);
 		if (format.effectType === 'Format') formatList = [targetId];
 		if (!formatList) {
-			if (this.broadcasting && (cmd !== 'om' && cmd !== 'othermetas')) return this.errorReply("'" + target + "' is not a format. This command's search mode is too spammy to broadcast.");
+			if (this.broadcasting && (cmd !== 'om' && cmd !== 'othermetas')) return this.errorReply(`'${target}' is not a format. This command's search mode is too spammy to broadcast.`);
 			formatList = Object.keys(Tools.data.Formats).filter(formatid => Tools.data.Formats[formatid].effectType === 'Format');
 		}
 
@@ -1130,7 +1129,7 @@ exports.commands = {
 		for (let i = 0; i < formatList.length; i++) {
 			let format = Tools.getFormat(formatList[i]);
 			let sectionId = toId(format.section);
-			if (targetId && !format[targetId + 'Show'] && sectionId !== targetId && format.id === formatList[i] && !format.id.startsWith(targetId)) continue;
+			if (targetId && !format[`${targetId}Show`] && sectionId !== targetId && format.id === formatList[i] && !format.id.startsWith(targetId)) continue;
 			totalMatches++;
 			if (!sections[sectionId]) sections[sectionId] = {name: format.section, formats: []};
 			sections[sectionId].formats.push(format.id);
@@ -1139,12 +1138,12 @@ exports.commands = {
 			break;
 		}
 
-		if (!totalMatches) return this.errorReply("No " + (target ? "matched " : "") + "formats found.");
+		if (!totalMatches) return this.errorReply(`No ${target ? "matched " : ""}formats found.`);
 		if (totalMatches === 1) {
 			let format = Tools.getFormat(Object.values(sections)[0].formats[0]);
 			let formatType = (format.gameType || "singles");
 			formatType = formatType.charAt(0).toUpperCase() + formatType.slice(1).toLowerCase();
-			if (!format.desc) return this.sendReplyBox("No description found for this " + formatType + " " + format.section + " format.");
+			if (!format.desc) return this.sendReplyBox(`No description found for this ${formatType} ${format.section} format.`);
 			return this.sendReplyBox(format.desc.join("<br />"));
 		}
 
@@ -1152,15 +1151,15 @@ exports.commands = {
 		let buf = [];
 		for (let sectionId in sections) {
 			if (exactMatch && sectionId !== exactMatch) continue;
-			buf.push("<h3>" + Tools.escapeHTML(sections[sectionId].name) + "</h3>");
+			buf.push(`<h3>${Tools.escapeHTML(sections[sectionId].name)}</h3>`);
 			buf.push("<table class=\"scrollable\" style=\"display:inline-block; max-height:200px; border:1px solid gray; border-collapse:collapse\" cellspacing=\"0\" cellpadding=\"5\"><thead><th style=\"border:1px solid gray\" >Name</th><th style=\"border:1px solid gray\" >Description</th></thead><tbody>");
 			for (let i = 0; i < sections[sectionId].formats.length; i++) {
 				let format = Tools.getFormat(sections[sectionId].formats[i]);
-				buf.push("<tr><td style=\"border:1px solid gray\">" + Tools.escapeHTML(format.name) + "</td><td style=\"border: 1px solid gray; margin-left:10px\">" + (format.desc ? format.desc.join("<br />") : "&mdash;") + "</td></tr>");
+				buf.push(`<tr><td style="border:1px solid gray">${Tools.escapeHTML(format.name)}</td><td style="border: 1px solid gray; margin-left:10px">${format.desc ? format.desc.join("<br />") : "&mdash;"}</td></tr>`);
 			}
 			buf.push("</tbody></table>");
 		}
-		return this.sendReply("|raw|<center>" + buf.join("") + "</center>");
+		return this.sendReply(`|raw|<center>${buf.join("")}</center>`);
 	},
 
 	roomhelp: function (target, room, user) {
@@ -1222,10 +1221,10 @@ exports.commands = {
 
 	processes: function (target, room, user) {
 		if (!this.can('lockdown')) return false;
-		let buf = "<strong>" + process.pid + "</strong> - Main<br />";
+		let buf = `<strong>${process.pid}</strong> - Main<br />`;
 		for (let i in Sockets.workers) {
 			let worker = Sockets.workers[i];
-			buf += "<strong>" + (worker.pid || worker.process.pid) + "</strong> - Sockets " + i + "<br />";
+			buf += `<strong>${worker.pid || worker.process.pid}</strong> - Sockets ${i}<br />`;
 		}
 
 		const ProcessManager = require('./../process-manager');
@@ -1233,7 +1232,7 @@ exports.commands = {
 			let i = 0;
 			let processType = path.basename(managerData[1]);
 			for (let process of managerData[0].processes) {
-				buf += "<strong>" + process.process.pid + "</strong> - " + processType + " " + (i++) + "<br />";
+				buf += `<strong>${process.process.pid}</strong> - ${processType} ${i++}<br />`;
 			}
 		}
 		this.sendReplyBox(buf);
@@ -1243,9 +1242,7 @@ exports.commands = {
 	rules: function (target, room, user) {
 		if (!target) {
 			if (!this.runBroadcast()) return;
-			this.sendReplyBox("Please follow the rules:<br />" +
-				(room.rulesLink ? "- <a href=\"" + Tools.escapeHTML(room.rulesLink) + "\">" + Tools.escapeHTML(room.title) + " room rules</a><br />" : "") +
-				"- <a href=\"https://pokemonshowdown.com/rules\">" + (room.rulesLink ? "Global rules" : "Rules") + "</a>");
+			this.sendReplyBox(`Please follow the rules:<br />${room.rulesLink ? "- <a href=\"" + Tools.escapeHTML(room.rulesLink) + "\">" + Tools.escapeHTML(room.title) + " room rules</a><br />" : ""}- <a href="https://pokemonshowdown.com/rules">${room.rulesLink ? "Global rules" : "Rules"}</a>`);
 			return;
 		}
 		if (!this.can('roommod', null, room)) return;
@@ -1254,7 +1251,7 @@ exports.commands = {
 		}
 
 		room.rulesLink = target.trim();
-		this.sendReply("(The room rules link is now: " + target + ")");
+		this.sendReply(`(The room rules link is now: ${target})`);
 
 		if (room.chatRoomData) {
 			room.chatRoomData.rulesLink = room.rulesLink;
@@ -1335,7 +1332,7 @@ exports.commands = {
 		if (pokemon.exists) {
 			atLeastOne = true;
 			if (genNumber < pokemon.gen) {
-				return this.sendReplyBox("" + pokemon.name + " did not exist in " + generation.toUpperCase() + "!");
+				return this.sendReplyBox(`${pokemon.name} did not exist in ${generation.toUpperCase()}!`);
 			}
 			if (pokemon.tier === 'CAP') {
 				generation = 'cap';
@@ -1353,8 +1350,8 @@ exports.commands = {
 			} else if (formatId === 'battlespotsingles') {
 				formatId = 'battle_spot_singles';
 			} else if (formatId.includes('vgc')) {
-				formatId = 'vgc' + formatId.slice(-2);
-				formatName = 'VGC20' + formatId.slice(-2);
+				formatId = `vgc${formatId.slice(-2)}`;
+				formatName = `VGC20${formatId.slice(-2)}`;
 			} else if (extraFormat.effectType !== 'Format') {
 				formatName = formatId = '';
 			}
@@ -1362,28 +1359,28 @@ exports.commands = {
 			// Special case for Meowstic-M and Hoopa-Unbound
 			if (speciesid === 'meowstic') speciesid = 'meowsticm';
 			if (pokemon.tier === 'CAP') {
-				this.sendReplyBox("<a href=\"https://www.smogon.com/cap/pokemon/strategies/" + speciesid + "\">" + generation.toUpperCase() + " " + Tools.escapeHTML(formatName) + " " + pokemon.name + " analysis preview</a>, brought to you by <a href=\"https://www.smogon.com\">Smogon University</a> <a href=\"https://smogon.com/cap/\">CAP Project</a>");
+				this.sendReplyBox(`<a href="https://www.smogon.com/cap/pokemon/strategies/${speciesid}">${generation.toUpperCase()} ${Tools.escapeHTML(formatName)} ${pokemon.name} analysis preview</a>, brought to you by <a href="https://www.smogon.com">Smogon University</a> <a href="https://smogon.com/cap/">CAP Project</a>`);
 			} else {
-				this.sendReplyBox("<a href=\"https://www.smogon.com/dex/" + generation + "/pokemon/" + speciesid + (formatId ? '/' + formatId : '') + "\">" + generation.toUpperCase() + " " + Tools.escapeHTML(formatName) + " " + pokemon.name + " analysis</a>, brought to you by <a href=\"https://www.smogon.com\">Smogon University</a>");
+				this.sendReplyBox(`<a href="https://www.smogon.com/dex/${generation}/pokemon/${speciesid}${formatId ? '/' + formatId : ''}">${generation.toUpperCase()} ${Tools.escapeHTML(formatName)} ${pokemon.name} analysis</a>, brought to you by <a href="https://www.smogon.com">Smogon University</a>`);
 			}
 		}
 
 		// Item
 		if (item.exists && genNumber > 1 && item.gen <= genNumber) {
 			atLeastOne = true;
-			this.sendReplyBox("<a href=\"https://www.smogon.com/dex/" + generation + "/items/" + item.id + "\">" + generation.toUpperCase() + " " + item.name + " item analysis</a>, brought to you by <a href=\"https://www.smogon.com\">Smogon University</a>");
+			this.sendReplyBox(`<a href="https://www.smogon.com/dex/${generation}/items/${item.id}">${generation.toUpperCase()} ${item.name} item analysis</a>, brought to you by <a href="https://www.smogon.com">Smogon University</a>`);
 		}
 
 		// Ability
 		if (ability.exists && genNumber > 2 && ability.gen <= genNumber) {
 			atLeastOne = true;
-			this.sendReplyBox("<a href=\"https://www.smogon.com/dex/" + generation + "/abilities/" + ability.id + "\">" + generation.toUpperCase() + " " + ability.name + " ability analysis</a>, brought to you by <a href=\"https://www.smogon.com\">Smogon University</a>");
+			this.sendReplyBox(`<a href="https://www.smogon.com/dex/${generation}/abilities/${ability.id}">${generation.toUpperCase()} ${ability.name} ability analysis</a>, brought to you by <a href="https://www.smogon.com">Smogon University</a>`);
 		}
 
 		// Move
 		if (move.exists && move.gen <= genNumber) {
 			atLeastOne = true;
-			this.sendReplyBox("<a href=\"https://www.smogon.com/dex/" + generation + "/moves/" + toId(move.name) + "\">" + generation.toUpperCase() + " " + move.name + " move analysis</a>, brought to you by <a href=\"https://www.smogon.com\">Smogon University</a>");
+			this.sendReplyBox(`<a href="https://www.smogon.com/dex/${generation}/moves/${toId(move.name)}">${generation.toUpperCase()} ${move.name} move analysis</a>, brought to you by <a href="https://www.smogon.com">Smogon University</a>`);
 		}
 
 		// Format
@@ -1393,19 +1390,19 @@ exports.commands = {
 			if (formatId === 'doublesou') {
 				formatId = 'doubles';
 			} else if (formatId.includes('vgc')) {
-				formatId = 'vgc' + formatId.slice(-2);
-				formatName = 'VGC20' + formatId.slice(-2);
+				formatId = `vgc${formatId.slice(-2)}`;
+				formatName = `VGC20${formatId.slice(-2)}`;
 			} else if (format.effectType !== 'Format') {
 				formatName = formatId = '';
 			}
 			if (formatName) {
 				atLeastOne = true;
-				this.sendReplyBox("<a href=\"https://www.smogon.com/dex/" + generation + "/formats/" + formatId + "\">" + generation.toUpperCase() + " " + Tools.escapeHTML(formatName) + " format analysis</a>, brought to you by <a href=\"https://www.smogon.com\">Smogon University</a>");
+				this.sendReplyBox(`<a href="https://www.smogon.com/dex/${generation}/formats/${formatId}">${generation.toUpperCase()} ${Tools.escapeHTML(formatName)} format analysis</a>, brought to you by <a href="https://www.smogon.com">Smogon University</a>`);
 			}
 		}
 
 		if (!atLeastOne) {
-			return this.sendReplyBox("Pok&eacute;mon, item, move, ability, or format not found for generation " + generation.toUpperCase() + ".");
+			return this.sendReplyBox(`Pok&eacute;mon, item, move, ability, or format not found for generation ${generation.toUpperCase()}.`);
 		}
 	},
 	smogdexhelp: ["/analysis [pokemon], [generation], [format] - Links to the Smogon University analysis for this Pok\u00e9mon in the given generation.",
@@ -1426,7 +1423,7 @@ exports.commands = {
 		// Pokemon
 		if (pokemon.exists) {
 			atLeastOne = true;
-			if (pokemon.isNonstandard) return this.errorReply(pokemon.species + ' is not a real Pok\u00e9mon.');
+			if (pokemon.isNonstandard) return this.errorReply(`${pokemon.species} is not a real Pok\u00e9mon.`);
 
 			let baseSpecies = pokemon.baseSpecies || pokemon.species;
 			let forme = pokemon.forme;
@@ -1436,42 +1433,42 @@ exports.commands = {
 				forme = 'Female';
 			}
 
-			let link = baseLink + 'pokemon/' + baseSpecies.toLowerCase();
+			let link = `${baseLink}pokemon/${baseSpecies.toLowerCase()}`;
 			if (forme) {
-				link += '?form=' + forme.toLowerCase();
+				link += `?form=${forme.toLowerCase()}`;
 			}
 
-			this.sendReplyBox("<a href=\"" + link + "\">" + pokemon.species + " description</a> by Veekun");
+			this.sendReplyBox(`<a href="${link}">${pokemon.species} description</a> by Veekun`);
 		}
 
 		// Item
 		if (item.exists) {
 			atLeastOne = true;
-			let link = baseLink + 'items/' + item.name.toLowerCase();
-			this.sendReplyBox("<a href=\"" + link + "\">" + item.name + " item description</a> by Veekun");
+			let link = `${baseLink}items/${item.name.toLowerCase()}`;
+			this.sendReplyBox(`<a href="${link}">${item.name} item description</a> by Veekun`);
 		}
 
 		// Ability
 		if (ability.exists) {
 			atLeastOne = true;
-			if (ability.isNonstandard) return this.sendReply(ability.name + ' is not a real ability.');
-			let link = baseLink + 'abilities/' + ability.name.toLowerCase();
-			this.sendReplyBox("<a href=\"" + link + "\">" + ability.name + " ability description</a> by Veekun");
+			if (ability.isNonstandard) return this.sendReply(`${ability.name} is not a real ability.`);
+			let link = `${baseLink}abilities/${ability.name.toLowerCase()}`;
+			this.sendReplyBox(`<a href="${link}">${ability.name} ability description</a> by Veekun`);
 		}
 
 		// Move
 		if (move.exists) {
 			atLeastOne = true;
-			if (move.isNonstandard) return this.errorReply(move.name + ' is not a real move.');
-			let link = baseLink + 'moves/' + move.name.toLowerCase();
-			this.sendReplyBox("<a href=\"" + link + "\">" + move.name + " move description</a> by Veekun");
+			if (move.isNonstandard) return this.errorReply(`${move.name} is not a real move.`);
+			let link = `${baseLink}moves/${move.name.toLowerCase()}`;
+			this.sendReplyBox(`<a href="${link}">${move.name} move description</a> by Veekun`);
 		}
 
 		// Nature
 		if (nature.exists) {
 			atLeastOne = true;
-			let link = baseLink + 'natures/' + nature.name.toLowerCase();
-			this.sendReplyBox("<a href=\"" + link + "\">" + nature.name + " nature description</a> by Veekun");
+			let link = `${baseLink}natures/${nature.name.toLowerCase()}`;
+			this.sendReplyBox(`<a href="${link}">${nature.name} nature description</a> by Veekun`);
 		}
 
 		if (!atLeastOne) {
@@ -1494,13 +1491,13 @@ exports.commands = {
 		if (!this.can('potd')) return false;
 
 		Config.potd = target;
-		Simulator.SimulatorProcess.eval('Config.potd = \'' + toId(target) + '\'');
+		Simulator.SimulatorProcess.eval(`Config.potd = '${toId(target)}'`);
 		if (target) {
-			if (Rooms.lobby) Rooms.lobby.addRaw("<div class=\"broadcast-blue\"><b>The Pok&eacute;mon of the Day is now " + target + "!</b><br />This Pokemon will be guaranteed to show up in random battles.</div>");
-			this.logModCommand("The Pok\u00e9mon of the Day was changed to " + target + " by " + user.name + ".");
+			if (Rooms.lobby) Rooms.lobby.addRaw(`<div class="broadcast-blue"><b>The Pok&eacute;mon of the Day is now ${target}!</b><br />This Pokemon will be guaranteed to show up in random battles.</div>`);
+			this.logModCommand(`The Pok\u00e9mon of the Day was changed to ${target} by ${user.name}.`);
 		} else {
 			if (Rooms.lobby) Rooms.lobby.addRaw("<div class=\"broadcast-blue\"><b>The Pok&eacute;mon of the Day was removed!</b><br />No pokemon will be guaranteed in random battles.</div>");
-			this.logModCommand("The Pok\u00e9mon of the Day was removed by " + user.name + ".");
+			this.logModCommand(`The Pok\u00e9mon of the Day was removed by ${user.name}.`);
 		}
 	},
 
@@ -1518,7 +1515,7 @@ exports.commands = {
 		if (diceDataStart >= 0) {
 			if (diceDataStart) diceQuantity = Number(target.slice(0, diceDataStart));
 			target = target.slice(diceDataStart + 1);
-			if (!Number.isInteger(diceQuantity) || diceQuantity <= 0 || diceQuantity > maxDice) return this.sendReply("The amount of dice rolled should be a natural number up to " + maxDice + ".");
+			if (!Number.isInteger(diceQuantity) || diceQuantity <= 0 || diceQuantity > maxDice) return this.sendReply(`The amount of dice rolled should be a natural number up to ${maxDice}.`);
 		}
 		let offset = 0;
 		let removeOutlier = 0;
@@ -1535,7 +1532,7 @@ exports.commands = {
 			default:
 				offset = Number(target.slice(modifierData.index));
 				if (isNaN(offset)) return this.parse('/help dice');
-				if (!Number.isSafeInteger(offset)) return this.errorReply("The specified offset must be an integer up to " + Number.MAX_SAFE_INTEGER + ".");
+				if (!Number.isSafeInteger(offset)) return this.errorReply(`The specified offset must be an integer up to ${Number.MAX_SAFE_INTEGER}.`);
 			}
 			if (removeOutlier && diceQuantity <= 1) return this.errorReply("More than one dice should be rolled before removing outliers.");
 			target = target.slice(0, modifierData.index);
@@ -1545,14 +1542,14 @@ exports.commands = {
 		if (target.length) {
 			diceFaces = Number(target);
 			if (!Number.isSafeInteger(diceFaces) || diceFaces <= 0) {
-				return this.errorReply("Rolled dice must have a natural amount of faces up to " + Number.MAX_SAFE_INTEGER + ".");
+				return this.errorReply(`Rolled dice must have a natural amount of faces up to ${Number.MAX_SAFE_INTEGER}.`);
 			}
 		}
 
 		if (diceQuantity > 1) {
 			// Make sure that we can deal with high rolls
 			if (!Number.isSafeInteger(offset < 0 ? diceQuantity * diceFaces : diceQuantity * diceFaces + offset)) {
-				return this.errorReply("The maximum sum of rolled dice must be lower or equal than " + Number.MAX_SAFE_INTEGER + ".");
+				return this.errorReply(`The maximum sum of rolled dice must be lower or equal than ${Number.MAX_SAFE_INTEGER}.`);
 			}
 		}
 
@@ -1583,12 +1580,12 @@ exports.commands = {
 		// Reply with relevant information
 
 		let offsetFragment = "";
-		if (offset) offsetFragment += (offset > 0 ? "+" + offset : offset);
+		if (offset) offsetFragment += (offset > 0 ? `+${offset}` : offset);
 
-		if (diceQuantity === 1) return this.sendReplyBox("Roll (1 - " + diceFaces + ")" + offsetFragment + ": " + rollSum);
+		if (diceQuantity === 1) return this.sendReplyBox(`Roll (1 - ${diceFaces})${offsetFragment}: ${rollSum}`);
 
-		let sumFragment = "<br />Sum" + offsetFragment + (removeOutlier ? " except " + (removeOutlier > 0 ? "highest" : "lowest") : "");
-		return this.sendReplyBox("" + diceQuantity + " rolls (1 - " + diceFaces + ")" + (trackRolls ? ": " + rolls.join(", ") : "") + sumFragment + ": " + rollSum);
+		let sumFragment = `<br />Sum${offsetFragment}${removeOutlier ? " except " + (removeOutlier > 0 ? "highest" : "lowest") : ""}`;
+		return this.sendReplyBox(`${diceQuantity} rolls (1 - ${diceFaces})${trackRolls ? ": " + rolls.join(", ") : ""}${sumFragment}: ${rollSum}`);
 	},
 	dicehelp: ["/dice [max number] - Randomly picks a number between 1 and the number you choose.",
 		"/dice [number of dice]d[number of sides] - Simulates rolling a number of dice, e.g., /dice 2d4 simulates rolling two 4-sided dice.",
@@ -1602,7 +1599,7 @@ exports.commands = {
 		if (options.length < 2) return this.parse('/help pick');
 		if (!this.runBroadcast()) return false;
 		const pickedOption = options[Math.floor(Math.random() * options.length)];
-		return this.sendReplyBox('<em>We randomly picked:</em> ' + Tools.escapeHTML(pickedOption).trim());
+		return this.sendReplyBox(`<em>We randomly picked:</em> ${Tools.escapeHTML(pickedOption).trim()}`);
 	},
 	pickrandomhelp: ["/pick [option], [option], ... - Randomly selects an item from a list containing 2 or more elements."],
 
@@ -1639,13 +1636,13 @@ exports.commands = {
 
 		let unitRegex = /^\d+(?:p[xtc]|%|[ecm]m|ex|in)$/;
 		if (!unitRegex.test(width)) {
-			return this.errorReply('"' + width + '" is not a valid width value!');
+			return this.errorReply(`"${width}" is not a valid width value!`);
 		}
 		if (!unitRegex.test(height)) {
-			return this.errorReply('"' + height + '" is not a valid height value!');
+			return this.errorReply(`"${height}" is not a valid height value!`);
 		}
 
-		this.sendReply('|raw|<img src="' + Tools.escapeHTML(image) + '" ' + 'style="width: ' + Tools.escapeHTML(width) + '; height: ' + Tools.escapeHTML(height) + '" />');
+		this.sendReply(`|raw|<img src="${Tools.escapeHTML(image)}" style="width: ${Tools.escapeHTML(width)}; height: ${Tools.escapeHTML(height)}" />`);
 	},
 	showimagehelp: ["/showimage [url], [width], [height] - Show an image. " +
 		"Any CSS units may be used for the width or height (default: px)." +
@@ -1668,7 +1665,7 @@ exports.commands = {
 		if (!this.can('addhtml', null, room)) return;
 
 		if (!user.can('addhtml')) {
-			target += '<div style="float:right;color:#888;font-size:8pt">[' + Tools.escapeHTML(user.name) + ']</div><div style="clear:both"></div>';
+			target += `<div style="float:right;color:#888;font-size:8pt">[${Tools.escapeHTML(user.name)}]</div><div style="clear:both"></div>`;
 		}
 
 		this.addBox(target);
