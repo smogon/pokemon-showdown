@@ -2668,7 +2668,7 @@ exports.BattleAbilities = {
 	"stall": {
 		shortDesc: "This Pokemon moves last among Pokemon using the same or greater priority moves.",
 		onModifyPriority: function (priority) {
-			return priority - 0.1;
+			return Math.round(priority) - 0.1;
 		},
 		id: "stall",
 		name: "Stall",
