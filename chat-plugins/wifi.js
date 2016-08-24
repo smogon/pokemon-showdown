@@ -195,6 +195,7 @@ class QuestionGiveaway extends Giveaway {
 				this.changeUhtml('<p style="text-align:center;font-size:14pt;font-weight:bold;">The giveaway was forcibly ended.</p>');
 				this.room.send("The giveaway has been forcibly ended as no one has answered the question.");
 			} else {
+				this.changeUhtml('<p style="text-align:center;font-size:14pt;font-weight:bold;">The giveaway has ended! Scroll down to see the answer.</p>');
 				this.phase = 'ended';
 				this.clearTimer();
 				this.room.modlog(`${this.winner.name} won ${this.giver.name}'s giveaway for a "${this.prize}"`);
@@ -301,10 +302,11 @@ class LotteryGiveaway extends Giveaway {
 			this.changeUhtml('<p style="text-align:center;font-size:14pt;font-weight:bold;">The giveaway was forcibly ended.</p>');
 			this.room.send("The giveaway was forcibly ended.");
 		} else {
+			this.changeUhtml(`<p style="text-align:center;font-size:14pt;font-weight:bold;">The giveaway has ended! Scroll down to see the winner${checkPlural(this.winners)}.</p>`);
 			this.phase = 'ended';
 			let winnerNames = this.winners.map(winner => winner.name).join(', ');
 			this.room.modlog(`${winnerNames} won ${this.giver.name}'s giveaway for "${this.prize}"`);
-			this.send(`<p style="text-align:center;font-size:10pt;font-weight:bold;">Lottery Draw</p><p style="text-align:center;">${Object.keys(this.joined).length} users joined the giveaway.<br/>Our lucky winner${checkPlural(this.winners)}: <b>${Tools.escapeHTML(winnerNames)}!</b> Congratulations!</p>`);
+			this.send(this.generateWindow(`<p style="text-align:center;font-size:10pt;font-weight:bold;">Lottery Draw</p><p style="text-align:center;">${Object.keys(this.joined).length} users joined the giveaway.<br/>Our lucky winner${checkPlural(this.winners)}: <b>${Tools.escapeHTML(winnerNames)}!</b> Congratulations!</p>`));
 			for (let i = 0; i < this.winners.length; i++) {
 				if (this.winners[i].connected) this.winners[i].popup(`You have won the lottery giveaway! PM **${this.giver.name}** to claim your prize!`);
 			}
