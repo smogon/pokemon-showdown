@@ -1273,11 +1273,11 @@ exports.commands = {
 		if (room.bannedUsers[userid] && room.bannedIps[targetUser.latestIp]) return this.sendReply("User " + targetUser.name + " is already banned from room " + room.id + ".");
 		if (targetUser in room.users || user.can('lock')) {
 			targetUser.popup(
-				"|html|<p>" + Tools.escapeHTML(user.name) + " has banned you from the room " + room.id + ".</p>" + (target ? "<p>Reason: " + Tools.escapeHTML(target) + "</p>" : "") +
-				"<p>To appeal the ban, PM the staff member that banned you" + (room.auth ? " or a room owner. </p><p><button name=\"send\" value=\"/roomauth " + room.id + "\">List Room Staff</button></p>" : ".</p>")
+				"|html|<p>" + Tools.escapeHTML(user.name) + " has roombanned you from '" + room.title + "'.</p>" + (target ? "<p>Reason: " + Tools.escapeHTML(target) + "</p>" : "") +
+				"<p>To appeal the roomban, PM the staff member that banned you" + (room.auth ? " or a room owner. </p><p><button name=\"send\" value=\"/roomauth " + room.id + "\">List Room Staff</button></p>" : ".</p>")
 			);
 		}
-		this.addModCommand("" + targetUser.name + " was banned from room " + room.id + " by " + user.name + "." + (target ? " (" + target + ")" : ""));
+		this.addModCommand("" + targetUser.name + " was roombanned from '" + room.title + "' by " + user.name + "." + (target ? " (" + target + ")" : ""));
 		let acAccount = (targetUser.autoconfirmed !== targetUser.userid && targetUser.autoconfirmed);
 		let alts = room.roomBan(targetUser);
 		if (!(room.isPersonal || room.isPrivate === true) || user.can('alts', targetUser)) {
@@ -1314,9 +1314,9 @@ exports.commands = {
 		if (!userid) return this.errorReply("User '" + target + "' is an invalid username.");
 		if (!this.can('ban', null, room)) return false;
 		let unbannedUserid = room.unRoomBan(userid);
-		if (!unbannedUserid) return this.errorReply("User " + userid + " is not banned from room " + room.id + ".");
+		if (!unbannedUserid) return this.errorReply("User " + userid + " is not roombanned from '" + room.title + "'.");
 
-		this.addModCommand("" + unbannedUserid + " was unbanned from room " + room.id + " by " + user.name + ".");
+		this.addModCommand("" + unbannedUserid + " was unroombanned from '" + room.title + "' by " + user.name + ".");
 	},
 	roomunbanhelp: ["/roomunban [username] - Unbans the user from the room you are in. Requires: @ # & ~"],
 
