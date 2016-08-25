@@ -318,8 +318,6 @@ exports.commands = {
 				"/poll results - Shows the results of the poll without voting. NOTE: you can't go back and vote after using this.",
 				"/poll display - Displays the poll",
 				"/poll end - Ends a poll and displays the results. Requires: % @ * # & ~"],
-
-	
 };
 
 process.nextTick(() => {
