@@ -140,7 +140,7 @@ class QuestionGiveaway extends Giveaway {
 	}
 
 	start() {
-		this.changeUhtml('<p style="text-align:center;font-size:14pt;font-weight:bold;">The giveaway has started! Scroll down to see the question.</p>');
+		this.changeUhtml('<p style="text-align:center;font-size:13pt;font-weight:bold;">The giveaway has started! Scroll down to see the question.</p>');
 		this.phase = 'started';
 		this.send(this.generateQuestion());
 		this.timer = setTimeout(() => this.end(), 1000 * 60 * 5);
@@ -188,19 +188,19 @@ class QuestionGiveaway extends Giveaway {
 	end(force) {
 		if (force) {
 			this.clearTimer();
-			this.changeUhtml('<p style="text-align:center;font-size:14pt;font-weight:bold;">The giveaway was forcibly ended.</p>');
+			this.changeUhtml('<p style="text-align:center;font-size:13pt;font-weight:bold;">The giveaway was forcibly ended.</p>');
 			this.room.send("The giveaway was forcibly ended.");
 		} else {
 			if (!this.winner) {
-				this.changeUhtml('<p style="text-align:center;font-size:14pt;font-weight:bold;">The giveaway was forcibly ended.</p>');
+				this.changeUhtml('<p style="text-align:center;font-size:13pt;font-weight:bold;">The giveaway was forcibly ended.</p>');
 				this.room.send("The giveaway has been forcibly ended as no one has answered the question.");
 			} else {
-				this.changeUhtml('<p style="text-align:center;font-size:14pt;font-weight:bold;">The giveaway has ended! Scroll down to see the answer.</p>');
+				this.changeUhtml('<p style="text-align:center;font-size:13pt;font-weight:bold;">The giveaway has ended! Scroll down to see the answer.</p>');
 				this.phase = 'ended';
 				this.clearTimer();
 				this.room.modlog(`${this.winner.name} won ${this.giver.name}'s giveaway for a "${this.prize}"`);
-				this.send(this.generateWindow(`<p style="text-align:center;font-size:14pt;"><b>'${Tools.escapeHTML(this.winner.name)}</b> won the giveaway! Congratulations!</p>` +
-				`<p style="text-align:center;">Correct answer${checkPlural(this.answers)}: ${this.answers.join(', ')}</p>`));
+				this.send(this.generateWindow(`<p style="text-align:center;font-size:12pt;"><b>'${Tools.escapeHTML(this.winner.name)}</b> won the giveaway! Congratulations!</p>` +
+				`<p style="text-align:center;">${this.question}<br/>Correct answer${checkPlural(this.answers)}: ${this.answers.join(', ')}</p>`));
 				if (this.winner.connected) this.winner.popup(`You have won the giveaway. PM **${Tools.escapeHTML(this.giver.name)}** to claim your prize!`);
 				if (this.giver.connected) this.giver.popup(`${Tools.escapeHTML(this.winner.name)} has won your question giveaway!`);
 			}
@@ -279,7 +279,6 @@ class LotteryGiveaway extends Giveaway {
 
 	drawLottery() {
 		this.clearTimer();
-		this.changeUhtml('<p style="text-align:center;font-size:14pt;font-weight:bold;">The giveaway has ended. Scroll down for results.</p>');
 
 		let userlist = Object.values(this.joined);
 		if (userlist.length < this.maxwinners) {
@@ -299,10 +298,10 @@ class LotteryGiveaway extends Giveaway {
 	end(force) {
 		if (force) {
 			this.clearTimer();
-			this.changeUhtml('<p style="text-align:center;font-size:14pt;font-weight:bold;">The giveaway was forcibly ended.</p>');
+			this.changeUhtml('<p style="text-align:center;font-size:13pt;font-weight:bold;">The giveaway was forcibly ended.</p>');
 			this.room.send("The giveaway was forcibly ended.");
 		} else {
-			this.changeUhtml(`<p style="text-align:center;font-size:14pt;font-weight:bold;">The giveaway has ended! Scroll down to see the winner${checkPlural(this.winners)}.</p>`);
+			this.changeUhtml(`<p style="text-align:center;font-size:13pt;font-weight:bold;">The giveaway has ended! Scroll down to see the winner${checkPlural(this.winners)}.</p>`);
 			this.phase = 'ended';
 			let winnerNames = this.winners.map(winner => winner.name).join(', ');
 			this.room.modlog(`${winnerNames} won ${this.giver.name}'s giveaway for "${this.prize}"`);
