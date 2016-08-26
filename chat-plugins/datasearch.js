@@ -38,7 +38,7 @@ const PM = exports.PM = new ProcessManager({
 		let id = message.substr(0, pipeIndex);
 
 		let data = JSON.parse(message.slice(pipeIndex + 1));
-		process.send(id + '|' + JSON.stringify(this.receive(data)));
+		process.send(`${id}|${JSON.stringify(this.receive(data))}`);
 	},
 	receive: function (data) {
 		let result;
@@ -120,7 +120,7 @@ exports.commands = {
 				if (qty) return this.errorReply("Only specify the number of Pok\u00e9mon once.");
 				qty = num;
 				if (qty < 1 || 15 < qty) return this.errorReply("Number of random Pok\u00e9mon must be between 1 and 15.");
-				targetsBuffer.push("random" + qty);
+				targetsBuffer.push(`random${qty}`);
 			} else {
 				targetsBuffer.push(targets[i]);
 			}
@@ -282,15 +282,15 @@ function runDexsearch(target, cmd, canAll, message) {
 			if (group[cat][param] === undefined) {
 				if (cat in uniqueTraits) {
 					for (let currentParam in group[cat]) {
-						if (group[cat][currentParam] !== isNotSearch) return "A pokemon cannot have multiple " + cat + ".";
+						if (group[cat][currentParam] !== isNotSearch) return `A pokemon cannot have multiple ${cat}.`;
 					}
 				}
 				continue;
 			}
 			if (group[cat][param] === isNotSearch) {
-				return "A search cannot both include and exclude '" + input + "'.";
+				return `A search cannot both include and exclude '${input}'.`;
 			} else {
-				return "The search included '" + (isNotSearch ? "!" : "") + input + "' more than once.";
+				return `The search included '${isNotSearch ? "!" : ""}${input}' more than once.`;
 			}
 		}
 		return false;
@@ -417,7 +417,7 @@ function runDexsearch(target, cmd, canAll, message) {
 					orGroup.resists[targetResist] = !isNotSearch;
 					continue;
 				} else {
-					return {reply: "'" + targetResist + "' is not a recognized type."};
+					return {reply: `'${targetResist}' is not a recognized type.`};
 				}
 			}
 
@@ -433,12 +433,12 @@ function runDexsearch(target, cmd, canAll, message) {
 			if (typeIndex >= 0) {
 				target = target.charAt(0).toUpperCase() + target.substring(1, typeIndex);
 				if (target in Tools.data.TypeChart) {
-					let invalid = validParameter("types", target, isNotSearch, target + ' type');
+					let invalid = validParameter("types", target, isNotSearch, `${target} type`);
 					if (invalid) return {reply: invalid};
 					orGroup.types[target] = !isNotSearch;
 					continue;
 				} else {
-					return {reply: "'" + target + "' is not a recognized type."};
+					return {reply: `'${target}' is not a recognized type.`};
 				}
 			}
 
@@ -472,7 +472,7 @@ function runDexsearch(target, cmd, canAll, message) {
 					case '=': direction = 'equal'; break;
 					}
 				} else {
-					return {reply: "No value given to compare with '" + Tools.escapeHTML(target) + "'."};
+					return {reply: `No value given to compare with '${Tools.escapeHTML(target)}'.`};
 				}
 				switch (toId(stat)) {
 				case 'attack': stat = 'atk'; break;
@@ -483,13 +483,13 @@ function runDexsearch(target, cmd, canAll, message) {
 				case 'spdef': stat = 'spd'; break;
 				case 'speed': stat = 'spe'; break;
 				}
-				if (!(stat in allStats)) return {reply: "'" + Tools.escapeHTML(target) + "' did not contain a valid stat."};
+				if (!(stat in allStats)) return {reply: `'${Tools.escapeHTML(target)}' did not contain a valid stat.`};
 				if (!orGroup.stats[stat]) orGroup.stats[stat] = {};
-				if (orGroup.stats[stat][direction]) return {reply: "Invalid stat range for " + stat + "."};
+				if (orGroup.stats[stat][direction]) return {reply: `Invalid stat range for ${stat}.`};
 				orGroup.stats[stat][direction] = num;
 				continue;
 			}
-			return {reply: "'" + Tools.escapeHTML(target) + "' could not be found in any of the search categories."};
+			return {reply: `'${Tools.escapeHTML(target)}' could not be found in any of the search categories.`};
 		}
 		searches.push(orGroup);
 	}
@@ -649,13 +649,13 @@ function runDexsearch(target, cmd, canAll, message) {
 		results = Tools.shuffle(results).slice(0, randomOutput);
 	}
 
-	let resultsStr = (message === "" ? message : "<font color=#999999>" + Tools.escapeHTML(message) + ":</font><br>");
+	let resultsStr = (message === "" ? message : `<font color=#999999>${Tools.escapeHTML(message)}:</font><br>`);
 	if (results.length > 1) {
 		if (showAll || results.length <= RESULTS_MAX_LENGTH + 5) {
 			results.sort();
 			resultsStr += results.join(", ");
 		} else {
-			resultsStr += results.slice(0, RESULTS_MAX_LENGTH).join(", ") + ", and " + (results.length - RESULTS_MAX_LENGTH) + " more. <font color=#999999>Redo the search with 'all' as a search parameter to show all results.</font>";
+			resultsStr += `${results.slice(0, RESULTS_MAX_LENGTH).join(", ")}, and ${results.length - RESULTS_MAX_LENGTH} more. <font color=#999999>Redo the search with 'all' as a search parameter to show all results.</font>`;
 		}
 	} else if (results.length === 1) {
 		return {dt: results[0]};
@@ -690,7 +690,7 @@ function runMovesearch(target, cmd, canAll, message) {
 		let typeIndex = target.indexOf(' type');
 		if (typeIndex >= 0) {
 			target = target.charAt(0).toUpperCase() + target.substring(1, typeIndex);
-			if (!(target in Tools.data.TypeChart)) return {reply: "Type '" + Tools.escapeHTML(target) + "' not found."};
+			if (!(target in Tools.data.TypeChart)) return {reply: `Type '${Tools.escapeHTML(target)}' not found.`};
 			if (!searches['type']) searches['type'] = {};
 			if ((searches['type'][target] && isNotSearch) || (searches['type'][target] === false && !isNotSearch)) return {reply: 'A search cannot both exclude and include a type.'};
 			searches['type'][target] = !isNotSearch;
@@ -716,7 +716,7 @@ function runMovesearch(target, cmd, canAll, message) {
 		if (target === 'bypassessubstitute') target = 'authentic';
 		if (target in allFlags) {
 			if (!searches['flags']) searches['flags'] = {};
-			if ((searches['flags'][target] && isNotSearch) || (searches['flags'][target] === false && !isNotSearch)) return {reply: 'A search cannot both exclude and include \'' + target + '\'.'};
+			if ((searches['flags'][target] && isNotSearch) || (searches['flags'][target] === false && !isNotSearch)) return {reply: `A search cannot both exclude and include '${target}'.`};
 			searches['flags'][target] = !isNotSearch;
 			continue;
 		}
@@ -774,7 +774,7 @@ function runMovesearch(target, cmd, canAll, message) {
 				case '=': direction = 'equal'; break;
 				}
 			} else {
-				return {reply: "No value given to compare with '" + Tools.escapeHTML(target) + "'."};
+				return {reply: `No value given to compare with '${Tools.escapeHTML(target)}'.`};
 			}
 			let prop = targetParts[propSide];
 			switch (toId(targetParts[propSide])) {
@@ -782,17 +782,17 @@ function runMovesearch(target, cmd, canAll, message) {
 			case 'bp': prop = 'basePower'; break;
 			case 'acc': prop = 'accuracy'; break;
 			}
-			if (!(prop in allProperties)) return {reply: "'" + Tools.escapeHTML(target) + "' did not contain a valid property."};
+			if (!(prop in allProperties)) return {reply: `'${Tools.escapeHTML(target)}' did not contain a valid property.`};
 			if (!searches['property']) searches['property'] = {};
 			if (direction === 'equal') {
-				if (searches['property'][prop]) return {reply: "Invalid property range for " + prop + "."};
+				if (searches['property'][prop]) return {reply: `Invalid property range for ${prop}.`};
 				searches['property'][prop] = {};
 				searches['property'][prop]['less'] = parseFloat(targetParts[numSide]);
 				searches['property'][prop]['greater'] = parseFloat(targetParts[numSide]);
 			} else {
 				if (!searches['property'][prop]) searches['property'][prop] = {};
 				if (searches['property'][prop][direction]) {
-					return {reply: "Invalid property range for " + prop + "."};
+					return {reply: `Invalid property range for ${prop}.`};
 				} else {
 					searches['property'][prop][direction] = parseFloat(targetParts[numSide]);
 				}
@@ -808,7 +808,7 @@ function runMovesearch(target, cmd, canAll, message) {
 			} else if (target === "-") {
 				sign = 'less';
 			} else {
-				return {reply: "Priority type '" + target + "' not recognized."};
+				return {reply: `Priority type '${target}' not recognized.`};
 			}
 			if (!searches['property']) searches['property'] = {};
 			if (searches['property']['priority']) {
@@ -833,7 +833,7 @@ function runMovesearch(target, cmd, canAll, message) {
 			case 'evasiveness': target = 'evasion'; break;
 			default: target = target.substr(7);
 			}
-			if (!(target in allBoosts)) return {reply: "'" + Tools.escapeHTML(target.substr(7)) + "' is not a recognized stat."};
+			if (!(target in allBoosts)) return {reply: `'${Tools.escapeHTML(target.substr(7))}' is not a recognized stat.`};
 			if (!searches['boost']) searches['boost'] = {};
 			if ((searches['boost'][target] && isNotSearch) || (searches['boost'][target] === false && !isNotSearch)) return {reply: 'A search cannot both exclude and include a stat boost.'};
 			searches['boost'][target] = !isNotSearch;
@@ -868,7 +868,7 @@ function runMovesearch(target, cmd, canAll, message) {
 			continue;
 		}
 
-		return {reply: "'" + Tools.escapeHTML(oldTarget) + "' could not be found in any of the search categories."};
+		return {reply: `'${Tools.escapeHTML(oldTarget)}' could not be found in any of the search categories.`};
 	}
 
 	if (showAll && !Object.keys(searches).length && !targetMon) {
@@ -992,7 +992,7 @@ function runMovesearch(target, cmd, canAll, message) {
 			break;
 
 		default:
-			throw new Error("/movesearch search category '" + search + "' was unrecognised.");
+			throw new Error(`/movesearch search category '${search}' was unrecognised.`);
 		}
 	}
 
@@ -1003,16 +1003,16 @@ function runMovesearch(target, cmd, canAll, message) {
 
 	let resultsStr = "";
 	if (targetMon) {
-		resultsStr += "<font color=#999999>Matching moves found in learnset for</font> " + targetMon + ":<br>";
+		resultsStr += `<font color=#999999>Matching moves found in learnset for</font> ${targetMon}:<br>`;
 	} else {
-		resultsStr += (message === "" ? message : "<font color=#999999>" + Tools.escapeHTML(message) + ":</font><br>");
+		resultsStr += (message === "" ? message : `<font color=#999999>${Tools.escapeHTML(message)}:</font><br>`);
 	}
 	if (results.length > 0) {
 		if (showAll || results.length <= RESULTS_MAX_LENGTH + 5) {
 			results.sort();
 			resultsStr += results.join(", ");
 		} else {
-			resultsStr += results.slice(0, RESULTS_MAX_LENGTH).join(", ") + ", and " + (results.length - RESULTS_MAX_LENGTH) + " more. <font color=#999999>Redo the search with 'all' as a search parameter to show all results.</font>";
+			resultsStr += `${results.slice(0, RESULTS_MAX_LENGTH).join(", ")}, and ${results.length - RESULTS_MAX_LENGTH} more. <font color=#999999>Redo the search with 'all' as a search parameter to show all results.</font>`;
 		}
 	} else {
 		resultsStr += "No moves found.";
@@ -1094,7 +1094,7 @@ function runItemsearch(target, cmd, canAll, message) {
 		case 'poisons': newWord = 'poison'; break;
 		default:
 			if (/x[\d\.]+/.test(newWord)) {
-				newWord = newWord.substr(1) + 'x';
+				newWord = `${newWord.substr(1)}x`;
 			}
 		}
 		if (!newWord || searchedWords.includes(newWord)) continue;
@@ -1147,7 +1147,7 @@ function runItemsearch(target, cmd, canAll, message) {
 				if (item.fling.status === effect || item.fling.volatileStatus === effect) foundItems.push(item.name);
 			}
 		}
-		if (foundItems.length === 0) return {reply: 'No items inflict ' + basePower + 'bp damage when used with Fling.'};
+		if (foundItems.length === 0) return {reply: `No items inflict ${basePower}bp damage when used with Fling.`};
 	} else if (target.search(/natural ?gift/i) >= 0) {
 		let basePower = 0;
 		let type = "";
@@ -1178,7 +1178,7 @@ function runItemsearch(target, cmd, canAll, message) {
 				if (item.naturalGift.type === type) foundItems.push(item.name);
 			}
 		}
-		if (foundItems.length === 0) return {reply: 'No berries inflict ' + basePower + 'bp damage when used with Natural Gift.'};
+		if (foundItems.length === 0) return {reply: `No berries inflict ${basePower}bp damage when used with Natural Gift.`};
 	} else {
 		let bestMatched = 0;
 		for (let n in Tools.data.Items) {
@@ -1221,13 +1221,13 @@ function runItemsearch(target, cmd, canAll, message) {
 		}
 	}
 
-	let resultsStr = (message === "" ? message : "<font color=#999999>" + Tools.escapeHTML(message) + ":</font><br>");
+	let resultsStr = (message === "" ? message : `<font color=#999999>${Tools.escapeHTML(message)}:</font><br>`);
 	if (foundItems.length > 0) {
 		if (showAll || foundItems.length <= RESULTS_MAX_LENGTH + 5) {
 			foundItems.sort();
 			resultsStr += foundItems.join(", ");
 		} else {
-			resultsStr += foundItems.slice(0, RESULTS_MAX_LENGTH).join(", ") + ", and " + (foundItems.length - RESULTS_MAX_LENGTH) + " more. <font color=#999999>Redo the search with ', all' at the end to show all results.</font>";
+			resultsStr += `${foundItems.slice(0, RESULTS_MAX_LENGTH).join(", ")}, and ${foundItems.length - RESULTS_MAX_LENGTH} more. <font color=#999999>Redo the search with ', all' at the end to show all results.</font>`;
 		}
 	} else {
 		resultsStr += "No items found. Try a more general search";
@@ -1242,17 +1242,17 @@ function runLearn(target, cmd) {
 	let move = {};
 	let problem;
 	let gen = ({rby:1, gsc:2, adv:3, dpp:4, bw2:5}[cmd.substring(0, 3)] || 6);
-	let format = 'gen' + gen + 'ou';
+	let format = `gen${gen}ou`;
 	let all = (cmd === 'learnall');
 	if (cmd === 'learn5') lsetData.set.level = 5;
 	if (cmd === 'g6learn') lsetData.format = {noPokebank: true};
 
 	if (!template.exists || template.id === 'missingno') {
-		return {error: "Pok\u00e9mon '" + template.id + "' not found."};
+		return {error: `Pok\u00e9mon '${template.id}' not found.`};
 	}
 
 	if (template.gen > gen) {
-		return {error: template.name + " didn't exist yet in generation " + gen + "."};
+		return {error: `${template.name} didn't exist yet in generation ${gen}.`};
 	}
 
 	if (targets.length < 2) {
@@ -1262,17 +1262,17 @@ function runLearn(target, cmd) {
 	for (let i = 1, len = targets.length; i < len; i++) {
 		move = Tools.getMove(targets[i]);
 		if (!move.exists || move.id === 'magikarpsrevenge') {
-			return {error: "Move '" + move.id + "' not found."};
+			return {error: `Move '${move.id}' not found.`};
 		}
 		if (move.gen > gen) {
-			return {error: move.name + " didn't exist yet in generation " + gen + "."};
+			return {error: `${move.name} didn't exist yet in generation ${gen}.`};
 		}
 		problem = TeamValidator(format).checkLearnset(move, template.species, lsetData);
 		if (problem) break;
 	}
 	let buffer = "";
-	if (format) buffer += "In Gen " + gen + ", ";
-	buffer += "" + template.name + (problem ? " <span class=\"message-learn-cannotlearn\">can't</span> learn " : " <span class=\"message-learn-canlearn\">can</span> learn ") + (targets.length > 2 ? "these moves" : move.name);
+	if (format) buffer += `In Gen ${gen}, `;
+	buffer += `${template.name}${problem ? " <span class=\"message-learn-cannotlearn\">can't</span> learn " : " <span class=\"message-learn-canlearn\">can</span> learn "}${targets.length > 2 ? "these moves" : move.name}`;
 	if (!problem) {
 		let sourceNames = {E:"egg", S:"event", D:"dream world", X:"egg, traded back", Y: "event, traded back"};
 		let sourcesBefore = lsetData.sourcesBefore;
@@ -1281,10 +1281,10 @@ function runLearn(target, cmd) {
 		if (lsetData.sources) {
 			let sources = lsetData.sources.map(source => {
 				if (source.slice(0, 3) === '1ET') {
-					return '2X' + source.slice(3);
+					return `2X${source.slice(3)}`;
 				}
 				if (source.slice(0, 3) === '1ST') {
-					return '2Y' + source.slice(3);
+					return `2Y${source.slice(3)}`;
 				}
 				return source;
 			}).sort();
@@ -1294,9 +1294,9 @@ function runLearn(target, cmd) {
 				let source = sources[i];
 				if (source.substr(0, 2) === prevSourceType) {
 					if (prevSourceCount < 0) {
-						buffer += ": " + source.substr(2);
+						buffer += `: ${source.substr(2)}`;
 					} else if (all || prevSourceCount < 3) {
-						buffer += ", " + source.substr(2);
+						buffer += `, ${source.substr(2)}`;
 					} else if (prevSourceCount === 3) {
 						buffer += ", ...";
 					}
@@ -1305,13 +1305,13 @@ function runLearn(target, cmd) {
 				}
 				prevSourceType = source.substr(0, 2);
 				prevSourceCount = source.substr(2) ? 0 : -1;
-				buffer += "<li>gen " + source.charAt(0) + " " + sourceNames[source.charAt(1)];
+				buffer += `<li>gen ${source.charAt(0)} ${sourceNames[source.charAt(1)]}`;
 				if (prevSourceType === '5E' && template.maleOnlyHidden) buffer += " (cannot have hidden ability)";
-				if (source.substr(2)) buffer += ": " + source.substr(2);
+				if (source.substr(2)) buffer += `: ${source.substr(2)}`;
 			}
 		}
 		if (sourcesBefore) {
-			buffer += "<li>" + (sourcesBefore < gen ? "gen " + sourcesBefore + " or earlier" : "anywhere") + " (all moves are level-up/tutor/TM/HM in gen " + Math.min(gen, sourcesBefore) + (sourcesBefore < gen ? " to " + gen : "") + ")";
+			buffer += `<li>${sourcesBefore < gen ? "gen " + sourcesBefore + " or earlier" : "anywhere"} (all moves are level-up/tutor/TM/HM in gen ${Math.min(gen, sourcesBefore)}${sourcesBefore < gen ? " to " + gen : ""})`;
 		}
 		buffer += "</ul>";
 	}

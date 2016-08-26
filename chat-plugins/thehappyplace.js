@@ -17,26 +17,24 @@ exports.commands = {
 			if (!this.runBroadcast()) return;
 			if (!room.chatRoomData.quote) return this.sendReplyBox("The Quote of the Day has not been set.");
 			return this.sendReplyBox(
-				"The current <strong>Inspirational Quote of the Day</strong> is:<br />" +
-				"\"" + room.chatRoomData.quote + "\""
+				`The current <strong>Inspirational Quote of the Day</strong> is:<br />"${room.chatRoomData.quote}"`
 			);
 		}
 		if (!this.can('declare', null, room)) return false;
 		if (target === 'off' || target === 'disable' || target === 'reset') {
 			if (!room.chatRoomData.quote) return this.sendReply("The Quote of the Day has already been reset.");
 			delete room.chatRoomData.quote;
-			this.sendReply("The Quote of the Day was reset by " + Tools.escapeHTML(user.name) + ".");
-			this.logModCommand(user.name + " reset the Quote of the Day.");
+			this.sendReply(`The Quote of the Day was reset by ${Tools.escapeHTML(user.name)}.`);
+			this.logModCommand(`${user.name} reset the Quote of the Day.`);
 			Rooms.global.writeChatRoomData();
 			return;
 		}
 		room.chatRoomData.quote = Tools.escapeHTML(target);
 		Rooms.global.writeChatRoomData();
 		room.addRaw(
-			"<div class=\"broadcast-blue\"><strong>The Inspirational Quote of the Day has been updated by " + Tools.escapeHTML(user.name) + ".</strong><br />" +
-			"Quote: " + room.chatRoomData.quote + "</div>"
+			`<div class="broadcast-blue"><strong>The Inspirational Quote of the Day has been updated by ${Tools.escapeHTML(user.name)}.</strong><br />Quote: ${room.chatRoomData.quote}</div>`
 		);
-		this.logModCommand(Tools.escapeHTML(user.name) + " updated the quote of the day to \"" + room.chatRoomData.quote + "\".");
+		this.logModCommand(`${Tools.escapeHTML(user.name)} updated the quote of the day to "${room.chatRoomData.quote}".`);
 	},
 	quoteofthedayhelp: 'qotdhelp',
 	qotdhelp: [

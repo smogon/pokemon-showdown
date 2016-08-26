@@ -126,7 +126,7 @@ let Jeopardy = (() => {
 		this.remainingFinalWagers = 0;
 		this.remainingFinalAnswers = 0;
 
-		this.room.add("A new Jeopardy match has been created by " + host.name);
+		this.room.add(`A new Jeopardy match has been created by ${host.name}`);
 	}
 
 	Jeopardy.prototype.checkPermission = function (user, output) {
@@ -156,7 +156,7 @@ let Jeopardy = (() => {
 				return false;
 
 			default:
-				output.sendReply("Unknown check '" + currentCheck + "'.");
+				output.sendReply(`Unknown check '${currentCheck}'.`);
 				return false;
 			}
 		}
@@ -166,7 +166,7 @@ let Jeopardy = (() => {
 
 	Jeopardy.prototype.addUser = function (user, targetUser, output) {
 		if (!this.checkPermission(user, output, 'notstarted', 'host')) return;
-		if (this.users.has(targetUser)) return output.sendReply("User " + targetUser.name + " is already participating.");
+		if (this.users.has(targetUser)) return output.sendReply(`User ${targetUser.name} is already participating.`);
 
 		this.users.set(targetUser, {
 			isAnswered: false,
@@ -174,14 +174,14 @@ let Jeopardy = (() => {
 			finalWager: -1,
 			finalAnswer: "",
 		});
-		this.room.add("User " + targetUser.name + " has joined the Jeopardy match.");
+		this.room.add(`User ${targetUser.name} has joined the Jeopardy match.`);
 	};
 	Jeopardy.prototype.removeUser = function (user, targetUser, output) {
 		if (!this.checkPermission(user, output, 'notstarted', 'host')) return;
-		if (!this.users.has(targetUser)) return output.sendReply("User " + targetUser.name + " is not participating.");
+		if (!this.users.has(targetUser)) return output.sendReply(`User ${targetUser.name} is not participating.`);
 
 		this.users.delete(targetUser);
-		this.room.add("User " + targetUser.name + " has left the Jeopardy match.");
+		this.room.add(`User ${targetUser.name} has left the Jeopardy match.`);
 	};
 
 	Jeopardy.prototype.start = function (user, output) {
@@ -191,17 +191,17 @@ let Jeopardy = (() => {
 		let isGridValid = true;
 		for (let c = 0; c < this.categoryCount; ++c) {
 			if (!this.questions.getCategory(c)) {
-				output.sendReply("Category " + (c + 1) + " is missing its name.");
+				output.sendReply(`Category ${c + 1} is missing its name.`);
 				isGridValid = false;
 			}
 			for (let q = 0; q < this.questionCount; ++q) {
 				let question = this.questions.getQuestion(c, q);
 				if (!question.value) {
-					output.sendReply("Category " + (c + 1) + " Question " + (q + 1) + " is empty.");
+					output.sendReply(`Category ${c + 1} Question ${q + 1} is empty.`);
 					isGridValid = false;
 				}
 				if (!question.answer) {
-					output.sendReply("Category " + (c + 1) + " Question " + (q + 1) + " has no answer.");
+					output.sendReply(`Category ${c + 1} Question ${q + 1} has no answer.`);
 					isGridValid = false;
 				}
 			}
@@ -228,8 +228,8 @@ let Jeopardy = (() => {
 		for (let n = 0, u = Math.floor(Math.random() * this.users.size); n <= u; ++n) {
 			this.currentUser = usersIterator.next().value;
 		}
-		this.room.add('|raw|<div class="infobox">' + renderGrid(this.questions) + '</div>');
-		this.room.add("The Jeopardy match has started! " + this.currentUser.name + " selects the first question.");
+		this.room.add(`|raw|<div class="infobox">${renderGrid(this.questions)}</div>`);
+		this.room.add(`The Jeopardy match has started! ${this.currentUser.name} selects the first question.`);
 	};
 
 	Jeopardy.prototype.select = function (user, category, question, output) {
@@ -255,10 +255,10 @@ let Jeopardy = (() => {
 		if (data.isDailyDouble) {
 			this.remainingAnswers = 1;
 			this.isDailyDouble = true;
-			this.room.add("It's the Daily Double! " + this.currentUser.name + ", please make a wager.");
+			this.room.add(`It's the Daily Double! ${this.currentUser.name}, please make a wager.`);
 		} else {
 			this.remainingAnswers = this.users.size;
-			this.room.add("The question is: " + data.value);
+			this.room.add(`The question is: ${data.value}`);
 		}
 	};
 	Jeopardy.prototype.wager = function (user, amount, output) {
@@ -271,11 +271,11 @@ let Jeopardy = (() => {
 		if (amount === 'all') amount = userData.points;
 		if (!(0 <= amount && amount <= (userData.points < 1000 ? 1000 : userData.points))) return output.sendReply("You cannot wager less than zero or more than your current amount of points.");
 		userData.wager = Math.round(amount);
-		this.room.add("" + this.currentUser.name + " has wagered " + userData.wager + " points.");
+		this.room.add(`${this.currentUser.name} has wagered ${userData.wager} points.`);
 
 		this.currentAnswerer = this.currentUser;
 		let data = this.questions.getQuestion(this.currentCategory, this.currentQuestion);
-		this.room.add("The question is: " + data.value);
+		this.room.add(`The question is: ${data.value}`);
 	};
 	Jeopardy.prototype.answer = function (user, answer, output) {
 		if (!this.checkPermission(user, output, 'started', 'user')) return;
@@ -288,7 +288,7 @@ let Jeopardy = (() => {
 		this.currentAnswerer = user;
 		this.currentAnswer = answer;
 		this.users.get(user).isAnswered = true;
-		this.room.add("" + user.name + " has answered '" + answer + "'.");
+		this.room.add(`${user.name} has answered '${answer}'.`);
 
 		if (answer.toLowerCase() === this.questions.getQuestion(this.currentCategory, this.currentQuestion).answer.toLowerCase()) {
 			this.mark(this.host, true);
@@ -303,7 +303,7 @@ let Jeopardy = (() => {
 		let points = this.isDailyDouble ? userData.wager : this.questions.getQuestion(this.currentCategory, this.currentQuestion).points;
 		if (isCorrect) {
 			userData.points += points;
-			this.room.add("The answer '" + this.currentAnswer + "' was correct! " + this.currentAnswerer.name + " gains " + points + " points to " + userData.points + "!");
+			this.room.add(`The answer '${this.currentAnswer}' was correct! ${this.currentAnswerer.name} gains ${points} points to ${userData.points}!`);
 
 			this.currentUser = this.currentAnswerer;
 			this.currentCategory = -1;
@@ -315,7 +315,7 @@ let Jeopardy = (() => {
 			if (this.remainingQuestions === 0) this.autostartFinalRound();
 		} else {
 			userData.points -= points;
-			this.room.add("The answer '" + this.currentAnswer + "' was incorrect! " + this.currentAnswerer.name + " loses " + points + " points to " + userData.points + "!");
+			this.room.add(`The answer '${this.currentAnswer}' was incorrect! ${this.currentAnswerer.name} loses ${points} points to ${userData.points}!`);
 
 			this.currentAnswerer = null;
 			this.currentAnswer = "";
@@ -330,12 +330,12 @@ let Jeopardy = (() => {
 		if (this.currentAnswer) return output.sendReply("Please mark the current answer.");
 
 		let answer = this.questions.getQuestion(this.currentCategory, this.currentQuestion).answer;
-		this.room.add("The correct answer was '" + answer + "'.");
+		this.room.add(`The correct answer was '${answer}'.`);
 
 		if (this.isDailyDouble) {
 			let userData = this.users.get(this.currentUser);
 			userData.points -= userData.wager;
-			this.room.add("" + this.currentUser.name + " loses " + userData.wager + " points to " + userData.points + "!");
+			this.room.add(`${this.currentUser.name} loses ${userData.wager} points to ${userData.points}!`);
 			this.isDailyDouble = false;
 		}
 
@@ -353,7 +353,7 @@ let Jeopardy = (() => {
 		this.currentQuestion = -1;
 		this.remainingFinalWagers = this.users.size;
 
-		this.room.add("The final category is: '" + this.questions.getCategory('final') + "'. Please set your wagers.");
+		this.room.add(`The final category is: '${this.questions.getCategory('final')}'. Please set your wagers.`);
 	};
 	Jeopardy.prototype.finalWager = function (user, amount, output) {
 		if (!this.checkPermission(user, output, 'started', 'user')) return;
@@ -367,10 +367,10 @@ let Jeopardy = (() => {
 		let isAlreadyWagered = userData.finalWager >= 0;
 		userData.finalWager = Math.round(amount);
 
-		output.sendReply("You have wagered " + userData.finalWager + " points.");
+		output.sendReply(`You have wagered ${userData.finalWager} points.`);
 		if (!isAlreadyWagered) {
 			--this.remainingFinalWagers;
-			this.room.add("User " + user.name + " has set their wager.");
+			this.room.add(`User ${user.name} has set their wager.`);
 		}
 
 		if (this.remainingFinalWagers !== 0) return;
@@ -378,7 +378,7 @@ let Jeopardy = (() => {
 		this.currentQuestion = 'final';
 		this.remainingFinalAnswers = this.users.size;
 
-		this.room.add("The final question is: '" + this.questions.getQuestion('final', 0).value + "'. Please set your answers.");
+		this.room.add(`The final question is: '${this.questions.getQuestion('final', 0).value}'. Please set your answers.`);
 		this.questions.setRevealed('final', 0, true);
 	};
 	Jeopardy.prototype.finalAnswer = function (user, answer, output) {
@@ -392,10 +392,10 @@ let Jeopardy = (() => {
 		let isAlreadyAnswered = !!userData.finalAnswer;
 		userData.finalAnswer = answer;
 
-		output.sendReply("You have answered '" + userData.finalAnswer + "'.");
+		output.sendReply(`You have answered '${userData.finalAnswer}'.`);
 		if (!isAlreadyAnswered) {
 			--this.remainingFinalAnswers;
-			this.room.add("User " + user.name + " has set their answer.");
+			this.room.add(`User ${user.name} has set their answer.`);
 		}
 
 		if (this.remainingFinalAnswers === 0) this.automarkFinalAnswers();
@@ -409,7 +409,7 @@ let Jeopardy = (() => {
 			return;
 		}
 
-		this.room.add("User " + data[0].name + " has answered '" + data[1].finalAnswer + "'.");
+		this.room.add(`User ${data[0].name} has answered '${data[1].finalAnswer}'.`);
 
 		if (data[1].finalAnswer.toLowerCase() === this.questions.getQuestion('final', 0).answer.toLowerCase()) {
 			this.finalMark(this.host, true);
@@ -422,10 +422,10 @@ let Jeopardy = (() => {
 		let data = this.finalMarkingData;
 		if (isCorrect) {
 			data[1].points += data[1].finalWager;
-			this.room.add("The answer '" + data[1].finalAnswer + "' was correct! " + data[0].name + " gains " + data[1].finalWager + " points to " + data[1].points + "!");
+			this.room.add(`The answer '${data[1].finalAnswer}' was correct! ${data[0].name} gains ${data[1].finalWager} points to ${data[1].points}!`);
 		} else {
 			data[1].points -= data[1].finalWager;
-			this.room.add("The answer '" + data[1].finalAnswer + "' was incorrect! " + data[0].name + " loses " + data[1].finalWager + " points to " + data[1].points + "!");
+			this.room.add(`The answer '${data[1].finalAnswer}' was incorrect! ${data[0].name} loses ${data[1].finalWager} points to ${data[1].points}!`);
 		}
 
 		this.automarkFinalAnswers();
@@ -439,8 +439,8 @@ let Jeopardy = (() => {
 		results.sort((a, b) => b.points - a.points);
 
 		let winner = results.shift();
-		this.room.add("Congratulations to " + winner.user.name + " for winning the Jeopardy match with " + winner.points + " points!");
-		this.room.add("Other participants:\n" + results.map(data => data.user.name + ": " + data.points).join("\n"));
+		this.room.add(`Congratulations to ${winner.user.name} for winning the Jeopardy match with ${winner.points} points!`);
+		this.room.add(`Other participants:\n${results.map(data => data.user.name + ": " + data.points).join("\n")}`);
 
 		delete jeopardies[this.room.id];
 	};
@@ -453,7 +453,7 @@ function renderGrid(questions, mode) {
 
 	buffer += '<tr>';
 	for (let c = 0; c < questions.categoryCount; ++c) {
-		buffer += '<th>' + (Tools.escapeHTML(questions.getCategory(c)) || '&nbsp;') + '</th>';
+		buffer += `<th>${Tools.escapeHTML(questions.getCategory(c)) || '&nbsp;'}</th>`;
 	}
 	buffer += '</tr>';
 
@@ -463,7 +463,7 @@ function renderGrid(questions, mode) {
 			let data = questions.getQuestion(c, q);
 
 			let cellType = (mode === 'questions' || mode === 'answers') && data.isDailyDouble ? 'th' : 'td';
-			buffer += '<' + cellType + '><center>';
+			buffer += `<${cellType}><center>`;
 
 			if (mode === 'questions') {
 				buffer += data.value || '&nbsp;';
@@ -475,7 +475,7 @@ function renderGrid(questions, mode) {
 				buffer += data.points;
 			}
 
-			buffer += '</center></' + cellType + '>';
+			buffer += `</center></${cellType}>`;
 		}
 		buffer += '</tr>';
 	}
@@ -599,7 +599,7 @@ let commands = {
 			case 'dailydouble':
 				isSet = toId(value) === 'true';
 				questions.setDailyDouble(categoryNumber, questionNumber, isSet);
-				this.sendReply("The daily double has been " + (isSet ? "set." : "unset."));
+				this.sendReply(`The daily double has been ${isSet ? "set." : "unset."}`);
 				break;
 			}
 		}
@@ -626,7 +626,7 @@ let commands = {
 		if (!(1 <= start && start <= questions.questionCount)) return this.sendReply("Please enter a valid starting question number.");
 		if (!(1 <= end && end <= questions.questionCount)) return this.sendReply("Please enter a valid ending question number.");
 
-		this.sendReply('||' + JSON.stringify(questions.export(categoryNumber - 1, start - 1, end)));
+		this.sendReply(`||${JSON.stringify(questions.export(categoryNumber - 1, start - 1, end))}`);
 	},
 	import: function (target, room, user) {
 		let params = target.split(',');
@@ -667,7 +667,7 @@ let commands = {
 			return this.sendReply("Failed to parse the data. Please make sure it is correct.");
 		}
 
-		this.sendReply('||' + questions.import(categoryNumber - 1, start - 1, end, data) + " questions have been imported.");
+		this.sendReply(`||${questions.import(categoryNumber - 1, start - 1, end, data)} questions have been imported.`);
 	},
 
 	create: function (target, room, user) {
@@ -678,8 +678,8 @@ let commands = {
 
 		let categoryCount = parseInt(params[0]) || MAX_CATEGORY_COUNT;
 		let questionCount = parseInt(params[1]) || MAX_QUESTION_COUNT;
-		if (categoryCount > MAX_CATEGORY_COUNT) return this.sendReply("A match with more than " + MAX_CATEGORY_COUNT + " categories cannot be created.");
-		if (questionCount > MAX_QUESTION_COUNT) return this.sendReply("A match with more than " + MAX_QUESTION_COUNT + " questions per category cannot be created.");
+		if (categoryCount > MAX_CATEGORY_COUNT) return this.sendReply(`A match with more than ${MAX_CATEGORY_COUNT} categories cannot be created.`);
+		if (questionCount > MAX_QUESTION_COUNT) return this.sendReply(`A match with more than ${MAX_QUESTION_COUNT} questions per category cannot be created.`);
 
 		jeopardies[room.id] = new Jeopardy(user, room, categoryCount, questionCount);
 	},
@@ -694,12 +694,12 @@ let commands = {
 		if (!this.can('jeopardy', null, room)) return;
 
 		delete jeopardies[room.id];
-		room.add("The Jeopardy match was forcibly ended by " + user.name);
+		room.add(`The Jeopardy match was forcibly ended by ${user.name}`);
 	},
 
 	adduser: function (target, room, user) {
 		let targetUser = Users.get(target);
-		if (!targetUser) return this.sendReply("User '" + target + "' not found.");
+		if (!targetUser) return this.sendReply(`User '${target}' not found.`);
 
 		let jeopardy = jeopardies[room.id];
 		if (!jeopardy) return this.sendReply("There is no Jeopardy match currently in this room.");
@@ -708,7 +708,7 @@ let commands = {
 	},
 	removeuser: function (target, room, user) {
 		let targetUser = Users.get(target);
-		if (!targetUser) return this.sendReply("User '" + target + "' not found.");
+		if (!targetUser) return this.sendReply(`User '${target}' not found.`);
 
 		let jeopardy = jeopardies[room.id];
 		if (!jeopardy) return this.sendReply("There is no Jeopardy match currently in this room.");
