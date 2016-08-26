@@ -261,7 +261,7 @@ class LotteryGiveaway extends Giveaway {
 		if (this.checkExcluded(user)) return user.sendTo(this.room, "You are disallowed from entering the giveaway.");
 
 		this.joined[user.latestIp] = user.userid;
-		user.sendTo(this.room, `|uhtmlchange|giveaway|<div class="broadcast-blue">${this.generateReminder(true)}</div>`);
+		user.sendTo(this.room, `|uhtmlchange|giveaway${this.room.gaNumber}${this.phase}|<div class="broadcast-blue">${this.generateReminder(true)}</div>`);
 		user.sendTo(this.room, "You have successfully joined the lottery giveaway.");
 	}
 
