@@ -373,19 +373,20 @@ class Tournament {
 		this.inProgressMatches = new Map();
 		this.pendingChallenges = new Map();
 		this.disqualifiedUsers = new Map();
-		this.isAutoDisqualifyWarned = new Map();
+		this.autoDisqualifyWarnings = new Map();
 		this.lastActionTimes = new Map();
+		let now = Date.now();
 		users.forEach(user => {
 			this.availableMatches.set(user, new Map());
 			this.inProgressMatches.set(user, null);
 			this.pendingChallenges.set(user, null);
 			this.disqualifiedUsers.set(user, false);
-			this.isAutoDisqualifyWarned.set(user, false);
-			this.lastActionTimes.set(user, Date.now());
+			this.lastActionTimes.set(user, now);
 		});
 
 		this.isTournamentStarted = true;
 		if (this.autoStartTimer) clearTimeout(this.autoStartTimer);
+		if (this.autoDisqualifyTimeout !== Infinity) this.autoDisqualifyTimer = setTimeout(() => this.runAutoDisqualify(), this.autoDisqualifyTimeout);
 		this.isBracketInvalidated = true;
 		this.room.add('|tournament|start');
 		this.room.send('|tournament|update|{"isStarted":true}');
@@ -424,10 +425,11 @@ class Tournament {
 			this.availableMatches.get(match[0]).set(match[1], true);
 		});
 
+		let now = Date.now();
 		this.availableMatches.forEach((availableMatches, user) => {
 			if (oldAvailableMatches.get(user)) return;
 
-			if (availableMatches.size) this.lastActionTimes.set(user, Date.now());
+			if (availableMatches.size && !this.autoDisqualifyWarnings.has(user)) this.lastActionTimes.set(user, now);
 		});
 
 		return {
@@ -554,11 +556,13 @@ class Tournament {
 		this.autoDisqualifyTimeout = parseFloat(timeout);
 		if (this.autoDisqualifyTimeout === Infinity) {
 			this.room.add('|tournament|autodq|off');
+			if (this.autoDisqualifyTimer) clearTimeout(this.autoDisqualifyTimer);
+			this.autoDisqualifyWarnings.clear();
 		} else {
 			this.room.add('|tournament|autodq|on|' + this.autoDisqualifyTimeout);
+			if (this.isTournamentStarted) this.runAutoDisqualify();
 		}
 
-		if (this.isTournamentStarted) this.runAutoDisqualify();
 		return true;
 	}
 	runAutoDisqualify(output) {
@@ -567,31 +571,42 @@ class Tournament {
 			return false;
 		}
 		if (this.autoDisqualifyTimer) clearTimeout(this.autoDisqualifyTimer);
+		let now = Date.now();
 		this.lastActionTimes.forEach((time, player) => {
 			let availableMatches = false;
 			if (this.availableMatches.get(player).size) availableMatches = true;
 			let pendingChallenge = this.pendingChallenges.get(player);
 
-			if (!availableMatches && !pendingChallenge) return;
+			if (!availableMatches && !pendingChallenge) {
+				this.autoDisqualifyWarnings.delete(player);
+				return;
+			}
 			if (pendingChallenge && pendingChallenge.to) return;
 
-			if (Date.now() > time + this.autoDisqualifyTimeout && this.isAutoDisqualifyWarned.get(player)) {
-				this.disqualifyUser(player.userid, output, "You failed to make or accept the challenge in time.");
+			if (now > time + this.autoDisqualifyTimeout && this.autoDisqualifyWarnings.has(player)) {
+				let reason;
+				if (pendingChallenge && pendingChallenge.from) {
+					reason = "You failed to accept your opponent's challenge in time.";
+				} else {
+					reason = "You failed to challenge your opponent in time.";
+				}
+				this.disqualifyUser(player.userid, output, reason);
 				this.room.update();
-			} else if (Date.now() > time + this.autoDisqualifyTimeout - AUTO_DISQUALIFY_WARNING_TIMEOUT && !this.isAutoDisqualifyWarned.get(player)) {
-				let remainingTime = this.autoDisqualifyTimeout - Date.now() + time;
+			} else if (now > time + this.autoDisqualifyTimeout - AUTO_DISQUALIFY_WARNING_TIMEOUT) {
+				if (this.autoDisqualifyWarnings.has(player)) return;
+				let remainingTime = this.autoDisqualifyTimeout - now + time;
 				if (remainingTime <= 0) {
 					remainingTime = AUTO_DISQUALIFY_WARNING_TIMEOUT;
-					this.lastActionTimes.set(player, Date.now() - this.autoDisqualifyTimeout + AUTO_DISQUALIFY_WARNING_TIMEOUT);
+					this.lastActionTimes.set(player, now - this.autoDisqualifyTimeout + AUTO_DISQUALIFY_WARNING_TIMEOUT);
 				}
 
-				this.isAutoDisqualifyWarned.set(player, true);
+				this.autoDisqualifyWarnings.set(player, true);
 				player.sendRoom('|tournament|autodq|target|' + remainingTime);
 			} else {
-				this.isAutoDisqualifyWarned.set(player, false);
+				this.autoDisqualifyWarnings.delete(player);
 			}
 		});
-		if (this.autoDisqualifyTimeout !== Infinity && !this.isEnded) this.autoDisqualifyTimer = setTimeout(() => this.runAutoDisqualify(), this.autoDisqualifyTimeout);
+		if (!this.isEnded) this.autoDisqualifyTimer = setTimeout(() => this.runAutoDisqualify(), this.autoDisqualifyTimeout);
 	}
 
 	challenge(user, targetUserid, output) {
@@ -612,7 +627,8 @@ class Tournament {
 
 		let from = this.players[user.userid];
 		let to = this.players[targetUserid];
-		if (!this.availableMatches.get(from) || !this.availableMatches.get(from).get(to)) {
+		let availableMatches = this.availableMatches.get(from);
+		if (!availableMatches || !availableMatches.get(to)) {
 			output.sendReply('|tournament|error|InvalidMatch');
 			return;
 		}
@@ -641,9 +657,7 @@ class Tournament {
 			return;
 		}
 
-		let now = Date.now();
-		this.lastActionTimes.set(from, now);
-		this.lastActionTimes.set(to, now);
+		this.lastActionTimes.set(to, Date.now());
 		this.pendingChallenges.set(from, {to: to, team: user.team});
 		this.pendingChallenges.set(to, {from: from, team: user.team});
 		from.sendRoom('|tournament|update|' + JSON.stringify({challenging: to.name}));
@@ -719,7 +733,7 @@ class Tournament {
 		this.room.add('|tournament|battlestart|' + from.name + '|' + user.name + '|' + room.id).update();
 
 		this.isBracketInvalidated = true;
-		this.runAutoDisqualify(this.room);
+		if (this.autoDisqualifyTimeout !== Infinity) this.runAutoDisqualify(this.room);
 		this.update();
 	}
 	forfeit(user) {
@@ -778,7 +792,7 @@ class Tournament {
 			this.isBracketInvalidated = true;
 			this.isAvailableMatchesInvalidated = true;
 
-			this.runAutoDisqualify();
+			if (this.autoDisqualifyTimeout !== Infinity) this.runAutoDisqualify();
 			this.update();
 			return this.room.update();
 		}
@@ -801,7 +815,7 @@ class Tournament {
 		if (this.generator.isTournamentEnded()) {
 			this.onTournamentEnd();
 		} else {
-			this.runAutoDisqualify();
+			if (this.autoDisqualifyTimeout !== Infinity) this.runAutoDisqualify();
 			this.update();
 		}
 		this.room.update();
@@ -1022,6 +1036,7 @@ let commands = {
 			}
 		},
 		runautodq: function (tournament) {
+			if (tournament.autoDisqualifyTimeout === Infinity) return this.errorReply("The automatic tournament disqualify timer is not set.");
 			tournament.runAutoDisqualify(this);
 		},
 		scout: 'setscouting',
