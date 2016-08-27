@@ -2993,7 +2993,7 @@ exports.commands = {
 	},
 	toursexplication: 'toursguide',
 	toursguide: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.canBroadcast() return;
 		this.sendReplyBox(
 			'<b>Tournament Rules and General Guidelines</b><br>' +
 			'<a href="http://www.smogon.com/forums/threads/tournament-rules-and-general-guidelines.3538684/">List of TD, rules, and more explication.</a><br>' +
@@ -3003,7 +3003,7 @@ exports.commands = {
 			'<b>List of Official Smogon Tournaments</b><br>' +
 			'<img src="http://www.smogon.com/media/forums/images/badges/tour.png" width="16" height="16"><a href="http://www.smogon.com/forums/forums/smogon-tour.49/">Smogon Tour</a><br>' +
 			'<img src="http://www.smogon.com/media/forums/images/badges/spl.png" width="16" height="16"><a href="http://www.smogon.com/forums/forums/smogon-premier-league.130/">Smogon Premier League</a><br>' +
-			'<img src="http://www.smogon.com/media/forums/images/badges/worldcup.png" width="16" height="16"><a href="http://www.smogon.com/forums/forums/world-cup-of-pokemon.234/">Worl Cup of Pokemon</a><br>' +
+			'<img src="http://www.smogon.com/media/forums/images/badges/worldcup.png" width="16" height="16"><a href="http://www.smogon.com/forums/forums/world-cup-of-pokemon.234/">World Cup of Pok&eacute;mon</a><br>' +
 			'<img src="http://www.smogon.com/media/forums/images/badges/grandslam.png" width="16" height="16"><a href="http://www.smogon.com/forums/forums/smogon-grand-slam.208/">Smogon Grand Slam</a><br>' +
 			'<img src="http://imgur.com/nIdW9QW.png" width="16" height="16"><a herf="http://www.smogon.com/forums/forums/the-smogon-classic.334/">The Smogon Classic</a><br>' +
 			'<img src="http://www.smogon.com/media/forums/images/badges/olt.png" width="16" height="16"><a href="http://www.smogon.com/forums/threads/smogons-official-ladder-tournament-iii-cycle-4-signups-read-post-178.3580529/#178">Smogons Official Ladder Tournament (cycle #4)</a><br>' +
