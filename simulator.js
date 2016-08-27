@@ -40,7 +40,7 @@ class BattlePlayer {
 		this.userid = user.userid;
 		this.name = user.name;
 		this.game = game;
-		user.games.set(this.game.id, this.game);
+		user.games.add(this.game.id);
 		user.updateSearch();
 
 		this.slot = slot;

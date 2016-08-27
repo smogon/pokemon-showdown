@@ -332,8 +332,8 @@ class User {
 		this.prevNames = Object.create(null);
 		this.inRooms = new Set();
 
-		// Table of roomid:game
-		this.games = new Map();
+		// Set of roomids
+		this.games = new Set();
 
 		// searches and challenges
 		this.searching = Object.create(null);
@@ -564,8 +564,9 @@ class User {
 	 */
 	rename(name, token, newlyRegistered, connection) {
 		// this needs to be a for-of because it returns...
-		for (let game of this.games.values()) {
-			if (game.ended) continue; // should never happen
+		for (let roomid of this.games) {
+			let game = Rooms(roomid).game;
+			if (!game || game.ended) continue; // should never happen
 			if (game.allowRenames) continue;
 			this.popup("You can't change your name right now because you're in the middle of a rated game.");
 			return false;
@@ -776,8 +777,8 @@ class User {
 			let initdata = '|updateuser|' + this.name + '|' + (this.named ? '1' : '0') + '|' + this.avatar;
 			this.connections[i].send(initdata);
 		}
-		this.games.forEach(game => {
-			game.onRename(this, oldid, joining);
+		this.games.forEach(roomid => {
+			Rooms(roomid).game.onRename(this, oldid, joining);
 		});
 		this.inRooms.forEach(roomid => {
 			Rooms(roomid).onRename(this, oldid, joining);
@@ -1244,7 +1245,8 @@ class User {
 	updateSearch(onlyIfExists, connection) {
 		let games = {};
 		let atLeastOne = false;
-		this.games.forEach((game, roomid) => {
+		this.games.forEach(roomid => {
+			let game = Rooms(roomid).game;
 			games[roomid] = game.title + (game.allowRenames ? '' : '*');
 			atLeastOne = true;
 		});
@@ -1398,7 +1400,8 @@ class User {
 	}
 	destroy() {
 		// deallocate user
-		this.games.forEach(game => {
+		this.games.forEach(roomid => {
+			let game = Rooms(roomid).game;
 			if (game.ended) return;
 			if (game.forfeit) {
 				game.forfeit(this);
