@@ -2993,7 +2993,7 @@ exports.commands = {
 	},
 	toursexplication: 'toursguide',
 	toursguide: function (target, room, user) {
-		if (!this.canBroadcast() return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox(
 			'<b>Tournament Rules and General Guidelines</b><br>' +
 			'<a href="http://www.smogon.com/forums/threads/tournament-rules-and-general-guidelines.3538684/">List of TD, rules, and more explication.</a><br>' +
