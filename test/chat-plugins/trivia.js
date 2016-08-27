@@ -179,7 +179,7 @@ describe('Trivia', function () {
 			game.start();
 			game.askQuestion();
 
-			this.game = game;
+			this.game = this.room.game = game;
 			this.player = game.players[this.user.userid];
 		});
 
@@ -239,7 +239,7 @@ describe('Trivia', function () {
 			game.start();
 			game.askQuestion();
 
-			this.game = game;
+			this.game = this.room.game = game;
 			this.player = game.players[this.user.userid];
 		});
 
@@ -310,7 +310,7 @@ describe('Trivia', function () {
 			game.start();
 			game.askQuestion();
 
-			this.game = game;
+			this.game = this.room.game = game;
 			this.player = game.players[this.user.userid];
 		});
 
