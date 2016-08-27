@@ -3006,7 +3006,7 @@ exports.commands = {
                         '<img src="http://www.smogon.com/media/forums/images/badges/worldcup.png" width="16" height="16"><a href="http://www.smogon.com/forums/forums/world-cup-of-pokemon.234/">Worl Cup of Pokemon</a>',
                         '<img src="http://www.smogon.com/media/forums/images/badges/grandslam.png" width="16" height="16"><a href="http://www.smogon.com/forums/forums/smogon-grand-slam.208/">Smogon Grand Slam</a>',
                         '<img src="http://imgur.com/nIdW9QW.png" width="16" height="16"><a herf="http://www.smogon.com/forums/forums/the-smogon-classic.334/">The Smogon Classic</a>',
-                        '<img src="http://www.smogon.com/media/forums/images/badges/olt.png" width=16 height="16"><a href="http://www.smogon.com/forums/threads/smogons-official-ladder-tournament-iii-cycle-4-signups-read-post-178.3580529/#178">Smogons Official Ladder Tournament (cycle #4)</a>',
+                        '<img src="http://www.smogon.com/media/forums/images/badges/olt.png" width="16" height="16"><a href="http://www.smogon.com/forums/threads/smogons-official-ladder-tournament-iii-cycle-4-signups-read-post-178.3580529/#178">Smogons Official Ladder Tournament (cycle #4)</a>',
                         '<img src="http://www.smogon.com/media/community/awards/ost.png" width="16" height="16"><a href="http://www.smogon.com/forums/threads/smogon-tournament-12-signups.3562131/">Smogon Official Smogon Tournament</a>'
 		); 
 	},
