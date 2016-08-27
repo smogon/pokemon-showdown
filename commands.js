@@ -879,7 +879,7 @@ exports.commands = {
 	roomdesc: function (target, room, user) {
 		if (!target) {
 			if (!this.runBroadcast()) return;
-			if (!room.desc) return this.errorReply("This room does not have a description set.");
+			if (!room.desc) return this.sendReply("This room does not have a description set.");
 			this.sendReplyBox("The room description is: " + Tools.escapeHTML(room.desc));
 			return;
 		}
@@ -912,7 +912,7 @@ exports.commands = {
 	roomintro: function (target, room, user) {
 		if (!target) {
 			if (!this.runBroadcast()) return;
-			if (!room.introMessage) return this.errorReply("This room does not have an introduction set.");
+			if (!room.introMessage) return this.sendReply("This room does not have an introduction set.");
 			this.sendReply('|raw|<div class="infobox infobox-limited">' + room.introMessage.replace(/\n/g, '') + '</div>');
 			if (!this.broadcasting && user.can('declare', null, room)) {
 				this.sendReply('Source:');
@@ -965,7 +965,7 @@ exports.commands = {
 	staffintro: function (target, room, user) {
 		if (!target) {
 			if (!this.can('mute', null, room)) return false;
-			if (!room.staffMessage) return this.errorReply("This room does not have a staff introduction set.");
+			if (!room.staffMessage) return this.sendReply("This room does not have a staff introduction set.");
 			this.sendReply('|raw|<div class="infobox">' + room.staffMessage.replace(/\n/g, '') + '</div>');
 			if (user.can('ban', null, room)) {
 				this.sendReply('Source:');
