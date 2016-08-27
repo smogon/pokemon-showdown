@@ -98,15 +98,30 @@ class Giveaway {
 				mons.set(mon.baseSpecies, mon);
 			}
 		}
+		for (let i in Tools.data.Aliases) {
+			if (toId(Tools.data.Aliases[i]) in Tools.data.Pokedex && text.includes(i)) {
+				let mon = Tools.getTemplate(toId(Tools.data.Aliases[i]));
+				mons.set(mon.baseSpecies, mon);
+			}
+		}
 		if (mons.size) {
-			mons.forEach(function (value) {
+			mons.forEach(function (value, key) {
+				let spriteid = value.spriteid;
+				if (value.otherForms) {
+					for (let i = 0; i < value.otherForms.length; i++) {
+						if (text.includes(value.otherForms[i])) {
+							spriteid += '-' + value.otherForms[i].substr(key.length);
+							break; // We don't want to end up with deerling-summer-spring
+						}
+					}
+				}
 				if (mons.size > 1) {
 					let top = Math.floor(value.num / 12) * 30;
 					let left = (value.num % 12) * 40;
 					output += `<div style="display:inline-block;width:40px;height:30px;background:transparent url('/sprites/xyicons-sheet.png?a1') no-repeat scroll -${left}px -${top}px'"></div>`;
 				} else {
 					let shiny = (text.includes("shiny") && !text.includes("shinystone") ? '-shiny' : '');
-					output += `<img src="/sprites/xyani${shiny}/${value.spriteid}.gif">`;
+					output += `<img src="/sprites/xyani${shiny}/${spriteid}.gif">`;
 				}
 			});
 		}
