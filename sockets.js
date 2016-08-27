@@ -31,10 +31,11 @@ if (cluster.isMaster) {
 			// console.log('master received: ' + data);
 			switch (data.charAt(0)) {
 			case '*': {
-				// *socketid, ip
+				// *socketid, ip, protocol
 				// connect
 				let nlPos = data.indexOf('\n');
-				Users.socketConnect(worker, id, data.substr(1, nlPos - 1), data.substr(nlPos + 1));
+				let nlPos2 = data.indexOf('\n', nlPos + 1);
+				Users.socketConnect(worker, id, data.slice(1, nlPos - 1), data.slice(nlPos + 1, nlPos2), data.slice(nlPos2 + 1));
 				break;
 			}
 
@@ -454,7 +455,7 @@ if (cluster.isMaster) {
 			}
 		}
 
-		process.send('*' + socketid + '\n' + socket.remoteAddress);
+		process.send('*' + socketid + '\n' + socket.remoteAddress + '\n' + socket.protocol);
 
 		socket.on('data', message => {
 			// drop empty messages (DDoS?)
