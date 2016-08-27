@@ -904,7 +904,7 @@ const commands = {
 
 	review: function (target, room) {
 		if (room.id !== 'questionworkshop') return this.errorReply('This command can only be used in Question Workshop.');
-		if (!this.can('mute', null, room)) return false;
+		if (!this.can('ban', null, room)) return false;
 
 		let submissions = triviaData.submissions;
 		let submissionsLen = submissions.length;
@@ -923,12 +923,12 @@ const commands = {
 
 		this.sendReply(buffer);
 	},
-	reviewhelp: ["/trivia review - View the list of submitted questions. Requires: % @ # & ~"],
+	reviewhelp: ["/trivia review - View the list of submitted questions. Requires: @ # & ~"],
 
 	reject: 'accept',
 	accept: function (target, room, user, connection, cmd) {
 		if (room.id !== 'questionworkshop') return this.errorReply('This command can only be used in Question Workshop.');
-		if (!this.can('mute', null, room)) return false;
+		if (!this.can('ban', null, room)) return false;
 		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
 
 		target = target.trim();
@@ -1007,8 +1007,8 @@ const commands = {
 
 		this.errorReply("'" + target + "' is an invalid argument. View /help trivia for more information.");
 	},
-	accepthelp: ["/trivia accept [index1], [index2], ... [indexn] OR all - Add questions from the submission database to the question database using their index numbers or ranges of them. Requires: % @ # & ~"],
-	rejecthelp: ["/trivia reject [index1], [index2], ... [indexn] OR all - Remove questions from the submission database using their index numbers or ranges of them. Requires: % @ # & ~"],
+	accepthelp: ["/trivia accept [index1], [index2], ... [indexn] OR all - Add questions from the submission database to the question database using their index numbers or ranges of them. Requires: @ # & ~"],
+	rejecthelp: ["/trivia reject [index1], [index2], ... [indexn] OR all - Remove questions from the submission database using their index numbers or ranges of them. Requires: @ # & ~"],
 
 	delete: function (target, room, user) {
 		if (room.id !== 'questionworkshop') return this.errorReply('This command can only be used in Question Workshop.');
@@ -1178,9 +1178,9 @@ module.exports = {
 			"- /trivia end - End a trivia game. Requires: + % @ # ~",
 			"Question modifying commands:",
 			"- /trivia submit [category] | [question] | [answer1], [answer2] ... [answern] - Add a question to the submission database for staff to review.",
-			"- /trivia review - View the list of submitted questions. Requires: % @ # & ~",
-			"- /trivia accept [index1], [index2], ... [indexn] OR all - Add questions from the submission database to the question database using their index numbers or ranges of them. Requires: % @ # & ~",
-			"- /trivia reject [index1], [index2], ... [indexn] OR all - Remove questions from the submission database using their index numbers or ranges of them. Requires: % @ # & ~",
+			"- /trivia review - View the list of submitted questions. Requires: @ # & ~",
+			"- /trivia accept [index1], [index2], ... [indexn] OR all - Add questions from the submission database to the question database using their index numbers or ranges of them. Requires: @ # & ~",
+			"- /trivia reject [index1], [index2], ... [indexn] OR all - Remove questions from the submission database using their index numbers or ranges of them. Requires: @ # & ~",
 			"- /trivia add [category] | [question] | [answer1], [answer2], ... [answern] - Add a question to the question database. Requires: % @ # & ~",
 			"- /trivia delete [question] - Delete a question from the trivia database. Requires: % @ # & ~",
 			"- /trivia qs - View the distribution of questions in the question database.",
