@@ -249,7 +249,7 @@ Users.cacheGroupData = cacheGroupData;
 let connections = Users.connections = new Map();
 
 class Connection {
-	constructor(id, worker, socketid, user, ip) {
+	constructor(id, worker, socketid, user, ip, protocol) {
 		this.id = id;
 		this.socketid = socketid;
 		this.worker = worker;
@@ -258,6 +258,7 @@ class Connection {
 		this.user = user;
 
 		this.ip = ip || '';
+		this.protocol = protocol || '';
 
 		this.autojoin = '';
 	}
@@ -1435,9 +1436,9 @@ Users.pruneInactiveTimer = setInterval(() => {
  * Routing
  *********************************************************/
 
-Users.socketConnect = function (worker, workerid, socketid, ip) {
+Users.socketConnect = function (worker, workerid, socketid, ip, protocol) {
 	let id = '' + workerid + '-' + socketid;
-	let connection = new Connection(id, worker, socketid, null, ip);
+	let connection = new Connection(id, worker, socketid, null, ip, protocol);
 	connections.set(id, connection);
 
 	let banned = Punishments.checkIpBanned(connection);
