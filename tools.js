@@ -719,6 +719,27 @@ module.exports = (() => {
 		return ('' + str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;').replace(/\//g, '&#x2f;');
 	};
 
+	Tools.prototype.html = function (strings) {
+		let buf = strings[0];
+		for (let i = 1; i < arguments.length; i++) {
+			buf += moddedTools.base.escapeHTML(arguments[i]);
+			buf += strings[i + 1];
+		}
+		return buf;
+	};
+	Tools.prototype.plural = function (num, plural, singular) {
+		if (!plural) plural = 's';
+		if (!singular) singular = '';
+		if (num && typeof num.length === 'number') {
+			num = num.length;
+		} else if (num && typeof num.size === 'number') {
+			num = num.size;
+		} else {
+			num = Number(num);
+		}
+		return (num !== 1 ? plural : singular);
+	};
+
 	Tools.prototype.toTimeStamp = function (date, options) {
 		// Return a timestamp in the form {yyyy}-{MM}-{dd} {hh}:{mm}:{ss}.
 		// Optionally reports hours in mod-12 format.

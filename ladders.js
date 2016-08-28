@@ -135,14 +135,14 @@ class Ladder {
 		let formatid = this.formatid;
 		let name = Tools.getFormat(formatid).name;
 		return this.ladder.then(ladder => {
-			let buf = '<h3>' + name + ' Top 100</h3>';
-			buf += '<table>';
-			buf += '<tr><th>' + ['', 'Username', '<abbr title="Elo rating">Elo</abbr>', 'W', 'L', 'T'].join('</th><th>') + '</th></tr>';
+			let buf = `<h3>${name} Top 100</h3>`;
+			buf += `<table>`;
+			buf += `<tr><th>` + ['', 'Username', '<abbr title="Elo rating">Elo</abbr>', 'W', 'L', 'T'].join(`</th><th>`) + `</th></tr>`;
 			for (let i = 0; i < ladder.length; i++) {
 				let row = ladder[i];
-				buf += '<tr><td>' + [
-					i + 1, row[2], '<strong>' + Math.round(row[1]) + '</strong>', row[3], row[4], row[5],
-				].join('</td><td>') + '</td></tr>';
+				buf += `<tr><td>` + [
+					i + 1, row[2], `<strong>${Math.round(row[1])}</strong>`, row[3], row[4], row[5],
+				].join(`</td><td>`) + `</td></tr>`;
 			}
 			return [formatid, buf];
 		});
@@ -266,22 +266,22 @@ class Ladder {
 				this.save();
 
 				if (!room.battle) {
-					console.log('room expired before ladder update was received');
+					console.log(`room expired before ladder update was received`);
 					return;
 				}
 
 				let reasons = '' + (Math.round(p1newElo) - Math.round(p1elo)) + ' for ' + (p1score > 0.9 ? 'winning' : (p1score < 0.1 ? 'losing' : 'tying'));
 				if (reasons.charAt(0) !== '-') reasons = '+' + reasons;
-				room.addRaw(Tools.escapeHTML(p1name) + '\'s rating: ' + Math.round(p1elo) + ' &rarr; <strong>' + Math.round(p1newElo) + '</strong><br />(' + reasons + ')');
+				room.addRaw(Tools.html`${p1name}'s rating: ${Math.round(p1elo)} &rarr; <strong>${Math.round(p1newElo)}</strong><br />(${reasons})`);
 
 				reasons = '' + (Math.round(p2newElo) - Math.round(p2elo)) + ' for ' + (p1score > 0.9 ? 'losing' : (p1score < 0.1 ? 'winning' : 'tying'));
 				if (reasons.charAt(0) !== '-') reasons = '+' + reasons;
-				room.addRaw(Tools.escapeHTML(p2name) + '\'s rating: ' + Math.round(p2elo) + ' &rarr; <strong>' + Math.round(p2newElo) + '</strong><br />(' + reasons + ')');
+				room.addRaw(Tools.html`${p2name}'s rating: ${Math.round(p2elo)} &rarr; <strong>${Math.round(p2newElo)}</strong><br />(${reasons})`);
 
 				room.update();
 			} catch (e) {
 				if (!room.battle) return;
-				room.addRaw('There was an error calculating rating changes:');
+				room.addRaw(`There was an error calculating rating changes:`);
 				room.add(e.stack);
 				room.update();
 			}
@@ -303,8 +303,8 @@ class Ladder {
 
 			let ratings = this.loadedLadder[index];
 
-			let output = '<tr><td>' + this.formatid + '</td><td><strong>' + Math.round(ratings[1]) + '</strong></td>';
-			return output + '<td>' + ratings[3] + '</td><td>' + ratings[4] + '</td><td>' + (ratings[3] + ratings[4]) + '</td></tr>';
+			let output = `<tr><td>${this.formatid}</td><td><strong>${Math.round(ratings[1])}</strong></td>`;
+			return `${output}<td>${ratings[3]}</td><td>${ratings[4]}</td><td>${ratings[3] + ratings[4]}</td></tr>`;
 		});
 	}
 
