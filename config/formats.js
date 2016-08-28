@@ -334,31 +334,6 @@ exports.Formats = [
 		requirePentagon: true,
 	},
 	{
-		name: "Unova Classic",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3577932/\">Unova Classic</a>"],
-		section: "ORAS Triples",
-
-		gameType: 'triples',
-		maxForcedLevel: 50,
-		teamLength: {
-			validate: [6, 6],
-		},
-		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview'],
-		banlist: [],
-		onValidateSet: function (set) {
-			let problems = [];
-			let template = this.getTemplate(set.species || set.name);
-			if (template.num > 649) {
-				problems.push(template.species + " is banned by Unova Classic.");
-			}
-			let item = this.getItem(set.item);
-			if (item.megaStone) {
-				problems.push(item.name + " is banned by Unova Classic.");
-			}
-			return problems;
-		},
-	},
-	{
 		name: "Triples Custom Game",
 		section: "ORAS Triples",
 
