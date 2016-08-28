@@ -32,20 +32,21 @@ exports.commands = {
 			return this.errorReply("/alts - Access denied.");
 		}
 
-		let buf = '<strong class="username"><small style="display:none">' + targetUser.group + '</small>' + Tools.escapeHTML(targetUser.name) + '</strong> ' + (!targetUser.connected ? ' <em style="color:gray">(offline)</em>' : '');
+		let buf = Tools.html`<strong class="username"><small style="display:none">${targetUser.group}</small>${targetUser.name}</strong> `;
+		if (!targetUser.connected) buf += ` <em style="color:gray">(offline)</em>`;
 		let roomauth = '';
 		if (room.auth && targetUser.userid in room.auth) roomauth = room.auth[targetUser.userid];
 		if (Config.groups[roomauth] && Config.groups[roomauth].name) {
-			buf += "<br />" + Config.groups[roomauth].name + " (" + roomauth + ")";
+			buf += `<br />${Config.groups[roomauth].name} (${roomauth})`;
 		}
 		if (Config.groups[targetUser.group] && Config.groups[targetUser.group].name) {
-			buf += "<br />Global " + Config.groups[targetUser.group].name + " (" + targetUser.group + ")";
+			buf += `<br />Global ${Config.groups[targetUser.group].name} (${targetUser.group})`;
 		}
 		if (targetUser.isSysop) {
-			buf += "<br />(Pok&eacute;mon Showdown System Operator)";
+			buf += `<br />(Pok&eacute;mon Showdown System Operator)`;
 		}
 		if (!targetUser.registered) {
-			buf += "<br />(Unregistered)";
+			buf += `<br />(Unregistered)`;
 		}
 		let publicrooms = "";
 		let hiddenrooms = "";
@@ -76,84 +77,87 @@ exports.commands = {
 		buf += '<br />';
 		if (user.can('alts', targetUser) || user.can('alts') && user === targetUser) {
 			let alts = targetUser.getAltUsers(true);
-			let output = Object.keys(targetUser.prevNames).join(", ");
-			if (output) buf += "<br />Previous names: " + Tools.escapeHTML(output);
+			let prevNames = Object.keys(targetUser.prevNames).join(", ");
+			if (prevNames) buf += Tools.html`<br />Previous names: ${prevNames}`;
 
 			for (let j = 0; j < alts.length; ++j) {
 				let targetAlt = alts[j];
 				if (!targetAlt.named && !targetAlt.connected) continue;
 				if (targetAlt.group === '~' && user.group !== '~') continue;
 
-				buf += '<br />Alt: <span class="username">' + Tools.escapeHTML(targetAlt.name) + '</span>' + (!targetAlt.connected ? " <em style=\"color:gray\">(offline)</em>" : "");
-				output = Object.keys(targetAlt.prevNames).join(", ");
-				if (output) buf += "<br />Previous names: " + output;
+				buf += Tools.html`<br />Alt: <span class="username">${targetAlt.name}</span>`;
+				if (!targetAlt.connected) buf += ` <em style=\"color:gray\">(offline)</em>`;
+				prevNames = Object.keys(targetAlt.prevNames).join(", ");
+				if (prevNames) buf += `<br />Previous names: ${prevNames}`;
 			}
 			if (targetUser.namelocked) {
-				buf += '<br />NAMELOCKED: ' + targetUser.namelocked;
+				buf += `<br />NAMELOCKED: ${targetUser.namelocked}`;
 				let punishment = Punishments.userids.get(targetUser.locked);
 				if (punishment) {
 					let expiresIn = new Date(punishment[2]).getTime() - Date.now();
 					let expiresDays = Math.round(expiresIn / 1000 / 60 / 60 / 24);
-					buf += ' (expires in around ' + expiresDays + ' day' + (expiresDays === 1 ? '' : 's') + ')';
-					if (punishment[3]) buf += ' (reason: ' + punishment[3] + ')';
+					buf += ` (expires in around ${expiresDays} day${Tools.plural(expiresDays)})`;
+					if (punishment[3]) buf += ` (reason: ${punishment[3]})`;
 				}
 			} else if (targetUser.locked) {
-				buf += '<br />LOCKED: ' + targetUser.locked;
+				buf += `<br />LOCKED: ${targetUser.locked}`;
 				switch (targetUser.locked) {
 				case '#dnsbl':
-					buf += " - IP is in a DNS-based blacklist";
+					buf += ` - IP is in a DNS-based blacklist`;
 					break;
 				case '#range':
-					buf += " - IP or host is in a temporary range-lock";
+					buf += ` - IP or host is in a temporary range-lock`;
 					break;
 				case '#hostfilter':
-					buf += " - host is permanently locked for being a proxy";
+					buf += ` - host is permanently locked for being a proxy`;
 					break;
 				}
 				let punishment = Punishments.userids.get(targetUser.locked);
 				if (punishment) {
 					let expiresIn = new Date(punishment[2]).getTime() - Date.now();
 					let expiresDays = Math.round(expiresIn / 1000 / 60 / 60 / 24);
-					buf += ' (expires in around ' + expiresDays + ' day' + (expiresDays === 1 ? '' : 's') + ')';
-					if (punishment[3]) buf += ' (reason: ' + punishment[3] + ')';
+					buf += ` (expires in around ${expiresDays} day${Tools.plural(expiresDays)})`;
+					if (punishment[3]) buf += ` (reason: ${punishment[3]})`;
 				}
 			}
 			if (targetUser.semilocked) {
-				buf += '<br />Semilocked: ' + targetUser.semilocked;
+				buf += `<br />Semilocked: ${targetUser.semilocked}`;
 			}
 		}
 		if ((user.can('ip', targetUser) || user === targetUser)) {
 			let ips = Object.keys(targetUser.ips);
-			buf += "<br /> IP" + ((ips.length > 1) ? "s" : "") + ": " + ips.join(", ") +
-					(user.group !== ' ' && targetUser.latestHost ? "<br />Host: " + Tools.escapeHTML(targetUser.latestHost) : "");
+			buf += `<br /> IP${Tools.plural(ips)}: ${ips.join(", ")}`;
+			if (user.group !== ' ' && targetUser.latestHost) {
+				buf += Tools.html`<br />Host: ${targetUser.latestHost}`;
+			}
 		}
 		if ((user === targetUser || user.can('alts', targetUser)) && hiddenrooms) {
-			buf += '<br />Hidden rooms: ' + hiddenrooms;
+			buf += `<br />Hidden rooms: ${hiddenrooms}`;
 		}
 		if ((user === targetUser || user.can('makeroom')) && privaterooms) {
-			buf += '<br />Private rooms: ' + privaterooms;
+			buf += `<br />Private rooms: ${privaterooms}`;
 		}
 
 		if (user.can('alts', targetUser) || (room.isPrivate !== true && user.can('mute', targetUser, room) && targetUser.userid in room.users)) {
-			let bannedFrom = "";
-			let mutedIn = "";
+			let bannedFrom = ``;
+			let mutedIn = ``;
 			for (let i = 0; i < Rooms.global.chatRooms.length; i++) {
 				let thisRoom = Rooms.global.chatRooms[i];
 				if (!thisRoom || thisRoom.isPrivate === true) continue;
 				let roomBanned = ((thisRoom.bannedIps && thisRoom.bannedIps[targetUser.latestIp]) || (thisRoom.bannedUsers && thisRoom.bannedUsers[targetUser.userid]));
 				if (roomBanned) {
-					if (bannedFrom) bannedFrom += ", ";
-					bannedFrom += '<a href="/' + thisRoom + '">' + thisRoom + '</a> (' + roomBanned + ')';
+					if (bannedFrom) bannedFrom += `, `;
+					bannedFrom += `<a href="/${thisRoom}">${thisRoom}</a> (${roomBanned})`;
 				} else {
 					let muted = thisRoom.isMuted(targetUser);
 					if (muted) {  // besides roombans, mutes also help to determine if a user is hitting multiple rooms
 						if (mutedIn) mutedIn += ", ";
-						mutedIn += '<a href="/' + thisRoom + '">' + thisRoom + '</a> (' + muted + ')';
+						mutedIn += `<a href="/${thisRoom}">${thisRoom}</a> (${muted})`;
 					}
 				}
 			}
-			if (bannedFrom) buf += '<br />Banned from: ' + bannedFrom;
-			if (mutedIn) buf += '<br />Muted in: ' + mutedIn;
+			if (bannedFrom) buf += `<br />Banned from: ` + bannedFrom;
+			if (mutedIn) buf += `<br />Muted in: ` + mutedIn;
 		}
 		this.sendReplyBox(buf);
 	},

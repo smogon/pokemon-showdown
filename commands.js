@@ -761,7 +761,7 @@ exports.commands = {
 			break;
 		default:
 			if (room.isPrivate === true && target !== 'force') {
-				return this.sendReply("This room is a secret room. Use `/publicroom` to make it public, or `/hiddenroom force` to force hidden.");
+				return this.sendReply(`This room is a secret room. Use "/publicroom" to make it public, or "/hiddenroom force" to force it hidden.`);
 			}
 			setting = 'hidden';
 			break;
@@ -773,35 +773,38 @@ exports.commands = {
 
 		if (target === 'off' || !setting) {
 			if (!room.isPrivate) {
-				return this.errorReply("This room is already public.");
+				return this.errorReply(`This room is already public.`);
 			}
-			if (room.isPersonal) return this.errorReply("This room can't be made public.");
+			if (room.isPersonal) return this.errorReply(`This room can't be made public.`);
 			if (room.privacySetter && user.can('nooverride', null, room) && !user.can('makeroom')) {
 				if (!room.privacySetter.has(user.userid)) {
-					return this.errorReply("You can't make the room public since you didn't make it private - only " + Array.from(room.privacySetter).join(', ') + " can.");
+					const privacySetters = Array.from(room.privacySetter).join(', ');
+					return this.errorReply(`You can't make the room public since you didn't make it private - only ${privacySetters} can.`);
 				}
 				room.privacySetter.delete(user.userid);
 				if (room.privacySetter.size) {
-					return this.sendReply("You are no longer forcing the room to stay private, but " + Array.from(room.privacySetter).join(', ') + " also needs to use /publicroom to make the room public.");
+					const privacySetters = Array.from(room.privacySetter).join(', ');
+					return this.sendReply(`You are no longer forcing the room to stay private, but ${privacySetters} also need${Tools.plural(room.privacySetter, '', 's')} to use /publicroom to make the room public.`);
 				}
 			}
 			delete room.isPrivate;
 			room.privacySetter = null;
-			this.addModCommand("" + user.name + " made this room public.");
+			this.addModCommand(`${user.name} made this room public.`);
 			if (room.chatRoomData) {
 				delete room.chatRoomData.isPrivate;
 				Rooms.global.writeChatRoomData();
 			}
 		} else {
+			const settingName = (setting === true ? 'secret' : setting);
 			if (room.isPrivate === setting) {
 				if (room.privacySetter && !room.privacySetter.has(user.userid)) {
 					room.privacySetter.add(user.userid);
-					return this.sendReply("This room is already " + (setting === true ? 'secret' : setting) + ", but is now forced to stay that way until you use /publicroom.");
+					return this.sendReply(`This room is already ${settingName}, but is now forced to stay that way until you use /publicroom.`);
 				}
-				return this.errorReply("This room is already " + (setting === true ? 'secret' : setting) + ".");
+				return this.errorReply(`This room is already ${settingName}.`);
 			}
 			room.isPrivate = setting;
-			this.addModCommand("" + user.name + " made this room " + (setting === true ? 'secret' : setting) + ".");
+			this.addModCommand(`${user.name} made this room ${settingName}.`);
 			if (room.chatRoomData) {
 				room.chatRoomData.isPrivate = setting;
 				Rooms.global.writeChatRoomData();
@@ -814,63 +817,66 @@ exports.commands = {
 		"/publicroom - Makes a room public. Requires: \u2605 & ~"],
 
 	modjoin: function (target, room, user) {
-		if (!target) return this.sendReply("Modjoin is currently set to: " + (room.modjoin ? room.modjoin : false));
+		if (!target) {
+			const modjoinSetting = room.modjoin === true ? "sync" : room.modjoin || "off";
+			return this.sendReply(`Modjoin is currently set to: ${modjoinSetting}`);
+		}
 		if (room.battle || room.isPersonal) {
 			if (!this.can('editroom', null, room)) return;
 		} else {
 			if (!this.can('makeroom')) return;
 		}
-		if (room.tour && !room.tour.modjoin) return this.errorReply("You can't do this in tournaments where modjoin is prohibited.");
+		if (room.tour && !room.tour.modjoin) return this.errorReply(`You can't do this in tournaments where modjoin is prohibited.`);
 		if (target === 'off' || target === 'false') {
-			if (!room.modjoin) return this.errorReply("Modjoin is already turned off in this room.");
+			if (!room.modjoin) return this.errorReply(`Modjoin is already turned off in this room.`);
 			delete room.modjoin;
-			this.addModCommand("" + user.name + " turned off modjoin.");
+			this.addModCommand(`${user.name} turned off modjoin.`);
 			if (room.chatRoomData) {
 				delete room.chatRoomData.modjoin;
 				Rooms.global.writeChatRoomData();
 			}
+			return;
+		} else if (target === 'sync') {
+			if (room.modjoin === true) return this.errorReply(`Modjoin is already set to sync modchat in this room.`);
+			room.modjoin = true;
+			this.addModCommand(`${user.name} set modjoin to sync with modchat.`);
+		} else if (Config.groups.hasOwnProperty(target)) {
+			if (room.battle && !this.can('makeroom')) return;
+			if (room.isPersonal && !user.can('makeroom') && target !== '+') return this.errorReply(`/modjoin - Access denied from setting modjoin past + in group chats.`);
+			if (room.modjoin === target) return this.errorReply(`Modjoin is already set to ${target} in this room.`);
+			room.modjoin = target;
+			this.addModCommand(`${user.name} set modjoin to ${target}.`);
 		} else {
-			if (target === 'on' || target === 'true') {
-				if (room.modjoin === true) return this.errorReply("Modjoin is already turned on in this room.");
-				room.modjoin = true;
-				this.addModCommand("" + user.name + " turned on modjoin.");
-			} else if (target in Config.groups) {
-				if (room.battle && !this.can('makeroom')) return;
-				if (room.isPersonal && !user.can('makeroom') && target !== '+') return this.errorReply("/modjoin - Access denied from setting modjoin past + in group chats.");
-				if (room.modjoin === target) return this.errorReply("Modjoin is already set to " + target + " in this room.");
-				room.modjoin = target;
-				this.addModCommand("" + user.name + " set modjoin to " + target + ".");
-			} else {
-				this.errorReply("Unrecognized modjoin setting.");
-				return false;
-			}
-			if (room.chatRoomData) {
-				room.chatRoomData.modjoin = room.modjoin;
-				Rooms.global.writeChatRoomData();
-			}
-			if (!room.modchat) this.parse('/modchat ' + Config.groupsranking[1]);
-			if (!room.isPrivate) this.parse('/hiddenroom');
+			this.errorReply(`Unrecognized modjoin setting.`);
+			this.parse('/help modjoin');
+			return false;
 		}
+		if (room.chatRoomData) {
+			room.chatRoomData.modjoin = room.modjoin;
+			Rooms.global.writeChatRoomData();
+		}
+		if (!room.modchat) this.parse('/modchat ' + Config.groupsranking[1]);
+		if (!room.isPrivate) this.parse('/hiddenroom');
 	},
 	modjoinhelp: ["/modjoin [+|%|@|*|&|~|#|off] - Sets modjoin. Users lower than the specified rank can't join this room. Requires: # & ~",
-		"/modjoin [on|off] - Sets modjoin. Only users who can speak in modchat can join this room. Requires: # & ~"],
+		"/modjoin [sync|off] - Sets modjoin. Only users who can speak in modchat can join this room. Requires: # & ~"],
 
 	officialchatroom: 'officialroom',
 	officialroom: function (target, room, user) {
 		if (!this.can('makeroom')) return;
 		if (!room.chatRoomData) {
-			return this.errorReply("/officialroom - This room can't be made official");
+			return this.errorReply(`/officialroom - This room can't be made official`);
 		}
 		if (target === 'off') {
-			if (!room.isOfficial) return this.errorReply("This chat room is already unofficial.");
+			if (!room.isOfficial) return this.errorReply(`This chat room is already unofficial.`);
 			delete room.isOfficial;
-			this.addModCommand("" + user.name + " made this chat room unofficial.");
+			this.addModCommand(`${user.name} made this chat room unofficial.`);
 			delete room.chatRoomData.isOfficial;
 			Rooms.global.writeChatRoomData();
 		} else {
-			if (room.isOfficial) return this.errorReply("This chat room is already official.");
+			if (room.isOfficial) return this.errorReply(`This chat room is already official.`);
 			room.isOfficial = true;
-			this.addModCommand("" + user.name + " made this chat room official.");
+			this.addModCommand(`${user.name} made this chat room official.`);
 			room.chatRoomData.isOfficial = true;
 			Rooms.global.writeChatRoomData();
 		}
@@ -879,28 +885,28 @@ exports.commands = {
 	roomdesc: function (target, room, user) {
 		if (!target) {
 			if (!this.runBroadcast()) return;
-			if (!room.desc) return this.sendReply("This room does not have a description set.");
-			this.sendReplyBox("The room description is: " + Tools.escapeHTML(room.desc));
+			if (!room.desc) return this.sendReply(`This room does not have a description set.`);
+			this.sendReplyBox(Tools.html`The room description is: ${room.desc}`);
 			return;
 		}
 		if (!this.can('declare')) return false;
-		if (target.length > 80) return this.errorReply("Error: Room description is too long (must be at most 80 characters).");
+		if (target.length > 80) return this.errorReply(`Error: Room description is too long (must be at most 80 characters).`);
 		let normalizedTarget = ' ' + target.toLowerCase().replace('[^a-zA-Z0-9]+', ' ').trim() + ' ';
 
 		if (normalizedTarget.includes(' welcome ')) {
-			return this.errorReply("Error: Room description must not contain the word 'welcome'.");
+			return this.errorReply(`Error: Room description must not contain the word "welcome".`);
 		}
 		if (normalizedTarget.slice(0, 9) === ' discuss ') {
-			return this.errorReply("Error: Room description must not start with the word 'discuss'.");
+			return this.errorReply(`Error: Room description must not start with the word "discuss".`);
 		}
 		if (normalizedTarget.slice(0, 12) === ' talk about ' || normalizedTarget.slice(0, 17) === ' talk here about ') {
-			return this.errorReply("Error: Room description must not start with the phrase 'talk about'.");
+			return this.errorReply(`Error: Room description must not start with the phrase "talk about".`);
 		}
 
 		room.desc = target;
-		this.sendReply("(The room description is now: " + target + ")");
+		this.sendReply(`(The room description is now: ${target})`);
 
-		this.privateModCommand("(" + user.name + " changed the roomdesc to: \"" + target + "\".)");
+		this.privateModCommand(`(${user.name} changed the roomdesc to: "${target}".)`);
 
 		if (room.chatRoomData) {
 			room.chatRoomData.desc = room.desc;
@@ -938,7 +944,7 @@ exports.commands = {
 		this.sendReply("(The room introduction has been changed to:)");
 		this.sendReply('|raw|<div class="infobox infobox-limited">' + room.introMessage.replace(/\n/g, '') + '</div>');
 
-		this.privateModCommand("(" + user.name + " changed the roomintro.)");
+		this.privateModCommand(`(${user.name} changed the roomintro.)`);
 		this.logEntry(room.introMessage.replace(/\n/g, ''));
 
 		if (room.chatRoomData) {
@@ -951,7 +957,7 @@ exports.commands = {
 		if (!this.can('declare', null, room)) return false;
 		if (!room.introMessage) return this.errorReply("This room does not have a introduction set.");
 
-		this.privateModCommand("(" + user.name + " deleted the roomintro.)");
+		this.privateModCommand(`(${user.name} deleted the roomintro.)`);
 		this.logEntry(target);
 
 		delete room.introMessage;
@@ -991,7 +997,7 @@ exports.commands = {
 		this.sendReply("(The staff introduction has been changed to:)");
 		this.sendReply('|raw|<div class="infobox">' + target.replace(/\n/g, '') + '</div>');
 
-		this.privateModCommand("(" + user.name + " changed the staffintro.)");
+		this.privateModCommand(`(${user.name} changed the staffintro.)`);
 		this.logEntry(room.staffMessage.replace(/\n/g, ''));
 
 		if (room.chatRoomData) {
@@ -1004,7 +1010,7 @@ exports.commands = {
 		if (!this.can('ban', null, room)) return false;
 		if (!room.staffMessage) return this.errorReply("This room does not have a staff introduction set.");
 
-		this.privateModCommand("(" + user.name + " deleted the staffintro.)");
+		this.privateModCommand(`(${user.name} deleted the staffintro.)`);
 		this.logEntry(target);
 
 		delete room.staffMessage;
@@ -1027,7 +1033,7 @@ exports.commands = {
 		if (room.isPersonal) return this.errorReply("Personal rooms can't have aliases.");
 
 		Rooms.aliases.set(alias, room.id);
-		this.privateModCommand("(" + user.name + " added the room alias '" + target + "'.)");
+		this.privateModCommand(`(${user.name} added the room alias '${target}'.)`);
 
 		if (!room.aliases) room.aliases = [];
 		room.aliases.push(alias);
@@ -1044,7 +1050,7 @@ exports.commands = {
 		if (!alias || !Rooms.aliases.has(alias)) return this.errorReply("Please specify an existing alias.");
 		if (Rooms.aliases.get(alias) !== room.id) return this.errorReply("You may only remove an alias from the current room.");
 
-		this.privateModCommand("(" + user.name + " removed the room alias '" + target + "'.)");
+		this.privateModCommand(`(${user.name} removed the room alias '${target}'.)`);
 
 		let aliasIndex = room.aliases.indexOf(alias);
 		if (aliasIndex >= 0) {
@@ -1065,7 +1071,7 @@ exports.commands = {
 		let userid = toId(name);
 
 		if (!Users.isUsernameKnown(userid)) {
-			return this.errorReply("User '" + this.targetUsername + "' is offline and unrecognized, and so can't be promoted.");
+			return this.errorReply(`User '${this.targetUsername}' is offline and unrecognized, and so can't be promoted.`);
 		}
 
 		if (!this.can('makeroom')) return false;
@@ -1073,9 +1079,9 @@ exports.commands = {
 		if (!room.auth) room.auth = room.chatRoomData.auth = {};
 
 		room.auth[userid] = '#';
-		this.addModCommand("" + name + " was appointed Room Owner by " + user.name + ".");
+		this.addModCommand(`${name} was appointed Room Owner by ${user.name}.`);
 		if (targetUser) {
-			targetUser.popup("You were appointed Room Owner by " + user.name + " in " + room.id + ".");
+			targetUser.popup(`You were appointed Room Owner by ${user.name} in ${room.id}.`);
 			room.onUpdateIdentity(targetUser);
 		}
 		Rooms.global.writeChatRoomData();
