@@ -659,7 +659,7 @@ exports.BattleMovedex = {
 			},
 			onBeforeMovePriority: 2,
 			onBeforeMove: function (pokemon, target, move) {
-				this.add('-activate', pokemon, 'Attract', '[of] ' + this.effectData.source);
+				this.add('-activate', pokemon, 'move: Attract', '[of] ' + this.effectData.source);
 				if (this.random(2) === 0) {
 					this.add('cant', pokemon, 'Attract');
 					return false;
@@ -1044,7 +1044,7 @@ exports.BattleMovedex = {
 					this.tryMoveHit(target, pokemon, moveData);
 					return false;
 				}
-				this.add('-activate', pokemon, 'Bide');
+				this.add('-activate', pokemon, 'move: Bide');
 				return false;
 			},
 		},
@@ -2304,7 +2304,7 @@ exports.BattleMovedex = {
 			onTryHitPriority: 3,
 			onTryHit: function (target, source, move) {
 				if (move && (move.target === 'self' || move.category !== 'Status')) return;
-				this.add('-activate', target, 'Crafty Shield');
+				this.add('-activate', target, 'move: Crafty Shield');
 				return null;
 			},
 		},
@@ -2639,7 +2639,7 @@ exports.BattleMovedex = {
 			onFaint: function (target, source, effect) {
 				if (!source || !effect) return;
 				if (effect.effectType === 'Move' && !effect.isFutureMove) {
-					this.add('-activate', target, 'Destiny Bond');
+					this.add('-activate', target, 'move: Destiny Bond');
 					source.faint();
 				}
 			},
@@ -5691,7 +5691,7 @@ exports.BattleMovedex = {
 						applies = true;
 						delete pokemon.volatiles['telekinesis'];
 					}
-					if (applies) this.add('-activate', pokemon, 'Gravity');
+					if (applies) this.add('-activate', pokemon, 'move: Gravity');
 				}
 			},
 			onModifyAccuracy: function (accuracy) {
@@ -5790,7 +5790,7 @@ exports.BattleMovedex = {
 					for (let i in source.moveset) {
 						if (source.moveset[i].id === source.lastMove) {
 							source.moveset[i].pp = 0;
-							this.add('-activate', source, 'Grudge', this.getMove(source.lastMove).name);
+							this.add('-activate', source, 'move: Grudge', this.getMove(source.lastMove).name);
 						}
 					}
 				}
@@ -5825,7 +5825,7 @@ exports.BattleMovedex = {
 			let newspd = Math.floor((target.stats.spd + source.stats.spd) / 2);
 			target.stats.spd = newspd;
 			source.stats.spd = newspd;
-			this.add('-activate', source, 'Guard Split', '[of] ' + target);
+			this.add('-activate', source, 'move: Guard Split', '[of] ' + target);
 		},
 		secondary: false,
 		target: "normal",
@@ -7679,7 +7679,7 @@ exports.BattleMovedex = {
 			onTryHitPriority: 3,
 			onTryHit: function (target, source, move) {
 				if (!move.flags['protect'] || move.category === 'Status') return;
-				this.add('-activate', target, 'Protect');
+				this.add('-activate', target, 'move: Protect');
 				let lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
 					// Outrage counter is reset
@@ -8536,7 +8536,7 @@ exports.BattleMovedex = {
 			onTryHit: function (target, source, move) {
 				if (!move.flags['protect']) return;
 				if (move && (move.target === 'self' || move.category === 'Status')) return;
-				this.add('-activate', target, 'Mat Block', move.name);
+				this.add('-activate', target, 'move: Mat Block', move.name);
 				let lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
 					// Outrage counter is reset
@@ -9150,7 +9150,7 @@ exports.BattleMovedex = {
 							showMsg = true;
 						}
 					}
-					if (showMsg && !effect.secondaries) this.add('-activate', target, 'Mist');
+					if (showMsg && !effect.secondaries) this.add('-activate', target, 'move: Mist');
 				}
 			},
 			onStart: function (side) {
@@ -10379,7 +10379,7 @@ exports.BattleMovedex = {
 			},
 			onTryMove: function (pokemon, target, move) {
 				if (move.type === 'Fire') {
-					this.add('-activate', pokemon, 'Powder');
+					this.add('-activate', pokemon, 'move: Powder');
 					this.damage(this.clampIntRange(Math.round(pokemon.maxhp / 4), 1));
 					return false;
 				}
@@ -10447,7 +10447,7 @@ exports.BattleMovedex = {
 			let newspa = Math.floor((target.stats.spa + source.stats.spa) / 2);
 			target.stats.spa = newspa;
 			source.stats.spa = newspa;
-			this.add('-activate', source, 'Power Split', '[of] ' + target);
+			this.add('-activate', source, 'move: Power Split', '[of] ' + target);
 		},
 		secondary: false,
 		target: "normal",
@@ -10646,7 +10646,7 @@ exports.BattleMovedex = {
 			onTryHitPriority: 3,
 			onTryHit: function (target, source, move) {
 				if (!move.flags['protect']) return;
-				this.add('-activate', target, 'Protect');
+				this.add('-activate', target, 'move: Protect');
 				let lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
 					// Outrage counter is reset
@@ -11019,7 +11019,7 @@ exports.BattleMovedex = {
 				if (effect && (effect.id === 'feint' || effect.priority <= 0.1 || effect.target === 'self')) {
 					return;
 				}
-				this.add('-activate', target, 'Quick Guard');
+				this.add('-activate', target, 'move: Quick Guard');
 				let lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
 					// Outrage counter is reset
@@ -13264,7 +13264,7 @@ exports.BattleMovedex = {
 				if (move && move.flags['snatch'] && move.sourceEffect !== 'snatch') {
 					let snatchUser = this.effectData.source;
 					snatchUser.removeVolatile('snatch');
-					this.add('-activate', snatchUser, 'Snatch', '[of] ' + source);
+					this.add('-activate', snatchUser, 'move: Snatch', '[of] ' + source);
 					this.useMove(move.id, snatchUser);
 					return null;
 				}
@@ -13329,7 +13329,7 @@ exports.BattleMovedex = {
 			onTryHitPriority: 3,
 			onTryHit: function (target, source, move) {
 				if (!move.flags['protect']) return;
-				this.add('-activate', target, 'Protect');
+				this.add('-activate', target, 'move: Protect');
 				let lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
 					// Outrage counter is reset
@@ -14071,7 +14071,7 @@ exports.BattleMovedex = {
 				if (target.volatiles['substitute'].hp <= 0) {
 					target.removeVolatile('substitute');
 				} else {
-					this.add('-activate', target, 'Substitute', '[damage]');
+					this.add('-activate', target, 'move: Substitute', '[damage]');
 				}
 				if (move.recoil) {
 					this.damage(this.calcRecoilDamage(damage, move), source, target, 'recoil');
@@ -15958,7 +15958,7 @@ exports.BattleMovedex = {
 				if (effect && (effect.category === 'Status' || (effect.target !== 'allAdjacent' && effect.target !== 'allAdjacentFoes'))) {
 					return;
 				}
-				this.add('-activate', target, 'Wide Guard');
+				this.add('-activate', target, 'move: Wide Guard');
 				let lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
 					// Outrage counter is reset
