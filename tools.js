@@ -723,7 +723,7 @@ module.exports = (() => {
 		let buf = strings[0];
 		for (let i = 1; i < arguments.length; i++) {
 			buf += moddedTools.base.escapeHTML(arguments[i]);
-			buf += strings[i + 1];
+			buf += strings[i];
 		}
 		return buf;
 	};
