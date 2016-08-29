@@ -35,7 +35,7 @@ exports.commands = {
 		let buf = Tools.html`<strong class="username"><small style="display:none">${targetUser.group}</small>${targetUser.name}</strong> `;
 		if (!targetUser.connected) buf += ` <em style="color:gray">(offline)</em>`;
 		let roomauth = '';
-		if (room.auth && targetUser.userid in room.auth) roomauth = room.auth[targetUser.userid];
+		if (room.auth && room.auth.hasOwnProperty(targetUser.userid)) roomauth = room.auth[targetUser.userid];
 		if (Config.groups[roomauth] && Config.groups[roomauth].name) {
 			buf += `<br />${Config.groups[roomauth].name} (${roomauth})`;
 		}
@@ -138,7 +138,7 @@ exports.commands = {
 			buf += `<br />Private rooms: ${privaterooms}`;
 		}
 
-		if (user.can('alts', targetUser) || (room.isPrivate !== true && user.can('mute', targetUser, room) && targetUser.userid in room.users)) {
+		if (user.can('alts', targetUser) || (room.isPrivate !== true && user.can('mute', targetUser, room) && room.users.hasOwnProperty(targetUser.userid))) {
 			let bannedFrom = ``;
 			let mutedIn = ``;
 			for (let i = 0; i < Rooms.global.chatRooms.length; i++) {
@@ -494,7 +494,7 @@ exports.commands = {
 				if (foundData.exists) break;
 			}
 			if (!foundData.exists) return this.parse('/help effectiveness');
-			if (!source && method in sourceMethods) {
+			if (!source && sourceMethods.hasOwnProperty(method)) {
 				if (foundData.type) {
 					source = foundData;
 					atkName = foundData.name;
@@ -503,7 +503,7 @@ exports.commands = {
 					atkName = foundData.id;
 				}
 				searchMethods = targetMethods;
-			} else if (!defender && method in targetMethods) {
+			} else if (!defender && targetMethods.hasOwnProperty(method)) {
 				if (foundData.types) {
 					defender = foundData;
 					defName = foundData.species + " (not counting abilities)";
@@ -565,7 +565,7 @@ exports.commands = {
 			}
 
 			let eff;
-			if (move in Tools.data.TypeChart) {
+			if (Tools.data.TypeChart.hasOwnProperty(move)) {
 				sources.push(move);
 				for (let type in bestCoverage) {
 					if (!Tools.getImmunity(move, type) && !move.ignoreImmunity) continue;

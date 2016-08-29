@@ -144,9 +144,9 @@ class Poll {
 
 		for (let i in this.room.users) {
 			let thisUser = this.room.users[i];
-			if (thisUser.userid in this.voters) {
+			if (this.voters.hasOwnProperty(thisUser.userid)) {
 				thisUser.sendTo(this.room, '|uhtml|poll' + this.room.pollNumber + '|' + results[this.voters[thisUser.userid]]);
-			} else if (thisUser.latestIp in this.voterIps) {
+			} else if (this.voterIps.hasOwnProperty(thisUser.latestIp)) {
 				thisUser.sendTo(this.room, '|uhtml|poll' + this.room.pollNumber + '|' + results[this.voterIps[thisUser.latestIp]]);
 			} else {
 				thisUser.sendTo(this.room, '|uhtml|poll' + this.room.pollNumber + '|' + votes);
@@ -156,9 +156,9 @@ class Poll {
 
 	displayTo(user, connection) {
 		if (!connection) connection = user;
-		if (user.userid in this.voters) {
+		if (this.voters.hasOwnProperty(user.userid)) {
 			connection.sendTo(this.room, '|uhtml|poll' + this.room.pollNumber + '|' + this.generateResults(false, this.voters[user.userid]));
-		} else if (user.latestIp in this.voterIps) {
+		} else if (this.voterIps.hasOwnProperty(user.latestIp)) {
 			connection.sendTo(this.room, '|uhtml|poll' + this.room.pollNumber + '|' + this.generateResults(false, this.voterIps[user.latestIp]));
 		} else {
 			connection.sendTo(this.room, '|uhtml|poll' + this.room.pollNumber + '|' + this.generateVotes());

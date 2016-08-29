@@ -324,7 +324,7 @@ exports.commands = {
 			zinnia: '#zinnia',
 			clemont: '#clemont',
 		};
-		if (avatarid in avatarTable) {
+		if (avatarTable.hasOwnProperty(avatarid)) {
 			avatar = avatarTable[avatarid];
 		} else {
 			avatar = parseInt(avatarid);
@@ -434,22 +434,22 @@ exports.commands = {
 				if (!targetRoom || targetRoom === Rooms.global) return this.errorReply('The room "' + innerTarget + '" does not exist.');
 				if (targetRoom.staffRoom && !targetUser.isStaff) return this.errorReply('User "' + this.targetUsername + '" requires global auth to join room "' + targetRoom.id + '".');
 				if (targetRoom.modjoin) {
-					if (targetRoom.auth && (targetRoom.isPrivate === true || targetUser.group === ' ') && !(targetUser.userid in targetRoom.auth)) {
+					if (targetRoom.auth && (targetRoom.isPrivate === true || targetUser.group === ' ') && !targetRoom.auth.hasOwnProperty(targetUser.userid)) {
 						this.parse('/roomvoice ' + targetUser.name, false, targetRoom);
-						if (!(targetUser.userid in targetRoom.auth)) {
+						if (!targetRoom.auth.hasOwnProperty(targetUser.userid)) {
 							return;
 						}
 					}
 				}
 				if (targetRoom.isPrivate === true && targetRoom.modjoin && targetRoom.auth) {
-					if (!(user.userid in targetRoom.auth)) {
+					if (!targetRoom.auth.hasOwnProperty(user.userid)) {
 						return this.errorReply('The room "' + innerTarget + '" does not exist.');
 					}
 					if (Config.groupsranking.indexOf(targetRoom.auth[targetUser.userid] || ' ') < Config.groupsranking.indexOf(targetRoom.modjoin) && !targetUser.can('bypassall')) {
 						return this.errorReply('The user "' + targetUser.name + '" does not have permission to join "' + innerTarget + '".');
 					}
 				}
-				if (targetRoom.auth && targetRoom.isPrivate && !(user.userid in targetRoom.auth) && !user.can('makeroom')) {
+				if (targetRoom.auth && targetRoom.isPrivate && !targetRoom.auth.hasOwnProperty(user.userid) && !user.can('makeroom')) {
 					return this.errorReply('You do not have permission to invite people to this room.');
 				}
 
@@ -481,7 +481,7 @@ exports.commands = {
 		let targetUser = this.targetUser;
 
 		if (!targetUser || !targetUser.connected) return this.errorReply("User " + targetUser + " is not currently online.");
-		if (!(targetUser in room.users) && !user.can('addhtml')) return this.errorReply("You do not have permission to use this command to users who are not in this room.");
+		if (!room.users.hasOwnProperty(targetUser) && !user.can('addhtml')) return this.errorReply("You do not have permission to use this command to users who are not in this room.");
 		if (targetUser.ignorePMs) return this.errorReply("This user is currently ignoring PMs.");
 		if (targetUser.locked) return this.errorReply("This user is currently locked, so you cannot send them a pminfobox.");
 
@@ -503,7 +503,7 @@ exports.commands = {
 		if (user.ignorePMs === (target || true)) return this.errorReply("You are already blocking private messages! To unblock, use /unblockpms");
 		if (user.can('lock') && !user.can('bypassall')) return this.errorReply("You are not allowed to block private messages.");
 		user.ignorePMs = true;
-		if (target in Config.groups) {
+		if (Config.groups.hasOwnProperty(target)) {
 			user.ignorePMs = target;
 			return this.sendReply("You are now blocking private messages, except from staff and " + target + ".");
 		}
@@ -1148,7 +1148,7 @@ exports.commands = {
 		// Only show popup if: user is online and in the room, the room is public, and not a groupchat or a battle.
 		let needsPopup = targetUser && room.users[targetUser.userid] && !room.isPrivate && !room.isPersonal && !room.battle;
 
-		if (nextGroup in Config.groups && currentGroup in Config.groups && Config.groups[nextGroup].rank < Config.groups[currentGroup].rank) {
+		if (Config.groups.hasOwnProperty(nextGroup) && Config.groups.hasOwnProperty(currentGroup) && Config.groups[nextGroup].rank < Config.groups[currentGroup].rank) {
 			if (targetUser && room.users[targetUser.userid] && !Config.groups[nextGroup].modlog) {
 				// if the user can't see the demotion message (i.e. rank < %), it is shown in the chat
 				targetUser.send(">" + room.id + "\n(You were demoted to Room " + groupName + " by " + user.name + ".)");
@@ -1191,7 +1191,7 @@ exports.commands = {
 			(Config.groups[b] || {rank:0}).rank - (Config.groups[a] || {rank:0}).rank
 		).map(r => {
 			let roomRankList = rankLists[r].sort();
-			roomRankList = roomRankList.map(s => s in targetRoom.users ? "**" + s + "**" : s);
+			roomRankList = roomRankList.map(s => targetRoom.users.hasOwnProperty(s) ? "**" + s + "**" : s);
 			return (Config.groups[r] ? Config.groups[r].name + "s (" + r + ")" : r) + ":\n" + roomRankList.join(", ");
 		});
 
@@ -1277,7 +1277,7 @@ exports.commands = {
 			return this.errorReply("Room bans are not meant to be used in room " + room.id + ".");
 		}
 		if (room.bannedUsers[userid] && room.bannedIps[targetUser.latestIp]) return this.sendReply("User " + targetUser.name + " is already banned from room " + room.id + ".");
-		if (targetUser in room.users || user.can('lock')) {
+		if (room.users.hasOwnProperty(targetUser) || user.can('lock')) {
 			targetUser.popup(
 				"|html|<p>" + Tools.escapeHTML(user.name) + " has banned you from the room " + room.id + ".</p>" + (target ? "<p>Reason: " + Tools.escapeHTML(target) + "</p>" : "") +
 				"<p>To appeal the ban, PM the staff member that banned you" + (room.auth ? " or a room owner. </p><p><button name=\"send\" value=\"/roomauth " + room.id + "\">List Room Staff</button></p>" : ".</p>")
@@ -1377,7 +1377,7 @@ exports.commands = {
 		target = this.splitTarget(target);
 		let targetUser = this.targetUser;
 		if (!targetUser || !targetUser.connected) return this.errorReply("User '" + this.targetUsername + "' not found.");
-		if (!(targetUser in room.users)) {
+		if (!room.users.hasOwnProperty(targetUser)) {
 			return this.errorReply("User " + this.targetUsername + " is not in the room " + room.id + ".");
 		}
 		if (target.length > MAX_REASON_LENGTH) {
@@ -1447,7 +1447,7 @@ exports.commands = {
 			return this.addModCommand("" + targetUser.name + " would be muted by " + user.name + problem + "." + (target ? " (" + target + ")" : ""));
 		}
 
-		if (targetUser in room.users) targetUser.popup("|modal|" + user.name + " has muted you in " + room.id + " for " + Tools.toDurationString(muteDuration) + ". " + target);
+		if (room.users.hasOwnProperty(targetUser)) targetUser.popup("|modal|" + user.name + " has muted you in " + room.id + " for " + Tools.toDurationString(muteDuration) + ". " + target);
 		this.addModCommand("" + targetUser.name + " was muted by " + user.name + " for " + Tools.toDurationString(muteDuration) + "." + (target ? " (" + target + ")" : ""));
 		if (targetUser.autoconfirmed && targetUser.autoconfirmed !== targetUser.userid) this.privateModCommand("(" + targetUser.name + "'s ac account: " + targetUser.autoconfirmed + ")");
 		let userid = targetUser.getLastId();
@@ -1747,7 +1747,7 @@ exports.commands = {
 		for (let userid in room.auth) {
 			if (room.auth[userid] === '+') {
 				delete room.auth[userid];
-				if (userid in room.users) room.users[userid].updateIdentity(room.id);
+				if (room.users.hasOwnProperty(userid)) room.users[userid].updateIdentity(room.id);
 				count++;
 			}
 		}
@@ -1995,7 +1995,7 @@ exports.commands = {
 				return this.errorReply("/modchat - Access denied for setting higher than " + Config.groupsranking[1] + ".");
 			}
 			let roomGroup = (room.auth && room.isPrivate === true ? ' ' : user.group);
-			if (room.auth && user.userid in room.auth) roomGroup = room.auth[user.userid];
+			if (room.auth && room.auth.hasOwnProperty(user.userid)) roomGroup = room.auth[user.userid];
 			if (Config.groupsranking.indexOf(target) > Math.max(1, Config.groupsranking.indexOf(roomGroup)) && !user.can('makeroom')) {
 				return this.errorReply("/modchat - Access denied for setting higher than " + roomGroup + ".");
 			}

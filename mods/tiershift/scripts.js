@@ -31,8 +31,8 @@ exports.BattleScripts = {
 					if (item.megaEvolves === template.species) tier = this.battle.getTemplate(item.megaStone).tier;
 				}
 				if (tier.charAt(0) === '(') tier = tier.slice(1, -1);
-				let boost = (tier in boosts) ? boosts[tier] : 0;
-				if (this.set.ability in {'Drizzle': 1, 'Drought': 1}) {
+				let boost = boosts.hasOwnProperty(tier) ? boosts[tier] : 0;
+				if ({'Drizzle': 1, 'Drought': 1}.hasOwnProperty(this.set.ability)) {
 					boost = 0;
 				} else if (this.set.moves.indexOf('chatter') >= 0) {
 					boost = 15;
