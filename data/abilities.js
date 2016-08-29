@@ -648,7 +648,7 @@ exports.BattleAbilities = {
 		},
 		id: "dryskin",
 		name: "Dry Skin",
-		rating: 3.5,
+		rating: 3,
 		num: 87,
 	},
 	"earlybird": {
