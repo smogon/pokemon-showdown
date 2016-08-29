@@ -255,16 +255,15 @@ class Validator {
 				if (!set.moves[i]) continue;
 				let move = tools.getMove(Tools.getString(set.moves[i]));
 				if (!move.exists) return ['"' + move.name + '" is an invalid move.'];
-				set.moves[i] = move.name;
 				check = move.id;
 				setHas[check] = true;
 				if (banlistTable[check]) {
 					clause = typeof banlistTable[check] === 'string' ? " by " + banlistTable[check] : '';
-					problems.push(name + "'s move " + set.moves[i] + " is banned" + clause + ".");
+					problems.push(name + "'s move " + move.name + " is banned" + clause + ".");
 				}
 
 				if (banlistTable['Unreleased']) {
-					if (move.isUnreleased) problems.push(name + "'s move " + set.moves[i] + " is unreleased.");
+					if (move.isUnreleased) problems.push(name + "'s move " + move.name + " is unreleased.");
 				}
 
 				if (banlistTable['illegal']) {
