@@ -2384,7 +2384,7 @@ exports.commands = {
 		} else if (roomId.startsWith('battle-') || roomId.startsWith('groupchat-')) {
 			return this.errorReply("Battles and groupchats do not have modlogs.");
 		} else {
-			if (!this.can('modlog', null, Rooms.get(roomId))) return;
+			if (!user.can('modlog') && !this.can('modlog', null, Rooms.get(roomId))) return;
 			roomNames = "the room " + roomId;
 			filename = path.normalize(__dirname + '/' + logPath + 'modlog_' + roomId + '.txt');
 		}
