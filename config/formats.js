@@ -264,7 +264,7 @@ exports.Formats = [
 			let n = 0;
 			for (let i = 0; i < team.length; i++) {
 				let template = this.getTemplate(team[i].species).baseSpecies;
-				if (template in legends) n++;
+				if (legends.hasOwnProperty(template)) n++;
 				if (n > 2) return ["You can only use up to two legendary Pok\u00E9mon."];
 			}
 		},
@@ -403,7 +403,7 @@ exports.Formats = [
 			let template = this.tools.getTemplate(species);
 			if (!template.exists || template.isNonstandard) return ["" + set.species + " is not a real Pok\u00E9mon."];
 			if (template.battleOnly) template = this.tools.getTemplate(template.baseSpecies);
-			if (this.tools.getBanlistTable(this.format)[template.id] || template.tier in {'Uber': 1, 'Unreleased': 1} && template.species !== 'Aegislash') {
+			if (this.tools.getBanlistTable(this.format)[template.id] || {'Uber': 1, 'Unreleased': 1}.hasOwnProperty(template.tier) && template.species !== 'Aegislash') {
 				return ["" + template.species + " is banned by Follow The Leader."];
 			}
 
@@ -496,7 +496,7 @@ exports.Formats = [
 		],
 		onValidateSet: function (set) {
 			let bannedAbilities = {'Aerilate': 1, 'Arena Trap': 1, 'Contrary': 1, 'Fur Coat': 1, 'Huge Power': 1, 'Illusion': 1, 'Imposter': 1, 'Parental Bond': 1, 'Protean': 1, 'Pure Power': 1, 'Simple':1, 'Speed Boost': 1, 'Wonder Guard': 1};
-			if (set.ability in bannedAbilities) {
+			if (bannedAbilities.hasOwnProperty(set.ability)) {
 				let template = this.getTemplate(set.species || set.name);
 				let legalAbility = false;
 				for (let i in template.abilities) {
