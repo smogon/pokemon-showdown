@@ -2501,10 +2501,10 @@ exports.commands = {
 					}
 				}
 
-				CommandParser.uncacheTree('./command-parser.js');
-				delete require.cache[require.resolve('./commands.js')];
-				delete require.cache[require.resolve('./chat-plugins/info.js')];
-				global.CommandParser = require('./command-parser.js');
+				CommandParser.uncacheTree('./command-parser');
+				delete require.cache[require.resolve('./commands')];
+				delete require.cache[require.resolve('./chat-plugins/info')];
+				global.CommandParser = require('./command-parser');
 
 				let runningTournaments = Tournaments.tournaments;
 				CommandParser.uncacheTree('./tournaments');
@@ -2524,9 +2524,9 @@ exports.commands = {
 			} else if (target === 'formats') {
 				let toolsLoaded = !!Tools.isLoaded;
 				// uncache the tools.js dependency tree
-				CommandParser.uncacheTree('./tools.js');
+				CommandParser.uncacheTree('./tools');
 				// reload tools.js
-				global.Tools = require('./tools.js')[toolsLoaded ? 'includeData' : 'includeFormats'](); // note: this will lock up the server for a few seconds
+				global.Tools = require('./tools')[toolsLoaded ? 'includeData' : 'includeFormats'](); // note: this will lock up the server for a few seconds
 				// rebuild the formats list
 				Rooms.global.formatListText = Rooms.global.getFormatListText();
 				// respawn validator processes
@@ -2539,15 +2539,15 @@ exports.commands = {
 				return this.sendReply("Formats have been hotpatched.");
 			} else if (target === 'loginserver') {
 				fs.unwatchFile('./config/custom.css');
-				CommandParser.uncacheTree('./loginserver.js');
-				global.LoginServer = require('./loginserver.js');
+				CommandParser.uncacheTree('./loginserver');
+				global.LoginServer = require('./loginserver');
 				return this.sendReply("The login server has been hotpatched. New login server requests will use the new code.");
 			} else if (target === 'learnsets' || target === 'validator') {
 				TeamValidator.PM.respawn();
 				return this.sendReply("The team validator has been hotpatched. Any battles started after now will have teams be validated according to the new code.");
 			} else if (target === 'punishments') {
-				delete require.cache[require.resolve('./punishments.js')];
-				global.Punishments = require('./punishments.js');
+				delete require.cache[require.resolve('./punishments')];
+				global.Punishments = require('./punishments');
 				return this.sendReply("Punishments have been hotpatched.");
 			} else if (target === 'dnsbl') {
 				Dnsbl.loadDatacenters();

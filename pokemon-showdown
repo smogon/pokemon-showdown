@@ -18,4 +18,4 @@ let port;
 if (process.argv[2]) {
 	port = parseInt(process.argv[2]); // eslint-disable-line radix
 }
-require('./app.js').listen(port);
+require('./app').listen(port);

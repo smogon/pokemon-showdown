@@ -3,7 +3,7 @@
 const assert = require('assert');
 const Module = require('module');
 
-const userUtils = require('../../dev-tools/users-utils.js');
+const userUtils = require('../../dev-tools/users-utils');
 const User = userUtils.User;
 const Connection = userUtils.Connection;
 
@@ -12,7 +12,7 @@ const Connection = userUtils.Connection;
 // context. For now we'll just construct a skeleton module representing the
 // trivia module and wait...
 const triviaModule = (() => {
-	let pathname = require.resolve('../../chat-plugins/trivia.js');
+	let pathname = require.resolve('../../chat-plugins/trivia');
 	let ret = new Module(pathname, module);
 	Module._preloadModules(ret);
 

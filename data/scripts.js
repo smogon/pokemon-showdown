@@ -1159,7 +1159,7 @@ exports.BattleScripts = {
 			template = this.getTemplate('unown');
 
 			let err = new Error('Template incompatible with random battles: ' + species);
-			require('../crashlogger.js')(err, 'The randbat set generator');
+			require('../crashlogger')(err, 'The randbat set generator');
 		}
 
 		if (typeof teamDetails !== 'object') teamDetails = {megaCount: teamDetails};
@@ -2433,7 +2433,7 @@ exports.BattleScripts = {
 			template = this.getTemplate('unown');
 
 			let err = new Error('Template incompatible with random battles: ' + species);
-			require('../crashlogger.js')(err, 'The doubles randbat set generator');
+			require('../crashlogger')(err, 'The doubles randbat set generator');
 		}
 
 		if (typeof teamDetails !== 'object') teamDetails = {megaCount: teamDetails};

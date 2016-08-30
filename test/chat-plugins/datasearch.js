@@ -1,6 +1,6 @@
 'use strict';
 
-const userUtils = require('./../../dev-tools/users-utils.js');
+const userUtils = require('./../../dev-tools/users-utils');
 const User = userUtils.User;
 
 describe('Learn', function () {

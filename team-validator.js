@@ -865,7 +865,7 @@ const ProcessManager = require('./process-manager');
 
 PM = TeamValidator.PM = new ProcessManager({
 	maxProcesses: global.Config && Config.validatorprocesses,
-	execFile: 'team-validator.js',
+	execFile: 'team-validator',
 	onMessageUpstream: function (message) {
 		// Protocol:
 		// success: "[id]|1[details]"
@@ -902,7 +902,7 @@ PM = TeamValidator.PM = new ProcessManager({
 		try {
 			problems = TeamValidator(format).validateTeam(parsedTeam, removeNicknames);
 		} catch (err) {
-			require('./crashlogger.js')(err, 'A team validation', {
+			require('./crashlogger')(err, 'A team validation', {
 				format: format,
 				team: team,
 			});
@@ -923,18 +923,18 @@ PM = TeamValidator.PM = new ProcessManager({
 if (process.send && module === process.mainModule) {
 	// This is a child process!
 
-	global.Config = require('./config/config.js');
+	global.Config = require('./config/config');
 
 	if (Config.crashguard) {
 		process.on('uncaughtException', err => {
-			require('./crashlogger.js')(err, 'A team validator process', true);
+			require('./crashlogger')(err, 'A team validator process', true);
 		});
 	}
 
-	global.Tools = require('./tools.js').includeMods();
+	global.Tools = require('./tools').includeMods();
 	global.toId = Tools.getId;
 
-	require('./repl.js').start('team-validator-', process.pid, cmd => eval(cmd));
+	require('./repl').start('team-validator-', process.pid, cmd => eval(cmd));
 
 	process.on('message', message => PM.onMessageDownstream(message));
 	process.on('disconnect', () => process.exit());

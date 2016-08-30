@@ -4938,7 +4938,7 @@ Battle = (() => {
 			let side = this[slot];
 			if (!side) {
 				console.log('**** ' + slot + ' tried to leave before it was possible in ' + this.id);
-				require('./crashlogger.js')(new Error('**** ' + slot + ' tried to leave before it was possible in ' + this.id), 'A simulator process');
+				require('./crashlogger')(new Error('**** ' + slot + ' tried to leave before it was possible in ' + this.id), 'A simulator process');
 				return;
 			}
 
