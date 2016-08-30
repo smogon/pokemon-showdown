@@ -98,12 +98,6 @@ class Giveaway {
 				mons.set(mon.baseSpecies, mon);
 			}
 		}
-		for (let i in Tools.data.Aliases) {
-			if (toId(Tools.data.Aliases[i]) in Tools.data.Pokedex && text.includes(i)) {
-				let mon = Tools.getTemplate(toId(Tools.data.Aliases[i]));
-				mons.set(mon.baseSpecies, mon);
-			}
-		}
 		if (mons.size) {
 			mons.forEach(function (value, key) {
 				let spriteid = value.spriteid;
