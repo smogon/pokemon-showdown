@@ -18,7 +18,7 @@ global.Config = require('./config/config');
 
 if (cluster.isMaster) {
 	cluster.setupMaster({
-		exec: require('path').resolve(__dirname, 'sockets.js'),
+		exec: require('path').resolve(__dirname, 'sockets'),
 	});
 
 	let workers = exports.workers = {};
@@ -62,7 +62,7 @@ if (cluster.isMaster) {
 
 	cluster.on('disconnect', worker => {
 		// worker crashed, try our best to clean up
-		require('./crashlogger.js')(new Error("Worker " + worker.id + " abruptly died"), "The main process");
+		require('./crashlogger')(new Error("Worker " + worker.id + " abruptly died"), "The main process");
 
 		// this could get called during cleanup; prevent it from crashing
 		worker.send = () => {};
@@ -183,12 +183,12 @@ if (cluster.isMaster) {
 
 	// It's optional if you don't need these features.
 
-	global.Dnsbl = require('./dnsbl.js');
+	global.Dnsbl = require('./dnsbl');
 
 	if (Config.crashguard) {
 		// graceful crash
 		process.on('uncaughtException', err => {
-			require('./crashlogger.js')(err, 'Socket process ' + cluster.worker.id + ' (' + process.pid + ')', true);
+			require('./crashlogger')(err, 'Socket process ' + cluster.worker.id + ' (' + process.pid + ')', true);
 		});
 	}
 
@@ -496,5 +496,5 @@ if (cluster.isMaster) {
 
 	console.log('Test your server at http://' + (Config.bindaddress === '0.0.0.0' ? 'localhost' : Config.bindaddress) + ':' + Config.port);
 
-	require('./repl.js').start('sockets-', cluster.worker.id + '-' + process.pid, cmd => eval(cmd));
+	require('./repl').start('sockets-', cluster.worker.id + '-' + process.pid, cmd => eval(cmd));
 }

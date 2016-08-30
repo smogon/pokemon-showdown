@@ -1,6 +1,6 @@
 'use strict';
 
-let TreeNode = require('./lib/closure-goog.structs.TreeNode-c8e0b2dcd892.min.js').goog.structs.TreeNode;
+let TreeNode = require('./lib/closure-goog.structs.TreeNode-c8e0b2dcd892.min').goog.structs.TreeNode;
 
 const nameMap = {
 	'1': "Single",

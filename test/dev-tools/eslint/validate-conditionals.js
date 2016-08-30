@@ -1,7 +1,7 @@
 "use strict";
 
 describe("eslint-rules/validate-conditionals", function () {
-	const rule = require('./../../../dev-tools/eslint/validate-conditionals.js');
+	const rule = require('./../../../dev-tools/eslint/validate-conditionals');
 	const RuleTester = require('eslint/lib/testers/rule-tester');
 
 	const ruleTester = new RuleTester();

@@ -71,7 +71,7 @@ try {
  *********************************************************/
 
 try {
-	require.resolve('./config/config.js');
+	require.resolve('./config/config');
 } catch (err) {
 	if (err.code !== 'MODULE_NOT_FOUND') throw err; // should never happen
 
@@ -81,15 +81,16 @@ try {
 		fs.readFileSync(path.resolve(__dirname, 'config/config-example.js'))
 	);
 } finally {
-	global.Config = require('./config/config.js');
+	global.Config = require('./config/config');
 }
 
 if (Config.watchconfig) {
-	fs.watchFile(path.resolve(__dirname, 'config/config.js'), (curr, prev) => {
+	let configPath = require.resolve(__dirname, 'config/config');
+	fs.watchFile(configPath, (curr, prev) => {
 		if (curr.mtime <= prev.mtime) return;
 		try {
-			delete require.cache[require.resolve('./config/config.js')];
-			global.Config = require('./config/config.js');
+			delete require.cache[configPath];
+			global.Config = require('./config/config');
 			if (global.Users) Users.cacheGroupData();
 			console.log('Reloaded config/config.js');
 		} catch (e) {
@@ -102,38 +103,38 @@ if (Config.watchconfig) {
  * Set up most of our globals
  *********************************************************/
 
-global.Monitor = require('./monitor.js');
+global.Monitor = require('./monitor');
 
-global.Tools = require('./tools.js');
+global.Tools = require('./tools');
 global.toId = Tools.getId;
 
-global.LoginServer = require('./loginserver.js');
+global.LoginServer = require('./loginserver');
 
-global.Ladders = require(Config.remoteladder ? './ladders-remote.js' : './ladders.js');
+global.Ladders = require(Config.remoteladder ? './ladders-remote' : './ladders');
 
-global.Users = require('./users.js');
+global.Users = require('./users');
 
-global.Punishments = require('./punishments.js');
+global.Punishments = require('./punishments');
 
-global.Rooms = require('./rooms.js');
+global.Rooms = require('./rooms');
 
 delete process.send; // in case we're a child process
-global.Verifier = require('./verifier.js');
+global.Verifier = require('./verifier');
 Verifier.PM.spawn();
 
-global.CommandParser = require('./command-parser.js');
+global.CommandParser = require('./command-parser');
 
-global.Simulator = require('./simulator.js');
+global.Simulator = require('./simulator');
 
 global.Tournaments = require('./tournaments');
 
-global.Dnsbl = require('./dnsbl.js');
+global.Dnsbl = require('./dnsbl');
 Dnsbl.loadDatacenters();
 
 if (Config.crashguard) {
 	// graceful crash - allow current battles to finish before restarting
 	process.on('uncaughtException', err => {
-		let crashMessage = require('./crashlogger.js')(err, 'The main process');
+		let crashMessage = require('./crashlogger')(err, 'The main process');
 		if (crashMessage !== 'lockdown') return;
 		let stack = Tools.escapeHTML(err.stack).split("\n").slice(0, 2).join("<br />");
 		if (Rooms.lobby) {
@@ -152,7 +153,7 @@ if (Config.crashguard) {
  * Start networking processes to be connected to
  *********************************************************/
 
-global.Sockets = require('./sockets.js');
+global.Sockets = require('./sockets');
 
 exports.listen = function (port, bindAddress, workerCount) {
 	Sockets.listen(port, bindAddress, workerCount);
@@ -176,11 +177,11 @@ if (require.main === module) {
 Tools.includeFormats();
 Rooms.global.formatListText = Rooms.global.getFormatListText();
 
-global.TeamValidator = require('./team-validator.js');
+global.TeamValidator = require('./team-validator');
 TeamValidator.PM.spawn();
 
 /*********************************************************
  * Start up the REPL server
  *********************************************************/
 
-require('./repl.js').start('app', cmd => eval(cmd));
+require('./repl').start('app', cmd => eval(cmd));
