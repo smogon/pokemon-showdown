@@ -30,7 +30,7 @@ exports = module.exports = function (err, description, data) {
 	console.error(`\nCRASH: ${stack}\n`);
 	let out = require('fs').createWriteStream(logPath, {'flags': 'a'});
 	out.on("open", fd => {
-		out.write(`\${stack}\n`);
+		out.write(`\n${stack}\n`);
 		out.end();
 	}).on("error", err => {
 		console.error(`\nSUBCRASH: ${err.stack}\n`);
