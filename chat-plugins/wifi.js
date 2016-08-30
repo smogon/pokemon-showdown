@@ -89,15 +89,24 @@ class Giveaway {
 	}
 
 	static getSprite(text) {
-		text = toId(text);
+		text = text.toLowerCase();
 		let mons = new Map();
 		let output = '';
 		for (let i in Tools.data.Pokedex) {
-			if (text.includes(i)) {
+			let regexp = new RegExp(`\\b${i}\\b`);
+			if (regexp.test(text)) {
 				let mon = Tools.getTemplate(i);
 				mons.set(mon.baseSpecies, mon);
 			}
 		}
+		// the previous regex doesn't match "nidoran-m" or "nidoran male"
+		if (/\bnidoran\W{0,1}m(ale){0,1}\b/.test(text)) {
+			mons.set('nidoranm', Tools.getTemplate('nidoranm'));
+		}
+		if (/\bnidoran\W{0,1}f(emale){0,1}\b/.test(text)) {
+			mons.set('nidoranf', Tools.getTemplate('nidoranf'));
+		}
+		text = toId(text);
 		if (mons.size) {
 			mons.forEach(function (value, key) {
 				let spriteid = value.spriteid;
@@ -106,6 +115,14 @@ class Giveaway {
 						if (text.includes(value.otherForms[i])) {
 							spriteid += '-' + value.otherForms[i].substr(key.length);
 							break; // We don't want to end up with deerling-summer-spring
+						}
+					}
+				}
+				if (value.otherFormes) {
+					for (let i = 0; i < value.otherFormes.length; i++) {
+						if (text.includes(value.otherFormes[i])) {
+							spriteid += '-' + value.otherFormes[i].substr(key.length);
+							break; // We don't want to end up with landorus-therian-therian
 						}
 					}
 				}
@@ -291,6 +308,7 @@ class LotteryGiveaway extends Giveaway {
 
 		let userlist = Object.values(this.joined);
 		if (userlist.length < this.maxwinners) {
+			this.changeUhtml('<p style="text-align:center;font-size:13pt;font-weight:bold;">The giveaway was forcibly ended.</p>');
 			delete this.room.giveaway;
 			return this.room.send("The giveaway has been forcibly ended as there are not enough participants.");
 		}
