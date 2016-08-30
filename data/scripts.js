@@ -1149,7 +1149,7 @@ exports.BattleScripts = {
 
 		return counter;
 	},
-	randomSet: function (template, slot, teamDetails) {
+	randomSet: function (template, slot, teamDetails, alternateMovePools) {
 		if (slot === undefined) slot = 1;
 		let baseTemplate = (template = this.getTemplate(template));
 		let species = template.species;
@@ -1176,8 +1176,7 @@ exports.BattleScripts = {
 		let movePool = (template.randomBattleMoves ? template.randomBattleMoves.slice() : Object.keys(template.learnset));
 
 		// Check for additional inputs. randomMonotypeTeam passes an object of alternate move pools.
-		if (arguments.length > 3) {
-			let alternateMovePools = arguments[3];
+		if (alternateMovePools) {
 			if (template.id in alternateMovePools) {
 				let alternateMovePool = alternateMovePools[template.id];
 
@@ -1185,7 +1184,10 @@ exports.BattleScripts = {
 				let validMoveSet = true;
 				for (let i = 0; i < alternateMovePool.length; i++) {
 					let moveTemplate = this.getMove(alternateMovePool[i]);
-					if (!moveTemplate.exists) validMoveSet = false;
+					if (!moveTemplate.exists) {
+						validMoveSet = false;
+						break;
+					}
 				}
 				if (validMoveSet) movePool = alternateMovePool;
 			}
@@ -3592,7 +3594,25 @@ exports.BattleScripts = {
 			}
 
 			let monotypeRandomBattleSets = {
+				// Electric
+				"eelektross": ["rockslide", "u-turn", "gigadrain", "drainpunch", "knockoff", "flamethrower", "voltswitch", "acidspray"],
+				"ampharosmega": ["voltswitch", "thunderbolt", "rest", "sleeptalk", "healbell", "dragonpulse", "focusblast", "agility", "toxic"],
+				"thundurus": ["superpower", "voltswitch", "taunt", "knockoff", "thunderwave", "grassknot", "nastyplot", "hiddenpowerflying", "wildcharge", "uturn", "thunderbolt"],
+				// Fire
+				"torkoal": ["lavaplume", "rapidspin", "stealthrock", "yawn", "earthpower", "stoneedge", "toxic"],
+				// Flying
+				"gliscor": ["toxic", "taunt", "earthquake", "swordsdance", "knockoff", "stoneedge", "roost", "stealthrock", "substitute", "protect"],
+				"skarmory": ["ironhead", "bravebird", "taunt", "roost", "stealthrock", "spikes", "whirlwind", "defog"],
+				"zapdos": ["discharge", "voltswitch", "defog", "toxic", "heatwave", "substitute", "roar", "hiddenpowerice", "thunderbolt", "roost"],
+				// Ice
 				"lapras": ["hydropump", "surf", "freezedry", "icebeam", "hiddenpowerfire", "thunderbolt", "ancientpower"],
+				// Normal
+				"loppunymega": ["fakeout", "poweruppunch", "return", "highjumpkick", "quickattack", "healingwish", "icepunch", "substitute"],
+				"staraptor": ["bravebird", "roost", "defog", "closecombat", "uturn", "whirlwind", "quickattack", "doubleedge"],
+				// Rock
+				"rhyperior": ["earthquake", "rockblast", "firepunch", "stoneedge", "avalanche", "rockslide", "rockpolish"],
+				// Water
+				"lanturn": ["thunderwave", "scald", "healbell", "discharge", "voltswitch", "toxic"],
 			};
 
 			let set = this.randomSet(template, pokemon.length, teamDetails, monotypeRandomBattleSets);
