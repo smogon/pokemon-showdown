@@ -75,7 +75,7 @@ exports.start = function (prefix, suffix, evalFunction) {
 		if (e.code === "EADDRINUSE") {
 			fs.unlink(name, e => {
 				if (e && e.code !== "ENOENT") {
-					require('./crashlogger.js')(e, 'REPL: ' + name);
+					require('./crashlogger')(e, 'REPL: ' + name);
 					return;
 				}
 
@@ -84,6 +84,6 @@ exports.start = function (prefix, suffix, evalFunction) {
 			return;
 		}
 
-		require('./crashlogger.js')(e, 'REPL: ' + name);
+		require('./crashlogger')(e, 'REPL: ' + name);
 	});
 };

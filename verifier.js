@@ -19,7 +19,7 @@ const ProcessManager = require('./process-manager');
 
 const PM = exports.PM = new ProcessManager({
 	maxProcesses: 1,
-	execFile: 'verifier.js',
+	execFile: 'verifier',
 	onMessageUpstream: function (message) {
 		// Protocol:
 		// success: "[id]|1"
@@ -58,9 +58,9 @@ const PM = exports.PM = new ProcessManager({
 if (process.send && module === process.mainModule) {
 	// This is a child process!
 
-	global.Config = require('./config/config.js');
+	global.Config = require('./config/config');
 
-	require('./repl.js').start('verifier', cmd => eval(cmd));
+	require('./repl').start('verifier', cmd => eval(cmd));
 
 	process.on('message', message => PM.onMessageDownstream(message));
 	process.on('disconnect', () => process.exit());

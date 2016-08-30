@@ -7,8 +7,8 @@ const MAX_REASON_LENGTH = 300;
 
 let TournamentGenerators = Object.create(null);
 let generatorFiles = {
-	'roundrobin': 'generator-round-robin.js',
-	'elimination': 'generator-elimination.js',
+	'roundrobin': 'generator-round-robin',
+	'elimination': 'generator-elimination',
 };
 for (let type in generatorFiles) {
 	TournamentGenerators[type] = require('./' + generatorFiles[type]);

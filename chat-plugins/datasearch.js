@@ -61,7 +61,7 @@ const PM = exports.PM = new ProcessManager({
 				result = null;
 			}
 		} catch (err) {
-			require('./../crashlogger.js')(err, 'A search query', data);
+			require('./../crashlogger')(err, 'A search query', data);
 			result = {error: "Sorry! Our search engine crashed on your query. We've been automatically notified and will fix this crash."};
 		}
 		return result;
@@ -242,24 +242,24 @@ exports.commands = {
 if (process.send && module === process.mainModule) {
 	// This is a child process!
 
-	global.Config = require('../config/config.js');
+	global.Config = require('../config/config');
 
 	if (Config.crashguard) {
 		process.on('uncaughtException', err => {
-			require('../crashlogger.js')(err, 'A dexsearch process', true);
+			require('../crashlogger')(err, 'A dexsearch process', true);
 		});
 	}
 
-	global.Tools = require('../tools.js');
+	global.Tools = require('../tools');
 	global.toId = Tools.getId;
 	Tools.includeData();
 	Tools.includeMods();
-	global.TeamValidator = require('../team-validator.js');
+	global.TeamValidator = require('../team-validator');
 
 	process.on('message', message => PM.onMessageDownstream(message));
 	process.on('disconnect', () => process.exit());
 
-	require('../repl.js').start('dexsearch', cmd => eval(cmd));
+	require('../repl').start('dexsearch', cmd => eval(cmd));
 } else if (!PM.maxProcesses) {
 	process.nextTick(() => Tools.includeMods());
 }

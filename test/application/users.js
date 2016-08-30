@@ -2,7 +2,7 @@
 
 const assert = require('assert');
 
-let userUtils = require('./../../dev-tools/users-utils.js');
+let userUtils = require('./../../dev-tools/users-utils');
 let Connection = userUtils.Connection;
 let User = userUtils.User;
 
