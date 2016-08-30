@@ -1174,6 +1174,23 @@ exports.BattleScripts = {
 		}
 
 		let movePool = (template.randomBattleMoves ? template.randomBattleMoves.slice() : Object.keys(template.learnset));
+
+		// Check for additional inputs. randomMonotypeTeam passes an object of alternate move pools.
+		if (arguments.length > 3) {
+			let alternateMovePools = arguments[3];
+			if (template.id in alternateMovePools) {
+				let alternateMovePool = alternateMovePools[template.id];
+
+				// Confirm it is a valid list of moves.
+				let validMoveSet = true;
+				for (let i = 0; i < alternateMovePool.length; i++) {
+					let moveTemplate = this.getMove(alternateMovePool[i]);
+					if (!moveTemplate.exists) validMoveSet = false;
+				}
+				if (validMoveSet) movePool = alternateMovePool;
+			}
+		}
+
 		let moves = [];
 		let ability = '';
 		let item = '';
@@ -2105,19 +2122,9 @@ exports.BattleScripts = {
 		let excludedTiers = {'NFE':1, 'LC Uber':1, 'LC':1};
 		let allowedNFE = {'Chansey':1, 'Doublade':1, 'Gligar':1, 'Porygon2':1, 'Scyther':1};
 
-		// For Monotype
-		let isMonotype = this.format === 'monotyperandombattle';
-		let typePool = Object.keys(this.data.TypeChart);
-		let type = typePool[this.random(typePool.length)];
-
 		let pokemonPool = [];
 		for (let id in this.data.FormatsData) {
 			let template = this.getTemplate(id);
-			if (isMonotype) {
-				let types = template.types;
-				if (template.battleOnly) types = this.getTemplate(template.baseSpecies).types;
-				if (types.indexOf(type) < 0) continue;
-			}
 			if (!excludedTiers[template.tier] && !template.isMega && !template.isPrimal && !template.isNonstandard && template.randomBattleMoves) {
 				pokemonPool.push(id);
 			}
@@ -2218,31 +2225,29 @@ exports.BattleScripts = {
 
 			let types = template.types;
 
-			if (!isMonotype) {
-				// Limit 2 of any type
-				let skip = false;
-				for (let t = 0; t < types.length; t++) {
-					if (typeCount[types[t]] > 1 && this.random(5) >= 1) {
-						skip = true;
-						break;
-					}
+			// Limit 2 of any type
+			let skip = false;
+			for (let t = 0; t < types.length; t++) {
+				if (typeCount[types[t]] > 1 && this.random(5) >= 1) {
+					skip = true;
+					break;
 				}
-				if (skip) continue;
 			}
+			if (skip) continue;
 
 			let set = this.randomSet(template, pokemon.length, teamDetails);
 
 			// Illusion shouldn't be the last Pokemon of the team
 			if (set.ability === 'Illusion' && pokemon.length > 4) continue;
 
-			// Limit 1 of any type combination, 2 in monotype
+			// Limit 1 of any type combination
 			let typeCombo = types.slice().sort().join();
 			if (set.ability === 'Drought' || set.ability === 'Drizzle' || set.ability === 'Sand Stream') {
 				// Drought, Drizzle and Sand Stream don't count towards the type combo limit
 				typeCombo = set.ability;
 				if (typeCombo in typeComboCount) continue;
 			} else {
-				if (typeComboCount[typeCombo] >= (isMonotype ? 2 : 1)) continue;
+				if (typeComboCount[typeCombo] >= 1) continue;
 			}
 
 			// Okay, the set passes, add it to our team
@@ -3488,6 +3493,160 @@ exports.BattleScripts = {
 			}
 		}
 
+		return pokemon;
+	},
+	randomMonotypeTeam: function (side) {
+		let pokemon = [];
+
+		let excludedTiers = {'NFE':1, 'LC Uber':1, 'LC':1};
+		let allowedNFE = {'Chansey':1, 'Doublade':1, 'Gligar':1, 'Porygon2':1, 'Scyther':1, 'Piloswine':1, 'Golbat':1};
+
+		let typePool = Object.keys(this.data.TypeChart);
+		let type = typePool[this.random(typePool.length)];
+
+		let pokemonPool = [];
+		for (let id in this.data.FormatsData) {
+			let template = this.getTemplate(id);
+
+			let types = template.types;
+			if (template.battleOnly) types = this.getTemplate(template.baseSpecies).types;
+			if (types.indexOf(type) < 0) continue;
+
+			if (!excludedTiers[template.tier] && !template.isMega && !template.isPrimal && !template.isNonstandard && template.randomBattleMoves) {
+				pokemonPool.push(id);
+			}
+		}
+
+		let typeCount = {};
+		let typeComboCount = {};
+		let baseFormes = {};
+		let uberCount = 0;
+		let puCount = 0;
+		let teamDetails = {};
+
+		while (pokemonPool.length && pokemon.length < 6) {
+			let template = this.getTemplate(this.sampleNoReplace(pokemonPool));
+
+			if (!template.exists) continue;
+
+			// Limit to one of each species (Species Clause)
+			if (baseFormes[template.baseSpecies]) continue;
+
+			// Useless in Random Battle without greatly lowering the levels of everything else
+			if (template.species === 'Unown') continue;
+
+			// Only certain NFE Pokemon are allowed
+			if (template.evos.length && !allowedNFE[template.species]) continue;
+
+			let tier = template.tier;
+			switch (tier) {
+			case 'Uber':
+				// Ubers are limited to 2 but have a 20% chance of being added anyway.
+				if (uberCount > 1 && this.random(5) >= 1) continue;
+				break;
+			case 'PU':
+				// PUs are limited to 2 but have a 20% chance of being added anyway.
+				if (puCount > 1 && this.random(5) >= 1) continue;
+				break;
+			case 'Unreleased':
+				// Unreleased Pokémon have 20% the normal rate
+				if (this.random(5) >= 1) continue;
+				break;
+			case 'CAP':
+				// CAPs have 20% the normal rate
+				if (this.random(5) >= 1) continue;
+			}
+
+			// Adjust rate for species with multiple formes
+			switch (template.baseSpecies) {
+			case 'Arceus':
+				if (this.random(18) >= 1) continue;
+				break;
+			case 'Basculin':
+				if (this.random(2) >= 1) continue;
+				break;
+			case 'Castform':
+				if (this.random(2) >= 1) continue;
+				break;
+			case 'Cherrim':
+				if (this.random(2) >= 1) continue;
+				break;
+			case 'Genesect':
+				if (this.random(5) >= 1) continue;
+				break;
+			case 'Gourgeist':
+				if (this.random(4) >= 1) continue;
+				break;
+			case 'Hoopa':
+				if (this.random(2) >= 1) continue;
+				break;
+			case 'Meloetta':
+				if (this.random(2) >= 1) continue;
+				break;
+			case 'Meowstic':
+				if (this.random(2) >= 1) continue;
+				break;
+			case 'Pikachu':
+				// Pikachu is not a viable NFE Pokemon
+				continue;
+			}
+
+			let monotypeRandomBattleSets = {
+				"lapras": ["hydropump", "surf", "freezedry", "icebeam", "hiddenpowerfire", "thunderbolt", "ancientpower"],
+			};
+
+			let set = this.randomSet(template, pokemon.length, teamDetails, monotypeRandomBattleSets);
+
+			// Illusion shouldn't be the last Pokemon of the team
+			if (set.ability === 'Illusion' && pokemon.length > 4) continue;
+
+			// Limit 2 of any type combination
+			let types = template.types;
+			let typeCombo = types.slice().sort().join();
+			if (set.ability === 'Drought' || set.ability === 'Drizzle' || set.ability === 'Sand Stream') {
+				// Drought, Drizzle and Sand Stream don't count towards the type combo limit
+				typeCombo = set.ability;
+				if (typeCombo in typeComboCount) continue;
+			} else {
+				if (typeComboCount[typeCombo] >= 2) continue;
+			}
+
+			// Okay, the set passes, add it to our team
+			pokemon.push(set);
+
+			// Now that our Pokemon has passed all checks, we can increment our counters
+			baseFormes[template.baseSpecies] = 1;
+
+			// Increment type counters
+			for (let t = 0; t < types.length; t++) {
+				if (types[t] in typeCount) {
+					typeCount[types[t]]++;
+				} else {
+					typeCount[types[t]] = 1;
+				}
+			}
+			if (typeCombo in typeComboCount) {
+				typeComboCount[typeCombo]++;
+			} else {
+				typeComboCount[typeCombo] = 1;
+			}
+
+			// Increment Uber/NU counters
+			if (tier === 'Uber') {
+				uberCount++;
+			} else if (tier === 'PU') {
+				puCount++;
+			}
+
+			// Team has Mega/weather/hazards
+			if (this.getItem(set.item).megaStone) teamDetails['megaCount'] = 1;
+			if (set.ability === 'Snow Warning') teamDetails['hail'] = 1;
+			if (set.ability === 'Drizzle' || set.moves.includes('raindance')) teamDetails['rain'] = 1;
+			if (set.ability === 'Sand Stream') teamDetails['sand'] = 1;
+			if (set.moves.includes('stealthrock')) teamDetails['stealthRock'] = 1;
+			if (set.moves.includes('toxicspikes')) teamDetails['toxicSpikes'] = 1;
+			if (set.moves.includes('defog') || set.moves.includes('rapidspin')) teamDetails['hazardClear'] = 1;
+		}
 		return pokemon;
 	},
 	randomSeasonalFireworksTeam: function (side) {
