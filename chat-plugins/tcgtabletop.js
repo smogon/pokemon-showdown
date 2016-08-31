@@ -10,29 +10,60 @@ const http = require('http');
 
 function noop() {}
 
-function wikiaSearch(subdomain, query, callback) {
-	http.get('http://' + subdomain + '.wikia.com/api/v1/Search/List/?query=' + encodeURIComponent(query) + '&limit=1', res => {
-		let buffer = '';
-		res.setEncoding('utf8');
-		res.on('data', data => {
-			buffer += data;
-		});
-		res.on('end', () => {
-			let result;
-			try {
-				result = JSON.parse(buffer);
-			} catch (e) {
-				return callback(e);
-			}
-			if (!result) return callback(new Error("Malformed data"));
-			if (result.exception) return callback(new Error(Tools.getString(result.exception.message) || "Not found"));
-			if (!Array.isArray(result.items) || !result.items[0] || typeof result.items[0] !== 'object') return callback(new Error("Malformed data"));
+function wikiaSearch(subdomain, query) {
+	console.log(`http://${subdomain}.wikia.com/api/v1/Search/List/?query=${encodeURIComponent(query)}&limit=1`);
+	return new Promise(function (resolve, reject) {
+		http.get(`http://${subdomain}.wikia.com/api/v1/Search/List/?query=${encodeURIComponent(query)}&limit=1`, res => {
+			let buffer = '';
+			res.setEncoding('utf8');
+			res.on('data', data => {
+				buffer += data;
+			});
+			res.on('end', () => {
+				console.log(buffer);
+				let result;
+				try {
+					result = JSON.parse(buffer);
+				} catch (e) {
+					return reject(e);
+				}
+				if (!result) return reject(new Error("Malformed data"));
+				if (result.exception) return reject(new Error(Tools.getString(result.exception.message) || "Not found"));
+				if (!Array.isArray(result.items) || !result.items[0] || typeof result.items[0] !== 'object') return reject(new Error("Malformed data"));
 
-			return callback(null, result.items[0]);
+				return resolve(result.items[0]);
+			});
+		}).once('error', function (err) {
+			this.on('error', noop);
+			reject(err);
 		});
-	}).once('error', function (err) {
-		this.on('error', noop);
-		callback(err);
+	});
+}
+function getCardDetails(subdomain, id) {
+	return new Promise(function (resolve, reject) {
+		http.get(`http://${subdomain}.wikia.com/api/v1/Articles/Details?ids=${id}&abstract=0&width=80&height=115`, res => {
+			let buffer = '';
+			res.setEncoding('utf8');
+			res.on('data', data => {
+				buffer += data;
+			});
+			res.on('end', () => {
+				let result;
+				try {
+					result = JSON.parse(buffer);
+				} catch (e) {
+					return reject(e);
+				}
+				if (!result) return reject(new Error("Malformed data"));
+				if (result.exception) return reject(new Error(Tools.getString(result.exception.message) || "Not found"));
+				if (typeof result.items !== 'object' || !result.items[id] || typeof result.items[id] !== 'object') return reject(new Error("Malformed data"));
+
+				return resolve(result.items[id]);
+			});
+		}).once('error', function (err) {
+			this.on('error', noop);
+			reject(err);
+		});
 	});
 }
 
@@ -40,27 +71,39 @@ exports.commands = {
 	ygo: 'yugioh',
 	yugioh: function (target, room, user) {
 		if (!this.canBroadcast()) return;
+		if (room.id !== 'tcgtabletop') return this.errorReply("This command can only be used in the TCG & Tabletop room.");
 		let subdomain = 'yugioh';
 		let query = target.trim();
 
-		wikiaSearch(subdomain, query, (err, data) => {
+		wikiaSearch(subdomain, query).then(data => {
 			if (!this.runBroadcast()) return;
-			if (err) {
-				if (err instanceof SyntaxError || err.message === 'Malformed data') {
-					if (!this.broadcasting) return this.sendReply("Error: Something went wrong in the request: " + err.message);
-					return room.add("Error: Something went wrong in the request: " + err.message).update();
-				} else if (err.message === 'Not found') {
-					if (!this.broadcasting) return this.sendReply("|raw|<div class=\"infobox\">No results found.</div>");
-					return room.addRaw("<div class=\"infobox\">No results found.</div>").update();
-				}
-				if (!this.broadcasting) return this.sendReply("Error: " + err.message);
-				return room.add("Error: " + err.message).update();
-			}
 			let entryUrl = Tools.getString(data.url);
 			let entryTitle = Tools.getString(data.title);
-			let htmlReply = "<strong>Best result for " + Tools.escapeHTML(query) + ":</strong><br/><a href=\"" + Tools.escapeHTML(entryUrl) + "\">" + Tools.escapeHTML(entryTitle) + "</a>";
-			if (!this.broadcasting) return this.sendReply("|raw|<div class=\"infobox\">" + htmlReply + "</div>");
-			room.addRaw("<div class=\"infobox\">" + htmlReply + "</div>").update();
+			let htmlReply = `<strong>Best result for ${Tools.escapeHTML(query)}:</strong><br/><a href="${Tools.escapeHTML(entryUrl)}">${Tools.escapeHTML(entryTitle)}</a>`;
+			if (data.id) {
+				getCardDetails(subdomain, data.id).then(card => {
+					if (card.thumbnail) {
+						htmlReply = `<table><tr><td style="padding-right:5px;"><img src="${card.thumbnail}" width=80 height=115></td><td>${htmlReply}</td></tr></table>`;
+					}
+					if (!this.broadcasting) return this.sendReply(`|raw|<div class="infobox">${htmlReply}</div>`);
+					room.addRaw(`<div class="infobox">${htmlReply}</div>`).update();
+				}, () => {
+					if (!this.broadcasting) return this.sendReply(`|raw|<div class="infobox">${htmlReply}</div>`);
+					room.addRaw(`<div class="infobox">${htmlReply}</div>`).update();
+				});
+			}
+		}, err => {
+			if (!this.runBroadcast()) return;
+
+			if (err instanceof SyntaxError || err.message === 'Malformed data') {
+				if (!this.broadcasting) return this.sendReply(`Error: Something went wrong in the request: ${err.message}`);
+				return room.add(`Error: Something went wrong in the request: ${err.message}`).update();
+			} else if (err.message === 'Not found') {
+				if (!this.broadcasting) return this.sendReply('|raw|<div class="infobox">No results found.</div>');
+				return room.addRaw('<div class="infobox">No results found.</div>').update();
+			}
+			if (!this.broadcasting) return this.sendReply(`Error: ${err.message}`);
+			return room.add(`Error: ${err.message}`).update();
 		});
 	},
 };
