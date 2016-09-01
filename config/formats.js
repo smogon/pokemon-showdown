@@ -729,13 +729,13 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
-		name: "[Gen 2] UU",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3576710/\">GSC UU</a>"],
+		name: "[Gen 3] NU",
+		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3503418/\">ADV NU</a>"],
 		section: "RoA Spotlight",
 		column: 3,
 
-		mod: 'gen2',
-		ruleset: ['[Gen 2] OU'],
+		mod: 'gen3',
+		ruleset: ['[Gen 3] OU'],
 		banlist: ['OU', 'BL'],
 	},
 
