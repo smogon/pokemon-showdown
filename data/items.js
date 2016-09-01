@@ -160,7 +160,7 @@ exports.BattleItems = {
 			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
 			return true;
 		},
-		num: -6,
+		num: 679,
 		gen: 6,
 		desc: "If holder is an Alakazam, this item allows it to Mega Evolve in battle.",
 	},
@@ -188,7 +188,7 @@ exports.BattleItems = {
 			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
 			return true;
 		},
-		num: -6,
+		num: 658,
 		gen: 6,
 		desc: "If holder is an Ampharos, this item allows it to Mega Evolve in battle.",
 	},
@@ -266,7 +266,7 @@ exports.BattleItems = {
 				}
 			}
 		},
-		num: -6,
+		num: 640,
 		gen: 6,
 		desc: "Holder's Sp. Def is 1.5x, but it can only select damaging moves.",
 	},
@@ -461,7 +461,7 @@ exports.BattleItems = {
 			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
 			return true;
 		},
-		num: -6,
+		num: 661,
 		gen: 6,
 		desc: "If holder is a Blastoise, this item allows it to Mega Evolve in battle.",
 	},
@@ -507,7 +507,7 @@ exports.BattleItems = {
 			if (source.baseTemplate.baseSpecies === 'Kyogre') return false;
 			return true;
 		},
-		num: -6,
+		num: 535,
 		gen: 6,
 		desc: "If holder is a Kyogre, this item triggers its Primal Reversion in battle.",
 	},
@@ -1371,7 +1371,7 @@ exports.BattleItems = {
 				}
 			}
 		},
-		num: -6,
+		num: 715,
 		gen: 6,
 		desc: "Holder's first successful Fairy-type attack will have 1.3x power. Single use.",
 	},
@@ -2165,7 +2165,7 @@ exports.BattleItems = {
 		onEat: function (pokemon) {
 			this.boost({def: 1});
 		},
-		num: -6,
+		num: 687,
 		gen: 6,
 		desc: "Raises holder's Defense by 1 stage after it is hit by a physical attack. Single use.",
 	},
@@ -2267,7 +2267,7 @@ exports.BattleItems = {
 			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
 			return true;
 		},
-		num: -6,
+		num: 684,
 		gen: 6,
 		desc: "If holder is a Latias, this item allows it to Mega Evolve in battle.",
 	},
@@ -2281,7 +2281,7 @@ exports.BattleItems = {
 			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
 			return true;
 		},
-		num: -6,
+		num: 685,
 		gen: 6,
 		desc: "If holder is a Latios, this item allows it to Mega Evolve in battle.",
 	},
@@ -2539,7 +2539,7 @@ exports.BattleItems = {
 				this.boost({spd: 1});
 			}
 		},
-		num: -6,
+		num: 648,
 		gen: 6,
 		desc: "Raises holder's Sp. Def by 1 stage if hit by a Water-type attack. Single use.",
 	},
@@ -2691,7 +2691,7 @@ exports.BattleItems = {
 		onEat: function (pokemon) {
 			this.boost({spd: 1});
 		},
-		num: -6,
+		num: 688,
 		gen: 6,
 		desc: "Raises holder's Sp. Def by 1 stage after it is hit by a special attack. Single use.",
 	},
@@ -3365,7 +3365,7 @@ exports.BattleItems = {
 			return true;
 		},
 		forcedForme: "Arceus-Fairy",
-		num: -6,
+		num: 644,
 		gen: 6,
 		desc: "Holder's Fairy-type attacks have 1.2x power. Judgment is Fairy type.",
 	},
@@ -3689,7 +3689,7 @@ exports.BattleItems = {
 			if (source.baseTemplate.baseSpecies === 'Groudon') return false;
 			return true;
 		},
-		num: -6,
+		num: 534,
 		gen: 6,
 		desc: "If holder is a Groudon, this item triggers its Primal Reversion in battle.",
 	},
@@ -3836,7 +3836,7 @@ exports.BattleItems = {
 			}
 		},
 		onEat: function () { },
-		num: -6,
+		num: 686,
 		gen: 6,
 		desc: "Halves damage taken from a supereffective Fairy-type attack. Single use.",
 	},
@@ -3899,7 +3899,7 @@ exports.BattleItems = {
 				return null;
 			}
 		},
-		num: -6,
+		num: 650,
 		gen: 6,
 		desc: "Holder is immune to powder moves and damage from Sandstorm or Hail.",
 	},
@@ -4227,7 +4227,7 @@ exports.BattleItems = {
 				this.boost({atk: 1});
 			}
 		},
-		num: -6,
+		num: 649,
 		gen: 6,
 		desc: "Raises holder's Attack by 1 if hit by an Ice-type attack. Single use.",
 	},
@@ -4733,7 +4733,7 @@ exports.BattleItems = {
 				this.boost({atk: 2, spa: 2});
 			}
 		},
-		num: -6,
+		num: 639,
 		gen: 6,
 		desc: "If holder is hit super effectively, raises Attack, Sp. Atk by 2 stages. Single use.",
 	},
