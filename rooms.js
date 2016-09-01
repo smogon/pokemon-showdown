@@ -1037,6 +1037,7 @@ let BattleRoom = (() => {
 		logData.endType = this.battle.endType;
 		if (!p1rating) logData.ladderError = true;
 		const date = new Date();
+		logData.timestamp = date;
 		const logsubfolder = Tools.toTimeStamp(date).split(' ')[0];
 		const logfolder = logsubfolder.split('-', 2).join('-');
 
