@@ -76,16 +76,21 @@ exports.BattleScripts = {
 	getMegaDeltas: function (megaTemplate) {
 		let baseTemplate = this.getTemplate(megaTemplate.baseSpecies);
 		let deltas = {
-			ability: megaTemplate.abilities['0'], baseStats: {}, weightkg: megaTemplate.weightkg - baseTemplate.weightkg, types: Array(baseTemplate.types.length),
-			originalMega: megaTemplate.species, requiredItem: megaTemplate.requiredItem,
+			ability: megaTemplate.abilities['0'],
+			baseStats: {},
+			weightkg: megaTemplate.weightkg - baseTemplate.weightkg,
+			originalMega: megaTemplate.species,
+			requiredItem: megaTemplate.requiredItem,
 		};
-		for (let statId in megaTemplate.baseStats) deltas.baseStats[statId] = megaTemplate.baseStats[statId] - baseTemplate.baseStats[statId];
+		for (let statId in megaTemplate.baseStats) {
+			deltas.baseStats[statId] = megaTemplate.baseStats[statId] - baseTemplate.baseStats[statId];
+		}
 		if (megaTemplate.types.length > baseTemplate.types.length) {
-			deltas.types.push(megaTemplate.types[1]);
+			deltas.type = megaTemplate.types[1];
 		} else if (megaTemplate.types.length < baseTemplate.types.length) {
-			deltas.types[1] = baseTemplate.types[0];
+			deltas.type = baseTemplate.types[0];
 		} else if (megaTemplate.types[1] !== baseTemplate.types[1]) {
-			deltas.types[1] = megaTemplate.types[1];
+			deltas.type = megaTemplate.types[1];
 		}
 		if (megaTemplate.isMega) deltas.isMega = true;
 		if (megaTemplate.isPrimal) deltas.isPrimal = true;
