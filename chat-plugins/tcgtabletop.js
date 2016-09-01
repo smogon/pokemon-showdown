@@ -8,10 +8,7 @@
 
 const http = require('http');
 
-function noop() {}
-
 function wikiaSearch(subdomain, query) {
-	console.log(`http://${subdomain}.wikia.com/api/v1/Search/List/?query=${encodeURIComponent(query)}&limit=1`);
 	return new Promise(function (resolve, reject) {
 		http.get(`http://${subdomain}.wikia.com/api/v1/Search/List/?query=${encodeURIComponent(query)}&limit=1`, res => {
 			let buffer = '';
@@ -19,8 +16,10 @@ function wikiaSearch(subdomain, query) {
 			res.on('data', data => {
 				buffer += data;
 			});
+			res.on('error', err => {
+				reject(err);
+			});
 			res.on('end', () => {
-				console.log(buffer);
 				let result;
 				try {
 					result = JSON.parse(buffer);
@@ -33,19 +32,19 @@ function wikiaSearch(subdomain, query) {
 
 				return resolve(result.items[0]);
 			});
-		}).once('error', function (err) {
-			this.on('error', noop);
-			reject(err);
 		});
 	});
 }
 function getCardDetails(subdomain, id) {
 	return new Promise(function (resolve, reject) {
-		http.get(`http://${subdomain}.wikia.com/api/v1/Articles/Details?ids=${id}&abstract=0&width=80&height=115`, res => {
+		http.get(`http://${subdomain}.wikia.com/api/v1/Articles/Details?ids=${encodeURIComponent(id)}&abstract=0&width=80&height=115`, res => {
 			let buffer = '';
 			res.setEncoding('utf8');
 			res.on('data', data => {
 				buffer += data;
+			});
+			res.on('error', err => {
+				reject(err);
 			});
 			res.on('end', () => {
 				let result;
@@ -60,9 +59,6 @@ function getCardDetails(subdomain, id) {
 
 				return resolve(result.items[id]);
 			});
-		}).once('error', function (err) {
-			this.on('error', noop);
-			reject(err);
 		});
 	});
 }
@@ -79,11 +75,13 @@ exports.commands = {
 			if (!this.runBroadcast()) return;
 			let entryUrl = Tools.getString(data.url);
 			let entryTitle = Tools.getString(data.title);
+			let id = Tools.getString(data.id);
 			let htmlReply = `<strong>Best result for ${Tools.escapeHTML(query)}:</strong><br/><a href="${Tools.escapeHTML(entryUrl)}">${Tools.escapeHTML(entryTitle)}</a>`;
-			if (data.id) {
-				getCardDetails(subdomain, data.id).then(card => {
-					if (card.thumbnail) {
-						htmlReply = `<table><tr><td style="padding-right:5px;"><img src="${card.thumbnail}" width=80 height=115></td><td>${htmlReply}</td></tr></table>`;
+			if (id) {
+				getCardDetails(subdomain, id).then(card => {
+					let thumb = Tools.getString(card.thumbnail);
+					if (thumb) {
+						htmlReply = `<table><tr><td style="padding-right:5px;"><img src="${Tools.escapeHTML(thumb)}" width=80 height=115></td><td>${htmlReply}</td></tr></table>`;
 					}
 					if (!this.broadcasting) return this.sendReply(`|raw|<div class="infobox">${htmlReply}</div>`);
 					room.addRaw(`<div class="infobox">${htmlReply}</div>`).update();
@@ -91,6 +89,9 @@ exports.commands = {
 					if (!this.broadcasting) return this.sendReply(`|raw|<div class="infobox">${htmlReply}</div>`);
 					room.addRaw(`<div class="infobox">${htmlReply}</div>`).update();
 				});
+			} else {
+				if (!this.broadcasting) return this.sendReply(`|raw|<div class="infobox">${htmlReply}</div>`);
+				room.addRaw(`<div class="infobox">${htmlReply}</div>`).update();
 			}
 		}, err => {
 			if (!this.runBroadcast()) return;
