@@ -30,6 +30,7 @@ exports.BattleAliases = {
 	"theorymon": "OU Theorymon",
 	"inverse": "Inverse Battle",
 	"aaa": "Almost Any Ability",
+	"mnm": "Mix and Mega",
 	"monorandom": "Monotype Random Battle",
 
 	// mega evos
