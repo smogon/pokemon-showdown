@@ -1038,8 +1038,8 @@ let BattleRoom = (() => {
 		if (!p1rating) logData.ladderError = true;
 		const date = new Date();
 		logData.timestamp = date;
-		logData.id = this.id
-		logData.format = this.format 
+		logData.id = this.id;
+		logData.format = this.format;
 		const logsubfolder = Tools.toTimeStamp(date).split(' ')[0];
 		const logfolder = logsubfolder.split('-', 2).join('-');
 
