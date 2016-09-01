@@ -736,7 +736,7 @@ exports.Formats = [
 
 		mod: 'gen3',
 		ruleset: ['[Gen 3] OU'],
-		banlist: ['OU', 'BL'],
+		banlist: ['OU', 'BL', 'UU'],
 	},
 
 	// BW2 Singles
