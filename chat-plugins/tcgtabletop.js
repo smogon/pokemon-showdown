@@ -16,9 +16,6 @@ function wikiaSearch(subdomain, query) {
 			res.on('data', data => {
 				buffer += data;
 			});
-			res.on('error', err => {
-				reject(err);
-			});
 			res.on('end', () => {
 				let result;
 				try {
@@ -32,6 +29,8 @@ function wikiaSearch(subdomain, query) {
 
 				return resolve(result.items[0]);
 			});
+		}).on('error', err => {
+			reject(err);
 		});
 	});
 }
@@ -42,9 +41,6 @@ function getCardDetails(subdomain, id) {
 			res.setEncoding('utf8');
 			res.on('data', data => {
 				buffer += data;
-			});
-			res.on('error', err => {
-				reject(err);
 			});
 			res.on('end', () => {
 				let result;
@@ -59,6 +55,8 @@ function getCardDetails(subdomain, id) {
 
 				return resolve(result.items[id]);
 			});
+		}).on('error', err => {
+			reject(err);
 		});
 	});
 }
@@ -102,6 +100,9 @@ exports.commands = {
 			} else if (err.message === 'Not found') {
 				if (!this.broadcasting) return this.sendReply('|raw|<div class="infobox">No results found.</div>');
 				return room.addRaw('<div class="infobox">No results found.</div>').update();
+			} else if (err.code === "ENOTFOUND") {
+				if (!this.broadcasting) return this.sendReply("Error connecting to the yugioh wiki.");
+				return room.add("Error connecting to the yugioh wiki.").update();
 			}
 			if (!this.broadcasting) return this.sendReply(`Error: ${err.message}`);
 			return room.add(`Error: ${err.message}`).update();
