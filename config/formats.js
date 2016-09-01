@@ -367,7 +367,7 @@ exports.Formats = [
 
 		mod: 'mixandmega',
 		ruleset: ['Ubers', 'Baton Pass Clause'],
-		banlist: ['Beedrillite', 'Blazikenite', 'Gengarite', 'Kangaskhanite', 'Mawilite', 'Medichamite', 'Shadow Tag', 'Dynamic Punch', 'Zap Cannon'],
+		banlist: ['Dynamic Punch', 'Zap Cannon'],
 		onValidateTeam: function (team) {
 			let itemTable = {};
 			for (let i = 0; i < team.length; i++) {
@@ -385,7 +385,8 @@ exports.Formats = [
 			if (template.baseSpecies === item.megaEvolves || (item.id === 'redorb' && template.baseSpecies === 'Groudon') || (item.id === 'blueorb' && template.baseSpecies === 'Kyogre')) return;
 			if (template.evos.length) return ["" + template.species + " is not allowed to hold " + item.name + " because it's not fully evolved."];
 			let ubers = {'Arceus':1, 'Cresselia':1, 'Darkrai':1, 'Deoxys':1, 'Deoxys-Attack':1, 'Dialga':1, 'Dragonite':1, 'Giratina':1, 'Giratina-Origin':1, 'Groudon':1, 'Heliolisk':1, 'Ho-Oh':1, 'Kyogre':1, 'Kyurem-Black':1, 'Kyurem-White':1, 'Lucario':1, 'Lugia':1, 'Manaphy':1, 'Mewtwo':1, 'Palkia':1, 'Regigigas':1, 'Reshiram':1, 'Shaymin-Sky':1, 'Slaking':1, 'Xerneas':1, 'Yveltal':1, 'Zekrom':1};
-			if (ubers.hasOwnProperty(template.species)) {
+			let uberStones = {'Beedrillite':1, 'Blazikenite':1, 'Gengarite':1, 'Kangaskhanite':1, 'Mawilite':1, 'Medichamite':1};
+			if (ubers.hasOwnProperty(template.species) || uberStones.hasOwnProperty(item.name)) {
 				return ["" + template.species + " is not allowed to hold " + item.name + "."];
 			}
 		},
