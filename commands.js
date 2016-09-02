@@ -2024,7 +2024,7 @@ exports.commands = {
 	slowchat: function (target, room, user) {
 		if (!target) return this.sendReply("Slow chat is currently set to: " + (room.slowchat ? room.slowchat : false));
 		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
-		if (!this.can('editroom', null, room)) return false;
+		if (!this.can('modchat', null, room)) return false;
 
 		let targetInt = parseInt(target);
 		if (target === 'off' || target === 'disable' || target === 'false') {
