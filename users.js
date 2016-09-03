@@ -413,6 +413,11 @@ class User {
 	can(permission, target, room) {
 		if (this.hasSysopAccess()) return true;
 
+		let groupData = Config.groups[this.group];
+		if (groupData && groupData['root']) {
+			return true;
+		}
+
 		let group, targetGroup;
 
 		if (typeof target === 'string') {
@@ -428,10 +433,7 @@ class User {
 			if (target) targetGroup = target.group;
 		}
 
-		let groupData = Config.groups[group];
-		if (groupData && groupData['root']) {
-			return true;
-		}
+		groupData = Config.groups[group];
 
 		if (groupData && groupData[permission]) {
 			let jurisdiction = groupData[permission];
