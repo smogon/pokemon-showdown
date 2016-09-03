@@ -228,6 +228,8 @@ class Validator {
 
 					if (template.unreleasedHidden && banlistTable['Unreleased']) {
 						problems.push(name + "'s hidden ability is unreleased.");
+					} else if (set.species.endsWith('Orange') || set.species.endsWith('White') && ability.name === 'Symbiosis') {
+						problems.push(name + "'s hidden ability is unreleased for the Orange and White forms.");
 					} else if (tools.gen === 5 && set.level < 10 && (template.maleOnlyHidden || template.gender === 'N')) {
 						problems.push(name + " must be at least level 10 with its hidden ability.");
 					}
