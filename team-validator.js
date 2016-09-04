@@ -498,7 +498,11 @@ class Validator {
 
 		if (teamHas) {
 			for (let i in setHas) {
-				teamHas[i] = true;
+				if (i in teamHas) {
+					teamHas[i]++;
+				} else {
+					teamHas[i] = 1;
+				}
 			}
 		}
 		for (let i = 0; i < format.setBanTable.length; i++) {
