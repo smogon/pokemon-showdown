@@ -2,11 +2,11 @@
 
 exports.BattleScripts = {
 	init: function () {
-		let onTakeMegaStone = function (item, source) {
+		let onTakeMegaStone = function (item) {
 			return false;
 		};
 		for (let id in this.data.Items) {
-			if (id !== 'blueorb' && id !== 'redorb' && !this.data.Items[id].megaStone) continue;
+			if (!this.data.Items[id].megaStone) continue;
 			this.modData('Items', id).onTakeItem = onTakeMegaStone;
 		}
 	},
