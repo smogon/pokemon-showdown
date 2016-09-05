@@ -3,7 +3,7 @@ Pokémon Showdown
 
 Navigation: [Website][1] | **Server repository** | [Client repository][2]
 
-  [1]: http://pokemonshowdown.com/
+  [1]: https://pokemonshowdown.com/
   [2]: https://github.com/Zarel/Pokemon-Showdown-Client
 
 [![Build Status](https://travis-ci.org/Zarel/Pokemon-Showdown.svg)](https://travis-ci.org/Zarel/Pokemon-Showdown)
@@ -19,8 +19,8 @@ This repository contains the files needed to set up your own Pokémon Showdown s
 
 You can use your own computer as a server, but for other people to connect to your computer, you'll need to expose a port (default is 8000 but you can choose a different one) to connect to, which sometimes requires [port forwarding][4] (note that this isn't possible on certain internet connections).
 
-  [3]: http://pokemonshowdown.com/
-  [4]: http://en.wikipedia.org/wiki/Port_forwarding
+  [3]: https://pokemonshowdown.com/
+  [4]: https://en.wikipedia.org/wiki/Port_forwarding
 
 
 Installing
@@ -119,7 +119,7 @@ PS has a built-in chat service. Join our main server to talk to us!
 
 You can also visit the [Pokémon Showdown forums][7] for discussion and help.
 
-  [7]: http://www.smogon.com/forums/forums/pok%C3%A9mon-showdown.209/
+  [7]: https://www.smogon.com/forums/forums/pok%C3%A9mon-showdown.209/
 
 
 License
