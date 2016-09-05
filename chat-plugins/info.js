@@ -1171,7 +1171,7 @@ exports.commands = {
 		if (!this.runBroadcast()) return;
 		if (this.broadcasting && (room.id === 'lobby' || room.battle)) return this.errorReply("This command is too spammy for lobby/battles.");
 		this.sendReplyBox(
-			"Room drivers (%) can use:<br />" +
+			"<div class = 'infobox-limited'>Room drivers (%) can use:<br />" +
 			"- /warn OR /k <em>username</em>: warn a user and show the Pok&eacute;mon Showdown rules<br />" +
 			"- /mute OR /m <em>username</em>: 7 minute mute<br />" +
 			"- /hourmute OR /hm <em>username</em>: 60 minute mute<br />" +
@@ -1208,7 +1208,7 @@ exports.commands = {
 			"- /tour start: Starts the tournament in the current room<br />" +
 			"<br />" +
 			"More detailed help can be found <a href=\"https://gist.github.com/verbiage/0846a552595349032fbe\">here</a><br />" +
-			"</div>"
+			"</div></div>"
 		);
 	},
 
