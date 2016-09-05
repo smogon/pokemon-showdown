@@ -1203,6 +1203,7 @@ exports.commands = {
 		connection.popup(buffer.join("\n\n") + userLookup);
 	},
 
+	auth: 'userauth',
 	userauth: function (target, room, user, connection) {
 		let targetId = toId(target) || user.userid;
 		let targetUser = Users.getExact(targetId);
