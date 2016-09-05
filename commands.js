@@ -3334,6 +3334,10 @@ exports.commands = {
 			Ladders(target).getTop().then(result => {
 				connection.send('|queryresponse|laddertop|' + JSON.stringify(result));
 			});
+		} else if (cmd === 'userlist') {
+			if (!trustable) return false;
+
+			connection.send(room + '|queryresponse|userlist|' + JSON.stringify(room.getUserList().substr(7)));
 		} else {
 			// default to sending null
 			if (!trustable) return false;
