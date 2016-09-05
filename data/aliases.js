@@ -432,4 +432,7 @@ exports.BattleAliases = {
 	"borutorosu": "Thundurus",
 	// there's no need to type out the other Japanese names
 	// I'll autogenerate them at some point
+	
+	// Other
+	"smogon": "Koffing"
 };
