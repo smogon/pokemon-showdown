@@ -4462,7 +4462,7 @@ exports.BattleMovedex = {
 	"flamecharge": {
 		num: 488,
 		accuracy: 100,
-		basePower: 50,
+		basePower: 60,
 		category: "Physical",
 		desc: "Has a 100% chance to raise the user's Speed by 1 stage.",
 		shortDesc: "100% chance to raise the user's Speed by 1.",
