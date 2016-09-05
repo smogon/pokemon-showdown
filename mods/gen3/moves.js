@@ -913,6 +913,23 @@ exports.BattleMovedex = {
 					let source = this.effectData.source;
 					let damage = this.heal(target.maxhp / 2, target, target);
 					if (damage) this.add('-heal', target, target.getHealth, '[from] move: Wish', '[wisher] ' + source.name);
+				} else {
+					int didFaint = 1;
+					onSwitchInPriority: -1,
+					onSwitchIn: function (target) {
+						while (didFaint != 0) {
+							if (target.position != this.effectData.sourcePosition) {
+								return;
+							}
+							if (!target.fainted) {
+								var source = this.effectData.source;
+								var damage = target.heal(target.maxhp / 2);
+								this.add('-heal', target, target.getHealth, '[from] move: Wish');
+								target.side.removeSideCondition('Wish');
+								didFaint = 0;
+							}
+						}
+					}
 				}
 			},
 		},
