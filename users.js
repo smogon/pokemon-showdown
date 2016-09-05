@@ -425,8 +425,8 @@ class User {
 		}
 
 		if (room && room.auth) {
-			group = room.getAuth(this);
-			if (target) targetGroup = room.getAuth(target);
+			group = room.getAuth(this, true);
+			if (target) targetGroup = room.getAuth(target, true);
 		} else {
 			group = this.group;
 			if (target) targetGroup = target.group;

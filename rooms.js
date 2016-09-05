@@ -226,10 +226,13 @@ let Room = (() => {
 			}
 		}
 	};
-	Room.prototype.getAuth = function (user) {
+	Room.prototype.getAuth = function (user, globaloverride) {
+		let rank;
+		let ranks = Config.groupsranking;
 		if (this.auth) {
 			if (user.userid in this.auth) {
-				return this.auth[user.userid];
+				rank = (globaloverride && ranks.indexOf(user.group) > ranks.indexOf(this.auth[user.userid]) ? user.group : this.auth[user.userid]);
+				return rank;
 			}
 			if (this.tour && this.tour.room) {
 				return this.tour.room.getAuth(user);
