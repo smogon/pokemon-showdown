@@ -908,6 +908,8 @@ exports.commands = {
 
 		this.privateModCommand(`(${user.name} changed the roomdesc to: "${target}".)`);
 
+		this.privateModCommand("(" + user.name + " changed the roomdesc to: \"" + target + "\".)");
+
 		if (room.chatRoomData) {
 			room.chatRoomData.desc = room.desc;
 			Rooms.global.writeChatRoomData();
@@ -946,6 +948,8 @@ exports.commands = {
 
 		this.privateModCommand(`(${user.name} changed the roomintro.)`);
 		this.logEntry(room.introMessage.replace(/\n/g, ''));
+
+		this.privateModCommand("(" + user.name + " changed the roomintro.)");
 
 		if (room.chatRoomData) {
 			room.chatRoomData.introMessage = room.introMessage;
