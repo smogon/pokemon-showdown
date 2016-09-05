@@ -558,6 +558,7 @@ exports.commands = {
 	},
 
 	makeprivatechatroom: 'makechatroom',
+	registerchatroom: 'makechatroom',
 	makechatroom: function (target, room, user, connection, cmd) {
 		if (!this.can('makeroom')) return;
 
@@ -678,6 +679,7 @@ exports.commands = {
 	},
 	makegroupchathelp: ["/makegroupchat [roomname], [hidden|private] - Creates a group chat named [roomname]. Leave off privacy to default to hidden. Requires global voice or roomdriver+ in a public room to make a groupchat."],
 
+	deletechatroom: 'deregisterchatroom',
 	deregisterchatroom: function (target, room, user) {
 		if (!this.can('makeroom')) return;
 		this.errorReply("NOTE: You probably want to use `/deleteroom` now that it exists.");
