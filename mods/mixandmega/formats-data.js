@@ -25,10 +25,6 @@ exports.BattleFormatsData = {
 		inherit: true,
 		tier: "Uber",
 	},
-	genesect: {
-		inherit: true,
-		tier: "OU",
-	},
 	greninja: {
 		inherit: true,
 		tier: "OU",
