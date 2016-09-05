@@ -387,6 +387,13 @@ exports.BattleMovedex = {
 			return this.random(1, pokemon.level + Math.floor(pokemon.level / 2));
 		},
 	},
+	powdersnow: {
+		inherit: true,
+		secondary: {
+			chance: 9.8,
+			status: 'frz',
+		}
+	},
 	rage: {
 		// TODO
 		// Rage boosts in Gens 2-4 is for the duration of Rage only
