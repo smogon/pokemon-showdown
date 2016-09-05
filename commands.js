@@ -1138,6 +1138,9 @@ exports.commands = {
 		if (targetUser && targetUser.locked && !room.isPrivate && !room.battle && !room.isPersonal && (nextGroup === '%' || nextGroup === '@' || nextGroup === '*')) {
 			return this.errorReply("Locked users can't be promoted.");
 		}
+		if (nextGroup === ' ' && room.isPrivate !== true && targetUser.group && !user.can('room' + Config.groups[targetUser.group].id, null, room)) {
+			return this.sendReply("/" + cmd + " - Access denied for promoting/demoting to " + Config.groups[targetUser.group].name + ".");
+		}
 
 		if (nextGroup === ' ') {
 			delete room.auth[userid];
