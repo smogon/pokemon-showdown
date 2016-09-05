@@ -1202,6 +1202,12 @@ exports.commands = {
 		if (targetRoom !== room) buffer.unshift("" + targetRoom.title + " room auth:");
 		connection.popup(buffer.join("\n\n") + userLookup);
 	},
+	
+	roomid: 'room',
+	room: function(target, room, user) {
+        	if (!this.canBroadcast()) return;
+        	this.sendReplyBox('You are currently in the room "'+room.id+'".');
+	},
 
 	userauth: function (target, room, user, connection) {
 		let targetId = toId(target) || user.userid;
