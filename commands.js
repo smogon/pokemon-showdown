@@ -678,6 +678,23 @@ exports.commands = {
 	},
 	makegroupchathelp: ["/makegroupchat [roomname], [hidden|private] - Creates a group chat named [roomname]. Leave off privacy to default to hidden. Requires global voice or roomdriver+ in a public room to make a groupchat."],
 
+	deletegroupchat: function (target, room, user) {
+		var id = toId(target);
+		var sameRoom = false;
+		if (!id) {
+			id = toId(room);
+			var sameRoom = true;
+		}
+		var targetRoom = Rooms.search(id);
+		target = targetRoom.title || targetRoom.id;
+		if (!targetRoom) return this.sendReply("The room '" + target + "' doesn't exist.");
+		if (!targetRoom.isPersonal) return this.sendReply("The room '" + target + "' is not a group chat.");
+		if (targetRoom.auth[user.userid] !== '#' && !this.can('makeroom')) return;
+		targetRoom.destroy();
+		if (!sameRoom) return this.sendReply("The room '" + target + "' has been deleted.");
+	},
+	deletegroupchathelp: ["/deletegroupchat [roomname] - Deletes the group chat [roomname]. Requires: # ~"],
+
 	deregisterchatroom: function (target, room, user) {
 		if (!this.can('makeroom')) return;
 		this.errorReply("NOTE: You probably want to use `/deleteroom` now that it exists.");
