@@ -393,10 +393,10 @@ exports.commands = {
 			return this.errorReply("Because moderated chat is set, you must be of rank " + groupName + " or higher to PM users.");
 		}
 
-		if (user.locked && !targetUser.can('lock')) {
+		if (user.locked && !targetUser.can('lock') && user.latestIp !== targetUser.latestIp) {
 			return this.errorReply("You can only private message members of the global moderation team (users marked by @ or above in the Help room) when locked.");
 		}
-		if (targetUser.locked && !user.can('lock')) {
+		if (targetUser.locked && !user.can('lock') && user.latestIp !== targetUser.latestIp) {
 			return this.errorReply("This user is locked and cannot PM.");
 		}
 		if (targetUser.ignorePMs && targetUser.ignorePMs !== user.group && !user.can('lock')) {
