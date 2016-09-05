@@ -11911,6 +11911,12 @@ exports.BattleMovedex = {
 			if (!targets.length && !anyAirborne) return false; // Fails when there are no grounded Grass types or airborne Pokemon
 			for (let i = 0; i < targets.length; i++) this.boost({atk: 1, spa: 1}, targets[i], source);
 		},
+		onTry: function(pokemon) {
+			if (pokemon.hp === pokemon.maxhp) {
+				this.add('-fail', pokemon, 'move: Roost');
+				return false;
+			}
+		},
 		secondary: false,
 		target: "all",
 		type: "Ground",
