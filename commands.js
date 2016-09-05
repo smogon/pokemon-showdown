@@ -1999,6 +1999,9 @@ exports.commands = {
 			if (Config.groupsranking.indexOf(target) > Math.max(1, Config.groupsranking.indexOf(roomGroup)) && !user.can('makeroom')) {
 				return this.errorReply("/modchat - Access denied for setting higher than " + roomGroup + ".");
 			}
+			if (room.auth && config.groupsranking.indexOf(target) > 4) {
+				return this.sendReply('/modchat - Access denied for setting higher than ' + config.groupsranking[4] + ' in a room with private moderation.');
+			}
 			room.modchat = target;
 			break;
 		}}
