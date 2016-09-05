@@ -10,10 +10,24 @@
 
 'use strict';
 
-const ProcessManager = require('./../process-manager');
-
 const MAX_PROCESSES = 1;
 const RESULTS_MAX_LENGTH = 10;
+
+if (!process.send) {
+	// This is the parent
+	Tools.dexsearchProcess = require('child_process').fork('dexsearch.js', {cwd: __dirname});
+
+	let resolvers = {};
+	let queryId = 1;
+	let queryChild = function (query) {
+		let localQueryId = queryId++;
+		query.id = localQueryId;
+		return new Promise((resolve, reject) => {
+			resolvers[localQueryId] = resolve;
+			Tools.dexsearchProcess.send(query);
+		});
+	};
+	Tools.dexsearchProcess.on("message", message => resolvers[message.id](message.value));
 
 const PM = exports.PM = new ProcessManager({
 	maxProcesses: MAX_PROCESSES,
@@ -76,7 +90,7 @@ exports.commands = {
 		if (!this.canBroadcast()) return;
 		if (!target) return this.parse('/help dexsearch');
 
-		return runSearch({
+		queryChild({
 			target: target,
 			cmd: 'dexsearch',
 			canAll: (!this.broadcastMessage || room.isPersonal),
