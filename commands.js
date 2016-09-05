@@ -355,6 +355,7 @@ exports.commands = {
 			this.sendReply("Ask one of the Moderators (@) in the Help room.");
 		} else {
 			this.parse('/join help');
+			user.popup("Ask one of the Moderators (@) in the Help room.");
 		}
 	},
 
