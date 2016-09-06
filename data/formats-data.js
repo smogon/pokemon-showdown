@@ -4472,7 +4472,7 @@ exports.BattleFormatsData = {
 		tier: "LC",
 	},
 	lilligant: {
-		randomBattleMoves: ["sleeppowder", "quiverdance", "petaldance", "gigadrain", "hiddenpowerfire", "healingwish"],
+		randomBattleMoves: ["sleeppowder", "quiverdance", "petaldance", "gigadrain", "hiddenpowerfire", "hiddenpowerrock"],
 		randomDoubleBattleMoves: ["quiverdance", "gigadrain", "sleeppowder", "hiddenpowerice", "hiddenpowerfire", "hiddenpowerrock", "petaldance", "helpinghand", "protect"],
 		tier: "NU",
 	},
@@ -4504,7 +4504,7 @@ exports.BattleFormatsData = {
 		tier: "LC",
 	},
 	darmanitan: {
-		randomBattleMoves: ["uturn", "flareblitz", "firepunch", "rockslide", "earthquake", "superpower"],
+		randomBattleMoves: ["uturn", "flareblitz", "rockslide", "earthquake", "superpower"],
 		randomDoubleBattleMoves: ["uturn", "flareblitz", "firepunch", "rockslide", "earthquake", "superpower", "protect"],
 		eventPokemon: [
 			{"generation": 5, "level": 35, "isHidden": true, "moves":["thrash", "bellydrum", "flareblitz", "hammerarm"]},
