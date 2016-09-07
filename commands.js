@@ -1177,9 +1177,14 @@ exports.commands = {
 		if (cmd === 'roomauth1') userLookup = '\n\nTo look up auth for a user, use /userauth ' + target;
 		let targetRoom = room;
 		if (target) targetRoom = Rooms.search(target);
-		let unavailableRoom = targetRoom && (targetRoom !== room && (targetRoom.modjoin || targetRoom.staffRoom) && !user.can('makeroom'));
-		if (!targetRoom || unavailableRoom) return this.errorReply("The room '" + target + "' does not exist.");
-		if (!targetRoom.auth) return this.sendReply("/roomauth - The room '" + (targetRoom.title ? targetRoom.title : target) + "' isn't designed for per-room moderation and therefore has no auth list." + userLookup);
+		if (!targetRoom) return this.errorReply("The room '" + target + "' does not exist.");
+		if (!targetRoom.auth) return this.sendReply("/roomauth - The room '" + (targetRoom.title || target) + "' isn't designed for per-room moderation and therefore has no auth list." + userLookup);
+
+		let cannotJoin = (targetRoom.isPrivate && targetRoom.modJoin &&
+			!targetRoom.auth[user.userid] || targetRoom.staffRoom) &&
+			!user.can('makeroom');
+		let unavailableRoom = !user.inRooms.has(targetRoom.id) && cannotJoin;
+		if (unavailableRoom) return this.errorReply("The room '" + target + "' does not exist.");
 
 		let rankLists = {};
 		for (let u in targetRoom.auth) {
