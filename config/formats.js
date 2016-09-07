@@ -185,7 +185,7 @@ exports.Formats = [
 		section: "ORAS Doubles",
 
 		gameType: 'doubles',
-		team: 'randomDoubles',
+		team: 'random',
 		ruleset: ['PotD', 'Pokemon', 'HP Percentage Mod', 'Cancel Mod'],
 	},
 	{
@@ -307,7 +307,7 @@ exports.Formats = [
 		section: "ORAS Triples",
 
 		gameType: 'triples',
-		team: 'randomDoubles',
+		team: 'random',
 		ruleset: ['PotD', 'Pokemon', 'HP Percentage Mod', 'Cancel Mod'],
 	},
 	{
