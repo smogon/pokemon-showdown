@@ -15,10 +15,8 @@ const ProcessManager = require('./../process-manager');
 const MAX_PROCESSES = 1;
 const RESULTS_MAX_LENGTH = 10;
 
-const PM = exports.PM = new ProcessManager({
-	maxProcesses: MAX_PROCESSES,
-	execFile: __filename,
-	onMessageUpstream: function (message) {
+class DatasearchManager extends ProcessManager {
+	onMessageUpstream(message) {
 		// Protocol:
 		// "[id]|JSON"
 		let pipeIndex = message.indexOf('|');
@@ -30,8 +28,9 @@ const PM = exports.PM = new ProcessManager({
 			this.pendingTasks.delete(id);
 			this.release();
 		}
-	},
-	onMessageDownstream: function (message) {
+	}
+
+	onMessageDownstream(message) {
 		// protocol:
 		// "[id]|{data, sig}"
 		let pipeIndex = message.indexOf('|');
@@ -39,8 +38,9 @@ const PM = exports.PM = new ProcessManager({
 
 		let data = JSON.parse(message.slice(pipeIndex + 1));
 		process.send(id + '|' + JSON.stringify(this.receive(data)));
-	},
-	receive: function (data) {
+	}
+
+	receive(data) {
 		let result;
 		try {
 			switch (data.cmd) {
@@ -65,7 +65,14 @@ const PM = exports.PM = new ProcessManager({
 			result = {error: "Sorry! Our search engine crashed on your query. We've been automatically notified and will fix this crash."};
 		}
 		return result;
-	},
+	}
+}
+
+exports.DatasearchManager = DatasearchManager;
+
+const PM = exports.PM = new DatasearchManager({
+	execFile: __filename,
+	maxProcesses: MAX_PROCESSES,
 	isChatBased: true,
 });
 
