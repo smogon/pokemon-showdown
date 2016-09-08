@@ -33,6 +33,13 @@ function makeUser(name, connection) {
 	return user;
 }
 
+function destroyUser(user) {
+	if (user.connected) {
+		user.disconnectAll();
+		user.destroy();
+	}
+}
+
 describe('Trivia', function () {
 	before(function () {
 		// ...until we can load the trivia module right before the tests begin,
@@ -54,11 +61,13 @@ describe('Trivia', function () {
 		let questions = [{question: '', answers: ['answer'], category: 'ae'}];
 		this.game = this.room.game = new Trivia(this.room, 'first', 'ae', 'short', questions);
 		this.user = makeUser('Morfent', new Connection('127.0.0.1'));
+		this.tarUser = makeUser('ReallyNotMorfent', new Connection('127.0.0.2'));
 	});
 
 	afterEach(function () {
 		if (this.room.game) this.room.game.destroy();
-		if (this.user.connected) this.user.disconnectAll();
+		destroyUser(this.user);
+		destroyUser(this.tarUser);
 	});
 
 	it('should have each of its score caps divisible by 5', function () {
@@ -85,67 +94,69 @@ describe('Trivia', function () {
 		this.game.addPlayer(user2);
 
 		assert.strictEqual(this.game.playerCount, 1);
-
-		user2.disconnectAll();
-		user2.destroy();
+		destroyUser(user2);
 	});
 
 	it('should not add a player if another player had their username previously', function () {
+		let userid = this.user.userid;
+		let name = this.user.name;
 		this.game.addPlayer(this.user);
 		this.user.forceRename('Not Morfent', true);
+		this.user.prevNames[userid] = name;
 
-		let user2 = makeUser('Morfent', new Connection('127.0.0.1'));
+		let user2 = makeUser(name, new Connection('127.0.0.3'));
 		this.game.addPlayer(user2);
 
 		assert.strictEqual(this.game.playerCount, 1);
-
-		user2.disconnectAll();
-		user2.destroy();
+		destroyUser(user2);
 	});
 
 	it('should not add a player if they were kicked from the game', function () {
-		this.game.kickedUsers.add(this.user.userid);
-		this.game.addPlayer(this.user);
+		this.game.kickedUsers.add(this.tarUser.userid);
+		this.game.addPlayer(this.tarUser);
 		assert.strictEqual(this.game.playerCount, 0);
 	});
 
 	it('should kick players from the game', function () {
-		this.game.addPlayer(this.user);
-		this.game.kick(this.user);
+		this.game.addPlayer(this.tarUser);
+		this.game.kick(this.tarUser, this.user);
 		assert.strictEqual(this.game.playerCount, 0);
 	});
 
 	it('should not kick players already kicked from the game', function () {
-		this.game.addPlayer(this.user);
-		this.game.kick(this.user);
-		let res = this.game.kick(this.user);
+		this.game.addPlayer(this.tarUser);
+		this.game.kick(this.tarUser, this.user);
+		let res = this.game.kick(this.tarUser, this.user);
 		assert.strictEqual(typeof res, 'string');
 	});
 
 	it('should not kick users who were kicked under another name', function () {
-		this.game.addPlayer(this.user);
-		this.game.kick(this.user);
-		this.user.forceRename('Not Morfent', true);
-		this.user.prevNames.morfent = 'Morfent';
-		this.game.addPlayer(this.user);
+		this.game.addPlayer(this.tarUser);
+		this.game.kick(this.tarUser, this.user);
+
+		let userid = this.tarUser.userid;
+		let name = this.tarUser.name;
+		this.tarUser.forceRename('Not Morfent', true);
+		this.tarUser.prevNames[userid] = name;
+		this.game.addPlayer(this.tarUser);
 		assert.strictEqual(this.game.playerCount, 0);
 	});
 
 	it('should not add users who were kicked under another IP', function () {
-		this.game.addPlayer(this.user);
-		this.game.kick(this.user);
-		this.user.resetName();
+		this.game.addPlayer(this.tarUser);
+		this.game.kick(this.tarUser, this.user);
 
-		let user2 = makeUser('Morfent', new Connection('127.0.0.2'));
+		let name = this.tarUser.name;
+		this.tarUser.resetName();
+
+		let user2 = makeUser(name, new Connection('127.0.0.2'));
 		this.game.addPlayer(user2);
 		assert.strictEqual(this.game.playerCount, 0);
-
-		user2.disconnectAll();
-		user2.destroy();
+		destroyUser(user2);
 	});
 
 	it('should not kick users that aren\'t players in the game', function () {
-		this.game.kick(this.user);
+		this.game.kick(this.tarUser, this.user);
 		assert.strictEqual(this.game.playerCount, 0);
 	});
 
@@ -188,9 +199,9 @@ describe('Trivia', function () {
 
 		afterEach(function () {
 			if (this.room.game) this.game.destroy();
-			if (this.user.connected) this.user.disconnectAll();
-			if (this.user2.connected) this.user2.disconnectAll();
-			if (this.user3.connected) this.user3.disconnectAll();
+			destroyUser(this.user);
+			destroyUser(this.user2);
+			destroyUser(this.user3);
 		});
 
 		it('should calculate player points correctly', function () {
@@ -248,9 +259,9 @@ describe('Trivia', function () {
 
 		afterEach(function () {
 			if (this.room.game) this.game.destroy();
-			if (this.user.connected) this.user.disconnectAll();
-			if (this.user2.connected) this.user2.disconnectAll();
-			if (this.user3.connected) this.user3.disconnectAll();
+			destroyUser(this.user);
+			destroyUser(this.user2);
+			destroyUser(this.user3);
 		});
 
 		it('should calculate points correctly', function () {
@@ -319,9 +330,9 @@ describe('Trivia', function () {
 
 		afterEach(function () {
 			if (this.room.game) this.game.destroy();
-			if (this.user.connected) this.user.disconnectAll();
-			if (this.user2.connected) this.user2.disconnectAll();
-			if (this.user3.connected) this.user3.disconnectAll();
+			destroyUser(this.user);
+			destroyUser(this.user2);
+			destroyUser(this.user3);
 		});
 
 		it('should calculate points correctly', function () {
