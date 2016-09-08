@@ -256,40 +256,40 @@ class Trivia extends Rooms.RoomGame {
 
 	// Kicks a player from the game, preventing them from joining it again
 	// until the next game begins.
-	kick(user) {
-		if (!this.players[user.userid]) {
-			if (this.kickedUsers.has(user.userid)) return 'User ' + user.name + ' has already been kicked from the trivia game.';
+	kick(tarUser, user) {
+		if (!this.players[tarUser.userid]) {
+			if (this.kickedUsers.has(tarUser.userid)) return 'User ' + tarUser.name + ' has already been kicked from the trivia game.';
 
-			for (let id in user.prevNames) {
-				if (this.kickedUsers.has(id)) return 'User ' + user.name + ' has already been kicked from the trivia game.';
+			for (let id in tarUser.prevNames) {
+				if (this.kickedUsers.has(id)) return 'User ' + tarUser.name + ' has already been kicked from the trivia game.';
 			}
 
 			for (let kickedUserid of this.kickedUsers) {
 				let kickedUser = Users.get(kickedUserid);
 				if (kickedUser) {
-					if (kickedUser.prevNames[user.userid]) {
-						return 'User ' + user.name + ' has already been kicked from the trivia game.';
+					if (kickedUser.prevNames[tarUser.userid]) {
+						return 'User ' + tarUser.name + ' has already been kicked from the trivia game.';
 					}
 
 					let prevNames = Object.keys(kickedUser.prevNames);
-					let nameMatch = prevNames.some(id => user.prevNames[id]);
-					if (nameMatch) return 'User ' + user.name + ' has already been kicked from the trivia game.';
+					let nameMatch = prevNames.some(id => tarUser.prevNames[id]);
+					if (nameMatch) return 'User ' + tarUser.name + ' has already been kicked from the trivia game.';
 
 					let ips = Object.keys(kickedUser.ips);
-					let ipMatch = ips.some(ip => user.ips[ip]);
-					if (ipMatch) return 'User ' + user.name + ' has already been kicked from the trivia game.';
+					let ipMatch = ips.some(ip => tarUser.ips[ip]);
+					if (ipMatch) return 'User ' + tarUser.name + ' has already been kicked from the trivia game.';
 				}
 			}
 
-			return 'User ' + user.name + ' is not a player in the current trivia game.';
+			return 'User ' + tarUser.name + ' is not a player in the current trivia game.';
 		}
 
-		this.kickedUsers.add(user.userid);
-		for (let id in user.prevNames) {
+		this.kickedUsers.add(tarUser.userid);
+		for (let id in tarUser.prevNames) {
 			this.kickedUsers.add(id);
 		}
 
-		super.removePlayer(user);
+		super.removePlayer(tarUser);
 	}
 
 	leave(user) {
@@ -410,6 +410,25 @@ class Trivia extends Rooms.RoomGame {
 				leaderboard[leader][rankIdx] = rank;
 			}
 		}
+
+		for (let i in this.players) {
+			let player = this.players[i];
+			let user = Users.get(player.userid);
+			if (!user || user.userid === winner.userid) continue;
+			user.sendTo(
+				this.room.id,
+				"You gained " + player.points + " and answered " +
+				player.correctAnswers + " questions correctly."
+			);
+		}
+
+		let buf = "(User " + winner.name + " won the game of " + this.mode +
+			" mode trivia under the " + this.category + " category with a cap of " +
+			this.cap + " points, with " + winner.points + " points and " +
+			winner.correctAnswers + " correct answers!)";
+		this.room.sendModCommand(buf);
+		this.room.logEntry(buf);
+		this.room.modlog(buf);
 
 		writeTriviaData();
 		this.destroy();
@@ -750,7 +769,7 @@ const commands = {
 		let targetUser = this.targetUser;
 		if (!targetUser) return this.errorReply("The user \"" + target + "\" does not exist.");
 
-		let res = room.game.kick(targetUser);
+		let res = room.game.kick(targetUser, user);
 		if (typeof res === 'string') this.sendReply(res);
 	},
 	kickhelp: ["/trivia kick [username] - Kick players from a trivia game by username. Requires: % @ # & ~"],
