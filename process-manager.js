@@ -47,19 +47,30 @@ class ProcessWrapper extends EventEmitter {
 	}
 }
 
+// execFile - the path to the file to spawn the child process(es) from
+// maxProcesses - the maximum number of child processes to spawn
+// isChatBased - the process manager handles some chat functionality
 class ProcessManager {
 	constructor(options) {
-		if (!options) options = {};
+		if (!('execFile' in options)) {
+			Monitor.debug(
+				"No execFile property was missing form the options object to be " +
+				"given to the ProcessManager constructor!"
+			);
+		} else if (!('maxProcesses' in options) || !('isChatBased' in options)) {
+			Monitor.debug(
+				"An options object given to the ProcessManager constructor is " +
+				"missing required properties! The filename given is: " + (options.execFile || '""') + "."
+			);
+		}
 
 		this.processes = [];
 		this.taskId = 0;
+		this.execFile = options.execFile;
+		this.maxProcesses = (typeof options.maxProcesses === 'number') ? options.maxProcesses : 1;
+		this.isChatBased = !!options.isChatBased;
 
-		Object.assign(this, options);
-		if (typeof this.maxProcesses !== 'number') {
-			this.maxProcesses = 1;
-		}
-
-		processManagers.set(this, this.execFile);
+		processManagers.set(this, options.execFile);
 	}
 
 	spawn() {
@@ -134,4 +145,5 @@ class ProcessManager {
 }
 
 ProcessManager.cache = processManagers;
+ProcessManager.ProcessWrapper = ProcessWrapper;
 module.exports = ProcessManager;

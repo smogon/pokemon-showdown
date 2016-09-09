@@ -17,10 +17,8 @@
 const crypto = require('crypto');
 const ProcessManager = require('./process-manager');
 
-const PM = exports.PM = new ProcessManager({
-	maxProcesses: 1,
-	execFile: 'verifier',
-	onMessageUpstream: function (message) {
+class VerifierManager extends ProcessManager {
+	onMessageUpstream(message) {
 		// Protocol:
 		// success: "[id]|1"
 		// failure: "[id]|0"
@@ -33,8 +31,9 @@ const PM = exports.PM = new ProcessManager({
 			this.pendingTasks.delete(id);
 			this.release();
 		}
-	},
-	onMessageDownstream: function (message) {
+	}
+
+	onMessageDownstream(message) {
 		// protocol:
 		// "[id]|{data, sig}"
 		let pipeIndex = message.indexOf('|');
@@ -42,8 +41,9 @@ const PM = exports.PM = new ProcessManager({
 
 		let data = JSON.parse(message.slice(pipeIndex + 1));
 		process.send(id + '|' + this.receive(data));
-	},
-	receive: function (data) {
+	}
+
+	receive(data) {
 		let verifier = crypto.createVerify(Config.loginserverkeyalgo);
 		verifier.update(data.data);
 		let success = false;
@@ -52,7 +52,15 @@ const PM = exports.PM = new ProcessManager({
 		} catch (e) {}
 
 		return success ? 1 : 0;
-	},
+	}
+}
+
+exports.VerifierManager = VerifierManager;
+
+const PM = exports.PM = new VerifierManager({
+	execFile: __filename,
+	maxProcesses: global.Config ? Config.verifierprocesses : 1,
+	isChatBased: false,
 });
 
 if (process.send && module === process.mainModule) {

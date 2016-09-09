@@ -18,19 +18,24 @@ global.Config = require('./config/config');
 const ProcessManager = require('./process-manager');
 const BattleEngine = require('./battle-engine').Battle;
 
-const SimulatorProcess = new ProcessManager({
-	maxProcesses: Config.simulatorprocesses,
-	execFile: 'simulator',
-	onMessageUpstream: function (message) {
+class SimulatorManager extends ProcessManager {
+	onMessageUpstream(message) {
 		let lines = message.split('\n');
 		let battle = this.pendingTasks.get(lines[0]);
 		if (battle) battle.receive(lines);
-	},
-	eval: function (code) {
+	}
+
+	eval(code) {
 		for (let process of this.processes) {
 			process.send('|eval|' + code);
 		}
-	},
+	}
+}
+
+const SimulatorProcess = new SimulatorManager({
+	execFile: __filename,
+	maxProcesses: global.Config ? Config.simulatorprocesses : 1,
+	isChatBased: false,
 });
 
 let slice = Array.prototype.slice;
@@ -441,6 +446,7 @@ class Battle {
 
 exports.BattlePlayer = BattlePlayer;
 exports.Battle = Battle;
+exports.SimulatorManager = SimulatorManager;
 exports.SimulatorProcess = SimulatorProcess;
 
 exports.create = function (id, format, rated, room) {
