@@ -479,9 +479,7 @@ exports.BattleFormats = {
 		effectType: 'Banlist',
 		name: 'Baton Pass Clause',
 		onStart: function () {
-			let format = this.getFormat();
-			let speedPassBan = format.id in {'nu': 1, 'nususpecttest': 1, 'nucurrent': 1};
-			this.add('rule', 'Baton Pass Clause: Limit one Baton Passer, can\'t pass Spe' + (speedPassBan ? 'ed' : ' and other stats simultaneously'));
+			this.add('rule', 'Baton Pass Clause: Limit one Baton Passer, can\'t pass Spe and other stats simultaneously');
 		},
 		onValidateTeam: function (team, format) {
 			let BPcount = 0;
@@ -521,8 +519,6 @@ exports.BattleFormats = {
 			}
 			if (!speedBoosted) {
 				return;
-			} else if (format.id in {'nu': 1, 'nususpecttest': 1, 'nucurrent': 1}) {
-				return [(set.name || set.species) + " can Baton Pass Speed boosts, which is banned by Baton Pass Clause in NU."];
 			}
 
 			// check if non-Speed boosted
@@ -538,6 +534,54 @@ exports.BattleFormats = {
 			if (!nonSpeedBoosted) return;
 
 			return [(set.name || set.species) + " can Baton Pass both Speed and a different stat, which is banned by Baton Pass Clause."];
+		},
+	},
+	batonpassspeedclause: {
+		effectType: 'Banlist',
+		name: 'Baton Pass Speed Clause',
+		onStart: function () {
+			this.add('rule', 'Baton Pass Clause: Limit one Baton Passer, can\'t pass Speed');
+		},
+		onValidateTeam: function (team, format) {
+			let BPcount = 0;
+			for (let i = 0; i < team.length; i++) {
+				if (team[i].moves.indexOf('Baton Pass') >= 0) {
+					BPcount++;
+				}
+				if (BPcount > 1) {
+					return [(team[i].name || team[i].species) + " has Baton Pass, but you are limited to one Baton Pass user by Baton Pass Clause."];
+				}
+			}
+		},
+		onValidateSet: function (set, format, setHas) {
+			if (!('batonpass' in setHas)) return;
+
+			// check if Speed is boosted
+			let speedBoosted = false;
+			let nonSpeedBoosted = false;
+			for (let i = 0; i < set.moves.length; i++) {
+				let move = this.getMove(set.moves[i]);
+				if (move.boosts && move.boosts.spe > 0) {
+					speedBoosted = true;
+				}
+				if (move.boosts && (move.boosts.atk > 0 || move.boosts.def > 0 || move.boosts.spa > 0 || move.boosts.spd > 0)) {
+					nonSpeedBoosted = true;
+				}
+			}
+
+			let boostSpeed = ['flamecharge', 'geomancy', 'motordrive', 'rattled', 'speedboost', 'steadfast', 'weakarmor', 'salacberry'];
+			if (!speedBoosted) {
+				for (let i = 0; i < boostSpeed.length; i++) {
+					if (boostSpeed[i] in setHas) {
+						speedBoosted = true;
+						break;
+					}
+				}
+			}
+			if (!speedBoosted) {
+				return;
+			}
+			return [(set.name || set.species) + " can Baton Pass Speed boosts, which is banned by Baton Pass Speed Clause."];
 		},
 	},
 	hppercentagemod: {
