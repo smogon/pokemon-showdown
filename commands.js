@@ -471,7 +471,7 @@ exports.commands = {
 
 	pminfobox: function (target, room, user, connection) {
 		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
-		if (!user.can('addhtml', null, room)) return false;
+		if (!this.can('addhtml', null, room)) return false;
 		if (!target) return this.parse("/help pminfobox");
 
 		target = this.canHTML(target);
@@ -2243,10 +2243,7 @@ exports.commands = {
 		if (!targetUser) return this.errorReply("User '" + name + "' not found.");
 		let userid = targetUser.getLastId();
 		let hidetype = '';
-		if (!user.can('lock', targetUser) && !user.can('ban', targetUser, room)) {
-			this.errorReply("/hidetext - Access denied.");
-			return false;
-		}
+		if (!user.can('lock', targetUser) && !this.can('ban', targetUser, room)) return false;
 
 		if (targetUser.locked) {
 			hidetype = 'hide|';
@@ -2266,7 +2263,7 @@ exports.commands = {
 	banword: {
 		add: function (target, room, user) {
 			if (!target || target === ' ') return this.parse('/help banword');
-			if (!user.can('declare', null, room)) return;
+			if (!this.can('declare', null, room)) return false;
 
 			if (!room.banwords) room.banwords = [];
 
@@ -2306,7 +2303,7 @@ exports.commands = {
 
 		delete: function (target, room, user) {
 			if (!target) return this.parse('/help banword');
-			if (!user.can('declare', null, room)) return;
+			if (!this.can('declare', null, room)) return false;
 
 			if (!room.banwords) return this.errorReply("This room has no banned phrases.");
 
@@ -2336,7 +2333,7 @@ exports.commands = {
 		},
 
 		list: function (target, room, user) {
-			if (!user.can('ban', null, room)) return;
+			if (!this.can('ban', null, room)) return false;
 
 			if (!room.banwords) return this.sendReply("This room has no banned phrases.");
 
