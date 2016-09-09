@@ -89,7 +89,7 @@ exports.Formats = [
 		],
 		section: "ORAS Singles",
 
-		ruleset: ['RU'],
+		ruleset: ['RU', 'Baton Pass Speed Clause'],
 		banlist: ['RU', 'BL3'],
 	},
 	{
