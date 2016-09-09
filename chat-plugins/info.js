@@ -1232,7 +1232,7 @@ exports.commands = {
 			buf += "<strong>" + (worker.pid || worker.process.pid) + "</strong> - Sockets " + i + "<br />";
 		}
 
-		const ProcessManager = require('./../process-manager');
+		const ProcessManager = require('../process-manager');
 		for (let managerData of ProcessManager.cache) {
 			let i = 0;
 			let processType = path.basename(managerData[1]);
