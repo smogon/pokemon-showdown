@@ -96,7 +96,7 @@ exports.commands = {
 				if (punishment) {
 					let expiresIn = new Date(punishment[2]).getTime() - Date.now();
 					let expiresDays = Math.round(expiresIn / 1000 / 60 / 60 / 24);
-					buf += ` (expires in around ${expiresDays} day${Tools.plural(expiresDays)})`;
+					if (expiresIn > 1) buf += ` (expires in around ${expiresDays} day${Tools.plural(expiresDays)})`;
 					if (punishment[3]) buf += ` (reason: ${punishment[3]})`;
 				}
 			} else if (targetUser.locked) {
@@ -116,7 +116,7 @@ exports.commands = {
 				if (punishment) {
 					let expiresIn = new Date(punishment[2]).getTime() - Date.now();
 					let expiresDays = Math.round(expiresIn / 1000 / 60 / 60 / 24);
-					buf += ` (expires in around ${expiresDays} day${Tools.plural(expiresDays)})`;
+					if (expiresIn > 1) buf += ` (expires in around ${expiresDays} day${Tools.plural(expiresDays)})`;
 					if (punishment[3]) buf += ` (reason: ${punishment[3]})`;
 				}
 			}
