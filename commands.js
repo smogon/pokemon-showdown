@@ -24,10 +24,6 @@ const MAX_REASON_LENGTH = 300;
 const MUTE_LENGTH = 7 * 60 * 1000;
 const HOURMUTE_LENGTH = 60 * 60 * 1000;
 
-const SLOWCHAT_MINIMUM = 2;
-const SLOWCHAT_MAXIMUM = 60;
-const SLOWCHAT_USER_REQUIREMENT = 10;
-
 exports.commands = {
 
 	version: function (target, room, user) {
@@ -815,51 +811,6 @@ exports.commands = {
 	privateroomhelp: ["/secretroom - Makes a room secret. Secret rooms are visible to & and up. Requires: & ~",
 		"/hiddenroom [on/off] - Makes a room hidden. Hidden rooms are visible to % and up, and inherit global ranks. Requires: \u2605 & ~",
 		"/publicroom - Makes a room public. Requires: \u2605 & ~"],
-
-	modjoin: function (target, room, user) {
-		if (!target) {
-			const modjoinSetting = room.modjoin === true ? "sync" : room.modjoin || "off";
-			return this.sendReply(`Modjoin is currently set to: ${modjoinSetting}`);
-		}
-		if (room.battle || room.isPersonal) {
-			if (!this.can('editroom', null, room)) return;
-		} else {
-			if (!this.can('makeroom')) return;
-		}
-		if (room.tour && !room.tour.modjoin) return this.errorReply(`You can't do this in tournaments where modjoin is prohibited.`);
-		if (target === 'off' || target === 'false') {
-			if (!room.modjoin) return this.errorReply(`Modjoin is already turned off in this room.`);
-			delete room.modjoin;
-			this.addModCommand(`${user.name} turned off modjoin.`);
-			if (room.chatRoomData) {
-				delete room.chatRoomData.modjoin;
-				Rooms.global.writeChatRoomData();
-			}
-			return;
-		} else if (target === 'sync') {
-			if (room.modjoin === true) return this.errorReply(`Modjoin is already set to sync modchat in this room.`);
-			room.modjoin = true;
-			this.addModCommand(`${user.name} set modjoin to sync with modchat.`);
-		} else if (target in Config.groups) {
-			if (room.battle && !this.can('makeroom')) return;
-			if (room.isPersonal && !user.can('makeroom') && target !== '+') return this.errorReply(`/modjoin - Access denied from setting modjoin past + in group chats.`);
-			if (room.modjoin === target) return this.errorReply(`Modjoin is already set to ${target} in this room.`);
-			room.modjoin = target;
-			this.addModCommand(`${user.name} set modjoin to ${target}.`);
-		} else {
-			this.errorReply(`Unrecognized modjoin setting.`);
-			this.parse('/help modjoin');
-			return false;
-		}
-		if (room.chatRoomData) {
-			room.chatRoomData.modjoin = room.modjoin;
-			Rooms.global.writeChatRoomData();
-		}
-		if (!room.modchat) this.parse('/modchat ' + Config.groupsranking[1]);
-		if (!room.isPrivate) this.parse('/hiddenroom');
-	},
-	modjoinhelp: ["/modjoin [+|%|@|*|&|~|#|off] - Sets modjoin. Users lower than the specified rank can't join this room. Requires: # & ~",
-		"/modjoin [sync|off] - Sets modjoin. Only users who can speak in modchat can join this room. Requires: # & ~"],
 
 	officialchatroom: 'officialroom',
 	officialroom: function (target, room, user) {
@@ -1962,145 +1913,6 @@ exports.commands = {
 	roomdeauth: function (target, room, user) {
 		return this.parse('/roomdemote ' + target + ', deauth');
 	},
-
-	modchat: function (target, room, user) {
-		if (!target) return this.sendReply("Moderated chat is currently set to: " + room.modchat);
-		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
-		if (!this.can('modchat', null, room)) return false;
-
-		if (room.modchat && room.modchat.length <= 1 && Config.groupsranking.indexOf(room.modchat) > 1 && !user.can('modchatall', null, room)) {
-			return this.errorReply("/modchat - Access denied for removing a setting higher than " + Config.groupsranking[1] + ".");
-		}
-		if (room.requestModchat) {
-			let error = room.requestModchat(user);
-			if (error) return this.errorReply(error);
-		}
-
-		target = target.toLowerCase().trim();
-		let currentModchat = room.modchat;
-		switch (target) {
-		case 'off':
-		case 'false':
-		case 'no':
-			room.modchat = false;
-			break;
-		case 'ac':
-		case 'autoconfirmed':
-			room.modchat = 'autoconfirmed';
-			break;
-		case 'player':
-			target = '\u2605';
-			/* falls through */
-		default: {
-			if (!Config.groups[target]) {
-				this.errorReply("The rank '" + target + '" was unrecognized as a modchat level.');
-				return this.parse('/help modchat');
-			}
-			if (Config.groupsranking.indexOf(target) > 1 && !user.can('modchatall', null, room)) {
-				return this.errorReply("/modchat - Access denied for setting higher than " + Config.groupsranking[1] + ".");
-			}
-			let roomGroup = (room.auth && room.isPrivate === true ? ' ' : user.group);
-			if (room.auth && user.userid in room.auth) roomGroup = room.auth[user.userid];
-			if (Config.groupsranking.indexOf(target) > Math.max(1, Config.groupsranking.indexOf(roomGroup)) && !user.can('makeroom')) {
-				return this.errorReply("/modchat - Access denied for setting higher than " + roomGroup + ".");
-			}
-			room.modchat = target;
-			break;
-		}}
-		if (currentModchat === room.modchat) {
-			return this.errorReply("Modchat is already set to " + currentModchat + ".");
-		}
-		if (!room.modchat) {
-			this.add("|raw|<div class=\"broadcast-blue\"><b>Moderated chat was disabled!</b><br />Anyone may talk now.</div>");
-		} else {
-			let modchat = Tools.escapeHTML(room.modchat);
-			this.add("|raw|<div class=\"broadcast-red\"><b>Moderated chat was set to " + modchat + "!</b><br />Only users of rank " + modchat + " and higher can talk.</div>");
-		}
-		if (room.battle && !room.modchat && !user.can('modchat')) room.requestModchat(null);
-		this.privateModCommand("(" + user.name + " set modchat to " + room.modchat + ")");
-
-		if (room.chatRoomData) {
-			room.chatRoomData.modchat = room.modchat;
-			Rooms.global.writeChatRoomData();
-		}
-	},
-	modchathelp: ["/modchat [off/autoconfirmed/+/%/@/*/#/&/~] - Set the level of moderated chat. Requires: *, @ for off/autoconfirmed/+ options, # & ~ for all the options"],
-
-	slowchat: function (target, room, user) {
-		if (!target) return this.sendReply("Slow chat is currently set to: " + (room.slowchat ? room.slowchat : false));
-		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
-		if (!this.can('modchat', null, room)) return false;
-
-		let targetInt = parseInt(target);
-		if (target === 'off' || target === 'disable' || target === 'false') {
-			if (!room.slowchat) return this.errorReply("Slow chat is already disabled in this room.");
-			room.slowchat = false;
-			this.add("|raw|<div class=\"broadcast-blue\"><b>Slow chat was disabled!</b><br />There is no longer a set minimum time between messages.</div>");
-		} else if (targetInt) {
-			if (room.userCount < SLOWCHAT_USER_REQUIREMENT) return this.errorReply("This room must have at least " + SLOWCHAT_USER_REQUIREMENT + " users to set slowchat; it only has " + room.userCount + " right now.");
-			if (room.slowchat === targetInt) return this.errorReply("Slow chat is already set for " + room.slowchat + " seconds in this room.");
-			if (targetInt < SLOWCHAT_MINIMUM) targetInt = SLOWCHAT_MINIMUM;
-			if (targetInt > SLOWCHAT_MAXIMUM) targetInt = SLOWCHAT_MAXIMUM;
-			room.slowchat = targetInt;
-			this.add("|raw|<div class=\"broadcast-red\"><b>Slow chat was enabled!</b><br />Messages must have at least " + room.slowchat + " seconds between them.</div>");
-		} else {
-			return this.parse("/help slowchat");
-		}
-		this.privateModCommand("(" + user.name + " set slowchat to " + room.slowchat + ")");
-
-		if (room.chatRoomData) {
-			room.chatRoomData.slowchat = room.slowchat;
-			Rooms.global.writeChatRoomData();
-		}
-	},
-	slowchathelp: ["/slowchat [number] - Sets a limit on how often users in the room can send messages, between 2 and 60 seconds. Requires @ * # & ~",
-		"/slowchat [off/disable] - Disables slowchat in the room. Requires @ * # & ~"],
-
-	stretching: function (target, room, user) {
-		if (!target) return this.sendReply("Stretching in this room is currently set to: " + (room.filterStretching ? room.filterStretching : false));
-		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
-		if (!this.can('editroom', null, room)) return false;
-
-		if (target === 'enable' || target === 'on') {
-			if (room.filterStretching) return this.errorReply("Stretching is already enabled in this room.");
-			room.filterStretching = true;
-		} else if (target === 'disable' || target === 'off') {
-			if (!room.filterStretching) return this.errorReply("Stretching is already disabled in this room.");
-			room.filterStretching = false;
-		} else {
-			return this.parse("/help stretching");
-		}
-		this.privateModCommand("(" + user.name + " set stretching to " + room.filterStretching + ")");
-
-		if (room.chatRoomData) {
-			room.chatRoomData.filterStretching = room.filterStretching;
-			Rooms.global.writeChatRoomData();
-		}
-	},
-	stretchinghelp: ["/stretching [enable/disable] - Toggles having the server check messages containing too much stretching. Requires # & ~"],
-
-	capitals: function (target, room, user) {
-		if (!target) return this.sendReply("Capitals in this room is currently set to: " + (room.filterCaps ? room.filterCaps : false));
-		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
-		if (!this.can('editroom', null, room)) return false;
-
-		if (target === 'enable' || target === 'on') {
-			if (room.filterCaps) return this.errorReply("Capitals is already enabled in this room.");
-			room.filterCaps = true;
-		} else if (target === 'disable' || target === 'off') {
-			if (!room.filterCaps) return this.errorReply("Capitals is already disabled in this room.");
-			room.filterCaps = false;
-		} else {
-			return this.parse("/help capitals");
-		}
-		this.privateModCommand("(" + user.name + " set capitals to " + room.filterCaps + ")");
-
-		if (room.chatRoomData) {
-			room.chatRoomData.filterCaps = room.filterCaps;
-			Rooms.global.writeChatRoomData();
-		}
-	},
-	capitalshelp: ["/capitals [enable/disable] - Toggles having the server check messages containing too many capitals. Requires # & ~"],
 
 	declare: function (target, room, user) {
 		if (!target) return this.parse('/help declare');
