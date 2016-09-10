@@ -1195,12 +1195,10 @@ class User {
 			return Promise.resolve(false);
 		}
 		let gameCount = this.games.size;
-		if (gameCount > 4) {
-			connection.popup(`Due to high load, you are limited to 4 games at the same time.`);
+		if (Monitor.countConcurrentBattle(gameCount, connection)) {
 			return Promise.resolve(false);
 		}
-		if (Monitor.countPrepBattle(connection.ip || connection.latestIp, this.name)) {
-			connection.popup(`Due to high load, you are limited to 6 battles every 3 minutes.`);
+		if (Monitor.countPrepBattle(connection.ip || connection.latestIp, connection)) {
 			return Promise.resolve(false);
 		}
 
