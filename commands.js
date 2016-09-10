@@ -2301,7 +2301,7 @@ exports.commands = {
 
 		for (let roomid of ['development', 'staff', 'upperstaff']) {
 			let curRoom = Rooms(roomid);
-			if (curRoom) curRoom.add("|c|~|(" + user.name + " used /hotpatch " + target + ")").update();
+			if (curRoom) curRoom.add(`|m|${user.name} used /hotpatch ${target}.`).update();
 		}
 
 		try {

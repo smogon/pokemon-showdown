@@ -98,6 +98,10 @@ displayed inline because they happen too often. For instance, the main server
 gets around 5 joins/leaves a second, and showing that inline with chat would
 make it near-impossible to chat.
 
+Another message type is `m:` followed by a timestamp from the server, followed
+by the message.  Example: `|m:|timestamp|message`, this will make it so that the
+message will have a timestamp, if a user has those enabled for their settings.
+
 Some outgoing message types
 ---------------------------
 
@@ -167,6 +171,12 @@ represented by a space), and the rest of the string being their username.
 >
 > The exact fate of this command is uncertain - it may or may not be
 > replaced with a more generalized way to transmit timestamps at some point.
+
+`|m:|TIMESTAMP|MESSAGE`
+
+> `m:` is pretty much the same as `m`, but also comes with a UNIX timestamp;
+> (the number of seconds since 1970). This is used for accurate timestamps
+> in chat logs.
 
 `|battle|ROOMID|USER1|USER2` or `|b|ROOMID|USER1|USER2`
 

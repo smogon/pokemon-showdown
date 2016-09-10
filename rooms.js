@@ -66,9 +66,12 @@ let Room = (() => {
 	Room.prototype.add = function (message) {
 		if (typeof message !== 'string') throw new Error("Deprecated message type");
 		if (message.startsWith('|uhtmlchange|')) return this.uhtmlchange(message);
+		let time = (~~(Date.now() / 1000));
 		this.logEntry(message);
 		if (this.logTimes && message.substr(0, 3) === '|c|') {
-			message = '|c:|' + (~~(Date.now() / 1000)) + '|' + message.substr(3);
+			message = `|c:|${time}|${message.substr(3)}`;
+		} else if (this.logTimes && message.substr(0, 3) === '|m|') {
+			message = `|m:|${time}|${message.substr(3)}`;
 		}
 		this.log.push(message);
 		return this;
