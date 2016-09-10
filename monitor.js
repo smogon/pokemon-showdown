@@ -113,9 +113,21 @@ const Monitor = module.exports = {
 	/**
 	 * Counts battle prep. Returns true if too much
 	 */
-	countPrepBattle: function (ip) {
+	countPrepBattle: function (ip, connection) {
 		let count = this.battlePreps.increment(ip, 3 * 60 * 1000)[0];
-		if (count > 6) return true;
+		if (count > 12) {
+			connection.popup(`Due to high load, you are limited to 12 battles and team validations every 3 minutes.`);
+			return true;
+		}
+	},
+	/**
+	 * Counts concurrent battles. Returns true if too much
+	 */
+	countConcurrentBattle: function (count, connection) {
+		if (count > 5) {
+			connection.popup(`Due to high load, you are limited to 5 games at the same time.`);
+			return true;
+		}
 	},
 	/**
 	 * Counts group chat creation. Returns true if too much.
