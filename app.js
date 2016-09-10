@@ -85,7 +85,7 @@ try {
 }
 
 if (Config.watchconfig) {
-	let configPath = require.resolve(__dirname, 'config/config');
+	let configPath = require.resolve('./config/config');
 	fs.watchFile(configPath, (curr, prev) => {
 		if (curr.mtime <= prev.mtime) return;
 		try {
