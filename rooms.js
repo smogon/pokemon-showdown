@@ -85,6 +85,21 @@ let Room = (() => {
 		this.send(message);
 		return this;
 	};
+	Room.prototype.unlinkHide = function (user, punishment) {
+		let rooms = user.talkedIn;
+		if (rooms < 0) return false;
+		if (punishment === 'LOCK' || punishment === 'NAMELOCK' || punishment === 'BAN') {
+			rooms.forEach(curRoom => {
+				if (!Rooms(curRoom)) return;
+				Rooms(curRoom).add('|unlink|hide|' + user.userid).update();
+				return;
+			});
+		} else if (punishment === 'ROOMBAN') {
+			this.add('|unlink|roomhide|' + user.userid).update();
+		} else {
+			return false;
+		}
+	};
 	Room.prototype.logEntry = function () {};
 	Room.prototype.addRaw = function (message) {
 		return this.add('|raw|' + message);

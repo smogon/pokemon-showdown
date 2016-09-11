@@ -1256,7 +1256,7 @@ exports.commands = {
 			Monitor.log("[CrisisMonitor] Confirmed user " + targetUser.name + (targetUser.confirmed !== targetUser.userid ? " (" + targetUser.confirmed + ")" : "") + " was roombanned from " + room.id + " by " + user.name + ", and should probably be demoted.");
 		}
 		let lastid = targetUser.getLastId();
-		this.add('|unlink|roomhide|' + lastid);
+		room.unlinkHide(targetUser, 'ROOMBAN');
 		if (lastid !== toId(this.inputUsername)) this.add('|unlink|roomhide|' + toId(this.inputUsername));
 	},
 	roombanhelp: ["/roomban [username] - Bans the user from the room you are in. Requires: @ # & ~"],
@@ -1491,7 +1491,7 @@ exports.commands = {
 		} else if (acAccount) {
 			this.privateModCommand("(" + name + "'s ac account: " + acAccount + ")");
 		}
-		this.add('|unlink|hide|' + userid);
+		room.unlinkHide(user, 'LOCK');
 		if (userid !== toId(this.inputUsername)) this.add('|unlink|hide|' + toId(this.inputUsername));
 
 		this.globalModlog("LOCK", targetUser, " by " + user.name + (target ? ": " + target : ""));
@@ -1550,7 +1550,7 @@ exports.commands = {
 		} else if (acAccount) {
 			this.privateModCommand("(" + name + "'s ac account: " + acAccount + ")");
 		}
-		this.add('|unlink|hide|' + userid);
+		room.unlinkHide(targetUser, 'LOCK');
 		if (userid !== toId(this.inputUsername)) this.add('|unlink|hide|' + toId(this.inputUsername));
 
 		this.globalModlog("WEEKLOCK", targetUser, " by " + user.name + (target ? ": " + target : ""));
@@ -1643,7 +1643,7 @@ exports.commands = {
 			this.privateModCommand("(" + name + "'s ac account: " + acAccount + ")");
 		}
 
-		this.add('|unlink|hide|' + userid);
+		room.unlinkHide(targetUser, 'BAN');
 		if (userid !== toId(this.inputUsername)) this.add('|unlink|hide|' + toId(this.inputUsername));
 		Punishments.ban(targetUser, null, null, target);
 		this.globalModlog("BAN", targetUser, " by " + user.name + (target ? ": " + target : ""));
@@ -2015,6 +2015,7 @@ exports.commands = {
 		if (targetUser.namelocked) return this.errorReply("User '" + target + "' is already namelocked.");
 
 		this.addModCommand("" + targetUser.name + " was namelocked by " + user.name + "." + (reason ? " (" + reason + ")" : ""));
+		room.unlinkHide(targetUser, 'NAMELOCK');
 		this.globalModlog("NAMELOCK", targetUser, " by " + user.name + (reason ? ": " + reason : ""));
 		Rooms.global.cancelSearch(targetUser);
 		Punishments.namelock(targetUser, null, null, reason);
