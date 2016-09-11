@@ -246,7 +246,7 @@ exports.BattleFormatsData = {
 	},
 	diglett: {
 		randomBattleMoves: ["earthquake", "rockslide", "stealthrock", "suckerpunch", "reversal", "substitute"],
-		tier: "LC",
+		tier: "NU",
 	},
 	dugtrio: {
 		inherit: true,
@@ -315,7 +315,7 @@ exports.BattleFormatsData = {
 	},
 	kadabra: {
 		randomBattleMoves: ["calmmind", "psychic", "psyshock", "hiddenpowerfighting", "shadowball", "encore", "substitute"],
-		tier: "NFE",
+		tier: "NU",
 	},
 	alakazam: {
 		inherit: true,
@@ -724,7 +724,7 @@ exports.BattleFormatsData = {
 	espeon: {
 		inherit: true,
 		randomBattleMoves: ["psychic", "psyshock", "substitute", "wish", "shadowball", "hiddenpowerfighting", "calmmind", "morningsun", "storedpower", "batonpass"],
-		tier: "NU",
+		tier: "BL2",
 	},
 	umbreon: {
 		inherit: true,
@@ -1055,7 +1055,7 @@ exports.BattleFormatsData = {
 	gligar: {
 		inherit: true,
 		randomBattleMoves: ["stealthrock", "toxic", "roost", "taunt", "swordsdance", "earthquake", "uturn", "stoneedge", "acrobatics"],
-		tier: "LC",
+		tier: "NU",
 	},
 	gliscor: {
 		randomBattleMoves: ["swordsdance", "acrobatics", "earthquake", "roost", "substitute", "taunt", "icefang", "protect", "toxic", "stealthrock"],
@@ -1196,7 +1196,7 @@ exports.BattleFormatsData = {
 	entei: {
 		inherit: true,
 		randomBattleMoves: ["extremespeed", "flareblitz", "ironhead", "flamecharge", "stoneedge"],
-		tier: "NU",
+		tier: "BL2",
 	},
 	suicune: {
 		inherit: true,
@@ -1483,7 +1483,7 @@ exports.BattleFormatsData = {
 	meditite: {
 		inherit: true,
 		randomBattleMoves: ["highjumpkick", "psychocut", "icepunch", "thunderpunch", "trick", "fakeout", "bulletpunch", "drainpunch"],
-		tier: "NU",
+		tier: "LC",
 	},
 	medicham: {
 		randomBattleMoves: ["highjumpkick", "drainpunch", "psychocut", "icepunch", "thunderpunch", "trick", "fakeout", "bulletpunch"],
@@ -1768,7 +1768,7 @@ exports.BattleFormatsData = {
 	},
 	clamperl: {
 		randomBattleMoves: ["shellsmash", "icebeam", "surf", "hiddenpowergrass", "hiddenpowerelectric", "substitute"],
-		tier: "LC",
+		tier: "NU",
 	},
 	huntail: {
 		randomBattleMoves: ["shellsmash", "return", "hydropump", "batonpass", "suckerpunch"],
@@ -2103,7 +2103,7 @@ exports.BattleFormatsData = {
 	},
 	hippopotas: {
 		randomBattleMoves: ["earthquake", "slackoff", "roar", "stealthrock", "protect", "toxic"],
-		tier: "LC",
+		tier: "BL2",
 	},
 	hippowdon: {
 		randomBattleMoves: ["earthquake", "slackoff", "roar", "stealthrock", "protect", "toxic", "icefang", "stoneedge", "stockpile"],
@@ -2139,7 +2139,7 @@ exports.BattleFormatsData = {
 	},
 	snover: {
 		randomBattleMoves: ["blizzard", "iceshard", "gigadrain", "leechseed", "substitute"],
-		tier: "LC",
+		tier: "BL2",
 	},
 	abomasnow: {
 		randomBattleMoves: ["blizzard", "iceshard", "gigadrain", "leechseed", "substitute", "focusblast"],
