@@ -164,7 +164,7 @@
 		"prefer-arrow-callback": "off",
 		"rest-spread-spacing": ["error", "never"],
 		"template-curly-spacing": ["error", "never"],
-		"no-restricted-syntax": ["error", "ObjectPattern", "ArrayPattern", "WithStatement"],
+		"no-restricted-syntax": ["error", "WithStatement"],
 
 		"validate-conditionals": "error",
 	}

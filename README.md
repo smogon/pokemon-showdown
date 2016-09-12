@@ -28,13 +28,13 @@ Installing
 
     ./pokemon-showdown
 
-(Requires Node.js 4+)
+(Requires Node.js 6+)
 
 
 Detailed installation instructions
 ------------------------------------------------------------------------
 
-Pokémon Showdown requires you to have [Node.js][5] installed, 4.x or later.
+Pokémon Showdown requires you to have [Node.js][5] installed, 6.x or later.
 
 Next, obtain a copy of Pokémon Showdown. If you're reading this outside of GitHub, you've probably already done this. If you're reading this in GitHub, there's a "Save" icon button near the top right (next to "Download ZIP"), or if you're really lazy, you can use the "Download ZIP" button. I recommend the Save method - it's more time-consuming to set up, but much easier to update.
 
