@@ -1334,7 +1334,7 @@ class User {
 		if (message.substr(0, 16) === '/cmd userdetails') {
 			// certain commands are exempt from the queue
 			Monitor.activeIp = connection.ip;
-			room.chat(this, message, connection);
+			CommandParser.parse(message, room, this, connection);
 			Monitor.activeIp = null;
 			return false; // but end the loop here
 		}
@@ -1360,7 +1360,7 @@ class User {
 		} else {
 			this.lastChatMessage = now;
 			Monitor.activeIp = connection.ip;
-			room.chat(this, message, connection);
+			CommandParser.parse(message, room, this, connection);
 			Monitor.activeIp = null;
 		}
 	}
@@ -1373,14 +1373,14 @@ class User {
 	}
 	processChatQueue() {
 		if (!this.chatQueue) return; // this should never happen
-		let toChat = this.chatQueue.shift();
+		let [message, roomid, connection] = this.chatQueue.shift();
 
 		this.lastChatMessage = new Date().getTime();
 
-		let room = Rooms(toChat[1]);
+		let room = Rooms(roomid);
 		if (room) {
-			Monitor.activeIp = toChat[2].ip;
-			room.chat(this, toChat[0], toChat[2]);
+			Monitor.activeIp = connection.ip;
+			CommandParser.parse(message, room, this, connection);
 			Monitor.activeIp = null;
 		} else {
 			// room is expired, do nothing

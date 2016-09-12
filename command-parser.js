@@ -296,6 +296,11 @@ class CommandContext {
 		let user = this.user;
 		let connection = this.connection;
 
+		if (room && room.id === 'global') {
+			// should never happen
+			console.log(`Command tried to write to global: ${user.name}: ${message}`);
+			return false;
+		}
 		if (!user.named) {
 			connection.popup("You must choose a name before you can talk.");
 			return false;
@@ -542,32 +547,27 @@ exports.CommandContext = CommandContext;
  * Usage:
  *   CommandParser.parse(message, room, user, connection)
  *
- * message - the message the user is trying to say
- * room - the room the user is trying to say it in
- * user - the user that sent the message
- * connection - the connection the user sent the message from
- *
- * Returns the message the user should say, or a falsy value which
- * means "don't say anything"
+ * Parses the message. If it's a command, the commnad is executed, if
+ * not, it's displayed directly in the room.
  *
  * Examples:
  *   CommandParser.parse("/join lobby", room, user, connection)
- *     will make the user join the lobby, and return false.
+ *     will make the user join the lobby.
  *
  *   CommandParser.parse("Hi, guys!", room, user, connection)
  *     will return "Hi, guys!" if the user isn't muted, or
- *     if he's muted, will warn him that he's muted, and
- *     return false.
+ *     if he's muted, will warn him that he's muted.
+ *
+ * @param {string} message - the message the user is trying to say
+ * @param {Room} room - the room the user is trying to say it in
+ * @param {User} user - the user that sent the message
+ * @param {Connection} connection - the connection the user sent the message from
  */
-let parse = exports.parse = function (message, room, user, connection, levelsDeep) {
+let parse = exports.parse = function (message, room, user, connection, levelsDeep = 0) {
 	let cmd = '', target = '', cmdToken = '';
 	if (!message || !message.trim().length) return;
-	if (!levelsDeep) {
-		levelsDeep = 0;
-	} else {
-		if (levelsDeep > MAX_PARSE_RECURSION) {
-			return connection.sendTo(room, "Error: Too much recursion");
-		}
+	if (levelsDeep > MAX_PARSE_RECURSION) {
+		return connection.sendTo(room, "Error: Too much command recursion");
 	}
 
 	if (message.slice(0, 3) === '>> ') {
@@ -669,9 +669,15 @@ let parse = exports.parse = function (message, room, user, connection, levelsDee
 		}
 	}
 
+	// Output the message to the room
+
 	message = context.canTalk(message);
 
-	return message || false;
+	if (message && message !== true && typeof message.then !== 'function') {
+		room.add('|c|' + user.getIdentity(room.id) + '|' + message);
+	}
+
+	room.update();
 };
 
 exports.package = {};
