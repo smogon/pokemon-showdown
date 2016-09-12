@@ -4,7 +4,7 @@
 // Make sure we're Node 6+
 
 try {
-	eval("{ let [a] = [1]; }");
+	eval('{ let [a] = [1]; }');
 } catch (e) {
 	console.log("We require Node.js v6 or later; you're using " + process.version);
 	process.exit();

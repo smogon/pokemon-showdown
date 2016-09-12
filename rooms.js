@@ -94,19 +94,6 @@ let Room = (() => {
 		log.unshift('|:|' + (~~(Date.now() / 1000)));
 		return log;
 	};
-	Room.prototype.chat = function (user, message, connection) {
-		// Battle actions are actually just text commands that are handled in
-		// parseCommand(), which in turn often calls Simulator.prototype.sendFor().
-		// Sometimes the call to sendFor is done indirectly, by calling
-		// room.decision(), where room.constructor === BattleRoom.
-
-		message = CommandParser.parse(message, this, user, connection);
-
-		if (message && message !== true && typeof message.then !== 'function') {
-			this.add('|c|' + user.getIdentity(this.id) + '|' + message);
-		}
-		this.update();
-	};
 
 	Room.prototype.toString = function () {
 		return this.id;
@@ -853,13 +840,6 @@ let GlobalRoom = (() => {
 			this.ladderIpLog.write(p2.userid + ': ' + p2.latestIp + '\n');
 		}
 		return newRoom;
-	};
-	GlobalRoom.prototype.chat = function (user, message, connection) {
-		if (Rooms.lobby) return Rooms.lobby.chat(user, message, connection);
-		message = CommandParser.parse(message, this, user, connection);
-		if (message && message !== true) {
-			connection.popup("You can't send messages directly to the server.");
-		}
 	};
 	GlobalRoom.prototype.modlog = function (text) {
 		this.modlogStream.write('[' + (new Date().toJSON()) + '] ' + text + '\n');
