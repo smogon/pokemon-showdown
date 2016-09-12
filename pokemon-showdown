@@ -1,6 +1,15 @@
 #!/usr/bin/env node
 'use strict';
 
+// Make sure we're Node 6+
+
+try {
+	eval("{ let [a] = [1]; }");
+} catch (e) {
+	console.log("We require Node.js v6 or later; you're using " + process.version);
+	process.exit();
+}
+
 // Make sure our dependencies are available, and install them if they
 // aren't
 
