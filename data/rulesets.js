@@ -558,14 +558,10 @@ exports.BattleFormats = {
 
 			// check if Speed is boosted
 			let speedBoosted = false;
-			let nonSpeedBoosted = false;
 			for (let i = 0; i < set.moves.length; i++) {
 				let move = this.getMove(set.moves[i]);
 				if (move.boosts && move.boosts.spe > 0) {
 					speedBoosted = true;
-				}
-				if (move.boosts && (move.boosts.atk > 0 || move.boosts.def > 0 || move.boosts.spa > 0 || move.boosts.spd > 0)) {
-					nonSpeedBoosted = true;
 				}
 			}
 
