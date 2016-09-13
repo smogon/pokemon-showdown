@@ -547,8 +547,9 @@ exports.CommandContext = CommandContext;
  * Usage:
  *   CommandParser.parse(message, room, user, connection)
  *
- * Parses the message. If it's a command, the commnad is executed, if
- * not, it's displayed directly in the room.
+ * Parses the message. If it's a command, the command is executed. If
+ * not or the command returns a message, it's displayed directly in
+ * the room.
  *
  * Examples:
  *   CommandParser.parse("/join lobby", room, user, connection)
@@ -634,7 +635,8 @@ let parse = exports.parse = function (message, room, user, connection, levelsDee
 	});
 
 	if (commandHandler) {
-		return context.run(commandHandler);
+		message = context.run(commandHandler);
+		if (!message || typeof message.then === 'function') return message;
 	} else {
 		// Check for mod/demod/admin/deadmin/etc depending on the group ids
 		for (let g in Config.groups) {
@@ -667,11 +669,11 @@ let parse = exports.parse = function (message, room, user, connection, levelsDee
 				message = message.charAt(0) + message;
 			}
 		}
+
+		message = context.canTalk(message);
 	}
 
 	// Output the message to the room
-
-	message = context.canTalk(message);
 
 	if (message && message !== true && typeof message.then !== 'function') {
 		room.add('|c|' + user.getIdentity(room.id) + '|' + message);
