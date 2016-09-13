@@ -29,7 +29,7 @@ class RoomSettings {
 		this.generateDisplay();
 	}
 	modchat() {
-		if (!this.user.can('modchat', null, this.room)) return "<button " + DISABLED + ">" + (this.room.modchat ? this.room.modchat : false) + "</button>";
+		if (!this.user.can('modchat', null, this.room)) return "<button " + DISABLED + ">" + (this.room.modchat ? this.room.modchat : 'off') + "</button>";
 		let modchatOutput = [];
 		for (let i = 0; i <= RANKS.length; i++) {
 			if (RANKS[i] === ' ' && !this.room.modchat) {
@@ -81,7 +81,7 @@ class RoomSettings {
 		}
 	}
 	capitals() {
-		if (!this.user.can('editroom', null, this.room)) return "<button " + DISABLED + ">" + (this.room.filterCaps ? this.room.filterCaps : false) + "</button>";
+		if (!this.user.can('editroom', null, this.room)) return "<button " + DISABLED + ">" + (this.room.filterCaps ? this.room.filterCaps : 'off') + "</button>";
 		if (this.room.filterCaps) {
 			return '<button name="send" value="/roomsetting capsfilter off">off</button> <button ' + DISABLED + '>filter capitals</button>';
 		} else {
