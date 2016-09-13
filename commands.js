@@ -1214,9 +1214,11 @@ exports.commands = {
 		connection.popup(buffer.join("\n\n"));
 	},
 
-	rb: 'roomban',
-	roomban: function (target, room, user, connection) {
-		if (!target) return this.parse('/help roomban');
+	b: 'ban',
+	rb: 'ban',
+	roomban: 'ban',
+	ban: function (target, room, user, connection) {
+		if (!target) return this.parse('/help ban');
 		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
 
 		target = this.splitTarget(target);
@@ -1259,11 +1261,11 @@ exports.commands = {
 		this.add('|unlink|roomhide|' + lastid);
 		if (lastid !== toId(this.inputUsername)) this.add('|unlink|roomhide|' + toId(this.inputUsername));
 	},
-	roombanhelp: ["/roomban [username] - Bans the user from the room you are in. Requires: @ # & ~"],
+	banhelp: ["/ban [username] - Bans the user from the room you are in. Requires: @ # & ~"],
 
-	unroomban: 'roomunban',
-	roomunban: function (target, room, user, connection) {
-		if (!target) return this.parse('/help roomunban');
+	roomunban: 'unban',
+	unban: function (target, room, user, connection) {
+		if (!target) return this.parse('/help unban');
 		if (!room.bannedUsers || !room.bannedIps) {
 			return this.errorReply("Room bans are not meant to be used in room " + room.id + ".");
 		}
@@ -1280,7 +1282,7 @@ exports.commands = {
 
 		this.addModCommand("" + unbannedUserid + " was unbanned from room " + room.id + " by " + user.name + ".");
 	},
-	roomunbanhelp: ["/roomunban [username] - Unbans the user from the room you are in. Requires: @ # & ~"],
+	unbanhelp: ["/unban [username] - Unbans the user from the room you are in. Requires: @ # & ~"],
 
 	autojoin: function (target, room, user, connection) {
 		Rooms.global.autojoinRooms(user, connection);
@@ -1585,10 +1587,10 @@ exports.commands = {
 	},
 	unlockhelp: ["/unlock [username] - Unlocks the user. Requires: % @ * & ~"],
 
-	forceban: 'ban',
-	b: 'ban',
-	ban: function (target, room, user, connection, cmd) {
-		if (!target) return this.parse('/help ban');
+	forceban: 'globalban',
+	gb: 'globalban',
+	globalban: function (target, room, user, connection, cmd) {
+		if (!target) return this.parse('/help globalban');
 
 		target = this.splitTarget(target);
 		let targetUser = this.targetUser;
@@ -1614,7 +1616,7 @@ exports.commands = {
 				return this.sendReply("" + name + " is a confirmed user. If you are sure you would like to ban them use /forceban.");
 			}
 		} else if (cmd === 'forceban') {
-			return this.errorReply("Use /ban; " + name + " is not a confirmed user.");
+			return this.errorReply("Use /globalban; " + name + " is not a confirmed user.");
 		}
 
 		// Destroy personal rooms of the banned user.
@@ -1649,10 +1651,10 @@ exports.commands = {
 		this.globalModlog("BAN", targetUser, " by " + user.name + (target ? ": " + target : ""));
 		return true;
 	},
-	banhelp: ["/ban OR /b [username], [reason] - Kick user from all rooms and ban user's IP address with reason. Requires: @ * & ~"],
+	globalbanhelp: ["/globalban OR /gb [username], [reason] - Kick user from all rooms and ban user's IP address with reason. Requires: @ * & ~"],
 
-	unban: function (target, room, user) {
-		if (!target) return this.parse('/help unban');
+	unglobalban: function (target, room, user) {
+		if (!target) return this.parse('/help unglobalban');
 		if (!this.can('ban')) return false;
 
 		let name = Punishments.unban(target);
@@ -1664,7 +1666,7 @@ exports.commands = {
 			this.errorReply("User '" + target + "' is not banned.");
 		}
 	},
-	unbanhelp: ["/unban [username] - Unban a user. Requires: @ * & ~"],
+	unglobalbanhelp: ["/unglobalban [username] - Unban a user. Requires: @ * & ~"],
 
 	unbanall: function (target, room, user) {
 		if (!this.can('rangeban')) return false;
@@ -3197,7 +3199,7 @@ exports.commands = {
 			this.sendReply("INFORMATIONAL COMMANDS: /data, /dexsearch, /movesearch, /groups, /faq, /rules, /intro, /formatshelp, /othermetas, /learn, /analysis, /calc (replace / with ! to broadcast. Broadcasting requires: + % @ * # & ~)");
 			if (user.group !== Config.groupsranking[0]) {
 				this.sendReply("DRIVER COMMANDS: /warn, /mute, /hourmute, /unmute, /alts, /forcerename, /modlog, /modnote, /lock, /unlock, /announce, /redirect");
-				this.sendReply("MODERATOR COMMANDS: /ban, /unban, /ip, /modchat");
+				this.sendReply("MODERATOR COMMANDS: /globalban, /unglobalban, /ip, /modchat");
 				this.sendReply("LEADER COMMANDS: /declare, /forcetie, /forcewin, /promote, /demote, /banip, /host, /unbanall");
 			}
 			this.sendReply("For an overview of room commands, use /roomhelp");
