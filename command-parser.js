@@ -558,6 +558,11 @@ exports.CommandContext = CommandContext;
  *     will return "Hi, guys!" if the user isn't muted, or
  *     if he's muted, will warn him that he's muted.
  *
+ * The return value is the return value of the command handler, if any,
+ * or the message, if there wasn't a command. This value could be a success
+ * or failure (few commands report these) or a Promise for when the command
+ * is done executing, if it's not currently done.
+ *
  * @param {string} message - the message the user is trying to say
  * @param {Room} room - the room the user is trying to say it in
  * @param {User} user - the user that sent the message
@@ -678,6 +683,8 @@ let parse = exports.parse = function (message, room, user, connection, levelsDee
 	}
 
 	room.update();
+
+	return message;
 };
 
 exports.package = {};
