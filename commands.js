@@ -2080,7 +2080,7 @@ exports.commands = {
 				if (!userid) return this.errorReply("Invalid name: " + name + ".");
 				if (!targetUser && cmd === 'add') return this.errorReply("Cannot add offline user " + name + " to blacklist, use '/bl addname' instead.");
 
-				let entry = Punishments.roombannedUserids.get(room.id + '|' + userid);
+				let entry = Punishments.roomUserids.get(room.id + ':' + userid);
 
 				if (entry && entry[0] === 'BLACKLIST') {
 					this.errorReply("User " + name + " is already blacklisted from this room.");
@@ -2093,10 +2093,10 @@ exports.commands = {
 					this.parse('/roomban ' + userid);
 				}
 
-				Punishments.roombannedUserids.set(room.id + '|' + userid, punishment);
+				Punishments.roomUserids.set(room.id + ':' + userid, punishment);
 
 				if (cmd === 'add') {
-					Punishments.roombannedIps.set(room.id + '|' + targetUser.latestIp, punishment);
+					Punishments.roomIps.set(room.id + ':' + targetUser.latestIp, punishment);
 				}
 
 				this.privateModCommand("(" + name + " was added to the blacklist by " + user.name + ".)");
@@ -2113,14 +2113,14 @@ exports.commands = {
 			let name = this.targetUsername;
 			let userid = toId(name);
 
-			let entry = Punishments.roombannedUserids.get(room.id + '|' + userid);
+			let entry = Punishments.roomUserids.get(room.id + ':' + userid);
 			if (!entry || entry[0] !== 'BLACKLIST') return this.errorReply("User " + name + " is not blacklisted from this room.");
 
-			Punishments.roombannedUserids.delete(room.id + '|' + userid);
+			Punishments.roomUserids.delete(room.id + ':' + userid);
 
-			Punishments.roombannedIps.forEach((entry, key) => {
-				if (key.split('|')[0] === room.id && entry[1] === userid && entry[0] === 'BLACKLIST') {
-					Punishments.roombannedIps.delete(key);
+			Punishments.roomIps.forEach((entry, key) => {
+				if (key.startsWith(`${room.id}:`) && entry[1] === userid && entry[0] === 'BLACKLIST') {
+					Punishments.roomIps.delete(key);
 				}
 			});
 
@@ -2135,8 +2135,8 @@ exports.commands = {
 			let names = [];
 			let ips = [];
 
-			Punishments.roombannedUserids.forEach((entry, key) => {
-				let split = key.split('|');
+			Punishments.roomUserids.forEach((entry, key) => {
+				let split = key.split(':');
 				if (split[0] === room.id && entry[0] === 'BLACKLIST') {
 					names.push(split[1]);
 				}
@@ -2145,8 +2145,8 @@ exports.commands = {
 			if (!names.length) return this.errorReply("This room has no blacklisted users.");
 
 			if (user.can('ban')) {
-				Punishments.roombannedIps.forEach((entry, key) => {
-					let split = key.split('|');
+				Punishments.roomIps.forEach((entry, key) => {
+					let split = key.split(':');
 					if (split[0] === room.id && entry[0] === 'BLACKLIST') {
 						ips.push(split[1]);
 					}
@@ -2167,8 +2167,8 @@ exports.commands = {
 
 			let str = "";
 
-			Punishments.roombannedUserids.forEach((entry, key) => {
-				let split = key.split('|');
+			Punishments.roomUserids.forEach((entry, key) => {
+				let split = key.split(':');
 				if (split[0] === room.id && split[1] === userid && entry[0] === 'BLACKLIST') {
 					str = "User " + name + " is blacklisted under name " + entry[1] + ".";
 				}
@@ -2177,8 +2177,8 @@ exports.commands = {
 			if (str) return this.sendReply(str);
 
 			if (targetUser) {
-				Punishments.roombannedIps.forEach((entry, key) => {
-					let split = key.split('|');
+				Punishments.roomIps.forEach((entry, key) => {
+					let split = key.split(':');
 					if (split[0] === room.id && split[1] === targetUser.latestIp && entry[0] === 'BLACKLIST') {
 						str = "User " + name + " is blacklisted under the IP of " + entry[1] + ".";
 					}

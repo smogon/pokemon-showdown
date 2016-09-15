@@ -145,20 +145,20 @@ exports.commands = {
 				let thisRoom = Rooms.global.chatRooms[i];
 				if (!thisRoom || thisRoom.isPrivate === true) continue;
 				let roomBanned = false;
-				let punishment = Punishments.roombannedIps.get(thisRoom.id + '|' + targetUser.latestIp);
+				let punishment = Punishments.roomIps.get(thisRoom.id + ':' + targetUser.latestIp);
 				if (punishment) {
 					if (Date.now() < punishment[2]) {
 						roomBanned = true;
 					} else {
-						Punishments.roombannedIps.delete(thisRoom.id + '|' + targetUser.latestIp);
+						Punishments.roomIps.delete(thisRoom.id + ':' + targetUser.latestIp);
 					}
 				}
-				punishment = Punishments.roombannedUserids.get(thisRoom.id + '|' + targetUser.userid);
+				punishment = Punishments.roomUserids.get(thisRoom.id + ':' + targetUser.userid);
 				if (punishment) {
 					if (Date.now() < punishment[2]) {
 						roomBanned = true;
 					} else {
-						Punishments.roombannedUserids.delete(thisRoom.id + '|' + targetUser.userid);
+						Punishments.roomUserids.delete(thisRoom.id + ':' + targetUser.userid);
 					}
 				}
 				if (roomBanned) {
