@@ -2398,6 +2398,92 @@ exports.commands = {
 		this.sendReply("learnsets.js saved.");
 	},
 
+	adddatacenters: function (target, room, user) {
+		if (!this.can('hotpatch')) return false;
+
+		fs.readFile(require('path').resolve(__dirname, 'config/datacenters.csv'), (err, data) => {
+			if (err) return;
+			data = String(data).split("\n");
+			let datacenters = [];
+			for (let row of data) {
+				if (!row) continue;
+				let rowSplit = row.split(',');
+				let rowData = [
+					Dnsbl.ipToNumber(rowSplit[0]),
+					Dnsbl.ipToNumber(rowSplit[1]),
+					Dnsbl.urlToHost(rowSplit[3]),
+					row,
+				];
+				datacenters.push(rowData);
+			}
+
+			data = String(target).split("\n");
+			let successes = 0;
+			let identicals = 0;
+			for (let row of data) {
+				if (!row) continue;
+				let rowSplit = row.split(',');
+				let rowData = [
+					Dnsbl.ipToNumber(rowSplit[0]),
+					Dnsbl.ipToNumber(rowSplit[1]),
+					Dnsbl.urlToHost(rowSplit[3]),
+					row,
+				];
+				if (rowData[1] < rowData[0]) {
+					this.errorReply('invalid range: ' + row);
+					continue;
+				}
+
+				let iMin = 0;
+				let iMax = datacenters.length;
+				while (iMin < iMax) {
+					let i = Math.floor((iMax + iMin) / 2);
+					if (rowData[0] > datacenters[i][0]) {
+						iMin = i + 1;
+					} else {
+						iMax = i;
+					}
+				}
+				if (iMin < datacenters.length) {
+					let next = datacenters[iMin];
+					if (rowData[0] === next[0] && rowData[1] === next[1]) {
+						identicals++;
+						continue;
+					}
+					if (rowData[0] <= next[0] && rowData[1] >= next[1]) {
+						this.errorReply('too wide: ' + row);
+						this.errorReply('intersects with: ' + next[3]);
+						continue;
+					}
+					if (rowData[1] >= next[0]) {
+						this.errorReply('could not insert: ' + row);
+						this.errorReply('intersects with: ' + next[3]);
+						continue;
+					}
+				}
+				if (iMin > 0) {
+					let prev = datacenters[iMin - 1];
+					if (rowData[0] >= prev[0] && rowData[1] <= prev[1]) {
+						this.errorReply('too narrow: ' + row);
+						this.errorReply('intersects with: ' + prev[3]);
+						continue;
+					}
+					if (rowData[0] <= prev[1]) {
+						this.errorReply('could not insert: ' + row);
+						this.errorReply('intersects with: ' + prev[3]);
+						continue;
+					}
+				}
+				successes++;
+				datacenters.splice(iMin, 0, rowData);
+			}
+
+			let output = datacenters.map(r => r[3]).join('\n') + '\n';
+			fs.writeFile(require('path').resolve(__dirname, 'config/datacenters.csv'), output);
+			this.sendReply(`done: ${successes} successes, ${identicals} unchanged`);
+		});
+	},
+
 	disableladder: function (target, room, user) {
 		if (!this.can('disableladder')) return false;
 		if (LoginServer.disabled) {
@@ -3247,4 +3333,5 @@ exports.commands = {
 process.nextTick(() => {
 	CommandParser.multiLinePattern.register('>>>? ');
 	CommandParser.multiLinePattern.register('/(room|staff)(topic|intro) ');
+	CommandParser.multiLinePattern.register('/adddatacenters ');
 });
