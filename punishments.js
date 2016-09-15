@@ -18,10 +18,12 @@ let fs = require('fs');
 let path = require('path');
 
 const PUNISHMENT_FILE = path.resolve(__dirname, 'config/punishments.tsv');
+const ROOMBANS_FILE = path.resolve(__dirname, 'config/roombans.tsv');
 
 const RANGELOCK_DURATION = 60 * 60 * 1000; // 1 hour
 const LOCK_DURATION = 37 * 60 * 60 * 1000; // 37 hours
 const BAN_DURATION = 7 * 24 * 60 * 60 * 1000; // 1 week
+const ROOMBAN_DURATION = 48 * 60 * 60 * 1000; // 48 hours
 
 // a punishment is an array: [punishType, userid, expireTime, reason]
 
@@ -37,17 +39,35 @@ Punishments.ips = new Map();
  */
 Punishments.userids = new Map();
 
+/**
+ * roombannedUserids is a roomid|userid:punishment Map
+ * @type Map<string, Array>
+ */
+Punishments.roombannedUserids = new Map();
+
+/**
+ * roombannedIps is a roomid|ip:punishment Map
+ * @type Map<string, Array>
+ */
+ Punishments.roombannedIps = new Map();
+
 /*********************************************************
  * Persistence
  *********************************************************/
 
-// punishType is an allcaps string, one of:
+// punishType is an allcaps string, for global punishments they can be one of the following:
 //   'LOCK'
 //   'BAN'
 //   'NAMELOCK'
+// For room punishments, they can instead be one of two:
+//   'ROOMBAN'
+//   'BLACKLIST'
 
 // punishments.tsv is in the format:
 // punishType, userid, ips/usernames, expiration time
+// roombans.tsv is in the format:
+// punishType, userid, roomid | ips/usernames, expiration time
+
 
 Punishments.loadPunishments = function () {
 	fs.readFile(PUNISHMENT_FILE, (err, data) => {
@@ -69,6 +89,32 @@ Punishments.loadPunishments = function () {
 					Punishments.ips.set(key, punishment);
 				} else {
 					Punishments.userids.set(key, punishment);
+				}
+			}
+		}
+	});
+};
+
+Punishments.loadRoombans = function () {
+	fs.readFile(ROOMBANS_FILE, (err, data) => {
+		if (err) return;
+		data = ('' + data).split("\n");
+		for (let i = 0; i < data.length; i++) {
+			if (!data[i] || data[i] === '\r') continue;
+			let row = data[i].trim().split("\t");
+			if (row[0] === "Punishment") continue;
+			let keys = row[2].split(',').concat(row[1]);
+
+			let punishment = [row[0], row[1], Number(row[3])].concat(row.slice(4));
+			if (Date.now() >= punishment[2]) {
+				continue;
+			}
+			for (let j = 0; j < keys.length; j++) {
+				let key = keys[j];
+				if (key.includes('.')) {
+					Punishments.roombannedIps.set(key, punishment);
+				} else {
+					Punishments.roombannedUserids.set(key, punishment);
 				}
 			}
 		}
@@ -126,14 +172,65 @@ Punishments.savePunishments = function () {
 	fs.writeFile(PUNISHMENT_FILE, buf, () => {});
 };
 
+Punishments.saveRoombans = function () {
+	let saveTable = new Map();
+	Punishments.roombannedIps.forEach((punishment, ip) => {
+		if (Date.now() >= punishment[2]) {
+			Punishments.roombannedIps.delete(ip);
+			return;
+		}
+		let id = punishment[1];
+		if (id.charAt(0) === '#') return;
+		let entry = saveTable.get(id);
+
+		if (entry) {
+			entry.keys.push(ip);
+			return;
+		}
+
+		entry = {
+			keys: [ip],
+			punishType: punishment[0],
+			rest: punishment.slice(2),
+		};
+		saveTable.set(id, entry);
+	});
+	Punishments.roombannedUserids.forEach((punishment, userid) => {
+		if (Date.now() >= punishment[2]) {
+			Punishments.roombannedUserids.delete(userid);
+			return;
+		}
+		let id = punishment[1];
+		let entry = saveTable.get(id);
+
+		if (!entry) {
+			entry = {
+				keys: [],
+				punishType: punishment[0],
+				rest: punishment.slice(2),
+			};
+			saveTable.set(id, entry);
+		}
+
+		if (userid !== id) entry.keys.push(userid);
+	});
+
+	let buf = 'Punishment\tUser ID\tRoom Id | IPs and alts\tExpires\r\n';
+	saveTable.forEach((entry, id) => {
+		buf += Punishments.renderEntry(entry, id);
+	});
+
+	fs.writeFile(ROOMBANS_FILE, buf, () => {});
+};
+
 /**
  * @param {Array} entry
  * @param {string} id
  */
-Punishments.appendPunishment = function (entry, id) {
+Punishments.appendPunishment = function (entry, id, filename) {
 	if (id.charAt(0) === '#') return;
 	let buf = Punishments.renderEntry(entry, id);
-	fs.appendFile(PUNISHMENT_FILE, buf, () => {});
+	fs.appendFile(filename, buf, () => {});
 };
 
 /**
@@ -172,6 +269,7 @@ Punishments.loadBanlist = function () {
 
 setImmediate(() => {
 	Punishments.loadPunishments();
+	Punishments.loadRoombans();
 	Punishments.loadBanlist().catch(err => {
 		if (err.code === 'ENOENT') return;
 		throw err;
@@ -223,7 +321,7 @@ Punishments.punish = function (user, punishment, noRecurse) {
 			keys: Array.from(keys),
 			punishType: punishment[0],
 			rest: punishment.slice(2),
-		}, punishment[1]);
+		}, punishment[1], PUNISHMENT_FILE);
 	}
 };
 /**
@@ -232,7 +330,7 @@ Punishments.punish = function (user, punishment, noRecurse) {
  */
 Punishments.unpunish = function (id, punishType) {
 	id = toId(id);
-	let punishment = Punishments.useridSearch(id);
+	let punishment = Punishments.userids.get(id);
 	if (punishment) {
 		id = punishment[1];
 	}
@@ -406,6 +504,81 @@ Punishments.lockRange = function (range, reason) {
 Punishments.banRange = function (range, reason) {
 	let punishment = ['BAN', '#rangelock', Date.now() + RANGELOCK_DURATION, reason];
 	Punishments.ips.set(range, punishment);
+};
+
+Punishments.roomBan = function (room, user, noRecurse, userid) {
+	if (!userid) userid = user.userid;
+	let alts;
+	let keys = noRecurse;
+	if (!keys || !keys.add) {
+		keys = new Set();
+	}
+	if (!noRecurse) {
+		alts = [];
+		keys = new Set();
+		Users.users.forEach(otherUser => {
+			if (otherUser === user) return;
+			for (let myIp in user.ips) {
+				if (myIp in otherUser.ips) {
+					alts.push(otherUser.name);
+					Punishments.roomBan(room, otherUser, keys, userid);
+					return;
+				}
+			}
+		});
+	}
+
+	let punishment = ['ROOMBAN', userid, Date.now() + ROOMBAN_DURATION];
+
+	Punishments.roombannedUserids.set(room.id + '|' + userid, punishment);
+	if (user.autoconfirmed) {
+		keys.add(room.id + '|' + user.autoconfirmed);
+		Punishments.roombannedUserids.set(room.id + '|' + user.autoconfirmed, punishment);
+	}
+	if (room.game && room.game.removeBannedUser) {
+		room.game.removeBannedUser(user);
+	}
+	for (let ip in user.ips) {
+		Punishments.roombannedIps.set(room.id + '|' + ip, punishment);
+		keys.add(room.id + '|' + ip);
+	}
+	if (!user.can('bypassall')) user.leaveRoom(room.id);
+	if (!noRecurse) {
+		keys.delete(punishment[1]);
+		Punishments.appendPunishment({
+			keys: Array.from(keys),
+			punishType: punishment[0],
+			rest: punishment.slice(2),
+		}, punishment[1], ROOMBANS_FILE);
+	}
+	return alts;
+};
+
+Punishments.unRoomBan = function (room, userid, noRecurse) {
+	userid = toId(userid);
+	let successUserid = false;
+	Punishments.roombannedUserids.forEach((entry, key) => {
+		console.log("entry" + entry);
+		let split = key.split('|');
+		console.log(split);
+		if (split[0] === room.id && (split[1] === userid || entry[1] === userid) && entry[0] === 'ROOMBAN') {
+			Punishments.roombannedUserids.delete(key);
+			successUserid = entry[1];
+			if (!noRecurse && entry[1] !== userid) {
+				Punishments.unRoomBan(room, entry[1], true);
+			}
+		}
+	});
+	Punishments.roombannedIps.forEach((entry, key) => {
+		if (key.split('|')[0] === room.id && entry[1] === userid && entry[0] === 'ROOMBAN') {
+			Punishments.roombannedIps.delete(key);
+			successUserid = userid;
+		}
+	});
+	if (successUserid) {
+		Punishments.saveRoombans();
+	}
+	return successUserid;
 };
 
 /*********************************************************
@@ -602,4 +775,28 @@ Punishments.checkIpBanned = function (connection) {
 	if (!Config.quietconsole) console.log(`CONNECT BLOCKED - IP BANNED: ${ip} (${banned})`);
 
 	return banned;
+};
+
+Punishments.checkRoomBanned = function (user, roomid) {
+	if (!user) return;
+
+	let punishment = Punishments.roombannedUserids.get(roomid + '|' + user.userid);
+	if (punishment) {
+		if (Date.now() < punishment[2]) return punishment[1];
+		Punishments.roombannedUserids.delete(roomid + '|' + user.userid);
+	}
+
+	punishment = Punishments.roombannedUserids.get(roomid + '|' + user.autoconfirmed);
+	if (punishment) {
+		if (Date.now() < punishment[2]) return punishment[1];
+		Punishments.roombannedUserids.delete(roomid + '|' + user.autoconfirmed);
+	}
+
+	for (let ip in user.ips) {
+		punishment = Punishments.roombannedIps.get(roomid + '|' + ip);
+		if (punishment) {
+			if (Date.now() < punishment[2]) return punishment[1];
+			Punishments.roombannedIps.delete(roomid + '|' + ip);
+		}
+	}
 };
