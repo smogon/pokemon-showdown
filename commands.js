@@ -23,6 +23,7 @@ const fs = require('fs');
 const MAX_REASON_LENGTH = 300;
 const MUTE_LENGTH = 7 * 60 * 1000;
 const HOURMUTE_LENGTH = 60 * 60 * 1000;
+const BLACKLIST_DURATION = 365 * 24 * 60 * 60 * 1000; // 1 year
 
 exports.commands = {
 
@@ -1229,10 +1230,7 @@ exports.commands = {
 			return this.errorReply("The reason is too long. It cannot exceed " + MAX_REASON_LENGTH + " characters.");
 		}
 		if (!this.can('ban', targetUser, room)) return false;
-		if (!room.bannedUsers || !room.bannedIps) {
-			return this.errorReply("Room bans are not meant to be used in room " + room.id + ".");
-		}
-		if (room.bannedUsers[userid] && room.bannedIps[targetUser.latestIp]) return this.sendReply("User " + targetUser.name + " is already banned from room " + room.id + ".");
+		if (Punishments.checkRoomBanned(targetUser, room.id)) return this.sendReply("User " + targetUser.name + " is already banned from room " + room.id + ".");
 		if (targetUser in room.users || user.can('lock')) {
 			targetUser.popup(
 				"|html|<p>" + Tools.escapeHTML(user.name) + " has banned you from the room " + room.id + ".</p>" + (target ? "<p>Reason: " + Tools.escapeHTML(target) + "</p>" : "") +
@@ -1241,7 +1239,7 @@ exports.commands = {
 		}
 		this.addModCommand("" + targetUser.name + " was banned from room " + room.id + " by " + user.name + "." + (target ? " (" + target + ")" : ""));
 		let acAccount = (targetUser.autoconfirmed !== targetUser.userid && targetUser.autoconfirmed);
-		let alts = room.roomBan(targetUser);
+		let alts = Punishments.roomBan(room, targetUser);
 		if (!(room.isPersonal || room.isPrivate === true) || user.can('alts', targetUser)) {
 			if (alts.length) {
 				this.privateModCommand("(" + targetUser.name + "'s " + (acAccount ? " ac account: " + acAccount + ", " : "") + "roombanned alts: " + alts.join(", ") + ")");
@@ -1264,18 +1262,15 @@ exports.commands = {
 	unroomban: 'roomunban',
 	roomunban: function (target, room, user, connection) {
 		if (!target) return this.parse('/help roomunban');
-		if (!room.bannedUsers || !room.bannedIps) {
-			return this.errorReply("Room bans are not meant to be used in room " + room.id + ".");
-		}
 		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
 
 		this.splitTarget(target, true);
 		let targetUser = this.targetUser;
-		let userid = room.isRoomBanned(targetUser) || toId(target);
+		let userid = Punishments.checkRoomBanned(targetUser, room.id) || toId(target);
 
 		if (!userid) return this.errorReply("User '" + target + "' is an invalid username.");
 		if (!this.can('ban', null, room)) return false;
-		let unbannedUserid = room.unRoomBan(userid);
+		let unbannedUserid = Punishments.unRoomBan(room, userid);
 		if (!unbannedUserid) return this.errorReply("User " + userid + " is not banned from room " + room.id + ".");
 
 		this.addModCommand("" + unbannedUserid + " was unbanned from room " + room.id + " by " + user.name + ".");
@@ -1395,7 +1390,7 @@ exports.commands = {
 		let muteDuration = ((cmd === 'hm' || cmd === 'hourmute') ? HOURMUTE_LENGTH : MUTE_LENGTH);
 		if (!this.can('mute', targetUser, room)) return false;
 		let canBeMutedFurther = ((room.getMuteTime(targetUser) || 0) <= (muteDuration * 5 / 6));
-		if (targetUser.locked || (room.isMuted(targetUser) && !canBeMutedFurther) || room.isRoomBanned(targetUser)) {
+		if (targetUser.locked || (room.isMuted(targetUser) && !canBeMutedFurther) || Punishments.checkRoomBanned(targetUser, room.id)) {
 			let problem = " but was already " + (targetUser.locked ? "locked" : room.isMuted(targetUser) ? "muted" : "room banned");
 			if (!target) {
 				return this.privateModCommand("(" + targetUser.name + " would be muted by " + user.name + problem + ".)");
@@ -1677,12 +1672,9 @@ exports.commands = {
 		if (user.lastCommand !== '/unbanall' || target !== 'confirm') {
 			return this.parse('/help unbanall');
 		}
-		// we have to do this the hard way since it's no longer a global
-		let punishKeys = ['bannedIps', 'bannedUsers', 'lockedIps', 'lockedUsers', 'lockedRanges', 'rangeLockedUsers'];
-		for (let i = 0; i < punishKeys.length; i++) {
-			let dict = Punishments[punishKeys[i]];
-			for (let entry in dict) delete dict[entry];
-		}
+		Punishments.userids.clear();
+		Punishments.ips.clear();
+		Punishments.savePunishments();
 		this.addModCommand("All bans and locks have been lifted by " + user.name + ".");
 	},
 	unbanallhelp: ["/unbanall - Unban all IP addresses. Requires: & ~"],
@@ -2059,7 +2051,7 @@ exports.commands = {
 
 		if (targetUser.locked) {
 			hidetype = 'hide|';
-		} else if ((room.bannedUsers[toId(name)] && room.bannedIps[targetUser.latestIp]) || user.can('rangeban')) {
+		} else if (Punishments.checkRoomBanned(user, room.id) || user.can('rangeban')) {
 			hidetype = 'roomhide|';
 		} else {
 			return this.errorReply("User '" + name + "' is not banned from this room or locked.");
@@ -2159,6 +2151,146 @@ exports.commands = {
 	banwordhelp: ["/banword add [words] - Adds the comma-separated list of phrases (& or ~ can also input regex) to the banword list of the current room. Requires: # & ~",
 					"/banword delete [words] - Removes the comma-separated list of phrases from the banword list. Requires: # & ~",
 					"/banword list - Shows the list of banned words in the current room. Requires: @ * # & ~"],
+
+	bl: 'blacklist',
+	blacklist: {
+		addname: 'add',
+		add: function (target, room, user, connection, cmd) {
+			if (!target) return this.parse('/help blacklist');
+			if (!user.can('declare', null, room)) return;
+			if (!room.chatRoomData) return this.errorReply("This room does not support blacklists.");
+			let targets = target.split(',').map(param => toId(param));
+
+			for (let i = 0; i < targets.length; i++) {
+				let targetUser = Users(targets[i]);
+				let name = (targetUser ? targetUser.name : targets[i]);
+				let userid = toId(name);
+
+				if (!userid) return this.errorReply("Invalid name: " + name + ".");
+				if (!targetUser && cmd === 'add') return this.errorReply("Cannot add offline user " + name + " to blacklist, use '/bl addname' instead.");
+
+				let entry = Punishments.roombannedUserids.get(room.id + '|' + userid);
+
+				if (entry && entry[0] === 'BLACKLIST') {
+					this.errorReply("User " + name + " is already blacklisted from this room.");
+					continue;
+				}
+
+				let punishment = ['BLACKLIST', userid, Date.now() + BLACKLIST_DURATION];
+
+				if (!entry && targetUser) {
+					this.parse('/roomban ' + userid);
+				}
+
+				Punishments.roombannedUserids.set(room.id + '|' + userid, punishment);
+
+				if (cmd === 'add') {
+					Punishments.roombannedIps.set(room.id + '|' + targetUser.latestIp, punishment);
+				}
+
+				this.privateModCommand("(" + name + " was added to the blacklist by " + user.name + ".)");
+			}
+
+			Punishments.saveRoombans();
+		},
+		remove: function (target, room, user) {
+			if (!target) return this.parse('/help blacklist');
+			if (!user.can('declare', null, room)) return;
+			if (!room.chatRoomData) return this.errorReply("This room does not support blacklists.");
+
+			this.splitTarget(target);
+			let name = this.targetUsername;
+			let userid = toId(name);
+
+			let entry = Punishments.roombannedUserids.get(room.id + '|' + userid);
+			if (!entry || entry[0] !== 'BLACKLIST') return this.errorReply("User " + name + " is not blacklisted from this room.");
+
+			Punishments.roombannedUserids.delete(room.id + '|' + userid);
+
+			Punishments.roombannedIps.forEach((entry, key) => {
+				if (key.split('|')[0] === room.id && entry[1] === userid && entry[0] === 'BLACKLIST') {
+					Punishments.roombannedIps.delete(key);
+				}
+			});
+
+			this.privateModCommand("(" + name + " was removed from the blacklist by " + user.name + ".)");
+
+			Punishments.saveRoombans();
+		},
+		view: function (target, room, user) {
+			if (!user.can('ban', null, room)) return;
+			if (!room.chatRoomData) return this.errorReply("This room does not support blacklists.");
+
+			let names = [];
+			let ips = [];
+
+			Punishments.roombannedUserids.forEach((entry, key) => {
+				let split = key.split('|');
+				if (split[0] === room.id && entry[0] === 'BLACKLIST') {
+					names.push(split[1]);
+				}
+			});
+
+			if (!names.length) return this.errorReply("This room has no blacklisted users.");
+
+			if (user.can('ban')) {
+				Punishments.roombannedIps.forEach((entry, key) => {
+					let split = key.split('|');
+					if (split[0] === room.id && entry[0] === 'BLACKLIST') {
+						ips.push(split[1]);
+					}
+				});
+			}
+
+			this.sendReply("Blacklist for room " + room.id + ": " + names.join(", "));
+			if (ips.length) this.sendReply("Banned IPs: " + ips.join(", "));
+		},
+		check: function (target, room, user) {
+			if (!user.can('ban', null, room)) return;
+			if (!room.chatRoomData) return this.errorReply("This room does not support blacklists.");
+
+			this.splitTarget(target);
+			let targetUser = this.targetUser;
+			let name = this.targetUsername;
+			let userid = toId(name);
+
+			let str = "";
+
+			Punishments.roombannedUserids.forEach((entry, key) => {
+				let split = key.split('|');
+				if (split[0] === room.id && split[1] === userid && entry[0] === 'BLACKLIST') {
+					str = "User " + name + " is blacklisted under name " + entry[1] + ".";
+				}
+			});
+
+			if (str) return this.sendReply(str);
+
+			if (targetUser) {
+				Punishments.roombannedIps.forEach((entry, key) => {
+					let split = key.split('|');
+					if (split[0] === room.id && split[1] === targetUser.latestIp && entry[0] === 'BLACKLIST') {
+						str = "User " + name + " is blacklisted under the IP of " + entry[1] + ".";
+					}
+				});
+			}
+
+			if (str) return this.sendReply(str);
+			return this.sendReply("User " + name + " is not blacklisted from this room.");
+		},
+	},
+	blacklisthelp: ["/blacklist add [user] (or /ab [user]) - Adds the user to this room's blacklist. When blacklisted, this user, and their alts, will be unable to join the room. If the given user is still in the room, they will be roombanned as well. Only works on online users. For offline users, use '/blacklist addname' Requires: # & ~",
+					"/blacklist addname [user] - Adds the given name to the blacklist. Easier to evade than a regular blacklist, but works on offline users. Requires: # & ~",
+					"/blacklist remove [user] (or /unab [user]) - Removes the user from the blacklist, and unbans them from the room. Requires: # & ~",
+					"/blacklist check [user] - Shows you if a user is blacklisted from this room, and under what name/ip address. Requires: @ # & ~",
+					"/blacklist view - Shows you this room's blacklist. Requires: @ # & ~"],
+
+	ab: function (target) {
+		return this.parse('/bl add ' + target);
+	},
+
+	unab: function (target) {
+		return this.parse('/bl remove ' + target);
+	},
 
 	modlog: function (target, room, user, connection) {
 		let lines = 0;

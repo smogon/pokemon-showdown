@@ -840,9 +840,12 @@ class User {
 		connection.inRooms.forEach(roomid => {
 			let room = Rooms(roomid);
 			if (!this.inRooms.has(roomid)) {
-				if (room.bannedUsers && (this.userid in room.bannedUsers || this.autoconfirmed in room.bannedUsers)) {
+				if (Punishments.roomBannedUsers.has(room.id + '|' + this.userid) || Punishments.roomBannedUsers.has(room.id + '|' + this.autoconfirmed)) {
+					let punishment = Punishments.roomBannedUsers.get(room.id + '|' + this.userid) || Punishments.roomBannedUsers.get(room.id + '|' + this.autoconfirmed);
 					// the connection was in a room that this user is banned from
-					room.bannedIps[connection.ip] = room.bannedUsers[this.userid];
+					Punishments.roombannedIps.set(room.id + '|' + connection.ip, punishment);
+					Punishments.saveRoomsbans();
+
 					connection.sendTo(room.id, `|deinit`);
 					connection.leaveRoom(room);
 					return;
