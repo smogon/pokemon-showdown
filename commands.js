@@ -2071,6 +2071,24 @@ exports.commands = {
 	},
 	hidetexthelp: ["/hidetext [username] - Removes a locked or banned user's messages from chat (includes users banned from the room). Requires: % (global only), @ * # & ~"],
 
+	unlogtext: function (target, room, user) {
+		if (!target) return this.parse('/help unlogtext');
+		this.splitTarget(target);
+		let targetUser = this.targetUser;
+		let name = this.targetUserName;
+		let userid = targetUser.getLastId();
+		if (!user.can("rangeban")) {
+			this.errorReply("/unlogtext - Access denied.");
+			return false;
+		}
+		if (!targetUser) return this.errorReply("User '" + name + "' not found.");
+		if (!(targetUser.locked || (room.bannedUsers[toId(name)] && room.bannedIps[targetUser.latestIp]) || user.can('rangeban'))) return this.errorReply("User '" + name + "' is not banned from this room or locked.");
+		this.add('|unlink|perma|' + userid);
+		if (userid !== toId(this.inputUsername)) this.add('|unlink|perma|' + toId(this.inputUsername));
+		this.addModCommand("" + targetUser.name + "'s messages were deleted from the log in room " + room.id + " by " + user.name + ".");
+	},
+	unlogtexthelp: ["/unlogtext [username] - Removes a locked or banned user's messages from chat and clears them from the room's log. Requires: & ~"],
+
 	banwords: 'banword',
 	banword: {
 		add: function (target, room, user) {
