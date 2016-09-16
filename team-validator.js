@@ -66,7 +66,7 @@ class Validator {
 
 		for (let i = 0; i < format.teamBanTable.length; i++) {
 			let bannedCombo = true;
-			for (let j = 0; j < format.teamBanTable[i].length; j++) {
+			for (let j = 1; j < format.teamBanTable[i].length; j++) {
 				if (!teamHas[format.teamBanTable[i][j]]) {
 					bannedCombo = false;
 					break;
@@ -74,7 +74,7 @@ class Validator {
 			}
 			if (bannedCombo) {
 				let clause = format.name ? " by " + format.name : '';
-				problems.push("Your team has the combination of " + format.teamBanTable[i].join(' + ') + ", which is banned" + clause + ".");
+				problems.push("Your team has the combination of " + format.teamBanTable[i][0] + ", which is banned" + clause + ".");
 			}
 		}
 
@@ -507,7 +507,7 @@ class Validator {
 		}
 		for (let i = 0; i < format.setBanTable.length; i++) {
 			let bannedCombo = true;
-			for (let j = 0; j < format.setBanTable[i].length; j++) {
+			for (let j = 1; j < format.setBanTable[i].length; j++) {
 				if (!setHas[format.setBanTable[i][j]]) {
 					bannedCombo = false;
 					break;
@@ -515,7 +515,7 @@ class Validator {
 			}
 			if (bannedCombo) {
 				clause = format.name ? " by " + format.name : '';
-				problems.push(name + " has the combination of " + format.setBanTable[i].join(' + ') + ", which is banned" + clause + ".");
+				problems.push(name + " has the combination of " + format.setBanTable[i][0] + ", which is banned" + clause + ".");
 			}
 		}
 
