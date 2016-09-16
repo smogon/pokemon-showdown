@@ -743,6 +743,10 @@ class User {
 		// skip the login server
 		let userid = toId(name);
 
+		this.inRooms.forEach(roomid => {
+			Punishments.checkNewNameInRoom(this, userid, roomid);
+		});
+
 		if (users.has(userid) && users.get(userid) !== this) {
 			return false;
 		}
@@ -840,12 +844,8 @@ class User {
 		connection.inRooms.forEach(roomid => {
 			let room = Rooms(roomid);
 			if (!this.inRooms.has(roomid)) {
-				if (Punishments.roomUserids.has(room.id + ':' + this.userid) || Punishments.roomUserids.has(room.id + ':' + this.autoconfirmed)) {
-					let punishment = Punishments.roomUserids.get(room.id + ':' + this.userid) || Punishments.roomUserids.get(room.id + ':' + this.autoconfirmed);
+				if (Punishments.checkNameInRoom(this, room.id)) {
 					// the connection was in a room that this user is banned from
-					Punishments.roomIps.set(room.id + ':' + connection.ip, punishment);
-					Punishments.saveRoombans();
-
 					connection.sendTo(room.id, `|deinit`);
 					connection.leaveRoom(room);
 					return;
@@ -1132,7 +1132,7 @@ class User {
 		if (!this.can('bypassall')) {
 			// check if user has permission to join
 			if (room.staffRoom && !this.isStaff) return false;
-			if (room.checkBanned && !room.checkBanned(this)) {
+			if (Punishments.isRoomBanned(this, room.id)) {
 				return null;
 			}
 		}

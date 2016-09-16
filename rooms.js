@@ -101,14 +101,6 @@ let Room = (() => {
 		return this.id;
 	};
 
-	Room.prototype.checkBanned = function (user) {
-		let userid = Punishments.checkRoomBanned(user, this.id);
-		if (userid) {
-			Punishments.roomBan(this, user, true, userid);
-			return false;
-		}
-		return true;
-	};
 	//mute handling
 	Room.prototype.runMuteTimer = function (forceReschedule) {
 		if (forceReschedule && this.muteTimer) {
@@ -1503,9 +1495,6 @@ let ChatRoom = (() => {
 			this.reportJoin('l', oldid);
 		} else {
 			this.reportJoin('n', user.getIdentity(this.id) + '|' + oldid);
-		}
-		if (!this.checkBanned(user, oldid)) {
-			return;
 		}
 		if (this.poll && user.userid in this.poll.voters) this.poll.updateFor(user);
 		return user;
