@@ -139,41 +139,35 @@ exports.commands = {
 		}
 
 		if (user.can('alts', targetUser) || (room.isPrivate !== true && user.can('mute', targetUser, room) && targetUser.userid in room.users)) {
-			let bannedFrom = ``;
-			let mutedIn = ``;
+			let roomPunishments = ``;
 			for (let i = 0; i < Rooms.global.chatRooms.length; i++) {
-				let thisRoom = Rooms.global.chatRooms[i];
-				if (!thisRoom || thisRoom.isPrivate === true) continue;
-				let roomBanned = false;
-				let punishment = Punishments.roomIps.get(thisRoom.id + ':' + targetUser.latestIp);
-				if (punishment) {
-					if (Date.now() < punishment[2]) {
-						roomBanned = true;
-					} else {
-						Punishments.roomIps.delete(thisRoom.id + ':' + targetUser.latestIp);
-					}
+				const curRoom = Rooms.global.chatRooms[i];
+				if (!curRoom || curRoom.isPrivate === true) continue;
+				let punishment = Punishments.roomIps.nestedGet(curRoom.id, targetUser.latestIp);
+				if (!punishment) {
+					punishment = Punishments.roomUserids.nestedGet(curRoom.id, targetUser.userid);
 				}
-				punishment = Punishments.roomUserids.get(thisRoom.id + ':' + targetUser.userid);
+				let punishDesc = ``;
 				if (punishment) {
-					if (Date.now() < punishment[2]) {
-						roomBanned = true;
-					} else {
-						Punishments.roomUserids.delete(thisRoom.id + ':' + targetUser.userid);
-					}
-				}
-				if (roomBanned) {
-					if (bannedFrom) bannedFrom += `, `;
-					bannedFrom += `<a href="/${thisRoom}">${thisRoom}</a> (${roomBanned})`;
+					const [punishType, userid, expireTime, reason] = punishment;
+					punishDesc = `banned`;
+					if (punishType === 'BLACKLIST') punishDesc = `blacklisted`;
+					if (userid !== targetUser.userid) punishDesc += ` as ${userid}`;
+
+					let expiresIn = new Date(expireTime).getTime() - Date.now();
+					let expiresDays = Math.round(expiresIn / 1000 / 60 / 60 / 24);
+					if (expiresIn > 1) punishDesc += ` for ${expiresDays} more day${Tools.plural(expiresDays)}`;
+					if (reason) punishDesc += `: ${reason}`;
 				} else {
-					let muted = thisRoom.isMuted(targetUser);
-					if (muted) {  // besides roombans, mutes also help to determine if a user is hitting multiple rooms
-						if (mutedIn) mutedIn += ", ";
-						mutedIn += `<a href="/${thisRoom}">${thisRoom}</a> (${muted})`;
-					}
+					let muted = curRoom.isMuted(targetUser);
+					punishDesc = `muted`;
+					if (muted !== targetUser.userid) punishDesc += ` as ${muted}`;
 				}
+				if (!punishDesc) continue;
+				if (roomPunishments) roomPunishments += `, `;
+				roomPunishments += `<a href="/${curRoom}">${curRoom}</a> (${punishDesc})`;
 			}
-			if (bannedFrom) buf += `<br />Banned from: ` + bannedFrom;
-			if (mutedIn) buf += `<br />Muted in: ` + mutedIn;
+			if (roomPunishments) buf += `<br />Room punishments: ` + roomPunishments;
 		}
 		this.sendReplyBox(buf);
 	},
