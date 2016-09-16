@@ -266,7 +266,7 @@ exports.BattleScripts = {
 		if (target && target.hp > 0 && pokemon.hp > 0 && moveData.forceSwitch && this.canSwitch(target.side)) {
 			hitResult = this.runEvent('DragOut', target, pokemon, move);
 			if (hitResult) {
-				target.forceSwitchFlag = true;
+				this.dragIn(target.side, target.position);
 			} else if (hitResult === false) {
 				this.add('-fail', target);
 			}
