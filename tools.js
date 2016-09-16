@@ -616,15 +616,18 @@ module.exports = (() => {
 					if (subformat.banlist[i].includes('+')) {
 						if (subformat.banlist[i].includes('++')) {
 							complexList = subformat.banlist[i].split('++');
+							let banlist = complexList.join('+');
 							for (let j = 0; j < complexList.length; j++) {
 								complexList[j] = toId(complexList[j]);
 							}
+							complexList.unshift(banlist);
 							format.teamBanTable.push(complexList);
 						} else {
 							complexList = subformat.banlist[i].split('+');
 							for (let j = 0; j < complexList.length; j++) {
 								complexList[j] = toId(complexList[j]);
 							}
+							complexList.unshift(subformat.banlist[i]);
 							format.setBanTable.push(complexList);
 						}
 					}
