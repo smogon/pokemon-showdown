@@ -64,7 +64,7 @@ In particular:
 ES5 and ES6
 ------------------------------------------------------------------------
 
-In general, use modern features only if they're supported in Node 4 and reasonably performant in the latest version of Node.
+In general, use modern features only if they're supported in Node 6 and reasonably performant in the latest version of Node.
 
 - **let, const: ALWAYS** - Supported in Node 4+, good performance.
 
