@@ -164,6 +164,7 @@ Punishments.loadRoomPunishments = function () {
 			const expireTime = Number(expireTimeStr);
 			if (punishType === "Punishment") continue;
 			const [roomid, userid] = id.split(':');
+			if (!userid) continue; // invalid format
 			const keys = altKeys.split(',').concat(userid);
 
 			const punishment = [punishType, userid, expireTime].concat(rest);
@@ -297,7 +298,7 @@ Punishments.renderEntry = function (entry, id) {
 Punishments.loadBanlist = function () {
 	return new Promise((resolve, reject) => {
 		fs.readFile(path.resolve(__dirname, 'config/ipbans.txt'), (err, data) => {
-			if (err.code === 'ENOENT') return resolve();
+			if (err && err.code === 'ENOENT') return resolve();
 			if (err) return reject(err);
 			data = ('' + data).split("\n");
 			let rangebans = [];
