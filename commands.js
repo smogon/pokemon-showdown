@@ -1196,7 +1196,7 @@ exports.commands = {
 		Punishments.roomBan(room, targetUser, null, null, target);
 		return true;
 	},
-	roombanhelp: ["/roomban [username], [reason] - Bans the user from the room you are in until the next server restart. Requires: @ # & ~"],
+	roombanhelp: ["/roomban [username], [reason] - Bans the user from the room you are in for a week. Requires: @ # & ~"],
 
 	unroomban: 'roomunban',
 	roomunban: function (target, room, user, connection) {
