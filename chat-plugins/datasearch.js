@@ -77,6 +77,7 @@ const PM = exports.PM = new DatasearchManager({
 });
 
 exports.commands = {
+	'!dexsearch': true,
 	ds: 'dexsearch',
 	dsearch: 'dexsearch',
 	dexsearch: function (target, room, user, connection, cmd, message) {
@@ -113,6 +114,7 @@ exports.commands = {
 		"Parameters separated with '|' will be searched as alternatives for each other, e.g., 'trick | switcheroo' searches for all Pok\u00e9mon that learn either Trick or Switcheroo.",
 		"The order of the parameters does not matter."],
 
+	'!randompokemon': true,
 	rollpokemon: 'randompokemon',
 	randpoke: 'randompokemon',
 	randompokemon: function (target, room, user, connection, cmd, message) {
@@ -155,6 +157,7 @@ exports.commands = {
 		"/randompokemon uses the same parameters as /dexsearch (see '/help ds').",
 		"Adding a number as a parameter returns that many random Pok\u00e9mon, e.g., '/randpoke 6' returns 6 random Pok\u00e9mon."],
 
+	'!movesearch': true,
 	ms: 'movesearch',
 	msearch: 'movesearch',
 	movesearch: function (target, room, user, connection, cmd, message) {
@@ -188,6 +191,7 @@ exports.commands = {
 		"If a Pok\u00e9mon is included as a parameter, moves will be searched from its movepool.",
 		"The order of the parameters does not matter."],
 
+	'!itemsearch': true,
 	isearch: 'itemsearch',
 	itemsearch: function (target, room, user, connection, cmd, message) {
 		if (!this.canBroadcast()) return;
@@ -215,6 +219,7 @@ exports.commands = {
 	"Searches with \"fling\" in them will find items with the specified Fling behavior.",
 	"Searches with \"natural gift\" in them will find items with the specified Natural Gift behavior."],
 
+	'!learn': true,
 	learnset: 'learn',
 	learnall: 'learn',
 	learn5: 'learn',
