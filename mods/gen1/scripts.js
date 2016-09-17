@@ -96,30 +96,6 @@ exports.BattleScripts = {
 		pokemon.lastDamage = 0;
 		let lockedMove = this.runEvent('LockMove', pokemon);
 		if (lockedMove === true) lockedMove = false;
-		if (!lockedMove && (!pokemon.volatiles['partialtrappinglock'] || pokemon.volatiles['partialtrappinglock'].locked !== target)) {
-			pokemon.deductPP(move, null, target);
-			// On gen 1 moves are stored when they are chosen and a PP is deducted.
-			pokemon.side.lastMove = move.id;
-			pokemon.lastMove = move.id;
-		} else {
-			sourceEffect = move;
-		}
-		this.useMove(move, pokemon, target, sourceEffect);
-		this.singleEvent('AfterMove', move, null, pokemon, target, move);
-
-		// If rival fainted
-		if (target.hp <= 0) {
-			// We remove recharge
-			if (pokemon.volatiles['mustrecharge']) pokemon.removeVolatile('mustrecharge');
-			delete pokemon.volatiles['partialtrappinglock'];
-			// We remove screens
-			target.side.removeSideCondition('reflect');
-			target.side.removeSideCondition('lightscreen');
-			pokemon.removeVolatile('twoturnmove');
-		} else {
-			this.runEvent('AfterMoveSelf', pokemon, target, move);
-		}
-
 		// For partial trapping moves, we are saving the target
 		if (move.volatileStatus === 'partiallytrapped' && target && target.hp > 0) {
 			// Let's check if the lock exists
@@ -143,13 +119,36 @@ exports.BattleScripts = {
 						}
 						if (usedMovePos > -1 && pokemon.moveset[usedMovePos].pp === 0) {
 							// If we were on the middle of the 0 PP sequence, the PPs get reset to 63.
-							pokemon.moveset[usedMovePos].pp = 63;
+							pokemon.moveset[usedMovePos].pp = 64;
 							pokemon.isStale = 2;
 							pokemon.isStaleSource = 'ppoverflow';
 						}
 					}
 				}
 			} // If we move to here, the move failed and there's no partial trapping lock.
+		}
+		if (!lockedMove && (!pokemon.volatiles['partialtrappinglock'] || pokemon.volatiles['partialtrappinglock'].locked !== target)) {
+			pokemon.deductPP(move, null, target);
+			// On gen 1 moves are stored when they are chosen and a PP is deducted.
+			pokemon.side.lastMove = move.id;
+			pokemon.lastMove = move.id;
+		} else {
+			sourceEffect = move;
+		}
+		this.useMove(move, pokemon, target, sourceEffect);
+		this.singleEvent('AfterMove', move, null, pokemon, target, move);
+
+		// If rival fainted
+		if (target.hp <= 0) {
+			// We remove recharge
+			if (pokemon.volatiles['mustrecharge']) pokemon.removeVolatile('mustrecharge');
+			delete pokemon.volatiles['partialtrappinglock'];
+			// We remove screens
+			target.side.removeSideCondition('reflect');
+			target.side.removeSideCondition('lightscreen');
+			pokemon.removeVolatile('twoturnmove');
+		} else {
+			this.runEvent('AfterMoveSelf', pokemon, target, move);
 		}
 	},
 	// useMove can be found on scripts.js
