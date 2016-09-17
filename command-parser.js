@@ -240,7 +240,7 @@ class CommandContext {
 		this.room.logEntry(data);
 	}
 	addModCommand(text, logOnlyText) {
-		this.add(text);
+		this.add('|c|' + this.user.getIdentity(this.room) + '|/log ' + text);
 		this.room.modlog(text + (logOnlyText || ""));
 	}
 	logModCommand(text) {
