@@ -2067,12 +2067,12 @@ exports.commands = {
 	hidetexthelp: ["/hidetext [username] - Removes a locked or banned user's messages from chat (includes users banned from the room). Requires: % (global only), @ * # & ~"],
 
 	ab: 'blacklist',
-	blacklist: function (target, room, user, connection) {
+	blacklist: function (target, room, user) {
 		if (!target) return this.parse('/help roomban');
 		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
 
 		target = this.splitTarget(target);
-		let targetUser = this.targetUser;
+		const targetUser = this.targetUser;
 		if (!targetUser) return this.errorReply("User '" + this.targetUsername + "' not found.");
 		if (!this.can('editroom', targetUser, room)) return false;
 		if (!room.chatRoomData) {
@@ -2084,8 +2084,8 @@ exports.commands = {
 		if (!target) {
 			return this.errorReply("Blacklists require a reason.");
 		}
-		let name = targetUser.getLastName();
-		let userid = targetUser.getLastId();
+		const name = targetUser.getLastName();
+		const userid = targetUser.getLastId();
 
 		if (targetUser.confirmed && room.isPrivate !== true) {
 			Monitor.log("[CrisisMonitor] Confirmed user " + targetUser.name + (targetUser.confirmed !== targetUser.userid ? " (" + targetUser.confirmed + ")" : "") + " was blacklisted from " + room.id + " by " + user.name + ", and should probably be demoted.");
@@ -2120,11 +2120,11 @@ exports.commands = {
 	blacklistshelp: ["/blacklist [username] - Blacklists the user from the room you are in for a year. Requires: @ # & ~"],
 
 	unab: 'unblacklist',
-	unblacklist: function (target, room, user, connection) {
+	unblacklist: function (target, room, user) {
 		if (!target) return this.parse('/help unblacklist');
 		if (!this.can('editroom', null, room)) return false;
 
-		let name = Punishments.roomUnblacklist(room, target);
+		const name = Punishments.roomUnblacklist(room, target);
 
 		if (name) {
 			this.addModCommand("" + name + " was unblacklisted by " + user.name + ".");
@@ -2136,6 +2136,55 @@ exports.commands = {
 		}
 	},
 	unblacklisthelp: ["/unblacklist [username] - Unblacklists the user from the room you are in. Requires: @ # & ~"],
+
+	showbl: 'showblacklist',
+	showblacklist: function (target, room, user) {
+		if (!this.can('mute', null, room)) return false;
+
+		if (!user.can('ban', null, room)) return;
+		if (!room.chatRoomData) return this.errorReply("This room does not support blacklists.");
+
+		const subMap = Punishments.roomUserids.get(room.id);
+		if (!subMap) {
+			return this.sendReply("This room has no blacklisted users.");
+		}
+		let blMap = new Map();
+		let ips = '';
+
+		subMap.forEach((punishment, userid) => {
+			const [punishType, id, expireTime] = punishment;
+			if (punishType === 'BLACKLIST') {
+				if (!blMap.has(id)) blMap.set(id, [expireTime]);
+				if (id !== userid) blMap.get(id).push(userid);
+			}
+		});
+
+		if (user.can('ban')) {
+			const subMap = Punishments.roomIps.get(room.id);
+			ips = '/ips';
+			subMap.forEach((punishment, ip) => {
+				const [punishType, id] = punishment;
+				if (punishType === 'BLACKLIST') {
+					if (!blMap.has(id)) blMap.set(id, []);
+					blMap.get(id).push(ip);
+				}
+			});
+		}
+
+		let buf = `Blacklist for room ${room.id}:<br />`;
+
+		blMap.forEach((data, userid) => {
+			const [expireTime, ...alts] = data;
+			const expiresIn = new Date(expireTime).getTime() - Date.now();
+			const expiresDays = Math.round(expiresIn / 1000 / 60 / 60 / 24);
+			buf += `- <strong>${userid}</strong>, for ${expiresDays} day${Tools.plural(expiresDays)}`;
+			if (alts.length) buf += `, alts${ips}: ${alts.join(', ')}`;
+			buf += `<br />`;
+		});
+
+		this.sendReplyBox(buf);
+	},
+	showblacklishelp: ["/showblacklist OR /showbl - show a list of blacklisted users in the room"],
 
 	modlog: function (target, room, user, connection) {
 		let lines = 0;
