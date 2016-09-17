@@ -225,7 +225,7 @@ exports.commands = {
 			room.modjoin = true;
 			this.addModCommand(`${user.name} set modjoin to sync with modchat.`);
 		} else if (target in Config.groups) {
-			if (room.battle && !this.can('makeroom')) return;
+			if (room.battle && !user.can('makeroom') && target !== '+') return this.errorReply(`/modjoin - Access denied from setting modjoin past + in battles.`);
 			if (room.isPersonal && !user.can('makeroom') && target !== '+') return this.errorReply(`/modjoin - Access denied from setting modjoin past + in group chats.`);
 			if (room.modjoin === target) return this.errorReply(`Modjoin is already set to ${target} in this room.`);
 			room.modjoin = target;
