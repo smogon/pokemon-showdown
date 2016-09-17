@@ -1177,7 +1177,9 @@ exports.commands = {
 			);
 		}
 
-		this.addModCommand("" + name + " was banned by " + user.name + "." + (target ? " (" + target + ")" : ""), " (" + targetUser.latestIp + ")");
+		const reason = (target ? ` (${target})` : ``);
+		this.addModCommand(`${name} was banned from ${room.title} by ${user.name}.${reason}`, ` (${targetUser.latestIp})`);
+
 		if (!room.isPrivate && room.chatRoomData) {
 			let alts = targetUser.getAlts();
 			let acAccount = (targetUser.autoconfirmed !== userid && targetUser.autoconfirmed);
