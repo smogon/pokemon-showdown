@@ -200,6 +200,21 @@ exports.commands = {
 	},
 	modchathelp: ["/modchat [off/autoconfirmed/+/%/@/*/#/&/~] - Set the level of moderated chat. Requires: *, @ for off/autoconfirmed/+ options, # & ~ for all the options"],
 
+	ioo: function (target, room, user) {
+		return this.parse('/modjoin +');
+	},
+
+	inviteonly: function (target, room, user) {
+		if (!target) return this.parse('/help inviteonly');
+		if (target === 'on' || target === 'true' || target === 'yes') {
+			return this.parse('/modjoin +');
+		} else {
+			return this.parse('/modjoin ' + target);
+		}
+	},
+	inviteonlyhelp: ["/inviteonly [on|off] - Sets modjoin +. Users can't join unless invited with /invite. Requires: # & ~",
+		"/ioo - Shortcut for /inviteonly on"],
+
 	modjoin: function (target, room, user) {
 		if (!target) {
 			const modjoinSetting = room.modjoin === true ? "SYNC" : room.modjoin || "OFF";
@@ -229,6 +244,7 @@ exports.commands = {
 			if (room.isPersonal && !user.can('makeroom') && target !== '+') return this.errorReply(`/modjoin - Access denied from setting modjoin past + in group chats.`);
 			if (room.modjoin === target) return this.errorReply(`Modjoin is already set to ${target} in this room.`);
 			room.modjoin = target;
+			if (target === '+') target += " (invite only)";
 			this.addModCommand(`${user.name} set modjoin to ${target}.`);
 		} else {
 			this.errorReply(`Unrecognized modjoin setting.`);
@@ -239,7 +255,7 @@ exports.commands = {
 			room.chatRoomData.modjoin = room.modjoin;
 			Rooms.global.writeChatRoomData();
 		}
-		if (!room.modchat) this.parse('/modchat ' + Config.groupsranking[1]);
+		if (target === 'sync' && !room.modchat) this.parse('/modchat ' + Config.groupsranking[1]);
 		if (!room.isPrivate) this.parse('/hiddenroom');
 	},
 	modjoinhelp: ["/modjoin [+|%|@|*|&|~|#|off] - Sets modjoin. Users lower than the specified rank can't join this room. Requires: # & ~",
