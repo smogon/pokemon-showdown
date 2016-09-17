@@ -783,7 +783,13 @@ class User {
 			this.connections[i].send(initdata);
 		}
 		this.games.forEach(roomid => {
-			Rooms(roomid).game.onRename(this, oldid, joining);
+			const room = Rooms(roomid);
+			if (!room) {
+				Monitor.warn(`while renaming, room ${roomid} expired for user ${this.userid} in rooms ${[...this.inRooms]} and games ${[...this.games]}`);
+				this.games.delete(roomid);
+				return;
+			}
+			room.game.onRename(this, oldid, joining);
 		});
 		this.inRooms.forEach(roomid => {
 			Rooms(roomid).onRename(this, oldid, joining);
@@ -1248,7 +1254,18 @@ class User {
 		let games = {};
 		let atLeastOne = false;
 		this.games.forEach(roomid => {
-			let game = Rooms(roomid).game;
+			const room = Rooms(roomid);
+			if (!room) {
+				Monitor.warn(`while searching, room ${roomid} expired for user ${this.userid} in rooms ${[...this.inRooms]} and games ${[...this.games]}`);
+				this.games.delete(roomid);
+				return;
+			}
+			const game = room.game;
+			if (!game) {
+				Monitor.warn(`while searching, room ${roomid} has no game for user ${this.userid} in rooms ${[...this.inRooms]} and games ${[...this.games]}`);
+				this.games.delete(roomid);
+				return;
+			}
 			games[roomid] = game.title + (game.allowRenames ? '' : '*');
 			atLeastOne = true;
 		});
