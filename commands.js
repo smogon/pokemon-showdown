@@ -2001,7 +2001,7 @@ exports.commands = {
 
 	ab: 'blacklist',
 	blacklist: function (target, room, user) {
-		if (!target) return this.parse('/help roomban');
+		if (!target) return this.parse('/help blacklist');
 		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
 
 		target = this.splitTarget(target);
