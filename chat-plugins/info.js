@@ -156,12 +156,14 @@ exports.commands = {
 
 					let expiresIn = new Date(expireTime).getTime() - Date.now();
 					let expiresDays = Math.round(expiresIn / 1000 / 60 / 60 / 24);
-					if (expiresIn > 1) punishDesc += ` for ${expiresDays} more day${Tools.plural(expiresDays)}`;
+					if (expiresIn > 1) punishDesc += ` for ${expiresDays} day${Tools.plural(expiresDays)}`;
 					if (reason) punishDesc += `: ${reason}`;
 				} else {
 					let muted = curRoom.isMuted(targetUser);
-					punishDesc = `muted`;
-					if (muted !== targetUser.userid) punishDesc += ` as ${muted}`;
+					if (muted) {
+						punishDesc = `muted`;
+						if (muted !== targetUser.userid) punishDesc += ` as ${muted}`;
+					}
 				}
 				if (!punishDesc) continue;
 				if (roomPunishments) roomPunishments += `, `;
