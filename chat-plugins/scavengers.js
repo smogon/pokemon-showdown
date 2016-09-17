@@ -85,10 +85,29 @@ exports.commands = {
 		}
 	},
 	scavengerhint: 'scavengerstatus',
-	scavengerstatus: function (target, room, user) {
+	scavengerstatus: function (target, room, user, connection, cmd) {
 		if (room.id !== 'scavengers') return this.errorReply('This command can only be used in the Scavengers room.');
 		if (scavengers.status !== 'on') return this.errorReply('There is no active scavenger hunt.');
-		if (!scavengers.participants[user.userid]) return this.errorReply('You are not participating in the current scavenger hunt. Use the command /joinhunt to participate.');
+		if (!scavengers.participants[user.userid]) {
+			if (!this.can('mute', null, room) || cmd !== 'scavengerstatus') return this.errorReply('You are not participating in the current scavenger hunt. Use the command /joinhunt to participate.');
+			let uptime = (Date.now() - scavengers.startTime) / 1000;
+			let uptimeText;
+			if (uptime > 24 * 60 * 60) {
+				let uptimeDays = Math.floor(uptime / (24 * 60 * 60));
+				uptimeText = uptimeDays + " " + (uptimeDays === 1 ? "day" : "days");
+				let uptimeHours = Math.floor(uptime / (60 * 60)) - uptimeDays * 24;
+				if (uptimeHours) uptimeText += ", " + uptimeHours + " " + (uptimeHours === 1 ? "hour" : "hours");
+			} else {
+				uptimeText = Tools.toDurationString(uptime * 1000);
+			}
+			this.sendReply('The current scavenger hunt has be up for: ' + uptimeText);
+			if (scavengers.finished.length) {
+				this.sendReply('The following users have completed it: ' + scavengers.finished.join(', '));
+			} else {
+				this.sendReply('No user has completed it.');
+			}
+			return;
+		}
 		if (scavengers.participants[user.userid].room >= 3) return this.sendReply('You have finished the current scavenger hunt.');
 		let roomnum = scavengers.participants[user.userid].room;
 		this.sendReply('You are on hint number ' + (roomnum + 1) + ': ' + scavengers.hints[roomnum]);
