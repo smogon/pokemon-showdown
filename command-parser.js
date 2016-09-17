@@ -665,6 +665,8 @@ let parse = exports.parse = function (message, room, user, connection, pmTarget,
 		if (typeof commandHandler === 'string') {
 			// in case someone messed up, don't loop
 			commandHandler = currentCommands[commandHandler];
+		} else if (Array.isArray(commandHandler)) {
+			return parse(cmdToken + 'help ' + cmd.slice(0, -4), room, user, connection, undefined, levelsDeep + 1);
 		}
 		if (commandHandler && typeof commandHandler === 'object') {
 			namespaces.push(cmd);
@@ -701,15 +703,15 @@ let parse = exports.parse = function (message, room, user, connection, pmTarget,
 		for (let g in Config.groups) {
 			let groupid = Config.groups[g].id;
 			if (cmd === groupid) {
-				return parse('/promote ' + toId(target) + ', ' + g, room, user, connection, levelsDeep + 1);
+				return parse('/promote ' + toId(target) + ', ' + g, room, user, connection, undefined, levelsDeep + 1);
 			} else if (cmd === 'global' + groupid) {
-				return parse('/globalpromote ' + toId(target) + ', ' + g, room, user, connection, levelsDeep + 1);
+				return parse('/globalpromote ' + toId(target) + ', ' + g, room, user, connection, undefined, levelsDeep + 1);
 			} else if (cmd === 'de' + groupid || cmd === 'un' + groupid || cmd === 'globalde' + groupid || cmd === 'deglobal' + groupid) {
-				return parse('/demote ' + toId(target), room, user, connection, levelsDeep + 1);
+				return parse('/demote ' + toId(target), room, user, connection, undefined, levelsDeep + 1);
 			} else if (cmd === 'room' + groupid) {
-				return parse('/roompromote ' + toId(target) + ', ' + g, room, user, connection, levelsDeep + 1);
+				return parse('/roompromote ' + toId(target) + ', ' + g, room, user, connection, undefined, levelsDeep + 1);
 			} else if (cmd === 'roomde' + groupid || cmd === 'deroom' + groupid || cmd === 'roomun' + groupid) {
-				return parse('/roomdemote ' + toId(target), room, user, connection, levelsDeep + 1);
+				return parse('/roomdemote ' + toId(target), room, user, connection, undefined, levelsDeep + 1);
 			}
 		}
 
