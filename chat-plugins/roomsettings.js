@@ -73,7 +73,7 @@ class RoomSettings {
 		return modjoinOutput.join(" ");
 	}
 	stretching() {
-		if (!this.user.can('ban', null, this.room)) return "<button " + DISABLED + ">" + (this.room.filterStretching ? this.room.filterStretching : 'off') + "</button>";
+		if (!this.user.can('editroom', null, this.room)) return "<button " + DISABLED + ">" + (this.room.filterStretching ? this.room.filterStretching : 'off') + "</button>";
 		if (this.room.filterStretching) {
 			return '<button name="send" value="/roomsetting stretchfilter off">off</button> <button ' + DISABLED + '>filter stretching</button>';
 		} else {
@@ -81,7 +81,7 @@ class RoomSettings {
 		}
 	}
 	capitals() {
-		if (!this.user.can('ban', null, this.room)) return "<button " + DISABLED + ">" + (this.room.filterCaps ? this.room.filterCaps : 'off') + "</button>";
+		if (!this.user.can('editroom', null, this.room)) return "<button " + DISABLED + ">" + (this.room.filterCaps ? this.room.filterCaps : 'off') + "</button>";
 		if (this.room.filterCaps) {
 			return '<button name="send" value="/roomsetting capsfilter off">off</button> <button ' + DISABLED + '>filter capitals</button>';
 		} else {
@@ -89,7 +89,7 @@ class RoomSettings {
 		}
 	}
 	slowchat() {
-		if (!this.user.can('ban', null, this.room) || this.room.userCount < SLOWCHAT_USER_REQUIREMENT) return "<button " + DISABLED + ">" + (this.room.slowchat ? this.room.slowchat : 'off') + "</button>";
+		if (!this.user.can('editroom', null, this.room) || this.room.userCount < SLOWCHAT_USER_REQUIREMENT) return "<button " + DISABLED + ">" + (this.room.slowchat ? this.room.slowchat : 'off') + "</button>";
 
 		let slowchatOutput = [];
 		for (let i of [5, 10, 20, 30, 60]) {
