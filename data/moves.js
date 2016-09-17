@@ -12716,7 +12716,11 @@ exports.BattleMovedex = {
 		onHit: function (target, source, move) {
 			let targetAbility = this.getAbility(target.ability);
 			let sourceAbility = this.getAbility(source.ability);
-			this.add('-activate', source, 'move: Skill Swap', targetAbility, sourceAbility, '[of] ' + target);
+			if (target.side === source.side) {
+				this.add('-activate', source, 'move: Skill Swap', '', '', '[of] ' + target);
+			} else {
+				this.add('-activate', source, 'move: Skill Swap', targetAbility, sourceAbility, '[of] ' + target);
+			}
 			source.battle.singleEvent('End', sourceAbility, source.abilityData, source);
 			target.battle.singleEvent('End', targetAbility, target.abilityData, target);
 			if (targetAbility.id !== sourceAbility.id) {
