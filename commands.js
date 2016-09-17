@@ -1264,7 +1264,7 @@ exports.commands = {
 		Punishments.roomBan(room, targetUser, null, null, target);
 		return true;
 	},
-	roombanhelp: ["/roomban [username] - Bans the user from the room you are in. Requires: @ # & ~"],
+	roombanhelp: ["/roomban [username], [reason] - Bans the user from the room you are in. Requires: @ # & ~"],
 
 	unroomban: 'roomunban',
 	roomunban: function (target, room, user, connection) {
@@ -2117,7 +2117,7 @@ exports.commands = {
 		Punishments.roomBlacklist(room, targetUser, null, null, target);
 		return true;
 	},
-	blacklistshelp: ["/blacklist [username] - Blacklists the user from the room you are in for a year. Requires: @ # & ~"],
+	blacklistshelp: ["/blacklist [username], [reason] - Blacklists the user from the room you are in for a year. Requires: @ # & ~"],
 
 	unab: 'unblacklist',
 	unblacklist: function (target, room, user) {
