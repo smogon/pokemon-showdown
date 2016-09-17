@@ -3248,8 +3248,8 @@ exports.commands = {
 			this.sendReply("/help OR /h OR /? - Gives you help.");
 		} else if (!target) {
 			this.sendReply("COMMANDS: /msg, /reply, /logout, /challenge, /search, /rating, /whois");
-			this.sendReply("OPTION COMMANDS: /nick, /avatar, /ignore, /away, /back, /timestamps, /highlight");
-			this.sendReply("INFORMATIONAL COMMANDS: /data, /dexsearch, /movesearch, /groups, /faq, /rules, /intro, /formatshelp, /othermetas, /learn, /analysis, /calc (replace / with ! to broadcast. Broadcasting requires: + % @ * # & ~)");
+			this.sendReply("OPTIONAL COMMANDS: /nick, /avatar, /ignore, /away, /back, /timestamps, /highlight");
+			this.sendReply("INFORMATIVE COMMANDS: /data, /dexsearch, /movesearch, /groups, /faq, /rules, /intro, /formatshelp, /othermetas, /learn, /analysis, /calc (replace / with ! to broadcast. Broadcasting requires: + % @ * # & ~)");
 			if (user.group !== Config.groupsranking[0]) {
 				this.sendReply("DRIVER COMMANDS: /warn, /mute, /hourmute, /unmute, /alts, /forcerename, /modlog, /modnote, /lock, /unlock, /announce, /redirect");
 				this.sendReply("MODERATOR COMMANDS: /ban, /unban, /ip, /modchat");
