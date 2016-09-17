@@ -2050,7 +2050,7 @@ exports.commands = {
 		Punishments.roomBlacklist(room, targetUser, null, null, target);
 		return true;
 	},
-	blacklistshelp: ["/blacklist [username], [reason] - Blacklists the user from the room you are in for a year. Requires: @ # & ~"],
+	blacklisthelp: ["/blacklist [username], [reason] - Blacklists the user from the room you are in for a year. Requires: @ # & ~"],
 
 	unab: 'unblacklist',
 	unblacklist: function (target, room, user) {
