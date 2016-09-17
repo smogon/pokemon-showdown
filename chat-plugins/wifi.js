@@ -6,7 +6,7 @@
 
 'use strict';
 
-let banned = Object.create(null);
+const BAN_DURATION = 7 * 24 * 60 * 60 * 1000;
 
 function checkPlural(variable, plural, singular) {
 	if (!plural) plural = 's';
@@ -26,11 +26,6 @@ class Giveaway {
 		this.room = room;
 		this.prize = prize;
 		this.phase = 'pending';
-
-		this.excluded = {};
-		this.excluded[host.latestIp] = host.userid;
-		this.excluded[giver.latestIp] = giver.userid;
-		Object.assign(this.excluded, banned);
 
 		this.joined = {};
 
@@ -62,30 +57,34 @@ class Giveaway {
 		return false;
 	}
 
-	banUser(user) {
+	kickUser(user) {
 		for (let ip in this.joined) {
 			if (user.latestIp === ip || this.joined[ip] in user.prevNames) {
-				this.excluded[ip] = this.joined[ip];
 				if (this.generateReminder) user.sendTo(this.room, `|uhtmlchange|giveaway${this.room.gaNumber}${this.phase}|<div class="broadcast-blue">${this.generateReminder()}</div>`);
 				delete this.joined[ip];
 			}
 		}
 	}
 
-	unbanUser(user) {
-		for (let ip in this.excluded) {
-			if (user.latestIp === ip || this.joined[ip] in user.prevNames) {
-				delete this.excluded[ip];
-			}
-		}
+	checkExcluded(user) {
+		if (Giveaway.checkBanned(this.room, user)) return true;
+		if (user === this.giver || user.latestIp in this.giver.ips || toId(user) in this.giver.prevNames) return true;
+		if (user === this.host || user.latestIp in this.host.ips || toId(user) in this.host.prevNames) return true;
+		return false;
 	}
 
-	checkExcluded(user) {
-		for (let ip in this.excluded) {
-			if (user.latestIp === ip) return true;
-			if (this.excluded[ip] in user.prevNames) return true;
-		}
-		return false;
+	static checkBanned(room, user) {
+		return Punishments.getRoomPunishType(room, toId(user)) === 'GIVEAWAY_BAN';
+	}
+
+	static ban(room, user, reason) {
+		if (reason) reason = `(${reason})`;
+		let msg = `Giveaway banned${reason}`;
+		Punishments.roomPunish(room, user, ['GIVEAWAY_BAN', toId(user), Date.now() + BAN_DURATION, msg]);
+	}
+
+	static unban(room, user) {
+		Punishments.roomUnpunish(room, toId(user), 'GIVEAWAY_BAN');
 	}
 
 	static getSprite(text) {
@@ -356,6 +355,7 @@ let commands = {
 		if (!targetUser || !targetUser.connected) return this.errorReply(`User '${params[0]}' is not online.`);
 		if (!this.can('warn', null, room) && !(this.can('broadcast', null, room) && user === targetUser)) return this.errorReply("Permission denied.");
 		if (!targetUser.autoconfirmed) return this.errorReply(`User '${targetUser.name}' needs to be autoconfirmed to give something away.`);
+		if (Giveaway.checkBanned(room, targetUser)) return this.errorReply(`User '${targetUser.name}' is giveaway banned.`);
 
 		room.giveaway = new QuestionGiveaway(user, targetUser, room, params[1], params[2], params.slice(3).join(','));
 
@@ -404,6 +404,7 @@ let commands = {
 		if (!targetUser || !targetUser.connected) return this.errorReply(`User '${params[0]}' is not online.`);
 		if (!this.can('warn', null, room) && !(this.can('broadcast', null, room) && user === targetUser)) return this.errorReply("Permission denied.");
 		if (!targetUser.autoconfirmed) return this.errorReply(`User '${targetUser.name}' needs to be autoconfirmed to give something away.`);
+		if (Giveaway.checkBanned(room, targetUser)) return this.errorReply(`User '${targetUser.name}' is giveaway banned.`);
 
 		let numWinners = 1;
 		if (params.length > 2) {
@@ -452,11 +453,12 @@ let commands = {
 		if (target.length > 300) {
 			return this.errorReply("The reason is too long. It cannot exceed 300 characters.");
 		}
-		if (targetUser.latestIp in banned || Object.values(banned).indexOf(toId(targetUser)) > -1) return this.errorReply(`User '${this.targetUsername}' is already banned from entering giveaways.`);
-		banned[targetUser.latestIp] = toId(targetUser);
-		if (room.giveaway) room.giveaway.banUser(targetUser);
+		if (Giveaway.checkBanned(room, targetUser)) return this.errorReply(`User '${this.targetUsername}' is already banned from entering giveaways.`);
+
+		Giveaway.ban(room, targetUser, target);
+		if (room.giveaway) room.giveaway.kickUser(targetUser);
 		if (target) target = ` (${target})`;
-		this.addModCommand(`${targetUser.name} was banned from entering giveaways by ${user.name}.${target}`);
+		this.privateModCommand(`(${targetUser.name} was banned from entering giveaways by ${user.name}.${target})`);
 	},
 	unban: function (target, room, user) {
 		if (!target) return false;
@@ -466,16 +468,10 @@ let commands = {
 		this.splitTarget(target);
 		let targetUser = this.targetUser;
 		if (!targetUser) return this.errorReply(`User '${this.targetUsername}' not found.`);
-		if (!(targetUser.latestIp in banned)) {
-			if (Object.values(banned).indexOf(toId(targetUser)) < 0) return this.errorReply(`User '${this.targetUsername}' isn't banned from entering giveaways.`);
+		if (!Giveaway.checkBanned(room, targetUser)) return this.errorReply(`User '${this.targetUsername}' isn't banned from entering giveaways.`);
 
-			for (let ip in banned) {
-				if (banned[ip] === toId(targetUser)) delete banned[ip];
-			}
-		}
-		delete banned[targetUser.latestIp];
-		if (room.giveaway) room.giveaway.unbanUser(targetUser);
-		this.addModCommand(`${targetUser.name} was unbanned from entering giveaways by ${user.name}.`);
+		Giveaway.unban(room, targetUser);
+		this.privateModCommand(`${targetUser.name} was unbanned from entering giveaways by ${user.name}.`);
 	},
 	stop: 'end',
 	end: function (target, room, user) {
