@@ -729,7 +729,7 @@ let parse = exports.parse = function (message, room, user, connection, pmTarget,
 
 	let context = new CommandContext({target, room, user, connection, cmd, message, namespaces, cmdToken, levelsDeep, pmTarget, relatedRoom});
 
-	if (commandHandler) {
+	if (typeof commandHandler === 'function') {
 		message = context.run(commandHandler);
 	} else {
 		// Check for mod/demod/admin/deadmin/etc depending on the group ids
