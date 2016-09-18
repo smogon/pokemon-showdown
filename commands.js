@@ -3308,7 +3308,7 @@ process.nextTick(() => {
 	CommandParser.multiLinePattern.register('/(room|staff)(topic|intro) ');
 	CommandParser.multiLinePattern.register('/adddatacenters ');
 	CommandParser.globalPattern.register([
-		'/join ', '/leave ', '/cmd ', '/trn', '/logout ', '/autojoin ', '/utm ', '/vtm', '/pm ',
+		'/join ', '/leave ', '/cmd ', '/trn ', '/logout ', '/autojoin ', '/utm ', '/vtm ', '/pm ',
 		'/accept ', '/reject ', '/challenge ', '/cancelchallenge ', '/search ', '/cancelsearch ',
 		'/avatar ',
 		'/roomauth ', '/auth ', '/stafflist ', '/globalauth ', '/authlist ', '/authority ',

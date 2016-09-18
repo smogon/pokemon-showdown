@@ -54,7 +54,9 @@ class PatternTester {
 	}
 	update() {
 		const slowElements = this.elements.filter(elem => !this.fastElements.has(this.fastNormalize(elem)));
-		this.regexp = new RegExp('^(' + slowElements.map(elem => '(?:' + elem + ')').join('|') + ')', 'i');
+		if (slowElements.length) {
+			this.regexp = new RegExp('^(' + slowElements.map(elem => '(?:' + elem + ')').join('|') + ')', 'i');
+		}
 	}
 	register(elem) {
 		if (Array.isArray(elem)) {
@@ -69,7 +71,7 @@ class PatternTester {
 	}
 	test(text) {
 		const spaceIndex = text.indexOf(' ');
-		if (spaceIndex >= 0 && this.fastElements.has(text.slice(0, spaceIndex))) {
+		if (this.fastElements.has(spaceIndex >= 0 ? text.slice(0, spaceIndex) : text)) {
 			return true;
 		}
 		if (!this.regexp) return false;
