@@ -947,6 +947,7 @@
 76.164.192.0,76.164.239.255,VersaWeb,http://www.versaweb.com/
 77.37.0.0,77.37.127.255,Star-Hosting e.K.,http://star-hosting.de/
 77.66.0.0,77.66.127.255,Netgroup Denmark,https://www.netgroup.dk/
+77.67.50.224,77.67.50.255,Surfeasy,https://www.surfeasy.com/
 77.68.0.0,77.68.127.255,Fasthosts Internet Ltd,http://www.fasthosts.co.uk/
 77.73.0.0,77.73.7.255,Memset Ltd,http://www.memset.com/
 77.74.192.0,77.74.199.255,UK Dedicated Servers LTD,http://ukservers.com/
@@ -1143,7 +1144,20 @@
 85.159.64.8,85.159.64.15,Ares Hosting,http://areshosting.com/
 85.159.64.40,85.159.64.47,Peron Hosting,http://peronhost.com/
 85.159.237.0,85.159.237.255,NFOrce,https://www.nforce.com/
+85.195.73.80,85.195.73.87,Surfeasy,https://www.surfeasy.com/
+85.195.75.200,85.195.75.207,Surfeasy,https://www.surfeasy.com/
+85.195.76.160,85.195.76.167,Surfeasy,https://www.surfeasy.com/
+85.195.76.168,85.195.76.175,Surfeasy,https://www.surfeasy.com/
+85.195.76.176,85.195.76.183,Surfeasy,https://www.surfeasy.com/
+85.195.76.184,85.195.76.191,Surfeasy,https://www.surfeasy.com/
+85.195.85.72,85.195.85.79,Surfeasy,https://www.surfeasy.com/
+85.195.94.80,85.195.94.87,Surfeasy,https://www.surfeasy.com/
+85.195.96.188,85.195.96.191,Surfeasy,https://www.surfeasy.com/
+85.195.96.200,85.195.96.203,Surfeasy,https://www.surfeasy.com/
 85.195.99.34,85.195.99.35,velia,http://www.velia.net/
+85.195.110.32,85.195.110.39,Surfeasy,https://www.surfeasy.com/
+85.195.114.192,85.195.114.199,Surfeasy,https://www.surfeasy.com/
+85.195.120.88,85.195.120.95,Surfeasy,https://www.surfeasy.com/
 85.214.0.0,85.215.255.255,Strato,http://www.strato.de
 85.232.32.0,85.232.63.255,Titan Internet Ltd,http://www.titaninternet.co.uk/index.cfm
 85.234.128.0,85.234.159.255,BlueConnex,http://www.simplytransit.net/
@@ -1677,6 +1691,9 @@
 142.234.0.0,142.234.255.255,Ubiquity Server Solutions,http://www.ubiquityservers.com/
 142.252.0.0,142.252.255.255,EGIHosting.com,http://www.egihosting.com/
 146.0.72.0,146.0.79.255,HostKey,http://www.hostkey.com/
+146.0.229.24,146.0.229.31,Surfeasy,https://www.surfeasy.com/
+146.0.237.48,146.0.237.55,Surfeasy,https://www.surfeasy.com/
+146.0.237.56,146.0.237.63,Surfeasy,https://www.surfeasy.com/
 146.185.16.0,146.185.31.255,UK2 Group,http://www.100tb.com/
 146.255.24.0,146.255.31.255,Angel Hosting,http://www.angel-hosting.cz/
 146.255.32.0,146.255.47.255,GoDaddy.com Inc,http://www.godaddy.com/
@@ -2077,6 +2094,7 @@
 185.104.184.0,185.104.184.255,M247,http://www.m247.com/
 185.108.84.0,185.108.85.255,Ardis Russia,https://ardis.ru/
 185.121.120.0,185.121.121.255,Trabia Network,https://www.trabia.com/
+185.137.16.0,185.137.19.255,Surfeasy,https://www.surfeasy.com/
 186.227.162.128,186.227.162.191,Server Green,http://servergreen.com.br/
 186.251.128.0,186.251.139.255,ipglobe.net,https://www.ipglobe.net/
 187.0.192.0,187.0.223.255,alog,http://www.alog.com.br/
