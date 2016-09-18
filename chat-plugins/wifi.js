@@ -6,6 +6,8 @@
 
 'use strict';
 
+Punishments.roomPunishmentTypes.set('GIVEAWAYBAN', 'banned from giveaways');
+
 const BAN_DURATION = 7 * 24 * 60 * 60 * 1000;
 
 function checkPlural(variable, plural, singular) {
@@ -74,17 +76,15 @@ class Giveaway {
 	}
 
 	static checkBanned(room, user) {
-		return Punishments.getRoomPunishType(room, toId(user)) === 'GIVEAWAY_BAN';
+		return Punishments.getRoomPunishType(room, toId(user)) === 'GIVEAWAYBAN';
 	}
 
 	static ban(room, user, reason) {
-		if (reason) reason = `(${reason})`;
-		let msg = `Giveaway banned${reason}`;
-		Punishments.roomPunish(room, user, ['GIVEAWAY_BAN', toId(user), Date.now() + BAN_DURATION, msg]);
+		Punishments.roomPunish(room, user, ['GIVEAWAYBAN', toId(user), Date.now() + BAN_DURATION, reason]);
 	}
 
 	static unban(room, user) {
-		Punishments.roomUnpunish(room, toId(user), 'GIVEAWAY_BAN');
+		Punishments.roomUnpunish(room, toId(user), 'GIVEAWAYBAN');
 	}
 
 	static getSprite(text) {
