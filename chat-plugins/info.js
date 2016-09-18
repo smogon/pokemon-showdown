@@ -151,8 +151,8 @@ exports.commands = {
 				let punishDesc = ``;
 				if (punishment) {
 					const [punishType, userid, expireTime, reason] = punishment;
-					punishDesc = `banned`;
-					if (punishType === 'BLACKLIST') punishDesc = `blacklisted`;
+					punishDesc = Punishments.roomPunishmentTypes.get(punishType);
+					if (!punishDesc) punishDesc = `punished`;
 					if (userid !== targetUser.userid) punishDesc += ` as ${userid}`;
 
 					let expiresIn = new Date(expireTime).getTime() - Date.now();

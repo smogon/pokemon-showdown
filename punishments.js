@@ -117,9 +117,18 @@ Punishments.roomIps = new NestedPunishmentMap();
 //   'LOCK'
 //   'BAN'
 //   'NAMELOCK'
-// For room punishments, they can instead be one of two:
+
+// For room punishments, they can be anything in the roomPunishmentTypes map.
+// This map can be extended with custom punishments by chat plugins.
+// Keys in the map correspond to punishTypes, values signify the way they should be displayed in /alt
+// By default, this includes:
 //   'ROOMBAN'
 //   'BLACKLIST'
+
+Punishments.roomPunishmentTypes = new Map([
+	['ROOMBAN', 'banned'],
+	['BLACKLIST', 'blacklisted'],
+]);
 
 // punishments.tsv is in the format:
 // punishType, userid, ips/usernames, expiration time
@@ -917,15 +926,15 @@ Punishments.isRoomBanned = function (user, roomid) {
 	if (!user) return;
 
 	let punishment = Punishments.roomUserids.nestedGet(roomid, user.userid);
-	if (punishment) return punishment[1];
+	if (punishment && (punishment[0] === 'ROOMBAN' || punishment[0] === 'BLACKLIST')) return punishment[1];
 
 	if (user.autoconfirmed) {
 		punishment = Punishments.roomUserids.nestedGet(roomid, user.autoconfirmed);
-		if (punishment) return punishment[1];
+		if (punishment && (punishment[0] === 'ROOMBAN' || punishment[0] === 'BLACKLIST')) return punishment[1];
 	}
 
 	for (let ip in user.ips) {
 		punishment = Punishments.roomIps.nestedGet(roomid, ip);
-		if (punishment) return punishment[1];
+		if (punishment && (punishment[0] === 'ROOMBAN' || punishment[0] === 'BLACKLIST')) return punishment[1];
 	}
 };
