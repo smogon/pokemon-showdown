@@ -239,6 +239,17 @@ Users.isUsernameKnown = function (name) {
 	return false;
 };
 
+Users.isConfirmed = function (name) {
+	if (name.confirmed) return name.confirmed;
+	let userid = toId(name);
+	if (userid in usergroups) return userid;
+	for (let i = 0; i < Rooms.global.chatRooms.length; i++) {
+		let curRoom = Rooms.global.chatRooms[i];
+		if (!curRoom.isPrivate && !curRoom.isPersonal && curRoom.auth && userid in curRoom.auth && curRoom.auth[userid] !== '+') return userid;
+	}
+	return false;
+};
+
 Users.importUsergroups = importUsergroups;
 Users.cacheGroupData = cacheGroupData;
 
@@ -901,18 +912,13 @@ class User {
 		this.registered = true;
 		if (this.userid in usergroups) {
 			this.group = usergroups[this.userid].charAt(0);
-			this.confirmed = this.userid;
-			this.autoconfirmed = this.userid;
 		} else {
 			this.group = Config.groupsranking[0];
-			for (let i = 0; i < Rooms.global.chatRooms.length; i++) {
-				let room = Rooms.global.chatRooms[i];
-				if (!room.isPrivate && !room.isPersonal && room.auth && this.userid in room.auth && room.auth[this.userid] !== '+') {
-					this.confirmed = this.userid;
-					this.autoconfirmed = this.userid;
-					break;
-				}
-			}
+		}
+
+		if (Users.isConfirmed(this)) {
+			this.confirmed = this.userid;
+			this.autoconfirmed = this.userid;
 		}
 
 		if (Config.customavatars && Config.customavatars[this.userid]) {
@@ -925,7 +931,6 @@ class User {
 			this.isStaff = (staffRoom && staffRoom.auth && staffRoom.auth[this.userid]);
 		}
 		if (this.confirmed) {
-			this.autoconfirmed = this.confirmed;
 			this.locked = false;
 			this.namelocked = false;
 		}
