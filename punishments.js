@@ -920,7 +920,7 @@ Punishments.checkNameInRoom = function (user, roomid) {
 		punishment = Punishments.roomUserids.nestedGet(roomid, user.autoconfirmed);
 	}
 	if (!punishment) return;
-	if (punishment === 'ROOMBAN' || punishment === 'BLACKLIST') {
+	if (punishment[0] === 'ROOMBAN' || punishment[0] === 'BLACKLIST') {
 		return true;
 	}
 };
