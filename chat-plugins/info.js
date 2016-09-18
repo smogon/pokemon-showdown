@@ -1726,4 +1726,7 @@ exports.commands = {
 	htmlboxhelp: ["/htmlbox [message] - Displays a message, parsing HTML code contained. Requires: ~ # * with global authority OR * with room authority"],
 };
 
-process.nextTick(() => Tools.includeData());
+process.nextTick(() => {
+	Tools.includeData();
+	CommandParser.globalPattern.register(['/git ', '/uptime ']);
+});

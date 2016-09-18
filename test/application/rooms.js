@@ -76,6 +76,7 @@ describe('Rooms features', function () {
 				},
 			};
 			room = Rooms.global.startBattle(p1, p2, 'customgame', packedTeam, packedTeam, options);
+			administrator.joinRoom(room);
 			assert.strictEqual(room.getAuth(roomStaff), '%', 'before promotion attempt');
 			CommandParser.parse("/roomvoice Room auth", room, p1, p1.connections[0]);
 			assert.strictEqual(room.getAuth(roomStaff), '%', 'after promotion attempt');

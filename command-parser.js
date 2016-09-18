@@ -39,22 +39,46 @@ const BROADCAST_TOKEN = '!';
 const fs = require('fs');
 const path = require('path');
 
-exports.multiLinePattern = {
-	elements: [],
-	regexp: null,
-	register: function (elem) {
+class PatternTester {
+	// This class sounds like a RegExp
+	// In fact, one could in theory implement it as a RegExp subclass
+	// However, ES2016 RegExp subclassing is a can of worms, and it wouldn't allow us
+	// to tailor the test method for fast command parsing.
+	constructor() {
+		this.elements = [];
+		this.fastElements = new Set();
+		this.regexp = null;
+	}
+	fastNormalize(elem) {
+		return elem.slice(0, -1);
+	}
+	update() {
+		const slowElements = this.elements.filter(elem => !this.fastElements.has(this.fastNormalize(elem)));
+		this.regexp = new RegExp('^(' + slowElements.map(elem => '(?:' + elem + ')').join('|') + ')', 'i');
+	}
+	register(elem) {
 		if (Array.isArray(elem)) {
-			elem.forEach(elem => this.elements.push(elem));
-		} else {
-			this.elements.push(elem);
+			elem.forEach(e => this.register(e));
+			return;
 		}
-		this.regexp = new RegExp('^(' + this.elements.map(elem => '(?:' + elem + ')').join('|') + ')', 'i');
-	},
-	test: function (text) {
+		this.elements.push(elem);
+		if (/^[^ \^\$\?\|\(\)\[\]]+ $/.test(elem)) {
+			this.fastElements.add(this.fastNormalize(elem));
+		}
+		this.update();
+	}
+	test(text) {
+		const spaceIndex = text.indexOf(' ');
+		if (spaceIndex >= 0 && this.fastElements.has(text.slice(0, spaceIndex))) {
+			return true;
+		}
 		if (!this.regexp) return false;
 		return this.regexp.test(text);
-	},
-};
+	}
+}
+
+exports.multiLinePattern = new PatternTester();
+exports.globalPattern = new PatternTester();
 
 /*********************************************************
  * Load command files
@@ -97,6 +121,7 @@ class CommandContext {
 		this.inputUsername = '';
 
 		this.pmTarget = options.pmTarget;
+		this.relatedRoom = options.relatedRoom;
 	}
 
 	checkFormat(room, message) {
@@ -306,7 +331,7 @@ class CommandContext {
 		if (inNamespace && this.cmdToken) {
 			message = this.cmdToken + this.namespaces.concat(message.slice(1)).join(" ");
 		}
-		return CommandParser.parse(message, room || this.room, this.user, this.connection, this.pmTarget, this.levelsDeep + 1);
+		return CommandParser.parse(message, room || this.room, this.user, this.connection, this.relatedRoom, this.pmTarget, this.levelsDeep + 1);
 	}
 	run(targetCmd, inNamespace) {
 		if (targetCmd === 'constructor') return this.sendReply("Access denied.");
@@ -626,10 +651,19 @@ exports.CommandContext = CommandContext;
  */
 let parse = exports.parse = function (message, room, user, connection, pmTarget, levelsDeep = 0) {
 	let cmd = '', target = '', cmdToken = '';
+
 	if (!message || !message.trim().length) return;
+
 	if (levelsDeep > MAX_PARSE_RECURSION) {
-		return connection.sendTo(room, "Error: Too much command recursion");
+		throw new Error("Too much command recursion");
 	}
+
+	let relatedRoom = null;
+	if (!user.inRooms.has(room.id) || room === Rooms.global) {
+		if (!CommandParser.globalPattern.test(message)) return;
+		relatedRoom = room;
+	}
+	if (relatedRoom) room = Rooms.global;
 
 	if (message.slice(0, 3) === '>> ') {
 		// multiline eval
@@ -691,10 +725,7 @@ let parse = exports.parse = function (message, room, user, connection, pmTarget,
 	}
 	let fullCmd = namespaces.concat(cmd).join(' ');
 
-	let context = new CommandContext({
-		target: target, room: room, user: user, connection: connection, cmd: cmd, message: message,
-		namespaces: namespaces, cmdToken: cmdToken, levelsDeep: levelsDeep, pmTarget: pmTarget,
-	});
+	let context = new CommandContext({target, room, user, connection, cmd, message, namespaces, cmdToken, levelsDeep, pmTarget, relatedRoom});
 
 	if (commandHandler) {
 		message = context.run(commandHandler);
