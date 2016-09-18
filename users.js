@@ -390,7 +390,7 @@ class User {
 		if (this.namelocked) {
 			return '‽' + this.name;
 		}
-		if (roomid) {
+		if (roomid && roomid !== 'global') {
 			let room = Rooms(roomid);
 			if (!room) {
 				throw new Error(`Room doesn't exist: ${roomid}`);

@@ -1062,9 +1062,11 @@ exports.commands = {
 		if (!targetRoom) return this.errorReply("The room '" + target + "' does not exist.");
 		if (!targetRoom.auth) return this.sendReply("/roomauth - The room '" + (targetRoom.title || target) + "' isn't designed for per-room moderation and therefore has no auth list." + userLookup);
 
-		let cannotJoin = (targetRoom.isPrivate && targetRoom.modjoin &&
-			!targetRoom.auth[user.userid] || targetRoom.staffRoom) &&
-			!user.can('makeroom');
+		let cannotJoin = !user.can('makeroom') && (
+			targetRoom.staffRoom ||
+			targetRoom.isPrivate && targetRoom.modjoin &&
+			(!targetRoom.auth || !targetRoom.auth[user.userid])
+		);
 		let unavailableRoom = !user.inRooms.has(targetRoom.id) && cannotJoin;
 		if (unavailableRoom) return this.errorReply("The room '" + target + "' does not exist.");
 
