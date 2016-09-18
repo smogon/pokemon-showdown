@@ -462,6 +462,16 @@ Punishments.roomPunish = function (room, user, punishment, noRecurse) {
 		}, room.id + ':' + id, ROOM_PUNISHMENT_FILE);
 	}
 };
+
+Punishments.roomPunishName = function (room, userid, punishment) {
+	Punishments.roomUserids.nestedSet(room.id, userid, punishment);
+	const [punishType, id, ...rest] = punishment;
+	Punishments.appendPunishment({
+		keys: [userid],
+		punishType: punishType,
+		rest: rest,
+	}, room.id + ':' + id, ROOM_PUNISHMENT_FILE);
+};
 /**
  * @param {string} id
  * @param {string} punishType
@@ -676,18 +686,23 @@ Punishments.roomBan = function (room, user, expireTime, id, ...rest) {
 };
 
 Punishments.roomBlacklist = function (room, user, expireTime, id, ...rest) {
-	if (!id) id = user.getLastId();
+	if (!id && user) id = user.getLastId();
+	if (!user) user = Users(id);
 
 	if (!expireTime) expireTime = Date.now() + BLACKLIST_DURATION;
 	let punishment = ['BLACKLIST', id, expireTime].concat(rest);
-	Punishments.roomPunish(room, user, punishment);
+	if (user) {
+		Punishments.roomPunish(room, user, punishment);
 
-	let affected = user.getAltUsers(false, true);
-	for (let curUser of affected) {
-		if (room.game && room.game.removeBannedUser) {
-			room.game.removeBannedUser(curUser);
+		let affected = user.getAltUsers(false, true);
+		for (let curUser of affected) {
+			if (room.game && room.game.removeBannedUser) {
+				room.game.removeBannedUser(curUser);
+			}
+			curUser.leaveRoom(room.id);
 		}
-		curUser.leaveRoom(room.id);
+	} else {
+		Punishments.roomPunishName(room, id, punishment);
 	}
 };
 

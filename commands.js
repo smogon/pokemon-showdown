@@ -2056,6 +2056,37 @@ let commands = exports.commands = {
 	},
 	blacklisthelp: ["/blacklist [username], [reason] - Blacklists the user from the room you are in for a year. Requires: # & ~"],
 
+	blacklistname: function (target, room, user) {
+		if (!target) return this.parse('/help blacklistname');
+		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
+		if (!this.can('editroom', null, room)) return false;
+		if (!room.chatRoomData) {
+			return this.errorReply("This room is not going to last long enough for a blacklist to matter - just ban the user");
+		}
+
+		let parts = target.split('|');
+		if (parts.length < 2) {
+			return this.errorReply("Blacklists require a reason.");
+		}
+		let reason = parts[1];
+		let targets = parts[0].split(',').map(s => toId(s));
+
+		for (let i = 0; i < targets.length; i++) {
+			let userid = targets[i];
+
+			Punishments.roomBlacklist(room, null, null, userid, reason);
+
+			let confirmed = Users.isConfirmed(userid);
+			if (Users.isConfirmed(userid)) {
+				Monitor.log("[CrisisMonitor] Confirmed user " + userid + (confirmed !== userid ? " (" + confirmed + ")" : "") + " was nameblacklisted from " + room.id + " by " + user.name + ", and should probably be demoted.");
+			}
+		}
+
+		this.addModCommand("" + targets.join(', ') + (targets.length > 1 ? " were" : " was") + " nameblacklisted by " + user.name + ".");
+		return true;
+	},
+	blacklistnamehelp: ["/blacklistname [username1, username2, etc.] | reason - Blacklists the given username(s) from the room you are in for a year. Requires: # & ~"],
+
 	unab: 'unblacklist',
 	unblacklist: function (target, room, user) {
 		if (!target) return this.parse('/help unblacklist');
@@ -2098,14 +2129,17 @@ let commands = exports.commands = {
 
 		if (user.can('ban')) {
 			const subMap = Punishments.roomIps.get(room.id);
-			ips = '/ips';
-			subMap.forEach((punishment, ip) => {
-				const [punishType, id] = punishment;
-				if (punishType === 'BLACKLIST') {
-					if (!blMap.has(id)) blMap.set(id, []);
-					blMap.get(id).push(ip);
-				}
-			});
+
+			if (subMap) {
+				ips = '/ips';
+				subMap.forEach((punishment, ip) => {
+					const [punishType, id] = punishment;
+					if (punishType === 'BLACKLIST') {
+						if (!blMap.has(id)) blMap.set(id, []);
+						blMap.get(id).push(ip);
+					}
+				});
+			}
 		}
 
 		let buf = `Blacklist for room ${room.id}:<br />`;
