@@ -574,6 +574,7 @@ let GlobalRoom = (() => {
 			}
 		}
 	};
+	GlobalRoom.prototype.update = function () {};
 	GlobalRoom.prototype.send = function (message, user) {
 		if (user) {
 			user.sendTo(this, message);
