@@ -331,7 +331,7 @@ class CommandContext {
 		if (inNamespace && this.cmdToken) {
 			message = this.cmdToken + this.namespaces.concat(message.slice(1)).join(" ");
 		}
-		return CommandParser.parse(message, room || this.room, this.user, this.connection, this.relatedRoom, this.pmTarget, this.levelsDeep + 1);
+		return CommandParser.parse(message, room || this.room, this.user, this.connection, this.pmTarget, this.levelsDeep + 1);
 	}
 	run(targetCmd, inNamespace) {
 		if (targetCmd === 'constructor') return this.sendReply("Access denied.");
