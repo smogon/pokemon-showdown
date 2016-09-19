@@ -1056,18 +1056,6 @@ exports.commands = {
 		);
 	},
 
-	'!calc': true,
-	calculator: 'calc',
-	calc: function (target, room, user) {
-		if (!this.runBroadcast()) return;
-		this.sendReplyBox(
-			"Pok&eacute;mon Showdown! damage calculator. (Courtesy of Honko)<br />" +
-			"- <a href=\"https://pokemonshowdown.com/damagecalc/\">Damage Calculator</a>"
-		);
-	},
-	calchelp: ["/calc - Provides a link to a damage calculator",
-		"!calc - Shows everyone a link to a damage calculator. Requires: + % @ * # & ~"],
-
 	'!cap': true,
 	capintro: 'cap',
 	cap: function (target, room, user) {
