@@ -54,6 +54,10 @@ Messages.send = function (target, context) {
 		context.cmd = innerCmd;
 		context.message = target;
 		context.target = innerTarget;
+
+		if (typeof CommandParser.commands[innerCmd] === 'string') {
+			innerCmd = CommandParser.commands[innerCmd];
+		}
 		switch (innerCmd) {
 		case 'me':
 		case 'mee':
@@ -67,8 +71,7 @@ Messages.send = function (target, context) {
 		case 'unignore':
 			context.errorReply(`This command can only be used by itself to ignore the person you're talking to: "/${innerCmd}", not "/${innerCmd} ${innerTarget}"`);
 			return;
-		case 'invite':
-		case 'inv': {
+		case 'invite': {
 			let targetRoom = Rooms.search(innerTarget);
 			if (!targetRoom || targetRoom === Rooms.global) return context.errorReply('The room "' + innerTarget + '" does not exist.');
 			if (targetRoom.staffRoom && !targetUser.isStaff) return context.errorReply('User "' + context.targetUsername + '" requires global auth to join room "' + targetRoom.id + '".');
@@ -96,17 +99,11 @@ Messages.send = function (target, context) {
 			break;
 		}
 		default:
-			if (!CommandParser.commands[innerCmd]) {
-				return context.errorReply(`The command "/${innerCmd}" was unrecognized. To send a message starting with "/${innerCmd}", type "//${innerCmd}".`);
-			}
-			if (typeof CommandParser.commands[innerCmd] === 'string') {
-				innerCmd = CommandParser.commands[innerCmd];
-			}
 			if (CommandParser.commands['!' + innerCmd]) {
 				target = CommandParser.commands[innerCmd].call(context, innerTarget, context.room, context.user, context.connection, context.cmd, target);
 				if (!target || typeof target.then === 'function') return;
 			} else {
-				return context.errorReply(`The command "/${innerCmd}" is unavailable in private messages. To send a message starting with "/${innerCmd}", type "//${innerCmd}".`);
+				return context.errorReply(`The command "/${innerCmd}" does not exist or is unavailable in private messages. To send a message starting with "/${innerCmd}", type "//${innerCmd}".`);
 			}
 		}
 	}
