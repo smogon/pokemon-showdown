@@ -1168,7 +1168,7 @@ exports.commands = {
 			return this.privateModCommand("(" + name + " would be banned by " + user.name + problem + ".)");
 		}
 
-		if (targetUser.confirmed && room.isPrivate !== true) {
+		if (targetUser.confirmed && room.isPrivate !== true && !room.isPersonal) {
 			Monitor.log("[CrisisMonitor] Confirmed user " + targetUser.name + (targetUser.confirmed !== targetUser.userid ? " (" + targetUser.confirmed + ")" : "") + " was roombanned from " + room.id + " by " + user.name + ", and should probably be demoted.");
 		}
 
