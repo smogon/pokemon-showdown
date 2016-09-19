@@ -787,7 +787,7 @@ exports.BattleMovedex = {
 	},
 	surf: {
 		inherit: true,
-		basePower: 95,
+		desc: 'Power doubles on the foe(s) Dive.',
 		target: "allAdjacentFoes",
 	},
 	synthesis: {
