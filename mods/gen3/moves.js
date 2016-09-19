@@ -785,6 +785,11 @@ exports.BattleMovedex = {
 		},
 		self: false,
 	},
+	surf: {
+		inherit: true,
+		basePower: 95,
+		target: "allAdjacentFoes",
+	},
 	synthesis: {
 		inherit: true,
 		onHit: function (pokemon) {
