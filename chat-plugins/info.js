@@ -1224,6 +1224,7 @@ exports.commands = {
 			"- /roomdevoice <em>username</em>: remove a room voice<br />" +
 			"- /modchat <em>[off/autoconfirmed/+]</em>: set modchat level<br />" +
 			"- /staffintro <em>intro</em>: sets the staff introduction that will be displayed for all staff joining the room<br />" +
+			"- /roomsettings: shows a list of the current room settings with an option to change them (if you can)<br />" +
 			"<br />" +
 			"Room owners (#) can also use:<br />" +
 			"- /roomintro <em>intro</em>: sets the room introduction that will be displayed for all users joining the room<br />" +
