@@ -39,6 +39,8 @@ const BROADCAST_TOKEN = '!';
 const fs = require('fs');
 const path = require('path');
 
+exports.Messages = require('./messages');
+
 class PatternTester {
 	// This class sounds like a RegExp
 	// In fact, one could in theory implement it as a RegExp subclass

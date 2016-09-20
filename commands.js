@@ -386,7 +386,7 @@ exports.commands = {
 			return this.parse('/help msg');
 		}
 
-		return Messages.send(target, this);
+		return CommandParser.Messages.send(target, this);
 	},
 	msghelp: ["/msg OR /whisper OR /w [username], [message] - Send a private message."],
 
