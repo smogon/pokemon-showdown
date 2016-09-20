@@ -785,6 +785,11 @@ exports.BattleMovedex = {
 		},
 		self: false,
 	},
+	surf: {
+		inherit: true,
+		shortDesc: "Power doubles on the foe(s) Dive.",
+		target: "allAdjacentFoes",
+	},
 	synthesis: {
 		inherit: true,
 		onHit: function (pokemon) {
