@@ -1585,7 +1585,7 @@ exports.commands = {
 		this.globalModlog("BAN", targetUser, " by " + user.name + (target ? ": " + target : ""));
 		return true;
 	},
-	globalbanhelp: ["/globalban OR /gb [username], [reason] - Kick user from all rooms and ban user's IP address with reason. Requires: @ * & ~"],
+	globalbanhelp: ["/globalban OR /gban [username], [reason] - Kick user from all rooms and ban user's IP address with reason. Requires: @ * & ~"],
 
 	unglobalban: function (target, room, user) {
 		if (!target) return this.parse('/help unglobalban');
