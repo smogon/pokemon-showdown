@@ -293,6 +293,12 @@ class Connection {
 		if (this.inRooms.has(room.id)) return;
 		this.inRooms.add(room.id);
 		Sockets.channelAdd(this.worker, room.id, this.socketid);
+		if (room.id !== 'global') {
+			for (let i = room.log.length - 100; i < room.log.length; i++) {
+				if (i < 0) continue;
+				if (room.log[i].includes('|unlink|hide|')) this.sendTo(room.id, '|unlink|hide|' + room.log[i].substring(13));
+			}
+		}
 	}
 	leaveRoom(room) {
 		if (this.inRooms.has(room.id)) {
