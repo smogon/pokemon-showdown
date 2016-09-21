@@ -1056,20 +1056,20 @@ exports.commands = {
 		);
 	},
 
-        '!calc': true,
-        damagecalculator: 'calc',
-        calculator: ' calc',
-        calculate: 'calc',
-        calc: function (target, room, user, connection, cmd, message) {
-               	if (!this.runBroadcast()) return;
-        	target = target.toLowerCase();
-        	if (target == 0) {
-        	this.sendReplyBox(
-                        "Pok&eacute;mon Showdown! damage calculator. (Courtesy of Honko)<br />" +
-		       	"- <a href=\"https://pokemonshowdown.com/damagecalc/\">Damage Calculator</a>"
-	    	);
-	    	return false;
-	    }
+    '!calc': true,
+    damagecalculator: 'calc',
+    calculator: ' calc',
+    calculate: 'calc',
+    calc: function(target, room, user, connection, cmd, message) {
+        if (!this.runBroadcast()) return;
+        target = target.toLowerCase();
+        if (target == 0) {
+            this.sendReplyBox(
+                "Pok&eacute;mon Showdown! damage calculator. (Courtesy of Honko)<br />" +
+                "- <a href=\"https://pokemonshowdown.com/damagecalc/\">Damage Calculator</a>"
+            );
+            return false;
+        }
         var parts = target.replace(/, /g, ',', '').split(',');
         if (parts.length < 0) return this.sendReply('/calc [attacker details], [defender details], [extras - weather, critical hit etc] - To add a berry that weakens a Super Effective attack just put \"berry\" as one of the defender\'s details. For a gem just put \"gem\" for the attacker details. To change the level to level 50 add VGC at the end and to change the level to level 5 add LC at then end.');
         var attackerDetails = parts[0].split(' ');
@@ -1273,7 +1273,7 @@ exports.commands = {
                 defender.ivs = detail;
             }
         }
-        if (!defender.id) return this.errorReply( 'You need to include an defending Pokemon/Move.');
+        if (!defender.id) return this.errorReply('You need to include an defending Pokemon/Move.');
         if (defender.wonderguard && effectiveFactor(attacker.move, defender.id) < 2) {
             finalMultiplier = 0;
         }
@@ -1362,14 +1362,12 @@ exports.commands = {
             }
             if (mon.ivs) {
                 var ivs = parseInt(mon.ivs);
-            }
-            else {
+            } else {
                 ivs = 31;
             }
             if (mon.evs) {
                 var evs = parseInt(mon.evs) / 4;
-            }
-            else {
+            } else {
                 evs = 0;
             }
             level = mon.level || 100;
@@ -1379,8 +1377,7 @@ exports.commands = {
         }
         if ((Tools.getMove(attacker.move) && Tools.getMove(attacker.move).category === 'Physical') || ['psyshock', 'psystrike', 'secretsword'].indexOf(attacker.move) > -1) {
             var defStat = 'def';
-        }
-        else {
+        } else {
             defStat = 'spd';
         }
 
@@ -1394,8 +1391,7 @@ exports.commands = {
             if (level < 0) {
                 var negative = true;
                 level *= -1
-            }
-            else {
+            } else {
                 negative = false;
             }
             level += 2;
@@ -1409,8 +1405,7 @@ exports.commands = {
         if (extras && (extras.indexOf('criticalhit') > -1 || extras.indexOf('crit') > -1)) {
             var boostmod = getBoostValue(defender.boosts);
             if (boostmod > 1) boostmod = 1;
-        }
-        else {
+        } else {
             boostmod = getBoostValue(defender.boosts);
         }
         var defBoost = boostmod * defender.multiplier;
@@ -1456,8 +1451,7 @@ exports.commands = {
         if (stabMove) {
             if (attacker.ability === 'adaptability') {
                 var STABmodifier = 2;
-            }
-            else {
+            } else {
                 STABmodifier = 1.5;
             }
             for (var i = 0; i < damageRolls.length; i++) {
@@ -1481,9 +1475,9 @@ exports.commands = {
 
         text += '<i>(Rolls [' + minRoll + '-' + maxRoll + '/' + hp + 'HP]: ' + damageRolls.join(', ') + ')</i>'
         this.sendReplyBox(text);
-        },
-        calchelp: ["/calc - Provides a damage calculation",
-		  "!calc - Shows everyone a damage calculation Requires: + % @ * # & ~"],
+    },
+    calchelp: ["/calc - Provides a damage calculation",
+        "!calc - Shows everyone a damage calculation Requires: + % @ * # & ~"],
 
 	'!cap': true,
 	capintro: 'cap',
