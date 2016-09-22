@@ -1477,6 +1477,7 @@ exports.BattleFormatsData = {
 	zapdos: {
 		randomBattleMoves: ["thunderbolt", "heatwave", "hiddenpowerice", "roost", "toxic", "uturn", "defog"],
 		randomDoubleBattleMoves: ["thunderbolt", "heatwave", "hiddenpowergrass", "hiddenpowerice", "tailwind", "protect", "discharge"],
+		randomMonotypeBattleMoves: ["discharge", "voltswitch", "defog", "toxic", "heatwave", "substitute", "roar", "hiddenpowerice", "thunderbolt", "roost"],
 		eventPokemon: [
 			{"generation": 3, "level": 50, "shiny": 1, "moves":["thunderwave", "agility", "detect", "drillpeck"]},
 			{"generation": 3, "level": 70, "moves":["agility", "detect", "drillpeck", "charge"]},
@@ -1755,6 +1756,7 @@ exports.BattleFormatsData = {
 	ampharosmega: {
 		randomBattleMoves: ["voltswitch", "focusblast", "agility", "thunderbolt", "healbell", "dragonpulse"],
 		randomDoubleBattleMoves: ["focusblast", "hiddenpowerice", "hiddenpowergrass", "thunderbolt", "discharge", "dragonpulse", "protect"],
+		randomMonotypeBattleMoves: ["voltswitch", "thunderbolt", "rest", "sleeptalk", "healbell", "dragonpulse", "focusblast", "agility", "toxic"],
 		requiredItem: "Ampharosite",
 		tier: "UU",
 	},
@@ -1915,6 +1917,7 @@ exports.BattleFormatsData = {
 	gliscor: {
 		randomBattleMoves: ["roost", "substitute", "taunt", "earthquake", "protect", "toxic", "stealthrock", "knockoff"],
 		randomDoubleBattleMoves: ["tailwind", "substitute", "taunt", "earthquake", "protect", "stoneedge", "knockoff"],
+		randomMonotypeBattleMoves: ["toxic", "taunt", "earthquake", "swordsdance", "knockoff", "stoneedge", "roost", "stealthrock", "substitute", "protect"],
 		tier: "OU",
 	},
 	snubbull: {
@@ -2065,6 +2068,7 @@ exports.BattleFormatsData = {
 	skarmory: {
 		randomBattleMoves: ["whirlwind", "bravebird", "roost", "spikes", "stealthrock", "defog"],
 		randomDoubleBattleMoves: ["skydrop", "bravebird", "tailwind", "taunt", "feint", "protect", "ironhead"],
+		randomMonotypeBattleMoves: ["ironhead", "bravebird", "taunt", "roost", "stealthrock", "spikes", "whirlwind", "defog"],
 		tier: "OU",
 	},
 	houndour: {
@@ -2802,6 +2806,7 @@ exports.BattleFormatsData = {
 	torkoal: {
 		randomBattleMoves: ["shellsmash", "fireblast", "earthpower", "hiddenpowergrass", "stealthrock", "rapidspin", "yawn", "lavaplume"],
 		randomDoubleBattleMoves: ["protect", "heatwave", "earthpower", "willowisp", "shellsmash", "fireblast", "hiddenpowergrass"],
+		randomMonotypeBattleMoves: ["lavaplume", "rapidspin", "stealthrock", "yawn", "earthpower", "stoneedge", "toxic"],
 		tier: "PU",
 	},
 	spoink: {
@@ -4765,6 +4770,7 @@ exports.BattleFormatsData = {
 	eelektross: {
 		randomBattleMoves: ["thunderbolt", "flamethrower", "uturn", "voltswitch", "acidspray", "gigadrain", "knockoff", "superpower", "aquatail"],
 		randomDoubleBattleMoves: ["thunderbolt", "flamethrower", "uturn", "voltswitch", "knockoff", "gigadrain", "protect"],
+		randomMonotypeBattleMoves: ["rockslide", "u-turn", "gigadrain", "drainpunch", "knockoff", "flamethrower", "voltswitch", "acidspray"],
 		tier: "RU",
 	},
 	elgyem: {
@@ -5017,6 +5023,7 @@ exports.BattleFormatsData = {
 	thundurus: {
 		randomBattleMoves: ["thunderwave", "nastyplot", "thunderbolt", "hiddenpowerice", "hiddenpowerflying", "focusblast", "substitute", "knockoff", "taunt"],
 		randomDoubleBattleMoves: ["thunderwave", "nastyplot", "thunderbolt", "hiddenpowerice", "hiddenpowerflying", "focusblast", "substitute", "knockoff", "taunt", "protect"],
+		randomMonotypeBattleMoves: ["superpower", "voltswitch", "taunt", "knockoff", "thunderwave", "grassknot", "nastyplot", "hiddenpowerflying", "wildcharge", "uturn", "thunderbolt"],
 		eventPokemon: [
 			{"generation": 5, "level": 40, "shiny": 1, "isHidden": false, "moves":["revenge", "shockwave", "healblock", "agility"]},
 			{"generation": 5, "level": 5, "isHidden": true, "moves":["uproar", "astonish", "thundershock"], "pokeball": "dreamball"},
