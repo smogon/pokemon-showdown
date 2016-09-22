@@ -2007,6 +2007,7 @@ exports.commands = {
 	blacklist: function (target, room, user) {
 		if (!target) return this.parse('/help blacklist');
 		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
+		if (target === 'show') return this.parse('/showblacklist');
 
 		target = this.splitTarget(target);
 		const targetUser = this.targetUser;
@@ -2054,7 +2055,8 @@ exports.commands = {
 		Punishments.roomBlacklist(room, targetUser, null, null, target);
 		return true;
 	},
-	blacklisthelp: ["/blacklist [username], [reason] - Blacklists the user from the room you are in for a year. Requires: # & ~"],
+	blacklisthelp: ["/blacklist [username], [reason] - Blacklists the user from the room you are in for a year. Requires: # & ~",
+		"/blacklist show - Show a list of blacklisted users in the room. Requires @ * # & ~"],
 
 	unab: 'unblacklist',
 	unblacklist: function (target, room, user) {
