@@ -47,6 +47,10 @@ Messages.send = function (target, context) {
 	let buf;
 	if ((target.charAt(0) === '/' && target.charAt(1) !== '/') || (target.charAt(0) === '!' && /[a-z0-9]/.test(target.charAt(1)))) {
 		// PM command
+		if (targetUser === user && target.charAt(0) === '!') {
+			// Don't allow users to PM broadcast themselves commands
+			target = target.replace('!', '/');
+		}
 		let innerCmdIndex = target.indexOf(' ');
 		let innerCmd = (innerCmdIndex >= 0 ? target.slice(1, innerCmdIndex) : target.slice(1));
 		let innerTarget = (innerCmdIndex >= 0 ? target.slice(innerCmdIndex + 1) : '');
