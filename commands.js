@@ -3212,6 +3212,8 @@ exports.commands = {
 	},
 
 	trn: function (target, room, user, connection) {
+		if (target === user.name) return false;
+
 		let commaIndex = target.indexOf(',');
 		let targetName = target;
 		let targetRegistered = false;
