@@ -2013,7 +2013,7 @@ exports.commands = {
 		if (!targetUser) return this.errorReply("User '" + this.targetUsername + "' not found.");
 		if (!this.can('editroom', targetUser, room)) return false;
 		if (!room.chatRoomData) {
-			return this.errorReply("This room is not going to last long enough for a blacklist to matter - just ban the user");
+			return this.errorReply("This room is not going to last long enough for a blacklist to matter - just roomban the user");
 		}
 		if (target.length > MAX_REASON_LENGTH) {
 			return this.errorReply("The reason is too long. It cannot exceed " + MAX_REASON_LENGTH + " characters.");
