@@ -382,18 +382,9 @@ exports.BattleFormats = {
 	},
 	ateclause: {
 		effectType: 'Rule',
+		banlist: ['Aerilate + Pixilate + Refrigerate > 1'],
 		onStart: function () {
 			this.add('rule', '-ate Clause: Limit one of Aerilate/Refrigerate/Pixilate');
-		},
-		onValidateTeam: function (team, format) {
-			let ateAbility = false;
-			for (let i = 0; i < team.length; i++) {
-				let ability = toId(team[i].ability);
-				if (ability === 'refrigerate' || ability === 'pixilate' || ability === 'aerilate') {
-					if (ateAbility) return [team[i].name + " has more than one of Aerilate/Refrigerate/Pixilate, which is banned by -ate Clause."];
-					ateAbility = true;
-				}
-			}
 		},
 	},
 	ohkoclause: {
@@ -478,19 +469,9 @@ exports.BattleFormats = {
 	batonpassclause: {
 		effectType: 'Banlist',
 		name: 'Baton Pass Clause',
+		banlist: ["Baton Pass > 1"],
 		onStart: function () {
 			this.add('rule', 'Baton Pass Clause: Limit one Baton Passer, can\'t pass Spe and other stats simultaneously');
-		},
-		onValidateTeam: function (team, format) {
-			let BPcount = 0;
-			for (let i = 0; i < team.length; i++) {
-				if (team[i].moves.indexOf('Baton Pass') >= 0) {
-					BPcount++;
-				}
-				if (BPcount > 1) {
-					return [(team[i].name || team[i].species) + " has Baton Pass, but you are limited to one Baton Pass user by Baton Pass Clause."];
-				}
-			}
 		},
 		onValidateSet: function (set, format, setHas) {
 			if (!('batonpass' in setHas)) return;
@@ -539,19 +520,9 @@ exports.BattleFormats = {
 	batonpassspeedclause: {
 		effectType: 'Banlist',
 		name: 'Baton Pass Speed Clause',
+		banlist: ["Baton Pass > 1"],
 		onStart: function () {
 			this.add('rule', 'Baton Pass Clause: Limit one Baton Passer, can\'t pass Speed');
-		},
-		onValidateTeam: function (team, format) {
-			let BPcount = 0;
-			for (let i = 0; i < team.length; i++) {
-				if (team[i].moves.indexOf('Baton Pass') >= 0) {
-					BPcount++;
-				}
-				if (BPcount > 1) {
-					return [(team[i].name || team[i].species) + " has Baton Pass, but you are limited to one Baton Pass user by Baton Pass Clause."];
-				}
-			}
 		},
 		onValidateSet: function (set, format, setHas) {
 			if (!('batonpass' in setHas)) return;
