@@ -1426,6 +1426,11 @@ class User {
 		// deallocate user
 		this.games.forEach(roomid => {
 			let game = Rooms(roomid).game;
+			if (!game) {
+				Monitor.warn(`while deallocating, room ${roomid} did not have a game for ${this.userid} in rooms ${[...this.inRooms]} and games ${[...this.games]}`);
+				this.games.delete(roomid);
+				return;
+			}
 			if (game.ended) return;
 			if (game.forfeit) {
 				game.forfeit(this);
