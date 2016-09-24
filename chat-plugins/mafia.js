@@ -402,7 +402,7 @@ class Mafia extends Rooms.RoomGame {
 
 		for (let i in this.players) {
 			if (this.players[i].class.side === 'mafia') {
-				this.players[i].sendRoom('|html|' + this.mafiaWindow(this.players[i].class.image, content + '<br/><strong>Mafia:</strong> ' + Tools.escapeHTML(mafia.joi0n(', '))));
+				this.players[i].sendRoom('|html|' + this.mafiaWindow(this.players[i].class.image, content + '<br/><strong>Mafia:</strong> ' + Tools.escapeHTML(mafia.join(', '))));
 			} else {
 				this.players[i].sendRoom('|html|' + this.mafiaWindow(this.players[i].class.image, content));
 			}
