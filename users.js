@@ -1426,7 +1426,7 @@ class User {
 		// deallocate user
 		this.games.forEach(roomid => {
 			let game = Rooms(roomid).game;
-			if (game.ended) return;
+			if (!game || game.ended) return;
 			if (game.forfeit) {
 				game.forfeit(this);
 			}
