@@ -619,6 +619,7 @@ Punishments.unnamelock = function (name) {
 	let user = Users(name);
 	let id = toId(name);
 	let success = [];
+	let unpunished = Punishments.unpunish(name, 'NAMELOCK');
 	if (user && user.locked) {
 		id = user.locked;
 		user.locked = false;
@@ -636,9 +637,7 @@ Punishments.unnamelock = function (name) {
 			});
 		}
 	}
-	if (Punishments.unpunish(name, 'NAMELOCK')) {
-		if (!success.length) success.push(name);
-	}
+	if (unpunished && !success.length) success.push(name);
 	if (!success.length) return false;
 	if (!success.some(v => toId(v) === id)) {
 		success.push(id);
