@@ -10,7 +10,7 @@
 'use strict';
 
 const RANKS = Config.groupsranking;
-const DISABLED = 'disabled="" style="font-weight:bold;"';
+const DISABLED = 'class="button disabled" style="font-weight:bold; color:#575757; font-weight:bold; background-color:#d3d3d3;"';
 
 const SLOWCHAT_MINIMUM = 2;
 const SLOWCHAT_MAXIMUM = 60;
@@ -35,7 +35,7 @@ class RoomSettings {
 			if (RANKS[i] === ' ' && !this.room.modchat) {
 				modchatOutput.push('<button ' + DISABLED + '>off</button>');
 			} else if (RANKS[i] === ' ') {
-				modchatOutput.push('<button name="send" value="/roomsetting modchat off">off</button>');
+				modchatOutput.push('<button class="button" name="send" value="/roomsetting modchat off">off</button>');
 			} else if (RANKS[i] === this.room.modchat) {
 				modchatOutput.push('<button ' + DISABLED + '>' + RANKS[i] + '</button>');
 			} else if (RANKS[i]) {
@@ -46,11 +46,11 @@ class RoomSettings {
 				if (roomAuth && !this.user.can('bypassall')) {
 					if (rankIndex > roomAtuhIndex) continue;
 				}
-				modchatOutput.push('<button name="send" value="/roomsetting modchat ' + RANKS[i] + '">' + RANKS[i] + '</button>');
+				modchatOutput.push('<button class="button" name="send" value="/roomsetting modchat ' + RANKS[i] + '">' + RANKS[i] + '</button>');
 			}
 		}
 		// Since autoconfirmed isn't technically a Config rank...
-		modchatOutput.splice(1, 0, '<button ' + (this.room.modchat !== 'autoconfirmed' ? 'name="send" value="/roomsetting modchat autoconfirmed"' : DISABLED) + '>AC</button>');
+		modchatOutput.splice(1, 0, '<button ' + (this.room.modchat !== 'autoconfirmed' ? 'class="button" name="send" value="/roomsetting modchat autoconfirmed"' : DISABLED) + '>AC</button>');
 		return modchatOutput.join(" ");
 	}
 	modjoin() {
@@ -60,14 +60,14 @@ class RoomSettings {
 			if (RANKS[i] === ' ' && !this.room.modjoin) {
 				modjoinOutput.push('<button ' + DISABLED + '>off</button>');
 			} else if (RANKS[i] === ' ') {
-				modjoinOutput.push('<button name="send" value="/roomsetting modjoin off">off</button>');
+				modjoinOutput.push('<button class="button" name="send" value="/roomsetting modjoin off">off</button>');
 			} else if (RANKS[i] === this.room.modjoin) {
 				modjoinOutput.push('<button ' + DISABLED + '>' + RANKS[i] + '</button>');
 			} else if (RANKS[i]) {
 				// Personal rooms modjoin check
 				if (this.room.isPersonal && !this.user.can('makeroom') && RANKS[i] !== '+') continue;
 
-				modjoinOutput.push('<button name="send" value="/roomsetting modjoin ' + RANKS[i] + '">' + RANKS[i] + '</button>');
+				modjoinOutput.push('<button class="button" name="send" value="/roomsetting modjoin ' + RANKS[i] + '">' + RANKS[i] + '</button>');
 			}
 		}
 		return modjoinOutput.join(" ");
@@ -75,17 +75,17 @@ class RoomSettings {
 	stretching() {
 		if (!this.user.can('editroom', null, this.room)) return "<button " + DISABLED + ">" + (this.room.filterStretching ? this.room.filterStretching : 'off') + "</button>";
 		if (this.room.filterStretching) {
-			return '<button name="send" value="/roomsetting stretchfilter off">off</button> <button ' + DISABLED + '>filter stretching</button>';
+			return '<button class="button" name="send" value="/roomsetting stretchfilter off">off</button> <button ' + DISABLED + '>filter stretching</button>';
 		} else {
-			return '<button ' + DISABLED + '>off</button> <button name="send" value="/roomsetting stretchfilter on">filter stretching</button>';
+			return '<button ' + DISABLED + '>off</button> <button class="button" name="send" value="/roomsetting stretchfilter on">filter stretching</button>';
 		}
 	}
 	capitals() {
 		if (!this.user.can('editroom', null, this.room)) return "<button " + DISABLED + ">" + (this.room.filterCaps ? this.room.filterCaps : 'off') + "</button>";
 		if (this.room.filterCaps) {
-			return '<button name="send" value="/roomsetting capsfilter off">off</button> <button ' + DISABLED + '>filter capitals</button>';
+			return '<button class="button" name="send" value="/roomsetting capsfilter off">off</button> <button ' + DISABLED + '>filter capitals</button>';
 		} else {
-			return '<button ' + DISABLED + '>off</button> <button name="send" value="/roomsetting capsfilter on">filter capitals</button>';
+			return '<button ' + DISABLED + '>off</button> <button class="button" name="send" value="/roomsetting capsfilter on">filter capitals</button>';
 		}
 	}
 	slowchat() {
@@ -96,13 +96,13 @@ class RoomSettings {
 			if (this.room.slowchat === i) {
 				slowchatOutput.push('<button ' + DISABLED + '>' + i + 's</button>');
 			} else {
-				slowchatOutput.push('<button name="send" value="/roomsetting slowchat ' + i + '">' + i + 's</button>');
+				slowchatOutput.push('<button class="button" name="send" value="/roomsetting slowchat ' + i + '">' + i + 's</button>');
 			}
 		}
 		if (!this.room.slowchat) {
 			slowchatOutput.unshift('<button ' + DISABLED + '>off</button>');
 		} else {
-			slowchatOutput.unshift('<button name="send" value="/roomsettings slowchat false">off</button>');
+			slowchatOutput.unshift('<button class="button" name="send" value="/roomsettings slowchat false">off</button>');
 		}
 		return slowchatOutput.join(" ");
 	}
@@ -281,7 +281,7 @@ exports.commands = {
 			room.slowchat = false;
 			this.add("|raw|<div class=\"broadcast-blue\"><b>Slow chat was disabled!</b><br />There is no longer a set minimum time between messages.</div>");
 		} else if (targetInt) {
-			if (room.userCount < SLOWCHAT_USER_REQUIREMENT) return this.errorReply(`This room must have at least ${SLOWCHAT_USER_REQUIREMENT}users to set slowchat; it only has ${room.userCount} right now.`);
+			if (room.userCount < SLOWCHAT_USER_REQUIREMENT) return this.errorReply(`This room must have at least ${SLOWCHAT_USER_REQUIREMENT} users to set slowchat; it only has ${room.userCount} right now.`);
 			if (room.slowchat === targetInt) return this.errorReply(`Slow chat is already set to ${room.slowchat} seconds in this room.`);
 			if (targetInt < SLOWCHAT_MINIMUM) targetInt = SLOWCHAT_MINIMUM;
 			if (targetInt > SLOWCHAT_MAXIMUM) targetInt = SLOWCHAT_MAXIMUM;

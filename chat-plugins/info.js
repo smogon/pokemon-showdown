@@ -1705,8 +1705,11 @@ exports.commands = {
 		if (!target) return this.parse('/help htmlbox');
 		target = this.canHTML(target);
 		if (!target) return;
+
+		if (!this.canBroadcast('!htmlbox')) return;
+		if (this.broadcastMessage && !this.can('declare', null, room)) return false;
+
 		if (!this.runBroadcast('!htmlbox')) return;
-		if (this.broadcasting && !this.can('declare', null, room)) return;
 
 		this.sendReplyBox(target);
 	},
@@ -1729,5 +1732,5 @@ exports.commands = {
 
 process.nextTick(() => {
 	Tools.includeData();
-	CommandParser.globalPattern.register(['/git ', '/uptime ']);
+	CommandParser.globalPattern.register('/git ', '/uptime ');
 });
