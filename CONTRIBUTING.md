@@ -60,6 +60,13 @@ In particular:
 
 - Tabs, not spaces (sorry! our more opinionated developers like tabs more)
 
+### Strings
+
+The codebase currently uses a mix of `"` and `'` and `` ` `` for strings.
+
+Our current convention is to use `'` for IDs; `"` for names (i.e. usernames, move names, etc), English text in object literals such as in `data/`, and help entries of chat commands; and `` ` `` for code (i.e. protocol code and HTML) and English text outside of object literals (yes, including strings that don't need interpolation). As far as I know, we don't use strings for anything else, but if you need to use strings in a way that doesn't conform the the above three, ask Zarel in the Development chatroom to decide (and default to `` ` `` in lieu of a decision).
+
+Unfortunately, since this is not a convention the linter can text for (and also because our older string standards predate PS), a lot of existing code is wrong on this, so you can't look at surrounding code to get an idea of what the convention should be. Refer to the above paragraph as the definitive rule.
 
 ES5 and ES6
 ------------------------------------------------------------------------
@@ -92,6 +99,6 @@ In general, use modern features only if they're supported in Node 6 and reasonab
 
 - **String#includes: ALWAYS** - Supported in Node 4+, poor performance, but not really noticeable and worth the better readability.
 
-- **Template strings: ALWAYS** - Supported in Node 4+ and good performance in Node 6+, please start refactoring existing code over.
+- **Template strings: ALWAYS** - Supported in Node 4+ and good performance in Node 6+, please start refactoring existing code over, but be careful since code standards having settled for template strings yet. Look at existing uses for guidance.
 
 Take "good performance" to mean "approximately on par with ES3" and "great performance" to mean "better than ES3".
