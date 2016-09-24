@@ -117,9 +117,18 @@ Punishments.roomIps = new NestedPunishmentMap();
 //   'LOCK'
 //   'BAN'
 //   'NAMELOCK'
-// For room punishments, they can instead be one of two:
+
+// For room punishments, they can be anything in the roomPunishmentTypes map.
+// This map can be extended with custom punishments by chat plugins.
+// Keys in the map correspond to punishTypes, values signify the way they should be displayed in /alt
+// By default, this includes:
 //   'ROOMBAN'
 //   'BLACKLIST'
+
+Punishments.roomPunishmentTypes = new Map([
+	['ROOMBAN', 'banned'],
+	['BLACKLIST', 'blacklisted'],
+]);
 
 // punishments.tsv is in the format:
 // punishType, userid, ips/usernames, expiration time
@@ -453,6 +462,16 @@ Punishments.roomPunish = function (room, user, punishment, noRecurse) {
 		}, room.id + ':' + id, ROOM_PUNISHMENT_FILE);
 	}
 };
+
+Punishments.roomPunishName = function (room, userid, punishment) {
+	Punishments.roomUserids.nestedSet(room.id, userid, punishment);
+	const [punishType, id, ...rest] = punishment;
+	Punishments.appendPunishment({
+		keys: [userid],
+		punishType: punishType,
+		rest: rest,
+	}, room.id + ':' + id, ROOM_PUNISHMENT_FILE);
+};
 /**
  * @param {string} id
  * @param {string} punishType
@@ -600,6 +619,7 @@ Punishments.unnamelock = function (name) {
 	let user = Users(name);
 	let id = toId(name);
 	let success = [];
+	let unpunished = Punishments.unpunish(name, 'NAMELOCK');
 	if (user && user.locked) {
 		id = user.locked;
 		user.locked = false;
@@ -617,9 +637,7 @@ Punishments.unnamelock = function (name) {
 			});
 		}
 	}
-	if (Punishments.unpunish(name, 'NAMELOCK')) {
-		if (!success.length) success.push(name);
-	}
+	if (unpunished && !success.length) success.push(name);
 	if (!success.length) return false;
 	if (!success.some(v => toId(v) === id)) {
 		success.push(id);
@@ -667,18 +685,23 @@ Punishments.roomBan = function (room, user, expireTime, id, ...rest) {
 };
 
 Punishments.roomBlacklist = function (room, user, expireTime, id, ...rest) {
-	if (!id) id = user.getLastId();
+	if (!id && user) id = user.getLastId();
+	if (!user) user = Users(id);
 
 	if (!expireTime) expireTime = Date.now() + BLACKLIST_DURATION;
 	let punishment = ['BLACKLIST', id, expireTime].concat(rest);
-	Punishments.roomPunish(room, user, punishment);
+	if (user) {
+		Punishments.roomPunish(room, user, punishment);
 
-	let affected = user.getAltUsers(false, true);
-	for (let curUser of affected) {
-		if (room.game && room.game.removeBannedUser) {
-			room.game.removeBannedUser(curUser);
+		let affected = user.getAltUsers(false, true);
+		for (let curUser of affected) {
+			if (room.game && room.game.removeBannedUser) {
+				room.game.removeBannedUser(curUser);
+			}
+			curUser.leaveRoom(room.id);
 		}
-		curUser.leaveRoom(room.id);
+	} else {
+		Punishments.roomPunishName(room, id, punishment);
 	}
 };
 
@@ -896,7 +919,7 @@ Punishments.checkNameInRoom = function (user, roomid) {
 		punishment = Punishments.roomUserids.nestedGet(roomid, user.autoconfirmed);
 	}
 	if (!punishment) return;
-	if (punishment === 'ROOMBAN' || punishment === 'BLACKLIST') {
+	if (punishment[0] === 'ROOMBAN' || punishment[0] === 'BLACKLIST') {
 		return true;
 	}
 };
@@ -917,15 +940,15 @@ Punishments.isRoomBanned = function (user, roomid) {
 	if (!user) return;
 
 	let punishment = Punishments.roomUserids.nestedGet(roomid, user.userid);
-	if (punishment) return punishment[1];
+	if (punishment && (punishment[0] === 'ROOMBAN' || punishment[0] === 'BLACKLIST')) return punishment[1];
 
 	if (user.autoconfirmed) {
 		punishment = Punishments.roomUserids.nestedGet(roomid, user.autoconfirmed);
-		if (punishment) return punishment[1];
+		if (punishment && (punishment[0] === 'ROOMBAN' || punishment[0] === 'BLACKLIST')) return punishment[1];
 	}
 
 	for (let ip in user.ips) {
 		punishment = Punishments.roomIps.nestedGet(roomid, ip);
-		if (punishment) return punishment[1];
+		if (punishment && (punishment[0] === 'ROOMBAN' || punishment[0] === 'BLACKLIST')) return punishment[1];
 	}
 };
