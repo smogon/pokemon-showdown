@@ -284,9 +284,9 @@ class Trivia extends Rooms.RoomGame {
 			return 'User ' + tarUser.name + ' is not a player in the current trivia game.';
 		}
 
-		this.kickedUsers.add(tarUser.userid);
+		this.kickedUsers.add(tarUser.userid.slice(0));
 		for (let id in tarUser.prevNames) {
-			this.kickedUsers.add(id);
+			this.kickedUsers.add(id.slice(0));
 		}
 
 		super.removePlayer(tarUser);
