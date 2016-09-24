@@ -92,6 +92,6 @@ In general, use modern features only if they're supported in Node 6 and reasonab
 
 - **String#includes: ALWAYS** - Supported in Node 4+, poor performance, but not really noticeable and worth the better readability.
 
-- **Template strings: ALWAYS** - Supported in Node 4+ and good performance in Node 6+, please start refactoring existing code over.
+- **Template strings: ALWAYS** - Supported in Node 4+ and good performance in Node 6+. Don't do multi-line template strings or use with serious string processing, such as tenary operators inside. Please start refactoring existing code over.
 
 Take "good performance" to mean "approximately on par with ES3" and "great performance" to mean "better than ES3".
