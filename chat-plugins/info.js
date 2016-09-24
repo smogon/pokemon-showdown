@@ -1732,5 +1732,5 @@ exports.commands = {
 
 process.nextTick(() => {
 	Tools.includeData();
-	CommandParser.globalPattern.register(['/git ', '/uptime ']);
+	CommandParser.globalPattern.register('/git ', '/uptime ');
 });

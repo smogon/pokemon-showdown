@@ -24,7 +24,7 @@ const MAX_REASON_LENGTH = 300;
 const MUTE_LENGTH = 7 * 60 * 1000;
 const HOURMUTE_LENGTH = 60 * 60 * 1000;
 
-exports.commands = {
+let commands = exports.commands = {
 
 	'!version': true,
 	version: function (target, room, user) {
@@ -3212,6 +3212,8 @@ exports.commands = {
 	},
 
 	trn: function (target, room, user, connection) {
+		if (target === user.name) return false;
+
 		let commaIndex = target.indexOf(',');
 		let targetName = target;
 		let targetRegistered = false;
@@ -3305,13 +3307,19 @@ exports.commands = {
 
 process.nextTick(() => {
 	// We might want to migrate most of this to a JSON schema of command attributes.
-	CommandParser.multiLinePattern.register('>>>? ');
-	CommandParser.multiLinePattern.register('/(room|staff)(topic|intro) ');
-	CommandParser.multiLinePattern.register('/adddatacenters ');
-	CommandParser.globalPattern.register([
-		'/join ', '/leave ', '/cmd ', '/trn ', '/logout ', '/autojoin ', '/utm ', '/vtm ', '/pm ',
-		'/accept ', '/reject ', '/challenge ', '/cancelchallenge ', '/search ', '/cancelsearch ',
-		'/avatar ',
-		'/roomauth ', '/auth ', '/stafflist ', '/globalauth ', '/authlist ', '/authority ',
+	CommandParser.multiLinePattern.register(
+		'>>>? ', '/(?:room|staff)intro ', '/(?:staff)?topic ', '/adddatacenters '
+	);
+
+	let globalCmds = new Set([
+		'/join ', '/part ', '/cmd ', '/trn ', '/logout ', '/autojoin ',
+		'/useteam ', '/vtm ', '/msg ', '/accept ', '/reject ', '/challenge ',
+		'/cancelchallenge ', '/search ', '/avatar ', '/roomauth ', '/authority ',
 	]);
+	for (let cmd in commands) {
+		if (typeof commands[cmd] === 'string' && globalCmds.has('/' + commands[cmd] + ' ')) {
+			globalCmds.add('/' + cmd + ' ');
+		}
+	}
+	CommandParser.globalPattern.register(...globalCmds);
 });

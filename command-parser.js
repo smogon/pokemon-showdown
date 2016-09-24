@@ -60,14 +60,12 @@ class PatternTester {
 			this.regexp = new RegExp('^(' + slowElements.map(elem => '(?:' + elem + ')').join('|') + ')', 'i');
 		}
 	}
-	register(elem) {
-		if (Array.isArray(elem)) {
-			elem.forEach(e => this.register(e));
-			return;
-		}
-		this.elements.push(elem);
-		if (/^[^ \^\$\?\|\(\)\[\]]+ $/.test(elem)) {
-			this.fastElements.add(this.fastNormalize(elem));
+	register(...elems) {
+		for (let elem of elems) {
+			this.elements.push(elem);
+			if (/^[^ \^\$\?\|\(\)\[\]]+ $/.test(elem)) {
+				this.fastElements.add(this.fastNormalize(elem));
+			}
 		}
 		this.update();
 	}
