@@ -156,6 +156,18 @@ let Room = (() => {
 		}
 		return user.group;
 	};
+	Room.prototype.checkModjoin = function (user) {
+		if (!this.modjoin) return true;
+		if (user.userid in this.users) return true;
+		if (user.can('makeroom')) return true;
+		if (this.staffRoom && !user.isStaff) return false;
+		let userGroup = this.getAuth(user);
+		let modjoinGroup = this.modjoin !== true ? this.modjoin : this.modchat;
+		if (Config.groupsranking.indexOf(userGroup) < Config.groupsranking.indexOf(modjoinGroup)) {
+			return false;
+		}
+		return true;
+	};
 	Room.prototype.mute = function (user, setTime) {
 		let userid = user.userid;
 
