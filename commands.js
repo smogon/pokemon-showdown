@@ -403,8 +403,8 @@ let commands = exports.commands = {
 
 		if (room) {
 			if (!this.targetUser) return this.errorReply(`The user "${this.targetUsername}" was not found.`);
-			if (!targetRoom&&!target) return this.parse(`/pm ${this.targetUsername}, /invite ${room}`);
-			if (!targetRoom)  return this.errorReply(`The room "${target}" was not found.`);
+			if (!targetRoom && !target) return this.parse(`/pm ${this.targetUsername}, /invite ${room}`);
+			if (!targetRoom) return this.errorReply(`The room "${target}" was not found.`);
 
 			return this.parse(`/pm ${this.targetUsername}, /invite ${targetRoom.id}`);
 		}
