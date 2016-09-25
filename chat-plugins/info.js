@@ -23,7 +23,8 @@ exports.commands = {
 	alts: 'whois',
 	whoare: 'whois',
 	whois: function (target, room, user, connection, cmd) {
-		if (room.id === 'staff' && !this.runBroadcast()) return;
+		if (room && room.id === 'staff' && !this.runBroadcast()) return;
+		if (!room) room = Rooms.global;
 		let targetUser = this.targetUserOrSelf(target, user.group === ' ');
 		if (!targetUser) {
 			return this.errorReply("User " + this.targetUsername + " not found.");
