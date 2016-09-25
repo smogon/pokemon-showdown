@@ -240,23 +240,14 @@ exports.commands = {
 	ipsearchhelp: ["/ipsearch [ip|range|host] - Find all users with specified IP, IP range, or host. Requires: & ~"],
 
 	/*********************************************************
-	 * Shortcuts
+	 * Client fallback
 	 *********************************************************/
 
-	inv: 'invite',
-	invite: function (target, room, user) {
-		if (!target) return this.parse('/help invite');
-		target = this.splitTarget(target);
-		if (!this.targetUser) {
-			return this.errorReply("User " + this.targetUsername + " not found.");
-		}
-		let targetRoom = (target ? Rooms.search(target) : room);
-		if (!targetRoom) {
-			return this.errorReply("Room " + target + " not found.");
-		}
-		return this.parse('/msg ' + this.targetUsername + ', /invite ' + targetRoom.id);
+	unignore: 'ignore',
+	ignore: function (target, room, user) {
+		if (!room) this.errorReply(`In PMs, this command can only be used by itself to ignore the person you're talking to: "/${this.cmd}", not "/${this.cmd} ${target}"`);
+		this.errorReply(`You're using a custom client that doesn't support the ignore command.`);
 	},
-	invitehelp: ["/invite [username], [roomname] - Invites the player [username] to join the room [roomname]."],
 
 	/*********************************************************
 	 * Data Search Tools

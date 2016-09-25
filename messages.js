@@ -41,20 +41,20 @@ Messages.send = function (target, context) {
 		return context.errorReply("You are blocking private messages right now.");
 	}
 
-	target = context.canTalk(target, null, targetUser);
-	if (!target) return false;
+	if (target.startsWith('/me') && /[^A-Za-z0-9 ]/.test(target.charAt(3))) {
+		target = '/mee ' + target.slice(3);
+	} else if (target.startsWith('/ME') && /[^A-Za-z0-9 ]/.test(target.charAt(3))) {
+		target = '/MEE ' + target.slice(3);
+	}
 
 	let buf;
 	if ((target.charAt(0) === '/' && target.charAt(1) !== '/') || (target.charAt(0) === '!' && /[a-z0-9]/.test(target.charAt(1)))) {
 		// PM command
-		if (targetUser === user && target.charAt(0) === '!') {
-			// Don't allow users to PM broadcast themselves commands
-			target = target.replace('!', '/');
-		}
 		let innerCmdIndex = target.indexOf(' ');
-		let innerCmd = (innerCmdIndex >= 0 ? target.slice(1, innerCmdIndex) : target.slice(1));
+		let innerCmd = (innerCmdIndex >= 0 ? target.slice(1, innerCmdIndex) : target.slice(1)).toLowerCase();
 		let innerTarget = (innerCmdIndex >= 0 ? target.slice(innerCmdIndex + 1) : '');
-		context.cmdToken = target.charAt(0);
+		let cmdToken = target.charAt(0);
+		context.cmdToken = cmdToken;
 		context.cmd = innerCmd;
 		context.message = target;
 		context.target = innerTarget;
@@ -62,56 +62,24 @@ Messages.send = function (target, context) {
 		if (typeof CommandParser.commands[innerCmd] === 'string') {
 			innerCmd = CommandParser.commands[innerCmd];
 		}
-		switch (innerCmd) {
-		case 'me':
-		case 'mee':
-		case 'announce':
-			break;
-		case 'ME':
-		case 'MEE':
-			buf = '|pm|' + user.getIdentity().toUpperCase() + '|' + targetUser.getIdentity() + '|/' + innerCmd.toLowerCase() + ' ' + innerTarget;
-			break;
-		case 'ignore':
-		case 'unignore':
-			context.errorReply(`This command can only be used by itself to ignore the person you're talking to: "/${innerCmd}", not "/${innerCmd} ${innerTarget}"`);
-			return;
-		case 'invite': {
-			let targetRoom = Rooms.search(innerTarget);
-			if (!targetRoom || targetRoom === Rooms.global) return context.errorReply('The room "' + innerTarget + '" does not exist.');
-			if (targetRoom.staffRoom && !targetUser.isStaff) return context.errorReply('User "' + context.targetUsername + '" requires global auth to join room "' + targetRoom.id + '".');
-			if (targetRoom.modjoin) {
-				if (targetRoom.auth && (targetRoom.isPrivate === true || targetUser.group === ' ') && !(targetUser.userid in targetRoom.auth)) {
-					context.parse('/roomvoice ' + targetUser.name, false, targetRoom);
-					if (!(targetUser.userid in targetRoom.auth)) {
-						return;
-					}
+		if (CommandParser.commands['!' + innerCmd]) {
+			target = CommandParser.commands[innerCmd].call(context, innerTarget, undefined, context.user, context.connection, context.cmd, target);
+		} else if (innerCmd) {
+			return context.errorReply(`The command "/${innerCmd}" is unavailable in private messages. To send a message starting with "/${innerCmd}", type "//${innerCmd}".`);
+		} else {
+			if (cmdToken === '!') {
+				if (/[a-z0-9]/.test(innerCmd.charAt(0))) {
+					return context.errorReply(`The command "${cmdToken}${innerCmd}" does not exist.`);
 				}
-			}
-			if (targetRoom.isPrivate === true && targetRoom.modjoin && targetRoom.auth) {
-				if (!(user.userid in targetRoom.auth)) {
-					return context.errorReply('The room "' + innerTarget + '" does not exist.');
-				}
-				if (Config.groupsranking.indexOf(targetRoom.auth[targetUser.userid] || ' ') < Config.groupsranking.indexOf(targetRoom.modjoin) && !targetUser.can('bypassall')) {
-					return context.errorReply('The user "' + targetUser.name + '" does not have permission to join "' + innerTarget + '".');
-				}
-			}
-			if (targetRoom.auth && targetRoom.isPrivate && !(user.userid in targetRoom.auth) && !user.can('makeroom')) {
-				return context.errorReply('You do not have permission to invite people to this room.');
-			}
-
-			target = '/invite ' + targetRoom.id;
-			break;
-		}
-		default:
-			if (CommandParser.commands['!' + innerCmd]) {
-				target = CommandParser.commands[innerCmd].call(context, innerTarget, context.room, context.user, context.connection, context.cmd, target);
-				if (!target || typeof target.then === 'function') return;
 			} else {
-				return context.errorReply(`The command "/${innerCmd}" does not exist or is unavailable in private messages. To send a message starting with "/${innerCmd}", type "//${innerCmd}".`);
+				return context.errorReply(`The command "${cmdToken}${innerCmd}" does not exist. To send a message starting with "${cmdToken}${innerCmd}", type "${cmdToken}${cmdToken}${innerCmd}".`);
 			}
 		}
+	} else {
+		target = context.canTalk(target, null, targetUser);
 	}
 
+	if (!target || typeof target.then === 'function') return;
 	if (!buf) buf = '|pm|' + user.getIdentity() + '|' + targetUser.getIdentity() + '|' + target;
 	user.send(buf);
 	if (targetUser !== user) targetUser.send(buf);
