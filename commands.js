@@ -70,24 +70,23 @@ let commands = exports.commands = {
 		"/auth [room] - Show what roomauth a room has.",
 		"/auth [user] - Show what global and roomauth a user has."],
 
-	me: function (target, room, user, connection) {
-		// By default, /me allows a blank message
-		if (!target) target = '';
-		target = this.canTalk('/me ' + target);
+	'!me': true,
+	mee: 'me',
+	me: function (target, room, user) {
+		target = this.canTalk(`/${this.cmd} ${target || ''}`);
 		if (!target) return;
 
-		return target;
-	},
-
-	mee: function (target, room, user, connection) {
-		// By default, /mee allows a blank message
-		if (!target) target = '';
-		target = target.trim();
-		if (/[A-Za-z0-9]/.test(target.charAt(0))) {
-			return this.errorReply("To prevent confusion, /mee can't start with a letter or number.");
+		if (this.message.startsWith(`/ME`)) {
+			const uppercaseIdentity = user.getIdentity().toUpperCase();
+			if (room) {
+				this.add(`|c|${uppercaseIdentity}|${target}`);
+			} else {
+				let msg = `|pm|${uppercaseIdentity}|${this.pmTarget.getIdentity()}|${target}`;
+				user.send(msg);
+				if (this.pmTarget !== user) this.pmTarget.send(msg);
+			}
+			return;
 		}
-		target = this.canTalk('/mee ' + target);
-		if (!target) return;
 
 		return target;
 	},
@@ -380,15 +379,64 @@ let commands = exports.commands = {
 			this.errorReply("You forgot the comma.");
 			return this.parse('/help msg');
 		}
-		this.pmTarget = (targetUser || this.targetUsername);
+		this.pmTarget = targetUser;
 		if (!targetUser) {
-			this.errorReply("User " + this.targetUsername + " not found. Did you misspell their name?");
-			return this.parse('/help msg');
+			let error = `User ${this.targetUsername} not found. Did you misspell their name?`;
+			error = `|pm|${this.user.getIdentity()}| ${this.targetUsername}|/error ${error}`;
+			connection.send(error);
+			return;
 		}
 
 		return CommandParser.Messages.send(target, this);
 	},
 	msghelp: ["/msg OR /whisper OR /w [username], [message] - Send a private message."],
+
+	'!invite': true,
+	inv: 'invite',
+	invite: function (target, room, user) {
+		if (!target) return this.parse('/help invite');
+		if (room) {
+			target = this.splitTarget(target);
+			if (!this.targetUser) {
+				return this.errorReply("User " + this.targetUsername + " not found.");
+			}
+			let targetRoom = (target ? Rooms.search(target) : room);
+			if (!targetRoom) {
+				return this.errorReply("Room " + target + " not found.");
+			}
+			return this.parse('/pm ' + this.targetUsername + ', /invite ' + targetRoom.id);
+		}
+		let targetRoom = Rooms.search(target);
+		let targetUser = this.pmTarget;
+
+		if (!targetRoom || targetRoom === Rooms.global) return this.errorReply('The room "' + target + '" does not exist.');
+		if (targetRoom.staffRoom && !targetUser.isStaff) return this.errorReply('User "' + this.targetUsername + '" requires global auth to join room "' + targetRoom.id + '".');
+		if (!targetUser) return this.errorReply("User " + this.targetUsername + " not found.");
+
+		if (targetRoom.modjoin) {
+			if (targetRoom.auth && (targetRoom.isPrivate === true || targetUser.group === ' ') && !(targetUser.userid in targetRoom.auth)) {
+				this.parse('/roomvoice ' + targetUser.name, false, targetRoom);
+				if (!(targetUser.userid in targetRoom.auth)) {
+					return;
+				}
+			}
+		}
+		if (targetRoom.isPrivate === true && targetRoom.modjoin && targetRoom.auth) {
+			if (!(user.userid in targetRoom.auth)) {
+				return this.errorReply('The room "' + target + '" does not exist.');
+			}
+			if (Config.groupsranking.indexOf(targetRoom.auth[targetUser.userid] || ' ') < Config.groupsranking.indexOf(targetRoom.modjoin) && !targetUser.can('bypassall')) {
+				return this.errorReply('The user "' + targetUser.name + '" does not have permission to join "' + target + '".');
+			}
+		}
+		if (targetRoom.auth && targetRoom.isPrivate && !(user.userid in targetRoom.auth) && !user.can('makeroom')) {
+			return this.errorReply('You do not have permission to invite people to this room.');
+		}
+
+		return '/invite ' + targetRoom.id;
+	},
+	invitehelp: ["/invite [username] - Invites the player [username] to join the room you sent the command to.",
+		"(in a PM) /invite [roomname] - Invites the player you're PMing to join the room [roomname]."],
 
 	pminfobox: function (target, room, user, connection) {
 		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
@@ -1902,7 +1950,7 @@ let commands = exports.commands = {
 	announce: function (target, room, user) {
 		if (!target) return this.parse('/help announce');
 
-		if (!this.can('announce', null, room)) return false;
+		if (room && !this.can('announce', null, room)) return false;
 
 		target = this.canTalk(target);
 		if (!target) return;
