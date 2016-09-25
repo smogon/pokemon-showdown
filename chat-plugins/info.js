@@ -1208,7 +1208,7 @@ exports.commands = {
 		if (!this.runBroadcast()) return;
 		if (this.broadcasting && (room.id === 'lobby' || room.battle)) return this.errorReply("This command is too spammy for lobby/battles.");
 		this.sendReplyBox(
-			"Room drivers (%) can use:<br />" +
+			"<b>Room drivers (%) can use:</b><br />" +
 			"- /warn OR /k <em>username</em>: warn a user and show the Pok&eacute;mon Showdown rules<br />" +
 			"- /mute OR /m <em>username</em>: 7 minute mute<br />" +
 			"- /hourmute OR /hm <em>username</em>: 60 minute mute<br />" +
@@ -1217,7 +1217,7 @@ exports.commands = {
 			"- /modlog <em>username</em>: search the moderator log of the room<br />" +
 			"- /modnote <em>note</em>: adds a moderator note that can be read through modlog<br />" +
 			"<br />" +
-			"Room moderators (@) can also use:<br />" +
+			"<b>Room moderators (@) can also use:</b><br />" +
 			"- /roomban OR /rb <em>username</em>: bans user from the room<br />" +
 			"- /roomunban <em>username</em>: unbans user from the room<br />" +
 			"- /roomvoice <em>username</em>: appoint a room voice<br />" +
@@ -1225,7 +1225,7 @@ exports.commands = {
 			"- /modchat <em>[off/autoconfirmed/+]</em>: set modchat level<br />" +
 			"- /staffintro <em>intro</em>: sets the staff introduction that will be displayed for all staff joining the room<br />" +
 			"<br />" +
-			"Room owners (#) can also use:<br />" +
+			"<b>Room owners (#) can also use:</b><br />" +
 			"- /roomintro <em>intro</em>: sets the room introduction that will be displayed for all users joining the room<br />" +
 			"- /rules <em>rules link</em>: set the room rules link seen when using /rules<br />" +
 			"- /roommod, /roomdriver <em>username</em>: appoint a room moderator/driver<br />" +
@@ -1236,15 +1236,15 @@ exports.commands = {
 			"- !htmlbox <em>HTML code</em>: broadcasts a box of HTML code to the room<br />" +
 			"- !showimage <em>[url], [width], [height]</em>: shows an image to the room<br />" +
 			"<br />" +
-			"More detailed help can be found in the <a href=\"https://www.smogon.com/sim/roomauth_guide\">roomauth guide</a><br />" +
+			"More detailed help can be found in the <a href=\"https://www.smogon.com/sim/roomauth_guide\"><b>roomauth guide</b></a><br />" +
 			"<br />" +
-			"Tournament Help:<br />" +
+			"<b>Tournament Help:</b><br />" +
 			"- /tour create <em>format</em>, elimination: Creates a new single elimination tournament in the current room.<br />" +
 			"- /tour create <em>format</em>, roundrobin: Creates a new round robin tournament in the current room.<br />" +
 			"- /tour end: Forcibly ends the tournament in the current room<br />" +
 			"- /tour start: Starts the tournament in the current room<br />" +
 			"<br />" +
-			"More detailed help can be found <a href=\"https://gist.github.com/verbiage/0846a552595349032fbe\">here</a><br />" +
+			"More detailed help can be found <a href=\"https://gist.github.com/verbiage/0846a552595349032fbe\"><b>here</b></a><br />" +
 			"</div>"
 		);
 	},
