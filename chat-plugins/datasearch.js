@@ -87,7 +87,7 @@ exports.commands = {
 		return runSearch({
 			target: target,
 			cmd: 'dexsearch',
-			canAll: (!this.broadcastMessage || room.isPersonal),
+			canAll: (!this.broadcastMessage || (room && room.isPersonal)),
 			message: (this.broadcastMessage ? "" : message),
 		}).then(response => {
 			if (!this.runBroadcast()) return;
@@ -98,7 +98,7 @@ exports.commands = {
 			} else if (response.dt) {
 				CommandParser.commands.data.call(this, response.dt, room, user, connection, 'dt');
 			}
-			room.update();
+			this.update();
 		});
 	},
 
@@ -150,7 +150,7 @@ exports.commands = {
 			} else if (response.dt) {
 				CommandParser.commands.data.call(this, response.dt, room, user, connection, 'dt');
 			}
-			room.update();
+			this.update();
 		});
 	},
 	randompokemonhelp: ["/randompokemon - Generates random Pok\u00e9mon based on given search conditions.",
@@ -167,7 +167,7 @@ exports.commands = {
 		return runSearch({
 			target: target,
 			cmd: 'movesearch',
-			canAll: (!this.broadcastMessage || room.isPersonal),
+			canAll: (!this.broadcastMessage || (room && room.isPersonal)),
 			message: (this.broadcastMessage ? "" : message),
 		}).then(response => {
 			if (!this.runBroadcast()) return;
@@ -178,7 +178,7 @@ exports.commands = {
 			} else if (response.dt) {
 				CommandParser.commands.data.call(this, response.dt, room, user, connection, 'dt');
 			}
-			room.update();
+			this.update();
 		});
 	},
 	movesearchhelp: ["/movesearch [parameter], [parameter], [parameter], ... - Searches for moves that fulfill the selected criteria.",
@@ -200,7 +200,7 @@ exports.commands = {
 		return runSearch({
 			target: target,
 			cmd: 'itemsearch',
-			canAll: (!this.broadcastMessage || room.isPersonal),
+			canAll: (!this.broadcastMessage || (room && room.isPersonal)),
 			message: (this.broadcastMessage ? "" : message),
 		}).then(response => {
 			if (!this.runBroadcast()) return;
@@ -211,7 +211,7 @@ exports.commands = {
 			} else if (response.dt) {
 				CommandParser.commands.data.call(this, response.dt, room, user, connection, 'dt');
 			}
-			room.update();
+			this.update();
 		});
 	},
 	itemsearchhelp: ["/itemsearch [move description] - finds items that match the given key words.",
@@ -244,7 +244,7 @@ exports.commands = {
 			} else if (response.reply) {
 				this.sendReplyBox(response.reply);
 			}
-			room.update();
+			this.update();
 		});
 	},
 	learnhelp: ["/learn [pokemon], [move, move, ...] - Displays how a Pok\u00e9mon can learn the given moves, if it can at all.",

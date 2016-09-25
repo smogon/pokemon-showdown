@@ -1242,7 +1242,7 @@ exports.commands = {
 
 	'!restarthelp': true,
 	restarthelp: function (target, room, user) {
-		if (room.id === 'lobby' && !this.can('lockdown')) return false;
+		if (!Rooms.global.lockdown && !this.can('lockdown')) return false;
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(
 			"The server is restarting. Things to know:<br />" +

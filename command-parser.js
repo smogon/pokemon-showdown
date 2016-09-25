@@ -273,6 +273,9 @@ class CommandContext {
 	logModCommand(text) {
 		this.room.modlog(text);
 	}
+	update() {
+		if (this.room) this.room.update();
+	}
 	can(permission, target, room) {
 		if (!this.user.can(permission, target, room)) {
 			this.errorReply(this.cmdToken + this.namespaces.concat(this.cmd).join(" ") + " - Access denied.");
@@ -661,7 +664,7 @@ let parse = exports.parse = function (message, room, user, connection, pmTarget,
 	}
 
 	let relatedRoom = null;
-	if (!user.inRooms.has(room.id) || room === Rooms.global) {
+	if (!pmTarget && (!user.inRooms.has(room.id) || room === Rooms.global)) {
 		if (!CommandParser.globalPattern.test(message)) return;
 		relatedRoom = room;
 	}

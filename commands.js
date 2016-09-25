@@ -395,7 +395,7 @@ let commands = exports.commands = {
 	inv: 'invite',
 	invite: function (target, room, user) {
 		if (!target) return this.parse('/help invite');
-		if (room) target = this.splitTarget(target);
+		if (room) target = this.splitTarget(target) || room.id;
 		let targetRoom = Rooms.search(target);
 		if (targetRoom && !targetRoom.checkModjoin(user)) {
 			targetRoom = undefined;
@@ -415,12 +415,12 @@ let commands = exports.commands = {
 		if (!targetUser) return this.errorReply(`The user "${this.targetUsername}" was not found.`);
 
 		if (!targetRoom.checkModjoin(targetUser)) {
-			if (room.getAuth(targetUser) !== ' ') {
+			if (targetRoom.getAuth(targetUser) !== ' ') {
 				return this.errorReply(`The user "${targetUser.name}" does not have permission to join "${targetRoom.title}".`);
 			}
 			this.parse(`/roomvoice ${targetUser.name}`, false, targetRoom);
 			if (!targetRoom.checkModjoin(targetUser)) {
-				if (room.getAuth(targetUser) !== ' ') {
+				if (targetRoom.getAuth(targetUser) !== ' ') {
 					return this.errorReply(`The user "${targetUser.name}" does not have permission to join "${targetRoom.title}".`);
 				}
 				return this.errorReply(`You do not have permission to invite people into this room.`);
@@ -1101,7 +1101,7 @@ let commands = exports.commands = {
 		if (cmd === 'roomauth1') userLookup = '\n\nTo look up auth for a user, use /userauth ' + target;
 		let targetRoom = room;
 		if (target) targetRoom = Rooms.search(target);
-		if (!targetRoom || !targetRoom.checkModjoin(user)) return this.errorReply(`The room "${target}" does not exist.`);
+		if (!targetRoom || targetRoom.id === 'global' || !targetRoom.checkModjoin(user)) return this.errorReply(`The room "${target}" does not exist.`);
 		if (!targetRoom.auth) return this.sendReply("/roomauth - The room '" + (targetRoom.title || target) + "' isn't designed for per-room moderation and therefore has no auth list." + userLookup);
 
 		let rankLists = {};
@@ -2139,6 +2139,7 @@ let commands = exports.commands = {
 	},
 	unblacklisthelp: ["/unblacklist [username] - Unblacklists the user from the room you are in. Requires: # & ~"],
 
+	blacklists: 'showblacklist',
 	showbl: 'showblacklist',
 	showblacklist: function (target, room, user) {
 		if (!this.can('mute', null, room)) return false;
