@@ -783,7 +783,7 @@ exports.BattleMovedex = {
 		onModifyMove: function (move) {
 			move.type = '???';
 		},
-		self: false,
+		struggleRecoil: false,
 	},
 	surf: {
 		inherit: true,

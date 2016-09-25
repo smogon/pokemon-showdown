@@ -388,6 +388,10 @@ exports.BattleScripts = {
 			this.damage(this.calcRecoilDamage(totalDamage, move), pokemon, target, 'recoil');
 		}
 
+		if (move.struggleRecoil) {
+			this.directDamage(this.clampIntRange(Math.round(pokemon.maxhp / 4), 1), pokemon, pokemon, {id: 'strugglerecoil'});
+		}
+
 		if (target && pokemon !== target) target.gotAttacked(move, damage, pokemon);
 
 		if (move.ohko) this.add('-ohko');
