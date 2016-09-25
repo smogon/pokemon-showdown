@@ -139,7 +139,7 @@ exports.commands = {
 		return runSearch({
 			target: targetsBuffer.join(","),
 			cmd: 'randpoke',
-			canAll: (!this.broadcastMessage || room.isPersonal),
+			canAll: (!this.broadcastMessage || (room && room.isPersonal)),
 			message: (this.broadcastMessage ? "" : message),
 		}).then(response => {
 			if (!this.runBroadcast()) return;

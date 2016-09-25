@@ -587,6 +587,9 @@ let GlobalRoom = (() => {
 		}
 	};
 	GlobalRoom.prototype.update = function () {};
+	GlobalRoom.prototype.checkModjoin = function () {
+		return true;
+	};
 	GlobalRoom.prototype.isMuted = function () {
 		return false;
 	};
