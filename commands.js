@@ -40,7 +40,7 @@ let commands = exports.commands = {
 	authority: function (target, room, user, connection) {
 		if (target) {
 			let targetRoom = Rooms.search(target);
-			let unavailableRoom = targetRoom && (targetRoom !== room && (targetRoom.modjoin || targetRoom.staffRoom) && !user.can('makeroom'));
+			let unavailableRoom = targetRoom && targetRoom.checkModjoin(user);
 			if (targetRoom && !unavailableRoom) return this.parse('/roomauth1 ' + target);
 			return this.parse('/userauth ' + target);
 		}
@@ -395,42 +395,36 @@ let commands = exports.commands = {
 	inv: 'invite',
 	invite: function (target, room, user) {
 		if (!target) return this.parse('/help invite');
-		if (room) {
-			target = this.splitTarget(target);
-			if (!this.targetUser) {
-				return this.errorReply("User " + this.targetUsername + " not found.");
-			}
-			let targetRoom = (target ? Rooms.search(target) : room);
-			if (!targetRoom) {
-				return this.errorReply("Room " + target + " not found.");
-			}
-			return this.parse('/pm ' + this.targetUsername + ', /invite ' + targetRoom.id);
-		}
+		if (room) target = this.splitTarget(target);
 		let targetRoom = Rooms.search(target);
+		if (targetRoom && !targetRoom.checkModjoin(user)) {
+			targetRoom = undefined;
+		}
+
+		if (room) {
+			if (!this.targetUser) return this.errorReply(`The user "${this.targetUsername}" was not found.`);
+			if (!targetRoom) return this.errorReply(`The room "${target}" was not found.`);
+
+			return this.parse(`/pm ${this.targetUsername}, /invite ${targetRoom.id}`);
+		}
+
 		let targetUser = this.pmTarget;
 
-		if (!targetRoom || targetRoom === Rooms.global) return this.errorReply('The room "' + target + '" does not exist.');
-		if (targetRoom.staffRoom && !targetUser.isStaff) return this.errorReply('User "' + this.targetUsername + '" requires global auth to join room "' + targetRoom.id + '".');
-		if (!targetUser) return this.errorReply("User " + this.targetUsername + " not found.");
+		if (!targetRoom || targetRoom === Rooms.global) return this.errorReply(`The room "${target}" was not found.`);
+		if (targetRoom.staffRoom && !targetUser.isStaff) return this.errorReply(`User "${this.targetUsername}" requires global auth to join room "${targetRoom.id}".`);
+		if (!targetUser) return this.errorReply(`The user "${this.targetUsername}" was not found.`);
 
-		if (targetRoom.modjoin) {
-			if (targetRoom.auth && (targetRoom.isPrivate === true || targetUser.group === ' ') && !(targetUser.userid in targetRoom.auth)) {
-				this.parse('/roomvoice ' + targetUser.name, false, targetRoom);
-				if (!(targetUser.userid in targetRoom.auth)) {
-					return;
+		if (!targetRoom.checkModjoin(targetUser)) {
+			if (room.getAuth(targetUser) !== ' ') {
+				return this.errorReply(`The user "${targetUser.name}" does not have permission to join "${targetRoom.title}".`);
+			}
+			this.parse(`/roomvoice ${targetUser.name}`, false, targetRoom);
+			if (!targetRoom.checkModjoin(targetUser)) {
+				if (room.getAuth(targetUser) !== ' ') {
+					return this.errorReply(`The user "${targetUser.name}" does not have permission to join "${targetRoom.title}".`);
 				}
+				return this.errorReply(`You do not have permission to invite people into this room.`);
 			}
-		}
-		if (targetRoom.isPrivate === true && targetRoom.modjoin && targetRoom.auth) {
-			if (!(user.userid in targetRoom.auth)) {
-				return this.errorReply('The room "' + target + '" does not exist.');
-			}
-			if (Config.groupsranking.indexOf(targetRoom.auth[targetUser.userid] || ' ') < Config.groupsranking.indexOf(targetRoom.modjoin) && !targetUser.can('bypassall')) {
-				return this.errorReply('The user "' + targetUser.name + '" does not have permission to join "' + target + '".');
-			}
-		}
-		if (targetRoom.auth && targetRoom.isPrivate && !(user.userid in targetRoom.auth) && !user.can('makeroom')) {
-			return this.errorReply('You do not have permission to invite people to this room.');
 		}
 
 		return '/invite ' + targetRoom.id;
@@ -1107,16 +1101,8 @@ let commands = exports.commands = {
 		if (cmd === 'roomauth1') userLookup = '\n\nTo look up auth for a user, use /userauth ' + target;
 		let targetRoom = room;
 		if (target) targetRoom = Rooms.search(target);
-		if (!targetRoom) return this.errorReply("The room '" + target + "' does not exist.");
+		if (!targetRoom || !targetRoom.checkModjoin(user)) return this.errorReply(`The room "${target}" does not exist.`);
 		if (!targetRoom.auth) return this.sendReply("/roomauth - The room '" + (targetRoom.title || target) + "' isn't designed for per-room moderation and therefore has no auth list." + userLookup);
-
-		let cannotJoin = !user.can('makeroom') && (
-			targetRoom.staffRoom ||
-			targetRoom.isPrivate && targetRoom.modjoin &&
-			(!targetRoom.auth || !targetRoom.auth[user.userid])
-		);
-		let unavailableRoom = !user.inRooms.has(targetRoom.id) && cannotJoin;
-		if (unavailableRoom) return this.errorReply("The room '" + target + "' does not exist.");
 
 		let rankLists = {};
 		for (let u in targetRoom.auth) {

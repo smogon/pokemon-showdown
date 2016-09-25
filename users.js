@@ -1088,7 +1088,7 @@ class User {
 	tryJoinRoom(room, connection) {
 		let roomid = (room && room.id ? room.id : room);
 		room = Rooms.search(room);
-		if (!room) {
+		if (!room || !room.checkModjoin(this)) {
 			if (!this.named) {
 				return null;
 			} else {
@@ -1102,18 +1102,6 @@ class User {
 			if (errorMessage) {
 				connection.sendTo(roomid, `|noinit|joinfailed|${errorMessage}`);
 				return false;
-			}
-		}
-		if (room.modjoin && !makeRoom) {
-			let userGroup = room.getAuth(this);
-			let modjoinGroup = room.modjoin !== true ? room.modjoin : room.modchat;
-			if (Config.groupsranking.indexOf(userGroup) < Config.groupsranking.indexOf(modjoinGroup)) {
-				if (!this.named) {
-					return null;
-				} else {
-					connection.sendTo(roomid, `|noinit|nonexistent|The room "${roomid}" does not exist.`);
-					return false;
-				}
 			}
 		}
 		if (room.isPrivate) {
