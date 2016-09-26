@@ -1230,7 +1230,7 @@ exports.commands = {
 			"- !showimage <em>[url], [width], [height]</em>: shows an image to the room<br />" +
 			"- /roomsettings: change a variety of room settings, including modchat, capsfilter, etc<br />" +
 			"<br />" +
-			"More detailed help can be found in the <a href=\"https://www.smogon.com/sim/roomauth_guide\">roomauth guide</a><br />" +
+			"More detailed help can be found in the <a href=\"https://www.smogon.com/forums/threads/3570628/#post-6774654\">roomauth guide</a><br />" +
 			"<br />" +
 			"Tournament Help:<br />" +
 			"- /tour create <em>format</em>, elimination: Creates a new single elimination tournament in the current room.<br />" +
@@ -1238,7 +1238,7 @@ exports.commands = {
 			"- /tour end: Forcibly ends the tournament in the current room<br />" +
 			"- /tour start: Starts the tournament in the current room<br />" +
 			"<br />" +
-			"More detailed help can be found in the <a href=\"https://gist.github.com/verbiage/0846a552595349032fbe\">tournaments guide</a><br />" +
+			"More detailed help can be found in the <a href=\"https://www.smogon.com/forums/threads/3570628/#post-6777489\">tournaments guide</a><br />" +
 			"</div>"
 		);
 	},
