@@ -960,11 +960,29 @@ let BattleRoom = (() => {
 		if (!logData) return;
 		this.battle.logData = null; // deallocate to save space
 		logData.log = BattleRoom.prototype.getLog.call(logData, 3); // replay log (exact damage)
+
+		// delete some redundant data
+		if (p1rating) {
+			delete p1rating.formatid;
+			delete p1rating.username;
+			delete p1rating.rpsigma;
+			delete p1rating.sigma;
+		}
+		if (p2rating) {
+			delete p2rating.formatid;
+			delete p2rating.username;
+			delete p2rating.rpsigma;
+			delete p2rating.sigma;
+		}
+
 		logData.p1rating = p1rating;
 		logData.p2rating = p2rating;
 		logData.endType = this.battle.endType;
 		if (!p1rating) logData.ladderError = true;
 		const date = new Date();
+		logData.timestamp = '' + date;
+		logData.id = this.id;
+		logData.format = this.format;
 		const logsubfolder = Tools.toTimeStamp(date).split(' ')[0];
 		const logfolder = logsubfolder.split('-', 2).join('-');
 
