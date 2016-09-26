@@ -53,13 +53,6 @@ exports.BattleMovedex = {
 	assurance: {
 		inherit: true,
 		basePower: 50,
-		basePowerCallback: function (pokemon, target) {
-			if (pokemon.volatiles.assurance && pokemon.volatiles.assurance.hurt) {
-				this.debug('Boosted for being damaged this turn');
-				return 100;
-			}
-			return 50;
-		},
 	},
 	aurasphere: {
 		inherit: true,
@@ -75,7 +68,7 @@ exports.BattleMovedex = {
 	},
 	bind: {
 		inherit: true,
-		desc: "Deals damage to one adjacent target and prevents it from switching for four or five turns; seven turns if the user is holding Grip Claw. Causes damage to the target equal to 1/16 of its maximum HP (1/8 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Rapid Spin. This effect is not stackable or reset by using this or another partial-trapping move. Makes contact.",
+		desc: "Prevents the target from switching for four or five turns; seven turns if the user is holding Grip Claw. Causes damage to the target equal to 1/16 of its maximum HP (1/8 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Rapid Spin. This effect is not stackable or reset by using this or another partial-trapping move.",
 	},
 	blizzard: {
 		inherit: true,
@@ -109,8 +102,8 @@ exports.BattleMovedex = {
 	chatter: {
 		inherit: true,
 		basePower: 60,
-		desc: "Deals damage to one adjacent or non-adjacent target. This move has an X% chance to confuse the target, where X is 0 unless the user is a Chatot that hasn't Transformed. If the user is a Chatot, X is 0 or 10 depending on the volume of Chatot's recorded cry, if any; 0 for a low volume or no recording, 10 for a medium to high volume recording. Pokemon with the Ability Soundproof are immune.",
-		shortDesc: "10% chance to confuse the target.",
+		desc: "Has an X% chance to confuse the target, where X is 0 unless the user is a Chatot that hasn't Transformed. If the user is a Chatot, X is 0 or 10 depending on the volume of Chatot's recorded cry, if any; 0 for a low volume or no recording, 10 for a medium to high volume recording.",
+		shortDesc: "For Chatot, 10% chance to confuse the target.",
 		onModifyMove: function (move, pokemon) {
 			if (pokemon.template.species !== 'Chatot') delete move.secondaries;
 		},
@@ -122,7 +115,7 @@ exports.BattleMovedex = {
 	},
 	clamp: {
 		inherit: true,
-		desc: "Deals damage to one adjacent target and prevents it from switching for four or five turns; seven turns if the user is holding Grip Claw. Causes damage to the target equal to 1/16 of its maximum HP (1/8 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Rapid Spin. This effect is not stackable or reset by using this or another partial-trapping move. Makes contact.",
+		desc: "Prevents the target from switching for four or five turns; seven turns if the user is holding Grip Claw. Causes damage to the target equal to 1/16 of its maximum HP (1/8 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Rapid Spin. This effect is not stackable or reset by using this or another partial-trapping move.",
 	},
 	conversion: {
 		inherit: true,
@@ -148,7 +141,6 @@ exports.BattleMovedex = {
 	copycat: {
 		inherit: true,
 		desc: "The user uses the last move used by any Pokemon, including itself. Fails if no move has been used, or if the last move used was Assist, Bestow, Chatter, Circle Throw, Copycat, Counter, Covet, Destiny Bond, Detect, Dragon Tail, Endure, Feint, Focus Punch, Follow Me, Helping Hand, Me First, Metronome, Mimic, Mirror Coat, Mirror Move, Nature Power, Protect, Rage Powder, Sketch, Sleep Talk, Snatch, Struggle, Switcheroo, Thief, Transform, or Trick.",
-		shortDesc: "Uses the last move used in the battle.",
 		onHit: function (pokemon) {
 			let noCopycat = {assist:1, bestow:1, chatter:1, circlethrow:1, copycat:1, counter:1, covet:1, destinybond:1, detect:1, dragontail:1, endure:1, feint:1, focuspunch:1, followme:1, helpinghand:1, mefirst:1, metronome:1, mimic:1, mirrorcoat:1, mirrormove:1, naturepower:1, protect:1, ragepowder:1, sketch:1, sleeptalk:1, snatch:1, struggle:1, switcheroo:1, thief:1, transform:1, trick:1};
 			if (!this.lastMove || noCopycat[this.lastMove]) {
@@ -172,8 +164,8 @@ exports.BattleMovedex = {
 	},
 	defog: {
 		inherit: true,
-		desc: "Lowers one adjacent target's evasion by 1 stage. Whether or not the target's evasion was affected, the effects of Reflect, Light Screen, Safeguard, Mist, Spikes, Toxic Spikes, and Stealth Rock end for the target's side. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves. Ignores a target's Substitute, although a Substitute will still block the evasion lowering.",
-		shortDesc: "Removes hazards/screens affecting foe, -1 evasion.",
+		desc: "Lowers the target's evasiveness by 1 stage. If this move is successful and whether or not the target's evasiveness was affected, the effects of Reflect, Light Screen, Safeguard, Mist, Spikes, Toxic Spikes, and Stealth Rock end for the target's side. Ignores a target's substitute, although a substitute will still block the lowering of evasiveness.",
+		shortDesc: "-1 evasion; clears target side's hazards/screens.",
 		onHit: function (pokemon) {
 			if (!pokemon.volatiles['substitute']) this.boost({evasion:-1});
 			let sideConditions = {reflect:1, lightscreen:1, safeguard:1, mist:1, spikes:1, toxicspikes:1, stealthrock:1};
@@ -214,7 +206,6 @@ exports.BattleMovedex = {
 	},
 	finalgambit: {
 		inherit: true,
-		desc: "Deals damage to one adjacent target equal to the user's current HP. If this move is successful, the user faints. Makes contact.",
 		flags: {contact: 1, protect: 1},
 	},
 	fireblast: {
@@ -234,7 +225,7 @@ exports.BattleMovedex = {
 	},
 	firespin: {
 		inherit: true,
-		desc: "Deals damage to one adjacent target and prevents it from switching for four or five turns; seven turns if the user is holding Grip Claw. Causes damage to the target equal to 1/16 of its maximum HP (1/8 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Rapid Spin. This effect is not stackable or reset by using this or another partial-trapping move.",
+		desc: "Prevents the target from switching for four or five turns; seven turns if the user is holding Grip Claw. Causes damage to the target equal to 1/16 of its maximum HP (1/8 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Rapid Spin. This effect is not stackable or reset by using this or another partial-trapping move.",
 	},
 	flamethrower: {
 		inherit: true,
@@ -251,12 +242,6 @@ exports.BattleMovedex = {
 	furycutter: {
 		inherit: true,
 		basePower: 20,
-		basePowerCallback: function (pokemon) {
-			if (!pokemon.volatiles.furycutter) {
-				pokemon.addVolatile('furycutter');
-			}
-			return 20 * pokemon.volatiles.furycutter.multiplier;
-		},
 		effect: {
 			duration: 2,
 			onStart: function () {
@@ -351,10 +336,6 @@ exports.BattleMovedex = {
 	hex: {
 		inherit: true,
 		basePower: 50,
-		basePowerCallback: function (pokemon, target) {
-			if (target.status) return 100;
-			return 50;
-		},
 	},
 	hiddenpower: {
 		inherit: true,
@@ -362,7 +343,7 @@ exports.BattleMovedex = {
 		basePowerCallback: function (pokemon) {
 			return pokemon.hpPower || 70;
 		},
-		desc: "Deals damage to one adjacent target. This move's type and power depend on the user's individual values (IVs). Power varies between 30 and 70, and type can be any but Normal.",
+		desc: "This move's type and power depend on the user's individual values (IVs). Power varies between 30 and 70, and type can be any but Normal.",
 		shortDesc: "Varies in power and type based on the user's IVs.",
 	},
 	hiddenpowerbug: {
@@ -452,7 +433,7 @@ exports.BattleMovedex = {
 	incinerate: {
 		inherit: true,
 		basePower: 30,
-		desc: "Deals damage to all adjacent foes and destroys any Berry they may be holding.",
+		desc: "The target loses its held item if it is a Berry. This move cannot cause Pokemon with the Ability Sticky Hold to lose their held item. Items lost to this move cannot be regained with Recycle or the Ability Harvest.",
 		shortDesc: "Destroys the foe(s) Berry.",
 		onHit: function (pokemon, source) {
 			let item = pokemon.getItem();
@@ -464,7 +445,7 @@ exports.BattleMovedex = {
 	knockoff: {
 		inherit: true,
 		basePower: 20,
-		desc: "Deals damage to one adjacent target and causes it to drop its held item. This move cannot force Pokemon with the Ability Sticky Hold to lose their held item, or force a Giratina, an Arceus, or a Genesect to lose their Griseous Orb, Plate, or Drive, respectively. Items lost to this move cannot be regained with Recycle. Makes contact.",
+		desc: "If the user has not fainted, the target loses its held item. This move cannot cause Pokemon with the Ability Sticky Hold to lose their held item, or force a Giratina, an Arceus, or a Genesect to lose their Griseous Orb, Plate, or Drive, respectively. Items lost to this move cannot be regained with Recycle.",
 		shortDesc: "Removes the target's held item.",
 		onBasePower: function () {},
 	},
@@ -519,7 +500,7 @@ exports.BattleMovedex = {
 	},
 	magmastorm: {
 		inherit: true,
-		desc: "Deals damage to one adjacent target and prevents it from switching for four or five turns; seven turns if the user is holding Grip Claw. Causes damage to the target equal to 1/16 of its maximum HP (1/8 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Rapid Spin. This effect is not stackable or reset by using this or another partial-trapping move.",
+		desc: "Prevents the target from switching for four or five turns; seven turns if the user is holding Grip Claw. Causes damage to the target equal to 1/16 of its maximum HP (1/8 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Rapid Spin. This effect is not stackable or reset by using this or another partial-trapping move.",
 		basePower: 120,
 	},
 	meanlook: {
@@ -562,7 +543,7 @@ exports.BattleMovedex = {
 	},
 	minimize: {
 		inherit: true,
-		desc: "Raises the user's evasion by 2 stages. After using this move, Stomp and Steamroller will have their power doubled if used against the user while it is active.",
+		desc: "Raises the user's evasiveness by 2 stages. Whether or not the user's evasiveness was changed, Stomp and Steamroller will have their power doubled if used against the user while it is active.",
 		pp: 20,
 		effect: {
 			noCopy: true,
@@ -663,7 +644,7 @@ exports.BattleMovedex = {
 	},
 	quickguard: {
 		inherit: true,
-		desc: "The user and its party members are protected from attacks with original priority greater than 0 made by other Pokemon, including allies, during this turn. This attack has a 1/X chance of being successful, where X starts at 1 and doubles each time this move is successfully used. X resets to 1 if this attack fails or if the user's last used move is not Detect, Endure, Protect, Quick Guard, or Wide Guard. If X is 256 or more, this move has a 1/(2^32) chance of being successful. Fails if the user moves last this turn or if this move is already in effect for the user's side. Priority +3.",
+		desc: "The user and its party members are protected from attacks with original priority greater than 0 made by other Pokemon, including allies, during this turn. This attack has a 1/X chance of being successful, where X starts at 1 and doubles each time this move is successfully used. X resets to 1 if this attack fails or if the user's last used move is not Detect, Endure, Protect, Quick Guard, or Wide Guard. If X is 256 or more, this move has a 1/(2^32) chance of being successful. Fails if the user moves last this turn or if this move is already in effect for the user's side.",
 		stallingMove: true,
 		onTryHitSide: function (side, source) {
 			return this.willAct() && this.runEvent('StallMove', source);
@@ -749,7 +730,7 @@ exports.BattleMovedex = {
 	},
 	sandtomb: {
 		inherit: true,
-		desc: "Deals damage to one adjacent target and prevents it from switching for four or five turns; seven turns if the user is holding Grip Claw. Causes damage to the target equal to 1/16 of its maximum HP (1/8 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Rapid Spin. This effect is not stackable or reset by using this or another partial-trapping move.",
+		desc: "Prevents the target from switching for four or five turns; seven turns if the user is holding Grip Claw. Causes damage to the target equal to 1/16 of its maximum HP (1/8 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Rapid Spin. This effect is not stackable or reset by using this or another partial-trapping move.",
 	},
 	sacredsword: {
 		inherit: true,
@@ -757,6 +738,8 @@ exports.BattleMovedex = {
 	},
 	scald: {
 		inherit: true,
+		desc: "Has a 30% chance to burn the target.",
+		shortDesc: "30% chance to burn the target.",
 		thawsTarget: false,
 	},
 	screech: {
@@ -781,6 +764,7 @@ exports.BattleMovedex = {
 	},
 	skillswap: {
 		inherit: true,
+		desc: "The user swaps its Ability with the target's Ability. Fails if either the user or the target's Ability is Illusion, Multitype, or Wonder Guard, or if both have the same Ability.",
 		onHit: function (target, source) {
 			let targetAbility = target.ability;
 			let sourceAbility = source.ability;
@@ -799,6 +783,7 @@ exports.BattleMovedex = {
 	},
 	skydrop: {
 		inherit: true,
+		desc: "This attack takes the target into the air with the user on the first turn and executes on the second. On the first turn, the user and the target avoid all attacks other than Gust, Hurricane, Sky Uppercut, Smack Down, Thousand Arrows, Thunder, and Twister. The user and the target cannot make a move between turns, but the target can select a move to use. This move cannot damage Flying-type Pokemon. Fails on the first turn if the target is an ally or if the target has a substitute.",
 		onTryHit: function (target, source, move) {
 			if (target.fainted) return false;
 			if (source.removeVolatile(move.id)) {
@@ -827,10 +812,6 @@ exports.BattleMovedex = {
 	smellingsalts: {
 		inherit: true,
 		basePower: 60,
-		basePowerCallback: function (pokemon, target) {
-			if (target.status === 'par') return 120;
-			return 60;
-		},
 	},
 	smog: {
 		inherit: true,
@@ -855,7 +836,7 @@ exports.BattleMovedex = {
 	},
 	stringshot: {
 		inherit: true,
-		desc: "Lowers all adjacent foes' Speed by 1 stage. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves.",
+		desc: "Lowers the target's Speed by 1 stage.",
 		shortDesc: "Lowers the foe(s) Speed by 1.",
 		boosts: {
 			spe: -1,
@@ -871,6 +852,7 @@ exports.BattleMovedex = {
 	},
 	substitute: {
 		inherit: true,
+		desc: "The user takes 1/4 of its maximum HP, rounded down, and puts it into a substitute to take its place in battle. The substitute is removed once enough damage is inflicted on it, or if the user switches out or faints. Baton Pass can be used to transfer the substitute to an ally, and the substitute will keep its remaining HP. Until the substitute is broken, it receives damage from all attacks made by other Pokemon and shields the user from status effects and stat stage changes caused by other Pokemon. The user still takes normal damage from weather and status effects while behind its substitute. If the substitute breaks during a multi-hit attack, the user will take damage from any remaining hits. If a substitute is created while the user is partially trapped, the partial-trapping effect ends immediately. This move fails if the user does not have enough HP remaining to create a substitute, or if it already has a substitute.",
 		effect: {
 			onStart: function (target) {
 				this.add('-start', target, 'Substitute');
@@ -933,7 +915,7 @@ exports.BattleMovedex = {
 	},
 	sweetscent: {
 		inherit: true,
-		desc: "Lowers all adjacent foes' evasion by 1 stage. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves.",
+		desc: "Lowers the target's evasiveness by 1 stage.",
 		shortDesc: "Lowers the foe(s) evasion by 1.",
 		boosts: {
 			evasion: -1,
@@ -981,10 +963,6 @@ exports.BattleMovedex = {
 	wakeupslap: {
 		inherit: true,
 		basePower: 60,
-		basePowerCallback: function (pokemon, target) {
-			if (target.status === 'slp') return 120;
-			return 60;
-		},
 	},
 	waterpledge: {
 		inherit: true,
@@ -1034,7 +1012,7 @@ exports.BattleMovedex = {
 	},
 	wideguard: {
 		inherit: true,
-		desc: "The user and its party members are protected from damaging attacks made by other Pokemon, including allies, during this turn that target all adjacent foes or all adjacent Pokemon. This attack has a 1/X chance of being successful, where X starts at 1 and doubles each time this move is successfully used. X resets to 1 if this attack fails or if the user's last used move is not Detect, Endure, Protect, Quick Guard, or Wide Guard. If X is 256 or more, this move has a 1/(2^32) chance of being successful. Fails if the user moves last this turn or if this move is already in effect for the user's side. Priority +3.",
+		desc: "The user and its party members are protected from damaging attacks made by other Pokemon, including allies, during this turn that target all adjacent foes or all adjacent Pokemon. This attack has a 1/X chance of being successful, where X starts at 1 and doubles each time this move is successfully used. X resets to 1 if this attack fails or if the user's last used move is not Detect, Endure, Protect, Quick Guard, or Wide Guard. If X is 256 or more, this move has a 1/(2^32) chance of being successful. Fails if the user moves last this turn or if this move is already in effect for the user's side.",
 		stallingMove: true,
 		onTryHitSide: function (side, source) {
 			return this.willAct() && this.runEvent('StallMove', source);
@@ -1045,7 +1023,7 @@ exports.BattleMovedex = {
 	},
 	whirlpool: {
 		inherit: true,
-		desc: "Deals damage to one adjacent target and prevents it from switching for four or five turns; seven turns if the user is holding Grip Claw. Power doubles if the target is using Dive. Causes damage to the target equal to 1/16 of its maximum HP (1/8 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Rapid Spin. This effect is not stackable or reset by using this or another partial-trapping move.",
+		desc: "Prevents the target from switching for four or five turns; seven turns if the user is holding Grip Claw. Power doubles if the target is using Dive. Causes damage to the target equal to 1/16 of its maximum HP (1/8 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Rapid Spin. This effect is not stackable or reset by using this or another partial-trapping move.",
 	},
 	willowisp: {
 		inherit: true,
@@ -1057,6 +1035,6 @@ exports.BattleMovedex = {
 	},
 	wrap: {
 		inherit: true,
-		desc: "Deals damage to one adjacent target and prevents it from switching for four or five turns; seven turns if the user is holding Grip Claw. Causes damage to the target equal to 1/16 of its maximum HP (1/8 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Rapid Spin. This effect is not stackable or reset by using this or another partial-trapping move. Makes contact.",
+		desc: "Prevents the target from switching for four or five turns; seven turns if the user is holding Grip Claw. Causes damage to the target equal to 1/16 of its maximum HP (1/8 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Rapid Spin. This effect is not stackable or reset by using this or another partial-trapping move.",
 	},
 };
