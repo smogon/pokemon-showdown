@@ -2041,6 +2041,7 @@ let commands = exports.commands = {
 	blacklist: function (target, room, user) {
 		if (!target) return this.parse('/help blacklist');
 		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
+		if (toId(target) === 'show') return this.errorReply("You're looking for /showbl");
 
 		target = this.splitTarget(target);
 		const targetUser = this.targetUser;
