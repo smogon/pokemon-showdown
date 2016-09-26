@@ -3,7 +3,7 @@
 exports.BattleMovedex = {
 	acupressure: {
 		inherit: true,
-		desc: "Raises a random stat by 2 stages as long as the stat is not already at stage 6. The user can choose to use this move on itself or an ally. Fails if no stat stage can be raised or if the user or ally has a Substitute. This move ignores Protect and Detect.",
+		desc: "Raises a random stat by 2 stages as long as the stat is not already at stage 6. The user can choose to use this move on itself or an ally. Fails if no stat stage can be raised or if the user or ally has a substitute.",
 		flags: {snatch: 1},
 		onHit: function (target) {
 			if (target.volatiles['substitute']) {
@@ -34,7 +34,7 @@ exports.BattleMovedex = {
 	},
 	assist: {
 		inherit: true,
-		desc: "The user performs a random move from any of the Pokemon on its team. Assist cannot generate itself, Chatter, Copycat, Counter, Covet, Destiny Bond, Detect, Endure, Feint, Focus Punch, Follow Me, Helping Hand, Me First, Metronome, Mimic, Mirror Coat, Mirror Move, Protect, Sketch, Sleep Talk, Snatch, Struggle, Switcheroo, Thief or Trick.",
+		desc: "A random move among those known by the user's party members is selected for use. Does not select Assist, Chatter, Copycat, Counter, Covet, Destiny Bond, Detect, Endure, Feint, Focus Punch, Follow Me, Helping Hand, Me First, Metronome, Mimic, Mirror Coat, Mirror Move, Protect, Sketch, Sleep Talk, Snatch, Struggle, Switcheroo, Thief or Trick.",
 		onHit: function (target) {
 			let moves = [];
 			for (let j = 0; j < target.side.pokemon.length; j++) {
@@ -70,7 +70,7 @@ exports.BattleMovedex = {
 			if (!pokemon.side.pokemon[pokemon.volatiles.beatup.index]) return null;
 			return 10;
 		},
-		desc: "Does one hit for the user and each other unfainted non-egg active and non-active Pokemon on the user's side without a status problem.",
+		desc: "Deals typeless damage. Hits one time for the user and one time for each unfainted Pokemon without a major status condition in the user's party. For each hit, the damage formula uses the participating Pokemon's base Attack as the Attack stat, the target's base Defense as the Defense stat, and ignores stat stages and other effects that modify Attack or Defense; each hit is considered to come from the user.",
 		onModifyMove: function (move, pokemon) {
 			move.type = '???';
 			move.category = 'Physical';
@@ -161,7 +161,8 @@ exports.BattleMovedex = {
 	},
 	brickbreak: {
 		inherit: true,
-		desc: "Reflect and Light Screen are removed from the target's field even if the attack misses or the target is a Ghost-type.",
+		desc: "Whether or not this attack misses or the target is immune, the effects of Reflect and Light Screen end for the target's side of the field before damage is calculated.",
+		shortDesc: "Destroys screens, even if the target is immune.",
 		onTryHit: function (pokemon) {
 			pokemon.side.removeSideCondition('reflect');
 			pokemon.side.removeSideCondition('lightscreen');
@@ -173,8 +174,8 @@ exports.BattleMovedex = {
 	},
 	chatter: {
 		inherit: true,
-		desc: "Deals damage to one adjacent target. This move has an X% chance to confuse the target, where X is 0 unless the user is a Chatot that hasn't Transformed. If the user is a Chatot, X is 1, 11, or 31 depending on the volume of Chatot's recorded cry, if any; 1 for no recording or low volume, 11 for medium volume, and 31 for high volume. Pokemon with the Ability Soundproof are immune. (Field: Can be used to record a sound to replace Chatot's cry. The cry is reset if Chatot is deposited in a PC.)",
-		shortDesc: "31% chance to confuse the target.",
+		desc: "Has an X% chance to confuse the target, where X is 0 unless the user is a Chatot that hasn't Transformed. If the user is a Chatot, X is 1, 11, or 31 depending on the volume of Chatot's recorded cry, if any; 1 for no recording or low volume, 11 for medium volume, and 31 for high volume.",
+		shortDesc: "For Chatot, 31% chance to confuse the target.",
 		secondary: {
 			chance: 31,
 			volatileStatus: 'confusion',
@@ -219,7 +220,8 @@ exports.BattleMovedex = {
 	},
 	curse: {
 		inherit: true,
-		desc: "If the user is not a Ghost-type, lowers the user's Speed by 1 stage and raises the user's Attack and Defense by 1 stage. If the user is a Ghost-type, the user loses 1/2 of its maximum HP, rounded down and even if it would cause fainting, in exchange for one adjacent target losing 1/4 of its maximum HP, rounded down, at the end of each turn while it is active. If the target uses Baton Pass, the replacement will continue to be affected. Fails if there is no target or if the target is already affected or has a Substitute.",
+		desc: "If the user is not a Ghost type, lowers the user's Speed by 1 stage and raises the user's Attack and Defense by 1 stage. If the user is a Ghost type, the user loses 1/2 of its maximum HP, rounded down and even if it would cause fainting, in exchange for the target losing 1/4 of its maximum HP, rounded down, at the end of each turn while it is active. If the target uses Baton Pass, the replacement will continue to be affected. Fails if there is no target or if the target is already affected or has a substitute.",
+		flags: {},
 		onModifyMove: function (move, source, target) {
 			if (!source.hasType('Ghost')) {
 				delete move.volatileStatus;
@@ -263,7 +265,7 @@ exports.BattleMovedex = {
 	disable: {
 		inherit: true,
 		accuracy: 80,
-		desc: "The target cannot choose its last move for 4-7 turns. Disable only works on one move at a time and fails if the target has not yet used a move or if its move has run out of PP. The target does nothing if it is about to use a move that becomes disabled.",
+		desc: "For 4 to 7 turns, the target's last move used becomes disabled. Fails if one of the target's moves is already disabled, if the target has not made a move, or if the target no longer knows the move.",
 		flags: {protect: 1, mirror: 1, authentic: 1},
 		volatileStatus: 'disable',
 		effect: {
@@ -316,6 +318,7 @@ exports.BattleMovedex = {
 		inherit: true,
 		accuracy: 85,
 		basePower: 120,
+		desc: "Deals typeless damage that cannot be a critical hit two turns after this move is used. Damage is calculated against the target on use, and at the end of the final turn that damage is dealt to the Pokemon at the position the original target had at the time. Fails if this move or Future Sight is already in effect for the target's position.",
 		onTry: function (source, target) {
 			target.side.addSideCondition('futuremove');
 			if (target.side.sideConditions['futuremove'].positions[target.position]) {
@@ -361,7 +364,7 @@ exports.BattleMovedex = {
 	},
 	dreameater: {
 		inherit: true,
-		desc: "Deals damage to one adjacent target, if it is asleep and does not have a Substitute. The user recovers half of the HP lost by the target, rounded up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down.",
+		desc: "The target is unaffected by this move unless it is asleep and does not have a substitute. The user recovers 1/2 the HP lost by the target, rounded down, but not less than 1 HP. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded down.",
 		onTryHit: function (target) {
 			if (target.status !== 'slp' || target.volatiles['substitute']) {
 				this.add('-immune', target, '[msg]');
@@ -380,6 +383,8 @@ exports.BattleMovedex = {
 	},
 	encore: {
 		inherit: true,
+		desc: "For 4 to 8 turns, the target is forced to repeat its last move used. If the affected move runs out of PP, the effect ends. Fails if the target is already under this effect, if it has not made a move, if the move has 0 PP, or if the move is Encore, Mimic, Mirror Move, Sketch, Struggle, or Transform.",
+		shortDesc: "The target repeats its last move for 4-8 turns.",
 		flags: {protect: 1, mirror: 1, authentic: 1},
 		volatileStatus: 'encore',
 		effect: {
@@ -447,12 +452,13 @@ exports.BattleMovedex = {
 	},
 	fakeout: {
 		inherit: true,
-		shortDesc: "Usually hits first; first turn out only; target flinch.",
 		priority: 1,
 	},
 	feint: {
 		inherit: true,
 		basePower: 50,
+		desc: "Fails unless the target is using Detect or Protect. If this move is successful, it breaks through the target's Detect or Protect for this turn, allowing other Pokemon to attack the target normally.",
+		shortDesc: "Breaks protection. Fails if target is not protecting.",
 		onTry: function (source, target) {
 			if (!target.volatiles['protect']) {
 				this.add('-fail', source);
@@ -514,6 +520,7 @@ exports.BattleMovedex = {
 		inherit: true,
 		accuracy: 90,
 		basePower: 80,
+		desc: "Deals typeless damage that cannot be a critical hit two turns after this move is used. Damage is calculated against the target on use, and at the end of the final turn that damage is dealt to the Pokemon at the position the original target had at the time. Fails if this move or Doom Desire is already in effect for the target's position.",
 		pp: 15,
 		onTry: function (source, target) {
 			target.side.addSideCondition('futuremove');
@@ -560,7 +567,7 @@ exports.BattleMovedex = {
 	growth: {
 		inherit: true,
 		desc: "Raises the user's Special Attack by 1 stage.",
-		shortDesc: "Boosts the user's Sp. Atk by 1.",
+		shortDesc: "Raises the user's Sp. Atk by 1.",
 		onModifyMove: function () { },
 		boosts: {
 			spa: 1,
@@ -577,6 +584,7 @@ exports.BattleMovedex = {
 	},
 	healblock: {
 		inherit: true,
+		desc: "For 5 turns, the target is prevented from restoring any HP as long as it remains active. During the effect, healing moves are unusable, move effects that grant healing will not heal, but Abilities and items will continue to heal the user. If an affected Pokemon uses Baton Pass, the replacement will remain under the effect. Pain Split is unaffected.",
 		flags: {protect: 1, mirror: 1},
 		effect: {
 			duration: 5,
@@ -641,84 +649,11 @@ exports.BattleMovedex = {
 			},
 		},
 	},
-	hiddenpower: {
-		inherit: true,
-		basePower: 0,
-		basePowerCallback: function (pokemon) {
-			return pokemon.hpPower || 70;
-		},
-		desc: "Deals damage to one adjacent target. This move's type and power depend on the user's individual values (IVs). Power varies between 30 and 70, and type can be any but Normal.",
-		shortDesc: "Varies in power and type based on the user's IVs.",
-	},
-	hiddenpowerbug: {
-		inherit: true,
-		basePower: 70,
-	},
-	hiddenpowerdark: {
-		inherit: true,
-		basePower: 70,
-	},
-	hiddenpowerdragon: {
-		inherit: true,
-		basePower: 70,
-	},
-	hiddenpowerelectric: {
-		inherit: true,
-		basePower: 70,
-	},
-	hiddenpowerfighting: {
-		inherit: true,
-		basePower: 70,
-	},
-	hiddenpowerfire: {
-		inherit: true,
-		basePower: 70,
-	},
-	hiddenpowerflying: {
-		inherit: true,
-		basePower: 70,
-	},
-	hiddenpowerghost: {
-		inherit: true,
-		basePower: 70,
-	},
-	hiddenpowergrass: {
-		inherit: true,
-		basePower: 70,
-	},
-	hiddenpowerground: {
-		inherit: true,
-		basePower: 70,
-	},
-	hiddenpowerice: {
-		inherit: true,
-		basePower: 70,
-	},
-	hiddenpowerpoison: {
-		inherit: true,
-		basePower: 70,
-	},
-	hiddenpowerpsychic: {
-		inherit: true,
-		basePower: 70,
-	},
-	hiddenpowerrock: {
-		inherit: true,
-		basePower: 70,
-	},
-	hiddenpowersteel: {
-		inherit: true,
-		basePower: 70,
-	},
-	hiddenpowerwater: {
-		inherit: true,
-		basePower: 70,
-	},
 	highjumpkick: {
 		inherit: true,
 		basePower: 100,
-		desc: "If this attack misses the target, the user takes half of the damage it would have dealt in recoil damage.",
-		shortDesc: "User takes half damage it would have dealt if miss.",
+		desc: "If this attack is not successful, the user loses HP equal to half the target's maximum HP, rounded down, if the target is immune, or half of the damage the target would have taken, rounded down, but no less than 1 HP and no more than half of the target's maximum HP, as crash damage. Pokemon with the Ability Magic Guard are unaffected by crash damage.",
+		shortDesc: "If miss, user takes 1/2 damage it would've dealt.",
 		pp: 20,
 		onMoveFail: function (target, source, move) {
 			let damage = this.getDamage(source, target, move, true);
@@ -732,6 +667,7 @@ exports.BattleMovedex = {
 	},
 	imprison: {
 		inherit: true,
+		desc: "The user prevents all of its foes from using any moves that the user also knows as long as the user remains active. Fails if no opponents know any of the user's moves.",
 		flags: {authentic: 1},
 		onTryHit: function (pokemon) {
 			let targets = pokemon.side.foe.active;
@@ -747,8 +683,8 @@ exports.BattleMovedex = {
 	jumpkick: {
 		inherit: true,
 		basePower: 85,
-		desc: "If this attack misses the target, the user takes half of the damage it would have dealt in recoil damage.",
-		shortDesc: "User takes half damage it would have dealt if miss.",
+		desc: "If this attack is not successful, the user loses HP equal to half the target's maximum HP, rounded down, if the target is immune, or half of the damage the target would have taken, rounded down, but no less than 1 HP and no more than half of the target's maximum HP, as crash damage. Pokemon with the Ability Magic Guard are unaffected by crash damage.",
+		shortDesc: "If miss, user takes 1/2 damage it would've dealt.",
 		pp: 25,
 		onMoveFail: function (target, source, move) {
 			let damage = this.getDamage(source, target, move, true);
@@ -796,6 +732,7 @@ exports.BattleMovedex = {
 	},
 	magiccoat: {
 		inherit: true,
+		desc: "The user is unaffected by certain non-damaging moves directed at it and will instead use such moves against the original user. Once a move is reflected, this effect ends. Moves reflected in this way are unable to be reflected again by another Pokemon under this effect. If the user has the Ability Soundproof, this move's effect happens before a sound-based move can be nullified. The Abilities Lightning Rod and Storm Drain redirect their respective moves before this move takes effect.",
 		effect: {
 			duration: 1,
 			onTryHitPriority: 2,
@@ -879,8 +816,8 @@ exports.BattleMovedex = {
 	},
 	minimize: {
 		inherit: true,
-		desc: "Raises the user's evasion by 1 stage. After using this move, Stomp will have its power doubled if used against the user while it is active.",
-		shortDesc: "Boosts the user's evasion by 1.",
+		desc: "Raises the user's evasiveness by 1 stage. Whether or not the user's evasiveness was changed, Stomp will have its power doubled if used against the user while it is active.",
+		shortDesc: "Raises the user's evasiveness by 1.",
 		boosts: {
 			evasion: 1,
 		},
@@ -942,6 +879,7 @@ exports.BattleMovedex = {
 			}
 			return 100;
 		},
+		desc: "Power doubles if the target moves before the user; power is also doubled if the target switches out.",
 	},
 	petaldance: {
 		inherit: true,
@@ -1097,6 +1035,7 @@ exports.BattleMovedex = {
 	},
 	suckerpunch: {
 		inherit: true,
+		desc: "Fails if the target did not select a physical or special attack for use this turn, or if the target moves before the user.",
 		onTry: function (source, target) {
 			let decision = this.willMove(target);
 			if (!decision || decision.choice !== 'move' || decision.move.category === 'Status' || target.volatiles.mustrecharge) {
@@ -1125,7 +1064,7 @@ exports.BattleMovedex = {
 	tailglow: {
 		inherit: true,
 		desc: "Raises the user's Special Attack by 2 stages.",
-		shortDesc: "Boosts the user's Sp. Atk by 2.",
+		shortDesc: "Raises the user's Sp. Atk by 2.",
 		boosts: {
 			spa: 2,
 		},
@@ -1157,6 +1096,8 @@ exports.BattleMovedex = {
 	},
 	taunt: {
 		inherit: true,
+		desc: "For 3 to 5 turns, prevents the target from using non-damaging moves.",
+		shortDesc: "For 3-5 turns, the target can't use status moves.",
 		flags: {protect: 1, mirror: 1, authentic: 1},
 		effect: {
 			durationCallback: function () {
@@ -1202,6 +1143,7 @@ exports.BattleMovedex = {
 	},
 	toxicspikes: {
 		inherit: true,
+		desc: "Sets up a hazard on the foe's side of the field, poisoning each foe that switches in, unless it is a Flying-type Pokemon or has the Ability Levitate. Can be used up to two times before failing. Foes become poisoned with one layer and badly poisoned with two layers. Can be removed from the foe's side if any foe uses Rapid Spin, is hit by Defog, or a grounded Poison-type Pokemon switches in. Safeguard prevents the foe's party from being poisoned on switch-in, as well as switching in with a substitute.",
 		flags: {},
 		effect: {
 			// this is a side condition
@@ -1233,6 +1175,7 @@ exports.BattleMovedex = {
 	},
 	transform: {
 		inherit: true,
+		desc: "The user transforms into the target. The target's current stats, stat stages, types, moves, Ability, weight, IVs, species, and sprite are copied. The user's level and HP remain the same and each copied move receives only 5 PP. This move fails if the target has transformed.",
 		flags: {authentic: 1},
 	},
 	uproar: {
@@ -1254,6 +1197,7 @@ exports.BattleMovedex = {
 	},
 	wish: {
 		inherit: true,
+		desc: "At the end of the next turn, the Pokemon at the user's position has 1/2 of its maximum HP restored to it, rounded down. Fails if this move is already in effect for the user's position.",
 		shortDesc: "Next turn, heals 50% of the recipient's max HP.",
 		flags: {heal: 1},
 		sideCondition: 'Wish',
