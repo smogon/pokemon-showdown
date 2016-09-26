@@ -175,7 +175,6 @@ if (require.main === module) {
 
 // Generate and cache the format list.
 Tools.includeFormats();
-Rooms.global.formatListText = Rooms.global.getFormatListText();
 
 global.TeamValidator = require('./team-validator');
 TeamValidator.PM.spawn();
