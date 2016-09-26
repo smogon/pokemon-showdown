@@ -2142,6 +2142,8 @@ let commands = exports.commands = {
 	blacklists: 'showblacklist',
 	showbl: 'showblacklist',
 	showblacklist: function (target, room, user) {
+		if (target) room = Rooms.search(target);
+		if (!room) return this.errorReply(`The room "${target}" was not found.`);
 		if (!this.can('mute', null, room)) return false;
 
 		if (!user.can('ban', null, room)) return;
