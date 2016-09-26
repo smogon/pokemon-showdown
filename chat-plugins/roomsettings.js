@@ -110,9 +110,9 @@ class RoomSettings {
 		if (!this.user.can('tournamentsmanagement', null, this.room)) return "<button " + DISABLED + ">" + (this.room.toursEnabled ? 'drivers+' : 'RO only') + "</button>";
 
 		if (this.room.toursEnabled) {
-			return '<button name="send" value="/roomsetting tournament disable">RO only</button> <button ' + DISABLED + '>drivers+</button>';
+			return '<button class="button" name="send" value="/roomsetting tournament disable">RO only</button> <button ' + DISABLED + '>drivers+</button>';
 		} else {
-			return '<button ' + DISABLED + '>RO only</button> <button name="send" value="/roomsetting tournament enable">drivers+</button> ';
+			return '<button ' + DISABLED + '>RO only</button> <button class="button" name="send" value="/roomsetting tournament enable">drivers+</button> ';
 		}
 	}
 	generateDisplay(user, room, connection) {
