@@ -1143,6 +1143,9 @@ exports.commands = {
 				"<br /><em>Type /formatshelp <strong>[format|section]</strong> to get details about an available format or group of formats.</em>"
 			);
 		}
+
+		const isOMSearch = (cmd === 'om' || cmd === 'othermetas');
+
 		let targetId = toId(target);
 		if (targetId === 'ladder') targetId = 'search';
 		if (targetId === 'all') targetId = '';
@@ -1151,7 +1154,6 @@ exports.commands = {
 		let format = Tools.getFormat(targetId);
 		if (format.effectType === 'Format') formatList = [targetId];
 		if (!formatList) {
-			if (this.broadcasting && (cmd !== 'om' && cmd !== 'othermetas')) return this.errorReply("'" + target + "' is not a format. This command's search mode is too spammy to broadcast.");
 			formatList = Object.keys(Tools.data.Formats).filter(formatid => Tools.data.Formats[formatid].effectType === 'Format');
 		}
 
@@ -1163,6 +1165,8 @@ exports.commands = {
 			let format = Tools.getFormat(formatList[i]);
 			let sectionId = toId(format.section);
 			if (targetId && !format[targetId + 'Show'] && sectionId !== targetId && format.id === formatList[i] && !format.id.startsWith(targetId)) continue;
+			if (isOMSearch && format.id.startsWith('gen') && ['ou', 'uu', 'ru', 'ubers', 'lc', 'customgame', 'doublescustomgame', 'gbusingles', 'gbudoubles'].includes(format.id.slice(4))) continue;
+			if (isOMSearch && (format.id === 'gen5nu')) continue;
 			totalMatches++;
 			if (!sections[sectionId]) sections[sectionId] = {name: format.section, formats: []};
 			sections[sectionId].formats.push(format.id);
@@ -1180,19 +1184,26 @@ exports.commands = {
 			return this.sendReplyBox(format.desc.join("<br />"));
 		}
 
+		let tableStyle = `border:1px solid gray; border-collapse:collapse`;
+
+		if (this.broadcasting) {
+			tableStyle += `; display:inline-block; max-height:240px;" class="scrollable`;
+		}
+
 		// Build tables
-		let buf = [];
+		let buf = [`<table style="${tableStyle}" cellspacing="0" cellpadding="5">`];
 		for (let sectionId in sections) {
 			if (exactMatch && sectionId !== exactMatch) continue;
-			buf.push("<h3>" + Tools.escapeHTML(sections[sectionId].name) + "</h3>");
-			buf.push("<table class=\"scrollable\" style=\"display:inline-block; max-height:200px; border:1px solid gray; border-collapse:collapse\" cellspacing=\"0\" cellpadding=\"5\"><thead><th style=\"border:1px solid gray\" >Name</th><th style=\"border:1px solid gray\" >Description</th></thead><tbody>");
+			buf.push(Tools.html`<th style="border:1px solid gray" colspan="2">${sections[sectionId].name}</th>`);
 			for (let i = 0; i < sections[sectionId].formats.length; i++) {
 				let format = Tools.getFormat(sections[sectionId].formats[i]);
-				buf.push("<tr><td style=\"border:1px solid gray\">" + Tools.escapeHTML(format.name) + "</td><td style=\"border: 1px solid gray; margin-left:10px\">" + (format.desc ? format.desc.join("<br />") : "&mdash;") + "</td></tr>");
+				let nameHTML = Tools.escapeHTML(format.name);
+				let descHTML = format.desc ? format.desc.join("<br />") : "&mdash;";
+				buf.push(`<tr><td style="border:1px solid gray">${nameHTML}</td><td style="border: 1px solid gray; margin-left:10px">${descHTML}</td></tr>`);
 			}
-			buf.push("</tbody></table>");
 		}
-		return this.sendReply("|raw|<center>" + buf.join("") + "</center>");
+		buf.push(`</table>`);
+		return this.sendReply("|raw|" + buf.join("") + "");
 	},
 
 	'!roomhelp': true,
