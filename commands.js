@@ -2692,37 +2692,15 @@ let commands = exports.commands = {
 		connection.sendTo(room, "updating...");
 
 		let exec = require('child_process').exec;
-		exec('git diff-index --quiet HEAD --', error => {
-			let cmd = 'git pull --rebase';
-			if (error) {
-				if (error.code === 1) {
-					// The working directory or index have local changes.
-					cmd = 'git stash && ' + cmd + ' && git stash pop';
-				} else {
-					// The most likely case here is that the user does not have
-					// `git` on the PATH (which would be error.code === 127).
-					connection.sendTo(room, "" + error);
-					logQueue.push("" + error);
-					for (let line of logQueue) {
-						room.logEntry(line);
-					}
-					CommandParser.updateServerLock = false;
-					return;
-				}
+		exec(`git fetch && git rebase --autostash FETCH_HEAD`, (error, stdout, stderr) => {
+			for (let s of ("" + stdout + stderr).split("\n")) {
+				connection.sendTo(room, s);
+				logQueue.push(s);
 			}
-			let entry = "Running `" + cmd + "`";
-			connection.sendTo(room, entry);
-			logQueue.push(entry);
-			exec(cmd, (error, stdout, stderr) => {
-				for (let s of ("" + stdout + stderr).split("\n")) {
-					connection.sendTo(room, s);
-					logQueue.push(s);
-				}
-				for (let line of logQueue) {
-					room.logEntry(line);
-				}
-				CommandParser.updateServerLock = false;
-			});
+			for (let line of logQueue) {
+				room.logEntry(line);
+			}
+			CommandParser.updateServerLock = false;
 		});
 	},
 
