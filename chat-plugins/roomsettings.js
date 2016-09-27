@@ -107,7 +107,7 @@ class RoomSettings {
 		return slowchatOutput.join(" ");
 	}
 	tourStatus() {
-		if (!this.user.can('tournamentsmanagement', null, this.room)) return "<button " + DISABLED + ">" + (this.room.toursEnabled ? 'drivers+' : 'RO only') + "</button>";
+		if (!this.user.can('tournamentsmanagement', null, this.room)) return "<button " + DISABLED + ">" + (this.room.toursEnabled ? '@' : '#') + "</button>";
 
 		if (this.room.toursEnabled) {
 			return '<button class="button" name="send" value="/roomsetting tournament disable">RO only</button> <button ' + DISABLED + '>drivers+</button>';
