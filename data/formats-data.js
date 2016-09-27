@@ -5698,6 +5698,14 @@ exports.BattleFormatsData = {
 		isNonstandard: true,
 		tier: "CAP",
 	},
+	kerfluffle: {
+		randomBattleMoves: ["aurasphere", "moonblast", "taunt", "partingshot", "gigadrain", "yawn"],
+		isNonstandard: true,
+		eventPokemon: [
+			{"generation": 6, "level": 16, "isHidden": false, "abilities":["naturalcure"], "moves":["celebrate", "holdhands", "fly", "metronome"], "pokeball": "cherishball"},
+		],
+		tier: "CAP",
+	},
 	syclant: {
 		randomBattleMoves: ["bugbuzz", "icebeam", "blizzard", "earthpower", "spikes", "superpower", "tailglow", "uturn", "focusblast"],
 		isNonstandard: true,
