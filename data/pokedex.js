@@ -11199,6 +11199,17 @@ exports.BattlePokedex = {
 		color: "Purple",
 		eggGroups: ["Amorphous", "Mineral"],
 	},
+	kerfluffle: {
+		num: -11,
+		species: "Kerfluffle",
+		types: ["Fairy", "Fighting"],
+		baseStats: {hp: 84, atk: 78, def: 86, spa: 115, spd: 88, spe: 119},
+		abilities: {0: "Natural Cure", 1: "Aroma Veil"},
+		heightm: 2.1,
+		weightkg: 24.2,
+		color: "Pink",
+		eggGroups: ["Fairy", "Human-Like"],
+	},
 	syclant: {
 		num: -51,
 		species: "Syclant",
