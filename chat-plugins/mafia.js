@@ -894,7 +894,7 @@ exports.commands = {
 		},
 
 		disable: function (target, room, user) {
-			if (!this.can('mafiamanagement', null, room)) return;
+			if (!this.can('gamemanagement', null, room)) return;
 			if (!room.mafiaEnabled) {
 				return this.errorReply("Mafia is already disabled.");
 			}
@@ -907,7 +907,7 @@ exports.commands = {
 		},
 
 		enable: function (target, room, user) {
-			if (!this.can('mafiamanagement', null, room)) return;
+			if (!this.can('gamemanagement', null, room)) return;
 			if (room.mafiaEnabled) {
 				return this.errorReply("Mafia is already enabled.");
 			}
