@@ -77,7 +77,7 @@ let commands = exports.commands = {
 		if (!target) return;
 
 		if (this.message.startsWith(`/ME`)) {
-			const uppercaseIdentity = user.getIdentity().toUpperCase();
+			const uppercaseIdentity = user.getIdentity(room).toUpperCase();
 			if (room) {
 				this.add(`|c|${uppercaseIdentity}|${target}`);
 			} else {
