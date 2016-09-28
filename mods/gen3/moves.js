@@ -11,6 +11,8 @@ exports.BattleMovedex = {
 	},
 	acid: {
 		inherit: true,
+		desc: "Has a 10% chance to lower the target's Defense by 1 stage.",
+		shortDesc: "10% chance to lower the foe(s) Defense by 1.",
 		secondary: {
 			chance: 10,
 			boosts: {
@@ -31,7 +33,7 @@ exports.BattleMovedex = {
 	},
 	assist: {
 		inherit: true,
-		desc: "The user performs a random move from any of the Pokemon on its team. Assist cannot generate itself, Chatter, Copycat, Counter, Covet, Destiny Bond, Detect, Endure, Feint, Focus Punch, Follow Me, Helping Hand, Me First, Metronome, Mimic, Mirror Coat, Mirror Move, Protect, Sketch, Sleep Talk, Snatch, Struggle, Switcheroo, Thief or Trick.",
+		desc: "A random move among those known by the user's party members is selected for use. Does not select Assist, Chatter, Copycat, Counter, Covet, Destiny Bond, Detect, Endure, Feint, Focus Punch, Follow Me, Helping Hand, Me First, Metronome, Mimic, Mirror Coat, Mirror Move, Protect, Sketch, Sleep Talk, Snatch, Struggle, Switcheroo, Thief or Trick.",
 		onHit: function (target) {
 			let moves = [];
 			for (let j = 0; j < target.side.pokemon.length; j++) {
@@ -61,6 +63,7 @@ exports.BattleMovedex = {
 			if (target.volatiles['minimize']) return 60;
 			return 30;
 		},
+		desc: "Has a 30% chance to flinch the target. Damage doubles if the target has used Minimize while active.",
 	},
 	beatup: {
 		inherit: true,
@@ -70,7 +73,7 @@ exports.BattleMovedex = {
 			if (!pokemon.side.pokemon[pokemon.volatiles.beatup.index]) return null;
 			return 10;
 		},
-		desc: "Does one hit for the user and each other unfainted non-egg active and non-active Pokemon on the user's side without a status problem.",
+		desc: "Deals typeless damage. Hits one time for each unfainted Pokemon without a major status condition in the user's party, or fails if no Pokemon meet the criteria. For each hit, the damage formula uses the participating Pokemon's base Attack as the Attack stat, the target's base Defense as the Defense stat, and ignores stat stages and other effects that modify Attack or Defense; each hit is considered to come from the user.",
 		onModifyMove: function (move, pokemon) {
 			move.type = '???';
 			move.category = 'Physical';
@@ -119,6 +122,7 @@ exports.BattleMovedex = {
 	},
 	blizzard: {
 		inherit: true,
+		desc: "Has a 10% chance to freeze the target.",
 		onModifyMove: function () { },
 	},
 	bonerush: {
@@ -138,6 +142,8 @@ exports.BattleMovedex = {
 	},
 	charge: {
 		inherit: true,
+		desc: "If the user uses an Electric-type attack on the next turn, its power will be doubled.",
+		shortDesc: "The user's Electric attack next turn has 2x power.",
 		boosts: false,
 	},
 	clamp: {
@@ -169,6 +175,8 @@ exports.BattleMovedex = {
 	},
 	crunch: {
 		inherit: true,
+		desc: "Has a 20% chance to lower the target's Special Defense by 1 stage.",
+		shortDesc: "20% chance to lower the target's Sp. Def by 1.",
 		secondary: {
 			chance: 20,
 			boosts: {
@@ -191,6 +199,8 @@ exports.BattleMovedex = {
 	disable: {
 		inherit: true,
 		accuracy: 55,
+		desc: "For 2 to 5 turns, the target's last move used becomes disabled. Fails if one of the target's moves is already disabled, if the target has not made a move, or if the target no longer knows the move.",
+		shortDesc: "For 2-5 turns, disables the target's last move.",
 		flags: {protect: 1, mirror: 1, authentic: 1},
 		volatileStatus: 'disable',
 		effect: {
@@ -286,7 +296,7 @@ exports.BattleMovedex = {
 	},
 	dreameater: {
 		inherit: true,
-		desc: "Deals damage to one adjacent target, if it is asleep and does not have a Substitute. The user recovers half of the HP lost by the target, rounded up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down.",
+		desc: "The target is unaffected by this move unless it is asleep and does not have a substitute. The user recovers 1/2 the HP lost by the target, rounded down, but not less than 1 HP.",
 		onTryHit: function (target) {
 			if (target.status !== 'slp' || target.volatiles['substitute']) {
 				this.add('-immune', target, '[msg]');
@@ -296,6 +306,8 @@ exports.BattleMovedex = {
 	},
 	encore: {
 		inherit: true,
+		desc: "For 3 to 6 turns, the target is forced to repeat its last move used. If the affected move runs out of PP, the effect ends. Fails if the target is already under this effect, if it has not made a move, if the move has 0 PP, or if the move is Encore, Mirror Move, or Struggle.",
+		shortDesc: "The target repeats its last move for 3-6 turns.",
 		flags: {protect: 1, mirror: 1, authentic: 1},
 		volatileStatus: 'encore',
 		effect: {
@@ -353,6 +365,7 @@ exports.BattleMovedex = {
 			if (target.volatiles['minimize']) return 160;
 			return 80;
 		},
+		desc: "Has a 10% chance to flinch the target. Damage doubles if the target has used Minimize while active.",
 	},
 	extremespeed: {
 		inherit: true,
@@ -502,6 +515,7 @@ exports.BattleMovedex = {
 	highjumpkick: {
 		inherit: true,
 		basePower: 85,
+		desc: "If this attack is not successful and the target was not immune, the user loses HP equal to half of the damage the target would have taken, rounded down, but no less than 1 HP and no more than half of the target's maximum HP, as crash damage.",
 		pp: 20,
 		onMoveFail: function (target, source, move) {
 			if (target.runImmunity('Fighting')) {
@@ -521,6 +535,7 @@ exports.BattleMovedex = {
 	jumpkick: {
 		inherit: true,
 		basePower: 70,
+		desc: "If this attack is not successful and the target was not immune, the user loses HP equal to half of the damage the target would have taken, rounded down, but no less than 1 HP and no more than half of the target's maximum HP, as crash damage.",
 		pp: 25,
 		onMoveFail: function (target, source, move) {
 			if (target.runImmunity('Fighting')) {
@@ -603,6 +618,8 @@ exports.BattleMovedex = {
 	naturepower: {
 		inherit: true,
 		accuracy: true,
+		desc: "This move calls another move for use depending on the battle terrain. Swift in Wi-Fi battles.",
+		shortDesc: "Attack changes based on terrain. (Swift)",
 		onHit: function (target) {
 			this.useMove('swift', target);
 		},
@@ -613,6 +630,7 @@ exports.BattleMovedex = {
 			if (target.volatiles['minimize']) return 120;
 			return 60;
 		},
+		desc: "Has a 30% chance to flinch the target. Damage doubles if the target has used Minimize while active.",
 	},
 	odorsleuth: {
 		inherit: true,
@@ -709,6 +727,7 @@ exports.BattleMovedex = {
 	},
 	sleeptalk: {
 		inherit: true,
+		desc: "One of the user's known moves, besides this move, is selected for use at random. Fails if the user is not asleep. The selected move does not have PP deducted from it, but if it currently has 0 PP it will fail to be used. This move cannot select Assist, Bide, Focus Punch, Metronome, Mirror Move, Sleep Talk, Uproar, or any two-turn move.",
 		beforeMoveCallback: function (pokemon) {
 			if (pokemon.volatiles['choicelock'] || pokemon.volatiles['encore']) {
 				this.addMove('move', pokemon, 'Sleep Talk');
@@ -746,6 +765,8 @@ exports.BattleMovedex = {
 	},
 	spite: {
 		inherit: true,
+		desc: "Causes the target's last move used to lose 2 to 5 PP, at random. Fails if the target has not made a move, if the move has 0 PP, or if it no longer knows the move.",
+		shortDesc: "Lowers the PP of the target's last move by 2-5.",
 		flags: {protect: 1, mirror: 1, authentic: 1},
 		onHit: function (target) {
 			let roll = this.random(2, 6);
@@ -758,6 +779,8 @@ exports.BattleMovedex = {
 	},
 	stockpile: {
 		inherit: true,
+		desc: "The user's Stockpile count increases by 1. Fails if the user's Stockpile count is 3.",
+		shortDesc: "Raises user's Stockpile count by 1. Max 3 uses.",
 		pp: 10,
 		effect: {
 			noCopy: true,
@@ -779,6 +802,8 @@ exports.BattleMovedex = {
 	struggle: {
 		inherit: true,
 		accuracy: 100,
+		desc: "Deals typeless damage to one adjacent foe at random. If this move was successful, the user takes damage equal to 1/2 the HP lost by the target, rounded down, but not less than 1 HP; the Ability Rock Head does not prevent this. This move can only be used if none of the user's known moves can be selected.",
+		shortDesc: "User loses 1/2 the HP lost by the target.",
 		recoil: [1, 2],
 		onModifyMove: function (move) {
 			move.type = '???';
@@ -815,6 +840,8 @@ exports.BattleMovedex = {
 	},
 	taunt: {
 		inherit: true,
+		desc: "For 2 turns, prevents the target from using non-damaging moves.",
+		shortDesc: "For 2 turns, the target can't use status moves.",
 		flags: {protect: 1, mirror: 1, authentic: 1},
 		effect: {
 			duration: 2,
@@ -869,11 +896,15 @@ exports.BattleMovedex = {
 	},
 	volttackle: {
 		inherit: true,
+		desc: "If the target lost HP, the user takes recoil damage equal to 1/3 the HP lost by the target, rounded down, but not less than 1 HP.",
+		shortDesc: "Has 1/3 recoil.",
 		recoil: [1, 3],
 		secondary: false,
 	},
 	waterfall: {
 		inherit: true,
+		desc: "No additional effect.",
+		shortDesc: "No additional effect.",
 		secondary: false,
 	},
 	weatherball: {
