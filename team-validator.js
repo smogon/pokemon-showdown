@@ -13,7 +13,7 @@ let TeamValidator = module.exports = getValidator;
 let PM;
 
 function banReason(strings, reason) {
-	return reason && typeof reason === 'string' ? ` banned by ${reason}.` : `banned`;
+	return reason && typeof reason === 'string' ? `banned by ${reason}` : `banned`;
 }
 
 class Validator {
