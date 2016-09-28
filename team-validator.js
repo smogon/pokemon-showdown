@@ -120,12 +120,6 @@ class Validator {
 			return [`This is not a Pokemon.`];
 		}
 
-		if (!template) {
-			template = tools.getTemplate(Tools.getString(set.species));
-			if (!template.exists) {
-				return [`The Pokemon "${set.species}" does not exist.`];
-			}
-		}
 		set.species = Tools.getSpecies(set.species);
 
 		set.name = tools.getName(set.name);
@@ -161,11 +155,6 @@ class Validator {
 
 		let setHas = {};
 
-		if (!template || !template.abilities) {
-			set.species = 'Unown';
-			template = tools.getTemplate('Unown');
-		}
-
 		if (format.ruleset) {
 			for (let i = 0; i < format.ruleset.length; i++) {
 				let subformat = tools.getFormat(format.ruleset[i]);
@@ -177,7 +166,14 @@ class Validator {
 		if (format.onChangeSet) {
 			problems = problems.concat(format.onChangeSet.call(tools, set, format, setHas, teamHas) || []);
 		}
-		if (toId(set.species) !== template.speciesid) template = tools.getTemplate(set.species);
+
+		if (!template) {
+			template = tools.getTemplate(set.species);
+		}
+		if (!template.exists) {
+			return [`The Pokemon "${set.species}" does not exist.`];
+		}
+
 		item = tools.getItem(set.item);
 		if (item.id && !item.exists) {
 			return [`"${set.item}" is an invalid item.`];
