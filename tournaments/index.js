@@ -1112,7 +1112,7 @@ CommandParser.commands.tournament = function (paramString, room, user) {
 			return !tournament.room.isPrivate && !tournament.room.isPersonal && !tournament.room.staffRoom;
 		}).map(tournament => {
 			tournament = exports.tournaments[tournament];
-			return {room: tournament.room.id, format: tournament.format, generator: tournament.generator.name, isStarted: tournament.isTournamentStarted};
+			return {room: tournament.room.id, title: tournament.room.title, format: tournament.format, generator: tournament.generator.name, isStarted: tournament.isTournamentStarted};
 		})));
 	} else if (cmd === 'help') {
 		return this.parse('/help tournament');
