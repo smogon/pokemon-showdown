@@ -413,12 +413,14 @@ class User {
 		}
 		return this.group + this.name;
 	}
-	matchesRank(rank) {
-		if (!rank || rank === ' ') return true;
-		if (rank === 'confirmed') return this.confirmed;
-		if (rank === 'autoconfirmed') return this.autoconfirmed;
-		if (!(rank in Config.groups)) return true;
-		return this.group in Config.groups && Config.groups[this.group].rank >= Config.groups[rank].rank;
+	authAtLeast(minAuth, room) {
+		if (!minAuth || minAuth === ' ') return true;
+		if (minAuth === 'confirmed') return this.confirmed;
+		if (minAuth === 'autoconfirmed') return this.autoconfirmed;
+		if (!(minAuth in Config.groups)) return true;
+		let auth = (room ? room.getAuth(this) : this.group);
+		if (room && this.can('makeroom')) auth = this.group;
+		return auth in Config.groups && Config.groups[auth].rank >= Config.groups[minAuth].rank;
 	}
 	can(permission, target, room) {
 		if (this.hasSysopAccess()) return true;

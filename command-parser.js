@@ -27,19 +27,15 @@ To reload chat commands:
 const MAX_MESSAGE_LENGTH = 300;
 
 const BROADCAST_COOLDOWN = 20 * 1000;
-
 const MESSAGE_COOLDOWN = 5 * 60 * 1000;
 
 const MAX_PARSE_RECURSION = 10;
 
 const VALID_COMMAND_TOKENS = '/!';
-
 const BROADCAST_TOKEN = '!';
 
 const fs = require('fs');
 const path = require('path');
-
-exports.Messages = require('./messages');
 
 class PatternTester {
 	// This class sounds like a RegExp
@@ -105,25 +101,219 @@ for (let file of fs.readdirSync(path.resolve(__dirname, 'chat-plugins'))) {
 
 class CommandContext {
 	constructor(options) {
-		this.cmd = options.cmd || '';
-		this.cmdToken = options.cmdToken || '';
-
-		this.target = options.target || '';
 		this.message = options.message || '';
+		this.recursionDepth = 0;
 
-		this.levelsDeep = options.levelsDeep || 0;
-		this.namespaces = options.namespaces || null;
-
+		// message context
 		this.room = options.room || null;
 		this.user = options.user || null;
 		this.connection = options.connection || null;
+		this.pmTarget = options.pmTarget;
 
+		// command context
+		this.cmd = options.cmd || '';
+		this.cmdToken = options.cmdToken || '';
+		this.target = options.target || '';
+		this.namespaces = options.namespaces || [];
+
+		// target user
 		this.targetUser = null;
 		this.targetUsername = '';
 		this.inputUsername = '';
+	}
+	get fullCmd() {
+		return this.namespaces.concat(this.cmd).join(' ');
+	}
 
-		this.pmTarget = options.pmTarget;
-		this.relatedRoom = options.relatedRoom;
+	parse(newMessage = this.message) {
+		// recursing! back up the command context
+		this.recursionDepth++;
+		if (this.recursionDepth > MAX_PARSE_RECURSION) {
+			throw new Error("Too much command recursion");
+		}
+		let {message, cmd, cmdToken, target, namespace} = this;
+
+		this.message = newMessage;
+		newMessage = this.parseMessage(newMessage);
+
+		this.message = message;
+		this.cmd = cmd;
+		this.cmdToken = cmdToken;
+		this.target = target;
+		this.namespace = namespace;
+		this.recursionDepth--;
+
+		return newMessage;
+	}
+	parseMessage(message = this.message) {
+		let commandHandler = this.splitCommand(message);
+
+		if (typeof commandHandler === 'function') {
+			message = this.run(commandHandler);
+		} else {
+			if (commandHandler === '!') {
+				return this.errorReply(`The command "${this.cmdToken}${this.fullCmd}" is unavailable in private messages. To send a message starting with "${this.cmdToken}${this.fullCmd}", type "${this.cmdToken}${this.cmdToken}${this.fullCmd}".`);
+			}
+			if (this.cmdToken) {
+				// To guard against command typos, show an error message
+				if (this.cmdToken === BROADCAST_TOKEN) {
+					if (/[a-z0-9]/.test(this.cmd.charAt(0))) {
+						return this.errorReply(`The command "${this.cmdToken}${this.fullCmd}" does not exist.`);
+					}
+				} else {
+					return this.errorReply(`The command "${this.cmdToken}${this.fullCmd}" does not exist. To send a message starting with "${this.cmdToken}${this.fullCmd}", type "${this.cmdToken}${this.cmdToken}${this.fullCmd}".`);
+				}
+			} else if (!VALID_COMMAND_TOKENS.includes(message.charAt(0)) && VALID_COMMAND_TOKENS.includes(message.trim().charAt(0))) {
+				message = message.trim();
+				if (message.charAt(0) !== BROADCAST_TOKEN) {
+					message = message.charAt(0) + message;
+				}
+			}
+
+			message = this.canTalk(message);
+		}
+
+		// Output the message
+
+		if (message && message !== true && typeof message.then !== 'function') {
+			if (this.pmTarget) {
+				let buf = `|pm|${this.user.getIdentity()}|${this.pmTarget.getIdentity()}|${message}`;
+				this.user.send(buf);
+				if (this.pmTarget !== this.user) this.pmTarget.send(buf);
+			} else {
+				this.room.add(`|c|${this.user.getIdentity(this.room.id)}|${message}`);
+			}
+		}
+
+		this.update();
+
+		return message;
+	}
+	splitCommand(message = this.message, recursing) {
+		this.cmd = '';
+		this.cmdToken = '';
+		this.target = '';
+		this.namespaces = [];
+		if (!message || !message.trim().length) return;
+
+		// hardcoded commands
+		if (message.slice(0, 3) === '>> ') {
+			message = '/eval ' + message.slice(3);
+		} else if (message.slice(0, 4) === '>>> ') {
+			message = '/evalbattle ' + message.slice(4);
+		} else if (message.startsWith('/me') && /[^A-Za-z0-9 ]/.test(message.charAt(3))) {
+			message = '/mee ' + message.slice(3);
+		} else if (message.startsWith('/ME') && /[^A-Za-z0-9 ]/.test(message.charAt(3))) {
+			message = '/MEE ' + message.slice(3);
+		}
+
+		let cmdToken = message.charAt(0);
+		if (!VALID_COMMAND_TOKENS.includes(cmdToken)) return;
+		if (cmdToken === message.charAt(1)) return;
+		if (cmdToken === BROADCAST_TOKEN && /[^A-Za-z0-9]/.test(message.charAt(1))) return;
+
+		let cmd = '', target = '';
+
+		let spaceIndex = message.indexOf(' ');
+		if (spaceIndex > 0) {
+			cmd = message.slice(1, spaceIndex).toLowerCase();
+			target = message.slice(spaceIndex + 1);
+		} else {
+			cmd = message.slice(1).toLowerCase();
+			target = '';
+		}
+
+		let namespaces = [];
+		let curCommands = commands;
+		let commandHandler;
+		let fullCmd = cmd;
+
+		do {
+			if (curCommands.hasOwnProperty(cmd)) {
+				commandHandler = curCommands[cmd];
+			} else {
+				commandHandler = undefined;
+			}
+			if (typeof commandHandler === 'string') {
+				// in case someone messed up, don't loop
+				commandHandler = curCommands[commandHandler];
+			} else if (Array.isArray(commandHandler) && !recursing) {
+				return this.splitCommand(cmdToken + 'help ' + fullCmd.slice(0, -4), true);
+			}
+			if (commandHandler && typeof commandHandler === 'object') {
+				namespaces.push(cmd);
+
+				let spaceIndex = target.indexOf(' ');
+				if (spaceIndex > 0) {
+					cmd = target.substr(0, spaceIndex).toLowerCase();
+					target = target.substr(spaceIndex + 1);
+				} else {
+					cmd = target.toLowerCase();
+					target = '';
+				}
+
+				fullCmd += ' ' + cmd;
+				curCommands = commandHandler;
+			}
+		} while (commandHandler && typeof commandHandler === 'object');
+
+		if (!commandHandler && curCommands.default) {
+			commandHandler = curCommands.default;
+			if (typeof commandHandler === 'string') {
+				commandHandler = curCommands[commandHandler];
+			}
+		}
+
+		if (!commandHandler && !recursing) {
+			for (let g in Config.groups) {
+				let groupid = Config.groups[g].id;
+				target = toId(target);
+				if (cmd === groupid) {
+					return this.splitCommand(`/promote ${target}, ${g}`, true);
+				} else if (cmd === 'global' + groupid) {
+					return this.splitCommand(`/globalpromote ${target}, ${g}`, true);
+				} else if (cmd === 'de' + groupid || cmd === 'un' + groupid || cmd === 'globalde' + groupid || cmd === 'deglobal' + groupid) {
+					return this.splitCommand(`/demote ${target}`, true);
+				} else if (cmd === 'room' + groupid) {
+					return this.splitCommand(`/roompromote ${target}, ${g}`, true);
+				} else if (cmd === 'roomde' + groupid || cmd === 'deroom' + groupid || cmd === 'roomun' + groupid) {
+					return this.splitCommand(`/roomdemote ${target}`, true);
+				}
+			}
+		}
+
+		this.cmd = cmd;
+		this.cmdToken = cmdToken;
+		this.target = target;
+		this.namespaces = namespaces;
+
+		if (typeof commandHandler === 'function' && this.pmTarget) {
+			if (!curCommands['!' + (typeof curCommands[cmd] === 'string' ? curCommands[cmd] : cmd)]) {
+				return '!';
+			}
+		}
+
+		return commandHandler;
+	}
+	run(commandHandler) {
+		let result;
+		try {
+			result = commandHandler.call(this, this.target, this.room, this.user, this.connection, this.cmd, this.message);
+		} catch (err) {
+			if (require('./crashlogger')(err, 'A chat command', {
+				user: this.user.name,
+				room: this.room.id,
+				message: this.message,
+			}) === 'lockdown') {
+				let ministack = Tools.escapeHTML(err.stack).split("\n").slice(0, 2).join("<br />");
+				if (Rooms.lobby) Rooms.lobby.send('|html|<div class="broadcast-red"><b>POKEMON SHOWDOWN HAS CRASHED:</b> ' + ministack + '</div>');
+			} else {
+				this.sendReply('|html|<div class="broadcast-red"><b>Pokemon Showdown crashed!</b><br />Don\'t worry, we\'re working on fixing it.</div>');
+			}
+		}
+		if (result === undefined) result = false;
+
+		return result;
 	}
 
 	checkFormat(room, message) {
@@ -332,46 +522,6 @@ class CommandContext {
 
 		return true;
 	}
-	parse(message, inNamespace, room) {
-		if (inNamespace && this.cmdToken) {
-			message = this.cmdToken + this.namespaces.concat(message.slice(1)).join(" ");
-		}
-		return CommandParser.parse(message, room || this.room, this.user, this.connection, this.pmTarget, this.levelsDeep + 1);
-	}
-	run(targetCmd, inNamespace) {
-		if (targetCmd === 'constructor') return this.sendReply("Access denied.");
-		let commandHandler;
-		if (typeof targetCmd === 'function') {
-			commandHandler = targetCmd;
-		} else if (inNamespace) {
-			commandHandler = commands;
-			for (let i = 0; i < this.namespaces.length; i++) {
-				commandHandler = commandHandler[this.namespaces[i]];
-			}
-			commandHandler = commandHandler[targetCmd];
-		} else {
-			commandHandler = commands[targetCmd];
-		}
-
-		let result;
-		try {
-			result = commandHandler.call(this, this.target, this.room, this.user, this.connection, this.cmd, this.message);
-		} catch (err) {
-			if (require('./crashlogger')(err, 'A chat command', {
-				user: this.user.name,
-				room: this.room.id,
-				message: this.message,
-			}) === 'lockdown') {
-				let ministack = Tools.escapeHTML(err.stack).split("\n").slice(0, 2).join("<br />");
-				if (Rooms.lobby) Rooms.lobby.send('|html|<div class="broadcast-red"><b>POKEMON SHOWDOWN HAS CRASHED:</b> ' + ministack + '</div>');
-			} else {
-				this.sendReply('|html|<div class="broadcast-red"><b>Pokemon Showdown crashed!</b><br />Don\'t worry, we\'re working on fixing it.</div>');
-			}
-		}
-		if (result === undefined) result = false;
-
-		return result;
-	}
 	canTalk(message, room, targetUser) {
 		if (room === undefined) room = this.room;
 		if (targetUser === undefined && this.pmTarget) {
@@ -387,44 +537,55 @@ class CommandContext {
 			return false;
 		}
 		if (!user.named) {
-			connection.popup("You must choose a name before you can talk.");
+			connection.popup(`You must choose a name before you can talk.`);
 			return false;
 		}
 		if (!user.can('bypassall')) {
-			if (room && user.locked) {
-				this.errorReply("You are locked from talking in chat.");
-				return false;
-			}
-			if (room && room.isMuted(user)) {
-				this.errorReply("You are muted and cannot talk in this room.");
-				return false;
-			}
-			if ((!room || !room.battle) && (!targetUser || " +".includes(targetUser.group))) {
-				// in a chat room, or PMing non-staff
-				if (user.namelocked) {
-					this.errorReply("You are namelocked and cannot talk except in battles and to global staff.");
+			let lockType = (user.namelocked ? `namelocked` : user.locked ? `locked` : ``);
+			if (room) {
+				if (lockType) {
+					this.errorReply(`You are ${lockType} and can't talk in chat.`);
 					return false;
 				}
-			}
-			if (room && room.modchat) {
-				let userGroup = user.group;
-				if (!user.can('makeroom')) {
-					userGroup = room.getAuth(user);
+				if (room.isMuted(user)) {
+					this.errorReply(`You are muted and cannot talk in this room.`);
+					return false;
 				}
-				if (room.modchat === 'autoconfirmed') {
-					if (!user.autoconfirmed && userGroup === ' ') {
-						this.errorReply("Because moderated chat is set, your account must be at least one week old and you must have won at least one ladder game to speak in this room.");
+				if (room.modchat && !user.authAtLeast(room.modchat, room)) {
+					if (room.modchat === 'autoconfirmed') {
+						this.errorReply(`Because moderated chat is set, your account must be at least one week old and you must have won at least one ladder game to speak in this room.`);
 						return false;
 					}
-				} else if (Config.groupsranking.indexOf(userGroup) < Config.groupsranking.indexOf(room.modchat)) {
-					let groupName = Config.groups[room.modchat].name || room.modchat;
-					this.errorReply("Because moderated chat is set, you must be of rank " + groupName + " or higher to speak in this room.");
+					const groupName = Config.groups[room.modchat] && Config.groups[room.modchat].name || room.modchat;
+					this.errorReply(`Because moderated chat is set, you must be of rank ${groupName} or higher to speak in this room.`);
+					return false;
+				}
+				if (!(user.userid in room.users)) {
+					connection.popup("You can't send a message to this room without being in it.");
 					return false;
 				}
 			}
-			if (room && !(user.userid in room.users)) {
-				connection.popup("You can't send a message to this room without being in it.");
-				return false;
+			if (targetUser) {
+				if (lockType && !targetUser.can('lock')) {
+					return this.errorReply(`You are ${lockType} and can only private message members of the global moderation team (users marked by @ or above in the Help room).`);
+				}
+				if (targetUser.locked && !user.can('lock')) {
+					return this.errorReply(`The user "${targetUser.name}" is locked and cannot be PMed.`);
+				}
+				if (Config.pmmodchat && !user.authAtLeast(Config.pmmodchat)) {
+					let groupName = Config.groups[Config.pmmodchat] && Config.groups[Config.pmmodchat].name || Config.pmmodchat;
+					return this.errorReply(`Because moderated chat is set, you must be of rank ${groupName} or higher to PM users.`);
+				}
+				if (targetUser.ignorePMs && targetUser.ignorePMs !== user.group && !user.can('lock')) {
+					if (!targetUser.can('lock')) {
+						return this.errorReply(`This user is blocking private messages right now.`);
+					} else if (targetUser.can('bypassall')) {
+						return this.errorReply(`This admin is too busy to answer private messages right now. Please contact a different staff member.`);
+					}
+				}
+				if (user.ignorePMs && user.ignorePMs !== targetUser.group && !targetUser.can('lock')) {
+					return this.errorReply(`You are blocking private messages right now.`);
+				}
 			}
 		}
 
@@ -652,135 +813,11 @@ exports.CommandContext = CommandContext;
  * @param {Room} room - the room the user is trying to say it in
  * @param {User} user - the user that sent the message
  * @param {Connection} connection - the connection the user sent the message from
- * @param {User?} pmTarget - the PM the user wants to send the message to
  */
-let parse = exports.parse = function (message, room, user, connection, pmTarget, levelsDeep = 0) {
-	let cmd = '', target = '', cmdToken = '';
+exports.parse = function (message, room, user, connection) {
+	let context = new CommandContext({message, room, user, connection});
 
-	if (!message || !message.trim().length) return;
-
-	if (levelsDeep > MAX_PARSE_RECURSION) {
-		throw new Error("Too much command recursion");
-	}
-
-	let relatedRoom = null;
-	if (!pmTarget && (!user.inRooms.has(room.id) || room === Rooms.global)) {
-		if (!CommandParser.globalPattern.test(message)) return;
-		relatedRoom = room;
-	}
-	if (relatedRoom) room = Rooms.global;
-
-	if (message.slice(0, 3) === '>> ') {
-		// multiline eval
-		message = '/eval ' + message.slice(3);
-	} else if (message.slice(0, 4) === '>>> ') {
-		// multiline eval
-		message = '/evalbattle ' + message.slice(4);
-	} else if (message.startsWith('/me') && /[^A-Za-z0-9 ]/.test(message.charAt(3))) {
-		message = '/mee ' + message.slice(3);
-	} else if (message.startsWith('/ME') && /[^A-Za-z0-9 ]/.test(message.charAt(3))) {
-		message = '/MEE ' + message.slice(3);
-	}
-
-	if (VALID_COMMAND_TOKENS.includes(message.charAt(0)) && message.charAt(1) !== message.charAt(0)) {
-		cmdToken = message.charAt(0);
-		let spaceIndex = message.indexOf(' ');
-		if (spaceIndex > 0) {
-			cmd = message.substr(1, spaceIndex - 1).toLowerCase();
-			target = message.substr(spaceIndex + 1);
-		} else {
-			cmd = message.substr(1).toLowerCase();
-			target = '';
-		}
-	}
-
-	let namespaces = [];
-	let currentCommands = commands;
-	let commandHandler;
-
-	do {
-		if (toId(cmd) === 'constructor') {
-			return connection.sendTo(room, "Error: Access denied.");
-		}
-		commandHandler = currentCommands[cmd];
-		if (typeof commandHandler === 'string') {
-			// in case someone messed up, don't loop
-			commandHandler = currentCommands[commandHandler];
-		} else if (Array.isArray(commandHandler)) {
-			return parse(cmdToken + 'help ' + cmd.slice(0, -4), room, user, connection, undefined, levelsDeep + 1);
-		}
-		if (commandHandler && typeof commandHandler === 'object') {
-			namespaces.push(cmd);
-
-			let spaceIndex = target.indexOf(' ');
-			if (spaceIndex > 0) {
-				cmd = target.substr(0, spaceIndex).toLowerCase();
-				target = target.substr(spaceIndex + 1);
-			} else {
-				cmd = target.toLowerCase();
-				target = '';
-			}
-
-			currentCommands = commandHandler;
-		}
-	} while (commandHandler && typeof commandHandler === 'object');
-	if (!commandHandler && currentCommands.default) {
-		commandHandler = currentCommands.default;
-		if (typeof commandHandler === 'string') {
-			commandHandler = currentCommands[commandHandler];
-		}
-	}
-	let fullCmd = namespaces.concat(cmd).join(' ');
-
-	let context = new CommandContext({target, room, user, connection, cmd, message, namespaces, cmdToken, levelsDeep, pmTarget, relatedRoom});
-
-	if (typeof commandHandler === 'function') {
-		message = context.run(commandHandler);
-	} else {
-		// Check for mod/demod/admin/deadmin/etc depending on the group ids
-		for (let g in Config.groups) {
-			let groupid = Config.groups[g].id;
-			if (cmd === groupid) {
-				return parse('/promote ' + toId(target) + ', ' + g, room, user, connection, undefined, levelsDeep + 1);
-			} else if (cmd === 'global' + groupid) {
-				return parse('/globalpromote ' + toId(target) + ', ' + g, room, user, connection, undefined, levelsDeep + 1);
-			} else if (cmd === 'de' + groupid || cmd === 'un' + groupid || cmd === 'globalde' + groupid || cmd === 'deglobal' + groupid) {
-				return parse('/demote ' + toId(target), room, user, connection, undefined, levelsDeep + 1);
-			} else if (cmd === 'room' + groupid) {
-				return parse('/roompromote ' + toId(target) + ', ' + g, room, user, connection, undefined, levelsDeep + 1);
-			} else if (cmd === 'roomde' + groupid || cmd === 'deroom' + groupid || cmd === 'roomun' + groupid) {
-				return parse('/roomdemote ' + toId(target), room, user, connection, undefined, levelsDeep + 1);
-			}
-		}
-
-		if (cmdToken && fullCmd) {
-			// To guard against command typos, we now emit an error message
-			if (cmdToken === BROADCAST_TOKEN) {
-				if (/[a-z0-9]/.test(cmd.charAt(0))) {
-					return context.errorReply(`The command "${cmdToken}${fullCmd}" does not exist.`);
-				}
-			} else {
-				return context.errorReply(`The command "${cmdToken}${fullCmd}" does not exist. To send a message starting with "${cmdToken}${fullCmd}", type "${cmdToken}${cmdToken}${fullCmd}".`);
-			}
-		} else if (!VALID_COMMAND_TOKENS.includes(message.charAt(0)) && VALID_COMMAND_TOKENS.includes(message.trim().charAt(0))) {
-			message = message.trim();
-			if (message.charAt(0) !== BROADCAST_TOKEN) {
-				message = message.charAt(0) + message;
-			}
-		}
-
-		message = context.canTalk(message);
-	}
-
-	// Output the message to the room
-
-	if (message && message !== true && typeof message.then !== 'function') {
-		room.add('|c|' + user.getIdentity(room.id) + '|' + message);
-	}
-
-	room.update();
-
-	return message;
+	return context.parse();
 };
 
 exports.package = {};
