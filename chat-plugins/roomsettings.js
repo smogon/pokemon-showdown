@@ -24,7 +24,6 @@ class RoomSettings {
 		this.sameCommand = true;
 	}
 	updateSetting(command) {
-		CommandParser.parse('/' + command, this.room, this.user, this.connection);
 		this.sameCommand = false;
 		this.generateDisplay();
 	}
@@ -139,6 +138,7 @@ exports.commands = {
 			room.update();
 			settings.generateDisplay(user, room, connection);
 		} else {
+			this.parse(`/${target}`);
 			settings.updateSetting(target);
 		}
 	},
