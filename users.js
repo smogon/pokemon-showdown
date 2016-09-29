@@ -208,15 +208,15 @@ function cacheGroupData() {
 }
 cacheGroupData();
 
-Users.setOfflineGroup = function (name, group, forceConfirmed) {
+Users.setOfflineGroup = function (name, group, forceTrusted) {
 	if (!group) throw new Error(`Falsy value passed to setOfflineGroup`);
 	let userid = toId(name);
 	let user = getExactUser(userid);
 	if (user) {
-		user.setGroup(group, forceConfirmed);
+		user.setGroup(group, forceTrusted);
 		return true;
 	}
-	if (group === Config.groupsranking[0] && !forceConfirmed) {
+	if (group === Config.groupsranking[0] && !forceTrusted) {
 		delete usergroups[userid];
 	} else {
 		let usergroup = usergroups[userid];
@@ -239,8 +239,8 @@ Users.isUsernameKnown = function (name) {
 	return false;
 };
 
-Users.isConfirmed = function (name) {
-	if (name.confirmed) return name.confirmed;
+Users.isTrusted = function (name) {
+	if (name.trusted) return name.trusted;
 	let userid = toId(name);
 	if (userid in usergroups) return userid;
 	for (let i = 0; i < Rooms.global.chatRooms.length; i++) {
@@ -415,7 +415,7 @@ class User {
 	}
 	authAtLeast(minAuth, room) {
 		if (!minAuth || minAuth === ' ') return true;
-		if (minAuth === 'confirmed') return this.confirmed;
+		if (minAuth === 'trusted') return this.trusted;
 		if (minAuth === 'autoconfirmed') return this.autoconfirmed;
 		if (!(minAuth in Config.groups)) return true;
 		let auth = (room ? room.getAuth(this) : this.group);
@@ -716,7 +716,7 @@ class User {
 
 			if (userType === '3') {
 				this.isSysop = true;
-				this.confirmed = userid;
+				this.trusted = userid;
 				this.autoconfirmed = userid;
 			} else if (userType === '4') {
 				this.autoconfirmed = userid;
@@ -899,9 +899,9 @@ class User {
 	}
 	/**
 	 * Updates several group-related attributes for the user, namely:
-	 * User#group, User#registered, User#isStaff, User#confirmed
+	 * User#group, User#registered, User#isStaff, User#trusted
 	 *
-	 * Note that unlike the others, User#confirmed isn't reset every
+	 * Note that unlike the others, User#trusted isn't reset every
 	 * name change.
 	 */
 	updateGroup(registered) {
@@ -918,8 +918,8 @@ class User {
 			this.group = Config.groupsranking[0];
 		}
 
-		if (Users.isConfirmed(this)) {
-			this.confirmed = this.userid;
+		if (Users.isTrusted(this)) {
+			this.trusted = this.userid;
 			this.autoconfirmed = this.userid;
 		}
 
@@ -932,7 +932,7 @@ class User {
 			let staffRoom = Rooms('staff');
 			this.isStaff = (staffRoom && staffRoom.auth && staffRoom.auth[this.userid]);
 		}
-		if (this.confirmed) {
+		if (this.trusted) {
 			this.locked = false;
 			this.namelocked = false;
 		}
@@ -945,10 +945,10 @@ class User {
 		if (this.ignorePMs && this.can('lock') && !this.can('bypassall')) this.ignorePMs = false;
 	}
 	/**
-	 * Set a user's group. Pass (' ', true) to force confirmed
+	 * Set a user's group. Pass (' ', true) to force trusted
 	 * status without giving the user a group.
 	 */
-	setGroup(group, forceConfirmed) {
+	setGroup(group, forceTrusted) {
 		if (!group) throw new Error(`Falsy value passed to setGroup`);
 		this.group = group.charAt(0);
 		this.isStaff = (this.group in {'%':1, '@':1, '&':1, '~':1});
@@ -958,9 +958,9 @@ class User {
 		}
 		Rooms.global.checkAutojoin(this);
 		if (this.registered) {
-			if (forceConfirmed || this.group !== Config.groupsranking[0]) {
+			if (forceTrusted || this.group !== Config.groupsranking[0]) {
 				usergroups[this.userid] = this.group + this.name;
-				this.confirmed = this.userid;
+				this.trusted = this.userid;
 				this.autoconfirmed = this.userid;
 			} else {
 				delete usergroups[this.userid];
@@ -969,12 +969,12 @@ class User {
 		}
 	}
 	/**
-	 * Demotes a user from anything that grants confirmed status.
+	 * Demotes a user from anything that grants trusted status.
 	 * Returns an array describing what the user was demoted from.
 	 */
-	deconfirm() {
-		if (!this.confirmed) return;
-		let userid = this.confirmed;
+	distrust() {
+		if (!this.trusted) return;
+		let userid = this.trusted;
 		let removed = [];
 		if (usergroups[userid]) {
 			removed.push(usergroups[userid].charAt(0));
@@ -986,7 +986,7 @@ class User {
 				room.auth[userid] = '+';
 			}
 		}
-		this.confirmed = '';
+		this.trusted = '';
 		this.setGroup(Config.groupsranking[0]);
 		return removed;
 	}
@@ -1000,7 +1000,7 @@ class User {
 			this.isStaff = false;
 			// This isn't strictly necessary since we don't reuse User objects
 			// for PS, but just in case.
-			// We're not resetting .confirmed/.autoconfirmed so those accounts
+			// We're not resetting .trusted/.autoconfirmed so those accounts
 			// can still be locked after logout.
 		}
 	}
@@ -1058,16 +1058,16 @@ class User {
 		});
 		this.inRooms.clear();
 	}
-	getAlts(includeConfirmed, forPunishment) {
-		return this.getAltUsers(includeConfirmed, forPunishment).map(user => user.getLastName());
+	getAlts(includeTrusted, forPunishment) {
+		return this.getAltUsers(includeTrusted, forPunishment).map(user => user.getLastName());
 	}
-	getAltUsers(includeConfirmed, forPunishment) {
+	getAltUsers(includeTrusted, forPunishment) {
 		let alts = [];
 		if (forPunishment) alts.push(this);
 		users.forEach(user => {
 			if (user === this) return;
 			if (!forPunishment && !user.named && !user.connected) return;
-			if (!includeConfirmed && user.confirmed) return;
+			if (!includeTrusted && user.trusted) return;
 			for (let myIp in this.ips) {
 				if (myIp in user.ips) {
 					alts.push(user);

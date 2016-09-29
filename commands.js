@@ -573,7 +573,7 @@ let commands = exports.commands = {
 		if (!user.autoconfirmed) {
 			return this.errorReply("You must be autoconfirmed to make a groupchat.");
 		}
-		if (!user.confirmed) {
+		if (!user.trusted) {
 			return this.errorReply("You must be global voice or roomdriver+ in some public room to make a groupchat.");
 		}
 		// if (!this.can('makegroupchat')) return false;
@@ -1208,8 +1208,8 @@ let commands = exports.commands = {
 			return this.privateModCommand("(" + name + " would be banned by " + user.name + problem + ".)");
 		}
 
-		if (targetUser.confirmed && room.isPrivate !== true && !room.isPersonal) {
-			Monitor.log("[CrisisMonitor] Confirmed user " + targetUser.name + (targetUser.confirmed !== targetUser.userid ? " (" + targetUser.confirmed + ")" : "") + " was roombanned from " + room.id + " by " + user.name + ", and should probably be demoted.");
+		if (targetUser.trusted && room.isPrivate !== true && !room.isPersonal) {
+			Monitor.log("[CrisisMonitor] Trusted user " + targetUser.name + (targetUser.trusted !== targetUser.userid ? " (" + targetUser.trusted + ")" : "") + " was roombanned from " + room.id + " by " + user.name + ", and should probably be demoted.");
 		}
 
 		if (targetUser in room.users || user.can('lock')) {
@@ -1440,16 +1440,16 @@ let commands = exports.commands = {
 			return this.privateModCommand("(" + name + " would be locked by " + user.name + problem + ".)");
 		}
 
-		if (targetUser.confirmed) {
+		if (targetUser.trusted) {
 			if (cmd === 'forcelock') {
-				let from = targetUser.deconfirm();
+				let from = targetUser.distrust();
 				Monitor.log("[CrisisMonitor] " + name + " was locked by " + user.name + " and demoted from " + from.join(", ") + ".");
 				this.globalModlog("CRISISDEMOTE", targetUser, " from " + from.join(", "));
 			} else {
-				return this.sendReply("" + name + " is a confirmed user. If you are sure you would like to lock them use /forcelock.");
+				return this.sendReply("" + name + " is a trusted user. If you are sure you would like to lock them use /forcelock.");
 			}
 		} else if (cmd === 'forcelock') {
-			return this.errorReply("Use /lock; " + name + " is not a confirmed user.");
+			return this.errorReply("Use /lock; " + name + " is not a trusted user.");
 		}
 
 		// Destroy personal rooms of the locked user.
@@ -1499,16 +1499,16 @@ let commands = exports.commands = {
 			return this.privateModCommand("(" + name + " would be locked by " + user.name + problem + ".)");
 		}
 
-		if (targetUser.confirmed) {
+		if (targetUser.trusted) {
 			if (cmd === 'forcelock') {
-				let from = targetUser.deconfirm();
+				let from = targetUser.distrust();
 				Monitor.log("[CrisisMonitor] " + name + " was locked by " + user.name + " and demoted from " + from.join(", ") + ".");
 				this.globalModlog("CRISISDEMOTE", targetUser, " from " + from.join(", "));
 			} else {
-				return this.sendReply("" + name + " is a confirmed user. If you are sure you would like to lock them use /forcelock.");
+				return this.sendReply("" + name + " is a trusted user. If you are sure you would like to lock them use /forcelock.");
 			}
 		} else if (cmd === 'forcelock') {
-			return this.errorReply("Use /lock; " + name + " is not a confirmed user.");
+			return this.errorReply("Use /lock; " + name + " is not a trusted user.");
 		}
 
 		// Destroy personal rooms of the locked user.
@@ -1583,16 +1583,16 @@ let commands = exports.commands = {
 		let name = targetUser.getLastName();
 		let userid = targetUser.getLastId();
 
-		if (targetUser.confirmed) {
+		if (targetUser.trusted) {
 			if (cmd === 'forceglobalban') {
-				let from = targetUser.deconfirm();
+				let from = targetUser.distrust();
 				Monitor.log("[CrisisMonitor] " + name + " was globally banned by " + user.name + " and demoted from " + from.join(", ") + ".");
 				this.globalModlog("CRISISDEMOTE", targetUser, " from " + from.join(", "));
 			} else {
-				return this.sendReply("" + name + " is a confirmed user. If you are sure you would like to ban them use /forceglobalban.");
+				return this.sendReply("" + name + " is a trusted user. If you are sure you would like to ban them use /forceglobalban.");
 			}
 		} else if (cmd === 'forceglobalban') {
-			return this.errorReply("Use /globalban; " + name + " is not a confirmed user.");
+			return this.errorReply("Use /globalban; " + name + " is not a trusted user.");
 		}
 
 		// Destroy personal rooms of the banned user.
@@ -1829,8 +1829,9 @@ let commands = exports.commands = {
 	},
 	promotehelp: ["/promote [username], [group] - Promotes the user to the specified group. Requires: & ~"],
 
-	confirmuser: function (target) {
-		if (!target) return this.parse('/help confirmuser');
+	confirmuser: 'trustuser',
+	trustuser: function (target) {
+		if (!target) return this.parse('/help trustuser');
 		if (!this.can('promote')) return;
 
 		target = this.splitTarget(target, true);
@@ -1838,15 +1839,15 @@ let commands = exports.commands = {
 		let userid = toId(this.targetUsername);
 		let name = targetUser ? targetUser.name : this.targetUsername;
 
-		if (!userid) return this.parse('/help confirmuser');
+		if (!userid) return this.parse('/help trustuser');
 		if (!targetUser) return this.errorReply("User '" + name + "' is not online.");
 
-		if (targetUser.confirmed) return this.errorReply("User '" + name + "' is already confirmed.");
+		if (targetUser.trusted) return this.errorReply("User '" + name + "' is already trusted.");
 
 		targetUser.setGroup(Config.groupsranking[0], true);
-		this.sendReply("User '" + name + "' is now confirmed.");
+		this.sendReply("User '" + name + "' is now trusted.");
 	},
-	confirmuserhelp: ["/confirmuser [username] - Confirms the user (makes them immune to locks). Requires: & ~"],
+	trustuserhelp: ["/trustuser [username] - Trusts the user (makes them immune to locks). Requires: & ~"],
 
 	globaldemote: 'demote',
 	demote: function (target) {
@@ -2067,8 +2068,8 @@ let commands = exports.commands = {
 		const name = targetUser.getLastName();
 		const userid = targetUser.getLastId();
 
-		if (targetUser.confirmed && room.isPrivate !== true) {
-			Monitor.log("[CrisisMonitor] Confirmed user " + targetUser.name + (targetUser.confirmed !== targetUser.userid ? " (" + targetUser.confirmed + ")" : "") + " was blacklisted from " + room.id + " by " + user.name + ", and should probably be demoted.");
+		if (targetUser.trusted && room.isPrivate !== true) {
+			Monitor.log("[CrisisMonitor] Trusted user " + targetUser.name + (targetUser.trusted !== targetUser.userid ? " (" + targetUser.trusted + ")" : "") + " was blacklisted from " + room.id + " by " + user.name + ", and should probably be demoted.");
 		}
 
 		if (targetUser in room.users || user.can('lock')) {
@@ -2119,9 +2120,9 @@ let commands = exports.commands = {
 
 			Punishments.roomBlacklist(room, null, null, userid, reason);
 
-			let confirmed = Users.isConfirmed(userid);
-			if (Users.isConfirmed(userid)) {
-				Monitor.log("[CrisisMonitor] Confirmed user " + userid + (confirmed !== userid ? " (" + confirmed + ")" : "") + " was nameblacklisted from " + room.id + " by " + user.name + ", and should probably be demoted.");
+			let trusted = Users.isTrusted(userid);
+			if (trusted) {
+				Monitor.log("[CrisisMonitor] Trusted user " + userid + (trusted !== userid ? " (" + trusted + ")" : "") + " was nameblacklisted from " + room.id + " by " + user.name + ", and should probably be demoted.");
 			}
 		}
 
