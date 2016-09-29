@@ -17,20 +17,38 @@ function banReason(strings, reason) {
 }
 
 class Validator {
-	constructor(format) {
-		this.format = Tools.getFormat(format);
+	constructor(format, supplementaryBanlist) {
+		format = Tools.getFormat(format);
+		if (supplementaryBanlist && supplementaryBanlist.length) {
+			format = Object.assign({}, format);
+			if (format.banlistTable) delete format.banlistTable;
+			if (!format.banlist) format.banlist = [];
+			for (let i = 0; i < supplementaryBanlist.length; i++) {
+				let ban = supplementaryBanlist[i];
+				if (ban.charAt(0) === '!') {
+					let index = format.banlist.indexOf(ban.substr(1));
+					if (index > -1) format.banlist.splice(index, 1);
+				} else {
+					if (!format.banlist.includes(ban)) format.banlist.push(ban);
+				}
+			}
+			supplementaryBanlist = supplementaryBanlist.join(',');
+		} else {
+			supplementaryBanlist = '0';
+		}
+		this.format = format;
+		this.supplementaryBanlist = supplementaryBanlist;
 		this.tools = Tools.mod(this.format);
 	}
 
 	validateTeam(team, removeNicknames) {
-		let format = Tools.getFormat(this.format);
-		if (format.validateTeam) return format.validateTeam.call(this, team, removeNicknames);
+		if (this.format.validateTeam) return this.format.validateTeam.call(this, team, removeNicknames);
 		return this.baseValidateTeam(team, removeNicknames);
 	}
 
 	prepTeam(team, removeNicknames) {
 		removeNicknames = removeNicknames ? '1' : '0';
-		return PM.send(this.format.id, removeNicknames, team);
+		return PM.send(this.format.id, this.supplementaryBanlist, removeNicknames, team);
 	}
 
 	baseValidateTeam(team, removeNicknames) {
@@ -877,8 +895,8 @@ class Validator {
 }
 TeamValidator.Validator = Validator;
 
-function getValidator(format) {
-	return new Validator(format);
+function getValidator(format, supplementaryBanlist) {
+	return new Validator(format, supplementaryBanlist);
 }
 
 /*********************************************************
@@ -904,7 +922,7 @@ class TeamValidatorManager extends ProcessManager {
 
 	onMessageDownstream(message) {
 		// protocol:
-		// "[id]|[format]|[removeNicknames]|[team]"
+		// "[id]|[format]|[supplementaryBanlist]|[removeNicknames]|[team]"
 		let pipeIndex = message.indexOf('|');
 		let nextPipeIndex = message.indexOf('|', pipeIndex + 1);
 		let id = message.substr(0, pipeIndex);
@@ -912,19 +930,24 @@ class TeamValidatorManager extends ProcessManager {
 
 		pipeIndex = nextPipeIndex;
 		nextPipeIndex = message.indexOf('|', pipeIndex + 1);
+		let supplementaryBanlist = message.substr(pipeIndex + 1, nextPipeIndex - pipeIndex - 1);
+
+		pipeIndex = nextPipeIndex;
+		nextPipeIndex = message.indexOf('|', pipeIndex + 1);
 		let removeNicknames = message.substr(pipeIndex + 1, nextPipeIndex - pipeIndex - 1);
 		let team = message.substr(nextPipeIndex + 1);
 
-		process.send(id + '|' + this.receive(format, removeNicknames, team));
+		process.send(id + '|' + this.receive(format, supplementaryBanlist, removeNicknames, team));
 	}
 
-	receive(format, removeNicknames, team) {
+	receive(format, supplementaryBanlist, removeNicknames, team) {
 		let parsedTeam = Tools.fastUnpackTeam(team);
+		supplementaryBanlist = supplementaryBanlist === '0' ? false : supplementaryBanlist.split(',');
 		removeNicknames = removeNicknames === '1';
 
 		let problems;
 		try {
-			problems = TeamValidator(format).validateTeam(parsedTeam, removeNicknames);
+			problems = TeamValidator(format, supplementaryBanlist).validateTeam(parsedTeam, removeNicknames);
 		} catch (err) {
 			require('./crashlogger')(err, 'A team validation', {
 				format: format,

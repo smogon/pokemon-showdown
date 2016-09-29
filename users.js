@@ -1183,7 +1183,7 @@ class User {
 			this.inRooms.delete(room.id);
 		}
 	}
-	prepBattle(formatid, type, connection) {
+	prepBattle(formatid, type, connection, supplementaryBanlist) {
 		// all validation for a battle goes through here
 		if (!connection) connection = this;
 		if (!type) type = 'challenge';
@@ -1213,7 +1213,7 @@ class User {
 			connection.popup(`You are already searching a battle in that format.`);
 			return Promise.resolve(false);
 		}
-		return TeamValidator(formatid).prepTeam(this.team, this.locked || this.namelocked).then(result => this.finishPrepBattle(connection, result));
+		return TeamValidator(formatid, supplementaryBanlist).prepTeam(this.team, this.locked || this.namelocked).then(result => this.finishPrepBattle(connection, result));
 	}
 	finishPrepBattle(connection, result) {
 		if (result.charAt(0) !== '1') {
