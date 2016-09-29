@@ -587,6 +587,7 @@ class Mafia extends Rooms.RoomGame {
 
 		switch (this.gamestate) {
 		case 'night':
+			this.day++;
 			if (this.autoModchat && this.day) {
 				if (this.room.modchat === '+') {
 					this.room.modchat = this.oldModchat;
