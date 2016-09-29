@@ -348,7 +348,7 @@ Punishments.punish = function (user, punishment, noRecurse) {
 	}
 	if (!noRecurse) {
 		Users.users.forEach(curUser => {
-			if (user === curUser || curUser.confirmed) return;
+			if (user === curUser || curUser.trusted) return;
 			for (let myIp in curUser.ips) {
 				if (myIp in user.ips) {
 					this.punish(curUser, punishment, keys);
@@ -369,9 +369,9 @@ Punishments.punish = function (user, punishment, noRecurse) {
 		Punishments.userids.set(user.autoconfirmed, punishment);
 		keys.add(user.autoconfirmed);
 	}
-	if (user.confirmed) {
-		Punishments.userids.set(user.confirmed, punishment);
-		keys.add(user.confirmed);
+	if (user.trusted) {
+		Punishments.userids.set(user.trusted, punishment);
+		keys.add(user.trusted);
 	}
 	if (!noRecurse) {
 		const [punishType, id, ...rest] = punishment;
@@ -427,7 +427,7 @@ Punishments.roomPunish = function (room, user, punishment, noRecurse) {
 	}
 	if (!noRecurse) {
 		Users.users.forEach(curUser => {
-			if (user === curUser || curUser.confirmed) return;
+			if (user === curUser || curUser.trusted) return;
 			for (let myIp in curUser.ips) {
 				if (myIp in user.ips) {
 					this.roomPunish(room, curUser, punishment, keys);
@@ -448,9 +448,9 @@ Punishments.roomPunish = function (room, user, punishment, noRecurse) {
 		Punishments.roomUserids.nestedSet(room.id, user.autoconfirmed, punishment);
 		keys.add(user.autoconfirmed);
 	}
-	if (user.confirmed) {
+	if (user.trusted) {
 		Punishments.roomUserids.nestedSet(room.id, user.confirmed, punishment);
-		keys.add(user.confirmed);
+		keys.add(user.trusted);
 	}
 	if (!noRecurse) {
 		const [punishType, id, ...rest] = punishment;
