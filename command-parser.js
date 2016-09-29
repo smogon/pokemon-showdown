@@ -76,7 +76,6 @@ class PatternTester {
 }
 
 exports.multiLinePattern = new PatternTester();
-exports.globalPattern = new PatternTester();
 
 /*********************************************************
  * Load command files
@@ -143,12 +142,22 @@ class CommandContext {
 		return newMessage;
 	}
 	parseMessage(message = this.message) {
+		let originalRoom = this.room;
+		if (this.room && !(this.user.userid in this.room.users)) {
+			this.room = Rooms.global;
+		}
+
 		let commandHandler = this.splitCommand(message);
 
 		if (typeof commandHandler === 'function') {
 			message = this.run(commandHandler);
 		} else {
 			if (commandHandler === '!') {
+				if (originalRoom === Rooms.global) {
+					return this.popupReply(`You tried use "${message}" as a global command, but it is not a global command.`);
+				} else if (originalRoom) {
+					return this.popupReply(`You tried to send "${message}" to the room "${originalRoom.id}" but it failed because you were not in that room.`);
+				}
 				return this.errorReply(`The command "${this.cmdToken}${this.fullCmd}" is unavailable in private messages. To send a message starting with "${this.cmdToken}${this.fullCmd}", type "${this.cmdToken}${this.cmdToken}${this.fullCmd}".`);
 			}
 			if (this.cmdToken) {
@@ -280,7 +289,7 @@ class CommandContext {
 		this.target = target;
 		this.fullCmd = fullCmd;
 
-		if (typeof commandHandler === 'function' && this.pmTarget) {
+		if (typeof commandHandler === 'function' && (this.pmTarget || this.room === Rooms.global)) {
 			if (!curCommands['!' + (typeof curCommands[cmd] === 'string' ? curCommands[cmd] : cmd)]) {
 				return '!';
 			}
