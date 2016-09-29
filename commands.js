@@ -379,15 +379,20 @@ let commands = exports.commands = {
 			this.errorReply("You forgot the comma.");
 			return this.parse('/help msg');
 		}
-		this.pmTarget = targetUser;
 		if (!targetUser) {
 			let error = `User ${this.targetUsername} not found. Did you misspell their name?`;
 			error = `|pm|${this.user.getIdentity()}| ${this.targetUsername}|/error ${error}`;
 			connection.send(error);
 			return;
 		}
+		this.pmTarget = targetUser;
+		this.room = undefined;
 
-		return CommandParser.Messages.send(target, this);
+		if (!targetUser.connected) {
+			return this.errorReply("User " + this.targetUsername + " is offline.");
+		}
+
+		this.parse(target);
 	},
 	msghelp: ["/msg OR /whisper OR /w [username], [message] - Send a private message."],
 
