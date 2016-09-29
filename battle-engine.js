@@ -12,10 +12,8 @@
 
 'use strict';
 
-let Battle, BattleSide, BattlePokemon;
-
-BattlePokemon = (() => {
-	function BattlePokemon(set, side) {
+class BattlePokemon {
+	constructor(set, side) {
 		this.side = side;
 		this.battle = side.battle;
 
@@ -47,6 +45,32 @@ BattlePokemon = (() => {
 		this.movepp = {};
 		this.moveset = [];
 		this.baseMoveset = [];
+
+		this.trapped = false;
+		this.maybeTrapped = false;
+		this.maybeDisabled = false;
+		this.illusion = null;
+		this.fainted = false;
+		this.faintQueued = false;
+		this.lastItem = '';
+		this.ateBerry = false;
+		this.status = '';
+		this.position = 0;
+
+		this.lastMove = '';
+		this.moveThisTurn = '';
+
+		this.lastDamage = 0;
+		this.lastAttackedBy = null;
+		this.usedItemThisTurn = false;
+		this.newlySwitched = false;
+		this.beingCalledBack = false;
+		this.isActive = false;
+		this.isStarted = false; // has this pokemon's Start events run yet?
+		this.transformed = false;
+		this.duringMove = false;
+		this.speed = 0;
+		this.abilityOrder = 0;
 
 		this.level = this.battle.clampIntRange(set.forcedLevel || set.level || 100, 1, 9999);
 
@@ -197,53 +221,22 @@ BattlePokemon = (() => {
 		this.clearVolatile(true);
 	}
 
-	BattlePokemon.prototype.trapped = false;
-	BattlePokemon.prototype.maybeTrapped = false;
-	BattlePokemon.prototype.maybeDisabled = false;
-	BattlePokemon.prototype.hp = 0;
-	BattlePokemon.prototype.maxhp = 100;
-	BattlePokemon.prototype.illusion = null;
-	BattlePokemon.prototype.fainted = false;
-	BattlePokemon.prototype.faintQueued = false;
-	BattlePokemon.prototype.lastItem = '';
-	BattlePokemon.prototype.ateBerry = false;
-	BattlePokemon.prototype.status = '';
-	BattlePokemon.prototype.position = 0;
-
-	BattlePokemon.prototype.lastMove = '';
-	BattlePokemon.prototype.moveThisTurn = '';
-
-	BattlePokemon.prototype.lastDamage = 0;
-	BattlePokemon.prototype.lastAttackedBy = null;
-	BattlePokemon.prototype.usedItemThisTurn = false;
-	BattlePokemon.prototype.newlySwitched = false;
-	BattlePokemon.prototype.beingCalledBack = false;
-	BattlePokemon.prototype.isActive = false;
-	BattlePokemon.prototype.isStarted = false; // has this pokemon's Start events run yet?
-	BattlePokemon.prototype.transformed = false;
-	BattlePokemon.prototype.duringMove = false;
-	BattlePokemon.prototype.hpType = 'Dark';
-	BattlePokemon.prototype.hpPower = 60;
-	BattlePokemon.prototype.speed = 0;
-	BattlePokemon.prototype.abilityOrder = 0;
-
-	BattlePokemon.prototype.toString = function () {
+	toString() {
 		let fullname = this.fullname;
 		if (this.illusion) fullname = this.illusion.fullname;
 
 		let positionList = 'abcdef';
 		if (this.isActive) return fullname.substr(0, 2) + positionList[this.position] + fullname.substr(2);
 		return fullname;
-	};
-	// "static" function
-	BattlePokemon.getDetails = function (side) {
+	}
+	static getDetails(side) {
 		if (this.illusion) return this.illusion.details + '|' + this.getHealth(side);
 		return this.details + '|' + this.getHealth(side);
-	};
-	BattlePokemon.prototype.updateSpeed = function () {
+	}
+	updateSpeed() {
 		this.speed = this.getDecisionSpeed();
-	};
-	BattlePokemon.prototype.calculateStat = function (statName, boost, modifier) {
+	}
+	calculateStat(statName, boost, modifier) {
 		statName = toId(statName);
 
 		if (statName === 'hp') return this.maxhp; // please just read .maxhp directly
@@ -283,8 +276,8 @@ BattlePokemon = (() => {
 		}
 
 		return stat;
-	};
-	BattlePokemon.prototype.getStat = function (statName, unboosted, unmodified) {
+	}
+	getStat(statName, unboosted, unmodified) {
 		statName = toId(statName);
 
 		if (statName === 'hp') return this.maxhp; // please just read .maxhp directly
@@ -325,22 +318,22 @@ BattlePokemon = (() => {
 			stat = this.battle.getStatCallback(stat, statName, this, unboosted);
 		}
 		return stat;
-	};
-	BattlePokemon.prototype.getDecisionSpeed = function () {
+	}
+	getDecisionSpeed() {
 		let speed = this.getStat('spe');
 		if (speed > 10000) speed = 10000;
 		if (this.battle.getPseudoWeather('trickroom')) {
 			speed = 0x2710 - speed;
 		}
 		return speed & 0x1FFF;
-	};
-	BattlePokemon.prototype.getWeight = function () {
+	}
+	getWeight() {
 		let weight = this.template.weightkg;
 		weight = this.battle.runEvent('ModifyWeight', this, null, null, weight);
 		if (weight < 0.1) weight = 0.1;
 		return weight;
-	};
-	BattlePokemon.prototype.getMoveData = function (move) {
+	}
+	getMoveData(move) {
 		move = this.battle.getMove(move);
 		for (let i = 0; i < this.moveset.length; i++) {
 			let moveData = this.moveset[i];
@@ -349,8 +342,8 @@ BattlePokemon = (() => {
 			}
 		}
 		return null;
-	};
-	BattlePokemon.prototype.getMoveTargets = function (move, target) {
+	}
+	getMoveTargets(move, target) {
 		let targets = [];
 		switch (move.target) {
 		case 'all':
@@ -418,14 +411,14 @@ BattlePokemon = (() => {
 			}
 		}
 		return targets;
-	};
-	BattlePokemon.prototype.ignoringAbility = function () {
+	}
+	ignoringAbility() {
 		return !!((this.battle.gen >= 5 && !this.isActive) || this.volatiles['gastroacid']);
-	};
-	BattlePokemon.prototype.ignoringItem = function () {
+	}
+	ignoringItem() {
 		return !!((this.battle.gen >= 5 && !this.isActive) || this.hasAbility('klutz') || this.volatiles['embargo'] || this.battle.pseudoWeather['magicroom']);
-	};
-	BattlePokemon.prototype.deductPP = function (move, amount, source) {
+	}
+	deductPP(move, amount, source) {
 		move = this.battle.getMove(move);
 		let ppData = this.getMoveData(move);
 		if (!ppData) return false;
@@ -447,12 +440,12 @@ BattlePokemon = (() => {
 		}
 		this.isStalePPTurns = 0;
 		return true;
-	};
-	BattlePokemon.prototype.moveUsed = function (move) {
+	}
+	moveUsed(move) {
 		this.lastMove = this.battle.getMove(move).id;
 		this.moveThisTurn = this.lastMove;
-	};
-	BattlePokemon.prototype.gotAttacked = function (move, damage, source) {
+	}
+	gotAttacked(move, damage, source) {
 		if (!damage) damage = 0;
 		move = this.battle.getMove(move);
 		this.lastAttackedBy = {
@@ -461,13 +454,13 @@ BattlePokemon = (() => {
 			move: move.id,
 			thisTurn: true,
 		};
-	};
-	BattlePokemon.prototype.getLockedMove = function () {
+	}
+	getLockedMove() {
 		let lockedMove = this.battle.runEvent('LockMove', this);
 		if (lockedMove === true) lockedMove = false;
 		return lockedMove;
-	};
-	BattlePokemon.prototype.getMoves = function (lockedMove, restrictData) {
+	}
+	getMoves(lockedMove, restrictData) {
 		if (lockedMove) {
 			lockedMove = toId(lockedMove);
 			this.trapped = true;
@@ -532,8 +525,8 @@ BattlePokemon = (() => {
 		if (hasValidMove) return moves;
 
 		return [];
-	};
-	BattlePokemon.prototype.getRequestData = function () {
+	}
+	getRequestData() {
 		let lockedMove = this.getLockedMove();
 
 		// Information should be restricted for the last active Pokémon
@@ -557,8 +550,8 @@ BattlePokemon = (() => {
 		if (this.canMegaEvo && !lockedMove) data.canMegaEvo = true;
 
 		return data;
-	};
-	BattlePokemon.prototype.isLastActive = function () {
+	}
+	isLastActive() {
 		if (!this.isActive) return false;
 
 		let allyActive = this.side.active;
@@ -566,15 +559,15 @@ BattlePokemon = (() => {
 			if (allyActive[i] && !allyActive.fainted) return false;
 		}
 		return true;
-	};
-	BattlePokemon.prototype.positiveBoosts = function () {
+	}
+	positiveBoosts() {
 		let boosts = 0;
 		for (let i in this.boosts) {
 			if (this.boosts[i] > 0) boosts += this.boosts[i];
 		}
 		return boosts;
-	};
-	BattlePokemon.prototype.boostBy = function (boost) {
+	}
+	boostBy(boost) {
 		let delta = 0;
 		for (let i in boost) {
 			delta = boost[i];
@@ -589,18 +582,18 @@ BattlePokemon = (() => {
 			}
 		}
 		return delta;
-	};
-	BattlePokemon.prototype.clearBoosts = function () {
+	}
+	clearBoosts() {
 		for (let i in this.boosts) {
 			this.boosts[i] = 0;
 		}
-	};
-	BattlePokemon.prototype.setBoost = function (boost) {
+	}
+	setBoost(boost) {
 		for (let i in boost) {
 			this.boosts[i] = boost[i];
 		}
-	};
-	BattlePokemon.prototype.copyVolatileFrom = function (pokemon) {
+	}
+	copyVolatileFrom(pokemon) {
 		this.clearVolatile();
 		this.boosts = pokemon.boosts;
 		for (let i in pokemon.volatiles) {
@@ -617,8 +610,8 @@ BattlePokemon = (() => {
 		for (let i in this.volatiles) {
 			this.battle.singleEvent('Copy', this.getVolatile(i), this.volatiles[i], this);
 		}
-	};
-	BattlePokemon.prototype.transformInto = function (pokemon, user, effect) {
+	}
+	transformInto(pokemon, user, effect) {
 		let template = pokemon.template;
 		if (pokemon.fainted || pokemon.illusion || (pokemon.volatiles['substitute'] && this.battle.gen >= 5)) {
 			return false;
@@ -696,8 +689,8 @@ BattlePokemon = (() => {
 		}
 
 		return true;
-	};
-	BattlePokemon.prototype.formeChange = function (template, dontRecalculateStats) {
+	}
+	formeChange(template, dontRecalculateStats) {
 		template = this.battle.getTemplate(template);
 
 		if (!template.abilities) return false;
@@ -728,8 +721,8 @@ BattlePokemon = (() => {
 			this.speed = this.stats.spe;
 		}
 		return true;
-	};
-	BattlePokemon.prototype.clearVolatile = function (init) {
+	}
+	clearVolatile(init) {
 		this.boosts = {
 			atk: 0,
 			def: 0,
@@ -772,8 +765,8 @@ BattlePokemon = (() => {
 		this.beingCalledBack = false;
 
 		this.formeChange(this.baseTemplate);
-	};
-	BattlePokemon.prototype.hasType = function (type) {
+	}
+	hasType(type) {
 		if (!type) return false;
 		if (Array.isArray(type)) {
 			for (let i = 0; i < type.length; i++) {
@@ -783,9 +776,9 @@ BattlePokemon = (() => {
 			if (this.getTypes().includes(type)) return true;
 		}
 		return false;
-	};
+	}
 	// returns the amount of damage actually dealt
-	BattlePokemon.prototype.faint = function (source, effect) {
+	faint(source, effect) {
 		// This function only puts the pokemon in the faint queue;
 		// actually setting of this.fainted comes later when the
 		// faint queue is resolved.
@@ -800,8 +793,8 @@ BattlePokemon = (() => {
 			effect: effect,
 		});
 		return d;
-	};
-	BattlePokemon.prototype.damage = function (d, source, effect) {
+	}
+	damage(d, source, effect) {
 		if (!this.hp) return 0;
 		if (d < 1 && d > 0) d = 1;
 		d = Math.floor(d);
@@ -813,16 +806,16 @@ BattlePokemon = (() => {
 			this.faint(source, effect);
 		}
 		return d;
-	};
-	BattlePokemon.prototype.tryTrap = function (isHidden) {
+	}
+	tryTrap(isHidden) {
 		if (this.runStatusImmunity('trapped')) {
 			if (this.trapped && isHidden) return true;
 			this.trapped = isHidden ? 'hidden' : true;
 			return true;
 		}
 		return false;
-	};
-	BattlePokemon.prototype.hasMove = function (moveid) {
+	}
+	hasMove(moveid) {
 		moveid = toId(moveid);
 		if (moveid.substr(0, 11) === 'hiddenpower') moveid = 'hiddenpower';
 		for (let i = 0; i < this.moveset.length; i++) {
@@ -831,8 +824,8 @@ BattlePokemon = (() => {
 			}
 		}
 		return false;
-	};
-	BattlePokemon.prototype.disableMove = function (moveid, isHidden, sourceEffect) {
+	}
+	disableMove(moveid, isHidden, sourceEffect) {
 		if (!sourceEffect && this.battle.event) {
 			sourceEffect = this.battle.effect;
 		}
@@ -845,9 +838,9 @@ BattlePokemon = (() => {
 				break;
 			}
 		}
-	};
+	}
 	// returns the amount of damage actually healed
-	BattlePokemon.prototype.heal = function (d) {
+	heal(d) {
 		if (!this.hp) return false;
 		d = Math.floor(d);
 		if (isNaN(d)) return false;
@@ -859,9 +852,9 @@ BattlePokemon = (() => {
 			this.hp = this.maxhp;
 		}
 		return d;
-	};
+	}
 	// sets HP, returns delta
-	BattlePokemon.prototype.sethp = function (d) {
+	sethp(d) {
 		if (!this.hp) return 0;
 		d = Math.floor(d);
 		if (isNaN(d)) return;
@@ -873,19 +866,19 @@ BattlePokemon = (() => {
 			this.hp = this.maxhp;
 		}
 		return d;
-	};
-	BattlePokemon.prototype.trySetStatus = function (status, source, sourceEffect) {
+	}
+	trySetStatus(status, source, sourceEffect) {
 		return this.setStatus(this.status || status, source, sourceEffect);
-	};
-	BattlePokemon.prototype.cureStatus = function (silent) {
+	}
+	cureStatus(silent) {
 		if (!this.hp) return false;
 		// unlike clearStatus, gives cure message
 		if (this.status) {
 			this.battle.add('-curestatus', this, this.status, silent ? '[silent]' : '[msg]');
 			this.setStatus('');
 		}
-	};
-	BattlePokemon.prototype.setStatus = function (status, source, sourceEffect, ignoreImmunities) {
+	}
+	setStatus(status, source, sourceEffect, ignoreImmunities) {
 		if (!this.hp) return false;
 		status = this.battle.getEffect(status);
 		if (this.battle.event) {
@@ -941,15 +934,15 @@ BattlePokemon = (() => {
 			return false;
 		}
 		return true;
-	};
-	BattlePokemon.prototype.clearStatus = function () {
+	}
+	clearStatus() {
 		// unlike cureStatus, does not give cure message
 		return this.setStatus('');
-	};
-	BattlePokemon.prototype.getStatus = function () {
+	}
+	getStatus() {
 		return this.battle.getEffect(this.status);
-	};
-	BattlePokemon.prototype.eatItem = function (item, source, sourceEffect) {
+	}
+	eatItem(item, source, sourceEffect) {
 		if (!this.hp || !this.isActive) return false;
 		if (!this.item) return false;
 
@@ -974,8 +967,8 @@ BattlePokemon = (() => {
 			return true;
 		}
 		return false;
-	};
-	BattlePokemon.prototype.useItem = function (item, source, sourceEffect) {
+	}
+	useItem(item, source, sourceEffect) {
 		if (!this.isActive) return false;
 		if (!this.item) return false;
 
@@ -1007,8 +1000,8 @@ BattlePokemon = (() => {
 			return true;
 		}
 		return false;
-	};
-	BattlePokemon.prototype.takeItem = function (source) {
+	}
+	takeItem(source) {
 		if (!this.isActive) return false;
 		if (!this.item) return false;
 		if (!source) source = this;
@@ -1023,8 +1016,8 @@ BattlePokemon = (() => {
 			return item;
 		}
 		return false;
-	};
-	BattlePokemon.prototype.setItem = function (item, source, effect) {
+	}
+	setItem(item, source, effect) {
 		if (!this.hp || !this.isActive) return false;
 		item = this.battle.getItem(item);
 
@@ -1042,22 +1035,22 @@ BattlePokemon = (() => {
 		}
 		if (this.lastItem) this.usedItemThisTurn = true;
 		return true;
-	};
-	BattlePokemon.prototype.getItem = function () {
+	}
+	getItem() {
 		return this.battle.getItem(this.item);
-	};
-	BattlePokemon.prototype.hasItem = function (item) {
+	}
+	hasItem(item) {
 		if (this.ignoringItem()) return false;
 		let ownItem = this.item;
 		if (!Array.isArray(item)) {
 			return ownItem === toId(item);
 		}
 		return item.map(toId).includes(ownItem);
-	};
-	BattlePokemon.prototype.clearItem = function () {
+	}
+	clearItem() {
 		return this.setItem('');
-	};
-	BattlePokemon.prototype.setAbility = function (ability, source, effect, noForce) {
+	}
+	setAbility(ability, source, effect, noForce) {
 		if (!this.hp) return false;
 		ability = this.battle.getAbility(ability);
 		let oldAbility = this.ability;
@@ -1076,25 +1069,25 @@ BattlePokemon = (() => {
 		}
 		this.abilityOrder = this.battle.abilityOrder++;
 		return oldAbility;
-	};
-	BattlePokemon.prototype.getAbility = function () {
+	}
+	getAbility() {
 		return this.battle.getAbility(this.ability);
-	};
-	BattlePokemon.prototype.hasAbility = function (ability) {
+	}
+	hasAbility(ability) {
 		if (this.ignoringAbility()) return false;
 		let ownAbility = this.ability;
 		if (!Array.isArray(ability)) {
 			return ownAbility === toId(ability);
 		}
 		return ability.map(toId).includes(ownAbility);
-	};
-	BattlePokemon.prototype.clearAbility = function () {
+	}
+	clearAbility() {
 		return this.setAbility('');
-	};
-	BattlePokemon.prototype.getNature = function () {
+	}
+	getNature() {
 		return this.battle.getNature(this.set.nature);
-	};
-	BattlePokemon.prototype.addVolatile = function (status, source, sourceEffect, linkedStatus) {
+	}
+	addVolatile(status, source, sourceEffect, linkedStatus) {
 		let result;
 		status = this.battle.getEffect(status);
 		if (!this.hp && !status.affectsFainted) return false;
@@ -1142,13 +1135,13 @@ BattlePokemon = (() => {
 			this.volatiles[status].linkedStatus = linkedStatus;
 		}
 		return true;
-	};
-	BattlePokemon.prototype.getVolatile = function (status) {
+	}
+	getVolatile(status) {
 		status = this.battle.getEffect(status);
 		if (!this.volatiles[status.id]) return null;
 		return status;
-	};
-	BattlePokemon.prototype.removeVolatile = function (status) {
+	}
+	removeVolatile(status) {
 		if (!this.hp) return false;
 		status = this.battle.getEffect(status);
 		if (!this.volatiles[status.id]) return false;
@@ -1160,9 +1153,8 @@ BattlePokemon = (() => {
 			linkedPokemon.removeVolatile(linkedStatus);
 		}
 		return true;
-	};
-	// "static" function
-	BattlePokemon.getHealth = function (side) {
+	}
+	static getHealth(side) {
 		if (!this.hp) return '0 fnt';
 		let hpstring;
 		if ((side === true) || (this.side === side) || this.battle.getFormat().debug || this.battle.reportExactHP) {
@@ -1189,13 +1181,13 @@ BattlePokemon = (() => {
 		}
 		if (this.status) hpstring += ' ' + this.status;
 		return hpstring;
-	};
+	}
 	/**
 	 * Sets a type (except on Arceus, who resists type changes)
 	 * newType can be an array, but this is for OMs only. The game in
 	 * reality doesn't support setting a type to more than one type.
 	 */
-	BattlePokemon.prototype.setType = function (newType, enforce) {
+	setType(newType, enforce) {
 		// Arceus first type cannot be normally changed
 		if (!enforce && this.template.num === 493) return false;
 
@@ -1205,15 +1197,15 @@ BattlePokemon = (() => {
 		this.knownType = true;
 
 		return true;
-	};
-	BattlePokemon.prototype.addType = function (newType) {
+	}
+	addType(newType) {
 		// removes any types added previously and adds another one
 
 		this.addedType = newType;
 
 		return true;
-	};
-	BattlePokemon.prototype.getTypes = function (excludeAdded) {
+	}
+	getTypes(excludeAdded) {
 		let types = this.types;
 		if (!excludeAdded && this.addedType) {
 			types = types.concat(this.addedType);
@@ -1223,8 +1215,8 @@ BattlePokemon = (() => {
 		}
 		if (types.length) return types;
 		return [this.battle.gen >= 5 ? 'Normal' : '???'];
-	};
-	BattlePokemon.prototype.isGrounded = function (negateImmunity) {
+	}
+	isGrounded(negateImmunity) {
 		if ('gravity' in this.battle.pseudoWeather) return true;
 		if ('ingrain' in this.volatiles) return true;
 		if ('smackdown' in this.volatiles) return true;
@@ -1235,8 +1227,8 @@ BattlePokemon = (() => {
 		if ('magnetrise' in this.volatiles) return false;
 		if ('telekinesis' in this.volatiles) return false;
 		return item !== 'airballoon';
-	};
-	BattlePokemon.prototype.isSemiInvulnerable = function () {
+	}
+	isSemiInvulnerable() {
 		if (this.volatiles['fly'] || this.volatiles['bounce'] || this.volatiles['skydrop'] || this.volatiles['dive'] || this.volatiles['dig'] || this.volatiles['phantomforce'] || this.volatiles['shadowforce']) {
 			return true;
 		}
@@ -1246,8 +1238,8 @@ BattlePokemon = (() => {
 			}
 		}
 		return false;
-	};
-	BattlePokemon.prototype.runEffectiveness = function (move) {
+	}
+	runEffectiveness(move) {
 		let totalTypeMod = 0;
 		let types = this.getTypes();
 		for (let i = 0; i < types.length; i++) {
@@ -1256,8 +1248,8 @@ BattlePokemon = (() => {
 			totalTypeMod += this.battle.runEvent('Effectiveness', this, types[i], move, typeMod);
 		}
 		return totalTypeMod;
-	};
-	BattlePokemon.prototype.runImmunity = function (type, message) {
+	}
+	runImmunity(type, message) {
 		if (!type || type === '???') {
 			return true;
 		}
@@ -1287,8 +1279,8 @@ BattlePokemon = (() => {
 			return false;
 		}
 		return true;
-	};
-	BattlePokemon.prototype.runStatusImmunity = function (type, message) {
+	}
+	runStatusImmunity(type, message) {
 		if (this.fainted) {
 			return false;
 		}
@@ -1311,18 +1303,17 @@ BattlePokemon = (() => {
 			return false;
 		}
 		return true;
-	};
-	BattlePokemon.prototype.destroy = function () {
+	}
+	destroy() {
 		// deallocate ourself
 		// get rid of some possibly-circular references
 		this.battle = null;
 		this.side = null;
-	};
-	return BattlePokemon;
-})();
+	}
+}
 
-BattleSide = (() => {
-	function BattleSide(name, battle, n, team) {
+class BattleSide {
+	constructor(name, battle, n, team) {
 		let sideScripts = battle.data.Scripts.side;
 		if (sideScripts) Object.assign(this, sideScripts);
 
@@ -1334,6 +1325,13 @@ BattleSide = (() => {
 		this.pokemon = [];
 		this.active = [null];
 		this.sideConditions = {};
+
+		this.isActive = false;
+		this.pokemonLeft = 0;
+		this.faintedLastTurn = false;
+		this.faintedThisTurn = false;
+		this.choiceData = null;
+		this.foe = null;
 
 		this.id = n ? 'p2' : 'p1';
 
@@ -1357,22 +1355,15 @@ BattleSide = (() => {
 		}
 	}
 
-	BattleSide.getChoice = function (side) {
+	static getChoice(side) {
 		if (side !== this && side !== true) return '';
 		return this.choiceData.choices.join(', ');
-	};
+	}
 
-	BattleSide.prototype.isActive = false;
-	BattleSide.prototype.pokemonLeft = 0;
-	BattleSide.prototype.faintedLastTurn = false;
-	BattleSide.prototype.faintedThisTurn = false;
-	BattleSide.prototype.choiceData = null;
-	BattleSide.prototype.foe = null;
-
-	BattleSide.prototype.toString = function () {
+	toString() {
 		return this.id + ': ' + this.name;
-	};
-	BattleSide.prototype.getData = function () {
+	}
+	getData() {
 		let data = {
 			name: this.name,
 			id: this.id,
@@ -1404,14 +1395,14 @@ BattleSide = (() => {
 			});
 		}
 		return data;
-	};
-	BattleSide.prototype.randomActive = function () {
+	}
+	randomActive() {
 		let actives = this.active.filter(active => active && !active.fainted);
 		if (!actives.length) return null;
 		let i = Math.floor(Math.random() * actives.length);
 		return actives[i];
-	};
-	BattleSide.prototype.addSideCondition = function (status, source, sourceEffect) {
+	}
+	addSideCondition(status, source, sourceEffect) {
 		status = this.battle.getEffect(status);
 		if (this.sideConditions[status.id]) {
 			if (!status.onRestart) return false;
@@ -1434,35 +1425,35 @@ BattleSide = (() => {
 			return false;
 		}
 		return true;
-	};
-	BattleSide.prototype.getSideCondition = function (status) {
+	}
+	getSideCondition(status) {
 		status = this.battle.getEffect(status);
 		if (!this.sideConditions[status.id]) return null;
 		return status;
-	};
-	BattleSide.prototype.removeSideCondition = function (status) {
+	}
+	removeSideCondition(status) {
 		status = this.battle.getEffect(status);
 		if (!this.sideConditions[status.id]) return false;
 		this.battle.singleEvent('End', status, this.sideConditions[status.id], this);
 		delete this.sideConditions[status.id];
 		return true;
-	};
-	BattleSide.prototype.send = function () {
+	}
+	send() {
 		let parts = Array.prototype.slice.call(arguments);
 		let sideUpdate = '|' + parts.map(part => {
 			if (typeof part !== 'function') return part;
 			return part(this);
 		}).join('|');
 		this.battle.send('sideupdate', this.id + "\n" + sideUpdate);
-	};
-	BattleSide.prototype.emitCallback = function () {
+	}
+	emitCallback() {
 		this.battle.send('sideupdate', this.id + "\n|callback|" +
 			Array.prototype.slice.call(arguments).join('|'));
-	};
-	BattleSide.prototype.emitRequest = function (update) {
+	}
+	emitRequest(update) {
 		this.battle.send('request', this.id + "\n" + this.battle.rqid + "\n" + JSON.stringify(update));
-	};
-	BattleSide.prototype.updateChoice = function () {
+	}
+	updateChoice() {
 		const offset = this.choiceData.choices.length;
 		this.battle.send('choice', this.id + "\n" + this.battle.rqid + "\n" + offset + "\n" + JSON.stringify({
 			done: this.choiceData.choices.map((choice, index) => choice === 'skip' ? '' : '' + index).join(""),
@@ -1470,15 +1461,15 @@ BattleSide = (() => {
 			enter: Array.from(this.choiceData.enterIndices).join(""),
 			team: this.currentRequest === 'teampreview' ? this.choiceData.decisions.map(decision => decision.pokemon.position + 1).join("") : null,
 		}));
-	};
+	}
 
-	BattleSide.prototype.getDecisionsFinished = function () {
+	getDecisionsFinished() {
 		if (this.choiceData.decisions === true) return true;
 		if (this.choiceData.skipsIndices.size) return false;
 		if (this.currentRequest === 'teampreview') return this.choiceData.choices.length >= this.pokemon.length;
 		return this.choiceData.choices.length >= this.active.length;
-	};
-	BattleSide.prototype.chooseMove = function (data, targetLoc, willMega, dontPlay) {
+	}
+	chooseMove(data, targetLoc, willMega, dontPlay) {
 		if (!targetLoc) targetLoc = 0;
 		const activePokemon = this.active[this.choiceData.choices.length];
 
@@ -1598,8 +1589,8 @@ BattleSide = (() => {
 
 		if (!dontPlay && !this.battle.checkDecisions()) return this; // allow chaining
 		return true;
-	};
-	BattleSide.prototype.chooseSwitch = function (data, index, dontPlay) {
+	}
+	chooseSwitch(data, index, dontPlay) {
 		const slot = +data - 1;
 		if (slot >= this.pokemon.length || !this.pokemon[slot]) {
 			this.battle.debug("Can't switch: You can't switch to a Pokémon that doesn't exist");
@@ -1654,8 +1645,8 @@ BattleSide = (() => {
 
 		if (!dontPlay && !this.battle.checkDecisions()) return this; // allow chaining
 		return true;
-	};
-	BattleSide.prototype.chooseTeam = function (data, dontPlay) {
+	}
+	chooseTeam(data, dontPlay) {
 		const positions = ('' + data).split('').map(datum => +datum - 1);
 
 		for (const pos of positions) {
@@ -1675,8 +1666,8 @@ BattleSide = (() => {
 
 		if (!dontPlay && !this.battle.checkDecisions()) return this; // allow chaining
 		return true;
-	};
-	BattleSide.prototype.chooseShift = function (dontPlay) {
+	}
+	chooseShift(dontPlay) {
 		const activePokemon = this.active[this.choiceData.choices.length];
 
 		this.choiceData.choices.push('shift');
@@ -1687,9 +1678,9 @@ BattleSide = (() => {
 
 		if (!dontPlay && !this.battle.checkDecisions()) return this; // allow chaining
 		return true;
-	};
+	}
 
-	BattleSide.prototype.undoChoices = function (count, nextIndex) {
+	undoChoices(count, nextIndex) {
 		if (count === 0 || !this.choiceData.choices.length) return null;
 		if (count === true) count = this.choiceData.choices.length;
 		if (nextIndex === undefined) nextIndex = this.choiceData.choices.length;
@@ -1698,9 +1689,9 @@ BattleSide = (() => {
 		for (let i = 1; i <= count; i++) {
 			this.undoChoice(nextIndex - i);
 		}
-	};
+	}
 
-	BattleSide.prototype.undoChoice = function (index) {
+	undoChoice(index) {
 		const decision = this.choiceData.decisions.splice(index, 1)[0];
 		if (decision.choice === 'switch' || decision.choice === 'instaswitch') {
 			this.choiceData.enterIndices.delete(decision.target.position);
@@ -1716,8 +1707,8 @@ BattleSide = (() => {
 			if (index !== this.choiceData.decisions.length) throw new Error(`Undoing decisions except the last during ${this.currentRequest} phase is unsupported (${index} !== ${this.choiceData.decisions.length})`);
 		}
 		this.choiceData.choices.splice(index, 1);
-	};
-	BattleSide.prototype.clearChoice = function () {
+	}
+	clearChoice() {
 		const canSwitchOut = this.active.filter(pokemon => pokemon && pokemon.switchFlag).length;
 		const canSwitchIn = this.pokemon.slice(this.active.length).filter(pokemon => pokemon && !pokemon.fainted).length;
 		this.choiceData = {
@@ -1737,10 +1728,10 @@ BattleSide = (() => {
 			leaveIndices: new Set(),
 			skipsIndices: new Set(),
 		};
-	};
+	}
 
 	// Special choices
-	BattleSide.prototype.choosePass = function (index, dontPlay) {
+	choosePass(index, dontPlay) {
 		if (typeof index === 'undefined') index = this.choiceData.choices.length;
 		if (index < this.choiceData.choices.length && this.choiceData.choices[index] !== 'skip') {
 			this.battle.debug("Can't pass: You can't override the decision for a Pokémon.");
@@ -1769,8 +1760,8 @@ BattleSide = (() => {
 
 		if (!dontPlay && !this.battle.checkDecisions()) return this; // allow chaining
 		return true;
-	};
-	BattleSide.prototype.chooseSkip = function (index) {
+	}
+	chooseSkip(index) {
 		if (this.currentRequest !== 'switch') {
 			this.battle.debug("Can't skip a Pokémon action");
 			return false;
@@ -1792,8 +1783,8 @@ BattleSide = (() => {
 		this.choiceData.skipsIndices.add(this.choiceData.choices.length);
 
 		return this;
-	};
-	BattleSide.prototype.chooseDefault = function (dontPlay) {
+	}
+	chooseDefault(dontPlay) {
 		const choiceOffset = this.choiceData.choices.length;
 		if (this.currentRequest === 'teampreview') {
 			const chosenPositions = new Set(this.choiceData.decisions.map(decision => decision.pokemon.position));
@@ -1888,18 +1879,18 @@ BattleSide = (() => {
 
 		if (!dontPlay && !this.battle.checkDecisions()) return this; // allow chaining
 		return true;
-	};
+	}
 
-	BattleSide.prototype.resolveDecision = function () {
+	resolveDecision() {
 		if (this.currentRequest && !this.getDecisionsFinished()) {
 			this.chooseDefault(true);
 			this.choiceData.choices = [];
 		} else if (this.choiceData.decisions === true) {
 			this.choiceData.choices = [];
 		}
-	};
+	}
 
-	BattleSide.prototype.destroy = function () {
+	destroy() {
 		// deallocate ourself
 
 		// deallocate children and get rid of references to them
@@ -1925,11 +1916,10 @@ BattleSide = (() => {
 		// get rid of some possibly-circular references
 		this.battle = null;
 		this.foe = null;
-	};
-	return BattleSide;
-})();
+	}
+}
 
-Battle = (() => {
+let Battle = (() => {
 	let Battle = {};
 
 	Battle.construct = (() => {
