@@ -32,7 +32,7 @@ let commands = exports.commands = {
 		this.sendReplyBox("Server version: <b>" + CommandParser.package.version + "</b>");
 	},
 
-	'!auth': true,
+	'!authority': true,
 	auth: 'authority',
 	stafflist: 'authority',
 	globalauth: 'authority',
@@ -368,6 +368,7 @@ let commands = exports.commands = {
 	},
 	replyhelp: ["/reply OR /r [message] - Send a private message to the last person you received a message from, or sent a message to."],
 
+	'!msg': true,
 	pm: 'msg',
 	whisper: 'msg',
 	w: 'msg',
@@ -1259,6 +1260,7 @@ let commands = exports.commands = {
 	},
 	roomunbanhelp: ["/roomunban [username] - Unbans the user from the room you are in. Requires: @ # & ~"],
 
+	'!autojoin': true,
 	autojoin: function (target, room, user, connection) {
 		Rooms.global.autojoinRooms(user, connection);
 		let targets = target.split(',');
@@ -1287,6 +1289,7 @@ let commands = exports.commands = {
 	},
 	joinhelp: ["/join [roomname] - Attempt to join the room [roomname]."],
 
+	'!part': true,
 	leave: 'part',
 	part: function (target, room, user, connection) {
 		let targetRoom = target ? Rooms.search(target) : room;
@@ -3072,6 +3075,7 @@ let commands = exports.commands = {
 	 * Challenging and searching commands
 	 *********************************************************/
 
+	'!search': true,
 	cancelsearch: 'search',
 	search: function (target, room, user) {
 		if (target) {
@@ -3089,6 +3093,7 @@ let commands = exports.commands = {
 		}
 	},
 
+	'!challenge': true,
 	chall: 'challenge',
 	challenge: function (target, room, user, connection) {
 		target = this.splitTarget(target);
@@ -3169,12 +3174,14 @@ let commands = exports.commands = {
 		user.rejectChallengeFrom(userid);
 	},
 
+	'!useteam': true,
 	saveteam: 'useteam',
 	utm: 'useteam',
 	useteam: function (target, room, user) {
 		user.team = target;
 	},
 
+	'!vtm': true,
 	vtm: function (target, room, user, connection) {
 		if (Monitor.countPrepBattle(connection.ip, connection)) {
 			return;
@@ -3198,8 +3205,10 @@ let commands = exports.commands = {
 	 * Low-level
 	 *********************************************************/
 
-	cmd: 'query',
-	query: function (target, room, user, connection) {
+	'!crq': true,
+	cmd: 'crq',
+	query: 'crq',
+	crq: function (target, room, user, connection) {
 		// Avoid guest users to use the cmd errors to ease the app-layer attacks in emergency mode
 		let trustable = (!Config.emergency || (user.named && user.registered));
 		let spaceIndex = target.indexOf(' ');
@@ -3266,6 +3275,7 @@ let commands = exports.commands = {
 		}
 	},
 
+	'!trn': true,
 	trn: function (target, room, user, connection) {
 		if (target === user.name) return false;
 
@@ -3365,16 +3375,4 @@ process.nextTick(() => {
 	CommandParser.multiLinePattern.register(
 		'>>>? ', '/(?:room|staff)intro ', '/(?:staff)?topic ', '/adddatacenters ', '/bash '
 	);
-
-	let globalCmds = new Set([
-		'/join ', '/part ', '/cmd ', '/trn ', '/logout ', '/autojoin ',
-		'/useteam ', '/vtm ', '/msg ', '/accept ', '/reject ', '/challenge ',
-		'/cancelchallenge ', '/search ', '/avatar ', '/roomauth ', '/authority ',
-	]);
-	for (let cmd in commands) {
-		if (typeof commands[cmd] === 'string' && globalCmds.has('/' + commands[cmd] + ' ')) {
-			globalCmds.add('/' + cmd + ' ');
-		}
-	}
-	CommandParser.globalPattern.register(...globalCmds);
 });
