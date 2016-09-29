@@ -114,15 +114,12 @@ class CommandContext {
 		this.cmd = options.cmd || '';
 		this.cmdToken = options.cmdToken || '';
 		this.target = options.target || '';
-		this.namespaces = options.namespaces || [];
+		this.fullCmd = options.fullCmd || [];
 
 		// target user
 		this.targetUser = null;
 		this.targetUsername = '';
 		this.inputUsername = '';
-	}
-	get fullCmd() {
-		return this.namespaces.concat(this.cmd).join(' ');
 	}
 
 	parse(newMessage = this.message) {
@@ -131,7 +128,7 @@ class CommandContext {
 		if (this.recursionDepth > MAX_PARSE_RECURSION) {
 			throw new Error("Too much command recursion");
 		}
-		let {message, cmd, cmdToken, target, namespace} = this;
+		let {message, cmd, cmdToken, target, fullCmd} = this;
 
 		this.message = newMessage;
 		newMessage = this.parseMessage(newMessage);
@@ -140,7 +137,7 @@ class CommandContext {
 		this.cmd = cmd;
 		this.cmdToken = cmdToken;
 		this.target = target;
-		this.namespace = namespace;
+		this.fullCmd = fullCmd;
 		this.recursionDepth--;
 
 		return newMessage;
@@ -193,7 +190,6 @@ class CommandContext {
 		this.cmd = '';
 		this.cmdToken = '';
 		this.target = '';
-		this.namespaces = [];
 		if (!message || !message.trim().length) return;
 
 		// hardcoded commands
@@ -223,7 +219,6 @@ class CommandContext {
 			target = '';
 		}
 
-		let namespaces = [];
 		let curCommands = commands;
 		let commandHandler;
 		let fullCmd = cmd;
@@ -241,8 +236,6 @@ class CommandContext {
 				return this.splitCommand(cmdToken + 'help ' + fullCmd.slice(0, -4), true);
 			}
 			if (commandHandler && typeof commandHandler === 'object') {
-				namespaces.push(cmd);
-
 				let spaceIndex = target.indexOf(' ');
 				if (spaceIndex > 0) {
 					cmd = target.substr(0, spaceIndex).toLowerCase();
@@ -285,7 +278,7 @@ class CommandContext {
 		this.cmd = cmd;
 		this.cmdToken = cmdToken;
 		this.target = target;
-		this.namespaces = namespaces;
+		this.fullCmd = fullCmd;
 
 		if (typeof commandHandler === 'function' && this.pmTarget) {
 			if (!curCommands['!' + (typeof curCommands[cmd] === 'string' ? curCommands[cmd] : cmd)]) {
@@ -468,7 +461,7 @@ class CommandContext {
 	}
 	can(permission, target, room) {
 		if (!this.user.can(permission, target, room)) {
-			this.errorReply(this.cmdToken + this.namespaces.concat(this.cmd).join(" ") + " - Access denied.");
+			this.errorReply(this.cmdToken + this.fullCmd + " - Access denied.");
 			return false;
 		}
 		return true;
