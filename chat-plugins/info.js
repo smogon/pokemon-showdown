@@ -1294,16 +1294,19 @@ exports.commands = {
 			if (!this.runBroadcast()) return;
 			this.sendReplyBox("Please follow the rules:<br />" +
 				(room && room.rulesLink ? "- <a href=\"" + Tools.escapeHTML(room.rulesLink) + "\">" + Tools.escapeHTML(room.title) + " room rules</a><br />" : "") +
-				"- <a href=\"https://pokemonshowdown.com/rules\">" + (room.rulesLink ? "Global rules" : "Rules") + "</a>");
+				"- <a href=\"https://pokemonshowdown.com/rules\">" + (room && room.rulesLink ? "Global rules" : "Rules") + "</a>");
 			return;
 		}
-		if (!this.can('roommod', null, room)) return;
+		if (!room) {
+			this.errorReply("This is not a room you can set the rules of.");
+		}
+		if (!this.can('editroom', null, room)) return;
 		if (target.length > 100) {
 			return this.errorReply("Error: Room rules link is too long (must be under 100 characters). You can use a URL shortener to shorten the link.");
 		}
 
 		room.rulesLink = target.trim();
-		this.sendReply("(The room rules link is now: " + target + ")");
+		this.privateModCommand(`(${user.name} changed the room rules link to: ${target})`);
 
 		if (room.chatRoomData) {
 			room.chatRoomData.rulesLink = room.rulesLink;
