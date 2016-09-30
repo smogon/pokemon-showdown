@@ -728,6 +728,23 @@ Punishments.roomUnblacklist = function (room, userid) {
 	return Punishments.roomUnpunish(room, userid, 'BLACKLIST');
 };
 
+Punishments.roomUnblacklistAll = function (room) {
+	const roombans = Punishments.roomUserids.get(room.id);
+	if (!roombans) return false;
+
+	let unblacklisted = [];
+
+	roombans.forEach((punishment, userid) => {
+		if (punishment[0] === 'BLACKLIST') {
+			Punishments.roomUnblacklist(room, userid);
+			unblacklisted.push(userid);
+		}
+	});
+	if (unblacklisted.length === 0) return false;
+	Punishments.savePunishments();
+	return unblacklisted;
+};
+
 /*********************************************************
  * Checking
  *********************************************************/

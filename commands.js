@@ -2159,6 +2159,26 @@ let commands = exports.commands = {
 	},
 	unblacklisthelp: ["/unblacklist [username] - Unblacklists the user from the room you are in. Requires: # & ~"],
 
+	unblacklistall: function (target, room, user) {
+		if (!this.can('editroom', null, room)) return false;
+
+		if (!target) {
+			user.lastCommand = '/unblacklistall';
+			this.errorReply("THIS WILL UNBLACKLIST ALL BLACKLISTED USERS IN THIS ROOM.");
+			this.errorReply("To confirm, use: /unblacklistall confirm");
+			return;
+		}
+		if (user.lastCommand !== '/unblacklistall' || target !== 'confirm') {
+			return this.parse('/help unblacklistall');
+		}
+
+		let unblacklisted = Punishments.roomUnblacklistAll(room);
+		if (!unblacklisted) return this.errorReply("No users are currently blacklisted in this room to unblacklist.");
+		this.addModCommand(`All blacklists in this room have been lifted by ${user.name}.`);
+		this.logEntry(`Unblacklisted users: ${unblacklisted.join(', ')}`);
+	},
+	unblacklistallhelp: ["/unblacklistall - Unblacklists all blacklisted users in the current room. Requires #, &, ~"],
+
 	blacklists: 'showblacklist',
 	showbl: 'showblacklist',
 	showblacklist: function (target, room, user) {
