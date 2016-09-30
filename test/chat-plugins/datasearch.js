@@ -26,6 +26,8 @@ describe('Learn', function () {
 				user.destroy();
 				if (logEntry.includes('cannotlearn')) return done(new Error("/gsclearn failed after /learn"));
 				return done();
+			}).catch(error => {
+				return done(error);
 			});
 		});
 	});
