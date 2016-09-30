@@ -560,6 +560,8 @@ class Mafia extends Rooms.RoomGame {
 				if (this.meeting === 'town' && toKill.class.onLynch) {
 					toKill.class.onLynch();
 				}
+			} else if (this.meeting === 'town') {
+				this.announcementWindow("Nobody was lynched.");
 			}
 
 			this.meeting = null;
