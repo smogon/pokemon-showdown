@@ -713,7 +713,8 @@ Punishments.roomBlacklist = function (room, user, expireTime, id, ...rest) {
 Punishments.roomUnban = function (room, userid) {
 	const user = Users(userid);
 	if (user) {
-		userid = Punishments.isRoomBanned(user, room.id) || userid;
+		let punishment = Punishments.isRoomBanned(user, room.id);
+		if (punishment) userid = punishment[1];
 	}
 	return Punishments.roomUnpunish(room, userid, 'ROOMBAN');
 };
@@ -721,7 +722,8 @@ Punishments.roomUnban = function (room, userid) {
 Punishments.roomUnblacklist = function (room, userid) {
 	const user = Users(userid);
 	if (user) {
-		userid = Punishments.isRoomBanned(user, room.id) || userid;
+		let punishment = Punishments.isRoomBanned(user, room.id);
+		if (punishment) userid = punishment[1];
 	}
 	return Punishments.roomUnpunish(room, userid, 'BLACKLIST');
 };
@@ -940,15 +942,15 @@ Punishments.isRoomBanned = function (user, roomid) {
 	if (!user) return;
 
 	let punishment = Punishments.roomUserids.nestedGet(roomid, user.userid);
-	if (punishment && (punishment[0] === 'ROOMBAN' || punishment[0] === 'BLACKLIST')) return punishment[1];
+	if (punishment && (punishment[0] === 'ROOMBAN' || punishment[0] === 'BLACKLIST')) return punishment;
 
 	if (user.autoconfirmed) {
 		punishment = Punishments.roomUserids.nestedGet(roomid, user.autoconfirmed);
-		if (punishment && (punishment[0] === 'ROOMBAN' || punishment[0] === 'BLACKLIST')) return punishment[1];
+		if (punishment && (punishment[0] === 'ROOMBAN' || punishment[0] === 'BLACKLIST')) return punishment;
 	}
 
 	for (let ip in user.ips) {
 		punishment = Punishments.roomIps.nestedGet(roomid, ip);
-		if (punishment && (punishment[0] === 'ROOMBAN' || punishment[0] === 'BLACKLIST')) return punishment[1];
+		if (punishment && (punishment[0] === 'ROOMBAN' || punishment[0] === 'BLACKLIST')) return punishment;
 	}
 };
