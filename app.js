@@ -136,7 +136,7 @@ if (Config.crashguard) {
 	process.on('uncaughtException', err => {
 		let crashMessage = require('./crashlogger')(err, 'The main process');
 		if (crashMessage !== 'lockdown') return;
-		let stack = Tools.escapeHTML(err.stack).split("\n").slice(0, 2).join("<br />");
+		let stack = CommandParser.escapeHTML(err.stack).split("\n").slice(0, 2).join("<br />");
 		if (!Rooms.global.lockdown) {
 			if (Rooms.lobby) {
 				Rooms.lobby.addRaw('<div class="broadcast-red"><b>THE SERVER HAS CRASHED:</b> ' + stack + '<br />Please restart the server.</div>');

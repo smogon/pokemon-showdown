@@ -223,7 +223,7 @@ class LoginServerInstance {
 		this.requestTimerPoke();
 	}
 	getLog() {
-		return this.requestLog + (this.lastRequest ? ' (' + Tools.toDurationString(Date.now() - this.lastRequest) + ' since last request)' : '');
+		return this.requestLog + (this.lastRequest ? ' (' + CommandParser.toDurationString(Date.now() - this.lastRequest) + ' since last request)' : '');
 	}
 }
 

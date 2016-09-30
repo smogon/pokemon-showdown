@@ -955,7 +955,7 @@ let commands = {
 		getusers: function (tournament) {
 			if (!this.runBroadcast()) return;
 			let users = usersToNames(tournament.generator.getUsers(true).sort());
-			this.sendReplyBox("<strong>" + users.length + " users remain in this tournament:</strong><br />" + Tools.escapeHTML(users.join(", ")));
+			this.sendReplyBox("<strong>" + users.length + " users remain in this tournament:</strong><br />" + CommandParser.escapeHTML(users.join(", ")));
 		},
 		getupdate: function (tournament, user) {
 			tournament.updateFor(user);
@@ -1245,7 +1245,7 @@ CommandParser.commands.tournament = function (paramString, room, user) {
 			this.privateModCommand("(" + user.name + " created a tournament in " + tour.format + " format.)");
 			if (room.tourAnnouncements) {
 				let tourRoom = Rooms.search(Config.tourroom || 'tournaments');
-				if (tourRoom && tourRoom !== room) tourRoom.addRaw('<div class="infobox"><a href="/' + room.id + '" class="ilink"><strong>' + Tools.escapeHTML(Tools.getFormat(tour.format).name) + '</strong> tournament created in <strong>' + Tools.escapeHTML(room.title) + '</strong>.</a></div>').update();
+				if (tourRoom && tourRoom !== room) tourRoom.addRaw('<div class="infobox"><a href="/' + room.id + '" class="ilink"><strong>' + CommandParser.escapeHTML(Tools.getFormat(tour.format).name) + '</strong> tournament created in <strong>' + CommandParser.escapeHTML(room.title) + '</strong>.</a></div>').update();
 			}
 		}
 	} else {

@@ -364,7 +364,7 @@ class Trivia extends Rooms.RoomGame {
 	// FIXME: this class and trivia database logic don't belong in bed with
 	// each other! Abstract all that away from this method as soon as possible.
 	win(winner, buffer) {
-		buffer += Tools.escapeHTML(winner.name) + ' won the game with a final score of <strong>' + winner.points + '</strong>, ' +
+		buffer += CommandParser.escapeHTML(winner.name) + ' won the game with a final score of <strong>' + winner.points + '</strong>, ' +
 			'and their leaderboard score has increased by <strong>' + this.prize + '</strong> points!';
 		this.broadcast('The answering period has ended!', buffer);
 
@@ -436,7 +436,7 @@ class Trivia extends Rooms.RoomGame {
 
 	// Forcibly ends a trivia game.
 	end(user) {
-		this.broadcast('The trivia game was forcibly ended by ' + Tools.escapeHTML(user.name) + '.');
+		this.broadcast('The trivia game was forcibly ended by ' + CommandParser.escapeHTML(user.name) + '.');
 		this.destroy();
 	}
 }
@@ -462,7 +462,7 @@ class FirstModeTrivia extends Trivia {
 		clearTimeout(this.phaseTimeout);
 		this.phase = INTERMISSION_PHASE;
 
-		let buffer = 'Correct: ' + Tools.escapeHTML(user.name) + '<br />' +
+		let buffer = 'Correct: ' + CommandParser.escapeHTML(user.name) + '<br />' +
 			'Answer(s): ' + this.curAnswers.join(', ') + '<br />';
 
 		let points = this.calculatePoints();
@@ -554,7 +554,7 @@ class TimerModeTrivia extends Trivia {
 			player.incrementPoints(points);
 
 			let pointBuffer = innerBuffer.get(points);
-			pointBuffer.push([Tools.escapeHTML(player.name), playerAnsweredAt]);
+			pointBuffer.push([CommandParser.escapeHTML(player.name), playerAnsweredAt]);
 
 			if (winner) {
 				if (player.points > winner.points) {
@@ -634,7 +634,7 @@ class NumberModeTrivia extends Trivia {
 			.filter(id => this.players[id].isCorrect)
 			.map(id => {
 				let player = this.players[id];
-				return [Tools.escapeHTML(player.name), hrtimeToNanoseconds(player.answeredAt)];
+				return [CommandParser.escapeHTML(player.name), hrtimeToNanoseconds(player.answeredAt)];
 			})
 			.sort((a, b) => a[1] - b[1]);
 
@@ -862,7 +862,7 @@ const commands = {
 		}
 
 		buffer += '<br />Players: ' + Object.keys(game.players)
-			.map(id => Tools.escapeHTML(game.players[id].name))
+			.map(id => CommandParser.escapeHTML(game.players[id].name))
 			.join(', ');
 
 		this.sendReplyBox(buffer);
@@ -881,7 +881,7 @@ const commands = {
 		let category = toId(target[0]);
 		if (!CATEGORIES[category]) return this.errorReply("'" + target[0].trim() + "' is not a valid category. View /help trivia for more information.");
 
-		let question = Tools.escapeHTML(target[1].trim());
+		let question = CommandParser.escapeHTML(target[1].trim());
 		if (!question) return this.errorReply("'" + target[1] + "' is not a valid question.");
 		if (question.length > MAX_QUESTION_LENGTH) {
 			return this.errorReply("This question is too long! It must remain under " + MAX_QUESTION_LENGTH + " characters.");
@@ -1037,7 +1037,7 @@ const commands = {
 		target = target.trim();
 		if (!target) return false;
 
-		let question = Tools.escapeHTML(target);
+		let question = CommandParser.escapeHTML(target);
 		if (!question) return this.errorReply("'" + target + "' is not a valid argument. View /help trivia for more information.");
 
 		let questions = triviaData.questions;
@@ -1121,11 +1121,11 @@ const commands = {
 		let name;
 		let userid;
 		if (!target) {
-			name = Tools.escapeHTML(user.name);
+			name = CommandParser.escapeHTML(user.name);
 			userid = user.userid;
 		} else {
 			target = this.splitTarget(target, true);
-			name = Tools.escapeHTML(this.targetUsername);
+			name = CommandParser.escapeHTML(this.targetUsername);
 			userid = toId(name);
 		}
 
@@ -1157,7 +1157,7 @@ const commands = {
 			for (let j = 0; j < leaders.length; j++) {
 				let rank = leaderboard[leaders[j]];
 				let leader = Users.getExact(leaders[j]);
-				leader = leader ? Tools.escapeHTML(leader.name) : leaders[j];
+				leader = leader ? CommandParser.escapeHTML(leader.name) : leaders[j];
 				buffer += "<tr><td><strong>" + (i + 1) + "</strong></td><td>" + leader + "</td><td>" + rank[0] + "</td><td>" + rank[1] + "</td><td>" + rank[2] + "</td></tr>";
 			}
 		}
