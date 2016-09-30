@@ -298,6 +298,7 @@ class CommandContext {
 		return commandHandler;
 	}
 	run(commandHandler) {
+		if (typeof commandHandler === 'string') commandHandler = commands[commandHandler];
 		let result;
 		try {
 			result = commandHandler.call(this, this.target, this.room, this.user, this.connection, this.cmd, this.message);
@@ -489,7 +490,7 @@ class CommandContext {
 			// broadcast cooldown
 			let broadcastMessage = message.toLowerCase().replace(/[^a-z0-9\s!,]/g, '');
 
-			if (this.room.lastBroadcast === this.broadcastMessage &&
+			if (this.room && this.room.lastBroadcast === this.broadcastMessage &&
 					this.room.lastBroadcastTime >= Date.now() - BROADCAST_COOLDOWN) {
 				this.errorReply("You can't broadcast this because it was just broadcast.");
 				return false;
