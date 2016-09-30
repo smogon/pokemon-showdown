@@ -137,10 +137,18 @@ if (Config.crashguard) {
 		let crashMessage = require('./crashlogger')(err, 'The main process');
 		if (crashMessage !== 'lockdown') return;
 		let stack = Tools.escapeHTML(err.stack).split("\n").slice(0, 2).join("<br />");
-		if (Rooms.lobby) {
-			Rooms.lobby.addRaw('<div class="broadcast-red"><b>THE SERVER HAS CRASHED:</b> ' + stack + '<br />Please restart the server.</div>');
-			Rooms.lobby.addRaw('<div class="broadcast-red">You will not be able to start new battles until the server restarts.</div>');
-			Rooms.lobby.update();
+		if (!Rooms.global.lockdown) {
+			if (Rooms.lobby) {
+				Rooms.lobby.addRaw('<div class="broadcast-red"><b>THE SERVER HAS CRASHED:</b> ' + stack + '<br />Please restart the server.</div>');
+				Rooms.lobby.addRaw('<div class="broadcast-red">You will not be able to start new battles until the server restarts.</div>');
+				Rooms.lobby.update();
+			}
+			let staffRoom = Rooms('staff');
+			if (staffRoom) {
+				staffRoom.addRaw('<div class="broadcast-red"><b>THE SERVER HAS CRASHED:</b> ' + stack + '<br />Please restart the server.</div>');
+				staffRoom.addRaw('<div class="broadcast-red">You will not be able to start new battles until the server restarts.</div>');
+				staffRoom.update();
+			}
 		}
 		Rooms.global.lockdown = true;
 	});
