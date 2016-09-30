@@ -2059,11 +2059,16 @@ let commands = exports.commands = {
 		if (!room.chatRoomData) {
 			return this.errorReply("This room is not going to last long enough for a blacklist to matter - just ban the user");
 		}
-		if (target.length > MAX_REASON_LENGTH) {
-			return this.errorReply("The reason is too long. It cannot exceed " + MAX_REASON_LENGTH + " characters.");
+		let punishment = Punishments.isRoomBanned(targetUser, room.id);
+		if (punishment && punishment[0] === 'BLACKLIST') {
+			return this.errorReply("This person is already blacklisted from this room.");
 		}
+
 		if (!target) {
 			return this.errorReply("Blacklists require a reason.");
+		}
+		if (target.length > MAX_REASON_LENGTH) {
+			return this.errorReply("The reason is too long. It cannot exceed " + MAX_REASON_LENGTH + " characters.");
 		}
 		const name = targetUser.getLastName();
 		const userid = targetUser.getLastId();
@@ -2114,6 +2119,11 @@ let commands = exports.commands = {
 		}
 		let reason = parts[1];
 		let targets = parts[0].split(',').map(s => toId(s));
+
+		let duplicates = targets.filter(userid => Punishments.roomUserids.nestedGet(room.id, userid));
+		if (duplicates.length) {
+			return this.errorReply(`[${duplicates.join(', ')}] ${Tools.plural(duplicates, "are", "is")} already blacklisted.`);
+		}
 
 		for (let i = 0; i < targets.length; i++) {
 			let userid = targets[i];
