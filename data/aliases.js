@@ -286,6 +286,7 @@ exports.BattleAliases = {
 	"azu": "Azumarill",
 	"bliss": "Blissey",
 	"bee": "Beedrill",
+	"cathy": "Trevenant",
 	"chomp": "Garchomp",
 	"clef": "Clefable",
 	"coba": "Cobalion",
