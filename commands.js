@@ -424,7 +424,8 @@ exports.commands = {
 			if (targetRoom.getAuth(targetUser) !== ' ') {
 				return this.errorReply(`The user "${targetUser.name}" does not have permission to join "${targetRoom.title}".`);
 			}
-			this.parse(`/roomvoice ${targetUser.name}`, false, targetRoom);
+			this.room = targetRoom;
+			this.parse(`/roomvoice ${targetUser.name}`);
 			if (!targetRoom.checkModjoin(targetUser)) {
 				if (targetRoom.getAuth(targetUser) !== ' ') {
 					return this.errorReply(`The user "${targetUser.name}" does not have permission to join "${targetRoom.title}".`);
@@ -1017,8 +1018,13 @@ exports.commands = {
 	},
 	roomownerhelp: ["/roomowner [username] - Appoints [username] as a room owner. Requires: & ~"],
 
+	'!roompromote': true,
 	roomdemote: 'roompromote',
 	roompromote: function (target, room, user, connection, cmd) {
+		if (!room) {
+			// this command isn't marked as room-only because it's usable in PMs through /invite
+			return this.errorReply("This command is only available in rooms");
+		}
 		if (!room.auth) {
 			this.sendReply("/roompromote - This room isn't designed for per-room moderation");
 			return this.sendReply("Before setting room mods, you need to set it up with /roomowner");
@@ -1077,7 +1083,11 @@ exports.commands = {
 		// Only show popup if: user is online and in the room, the room is public, and not a groupchat or a battle.
 		let needsPopup = targetUser && room.users[targetUser.userid] && !room.isPrivate && !room.isPersonal && !room.battle;
 
-		if (nextGroup in Config.groups && currentGroup in Config.groups && Config.groups[nextGroup].rank < Config.groups[currentGroup].rank) {
+		if (this.pmTarget && targetUser) {
+			const text = `${targetUser.name} was invited (and promoted to Room ${groupName}) by ${user.name}`;
+			room.add(`|c|${user.getIdentity(room)}|/log ${text}`).update();
+			room.modlog(text);
+		} else if (nextGroup in Config.groups && currentGroup in Config.groups && Config.groups[nextGroup].rank < Config.groups[currentGroup].rank) {
 			if (targetUser && room.users[targetUser.userid] && !Config.groups[nextGroup].modlog) {
 				// if the user can't see the demotion message (i.e. rank < %), it is shown in the chat
 				targetUser.send(">" + room.id + "\n(You were demoted to Room " + groupName + " by " + user.name + ".)");
