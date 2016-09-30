@@ -121,27 +121,19 @@ class CommandContext {
 		this.inputUsername = "";
 	}
 
-	parse(newMessage = this.message) {
-		// recursing! back up the command context
-		this.recursionDepth++;
-		if (this.recursionDepth > MAX_PARSE_RECURSION) {
-			throw new Error("Too much command recursion");
+	parse(message) {
+		if (message) {
+			// spawn subcontext
+			let subcontext = new CommandContext(this);
+			subcontext.recursionDepth++;
+			if (subcontext.recursionDepth > MAX_PARSE_RECURSION) {
+				throw new Error("Too much command recursion");
+			}
+			subcontext.message = message;
+			return subcontext.parse();
 		}
-		let {message, cmd, cmdToken, target, fullCmd} = this;
+		message = this.message;
 
-		this.message = newMessage;
-		newMessage = this.parseMessage(newMessage);
-
-		this.message = message;
-		this.cmd = cmd;
-		this.cmdToken = cmdToken;
-		this.target = target;
-		this.fullCmd = fullCmd;
-		this.recursionDepth--;
-
-		return newMessage;
-	}
-	parseMessage(message = this.message) {
 		let originalRoom = this.room;
 		if (this.room && !(this.user.userid in this.room.users)) {
 			this.room = Rooms.global;
