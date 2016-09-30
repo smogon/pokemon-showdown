@@ -2061,7 +2061,7 @@ let commands = exports.commands = {
 		}
 		let punishment = Punishments.isRoomBanned(targetUser, room.id);
 		if (punishment && punishment[0] === 'BLACKLIST') {
-			return this.errorReply("This person is already blacklisted from this room.");
+			return this.errorReply("This user is already blacklisted from this room.");
 		}
 
 		if (!target) {
