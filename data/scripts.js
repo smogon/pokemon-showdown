@@ -1913,16 +1913,16 @@ exports.BattleScripts = {
 			}
 		} else if (template.evos.length) {
 			item = (ability === 'Technician' && counter.Physical >= 4) ? 'Choice Band' : 'Eviolite';
-		} else if (hasMove['shellsmash']) {
-			item = (ability === 'Solid Rock' && counter['priority']) ? 'Weakness Policy' : 'White Herb';
-		} else if (ability === 'Magic Guard' || ability === 'Sheer Force') {
-			item = 'Life Orb';
 		} else if (hasMove['bellydrum']) {
 			item = 'Sitrus Berry';
-		} else if (ability === 'Poison Heal' || ability === 'Toxic Boost' || hasMove['facade']) {
-			item = 'Toxic Orb';
+		} else if (hasMove['shellsmash']) {
+			item = (ability === 'Solid Rock' && counter['priority']) ? 'Weakness Policy' : 'White Herb';
 		} else if (ability === 'Harvest') {
 			item = hasMove['rest'] ? 'Lum Berry' : 'Sitrus Berry';
+		} else if (ability === 'Magic Guard' || ability === 'Sheer Force') {
+			item = 'Life Orb';
+		} else if (ability === 'Poison Heal' || ability === 'Toxic Boost') {
+			item = 'Toxic Orb';
 		} else if (hasMove['rest'] && !hasMove['sleeptalk'] && ability !== 'Natural Cure' && ability !== 'Shed Skin') {
 			item = (hasMove['raindance'] && ability === 'Hydration') ? 'Damp Rock' : 'Chesto Berry';
 		} else if (hasMove['raindance']) {
@@ -1933,6 +1933,8 @@ exports.BattleScripts = {
 			item = 'Light Clay';
 		} else if (hasMove['acrobatics']) {
 			item = 'Flying Gem';
+		} else if ((ability === 'Guts' || hasMove['facade']) && !hasMove['sleeptalk']) {
+			item = hasMove['drainpunch'] ? 'Flame Orb' : 'Toxic Orb';
 		} else if (ability === 'Unburden') {
 			if (hasMove['fakeout']) {
 				item = 'Normal Gem';
@@ -1952,8 +1954,6 @@ exports.BattleScripts = {
 			}
 
 		// Medium priority
-		} else if (ability === 'Guts' && !hasMove['sleeptalk']) {
-			item = hasMove['drainpunch'] ? 'Flame Orb' : 'Toxic Orb';
 		} else if (((ability === 'Speed Boost' && !hasMove['substitute']) || (ability === 'Stance Change')) && counter.Physical + counter.Special > 2) {
 			item = 'Life Orb';
 		} else if (counter.Physical >= 4 && !hasMove['bodyslam'] && !hasMove['dragontail'] && !hasMove['fakeout'] && !hasMove['flamecharge'] && !hasMove['rapidspin'] && !hasMove['suckerpunch']) {
