@@ -22,7 +22,11 @@ class Validator {
 		if (supplementaryBanlist && supplementaryBanlist.length) {
 			format = Object.assign({}, format);
 			if (format.banlistTable) delete format.banlistTable;
-			if (!format.banlist) format.banlist = [];
+			if (format.banlist) {
+				format.banlist = format.banlist.slice();
+			} else {
+				format.banlist = [];
+			}
 			for (let i = 0; i < supplementaryBanlist.length; i++) {
 				let ban = supplementaryBanlist[i];
 				if (ban.charAt(0) === '!') {
