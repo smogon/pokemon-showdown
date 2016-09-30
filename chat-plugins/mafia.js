@@ -595,7 +595,7 @@ class Mafia extends Rooms.RoomGame {
 			this.end(MafiaData.MafiaClasses.mafia.image, 'The mafia is victorious, how awful!');
 			return;
 		} else if (!mafiaCount && (townCount === this.playerCount)) {
-			this.end(MafiaData.MafiaClasses.villager.image, 'The town has driven the mafia out succesfully!');
+			this.end(MafiaData.MafiaClasses.villager.image, 'The town has driven the mafia out successfully!');
 			return;
 		} else if (this.playerCount === 1) {
 			for (let i in this.players) {
