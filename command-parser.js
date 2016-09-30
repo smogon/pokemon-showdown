@@ -100,25 +100,25 @@ for (let file of fs.readdirSync(path.resolve(__dirname, 'chat-plugins'))) {
 
 class CommandContext {
 	constructor(options) {
-		this.message = options.message || '';
+		this.message = options.message || ``;
 		this.recursionDepth = 0;
 
 		// message context
-		this.room = options.room || null;
-		this.user = options.user || null;
-		this.connection = options.connection || null;
+		this.room = options.room;
+		this.user = options.user;
+		this.connection = options.connection;
 		this.pmTarget = options.pmTarget;
 
 		// command context
 		this.cmd = options.cmd || '';
 		this.cmdToken = options.cmdToken || '';
-		this.target = options.target || '';
-		this.fullCmd = options.fullCmd || [];
+		this.target = options.target || ``;
+		this.fullCmd = options.fullCmd || '';
 
 		// target user
 		this.targetUser = null;
-		this.targetUsername = '';
-		this.inputUsername = '';
+		this.targetUsername = "";
+		this.inputUsername = "";
 	}
 
 	parse(newMessage = this.message) {
@@ -202,14 +202,14 @@ class CommandContext {
 		if (!message || !message.trim().length) return;
 
 		// hardcoded commands
-		if (message.slice(0, 3) === '>> ') {
-			message = '/eval ' + message.slice(3);
-		} else if (message.slice(0, 4) === '>>> ') {
-			message = '/evalbattle ' + message.slice(4);
-		} else if (message.startsWith('/me') && /[^A-Za-z0-9 ]/.test(message.charAt(3))) {
-			message = '/mee ' + message.slice(3);
-		} else if (message.startsWith('/ME') && /[^A-Za-z0-9 ]/.test(message.charAt(3))) {
-			message = '/MEE ' + message.slice(3);
+		if (message.startsWith(`>> `)) {
+			message = `/eval ${message.slice(3)}`;
+		} else if (message.startsWith(`>>> `)) {
+			message = `/evalbattle ${message.slice(4)}`;
+		} else if (message.startsWith(`/me`) && /[^A-Za-z0-9 ]/.test(message.charAt(3))) {
+			message = `/mee ${message.slice(3)}`;
+		} else if (message.startsWith(`/ME`) && /[^A-Za-z0-9 ]/.test(message.charAt(3))) {
+			message = `/MEE ${message.slice(3)}`;
 		}
 
 		let cmdToken = message.charAt(0);
@@ -304,7 +304,8 @@ class CommandContext {
 		} catch (err) {
 			if (require('./crashlogger')(err, 'A chat command', {
 				user: this.user.name,
-				room: this.room.id,
+				room: this.room && this.room.id,
+				pmTarget: this.pmTarget && this.pmTarget.name,
 				message: this.message,
 			}) === 'lockdown') {
 				let ministack = Tools.escapeHTML(err.stack).split("\n").slice(0, 2).join("<br />");
