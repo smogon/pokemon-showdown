@@ -453,7 +453,7 @@ function renderGrid(questions, mode) {
 
 	buffer += '<tr>';
 	for (let c = 0; c < questions.categoryCount; ++c) {
-		buffer += '<th>' + (Tools.escapeHTML(questions.getCategory(c)) || '&nbsp;') + '</th>';
+		buffer += '<th>' + (CommandParser.escapeHTML(questions.getCategory(c)) || '&nbsp;') + '</th>';
 	}
 	buffer += '</tr>';
 
@@ -525,9 +525,9 @@ let commands = {
 
 		if (toId(target) === 'final') {
 			this.sendReplyBox(
-				"<strong>Final Category:</strong> " + Tools.escapeHTML(questions.getCategory('final') || "") + '<br />' +
-				"<strong>Final Question:</strong> " + Tools.escapeHTML(questions.getQuestion('final', 0).value || "") + '<br />' +
-				"<strong>Final Answer:</strong> " + Tools.escapeHTML(questions.getQuestion('final', 0).answer || "")
+				"<strong>Final Category:</strong> " + CommandParser.escapeHTML(questions.getCategory('final') || "") + '<br />' +
+				"<strong>Final Question:</strong> " + CommandParser.escapeHTML(questions.getQuestion('final', 0).value || "") + '<br />' +
+				"<strong>Final Answer:</strong> " + CommandParser.escapeHTML(questions.getQuestion('final', 0).answer || "")
 			);
 		} else {
 			this.sendReplyBox(renderGrid(questions, target));

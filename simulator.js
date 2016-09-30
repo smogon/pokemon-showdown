@@ -490,7 +490,7 @@ if (process.send && module === process.mainModule) {
 					if (require('./crashlogger')(err, 'A battle', {
 						message: message,
 					}) === 'lockdown') {
-						let ministack = Tools.escapeHTML(err.stack).split("\n").slice(0, 2).join("<br />");
+						let ministack = CommandParser.escapeHTML(err.stack).split("\n").slice(0, 2).join("<br />");
 						process.send(id + '\nupdate\n|html|<div class="broadcast-red"><b>A BATTLE PROCESS HAS CRASHED:</b> ' + ministack + '</div>');
 					} else {
 						process.send(id + '\nupdate\n|html|<div class="broadcast-red"><b>The battle crashed!</b><br />Don\'t worry, we\'re working on fixing it.</div>');

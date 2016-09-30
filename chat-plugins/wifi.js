@@ -140,8 +140,8 @@ class Giveaway {
 
 	generateWindow(rightSide) {
 		return `<p style="text-align:center;font-size:14pt;font-weight:bold;margin-bottom:2px;">It's giveaway time!</p>` +
-			`<p style="text-align:center;font-size:7pt;">Giveaway started by ${Tools.escapeHTML(this.host.name)}</p>` +
-			`<table style="margin-left:auto;margin-right:auto;"><tr><td style="text-align:center;width:45%">${this.sprite}<p style="font-weight:bold;">Giver: ${this.giver}</p>${Tools.escapeHTML(this.prize)}</td>` +
+			`<p style="text-align:center;font-size:7pt;">Giveaway started by ${CommandParser.escapeHTML(this.host.name)}</p>` +
+			`<table style="margin-left:auto;margin-right:auto;"><tr><td style="text-align:center;width:45%">${this.sprite}<p style="font-weight:bold;">Giver: ${this.giver}</p>${CommandParser.escapeHTML(this.prize)}</td>` +
 			`<td style="text-align:center;width:45%">${rightSide}</td></tr></table><p style="text-align:center;font-size:7pt;font-weight:bold;"><u>Note:</u> Please do not join if you don't have a 3DS and a copy of Pok&eacute;mon XY or ORAS.</p>`;
 	}
 }
@@ -224,10 +224,10 @@ class QuestionGiveaway extends Giveaway {
 				this.phase = 'ended';
 				this.clearTimer();
 				this.room.modlog(`${this.winner.name} won ${this.giver.name}'s giveaway for a "${this.prize}"`);
-				this.send(this.generateWindow(`<p style="text-align:center;font-size:12pt;"><b>${Tools.escapeHTML(this.winner.name)}</b> won the giveaway! Congratulations!</p>` +
+				this.send(this.generateWindow(`<p style="text-align:center;font-size:12pt;"><b>${CommandParser.escapeHTML(this.winner.name)}</b> won the giveaway! Congratulations!</p>` +
 				`<p style="text-align:center;">${this.question}<br/>Correct answer${checkPlural(this.answers)}: ${this.answers.join(', ')}</p>`));
-				if (this.winner.connected) this.winner.popup(`You have won the giveaway. PM **${Tools.escapeHTML(this.giver.name)}** to claim your prize!`);
-				if (this.giver.connected) this.giver.popup(`${Tools.escapeHTML(this.winner.name)} has won your question giveaway!`);
+				if (this.winner.connected) this.winner.popup(`You have won the giveaway. PM **${CommandParser.escapeHTML(this.giver.name)}** to claim your prize!`);
+				if (this.giver.connected) this.giver.popup(`${CommandParser.escapeHTML(this.winner.name)} has won your question giveaway!`);
 			}
 		}
 
@@ -331,11 +331,11 @@ class LotteryGiveaway extends Giveaway {
 			this.phase = 'ended';
 			let winnerNames = this.winners.map(winner => winner.name).join(', ');
 			this.room.modlog(`${winnerNames} won ${this.giver.name}'s giveaway for "${this.prize}"`);
-			this.send(this.generateWindow(`<p style="text-align:center;font-size:10pt;font-weight:bold;">Lottery Draw</p><p style="text-align:center;">${Object.keys(this.joined).length} users joined the giveaway.<br/>Our lucky winner${checkPlural(this.winners)}: <b>${Tools.escapeHTML(winnerNames)}!</b> Congratulations!</p>`));
+			this.send(this.generateWindow(`<p style="text-align:center;font-size:10pt;font-weight:bold;">Lottery Draw</p><p style="text-align:center;">${Object.keys(this.joined).length} users joined the giveaway.<br/>Our lucky winner${checkPlural(this.winners)}: <b>${CommandParser.escapeHTML(winnerNames)}!</b> Congratulations!</p>`));
 			for (let i = 0; i < this.winners.length; i++) {
 				if (this.winners[i].connected) this.winners[i].popup(`You have won the lottery giveaway! PM **${this.giver.name}** to claim your prize!`);
 			}
-			if (this.giver.connected) this.giver.popup(`The following users have won your lottery giveaway:\n${Tools.escapeHTML(winnerNames)}`);
+			if (this.giver.connected) this.giver.popup(`The following users have won your lottery giveaway:\n${CommandParser.escapeHTML(winnerNames)}`);
 		}
 		delete this.room.giveaway;
 	}

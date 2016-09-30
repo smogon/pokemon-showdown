@@ -49,7 +49,7 @@ exports.commands = {
 		scavengers.hints = [targets[0].trim(), targets[2].trim(), targets[4].trim()];
 		scavengers.answers = [toId(targets[1]), toId(targets[3]), toId(targets[5])];
 		scavengers.startTime = Date.now();
-		let result = (cmd === 'startofficialhunt' ? 'An official' : 'A new') + ' Scavenger Hunt has been started by <em> ' + Tools.escapeHTML(user.name) + '</em>! The first hint is: ' + Tools.escapeHTML(scavengers.hints[0]);
+		let result = (cmd === 'startofficialhunt' ? 'An official' : 'A new') + ' Scavenger Hunt has been started by <em> ' + CommandParser.escapeHTML(user.name) + '</em>! The first hint is: ' + CommandParser.escapeHTML(scavengers.hints[0]);
 		Rooms('scavengers').addRaw('<div class="broadcast-blue"><strong>' + result + '</strong></div>');
 	},
 	joinhunt: function (target, room, user) {
@@ -74,10 +74,10 @@ exports.commands = {
 			} else {
 				scavengers.finished.push(user.name);
 				let position = scavengers.finished.length;
-				let result = '<em>' + Tools.escapeHTML(user.name) + '</em> has finished the hunt ';
+				let result = '<em>' + CommandParser.escapeHTML(user.name) + '</em> has finished the hunt ';
 				result += (position === 1) ? 'and is the winner!' : (position === 2) ? 'in 2nd place!' : (position === 3) ? 'in 3rd place!' : 'in ' + position + 'th place!';
 				result += (position < 4 && scavengers.blitz ? ' [BLITZ]' : '');
-				result += ' (' + Tools.toDurationString(Date.now() - scavengers.startTime, {hhmmss: true}) + ')';
+				result += ' (' + CommandParser.toDurationString(Date.now() - scavengers.startTime, {hhmmss: true}) + ')';
 				Rooms('scavengers').addRaw('<div class="broadcast-blue"><strong>' + result + '</strong></div>');
 			}
 		} else {
@@ -98,7 +98,7 @@ exports.commands = {
 				let uptimeHours = Math.floor(uptime / (60 * 60)) - uptimeDays * 24;
 				if (uptimeHours) uptimeText += ", " + uptimeHours + " " + (uptimeHours === 1 ? "hour" : "hours");
 			} else {
-				uptimeText = Tools.toDurationString(uptime * 1000);
+				uptimeText = CommandParser.toDurationString(uptime * 1000);
 			}
 			this.sendReply('The current scavenger hunt has be up for: ' + uptimeText);
 			if (scavengers.finished.length) {
@@ -120,16 +120,16 @@ exports.commands = {
 		let second = scavengers.finished[1];
 		let third = scavengers.finished[2];
 		let consolation = scavengers.finished.slice(3).join(', ');
-		let msg = 'The Scavenger Hunt was ended by <em>' + Tools.escapeHTML(user.name) + '</em>. ';
+		let msg = 'The Scavenger Hunt was ended by <em>' + CommandParser.escapeHTML(user.name) + '</em>. ';
 		if (winner) {
-			msg += '<br />Winner: <em>' + Tools.escapeHTML(winner) + '</em>.';
-			if (second) msg += ' Second place: <em>' + Tools.escapeHTML(second) + '</em>.';
-			if (third) msg += ' Third place: <em>' + Tools.escapeHTML(third) + '</em>.';
-			if (consolation) msg += ' Consolation prize to: ' + Tools.escapeHTML(consolation) + '.';
+			msg += '<br />Winner: <em>' + CommandParser.escapeHTML(winner) + '</em>.';
+			if (second) msg += ' Second place: <em>' + CommandParser.escapeHTML(second) + '</em>.';
+			if (third) msg += ' Third place: <em>' + CommandParser.escapeHTML(third) + '</em>.';
+			if (consolation) msg += ' Consolation prize to: ' + CommandParser.escapeHTML(consolation) + '.';
 		} else {
 			msg += 'No user has completed the hunt.';
 		}
-		msg += '<br />Solution: ' + Tools.escapeHTML(scavengers.answers.join(', ')) + '.';
+		msg += '<br />Solution: ' + CommandParser.escapeHTML(scavengers.answers.join(', ')) + '.';
 		scavengers.result = msg;
 		this.parse('/resethunt');
 	},
@@ -147,7 +147,7 @@ exports.commands = {
 		if (scavengers.result) {
 			Rooms('scavengers').addRaw('<div class="broadcast-blue"><strong>' + scavengers.result + '</strong></div>');
 		} else {
-			Rooms('scavengers').addRaw('<div class="broadcast-blue"><strong>The Scavenger Hunt was reset by <em>' + Tools.escapeHTML(user.name) + '</em>.</strong></div>');
+			Rooms('scavengers').addRaw('<div class="broadcast-blue"><strong>The Scavenger Hunt was reset by <em>' + CommandParser.escapeHTML(user.name) + '</em>.</strong></div>');
 		}
 		scavengers.result = null;
 	},

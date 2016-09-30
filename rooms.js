@@ -978,7 +978,7 @@ class BattleRoom extends Room {
 		logData.timestamp = '' + date;
 		logData.id = this.id;
 		logData.format = this.format;
-		const logsubfolder = Tools.toTimeStamp(date).split(' ')[0];
+		const logsubfolder = CommandParser.toTimestamp(date).split(' ')[0];
 		const logfolder = logsubfolder.split('-', 2).join('-');
 
 		let curpath = 'logs/' + logfolder;
@@ -1316,7 +1316,7 @@ class ChatRoom extends Room {
 		if (Config.logchat) {
 			this.rollLogFile(true);
 			this.logEntry = function (entry, date) {
-				const timestamp = Tools.toTimeStamp(new Date()).split(' ')[1] + ' ';
+				const timestamp = CommandParser.toTimestamp(new Date()).split(' ')[1] + ' ';
 				entry = entry.replace(/<img[^>]* src="data:image\/png;base64,[^">]+"[^>]*>/g, '');
 				this.logFile.write(timestamp + entry + '\n');
 			};
@@ -1359,7 +1359,7 @@ class ChatRoom extends Room {
 		let date = new Date();
 		let basepath = 'logs/chat/' + this.id + '/';
 		mkdir(basepath, '0755', () => {
-			const dateString = Tools.toTimeStamp(date).split(' ')[0];
+			const dateString = CommandParser.toTimestamp(date).split(' ')[0];
 			let path = dateString.split('-', 2).join('-');
 			mkdir(basepath + path, '0755', () => {
 				if (this.destroyingLog) return;

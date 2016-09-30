@@ -716,59 +716,6 @@ module.exports = (() => {
 		return num;
 	};
 
-	Tools.prototype.escapeHTML = function (str) {
-		if (!str) return '';
-		return ('' + str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;').replace(/\//g, '&#x2f;');
-	};
-
-	Tools.prototype.html = function (strings) {
-		let buf = strings[0];
-		for (let i = 1; i < arguments.length; i++) {
-			buf += moddedTools.base.escapeHTML(arguments[i]);
-			buf += strings[i];
-		}
-		return buf;
-	};
-	Tools.prototype.plural = function (num, plural, singular) {
-		if (!plural) plural = 's';
-		if (!singular) singular = '';
-		if (num && typeof num.length === 'number') {
-			num = num.length;
-		} else if (num && typeof num.size === 'number') {
-			num = num.size;
-		} else {
-			num = Number(num);
-		}
-		return (num !== 1 ? plural : singular);
-	};
-
-	Tools.prototype.toTimeStamp = function (date, options) {
-		// Return a timestamp in the form {yyyy}-{MM}-{dd} {hh}:{mm}:{ss}.
-		// Optionally reports hours in mod-12 format.
-		const isHour12 = options && options.hour12;
-		let parts = [date.getFullYear(), date.getMonth() + 1, date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()];
-		if (isHour12) {
-			parts.push(parts[3] >= 12 ? 'pm' : 'am');
-			parts[3] = parts[3] % 12 || 12;
-		}
-		parts = parts.map(val => val < 10 ? '0' + val : '' + val);
-		return parts.slice(0, 3).join("-") + " " + parts.slice(3, 6).join(":") + (isHour12 ? " " + parts[6] : "");
-	};
-
-	Tools.prototype.toDurationString = function (number, options) {
-		// TODO: replace by Intl.DurationFormat or equivalent when it becomes available (ECMA-402)
-		// https://github.com/tc39/ecma402/issues/47
-		const date = new Date(+number);
-		const parts = [date.getUTCFullYear() - 1970, date.getUTCMonth(), date.getUTCDate() - 1, date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds()];
-		const unitNames = ["second", "minute", "hour", "day", "month", "year"];
-		const positiveIndex = parts.findIndex(elem => elem > 0);
-		if (options && options.hhmmss) {
-			let string = parts.slice(positiveIndex).map(value => value < 10 ? "0" + value : "" + value).join(":");
-			return string.length === 2 ? "00:" + string : string;
-		}
-		return parts.slice(positiveIndex).reverse().map((value, index) => value ? value + " " + unitNames[index] + (value > 1 ? "s" : "") : "").reverse().join(" ").trim();
-	};
-
 	Tools.prototype.dataSearch = function (target, searchIn, isInexact) {
 		if (!target) {
 			return false;

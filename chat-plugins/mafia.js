@@ -49,10 +49,10 @@ class MafiaPlayer extends Rooms.RoomGamePlayer {
 	kill(flavorText) {
 		if (this.invincible) return;
 
-		let message = flavorText + '<br/>' + Tools.escapeHTML(this.name + ', the ' + this.class.name) + ' lies dead on the ground.';
+		let message = flavorText + '<br/>' + CommandParser.escapeHTML(this.name + ', the ' + this.class.name) + ' lies dead on the ground.';
 
 		if (this.allowWills && this.will) {
-			message += '<br/>' + Tools.escapeHTML(this.name) + '\'s will: ' + Tools.escapeHTML(this.will);
+			message += '<br/>' + CommandParser.escapeHTML(this.name) + '\'s will: ' + CommandParser.escapeHTML(this.will);
 		}
 
 		this.game.announcementWindow(deadImage, message);
@@ -64,9 +64,9 @@ class MafiaPlayer extends Rooms.RoomGamePlayer {
 
 	eliminate() {
 		if (this.game.gamestate === 'pregame') {
-			this.game.announcementWindow('', Tools.escapeHTML(this.name) + ' was kicked from the game.');
+			this.game.announcementWindow('', CommandParser.escapeHTML(this.name) + ' was kicked from the game.');
 		} else {
-			this.game.announcementWindow(deadImage, Tools.escapeHTML(this.name + ', the ' + this.class.name) + ' was eliminated from the game.');
+			this.game.announcementWindow(deadImage, CommandParser.escapeHTML(this.name + ', the ' + this.class.name) + ' was eliminated from the game.');
 		}
 		this.game.playerCount--;
 		this.game.dead.push(this.name);
@@ -79,14 +79,14 @@ class MafiaPlayer extends Rooms.RoomGamePlayer {
 	}
 
 	getRole() {
-		this.sendRoom('|html|' + this.game.mafiaWindow(this.class.image, Tools.escapeHTML(this.class.flavorText)));
+		this.sendRoom('|html|' + this.game.mafiaWindow(this.class.image, CommandParser.escapeHTML(this.class.flavorText)));
 	}
 
 	targetWindow(image, content, update) {
 		let output = content;
 		output += '<br/><p>Who do you wish to target?</p>';
 		for (let i in this.validTargets) {
-			output += '<button value="/choose target ' + this.validTargets[i].userid + '" name="send">' + Tools.escapeHTML(this.validTargets[i].name) + '</button>';
+			output += '<button value="/choose target ' + this.validTargets[i].userid + '" name="send">' + CommandParser.escapeHTML(this.validTargets[i].name) + '</button>';
 		}
 		output += '<button value="/choose target none" name="send">Nobody</button>';
 
@@ -99,7 +99,7 @@ class MafiaPlayer extends Rooms.RoomGamePlayer {
 
 	updateTarget(image) {
 		if (this.target) {
-			this.targetWindow(image, 'Targeting ' + Tools.escapeHTML(this.target.name) + '!<br/>', true);
+			this.targetWindow(image, 'Targeting ' + CommandParser.escapeHTML(this.target.name) + '!<br/>', true);
 		} else {
 			this.targetWindow(image, 'You chose to not target anybody.<br/>', true);
 		}
@@ -109,7 +109,7 @@ class MafiaPlayer extends Rooms.RoomGamePlayer {
 		let output = content;
 		output += '<br/><p>Who do you wish to vote for?</p>';
 		for (let i in this.validVotes) {
-			output += '<button value="/choose vote ' + this.validVotes[i].userid + '" name="send">' + Tools.escapeHTML(this.validVotes[i].name) + '</button>';
+			output += '<button value="/choose vote ' + this.validVotes[i].userid + '" name="send">' + CommandParser.escapeHTML(this.validVotes[i].name) + '</button>';
 		}
 		output += '<button value="/choose vote none" name="send">Abstain</button>';
 
@@ -355,7 +355,7 @@ class Mafia extends Rooms.RoomGame {
 		let temp = Object.values(this.players);
 		let output = '<div class="broadcast-blue"><center><h2>A game of mafia has been made!</h2><p>Participants (' + (this.playerCap - temp.length) + ' needed): </p>';
 		for (let i = 0; i < temp.length; i++) {
-			output += Tools.escapeHTML(temp[i].name);
+			output += CommandParser.escapeHTML(temp[i].name);
 			if (i < temp.length - 1) {
 				output += ', ';
 			}
@@ -416,11 +416,11 @@ class Mafia extends Rooms.RoomGame {
 			}
 		}
 
-		let content = '<strong>Roles:</strong> ' + this.roleString + '<br/><strong>Alive:</strong> ' + Tools.escapeHTML(alive.join(', ')) + '<br/><strong>Dead:</strong> ' + Tools.escapeHTML(this.dead.join(', '));
+		let content = '<strong>Roles:</strong> ' + this.roleString + '<br/><strong>Alive:</strong> ' + CommandParser.escapeHTML(alive.join(', ')) + '<br/><strong>Dead:</strong> ' + CommandParser.escapeHTML(this.dead.join(', '));
 
 		for (let i in this.players) {
 			if (this.players[i].class.side === 'mafia') {
-				this.players[i].sendRoom('|html|' + this.mafiaWindow(this.players[i].class.image, content + '<br/><strong>Mafia:</strong> ' + Tools.escapeHTML(mafia.join(', '))));
+				this.players[i].sendRoom('|html|' + this.mafiaWindow(this.players[i].class.image, content + '<br/><strong>Mafia:</strong> ' + CommandParser.escapeHTML(mafia.join(', '))));
 			} else {
 				this.players[i].sendRoom('|html|' + this.mafiaWindow(this.players[i].class.image, content));
 			}
@@ -430,7 +430,7 @@ class Mafia extends Rooms.RoomGame {
 	updateVotes() {
 		let text = '';
 		for (let i in this.currentVote) {
-			text += (i === 'none' ? 'Abstain' : Tools.escapeHTML(this.players[i].name)) + ': ';
+			text += (i === 'none' ? 'Abstain' : CommandParser.escapeHTML(this.players[i].name)) + ': ';
 			if (this.anonVotes) {
 				text += this.currentVote[i].votes + ' votes.';
 			} else {
@@ -535,9 +535,9 @@ class Mafia extends Rooms.RoomGame {
 						}
 						let output;
 						if (player.target) {
-							output = Tools.escapeHTML(player.toExecute(player.target));
+							output = CommandParser.escapeHTML(player.toExecute(player.target));
 						} else {
-							output = Tools.escapeHTML(player.toExecute());
+							output = CommandParser.escapeHTML(player.toExecute());
 						}
 
 						if (output) {
@@ -678,7 +678,7 @@ class Mafia extends Rooms.RoomGame {
 			if (this.voters.length === 1) {
 				flavorText += 'As the only live member of the mafia, you have to be careful. Not careful enough to stop killing, though.';
 			} else if (this.voters.length === 2) {
-				flavorText += 'You sit down with the only other member of the mafia, ' + (i === 0 ? Tools.escapeHTML(this.voters[1].name) : Tools.escapeHTML(this.voters[0].name)) + '.';
+				flavorText += 'You sit down with the only other member of the mafia, ' + (i === 0 ? CommandParser.escapeHTML(this.voters[1].name) : CommandParser.escapeHTML(this.voters[0].name)) + '.';
 			} else {
 				flavorText += 'You sit down with the other members of the mafia, ';
 				for (let j = 0; i < this.voters.length; i++) {
@@ -688,7 +688,7 @@ class Mafia extends Rooms.RoomGame {
 						} else {
 							flavorText += ', ';
 						}
-						flavorText += Tools.escapeHTML(this.voters[i].name);
+						flavorText += CommandParser.escapeHTML(this.voters[i].name);
 					}
 				}
 			}
@@ -756,11 +756,11 @@ exports.commands = {
 
 				for (let i in targetObj.classes) {
 					if (!MafiaData.MafiaClasses[i]) {
-						return this.errorReply(Tools.escapeHTML(i) + " is not a valid mafia class.");
+						return this.errorReply(CommandParser.escapeHTML(i) + " is not a valid mafia class.");
 					}
 
 					let amt = parseInt(Tools.getString(targetObj.classes[i]));
-					if (isNaN(amt) || amt < 0 || amt > 25) return this.errorReply("Invalid amount for class " + Tools.escapeHTML(i));
+					if (isNaN(amt) || amt < 0 || amt > 25) return this.errorReply("Invalid amount for class " + CommandParser.escapeHTML(i));
 
 					for (let j = 0; j < amt; j++) {
 						roleList.push(i);
@@ -791,7 +791,7 @@ exports.commands = {
 
 				for (let i = 0; i < params.length; i++) {
 					if (!MafiaData.MafiaClasses[params[i]]) {
-						return this.errorReply(Tools.escapeHTML(params[i]) + " is not a valid mafia class.");
+						return this.errorReply(CommandParser.escapeHTML(params[i]) + " is not a valid mafia class.");
 					}
 				}
 
@@ -842,14 +842,14 @@ exports.commands = {
 
 				if (!target.length) {
 					if (will) {
-						return this.sendReply("Your will is: " + Tools.escapeHTML(will));
+						return this.sendReply("Your will is: " + CommandParser.escapeHTML(will));
 					} else {
 						return this.sendReply("You don't have a will set.");
 					}
 				}
 
 				room.game.players[user.userid].will = target;
-				this.sendReply("Will set to: " + Tools.escapeHTML(target));
+				this.sendReply("Will set to: " + CommandParser.escapeHTML(target));
 			} else {
 				this.errorReply("Wills are not allowed in this game.");
 			}
