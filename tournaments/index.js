@@ -1156,6 +1156,7 @@ let commands = {
 	},
 };
 
+Chat.loadCommands();
 Chat.commands.tour = 'tournament';
 Chat.commands.tours = 'tournament';
 Chat.commands.tournaments = 'tournament';
