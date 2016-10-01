@@ -25,6 +25,8 @@ To reload chat commands:
 
 'use strict';
 
+let Chat = module.exports;
+
 const MAX_MESSAGE_LENGTH = 300;
 
 const BROADCAST_COOLDOWN = 20 * 1000;
@@ -76,24 +78,14 @@ class PatternTester {
 	}
 }
 
-exports.multiLinePattern = new PatternTester();
+Chat.multiLinePattern = new PatternTester();
 
 /*********************************************************
  * Load command files
  *********************************************************/
 
-let baseCommands = exports.baseCommands = require('./commands').commands;
-let commands = exports.commands = Object.assign({}, baseCommands);
-
-// Install plug-in commands
-
-// info always goes first so other plugins can shadow it
-Object.assign(commands, require('./chat-plugins/info').commands);
-
-for (let file of fs.readdirSync(path.resolve(__dirname, 'chat-plugins'))) {
-	if (file.substr(-3) !== '.js' || file === 'info.js') continue;
-	Object.assign(commands, require('./chat-plugins/' + file).commands);
-}
+Chat.baseCommands = undefined;
+Chat.commands = undefined;
 
 /*********************************************************
  * Parser
@@ -221,7 +213,7 @@ class CommandContext {
 			target = '';
 		}
 
-		let curCommands = commands;
+		let curCommands = Chat.commands;
 		let commandHandler;
 		let fullCmd = cmd;
 
@@ -291,7 +283,7 @@ class CommandContext {
 		return commandHandler;
 	}
 	run(commandHandler) {
-		if (typeof commandHandler === 'string') commandHandler = commands[commandHandler];
+		if (typeof commandHandler === 'string') commandHandler = Chat.commands[commandHandler];
 		let result;
 		try {
 			result = commandHandler.call(this, this.target, this.room, this.user, this.connection, this.cmd, this.message);
@@ -782,7 +774,7 @@ class CommandContext {
 		return target.substr(commaIndex + 1).trim();
 	}
 }
-exports.CommandContext = CommandContext;
+Chat.CommandContext = CommandContext;
 
 /**
  * Command parser
@@ -811,19 +803,16 @@ exports.CommandContext = CommandContext;
  * @param {User} user - the user that sent the message
  * @param {Connection} connection - the connection the user sent the message from
  */
-exports.parse = function (message, room, user, connection) {
+Chat.parse = function (message, room, user, connection) {
+	Chat.loadCommands();
 	let context = new CommandContext({message, room, user, connection});
 
 	return context.parse();
 };
 
-exports.package = {};
-fs.readFile(path.resolve(__dirname, 'package.json'), (err, data) => {
-	if (err) return;
-	exports.package = JSON.parse(data);
-});
+Chat.package = {};
 
-exports.uncacheTree = function (root) {
+Chat.uncacheTree = function (root) {
 	let uncache = [require.resolve(root)];
 	do {
 		let newuncache = [];
@@ -841,13 +830,35 @@ exports.uncacheTree = function (root) {
 	} while (uncache.length > 0);
 };
 
+Chat.loadCommands = function () {
+	if (Chat.commands) return;
+
+	fs.readFile(path.resolve(__dirname, 'package.json'), (err, data) => {
+		if (err) return;
+		Chat.package = JSON.parse(data);
+	});
+
+	let baseCommands = Chat.baseCommands = require('./commands').commands;
+	let commands = Chat.commands = Object.assign({}, baseCommands);
+
+	// Install plug-in commands
+
+	// info always goes first so other plugins can shadow it
+	Object.assign(commands, require('./chat-plugins/info').commands);
+
+	for (let file of fs.readdirSync(path.resolve(__dirname, 'chat-plugins'))) {
+		if (file.substr(-3) !== '.js' || file === 'info.js') continue;
+		Object.assign(commands, require('./chat-plugins/' + file).commands);
+	}
+};
+
 /**
  * Escapes HTML in a string.
  *
  * @param  {string} str
  * @return {string}
  */
-exports.escapeHTML = function (str) {
+Chat.escapeHTML = function (str) {
 	if (!str) return '';
 	return ('' + str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;').replace(/\//g, '&#x2f;');
 };
@@ -859,7 +870,7 @@ exports.escapeHTML = function (str) {
  * @param  {...any} values
  * @return {string}
  */
-exports.html = function (strings) {
+Chat.html = function (strings) {
 	let buf = strings[0];
 	for (let i = 1; i < arguments.length; i++) {
 		buf += Chat.escapeHTML(arguments[i]);
@@ -878,7 +889,7 @@ exports.html = function (strings) {
  * @param  {?string} singular
  * @return {string}
  */
-exports.plural = function (num, plural = 's', singular = '') {
+Chat.plural = function (num, plural = 's', singular = '') {
 	if (num && typeof num.length === 'number') {
 		num = num.length;
 	} else if (num && typeof num.size === 'number') {
@@ -898,7 +909,7 @@ exports.plural = function (num, plural = 's', singular = '') {
  * @param  {object} options
  * @return {string}
  */
-exports.toTimestamp = function (date, options) {
+Chat.toTimestamp = function (date, options) {
 	const isHour12 = options && options.hour12;
 	let parts = [date.getFullYear(), date.getMonth() + 1, date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()];
 	if (isHour12) {
@@ -918,7 +929,7 @@ exports.toTimestamp = function (date, options) {
  * @param  {object} options
  * @return {string}
  */
-exports.toDurationString = function (number, options) {
+Chat.toDurationString = function (number, options) {
 	// TODO: replace by Intl.DurationFormat or equivalent when it becomes available (ECMA-402)
 	// https://github.com/tc39/ecma402/issues/47
 	const date = new Date(+number);
