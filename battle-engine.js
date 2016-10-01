@@ -1062,7 +1062,7 @@ class BattlePokemon {
 			if (oldAbility in {multitype:1, stancechange:1}) return false;
 		}
 		this.battle.singleEvent('End', this.battle.getAbility(oldAbility), this.abilityData, this, source, effect);
-		if (this.battle.effect && this.battle.effect.id in {entrainment:1, roleplay:1, simplebeam:1, worryseed:1}) {
+		if (this.battle.effect && this.battle.effect.effectType === 'Move') {
 			this.battle.add('-endability', this, this.battle.getAbility(oldAbility), '[from] move: ' + this.battle.getMove(this.battle.effect.id));
 		}
 		this.ability = ability.id;
