@@ -272,11 +272,11 @@ class Ladder {
 
 				let reasons = '' + (Math.round(p1newElo) - Math.round(p1elo)) + ' for ' + (p1score > 0.9 ? 'winning' : (p1score < 0.1 ? 'losing' : 'tying'));
 				if (reasons.charAt(0) !== '-') reasons = '+' + reasons;
-				room.addRaw(CommandParser.html`${p1name}'s rating: ${Math.round(p1elo)} &rarr; <strong>${Math.round(p1newElo)}</strong><br />(${reasons})`);
+				room.addRaw(Chat.html`${p1name}'s rating: ${Math.round(p1elo)} &rarr; <strong>${Math.round(p1newElo)}</strong><br />(${reasons})`);
 
 				reasons = '' + (Math.round(p2newElo) - Math.round(p2elo)) + ' for ' + (p1score > 0.9 ? 'losing' : (p1score < 0.1 ? 'winning' : 'tying'));
 				if (reasons.charAt(0) !== '-') reasons = '+' + reasons;
-				room.addRaw(CommandParser.html`${p2name}'s rating: ${Math.round(p2elo)} &rarr; <strong>${Math.round(p2newElo)}</strong><br />(${reasons})`);
+				room.addRaw(Chat.html`${p2name}'s rating: ${Math.round(p2elo)} &rarr; <strong>${Math.round(p2newElo)}</strong><br />(${reasons})`);
 
 				room.update();
 			} catch (e) {

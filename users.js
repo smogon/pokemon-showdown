@@ -1349,7 +1349,7 @@ class User {
 		if (message.substr(0, 16) === '/cmd userdetails') {
 			// certain commands are exempt from the queue
 			Monitor.activeIp = connection.ip;
-			CommandParser.parse(message, room, this, connection);
+			Chat.parse(message, room, this, connection);
 			Monitor.activeIp = null;
 			return false; // but end the loop here
 		}
@@ -1375,7 +1375,7 @@ class User {
 		} else {
 			this.lastChatMessage = now;
 			Monitor.activeIp = connection.ip;
-			CommandParser.parse(message, room, this, connection);
+			Chat.parse(message, room, this, connection);
 			Monitor.activeIp = null;
 		}
 	}
@@ -1395,7 +1395,7 @@ class User {
 		let room = Rooms(roomid);
 		if (room) {
 			Monitor.activeIp = connection.ip;
-			CommandParser.parse(message, room, this, connection);
+			Chat.parse(message, room, this, connection);
 			Monitor.activeIp = null;
 		} else {
 			// room is expired, do nothing
@@ -1541,7 +1541,7 @@ Users.socketReceive = function (worker, workerid, socketid, message) {
 
 	const room = Rooms(roomId);
 	if (!room) return;
-	if (CommandParser.multiLinePattern.test(message)) {
+	if (Chat.multiLinePattern.test(message)) {
 		user.chat(message, room, connection);
 		return;
 	}

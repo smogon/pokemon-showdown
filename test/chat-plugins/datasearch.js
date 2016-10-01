@@ -17,8 +17,8 @@ describe('Learn', function () {
 
 			const cmdText1 = '!learn nidoking, counter';
 			const cmdText2 = '!gsclearn nidoking, counter';
-			CommandParser.parse(cmdText1, room, user, user.connections[0]).then(() => {
-				return CommandParser.parse(cmdText2, room, user, user.connections[0]);
+			Chat.parse(cmdText1, room, user, user.connections[0]).then(() => {
+				return Chat.parse(cmdText2, room, user, user.connections[0]);
 			}).then(() => {
 				room.update();
 				const logEntry = room.log[room.log.length - 1];

@@ -955,7 +955,7 @@ let commands = {
 		getusers: function (tournament) {
 			if (!this.runBroadcast()) return;
 			let users = usersToNames(tournament.generator.getUsers(true).sort());
-			this.sendReplyBox("<strong>" + users.length + " users remain in this tournament:</strong><br />" + CommandParser.escapeHTML(users.join(", ")));
+			this.sendReplyBox("<strong>" + users.length + " users remain in this tournament:</strong><br />" + Chat.escapeHTML(users.join(", ")));
 		},
 		getupdate: function (tournament, user) {
 			tournament.updateFor(user);
@@ -1156,10 +1156,10 @@ let commands = {
 	},
 };
 
-CommandParser.commands.tour = 'tournament';
-CommandParser.commands.tours = 'tournament';
-CommandParser.commands.tournaments = 'tournament';
-CommandParser.commands.tournament = function (paramString, room, user) {
+Chat.commands.tour = 'tournament';
+Chat.commands.tours = 'tournament';
+Chat.commands.tournaments = 'tournament';
+Chat.commands.tournament = function (paramString, room, user) {
 	let cmdParts = paramString.split(' ');
 	let cmd = cmdParts.shift().trim().toLowerCase();
 	let params = cmdParts.join(' ').split(',').map(param => param.trim());
@@ -1245,7 +1245,7 @@ CommandParser.commands.tournament = function (paramString, room, user) {
 			this.privateModCommand("(" + user.name + " created a tournament in " + tour.format + " format.)");
 			if (room.tourAnnouncements) {
 				let tourRoom = Rooms.search(Config.tourroom || 'tournaments');
-				if (tourRoom && tourRoom !== room) tourRoom.addRaw('<div class="infobox"><a href="/' + room.id + '" class="ilink"><strong>' + CommandParser.escapeHTML(Tools.getFormat(tour.format).name) + '</strong> tournament created in <strong>' + CommandParser.escapeHTML(room.title) + '</strong>.</a></div>').update();
+				if (tourRoom && tourRoom !== room) tourRoom.addRaw('<div class="infobox"><a href="/' + room.id + '" class="ilink"><strong>' + Chat.escapeHTML(Tools.getFormat(tour.format).name) + '</strong> tournament created in <strong>' + Chat.escapeHTML(room.title) + '</strong>.</a></div>').update();
 			}
 		}
 	} else {
@@ -1284,7 +1284,7 @@ CommandParser.commands.tournament = function (paramString, room, user) {
 		}
 	}
 };
-CommandParser.commands.tournamenthelp = function (target, room, user) {
+Chat.commands.tournamenthelp = function (target, room, user) {
 	if (!this.runBroadcast()) return;
 	return this.sendReplyBox(
 		"- create/new &lt;format>, &lt;type> [, &lt;comma-separated arguments>]: Creates a new tournament in the current room.<br />" +
