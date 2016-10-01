@@ -5023,6 +5023,28 @@ let Battle = (() => {
 			break;
 		}
 
+		case 'evalbattle': {
+			if (!this.evalbattle) {
+				this.evalbattle = true;
+				this.add('html', '<div class="broadcast-red">This battle has been manipulated by the System Operators.</div>');
+			}
+			/* eslint-disable no-eval, no-unused-vars */
+			let battle = this;
+			let p1 = this.p1;
+			let p2 = this.p2;
+			let p1active = p1 ? p1.active[0] : null;
+			let p2active = p2 ? p2.active[0] : null;
+			let target = data.slice(3).join('|').replace(/\f/g, '\n');
+			this.send('evalbattle', [data[2], '>>> ' + target]);
+			try {
+				this.send('evalbattle', [data[2], '<<< ' + eval(target)]);
+			} catch (e) {
+				this.send('evalbattle', [data[2], '<<< error: ' + e.message]);
+			}
+			/* eslint-enable no-eval, no-unused-vars */
+			break;
+		}
+
 		default:
 		// unhandled
 		}
