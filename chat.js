@@ -179,6 +179,9 @@ class CommandContext {
 				let buf = `|pm|${this.user.getIdentity()}|${this.pmTarget.getIdentity()}|${message}`;
 				this.user.send(buf);
 				if (this.pmTarget !== this.user) this.pmTarget.send(buf);
+
+				this.pmTarget.lastPM = this.user.userid;
+				this.user.lastPM = this.pmTarget.userid;
 			} else {
 				this.room.add(`|c|${this.user.getIdentity(this.room.id)}|${message}`);
 			}
