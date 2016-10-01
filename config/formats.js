@@ -740,14 +740,14 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
-		name: "[Gen 3] NU",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3503418/\">ADV NU</a>"],
+		name: "[Gen 4] NU",
+		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3512254/\">DPP NU</a>"],
 		section: "RoA Spotlight",
 		column: 3,
 
-		mod: 'gen3',
-		ruleset: ['[Gen 3] OU'],
-		banlist: ['OU', 'BL', 'UU'],
+		mod: 'gen4',
+		ruleset: ['[Gen 4] UU'],
+		banlist: ['BL2'],
 	},
 
 	// BW2 Singles
