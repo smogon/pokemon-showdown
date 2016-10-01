@@ -94,14 +94,14 @@ class Ladder {
 					let act = (p1score > 0.9 ? `winning` : (p1score < 0.1 ? `losing` : `tying`));
 					let reasons = `${elo - oldelo} for ${act}`;
 					if (reasons.charAt(0) !== '-') reasons = '+' + reasons;
-					room.addRaw(CommandParser.html`${p1name}'s rating: ${oldelo} &rarr; <strong>${elo}</strong><br />(${reasons})`);
+					room.addRaw(Chat.html`${p1name}'s rating: ${oldelo} &rarr; <strong>${elo}</strong><br />(${reasons})`);
 
 					oldelo = Math.round(p2rating.oldelo);
 					elo = Math.round(p2rating.elo);
 					act = (p1score > 0.9 ? `losing` : (p1score < 0.1 ? `winning` : `tying`));
 					reasons = `${elo - oldelo} for ${act}`;
 					if (reasons.charAt(0) !== '-') reasons = '+' + reasons;
-					room.addRaw(CommandParser.html`${p2name}'s rating: ${oldelo} &rarr; <strong>${elo}</strong><br />(${reasons})`);
+					room.addRaw(Chat.html`${p2name}'s rating: ${oldelo} &rarr; <strong>${elo}</strong><br />(${reasons})`);
 
 					let p1 = Users.getExact(p1name);
 					if (p1) p1.mmrCache[formatid] = +p1rating.elo;

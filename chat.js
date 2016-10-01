@@ -1,8 +1,9 @@
 /**
- * Command parser
+ * Chat
  * Pokemon Showdown - http://pokemonshowdown.com/
  *
- * This is the command parser. Call it with CommandParser.parse
+ * This handles chat and chat commands sent from users to chatrooms
+ * and PMs. The main function you're lookoing for is Chat.parse
  * (scroll down to its definition for details)
  *
  * Individual commands are put in:
@@ -301,7 +302,7 @@ class CommandContext {
 				pmTarget: this.pmTarget && this.pmTarget.name,
 				message: this.message,
 			}) === 'lockdown') {
-				let ministack = CommandParser.escapeHTML(err.stack).split("\n").slice(0, 2).join("<br />");
+				let ministack = Chat.escapeHTML(err.stack).split("\n").slice(0, 2).join("<br />");
 				if (Rooms.lobby) Rooms.lobby.send('|html|<div class="broadcast-red"><b>POKEMON SHOWDOWN HAS CRASHED:</b> ' + ministack + '</div>');
 			} else {
 				this.sendReply('|html|<div class="broadcast-red"><b>Pokemon Showdown crashed!</b><br />Don\'t worry, we\'re working on fixing it.</div>');
@@ -398,7 +399,7 @@ class CommandContext {
 			let prefix = '|pm|' + this.user.getIdentity() + '|' + this.pmTarget.getIdentity() + '|/error ';
 			this.connection.send(prefix + message.replace(/\n/g, prefix));
 		} else {
-			this.sendReply('|html|<div class="message-error">' + CommandParser.escapeHTML(message).replace(/\n/g, '<br />') + '</div>');
+			this.sendReply('|html|<div class="message-error">' + Chat.escapeHTML(message).replace(/\n/g, '<br />') + '</div>');
 		}
 	}
 	addBox(html) {
@@ -787,16 +788,16 @@ exports.CommandContext = CommandContext;
  * Command parser
  *
  * Usage:
- *   CommandParser.parse(message, room, user, connection)
+ *   Chat.parse(message, room, user, connection)
  *
  * Parses the message. If it's a command, the commnad is executed, if
  * not, it's displayed directly in the room.
  *
  * Examples:
- *   CommandParser.parse("/join lobby", room, user, connection)
+ *   Chat.parse("/join lobby", room, user, connection)
  *     will make the user join the lobby.
  *
- *   CommandParser.parse("Hi, guys!", room, user, connection)
+ *   Chat.parse("Hi, guys!", room, user, connection)
  *     will return "Hi, guys!" if the user isn't muted, or
  *     if he's muted, will warn him that he's muted.
  *
@@ -861,7 +862,7 @@ exports.escapeHTML = function (str) {
 exports.html = function (strings) {
 	let buf = strings[0];
 	for (let i = 1; i < arguments.length; i++) {
-		buf += CommandParser.escapeHTML(arguments[i]);
+		buf += Chat.escapeHTML(arguments[i]);
 		buf += strings[i];
 	}
 	return buf;

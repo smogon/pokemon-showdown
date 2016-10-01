@@ -25,18 +25,18 @@ exports.commands = {
 		if (target === 'off' || target === 'disable' || target === 'reset') {
 			if (!room.chatRoomData.quote) return this.sendReply("The Quote of the Day has already been reset.");
 			delete room.chatRoomData.quote;
-			this.sendReply("The Quote of the Day was reset by " + CommandParser.escapeHTML(user.name) + ".");
+			this.sendReply("The Quote of the Day was reset by " + Chat.escapeHTML(user.name) + ".");
 			this.logModCommand(user.name + " reset the Quote of the Day.");
 			Rooms.global.writeChatRoomData();
 			return;
 		}
-		room.chatRoomData.quote = CommandParser.escapeHTML(target);
+		room.chatRoomData.quote = Chat.escapeHTML(target);
 		Rooms.global.writeChatRoomData();
 		room.addRaw(
-			"<div class=\"broadcast-blue\"><strong>The Inspirational Quote of the Day has been updated by " + CommandParser.escapeHTML(user.name) + ".</strong><br />" +
+			"<div class=\"broadcast-blue\"><strong>The Inspirational Quote of the Day has been updated by " + Chat.escapeHTML(user.name) + ".</strong><br />" +
 			"Quote: " + room.chatRoomData.quote + "</div>"
 		);
-		this.logModCommand(CommandParser.escapeHTML(user.name) + " updated the quote of the day to \"" + room.chatRoomData.quote + "\".");
+		this.logModCommand(Chat.escapeHTML(user.name) + " updated the quote of the day to \"" + room.chatRoomData.quote + "\".");
 	},
 	quoteofthedayhelp: 'qotdhelp',
 	qotdhelp: [

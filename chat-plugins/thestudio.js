@@ -68,7 +68,7 @@ let commands = {
 		Rooms.global.writeChatRoomData();
 		room.addRaw(
 			"<div class=\"broadcast-blue\"><strong>Nominations for the Artist of the Day have ended!</strong><br />" +
-			"Randomly selected artist: " + CommandParser.escapeHTML(artist) + "</div>"
+			"Randomly selected artist: " + Chat.escapeHTML(artist) + "</div>"
 		);
 		this.privateModCommand("(" + user.name + " ended nominations for the Artist of the Day.)");
 	},
@@ -166,7 +166,7 @@ let commands = {
 			buffer += "Current prenominations: (" + prenominations.length + ")";
 			for (let i = 0; i < prenominations.length; i++) {
 				buffer += "<br />" +
-					"- " + CommandParser.escapeHTML(prenominations[i][1]) + " (submitted by " + CommandParser.escapeHTML(prenominations[i][0].name) + ")";
+					"- " + Chat.escapeHTML(prenominations[i][1]) + " (submitted by " + Chat.escapeHTML(prenominations[i][0].name) + ")";
 			}
 			return this.sendReplyBox(buffer);
 		}
@@ -179,7 +179,7 @@ let commands = {
 		buffer += "Current nominations (" + nominations.length + "):";
 		for (let i = 0; i < nominations.length; i++) {
 			buffer += "<br />" +
-				"- " + CommandParser.escapeHTML(nominations[i][1]) + " (submitted by " + CommandParser.escapeHTML(nominations[i][0].name) + ")";
+				"- " + Chat.escapeHTML(nominations[i][1]) + " (submitted by " + Chat.escapeHTML(nominations[i][0].name) + ")";
 		}
 
 		this.sendReplyBox(buffer);
@@ -240,18 +240,18 @@ let commands = {
 		if (target === 'off' || target === 'disable' || target === 'reset') {
 			if (!room.chatRoomData.artistQuoteOfTheDay) return this.sendReply("The Artist Quote of the Day has already been reset.");
 			delete room.chatRoomData.artistQuoteOfTheDay;
-			this.sendReply("The Artist Quote of the Day was reset by " + CommandParser.escapeHTML(user.name) + ".");
+			this.sendReply("The Artist Quote of the Day was reset by " + Chat.escapeHTML(user.name) + ".");
 			this.logModCommand(user.name + " reset the Artist Quote of the Day.");
 			Rooms.global.writeChatRoomData();
 			return;
 		}
-		room.chatRoomData.artistQuoteOfTheDay = CommandParser.escapeHTML(target);
+		room.chatRoomData.artistQuoteOfTheDay = Chat.escapeHTML(target);
 		Rooms.global.writeChatRoomData();
 		room.addRaw(
-			"<div class=\"broadcast-blue\"><strong>The Artist Quote of the Day has been updated by " + CommandParser.escapeHTML(user.name) + ".</strong><br />" +
+			"<div class=\"broadcast-blue\"><strong>The Artist Quote of the Day has been updated by " + Chat.escapeHTML(user.name) + ".</strong><br />" +
 			"Quote: " + room.chatRoomData.artistQuoteOfTheDay + "</div>"
 		);
-		this.logModCommand(CommandParser.escapeHTML(user.name) + " updated the artist quote of the day to \"" + room.chatRoomData.artistQuoteOfTheDay + "\".");
+		this.logModCommand(Chat.escapeHTML(user.name) + " updated the artist quote of the day to \"" + room.chatRoomData.artistQuoteOfTheDay + "\".");
 	},
 	quotehelp:  [
 		"/aotd quote - View the current Artist Quote of the Day.",

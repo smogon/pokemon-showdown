@@ -115,7 +115,7 @@ class RoomSettings {
 		}
 	}
 	generateDisplay(user, room, connection) {
-		let output = '<div class="infobox">Room Settings for ' + CommandParser.escapeHTML(this.room.title) + '<br />';
+		let output = '<div class="infobox">Room Settings for ' + Chat.escapeHTML(this.room.title) + '<br />';
 		output += "<b>Modchat:</b> <br />" + this.modchat() + "<br />";
 		output += "<b>Modjoin:</b> <br />" + this.modjoin() + "<br />";
 		output += "<b>Stretch filter:</b> <br />" + this.stretching() + "<br />";
@@ -197,7 +197,7 @@ exports.commands = {
 		if (!room.modchat) {
 			this.add("|raw|<div class=\"broadcast-blue\"><b>Moderated chat was disabled!</b><br />Anyone may talk now.</div>");
 		} else {
-			const modchatSetting = CommandParser.escapeHTML(room.modchat);
+			const modchatSetting = Chat.escapeHTML(room.modchat);
 			this.add("|raw|<div class=\"broadcast-red\"><b>Moderated chat was set to " + modchatSetting + "!</b><br />Only users of rank " + modchatSetting + " and higher can talk.</div>");
 		}
 		if (room.battle && !room.modchat && !user.can('modchat')) room.requestModchat(null);

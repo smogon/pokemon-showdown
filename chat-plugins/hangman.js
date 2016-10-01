@@ -142,21 +142,21 @@ class Hangman extends Rooms.RoomGame {
 			);
 		}
 
-		if (this.hint) output += '<div>(Hint: ' + CommandParser.escapeHTML(this.hint) + ')</div>';
+		if (this.hint) output += '<div>(Hint: ' + Chat.escapeHTML(this.hint) + ')</div>';
 		output += '<p style="font-weight:bold;font-size:12pt;letter-spacing:3pt">' + wordString + '</p>';
 		if (this.guesses.length) {
 			if (this.letterGuesses.length) {
 				output += 'Letters: ' + this.letterGuesses.map(g =>
-					'<strong' + (g[1] === '1' ? '' : ' style="color: #DBA"') + '>' + CommandParser.escapeHTML(g[0]) + '</strong>'
+					'<strong' + (g[1] === '1' ? '' : ' style="color: #DBA"') + '>' + Chat.escapeHTML(g[0]) + '</strong>'
 				).join(', ');
 			}
 			if (result === 2) {
-				output += '<br />Winner: ' + CommandParser.escapeHTML(this.lastGuesser);
+				output += '<br />Winner: ' + Chat.escapeHTML(this.lastGuesser);
 			} else if (this.guesses[this.guesses.length - 1].length === 1) {
 				// last guess was a letter
-				output += ' <small>&ndash; ' + CommandParser.escapeHTML(this.lastGuesser) + '</small>';
+				output += ' <small>&ndash; ' + Chat.escapeHTML(this.lastGuesser) + '</small>';
 			} else {
-				output += '<br />Guessed: ' + this.guesses[this.guesses.length - 1] + ' <small>&ndash; ' + CommandParser.escapeHTML(this.lastGuesser) + '</small>';
+				output += '<br />Guessed: ' + this.guesses[this.guesses.length - 1] + ' <small>&ndash; ' + Chat.escapeHTML(this.lastGuesser) + '</small>';
 			}
 		}
 

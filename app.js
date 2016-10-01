@@ -32,9 +32,9 @@
  *
  *   Used to access the simulator itself.
  *
- * CommandParser - from command-parser.js
+ * Chat - from chat.js
  *
- *   Parses text commands like /me
+ *   Handles chat and parses chat commands like /me and /ban
  *
  * Sockets - from sockets.js
  *
@@ -122,7 +122,7 @@ delete process.send; // in case we're a child process
 global.Verifier = require('./verifier');
 Verifier.PM.spawn();
 
-global.CommandParser = require('./command-parser');
+global.Chat = require('./chat');
 
 global.Simulator = require('./simulator');
 
@@ -136,7 +136,7 @@ if (Config.crashguard) {
 	process.on('uncaughtException', err => {
 		let crashMessage = require('./crashlogger')(err, 'The main process');
 		if (crashMessage !== 'lockdown') return;
-		let stack = CommandParser.escapeHTML(err.stack).split("\n").slice(0, 2).join("<br />");
+		let stack = Chat.escapeHTML(err.stack).split("\n").slice(0, 2).join("<br />");
 		if (!Rooms.global.lockdown) {
 			if (Rooms.lobby) {
 				Rooms.lobby.addRaw('<div class="broadcast-red"><b>THE SERVER HAS CRASHED:</b> ' + stack + '<br />Please restart the server.</div>');
