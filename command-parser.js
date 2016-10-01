@@ -840,11 +840,24 @@ exports.uncacheTree = function (root) {
 	} while (uncache.length > 0);
 };
 
+/**
+ * Escapes HTML in a string.
+ *
+ * @param  {string} str
+ * @return {string}
+ */
 exports.escapeHTML = function (str) {
 	if (!str) return '';
 	return ('' + str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;').replace(/\//g, '&#x2f;');
 };
 
+/**
+ * Template string tag function for escaping HTML
+ *
+ * @param  {string[]} strings
+ * @param  {...any} values
+ * @return {string}
+ */
 exports.html = function (strings) {
 	let buf = strings[0];
 	for (let i = 1; i < arguments.length; i++) {
@@ -853,9 +866,18 @@ exports.html = function (strings) {
 	}
 	return buf;
 };
-exports.plural = function (num, plural, singular) {
-	if (!plural) plural = 's';
-	if (!singular) singular = '';
+
+/**
+ * Returns singular (defaulting to '') if num is 1, or plural
+ * (defaulting to 's') otherwise. Helper function for pluralizing
+ * words.
+ *
+ * @param  {any} num
+ * @param  {?string} plural
+ * @param  {?string} singular
+ * @return {string}
+ */
+exports.plural = function (num, plural = 's', singular = '') {
 	if (num && typeof num.length === 'number') {
 		num = num.length;
 	} else if (num && typeof num.size === 'number') {
@@ -866,9 +888,16 @@ exports.plural = function (num, plural, singular) {
 	return (num !== 1 ? plural : singular);
 };
 
+/**
+ * Returns a timestamp in the form {yyyy}-{MM}-{dd} {hh}:{mm}:{ss}.
+ *
+ * options.hour12 = true will reports hours in mod-12 format.
+ *
+ * @param  {Date} date
+ * @param  {object} options
+ * @return {string}
+ */
 exports.toTimestamp = function (date, options) {
-	// Return a timestamp in the form {yyyy}-{MM}-{dd} {hh}:{mm}:{ss}.
-	// Optionally reports hours in mod-12 format.
 	const isHour12 = options && options.hour12;
 	let parts = [date.getFullYear(), date.getMonth() + 1, date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()];
 	if (isHour12) {
@@ -879,6 +908,15 @@ exports.toTimestamp = function (date, options) {
 	return parts.slice(0, 3).join("-") + " " + parts.slice(3, 6).join(":") + (isHour12 ? " " + parts[6] : "");
 };
 
+/**
+ * Takes a number of milliseconds, and reports the duration in English: hours, minutes, etc.
+ *
+ * options.hhmmss = true will instead report the duration in 00:00:00 format
+ *
+ * @param  {number} number
+ * @param  {object} options
+ * @return {string}
+ */
 exports.toDurationString = function (number, options) {
 	// TODO: replace by Intl.DurationFormat or equivalent when it becomes available (ECMA-402)
 	// https://github.com/tc39/ecma402/issues/47
