@@ -1002,7 +1002,7 @@ exports.commands = {
 	bugreport: 'bugs',
 	bugs: function (target, room, user) {
 		if (!this.runBroadcast()) return;
-		if (room.battle) {
+		if (room && room.battle) {
 			this.sendReplyBox("<center><button name=\"saveReplay\"><i class=\"fa fa-upload\"></i> Save Replay</button> &mdash; <a href=\"https://www.smogon.com/forums/threads/3520646/\">Questions</a> &mdash; <a href=\"https://www.smogon.com/forums/threads/3469932/\">Bug Reports</a></center>");
 		} else {
 			this.sendReplyBox(
