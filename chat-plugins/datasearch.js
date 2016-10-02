@@ -15,6 +15,11 @@ const ProcessManager = require('./../process-manager');
 const MAX_PROCESSES = 1;
 const RESULTS_MAX_LENGTH = 10;
 
+function escapeHTML(str) {
+	if (!str) return '';
+	return ('' + str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;').replace(/\//g, '&#x2f;');
+}
+
 class DatasearchManager extends ProcessManager {
 	onMessageUpstream(message) {
 		// Protocol:
@@ -484,7 +489,7 @@ function runDexsearch(target, cmd, canAll, message) {
 					case '=': direction = 'equal'; break;
 					}
 				} else {
-					return {reply: "No value given to compare with '" + Chat.escapeHTML(target) + "'."};
+					return {reply: "No value given to compare with '" + escapeHTML(target) + "'."};
 				}
 				switch (toId(stat)) {
 				case 'attack': stat = 'atk'; break;
@@ -495,13 +500,13 @@ function runDexsearch(target, cmd, canAll, message) {
 				case 'spdef': stat = 'spd'; break;
 				case 'speed': stat = 'spe'; break;
 				}
-				if (!(stat in allStats)) return {reply: "'" + Chat.escapeHTML(target) + "' did not contain a valid stat."};
+				if (!(stat in allStats)) return {reply: "'" + escapeHTML(target) + "' did not contain a valid stat."};
 				if (!orGroup.stats[stat]) orGroup.stats[stat] = {};
 				if (orGroup.stats[stat][direction]) return {reply: "Invalid stat range for " + stat + "."};
 				orGroup.stats[stat][direction] = num;
 				continue;
 			}
-			return {reply: "'" + Chat.escapeHTML(target) + "' could not be found in any of the search categories."};
+			return {reply: "'" + escapeHTML(target) + "' could not be found in any of the search categories."};
 		}
 		searches.push(orGroup);
 	}
@@ -661,7 +666,7 @@ function runDexsearch(target, cmd, canAll, message) {
 		results = Tools.shuffle(results).slice(0, randomOutput);
 	}
 
-	let resultsStr = (message === "" ? message : "<font color=#999999>" + Chat.escapeHTML(message) + ":</font><br>");
+	let resultsStr = (message === "" ? message : "<font color=#999999>" + escapeHTML(message) + ":</font><br>");
 	if (results.length > 1) {
 		if (showAll || results.length <= RESULTS_MAX_LENGTH + 5) {
 			results.sort();
@@ -702,7 +707,7 @@ function runMovesearch(target, cmd, canAll, message) {
 		let typeIndex = target.indexOf(' type');
 		if (typeIndex >= 0) {
 			target = target.charAt(0).toUpperCase() + target.substring(1, typeIndex);
-			if (!(target in Tools.data.TypeChart)) return {reply: "Type '" + Chat.escapeHTML(target) + "' not found."};
+			if (!(target in Tools.data.TypeChart)) return {reply: "Type '" + escapeHTML(target) + "' not found."};
 			if (!searches['type']) searches['type'] = {};
 			if ((searches['type'][target] && isNotSearch) || (searches['type'][target] === false && !isNotSearch)) return {reply: 'A search cannot both exclude and include a type.'};
 			searches['type'][target] = !isNotSearch;
@@ -786,7 +791,7 @@ function runMovesearch(target, cmd, canAll, message) {
 				case '=': direction = 'equal'; break;
 				}
 			} else {
-				return {reply: "No value given to compare with '" + Chat.escapeHTML(target) + "'."};
+				return {reply: "No value given to compare with '" + escapeHTML(target) + "'."};
 			}
 			let prop = targetParts[propSide];
 			switch (toId(targetParts[propSide])) {
@@ -794,7 +799,7 @@ function runMovesearch(target, cmd, canAll, message) {
 			case 'bp': prop = 'basePower'; break;
 			case 'acc': prop = 'accuracy'; break;
 			}
-			if (!(prop in allProperties)) return {reply: "'" + Chat.escapeHTML(target) + "' did not contain a valid property."};
+			if (!(prop in allProperties)) return {reply: "'" + escapeHTML(target) + "' did not contain a valid property."};
 			if (!searches['property']) searches['property'] = {};
 			if (direction === 'equal') {
 				if (searches['property'][prop]) return {reply: "Invalid property range for " + prop + "."};
@@ -845,7 +850,7 @@ function runMovesearch(target, cmd, canAll, message) {
 			case 'evasiveness': target = 'evasion'; break;
 			default: target = target.substr(7);
 			}
-			if (!(target in allBoosts)) return {reply: "'" + Chat.escapeHTML(target.substr(7)) + "' is not a recognized stat."};
+			if (!(target in allBoosts)) return {reply: "'" + escapeHTML(target.substr(7)) + "' is not a recognized stat."};
 			if (!searches['boost']) searches['boost'] = {};
 			if ((searches['boost'][target] && isNotSearch) || (searches['boost'][target] === false && !isNotSearch)) return {reply: 'A search cannot both exclude and include a stat boost.'};
 			searches['boost'][target] = !isNotSearch;
@@ -880,7 +885,7 @@ function runMovesearch(target, cmd, canAll, message) {
 			continue;
 		}
 
-		return {reply: "'" + Chat.escapeHTML(oldTarget) + "' could not be found in any of the search categories."};
+		return {reply: "'" + escapeHTML(oldTarget) + "' could not be found in any of the search categories."};
 	}
 
 	if (showAll && !Object.keys(searches).length && !targetMon) {
@@ -1017,7 +1022,7 @@ function runMovesearch(target, cmd, canAll, message) {
 	if (targetMon) {
 		resultsStr += "<font color=#999999>Matching moves found in learnset for</font> " + targetMon + ":<br>";
 	} else {
-		resultsStr += (message === "" ? message : "<font color=#999999>" + Chat.escapeHTML(message) + ":</font><br>");
+		resultsStr += (message === "" ? message : "<font color=#999999>" + escapeHTML(message) + ":</font><br>");
 	}
 	if (results.length > 0) {
 		if (showAll || results.length <= RESULTS_MAX_LENGTH + 5) {
@@ -1233,7 +1238,7 @@ function runItemsearch(target, cmd, canAll, message) {
 		}
 	}
 
-	let resultsStr = (message === "" ? message : "<font color=#999999>" + Chat.escapeHTML(message) + ":</font><br>");
+	let resultsStr = (message === "" ? message : "<font color=#999999>" + escapeHTML(message) + ":</font><br>");
 	if (foundItems.length > 0) {
 		if (showAll || foundItems.length <= RESULTS_MAX_LENGTH + 5) {
 			foundItems.sort();
