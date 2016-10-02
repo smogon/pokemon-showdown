@@ -2591,18 +2591,7 @@ exports.commands = {
 	lockdown: function (target, room, user) {
 		if (!this.can('lockdown')) return false;
 
-		Rooms.global.lockdown = true;
-		Rooms.rooms.forEach((curRoom, id) => {
-			if (id === 'global') return;
-			curRoom.addRaw("<div class=\"broadcast-red\"><b>The server is restarting soon.</b><br />Please finish your battles quickly. No new battles can be started until the server resets in a few minutes.</div>").update();
-			if (curRoom.requestKickInactive && !curRoom.battle.ended) {
-				curRoom.requestKickInactive(user, true);
-				if (curRoom.modchat !== '+') {
-					curRoom.modchat = '+';
-					curRoom.addRaw("<div class=\"broadcast-red\"><b>Moderated chat was set to +!</b><br />Only users of rank + and higher can talk.</div>").update();
-				}
-			}
-		});
+		Rooms.global.startLockdown();
 
 		this.logEntry(user.name + " used /lockdown");
 	},
@@ -2618,12 +2607,7 @@ exports.commands = {
 	slowlockdown: function (target, room, user) {
 		if (!this.can('lockdown')) return false;
 
-		Rooms.global.lockdown = true;
-		Rooms.rooms.forEach((curRoom, id) => {
-			if (id === 'global') return;
-			if (curRoom.battle) return;
-			curRoom.addRaw("<div class=\"broadcast-red\"><b>The server is restarting soon.</b><br />Please finish your battles quickly. No new battles can be started until the server resets in a few minutes.</div>").update();
-		});
+		Rooms.global.startLockdown(undefined, true);
 
 		this.logEntry(user.name + " used /slowlockdown");
 	},
