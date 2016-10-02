@@ -367,7 +367,7 @@ exports.Formats = [
 		column: 2,
 
 		ruleset: ['Ubers', 'Baton Pass Clause'],
-		banlist: ['Uber > 1', 'AG ++ Uber', 'Blissey', 'Chansey', 'Eviolite', 'Mawilite', 'Medichamite', 'Huge Power', 'Pure Power'],
+		banlist: ['Uber > 1', 'AG ++ Uber', 'Blissey', 'Chansey', 'Eviolite', 'Mawilite', 'Medichamite', 'Soul Dew', 'Huge Power', 'Pure Power'],
 		onBegin: function () {
 			let stats = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'];
 			for (let j = 0; j < this.sides.length; j++) {
