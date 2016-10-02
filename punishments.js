@@ -14,8 +14,9 @@
  */
 
 let Punishments = module.exports;
-let fs = require('fs');
-let path = require('path');
+
+const fs = require('fs');
+const path = require('path');
 
 const PUNISHMENT_FILE = path.resolve(__dirname, 'config/punishments.tsv');
 const ROOM_PUNISHMENT_FILE = path.resolve(__dirname, 'config/room-punishments.tsv');
