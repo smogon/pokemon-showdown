@@ -845,12 +845,12 @@ exports.commands = {
 	},
 
 	topic: 'roomintro',
-	roomintro: function (target, room, user) {
+	roomintro: function (target, room, user, connection, cmd) {
 		if (!target) {
 			if (!this.runBroadcast()) return;
 			if (!room.introMessage) return this.sendReply("This room does not have an introduction set.");
 			this.sendReply('|raw|<div class="infobox infobox-limited">' + room.introMessage.replace(/\n/g, '') + '</div>');
-			if (!this.broadcasting && user.can('declare', null, room)) {
+			if (!this.broadcasting && user.can('declare', null, room) && cmd !== 'topic') {
 				this.sendReply('Source:');
 				this.sendReplyBox(
 					'<code>/roomintro ' + Chat.escapeHTML(room.introMessage).split('\n').map(line => {
