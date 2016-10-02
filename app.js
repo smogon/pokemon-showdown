@@ -116,13 +116,13 @@ global.Users = require('./users');
 
 global.Punishments = require('./punishments');
 
+global.Chat = require('./chat');
+
 global.Rooms = require('./rooms');
 
 delete process.send; // in case we're a child process
 global.Verifier = require('./verifier');
 Verifier.PM.spawn();
-
-global.Chat = require('./chat');
 
 global.Simulator = require('./simulator');
 
