@@ -7,7 +7,7 @@
  * (scroll down to its definition for details)
  *
  * Individual commands are put in:
- *   commands.js - "core" commands that shouldn't be modified
+ *   chat-commands.js - "core" commands that shouldn't be modified
  *   chat-plugins/ - other commands that can be safely modified
  *
  * The command API is (mostly) documented in chat-plugins/COMMANDS.md
@@ -841,7 +841,7 @@ Chat.loadCommands = function () {
 		Chat.package = JSON.parse(data);
 	});
 
-	let baseCommands = Chat.baseCommands = require('./commands').commands;
+	let baseCommands = Chat.baseCommands = require('./chat-commands').commands;
 	let commands = Chat.commands = Object.assign({}, baseCommands);
 
 	// Install plug-in commands
