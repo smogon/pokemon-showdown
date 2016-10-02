@@ -1104,12 +1104,10 @@ exports.commands = {
 			if (!target) return this.sendReplyBox(buffer);
 		}
 		let showMonthly = (target === 'all' || target === 'omofthemonth' || target === 'omotm' || target === 'month');
-		let monthBuffer = "- <a href=\"https://www.smogon.com/forums/threads/3541792/\">Other Metagame of the Month</a>";
 
 		if (target === 'all') {
 			// Display OMotM formats, with forum thread links as caption
 			this.parse('/formathelp omofthemonth');
-			if (showMonthly) this.sendReply('|raw|<center>' + monthBuffer + '</center>');
 
 			// Display the rest of OM formats, with OM hub/index forum links as caption
 			this.parse('/formathelp othermetagames');
@@ -1118,7 +1116,6 @@ exports.commands = {
 		if (showMonthly) {
 			this.target = 'omofthemonth';
 			this.run('formathelp');
-			this.sendReply('|raw|<center>' + monthBuffer + '</center>');
 		} else {
 			this.run('formathelp');
 		}
