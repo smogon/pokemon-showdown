@@ -2400,7 +2400,7 @@ exports.commands = {
 				}
 
 				Chat.uncacheTree('./chat');
-				delete require.cache[require.resolve('./commands')];
+				delete require.cache[require.resolve('./chat-commands')];
 				delete require.cache[require.resolve('./chat-plugins/info')];
 				global.Chat = require('./chat');
 
@@ -2469,7 +2469,7 @@ exports.commands = {
 	},
 	hotpatchhelp: ["Hot-patching the game engine allows you to update parts of Showdown without interrupting currently-running battles. Requires: ~",
 		"Hot-patching has greater memory requirements than restarting.",
-		"/hotpatch chat - reload commands.js and the chat-plugins",
+		"/hotpatch chat - reload chat-commands.js and the chat-plugins",
 		"/hotpatch battles - spawn new simulator processes",
 		"/hotpatch validator - spawn new team validator processes",
 		"/hotpatch formats - reload the tools.js tree, rebuild and rebroad the formats list, and spawn new simulator and team validator processes",
