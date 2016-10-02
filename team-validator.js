@@ -314,7 +314,8 @@ class Validator {
 								problemString = problemString.concat(` because it's incompatible with another move.`);
 							}
 						} else if (problem.type === 'oversketched') {
-							problemString = problemString.concat(` because it can only sketch ${problem.maxSketches} move${Chat.plural(problem.maxSketches)}.`);
+							let plural = (parseInt(problem.maxSketches) === 1 ? '' : 's');
+							problemString = problemString.concat(` because it can only sketch ${problem.maxSketches} move${plural}.`);
 						} else if (problem.type === 'pokebank') {
 							problemString = problemString.concat(` because it's only obtainable from a previous generation.`);
 						} else {
@@ -992,8 +993,6 @@ if (process.send && module === process.mainModule) {
 
 	global.Tools = require('./tools').includeMods();
 	global.toId = Tools.getId;
-
-	global.Chat = require('./chat');
 
 	require('./repl').start('team-validator-', process.pid, cmd => eval(cmd));
 
