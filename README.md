@@ -1,10 +1,11 @@
 Pokémon Showdown
 ========================================================================
 
-Navigation: [Website][1] | **Server repository** | [Client repository][2]
+Navigation: [Website][1] | **Server repository** | [Client repository][2] | [Dex repository][3]
 
   [1]: http://pokemonshowdown.com/
   [2]: https://github.com/Zarel/Pokemon-Showdown-Client
+  [3]: https://github.com/Zarel/Pokemon-Showdown-Dex
 
 [![Build Status](https://travis-ci.org/Zarel/Pokemon-Showdown.svg)](https://travis-ci.org/Zarel/Pokemon-Showdown)
 [![Dependency Status](https://david-dm.org/zarel/Pokemon-Showdown.svg)](https://david-dm.org/zarel/Pokemon-Showdown)
@@ -13,14 +14,14 @@ Navigation: [Website][1] | **Server repository** | [Client repository][2]
 Introduction
 ------------------------------------------------------------------------
 
-This is the source code for the game server of [Pokémon Showdown][3], a website for Pokémon battling. Pokémon Showdown simulates singles, doubles and triples battles in all the games out so far (Generations 1 through 6).
+This is the source code for the game server of [Pokémon Showdown][4], a website for Pokémon battling. Pokémon Showdown simulates singles, doubles and triples battles in all the games out so far (Generations 1 through 6).
 
 This repository contains the files needed to set up your own Pokémon Showdown server. Note that to set up a server, you'll also need a server computer.
 
-You can use your own computer as a server, but for other people to connect to your computer, you'll need to expose a port (default is 8000 but you can choose a different one) to connect to, which sometimes requires [port forwarding][4] (note that this isn't possible on certain internet connections).
+You can use your own computer as a server, but for other people to connect to your computer, you'll need to expose a port (default is 8000 but you can choose a different one) to connect to, which sometimes requires [port forwarding][5] (note that this isn't possible on certain internet connections).
 
-  [3]: http://pokemonshowdown.com/
-  [4]: http://en.wikipedia.org/wiki/Port_forwarding
+  [4]: http://pokemonshowdown.com/
+  [5]: http://en.wikipedia.org/wiki/Port_forwarding
 
 
 Installing
@@ -34,7 +35,7 @@ Installing
 Detailed installation instructions
 ------------------------------------------------------------------------
 
-Pokémon Showdown requires you to have [Node.js][5] installed, 6.x or later.
+Pokémon Showdown requires you to have [Node.js][6] installed, 6.x or later.
 
 Next, obtain a copy of Pokémon Showdown. If you're reading this outside of GitHub, you've probably already done this. If you're reading this in GitHub, there's a "Save" icon button near the top right (next to "Download ZIP"), or if you're really lazy, you can use the "Download ZIP" button. I recommend the Save method - it's more time-consuming to set up, but much easier to update.
 
@@ -68,10 +69,10 @@ Yes, you can test even if you are behind a NAT without port forwarding: `http://
 
 You will be redirected to `http://SERVER.psim.us`. The reason your server is visited through `psim.us` is to make it more difficult for servers to see a user's password in any form, by handling logins globally. You can embed this in an `iframe` in your website if the URL is a big deal with you.
 
-If you truly want to host the client yourself, there is [a repository for the Pokémon Showdown Client][6]. It's not recommended for beginners, though.
+If you truly want to host the client yourself, there is [a repository for the Pokémon Showdown Client][7]. It's not recommended for beginners, though.
 
-  [5]: https://nodejs.org/
-  [6]: https://github.com/Zarel/Pokemon-Showdown-Client
+  [6]: https://nodejs.org/
+  [7]: https://github.com/Zarel/Pokemon-Showdown-Client
 
 
 Setting up an Administrator account
@@ -117,17 +118,17 @@ Community
 
 PS has a built-in chat service. Join our main server to talk to us!
 
-You can also visit the [Pokémon Showdown forums][7] for discussion and help.
+You can also visit the [Pokémon Showdown forums][8] for discussion and help.
 
-  [7]: http://www.smogon.com/forums/forums/pok%C3%A9mon-showdown.209/
+  [8]: http://www.smogon.com/forums/forums/pok%C3%A9mon-showdown.209/
 
 
 License
 ------------------------------------------------------------------------
 
-Pokémon Showdown's server is distributed under the terms of the [MIT License][8].
+Pokémon Showdown's server is distributed under the terms of the [MIT License][9].
 
-  [8]: https://github.com/Zarel/Pokemon-Showdown/blob/master/LICENSE
+  [9]: https://github.com/Zarel/Pokemon-Showdown/blob/master/LICENSE
 
 
 Credits
