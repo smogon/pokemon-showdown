@@ -4,9 +4,13 @@
  *
  * Handles getting data about pokemon, items, etc.
  *
- * This file is used by the main process (to validate teams)
- * as well as the individual simulator processes (to get
- * information about pokemon, items, etc to simulate).
+ * This file is used by basically every PS process. Sim processes use it
+ * to get game data for simulation, team validators use it to get data
+ * for validation, dexsearch uses it for dex data, and the main process
+ * uses it for format listing and miscellaneous dex lookup chat commands.
+ *
+ * It currently also contains our shims, since it has no dependencies and
+ * is included by nearly every process.
  *
  * @license MIT license
  */
@@ -173,10 +177,16 @@ module.exports = (() => {
 	};
 
 	/**
-	 * Safely ensures the passed variable is a string
-	 * Simply doing '' + str can crash if str.toString crashes or isn't a function
-	 * If we're expecting a string and being given anything that isn't a string
-	 * or a number, it's safe to assume it's an error, and return ''
+	 * Safely converts the passed variable into a string. Unlike '' + str,
+	 * String(str), or str.toString(), Tools.getString is guaranteed not to
+	 * crash.
+	 *
+	 * The other methods of casting to string can crash if str.toString crashes
+	 * or isn't a function. Instead, Tools.getString simply returns '' if the
+	 * passed variable isn't a string or a number.
+	 *
+	 * @param {mixed} str
+	 * @return {string}
 	 */
 	Tools.prototype.getString = function (str) {
 		if (typeof str === 'string' || typeof str === 'number') return '' + str;
@@ -200,8 +210,12 @@ module.exports = (() => {
 	 * functions are expected to check for that condition and deal with it
 	 * accordingly.
 	 *
-	 * getName also enforces that there are not multiple space characters
-	 * in the name, although this is not strictly necessary for safety.
+	 * getName also enforces that there are not multiple consecutive space
+	 * characters in the name, although this is not strictly necessary for
+	 * safety.
+	 *
+	 * @param {mixed} name
+	 * @return {string}
 	 */
 	Tools.prototype.getName = function (name) {
 		if (typeof name !== 'string' && typeof name !== 'number') return '';
@@ -222,6 +236,12 @@ module.exports = (() => {
 	 * non-alphanumeric characters will be stripped.
 	 * If an object with an ID is passed, its ID will be returned.
 	 * Otherwise, an empty string will be returned.
+	 *
+	 * Tools.getId is generally assigned to the global toId, because of how
+	 * commonly it's used.
+	 *
+	 * @param {mixed} text
+	 * @return {string}
 	 */
 	Tools.prototype.getId = function (text) {
 		if (text && text.id) {
@@ -234,6 +254,14 @@ module.exports = (() => {
 	};
 	let toId = Tools.prototype.getId;
 
+	/**
+	 * Convert a pokemon name, ID, or template into its species name, preserving
+	 * form name (which is the main way Tools.getSpecies(id) differs from
+	 * Tools.getTemplate(id).species).
+	 *
+	 * @param {string|DexTemplate} species
+	 * @return {string}
+	 */
 	Tools.prototype.getSpecies = function (species) {
 		let id = toId(species || '');
 		let template = this.getTemplate(id);
