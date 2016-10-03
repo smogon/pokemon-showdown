@@ -358,16 +358,6 @@ exports.commands = {
 		}
 	},
 
-	r: 'reply',
-	reply: function (target, room, user) {
-		if (!target) return this.parse('/help reply');
-		if (!user.lastPM) {
-			return this.errorReply("No one has PMed you yet.");
-		}
-		return this.parse('/msg ' + (user.lastPM || '') + ', ' + target);
-	},
-	replyhelp: ["/reply OR /r [message] - Send a private message to the last person you received a message from, or sent a message to."],
-
 	'!msg': true,
 	pm: 'msg',
 	whisper: 'msg',
@@ -3343,7 +3333,7 @@ exports.commands = {
 		if (target === 'help' || target === 'h' || target === '?' || target === 'commands') {
 			this.sendReply("/help OR /h OR /? - Gives you help.");
 		} else if (!target) {
-			this.sendReply("COMMANDS: /msg, /reply, /logout, /challenge, /search, /rating, /whois");
+			this.sendReply("COMMANDS: /msg, /logout, /challenge, /search, /rating, /whois");
 			this.sendReply("OPTION COMMANDS: /nick, /avatar, /ignore, /away, /back, /timestamps, /highlight");
 			this.sendReply("INFORMATIONAL COMMANDS: /data, /dexsearch, /movesearch, /groups, /faq, /rules, /intro, /formatshelp, /othermetas, /learn, /analysis, /calc (replace / with ! to broadcast. Broadcasting requires: + % @ * # & ~)");
 			if (user.group !== Config.groupsranking[0]) {
