@@ -733,7 +733,10 @@ exports.Formats = [
 
 	{
 		name: "[Gen 4] NU",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3512254/\">DPP NU</a>"],
+		desc: [
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3583742/\">DPP NU</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3512254/\">DPP NU Viability Ranking</a>",
+		],
 		section: "RoA Spotlight",
 		column: 3,
 
