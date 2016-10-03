@@ -298,7 +298,12 @@ class CommandContext {
 				message: this.message,
 			}) === 'lockdown') {
 				let ministack = Chat.escapeHTML(err.stack).split("\n").slice(0, 2).join("<br />");
-				if (Rooms.lobby) Rooms.lobby.send('|html|<div class="broadcast-red"><b>POKEMON SHOWDOWN HAS CRASHED:</b> ' + ministack + '</div>');
+				let devRoom = Rooms('development');
+				if (devRoom) {
+					devRoom.send('|html|<div class="broadcast-red"><b>POKEMON SHOWDOWN HAS CRASHED:</b> ' + ministack + '</div>');
+				} else if (Rooms.lobby) {
+					Rooms.lobby.send('|html|<div class="broadcast-red"><b>POKEMON SHOWDOWN HAS CRASHED:</b> ' + ministack + '</div>');
+				}
 			} else {
 				this.sendReply('|html|<div class="broadcast-red"><b>Pokemon Showdown crashed!</b><br />Don\'t worry, we\'re working on fixing it.</div>');
 			}
