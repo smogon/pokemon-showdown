@@ -11,6 +11,7 @@
 'use strict';
 
 const CRASH_EMAIL_THROTTLE = 5 * 60 * 1000; // 5 minutes
+const LOCKDOWN_PERIOD = 30 * 60 * 1000; // 30 minutes
 
 const logPath = require('path').resolve(__dirname, 'logs/errors.txt');
 let lastCrashLog = 0;
@@ -56,7 +57,7 @@ exports = module.exports = function (err, description, data) {
 	}
 
 	exports.hadException = true;
-	if (process.uptime() < 60 * 60) {
+	if (process.uptime() * 1000 < LOCKDOWN_PERIOD) {
 		// lock down the server
 		return 'lockdown';
 	}

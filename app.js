@@ -135,8 +135,11 @@ if (Config.crashguard) {
 	// graceful crash - allow current battles to finish before restarting
 	process.on('uncaughtException', err => {
 		let crashType = require('./crashlogger')(err, 'The main process');
-		if (crashType !== 'lockdown') return;
-		Rooms.global.startLockdown(err);
+		if (crashType === 'lockdown') {
+			Rooms.global.startLockdown(err);
+		} else {
+			Rooms.global.reportCrash(err);
+		}
 	});
 	process.on('unhandledRejection', err => {
 		throw err;

@@ -16,6 +16,8 @@ const TIMEOUT_INACTIVE_DEALLOCATE = 40 * 60 * 1000;
 const REPORT_USER_STATS_INTERVAL = 10 * 60 * 1000;
 const PERIODIC_MATCH_INTERVAL = 60 * 1000;
 
+const CRASH_REPORT_THROTTLE = 60 * 60 * 1000;
+
 const fs = require('fs');
 const path = require('path');
 
@@ -792,12 +794,12 @@ class GlobalRoom {
 	startLockdown(err, slow) {
 		if (this.lockdown) return;
 		let devRoom = Rooms('development');
-		const stack = (err ? Chat.escapeHTML(err.stack).split("\n").slice(0, 2).join("<br />") : '');
+		const stack = (err ? Chat.escapeHTML(err.stack).split(`\n`).slice(0, 2).join(`<br />`) : ``);
 		Rooms.rooms.forEach((curRoom, id) => {
 			if (id === 'global') return;
 			if (err) {
 				if (id === 'staff' || id === 'development' || (!devRoom && id === 'lobby')) {
-					curRoom.addRaw(`<div class="broadcast-red"><b>THE SERVER HAS CRASHED:</b>${stack}<br />Please restart the server.</div>`);
+					curRoom.addRaw(`<div class="broadcast-red"><b>The server needs to restart because of a crash:</b> ${stack}<br />Please restart the server.</div>`);
 					curRoom.addRaw(`<div class="broadcast-red">You will not be able to start new battles until the server restarts.</div>`);
 					curRoom.update();
 				} else {
@@ -816,6 +818,25 @@ class GlobalRoom {
 		});
 
 		this.lockdown = true;
+		this.lastReportedCrash = Date.now();
+	}
+	reportCrash(err) {
+		if (this.lockdown) return;
+		const time = Date.now();
+		if (time - this.lastReportedCrash < CRASH_REPORT_THROTTLE) {
+			return;
+		}
+		this.lastReportedCrash = time;
+		const stack = (err ? Chat.escapeHTML(err.stack).split(`\n`).slice(0, 2).join(`<br />`) : ``);
+		const crashMessage = `|html|<div class="broadcast-red"><b>The server has crashed:</b> ${stack}</div>`;
+		const devRoom = Rooms('development');
+		if (devRoom) {
+			devRoom.add(crashMessage).update();
+		} else {
+			if (Rooms.lobby) Rooms.lobby.add(crashMessage).update();
+			const staffRoom = Rooms('staff');
+			if (staffRoom) staffRoom.add(crashMessage).update();
+		}
 	}
 }
 
