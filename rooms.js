@@ -789,6 +789,34 @@ class GlobalRoom {
 	modlog(text) {
 		this.modlogStream.write('[' + (new Date().toJSON()) + '] ' + text + '\n');
 	}
+	startLockdown(err, slow) {
+		if (this.lockdown) return;
+		let devRoom = Rooms('development');
+		const stack = (err ? Chat.escapeHTML(err.stack).split("\n").slice(0, 2).join("<br />") : '');
+		Rooms.rooms.forEach((curRoom, id) => {
+			if (id === 'global') return;
+			if (err) {
+				if (id === 'staff' || id === 'development' || (!devRoom && id === 'lobby')) {
+					curRoom.addRaw(`<div class="broadcast-red"><b>THE SERVER HAS CRASHED:</b>${stack}<br />Please restart the server.</div>`);
+					curRoom.addRaw(`<div class="broadcast-red">You will not be able to start new battles until the server restarts.</div>`);
+					curRoom.update();
+				} else {
+					curRoom.addRaw(`<div class="broadcast-red"><b>The server needs restart because of a crash.</b><br />No new battles can be started until the server is done restarting.</div>`).update();
+				}
+			} else {
+				curRoom.addRaw(`<div class="broadcast-red"><b>The server is restarting soon.</b><br />Please finish your battles quickly. No new battles can be started until the server resets in a few minutes.</div>`).update();
+			}
+			if (!slow && curRoom.requestKickInactive && !curRoom.battle.ended) {
+				curRoom.requestKickInactive(false, true);
+				if (curRoom.modchat !== '+') {
+					curRoom.modchat = '+';
+					curRoom.addRaw(`<div class="broadcast-red"><b>Moderated chat was set to +!</b><br />Only users of rank + and higher can talk.</div>`).update();
+				}
+			}
+		});
+
+		this.lockdown = true;
+	}
 }
 
 class BattleRoom extends Room {
