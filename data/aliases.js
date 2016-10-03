@@ -359,7 +359,8 @@ exports.BattleAliases = {
 	"whimsi": "Whimsicott",
 	"zam": "Alakazam",
 	"zard": "Charizard",
-	"ohmagod":"Plasmanta",
+	"ohmagod": "Plasmanta",
+	"zong": "Bronzong",
 
 	// moves
 	"bb": "Brave Bird",
