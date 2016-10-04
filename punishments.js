@@ -521,11 +521,11 @@ Punishments.roomUnpunish = function (room, id, punishType) {
  * @param {string} id
  * @param {?string} reason
  */
-Punishments.ban = function (user, expireTime, id, reason) {
+Punishments.ban = function (user, expireTime, id, ...reason) {
 	if (!id) id = user.getLastId();
 
 	if (!expireTime) expireTime = Date.now() + BAN_DURATION;
-	let punishment = ['BAN', id, expireTime].concat(Array.prototype.slice.call(arguments, 3));
+	let punishment = ['BAN', id, expireTime, ...reason];
 	Punishments.punish(user, punishment);
 
 	let affected = user.getAltUsers(false, true);
@@ -546,11 +546,11 @@ Punishments.unban = function (name) {
  * @param {string} id
  * @param {?string} reason
  */
-Punishments.lock = function (user, expireTime, id, reason) {
+Punishments.lock = function (user, expireTime, id, ...reason) {
 	if (!id) id = user.getLastId();
 
 	if (!expireTime) expireTime = Date.now() + LOCK_DURATION;
-	let punishment = ['LOCK', id, expireTime].concat(Array.prototype.slice.call(arguments, 3));
+	let punishment = ['LOCK', id, expireTime, ...reason];
 	Punishments.punish(user, punishment);
 
 	let affected = user.getAltUsers(false, true);
@@ -598,11 +598,11 @@ Punishments.unlock = function (name) {
  * @param {string} id
  * @param {?string} reason
  */
-Punishments.namelock = function (user, expireTime, id, reason) {
+Punishments.namelock = function (user, expireTime, id, ...reason) {
 	if (!id) id = user.getLastId();
 
 	if (!expireTime) expireTime = Date.now() + LOCK_DURATION;
-	let punishment = ['NAMELOCK', id, expireTime].concat(Array.prototype.slice.call(arguments, 3));
+	let punishment = ['NAMELOCK', id, expireTime, ...reason];
 	Punishments.punish(user, punishment);
 
 	let affected = user.getAltUsers(false, true);
