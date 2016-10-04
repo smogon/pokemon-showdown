@@ -697,7 +697,7 @@ class Mafia extends Rooms.RoomGame {
 
 	townMeeting() {
 		this.meeting = 'town';
-		this.currentVote = {};
+		this.currentVote = new Map();
 
 		for (let i in this.players) {
 			let player = this.players[i];
