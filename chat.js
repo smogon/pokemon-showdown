@@ -870,11 +870,12 @@ Chat.escapeHTML = function (str) {
  * @param  {...any} values
  * @return {string}
  */
-Chat.html = function (strings) {
+Chat.html = function (strings, ...args) {
 	let buf = strings[0];
-	for (let i = 1; i < arguments.length; i++) {
-		buf += Chat.escapeHTML(arguments[i]);
-		buf += strings[i];
+	let i = 0;
+	while (i < args.length) {
+		buf += Chat.escapeHTML(args[i]);
+		buf += strings[++i];
 	}
 	return buf;
 };

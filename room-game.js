@@ -68,10 +68,10 @@ class RoomGame {
 		}
 	}
 
-	addPlayer(user) {
+	addPlayer(user, ...rest) {
 		if (user.userid in this.players) return false;
 		if (this.playerCount >= this.playerCap) return false;
-		let player = this.makePlayer.apply(this, arguments);
+		let player = this.makePlayer(user, ...rest);
 		if (!player) return false;
 		this.players[user.userid] = player;
 		this.playerCount++;

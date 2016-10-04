@@ -89,19 +89,19 @@ exports.BattleFormats = {
 					set.gender = 'M';
 					// 0-1 (1 DV = 2 IV) Gender value 1:7
 					if (template.genderRatio && template.genderRatio.F === 0.125 && set.ivs.atk < 3) {
-						 set.gender = 'F';
+						set.gender = 'F';
 					}
 					// 0-3 (3 DV = 6 IV) Gender value 1:3
 					if (template.genderRatio && template.genderRatio.F === 0.25 && set.ivs.atk < 7) {
-						 set.gender = 'F';
+						set.gender = 'F';
 					}
 					// 0-7 (7 DV = 14 IV) Gender value 1:1
 					if (template.genderRatio && template.genderRatio.F === 0.5 && set.ivs.atk < 15) {
-						 set.gender = 'F';
+						set.gender = 'F';
 					}
 					// 0-11 (11 DV = 22 IV) Gender value 3:1
 					if (template.genderRatio && template.genderRatio.F === 0.75 && set.ivs.atk < 23) {
-						 set.gender = 'F';
+						set.gender = 'F';
 					}
 				}
 

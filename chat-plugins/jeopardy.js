@@ -129,9 +129,7 @@ let Jeopardy = (() => {
 		this.room.add("A new Jeopardy match has been created by " + host.name);
 	}
 
-	Jeopardy.prototype.checkPermission = function (user, output) {
-		let checks = Array.prototype.slice.call(arguments, 2);
-
+	Jeopardy.prototype.checkPermission = function (user, output, ...checks) {
 		let currentCheck = '';
 		while ((currentCheck = checks.pop())) {
 			switch (currentCheck) {
