@@ -105,27 +105,25 @@ class ProcessManager {
 		process.release();
 	}
 
-	send() {
+	send(...args) {
 		if (!this.processes.length) {
-			return Promise.resolve(this.receive.apply(this, arguments));
+			return Promise.resolve(this.receive.apply(this, args));
 		}
 
-		// Prevents the arguments object from leaking.
-		let args = Array.prototype.slice.call(arguments);
 		let serializedArgs = args.map(serialize).join('|');
 		return new Promise((resolve, reject) => {
 			let process = this.acquire();
 			process.pendingTasks.set(this.taskId, resolve);
 			try {
-				process.process.send('' + this.taskId + '|' + serializedArgs);
+				process.process.send(`${this.taskId}|${serializedArgs}`);
 			} catch (e) {}
 			++this.taskId;
 		});
 	}
 
-	sendSync() {
+	sendSync(...args) {
 		// synchronously!
-		return this.receive.apply(this, arguments);
+		return this.receive.apply(this, args);
 	}
 
 	onMessageUpstream() {
