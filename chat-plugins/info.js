@@ -1337,6 +1337,15 @@ exports.commands = {
 		if (showAll || target === 'tiering' || target === 'tiers' || target === 'tier') {
 			buffer.push("<a href=\"https://www.smogon.com/ingame/battle/tiering-faq\">Tiering FAQ</a>");
 		}
+		if (showAll || toId(target).startsWith('lostpass') || target === 'pwreset' || target === 'password') {
+			buffer.push("PM a global staff member (@ and up in the Help room) for help with resetting your password.");
+		}
+		if (showAll || toId(target) === 'lostteams' || toId(target) === 'deletedteams') {
+			buffer.push("Are you sure you're on the same computer as when you last used your teams? Have you cleared your cookies? This deletes your teams. You may  have done this accidentally when clearing your history, or by using  private browsing. Remember to always backup your teams!");
+		}
+		if (showAll || toId(target).startsWith('minimod')) {
+			buffer.push("Minimodding is when someone is moderating the chat when it isn't their job to do so - this is against the rules. This can include telling people they'll be muted, asking for people to be muted, or talking about whether or not people should be muted.");
+		}
 		if (showAll || !buffer.length) {
 			buffer.unshift("<a href=\"https://www.smogon.com/forums/threads/3570628/#post-6774128\">Frequently Asked Questions</a>");
 		}
