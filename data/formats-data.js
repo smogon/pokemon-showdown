@@ -1835,7 +1835,7 @@ exports.BattleFormatsData = {
 	quagsire: {
 		randomBattleMoves: ["recover", "earthquake", "scald", "toxic", "encore", "icebeam"],
 		randomDoubleBattleMoves: ["icywind", "earthquake", "waterfall", "scald", "rockslide", "curse", "yawn", "icepunch", "protect"],
-		tier: "RU",
+		tier: "NU",
 	},
 	murkrow: {
 		randomBattleMoves: ["substitute", "suckerpunch", "bravebird", "heatwave", "roost", "darkpulse", "thunderwave"],
@@ -3904,7 +3904,7 @@ exports.BattleFormatsData = {
 			{"generation": 6, "level": 50, "shiny": 1, "moves":["uproar", "futuresight", "nastyplot", "extrasensory"]},
 		],
 		eventOnly: true,
-		tier: "UU",
+		tier: "OU",
 	},
 	dialga: {
 		randomBattleMoves: ["stealthrock", "toxic", "dracometeor", "fireblast", "flashcannon", "roar", "thunderbolt"],
@@ -4429,7 +4429,7 @@ exports.BattleFormatsData = {
 	sawk: {
 		randomBattleMoves: ["closecombat", "earthquake", "icepunch", "poisonjab", "bulkup", "knockoff"],
 		randomDoubleBattleMoves: ["closecombat", "knockoff", "icepunch", "rockslide", "protect"],
-		tier: "BL3",
+		tier: "RU",
 	},
 	sewaddle: {
 		randomBattleMoves: ["calmmind", "gigadrain", "bugbuzz", "hiddenpowerfire", "hiddenpowerice", "airslash"],
