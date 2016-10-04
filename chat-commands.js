@@ -70,6 +70,22 @@ exports.commands = {
 		"/auth [room] - Show what roomauth a room has.",
 		"/auth [user] - Show what global and roomauth a user has."],
 
+	userlist: function (target, room, user) {
+		let userList = [];
+
+		for (let i in room.users) {
+			let curUser = Users(room.users[i]);
+			if (!curUser || !curUser.named) continue;
+			userList.push(Chat.escapeHTML(curUser.getIdentity(room.id)));
+		}
+
+		let output = `There ${Chat.plural(userList.length, 'are', 'is')} <strong style="color:#24678d">${userList.length}</strong> user${Chat.plural(userList.length)} in this room:<br />`;
+		output += userList.join(`, `);
+
+		this.sendReplyBox(output);
+	},
+	userlisthelp: ["/userlist - Displays a list of users who are currently in the room."],
+
 	'!me': true,
 	mee: 'me',
 	me: function (target, room, user) {
