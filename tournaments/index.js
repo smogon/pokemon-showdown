@@ -973,6 +973,13 @@ let commands = {
 		acceptchallenge: function (tournament, user) {
 			tournament.acceptChallenge(user, this);
 		},
+		viewbanlist: function (tournament, user) {
+			if (!this.runBroadcast()) return;
+			if (tournament.banlist.length < 1) {
+				return this.errorReply("The tournament's banlist is empty.");
+			}
+			this.sendReplyBox("<b>Banlist:</b><br />" + Chat.escapeHTML(tournament.banlist.join(', ')));
+		},
 	},
 	creation: {
 		settype: function (tournament, user, params, cmd) {
@@ -1014,13 +1021,6 @@ let commands = {
 				this.room.addRaw("<b>The tournament's banlist now includes:</b> " + banlist + ".");
 				this.privateModCommand("(" + user.name + " set the tournament's banlist to " + banlist + ".)");
 			}
-		},
-		viewbanlist: function (tournament, user) {
-			if (!this.runBroadcast()) return;
-			if (tournament.banlist.length < 1) {
-				return this.errorReply("The tournament's banlist is empty.");
-			}
-			this.sendReplyBox("<b>Banlist:</b><br />" + Chat.escapeHTML(tournament.banlist.join(', ')));
 		},
 		clearbanlist: function (tournament, user) {
 			if (tournament.isTournamentStarted) {
