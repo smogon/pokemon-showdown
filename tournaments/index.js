@@ -978,7 +978,7 @@ let commands = {
 			if (tournament.banlist.length < 1) {
 				return this.errorReply("The tournament's banlist is empty.");
 			}
-			this.sendReplyBox("<b>Banlist:</b><br />" + Chat.escapeHTML(tournament.banlist.join(', ')));
+			this.sendReplyBox("<b>This tournament's banlist:</b><br />" + Chat.escapeHTML(tournament.banlist.join(', ')));
 		},
 	},
 	creation: {
