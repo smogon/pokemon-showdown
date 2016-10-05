@@ -973,7 +973,7 @@ let commands = {
 		acceptchallenge: function (tournament, user) {
 			tournament.acceptChallenge(user, this);
 		},
-		viewbanlist: function (tournament, user) {
+		viewbanlist: function (tournament) {
 			if (!this.runBroadcast()) return;
 			if (tournament.banlist.length < 1) {
 				return this.errorReply("The tournament's banlist is empty.");
