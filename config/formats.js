@@ -371,7 +371,7 @@ exports.Formats = [
 		section: "OM of the Month",
 
 		ruleset: ['OU'],
-		banlist: [],
+		banlist: ['Pinsirite'],
 		onModifyMovePriority: 2,
 		onModifyMove: function (move, pokemon) {
 			if (move.basePower > 0 && !move.multihit && pokemon.moves.indexOf(move.id) === 0) {
