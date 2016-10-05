@@ -956,6 +956,18 @@ Punishments.checkNewNameInRoom = function (user, userid, roomid) {
 	}
 };
 
+Punishments.checkLockExpiration = function (userid) {
+	const punishment = Punishments.userids.get(userid);
+
+	if (punishment) {
+		let expiresIn = new Date(punishment[2]).getTime() - Date.now();
+		let expiresDays = Math.round(expiresIn / 1000 / 60 / 60 / 24);
+		if (expiresIn > 1) return ` (expires in around ${expiresDays} day${Chat.plural(expiresDays)})`;
+	}
+
+	return ``;
+};
+
 Punishments.isRoomBanned = function (user, roomid) {
 	if (!user) return;
 
