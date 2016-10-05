@@ -116,8 +116,15 @@ class Tournament {
 			if (!search || search.length < 1) continue;
 			search = search[0];
 			if (search.searchType === 'nature') continue;
-			let ban = (unban ? '!' : '') + search.name;
-			let oppositeBan = unban ? search.name : '!' + search.name;
+			let ban = search.name;
+			let oppositeBan;
+			if (unban) {
+				if (format.unbanlist && format.unbanlist.includes(ban)) continue;
+				oppositeBan = ban;
+				ban = '!' + ban;
+			} else {
+				oppositeBan = '!' + ban;
+			}
 			let index = banlist.indexOf(oppositeBan);
 			if (index > -1) {
 				banlist.splice(index, 1);
