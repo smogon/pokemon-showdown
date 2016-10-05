@@ -1008,6 +1008,10 @@ exports.BattleMovedex = {
 			onDamagePriority: -101,
 			onDamage: function (damage, target, source, move) {
 				if (!move || move.effectType !== 'Move' || !source) return;
+				if (move.id === 'confused') {
+					source.removeVolatile('bide');
+					return;
+				}
 				this.effectData.totalDamage += damage;
 				this.effectData.lastDamageSource = source;
 			},
