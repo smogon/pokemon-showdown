@@ -973,6 +973,13 @@ let commands = {
 		acceptchallenge: function (tournament, user) {
 			tournament.acceptChallenge(user, this);
 		},
+		viewbanlist: function (tournament) {
+			if (!this.runBroadcast()) return;
+			if (tournament.banlist.length < 1) {
+				return this.errorReply("The tournament's banlist is empty.");
+			}
+			this.sendReplyBox("<b>This tournament's banlist:</b><br />" + Chat.escapeHTML(tournament.banlist.join(', ')));
+		},
 	},
 	creation: {
 		settype: function (tournament, user, params, cmd) {
@@ -1291,6 +1298,7 @@ Chat.commands.tournamenthelp = function (target, room, user) {
 		"- create/new &lt;format>, &lt;type> [, &lt;comma-separated arguments>]: Creates a new tournament in the current room.<br />" +
 		"- settype &lt;type> [, &lt;comma-separated arguments>]: Modifies the type of tournament after it's been created, but before it has started.<br />" +
 		"- banlist &lt;comma-separated arguments>: Sets the supplementary banlist for the tournament before it has started.<br />" +
+		"- viewbanlist: Shows the supplementary banlist for the tournament.<br />" +
 		"- clearbanlist: Clears the supplementary banlist for the tournament before it has started.<br />" +
 		"- end/stop/delete: Forcibly ends the tournament in the current room.<br />" +
 		"- begin/start: Starts the tournament in the current room.<br />" +
