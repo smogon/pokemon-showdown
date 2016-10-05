@@ -27,11 +27,16 @@ class Validator {
 			} else {
 				format.banlist = [];
 			}
+			if (format.unbanlist) {
+				format.unbanlist = format.unbanlist.slice();
+			} else {
+				format.unbanlist = [];
+			}
 			for (let i = 0; i < supplementaryBanlist.length; i++) {
 				let ban = supplementaryBanlist[i];
 				if (ban.charAt(0) === '!') {
-					let index = format.banlist.indexOf(ban.substr(1));
-					if (index > -1) format.banlist.splice(index, 1);
+					ban = ban.substr(1);
+					if (!format.unbanlist.includes(ban)) format.unbanlist.push(ban);
 				} else {
 					if (!format.banlist.includes(ban)) format.banlist.push(ban);
 				}
