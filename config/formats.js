@@ -637,27 +637,9 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
-		name: "[Seasonal] Fireworks Frenzy",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3491902/\">Seasonal Ladder</a>"],
-		section: "Randomized Metas",
-		column: 2,
-
-		team: 'randomSeasonalFireworks',
-		ruleset: ['Sleep Clause Mod', 'Freeze Clause Mod', 'HP Percentage Mod', 'Cancel Mod'],
-		onBegin: function () {
-			this.add('message', "A fireworks show is starting!");
-			// this.add('-weather', 'Fireworks'); // un-comment when the client supports custom named weathers
-		},
-		onResidual: function () {
-			if (this.isWeather('')) this.eachEvent('Weather');
-		},
-		onWeather: function (target) {
-			if (!target.hasType('Fire')) this.damage(target.maxhp / 16, target, null, 'exploding fireworks');
-		},
-	},
-	{
 		name: "Battle Factory",
 		section: "Randomized Metas",
+		column: 2,
 
 		team: 'randomFactory',
 		ruleset: ['Pokemon', 'Sleep Clause Mod', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Mega Rayquaza Clause'],
