@@ -86,6 +86,8 @@ exports.BattleScripts = {
 		if (!this.runEvent('BeforeMove', pokemon, target, move)) {
 			// Prevent invulnerability from persisting until the turn ends
 			pokemon.removeVolatile('twoturnmove');
+			// End Bide
+			pokemon.removeVolatile('bide');
 			// Rampage moves end without causing confusion
 			delete pokemon.volatiles['lockedmove'];
 			this.clearActiveMove(true);
