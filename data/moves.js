@@ -998,12 +998,15 @@ exports.BattleMovedex = {
 		flags: {contact: 1, protect: 1},
 		volatileStatus: 'bide',
 		ignoreImmunity: true,
+		beforeMoveCallback: function (pokemon) {
+			if (pokemon.volatiles['bide']) return true;
+		},
 		effect: {
 			duration: 3,
 			onLockMove: 'bide',
 			onStart: function (pokemon) {
 				this.effectData.totalDamage = 0;
-				this.add('-start', pokemon, 'Bide');
+				this.add('-start', pokemon, 'move: Bide');
 			},
 			onDamagePriority: -101,
 			onDamage: function (damage, target, source, move) {
@@ -1011,14 +1014,9 @@ exports.BattleMovedex = {
 				this.effectData.totalDamage += damage;
 				this.effectData.lastDamageSource = source;
 			},
-			onAfterSetStatus: function (status, pokemon) {
-				if (status.id === 'slp') {
-					pokemon.removeVolatile('bide');
-				}
-			},
 			onBeforeMove: function (pokemon, target, move) {
 				if (this.effectData.duration === 1) {
-					this.add('-end', pokemon, 'Bide');
+					this.add('-end', pokemon, 'move: Bide');
 					target = this.effectData.lastDamageSource;
 					if (!target || !this.effectData.totalDamage) {
 						this.attrLastMove('[still]');
@@ -1045,7 +1043,9 @@ exports.BattleMovedex = {
 					return false;
 				}
 				this.add('-activate', pokemon, 'move: Bide');
-				return false;
+			},
+			onEnd: function (pokemon) {
+				this.add('-end', pokemon, 'move: Bide', '[silent]');
 			},
 		},
 		secondary: false,
