@@ -151,7 +151,7 @@ exports.commands = {
 			const modchatSetting = (room.modchat || "OFF");
 			return this.sendReply(`Moderated chat is currently set to: ${modchatSetting}`);
 		}
-		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
+		if (!this.canTalk()) return;
 		if (!this.can('modchat', null, room)) return false;
 
 		if (room.modchat && room.modchat.length <= 1 && Config.groupsranking.indexOf(room.modchat) > 1 && !user.can('modchatall', null, room)) {
@@ -284,7 +284,7 @@ exports.commands = {
 			const slowchatSetting = (room.slowchat || "OFF");
 			return this.sendReply(`Slow chat is currently set to: ${slowchatSetting}`);
 		}
-		if (!this.canTalk()) return this.errorReply(`You cannot do this while unable to talk.`);
+		if (!this.canTalk()) return;
 		if (!this.can('modchat', null, room)) return false;
 
 		let targetInt = parseInt(target);
@@ -320,7 +320,7 @@ exports.commands = {
 			const stretchSetting = (room.filterStretching ? "ON" : "OFF");
 			return this.sendReply(`This room's stretch filter is currently: ${stretchSetting}`);
 		}
-		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
+		if (!this.canTalk()) return;
 		if (!this.can('editroom', null, room)) return false;
 
 		if (target === 'enable' || target === 'on') {
@@ -349,7 +349,7 @@ exports.commands = {
 			const capsSetting = (room.filterCaps ? "ON" : "OFF");
 			return this.sendReply(`This room's caps filter is currently: ${capsSetting}`);
 		}
-		if (!this.canTalk()) return this.errorReply(`You cannot do this while unable to talk.`);
+		if (!this.canTalk()) return;
 		if (!this.can('editroom', null, room)) return false;
 
 		if (target === 'enable' || target === 'on' || target === 'true') {
