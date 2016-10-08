@@ -11204,7 +11204,7 @@ exports.BattlePokedex = {
 		species: "Kerfluffle",
 		types: ["Fairy", "Fighting"],
 		baseStats: {hp: 84, atk: 78, def: 86, spa: 115, spd: 88, spe: 119},
-		abilities: {0: "Natural Cure", 1: "Aroma Veil"},
+		abilities: {0: "Natural Cure", 1: "Aroma Veil", H: "Friend Guard"},
 		heightm: 2.1,
 		weightkg: 24.2,
 		color: "Pink",
