@@ -1109,9 +1109,10 @@ let commands = {
 				this.privateModCommand("(The tournament auto disqualify timer was set to " + params[0] + " by " + user.name + ")");
 			}
 		},
-		runautodq: function (tournament) {
+		runautodq: function (tournament, user) {
 			if (tournament.autoDisqualifyTimeout === Infinity) return this.errorReply("The automatic tournament disqualify timer is not set.");
 			tournament.runAutoDisqualify(this);
+			this.logEntry(user.name + " used /tour runautodq");
 		},
 		scout: 'setscouting',
 		scouting: 'setscouting',
