@@ -2274,9 +2274,11 @@ exports.commands = {
 			target = targets[1].trim();
 			roomId = toId(targets[0]) || room.id;
 		}
+		let targetRoom = Rooms.get(roomId);
+		let addModlogLinks = Config.modloglink && (!hideIps || (targetRoom && !targetRoom.isPrivate));
 
 		// Let's check the number of lines to retrieve or if it's a word instead
-		if (!target.match('[^0-9]')) {
+		if (!target.match(/[^0-9]/)) {
 			lines = parseInt(target || 20);
 			if (lines > 100) lines = 100;
 		}
@@ -2292,21 +2294,21 @@ exports.commands = {
 			// Get a list of all the rooms
 			let fileList = fs.readdirSync('logs/modlog');
 			for (let i = 0; i < fileList.length; ++i) {
-				filename += path.normalize(__dirname + '/' + logPath + fileList[i]) + ' ';
+				filename += path.normalize(`${__dirname}/${logPath}${fileList[i]}`) + ' ';
 			}
 		} else if (roomId.startsWith('battle-') || roomId.startsWith('groupchat-')) {
 			return this.errorReply("Battles and groupchats do not have modlogs.");
 		} else {
-			if (!user.can('modlog') && !this.can('modlog', null, Rooms.get(roomId))) return;
+			if (!user.can('modlog') && !this.can('modlog', null, targetRoom)) return;
 			roomNames = "the room " + roomId;
-			filename = path.normalize(__dirname + '/' + logPath + 'modlog_' + roomId + '.txt');
+			filename = path.normalize(`${__dirname}/${logPath}modlog_${roomId}.txt`);
 		}
 
 		// Seek for all input rooms for the lines or text
 		if (isWin) {
-			command = path.normalize(__dirname + '/lib/winmodlog') + ' tail ' + lines + ' ' + filename;
+			command = `${path.normalize(__dirname + '/lib/winmodlog')} tail ${lines} ${filename}`;
 		} else {
-			command = 'tail -' + lines + ' ' + filename + ' | tac';
+			command = `tail -${lines} ${filename} | tac`;
 		}
 		let grepLimit = 100;
 		let strictMatch = false;
@@ -2319,27 +2321,27 @@ exports.commands = {
 			} else if (searchString.includes('_')) {
 				// do an exact search, the approximate search fails for underscores
 			} else if (isWin) {  // ID search with RegEx isn't implemented for windows yet (feel free to add it to winmodlog.cmd)
-				target = '"' + target + '"';  // add quotes to target so the caller knows they are getting a strict match
+				target = `"${target}"`;  // add quotes to target so the caller knows they are getting a strict match
 			} else {
 				// search for ID: allow any number of non-word characters (\W*) in between the letters we have to match.
 				// i.e. if searching for "myUsername", also match on "My User-Name".
 				// note that this doesn't really add a lot of unwanted results, since we use \b..\b
 				target = toId(target);
-				searchString = '\\b' + target.split('').join('\\W*') + '\\b';
+				searchString = `\\b${target.split('').join('\\W*')}\\b`;
 				strictMatch = false;
 			}
 
 			if (isWin) {
 				if (strictMatch) {
-					command = path.normalize(__dirname + '/lib/winmodlog') + ' ws ' + grepLimit + ' "' + searchString.replace(/%/g, "%%").replace(/([\^"&<>\|])/g, "^$1") + '" ' + filename;
+					command = `${path.normalize(__dirname + '/lib/winmodlog')} ws ${grepLimit} "${searchString.replace(/%/g, "%%").replace(/([\^"&<>\|])/g, "^$1")}" ${filename}`;
 				} else {
 					// doesn't happen. ID search with RegEx isn't implemented for windows yet (feel free to add it to winmodlog.cmd and call it from here)
 				}
 			} else {
 				if (strictMatch) {
-					command = "awk '{print NR,$0}' " + filename + " | sort -nr | cut -d' ' -f2- | grep -m" + grepLimit + " -i '" + searchString.replace(/\\/g, '\\\\\\\\').replace(/["'`]/g, '\'\\$&\'').replace(/[\{\}\[\]\(\)\$\^\.\?\+\-\*]/g, '[$&]') + "'";
+					command = `awk '{print NR,$0}' ${filename} | sort -nr | cut -d' ' -f2- | grep -m${grepLimit} -i '${searchString.replace(/\\/g, '\\\\\\\\').replace(/["'`]/g, '\'\\$&\'').replace(/[\{\}\[\]\(\)\$\^\.\?\+\-\*]/g, '[$&]')}'`;
 				} else {
-					command = "awk '{print NR,$0}' " + filename + " | sort -nr | cut -d' ' -f2- | grep -m" + grepLimit + " -Ei '" + searchString + "'";
+					command = `awk '{print NR,$0}' ${filename} | sort -nr | cut -d' ' -f2- | grep -m${grepLimit} -Ei '${searchString}'`;
 				}
 			}
 		}
@@ -2347,8 +2349,8 @@ exports.commands = {
 		// Execute the file search to see modlog
 		require('child_process').exec(command, (error, stdout, stderr) => {
 			if (error && stderr) {
-				connection.popup("/modlog empty on " + roomNames + " or erred");
-				console.log("/modlog error: " + error);
+				connection.popup(`/modlog empty on ${roomNames} or erred`);
+				console.log(`/modlog error: ${error}`);
 				return false;
 			}
 			if (stdout && hideIps) {
@@ -2361,26 +2363,26 @@ exports.commands = {
 				const time = line.slice(1, bracketIndex);
 				let timestamp = Chat.toTimestamp(new Date(time), {hour12: true});
 				parenIndex = line.indexOf(')');
-				let roomid = line.slice(bracketIndex + 3, parenIndex);
-				if (!hideIps && Config.modloglink) {
-					let url = Config.modloglink(time, roomid);
-					if (url) timestamp = '<a href="' + url + '">' + timestamp + '</a>';
+				let thisRoomID = line.slice(bracketIndex + 3, parenIndex);
+				if (addModlogLinks) {
+					let url = Config.modloglink(time, thisRoomID);
+					if (url) timestamp = `<a href="${url}">${timestamp}</a>`;
 				}
-				return '<small>[' + timestamp + '] (' + roomid + ')</small>' + Chat.escapeHTML(line.slice(parenIndex + 1));
-			}).join('<br />');
+				return `<small>[${timestamp}] (${thisRoomID})</small>${Chat.escapeHTML(line.slice(parenIndex + 1))}`;
+			}).join('<br>');
 			if (lines) {
 				if (!stdout) {
 					connection.popup("The modlog is empty. (Weird.)");
 				} else {
-					connection.popup("|wide||html|<p>The last " + lines + " lines of the Moderator Log of " + roomNames + ".</p><p><small>[" + Chat.toTimestamp(new Date(), {hour12: true}) + "] ← current server time</small></p>" + stdout);
+					connection.popup(`|wide||html|<p>The last ${lines} lines of the Moderator Log of ${roomNames}.</p><p><small>[${Chat.toTimestamp(new Date(), {hour12: true})}] \u2190 current server time</small></p>${stdout}`);
 				}
 			} else {
 				if (!stdout) {
-					connection.popup("No moderator actions containing " + target + " were found on " + roomNames + "." +
+					connection.popup(`No moderator actions containing ${target} were found on ${roomNames}.` +
 					                 (strictMatch ? "" : " Add quotes to the search parameter to search for a phrase, rather than a user."));
 				} else {
-					connection.popup("|wide||html|<p>The last " + grepLimit + " logged actions containing " + target + " on " + roomNames + "." +
-					                 (strictMatch ? "" : " Add quotes to the search parameter to search for a phrase, rather than a user.") + "</p><p><small>[" + Chat.toTimestamp(new Date(), {hour12: true}) + "] ← current server time</small></p>" + stdout);
+					connection.popup(`|wide||html|<p>The last ${grepLimit} logged actions containing ${target} on ${roomNames}.` +
+					                 (strictMatch ? "" : " Add quotes to the search parameter to search for a phrase, rather than a user.") + `</p><p><small>[${Chat.toTimestamp(new Date(), {hour12: true})}] ? current server time</small></p>${stdout}`);
 				}
 			}
 		});
