@@ -525,7 +525,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 3, "level": 40, "moves":["charm", "earthquake", "sandstorm", "triattack"]},
 		],
-		tier: "RU",
+		tier: "BL2",
 	},
 	meowth: {
 		randomBattleMoves: ["fakeout", "uturn", "thief", "taunt", "return", "hypnosis"],
