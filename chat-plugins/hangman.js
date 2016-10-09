@@ -202,7 +202,7 @@ exports.commands = {
 
 			if (!this.can('minigame', null, room)) return false;
 			if (room.hangmanDisabled) return this.errorReply("Hangman is disabled for this room.");
-			if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
+			if (!this.canTalk()) return;
 			if (room.game) return this.errorReply("There is already a game of " + room.game.title + " in progress in this room.");
 
 			if (!params) return this.errorReply("No word entered.");
@@ -228,7 +228,7 @@ exports.commands = {
 		guess: function (target, room, user) {
 			if (!target) return this.parse('/help guess');
 			if (!room.game || room.game.gameid !== 'hangman') return this.errorReply("There is no game of hangman running in this room.");
-			if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
+			if (!this.canTalk()) return;
 
 			room.game.guess(target, user);
 		},
@@ -238,7 +238,7 @@ exports.commands = {
 		stop: 'end',
 		end: function (target, room, user) {
 			if (!this.can('minigame', null, room)) return false;
-			if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
+			if (!this.canTalk()) return;
 			if (!room.game || room.game.gameid !== 'hangman') return this.errorReply("There is no game of hangman running in this room.");
 
 			room.game.end();
@@ -296,7 +296,7 @@ exports.commands = {
 
 	guess: function (target, room, user) {
 		if (!room.game) return this.errorReply("There is no game running in this room.");
-		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
+		if (!this.canTalk()) return;
 		if (!room.game.guess) return this.errorReply("You can't guess anything in this game.");
 
 		room.game.guess(target, user);

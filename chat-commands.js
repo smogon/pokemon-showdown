@@ -456,7 +456,7 @@ exports.commands = {
 		"(in a PM) /invite [roomname] - Invites the player you're PMing to join the room [roomname]."],
 
 	pminfobox: function (target, room, user, connection) {
-		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
+		if (!this.canTalk()) return;
 		if (!this.can('addhtml', null, room)) return false;
 		if (!target) return this.parse("/help pminfobox");
 
@@ -1217,7 +1217,7 @@ exports.commands = {
 	rb: 'roomban',
 	roomban: function (target, room, user, connection) {
 		if (!target) return this.parse('/help roomban');
-		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
+		if (!this.canTalk()) return;
 
 		target = this.splitTarget(target);
 		let targetUser = this.targetUser;
@@ -1333,7 +1333,7 @@ exports.commands = {
 	k: 'warn',
 	warn: function (target, room, user) {
 		if (!target) return this.parse('/help warn');
-		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
+		if (!this.canTalk()) return;
 		if (room.isPersonal && !user.can('warn')) return this.errorReply("Warning is unavailable in group chats.");
 
 		target = this.splitTarget(target);
@@ -1389,7 +1389,7 @@ exports.commands = {
 	m: 'mute',
 	mute: function (target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help mute');
-		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
+		if (!this.canTalk()) return;
 
 		target = this.splitTarget(target);
 		let targetUser = this.targetUser;
@@ -1431,7 +1431,7 @@ exports.commands = {
 	unmute: function (target, room, user) {
 		if (!target) return this.parse('/help unmute');
 		target = this.splitTarget(target);
-		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
+		if (!this.canTalk()) return;
 		if (!this.can('mute', null, room)) return false;
 
 		let targetUser = this.targetUser;
@@ -1788,7 +1788,7 @@ exports.commands = {
 	mn: 'modnote',
 	modnote: function (target, room, user, connection) {
 		if (!target) return this.parse('/help modnote');
-		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
+		if (!this.canTalk()) return;
 
 		if (target.length > MAX_REASON_LENGTH) {
 			return this.errorReply("The note is too long. It cannot exceed " + MAX_REASON_LENGTH + " characters.");
@@ -2075,7 +2075,7 @@ exports.commands = {
 	ab: 'blacklist',
 	blacklist: function (target, room, user) {
 		if (!target) return this.parse('/help blacklist');
-		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
+		if (!this.canTalk()) return;
 		if (toId(target) === 'show') return this.errorReply("You're looking for /showbl");
 
 		target = this.splitTarget(target);
@@ -2133,7 +2133,7 @@ exports.commands = {
 
 	blacklistname: function (target, room, user) {
 		if (!target) return this.parse('/help blacklistname');
-		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
+		if (!this.canTalk()) return;
 		if (!this.can('editroom', null, room)) return false;
 		if (!room.chatRoomData) {
 			return this.errorReply("This room is not going to last long enough for a blacklist to matter - just ban the user");

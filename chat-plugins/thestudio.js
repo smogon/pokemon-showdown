@@ -29,7 +29,7 @@ let commands = {
 	start: function (target, room, user) {
 		if (room.id !== 'thestudio') return this.errorReply('This command can only be used in The Studio.');
 		if (!room.chatRoomData || !this.can('mute', null, room)) return false;
-		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
+		if (!this.canTalk()) return;
 		if (artistOfTheDay.pendingNominations) return this.sendReply("Nominations for the Artist of the Day are already in progress.");
 
 		let nominations = artistOfTheDay.nominations;
@@ -55,7 +55,7 @@ let commands = {
 	end: function (target, room, user) {
 		if (room.id !== 'thestudio') return this.errorReply('This command can only be used in The Studio.');
 		if (!room.chatRoomData || !this.can('mute', null, room)) return false;
-		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
+		if (!this.canTalk()) return;
 		if (!artistOfTheDay.pendingNominations) return this.sendReply("Nominations for the Artist of the Day are not in progress.");
 		if (!artistOfTheDay.nominations.size) return this.sendReply("No nominations have been submitted yet.");
 
@@ -78,7 +78,7 @@ let commands = {
 		if (room.id !== 'thestudio') return this.errorReply('This command can only be used in The Studio.');
 		if (!target) this.parse('/help aotd prenom');
 		if (!room.chatRoomData || !target) return false;
-		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
+		if (!this.canTalk()) return;
 		if (artistOfTheDay.pendingNominations) return this.sendReply("Nominations for the Artist of the Day are in progress.");
 		if (!room.chatRoomData.prenominations) room.chatRoomData.prenominations = [];
 
@@ -118,7 +118,7 @@ let commands = {
 		if (room.id !== 'thestudio') return this.errorReply('This command can only be used in The Studio.');
 		if (!target) this.parse('/help aotd nom');
 		if (!room.chatRoomData || !target) return false;
-		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
+		if (!this.canTalk()) return;
 		if (!artistOfTheDay.pendingNominations) return this.sendReply("Nominations for the Artist of the Day are not in progress.");
 
 		let removedNominators = artistOfTheDay.removedNominators;
@@ -190,7 +190,7 @@ let commands = {
 		if (room.id !== 'thestudio') return this.errorReply('This command can only be used in The Studio.');
 		if (!target) this.parse('/help aotd removenom');
 		if (!room.chatRoomData || !target || !this.can('mute', null, room)) return false;
-		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
+		if (!this.canTalk()) return;
 		if (!artistOfTheDay.pendingNominations) return this.sendReply("Nominations for the Artist of the Day are not in progress.");
 		if (!artistOfTheDay.nominations.size) return this.sendReply("No nominations have been submitted yet.");
 
