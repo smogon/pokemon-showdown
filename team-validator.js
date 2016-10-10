@@ -217,7 +217,12 @@ class Validator {
 			}
 		}
 		if (!tools.getNature(set.nature).exists) {
-			return [`${set.species}'s nature "${set.nature}" is invalid.`];
+			if (gen.tools < 3) {
+				// gen 1-2 don't have natures, just silently remove them
+				set.nature = '';
+			} else {
+				return [`${set.species}'s nature "${set.nature}" is invalid.`];
+			}
 		}
 
 		let banlistTable = tools.getBanlistTable(format);
