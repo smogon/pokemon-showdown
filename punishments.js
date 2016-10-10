@@ -477,7 +477,7 @@ Punishments.roomPunishName = function (room, userid, punishment) {
  * @param {string} id
  * @param {string} punishType
  */
-Punishments.roomUnpunish = function (room, id, punishType) {
+Punishments.roomUnpunish = function (room, id, punishType, ignoreWrite) {
 	id = toId(id);
 	let punishment = Punishments.roomUserids.nestedGet(room, id);
 	if (punishment) {
@@ -505,7 +505,7 @@ Punishments.roomUnpunish = function (room, id, punishType) {
 			}
 		});
 	}
-	if (success) {
+	if (success && !ignoreWrite) {
 		Punishments.saveRoomPunishments();
 	}
 	return success;
@@ -720,13 +720,13 @@ Punishments.roomUnban = function (room, userid) {
 	return Punishments.roomUnpunish(room, userid, 'ROOMBAN');
 };
 
-Punishments.roomUnblacklist = function (room, userid) {
+Punishments.roomUnblacklist = function (room, userid, ignoreWrite) {
 	const user = Users(userid);
 	if (user) {
 		let punishment = Punishments.isRoomBanned(user, room.id);
 		if (punishment) userid = punishment[1];
 	}
-	return Punishments.roomUnpunish(room, userid, 'BLACKLIST');
+	return Punishments.roomUnpunish(room, userid, 'BLACKLIST', ignoreWrite);
 };
 
 Punishments.roomUnblacklistAll = function (room) {
@@ -737,12 +737,12 @@ Punishments.roomUnblacklistAll = function (room) {
 
 	roombans.forEach((punishment, userid) => {
 		if (punishment[0] === 'BLACKLIST') {
-			Punishments.roomUnblacklist(room, userid);
+			Punishments.roomUnblacklist(room, userid, true);
 			unblacklisted.push(userid);
 		}
 	});
 	if (unblacklisted.length === 0) return false;
-	Punishments.savePunishments();
+	Punishments.saveRoomPunishments();
 	return unblacklisted;
 };
 
