@@ -1635,7 +1635,8 @@ exports.BattleScripts = {
 				}
 
 				// Pokemon should have moves that benefit their Ability/Type/Weather, as well as moves required by its forme
-				if ((hasType['Dark'] && hasMove['suckerpunch'] && counter.stab < template.types.length) ||
+				if ((hasType['Bug'] && (movePool.includes('pinmissile') || (movePool.includes('megahorn') && !hasMove['batonpass']) || (hasType['Flying'] && !hasMove['hurricane'] && movePool.includes('bugbuzz')))) ||
+					(hasType['Dark'] && hasMove['suckerpunch'] && counter.stab < template.types.length) ||
 					(hasType['Dragon'] && !counter['Dragon'] && !hasAbility['Aerilate'] && !hasAbility['Pixilate'] && !hasMove['rest'] && !hasMove['sleeptalk']) ||
 					(hasType['Electric'] && !counter['Electric']) ||
 					(hasType['Fighting'] && !counter['Fighting'] && counter.setupType) ||
