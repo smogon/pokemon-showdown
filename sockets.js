@@ -14,6 +14,7 @@
 'use strict';
 
 const cluster = require('cluster');
+const EventEmitter = require('events').EventEmitter;
 global.Config = require('./config/config');
 
 if (cluster.isMaster) {
@@ -21,7 +22,7 @@ if (cluster.isMaster) {
 		exec: require('path').resolve(__dirname, 'sockets'),
 	});
 
-	let workers = exports.workers = {};
+	let workers = {};
 
 	let spawnWorker = exports.spawnWorker = function () {
 		let worker = cluster.fork({PSPORT: Config.port, PSBINDADDR: Config.bindaddress || '', PSNOSSL: Config.ssl ? 0 : 1});
@@ -35,14 +36,14 @@ if (cluster.isMaster) {
 				// connect
 				let nlPos = data.indexOf('\n');
 				let nlPos2 = data.indexOf('\n', nlPos + 1);
-				Users.socketConnect(worker, id, data.slice(1, nlPos), data.slice(nlPos + 1, nlPos2), data.slice(nlPos2 + 1));
+				Users.socketConnect(id, data.slice(1, nlPos), data.slice(nlPos + 1, nlPos2), data.slice(nlPos2 + 1));
 				break;
 			}
 
 			case '!': {
 				// !socketid
 				// disconnect
-				Users.socketDisconnect(worker, id, data.substr(1));
+				Users.socketDisconnect(id, data.substr(1));
 				break;
 			}
 
@@ -50,7 +51,7 @@ if (cluster.isMaster) {
 				// <socketid, message
 				// message
 				let nlPos = data.indexOf('\n');
-				Users.socketReceive(worker, id, data.substr(1, nlPos - 1), data.substr(nlPos + 1));
+				Users.socketReceive(id, data.substr(1, nlPos - 1), data.substr(nlPos + 1));
 				break;
 			}
 
@@ -60,21 +61,31 @@ if (cluster.isMaster) {
 		});
 	};
 
+	exports.spawnMockWorker = function () {
+		let mock = new EventEmitter();
+		mock.id = 1;
+		mock.send = () => {};
+		mock.process = {connected: true};
+		workers[mock.id] = mock;
+		return mock;
+	};
+
 	cluster.on('disconnect', worker => {
 		// worker crashed, try our best to clean up
-		require('./crashlogger')(new Error("Worker " + worker.id + " abruptly died"), "The main process");
+		require('./crashlogger')(new Error(`Worker ${worker.id} abruptly died`), "The main process");
 
-		// this could get called during cleanup; prevent it from crashing
-		worker.send = () => {};
+		// event listeners could get called during cleanup; prevent this from crashing
+		worker.removeAllListeners();
+		worker.process.removeAllListeners();
 
 		let count = 0;
 		Users.connections.forEach(connection => {
-			if (connection.worker === worker) {
-				Users.socketDisconnect(worker, worker.id, connection.socketid);
+			if (connection.workerid === worker.id) {
+				Users.socketDisconnect(worker.id, connection.socketid);
 				count++;
 			}
 		});
-		console.error("" + count + " connections were lost.");
+		console.error(`${count} connections were lost.`);
 
 		// don't delete the worker, so we can investigate it if necessary.
 
@@ -106,12 +117,33 @@ if (cluster.isMaster) {
 		}
 	};
 
-	exports.killWorker = function (worker) {
+	// This should only be used for debugging purposes;
+	// if you need to manipulate workers directly outside this file,
+	// truly reconsider because you may not have this luxury in the future.
+	exports.getWorkers = function () {
+		return workers;
+	};
+
+	exports.getWorkerIds = function () {
+		return Object.keys(workers);
+	};
+
+	exports.getWorkerPids = function () {
+		return Object.keys(workers).map(id => {
+			let worker = workers[id];
+			return worker.pid || worker.process.pid;
+		});
+	};
+
+	exports.killWorker = function (workerid) {
+		let worker = workers[workerid];
+		if (!worker) return false;
+
 		let idd = worker.id + '-';
 		let count = 0;
 		Users.connections.forEach((connection, connectionid) => {
 			if (connectionid.substr(idd.length) === idd) {
-				Users.socketDisconnect(worker, worker.id, connection.socketid);
+				Users.socketDisconnect(worker.id, connection.socketid);
 				count++;
 			}
 		});
@@ -127,41 +159,47 @@ if (cluster.isMaster) {
 		for (let id in workers) {
 			let worker = workers[id];
 			if (pid === '' + worker.process.pid) {
-				return this.killWorker(worker);
+				return this.killWorker(worker.id);
 			}
 		}
 		return false;
 	};
 
-	exports.socketSend = function (worker, socketid, message) {
-		worker.send('>' + socketid + '\n' + message);
+	exports.socketSend = function (workerid, socketid, message) {
+		let worker = workers[workerid];
+		if (worker) worker.send(`>${socketid}\n${message}`);
 	};
-	exports.socketDisconnect = function (worker, socketid) {
-		worker.send('!' + socketid);
+	exports.socketDisconnect = function (workerid, socketid) {
+		let worker = workers[workerid];
+		if (worker) worker.send(`!${socketid}`);
 	};
 
 	exports.channelBroadcast = function (channelid, message) {
 		for (let workerid in workers) {
-			workers[workerid].send('#' + channelid + '\n' + message);
+			workers[workerid].send(`#${channelid}\n${message}`);
 		}
 	};
-	exports.channelSend = function (worker, channelid, message) {
-		worker.send('#' + channelid + '\n' + message);
+	exports.channelSend = function (workerid, channelid, message) {
+		let worker = workers[workerid];
+		if (worker) worker.send(`#${channelid}\n${message}`);
 	};
-	exports.channelAdd = function (worker, channelid, socketid) {
-		worker.send('+' + channelid + '\n' + socketid);
+	exports.channelAdd = function (workerid, channelid, socketid) {
+		let worker = workers[workerid];
+		if (worker) worker.send(`+${channelid}\n${socketid}`);
 	};
-	exports.channelRemove = function (worker, channelid, socketid) {
-		worker.send('-' + channelid + '\n' + socketid);
+	exports.channelRemove = function (workerid, channelid, socketid) {
+		let worker = workers[workerid];
+		if (worker) worker.send(`-${channelid}\n${socketid}`);
 	};
 
 	exports.subchannelBroadcast = function (channelid, message) {
 		for (let workerid in workers) {
-			workers[workerid].send(':' + channelid + '\n' + message);
+			workers[workerid].send(`:${channelid}\n${message}`);
 		}
 	};
-	exports.subchannelMove = function (worker, channelid, subchannelid, socketid) {
-		worker.send('.' + channelid + '\n' + subchannelid + '\n' + socketid);
+	exports.subchannelMove = function (workerid, channelid, subchannelid, socketid) {
+		let worker = workers[workerid];
+		if (worker) worker.send(`.${channelid}\n${subchannelid}\n${socketid}`);
 	};
 } else {
 	// is worker
@@ -188,7 +226,7 @@ if (cluster.isMaster) {
 	if (Config.crashguard) {
 		// graceful crash
 		process.on('uncaughtException', err => {
-			require('./crashlogger')(err, 'Socket process ' + cluster.worker.id + ' (' + process.pid + ')', true);
+			require('./crashlogger')(err, `Socket process ${cluster.worker.id} (${process.pid})`, true);
 		});
 	}
 
@@ -455,14 +493,14 @@ if (cluster.isMaster) {
 			}
 		}
 
-		process.send('*' + socketid + '\n' + socket.remoteAddress + '\n' + socket.protocol);
+		process.send(`*${socketid}\n${socket.remoteAddress}\n${socket.protocol}`);
 
 		socket.on('data', message => {
 			// drop empty messages (DDoS?)
 			if (!message) return;
 			// drop messages over 100KB
-			if (message.length > 100000) {
-				console.log("Dropping client message " + (message.length / 1024) + " KB...");
+			if (message.length > 102400) {
+				console.log(`Dropping client message ${message.length / 1024}KB...`);
 				console.log(message.slice(0, 160));
 				return;
 			}
@@ -486,15 +524,15 @@ if (cluster.isMaster) {
 	server.installHandlers(app, {});
 	if (!Config.bindaddress) Config.bindaddress = '0.0.0.0';
 	app.listen(Config.port, Config.bindaddress);
-	console.log('Worker ' + cluster.worker.id + ' now listening on ' + Config.bindaddress + ':' + Config.port);
+	console.log(`Worker ${cluster.worker.id} now listening on ${Config.bindaddress}:${Config.port}`);
 
 	if (appssl) {
 		server.installHandlers(appssl, {});
 		appssl.listen(Config.ssl.port, Config.bindaddress);
-		console.log('Worker ' + cluster.worker.id + ' now listening for SSL on port ' + Config.ssl.port);
+		console.log(`Worker ${cluster.worker.id} now listening for SSL on port ${Config.ssl.port}`);
 	}
 
-	console.log('Test your server at http://' + (Config.bindaddress === '0.0.0.0' ? 'localhost' : Config.bindaddress) + ':' + Config.port);
+	console.log(`Test your server at http://${Config.bindaddress === '0.0.0.0' ? 'localhost' : Config.bindaddress}:${Config.port}`);
 
-	require('./repl').start('sockets-', cluster.worker.id + '-' + process.pid, cmd => eval(cmd));
+	require('./repl').start('sockets-', `${cluster.worker.id}-${process.pid}`, cmd => eval(cmd));
 }

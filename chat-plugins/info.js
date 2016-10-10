@@ -1266,18 +1266,17 @@ exports.commands = {
 	'!processes': true,
 	processes: function (target, room, user) {
 		if (!this.can('lockdown')) return false;
-		let buf = "<strong>" + process.pid + "</strong> - Main<br />";
-		for (let i in Sockets.workers) {
-			let worker = Sockets.workers[i];
-			buf += "<strong>" + (worker.pid || worker.process.pid) + "</strong> - Sockets " + i + "<br />";
-		}
+		let buf = `<strong>${process.pid}</strong> - Main<br />`;
+		Sockets.getWorkerPids().forEach((pid, i) => {
+			buf += `<strong>${pid}</strong> - Sockets ${i}<br />`;
+		});
 
 		const ProcessManager = require('../process-manager');
 		for (let managerData of ProcessManager.cache) {
 			let i = 0;
 			let processType = path.basename(managerData[1]);
 			for (let process of managerData[0].processes) {
-				buf += "<strong>" + process.process.pid + "</strong> - " + processType + " " + (i++) + "<br />";
+				buf += `<strong>${process.process.pid}</strong> - ${processType} ${i++}<br />`;
 			}
 		}
 		this.sendReplyBox(buf);

@@ -1,23 +1,9 @@
 'use strict';
 
-let EventEmitter = require('events').EventEmitter;
-
-function createWorker() {
-	let fakeWorker = new EventEmitter();
-	fakeWorker.id = 1;
-	fakeWorker.send = function () {};
-	fakeWorker.process = {connected: true};
-	Sockets.workers[fakeWorker.id] = fakeWorker;
-	return fakeWorker;
-}
-
 function createConnection(ip, workerid, socketid) {
-	let worker;
-	if (workerid) {
-		worker = Sockets.workers[workerid];
-	} else {
-		worker = createWorker();
-		workerid = worker.id;
+	if (!workerid) {
+		Sockets.spawnMockWorker();
+		workerid = 1;
 	}
 
 	if (!socketid) {
@@ -28,7 +14,7 @@ function createConnection(ip, workerid, socketid) {
 	}
 
 	let connectionid = '' + workerid + '-' + socketid;
-	let connection = new Users.Connection(connectionid, worker, socketid, null, ip || '127.0.0.1');
+	let connection = new Users.Connection(connectionid, workerid, socketid, null, ip || '127.0.0.1');
 	Users.connections.set(connectionid, connection);
 
 	return connection;

@@ -260,16 +260,16 @@ Users.cacheGroupData = cacheGroupData;
 let connections = Users.connections = new Map();
 
 class Connection {
-	constructor(id, worker, socketid, user, ip, protocol) {
+	constructor(id, workerid, socketid, user, ip = '', protocol = '') {
 		this.id = id;
 		this.socketid = socketid;
-		this.worker = worker;
+		this.workerid = workerid;
 		this.inRooms = new Set();
 
 		this.user = user;
 
-		this.ip = ip || '';
-		this.protocol = protocol || '';
+		this.ip = ip;
+		this.protocol = protocol;
 
 		this.autojoin = '';
 	}
@@ -277,17 +277,17 @@ class Connection {
 	sendTo(roomid, data) {
 		if (roomid && roomid.id) roomid = roomid.id;
 		if (roomid && roomid !== 'lobby') data = `>${roomid}\n${data}`;
-		Sockets.socketSend(this.worker, this.socketid, data);
+		Sockets.socketSend(this.workerid, this.socketid, data);
 		Monitor.countNetworkUse(data.length);
 	}
 
 	send(data) {
-		Sockets.socketSend(this.worker, this.socketid, data);
+		Sockets.socketSend(this.workerid, this.socketid, data);
 		Monitor.countNetworkUse(data.length);
 	}
 
 	destroy() {
-		Sockets.socketDisconnect(this.worker, this.socketid);
+		Sockets.socketDisconnect(this.workerid, this.socketid);
 		this.onDisconnect();
 	}
 	onDisconnect() {
@@ -303,12 +303,12 @@ class Connection {
 	joinRoom(room) {
 		if (this.inRooms.has(room.id)) return;
 		this.inRooms.add(room.id);
-		Sockets.channelAdd(this.worker, room.id, this.socketid);
+		Sockets.channelAdd(this.workerid, room.id, this.socketid);
 	}
 	leaveRoom(room) {
 		if (this.inRooms.has(room.id)) {
 			this.inRooms.delete(room.id);
-			Sockets.channelRemove(this.worker, room.id, this.socketid);
+			Sockets.channelRemove(this.workerid, room.id, this.socketid);
 		}
 	}
 }
@@ -1464,9 +1464,9 @@ Users.pruneInactiveTimer = setInterval(() => {
  * Routing
  *********************************************************/
 
-Users.socketConnect = function (worker, workerid, socketid, ip, protocol) {
-	let id = '' + workerid + '-' + socketid;
-	let connection = new Connection(id, worker, socketid, null, ip, protocol);
+Users.socketConnect = function (workerid, socketid, ip, protocol) {
+	let id = `${workerid}-${socketid}`;
+	let connection = new Connection(id, workerid, socketid, null, ip, protocol);
 	connections.set(id, connection);
 
 	let banned = Punishments.checkIpBanned(connection);
@@ -1475,7 +1475,7 @@ Users.socketConnect = function (worker, workerid, socketid, ip, protocol) {
 	}
 	// Emergency mode connections logging
 	if (Config.emergency) {
-		fs.appendFile('logs/cons.emergency.log', '[' + ip + ']\n', err => {
+		fs.appendFile('logs/cons.emergency.log', `[${ip}]\n`, err => {
 			if (err) {
 				console.log('!! Error in emergency conns log !!');
 				throw err;
@@ -1506,17 +1506,14 @@ Users.socketConnect = function (worker, workerid, socketid, ip, protocol) {
 	user.joinRoom('global', connection);
 };
 
-Users.socketDisconnect = function (worker, workerid, socketid) {
-	let id = '' + workerid + '-' + socketid;
-
+Users.socketDisconnect = function (workerid, socketid) {
+	let id = `${workerid}-${socketid}`;
 	let connection = connections.get(id);
-	if (!connection) return;
-	connection.onDisconnect();
+	if (connection) connection.onDisconnect();
 };
 
-Users.socketReceive = function (worker, workerid, socketid, message) {
-	let id = '' + workerid + '-' + socketid;
-
+Users.socketReceive = function (workerid, socketid, message) {
+	let id = `${workerid}-${socketid}`;
 	let connection = connections.get(id);
 	if (!connection) return;
 
