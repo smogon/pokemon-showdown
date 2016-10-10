@@ -154,6 +154,7 @@ class Validator {
 		set.item = item.name;
 		let ability = tools.getAbility(Tools.getString(set.ability));
 		set.ability = ability.name;
+		set.nature = tools.getNature(Tools.getString(set.nature));
 		if (!Array.isArray(set.moves)) set.moves = [];
 
 		let maxLevel = format.maxLevel || 100;
@@ -214,6 +215,9 @@ class Validator {
 			} else {
 				return [`"${set.ability}" is an invalid ability.`];
 			}
+		}
+		if (!tools.getNature(set.nature).exists) {
+			return [`${set.species}'s nature "${set.nature}" is invalid.`];
 		}
 
 		let banlistTable = tools.getBanlistTable(format);
