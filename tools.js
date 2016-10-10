@@ -318,6 +318,7 @@ module.exports = (() => {
 			if (!template.prevo) template.prevo = '';
 			if (!template.evos) template.evos = [];
 			if (!template.nfe) template.nfe = !!template.evos.length;
+			if (!template.eggGroups) template.eggGroups = [];
 			if (!template.gender) template.gender = '';
 			if (!template.genderRatio && template.gender === 'M') template.genderRatio = {M:1, F:0};
 			if (!template.genderRatio && template.gender === 'F') template.genderRatio = {M:0, F:1};
