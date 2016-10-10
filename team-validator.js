@@ -217,7 +217,7 @@ class Validator {
 			}
 		}
 		if (!tools.getNature(set.nature).exists) {
-			if (gen.tools < 3) {
+			if (tools.gen < 3) {
 				// gen 1-2 don't have natures, just silently remove them
 				set.nature = '';
 			} else {
