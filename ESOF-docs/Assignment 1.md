@@ -16,3 +16,10 @@ O repositório em análise contém os ficheiros necessários para a configuraç�
 de combate, interação entre clientes, autenticação, entre outros.
 
 
+### Processo de Desenvolvimento
+
+No "Pokemon Showdown", qualquer pessoa que pretenda contribuir, adicionando novo conteúdo ao PS, 
+submete um pull request e os colaboradores (PS developers),assim como o dono e criador do projeto revêm o counteúdo,
+comentam código com o objetivo de clarificar a função do mesmo, deixando o teste do código a cargo do contribuidor,
+e aceitam o pull request, no caso de se tratar de conteúdo útil. A principal preocupação
+não é de se o códido introduzido funciona, mas sim se vale a pena fazer essa alteração no projeto final.
