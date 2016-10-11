@@ -531,9 +531,10 @@ class CommandContext {
 		}
 		if (!user.can('bypassall')) {
 			let lockType = (user.namelocked ? `namelocked` : user.locked ? `locked` : ``);
+			let lockExpiration = Punishments.checkLockExpiration(user.namelocked || user.locked);
 			if (room) {
 				if (lockType) {
-					this.errorReply(`You are ${lockType} and can't talk in chat.`);
+					this.errorReply(`You are ${lockType} and can't talk in chat. ${lockExpiration}`);
 					return false;
 				}
 				if (room.isMuted(user)) {
@@ -556,7 +557,7 @@ class CommandContext {
 			}
 			if (targetUser) {
 				if (lockType && !targetUser.can('lock')) {
-					return this.errorReply(`You are ${lockType} and can only private message members of the global moderation team (users marked by @ or above in the Help room).`);
+					return this.errorReply(`You are ${lockType} and can only private message members of the global moderation team (users marked by @ or above in the Help room). ${lockExpiration}`);
 				}
 				if (targetUser.locked && !user.can('lock')) {
 					return this.errorReply(`The user "${targetUser.name}" is locked and cannot be PMed.`);
@@ -870,11 +871,12 @@ Chat.escapeHTML = function (str) {
  * @param  {...any} values
  * @return {string}
  */
-Chat.html = function (strings) {
+Chat.html = function (strings, ...args) {
 	let buf = strings[0];
-	for (let i = 1; i < arguments.length; i++) {
-		buf += Chat.escapeHTML(arguments[i]);
-		buf += strings[i];
+	let i = 0;
+	while (i < args.length) {
+		buf += Chat.escapeHTML(args[i]);
+		buf += strings[++i];
 	}
 	return buf;
 };

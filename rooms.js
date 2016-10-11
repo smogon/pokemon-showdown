@@ -1636,6 +1636,12 @@ class ChatRoom extends Room {
 		}
 		this.logUserStatsInterval = null;
 
+		if (!this.isPersonal) {
+			this.modlogStream.destroySoon();
+			this.modlogStream.removeAllListeners('finish');
+		}
+		this.modlogStream = null;
+
 		// get rid of some possibly-circular references
 		Rooms.rooms.delete(this.id);
 	}

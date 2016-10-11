@@ -27,11 +27,16 @@ class Validator {
 			} else {
 				format.banlist = [];
 			}
+			if (format.unbanlist) {
+				format.unbanlist = format.unbanlist.slice();
+			} else {
+				format.unbanlist = [];
+			}
 			for (let i = 0; i < supplementaryBanlist.length; i++) {
 				let ban = supplementaryBanlist[i];
 				if (ban.charAt(0) === '!') {
-					let index = format.banlist.indexOf(ban.substr(1));
-					if (index > -1) format.banlist.splice(index, 1);
+					ban = ban.substr(1);
+					if (!format.unbanlist.includes(ban)) format.unbanlist.push(ban);
 				} else {
 					if (!format.banlist.includes(ban)) format.banlist.push(ban);
 				}
@@ -225,6 +230,24 @@ class Validator {
 				return [`${template.baseSpecies} is ${reason}.`];
 			}
 		}
+		if (banlistTable['Unreleased'] && template.isUnreleased) {
+			if (!format.requirePentagon || (template.eggGroups[0] === 'Undiscovered' && !template.evos)) {
+				problems.push(`${name} (${template.species}) is unreleased.`);
+			}
+		}
+		let species = template.species;
+		let tier = template.tier;
+		if (item.megaEvolves === template.species) {
+			species = item.megaStone;
+			tier = tools.getTemplate(item.megaStone).tier;
+		}
+		if (tier) {
+			if (tier.charAt(0) === '(') tier = tier.slice(1, -1);
+			setHas[toId(tier)] = true;
+			if (banlistTable[tier] && banlistTable[toId(species)] !== false) {
+				problems.push(`${template.species} is in ${tier}, which is banned.`);
+			}
+		}
 
 		check = toId(set.ability);
 		setHas[check] = true;
@@ -240,11 +263,6 @@ class Validator {
 		}
 		if (banlistTable['Unreleased'] && item.isUnreleased) {
 			problems.push(`${name}'s item ${set.item} is unreleased.`);
-		}
-		if (banlistTable['Unreleased'] && template.isUnreleased) {
-			if (!format.requirePentagon || (template.eggGroups[0] === 'Undiscovered' && !template.evos)) {
-				problems.push(`${name} (${template.species}) is unreleased.`);
-			}
 		}
 		setHas[toId(set.ability)] = true;
 		if (banlistTable['illegal']) {
@@ -525,17 +543,6 @@ class Validator {
 				}
 			}
 		}
-		if (item.megaEvolves === template.species) {
-			template = tools.getTemplate(item.megaStone);
-		}
-		if (template.tier) {
-			let tier = template.tier;
-			if (tier.charAt(0) === '(') tier = tier.slice(1, -1);
-			setHas[toId(tier)] = true;
-			if (banlistTable[tier]) {
-				problems.push(`${template.species} is in ${tier}, which is banned.`);
-			}
-		}
 
 		if (teamHas) {
 			for (let i in setHas) {
@@ -635,7 +642,7 @@ class Validator {
 			alreadyChecked[template.speciesid] = true;
 			if (tools.gen === 2 && template.gen === 1) tradebackEligible = true;
 			// STABmons hack to avoid copying all of validateSet to formats
-			if (format.banlistTable && format.banlistTable['ignorestabmoves'] && !(moveid in {'bellydrum':1, 'chatter':1, 'darkvoid':1, 'geomancy':1, 'lovelykiss':1, 'shellsmash':1, 'shiftgear':1})) {
+			if (format.banlistTable && format.banlistTable['ignorestabmoves'] && !(moveid in {'acupressure':1, 'bellydrum':1, 'chatter':1, 'darkvoid':1, 'geomancy':1, 'lovelykiss':1, 'shellsmash':1, 'shiftgear':1})) {
 				let types = template.types;
 				if (template.species === 'Shaymin') types = ['Grass', 'Flying'];
 				if (template.baseSpecies === 'Hoopa') types = ['Psychic', 'Ghost', 'Dark'];

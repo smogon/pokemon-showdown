@@ -318,6 +318,7 @@ module.exports = (() => {
 			if (!template.prevo) template.prevo = '';
 			if (!template.evos) template.evos = [];
 			if (!template.nfe) template.nfe = !!template.evos.length;
+			if (!template.eggGroups) template.eggGroups = [];
 			if (!template.gender) template.gender = '';
 			if (!template.genderRatio && template.gender === 'M') template.genderRatio = {M:1, F:0};
 			if (!template.genderRatio && template.gender === 'F') template.genderRatio = {M:0, F:1};
@@ -624,10 +625,16 @@ module.exports = (() => {
 
 			banlistTable = format.banlistTable;
 			if (!subformat) subformat = format;
+			if (subformat.unbanlist) {
+				for (let i = 0; i < subformat.unbanlist.length; i++) {
+					banlistTable[subformat.unbanlist[i]] = false;
+					banlistTable[toId(subformat.unbanlist[i])] = false;
+				}
+			}
 			if (subformat.banlist) {
 				for (let i = 0; i < subformat.banlist.length; i++) {
 					// don't revalidate what we already validate
-					if (banlistTable[toId(subformat.banlist[i])]) continue;
+					if (banlistTable[toId(subformat.banlist[i])] !== undefined) continue;
 
 					banlistTable[subformat.banlist[i]] = subformat.name || true;
 					banlistTable[toId(subformat.banlist[i])] = subformat.name || true;
@@ -663,7 +670,7 @@ module.exports = (() => {
 			if (subformat.ruleset) {
 				for (let i = 0; i < subformat.ruleset.length; i++) {
 					// don't revalidate what we already validate
-					if (banlistTable['Rule:' + toId(subformat.ruleset[i])]) continue;
+					if (banlistTable['Rule:' + toId(subformat.ruleset[i])] !== undefined) continue;
 
 					banlistTable['Rule:' + toId(subformat.ruleset[i])] = subformat.ruleset[i];
 					if (!format.ruleset.includes(subformat.ruleset[i])) format.ruleset.push(subformat.ruleset[i]);

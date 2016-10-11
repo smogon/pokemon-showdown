@@ -1446,20 +1446,18 @@ class BattleSide {
 		delete this.sideConditions[status.id];
 		return true;
 	}
-	send() {
-		let parts = Array.prototype.slice.call(arguments);
+	send(...parts) {
 		let sideUpdate = '|' + parts.map(part => {
 			if (typeof part !== 'function') return part;
 			return part(this);
 		}).join('|');
-		this.battle.send('sideupdate', this.id + "\n" + sideUpdate);
+		this.battle.send('sideupdate', `${this.id}\n${sideUpdate}`);
 	}
-	emitCallback() {
-		this.battle.send('sideupdate', this.id + "\n|callback|" +
-			Array.prototype.slice.call(arguments).join('|'));
+	emitCallback(...args) {
+		this.battle.send('sideupdate', `${this.id}\n|callback|${args.join('|')}`);
 	}
 	emitRequest(update) {
-		this.battle.send('request', this.id + "\n" + this.battle.rqid + "\n" + JSON.stringify(update));
+		this.battle.send('request', `${this.id}\n${this.battle.rqid}\n${JSON.stringify(update)}`);
 	}
 	updateChoice() {
 		const offset = this.choiceData.choices.length;
@@ -2898,24 +2896,23 @@ let Battle = (() => {
 	 * provided priority. Priority can either be a number or an object that contains the priority,
 	 * order, and subOrder for the evend handler as needed (undefined keys will use default values)
 	 */
-	Battle.prototype.on = function (eventid, target /*[, priority], callback*/) {
+	Battle.prototype.on = function (eventid, target, ...rest) { // rest = [priority, callback]
 		if (!eventid) throw new TypeError("Event handlers must have an event to listen to");
 		if (!target) throw new TypeError("Event handlers must have a target");
-		if (arguments.length < 3) throw new TypeError("Event handlers must have a callback");
+		if (!rest.length) throw new TypeError("Event handlers must have a callback");
 
 		if (target.effectType !== 'Format') {
-			throw new TypeError("" + target.effectType + " targets are not supported at this time");
+			throw new TypeError(`${target.effectType} targets are not supported at this time`);
 		}
 
-		let callback, priority, order, subOrder;
-		if (arguments.length === 3) {
-			callback = arguments[2];
+		let callback, priority, order, subOrder, data;
+		if (rest.length === 1) {
+			[callback] = rest;
 			priority = 0;
 			order = false;
 			subOrder = 0;
 		} else {
-			callback = arguments[3];
-			let data = arguments[2];
+			[data, callback] = rest;
 			if (typeof data === 'object') {
 				priority = data['priority'] || 0;
 				order = data['order'] || false;
@@ -2927,9 +2924,9 @@ let Battle = (() => {
 			}
 		}
 
-		let eventHandler = {callback: callback, target: target, priority: priority, order: order, subOrder: subOrder};
+		let eventHandler = {callback, target, priority, order, subOrder};
 
-		let callbackType = 'on' + eventid;
+		let callbackType = `on${eventid}`;
 		if (!this.events) this.events = {};
 		if (this.events[callbackType] === undefined) {
 			this.events[callbackType] = [eventHandler];
@@ -4858,10 +4855,9 @@ let Battle = (() => {
 		}
 	};
 
-	Battle.prototype.add = function () {
-		let parts = Array.prototype.slice.call(arguments);
+	Battle.prototype.add = function (...parts) {
 		if (!parts.some(part => typeof part === 'function')) {
-			this.log.push('|' + parts.join('|'));
+			this.log.push(`|${parts.join('|')}`);
 			return;
 		}
 		this.log.push('|split');
@@ -4874,12 +4870,12 @@ let Battle = (() => {
 			this.log.push(sideUpdate);
 		}
 	};
-	Battle.prototype.addMove = function () {
+	Battle.prototype.addMove = function (...args) {
 		this.lastMoveLine = this.log.length;
-		this.log.push('|' + Array.prototype.slice.call(arguments).join('|'));
+		this.log.push(`|${args.join('|')}`);
 	};
-	Battle.prototype.attrLastMove = function () {
-		this.log[this.lastMoveLine] += '|' + Array.prototype.slice.call(arguments).join('|');
+	Battle.prototype.attrLastMove = function (...args) {
+		this.log[this.lastMoveLine] += `|${args.join('|')}`;
 	};
 	Battle.prototype.retargetLastMove = function (newTarget) {
 		let parts = this.log[this.lastMoveLine].split('|');

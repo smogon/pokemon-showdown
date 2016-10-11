@@ -25,17 +25,17 @@ describe('Rage Powder', function () {
 			{species: 'Alakazam', ability: 'synchronize', moves: ['absorb']},
 		]);
 		let hitCount = [0, 0, 0];
-		battle.p1.active[0].damage = function () {
+		battle.p1.active[0].damage = function (...args) {
 			hitCount[0]++;
-			return BattleEngine.BattlePokemon.prototype.damage.apply(this, arguments);
+			return BattleEngine.BattlePokemon.prototype.damage.apply(this, args);
 		};
-		battle.p1.active[1].damage = function () {
+		battle.p1.active[1].damage = function (...args) {
 			hitCount[1]++;
-			return BattleEngine.BattlePokemon.prototype.damage.apply(this, arguments);
+			return BattleEngine.BattlePokemon.prototype.damage.apply(this, args);
 		};
-		battle.p1.active[2].damage = function () {
+		battle.p1.active[2].damage = function (...args) {
 			hitCount[2]++;
-			return BattleEngine.BattlePokemon.prototype.damage.apply(this, arguments);
+			return BattleEngine.BattlePokemon.prototype.damage.apply(this, args);
 		};
 		battle.choose('p2', 'move 1 2, move 1 2, move 1 2');
 		battle.commitDecisions();
@@ -57,17 +57,17 @@ describe('Rage Powder', function () {
 			{species: 'Alakazam', ability: 'synchronize', item: 'safetygoggles', moves: ['absorb']},
 		]);
 		let hitCount = [0, 0, 0];
-		battle.p1.active[0].damage = function () {
+		battle.p1.active[0].damage = function (...args) {
 			hitCount[0]++;
-			return BattleEngine.BattlePokemon.prototype.damage.apply(this, arguments);
+			return BattleEngine.BattlePokemon.prototype.damage.apply(this, args);
 		};
-		battle.p1.active[1].damage = function () {
+		battle.p1.active[1].damage = function (...args) {
 			hitCount[1]++;
-			return BattleEngine.BattlePokemon.prototype.damage.apply(this, arguments);
+			return BattleEngine.BattlePokemon.prototype.damage.apply(this, args);
 		};
-		battle.p1.active[2].damage = function () {
+		battle.p1.active[2].damage = function (...args) {
 			hitCount[2]++;
-			return BattleEngine.BattlePokemon.prototype.damage.apply(this, arguments);
+			return BattleEngine.BattlePokemon.prototype.damage.apply(this, args);
 		};
 		battle.choose('p2', 'move 1 3, move 1 1, move 1 1');
 		battle.commitDecisions();
