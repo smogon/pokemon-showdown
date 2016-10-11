@@ -2686,9 +2686,7 @@ exports.commands = {
 			return this.errorReply("Wait for /updateserver to finish before using /kill.");
 		}
 
-		for (let i in Sockets.workers) {
-			Sockets.workers[i].kill();
-		}
+		Sockets.getWorkerIds().forEach(id => Sockets.killWorker(id));
 
 		if (!room.destroyLog) {
 			process.exit();

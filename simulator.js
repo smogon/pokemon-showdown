@@ -52,7 +52,7 @@ class BattlePlayer {
 
 		for (let i = 0; i < user.connections.length; i++) {
 			let connection = user.connections[i];
-			Sockets.subchannelMove(connection.worker, this.game.id, this.slotNum + 1, connection.socketid);
+			Sockets.subchannelMove(connection.workerid, this.game.id, this.slotNum + 1, connection.socketid);
 		}
 	}
 	destroy() {
@@ -63,7 +63,7 @@ class BattlePlayer {
 			user.updateSearch();
 			for (let j = 0; j < user.connections.length; j++) {
 				let connection = user.connections[j];
-				Sockets.subchannelMove(connection.worker, this.game.id, '0', connection.socketid);
+				Sockets.subchannelMove(connection.workerid, this.game.id, '0', connection.socketid);
 			}
 		}
 		this.game[this.slot] = null;
@@ -71,12 +71,12 @@ class BattlePlayer {
 	updateSubchannel(user) {
 		if (!user.connections) {
 			// "user" is actually a connection
-			Sockets.subchannelMove(user.worker, this.game.id, this.slotNum + 1, user.socketid);
+			Sockets.subchannelMove(user.workerid, this.game.id, this.slotNum + 1, user.socketid);
 			return;
 		}
 		for (let i = 0; i < user.connections.length; i++) {
 			let connection = user.connections[i];
-			Sockets.subchannelMove(connection.worker, this.game.id, this.slotNum + 1, connection.socketid);
+			Sockets.subchannelMove(connection.workerid, this.game.id, this.slotNum + 1, connection.socketid);
 		}
 	}
 
