@@ -2,7 +2,8 @@
 
 exports.BattleFormats = {
 	pokemon: {
-		effectType: 'Banlist',
+		effectType: 'ValidatorRule',
+		name: 'Pokemon',
 		onValidateSet: function (set, format) {
 			let template = this.getTemplate(set.species);
 			let problems = [];
@@ -80,7 +81,8 @@ exports.BattleFormats = {
 		},
 	},
 	standard: {
-		effectType: 'Banlist',
+		effectType: 'ValidatorRule',
+		name: 'Standard',
 		ruleset: ['Sleep Clause Mod', 'Freeze Clause Mod', 'Species Clause', 'OHKO Clause', 'Evasion Moves Clause', 'HP Percentage Mod', 'Cancel Mod'],
 		banlist: ['Unreleased', 'Illegal', 'Dig', 'Fly',
 			'Kakuna + Poison Sting + Harden', 'Kakuna + String Shot + Harden',
