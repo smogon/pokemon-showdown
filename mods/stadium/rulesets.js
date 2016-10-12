@@ -2,7 +2,8 @@
 
 exports.BattleFormats = {
 	standard: {
-		effectType: 'Banlist',
+		effectType: 'ValidatorRule',
+		name: 'Standard',
 		ruleset: ['Sleep Clause Mod', 'Freeze Clause Mod', 'Species Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Exact HP Mod', 'Cancel Mod'],
 		banlist: ['Unreleased', 'Illegal'],
 		onValidateSet: function (set) {

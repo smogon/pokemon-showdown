@@ -9,22 +9,26 @@ exports.BattleFormats = {
 	///////////////////////////////////////////////////////////////////
 
 	standard: {
-		effectType: 'Banlist',
+		effectType: 'ValidatorRule',
+		name: 'Standard',
 		ruleset: ['Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod'],
 		banlist: ['Unreleased', 'Illegal'],
 	},
 	standardnext: {
-		effectType: 'Banlist',
+		effectType: 'ValidatorRule',
+		name: 'Standard NEXT',
 		ruleset: ['Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'HP Percentage Mod', 'Cancel Mod'],
 		banlist: ['Illegal', 'Soul Dew'],
 	},
 	standardubers: {
-		effectType: 'Banlist',
+		effectType: 'ValidatorRule',
+		name: 'Standard Ubers',
 		ruleset: ['Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'Moody Clause', 'OHKO Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod'],
 		banlist: ['Unreleased', 'Illegal'],
 	},
 	standardgbu: {
-		effectType: 'Banlist',
+		effectType: 'ValidatorRule',
+		name: 'Standard GBU',
 		ruleset: ['Species Clause', 'Nickname Clause', 'Item Clause', 'Cancel Mod'],
 		banlist: ['Unreleased', 'Illegal', 'Soul Dew',
 			'Mewtwo',
@@ -61,12 +65,14 @@ exports.BattleFormats = {
 		],
 	},
 	standarddoubles: {
-		effectType: 'Banlist',
+		effectType: 'ValidatorRule',
+		name: 'Standard Doubles',
 		ruleset: ['Species Clause', 'Nickname Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Abilities Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod'],
 		banlist: ['Unreleased', 'Illegal'],
 	},
 	pokemon: {
-		effectType: 'Banlist',
+		effectType: 'ValidatorRule',
+		name: 'Pokemon',
 		onValidateTeam: function (team, format) {
 			let problems = [];
 			// ----------- legality line ------------------------------------------
@@ -256,7 +262,8 @@ exports.BattleFormats = {
 		},
 	},
 	hoennpokedex: {
-		effectType: 'Rule',
+		effectType: 'ValidatorRule',
+		name: 'Hoenn Pokedex',
 		onValidateSet: function (set) {
 			let hoennDex = {
 				"Abra":1, "Absol":1, "Aggron":1, "Alakazam":1, "Altaria":1, "Anorith":1, "Armaldo":1, "Aron":1, "Azumarill":1, "Azurill":1, "Bagon":1, "Baltoy":1, "Banette":1, "Barboach":1, "Beautifly":1, "Beldum":1, "Bellossom":1, "Blaziken":1, "Breloom":1, "Budew":1, "Cacnea":1, "Cacturne":1, "Camerupt":1, "Carvanha":1, "Cascoon":1, "Castform":1, "Chimecho":1, "Chinchou":1, "Chingling":1, "Clamperl":1, "Claydol":1, "Combusken":1, "Corphish":1, "Corsola":1, "Cradily":1, "Crawdaunt":1, "Crobat":1, "Delcatty":1, "Dodrio":1, "Doduo":1, "Donphan":1, "Dusclops":1, "Dusknoir":1, "Duskull":1, "Dustox":1, "Electrike":1, "Electrode":1, "Exploud":1, "Feebas":1, "Flygon":1, "Froslass":1, "Gallade":1, "Gardevoir":1, "Geodude":1, "Girafarig":1, "Glalie":1, "Gloom":1, "Golbat":1, "Goldeen":1, "Golduck":1, "Golem":1, "Gorebyss":1, "Graveler":1, "Grimer":1, "Grovyle":1, "Grumpig":1, "Gulpin":1, "Gyarados":1, "Hariyama":1, "Heracross":1, "Horsea":1, "Huntail":1, "Igglybuff":1, "Illumise":1, "Jigglypuff":1, "Kadabra":1, "Kecleon":1, "Kingdra":1, "Kirlia":1, "Koffing":1, "Lairon":1, "Lanturn":1, "Latias":1, "Latios":1, "Lileep":1, "Linoone":1, "Lombre":1, "Lotad":1, "Loudred":1, "Ludicolo":1, "Lunatone":1, "Luvdisc":1, "Machamp":1, "Machoke":1, "Machop":1, "Magcargo":1, "Magikarp":1, "Magnemite":1, "Magneton":1, "Magnezone":1, "Makuhita":1, "Manectric":1, "Marill":1, "Marshtomp":1, "Masquerain":1, "Mawile":1, "Medicham":1, "Meditite":1, "Metagross":1, "Metang":1, "Mightyena":1, "Milotic":1, "Minun":1, "Mudkip":1, "Muk":1, "Natu":1, "Ninetales":1, "Ninjask":1, "Nosepass":1, "Numel":1, "Nuzleaf":1, "Oddish":1, "Pelipper":1, "Phanpy":1, "Pichu":1, "Pikachu":1, "Pinsir":1, "Plusle":1, "Poochyena":1, "Probopass":1, "Psyduck":1, "Raichu":1, "Ralts":1, "Regice":1, "Regirock":1, "Registeel":1, "Relicanth":1, "Rhydon":1, "Rhyhorn":1, "Rhyperior":1, "Roselia":1, "Roserade":1, "Sableye":1, "Salamence":1, "Sandshrew":1, "Sandslash":1, "Sceptile":1, "Seadra":1, "Seaking":1, "Sealeo":1, "Seedot":1, "Seviper":1, "Sharpedo":1, "Shedinja":1, "Shelgon":1, "Shiftry":1, "Shroomish":1, "Shuppet":1, "Silcoon":1, "Skarmory":1, "Skitty":1, "Slaking":1, "Slakoth":1, "Slugma":1, "Snorunt":1, "Solrock":1, "Spheal":1, "Spinda":1, "Spoink":1, "Starmie":1, "Staryu":1, "Surskit":1, "Swablu":1, "Swalot":1, "Swampert":1, "Swellow":1, "Taillow":1, "Tentacool":1, "Tentacruel":1, "Torchic":1, "Torkoal":1, "Trapinch":1, "Treecko":1, "Tropius":1, "Vibrava":1, "Vigoroth":1, "Vileplume":1, "Volbeat":1, "Voltorb":1, "Vulpix":1, "Wailmer":1, "Wailord":1, "Walrein":1, "Weezing":1, "Whiscash":1, "Whismur":1, "Wigglytuff":1, "Wingull":1, "Wobbuffet":1, "Wurmple":1, "Wynaut":1, "Xatu":1, "Zangoose":1, "Zigzagoon":1, "Zubat":1,
@@ -269,6 +276,7 @@ exports.BattleFormats = {
 	},
 	potd: {
 		effectType: 'Rule',
+		name: 'PotD',
 		onStart: function () {
 			if (Config.potd) {
 				this.add('rule', "Pokemon of the Day: " + this.getTemplate(Config.potd).name);
@@ -277,6 +285,7 @@ exports.BattleFormats = {
 	},
 	teampreview: {
 		effectType: 'Rule',
+		name: 'Team Preview',
 		onStartPriority: -10,
 		onStart: function () {
 			this.add('clearpoke');
@@ -297,7 +306,8 @@ exports.BattleFormats = {
 		},
 	},
 	littlecup: {
-		effectType: 'Rule',
+		effectType: 'ValidatorRule',
+		name: 'Little Cup',
 		onValidateSet: function (set) {
 			let template = this.getTemplate(set.species || set.name);
 			if (template.prevo) {
@@ -309,7 +319,8 @@ exports.BattleFormats = {
 		},
 	},
 	speciesclause: {
-		effectType: 'Rule',
+		effectType: 'ValidatorRule',
+		name: 'Species Clause',
 		onStart: function () {
 			this.add('rule', 'Species Clause: Limit one of each Pokémon');
 		},
@@ -325,7 +336,8 @@ exports.BattleFormats = {
 		},
 	},
 	nicknameclause: {
-		effectType: 'Rule',
+		effectType: 'ValidatorRule',
+		name: 'Nickname Clause',
 		onValidateTeam: function (team, format) {
 			let nameTable = {};
 			for (let i = 0; i < team.length; i++) {
@@ -343,7 +355,8 @@ exports.BattleFormats = {
 		},
 	},
 	itemclause: {
-		effectType: 'Rule',
+		effectType: 'ValidatorRule',
+		name: 'Item Clause',
 		onStart: function () {
 			this.add('rule', 'Item Clause: Limit one of each item');
 		},
@@ -360,7 +373,8 @@ exports.BattleFormats = {
 		},
 	},
 	abilityclause: {
-		effectType: 'Rule',
+		effectType: 'ValidatorRule',
+		name: 'Ability Clause',
 		onStart: function () {
 			this.add('rule', 'Ability Clause: Limit two of each ability');
 		},
@@ -381,14 +395,16 @@ exports.BattleFormats = {
 		},
 	},
 	ateclause: {
-		effectType: 'Rule',
+		effectType: 'ValidatorRule',
+		name: '-ate Clause',
 		banlist: ['Aerilate + Pixilate + Refrigerate > 1'],
 		onStart: function () {
 			this.add('rule', '-ate Clause: Limit one of Aerilate/Refrigerate/Pixilate');
 		},
 	},
 	ohkoclause: {
-		effectType: 'Rule',
+		effectType: 'ValidatorRule',
+		name: 'OHKO Clause',
 		onStart: function () {
 			this.add('rule', 'OHKO Clause: OHKO moves are banned');
 		},
@@ -404,7 +420,7 @@ exports.BattleFormats = {
 		},
 	},
 	evasionabilitiesclause: {
-		effectType: 'Banlist',
+		effectType: 'ValidatorRule',
 		name: 'Evasion Abilities Clause',
 		banlist: ['Sand Veil', 'Snow Cloak'],
 		onStart: function () {
@@ -412,7 +428,7 @@ exports.BattleFormats = {
 		},
 	},
 	evasionmovesclause: {
-		effectType: 'Banlist',
+		effectType: 'ValidatorRule',
 		name: 'Evasion Moves Clause',
 		banlist: ['Minimize', 'Double Team'],
 		onStart: function () {
@@ -420,7 +436,7 @@ exports.BattleFormats = {
 		},
 	},
 	endlessbattleclause: {
-		effectType: 'Banlist',
+		effectType: 'Rule',
 		name: 'Endless Battle Clause',
 		// implemented in battle-engine.js
 
@@ -451,7 +467,7 @@ exports.BattleFormats = {
 		},
 	},
 	moodyclause: {
-		effectType: 'Banlist',
+		effectType: 'ValidatorRule',
 		name: 'Moody Clause',
 		banlist: ['Moody'],
 		onStart: function () {
@@ -459,7 +475,7 @@ exports.BattleFormats = {
 		},
 	},
 	swaggerclause: {
-		effectType: 'Banlist',
+		effectType: 'ValidatorRule',
 		name: 'Swagger Clause',
 		banlist: ['Swagger'],
 		onStart: function () {
@@ -467,7 +483,7 @@ exports.BattleFormats = {
 		},
 	},
 	batonpassclause: {
-		effectType: 'Banlist',
+		effectType: 'ValidatorRule',
 		name: 'Baton Pass Clause',
 		banlist: ["Baton Pass > 1"],
 		onStart: function () {
@@ -518,7 +534,7 @@ exports.BattleFormats = {
 		},
 	},
 	batonpassspeedclause: {
-		effectType: 'Banlist',
+		effectType: 'ValidatorRule',
 		name: 'Baton Pass Speed Clause',
 		banlist: ["Baton Pass > 1"],
 		onStart: function () {
@@ -569,12 +585,14 @@ exports.BattleFormats = {
 	},
 	cancelmod: {
 		effectType: 'Rule',
+		name: 'Cancel Mod',
 		onStart: function () {
 			this.supportCancel = true;
 		},
 	},
 	sleepclausemod: {
 		effectType: 'Rule',
+		name: 'Sleep Clause Mod',
 		onStart: function () {
 			this.add('rule', 'Sleep Clause Mod: Limit one foe put to sleep');
 		},
@@ -597,6 +615,7 @@ exports.BattleFormats = {
 	},
 	freezeclausemod: {
 		effectType: 'Rule',
+		name: 'Freeze Clause Mod',
 		onStart: function () {
 			this.add('rule', 'Freeze Clause Mod: Limit one foe frozen');
 		},
@@ -616,7 +635,8 @@ exports.BattleFormats = {
 		},
 	},
 	sametypeclause: {
-		effectType: 'Rule',
+		effectType: 'ValidatorRule',
+		name: 'Same Type Clause',
 		onStart: function () {
 			this.add('rule', 'Same Type Clause: Pokémon in a team must share a type');
 		},
@@ -645,6 +665,7 @@ exports.BattleFormats = {
 	},
 	megarayquazaclause: {
 		effectType: 'Rule',
+		name: 'Mega Rayquaza Clause',
 		onStart: function () {
 			this.add('rule', 'Mega Rayquaza Clause: You cannot mega evolve Rayquaza');
 			for (let i = 0; i < this.sides[0].pokemon.length; i++) {
