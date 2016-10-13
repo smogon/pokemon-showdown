@@ -1400,6 +1400,8 @@ exports.commands = {
 			let formatId = extraFormat.id;
 			if (formatId === 'doublesou') {
 				formatId = 'doubles';
+			} else if (formatId === 'balancedhackmons') {
+				formatId = 'bh';
 			} else if (formatId === 'battlespotsingles') {
 				formatId = 'battle_spot_singles';
 			} else if (formatId.includes('vgc')) {
@@ -1442,6 +1444,8 @@ exports.commands = {
 			let formatId = format.id;
 			if (formatId === 'doublesou') {
 				formatId = 'doubles';
+			} else if (formatId === 'balancedhackmons') {
+				formatId = 'bh';
 			} else if (formatId.includes('vgc')) {
 				formatId = 'vgc' + formatId.slice(-2);
 				formatName = 'VGC20' + formatId.slice(-2);
