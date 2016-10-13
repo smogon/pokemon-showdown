@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOMFAQ_FILE = path.resolve(__dirname, '../config/chat-plugins/faqs.json');
-const ALLOWED_HTML = ['a', 'font', 'i', 'u', 'b'];
+const ALLOWED_HTML = ['a', 'font', 'i', 'u', 'b', 'strong', 'em', 'small', 'sub', 'sup', 'ins', 'del'];
 
 let roomFaqs = {};
 try {
