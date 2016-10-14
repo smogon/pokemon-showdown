@@ -82,10 +82,10 @@ ou só uma tabela sobre o que cada pessoa está a trabalhar.
 
 ##Trabalho realizado por:
 
-[Ana Rita Torres](https://github.com/AnaRitaTorres). Contribuição xx%.
+[Ana Rita Torres](https://github.com/AnaRitaTorres): Contribuição xx%.
 
-[Diogo Cepa](https://github.com/dcepa95). Contribuição xx%.
+[Diogo Cepa](https://github.com/dcepa95): Contribuição xx%.
 
-[João Loureiro](https://github.com/Katchau). Contribução xx%.
+[João Loureiro](https://github.com/Katchau): Contribução xx%.
 
-[João Pedro Silva](https://github.com/joaosilva22). Contribuição xx%.
+[João Pedro Silva](https://github.com/joaosilva22): Contribuição xx%.
