@@ -14,16 +14,16 @@ O repositório em análise contém os ficheiros necessários para a configuraç�
 ###1.Processo
 
 ####1.1.Contribuir
-Qualquer pessoa que deseje contribuir para o projeto deve fazer as suas alterações e propô-las através de um Pull Request onde as alterações vão ser revistas pelos restantes contribuidores e podem ser aceites pelo dono do repositório e criador do projeto, Zarel, se este achar que estas têm valor para o projeto.
+Qualquer pessoa que deseje contribuir para o projeto deve fazer as suas alterações e propô-las através de um *Pull Request* onde as alterações vão ser revistas pelos restantes contribuidores e podem ser aceites pelo dono do repositório e criador do projeto, Zarel, se este achar que estas são pertinentes para o projeto.
 
 Como se trata de um projeto sem fins lucrativos e em que os contribuidores são voluntários não existe qualquer estrutura organizacional estrita: Não existem reuniões de staff; Não existem prazos; Todos os contribuidores, pertencentes à equipa principal ou não, respondem peranto o líder do projeto, Zarel.
 
-Os contribuidores escolhem aquilo em que querem trabalhar através da consulta de um tópico de sugestões ou de um tópico de bug reports nos fórums do Pokemon Showdown.
+Os contribuidores escolhem aquilo em que querem trabalhar através da consulta de um tópico de sugestões ou de um tópico de *bug reports* nos fórums do "Pokémon Showdown".
 
 ####1.2.Processo
 
-Através do contacto com os contribuidores e líder do projeto, verificamos que o processo, embora não explicitamente definido, segue os principios de um processo Agile: O planeamento é feito passo a passo e de acordo com os requerimentos e feedback dos utilizadoresss.
-Segue também um modelo incremental, em que a especificação, *design*/desenvolvimento e a validação do código estão intercalados. De resto, o contribuidor é responsável por testar as mudanças que deseja introduzir, sendo que quando as propõe através de um Pull Request o código deve estar funcional.
+Através do contacto com os contribuidores e líder do projeto, verificamos que o processo, embora não explicitamente definido, segue os princípios de um processo *Agile*: O planeamento é feito passo a passo e de acordo com os requerimentos e *feedback* dos utilizadores.
+Segue também um modelo incremental, em que a especificação, *design*/desenvolvimento e a validação do código estão intercalados. Para além disso, o contribuidor é responsável por testar as mudanças que deseja introduzir, sendo que quando as propõe através de um *Pull Request* o código deve ser funcional.
 
 <p align="center">
   <img src="https://cloud.githubusercontent.com/assets/15113826/19389757/13eaace0-921d-11e6-88d3-40cde5a0016d.png" alt="incremental-model"/>
@@ -32,10 +32,14 @@ Segue também um modelo incremental, em que a especificação, *design*/desenvol
 
 ####1.3.Estilo do Código
 
-O *standard* a nível de estilo de código é garantido atreavés da utilização de ESLint, uma aplicação de *linting* para javascript. As regras de estilo usadas pelos contribuidores podem ser consultadas [aqui](https://github.com/Zarel/Pokemon-Showdown/blob/master/.eslintrc).
+O *standard* a nível de estilo de código é garantido através da utilização de *ESLint*, uma aplicação de *linting* para JavaScript. As regras de estilo usadas pelos contribuidores podem ser consultadas [aqui](https://github.com/Zarel/Pokemon-Showdown/blob/master/.eslintrc).
 
 ####1.4.Branch Model
-Pela análise vimos que não há um esquema de *branches* definido no projeto. Os contribuidores fazem *fork* do repositório original e no seu repositório criam *branches* para implementar/corrigir funcionalidades. Quando querem que o codigo seja usado fazem um pull request desse *branch* para o *branch master* do repositório original, e esperam que seja aprovado pelo Zarel.
+Pela análise vimos que não há um esquema de *branches* definido no projeto. Os contribuidores fazem *fork* do repositório original e no seu repositório criam *branches* para implementar/corrigir funcionalidades. Quando querem que o código seja usado fazem um *Pull Request* desse *branch* para o *branch master* do repositório original, e esperam que seja aprovado pelo Zarel.
 
 ####1.5.Comunicação
-A comunicação entre contribuidores acerca do planeamento e futuro do projeto, assim como de quaisquer alterações que estejam a ser implementadas, é feita essencialmente em dois canais: Na sala *Develop* no chat do*Pokémon Showdown* ou nos Pull Requests.
+A comunicação entre contribuidores acerca do planeamento e futuro do projeto, assim como de quaisquer alterações que estejam a ser implementadas, é feita essencialmente em dois canais: Na sala *Develop* no chat do "Pokémon Showdown" ou nos "Pull Requests".
+
+###2.Análise Crítica
+
+
