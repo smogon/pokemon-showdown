@@ -57,7 +57,7 @@ A comunicação entre contribuidores acerca do planeamento e futuro do projeto, 
 Como referido anteriormente, este projeto não tem qualquer tipo de fins lucrativos e como tal, a equipa não é obrigada a realizar contribuições frequentemente. No caso de existir algum problema urgente que necessita reparação rápida, por exemplo uma falha na segurança, os contribuidores são chamados a resolver o *bug*. No gráfico podemos confirmar estes acontecimentos, uma vez que os *commits* são dispersos e desorganizados.
 
 <p align="center">
-    <img src="https://cloud.githubusercontent.com/assets/15113826/19389757/13eaace0-921d-11e6-88d3-40cde5a0016d.png"  alt="incremental-model"/>
+    <img src="https://cloud.githubusercontent.com/assets/17515494/19391548/0e4bb916-9225-11e6-84e7-162d4627f638.png"  alt="incremental-model"/>
 </p>
 
 
