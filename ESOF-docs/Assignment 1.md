@@ -73,6 +73,8 @@ Como referido anteriormente, este projeto não tem qualquer tipo de fins lucrati
 Brainstorming:
 
 -Espécie de agenda com informação acerca de quando um man começa a trabalhar numa ideia, e quando a acaba
-ou só uma tabela sobre o que cada pessoa está a trabalhar
--Ter uma espécie de "testing team" (meh)
--Meter o pikachu mais forte ;)
+ou só uma tabela sobre o que cada pessoa está a trabalhar.
+
+-Ter uma espécie de "testing team" (meh).
+
+-Meter o pikachu mais forte ;).
