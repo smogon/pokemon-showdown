@@ -5,16 +5,18 @@
 
 ### Introdução
 
-"Pokémon Showndown" é um simulador online no *browser* de batalha entre *Pokémons*.
+"Pokémon Showdown" é um simulador online no *browser* de batalha entre *Pokémons*.
 Permite aos jogadores utilizarem personagens de todas as gerações do vídeo jogo, assim como combater em batalhas individuais (1v1), duplas (2v2), ou triplas (3v3).
 Proporciona ainda diversos modos de jogo que não existem no jogo original, tabelas de classificação e a possibilidade de comunicar com os restantes jogadores através de um *chat*.
 
-O repositório em análise contém os ficheiros necessários para a configuração de um servidor de "Pokémon Showndown". O servidor providencia os serviços fundamentais para o funcionamento dos sistemas de combate, interação entre clientes, autenticação, entre outros.
+O repositório em análise contém os ficheiros necessários para a configuração de um servidor de "Pokémon Showdown". O servidor providencia os serviços fundamentais para o funcionamento dos sistemas de combate, interação entre clientes, autenticação, entre outros.
+
+O projeto foi criado em outubro de 2011, pelo Guangcong Luo aka "Zarel", que é o responsável máximo pelo "Pokémon Showdown". A equipa de *developers* oficiais é composta por mais cinco elementos, nomeadamente Chris Monsanto ("chaos"), Juanma Serrano ("Joim"), Leonardo Julca ("Slayer95"), Mathieu Dias-Martins ("Marty"), e o "The Immortal".
 
 ###1.Processo
 
 ####1.1.Contribuir
-Qualquer pessoa que deseje contribuir para o projeto deve fazer as suas alterações e propô-las através de um *Pull Request* onde as alterações vão ser revistas pelos restantes contribuidores e podem ser aceites pelo dono do repositório e criador do projeto, Zarel, se este achar que estas são pertinentes para o projeto.
+Qualquer pessoa que deseje contribuir para o projeto deve fazer as suas alterações e propô-las através de um *Pull Request* onde as alterações vão ser revistas pelos restantes contribuidores e podem ser aceites pelo Zarel, se este achar que estas são pertinentes para o projeto.
 
 Como se trata de um projeto sem fins lucrativos e em que os contribuidores são voluntários não existe qualquer estrutura organizacional estrita: Não existem reuniões de staff; Não existem prazos; Todos os contribuidores, pertencentes à equipa principal ou não, respondem peranto o líder do projeto, Zarel.
 
@@ -38,7 +40,7 @@ O *standard* a nível de estilo de código é garantido através da utilização
 Pela análise vimos que não há um esquema de *branches* definido no projeto. Os contribuidores fazem *fork* do repositório original e no seu repositório criam *branches* para implementar/corrigir funcionalidades. Quando querem que o código seja usado fazem um *Pull Request* desse *branch* para o *branch master* do repositório original, e esperam que seja aprovado pelo Zarel.
 
 ####1.5.Comunicação
-A comunicação entre contribuidores acerca do planeamento e futuro do projeto, assim como de quaisquer alterações que estejam a ser implementadas, é feita essencialmente em dois canais: Na sala *Develop* no chat do "Pokémon Showdown" ou nos "Pull Requests".
+A comunicação entre contribuidores acerca do planeamento e futuro do projeto, assim como de quaisquer alterações que estejam a ser implementadas, é feita essencialmente em dois canais: Na sala *Develop* no chat do "Pokémon Showdown" ou nos *Pull Requests*.
 
 ###2.Análise Crítica
 
