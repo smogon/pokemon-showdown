@@ -27,7 +27,7 @@ Segue também um modelo incremental, em que a especificação, *design*/desenvol
 
 ####1.3.Estilo do Código
 
-O *standard* a nível de estilo de código é garantido atreavés da utilização de ESLint, uma aplicação de *linting* para javascript. As regras de estilo usadas pelos contribuidores podem ser consultadas [aqui](https://github.com/Zarel/Pokemon-Showndown/blob/master/.eslintrc).
+O *standard* a nível de estilo de código é garantido atreavés da utilização de ESLint, uma aplicação de *linting* para javascript. As regras de estilo usadas pelos contribuidores podem ser consultadas [aqui](https://github.com/Zarel/Pokemon-Showdown/blob/master/.eslintrc).
 
 ####1.4.Branch Model
 Pela análise vimos que não há um esquema de *branches* definido no projeto. Os contribuidores fazem *fork* do repositório original e no seu repositório criam *branches* para implementar/corrigir funcionalidades. Quando querem que o codigo seja usado fazem um pull request desse *branch* para o *branch master* do repositório original, e esperam que seja aprovado pelo Zarel.
