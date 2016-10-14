@@ -25,6 +25,11 @@ Os contribuidores escolhem aquilo em que querem trabalhar através da consulta d
 Através do contacto com os contribuidores e líder do projeto, verificamos que o processo, embora não explicitamente definido, segue os principios de um processo Agile: O planeamento é feito passo a passo e de acordo com os requerimentos e feedback dos utilizadoresss.
 Segue também um modelo incremental, em que a especificação, *design*/desenvolvimento e a validação do código estão intercalados. De resto, o contribuidor é responsável por testar as mudanças que deseja introduzir, sendo que quando as propõe através de um Pull Request o código deve estar funcional.
 
+<p align="center">
+  <img src="https://cloud.githubusercontent.com/assets/15113826/19389757/13eaace0-921d-11e6-88d3-40cde5a0016d.png" alt="incremental-model"/>
+</p>
+
+
 ####1.3.Estilo do Código
 
 O *standard* a nível de estilo de código é garantido atreavés da utilização de ESLint, uma aplicação de *linting* para javascript. As regras de estilo usadas pelos contribuidores podem ser consultadas [aqui](https://github.com/Zarel/Pokemon-Showdown/blob/master/.eslintrc).
