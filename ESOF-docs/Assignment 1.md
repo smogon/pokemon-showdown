@@ -11,18 +11,23 @@ Proporciona ainda diversos modos de jogo que não existem no jogo original, tabe
 
 O repositório em análise contém os ficheiros necessários para a configuração de um servidor de "Pokémon Showndown". O servidor providencia os serviços fundamentais para o funcionamento dos sistemas de combate, interação entre clientes, autenticação, entre outros.
 
+###1.Processo
 
-### Processo de Desenvolvimento
+####1.1.Contribuir
+Qualquer pessoa que deseje contribuir para o projeto deve fazer as suas alterações e propô-las através de um Pull Request onde as alterações vão ser revistas pelos restantes contribuidores e podem ser aceites pelo dono do repositório e criador do projeto, Zarel, se este achar que estas têm valor para o projeto.
 
-No "Pokémon Showndown", qualquer pessoa que pretenda contribuir, adicionando novo conteúdo ao "Pokémon Showndown", submete um pull request e os colaboradores ("Pokémon Showndown" developers), assim como o dono e criador do projeto reveem o counteúdo, comentam código com o objetivo de clarificar a função do mesmo, deixando o teste do código a cargo do contribuidor, e aceitam o pull request, no caso de se tratar de conteúdo útil. A principal preocupação não é verificar se o códido introduzido funciona, mas sim se vale a pena fazer essa alteração no projeto final.
+Como se trata de um projeto sem fins lucrativos e em que os contribuidores são voluntários não existe qualquer estrutura organizacional estrita: Não existem reuniões de staff; Não existem prazos; Todos os contribuidores, pertencentes à equipa principal ou não, respondem peranto o líder do projeto, Zarel.
 
-Como se trata de um projeto sem fins lucrativos, não existem reuniões de staff, nem nenhum tipo de organização concreta relativa ao desenvolvimento deste. Uma vez que os contribuidores, podendo estes ser internos ou externos, isto é, integram a equipa principal ou não, apenas discutem ideias com o criador do projeto, quando se encontram na sala "development" do PS e adicionam ao projeto se acharem adequado.
+Os contribuidores escolhem aquilo em que querem trabalhar através da consulta de um tópico de sugestões ou de um tópico de bug reports nos fórums do Pokemon Showdown.
 
-Não existe uma especificação de contribuidores internos, bem clara, por exemplo, não existe ninguém que trabalhe apenas a corrigir bugs, ou outro aspeto em específico.
+####1.2.Processo
 
+Através do contacto com os contribuidores e líder do projeto, verificamos que o processo, embora não explicitamente definido, segue os principios de um processo Agile: O planeamento é feito passo a passo e de acordo com os requerimentos e feedback dos utilizadoresss.
+Segue também um modelo incremental, em que a especificação, *design*/desenvolvimento e a validação do código estão intercalados. De resto, o contribuidor é responsável por testar as mudanças que deseja introduzir, sendo que quando as propõe através de um Pull Request o código deve estar funcional.
 
-### Coisas a acrescentar no texto
+####1.3.Estilo do Código
 
-#### Branches
+O *standard* a nível de estilo de código é garantido atreavés da utilização de ESLint, uma aplicação de *linting* para javascript. As regras de estilo usadas pelos contribuidores podem ser consultadas [aqui](https://github.com/Zarel/Pokemon-Showndown/blob/master/.eslintrc).
 
-Pela análise vimos que não há um esquema de branches definido no projeto. Os contribuidores fazem fork do repositório original e no seu repositório(forked) criam branches para implementar/corrigir funcionalidades. Quando querem que o codigo seja usado fazem um pull request desse branch para o branch master repositório original, e esperam que seja aprovado pelo Zarel.
+####1.4.Branch Model
+Pela análise vimos que não há um esquema de *branches* definido no projeto. Os contribuidores fazem *fork* do repositório original e no seu repositório criam *branches* para implementar/corrigir funcionalidades. Quando querem que o codigo seja usado fazem um pull request desse *branch* para o *branch master* do repositório original, e esperam que seja aprovado pelo Zarel.
