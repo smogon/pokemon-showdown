@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOMFAQ_FILE = path.resolve(__dirname, '../config/chat-plugins/faqs.json');
-const ALLOWED_HTML = ['a', 'font', 'i', 'u', 'b'];
+const ALLOWED_HTML = ['a', 'font', 'i', 'u', 'b', 'strong', 'em', 'small', 'sub', 'sup', 'ins', 'del'];
 
 let roomFaqs = {};
 try {
@@ -40,6 +40,7 @@ exports.commands = {
 		if (!roomFaqs[room.id]) roomFaqs[room.id] = {};
 		roomFaqs[room.id][topic] = text;
 		saveRoomFaqs();
+		this.sendReplyBox(text);
 		this.privateModCommand(`(${user.name} added a FAQ for '${topic}')`);
 	},
 	removefaq: function (target, room, user) {
@@ -63,7 +64,8 @@ exports.commands = {
 		if (!roomFaqs[room.id][topic]) return this.errorReply("Invalid topic.");
 
 		if (!this.runBroadcast()) return;
-		return this.sendReplyBox(roomFaqs[room.id][topic]);
+		this.sendReplyBox(roomFaqs[room.id][topic]);
+		if (!this.broadcasting && user.can('declare', null, room)) this.sendReplyBox('<code>/addfaq ' + topic + ', ' + Chat.escapeHTML(roomFaqs[room.id][topic]));
 	},
 	roomfaqhelp: ["/roomfaq - Shows the list of all available FAQ topics",
 			  "/roomfaq <topic> - Shows the FAQ for <topic>.",

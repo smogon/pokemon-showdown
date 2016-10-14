@@ -148,7 +148,6 @@ class Validator {
 		}
 
 		set.species = Tools.getSpecies(set.species);
-
 		set.name = tools.getName(set.name);
 		let item = tools.getItem(Tools.getString(set.item));
 		set.item = item.name;
@@ -214,6 +213,9 @@ class Validator {
 			} else {
 				return [`"${set.ability}" is an invalid ability.`];
 			}
+		}
+		if (set.happiness !== undefined && isNaN(set.happiness)) {
+			problems.push(`${set.species} has an invalid happiness.`);
 		}
 
 		let banlistTable = tools.getBanlistTable(format);
