@@ -78,3 +78,14 @@ ou só uma tabela sobre o que cada pessoa está a trabalhar.
 -Ter uma espécie de "testing team" (meh).
 
 -Meter o pikachu mais forte ;).
+
+
+##Trabalho realizado por:
+
+[Ana Rita Torres](https://github.com/AnaRitaTorres). Contribuição xx%.
+
+[Diogo Cepa](https://github.com/dcepa95). Contribuição xx%.
+
+[João Loureiro](https://github.com/Katchau). Contribução xx%.
+
+[João Pedro Silva](https://github.com/joaosilva22). Contribuição xx%.
