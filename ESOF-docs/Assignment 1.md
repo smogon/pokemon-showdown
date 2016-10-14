@@ -31,3 +31,6 @@ O *standard* a nível de estilo de código é garantido atreavés da utilizaçã
 
 ####1.4.Branch Model
 Pela análise vimos que não há um esquema de *branches* definido no projeto. Os contribuidores fazem *fork* do repositório original e no seu repositório criam *branches* para implementar/corrigir funcionalidades. Quando querem que o codigo seja usado fazem um pull request desse *branch* para o *branch master* do repositório original, e esperam que seja aprovado pelo Zarel.
+
+####1.5.Comunicação
+A comunicação entre contribuidores acerca do planeamento e futuro do projeto, assim como de quaisquer alterações que estejam a ser implementadas, é feita essencialmente em dois canais: Na sala *Develop* no chat do*Pokémon Showdown* ou nos Pull Requests.
