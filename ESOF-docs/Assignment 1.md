@@ -16,6 +16,7 @@ O projeto foi criado em outubro de 2011, pelo Guangcong Luo aka "Zarel", que é 
 ###1.Processo
 
 ####1.1.Contribuir
+
 Qualquer pessoa que deseje contribuir para o projeto deve fazer as suas alterações e propô-las através de um *Pull Request* onde as alterações vão ser revistas pelos restantes contribuidores e podem ser aceites pelo Zarel, se este achar que estas são pertinentes para o projeto.
 
 Como se trata de um projeto sem fins lucrativos e em que os contribuidores são voluntários não existe qualquer estrutura organizacional estrita: Não existem reuniões de staff; Não existem prazos; Todos os contribuidores, pertencentes à equipa principal ou não, respondem peranto o líder do projeto, Zarel.
@@ -31,17 +32,35 @@ Segue também um modelo incremental, em que a especificação, *design*/desenvol
   <img src="https://cloud.githubusercontent.com/assets/15113826/19389757/13eaace0-921d-11e6-88d3-40cde5a0016d.png" alt="incremental-model"/>
 </p>
 
-
 ####1.3.Estilo do Código
 
 O *standard* a nível de estilo de código é garantido através da utilização de *ESLint*, uma aplicação de *linting* para JavaScript. As regras de estilo usadas pelos contribuidores podem ser consultadas [aqui](https://github.com/Zarel/Pokemon-Showdown/blob/master/.eslintrc).
 
 ####1.4.Branch Model
+
 Pela análise vimos que não há um esquema de *branches* definido no projeto. Os contribuidores fazem *fork* do repositório original e no seu repositório criam *branches* para implementar/corrigir funcionalidades. Quando querem que o código seja usado fazem um *Pull Request* desse *branch* para o *branch master* do repositório original, e esperam que seja aprovado pelo Zarel.
 
 ####1.5.Comunicação
+
 A comunicação entre contribuidores acerca do planeamento e futuro do projeto, assim como de quaisquer alterações que estejam a ser implementadas, é feita essencialmente em dois canais: Na sala *Develop* no chat do "Pokémon Showdown" ou nos *Pull Requests*.
+
 
 ###2.Análise Crítica
 
+####2.1.Processo de Desenvolvimento
 
+
+
+
+####2.2.Commits
+
+Como referido anteriormente, este projeto não tem qualquer tipo de fins lucrativos e como tal, a equipa não é obrigada a realizar contribuições frequentemente. No caso de existir algum problema urgente que necessita reparação rápida, por exemplo uma falha na segurança, os contribuidores são chamados a resolver o *bug*. No gráfico podemos confirmar estes acontecimentos, uma vez que os *commits* são dispersos e desorganizados.
+
+<p align="center">
+    <img src="https://cloud.githubusercontent.com/assets/15113826/19389757/13eaace0-921d-11e6-88d3-40cde5a0016d.png"  alt="incremental-model"/>
+</p>
+
+
+
+
+####2.3.Sugestões
