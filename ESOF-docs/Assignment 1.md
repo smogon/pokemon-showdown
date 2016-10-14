@@ -49,8 +49,13 @@ A comunicação entre contribuidores acerca do planeamento e futuro do projeto, 
 
 ####2.1.Processo de Desenvolvimento
 
+Um dos problemas a nivel de processo de desenvolvimento é o facto de não haver teste sobre os *Pull Requests* dos contribuidores. Como
+foi mencionado no ponto 1.1, as alterações efetuadas por terceiros vão ser analizadas a "olho nu" pelos membros da *staff* , deixando a cargo dos contribuidores os testes que, por vezes, podem não os efetuar, ou de obterem resultados incorretos.
 
+Não sendo este um problema muito ocorrente, existe outro que se deve à falta de organização e da falta de prazos, que é a possibilidade de 
+mais do que uma pessoa estar a trabalhar na mesma ideia. Isto leva a um claro desperdício de tempo dos contribuidores e de recursos, uma vez que estes poderiam estar a contribuir noutro aspecto do projeto.
 
+to be continued ... 
 
 ####2.2.Commits
 
