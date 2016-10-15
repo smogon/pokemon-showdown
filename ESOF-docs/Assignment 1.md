@@ -57,7 +57,7 @@ to be continued ...
 
 ####2.2.Commits
 
-Como referido anteriormente, este projeto não tem qualquer tipo de fins lucrativos e como tal, a equipa não é obrigada a realizar contribuições frequentemente. No caso de existir algum problema urgente que necessita reparação rápida, por exemplo uma falha na segurança, os contribuidores são chamados a resolver o *bug*. No gráfico podemos confirmar estes acontecimentos, uma vez que os *commits* são dispersos e desorganizados.
+Apesar de ser um projeto que funciona à base de voluntariado, e em que os contribuídores não têm qualquer tipo de obrigação para com o projeto, verificamos que este se encontra em desenvolvimento activo, com vários contribuídores a trabalhar em simultâneo e com commits regulares. Uma métrica que representa bem esta observação, é que no último ano foram feitos 38 commits por semana.
 
 <p align="center">
     <img src="https://cloud.githubusercontent.com/assets/17515494/19391548/0e4bb916-9225-11e6-84e7-162d4627f638.png"  alt="incremental-model"/>
