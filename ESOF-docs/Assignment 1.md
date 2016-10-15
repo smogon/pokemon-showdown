@@ -57,7 +57,7 @@ Outra situação, ainda que não muito frequente, e que se deve a alguma organiz
 
 ####2.2.Commits
 
-Apesar de ser um projeto que funciona à base de voluntariado, e em que os contribuídores não têm qualquer tipo de obrigação para com o projeto, verificamos que este se encontra em desenvolvimento activo, com vários contribuídores a trabalhar em simultâneo e com commits regulares. Uma métrica que representa bem esta observação, é que no último ano foram feitos 38 commits por semana.
+Apesar de ser um projeto que funciona à base de voluntariado, sem qualquer tipo de fins lucrativos, em que os contribuídores não têm qualquer tipo de obrigação para com o projeto, nem pressão por parte de *dead lines*, verificamos que este se encontra em desenvolvimento activo, com vários contribuídores (cerca de 134)  a trabalhar em simultâneo e com commits regulares. Uma métrica que representa bem esta observação, é que no último ano foram feitos 38 commits por semana.
 
 <p align="center">
     <img src="https://cloud.githubusercontent.com/assets/17515494/19391548/0e4bb916-9225-11e6-84e7-162d4627f638.png"  alt="incremental-model"/>
@@ -65,12 +65,16 @@ Apesar de ser um projeto que funciona à base de voluntariado, e em que os contr
 
 ####2.3.Sugestões
 
-Brainstorming:
+--alguem que escreva uma cena antes 
 
--Espécie de agenda com informação acerca de quando um man começa a trabalhar numa ideia, e quando a acaba
-ou só uma tabela sobre o que cada pessoa está a trabalhar.
+Uma vez que nunca é possivel garantir a qualidade de 100% dos *commits*, seria útil se existisse membros do *staff*, ou mesmo contribuidores, que se dedicassem a testar estes (ou seja, criar uma *test team*), antes de implementarem no projeto, visto que com qualquer mínimo erro, pode originar um efeito borboleta (apartir de um erro pequeno, tudo o que tive como base pode estar errado). Esta equipa poderia também testar a qualidade de adaptação de código, de forma a que qualquer pessoa possa perceber e reutilizar o códgio, sem qualquer tipo de problemas. Assim, garante-se sempre a integridade e qualidade do projeto final.
 
--Ter uma espécie de "testing team" (meh).
+Deveria haver outra fonte de discussão, onde toda a gente que quiser contribuir saiba claramente o que os outros colaboradores e membros do "Pokémon Showdown" estão a trabalhar. Ao realizar esta especificação de trabalho, vai garantir que exista algum tipo de organização à equipa, e promove que os membros se entre-ajudem, sem prejudicar o trabalho dos outros.
+
+
+--este paragrafo aqui não tenho a certeza. Queria só usar a expressão dead lines e foi isto que me veio à cabeça :)
+--Isto vai um bocado contra a ideia dos gajos, alguém que leia e opine.
+Uma vez que não existe obrigação entre os membros com o *development* deste *open source*, é difícil manter uma agenda do conteúdo que se vai adicionar ao projeto, uma vez que obrigava os colaboradores a porem este como prioridade. Tal ideia seria apenas possível se contratássem *staff* que trabalhassem um certo número de horas, podendo garantir assim *dead lines*
 
 -Meter o pikachu mais forte ;).
 
