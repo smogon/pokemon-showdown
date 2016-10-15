@@ -72,8 +72,10 @@ Uma vez que nunca é possivel garantir a qualidade de 100% dos *commits*, seria 
 Deveria haver outra fonte de discussão, onde toda a gente que quiser contribuir saiba claramente o que os outros colaboradores e membros do "Pokémon Showdown" estão a trabalhar. Ao realizar esta especificação de trabalho, vai garantir que exista algum tipo de organização à equipa, e promove que os membros se entre-ajudem, sem prejudicar o trabalho dos outros.
 
 
---este paragrafo aqui não tenho a certeza. Queria só usar a expressão dead lines e foi isto que me veio à cabeça :)
+--este paragrafo aqui não tenho a certeza. Queria só usar a expressão dead lines e foi isto que me veio à cabeça :).
+
 --Isto vai um bocado contra a ideia dos gajos, alguém que leia e opine.
+
 Uma vez que não existe obrigação entre os membros com o *development* deste *open source*, é difícil manter uma agenda do conteúdo que se vai adicionar ao projeto, uma vez que obrigava os colaboradores a porem este como prioridade. Tal ideia seria apenas possível se contratássem *staff* que trabalhassem um certo número de horas, podendo garantir assim *dead lines*
 
 -Meter o pikachu mais forte ;).
