@@ -47,13 +47,13 @@ A comunicação entre contribuidores acerca do planeamento e futuro do projeto, 
 
 ###2.Análise Crítica
 
-####2.1.Processo de Desenvolvimento
+####2.1.Processo
 
-Durante o processo de desenvolvimento não são realizados testes sobre os *Pull Requests* dos contribuidores. Como foi mencionado no ponto 1.1., as alterações efetuadas por terceiros vão ser analisadas a "olho nu" pelos membros da *staff* , deixando a cargo dos contribuidores os testes que, por vezes, podem não os efetuar, ou não detetarem erros.
+Somos da opinião que o processo utilizado se adequa à natureza do projeto. "Pokemon Showdown" está em constante desenvolvimento e recebe feedback dos utilizadores diariamente, pelo que um processo Agile e Incremental é, a nosso ver, a escolha natural e adequada.
 
-Não sendo este um problema muito ocorrente, existe outro que se deve à falta de organização e da falta de prazos, que é a possibilidade de mais do que uma pessoa estar a trabalhar na mesma ideia. Isto leva a um claro desperdício de tempo dos contribuidores e de recursos, uma vez que estes poderiam estar a contribuir noutro aspecto do projeto.
+No entanto, existem algumas situações das quais podem surgir problemas. Nomeadamente, o teste dos *Pull Requests* dos contribuidores é da responsabilidade do próprio contribuidor o que, embora pareça que funciona bem no contexto deste projeto, pode causar situações em que as alterações são implementadas na versão pública com erros que passaram despercebidos.
 
-to be continued ... 
+Outra situação, ainda que não muito frequente, e que se deve a alguma organização resultante deste processo é a possibilidade de mais do que uma pessoa estar a trabalhar na mesma ideia. Isto leva a um claro desperdício de tempo dos contribuidores e de recursos, uma vez que estes poderiam estar a contribuir noutro aspecto do projeto.
 
 ####2.2.Commits
 
@@ -62,9 +62,6 @@ Apesar de ser um projeto que funciona à base de voluntariado, e em que os contr
 <p align="center">
     <img src="https://cloud.githubusercontent.com/assets/17515494/19391548/0e4bb916-9225-11e6-84e7-162d4627f638.png"  alt="incremental-model"/>
 </p>
-
-
-
 
 ####2.3.Sugestões
 
