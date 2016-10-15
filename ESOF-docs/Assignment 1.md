@@ -11,7 +11,7 @@ Proporciona ainda diversos modos de jogo que não existem no jogo original, tabe
 
 O repositório em análise contém os ficheiros necessários para a configuração de um servidor de "Pokémon Showdown". O servidor providencia os serviços fundamentais para o funcionamento dos sistemas de combate, interação entre clientes, autenticação, entre outros.
 
-O projeto foi criado em outubro de 2011, pelo Guangcong Luo aka "Zarel", que é o responsável máximo pelo "Pokémon Showdown". A equipa de *developers* oficiais é composta por mais cinco elementos, nomeadamente Chris Monsanto ("chaos"), Juanma Serrano ("Joim"), Leonardo Julca ("Slayer95"), Mathieu Dias-Martins ("Marty"), e o "The Immortal".
+O projeto foi criado em outubro de 2011, por Guangcong Luo aka "Zarel", que é o responsável máximo pelo "Pokémon Showdown". A equipa de *developers* oficiais é composta por mais cinco elementos, nomeadamente Chris Monsanto ("chaos"), Juanma Serrano ("Joim"), Leonardo Julca ("Slayer95"), Mathieu Dias-Martins ("Marty"), e o "The Immortal".
 
 ###1.Processo
 
@@ -26,7 +26,7 @@ Os contribuidores escolhem aquilo em que querem trabalhar através da consulta d
 ####1.2.Processo
 
 Através do contacto com os contribuidores e líder do projeto, verificamos que o processo, embora não explicitamente definido, segue os princípios de um processo *Agile*: O planeamento é feito passo a passo e de acordo com os requerimentos e *feedback* dos utilizadores.
-Segue também um modelo incremental, em que a especificação, *design*/desenvolvimento e a validação do código estão intercalados. Para além disso, o contribuidor é responsável por testar as mudanças que deseja introduzir, sendo que quando as propõe através de um *Pull Request* o código deve ser funcional.
+Segue também um modelo incremental, em que a especificação, *design*/desenvolvimento e a validação do código estão intercalados. Para além disso, o contribuidor é responsável por testar as mudanças que deseja introduzir, sendo que quando as propõe através de um *Pull Request*, o código deve ser funcional.
 
 <p align="center">
   <img src="https://cloud.githubusercontent.com/assets/15113826/19389757/13eaace0-921d-11e6-88d3-40cde5a0016d.png" alt="incremental-model"/>
@@ -49,7 +49,7 @@ A comunicação entre contribuidores acerca do planeamento e futuro do projeto, 
 
 ####2.1.Processo
 
-Somos da opinião que o processo utilizado se adequa à natureza do projeto. "Pokemon Showdown" está em constante desenvolvimento e recebe feedback dos utilizadores diariamente, pelo que um processo Agile e Incremental é, a nosso ver, a escolha natural e adequada.
+Somos da opinião que o processo utilizado se adequa à natureza do projeto. "Pokémon Showdown" está em constante desenvolvimento e recebe *feedback* dos utilizadores diariamente, pelo que um processo *Agile* e Incremental é, a nosso ver, a escolha natural e adequada.
 
 No entanto, existem algumas situações das quais podem surgir problemas. Nomeadamente, o teste dos *Pull Requests* dos contribuidores é da responsabilidade do próprio contribuidor o que, embora pareça que funciona bem no contexto deste projeto, pode causar situações em que as alterações são implementadas na versão pública com erros que passaram despercebidos.
 
@@ -57,7 +57,7 @@ Outra situação, ainda que não muito frequente, e que se deve a alguma organiz
 
 ####2.2.Commits
 
-Apesar de ser um projeto que funciona à base de voluntariado, sem qualquer tipo de fins lucrativos, em que os contribuídores não têm qualquer tipo de obrigação para com o projeto, nem pressão por parte de *dead lines*, verificamos que este se encontra em desenvolvimento activo, com vários contribuídores (cerca de 134)  a trabalhar em simultâneo e com commits regulares. Uma métrica que representa bem esta observação, é que no último ano foram feitos 38 commits por semana.
+Apesar de ser um projeto que funciona à base de voluntariado, sem qualquer tipo de fins lucrativos, em que os contribuídores não têm qualquer tipo de obrigação para com o projeto, nem pressão por parte de *dead lines*, verificamos que este se encontra em desenvolvimento activo, com vários contribuídores (cerca de 134)  a trabalhar em simultâneo e com commits regulares. Uma métrica que representa bem esta observação, é que no último ano foram feitos, em média, 38 commits por semana.
 
 <p align="center">
     <img src="https://cloud.githubusercontent.com/assets/17515494/19391548/0e4bb916-9225-11e6-84e7-162d4627f638.png"  alt="incremental-model"/>
@@ -65,14 +65,11 @@ Apesar de ser um projeto que funciona à base de voluntariado, sem qualquer tipo
 
 ####2.3.Sugestões
 
---alguem que escreva uma cena antes 
+Após uma análise minuciosa dos diversos aspetos do projeto, chegamos à conclusão de que nem todos os métodos e mecanismos utilizados foram os mais eficazes ou úteis. Seguem-se as nossas sugestões.
 
-Uma vez que nunca é possivel garantir a qualidade de 100% dos *commits*, seria útil se existisse membros do *staff*, ou mesmo contribuidores, que se dedicassem a testar estes (ou seja, criar uma *test team*), antes de implementarem no projeto, visto que com qualquer mínimo erro, pode originar um efeito borboleta (apartir de um erro pequeno, tudo o que tive como base pode estar errado). Esta equipa poderia também testar a qualidade de adaptação de código, de forma a que qualquer pessoa possa perceber e reutilizar o códgio, sem qualquer tipo de problemas. Assim, garante-se sempre a integridade e qualidade do projeto final.
+É impossível garantir a qualidade da totalidade dos *commits*. Seria fundamental a existência de membros do *staff*, ou mesmo contribuidores, que se dedicassem, somente à execução de testes de código, ou seja, criar uma *Test Team*. Consideramos este ato essencial para evitar que um erro mínimo tome proporções desmesuradas, afetando o projeto na sua integridade. Propomos também que esta equipa se dedique a testar a qualidade de adaptação do código, na medida em que este possa ser percetível e reutilizável de uma forma simples e fácil, garantindo-se a qualidade do projeto.
 
-Deveria haver outra fonte de discussão, onde toda a gente que quiser contribuir saiba claramente o que os outros colaboradores e membros do "Pokémon Showdown" estão a trabalhar. Ao realizar esta especificação de trabalho, vai garantir que exista algum tipo de organização à equipa, e promove que os membros se entre-ajudem, sem prejudicar o trabalho dos outros.
-
-
---este paragrafo aqui não tenho a certeza. Queria só usar a expressão dead lines e foi isto que me veio à cabeça :).
+Também nos parece imperativo que a equipa melhor a sua organização, visto que a sua produtividade está dependente desta. Um mecanismo de gerência de trabalhos, seria fundamental, pois os contribuidores saberiam que *feature*/processo os seus colegas estão a desenvolver e portanto se pretendessem contribuir, poderiam contactar-se. Por outro lado, também impede que dois ou mais contribuidores estejam a desenvolver trabalhos semelhantes e possam partir para outros temas, ajudando a uma progressão mais rápida do projeto.
 
 --Isto vai um bocado contra a ideia dos gajos, alguém que leia e opine.
 
@@ -80,13 +77,15 @@ Uma vez que não existe obrigação entre os membros com o *development* deste *
 
 -Meter o pikachu mais forte ;).
 
+///////Acrescentar conlusão
+
 
 ##Trabalho realizado por:
 
-[Ana Rita Torres](https://github.com/AnaRitaTorres): Contribuição xx%.
+[Ana Rita Torres](https://github.com/AnaRitaTorres): Contribuição 25%.
 
-[Diogo Cepa](https://github.com/dcepa95): Contribuição xx%.
+[Diogo Cepa](https://github.com/dcepa95): Contribuição 25%.
 
-[João Loureiro](https://github.com/Katchau): Contribução xx%.
+[João Loureiro](https://github.com/Katchau): Contribução 25%.
 
-[João Pedro Silva](https://github.com/joaosilva22): Contribuição xx%.
+[João Pedro Silva](https://github.com/joaosilva22): Contribuição 25%.
