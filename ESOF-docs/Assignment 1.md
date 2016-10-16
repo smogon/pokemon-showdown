@@ -74,10 +74,9 @@ Também nos parece imperativo que a equipa melhor a sua organização, visto que
 
 ### Conclusão
 
-De uma forma geral, concordamos com as práticas utilizadas neste projeto. Tem uma interface apelativa e funcional que permite uma comunicação jogador/contribuidor acessível e útil para um ainda melhor desempenho por parte da equipa que trabalha na plataforma "Pokémon Showdown".
-Durante a análise deste *open source* deparamo-nos com algumas falhas de rigor a nível dos modelos de *branches* e testes, falhas estas que se devem ao facto de o *testing* ser apenas efetuado pelo contribuidor que constrói o código, antes de o submeter para o *branch master* do projeto. 
-Por esta razão, entendemos que deveria ser criada uma equipa para testar e aprovar esse código submetido, como referido nas sugestões, podendo assim ser utilizado o modelo *git flow*,sendo o código submetido para o *branch develop* onde é validado ou não. Se a resposta for afirmativa é posteriormente integrado na versão ativa do projeto. Seguindo este método, o projeto tornar-se-ia mais resistente a  falhas realizados pelos contribuidores, resguardando assim a sua integridade e facilitando a análise de qual o próximo passo a tomar.
+De maneira geral, concordamos com as práticas utilizadas neste projeto. Tem uma interface apelativa e funcional que permite uma comunicação jogador/contribuídor acessível e útil para um ainda melhor desempenho por parte da equipa que trabalha na plataforma.
 
+No entanto são de notar algumas situações, nomeadamente ao nível do modelo de *branching* e de *testing*, em que achamos que a equipa e o projeto beneficiariam de um processo ligeiramente mais rigoroso. Não obstante, ficamos com a ideia que o desenvolvimento contínuo de "Pokemon Showdown" decorre sem grandes problemas. 
 
 ##Trabalho realizado por:
 
