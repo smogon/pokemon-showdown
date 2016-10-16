@@ -71,11 +71,6 @@ Após uma análise minuciosa dos diversos aspetos do projeto, chegamos à conclu
 
 Também nos parece imperativo que a equipa melhor a sua organização, visto que a sua produtividade está dependente desta. Um mecanismo de gerência de trabalhos, seria fundamental, pois os contribuidores saberiam que *feature*/processo os seus colegas estão a desenvolver e portanto se pretendessem contribuir, poderiam contactar-se. Por outro lado, também impede que dois ou mais contribuidores estejam a desenvolver trabalhos semelhantes e possam partir para outros temas, ajudando a uma progressão mais rápida do projeto.
 
---Isto vai um bocado contra a ideia dos gajos, alguém que leia e opine.
-
-Uma vez que não existe obrigação entre os membros com o *development* deste *open source*, é difícil manter uma agenda do conteúdo que se vai adicionar ao projeto, uma vez que obrigava os colaboradores a porem este como prioridade. Tal ideia seria apenas possível se contratássem *staff* que trabalhassem um certo número de horas, podendo garantir assim *dead lines*
-
--Meter o pikachu mais forte ;).
 
 ### Conclusão
 
