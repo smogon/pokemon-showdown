@@ -74,7 +74,9 @@ Também nos parece imperativo que a equipa melhor a sua organização, visto que
 
 ### Conclusão
 
-Pela observação dos aspetos analisados, entendemos que as práticas utilizadas, embora, como referido anteriormente, não definido, são, a nosso ver, maioritariamente as mais adequadas para este projeto. Deparamo-nos com algumas falhas de rigor a niveis dos modelos de branches e testes, falhas estas que se devem ao facto de os testes serem apenas efetuados pelo contribuidor antes de este o submeter para o branch master do projeto. Posto isto, entendemos que deveria ser criada uma equipa para testar e aprovar esse codigo submetido, podendo assim ser utilizado o modelo *git flow*, onde o codigo é submetido para o branch develop e após validado é que segue para a sua integração na versão ativa do projeto. Posto isto, o projeto tornar-se-ia mais protegido contra falhas depercebidas pelos contribuidores, resguardando assim a sua integridade e facilitando a análise do rumo que este leva.
+De uma forma geral, concordamos com as práticas utilizadas neste projeto. Tem uma interface apelativa e funcional que permite uma comunicação jogador/contribuidor acessível e útil para um ainda melhor desempenho por parte da equipa que trabalha na plataforma "Pokémon Showdown".
+Durante a análise deste *open source* deparamo-nos com algumas falhas de rigor a nível dos modelos de *branches* e testes, falhas estas que se devem ao facto de o *testing* ser apenas efetuado pelo contribuidor que constrói o código, antes de o submeter para o *branch master* do projeto. 
+Por esta razão, entendemos que deveria ser criada uma equipa para testar e aprovar esse código submetido, como referido nas sugestões, podendo assim ser utilizado o modelo *git flow*,sendo o código submetido para o *branch develop* onde é validado ou não. Se a resposta for afirmativa é posteriormente integrado na versão ativa do projeto. Seguindo este método, o projeto tornar-se-ia mais resistente a  falhas realizados pelos contribuidores, resguardando assim a sua integridade e facilitando a análise de qual o próximo passo a tomar.
 
 
 ##Trabalho realizado por:
