@@ -627,8 +627,8 @@ module.exports = (() => {
 			if (!subformat) subformat = format;
 			if (subformat.unbanlist) {
 				for (let i = 0; i < subformat.unbanlist.length; i++) {
-					banlistTable[subformat.unbanlist[i]] = false;
-					banlistTable[toId(subformat.unbanlist[i])] = false;
+					banlistTable[subformat.banlist[i]] = false;
+					banlistTable[toId(subformat.banlist[i])] = false;
 				}
 			}
 			if (subformat.banlist) {

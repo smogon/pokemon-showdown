@@ -231,23 +231,23 @@ class Validator {
 				const reason = banReason`${banlistTable[check]}`;
 				return [`${template.baseSpecies} is ${reason}.`];
 			}
-		}
-		if (banlistTable['Unreleased'] && template.isUnreleased) {
-			if (!format.requirePentagon || (template.eggGroups[0] === 'Undiscovered' && !template.evos)) {
-				problems.push(`${name} (${template.species}) is unreleased.`);
+			if (banlistTable['Unreleased'] && template.isUnreleased) {
+				if (!format.requirePentagon || (template.eggGroups[0] === 'Undiscovered' && !template.evos)) {
+					problems.push(`${name} (${template.species}) is unreleased.`);
+				}
 			}
-		}
-		let species = template.species;
-		let tier = template.tier;
-		if (item.megaEvolves === template.species) {
-			species = item.megaStone;
-			tier = tools.getTemplate(item.megaStone).tier;
-		}
-		if (tier) {
-			if (tier.charAt(0) === '(') tier = tier.slice(1, -1);
-			setHas[toId(tier)] = true;
-			if (banlistTable[tier] && banlistTable[toId(species)] !== false) {
-				problems.push(`${template.species} is in ${tier}, which is banned.`);
+			let species = template.species;
+			let tier = template.tier;
+			if (item.megaEvolves === template.species) {
+				species = item.megaStone;
+				tier = tools.getTemplate(item.megaStone).tier;
+			}
+			if (tier) {
+				if (tier.charAt(0) === '(') tier = tier.slice(1, -1);
+				setHas[toId(tier)] = true;
+				if (banlistTable[tier] && banlistTable[toId(species)] !== false) {
+					problems.push(`${template.species} is in ${tier}, which is banned.`);
+				}
 			}
 		}
 
