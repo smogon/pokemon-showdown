@@ -232,24 +232,6 @@ class Validator {
 				return [`${template.baseSpecies} is ${reason}.`];
 			}
 		}
-		if (banlistTable['Unreleased'] && template.isUnreleased) {
-			if (!format.requirePentagon || (template.eggGroups[0] === 'Undiscovered' && !template.evos)) {
-				problems.push(`${name} (${template.species}) is unreleased.`);
-			}
-		}
-		let species = template.species;
-		let tier = template.tier;
-		if (item.megaEvolves === template.species) {
-			species = item.megaStone;
-			tier = tools.getTemplate(item.megaStone).tier;
-		}
-		if (tier) {
-			if (tier.charAt(0) === '(') tier = tier.slice(1, -1);
-			setHas[toId(tier)] = true;
-			if (banlistTable[tier] && banlistTable[toId(species)] !== false) {
-				problems.push(`${template.species} is in ${tier}, which is banned.`);
-			}
-		}
 
 		check = toId(set.ability);
 		setHas[check] = true;
@@ -265,6 +247,11 @@ class Validator {
 		}
 		if (banlistTable['Unreleased'] && item.isUnreleased) {
 			problems.push(`${name}'s item ${set.item} is unreleased.`);
+		}
+		if (banlistTable['Unreleased'] && template.isUnreleased) {
+			if (!format.requirePentagon || (template.eggGroups[0] === 'Undiscovered' && !template.evos)) {
+				problems.push(`${name} (${template.species}) is unreleased.`);
+			}
 		}
 		setHas[toId(set.ability)] = true;
 		if (banlistTable['illegal']) {
@@ -543,6 +530,17 @@ class Validator {
 				if (ability.name !== oldAbilities['0'] && ability.name !== oldAbilities['1'] && !oldAbilities['H']) {
 					problems.push(`${name} has moves incompatible with its ability.`);
 				}
+			}
+		}
+		if (item.megaEvolves === template.species) {
+			template = tools.getTemplate(item.megaStone);
+		}
+		if (template.tier) {
+			let tier = template.tier;
+			if (tier.charAt(0) === '(') tier = tier.slice(1, -1);
+			setHas[toId(tier)] = true;
+			if (banlistTable[tier] && banlistTable[template.id] !== false) {
+				problems.push(`${template.species} is in ${tier}, which is banned.`);
 			}
 		}
 
