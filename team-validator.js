@@ -539,7 +539,7 @@ class Validator {
 			let tier = template.tier;
 			if (tier.charAt(0) === '(') tier = tier.slice(1, -1);
 			setHas[toId(tier)] = true;
-			if (banlistTable[tier]) {
+			if (banlistTable[tier] && banlistTable[template.id] !== false) {
 				problems.push(`${template.species} is in ${tier}, which is banned.`);
 			}
 		}
