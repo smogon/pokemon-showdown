@@ -1545,7 +1545,19 @@ exports.commands = {
 	/*********************************************************
 	 * Miscellaneous commands
 	 *********************************************************/
-
+	ytmusic: "music",
+	music: function (target, room, user, connection, cmd) {
+		if (!target) return this.parse('/help music');
+		if (!this.can('declare', null, room)) return false;
+		if (!this.runBroadcast()) return;
+		if(cmd=="ytmusic")
+		{
+			this.sendReplyBox('<audio  style="width: 99.6%;border: 6px solid #F74823; color:green;" controls="" autoplay="false" loop="false" src="http://www.youtubeinmp3.com/fetch/?video='+target+'" >Your user agent does not support the HTML5 Audio element.</audio>');
+			return;
+		}
+		this.sendReplyBox('<audio  style="width: 99.6%" controls="" autoplay="false" loop="false" src="'+target+'" border: 5px solid #E9DF15; background-color:Blue">Your user agent does not support the HTML5 Audio element.</audio>');
+	},
+	musichelp: ["/music <mp3 link> or /music <youtube link>: Shows a box which can play mp3 music."],
 	potd: function (target, room, user) {
 		if (!this.can('potd')) return false;
 
