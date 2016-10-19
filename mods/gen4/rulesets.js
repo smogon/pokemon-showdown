@@ -3,7 +3,6 @@
 exports.BattleFormats = {
 	pokemon: {
 		inherit: true,
-		effectType: 'Banlist',
 		onValidateSet: function (set) {
 			let template = this.getTemplate(set.species);
 			let item = this.getItem(set.item);

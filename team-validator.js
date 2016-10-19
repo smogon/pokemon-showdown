@@ -148,7 +148,6 @@ class Validator {
 		}
 
 		set.species = Tools.getSpecies(set.species);
-
 		set.name = tools.getName(set.name);
 		let item = tools.getItem(Tools.getString(set.item));
 		set.item = item.name;
@@ -215,6 +214,9 @@ class Validator {
 				return [`"${set.ability}" is an invalid ability.`];
 			}
 		}
+		if (set.happiness !== undefined && isNaN(set.happiness)) {
+			problems.push(`${set.species} has an invalid happiness.`);
+		}
 
 		let banlistTable = tools.getBanlistTable(format);
 
@@ -228,24 +230,6 @@ class Validator {
 			if (banlistTable[check]) {
 				const reason = banReason`${banlistTable[check]}`;
 				return [`${template.baseSpecies} is ${reason}.`];
-			}
-		}
-		if (banlistTable['Unreleased'] && template.isUnreleased) {
-			if (!format.requirePentagon || (template.eggGroups[0] === 'Undiscovered' && !template.evos)) {
-				problems.push(`${name} (${template.species}) is unreleased.`);
-			}
-		}
-		let species = template.species;
-		let tier = template.tier;
-		if (item.megaEvolves === template.species) {
-			species = item.megaStone;
-			tier = tools.getTemplate(item.megaStone).tier;
-		}
-		if (tier) {
-			if (tier.charAt(0) === '(') tier = tier.slice(1, -1);
-			setHas[toId(tier)] = true;
-			if (banlistTable[tier] && banlistTable[toId(species)] !== false) {
-				problems.push(`${template.species} is in ${tier}, which is banned.`);
 			}
 		}
 
@@ -263,6 +247,11 @@ class Validator {
 		}
 		if (banlistTable['Unreleased'] && item.isUnreleased) {
 			problems.push(`${name}'s item ${set.item} is unreleased.`);
+		}
+		if (banlistTable['Unreleased'] && template.isUnreleased) {
+			if (!format.requirePentagon || (template.eggGroups[0] === 'Undiscovered' && !template.evos)) {
+				problems.push(`${name} (${template.species}) is unreleased.`);
+			}
 		}
 		setHas[toId(set.ability)] = true;
 		if (banlistTable['illegal']) {
@@ -541,6 +530,17 @@ class Validator {
 				if (ability.name !== oldAbilities['0'] && ability.name !== oldAbilities['1'] && !oldAbilities['H']) {
 					problems.push(`${name} has moves incompatible with its ability.`);
 				}
+			}
+		}
+		if (item.megaEvolves === template.species) {
+			template = tools.getTemplate(item.megaStone);
+		}
+		if (template.tier) {
+			let tier = template.tier;
+			if (tier.charAt(0) === '(') tier = tier.slice(1, -1);
+			setHas[toId(tier)] = true;
+			if (banlistTable[tier] && banlistTable[template.id] !== false) {
+				problems.push(`${template.species} is in ${tier}, which is banned.`);
 			}
 		}
 

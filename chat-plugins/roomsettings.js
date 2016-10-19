@@ -261,7 +261,7 @@ exports.commands = {
 			if (target === '+') {
 				this.add(`|raw|<div class="broadcast-red"><b>This room is now invite only!</b><br />Users must be rank + or invited with <code>/invite</code> to join</div>`);
 			} else {
-				this.add(`|raw|<div class="broadcast-red"><b>Moderated join was set to ${target}!</b><br />Only users of rank ${target} and higher can talk.</div>`);
+				this.add(`|raw|<div class="broadcast-red"><b>Moderated join was set to ${target}!</b><br />Only users of rank ${target} and higher can join.</div>`);
 			}
 			this.addModCommand(`${user.name} set modjoin to ${target}.`);
 		} else {
@@ -445,7 +445,7 @@ exports.commands = {
 		},
 
 		list: function (target, room, user) {
-			if (!this.can('ban', null, room)) return false;
+			if (!this.can('mute', null, room)) return false;
 
 			if (!room.banwords) return this.sendReply("This room has no banned phrases.");
 
@@ -458,5 +458,5 @@ exports.commands = {
 	},
 	banwordhelp: ["/banword add [words] - Adds the comma-separated list of phrases (& or ~ can also input regex) to the banword list of the current room. Requires: # & ~",
 					"/banword delete [words] - Removes the comma-separated list of phrases from the banword list. Requires: # & ~",
-					"/banword list - Shows the list of banned words in the current room. Requires: @ * # & ~"],
+					"/banword list - Shows the list of banned words in the current room. Requires: % @ * # & ~"],
 };
