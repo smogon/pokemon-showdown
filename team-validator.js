@@ -214,6 +214,9 @@ class Validator {
 				return [`"${set.ability}" is an invalid ability.`];
 			}
 		}
+		if (!tools.getNature(set.nature).exists) {
+			return [`${set.species}'s nature is invalid.`];
+		}
 		if (set.happiness !== undefined && isNaN(set.happiness)) {
 			problems.push(`${set.species} has an invalid happiness.`);
 		}
