@@ -1346,7 +1346,7 @@ exports.BattleScripts = {
 					break;
 				case 'protect':
 					if (counter.setupType && (hasAbility['Guts'] || hasAbility['Speed Boost']) && !hasMove['batonpass']) rejected = true;
-					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
+					if ((hasMove['lightscreen'] && hasMove['reflect']) || (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
 					break;
 				case 'roar': case 'whirlwind':
 					if (counter.setupType || hasMove['dragontail']) rejected = true;
@@ -2178,10 +2178,10 @@ exports.BattleScripts = {
 			case 'Genesect':
 				if (this.random(5) >= 1) continue;
 				break;
-			case 'Gourgeist':
+			case 'Castform': case 'Gourgeist':
 				if (this.random(4) >= 1) continue;
 				break;
-			case 'Basculin': case 'Castform': case 'Cherrim': case 'Hoopa': case 'Meloetta': case 'Meowstic':
+			case 'Basculin': case 'Cherrim': case 'Hoopa': case 'Meloetta': case 'Meowstic':
 				if (this.random(2) >= 1) continue;
 				break;
 			}
