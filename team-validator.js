@@ -153,6 +153,7 @@ class Validator {
 		set.item = item.name;
 		let ability = tools.getAbility(Tools.getString(set.ability));
 		set.ability = ability.name;
+		set.nature = tools.getNature(Tools.getString(set.nature));
 		if (!Array.isArray(set.moves)) set.moves = [];
 
 		let maxLevel = format.maxLevel || 100;
