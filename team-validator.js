@@ -218,7 +218,7 @@ class Validator {
 			if (tools.gen < 3) {
 				set.nature = '';
 			} else {
-			  return [`${set.species}'s nature "${set.nature}" is invalid.`];
+				return [`${set.species}'s nature "${set.nature}" is invalid.`];
 			}
 		}
 		if (set.happiness !== undefined && isNaN(set.happiness)) {
