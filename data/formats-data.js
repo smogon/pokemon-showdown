@@ -297,7 +297,6 @@ exports.BattleFormatsData = {
 	},
 	pikachurockstar: {
 		randomBattleMoves: ["meteormash", "wildcharge", "knockoff", "brickbreak"],
-		randomDoubleBattleMoves: ["meteormash", "discharge", "hiddenpowerice", "protect"],
 		eventPokemon: [
 			{"generation": 6, "level": 20, "moves":["quickattack", "electroball", "thunderwave", "meteormash"]},
 		],
@@ -306,8 +305,7 @@ exports.BattleFormatsData = {
 		tier: "PU",
 	},
 	pikachubelle: {
-		randomBattleMoves: ["iciclecrash", "thunderbolt", "knockoff", "brickbreak"],
-		randomDoubleBattleMoves: ["iciclecrash", "discharge", "protect", "brickbreak"],
+		randomBattleMoves: ["iciclecrash", "thunderbolt", "knockoff", "brickbreak", "substitute", "grassknot", "voltswitch"],
 		eventPokemon: [
 			{"generation": 6, "level": 20, "moves":["quickattack", "electroball", "thunderwave", "iciclecrash"]},
 		],
@@ -316,8 +314,6 @@ exports.BattleFormatsData = {
 		tier: "PU",
 	},
 	pikachupopstar: {
-		randomBattleMoves: ["drainingkiss", "thunderbolt", "hiddenpowerice", "knockoff"],
-		randomDoubleBattleMoves: ["drainingkiss", "discharge", "hiddenpowerice", "protect"],
 		eventPokemon: [
 			{"generation": 6, "level": 20, "moves":["quickattack", "electroball", "thunderwave", "drainingkiss"]},
 		],
@@ -326,8 +322,6 @@ exports.BattleFormatsData = {
 		tier: "PU",
 	},
 	pikachuphd: {
-		randomBattleMoves: ["electricterrain", "thunderbolt", "hiddenpowerice", "knockoff"],
-		randomDoubleBattleMoves: ["electricterrain", "discharge", "hiddenpowerice", "protect"],
 		eventPokemon: [
 			{"generation": 6, "level": 20, "moves":["quickattack", "electroball", "thunderwave", "electricterrain"]},
 		],
@@ -336,8 +330,7 @@ exports.BattleFormatsData = {
 		tier: "PU",
 	},
 	pikachulibre: {
-		randomBattleMoves: ["flyingpress", "thunderbolt", "knockoff", "grassknot"],
-		randomDoubleBattleMoves: ["flyingpress", "discharge", "knockoff", "protect"],
+		randomBattleMoves: ["flyingpress", "thunderbolt", "knockoff", "hiddenpowerice", "substitute", "grassknot", "voltswitch"],
 		eventPokemon: [
 			{"generation": 6, "level": 20, "moves":["quickattack", "electroball", "thunderwave", "flyingpress"]},
 		],
