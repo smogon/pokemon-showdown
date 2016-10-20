@@ -21,7 +21,7 @@ exports.commands = {
 				"\"" + room.chatRoomData.quote + "\""
 			);
 		}
-		if (!this.can('declare', null, room)) return false;
+		if (!this.can('ban', null, room)) return false;
 		if (target === 'off' || target === 'disable' || target === 'reset') {
 			if (!room.chatRoomData.quote) return this.sendReply("The Quote of the Day has already been reset.");
 			delete room.chatRoomData.quote;
@@ -41,6 +41,6 @@ exports.commands = {
 	quoteofthedayhelp: 'qotdhelp',
 	qotdhelp: [
 		"/qotd - View the current Inspirational Quote of the Day.",
-		"/qotd [quote] - Set the Inspirational Quote of the Day. Requires: # & ~",
+		"/qotd [quote] - Set the Inspirational Quote of the Day. Requires: @ # & ~",
 	],
 };
