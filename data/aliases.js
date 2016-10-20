@@ -17,6 +17,7 @@ exports.BattleAliases = {
 	"smogtrips": "Smogon Triples",
 	"triples": "Smogon Triples",
 	"vgc": "VGC 2016",
+	"bss": "Battle Spot Singles",
 	"bsdoubles": "Battle Spot Doubles",
 	"bstriples": "Battle Spot Triples",
 	"createapokemon": "CAP",
