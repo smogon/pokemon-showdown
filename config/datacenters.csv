@@ -2857,7 +2857,6 @@
 209.164.0.0,209.164.63.255,HostMySite.com,http://www.webmysite.com/
 209.164.64.0,209.164.127.255,C I Host,http://www.cihost.com/
 209.172.32.0,209.172.63.255,iWeb Technologies Inc.,http://iweb.com/
-209.173.240.0,209.173.255.255,Securewebs.com,http://www.securewebs.com/
 209.177.80.0,209.177.95.255,Zenlayer,http://www.zenlayer.com/
 209.177.144.0,209.177.159.255,Host Virtual,http://www.vr.org/
 209.188.0.0,209.188.31.255,Secure Servers,http://www.securedservers.com/
