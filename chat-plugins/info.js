@@ -1556,7 +1556,7 @@ exports.commands = {
 		}
 		this.sendReplyBox('<audio  style="width: 99.6%" controls="" autoplay="false" loop="false" src="' + target + '" border: 5px solid #E9DF15; background-color:Blue">Your user agent does not support the HTML5 Audio element.</audio>');
 	},
-	musichelp: ["/music <mp3 link> or /music <youtube link>: Shows a box which can play mp3 music."],
+	musichelp: ["/music <mp3 link> or /music <youtube link>: Shows a box that can play music."],
 	potd: function (target, room, user) {
 		if (!this.can('potd')) return false;
 
