@@ -47,7 +47,7 @@ class Validator {
 		}
 		this.format = format;
 		this.supplementaryBanlist = supplementaryBanlist;
-		this.tools = Tools.mod(this.format);
+		this.tools = Tools.format(this.format);
 	}
 
 	validateTeam(team, removeNicknames) {
@@ -998,7 +998,7 @@ if (process.send && module === process.mainModule) {
 		});
 	}
 
-	global.Tools = require('./tools').includeMods();
+	global.Tools = require('./tools').includeData();
 	global.toId = Tools.getId;
 
 	require('./repl').start('team-validator-', process.pid, cmd => eval(cmd));

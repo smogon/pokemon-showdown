@@ -270,15 +270,12 @@ if (process.send && module === process.mainModule) {
 	global.Tools = require('../tools');
 	global.toId = Tools.getId;
 	Tools.includeData();
-	Tools.includeMods();
 	global.TeamValidator = require('../team-validator');
 
 	process.on('message', message => PM.onMessageDownstream(message));
 	process.on('disconnect', () => process.exit());
 
 	require('../repl').start('dexsearch', cmd => eval(cmd));
-} else if (!PM.maxProcesses) {
-	process.nextTick(() => Tools.includeMods());
 }
 
 function runDexsearch(target, cmd, canAll, message) {
