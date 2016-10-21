@@ -450,8 +450,9 @@ exports.SimulatorProcess = SimulatorProcess;
 if (process.send && module === process.mainModule) {
 	// This is a child process!
 
-	global.Tools = require('./tools').includeMods();
+	global.Tools = require('./tools').includeFormats();
 	global.toId = Tools.getId;
+	global.Chat = require('./chat');
 
 	if (Config.crashguard) {
 		// graceful crash - allow current battles to finish before restarting
