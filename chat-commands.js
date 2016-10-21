@@ -2438,7 +2438,7 @@ exports.commands = {
 				Tournaments.tournaments = runningTournaments;
 				return this.sendReply("Tournaments have been hot-patched.");
 			} else if (target === 'battles') {
-				Simulator.SimulatorProcess.respawn();
+				Rooms.SimulatorProcess.respawn();
 				return this.sendReply("Battles have been hotpatched. Any battles started after now will use the new code; however, in-progress battles will continue to use the old code.");
 			} else if (target === 'formats') {
 				let toolsLoaded = !!Tools.isLoaded;
@@ -2451,7 +2451,7 @@ exports.commands = {
 				// respawn validator processes
 				TeamValidator.PM.respawn();
 				// respawn simulator processes
-				Simulator.SimulatorProcess.respawn();
+				Rooms.SimulatorProcess.respawn();
 				// broadcast the new formats list to clients
 				Rooms.global.send(Rooms.global.formatListText);
 
