@@ -792,7 +792,7 @@ class GlobalRoom {
 		this.modlogStream.write('[' + (new Date().toJSON()) + '] ' + text + '\n');
 	}
 	startLockdown(err, slow) {
-		if (this.lockdown) return;
+		if (this.lockdown && err) return;
 		let devRoom = Rooms('development');
 		const stack = (err ? Chat.escapeHTML(err.stack).split(`\n`).slice(0, 2).join(`<br />`) : ``);
 		Rooms.rooms.forEach((curRoom, id) => {
