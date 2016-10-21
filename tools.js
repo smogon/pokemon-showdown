@@ -16,20 +16,20 @@
  * Dex.format(format).
  *
  * You may choose to preload some things:
- * - Dex.includeMods()
+ * - Dex.includeMods() ~10ms
  *   This will populate Dex.dexes, giving you a list of possible mods.
  *   Note that you don't need this for Dex.mod, Dex.mod will
  *   automatically populate this.
- * - Dex.includeFormats()
+ * - Dex.includeFormats() ~30ms
  *   As above, but will also populate Dex.data.Formats, giving an object
  *   containing formats.
- * - Dex.includeData()
+ * - Dex.includeData() ~500ms
  *   As above, but will also populate all of Dex.data, giving access to
  *   the data access functions like Dex.getTemplate, Dex.getMove, etc.
  *   Note that you don't need this if you access the functions through
  *   Dex.mod(...).getTemplate, because Dex.mod automatically populates
  *   data for the relevant mod.
- * - Dex.includeModData()
+ * - Dex.includeModData() ~1500ms
  *   As above, but will also populate Dex.dexes[...].data for all mods.
  *   Note that Dex.mod(...) will automatically populate .data, so use
  *   this only if you need to manually iterate Dex.dexes.
@@ -1176,7 +1176,6 @@ class BattleDex {
 
 		// Load [formats] aliases
 		let BattleAliases = this.loadDataFile('./data/', 'Aliases');
-		if (!BattleAliases || typeof BattleAliases !== 'object') throw new TypeError("Exported property `BattleAliases`from `" + "./data/aliases.js` must be an object except `null`.");
 		this.data.Aliases = BattleAliases;
 
 		// Load formats

@@ -12,11 +12,6 @@
 
 'use strict';
 
-function escapeHTML(str) {
-	if (!str) return '';
-	return ('' + str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;').replace(/\//g, '&#x2f;');
-}
-
 class BattlePokemon {
 	constructor(set, side) {
 		this.side = side;
@@ -3297,13 +3292,13 @@ let Battle = (() => {
 							if (this.firstStaleWarned && pokemon.isStale < 2) {
 								switch (pokemon.isStaleSource) {
 								case 'struggle':
-									this.add('html', '<div class="broadcast-red">' + escapeHTML(pokemon.name) + ' isn\'t losing HP from Struggle. If this continues, it will be classified as being in an endless loop.</div>');
+									this.add('html', '<div class="broadcast-red">' + Chat.escapeHTML(pokemon.name) + ' isn\'t losing HP from Struggle. If this continues, it will be classified as being in an endless loop.</div>');
 									break;
 								case 'drag':
-									this.add('html', '<div class="broadcast-red">' + escapeHTML(pokemon.name) + ' isn\'t losing PP or HP from being forced to switch. If this continues, it will be classified as being in an endless loop.</div>');
+									this.add('html', '<div class="broadcast-red">' + Chat.escapeHTML(pokemon.name) + ' isn\'t losing PP or HP from being forced to switch. If this continues, it will be classified as being in an endless loop.</div>');
 									break;
 								case 'switch':
-									this.add('html', '<div class="broadcast-red">' + escapeHTML(pokemon.name) + ' isn\'t losing PP or HP from repeatedly switching. If this continues, it will be classified as being in an endless loop.</div>');
+									this.add('html', '<div class="broadcast-red">' + Chat.escapeHTML(pokemon.name) + ' isn\'t losing PP or HP from repeatedly switching. If this continues, it will be classified as being in an endless loop.</div>');
 									break;
 								}
 							}
@@ -3317,7 +3312,7 @@ let Battle = (() => {
 							pokemon.isStale++;
 							pokemon.isStaleSource = 'ppstall';
 							if (this.firstStaleWarned && pokemon.isStale < 2) {
-								this.add('html', '<div class="broadcast-red">' + escapeHTML(pokemon.name) + ' isn\'t losing PP or HP. If it keeps on not losing PP or HP, it will be classified as being in an endless loop.</div>');
+								this.add('html', '<div class="broadcast-red">' + Chat.escapeHTML(pokemon.name) + ' isn\'t losing PP or HP. If it keeps on not losing PP or HP, it will be classified as being in an endless loop.</div>');
 							}
 						}
 						pokemon.isStaleCon = 0;
@@ -3375,7 +3370,7 @@ let Battle = (() => {
 					loopReason = ": its PP overflowed";
 					break;
 				}
-				this.add('html', '<div class="broadcast-red">' + escapeHTML(oneStale.name) + ' is in an endless loop' + loopReason + '.' + activationWarning + '</div>');
+				this.add('html', '<div class="broadcast-red">' + Chat.escapeHTML(oneStale.name) + ' is in an endless loop' + loopReason + '.' + activationWarning + '</div>');
 				oneStale.staleWarned = true;
 				this.firstStaleWarned = true;
 			}
@@ -3409,7 +3404,7 @@ let Battle = (() => {
 				this.staleWarned = true;
 				this.add('html', '<div class="broadcast-red">If this format had Endless Battle Clause, it would have activated.</div>');
 			} else if (oneStale) {
-				this.add('html', '<div class="broadcast-red">' + escapeHTML(oneStale.name) + ' is in an endless loop.</div>');
+				this.add('html', '<div class="broadcast-red">' + Chat.escapeHTML(oneStale.name) + ' is in an endless loop.</div>');
 				oneStale.staleWarned = true;
 			}
 		}
