@@ -7,7 +7,7 @@ const ProcessManager = require('../../process-manager');
 const ProcessWrapper = ProcessManager.ProcessWrapper;
 
 // const DatasearchManager = require('../../chat-plugins/datasearch.js').DatasearchManager;
-// const SimulatorManager = require('../../simulator.js').SimulatorManager;
+// const SimulatorManager = require('../../room-battle.js').SimulatorManager;
 // const TeamValidatorManager = require('../../team-validator.js').TeamValidatorManager;
 // const VerifierManager = require('../../verifier.js').VerifierManager;
 

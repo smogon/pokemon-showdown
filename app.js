@@ -28,10 +28,6 @@
  *
  *   Handles Elo rating tracking for players.
  *
- * Simulator - from simulator.js
- *
- *   Used to access the simulator itself.
- *
  * Chat - from chat.js
  *
  *   Handles chat and parses chat commands like /me and /ban
@@ -123,8 +119,6 @@ global.Rooms = require('./rooms');
 delete process.send; // in case we're a child process
 global.Verifier = require('./verifier');
 Verifier.PM.spawn();
-
-global.Simulator = require('./simulator');
 
 global.Tournaments = require('./tournaments');
 

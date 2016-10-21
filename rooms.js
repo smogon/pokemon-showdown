@@ -888,7 +888,7 @@ class BattleRoom extends Room {
 		this.p2 = p2 || null;
 
 		this.rated = rated;
-		this.battle = Simulator.create(this.id, format, rated, this);
+		this.battle = new Rooms.RoomBattle(this, format, rated);
 		this.game = this.battle;
 
 		this.sideTicksLeft = [21, 21];
@@ -1692,6 +1692,11 @@ Rooms.ChatRoom = ChatRoom;
 
 Rooms.RoomGame = require('./room-game').RoomGame;
 Rooms.RoomGamePlayer = require('./room-game').RoomGamePlayer;
+
+Rooms.RoomBattle = require('./room-battle').RoomBattle;
+Rooms.RoomBattlePlayer = require('./room-battle').RoomBattlePlayer;
+Rooms.SimulatorManager = require('./room-battle').SimulatorManager;
+Rooms.SimulatorProcess = require('./room-battle').SimulatorProcess;
 
 // initialize
 
