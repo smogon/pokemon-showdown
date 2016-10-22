@@ -100,7 +100,7 @@ exports.commands = {
 			} else {
 				uptimeText = Chat.toDurationString(uptime * 1000);
 			}
-			this.sendReply('The current scavenger hunt has be up for: ' + uptimeText);
+			this.sendReply('The current scavenger hunt has been up for: ' + uptimeText);
 			if (scavengers.finished.length) {
 				this.sendReply('The following users have completed it: ' + scavengers.finished.join(', '));
 			} else {
