@@ -432,17 +432,28 @@ exports.commands = {
 		let pokemon = Tools.getTemplate(target);
 		let type1 = Tools.getType(targets[0]);
 		let type2 = Tools.getType(targets[1]);
+		let type3 = Tools.getType(targets[2]);
 
 		if (pokemon.exists) {
 			target = pokemon.species;
-		} else if (type1.exists && type2.exists && type1 !== type2) {
-			pokemon = {types: [type1.id, type2.id]};
-			target = type1.id + "/" + type2.id;
-		} else if (type1.exists) {
-			pokemon = {types: [type1.id]};
-			target = type1.id;
 		} else {
-			return this.sendReplyBox("" + Chat.escapeHTML(target) + " isn't a recognized type or pokemon.");
+			let types = [];
+			let newTarget = "";
+			if (type1.exists) {
+				types.push(type1.id);
+				if (type2.exists && type2 !== type1) {
+					types.push(type2.id);
+				}
+				if (type3.exists && type3 !== type1 && type3 !== type2) {
+					types.push(type3.id);
+				}
+			}
+
+			if (types.length == 0) {
+				return this.sendReplyBox("" + Chat.escapeHTML(target) + " isn't a recognized type or pokemon.");
+			}
+			pokemon = {types: types};
+			target = types.join("/");
 		}
 
 		let weaknesses = [];
@@ -459,11 +470,17 @@ exports.commands = {
 				case 2:
 					weaknesses.push("<b>" + type + "</b>");
 					break;
+				case 3:
+					weaknesses.push("<b><i>" + type + "</i></b>");
+					break;
 				case -1:
 					resistances.push(type);
 					break;
 				case -2:
 					resistances.push("<b>" + type + "</b>");
+					break;
+				case -3:
+					resistances.push("<b><i>" + type + "</i></b>");
 					break;
 				}
 			} else {
