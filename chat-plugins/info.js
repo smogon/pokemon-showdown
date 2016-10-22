@@ -438,7 +438,6 @@ exports.commands = {
 			target = pokemon.species;
 		} else {
 			let types = [];
-			let newTarget = "";
 			if (type1.exists) {
 				types.push(type1.id);
 				if (type2.exists && type2 !== type1) {
@@ -449,7 +448,7 @@ exports.commands = {
 				}
 			}
 
-			if (types.length == 0) {
+			if (types.length === 0) {
 				return this.sendReplyBox("" + Chat.escapeHTML(target) + " isn't a recognized type or pokemon.");
 			}
 			pokemon = {types: types};
