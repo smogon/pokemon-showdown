@@ -233,15 +233,15 @@ exports.BattleScripts = {
 			return false;
 		}
 
-		if (move.flags['powder'] && target !== pokemon && !this.getImmunity('powder', target)) {
-			this.debug('natural powder immunity');
-			this.add('-immune', target, '[msg]');
-			return false;
-		}
-
 		hitResult = this.runEvent('TryHit', target, pokemon, move);
 		if (!hitResult) {
 			if (hitResult === false) this.add('-fail', target);
+			return false;
+		}
+
+		if (move.flags['powder'] && target !== pokemon && !this.getImmunity('powder', target)) {
+			this.debug('natural powder immunity');
+			this.add('-immune', target, '[msg]');
 			return false;
 		}
 
@@ -1093,8 +1093,8 @@ exports.BattleScripts = {
 				}
 				if (move.priority === 0 && hasAbility['Protean'] && !(moveid in NoStab)) counter['stab']++;
 				if (move.category === 'Physical') counter['hustle']++;
-				if (movetype === 'Normal') {
-					if ((hasAbility['Aerilate'] || hasAbility['Pixilate'] || hasAbility['Refrigerate']) && !(moveid in NoStab)) counter['stab']++;
+				if (movetype === 'Normal' && !(moveid in NoStab)) {
+					if (hasAbility['Aerilate'] || hasAbility['Pixilate'] || hasAbility['Refrigerate']) counter['stab']++;
 				}
 				if (move.flags['bite']) counter['bite']++;
 				if (move.flags['punch']) counter['ironfist']++;
@@ -1104,9 +1104,7 @@ exports.BattleScripts = {
 			// Moves with secondary effects:
 			if (move.secondary) {
 				counter['sheerforce']++;
-				if (move.secondary.chance >= 20) {
-					counter['serenegrace']++;
-				}
+				if (move.secondary.chance >= 20) counter['serenegrace']++;
 			}
 			// Moves with low accuracy:
 			if (move.accuracy && move.accuracy !== true && move.accuracy < 90) counter['inaccurate']++;
@@ -1348,7 +1346,7 @@ exports.BattleScripts = {
 					break;
 				case 'protect':
 					if (counter.setupType && (hasAbility['Guts'] || hasAbility['Speed Boost']) && !hasMove['batonpass']) rejected = true;
-					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
+					if ((hasMove['lightscreen'] && hasMove['reflect']) || (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
 					break;
 				case 'roar': case 'whirlwind':
 					if (counter.setupType || hasMove['dragontail']) rejected = true;
@@ -1382,6 +1380,7 @@ exports.BattleScripts = {
 					if (hasMove['uturn'] && !counter.setupType) rejected = true;
 					break;
 				case 'darkpulse':
+					if (hasMove['shadowball']) rejected = true;
 					if ((hasMove['crunch'] || hasMove['hyperspacefury']) && counter.setupType !== 'Special') rejected = true;
 					break;
 				case 'suckerpunch':
@@ -1639,10 +1638,10 @@ exports.BattleScripts = {
 					(hasType['Dark'] && hasMove['suckerpunch'] && counter.stab < template.types.length) ||
 					(hasType['Dragon'] && !counter['Dragon'] && !hasAbility['Aerilate'] && !hasAbility['Pixilate'] && !hasMove['rest'] && !hasMove['sleeptalk']) ||
 					(hasType['Electric'] && !counter['Electric']) ||
-					(hasType['Fighting'] && !counter['Fighting'] && counter.setupType) ||
+					(hasType['Fighting'] && !counter['Fighting'] && (counter.setupType || !counter['Status'])) ||
 					(hasType['Fire'] && !counter['Fire']) ||
-					(hasType['Ground'] && !counter['Ground'] && (counter.setupType || counter['speedsetup'] || hasMove['raindance'])) ||
-					(hasType['Ice'] && !counter['Ice']) ||
+					(hasType['Ground'] && !counter['Ground'] && (counter.setupType || counter['speedsetup'] || hasMove['raindance'] || !counter['Status'])) ||
+					(hasType['Ice'] && !counter['Ice'] && !hasAbility['Refrigerate']) ||
 					(hasType['Psychic'] && !!counter['Psychic'] && !hasType['Flying'] && !hasAbility['Pixilate'] && template.types.length > 1 && counter.stab < 2) ||
 					(hasType['Water'] && !counter['Water'] && (!hasType['Ice'] || !counter['Ice']) && !hasAbility['Protean']) ||
 					((hasAbility['Adaptability'] && !counter.setupType && template.types.length > 1 && (!counter[template.types[0]] || !counter[template.types[1]])) ||
@@ -1795,6 +1794,8 @@ exports.BattleScripts = {
 				rejectAbility = !hasMove['raindance'] && !teamDetails['rain'];
 			} else if (ability === 'Swarm') {
 				rejectAbility = !counter['Bug'];
+			} else if (ability === 'Synchronize') {
+				rejectAbility = counter.Status < 2;
 			} else if (ability === 'Technician') {
 				rejectAbility = !counter['technician'] || (abilities.includes('Skill Link') && counter['skilllink'] >= counter['technician']);
 			} else if (ability === 'Tinted Lens') {
@@ -1829,7 +1830,6 @@ exports.BattleScripts = {
 			}
 			if (template.id === 'ambipom' && !counter['technician']) {
 				// If it doesn't qualify for Technician, Skill Link is useless on it
-				// Might as well give it Pickup just in case
 				ability = 'Pickup';
 			} else if (template.id === 'aurorus' && ability === 'Snow Warning' && hasMove['hypervoice']) {
 				for (let i = 0; i < moves.length; i++) {
@@ -1846,7 +1846,6 @@ exports.BattleScripts = {
 			} else if (template.id === 'lopunny' && hasMove['switcheroo'] && this.random(3)) {
 				ability = 'Klutz';
 			} else if (template.id === 'mawilemega') {
-				// Mega Mawile only needs Intimidate for a starting ability
 				ability = 'Intimidate';
 			} else if (template.id === 'rampardos' && !hasMove['headsmash']) {
 				ability = 'Sheer Force';
@@ -1987,7 +1986,7 @@ exports.BattleScripts = {
 			item = (!!counter['Normal'] || (hasMove['suckerpunch'] && !hasType['Dark'])) ? 'Life Orb' : 'Expert Belt';
 		} else if (counter.damagingMoves.length >= 3 && !!counter['speedsetup'] && template.baseStats.hp + template.baseStats.def + template.baseStats.spd >= 300) {
 			item = 'Weakness Policy';
-		} else if (counter.damagingMoves.length >= 3 && ability !== 'Sturdy' && !hasMove['dragontail'] && !hasMove['foulplay'] && !hasMove['superfang']) {
+		} else if (counter.damagingMoves.length >= 3 && ability !== 'Sturdy' && !hasMove['clearsmog'] && !hasMove['dragontail'] && !hasMove['foulplay'] && !hasMove['superfang']) {
 			item = (template.baseStats.hp + template.baseStats.def + template.baseStats.spd < 285 || !!counter['speedsetup'] || hasMove['trickroom']) ? 'Life Orb' : 'Leftovers';
 		} else if (template.species === 'Palkia' && (hasMove['dracometeor'] || hasMove['spacialrend']) && hasMove['hydropump']) {
 			item = 'Lustrous Orb';
@@ -2044,7 +2043,7 @@ exports.BattleScripts = {
 			Gothitelle: 74, Ninetales: 77, Politoed: 77, Wobbuffet: 74,
 
 			// Holistic judgement
-			Unown: 85,
+			Unown: 100,
 		};
 		let tier = template.tier;
 		if (tier.charAt(0) === '(') {
@@ -2150,9 +2149,6 @@ exports.BattleScripts = {
 			// Limit to one of each species (Species Clause)
 			if (baseFormes[template.baseSpecies]) continue;
 
-			// Useless in Random Battle without greatly lowering the levels of everything else
-			if (template.species === 'Unown') continue;
-
 			// Only certain NFE Pokemon are allowed
 			if (template.evos.length && !allowedNFE[template.species]) continue;
 
@@ -2166,12 +2162,8 @@ exports.BattleScripts = {
 				// PUs are limited to 2 but have a 20% chance of being added anyway.
 				if (puCount > 1 && this.random(5) >= 1) continue;
 				break;
-			case 'Unreleased':
-				// Unreleased Pokémon have 20% the normal rate
-				if (this.random(5) >= 1) continue;
-				break;
-			case 'CAP':
-				// CAPs have 20% the normal rate
+			case 'Unreleased': case 'CAP':
+				// Unreleased and CAP have 20% the normal rate
 				if (this.random(5) >= 1) continue;
 			}
 
@@ -2180,33 +2172,18 @@ exports.BattleScripts = {
 			case 'Arceus':
 				if (this.random(18) >= 1) continue;
 				break;
-			case 'Basculin':
-				if (this.random(2) >= 1) continue;
-				break;
-			case 'Castform':
-				if (this.random(2) >= 1) continue;
-				break;
-			case 'Cherrim':
-				if (this.random(2) >= 1) continue;
-				break;
+			case 'Pikachu':
+				if (this.random(7) >= 1) continue;
+				continue;
 			case 'Genesect':
 				if (this.random(5) >= 1) continue;
 				break;
-			case 'Gourgeist':
+			case 'Castform': case 'Gourgeist':
 				if (this.random(4) >= 1) continue;
 				break;
-			case 'Hoopa':
+			case 'Basculin': case 'Cherrim': case 'Hoopa': case 'Meloetta': case 'Meowstic':
 				if (this.random(2) >= 1) continue;
 				break;
-			case 'Meloetta':
-				if (this.random(2) >= 1) continue;
-				break;
-			case 'Meowstic':
-				if (this.random(2) >= 1) continue;
-				break;
-			case 'Pikachu':
-				// Pikachu is not a viable NFE Pokemon
-				continue;
 			}
 
 			if (potd && potd.exists) {
@@ -2219,7 +2196,7 @@ exports.BattleScripts = {
 						template.randomBattleMoves = ['present', 'bestow'];
 					}
 				} else if (template.species === potd.species) {
-					continue; // No, thanks, I've already got one
+					continue; // No thanks, I've already got one
 				}
 			}
 

@@ -1863,7 +1863,7 @@ exports.BattleAbilities = {
 		},
 		onTryHitPriority: 1,
 		onTryHit: function (target, source, move) {
-			if (move.flags['powder'] && target !== source) {
+			if (move.flags['powder'] && target !== source && this.getImmunity('powder', target)) {
 				this.add('-immune', target, '[msg]', '[from] ability: Overcoat');
 				return null;
 			}
@@ -2375,6 +2375,7 @@ exports.BattleAbilities = {
 	"sapsipper": {
 		desc: "This Pokemon is immune to Grass-type moves and raises its Attack by 1 stage when hit by a Grass-type move.",
 		shortDesc: "This Pokemon's Attack is raised 1 stage if hit by a Grass move; Grass immunity.",
+		onTryHitPriority: 1,
 		onTryHit: function (target, source, move) {
 			if (target !== source && move.type === 'Grass') {
 				if (!this.boost({atk:1})) {

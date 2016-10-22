@@ -305,26 +305,27 @@ class CommandContext {
 		return result;
 	}
 
-	checkFormat(room, message) {
-		if (!room) return false;
-		if (!room.filterStretching && !room.filterCaps) return false;
-		let formatError = [];
+	checkFormat(room, user, message) {
+		if (!room) return true;
+		if (!room.filterStretching && !room.filterCaps) return true;
+
+		if (room.filterStretching && user.name.match(/(.+?)\1{5,}/i)) {
+			return this.errorReply(`Your username contains too much stretching, which this room doesn't allow.`);
+		}
+		if (room.filterCaps && user.name.match(/[A-Z\s]{6,}/)) {
+			return this.errorReply(`Your username contains too many capital letters, which this room doesn't allow.`);
+		}
 		// Removes extra spaces and null characters
 		message = message.trim().replace(/[ \u0000\u200B-\u200F]+/g, ' ');
 
-		let stretchMatch = room.filterStretching && message.match(/(.+?)\1{7,}/i);
-		let capsMatch = room.filterCaps && message.match(/[A-Z\s]{18,}/);
+		if (room.filterStretching && message.match(/(.+?)\1{7,}/i) && !user.can('mute', null, room)) {
+			return this.errorReply(`Your message contains too much stretching, which this room doesn't allow.`);
+		}
+		if (room.filterCaps && message.match(/[A-Z\s]{18,}/) && !user.can('mute', null, room)) {
+			return this.errorReply(`Your message contains too many capital letters, which this room doesn't allow.`);
+		}
 
-		if (stretchMatch) {
-			formatError.push("too much stretching");
-		}
-		if (capsMatch) {
-			formatError.push("too many capital letters");
-		}
-		if (formatError.length > 0) {
-			return formatError.join(' and ') + ".";
-		}
-		return false;
+		return true;
 	}
 
 	checkSlowchat(room, user) {
@@ -598,8 +599,7 @@ class CommandContext {
 				return false;
 			}
 
-			if (this.checkFormat(room, message) && !user.can('mute', null, room)) {
-				this.errorReply("Your message was not sent because it contained " + this.checkFormat(room, message));
+			if (!this.checkFormat(room, user, message)) {
 				return false;
 			}
 

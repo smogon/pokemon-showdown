@@ -89,6 +89,9 @@ exports.commands = {
 	'!me': true,
 	mee: 'me',
 	me: function (target, room, user) {
+		if (this.cmd === 'mee' && /[A-Z-a-z0-9/]/.test(target.charAt(0))) {
+			return this.errorReply(`/mee - must not start with a letter or number`);
+		}
 		target = this.canTalk(`/${this.cmd} ${target || ''}`);
 		if (!target) return;
 
@@ -417,6 +420,7 @@ exports.commands = {
 	inv: 'invite',
 	invite: function (target, room, user) {
 		if (!target) return this.parse('/help invite');
+		if (!this.canTalk()) return;
 		if (room) target = this.splitTarget(target) || room.id;
 		let targetRoom = Rooms.search(target);
 		if (targetRoom && !targetRoom.checkModjoin(user)) {
@@ -2434,20 +2438,19 @@ exports.commands = {
 				Tournaments.tournaments = runningTournaments;
 				return this.sendReply("Tournaments have been hot-patched.");
 			} else if (target === 'battles') {
-				Simulator.SimulatorProcess.respawn();
+				Rooms.SimulatorProcess.respawn();
 				return this.sendReply("Battles have been hotpatched. Any battles started after now will use the new code; however, in-progress battles will continue to use the old code.");
 			} else if (target === 'formats') {
-				let toolsLoaded = !!Tools.isLoaded;
 				// uncache the tools.js dependency tree
 				Chat.uncacheTree('./tools');
 				// reload tools.js
-				global.Tools = require('./tools')[toolsLoaded ? 'includeData' : 'includeFormats'](); // note: this will lock up the server for a few seconds
+				global.Tools = require('./tools').includeData(); // note: this will lock up the server for a few seconds
 				// rebuild the formats list
 				delete Rooms.global.formatList;
 				// respawn validator processes
 				TeamValidator.PM.respawn();
 				// respawn simulator processes
-				Simulator.SimulatorProcess.respawn();
+				Rooms.SimulatorProcess.respawn();
 				// broadcast the new formats list to clients
 				Rooms.global.send(Rooms.global.formatListText);
 
