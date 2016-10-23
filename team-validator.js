@@ -153,6 +153,7 @@ class Validator {
 		set.item = item.name;
 		let ability = tools.getAbility(Tools.getString(set.ability));
 		set.ability = ability.name;
+		set.nature = tools.getNature(Tools.getString(set.nature)).name;
 		if (!Array.isArray(set.moves)) set.moves = [];
 
 		let maxLevel = format.maxLevel || 100;
@@ -212,6 +213,14 @@ class Validator {
 				set.ability = '';
 			} else {
 				return [`"${set.ability}" is an invalid ability.`];
+			}
+		}
+		if (set.nature && !tools.getNature(set.nature).exists) {
+			if (tools.gen < 3) {
+				// gen 1-2 don't have natures, just remove them
+				set.nature = '';
+			} else {
+				return [`${set.species}'s nature is invalid.`];
 			}
 		}
 		if (set.happiness !== undefined && isNaN(set.happiness)) {
