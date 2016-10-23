@@ -188,33 +188,45 @@ class Validator {
 			problems.push(`${set.species} has an invalid happiness.`);
 		}
 
-		let banReason = ruleTable.check(template.id, setHas) || ruleTable.check(template.id + 'base', setHas);
-		if (banReason) {
-			return [`${set.species} is ${banReason}.`];
-		} else {
-			banReason = ruleTable.check(toId(template.baseSpecies), setHas);
-			if (banReason) {
-				return [`${template.baseSpecies} is ${banReason}.`];
+		let templates = [template];
+		if (item.megaEvolves === template.species && !ruleTable.has('+' + item.id)) templates.push(dex.getTemplate(item.megaStone));
+		templates.forEach((template, index) => {
+			if (ruleTable.has('-mega') && template.forme in {'Mega': 1, 'Mega-X': 1, 'Mega-Y': 1}) {
+				problems.push(`Mega evolutions are banned.`);
 			}
-		}
+			let banReason = ruleTable.check(template.id, setHas) || ruleTable.check(template.id + 'base', setHas);
+			if (banReason) {
+				problems.push(`${template.species} is ${banReason}.`);
+			} else {
+				banReason = ruleTable.check(toId(template.baseSpecies), setHas);
+				if (banReason) {
+					problems.push(`${template.baseSpecies} is ${banReason}.`);
+				}
+			}
+			if (ruleTable.has('-unreleased') && template.isUnreleased) {
+				if (template.eggGroups[0] === 'Undiscovered' && !template.evos) {
+					problems.push(`${name} (${template.species}) is unreleased.`);
+				}
+			}
+			if (template.tier) {
+				banReason = ruleTable.check(toId(template.tier), setHas);
+				if (banReason && !ruleTable.has('+' + template.id)) {
+					problems.push(`${template.species} is in ${template.tier}, which is ${banReason}.`);
+				}
+			}
+			banReason = ruleTable.check(toId(index === 0 ? set.ability : template.abilities[0]), setHas);
+			if (banReason) {
+				problems.push(`${name}'s ability ${set.ability} is ${banReason}.`);
+			}
+		});
 
-		banReason = ruleTable.check(toId(set.ability), setHas);
-		if (banReason) {
-			problems.push(`${name}'s ability ${set.ability} is ${banReason}.`);
-		}
-		banReason = ruleTable.check(toId(set.item), setHas);
+		let banReason = ruleTable.check(toId(set.item), setHas);
 		if (banReason) {
 			problems.push(`${name}'s item ${set.item} is ${banReason}.`);
 		}
 		if (ruleTable.has('-unreleased') && item.isUnreleased) {
 			problems.push(`${name}'s item ${set.item} is unreleased.`);
 		}
-		if (ruleTable.has('-unreleased') && template.isUnreleased) {
-			if (template.eggGroups[0] === 'Undiscovered' && !template.evos) {
-				problems.push(`${name} (${template.species}) is unreleased.`);
-			}
-		}
-		setHas[toId(set.ability)] = true;
 		if (ruleTable.has('-illegal')) {
 			// Don't check abilities for metagames with All Abilities
 			if (dex.gen <= 2) {
@@ -531,18 +543,6 @@ class Validator {
 				if (ability.name !== oldAbilities['0'] && ability.name !== oldAbilities['1'] && !oldAbilities['H']) {
 					problems.push(`${name} has moves incompatible with its ability.`);
 				}
-			}
-		}
-		if (item.megaEvolves === template.species) {
-			template = dex.getTemplate(item.megaStone);
-		}
-		if (ruleTable.has('-mega') && template.forme in {'Mega': 1, 'Mega-X': 1, 'Mega-Y': 1}) {
-			problems.push(`Mega evolutions are banned.`);
-		}
-		if (template.tier) {
-			banReason = ruleTable.check(toId(template.tier), setHas);
-			if (banReason && !ruleTable.has('+' + template.id)) {
-				problems.push(`${template.species} is in ${template.tier}, which is ${banReason}.`);
 			}
 		}
 
