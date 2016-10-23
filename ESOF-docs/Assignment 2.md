@@ -8,16 +8,15 @@
 
 ### 1.Requisitos
 
-#### 1.1.Sistema
+### 1.1.Sistema
 
-    O "Pokémon Showdown" embora desenvolvido, em grande parte, para Chrome também suporta os seguintes *browsers*:
+O "Pokémon Showdown" embora desenvolvido, em grande parte, para Chrome também suporta os seguintes *browsers*:
      -Firefox
      -Opera
      -Safari 5+
      -iE 11+
     
-    Este também pode ser utilizado em Safari 4+ e iE9, mas com uma *performance* aquém do expectável e com impossibilidade de usufruir de algumas *features*.
-      
+ Este também pode ser utilizado em Safari 4+ e iE9, mas com uma *performance* aquém do expectável e com impossibilidade de usufruir de algumas *features*.
 
 #### 1.2.Elicitação
 
