@@ -12,7 +12,7 @@ assert.bounded = function (value, range, message) {
 	if (value >= range[0] && value <= range[1]) return;
 	throw new AssertionError({
 		actual: value,
-		expected: `[${value[0]}, ${value[1]}]`,
+		expected: `[${range[0]}, ${range[1]}]`,
 		operator: '\u2208',
 		message: message,
 		stackStartFunction: assert.bounded,

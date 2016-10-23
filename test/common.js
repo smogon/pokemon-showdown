@@ -92,7 +92,7 @@ class TestTools {
 			options = {};
 		}
 		const format = this.getFormat(options || {});
-		const battle = BattleEngine.Battle.construct(`battle-test-${battleNum++}`, format.id);
+		const battle = BattleEngine.construct(`battle-test-${battleNum++}`, format.id);
 		if (options && options.partialDecisions) battle.supportPartialDecisions = true;
 		if (teams) {
 			for (let i = 0; i < teams.length; i++) {
