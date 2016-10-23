@@ -1223,6 +1223,7 @@ class BattleDex {
 }
 
 dexes['base'] = new BattleDex();
+dexes['base'].BattleDex = BattleDex;
 
 // "gen6" is an alias for the current base data
 dexes['gen6'] = dexes['base'];
