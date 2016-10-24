@@ -26,10 +26,11 @@ exports.commands = {
 		if (room && room.id === 'staff' && !this.runBroadcast()) return;
 		if (!room) room = Rooms.global;
 		let targetUser = this.targetUserOrSelf(target, user.group === ' ');
+		let showAll = (cmd === 'ip' || cmd === 'whoare' || cmd === 'alt' || cmd === 'alts');
 		if (!targetUser) {
+			if (showAll) return this.parse('/checkpunishment ' + target);
 			return this.errorReply("User " + this.targetUsername + " not found.");
 		}
-		let showAll = (cmd === 'ip' || cmd === 'whoare' || cmd === 'alt' || cmd === 'alts');
 		if (showAll && !user.trusted && targetUser !== user) {
 			return this.errorReply("/alts - Access denied.");
 		}
@@ -175,6 +176,65 @@ exports.commands = {
 	},
 	whoishelp: ["/whois - Get details on yourself: alts, group, IP address, and rooms.",
 		"/whois [username] - Get details on a username: alts (Requires: % @ * & ~), group, IP address (Requires: @ * & ~), and rooms."],
+
+	'!checkpunishment': true,
+	checkpunishment: function (target, room, user) {
+		if (!user.trusted) {
+			return this.errorReply("/checkpunishment - Access denied.");
+		}
+		let userid = toId(target);
+		let buf = Chat.html`<strong class="username">${userid}</strong> <em style="color:gray">(offline)</em><br /><br />`;
+		let atLeastOne = false;
+
+		let punishment = Punishments.userids.get(userid);
+		if (punishment) {
+			const [punishType, punishUserid, , reason] = punishment;
+			const punishName = {BAN: "BANNED", LOCK: "LOCKED", NAMELOCK: "NAMELOCKED"}[punishType] || punishType;
+			buf += `${punishName}: ${punishUserid}`;
+			let expiresIn = Punishments.checkLockExpiration(userid);
+			if (expiresIn) buf += expiresIn;
+			if (reason) buf += ` (reason: ${reason})`;
+			buf += '<br />';
+			atLeastOne = true;
+		}
+
+		if (!user.can('alts') && !atLeastOne) {
+			let hasJurisdiction = room && user.can('mute', null, room) && Punishments.roomUserids.nestedHas(room.id, userid);
+			if (!hasJurisdiction) {
+				return this.errorReply("/checkpunishment - User not found.");
+			}
+		}
+
+		let roomPunishments = ``;
+		for (let i = 0; i < Rooms.global.chatRooms.length; i++) {
+			const curRoom = Rooms.global.chatRooms[i];
+			if (!curRoom || curRoom.isPrivate === true) continue;
+			let punishment = Punishments.roomUserids.nestedGet(curRoom.id, userid);
+			let punishDesc = ``;
+			if (punishment) {
+				const [punishType, punishUserid, expireTime, reason] = punishment;
+				punishDesc = Punishments.roomPunishmentTypes.get(punishType);
+				if (!punishDesc) punishDesc = `punished`;
+				if (punishUserid !== userid) punishDesc += ` as ${punishUserid}`;
+
+				let expiresIn = new Date(expireTime).getTime() - Date.now();
+				let expiresDays = Math.round(expiresIn / 1000 / 60 / 60 / 24);
+				if (expiresIn > 1) punishDesc += ` for ${expiresDays} day${Chat.plural(expiresDays)}`;
+				if (reason) punishDesc += `: ${reason}`;
+			}
+			if (!punishDesc) continue;
+			if (roomPunishments) roomPunishments += `, `;
+			roomPunishments += `<a href="/${curRoom}">${curRoom}</a> (${punishDesc})`;
+		}
+		if (roomPunishments) {
+			buf += `Room punishments: ` + roomPunishments;
+			atLeastOne = true;
+		}
+		if (!atLeastOne) {
+			buf += `This username has no punishments associated with it.`;
+		}
+		this.sendReplyBox(buf);
+	},
 
 	'!host': true,
 	host: function (target, room, user, connection, cmd) {
