@@ -10913,9 +10913,13 @@ exports.BattleMovedex = {
 			onBeforeSwitchOut: function (pokemon) {
 				this.debug('Pursuit start');
 				let sources = this.effectData.sources;
-				this.add('-activate', pokemon, 'move: Pursuit');
+				let alreadyAdded = false;
 				for (let i = 0; i < sources.length; i++) {
 					if (sources[i].moveThisTurn || sources[i].fainted) continue;
+					if (!alreadyAdded) {
+						this.add('-activate', pokemon, 'move: Pursuit');
+						alreadyAdded = true;
+					}
 					this.cancelMove(sources[i]);
 					// Run through each decision in queue to check if the Pursuit user is supposed to Mega Evolve this turn.
 					// If it is, then Mega Evolve before moving.
