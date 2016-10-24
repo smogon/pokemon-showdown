@@ -126,7 +126,7 @@ class BattleDex {
 	}
 
 	mod(mod) {
-		if (!this.modsLoaded) this.includeMods();
+		if (!dexes['base'].modsLoaded) dexes['base'].includeMods();
 		if (!mod) mod = 'base';
 		return dexes[mod].includeData();
 	}
