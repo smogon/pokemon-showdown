@@ -9,13 +9,13 @@ O cerne deste relatório baseia-se no processo de estudo das necessidades do cli
 
 ### 1.Requisitos
 
-### 1.1.Sistema
+#### 1.1.Sistema
 
 O "Pokémon Showdown" embora desenvolvido, em grande parte, para Chrome também suporta os seguintes *browsers*:
--Firefox
--Opera
--Safari 5+
--iE 11+
+<p> -Firefox </p>
+<p> -Opera </p>
+<p> -Safari 5+ </p>
+<p> -iE 11+ </p>
     
 Este também pode ser utilizado em Safari 4+ e iE9, mas com uma *performance* aquém do expectável e com impossibilidade de usufruir de algumas *features*.
 
