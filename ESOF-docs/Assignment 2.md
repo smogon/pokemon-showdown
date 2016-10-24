@@ -5,27 +5,31 @@
 ## [Pokémon Showdown](https://www.pokemonshowdown.com)
 
 ### Introdução
+O cerne deste relatório baseia-se no processo de estudo das necessidades do cliente e do utilizador para obtenção de requisitos de software, mais vulgarmente conhecidos por "Engenharia de Requisitos".
 
 ### 1.Requisitos
 
 ### 1.1.Sistema
 
 O "Pokémon Showdown" embora desenvolvido, em grande parte, para Chrome também suporta os seguintes *browsers*:
-     -Firefox
-     -Opera
-     -Safari 5+
-     -iE 11+
+-Firefox
+-Opera
+-Safari 5+
+-iE 11+
     
- Este também pode ser utilizado em Safari 4+ e iE9, mas com uma *performance* aquém do expectável e com impossibilidade de usufruir de algumas *features*.
+Este também pode ser utilizado em Safari 4+ e iE9, mas com uma *performance* aquém do expectável e com impossibilidade de usufruir de algumas *features*.
 
 #### 1.2.Elicitação
+Este parâmetro visa a interação com recursos humanos e técnicos com o objetivo de recolher informação sobre os requisitos a desenvolver, utilizando métodos como: entrevistas, questionários, *brain storming*, entre outros.
 
 #### 1.3.Análise e Negociação
+O tópico em estudo pretende detetar, assim como, resolver conflitos entre requisitos e numa fase final o alcance de um consenso, relativamente aos requisitos a implementar. Para este efeito, usam-se técnicas de modelação e de verificação.
 
 #### 1.4.Especificação
+A produção do software de requisitos fica a cargo da especificação, normalmente, acompanhados por modelos, como o *case model* e o *domain model*.
 
 #### 1.5.Validação
+A validação do projeto passa por uma demonstração de que os requisitos definem o sistema que o cliente, realmente, deseja e ambiciona.
 
-### 2.Casos de Utilização
 
 ### Conclusão
