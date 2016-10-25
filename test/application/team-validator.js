@@ -34,6 +34,22 @@ describe('Team Validator features', function () {
 			});
 		});
 
+		it('should reject non-existent natures', function (done) {
+			let packedTeam = "|pikachu|eviolite||thunderbolt|nonexistentNature||||||";
+			TeamValidator('customgame').prepTeam(packedTeam).then(result => {
+				if (result.charAt(0) === '0') return done();
+				return done(new Error("Non-existent nature accepted"));
+			});
+		});
+
+		it('should reject invalid happiness values', function (done) {
+			let packedTeam = "|pikachu|eviolite||thunderbolt|||||||invalidHappinessValue";
+			TeamValidator('customgame').prepTeam(packedTeam).then(result => {
+				if (result.charAt(0) === '0') return done();
+				return done(new Error("Invalid happiness value accepted"));
+			});
+		});
+
 		it('should accept legal movesets', function (done) {
 			let packedTeam = "|pikachu|||agility,protect,thunder,thunderbolt|||||||";
 			TeamValidator('anythinggoes').prepTeam(packedTeam).then(result => {
