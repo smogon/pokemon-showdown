@@ -215,7 +215,7 @@ let commands = {
 		if (room.id !== 'thestudio') return this.errorReply('This command can only be used in The Studio.');
 		if (!target) this.parse('/help aotd set');
 		if (!room.chatRoomData || !this.can('mute', null, room)) return false;
-		if ((user.locked || room.isMuted(user)) && !user.can('bypassall')) return this.errorReply("You cannot do this while unable to talk.");
+		if (!this.canTalk()) return;
 		if (!toId(target)) return this.errorReply("No valid artist was specified.");
 		if (artistOfTheDay.pendingNominations) return this.sendReply("The Artist of the Day cannot be set while nominations are in progress.");
 
@@ -257,11 +257,37 @@ let commands = {
 		"/aotd quote - View the current Artist Quote of the Day.",
 		"/aotd quote [quote] - Set the Artist Quote of the Day. Requires: # & ~",
 	],
+	song: function (target, room, user) {
+		if (room.id !== 'thestudio') return this.errorReply('This command can only be used in The Studio.');
+		if (!target) return this.parse('/help aotd song');
+		if (!room.chatRoomData || !this.can('mute', null, room)) return false;
+		if (!this.canTalk()) return;
+
+		if (target === 'off' || target === 'disable') {
+			room.chatRoomData.songOfTheDayHTML = false;
+			Rooms.global.writeChatRoomData();
+			return this.privateModCommand(`(${user.name} has disabled the Song of the Day.)`);
+		} else if (target.includes(',')) {
+			let title = target.split(',')[0].trim();
+			let link = target.split(',')[1].trim();
+
+			room.chatRoomData.songOfTheDayHTML = Chat.html`<a href="${link}" title="${title}">${title}</a>.`;
+			Rooms.global.writeChatRoomData();
+			return this.privateModCommand(`(${user.name} set the Song of the Day to ${title} (Link: ${link}.)`);
+		} else {
+			return this.parse('/help aotd song');
+		}
+	},
+	songhelp: [
+		"/aotd song [song], [link] - Sets the Song of the Day. Requires % @ * # & ~",
+		"/aotd song [off|disable] - Turns the Song of the Day off. Requires % @ * # & ~",
+	],
 
 	'': function (target, room) {
 		if (room.id !== 'thestudio') return this.errorReply('This command can only be used in The Studio.');
 		if (!room.chatRoomData || !this.runBroadcast()) return false;
-		this.sendReplyBox("The Artist of the Day " + (room.chatRoomData.artistOfTheDay ? "is " + room.chatRoomData.artistOfTheDay + "." : "has not been set yet."));
+		let song = (room.chatRoomData.songOfTheDayHTML ? '<br />The Song of the Day is ' + room.chatRoomData.songOfTheDayHTML : '');
+		this.sendReplyBox("The Artist of the Day " + (room.chatRoomData.artistOfTheDay ? "is " + Chat.escapeHTML(room.chatRoomData.artistOfTheDay) + "." : "has not been set yet.") + song);
 	},
 
 	help: function (target, room) {
@@ -285,5 +311,7 @@ exports.commands = {
 		"- /aotd set [artist] - Set the Artist of the Day. Requires: % @ * # & ~",
 		"- /aotd quote - View the current Artist Quote of the Day.",
 		"- /aotd quote [quote] - Set the Artist Quote of the Day. Requires: # & ~",
+		"- /aotd song [song], [link] - Sets the Song of the Day. Requires % @ * # & ~",
+		"- /aotd song [off|disable] - Turns the Song of the Day off. Requires % @ * # & ~",
 	],
 };
