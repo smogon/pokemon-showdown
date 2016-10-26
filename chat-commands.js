@@ -1971,6 +1971,7 @@ exports.commands = {
 	},
 	chatdeclarehelp: ["/cdeclare [message] - Anonymously announces a message to all chatrooms on the server. Requires: ~"],
 
+	'!announce': true,
 	wall: 'announce',
 	announce: function (target, room, user) {
 		if (!target) return this.parse('/help announce');
