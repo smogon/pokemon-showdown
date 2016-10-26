@@ -31,5 +31,11 @@ A produção do software de requisitos fica a cargo da especificação, normalme
 #### 1.5.Validação
 A validação do projeto passa por uma demonstração de que os requisitos definem o sistema que o cliente, realmente, deseja e ambiciona.
 
+### Use Cases
+
+|Nome|Actors|Objectivo|Requerimentos|Descrição|Resultado|
+|:--:|:----:|:-------:|:-----------:|:-------:|:-------:|
+|Procurar Batalha|Jogador|Encontrar uma batalha|Escolher nome|O jogador procura uma batalha|O jogador é colocado numa batalha contra outro jogador|
+
 
 ### Conclusão
