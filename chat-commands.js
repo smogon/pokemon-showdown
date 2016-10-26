@@ -453,6 +453,7 @@ exports.commands = {
 				return this.errorReply(`You do not have permission to invite people into this room.`);
 			}
 		}
+		if (targetUser in targetRoom.users) return this.errorReply(`This user is already in "${targetRoom.title}".`);
 
 		return '/invite ' + targetRoom.id;
 	},
