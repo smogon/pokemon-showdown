@@ -38,9 +38,9 @@ A validação do projeto passa por uma demonstração de que os requisitos defin
 |Nome|Actor|Objectivo|Requerimentos|Resultado|
 |:--:|:----:|:-------:|:-----------:|:-------:|
 |Escolher Nome|Jogador|Escolher um nickname que o identifica no jogo|N/A|É atribuído ao jogador o username que este escolheu, caso esteja disponível|
-|Registar Nome|Jogador|Associar uma password ao username escolhido|Escolher nome|O nome do jogador é associado a uma password|
-|Procurar Batalha|Jogador|Iniciar uma batalha contra outro jogador|Escolher nome|O jogador é colocado numa batalha contra outro jogador|
-|Entrar em Sala de Chat|Jogador|Escolher e entrar numa sala de chat|Escolher nome|O jogador entra na sala escolhida e pode começar a falar|
+|Registar Nome|Jogador|Associar uma password ao username escolhido|Escolher Nome|O nome do jogador é associado a uma password|
+|Procurar Batalha|Jogador|Iniciar uma batalha contra outro jogador|Escolher Nome|O jogador é colocado numa batalha contra outro jogador|
+|Entrar em Sala de Chat|Jogador|Escolher e entrar numa sala de chat|Escolher Nome|O jogador entra na sala escolhida e pode começar a falar|
 |Construir Equipa|Jogador|Criar uma equipa de pokemons que pode ser usada em batalha|N/A|O jogador constrói uma equipa de pokemons que pode utilizar em batalhas com outros utilizadores|
 |Ver Tabelas de Classificação|Jogador|Consultar as tabelas de classificação|N/A|São mostradas as tabelas de classificação|
 |Assistir a Batalha|Jogador|Assistir a uma batalha entre terceiros|N/A|Permite ao jogador ser espectador de uma batalha entre outros dois jogadores|
