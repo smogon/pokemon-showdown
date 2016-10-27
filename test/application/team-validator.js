@@ -1,76 +1,73 @@
 'use strict';
 
+const assert = require('assert');
+
 describe('Team Validator features', function () {
 	describe('TeamValidator', function () {
-		it('should reject non-existent Pokemon', function (done) {
-			let packedTeam = "|nonexistentPokemon|eviolite||thunderbolt|||||||";
-			TeamValidator('customgame').prepTeam(packedTeam).then(result => {
-				if (result.charAt(0) === '0') return done();
-				return done(new Error("Non-existent Pokemon accepted"));
-			});
+		it('should reject non-existent Pokemon', function () {
+			let team = [{species:'nonexistentPokemon', moves:['thunderbolt']}];
+			let illegal = TeamValidator('customgame').validateTeam(team);
+			assert(illegal);
 		});
 
-		it('should reject non-existent items', function (done) {
-			let packedTeam = "|pikachu|nonexistentItem||thunderbolt|||||||";
-			TeamValidator('customgame').prepTeam(packedTeam).then(result => {
-				if (result.charAt(0) === '0') return done();
-				return done(new Error("Non-existent item accepted"));
-			});
+		it('should reject non-existent items', function () {
+			let team = [{species:'pikachu', moves:['thunderbolt'], ability:'static', item:'nonexistentItem'}];
+			let illegal = TeamValidator('customgame').validateTeam(team);
+			assert(illegal);
 		});
 
-		it('should reject non-existent abilities', function (done) {
-			let packedTeam = "|pikachu|eviolite|nonexistentAbility|thunderbolt|||||||";
-			TeamValidator('customgame').prepTeam(packedTeam).then(result => {
-				if (result.charAt(0) === '0') return done();
-				return done(new Error("Non-existent ability accepted"));
-			});
+		it('should reject non-existent abilities', function () {
+			let team = [{species:'pikachu', moves:['thunderbolt'], ability:'nonexistentAbility'}];
+			let illegal = TeamValidator('customgame').validateTeam(team);
+			assert(illegal);
 		});
 
-		it('should reject non-existent moves', function (done) {
-			let packedTeam = "|pikachu|eviolite||nonexistentMove|||||||";
-			TeamValidator('customgame').prepTeam(packedTeam).then(result => {
-				if (result.charAt(0) === '0') return done();
-				return done(new Error("Non-existent move accepted"));
-			});
+		it('should reject non-existent moves', function () {
+			let team = [{species:'pikachu', ability:'static', moves:['nonexistentMove']}];
+			let illegal = TeamValidator('customgame').validateTeam(team);
+			assert(illegal);
 		});
 
-		it('should accept legal movesets', function (done) {
-			let packedTeam = "|pikachu|||agility,protect,thunder,thunderbolt|||||||";
-			TeamValidator('anythinggoes').prepTeam(packedTeam).then(result => {
-				if (result.charAt(0) === '1') return done();
-				return done(new Error("Legal moveset rejected"));
-			});
+		it('should reject non-existent natures', function () {
+			let team = [{species:'pikachu', ability:'static', moves:['thunderbolt'], nature:'nonexistentNature'}];
+			let illegal = TeamValidator('customgame').validateTeam(team);
+			assert(illegal);
 		});
 
-		it('should reject illegal movesets', function (done) {
-			let packedTeam = "|pikachu|||blastburn,frenzyplant,hydrocannon,dragonascent|||||||";
-			TeamValidator('anythinggoes').prepTeam(packedTeam).then(result => {
-				if (result.charAt(0) === '0') return done();
-				return done(new Error("Illegal moveset accepted"));
-			});
+		it('should reject invalid happiness values', function () {
+			let team = [{species:'pikachu', ability:'static', moves:['thunderbolt'], happiness:'invalidHappinessValue'}];
+			let illegal = TeamValidator('customgame').validateTeam(team);
+			assert(illegal);
 		});
 
-		it('should accept both ability types for Mega Evolutions', function (done) {
+		it('should accept legal movesets', function () {
+			let team = [{species:'pikachu', ability:'static', moves:['agility', 'protect', 'thunder', 'thunderbolt']}];
+			let illegal = TeamValidator('anythinggoes').validateTeam(team);
+			assert(!illegal);
+		});
+
+		it('should reject illegal movesets', function () {
+			let team = [{species:'pikachu', ability:'static', moves:['blastburn', 'frenzyplant', 'hydrocannon', 'dragonascent']}];
+			let illegal = TeamValidator('anythinggoes').validateTeam(team);
+			assert(illegal);
+		});
+
+		it('should accept both ability types for Mega Evolutions', function () {
 			// base forme ability
-			let packedTeam = "|gyaradosmega|gyaradosite|intimidate|dragondance,crunch,waterfall,icefang|||||||";
-			TeamValidator('anythinggoes').prepTeam(packedTeam).then(result => {
-				if (result.charAt(0) === '0') return done(new Error("Mega Evolution base forme ability rejected"));
-			});
+			let team = [{species:'gyaradosmega', item:'gyaradosite', ability:'intimidate', moves:['dragondance', 'crunch', 'waterfall', 'icefang']}];
+			let illegal = TeamValidator('anythinggoes').validateTeam(team);
+			assert(!illegal);
 
 			// mega forme ability
-			packedTeam = "|gyaradosmega|gyaradosite|moldbreaker|dragondance,crunch,waterfall,icefang|||||||";
-			TeamValidator('anythinggoes').prepTeam(packedTeam).then(result => {
-				if (result.charAt(0) === '1') return done();
-				return done(new Error("Mega Evolution mega forme ability rejected"));
-			});
+			team = [{species:'gyaradosmega', item:'gyaradosite', ability:'moldbreaker', moves:['dragondance', 'crunch', 'waterfall', 'icefang']}];
+			illegal = TeamValidator('anythinggoes').validateTeam(team);
+			assert(!illegal);
 		});
 
-		it('should reject newer Pokemon in older gens', function (done) {
-			let packedTeam = "|pichu|||thunderbolt|||||||";
-			TeamValidator('gen1ou').prepTeam(packedTeam).then(result => {
-				if (result.charAt(0) === '0') return done();
-				return done(new Error("Newer Pokemon accepted in older gen"));
-			});
+		it('should reject newer Pokemon in older gens', function () {
+			let team = [{species:'pichu', ability:'static', moves:['thunderbolt']}];
+			let illegal = TeamValidator('gen1ou').validateTeam(team);
+			assert(illegal);
 		});
 	});
 });
