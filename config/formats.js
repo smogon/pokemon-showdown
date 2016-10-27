@@ -38,6 +38,14 @@ exports.Formats = [
 		banlist: ['Uber', 'Shadow Tag', 'Soul Dew'],
 	},
 	{
+		name: "OU (suspect test)",
+		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3585600/\">np: OU Stage 7</a>"],
+		section: "ORAS Singles",
+
+		ruleset: ['OU'],
+		banlist: ['Sablenite'],
+	},
+	{
 		name: "Ubers",
 		desc: [
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3522911/\">Ubers Metagame Discussion</a>",
