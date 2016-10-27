@@ -12,32 +12,38 @@ O cerne deste relatório baseia-se no processo de estudo das necessidades do cli
 #### 1.1.Sistema
 
 O "Pokémon Showdown" embora desenvolvido, em grande parte, para Chrome também suporta os seguintes *browsers*:
-+Firefox 
-+Opera
-+Safari 5+
-+iE 11+
++ Firefox 
++ Opera
++ Safari 5+
++ iE 11+
     
 Este também pode ser utilizado em Safari 4+ e iE9, mas com uma *performance* aquém do expectável e com impossibilidade de usufruir de algumas *features*.
 
-1.2.Requisitos Funcionais
+####1.2.Requisitos Funcionais
 
 Os seguintes requisitos funcionais descrevem os serviços que o Pokémon Showdown se propõe a disponibilizar aos seus jogadores:
-+Permitir simular uma batalha de Pokémon entre dois jogadores.
-+Implementar salas de chat para facilitar a comunicação entre os jogadores.
-+Manter uma tabela classificativa.
-+Emparelhar jogadores que procuram uma batalha com outros de nível de abilidade semelhante.
++ Permitir simular uma batalha de Pokémon entre dois jogadores.
++ Implementar salas de chat para facilitar a comunicação entre os jogadores.
++ Manter uma tabela classificativa.
++ Emparelhar jogadores que procuram uma batalha com outros de nível de abilidade semelhante.
 
-1.3.Requisitos Não Funcionais
+####1.3.Requisitos Não Funcionais
 
 O Pokemon Showdown deve cumprir os seguintes requisitos não funcionais:
-+Ser robusto de modo a aguentar todo o tráfego a que pode ser sujeito.
-+Ser seguro para não colocar em risco a informação dos seus utilizadores.
-+Ter um tempo de resposta rápido para permitir uma boa experiência de utilização.
-+Ter o Node.js instalado, versão 6.X ou mais recente.
-+Ser disponibilizado como software Open Source.
++ Ser robusto de modo a aguentar todo o tráfego a que pode ser sujeito.
++ Ser seguro para não colocar em risco a informação dos seus utilizadores.
++ Ter um tempo de resposta rápido para permitir uma boa experiência de utilização.
++ Ter o Node.js instalado, versão 6.X ou mais recente.
++ Ser disponibilizado como software Open Source.
 
 #### 1.2.Elicitação
-Este parâmetro visa a interação com recursos humanos e técnicos com o objetivo de recolher informação sobre os requisitos a desenvolver, utilizando métodos como: entrevistas, questionários, *brain storming*, entre outros.
+
+A escolha do objecto que vai ser o foco do desenvolvimento é feita, essencialmente, de três modos:
++ Através de um [tópico de Bug Reports](http://www.smogon.com/forums/threads/bug-reports-v2-0-read-op-before-posting.3469932/) nos fóruns oficiais;
++ Através de um [tópico de sugestões](http://www.smogon.com/forums/threads/suggestions.3534365/) nos mesmos fóruns;
++ Através da sugestão de um dos contribuidores.
+
+Todos os contribuídores frequentam estas plataformas e estão sempre atentos a qualquer situação que requira ou capture a sua atenção.
 
 #### 1.3.Análise e Negociação
 O tópico em estudo pretende detetar, assim como, resolver conflitos entre requisitos e numa fase final o alcance de um consenso, relativamente aos requisitos a implementar. Para este efeito, usam-se técnicas de modelação e de verificação.
