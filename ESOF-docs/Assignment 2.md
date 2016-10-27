@@ -54,12 +54,9 @@ Após o desenvolvimento da funcionalidade, a discussão final é feita no própr
 #### 1.4.Especificação
 A produção do software de requisitos fica a cargo da especificação, normalmente, acompanhados por modelos, como o *case model* e o *domain model*.
 
-#### 1.5.Validação
-A validação do projeto passa por uma demonstração de que os requisitos definem o sistema que o cliente, realmente, deseja e ambiciona.
-
 ### Use Cases
 
-|Nome|Actor|Objectivo|Requerimentos|Resultado|
+|Nome|Actor|Objectivo|Pré-Requisitos|Resultado|
 |:--:|:----:|:-------:|:-----------:|:-------:|
 |Escolher Nome|Jogador|Escolher um nickname que o identifica no jogo|N/A|É atribuído ao jogador o username que este escolheu, caso esteja disponível|
 |Registar Nome|Jogador|Associar uma password ao username escolhido|Escolher Nome|O nome do jogador é associado a uma password|
@@ -72,5 +69,8 @@ A validação do projeto passa por uma demonstração de que os requisitos defin
 |Enviar Mensagem|Jogador|Enviar uma mensagem numa sala de chat|Entrar em Sala de Chat|O jogador envia uma mensagem que é vista pelos restantes na mesma sala|
 |Banir Jogador|Admin|Banir um jogador de uma sala de chat|N/A|O admin impede o jogador de estar presente numa sala de chat|
 |Promover Jogador|Admin|Aumentar o rank de um jogador|N/A|O admin aumenta o rank do jogador para um nível com mais previlégios na sala de chat|
+
+#### 1.5.Validação
+A validação do projeto passa por uma demonstração de que os requisitos definem o sistema que o cliente, realmente, deseja e ambiciona.
 
 ### Conclusão
