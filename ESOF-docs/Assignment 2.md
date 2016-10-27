@@ -19,6 +19,8 @@ O "Pokémon Showdown" embora desenvolvido, em grande parte, para Chrome também 
     
 Este também pode ser utilizado em Safari 4+ e iE9, mas com uma *performance* aquém do expectável e com impossibilidade de usufruir de algumas *features*.
 
+Para correr o projeto é ainda necessário ter o Node.js instalado, versão 6.X ou mais recente.
+
 ####1.2.Requisitos Funcionais
 
 Os seguintes requisitos funcionais descrevem os serviços que o Pokémon Showdown se propõe a disponibilizar aos seus jogadores:
@@ -33,7 +35,6 @@ O Pokemon Showdown deve cumprir os seguintes requisitos não funcionais:
 + Ser robusto de modo a aguentar todo o tráfego a que pode ser sujeito.
 + Ser seguro para não colocar em risco a informação dos seus utilizadores.
 + Ter um tempo de resposta rápido para permitir uma boa experiência de utilização.
-+ Ter o Node.js instalado, versão 6.X ou mais recente.
 + Ser disponibilizado como software Open Source.
 
 #### 1.2.Elicitação
