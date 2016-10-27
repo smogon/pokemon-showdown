@@ -19,7 +19,7 @@ O "Pokémon Showdown" embora desenvolvido, em grande parte, para Chrome também 
     
 Este também pode ser utilizado em Safari 4+ e iE9, mas com uma *performance* aquém do expectável e com impossibilidade de usufruir de algumas *features*.
 
-1.2.Requisitos Funcionais
+####1.2.Requisitos Funcionais
 
 Os seguintes requisitos funcionais descrevem os serviços que o Pokémon Showdown se propõe a disponibilizar aos seus jogadores:
 + Permitir simular uma batalha de Pokémon entre dois jogadores.
@@ -27,7 +27,7 @@ Os seguintes requisitos funcionais descrevem os serviços que o Pokémon Showdow
 + Manter uma tabela classificativa.
 + Emparelhar jogadores que procuram uma batalha com outros de nível de abilidade semelhante.
 
-1.3.Requisitos Não Funcionais
+####1.3.Requisitos Não Funcionais
 
 O Pokemon Showdown deve cumprir os seguintes requisitos não funcionais:
 + Ser robusto de modo a aguentar todo o tráfego a que pode ser sujeito.
@@ -40,7 +40,7 @@ O Pokemon Showdown deve cumprir os seguintes requisitos não funcionais:
 
 A escolha do objecto que vai ser o foco do desenvolvimento é feita, essencialmente, de três modos:
 + Através de um [tópico de Bug Reports](http://www.smogon.com/forums/threads/bug-reports-v2-0-read-op-before-posting.3469932/) nos fóruns oficiais;
-+ Através de um [tópico de sugestões](http://www.smogon.com/forums/threads/suggestions.3534365/);
++ Através de um [tópico de sugestões](http://www.smogon.com/forums/threads/suggestions.3534365/) nos mesmos fóruns;
 + Através da sugestão de um dos contribuidores.
 
 Todos os contribuídores frequentam estas plataformas e estão sempre atentos a qualquer situação que requira ou capture a sua atenção.
