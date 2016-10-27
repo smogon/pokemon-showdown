@@ -46,7 +46,10 @@ A escolha do objecto que vai ser o foco do desenvolvimento é feita, essencialme
 Todos os contribuídores frequentam estas plataformas e estão sempre atentos a qualquer situação que requira ou capture a sua atenção.
 
 #### 1.3.Análise e Negociação
-O tópico em estudo pretende detetar, assim como, resolver conflitos entre requisitos e numa fase final o alcance de um consenso, relativamente aos requisitos a implementar. Para este efeito, usam-se técnicas de modelação e de verificação.
+
+A discussão e análise de novas funcionalidades ocorre, numa primeira fase, no [chat para contribuidores](http://play.pokemonshowdown.com/development) no próprio site do Pokémon Showdown. Aqui os contribuidores podem discutir e elaborar as suas ideias, e ouvir a opinião dos seus pares.
+
+Após o desenvolvimento da funcionalidade, a discussão final é feita no próprio Pull Request. Aqui os contribuidores discutem a viabilidade da ideia e, se o parecer do dono do projeto for positivo, esta é finalmente implementada.
 
 #### 1.4.Especificação
 A produção do software de requisitos fica a cargo da especificação, normalmente, acompanhados por modelos, como o *case model* e o *domain model*.
