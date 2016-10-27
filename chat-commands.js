@@ -439,6 +439,7 @@ exports.commands = {
 		if (!targetRoom || targetRoom === Rooms.global) return this.errorReply(`The room "${target}" was not found.`);
 		if (targetRoom.staffRoom && !targetUser.isStaff) return this.errorReply(`User "${this.targetUsername}" requires global auth to join room "${targetRoom.id}".`);
 		if (!targetUser) return this.errorReply(`The user "${this.targetUsername}" was not found.`);
+		if (!this.canTalk(target, null, targetUser)) return;
 
 		if (!targetRoom.checkModjoin(targetUser)) {
 			if (targetRoom.getAuth(targetUser) !== ' ') {
