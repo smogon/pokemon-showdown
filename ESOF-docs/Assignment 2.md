@@ -33,8 +33,6 @@ A validação do projeto passa por uma demonstração de que os requisitos defin
 
 ### Use Cases
 
-#####Geral
-
 |Nome|Actor|Objectivo|Requerimentos|Resultado|
 |:--:|:----:|:-------:|:-----------:|:-------:|
 |Escolher Nome|Jogador|Escolher um nickname que o identifica no jogo|N/A|É atribuído ao jogador o username que este escolheu, caso esteja disponível|
@@ -45,7 +43,8 @@ A validação do projeto passa por uma demonstração de que os requisitos defin
 |Ver Tabelas de Classificação|Jogador|Consultar as tabelas de classificação|N/A|São mostradas as tabelas de classificação|
 |Assistir a Batalha|Jogador|Assistir a uma batalha entre terceiros|N/A|Permite ao jogador ser espectador de uma batalha entre outros dois jogadores|
 |Procurar Utilizador|Jogador|Procurar outro utilizador pelo seu username|N/A|Mostra ao jogador opções para interagir com o utilizador que procurava, se este existir|
-
-
+|Enviar Mensagem|Jogador|Enviar uma mensagem numa sala de chat|Entrar em Sala de Chat|O jogador envia uma mensagem que é vista pelos restantes na mesma sala|
+|Banir Jogador|Admin|Banir um jogador de uma sala de chat|N/A|O admin impede o jogador de estar presente numa sala de chat|
+|Promover Jogador|Admin|Aumentar o rank de um jogador|N/A|O admin aumenta o rank do jogador para um nível com mais previlégios na sala de chat|
 
 ### Conclusão
