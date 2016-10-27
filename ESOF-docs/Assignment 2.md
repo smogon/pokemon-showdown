@@ -46,17 +46,17 @@ A escolha do objecto que vai ser o foco do desenvolvimento é feita, essencialme
 Todos os contribuídores frequentam estas plataformas e estão sempre atentos a qualquer situação que requira ou capture a sua atenção.
 
 #### 1.3.Análise e Negociação
-O tópico em estudo pretende detetar, assim como, resolver conflitos entre requisitos e numa fase final o alcance de um consenso, relativamente aos requisitos a implementar. Para este efeito, usam-se técnicas de modelação e de verificação.
+
+A discussão e análise de novas funcionalidades ocorre, numa primeira fase, no [chat para contribuidores](http://play.pokemonshowdown.com/development) no próprio site do Pokémon Showdown. Aqui os contribuidores podem discutir e elaborar as suas ideias, e ouvir a opinião dos seus pares.
+
+Após o desenvolvimento da funcionalidade, a discussão final é feita no próprio Pull Request. Aqui os contribuidores discutem a viabilidade da ideia e, se o parecer do dono do projeto for positivo, esta é finalmente implementada.
 
 #### 1.4.Especificação
 A produção do software de requisitos fica a cargo da especificação, normalmente, acompanhados por modelos, como o *case model* e o *domain model*.
 
-#### 1.5.Validação
-A validação do projeto passa por uma demonstração de que os requisitos definem o sistema que o cliente, realmente, deseja e ambiciona.
-
 ### Use Cases
 
-|Nome|Actor|Objectivo|Requerimentos|Resultado|
+|Nome|Actor|Objectivo|Pré-Requisitos|Resultado|
 |:--:|:----:|:-------:|:-----------:|:-------:|
 |Escolher Nome|Jogador|Escolher um nickname que o identifica no jogo|N/A|É atribuído ao jogador o username que este escolheu, caso esteja disponível|
 |Registar Nome|Jogador|Associar uma password ao username escolhido|Escolher Nome|O nome do jogador é associado a uma password|
@@ -69,5 +69,8 @@ A validação do projeto passa por uma demonstração de que os requisitos defin
 |Enviar Mensagem|Jogador|Enviar uma mensagem numa sala de chat|Entrar em Sala de Chat|O jogador envia uma mensagem que é vista pelos restantes na mesma sala|
 |Banir Jogador|Admin|Banir um jogador de uma sala de chat|N/A|O admin impede o jogador de estar presente numa sala de chat|
 |Promover Jogador|Admin|Aumentar o rank de um jogador|N/A|O admin aumenta o rank do jogador para um nível com mais previlégios na sala de chat|
+
+#### 1.5.Validação
+A validação do projeto passa por uma demonstração de que os requisitos definem o sistema que o cliente, realmente, deseja e ambiciona.
 
 ### Conclusão
