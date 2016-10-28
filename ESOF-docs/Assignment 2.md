@@ -57,6 +57,15 @@ A produção do software de requisitos fica a cargo da especificação, normalme
 
 ### Use Cases
 
+Casos de utilização correspondem a interações com o sistema, na qual o utilizador pode participar. Estas têm sempre um fim bem definido, sendo este apresentado ao utilizador, sem que este saiba como funciona a máquina por de trás das cortinas.
+
+No *Pokémon Showdown* estes são bastante *user friendly*, ou seja, fornecem uma mensagem clara e consistende daquilo que o projeto é capaz. Segue-se uma imagem dos casos de utilização principais do *Pokémon Showdown*, nas quais estão presentes 2 atores (utilizador normal, e administrador), bem como a descrição da funcionalidade de cada um deles.
+
+<p align="center">
+  <img src="https://github.com/Katchau/Pokemon-Showdown/blob/master/ESOF-docs/Resources/Use%20Case%20Model.png?raw=true" alt="incremental-model"/>
+</p>
+
+
 |Nome|Actor|Objectivo|Pré-Requisitos|Resultado|
 |:--:|:----:|:-------:|:-----------:|:-------:|
 |Escolher Nome|Jogador|Escolher um nickname que o identifica no jogo|N/A|É atribuído ao jogador o username que este escolheu, caso esteja disponível|
@@ -70,6 +79,10 @@ A produção do software de requisitos fica a cargo da especificação, normalme
 |Enviar Mensagem|Jogador|Enviar uma mensagem numa sala de chat|Entrar em Sala de Chat|O jogador envia uma mensagem que é vista pelos restantes na mesma sala|
 |Banir Jogador|Admin|Banir um jogador de uma sala de chat|N/A|O admin impede o jogador de estar presente numa sala de chat|
 |Promover Jogador|Admin|Aumentar o rank de um jogador|N/A|O admin aumenta o rank do jogador para um nível com mais previlégios na sala de chat|
+
+Existem ainda outros casos de utilização mais específicos, nomeadamente ao nivel de criação de equipas, onde se pode criar/editar *pokémons*, existindo vários parâmetros que os definem, como por exemplo, definir o tipo de *pokémon*, escolher ataques,etc . Também se pode visualizar no modo de batalha outros use cases, sendo estes iguais aos jogos da merchandising de *pokémon*. Segue-se uma imagem dos casos de utilização neste caso:
+
+fazer caso de utilização entre jogador - cenas - servidor
 
 #### 1.5.Validação
 A validação do projeto passa por uma demonstração de que os requisitos definem o sistema que o cliente, realmente, deseja e ambiciona.
