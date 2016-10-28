@@ -16,7 +16,6 @@
 global.Config = require('./config/config');
 
 const ProcessManager = require('./process-manager');
-const BattleEngine = require('./battle-engine').Battle;
 
 class SimulatorManager extends ProcessManager {
 	onMessageUpstream(message) {
@@ -453,6 +452,7 @@ if (process.send && module === process.mainModule) {
 	global.Tools = require('./tools').includeFormats();
 	global.toId = Tools.getId;
 	global.Chat = require('./chat');
+	const BattleEngine = require('./battle-engine');
 
 	if (Config.crashguard) {
 		// graceful crash - allow current battles to finish before restarting

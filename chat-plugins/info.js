@@ -26,10 +26,11 @@ exports.commands = {
 		if (room && room.id === 'staff' && !this.runBroadcast()) return;
 		if (!room) room = Rooms.global;
 		let targetUser = this.targetUserOrSelf(target, user.group === ' ');
+		let showAll = (cmd === 'ip' || cmd === 'whoare' || cmd === 'alt' || cmd === 'alts');
 		if (!targetUser) {
+			if (showAll) return this.parse('/checkpunishment ' + target);
 			return this.errorReply("User " + this.targetUsername + " not found.");
 		}
-		let showAll = (cmd === 'ip' || cmd === 'whoare' || cmd === 'alt' || cmd === 'alts');
 		if (showAll && !user.trusted && targetUser !== user) {
 			return this.errorReply("/alts - Access denied.");
 		}
@@ -175,6 +176,65 @@ exports.commands = {
 	},
 	whoishelp: ["/whois - Get details on yourself: alts, group, IP address, and rooms.",
 		"/whois [username] - Get details on a username: alts (Requires: % @ * & ~), group, IP address (Requires: @ * & ~), and rooms."],
+
+	'!checkpunishment': true,
+	checkpunishment: function (target, room, user) {
+		if (!user.trusted) {
+			return this.errorReply("/checkpunishment - Access denied.");
+		}
+		let userid = toId(target);
+		let buf = Chat.html`<strong class="username">${userid}</strong> <em style="color:gray">(offline)</em><br /><br />`;
+		let atLeastOne = false;
+
+		let punishment = Punishments.userids.get(userid);
+		if (punishment) {
+			const [punishType, punishUserid, , reason] = punishment;
+			const punishName = {BAN: "BANNED", LOCK: "LOCKED", NAMELOCK: "NAMELOCKED"}[punishType] || punishType;
+			buf += `${punishName}: ${punishUserid}`;
+			let expiresIn = Punishments.checkLockExpiration(userid);
+			if (expiresIn) buf += expiresIn;
+			if (reason) buf += ` (reason: ${reason})`;
+			buf += '<br />';
+			atLeastOne = true;
+		}
+
+		if (!user.can('alts') && !atLeastOne) {
+			let hasJurisdiction = room && user.can('mute', null, room) && Punishments.roomUserids.nestedHas(room.id, userid);
+			if (!hasJurisdiction) {
+				return this.errorReply("/checkpunishment - User not found.");
+			}
+		}
+
+		let roomPunishments = ``;
+		for (let i = 0; i < Rooms.global.chatRooms.length; i++) {
+			const curRoom = Rooms.global.chatRooms[i];
+			if (!curRoom || curRoom.isPrivate === true) continue;
+			let punishment = Punishments.roomUserids.nestedGet(curRoom.id, userid);
+			let punishDesc = ``;
+			if (punishment) {
+				const [punishType, punishUserid, expireTime, reason] = punishment;
+				punishDesc = Punishments.roomPunishmentTypes.get(punishType);
+				if (!punishDesc) punishDesc = `punished`;
+				if (punishUserid !== userid) punishDesc += ` as ${punishUserid}`;
+
+				let expiresIn = new Date(expireTime).getTime() - Date.now();
+				let expiresDays = Math.round(expiresIn / 1000 / 60 / 60 / 24);
+				if (expiresIn > 1) punishDesc += ` for ${expiresDays} day${Chat.plural(expiresDays)}`;
+				if (reason) punishDesc += `: ${reason}`;
+			}
+			if (!punishDesc) continue;
+			if (roomPunishments) roomPunishments += `, `;
+			roomPunishments += `<a href="/${curRoom}">${curRoom}</a> (${punishDesc})`;
+		}
+		if (roomPunishments) {
+			buf += `Room punishments: ` + roomPunishments;
+			atLeastOne = true;
+		}
+		if (!atLeastOne) {
+			buf += `This username has no punishments associated with it.`;
+		}
+		this.sendReplyBox(buf);
+	},
 
 	'!host': true,
 	host: function (target, room, user, connection, cmd) {
@@ -432,17 +492,27 @@ exports.commands = {
 		let pokemon = Tools.getTemplate(target);
 		let type1 = Tools.getType(targets[0]);
 		let type2 = Tools.getType(targets[1]);
+		let type3 = Tools.getType(targets[2]);
 
 		if (pokemon.exists) {
 			target = pokemon.species;
-		} else if (type1.exists && type2.exists && type1 !== type2) {
-			pokemon = {types: [type1.id, type2.id]};
-			target = type1.id + "/" + type2.id;
-		} else if (type1.exists) {
-			pokemon = {types: [type1.id]};
-			target = type1.id;
 		} else {
-			return this.sendReplyBox("" + Chat.escapeHTML(target) + " isn't a recognized type or pokemon.");
+			let types = [];
+			if (type1.exists) {
+				types.push(type1.id);
+				if (type2.exists && type2 !== type1) {
+					types.push(type2.id);
+				}
+				if (type3.exists && type3 !== type1 && type3 !== type2) {
+					types.push(type3.id);
+				}
+			}
+
+			if (types.length === 0) {
+				return this.sendReplyBox("" + Chat.escapeHTML(target) + " isn't a recognized type or pokemon.");
+			}
+			pokemon = {types: types};
+			target = types.join("/");
 		}
 
 		let weaknesses = [];
@@ -459,11 +529,17 @@ exports.commands = {
 				case 2:
 					weaknesses.push("<b>" + type + "</b>");
 					break;
+				case 3:
+					weaknesses.push("<b><i>" + type + "</i></b>");
+					break;
 				case -1:
 					resistances.push(type);
 					break;
 				case -2:
 					resistances.push("<b>" + type + "</b>");
+					break;
+				case -3:
+					resistances.push("<b><i>" + type + "</i></b>");
 					break;
 				}
 			} else {

@@ -731,7 +731,8 @@ exports.BattleScripts = {
 		const teamGenerator = typeof format.team === 'string' && format.team.startsWith('random') ? format.team + 'Team' : '';
 		if (!teamGenerator && team) return team;
 		// Reinitialize the RNG seed to create random teams.
-		this.startingSeed = this.startingSeed.concat(this.generateSeed());
+		this.seed = this.generateSeed();
+		this.startingSeed = this.startingSeed.concat(this.seed);
 		team = this[teamGenerator || 'randomTeam'](side);
 		// Restore the default seed
 		this.seed = this.startingSeed.slice(0, 4);

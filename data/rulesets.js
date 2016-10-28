@@ -538,7 +538,7 @@ exports.BattleFormats = {
 		name: 'Baton Pass Speed Clause',
 		banlist: ["Baton Pass > 1"],
 		onStart: function () {
-			this.add('rule', 'Baton Pass Clause: Limit one Baton Passer, can\'t pass Speed');
+			this.add('rule', 'Baton Pass Speed Clause: Limit one Baton Passer, can\'t pass Speed');
 		},
 		onValidateSet: function (set, format, setHas) {
 			if (!('batonpass' in setHas)) return;

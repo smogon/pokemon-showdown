@@ -65,7 +65,7 @@ exports.commands = {
 
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(roomFaqs[room.id][topic]);
-		if (!this.broadcasting && user.can('declare', null, room)) this.sendReplyBox('<code>/addfaq ' + topic + ', ' + Chat.escapeHTML(roomFaqs[room.id][topic]));
+		if (!this.broadcasting && user.can('declare', null, room)) this.sendReplyBox('<code>/addfaq ' + topic + ', ' + Chat.escapeHTML(roomFaqs[room.id][topic]) + '</code>');
 	},
 	roomfaqhelp: ["/roomfaq - Shows the list of all available FAQ topics",
 			  "/roomfaq <topic> - Shows the FAQ for <topic>.",

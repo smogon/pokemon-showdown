@@ -109,18 +109,6 @@ function toId(text) {
 	return ('' + text).toLowerCase().replace(/[^a-z0-9]+/g, '');
 }
 
-function deepClone(obj) {
-	if (typeof obj === 'function') return obj;
-	if (obj === null || typeof obj !== 'object') return obj;
-	if (Array.isArray(obj)) return obj.map(deepClone);
-	const clone = Object.create(Object.getPrototypeOf(obj));
-	const keys = Object.keys(obj);
-	for (let i = 0; i < keys.length; i++) {
-		clone[keys[i]] = deepClone(obj[keys[i]]);
-	}
-	return clone;
-}
-
 class BattleDex {
 
 	constructor(mod) {
@@ -138,10 +126,12 @@ class BattleDex {
 	}
 
 	mod(mod) {
+		if (!dexes['base'].modsLoaded) dexes['base'].includeMods();
 		if (!mod) mod = 'base';
 		return dexes[mod].includeData();
 	}
 	format(format) {
+		if (!this.modsLoaded) this.includeMods();
 		const mod = this.getFormat(format).mod;
 		if (!mod) return dexes['base'].includeData();
 		return dexes[mod].includeData();
@@ -149,7 +139,7 @@ class BattleDex {
 	modData(dataType, id) {
 		if (this.isBase) return this.data[dataType][id];
 		if (this.data[dataType][id] !== dexes[this.parentMod].data[dataType][id]) return this.data[dataType][id];
-		return (this.data[dataType][id] = deepClone(this.data[dataType][id]));
+		return (this.data[dataType][id] = this.deepClone(this.data[dataType][id]));
 	}
 
 	effectToString() {
@@ -296,27 +286,39 @@ class BattleDex {
 		if (!template || typeof template === 'string') {
 			let name = (template || '').trim();
 			let id = toId(name);
-			if (id !== 'constructor' && this.data.Aliases[id]) {
-				name = this.data.Aliases[id];
-				id = toId(name);
+			template = this.data.TemplateCache.get(id);
+			if (template) return template;
+			if (this.data.Aliases.hasOwnProperty(id)) {
+				template = this.getTemplate(this.data.Aliases[id]);
+				if (template) {
+					this.data.TemplateCache.set(id, template);
+				}
+				return template;
 			}
-			if (!this.data.Pokedex[id]) {
+			if (!this.data.Pokedex.hasOwnProperty(id)) {
+				let aliasTo = '';
 				if (id.startsWith('mega') && this.data.Pokedex[id.slice(4) + 'mega']) {
-					id = id.slice(4) + 'mega';
+					aliasTo = id.slice(4) + 'mega';
 				} else if (id.startsWith('m') && this.data.Pokedex[id.slice(1) + 'mega']) {
-					id = id.slice(1) + 'mega';
+					aliasTo = id.slice(1) + 'mega';
 				} else if (id.startsWith('primal') && this.data.Pokedex[id.slice(6) + 'primal']) {
-					id = id.slice(6) + 'primal';
+					aliasTo = id.slice(6) + 'primal';
 				} else if (id.startsWith('p') && this.data.Pokedex[id.slice(1) + 'primal']) {
-					id = id.slice(1) + 'primal';
+					aliasTo = id.slice(1) + 'primal';
+				}
+				if (aliasTo) {
+					template = this.getTemplate(aliasTo);
+					if (template.exists) {
+						this.data.TemplateCache.set(id, template);
+						return template;
+					}
 				}
 			}
-			template = {};
-			if (id && id !== 'constructor' && this.data.Pokedex[id]) {
-				template = this.data.Pokedex[id];
-				if (template.cached) return template;
-				template.cached = true;
+			if (id && this.data.Pokedex.hasOwnProperty(id)) {
+				template = this.deepClone(this.data.Pokedex[id]);
 				template.exists = true;
+			} else {
+				template = {};
 			}
 			name = template.species || template.name || name;
 			if (this.data.FormatsData[id]) {
@@ -369,6 +371,7 @@ class BattleDex {
 					template.gen = 0;
 				}
 			}
+			if (template.exists) this.data.TemplateCache.set(id, template);
 		}
 		return template;
 	}
@@ -381,20 +384,24 @@ class BattleDex {
 		if (!move || typeof move === 'string') {
 			let name = (move || '').trim();
 			let id = toId(name);
-			if (this.data.Aliases[id]) {
-				name = this.data.Aliases[id];
-				id = toId(name);
+			move = this.data.MoveCache.get(id);
+			if (move) return move;
+			if (this.data.Aliases.hasOwnProperty(id)) {
+				move = this.getMove(this.data.Aliases[id]);
+				if (move.exists) {
+					this.data.MoveCache.set(id, move);
+				}
+				return move;
 			}
-			move = {};
 			if (id.substr(0, 11) === 'hiddenpower') {
 				let matches = /([a-z]*)([0-9]*)/.exec(id);
 				id = matches[1];
 			}
-			if (id && id !== 'constructor' && this.data.Movedex[id]) {
-				move = this.data.Movedex[id];
-				if (move.cached) return move;
-				move.cached = true;
+			if (id && this.data.Movedex.hasOwnProperty(id)) {
+				move = this.deepClone(this.data.Movedex[id]);
 				move.exists = true;
+			} else {
+				move = {};
 			}
 			if (!move.id) move.id = id;
 			if (!move.name) move.name = name;
@@ -424,6 +431,7 @@ class BattleDex {
 			if (!move.priority) move.priority = 0;
 			if (move.ignoreImmunity === undefined) move.ignoreImmunity = (move.category === 'Status');
 			if (!move.flags) move.flags = {};
+			if (move.exists) this.data.MoveCache.set(id, move);
 		}
 		return move;
 	}
@@ -442,7 +450,7 @@ class BattleDex {
 	getMoveCopy(move) {
 		if (move && move.isCopy) return move;
 		move = this.getMove(move);
-		let moveCopy = deepClone(move);
+		let moveCopy = this.deepClone(move);
 		moveCopy.isCopy = true;
 		return moveCopy;
 	}
@@ -516,19 +524,25 @@ class BattleDex {
 		if (!item || typeof item === 'string') {
 			let name = (item || '').trim();
 			let id = toId(name);
-			if (this.data.Aliases[id]) {
-				name = this.data.Aliases[id];
-				id = toId(name);
+			item = this.data.ItemCache.get(id);
+			if (item) return item;
+			if (this.data.Aliases.hasOwnProperty(id)) {
+				item = this.getItem(this.data.Aliases[id]);
+				if (item.exists) {
+					this.data.ItemCache.set(id, item);
+				}
+				return item;
 			}
 			if (id && !this.data.Items[id] && this.data.Items[id + 'berry']) {
-				id += 'berry';
+				item = this.getItem(id + 'berry');
+				this.data.ItemCache.set(id, item);
+				return item;
 			}
-			item = {};
-			if (id && id !== 'constructor' && this.data.Items[id]) {
+			if (id && this.data.Items.hasOwnProperty(id)) {
 				item = this.data.Items[id];
-				if (item.cached) return item;
-				item.cached = true;
 				item.exists = true;
+			} else {
+				item = {};
 			}
 			if (!item.id) item.id = id;
 			if (!item.name) item.name = name;
@@ -552,6 +566,7 @@ class BattleDex {
 				}
 				// Due to difference in storing items, gen 2 items must be specified manually
 			}
+			if (item.exists) this.data.ItemCache.set(id, item);
 		}
 		return item;
 	}
@@ -559,12 +574,15 @@ class BattleDex {
 		if (!ability || typeof ability === 'string') {
 			let name = (ability || '').trim();
 			let id = toId(name);
-			ability = {};
-			if (id && id !== 'constructor' && this.data.Abilities[id]) {
+			ability = this.data.AbilityCache.get(id);
+			if (ability) return ability;
+			if (id && this.data.Abilities.hasOwnProperty(id)) {
 				ability = this.data.Abilities[id];
 				if (ability.cached) return ability;
 				ability.cached = true;
 				ability.exists = true;
+			} else {
+				ability = {};
 			}
 			if (!ability.id) ability.id = id;
 			if (!ability.name) ability.name = name;
@@ -585,6 +603,7 @@ class BattleDex {
 					ability.gen = 0;
 				}
 			}
+			if (ability.exists) this.data.AbilityCache.set(id, ability);
 		}
 		return ability;
 	}
@@ -1059,6 +1078,18 @@ class BattleDex {
 		return team;
 	}
 
+	deepClone(obj) {
+		if (typeof obj === 'function') return obj;
+		if (obj === null || typeof obj !== 'object') return obj;
+		if (Array.isArray(obj)) return obj.map(prop => this.deepClone(prop));
+		const clone = Object.create(Object.getPrototypeOf(obj));
+		const keys = Object.keys(obj);
+		for (let i = 0; i < keys.length; i++) {
+			clone[keys[i]] = this.deepClone(obj[keys[i]]);
+		}
+		return clone;
+	}
+
 	loadDataFile(basePath, dataType) {
 		try {
 			const filePath = basePath + DATA_FILES[dataType];
@@ -1121,6 +1152,10 @@ class BattleDex {
 			if (!BattleData || typeof BattleData !== 'object') throw new TypeError("Exported property `Battle" + dataType + "`from `" + './data/' + DATA_FILES[dataType] + "` must be an object except `null`.");
 			if (BattleData !== this.data[dataType]) this.data[dataType] = Object.assign(BattleData, this.data[dataType]);
 		}
+		this.data['MoveCache'] = new Map();
+		this.data['ItemCache'] = new Map();
+		this.data['AbilityCache'] = new Map();
+		this.data['TemplateCache'] = new Map();
 		if (this.isBase) {
 			// Formats are inherited by mods
 			this.includeFormats();
@@ -1137,8 +1172,7 @@ class BattleDex {
 						if (dataType === 'Pokedex') {
 							// Pokedex entries can be modified too many different ways
 							// e.g. inheriting different formats-data/learnsets
-							childTypedData[entryId] = deepClone(parentTypedData[entryId]);
-							childTypedData[entryId].cached = undefined;
+							childTypedData[entryId] = this.deepClone(parentTypedData[entryId]);
 						} else {
 							childTypedData[entryId] = parentTypedData[entryId];
 						}
@@ -1223,6 +1257,7 @@ class BattleDex {
 }
 
 dexes['base'] = new BattleDex();
+dexes['base'].BattleDex = BattleDex;
 
 // "gen6" is an alias for the current base data
 dexes['gen6'] = dexes['base'];
