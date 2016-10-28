@@ -84,6 +84,15 @@ Existem ainda outros casos de utilização mais específicos, nomeadamente ao ni
 
 fazer caso de utilização entre jogador - cenas - servidor
 
+### Domain Model
+
+O modelo de domínio é um modelo conceptual de um domínio, que representa a situação real deste. Não tem como objetivo a representação das classes a nível de software (diagrama de classes), mas de fazer uma conexão entre os *use cases* e o *software design model*.
+Segue-se uma representação do modelo de domínio do *Pokémon Showdown*
+
+<p align="center">
+  <img src="https://github.com/Katchau/Pokemon-Showdown/blob/master/ESOF-docs/Resources/domain%20model.png?raw=true" alt="incremental-model"/>
+</p>
+
 #### 1.5.Validação
 A validação do projeto passa por uma demonstração de que os requisitos definem o sistema que o cliente, realmente, deseja e ambiciona.
 
