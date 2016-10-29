@@ -1727,6 +1727,9 @@ exports.BattleScripts = {
 		if (hasMove['autotomize'] && hasMove['heavyslam']) {
 			moves[moves.indexOf('autotomize')] = 'rockpolish';
 		}
+		if (hasMove['nuzzle'] && counter['Electric'] < 2) {
+			moves[moves.indexOf('nuzzle')] = 'thunderbolt';
+		}
 
 		// If Hidden Power has been removed, reset the IVs
 		if (!hasMove['hiddenpower']) {
