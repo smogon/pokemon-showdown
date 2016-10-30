@@ -1932,6 +1932,19 @@ exports.commands = {
 	},
 	declarehelp: ["/declare [message] - Anonymously announces a message. Requires: # * & ~"],
 
+	staffdeclare: 'moddeclare',
+	modmsg: 'moddeclare',
+	declaremod: 'moddeclare',
+	moddeclare: function (target, room, user) {
+		if (!target) return this.parse('/help moddeclare');
+		if (!this.can('declare', null, room)) return false;
+		if (!this.canTalk()) return;
+		let declareHTML = Chat.html`<div class="broadcast-red"><i>Private Staff Message (Driver+) from ${user.name}:</i><br /><strong>${target}</strong></div>`;
+		this.privateModCommand(`|raw|${declareHTML}`);
+		this.logModCommand(`${user.name} mod declared ${target}`);
+	},
+	moddeclarehelp: ["/declaremod [message] - Displays a red [message] to all authority in the respected room.  Requires * # & ~"],
+
 	htmldeclare: function (target, room, user) {
 		if (!target) return this.parse('/help htmldeclare');
 		if (!this.can('gdeclare', null, room)) return false;
