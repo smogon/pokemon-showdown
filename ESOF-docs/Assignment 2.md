@@ -107,3 +107,13 @@ O único responsável pelas validações é o dono, Zarel, onde este assume que 
 ### Conclusão
 
 Em suma, o foco do projeto depende da opinião dos contribuidores onde numa fase inicial existe uma discussão no chat de contribuidores que após desenvolvimento passa para uma discussão no próprio pull request até ser validado. Tudo isto, tendo sempre em consideração a interação do jogador com o jogo através de várias funcionalidades e costumizações.
+
+## Trabalho realizado por:
+
+[Ana Rita Torres](https://github.com/AnaRitaTorres): Contribuição 25%.
+
+[Diogo Cepa](https://github.com/dcepa95): Contribuição 25%.
+
+[João Loureiro](https://github.com/Katchau): Contribução 25%.
+
+[João Pedro Silva](https://github.com/joaosilva22): Contribuição 25%.
