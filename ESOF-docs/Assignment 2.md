@@ -37,7 +37,7 @@ O Pokemon Showdown deve cumprir os seguintes requisitos não funcionais:
 + Ter um tempo de resposta rápido para permitir uma boa experiência de utilização.
 + Ser disponibilizado como software Open Source.
 
-#### 1.2.Elicitação
+#### 1.4.Elicitação
 
 A escolha do objecto que vai ser o foco do desenvolvimento é feita, essencialmente, de três modos:
 + Através de um [tópico de Bug Reports](http://www.smogon.com/forums/threads/bug-reports-v2-0-read-op-before-posting.3469932/) nos fóruns oficiais;
@@ -46,16 +46,16 @@ A escolha do objecto que vai ser o foco do desenvolvimento é feita, essencialme
 
 Todos os contribuídores frequentam estas plataformas e estão sempre atentos a qualquer situação que requira ou capture a sua atenção.
 
-#### 1.3.Análise e Negociação
+#### 1.5.Análise e Negociação
 
 A discussão e análise de novas funcionalidades ocorre, numa primeira fase, no [chat para contribuidores](http://play.pokemonshowdown.com/development) no próprio site do Pokémon Showdown. Aqui os contribuidores podem discutir e elaborar as suas ideias, e ouvir a opinião dos seus pares.
 
 Após o desenvolvimento da funcionalidade, a discussão final é feita no próprio Pull Request. Aqui os contribuidores discutem a viabilidade da ideia e, se o parecer do dono do projeto for positivo, esta é finalmente implementada.
 
-#### 1.4.Especificação
-*(isto é suposto estar?)* A produção do software de requisitos fica a cargo da especificação, normalmente, acompanhados por modelos, como o *case model* e o *domain model*.
+#### 1.6. Especificação
+A produção do software de requisitos fica a cargo da especificação, normalmente, acompanhados por modelos, como o *case model* e o *domain model*:
 
-##### 1.4.1 Use Cases
+##### 1.6.1 Use Cases
 
 Casos de utilização correspondem a interações com o sistema, na qual o utilizador pode participar. Estas têm sempre um fim bem definido, sendo este apresentado ao utilizador, sem que este saiba como funciona a máquina por de trás das cortinas.
 
@@ -84,7 +84,7 @@ Existem ainda outros casos de utilização mais específicos, nomeadamente ao ni
 
 fazer caso de utilização entre jogador - cenas - servidor
 
-##### 1.4.2 Domain Model
+##### 1.6.2 Domain Model
 
 O modelo de domínio é um modelo conceptual de um domínio, que representa a situação real deste. Não tem como objetivo a representação das classes a nível de software (diagrama de classes), mas de fazer uma conexão entre os *use cases* e o *software design model*.
 Segue-se uma representação do modelo de domínio do *Pokémon Showdown*
@@ -93,12 +93,12 @@ Segue-se uma representação do modelo de domínio do *Pokémon Showdown*
   <img src="https://github.com/Katchau/Pokemon-Showdown/blob/master/ESOF-docs/Resources/domain%20model.png?raw=true" alt="incremental-model"/>
 </p>
 
-#### 1.5.Validação
-*(remove this?)* A validação do projeto passa por uma demonstração de que os requisitos definem o sistema que o cliente, realmente, deseja e ambiciona.
+#### 1.7.Validação
+A validação do projeto passa por uma demonstração de que os requisitos definem o sistema que o cliente, realmente, deseja e ambiciona.
 
 Embora qualquer pessoa possa ser um contribuidor e existirem instruções para o ser no ficheiro readme.md presente no repositório, não são referidos requisitos apenas o estilo de código a ser usado.
 O único responsável pelas validações é o dono, Zarel, onde este assume que o código submetido já foi devidamente testado com sucesso pelo contribuidor, excepto se for de uma dimensão considerável, e através de leitura decide se é válido.
 
 ### Conclusão
 
-Em suma, o foco do projeto depende da opinião dos contribuidores onde numa fase inicial existe uma discussão no chat de contribuidores que posteriormente, após desenvolvimento, passa para uma discussão no próprio pull request até ser validado. Tudo isto, tendo sempre em consideração a interação do jogador com o jogo através de várias funcionalidades e costumizações.
+Em suma, o foco do projeto depende da opinião dos contribuidores onde numa fase inicial existe uma discussão no chat de contribuidores que após desenvolvimento passa para uma discussão no próprio pull request até ser validado. Tudo isto, tendo sempre em consideração a interação do jogador com o jogo através de várias funcionalidades e costumizações.
