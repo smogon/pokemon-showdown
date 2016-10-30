@@ -24,7 +24,7 @@ Para correr o projeto é ainda necessário ter o Node.js instalado, versão 6.X 
 #### 1.2.Requisitos Funcionais
 
 Os seguintes requisitos funcionais descrevem os serviços que o Pokémon Showdown se propõe a disponibilizar aos seus jogadores:
-+ Permitir simular uma batalha de Pokémon entre dois jogadores.
++ Permitir simular uma batalha de Pokémon entre dois jogadores, sendo fiel a todos os jogos da *merchandising*.
 + Implementar salas de chat para facilitar a comunicação entre os jogadores.
 + Manter uma tabela classificativa.
 + Emparelhar jogadores que procuram uma batalha com outros de nível de abilidade semelhante.
@@ -39,10 +39,11 @@ O Pokemon Showdown deve cumprir os seguintes requisitos não funcionais:
 
 #### 1.4.Elicitação
 
-A escolha do objecto que vai ser o foco do desenvolvimento é feita, essencialmente, de três modos:
+A escolha do objecto que vai ser o foco do desenvolvimento é feita, essencialmente, de quatro modos:
 + Através de um [tópico de Bug Reports](http://www.smogon.com/forums/threads/bug-reports-v2-0-read-op-before-posting.3469932/) nos fóruns oficiais;
 + Através de um [tópico de sugestões](http://www.smogon.com/forums/threads/suggestions.3534365/) nos mesmos fóruns;
-+ Através da sugestão de um dos contribuidores.
++ Através da sugestão de um dos contribuidores;
++ Através da *release* de uma nova versão dos jogos da *merchandising* de Pokémon, caso introduza novas mecânicas de jogo, ou introduza novos *Pokémons*.
 
 Todos os contribuídores frequentam estas plataformas e estão sempre atentos a qualquer situação que requira ou capture a sua atenção.
 
@@ -86,6 +87,8 @@ Existem ainda outros casos de utilização mais específicos, nomeadamente ao ni
   <img src="https://github.com/Katchau/Pokemon-Showdown/blob/master/ESOF-docs/Resources/usecase.jpg?raw=true" alt="incremental-model"/>
 </p>
 
+Como se pode visualizar, existe uma pequena diferença em relação aos jogos atuais, que é o facto de existir um temporizador, que conta o tempo de resposta de ambos os jogadores, que é começado caso o jogador deseje. Este, ao terminar, vai anunciar um vencedor da batalha.
+
 ##### 1.6.2 Domain Model
 
 O modelo de domínio é um modelo conceptual de um domínio, que representa a situação real deste. Não tem como objetivo a representação das classes a nível de software (diagrama de classes), mas de fazer uma conexão entre os *use cases* e o *software design model*.
@@ -96,7 +99,7 @@ Segue-se uma representação do modelo de domínio do *Pokémon Showdown*
 </p>
 
 #### 1.7.Validação
-A validação do projeto passa por uma demonstração de que os requisitos definem o sistema que o cliente, realmente, deseja e ambiciona.
+A validação do projeto passa por uma demonstração de que os requisitos definem o sistema que o cliente, realmente, deseja e ambiciona. 
 
 Embora qualquer pessoa possa ser um contribuidor e existirem instruções para o ser no ficheiro readme.md presente no repositório, não são referidos requisitos apenas o estilo de código a ser usado.
 O único responsável pelas validações é o dono, Zarel, onde este assume que o código submetido já foi devidamente testado com sucesso pelo contribuidor, excepto se for de uma dimensão considerável, e através de leitura decide se é válido.
