@@ -118,6 +118,14 @@ exports.commands = {
 		return this.parse("/search " + target);
 	},
 
+	pi: function (target, room, user) {
+		return this.sendReplyBox(
+			'Did you mean: 1. 3.1415926535897932384626... (Decimal)<br />' +
+			'2. 3.184809493B91866... (Duodecimal)<br />' +
+			'3. 3.243F6A8885A308D... (Hexadecimal)<br /><br />' +
+			'How many digits of pi do YOU know? Test it out <a href=" http://guangcongluo.com/mempi/">here</a>!');
+	},
+
 	'!avatar': true,
 	avatar: function (target, room, user) {
 		if (!target) return this.parse('/avatars');
