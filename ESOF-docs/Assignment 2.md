@@ -82,7 +82,9 @@ No *Pokémon Showdown* estes são bastante *user friendly*, ou seja, fornecem um
 
 Existem ainda outros casos de utilização mais específicos, nomeadamente ao nivel de criação de equipas, onde se pode criar/editar *pokémons*, existindo vários parâmetros que os definem, como por exemplo, definir o tipo de *pokémon*, escolher ataques,etc . Também se pode visualizar no modo de batalha outros use cases, sendo estes iguais aos jogos da merchandising de *pokémon*. Segue-se uma imagem dos casos de utilização neste caso:
 
-fazer caso de utilização entre jogador - cenas - servidor
+<p align="center">
+  <img src="https://github.com/Katchau/Pokemon-Showdown/blob/master/ESOF-docs/Resources/usecase.jpg?raw=true" alt="incremental-model"/>
+</p>
 
 ##### 1.6.2 Domain Model
 
