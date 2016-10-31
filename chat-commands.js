@@ -2250,7 +2250,7 @@ exports.commands = {
 			}
 		}
 
-		let buf = `Blacklist for room ${room.id}:<br />`;
+		let buf = Chat.html`Blacklist for ${room.title}:<br />`;
 
 		blMap.forEach((data, userid) => {
 			const [expireTime, ...alts] = data;
