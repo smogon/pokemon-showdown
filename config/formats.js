@@ -641,17 +641,17 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
-		name: "[Gen 4] NU",
+		name: "[Gen 3] UU",
 		desc: [
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3583742/\">DPP NU</a>",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3512254/\">DPP NU Viability Ranking</a>",
+			"&bullet; <a href=\"https://www.smogon.com/dex/rs/formats/uu/\">ADV UU</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3548578/\">ADV UU Viability Ranking</a>",
 		],
 		section: "RoA Spotlight",
 		column: 3,
 
-		mod: 'gen4',
-		ruleset: ['[Gen 4] UU'],
-		banlist: ['UU', 'BL2'],
+		mod: 'gen3',
+		ruleset: ['[Gen 3] OU'],
+		banlist: ['OU', 'BL'],
 	},
 
 	// BW2 Singles
