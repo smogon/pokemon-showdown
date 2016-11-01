@@ -126,7 +126,7 @@ exports.commands = {
 			}
 		}
 		if ((user.can('ip', targetUser) || user === targetUser)) {
-			let ips = Object.keys(targetUser.ips);
+			let ips = Object.keys(targetUser.ips).map(ip => ip + (Punishments.sharedIps.has(ip) ? ' (shared)' : ''));
 			buf += `<br /> IP${Chat.plural(ips)}: ${ips.join(", ")}`;
 			if (user.group !== ' ' && targetUser.latestHost) {
 				buf += Chat.html`<br />Host: ${targetUser.latestHost}`;

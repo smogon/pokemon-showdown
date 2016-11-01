@@ -20,6 +20,7 @@ const path = require('path');
 
 const PUNISHMENT_FILE = path.resolve(__dirname, 'config/punishments.tsv');
 const ROOM_PUNISHMENT_FILE = path.resolve(__dirname, 'config/room-punishments.tsv');
+const SHAREDIPS_FILE = path.resolve(__dirname, 'config/sharedips.tsv');
 
 const RANGELOCK_DURATION = 60 * 60 * 1000; // 1 hour
 const LOCK_DURATION = 37 * 60 * 60 * 1000; // 37 hours
@@ -108,6 +109,11 @@ Punishments.roomUserids = new NestedPunishmentMap();
  * roomIps is a roomid:ip:punishment Map
  */
 Punishments.roomIps = new NestedPunishmentMap();
+
+/**
+ * sharedIps is an ip:note Map
+ */
+Punishments.sharedIps = new Map();
 
 
 /*********************************************************
@@ -327,10 +333,47 @@ Punishments.loadBanlist = function () {
 	});
 };
 
+// sharedips.tsv is in the format:
+// IP, type (in this case always SHARED), note
+
+Punishments.loadSharedIps = function () {
+	fs.readFile(SHAREDIPS_FILE, (err, data) => {
+		if (err) return;
+		data = String(data).split("\n");
+		for (let i = 0; i < data.length; i++) {
+			if (!data[i] || data[i] === '\r') continue;
+			const [ip, type, note] = data[i].trim().split("\t");
+			if (!ip.includes('.')) continue;
+			if (type !== 'SHARED') continue;
+
+			Punishments.sharedIps.set(ip, note);
+		}
+	});
+};
+
+/**
+ * @param {string} ip
+ * @param {string} note
+ */
+Punishments.appendSharedIp = function (ip, note) {
+	let buf = `${ip}\tSHARED\t${note}\r\n`;
+	fs.appendFile(SHAREDIPS_FILE, buf, () => {});
+};
+
+Punishments.saveSharedIps = function () {
+	let buf = 'IP\tType\tNote\r\n';
+	Punishments.sharedIps.forEach((note, ip) => {
+		buf += `${ip}\tSHARED\t${note}\r\n`;
+	});
+
+	fs.writeFile(SHAREDIPS_FILE, buf, () => {});
+};
+
 setImmediate(() => {
 	Punishments.loadPunishments();
 	Punishments.loadRoomPunishments();
 	Punishments.loadBanlist();
+	Punishments.loadSharedIps();
 });
 
 /*********************************************************
@@ -746,6 +789,34 @@ Punishments.roomUnblacklistAll = function (room) {
 	return unblacklisted;
 };
 
+/**
+ * @param {string} ip
+ * @param {string} note
+ */
+Punishments.addSharedIp = function (ip, note) {
+	Punishments.sharedIps.set(ip, note);
+	Punishments.appendSharedIp(ip, note);
+
+	Users.users.forEach(user => {
+		if (user.locked && user.locked !== user.userid && ip in user.ips) {
+			if (!user.autoconfirmed) {
+				user.semilocked = `#sharedip ${user.locked}`;
+			}
+			user.locked = false;
+
+			user.updateIdentity();
+		}
+	});
+};
+
+/**
+ * @param {string} ip
+ */
+Punishments.removeSharedIp = function (ip) {
+	Punishments.sharedIps.delete(ip);
+	Punishments.saveSharedIps();
+};
+
 /*********************************************************
  * Checking
  *********************************************************/
@@ -871,9 +942,15 @@ Punishments.checkIp = function (user, connection) {
 	let punishment = Punishments.ipSearch(ip);
 
 	if (punishment) {
-		user.locked = punishment[1];
-		if (punishment[0] === 'NAMELOCK') {
-			user.namelocked = punishment[1];
+		if (Punishments.sharedIps.has(user.latestIp)) {
+			if (connection.user && !connection.user.locked && !connection.user.autoconfirmed) {
+				connection.user.semilocked = `#sharedip ${punishment[1]}`;
+			}
+		} else {
+			user.locked = punishment[1];
+			if (punishment[0] === 'NAMELOCK') {
+				user.namelocked = punishment[1];
+			}
 		}
 	}
 
@@ -912,6 +989,8 @@ Punishments.checkIpBanned = function (connection) {
 		connection.send(`|popup||modal|PS is under heavy load and cannot accommodate your connection right now.`);
 		return '#cflood';
 	}
+
+	if (Punishments.sharedIps.has(ip)) return false;
 
 	let banned = false;
 	let punishment = Punishments.ipSearch(ip);
@@ -981,6 +1060,14 @@ Punishments.isRoomBanned = function (user, roomid) {
 
 	for (let ip in user.ips) {
 		punishment = Punishments.roomIps.nestedGet(roomid, ip);
-		if (punishment && (punishment[0] === 'ROOMBAN' || punishment[0] === 'BLACKLIST')) return punishment;
+		if (punishment) {
+			 if (punishment[0] === 'ROOMBAN') {
+				return punishment;
+			 } else if (punishment[0] === 'BLACKLIST') {
+				if (Punishments.sharedIps.has(ip) && user.autoconfirmed) return;
+
+				return punishment;
+			 }
+		}
 	}
 };
