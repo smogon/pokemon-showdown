@@ -1657,7 +1657,9 @@ exports.BattleScripts = {
 					(movePool.includes('technoblast') || template.requiredMove && movePool.includes(toId(template.requiredMove)))) &&
 					(counter['physicalsetup'] + counter['specialsetup'] < 2 && (!counter.setupType || counter.setupType === 'Mixed' || (move.category !== counter.setupType && move.category !== 'Status') || counter[counter.setupType] + counter.Status > 3))) {
 					// Reject Status or non-STAB
-					if (!isSetup && !move.weather && moveid !== 'rest' && moveid !== 'sleeptalk' && (move.category === 'Status' || !hasType[move.type]) && moveid !== 'judgment') rejected = true;
+					if (!isSetup && !move.weather && moveid !== 'judgment' && moveid !== 'rest' && moveid !== 'sleeptalk') {
+						if (move.category === 'Status' || !hasType[move.type] || (move.basePower && move.basePower < 40 && !move.multihit)) rejected = true;
+					}
 				}
 
 				// Sleep Talk shouldn't be selected without Rest
@@ -1692,6 +1694,7 @@ exports.BattleScripts = {
 					// A set shouldn't have no attacking moves
 					moves.splice(this.random(moves.length), 1);
 				} else if (counter.damagingMoves.length === 1) {
+					// In most cases, a set shouldn't have no STAB
 					let damagingid = counter.damagingMoves[0].id;
 					if (movePool.length - availableHP || availableHP && (damagingid === 'hiddenpower' || !hasMove['hiddenpower'])) {
 						let replace = false;
@@ -1726,9 +1729,6 @@ exports.BattleScripts = {
 		// Moveset modifications
 		if (hasMove['autotomize'] && hasMove['heavyslam']) {
 			moves[moves.indexOf('autotomize')] = 'rockpolish';
-		}
-		if (hasMove['nuzzle'] && counter['Electric'] < 2) {
-			moves[moves.indexOf('nuzzle')] = 'thunderbolt';
 		}
 
 		// If Hidden Power has been removed, reset the IVs
