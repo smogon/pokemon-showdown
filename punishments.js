@@ -450,7 +450,7 @@ Punishments.roomPunish = function (room, user, punishment, noRecurse) {
 		keys.add(user.autoconfirmed);
 	}
 	if (user.trusted) {
-		Punishments.roomUserids.nestedSet(room.id, user.confirmed, punishment);
+		Punishments.roomUserids.nestedSet(room.id, user.trusted, punishment);
 		keys.add(user.trusted);
 	}
 	if (!noRecurse) {
