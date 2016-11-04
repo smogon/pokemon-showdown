@@ -1478,7 +1478,7 @@ class ChatRoom extends Room {
 		let buffer = '';
 		let counter = 0;
 		for (let i in this.users) {
-			if (!this.users[i].named) {
+			if (!Users(this.users[i]) || !this.users[i].named) {
 				continue;
 			}
 			counter++;
