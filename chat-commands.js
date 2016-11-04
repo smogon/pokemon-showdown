@@ -3256,7 +3256,7 @@ exports.commands = {
 	cmd: 'crq',
 	query: 'crq',
 	crq: function (target, room, user, connection) {
-		// Avoid guest users to use the cmd errors to ease the app-layer attacks in emergency mode
+		// In emergency mode, clamp down on data returned from crq's
 		let trustable = (!Config.emergency || (user.named && user.registered));
 		let spaceIndex = target.indexOf(' ');
 		let cmd = target;
@@ -3317,7 +3317,6 @@ exports.commands = {
 			});
 		} else {
 			// default to sending null
-			if (!trustable) return false;
 			connection.send('|queryresponse|' + cmd + '|null');
 		}
 	},
