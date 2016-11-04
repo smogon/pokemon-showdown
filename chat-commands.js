@@ -3290,7 +3290,7 @@ exports.commands = {
 					roomData.p1 = battle.p1 ? ' ' + battle.p1.name : '';
 					roomData.p2 = battle.p2 ? ' ' + battle.p2.name : '';
 				}
-				if (targetRoom && targetUser.userid in targetRoom.auth) {
+				if (targetRoom.auth && targetUser.userid in targetRoom.auth) {
 					roomid = targetRoom.auth[targetUser.userid] + roomid;
 				}
 				roomList[roomid] = roomData;
