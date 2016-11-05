@@ -1036,10 +1036,11 @@ exports.commands = {
 			"% <b>Global Driver</b> - The above, and they can also lock users and check for alts<br />"+
 			"@ <b>Global Moderator</b> - The above, and they can globally ban users<br />"+
 			"* <b>Global Bot</b> - Like Moderator, but makes it clear that this user is a bot<br />"+
-			"& <b>Global Leader</b> - The above, and they can promote to global moderator and force ties<br />"+
+			"&amp; <b>Global Leader</b> - The above, and they can promote to global moderator and force ties<br />"+
 			"~ <b>Global Administrator</b> -  They can do anything, like change what this message says"
 		);
 	},
+	
 	groupshelp: ["/groups - Explains what the + % @ # & next to people's names mean.",
 		"!groups - Shows everyone that information. Requires: + % @ * # & ~"],
 
