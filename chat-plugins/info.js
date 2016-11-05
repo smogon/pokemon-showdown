@@ -1040,7 +1040,7 @@ exports.commands = {
 			"~ <b>Global Administrator</b> -  They can do anything, like change what this message says"
 		);
 	},
-	
+
 	groupshelp: ["/groups - Explains what the + % @ # & next to people's names mean.",
 		"!groups - Shows everyone that information. Requires: + % @ * # & ~"],
 
