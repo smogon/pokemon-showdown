@@ -273,7 +273,7 @@ let commands = {
 
 			room.chatRoomData.songOfTheDayHTML = Chat.html`<a href="${link}" title="${title}">${title}</a>.`;
 			Rooms.global.writeChatRoomData();
-			return this.privateModCommand(`(${user.name} set the Song of the Day to ${title} (Link: ${link}.)`);
+			return this.privateModCommand(`(${user.name} set the Song of the Day to ${title} (Link: ${link})`);
 		} else {
 			return this.parse('/help aotd song');
 		}
