@@ -526,7 +526,7 @@ class GlobalRoom {
 
 		// search must be within range
 		let searchRange = 100, elapsed = Date.now() - Math.min(search1.time, search2.time);
-		if (formatid === 'ou' || formatid === 'oucurrent' || formatid === 'randombattle') searchRange = 50;
+		if (formatid === 'ou' || formatid === 'oucurrent' || formatid === 'oususpecttest' || formatid === 'randombattle') searchRange = 50;
 		searchRange += elapsed / 300; // +1 every .3 seconds
 		if (searchRange > 300) searchRange = 300 + (searchRange - 300) / 10; // +1 every 3 sec after 300
 		if (searchRange > 600) searchRange = 600;
