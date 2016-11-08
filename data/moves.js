@@ -11142,7 +11142,7 @@ exports.BattleMovedex = {
 		name: "Rain Dance",
 		pp: 5,
 		priority: 0,
-		flags: {dance: 1},
+		flags: {},
 		weather: 'RainDance',
 		secondary: false,
 		target: "all",
