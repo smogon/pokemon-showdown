@@ -3168,7 +3168,7 @@ exports.BattleMovedex = {
 		name: "Dragon Dance",
 		pp: 20,
 		priority: 0,
-		flags: {snatch: 1},
+		flags: {dance: 1, snatch: 1},
 		boosts: {
 			atk: 1,
 			spe: 1,
@@ -4117,7 +4117,7 @@ exports.BattleMovedex = {
 		name: "Feather Dance",
 		pp: 15,
 		priority: 0,
-		flags: {protect: 1, reflectable: 1, mirror: 1},
+		flags: {dance: 1, protect: 1, reflectable: 1, mirror: 1},
 		boosts: {
 			atk: -2,
 		},
@@ -4184,7 +4184,7 @@ exports.BattleMovedex = {
 		name: "Fiery Dance",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {dance: 1, protect: 1, mirror: 1},
 		secondary: {
 			chance: 50,
 			self: {
@@ -8179,7 +8179,7 @@ exports.BattleMovedex = {
 		name: "Lunar Dance",
 		pp: 10,
 		priority: 0,
-		flags: {snatch: 1, heal: 1},
+		flags: {dance: 1, snatch: 1, heal: 1},
 		onTryHit: function (pokemon, target, move) {
 			if (!this.canSwitch(pokemon.side)) {
 				delete move.selfdestruct;
@@ -10079,7 +10079,7 @@ exports.BattleMovedex = {
 		name: "Petal Dance",
 		pp: 10,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {dance: 1, contact: 1, protect: 1, mirror: 1},
 		self: {
 			volatileStatus: 'lockedmove',
 		},
@@ -11051,7 +11051,7 @@ exports.BattleMovedex = {
 		name: "Quiver Dance",
 		pp: 20,
 		priority: 0,
-		flags: {snatch: 1},
+		flags: {dance: 1, snatch: 1},
 		boosts: {
 			spa: 1,
 			spd: 1,
@@ -11142,7 +11142,7 @@ exports.BattleMovedex = {
 		name: "Rain Dance",
 		pp: 5,
 		priority: 0,
-		flags: {},
+		flags: {dance: 1},
 		weather: 'RainDance',
 		secondary: false,
 		target: "all",
@@ -14375,7 +14375,7 @@ exports.BattleMovedex = {
 		name: "Swords Dance",
 		pp: 20,
 		priority: 0,
-		flags: {snatch: 1},
+		flags: {dance: 1, snatch: 1},
 		boosts: {
 			atk: 2,
 		},
@@ -14644,7 +14644,7 @@ exports.BattleMovedex = {
 		name: "Teeter Dance",
 		pp: 20,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {dance: 1, protect: 1, mirror: 1},
 		volatileStatus: 'confusion',
 		secondary: false,
 		target: "allAdjacent",
