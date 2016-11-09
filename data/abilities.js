@@ -950,9 +950,9 @@ exports.BattleAbilities = {
 		num: 169,
 	},
 	"galewings": {
-		shortDesc: "This Pokemon's Flying-type moves have their priority increased by 1.",
+		shortDesc: "If this Pokemon is at full HP, its Flying-type moves have their priority increased by 1.",
 		onModifyPriority: function (priority, pokemon, target, move) {
-			if (move && move.type === 'Flying') return priority + 1;
+			if (move && move.type === 'Flying' && pokemon.hp === pokemon.maxhp) return priority + 1;
 		},
 		id: "galewings",
 		name: "Gale Wings",
@@ -1691,8 +1691,9 @@ exports.BattleAbilities = {
 		num: 136,
 	},
 	"multitype": {
-		shortDesc: "If this Pokemon is an Arceus, its type changes to match its held Plate.",
+		shortDesc: "If this Pokemon is an Arceus, its type changes to match its held Plate or Z-Crystal.",
 		// Multitype's type-changing itself is implemented in statuses.js
+		// TODO: add onPlate to each Z-Crystal
 		id: "multitype",
 		name: "Multitype",
 		rating: 4,
@@ -1917,8 +1918,8 @@ exports.BattleAbilities = {
 		num: 20,
 	},
 	"parentalbond": {
-		desc: "This Pokemon's damaging moves become multi-hit moves that hit twice. The second hit has its damage halved. Does not affect multi-hit moves or moves that have multiple targets.",
-		shortDesc: "This Pokemon's damaging moves hit twice. The second hit has its damage halved.",
+		desc: "This Pokemon's damaging moves become multi-hit moves that hit twice. The second hit has its damage quartered. Does not affect multi-hit moves or moves that have multiple targets.",
+		shortDesc: "This Pokemon's damaging moves hit twice. The second hit has its damage quartered.",
 		onPrepareHit: function (source, target, move) {
 			if (move.id in {iceball: 1, rollout: 1}) return;
 			if (move.category !== 'Status' && !move.selfdestruct && !move.multihit && !move.flags['charge'] && !move.spreadHit) {
@@ -1932,7 +1933,7 @@ exports.BattleAbilities = {
 			onBasePower: function (basePower) {
 				if (this.effectData.hit) {
 					this.effectData.hit++;
-					return this.chainModify(0.5);
+					return this.chainModify(0.25);
 				} else {
 					this.effectData.hit = 1;
 				}
@@ -3120,8 +3121,8 @@ exports.BattleAbilities = {
 		num: 163,
 	},
 	"unaware": {
-		desc: "This Pokemon ignores other Pokemon's Attack, Special Attack, and accuracy stat stages when taking damage, and ignores other Pokemon's Defense, Special Defense, and evasiveness stat stages when dealing damage.",
-		shortDesc: "This Pokemon ignores other Pokemon's stat stages when taking or doing damage.",
+		desc: "This Pokemon ignores other Pokemon's Defense, Special Defense, and evasiveness stat stages when dealing damage.",
+		shortDesc: "This Pokemon ignores other Pokemon's stat stages when dealing damage.",
 		id: "unaware",
 		name: "Unaware",
 		onAnyModifyBoost: function (boosts, target) {
@@ -3131,11 +3132,6 @@ exports.BattleAbilities = {
 				boosts['def'] = 0;
 				boosts['spd'] = 0;
 				boosts['evasion'] = 0;
-			}
-			if (target === this.activePokemon && source === this.activeTarget) {
-				boosts['atk'] = 0;
-				boosts['spa'] = 0;
-				boosts['accuracy'] = 0;
 			}
 		},
 		rating: 3,
@@ -3260,16 +3256,16 @@ exports.BattleAbilities = {
 		num: 41,
 	},
 	"weakarmor": {
-		desc: "If a physical attack hits this Pokemon, its Defense is lowered by 1 stage and its Speed is raised by 1 stage.",
-		shortDesc: "If a physical attack hits this Pokemon, Defense is lowered by 1, Speed is raised by 1.",
+		desc: "If a physical attack hits this Pokemon, its Defense is lowered by 1 stage and its Speed is raised by 2 stages.",
+		shortDesc: "If a physical attack hits this Pokemon, Defense is lowered by 1, Speed is raised by 2.",
 		onAfterDamage: function (damage, target, source, move) {
 			if (move.category === 'Physical') {
-				this.boost({def:-1, spe:1});
+				this.boost({def:-1, spe:2});
 			}
 		},
 		id: "weakarmor",
 		name: "Weak Armor",
-		rating: 0.5,
+		rating: 1,
 		num: 133,
 	},
 	"whitesmoke": {
