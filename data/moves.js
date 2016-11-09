@@ -14,7 +14,7 @@ heal: Prevented from being executed or selected during Heal Block's effect.
 mirror: Can be copied by Mirror Move.
 nonsky: Prevented from being executed or selected in a Sky Battle.
 powder: Has no effect on Grass-type Pokemon, Pokemon with the Ability Overcoat, and Pokemon holding Safety Goggles.
-protect: Blocked by Detect, Protect, Spiky Shield, and if not a Status move, King's Shield.
+protect: Blocked by Detect, Protect, Spiky Shield, Baneful Bunker and if not a Status move, King's Shield.
 pulse: Power is multiplied by 1.5 when used by a Pokemon with the Ability Mega Launcher.
 punch: Power is multiplied by 1.2 when used by a Pokemon with the Ability Iron Fist.
 recharge: If this move is successful, the user must recharge on the following turn and cannot make a move.
@@ -303,7 +303,7 @@ exports.BattleMovedex = {
 		id: "allyswitch",
 		name: "Ally Switch",
 		pp: 15,
-		priority: 1,
+		priority: 2,
 		flags: {},
 		onTryHit: function (source) {
 			if (source.side.active.length === 1) return false;
@@ -519,7 +519,7 @@ exports.BattleMovedex = {
 					let move = pokemon.moveset[i].id;
 					let noAssist = {
 						assist:1, belch:1, bestow:1, bounce:1, chatter:1, circlethrow:1, copycat:1, counter:1, covet:1, destinybond:1, detect:1, dig:1, dive:1, dragontail:1, endure:1, feint:1, fly:1, focuspunch:1, followme:1, helpinghand:1, kingsshield:1, matblock:1, mefirst:1, metronome:1, mimic:1, mirrorcoat:1, mirrormove:1, naturepower:1, phantomforce:1, protect:1, ragepowder:1, roar:1, shadowforce:1, sketch:1, skydrop:1, sleeptalk:1, snatch:1, spikyshield:1, struggle:1, switcheroo:1, thief:1, transform:1, trick:1, whirlwind:1,
-					};
+					}; /* TODO: expand by SM moves, e. g. banefulbunker */
 					if (!noAssist[move]) {
 						moves.push(move);
 					}
@@ -1654,6 +1654,8 @@ exports.BattleMovedex = {
 				newType = 'Grass';
 			} else if (this.isTerrain('mistyterrain')) {
 				newType = 'Fairy';
+			} else if (this.isTerrain('psychicterrain')) {
+				newType = 'Psychic';
 			}
 
 			if (!target.setType(newType)) return false;
@@ -2109,7 +2111,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {},
 		onHit: function (pokemon) {
-			let noCopycat = {assist:1, bestow:1, chatter:1, circlethrow:1, copycat:1, counter:1, covet:1, destinybond:1, detect:1, dragontail:1, endure:1, feint:1, focuspunch:1, followme:1, helpinghand:1, mefirst:1, metronome:1, mimic:1, mirrorcoat:1, mirrormove:1, naturepower:1, protect:1, ragepowder:1, roar:1, sketch:1, sleeptalk:1, snatch:1, struggle:1, switcheroo:1, thief:1, transform:1, trick:1, whirlwind:1};
+			let noCopycat = {assist:1, bestow:1, chatter:1, circlethrow:1, copycat:1, counter:1, covet:1, destinybond:1, detect:1, dragontail:1, endure:1, feint:1, focuspunch:1, followme:1, helpinghand:1, mefirst:1, metronome:1, mimic:1, mirrorcoat:1, mirrormove:1, naturepower:1, protect:1, ragepowder:1, roar:1, sketch:1, sleeptalk:1, snatch:1, struggle:1, switcheroo:1, thief:1, transform:1, trick:1, whirlwind:1}; /* TODO: expand by SM moves, e. g. Spotlight */
 			if (!this.lastMove || noCopycat[this.lastMove]) {
 				return false;
 			}
@@ -2503,7 +2505,7 @@ exports.BattleMovedex = {
 	},
 	"darkvoid": {
 		num: 464,
-		accuracy: 80,
+		accuracy: 50,
 		basePower: 0,
 		category: "Status",
 		desc: "Causes the target to fall asleep.",
@@ -2663,7 +2665,7 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "The user is protected from most attacks made by other Pokemon during this turn. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails or if the user's last move used is not Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, or Wide Guard. Fails if the user moves last this turn.",
+		desc: "The user is protected from most attacks made by other Pokemon during this turn. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails or if the user's last move used is not Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, Wide Guard or Baneful Bunker. Fails if the user moves last this turn.",
 		shortDesc: "Prevents moves from affecting the user this turn.",
 		id: "detect",
 		isViable: true,
@@ -2689,8 +2691,8 @@ exports.BattleMovedex = {
 		accuracy: 95,
 		basePower: 100,
 		category: "Physical",
-		desc: "Has a 50% chance to raise the user's Defense by 1 stage.",
-		shortDesc: "50% chance to raise user's Def by 1 for each hit.",
+		desc: "Has a 50% chance to raise the user's Defense by 2 stages.",
+		shortDesc: "50% chance to raise user's Def by 2 for each hit.",
 		id: "diamondstorm",
 		isViable: true,
 		name: "Diamond Storm",
@@ -2701,7 +2703,7 @@ exports.BattleMovedex = {
 			chance: 50,
 			self: {
 				boosts: {
-					def: 1,
+					def: 2,
 				},
 			},
 		},
@@ -3168,7 +3170,7 @@ exports.BattleMovedex = {
 		name: "Dragon Dance",
 		pp: 20,
 		priority: 0,
-		flags: {snatch: 1},
+		flags: {snatch: 1, dance: 1},
 		boosts: {
 			atk: 1,
 			spe: 1,
@@ -3787,7 +3789,7 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "The user will survive attacks made by other Pokemon during this turn with at least 1 HP. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails or if the user's last move used is not Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, or Wide Guard. Fails if the user moves last this turn.",
+		desc: "The user will survive attacks made by other Pokemon during this turn with at least 1 HP. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails or if the user's last move used is not Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, Wide Guard or Baneful Bunker. Fails if the user moves last this turn.",
 		shortDesc: "The user survives the next hit with at least 1 HP.",
 		id: "endure",
 		name: "Endure",
@@ -4117,7 +4119,7 @@ exports.BattleMovedex = {
 		name: "Feather Dance",
 		pp: 15,
 		priority: 0,
-		flags: {protect: 1, reflectable: 1, mirror: 1},
+		flags: {protect: 1, reflectable: 1, mirror: 1, dance: 1},
 		boosts: {
 			atk: -2,
 		},
@@ -4131,7 +4133,7 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 30,
 		category: "Physical",
-		desc: "If this move is successful, it breaks through the target's Detect, King's Shield, Protect, or Spiky Shield for this turn, allowing other Pokemon to attack the target normally. If the target's side is protected by Crafty Shield, Mat Block, Quick Guard, or Wide Guard, that protection is also broken for this turn and other Pokemon may attack the target's side normally.",
+		desc: "If this move is successful, it breaks through the target's Detect, King's Shield, Protect, Spiky Shield or Baneful Bunker for this turn, allowing other Pokemon to attack the target normally. If the target's side is protected by Crafty Shield, Mat Block, Quick Guard, or Wide Guard, that protection is also broken for this turn and other Pokemon may attack the target's side normally.",
 		shortDesc: "Nullifies Detect, Protect, and Quick/Wide Guard.",
 		id: "feint",
 		name: "Feint",
@@ -4148,7 +4150,7 @@ exports.BattleMovedex = {
 	"fellstinger": {
 		num: 565,
 		accuracy: 100,
-		basePower: 30,
+		basePower: 50,
 		category: "Physical",
 		desc: "Raises the user's Attack by 2 stages if this move knocks out the target.",
 		shortDesc: "Raises user's Attack by 2 if this KOes the target.",
@@ -4184,7 +4186,7 @@ exports.BattleMovedex = {
 		name: "Fiery Dance",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1, dance: 1},
 		secondary: {
 			chance: 50,
 			self: {
@@ -4760,11 +4762,12 @@ exports.BattleMovedex = {
 	"flyingpress": {
 		num: 560,
 		accuracy: 95,
-		basePower: 80,
+		basePower: 100,
 		category: "Physical",
 		desc: "This move combines Flying in its type effectiveness against the target. Damage doubles and no accuracy check is done if the target has used Minimize while active.",
 		shortDesc: "Combines Flying in its type effectiveness.",
 		id: "flyingpress",
+		isViable: true,
 		name: "Flying Press",
 		pp: 10,
 		flags: {contact: 1, protect: 1, mirror: 1, gravity: 1, distance: 1, nonsky: 1},
@@ -7026,7 +7029,7 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 100,
 		category: "Physical",
-		desc: "Lowers the user's Defense by 1 stage. This move cannot be used successfully unless the user's current form, while considering Transform, is Hoopa Unbound. If this move is successful, it breaks through the target's Detect, King's Shield, Protect, or Spiky Shield for this turn, allowing other Pokemon to attack the target normally. If the target's side is protected by Crafty Shield, Mat Block, Quick Guard, or Wide Guard, that protection is also broken for this turn and other Pokemon may attack the target's side normally.",
+		desc: "Lowers the user's Defense by 1 stage. This move cannot be used successfully unless the user's current form, while considering Transform, is Hoopa Unbound. If this move is successful, it breaks through the target's Detect, King's Shield, Protect, Spiky Shield or Baneful Bunker for this turn, allowing other Pokemon to attack the target normally. If the target's side is protected by Crafty Shield, Mat Block, Quick Guard, or Wide Guard, that protection is also broken for this turn and other Pokemon may attack the target's side normally.",
 		shortDesc: "Hoopa-U: Lowers user's Def by 1; breaks protection.",
 		id: "hyperspacefury",
 		isViable: true,
@@ -7062,7 +7065,7 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 80,
 		category: "Special",
-		desc: "If this move is successful, it breaks through the target's Detect, King's Shield, Protect, or Spiky Shield for this turn, allowing other Pokemon to attack the target normally. If the target's side is protected by Crafty Shield, Mat Block, Quick Guard, or Wide Guard, that protection is also broken for this turn and other Pokemon may attack the target's side normally.",
+		desc: "If this move is successful, it breaks through the target's Detect, King's Shield, Protect, Spiky Shield or Baneful Bunker for this turn, allowing other Pokemon to attack the target normally. If the target's side is protected by Crafty Shield, Mat Block, Quick Guard, or Wide Guard, that protection is also broken for this turn and other Pokemon may attack the target's side normally.",
 		shortDesc: "Breaks the target's protection for this turn.",
 		id: "hyperspacehole",
 		name: "Hyperspace Hole",
@@ -7655,7 +7658,7 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "The user is protected from most attacks made by other Pokemon during this turn, and Pokemon making contact with the user have their Attack lowered by 2 stages. Non-damaging moves go through this protection. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails or if the user's last move used is not Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, or Wide Guard. Fails if the user moves last this turn.",
+		desc: "The user is protected from most attacks made by other Pokemon during this turn, and Pokemon making contact with the user have their Attack lowered by 2 stages. Non-damaging moves go through this protection. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails or if the user's last move used is not Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, Wide Guard or Baneful Bunker. Fails if the user moves last this turn.",
 		shortDesc: "Protects from attacks. Contact: lowers Atk by 2.",
 		id: "kingsshield",
 		isViable: true,
@@ -7866,13 +7869,14 @@ exports.BattleMovedex = {
 	"leechlife": {
 		num: 141,
 		accuracy: 100,
-		basePower: 20,
+		basePower: 80,
 		category: "Physical",
 		desc: "The user recovers 1/2 the HP lost by the target, rounded half up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down.",
 		shortDesc: "User recovers 50% of the damage dealt.",
 		id: "leechlife",
+		isViable: true,
 		name: "Leech Life",
-		pp: 15,
+		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, heal: 1},
 		drain: [1, 2],
@@ -8179,7 +8183,7 @@ exports.BattleMovedex = {
 		name: "Lunar Dance",
 		pp: 10,
 		priority: 0,
-		flags: {snatch: 1, heal: 1},
+		flags: {snatch: 1, heal: 1, dance: 1},
 		onTryHit: function (pokemon, target, move) {
 			if (!this.canSwitch(pokemon.side)) {
 				delete move.selfdestruct;
@@ -8863,7 +8867,7 @@ exports.BattleMovedex = {
 				if (move.isNonstandard) continue;
 				let noMetronome = {
 					afteryou:1, assist:1, belch:1, bestow:1, celebrate:1, chatter:1, copycat:1, counter:1, covet:1, craftyshield:1, destinybond:1, detect:1, diamondstorm:1, dragonascent:1, endure:1, feint:1, focuspunch:1, followme:1, freezeshock:1, happyhour:1, helpinghand:1, holdhands:1, hyperspacefury:1, hyperspacehole:1, iceburn:1, kingsshield:1, lightofruin:1, matblock:1, mefirst:1, metronome:1, mimic:1, mirrorcoat:1, mirrormove:1, naturepower:1, originpulse:1, precipiceblades:1, protect:1, quash:1, quickguard:1, ragepowder:1, relicsong:1, secretsword:1, sketch:1, sleeptalk:1, snarl:1, snatch:1, snore:1, spikyshield:1, steameruption:1, struggle:1, switcheroo:1, technoblast:1, thief:1, thousandarrows:1, thousandwaves:1, transform:1, trick:1, vcreate:1, wideguard:1,
-				};
+				}; /* TODO: expand by SM moves, e. g. banefulbunker */
 				if (!noMetronome[move.id]) {
 					moves.push(move);
 				}
@@ -9444,7 +9448,7 @@ exports.BattleMovedex = {
 	"mysticalfire": {
 		num: 595,
 		accuracy: 100,
-		basePower: 65,
+		basePower: 75,
 		category: "Special",
 		desc: "Has a 100% chance to lower the target's Special Attack by 1 stage.",
 		shortDesc: "100% chance to lower the target's Sp. Atk by 1.",
@@ -9533,7 +9537,7 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "This move calls another move for use based on the battle terrain. Tri Attack on the regular Wi-Fi terrain, Thunderbolt during Electric Terrain, Moonblast during Misty Terrain, and Energy Ball during Grassy Terrain.",
+		desc: "This move calls another move for use based on the battle terrain. Tri Attack on the regular Wi-Fi terrain, Thunderbolt during Electric Terrain, Moonblast during Misty Terrain, Energy Ball during Grassy Terrain, and Psychic during Psychic Terrain.",
 		shortDesc: "Attack depends on terrain (default Tri Attack).",
 		id: "naturepower",
 		name: "Nature Power",
@@ -9548,6 +9552,8 @@ exports.BattleMovedex = {
 				move = 'energyball';
 			} else if (this.isTerrain('mistyterrain')) {
 				move = 'moonblast';
+			} else if (this.isTerrain('psychicterrain')) {
+				move = 'psychic';
 			}
 			this.useMove(move, pokemon, target);
 			return null;
@@ -9899,7 +9905,7 @@ exports.BattleMovedex = {
 	"paraboliccharge": {
 		num: 570,
 		accuracy: 100,
-		basePower: 50,
+		basePower: 65,
 		category: "Special",
 		desc: "The user recovers 1/2 the HP lost by the target, rounded half up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down.",
 		shortDesc: "User recovers 50% of the damage dealt.",
@@ -10079,7 +10085,7 @@ exports.BattleMovedex = {
 		name: "Petal Dance",
 		pp: 10,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, dance: 1},
 		self: {
 			volatileStatus: 'lockedmove',
 		},
@@ -10098,7 +10104,7 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 90,
 		category: "Physical",
-		desc: "If this move is successful, it breaks through the target's Detect, King's Shield, Protect, or Spiky Shield for this turn, allowing other Pokemon to attack the target normally. If the target's side is protected by Crafty Shield, Mat Block, Quick Guard, or Wide Guard, that protection is also broken for this turn and other Pokemon may attack the target's side normally. This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks. If the user is holding a Power Herb, the move completes in one turn. Damage doubles and no accuracy check is done if the target has used Minimize while active.",
+		desc: "If this move is successful, it breaks through the target's Detect, King's Shield, Protect, Spiky Shield or Baneful Bunker for this turn, allowing other Pokemon to attack the target normally. If the target's side is protected by Crafty Shield, Mat Block, Quick Guard, or Wide Guard, that protection is also broken for this turn and other Pokemon may attack the target's side normally. This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks. If the user is holding a Power Herb, the move completes in one turn. Damage doubles and no accuracy check is done if the target has used Minimize while active.",
 		shortDesc: "Disappears turn 1. Hits turn 2. Breaks protection.",
 		id: "phantomforce",
 		name: "Phantom Force",
@@ -10622,7 +10628,7 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "The user is protected from most attacks made by other Pokemon during this turn. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails or if the user's last move used is not Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, or Wide Guard. Fails if the user moves last this turn.",
+		desc: "The user is protected from most attacks made by other Pokemon during this turn. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails or if the user's last move used is not Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, Wide Guard or Baneful Bunker. Fails if the user moves last this turn.",
 		shortDesc: "Prevents moves from affecting the user this turn.",
 		id: "protect",
 		isViable: true,
@@ -10997,7 +11003,7 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "The user and its party members are protected from attacks with original or altered priority greater than 0 made by other Pokemon, including allies, during this turn. This move modifies the same 1/X chance of being successful used by other protection moves, where X starts at 1 and triples each time this move is successfully used, but does not use the chance to check for failure. X resets to 1 if this move fails or if the user's last move used is not Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, or Wide Guard. Fails if the user moves last this turn or if this move is already in effect for the user's side.",
+		desc: "The user and its party members are protected from attacks with original or altered priority greater than 0 made by other Pokemon, including allies, during this turn. This move modifies the same 1/X chance of being successful used by other protection moves, where X starts at 1 and triples each time this move is successfully used, but does not use the chance to check for failure. X resets to 1 if this move fails or if the user's last move used is not Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, Wide Guard or Baneful Bunker. Fails if the user moves last this turn or if this move is already in effect for the user's side.",
 		shortDesc: "Protects allies from priority attacks this turn.",
 		id: "quickguard",
 		name: "Quick Guard",
@@ -11051,7 +11057,7 @@ exports.BattleMovedex = {
 		name: "Quiver Dance",
 		pp: 20,
 		priority: 0,
-		flags: {snatch: 1},
+		flags: {snatch: 1, dance: 1},
 		boosts: {
 			spa: 1,
 			spd: 1,
@@ -12231,6 +12237,12 @@ exports.BattleMovedex = {
 						spa: -1,
 					},
 				});
+			} else if (this.isTerrain('psychicterrain')) {
+				/* TODO!!!
+				move.secondaries.push({
+					chance: 30,
+				});
+				*/
 			}
 		},
 		secondary: {
@@ -12385,7 +12397,7 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 120,
 		category: "Physical",
-		desc: "If this move is successful, it breaks through the target's Detect, King's Shield, Protect, or Spiky Shield for this turn, allowing other Pokemon to attack the target normally. If the target's side is protected by Crafty Shield, Mat Block, Quick Guard, or Wide Guard, that protection is also broken for this turn and other Pokemon may attack the target's side normally. This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks. If the user is holding a Power Herb, the move completes in one turn. Damage doubles and no accuracy check is done if the target has used Minimize while active.",
+		desc: "If this move is successful, it breaks through the target's Detect, King's Shield, Protect, Spiky Shield or Baneful Bunker for this turn, allowing other Pokemon to attack the target normally. If the target's side is protected by Crafty Shield, Mat Block, Quick Guard, or Wide Guard, that protection is also broken for this turn and other Pokemon may attack the target's side normally. This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks. If the user is holding a Power Herb, the move completes in one turn. Damage doubles and no accuracy check is done if the target has used Minimize while active.",
 		shortDesc: "Disappears turn 1. Hits turn 2. Breaks protection.",
 		id: "shadowforce",
 		isViable: true,
@@ -13312,7 +13324,7 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "The user is protected from most attacks made by other Pokemon during this turn, and Pokemon making contact with the user lose 1/8 of their maximum HP, rounded down. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails or if the user's last move used is not Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, or Wide Guard. Fails if the user moves last this turn.",
+		desc: "The user is protected from most attacks made by other Pokemon during this turn, and Pokemon making contact with the user lose 1/8 of their maximum HP, rounded down. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails or if the user's last move used is not Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, Wide Guard or Baneful Bunker. Fails if the user moves last this turn.",
 		shortDesc: "Protects from moves. Contact: loses 1/8 max HP.",
 		id: "spikyshield",
 		isViable: true,
@@ -14097,7 +14109,7 @@ exports.BattleMovedex = {
 	"suckerpunch": {
 		num: 389,
 		accuracy: 100,
-		basePower: 80,
+		basePower: 70,
 		category: "Physical",
 		desc: "Fails if the target did not select a physical attack, special attack, or Me First for use this turn, or if the target moves before the user.",
 		shortDesc: "Usually goes first. Fails if target is not attacking.",
@@ -14221,7 +14233,7 @@ exports.BattleMovedex = {
 	},
 	"swagger": {
 		num: 207,
-		accuracy: 90,
+		accuracy: 85,
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the target's Attack by 2 stages and confuses it.",
@@ -14375,7 +14387,7 @@ exports.BattleMovedex = {
 		name: "Swords Dance",
 		pp: 20,
 		priority: 0,
-		flags: {snatch: 1},
+		flags: {snatch: 1, dance: 1},
 		boosts: {
 			atk: 2,
 		},
@@ -14434,7 +14446,7 @@ exports.BattleMovedex = {
 	"tackle": {
 		num: 33,
 		accuracy: 100,
-		basePower: 50,
+		basePower: 40,
 		category: "Physical",
 		desc: "No additional effect.",
 		shortDesc: "No additional effect.",
@@ -14644,7 +14656,7 @@ exports.BattleMovedex = {
 		name: "Teeter Dance",
 		pp: 20,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1, dance: 1},
 		volatileStatus: 'confusion',
 		secondary: false,
 		target: "allAdjacent",
@@ -14908,7 +14920,7 @@ exports.BattleMovedex = {
 	},
 	"thunderwave": {
 		num: 86,
-		accuracy: 100,
+		accuracy: 90,
 		basePower: 0,
 		category: "Status",
 		desc: "Paralyzes the target.",
@@ -15841,7 +15853,7 @@ exports.BattleMovedex = {
 		num: 594,
 		accuracy: 100,
 		basePower: 15,
-		category: "Physical",
+		category: "Special",
 		desc: "Hits two to five times. Has a 1/3 chance to hit two or three times, and a 1/6 chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Ability Skill Link, this move will always hit five times.",
 		shortDesc: "Hits 2-5 times in one turn.",
 		id: "watershuriken",
@@ -15936,7 +15948,7 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "The user and its party members are protected from damaging attacks made by other Pokemon, including allies, during this turn that target all adjacent foes or all adjacent Pokemon. This move modifies the same 1/X chance of being successful used by other protection moves, where X starts at 1 and triples each time this move is successfully used, but does not use the chance to check for failure. X resets to 1 if this move fails or if the user's last move used is not Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, or Wide Guard. Fails if the user moves last this turn or if this move is already in effect for the user's side.",
+		desc: "The user and its party members are protected from damaging attacks made by other Pokemon, including allies, during this turn that target all adjacent foes or all adjacent Pokemon. This move modifies the same 1/X chance of being successful used by other protection moves, where X starts at 1 and triples each time this move is successfully used, but does not use the chance to check for failure. X resets to 1 if this move fails or if the user's last move used is not Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, Wide Guard or Baneful Bunker. Fails if the user moves last this turn or if this move is already in effect for the user's side.",
 		shortDesc: "Protects allies from multi-target hits this turn.",
 		id: "wideguard",
 		name: "Wide Guard",
@@ -16412,4 +16424,1012 @@ exports.BattleMovedex = {
 		type: "Water",
 		contestType: "Cute",
 	},
+	"catastropika": {
+		num: 622,
+		accuracy: true,
+		basePower: 210,
+		category: "Physical",
+		desc: "No additional effect.",
+		shortDesc: "No additional effect.",
+		id: "catastropika",
+		name: "Catastropika",
+		pp: 1,
+		priority: 0,
+		flags: {contact: 1},
+		secondary: false,
+		target: "normal",
+		type: "Electric",
+	},
+	"shoreup": {
+		num: 623,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "The user restores 1/2 of its maximum HP if no weather conditions are in effect, 2/3 of its maximum HP if the weather is Sandstorm, all rounded half down.",
+		shortDesc: "Heals the user by a weather-dependent amount.",
+		id: "shoreup",
+		isViable: true,
+		name: "Shore Up",
+		pp: 10,
+		priority: 0,
+		flags: {snatch: 1, heal: 1},
+		onHit: function (pokemon) {
+			if (this.isWeather(['sandstorm'])) {
+				this.heal(this.modify(pokemon.maxhp, 0.667));
+			} else {
+				this.heal(this.modify(pokemon.maxhp, 0.5));
+			}
+		},
+		secondary: false,
+		target: "self",
+		type: "Ground",
+	},
+	"firstimpression": {
+		num: 624,
+		accuracy: 100,
+		basePower: 90,
+		category: "Physical",
+		desc: "Fails unless it is the user's first turn on the field.",
+		shortDesc: "Hits first. First turn out only.",
+		id: "firstimpression",
+		isViable: true,
+		name: "First Impression",
+		pp: 10,
+		priority: 2,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		onTry: function (pokemon, target) {
+			if (pokemon.activeTurns > 1) {
+				this.add('-fail', pokemon);
+				this.add('-hint', "First Impression only works on your first turn out.");
+				return null;
+			}
+		},
+		secondary: false,
+		target: "normal",
+		type: "Bug",
+	},
+	"banefulbunker": {
+		num: 625,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "The user is protected from most attacks made by other Pokemon during this turn, and Pokemon making contact with the user are posioned. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails or if the user's last move used is not Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, Wide Guard or Baneful Bunker. Fails if the user moves last this turn.",
+		shortDesc: "Protects from moves. Contact: posions.",
+		id: "banefulbunker",
+		isViable: true,
+		name: "Baneful Bunker",
+		pp: 10,
+		priority: 4,
+		flags: {},
+		stallingMove: true,
+		volatileStatus: 'banefulbunker',
+		onTryHit: function (target, source, move) {
+			return !!this.willAct() && this.runEvent('StallMove', target);
+		},
+		onHit: function (pokemon) {
+			pokemon.addVolatile('stall');
+		},
+		effect: {
+			duration: 1,
+			onStart: function (target) {
+				this.add('-singleturn', target, 'move: Protect');
+			},
+			onTryHitPriority: 3,
+			onTryHit: function (target, source, move) {
+				if (!move.flags['protect']) return;
+				this.add('-activate', target, 'move: Protect');
+				let lockedmove = source.getVolatile('lockedmove');
+				if (lockedmove) {
+					// Outrage counter is reset
+					if (source.volatiles['lockedmove'].duration === 2) {
+						delete source.volatiles['lockedmove'];
+					}
+				}
+				if (move.flags['contact']) {
+					source.trySetStatus('psn', target);
+				}
+				return null;
+			},
+		},
+		secondary: false,
+		target: "self",
+		type: "Poison",
+	},
+	"spiritshackle": {
+		num: 626,
+		accuracy: 100,
+		basePower: 80,
+		category: "Physical",
+		desc: "Prevents the target from switching out. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Parting Shot, U-turn, or Volt Switch. If the target leaves the field using Baton Pass, the replacement will remain trapped. The effect ends if the user leaves the field.",
+		shortDesc: "Hits adjacent foes. Prevents them from switching.",
+		id: "spiritshackle",
+		name: "Spirit Shackle",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		secondary: false,
+		onHit: function (target, source, move) {
+			if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
+		},
+		target: "normal",
+		type: "Ghost",
+	},
+	"darkestlariat": {
+		num: 627,
+		accuracy: 100,
+		basePower: 85,
+		category: "Physical",
+		desc: "Ignores the target's stat stage changes, including evasiveness.",
+		shortDesc: "Ignores the target's stat stage changes.",
+		id: "darkestlariat",
+		isViable: true,
+		name: "Darkest Lariat",
+		pp: 10,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		ignoreDefensive: true,
+		ignoreEvasion: true,
+		secondary: false,
+		target: "normal",
+		type: "Dark",
+	},
+	"sparklingaria": {
+		num: 628,
+	},
+	"icehammer": {
+		num: 629,
+	},
+	"floralhealing": {
+		num: 630,
+	},
+	"highhorsepower": {
+		num: 631,
+		accuracy: 95,
+		basePower: 95,
+		category: "Physical",
+		desc: "No additional effect.",
+		shortDesc: "No additional effect.",
+		id: "darkestlariat",
+		isViable: true,
+		name: "Darkest Lariat",
+		pp: 10,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		secondary: false,
+		target: "normal",
+		type: "Ground",
+	},
+	"strengthsap": {
+		num: 632,
+
+		//flags: he
+	},
+	"solarblade": {
+		num: 633,
+		accuracy: 100,
+		basePower: 125,
+		category: "Special",
+		desc: "This attack charges on the first turn and executes on the second. Power is halved if the weather is Hail, Rain Dance, or Sandstorm. If the user is holding a Power Herb or the weather is Sunny Day, the move completes in one turn.",
+		shortDesc: "Charges turn 1. Hits turn 2. No charge in sunlight.",
+		id: "solarblade",
+		name: "Solar Blade",
+		pp: 10,
+		priority: 0,
+		flags: {contact: 1, charge: 1, protect: 1, mirror: 1},
+		onTry: function (attacker, defender, move) {
+			if (attacker.removeVolatile(move.id)) {
+				return;
+			}
+			this.add('-prepare', attacker, move.name, defender);
+			if (this.isWeather(['sunnyday', 'desolateland']) || !this.runEvent('ChargeMove', attacker, defender, move)) {
+				this.add('-anim', attacker, move.name, defender);
+				return;
+			}
+			attacker.addVolatile('twoturnmove', defender);
+			return null;
+		},
+		onBasePowerPriority: 4,
+		onBasePower: function (basePower, pokemon, target) {
+			if (this.isWeather(['raindance', 'primordialsea', 'sandstorm', 'hail'])) {
+				this.debug('weakened by weather');
+				return this.chainModify(0.5);
+			}
+		},
+		secondary: false,
+		target: "normal",
+		type: "Grass",
+	},
+	"leafage": {
+		num: 634,
+		accuracy: 100,
+		basePower: 40,
+		category: "Physical",
+		desc: "No additional effect.",
+		shortDesc: "No additional effect.",
+		id: "leafage",
+		name: "Leafage",
+		pp: 25,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		secondary: false,
+		target: "normal",
+		type: "Grass",
+	},
+	"spotlight": {
+		num: 635,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "Until the end of the turn, all single-target attacks from the foe's team are redirected to the target if they are in range. Such attacks are redirected to the user before they can be reflected by Magic Coat or the Ability Magic Bounce, or drawn in by the Abilities Lightning Rod or Storm Drain. Fails if it is not a Double or Triple Battle.",
+		shortDesc: "The foes' moves target the target on the turn used.",
+		priority: 2,
+		flags: {protect: 1, reflectable: 1, flag_0x8000 = 1},
+		effect: {
+			duration: 1,
+			onStart: function (pokemon) {
+				this.add('-singleturn', pokemon, 'move: Spotlight');
+			},
+			onFoeRedirectTargetPriority: 1,
+			onFoeRedirectTarget: function (target, source, source2, move) {
+				if (this.validTarget(this.effectData.target, source, move.target)) {
+					this.debug("Spotlight redirected target of move");
+					return this.effectData.target;
+				}
+			},
+		},
+		secondary: false,
+		target: "normal", /* TODO: "adjacentAlly" ??? */
+		type: "Normal",
+		onHit: function (target, pokemon) {
+			target.addVolatile('spotlight');
+		},
+	},
+	"toxicthread": {
+		num: 636,
+	},
+	"laserfocus": {
+		num: 637,
+	},
+	"gearup": {
+		num: 638,
+	},
+	"throatchop": {
+		num: 639,
+	},
+	"pollenpuff": {
+		num: 640,
+	},
+	"anchorshot": {
+		num: 641,
+	},
+	"psychicterrain": {
+		num: 642,
+	},
+	"lunge": {
+		num: 643,
+	},
+	"firelash": {
+		num: 644,
+	},
+	"powertrip": {
+		num: 645,
+	},
+	"burnup": {
+		num: 646,
+	},
+	"speedswap": {
+		num: 647,
+	},
+	"smartstrike": {
+		num: 648,
+	},
+	"purify": {
+		num: 649,
+	},
+	"revelationdance": {
+		num: 650,
+		/*flags dance*/
+	},
+	"coreenforcer": {
+		num: 651,
+	},
+	"tropkick": {
+		num: 652,
+	},
+	"instruct": {
+		num: 653,
+	},
+	"beakblast": {
+		num: 654,
+	},
+	"clanglingscales": {
+		num: 655,
+	},
+	"dragonhammer": {
+		num: 656,
+	},
+	"brutalswing": {
+		num: 657,
+	},
+	"auroraveil": {
+		num: 658,
+	},
+	"sinisterarrowraid": {
+		num: 659,
+	},
+	"maliciousmoonsault": {
+		num: 660,
+	},
+	"oceanicoperatta": {
+		num: 661,
+	},
+	"soulstealing7starstrike": {
+		num: 662,
+	},
+	"stokedsparksurfer": {
+		num: 663,
+	},
+	"pulveringpancake": {
+		num: 664,
+	},
+	"genesissupernova": {
+		num: 665,
+	},
+	"shelltrap": {
+		num: 666,
+	},
+	"fleurcannon": {
+		num: 667,
+	},
+	"psychicfangs": {
+		num: 668,
+		accuracy: 100,
+		basePower: 85,
+		category: "Physical",
+		desc: "If this attack does not miss, the effects of Reflect and Light Screen end for the target's side of the field before damage is calculated.",
+		shortDesc: "Destroys screens, unless the target is immune.",
+		id: "psychicfangs",
+		isViable: true,
+		name: "Psychic Fangs",
+		pp: 10,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1, bite: 1},
+		onTryHit: function (pokemon) {
+			// will shatter screens through sub, before you hit
+			if (pokemon.runImmunity('Psychic')) {
+				pokemon.side.removeSideCondition('reflect');
+				pokemon.side.removeSideCondition('lightscreen');
+			}
+		},
+		secondary: false,
+		target: "normal",
+		type: "Psychic",
+	},
+	"stompingtantrum": {
+		num: 669,
+		accuracy: 100,
+		basePower: 75,
+		category: "Physical",
+		desc: "Power doubles if one of the user's party members fainted last turn.",
+		shortDesc: "Power doubles if an ally fainted last turn.",
+		id: "stompingtantrum",
+		name: "Stomping Tantrum",
+		pp: 5,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		onBasePowerPriority: 4,
+		onBasePower: function (basePower, pokemon) {
+			/*TODO: Implement the lastMoveFailed volatile status
+			if (pokemon.volatiles.lastMoveFailed) {
+				this.debug('Boosted for a failed move last turn');
+				return this.chainModify(2);
+			}
+			*/
+		},
+		secondary: false,
+		target: "normal",
+		type: "Normal",
+	},
+	"shadowbone": {
+		num: 670,
+		accuracy: 100,
+		basePower: 85,
+		category: "Physical",
+		desc: "Has a 10% chance to lower the target's Defense by 1 stage.",
+		shortDesc: "10% chance to lower the target's Defense by 1.",
+		id: "liquidation",
+		isViable: true,
+		name: "Liquidation",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		secondary: {
+			chance: 10, /* unconfirmed! */
+			boosts: {
+				def: -1,
+			},
+		},
+		target: "normal",
+		type: "Ghost",
+	},
+	"accelerock": {
+		num: 671,
+		accuracy: 100,
+		basePower: 40,
+		category: "Physical",
+		desc: "No additional effect.",
+		shortDesc: "Usually goes first.",
+		id: "accelerock",
+		isViable: true,
+		name: "Accelerock",
+		pp: 20,
+		priority: 1,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		secondary: false,
+		target: "normal",
+		type: "Rock",
+	},
+	"liquidation": {
+		num: 672,
+		accuracy: 100,
+		basePower: 85,
+		category: "Physical",
+		desc: "Has a 30% chance to lower the target's Defense by 1 stage.",
+		shortDesc: "30% chance to lower the target's Defense by 1.",
+		id: "liquidation",
+		isViable: true,
+		name: "Liquidation",
+		pp: 10,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		secondary: {
+			chance: 30, /* unconfirmed! */
+			boosts: {
+				def: -1,
+			},
+		},
+		target: "normal",
+		type: "Water",
+	},
+	"prismaticlaser": {
+		num: 673,
+	},
+	"spectralthief": {
+		num: 674,
+	},
+	"sunsteelstrike": {
+		num: 675,
+		accuracy: 100,
+		basePower: 100,
+		category: "Physical",
+		desc: "This move is unaffected by Abilities.",
+		shortDescr: "Unaffected by Abilities.",
+		id: "sunsteelstrike",
+		isViable: true,
+		name: "Sunsteel Strike",
+		pp: 5,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		self: {
+			volatileStatus: 'suppressAttackEvents',
+		},
+		onAfterMove: function (pokemon) {
+			pokemon.removeVolatile('suppressAttackEvents');
+		},
+		secondary: false,
+		target: "normal",
+		type: "Steel",
+	},
+	"moongeistbeam": {
+		num: 676,
+		accuracy: 100,
+		basePower: 100,
+		category: "Special",
+		desc: "This move is unaffected by Abilities.",
+		shortDescr: "Unaffected by Abilities.",
+		id: "moongeistbeam",
+		isViable: true,
+		name: "Moongeist Beam",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		self: {
+			volatileStatus: 'suppressAttackEvents',
+		},
+		onAfterMove: function (pokemon) {
+			pokemon.removeVolatile('suppressAttackEvents');
+		},
+		secondary: false,
+		target: "normal",
+		type: "Ghost",
+	},
+	"tearfullook": {
+		num: 677,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "Lowers the target's Attack and Special Attack by 1 stage.",
+		shortDesc: "Lowers the target's Attack and Special Attack by 1.",
+		id: "tearfullook",
+		name: "Tearful Look",
+		pp: 20,
+		priority: 0,
+		flags: {protect: 1, reflectable: 1, mirror: 1},
+		boosts: {
+			atk: -1,
+			def: -1,
+		},
+		secondary: false,
+		target: "normal",
+		type: "Normal",
+	},
+	"zingzap": {
+		num: 678,
+		accuracy: 100,
+		basePower: 80,
+		category: "Physical",
+		desc: "Has a 30% chance to flinch the target.",
+		shortDesc: "30% chance to flinch the target.",
+		id: "zingzap",
+		isViable: true,
+		name: "Zing Zap",
+		pp: 10,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		secondary: {
+			chance: 30,
+			volatileStatus: 'flinch',
+		},
+		target: "normal",
+		type: "Electric",
+	},
+	"naturesmadness": {
+		num: 679,
+		accuracy: 90,
+		basePower: 0,
+		damageCallback: function (pokemon, target) {
+			return this.clampIntRange(Math.floor(target.hp / 2), 1);
+		},
+		category: "Special",
+		desc: "Deals damage to the target equal to half of its current HP, rounded down, but not less than 1 HP.",
+		shortDesc: "Does damage equal to 1/2 target's current HP.",
+		id: "naturesmadness",
+		isViable: true,
+		name: "Nature’s Madness",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		secondary: false,
+		target: "normal",
+		type: "Fairy",
+	},
+	"multiattack": {
+		num: 680,
+		accuracy: 90,
+		basePower: 100,
+		category: "Physical",
+		desc: "This move's type depends on the user's held Memory.",
+		shortDesc: "Type varies based on the held Memory.",
+		id: "multiattack",
+		isViable: true,
+		name: "Multi-Attack",
+		pp: 10,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		onModifyMove: function (move, pokemon) {
+			move.type = this.runEvent('Plate', pokemon, null, 'multiattack', 'Normal');
+		},
+		secondary: false,
+		target: "normal",
+		type: "Normal",
+	},
+	"tenmillionvoltthunderbolt": {
+		num: 681,
+		accuracy: true,
+		basePower: 195,
+		category: "Special",
+		desc: "Has a higher chance for a critical hit.",
+		shortDesc: "High critical hit ratio.",
+		id: "tenmillionvoltthunderbolt",
+		name: "10,000,000 Volt Thunderbolt",
+		pp: 1,
+		priority: 0,
+		flags: {},
+		critRatio: 3,
+		secondary: false,
+		target: "normal",
+		type: "Electric",
+	},
 };
+
+/*
+
+
+Sparkling Aria
+The user bursts into song, emitting many bubbles.\nAny Pokémon suffering from a burn will be healed\nby the touch of these bubbles.
+Water
+Special
+90 Power
+100% Accuracy
+10 PP
+All adjacent Pokémon
+Effect 385
+Flags 0x2148 //protect, reflectable, sound, authentic. It does not have the defrost effect (0x400), though ...
+
+Ice Hammer
+The user swings and hits with its strong, heavy fist.\nIt lowers the user’s Speed, however.
+Ice
+Physical
+100 Power
+90% Accuracy
+10 PP
+Adjacent Pokémon
+-1 Speed for the user
+Flags 0xC9 //contact, protect, punch, mirror
+
+Floral Healing
+The user restores the target’s HP by up to half of its\nmax HP. It restores more HP when the terrain\nis grass.
+Fairy
+Status
+10 PP
+Adjacent Pokémon
+Heals user for 50% of total HP
+Flags 0x9018 //flag_0x8000, healing, magiccoat, protect
+
+Strength Sap
+The user restores its HP by the same amount as the\ntarget’s Attack stat. It also lowers the target’s\nAttack stat.
+Grass
+Status
+100% Accuracy
+10 PP
+Adjacent Pokémon
+Effect 387
+Flags 0x1058 //protect, reflectable, mirror, healing
+
+Toxic Thread
+The user shoots poisonous threads to poison the\ntarget and lower the target’s Speed stat.
+Poison
+Status
+100% Accuracy
+20 PP
+Adjacent Pokémon
+Causes Poison
+-1 Speed for the target
+Flags 0x58 //protect, reflectable, mirror
+
+Laser Focus
+The user concentrates intensely. The attack on the\nnext turn always results in a critical hit.
+Normal
+Status
+30 PP
+Self
+Effect 390
+Flags 0x20 //snatch
+
+Gear Up
+The user engages its gears to raise the Attack and\nSp. Atk stats of ally Pokémon with the Plus or\nMinus Ability.
+Steel
+Status
+20 PP
+User's team
++1 Attack/+1 Special Attack for the target
+Flags 0x2020 //snatch, authentic
+
+Throat Chop
+The user attacks the target’s throat, and the\nresultant suffering prevents the target from using\nmoves that emit sound for two turns.
+Dark
+Physical
+80 Power
+100% Accuracy
+15 PP
+Adjacent Pokémon
+Causes Silence
+Flags 0x49 //contact, protect, mirror
+
+Pollen Puff
+The user attacks the enemy with a pollen puff that\nexplodes. If the target is an ally, it gives the ally a\npollen puff that restores its HP instead.
+Bug
+Special
+90 Power
+100% Accuracy
+15 PP
+Adjacent Pokémon
+Effect 393
+Flags 0x48 //protect, mirror
+
+Anchor Shot
+The user entangles the target with its anchor chain\nwhile attacking. The target becomes unable to flee.
+Steel
+Physical
+80 Power
+100% Accuracy
+20 PP
+Adjacent Pokémon
+Effect 384, similar to Spirit Shackle
+Flags 0x49 //contact, protect, mirror
+
+Psychic Terrain
+This protects Pokémon on the ground from priority\nmoves and powers up Psychic-type moves for\nfive turns.
+Psychic
+Status
+10 PP
+Entire field
+Effect 394
+Flags 0x4000 //nonsky, terrain: 'psychicterrain',
+
+Lunge
+The user makes a lunge at the target, attacking with\nfull force. This also lowers the target’s Attack stat.
+Bug
+Physical
+80 Power
+100% Accuracy
+15 PP
+Adjacent Pokémon
+-1 Attack for the target
+Flags 0x49 //contact, protect, mirror
+
+Fire Lash
+The user strikes the target with a burning lash. This\nalso lowers the target’s Defense stat.
+Fire
+Physical
+80 Power
+100% Accuracy
+15 PP
+Adjacent Pokémon
+-1 Defense for the target
+Flags 0x49 //contact, protect, mirror
+
+Power Trip
+The user boasts its strength and attacks the target.\nThe more the user’s stats are raised, the greater the\nmove’s power.
+Dark
+Physical
+20 Power
+100% Accuracy
+10 PP
+Adjacent Pokémon
+Effect 305, similar to Stored Power
+Flags 0x49 //contact, protect, mirror
+
+Burn Up
+To inflict massive damage, the user burns itself out.\nAfter using this move, the user will no longer be\nFire type.
+Fire
+Special
+130 Power
+100% Accuracy
+5 PP
+Adjacent Pokémon
+Effect 397
+Flags 0x448 //protect, mirror, defrost
+
+Speed Swap
+The user exchanges Speed stats with the target.
+Psychic
+Status
+10 PP
+Adjacent Pokémon
+Effect 398
+Flags 0xA048 //protect, mirror, authentic, flag_0x8000 
+
+Smart Strike
+The user stabs the target with a sharp horn. This\nattack never misses.
+Steel
+Physical
+70 Power
+10 PP
+Adjacent Pokémon
+Effect 17, similar to Swift
+Flags 0x49 //contact, protect, mirror
+
+Purify
+The user heals the target’s status condition. If the\nmove succeeds, it also restores the user’s own HP.
+Poison
+Status
+20 PP
+Adjacent Pokémon
+Effect 399
+Flags 0x1018 //protect, magic coat, healing
+
+Revelation Dance
+The user attacks the target by dancing very hard.\nThe user’s type determines the type of this move.
+Normal
+Special
+90 Power
+100% Accuracy
+15 PP
+Adjacent Pokémon
+Effect 400
+Flags 0x10048 //protect, mirror, dance
+
+Core Enforcer
+If the Pokémon the user has inflicted damage on\nhave already used their moves, this move eliminates\nthe effect of the target’s Ability.
+Dragon
+Special
+100 Power
+100% Accuracy
+10 PP
+All adjacent opponents
+Effect 401
+Flags 0x48 //protect, mirror
+Devastating Drake (140 Power)
+
+Trop Kick
+The user lands an intense kick of tropical origins on\nthe target. This also lowers the target’s Attack stat.
+Grass
+Physical
+70 Power
+100% Accuracy
+15 PP
+Adjacent Pokémon
+-1 Attack for the target
+Flags 0x49 //contact, protect, mirror
+Bloom Doom (140 Power)
+
+Instruct
+The user instructs the target to use the target’s last\nmove again.
+Psychic
+Status
+15 PP
+Adjacent Pokémon
+Effect 402
+Flags 0xA008 //protect, authentic, flag_0x8000
+
+Beak Blast
+The user first heats up its beak, and then it attacks\nthe target. Making direct contact with the Pokémon\nwhile it’s heating up its beak results in a burn.
+Flying
+Physical
+100 Power
+100% Accuracy
+15 PP
+-3 Priority
+Adjacent Pokémon
+Effect 403
+Flags 0x8 //protect
+
+Clanging Scales
+The user rubs the scales on its entire body and\nmakes a huge noise to attack the opposing Pokémon.\nThe user’s Defense stat goes down after the attack.
+Dragon
+Special
+110 Power
+100% Accuracy
+5 PP
+All adjacent opponents
+-1 Defense for the user
+Flags 0x2148 //protect, mirror, sound, authentic
+
+Dragon Hammer
+The user uses its body like a hammer to attack the\ntarget and inflict damage.
+Dragon
+Physical
+90 Power
+100% Accuracy
+15 PP
+Adjacent Pokémon
+Flags 0x49 //contact, protect, mirror
+
+Brutal Swing
+The user swings its body around violently to inflict\ndamage on everything in its vicinity.
+Dark
+Physical
+60 Power
+100% Accuracy
+20 PP
+All adjacent Pokémon
+Effect 405
+Flags 0x49 //contact, protect, mirror
+
+Aurora Veil
+This move reduces damage from physical and\nspecial moves for five turns. This can be used only\nin a hailstorm.
+Ice
+Status
+20 PP
+User's side of the field
+Effect 406 //charge, recharge, defrost
+Flags 0x20 //snatch
+
+Sinister Arrow Raid
+The user, Decidueye, creates countless arrows\nusing its Z-Power and shoots the target with\nfull force.
+Ghost
+Physical
+180 Power
+1 PP
+Adjacent Pokémon
+
+Malicious Moonsault
+The user, Incineroar, strengthens its body using\nits Z-Power and crashes into the target with\nfull force.
+Dark
+Physical
+180 Power
+1 PP
+Adjacent Pokémon
+Flags 0x1 //protect
+
+Oceanic Operetta
+The user, Primarina, summons a massive amount of \nwater using its Z-Power and attacks the target with \nfull force.
+Water
+Special
+195 Power
+1 PP
+Adjacent Pokémon
+
+Soul-Stealing 7-Star Strike
+After obtaining Z-Power, the user, Marshadow,\npunches and kicks the target consecutively\nwith full force.
+Ghost
+Physical
+195 Power
+1 PP
+Adjacent Pokémon
+Flags 0x1 //protect
+
+Stoked Sparksurfer
+After obtaining Z-Power, the user, Alolan Raichu,\nattacks the target with full force. This move leaves\nthe target with paralysis.
+Electric
+Special
+175 Power
+1 PP
+Adjacent Pokémon
+Causes Paralysis
+
+Pulverizing Pancake
+Z-Power brings out the true capabilities of the user,\nSnorlax. The Pokémon moves its enormous body\nenergetically and attacks the target with full force.
+Normal
+Physical
+210 Power
+1 PP
+Adjacent Pokémon
+Flags 0x1 //protect
+
+Genesis Supernova
+After obtaining Z-Power, the user, Mew, attacks\nthe target with full force. The terrain will be charged\nwith psychic energy.
+Psychic
+Special
+185 Power
+1 PP
+Adjacent Pokémon
+Effect 414 //defrost, recharge, reflectable
+
+Shell Trap
+The user sets a shell trap. If the user is hit by a\nphysical move, the trap will explode and inflict\ndamage on the opposing Pokémon.
+Fire
+Special
+150 Power
+100% Accuracy
+5 PP
+-3 Priority
+All adjacent opponents
+Effect 407
+Flags 0x8 //protect
+
+Fleur Cannon
+The user unleashes a strong beam. The attack’s\nrecoil harshly lowers the user’s Sp. Atk stat.
+Fairy
+Special
+130 Power
+90% Accuracy
+5 PP
+Adjacent Pokémon
+-2 Special Attack for the user
+Flags 0x48 //protect, mirror
+
+Prismatic Laser
+The user shoots powerful lasers using the power of\na prism. The user can’t move on the next turn.
+Psychic
+Special
+160 Power
+100% Accuracy
+10 PP
+Adjacent Pokémon
+Effect 80, similar to Hyper Beam
+Flags 0x4C //protect, recharge, mirror
+
+Spectral Thief
+The user hides in the target’s shadow, steals\nthe target’s stat boosts, and then attacks.
+Ghost
+Physical
+90 Power
+100% Accuracy
+10 PP
+Adjacent Pokémon
+Effect 409
+Flags 0x2049 //contact, protect, mirror, authentic
+
+*/

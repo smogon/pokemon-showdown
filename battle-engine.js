@@ -2259,7 +2259,7 @@ class Battle extends Tools.BattleDex {
 		return true;
 	}
 	suppressingAttackEvents() {
-		return (this.activePokemon && this.activePokemon.isActive && !this.activePokemon.ignoringAbility() && this.activePokemon.getAbility().stopAttackEvents);
+		return (this.activePokemon && this.activePokemon.isActive && ( this.activePokemon.volatiles['suppressAttackEvents'] || (!this.activePokemon.ignoringAbility() && this.activePokemon.getAbility().stopAttackEvents)));
 	}
 	suppressingWeather() {
 		let pokemon;
