@@ -116,6 +116,15 @@ class RoomSettings {
 			return '<button class="button" name="send" value="/roomsetting tournament enable %">%</button> <button class="button" name="send" value="/roomsetting tournament enable @">@</button> <button ' + DISABLED + '>#</button>';
 		}
 	}
+	blacklist() {
+		if (!this.user.can('editroom', null, this.room)) return "<button " + DISABLED + ">" + (this.room.blacklistPermission === '@' ? '@' : '#') + "</button>";
+
+		if (this.room.blacklistPermission === '@') {
+			return '<button ' + DISABLED + '>@</button> <button class="button" name="send" value="/roomsettings blacklistpermission #">#</button>';
+		} else {
+			return '<button class="button" name="send" value="/roomsettings blacklistpermission @">@</button> <button ' + DISABLED + '>#</button>';
+		}
+	}
 	generateDisplay(user, room, connection) {
 		let output = '<div class="infobox">Room Settings for ' + Chat.escapeHTML(this.room.title) + '<br />';
 		output += "<b>Modchat:</b> <br />" + this.modchat() + "<br />";
@@ -124,6 +133,7 @@ class RoomSettings {
 		output += "<b>Caps filter:</b> <br />" + this.capitals() + "<br />";
 		output += "<b>Slowchat:</b> <br />" + this.slowchat() + "<br />";
 		output += "<b>Tournaments:</b> <br />" + this.tourStatus() + "<br />";
+		output += "<b>Blacklist:</b> <br />" + this.blacklist() + "<br />";
 		output += "</div>";
 
 		this.user.sendTo(this.room, '|uhtml' + (this.sameCommand ? '' : 'change') + '|roomsettings|' + output);
@@ -370,6 +380,30 @@ exports.commands = {
 		}
 	},
 	capsfilterhelp: ["/capsfilter [on/off] - Toggles filtering messages in the room for EXCESSIVE CAPS. Requires # & ~"],
+
+	blacklistpermission: function (target, room, user) {
+		if (!target) return this.parse('/help blacklistpermission');
+		if (!this.canTalk()) return;
+		if (!this.can('declare', null, room)) return false;
+
+		if (target === '@') {
+			if (room.blacklistPermission === '@') return this.errorReply("Moderators alredy have permission to use blacklist commands in this room.");
+			room.blacklistPermission = '@';
+		} else if (target === '#') {
+			if (room.blacklistPermission === true) return this.errorReply();
+			room.blacklistPermission = true;
+		} else {
+			return this.parse('/help blacklistpermission');
+		}
+		const blacklistSetting = (room.blacklistPermission === true ? '#' : '@');
+		this.privateModCommand(`(${user.name} has set the blacklist permission to ${blacklistSetting} and above.)`);
+
+		if (room.chatRoomData) {
+			room.chatRoomData.blacklistPermission = room.blacklistPermission;
+			Rooms.global.writeChatRoomData();
+		}
+	},
+	blacklistpermissionhelp: ["/blacklistpermission [@/#] - Toggles allowing moderators or room owners to use blacklist commands. Requires: # & ~"],
 
 	banwords: 'banword',
 	banword: {
