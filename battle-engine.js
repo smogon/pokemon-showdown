@@ -897,7 +897,7 @@ class BattlePokemon {
 			return false;
 		}
 
-		if (!ignoreImmunities && status.id) {
+		if (!ignoreImmunities && status.id && !(source && source.hasAbility('corrosion') && status.id in {'tox': 1, 'psn': 1})) {
 			// the game currently never ignores immunities
 			if (!this.runStatusImmunity(status.id === 'tox' ? 'psn' : status.id)) {
 				this.battle.debug('immune to status');

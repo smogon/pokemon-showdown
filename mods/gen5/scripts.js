@@ -1,6 +1,7 @@
 'use strict';
 
 exports.BattleScripts = {
+	inherit: 'gen6',
 	gen: 5,
 	randomSet: function (template, slot, teamDetails) {
 		if (slot === undefined) slot = 1;
