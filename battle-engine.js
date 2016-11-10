@@ -1219,6 +1219,9 @@ class BattlePokemon {
 		if ('roost' in this.volatiles) {
 			types = types.filter(type => type !== 'Flying');
 		}
+		if ('burnup' in this.volatiles) {
+			types = types.filter(type => type !== 'Fire');
+		}
 		if (types.length) return types;
 		return [this.battle.gen >= 5 ? 'Normal' : '???'];
 	}
@@ -2259,7 +2262,7 @@ class Battle extends Tools.BattleDex {
 		return true;
 	}
 	suppressingAttackEvents() {
-		return (this.activePokemon && this.activePokemon.isActive && !this.activePokemon.ignoringAbility() && this.activePokemon.getAbility().stopAttackEvents);
+		return (this.activePokemon && this.activePokemon.isActive && (!this.activePokemon.ignoringAbility() && this.activePokemon.getAbility().stopAttackEvents) || (this.activeMove && this.activeMove.ignoreAbility));
 	}
 	suppressingWeather() {
 		let pokemon;
