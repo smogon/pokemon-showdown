@@ -66,7 +66,7 @@ exports.Formats = [
 		section: "ORAS Singles",
 
 		ruleset: ['OU'],
-		banlist: ['OU', 'BL', 'Drizzle', 'Drought'],
+		banlist: ['OU', 'BL', 'Drizzle', 'Drought', 'Baton Pass'],
 	},
 	{
 		name: "RU",
@@ -77,8 +77,8 @@ exports.Formats = [
 		],
 		section: "ORAS Singles",
 
-		ruleset: ['UU'],
-		banlist: ['UU', 'BL2'],
+		ruleset: ['OU'],
+		banlist: ['OU', 'BL', 'UU', 'BL2', 'Drizzle', 'Drought'],
 	},
 	{
 		name: "NU",
