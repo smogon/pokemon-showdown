@@ -3666,8 +3666,8 @@ exports.BattleAbilities = {
 		num: 163,
 	},
 	"unaware": {
-		desc: "This Pokemon ignores other Pokemon's Defense, Special Defense, and evasiveness stat stages when dealing damage.",
-		shortDesc: "This Pokemon ignores other Pokemon's stat stages when dealing damage.",
+		desc: "This Pokemon ignores other Pokemon's Attack, Special Attack, and accuracy stat stages when taking damage, and ignores other Pokemon's Defense, Special Defense, and evasiveness stat stages when dealing damage.",
+		shortDesc: "This Pokemon ignores other Pokemon's stat stages when taking or doing damage.",
 		id: "unaware",
 		name: "Unaware",
 		onAnyModifyBoost: function (boosts, target) {
@@ -3677,6 +3677,11 @@ exports.BattleAbilities = {
 				boosts['def'] = 0;
 				boosts['spd'] = 0;
 				boosts['evasion'] = 0;
+			}
+			if (target === this.activePokemon && source === this.activeTarget) {
+				boosts['atk'] = 0;
+				boosts['spa'] = 0;
+				boosts['accuracy'] = 0;
 			}
 		},
 		rating: 3,

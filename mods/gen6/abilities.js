@@ -48,26 +48,6 @@ exports.BattleAbilities = {
 			},
 		},
 	},
-	"unaware": {
-		inherit: true,
-		desc: "This Pokemon ignores other Pokemon's Attack, Special Attack, and accuracy stat stages when taking damage, and ignores other Pokemon's Defense, Special Defense, and evasiveness stat stages when dealing damage.",
-		shortDesc: "This Pokemon ignores other Pokemon's stat stages when taking or doing damage.",
-		onAnyModifyBoost: function (boosts, target) {
-			let source = this.effectData.target;
-			if (source === target) return;
-			if (source === this.activePokemon && target === this.activeTarget) {
-				boosts['def'] = 0;
-				boosts['spd'] = 0;
-				boosts['evasion'] = 0;
-			}
-			if (target === this.activePokemon && source === this.activeTarget) {
-				boosts['atk'] = 0;
-				boosts['spa'] = 0;
-				boosts['accuracy'] = 0;
-			}
-		},
-		rating: 3,
-	},
 	"weakarmor": {
 		desc: "If a physical attack hits this Pokemon, its Defense is lowered by 1 stage and its Speed is raised by 1 stage.",
 		shortDesc: "If a physical attack hits this Pokemon, Defense is lowered by 1, Speed is raised by 1.",
