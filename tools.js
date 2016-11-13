@@ -347,7 +347,9 @@ class BattleDex {
 			if (!template.tier && template.baseSpecies !== template.species) template.tier = this.data.FormatsData[toId(template.baseSpecies)].tier;
 			if (!template.tier) template.tier = 'Illegal';
 			if (!template.gen) {
-				if (template.forme && template.forme in {'Mega':1, 'Mega-X':1, 'Mega-Y':1}) {
+				if (template.num >= 722) {
+					template.gen = 7;
+				} else if (template.forme && template.forme in {'Mega':1, 'Mega-X':1, 'Mega-Y':1}) {
 					template.gen = 6;
 					template.isMega = true;
 					template.battleOnly = true;
@@ -412,7 +414,9 @@ class BattleDex {
 			if (!move.effectType) move.effectType = 'Move';
 			if (!move.secondaries && move.secondary) move.secondaries = [move.secondary];
 			if (!move.gen) {
-				if (move.num >= 560) {
+				if (move.num >= 622) {
+					move.gen = 7;
+				} else if (move.num >= 560) {
 					move.gen = 6;
 				} else if (move.num >= 468) {
 					move.gen = 5;
@@ -555,7 +559,9 @@ class BattleDex {
 			if (item.onDrive) item.fling = {basePower: 70};
 			if (item.megaStone) item.fling = {basePower: 80};
 			if (!item.gen) {
-				if (item.num >= 577) {
+				if (item.num >= 689) {
+					item.gen = 7;
+				} else if (item.num >= 577) {
 					item.gen = 6;
 				} else if (item.num >= 537) {
 					item.gen = 5;
@@ -591,7 +597,9 @@ class BattleDex {
 			if (!ability.category) ability.category = 'Effect';
 			if (!ability.effectType) ability.effectType = 'Ability';
 			if (!ability.gen) {
-				if (ability.num >= 165) {
+				if (ability.num >= 192) {
+					ability.gen = 7;
+				} else if (ability.num >= 165) {
 					ability.gen = 6;
 				} else if (ability.num >= 124) {
 					ability.gen = 5;
