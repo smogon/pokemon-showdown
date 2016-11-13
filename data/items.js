@@ -4255,21 +4255,15 @@ exports.BattleItems = {
 		fling: {
 			basePower: 30,
 		},
-		onModifySpAPriority: 1,
-		onModifySpA: function (spa, pokemon) {
-			if (pokemon.baseTemplate.num === 380 || pokemon.baseTemplate.num === 381) {
-				return this.chainModify(1.5);
-			}
-		},
-		onModifySpDPriority: 2,
-		onModifySpD: function (spd, pokemon) {
-			if (pokemon.baseTemplate.num === 380 || pokemon.baseTemplate.num === 381) {
-				return this.chainModify(1.5);
+		onBasePowerPriority: 6,
+		onBasePower: function (basePower, user, target, move) {
+			if (move && (user.baseTemplate.num === 380 || user.baseTemplate.num === 381) && (move.type === 'Psychic' || move.type === 'Dragon')) {
+				return this.chainModify([0x1333, 0x1000]);
 			}
 		},
 		num: 225,
 		gen: 3,
-		desc: "If holder is a Latias or a Latios, its Sp. Atk and Sp. Def are 1.5x.",
+		desc: "If holder's a Latias/Latios, its Dragon- and Psychic-type moves have 1.2x power.",
 	},
 	"spelltag": {
 		id: "spelltag",
