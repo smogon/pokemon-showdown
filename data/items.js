@@ -62,6 +62,22 @@ exports.BattleItems = {
 		gen: 4,
 		desc: "If holder is a Dialga, its Steel- and Dragon-type attacks have 1.2x power.",
 	},
+	"adrenalineorb": {
+		id: "adrenalineorb",
+		name: "Adrenaline Orb",
+		spritenum: 660,
+		fling: {
+			basePower: 30,
+		},
+		onAfterBoost: function (boost, target, source, effect) {
+			if (effect.id === 'intimidate' && target.useItem()) {
+				this.boost({spe: 1});
+			}
+		},
+		num: 846,
+		gen: 7,
+		desc: "Raises holder's Speed by 1 stage if it gets affected by Intimidate. Single use.",
+	},
 	"aerodactylite": {
 		id: "aerodactylite",
 		name: "Aerodactylite",
@@ -163,6 +179,15 @@ exports.BattleItems = {
 		num: 679,
 		gen: 6,
 		desc: "If holder is an Alakazam, this item allows it to Mega Evolve in battle.",
+	},
+	"aloraichiumz": {
+		id: "aloraichiumz",
+		name: "Aloraichium Z",
+		spritenum: 655,
+		onTakeItem: false,
+		num: 803,
+		gen: 7,
+		desc: "If holder is an Alolan Raichu with Thunderbolt, it can use Stoked Sparksurfer.",
 	},
 	"altarianite": {
 		id: "altarianite",
@@ -320,6 +345,14 @@ exports.BattleItems = {
 		num: 668,
 		gen: 6,
 		desc: "If holder is a Banette, this item allows it to Mega Evolve in battle.",
+	},
+	"beastball": {
+		id: "beastball",
+		name: "Beast Ball",
+		spritenum: 661,
+		num: 851,
+		gen: 7,
+		desc: "A special Poke Ball designed to catch Ultra Beasts.",
 	},
 	"beedrillite": {
 		id: "beedrillite",
@@ -559,6 +592,31 @@ exports.BattleItems = {
 		num: 558,
 		gen: 5,
 		desc: "Holder's first successful Bug-type attack will have 1.3x power. Single use.",
+	},
+	"bugmemory": {
+		id: "bugmemory",
+		name: "Bug Memory",
+		spritenum: 673,
+		onMemory: 'Bug',
+		onTakeItem: function (item, pokemon, source) {
+			if ((source && source.baseTemplate.num === 773) || pokemon.baseTemplate.num === 773) {
+				return false;
+			}
+			return true;
+		},
+		forcedForme: "Silvally-Bug",
+		num: 909,
+		gen: 7,
+		desc: "Holder's Multi-Attack is Bug type.",
+	},
+	"buginiumz": {
+		id: "buginiumz",
+		name: "Buginium Z",
+		spritenum: 642,
+		onTakeItem: false,
+		num: 787,
+		gen: 7,
+		desc: "If holder has a Bug move, this item allows it to use a Bug Z-Move.",
 	},
 	"burndrive": {
 		id: "burndrive",
@@ -1000,6 +1058,40 @@ exports.BattleItems = {
 		gen: 5,
 		desc: "Holder's first successful Dark-type attack will have 1.3x power. Single use.",
 	},
+	"darkmemory": {
+		id: "darkmemory",
+		name: "Dark Memory",
+		spritenum: 683,
+		onMemory: 'Dark',
+		onTakeItem: function (item, pokemon, source) {
+			if ((source && source.baseTemplate.num === 773) || pokemon.baseTemplate.num === 773) {
+				return false;
+			}
+			return true;
+		},
+		forcedForme: "Silvally-Dark",
+		num: 919,
+		gen: 7,
+		desc: "Holder's Multi-Attack is Dark type.",
+	},
+	"darkiniumz": {
+		id: "darkiniumz",
+		name: "Darkinium Z",
+		spritenum: 646,
+		onTakeItem: false,
+		num: 791,
+		gen: 7,
+		desc: "If holder has a Dark move, this item allows it to use a Dark Z-Move.",
+	},
+	"decidiumz": {
+		id: "decidiumz",
+		name: "Decidium Z",
+		spritenum: 650,
+		onTakeItem: false,
+		num: 798,
+		gen: 7,
+		desc: "If holder is a Decidueye with Spirit Shackle, it can use Sinister Arrow Raid.",
+	},
 	"deepseascale": {
 		id: "deepseascale",
 		name: "DeepSeaScale",
@@ -1158,6 +1250,31 @@ exports.BattleItems = {
 		gen: 5,
 		desc: "Holder's first successful Dragon-type attack will have 1.3x power. Single use.",
 	},
+	"dragonmemory": {
+		id: "dragonmemory",
+		name: "Dragon Memory",
+		spritenum: 682,
+		onMemory: 'Dragon',
+		onTakeItem: function (item, pokemon, source) {
+			if ((source && source.baseTemplate.num === 773) || pokemon.baseTemplate.num === 773) {
+				return false;
+			}
+			return true;
+		},
+		forcedForme: "Silvally-Dragon",
+		num: 918,
+		gen: 7,
+		desc: "Holder's Multi-Attack is Dragon type.",
+	},
+	"dragoniumz": {
+		id: "dragoniumz",
+		name: "Dragonium Z",
+		spritenum: 645,
+		onTakeItem: false,
+		num: 790,
+		gen: 7,
+		desc: "If holder has a Dragon move, this item allows it to use a Dragon Z-Move.",
+	},
 	"dreadplate": {
 		id: "dreadplate",
 		name: "Dread Plate",
@@ -1232,6 +1349,15 @@ exports.BattleItems = {
 		gen: 4,
 		desc: "Holder's Ground-type attacks have 1.2x power. Judgment is Ground type.",
 	},
+	"eeviumz": {
+		id: "eeviumz",
+		name: "Eevium Z",
+		spritenum: 657,
+		onTakeItem: false,
+		num: 805,
+		gen: 7,
+		desc: "If holder is an Eevee with Last Resort, it can use Extreme Evoboost.",
+	},
 	"ejectbutton": {
 		id: "ejectbutton",
 		name: "Eject Button",
@@ -1281,6 +1407,47 @@ exports.BattleItems = {
 		num: 550,
 		gen: 5,
 		desc: "Holder's first successful Electric-type attack will have 1.3x power. Single use.",
+	},
+	"electricmemory": {
+		id: "electricmemory",
+		name: "Electric Memory",
+		spritenum: 679,
+		onMemory: 'Electric',
+		onTakeItem: function (item, pokemon, source) {
+			if ((source && source.baseTemplate.num === 773) || pokemon.baseTemplate.num === 773) {
+				return false;
+			}
+			return true;
+		},
+		forcedForme: "Silvally-Electric",
+		num: 915,
+		gen: 7,
+		desc: "Holder's Multi-Attack is Electric type.",
+	},
+	"electricseed": {
+		id: "electricseed",
+		name: "Electric Seed",
+		spritenum: 664,
+		fling: {
+			basePower: 10,
+		},
+		onUpdate: function (pokemon) {
+			if (this.isTerrain('electricterrain') && pokemon.useItem()) {
+				this.boost({def: 1});
+			}
+		},
+		num: 881,
+		gen: 7,
+		desc: "If the terrain is Electric Terrain, raises holder's Defense by 1 stage. Single use.",
+	},
+	"electriumz": {
+		id: "electriumz",
+		name: "Electrium Z",
+		spritenum: 634,
+		onTakeItem: false,
+		num: 779,
+		gen: 7,
+		desc: "If holder has an Electric move, this item allows it to use an Electric Z-Move.",
 	},
 	"energypowder": {
 		id: "energypowder",
@@ -1356,6 +1523,15 @@ exports.BattleItems = {
 		gen: 4,
 		desc: "Holder's attacks that are super effective against the target do 1.2x damage.",
 	},
+	"fairiumz": {
+		id: "fairiumz",
+		name: "Fairium Z",
+		spritenum: 648,
+		onTakeItem: false,
+		num: 793,
+		gen: 7,
+		desc: "If holder has a Fairy move, this item allows it to use a Fairy Z-Move.",
+	},
 	"fairygem": {
 		id: "fairygem",
 		name: "Fairy Gem",
@@ -1374,6 +1550,22 @@ exports.BattleItems = {
 		num: 715,
 		gen: 6,
 		desc: "Holder's first successful Fairy-type attack will have 1.3x power. Single use.",
+	},
+	"fairymemory": {
+		id: "fairymemory",
+		name: "Fairy Memory",
+		spritenum: 684,
+		onMemory: 'Fairy',
+		onTakeItem: function (item, pokemon, source) {
+			if ((source && source.baseTemplate.num === 773) || pokemon.baseTemplate.num === 773) {
+				return false;
+			}
+			return true;
+		},
+		forcedForme: "Silvally-Fairy",
+		num: 920,
+		gen: 7,
+		desc: "Holder's Multi-Attack is Fairy type.",
 	},
 	"fastball": {
 		id: "fastball",
@@ -1401,6 +1593,31 @@ exports.BattleItems = {
 		num: 553,
 		gen: 5,
 		desc: "Holder's first successful Fighting-type attack will have 1.3x power. Single use.",
+	},
+	"fightingmemory": {
+		id: "fightingmemory",
+		name: "Fighting Memory",
+		spritenum: 668,
+		onMemory: 'Fighting',
+		onTakeItem: function (item, pokemon, source) {
+			if ((source && source.baseTemplate.num === 773) || pokemon.baseTemplate.num === 773) {
+				return false;
+			}
+			return true;
+		},
+		forcedForme: "Silvally-Fighting",
+		num: 904,
+		gen: 7,
+		desc: "Holder's Multi-Attack is Fighting type.",
+	},
+	"fightiniumz": {
+		id: "fightiniumz",
+		name: "Fightinium Z",
+		spritenum: 637,
+		onTakeItem: false,
+		num: 782,
+		gen: 7,
+		desc: "If holder has a Fighting move, this item allows it to use a Fighting Z-Move.",
 	},
 	"figyberry": {
 		id: "figyberry",
@@ -1447,6 +1664,31 @@ exports.BattleItems = {
 		num: 548,
 		gen: 5,
 		desc: "Holder's first successful Fire-type attack will have 1.3x power. Single use.",
+	},
+	"firememory": {
+		id: "firememory",
+		name: "Fire Memory",
+		spritenum: 676,
+		onMemory: 'Fire',
+		onTakeItem: function (item, pokemon, source) {
+			if ((source && source.baseTemplate.num === 773) || pokemon.baseTemplate.num === 773) {
+				return false;
+			}
+			return true;
+		},
+		forcedForme: "Silvally-Fire",
+		num: 912,
+		gen: 7,
+		desc: "Holder's Multi-Attack is Fire type.",
+	},
+	"firiumz": {
+		id: "firiumz",
+		name: "Firium Z",
+		spritenum: 632,
+		onTakeItem: false,
+		num: 777,
+		gen: 7,
+		desc: "If holder has a Fire move, this item allows it to use a Fire Z-Move.",
 	},
 	"fistplate": {
 		id: "fistplate",
@@ -1541,6 +1783,31 @@ exports.BattleItems = {
 		num: 556,
 		gen: 5,
 		desc: "Holder's first successful Flying-type attack will have 1.3x power. Single use.",
+	},
+	"flyingmemory": {
+		id: "flyingmemory",
+		name: "Flying Memory",
+		spritenum: 669,
+		onMemory: 'Flying',
+		onTakeItem: function (item, pokemon, source) {
+			if ((source && source.baseTemplate.num === 773) || pokemon.baseTemplate.num === 773) {
+				return false;
+			}
+			return true;
+		},
+		forcedForme: "Silvally-Flying",
+		num: 905,
+		gen: 7,
+		desc: "Holder's Multi-Attack is Flying type.",
+	},
+	"flyiniumz": {
+		id: "flyiniumz",
+		name: "Flyinium Z",
+		spritenum: 640,
+		onTakeItem: false,
+		num: 785,
+		gen: 7,
+		desc: "If holder has a Flying move, this item allows it to use a Flying Z-Move.",
 	},
 	"focusband": {
 		id: "focusband",
@@ -1695,6 +1962,31 @@ exports.BattleItems = {
 		gen: 5,
 		desc: "Holder's first successful Ghost-type attack will have 1.3x power. Single use.",
 	},
+	"ghostmemory": {
+		id: "ghostmemory",
+		name: "Ghost Memory",
+		spritenum: 674,
+		onMemory: 'Ghost',
+		onTakeItem: function (item, pokemon, source) {
+			if ((source && source.baseTemplate.num === 773) || pokemon.baseTemplate.num === 773) {
+				return false;
+			}
+			return true;
+		},
+		forcedForme: "Silvally-Ghost",
+		num: 910,
+		gen: 7,
+		desc: "Holder's Multi-Attack is Ghost type.",
+	},
+	"ghostiumz": {
+		id: "ghostiumz",
+		name: "Ghostium Z",
+		spritenum: 644,
+		onTakeItem: false,
+		num: 789,
+		gen: 7,
+		desc: "If holder has a Ghost move, this item allows it to use a Ghost Z-Move.",
+	},
 	"glalitite": {
 		id: "glalitite",
 		name: "Glalitite",
@@ -1727,6 +2019,47 @@ exports.BattleItems = {
 		num: 551,
 		gen: 5,
 		desc: "Holder's first successful Grass-type attack will have 1.3x power. Single use.",
+	},
+	"grassmemory": {
+		id: "grassmemory",
+		name: "Grass Memory",
+		spritenum: 678,
+		onMemory: 'Grass',
+		onTakeItem: function (item, pokemon, source) {
+			if ((source && source.baseTemplate.num === 773) || pokemon.baseTemplate.num === 773) {
+				return false;
+			}
+			return true;
+		},
+		forcedForme: "Silvally-Grass",
+		num: 914,
+		gen: 7,
+		desc: "Holder's Multi-Attack is Grass type.",
+	},
+	"grassiumz": {
+		id: "grassiumz",
+		name: "Grassium Z",
+		spritenum: 635,
+		onTakeItem: false,
+		num: 780,
+		gen: 7,
+		desc: "If holder has a Grass move, this item allows it to use a Grass Z-Move.",
+	},
+	"grassyseed": {
+		id: "grassyseed",
+		name: "Grassy Seed",
+		spritenum: 667,
+		fling: {
+			basePower: 10,
+		},
+		onUpdate: function (pokemon) {
+			if (this.isTerrain('grassyterrain') && pokemon.useItem()) {
+				this.boost({def: 1});
+			}
+		},
+		num: 884,
+		gen: 7,
+		desc: "If the terrain is Grassy Terrain, raises holder's Defense by 1 stage. Single use.",
 	},
 	"greatball": {
 		id: "greatball",
@@ -1804,6 +2137,31 @@ exports.BattleItems = {
 		num: 555,
 		gen: 5,
 		desc: "Holder's first successful Ground-type attack will have 1.3x power. Single use.",
+	},
+	"groundmemory": {
+		id: "groundmemory",
+		name: "Ground Memory",
+		spritenum: 671,
+		onMemory: 'Ground',
+		onTakeItem: function (item, pokemon, source) {
+			if ((source && source.baseTemplate.num === 773) || pokemon.baseTemplate.num === 773) {
+				return false;
+			}
+			return true;
+		},
+		forcedForme: "Silvally-Ground",
+		num: 907,
+		gen: 7,
+		desc: "Holder's Multi-Attack is Ground type.",
+	},
+	"groundiumz": {
+		id: "groundiumz",
+		name: "Groundium Z",
+		spritenum: 639,
+		onTakeItem: false,
+		num: 784,
+		gen: 7,
+		desc: "If holder has a Ground move, this item allows it to use a Ground Z-Move.",
 	},
 	"gyaradosite": {
 		id: "gyaradosite",
@@ -1985,6 +2343,22 @@ exports.BattleItems = {
 		gen: 5,
 		desc: "Holder's first successful Ice-type attack will have 1.3x power. Single use.",
 	},
+	"icememory": {
+		id: "icememory",
+		name: "Ice Memory",
+		spritenum: 681,
+		onMemory: 'Ice',
+		onTakeItem: function (item, pokemon, source) {
+			if ((source && source.baseTemplate.num === 773) || pokemon.baseTemplate.num === 773) {
+				return false;
+			}
+			return true;
+		},
+		forcedForme: "Silvally-Ice",
+		num: 917,
+		gen: 7,
+		desc: "Holder's Multi-Attack is Ice type.",
+	},
 	"icicleplate": {
 		id: "icicleplate",
 		name: "Icicle Plate",
@@ -2007,6 +2381,15 @@ exports.BattleItems = {
 		gen: 4,
 		desc: "Holder's Ice-type attacks have 1.2x power. Judgment is Ice type.",
 	},
+	"iciumz": {
+		id: "iciumz",
+		name: "Icium Z",
+		spritenum: 636,
+		onTakeItem: false,
+		num: 781,
+		gen: 7,
+		desc: "If holder has an Ice move, this item allows it to use an Ice Z-Move.",
+	},
 	"icyrock": {
 		id: "icyrock",
 		name: "Icy Rock",
@@ -2017,6 +2400,15 @@ exports.BattleItems = {
 		num: 282,
 		gen: 4,
 		desc: "Holder's use of Hail lasts 8 turns instead of 5.",
+	},
+	"inciniumz": {
+		id: "inciniumz",
+		name: "Incinium Z",
+		spritenum: 651,
+		onTakeItem: false,
+		num: 799,
+		gen: 7,
+		desc: "If holder is an Incineroar with Darkest Lariat, it can use Malicious Moonsault.",
 	},
 	"insectplate": {
 		id: "insectplate",
@@ -2695,6 +3087,15 @@ exports.BattleItems = {
 		gen: 6,
 		desc: "Raises holder's Sp. Def by 1 stage after it is hit by a special attack. Single use.",
 	},
+	"marshadiumz": {
+		id: "marshadiumz",
+		name: "Marshadium Z",
+		spritenum: 654,
+		onTakeItem: false,
+		num: 802,
+		gen: 7,
+		desc: "If holder is Marshadow with Spectral Thief, it can use Soul-Stealing 7-Star Strike.",
+	},
 	"masterball": {
 		id: "masterball",
 		name: "Master Ball",
@@ -2878,6 +3279,15 @@ exports.BattleItems = {
 		gen: 4,
 		desc: "Damage of moves used on consecutive turns is increased. Max 2x after 5 turns.",
 	},
+	"mewniumz": {
+		id: "mewniumz",
+		name: "Mewnium Z",
+		spritenum: 658,
+		onTakeItem: false,
+		num: 806,
+		gen: 7,
+		desc: "If holder is a Mew with Psychic, it can use Genesis Supernova.",
+	},
 	"mewtwonitex": {
 		id: "mewtwonitex",
 		name: "Mewtwonite X",
@@ -2975,6 +3385,22 @@ exports.BattleItems = {
 		num: 239,
 		gen: 2,
 		desc: "Holder's Grass-type attacks have 1.2x power.",
+	},
+	"mistyseed": {
+		id: "mistyseed",
+		name: "Misty Seed",
+		spritenum: 666,
+		fling: {
+			basePower: 10,
+		},
+		onUpdate: function (pokemon) {
+			if (this.isTerrain('mistyterrain') && pokemon.useItem()) {
+				this.boost({spd: 1});
+			}
+		},
+		num: 883,
+		gen: 7,
+		desc: "If the terrain is Misty Terrain, raises holder's Sp. Def by 1 stage. Single use.",
 	},
 	"moonball": {
 		id: "moonball",
@@ -3096,6 +3522,15 @@ exports.BattleItems = {
 		num: 564,
 		gen: 5,
 		desc: "Holder's first successful Normal-type attack will have 1.3x power. Single use.",
+	},
+	"normaliumz": {
+		id: "normaliumz",
+		name: "Normalium Z",
+		spritenum: 631,
+		onTakeItem: false,
+		num: 776,
+		gen: 7,
+		desc: "If holder has a Normal move, this item allows it to use a Normal Z-Move.",
 	},
 	"occaberry": {
 		id: "occaberry",
@@ -3319,6 +3754,24 @@ exports.BattleItems = {
 		gen: 6,
 		desc: "If holder is a Pidgeot, this item allows it to Mega Evolve in battle.",
 	},
+	"pikaniumz": {
+		id: "pikaniumz",
+		name: "Pikanium Z",
+		spritenum: 649,
+		onTakeItem: false,
+		num: 794,
+		gen: 7,
+		desc: "If holder is a Pikachu with Volt Tackle, it can use Catastropika.",
+	},
+	"pikashuniumz": {
+		id: "pikashuniumz",
+		name: "Pikashunium Z",
+		spritenum: 659,
+		onTakeItem: false,
+		num: 836,
+		gen: 7,
+		desc: "If holder is cap Pikachu with Thunderbolt, it can use 10,000,000 Volt Thunderbolt.",
+	},
 	"pinapberry": {
 		id: "pinapberry",
 		name: "Pinap Berry",
@@ -3417,6 +3870,31 @@ exports.BattleItems = {
 		gen: 5,
 		desc: "Holder's first successful Poison-type attack will have 1.3x power. Single use.",
 	},
+	"poisonmemory": {
+		id: "poisonmemory",
+		name: "Poison Memory",
+		spritenum: 670,
+		onMemory: 'Poison',
+		onTakeItem: function (item, pokemon, source) {
+			if ((source && source.baseTemplate.num === 773) || pokemon.baseTemplate.num === 773) {
+				return false;
+			}
+			return true;
+		},
+		forcedForme: "Silvally-Poison",
+		num: 906,
+		gen: 7,
+		desc: "Holder's Multi-Attack is Poison type.",
+	},
+	"poisoniumz": {
+		id: "poisoniumz",
+		name: "Poisonium Z",
+		spritenum: 638,
+		onTakeItem: false,
+		num: 783,
+		gen: 7,
+		desc: "If holder has a Poison move, this item allows it to use a Poison Z-Move.",
+	},
 	"pokeball": {
 		id: "pokeball",
 		name: "Poke Ball",
@@ -3464,6 +3942,29 @@ exports.BattleItems = {
 		gen: 3,
 		desc: "A rare Poke Ball that has been crafted to commemorate an event.",
 	},
+	"primariumz": {
+		id: "primariumz",
+		name: "Primarium Z",
+		spritenum: 652,
+		onTakeItem: false,
+		num: 800,
+		gen: 7,
+		desc: "If holder is a Primarina with Sparkling Aria, it can use Oceanic Operetta.",
+	},
+	"protectivepads": {
+		id: "protectivepads",
+		name: "Protective Pads",
+		spritenum: 663,
+		fling: {
+			basePower: 30,
+		},
+		onModifyMove: function (move) {
+			delete move.flags['contact'];
+		},
+		num: 880,
+		gen: 7,
+		desc: "Holder's attacks do not make contact with the target.",
+	},
 	"psychicgem": {
 		id: "psychicgem",
 		name: "Psychic Gem",
@@ -3482,6 +3983,47 @@ exports.BattleItems = {
 		num: 557,
 		gen: 5,
 		desc: "Holder's first successful Psychic-type attack will have 1.3x power. Single use.",
+	},
+	"psychicmemory": {
+		id: "psychicmemory",
+		name: "Psychic Memory",
+		spritenum: 680,
+		onMemory: 'Psychic',
+		onTakeItem: function (item, pokemon, source) {
+			if ((source && source.baseTemplate.num === 773) || pokemon.baseTemplate.num === 773) {
+				return false;
+			}
+			return true;
+		},
+		forcedForme: "Silvally-Psychic",
+		num: 916,
+		gen: 7,
+		desc: "Holder's Multi-Attack is Psychic type.",
+	},
+	"psychicseed": {
+		id: "psychicseed",
+		name: "Psychic Seed",
+		spritenum: 665,
+		fling: {
+			basePower: 10,
+		},
+		onUpdate: function (pokemon) {
+			if (this.isTerrain('psychicterrain') && pokemon.useItem()) {
+				this.boost({spd: 1});
+			}
+		},
+		num: 882,
+		gen: 7,
+		desc: "If the terrain is Psychic Terrain, raises holder's Sp. Def by 1 stage. Single use.",
+	},
+	"psychiumz": {
+		id: "psychiumz",
+		name: "Psychium Z",
+		spritenum: 641,
+		onTakeItem: false,
+		num: 786,
+		gen: 7,
+		desc: "If holder has a Psychic move, this item allows it to use a Psychic Z-Move.",
 	},
 	"qualotberry": {
 		id: "qualotberry",
@@ -3771,6 +4313,31 @@ exports.BattleItems = {
 		num: 315,
 		gen: 4,
 		desc: "Holder's Rock-type attacks have 1.2x power.",
+	},
+	"rockmemory": {
+		id: "rockmemory",
+		name: "Rock Memory",
+		spritenum: 672,
+		onMemory: 'Rock',
+		onTakeItem: function (item, pokemon, source) {
+			if ((source && source.baseTemplate.num === 773) || pokemon.baseTemplate.num === 773) {
+				return false;
+			}
+			return true;
+		},
+		forcedForme: "Silvally-Rock",
+		num: 908,
+		gen: 7,
+		desc: "Holder's Multi-Attack is Rock type.",
+	},
+	"rockiumz": {
+		id: "rockiumz",
+		name: "Rockium Z",
+		spritenum: 643,
+		onTakeItem: false,
+		num: 788,
+		gen: 7,
+		desc: "If holder has a Rock move, this item allows it to use a Rock Z-Move.",
 	},
 	"rockyhelmet": {
 		id: "rockyhelmet",
@@ -4215,6 +4782,15 @@ exports.BattleItems = {
 		gen: 4,
 		desc: "Holder's use of Sandstorm lasts 8 turns instead of 5.",
 	},
+	"snorliumz": {
+		id: "snorliumz",
+		name: "Snorlium Z",
+		spritenum: 656,
+		onTakeItem: false,
+		num: 804,
+		gen: 7,
+		desc: "If holder is a Snorlax with Giga Impact, it can use Pulverizing Pancake.",
+	},
 	"snowball": {
 		id: "snowball",
 		name: "Snowball",
@@ -4413,6 +4989,31 @@ exports.BattleItems = {
 		gen: 5,
 		desc: "Holder's first successful Steel-type attack will have 1.3x power. Single use.",
 	},
+	"steelmemory": {
+		id: "steelmemory",
+		name: "Steel Memory",
+		spritenum: 675,
+		onMemory: 'Steel',
+		onTakeItem: function (item, pokemon, source) {
+			if ((source && source.baseTemplate.num === 773) || pokemon.baseTemplate.num === 773) {
+				return false;
+			}
+			return true;
+		},
+		forcedForme: "Silvally-Steel",
+		num: 911,
+		gen: 7,
+		desc: "Holder's Multi-Attack is Steel type.",
+	},
+	"steeliumz": {
+		id: "steeliumz",
+		name: "Steelium Z",
+		spritenum: 647,
+		onTakeItem: false,
+		num: 792,
+		gen: 7,
+		desc: "If holder has a Steel move, this item allows it to use a Steel Z-Move.",
+	},
 	"stick": {
 		id: "stick",
 		name: "Stick",
@@ -4524,6 +5125,26 @@ exports.BattleItems = {
 		num: 194,
 		gen: 4,
 		desc: "Halves damage taken from a supereffective Bug-type attack. Single use.",
+	},
+	"tapuniumz": {
+		id: "tapuniumz",
+		name: "Tapunium Z",
+		spritenum: 653,
+		onTakeItem: false,
+		num: 801,
+		gen: 7,
+		desc: "If holder is a Tapu with Nature's Madness, it can use Guardian of Alola.",
+	},
+	"terrainextender": {
+		id: "terrainextender",
+		name: "Terrain Extender",
+		spritenum: 662,
+		fling: {
+			basePower: 60,
+		},
+		num: 879,
+		gen: 7,
+		desc: "Holder's use of Electric/Grassy/Misty/Psychic Terrain lasts 8 turns instead of 5.",
 	},
 	"thickclub": {
 		id: "thickclub",
@@ -4683,6 +5304,31 @@ exports.BattleItems = {
 		num: 549,
 		gen: 5,
 		desc: "Holder's first successful Water-type attack will have 1.3x power. Single use.",
+	},
+	"watermemory": {
+		id: "watermemory",
+		name: "Water Memory",
+		spritenum: 677,
+		onMemory: 'Water',
+		onTakeItem: function (item, pokemon, source) {
+			if ((source && source.baseTemplate.num === 773) || pokemon.baseTemplate.num === 773) {
+				return false;
+			}
+			return true;
+		},
+		forcedForme: "Silvally-Water",
+		num: 913,
+		gen: 7,
+		desc: "Holder's Multi-Attack is Water type.",
+	},
+	"wateriumz": {
+		id: "wateriumz",
+		name: "Waterium Z",
+		spritenum: 633,
+		onTakeItem: false,
+		num: 778,
+		gen: 7,
+		desc: "If holder has a Water move, this item allows it to use a Water Z-Move.",
 	},
 	"watmelberry": {
 		id: "watmelberry",
