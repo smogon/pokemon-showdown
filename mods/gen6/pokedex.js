@@ -59,15 +59,15 @@ exports.BattlePokedex = {
 	},
 	raikou: {
 		inherit: true,
-		abilities: {0: "Pressure", H: "Volt Absorb"},
+		abilities: {0: "Pressure"},
 	},
 	entei: {
 		inherit: true,
-		abilities: {0: "Pressure", H: "Flash Fire"},
+		abilities: {0: "Pressure"},
 	},
 	suicune: {
 		inherit: true,
-		abilities: {0: "Pressure", H: "Water Absorb"},
+		abilities: {0: "Pressure"},
 	},
 	swellow: {
 		inherit: true,
@@ -115,6 +115,10 @@ exports.BattlePokedex = {
 		inherit: true,
 		baseStats: {hp: 65, atk: 50, def: 70, spa: 95, spd: 80, spe: 65},
 	},
+	heatran: {
+		inherit: true,
+		abilities: {0: "Flash Fire"},
+	},
 	roggenrola: {
 		inherit: true,
 		abilities: {0: "Sturdy", H: "Sand Force"},
@@ -159,5 +163,21 @@ exports.BattlePokedex = {
 	cryogonal: {
 		inherit: true,
 		baseStats: {hp: 70, atk: 50, def: 30, spa: 95, spd: 135, spe: 105},
+	},
+	pumpkaboosmall: {
+		inherit: true,
+		abilities: {0: "Pickup", 1: "Frisk"},
+	},
+	pumpkaboolarge: {
+		inherit: true,
+		abilities: {0: "Pickup", 1: "Frisk"},
+	},
+	gourgeistsmall: {
+		inherit: true,
+		abilities: {0: "Pickup", 1: "Frisk"},
+	},
+	gourgeistlarge: {
+		inherit: true,
+		abilities: {0: "Pickup", 1: "Frisk"},
 	},
 };
