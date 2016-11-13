@@ -553,7 +553,7 @@ exports.BattleAbilities = {
 		id: "dancer",
 		onAnyAfterMove: function (source, target, move) {
 			if (!this.effectData.target.hp || source === this.effectData.target) return;
-			if (move.id.includes('dance')) {
+			if (move.id.includes('dance') && move.id !== 'raindance') {
 				this.faintMessages();
 				this.add('-activate', this.effectData.target, 'ability: Dancer');
 				this.useMove(move, this.effectData.target);
@@ -584,7 +584,7 @@ exports.BattleAbilities = {
 		desc: "While this Pokemon is active, priority moves targeted at allies are prevented from having an effect.",
 		shortDesc: "While this Pokemon is active, allies are protected from priority moves.",
 		onAnyTryMove: function (target, source, effect) {
-			if (source.side === this.effectData.target.side && effect.priority > 0 && effect.target !== 'self') {
+			if (source.side === this.effectData.target.side && effect.priority > 0.1 && effect.target !== 'self') {
 				this.attrLastMove('[still]');
 				this.add('cant', this.effectData.target, 'ability: Dazzling', effect, '[of] ' + target);
 				return false;
@@ -2530,7 +2530,7 @@ exports.BattleAbilities = {
 		desc: "While this Pokemon is active, priority moves targeted at allies are prevented from having an effect.",
 		shortDesc: "While this Pokemon is active, allies are protected from priority moves.",
 		onAnyTryMove: function (target, source, effect) {
-			if (source.side === this.effectData.target.side && effect.priority > 0 && effect.target !== 'self') {
+			if (source.side === this.effectData.target.side && effect.priority > 0.1 && effect.target !== 'self') {
 				this.attrLastMove('[still]');
 				this.add('cant', this.effectData.target, 'ability: Queenly Majesty', effect, '[of] ' + target);
 				return false;
