@@ -1277,7 +1277,7 @@ exports.BattleAbilities = {
 		num: 131,
 	},
 	"heatproof": {
-		desc: "The power of Fire-type attacks against this Pokemon is halved, and any burn damage taken is 1/16 of its maximum HP, rounded down.",
+		desc: "The power of Fire-type attacks against this Pokemon is halved, and burn damage taken is halved.",
 		shortDesc: "The power of Fire-type attacks against this Pokemon is halved; burn damage halved.",
 		onBasePowerPriority: 7,
 		onSourceBasePower: function (basePower, attacker, defender, move) {
