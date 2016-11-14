@@ -10,7 +10,6 @@
 'use strict';
 
 const RANKS = Config.groupsranking;
-const DISABLED = 'class="button disabled" style="font-weight:bold; color:#575757; font-weight:bold; background-color:#d3d3d3;"';
 
 const SLOWCHAT_MINIMUM = 2;
 const SLOWCHAT_MAXIMUM = 60;
@@ -27,16 +26,22 @@ class RoomSettings {
 		this.sameCommand = false;
 		this.generateDisplay();
 	}
+	button(setting, disable, command) {
+		if (disable) {
+			return Chat.html`<button class="button disabled" style="font-weight:bold; color:#575757; font-weight:bold; background-color:#d3d3d3;">${setting}</button> `;
+		}
+		return Chat.html`<button class="button" name="send" value="/roomsetting ${command}">${setting}</button> `;
+	}
 	modchat() {
-		if (!this.user.can('modchat', null, this.room)) return "<button " + DISABLED + ">" + (this.room.modchat ? this.room.modchat : 'off') + "</button>";
+		if (!this.user.can('modchat', null, this.room)) return this.button(this.room.modchat ? this.room.modchat : 'off', true);
 		let modchatOutput = [];
 		for (let i = 0; i <= RANKS.length; i++) {
 			if (RANKS[i] === ' ' && !this.room.modchat) {
-				modchatOutput.push('<button ' + DISABLED + '>off</button>');
+				modchatOutput.push(this.button('off', true));
 			} else if (RANKS[i] === ' ') {
-				modchatOutput.push('<button class="button" name="send" value="/roomsetting modchat off">off</button>');
+				modchatOutput.push(this.button('off', null, 'modchat off'));
 			} else if (RANKS[i] === this.room.modchat) {
-				modchatOutput.push('<button ' + DISABLED + '>' + RANKS[i] + '</button>');
+				modchatOutput.push(this.button(RANKS[i], true));
 			} else if (RANKS[i]) {
 				let rankIndex = RANKS.indexOf(RANKS[i]);
 				let roomAuth = (this.room.auth && this.room.auth[this.user.userid] ? this.room.auth[this.user.userid] : false);
@@ -45,75 +50,76 @@ class RoomSettings {
 				if (roomAuth && !this.user.can('bypassall')) {
 					if (rankIndex > roomAtuhIndex) continue;
 				}
-				modchatOutput.push('<button class="button" name="send" value="/roomsetting modchat ' + RANKS[i] + '">' + RANKS[i] + '</button>');
+				modchatOutput.push(this.button(RANKS[i], null, `modchat ${RANKS[i]}`));
 			}
 		}
 		// Since autoconfirmed isn't technically a Config rank...
-		modchatOutput.splice(1, 0, '<button ' + (this.room.modchat !== 'autoconfirmed' ? 'class="button" name="send" value="/roomsetting modchat autoconfirmed"' : DISABLED) + '>AC</button>');
-		return modchatOutput.join(" ");
+		let acStatus = this.room.modchat === 'autoconfirmed';
+		modchatOutput.splice(1, 0, this.button('AC', acStatus, 'modchat autoconfirmed'));
+		return modchatOutput.join(' ');
 	}
 	modjoin() {
-		if (!this.user.can('makeroom') && !this.room.isPersonal) return "<button " + DISABLED + ">" + (this.room.modjoin ? this.room.modjoin : 'off') + "</button>";
+		if (!this.user.can('makeroom') && !this.room.isPersonal) return this.button(this.room.modjoin ? this.room.modjoin : 'off', true);
 		let modjoinOutput = [];
 		for (let i = 0; i < RANKS.length; i++) {
 			if (RANKS[i] === ' ' && !this.room.modjoin) {
-				modjoinOutput.push('<button ' + DISABLED + '>off</button>');
+				modjoinOutput.push(this.button('off', true));
 			} else if (RANKS[i] === ' ') {
-				modjoinOutput.push('<button class="button" name="send" value="/roomsetting modjoin off">off</button>');
+				modjoinOutput.push(this.button('off', null, 'modjoin off'));
 			} else if (RANKS[i] === this.room.modjoin) {
-				modjoinOutput.push('<button ' + DISABLED + '>' + RANKS[i] + '</button>');
+				modjoinOutput.push(this.button(RANKS[i], true));
 			} else if (RANKS[i]) {
 				// Personal rooms modjoin check
 				if (this.room.isPersonal && !this.user.can('makeroom') && RANKS[i] !== '+') continue;
 
-				modjoinOutput.push('<button class="button" name="send" value="/roomsetting modjoin ' + RANKS[i] + '">' + RANKS[i] + '</button>');
+				modjoinOutput.push(this.button(RANKS[i], false, `modjoin ${RANKS[i]}`));
 			}
 		}
-		return modjoinOutput.join(" ");
+		return modjoinOutput.join(' ');
 	}
 	stretching() {
-		if (!this.user.can('editroom', null, this.room)) return "<button " + DISABLED + ">" + (this.room.filterStretching ? 'filter stretching' : 'off') + "</button>";
+		if (!this.user.can('editroom', null, this.room)) return this.button(this.room.filterStretching ? 'filter stretching' : 'off', true);
 		if (this.room.filterStretching) {
-			return '<button class="button" name="send" value="/roomsetting stretchfilter off">off</button> <button ' + DISABLED + '>filter stretching</button>';
+			return this.button('off', null, 'stretchfilter off') + ' ' + this.button('filter stretching', true);
 		} else {
-			return '<button ' + DISABLED + '>off</button> <button class="button" name="send" value="/roomsetting stretchfilter on">filter stretching</button>';
+			return this.button('off', true) + ' ' + this.button('filter stretching', null, 'stretchfilter on');
 		}
 	}
 	capitals() {
-		if (!this.user.can('editroom', null, this.room)) return "<button " + DISABLED + ">" + (this.room.filterCaps ? 'filter capitals' : 'off') + "</button>";
+		if (!this.user.can('editroom', null, this.room)) return this.button(this.room.filterCaps ? 'filter capitals' : 'off', true);
 		if (this.room.filterCaps) {
-			return '<button class="button" name="send" value="/roomsetting capsfilter off">off</button> <button ' + DISABLED + '>filter capitals</button>';
+			return this.button('off', null, 'capsfilter off') + this.button('filter capitals', true);
 		} else {
-			return '<button ' + DISABLED + '>off</button> <button class="button" name="send" value="/roomsetting capsfilter on">filter capitals</button>';
+			return this.button('off', true) + this.button('filter capitals', null, 'capsfilter on');
 		}
 	}
 	slowchat() {
-		if (!this.user.can('editroom', null, this.room) || this.room.userCount < SLOWCHAT_USER_REQUIREMENT) return "<button " + DISABLED + ">" + (this.room.slowchat ? this.room.slowchat : 'off') + "</button>";
+		if (!this.user.can('editroom', null, this.room) || this.room.userCount < SLOWCHAT_USER_REQUIREMENT) return this.button(this.room.slowchat ? this.room.slowchat : 'off', true);
 
 		let slowchatOutput = [];
 		for (let i of [5, 10, 20, 30, 60]) {
 			if (this.room.slowchat === i) {
-				slowchatOutput.push('<button ' + DISABLED + '>' + i + 's</button>');
+				slowchatOutput.push(this.button(`${i}s`, true));
 			} else {
-				slowchatOutput.push('<button class="button" name="send" value="/roomsetting slowchat ' + i + '">' + i + 's</button>');
+				slowchatOutput.push(this.button(`{i}s`, null, `slowchat ${i}`));
 			}
 		}
 		if (!this.room.slowchat) {
-			slowchatOutput.unshift('<button ' + DISABLED + '>off</button>');
+			slowchatOutput.unshift(this.button('off', true));
 		} else {
-			slowchatOutput.unshift('<button class="button" name="send" value="/roomsettings slowchat false">off</button>');
+			slowchatOutput.unshift(this.button('off', null, 'slowchat false'));
 		}
-		return slowchatOutput.join(" ");
+		return slowchatOutput.join(' ');
 	}
 	tourStatus() {
-		if (!this.user.can('tournamentsmanagement', null, this.room)) return "<button " + DISABLED + ">" + (this.room.toursEnabled === true ? '@' : this.room.toursEnabled === '%' ? '%' : '#') + "</button>";
+		if (!this.user.can('tournamentsmanagement', null, this.room)) return this.button(this.room.toursEnabled === true ? '@' : this.room.toursEnabled === '%' ? '%' : '#', true);
 
 		if (this.room.toursEnabled === true) {
-			return '<button class="button" name="send" value="/roomsetting tournament enable %">%</button> <button ' + DISABLED + '>@</button> <button class="button" name="send" value="/roomsetting tournament disable">#</button>';
+			return this.button('%', null, 'tournament enable %') + this.button('@', true) + this.button('#', null, 'tournament disable');
 		} else if (this.room.toursEnabled === '%') {
-			return '<button ' + DISABLED + '>%</button> <button class="button" name="send" value="/roomsetting tournament enable @">@</button> <button class="button" name="send" value="/roomsetting tournament disable">#</button>';
+			return this.button('%', true) + this.button('@', null, 'tournament enable @') + this.button('#', null, 'tournament disable');
 		} else {
-			return '<button class="button" name="send" value="/roomsetting tournament enable %">%</button> <button class="button" name="send" value="/roomsetting tournament enable @">@</button> <button ' + DISABLED + '>#</button>';
+			return this.button('%', null, 'tournament enable %') + this.button('@', 'tournament enable @') + this.button('#', true);
 		}
 	}
 	generateDisplay(user, room, connection) {
