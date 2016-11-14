@@ -455,7 +455,7 @@ exports.BattlePokedex = {
 		weightkg: 6,
 		color: "Yellow",
 		prevo: "pichu",
-		evos: ["raichu"],
+		evos: ["raichu", "raichualola"],
 		evoLevel: 1,
 		eggGroups: ["Field", "Fairy"],
 		otherFormes: ["pikachucosplay", "pikachurockstar", "pikachubelle", "pikachupopstar", "pikachuphd", "pikachulibre"],
@@ -1832,7 +1832,7 @@ exports.BattlePokedex = {
 		heightm: 0.4,
 		weightkg: 2.5,
 		color: "Pink",
-		evos: ["exeggutor"],
+		evos: ["exeggutor", "exeggutoralola"],
 		eggGroups: ["Grass"],
 	},
 	exeggutor: {
@@ -1874,7 +1874,7 @@ exports.BattlePokedex = {
 		heightm: 0.4,
 		weightkg: 6.5,
 		color: "Brown",
-		evos: ["marowak"],
+		evos: ["marowak", "marowakalola"],
 		eggGroups: ["Monster"],
 	},
 	marowak: {
