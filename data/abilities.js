@@ -3787,12 +3787,17 @@ exports.BattleAbilities = {
 		num: 11,
 	},
 	"waterbubble": {
-		desc: "The power of Fire-type attacks against this Pokemon is halved, and this Pokemon cannot be burned. Gaining this Ability while burned cures it.",
-		shortDesc: "This Pokemon cannot be burned. The power of Fire-type attacks against it is halved.",
+		desc: "This Pokemon's Water-type attacks have their power doubled, the power of Fire-type attacks against this Pokemon is halved, and this Pokemon cannot be burned. Gaining this Ability while burned cures it.",
+		shortDesc: "This Pokemon's Water power is 2x; it can't be burned; Fire power against it is halved.",
 		onBasePowerPriority: 7,
 		onSourceBasePower: function (basePower, attacker, defender, move) {
 			if (move.type === 'Fire') {
 				return this.chainModify(0.5);
+			}
+		},
+		onBasePower: function (basePower, attacker, defender, move) {
+			if (move.type === 'Water') {
+				return this.chainModify(2);
 			}
 		},
 		onUpdate: function (pokemon) {
