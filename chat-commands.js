@@ -2223,7 +2223,7 @@ exports.commands = {
 		if (!room.chatRoomData) return this.errorReply("This room does not support blacklists.");
 
 		const subMap = Punishments.roomUserids.get(room.id);
-		if (!subMap) {
+		if (!subMap || subMap.size === 0) {
 			return this.sendReply("This room has no blacklisted users.");
 		}
 		let blMap = new Map();
