@@ -1542,6 +1542,11 @@ class ChatRoom extends Room {
 				'Must be rank ' + this.modchat + ' or higher to talk right now.' +
 				'</div>';
 		}
+		if (this.slowchat && user.can('mute', null, this)) {
+			message += (message ? '<br />' : '\n|raw|<div class="infobox">') + '<div class="broadcast-red">' +
+				'Messages must have at least ' + this.slowchat + ' seconds between them.' +
+				'</div>';
+		}
 		if (message) message += '</div>';
 		return message;
 	}
