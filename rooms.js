@@ -526,7 +526,7 @@ class GlobalRoom {
 
 		// search must be within range
 		let searchRange = 100, elapsed = Date.now() - Math.min(search1.time, search2.time);
-		if (formatid === 'ou' || formatid === 'oucurrent' || formatid === 'randombattle') searchRange = 50;
+		if (formatid === 'ou' || formatid === 'oucurrent' || formatid === 'oususpecttest' || formatid === 'randombattle') searchRange = 50;
 		searchRange += elapsed / 300; // +1 every .3 seconds
 		if (searchRange > 300) searchRange = 300 + (searchRange - 300) / 10; // +1 every 3 sec after 300
 		if (searchRange > 600) searchRange = 600;
@@ -1540,6 +1540,11 @@ class ChatRoom extends Room {
 		if (this.modchat) {
 			message += (message ? '<br />' : '\n|raw|<div class="infobox">') + '<div class="broadcast-red">' +
 				'Must be rank ' + this.modchat + ' or higher to talk right now.' +
+				'</div>';
+		}
+		if (this.slowchat && user.can('mute', null, this)) {
+			message += (message ? '<br />' : '\n|raw|<div class="infobox">') + '<div class="broadcast-red">' +
+				'Messages must have at least ' + this.slowchat + ' seconds between them.' +
 				'</div>';
 		}
 		if (message) message += '</div>';

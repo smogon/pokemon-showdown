@@ -882,6 +882,7 @@ exports.commands = {
 			return;
 		}
 		if (!this.can('declare', null, room)) return false;
+		if (target === 'off' || target === 'disable' || target === 'delete') return this.errorReply('Did you mean "/deleteroomintro"?');
 		target = this.canHTML(target);
 		if (!target) return;
 		if (!/</.test(target)) {
@@ -935,6 +936,7 @@ exports.commands = {
 			return;
 		}
 		if (!this.can('ban', null, room)) return false;
+		if (target === 'off' || target === 'disable' || target === 'delete') return this.errorReply('Did you mean "/deletestaffintro"?');
 		target = this.canHTML(target);
 		if (!target) return;
 		if (!/</.test(target)) {
@@ -2221,7 +2223,7 @@ exports.commands = {
 		if (!room.chatRoomData) return this.errorReply("This room does not support blacklists.");
 
 		const subMap = Punishments.roomUserids.get(room.id);
-		if (!subMap) {
+		if (!subMap || subMap.size === 0) {
 			return this.sendReply("This room has no blacklisted users.");
 		}
 		let blMap = new Map();
@@ -2250,7 +2252,7 @@ exports.commands = {
 			}
 		}
 
-		let buf = `Blacklist for room ${room.id}:<br />`;
+		let buf = Chat.html`Blacklist for ${room.title}:<br />`;
 
 		blMap.forEach((data, userid) => {
 			const [expireTime, ...alts] = data;
@@ -2969,7 +2971,8 @@ exports.commands = {
 	uploadreplay: 'savereplay',
 	savereplay: function (target, room, user, connection) {
 		if (!room || !room.battle) return;
-		let logidx = Tools.getFormat(room.battle.format).team ? 3 : 0; // retrieve spectator log (0) if there are set privacy concerns
+		// retrieve spectator log (0) if there are privacy concerns
+		let logidx = room.battle.ended ? 3 : 0;
 		let data = room.getLog(logidx).join("\n");
 		let datahash = crypto.createHash('md5').update(data.replace(/[^(\x20-\x7F)]+/g, '')).digest('hex');
 		let players = room.battle.playerNames;
@@ -3256,7 +3259,7 @@ exports.commands = {
 	cmd: 'crq',
 	query: 'crq',
 	crq: function (target, room, user, connection) {
-		// Avoid guest users to use the cmd errors to ease the app-layer attacks in emergency mode
+		// In emergency mode, clamp down on data returned from crq's
 		let trustable = (!Config.emergency || (user.named && user.registered));
 		let spaceIndex = target.indexOf(' ');
 		let cmd = target;
@@ -3290,6 +3293,9 @@ exports.commands = {
 					roomData.p1 = battle.p1 ? ' ' + battle.p1.name : '';
 					roomData.p2 = battle.p2 ? ' ' + battle.p2.name : '';
 				}
+				if (targetRoom.auth && targetUser.userid in targetRoom.auth) {
+					roomid = targetRoom.auth[targetUser.userid] + roomid;
+				}
 				roomList[roomid] = roomData;
 			});
 			if (!targetUser.connected) roomList = false;
@@ -3317,7 +3323,6 @@ exports.commands = {
 			});
 		} else {
 			// default to sending null
-			if (!trustable) return false;
 			connection.send('|queryresponse|' + cmd + '|null');
 		}
 	},
@@ -3397,7 +3402,7 @@ exports.commands = {
 					namespace = namespace[targets[i]];
 				}
 				if (typeof namespace[helpCmd] === 'object') return this.sendReply(namespace[helpCmd].join('\n'));
-				if (typeof namespace[helpCmd] === 'function') return this.parse('/' + targets.slice(0, targets.length - 1).concat(helpCmd).join(' '));
+				if (typeof namespace[helpCmd] === 'function') return this.run(namespace[helpCmd]);
 				return this.errorReply("Help for the command '" + target + "' was not found. Try /help for general help");
 			} else {
 				helpCmd = target + 'help';
@@ -3405,7 +3410,7 @@ exports.commands = {
 			if (helpCmd in allCommands) {
 				if (typeof allCommands[helpCmd] === 'function') {
 					// If the help command is a function, parse it instead
-					this.parse('/' + helpCmd);
+					this.run(allCommands[helpCmd]);
 				} else if (Array.isArray(allCommands[helpCmd])) {
 					this.sendReply(allCommands[helpCmd].join('\n'));
 				}

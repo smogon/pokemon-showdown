@@ -1257,5 +1257,4 @@ exports.BattleMovedex = {
 			return Math.floor(target.hp * 120 / target.maxhp) + 1;
 		},
 	},
-	magikarpsrevenge: null,
 };

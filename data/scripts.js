@@ -1629,9 +1629,9 @@ exports.BattleScripts = {
 					// Reject Status moves only if there is nothing else to reject
 					if (move.category !== 'Status' || counter[counter.setupType] + counter.Status > 3 && counter['physicalsetup'] + counter['specialsetup'] < 2) rejected = true;
 				}
-				if (counter.setupType === 'Special' && move.id === 'hiddenpower' && counter['Special'] <= 2 && !hasType[move.type] && !counter['Physical'] && counter['specialpool']) {
+				if (counter.setupType === 'Special' && move.id === 'hiddenpower' && template.types.length > 1 && counter['Special'] <= 2 && !hasType[move.type] && !counter['Physical'] && counter['specialpool']) {
 					// Hidden Power isn't good enough
-					if ((!hasType['Ghost'] || !counter['Ghost'] || move.type !== 'Fighting') && (!hasType['Electric'] || move.type !== 'Ice')) rejected = true;
+					rejected = true;
 				}
 
 				// Pokemon should have moves that benefit their Ability/Type/Weather, as well as moves required by its forme
@@ -1657,7 +1657,9 @@ exports.BattleScripts = {
 					(movePool.includes('technoblast') || template.requiredMove && movePool.includes(toId(template.requiredMove)))) &&
 					(counter['physicalsetup'] + counter['specialsetup'] < 2 && (!counter.setupType || counter.setupType === 'Mixed' || (move.category !== counter.setupType && move.category !== 'Status') || counter[counter.setupType] + counter.Status > 3))) {
 					// Reject Status or non-STAB
-					if (!isSetup && !move.weather && moveid !== 'rest' && moveid !== 'sleeptalk' && (move.category === 'Status' || !hasType[move.type]) && moveid !== 'judgment') rejected = true;
+					if (!isSetup && !move.weather && moveid !== 'judgment' && moveid !== 'rest' && moveid !== 'sleeptalk') {
+						if (move.category === 'Status' || !hasType[move.type] || (move.basePower && move.basePower < 40 && !move.multihit)) rejected = true;
+					}
 				}
 
 				// Sleep Talk shouldn't be selected without Rest
@@ -1692,6 +1694,7 @@ exports.BattleScripts = {
 					// A set shouldn't have no attacking moves
 					moves.splice(this.random(moves.length), 1);
 				} else if (counter.damagingMoves.length === 1) {
+					// In most cases, a set shouldn't have no STAB
 					let damagingid = counter.damagingMoves[0].id;
 					if (movePool.length - availableHP || availableHP && (damagingid === 'hiddenpower' || !hasMove['hiddenpower'])) {
 						let replace = false;

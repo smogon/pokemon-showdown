@@ -1162,7 +1162,8 @@ class BattlePokemon {
 	static getHealth(side) {
 		if (!this.hp) return '0 fnt';
 		let hpstring;
-		if ((side === true) || (this.side === side) || this.battle.getFormat().debug || this.battle.reportExactHP) {
+		// side === true in replays
+		if (side === this.side || this.battle.reportExactHP || (side === true && this.battle.replayExactHP)) {
 			hpstring = '' + this.hp + '/' + this.maxhp;
 		} else {
 			let ratio = this.hp / this.maxhp;
@@ -1942,6 +1943,8 @@ class Battle extends Tools.BattleDex {
 		this.event = {id:''};
 
 		this.gameType = (format.gameType || 'singles');
+		this.reportExactHP = !!format.debug;
+		this.replayExactHP = !format.team;
 
 		this.queue = [];
 		this.faintQueue = [];

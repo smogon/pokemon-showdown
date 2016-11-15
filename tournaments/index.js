@@ -30,7 +30,7 @@ class Tournament {
 		this.allowRenames = false;
 		this.players = Object.create(null);
 		this.playerCount = 0;
-		this.playerCap = parseInt(playerCap) || Config.tournamentDefaultPlayerCap || 0;
+		this.playerCap = parseInt(playerCap) || Config.tourdefaultplayercap || 0;
 
 		this.format = format;
 		this.banlist = [];
@@ -38,8 +38,9 @@ class Tournament {
 		this.isRated = isRated;
 		this.scouting = true;
 		this.modjoin = false;
+		this.forceTimer = false;
 		this.autostartcap = false;
-		if (Config.tournamentDefaultPlayerCap && this.playerCap > Config.tournamentDefaultPlayerCap) {
+		if (Config.tourdefaultplayercap && this.playerCap > Config.tourdefaultplayercap) {
 			Monitor.log('[TourMonitor] Room ' + room.id + ' starting a tour over default cap (' + this.playerCap + ')');
 		}
 
@@ -777,6 +778,7 @@ class Tournament {
 
 		this.isBracketInvalidated = true;
 		if (this.autoDisqualifyTimeout !== Infinity) this.runAutoDisqualify(this.room);
+		if (this.forceTimer) room.requestKickInactive(false);
 		this.update();
 	}
 	forfeit(user) {
@@ -998,7 +1000,7 @@ let commands = {
 			if (generator && tournament.setGenerator(generator, this)) {
 				if (playerCap && playerCap >= 2) {
 					tournament.playerCap = playerCap;
-					if (Config.tournamentDefaultPlayerCap && tournament.playerCap > Config.tournamentDefaultPlayerCap) {
+					if (Config.tourdefaultplayercap && tournament.playerCap > Config.tourdefaultplayercap) {
 						Monitor.log('[TourMonitor] Room ' + tournament.room.id + ' starting a tour over default cap (' + tournament.playerCap + ')');
 					}
 				} else if (tournament.playerCap && !playerCap) {
@@ -1168,6 +1170,20 @@ let commands = {
 				return this.sendReply("Usage: " + cmd + " <allow|disallow>");
 			}
 		},
+		forcetimer: function (tournament, user, params, cmd) {
+			let option = params.length ? params[0].toLowerCase() : 'on';
+			if (option === 'on' || option === 'true') {
+				tournament.forceTimer = true;
+				this.room.add('Forcetimer is now on for the tournament.');
+				this.privateModCommand("(The timer was turned on for the tournament by " + user.name + ")");
+			} else if (option === 'off' || option === 'false' || option === 'stop') {
+				tournament.forceTimer = false;
+				this.room.add('Forcetimer is now off for the tournament.');
+				this.privateModCommand("(The timer was turned off for the tournament by " + user.name + ")");
+			} else {
+				return this.sendReply("Usage: " + cmd + " <on|off>");
+			}
+		},
 	},
 };
 
@@ -1269,7 +1285,7 @@ Chat.commands.tournament = function (paramString, room, user) {
 			return this.sendReply("Usage: " + cmd + " <format>, <type> [, <comma-separated arguments>]");
 		}
 
-		let tour = createTournament(room, params.shift(), params.shift(), params.shift(), Config.istournamentsrated, params, this);
+		let tour = createTournament(room, params.shift(), params.shift(), params.shift(), Config.ratedtours, params, this);
 		if (tour) {
 			this.privateModCommand("(" + user.name + " created a tournament in " + tour.format + " format.)");
 			if (room.tourAnnouncements) {
@@ -1331,6 +1347,7 @@ Chat.commands.tournamenthelp = function (target, room, user) {
 		"- runautodq: Manually run the automatic disqualifier.<br />" +
 		"- scouting &lt;allow|disallow>: Specifies whether joining tournament matches while in a tournament is allowed.<br />" +
 		"- modjoin &lt;allow|disallow>: Specifies whether players can modjoin their battles.<br />" +
+		"- forcetimer &lt;on|off>: Turn on the timer for tournament battles.<br />" +
 		"- getusers: Lists the users in the current tournament.<br />" +
 		"- on/enable &lt;%|@>: Enables allowing drivers or mods to start tournaments in the current room.<br />" +
 		"- off/disable: Disables allowing drivers and mods to start tournaments in the current room.<br />" +

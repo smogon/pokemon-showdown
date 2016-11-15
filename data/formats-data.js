@@ -862,6 +862,7 @@ exports.BattleFormatsData = {
 			{"generation": 6, "level": 50, "moves":["shadowball", "sludgebomb", "willowisp", "destinybond"], "pokeball": "cherishball"},
 			{"generation": 6, "level": 25, "shiny": true, "moves":["shadowball", "sludgewave", "confuseray", "astonish"], "pokeball": "duskball"},
 			{"generation": 6, "level": 50, "shiny": true, "gender": "M", "moves":["meanlook", "hypnosis", "psychic", "hyperbeam"], "pokeball": "cherishball"},
+			{"generation": 6, "level": 100, "moves":["meanlook", "hypnosis", "psychic", "hyperbeam"], "pokeball": "cherishball"},
 		],
 		tier: "OU",
 	},
@@ -1426,7 +1427,7 @@ exports.BattleFormatsData = {
 		tier: "NU",
 	},
 	aerodactyl: {
-		randomBattleMoves: ["stealthrock", "taunt", "stoneedge", "earthquake", "aquatail", "roost", "doubleedge"],
+		randomBattleMoves: ["stealthrock", "taunt", "stoneedge", "earthquake", "defog", "roost", "doubleedge"],
 		randomDoubleBattleMoves: ["wideguard", "taunt", "stoneedge", "rockslide", "earthquake", "aquatail", "protect", "icefang", "skydrop", "tailwind"],
 		eventPokemon: [
 			{"generation": 5, "level": 15, "gender": "M", "isHidden": false, "abilities":["pressure"], "moves":["steelwing", "icefang", "firefang", "thunderfang"], "pokeball": "cherishball"},
@@ -1434,7 +1435,7 @@ exports.BattleFormatsData = {
 		tier: "RU",
 	},
 	aerodactylmega: {
-		randomBattleMoves: ["aquatail", "defog", "honeclaws", "stoneedge", "firefang", "icefang", "aerialace", "roost"],
+		randomBattleMoves: ["aquatail", "pursuit", "honeclaws", "stoneedge", "firefang", "aerialace", "roost"],
 		randomDoubleBattleMoves: ["wideguard", "taunt", "stoneedge", "rockslide", "earthquake", "ironhead", "aerialace", "protect", "icefang", "skydrop", "tailwind"],
 		requiredItem: "Aerodactylite",
 		tier: "UU",
@@ -2184,6 +2185,7 @@ exports.BattleFormatsData = {
 			{"generation": 6, "level": 50, "isHidden": false, "moves":["stoneedge", "crunch", "earthquake", "icepunch"], "pokeball": "cherishball"},
 			{"generation": 6, "level": 50, "nature": "Jolly", "isHidden": false, "moves":["rockslide", "earthquake", "crunch", "stoneedge"], "pokeball": "cherishball"},
 			{"generation": 6, "level": 55, "shiny": true, "nature": "Adamant", "ivs": {"hp": 31, "atk": 31, "def": 31, "spa": 14, "spd": 31, "spe": 0}, "isHidden": false, "moves":["crunch", "rockslide", "lowkick", "protect"], "pokeball": "cherishball"},
+			{"generation": 6, "level": 100, "isHidden": false, "moves":["rockslide", "crunch", "icepunch", "lowkick"], "pokeball": "cherishball"},
 		],
 		tier: "OU",
 	},
@@ -2615,6 +2617,7 @@ exports.BattleFormatsData = {
 			{"generation": 3, "level": 10, "gender": "M", "moves":["astonish", "faketears"]},
 			{"generation": 3, "level": 22, "moves":["sing", "falseswipe", "vicegrip", "irondefense"]},
 			{"generation": 6, "level": 50, "isHidden": false, "abilities":["intimidate"], "moves":["ironhead", "playrough", "firefang", "suckerpunch"], "pokeball": "cherishball"},
+			{"generation": 6, "level": 100, "isHidden": false, "abilities":["intimidate"], "moves":["suckerpunch", "protect", "playrough", "ironhead"], "pokeball": "cherishball"},
 		],
 		tier: "PU",
 	},
@@ -5152,6 +5155,7 @@ exports.BattleFormatsData = {
 			{"generation": 5, "level": 50, "moves":["technoblast", "magnetbomb", "solarbeam", "signalbeam"], "pokeball": "cherishball"},
 			{"generation": 5, "level": 15, "moves":["technoblast", "magnetbomb", "solarbeam", "signalbeam"], "pokeball": "cherishball"},
 			{"generation": 5, "level": 100, "shiny": true, "nature": "Hasty", "ivs": {"atk": 31, "spe": 31}, "moves":["extremespeed", "technoblast", "blazekick", "shiftgear"], "pokeball": "cherishball"},
+			{"generation": 6, "level": 100, "moves":["technoblast", "magnetbomb", "solarbeam", "signalbeam"], "pokeball": "cherishball"},
 		],
 		eventOnly: true,
 		tier: "Uber",
@@ -5477,7 +5481,7 @@ exports.BattleFormatsData = {
 		tier: "BL",
 	},
 	dedenne: {
-		randomBattleMoves: ["voltswitch", "thunderbolt", "nuzzle", "grassknot", "hiddenpowerice", "uturn", "toxic"],
+		randomBattleMoves: ["substitute", "recycle", "thunderbolt", "nuzzle", "grassknot", "hiddenpowerice", "toxic"],
 		randomDoubleBattleMoves: ["voltswitch", "thunderbolt", "nuzzle", "grassknot", "hiddenpowerice", "uturn", "helpinghand", "protect"],
 		tier: "PU",
 	},
