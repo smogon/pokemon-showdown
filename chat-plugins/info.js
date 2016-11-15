@@ -183,6 +183,7 @@ exports.commands = {
 			return this.errorReply("/checkpunishment - Access denied.");
 		}
 		let userid = toId(target);
+		if (!userid) return this.errorReply("Please enter a valid username.");
 		let buf = Chat.html`<strong class="username">${target}</strong> <em style="color:gray">(offline)</em><br /><br />`;
 		let atLeastOne = false;
 
