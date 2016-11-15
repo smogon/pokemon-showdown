@@ -581,9 +581,9 @@ exports.BattleAbilities = {
 		num: 186,
 	},
 	"dazzling": {
-		desc: "While this Pokemon is active, priority moves targeted at allies are prevented from having an effect.",
-		shortDesc: "While this Pokemon is active, allies are protected from priority moves.",
-		onAnyTryMove: function (target, source, effect) {
+		desc: "While this Pokemon is active, priority moves from opposing Pokemon targeted at allies are prevented from having an effect.",
+		shortDesc: "While this Pokemon is active, allies are protected from opposing priority moves.",
+		onFoeTryMove: function (target, source, effect) {
 			if (source.side === this.effectData.target.side && effect.priority > 0.1 && effect.target !== 'self') {
 				this.attrLastMove('[still]');
 				this.add('cant', this.effectData.target, 'ability: Dazzling', effect, '[of] ' + target);
@@ -2527,9 +2527,9 @@ exports.BattleAbilities = {
 		num: 74,
 	},
 	"queenlymajesty": {
-		desc: "While this Pokemon is active, priority moves targeted at allies are prevented from having an effect.",
-		shortDesc: "While this Pokemon is active, allies are protected from priority moves.",
-		onAnyTryMove: function (target, source, effect) {
+		desc: "While this Pokemon is active, priority moves from opposing Pokemon targeted at allies are prevented from having an effect.",
+		shortDesc: "While this Pokemon is active, allies are protected from opposing priority moves.",
+		onFoeTryMove: function (target, source, effect) {
 			if (source.side === this.effectData.target.side && effect.priority > 0.1 && effect.target !== 'self') {
 				this.attrLastMove('[still]');
 				this.add('cant', this.effectData.target, 'ability: Queenly Majesty', effect, '[of] ' + target);
@@ -3627,9 +3627,9 @@ exports.BattleAbilities = {
 		num: 36,
 	},
 	"triage": {
-		shortDesc: "This Pokemon's healing moves have their priority increased by 1.",
+		shortDesc: "This Pokemon's healing moves have their priority increased by 3.",
 		onModifyPriority: function (priority, pokemon, target, move) {
-			if (move && move.flags['heal']) return priority + 1; // TODO: more than 1?
+			if (move && move.flags['heal']) return priority + 3;
 		},
 		id: "triage",
 		name: "Triage",
