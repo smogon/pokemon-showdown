@@ -798,7 +798,7 @@ exports.BattleMovedex = {
 			onAnyModifyDamage: function (damage, source, target, move) {
 				if (target !== source && target.side === this.effectData.target) {
 					if (!move.crit && !move.infiltrates) {
-						this.debug('Light Screen weaken');
+						this.debug('Aurora Veil weaken');
 						if (target.side.active.length > 1) return this.chainModify([0xAAC, 0x1000]);
 						return this.chainModify(0.5);
 					}
@@ -1577,7 +1577,7 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 75,
 		category: "Physical",
-		desc: "If this attack does not miss, the effects of Reflect and Light Screen end for the target's side of the field before damage is calculated.",
+		desc: "If this attack does not miss, the effects of Reflect, Light Screen, and Aurora Veil end for the target's side of the field before damage is calculated.",
 		shortDesc: "Destroys screens, unless the target is immune.",
 		id: "brickbreak",
 		isViable: true,
@@ -1590,6 +1590,7 @@ exports.BattleMovedex = {
 			if (pokemon.runImmunity('Fighting')) {
 				pokemon.side.removeSideCondition('reflect');
 				pokemon.side.removeSideCondition('lightscreen');
+				pokemon.side.removeSideCondition('auroraveil');
 			}
 		},
 		secondary: false,
@@ -11565,7 +11566,7 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 85,
 		category: "Physical",
-		desc: "If this attack does not miss, the effects of Reflect and Light Screen end for the target's side of the field before damage is calculated.",
+		desc: "If this attack does not miss, the effects of Reflect, Light Screen, and Aurora Veil end for the target's side of the field before damage is calculated.",
 		shortDesc: "Destroys screens, unless the target is immune.",
 		id: "psychicfangs",
 		isViable: true,
@@ -11578,6 +11579,7 @@ exports.BattleMovedex = {
 			if (pokemon.runImmunity('Psychic')) {
 				pokemon.side.removeSideCondition('reflect');
 				pokemon.side.removeSideCondition('lightscreen');
+				pokemon.side.removeSideCondition('auroraveil');
 			}
 		},
 		secondary: false,
@@ -15226,14 +15228,18 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
-		desc: "Lowers the target's Attack by 1 stage.",
-		shortDesc: "Lowers the target's Attack by 1.",
+		desc: "The user restores its HP equal to the target's Attack stat, calculated with its stat stage, then lowers the target's Attack by 1 stage.",
+		shortDesc: "User heals HP=target's Atk stat. Lowers Atk by 1.",
 		id: "strengthsap",
 		name: "Strength Sap",
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, heal: 1},
-		// TODO: find out specifically what this move does
+		onHit: function (target, source) {
+			if (target.boosts.atk === -6) return false;
+			this.heal(target.getStat('atk', false, true), source);
+			this.boost({atk:-1}, target, source, null, null, true);
+		},
 		secondary: false,
 		target: "normal",
 		type: "Grass",
