@@ -673,7 +673,7 @@ class Validator {
 				sometimesPossible = true;
 				let lset = template.learnset[moveid];
 				if (!lset || template.speciesid === 'smeargle') {
-					if (move.noSketch) return true;
+					if (move.noSketch || move.isZ) return true;
 					lset = template.learnset['sketch'];
 					sketch = true;
 				}
