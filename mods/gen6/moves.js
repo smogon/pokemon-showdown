@@ -7,6 +7,10 @@ exports.BattleMovedex = {
 		shortDesc: "Switches position with the ally on the far side.",
 		priority: 1,
 	},
+	brickbreak: {
+		inherit: true,
+		desc: "If this attack does not miss, the effects of Reflect and Light Screen end for the target's side of the field before damage is calculated.",
+	},
 	darkvoid: {
 		inherit: true,
 		accuracy: 80,

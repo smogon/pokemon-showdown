@@ -3493,7 +3493,7 @@ class Battle extends Tools.BattleDex {
 					this.add(msg, target, i, boostBy, '[silent]');
 					this.add('-hint', "In Gen 2, Belly Drum boosts by 2 when it fails.");
 					break;
-				case 'intimidate': case 'gooey':
+				case 'intimidate': case 'gooey': case 'tanglinghair':
 					this.add(msg, target, i, boostBy);
 					break;
 				default:

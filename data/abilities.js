@@ -269,8 +269,8 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon's highest stat is raised by 1 if it attacks and KOes another Pokemon.",
 		onSourceFaint: function (target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
-				let stat = 'atk'; // TODO: find out what really happens if multiple stats
-				let bestStat = 0; // are equal and whether it considers stat stages
+				let stat = 'atk';
+				let bestStat = 0;
 				for (let i in source.stats) {
 					if (source.stats[i] > bestStat) {
 						stat = i;
@@ -1983,7 +1983,6 @@ exports.BattleAbilities = {
 	"multitype": {
 		shortDesc: "If this Pokemon is an Arceus, its type changes to match its held Plate or Z-Crystal.",
 		// Multitype's type-changing itself is implemented in statuses.js
-		// TODO: add onPlate to each Z-Crystal
 		id: "multitype",
 		name: "Multitype",
 		rating: 4,
@@ -3215,12 +3214,12 @@ exports.BattleAbilities = {
 		num: 80,
 	},
 	"steelworker": {
-		shortDesc: "This Pokemon's Steel-type attacks have their power multiplied by 1.3.",
+		shortDesc: "This Pokemon's Steel-type attacks have their power multiplied by 1.5.",
 		onBasePowerPriority: 8,
 		onBasePower: function (basePower, attacker, defender, move) {
 			if (move.type === 'Steel') {
 				this.debug('Steelworker boost');
-				return this.chainModify([0x14CD, 0x1000]); // TODO: is it 1.5?
+				return this.chainModify(1.5);
 			}
 		},
 		id: "steelworker",
@@ -3466,7 +3465,7 @@ exports.BattleAbilities = {
 		shortDesc: "Pokemon making contact with this Pokemon have their Speed lowered by 1 stage.",
 		onAfterDamage: function (damage, target, source, effect) {
 			if (effect && effect.flags['contact']) {
-				this.add('-ability', target, 'Tangling Hair'); // TODO: add to battle-engine
+				this.add('-ability', target, 'Tangling Hair');
 				this.boost({spe: -1}, source, target, null, null, true);
 			}
 		},
