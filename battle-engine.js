@@ -3887,6 +3887,12 @@ class Battle extends Tools.BattleDex {
 		// Final modifier. Modifiers that modify damage after min damage check, such as Life Orb.
 		baseDamage = this.runEvent('ModifyDamage', pokemon, target, move, baseDamage);
 
+		// TODO: Find out where this actually goes in the damage calculation
+		if (move.isZ && (target.volatiles['banefulbunker'] || target.volatiles['kingsshield'] || target.volatiles['protect'] || target.volatiles['spikyshield'])) {
+			baseDamage = this.modify(baseDamage, 0.25);
+			this.add('-message', target.name + " couldn't fully protect itself and got hurt! (placeholder)");
+		}
+
 		if (this.gen !== 5 && basePower && !Math.floor(baseDamage)) {
 			return 1;
 		}
