@@ -626,18 +626,31 @@ exports.BattleStatuses = {
 		},
 	},
 
+	// Arceus and Silvally's actual typing is implemented here.
+	// Their true typing for all their formes is Normal, and it's only
+	// Multitype and RKS System, respectively, that changes their type,
+	// but their formes are specified to be their corresponding type
+	// in the Pokedex, so that needs to be overridden.
+	// This is mainly relevant for Hackmons and Balanced Hackmons.
 	arceus: {
-		// Arceus's actual typing is implemented here
-		// Arceus's true typing for all its formes is Normal, and it's only
-		// Multitype that changes its type, but its formes are specified to
-		// be their corresponding type in the Pokedex, so that needs to be
-		// overridden. This is mainly relevant for Hackmons and Balanced
-		// Hackmons.
 		onSwitchInPriority: 101,
 		onSwitchIn: function (pokemon) {
 			let type = 'Normal';
 			if (pokemon.ability === 'multitype') {
 				type = pokemon.getItem().onPlate;
+				if (!type || type === true) {
+					type = 'Normal';
+				}
+			}
+			pokemon.setType(type, true);
+		},
+	},
+	silvally: {
+		onSwitchInPriority: 101,
+		onSwitchIn: function (pokemon) {
+			let type = 'Normal';
+			if (pokemon.ability === 'rkssystem') {
+				type = pokemon.getItem().onMemory;
 				if (!type || type === true) {
 					type = 'Normal';
 				}
