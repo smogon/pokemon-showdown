@@ -94,7 +94,7 @@ class RoomSettings {
 		}
 	}
 	slowchat() {
-		if (!this.user.can('editroom', null, this.room) || this.room.userCount < SLOWCHAT_USER_REQUIREMENT) return this.button(this.room.slowchat ? this.room.slowchat : 'off', true);
+		if (!this.user.can('editroom', null, this.room) || (!this.user.can('bypassall') && this.room.userCount < SLOWCHAT_USER_REQUIREMENT)) return this.button(this.room.slowchat ? this.room.slowchat : 'off', true);
 
 		let slowchatOutput = [];
 		for (let i of [5, 10, 20, 30, 60]) {
@@ -299,7 +299,7 @@ exports.commands = {
 			room.slowchat = false;
 			this.add("|raw|<div class=\"broadcast-blue\"><b>Slow chat was disabled!</b><br />There is no longer a set minimum time between messages.</div>");
 		} else if (targetInt) {
-			if (room.userCount < SLOWCHAT_USER_REQUIREMENT) return this.errorReply(`This room must have at least ${SLOWCHAT_USER_REQUIREMENT} users to set slowchat; it only has ${room.userCount} right now.`);
+			if (!user.can('bypassall') && room.userCount < SLOWCHAT_USER_REQUIREMENT) return this.errorReply(`This room must have at least ${SLOWCHAT_USER_REQUIREMENT} users to set slowchat; it only has ${room.userCount} right now.`);
 			if (room.slowchat === targetInt) return this.errorReply(`Slow chat is already set to ${room.slowchat} seconds in this room.`);
 			if (targetInt < SLOWCHAT_MINIMUM) targetInt = SLOWCHAT_MINIMUM;
 			if (targetInt > SLOWCHAT_MAXIMUM) targetInt = SLOWCHAT_MAXIMUM;
