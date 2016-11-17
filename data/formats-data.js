@@ -5649,6 +5649,282 @@ exports.BattleFormatsData = {
 		eventOnly: true,
 		tier: "OU",
 	},
+	rowlet: {
+		tier: "LC",
+	},
+	dartrix: {
+		tier: "NFE",
+	},
+	decidueye: {
+		tier: "OU",
+	},
+	litten: {
+		tier: "LC",
+	},
+	torracat: {
+		tier: "NFE",
+	},
+	incineroar: {
+		tier: "OU",
+	},
+	popplio: {
+		tier: "LC",
+	},
+	brionne: {
+		tier: "NFE",
+	},
+	primarina: {
+		tier: "OU",
+	},
+	pikipek: {
+		tier: "LC",
+	},
+	trumbeak: {
+		tier: "NFE",
+	},
+	toucannon: {
+		tier: "OU",
+	},
+	yungoos: {
+		tier: "LC",
+	},
+	gumshoos: {
+		tier: "OU",
+	},
+	grubbin: {
+		tier: "LC",
+	},
+	charjabug: {
+		tier: "NFE",
+	},
+	vikavolt: {
+		tier: "OU",
+	},
+	crabrawler: {
+		tier: "LC",
+	},
+	crabominable: {
+		tier: "OU",
+	},
+	oricorio: {
+		tier: "OU",
+	},
+	oricoriopompom: {
+		tier: "OU",
+	},
+	oricoriopau: {
+		tier: "OU",
+	},
+	oricoriosensu: {
+		tier: "OU",
+	},
+	cutiefly: {
+		tier: "LC",
+	},
+	ribombee: {
+		tier: "OU",
+	},
+	rockruff: {
+		tier: "LC",
+	},
+	lycanroc: {
+		tier: "OU",
+	},
+	lycanrocmidnight: {
+		tier: "OU",
+	},
+	wishiwashi: {
+		tier: "OU",
+	},
+	mareanie: {
+		tier: "LC",
+	},
+	toxapex: {
+		tier: "OU",
+	},
+	mudbray: {
+		tier: "LC",
+	},
+	mudsdale: {
+		tier: "OU",
+	},
+	dewpider: {
+		tier: "LC",
+	},
+	araquanid: {
+		tier: "OU",
+	},
+	fomantis: {
+		tier: "LC",
+	},
+	lurantis: {
+		tier: "OU",
+	},
+	morelull: {
+		tier: "LC",
+	},
+	shiinotic: {
+		tier: "OU",
+	},
+	salandit: {
+		tier: "LC",
+	},
+	salazzle: {
+		tier: "OU",
+	},
+	stufful: {
+		tier: "LC",
+	},
+	bewear: {
+		tier: "OU",
+	},
+	bounsweet: {
+		tier: "LC",
+	},
+	steenee: {
+		tier: "NFE",
+	},
+	tsareena: {
+		tier: "OU",
+	},
+	comfey: {
+		tier: "OU",
+	},
+	oranguru: {
+		tier: "OU",
+	},
+	passimian: {
+		tier: "OU",
+	},
+	wimpod: {
+		tier: "LC",
+	},
+	golisopod: {
+		tier: "OU",
+	},
+	sandygast: {
+		tier: "LC",
+	},
+	palossand: {
+		tier: "OU",
+	},
+	pyukumuku: {
+		tier: "OU",
+	},
+	typenull: {
+		tier: "NFE",
+	},
+	silvally: {
+		tier: "OU",
+	},
+	silvallybug: {
+		tier: "OU",
+	},
+	silvallydark: {
+		tier: "OU",
+	},
+	silvallydragon: {
+		tier: "OU",
+	},
+	silvallyelectric: {
+		tier: "OU",
+	},
+	silvallyfairy: {
+		tier: "OU",
+	},
+	silvallyfighting: {
+		tier: "OU",
+	},
+	silvallyfire: {
+		tier: "OU",
+	},
+	silvallyflying: {
+		tier: "OU",
+	},
+	silvallyghost: {
+		tier: "OU",
+	},
+	silvallygrass: {
+		tier: "OU",
+	},
+	silvallyground: {
+		tier: "OU",
+	},
+	silvallyice: {
+		tier: "OU",
+	},
+	silvallypoison: {
+		tier: "OU",
+	},
+	silvallypsychic: {
+		tier: "OU",
+	},
+	silvallyrock: {
+		tier: "OU",
+	},
+	silvallysteel: {
+		tier: "OU",
+	},
+	silvallywater: {
+		tier: "OU",
+	},
+	minior: {
+		tier: "OU",
+	},
+	komala: {
+		tier: "OU",
+	},
+	turtonator: {
+		tier: "OU",
+	},
+	togedemaru: {
+		tier: "OU",
+	},
+	mimikyu: {
+		tier: "OU",
+	},
+	bruxish: {
+		tier: "OU",
+	},
+	drampa: {
+		tier: "OU",
+	},
+	dhelmise: {
+		tier: "OU",
+	},
+	jangmoo: {
+		tier: "LC",
+	},
+	hakamoo: {
+		tier: "NFE",
+	},
+	kommoo: {
+		tier: "OU",
+	},
+	tapukoko: {
+		tier: "OU",
+	},
+	tapulele: {
+		tier: "OU",
+	},
+	tapubulu: {
+		tier: "OU",
+	},
+	tapufini: {
+		tier: "OU",
+	},
+	cosmog: {
+		tier: "LC",
+	},
+	cosmoem: {
+		tier: "NFE",
+	},
+	solgaleo: {
+		tier: "Uber",
+	},
+	lunala: {
+		tier: "Uber",
+	},
 	missingno: {
 		randomBattleMoves: ["watergun", "skyattack", "doubleedge", "metronome"],
 		isNonstandard: true,
