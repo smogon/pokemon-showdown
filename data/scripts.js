@@ -57,7 +57,6 @@ exports.BattleScripts = {
 		}
 		pokemon.moveUsed(move);
 		this.useMove(move, pokemon, target, sourceEffect);
-		this.singleEvent('AfterMove', move, null, pokemon, target, move);
 		this.runEvent('AfterMove', pokemon, target, move);
 	},
 	useMove: function (move, pokemon, target, sourceEffect) {
