@@ -3,7 +3,7 @@
 const CHOOSABLE_TARGETS = new Set(['normal', 'any', 'adjacentAlly', 'adjacentAllyOrSelf', 'adjacentFoe']);
 
 exports.BattleScripts = {
-	gen: 6,
+	gen: 7,
 	runMove: function (move, pokemon, target, sourceEffect) {
 		if (!sourceEffect && toId(move) !== 'struggle') {
 			let changedMove = this.runEvent('OverrideDecision', pokemon, target, move);
