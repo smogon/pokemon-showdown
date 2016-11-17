@@ -21,8 +21,8 @@ describe('Focus Sash', function () {
 		assert.strictEqual(holder.hp, 1);
 	});
 
-	it('should be consumed and allow its user to survive a confusion damage hit from full HP', function () {
-		battle = common.createBattle();
+	it('should be consumed and allow its user to survive a confusion damage hit from full HP [gen 6]', function () {
+		battle = common.gen(6).createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Shedinja', ability: 'wonderguard', item: 'focussash', moves: ['absorb']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Klefki', ability: 'prankster', moves: ['confuseray']}]);
 		const holder = battle.p1.active[0];

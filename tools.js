@@ -133,7 +133,8 @@ class BattleDex {
 	format(format) {
 		if (!this.modsLoaded) this.includeMods();
 		const mod = this.getFormat(format).mod;
-		if (!mod) return dexes['base'].includeData();
+		// TODO: change default format mod as gen7 becomes stable
+		if (!mod) return dexes['gen6'].includeData();
 		return dexes[mod].includeData();
 	}
 	modData(dataType, id) {
@@ -1268,7 +1269,7 @@ class BattleDex {
 dexes['base'] = new BattleDex();
 dexes['base'].BattleDex = BattleDex;
 
-// "gen6" is an alias for the current base data
-dexes['gen6'] = dexes['base'];
+// "gen7" is an alias for the current base data
+dexes['gen7'] = dexes['base'];
 
-module.exports = dexes['gen6'];
+module.exports = dexes['gen7'];

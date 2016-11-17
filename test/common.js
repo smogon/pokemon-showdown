@@ -107,4 +107,4 @@ class TestTools {
 
 const common = exports = module.exports = new TestTools();
 cache.set('base', common);
-cache.set('gen6', common);
+cache.set('gen7', common);
