@@ -52712,4 +52712,174 @@ exports.BattleLearnsets = {
 		weatherball: ["6L40"],
 		willowisp: ["6M"],
 	}},
+	rowlet: {learnset: {
+	}},
+	dartrix: {learnset: {
+	}},
+	decidueye: {learnset: {
+	}},
+	litten: {learnset: {
+	}},
+	torracat: {learnset: {
+	}},
+	incineroar: {learnset: {
+	}},
+	popplio: {learnset: {
+	}},
+	brionne: {learnset: {
+	}},
+	primarina: {learnset: {
+	}},
+	pikipek: {learnset: {
+	}},
+	trumbeak: {learnset: {
+	}},
+	toucannon: {learnset: {
+	}},
+	yungoos: {learnset: {
+	}},
+	gumshoos: {learnset: {
+	}},
+	grubbin: {learnset: {
+	}},
+	charjabug: {learnset: {
+	}},
+	vikavolt: {learnset: {
+	}},
+	crabrawler: {learnset: {
+	}},
+	crabominable: {learnset: {
+	}},
+	oricorio: {learnset: {
+	}},
+	oricoriopompom: {learnset: {
+	}},
+	oricoriopau: {learnset: {
+	}},
+	oricoriosensu: {learnset: {
+	}},
+	cutiefly: {learnset: {
+	}},
+	ribombee: {learnset: {
+	}},
+	rockruff: {learnset: {
+	}},
+	lycanroc: {learnset: {
+	}},
+	lycanrocmidnight: {learnset: {
+	}},
+	wishiwashi: {learnset: {
+	}},
+	mareanie: {learnset: {
+	}},
+	toxapex: {learnset: {
+	}},
+	mudbray: {learnset: {
+	}},
+	mudsdale: {learnset: {
+	}},
+	dewpider: {learnset: {
+	}},
+	araquanid: {learnset: {
+	}},
+	fomantis: {learnset: {
+	}},
+	lurantis: {learnset: {
+	}},
+	morelull: {learnset: {
+	}},
+	shiinotic: {learnset: {
+	}},
+	salandit: {learnset: {
+	}},
+	salazzle: {learnset: {
+	}},
+	stufful: {learnset: {
+	}},
+	bewear: {learnset: {
+	}},
+	bounsweet: {learnset: {
+	}},
+	steenee: {learnset: {
+	}},
+	tsareena: {learnset: {
+	}},
+	comfey: {learnset: {
+	}},
+	oranguru: {learnset: {
+	}},
+	passimian: {learnset: {
+	}},
+	wimpod: {learnset: {
+	}},
+	golisopod: {learnset: {
+	}},
+	sandygast: {learnset: {
+	}},
+	palossand: {learnset: {
+	}},
+	pyukumuku: {learnset: {
+	}},
+	typenull: {learnset: {
+	}},
+	silvally: {learnset: {
+	}},
+	minior: {learnset: {
+	}},
+	komala: {learnset: {
+	}},
+	turtonator: {learnset: {
+	}},
+	togedemaru: {learnset: {
+	}},
+	mimikyu: {learnset: {
+	}},
+	bruxish: {learnset: {
+	}},
+	drampa: {learnset: {
+	}},
+	dhelmise: {learnset: {
+	}},
+	jangmoo: {learnset: {
+	}},
+	hakamoo: {learnset: {
+	}},
+	kommoo: {learnset: {
+	}},
+	tapukoko: {learnset: {
+	}},
+	tapulele: {learnset: {
+	}},
+	tapubulu: {learnset: {
+	}},
+	tapufini: {learnset: {
+	}},
+	cosmog: {learnset: {
+	}},
+	cosmoem: {learnset: {
+	}},
+	solgaleo: {learnset: {
+	}},
+	lunala: {learnset: {
+	}},
+	nihilego: {learnset: {
+	}},
+	buzzwole: {learnset: {
+	}},
+	pheromosa: {learnset: {
+	}},
+	xurkitree: {learnset: {
+	}},
+	celesteela: {learnset: {
+	}},
+	kartana: {learnset: {
+	}},
+	guzzlord: {learnset: {
+	}},
+	necrozma: {learnset: {
+	}},
+	magearna: {learnset: {
+	}},
+	marshadow: {learnset: {
+	}},
 };
