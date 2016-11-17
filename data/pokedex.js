@@ -12503,7 +12503,7 @@ exports.BattlePokedex = {
 	},
 	drampa: {
 		num: 780,
-		species: "drampa",
+		species: "Drampa",
 		types: ["Normal", "Dragon"],
 		baseStats: {hp: 78, atk: 60, def: 85, spa: 135, spd: 91, spe: 36},
 		abilities: {0: "Berserk", 1: "Sap Sipper", H: "Cloud Nine"},
