@@ -2683,6 +2683,8 @@ exports.BattleLearnsets = {
 		workup: ["5M"],
 		zenheadbutt: ["6T", "5T", "4T"],
 	}},
+	rattataalola: {learnset: {
+	}},
 	raticate: {learnset: {
 		assurance: ["6L29", "5L29", "4L29"],
 		attract: ["6M", "5M", "4M", "3M"],
@@ -2757,6 +2759,8 @@ exports.BattleLearnsets = {
 		wildcharge: ["6M", "5M"],
 		workup: ["5M"],
 		zenheadbutt: ["6T", "5T", "4T"],
+	}},
+	raticatealola: {learnset: {
 	}},
 	spearow: {learnset: {
 		aerialace: ["6M", "6L17", "5M", "5L17", "4M", "4L17", "3M", "3L25", "3S0"],
@@ -3649,6 +3653,8 @@ exports.BattleLearnsets = {
 		voltswitch: ["6M", "5M"],
 		wildcharge: ["6M", "5M"],
 	}},
+	raichualola: {learnset: {
+	}},
 	sandshrew: {learnset: {
 		aerialace: ["6M", "5M", "4M", "3M"],
 		attract: ["6M", "5M", "4M", "3M"],
@@ -3726,6 +3732,8 @@ exports.BattleLearnsets = {
 		toxic: ["6M", "5M", "4M", "3M"],
 		xscissor: ["6M", "5M", "4M"],
 	}},
+	sandshrewalola: {learnset: {
+	}},
 	sandslash: {learnset: {
 		aerialace: ["6M", "5M", "4M", "3M"],
 		attract: ["6M", "5M", "4M", "3M"],
@@ -3800,6 +3808,8 @@ exports.BattleLearnsets = {
 		thief: ["6M", "5M", "4M", "3M"],
 		toxic: ["6M", "5M", "4M", "3M"],
 		xscissor: ["6M", "5M", "4M"],
+	}},
+	sandslashalola: {learnset: {
 	}},
 	nidoranf: {learnset: {
 		aerialace: ["6M", "5M", "4M", "3M"],
@@ -4659,6 +4669,8 @@ exports.BattleLearnsets = {
 		willowisp: ["6M", "6L20", "5M", "5L31", "4M", "4L14", "3L17", "3S0"],
 		zenheadbutt: ["6T", "5T", "4T"],
 	}},
+	vulpixalola: {learnset: {
+	}},
 	ninetales: {learnset: {
 		attract: ["6M", "5M", "4M", "3M"],
 		bodyslam: ["3T"],
@@ -4719,6 +4731,8 @@ exports.BattleLearnsets = {
 		toxic: ["6M", "5M", "4M", "3M"],
 		willowisp: ["6M", "5M", "5S0", "4M"],
 		zenheadbutt: ["6T", "5T", "4T"],
+	}},
+	ninetalesalola: {learnset: {
 	}},
 	igglybuff: {learnset: {
 		attract: ["6M", "5M", "4M", "3M"],
@@ -5761,6 +5775,8 @@ exports.BattleLearnsets = {
 		toxic: ["6M", "5M", "4M", "3M"],
 		uproar: ["6E", "5T", "5E", "4E", "3E"],
 	}},
+	diglettalola: {learnset: {
+	}},
 	dugtrio: {learnset: {
 		aerialace: ["6M", "5M", "4M", "3M"],
 		astonish: ["6L7", "5L7", "4L7"],
@@ -5822,6 +5838,8 @@ exports.BattleLearnsets = {
 		toxic: ["6M", "5M", "4M", "3M"],
 		triattack: ["6L1", "5L1", "4L1", "3L1", "3S0"],
 		uproar: ["5T"],
+	}},
+	dugtrioalola: {learnset: {
 	}},
 	meowth: {learnset: {
 		aerialace: ["6M", "5M", "4M", "3M"],
@@ -5912,6 +5930,8 @@ exports.BattleLearnsets = {
 		waterpulse: ["6T", "4M", "3M"],
 		workup: ["5M"],
 	}},
+	meowthalola: {learnset: {
+	}},
 	persian: {learnset: {
 		aerialace: ["6M", "5M", "4M", "3M"],
 		assurance: ["6L49", "5L49", "4L49"],
@@ -5996,6 +6016,8 @@ exports.BattleLearnsets = {
 		uturn: ["6M", "5M", "4M"],
 		waterpulse: ["6T", "4M", "3M"],
 		workup: ["5M"],
+	}},
+	persianalola: {learnset: {
 	}},
 	psyduck: {learnset: {
 		aerialace: ["6M", "5M", "4M", "3M"],
@@ -7700,6 +7722,8 @@ exports.BattleLearnsets = {
 		toxic: ["6M", "5M", "4M", "3M"],
 		wideguard: ["6E"],
 	}},
+	geodudealola: {learnset: {
+	}},
 	graveler: {learnset: {
 		ancientpower: ["4T"],
 		attract: ["6M", "5M", "4M", "3M"],
@@ -7770,6 +7794,8 @@ exports.BattleLearnsets = {
 		tackle: ["6L1", "5L1", "4L1", "3L1"],
 		thunderpunch: ["6T", "5T", "4T"],
 		toxic: ["6M", "5M", "4M", "3M"],
+	}},
+	graveleralola: {learnset: {
 	}},
 	golem: {learnset: {
 		ancientpower: ["4T"],
@@ -7850,6 +7876,8 @@ exports.BattleLearnsets = {
 		tackle: ["6L1", "5L1", "4L1", "3L1"],
 		thunderpunch: ["6T", "5T", "4T"],
 		toxic: ["6M", "5M", "4M", "3M"],
+	}},
+	golemalola: {learnset: {
 	}},
 	ponyta: {learnset: {
 		agility: ["6L37", "5L37", "4L33", "3L38"],
@@ -8852,6 +8880,8 @@ exports.BattleLearnsets = {
 		toxic: ["6M", "5M", "4M", "3M"],
 		venoshock: ["6M", "5M"],
 	}},
+	grimeralola: {learnset: {
+	}},
 	muk: {learnset: {
 		acidarmor: ["6L43", "5L42", "4L44", "3L34"],
 		attract: ["6M", "5M", "4M", "3M"],
@@ -8928,6 +8958,8 @@ exports.BattleLearnsets = {
 		toxic: ["6M", "5M", "4M", "3M"],
 		venomdrench: ["6L38"],
 		venoshock: ["6M", "5M"],
+	}},
+	mukalola: {learnset: {
 	}},
 	shellder: {learnset: {
 		aquaring: ["6E", "5E"],
@@ -10026,6 +10058,8 @@ exports.BattleLearnsets = {
 		worryseed: ["6T", "5T", "4T"],
 		zenheadbutt: ["6T", "5T", "4T"],
 	}},
+	exeggutoralola: {learnset: {
+	}},
 	cubone: {learnset: {
 		aerialace: ["6M", "5M", "4M", "3M"],
 		ancientpower: ["6E", "5E", "4E", "3E"],
@@ -10197,6 +10231,8 @@ exports.BattleLearnsets = {
 		thunderpunch: ["6T", "5T", "4T", "3T"],
 		toxic: ["6M", "5M", "4M", "3M"],
 		uproar: ["6T", "5T", "4T"],
+	}},
+	marowakalola: {learnset: {
 	}},
 	tyrogue: {learnset: {
 		attract: ["6M", "5M", "4M", "3M"],
@@ -52751,12 +52787,6 @@ exports.BattleLearnsets = {
 	crabominable: {learnset: {
 	}},
 	oricorio: {learnset: {
-	}},
-	oricoriopompom: {learnset: {
-	}},
-	oricoriopau: {learnset: {
-	}},
-	oricoriosensu: {learnset: {
 	}},
 	cutiefly: {learnset: {
 	}},
