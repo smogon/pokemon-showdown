@@ -638,7 +638,7 @@ class Validator {
 		let sources = [];
 		// the equivalent of adding "every source at or before this gen" to sources
 		let sourcesBefore = 0;
-		if (lsetData.sourcesBefore === undefined) lsetData.sourcesBefore = 6;
+		if (lsetData.sourcesBefore === undefined) lsetData.sourcesBefore = tools.gen;
 		let noPastGen = !!format.requirePentagon;
 		// Pokemon cannot be traded to past generations except in Gen 1 Tradeback
 		let noFutureGen = !(format.banlistTable && format.banlistTable['allowtradeback']);
@@ -681,14 +681,14 @@ class Validator {
 
 				for (let i = 0, len = lset.length; i < len; i++) {
 					let learned = lset[i];
-					let learnedGen = learned.charAt(0);
-					if (noPastGen && learnedGen !== '6') continue;
-					if (noFutureGen && parseInt(learnedGen) > tools.gen) continue;
+					let learnedGen = parseInt(learned.charAt(0));
+					if (noPastGen && learnedGen < tools.gen) continue;
+					if (noFutureGen && learnedGen > tools.gen) continue;
 
 					// redundant
 					if (learnedGen <= sourcesBefore) continue;
 
-					if (learnedGen !== '6' && isHidden && !tools.mod('gen' + learnedGen).getTemplate(template.species).abilities['H']) {
+					if (learnedGen < 7 && isHidden && !tools.mod('gen' + learnedGen).getTemplate(template.species).abilities['H']) {
 						// check if the Pokemon's hidden ability was available
 						incompatibleAbility = true;
 						continue;
@@ -700,8 +700,8 @@ class Validator {
 						// Defog and Whirlpool can't be transferred together
 						if (tools.gen >= 5 && moveid in {'defog':1, 'whirlpool':1} && learnedGen <= 4) blockedHM = true;
 					}
-					if (learned.substr(0, 2) in {'4L':1, '5L':1, '6L':1}) {
-						// gen 4-6 level-up moves
+					if (learned.substr(0, 2) in {'4L':1, '5L':1, '6L':1, '7L':1}) {
+						// gen 4-7 level-up moves
 						if (level >= parseInt(learned.substr(2))) {
 							// we're past the required level to learn it
 							return false;
@@ -716,7 +716,7 @@ class Validator {
 						}
 					}
 					if (learned.charAt(1) in {L:1, M:1, T:1}) {
-						if (parseInt(learnedGen) === tools.gen) {
+						if (learnedGen === tools.gen) {
 							// current-gen TM or tutor moves:
 							//   always available
 							return false;
@@ -724,12 +724,12 @@ class Validator {
 						// past-gen level-up, TM, or tutor moves:
 						//   available as long as the source gen was or was before this gen
 						limit1 = false;
-						sourcesBefore = Math.max(sourcesBefore, parseInt(learnedGen));
+						sourcesBefore = Math.max(sourcesBefore, learnedGen);
 						limitedEgg = false;
 					} else if (learned.charAt(1) === 'E') {
 						// egg moves:
 						//   only if that was the source
-						if (learnedGen === '6' || lsetData.fastCheck) {
+						if (learnedGen >= 6 || lsetData.fastCheck) {
 							// gen 6 doesn't have egg move incompatibilities except for certain cases with baby Pokemon
 							learned = learnedGen + 'E' + (template.prevo ? template.id : '');
 							sources.push(learned);
@@ -751,7 +751,7 @@ class Validator {
 							// can't inherit from CAP pokemon
 							if (dexEntry.isNonstandard) continue;
 							// can't breed mons from future gens
-							if (dexEntry.gen > parseInt(learnedGen)) continue;
+							if (dexEntry.gen > learnedGen) continue;
 							// father must be male
 							if (dexEntry.gender === 'N' || dexEntry.gender === 'F') continue;
 							// can't inherit from dex entries with no learnsets
@@ -767,7 +767,7 @@ class Validator {
 
 							// we can breed with it
 							atLeastOne = true;
-							if (tradebackEligible && learnedGen === '2' && move.gen <= 1) {
+							if (tradebackEligible && learnedGen === 2 && move.gen <= 1) {
 								// can tradeback
 								sources.push('1ET' + dexEntry.id);
 							}
@@ -785,7 +785,7 @@ class Validator {
 						//   only if that was the source
 						// Event Pokémon:
 						//	Available as long as the past gen can get the Pokémon and then trade it back.
-						if (tradebackEligible && learnedGen === '2' && move.gen <= 1) {
+						if (tradebackEligible && learnedGen === 2 && move.gen <= 1) {
 							// can tradeback
 							sources.push('1ST' + learned.slice(2) + ' ' + template.id);
 						}
