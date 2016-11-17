@@ -293,25 +293,23 @@ exports.BattleFormatsData = {
 		],
 		eventOnly: true,
 		gen: 6,
-		tier: "PU",
+		tier: "Illegal",
 	},
 	pikachurockstar: {
-		randomBattleMoves: ["meteormash", "wildcharge", "knockoff", "brickbreak"],
 		eventPokemon: [
 			{"generation": 6, "level": 20, "moves":["quickattack", "electroball", "thunderwave", "meteormash"]},
 		],
 		eventOnly: true,
 		gen: 6,
-		tier: "PU",
+		tier: "Illegal",
 	},
 	pikachubelle: {
-		randomBattleMoves: ["iciclecrash", "thunderbolt", "knockoff", "brickbreak", "substitute", "grassknot", "voltswitch"],
 		eventPokemon: [
 			{"generation": 6, "level": 20, "moves":["quickattack", "electroball", "thunderwave", "iciclecrash"]},
 		],
 		eventOnly: true,
 		gen: 6,
-		tier: "PU",
+		tier: "Illegal",
 	},
 	pikachupopstar: {
 		eventPokemon: [
@@ -319,7 +317,7 @@ exports.BattleFormatsData = {
 		],
 		eventOnly: true,
 		gen: 6,
-		tier: "PU",
+		tier: "Illegal",
 	},
 	pikachuphd: {
 		eventPokemon: [
@@ -327,16 +325,15 @@ exports.BattleFormatsData = {
 		],
 		eventOnly: true,
 		gen: 6,
-		tier: "PU",
+		tier: "Illegal",
 	},
 	pikachulibre: {
-		randomBattleMoves: ["flyingpress", "thunderbolt", "knockoff", "hiddenpowerice", "substitute", "grassknot", "voltswitch"],
 		eventPokemon: [
 			{"generation": 6, "level": 20, "moves":["quickattack", "electroball", "thunderwave", "flyingpress"]},
 		],
 		eventOnly: true,
 		gen: 6,
-		tier: "PU",
+		tier: "Illegal",
 	},
 	raichu: {
 		randomBattleMoves: ["nastyplot", "encore", "thunderbolt", "grassknot", "hiddenpowerice", "focusblast", "voltswitch"],
@@ -4098,7 +4095,6 @@ exports.BattleFormatsData = {
 		randomDoubleBattleMoves: ["calmmind", "judgment", "recover", "willowisp", "protect", "earthpower", "thunderbolt"],
 		eventOnly: true,
 		requiredItem: "Pixie Plate",
-		gen: 6,
 	},
 	arceusfighting: {
 		randomBattleMoves: ["calmmind", "judgment", "stoneedge", "shadowball", "recover", "toxic", "defog"],
@@ -5072,7 +5068,7 @@ exports.BattleFormatsData = {
 			{"generation": 6, "level": 50, "nature": "Adamant", "ivs": {"hp": 31, "atk": 31, "def": 31, "spa": 1, "spd": 31, "spe": 24}, "isHidden": false, "moves":["earthquake", "knockoff", "uturn", "rocktomb"], "pokeball": "cherishball"},
 		],
 		eventOnly: true,
-		tier: "Uber",
+		tier: "OU",
 	},
 	landorustherian: {
 		randomBattleMoves: ["swordsdance", "rockpolish", "earthquake", "stoneedge", "uturn", "superpower", "stealthrock"],
@@ -5158,7 +5154,7 @@ exports.BattleFormatsData = {
 			{"generation": 6, "level": 100, "moves":["technoblast", "magnetbomb", "solarbeam", "signalbeam"], "pokeball": "cherishball"},
 		],
 		eventOnly: true,
-		tier: "Uber",
+		tier: "OU",
 	},
 	genesectburn: {
 		randomBattleMoves: ["uturn", "bugbuzz", "icebeam", "technoblast", "thunderbolt", "ironhead", "extremespeed"],
@@ -5230,7 +5226,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 6, "level": 36, "ivs": {"spe": 31}, "isHidden": true, "moves":["watershuriken", "shadowsneak", "hydropump", "substitute"], "pokeball": "cherishball"},
 		],
-		tier: "Uber",
+		tier: "OU",
 	},
 	bunnelby: {
 		randomBattleMoves: ["agility", "earthquake", "return", "quickattack", "uturn", "stoneedge", "spikes", "bounce"],
@@ -5365,7 +5361,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 6, "level": 50, "gender": "F", "nature": "Quiet", "moves":["wideguard", "kingsshield", "shadowball", "flashcannon"], "pokeball": "cherishball"},
 		],
-		tier: "Uber",
+		tier: "OU",
 	},
 	aegislashblade: {
 		battleOnly: true,
@@ -5637,7 +5633,7 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["nastyplot", "substitute", "psyshock", "psychic", "darkpulse", "focusblast", "hyperspacefury", "zenheadbutt", "icepunch", "drainpunch", "gunkshot", "knockoff", "trick"],
 		randomDoubleBattleMoves: ["psychic", "darkpulse", "focusblast", "protect", "hyperspacefury", "zenheadbutt", "icepunch", "drainpunch", "gunkshot"],
 		eventOnly: true,
-		tier: "Uber",
+		tier: "OU",
 	},
 	volcanion: {
 		randomBattleMoves: ["substitute", "steameruption", "fireblast", "sludgewave", "hiddenpowerice", "earthpower", "superpower"],
@@ -5902,28 +5898,93 @@ exports.BattleFormatsData = {
 		tier: "OU",
 	},
 	tapukoko: {
+		eventPokemon: [
+			{"generation": 7, "level": 60, "isHidden": false, "moves":["naturesmadness", "discharge", "agility", "electroball"]},
+		],
+		eventOnly: true,
+		unreleasedHidden: true,
 		tier: "OU",
 	},
 	tapulele: {
+		eventPokemon: [
+			{"generation": 7, "level": 60, "isHidden": false, "moves":["naturesmadness", "extrasensory", "flatter", "moonblast"]},
+		],
+		eventOnly: true,
+		unreleasedHidden: true,
 		tier: "OU",
 	},
 	tapubulu: {
+		eventPokemon: [
+			{"generation": 7, "level": 60, "isHidden": false, "moves":["naturesmadness", "zenheadbutt", "megahorn", "skullbash"]},
+		],
+		eventOnly: true,
+		unreleasedHidden: true,
 		tier: "OU",
 	},
 	tapufini: {
+		eventPokemon: [
+			{"generation": 7, "level": 60, "isHidden": false, "moves":["naturesmadness", "muddywater", "aquaring", "hydropump"]},
+		],
+		eventOnly: true,
+		unreleasedHidden: true,
 		tier: "OU",
 	},
 	cosmog: {
+		eventPokemon: [
+			{"generation": 7, "level": 5, "moves":["splash"]},
+		],
+		eventOnly: true,
 		tier: "LC",
 	},
 	cosmoem: {
 		tier: "NFE",
 	},
 	solgaleo: {
+		eventPokemon: [
+			{"generation": 7, "level": 55, "moves":["sunsteelstrike"]},
+		],
 		tier: "Uber",
 	},
 	lunala: {
+		eventPokemon: [
+			{"generation": 7, "level": 55, "moves":["moongeistbeam", "cosmicpower", "nightdaze", "shadowball"]},
+		],
 		tier: "Uber",
+	},
+	nihilego: {
+		tier: "OU",
+	},
+	buzzwole: {
+		tier: "OU",
+	},
+	pheromosa: {
+		tier: "OU",
+	},
+	xurkitree: {
+		tier: "OU",
+	},
+	celesteela: {
+		tier: "OU",
+	},
+	kartana: {
+		tier: "OU",
+	},
+	guzzlord: {
+		tier: "OU",
+	},
+	necrozma: {
+		tier: "OU",
+	},
+	magearna: {
+		eventPokemon: [
+			{"generation": 7, "level": 50, "moves":["fleurcannon", "flashcannon", "luckychant", "helpinghand"]},
+		],
+		eventOnly: true,
+		tier: "OU",
+	},
+	marshadow: {
+		isUnreleased: true,
+		tier: "Unreleased",
 	},
 	missingno: {
 		randomBattleMoves: ["watergun", "skyattack", "doubleedge", "metronome"],
