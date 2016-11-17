@@ -1961,7 +1961,7 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "The user's type changes based on the battle terrain. Normal type on the regular Wi-Fi terrain, Electric type during Electric Terrain, Fairy type during Misty Terrain, and Grass type during Grassy Terrain. Fails if the user's type cannot be changed or if the user is already purely that type.",
+		desc: "The user's type changes based on the battle terrain. Normal type on the regular Wi-Fi terrain, Electric type during Electric Terrain, Fairy type during Misty Terrain, Grass type during Grassy Terrain, and Psychic type during Psychic Terrain. Fails if the user's type cannot be changed or if the user is already purely that type.",
 		shortDesc: "Changes user's type by terrain (default Normal).",
 		id: "camouflage",
 		name: "Camouflage",
@@ -1976,6 +1976,8 @@ exports.BattleMovedex = {
 				newType = 'Grass';
 			} else if (this.isTerrain('mistyterrain')) {
 				newType = 'Fairy';
+			} else if (this.isTerrain('psychicterrain')) {
+				newType = 'Psychic';
 			}
 
 			if (!target.setType(newType)) return false;
@@ -10498,7 +10500,7 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "This move calls another move for use based on the battle terrain. Tri Attack on the regular Wi-Fi terrain, Thunderbolt during Electric Terrain, Moonblast during Misty Terrain, and Energy Ball during Grassy Terrain.",
+		desc: "This move calls another move for use based on the battle terrain. Tri Attack on the regular Wi-Fi terrain, Thunderbolt during Electric Terrain, Moonblast during Misty Terrain, Energy Ball during Grassy Terrain, and Psychic during Psychic Terrain.",
 		shortDesc: "Attack depends on terrain (default Tri Attack).",
 		id: "naturepower",
 		name: "Nature Power",
@@ -10513,6 +10515,8 @@ exports.BattleMovedex = {
 				move = 'energyball';
 			} else if (this.isTerrain('mistyterrain')) {
 				move = 'moonblast';
+			} else if (this.isTerrain('psychicterrain')) {
+				move = 'psychic';
 			}
 			this.useMove(move, pokemon, target);
 			return null;
@@ -13450,7 +13454,7 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 70,
 		category: "Physical",
-		desc: "Has a 30% chance to cause a secondary effect on the target based on the battle terrain. Causes paralysis on the regular Wi-Fi terrain, causes paralysis during Electric Terrain, lowers Special Attack by 1 stage during Misty Terrain, and causes sleep during Grassy Terrain. The secondary effect chance is not affected by the Ability Serene Grace.",
+		desc: "Has a 30% chance to cause a secondary effect on the target based on the battle terrain. Causes paralysis on the regular Wi-Fi terrain, causes paralysis during Electric Terrain, lowers Special Attack by 1 stage during Misty Terrain, causes sleep during Grassy Terrain and lowers Speed by 1 stage during Psychic Terrain. The secondary effect chance is not affected by the Ability Serene Grace.",
 		shortDesc: "Effect varies with terrain. (30% paralysis chance)",
 		id: "secretpower",
 		name: "Secret Power",
@@ -13475,6 +13479,13 @@ exports.BattleMovedex = {
 					chance: 30,
 					boosts: {
 						spa: -1,
+					},
+				});
+			} else if (this.isTerrain('psychicterrain')) {
+				move.secondaries.push({
+					chance: 30,
+					boosts: {
+						spe: -1,
 					},
 				});
 			}
