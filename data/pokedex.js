@@ -12749,7 +12749,7 @@ exports.BattlePokedex = {
 		eggGroups: ["Undiscovered"],
 	},
 	necrozma: {
-		num: 794,
+		num: 800,
 		species: "Necrozma",
 		types: ["Psychic"],
 		gender: "N",
