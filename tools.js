@@ -51,6 +51,18 @@ if (!Object.values) {
 	};
 }
 
+// shim padStart
+// if (!String.prototype.padStart) {
+// 	String.prototype.padStart = function padStart(maxLength, filler) {
+// 		filler = filler || ' ';
+// 		while (filler.length + this.length < maxLength) {
+// 			filler += filler;
+// 		}
+
+// 		return filler.slice(0, maxLength - this.length) + this;
+// 	};
+// }
+
 let dexes = {};
 
 const DATA_TYPES = ['Pokedex', 'FormatsData', 'Learnsets', 'Movedex', 'Statuses', 'TypeChart', 'Scripts', 'Items', 'Abilities', 'Natures', 'Formats', 'Aliases'];
@@ -287,6 +299,11 @@ class BattleDex {
 		if (!template || typeof template === 'string') {
 			let name = (template || '').trim();
 			let id = toId(name);
+			if (id === 'nidoran' && name.slice(-1) === '♀') {
+				id = 'nidoranf';
+			} else if (id === 'nidoran' && name.slice(-1) === '♂') {
+				id = 'nidoranm';
+			}
 			template = this.data.TemplateCache.get(id);
 			if (template) return template;
 			if (this.data.Aliases.hasOwnProperty(id)) {
