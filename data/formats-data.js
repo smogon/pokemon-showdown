@@ -5225,6 +5225,7 @@ exports.BattleFormatsData = {
 		randomDoubleBattleMoves: ["hydropump", "uturn", "surf", "icebeam", "matblock", "taunt", "darkpulse", "protect"],
 		eventPokemon: [
 			{"generation": 6, "level": 36, "ivs": {"spe": 31}, "isHidden": true, "moves":["watershuriken", "shadowsneak", "hydropump", "substitute"], "pokeball": "cherishball"},
+			{"generation": 6, "level": 100, "isHidden": true, "moves":["hydrocannon", "gunkshot", "matblock", "happyhour"], "pokeball": "cherishball"},
 		],
 		tier: "OU",
 	},
@@ -5941,7 +5942,7 @@ exports.BattleFormatsData = {
 	},
 	solgaleo: {
 		eventPokemon: [
-			{"generation": 7, "level": 55, "moves":["sunsteelstrike"]},
+			{"generation": 7, "level": 55, "moves":["sunsteelstrike", "cosmicpower", "crunch", "zenheadbutt"]},
 		],
 		tier: "Uber",
 	},
