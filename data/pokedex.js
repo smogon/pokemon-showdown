@@ -11462,7 +11462,7 @@ exports.BattlePokedex = {
 	},
 	brionne: {
 		num: 729,
-		species: "Wartortle",
+		species: "Brionne",
 		types: ["Water"],
 		genderRatio: {M: 0.875, F: 0.125},
 		baseStats: {hp: 60, atk: 69, def: 69, spa: 91, spd: 81, spe: 50},
