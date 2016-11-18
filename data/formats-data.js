@@ -242,6 +242,8 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 4, "level": 30, "gender": "F", "nature": "Naughty", "moves":["helpinghand", "volttackle", "swagger", "painsplit"]},
 		],
+		eventOnly: true,
+		gen: 4,
 		tier: "Illegal",
 	},
 	pikachu: {
