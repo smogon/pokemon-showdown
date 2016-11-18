@@ -49,6 +49,14 @@ class TestTools {
 		return this.mod('gen' + genNum);
 	}
 
+	get minRollSeed() {
+		return [0x09917, 0x06924, 0x0e1c8, 0x06af0];
+	}
+
+	get maxRollSeed() {
+		return [0x0967e, 0x0b79c, 0x06494, 0x068e3];
+	}
+
 	getFormat(options) {
 		let mask = 0;
 		for (let property in options) {
