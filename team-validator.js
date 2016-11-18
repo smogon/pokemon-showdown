@@ -495,7 +495,7 @@ class Validator {
 				events:
 				for (let i = 0; i < eventPokemon.length; i++) {
 					let eventData = eventPokemon[i];
-					if (format.requirePentagon && eventData.generation < 6) continue;
+					if (format.requirePentagon && eventData.generation < tools.gen) continue;
 					if (eventData.level && set.level < eventData.level) continue;
 					if ((eventData.shiny === true && !set.shiny) || (!eventData.shiny && set.shiny)) continue;
 					if (eventData.nature && set.nature !== eventData.nature) continue;
