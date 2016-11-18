@@ -496,7 +496,7 @@ class BattleDex {
 			} else if (id && this.data.Formats[id]) {
 				effect = this.data.Formats[id];
 				effect.name = effect.name || this.data.Formats[id].name;
-				if (!effect.mod) effect.mod = 'base';
+				if (!effect.mod) effect.mod = 'gen6';
 				if (!effect.effectType) effect.effectType = 'Format';
 			} else if (id === 'recoil') {
 				effect = {
@@ -530,7 +530,7 @@ class BattleDex {
 				if (effect.cached) return effect;
 				effect.cached = true;
 				effect.name = effect.name || this.data.Formats[id].name;
-				if (!effect.mod) effect.mod = 'base';
+				if (!effect.mod) effect.mod = 'gen6';
 				if (!effect.effectType) effect.effectType = 'Format';
 			}
 			if (!effect.id) effect.id = id;
@@ -1257,7 +1257,7 @@ class BattleDex {
 			if (format.challengeShow === undefined) format.challengeShow = true;
 			if (format.searchShow === undefined) format.searchShow = true;
 			if (format.tournamentShow === undefined) format.tournamentShow = true;
-			if (format.mod === undefined) format.mod = 'base';
+			if (format.mod === undefined) format.mod = 'gen6';
 			if (!dexes[format.mod]) throw new Error("Format `" + format.name + "` requires nonexistent mod: `" + format.mod + "`");
 			this.installFormat(id, format);
 		}
