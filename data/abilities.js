@@ -288,7 +288,12 @@ exports.BattleAbilities = {
 	"berserk": {
 		desc: "This Pokemon's Special Attack is raised by 1 stage when it reaches 1/2 or less of its maximum HP.",
 		shortDesc: "This Pokemon's Sp. Atk is raised by 1 when it reaches 1/2 or less of its max HP.",
-		// TODO
+		onAfterDamage: function (damage, target, source, move) {
+			if (!target.hp || !damage || move.effectType !== 'Move') return;
+			if (target.hp <= target.maxhp / 2 && target.hp + damage > target.maxhp / 2) {
+				this.boost({spa: 1});
+			}
+		},
 		id: "berserk",
 		name: "Berserk",
 		rating: 3,
