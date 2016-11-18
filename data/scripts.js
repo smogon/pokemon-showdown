@@ -624,6 +624,59 @@ exports.BattleScripts = {
 		return this.clampIntRange(Math.round(damageDealt * move.recoil[0] / move.recoil[1]), 1);
 	},
 
+	zMoveTable: {
+		Poison: "Acid Downpour",
+		Fighting: "All-Out Pummeling",
+		Dark: "Black Hole Eclipse",
+		Grass: "Bloom Doom",
+		Normal: "Breakneck Blitz",
+		Rock: "Continental Crush",
+		Steel: "Corkscrew Crash",
+		Dragon: "Devastating Drake",
+		Electric: "Gigavolt Havoc",
+		Water: "Hydro Vortex",
+		Fire: "Inferno Overdrive",
+		Ghost: "Never-Ending Nightmare",
+		Bug: "Savage Spin-Out",
+		Psychic: "Shattered Psyche",
+		Ice: "Subzero Slammer",
+		Flying: "Supersonic Skystrike",
+		Ground: "Tectonic Rage",
+		Fairy: "Twinkle Tackle",
+	},
+
+	canZMove: function (pokemon) {
+		if (this.zMoveUsed) return;
+		let item = pokemon.getItem();
+		if (!item.zMove) return;
+		if (item.zMoveUser && !item.zMoveUser.includes(pokemon.species)) return;
+		var atLeastOne = false;
+		var zMoves = [];
+		for (var i = 0; i < pokemon.moves.length; i++) {
+			var move = this.getMove(pokemon.moves[i]);
+			var zMove = '';
+			if (item.zMoveFrom) {
+				if (move.name === item.zMoveFrom) zMove = item.zMove;
+			} else if (item.zMove === true) {
+				if (move.type === item.zMoveType) {
+					if (move.category === "Status") {
+						zMove = 'Z-' + move.name;
+					} else {
+						zMove = this.zMoveTable[move.type];
+					}
+				}
+			}
+			zMoves.push(zMove);
+			if (zMove) atLeastOne = true;
+		}
+		if (atLeastOne) return zMoves;
+	},
+
+	runZMove: function (pokemon, move) {
+		// Limit one Z move
+		this.zMoveUsed = true;
+	},
+
 	canMegaEvo: function (pokemon) {
 		let altForme = pokemon.baseTemplate.otherFormes && this.getTemplate(pokemon.baseTemplate.otherFormes[0]);
 		if (altForme && altForme.isMega && altForme.requiredMove && pokemon.moves.includes(toId(altForme.requiredMove))) return altForme.species;
