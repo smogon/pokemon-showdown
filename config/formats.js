@@ -338,7 +338,7 @@ exports.Formats = [
 		banlist: ['Illegal', 'Unreleased'],
 	},
 	{
-		name: "[Gen 7] Challenge Cup",
+		name: "[Gen 7] Challenge Cup (beta)",
 		section: "Sun/Moon (beta)",
 
 		mod: 'gen7',
