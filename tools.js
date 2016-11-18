@@ -1219,7 +1219,7 @@ class BattleDex {
 		}
 
 		// Flag the generation. Required for team validator.
-		this.gen = this.data.Scripts.gen || 6;
+		this.gen = this.data.Scripts.gen || 7;
 
 		// Execute initialization script.
 		if (BattleScripts.init) BattleScripts.init.call(this);
