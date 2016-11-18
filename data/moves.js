@@ -15277,7 +15277,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, authentic: 1},
 		stealsBoosts: true,
-		// Boost stealing implemented in scripts.js TODO: actually implement it
+		// Boost stealing implemented in scripts.js
 		secondary: false,
 		target: "normal",
 		type: "Ghost",
