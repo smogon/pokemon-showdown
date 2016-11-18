@@ -26,6 +26,14 @@ describe('Prankster', function () {
 		]);
 		assert.constant(() => battle.p2.active[0].status, () => battle.commitDecisions());
 	});
+
+	it('should cause bounced Status moves to fail against Dark Pokémon', function () {
+		battle = common.createBattle([
+			[{species: "Klefki", ability: 'prankster', moves: ['magiccoat']}],
+			[{species: "Spiritomb", ability: 'pressure', moves: ['willowisp']}],
+		]);
+		assert.constant(() => battle.p2.active[0].status, () => battle.commitDecisions());
+	});
 });
 
 describe('Prankster [Gen 6]', function () {
