@@ -271,13 +271,16 @@ class BattlePokemon {
 
 		return stat;
 	}
-	getStat(statName, unboosted, unmodified) {
+	getStat(statName, unboosted, unmodified, afterMega) {
 		statName = toId(statName);
 
 		if (statName === 'hp') return this.maxhp; // please just read .maxhp directly
 
 		// base stat
 		let stat = this.stats[statName];
+		if (afterMega) {
+			stat = this.battle.spreadModify(this.battle.getTemplate(this.canMegaEvo).baseStats, this.set)[statName];
+		}
 
 		// Download ignores Wonder Room's effect, but this results in
 		// stat stages being calculated on the opposite defensive stat
@@ -314,7 +317,7 @@ class BattlePokemon {
 		return stat;
 	}
 	getDecisionSpeed() {
-		let speed = this.getStat('spe');
+		let speed = this.getStat('spe', false, false, this.battle.gen >= 7 && this.willMega);
 		if (speed > 10000) speed = 10000;
 		if (this.battle.getPseudoWeather('trickroom')) {
 			speed = 0x2710 - speed;
@@ -1070,6 +1073,11 @@ class BattlePokemon {
 	getAbility() {
 		return this.battle.getAbility(this.ability);
 	}
+	getMegaAbility() {
+		if (!this.canMegaEvo) return null;
+		const megaTemplate = this.battle.getTemplate(this.canMegaEvo);
+		return this.battle.getAbility(megaTemplate.abilities['0']);
+	}
 	hasAbility(ability) {
 		if (this.ignoringAbility()) return false;
 		let ownAbility = this.ability;
@@ -1583,6 +1591,7 @@ class BattleSide {
 			pokemon: activePokemon,
 			targetLoc: targetLoc,
 			move: moveid,
+			mega: willMega && activePokemon.canMegaEvo,
 		});
 		this.choiceData.decisions.push(decision);
 
@@ -2796,10 +2805,18 @@ class Battle extends Tools.BattleDex {
 				this.resolveLastPriority(statuses, callbackType);
 			}
 		}
-		status = thing.getAbility();
-		if (status[callbackType] !== undefined || (getAll && thing.abilityData[getAll])) {
-			statuses.push({status: status, callback: status[callbackType], statusData: thing.abilityData, end: thing.clearAbility, thing: thing});
-			this.resolveLastPriority(statuses, callbackType);
+		if (this.gen >= 7 && thing.willMega && (callbackType === 'onModifySpe' || callbackType === 'onModifyPriority')) {
+			status = thing.getMegaAbility();
+			if (status[callbackType] !== undefined) {
+				statuses.push({status: status, callback: status[callbackType], statusData: {id: status.id}, end: null, thing: thing});
+				this.resolveLastPriority(statuses, callbackType);
+			}
+		} else {
+			status = thing.getAbility();
+			if (status[callbackType] !== undefined || (getAll && thing.abilityData[getAll])) {
+				statuses.push({status: status, callback: status[callbackType], statusData: thing.abilityData, end: thing.clearAbility, thing: thing});
+				this.resolveLastPriority(statuses, callbackType);
+			}
 		}
 		status = thing.getItem();
 		if (status[callbackType] !== undefined || (getAll && thing.itemData[getAll])) {
@@ -4065,6 +4082,7 @@ class Battle extends Tools.BattleDex {
 		if (decision) {
 			if (!decision.side && decision.pokemon) decision.side = decision.pokemon.side;
 			if (!decision.choice && decision.move) decision.choice = 'move';
+			if (decision.mega) decision.pokemon.willMega = true;
 			if (!decision.priority && decision.priority !== 0) {
 				let priorities = {
 					'beforeTurn': 100,
@@ -4092,7 +4110,7 @@ class Battle extends Tools.BattleDex {
 					decision.pokemon.switchCopyFlag = decision.pokemon.switchFlag;
 				}
 				decision.pokemon.switchFlag = false;
-				if (!decision.speed && decision.pokemon && decision.pokemon.isActive) decision.speed = decision.pokemon.speed;
+				if (!decision.speed && decision.pokemon && decision.pokemon.isActive) decision.speed = decision.pokemon.getDecisionSpeed();
 			}
 			if (decision.move) {
 				let target;
@@ -4113,8 +4131,8 @@ class Battle extends Tools.BattleDex {
 				}
 			}
 			if (!decision.pokemon && !decision.speed) decision.speed = 1;
-			if (!decision.speed && (decision.choice === 'switch' || decision.choice === 'instaswitch') && decision.target) decision.speed = decision.target.speed;
-			if (!decision.speed) decision.speed = decision.pokemon.speed;
+			if (!decision.speed && (decision.choice === 'switch' || decision.choice === 'instaswitch') && decision.target) decision.speed = decision.target.getDecisionSpeed();
+			if (!decision.speed) decision.speed = decision.pokemon.getDecisionSpeed();
 		}
 	}
 	addQueue(decision) {
