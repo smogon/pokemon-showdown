@@ -192,7 +192,7 @@ class BattlePokemon {
 			// In Gen 6, Hidden Power is always 60 base power
 			this.hpPower = (this.battle.gen && this.battle.gen < 6) ? Math.floor(hpPowerX * 40 / 63) + 30 : 60;
 		}
-		if (this.battle.gen >= 7) {
+		if (this.battle.gen >= 7 && desiredHPType) {
 			this.hpType = desiredHPType;
 		}
 
