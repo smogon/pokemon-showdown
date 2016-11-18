@@ -549,9 +549,11 @@ class BattlePokemon {
 			if (this.trapped) data.trapped = true;
 		}
 
-		if (this.canMegaEvo && !lockedMove) data.canMegaEvo = true;
-		let canZMove = this.battle.canZMove(this);
-		if (canZMove) data.canZMove = canZMove;
+		if (!lockedMove) {
+			if (this.canMegaEvo) data.canMegaEvo = true;
+			let canZMove = this.battle.canZMove(this);
+			if (canZMove) data.canZMove = canZMove;
+		}
 
 		return data;
 	}
