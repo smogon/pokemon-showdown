@@ -21,6 +21,7 @@ describe(`Judgment`, function () {
 			[{species: "Arceus", ability: 'Honey Gather', item: 'ghostiumz', moves: ['judgment']}],
 			[{species: "Spiritomb", ability: 'stancechange', moves: ['calmmind']}],
 		]);
+		battle.commitDecisions();
 		assert.fullHP(battle.p2.active[0]);
 	});
 });
