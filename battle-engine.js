@@ -1578,7 +1578,7 @@ class BattleSide {
 			this.choiceData.finalDecision = this.choiceData.finalDecision || activePokemon.isLastActive();
 		}
 
-		this.choiceData.choices.push('move ' + moveid + (targetLoc ? ' ' + targetLoc : '') + megaOrZ);
+		this.choiceData.choices.push('move ' + moveid + (targetLoc ? ' ' + targetLoc : '') + (megaOrZ || ''));
 
 		const decision = [];
 		if (megaOrZ === ' mega') {

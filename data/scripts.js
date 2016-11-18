@@ -127,9 +127,9 @@ exports.BattleScripts = {
 			pokemon.clearBoosts();
 			this.add('-clearboost', pokemon);
 		} else if (zMove && move.zMoveEffect === 'redirect') {
-			pokemon.addVolatile('followme', pokemon, move);;
+			pokemon.addVolatile('followme', pokemon, move);
 		} else if (zMove && move.zMoveEffect === 'crit1') {
-			pokemon.addVolatile('crit1', pokemon, move);;
+			pokemon.addVolatile('crit1', pokemon, move);
 		} else if (zMove && move.zMoveEffect === 'curse') {
 			if (pokemon.hasType('Ghost')) {
 				this.heal(pokemon.maxhp, pokemon, pokemon, move);
