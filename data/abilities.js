@@ -840,11 +840,18 @@ exports.BattleAbilities = {
 	},
 	"emergencyexit": {
 		shortDesc: "This Pokemon switches out when it reaches 1/2 or less of its maximum HP.",
-		// TODO
 		id: "emergencyexit",
 		name: "Emergency Exit",
 		rating: 3,
 		num: 194,
+		onAfterDamage: function (damage, target, source) {
+			if (!this.canSwitch(target.side) || target.forceSwitchFlag) return;
+			if (target.hp <= target.maxhp / 2 && target.hp > 0 && target.hp + damage > target.maxhp / 2) {
+				target.switchFlag = true;
+				source.switchFlag = false;
+				this.add('-activate', target, 'ability: Emergency Exit');
+			}
+		},
 	},
 	"fairyaura": {
 		desc: "While this Pokemon is active, the power of Fairy-type moves used by active Pokemon is multiplied by 1.33.",
@@ -3909,11 +3916,18 @@ exports.BattleAbilities = {
 	},
 	"wimpout": {
 		shortDesc: "This Pokemon switches out when it reaches 1/2 or less of its maximum HP.",
-		// TODO
 		id: "wimpout",
 		name: "Wimp Out",
 		rating: 3,
 		num: 193,
+		onAfterDamage: function (damage, target, source) {
+			if (!this.canSwitch(target.side) || target.forceSwitchFlag) return;
+			if (target.hp <= target.maxhp / 2 && target.hp > 0 && target.hp + damage > target.maxhp / 2) {
+				target.switchFlag = true;
+				source.switchFlag = false;
+				this.add('-activate', target, 'ability: Wimp Out');
+			}
+		},
 	},
 	"wonderguard": {
 		shortDesc: "This Pokemon can only be damaged by supereffective moves and indirect damage.",
