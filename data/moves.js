@@ -8780,8 +8780,8 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "The user is protected from most attacks made by other Pokemon during this turn, and Pokemon making contact with the user have their Attack lowered by 2 stages. Non-damaging moves go through this protection. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails or if the user's last move used is not Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, or Wide Guard. Fails if the user moves last this turn.",
-		shortDesc: "Protects from attacks. Contact: lowers Atk by 2.",
+		desc: "The user is protected from most attacks made by other Pokemon during this turn, and Pokemon trying to make contact with the user have their Attack lowered by 2 stages. Non-damaging moves go through this protection. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails or if the user's last move used is not Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, or Wide Guard. Fails if the user moves last this turn.",
+		shortDesc: "Protects from attacks. Contact try: lowers Atk by 2.",
 		id: "kingsshield",
 		isViable: true,
 		name: "King's Shield",
@@ -8800,6 +8800,12 @@ exports.BattleMovedex = {
 			duration: 1,
 			onStart: function (target) {
 				this.add('-singleturn', target, 'Protect');
+			},
+			onSourcePrepareHit: function (source, target, effect) {
+				if (effect.effectType !== 'Move' || !effect.flags['protect'] || effect.category === 'Status') return;
+				if (effect.flags['contact']) {
+					effect.ignoreImmunity = true;
+				}
 			},
 			onTryHitPriority: 3,
 			onTryHit: function (target, source, move) {

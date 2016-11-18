@@ -48,6 +48,33 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 80,
 	},
+	kingsshield: {
+		inherit: true,
+		desc: "The user is protected from most attacks made by other Pokemon during this turn, and Pokemon trying to make contact with the user have their Attack lowered by 2 stages. Non-damaging moves go through this protection. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails or if the user's last move used is not Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, or Wide Guard. Fails if the user moves last this turn.",
+		shortDesc: "Protects from attacks. Contact try: lowers Atk by 2.",
+		effect: {
+			duration: 1,
+			onStart: function (target) {
+				this.add('-singleturn', target, 'Protect');
+			},
+			onTryHitPriority: 3,
+			onTryHit: function (target, source, move) {
+				if (!move.flags['protect'] || move.category === 'Status') return;
+				this.add('-activate', target, 'move: Protect');
+				let lockedmove = source.getVolatile('lockedmove');
+				if (lockedmove) {
+					// Outrage counter is reset
+					if (source.volatiles['lockedmove'].duration === 2) {
+						delete source.volatiles['lockedmove'];
+					}
+				}
+				if (move.flags['contact']) {
+					this.boost({atk:-2}, source, target, this.getMove("King's Shield"));
+				}
+				return null;
+			},
+		},
+	},
 	leechlife: {
 		inherit: true,
 		basePower: 20,
