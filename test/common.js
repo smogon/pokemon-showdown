@@ -41,7 +41,7 @@ class TestTools {
 		if (cache.has(mod)) return cache.get(mod);
 		if (Tools.dexes[mod]) return new TestTools({mod: mod});
 		const baseFormat = Tools.getFormat(mod);
-		if (baseFormat.effectType === 'Format') return new TestTools({mod: 'base', baseFormat});
+		if (baseFormat.effectType === 'Format') return new TestTools({mod: baseFormat.mod, baseFormat});
 		throw new Error(`Mod ${mod} does not exist`);
 	}
 
