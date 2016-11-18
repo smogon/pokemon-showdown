@@ -8580,7 +8580,7 @@ exports.BattleMovedex = {
 			let noInstruct = {
 				// TODO: fill this up
 			};
-			if (!target.lastMove || noInstruct[target.lastMove]) {
+			if (!target.lastMove || this.getMove(target.lastMove).isZ || noInstruct[target.lastMove]) {
 				return false;
 			}
 			this.add('-singleturn', target, 'move: Instruct', '[of] ' + source);
