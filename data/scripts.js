@@ -63,13 +63,16 @@ exports.BattleScripts = {
 	useMove: function (move, pokemon, target, sourceEffect, zMove) {
 		if (!sourceEffect && this.effect.id) sourceEffect = this.effect;
 		let zMovePower = 0;
-		if (zMove && move.zMovePower) {
+		let zMoveCategory = '';
+		if (zMove && !move.zMoveEffect && !move.zMoveBoost) {
 			zMovePower = move.zMovePower;
+			zMoveCategory = move.category;
 			move = zMove;
 		}
 		move = this.getMoveCopy(move);
-		if (zMovePower) {
+		if (zMovePower && move.basePower === 1) {
 			move.basePower = zMovePower;
+			move.category = zMoveCategory;
 		}
 		if (this.activeMove) {
 			move.priority = this.activeMove.priority;
