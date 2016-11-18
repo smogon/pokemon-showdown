@@ -2947,6 +2947,35 @@ exports.BattleAbilities = {
 		rating: 2.5,
 		num: 19,
 	},
+	"shieldsdown": {
+		desc: "If this Pokemon is a Minior, it changes to its Core forme if it has 1/2 or less of its maximum HP at the end of a turn. If Minior's HP is above 1/2 of its maximum HP at the end of a turn, it changes back to Meteor Form.",
+		shortDesc: "If Minior, at end of turn changes forme to Core if at 1/2 max HP or less, else Meteor.",
+		onResidualOrder: 27,
+		onResidual: function (pokemon) {
+			if (pokemon.baseTemplate.baseSpecies !== 'Minior' || pokemon.transformed) return;
+			if (pokemon.hp > pokemon.maxhp / 2) {
+				if (pokemon.template.speciesid !== 'minior') {
+					pokemon.formeChange('Minior');
+					this.add('-formechange', pokemon, 'Minior', '[msg]', '[from] ability: Shields Down');
+				}
+			} else {
+				if (pokemon.template.speciesid === 'minior') {
+					pokemon.formeChange('Minior-Red');
+					this.add('-formechange', pokemon, 'Minior-Red', '[msg]', '[from] ability: Shields Down');
+				}
+			}
+		},
+		onSetStatus: function (status, target, source, effect) {
+			if (target.template.speciesid !== 'minior' || target.transformed) return;
+			if (!effect || !effect.status) return false;
+			this.add('-immune', target, '[msg]', '[from] ability: Shields Down');
+			return false;
+		},
+		id: "shieldsdown",
+		name: "Shields Down",
+		rating: 2.5,
+		num: 197,
+	},
 	"simple": {
 		shortDesc: "If this Pokemon's stat stages are raised or lowered, the effect is doubled instead.",
 		onBoost: function (boost) {
