@@ -19,15 +19,6 @@ describe('Burn', function () {
 		assert.hurtsBy(target, Math.floor(target.maxhp / 16), () => battle.commitDecisions());
 	});
 
-	it('should inflict 1/8 of max HP at the end of the turn, rounded down [gen 6]', function () {
-		battle = common.gen(6).createBattle([
-			[{species: 'Machamp', ability: 'noguard', moves: ['bulkup']}],
-			[{species: 'Sableye', ability: 'prankster', moves: ['willowisp']}],
-		]);
-		const target = battle.p1.active[0];
-		assert.hurtsBy(target, Math.floor(target.maxhp / 8), () => battle.commitDecisions());
-	});
-
 	it('should halve damage from most Physical attacks', function () {
 		battle = common.createBattle([
 			[{species: 'Machamp', ability: 'noguard', moves: ['boneclub']}],
@@ -63,15 +54,6 @@ describe('Paralysis', function () {
 		battle.commitDecisions();
 		assert.strictEqual(battle.p1.active[0].getStat('spe'), battle.modify(speed, 0.5));
 	});
-
-	it('should reduce speed to 25% of its original value [gen 6]', function () {
-		battle = common.gen(6).createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: 'Vaporeon', ability: 'waterabsorb', moves: ['aquaring']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: 'Jolteon', ability: 'voltabsorb', moves: ['thunderwave']}]);
-		let speed = battle.p1.active[0].getStat('spe');
-		battle.commitDecisions();
-		assert.strictEqual(battle.p1.active[0].getStat('spe'), battle.modify(speed, 0.25));
-	});
 });
 
 describe('Toxic Poison', function () {
@@ -103,6 +85,36 @@ describe('Toxic Poison', function () {
 		pokemon.hp = pokemon.maxhp;
 		battle.p1.chooseSwitch(2).foe.chooseMove('whirlwind');
 		assert.strictEqual(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 16));
+	});
+});
+
+describe('Burn [Gen 6]', function () {
+	afterEach(function () {
+		battle.destroy();
+	});
+
+	it('should inflict 1/8 of max HP at the end of the turn, rounded down', function () {
+		battle = common.gen(6).createBattle([
+			[{species: 'Machamp', ability: 'noguard', moves: ['bulkup']}],
+			[{species: 'Sableye', ability: 'prankster', moves: ['willowisp']}],
+		]);
+		const target = battle.p1.active[0];
+		assert.hurtsBy(target, Math.floor(target.maxhp / 8), () => battle.commitDecisions());
+	});
+});
+
+describe('Paralysis [Gen 6]', function () {
+	afterEach(function () {
+		battle.destroy();
+	});
+
+	it('should reduce speed to 25% of its original value', function () {
+		battle = common.gen(6).createBattle();
+		battle.join('p1', 'Guest 1', 1, [{species: 'Vaporeon', ability: 'waterabsorb', moves: ['aquaring']}]);
+		battle.join('p2', 'Guest 2', 1, [{species: 'Jolteon', ability: 'voltabsorb', moves: ['thunderwave']}]);
+		let speed = battle.p1.active[0].getStat('spe');
+		battle.commitDecisions();
+		assert.strictEqual(battle.p1.active[0].getStat('spe'), battle.modify(speed, 0.25));
 	});
 });
 
