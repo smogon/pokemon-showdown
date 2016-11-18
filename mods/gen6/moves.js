@@ -15,6 +15,11 @@ exports.BattleMovedex = {
 		inherit: true,
 		accuracy: 80,
 	},
+	destinybond: {
+		inherit: true,
+		onPrepareHit: function () {},
+		onHit: function () {},
+	},
 	diamondstorm: {
 		inherit: true,
 		desc: "Has a 50% chance to raise the user's Defense by 1 stage.",

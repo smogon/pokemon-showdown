@@ -3085,6 +3085,12 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {authentic: 1},
 		volatileStatus: 'destinybond',
+		onPrepareHit: function (pokemon) {
+			return this.runEvent('StallMove', pokemon);
+		},
+		onHit: function (pokemon) {
+			pokemon.addVolatile('stall');
+		},
 		effect: {
 			onStart: function (pokemon) {
 				this.add('-singlemove', pokemon, 'Destiny Bond');
