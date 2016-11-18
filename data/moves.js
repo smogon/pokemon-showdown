@@ -15282,24 +15282,18 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "The user swaps its Speed stat stage changes with the target.", // TODO: is it actually raw Speed stat?
-		shortDesc: "Swaps Speed stat stages with target.",
+		desc: "The user swaps its raw Speed stat with the target.",
+		shortDesc: "Swaps Speed stat with target.",
 		id: "speedswap",
 		name: "Speed Swap",
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, authentic: 1, mystery: 1},
 		onHit: function (target, source) {
-			let targetBoosts = {};
-			let sourceBoosts = {};
-
-			targetBoosts['spe'] = target.boosts['spe'];
-			sourceBoosts['spe'] = source.boosts['spe'];
-
-			source.setBoost(targetBoosts);
-			target.setBoost(sourceBoosts);
-
-			this.add('-swapboost', source, target, 'spe', '[from] move: Speed Swap');
+			const targetSpe = target.stats.spe;
+			target.stats.spe = source.stats.spe;
+			source.stats.spe = targetSpe;
+			this.add('-activate', source, 'move: Speed Swap', '[of] ' + target);
 		},
 		secondary: false,
 		target: "normal",
