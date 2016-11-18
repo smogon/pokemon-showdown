@@ -291,12 +291,12 @@ exports.BattleFormats = {
 			this.add('clearpoke');
 			for (let i = 0; i < this.sides[0].pokemon.length; i++) {
 				let pokemon = this.sides[0].pokemon[i];
-				let details = pokemon.details.replace(/(Arceus|Gourgeist|Genesect|Pumpkaboo)(-[a-zA-Z?]+)?/g, '$1-*');
+				let details = pokemon.details.replace(/(Arceus|Gourgeist|Genesect|Pumpkaboo|Silvally)(-[a-zA-Z?]+)?/g, '$1-*');
 				this.add('poke', pokemon.side.id, details, pokemon.item ? 'item' : '');
 			}
 			for (let i = 0; i < this.sides[1].pokemon.length; i++) {
 				let pokemon = this.sides[1].pokemon[i];
-				let details = pokemon.details.replace(/(Arceus|Gourgeist|Genesect|Pumpkaboo)(-[a-zA-Z?]+)?/g, '$1-*');
+				let details = pokemon.details.replace(/(Arceus|Gourgeist|Genesect|Pumpkaboo|Silvally)(-[a-zA-Z?]+)?/g, '$1-*');
 				this.add('poke', pokemon.side.id, details, pokemon.item ? 'item' : '');
 			}
 		},
