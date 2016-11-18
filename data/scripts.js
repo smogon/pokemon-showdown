@@ -693,7 +693,7 @@ exports.BattleScripts = {
 	getZMove: function (move, pokemon, skipChecks) {
 		let item = pokemon.getItem();
 		if (!skipChecks) {
-			if (this.zMoveUsed) return;
+			if (pokemon.side.zMoveUsed) return;
 			if (!item.zMove) return;
 			if (item.zMoveUser && !item.zMoveUser.includes(pokemon.species)) return;
 		}
@@ -712,7 +712,7 @@ exports.BattleScripts = {
 	},
 
 	canZMove: function (pokemon) {
-		if (this.zMoveUsed) return;
+		if (pokemon.side.zMoveUsed) return;
 		let item = pokemon.getItem();
 		if (!item.zMove) return;
 		if (item.zMoveUser && !item.zMoveUser.includes(pokemon.species)) return;
@@ -728,10 +728,10 @@ exports.BattleScripts = {
 	},
 
 	runZMove: function (move, pokemon, target, sourceEffect) {
-		// Limit one Z move
+		// Limit one Z move per side
 		let zMove = this.getZMove(move, pokemon);
 		if (zMove) {
-			this.zMoveUsed = true;
+			pokemon.side.zMoveUsed = true;
 		}
 		this.runMove(move, pokemon, target, sourceEffect, zMove);
 	},
