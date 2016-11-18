@@ -359,6 +359,20 @@ exports.BattleScripts = {
 			}
 		}
 
+		if (move.stealsBoosts) {
+			let boosts = {};
+			for (let statName in target.boosts) {
+				let stage = target.boosts[statName];
+				if (stage > 0) boosts[statName] = -stage;
+			}
+			this.boost(boosts, target);
+
+			for (let statName in boosts) {
+				boosts[statName] = -boosts[statName];
+			}
+			this.boost(boosts, pokemon);
+		}
+
 		move.totalDamage = 0;
 		let damage = 0;
 		pokemon.lastDamage = 0;
