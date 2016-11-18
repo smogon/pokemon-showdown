@@ -658,11 +658,11 @@ exports.BattleScripts = {
 		let item = pokemon.getItem();
 		if (!item.zMove) return;
 		if (item.zMoveUser && !item.zMoveUser.includes(pokemon.species)) return;
-		var atLeastOne = false;
-		var zMoves = [];
-		for (var i = 0; i < pokemon.moves.length; i++) {
-			var move = this.getMove(pokemon.moves[i]);
-			var zMove = '';
+		let atLeastOne = false;
+		let zMoves = [];
+		for (let i = 0; i < pokemon.moves.length; i++) {
+			let move = this.getMove(pokemon.moves[i]);
+			let zMove = '';
 			if (item.zMoveFrom) {
 				if (move.name === item.zMoveFrom) zMove = item.zMove;
 			} else if (item.zMove === true) {
