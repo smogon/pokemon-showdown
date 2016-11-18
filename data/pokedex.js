@@ -12771,6 +12771,7 @@ exports.BattlePokedex = {
 		weightkg: 80.5,
 		color: "Gray",
 		eggGroups: ["Undiscovered"],
+		otherForms: ["magearnaoriginal"],
 	},
 	marshadow: {
 		num: 802,
