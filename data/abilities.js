@@ -2428,10 +2428,15 @@ exports.BattleAbilities = {
 		num: 223,
 	},
 	"prankster": {
-		shortDesc: "This Pokemon's non-damaging moves have their priority increased by 1.",
+		shortDesc: "This Pokemon's non-damaging moves have their priority increased by 1, but fail gainst Dark Pokémon.",
 		onModifyPriority: function (priority, pokemon, target, move) {
 			if (move && move.category === 'Status') {
 				return priority + 1;
+			}
+		},
+		onModifyMove: function (move) {
+			if (move && move.category === 'Status') {
+				move.pranksterBoosted = true;
 			}
 		},
 		id: "prankster",

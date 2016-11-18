@@ -48,6 +48,10 @@ exports.BattleAbilities = {
 			},
 		},
 	},
+	"prankster": {
+		inherit: true,
+		shortDesc: "This Pokemon's non-damaging moves have their priority increased by 1.",
+	},
 	"weakarmor": {
 		desc: "If a physical attack hits this Pokemon, its Defense is lowered by 1 stage and its Speed is raised by 1 stage.",
 		shortDesc: "If a physical attack hits this Pokemon, Defense is lowered by 1, Speed is raised by 1.",
