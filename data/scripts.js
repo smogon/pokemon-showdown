@@ -282,7 +282,8 @@ exports.BattleScripts = {
 		if (move.ohko) { // bypasses accuracy modifiers
 			if (!target.isSemiInvulnerable()) {
 				accuracy = 30;
-				if (pokemon.level >= target.level) {
+				if (pokemon.level >= target.level && (move.ohko === true || !target.hasType(move.ohko))) {
+					// TODO: Research dependency of accuracy on user typing
 					accuracy += (pokemon.level - target.level);
 				} else {
 					this.add('-immune', target, '[ohko]');
