@@ -545,6 +545,8 @@ class BattlePokemon {
 		}
 
 		if (this.canMegaEvo && !lockedMove) data.canMegaEvo = true;
+		let canZMove = this.battle.canZMove(this);
+		if (canZMove) data.canZMove = canZMove;
 
 		return data;
 	}
