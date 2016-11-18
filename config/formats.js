@@ -340,6 +340,14 @@ exports.Formats = [
 		],
 	},
 	{
+		name: "[Gen 7] Challenge Cup",
+		section: "Sun/Moon (beta)",
+
+		mod: 'gen7',
+		team: 'randomCC',
+		ruleset: ['Pokemon', 'HP Percentage Mod', 'Cancel Mod'],
+	},
+	{
 		name: "STABmons",
 		desc: [
 			"Pok&eacute;mon can use any move of their typing, in addition to the moves they can normally learn.",

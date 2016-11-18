@@ -810,7 +810,11 @@ exports.BattleScripts = {
 		let num;
 		for (let i = 0; i < 6; i++) {
 			do {
-				num = this.random(721) + 1;
+				if (this.random() < 0.4) {
+					num = this.random(802 - 721) + 722;
+				} else {
+					num = this.random(721) + 1;
+				}
 			} while (num in hasDexNumber);
 			hasDexNumber[num] = i;
 		}
