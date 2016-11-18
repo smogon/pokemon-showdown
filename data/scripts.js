@@ -63,7 +63,10 @@ exports.BattleScripts = {
 	useMove: function (move, pokemon, target, sourceEffect) {
 		if (!sourceEffect && this.effect.id) sourceEffect = this.effect;
 		move = this.getMoveCopy(move);
-		if (this.activeMove) move.priority = this.activeMove.priority;
+		if (this.activeMove) {
+			move.priority = this.activeMove.priority;
+			move.pranksterBoosted = this.activeMove.pranksterBoosted;
+		}
 		let baseTarget = move.target;
 		if (!target && target !== false) target = this.resolveTarget(pokemon, move);
 		if (move.target === 'self' || move.target === 'allies') {
@@ -242,6 +245,11 @@ exports.BattleScripts = {
 
 		if (move.flags['powder'] && target !== pokemon && !this.getImmunity('powder', target)) {
 			this.debug('natural powder immunity');
+			this.add('-immune', target, '[msg]');
+			return false;
+		}
+		if (this.gen >= 7 && move.pranksterBoosted && target !== pokemon && !this.getImmunity('prankster', target)) {
+			this.debug('natural prankster immunity');
 			this.add('-immune', target, '[msg]');
 			return false;
 		}
