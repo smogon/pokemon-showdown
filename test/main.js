@@ -6,6 +6,7 @@ const fs = require('fs');
 const Module = require('module');
 
 const mock = require('mock-fs-require-fix');
+const common = require('./common');
 
 const noop = () => {};
 
@@ -43,7 +44,7 @@ function init(callback) {
 	BattleEngine.Battle.prototype._init = BattleEngine.Battle.prototype.init;
 	BattleEngine.Battle.prototype.init = function (roomid, formatarg, rated) {
 		this._init(roomid, formatarg, rated);
-		this.seed = this.startingSeed = [0x09d56, 0x08642, 0x13656, 0x03653];
+		this.seed = this.startingSeed = common.minRollSeed;
 	};
 
 	// Disable writing to modlog
