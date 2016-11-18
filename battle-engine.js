@@ -1201,8 +1201,8 @@ class BattlePokemon {
 	 * reality doesn't support setting a type to more than one type.
 	 */
 	setType(newType, enforce) {
-		// Arceus first type cannot be normally changed
-		if (!enforce && this.template.num === 493) return false;
+		// First type of Arceus, Silvally cannot be normally changed
+		if (!enforce && (this.template.num === 493 || this.template.num === 773)) return false;
 
 		if (!newType) throw new Error("Must pass type to setType");
 		this.types = (typeof newType === 'string' ? [newType] : newType);
