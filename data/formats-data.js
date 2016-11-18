@@ -5295,6 +5295,10 @@ exports.BattleFormatsData = {
 		],
 		tier: "OU",
 	},
+	greninjaash: {
+		requiredAbility: "Battle Bond",
+		battleOnly: true,
+	},
 	bunnelby: {
 		randomBattleMoves: ["agility", "earthquake", "return", "quickattack", "uturn", "stoneedge", "spikes", "bounce"],
 		tier: "LC",
