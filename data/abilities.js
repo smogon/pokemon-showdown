@@ -849,6 +849,7 @@ exports.BattleAbilities = {
 			if (target.hp <= target.maxhp / 2 && target.hp + move.totalDamage > target.maxhp / 2) {
 				if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.switchFlag) return;
 				target.switchFlag = true;
+				this.add('-activate', target, 'ability: Emergency Exit');
 			}
 		},
 	},
