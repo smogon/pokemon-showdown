@@ -3929,7 +3929,7 @@ exports.BattleAbilities = {
 			if (!this.canSwitch(target.side) || target.forceSwitchFlag) return;
 			if (target.hp <= target.maxhp / 2 && target.hp > 0 && target.hp + damage > target.maxhp / 2) {
 				target.switchFlag = true;
-				source.switchFlag = false;
+				if (source) source.switchFlag = false;
 				this.add('-activate', target, 'ability: Wimp Out');
 			}
 		},
