@@ -74,7 +74,8 @@ class BattlePokemon {
 		this.speed = 0;
 		this.abilityOrder = 0;
 
-		this.level = this.battle.clampIntRange(set.forcedLevel || set.level || 100, 1, 9999);
+		set.level = this.battle.clampIntRange(set.forcedLevel || set.level || 100, 1, 9999);
+		this.level = set.level;
 
 		let genders = {M:'M', F:'F', N:'N'};
 		this.gender = genders[set.gender] || this.template.gender || (Math.random() * 2 < 1 ? 'M' : 'F');
@@ -192,22 +193,13 @@ class BattlePokemon {
 
 		this.boosts = {atk: 0, def: 0, spa: 0, spd: 0, spe: 0, accuracy: 0, evasion: 0};
 		this.stats = {atk:0, def:0, spa:0, spd:0, spe:0};
-		this.baseStats = {atk:10, def:10, spa:10, spd:10, spe:10};
+
+		this.baseStats = this.battle.spreadModify(this.template.baseStats, this.set);
 		// This is used in gen 1 only, here to avoid code repetition.
 		// Only declared if gen 1 to avoid declaring an object we aren't going to need.
 		if (this.battle.gen === 1) this.modifiedStats = {atk:0, def:0, spa:0, spd:0, spe:0};
-		for (let statName in this.baseStats) {
-			let stat = this.template.baseStats[statName];
-			stat = Math.floor(Math.floor(2 * stat + this.set.ivs[statName] + Math.floor(this.set.evs[statName] / 4)) * this.level / 100 + 5);
-			let nature = this.battle.getNature(this.set.nature);
-			if (statName === nature.plus) stat *= 1.1;
-			if (statName === nature.minus) stat *= 0.9;
-			this.baseStats[statName] = Math.floor(stat);
-		}
 
-		this.maxhp = Math.floor(Math.floor(2 * this.template.baseStats['hp'] + this.set.ivs['hp'] + Math.floor(this.set.evs['hp'] / 4) + 100) * this.level / 100 + 10);
-		if (this.template.maxHP) this.maxhp = this.template.maxHP; // Shedinja
-
+		this.maxhp = this.template.maxHP || this.baseStats.hp;
 		this.hp = this.hp || this.maxhp;
 
 		this.isStale = 0;
