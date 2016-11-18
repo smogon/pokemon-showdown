@@ -236,6 +236,7 @@ exports.commands = {
 	advlearn: 'learn',
 	dpplearn: 'learn',
 	bw2learn: 'learn',
+	oraslearn: 'learn',
 	learn: function (target, room, user, connection, cmd, message) {
 		if (!this.canBroadcast()) return;
 		if (!target) return this.parse('/help learn');
@@ -1257,7 +1258,7 @@ function runLearn(target, cmd) {
 	let template = Tools.getTemplate(targets[0]);
 	let move = {};
 	let problem;
-	let gen = ({rby:1, gsc:2, adv:3, dpp:4, bw2:5}[cmd.substring(0, 3)] || 6);
+	let gen = ({rby:1, gsc:2, adv:3, dpp:4, bw2:5, oras:6}[cmd.substring(0, 3)] || 7);
 	let format = 'gen' + gen + 'ou';
 	let all = (cmd === 'learnall');
 	if (cmd === 'learn5') lsetData.set.level = 5;
