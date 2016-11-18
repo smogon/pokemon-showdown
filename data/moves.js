@@ -8704,7 +8704,10 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		onModifyMove: function (move, pokemon) {
-			move.type = this.runEvent('Plate', pokemon, null, 'judgment', 'Normal');
+			const item = pokemon.getItem();
+			if (item.id && item.onPlate && !item.zMove) {
+				move.type = item.onPlate;
+			}
 		},
 		secondary: false,
 		target: "normal",
