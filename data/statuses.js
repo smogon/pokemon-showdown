@@ -202,6 +202,14 @@ exports.BattleStatuses = {
 	trapper: {
 		noCopy: true,
 	},
+	crit1: {
+		onStart: function (pokemon) {
+			this.add('-start', pokemon, 'move: Focus Energy');
+		},
+		onModifyCritRatio: function (critRatio) {
+			return critRatio + 1;
+		},
+	},
 	partiallytrapped: {
 		duration: 5,
 		durationCallback: function (target, source) {

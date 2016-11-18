@@ -4,7 +4,7 @@ const CHOOSABLE_TARGETS = new Set(['normal', 'any', 'adjacentAlly', 'adjacentAll
 
 exports.BattleScripts = {
 	gen: 7,
-	runMove: function (move, pokemon, target, sourceEffect) {
+	runMove: function (move, pokemon, target, sourceEffect, zMove) {
 		if (!sourceEffect && toId(move) !== 'struggle') {
 			let changedMove = this.runEvent('OverrideDecision', pokemon, target, move);
 			if (changedMove && changedMove !== true) {
@@ -17,14 +17,14 @@ exports.BattleScripts = {
 
 		this.setActiveMove(move, pokemon, target);
 
-		if (pokemon.moveThisTurn) {
+		/* if (pokemon.moveThisTurn) {
 			// THIS IS PURELY A SANITY CHECK
 			// DO NOT TAKE ADVANTAGE OF THIS TO PREVENT A POKEMON FROM MOVING;
 			// USE this.cancelMove INSTEAD
 			this.debug('' + pokemon.id + ' INCONSISTENT STATE, ALREADY MOVED: ' + pokemon.moveThisTurn);
 			this.clearActiveMove(true);
 			return;
-		}
+		} */
 		if (!this.runEvent('BeforeMove', pokemon, target, move)) {
 			// Prevent invulnerability from persisting until the turn ends
 			pokemon.removeVolatile('twoturnmove');
@@ -56,13 +56,21 @@ exports.BattleScripts = {
 			sourceEffect = this.getEffect('lockedmove');
 		}
 		pokemon.moveUsed(move);
-		this.useMove(move, pokemon, target, sourceEffect);
+		this.useMove(move, pokemon, target, sourceEffect, zMove);
 		this.singleEvent('AfterMove', move, null, pokemon, target, move);
 		this.runEvent('AfterMove', pokemon, target, move);
 	},
-	useMove: function (move, pokemon, target, sourceEffect) {
+	useMove: function (move, pokemon, target, sourceEffect, zMove) {
 		if (!sourceEffect && this.effect.id) sourceEffect = this.effect;
+		let zMovePower = 0;
+		if (zMove && move.zMovePower) {
+			zMovePower = move.zMovePower;
+			move = zMove;
+		}
 		move = this.getMoveCopy(move);
+		if (zMovePower) {
+			move.basePower = zMovePower;
+		}
 		if (this.activeMove) {
 			move.priority = this.activeMove.priority;
 			move.pranksterBoosted = this.activeMove.pranksterBoosted;
@@ -103,7 +111,32 @@ exports.BattleScripts = {
 		let movename = move.name;
 		if (move.id === 'hiddenpower') movename = 'Hidden Power';
 		if (sourceEffect) attrs += '|[from]' + this.getEffect(sourceEffect);
+		if (zMove && (move.zMoveBoost || move.zMoveEffect)) {
+			attrs = '|[anim]' + movename + attrs;
+			movename = 'Z-' + movename;
+		}
 		this.addMove('move', pokemon, movename, target + attrs);
+
+		if (zMove && move.zMoveBoost) {
+			this.boost(move.zMoveBoost, pokemon, pokemon, move);
+		} else if (zMove && move.zMoveEffect === 'heal') {
+			this.heal(pokemon.maxhp, pokemon, pokemon, move);
+		} else if (zMove && move.zMoveEffect === 'healreplacement') {
+			pokemon.side.addSideCondition('healingwish', pokemon, move);
+		} else if (zMove && move.zMoveEffect === 'clearboost') {
+			pokemon.clearBoosts();
+			this.add('-clearboost', pokemon);
+		} else if (zMove && move.zMoveEffect === 'redirect') {
+			pokemon.addVolatile('followme', pokemon, move);;
+		} else if (zMove && move.zMoveEffect === 'crit1') {
+			pokemon.addVolatile('crit1', pokemon, move);;
+		} else if (zMove && move.zMoveEffect === 'curse') {
+			if (pokemon.hasType('Ghost')) {
+				this.heal(pokemon.maxhp, pokemon, pokemon, move);
+			} else {
+				this.boost({atk: 1}, pokemon, pokemon, move);
+			}
+		}
 
 		if (target === false) {
 			this.attrLastMove('[notarget]');
@@ -654,6 +687,27 @@ exports.BattleScripts = {
 		Fairy: "Twinkle Tackle",
 	},
 
+	getZMove: function (move, pokemon, skipChecks) {
+		let item = pokemon.getItem();
+		if (!skipChecks) {
+			if (this.zMoveUsed) return;
+			if (!item.zMove) return;
+			if (item.zMoveUser && !item.zMoveUser.includes(pokemon.species)) return;
+		}
+
+		if (item.zMoveFrom) {
+			if (move.name === item.zMoveFrom) return item.zMove;
+		} else if (item.zMove === true) {
+			if (move.type === item.zMoveType) {
+				if (move.category === "Status") {
+					return 'Z-' + move.name;
+				} else {
+					return this.zMoveTable[move.type];
+				}
+			}
+		}
+	},
+
 	canZMove: function (pokemon) {
 		if (this.zMoveUsed) return;
 		let item = pokemon.getItem();
@@ -663,27 +717,20 @@ exports.BattleScripts = {
 		let zMoves = [];
 		for (let i = 0; i < pokemon.moves.length; i++) {
 			let move = this.getMove(pokemon.moves[i]);
-			let zMove = '';
-			if (item.zMoveFrom) {
-				if (move.name === item.zMoveFrom) zMove = item.zMove;
-			} else if (item.zMove === true) {
-				if (move.type === item.zMoveType) {
-					if (move.category === "Status") {
-						zMove = 'Z-' + move.name;
-					} else {
-						zMove = this.zMoveTable[move.type];
-					}
-				}
-			}
+			let zMove = this.getZMove(move, pokemon, true) || '';
 			zMoves.push(zMove);
 			if (zMove) atLeastOne = true;
 		}
 		if (atLeastOne) return zMoves;
 	},
 
-	runZMove: function (pokemon, move) {
+	runZMove: function (move, pokemon, target, sourceEffect) {
 		// Limit one Z move
-		this.zMoveUsed = true;
+		let zMove = this.getZMove(move, pokemon);
+		if (zMove) {
+			this.zMoveUsed = true;
+		}
+		this.runMove(move, pokemon, target, sourceEffect, zMove);
 	},
 
 	canMegaEvo: function (pokemon) {

@@ -1478,7 +1478,8 @@ class BattleSide {
 		if (this.currentRequest === 'teampreview') return this.choiceData.choices.length >= this.pokemon.length;
 		return this.choiceData.choices.length >= this.active.length;
 	}
-	chooseMove(data, targetLoc, willMega, dontPlay) {
+	chooseMove(data, targetLoc, megaOrZ, dontPlay) {
+		if (megaOrZ === true) megaOrZ = ' mega';
 		if (!targetLoc) targetLoc = 0;
 		const activePokemon = this.active[this.choiceData.choices.length];
 
@@ -1577,10 +1578,10 @@ class BattleSide {
 			this.choiceData.finalDecision = this.choiceData.finalDecision || activePokemon.isLastActive();
 		}
 
-		this.choiceData.choices.push('move ' + moveid + (targetLoc ? ' ' + targetLoc : '') + (willMega ? ' mega' : ''));
+		this.choiceData.choices.push('move ' + moveid + (targetLoc ? ' ' + targetLoc : '') + megaOrZ);
 
 		const decision = [];
-		if (willMega) {
+		if (megaOrZ === ' mega') {
 			// TODO: Check that the Pokémon is not affected by Sky Drop.
 			// (This is currently being done in `runMegaEvo`).
 			decision.push({
@@ -1593,7 +1594,8 @@ class BattleSide {
 			pokemon: activePokemon,
 			targetLoc: targetLoc,
 			move: moveid,
-			mega: willMega && activePokemon.canMegaEvo,
+			mega: megaOrZ === ' mega' && activePokemon.canMegaEvo,
+			zmove: megaOrZ === ' zmove',
 		});
 		this.choiceData.decisions.push(decision);
 
@@ -4268,7 +4270,11 @@ class Battle extends Tools.BattleDex {
 		case 'move':
 			if (!decision.pokemon.isActive) return false;
 			if (decision.pokemon.fainted) return false;
-			this.runMove(decision.move, decision.pokemon, this.getTarget(decision), decision.sourceEffect);
+			if (decision.zmove) {
+				this.runZMove(decision.move, decision.pokemon, this.getTarget(decision), decision.sourceEffect);
+			} else {
+				this.runMove(decision.move, decision.pokemon, this.getTarget(decision), decision.sourceEffect);
+			}
 			break;
 		case 'megaEvo':
 			if (decision.pokemon.canMegaEvo) this.runMegaEvo(decision.pokemon);
@@ -4593,9 +4599,12 @@ class Battle extends Tools.BattleDex {
 					targetLoc = parseInt(data.slice(-2));
 					data = data.slice(0, data.lastIndexOf(' '));
 				}
-				let willMega = data.endsWith(' mega');
-				let move = willMega ? data.slice(0, -5) : data; // `move` is expected to be either a one-based index or a move id
-				if (!side.chooseMove(move.trim(), targetLoc, willMega, true)) return side.undoChoices(i, choiceIndex);
+				let willMega = data.endsWith(' mega') ? ' mega' : '';
+				if (willMega) data = data.slice(0, -5);
+				let willZ = data.endsWith(' zmove') ? ' zmove' : '';
+				if (willZ) data = data.slice(0, -6);
+				let move = data; // `move` is expected to be either a one-based index or a move id
+				if (!side.chooseMove(move.trim(), targetLoc, willMega || willZ, true)) return side.undoChoices(i, choiceIndex);
 				break;
 			}
 			case 'switch':
