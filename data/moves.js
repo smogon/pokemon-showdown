@@ -228,7 +228,7 @@ exports.BattleMovedex = {
 		secondary: false,
 		target: "adjacentAllyOrSelf",
 		type: "Normal",
-		zMoveEffect: 'focusenergy',
+		zMoveEffect: 'crit1',
 		contestType: "Tough",
 	},
 	"aerialace": {
@@ -5778,7 +5778,7 @@ exports.BattleMovedex = {
 		secondary: false,
 		target: "normal",
 		type: "Normal",
-		zMoveEffect: 'focusenergy',
+		zMoveEffect: 'crit1',
 		contestType: "Clever",
 	},
 	"forestscurse": {
@@ -7301,7 +7301,7 @@ exports.BattleMovedex = {
 		secondary: false,
 		target: "normal",
 		type: "Psychic",
-		zMoveEffect: 'focusenergy',
+		zMoveEffect: 'crit1',
 		contestType: "Clever",
 	},
 	"heatcrash": {
@@ -14965,7 +14965,7 @@ exports.BattleMovedex = {
 		secondary: false,
 		target: "self",
 		type: "Normal",
-		zMoveEffect: 'focusenergy',
+		zMoveEffect: 'crit1',
 		contestType: "Cute",
 	},
 	"sludge": {
@@ -16841,7 +16841,7 @@ exports.BattleMovedex = {
 		secondary: false,
 		target: "allySide",
 		type: "Flying",
-		zMoveEffect: 'focusenergy',
+		zMoveEffect: 'crit1',
 		contestType: "Cool",
 	},
 	"takedown": {
