@@ -544,6 +544,9 @@ class Validator {
 		if (item.megaEvolves === template.species) {
 			template = tools.getTemplate(item.megaStone);
 		}
+		if (banlistTable['mega'] && template.forme in {'Mega': 1, 'Mega-X': 1, 'Mega-Y': 1}) {
+			problems.push(`Mega evolutions are banned.`);
+		}
 		if (template.tier) {
 			let tier = template.tier;
 			if (tier.charAt(0) === '(') tier = tier.slice(1, -1);
