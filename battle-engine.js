@@ -2069,7 +2069,13 @@ class Battle extends Tools.BattleDex {
 		let result = (this.seed[0] << 16 >>> 0) + this.seed[1]; // Use the upper 32 bits
 		m = Math.floor(m);
 		n = Math.floor(n);
-		result = (m ? (n ? Math.floor(result * (n - m) / 0x100000000) + m : Math.floor(result * m / 0x100000000)) : result / 0x100000000);
+		if (!m) {
+			result = result / 0x100000000;
+		} else if (!n) {
+			result = Math.floor(result * m / 0x100000000);
+		} else {
+			result = Math.floor(result * (n - m) / 0x100000000) + m;
+		}
 		this.debug('randBW(' + (m ? (n ? m + ', ' + n : m) : '') + ') = ' + result);
 		return result;
 	}
