@@ -146,6 +146,14 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 50,
 	},
+	thousandarrows: {
+		inherit: true,
+		isUnreleased: true,
+	},
+	thousandwaves: {
+		inherit: true,
+		isUnreleased: true,
+	},
 	thunderwave: {
 		inherit: true,
 		accuracy: 100,
