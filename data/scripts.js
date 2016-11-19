@@ -126,9 +126,15 @@ exports.BattleScripts = {
 			this.heal(pokemon.maxhp, pokemon, pokemon, move);
 		} else if (zMove && move.zMoveEffect === 'healreplacement') {
 			pokemon.side.addSideCondition('healingwish', pokemon, move);
-		} else if (zMove && move.zMoveEffect === 'clearboost') {
-			pokemon.clearBoosts();
-			this.add('-clearboost', pokemon);
+		} else if (zMove && move.zMoveEffect === 'restoreboost') {
+			let boosts = {};
+			for (let i in pokemon.boosts) {
+				if (pokemon.boosts[i] < 0) {
+					boosts[i] = 0;
+				}
+			}
+			pokemon.setBoost(boosts);
+			this.add('-restoreboost', pokemon, '[zEffect]');
 		} else if (zMove && move.zMoveEffect === 'redirect') {
 			pokemon.addVolatile('followme', pokemon, move);
 		} else if (zMove && move.zMoveEffect === 'crit1') {
