@@ -29,6 +29,14 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 7] OU",
+		section: "SM Singles (beta)",
+
+		mod: 'gen7',
+		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Baton Pass Clause'],
+		banlist: ['Uber', 'Shadow Tag'],
+	},
+	{
+		name: "[Gen 7] Pokebank OU",
 		desc: [
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3587188/\">OU Metagame Discussion</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3587177/\">OU Banlist</a>",
@@ -40,15 +48,7 @@ exports.Formats = [
 		banlist: ['Uber', 'Shadow Tag'],
 	},
 	{
-		name: "[Gen 7] OU (pre-bank)",
-		section: "SM Singles (beta)",
-
-		mod: 'gen7',
-		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Baton Pass Clause'],
-		banlist: ['Uber', 'Shadow Tag'],
-	},
-	{
-		name: "[Gen 7] Ubers",
+		name: "[Gen 7] Pokebank Ubers",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3587184/\">Ubers Metagame Discussion</a>"],
 		section: "SM Singles (beta)",
 
@@ -56,7 +56,7 @@ exports.Formats = [
 		ruleset: ['Pokemon', 'Standard', 'Swagger Clause', 'Team Preview', 'Mega Rayquaza Clause'],
 	},
 	{
-		name: "[Gen 7] LC",
+		name: "[Gen 7] Pokebank LC",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3587196/\">LC Metagame Discussion</a>"],
 		section: "SM Singles (beta)",
 
@@ -66,7 +66,7 @@ exports.Formats = [
 		banlist: ['LC Uber', 'Gligar', 'Misdreavus', 'Scyther', 'Sneasel', 'Tangela', 'Eevium Z', 'Dragon Rage', 'Sonic Boom'],
 	},
 	{
-		name: "[Gen 7] Anything Goes",
+		name: "[Gen 7] Pokebank Anything Goes",
 		section: "SM Singles (beta)",
 
 		mod: 'gen7',
@@ -87,7 +87,7 @@ exports.Formats = [
 		ruleset: ['PotD', 'Pokemon', 'HP Percentage Mod', 'Cancel Mod'],
 	},
 	{
-		name: "[Gen 7] Doubles OU",
+		name: "[Gen 7] Pokebank Doubles OU",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3586596/\">Doubles OU Metagame Discussion</a>"],
 		section: "SM Doubles (beta)",
 
@@ -100,7 +100,7 @@ exports.Formats = [
 		],
 	},
 	{
-		name: "[Gen 7] Doubles Ubers",
+		name: "[Gen 7] Pokebank Doubles Ubers",
 		section: "SM Doubles (beta)",
 
 		mod: 'gen7',
