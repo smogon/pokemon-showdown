@@ -3204,7 +3204,7 @@ exports.BattleMovedex = {
 			return this.runEvent('StallMove', pokemon);
 		},
 		onHit: function (pokemon) {
-			pokemon.addVolatile('stall');
+			pokemon.addVolatile('retaliationstall');
 		},
 		effect: {
 			onStart: function (pokemon) {

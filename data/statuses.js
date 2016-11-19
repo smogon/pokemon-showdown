@@ -375,6 +375,30 @@ exports.BattleStatuses = {
 			this.effectData.counter = 3;
 		},
 		onStallMove: function () {
+			if (this.activeMove.id === 'destinybond') return true;
+			// this.effectData.counter should never be undefined here.
+			// However, just in case, use 1 if it is undefined.
+			let counter = this.effectData.counter || 1;
+			this.debug("Success chance: " + Math.round(100 / counter) + "%");
+			return (this.random(counter) === 0);
+		},
+		onRestart: function () {
+			if (this.effectData.counter < this.effect.counterMax) {
+				this.effectData.counter *= 3;
+			}
+			this.effectData.duration = 2;
+		},
+	},
+	retaliationstall: {
+		// Destiny Bond counter
+		// TODO: Research how it works with Quick Guard, Wide Guard, as well as probabilities
+		duration: 2,
+		counterMax: 729,
+		onStart: function () {
+			this.effectData.counter = 3;
+		},
+		onStallMove: function () {
+			if (this.activeMove.id !== 'destinybond') return true;
 			// this.effectData.counter should never be undefined here.
 			// However, just in case, use 1 if it is undefined.
 			let counter = this.effectData.counter || 1;
