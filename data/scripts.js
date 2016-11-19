@@ -914,7 +914,7 @@ exports.BattleScripts = {
 			} while (this.data.Items[item].gen > this.gen || this.data.Items[item].isNonstandard);
 
 			// Make sure forme is legal
-			if (template.battleOnly || template.requiredItem && item !== toId(template.requiredItem)) {
+			if (template.battleOnly || template.requiredItems && !template.requiredItems.some(req => toId(req) === item)) {
 				template = this.getTemplate(template.baseSpecies);
 				poke = template.name;
 			}
@@ -2014,11 +2014,8 @@ exports.BattleScripts = {
 		}
 
 		item = 'Leftovers';
-		if (template.requiredItem) {
-			item = template.requiredItem;
-			if (typeof item !== 'string') {
-				item = item[this.random(item.length)];
-			}
+		if (template.requiredItems) {
+			item = template.requiredItems[this.random(template.requiredItems.length)];
 		} else if (hasMove['magikarpsrevenge']) {
 			// PoTD Magikarp
 			item = 'Choice Band';
@@ -3079,11 +3076,8 @@ exports.BattleScripts = {
 		}
 
 		item = 'Sitrus Berry';
-		if (template.requiredItem) {
-			item = template.requiredItem;
-			if (typeof item !== 'string') {
-				item = item[this.random(item.length)];
-			}
+		if (template.requiredItems) {
+			item = template.requiredItems[this.random(template.requiredItems.length)];
 		// First, the extra high-priority items
 		} else if (ability === 'Imposter') {
 			item = 'Choice Scarf';
