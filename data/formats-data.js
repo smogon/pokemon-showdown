@@ -5815,7 +5815,7 @@ exports.BattleFormatsData = {
 		tier: "LC",
 	},
 	lycanroc: {
-		randomBattleMoves: ["swordsdance", "accelrock", "stoneedge", "crunch", "firefang"],
+		randomBattleMoves: ["swordsdance", "accelerock", "stoneedge", "crunch", "firefang"],
 		tier: "OU",
 	},
 	lycanrocmidnight: {
