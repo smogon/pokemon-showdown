@@ -1576,30 +1576,49 @@ class BattleSide {
 			// The chosen move is valid yay
 		}
 
-		if (activePokemon.maybeDisabled) {
-			this.choiceData.finalDecision = this.choiceData.finalDecision || activePokemon.isLastActive();
-		}
-
-		this.choiceData.choices.push('move ' + moveid + (targetLoc ? ' ' + targetLoc : '') + (megaOrZ || ''));
-
 		const decision = [];
+
 		if (megaOrZ === ' mega') {
+			if (!activePokemon.canMegaEvo || this.choiceData.mega) {
+				this.emitCallback('cantmega', activePokemon); // TODO: The client shouldn't have sent this request in the first place.
+				this.battle.debug(`Can't issue more than one Mega-Evolution command`);
+				return false;
+			}
+
 			// TODO: Check that the Pokémon is not affected by Sky Drop.
 			// (This is currently being done in `runMegaEvo`).
 			decision.push({
 				choice: 'megaEvo',
 				pokemon: activePokemon,
 			});
+		} else if (megaOrZ === ' zmove') {
+			if (this.zMoveUsed || this.choiceData.zmove) {
+				this.emitCallback('cantz', activePokemon); // TODO: The client shouldn't have sent this request in the first place.
+				this.battle.debug(`Can't issue more than one Z-Move command`);
+				return false;
+			}
 		}
+
 		decision.push({
 			choice: 'move',
 			pokemon: activePokemon,
 			targetLoc: targetLoc,
 			move: moveid,
-			mega: megaOrZ === ' mega' && activePokemon.canMegaEvo,
+			mega: megaOrZ === ' mega',
 			zmove: megaOrZ === ' zmove',
 		});
+
+		this.choiceData.choices.push('move ' + moveid + (targetLoc ? ' ' + targetLoc : '') + (megaOrZ || ''));
 		this.choiceData.decisions.push(decision);
+
+		if (activePokemon.maybeDisabled) {
+			this.choiceData.finalDecision = this.choiceData.finalDecision || activePokemon.isLastActive();
+		}
+
+		if (megaOrZ) {
+			if (megaOrZ === ' mega') this.choiceData.mega = (this.choiceData.mega || 0) + 1;
+			if (megaOrZ === ' zmove') this.choiceData.zmove = (this.choiceData.zmove || 0) + 1;
+		}
 
 		if (!dontPlay && !this.battle.checkDecisions()) return this; // allow chaining
 		return true;
@@ -1707,6 +1726,11 @@ class BattleSide {
 
 	undoChoice(index) {
 		const decision = this.choiceData.decisions.splice(index, 1)[0];
+		if (Array.isArray(decision) && decision.length >= 2 && decision[1].choice === 'move') {
+			// It probably doesn't make sense anymore to have a separate `mega` choice in the decider...
+			if (decision[1].mega) this.choiceData.mega--;
+			if (decision[1].zmove) this.choiceData.zmove--;
+		}
 		if (decision.choice === 'switch' || decision.choice === 'instaswitch') {
 			this.choiceData.enterIndices.delete(decision.target.position);
 			this.choiceData.leaveIndices.delete(this.choiceData.decisions.length);
@@ -4279,7 +4303,7 @@ class Battle extends Tools.BattleDex {
 			}
 			break;
 		case 'megaEvo':
-			if (decision.pokemon.canMegaEvo) this.runMegaEvo(decision.pokemon);
+			this.runMegaEvo(decision.pokemon);
 			break;
 		case 'beforeTurnMove': {
 			if (!decision.pokemon.isActive) return false;
