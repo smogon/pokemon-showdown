@@ -30,6 +30,8 @@ Durante o decorrer do *Pokémon Showdown* vários utilizadores iram ligar-se a e
 </p>
 
 Como se pode observar, quase todas as funcionalidades do *Pokémon Showdown* requerem pedidos constantes do utilizador - servidor e vice versa. Sempre que o utilizador pretende realizar alguma coisa, este vai fazer um *request* ao servidor, sendo que este vai processá-lo, e enviar uma mensagem de resposta. Um exemplo desta situação é nas batalhas, onde o servidor vai esperar pela acção dos dois jogadores, atacar, trocar, ou desistir, e mediante estas vai simular o turno, fazendo as alterações necessárias ao estado de batalha, e envia resposta a ambos os jogadores.
+É de notar que todos os processos derivados da escolha do jogador (*Player Choices*) podem ser executadas mais que uma vez, e em simultâneo.
+
 Resumidamente, o *Pokémon Showdown* vai verificar a conectividade de jogadores e responder a *requests* destes, através da execução de um processo que trate o tipo de *request* pedido.
 
 ### 4.Vista de Desenvolvimento
