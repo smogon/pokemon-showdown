@@ -1,6 +1,130 @@
 'use strict';
 
 exports.BattleItems = {
+	abomasite: {
+		inherit: true,
+		isUnreleased: false,
+	},
+	aggronite: {
+		inherit: true,
+		isUnreleased: false,
+	},
+	altarianite: {
+		inherit: true,
+		isUnreleased: false,
+	},
+	ampharosite: {
+		inherit: true,
+		isUnreleased: false,
+	},
+	audinite: {
+		inherit: true,
+		isUnreleased: false,
+	},
+	banettite: {
+		inherit: true,
+		isUnreleased: false,
+	},
+	beedrillite: {
+		inherit: true,
+		isUnreleased: false,
+	},
+	blastoisinite: {
+		inherit: true,
+		isUnreleased: false,
+	},
+	blazikenite: {
+		inherit: true,
+		isUnreleased: false,
+	},
+	cameruptite: {
+		inherit: true,
+		isUnreleased: false,
+	},
+	charizarditex: {
+		inherit: true,
+		isUnreleased: false,
+	},
+	charizarditey: {
+		inherit: true,
+		isUnreleased: false,
+	},
+	diancite: {
+		inherit: true,
+		isUnreleased: false,
+	},
+	galladite: {
+		inherit: true,
+		isUnreleased: false,
+	},
+	gardevoirite: {
+		inherit: true,
+		isUnreleased: false,
+	},
+	heracronite: {
+		inherit: true,
+		isUnreleased: false,
+	},
+	houndoominite: {
+		inherit: true,
+		isUnreleased: false,
+	},
+	latiasite: {
+		inherit: true,
+		isUnreleased: false,
+	},
+	latiosite: {
+		inherit: true,
+		isUnreleased: false,
+	},
+	lopunnite: {
+		inherit: true,
+		isUnreleased: false,
+	},
+	manectite: {
+		inherit: true,
+		isUnreleased: false,
+	},
+	mawilite: {
+		inherit: true,
+		isUnreleased: false,
+	},
+	medichamite: {
+		inherit: true,
+		isUnreleased: false,
+	},
+	mewtwonitex: {
+		inherit: true,
+		isUnreleased: false,
+	},
+	mewtwonitey: {
+		inherit: true,
+		isUnreleased: false,
+	},
+	pidgeotite: {
+		inherit: true,
+		isUnreleased: false,
+	},
+	sceptilite: {
+		inherit: true,
+		isUnreleased: false,
+	},
+	steelixite: {
+		inherit: true,
+		isUnreleased: false,
+	},
+	swampertite: {
+		inherit: true,
+		isUnreleased: false,
+	},
+	tyranitarite: {
+		inherit: true,
+		isUnreleased: false,
+	},
+	venusaurite: {
+		inherit: true,
+		isUnreleased: false,
+	},
 	souldew: {
 		id: "souldew",
 		name: "Soul Dew",
