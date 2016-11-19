@@ -1,6 +1,18 @@
 'use strict';
 
 exports.BattleAbilities = {
+	"aerilate": {
+		inherit: true,
+		desc: "This Pokemon's Normal-type moves become Flying-type moves and have their power multiplied by 1.3. This effect comes after other effects that change a move's type, but before Ion Deluge and Electrify's effects.",
+		shortDesc: "This Pokemon's Normal-type moves become Flying type and have 1.3x power.",
+		effect: {
+			duration: 1,
+			onBasePowerPriority: 8,
+			onBasePower: function (basePower, pokemon, target, move) {
+				return this.chainModify([0x14CD, 0x1000]);
+			},
+		},
+	},
 	"galewings": {
 		inherit: true,
 		shortDesc: "This Pokemon's Flying-type moves have their priority increased by 1.",
@@ -48,9 +60,33 @@ exports.BattleAbilities = {
 			},
 		},
 	},
+	"pixilate": {
+		inherit: true,
+		desc: "This Pokemon's Normal-type moves become Fairy-type moves and have their power multiplied by 1.3. This effect comes after other effects that change a move's type, but before Ion Deluge and Electrify's effects.",
+		shortDesc: "This Pokemon's Normal-type moves become Fairy type and have 1.3x power.",
+		effect: {
+			duration: 1,
+			onBasePowerPriority: 8,
+			onBasePower: function (basePower, pokemon, target, move) {
+				return this.chainModify([0x14CD, 0x1000]);
+			},
+		},
+	},
 	"prankster": {
 		inherit: true,
 		shortDesc: "This Pokemon's non-damaging moves have their priority increased by 1.",
+	},
+	"refrigerate": {
+		inherit: true,
+		desc: "This Pokemon's Normal-type moves become Ice-type moves and have their power multiplied by 1.3. This effect comes after other effects that change a move's type, but before Ion Deluge and Electrify's effects.",
+		shortDesc: "This Pokemon's Normal-type moves become Ice type and have 1.3x power.",
+		effect: {
+			duration: 1,
+			onBasePowerPriority: 8,
+			onBasePower: function (basePower, pokemon, target, move) {
+				return this.chainModify([0x1333, 0x1000]);
+			},
+		},
 	},
 	"weakarmor": {
 		desc: "If a physical attack hits this Pokemon, its Defense is lowered by 1 stage and its Speed is raised by 1 stage.",
