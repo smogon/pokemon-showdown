@@ -78,6 +78,7 @@ exports.BattleMovedex = {
 	leechlife: {
 		inherit: true,
 		basePower: 20,
+		isViable: false,
 		pp: 15,
 	},
 	mistyterrain: {
