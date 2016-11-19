@@ -6069,7 +6069,7 @@ exports.BattleFormatsData = {
 		tier: "OU",
 	},
 	tapufini: {
-		randomBattleMoves: ["calmmind", "moonblast", "scald", "rest", "sleeptalk"],
+		randomBattleMoves: ["calmmind", "moonblast", "scald", "substitute", "icebeam"],
 		eventPokemon: [
 			{"generation": 7, "level": 60, "isHidden": false, "moves":["naturesmadness", "muddywater", "aquaring", "hydropump"]},
 		],
