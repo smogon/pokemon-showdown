@@ -1074,7 +1074,7 @@ exports.BattleScripts = {
 			let m = [];
 			do {
 				let moveid = this.sampleNoReplace(movePool);
-				if (this.getAbility(moveid).gen <= this.gen && !this.data.Movedex[moveid].isNonstandard && (moveid === 'hiddenpower' || moveid.substr(0, 11) !== 'hiddenpower')) {
+				if (this.getMove(moveid).gen <= this.gen && !this.data.Movedex[moveid].isNonstandard && (moveid === 'hiddenpower' || moveid.substr(0, 11) !== 'hiddenpower')) {
 					m.push(moveid);
 				}
 			} while (m.length < 4);
