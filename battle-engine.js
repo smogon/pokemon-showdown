@@ -707,22 +707,17 @@ class BattlePokemon {
 		this.knownType = true;
 
 		if (!dontRecalculateStats) {
+			let stats = this.battle.spreadModify(this.template.baseStats, this.set);
 			for (let statName in this.stats) {
-				let stat = this.template.baseStats[statName];
-				stat = Math.floor(Math.floor(2 * stat + this.set.ivs[statName] + Math.floor(this.set.evs[statName] / 4)) * this.level / 100 + 5);
-
-				// nature
-				let nature = this.battle.getNature(this.set.nature);
-				if (statName === nature.plus) stat *= 1.1;
-				if (statName === nature.minus) stat *= 0.9;
-				this.baseStats[statName] = this.stats[statName] = Math.floor(stat);
-				// If gen 1, we reset modified stats.
-				if (this.battle.gen === 1) {
-					this.modifiedStats[statName] = Math.floor(stat);
-					// ...and here is where the gen 1 games re-apply burn and para drops.
-					if (this.status === 'par' && statName === 'spe') this.modifyStat('spe', 0.25);
-					if (this.status === 'brn' && statName === 'atk') this.modifyStat('atk', 0.5);
-				}
+				this.stats[statName] = stats[statName];
+				this.baseStats[statName] = stats[statName];
+				if (this.modifiedStats) this.modifiedStats[statName] = stats[statName]; // Gen 1: Reset modified stats.
+			}
+			if (this.battle.gen <= 1) {
+				// Gen 1: Re-Apply burn and para drops.
+				// FIXME: modifyStat() is only defined for the Gen 1 mod...
+				if (this.status === 'par') this.modifyStat('spe', 0.25);
+				if (this.status === 'brn') this.modifyStat('atk', 0.5);
 			}
 			this.speed = this.stats.spe;
 		}
