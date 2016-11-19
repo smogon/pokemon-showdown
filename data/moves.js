@@ -438,6 +438,7 @@ exports.BattleMovedex = {
 		desc: "Prevents the target from switching out. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Parting Shot, U-turn, or Volt Switch. If the target leaves the field using Baton Pass, the replacement will remain trapped. The effect ends if the user leaves the field.",
 		shortDesc: "Prevents the target from switching out.",
 		id: "anchorshot",
+		isViable: true,
 		name: "Anchor Shot",
 		pp: 20,
 		priority: 0,
