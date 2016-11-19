@@ -15791,8 +15791,8 @@ exports.BattleMovedex = {
 			onStart: function (pokemon) {
 				this.add('-singleturn', pokemon, 'move: Spotlight');
 			},
-			onAllyRedirectTargetPriority: 1,
-			onAllyRedirectTarget: function (target, source, source2, move) {
+			onFoeRedirectTargetPriority: 2,
+			onFoeRedirectTarget: function (target, source, source2, move) {
 				if (this.validTarget(this.effectData.target, source, move.target)) {
 					this.debug("Spotlight redirected target of move");
 					return this.effectData.target;
