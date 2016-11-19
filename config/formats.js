@@ -34,6 +34,7 @@ exports.Formats = [
 		mod: 'gen7',
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Baton Pass Clause'],
 		banlist: ['Uber', 'Shadow Tag'],
+		requirePentagon: true,
 	},
 	{
 		name: "[Gen 7] Pokebank OU",
