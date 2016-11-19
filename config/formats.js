@@ -320,7 +320,17 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
-		name: "[Gen 7] OU",
+		name: "[Gen 7] OU (β)",
+		section: "Sun/Moon (beta)",
+		column: 2,
+
+		mod: 'gen7',
+		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Baton Pass Clause'],
+		banlist: ['Uber', 'Shadow Tag'],
+		requirePentagon: true,
+	},
+	{
+		name: "[Gen 7] Pokebank OU (β)",
 		section: "Sun/Moon (beta)",
 		column: 2,
 
@@ -329,7 +339,24 @@ exports.Formats = [
 		banlist: ['Uber', 'Shadow Tag'],
 	},
 	{
-		name: "[Gen 7] Doubles OU (beta)",
+		name: "[Gen 7] Challenge Cup (β)",
+		section: "Sun/Moon (beta)",
+
+		mod: 'gen7',
+		team: 'randomCC',
+		ruleset: ['Pokemon', 'HP Percentage Mod', 'Cancel Mod'],
+	},
+	{
+		name: "[Gen 7] Pokebank AG (β)",
+		section: "Sun/Moon (beta)",
+		column: 2,
+
+		mod: 'gen7',
+		ruleset: ['Pokemon', 'Endless Battle Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod'],
+		banlist: ['Illegal', 'Unreleased'],
+	},
+	{
+		name: "[Gen 7] Pokebank Doubles OU (β)",
 		section: "Sun/Moon (beta)",
 
 		mod: 'gen7',
@@ -343,16 +370,7 @@ exports.Formats = [
 		],
 	},
 	{
-		name: "[Gen 7] Anything Goes (beta)",
-		section: "Sun/Moon (beta)",
-		column: 2,
-
-		mod: 'gen7',
-		ruleset: ['Pokemon', 'Endless Battle Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod'],
-		banlist: ['Illegal', 'Unreleased'],
-	},
-	{
-		name: "[Gen 7] Doubles Anything Goes (beta)",
+		name: "[Gen 7] Pokebank Doubles AG (β)",
 		section: "Sun/Moon (beta)",
 
 		mod: 'gen7',
@@ -361,15 +379,7 @@ exports.Formats = [
 		banlist: ['Illegal', 'Unreleased'],
 	},
 	{
-		name: "[Gen 7] Challenge Cup (beta)",
-		section: "Sun/Moon (beta)",
-
-		mod: 'gen7',
-		team: 'randomCC',
-		ruleset: ['Pokemon', 'HP Percentage Mod', 'Cancel Mod'],
-	},
-	{
-		name: "[Gen 7] VGC 2017 (beta)",
+		name: "[Gen 7] VGC 2017 (β)",
 		section: "Sun/Moon (beta)",
 
 		mod: 'gen7',
