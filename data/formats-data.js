@@ -5728,33 +5728,42 @@ exports.BattleFormatsData = {
 		tier: "OU",
 	},
 	rowlet: {
+		unreleasedHidden: true,
 		tier: "LC",
 	},
 	dartrix: {
+		unreleasedHidden: true,
 		tier: "NFE",
 	},
 	decidueye: {
 		randomBattleMoves: ["spiritshackle", "uturn", "leafblade", "roost", "swordsdance", "suckerpunch"],
+		unreleasedHidden: true,
 		tier: "OU",
 	},
 	litten: {
+		unreleasedHidden: true,
 		tier: "LC",
 	},
 	torracat: {
+		unreleasedHidden: true,
 		tier: "NFE",
 	},
 	incineroar: {
 		randomBattleMoves: ["fakeout", "darkestlariat", "flareblitz", "uturn", "earthquake"],
+		unreleasedHidden: true,
 		tier: "OU",
 	},
 	popplio: {
+		unreleasedHidden: true,
 		tier: "LC",
 	},
 	brionne: {
+		unreleasedHidden: true,
 		tier: "NFE",
 	},
 	primarina: {
 		randomBattleMoves: ["hypervoice", "moonblast", "icebeam", "encore", "reflect", "lightscreen", "scald"],
+		unreleasedHidden: true,
 		tier: "OU",
 	},
 	pikipek: {
