@@ -329,6 +329,20 @@ exports.Formats = [
 		banlist: ['Uber', 'Shadow Tag'],
 	},
 	{
+		name: "[Gen 7] Doubles OU (beta)",
+		section: "Sun/Moon (beta)",
+
+		mod: 'gen7',
+		gameType: 'doubles',
+		ruleset: ['Pokemon', 'Standard Doubles', 'Swagger Clause', 'Team Preview'],
+		banlist: [
+			'Arceus', 'Dialga', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-White', 'Lugia', 'Lunala',
+			'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Solgaleo', 'Xerneas', 'Yveltal', 'Zekrom',
+			'Soul Dew', 'Dark Void',
+			'Gravity ++ Grass Whistle', 'Gravity ++ Hypnosis', 'Gravity ++ Lovely Kiss', 'Gravity ++ Sing', 'Gravity ++ Sleep Powder', 'Gravity ++ Spore',
+		],
+	},
+	{
 		name: "[Gen 7] Anything Goes (beta)",
 		section: "Sun/Moon (beta)",
 		column: 2,
