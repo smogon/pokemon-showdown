@@ -203,9 +203,9 @@ exports.BattleFormats = {
 			let battleForme = template.battleOnly && template.species;
 			if (battleForme) {
 				if (template.requiredAbility && set.ability !== template.requiredAbility) {
-					problems.push("" + template.species + " transforms in-battle with " + template.requiredAbility + "."); // Darmanitan-Zen, Zygarde-Complete
+					problems.push("" + template.species + " transforms in-battle with " + template.requiredAbility + "."); // Darmanitan-Zen, Greninja-Ash, Zygarde-Complete
 				}
-				if (template.requiredItem && item.name !== template.requiredItem) {
+				if (typeof template.requiredItem === 'string' && item.name !== template.requiredItem) {
 					problems.push("" + template.species + " transforms in-battle with " + template.requiredItem + '.'); // Mega or Primal
 				}
 				if (template.requiredMove && set.moves.indexOf(toId(template.requiredMove)) < 0) {
@@ -216,15 +216,17 @@ exports.BattleFormats = {
 				if (template.requiredAbility && set.ability !== template.requiredAbility) {
 					problems.push("" + (set.name || set.species) + " needs the ability " + template.requiredAbility + "."); // No cases currently.
 				}
-				if (template.requiredItem && item.name !== template.requiredItem) {
-					problems.push("" + (set.name || set.species) + " needs to hold " + template.requiredItem + '.'); // Plate/Drive/Griseous Orb - Forme mismatch
+				if (typeof template.requiredItem === 'string' && item.name !== template.requiredItem) {
+					problems.push("" + (set.name || set.species) + " needs to hold " + template.requiredItem + '.'); // Memory/Drive/Griseous Orb - Forme mismatch
+				} else if (Array.isArray(template.requiredItem) && !template.requiredItem.includes(item.name)) {
+					problems.push("" + (set.name || set.species) + " needs to hold either " + template.requiredItem.join(" or ") + '.'); // Plate/Z-Crystal - Arceus Forme mismatch
 				}
 				if (template.requiredMove && set.moves.indexOf(toId(template.requiredMove)) < 0) {
 					problems.push("" + (set.name || set.species) + " needs to have the move " + template.requiredMove + "."); // Keldeo-Resolute
 				}
 
 				// Mismatches between the set forme (if not base) and the item signature forme will have been rejected already.
-				// It only remains to assign the right forme to a set with the base species (Arceus/Genesect/Giratina).
+				// It only remains to assign the right forme to a set with the base species (Arceus/Genesect/Giratina/Silvally).
 				if (item.forcedForme && template.species === this.getTemplate(item.forcedForme).baseSpecies && !format.noChangeForme) {
 					set.species = item.forcedForme;
 				}
