@@ -5727,6 +5727,7 @@ exports.BattleFormatsData = {
 		tier: "NFE",
 	},
 	decidueye: {
+		randomBattleMoves: ["spiritshackle", "uturn", "leafblade", "roost", "swordsdance", "suckerpunch"],
 		tier: "OU",
 	},
 	litten: {
@@ -5736,6 +5737,7 @@ exports.BattleFormatsData = {
 		tier: "NFE",
 	},
 	incineroar: {
+		randomBattleMoves: ["fakeout", "darkestlariat", "flareblitz", "uturn", "earthquake"],
 		tier: "OU",
 	},
 	popplio: {
@@ -5745,6 +5747,7 @@ exports.BattleFormatsData = {
 		tier: "NFE",
 	},
 	primarina: {
+		randomBattleMoves: ["hypervoice", "moonblast", "icebeam", "encore", "reflect", "lightscreen", "scald"],
 		tier: "OU",
 	},
 	pikipek: {
@@ -5754,12 +5757,14 @@ exports.BattleFormatsData = {
 		tier: "NFE",
 	},
 	toucannon: {
+		randomBattleMoves: ["substitute", "beakblast", "swordsdance", "roost"],
 		tier: "OU",
 	},
 	yungoos: {
 		tier: "LC",
 	},
 	gumshoos: {
+		randomBattleMoves: ["uturn", "return", "crunch", "earthquake"],
 		tier: "OU",
 	},
 	grubbin: {
@@ -5769,15 +5774,18 @@ exports.BattleFormatsData = {
 		tier: "NFE",
 	},
 	vikavolt: {
+		randomBattleMoves: ["agility", "bugbuzz", "thunderbolt", "voltswitch", "energyball"],
 		tier: "OU",
 	},
 	crabrawler: {
 		tier: "LC",
 	},
 	crabominable: {
+		randomBattleMoves: ["icehammer", "closecombat", "earthquake", "stoneedge"],
 		tier: "OU",
 	},
 	oricorio: {
+		randomBattleMoves: ["revelationdance", "hurricane", "toxic", "roost", "uturn"],
 		tier: "OU",
 	},
 	oricoriopompom: {
@@ -5793,60 +5801,71 @@ exports.BattleFormatsData = {
 		tier: "LC",
 	},
 	ribombee: {
+		randomBattleMoves: ["quiverdance", "bugbuzz", "moonblast", "hiddenpowerfire", "roost", "batonpass"],
 		tier: "OU",
 	},
 	rockruff: {
 		tier: "LC",
 	},
 	lycanroc: {
+		randomBattleMoves: ["swordsdance", "accelrock", "stoneedge", "crunch", "firefang"],
 		tier: "OU",
 	},
 	lycanrocmidnight: {
+		randomBattleMoves: ["bulkup", "stoneedge", "stealthrock", "suckerpunch", "swordsdance", "firefang", "rockclimb"],
 		tier: "OU",
 	},
 	wishiwashi: {
+		randomBattleMoves: ["scald", "hydropump", "icebeam", "hiddenpowergrass", "earthquake"],
 		tier: "OU",
 	},
 	mareanie: {
 		tier: "LC",
 	},
 	toxapex: {
+		randomBattleMoves: ["toxicspikes", "banefulbunker", "recover", "liquidation", "venoshock"],
 		tier: "OU",
 	},
 	mudbray: {
 		tier: "LC",
 	},
 	mudsdale: {
+		randomBattleMoves: ["earthquake", "closecombat", "payback", "rockslide"],
 		tier: "OU",
 	},
 	dewpider: {
 		tier: "LC",
 	},
 	araquanid: {
+		randomBattleMoves: ["liquidation", "lunge", "infestation", "mirrorcoat"],
 		tier: "OU",
 	},
 	fomantis: {
 		tier: "LC",
 	},
 	lurantis: {
+		randomBattleMoves: ["leafstorm", "hiddenpowerfire", "gigadrain", "substitute"],
 		tier: "OU",
 	},
 	morelull: {
 		tier: "LC",
 	},
 	shiinotic: {
+		randomBattleMoves: ["spore", "strengthsap", "moonblast", "substitute", "leechseed"],
 		tier: "OU",
 	},
 	salandit: {
 		tier: "LC",
 	},
 	salazzle: {
+		randomBattleMoves: ["nastyplot", "fireblast", "sludgewave", "hiddenpowerground"],
 		tier: "OU",
 	},
 	stufful: {
 		tier: "LC",
 	},
 	bewear: {
+		randomBattleMoves: ["hammerarm", "icepunch", "swordsdance", "painsplit", "substitute"],
 		tier: "OU",
 	},
 	bounsweet: {
@@ -5856,36 +5875,44 @@ exports.BattleFormatsData = {
 		tier: "NFE",
 	},
 	tsareena: {
+		randomBattleMoves: ["highjumpkick", "tropkick", "playrough", "uturn"],
 		tier: "OU",
 	},
 	comfey: {
+		randomBattleMoves: ["sweetkiss", "aromatherapy", "drainingkiss", "toxic", "synthesis"],
 		tier: "OU",
 	},
 	oranguru: {
+		randomBattleMoves: ["nastyplot", "psyshock", "focusblast", "thunderbolt"],
 		tier: "OU",
 	},
 	passimian: {
+		randomBattleMoves: ["rocktomb", "closecombat", "earthquake", "ironhead"],
 		tier: "OU",
 	},
 	wimpod: {
 		tier: "LC",
 	},
 	golisopod: {
+		randomBattleMoves: ["spikes", "firstimpression", "liquidation", "suckerpunch", "aquajet", "toxic"],
 		tier: "OU",
 	},
 	sandygast: {
 		tier: "LC",
 	},
 	palossand: {
+		randomBattleMoves: ["shoreup", "earthpower", "shadowball", "protect", "toxic"],
 		tier: "OU",
 	},
 	pyukumuku: {
+		randomBattleMoves: ["curse", "batonpass", "recover", "counter"],
 		tier: "OU",
 	},
 	typenull: {
 		tier: "NFE",
 	},
 	silvally: {
+		randomBattleMoves: ["swordsdance", "return", "crunch", "flamecharge"],
 		tier: "OU",
 	},
 	silvallybug: {
@@ -5957,27 +5984,35 @@ exports.BattleFormatsData = {
 		requiredItem: "Water Memory",
 	},
 	minior: {
+		randomBattleMoves: ["shellsmash", "powergem", "acrobatics", "earthquake"],
 		tier: "OU",
 	},
 	komala: {
+		randomBattleMoves: ["return", "suckerpunch", "woodhammer", "earthquake", "playrough", "uturn"],
 		tier: "OU",
 	},
 	turtonator: {
+		randomBattleMoves: ["overheat", "shelltrap", "earthquake", "dragontail", "explosion"],
 		tier: "OU",
 	},
 	togedemaru: {
+		randomBattleMoves: ["spikyshield", "zingzap", "nuzzle", "uturn", "wish"],
 		tier: "OU",
 	},
 	mimikyu: {
+		randomBattleMoves: ["swordsdance", "shadowsneak", "playrough", "woodhammer", "shadowclaw"],
 		tier: "OU",
 	},
 	bruxish: {
+		randomBattleMoves: ["psychicfangs", "crunch", "waterfall", "icefang", "aquajet", "swordsdance"],
 		tier: "OU",
 	},
 	drampa: {
+		randomBattleMoves: ["dracometeor", "dragonpulse", "hypervoice", "fireblast", "thunderbolt", "glare", "substitute"],
 		tier: "OU",
 	},
 	dhelmise: {
+		randomBattleMoves: ["swordsdance", "powerwhip", "phantomforce", "anchorshot", "switcheroo", "earthquake"],
 		tier: "OU",
 	},
 	jangmoo: {
@@ -5987,9 +6022,11 @@ exports.BattleFormatsData = {
 		tier: "NFE",
 	},
 	kommoo: {
+		randomBattleMoves: ["dragondance", "dragonclaw", "skyuppercut", "poisonjab"],
 		tier: "OU",
 	},
 	tapukoko: {
+		randomBattleMoves: ["wildcharge", "voltswitch", "naturesmadness", "bravebird", "uturn"],
 		eventPokemon: [
 			{"generation": 7, "level": 60, "isHidden": false, "moves":["naturesmadness", "discharge", "agility", "electroball"]},
 		],
@@ -5998,6 +6035,7 @@ exports.BattleFormatsData = {
 		tier: "OU",
 	},
 	tapulele: {
+		randomBattleMoves: ["moonblast", "psyshock", "calmmind", "focusblast", "aromatherapy"],
 		eventPokemon: [
 			{"generation": 7, "level": 60, "isHidden": false, "moves":["naturesmadness", "extrasensory", "flatter", "moonblast"]},
 		],
@@ -6006,6 +6044,7 @@ exports.BattleFormatsData = {
 		tier: "OU",
 	},
 	tapubulu: {
+		randomBattleMoves: ["woodhammer", "naturesmadness", "rocktomb", "superpower", "megahorn"],
 		eventPokemon: [
 			{"generation": 7, "level": 60, "isHidden": false, "moves":["naturesmadness", "zenheadbutt", "megahorn", "skullbash"]},
 		],
@@ -6014,6 +6053,7 @@ exports.BattleFormatsData = {
 		tier: "OU",
 	},
 	tapufini: {
+		randomBattleMoves: ["calmmind", "moonblast", "scald", "rest", "sleeptalk"],
 		eventPokemon: [
 			{"generation": 7, "level": 60, "isHidden": false, "moves":["naturesmadness", "muddywater", "aquaring", "hydropump"]},
 		],
@@ -6032,42 +6072,53 @@ exports.BattleFormatsData = {
 		tier: "NFE",
 	},
 	solgaleo: {
+		randomBattleMoves: ["sunsteelstrike", "zenheadbutt", "flareblitz", "morningsun", "stoneedge", "earthquake"],
 		eventPokemon: [
 			{"generation": 7, "level": 55, "moves":["sunsteelstrike", "cosmicpower", "crunch", "zenheadbutt"]},
 		],
 		tier: "Uber",
 	},
 	lunala: {
+		randomBattleMoves: ["moongeistbeam", "psyshock", "calmmind", "focusblast", "moonlight"],
 		eventPokemon: [
 			{"generation": 7, "level": 55, "moves":["moongeistbeam", "cosmicpower", "nightdaze", "shadowball"]},
 		],
 		tier: "Uber",
 	},
 	nihilego: {
+		randomBattleMoves: ["stealthrock", "acidspray", "powergem", "toxicspikes"],
 		tier: "OU",
 	},
 	buzzwole: {
+		randomBattleMoves: ["lunge", "substitute", "focuspunch", "thunderpunch"],
 		tier: "OU",
 	},
 	pheromosa: {
+		randomBattleMoves: ["highjumpkick", "uturn", "icebeam", "poisonjab", "bugbuzz"],
 		tier: "OU",
 	},
 	xurkitree: {
+		randomBattleMoves: ["thunderbolt", "voltswitch", "energyball", "dazzlinggleam", "hiddenpowerice"],
 		tier: "OU",
 	},
 	celesteela: {
+		randomBattleMoves: ["autotomize", "flashcannon", "airslash", "fireblast", "energyball"],
 		tier: "OU",
 	},
 	kartana: {
+		randomBattleMoves: ["leafblade", "sacredsword", "smartstrike", "psychocut", "swordsdance"],
 		tier: "OU",
 	},
 	guzzlord: {
+		randomBattleMoves: ["dracometeor", "hammerarm", "crunch", "earthquake", "fireblast"],
 		tier: "OU",
 	},
 	necrozma: {
+		randomBattleMoves: ["autotomize", "swordsdance", "stoneedge", "psychocut", "earthquake", "psyshock"],
 		tier: "OU",
 	},
 	magearna: {
+		randomBattleMoves: ["shiftgear", "flashcannon", "aurasphere", "fleurcannon", "ironhead", "thunderbolt", "icebeam"],
 		eventPokemon: [
 			{"generation": 7, "level": 50, "moves":["fleurcannon", "flashcannon", "luckychant", "helpinghand"]},
 		],
@@ -6075,6 +6126,7 @@ exports.BattleFormatsData = {
 		tier: "OU",
 	},
 	marshadow: {
+		randomBattleMoves: ["spectralthief", "closecombat", "stoneedge", "shadowsneak", "icepunch"],
 		isUnreleased: true,
 		tier: "Unreleased",
 	},
