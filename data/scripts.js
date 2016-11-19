@@ -883,11 +883,7 @@ exports.BattleScripts = {
 		let num;
 		for (let i = 0; i < 6; i++) {
 			do {
-				if (this.random() < 0.4) {
-					num = this.random(802 - 721) + 722;
-				} else {
-					num = this.random(721) + 1;
-				}
+				num = this.random(802) + 1;
 			} while (num in hasDexNumber);
 			hasDexNumber[num] = i;
 		}
@@ -895,7 +891,7 @@ exports.BattleScripts = {
 		for (let id in this.data.Pokedex) {
 			if (!(this.data.Pokedex[id].num in hasDexNumber)) continue;
 			let template = this.getTemplate(id);
-			if (template.species !== 'Pichu-Spiky-eared') {
+			if (template.gen <= this.gen && template.species !== 'Pichu-Spiky-eared' && template.species.substr(0, 8) !== 'Pikachu-') {
 				formes[hasDexNumber[template.num]].push(template.species);
 			}
 		}
@@ -908,7 +904,7 @@ exports.BattleScripts = {
 			let item = '';
 			do {
 				item = items[this.random(items.length)];
-			} while (this.data.Items[item].isNonstandard);
+			} while (this.data.Items[item].gen > this.gen || this.data.Items[item].isNonstandard);
 
 			// Make sure forme is legal
 			if (template.battleOnly || template.requiredItem && item !== toId(template.requiredItem)) {
@@ -926,6 +922,9 @@ exports.BattleScripts = {
 				break;
 			case 'Genesect':
 				while (item.substr(-5) === 'drive') item = items[this.random(items.length)];
+				break;
+			case 'Silvally':
+				while (item.substr(-6) === 'memory') item = items[this.random(items.length)];
 			}
 
 			// Random ability
@@ -1038,7 +1037,7 @@ exports.BattleScripts = {
 		let num;
 		for (let i = 0; i < 6; i++) {
 			do {
-				num = this.random(721) + 1;
+				num = this.random(802) + 1;
 			} while (num in hasDexNumber);
 			hasDexNumber[num] = i;
 		}
@@ -1046,7 +1045,7 @@ exports.BattleScripts = {
 		for (let id in this.data.Pokedex) {
 			if (!(this.data.Pokedex[id].num in hasDexNumber)) continue;
 			let template = this.getTemplate(id);
-			if (template.learnset && template.species !== 'Pichu-Spiky-eared') {
+			if (template.gen <= this.gen && template.learnset && template.species !== 'Pichu-Spiky-eared' && template.species.substr(0, 8) !== 'Pikachu-') {
 				formes[hasDexNumber[template.num]].push(template.species);
 			}
 		}
@@ -1060,7 +1059,7 @@ exports.BattleScripts = {
 			let item = '';
 			do {
 				item = this.sampleNoReplace(itemPool);
-			} while (this.data.Items[item].isNonstandard);
+			} while (this.data.Items[item].gen > this.gen || this.data.Items[item].isNonstandard);
 
 			// Genesect forms are a sprite difference based on its Drives
 			if (template.species.substr(0, 9) === 'Genesect-' && item !== toId(template.requiredItem)) pokemon = 'Genesect';
@@ -1069,13 +1068,13 @@ exports.BattleScripts = {
 			let ability = '';
 			do {
 				ability = this.sampleNoReplace(abilityPool);
-			} while (this.data.Abilities[ability].isNonstandard);
+			} while (this.getAbility(ability).gen > this.gen || this.data.Abilities[ability].isNonstandard);
 
 			// Random unique moves
 			let m = [];
 			do {
 				let moveid = this.sampleNoReplace(movePool);
-				if (!this.data.Movedex[moveid].isNonstandard && (moveid === 'hiddenpower' || moveid.substr(0, 11) !== 'hiddenpower')) {
+				if (this.getAbility(moveid).gen <= this.gen && !this.data.Movedex[moveid].isNonstandard && (moveid === 'hiddenpower' || moveid.substr(0, 11) !== 'hiddenpower')) {
 					m.push(moveid);
 				}
 			} while (m.length < 4);
