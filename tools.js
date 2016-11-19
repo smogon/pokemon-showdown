@@ -687,8 +687,8 @@ class BattleDex {
 	}
 	natureModify(stats, nature) {
 		nature = this.getNature(nature);
-		if (nature.plus) stats[nature.plus] *= 1.1;
-		if (nature.minus) stats[nature.minus] *= 0.9;
+		if (nature.plus) stats[nature.plus] = Math.floor(stats[nature.plus] * 1.1);
+		if (nature.minus) stats[nature.minus] = Math.floor(stats[nature.minus] * 0.9);
 		return stats;
 	}
 
