@@ -5826,6 +5826,9 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["scald", "hydropump", "icebeam", "hiddenpowergrass", "earthquake"],
 		tier: "OU",
 	},
+	wishiwashischool: {
+		battleOnly: true,
+	},
 	mareanie: {
 		tier: "LC",
 	},
