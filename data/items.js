@@ -5553,7 +5553,7 @@ exports.BattleItems = {
 			}
 			if (activate && pokemon.useItem()) {
 				pokemon.setBoost(boosts);
-				this.add('-restoreboost', pokemon, '[silent]');
+				this.add('-clearnegativeboost', pokemon, '[silent]');
 			}
 		},
 		num: 214,
