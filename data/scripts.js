@@ -134,7 +134,7 @@ exports.BattleScripts = {
 				}
 			}
 			pokemon.setBoost(boosts);
-			this.add('-restoreboost', pokemon, '[zEffect]');
+			this.add('-restoreboost', pokemon, '[zeffect]');
 		} else if (zMove && move.zMoveEffect === 'redirect') {
 			pokemon.addVolatile('followme', pokemon, move);
 		} else if (zMove && move.zMoveEffect === 'crit1') {
