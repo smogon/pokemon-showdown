@@ -19,11 +19,11 @@ exports.BattleScripts = {
 			template = this.battle.getTemplate(template);
 
 			if (!template.abilities) return false;
-			this.illusion = null;
 			this.template = template;
 
 			this.types = template.types;
 			this.addedType = '';
+			this.knownType = true;
 
 			if (!dontRecalculateStats) {
 				let tier = template.tier;
@@ -35,7 +35,7 @@ exports.BattleScripts = {
 				let boost = (tier in BOOST_TABLE) ? BOOST_TABLE[tier] : 0;
 				if (this.set.ability in {'Drizzle': 1, 'Drought': 1}) {
 					boost = 0;
-				} else if (this.set.moves.indexOf('chatter') >= 0) {
+				} else if (this.set.moves.includes('chatter')) {
 					boost = 15;
 				}
 
