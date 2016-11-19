@@ -1042,9 +1042,10 @@ exports.BattleScripts = {
 		// Unreleased are okay but no CAP
 
 		let num;
+		let last = [0, 151, 251, 386, 493, 649, 721, 802][this.gen];
 		for (let i = 0; i < 6; i++) {
 			do {
-				num = this.random(802) + 1;
+				num = this.random(last) + 1;
 			} while (num in hasDexNumber);
 			hasDexNumber[num] = i;
 		}
