@@ -14,8 +14,8 @@ Embora o projeto "Pokémon Showdown" não apresente uma arquitetura bem estrutur
 
 ### 3.Vista de Processo
 
-A vista de processo tem como finalidade de mostrar os vários processos a serem executados, e a sua interação, durante o decorrer do servidor do *Pokémon Showdown*. Para tal, utilizamos diagramas de atividade para exemplificar (?) esta vista.
-Para um utilizador inicar o servidor, é necessário que este crie um ficheiro de configuração do servidor, ou apenas editar um ficheiro de base já existente. De seguida, o utilizador precisa de instalar o [node.js](https://nodejs.org/en/) para poder correr o servidor. Durante o processo de execução, vão ser executados os seguintes passos:
+A vista de processo tem como finalidade de mostrar os vários processos a serem executados e a sua interação, durante o decorrer do servidor do *Pokémon Showdown*. Para tal, utilizamos diagramas de atividade para explicitar esta vista.
+Para um utilizador iniciar o servidor, é necessário que este crie um ficheiro de configuração do servidor, ou apenas editar um ficheiro de base já existente. De seguida, o utilizador precisa de instalar o [node.js](https://nodejs.org/en/) para poder correr o servidor. Durante o processo de execução, vão ser executados os seguintes passos:
 
 <p align="center">
   <img src="https://github.com/Katchau/Pokemon-Showdown/blob/master/ESOF-docs/Resources/server%20boot.png?raw=true" alt="incremental-model"/>
@@ -35,6 +35,9 @@ Como se pode observar, quase todas as funcionalidades do *Pokémon Showdown* req
 Resumidamente, o *Pokémon Showdown* vai verificar a conectividade de jogadores e responder a *requests* destes, através da execução de um processo que trate o tipo de *request* pedido.
 
 ### 4.Vista de Desenvolvimento
+
+A vista de desenvolvimento visa demonstrar os nós de *hardware* distribuídos pelos componentes de *software*, assim como o sistema de *hardware*.
+
 
 ### Conclusão
 
