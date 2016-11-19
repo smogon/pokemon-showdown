@@ -6010,6 +6010,9 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["swordsdance", "shadowsneak", "playrough", "woodhammer", "shadowclaw"],
 		tier: "OU",
 	},
+	mimikyubusted: {
+		battleOnly: true,
+	},
 	bruxish: {
 		randomBattleMoves: ["psychicfangs", "crunch", "waterfall", "icefang", "aquajet", "swordsdance"],
 		tier: "OU",
