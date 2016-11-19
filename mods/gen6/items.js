@@ -29,23 +29,11 @@ exports.BattleItems = {
 		inherit: true,
 		isUnreleased: false,
 	},
-	blastoisinite: {
-		inherit: true,
-		isUnreleased: false,
-	},
 	blazikenite: {
 		inherit: true,
 		isUnreleased: false,
 	},
 	cameruptite: {
-		inherit: true,
-		isUnreleased: false,
-	},
-	charizarditex: {
-		inherit: true,
-		isUnreleased: false,
-	},
-	charizarditey: {
 		inherit: true,
 		isUnreleased: false,
 	},
@@ -118,10 +106,6 @@ exports.BattleItems = {
 		isUnreleased: false,
 	},
 	tyranitarite: {
-		inherit: true,
-		isUnreleased: false,
-	},
-	venusaurite: {
 		inherit: true,
 		isUnreleased: false,
 	},
