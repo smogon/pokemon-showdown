@@ -14,6 +14,7 @@ exports.BattleMovedex = {
 	darkvoid: {
 		inherit: true,
 		accuracy: 80,
+		onTry: function () {},
 	},
 	destinybond: {
 		inherit: true,
