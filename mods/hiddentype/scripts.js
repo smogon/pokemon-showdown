@@ -1,6 +1,7 @@
 'use strict';
 
 exports.BattleScripts = {
+	inherit: 'gen6',
 	pokemon: {
 		formeChange: function (template, dontRecalculateStats) {
 			template = this.battle.getTemplate(template);
