@@ -1726,10 +1726,11 @@ class BattleSide {
 
 	undoChoice(index) {
 		const decision = this.choiceData.decisions.splice(index, 1)[0];
-		if (Array.isArray(decision) && decision.length >= 2 && decision[1].choice === 'move') {
+		if (Array.isArray(decision) && decision[decision.length - 1].choice === 'move') {
+			const moveDecision = decision[decision.length - 1];
 			// It probably doesn't make sense anymore to have a separate `mega` choice in the decider...
-			if (decision[1].mega) this.choiceData.mega--;
-			if (decision[1].zmove) this.choiceData.zmove--;
+			if (moveDecision.mega) this.choiceData.mega--;
+			if (moveDecision.zmove) this.choiceData.zmove--;
 		}
 		if (decision.choice === 'switch' || decision.choice === 'instaswitch') {
 			this.choiceData.enterIndices.delete(decision.target.position);
