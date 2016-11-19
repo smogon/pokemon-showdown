@@ -2016,6 +2016,9 @@ exports.BattleScripts = {
 		item = 'Leftovers';
 		if (template.requiredItem) {
 			item = template.requiredItem;
+			if (typeof item !== 'string') {
+				item = item[this.random(item.length)];
+			}
 		} else if (hasMove['magikarpsrevenge']) {
 			// PoTD Magikarp
 			item = 'Choice Band';
@@ -3078,6 +3081,9 @@ exports.BattleScripts = {
 		item = 'Sitrus Berry';
 		if (template.requiredItem) {
 			item = template.requiredItem;
+			if (typeof item !== 'string') {
+				item = item[this.random(item.length)];
+			}
 		// First, the extra high-priority items
 		} else if (ability === 'Imposter') {
 			item = 'Choice Scarf';
