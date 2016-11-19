@@ -5675,6 +5675,13 @@ exports.BattleFormatsData = {
 		eventOnly: true,
 		tier: "BL",
 	},
+	zygarde10: {
+		eventPokemon: [
+			{"generation": 7, "level": 30, "moves":["safeguard", "dig", "bind", "landswrath"]},
+		],
+		eventOnly: true,
+		tier: "OU",
+	},
 	zygardecomplete: {
 		requiredAbility: "Power Construct",
 		battleOnly: true,
