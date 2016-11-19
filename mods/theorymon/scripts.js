@@ -1,6 +1,7 @@
 'use strict';
 
 exports.BattleScripts = {
+	inherit: 'gen6',
 	init: function () {
 		this.modData('Pokedex', 'archeops').abilities['1'] = 'Vital Spirit';
 		this.modData('Pokedex', 'porygonz').types = ['Normal', 'Ghost'];
