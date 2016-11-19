@@ -6,10 +6,10 @@ exports.BattleScripts = {
 			template = this.battle.getTemplate(template);
 
 			if (!template.abilities) return false;
-			this.illusion = null;
 			this.template = template;
 			this.types = template.types;
 			this.addedType = this.baseHpType;
+			this.knownType = true;
 
 			if (!dontRecalculateStats) {
 				let stats = this.battle.spreadModify(this.template.baseStats, this.set);
