@@ -5994,6 +5994,9 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["shellsmash", "powergem", "acrobatics", "earthquake"],
 		tier: "OU",
 	},
+	miniorred: {
+		battleOnly: true,
+	},
 	komala: {
 		randomBattleMoves: ["return", "suckerpunch", "woodhammer", "earthquake", "playrough", "uturn"],
 		tier: "OU",
