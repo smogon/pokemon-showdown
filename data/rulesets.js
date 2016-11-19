@@ -510,6 +510,10 @@ exports.BattleFormats = {
 			// check if Speed is boosted
 			let speedBoosted = false;
 			let nonSpeedBoosted = false;
+			if (toId(set.item) === 'eeviumz') {
+				speedBoosted = true;
+				nonSpeedBoosted = true;
+			}
 			for (let i = 0; i < set.moves.length; i++) {
 				let move = this.getMove(set.moves[i]);
 				if (move.boosts && move.boosts.spe > 0) {
@@ -560,6 +564,9 @@ exports.BattleFormats = {
 
 			// check if Speed is boosted
 			let speedBoosted = false;
+			if (toId(set.item) === 'eeviumz') {
+				speedBoosted = true;
+			}
 			for (let i = 0; i < set.moves.length; i++) {
 				let move = this.getMove(set.moves[i]);
 				if (move.boosts && move.boosts.spe > 0) {
