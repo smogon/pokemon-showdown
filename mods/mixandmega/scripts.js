@@ -45,7 +45,7 @@ exports.BattleScripts = {
 		if (this.getTemplate(pokemon.canMegaEvo).baseSpecies === pokemon.originalSpecies) {
 			pokemon.details = template.species + (pokemon.level === 100 ? '' : ', L' + pokemon.level) + (pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
 			this.add('detailschange', pokemon, pokemon.details);
-			this.add('-mega', pokemon, template.baseSpecies, template.requiredItem[0]);
+			this.add('-mega', pokemon, template.baseSpecies, template.requiredItem);
 		} else {
 			let oTemplate = this.getTemplate(pokemon.originalSpecies);
 			let oMegaTemplate = this.getTemplate(template.originalMega);
@@ -54,9 +54,9 @@ exports.BattleScripts = {
 			} else {
 				this.add('message', "" + pokemon.species + "'s " + pokemon.getItem().name + " is reacting to " + pokemon.side.name + "'s Mega Bracelet!");
 			}
-			this.add('-formechange', pokemon, oTemplate.species, template.requiredItem[0]);
+			this.add('-formechange', pokemon, oTemplate.species, template.requiredItem);
 			this.add('message', template.baseSpecies + " has Mega Evolved into Mega " + template.baseSpecies + "!");
-			this.add('-start', pokemon, oMegaTemplate.requiredItem[0] || oMegaTemplate.requiredMove, '[silent]');
+			this.add('-start', pokemon, oMegaTemplate.requiredItem || oMegaTemplate.requiredMove, '[silent]');
 			if (oTemplate.types.length !== pokemon.template.types.length || oTemplate.types[1] !== pokemon.template.types[1]) {
 				this.add('-start', pokemon, 'typechange', pokemon.template.types.join('/'), '[silent]');
 			}
@@ -115,7 +115,7 @@ exports.BattleScripts = {
 		}
 		template.weightkg = Math.max(0.1, template.weightkg + deltas.weightkg);
 		template.originalMega = deltas.originalMega;
-		template.requiredItem = deltas.requiredItem.slice();
+		template.requiredItem = deltas.requiredItem;
 		if (deltas.isMega) template.isMega = true;
 		if (deltas.isPrimal) template.isPrimal = true;
 		return template;

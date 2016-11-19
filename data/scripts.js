@@ -784,10 +784,10 @@ exports.BattleScripts = {
 		pokemon.details = template.species + (pokemon.level === 100 ? '' : ', L' + pokemon.level) + (pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
 		if (pokemon.illusion) {
 			pokemon.ability = ''; // Don't allow Illusion to wear off
-			this.add('-mega', pokemon, pokemon.illusion.template.baseSpecies, template.requiredItem[0]);
+			this.add('-mega', pokemon, pokemon.illusion.template.baseSpecies, template.requiredItem);
 		} else {
 			this.add('detailschange', pokemon, pokemon.details);
-			this.add('-mega', pokemon, template.baseSpecies, template.requiredItem[0]);
+			this.add('-mega', pokemon, template.baseSpecies, template.requiredItem);
 		}
 		pokemon.setAbility(template.abilities['0']);
 		pokemon.baseAbility = pokemon.ability;
@@ -914,7 +914,7 @@ exports.BattleScripts = {
 			} while (this.data.Items[item].gen > this.gen || this.data.Items[item].isNonstandard);
 
 			// Make sure forme is legal
-			if (template.battleOnly || template.requiredItem && !template.requiredItem.some(req => toId(req) === item)) {
+			if (template.battleOnly || template.requiredItem && item !== toId(template.requiredItem)) {
 				template = this.getTemplate(template.baseSpecies);
 				poke = template.name;
 			}
@@ -1069,7 +1069,7 @@ exports.BattleScripts = {
 			} while (this.data.Items[item].gen > this.gen || this.data.Items[item].isNonstandard);
 
 			// Genesect forms are a sprite difference based on its Drives
-			if (template.species.substr(0, 9) === 'Genesect-' && item !== toId(template.requiredItem[0])) pokemon = 'Genesect';
+			if (template.species.substr(0, 9) === 'Genesect-' && item !== toId(template.requiredItem)) pokemon = 'Genesect';
 
 			// Random unique ability
 			let ability = '';
@@ -2015,7 +2015,10 @@ exports.BattleScripts = {
 
 		item = 'Leftovers';
 		if (template.requiredItem) {
-			item = template.requiredItem[this.random(template.requiredItem.length)];
+			item = template.requiredItem;
+			if (typeof item !== 'string') {
+				item = item[this.random(item.length)];
+			}
 		} else if (hasMove['magikarpsrevenge']) {
 			// PoTD Magikarp
 			item = 'Choice Band';
@@ -2883,7 +2886,7 @@ exports.BattleScripts = {
 		// any moveset modification goes here
 		//moves[0] = 'safeguard';
 		let changedMove = false;
-		if (template.requiredItem && template.requiredItem[0].slice(-5) === 'Drive' && !hasMove['technoblast']) {
+		if (template.requiredItem && template.requiredItem.slice(-5) === 'Drive' && !hasMove['technoblast']) {
 			delete hasMove[this.getMove(moves[3]).id];
 			moves[3] = 'technoblast';
 			hasMove['technoblast'] = true;
@@ -3077,7 +3080,10 @@ exports.BattleScripts = {
 
 		item = 'Sitrus Berry';
 		if (template.requiredItem) {
-			item = template.requiredItem[this.random(template.requiredItem.length)];
+			item = template.requiredItem;
+			if (typeof item !== 'string') {
+				item = item[this.random(item.length)];
+			}
 		// First, the extra high-priority items
 		} else if (ability === 'Imposter') {
 			item = 'Choice Scarf';

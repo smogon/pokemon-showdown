@@ -454,7 +454,7 @@ exports.BattleScripts = {
 
 		item = 'Leftovers';
 		if (template.requiredItem) {
-			item = template.requiredItem[this.random(template.requiredItem.length)];
+			item = template.requiredItem;
 
 		// First, the extra high-priority items
 		} else if (template.species === 'Marowak') {
