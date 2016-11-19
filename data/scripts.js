@@ -759,7 +759,6 @@ exports.BattleScripts = {
 	},
 
 	runMegaEvo: function (pokemon) {
-		if (!pokemon.canMegaEvo) return;
 		let template = this.getTemplate(pokemon.canMegaEvo);
 		let side = pokemon.side;
 

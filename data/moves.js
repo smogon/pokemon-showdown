@@ -12601,6 +12601,7 @@ exports.BattleMovedex = {
 						for (let j = 0; j < this.queue.length; j++) {
 							if (this.queue[j].pokemon === sources[i] && this.queue[j].choice === 'megaEvo') {
 								this.runMegaEvo(sources[i]);
+								this.queue.splice(j, 1);
 								break;
 							}
 						}
