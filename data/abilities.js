@@ -3941,7 +3941,7 @@ exports.BattleAbilities = {
 				if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.switchFlag) return;
 				target.switchFlag = true;
 				source.switchFlag = false;
-				this.add('-activate', target, 'ability: Emergency Exit');
+				this.add('-activate', target, 'ability: Wimp Out');
 			}
 		},
 		id: "wimpout",
