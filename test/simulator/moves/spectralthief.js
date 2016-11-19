@@ -79,4 +79,37 @@ describe(`Spectral Thief`, function () {
 		assert.statStage(thief, 'atk', 0);
 		assert.statStage(victim, 'atk', 2);
 	});
+
+	it(`should zero target's boosts if the target has Contrary`, function () {
+		battle = common.createBattle([
+			[{species: "Smeargle", ability: 'owntempo', item: 'focussash', moves: ['spectralthief']}],
+			[{species: "Serperior", ability: 'contrary', moves: ['leafstorm']}],
+		]);
+		const victim = battle.p2.active[0];
+		battle.commitDecisions();
+		assert.statStage(victim, 'spa', 0);
+		assert.false.fainted(victim);
+	});
+
+	it(`should zero target's boosts if the target has Clear Body`, function () {
+		battle = common.createBattle([
+			[{species: "Smeargle", ability: 'owntempo', moves: ['spectralthief']}],
+			[{species: "Tentacruel", ability: 'clearbody', moves: ['swordsdance']}],
+		]);
+		const victim = battle.p2.active[0];
+		battle.commitDecisions();
+		assert.statStage(victim, 'atk', 0);
+		assert.false.fainted(victim);
+	});
+
+	it(`should zero target's boosts if the target has Simple`, function () {
+		battle = common.createBattle([
+			[{species: "Smeargle", ability: 'owntempo', moves: ['spectralthief']}],
+			[{species: "Swoobat", ability: 'simple', moves: ['amnesia']}],
+		]);
+		const victim = battle.p2.active[0];
+		battle.commitDecisions();
+		assert.statStage(victim, 'spd', 0);
+		assert.false.fainted(victim);
+	});
 });

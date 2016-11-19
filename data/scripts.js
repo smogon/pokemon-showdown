@@ -369,14 +369,15 @@ exports.BattleScripts = {
 			let boosts = {};
 			for (let statName in target.boosts) {
 				let stage = target.boosts[statName];
-				if (stage > 0) boosts[statName] = -stage;
-			}
-			this.boost(boosts, target);
-
-			for (let statName in boosts) {
-				boosts[statName] = -boosts[statName];
+				if (stage > 0) boosts[statName] = stage;
 			}
 			this.boost(boosts, pokemon);
+
+			for (let statName in boosts) {
+				boosts[statName] = 0;
+			}
+			target.setBoost(boosts);
+			this.add('-clearpositiveboost', target, pokemon, 'move: ' + move.name);
 		}
 
 		move.totalDamage = 0;
