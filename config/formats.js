@@ -7,11 +7,12 @@ exports.Formats = [
 
 	// SM Singles
 	///////////////////////////////////////////////////////////////////
-
+	{
+		section: "SM Singles (beta)",
+	},
 	{
 		name: "Random Battle",
 		desc: ["Randomized teams of level-balanced Pok&eacute;mon with sets that are generated to be competitively viable."],
-		section: "SM Singles (beta)",
 
 		mod: 'gen7',
 		team: 'random',
@@ -19,7 +20,6 @@ exports.Formats = [
 	},
 	{
 		name: "Unrated Random Battle",
-		section: "SM Singles (beta)",
 
 		mod: 'gen7',
 		team: 'random',
@@ -29,7 +29,6 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 7] OU",
-		section: "SM Singles (beta)",
 
 		mod: 'gen7',
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Baton Pass Clause'],
@@ -42,7 +41,6 @@ exports.Formats = [
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3587188/\">OU Metagame Discussion</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3587177/\">OU Banlist</a>",
 		],
-		section: "SM Singles (beta)",
 
 		mod: 'gen7',
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Baton Pass Clause'],
@@ -51,7 +49,6 @@ exports.Formats = [
 	{
 		name: "[Gen 7] Pokebank Ubers",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3587184/\">Ubers Metagame Discussion</a>"],
-		section: "SM Singles (beta)",
 
 		mod: 'gen7',
 		ruleset: ['Pokemon', 'Standard', 'Swagger Clause', 'Team Preview', 'Mega Rayquaza Clause'],
@@ -59,7 +56,6 @@ exports.Formats = [
 	{
 		name: "[Gen 7] Pokebank LC",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3587196/\">LC Metagame Discussion</a>"],
-		section: "SM Singles (beta)",
 
 		mod: 'gen7',
 		maxLevel: 5,
@@ -68,7 +64,6 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 7] Pokebank Anything Goes",
-		section: "SM Singles (beta)",
 
 		mod: 'gen7',
 		ruleset: ['Pokemon', 'Endless Battle Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod'],
@@ -79,8 +74,10 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
-		name: "Random Doubles Battle",
 		section: "SM Doubles (beta)",
+	},
+	{
+		name: "Random Doubles Battle",
 
 		mod: 'gen7',
 		gameType: 'doubles',
@@ -90,7 +87,6 @@ exports.Formats = [
 	{
 		name: "[Gen 7] Pokebank Doubles OU",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3586596/\">Doubles OU Metagame Discussion</a>"],
-		section: "SM Doubles (beta)",
 
 		mod: 'gen7',
 		gameType: 'doubles',
@@ -102,7 +98,6 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 7] Pokebank Doubles Ubers",
-		section: "SM Doubles (beta)",
 
 		mod: 'gen7',
 		gameType: 'doubles',
@@ -113,7 +108,6 @@ exports.Formats = [
 	{
 		name: "[Gen 7] VGC 2017",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3586596/\"VGC 2017 Discussion</a>"],
-		section: "SM Doubles (beta)",
 
 		mod: 'gen7',
 		gameType: 'doubles',
@@ -131,13 +125,15 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
+		section: "ORAS Singles",
+	},
+	{
 		name: "OU",
 		desc: [
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3573990/\">OU Metagame Discussion</a>",
 			"&bullet; <a href=\"https://www.smogon.com/dex/xy/tags/ou/\">OU Banlist</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3571990/\">OU Viability Ranking</a>",
 		],
-		section: "ORAS Singles",
 
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
 		banlist: ['Uber', 'Shadow Tag', 'Soul Dew'],
@@ -148,7 +144,6 @@ exports.Formats = [
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3522911/\">Ubers Metagame Discussion</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3535106/\">Ubers Viability Ranking</a>",
 		],
-		section: "ORAS Singles",
 
 		ruleset: ['Pokemon', 'Standard', 'Swagger Clause', 'Team Preview', 'Mega Rayquaza Clause'],
 	},
@@ -159,7 +154,6 @@ exports.Formats = [
 			"&bullet; <a href=\"https://www.smogon.com/dex/xy/tags/uu/\">UU Banlist</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3555277/\">UU Viability Ranking</a>",
 		],
-		section: "ORAS Singles",
 
 		ruleset: ['OU'],
 		banlist: ['OU', 'BL', 'Drizzle', 'Drought', 'Baton Pass'],
@@ -171,7 +165,6 @@ exports.Formats = [
 			"&bullet; <a href=\"https://www.smogon.com/dex/xy/tags/ru/\">RU Banlist</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3558546/\">RU Viability Ranking</a>",
 		],
-		section: "ORAS Singles",
 
 		ruleset: ['OU'],
 		banlist: ['OU', 'BL', 'UU', 'BL2', 'Drizzle', 'Drought'],
@@ -183,7 +176,6 @@ exports.Formats = [
 			"&bullet; <a href=\"https://www.smogon.com/dex/xy/tags/nu/\">NU Banlist</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3555650/\">NU Viability Ranking</a>",
 		],
-		section: "ORAS Singles",
 
 		ruleset: ['RU', 'Baton Pass Speed Clause'],
 		banlist: ['RU', 'BL3'],
@@ -194,7 +186,6 @@ exports.Formats = [
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3578583/\">np: PU Stage 9</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3528743/\">PU Viability Ranking</a>",
 		],
-		section: "ORAS Singles",
 
 		ruleset: ['RU'],
 		banlist: ['RU', 'BL3', 'NU', 'BL4', 'Chatter'],
@@ -206,7 +197,6 @@ exports.Formats = [
 			"&bullet; <a href=\"https://www.smogon.com/dex/xy/formats/lc/\">LC Banlist</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3547566/\">LC Viability Ranking</a>",
 		],
-		section: "ORAS Singles",
 
 		maxLevel: 5,
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
@@ -219,7 +209,6 @@ exports.Formats = [
 			"&bullet; <a href=\"https://www.smogon.com/dex/xy/formats/cap/\">CAP Banlist</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3545628/\">CAP Viability Ranking</a>",
 		],
-		section: "ORAS Singles",
 
 		ruleset: ['OU'],
 		banlist: ['Allow CAP'],
@@ -230,7 +219,6 @@ exports.Formats = [
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3527960/\">Battle Spot Singles Metagame Discussion</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3554616/\">Battle Spot Singles Viability Ranking</a>",
 		],
-		section: "ORAS Singles",
 
 		maxForcedLevel: 50,
 		teamLength: {
@@ -242,7 +230,6 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 6] Random Battle",
-		section: "ORAS Singles",
 
 		team: 'random',
 		searchShow: false,
@@ -250,7 +237,6 @@ exports.Formats = [
 	},
 	{
 		name: "Custom Game",
-		section: "ORAS Singles",
 
 		searchShow: false,
 		canUseRandomTeam: true,
@@ -265,13 +251,15 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
+		section: "ORAS Doubles/Triples",
+	},
+	{
 		name: "Doubles OU",
 		desc: [
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3580680/\">np: Doubles OU Stage 5</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3498688/\">Doubles OU Banlist</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3535930/\">Doubles OU Viability Ranking</a>",
 		],
-		section: "ORAS Doubles/Triples",
 
 		gameType: 'doubles',
 		ruleset: ['Pokemon', 'Standard Doubles', 'Swagger Clause', 'Team Preview'],
@@ -284,7 +272,6 @@ exports.Formats = [
 	{
 		name: "Doubles Ubers",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3542746/\">Doubles Ubers</a>"],
-		section: "ORAS Doubles/Triples",
 
 		gameType: 'doubles',
 		ruleset: ['Pokemon', 'Species Clause', 'Moody Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Evasion Abilities Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
@@ -293,7 +280,6 @@ exports.Formats = [
 	{
 		name: "Doubles UU",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3542755/\">Doubles UU</a>"],
-		section: "ORAS Doubles/Triples",
 
 		gameType: 'doubles',
 		ruleset: ['Doubles OU'],
@@ -312,7 +298,6 @@ exports.Formats = [
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3558332/\">VGC 2016 Rules</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3580592/\">VGC 2016 Viability Ranking</a>",
 		],
-		section: "ORAS Doubles/Triples",
 
 		gameType: 'doubles',
 		maxForcedLevel: 50,
@@ -342,7 +327,6 @@ exports.Formats = [
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3560820/\">Battle Spot Doubles Metagame Discussion</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3560824/\">Battle Spot Doubles Viability Ranking</a>",
 		],
-		section: "ORAS Doubles/Triples",
 
 		gameType: 'doubles',
 		maxForcedLevel: 50,
@@ -355,7 +339,6 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 6] Random Doubles Battle",
-		section: "ORAS Doubles/Triples",
 
 		gameType: 'doubles',
 		team: 'random',
@@ -364,7 +347,6 @@ exports.Formats = [
 	},
 	{
 		name: "Doubles Custom Game",
-		section: "ORAS Doubles/Triples",
 
 		gameType: 'doubles',
 		searchShow: false,
@@ -381,7 +363,6 @@ exports.Formats = [
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3533914/\">Battle Spot Triples Metagame Discussion</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3549201/\">Battle Spot Triples Viability Ranking</a>",
 		],
-		section: "ORAS Doubles/Triples",
 
 		gameType: 'triples',
 		maxForcedLevel: 50,
@@ -393,7 +374,6 @@ exports.Formats = [
 	},
 	{
 		name: "Triples Custom Game",
-		section: "ORAS Doubles/Triples",
 
 		gameType: 'triples',
 		searchShow: false,
@@ -409,9 +389,11 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
-		name: "[Gen 7] Balanced Hackmons",
 		section: "OM of the Month",
 		column: 2,
+	},
+	{
+		name: "[Gen 7] Balanced Hackmons",
 
 		mod: 'gen7',
 		ruleset: ['Pokemon', 'Ability Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod'],
@@ -424,10 +406,13 @@ exports.Formats = [
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3547279/\">STABmons</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3558034/\">STABmons Viability Ranking</a>",
 		],
-		section: "OM of the Month",
 
 		ruleset: ['OU'],
 		banlist: ['Ignore STAB Moves', 'Diggersby', 'Kyurem-Black', 'Porygon-Z', 'Thundurus', 'Aerodactylite', 'Altarianite', "King's Rock", 'Metagrossite', 'Razor Fang'],
+	},
+	{
+		section: "Other Metagames",
+		column: 2,
 	},
 	{
 		name: "Anything Goes",
@@ -435,8 +420,6 @@ exports.Formats = [
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3523229/\">Anything Goes</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3548945/\">AG Resources</a>",
 		],
-		section: "Other Metagames",
-		column: 2,
 
 		ruleset: ['Pokemon', 'Endless Battle Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod'],
 		banlist: ['Illegal', 'Unreleased'],
@@ -448,7 +431,6 @@ exports.Formats = [
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3566051/\">BH Suspects and Bans</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3571384/\">BH Resources</a>",
 		],
-		section: "Other Metagames",
 
 		ruleset: ['Pokemon', 'Ability Clause', '-ate Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod'],
 		banlist: ['Groudon-Primal', 'Kyogre-Primal', 'Arena Trap', 'Huge Power', 'Moody', 'Parental Bond', 'Protean', 'Pure Power', 'Shadow Tag', 'Wonder Guard', 'Assist', 'Chatter'],
@@ -480,7 +462,6 @@ exports.Formats = [
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3544507/\">Monotype</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3575778/\">Monotype Viability Ranking</a>",
 		],
-		section: "Other Metagames",
 
 		ruleset: ['Pokemon', 'Standard', 'Baton Pass Clause', 'Swagger Clause', 'Same Type Clause', 'Team Preview'],
 		banlist: [
@@ -495,7 +476,6 @@ exports.Formats = [
 			"Mega Stones and Primal Orbs can be used on almost any fully evolved Pok&eacute;mon with no Mega Evolution limit.",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3540979/\">Mix and Mega</a>",
 		],
-		section: "Other Metagames",
 
 		mod: 'mixandmega',
 		ruleset: ['Ubers'],
@@ -551,7 +531,6 @@ exports.Formats = [
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3528058/\">Almost Any Ability</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3578707/\">AAA Resources</a>",
 		],
-		section: "Other Metagames",
 
 		ruleset: ['Pokemon', 'Standard', 'Ability Clause', 'Baton Pass Clause', 'Swagger Clause', 'Team Preview'],
 		banlist: ['Ignore Illegal Abilities',
@@ -578,7 +557,6 @@ exports.Formats = [
 			"Pok&eacute;mon below OU/BL get all their stats boosted. UU/BL2 get +5, RU/BL3 get +10, NU/BL4 get +15, and PU or lower get +20.",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3554765/\">Tier Shift</a>",
 		],
-		section: "Other Metagames",
 
 		mod: 'tiershift',
 		ruleset: ['OU'],
@@ -591,7 +569,6 @@ exports.Formats = [
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3518146/\">Inverse Battle</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3526371/\">Inverse Battle Viability Ranking</a>",
 		],
-		section: "Other Metagames",
 
 		ruleset: ['Pokemon', 'Standard', 'Baton Pass Clause', 'Swagger Clause', 'Team Preview'],
 		banlist: [
@@ -613,7 +590,6 @@ exports.Formats = [
 			"Double battle where you bring four Pok&eacute;mon to Team Preview and choose only two.",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3547040/\">2v2 Doubles</a>",
 		],
-		section: "Other Metagames",
 
 		gameType: 'doubles',
 		searchShow: false,
@@ -630,7 +606,6 @@ exports.Formats = [
 			"Pok&eacute;mon have an added type determined by their IVs. Same as the Hidden Power type.",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3516349/\">Hidden Type</a>",
 		],
-		section: "Other Metagames",
 
 		searchShow: false,
 		mod: 'hiddentype',
@@ -639,7 +614,6 @@ exports.Formats = [
 	{
 		name: "OU Theorymon",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3559611/\">OU Theorymon</a>"],
-		section: "Other Metagames",
 
 		mod: 'theorymon',
 		searchShow: false,
@@ -647,7 +621,6 @@ exports.Formats = [
 	},
 	{
 		name: "Gen-NEXT OU",
-		section: "Other Metagames",
 
 		mod: 'gennext',
 		searchShow: false,
@@ -659,9 +632,11 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
-		name: "[Gen 7] Challenge Cup",
 		section: "Randomized Metas",
 		column: 2,
+	},
+	{
+		name: "[Gen 7] Challenge Cup",
 
 		mod: 'gen7',
 		team: 'randomCC',
@@ -669,14 +644,12 @@ exports.Formats = [
 	},
 	{
 		name: "Battle Factory",
-		section: "Randomized Metas",
 
 		team: 'randomFactory',
 		ruleset: ['Pokemon', 'Sleep Clause Mod', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Mega Rayquaza Clause'],
 	},
 	{
 		name: "Challenge Cup 1v1",
-		section: "Randomized Metas",
 
 		team: 'randomCC',
 		teamLength: {
@@ -686,7 +659,6 @@ exports.Formats = [
 	},
 	{
 		name: "Monotype Random Battle",
-		section: "Randomized Metas",
 
 		team: 'random',
 		searchShow: false,
@@ -695,14 +667,12 @@ exports.Formats = [
 	{
 		name: "Hackmons Cup",
 		desc: ["Randomized teams of level-balanced Pok&eacute;mon with absolutely any ability, moves, and item."],
-		section: "Randomized Metas",
 
 		team: 'randomHC',
 		ruleset: ['Pokemon', 'HP Percentage Mod', 'Cancel Mod'],
 	},
 	{
 		name: "Doubles Hackmons Cup",
-		section: "Randomized Metas",
 
 		gameType: 'doubles',
 		team: 'randomHC',
@@ -711,7 +681,6 @@ exports.Formats = [
 	},
 	{
 		name: "Triples Hackmons Cup",
-		section: "Randomized Metas",
 
 		gameType: 'triples',
 		team: 'randomHC',
@@ -723,13 +692,15 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
+		section: "RoA Spotlight",
+		column: 3,
+	},
+	{
 		name: "[Gen 3] UU",
 		desc: [
 			"&bullet; <a href=\"https://www.smogon.com/dex/rs/formats/uu/\">ADV UU</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3548578/\">ADV UU Viability Ranking</a>",
 		],
-		section: "RoA Spotlight",
-		column: 3,
 
 		mod: 'gen3',
 		ruleset: ['[Gen 3] OU'],
@@ -740,13 +711,15 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
+		section: "BW2 Singles",
+		column: 3,
+	},
+	{
 		name: "[Gen 5] OU",
 		desc: [
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3551993/\">BW2 OU Viability Ranking</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/posts/6431094/\">BW2 Sample Teams</a>",
 		],
-		section: "BW2 Singles",
-		column: 3,
 
 		mod: 'gen5',
 		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Baton Pass Clause', 'Swagger Clause', 'Team Preview'],
@@ -758,7 +731,6 @@ exports.Formats = [
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3550881/\">BW2 Ubers Viability Ranking</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/posts/6446463/\">BW2 Ubers Sample Teams</a>",
 		],
-		section: "BW2 Singles",
 
 		mod: 'gen5',
 		ruleset: ['Pokemon', 'Team Preview', 'Standard Ubers'],
@@ -769,7 +741,6 @@ exports.Formats = [
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3474024/\">BW2 UU Viability Ranking</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/posts/6431094/\">BW2 Sample Teams</a>",
 		],
-		section: "BW2 Singles",
 
 		mod: 'gen5',
 		ruleset: ['[Gen 5] OU'],
@@ -781,7 +752,6 @@ exports.Formats = [
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3473124/\">BW2 RU Viability Ranking</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/posts/6431094/\">BW2 Sample Teams</a>",
 		],
-		section: "BW2 Singles",
 
 		mod: 'gen5',
 		ruleset: ['[Gen 5] UU'],
@@ -793,7 +763,6 @@ exports.Formats = [
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3484121/\">BW2 NU Viability Ranking</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/posts/6431094/\">BW2 Sample Teams</a>",
 		],
-		section: "BW2 Singles",
 
 		mod: 'gen5',
 		ruleset: ['[Gen 5] RU'],
@@ -805,7 +774,6 @@ exports.Formats = [
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3485860/\">BW2 LC Viability Ranking</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/posts/6431094/\">BW2 Sample Teams</a>",
 		],
-		section: "BW2 Singles",
 
 		mod: 'gen5',
 		maxLevel: 5,
@@ -814,7 +782,6 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 5] GBU Singles",
-		section: "BW2 Singles",
 
 		mod: 'gen5',
 		searchShow: false,
@@ -828,7 +795,6 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 5] Random Battle",
-		section: "BW2 Singles",
 
 		mod: 'gen5',
 		searchShow: false,
@@ -837,7 +803,6 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 5] Custom Game",
-		section: "BW2 Singles",
 
 		mod: 'gen5',
 		searchShow: false,
@@ -853,13 +818,15 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
+		section: 'BW2 Doubles',
+		column: 3,
+	},
+	{
 		name: "[Gen 5] Doubles OU",
 		desc: [
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3533424/\">BW2 Doubles Metagame Discussion</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3533421/\">BW2 Doubles Viability Ranking</a>",
 		],
-		section: 'BW2 Doubles',
-		column: 3,
 
 		mod: 'gen5',
 		gameType: 'doubles',
@@ -871,7 +838,6 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 5] GBU Doubles",
-		section: 'BW2 Doubles',
 
 		mod: 'gen5',
 		gameType: 'doubles',
@@ -886,7 +852,6 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 5] Doubles Custom Game",
-		section: 'BW2 Doubles',
 
 		mod: 'gen5',
 		gameType: 'doubles',
@@ -903,13 +868,15 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
+		section: "DPP Singles",
+		column: 4,
+	},
+	{
 		name: "[Gen 4] OU",
 		desc: [
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3551992/\">DPP OU Viability Ranking</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/posts/6431088/\">DPP Sample Teams</a>",
 		],
-		section: "DPP Singles",
-		column: 4,
 
 		mod: 'gen4',
 		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause'],
@@ -921,7 +888,6 @@ exports.Formats = [
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3505128/\">DPP Ubers Viability Ranking</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/posts/6446464/\">DPP Ubers Sample Teams</a>",
 		],
-		section: "DPP Singles",
 
 		mod: 'gen4',
 		ruleset: ['Pokemon', 'Standard'],
@@ -933,7 +899,6 @@ exports.Formats = [
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3503638/\">DPP UU Viability Ranking</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/posts/6431088/\">DPP Sample Teams</a>",
 		],
-		section: "DPP Singles",
 
 		mod: 'gen4',
 		ruleset: ['Pokemon', 'Standard'],
@@ -945,7 +910,6 @@ exports.Formats = [
 			"&bullet; <a href=\"https://www.smogon.com/dp/articles/little_cup_guide\">DPP LC Guide</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/posts/6431088/\">DPP Sample Teams</a>",
 		],
-		section: "DPP Singles",
 
 		mod: 'gen4',
 		maxLevel: 5,
@@ -954,7 +918,6 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 4] Custom Game",
-		section: "DPP Singles",
 
 		mod: 'gen4',
 		searchShow: false,
@@ -970,9 +933,11 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
-		name: "[Gen 4] Doubles Custom Game",
 		section: "DPP Doubles",
 		column: 4,
+	},
+	{
+		name: "[Gen 4] Doubles Custom Game",
 
 		mod: 'gen4',
 		gameType: 'doubles',
@@ -989,13 +954,15 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
+		section: "Past Generations",
+		column: 4,
+	},
+	{
 		name: "[Gen 3] OU",
 		desc: [
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3503019/\">ADV OU Viability Ranking</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/posts/6431087/\">ADV Sample Teams</a>",
 		],
-		section: "Past Generations",
-		column: 4,
 
 		mod: 'gen3',
 		ruleset: ['Pokemon', 'Standard'],
@@ -1007,7 +974,6 @@ exports.Formats = [
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3536426/\">ADV Ubers Viability Ranking</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/posts/6446466/\">ADV Ubers Sample Teams</a>",
 		],
-		section: "Past Generations",
 
 		mod: 'gen3',
 		ruleset: ['Pokemon', 'Standard'],
@@ -1015,7 +981,6 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 3] Custom Game",
-		section: "Past Generations",
 
 		mod: 'gen3',
 		searchShow: false,
@@ -1028,7 +993,6 @@ exports.Formats = [
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3503082/\">GSC OU Viability Ranking</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/posts/6431086/\">GSC Sample Teams</a>",
 		],
-		section: "Past Generations",
 
 		mod: 'gen2',
 		ruleset: ['Pokemon', 'Standard'],
@@ -1040,7 +1004,6 @@ exports.Formats = [
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3507552/\">GSC Ubers Discussion</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/posts/6431086/\">GSC Sample Teams</a>",
 		],
-		section: "Past Generations",
 
 		mod: 'gen2',
 		searchShow: false,
@@ -1048,7 +1011,6 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 2] Random Battle",
-		section: "Past Generations",
 
 		mod: 'gen2',
 		searchShow: false,
@@ -1057,7 +1019,6 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 2] Custom Game",
-		section: "Past Generations",
 
 		mod: 'gen2',
 		searchShow: false,
@@ -1070,7 +1031,6 @@ exports.Formats = [
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3486845/\">RBY OU Viability Ranking</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/posts/6431045/\">RBY Sample Teams</a>",
 		],
-		section: "Past Generations",
 
 		mod: 'gen1',
 		ruleset: ['Pokemon', 'Standard'],
@@ -1082,7 +1042,6 @@ exports.Formats = [
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3541329/\">RBY Ubers Viability Ranking</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/posts/6431045/\">RBY Sample Teams</a>",
 		],
-		section: "Past Generations",
 
 		mod: 'gen1',
 		searchShow: false,
@@ -1090,7 +1049,6 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 1] OU (tradeback)",
-		section: "Past Generations",
 
 		mod: 'gen1',
 		searchShow: false,
@@ -1102,7 +1060,6 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 1] Random Battle",
-		section: "Past Generations",
 
 		mod: 'gen1',
 		team: 'random',
@@ -1110,7 +1067,6 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 1] Challenge Cup",
-		section: "Past Generations",
 
 		mod: 'gen1',
 		team: 'randomCC',
@@ -1119,7 +1075,6 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 1] Stadium",
-		section: "Past Generations",
 
 		mod: 'stadium',
 		searchShow: false,
@@ -1131,7 +1086,6 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 1] Custom Game",
-		section: "Past Generations",
 
 		mod: 'gen1',
 		searchShow: false,
