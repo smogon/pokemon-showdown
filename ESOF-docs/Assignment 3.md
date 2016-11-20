@@ -5,8 +5,13 @@
 
 ### Introdução
 O assunto deste relatório é o design arquitetónico, conceito que visa a organização fundamental de um sistema com os seus componentes, assim como as relações entre estes.
-Durante o decorrer do trabalho serão apresentados quatro tipos de diagramas que representam diferentes vistas: Lógica, de Implementação, de Processo e de Desenvolvimento.
+Durante o decorrer do trabalho serão apresentados quatro tipos de diagramas que representam diferentes vistas: Lógica, de Implementação, de Processo e de Desenvolvimento, bem como os padrões de arquitetura utilizados.
 Embora o projeto "Pokémon Showdown" não apresente uma arquitetura bem estruturada e rigorosa, vamos tentar representá-la da melhor forma possível.
+
+*Architectural Patterns* são exemplos de uma boa prática de design arquitetónico, que foram previamente testados em ambientes diferentes, tendo sido bem sucedidos e formalizados como padrões a seguir.
+Destes padrões, estão presentes no nosso projeto o *Mode-View-Controller* e o *Client-server and N-tier systems*.
+O *Mode-View-Controller* tem como objetivo separar a representação e interação do estado da aplicação a nível estrutural,permitindo alterar a vizualisação do conteúdo, sem ter que alterar este. Este é uma boa conduta de programação, podendo fazer várias *views* para um mesmo conteúdo, e ao alterar este, permite observar a alteração feita em todas as vistas.
+O *Client-server and N-tier systems* representa um sistema em que ocorre pedidos de um cliente para um servidor atravéz de uma rede partilhada, ou de um *middleware*, sendo neste projeto utilizado o protocolo de comunicação HTML.
 
 ### 1.Vista Lógica
 
