@@ -61,8 +61,11 @@ Resumidamente, o *Pokémon Showdown* vai verificar a conectividade de jogadores 
 
 ### 4.Vista de Desenvolvimento
 
-A vista de desenvolvimento visa demonstrar os nós de *hardware* distribuídos pelos componentes de *software*, assim como o sistema de *hardware*.
+O diagrama que representa a vista de desevolvimento visa explorar a relação entre os componentes de software e de hardware. Este mostra o sistema de hardware, assim como os componentes de software distribuídos pelos nós de hardware.
 
+<p align="center">
+  <img src="https://https://github.com/Katchau/Pokemon-Showdown/blob/master/ESOF-docs/Resources/deployment%20view.png" alt="deployment-model"/>
+</p>
 
 ### Conclusão
 
