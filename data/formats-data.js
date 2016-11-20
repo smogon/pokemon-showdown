@@ -5671,6 +5671,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 6, "level": 70, "moves":["crunch", "earthquake", "camouflage", "dragonpulse"]},
 			{"generation": 6, "level": 100, "moves":["landswrath", "extremespeed", "glare", "outrage"], "pokeball": "cherishball"},
+			{"generation": 7, "level": 50, "moves":["bind", "landswrath", "sandstorm", "haze"], "pokeball": "pokeball"},
 		],
 		eventOnly: true,
 		tier: "BL",
