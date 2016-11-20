@@ -898,18 +898,13 @@ exports.BattleScripts = {
 				species = template.name;
 			}
 
-			// Make sure forme/item combo is correct
-			let badItemType = '';
-			switch (species) {
-			case 'Arceus': badItemType = 'plate'; break;
-			case 'Genesect': badItemType = 'drive'; break;
-			case 'Giratina': badItemType = 'griseousorb'; break;
-			case 'Silvally': badItemType = 'memory'; break;
-			}
-			if (badItemType) {
-				while (item.endsWith(badItemType) || this.getItem(item).gen > this.gen || this.data.Items[item].isNonstandard) {
+			// Make sure that a base forme does not hold any forme-modifier items.
+			let itemData = this.getItem(item);
+			if (itemData.forcedForme && species === this.getTemplate(itemData.forcedForme).baseSpecies) {
+				do {
 					item = items[this.random(items.length)];
-				}
+					itemData = this.getItem(item);
+				} while (itemData.gen > this.gen || itemData.isNonstandard || itemData.forcedForme && species === this.getTemplate(itemData.forcedForme).baseSpecies);
 			}
 
 			// Random ability
