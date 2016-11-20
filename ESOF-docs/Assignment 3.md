@@ -10,6 +10,31 @@ Embora o projeto "Pokémon Showdown" não apresente uma arquitetura bem estrutur
 
 ### 1.Vista Lógica
 
+|Package|Descrição|
+|:-----:|:-------:|
+|Monitor|Várias funções utilitárias que garantem que a aplicação corre sem problemas|
+|Tools|Lida com a obtenção de dados sobre Pokemons, items, etc.|
+|LoginServer|Trata com a comunicação com o servidor de login.|
+|LaddersRemote|Gere os rankings do servidor oficial em play.pokemonshowdown.com|
+|Ladders|Gere os rankings de todos os servidores que não são o servidor oficial. Mais especificamente é responsável por calcular e armazenar os elo ratings dos jogadores|
+|Users|A maior parte da comunicação com os utilizadores é da responsabilidade desta package|
+|Punishments|É responsável por aplicar e manter as penalizações aos utilizadores de Pokemon Showdown. Os castigos podem ser de quatro tipos: Locks, Bans, Homelocks e Rangelocks|
+|Chat|Gere as salas de chat do Pokemon Showdown|
+|Crashlogger|Mantém registos dos crashes do servidor e notifica o administrador do servidor por email se este assim desejar|
+|ChatCommands|Mantém comandos do sistema, que são necessários para correr o servidor de Pokemon Showdown|
+|ProcessManager|Abstrai a lógica multiprocesso envolvida em vários processos|
+|ChatPlugins|Adiciona e remove comandos de char customizados, como por exemplo jogos baseados em texto tipo hangman, entre outros|
+|Tournaments|Lida com a geração e gestão de torneios entre os utilizadores|
+|Rooms|Contém todas as salas de chat e salas de jogo|
+|RoomGame|É responsável por manter o tipo de jogo associado a uma sala. Este pode ser um combate, um torneio, um jogo à base de texto, etc|
+|RoomBattle|Abstrai a lógica multiprocesso de uma sala onde ocorre a simulação de batalha|
+|BattleEngine|Trata da simulação de combate entre Pokémons|
+|REPL|Read-Eval-Print Loop, recebe o input de um utilizador, avalia-o e devolve o resultado|
+|DNSBL|Providencia várias ferramentas que permitem o parsing de IPs e o bloqueio à base de IPs|
+|Sockets|Camada de abstração para as conexões multiprocesso de SockJS|
+|Verifier|Implementação assíncrona de um verificador de uma chave assinada|
+|TeamValidator|Permite a validação de equipas|
+
 ### 2.Vista de Implementação
 
 ### 3.Vista de Processo
