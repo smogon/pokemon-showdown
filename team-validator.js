@@ -1021,6 +1021,7 @@ if (process.send && module === process.mainModule) {
 
 	global.Tools = require('./tools').includeData();
 	global.toId = Tools.getId;
+	global.Chat = require('./chat');
 
 	require('./repl').start('team-validator-', process.pid, cmd => eval(cmd));
 
