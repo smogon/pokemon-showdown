@@ -2012,7 +2012,13 @@ exports.BattleScripts = {
 
 		item = 'Leftovers';
 		if (template.requiredItems) {
-			item = template.requiredItems[this.random(template.requiredItems.length)];
+			if (template.baseSpecies === 'Arceus' && hasMove['judgment']) {
+				// Judgment doesn't change type with Z-Crystals
+				let items = template.requiredItems.filter(item => item.endsWith('Plate'));
+				item = items[this.random(items.length)];
+			} else {
+				item = template.requiredItems[this.random(template.requiredItems.length)];
+			}
 		} else if (hasMove['magikarpsrevenge']) {
 			// PoTD Magikarp
 			item = 'Choice Band';
