@@ -69,7 +69,7 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon's Normal-type moves become Flying type and have 1.2x power.",
 		onModifyMovePriority: -1,
 		onModifyMove: function (move, pokemon) {
-			if (move.type === 'Normal' && move.id !== 'naturalgift') {
+			if (move.type === 'Normal' && move.id !== 'naturalgift' && !move.isZ) {
 				move.type = 'Flying';
 				if (move.category !== 'Status') pokemon.addVolatile('aerilate');
 			}
@@ -1177,7 +1177,7 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon's Normal-type moves become Electric type and have 1.2x power.",
 		onModifyMovePriority: -1,
 		onModifyMove: function (move, pokemon) {
-			if (move.type === 'Normal' && move.id !== 'naturalgift') {
+			if (move.type === 'Normal' && move.id !== 'naturalgift' && !move.isZ) {
 				move.type = 'Electric';
 				if (move.category !== 'Status') pokemon.addVolatile('galvanize');
 			}
@@ -2315,7 +2315,7 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon's Normal-type moves become Fairy type and have 1.2x power.",
 		onModifyMovePriority: -1,
 		onModifyMove: function (move, pokemon) {
-			if (move.type === 'Normal' && move.id !== 'naturalgift') {
+			if (move.type === 'Normal' && move.id !== 'naturalgift' && !move.isZ) {
 				move.type = 'Fairy';
 				if (move.category !== 'Status') pokemon.addVolatile('pixilate');
 			}
@@ -2641,7 +2641,7 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon's Normal-type moves become Ice type and have 1.2x power.",
 		onModifyMovePriority: -1,
 		onModifyMove: function (move, pokemon) {
-			if (move.type === 'Normal' && move.id !== 'naturalgift') {
+			if (move.type === 'Normal' && move.id !== 'naturalgift' && !move.isZ) {
 				move.type = 'Ice';
 				if (move.category !== 'Status') pokemon.addVolatile('refrigerate');
 			}
