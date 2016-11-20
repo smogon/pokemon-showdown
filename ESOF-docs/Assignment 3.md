@@ -37,13 +37,13 @@ Embora o projeto "Pokémon Showdown" não apresente uma arquitetura bem estrutur
 
 ### 2.Vista de Implementação
 
-O objetivo da vista de implementação é mostrar como o software é composto por vários componentes software e as suas dependências. Para isto, representamos o software num diagrama de componentes.
+O objetivo da vista de implementação é mostrar como o software é constituído por vários componentes de software e as suas dependências. Para isto, representamos o software num diagrama de componentes.
 
 <p align="center">
   <img src="https://github.com/Katchau/Pokemon-Showdown/blob/master/ESOF-docs/Resources/ComponentDiagram.png?raw=true" alt="incremental-model"/>
 </p>
 
-Neste diagrama, o componente central é o Pokemon Showdown. Este componente tem como dependências [es6-shim](https://www.npmjs.com/package/es6-shim), [sockjs](https://www.npmjs.com/package/sockjs), [cloud-env](https://www.npmjs.com/package/cloud-env), [node-static](https://www.npmjs.com/package/node-static), [sugar](https://www.npmjs.com/package/sugar), precisa de aceder à informação do utilizador e irá funcionar através de várias salas (componente rooms) que, como representado no diagrama, possuem vários tipos. Estas salas gerem toda a interação com o utilizador desde o menu principal até aos vários tipos de jogo, e mesmo o jogo em si. Todas comunicações e comandos funcionam com base no id da sala. Tem ainda um sistema de classificação, pelo componente ladder, que divide os jogadores pelo seu ELO proporcionando assim uma procura de adversário mais equilibrada.
+Neste diagrama, o componente central é o Pokemon Showdown. Este componente tem como dependências [es6-shim](https://www.npmjs.com/package/es6-shim), [sockjs](https://www.npmjs.com/package/sockjs), [cloud-env](https://www.npmjs.com/package/cloud-env), [node-static](https://www.npmjs.com/package/node-static), [sugar](https://www.npmjs.com/package/sugar). Este precisa de aceder à informação do utilizador e irá funcionar através de várias salas (componente *rooms*) que, como representado no diagrama, possuem vários tipos. Estas salas gerem toda a interação com o utilizador desde o menu principal até aos vários tipos de jogo, e mesmo o jogo em si. Todas comunicações e comandos funcionam com base no Id da sala. Tem ainda um sistema de classificação, pelo componente *ladder*, que divide os jogadores pelo seu *ELO* proporcionando, assim uma procura de adversário mais equilibrada.
 
 ### 3.Vista de Processo
 
@@ -75,17 +75,19 @@ O diagrama que representa a vista de desevolvimento visa explorar a relação en
   <img src="https://github.com/Katchau/Pokemon-Showdown/blob/master/ESOF-docs/Resources/deployment%20view.png?raw=true" alt="incremental-model"/>
 </p>
 
+O *web server* do *Pokemón Showdown* permite aos utilizadores usufruirem do jogo em qualquer browser, sendo que alguns deles oferecem ligeiras restriçoes. Os dois nós existentes, o Computador e o Servidor, comunicam através de pedidos *HTTP*.
+
 ### Conclusão
 
 ##Trabalho realizado por:
 
-[Ana Rita Torres](https://github.com/AnaRitaTorres): Contribuição .
+[Ana Rita Torres](https://github.com/AnaRitaTorres): Contribuição 25%
 
-[Diogo Cepa](https://github.com/dcepa95): Contribuição .
+[Diogo Cepa](https://github.com/dcepa95): Contribuição 25%
 
-[João Loureiro](https://github.com/Katchau): Contribução .
+[João Loureiro](https://github.com/Katchau): Contribução 25%
 
-[João Pedro Silva](https://github.com/joaosilva22): Contribuição .
+[João Pedro Silva](https://github.com/joaosilva22): Contribuição 25%
 
 
 
