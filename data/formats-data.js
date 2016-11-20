@@ -4087,7 +4087,7 @@ exports.BattleFormatsData = {
 		tier: "Bank",
 	},
 	darkrai: {
-		randomBattleMoves: ["darkvoid", "darkpulse", "focusblast", "nastyplot", "substitute", "sludgebomb"],
+		randomBattleMoves: ["hypnosis", "darkpulse", "focusblast", "nastyplot", "substitute", "sludgebomb"],
 		randomDoubleBattleMoves: ["darkpulse", "focusblast", "nastyplot", "substitute", "snarl", "protect"],
 		eventPokemon: [
 			{"generation": 4, "level": 40, "shiny": 1, "moves":["quickattack", "hypnosis", "pursuit", "nightmare"]},
@@ -5678,6 +5678,7 @@ exports.BattleFormatsData = {
 		tier: "New",
 	},
 	zygarde10: {
+		randomBattleMoves: ["dragondance", "thousandarrows", "outrage", "extremespeed", "irontail", "substitute"],
 		eventPokemon: [
 			{"generation": 7, "level": 30, "moves":["safeguard", "dig", "bind", "landswrath"]},
 		],
@@ -5777,7 +5778,7 @@ exports.BattleFormatsData = {
 		tier: "NFE",
 	},
 	toucannon: {
-		randomBattleMoves: ["substitute", "beakblast", "swordsdance", "roost"],
+		randomBattleMoves: ["substitute", "beakblast", "swordsdance", "roost", "brickbreak"],
 		tier: "New",
 	},
 	yungoos: {
@@ -5928,7 +5929,7 @@ exports.BattleFormatsData = {
 		tier: "New",
 	},
 	pyukumuku: {
-		randomBattleMoves: ["curse", "batonpass", "recover", "counter"],
+		randomBattleMoves: ["curse", "batonpass", "recover", "counter", "reflect", "lightscreen"],
 		tier: "New",
 	},
 	typenull: {
@@ -5939,7 +5940,7 @@ exports.BattleFormatsData = {
 		tier: "NFE",
 	},
 	silvally: {
-		randomBattleMoves: ["swordsdance", "return", "crunch", "flamecharge"],
+		randomBattleMoves: ["swordsdance", "return", "doubleedge", "crunch", "flamecharge", "flamethrower", "icebeam", "uturn", "ironhead"],
 		tier: "New",
 	},
 	silvallybug: {
@@ -5975,6 +5976,7 @@ exports.BattleFormatsData = {
 		requiredItem: "Flying Memory",
 	},
 	silvallyghost: {
+		randomBattleMoves: ["multiattack", "flamethrower", "icebeam", "partingshot", "toxic"],
 		tier: "New",
 		requiredItem: "Ghost Memory",
 	},
@@ -6041,7 +6043,7 @@ exports.BattleFormatsData = {
 		tier: "New",
 	},
 	drampa: {
-		randomBattleMoves: ["dracometeor", "dragonpulse", "hypervoice", "fireblast", "thunderbolt", "glare", "substitute"],
+		randomBattleMoves: ["dracometeor", "dragonpulse", "hypervoice", "fireblast", "thunderbolt", "glare", "substitute", "roost"],
 		tier: "New",
 	},
 	dhelmise: {
@@ -6055,7 +6057,7 @@ exports.BattleFormatsData = {
 		tier: "NFE",
 	},
 	kommoo: {
-		randomBattleMoves: ["dragondance", "dragonclaw", "skyuppercut", "poisonjab"],
+		randomBattleMoves: ["dragondance", "outrage", "dragonclaw", "skyuppercut", "poisonjab"],
 		tier: "New",
 	},
 	tapukoko: {
