@@ -1991,12 +1991,13 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, defrost: 1},
-		self: {
-			volatileStatus: 'burnup',
+		onTryHit: function (pokemon) {
+			if (!pokemon.hasType("Fire")) return false;
 		},
-		effect: {
-			noCopy: true,
-			// implemented in BattlePokemon#getTypes
+		self: {
+			onHit: function (pokemon) {
+				pokemon.setType(pokemon.getTypes(true).map(type => type === "Fire" ? "???" : type));
+			},
 		},
 		secondary: false,
 		target: "normal",
