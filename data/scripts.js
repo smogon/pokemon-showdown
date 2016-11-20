@@ -888,9 +888,11 @@ exports.BattleScripts = {
 
 			// Random legal item
 			let item = '';
-			do {
-				item = items[this.random(items.length)];
-			} while (this.data.Items[item].gen > this.gen || this.data.Items[item].isNonstandard);
+			if (this.gen >= 2) {
+				do {
+					item = items[this.random(items.length)];
+				} while (this.getItem(item).gen > this.gen || this.data.Items[item].isNonstandard);
+			}
 
 			// Make sure forme is legal
 			if (template.battleOnly || template.requiredItems && !template.requiredItems.some(req => toId(req) === item)) {
@@ -915,7 +917,7 @@ exports.BattleScripts = {
 
 			// Random ability
 			let abilities = Object.values(template.abilities);
-			let ability = abilities[this.random(abilities.length)];
+			let ability = this.gen <= 2 ? 'None' : abilities[this.random(abilities.length)];
 
 			// Four random unique moves from the movepool
 			let moves;
@@ -1061,15 +1063,19 @@ exports.BattleScripts = {
 
 			// Random unique item
 			let item = '';
-			do {
-				item = this.sampleNoReplace(itemPool);
-			} while (this.data.Items[item].gen > this.gen || this.data.Items[item].isNonstandard);
+			if (this.gen >= 2) {
+				do {
+					item = this.sampleNoReplace(itemPool);
+				} while (this.getItem(item).gen > this.gen || this.data.Items[item].isNonstandard);
+			}
 
 			// Random unique ability
-			let ability = '';
-			do {
-				ability = this.sampleNoReplace(abilityPool);
-			} while (this.getAbility(ability).gen > this.gen || this.data.Abilities[ability].isNonstandard);
+			let ability = 'None';
+			if (this.gen >= 3) {
+				do {
+					ability = this.sampleNoReplace(abilityPool);
+				} while (this.getAbility(ability).gen > this.gen || this.data.Abilities[ability].isNonstandard);
+			}
 
 			// Random unique moves
 			let m = [];
