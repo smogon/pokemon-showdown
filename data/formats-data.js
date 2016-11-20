@@ -5296,6 +5296,7 @@ exports.BattleFormatsData = {
 		tier: "OU",
 	},
 	greninjaash: {
+		gen: 7,
 		requiredAbility: "Battle Bond",
 		battleOnly: true,
 	},
@@ -5680,9 +5681,11 @@ exports.BattleFormatsData = {
 			{"generation": 7, "level": 30, "moves":["safeguard", "dig", "bind", "landswrath"]},
 		],
 		eventOnly: true,
+		gen: 7,
 		tier: "OU",
 	},
 	zygardecomplete: {
+		gen: 7,
 		requiredAbility: "Power Construct",
 		battleOnly: true,
 	},
