@@ -60,7 +60,7 @@ exports.Formats = [
 		mod: 'gen7',
 		maxLevel: 5,
 		ruleset: ['Pokemon', 'Standard', 'Swagger Clause', 'Team Preview', 'Little Cup'],
-		banlist: ['LC Uber', 'Gligar', 'Misdreavus', 'Scyther', 'Sneasel', 'Tangela', 'Eevium Z', 'Dragon Rage', 'Sonic Boom'],
+		banlist: ['LC Uber', 'Gligar', 'Misdreavus', 'Scyther', 'Sneasel', 'Tangela', 'Type: Null', 'Eevium Z', 'Dragon Rage', 'Sonic Boom'],
 	},
 	{
 		name: "[Gen 7] Pokebank Anything Goes",
