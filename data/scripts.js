@@ -2310,7 +2310,7 @@ exports.BattleScripts = {
 
 			// Adjust rate for species with multiple formes
 			switch (template.baseSpecies) {
-			case 'Arceus':
+			case 'Arceus': case 'Silvally':
 				if (this.random(18) >= 1) continue;
 				break;
 			case 'Pikachu':
