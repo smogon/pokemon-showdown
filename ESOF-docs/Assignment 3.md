@@ -37,6 +37,14 @@ Embora o projeto "Pokémon Showdown" não apresente uma arquitetura bem estrutur
 
 ### 2.Vista de Implementação
 
+O objetivo da vista de implementação é mostrar como o software é composto por vários componentes software e as suas dependências. Para isto, representamos o software num diagrama de componentes.
+
+<p align="center">
+  <img src="https://github.com/Katchau/Pokemon-Showdown/blob/master/ESOF-docs/Resources/ComponentDiagram.png?raw=true" alt="incremental-model"/>
+</p>
+
+Neste diagrama, o componente central é o Pokemon Showdown. Este componente tem como dependências [es6-shim](https://www.npmjs.com/package/es6-shim), [sockjs](https://www.npmjs.com/package/sockjs), [cloud-env](https://www.npmjs.com/package/cloud-env), [node-static](https://www.npmjs.com/package/node-static), [sugar](https://www.npmjs.com/package/sugar), precisa de aceder à informação do utilizador e irá funcionar através de várias salas (componente rooms) que, como representado no diagrama, possuem vários tipos. Estas salas gerem toda a interação com o utilizador desde o menu principal até aos vários tipos de jogo, e mesmo o jogo em si. Todas comunicações e comandos funcionam com base no id da sala. Tem ainda um sistema de classificação, pelo componente ladder, que divide os jogadores pelo seu ELO proporcionando assim uma procura de adversário mais equilibrada.
+
 ### 3.Vista de Processo
 
 A vista de processo tem como finalidade de mostrar os vários processos a serem executados e a sua interação, durante o decorrer do servidor do *Pokémon Showdown*. Para tal, utilizamos diagramas de atividade para explicitar esta vista.
