@@ -12285,7 +12285,7 @@ exports.BattleMovedex = {
 		name: "Psychic Fangs",
 		pp: 10,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {bite: 1, contact: 1, protect: 1, mirror: 1},
 		onTryHit: function (pokemon) {
 			// will shatter screens through sub, before you hit
 			if (pokemon.runImmunity('Psychic')) {
