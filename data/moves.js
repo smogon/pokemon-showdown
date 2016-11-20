@@ -8581,7 +8581,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, authentic: 1, mystery: 1},
 		onHit: function (target, source) {
 			let noInstruct = {
-				// TODO: fill this up
+				instruct:1, // TODO: fill this up
 			};
 			if (!target.lastMove || this.getMove(target.lastMove).isZ || noInstruct[target.lastMove]) {
 				return false;
