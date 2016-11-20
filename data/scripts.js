@@ -901,18 +901,17 @@ exports.BattleScripts = {
 			}
 
 			// Make sure forme/item combo is correct
+			let badItemType = '';
 			switch (species) {
-			case 'Giratina':
-				while (item === 'griseousorb') item = items[this.random(items.length)];
-				break;
-			case 'Arceus':
-				while (item.substr(-5) === 'plate') item = items[this.random(items.length)];
-				break;
-			case 'Genesect':
-				while (item.substr(-5) === 'drive') item = items[this.random(items.length)];
-				break;
-			case 'Silvally':
-				while (item.substr(-6) === 'memory') item = items[this.random(items.length)];
+			case 'Arceus': badItemType = 'plate'; break;
+			case 'Genesect': badItemType = 'drive'; break;
+			case 'Giratina': badItemType = 'griseousorb'; break;
+			case 'Silvally': badItemType = 'memory'; break;
+			}
+			if (badItemType) {
+				while (item.endsWith(badItemType) || this.getItem(item).gen > this.gen || this.data.Items[item].isNonstandard) {
+					item = items[this.random(items.length)];
+				}
 			}
 
 			// Random ability
