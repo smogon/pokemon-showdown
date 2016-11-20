@@ -6,16 +6,16 @@
 ### Introdução
 O assunto deste relatório é o design arquitetónico, conceito que visa a organização fundamental de um sistema com os seus componentes, assim como as relações entre estes.
 Durante o decorrer do trabalho serão apresentados quatro tipos de diagramas que representam diferentes vistas: Lógica, de Implementação, de Processo e de Desenvolvimento, bem como os padrões de arquitetura utilizados.
-Embora o projeto "Pokémon Showdown" não apresente uma arquitetura bem estruturada e rigorosa, vamos tentar representá-la da melhor forma possível.
 
 *Architectural Patterns* são exemplos de uma boa prática de design arquitetónico, que foram previamente testados em ambientes diferentes, tendo sido bem sucedidos e formalizados como padrões a seguir.
+
 Destes padrões, estão presentes no nosso projeto o *Mode-View-Controller* e o *Client-server and N-tier systems*.
-O *Mode-View-Controller* tem como objetivo separar a representação e interação do estado da aplicação a nível estrutural,permitindo alterar a vizualisação do conteúdo, sem ter que alterar este. Este é uma boa conduta de programação, podendo fazer várias *views* para um mesmo conteúdo, e ao alterar este, permite observar a alteração feita em todas as vistas.
-O *Client-server and N-tier systems* representa um sistema em que ocorre pedidos de um cliente para um servidor atravéz de uma rede partilhada, ou de um *middleware*, sendo neste projeto utilizado o protocolo de comunicação HTML.
+O *Mode-View-Controller* tem como objetivo separar a representação e interação do estado da aplicação a nível estrutural,permitindo alterar a visualização do conteúdo, sem ter que alterar este. Este é uma boa conduta de programação, podendo fazer várias *views* para um mesmo conteúdo, e ao alterar este, permite observar a alteração feita em todas as vistas.
+O *Client-server and N-tier systems* representa um sistema em que ocorre pedidos de um cliente para um servidor através de uma rede partilhada, ou de um *middleware*, sendo neste projeto utilizado o protocolo de comunicação HTML.
 
 ### 1.Vista Lógica
 
-A vista lógica evidencia as divisão de responsabilidades pelos vários segmentos lógicos do projeto. Mostra ainda o tipo de relação que existe entre eles.
+A vista lógica evidencia a divisão de responsabilidades pelos vários segmentos lógicos do projeto. Mostra ainda o tipo de relação que existe entre eles.
 
 <p align="center">
    <img src="https://github.com/Katchau/Pokemon-Showdown/blob/master/ESOF-docs/Resources/logial%20view.jpg?raw=true" />
@@ -46,7 +46,7 @@ A vista lógica evidencia as divisão de responsabilidades pelos vários segment
 |Verifier|Implementação assíncrona de um verificador de uma chave assinada|
 |TeamValidator|Permite a validação de equipas|
 
-Tratando-se de um projeto já com uma dimensão considerável, verifica-se que o número de *packages* de Pokemon Showdown é elevado. Isto é essencial para garantir a organização do código necessária num projeto que conta com tantos colaboradores.
+Tratando-se de um projeto já com uma dimensão considerável, verifica-se que o número de *packages* de *Pokemón Showdown* é elevado. Isto é essencial para garantir a organização do código necessária num projeto que conta com tantos colaboradores.
 
 ### 2.Vista de Implementação
 
@@ -91,6 +91,10 @@ O diagrama que representa a vista de desevolvimento visa explorar a relação en
 O *web server* do *Pokemón Showdown* permite aos utilizadores usufruirem do jogo em qualquer browser, sendo que alguns deles oferecem ligeiras restriçoes. Os dois nós existentes, o Computador e o Servidor, comunicam através de pedidos *HTTP*.
 
 ### Conclusão
+Em suma, a organização do projeto revelou-se representável através de diagramas realizados pelo grupo com recurso ao programa *Enterprise Architect* e, espera-se que estes permitam alcançar um melhor entendimento do projeto.
+É de notar também, que os ficheiros deste têm uma breve descrição do seu objetivo e conteúdo sob a forma de comentário o que ajudou o grupo no desenvolvimento deste relatório.
+Por fim, pode-se constatar que o projeto é portador de uma organização extremamente simples e, por vezes, inificiente.
+
 
 ##Trabalho realizado por:
 
