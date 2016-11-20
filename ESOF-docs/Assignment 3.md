@@ -10,6 +10,8 @@ Embora o projeto "Pokémon Showdown" não apresente uma arquitetura bem estrutur
 
 ### 1.Vista Lógica
 
+A vista lógica evidencia as divisão de responsabilidades pelos vários segmentos lógicos do projeto. Mostra ainda o tipo de relação que existe entre eles.
+
 <p align="center">
    <img src="https://github.com/Katchau/Pokemon-Showdown/blob/master/ESOF-docs/Resources/logial%20view.jpg?raw=true" />
 </p>
@@ -38,6 +40,8 @@ Embora o projeto "Pokémon Showdown" não apresente uma arquitetura bem estrutur
 |Sockets|Camada de abstração para as conexões multiprocesso de SockJS|
 |Verifier|Implementação assíncrona de um verificador de uma chave assinada|
 |TeamValidator|Permite a validação de equipas|
+
+Tratando-se de um projeto já com uma dimensão considerável, verifica-se que o número de *packages* de Pokemon Showdown é elevado. Isto é essencial para garantir a organização do código necessária num projeto que conta com tantos colaboradores.
 
 ### 2.Vista de Implementação
 
