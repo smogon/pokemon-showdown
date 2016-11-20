@@ -164,6 +164,10 @@ exports.BattlePokedex = {
 		inherit: true,
 		baseStats: {hp: 70, atk: 50, def: 30, spa: 95, spd: 135, spe: 105},
 	},
+	greninja: {
+		inherit: true,
+		abilities: {0: "Torrent", H: "Protean"},
+	},
 	pumpkaboosmall: {
 		inherit: true,
 		abilities: {0: "Pickup", 1: "Frisk"},
@@ -179,5 +183,9 @@ exports.BattlePokedex = {
 	gourgeistlarge: {
 		inherit: true,
 		abilities: {0: "Pickup", 1: "Frisk"},
+	},
+	zygarde: {
+		inherit: true,
+		abilities: {0: "Aura Break"},
 	},
 };
