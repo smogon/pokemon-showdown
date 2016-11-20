@@ -261,7 +261,7 @@ exports.BattleAbilities = {
 		},
 		id: "battlebond",
 		name: "Battle Bond",
-		rating: 3.5,
+		rating: 3,
 		num: 210,
 	},
 	"beastboost": {
