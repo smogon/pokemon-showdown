@@ -10,6 +10,10 @@ Embora o projeto "Pokémon Showdown" não apresente uma arquitetura bem estrutur
 
 ### 1.Vista Lógica
 
+<p align="center">
+   <img src="https://github.com/Katchau/Pokemon-Showdown/blob/master/ESOF-docs/Resources/logial%20view.jpg?raw=true" />
+</p>
+
 |Package|Descrição|
 |:-----:|:-------:|
 |Monitor|Várias funções utilitárias que garantem que a aplicação corre sem problemas|
