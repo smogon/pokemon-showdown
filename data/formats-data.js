@@ -5932,11 +5932,11 @@ exports.BattleFormatsData = {
 		tier: "OU",
 	},
 	typenull: {
-		tier: "NFE",
 		eventPokemon: [
 			{"generation": 7, "level": 40, "moves":["crushclaw", "scaryface", "xscissor", "takedown"]},
 		],
 		eventOnly: true,
+		tier: "NFE",
 	},
 	silvally: {
 		randomBattleMoves: ["swordsdance", "return", "crunch", "flamecharge"],
