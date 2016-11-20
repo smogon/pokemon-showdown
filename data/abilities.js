@@ -2121,7 +2121,7 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon's moves are changed to be Normal type and have 1.2x power.",
 		onModifyMovePriority: 1,
 		onModifyMove: function (move, pokemon) {
-			if (move.id !== 'struggle' && this.getMove(move.id).type !== 'Normal') {
+			if (!move.isZ && move.id !== 'struggle' && this.getMove(move.id).type !== 'Normal') {
 				move.type = 'Normal';
 			}
 			if (move.category !== 'Status') pokemon.addVolatile('normalize');
