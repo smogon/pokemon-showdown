@@ -17184,18 +17184,18 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 2,
 			onStart: function (target) {
-				this.add('-start', target, 'move: Throat Chop');
+				this.add('-start', target, 'Throat Chop', '[silent]');
 			},
 			onBeforeMovePriority: 6,
 			onBeforeMove: function (pokemon, target, move) {
 				if (move.flags['sound']) {
-					this.add('cant', pokemon, 'move: Throat Chop', move); // TODO: client-side
+					this.add('cant', pokemon, 'move: Throat Chop');
 					return false;
 				}
 			},
 			onResidualOrder: 22,
 			onEnd: function (target) {
-				this.add('-end', target, 'move: Throat Chop');
+				this.add('-end', target, 'Throat Chop', '[silent]');
 			},
 		},
 		secondary: false,
