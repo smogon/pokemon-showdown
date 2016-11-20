@@ -906,6 +906,10 @@ exports.commands = {
 			if (!evSet) {
 				if (lowercase === 'invested' || lowercase === 'max') {
 					evSet = true;
+					if (lowercase === max && !natureSet) {
+						nature = 1.1;
+						natureSet = true;
+					}
 				} else if (lowercase === 'uninvested') {
 					ev = 0;
 					evSet = true;
