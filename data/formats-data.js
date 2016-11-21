@@ -5948,6 +5948,7 @@ exports.BattleFormatsData = {
 		requiredItem: "Bug Memory",
 	},
 	silvallydark: {
+		randomBattleMoves: ["multiattack", "swordsdance", "flamecharge", "ironhead"],
 		tier: "New",
 		requiredItem: "Dark Memory",
 	},
@@ -5956,6 +5957,7 @@ exports.BattleFormatsData = {
 		requiredItem: "Dragon Memory",
 	},
 	silvallyelectric: {
+		randomBattleMoves: ["multiattack", "flamethrower", "icebeam", "partingshot", "toxic"],
 		tier: "New",
 		requiredItem: "Electric Memory",
 	},
@@ -5985,6 +5987,7 @@ exports.BattleFormatsData = {
 		requiredItem: "Grass Memory",
 	},
 	silvallyground: {
+		randomBattleMoves: ["multiattack", "swordsdance", "flamecharge", "rockslide"],
 		tier: "New",
 		requiredItem: "Ground Memory",
 	},
