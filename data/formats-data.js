@@ -5944,6 +5944,7 @@ exports.BattleFormatsData = {
 		tier: "New",
 	},
 	silvallybug: {
+		randomBattleMoves: ["multiattack", "flamethrower", "icebeam", "uturn"],
 		tier: "New",
 		requiredItem: "Bug Memory",
 	},
@@ -5953,6 +5954,7 @@ exports.BattleFormatsData = {
 		requiredItem: "Dark Memory",
 	},
 	silvallydragon: {
+		randomBattleMoves: ["multiattack", "ironhead", "flamecharge", "flamethrower", "icebeam", "dracometeor"],
 		tier: "New",
 		requiredItem: "Dragon Memory",
 	},
@@ -5962,18 +5964,22 @@ exports.BattleFormatsData = {
 		requiredItem: "Electric Memory",
 	},
 	silvallyfairy: {
+		randomBattleMoves: ["multiattack", "flamethrower", "thunderbolt", "partingshot", "toxic"],
 		tier: "New",
 		requiredItem: "Fairy Memory",
 	},
 	silvallyfighting: {
+		randomBattleMoves: ["swordsdance", "multiattack", "shadowclaw", "flamecharge", "ironhead"],
 		tier: "New",
 		requiredItem: "Fighting Memory",
 	},
 	silvallyfire: {
+		randomBattleMoves: ["multiattack", "icebeam", "thunderbolt", "partingshot"],
 		tier: "New",
 		requiredItem: "Fire Memory",
 	},
 	silvallyflying: {
+		randomBattleMoves: ["multiattack", "flamethrower", "icebeam", "partingshot", "toxic"],
 		tier: "New",
 		requiredItem: "Flying Memory",
 	},
@@ -5983,6 +5989,7 @@ exports.BattleFormatsData = {
 		requiredItem: "Ghost Memory",
 	},
 	silvallygrass: {
+		randomBattleMoves: ["multiattack", "flamethrower", "icebeam", "partingshot", "toxic"],
 		tier: "New",
 		requiredItem: "Grass Memory",
 	},
@@ -5992,26 +5999,32 @@ exports.BattleFormatsData = {
 		requiredItem: "Ground Memory",
 	},
 	silvallyice: {
+		randomBattleMoves: ["multiattack", "thunderbolt", "flamethrower", "partingshot", "toxic"],
 		tier: "New",
 		requiredItem: "Ice Memory",
 	},
 	silvallypoison: {
+		randomBattleMoves: ["multiattack", "flamethrower", "thunderbolt", "partingshot", "toxic"],
 		tier: "New",
 		requiredItem: "Poison Memory",
 	},
 	silvallypsychic: {
+		randomBattleMoves: ["multiattack", "flamethrower", "thunderbolt", "partingshot", "toxic"],
 		tier: "New",
 		requiredItem: "Psychic Memory",
 	},
 	silvallyrock: {
+		randomBattleMoves: ["multiattack", "flamethrower", "icebeam", "partingshot", "toxic"],
 		tier: "New",
 		requiredItem: "Rock Memory",
 	},
 	silvallysteel: {
+		randomBattleMoves: ["multiattack", "crunch", "flamethrower", "thunderbolt"],
 		tier: "New",
 		requiredItem: "Steel Memory",
 	},
 	silvallywater: {
+		randomBattleMoves: ["multiattack", "icebeam", "thunderbolt", "partingshot"],
 		tier: "New",
 		requiredItem: "Water Memory",
 	},
