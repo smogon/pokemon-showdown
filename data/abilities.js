@@ -2400,9 +2400,10 @@ exports.BattleAbilities = {
 		num: 143,
 	},
 	"powerconstruct": {
-		desc: "If this Pokemon is a Zygarde in its 10% or 50% Forme, it changes to Complete Forme when it has 1/2 or less of its maximum HP.",
-		shortDesc: "If Zygarde 10% or 50%, changes to Complete Forme when at 1/2 max HP or less.",
-		onUpdate: function (pokemon) {
+		desc: "If this Pokemon is a Zygarde in its 10% or 50% Forme, it changes to Complete Forme when it has 1/2 or less of its maximum HP at the end of the turn.",
+		shortDesc: "If Zygarde 10%/50%, changes to Complete if at 1/2 max HP or less at end of turn.",
+		onResidualOrder: 27,
+		onResidual: function (pokemon) {
 			if (pokemon.baseTemplate.baseSpecies !== 'Zygarde' || pokemon.transformed) return;
 			if (pokemon.template.speciesid === 'zygardecomplete' || pokemon.hp > pokemon.maxhp / 2) return;
 			this.add('-message', "You sense the presence of many! (placeholder)");
