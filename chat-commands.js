@@ -2154,7 +2154,10 @@ exports.commands = {
 		let reason = parts[1];
 		let targets = parts[0].split(',').map(s => toId(s));
 
-		let duplicates = targets.filter(userid => Punishments.roomUserids.nestedGet(room.id, userid));
+		let duplicates = targets.filter(userid => {
+			let punishment = Punishments.roomUserids.nestedGet(room.id, userid);
+			return punishment && punishment[0] === 'BLACKLIST';
+		});
 		if (duplicates.length) {
 			return this.errorReply(`[${duplicates.join(', ')}] ${Chat.plural(duplicates, "are", "is")} already blacklisted.`);
 		}
