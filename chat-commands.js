@@ -1052,6 +1052,7 @@ exports.commands = {
 			this.sendReply("/roompromote - This room isn't designed for per-room moderation");
 			return this.sendReply("Before setting room mods, you need to set it up with /roomowner");
 		}
+		if (!this.canTalk()) return;
 		if (!target) return this.parse('/help roompromote');
 
 		target = this.splitTarget(target, true);
