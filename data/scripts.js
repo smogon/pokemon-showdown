@@ -2082,7 +2082,7 @@ exports.BattleScripts = {
 		} else if (hasMove['acrobatics']) {
 			item = 'Flying Gem';
 		} else if ((ability === 'Guts' || hasMove['facade']) && !hasMove['sleeptalk']) {
-			item = 'Flame Orb';
+			item = hasType['Fire'] ? 'Toxic Orb' : 'Flame Orb';
 		} else if (ability === 'Unburden') {
 			if (hasMove['fakeout']) {
 				item = 'Normal Gem';
