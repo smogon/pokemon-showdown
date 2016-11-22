@@ -635,7 +635,7 @@ exports.BattlePokedex = {
 		weightkg: 55,
 		color: "Blue",
 		prevo: "sandshrewalola",
-		evoLevel: 22,
+		evoLevel: 1,
 		eggGroups: ["Field"],
 	},
 	nidoranf: {
@@ -1070,7 +1070,7 @@ exports.BattlePokedex = {
 		weightkg: 33,
 		color: "Blue",
 		prevo: "meowthalola",
-		evoLevel: 28,
+		evoLevel: 2,
 		eggGroups: ["Field"],
 	},
 	psyduck: {
@@ -11866,7 +11866,7 @@ exports.BattlePokedex = {
 		color: "Brown",
 		prevo: "mudbray",
 		evoLevel: 30,
-		eggGroups: ["Water 1"],
+		eggGroups: ["Field"],
 	},
 	dewpider: {
 		num: 751,
