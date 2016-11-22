@@ -349,7 +349,7 @@ exports.BattleScripts = {
 
 		if (move.breaksProtect) {
 			let broke = false;
-			for (let i in {kingsshield:1, protect:1, spikyshield:1}) {
+			for (let i in {banefulbunker:1, kingsshield:1, protect:1, spikyshield:1}) {
 				if (target.removeVolatile(i)) broke = true;
 			}
 			if (this.gen >= 6 || target.side !== pokemon.side) {
