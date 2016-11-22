@@ -1836,7 +1836,7 @@ exports.commands = {
 	},
 	htmlboxhelp: [
 		"/htmlbox [message] - Displays a message, parsing HTML code contained.",
-		"!htmlbox [message] - Shows everyone a message, parsing HTML code contained. Requires: ~ & * with global authority OR # * with room authority",
+		"!htmlbox [message] - Shows everyone a message, parsing HTML code contained. Requires: ~ & #",
 	],
 };
 
