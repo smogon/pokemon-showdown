@@ -1991,8 +1991,8 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, defrost: 1},
-		onTryHit: function (pokemon) {
-			if (!pokemon.hasType("Fire")) return false;
+		onTryHit: function (target, source, move) {
+			if (!source.hasType("Fire")) return false;
 		},
 		self: {
 			onHit: function (pokemon) {
