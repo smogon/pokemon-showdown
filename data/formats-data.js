@@ -119,8 +119,8 @@ exports.BattleFormatsData = {
 		tier: "NFE",
 	},
 	butterfree: {
-		randomBattleMoves: ["sleeppowder", "quiverdance", "bugbuzz", "psychic", "gigadrain", "substitute"],
-		randomDoubleBattleMoves: ["quiverdance", "bugbuzz", "substitute", "sleeppowder", "psychic", "shadowball", "protect"],
+		randomBattleMoves: ["sleeppowder", "quiverdance", "bugbuzz", "airslash", "gigadrain", "substitute"],
+		randomDoubleBattleMoves: ["quiverdance", "bugbuzz", "substitute", "sleeppowder", "airslash", "shadowball", "protect"],
 		eventPokemon: [
 			{"generation": 3, "level": 30, "moves":["morningsun", "psychic", "sleeppowder", "aerialace"]},
 		],
@@ -350,7 +350,7 @@ exports.BattleFormatsData = {
 		tier: "Bank",
 	},
 	raichualola: {
-		randomBattleMoves: ["nastyplot", "encore", "thunderbolt", "psyshock", "focusblast", "voltswitch"],
+		randomBattleMoves: ["nastyplot", "encore", "thunderbolt", "psyshock", "focusblast", "voltswitch", "hiddenpowerice"],
 		tier: "New",
 	},
 	sandshrew: {
@@ -836,7 +836,7 @@ exports.BattleFormatsData = {
 		tier: "Bank-LC",
 	},
 	dodrio: {
-		randomBattleMoves: ["bravebird", "return", "doubleedge", "roost", "quickattack", "knockoff"],
+		randomBattleMoves: ["bravebird", "return", "swordsdance", "roost", "quickattack", "knockoff", "jumpkick"],
 		randomDoubleBattleMoves: ["bravebird", "return", "doubleedge", "quickattack", "protect"],
 		eventPokemon: [
 			{"generation": 3, "level": 34, "moves":["batonpass", "drillpeck", "agility", "triattack"]},
@@ -1016,7 +1016,7 @@ exports.BattleFormatsData = {
 		tier: "Bank",
 	},
 	marowakalola: {
-		randomBattleMoves: ["flamecharge", "shadowbone", "bonemerang", "doubleedge", "stoneedge"],
+		randomBattleMoves: ["flamecharge", "shadowbone", "bonemerang", "willowisp", "stoneedge", "flareblitz", "substitute"],
 		tier: "New",
 	},
 	tyrogue: {
@@ -1864,7 +1864,7 @@ exports.BattleFormatsData = {
 		tier: "Bank-LC",
 	},
 	ambipom: {
-		randomBattleMoves: ["fakeout", "return", "knockoff", "uturn", "switcheroo", "seedbomb", "acrobatics", "lowkick"],
+		randomBattleMoves: ["fakeout", "return", "knockoff", "uturn", "switcheroo", "seedbomb", "lowkick"],
 		randomDoubleBattleMoves: ["fakeout", "return", "knockoff", "uturn", "doublehit", "icepunch", "lowkick", "protect"],
 		tier: "Bank",
 	},
@@ -2903,7 +2903,7 @@ exports.BattleFormatsData = {
 		tier: "NFE",
 	},
 	flygon: {
-		randomBattleMoves: ["earthquake", "outrage", "uturn", "roost", "stoneedge", "firepunch", "fireblast", "defog"],
+		randomBattleMoves: ["earthquake", "outrage", "uturn", "roost", "stoneedge", "firepunch", "dragondance"],
 		randomDoubleBattleMoves: ["earthquake", "protect", "dragonclaw", "uturn", "rockslide", "firepunch", "fireblast", "tailwind", "feint"],
 		eventPokemon: [
 			{"generation": 3, "level": 45, "moves":["sandtomb", "crunch", "dragonbreath", "screech"]},
@@ -2973,8 +2973,8 @@ exports.BattleFormatsData = {
 		tier: "Bank",
 	},
 	lunatone: {
-		randomBattleMoves: ["psychic", "earthpower", "stealthrock", "rockpolish", "batonpass", "calmmind", "icebeam", "ancientpower", "moonlight", "toxic"],
-		randomDoubleBattleMoves: ["psychic", "earthpower", "rockpolish", "calmmind", "helpinghand", "icebeam", "ancientpower", "moonlight", "trickroom", "protect"],
+		randomBattleMoves: ["psychic", "earthpower", "stealthrock", "rockpolish", "batonpass", "calmmind", "icebeam", "powergem", "moonlight", "toxic"],
+		randomDoubleBattleMoves: ["psychic", "earthpower", "rockpolish", "calmmind", "helpinghand", "icebeam", "powergem", "moonlight", "trickroom", "protect"],
 		eventPokemon: [
 			{"generation": 3, "level": 10, "moves":["tackle", "harden", "confusion"]},
 			{"generation": 3, "level": 25, "moves":["batonpass", "psychic", "raindance", "rocktomb"]},
@@ -4545,12 +4545,12 @@ exports.BattleFormatsData = {
 		tier: "New",
 	},
 	basculin: {
-		randomBattleMoves: ["waterfall", "aquajet", "superpower", "crunch", "zenheadbutt"],
+		randomBattleMoves: ["waterfall", "aquajet", "superpower", "crunch", "headsmash"],
 		randomDoubleBattleMoves: ["waterfall", "aquajet", "superpower", "crunch", "doubleedge", "protect"],
 		tier: "Bank",
 	},
 	basculinbluestriped: {
-		randomBattleMoves: ["waterfall", "aquajet", "superpower", "crunch", "zenheadbutt"],
+		randomBattleMoves: ["waterfall", "aquajet", "superpower", "crunch", "headsmash"],
 		randomDoubleBattleMoves: ["waterfall", "aquajet", "superpower", "crunch", "doubleedge", "protect"],
 		tier: "Bank",
 	},
@@ -5795,7 +5795,7 @@ exports.BattleFormatsData = {
 		tier: "NFE",
 	},
 	vikavolt: {
-		randomBattleMoves: ["agility", "bugbuzz", "thunderbolt", "voltswitch", "energyball"],
+		randomBattleMoves: ["agility", "bugbuzz", "thunderbolt", "voltswitch", "energyball", "hiddenpowerice"],
 		tier: "New",
 	},
 	crabrawler: {
@@ -5847,14 +5847,14 @@ exports.BattleFormatsData = {
 		tier: "LC",
 	},
 	toxapex: {
-		randomBattleMoves: ["toxicspikes", "banefulbunker", "recover", "liquidation", "venoshock"],
+		randomBattleMoves: ["toxicspikes", "banefulbunker", "recover", "scald", "haze"],
 		tier: "New",
 	},
 	mudbray: {
 		tier: "LC",
 	},
 	mudsdale: {
-		randomBattleMoves: ["earthquake", "closecombat", "payback", "rockslide"],
+		randomBattleMoves: ["earthquake", "closecombat", "payback", "rockslide", "heavyslam"],
 		tier: "New",
 	},
 	dewpider: {
@@ -5889,7 +5889,7 @@ exports.BattleFormatsData = {
 		tier: "LC",
 	},
 	bewear: {
-		randomBattleMoves: ["hammerarm", "icepunch", "swordsdance", "painsplit", "substitute"],
+		randomBattleMoves: ["hammerarm", "icepunch", "swordsdance", "return", "shadowclaw", "doubleedge"],
 		tier: "New",
 	},
 	bounsweet: {
@@ -5944,7 +5944,7 @@ exports.BattleFormatsData = {
 		tier: "New",
 	},
 	silvallybug: {
-		randomBattleMoves: ["multiattack", "flamethrower", "icebeam", "uturn"],
+		randomBattleMoves: ["flamethrower", "icebeam", "thunderbolt", "uturn"],
 		tier: "New",
 		requiredItem: "Bug Memory",
 	},
@@ -5954,7 +5954,7 @@ exports.BattleFormatsData = {
 		requiredItem: "Dark Memory",
 	},
 	silvallydragon: {
-		randomBattleMoves: ["multiattack", "ironhead", "flamecharge", "flamethrower", "icebeam", "dracometeor"],
+		randomBattleMoves: ["multiattack", "ironhead", "flamecharge", "flamethrower", "icebeam", "dracometeor", "swordsdance", "uturn"],
 		tier: "New",
 		requiredItem: "Dragon Memory",
 	},
@@ -5964,7 +5964,7 @@ exports.BattleFormatsData = {
 		requiredItem: "Electric Memory",
 	},
 	silvallyfairy: {
-		randomBattleMoves: ["multiattack", "flamethrower", "thunderbolt", "partingshot", "toxic"],
+		randomBattleMoves: ["multiattack", "flamethrower", "rockslide", "thunderwave", "partingshot"],
 		tier: "New",
 		requiredItem: "Fairy Memory",
 	},
@@ -5974,12 +5974,12 @@ exports.BattleFormatsData = {
 		requiredItem: "Fighting Memory",
 	},
 	silvallyfire: {
-		randomBattleMoves: ["multiattack", "icebeam", "thunderbolt", "partingshot"],
+		randomBattleMoves: ["multiattack", "icebeam", "thunderbolt", "uturn"],
 		tier: "New",
 		requiredItem: "Fire Memory",
 	},
 	silvallyflying: {
-		randomBattleMoves: ["multiattack", "flamethrower", "icebeam", "partingshot", "toxic"],
+		randomBattleMoves: ["multiattack", "flamethrower", "ironhead", "partingshot", "thunderwave"],
 		tier: "New",
 		requiredItem: "Flying Memory",
 	},
@@ -5999,17 +5999,17 @@ exports.BattleFormatsData = {
 		requiredItem: "Ground Memory",
 	},
 	silvallyice: {
-		randomBattleMoves: ["multiattack", "thunderbolt", "flamethrower", "partingshot", "toxic"],
+		randomBattleMoves: ["multiattack", "thunderbolt", "flamethrower", "uturn", "toxic"],
 		tier: "New",
 		requiredItem: "Ice Memory",
 	},
 	silvallypoison: {
-		randomBattleMoves: ["multiattack", "flamethrower", "thunderbolt", "partingshot", "toxic"],
+		randomBattleMoves: ["multiattack", "flamethrower", "icebeam", "partingshot", "toxic"],
 		tier: "New",
 		requiredItem: "Poison Memory",
 	},
 	silvallypsychic: {
-		randomBattleMoves: ["multiattack", "flamethrower", "thunderbolt", "partingshot", "toxic"],
+		randomBattleMoves: ["multiattack", "flamethrower", "rockslide", "partingshot", "thunderwave"],
 		tier: "New",
 		requiredItem: "Psychic Memory",
 	},
@@ -6137,11 +6137,11 @@ exports.BattleFormatsData = {
 		tier: "Uber",
 	},
 	nihilego: {
-		randomBattleMoves: ["stealthrock", "acidspray", "powergem", "toxicspikes"],
+		randomBattleMoves: ["stealthrock", "acidspray", "powergem", "toxicspikes", "sludgewave"],
 		tier: "New",
 	},
 	buzzwole: {
-		randomBattleMoves: ["lunge", "substitute", "focuspunch", "thunderpunch"],
+		randomBattleMoves: ["superpower", "leechlife", "stoneedge", "poisonjab"],
 		tier: "New",
 	},
 	pheromosa: {
