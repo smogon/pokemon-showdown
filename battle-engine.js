@@ -2641,7 +2641,7 @@ class Battle extends Tools.BattleDex {
 				// it's changed; call it off
 				continue;
 			}
-			if (status.effectType === 'Ability' && this.suppressingAttackEvents() && this.activePokemon !== thing) {
+			if (status.effectType === 'Ability' && !status.isUnbreakable && this.suppressingAttackEvents() && this.activePokemon !== thing) {
 				// ignore attacking events
 				let AttackingEvents = {
 					BeforeMove: 1,
