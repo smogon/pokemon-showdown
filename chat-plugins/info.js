@@ -1832,7 +1832,7 @@ exports.commands = {
 	},
 	htmlboxhelp: [
 		"/htmlbox [message] - Displays a message, parsing HTML code contained.",
-		"!htmlbox [message] - Shows everyone a message, parsing HTML code contained. Requires: ~ & # *",
+		"!htmlbox [message] - Shows everyone a message, parsing HTML code contained. Requires: ~ & #",
 	],
 };
 
