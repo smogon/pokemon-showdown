@@ -705,6 +705,7 @@ class Validator {
 						incompatibleAbility = true;
 						continue;
 					}
+					if (learnedGen < 7 && set.ability && tools.getAbility(set.ability).name === 'Battle Bond') continue;
 					if (!template.isNonstandard) {
 						// HMs can't be transferred
 						if (tools.gen >= 4 && learnedGen <= 3 && moveid in {'cut':1, 'fly':1, 'surf':1, 'strength':1, 'flash':1, 'rocksmash':1, 'waterfall':1, 'dive':1}) continue;
@@ -1021,6 +1022,7 @@ if (process.send && module === process.mainModule) {
 
 	global.Tools = require('./tools').includeData();
 	global.toId = Tools.getId;
+	global.Chat = require('./chat');
 
 	require('./repl').start('team-validator-', process.pid, cmd => eval(cmd));
 

@@ -56,6 +56,7 @@ exports.BattleScripts = {
 			sourceEffect = this.getEffect('lockedmove');
 		}
 		pokemon.moveUsed(move);
+		if (zMove) pokemon.side.zMoveUsed = true;
 		this.useMove(move, pokemon, target, sourceEffect, zMove);
 		this.singleEvent('AfterMove', move, null, pokemon, target, move);
 		this.runEvent('AfterMove', pokemon, target, move);
@@ -751,16 +752,13 @@ exports.BattleScripts = {
 	runZMove: function (move, pokemon, target, sourceEffect) {
 		// Limit one Z move per side
 		let zMove = this.getZMove(move, pokemon);
-		if (zMove) {
-			pokemon.side.zMoveUsed = true;
-		}
 		this.runMove(move, pokemon, target, sourceEffect, zMove);
 	},
 
 	canMegaEvo: function (pokemon) {
 		let altForme = pokemon.baseTemplate.otherFormes && this.getTemplate(pokemon.baseTemplate.otherFormes[0]);
-		if (altForme && altForme.isMega && altForme.requiredMove && pokemon.moves.includes(toId(altForme.requiredMove))) return altForme.species;
 		let item = pokemon.getItem();
+		if (altForme && altForme.isMega && altForme.requiredMove && pokemon.moves.includes(toId(altForme.requiredMove)) && !item.zMove) return altForme.species;
 		if (item.megaEvolves !== pokemon.baseTemplate.baseSpecies || item.megaStone === pokemon.species) return false;
 		return item.megaStone;
 	},
@@ -880,68 +878,43 @@ exports.BattleScripts = {
 		let natures = Object.keys(this.data.Natures);
 		let items = Object.keys(this.data.Items);
 
-		let hasDexNumber = {};
-		let formes = [[], [], [], [], [], []];
-
-		// Pick six random pokemon--no repeats, even among formes
-		// Also need to either normalize for formes or select formes at random
-		// Unreleased are okay but no CAP
-
-		let num;
-		for (let i = 0; i < 6; i++) {
-			do {
-				num = this.random(802) + 1;
-			} while (num in hasDexNumber);
-			hasDexNumber[num] = i;
-		}
-
-		for (let id in this.data.Pokedex) {
-			if (!(this.data.Pokedex[id].num in hasDexNumber)) continue;
-			let template = this.getTemplate(id);
-			if (template.gen <= this.gen && template.species !== 'Pichu-Spiky-eared' && template.species.substr(0, 8) !== 'Pikachu-') {
-				formes[hasDexNumber[template.num]].push(template.species);
-			}
-		}
+		let random6 = this.random6Pokemon();
 
 		for (let i = 0; i < 6; i++) {
-			let poke = formes[i][this.random(formes[i].length)];
-			let template = this.getTemplate(poke);
+			let species = random6[i];
+			let template = this.getTemplate(species);
 
 			// Random legal item
 			let item = '';
-			do {
-				item = items[this.random(items.length)];
-			} while (this.data.Items[item].gen > this.gen || this.data.Items[item].isNonstandard);
+			if (this.gen >= 2) {
+				do {
+					item = items[this.random(items.length)];
+				} while (this.getItem(item).gen > this.gen || this.data.Items[item].isNonstandard);
+			}
 
 			// Make sure forme is legal
 			if (template.battleOnly || template.requiredItems && !template.requiredItems.some(req => toId(req) === item)) {
 				template = this.getTemplate(template.baseSpecies);
-				poke = template.name;
+				species = template.name;
 			}
 
-			// Make sure forme/item combo is correct
-			switch (poke) {
-			case 'Giratina':
-				while (item === 'griseousorb') item = items[this.random(items.length)];
-				break;
-			case 'Arceus':
-				while (item.substr(-5) === 'plate') item = items[this.random(items.length)];
-				break;
-			case 'Genesect':
-				while (item.substr(-5) === 'drive') item = items[this.random(items.length)];
-				break;
-			case 'Silvally':
-				while (item.substr(-6) === 'memory') item = items[this.random(items.length)];
+			// Make sure that a base forme does not hold any forme-modifier items.
+			let itemData = this.getItem(item);
+			if (itemData.forcedForme && species === this.getTemplate(itemData.forcedForme).baseSpecies) {
+				do {
+					item = items[this.random(items.length)];
+					itemData = this.getItem(item);
+				} while (itemData.gen > this.gen || itemData.isNonstandard || itemData.forcedForme && species === this.getTemplate(itemData.forcedForme).baseSpecies);
 			}
 
 			// Random ability
 			let abilities = Object.values(template.abilities);
-			let ability = abilities[this.random(abilities.length)];
+			let ability = this.gen <= 2 ? 'None' : abilities[this.random(abilities.length)];
 
 			// Four random unique moves from the movepool
 			let moves;
 			let pool = ['struggle'];
-			if (poke === 'Smeargle') {
+			if (species === 'Smeargle') {
 				pool = Object.keys(this.data.Movedex).filter(moveid => !(moveid in {'chatter':1, 'struggle':1, 'paleowave':1, 'shadowstrike':1, 'magikarpsrevenge':1}));
 			} else if (template.learnset) {
 				pool = Object.keys(template.learnset);
@@ -949,7 +922,8 @@ exports.BattleScripts = {
 					pool = Array.from(new Set(pool.concat(Object.keys(this.getTemplate(template.baseSpecies).learnset))));
 				}
 			} else {
-				pool = Object.keys(this.getTemplate(template.baseSpecies).learnset);
+				const learnset = this.getTemplate(template.baseSpecies).learnset;
+				pool = Object.keys(learnset);
 			}
 			if (pool.length <= 4) {
 				moves = pool;
@@ -1026,30 +1000,21 @@ exports.BattleScripts = {
 
 		return team;
 	},
-	randomHCTeam: function (side) {
-		let team = [];
-
-		let itemPool = Object.keys(this.data.Items);
-		let abilityPool = Object.keys(this.data.Abilities);
-		let movePool = Object.keys(this.data.Movedex);
-		let naturePool = Object.keys(this.data.Natures);
-
-		let hasDexNumber = {};
-		let formes = [[], [], [], [], [], []];
-
+	random6Pokemon: function () {
 		// Pick six random pokemon--no repeats, even among formes
 		// Also need to either normalize for formes or select formes at random
 		// Unreleased are okay but no CAP
-
-		let num;
 		let last = [0, 151, 251, 386, 493, 649, 721, 802][this.gen];
+		let hasDexNumber = {};
 		for (let i = 0; i < 6; i++) {
+			let num;
 			do {
 				num = this.random(last) + 1;
 			} while (num in hasDexNumber);
 			hasDexNumber[num] = i;
 		}
 
+		let formes = [[], [], [], [], [], []];
 		for (let id in this.data.Pokedex) {
 			if (!(this.data.Pokedex[id].num in hasDexNumber)) continue;
 			let template = this.getTemplate(id);
@@ -1058,25 +1023,51 @@ exports.BattleScripts = {
 			}
 		}
 
+		let sixPokemon = [];
+		for (let i = 0; i < 6; i++) {
+			if (!formes[i].length) {
+				// console.log("Could not find pokemon " + i);
+				// for (var k in hasDexNumber) {
+				// 	if (hasDexNumber[k] === i) {
+				// 		console.log("dexNumber was " + k);
+				// 		console.log("dex found: " + JSON.stringify(Object.values(this.data.Pokedex).filter(t => t.num == Number(k)).map(t => t.species)));
+				// 	}
+				// }
+				throw new Error("Invalid pokemon gen " + this.gen + ": " + JSON.stringify(formes) + " numbers " + JSON.stringify(hasDexNumber));
+			}
+			sixPokemon.push(formes[i][this.random(formes[i].length)]);
+		}
+		return sixPokemon;
+	},
+	randomHCTeam: function (side) {
+		let team = [];
+
+		let itemPool = Object.keys(this.data.Items);
+		let abilityPool = Object.keys(this.data.Abilities);
+		let movePool = Object.keys(this.data.Movedex);
+		let naturePool = Object.keys(this.data.Natures);
+
+		let random6 = this.random6Pokemon();
+
 		for (let i = 0; i < 6; i++) {
 			// Choose forme
-			let pokemon = formes[i][this.random(formes[i].length)];
-			let template = this.getTemplate(pokemon);
+			let template = this.getTemplate(random6[i]);
 
 			// Random unique item
 			let item = '';
-			do {
-				item = this.sampleNoReplace(itemPool);
-			} while (this.data.Items[item].gen > this.gen || this.data.Items[item].isNonstandard);
-
-			// Genesect forms are a sprite difference based on its Drives
-			if (template.species.substr(0, 9) === 'Genesect-' && item !== toId(template.requiredItem)) pokemon = 'Genesect';
+			if (this.gen >= 2) {
+				do {
+					item = this.sampleNoReplace(itemPool);
+				} while (this.getItem(item).gen > this.gen || this.data.Items[item].isNonstandard);
+			}
 
 			// Random unique ability
-			let ability = '';
-			do {
-				ability = this.sampleNoReplace(abilityPool);
-			} while (this.getAbility(ability).gen > this.gen || this.data.Abilities[ability].isNonstandard);
+			let ability = 'None';
+			if (this.gen >= 3) {
+				do {
+					ability = this.sampleNoReplace(abilityPool);
+				} while (this.getAbility(ability).gen > this.gen || this.data.Abilities[ability].isNonstandard);
+			}
 
 			// Random unique moves
 			let m = [];
@@ -1207,7 +1198,7 @@ exports.BattleScripts = {
 			let move = this.getMove(moves[k]);
 			let moveid = move.id;
 			let movetype = move.type;
-			if (moveid === 'judgment') movetype = Object.keys(hasType)[0];
+			if (moveid === 'judgment' || moveid === 'multiattack') movetype = Object.keys(hasType)[0];
 			if (move.damage || move.damageCallback) {
 				// Moves that do a set amount of damage:
 				counter['damage']++;
@@ -1793,7 +1784,6 @@ exports.BattleScripts = {
 					(hasType['Water'] && !counter['Water'] && (!hasType['Ice'] || !counter['Ice']) && !hasAbility['Protean']) ||
 					((hasAbility['Adaptability'] && !counter.setupType && template.types.length > 1 && (!counter[template.types[0]] || !counter[template.types[1]])) ||
 					((hasAbility['Aerilate'] || hasAbility['Pixilate'] || hasAbility['Refrigerate']) && !counter['Normal']) ||
-					(hasAbility['Bad Dreams'] && movePool.includes('darkvoid')) ||
 					(hasAbility['Contrary'] && !counter['contrary'] && template.species !== 'Shuckle') ||
 					(hasAbility['Dark Aura'] && !counter['Dark']) ||
 					(hasAbility['Gale Wings'] && !counter['Flying']) ||
@@ -2016,7 +2006,13 @@ exports.BattleScripts = {
 
 		item = 'Leftovers';
 		if (template.requiredItems) {
-			item = template.requiredItems[this.random(template.requiredItems.length)];
+			if (template.baseSpecies === 'Arceus' && hasMove['judgment']) {
+				// Judgment doesn't change type with Z-Crystals
+				let items = template.requiredItems.filter(item => item.endsWith('Plate'));
+				item = items[this.random(items.length)];
+			} else {
+				item = template.requiredItems[this.random(template.requiredItems.length)];
+			}
 		} else if (hasMove['magikarpsrevenge']) {
 			// PoTD Magikarp
 			item = 'Choice Band';
@@ -2027,7 +2023,7 @@ exports.BattleScripts = {
 		// First, the extra high-priority items
 		} else if (template.species === 'Clamperl' && !hasMove['shellsmash']) {
 			item = 'DeepSeaTooth';
-		} else if (template.species === 'Cubone' || template.species === 'Marowak') {
+		} else if (template.species === 'Cubone' || template.baseSpecies === 'Marowak') {
 			item = 'Thick Club';
 		} else if (template.species === 'Dedenne') {
 			item = 'Petaya Berry';
@@ -2055,10 +2051,10 @@ exports.BattleScripts = {
 		} else if (ability === 'Magic Guard' && hasMove['psychoshift']) {
 			item = 'Flame Orb';
 		} else if (hasMove['switcheroo'] || hasMove['trick']) {
-			let randomNum = this.random(2);
-			if (counter.Physical >= 3 && (template.baseStats.spe >= 95 || randomNum)) {
+			let randomNum = this.random(3);
+			if (counter.Physical >= 3 && (template.baseStats.spe < 60 || template.baseStats.spe > 108 || randomNum)) {
 				item = 'Choice Band';
-			} else if (counter.Special >= 3 && (template.baseStats.spe >= 95 || randomNum)) {
+			} else if (counter.Special >= 3 && (template.baseStats.spe < 60 || template.baseStats.spe > 108 || randomNum)) {
 				item = 'Choice Specs';
 			} else {
 				item = 'Choice Scarf';
@@ -2086,7 +2082,7 @@ exports.BattleScripts = {
 		} else if (hasMove['acrobatics']) {
 			item = 'Flying Gem';
 		} else if ((ability === 'Guts' || hasMove['facade']) && !hasMove['sleeptalk']) {
-			item = hasMove['drainpunch'] ? 'Flame Orb' : 'Toxic Orb';
+			item = 'Flame Orb';
 		} else if (ability === 'Unburden') {
 			if (hasMove['fakeout']) {
 				item = 'Normal Gem';
@@ -2109,10 +2105,10 @@ exports.BattleScripts = {
 		} else if (((ability === 'Speed Boost' && !hasMove['substitute']) || (ability === 'Stance Change')) && counter.Physical + counter.Special > 2) {
 			item = 'Life Orb';
 		} else if (counter.Physical >= 4 && !hasMove['bodyslam'] && !hasMove['dragontail'] && !hasMove['fakeout'] && !hasMove['flamecharge'] && !hasMove['rapidspin'] && !hasMove['suckerpunch']) {
-			item = template.baseStats.spe > 82 && template.baseStats.spe < 109 && !counter['priority'] && this.random(3) ? 'Choice Scarf' : 'Choice Band';
+			item = template.baseStats.spe >= 60 && template.baseStats.spe <= 108 && !counter['priority'] && this.random(3) ? 'Choice Scarf' : 'Choice Band';
 		} else if (counter.Special >= 4 && !hasMove['acidspray'] && !hasMove['chargebeam'] && !hasMove['fierydance']) {
-			item = template.baseStats.spe > 82 && template.baseStats.spe < 109 && !counter['priority'] && this.random(3) ? 'Choice Scarf' : 'Choice Specs';
-		} else if (counter.Special >= 3 && hasMove['uturn'] && template.baseStats.spe > 82 && template.baseStats.spe < 109 && !counter['priority'] && this.random(3)) {
+			item = template.baseStats.spe >= 60 && template.baseStats.spe <= 108 && !counter['priority'] && this.random(3) ? 'Choice Scarf' : 'Choice Specs';
+		} else if (counter.Special >= 3 && hasMove['uturn'] && template.baseStats.spe >= 60 && template.baseStats.spe <= 108 && !counter['priority'] && this.random(3)) {
 			item = 'Choice Scarf';
 		} else if (ability === 'Defeatist' || hasMove['eruption'] || hasMove['waterspout']) {
 			item = counter.Status <= 1 ? 'Expert Belt' : 'Leftovers';
@@ -2187,10 +2183,10 @@ exports.BattleScripts = {
 		};
 		let customScale = {
 			// Between OU and Uber
-			Aegislash: 74, Blaziken: 74, 'Blaziken-Mega': 74, Genesect: 74, 'Genesect-Burn': 74, 'Genesect-Chill': 74, 'Genesect-Douse': 74, 'Genesect-Shock': 74, Greninja: 74, 'Lucario-Mega': 74, 'Mawile-Mega': 74,
+			// Blaziken: 74, 'Blaziken-Mega': 74, 'Lucario-Mega': 74,
 
 			// Banned Ability
-			Gothitelle: 74, Ninetales: 77, Politoed: 77, Wobbuffet: 74,
+			// Gothitelle: 74, Wobbuffet: 74,
 
 			// Holistic judgement
 			Unown: 100,
@@ -2199,7 +2195,7 @@ exports.BattleScripts = {
 		if (tier.charAt(0) === '(') {
 			tier = tier.slice(1, -1);
 		}
-		let level = levelScale[tier] || 90;
+		let level = levelScale[tier] || 75;
 		if (customScale[template.name]) level = customScale[template.name];
 
 		if (template.name === 'Slurpuff' && !counter.setupType) level = 81;
@@ -2319,7 +2315,7 @@ exports.BattleScripts = {
 
 			// Adjust rate for species with multiple formes
 			switch (template.baseSpecies) {
-			case 'Arceus':
+			case 'Arceus': case 'Silvally':
 				if (this.random(18) >= 1) continue;
 				break;
 			case 'Pikachu':

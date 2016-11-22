@@ -69,7 +69,7 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon's Normal-type moves become Flying type and have 1.2x power.",
 		onModifyMovePriority: -1,
 		onModifyMove: function (move, pokemon) {
-			if (move.type === 'Normal' && move.id !== 'naturalgift') {
+			if (move.type === 'Normal' && move.id !== 'naturalgift' && !move.isZ) {
 				move.type = 'Flying';
 				if (move.category !== 'Status') pokemon.addVolatile('aerilate');
 			}
@@ -261,7 +261,7 @@ exports.BattleAbilities = {
 		},
 		id: "battlebond",
 		name: "Battle Bond",
-		rating: 3.5,
+		rating: 3,
 		num: 210,
 	},
 	"beastboost": {
@@ -1177,7 +1177,7 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon's Normal-type moves become Electric type and have 1.2x power.",
 		onModifyMovePriority: -1,
 		onModifyMove: function (move, pokemon) {
-			if (move.type === 'Normal' && move.id !== 'naturalgift') {
+			if (move.type === 'Normal' && move.id !== 'naturalgift' && !move.isZ) {
 				move.type = 'Electric';
 				if (move.category !== 'Status') pokemon.addVolatile('galvanize');
 			}
@@ -2121,7 +2121,7 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon's moves are changed to be Normal type and have 1.2x power.",
 		onModifyMovePriority: 1,
 		onModifyMove: function (move, pokemon) {
-			if (move.id !== 'struggle' && this.getMove(move.id).type !== 'Normal') {
+			if (!move.isZ && move.id !== 'struggle' && this.getMove(move.id).type !== 'Normal') {
 				move.type = 'Normal';
 			}
 			if (move.category !== 'Status') pokemon.addVolatile('normalize');
@@ -2315,7 +2315,7 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon's Normal-type moves become Fairy type and have 1.2x power.",
 		onModifyMovePriority: -1,
 		onModifyMove: function (move, pokemon) {
-			if (move.type === 'Normal' && move.id !== 'naturalgift') {
+			if (move.type === 'Normal' && move.id !== 'naturalgift' && !move.isZ) {
 				move.type = 'Fairy';
 				if (move.category !== 'Status') pokemon.addVolatile('pixilate');
 			}
@@ -2400,9 +2400,10 @@ exports.BattleAbilities = {
 		num: 143,
 	},
 	"powerconstruct": {
-		desc: "If this Pokemon is a Zygarde in its 10% or 50% Forme, it changes to Complete Forme when it has 1/2 or less of its maximum HP.",
-		shortDesc: "If Zygarde 10% or 50%, changes to Complete Forme when at 1/2 max HP or less.",
-		onUpdate: function (pokemon) {
+		desc: "If this Pokemon is a Zygarde in its 10% or 50% Forme, it changes to Complete Forme when it has 1/2 or less of its maximum HP at the end of the turn.",
+		shortDesc: "If Zygarde 10%/50%, changes to Complete if at 1/2 max HP or less at end of turn.",
+		onResidualOrder: 27,
+		onResidual: function (pokemon) {
 			if (pokemon.baseTemplate.baseSpecies !== 'Zygarde' || pokemon.transformed) return;
 			if (pokemon.template.speciesid === 'zygardecomplete' || pokemon.hp > pokemon.maxhp / 2) return;
 			this.add('-message', "You sense the presence of many! (placeholder)");
@@ -2442,7 +2443,7 @@ exports.BattleAbilities = {
 		num: 223,
 	},
 	"prankster": {
-		shortDesc: "This Pokemon's non-damaging moves have their priority increased by 1, but fail gainst Dark Pokémon.",
+		shortDesc: "This Pokemon's Status moves have priority raised by 1, but Dark types are immune.",
 		onModifyPriority: function (priority, pokemon, target, move) {
 			if (move && move.category === 'Status') {
 				return priority + 1;
@@ -2641,7 +2642,7 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon's Normal-type moves become Ice type and have 1.2x power.",
 		onModifyMovePriority: -1,
 		onModifyMove: function (move, pokemon) {
-			if (move.type === 'Normal' && move.id !== 'naturalgift') {
+			if (move.type === 'Normal' && move.id !== 'naturalgift' && !move.isZ) {
 				move.type = 'Ice';
 				if (move.category !== 'Status') pokemon.addVolatile('refrigerate');
 			}
@@ -2823,12 +2824,12 @@ exports.BattleAbilities = {
 			if (pokemon.hp > pokemon.maxhp / 4) {
 				if (pokemon.template.speciesid === 'wishiwashi') {
 					pokemon.formeChange('Wishiwashi-School');
-					this.add('-formechange', pokemon, 'Wishiwashi-School', '[msg]', '[from] ability: Schooling');
+					this.add('-formechange', pokemon, 'Wishiwashi-School', '[from] ability: Schooling');
 				}
 			} else {
 				if (pokemon.template.speciesid === 'wishiwashischool') {
 					pokemon.formeChange('Wishiwashi');
-					this.add('-formechange', pokemon, 'Wishiwashi', '[msg]', '[from] ability: Schooling');
+					this.add('-formechange', pokemon, 'Wishiwashi', '[from] ability: Schooling');
 				}
 			}
 		},
@@ -2838,12 +2839,12 @@ exports.BattleAbilities = {
 			if (pokemon.hp > pokemon.maxhp / 4) {
 				if (pokemon.template.speciesid === 'wishiwashi') {
 					pokemon.formeChange('Wishiwashi-School');
-					this.add('-formechange', pokemon, 'Wishiwashi-School', '[msg]', '[from] ability: Schooling');
+					this.add('-formechange', pokemon, 'Wishiwashi-School', '[from] ability: Schooling');
 				}
 			} else {
 				if (pokemon.template.speciesid === 'wishiwashischool') {
 					pokemon.formeChange('Wishiwashi');
-					this.add('-formechange', pokemon, 'Wishiwashi', '[msg]', '[from] ability: Schooling');
+					this.add('-formechange', pokemon, 'Wishiwashi', '[from] ability: Schooling');
 				}
 			}
 		},
@@ -2976,23 +2977,37 @@ exports.BattleAbilities = {
 	"shieldsdown": {
 		desc: "If this Pokemon is a Minior, it changes to its Core forme if it has 1/2 or less of its maximum HP at the end of a turn. If Minior's HP is above 1/2 of its maximum HP at the end of a turn, it changes back to Meteor Form.",
 		shortDesc: "If Minior, at end of turn changes forme to Core if at 1/2 max HP or less, else Meteor.",
-		onResidualOrder: 27,
-		onResidual: function (pokemon) {
+		onStart: function (pokemon) {
 			if (pokemon.baseTemplate.baseSpecies !== 'Minior' || pokemon.transformed) return;
 			if (pokemon.hp > pokemon.maxhp / 2) {
+				if (pokemon.template.speciesid === 'minior') {
+					pokemon.formeChange('Minior-Meteor');
+					this.add('-formechange', pokemon, 'Minior-Meteor', '[msg]', '[from] ability: Shields Down');
+				}
+			} else {
 				if (pokemon.template.speciesid !== 'minior') {
 					pokemon.formeChange('Minior');
 					this.add('-formechange', pokemon, 'Minior', '[msg]', '[from] ability: Shields Down');
 				}
-			} else {
+			}
+		},
+		onResidualOrder: 27,
+		onResidual: function (pokemon) {
+			if (pokemon.baseTemplate.baseSpecies !== 'Minior' || pokemon.transformed) return;
+			if (pokemon.hp > pokemon.maxhp / 2) {
 				if (pokemon.template.speciesid === 'minior') {
-					pokemon.formeChange('Minior-Red');
-					this.add('-formechange', pokemon, 'Minior-Red', '[msg]', '[from] ability: Shields Down');
+					pokemon.formeChange('Minior-Meteor');
+					this.add('-formechange', pokemon, 'Minior-Meteor', '[msg]', '[from] ability: Shields Down');
+				}
+			} else {
+				if (pokemon.template.speciesid !== 'minior') {
+					pokemon.formeChange('Minior');
+					this.add('-formechange', pokemon, 'Minior', '[msg]', '[from] ability: Shields Down');
 				}
 			}
 		},
 		onSetStatus: function (status, target, source, effect) {
-			if (target.template.speciesid !== 'minior' || target.transformed) return;
+			if (target.template.speciesid !== 'miniormeteor' || target.transformed) return;
 			if (!effect || !effect.status) return false;
 			this.add('-immune', target, '[msg]', '[from] ability: Shields Down');
 			return false;

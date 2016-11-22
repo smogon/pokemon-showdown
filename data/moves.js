@@ -639,7 +639,7 @@ exports.BattleMovedex = {
 					let noAssist = {
 						assist:1, belch:1, bestow:1, bounce:1, chatter:1, circlethrow:1, copycat:1, counter:1, covet:1, destinybond:1, detect:1, dig:1, dive:1, dragontail:1, endure:1, feint:1, fly:1, focuspunch:1, followme:1, helpinghand:1, kingsshield:1, matblock:1, mefirst:1, metronome:1, mimic:1, mirrorcoat:1, mirrormove:1, naturepower:1, phantomforce:1, protect:1, ragepowder:1, roar:1, shadowforce:1, sketch:1, skydrop:1, sleeptalk:1, snatch:1, spikyshield:1, struggle:1, switcheroo:1, thief:1, transform:1, trick:1, whirlwind:1,
 					};
-					if (!noAssist[move]) {
+					if (!noAssist[move] && !move.isZ) {
 						moves.push(move);
 					}
 				}
@@ -1991,12 +1991,13 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, defrost: 1},
-		self: {
-			volatileStatus: 'burnup',
+		onTryHit: function (pokemon) {
+			if (!pokemon.hasType("Fire")) return false;
 		},
-		effect: {
-			noCopy: true,
-			// implemented in BattlePokemon#getTypes
+		self: {
+			onHit: function (pokemon) {
+				pokemon.setType(pokemon.getTypes(true).map(type => type === "Fire" ? "???" : type));
+			},
 		},
 		secondary: false,
 		target: "normal",
@@ -8580,7 +8581,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, authentic: 1, mystery: 1},
 		onHit: function (target, source) {
 			let noInstruct = {
-				// TODO: fill this up
+				instruct:1, // TODO: fill this up
 			};
 			if (!target.lastMove || this.getMove(target.lastMove).isZ || noInstruct[target.lastMove]) {
 				return false;
@@ -12284,7 +12285,7 @@ exports.BattleMovedex = {
 		name: "Psychic Fangs",
 		pp: 10,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {bite: 1, contact: 1, protect: 1, mirror: 1},
 		onTryHit: function (pokemon) {
 			// will shatter screens through sub, before you hit
 			if (pokemon.runImmunity('Psychic')) {
@@ -17184,18 +17185,18 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 2,
 			onStart: function (target) {
-				this.add('-start', target, 'move: Throat Chop');
+				this.add('-start', target, 'Throat Chop', '[silent]');
 			},
 			onBeforeMovePriority: 6,
 			onBeforeMove: function (pokemon, target, move) {
 				if (move.flags['sound']) {
-					this.add('cant', pokemon, 'move: Throat Chop', move); // TODO: client-side
+					this.add('cant', pokemon, 'move: Throat Chop');
 					return false;
 				}
 			},
 			onResidualOrder: 22,
 			onEnd: function (target) {
-				this.add('-end', target, 'move: Throat Chop');
+				this.add('-end', target, 'Throat Chop', '[silent]');
 			},
 		},
 		secondary: false,

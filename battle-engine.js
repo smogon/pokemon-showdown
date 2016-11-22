@@ -1220,11 +1220,9 @@ class BattlePokemon {
 		if (!excludeAdded && this.addedType) {
 			types = types.concat(this.addedType);
 		}
-		if ('roost' in this.volatiles) {
+		// If a Fire/Flying type uses Burn Up and Roost, it becomes ???/Flying-type, but it's still grounded.
+		if ('roost' in this.volatiles && !types.includes('???')) {
 			types = types.filter(type => type !== 'Flying');
-		}
-		if ('burnup' in this.volatiles) {
-			types = types.filter(type => type !== 'Fire');
 		}
 		if (types.length) return types;
 		return [this.battle.gen >= 5 ? 'Normal' : '???'];
@@ -1235,7 +1233,8 @@ class BattlePokemon {
 		if ('smackdown' in this.volatiles) return true;
 		let item = (this.ignoringItem() ? '' : this.item);
 		if (item === 'ironball') return true;
-		if (!negateImmunity && this.hasType('Flying')) return false;
+		// If a Fire/Flying type uses Burn Up and Roost, it becomes ???/Flying-type, but it's still grounded.
+		if (!negateImmunity && this.hasType('Flying') && !('roost' in this.volatiles)) return false;
 		if (this.hasAbility('levitate') && !this.battle.suppressingAttackEvents()) return null;
 		if ('magnetrise' in this.volatiles) return false;
 		if ('telekinesis' in this.volatiles) return false;
@@ -2069,7 +2068,13 @@ class Battle extends Tools.BattleDex {
 		let result = (this.seed[0] << 16 >>> 0) + this.seed[1]; // Use the upper 32 bits
 		m = Math.floor(m);
 		n = Math.floor(n);
-		result = (m ? (n ? Math.floor(result * (n - m) / 0x100000000) + m : Math.floor(result * m / 0x100000000)) : result / 0x100000000);
+		if (!m) {
+			result = result / 0x100000000;
+		} else if (!n) {
+			result = Math.floor(result * m / 0x100000000);
+		} else {
+			result = Math.floor(result * (n - m) / 0x100000000) + m;
+		}
 		this.debug('randBW(' + (m ? (n ? m + ', ' + n : m) : '') + ') = ' + result);
 		return result;
 	}
@@ -4155,6 +4160,13 @@ class Battle extends Tools.BattleDex {
 				decision.move = this.getMoveCopy(decision.move);
 				if (!decision.priority) {
 					let priority = decision.move.priority;
+					if (decision.zmove) {
+						let zMoveName = this.getZMove(decision.move, decision.pokemon, true);
+						let zMove = this.getMove(zMoveName);
+						if (zMove.exists) {
+							priority = zMove.priority;
+						}
+					}
 					priority = this.runEvent('ModifyPriority', decision.pokemon, target, decision.move, priority);
 					decision.priority = priority;
 					// In Gen 6, Quick Guard blocks moves with artificially enhanced priority.

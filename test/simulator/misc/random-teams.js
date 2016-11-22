@@ -4,79 +4,104 @@ const common = require('./../../common');
 
 let battle;
 
-const TOTAL_TEAMS = 300;
+const TOTAL_TEAMS = 100;
+const ALL_GENS = [1, 2/*, 3, 4*/, 5, 6, 7];
 
-function isValidSet(set) {
-	if (!Tools.getTemplate(set.species || set.name).exists) return false;
-	if (!Tools.getItem(set.item).exists) return false;
-	if (!Tools.getAbility(set.ability).exists) return false;
+function isValidSet(gen, set) {
+	const tools = Tools.mod(`gen${gen}`);
+	const template = tools.getTemplate(set.species || set.name);
+	if (!template.exists || template.gen > gen) return false;
+	if (set.item) {
+		const item = tools.getItem(set.item);
+		if (!item.exists || item.gen > gen) {
+			return false;
+		}
+	}
+	if (set.ability && set.ability !== 'None') {
+		const ability = tools.getAbility(set.ability);
+		if (!ability.exists || ability.gen > gen) {
+			return false;
+		}
+	} else if (gen >= 3) {
+		return false;
+	}
 	return true;
 }
 
 describe(`Random Team generator`, function () {
 	afterEach(() => battle.destroy());
 
-	it(`should successfully create valid teams`, function () {
-		this.timeout(0);
-		battle = common.createBattle([[{species: "Mew", ability: 'pressure', moves: ['struggle']}], [{species: "Mew", ability: 'pressure', moves: ['struggle']}]]);
-		battle.seed = battle.generateSeed();
+	for (const gen of ALL_GENS) {
+		it(`should successfully create valid Gen ${gen} teams`, function () {
+			this.timeout(0);
+			battle = common.gen(gen).createBattle();
+			battle.seed = battle.generateSeed();
 
-		let teamCount = TOTAL_TEAMS;
-		while (teamCount--) {
-			let seed = battle.seed.slice();
-			let team = null;
-			try {
-				team = battle.randomTeam(battle.p1);
-				if (team.some(set => !isValidSet(set))) throw new Error(`Invalid set`);
-			} catch (err) {
-				throw new Error(`Failed to create a valid random team from seed ${seed}`);
+			let teamCount = TOTAL_TEAMS;
+			while (teamCount--) {
+				let seed = battle.seed.slice();
+				let team = null;
+				try {
+					team = battle.randomTeam(battle.p1);
+					let invalidSet = team.find(set => !isValidSet(gen, set));
+					if (invalidSet) throw new Error(`Invalid set: ${JSON.stringify(invalidSet)}`);
+				} catch (err) {
+					err.message += ` (seed ${seed})`;
+					throw err;
+				}
 			}
-		}
-	});
+		});
+	}
 });
 
 describe(`Challenge Cup Team generator`, function () {
 	afterEach(() => battle.destroy());
 
-	it(`should successfully create valid teams`, function () {
-		this.timeout(0);
-		battle = common.createBattle([[{species: "Mew", ability: 'pressure', moves: ['struggle']}], [{species: "Mew", ability: 'pressure', moves: ['struggle']}]]);
-		battle.seed = battle.generateSeed();
+	for (const gen of ALL_GENS) {
+		it(`should successfully create valid Gen ${gen} teams`, function () {
+			this.timeout(0);
+			battle = common.gen(gen).createBattle();
+			battle.seed = battle.generateSeed();
 
-		let teamCount = TOTAL_TEAMS;
-		while (teamCount--) {
-			let seed = battle.seed.slice();
-			let team = null;
-			try {
-				team = battle.randomCCTeam(battle.p1);
-				if (team.some(set => !isValidSet(set))) throw new Error(`Invalid set`);
-			} catch (err) {
-				err.message += ` (seed ${seed})`;
-				throw err;
+			let teamCount = TOTAL_TEAMS;
+			while (teamCount--) {
+				let seed = battle.seed.slice();
+				let team = null;
+				try {
+					team = battle.randomCCTeam(battle.p1);
+					let invalidSet = team.find(set => !isValidSet(gen, set));
+					if (invalidSet) throw new Error(`Invalid set: ${JSON.stringify(invalidSet)}`);
+				} catch (err) {
+					err.message += ` (seed ${seed})`;
+					throw err;
+				}
 			}
-		}
-	});
+		});
+	}
 });
 
 describe(`Hackmons Cup Team generator`, function () {
 	afterEach(() => battle.destroy());
 
-	it(`should successfully create valid teams`, function () {
-		this.timeout(0);
-		battle = common.createBattle([[{species: "Mew", ability: 'pressure', moves: ['struggle']}], [{species: "Mew", ability: 'pressure', moves: ['struggle']}]]);
-		battle.seed = battle.generateSeed();
+	for (const gen of ALL_GENS) {
+		it(`should successfully create valid Gen ${gen} teams`, function () {
+			this.timeout(0);
+			battle = common.gen(gen).createBattle();
+			battle.seed = battle.generateSeed();
 
-		let teamCount = TOTAL_TEAMS;
-		while (teamCount--) {
-			let seed = battle.seed.slice();
-			let team = null;
-			try {
-				team = battle.randomHCTeam(battle.p1);
-				if (team.some(set => !isValidSet(set))) throw new Error(`Invalid set`);
-			} catch (err) {
-				err.message += ` (seed ${seed})`;
-				throw err;
+			let teamCount = TOTAL_TEAMS;
+			while (teamCount--) {
+				let seed = battle.seed.slice();
+				let team = null;
+				try {
+					team = battle.randomHCTeam(battle.p1);
+					let invalidSet = team.find(set => !isValidSet(gen, set));
+					if (invalidSet) throw new Error(`Invalid set: ${JSON.stringify(invalidSet)}`);
+				} catch (err) {
+					err.message += ` (seed ${seed})`;
+					throw err;
+				}
 			}
-		}
-	});
+		});
+	}
 });
