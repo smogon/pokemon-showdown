@@ -2824,12 +2824,12 @@ exports.BattleAbilities = {
 			if (pokemon.hp > pokemon.maxhp / 4) {
 				if (pokemon.template.speciesid === 'wishiwashi') {
 					pokemon.formeChange('Wishiwashi-School');
-					this.add('-formechange', pokemon, 'Wishiwashi-School', '[msg]', '[from] ability: Schooling');
+					this.add('-formechange', pokemon, 'Wishiwashi-School', '[from] ability: Schooling');
 				}
 			} else {
 				if (pokemon.template.speciesid === 'wishiwashischool') {
 					pokemon.formeChange('Wishiwashi');
-					this.add('-formechange', pokemon, 'Wishiwashi', '[msg]', '[from] ability: Schooling');
+					this.add('-formechange', pokemon, 'Wishiwashi', '[from] ability: Schooling');
 				}
 			}
 		},
@@ -2839,12 +2839,12 @@ exports.BattleAbilities = {
 			if (pokemon.hp > pokemon.maxhp / 4) {
 				if (pokemon.template.speciesid === 'wishiwashi') {
 					pokemon.formeChange('Wishiwashi-School');
-					this.add('-formechange', pokemon, 'Wishiwashi-School', '[msg]', '[from] ability: Schooling');
+					this.add('-formechange', pokemon, 'Wishiwashi-School', '[from] ability: Schooling');
 				}
 			} else {
 				if (pokemon.template.speciesid === 'wishiwashischool') {
 					pokemon.formeChange('Wishiwashi');
-					this.add('-formechange', pokemon, 'Wishiwashi', '[msg]', '[from] ability: Schooling');
+					this.add('-formechange', pokemon, 'Wishiwashi', '[from] ability: Schooling');
 				}
 			}
 		},
