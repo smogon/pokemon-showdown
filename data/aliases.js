@@ -304,6 +304,13 @@ exports.BattleAliases = {
 	"florgesorange": "Florges",
 	"florgeswhite": "Florges",
 	"florgesyellow": "Florges",
+	"miniororange": "Minior",
+	"minioryellow": "Minior",
+	"miniorgreen": "Minior",
+	"miniorblue": "Minior",
+	"miniorindigo": "Minior",
+	"miniorviolet": "Minior",
+	"magearnaoriginal": "Magearna",
 
 	// items
 	"assvest": "Assault Vest",
