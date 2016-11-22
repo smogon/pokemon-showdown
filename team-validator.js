@@ -495,7 +495,7 @@ class Validator {
 				events:
 				for (let i = 0; i < eventPokemon.length; i++) {
 					let eventData = eventPokemon[i];
-					if (format.requirePentagon && eventData.generation < 6) continue;
+					if (format.requirePentagon && eventData.generation < tools.gen) continue;
 					if (eventData.level && set.level < eventData.level) continue;
 					if ((eventData.shiny === true && !set.shiny) || (!eventData.shiny && set.shiny)) continue;
 					if (eventData.nature && set.nature !== eventData.nature) continue;
@@ -544,12 +544,24 @@ class Validator {
 		if (item.megaEvolves === template.species) {
 			template = tools.getTemplate(item.megaStone);
 		}
+		if (banlistTable['mega'] && template.forme in {'Mega': 1, 'Mega-X': 1, 'Mega-Y': 1}) {
+			problems.push(`Mega evolutions are banned.`);
+		}
 		if (template.tier) {
 			let tier = template.tier;
 			if (tier.charAt(0) === '(') tier = tier.slice(1, -1);
 			setHas[toId(tier)] = true;
 			if (banlistTable[tier] && banlistTable[template.id] !== false) {
 				problems.push(`${template.species} is in ${tier}, which is banned.`);
+			}
+		}
+		if (format.requirePentagon && tools.gen >= 7) {
+			const islandScanList = ["Chikorita", "Bayleef", "Meganium", "Cyndaquil", "Quilava", "Typhlosion", "Totodile", "Croconaw", "Feraligatr", "Klink", "Klang", "Klinklang", "Litwick", "Lampent", "Chandelure", "Deino", "Zweilous", "Hydreigon", "Bellsprout", "Weepinbell", "Victreebel", "Rhyhorn", "Rhydon", "Rhyperior", "Marill", "Azumarill", "Spheal", "Sealeo", "Walrein", "Shinx", "Luxio", "Luxray", "Venipede", "Whirlipede", "Scolipede", "Gothita", "Gothorita", "Gothitelle", "Honedge", "Doublade", "Aegislash", "Swinub", "Piloswine", "Mamoswine", "Slakoth", "Vigoroth", "Slaking", "Budew", "Roselia", "Roserade", "Starly", "Staravia", "Staraptor", "Solosis", "Duosion", "Reuniclus", "Axew", "Fraxure", "Haxorus", "Togepi", "Togetic", "Togekiss", "Snivy", "Servine", "Serperior", "Tepig", "Pignite", "Emboar", "Oshawott", "Dewott", "Samurott", "Timburr", "Gurdurr", "Conkeldurr", "Sewaddle", "Swadloon", "Leavanny", "Tynamo", "Eelektrik", "Eelektross", "Froakie", "Frogadier", "Greninja"];
+			const alolaDex = {
+				"Caterpie":1, "Metapod":1, "Butterfree":1, "Rattata-Alola":1, "Raticate-Alola":1, "Spearow":1, "Fearow":1, "Pikachu":1, "Raichu-Alola":1, "Sandshrew-Alola":1, "Sandslash-Alola":1, "Clefairy":1, "Clefable":1, "Vulpix-Alola":1, "Ninetales-Alola":1, "Jigglypuff":1, "Wigglytuff":1, "Zubat":1, "Golbat":1, "Paras":1, "Parasect":1, "Diglett-Alola":1, "Dugtrio-Alola":1, "Meowth-Alola":1, "Persian-Alola":1, "Psyduck":1, "Golduck":1, "Mankey":1, "Primeape":1, "Growlithe":1, "Arcanine":1, "Poliwag":1, "Poliwhirl":1, "Poliwrath":1, "Abra":1, "Kadabra":1, "Alakazam":1, "Machop":1, "Machoke":1, "Machamp":1, "Tentacool":1, "Tentacruel":1, "Geodude-Alola":1, "Graveler-Alola":1, "Golem-Alola":1, "Slowpoke":1, "Slowbro":1, "Magnemite":1, "Magneton":1, "Grimer-Alola":1, "Muk-Alola":1, "Shellder":1, "Cloyster":1, "Gastly":1, "Haunter":1, "Gengar":1, "Drowzee":1, "Hypno":1, "Exeggcute":1, "Exeggutor-Alola":1, "Cubone":1, "Marowak-Alola":1, "Chansey":1, "Kangaskhan":1, "Goldeen":1, "Seaking":1, "Staryu":1, "Starmie":1, "Scyther":1, "Electabuzz":1, "Magmar":1, "Pinsir":1, "Tauros":1, "Magikarp":1, "Gyarados":1, "Lapras":1, "Ditto":1, "Eevee":1, "Vaporeon":1, "Jolteon":1, "Flareon":1, "Porygon":1, "Aerodactyl":1, "Snorlax":1, "Dratini":1, "Dragonair":1, "Dragonite":1, "Ledyba":1, "Ledian":1, "Spinarak":1, "Ariados":1, "Crobat":1, "Chinchou":1, "Lanturn":1, "Pichu":1, "Cleffa":1, "Igglybuff":1, "Sudowoodo":1, "Politoed":1, "Espeon":1, "Umbreon":1, "Murkrow":1, "Slowking":1, "Misdreavus":1, "Snubbull":1, "Granbull":1, "Scizor":1, "Sneasel":1, "Corsola":1, "Delibird":1, "Skarmory":1, "Porygon2":1, "Smeargle":1, "Elekid":1, "Magby":1, "Miltank":1, "Blissey":1, "Wingull":1, "Pelipper":1, "Surskit":1, "Masquerain":1, "Makuhita":1, "Hariyama":1, "Nosepass":1, "Sableye":1, "Carvanha":1, "Sharpedo":1, "Wailmer":1, "Wailord":1, "Torkoal":1, "Spinda":1, "Trapinch":1, "Vibrava":1, "Flygon":1, "Barboach":1, "Whiscash":1, "Feebas":1, "Milotic":1, "Castform":1, "Absol":1, "Snorunt":1, "Glalie":1, "Relicanth":1, "Luvdisc":1, "Bagon":1, "Shelgon":1, "Salamence":1, "Beldum":1, "Metang":1, "Metagross":1, "Cranidos":1, "Rampardos":1, "Shieldon":1, "Bastiodon":1, "Shellos":1, "Gastrodon":1, "Drifloon":1, "Drifblim":1, "Mismagius":1, "Honchkrow":1, "Bonsly":1, "Happiny":1, "Gible":1, "Gabite":1, "Garchomp":1, "Munchlax":1, "Riolu":1, "Lucario":1, "Finneon":1, "Lumineon":1, "Weavile":1, "Magnezone":1, "Electivire":1, "Magmortar":1, "Leafeon":1, "Glaceon":1, "Porygon-Z":1, "Probopass":1, "Froslass":1, "Lillipup":1, "Herdier":1, "Stoutland":1, "Roggenrola":1, "Boldore":1, "Gigalith":1, "Cottonee":1, "Whimsicott":1, "Petilil":1, "Lilligant":1, "Sandile":1, "Krokorok":1, "Krookodile":1, "Tirtouga":1, "Carracosta":1, "Archen":1, "Archeops":1, "Trubbish":1, "Garbodor":1, "Vanillite":1, "Vanillish":1, "Vanilluxe":1, "Emolga":1, "Alomomola":1, "Rufflet":1, "Braviary":1, "Vullaby":1, "Mandibuzz":1, "Fletchling":1, "Fletchinder":1, "Talonflame":1, "Pancham":1, "Pangoro":1, "Sylveon":1, "Carbink":1, "Goomy":1, "Sliggoo":1, "Goodra":1, "Klefki":1, "Phantump":1, "Trevenant":1, "Zygarde":1, "Rowlet":1, "Dartrix":1, "Decidueye":1, "Litten":1, "Torracat":1, "Incineroar":1, "Popplio":1, "Brionne":1, "Primarina":1, "Pikipek":1, "Trumbeak":1, "Toucannon":1, "Yungoos":1, "Gumshoos":1, "Grubbin":1, "Charjabug":1, "Vikavolt":1, "Crabrawler":1, "Crabominable":1, "Oricorio":1, "Cutiefly":1, "Ribombee":1, "Rockruff":1, "Lycanroc":1, "Wishiwashi":1, "Mareanie":1, "Toxapex":1, "Mudbray":1, "Mudsdale":1, "Dewpider":1, "Araquanid":1, "Fomantis":1, "Lurantis":1, "Morelull":1, "Shiinotic":1, "Salandit":1, "Salazzle":1, "Stufful":1, "Bewear":1, "Bounsweet":1, "Steenee":1, "Tsareena":1, "Comfey":1, "Oranguru":1, "Passimian":1, "Wimpod":1, "Golisopod":1, "Sandygast":1, "Palossand":1, "Pyukumuku":1, "Type: Null":1, "Silvally":1, "Minior":1, "Komala":1, "Turtonator":1, "Togedemaru":1, "Mimikyu":1, "Bruxish":1, "Drampa":1, "Dhelmise":1, "Jangmo-o":1, "Hakamo-o":1, "Kommo-o":1, "Tapu Koko":1, "Tapu Lele":1, "Tapu Bulu":1, "Tapu Fini":1, "Cosmog":1, "Cosmoem":1, "Solgaleo":1, "Lunala":1, "Nihilego":1, "Buzzwole":1, "Pheromosa":1, "Xurkitree":1, "Celesteela":1, "Kartana":1, "Guzzlord":1, "Necrozma":1, "Magearna":1, "Marshadow":1,
+			};
+			if (!(template.baseSpecies in alolaDex) && !(template.species in alolaDex) && !islandScanList.includes(template.baseSpecies)) {
+				problems.push(template.baseSpecies + " is unreleased in gen 7. (It's not possible to transfer Pokemon to Sun/Moon yet)");
 			}
 		}
 
@@ -638,7 +650,7 @@ class Validator {
 		let sources = [];
 		// the equivalent of adding "every source at or before this gen" to sources
 		let sourcesBefore = 0;
-		if (lsetData.sourcesBefore === undefined) lsetData.sourcesBefore = 6;
+		if (lsetData.sourcesBefore === undefined) lsetData.sourcesBefore = tools.gen;
 		let noPastGen = !!format.requirePentagon;
 		// Pokemon cannot be traded to past generations except in Gen 1 Tradeback
 		let noFutureGen = !(format.banlistTable && format.banlistTable['allowtradeback']);
@@ -673,7 +685,7 @@ class Validator {
 				sometimesPossible = true;
 				let lset = template.learnset[moveid];
 				if (!lset || template.speciesid === 'smeargle') {
-					if (move.noSketch) return true;
+					if (move.noSketch || move.isZ) return true;
 					lset = template.learnset['sketch'];
 					sketch = true;
 				}
@@ -681,14 +693,14 @@ class Validator {
 
 				for (let i = 0, len = lset.length; i < len; i++) {
 					let learned = lset[i];
-					let learnedGen = learned.charAt(0);
-					if (noPastGen && learnedGen !== '6') continue;
-					if (noFutureGen && parseInt(learnedGen) > tools.gen) continue;
+					let learnedGen = parseInt(learned.charAt(0));
+					if (noPastGen && learnedGen < tools.gen) continue;
+					if (noFutureGen && learnedGen > tools.gen) continue;
 
 					// redundant
 					if (learnedGen <= sourcesBefore) continue;
 
-					if (learnedGen !== '6' && isHidden && !tools.mod('gen' + learnedGen).getTemplate(template.species).abilities['H']) {
+					if (learnedGen < 7 && isHidden && !tools.mod('gen' + learnedGen).getTemplate(template.species).abilities['H']) {
 						// check if the Pokemon's hidden ability was available
 						incompatibleAbility = true;
 						continue;
@@ -700,8 +712,8 @@ class Validator {
 						// Defog and Whirlpool can't be transferred together
 						if (tools.gen >= 5 && moveid in {'defog':1, 'whirlpool':1} && learnedGen <= 4) blockedHM = true;
 					}
-					if (learned.substr(0, 2) in {'4L':1, '5L':1, '6L':1}) {
-						// gen 4-6 level-up moves
+					if (learned.substr(0, 2) in {'4L':1, '5L':1, '6L':1, '7L':1}) {
+						// gen 4-7 level-up moves
 						if (level >= parseInt(learned.substr(2))) {
 							// we're past the required level to learn it
 							return false;
@@ -716,7 +728,7 @@ class Validator {
 						}
 					}
 					if (learned.charAt(1) in {L:1, M:1, T:1}) {
-						if (parseInt(learnedGen) === tools.gen) {
+						if (learnedGen === tools.gen) {
 							// current-gen TM or tutor moves:
 							//   always available
 							return false;
@@ -724,12 +736,12 @@ class Validator {
 						// past-gen level-up, TM, or tutor moves:
 						//   available as long as the source gen was or was before this gen
 						limit1 = false;
-						sourcesBefore = Math.max(sourcesBefore, parseInt(learnedGen));
+						sourcesBefore = Math.max(sourcesBefore, learnedGen);
 						limitedEgg = false;
 					} else if (learned.charAt(1) === 'E') {
 						// egg moves:
 						//   only if that was the source
-						if (learnedGen === '6' || lsetData.fastCheck) {
+						if (learnedGen >= 6 || lsetData.fastCheck) {
 							// gen 6 doesn't have egg move incompatibilities except for certain cases with baby Pokemon
 							learned = learnedGen + 'E' + (template.prevo ? template.id : '');
 							sources.push(learned);
@@ -751,7 +763,7 @@ class Validator {
 							// can't inherit from CAP pokemon
 							if (dexEntry.isNonstandard) continue;
 							// can't breed mons from future gens
-							if (dexEntry.gen > parseInt(learnedGen)) continue;
+							if (dexEntry.gen > learnedGen) continue;
 							// father must be male
 							if (dexEntry.gender === 'N' || dexEntry.gender === 'F') continue;
 							// can't inherit from dex entries with no learnsets
@@ -767,7 +779,7 @@ class Validator {
 
 							// we can breed with it
 							atLeastOne = true;
-							if (tradebackEligible && learnedGen === '2' && move.gen <= 1) {
+							if (tradebackEligible && learnedGen === 2 && move.gen <= 1) {
 								// can tradeback
 								sources.push('1ET' + dexEntry.id);
 							}
@@ -785,7 +797,7 @@ class Validator {
 						//   only if that was the source
 						// Event Pokémon:
 						//	Available as long as the past gen can get the Pokémon and then trade it back.
-						if (tradebackEligible && learnedGen === '2' && move.gen <= 1) {
+						if (tradebackEligible && learnedGen === 2 && move.gen <= 1) {
 							// can tradeback
 							sources.push('1ST' + learned.slice(2) + ' ' + template.id);
 						}

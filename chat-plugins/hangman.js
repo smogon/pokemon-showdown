@@ -232,8 +232,10 @@ exports.commands = {
 
 			room.game.guess(target, user);
 		},
-		guesshelp: ["/hangman guess [letter] - Makes a guess for the letter entered.",
-					"/hangman guess [word] - Same as a letter, but guesses an entire word."],
+		guesshelp: [
+			"/hangman guess [letter] - Makes a guess for the letter entered.",
+			"/hangman guess [word] - Same as a letter, but guesses an entire word.",
+		],
 
 		stop: 'end',
 		end: function (target, room, user) {
@@ -285,14 +287,16 @@ exports.commands = {
 		},
 	},
 
-	hangmanhelp: ["/hangman allows users to play the popular game hangman in PS rooms.",
-				"Accepts the following commands:",
-				"/hangman create [word], [hint] - Makes a new hangman game. Requires: % @ * # & ~",
-				"/hangman guess [letter] - Makes a guess for the letter entered.",
-				"/hangman guess [word] - Same as a letter, but guesses an entire word.",
-				"/hangman display - Displays the game.",
-				"/hangman end - Ends the game of hangman before the man is hanged or word is guessed. Requires: % @ * # & ~",
-				"/hangman [enable/disable] - Enables or disables hangman from being started in a room. Requires: # & ~"],
+	hangmanhelp: [
+		"/hangman allows users to play the popular game hangman in PS rooms.",
+		"Accepts the following commands:",
+		"/hangman create [word], [hint] - Makes a new hangman game. Requires: % @ * # & ~",
+		"/hangman guess [letter] - Makes a guess for the letter entered.",
+		"/hangman guess [word] - Same as a letter, but guesses an entire word.",
+		"/hangman display - Displays the game.",
+		"/hangman end - Ends the game of hangman before the man is hanged or word is guessed. Requires: % @ * # & ~",
+		"/hangman [enable/disable] - Enables or disables hangman from being started in a room. Requires: # & ~",
+	],
 
 	guess: function (target, room, user) {
 		if (!room.game) return this.errorReply("There is no game running in this room.");
@@ -301,6 +305,8 @@ exports.commands = {
 
 		room.game.guess(target, user);
 	},
-	guesshelp: ["/guess - Shortcut for /hangman guess.", "/hangman guess [letter] - Makes a guess for the letter entered.",
-					"/hangman guess [word] - Same as a letter, but guesses an entire word."],
+	guesshelp: [
+		"/guess - Shortcut for /hangman guess.", "/hangman guess [letter] - Makes a guess for the letter entered.",
+		"/hangman guess [word] - Same as a letter, but guesses an entire word.",
+	],
 };

@@ -101,7 +101,7 @@ class RoomSettings {
 			if (this.room.slowchat === i) {
 				slowchatOutput.push(this.button(`${i}s`, true));
 			} else {
-				slowchatOutput.push(this.button(`{i}s`, null, `slowchat ${i}`));
+				slowchatOutput.push(this.button(`${i}s`, null, `slowchat ${i}`));
 			}
 		}
 		if (!this.room.slowchat) {
@@ -119,7 +119,7 @@ class RoomSettings {
 		} else if (this.room.toursEnabled === '%') {
 			return this.button('%', true) + this.button('@', null, 'tournament enable @') + this.button('#', null, 'tournament disable');
 		} else {
-			return this.button('%', null, 'tournament enable %') + this.button('@', 'tournament enable @') + this.button('#', true);
+			return this.button('%', null, 'tournament enable %') + this.button('@', null, 'tournament enable @') + this.button('#', true);
 		}
 	}
 	generateDisplay(user, room, connection) {
@@ -462,7 +462,9 @@ exports.commands = {
 			return this.parse("/help banword");
 		},
 	},
-	banwordhelp: ["/banword add [words] - Adds the comma-separated list of phrases (& or ~ can also input regex) to the banword list of the current room. Requires: # & ~",
-					"/banword delete [words] - Removes the comma-separated list of phrases from the banword list. Requires: # & ~",
-					"/banword list - Shows the list of banned words in the current room. Requires: % @ * # & ~"],
+	banwordhelp: [
+		"/banword add [words] - Adds the comma-separated list of phrases (& or ~ can also input regex) to the banword list of the current room. Requires: # & ~",
+		"/banword delete [words] - Removes the comma-separated list of phrases from the banword list. Requires: # & ~",
+		"/banword list - Shows the list of banned words in the current room. Requires: % @ * # & ~",
+	],
 };

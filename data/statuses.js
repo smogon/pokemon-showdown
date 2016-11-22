@@ -15,7 +15,7 @@ exports.BattleStatuses = {
 		// Damage reduction is handled directly in the battle-engine.js damage function
 		onResidualOrder: 9,
 		onResidual: function (pokemon) {
-			this.damage(pokemon.maxhp / 8);
+			this.damage(pokemon.maxhp / 16);
 		},
 	},
 	par: {
@@ -29,7 +29,7 @@ exports.BattleStatuses = {
 		},
 		onModifySpe: function (spe, pokemon) {
 			if (!pokemon.hasAbility('quickfeet')) {
-				return this.chainModify(0.25);
+				return this.chainModify(0.5);
 			}
 		},
 		onBeforeMovePriority: 1,
@@ -168,7 +168,7 @@ exports.BattleStatuses = {
 				return;
 			}
 			this.add('-activate', pokemon, 'confusion');
-			if (this.random(2) === 0) {
+			if (this.random(3) > 0) {
 				return;
 			}
 			this.damage(this.getDamage(pokemon, pokemon, 40), pokemon, pokemon, {
@@ -201,6 +201,14 @@ exports.BattleStatuses = {
 	},
 	trapper: {
 		noCopy: true,
+	},
+	crit1: {
+		onStart: function (pokemon) {
+			this.add('-start', pokemon, 'move: Focus Energy');
+		},
+		onModifyCritRatio: function (critRatio) {
+			return critRatio + 1;
+		},
 	},
 	partiallytrapped: {
 		duration: 5,
@@ -367,6 +375,30 @@ exports.BattleStatuses = {
 			this.effectData.counter = 3;
 		},
 		onStallMove: function () {
+			if (this.activeMove.id === 'destinybond') return true;
+			// this.effectData.counter should never be undefined here.
+			// However, just in case, use 1 if it is undefined.
+			let counter = this.effectData.counter || 1;
+			this.debug("Success chance: " + Math.round(100 / counter) + "%");
+			return (this.random(counter) === 0);
+		},
+		onRestart: function () {
+			if (this.effectData.counter < this.effect.counterMax) {
+				this.effectData.counter *= 3;
+			}
+			this.effectData.duration = 2;
+		},
+	},
+	retaliationstall: {
+		// Destiny Bond counter
+		// TODO: Research how it works with Quick Guard, Wide Guard, as well as probabilities
+		duration: 2,
+		counterMax: 729,
+		onStart: function () {
+			this.effectData.counter = 3;
+		},
+		onStallMove: function () {
+			if (this.activeMove.id !== 'destinybond') return true;
 			// this.effectData.counter should never be undefined here.
 			// However, just in case, use 1 if it is undefined.
 			let counter = this.effectData.counter || 1;
@@ -626,18 +658,31 @@ exports.BattleStatuses = {
 		},
 	},
 
+	// Arceus and Silvally's actual typing is implemented here.
+	// Their true typing for all their formes is Normal, and it's only
+	// Multitype and RKS System, respectively, that changes their type,
+	// but their formes are specified to be their corresponding type
+	// in the Pokedex, so that needs to be overridden.
+	// This is mainly relevant for Hackmons and Balanced Hackmons.
 	arceus: {
-		// Arceus's actual typing is implemented here
-		// Arceus's true typing for all its formes is Normal, and it's only
-		// Multitype that changes its type, but its formes are specified to
-		// be their corresponding type in the Pokedex, so that needs to be
-		// overridden. This is mainly relevant for Hackmons and Balanced
-		// Hackmons.
 		onSwitchInPriority: 101,
 		onSwitchIn: function (pokemon) {
 			let type = 'Normal';
 			if (pokemon.ability === 'multitype') {
 				type = pokemon.getItem().onPlate;
+				if (!type || type === true) {
+					type = 'Normal';
+				}
+			}
+			pokemon.setType(type, true);
+		},
+	},
+	silvally: {
+		onSwitchInPriority: 101,
+		onSwitchIn: function (pokemon) {
+			let type = 'Normal';
+			if (pokemon.ability === 'rkssystem') {
+				type = pokemon.getItem().onMemory;
 				if (!type || type === true) {
 					type = 'Normal';
 				}

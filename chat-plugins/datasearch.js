@@ -219,10 +219,12 @@ exports.commands = {
 			this.update();
 		});
 	},
-	itemsearchhelp: ["/itemsearch [move description] - finds items that match the given key words.",
-	"Command accepts natural language. (tip: fewer words tend to work better)",
-	"Searches with \"fling\" in them will find items with the specified Fling behavior.",
-	"Searches with \"natural gift\" in them will find items with the specified Natural Gift behavior."],
+	itemsearchhelp: [
+		"/itemsearch [move description] - finds items that match the given key words.",
+		"Command accepts natural language. (tip: fewer words tend to work better)",
+		"Searches with \"fling\" in them will find items with the specified Fling behavior.",
+		"Searches with \"natural gift\" in them will find items with the specified Natural Gift behavior.",
+	],
 
 	'!learn': true,
 	learnset: 'learn',
@@ -234,6 +236,7 @@ exports.commands = {
 	advlearn: 'learn',
 	dpplearn: 'learn',
 	bw2learn: 'learn',
+	oraslearn: 'learn',
 	learn: function (target, room, user, connection, cmd, message) {
 		if (!this.canBroadcast()) return;
 		if (!target) return this.parse('/help learn');
@@ -354,7 +357,7 @@ function runDexsearch(target, cmd, canAll, message) {
 
 			let targetInt = 0;
 			if (target.substr(0, 3) === 'gen' && Number.isInteger(parseFloat(target.substr(3)))) targetInt = parseInt(target.substr(3).trim());
-			if (0 < targetInt && targetInt < 7) {
+			if (0 < targetInt && targetInt < 8) {
 				let invalid = validParameter("gens", targetInt, isNotSearch, target);
 				if (invalid) return {reply: invalid};
 				orGroup.gens[targetInt] = !isNotSearch;
@@ -1255,7 +1258,7 @@ function runLearn(target, cmd) {
 	let template = Tools.getTemplate(targets[0]);
 	let move = {};
 	let problem;
-	let gen = ({rby:1, gsc:2, adv:3, dpp:4, bw2:5}[cmd.substring(0, 3)] || 6);
+	let gen = ({rby:1, gsc:2, adv:3, dpp:4, bw2:5, oras:6}[cmd.slice(0, -5)] || 7);
 	let format = 'gen' + gen + 'ou';
 	let all = (cmd === 'learnall');
 	if (cmd === 'learn5') lsetData.set.level = 5;
