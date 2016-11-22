@@ -442,6 +442,7 @@ exports.BattleAbilities = {
 			this.add('-immune', target, '[msg]', '[from] ability: Comatose');
 			return false;
 		},
+		isUnbreakable: true,
 		id: "comatose",
 		name: "Comatose",
 		rating: 3,
@@ -1146,6 +1147,7 @@ exports.BattleAbilities = {
 			}
 			if (showMsg && !effect.secondaries) this.add("-fail", target, "unboost", "[from] ability: Full Metal Body", "[of] " + target);
 		},
+		isUnbreakable: true,
 		id: "fullmetalbody",
 		name: "Full Metal Body",
 		rating: 2,
@@ -2510,6 +2512,7 @@ exports.BattleAbilities = {
 				return this.chainModify(0.75);
 			}
 		},
+		isUnbreakable: true,
 		id: "prismarmor",
 		name: "Prism Armor",
 		rating: 3,
@@ -2892,6 +2895,7 @@ exports.BattleAbilities = {
 				return this.chainModify(0.5);
 			}
 		},
+		isUnbreakable: true,
 		id: "shadowshield",
 		name: "Shadow Shield",
 		rating: 4,
