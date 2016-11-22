@@ -246,8 +246,8 @@ exports.BattleAbilities = {
 		num: 4,
 	},
 	"battlebond": {
-		desc: "If this Pokemon is a Greninja, it transforms into Ash-Greninja after knocking out a Pokemon.",
-		shortDesc: "If user is a Greninja, it transforms into Ash-Greninja after knocking out a Pokemon.",
+		desc: "If this Pokemon is a Greninja, it transforms into Ash-Greninja after knocking out a Pokemon. As Ash-Greninja, its Water Shuriken does 1.5x damage.",
+		shortDesc: "After knocking out a Pokemon: Becomes Ash-Greninja and Water Shuriken does 1.5x.",
 		onSourceFaint: function (target, source, effect) {
 			if (effect && effect.effectType === 'Move' && source.template.speciesid === 'greninja' && !source.transformed) {
 				this.add('-activate', source, 'ability: Battle Bond');
@@ -257,6 +257,13 @@ exports.BattleAbilities = {
 				source.details = template.species + (source.level === 100 ? '' : ', L' + source.level) + (source.gender === '' ? '' : ', ' + source.gender) + (source.set.shiny ? ', shiny' : '');
 				this.add('detailschange', source, source.details);
 				this.add('-message', "" + source.name + " became Ash-Greninja! (placeholder)"); // TODO: -bond
+			}
+		},
+		onBasePowerPriority: 8,
+		onBasePower: function (basePower, attacker, defender, move) {
+			// TODO: figure out the exact boost
+			if (move.id === 'watershuriken' && attacker.template.speciesid === 'greninjaash') {
+				return this.chainModify([0x1800, 0x1000]);
 			}
 		},
 		id: "battlebond",
