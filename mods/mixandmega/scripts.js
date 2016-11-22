@@ -1,6 +1,7 @@
 'use strict';
 
 exports.BattleScripts = {
+	inherit: 'gen6',
 	init: function () {
 		let onTakeMegaStone = function (item) {
 			return false;
