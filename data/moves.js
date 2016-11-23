@@ -1107,7 +1107,7 @@ exports.BattleMovedex = {
 		name: "Beak Blast",
 		pp: 15,
 		priority: -3,
-		flags: {protect: 1},
+		flags: {bullet: 1, protect: 1},
 		beforeTurnCallback: function (pokemon) {
 			pokemon.addVolatile('beakblast');
 		},
