@@ -3202,10 +3202,7 @@ exports.BattleMovedex = {
 		flags: {authentic: 1},
 		volatileStatus: 'destinybond',
 		onPrepareHit: function (pokemon) {
-			return this.runEvent('StallMove', pokemon);
-		},
-		onHit: function (pokemon) {
-			pokemon.addVolatile('retaliationstall');
+			if (pokemon.removeVolatile('destinybond')) return false;
 		},
 		effect: {
 			onStart: function (pokemon) {
@@ -3219,9 +3216,11 @@ exports.BattleMovedex = {
 				}
 			},
 			onBeforeMovePriority: 100,
-			onBeforeMove: function (pokemon) {
-				this.debug('removing Destiny Bond before attack');
-				pokemon.removeVolatile('destinybond');
+			onBeforeMove: function (pokemon, target, move) {
+				if (move.id !== 'destinybond') {
+					this.debug('removing Destiny Bond before attack');
+					pokemon.removeVolatile('destinybond');
+				}
 			},
 			onBeforeSwitchOutPriority: 1,
 			onBeforeSwitchOut: function (pokemon) {
