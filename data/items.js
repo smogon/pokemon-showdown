@@ -3169,6 +3169,7 @@ exports.BattleItems = {
 	"marshadiumz": {
 		id: "marshadiumz",
 		name: "Marshadium Z",
+		isUnreleased: true,
 		spritenum: 654,
 		onTakeItem: false,
 		zMove: "Soul-Stealing 7-Star Strike",
@@ -3366,6 +3367,7 @@ exports.BattleItems = {
 	"mewniumz": {
 		id: "mewniumz",
 		name: "Mewnium Z",
+		isUnreleased: true,
 		spritenum: 658,
 		onTakeItem: false,
 		zMove: "Genesis Supernova",
@@ -3861,6 +3863,7 @@ exports.BattleItems = {
 	"pikashuniumz": {
 		id: "pikashuniumz",
 		name: "Pikashunium Z",
+		isUnreleased: true,
 		spritenum: 659,
 		onTakeItem: false,
 		zMove: "10,000,000 Volt Thunderbolt",
