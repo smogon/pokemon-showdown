@@ -12156,7 +12156,7 @@ exports.BattlePokedex = {
 		weightkg: 100.5,
 		color: "Gray",
 		prevo: "typenull",
-		evoLevel: 2,
+		evoLevel: 41,
 		eggGroups: ["Undiscovered"],
 		otherFormes: ["silvallybug", "silvallydark", "silvallydragon", "silvallyelectric", "silvallyfairy", "silvallyfighting", "silvallyfire", "silvallyflying", "silvallyghost", "silvallygrass", "silvallyground", "silvallyice", "silvallypoison", "silvallypsychic", "silvallyrock", "silvallysteel", "silvallywater"],
 	},
