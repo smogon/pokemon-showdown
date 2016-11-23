@@ -115,7 +115,7 @@ exports.commands = {
 		"'resists' followed by a type will show Pok\u00e9mon that resist that typing, e.g., 'resists normal'.",
 		"Inequality ranges use the characters '>=' for '≥' and '<=' for '≤', e.g., 'hp <= 95' searches all Pok\u00e9mon with HP less than or equal to 95.",
 		"Parameters can be excluded through the use of '!', e.g., '!water type' excludes all water types.",
-		"The parameter 'mega' can be added to search for Mega Evolutions only, and the parameter 'NFE' can be added to search not-fully evolved Pok\u00e9mon only.",
+		"The parameter 'mega' can be added to search for Mega Evolutions only, the parameter 'alola' can be added to search for Alolan Pokemon only, and the parameter 'NFE' can be added to search not-fully evolved Pok\u00e9mon only.",
 		"Parameters separated with '|' will be searched as alternatives for each other, e.g., 'trick | switcheroo' searches for all Pok\u00e9mon that learn either Trick or Switcheroo.",
 		"The order of the parameters does not matter."],
 
@@ -288,6 +288,7 @@ function runDexsearch(target, cmd, canAll, message) {
 	let allStats = {'hp':1, 'atk':1, 'def':1, 'spa':1, 'spd':1, 'spe':1, 'bst':1};
 	let showAll = false;
 	let megaSearch = null;
+	let alolaSearch = null;
 	let capSearch = null;
 	let randomOutput = 0;
 
@@ -383,6 +384,15 @@ function runDexsearch(target, cmd, canAll, message) {
 				if (megaSearch === isNotSearch) return {reply: "A search cannot include and exclude 'mega'."};
 				if (parameters.length > 1) return {reply: "The parameter 'mega' cannot have alternative parameters"};
 				megaSearch = !isNotSearch;
+				orGroup.skip = true;
+				break;
+			}
+			
+			
+			if (target === 'alolan' || target === 'alola') {
+				if (alolaSearch === isNotSearch) return {reply: "A search cannot include and exclude 'alola'."};
+				if (parameters.length > 1) return {reply: "The parameter 'alola' cannot have alternative parameters"};
+				alolaSearch = !isNotSearch;
 				orGroup.skip = true;
 				break;
 			}
@@ -511,7 +521,7 @@ function runDexsearch(target, cmd, canAll, message) {
 		searches.push(orGroup);
 	}
 
-	if (showAll && searches.length === 0 && megaSearch === null) return {reply: "No search parameters other than 'all' were found. Try '/help dexsearch' for more information on this command."};
+	if (showAll && searches.length === 0 && alolaSearch === null && megaSearch === null) return {reply: "No search parameters other than 'all' were found. Try '/help dexsearch' for more information on this command."};
 
 	let dex = {};
 	for (let pokemon in Tools.data.Pokedex) {
