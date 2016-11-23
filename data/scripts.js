@@ -291,7 +291,7 @@ exports.BattleScripts = {
 			this.add('-immune', target, '[msg]');
 			return false;
 		}
-		if (this.gen >= 7 && move.pranksterBoosted && target !== pokemon && !this.getImmunity('prankster', target)) {
+		if (this.gen >= 7 && move.pranksterBoosted && target.side !== pokemon.side && !this.getImmunity('prankster', target)) {
 			this.debug('natural prankster immunity');
 			this.add('-immune', target, '[msg]');
 			return false;
