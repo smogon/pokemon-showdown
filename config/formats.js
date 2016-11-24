@@ -92,7 +92,7 @@ exports.Formats = [
 			}
 		},
 		{
-		   name: "[Gen 7] 1v1"
+		   name: "[Gen 7] 1v1",
 		   desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/1v1.3587523/\">1v1</a>"],
 		   
 		   mod: 'gen 7',
