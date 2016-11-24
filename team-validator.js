@@ -715,7 +715,7 @@ class Validator {
 					}
 					if (learned.substr(0, 2) in {'4L':1, '5L':1, '6L':1, '7L':1}) {
 						// gen 4-7 level-up moves
-						if (level >= parseInt(learned.substr(2))) {
+						if (level >= parseInt(learned.substr(2)) || learnedGen === 7 && tools.gen >= 7) {
 							// we're past the required level to learn it
 							return false;
 						}
