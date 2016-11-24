@@ -3515,6 +3515,7 @@ class Battle extends Tools.BattleDex {
 		}
 		if (!target || !target.hp) return 0;
 		if (!target.isActive) return false;
+		if (this.gen > 5 && !target.side.foe.pokemonLeft) return false;
 		effect = this.getEffect(effect);
 		boost = this.runEvent('Boost', target, source, effect, Object.assign({}, boost));
 		let success = null;
@@ -4073,12 +4074,12 @@ class Battle extends Tools.BattleDex {
 			faintData = this.faintQueue.shift();
 			if (!faintData.target.fainted) {
 				this.add('faint', faintData.target);
+				faintData.target.side.pokemonLeft--;
 				this.runEvent('Faint', faintData.target, faintData.source, faintData.effect);
 				this.singleEvent('End', this.getAbility(faintData.target.ability), faintData.target.abilityData, faintData.target);
 				faintData.target.fainted = true;
 				faintData.target.isActive = false;
 				faintData.target.isStarted = false;
-				faintData.target.side.pokemonLeft--;
 				faintData.target.side.faintedThisTurn = true;
 			}
 		}
