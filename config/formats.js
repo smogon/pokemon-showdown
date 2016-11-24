@@ -91,6 +91,22 @@ exports.Formats = [
 				return [template.baseSpecies + " is not permitted in Battle Spot Singles."];
 			}
 		},
+		{
+		   name: "[Gen 7] 1v1"
+		   desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/1v1.3587523/\">1v1</a>"],
+		   
+		   mod: 'gen 7',
+		   teamLength: {
+			validate: [1, 3],
+			battle: 1,
+	        },
+	        ruleset: ['Pokemon', 'Moody Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Species Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
+		banlist: [
+			'Illegal', 'Unreleased', 'Arceus', 'Blaziken', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Deoxys-Defense', 'Deoxys-Speed', 'Dialga', 'Giratina', 'Giratina-Origin', 'Groudon',
+			'Ho-Oh', 'Kyogre', 'Kyurem-White', 'Lugia', 'Lunala', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Solgaleo', 'Shaymin-Sky', 'Xerneas', 'Yveltal', 'Zekrom', 'Zygarde-Complete',
+			'Focus Sash', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Salamencite', 
+		],
+		
 	},
 
 	// SM Doubles
