@@ -420,6 +420,35 @@ exports.commands = {
 				if (move.id === 'snatch') isSnatch = true;
 				if (move.id === 'mirrormove') isMirrorMove = true;
 
+				if (move.zMovePower) {
+					details["Z-Power"] = move.zMovePower;
+				} else if (move.zMoveEffect) {
+					details["Z-Effect"] = {
+						'clearnegativeboost': "Restores negative stat stages to 0",
+						'crit1': "Crit ratio +1",
+						'heal': "Restores HP 100%",
+						'curse': "Restores HP 100% if user is Ghost type, otherwise Attack +1",
+						'redirect': "Redirects opposing attacks to user",
+						'healreplacement': "Restores replacement's HP 100%",
+					}[move.zMoveEffect];
+				} else if (move.zMoveBoost) {
+					details["Z-Effect"] = "";
+					let boost = move.zMoveBoost;
+					let stats = {atk: 'Attack', def: 'Defense', spa: 'Sp. Atk', spd: 'Sp. Def', spe: 'Speed', accuracy: 'Accuracy', evasion: 'Evasiveness'};
+					for (let i in boost) {
+						details["Z-Effect"] += " " + stats[i] + " +" + boost[i];
+					}
+				} else if (move.isZ) {
+					details["&#10003; Z-Move"] = "";
+					details["Z-Crystal"] = Tools.getItem(move.isZ).name;
+					if (move.basePower !== 1) {
+						details["User"] = Tools.getItem(move.isZ).zMoveUser.join(", ");
+						details["Required Move"] = Tools.getItem(move.isZ).zMoveFrom;
+					}
+				} else {
+					details["Z-Effect"] = "None";
+				}
+
 				details["Target"] = {
 					'normal': "One Adjacent Pok\u00e9mon",
 					'self': "User",
