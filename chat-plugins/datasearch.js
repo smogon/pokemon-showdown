@@ -389,7 +389,7 @@ function runDexsearch(target, cmd, canAll, message) {
 
 			if (target === 'recovery') {
 				if (parameters.length > 1) return {reply: "The parameter 'recovery' cannot have alternative parameters"};
-				let recoveryMoves = ["recover", "roost", "moonlight", "morningsun", "synthesis", "milkdrink", "slackoff", "softboiled", "wish", "healorder"];
+				let recoveryMoves = ["recover", "roost", "moonlight", "morningsun", "synthesis", "milkdrink", "slackoff", "softboiled", "wish", "healorder", "shoreup"];
 				for (let k = 0; k < recoveryMoves.length; k++) {
 					let invalid = validParameter("moves", recoveryMoves[k], isNotSearch, target);
 					if (invalid) return {reply: invalid};
