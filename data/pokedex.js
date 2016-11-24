@@ -11757,7 +11757,7 @@ exports.BattlePokedex = {
 		heightm: 0.5,
 		weightkg: 9.2,
 		color: "Brown",
-		evos: ["lycanroc"],
+		evos: ["lycanroc", "lycanrocmidnight"],
 		eggGroups: ["Field"],
 	},
 	lycanroc: {
