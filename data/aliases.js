@@ -313,16 +313,8 @@ exports.BattleAliases = {
 	"magearnaoriginal": "Magearna",
 
 	// abilities
-	"adapt": "Adaptability",
-	"ff": "Flash Fire",
-	"intim": "Intimidate",
-	"mbounce": "Magic Bounce",
-	"mguard": "Magic Guard",
-	"moldy": "Mold Breaker",
 	"ph": "Poison Heal",
-	"pster": "Prankster",
 	"stag": "Shadow Tag",
-	"tech": "Technician",
 
 	// items
 	"assvest": "Assault Vest",
