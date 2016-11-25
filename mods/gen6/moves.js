@@ -18,8 +18,9 @@ exports.BattleMovedex = {
 	},
 	destinybond: {
 		inherit: true,
-		onPrepareHit: function () {},
-		onHit: function () {},
+		onPrepareHit: function (pokemon) {
+			pokemon.removeVolatile('destinybond');
+		},
 	},
 	diamondstorm: {
 		inherit: true,
