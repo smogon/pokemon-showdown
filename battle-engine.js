@@ -276,16 +276,13 @@ class BattlePokemon {
 
 		return stat;
 	}
-	getStat(statName, unboosted, unmodified, afterMega) {
+	getStat(statName, unboosted, unmodified) {
 		statName = toId(statName);
 
 		if (statName === 'hp') return this.maxhp; // please just read .maxhp directly
 
 		// base stat
 		let stat = this.stats[statName];
-		if (afterMega) {
-			stat = this.battle.spreadModify(this.battle.getTemplate(this.canMegaEvo).baseStats, this.set)[statName];
-		}
 
 		// Download ignores Wonder Room's effect, but this results in
 		// stat stages being calculated on the opposite defensive stat
@@ -322,7 +319,7 @@ class BattlePokemon {
 		return stat;
 	}
 	getDecisionSpeed() {
-		let speed = this.getStat('spe', false, false, this.battle.gen >= 7 && this.willMega);
+		let speed = this.getStat('spe', false, false);
 		if (speed > 10000) speed = 10000;
 		if (this.battle.getPseudoWeather('trickroom')) {
 			speed = 0x2710 - speed;
@@ -2841,18 +2838,10 @@ class Battle extends Tools.BattleDex {
 				this.resolveLastPriority(statuses, callbackType);
 			}
 		}
-		if (this.gen >= 7 && thing.willMega && (callbackType === 'onModifySpe' || callbackType === 'onModifyPriority')) {
-			status = thing.getMegaAbility();
-			if (status[callbackType] !== undefined) {
-				statuses.push({status: status, callback: status[callbackType], statusData: {id: status.id}, end: null, thing: thing});
-				this.resolveLastPriority(statuses, callbackType);
-			}
-		} else {
-			status = thing.getAbility();
-			if (status[callbackType] !== undefined || (getAll && thing.abilityData[getAll])) {
-				statuses.push({status: status, callback: status[callbackType], statusData: thing.abilityData, end: thing.clearAbility, thing: thing});
-				this.resolveLastPriority(statuses, callbackType);
-			}
+		status = thing.getAbility();
+		if (status[callbackType] !== undefined || (getAll && thing.abilityData[getAll])) {
+			statuses.push({status: status, callback: status[callbackType], statusData: thing.abilityData, end: thing.clearAbility, thing: thing});
+			this.resolveLastPriority(statuses, callbackType);
 		}
 		status = thing.getItem();
 		if (status[callbackType] !== undefined || (getAll && thing.itemData[getAll])) {
@@ -4119,7 +4108,6 @@ class Battle extends Tools.BattleDex {
 		if (decision) {
 			if (!decision.side && decision.pokemon) decision.side = decision.pokemon.side;
 			if (!decision.choice && decision.move) decision.choice = 'move';
-			if (decision.mega) decision.pokemon.willMega = true;
 			if (!decision.priority && decision.priority !== 0) {
 				let priorities = {
 					'beforeTurn': 100,
@@ -4149,6 +4137,8 @@ class Battle extends Tools.BattleDex {
 				decision.pokemon.switchFlag = false;
 				if (!decision.speed && decision.pokemon && decision.pokemon.isActive) decision.speed = decision.pokemon.getDecisionSpeed();
 			}
+
+			let deferPriority = this.gen >= 7 && decision.mega && !decision.pokemon.template.isMega;
 			if (decision.move) {
 				let target;
 
@@ -4159,7 +4149,7 @@ class Battle extends Tools.BattleDex {
 				}
 
 				decision.move = this.getMoveCopy(decision.move);
-				if (!decision.priority) {
+				if (!decision.priority && !deferPriority) {
 					let priority = decision.move.priority;
 					if (decision.zmove) {
 						let zMoveName = this.getZMove(decision.move, decision.pokemon, true);
@@ -4176,7 +4166,7 @@ class Battle extends Tools.BattleDex {
 			}
 			if (!decision.pokemon && !decision.speed) decision.speed = 1;
 			if (!decision.speed && (decision.choice === 'switch' || decision.choice === 'instaswitch') && decision.target) decision.speed = decision.target.getDecisionSpeed();
-			if (!decision.speed) decision.speed = decision.pokemon.getDecisionSpeed();
+			if (!decision.speed && !deferPriority) decision.speed = decision.pokemon.getDecisionSpeed();
 		}
 	}
 	addQueue(decision) {
@@ -4482,6 +4472,15 @@ class Battle extends Tools.BattleDex {
 			this.checkFainted();
 		} else if (decision.choice === 'pass') {
 			this.eachEvent('Update');
+			return false;
+		} else if (decision.choice === 'megaEvo' && this.gen >= 7) {
+			this.eachEvent('Update');
+			// In Gen 7, the decision order is recalculated for a Pokémon that mega evolves.
+			const moveIndex = this.queue.findIndex(queuedDecision => queuedDecision.pokemon === decision.pokemon && queuedDecision.choice === 'move');
+			if (moveIndex >= 0) {
+				const moveDecision = this.queue.splice(moveIndex, 1)[0];
+				this.insertQueue(moveDecision);
+			}
 			return false;
 		}
 
