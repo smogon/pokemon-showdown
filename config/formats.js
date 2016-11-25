@@ -8,7 +8,7 @@ exports.Formats = [
 	// SM Singles
 	///////////////////////////////////////////////////////////////////
 	{
-		section: "SM Singles (beta)",
+		section: "SM Singles (ß)",
 	},
 	{
 		name: "Random Battle",
@@ -97,7 +97,7 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
-		section: "SM Doubles/Triples (beta)",
+		section: "SM Doubles/Triples (ß)",
 	},
 	{
 		name: "Random Doubles Battle",
