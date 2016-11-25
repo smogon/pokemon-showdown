@@ -323,7 +323,7 @@ exports.BattleAliases = {
 	"pster": "Prankster",
 	"stag": "Shadow Tag",
 	"tech": "Technician",
-	
+
 	// items
 	"assvest": "Assault Vest",
 	"av": "Assault Vest",
