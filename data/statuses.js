@@ -284,6 +284,9 @@ exports.BattleStatuses = {
 		onLockMoveTarget: function () {
 			return this.effectData.targetLoc;
 		},
+		onMoveAborted: function (pokemon) {
+			pokemon.removeVolatile('twoturnmove');
+		},
 	},
 	choicelock: {
 		onStart: function (pokemon) {
