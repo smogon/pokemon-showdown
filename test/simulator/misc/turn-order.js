@@ -20,6 +20,18 @@ describe('Mega Evolution', function () {
 		assert.statStage(pranksterMega, 'spa', 0);
 	});
 
+	it('should cause an ability copied with Trace by a mega to affect the order of the turn in which it happens', function () {
+		battle = common.createBattle([
+			[{species: "Politoed", ability: 'drizzle', item: '', moves: ['scald']}, {species: "Kingdra", ability: 'swiftswim', item: '', moves: ['dragondance']}],
+			[{species: "Marowak", ability: 'rockhead', item: '', moves: ['earthquake']}, {species: "Alakazam", ability: 'magicguard', item: 'alakazite', moves: ['psychup']}],
+		]);
+		battle.p1.chooseSwitch(2).foe.chooseSwitch(2);
+		battle.p1.chooseMove('dragondance').foe.chooseMove('psychup', null, true);
+		assert.statStage(battle.p1.active[0], 'atk', 1);
+		assert.statStage(battle.p2.active[0], 'atk', 0);
+		assert.species(battle.p2.active[0], 'Alakazam-Mega');
+	});
+
 	it('should cause base ability to not affect the order of the turn in which it happens', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Sableye', ability: 'prankster', item: 'sablenite', moves: ['psychup']}]);
@@ -54,6 +66,18 @@ describe('Mega Evolution [Gen 6]', function () {
 		battle.p1.chooseMove('psychup', null, true);
 		battle.commitDecisions();
 		assert.statStage(pranksterMega, 'spa', 1);
+	});
+
+	it('should not cause an ability copied with Trace by a mega to affect the order of the turn in which it happens', function () {
+		battle = common.gen(6).createBattle([
+			[{species: "Politoed", ability: 'drizzle', item: '', moves: ['scald']}, {species: "Kingdra", ability: 'swiftswim', item: '', moves: ['dragondance']}],
+			[{species: "Marowak", ability: 'rockhead', item: '', moves: ['earthquake']}, {species: "Alakazam", ability: 'magicguard', item: 'alakazite', moves: ['psychup']}],
+		]);
+		battle.p1.chooseSwitch(2).foe.chooseSwitch(2);
+		battle.p1.chooseMove('dragondance').foe.chooseMove('psychup', null, true);
+		assert.statStage(battle.p1.active[0], 'atk', 1);
+		assert.statStage(battle.p2.active[0], 'atk', 1);
+		assert.species(battle.p2.active[0], 'Alakazam-Mega');
 	});
 
 	it('should cause base ability to affect the order of the turn in which it happens', function () {
