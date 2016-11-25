@@ -107,6 +107,15 @@ exports.Formats = [
 		team: 'random',
 		ruleset: ['PotD', 'Pokemon', 'HP Percentage Mod', 'Cancel Mod'],
 	},
+
+	{
+		name: "Random Triples Battle",
+
+		mod: 'gen7',
+		gameType: 'triples',
+		team: 'random',
+		ruleset: ['PotD', 'Pokemon', 'HP Percentage Mod', 'Cancel Mod'],
+	},
 	{
 		name: "[Gen 7] Pokebank Doubles OU",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3586596/\">Doubles OU Metagame Discussion</a>"],
