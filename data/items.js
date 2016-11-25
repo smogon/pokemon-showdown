@@ -118,7 +118,7 @@ exports.BattleItems = {
 			type: "Dragon",
 		},
 		onUpdate: function (pokemon) {
-			if (pokemon.hp <= pokemon.maxhp / 2) {
+			if (pokemon.hp <= pokemon.maxhp / 4) {
 				pokemon.eatItem();
 			}
 		},
@@ -133,7 +133,7 @@ exports.BattleItems = {
 		},
 		num: 162,
 		gen: 3,
-		desc: "Restores 1/2 max HP when at 1/2 max HP or less. Confuses some users. Single use.",
+		desc: "Restores 1/2 max HP at 1/4 max HP or less; confuses if -SpD Nature. Single use.",
 	},
 	"airballoon": {
 		id: "airballoon",
@@ -1673,7 +1673,7 @@ exports.BattleItems = {
 			type: "Bug",
 		},
 		onUpdate: function (pokemon) {
-			if (pokemon.hp <= pokemon.maxhp / 2) {
+			if (pokemon.hp <= pokemon.maxhp / 4) {
 				pokemon.eatItem();
 			}
 		},
@@ -1688,7 +1688,7 @@ exports.BattleItems = {
 		},
 		num: 159,
 		gen: 3,
-		desc: "Restores 1/2 max HP when at 1/2 max HP or less. Confuses some users. Single use.",
+		desc: "Restores 1/2 max HP at 1/4 max HP or less; confuses if -Atk Nature. Single use.",
 	},
 	"firegem": {
 		id: "firegem",
@@ -2375,7 +2375,7 @@ exports.BattleItems = {
 			type: "Dark",
 		},
 		onUpdate: function (pokemon) {
-			if (pokemon.hp <= pokemon.maxhp / 2) {
+			if (pokemon.hp <= pokemon.maxhp / 4) {
 				pokemon.eatItem();
 			}
 		},
@@ -2390,7 +2390,7 @@ exports.BattleItems = {
 		},
 		num: 163,
 		gen: 3,
-		desc: "Restores 1/2 max HP when at 1/2 max HP or less. Confuses some users. Single use.",
+		desc: "Restores 1/2 max HP at 1/4 max HP or less; confuses if -Def Nature. Single use.",
 	},
 	"icegem": {
 		id: "icegem",
@@ -3087,7 +3087,7 @@ exports.BattleItems = {
 			type: "Ghost",
 		},
 		onUpdate: function (pokemon) {
-			if (pokemon.hp <= pokemon.maxhp / 2) {
+			if (pokemon.hp <= pokemon.maxhp / 4) {
 				pokemon.eatItem();
 			}
 		},
@@ -3102,7 +3102,7 @@ exports.BattleItems = {
 		},
 		num: 161,
 		gen: 3,
-		desc: "Restores 1/2 max HP when at 1/2 max HP or less. Confuses some users. Single use.",
+		desc: "Restores 1/2 max HP at 1/4 max HP or less; confuses if -Spe Nature. Single use.",
 	},
 	"magostberry": {
 		id: "magostberry",
@@ -5589,7 +5589,7 @@ exports.BattleItems = {
 			type: "Rock",
 		},
 		onUpdate: function (pokemon) {
-			if (pokemon.hp <= pokemon.maxhp / 2) {
+			if (pokemon.hp <= pokemon.maxhp / 4) {
 				pokemon.eatItem();
 			}
 		},
@@ -5604,7 +5604,7 @@ exports.BattleItems = {
 		},
 		num: 160,
 		gen: 3,
-		desc: "Restores 1/2 max HP when at 1/2 max HP or less. Confuses some users. Single use.",
+		desc: "Restores 1/2 max HP at 1/4 max HP or less; confuses if -SpA Nature. Single use.",
 	},
 	"wiseglasses": {
 		id: "wiseglasses",
