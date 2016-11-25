@@ -18,8 +18,27 @@ exports.BattleMovedex = {
 	},
 	destinybond: {
 		inherit: true,
-		onPrepareHit: function () {},
-		onHit: function () {},
+		effect: {
+			onStart: function (pokemon) {
+				this.add('-singlemove', pokemon, 'Destiny Bond');
+			},
+			onFaint: function (target, source, effect) {
+				if (!source || !effect || target.side === source.side) return;
+				if (effect.effectType === 'Move' && !effect.isFutureMove) {
+					this.add('-activate', target, 'move: Destiny Bond');
+					source.faint();
+				}
+			},
+			onBeforeMovePriority: 100,
+			onBeforeMove: function (pokemon, target, move) {
+				this.debug('removing Destiny Bond before attack');
+				pokemon.removeVolatile('destinybond');
+			},
+			onBeforeSwitchOutPriority: 1,
+			onBeforeSwitchOut: function (pokemon) {
+				pokemon.removeVolatile('destinybond');
+			},
+		},
 	},
 	diamondstorm: {
 		inherit: true,
