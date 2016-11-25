@@ -11,13 +11,18 @@ exports.BattleItems = {
 	},
 	aguavberry: {
 		inherit: true,
+		onUpdate: function (pokemon) {
+			if (pokemon.hp <= pokemon.maxhp / 2) {
+				pokemon.eatItem();
+			}
+		},
 		onEat: function (pokemon) {
 			this.heal(pokemon.maxhp / 8);
 			if (pokemon.getNature().minus === 'spd') {
 				pokemon.addVolatile('confusion');
 			}
 		},
-		desc: "Restores 1/8 max HP when at 1/2 max HP or less. Confuses some users. Single use.",
+		desc: "Restores 1/8 max HP at 1/2 max HP or less; confuses if -SpD Nature. Single use.",
 	},
 	altarianite: {
 		inherit: true,
@@ -53,13 +58,18 @@ exports.BattleItems = {
 	},
 	figyberry: {
 		inherit: true,
+		onUpdate: function (pokemon) {
+			if (pokemon.hp <= pokemon.maxhp / 2) {
+				pokemon.eatItem();
+			}
+		},
 		onEat: function (pokemon) {
 			this.heal(pokemon.maxhp / 8);
 			if (pokemon.getNature().minus === 'atk') {
 				pokemon.addVolatile('confusion');
 			}
 		},
-		desc: "Restores 1/8 max HP when at 1/2 max HP or less. Confuses some users. Single use.",
+		desc: "Restores 1/8 max HP at 1/2 max HP or less; confuses if -Atk Nature. Single use.",
 	},
 	galladite: {
 		inherit: true,
@@ -79,13 +89,18 @@ exports.BattleItems = {
 	},
 	iapapaberry: {
 		inherit: true,
+		onUpdate: function (pokemon) {
+			if (pokemon.hp <= pokemon.maxhp / 2) {
+				pokemon.eatItem();
+			}
+		},
 		onEat: function (pokemon) {
 			this.heal(pokemon.maxhp / 8);
 			if (pokemon.getNature().minus === 'def') {
 				pokemon.addVolatile('confusion');
 			}
 		},
-		desc: "Restores 1/8 max HP when at 1/2 max HP or less. Confuses some users. Single use.",
+		desc: "Restores 1/8 max HP at 1/2 max HP or less; confuses if -Def Nature. Single use.",
 	},
 	latiasite: {
 		inherit: true,
@@ -101,13 +116,18 @@ exports.BattleItems = {
 	},
 	magoberry: {
 		inherit: true,
+		onUpdate: function (pokemon) {
+			if (pokemon.hp <= pokemon.maxhp / 2) {
+				pokemon.eatItem();
+			}
+		},
 		onEat: function (pokemon) {
 			this.heal(pokemon.maxhp / 8);
 			if (pokemon.getNature().minus === 'spe') {
 				pokemon.addVolatile('confusion');
 			}
 		},
-		desc: "Restores 1/8 max HP when at 1/2 max HP or less. Confuses some users. Single use.",
+		desc: "Restores 1/8 max HP at 1/2 max HP or less; confuses if -Spe Nature. Single use.",
 	},
 	manectite: {
 		inherit: true,
@@ -174,12 +194,17 @@ exports.BattleItems = {
 	},
 	wikiberry: {
 		inherit: true,
+		onUpdate: function (pokemon) {
+			if (pokemon.hp <= pokemon.maxhp / 2) {
+				pokemon.eatItem();
+			}
+		},
 		onEat: function (pokemon) {
 			this.heal(pokemon.maxhp / 8);
 			if (pokemon.getNature().minus === 'spa') {
 				pokemon.addVolatile('confusion');
 			}
 		},
-		desc: "Restores 1/8 max HP when at 1/2 max HP or less. Confuses some users. Single use.",
+		desc: "Restores 1/8 max HP at 1/2 max HP or less; confuses if -SpA Nature. Single use.",
 	},
 };
