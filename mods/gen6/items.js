@@ -9,6 +9,16 @@ exports.BattleItems = {
 		inherit: true,
 		isUnreleased: false,
 	},
+	aguavberry: {
+		inherit: true,
+		onEat: function (pokemon) {
+			this.heal(pokemon.maxhp / 8);
+			if (pokemon.getNature().minus === 'spd') {
+				pokemon.addVolatile('confusion');
+			}
+		},
+		desc: "Restores 1/8 max HP when at 1/2 max HP or less. Confuses some users. Single use.",
+	},
 	altarianite: {
 		inherit: true,
 		isUnreleased: false,
@@ -41,6 +51,16 @@ exports.BattleItems = {
 		inherit: true,
 		isUnreleased: false,
 	},
+	figyberry: {
+		inherit: true,
+		onEat: function (pokemon) {
+			this.heal(pokemon.maxhp / 8);
+			if (pokemon.getNature().minus === 'atk') {
+				pokemon.addVolatile('confusion');
+			}
+		},
+		desc: "Restores 1/8 max HP when at 1/2 max HP or less. Confuses some users. Single use.",
+	},
 	galladite: {
 		inherit: true,
 		isUnreleased: false,
@@ -57,6 +77,16 @@ exports.BattleItems = {
 		inherit: true,
 		isUnreleased: false,
 	},
+	iapapaberry: {
+		inherit: true,
+		onEat: function (pokemon) {
+			this.heal(pokemon.maxhp / 8);
+			if (pokemon.getNature().minus === 'def') {
+				pokemon.addVolatile('confusion');
+			}
+		},
+		desc: "Restores 1/8 max HP when at 1/2 max HP or less. Confuses some users. Single use.",
+	},
 	latiasite: {
 		inherit: true,
 		isUnreleased: false,
@@ -68,6 +98,16 @@ exports.BattleItems = {
 	lopunnite: {
 		inherit: true,
 		isUnreleased: false,
+	},
+	magoberry: {
+		inherit: true,
+		onEat: function (pokemon) {
+			this.heal(pokemon.maxhp / 8);
+			if (pokemon.getNature().minus === 'spe') {
+				pokemon.addVolatile('confusion');
+			}
+		},
+		desc: "Restores 1/8 max HP when at 1/2 max HP or less. Confuses some users. Single use.",
 	},
 	manectite: {
 		inherit: true,
@@ -131,5 +171,15 @@ exports.BattleItems = {
 		num: 225,
 		gen: 3,
 		desc: "If holder is a Latias or a Latios, its Sp. Atk and Sp. Def are 1.5x.",
+	},
+	wikiberry: {
+		inherit: true,
+		onEat: function (pokemon) {
+			this.heal(pokemon.maxhp / 8);
+			if (pokemon.getNature().minus === 'spa') {
+				pokemon.addVolatile('confusion');
+			}
+		},
+		desc: "Restores 1/8 max HP when at 1/2 max HP or less. Confuses some users. Single use.",
 	},
 };

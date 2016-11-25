@@ -126,14 +126,14 @@ exports.BattleItems = {
 			if (!this.runEvent('TryHeal', pokemon)) return false;
 		},
 		onEat: function (pokemon) {
-			this.heal(pokemon.maxhp / 8);
+			this.heal(pokemon.maxhp / 2);
 			if (pokemon.getNature().minus === 'spd') {
 				pokemon.addVolatile('confusion');
 			}
 		},
 		num: 162,
 		gen: 3,
-		desc: "Restores 1/8 max HP when at 1/2 max HP or less. May confuse. Single use.",
+		desc: "Restores 1/2 max HP when at 1/2 max HP or less. Confuses some users. Single use.",
 	},
 	"airballoon": {
 		id: "airballoon",
@@ -1681,14 +1681,14 @@ exports.BattleItems = {
 			if (!this.runEvent('TryHeal', pokemon)) return false;
 		},
 		onEat: function (pokemon) {
-			this.heal(pokemon.maxhp / 8);
+			this.heal(pokemon.maxhp / 2);
 			if (pokemon.getNature().minus === 'atk') {
 				pokemon.addVolatile('confusion');
 			}
 		},
 		num: 159,
 		gen: 3,
-		desc: "Restores 1/8 max HP when at 1/2 max HP or less. May confuse. Single use.",
+		desc: "Restores 1/2 max HP when at 1/2 max HP or less. Confuses some users. Single use.",
 	},
 	"firegem": {
 		id: "firegem",
@@ -2383,14 +2383,14 @@ exports.BattleItems = {
 			if (!this.runEvent('TryHeal', pokemon)) return false;
 		},
 		onEat: function (pokemon) {
-			this.heal(pokemon.maxhp / 8);
+			this.heal(pokemon.maxhp / 2);
 			if (pokemon.getNature().minus === 'def') {
 				pokemon.addVolatile('confusion');
 			}
 		},
 		num: 163,
 		gen: 3,
-		desc: "Restores 1/8 max HP when at 1/2 max HP or less. May confuse. Single use.",
+		desc: "Restores 1/2 max HP when at 1/2 max HP or less. Confuses some users. Single use.",
 	},
 	"icegem": {
 		id: "icegem",
@@ -3095,14 +3095,14 @@ exports.BattleItems = {
 			if (!this.runEvent('TryHeal', pokemon)) return false;
 		},
 		onEat: function (pokemon) {
-			this.heal(pokemon.maxhp / 8);
+			this.heal(pokemon.maxhp / 2);
 			if (pokemon.getNature().minus === 'spe') {
 				pokemon.addVolatile('confusion');
 			}
 		},
 		num: 161,
 		gen: 3,
-		desc: "Restores 1/8 max HP when at 1/2 max HP or less. May confuse. Single use.",
+		desc: "Restores 1/2 max HP when at 1/2 max HP or less. Confuses some users. Single use.",
 	},
 	"magostberry": {
 		id: "magostberry",
@@ -5597,14 +5597,14 @@ exports.BattleItems = {
 			if (!this.runEvent('TryHeal', pokemon)) return false;
 		},
 		onEat: function (pokemon) {
-			this.heal(pokemon.maxhp / 8);
+			this.heal(pokemon.maxhp / 2);
 			if (pokemon.getNature().minus === 'spa') {
 				pokemon.addVolatile('confusion');
 			}
 		},
 		num: 160,
 		gen: 3,
-		desc: "Restores 1/8 max HP when at 1/2 max HP or less. May confuse. Single use.",
+		desc: "Restores 1/2 max HP when at 1/2 max HP or less. Confuses some users. Single use.",
 	},
 	"wiseglasses": {
 		id: "wiseglasses",
