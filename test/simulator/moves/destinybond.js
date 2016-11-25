@@ -8,7 +8,7 @@ let battle;
 describe(`Destiny Bond`, function () {
 	afterEach(() => battle.destroy());
 
-	it.skip(`should fail if used consecutively`, function () {
+	it(`should fail if used consecutively`, function () {
 		battle = common.createBattle([
 			[{species: "Gastly", ability: 'levitate', moves: ['destinybond']}, {species: "Clefable", ability: 'unaware', moves: ['calmmind']}],
 			[{species: "Metagross", ability: 'clearbody', moves: ['psychic', 'calmmind']}, {species: "Clefable", ability: 'unaware', moves: ['calmmind']}],
@@ -41,6 +41,17 @@ describe(`Destiny Bond`, function () {
 		battle.p1.chooseMove('destinybond').foe.chooseMove('psychic');
 		assert.fainted(battle.p1.active[0]);
 		assert.fainted(battle.p2.active[0]);
+	});
+
+	it(`should be removed the next turn if a fast user is asleep`, function () {
+		battle = common.createBattle([
+			[{species: "Gastly", ability: 'levitate', item: '', moves: ['destinybond', 'spite']}, {species: "Clefable", ability: 'unaware', moves: ['calmmind']}],
+			[{species: "Hypno", ability: 'insomnia', item: 'laggingtail', moves: ['psychic', 'hypnosis']}, {species: "Clefable", ability: 'unaware', moves: ['calmmind']}],
+		]);
+		battle.p1.chooseMove('destinybond').foe.chooseMove('hypnosis');
+		battle.commitDecisions();
+		assert.fainted(battle.p1.active[0]);
+		assert.false.fainted(battle.p2.active[0]);
 	});
 });
 
