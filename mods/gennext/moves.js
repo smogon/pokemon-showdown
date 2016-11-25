@@ -638,6 +638,9 @@ exports.BattleMovedex = {
 				this.add('-activate', pokemon, 'Bide');
 				return false;
 			},
+			onMoveAborted: function (pokemon) {
+				pokemon.removeVolatile('bide');
+			},
 		},
 	},
 	/******************************************************************
