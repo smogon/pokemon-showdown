@@ -93,11 +93,11 @@ exports.Formats = [
 		},
 	},
 
-	// SM Doubles
+	// SM Doubles/Triples
 	///////////////////////////////////////////////////////////////////
 
 	{
-		section: "SM Doubles (beta)",
+		section: "SM Doubles/Triples (beta)",
 	},
 	{
 		name: "Random Doubles Battle",
