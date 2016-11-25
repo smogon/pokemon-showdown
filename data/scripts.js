@@ -767,8 +767,6 @@ exports.BattleScripts = {
 		let template = this.getTemplate(pokemon.canMegaEvo);
 		let side = pokemon.side;
 
-		pokemon.willMega = false;
-
 		// Pokémon affected by Sky Drop cannot mega evolve. Enforce it here for now.
 		let foeActive = side.foe.active;
 		for (let i = 0; i < foeActive.length; i++) {
