@@ -1229,14 +1229,13 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {mirror: 1, authentic: 1, mystery: 1},
-		onHit: function (target, source) {
+		onHit: function (target, source, move) {
 			if (target.item) {
 				return false;
 			}
 			let yourItem = source.takeItem();
-			if (!yourItem || (yourItem.onTakeItem && yourItem.onTakeItem(yourItem, target) === false)) {
-				return false;
-			}
+			if (!yourItem) return false;
+			if (!this.singleEvent('TakeItem', yourItem, source.itemData, source, target, move, yourItem)) return;
 			if (!target.setItem(yourItem)) {
 				source.item = yourItem.id;
 				return false;
@@ -5424,14 +5423,14 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, mystery: 1},
-		beforeMoveCallback: function (pokemon) {
-			if (pokemon.ignoringItem()) return;
-			let item = pokemon.getItem();
-			let noFling = item.onTakeItem && item.onTakeItem(item, pokemon) === false;
-			if (item.fling && !noFling) {
-				pokemon.addVolatile('fling');
-				pokemon.setItem('');
-				this.runEvent('AfterUseItem', pokemon, null, null, item);
+		beforeMoveCallback: function (source, target, move) {
+			if (source.ignoringItem()) return;
+			let item = source.getItem();
+			if (!this.singleEvent('TakeItem', item, source.itemData, source, source, move, item)) return;
+			if (item.fling) {
+				source.addVolatile('fling');
+				source.setItem('');
+				this.runEvent('AfterUseItem', source, null, null, item);
 			}
 		},
 		onPrepareHit: function (target, source, move) {
@@ -8860,10 +8859,10 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
 		onBasePowerPriority: 4,
-		onBasePower: function (basePower, pokemon, target) {
+		onBasePower: function (basePower, source, target, move) {
 			let item = target.getItem();
-			let noKnockOff = item.onTakeItem && item.onTakeItem(item, target) === false;
-			if (item.id && !noKnockOff) {
+			if (!this.singleEvent('TakeItem', item, source.itemData, source, source, move, item)) return;
+			if (item.id) {
 				return this.chainModify(1.5);
 			}
 		},
@@ -16648,11 +16647,15 @@ exports.BattleMovedex = {
 				return null;
 			}
 		},
-		onHit: function (target, source) {
+		onHit: function (target, source, move) {
 			let yourItem = target.takeItem(source);
 			let myItem = source.takeItem();
-			if (target.item || source.item || (!yourItem && !myItem) ||
-					(myItem.onTakeItem && myItem.onTakeItem(myItem, target) === false)) {
+			if (target.item || source.item || (!yourItem && !myItem)) {
+				if (yourItem) target.item = yourItem.id;
+				if (myItem) source.item = myItem.id;
+				return false;
+			}
+			if (!this.singleEvent('TakeItem', myItem, source.itemData, source, target, move, myItem)) {
 				if (yourItem) target.item = yourItem.id;
 				if (myItem) source.item = myItem.id;
 				return false;
@@ -17598,11 +17601,15 @@ exports.BattleMovedex = {
 				return null;
 			}
 		},
-		onHit: function (target, source) {
+		onHit: function (target, source, move) {
 			let yourItem = target.takeItem(source);
 			let myItem = source.takeItem();
-			if (target.item || source.item || (!yourItem && !myItem) ||
-					(myItem.onTakeItem && myItem.onTakeItem(myItem, target) === false)) {
+			if (target.item || source.item || (!yourItem && !myItem)) {
+				if (yourItem) target.item = yourItem.id;
+				if (myItem) source.item = myItem.id;
+				return false;
+			}
+			if (!this.singleEvent('TakeItem', myItem, source.itemData, source, target, move, myItem)) {
 				if (yourItem) target.item = yourItem.id;
 				if (myItem) source.item = myItem.id;
 				return false;

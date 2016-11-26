@@ -3501,10 +3501,8 @@ exports.BattleAbilities = {
 		shortDesc: "If an ally uses its item, this Pokemon gives its item to that ally immediately.",
 		onAllyAfterUseItem: function (item, pokemon) {
 			let sourceItem = this.effectData.target.getItem();
-			let noSharing = sourceItem.onTakeItem && sourceItem.onTakeItem(sourceItem, pokemon) === false;
-			if (!sourceItem || noSharing) {
-				return;
-			}
+			if (!sourceItem) return;
+			if (!this.singleEvent('TakeItem', item, this.effectData.target.itemData, this.effectData.target, pokemon, this.effectData, item)) return;
 			sourceItem = this.effectData.target.takeItem();
 			if (!sourceItem) {
 				return;
