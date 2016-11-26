@@ -465,7 +465,6 @@ exports.Formats = [
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3496773/\">1v1</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3536109/\">1v1 Resources</a>",
 		],
-		section: 'Other Metagames',
 
 		teamLength: {
 			validate: [1, 3],
