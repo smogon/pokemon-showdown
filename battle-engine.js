@@ -3531,6 +3531,9 @@ class Battle extends Tools.BattleDex {
 				case 'intimidate': case 'gooey': case 'tanglinghair':
 					this.add(msg, target, i, boostBy);
 					break;
+				case 'zpower':
+					this.add(msg, target, i, boostBy, '[zeffect]');
+					break;
 				default:
 					if (effect.effectType === 'Move') {
 						this.add(msg, target, i, boostBy);
@@ -3670,6 +3673,9 @@ class Battle extends Tools.BattleDex {
 			this.add('-heal', target, target.getHealth, '[from] drain', '[of] ' + source);
 			break;
 		case 'wish':
+			break;
+		case 'zpower':
+			this.add('-heal', target, target.getHealth, '[zeffect]');
 			break;
 		default:
 			if (effect.effectType === 'Move') {
