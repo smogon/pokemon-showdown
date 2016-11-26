@@ -797,21 +797,6 @@ exports.BattleScripts = {
 		return true;
 	},
 
-	runProtect: function (move, attacker) {
-		if (move.isZ && move.basePower) {
-			move.basePower = Math.floor(move.basePower / 4);
-		}
-		if (!move.flags['protect']) return false;
-		let lockedmove = attacker.getVolatile('lockedmove');
-		if (lockedmove) {
-			// Outrage counter is reset
-			if (attacker.volatiles['lockedmove'].duration === 2) {
-				delete attacker.volatiles['lockedmove'];
-			}
-		}
-		return true;
-	},
-
 	isAdjacent: function (pokemon1, pokemon2) {
 		if (pokemon1.fainted || pokemon2.fainted) return false;
 		if (pokemon1.side === pokemon2.side) return Math.abs(pokemon1.position - pokemon2.position) === 1;
