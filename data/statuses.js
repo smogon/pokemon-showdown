@@ -382,7 +382,6 @@ exports.BattleStatuses = {
 			this.effectData.counter = 3;
 		},
 		onStallMove: function () {
-			if (this.activeMove.id === 'destinybond') return true;
 			// this.effectData.counter should never be undefined here.
 			// However, just in case, use 1 if it is undefined.
 			let counter = this.effectData.counter || 1;
