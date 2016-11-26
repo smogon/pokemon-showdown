@@ -55783,12 +55783,6 @@ exports.BattleLearnsets = {
 		willowisp: ["7M", "6M"],
 		worryseed: ["7L11", "6T", "6L11"],
 	}},
-	pumpkaboosuper: {learnset: {
-		astonish: ["6S0"],
-		scaryface: ["6S0"],
-		shadowsneak: ["6S0"],
-		trickortreat: ["6S0"],
-	}},
 	gourgeist: {learnset: {
 		astonish: ["7L1", "6L1"],
 		attract: ["7M", "6M"],

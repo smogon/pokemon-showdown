@@ -846,9 +846,8 @@ class Validator {
 				template = tools.getTemplate(template.prevo);
 				if (template.gen > Math.max(2, tools.gen)) template = null;
 				if (template && !template.abilities['H']) isHidden = false;
-			} else if (template.baseSpecies !== template.species &&
-				(template.baseSpecies === 'Rotom' || template.baseSpecies === 'Pumpkaboo')) {
-				// only Rotom and Pumpkaboo formes inherit learnsets from base
+			} else if (template.baseSpecies !== template.species && template.baseSpecies === 'Rotom') {
+				// only Rotom inherit learnsets from base
 				template = tools.getTemplate(template.baseSpecies);
 			} else {
 				template = null;
