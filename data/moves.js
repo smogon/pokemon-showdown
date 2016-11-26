@@ -1014,13 +1014,19 @@ exports.BattleMovedex = {
 			},
 			onTryHitPriority: 3,
 			onTryHit: function (target, source, move) {
-				if (this.runProtect(move, source)) {
-					this.add('-activate', target, 'move: Protect');
-					if (move.flags['contact']) {
-						source.trySetStatus('psn');
+				if (!move.flags['protect']) return;
+				this.add('-activate', target, 'move: Protect');
+				let lockedmove = source.getVolatile('lockedmove');
+				if (lockedmove) {
+					// Outrage counter is reset
+					if (source.volatiles['lockedmove'].duration === 2) {
+						delete source.volatiles['lockedmove'];
 					}
-					return null;
 				}
+				if (move.flags['contact']) {
+					source.trySetStatus('psn');
+				}
+				return null;
 			},
 		},
 		secondary: false,
@@ -8819,13 +8825,19 @@ exports.BattleMovedex = {
 			},
 			onTryHitPriority: 3,
 			onTryHit: function (target, source, move) {
-				if (this.runProtect(move, source)) {
-					this.add('-activate', target, 'move: Protect');
-					if (move.flags['contact']) {
-						this.boost({atk:-2}, source, target, this.getMove("King's Shield"));
+				if (!move.flags['protect'] || move.category === 'Status') return;
+				this.add('-activate', target, 'move: Protect');
+				let lockedmove = source.getVolatile('lockedmove');
+				if (lockedmove) {
+					// Outrage counter is reset
+					if (source.volatiles['lockedmove'].duration === 2) {
+						delete source.volatiles['lockedmove'];
 					}
-					return null;
 				}
+				if (move.flags['contact']) {
+					this.boost({atk:-2}, source, target, this.getMove("King's Shield"));
+				}
+				return null;
 			},
 		},
 		secondary: false,
@@ -12184,10 +12196,16 @@ exports.BattleMovedex = {
 			},
 			onTryHitPriority: 3,
 			onTryHit: function (target, source, move) {
-				if (this.runProtect(move, source)) {
-					this.add('-activate', target, 'move: Protect');
-					return null;
+				if (!move.flags['protect']) return;
+				this.add('-activate', target, 'move: Protect');
+				let lockedmove = source.getVolatile('lockedmove');
+				if (lockedmove) {
+					// Outrage counter is reset
+					if (source.volatiles['lockedmove'].duration === 2) {
+						delete source.volatiles['lockedmove'];
+					}
 				}
+				return null;
 			},
 		},
 		secondary: false,
@@ -15329,12 +15347,17 @@ exports.BattleMovedex = {
 			},
 			onTryHitPriority: 3,
 			onTryHit: function (target, source, move) {
-				if (this.runProtect(move, source)) {
-					this.add('-activate', target, 'move: Protect');
-					if (move.flags['contact']) {
-						this.damage(source.maxhp / 8, source, target);
+				if (!move.flags['protect']) return;
+				this.add('-activate', target, 'move: Protect');
+				let lockedmove = source.getVolatile('lockedmove');
+				if (lockedmove) {
+					// Outrage counter is reset
+					if (source.volatiles['lockedmove'].duration === 2) {
+						delete source.volatiles['lockedmove'];
 					}
-					return null;
+				}
+				if (move.flags['contact']) {
+					this.damage(source.maxhp / 8, source, target);
 				}
 				return null;
 			},
