@@ -5810,12 +5810,15 @@ exports.BattleFormatsData = {
 		tier: "New",
 	},
 	oricoriopompom: {
+		randomBattleMoves: ["revelationdance", "hurricane", "toxic", "roost", "uturn"],
 		tier: "New",
 	},
 	oricoriopau: {
+		randomBattleMoves: ["revelationdance", "hurricane", "toxic", "roost", "uturn"],
 		tier: "New",
 	},
 	oricoriosensu: {
+		randomBattleMoves: ["revelationdance", "hurricane", "toxic", "roost", "uturn"],
 		tier: "New",
 	},
 	cutiefly: {
