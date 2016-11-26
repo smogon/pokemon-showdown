@@ -118,10 +118,12 @@ exports.BattleScripts = {
 		}
 		this.addMove('move', pokemon, movename, target + attrs);
 
-		if (zMove && move.zMoveBoost) {
-			this.boost(move.zMoveBoost, pokemon, pokemon, move);
+		if (zMove && move.category !== 'Status') {
+			this.attrLastMove('[zeffect]');
+		} else if (zMove && move.zMoveBoost) {
+			this.boost(move.zMoveBoost, pokemon, pokemon, {id: 'zpower'});
 		} else if (zMove && move.zMoveEffect === 'heal') {
-			this.heal(pokemon.maxhp, pokemon, pokemon, move);
+			this.heal(pokemon.maxhp, pokemon, pokemon, {id: 'zpower'});
 		} else if (zMove && move.zMoveEffect === 'healreplacement') {
 			pokemon.side.addSideCondition('healingwish', pokemon, move);
 		} else if (zMove && move.zMoveEffect === 'clearnegativeboost') {
@@ -134,14 +136,14 @@ exports.BattleScripts = {
 			pokemon.setBoost(boosts);
 			this.add('-clearnegativeboost', pokemon, '[zeffect]');
 		} else if (zMove && move.zMoveEffect === 'redirect') {
-			pokemon.addVolatile('followme', pokemon, move);
+			pokemon.addVolatile('followme', pokemon, {id: 'zpower'});
 		} else if (zMove && move.zMoveEffect === 'crit1') {
-			pokemon.addVolatile('crit1', pokemon, move);
+			pokemon.addVolatile('crit1', pokemon, {id: 'zpower'});
 		} else if (zMove && move.zMoveEffect === 'curse') {
 			if (pokemon.hasType('Ghost')) {
-				this.heal(pokemon.maxhp, pokemon, pokemon, move);
+				this.heal(pokemon.maxhp, pokemon, pokemon, {id: 'zpower'});
 			} else {
-				this.boost({atk: 1}, pokemon, pokemon, move);
+				this.boost({atk: 1}, pokemon, pokemon, {id: 'zpower'});
 			}
 		}
 
@@ -749,6 +751,7 @@ exports.BattleScripts = {
 	runZMove: function (move, pokemon, target, sourceEffect) {
 		// Limit one Z move per side
 		let zMove = this.getZMove(move, pokemon);
+		this.add("-zmove", pokemon);
 		this.runMove(move, pokemon, target, sourceEffect, zMove);
 	},
 
