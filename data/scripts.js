@@ -751,7 +751,7 @@ exports.BattleScripts = {
 	runZMove: function (move, pokemon, target, sourceEffect) {
 		// Limit one Z move per side
 		let zMove = this.getZMove(move, pokemon);
-		this.add("-zmove", pokemon);
+		this.add("-zpower", pokemon);
 		this.runMove(move, pokemon, target, sourceEffect, zMove);
 	},
 
