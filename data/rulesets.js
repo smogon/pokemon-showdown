@@ -203,7 +203,7 @@ exports.BattleFormats = {
 			let battleForme = template.battleOnly && template.species;
 			if (battleForme) {
 				if (template.requiredAbility && set.ability !== template.requiredAbility) {
-					problems.push("" + template.species + " transforms in-battle with " + template.requiredAbility + "."); // Darmanitan-Zen, Greninja-Ash, Zygarde-Complete
+					problems.push("" + template.species + " transforms in-battle with " + template.requiredAbility + "."); // Darmanitan-Zen, Zygarde-Complete
 				}
 				if (template.requiredItems && !template.requiredItems.includes(item.name)) {
 					problems.push("" + template.species + " transforms in-battle with " + Chat.plural(template.requiredItems.length, "either ") + template.requiredItems.join(" or ") + '.'); // Mega or Primal
@@ -259,6 +259,12 @@ exports.BattleFormats = {
 			}
 
 			return problems;
+		},
+		onValidateSet: function (set) {
+			let template = this.getTemplate(set.species || set.name);
+			if (template.species === 'Greninja-Ash') {
+				set.species = 'Greninja';
+			}
 		},
 	},
 	hoennpokedex: {
