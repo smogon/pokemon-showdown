@@ -5297,8 +5297,6 @@ exports.BattleFormatsData = {
 	},
 	greninjaash: {
 		gen: 7,
-		requiredAbility: "Battle Bond",
-		battleOnly: true,
 	},
 	bunnelby: {
 		randomBattleMoves: ["agility", "earthquake", "return", "quickattack", "uturn", "stoneedge", "spikes", "bounce"],
