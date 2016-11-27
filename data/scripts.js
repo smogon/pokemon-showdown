@@ -717,6 +717,8 @@ exports.BattleScripts = {
 			if (pokemon.side.zMoveUsed) return;
 			if (!item.zMove) return;
 			if (item.zMoveUser && !item.zMoveUser.includes(pokemon.species)) return;
+			let moveData = pokemon.getMoveData(move);
+			if (!moveData || !moveData.pp) return; // Draining the PP of the base move prevents the corresponding Z-move from being used.
 		}
 
 		if (item.zMoveFrom) {
