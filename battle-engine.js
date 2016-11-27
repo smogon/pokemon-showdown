@@ -1516,6 +1516,24 @@ class BattleSide {
 			}
 		}
 
+		let move = this.battle.getMove(moveid);
+		let zMove = megaOrZ === 'zmove' ? this.battle.getZMove(move, activePokemon) : '';
+		if (megaOrZ === 'zmove') {
+			if (!zMove || this.choiceData.zmove) {
+				this.emitCallback('cantz', activePokemon); // TODO: The client shouldn't have sent this request in the first place.
+				this.battle.debug(`Can't use an unexpected z-move`);
+				return false;
+			}
+			targetType = this.battle.getMove(zMove).target;
+
+			if (!targetLoc && this.active.length >= 2) {
+				// Compatibility fix:
+				// Clients failed to select a target for Z-Moves based on spread moves
+				// in the early stages of Gen 7 implementation.
+				targetLoc = 1;
+			}
+		}
+
 		/**
 		 * Validate targetting
 		 */
@@ -1540,17 +1558,19 @@ class BattleSide {
 		/**
 		 *  Check whether the chosen move is really valid, accounting for
 		 *  effects active in battle which could be unknown for the client.
+		 *  Note that a Z-Move cannot be disabled.
+		 *
 		 *  Upon reaching this stage, if a new decision is required, a server
 		 *  reply is mandatory.
 		 */
 
 		const moves = activePokemon.getMoves();
-		if (!moves.length) {
+		if (!moves.length && !zMove) {
 			// Override decision and use Struggle if there are no enabled moves with PP
 			// Gen 4 and earlier announce a Pokemon has no moves left before the turn begins, and only to that player's side.
 			if (this.gen <= 4) this.send('-activate', activePokemon, 'move: Struggle');
 			moveid = 'struggle';
-		} else {
+		} else if (!zMove) {
 			// At least a move is valid. Check if the chosen one is.
 			// This may include Struggle in Hackmons.
 			let isEnabled = false;
@@ -1587,12 +1607,6 @@ class BattleSide {
 				choice: 'megaEvo',
 				pokemon: activePokemon,
 			});
-		} else if (megaOrZ === 'zmove') {
-			if (this.zMoveUsed || this.choiceData.zmove) {
-				this.emitCallback('cantz', activePokemon); // TODO: The client shouldn't have sent this request in the first place.
-				this.battle.debug(`Can't issue more than one Z-Move command`);
-				return false;
-			}
 		}
 
 		decision.push({
