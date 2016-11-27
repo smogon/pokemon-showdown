@@ -1477,7 +1477,7 @@ class BattleSide {
 		return this.choiceData.choices.length >= this.active.length;
 	}
 	chooseMove(data, targetLoc, megaOrZ, dontPlay) {
-		if (megaOrZ === true) megaOrZ = ' mega';
+		if (megaOrZ === true) megaOrZ = 'mega';
 		if (!targetLoc) targetLoc = 0;
 		const activePokemon = this.active[this.choiceData.choices.length];
 
@@ -1574,7 +1574,7 @@ class BattleSide {
 
 		const decision = [];
 
-		if (megaOrZ === ' mega') {
+		if (megaOrZ === 'mega') {
 			if (!activePokemon.canMegaEvo || this.choiceData.mega) {
 				this.emitCallback('cantmega', activePokemon); // TODO: The client shouldn't have sent this request in the first place.
 				this.battle.debug(`Can't issue more than one Mega-Evolution command`);
@@ -1587,7 +1587,7 @@ class BattleSide {
 				choice: 'megaEvo',
 				pokemon: activePokemon,
 			});
-		} else if (megaOrZ === ' zmove') {
+		} else if (megaOrZ === 'zmove') {
 			if (this.zMoveUsed || this.choiceData.zmove) {
 				this.emitCallback('cantz', activePokemon); // TODO: The client shouldn't have sent this request in the first place.
 				this.battle.debug(`Can't issue more than one Z-Move command`);
@@ -1600,11 +1600,11 @@ class BattleSide {
 			pokemon: activePokemon,
 			targetLoc: targetLoc,
 			move: moveid,
-			mega: megaOrZ === ' mega',
-			zmove: megaOrZ === ' zmove',
+			mega: megaOrZ === 'mega',
+			zmove: megaOrZ === 'zmove',
 		});
 
-		this.choiceData.choices.push('move ' + moveid + (targetLoc ? ' ' + targetLoc : '') + (megaOrZ || ''));
+		this.choiceData.choices.push('move ' + moveid + (targetLoc ? ' ' + targetLoc : '') + (megaOrZ ? ' ' + megaOrZ : ''));
 		this.choiceData.decisions.push(decision);
 
 		if (activePokemon.maybeDisabled) {
@@ -1612,8 +1612,8 @@ class BattleSide {
 		}
 
 		if (megaOrZ) {
-			if (megaOrZ === ' mega') this.choiceData.mega = (this.choiceData.mega || 0) + 1;
-			if (megaOrZ === ' zmove') this.choiceData.zmove = (this.choiceData.zmove || 0) + 1;
+			if (megaOrZ === 'mega') this.choiceData.mega = (this.choiceData.mega || 0) + 1;
+			if (megaOrZ === 'zmove') this.choiceData.zmove = (this.choiceData.zmove || 0) + 1;
 		}
 
 		if (!dontPlay && !this.battle.checkDecisions()) return this; // allow chaining
@@ -4644,9 +4644,9 @@ class Battle extends Tools.BattleDex {
 					targetLoc = parseInt(data.slice(-2));
 					data = data.slice(0, data.lastIndexOf(' '));
 				}
-				let willMega = data.endsWith(' mega') ? ' mega' : '';
+				let willMega = data.endsWith(' mega') ? 'mega' : '';
 				if (willMega) data = data.slice(0, -5);
-				let willZ = data.endsWith(' zmove') ? ' zmove' : '';
+				let willZ = data.endsWith(' zmove') ? 'zmove' : '';
 				if (willZ) data = data.slice(0, -6);
 				let move = data; // `move` is expected to be either a one-based index or a move id
 				if (!side.chooseMove(move.trim(), targetLoc, willMega || willZ, true)) return side.undoChoices(i, choiceIndex);
