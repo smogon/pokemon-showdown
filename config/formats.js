@@ -146,7 +146,7 @@ exports.Formats = [
 
 		mod: 'gen7',
 		gameType: 'doubles',
-		maxForcedLevel: 50,
+		forcedLevel: 50,
 		teamLength: {
 			validate: [4, 6],
 			battle: 4,
