@@ -5296,7 +5296,12 @@ exports.BattleFormatsData = {
 		tier: "New",
 	},
 	greninjaash: {
+		eventPokemon: [
+			{"generation": 7, "level": 36, "ivs": {"hp": 20, "atk": 31, "def": 20, "spa": 31, "spd": 20, "spe": 31}, "moves":["watershuriken", "aerialace", "doubleteam", "nightslash"]},
+		],
+		eventOnly: true,
 		gen: 7,
+		tier: "New",
 	},
 	bunnelby: {
 		randomBattleMoves: ["agility", "earthquake", "return", "quickattack", "uturn", "stoneedge", "spikes", "bounce"],
