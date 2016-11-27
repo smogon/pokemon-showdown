@@ -1508,6 +1508,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 4, "level": 5, "moves":["metronome", "tackle", "defensecurl", "selfdestruct"]},
 			{"generation": 4, "level": 5, "gender": "F", "nature": "Relaxed", "abilities":["thickfat"], "moves":["metronome", "odorsleuth", "tackle", "curse"], "pokeball": "cherishball"},
+			{"generation": 7, "level": 5, "isHidden": false, "abilities":["thickfat"], "moves":["tackle", "metronome", "holdback", "happyhour"], "pokeball": "cherishball"},
 		],
 		tier: "LC",
 	},
