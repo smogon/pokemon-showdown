@@ -5911,10 +5911,12 @@ exports.BattleFormatsData = {
 	},
 	oranguru: {
 		randomBattleMoves: ["nastyplot", "psyshock", "focusblast", "thunderbolt"],
+		unreleasedHidden: true,
 		tier: "New",
 	},
 	passimian: {
 		randomBattleMoves: ["rocktomb", "closecombat", "earthquake", "ironhead"],
+		unreleasedHidden: true,
 		tier: "New",
 	},
 	wimpod: {
