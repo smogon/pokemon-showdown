@@ -26,6 +26,7 @@ describe('Focus Sash', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: 'Shedinja', ability: 'wonderguard', item: 'focussash', moves: ['absorb']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Klefki', ability: 'prankster', moves: ['confuseray']}]);
 		const holder = battle.p1.active[0];
+		battle.seed = common.maxRollSeed;
 		battle.commitDecisions();
 		assert.false.holdsItem(holder);
 		assert.false.fainted(holder);
