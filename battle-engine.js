@@ -1524,9 +1524,12 @@ class BattleSide {
 				this.battle.debug(`Can't use an unexpected z-move`);
 				return false;
 			}
-			targetType = this.battle.getMove(zMove).target;
 
-			if (!targetLoc && this.active.length >= 2) {
+			if (move.category !== 'Status') {
+				targetType = this.battle.getMove(zMove).target;
+			}
+
+			if (!targetLoc && this.active.length >= 2 && this.battle.targetTypeChoices(targetType)) {
 				// Compatibility fix:
 				// Clients failed to select a target for Z-Moves based on spread moves
 				// in the early stages of Gen 7 implementation.
