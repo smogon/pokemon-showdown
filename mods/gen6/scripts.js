@@ -15,14 +15,14 @@ exports.BattleScripts = {
 			require('../crashlogger')(err, 'The randbat set generator');
 		}
 
-		if (typeof teamDetails !== 'object') teamDetails = {megaCount: teamDetails};
+		if (typeof teamDetails !== 'object') teamDetails = {megaStone: teamDetails};
 
 		if (template.battleOnly) {
 			// Only change the species. The template has custom moves, and may have different typing and requirements.
 			species = template.baseSpecies;
 		}
 		let battleForme = this.checkBattleForme(template);
-		if (battleForme && battleForme.tier !== 'AG' && (battleForme.isMega ? !teamDetails.megaCount : this.random(2))) {
+		if (battleForme && battleForme.tier !== 'AG' && (battleForme.isMega ? !teamDetails.megaStone : this.random(2))) {
 			template = this.getTemplate(template.otherFormes.length >= 2 ? template.otherFormes[this.random(template.otherFormes.length)] : template.otherFormes[0]);
 		}
 
@@ -259,8 +259,8 @@ exports.BattleScripts = {
 					if (hasMove['thunderbolt'] && !hasMove['raindance']) rejected = true;
 					break;
 				case 'thunderbolt':
-					if (hasMove['discharge'] || (hasMove['raindance'] || hasMove['thunder']) || (hasMove['voltswitch'] && hasMove['wildcharge'])) rejected = true;
-					if (hasMove['voltswitch'] && template.types.length > 1 && !counter[template.types.find(type => type !== 'Electric')]) rejected = true;
+					if (hasMove['discharge'] || (hasMove['raindance'] && hasMove['thunder']) || (hasMove['voltswitch'] && hasMove['wildcharge'])) rejected = true;
+					if (!counter.setupType && !counter['speedsetup'] && hasMove['voltswitch'] && template.types.length > 1 && !counter[template.types.find(type => type !== 'Electric')]) rejected = true;
 					break;
 				case 'dazzlinggleam':
 					if (hasMove['playrough'] && counter.setupType !== 'Special') rejected = true;
@@ -506,6 +506,7 @@ exports.BattleScripts = {
 					(hasAbility['Dark Aura'] && !counter['Dark']) ||
 					(hasAbility['Gale Wings'] && !counter['Flying']) ||
 					(hasAbility['Guts'] && hasType['Normal'] && movePool.includes('facade')) ||
+					(hasAbility['Slow Start'] && movePool.includes('substitute')) ||
 					(hasAbility['Stance Change'] && !counter.setupType && movePool.includes('kingsshield')) ||
 					(counter['defensesetup'] && !counter.recovery && !hasMove['rest']) ||
 					(movePool.includes('technoblast') || template.requiredMove && movePool.includes(toId(template.requiredMove)))) &&
@@ -754,8 +755,6 @@ exports.BattleScripts = {
 			item = 'Assault Vest';
 		} else if (hasMove['geomancy']) {
 			item = 'Power Herb';
-		} else if (ability === 'Magic Guard' && hasMove['psychoshift']) {
-			item = 'Flame Orb';
 		} else if (hasMove['switcheroo'] || hasMove['trick']) {
 			let randomNum = this.random(3);
 			if (counter.Physical >= 3 && (template.baseStats.spe < 60 || template.baseStats.spe > 108 || randomNum)) {
@@ -774,7 +773,7 @@ exports.BattleScripts = {
 		} else if (ability === 'Harvest') {
 			item = hasMove['rest'] ? 'Lum Berry' : 'Sitrus Berry';
 		} else if (ability === 'Magic Guard' || ability === 'Sheer Force') {
-			item = 'Life Orb';
+			item = hasMove['psychoshift'] ? 'Flame Orb' : 'Life Orb';
 		} else if (ability === 'Poison Heal' || ability === 'Toxic Boost') {
 			item = 'Toxic Orb';
 		} else if (hasMove['rest'] && !hasMove['sleeptalk'] && ability !== 'Natural Cure' && ability !== 'Shed Skin') {

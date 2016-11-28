@@ -3603,8 +3603,8 @@ exports.BattleFormatsData = {
 		tier: "Bank-LC",
 	},
 	bibarel: {
-		randomBattleMoves: ["return", "waterfall", "curse", "quickattack", "stealthrock", "rest"],
-		randomDoubleBattleMoves: ["return", "waterfall", "curse", "quickattack", "protect", "rest"],
+		randomBattleMoves: ["return", "waterfall", "swordsdance", "quickattack", "aquajet"],
+		randomDoubleBattleMoves: ["return", "waterfall", "curse", "aquajet", "quickattack", "protect", "rest"],
 		tier: "Bank",
 	},
 	kricketot: {
