@@ -1024,7 +1024,7 @@ exports.BattleMovedex = {
 					}
 				}
 				if (move.flags['contact']) {
-					source.trySetStatus('psn');
+					source.trySetStatus('psn', target);
 				}
 				return null;
 			},
