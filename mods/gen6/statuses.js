@@ -15,24 +15,4 @@ exports.BattleStatuses = {
 			}
 		},
 	},
-	confusion: {
-		inherit: true,
-		onBeforeMove: function (pokemon) {
-			pokemon.volatiles.confusion.time--;
-			if (!pokemon.volatiles.confusion.time) {
-				pokemon.removeVolatile('confusion');
-				return;
-			}
-			this.add('-activate', pokemon, 'confusion');
-			if (this.random(2) === 0) {
-				return;
-			}
-			this.damage(this.getDamage(pokemon, pokemon, 40), pokemon, pokemon, {
-				id: 'confused',
-				effectType: 'Move',
-				type: '???',
-			});
-			return false;
-		},
-	},
 };
