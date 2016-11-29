@@ -59,7 +59,8 @@ exports.commands = {
 			let targetRoom = Rooms.get(roomid);
 
 			let authSymbol = (targetRoom.auth && targetRoom.auth[targetUser.userid] ? targetRoom.auth[targetUser.userid] : '');
-			let output = `${authSymbol}<a href="/${roomid}">${roomid}</a>`;
+			let battleTitle = (roomid.battle ? ` title="${roomid.title}"` : '');
+			let output = `${authSymbol}<a href="/${roomid}"${battleTitle}>${roomid}</a>`;
 			if (targetRoom.isPrivate === true) {
 				if (targetRoom.modjoin === '~') return;
 				if (privaterooms) privaterooms += " | ";
