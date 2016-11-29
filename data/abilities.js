@@ -3891,7 +3891,7 @@ exports.BattleAbilities = {
 		},
 		id: "waterbubble",
 		name: "Water Bubble",
-		rating: 3.5,
+		rating: 4,
 		num: 199,
 	},
 	"watercompaction": {
