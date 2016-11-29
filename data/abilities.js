@@ -246,10 +246,10 @@ exports.BattleAbilities = {
 		num: 4,
 	},
 	"battlebond": {
-		desc: "If this Pokemon is a Greninja, it transforms into Ash-Greninja after knocking out a Pokemon.",
-		shortDesc: "If user is a Greninja, it transforms into Ash-Greninja after knocking out a Pokemon.",
+		desc: "If this Pokemon is a Greninja, it transforms into Ash-Greninja after knocking out a Pokemon. As Ash-Greninja, its Water Shuriken has 20 base power and always hits 3 times.",
+		shortDesc: "After knocking out Pokemon: Adopt Ash forme, Water Shuriken hits 3 times with 20 BP.",
 		onSourceFaint: function (target, source, effect) {
-			if (effect && effect.effectType === 'Move' && source.template.speciesid === 'greninja' && !source.transformed) {
+			if (effect && effect.effectType === 'Move' && source.template.speciesid === 'greninja' && !source.transformed && source.side.foe.pokemonLeft) {
 				this.add('-activate', source, 'ability: Battle Bond');
 				let template = this.getTemplate('Greninja-Ash');
 				source.formeChange(template);
@@ -257,6 +257,11 @@ exports.BattleAbilities = {
 				source.details = template.species + (source.level === 100 ? '' : ', L' + source.level) + (source.gender === '' ? '' : ', ' + source.gender) + (source.set.shiny ? ', shiny' : '');
 				this.add('detailschange', source, source.details);
 				this.add('-message', "" + source.name + " became Ash-Greninja! (placeholder)"); // TODO: -bond
+			}
+		},
+		onModifyMove: function (move, attacker) {
+			if (move.id === 'watershuriken' && attacker.template.species === 'Greninja-Ash') {
+				move.multihit = 3;
 			}
 		},
 		id: "battlebond",
@@ -442,6 +447,7 @@ exports.BattleAbilities = {
 			this.add('-immune', target, '[msg]', '[from] ability: Comatose');
 			return false;
 		},
+		isUnbreakable: true,
 		id: "comatose",
 		name: "Comatose",
 		rating: 3,
@@ -701,6 +707,7 @@ exports.BattleAbilities = {
 	"disguise": {
 		desc: "If this Pokemon is a Mimikyu, it will take 0 damage the first time it is attacked in battle. It then changes to Busted Form.",
 		shortDesc: "If this Pokemon is a Mimikyu, it takes 0 damage the first time it is attacked in battle.",
+		onDamagePriority: 1,
 		onDamage: function (damage, target, source, effect) {
 			if (effect && effect.effectType === 'Move' && target.template.speciesid === 'mimikyu' && !target.transformed) {
 				this.add('-activate', target, 'ability: Disguise');
@@ -1146,6 +1153,7 @@ exports.BattleAbilities = {
 			}
 			if (showMsg && !effect.secondaries) this.add("-fail", target, "unboost", "[from] ability: Full Metal Body", "[of] " + target);
 		},
+		isUnbreakable: true,
 		id: "fullmetalbody",
 		name: "Full Metal Body",
 		rating: 2,
@@ -1169,7 +1177,7 @@ exports.BattleAbilities = {
 		},
 		id: "galewings",
 		name: "Gale Wings",
-		rating: 4.5,
+		rating: 3,
 		num: 177,
 	},
 	"galvanize": {
@@ -2510,6 +2518,7 @@ exports.BattleAbilities = {
 				return this.chainModify(0.75);
 			}
 		},
+		isUnbreakable: true,
 		id: "prismarmor",
 		name: "Prism Armor",
 		rating: 3,
@@ -2892,6 +2901,7 @@ exports.BattleAbilities = {
 				return this.chainModify(0.5);
 			}
 		},
+		isUnbreakable: true,
 		id: "shadowshield",
 		name: "Shadow Shield",
 		rating: 4,
@@ -3245,7 +3255,7 @@ exports.BattleAbilities = {
 	"stancechange": {
 		desc: "If this Pokemon is an Aegislash, it changes to Blade Forme before attempting to use an attacking move, and changes to Shield Forme before attempting to use King's Shield.",
 		shortDesc: "If Aegislash, changes Forme to Blade before attacks and Shield before King's Shield.",
-		onBeforeMovePriority: 11,
+		onBeforeMovePriority: 0.5,
 		onBeforeMove: function (attacker, defender, move) {
 			if (attacker.template.baseSpecies !== 'Aegislash' || attacker.transformed) return;
 			if (move.category === 'Status' && move.id !== 'kingsshield') return;
@@ -3485,10 +3495,8 @@ exports.BattleAbilities = {
 		shortDesc: "If an ally uses its item, this Pokemon gives its item to that ally immediately.",
 		onAllyAfterUseItem: function (item, pokemon) {
 			let sourceItem = this.effectData.target.getItem();
-			let noSharing = sourceItem.onTakeItem && sourceItem.onTakeItem(sourceItem, pokemon) === false;
-			if (!sourceItem || noSharing) {
-				return;
-			}
+			if (!sourceItem) return;
+			if (!this.singleEvent('TakeItem', item, this.effectData.target.itemData, this.effectData.target, pokemon, this.effectData, item)) return;
 			sourceItem = this.effectData.target.takeItem();
 			if (!sourceItem) {
 				return;

@@ -26,10 +26,7 @@ exports.BattleScripts = {
 			return;
 		} */
 		if (!this.runEvent('BeforeMove', pokemon, target, move)) {
-			// Prevent invulnerability from persisting until the turn ends
-			pokemon.removeVolatile('twoturnmove');
-			// End Bide
-			pokemon.removeVolatile('bide');
+			this.runEvent('MoveAborted', pokemon, target, move);
 			// Prevent Pursuit from running again against a slower U-turn/Volt Switch/Parting Shot
 			pokemon.moveThisTurn = true;
 			this.clearActiveMove(true);
@@ -121,10 +118,12 @@ exports.BattleScripts = {
 		}
 		this.addMove('move', pokemon, movename, target + attrs);
 
-		if (zMove && move.zMoveBoost) {
-			this.boost(move.zMoveBoost, pokemon, pokemon, move);
+		if (zMove && move.category !== 'Status') {
+			this.attrLastMove('[zeffect]');
+		} else if (zMove && move.zMoveBoost) {
+			this.boost(move.zMoveBoost, pokemon, pokemon, {id: 'zpower'});
 		} else if (zMove && move.zMoveEffect === 'heal') {
-			this.heal(pokemon.maxhp, pokemon, pokemon, move);
+			this.heal(pokemon.maxhp, pokemon, pokemon, {id: 'zpower'});
 		} else if (zMove && move.zMoveEffect === 'healreplacement') {
 			pokemon.side.addSideCondition('healingwish', pokemon, move);
 		} else if (zMove && move.zMoveEffect === 'clearnegativeboost') {
@@ -137,14 +136,14 @@ exports.BattleScripts = {
 			pokemon.setBoost(boosts);
 			this.add('-clearnegativeboost', pokemon, '[zeffect]');
 		} else if (zMove && move.zMoveEffect === 'redirect') {
-			pokemon.addVolatile('followme', pokemon, move);
+			pokemon.addVolatile('followme', pokemon, {id: 'zpower'});
 		} else if (zMove && move.zMoveEffect === 'crit1') {
-			pokemon.addVolatile('crit1', pokemon, move);
+			pokemon.addVolatile('crit1', pokemon, {id: 'zpower'});
 		} else if (zMove && move.zMoveEffect === 'curse') {
 			if (pokemon.hasType('Ghost')) {
-				this.heal(pokemon.maxhp, pokemon, pokemon, move);
+				this.heal(pokemon.maxhp, pokemon, pokemon, {id: 'zpower'});
 			} else {
-				this.boost({atk: 1}, pokemon, pokemon, move);
+				this.boost({atk: 1}, pokemon, pokemon, {id: 'zpower'});
 			}
 		}
 
@@ -291,7 +290,7 @@ exports.BattleScripts = {
 			this.add('-immune', target, '[msg]');
 			return false;
 		}
-		if (this.gen >= 7 && move.pranksterBoosted && target !== pokemon && !this.getImmunity('prankster', target)) {
+		if (this.gen >= 7 && move.pranksterBoosted && target.side !== pokemon.side && !this.getImmunity('prankster', target)) {
 			this.debug('natural prankster immunity');
 			this.add('-immune', target, '[msg]');
 			return false;
@@ -349,7 +348,7 @@ exports.BattleScripts = {
 
 		if (move.breaksProtect) {
 			let broke = false;
-			for (let i in {kingsshield:1, protect:1, spikyshield:1}) {
+			for (let i in {banefulbunker:1, kingsshield:1, protect:1, spikyshield:1}) {
 				if (target.removeVolatile(i)) broke = true;
 			}
 			if (this.gen >= 6 || target.side !== pokemon.side) {
@@ -718,6 +717,8 @@ exports.BattleScripts = {
 			if (pokemon.side.zMoveUsed) return;
 			if (!item.zMove) return;
 			if (item.zMoveUser && !item.zMoveUser.includes(pokemon.species)) return;
+			let moveData = pokemon.getMoveData(move);
+			if (!moveData || !moveData.pp) return; // Draining the PP of the base move prevents the corresponding Z-move from being used.
 		}
 
 		if (item.zMoveFrom) {
@@ -752,6 +753,7 @@ exports.BattleScripts = {
 	runZMove: function (move, pokemon, target, sourceEffect) {
 		// Limit one Z move per side
 		let zMove = this.getZMove(move, pokemon);
+		this.add("-zpower", pokemon);
 		this.runMove(move, pokemon, target, sourceEffect, zMove);
 	},
 
@@ -766,8 +768,6 @@ exports.BattleScripts = {
 	runMegaEvo: function (pokemon) {
 		let template = this.getTemplate(pokemon.canMegaEvo);
 		let side = pokemon.side;
-
-		pokemon.willMega = false;
 
 		// Pokémon affected by Sky Drop cannot mega evolve. Enforce it here for now.
 		let foeActive = side.foe.active;
@@ -918,7 +918,7 @@ exports.BattleScripts = {
 				pool = Object.keys(this.data.Movedex).filter(moveid => !(moveid in {'chatter':1, 'struggle':1, 'paleowave':1, 'shadowstrike':1, 'magikarpsrevenge':1}));
 			} else if (template.learnset) {
 				pool = Object.keys(template.learnset);
-				if (template.species.substr(0, 6) === 'Rotom-' || template.species.substr(0, 10) === 'Pumpkaboo-') {
+				if (template.species.substr(0, 6) === 'Rotom-') {
 					pool = Array.from(new Set(pool.concat(Object.keys(this.getTemplate(template.baseSpecies).learnset))));
 				}
 			} else {
@@ -1305,7 +1305,7 @@ exports.BattleScripts = {
 			species = template.baseSpecies;
 		}
 		let battleForme = this.checkBattleForme(template);
-		if (battleForme && battleForme.tier !== 'AG' && (battleForme.isMega ? !teamDetails.megaCount : this.random(2))) {
+		if (battleForme && battleForme.randomBattleMoves && (battleForme.isMega ? !teamDetails.megaCount : this.random(2))) {
 			template = this.getTemplate(template.otherFormes.length >= 2 ? template.otherFormes[this.random(template.otherFormes.length)] : template.otherFormes[0]);
 		}
 
@@ -1815,14 +1815,6 @@ exports.BattleScripts = {
 					moves.splice(k, 1);
 					break;
 				}
-
-				// Handle Hidden Power IVs
-				if (move.id === 'hiddenpower') {
-					let HPivs = this.getType(move.type).HPivs;
-					for (let iv in HPivs) {
-						ivs[iv] = HPivs[iv];
-					}
-				}
 			}
 			if (moves.length === 4 && !counter.stab && !hasMove['metalburst'] && (counter['physicalpool'] || counter['specialpool'])) {
 				// Move post-processing:
@@ -1865,11 +1857,6 @@ exports.BattleScripts = {
 		// Moveset modifications
 		if (hasMove['autotomize'] && hasMove['heavyslam']) {
 			moves[moves.indexOf('autotomize')] = 'rockpolish';
-		}
-
-		// If Hidden Power has been removed, reset the IVs
-		if (!hasMove['hiddenpower']) {
-			ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
 		}
 
 		let abilities = Object.values(baseTemplate.abilities);
@@ -2082,7 +2069,7 @@ exports.BattleScripts = {
 		} else if (hasMove['acrobatics']) {
 			item = 'Flying Gem';
 		} else if ((ability === 'Guts' || hasMove['facade']) && !hasMove['sleeptalk']) {
-			item = 'Flame Orb';
+			item = (hasType['Fire'] || ability === 'Quick Feet') ? 'Toxic Orb' : 'Flame Orb';
 		} else if (ability === 'Unburden') {
 			if (hasMove['fakeout']) {
 				item = 'Normal Gem';
@@ -2198,8 +2185,8 @@ exports.BattleScripts = {
 		let level = levelScale[tier] || 75;
 		if (customScale[template.name]) level = customScale[template.name];
 
-		if (template.name === 'Slurpuff' && !counter.setupType) level = 81;
-		if (template.name === 'Xerneas' && hasMove['geomancy']) level = 71;
+		// if (template.name === 'Slurpuff' && !counter.setupType) level = 81;
+		// if (template.name === 'Xerneas' && hasMove['geomancy']) level = 71;
 
 		// Prepare optimal HP
 		let hp = Math.floor(Math.floor(2 * template.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
@@ -2324,7 +2311,7 @@ exports.BattleScripts = {
 			case 'Genesect':
 				if (this.random(5) >= 1) continue;
 				break;
-			case 'Castform': case 'Gourgeist':
+			case 'Castform': case 'Gourgeist': case 'Oricorio':
 				if (this.random(4) >= 1) continue;
 				break;
 			case 'Basculin': case 'Cherrim': case 'Hoopa': case 'Meloetta': case 'Meowstic':

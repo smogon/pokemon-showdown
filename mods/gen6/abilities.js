@@ -88,6 +88,10 @@ exports.BattleAbilities = {
 			},
 		},
 	},
+	"stancechange": {
+		inherit: true,
+		onBeforeMovePriority: 11,
+	},
 	"weakarmor": {
 		desc: "If a physical attack hits this Pokemon, its Defense is lowered by 1 stage and its Speed is raised by 1 stage.",
 		shortDesc: "If a physical attack hits this Pokemon, Defense is lowered by 1, Speed is raised by 1.",

@@ -1,13 +1,11 @@
 'use strict';
 
 exports.BattleScripts = {
+	inherit: 'gen6',
 	init: function () {
-		let onTakeMegaStone = function (item) {
-			return false;
-		};
 		for (let id in this.data.Items) {
 			if (!this.data.Items[id].megaStone) continue;
-			this.modData('Items', id).onTakeItem = onTakeMegaStone;
+			this.modData('Items', id).onTakeItem = false;
 		}
 	},
 	canMegaEvo: function (pokemon) {
@@ -27,8 +25,6 @@ exports.BattleScripts = {
 		if (pokemon.template.isMega || pokemon.template.isPrimal) return false;
 		let template = this.getMixedTemplate(pokemon.originalSpecies, pokemon.canMegaEvo);
 		let side = pokemon.side;
-
-		pokemon.willMega = false;
 
 		// Pokémon affected by Sky Drop cannot Mega Evolve. Enforce it here for now.
 		let foeActive = side.foe.active;
