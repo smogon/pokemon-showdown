@@ -32,7 +32,7 @@ exports.commands = {
 			return this.errorReply("User " + this.targetUsername + " not found.");
 		}
 		if (showAll && !user.trusted && targetUser !== user) {
-			return this.errorReply("/alts - Access denied.");
+			return this.errorReply(`/${cmd} - Access denied.`);
 		}
 
 		let buf = Chat.html`<strong class="username"><small style="display:none">${targetUser.group}</small>${targetUser.name}</strong> `;
@@ -59,7 +59,8 @@ exports.commands = {
 			let targetRoom = Rooms.get(roomid);
 
 			let authSymbol = (targetRoom.auth && targetRoom.auth[targetUser.userid] ? targetRoom.auth[targetUser.userid] : '');
-			let output = `${authSymbol}<a href="/${roomid}">${roomid}</a>`;
+			let battleTitle = (roomid.battle ? ` title="${roomid.title}"` : '');
+			let output = `${authSymbol}<a href="/${roomid}"${battleTitle}>${roomid}</a>`;
 			if (targetRoom.isPrivate === true) {
 				if (targetRoom.modjoin === '~') return;
 				if (privaterooms) privaterooms += " | ";
@@ -183,6 +184,7 @@ exports.commands = {
 			return this.errorReply("/checkpunishment - Access denied.");
 		}
 		let userid = toId(target);
+		if (!userid) return this.errorReply("Please enter a valid username.");
 		let buf = Chat.html`<strong class="username">${target}</strong> <em style="color:gray">(offline)</em><br /><br />`;
 		let atLeastOne = false;
 
@@ -418,6 +420,35 @@ exports.commands = {
 
 				if (move.id === 'snatch') isSnatch = true;
 				if (move.id === 'mirrormove') isMirrorMove = true;
+
+				if (move.zMovePower) {
+					details["Z-Power"] = move.zMovePower;
+				} else if (move.zMoveEffect) {
+					details["Z-Effect"] = {
+						'clearnegativeboost': "Restores negative stat stages to 0",
+						'crit1': "Crit ratio +1",
+						'heal': "Restores HP 100%",
+						'curse': "Restores HP 100% if user is Ghost type, otherwise Attack +1",
+						'redirect': "Redirects opposing attacks to user",
+						'healreplacement': "Restores replacement's HP 100%",
+					}[move.zMoveEffect];
+				} else if (move.zMoveBoost) {
+					details["Z-Effect"] = "";
+					let boost = move.zMoveBoost;
+					let stats = {atk: 'Attack', def: 'Defense', spa: 'Sp. Atk', spd: 'Sp. Def', spe: 'Speed', accuracy: 'Accuracy', evasion: 'Evasiveness'};
+					for (let i in boost) {
+						details["Z-Effect"] += " " + stats[i] + " +" + boost[i];
+					}
+				} else if (move.isZ) {
+					details["&#10003; Z-Move"] = "";
+					details["Z-Crystal"] = Tools.getItem(move.isZ).name;
+					if (move.basePower !== 1) {
+						details["User"] = Tools.getItem(move.isZ).zMoveUser.join(", ");
+						details["Required Move"] = Tools.getItem(move.isZ).zMoveFrom;
+					}
+				} else {
+					details["Z-Effect"] = "None";
+				}
 
 				details["Target"] = {
 					'normal': "One Adjacent Pok\u00e9mon",
@@ -905,6 +936,10 @@ exports.commands = {
 			if (!evSet) {
 				if (lowercase === 'invested' || lowercase === 'max') {
 					evSet = true;
+					if (lowercase === 'max' && !natureSet) {
+						nature = 1.1;
+						natureSet = true;
+					}
 				} else if (lowercase === 'uninvested') {
 					ev = 0;
 					evSet = true;
@@ -996,7 +1031,6 @@ exports.commands = {
 		}
 		return this.sendReplyBox('Base ' + statValue + (calcHP ? ' HP ' : ' ') + 'at level ' + level + ' with ' + iv + ' IVs, ' + ev + (nature === 1.1 ? '+' : (nature === 0.9 ? '-' : '')) + ' EVs' + (modifier > 0 && !calcHP ? ' at ' + (positiveMod ? '+' : '-') + modifier : '') + ': <b>' + Math.floor(output) + '</b>.');
 	},
-
 	statcalchelp: ["/statcalc [level] [base stat] [IVs] [nature] [EVs] [modifier] (only base stat is required) - Calculates what the actual stat of a Pokémon is with the given parameters. For example, '/statcalc lv50 100 30iv positive 252ev scarf' calculates the speed of a base 100 scarfer with HP Ice in Battle Spot, and '/statcalc uninvested 90 neutral' calculates the attack of an uninvested Crobat.",
 		"!statcalc [level] [base stat] [IVs] [nature] [EVs] [modifier] (only base stat is required) - Shows this information to everyone.",
 		"Inputing 'hp' as an argument makes it use the formula for HP. Instead of giving nature, '+' and '-' can be appended to the EV amount (e.g. 252+ev) to signify a boosting or inhibiting nature."],
@@ -1025,16 +1059,22 @@ exports.commands = {
 	groups: function (target, room, user) {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(
+			"<b>Room Rank</b><br />" +
 			"+ <b>Voice</b> - They can use ! commands like !groups, and talk during moderated chat<br />" +
-			"% <b>Driver</b> - The above, and they can mute. Global % can also lock users and check for alts<br />" +
-			"@ <b>Moderator</b> - The above, and they can ban users<br />" +
+			"% <b>Driver</b> - The above, and they can mute and warn<br />" +
+			"@ <b>Moderator</b> - The above, and they can room ban users<br />" +
 			"* <b>Bot</b> - Like Moderator, but makes it clear that this user is a bot<br />" +
-			"&amp; <b>Leader</b> - The above, and they can promote to moderator and force ties<br />" +
-			"# <b>Room Owner</b> - They are leaders of the room and can almost totally control it<br />" +
-			"~ <b>Administrator</b> - They can do anything, like change what this message says"
+			"# <b>Room Owner</b> - They are leaders of the room and can almost totally control it<br /><br />" +
+			"<b>Global Rank</b><br />" +
+			"+ <b>Global Voice</b> - They can use ! commands like !groups, and talk during moderated chat<br />" +
+			"% <b>Global Driver</b> - The above, and they can also lock users and check for alts<br />" +
+			"@ <b>Global Moderator</b> - The above, and they can globally ban users<br />" +
+			"* <b>Global Bot</b> - Like Moderator, but makes it clear that this user is a bot<br />" +
+			"&amp; <b>Global Leader</b> - The above, and they can promote to global moderator and force ties<br />" +
+			"~ <b>Global Administrator</b> -  They can do anything, like change what this message says"
 		);
 	},
-	groupshelp: ["/groups - Explains what the + % @ # & next to people's names mean.",
+	groupshelp: ["/groups - Explains what the symbols (like % and @) before people's names mean.",
 		"!groups - Shows everyone that information. Requires: + % @ * # & ~"],
 
 	'!opensource': true,
@@ -1824,8 +1864,10 @@ exports.commands = {
 
 		this.addBox(target);
 	},
-	htmlboxhelp: ["/htmlbox [message] - Displays a message, parsing HTML code contained.",
-	"!htmlbox [message] - Shows everyone a message, parsing HTML code contained. Requires: ~ & * with global authority OR # * with room authority"],
+	htmlboxhelp: [
+		"/htmlbox [message] - Displays a message, parsing HTML code contained.",
+		"!htmlbox [message] - Shows everyone a message, parsing HTML code contained. Requires: ~ & #",
+	],
 };
 
 process.nextTick(() => {

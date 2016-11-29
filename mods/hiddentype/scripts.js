@@ -1,26 +1,22 @@
 'use strict';
 
 exports.BattleScripts = {
+	inherit: 'gen6',
 	pokemon: {
 		formeChange: function (template, dontRecalculateStats) {
 			template = this.battle.getTemplate(template);
 
 			if (!template.abilities) return false;
-			this.illusion = null;
 			this.template = template;
 			this.types = template.types;
 			this.addedType = this.baseHpType;
+			this.knownType = true;
 
 			if (!dontRecalculateStats) {
+				let stats = this.battle.spreadModify(this.template.baseStats, this.set);
 				for (let statName in this.stats) {
-					let stat = this.template.baseStats[statName];
-					stat = Math.floor(Math.floor(2 * stat + this.set.ivs[statName] + Math.floor(this.set.evs[statName] / 4)) * this.level / 100 + 5);
-
-					// nature
-					let nature = this.battle.getNature(this.set.nature);
-					if (statName === nature.plus) stat *= 1.1;
-					if (statName === nature.minus) stat *= 0.9;
-					this.baseStats[statName] = this.stats[statName] = Math.floor(stat);
+					this.stats[statName] = stats[statName];
+					this.baseStats[statName] = stats[statName];
 				}
 				this.speed = this.stats.spe;
 			}

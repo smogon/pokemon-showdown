@@ -1,13 +1,11 @@
 'use strict';
 
 exports.BattleScripts = {
+	inherit: 'gen6',
 	init: function () {
-		let onTakeMegaStone = function (item) {
-			return false;
-		};
 		for (let id in this.data.Items) {
 			if (!this.data.Items[id].megaStone) continue;
-			this.modData('Items', id).onTakeItem = onTakeMegaStone;
+			this.modData('Items', id).onTakeItem = false;
 		}
 	},
 	canMegaEvo: function (pokemon) {

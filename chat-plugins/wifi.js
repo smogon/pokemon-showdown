@@ -108,6 +108,7 @@ class Giveaway {
 		text = toId(text);
 		if (mons.size) {
 			mons.forEach(function (value, key) {
+				let useBWSprites = value.gen === 7;
 				let spriteid = value.spriteid;
 				if (value.otherForms) {
 					for (let i = 0; i < value.otherForms.length; i++) {
@@ -119,6 +120,14 @@ class Giveaway {
 				}
 				if (value.otherFormes) {
 					for (let i = 0; i < value.otherFormes.length; i++) {
+						// Hardcore alola formes.
+						if (value.otherFormes[i].endsWith('alola')) {
+							if (/alolan?/.test(text)) {
+								spriteid += '-alolan';
+								useBWSprites = true;
+								break;
+							}
+						}
 						if (text.includes(value.otherFormes[i])) {
 							spriteid += '-' + value.otherFormes[i].substr(key.length);
 							break; // We don't want to end up with landorus-therian-therian
@@ -131,7 +140,7 @@ class Giveaway {
 					output += `<div style="display:inline-block;width:40px;height:30px;background:transparent url('/sprites/xyicons-sheet.png?a1') no-repeat scroll -${left}px -${top}px'"></div>`;
 				} else {
 					let shiny = (text.includes("shiny") && !text.includes("shinystone") ? '-shiny' : '');
-					output += `<img src="/sprites/xyani${shiny}/${spriteid}.gif">`;
+					output += `<img src="/sprites/${useBWSprites ? 'bw' : 'xyani'}${shiny}/${spriteid}.${useBWSprites ? 'png' : 'gif'}">`;
 				}
 			});
 		}
@@ -142,7 +151,7 @@ class Giveaway {
 		return `<p style="text-align:center;font-size:14pt;font-weight:bold;margin-bottom:2px;">It's giveaway time!</p>` +
 			`<p style="text-align:center;font-size:7pt;">Giveaway started by ${Chat.escapeHTML(this.host.name)}</p>` +
 			`<table style="margin-left:auto;margin-right:auto;"><tr><td style="text-align:center;width:45%">${this.sprite}<p style="font-weight:bold;">Giver: ${this.giver}</p>${Chat.escapeHTML(this.prize)}</td>` +
-			`<td style="text-align:center;width:45%">${rightSide}</td></tr></table><p style="text-align:center;font-size:7pt;font-weight:bold;"><u>Note:</u> Please do not join if you don't have a 3DS and a copy of Pok&eacute;mon XY or ORAS.</p>`;
+			`<td style="text-align:center;width:45%">${rightSide}</td></tr></table><p style="text-align:center;font-size:7pt;font-weight:bold;"><u>Note:</u> Please do not join if you don't have a 3DS and a copy of the relevant game.</p>`;
 	}
 }
 

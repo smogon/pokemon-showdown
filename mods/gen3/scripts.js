@@ -1,7 +1,7 @@
 'use strict';
 
 exports.BattleScripts = {
-	inherit: 'gen5',
+	inherit: 'gen4',
 	gen: 3,
 	init: function () {
 		for (let i in this.data.Pokedex) {
@@ -10,6 +10,7 @@ exports.BattleScripts = {
 		let specialTypes = {Fire:1, Water:1, Grass:1, Ice:1, Electric:1, Dark:1, Psychic:1, Dragon:1};
 		let newCategory = '';
 		for (let i in this.data.Movedex) {
+			if (!this.data.Movedex[i]) console.log(i);
 			if (this.data.Movedex[i].category === 'Status') continue;
 			newCategory = specialTypes[this.data.Movedex[i].type] ? 'Special' : 'Physical';
 			if (newCategory !== this.data.Movedex[i].category) {

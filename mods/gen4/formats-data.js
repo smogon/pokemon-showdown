@@ -116,7 +116,6 @@ exports.BattleFormatsData = {
 	},
 	pichuspikyeared: {
 		inherit: true,
-		eventOnly: true,
 		tier: "NU",
 	},
 	pikachu: {

@@ -1,6 +1,7 @@
 'use strict';
 
 exports.BattleScripts = {
+	inherit: 'gen6',
 	gen: 5,
 	randomSet: function (template, slot, teamDetails) {
 		if (slot === undefined) slot = 1;
@@ -452,8 +453,8 @@ exports.BattleScripts = {
 		}
 
 		item = 'Leftovers';
-		if (template.requiredItem) {
-			item = template.requiredItem;
+		if (template.requiredItems) {
+			item = template.requiredItems[this.random(template.requiredItems.length)];
 
 		// First, the extra high-priority items
 		} else if (template.species === 'Marowak') {
