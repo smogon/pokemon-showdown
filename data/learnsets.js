@@ -3495,7 +3495,7 @@ exports.BattleLearnsets = {
 		tickle: ["7E"],
 		toxic: ["7M", "6M", "5M", "4M", "3M"],
 		voltswitch: ["7M", "6M", "5M", "5S29"],
-		volttackle: ["6S39", "5S25", "5S29", "4S9", "4S21"],
+		volttackle: ["7T", "6S39", "5S25", "5S29", "4S9", "4S21"],
 		wildcharge: ["7M", "7L50", "6M", "6L50", "5M"],
 		wish: ["7E"],
 		yawn: ["4S19"],
