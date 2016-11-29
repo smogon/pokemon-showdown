@@ -201,8 +201,13 @@ exports.BattleAliases = {
 	"floetteeternalflower": "Floette-Eternal",
 	"ashgreninja": "Greninja-Ash",
 	"zydog": "Zygarde-10%",
+	"zygardedog": "Zygarde-10%",
 	"zygarde50": "Zygarde",
+	"zyc": "Zygarde-Complete",
 	"zygarde100": "Zygarde-Complete",
+	"zygardec": "Zygarde-Complete",
+	"zygardefull": "Zygarde-Complete",
+	"zygod": "Zygarde-Complete",
 	"perfectzygarde": "Zygarde-Complete",
 	"oricoriobaile": "Oricorio",
 	"oricoriob": "Oricorio",
@@ -427,6 +432,15 @@ exports.BattleAliases = {
 	"zard": "Charizard",
 	"ohmagod": "Plasmanta",
 	"zong": "Bronzong",
+
+	// ultra beasts
+	"ub01": "Nihilego",
+	"ub02a": "Buzzwole",
+	"ub02b": "Pheromosa",
+	"ub03": "Xurkitree",
+	"ub04blade": "Kartana",
+	"ub04blaster": "Celesteela",
+	"ub05": "Guzzlord",
 
 	// moves
 	"bb": "Brave Bird",
