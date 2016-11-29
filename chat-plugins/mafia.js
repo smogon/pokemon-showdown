@@ -410,7 +410,6 @@ class Mafia extends Rooms.RoomGame {
 
 	parseVotes() {
 		let votes = {};
-		let total = 0;
 		this.currentVote.forEach((target, voter) => {
 			if (!(target in votes)) {
 				votes[target] = {voters: [], num: 0};
@@ -419,17 +418,16 @@ class Mafia extends Rooms.RoomGame {
 			votes[target].voters.push(voter.name);
 			let numVotes = voter.class.numVotes || 1;
 			votes[target].num += numVotes;
-			total += numVotes;
 		});
-		return [votes, total];
+		return votes;
 	}
 
 	updateVotes() {
 		let text = '';
-		let [votes, total] = this.parseVotes();
+		let votes = this.parseVotes();
 
 		for (let i in votes) {
-			if (votes[i].num > (total / 2)) return this.progress();
+			if (votes[i].num > (Object.keys(this.players).length / 2)) return this.progress();
 			text += '<b>' + (i === 'none' ? 'Abstain' : Chat.escapeHTML(this.players[i].name)) + '</b>: ';
 			if (this.anonVotes) {
 				text += this.currentVote[i].num + ' votes.';
@@ -448,7 +446,7 @@ class Mafia extends Rooms.RoomGame {
 	}
 
 	tallyVotes() {
-		let votes = this.parseVotes()[0];
+		let votes = this.parseVotes();
 		let max = 0;
 		let toKill = null;
 		for (let i in votes) {
@@ -735,7 +733,7 @@ exports.commands = {
 		new: function (target, room, user) {
 			if (!this.can('game', null, room)) return false;
 			if (!room.mafiaEnabled) return this.errorReply("Mafia is disabled for this room.");
-			if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
+			if (!this.canTalk()) return;
 			if (room.game) return this.errorReply("There is already a game of " + room.game.title + " in progress in this room.");
 
 			// Check if input is a JSON object. If it is, use the parser for json input.
@@ -799,14 +797,14 @@ exports.commands = {
 		display: function (target, room, user) {
 			if (!room.game || room.game.gameid !== 'mafia') return this.errorReply("There is no game of mafia running in this room.");
 			if (room.game.gamestate !== 'pregame') return this.errorReply("The game has started already.");
-			if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
+			if (!this.canTalk()) return;
 
 			room.game.displayPregame();
 		},
 
 		will: function (target, room, user) {
 			if (!room.game || room.game.gameid !== 'mafia') return this.errorReply("There is no game of mafia running in this room.");
-			if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
+			if (!this.canTalk()) return;
 
 			if (target.toLowerCase() === 'on' || target.toLowerCase() === 'enable') {
 				if (!this.can('game', null, room)) return false;
@@ -852,7 +850,7 @@ exports.commands = {
 
 		anonvotes: function (target, room, user) {
 			if (!room.game || room.game.gameid !== 'mafia') return this.errorReply("There is no game of mafia running in this room.");
-			if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
+			if (!this.canTalk()) return;
 			if (!this.can('game', null, room)) return false;
 			if (room.game.gamestate !== 'pregame') return this.errorReply("The game has started already.");
 
@@ -875,7 +873,7 @@ exports.commands = {
 
 		automodchat: function (target, room, user) {
 			if (!room.game || room.game.gameid !== 'mafia') return this.errorReply("There is no game of mafia running in this room.");
-			if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
+			if (!this.canTalk()) return;
 			if (!this.can('game', null, room)) return false;
 			if (room.game.gamestate !== 'pregame') return this.errorReply("The game has started already.");
 
@@ -898,7 +896,7 @@ exports.commands = {
 
 		export: function (target, room, user) {
 			if (!room.game || room.game.gameid !== 'mafia') return this.errorReply("There is no game of mafia running in this room.");
-			if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
+			if (!this.canTalk()) return;
 			if (!this.can('game', null, room)) return false;
 
 			return this.sendReply("/mafia new " + room.game.exportGame());
@@ -907,7 +905,7 @@ exports.commands = {
 		end: function (target, room, user) {
 			if (!this.can('game', null, room)) return false;
 			if (!room.game || room.game.gameid !== 'mafia') return this.errorReply("There is no game of mafia running in this room.");
-			if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
+			if (!this.canTalk()) return;
 
 			room.game.forceEnd();
 			return this.privateModCommand("(The game of mafia was forcibly ended by " + user.name + ".)");

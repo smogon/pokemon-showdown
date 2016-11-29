@@ -39,7 +39,7 @@ class TestTools {
 
 	mod(mod) {
 		if (cache.has(mod)) return cache.get(mod);
-		if (Tools.moddedTools[mod]) return new TestTools({mod: mod});
+		if (Tools.dexes[mod]) return new TestTools({mod: mod});
 		const baseFormat = Tools.getFormat(mod);
 		if (baseFormat.effectType === 'Format') return new TestTools({mod: 'base', baseFormat});
 		throw new Error(`Mod ${mod} does not exist`);
@@ -92,7 +92,7 @@ class TestTools {
 			options = {};
 		}
 		const format = this.getFormat(options || {});
-		const battle = BattleEngine.Battle.construct(`battle-test-${battleNum++}`, format.id);
+		const battle = BattleEngine.construct(`battle-test-${battleNum++}`, format.id);
 		if (options && options.partialDecisions) battle.supportPartialDecisions = true;
 		if (teams) {
 			for (let i = 0; i < teams.length; i++) {
