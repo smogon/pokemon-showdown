@@ -1517,7 +1517,7 @@ class BattleSide {
 		}
 
 		let move = this.battle.getMove(moveid);
-		let zMove = megaOrZ === 'zmove' ? this.battle.getZMove(move, activePokemon) : '';
+		let zMove = megaOrZ === 'zmove' ? this.battle.getZMove(move, activePokemon, false, true) : '';
 		if (megaOrZ === 'zmove') {
 			if (!zMove || this.choiceData.zmove) {
 				this.emitCallback('cantz', activePokemon); // TODO: The client shouldn't have sent this request in the first place.
@@ -1525,9 +1525,7 @@ class BattleSide {
 				return false;
 			}
 
-			if (move.category !== 'Status') {
-				targetType = this.battle.getMove(zMove).target;
-			}
+			targetType = this.battle.getMove(zMove).target;
 
 			if (!targetLoc && this.active.length >= 2 && this.battle.targetTypeChoices(targetType)) {
 				// Compatibility fix:

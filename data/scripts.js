@@ -60,17 +60,10 @@ exports.BattleScripts = {
 	},
 	useMove: function (move, pokemon, target, sourceEffect, zMove) {
 		if (!sourceEffect && this.effect.id) sourceEffect = this.effect;
-		let zMovePower = 0;
-		let zMoveCategory = '';
-		if (zMove && !move.zMoveEffect && !move.zMoveBoost) {
-			zMovePower = move.zMovePower;
-			zMoveCategory = move.category;
-			move = zMove;
-		}
-		move = this.getMoveCopy(move);
-		if (zMovePower && move.basePower === 1) {
-			move.basePower = zMovePower;
-			move.category = zMoveCategory;
+		if (zMove || (sourceEffect && sourceEffect.isZ)) {
+			move = this.getZMoveCopy(move, pokemon);
+		} else {
+			move = this.getMoveCopy(move);
 		}
 		if (this.activeMove) {
 			move.priority = this.activeMove.priority;
@@ -112,7 +105,7 @@ exports.BattleScripts = {
 		let movename = move.name;
 		if (move.id === 'hiddenpower') movename = 'Hidden Power';
 		if (sourceEffect) attrs += '|[from]' + this.getEffect(sourceEffect);
-		if (zMove && (move.zMoveBoost || move.zMoveEffect)) {
+		if (zMove && (move.category === 'Status')) {
 			attrs = '|[anim]' + movename + attrs;
 			movename = 'Z-' + movename;
 		}
@@ -711,7 +704,7 @@ exports.BattleScripts = {
 		Fairy: "Twinkle Tackle",
 	},
 
-	getZMove: function (move, pokemon, skipChecks) {
+	getZMove: function (move, pokemon, skipChecks, underlyingMove) {
 		let item = pokemon.getItem();
 		if (!skipChecks) {
 			if (pokemon.side.zMoveUsed) return;
@@ -726,12 +719,33 @@ exports.BattleScripts = {
 		} else if (item.zMove === true) {
 			if (move.type === item.zMoveType) {
 				if (move.category === "Status") {
-					return 'Z-' + move.name;
+					return (underlyingMove ? '' : 'Z-') + move.name;
 				} else {
 					return this.zMoveTable[move.type];
 				}
 			}
 		}
+	},
+
+	getZMoveCopy: function (move, pokemon) {
+		move = this.getMove(move);
+		let zMove;
+		if (pokemon) {
+			let item = pokemon.getItem();
+			if (move.name === item.zMoveFrom) {
+				return this.getMoveCopy(item.zMove);
+			}
+		}
+
+		if (move.category === 'Status') {
+			zMove = this.getMoveCopy(move);
+			zMove.isZ = true;
+			return zMove;
+		}
+		zMove = this.getMoveCopy(this.zMoveTable[move.type]);
+		zMove.basePower = move.zMovePower;
+		zMove.category = move.category;
+		return zMove;
 	},
 
 	canZMove: function (pokemon) {
@@ -752,9 +766,8 @@ exports.BattleScripts = {
 
 	runZMove: function (move, pokemon, target, sourceEffect) {
 		// Limit one Z move per side
-		let zMove = this.getZMove(move, pokemon);
 		this.add("-zpower", pokemon);
-		this.runMove(move, pokemon, target, sourceEffect, zMove);
+		this.runMove(move, pokemon, target, sourceEffect, true);
 	},
 
 	canMegaEvo: function (pokemon) {
