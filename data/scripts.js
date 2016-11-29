@@ -757,6 +757,8 @@ exports.BattleScripts = {
 		let zMoves = [];
 		for (let i = 0; i < pokemon.moves.length; i++) {
 			let move = this.getMove(pokemon.moves[i]);
+			let moveData = pokemon.getMoveData(move);
+			if (moveData.disabled && moveData.disabledSource === 'Encore') continue;
 			let zMove = this.getZMove(move, pokemon, true) || '';
 			zMoves.push(zMove);
 			if (zMove) atLeastOne = true;
