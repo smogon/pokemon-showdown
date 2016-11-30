@@ -384,6 +384,7 @@ exports.commands = {
 					"Gen": move.gen,
 				};
 
+				if (move.contestType) details["Contest Condition"] = move.contestType;
 				if (move.secondary || move.secondaries) details["&#10003; Secondary effect"] = "";
 				if (move.flags['contact']) details["&#10003; Contact"] = "";
 				if (move.flags['sound']) details["&#10003; Sound"] = "";
