@@ -4,6 +4,9 @@ const BRACKET_MINIMUM_UPDATE_INTERVAL = 2 * 1000;
 const AUTO_DISQUALIFY_WARNING_TIMEOUT = 30 * 1000;
 const AUTO_START_MINIMUM_TIMEOUT = 30 * 1000;
 const MAX_REASON_LENGTH = 300;
+const TOURBAN_DURATION = 14 * 24 * 60 * 60 * 1000;
+
+Punishments.roomPunishmentTypes.set('TOURBAN', 'banned from tournaments');
 
 let TournamentGenerators = Object.create(null);
 let generatorFiles = {
@@ -231,6 +234,10 @@ class Tournament {
 		this.room.send('|tournament|updateEnd');
 	}
 
+	checkBanned(user) {
+		return Punishments.getRoomPunishType(this.room, toId(user)) === 'TOURBAN';
+	}
+
 	removeBannedUser(user) {
 		if (!(user.userid in this.players)) return;
 		if (this.isTournamentStarted) {
@@ -256,6 +263,11 @@ class Tournament {
 
 		if (this.playerCap && this.playerCount >= this.playerCap) {
 			output.sendReply('|tournament|error|Full');
+			return;
+		}
+
+		if (this.checkBanned(user)) {
+			output.sendReply('|tournament|error|Banned');
 			return;
 		}
 
@@ -1183,6 +1195,24 @@ let commands = {
 			} else {
 				return this.sendReply("Usage: " + cmd + " <on|off>");
 			}
+		},
+		ban: function (tournament, user, params, cmd) {
+			if (params.length < 1) {
+				return this.sendReply("Usage: " + cmd + " <user>");
+			}
+			let targetUser = Users.get(params[0]) || params[0];
+			let targetUserid = toId(targetUser);
+			let reason = '';
+			if (params[1]) {
+				reason = params[1].trim();
+				if (reason.length > MAX_REASON_LENGTH) return this.errorReply("The reason is too long. It cannot exceed " + MAX_REASON_LENGTH + " characters.");
+			}
+
+			if (tournament.checkBanned(user)) return this.errorReply("This user is already banned from tournaments.");
+
+			Punishments.roomPunish(this.room, user, ['TOURBAN', targetUserid, Date.now() + TOURBAN_DURATION, reason]);
+			tournament.removeBannedUser(user);
+			this.privateModCommand((targetUser.name || targetUserid) + " was banned from tournaments by " + user.name + "." + (reason ? " (" + reason + ")" : ""));
 		},
 	},
 };
