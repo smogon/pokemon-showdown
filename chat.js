@@ -938,7 +938,7 @@ Chat.toDurationString = function (number, options) {
 	const parts = [date.getUTCFullYear() - 1970, date.getUTCMonth(), date.getUTCDate() - 1, date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds()];
 	const unitNames = ["second", "minute", "hour", "day", "month", "year"];
 	const positiveIndex = parts.findIndex(elem => elem > 0);
-	const limit = (options && options.limit ? options.limit : 0);
+	const limit = (options && options.limit ? options.limit : parts.length);
 	if (options && options.hhmmss) {
 		let string = parts.slice(positiveIndex).map(value => value < 10 ? "0" + value : "" + value).join(":");
 		return string.length === 2 ? "00:" + string : string;
