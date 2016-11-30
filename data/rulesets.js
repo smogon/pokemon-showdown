@@ -260,14 +260,6 @@ exports.BattleFormats = {
 
 			return problems;
 		},
-		onValidateSet: function (set, format) {
-			if (format && format.banlistTable && format.banlistTable['illegal']) {
-				let template = this.getTemplate(set.species || set.name);
-				if (template.species === 'Greninja-Ash') {
-					set.species = 'Greninja';
-				}
-			}
-		},
 	},
 	hoennpokedex: {
 		effectType: 'ValidatorRule',
