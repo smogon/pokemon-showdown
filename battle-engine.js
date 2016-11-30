@@ -1517,7 +1517,7 @@ class BattleSide {
 		}
 
 		let move = this.battle.getMove(moveid);
-		let zMove = megaOrZ === 'zmove' ? this.battle.getZMove(move, activePokemon, false, true) : '';
+		let zMove = megaOrZ === 'zmove' ? this.battle.getZMove(move, activePokemon, false, true) : undefined;
 		if (megaOrZ === 'zmove') {
 			if (!zMove || this.choiceData.zmove) {
 				this.emitCallback('cantz', activePokemon); // TODO: The client shouldn't have sent this request in the first place.
@@ -1616,7 +1616,7 @@ class BattleSide {
 			targetLoc: targetLoc,
 			move: moveid,
 			mega: megaOrZ === 'mega',
-			zmove: megaOrZ === 'zmove',
+			zmove: zMove,
 		});
 
 		this.choiceData.choices.push('move ' + moveid + (targetLoc ? ' ' + targetLoc : '') + (megaOrZ ? ' ' + megaOrZ : ''));
@@ -3996,7 +3996,7 @@ class Battle extends Tools.BattleDex {
 		return this.validTargetLoc(this.getTargetLoc(target, source), source, targetType);
 	}
 	getTarget(decision) {
-		let move = this.getMove(decision.move);
+		let move = this.getMove(decision.zmove || decision.move);
 		let target;
 		if ((move.target !== 'randomNormal') &&
 				this.validTargetLoc(decision.targetLoc, decision.pokemon, move.target)) {
@@ -4017,7 +4017,7 @@ class Battle extends Tools.BattleDex {
 			// chosen target not valid, retarget randomly with resolveTarget
 		}
 		if (!decision.targetPosition || !decision.targetSide) {
-			target = this.resolveTarget(decision.pokemon, decision.move);
+			target = this.resolveTarget(decision.pokemon, decision.zmove || decision.move);
 			decision.targetSide = target.side;
 			decision.targetPosition = target.position;
 		}
