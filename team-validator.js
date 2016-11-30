@@ -326,12 +326,10 @@ class Validator {
 					let problem = this.checkLearnset(move, template, lsetData);
 					if (problem) {
 						let problemString = `${name} can't learn ${move.name}`;
-						if (problem.type === 'incompatible') {
-							if (isHidden) {
-								problemString = problemString.concat(` because it's incompatible with its ability or another move.`);
-							} else {
-								problemString = problemString.concat(` because it's incompatible with another move.`);
-							}
+						if (problem.type === 'incompatibleAbility') {
+							problemString = problemString.concat(` because it's incompatible with its ability.`);
+						} else if (problem.type === 'incompatible') {
+							problemString = problemString.concat(` because it's incompatible with another move.`);
 						} else if (problem.type === 'oversketched') {
 							let plural = (parseInt(problem.maxSketches) === 1 ? '' : 's');
 							problemString = problemString.concat(` because it can only sketch ${problem.maxSketches} move${plural}.`);
@@ -432,68 +430,14 @@ class Validator {
 					let eventTemplate = tools.getTemplate(splitSource[1]);
 					if (eventTemplate.eventPokemon) eventData = eventTemplate.eventPokemon[parseInt(splitSource[0])];
 					if (eventData) {
-						if (eventData.level && set.level < eventData.level) {
-							problems.push(`${name} must be at least level ${eventData.level} because it has a move only available from a specific event.`);
-						}
-						if ((eventData.shiny === true && !set.shiny) || (!eventData.shiny && set.shiny)) {
-							let shinyReq = eventData.shiny ? ` be shiny` : ` not be shiny`;
-							problems.push(`${name} must${shinyReq} because it has a move only available from a specific event.`);
-						}
-						if (eventData.gender) {
-							set.gender = eventData.gender;
-						}
-						if (eventData.nature && eventData.nature !== set.nature) {
-							problems.push(`${name} must have a ${eventData.nature} nature because it has a move only available from a specific event.`);
-						}
-						if (eventData.ivs) {
-							if (!set.ivs) set.ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
-							let statTable = {atk:'Attack', def:'Defense', spa:'Special Attack', spd:'Special Defense', spe:'Speed'};
-							for (let statId in eventData.ivs) {
-								if (set.ivs[statId] !== eventData.ivs[statId]) {
-									problems.push(`${name} must have ${eventData.ivs[statId]} ${statTable[statId]} IVs because it has a move only available from a specific event.`);
-								}
-							}
-						} else if (set.ivs && (eventData.perfectIVs || (eventData.generation >= 6 && (template.eggGroups[0] === 'Undiscovered' || template.species === 'Manaphy') && !template.prevo && !template.nfe &&
-							template.species !== 'Unown' && template.baseSpecies !== 'Pikachu' && (template.baseSpecies !== 'Diancie' || !set.shiny)))) {
-							// Legendary Pokemon must have at least 3 perfect IVs in gen 6
-							// Events can also have a certain amount of guaranteed perfect IVs
-							let perfectIVs = 0;
-							for (let i in set.ivs) {
-								if (set.ivs[i] >= 31) perfectIVs++;
-							}
-							if (eventData.perfectIVs) {
-								if (perfectIVs < eventData.perfectIVs) problems.push(`${name} must have at least ${eventData.perfectIVs} perfect IVs because it has a move only available from a specific event.`);
-							} else if (perfectIVs < 3) {
-								problems.push(`${name} must have at least three perfect IVs because it's a legendary and it has a move only available from a gen 6 event.`);
-							}
-						}
-						if (tools.gen <= 5 && eventData.abilities && eventData.abilities.length === 1 && !eventData.isHidden) {
-							if (template.species === eventTemplate.species) {
-								// has not evolved, abilities must match
-								const requiredAbility = tools.getAbility(eventData.abilities[0]).name;
-								if (ability.name !== requiredAbility) {
-									problems.push(`${name} must have ${requiredAbility}  because it has a move only available from a specific event.`);
-								}
-							} else {
-								// has evolved
-								let ability1 = tools.getAbility(eventTemplate.abilities['1']);
-								if (ability1.gen && eventData.generation >= ability1.gen) {
-									// pokemon had 2 available abilities in the gen the event happened
-									// ability is restricted to a single ability slot
-									const requiredAbilitySlot = (toId(eventData.abilities[0]) === ability1.id ? 1 : 0);
-									const requiredAbility = tools.getAbility(template.abilities[requiredAbilitySlot] || template.abilities['0']).name;
-									if (ability.name !== requiredAbility) {
-										const originalAbility = tools.getAbility(eventData.abilities[0]).name;
-										problems.push(`${name} must have ${requiredAbility}  because it has a move only available from a specific ${originalAbility} ${eventTemplate.species} event.`);
-									}
-								}
-							}
-						}
+						let eventProblems = this.validateEvent(set, eventData, eventTemplate, ` because it has a move only available`);
+						if (eventProblems) problems.push(...eventProblems);
 					}
 					isHidden = false;
 				}
 			} else if (banlistTable['illegal'] && template.eventOnly) {
-				let eventPokemon = !template.learnset && template.baseSpecies !== template.species ? tools.getTemplate(template.baseSpecies).eventPokemon : template.eventPokemon;
+				let eventTemplate = !template.learnset && template.baseSpecies !== template.species ? tools.getTemplate(template.baseSpecies) : template;
+				let eventPokemon = eventTemplate.eventPokemon;
 				let legal = false;
 				events:
 				for (let i = 0; i < eventPokemon.length; i++) {
@@ -505,14 +449,23 @@ class Validator {
 					if (eventData.ivs) {
 						if (!set.ivs) set.ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
 						for (let i in eventData.ivs) {
-							if (set.ivs[i] !== eventData.ivs[i]) continue events;
+							if (set.ivs[i] !== eventData.ivs[i] && (tools.gen !== 7 || set.level !== 100)) continue events;
 						}
 					}
 					if (eventData.isHidden !== undefined && isHidden !== eventData.isHidden) continue;
 					legal = true;
 					if (eventData.gender) set.gender = eventData.gender;
 				}
-				if (!legal) problems.push(`${template.species} is only obtainable via event - it needs to match one of its events.`);
+				if (!legal) {
+					if (eventPokemon.length === 1) {
+						problems.push(`${template.species} is only obtainable from an event - it needs to match its event:`);
+					} else {
+						problems.push(`${template.species} is only obtainable from events - it needs to match one of its events, such as:`);
+					}
+					let eventData = eventPokemon[0];
+					let eventProblems = this.validateEvent(set, eventData, eventTemplate, ` to be`, eventPokemon.length === 1 ? `its` : `its first`);
+					if (eventProblems) problems.push(...eventProblems);
+				}
 			}
 			if (isHidden && lsetData.sourcesBefore) {
 				if (!lsetData.sources && lsetData.sourcesBefore < 5) {
@@ -611,6 +564,82 @@ class Validator {
 			return false;
 		}
 
+		return problems;
+	}
+
+	validateEvent(set, eventData, eventTemplate, because, article = `an`) {
+		let tools = this.tools;
+		let name = set.species;
+		let template = tools.getTemplate(set.species);
+		if (set.species !== set.name && set.baseSpecies !== set.name) name = `${set.name} (${set.species})`;
+
+		if (!because) because = ` because it has a move only available`;
+		let etc = because + ` from ${article} event`;
+
+		let problems = [];
+		if (eventData.level && set.level < eventData.level) {
+			problems.push(`${name} must be at least level ${eventData.level}${etc}.`);
+		}
+		if ((eventData.shiny === true && !set.shiny) || (!eventData.shiny && set.shiny)) {
+			let shinyReq = eventData.shiny ? ` be shiny` : ` not be shiny`;
+			problems.push(`${name} must${shinyReq}${etc}.`);
+		}
+		if (eventData.gender) {
+			set.gender = eventData.gender;
+		}
+		if (eventData.nature && eventData.nature !== set.nature) {
+			problems.push(`${name} must have a ${eventData.nature} nature${etc}.`);
+		}
+		if (eventData.ivs) {
+			if (tools.gen === 6 || tools.gen === 7 && set.level !== 100) {
+				if (!set.ivs) set.ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
+				let statTable = {hp:'HP', atk:'Attack', def:'Defense', spa:'Special Attack', spd:'Special Defense', spe:'Speed'};
+				for (let statId in eventData.ivs) {
+					if (set.ivs[statId] !== eventData.ivs[statId]) {
+						problems.push(`${name} must have ${eventData.ivs[statId]} ${statTable[statId]} IVs${etc}.`);
+					}
+				}
+			}
+		} else if (set.ivs && (eventData.perfectIVs || (eventData.generation >= 6 && (template.eggGroups[0] === 'Undiscovered' || template.species === 'Manaphy') && !template.prevo && !template.nfe &&
+			template.species !== 'Unown' && template.baseSpecies !== 'Pikachu' && (template.baseSpecies !== 'Diancie' || !set.shiny)))) {
+			// Legendary Pokemon must have at least 3 perfect IVs in gen 6
+			// Events can also have a certain amount of guaranteed perfect IVs
+			if (tools.gen === 6 || tools.gen === 7 && set.level !== 100) {
+				let perfectIVs = 0;
+				for (let i in set.ivs) {
+					if (set.ivs[i] >= 31) perfectIVs++;
+				}
+				if (eventData.perfectIVs) {
+					let or7 = tools.gen === 7 ? ' or be level 100' : '';
+					if (perfectIVs < eventData.perfectIVs) problems.push(`${name} must have at least ${eventData.perfectIVs} perfect IVs${or7}${etc}.`);
+				} else if (perfectIVs < 3) {
+					problems.push(`${name} must have at least three perfect IVs because it's a legendary and it has a move only available from a gen 6 event.`);
+				}
+			}
+		}
+		if (tools.gen <= 5 && eventData.abilities && eventData.abilities.length === 1 && !eventData.isHidden) {
+			if (template.species === eventTemplate.species) {
+				// has not evolved, abilities must match
+				const requiredAbility = tools.getAbility(eventData.abilities[0]).name;
+				if (set.ability !== requiredAbility) {
+					problems.push(`${name} must have ${requiredAbility}${etc}.`);
+				}
+			} else {
+				// has evolved
+				let ability1 = tools.getAbility(eventTemplate.abilities['1']);
+				if (ability1.gen && eventData.generation >= ability1.gen) {
+					// pokemon had 2 available abilities in the gen the event happened
+					// ability is restricted to a single ability slot
+					const requiredAbilitySlot = (toId(eventData.abilities[0]) === ability1.id ? 1 : 0);
+					const requiredAbility = tools.getAbility(template.abilities[requiredAbilitySlot] || template.abilities['0']).name;
+					if (set.ability !== requiredAbility) {
+						const originalAbility = tools.getAbility(eventData.abilities[0]).name;
+						problems.push(`${name} must have ${requiredAbility}${because} from a specific ${originalAbility} ${eventTemplate.species} event.`);
+					}
+				}
+			}
+		}
+		if (!problems.length) return;
 		return problems;
 	}
 
@@ -876,7 +905,7 @@ class Validator {
 		// Now that we have our list of possible sources, intersect it with the current list
 		if (!sourcesBefore && !sources.length) {
 			if (noPastGen && sometimesPossible) return {type:'pokebank'};
-			if (incompatibleAbility) return {type:'incompatible'};
+			if (incompatibleAbility) return {type:'incompatibleAbility'};
 			return true;
 		}
 		if (!sources.length) sources = null;
