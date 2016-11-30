@@ -523,7 +523,7 @@ class CommandContext {
 
 		if (room && room.id === 'global') {
 			// should never happen
-			console.log(`Command tried to write to global: ${user.name}: ${message}`);
+			// console.log(`Command tried to write to global: ${user.name}: ${message}`);
 			return false;
 		}
 		if (!user.named) {
