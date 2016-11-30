@@ -293,6 +293,9 @@ class Validator {
 		if (set.moves && Array.isArray(set.moves)) {
 			set.moves = set.moves.filter(val => val);
 		}
+		if (ability.id === 'battlebond' && template.id === 'greninja') {
+			template = tools.getTemplate('greninjaash');
+		}
 		if (!set.moves || !set.moves.length) {
 			problems.push(`${name} has no moves.`);
 		} else {
@@ -323,12 +326,10 @@ class Validator {
 					let problem = this.checkLearnset(move, template, lsetData);
 					if (problem) {
 						let problemString = `${name} can't learn ${move.name}`;
-						if (problem.type === 'incompatible') {
-							if (isHidden) {
-								problemString = problemString.concat(` because it's incompatible with its ability or another move.`);
-							} else {
-								problemString = problemString.concat(` because it's incompatible with another move.`);
-							}
+						if (problem.type === 'incompatibleAbility') {
+							problemString = problemString.concat(` because it's incompatible with its ability.`);
+						} else if (problem.type === 'incompatible') {
+							problemString = problemString.concat(` because it's incompatible with another move.`);
 						} else if (problem.type === 'oversketched') {
 							let plural = (parseInt(problem.maxSketches) === 1 ? '' : 's');
 							problemString = problemString.concat(` because it can only sketch ${problem.maxSketches} move${plural}.`);
@@ -429,68 +430,14 @@ class Validator {
 					let eventTemplate = tools.getTemplate(splitSource[1]);
 					if (eventTemplate.eventPokemon) eventData = eventTemplate.eventPokemon[parseInt(splitSource[0])];
 					if (eventData) {
-						if (eventData.level && set.level < eventData.level) {
-							problems.push(`${name} must be at least level ${eventData.level} because it has a move only available from a specific event.`);
-						}
-						if ((eventData.shiny === true && !set.shiny) || (!eventData.shiny && set.shiny)) {
-							let shinyReq = eventData.shiny ? ` be shiny` : ` not be shiny`;
-							problems.push(`${name} must${shinyReq} because it has a move only available from a specific event.`);
-						}
-						if (eventData.gender) {
-							set.gender = eventData.gender;
-						}
-						if (eventData.nature && eventData.nature !== set.nature) {
-							problems.push(`${name} must have a ${eventData.nature} nature because it has a move only available from a specific event.`);
-						}
-						if (eventData.ivs) {
-							if (!set.ivs) set.ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
-							let statTable = {atk:'Attack', def:'Defense', spa:'Special Attack', spd:'Special Defense', spe:'Speed'};
-							for (let statId in eventData.ivs) {
-								if (set.ivs[statId] !== eventData.ivs[statId]) {
-									problems.push(`${name} must have ${eventData.ivs[statId]} ${statTable[statId]} IVs because it has a move only available from a specific event.`);
-								}
-							}
-						} else if (set.ivs && (eventData.perfectIVs || (eventData.generation >= 6 && (template.eggGroups[0] === 'Undiscovered' || template.species === 'Manaphy') && !template.prevo && !template.nfe &&
-							template.species !== 'Unown' && template.baseSpecies !== 'Pikachu' && (template.baseSpecies !== 'Diancie' || !set.shiny)))) {
-							// Legendary Pokemon must have at least 3 perfect IVs in gen 6
-							// Events can also have a certain amount of guaranteed perfect IVs
-							let perfectIVs = 0;
-							for (let i in set.ivs) {
-								if (set.ivs[i] >= 31) perfectIVs++;
-							}
-							if (eventData.perfectIVs) {
-								if (perfectIVs < eventData.perfectIVs) problems.push(`${name} must have at least ${eventData.perfectIVs} perfect IVs because it has a move only available from a specific event.`);
-							} else if (perfectIVs < 3) {
-								problems.push(`${name} must have at least three perfect IVs because it's a legendary and it has a move only available from a gen 6 event.`);
-							}
-						}
-						if (tools.gen <= 5 && eventData.abilities && eventData.abilities.length === 1 && !eventData.isHidden) {
-							if (template.species === eventTemplate.species) {
-								// has not evolved, abilities must match
-								const requiredAbility = tools.getAbility(eventData.abilities[0]).name;
-								if (ability.name !== requiredAbility) {
-									problems.push(`${name} must have ${requiredAbility}  because it has a move only available from a specific event.`);
-								}
-							} else {
-								// has evolved
-								let ability1 = tools.getAbility(eventTemplate.abilities['1']);
-								if (ability1.gen && eventData.generation >= ability1.gen) {
-									// pokemon had 2 available abilities in the gen the event happened
-									// ability is restricted to a single ability slot
-									const requiredAbilitySlot = (toId(eventData.abilities[0]) === ability1.id ? 1 : 0);
-									const requiredAbility = tools.getAbility(template.abilities[requiredAbilitySlot] || template.abilities['0']).name;
-									if (ability.name !== requiredAbility) {
-										const originalAbility = tools.getAbility(eventData.abilities[0]).name;
-										problems.push(`${name} must have ${requiredAbility}  because it has a move only available from a specific ${originalAbility} ${eventTemplate.species} event.`);
-									}
-								}
-							}
-						}
+						let eventProblems = this.validateEvent(set, eventData, eventTemplate, ` because it has a move only available`);
+						if (eventProblems) problems.push(...eventProblems);
 					}
 					isHidden = false;
 				}
 			} else if (banlistTable['illegal'] && template.eventOnly) {
-				let eventPokemon = !template.learnset && template.baseSpecies !== template.species ? tools.getTemplate(template.baseSpecies).eventPokemon : template.eventPokemon;
+				let eventTemplate = !template.learnset && template.baseSpecies !== template.species ? tools.getTemplate(template.baseSpecies) : template;
+				let eventPokemon = eventTemplate.eventPokemon;
 				let legal = false;
 				events:
 				for (let i = 0; i < eventPokemon.length; i++) {
@@ -502,14 +449,23 @@ class Validator {
 					if (eventData.ivs) {
 						if (!set.ivs) set.ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
 						for (let i in eventData.ivs) {
-							if (set.ivs[i] !== eventData.ivs[i]) continue events;
+							if (set.ivs[i] !== eventData.ivs[i] && (tools.gen !== 7 || set.level !== 100)) continue events;
 						}
 					}
 					if (eventData.isHidden !== undefined && isHidden !== eventData.isHidden) continue;
 					legal = true;
 					if (eventData.gender) set.gender = eventData.gender;
 				}
-				if (!legal) problems.push(`${template.species} is only obtainable via event - it needs to match one of its events.`);
+				if (!legal) {
+					if (eventPokemon.length === 1) {
+						problems.push(`${template.species} is only obtainable from an event - it needs to match its event:`);
+					} else {
+						problems.push(`${template.species} is only obtainable from events - it needs to match one of its events, such as:`);
+					}
+					let eventData = eventPokemon[0];
+					let eventProblems = this.validateEvent(set, eventData, eventTemplate, ` to be`, eventPokemon.length === 1 ? `its` : `its first`);
+					if (eventProblems) problems.push(...eventProblems);
+				}
 			}
 			if (isHidden && lsetData.sourcesBefore) {
 				if (!lsetData.sources && lsetData.sourcesBefore < 5) {
@@ -558,10 +514,13 @@ class Validator {
 		if (format.requirePentagon && tools.gen >= 7) {
 			const islandScanList = ["Chikorita", "Bayleef", "Meganium", "Cyndaquil", "Quilava", "Typhlosion", "Totodile", "Croconaw", "Feraligatr", "Klink", "Klang", "Klinklang", "Litwick", "Lampent", "Chandelure", "Deino", "Zweilous", "Hydreigon", "Bellsprout", "Weepinbell", "Victreebel", "Rhyhorn", "Rhydon", "Rhyperior", "Marill", "Azumarill", "Spheal", "Sealeo", "Walrein", "Shinx", "Luxio", "Luxray", "Venipede", "Whirlipede", "Scolipede", "Gothita", "Gothorita", "Gothitelle", "Honedge", "Doublade", "Aegislash", "Swinub", "Piloswine", "Mamoswine", "Slakoth", "Vigoroth", "Slaking", "Budew", "Roselia", "Roserade", "Starly", "Staravia", "Staraptor", "Solosis", "Duosion", "Reuniclus", "Axew", "Fraxure", "Haxorus", "Togepi", "Togetic", "Togekiss", "Snivy", "Servine", "Serperior", "Tepig", "Pignite", "Emboar", "Oshawott", "Dewott", "Samurott", "Timburr", "Gurdurr", "Conkeldurr", "Sewaddle", "Swadloon", "Leavanny", "Tynamo", "Eelektrik", "Eelektross"];
 			const alolaDex = {
-				"Caterpie":1, "Metapod":1, "Butterfree":1, "Rattata-Alola":1, "Raticate-Alola":1, "Spearow":1, "Fearow":1, "Pikachu":1, "Raichu-Alola":1, "Sandshrew-Alola":1, "Sandslash-Alola":1, "Clefairy":1, "Clefable":1, "Vulpix-Alola":1, "Ninetales-Alola":1, "Jigglypuff":1, "Wigglytuff":1, "Zubat":1, "Golbat":1, "Paras":1, "Parasect":1, "Diglett-Alola":1, "Dugtrio-Alola":1, "Meowth-Alola":1, "Persian-Alola":1, "Psyduck":1, "Golduck":1, "Mankey":1, "Primeape":1, "Growlithe":1, "Arcanine":1, "Poliwag":1, "Poliwhirl":1, "Poliwrath":1, "Abra":1, "Kadabra":1, "Alakazam":1, "Machop":1, "Machoke":1, "Machamp":1, "Tentacool":1, "Tentacruel":1, "Geodude-Alola":1, "Graveler-Alola":1, "Golem-Alola":1, "Slowpoke":1, "Slowbro":1, "Magnemite":1, "Magneton":1, "Grimer-Alola":1, "Muk-Alola":1, "Shellder":1, "Cloyster":1, "Gastly":1, "Haunter":1, "Gengar":1, "Drowzee":1, "Hypno":1, "Exeggcute":1, "Exeggutor-Alola":1, "Cubone":1, "Marowak-Alola":1, "Chansey":1, "Kangaskhan":1, "Goldeen":1, "Seaking":1, "Staryu":1, "Starmie":1, "Scyther":1, "Electabuzz":1, "Magmar":1, "Pinsir":1, "Tauros":1, "Magikarp":1, "Gyarados":1, "Lapras":1, "Ditto":1, "Eevee":1, "Vaporeon":1, "Jolteon":1, "Flareon":1, "Porygon":1, "Aerodactyl":1, "Snorlax":1, "Dratini":1, "Dragonair":1, "Dragonite":1, "Ledyba":1, "Ledian":1, "Spinarak":1, "Ariados":1, "Crobat":1, "Chinchou":1, "Lanturn":1, "Pichu":1, "Cleffa":1, "Igglybuff":1, "Sudowoodo":1, "Politoed":1, "Espeon":1, "Umbreon":1, "Murkrow":1, "Slowking":1, "Misdreavus":1, "Snubbull":1, "Granbull":1, "Scizor":1, "Sneasel":1, "Corsola":1, "Delibird":1, "Skarmory":1, "Porygon2":1, "Smeargle":1, "Elekid":1, "Magby":1, "Miltank":1, "Blissey":1, "Wingull":1, "Pelipper":1, "Surskit":1, "Masquerain":1, "Makuhita":1, "Hariyama":1, "Nosepass":1, "Sableye":1, "Carvanha":1, "Sharpedo":1, "Wailmer":1, "Wailord":1, "Torkoal":1, "Spinda":1, "Trapinch":1, "Vibrava":1, "Flygon":1, "Barboach":1, "Whiscash":1, "Feebas":1, "Milotic":1, "Castform":1, "Absol":1, "Snorunt":1, "Glalie":1, "Relicanth":1, "Luvdisc":1, "Bagon":1, "Shelgon":1, "Salamence":1, "Beldum":1, "Metang":1, "Metagross":1, "Cranidos":1, "Rampardos":1, "Shieldon":1, "Bastiodon":1, "Shellos":1, "Gastrodon":1, "Drifloon":1, "Drifblim":1, "Mismagius":1, "Honchkrow":1, "Bonsly":1, "Happiny":1, "Gible":1, "Gabite":1, "Garchomp":1, "Munchlax":1, "Riolu":1, "Lucario":1, "Finneon":1, "Lumineon":1, "Weavile":1, "Magnezone":1, "Electivire":1, "Magmortar":1, "Leafeon":1, "Glaceon":1, "Porygon-Z":1, "Probopass":1, "Froslass":1, "Lillipup":1, "Herdier":1, "Stoutland":1, "Roggenrola":1, "Boldore":1, "Gigalith":1, "Cottonee":1, "Whimsicott":1, "Petilil":1, "Lilligant":1, "Sandile":1, "Krokorok":1, "Krookodile":1, "Tirtouga":1, "Carracosta":1, "Archen":1, "Archeops":1, "Trubbish":1, "Garbodor":1, "Vanillite":1, "Vanillish":1, "Vanilluxe":1, "Emolga":1, "Alomomola":1, "Rufflet":1, "Braviary":1, "Vullaby":1, "Mandibuzz":1, "Greninja-Ash":1, "Fletchling":1, "Fletchinder":1, "Talonflame":1, "Pancham":1, "Pangoro":1, "Sylveon":1, "Carbink":1, "Goomy":1, "Sliggoo":1, "Goodra":1, "Klefki":1, "Phantump":1, "Trevenant":1, "Zygarde":1, "Rowlet":1, "Dartrix":1, "Decidueye":1, "Litten":1, "Torracat":1, "Incineroar":1, "Popplio":1, "Brionne":1, "Primarina":1, "Pikipek":1, "Trumbeak":1, "Toucannon":1, "Yungoos":1, "Gumshoos":1, "Grubbin":1, "Charjabug":1, "Vikavolt":1, "Crabrawler":1, "Crabominable":1, "Oricorio":1, "Cutiefly":1, "Ribombee":1, "Rockruff":1, "Lycanroc":1, "Wishiwashi":1, "Mareanie":1, "Toxapex":1, "Mudbray":1, "Mudsdale":1, "Dewpider":1, "Araquanid":1, "Fomantis":1, "Lurantis":1, "Morelull":1, "Shiinotic":1, "Salandit":1, "Salazzle":1, "Stufful":1, "Bewear":1, "Bounsweet":1, "Steenee":1, "Tsareena":1, "Comfey":1, "Oranguru":1, "Passimian":1, "Wimpod":1, "Golisopod":1, "Sandygast":1, "Palossand":1, "Pyukumuku":1, "Type: Null":1, "Silvally":1, "Minior":1, "Komala":1, "Turtonator":1, "Togedemaru":1, "Mimikyu":1, "Bruxish":1, "Drampa":1, "Dhelmise":1, "Jangmo-o":1, "Hakamo-o":1, "Kommo-o":1, "Tapu Koko":1, "Tapu Lele":1, "Tapu Bulu":1, "Tapu Fini":1, "Cosmog":1, "Cosmoem":1, "Solgaleo":1, "Lunala":1, "Nihilego":1, "Buzzwole":1, "Pheromosa":1, "Xurkitree":1, "Celesteela":1, "Kartana":1, "Guzzlord":1, "Necrozma":1, "Magearna":1, "Marshadow":1,
+				"Caterpie":1, "Metapod":1, "Butterfree":1, "Rattata-Alola":1, "Raticate-Alola":1, "Spearow":1, "Fearow":1, "Pikachu":1, "Raichu-Alola":1, "Sandshrew-Alola":1, "Sandslash-Alola":1, "Clefairy":1, "Clefable":1, "Vulpix-Alola":1, "Ninetales-Alola":1, "Jigglypuff":1, "Wigglytuff":1, "Zubat":1, "Golbat":1, "Paras":1, "Parasect":1, "Diglett-Alola":1, "Dugtrio-Alola":1, "Meowth-Alola":1, "Persian-Alola":1, "Psyduck":1, "Golduck":1, "Mankey":1, "Primeape":1, "Growlithe":1, "Arcanine":1, "Poliwag":1, "Poliwhirl":1, "Poliwrath":1, "Abra":1, "Kadabra":1, "Alakazam":1, "Machop":1, "Machoke":1, "Machamp":1, "Tentacool":1, "Tentacruel":1, "Geodude-Alola":1, "Graveler-Alola":1, "Golem-Alola":1, "Slowpoke":1, "Slowbro":1, "Magnemite":1, "Magneton":1, "Grimer-Alola":1, "Muk-Alola":1, "Shellder":1, "Cloyster":1, "Gastly":1, "Haunter":1, "Gengar":1, "Drowzee":1, "Hypno":1, "Exeggcute":1, "Exeggutor-Alola":1, "Cubone":1, "Marowak-Alola":1, "Chansey":1, "Kangaskhan":1, "Goldeen":1, "Seaking":1, "Staryu":1, "Starmie":1, "Scyther":1, "Electabuzz":1, "Magmar":1, "Pinsir":1, "Tauros":1, "Magikarp":1, "Gyarados":1, "Lapras":1, "Ditto":1, "Eevee":1, "Vaporeon":1, "Jolteon":1, "Flareon":1, "Porygon":1, "Aerodactyl":1, "Snorlax":1, "Dratini":1, "Dragonair":1, "Dragonite":1, "Ledyba":1, "Ledian":1, "Spinarak":1, "Ariados":1, "Crobat":1, "Chinchou":1, "Lanturn":1, "Pichu":1, "Cleffa":1, "Igglybuff":1, "Sudowoodo":1, "Politoed":1, "Espeon":1, "Umbreon":1, "Murkrow":1, "Slowking":1, "Misdreavus":1, "Snubbull":1, "Granbull":1, "Scizor":1, "Sneasel":1, "Corsola":1, "Delibird":1, "Skarmory":1, "Porygon2":1, "Smeargle":1, "Elekid":1, "Magby":1, "Miltank":1, "Blissey":1, "Wingull":1, "Pelipper":1, "Surskit":1, "Masquerain":1, "Makuhita":1, "Hariyama":1, "Nosepass":1, "Sableye":1, "Carvanha":1, "Sharpedo":1, "Wailmer":1, "Wailord":1, "Torkoal":1, "Spinda":1, "Trapinch":1, "Vibrava":1, "Flygon":1, "Barboach":1, "Whiscash":1, "Feebas":1, "Milotic":1, "Castform":1, "Absol":1, "Snorunt":1, "Glalie":1, "Relicanth":1, "Luvdisc":1, "Bagon":1, "Shelgon":1, "Salamence":1, "Beldum":1, "Metang":1, "Metagross":1, "Cranidos":1, "Rampardos":1, "Shieldon":1, "Bastiodon":1, "Shellos":1, "Gastrodon":1, "Drifloon":1, "Drifblim":1, "Mismagius":1, "Honchkrow":1, "Bonsly":1, "Happiny":1, "Gible":1, "Gabite":1, "Garchomp":1, "Munchlax":1, "Riolu":1, "Lucario":1, "Finneon":1, "Lumineon":1, "Weavile":1, "Magnezone":1, "Electivire":1, "Magmortar":1, "Leafeon":1, "Glaceon":1, "Porygon-Z":1, "Probopass":1, "Froslass":1, "Lillipup":1, "Herdier":1, "Stoutland":1, "Roggenrola":1, "Boldore":1, "Gigalith":1, "Cottonee":1, "Whimsicott":1, "Petilil":1, "Lilligant":1, "Sandile":1, "Krokorok":1, "Krookodile":1, "Tirtouga":1, "Carracosta":1, "Archen":1, "Archeops":1, "Trubbish":1, "Garbodor":1, "Vanillite":1, "Vanillish":1, "Vanilluxe":1, "Emolga":1, "Alomomola":1, "Rufflet":1, "Braviary":1, "Vullaby":1, "Mandibuzz":1, "Greninja":1, "Fletchling":1, "Fletchinder":1, "Talonflame":1, "Pancham":1, "Pangoro":1, "Sylveon":1, "Carbink":1, "Goomy":1, "Sliggoo":1, "Goodra":1, "Klefki":1, "Phantump":1, "Trevenant":1, "Zygarde":1, "Rowlet":1, "Dartrix":1, "Decidueye":1, "Litten":1, "Torracat":1, "Incineroar":1, "Popplio":1, "Brionne":1, "Primarina":1, "Pikipek":1, "Trumbeak":1, "Toucannon":1, "Yungoos":1, "Gumshoos":1, "Grubbin":1, "Charjabug":1, "Vikavolt":1, "Crabrawler":1, "Crabominable":1, "Oricorio":1, "Cutiefly":1, "Ribombee":1, "Rockruff":1, "Lycanroc":1, "Wishiwashi":1, "Mareanie":1, "Toxapex":1, "Mudbray":1, "Mudsdale":1, "Dewpider":1, "Araquanid":1, "Fomantis":1, "Lurantis":1, "Morelull":1, "Shiinotic":1, "Salandit":1, "Salazzle":1, "Stufful":1, "Bewear":1, "Bounsweet":1, "Steenee":1, "Tsareena":1, "Comfey":1, "Oranguru":1, "Passimian":1, "Wimpod":1, "Golisopod":1, "Sandygast":1, "Palossand":1, "Pyukumuku":1, "Type: Null":1, "Silvally":1, "Minior":1, "Komala":1, "Turtonator":1, "Togedemaru":1, "Mimikyu":1, "Bruxish":1, "Drampa":1, "Dhelmise":1, "Jangmo-o":1, "Hakamo-o":1, "Kommo-o":1, "Tapu Koko":1, "Tapu Lele":1, "Tapu Bulu":1, "Tapu Fini":1, "Cosmog":1, "Cosmoem":1, "Solgaleo":1, "Lunala":1, "Nihilego":1, "Buzzwole":1, "Pheromosa":1, "Xurkitree":1, "Celesteela":1, "Kartana":1, "Guzzlord":1, "Necrozma":1, "Magearna":1, "Marshadow":1,
 			};
 			if (!(template.baseSpecies in alolaDex) && !(template.species in alolaDex) && !islandScanList.includes(template.baseSpecies)) {
 				problems.push(template.baseSpecies + " is unreleased in gen 7. (It's not possible to transfer Pokemon to Sun/Moon yet)");
+			}
+			if (template.species === 'Greninja' && ability.id !== 'battlebond') {
+				problems.push("Regular Greninja is unreleased in gen 7; only Battle Bond Greninja is available. (It's not possible to transfer Pokemon to Sun/Moon yet)");
 			}
 		}
 
@@ -605,6 +564,82 @@ class Validator {
 			return false;
 		}
 
+		return problems;
+	}
+
+	validateEvent(set, eventData, eventTemplate, because, article = `an`) {
+		let tools = this.tools;
+		let name = set.species;
+		let template = tools.getTemplate(set.species);
+		if (set.species !== set.name && set.baseSpecies !== set.name) name = `${set.name} (${set.species})`;
+
+		if (!because) because = ` because it has a move only available`;
+		let etc = because + ` from ${article} event`;
+
+		let problems = [];
+		if (eventData.level && set.level < eventData.level) {
+			problems.push(`${name} must be at least level ${eventData.level}${etc}.`);
+		}
+		if ((eventData.shiny === true && !set.shiny) || (!eventData.shiny && set.shiny)) {
+			let shinyReq = eventData.shiny ? ` be shiny` : ` not be shiny`;
+			problems.push(`${name} must${shinyReq}${etc}.`);
+		}
+		if (eventData.gender) {
+			set.gender = eventData.gender;
+		}
+		if (eventData.nature && eventData.nature !== set.nature) {
+			problems.push(`${name} must have a ${eventData.nature} nature${etc}.`);
+		}
+		if (eventData.ivs) {
+			if (tools.gen === 6 || tools.gen === 7 && set.level !== 100) {
+				if (!set.ivs) set.ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
+				let statTable = {hp:'HP', atk:'Attack', def:'Defense', spa:'Special Attack', spd:'Special Defense', spe:'Speed'};
+				for (let statId in eventData.ivs) {
+					if (set.ivs[statId] !== eventData.ivs[statId]) {
+						problems.push(`${name} must have ${eventData.ivs[statId]} ${statTable[statId]} IVs${etc}.`);
+					}
+				}
+			}
+		} else if (set.ivs && (eventData.perfectIVs || (eventData.generation >= 6 && (template.eggGroups[0] === 'Undiscovered' || template.species === 'Manaphy') && !template.prevo && !template.nfe &&
+			template.species !== 'Unown' && template.baseSpecies !== 'Pikachu' && (template.baseSpecies !== 'Diancie' || !set.shiny)))) {
+			// Legendary Pokemon must have at least 3 perfect IVs in gen 6
+			// Events can also have a certain amount of guaranteed perfect IVs
+			if (tools.gen === 6 || tools.gen === 7 && set.level !== 100) {
+				let perfectIVs = 0;
+				for (let i in set.ivs) {
+					if (set.ivs[i] >= 31) perfectIVs++;
+				}
+				if (eventData.perfectIVs) {
+					let or7 = tools.gen === 7 ? ' or be level 100' : '';
+					if (perfectIVs < eventData.perfectIVs) problems.push(`${name} must have at least ${eventData.perfectIVs} perfect IVs${or7}${etc}.`);
+				} else if (perfectIVs < 3) {
+					problems.push(`${name} must have at least three perfect IVs because it's a legendary and it has a move only available from a gen 6 event.`);
+				}
+			}
+		}
+		if (tools.gen <= 5 && eventData.abilities && eventData.abilities.length === 1 && !eventData.isHidden) {
+			if (template.species === eventTemplate.species) {
+				// has not evolved, abilities must match
+				const requiredAbility = tools.getAbility(eventData.abilities[0]).name;
+				if (set.ability !== requiredAbility) {
+					problems.push(`${name} must have ${requiredAbility}${etc}.`);
+				}
+			} else {
+				// has evolved
+				let ability1 = tools.getAbility(eventTemplate.abilities['1']);
+				if (ability1.gen && eventData.generation >= ability1.gen) {
+					// pokemon had 2 available abilities in the gen the event happened
+					// ability is restricted to a single ability slot
+					const requiredAbilitySlot = (toId(eventData.abilities[0]) === ability1.id ? 1 : 0);
+					const requiredAbility = tools.getAbility(template.abilities[requiredAbilitySlot] || template.abilities['0']).name;
+					if (set.ability !== requiredAbility) {
+						const originalAbility = tools.getAbility(eventData.abilities[0]).name;
+						problems.push(`${name} must have ${requiredAbility}${because} from a specific ${originalAbility} ${eventTemplate.species} event.`);
+					}
+				}
+			}
+		}
+		if (!problems.length) return;
 		return problems;
 	}
 
@@ -870,7 +905,7 @@ class Validator {
 		// Now that we have our list of possible sources, intersect it with the current list
 		if (!sourcesBefore && !sources.length) {
 			if (noPastGen && sometimesPossible) return {type:'pokebank'};
-			if (incompatibleAbility) return {type:'incompatible'};
+			if (incompatibleAbility) return {type:'incompatibleAbility'};
 			return true;
 		}
 		if (!sources.length) sources = null;

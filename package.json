@@ -2,7 +2,7 @@
   "name": "pokemon-showdown",
   "preferGlobal": true,
   "description": "The server for the Pokémon Showdown battle simulator",
-  "version": "0.10.2",
+  "version": "0.11.0",
   "dependencies": {
     "sockjs": "0.3.18"
   },

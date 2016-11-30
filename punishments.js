@@ -125,10 +125,12 @@ Punishments.roomIps = new NestedPunishmentMap();
 // By default, this includes:
 //   'ROOMBAN'
 //   'BLACKLIST'
+//   'MUTE' (used by getRoomPunishments)
 
 Punishments.roomPunishmentTypes = new Map([
 	['ROOMBAN', 'banned'],
 	['BLACKLIST', 'blacklisted'],
+	['MUTE', 'muted'],
 ]);
 
 // punishments.tsv is in the format:
@@ -461,6 +463,8 @@ Punishments.roomPunish = function (room, user, punishment, noRecurse) {
 			punishType: punishType,
 			rest: rest,
 		}, room.id + ':' + id, ROOM_PUNISHMENT_FILE);
+
+		Punishments.monitorRoomPunishments(user);
 	}
 };
 
@@ -472,6 +476,8 @@ Punishments.roomPunishName = function (room, userid, punishment) {
 		punishType: punishType,
 		rest: rest,
 	}, room.id + ':' + id, ROOM_PUNISHMENT_FILE);
+
+	Punishments.monitorRoomPunishments(userid);
 };
 /**
  * @param {string} id
@@ -982,5 +988,60 @@ Punishments.isRoomBanned = function (user, roomid) {
 	for (let ip in user.ips) {
 		punishment = Punishments.roomIps.nestedGet(roomid, ip);
 		if (punishment && (punishment[0] === 'ROOMBAN' || punishment[0] === 'BLACKLIST')) return punishment;
+	}
+};
+
+/**
+ * Returns an array of all room punishments associated with a user.
+ *
+ * @param {User} user
+ * @return {Array}
+ */
+Punishments.getRoomPunishments = function (user) {
+	if (!user) return;
+	let userid = toId(user);
+	let checkMutes = typeof user !== 'string';
+
+	let punishments = [];
+
+	for (let i = 0; i < Rooms.global.chatRooms.length; i++) {
+		const curRoom = Rooms.global.chatRooms[i];
+		if (!curRoom || curRoom.isPrivate === true) continue;
+		let punishment = Punishments.roomUserids.nestedGet(curRoom.id, userid);
+		if (punishment) {
+			punishments.push([curRoom, punishment]);
+		} else if (checkMutes && curRoom.muteQueue) {
+			for (let i = 0; i < curRoom.muteQueue.length; i++) {
+				let entry = curRoom.muteQueue[i];
+				if (userid === entry.userid ||
+					user.guestNum === entry.guestNum ||
+					(user.autoconfirmed && user.autoconfirmed === entry.autoconfirmed)) {
+					punishments.push([curRoom, ['MUTE', entry.userid, curRoom.muteQueue[i].time]]);
+				}
+			}
+		}
+	}
+};
+
+/**
+ * Notifies staff if a user has three or more room punishments.
+ *
+ * @param {User} user
+ */
+Punishments.monitorRoomPunishments = function (user) {
+	let punishments = Punishments.getRoomPunishments(user);
+
+	if (punishments.length >= 3) {
+		let punishmentText = punishments.map(([room, punishment]) => {
+			const [punishType, punishUserid, , reason] = punishment;
+			let punishDesc = Punishments.roomPunishmentTypes.get(punishType);
+			if (!punishDesc) punishDesc = `punished`;
+			if (punishUserid !== user.userid) punishDesc += ` as ${punishUserid}`;
+
+			if (reason) punishDesc += `: ${reason}`;
+			return `${room} (${punishDesc})`;
+		}).join(', ');
+
+		Monitor.log(`[PunishmentMonitor] ${user.name} currently has punishments in ${punishments.length} rooms: ${punishmentText}`);
 	}
 };

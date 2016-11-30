@@ -2985,8 +2985,8 @@ exports.BattleAbilities = {
 		num: 19,
 	},
 	"shieldsdown": {
-		desc: "If this Pokemon is a Minior, it changes to its Core forme if it has 1/2 or less of its maximum HP at the end of a turn. If Minior's HP is above 1/2 of its maximum HP at the end of a turn, it changes back to Meteor Form.",
-		shortDesc: "If Minior, at end of turn changes forme to Core if at 1/2 max HP or less, else Meteor.",
+		desc: "If this Pokemon is a Minior, it changes to its Core forme if it has 1/2 or less of its maximum HP, and changes to Meteor Form if it has more than 1/2 its maximum HP. This check is done on switch-in and at the end of each turn. While in its Meteor Form, it cannot become affected by major status conditions.",
+		shortDesc: "If Minior, switch-in/end of turn it changes to Core at 1/2 max HP or less, else Meteor.",
 		onStart: function (pokemon) {
 			if (pokemon.baseTemplate.baseSpecies !== 'Minior' || pokemon.transformed) return;
 			if (pokemon.hp > pokemon.maxhp / 2) {
@@ -2996,8 +2996,8 @@ exports.BattleAbilities = {
 				}
 			} else {
 				if (pokemon.template.speciesid !== 'minior') {
-					pokemon.formeChange('Minior');
-					this.add('-formechange', pokemon, 'Minior', '[msg]', '[from] ability: Shields Down');
+					pokemon.formeChange(pokemon.set.species);
+					this.add('-formechange', pokemon, pokemon.set.species, '[msg]', '[from] ability: Shields Down');
 				}
 			}
 		},
@@ -3011,8 +3011,8 @@ exports.BattleAbilities = {
 				}
 			} else {
 				if (pokemon.template.speciesid !== 'minior') {
-					pokemon.formeChange('Minior');
-					this.add('-formechange', pokemon, 'Minior', '[msg]', '[from] ability: Shields Down');
+					pokemon.formeChange(pokemon.set.species);
+					this.add('-formechange', pokemon, pokemon.set.species, '[msg]', '[from] ability: Shields Down');
 				}
 			}
 		},
