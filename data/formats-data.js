@@ -5303,6 +5303,8 @@ exports.BattleFormatsData = {
 		],
 		eventOnly: true,
 		gen: 7,
+		requiredAbility: "Battle Bond",
+		battleOnly: true,
 		tier: "New",
 	},
 	bunnelby: {
