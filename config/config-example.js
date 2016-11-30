@@ -186,6 +186,10 @@ exports.tourannouncements = [/* roomids */];
 exports.tourdefaultplayercap = 0;
 exports.ratedtours = false;
 
+// disablepunishmentmonitor - disables the monitor that alerts the staff room
+// when a user has been punished in several rooms within a short period of time
+exports.disablepunishmentmonitor = false;
+
 // appealurl - specify a URL containing information on how users can appeal
 // disciplinary actions on your section. You can also leave this blank, in
 // which case users won't be given any information on how to appeal.

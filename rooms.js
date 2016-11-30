@@ -200,7 +200,9 @@ class Room {
 
 		user.updateIdentity(this.id);
 
-		Punishments.monitorRoomPunishments(user);
+		if (!Config.disablepunishmentmonitor) {
+			Punishments.monitorRoomPunishments(user);
+		}
 
 		return userid;
 	}
