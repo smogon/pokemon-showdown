@@ -382,7 +382,6 @@ exports.commands = {
 				details = {
 					"Priority": move.priority,
 					"Gen": move.gen,
-					"Contest Condition": move.contestType,
 				};
 
 				if (move.secondary || move.secondaries) details["&#10003; Secondary effect"] = "";
