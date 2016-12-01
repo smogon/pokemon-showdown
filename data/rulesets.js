@@ -260,14 +260,6 @@ exports.BattleFormats = {
 
 			return problems;
 		},
-		onValidateSet: function (set, format) {
-			if (format && format.banlistTable && format.banlistTable['illegal']) {
-				let template = this.getTemplate(set.species || set.name);
-				if (template.species === 'Greninja-Ash') {
-					set.species = 'Greninja';
-				}
-			}
-		},
 	},
 	hoennpokedex: {
 		effectType: 'ValidatorRule',
@@ -699,16 +691,21 @@ exports.BattleFormats = {
 		onStart: function () {
 			this.add('rule', 'Same Type Clause: Pokémon in a team must share a type');
 		},
-		onValidateTeam: function (team, format, teamHas) {
-			if (!team[0]) return;
-			let template = this.getTemplate(team[0].species);
-			let typeTable = template.types;
-			if (!typeTable) return ["Your team must share a type."];
-			for (let i = 1; i < team.length; i++) {
-				template = this.getTemplate(team[i].species);
+		onValidateTeam: function (team) {
+			let typeTable;
+			for (let i = 0; i < team.length; i++) {
+				let template = this.getTemplate(team[i].species);
 				if (!template.types) return ["Your team must share a type."];
-
-				typeTable = typeTable.filter(type => template.types.indexOf(type) >= 0);
+				if (i === 0) {
+					typeTable = template.types;
+				} else {
+					typeTable = typeTable.filter(type => template.types.indexOf(type) >= 0);
+				}
+				let item = this.getItem(team[i].item);
+				if (item.megaStone && template.species === item.megaEvolves) {
+					template = this.getTemplate(item.megaStone);
+					typeTable = typeTable.filter(type => template.types.indexOf(type) >= 0);
+				}
 				if (!typeTable.length) return ["Your team must share a type."];
 			}
 		},

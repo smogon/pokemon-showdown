@@ -325,6 +325,11 @@ class Validator {
 				if (banlistTable['illegal']) {
 					let problem = this.checkLearnset(move, template, lsetData);
 					if (problem) {
+						// Sketchmons hack
+						if (banlistTable['allowonesketch'] && !set.sketchmonsMove && !move.noSketch && !move.isZ) {
+							set.sketchmonsMove = move.id;
+							continue;
+						}
 						let problemString = `${name} can't learn ${move.name}`;
 						if (problem.type === 'incompatibleAbility') {
 							problemString = problemString.concat(` because it's incompatible with its ability.`);
@@ -698,11 +703,13 @@ class Validator {
 			alreadyChecked[template.speciesid] = true;
 			if (tools.gen === 2 && template.gen === 1) tradebackEligible = true;
 			// STABmons hack to avoid copying all of validateSet to formats
-			if (format.banlistTable && format.banlistTable['ignorestabmoves'] && !(moveid in {'acupressure':1, 'bellydrum':1, 'chatter':1, 'darkvoid':1, 'geomancy':1, 'lovelykiss':1, 'shellsmash':1, 'shiftgear':1})) {
+			if (format.banlistTable && format.banlistTable['ignorestabmoves'] && !(moveid in {'acupressure':1, 'chatter':1}) && !move.isZ) {
 				let types = template.types;
-				if (template.species === 'Shaymin') types = ['Grass', 'Flying'];
+				if (template.baseSpecies === 'Rotom') types = ['Electric', 'Ghost', 'Fire', 'Water', 'Ice', 'Flying', 'Grass'];
+				if (template.baseSpecies === 'Shaymin') types = ['Grass', 'Flying'];
 				if (template.baseSpecies === 'Hoopa') types = ['Psychic', 'Ghost', 'Dark'];
-				if (types.includes(move.type)) return false;
+				if (template.baseSpecies === 'Oricorio') types = ['Fire', 'Flying', 'Electric', 'Psychic', 'Ghost'];
+				if (template.baseSpecies === 'Silvally' || types.includes(move.type)) return false;
 			}
 			if (!template.learnset) {
 				if (template.baseSpecies !== template.species) {

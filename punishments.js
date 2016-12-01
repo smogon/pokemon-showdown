@@ -1021,6 +1021,8 @@ Punishments.getRoomPunishments = function (user) {
 			}
 		}
 	}
+
+	return punishments;
 };
 
 /**

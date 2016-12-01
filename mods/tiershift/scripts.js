@@ -14,7 +14,6 @@ const BOOST_TABLE = {
 };
 
 exports.BattleScripts = {
-	inherit: 'gen6',
 	pokemon: {
 		formeChange: function (template, dontRecalculateStats) {
 			template = this.battle.getTemplate(template);
@@ -34,11 +33,9 @@ exports.BattleScripts = {
 				}
 				if (tier.charAt(0) === '(') tier = tier.slice(1, -1);
 				let boost = (tier in BOOST_TABLE) ? BOOST_TABLE[tier] : 0;
-				if (this.set.ability in {'Drizzle': 1, 'Drought': 1}) {
+				/*if (this.set.ability in {'Drizzle': 1, 'Drought': 1}) {
 					boost = 0;
-				} else if (this.set.moves.includes('chatter')) {
-					boost = 15;
-				}
+				}*/
 
 				let baseStats = {};
 				for (let statName in this.template.baseStats) {
