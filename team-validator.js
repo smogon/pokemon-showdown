@@ -231,10 +231,10 @@ class Validator {
 
 		let check = template.id;
 		setHas[check] = true;
-		if (banlistTable[check]) {
+		if (banlistTable[check] || banlistTable[check + 'base']) {
 			const reason = banReason`${banlistTable[check]}`;
 			return [`${set.species} is ${reason}.`];
-		} else if (!tools.data.FormatsData[check] || !tools.data.FormatsData[check].tier) {
+		} else {
 			check = toId(template.baseSpecies);
 			if (banlistTable[check]) {
 				const reason = banReason`${banlistTable[check]}`;
