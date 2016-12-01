@@ -353,7 +353,7 @@ exports.Formats = [
 	{
 		name: "Sketchmons",
 		desc: [
-			"Pok&eacute;mon gain access to one Sketch'd move.",
+			"Pok&eacute;mon gain access to one Sketched move.",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3587743/\">Sketchmons</a>",
 		],
 
@@ -586,6 +586,7 @@ exports.Formats = [
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3545628/\">CAP Viability Ranking</a>",
 		],
 
+		searchShow: false,
 		ruleset: ['OU'],
 		banlist: ['Allow CAP'],
 	},
