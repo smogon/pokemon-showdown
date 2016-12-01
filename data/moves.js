@@ -1120,6 +1120,9 @@ exports.BattleMovedex = {
 				}
 			},
 		},
+		onAfterMove: function (pokemon) {
+			pokemon.removeVolatile('beakblast');
+		},
 		secondary: false,
 		target: "normal",
 		type: "Flying",
