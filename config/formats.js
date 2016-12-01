@@ -19,7 +19,7 @@ exports.Formats = [
 		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod'],
 	},
 	{
-		name: "Unrated Random Battle",
+		name: "[Gen 7] Unrated Random Battle",
 
 		mod: 'gen7',
 		team: 'random',
@@ -231,7 +231,7 @@ exports.Formats = [
 		column: 2,
 	},
 	{
-		name: "STABmons",
+		name: "[Gen 7] STABmons",
 		desc: [
 			"Pok&eacute;mon can use any move of their typing, in addition to the moves they can normally learn.",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3587949/\">STABmons</a>",
@@ -251,7 +251,7 @@ exports.Formats = [
 		column: 2,
 	},
 	{
-		name: "Balanced Hackmons",
+		name: "[Gen 7] Balanced Hackmons",
 		desc: [
 			"Anything that can be hacked in-game and is usable in local battles is allowed.",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3587475/\">Balanced Hackmons</a>",
@@ -262,7 +262,7 @@ exports.Formats = [
 		banlist: ['Arena Trap', 'Huge Power', 'Moody', 'Parental Bond', 'Protean', 'Pure Power', 'Shadow Tag', 'Wonder Guard', 'Chatter', 'Extreme Evoboost'],
 	},
 	{
-		name: "1v1",
+		name: "[Gen 7] 1v1",
 		desc: [
 			"Bring three Pok&eacute;mon to Team Preview and choose one to battle.",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3587523/\">1v1</a>",
@@ -282,7 +282,7 @@ exports.Formats = [
 		],
 	},
 	{
-		name: "Monotype",
+		name: "[Gen 7] Monotype",
 		desc: [
 			"All the Pok&eacute;mon on a team must share a type.",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3587204/\">Monotype</a>",
@@ -297,7 +297,7 @@ exports.Formats = [
 		],
 	},
 	{
-		name: "Mix and Mega",
+		name: "[Gen 7] Mix and Mega",
 		desc: [
 			"Mega Stones and Primal Orbs can be used on almost any fully evolved Pok&eacute;mon with no Mega Evolution limit.",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3587740/\">Mix and Mega</a>",
@@ -351,7 +351,7 @@ exports.Formats = [
 		},
 	},
 	{
-		name: "Almost Any Ability",
+		name: "[Gen 7] Almost Any Ability",
 		desc: [
 			"Pok&eacute;mon can use any ability, barring the few that are banned.",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3587901/\">Almost Any Ability</a>",
@@ -378,7 +378,7 @@ exports.Formats = [
 		},
 	},
 	{
-		name: "Sketchmons",
+		name: "[Gen 7] Sketchmons",
 		desc: [
 			"Pok&eacute;mon gain access to one Sketched move.",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3587743/\">Sketchmons</a>",
@@ -405,7 +405,7 @@ exports.Formats = [
 		},
 	},
 	{
-		name: "Hidden Type",
+		name: "[Gen 7] Hidden Type",
 		desc: [
 			"Pok&eacute;mon have an added type determined by their IVs. Same as the Hidden Power type.",
 			// "&bullet; <a href=\"https://www.smogon.com/forums/threads/3516349/\">Hidden Type</a>",
@@ -416,7 +416,7 @@ exports.Formats = [
 		ruleset: ['[Gen 7] Pokebank OU'],
 	},
 	{
-		name: "2v2 Doubles",
+		name: "[Gen 7] 2v2 Doubles",
 		desc: ["Doubles battle where you bring four Pok&eacute;mon to Team Preview and choose only two."],
 
 		mod: 'gen7',
@@ -460,7 +460,7 @@ exports.Formats = [
 		ruleset: ['Pokemon', 'Sleep Clause Mod', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Mega Rayquaza Clause'],
 	},
 	{
-		name: "Challenge Cup 1v1",
+		name: "[Gen 7] Challenge Cup 1v1",
 
 		mod: 'gen7',
 		team: 'randomCC',
@@ -470,7 +470,7 @@ exports.Formats = [
 		ruleset: ['Pokemon', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
 	},
 	{
-		name: "Monotype Random Battle",
+		name: "[Gen 7] Monotype Random Battle",
 
 		mod: 'gen7',
 		team: 'random',
@@ -478,7 +478,7 @@ exports.Formats = [
 		ruleset: ['Pokemon', 'Same Type Clause', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod'],
 	},
 	{
-		name: "Hackmons Cup",
+		name: "[Gen 7] Hackmons Cup",
 		desc: ["Randomized teams of level-balanced Pok&eacute;mon with absolutely any ability, moves, and item."],
 
 		mod: 'gen7',
@@ -486,7 +486,7 @@ exports.Formats = [
 		ruleset: ['Pokemon', 'HP Percentage Mod', 'Cancel Mod'],
 	},
 	{
-		name: "Doubles Hackmons Cup",
+		name: "[Gen 7] Doubles Hackmons Cup",
 
 		mod: 'gen7',
 		gameType: 'doubles',
@@ -643,7 +643,7 @@ exports.Formats = [
 		},
 	},
 	{
-		name: "Random Battle",
+		name: "[Gen 6] Random Battle",
 
 		team: 'random',
 		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod'],
@@ -752,7 +752,7 @@ exports.Formats = [
 		requirePentagon: true,
 	},
 	{
-		name: "Random Doubles Battle",
+		name: "[Gen 6] Random Doubles Battle",
 
 		gameType: 'doubles',
 		team: 'random',
