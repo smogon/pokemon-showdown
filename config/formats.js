@@ -222,6 +222,19 @@ exports.Formats = [
 			}
 		},
 	},
+	{
+		name: "[Gen 7] Doubles Custom Game",
+
+		mod: 'gen7',
+		gameType: 'doubles',
+		searchShow: false,
+		canUseRandomTeam: true,
+		maxLevel: 9999,
+		defaultLevel: 100,
+		debug: true,
+		// no restrictions, for serious (other than team preview)
+		ruleset: ['Team Preview', 'Cancel Mod'],
+	},
 
 	// Other Metagames
 	///////////////////////////////////////////////////////////////////
