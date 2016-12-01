@@ -1,12 +1,11 @@
 'use strict';
 
 exports.BattleScripts = {
-	inherit: 'gen6',
 	pokemon: {
 		formeChange: function (template, dontRecalculateStats) {
 			template = this.battle.getTemplate(template);
-
 			if (!template.abilities) return false;
+
 			this.template = template;
 			this.types = template.types;
 			this.addedType = this.baseHpType;
@@ -22,17 +21,12 @@ exports.BattleScripts = {
 			}
 			return true;
 		},
-		transformInto: function (pokemon, user) {
+		transformInto: function (pokemon, user, effect) {
 			let template = pokemon.template;
-			if (pokemon.fainted || pokemon.illusion || (pokemon.volatiles['substitute'] && this.battle.gen >= 5)) {
-				return false;
-			}
-			if (!template.abilities || (pokemon && pokemon.transformed && this.battle.gen >= 2) || (user && user.transformed && this.battle.gen >= 5)) {
-				return false;
-			}
-			if (!this.formeChange(template, true)) {
-				return false;
-			}
+			if (pokemon.fainted || pokemon.illusion || pokemon.volatiles['substitute']) return false;
+			if (!template.abilities || (pokemon && pokemon.transformed) || (user && user.transformed)) return false;
+			if (!this.formeChange(template, true)) return false;
+
 			this.transformed = true;
 			this.types = pokemon.types;
 			if (pokemon.addedType !== pokemon.hpType) {
@@ -47,11 +41,10 @@ exports.BattleScripts = {
 			}
 			this.moveset = [];
 			this.moves = [];
-			this.set.ivs = (this.battle.gen >= 5 ? this.set.ivs : pokemon.set.ivs);
-			this.hpType = (this.battle.gen >= 5 ? this.hpType : pokemon.hpType);
-			this.hpPower = (this.battle.gen >= 5 ? this.hpPower : pokemon.hpPower);
+			this.set.ivs = this.set.ivs;
+			this.hpType = this.hpType;
+			this.hpPower = this.hpPower;
 			for (let i = 0; i < pokemon.moveset.length; i++) {
-				let move = this.battle.getMove(this.set.moves[i]);
 				let moveData = pokemon.moveset[i];
 				let moveName = moveData.move;
 				if (moveData.id === 'hiddenpower') {
@@ -60,18 +53,24 @@ exports.BattleScripts = {
 				this.moveset.push({
 					move: moveName,
 					id: moveData.id,
-					pp: move.noPPBoosts ? moveData.maxpp : 5,
-					maxpp: this.battle.gen >= 5 ? (move.noPPBoosts ? moveData.maxpp : 5) : (this.battle.gen <= 2 ? move.pp : moveData.maxpp),
+					pp: moveData.maxpp === 1 ? 1 : 5,
+					maxpp: moveData.maxpp === 1 ? 1 : 5,
 					target: moveData.target,
 					disabled: false,
+					used: false,
+					virtual: true,
 				});
 				this.moves.push(toId(moveName));
 			}
 			for (let j in pokemon.boosts) {
 				this.boosts[j] = pokemon.boosts[j];
 			}
-			this.battle.add('-transform', this, pokemon);
-			this.setAbility(pokemon.ability);
+			if (effect) {
+				this.battle.add('-transform', this, pokemon, '[from] ' + effect.fullname);
+			} else {
+				this.battle.add('-transform', this, pokemon);
+			}
+			this.setAbility(pokemon.ability, this, {id: 'transform'});
 			return true;
 		},
 	},
