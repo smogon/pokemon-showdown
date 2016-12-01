@@ -152,7 +152,7 @@ exports.commands = {
 					if (!punishDesc) punishDesc = `punished`;
 					if (punishUserid !== user.userid) punishDesc += ` as ${punishUserid}`;
 					let expiresIn = new Date(expireTime).getTime() - Date.now();
-					let expireString = Chat.toDurationString(expiresIn, {limit: 1});
+					let expireString = Chat.toDurationString(expiresIn, {precision: 1});
 					punishDesc += ` for ${expireString}`;
 
 					if (reason) punishDesc += `: ${reason}`;
@@ -205,7 +205,7 @@ exports.commands = {
 				if (!punishDesc) punishDesc = `punished`;
 				if (punishUserid !== user.userid) punishDesc += ` as ${punishUserid}`;
 				let expiresIn = new Date(expireTime).getTime() - Date.now();
-				let expireString = Chat.toDurationString(expiresIn, {limit: 1});
+				let expireString = Chat.toDurationString(expiresIn, {precision: 1});
 				punishDesc += ` for ${expireString}`;
 
 				if (reason) punishDesc += `: ${reason}`;
