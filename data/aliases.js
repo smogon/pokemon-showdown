@@ -420,7 +420,7 @@ exports.BattleAliases = {
 	"pz": "Porygon-Z",
 	"poryz": "Porygon-Z",
 	"pyuku": "Pyukumuku",
-	"quag" "Quagsire",
+	"quag": "Quagsire",
 	"queen": "Nidoqueen",
 	"rank": "Reuniclus",
 	"rachi": "Jirachi",
