@@ -65,5 +65,7 @@ exports.BattleScripts = {
 		this.modData('Pokedex', 'cresselia').types = ['Fairy', 'Ghost'];
 		this.modData('Pokedex', 'yanmega').types = ['Bug', 'Ground'];
 		this.modData('Learnsets', 'yanmega').learnset.earthpower = ['6T'];
+		this.modData('Pokedex', 'torkoal').abilities['1'] = 'Desolate Land';
+		this.modData('Pokedex', 'torkoal').types = ['Fire', 'Ground'];
 	},
 };
