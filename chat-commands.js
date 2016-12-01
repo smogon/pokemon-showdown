@@ -2297,7 +2297,9 @@ exports.commands = {
 			target = targets[1].trim();
 			roomId = toId(targets[0]) || room.id;
 		}
-		let targetRoom = Rooms.get(roomId);
+		let targetRoom = Rooms.search(roomId);
+		// if a room alias was used, replace alias with actual id
+		if (targetRoom) roomId = targetRoom.id;
 		let addModlogLinks = Config.modloglink && (!hideIps || (targetRoom && !targetRoom.isPrivate));
 
 		// Let's check the number of lines to retrieve or if it's a word instead
