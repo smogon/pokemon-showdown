@@ -503,15 +503,11 @@ exports.Formats = [
 		column: 3,
 	},
 	{
-		name: "[Gen 3] UU",
-		desc: [
-			"&bullet; <a href=\"https://www.smogon.com/dex/rs/formats/uu/\">ADV UU</a>",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3548578/\">ADV UU Viability Ranking</a>",
-		],
+		name: "[Gen 5] Anything Goes",
 
-		mod: 'gen3',
-		ruleset: ['[Gen 3] OU'],
-		banlist: ['OU', 'BL'],
+		mod: 'gen5',
+		ruleset: ['Pokemon', 'Endless Battle Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod'],
+		banlist: ['Illegal', 'Unreleased'],
 	},
 
 	// ORAS Singles
