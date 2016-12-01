@@ -95,6 +95,12 @@ exports.reportbattles = true;
 //   Note that the feature of turning this off is deprecated.
 exports.reportbattlejoins = true;
 
+// notify staff when users have a certain amount of room punishments.
+//   Setting this to a number greater than zero will notify staff for everyone with
+//   the required amount of room punishments.
+//   Set this to 0 to turn the monitor off.
+exports.monitorminpunishments = 3;
+
 // whitelist - prevent users below a certain group from doing things
 //   For the modchat settings, false will allow any user to participate, while a string
 //   with a group symbol will restrict it to that group and above. The string

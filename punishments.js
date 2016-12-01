@@ -1031,9 +1031,11 @@ Punishments.getRoomPunishments = function (user) {
  * @param {User} user
  */
 Punishments.monitorRoomPunishments = function (user) {
+	if (!Config.monitorminpunishments) return;
+
 	let punishments = Punishments.getRoomPunishments(user);
 
-	if (punishments.length >= 3) {
+	if (punishments.length >= Config.monitorminpunishments) {
 		let punishmentText = punishments.map(([room, punishment]) => {
 			const [punishType, punishUserid, , reason] = punishment;
 			let punishDesc = Punishments.roomPunishmentTypes.get(punishType);
