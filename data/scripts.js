@@ -1903,12 +1903,14 @@ exports.BattleScripts = {
 				rejectAbility = !counter['inaccurate'];
 			} else if (ability === 'Defiant' || ability === 'Moxie') {
 				rejectAbility = !counter['Physical'] && !hasMove['batonpass'];
-			} else if (ability === 'Gluttony' || ability === 'Moody') {
-				rejectAbility = true;
+			} else if (ability === 'Gluttony') {
+				rejectAbility = !hasMove['bellydrum'];
 			} else if (ability === 'Lightning Rod') {
 				rejectAbility = template.types.includes('Ground');
 			} else if (ability === 'Limber') {
 				rejectAbility = template.types.includes('Electric');
+			} else if (ability === 'Moody') {
+				rejectAbility = true;
 			} else if (ability === 'Overgrow') {
 				rejectAbility = !counter['Grass'];
 			} else if (ability === 'Poison Heal') {
@@ -2065,7 +2067,13 @@ exports.BattleScripts = {
 		} else if (template.evos.length) {
 			item = (ability === 'Technician' && counter.Physical >= 4) ? 'Choice Band' : 'Eviolite';
 		} else if (hasMove['bellydrum']) {
-			item = (template.baseStats.spe <= 50 && !teamDetails.zMove && this.random(2)) ? 'Normalium Z' : 'Sitrus Berry';
+			if (ability === 'Gluttony') {
+				item = ['Aguav', 'Figy', 'Iapapa', 'Mago', 'Wiki'][this.random(5)] + ' Berry';
+			} else if (template.baseStats.spe <= 50 && !teamDetails.zMove && this.random(2)) {
+				item = 'Normalium Z';
+			} else {
+				item = 'Sitrus Berry';
+			}
 		} else if (hasMove['shellsmash']) {
 			item = (ability === 'Solid Rock' && counter['priority']) ? 'Weakness Policy' : 'White Herb';
 		} else if (ability === 'Harvest') {
