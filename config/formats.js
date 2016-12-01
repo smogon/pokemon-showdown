@@ -260,6 +260,26 @@ exports.Formats = [
 		],
 	},
 	{
+		name: "[Gen 7] Middle Cup",
+		desc: [
+			"Only middle evolutions are allowed.",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3588047/\">Middle Cup</a>",
+		],
+
+		mod: 'gen7',
+		searchShow: false,
+		maxLevel: 50,
+		defaultLevel: 50,
+		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
+		banlist: ['Eviolite', 'Light Ball', 'Baton Pass'],
+		onValidateSet: function (set) {
+			let template = this.getTemplate(set.species || set.name);
+			if (!template.prevo || !template.nfe) {
+				return [set.species + " is not the middle Pokémon in an evolution chain."];
+			}
+		},
+	},
+	{
 		section: "Other Metagames",
 		column: 2,
 	},
