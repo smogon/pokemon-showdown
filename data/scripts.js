@@ -1909,6 +1909,8 @@ exports.BattleScripts = {
 				rejectAbility = template.types.includes('Ground');
 			} else if (ability === 'Limber') {
 				rejectAbility = template.types.includes('Electric');
+			} else if (ability === 'Liquid Voice') {
+				rejectAbility = !hasMove['hypervoice'];
 			} else if (ability === 'Moody') {
 				rejectAbility = true;
 			} else if (ability === 'Overgrow') {
@@ -2006,7 +2008,6 @@ exports.BattleScripts = {
 		if (hasMove['rockclimb'] && ability !== 'Sheer Force') {
 			moves[moves.indexOf('rockclimb')] = 'doubleedge';
 		}
-
 		if (hasMove['thunderpunch'] && ability === 'Galvanize') {
 			moves[moves.indexOf('thunderpunch')] = 'return';
 		}
