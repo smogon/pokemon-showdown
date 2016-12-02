@@ -3243,7 +3243,7 @@ exports.BattleAbilities = {
 	"stamina": {
 		shortDesc: "This Pokemon's Defense is raised by 1 stage after it is damaged by a move.",
 		onAfterDamage: function (damage, target, source, effect) {
-			if (effect && effect.effectType === 'Move') {
+			if (effect && effect.effectType === 'Move' && effect.id !== 'confused') {
 				this.boost({def:1});
 			}
 		},
