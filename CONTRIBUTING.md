@@ -38,6 +38,11 @@ Your commit summary should make it clear what part of the code you're talking ab
 - BAD: `Ban Genesect`
 - GOOD: `Monotype: Ban Genesect` (notice the uppercase "B")
 
+If you're using a variable name within the commit, it should be case-sensitive to the actual variable name.
+
+- BAD: `Add a config option for disabling tournaments`
+- GOOD: `Add a Config option for disabling tournaments`
+
 Do not make commits to fix commits in your pull request. Just squash/amend them into one commit.
 
 - BAD: `Add /lock`, `Fix crash in /lock`, `Fix another crash in /lock` (if these are the same pullreq, they should be the same commit)
