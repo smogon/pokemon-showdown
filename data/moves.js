@@ -1120,6 +1120,9 @@ exports.BattleMovedex = {
 				}
 			},
 		},
+		onMoveAborted: function (pokemon) {
+			pokemon.removeVolatile('beakblast');
+		},
 		onAfterMove: function (pokemon) {
 			pokemon.removeVolatile('beakblast');
 		},
