@@ -247,7 +247,7 @@ exports.BattleAbilities = {
 	},
 	"battlebond": {
 		desc: "If this Pokemon is a Greninja, it transforms into Ash-Greninja after knocking out a Pokemon. As Ash-Greninja, its Water Shuriken has 20 base power and always hits 3 times.",
-		shortDesc: "After knocking out Pokemon: Adopt Ash forme, Water Shuriken hits 3 times with 20 BP.",
+		shortDesc: "After KOing a Pokemon: becomes Ash-Greninja, Water Shuriken: 20 power, hits 3x.",
 		onSourceFaint: function (target, source, effect) {
 			if (effect && effect.effectType === 'Move' && source.template.speciesid === 'greninja' && !source.transformed && source.side.foe.pokemonLeft) {
 				this.add('-activate', source, 'ability: Battle Bond');
@@ -3243,7 +3243,7 @@ exports.BattleAbilities = {
 	"stamina": {
 		shortDesc: "This Pokemon's Defense is raised by 1 stage after it is damaged by a move.",
 		onAfterDamage: function (damage, target, source, effect) {
-			if (effect && effect.effectType === 'Move') {
+			if (effect && effect.effectType === 'Move' && effect.id !== 'confused') {
 				this.boost({def:1});
 			}
 		},
