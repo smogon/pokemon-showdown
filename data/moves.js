@@ -1109,6 +1109,12 @@ exports.BattleMovedex = {
 		beforeTurnCallback: function (pokemon) {
 			pokemon.addVolatile('beakblast');
 		},
+		beforeMoveCallback: function (pokemon) {
+			pokemon.removeVolatile('beakblast');
+		},
+		onMoveAborted: function (pokemon) {
+			pokemon.removeVolatile('beakblast');
+		},
 		effect: {
 			duration: 1,
 			onStart: function (pokemon) {
