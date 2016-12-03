@@ -13,6 +13,14 @@ exports.BattleAbilities = {
 			},
 		},
 	},
+	"aftermath": {
+		inherit: true,
+		onAfterDamage: function (damage, target, source, move) {
+			if (source && source !== target && move && move.flags['contact'] && !target.hp) {
+				this.damage(source.maxhp / 4, source, target, null, true);
+			}
+		},
+	},
 	"galewings": {
 		inherit: true,
 		shortDesc: "This Pokemon's Flying-type moves have their priority increased by 1.",
@@ -20,6 +28,25 @@ exports.BattleAbilities = {
 			if (move && move.type === 'Flying') return priority + 1;
 		},
 		rating: 4.5,
+	},
+	"ironbarbs": {
+		inherit: true,
+		onAfterDamage: function (damage, target, source, move) {
+			if (source && source !== target && move && move.flags['contact']) {
+				this.damage(source.maxhp / 8, source, target, null, true);
+			}
+		},
+	},
+	"liquidooze": {
+		inherit: true,
+		onSourceTryHeal: function (damage, target, source, effect) {
+			this.debug("Heal is occurring: " + target + " <- " + source + " :: " + effect.id);
+			let canOoze = {drain: 1, leechseed: 1};
+			if (canOoze[effect.id]) {
+				this.damage(damage, null, null, null, true);
+				return 0;
+			}
+		},
 	},
 	"multitype": {
 		inherit: true,
@@ -86,6 +113,14 @@ exports.BattleAbilities = {
 			onBasePower: function (basePower, pokemon, target, move) {
 				return this.chainModify([0x1333, 0x1000]);
 			},
+		},
+	},
+	"roughskin": {
+		inherit: true,
+		onAfterDamage: function (damage, target, source, move) {
+			if (source && source !== target && move && move.flags['contact']) {
+				this.damage(source.maxhp / 8, source, target, null, true);
+			}
 		},
 	},
 	"stancechange": {

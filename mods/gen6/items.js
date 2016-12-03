@@ -102,6 +102,16 @@ exports.BattleItems = {
 		},
 		desc: "Restores 1/8 max HP at 1/2 max HP or less; confuses if -Def Nature. Single use.",
 	},
+	jabocaberry: {
+		inherit: true,
+		onAfterDamage: function (damage, target, source, move) {
+			if (source && source !== target && move && move.category === 'Physical') {
+				if (target.eatItem()) {
+					this.damage(source.maxhp / 8, source, target, null, true);
+				}
+			}
+		},
+	},
 	latiasite: {
 		inherit: true,
 		isUnreleased: false,
@@ -152,6 +162,24 @@ exports.BattleItems = {
 	pidgeotite: {
 		inherit: true,
 		isUnreleased: false,
+	},
+	rockyhelmet: {
+		inherit: true,
+		onAfterDamage: function (damage, target, source, move) {
+			if (source && source !== target && move && move.flags['contact']) {
+				this.damage(source.maxhp / 6, source, target, null, true);
+			}
+		},
+	},
+	rowapberry: {
+		inherit: true,
+		onAfterDamage: function (damage, target, source, move) {
+			if (source && source !== target && move && move.category === 'Special') {
+				if (target.eatItem()) {
+					this.damage(source.maxhp / 8, source, target, null, true);
+				}
+			}
+		},
 	},
 	sceptilite: {
 		inherit: true,
