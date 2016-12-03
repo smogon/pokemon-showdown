@@ -1208,10 +1208,10 @@ let commands = {
 				if (reason.length > MAX_REASON_LENGTH) return this.errorReply("The reason is too long. It cannot exceed " + MAX_REASON_LENGTH + " characters.");
 			}
 
-			if (tournament.checkBanned(user)) return this.errorReply("This user is already banned from tournaments.");
+			if (tournament.checkBanned(targetUser)) return this.errorReply("This user is already banned from tournaments.");
 
-			Punishments.roomPunish(this.room, user, ['TOURBAN', targetUserid, Date.now() + TOURBAN_DURATION, reason]);
-			tournament.removeBannedUser(user);
+			Punishments.roomPunish(this.room, targetUser, ['TOURBAN', targetUserid, Date.now() + TOURBAN_DURATION, reason]);
+			tournament.removeBannedUser(targetUser);
 			this.privateModCommand((targetUser.name || targetUserid) + " was banned from tournaments by " + user.name + "." + (reason ? " (" + reason + ")" : ""));
 		},
 	},
