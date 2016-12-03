@@ -783,7 +783,8 @@ class Validator {
 					} else if (learned.charAt(1) === 'E') {
 						// egg moves:
 						//   only if that was the source
-						if (learnedGen >= 6 || lsetData.fastCheck) {
+						const noPastGenBreeding = noPastGen && tools.gen === 7;
+						if ((learnedGen >= 6 && !noPastGenBreeding) || lsetData.fastCheck) {
 							// gen 6 doesn't have egg move incompatibilities except for certain cases with baby Pokemon
 							learned = learnedGen + 'E' + (template.prevo ? template.id : '');
 							sources.push(learned);
@@ -814,11 +815,15 @@ class Validator {
 							// only basic pokemon have egg moves, so by now all evolutions should be in alreadyChecked
 							if (!fromSelf && alreadyChecked[dexEntry.speciesid]) continue;
 							if (!fromSelf && dexEntry.evos.includes(template.id)) continue;
+							if (!fromSelf && dexEntry.prevo === template.id) continue;
 							// father must be able to learn the move
 							if (!fromSelf && !dexEntry.learnset[moveid] && !dexEntry.learnset['sketch']) continue;
 
 							// must be able to breed with father
 							if (!dexEntry.eggGroups.some(eggGroup => eggGroupsSet.has(eggGroup))) continue;
+
+							const fatherLatestMoveGen = (dexEntry.learnset[moveid] ? dexEntry.learnset[moveid][0].charAt(0) : dexEntry.learnset['sketch'][0].charAt(0));
+							if (noPastGenBreeding && (dexEntry.tier.startsWith('Bank') || fatherLatestMoveGen !== '7')) continue;
 
 							// we can breed with it
 							atLeastOne = true;
@@ -832,6 +837,7 @@ class Validator {
 						// chainbreeding with itself
 						// e.g. ExtremeSpeed Dragonite
 						if (!atLeastOne) {
+							if (noPastGenBreeding) continue;
 							sources.push(learned + template.id);
 							limitedEgg = 'self';
 						}
