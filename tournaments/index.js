@@ -1198,7 +1198,7 @@ let commands = {
 		},
 		ban: function (tournament, user, params, cmd) {
 			if (params.length < 1) {
-				return this.sendReply("Usage: " + cmd + " <user>");
+				return this.sendReply("Usage: " + cmd + " <user>, <reason>");
 			}
 			let targetUser = Users.get(params[0]) || params[0];
 			let targetUserid = toId(targetUser);
@@ -1213,6 +1213,19 @@ let commands = {
 			Punishments.roomPunish(this.room, targetUser, ['TOURBAN', targetUserid, Date.now() + TOURBAN_DURATION, reason]);
 			tournament.removeBannedUser(targetUser);
 			this.privateModCommand((targetUser.name || targetUserid) + " was banned from tournaments by " + user.name + "." + (reason ? " (" + reason + ")" : ""));
+		},
+		unban: function (tournament, user, params, cmd) {
+			if (params.length < 1) {
+				return this.sendReply("Usage: " + cmd + " <user>");
+			}
+			let targetUser = Users.get(params[0]) || params[0];
+			let targetUserid = toId(targetUser);
+
+			if (!tournament.checkBanned(targetUser)) return this.errorReply("This user isn't banned from tournaments.");
+
+			Punishments.roomUnpunish(this.room, targetUser, 'TOURBAN');
+			tournament.removeBannedUser(targetUser);
+			this.privateModCommand((targetUser.name || targetUserid) + " was unbanned from tournaments by " + user.name + ".");
 		},
 	},
 };
