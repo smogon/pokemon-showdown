@@ -97,7 +97,7 @@ exports.Formats = [
 			battle: 3,
 		},
 		ruleset: ['Pokemon', 'Species Clause', 'Nickname Clause', 'Item Clause', 'Team Preview', 'Cancel Mod'],
-		banlist: ['Illegal', 'Unreleased'],
+		banlist: ['Illegal', 'Unreleased', 'Memento', 'Parting Shot'],
 		requirePentagon: true,
 		onValidateSet: function (set) {
 			let localDex = {
@@ -120,7 +120,7 @@ exports.Formats = [
 			battle: 3,
 		},
 		ruleset: ['Pokemon', 'Species Clause', 'Nickname Clause', 'Item Clause', 'Team Preview', 'Cancel Mod'],
-		banlist: ['Illegal', 'Unreleased'],
+		banlist: ['Illegal', 'Unreleased', 'Memento', 'Parting Shot'],
 		requirePentagon: true,
 		onValidateSet: function (set) {
 			let localDex = {
@@ -210,7 +210,7 @@ exports.Formats = [
 			battle: 4,
 		},
 		ruleset: ['Pokemon', 'Species Clause', 'Nickname Clause', 'Item Clause', 'Team Preview', 'Cancel Mod'],
-		banlist: ['Illegal', 'Unreleased'],
+		banlist: ['Illegal', 'Unreleased', 'Memento', 'Parting Shot'],
 		requirePentagon: true,
 		onValidateSet: function (set) {
 			let localDex = {
