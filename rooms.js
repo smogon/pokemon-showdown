@@ -200,7 +200,7 @@ class Room {
 
 		user.updateIdentity(this.id);
 
-		Punishments.monitorRoomPunishments(user);
+		if (!(this.isPrivate === true || this.isPersonal || this.battle)) Punishments.monitorRoomPunishments(user);
 
 		return userid;
 	}
