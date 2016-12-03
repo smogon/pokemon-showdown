@@ -172,7 +172,9 @@ exports.commands = {
 		}
 		let userid = toId(target);
 		if (!userid) return this.errorReply("Please enter a valid username.");
-		let buf = Chat.html`<strong class="username">${target}</strong> <em style="color:gray">(offline)</em><br /><br />`;
+		let buf = Chat.html`<strong class="username">${target}</strong>`;
+		if (!Users(userid)) buf += ` <em style="color:gray">(offline)</em>`;
+		buf += `<br /><br />`;
 		let atLeastOne = false;
 
 		let punishment = Punishments.userids.get(userid);
