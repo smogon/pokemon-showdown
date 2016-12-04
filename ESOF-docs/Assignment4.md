@@ -8,8 +8,12 @@
 
 ### 1.Grau de Testabilidade
 
+ Neste tópico será abordado o grau de testabilidade do projeto, isto é, o grau de facilidade de desenvolvimento dos seus testes. 
+ Analizando os módulos do *Pokemon Showdown* verificamos que os testes apenas podem ser aplicados aos seus sub-componentes devido a complexidade e, por vezes, multifuncionalidade destes.
+
 #### 1.1.Controlabilidade
-A controlabilidade determina o grau de possibilidade do teste a ser executado.
+ A controlabilidade dos componentes sob teste (CUT - Componentes Under Test) depende da complexidade e da interação com outros módulos do componente em questão. Quanto maior a complexidade e quantas mais interações tiver o componente mais baixa será a sua controlabilidade nos testes. 
+ Neste projeto, apenas se usa testes unitários e como nestes testes é possível aceder e controlar os estados de um objeto podemos afirmar que o componente tem um controlabilidade boa, excepto quando este utiliza módulos externos que se tornam impossíveis de aceder.
 
 #### 1.2.Observabilidade
 
