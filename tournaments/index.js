@@ -1395,7 +1395,7 @@ Chat.commands.tournamenthelp = function (target, room, user) {
 		"- on/enable &lt;%|@>: Enables allowing drivers or mods to start tournaments in the current room.<br />" +
 		"- off/disable: Disables allowing drivers and mods to start tournaments in the current room.<br />" +
 		"- announce/announcements &lt;on|off>: Enables/disables tournament announcements for the current room.<br />" +
-		"- ban/unban &lt;user>: Bans/unbans a user from joining tournaments in this room. Lasts 2 weeks." +
+		"- ban/unban &lt;user>: Bans/unbans a user from joining tournaments in this room. Lasts 2 weeks.<br />" +
 		"More detailed help can be found <a href=\"https://www.smogon.com/forums/threads/3570628/#post-6777489\">here</a>"
 	);
 };
