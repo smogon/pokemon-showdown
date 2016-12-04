@@ -64,6 +64,7 @@ describe('Rooms features', function () {
 			const roomStaff = new User();
 			roomStaff.forceRename("Room auth", true);
 			const administrator = new User();
+			administrator.forceRename("Admin", true);
 			administrator.group = '~';
 			const options = {
 				rated: false,
