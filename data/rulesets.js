@@ -644,6 +644,7 @@ exports.BattleFormats = {
 	sleepclausemod: {
 		effectType: 'Rule',
 		name: 'Sleep Clause Mod',
+		banlist: ['Hypnosis + Gengarite'],
 		onStart: function () {
 			this.add('rule', 'Sleep Clause Mod: Limit one foe put to sleep');
 		},
