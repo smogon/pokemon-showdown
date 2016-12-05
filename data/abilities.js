@@ -213,7 +213,7 @@ exports.BattleAbilities = {
 			for (let i = 0; i < pokemon.side.foe.active.length; i++) {
 				let target = pokemon.side.foe.active[i];
 				if (!target || !target.hp) continue;
-				if (target.status === 'slp') {
+				if (target.status === 'slp' || target.hasAbility('comatose')) {
 					this.damage(target.maxhp / 8, target, pokemon);
 				}
 			}
@@ -432,21 +432,16 @@ exports.BattleAbilities = {
 		num: 16,
 	},
 	"comatose": {
-		shortDesc: "This Pokemon cannot be statused. Gaining this Ability while statused cures it.",
+		shortDesc: "This Pokemon cannot be statused, and is considered to be asleep.",
 		onStart: function (pokemon) {
-			this.add('-ability', pokemon, 'Comatose'); // TODO: "POKEMON is drowsing!"
-		},
-		onUpdate: function (pokemon) {
-			if (pokemon.hp && pokemon.status) {
-				this.add('-activate', pokemon, 'ability: Comatose');
-				pokemon.cureStatus();
-			}
+			this.add('-ability', pokemon, 'Comatose');
 		},
 		onSetStatus: function (status, target, source, effect) {
 			if (!effect || !effect.status) return false;
 			this.add('-immune', target, '[msg]', '[from] ability: Comatose');
 			return false;
 		},
+		// Permanent sleep "status" implemented in the relevant sleep-checking effects
 		isUnbreakable: true,
 		id: "comatose",
 		name: "Comatose",
@@ -2440,7 +2435,7 @@ exports.BattleAbilities = {
 		onAllyFaint: function (target) {
 			if (!this.effectData.target.hp) return;
 			let ability = this.getAbility(target.ability);
-			let bannedAbilities = {flowergift:1, forecast:1, illusion:1, imposter:1, multitype:1, stancechange:1, trace:1, wonderguard:1, zenmode:1};
+			let bannedAbilities = {comatose:1, flowergift:1, forecast:1, illusion:1, imposter:1, multitype:1, stancechange:1, trace:1, wonderguard:1, zenmode:1};
 			if (bannedAbilities[target.ability]) return;
 			this.add('-ability', this.effectData.target, ability, '[from] ability: Power of Alchemy', '[of] ' + target);
 			this.effectData.target.setAbility(ability);
@@ -2621,7 +2616,7 @@ exports.BattleAbilities = {
 		onAllyFaint: function (target) {
 			if (!this.effectData.target.hp) return;
 			let ability = this.getAbility(target.ability);
-			let bannedAbilities = {flowergift:1, forecast:1, illusion:1, imposter:1, multitype:1, stancechange:1, trace:1, wonderguard:1, zenmode:1};
+			let bannedAbilities = {comatose:1, flowergift:1, forecast:1, illusion:1, imposter:1, multitype:1, stancechange:1, trace:1, wonderguard:1, zenmode:1};
 			if (bannedAbilities[target.ability]) return;
 			this.add('-ability', this.effectData.target, ability, '[from] ability: Receiver', '[of] ' + target);
 			this.effectData.target.setAbility(ability);
@@ -3688,7 +3683,7 @@ exports.BattleAbilities = {
 				if (possibleTargets.length > 1) rand = this.random(possibleTargets.length);
 				let target = possibleTargets[rand];
 				let ability = this.getAbility(target.ability);
-				let bannedAbilities = {flowergift:1, forecast:1, illusion:1, imposter:1, multitype:1, stancechange:1, trace:1, zenmode:1};
+				let bannedAbilities = {comatose:1, flowergift:1, forecast:1, illusion:1, imposter:1, multitype:1, schooling:1, stancechange:1, trace:1, zenmode:1};
 				if (bannedAbilities[target.ability]) {
 					possibleTargets.splice(rand, 1);
 					continue;
