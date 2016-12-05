@@ -199,7 +199,7 @@ exports.commands = {
 
 		let punishments = Punishments.getRoomPunishments(targetUser);
 
-		if (punishments.length) {
+		if (punishments && punishments.length) {
 			buf += `<br />Room punishments: `;
 
 			buf += punishments.map(([room, punishment]) => {
