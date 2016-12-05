@@ -425,6 +425,7 @@ exports.Formats = [
 			'Lugia', 'Lunala', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Shaymin-Sky', 'Solgaleo', 'Xerneas', 'Yveltal', 'Zekrom',
 			'Power Construct', 'Shadow Tag', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Salamencite',
 		],
+		noSketch: ['Geomancy', 'Shell Smash'],
 		onValidateTeam: function (team) {
 			let sketchedMoves = {};
 			for (let i = 0; i < team.length; i++) {
