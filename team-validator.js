@@ -810,9 +810,10 @@ class Validator {
 							if (dexEntry.gender === 'N' || dexEntry.gender === 'F') continue;
 							// can't inherit from dex entries with no learnsets
 							if (!dexEntry.learnset) continue;
-							// unless it's supposed to be self-breedable, can't inherit from self, prevos, etc
+							// unless it's supposed to be self-breedable, can't inherit from self, prevos, evos, etc
 							// only basic pokemon have egg moves, so by now all evolutions should be in alreadyChecked
 							if (!fromSelf && alreadyChecked[dexEntry.speciesid]) continue;
+							if (!fromSelf && dexEntry.evos.includes(template.id)) continue;
 							// father must be able to learn the move
 							if (!fromSelf && !dexEntry.learnset[moveid] && !dexEntry.learnset['sketch']) continue;
 
