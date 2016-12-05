@@ -4465,7 +4465,7 @@ exports.BattleItems = {
 		onAfterDamageOrder: 2,
 		onAfterDamage: function (damage, target, source, move) {
 			if (source && source !== target && move && move.flags['contact']) {
-				this.damage(source.maxhp / 6, source, target);
+				this.damage(source.maxhp / 6, source, target, null, true);
 			}
 		},
 		num: 540,
