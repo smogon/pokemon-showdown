@@ -64,6 +64,18 @@ exports.BattleAbilities = {
 		rating: 3.5,
 		num: 32,
 	},
+	"minus": {
+		inherit: true,
+		shortDesc: "If an active Pokemon has the Ability Plus, this Pokemon's Sp. Atk is 1.5x.",
+		onModifySpA: function (spa, pokemon) {
+			let allActives = pokemon.side.active.concat(pokemon.side.foe.active);
+			for (let i = 0; i < allActives.length; i++) {
+				if (!allActives[i].fainted && allActives[i].hasAbility('plus')) {
+					return this.chainModify(1.5);
+				}
+			}
+		},
+	},
 	"naturalcure": {
 		inherit: true,
 		onCheckShow: function (pokemon) {},
@@ -82,6 +94,18 @@ exports.BattleAbilities = {
 		onResidualOrder: null,
 		onResidualSubOrder: null,
 		onResidual: function () {},
+	},
+	"plus": {
+		inherit: true,
+		shortDesc: "If an active Pokemon has the Ability Minus, this Pokemon's Sp. Atk is 1.5x.",
+		onModifySpA: function (spa, pokemon) {
+			let allActives = pokemon.side.active.concat(pokemon.side.foe.active);
+			for (let i = 0; i < allActives.length; i++) {
+				if (!allActives[i].fainted && allActives[i].hasAbility('minus')) {
+					return this.chainModify(1.5);
+				}
+			}
+		},
 	},
 	"poisonpoint": {
 		inherit: true,
