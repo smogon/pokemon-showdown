@@ -1916,7 +1916,9 @@ exports.BattleAbilities = {
 		onStart: function (pokemon) {
 			this.add('-ability', pokemon, 'Mold Breaker');
 		},
-		stopAttackEvents: true,
+		onModifyMove: function (move) {
+			move.ignoreAbility = true;
+		},
 		id: "moldbreaker",
 		name: "Mold Breaker",
 		rating: 3.5,
@@ -3580,7 +3582,9 @@ exports.BattleAbilities = {
 		onStart: function (pokemon) {
 			this.add('-ability', pokemon, 'Teravolt');
 		},
-		stopAttackEvents: true,
+		onModifyMove: function (move) {
+			move.ignoreAbility = true;
+		},
 		id: "teravolt",
 		name: "Teravolt",
 		rating: 3.5,
@@ -3731,7 +3735,9 @@ exports.BattleAbilities = {
 		onStart: function (pokemon) {
 			this.add('-ability', pokemon, 'Turboblaze');
 		},
-		stopAttackEvents: true,
+		onModifyMove: function (move) {
+			move.ignoreAbility = true;
+		},
 		id: "turboblaze",
 		name: "Turboblaze",
 		rating: 3.5,
