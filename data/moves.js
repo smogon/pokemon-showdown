@@ -8860,7 +8860,7 @@ exports.BattleMovedex = {
 		onBasePowerPriority: 4,
 		onBasePower: function (basePower, source, target, move) {
 			let item = target.getItem();
-			if (!this.singleEvent('TakeItem', item, source.itemData, source, source, move, item)) return;
+			if (!this.singleEvent('TakeItem', item, target.itemData, target, source, move, item)) return;
 			if (item.id) {
 				return this.chainModify(1.5);
 			}
