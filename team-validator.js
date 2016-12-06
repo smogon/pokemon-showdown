@@ -801,37 +801,41 @@ class Validator {
 						let eggGroupsSet = new Set(eggGroups);
 						learned = learned.substr(0, 2);
 						// loop through pokemon for possible fathers to inherit the egg move from
-						for (let templateid in tools.data.Pokedex) {
-							let dexEntry = tools.getTemplate(templateid);
+						for (let fatherid in tools.data.Pokedex) {
+							let father = tools.getTemplate(fatherid);
 							// can't inherit from CAP pokemon
-							if (dexEntry.isNonstandard) continue;
+							if (father.isNonstandard) continue;
 							// can't breed mons from future gens
-							if (dexEntry.gen > learnedGen) continue;
+							if (father.gen > learnedGen) continue;
 							// father must be male
-							if (dexEntry.gender === 'N' || dexEntry.gender === 'F') continue;
+							if (father.gender === 'N' || father.gender === 'F') continue;
 							// can't inherit from dex entries with no learnsets
-							if (!dexEntry.learnset) continue;
+							if (!father.learnset) continue;
 							// unless it's supposed to be self-breedable, can't inherit from self, prevos, evos, etc
 							// only basic pokemon have egg moves, so by now all evolutions should be in alreadyChecked
-							if (!fromSelf && alreadyChecked[dexEntry.speciesid]) continue;
-							if (!fromSelf && dexEntry.evos.includes(template.id)) continue;
-							if (!fromSelf && dexEntry.prevo === template.id) continue;
+							if (!fromSelf && alreadyChecked[father.speciesid]) continue;
+							if (!fromSelf && father.evos.includes(template.id)) continue;
+							if (!fromSelf && father.prevo === template.id) continue;
 							// father must be able to learn the move
-							if (!fromSelf && !dexEntry.learnset[moveid] && !dexEntry.learnset['sketch']) continue;
+							let fatherSources = father.learnset[moveid] || father.learnset['sketch'];
+							if (!fromSelf && !fatherSources) continue;
 
 							// must be able to breed with father
-							if (!dexEntry.eggGroups.some(eggGroup => eggGroupsSet.has(eggGroup))) continue;
+							if (!father.eggGroups.some(eggGroup => eggGroupsSet.has(eggGroup))) continue;
 
-							const fatherLatestMoveGen = (dexEntry.learnset[moveid] ? dexEntry.learnset[moveid][0].charAt(0) : dexEntry.learnset['sketch'][0].charAt(0));
-							if (noPastGenBreeding && (dexEntry.tier.startsWith('Bank') || fatherLatestMoveGen !== '7')) continue;
+							// detect unavailable egg moves
+							if (noPastGenBreeding) {
+								const fatherLatestMoveGen = fatherSources[0].charAt(0);
+								if (father.tier.startsWith('Bank') || fatherLatestMoveGen !== '7') continue;
+							}
 
 							// we can breed with it
 							atLeastOne = true;
 							if (tradebackEligible && learnedGen === 2 && move.gen <= 1) {
 								// can tradeback
-								sources.push('1ET' + dexEntry.id);
+								sources.push('1ET' + father.id);
 							}
-							sources.push(learned + dexEntry.id);
+							sources.push(learned + father.id);
 							if (limitedEgg !== false) limitedEgg = true;
 						}
 						// chainbreeding with itself
