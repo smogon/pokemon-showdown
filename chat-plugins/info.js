@@ -174,7 +174,7 @@ exports.commands = {
 		if (!userid) return this.errorReply("Please enter a valid username.");
 		let targetUser = Users(userid);
 		let buf = Chat.html`<strong class="username">${target}</strong>`;
-		if (!targetUser) buf += ` <em style="color:gray">(offline)</em>`;
+		if (!targetUser || !targetUser.connected) buf += ` <em style="color:gray">(offline)</em>`;
 		buf += `<br /><br />`;
 		let atLeastOne = false;
 
