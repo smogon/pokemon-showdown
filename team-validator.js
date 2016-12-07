@@ -827,6 +827,8 @@ class Validator {
 							if (noPastGenBreeding) {
 								const fatherLatestMoveGen = fatherSources[0].charAt(0);
 								if (father.tier.startsWith('Bank') || fatherLatestMoveGen !== '7') continue;
+								atLeastOne = true;
+								break;
 							}
 
 							// we can breed with it
@@ -837,6 +839,13 @@ class Validator {
 							}
 							sources.push(learned + father.id);
 							if (limitedEgg !== false) limitedEgg = true;
+						}
+						if (atLeastOne && noPastGenBreeding) {
+							// gen 6+ doesn't have egg move incompatibilities except for certain cases with baby Pokemon
+							learned = learnedGen + 'E' + (template.prevo ? template.id : '');
+							sources.push(learned);
+							limitedEgg = false;
+							continue;
 						}
 						// chainbreeding with itself
 						// e.g. ExtremeSpeed Dragonite
