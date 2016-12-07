@@ -1339,11 +1339,12 @@ function runLearn(target, cmd) {
 			let prevSourceCount = 0;
 			for (let i = 0, len = sources.length; i < len; ++i) {
 				let source = sources[i];
+				let hatchAs = ['6E', '7E'].includes(source.substr(0, 2)) ? 'hatched as ' : '';
 				if (source.substr(0, 2) === prevSourceType) {
 					if (prevSourceCount < 0) {
-						buffer += ": " + source.substr(2);
+						buffer += ": " + hatchAs + source.substr(2);
 					} else if (all || prevSourceCount < 3) {
-						buffer += ", " + source.substr(2);
+						buffer += ", " + hatchAs + source.substr(2);
 					} else if (prevSourceCount === 3) {
 						buffer += ", ...";
 					}
@@ -1354,7 +1355,7 @@ function runLearn(target, cmd) {
 				prevSourceCount = source.substr(2) ? 0 : -1;
 				buffer += "<li>gen " + source.charAt(0) + " " + sourceNames[source.charAt(1)];
 				if (prevSourceType === '5E' && template.maleOnlyHidden) buffer += " (cannot have hidden ability)";
-				if (source.substr(2)) buffer += ": " + source.substr(2);
+				if (source.substr(2)) buffer += ": " + hatchAs + source.substr(2);
 			}
 		}
 		if (sourcesBefore) {
