@@ -287,6 +287,7 @@ exports.Formats = [
 		desc: [
 			"Anything that can be hacked in-game and is usable in local battles is allowed.",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3587475/\">Balanced Hackmons</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3588586/\">BH Suspects and Bans Discussion</a>",
 		],
 
 		mod: 'gen7',
