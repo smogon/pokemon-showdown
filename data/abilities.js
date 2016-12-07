@@ -200,7 +200,7 @@ exports.BattleAbilities = {
 		},
 		id: "aurabreak",
 		name: "Aura Break",
-		rating: 2,
+		rating: 1.5,
 		num: 188,
 	},
 	"baddreams": {
@@ -1441,7 +1441,7 @@ exports.BattleAbilities = {
 		},
 		id: "illusion",
 		name: "Illusion",
-		rating: 4.5,
+		rating: 4,
 		num: 149,
 	},
 	"immunity": {
@@ -2461,7 +2461,7 @@ exports.BattleAbilities = {
 		},
 		id: "prankster",
 		name: "Prankster",
-		rating: 4.5,
+		rating: 4,
 		num: 158,
 	},
 	"pressure": {
