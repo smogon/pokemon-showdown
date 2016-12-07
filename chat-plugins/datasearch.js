@@ -1253,29 +1253,44 @@ function runItemsearch(target, cmd, canAll, message) {
 }
 
 function runLearn(target, cmd) {
-	let lsetData = {set:{}, format:{}};
+	let format = {};
 	let targets = target.split(',');
 	let gen = ({rby:1, gsc:2, adv:3, dpp:4, bw2:5, oras:6}[cmd.slice(0, -5)] || 7);
+	let formatid;
+	let formatName;
 
-	while (true) {
+	while (targets.length) {
 		let targetid = toId(targets[0]);
+		if (Tools.getFormat(targetid).exists) {
+			if (format.requirePentagon) {
+				return {error: "'pentagon' can't be used with formats."};
+			}
+			format = Tools.getFormat(targetid);
+			formatid = targetid;
+			formatName = format.name;
+		}
 		if (targetid.startsWith('gen') && parseInt(targetid.charAt(3))) {
 			gen = parseInt(targetid.slice(3));
 			targets.shift();
 			continue;
 		}
 		if (targetid === 'pentagon') {
-			lsetData.format.requirePentagon = true;
+			if (formatid) {
+				return {error: "'pentagon' can't be used with formats."};
+			}
+			format.requirePentagon = true;
 			targets.shift();
 			continue;
 		}
 		break;
 	}
+	if (!formatid) formatid = 'gen' + gen + 'ou';
+	if (!formatName) formatName = 'Gen ' + gen;
+	let lsetData = {set: {}, format: format};
 
 	let template = Tools.getTemplate(targets[0]);
 	let move = {};
 	let problem;
-	let format = 'gen' + gen + 'ou';
 	let all = (cmd === 'learnall');
 	if (cmd === 'learn5') lsetData.set.level = 5;
 	if (cmd === 'g6learn') lsetData.format.noPokebank = true;
@@ -1300,11 +1315,10 @@ function runLearn(target, cmd) {
 		if (move.gen > gen) {
 			return {error: move.name + " didn't exist yet in generation " + gen + "."};
 		}
-		problem = TeamValidator(format).checkLearnset(move, template.species, lsetData);
+		problem = TeamValidator(formatid).checkLearnset(move, template.species, lsetData);
 		if (problem) break;
 	}
-	let buffer = "";
-	if (format) buffer += "In Gen " + gen + ", ";
+	let buffer = "In " + formatName + ", ";
 	buffer += "" + template.name + (problem ? " <span class=\"message-learn-cannotlearn\">can't</span> learn " : " <span class=\"message-learn-canlearn\">can</span> learn ") + (targets.length > 2 ? "these moves" : move.name);
 	if (!problem) {
 		let sourceNames = {E:"egg", S:"event", D:"dream world", X:"egg, traded back", Y: "event, traded back"};

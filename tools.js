@@ -526,10 +526,11 @@ class BattleDex {
 				id = toId(name);
 			}
 			effect = {};
-			if (id && this.data.Formats[id]) {
+			if (this.data.Formats.hasOwnProperty(id)) {
 				effect = this.data.Formats[id];
 				if (effect.cached) return effect;
 				effect.cached = true;
+				effect.exists = true;
 				effect.name = effect.name || this.data.Formats[id].name;
 				if (!effect.mod) effect.mod = 'gen6';
 				if (!effect.effectType) effect.effectType = 'Format';
