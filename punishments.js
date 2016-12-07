@@ -1045,7 +1045,7 @@ Punishments.monitorRoomPunishments = function (user) {
 			if (punishUserid !== user.userid) punishDesc += ` as ${punishUserid}`;
 
 			if (reason) punishDesc += `: ${reason}`;
-			return `${room} (${punishDesc})`;
+			return `<<${room}>> (${punishDesc})`;
 		}).join(', ');
 
 		Monitor.log(`[PunishmentMonitor] ${user.name} currently has punishments in ${punishments.length} rooms: ${punishmentText}`);
