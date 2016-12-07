@@ -1097,6 +1097,7 @@ class BattlePokemon {
 		let result;
 		status = this.battle.getEffect(status);
 		if (!this.hp && !status.affectsFainted) return false;
+		if (linkedStatus && !source.hp) return false;
 		if (this.battle.event) {
 			if (!source) source = this.battle.event.source;
 			if (!sourceEffect) sourceEffect = this.battle.effect;
