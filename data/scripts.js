@@ -757,9 +757,14 @@ exports.BattleScripts = {
 		let zMoves = [];
 		for (let i = 0; i < pokemon.moves.length; i++) {
 			let move = this.getMove(pokemon.moves[i]);
-			let zMove = this.getZMove(move, pokemon, true) || '';
-			zMoves.push(zMove);
-			if (zMove) atLeastOne = true;
+			let zMoveName = this.getZMove(move, pokemon, true) || '';
+			if (zMoveName) {
+				let zMove = this.getMove(zMoveName);
+				zMoves.push({move: zMoveName, target: zMove.target});
+			} else {
+				zMoves.push(null);
+			}
+			if (zMoveName) atLeastOne = true;
 		}
 		if (atLeastOne) return zMoves;
 	},
