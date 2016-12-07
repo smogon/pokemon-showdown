@@ -102,6 +102,7 @@ exports.BattleAbilities = {
 	"prankster": {
 		inherit: true,
 		shortDesc: "This Pokemon's non-damaging moves have their priority increased by 1.",
+		rating: 4.5,
 	},
 	"refrigerate": {
 		inherit: true,
