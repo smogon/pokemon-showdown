@@ -1987,7 +1987,7 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 130,
 		category: "Special",
-		desc: "Until the user is no longer active, Fire-type users lose their Fire type and pure Fire-type users become Normal type.",
+		desc: "User must be Fire-type. User's Fire-type changes to ???-type until it switches out. User's secondary type (if any) is unaffected even by Roost.",
 		shortDesc: "User's Fire-type is removed until it switches out.",
 		id: "burnup",
 		name: "Burn Up",
