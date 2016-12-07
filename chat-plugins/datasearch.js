@@ -230,7 +230,6 @@ exports.commands = {
 	learnset: 'learn',
 	learnall: 'learn',
 	learn5: 'learn',
-	g6learn: 'learn',
 	rbylearn: 'learn',
 	gsclearn: 'learn',
 	advlearn: 'learn',
@@ -255,8 +254,12 @@ exports.commands = {
 			this.update();
 		});
 	},
-	learnhelp: ["/learn [pokemon], [move, move, ...] - Displays how a Pok\u00e9mon can learn the given moves, if it can at all.",
-		"!learn [pokemon], [move, move, ...] - Show everyone that information. Requires: + % @ * # & ~"],
+	learnhelp: ["/learn [ruleset], [pokemon], [move, move, ...] - Displays how the Pok\u00e9mon can learn the given moves, if it can at all.",
+		"!learn [ruleset], [pokemon], [move, move, ...] - Show everyone that information. Requires: + % @ * # & ~",
+		"Specifying a ruleset is entirely optional. The ruleset can be a format, a generation (e.g.: gen3) or 'pentagon'. A value of 'pentagon' indicates that trading from previous generations is not allowed.",
+		"/learn5 displays how the Pok\u00e9mon can learn the given moves at level 5, if it can at all.",
+		"/learnall displays all of the possible fathers for egg moves.",
+		"/learn can also be prefixed by a generation acronym (e.g.: /dpplearn) to indicate which generation is used. Valid options are: rby gsc adv dpp bw2 oras"],
 };
 
 if (process.send && module === process.mainModule) {
@@ -1293,7 +1296,6 @@ function runLearn(target, cmd) {
 	let problem;
 	let all = (cmd === 'learnall');
 	if (cmd === 'learn5') lsetData.set.level = 5;
-	if (cmd === 'g6learn') lsetData.format.noPokebank = true;
 
 	if (!template.exists || template.id === 'missingno') {
 		return {error: "Pok\u00e9mon '" + template.id + "' not found."};
