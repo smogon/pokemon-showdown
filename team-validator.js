@@ -871,6 +871,7 @@ class Validator {
 								continue;
 							}
 						}
+						if (level < template.eventPokemon[learned.substr(2)].level) continue;
 						sources.push(learned + ' ' + template.id);
 					} else if (learned.charAt(1) === 'D') {
 						// DW moves:
