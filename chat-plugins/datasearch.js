@@ -1253,16 +1253,32 @@ function runItemsearch(target, cmd, canAll, message) {
 }
 
 function runLearn(target, cmd) {
-	let lsetData = {set:{}};
+	let lsetData = {set:{}, format:{}};
 	let targets = target.split(',');
+	let gen = ({rby:1, gsc:2, adv:3, dpp:4, bw2:5, oras:6}[cmd.slice(0, -5)] || 7);
+
+	while (true) {
+		let targetid = toId(targets[0]);
+		if (targetid.startsWith('gen') && parseInt(targetid.charAt(3))) {
+			gen = parseInt(targetid.slice(3));
+			targets.shift();
+			continue;
+		}
+		if (targetid === 'pentagon') {
+			lsetData.format.requirePentagon = true;
+			targets.shift();
+			continue;
+		}
+		break;
+	}
+
 	let template = Tools.getTemplate(targets[0]);
 	let move = {};
 	let problem;
-	let gen = ({rby:1, gsc:2, adv:3, dpp:4, bw2:5, oras:6}[cmd.slice(0, -5)] || 7);
 	let format = 'gen' + gen + 'ou';
 	let all = (cmd === 'learnall');
 	if (cmd === 'learn5') lsetData.set.level = 5;
-	if (cmd === 'g6learn') lsetData.format = {noPokebank: true};
+	if (cmd === 'g6learn') lsetData.format.noPokebank = true;
 
 	if (!template.exists || template.id === 'missingno') {
 		return {error: "Pok\u00e9mon '" + template.id + "' not found."};
