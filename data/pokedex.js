@@ -11535,7 +11535,7 @@ exports.BattlePokedex = {
 		color: "Blue",
 		prevo: "brionne",
 		evoLevel: 34,
-		eggGroups: ["Monster", "Water 1"],
+		eggGroups: ["Water 1", "Field"],
 	},
 	pikipek: {
 		num: 731,
