@@ -8588,10 +8588,12 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, authentic: 1, mystery: 1},
 		onHit: function (target, source) {
+			if (!target.lastMove) return false;
+			let lastMove = this.getMove(target.lastMove);
 			let noInstruct = {
-				instruct:1, // TODO: fill this up
+				instruct:1, outrage:1, petaldance:1, thrash:1, // TODO: fill this up
 			};
-			if (!target.lastMove || this.getMove(target.lastMove).isZ || noInstruct[target.lastMove]) {
+			if (noInstruct[lastMove.id] || lastMove.isZ || lastMove.flags['charge'] || lastMove.flags['recharge']) {
 				return false;
 			}
 			this.add('-singleturn', target, 'move: Instruct', '[of] ' + source);
