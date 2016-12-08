@@ -29,6 +29,7 @@ const ROOMBAN_DURATION = 48 * 60 * 60 * 1000; // 48 hours
 const BLACKLIST_DURATION = 365 * 24 * 60 * 60 * 1000; // 1 year
 
 const USERID_REGEX = /^[a-z0-9]+$/;
+const PUNISH_TRUSTED = false;
 
 /**
  * a punishment is an array: [punishType, userid, expireTime, reason]
@@ -350,15 +351,10 @@ Punishments.punish = function (user, punishment, recursionKeys) {
 	let keys = recursionKeys || new Set();
 
 	if (!recursionKeys) {
-		Users.users.forEach(curUser => {
-			if (user === curUser || curUser.trusted) return;
-			for (let myIp in curUser.ips) {
-				if (myIp in user.ips) {
-					this.punish(curUser, punishment, keys);
-					return;
-				}
-			}
-		});
+		let affected = user.getAltUsers(PUNISH_TRUSTED, true);
+		for (let curUser of affected) {
+			this.punish(curUser, punishment, keys);
+		}
 	}
 
 	for (let ip in user.ips) {
@@ -427,15 +423,10 @@ Punishments.roomPunish = function (room, user, punishment, recursionKeys) {
 	let keys = recursionKeys || new Set();
 
 	if (!recursionKeys) {
-		Users.users.forEach(curUser => {
-			if (user === curUser || curUser.trusted) return;
-			for (let myIp in curUser.ips) {
-				if (myIp in user.ips) {
-					this.roomPunish(room, curUser, punishment, keys);
-					return;
-				}
-			}
-		});
+		let affected = user.getAltUsers(PUNISH_TRUSTED, true);
+		for (let curUser of affected) {
+			this.roomPunish(room, curUser, punishment, keys);
+		}
 	}
 
 	for (let ip in user.ips) {
@@ -535,7 +526,7 @@ Punishments.ban = function (user, expireTime, id, ...reason) {
 	let punishment = ['BAN', id, expireTime, ...reason];
 	Punishments.punish(user, punishment);
 
-	let affected = user.getAltUsers(false, true);
+	let affected = user.getAltUsers(PUNISH_TRUSTED, true);
 	for (let curUser of affected) {
 		curUser.locked = id;
 		curUser.disconnectAll();
@@ -560,7 +551,7 @@ Punishments.lock = function (user, expireTime, id, ...reason) {
 	let punishment = ['LOCK', id, expireTime, ...reason];
 	Punishments.punish(user, punishment);
 
-	let affected = user.getAltUsers(false, true);
+	let affected = user.getAltUsers(PUNISH_TRUSTED, true);
 	for (let curUser of affected) {
 		curUser.locked = id;
 		curUser.updateIdentity();
@@ -612,7 +603,7 @@ Punishments.namelock = function (user, expireTime, id, ...reason) {
 	let punishment = ['NAMELOCK', id, expireTime, ...reason];
 	Punishments.punish(user, punishment);
 
-	let affected = user.getAltUsers(false, true);
+	let affected = user.getAltUsers(PUNISH_TRUSTED, true);
 	for (let curUser of affected) {
 		curUser.locked = id;
 		curUser.namelocked = id;
@@ -684,7 +675,7 @@ Punishments.roomBan = function (room, user, expireTime, userId, ...reason) {
 	let punishment = ['ROOMBAN', userId, expireTime].concat(reason);
 	Punishments.roomPunish(room, user, punishment);
 
-	let affected = user.getAltUsers(false, true);
+	let affected = user.getAltUsers(PUNISH_TRUSTED, true);
 	for (let curUser of affected) {
 		if (room.game && room.game.removeBannedUser) {
 			room.game.removeBannedUser(curUser);
@@ -709,7 +700,7 @@ Punishments.roomBlacklist = function (room, user, expireTime, userId, ...reason)
 	if (user) {
 		Punishments.roomPunish(room, user, punishment);
 
-		let affected = user.getAltUsers(false, true);
+		let affected = user.getAltUsers(PUNISH_TRUSTED, true);
 		for (let curUser of affected) {
 			if (room.game && room.game.removeBannedUser) {
 				room.game.removeBannedUser(curUser);
