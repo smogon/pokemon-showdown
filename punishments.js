@@ -28,6 +28,8 @@ const BAN_DURATION = 7 * 24 * 60 * 60 * 1000; // 1 week
 const ROOMBAN_DURATION = 48 * 60 * 60 * 1000; // 48 hours
 const BLACKLIST_DURATION = 365 * 24 * 60 * 60 * 1000; // 1 year
 
+const USERID_REGEX = /^[a-z0-9]+$/;
+
 /**
  * a punishment is an array: [punishType, userid, expireTime, reason]
  * @typedef {[string, string, number, string]} Punishment
@@ -156,7 +158,7 @@ Punishments.loadPunishments = function () {
 			}
 			for (let j = 0; j < keys.length; j++) {
 				const key = keys[j];
-				if (key.includes('.')) {
+				if (!USERID_REGEX.test(key)) {
 					Punishments.ips.set(key, punishment);
 				} else {
 					Punishments.userids.set(key, punishment);
@@ -185,7 +187,7 @@ Punishments.loadRoomPunishments = function () {
 			}
 			for (let j = 0; j < keys.length; j++) {
 				const key = keys[j];
-				if (key.includes('.')) {
+				if (!USERID_REGEX.test(key)) {
 					Punishments.roomIps.nestedSet(roomid, key, punishment);
 				} else {
 					Punishments.roomUserids.nestedSet(roomid, key, punishment);
