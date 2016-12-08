@@ -1200,7 +1200,8 @@ let commands = {
 			if (params.length < 1) {
 				return this.sendReply("Usage: " + cmd + " <user>, <reason>");
 			}
-			let targetUser = Users.get(params[0]) || params[0];
+			let targetUser = Users.get(params[0]);
+			if (!targetUser) return this.errorReply(`User "${params[0]}" not found.`);
 			let targetUserid = toId(targetUser);
 			let reason = '';
 			if (params[1]) {

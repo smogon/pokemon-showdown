@@ -697,6 +697,11 @@ Punishments.roomBlacklist = function (room, user, expireTime, userId, ...reason)
 
 	if (!expireTime) expireTime = Date.now() + BLACKLIST_DURATION;
 	let punishment = ['BLACKLIST', userId, expireTime].concat(reason);
+
+	if (!user || userId && userId !== user.userid) {
+		Punishments.roomPunishName(room, userId, punishment);
+	}
+
 	if (user) {
 		Punishments.roomPunish(room, user, punishment);
 
@@ -707,8 +712,6 @@ Punishments.roomBlacklist = function (room, user, expireTime, userId, ...reason)
 			}
 			curUser.leaveRoom(room.id);
 		}
-	} else {
-		Punishments.roomPunishName(room, userId, punishment);
 	}
 };
 
@@ -985,6 +988,7 @@ Punishments.checkNewNameInRoom = function (user, userid, roomid) {
 
 /**
  * @param {string} userid
+ * @return {string} Descriptive text for the remaining time until the punishment expires, if any.
  */
 Punishments.checkLockExpiration = function (userid) {
 	const punishment = Punishments.userids.get(userid);
