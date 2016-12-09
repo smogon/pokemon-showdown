@@ -2197,7 +2197,7 @@ exports.BattleScripts = {
 			// Blaziken: 74, 'Blaziken-Mega': 74, 'Lucario-Mega': 74,
 
 			// Banned Ability
-			Zygarde: 73
+			Zygarde: 73,
 			// Gothitelle: 74, Wobbuffet: 74,
 
 			// Holistic judgement
