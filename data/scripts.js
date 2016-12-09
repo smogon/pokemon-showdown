@@ -2213,7 +2213,7 @@ exports.BattleScripts = {
 			level = levelScale[baseSpeciesTemplate.tier] || 75;
 		}
 		if (customScale[template.name]) level = customScale[template.name];
-		
+
 		// if (template.name === 'Slurpuff' && !counter.setupType) level = 81;
 		// if (template.name === 'Xerneas' && hasMove['geomancy']) level = 71;
 
