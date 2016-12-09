@@ -2210,7 +2210,8 @@ exports.BattleScripts = {
 		let level = levelScale[tier] || 75;
 		if (tier === 'Unreleased') {
 			let baseSpeciesTemplate = Tools.getTemplate(template.basespecies);
-			level = levelScale[baseSpeciesTemplate.tier] || 75;
+			if (levelScale[baseSpeciesTemplate.tier] < 75)
+				level = levelScale[baseSpeciesTemplate.tier] || 75;
 		}
 		if (customScale[template.name]) level = customScale[template.name];
 
