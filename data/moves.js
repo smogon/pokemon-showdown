@@ -1987,7 +1987,7 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 130,
 		category: "Special",
-		desc: "Until the user is no longer active, Fire-type users lose their Fire type and pure Fire-type users become Normal type.",
+		desc: "User must be Fire-type. User's Fire-type changes to ???-type until it switches out. User's secondary type (if any) is unaffected even by Roost.",
 		shortDesc: "User's Fire-type is removed until it switches out.",
 		id: "burnup",
 		name: "Burn Up",
@@ -8588,10 +8588,12 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, authentic: 1, mystery: 1},
 		onHit: function (target, source) {
+			if (!target.lastMove) return false;
+			let lastMove = this.getMove(target.lastMove);
 			let noInstruct = {
-				instruct:1, // TODO: fill this up
+				instruct:1, outrage:1, petaldance:1, thrash:1, // TODO: fill this up
 			};
-			if (!target.lastMove || this.getMove(target.lastMove).isZ || noInstruct[target.lastMove]) {
+			if (noInstruct[lastMove.id] || lastMove.isZ || lastMove.flags['charge'] || lastMove.flags['recharge']) {
 				return false;
 			}
 			this.add('-singleturn', target, 'move: Instruct', '[of] ' + source);
@@ -8860,7 +8862,7 @@ exports.BattleMovedex = {
 		onBasePowerPriority: 4,
 		onBasePower: function (basePower, source, target, move) {
 			let item = target.getItem();
-			if (!this.singleEvent('TakeItem', item, source.itemData, source, source, move, item)) return;
+			if (!this.singleEvent('TakeItem', item, target.itemData, target, source, move, item)) return;
 			if (item.id) {
 				return this.chainModify(1.5);
 			}
@@ -12312,7 +12314,7 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "For 5 turns, the terrain becomes Psychic Terrain. During the effect, the power of Psychic-type attacks made by grounded Pokemon is multiplied by 1.5 and grounded Pokemon cannot be hit by moves with priority greater than 0. Camouflage transforms the user into a Psychic type, Nature Power becomes Psychic, and Secret Power has a 30% chance to do something. Fails if the current terrain is Psychic Terrain.",
+		desc: "For 5 turns, the terrain becomes Psychic Terrain. During the effect, the power of Psychic-type attacks made by grounded Pokemon is multiplied by 1.5 and grounded Pokemon cannot be hit by moves with priority greater than 0, unless the target is an ally. Camouflage transforms the user into a Psychic type, Nature Power becomes Psychic, and Secret Power has a 30% chance to lower the target's Speed by 1 stage. Fails if the current terrain is Psychic Terrain.",
 		shortDesc: "5 turns. Grounded: +Psychic power, priority-safe.",
 		id: "psychicterrain",
 		name: "Psychic Terrain",
@@ -12330,7 +12332,7 @@ exports.BattleMovedex = {
 			},
 			onTryHitPriority: 4,
 			onTryHit: function (target, source, effect) {
-				if (!target.isGrounded() || target.isSemiInvulnerable()) return;
+				if (!target.isGrounded() || target.isSemiInvulnerable() || target.side === source.side) return;
 				if (effect && (effect.priority <= 0.1 || effect.target === 'self')) {
 					return;
 				}
