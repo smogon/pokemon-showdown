@@ -1664,7 +1664,7 @@ function getRoom(roomid, fallback) {
 Rooms.get = getRoom;
 Rooms.search = function (name, fallback) {
 	if (fallback) throw new Error("fallback parameter in Rooms.search no longer supported");
-	return getRoom(name) || getRoom(toId(name)) || getRoom(Rooms.aliases.get(toId(name)));
+	return getRoom(name) || getRoom(toRoomId(name)) || getRoom(toId(name)) || getRoom(Rooms.aliases.get(toId(name)));
 };
 
 Rooms.createBattle = function (roomid, format, p1, p2, options) {
