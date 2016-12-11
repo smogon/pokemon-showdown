@@ -177,15 +177,7 @@ class Trivia extends Rooms.RoomGame {
 				questions = questions.filter(q => q.category !== 'ugm');
 			}
 		} else if (category === 'random') {
-			if (triviaData.ugm) {
-				let i = 0;
-				do {
-					category = questions[i].category;
-				} while (category === 'ugm' && ++i < questions.length);
-				this.category = 'Random (' + CATEGORIES[category] + ')';
-			} else {
-				this.category = 'Random (' + CATEGORIES[questions[0].category] + ')';
-			}
+			this.category = 'Random (' + CATEGORIES[questions[0].category] + ')';
 		} else {
 			this.category = CATEGORIES[category];
 		}
@@ -738,6 +730,10 @@ const commands = {
 		if (isRandom) {
 			let categories = Object.keys(CATEGORIES);
 			let randCategory = categories[Math.random() * categories.length | 0];
+			if (triviaData.ugm && randCategory === 'ugm') {
+				categories.splice(categories.indexOf('ugm'), 1);
+				randCategory = categories[Math.random() * categories.length | 0];
+			}
 			questions = sliceCategory(randCategory);
 		} else if (isAll) {
 			questions = triviaData.questions;
