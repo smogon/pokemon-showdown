@@ -101,6 +101,14 @@ exports.reportbattlejoins = true;
 //   Set this to 0 to turn the monitor off.
 exports.monitorminpunishments = 3;
 
+// allow punishmentmonitor to lock users with multiple roombans.
+//	 When set to `true`, this feature will automatically lock any users with three or more
+//	 active roombans, and notify the staff room.
+//   Note that this requires punishmentmonitor to be enabled, and therefore requires the `monitorminpunishments`
+//   option to be set to a number greater than zero. If `monitorminpunishments` is set to a value greater than 3,
+//   the autolock will only apply to people who pass this threshold.
+exports.punishmentautolock = false;
+
 // whitelist - prevent users below a certain group from doing things
 //   For the modchat settings, false will allow any user to participate, while a string
 //   with a group symbol will restrict it to that group and above. The string
