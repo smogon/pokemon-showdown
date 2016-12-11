@@ -2411,7 +2411,7 @@ exports.commands = {
 					if (url) timestamp = `<a href="${url}">${timestamp}</a>`;
 				}
 				return `<small>[${timestamp}] (${thisRoomID})</small>${Chat.escapeHTML(line.slice(parenIndex + 1))}`;
-			}).join('<br>');
+			}).join('<br />');
 			if (lines) {
 				if (!stdout) {
 					connection.popup("The modlog is empty. (Weird.)");
