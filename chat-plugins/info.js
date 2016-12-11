@@ -1357,7 +1357,7 @@ exports.commands = {
 			"- /tour create <em>format</em>, roundrobin: Creates a new round robin tournament in the current room.<br />" +
 			"- /tour end: Forcibly ends the tournament in the current room<br />" +
 			"- /tour start: Starts the tournament in the current room<br />" +
-			"- /tour banlist [pokemon], [talent], [...]: After the tournament is created, this will either ban a move, ability, pokemon, or an item from being used in the tournament.<br />" +
+			"- /tour banlist [pokemon], [talent], [...]: Bans moves, abilities, Pokémon or items from being used in a tournament (it must be created first)<br />" +
 			"<br />" +
 			"More detailed help can be found in the <a href=\"https://www.smogon.com/forums/threads/3570628/#post-6777489\">tournaments guide</a><br />" +
 			"</div>"
