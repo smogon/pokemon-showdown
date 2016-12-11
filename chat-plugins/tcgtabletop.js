@@ -90,7 +90,7 @@ exports.commands = {
 			let entryUrl = Tools.getString(data.url);
 			let entryTitle = Tools.getString(data.title);
 			let id = Tools.getString(data.id);
-			let htmlReply = `<strong>Best result for ${Chat.escapeHTML(query)}:</strong><br/><a href="${Chat.escapeHTML(entryUrl)}">${Chat.escapeHTML(entryTitle)}</a>`;
+			let htmlReply = `<strong>Best result for ${Chat.escapeHTML(query)}:</strong><br /><a href="${Chat.escapeHTML(entryUrl)}">${Chat.escapeHTML(entryTitle)}</a>`;
 			if (id) {
 				getCardDetails(subdomain, id).then(card => {
 					let thumb = Tools.getString(card.thumbnail);
@@ -138,7 +138,7 @@ exports.commands = {
 				let redir = /\[\[(.+)\]\]/.exec(snippet);
 				if (redir) page = redir[1];
 			}
-			let htmlReply = `<strong>Best result for ${Chat.escapeHTML(query)}:</strong><br/><a href="http://${domain}/${encodeURIComponent(page)}">${Chat.escapeHTML(page)}</a>`;
+			let htmlReply = `<strong>Best result for ${Chat.escapeHTML(query)}:</strong><br /><a href="http://${domain}/${encodeURIComponent(page)}">${Chat.escapeHTML(page)}</a>`;
 			if (!this.broadcasting) return this.sendReply(`|raw|<div class="infobox">${htmlReply}</div>`);
 			room.addRaw(`<div class="infobox">${htmlReply}</div>`).update();
 		}, err => {

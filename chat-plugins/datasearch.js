@@ -669,7 +669,7 @@ function runDexsearch(target, cmd, canAll, message) {
 		results = Tools.shuffle(results).slice(0, randomOutput);
 	}
 
-	let resultsStr = (message === "" ? message : "<font color=#999999>" + escapeHTML(message) + ":</font><br>");
+	let resultsStr = (message === "" ? message : "<font color=#999999>" + escapeHTML(message) + ":</font><br />");
 	if (results.length > 1) {
 		if (showAll || results.length <= RESULTS_MAX_LENGTH + 5) {
 			results.sort();
@@ -1023,9 +1023,9 @@ function runMovesearch(target, cmd, canAll, message) {
 
 	let resultsStr = "";
 	if (targetMon) {
-		resultsStr += "<font color=#999999>Matching moves found in learnset for</font> " + targetMon + ":<br>";
+		resultsStr += "<font color=#999999>Matching moves found in learnset for</font> " + targetMon + ":<br />";
 	} else {
-		resultsStr += (message === "" ? message : "<font color=#999999>" + escapeHTML(message) + ":</font><br>");
+		resultsStr += (message === "" ? message : "<font color=#999999>" + escapeHTML(message) + ":</font><br />");
 	}
 	if (results.length > 0) {
 		if (showAll || results.length <= RESULTS_MAX_LENGTH + 5) {
@@ -1241,7 +1241,7 @@ function runItemsearch(target, cmd, canAll, message) {
 		}
 	}
 
-	let resultsStr = (message === "" ? message : "<font color=#999999>" + escapeHTML(message) + ":</font><br>");
+	let resultsStr = (message === "" ? message : "<font color=#999999>" + escapeHTML(message) + ":</font><br />");
 	if (foundItems.length > 0) {
 		if (showAll || foundItems.length <= RESULTS_MAX_LENGTH + 5) {
 			foundItems.sort();
