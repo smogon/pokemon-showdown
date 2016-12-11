@@ -1065,14 +1065,21 @@ Punishments.getRoomPunishments = function (user, publicOnly) {
  * @param {User} user
  */
 Punishments.monitorRoomPunishments = function (user) {
+	if (user.locked) return;
+
 	const minPunishments = (typeof Config.monitorminpunishments === 'number' ? Config.monitorminpunishments : 3); // Default to 3 if the Config option is not defined or valid
 	if (!minPunishments) return;
 
 	let punishments = Punishments.getRoomPunishments(user, true);
 
 	if (punishments.length >= minPunishments) {
+		let roombans = [];
+		let blacklists = [];
+
 		let punishmentText = punishments.map(([room, punishment]) => {
 			const [punishType, punishUserid, , reason] = punishment;
+			if (punishType === 'ROOMBAN') roombans.push(room.id);
+			if (punishType === 'BLACKLIST') blacklists.push(room.id);
 			let punishDesc = Punishments.roomPunishmentTypes.get(punishType);
 			if (!punishDesc) punishDesc = `punished`;
 			if (punishUserid !== user.userid) punishDesc += ` as ${punishUserid}`;
@@ -1081,6 +1088,18 @@ Punishments.monitorRoomPunishments = function (user) {
 			return `<<${room}>> (${punishDesc})`;
 		}).join(', ');
 
-		Monitor.log(`[PunishmentMonitor] ${user.name} currently has punishments in ${punishments.length} rooms: ${punishmentText}`);
+		if (Config.punishmentautolock && roombans.length && (roombans.length + blacklists.length) >= 3) {
+			let roombanString = roombans.join(', ');
+			let blacklistString = blacklists.map(str => `${str} (blacklisted)`).join(', ');
+			let sep = roombanString && blacklistString ? ', ' : '';
+			let reason = `Autolocked for being banned from ${roombans.length + blacklists.length} rooms: ${roombanString}${sep}${blacklistString}`;
+
+			Punishments.lock(user, Date.now() + LOCK_DURATION, user.userid, reason);
+			Monitor.log(`[PunishmentMonitor] ${user.name} was locked for being banned from ${roombans.length + blacklists.length} rooms: ${punishmentText}`);
+			user.popup("|modal|You've been locked for breaking the rules in multiple chatrooms.\n\nIf you feel that your lock was unjustified, you can still PM staff members (%, @, &, and ~) to discuss it" + (Config.appealurl ? " or you can appeal:\n" + Config.appealurl : ".") + "\n\nYour lock will expire in a few days.");
+			Rooms.global.modlog(`(staff) AUTOLOCK: [${user.userid}]: ${reason}`);
+		} else {
+			Monitor.log(`[PunishmentMonitor] ${user.name} currently has punishments in ${punishments.length} rooms: ${punishmentText}`);
+		}
 	}
 };
