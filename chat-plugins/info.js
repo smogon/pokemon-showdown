@@ -1322,7 +1322,7 @@ exports.commands = {
 
 		if (!this.runBroadcast('!htmlbox')) return;
 		this.sendReplyBox(
-			"<strong>Room drivers</strong> (%) can use:<br />" +
+			"<strong>Room drivers (%)</strong> can use:<br />" +
 			"- /warn OR /k <em>username</em>: warn a user and show the Pok&eacute;mon Showdown rules<br />" +
 			"- /mute OR /m <em>username</em>: 7 minute mute<br />" +
 			"- /hourmute OR /hm <em>username</em>: 60 minute mute<br />" +
@@ -1331,7 +1331,7 @@ exports.commands = {
 			"- /modlog <em>username</em>: search the moderator log of the room<br />" +
 			"- /modnote <em>note</em>: adds a moderator note that can be read through modlog<br />" +
 			"<br />" +
-			"<strong>Room moderators</strong> (@) can also use:<br />" +
+			"<strong>Room moderators (@)</strong> can also use:<br />" +
 			"- /roomban OR /rb <em>username</em>: bans user from the room<br />" +
 			"- /roomunban <em>username</em>: unbans user from the room<br />" +
 			"- /roomvoice <em>username</em>: appoint a room voice<br />" +
@@ -1339,7 +1339,7 @@ exports.commands = {
 			"- /staffintro <em>intro</em>: sets the staff introduction that will be displayed for all staff joining the room<br />" +
 			"- /roomsettings: change a variety of room settings, namely modchat<br />" +
 			"<br />" +
-			"<strong>Room owners</strong> (#) can also use:<br />" +
+			"<strong>Room owners (#)</strong> can also use:<br />" +
 			"- /roomintro <em>intro</em>: sets the room introduction that will be displayed for all users joining the room<br />" +
 			"- /rules <em>rules link</em>: set the room rules link seen when using /rules<br />" +
 			"- /roommod, /roomdriver <em>username</em>: appoint a room moderator/driver<br />" +
