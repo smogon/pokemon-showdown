@@ -90,7 +90,9 @@ class Room {
 	addRaw(message) {
 		return this.add('|raw|' + message);
 	}
-
+	addLogMessage(user, text) {
+		return this.add('|c|' + user.getIdentity(this) + '|/log ' + text).update();
+	}
 	getLogSlice(amount) {
 		let log = this.log.slice(amount);
 		log.unshift('|:|' + (~~(Date.now() / 1000)));
