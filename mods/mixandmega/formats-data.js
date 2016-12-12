@@ -21,6 +21,10 @@ exports.BattleFormatsData = {
 		inherit: true,
 		tier: "OU",
 	},
+	landorus: {
+		inherit: true,
+		tier: "OU",
+	},
 	slaking: {
 		inherit: true,
 		tier: "Uber",
