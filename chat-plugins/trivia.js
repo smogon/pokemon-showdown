@@ -50,10 +50,14 @@ try {
 	triviaData = require('../config/chat-plugins/triviadata.json');
 } catch (e) {} // file doesn't exist or contains invalid JSON
 if (!triviaData || typeof triviaData !== 'object') triviaData = {};
-if (!triviaData || typeof triviaData.leaderboard !== 'object') triviaData.leaderboard = {};
+if (typeof triviaData.leaderboard !== 'object') triviaData.leaderboard = {};
 if (!Array.isArray(triviaData.ladder)) triviaData.ladder = [];
 if (!Array.isArray(triviaData.questions)) triviaData.questions = [];
 if (!Array.isArray(triviaData.submissions)) triviaData.submissions = [];
+if (triviaData.ugm) {
+	CATEGORIES.ugm = 'Ultimate Gaming Month';
+	if (typeof triviaData.ugm !== 'object') triviaData.ugm = {};
+}
 
 const writeTriviaData = (() => {
 	let writing = false;
@@ -169,6 +173,9 @@ class Trivia extends Rooms.RoomGame {
 		this.cap = SCORE_CAPS[length];
 		if (category === 'all') {
 			this.category = 'All';
+			if (triviaData.ugm) {
+				questions = questions.filter(q => q.category !== 'ugm');
+			}
 		} else if (category === 'random') {
 			this.category = 'Random (' + CATEGORIES[questions[0].category] + ')';
 		} else {
@@ -383,6 +390,12 @@ class Trivia extends Rooms.RoomGame {
 				rank[2] += player.correctAnswers;
 			} else {
 				leaderboard[i] = [0, player.points, player.correctAnswers];
+			}
+
+			if (triviaData.ugm) {
+				let ugmPoints = player.points / 5 | 0;
+				if (winner && winner.userid === i) ugmPoints *= 2;
+				triviaData.ugm[i] += ugmPoints;
 			}
 		}
 
@@ -717,6 +730,10 @@ const commands = {
 		if (isRandom) {
 			let categories = Object.keys(CATEGORIES);
 			let randCategory = categories[Math.random() * categories.length | 0];
+			if (triviaData.ugm && randCategory === 'ugm') {
+				categories.splice(categories.indexOf('ugm'), 1);
+				randCategory = categories[Math.random() * categories.length | 0];
+			}
 			questions = sliceCategory(randCategory);
 		} else if (isAll) {
 			questions = triviaData.questions;
@@ -746,7 +763,7 @@ const commands = {
 
 		room.game = new _Trivia(room, mode, category, length, questions);
 	},
-	newhelp: ["/trivia new [mode], [category], [length] - Begin a new trivia game. Requires: + % @ * # & ~"],
+	newhelp: ["/trivia new [mode], [category], [length] - Begin a new trivia game. Requires: + % @ # & ~"],
 
 	join: function (target, room, user) {
 		if (room.id !== 'trivia') return this.errorReply("This command can only be used in Trivia.");
@@ -776,7 +793,7 @@ const commands = {
 		let res = room.game.kick(targetUser, user);
 		if (typeof res === 'string') this.sendReply(res);
 	},
-	kickhelp: ["/trivia kick [username] - Kick players from a trivia game by username. Requires: % @ * # & ~"],
+	kickhelp: ["/trivia kick [username] - Kick players from a trivia game by username. Requires: % @ # & ~"],
 
 	leave: function (target, room, user) {
 		if (room.id !== 'trivia') return this.errorReply("This command can only be used in Trivia.");
@@ -803,7 +820,7 @@ const commands = {
 		let res = room.game.start();
 		if (typeof res === 'string') this.sendReply(res);
 	},
-	starthelp: ["/trivia start - Ends the signup phase of a trivia game and begins the game. Requires: + % @ * # & ~"],
+	starthelp: ["/trivia start - Ends the signup phase of a trivia game and begins the game. Requires: + % @ # & ~"],
 
 	answer: function (target, room, user) {
 		if (room.id !== 'trivia') return this.errorReply("This command can only be used in Trivia.");
@@ -831,7 +848,7 @@ const commands = {
 
 		room.game.end(user);
 	},
-	endhelp: ["/trivia end - Forcibly end a trivia game. Requires: + % @ * # & ~"],
+	endhelp: ["/trivia end - Forcibly end a trivia game. Requires: + % @ # & ~"],
 
 	'': 'status',
 	players: 'status',
@@ -923,7 +940,7 @@ const commands = {
 		this.privateModCommand("(" + user.name + " submitted question '" + target[1] + "' for review.)");
 	},
 	submithelp: ["/trivia submit [category] | [question] | [answer1], [answer2] ... [answern] - Add a question to the submission database for staff to review."],
-	addhelp: ["/trivia add [category] | [question] | [answer1], [answer2], ... [answern] - Add a question to the question database. Requires: % @ * # & ~"],
+	addhelp: ["/trivia add [category] | [question] | [answer1], [answer2], ... [answern] - Add a question to the question database. Requires: % @ # & ~"],
 
 	review: function (target, room) {
 		if (room.id !== 'questionworkshop') return this.errorReply('This command can only be used in Question Workshop.');
@@ -946,7 +963,7 @@ const commands = {
 
 		this.sendReply(buffer);
 	},
-	reviewhelp: ["/trivia review - View the list of submitted questions. Requires: @ * # & ~"],
+	reviewhelp: ["/trivia review - View the list of submitted questions. Requires: @ # & ~"],
 
 	reject: 'accept',
 	accept: function (target, room, user, connection, cmd) {
@@ -1030,8 +1047,8 @@ const commands = {
 
 		this.errorReply("'" + target + "' is an invalid argument. View /help trivia for more information.");
 	},
-	accepthelp: ["/trivia accept [index1], [index2], ... [indexn] OR all - Add questions from the submission database to the question database using their index numbers or ranges of them. Requires: @ * # & ~"],
-	rejecthelp: ["/trivia reject [index1], [index2], ... [indexn] OR all - Remove questions from the submission database using their index numbers or ranges of them. Requires: @ * # & ~"],
+	accepthelp: ["/trivia accept [index1], [index2], ... [indexn] OR all - Add questions from the submission database to the question database using their index numbers or ranges of them. Requires: @ # & ~"],
+	rejecthelp: ["/trivia reject [index1], [index2], ... [indexn] OR all - Remove questions from the submission database using their index numbers or ranges of them. Requires: @ # & ~"],
 
 	delete: function (target, room, user) {
 		if (room.id !== 'questionworkshop') return this.errorReply('This command can only be used in Question Workshop.');
@@ -1055,7 +1072,7 @@ const commands = {
 
 		this.errorReply("Question '" + target + "' was not found in the question database.");
 	},
-	deletehelp: ["/trivia delete [question] - Delete a question from the trivia database. Requires: % @ * # & ~"],
+	deletehelp: ["/trivia delete [question] - Delete a question from the trivia database. Requires: % @ # & ~"],
 
 	qs: function (target, room, user) {
 		if (room.id !== 'questionworkshop') return this.errorReply('This command can only be used in Question Workshop.');
@@ -1116,7 +1133,7 @@ const commands = {
 	},
 	qshelp: [
 		"/trivia qs - View the distribution of questions in the question database.",
-		"/trivia qs [category] - View the questions in the specified category. Requires: % @ * # & ~",
+		"/trivia qs [category] - View the questions in the specified category. Requires: % @ # & ~",
 	],
 
 	search: function (target, room, user) {
@@ -1149,7 +1166,7 @@ const commands = {
 
 		this.sendReply(buffer);
 	},
-	searchhelp: ["/trivia search [type], [query] - Searches for questions based on their type and their query. Valid types: submissions, subs, questions, qs. Requires: + % @ # * & ~"],
+	searchhelp: ["/trivia search [type], [query] - Searches for questions based on their type and their query. Valid types: submissions, subs, questions, qs. Requires: + % @ * & ~"],
 
 	rank: function (target, room, user) {
 		if (room.id !== 'trivia') return this.errorReply("This command can only be used in Trivia.");
@@ -1172,7 +1189,8 @@ const commands = {
 			"User: <strong>" + name + "</strong><br />" +
 			"Leaderboard score: <strong>" + score[0] + "</strong> (#" + score[3] + ")<br />" +
 			"Total game points: <strong>" + score[1] + "</strong> (#" + score[4] + ")<br />" +
-			"Total correct answers: <strong>" + score[2] + "</strong> (#" + score[5] + ")"
+			"Total correct answers: <strong>" + score[2] + "</strong> (#" + score[5] + ")" +
+			(triviaData.ugm ? "<br />UGM points: <strong>" + triviaData.ugm[userid] + "</strong>" : "")
 		);
 	},
 	rankhelp: ["/trivia rank [username] - View the rank of the specified user. If none is given, view your own."],
@@ -1202,6 +1220,33 @@ const commands = {
 		return this.sendReply(buffer);
 	},
 	ladderhelp: ["/trivia ladder - View information about the top 15 users on the trivia leaderboard."],
+
+	ugm: function (target, room, user) {
+		if (room.id !== 'trivia') return this.errorReply("This command can only be used in Trivia.");
+		if (!this.can('broadcast', null, room)) return false;
+
+		let command = toId(target);
+		if (command === 'enable') {
+			if (triviaData.ugm) return this.errorReply("UGM mode is already enabled.");
+			triviaData.ugm = {};
+			for (let i in triviaData.leaderboard) {
+				triviaData.ugm[i] = 0;
+			}
+			CATEGORIES.ugm = 'Ultimate Gaming Month';
+			writeTriviaData();
+			return this.privateModCommand("(" + user.name + " enabled UGM mode.)");
+		}
+		if (command === 'disable') {
+			if (!triviaData.ugm) return this.errorReply("UGM mode is already disabled.");
+			triviaData.questions = triviaData.questions.filter(q => q.category !== 'ugm');
+			delete triviaData.ugm;
+			delete CATEGORIES.ugm;
+			writeTriviaData();
+			return this.privateModCommand("(" + user.name + " disabled UGM mode.)");
+		}
+		this.errorReply("Invalid target. Valid targets: enable, disable");
+	},
+	ugmhelp: ["/trivia ugm [setting] - Enable or disable UGM mode. Requires: # & ~"],
 };
 
 module.exports = {
@@ -1232,27 +1277,28 @@ module.exports = {
 			"- Medium: 35 point score cap. The winner gains 4 leaderboard points.",
 			"- Long: 50 point score cap. The winner gains 5 leaderboard points.",
 			"Game commands:",
-			"- /trivia new [mode], [category], [length] - Begin signups for a new trivia game. Requires: + % @ * # & ~",
+			"- /trivia new [mode], [category], [length] - Begin signups for a new trivia game. Requires: + % @ # & ~",
 			"- /trivia join - Join a trivia game during signups.",
-			"- /trivia start - Begin the game once enough users have signed up. Requires: + % @ * # & ~",
+			"- /trivia start - Begin the game once enough users have signed up. Requires: + % @ # & ~",
 			"- /ta [answer] - Answer the current question.",
-			"- /trivia kick [username] - Disqualify a participant from the current trivia game. Requires: % @ * # & ~",
+			"- /trivia kick [username] - Disqualify a participant from the current trivia game. Requires: % @ # & ~",
 			"- /trivia leave - Makes the player leave the game.",
-			"- /trivia end - End a trivia game. Requires: + % @ * # ~",
+			"- /trivia end - End a trivia game. Requires: + % @ # ~",
 			"Question modifying commands:",
 			"- /trivia submit [category] | [question] | [answer1], [answer2] ... [answern] - Add a question to the submission database for staff to review.",
-			"- /trivia review - View the list of submitted questions. Requires: @ * # & ~",
-			"- /trivia accept [index1], [index2], ... [indexn] OR all - Add questions from the submission database to the question database using their index numbers or ranges of them. Requires: @ * # & ~",
-			"- /trivia reject [index1], [index2], ... [indexn] OR all - Remove questions from the submission database using their index numbers or ranges of them. Requires: @ * # & ~",
-			"- /trivia add [category] | [question] | [answer1], [answer2], ... [answern] - Add a question to the question database. Requires: % @ * # & ~",
-			"- /trivia delete [question] - Delete a question from the trivia database. Requires: % @ * # & ~",
+			"- /trivia review - View the list of submitted questions. Requires: @ # & ~",
+			"- /trivia accept [index1], [index2], ... [indexn] OR all - Add questions from the submission database to the question database using their index numbers or ranges of them. Requires: @ # & ~",
+			"- /trivia reject [index1], [index2], ... [indexn] OR all - Remove questions from the submission database using their index numbers or ranges of them. Requires: @ # & ~",
+			"- /trivia add [category] | [question] | [answer1], [answer2], ... [answern] - Add a question to the question database. Requires: % @ # & ~",
+			"- /trivia delete [question] - Delete a question from the trivia database. Requires: % @ # & ~",
 			"- /trivia qs - View the distribution of questions in the question database.",
-			"- /trivia qs [category] - View the questions in the specified category. Requires: % @ * # & ~",
+			"- /trivia qs [category] - View the questions in the specified category. Requires: % @ # & ~",
 			"Informational commands:",
-			"- /trivia search [type], [query] - Searches for questions based on their type and their query. Valid types: submissions, subs, questions, qs. Requires: + % @ * # & ~",
+			"- /trivia search [type], [query] - Searches for questions based on their type and their query. Valid types: submissions, subs, questions, qs. Requires: + % @ # & ~",
 			"- /trivia status [player] - lists the player's standings (your own if no player is specified) and the list of players in the current trivia game.",
 			"- /trivia rank [username] - View the rank of the specified user. If none is given, view your own.",
 			"- /trivia ladder - View information about the top 15 users on the trivia leaderboard.",
+			"- /trivia ugm [setting] - Enable or disable UGM mode. Requires: # & ~",
 		],
 	},
 };

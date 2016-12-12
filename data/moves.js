@@ -11826,7 +11826,7 @@ exports.BattleMovedex = {
 		name: "Pollen Puff",
 		pp: 15,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {bullet: 1, protect: 1, mirror: 1},
 		onTryHit: function (target, source, move) {
 			if (source.side === target.side) {
 				move.basePower = 0;
