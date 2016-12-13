@@ -9,6 +9,10 @@ exports.BattleFormatsData = {
 		inherit: true,
 		tier: "OU",
 	},
+	cresselia: {
+		inherit: true,
+		tier: "Uber",
+	},
 	darkrai: {
 		inherit: true,
 		tier: "OU",
