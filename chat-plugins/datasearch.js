@@ -108,7 +108,7 @@ exports.commands = {
 	},
 
 	dexsearchhelp: ["/dexsearch [parameter], [parameter], [parameter], ... - Searches for Pok\u00e9mon that fulfill the selected criteria",
-		"Search categories are: type, tier, color, moves, ability, gen, resists, recovery, priority, stat.",
+		"Search categories are: type, tier, color, moves, ability, gen, resists, recovery, priority, stat, egg group.",
 		"Valid colors are: green, red, blue, white, brown, yellow, purple, pink, gray and black.",
 		"Valid tiers are: Uber/OU/BL/UU/BL2/RU/BL3/NU/BL4/PU/NFE/LC/CAP.",
 		"Types must be followed by ' type', e.g., 'dragon type'.",
@@ -288,6 +288,7 @@ function runDexsearch(target, cmd, canAll, message) {
 	let searches = [];
 	let allTiers = {'uber':'Uber', 'ou':'OU', 'bl':"BL", 'uu':'UU', 'bl2':"BL2", 'ru':'RU', 'bl3':"BL3", 'nu':'NU', 'bl4':"BL4", 'pu':'PU', 'nfe':'NFE', 'lc uber':"LC Uber", 'lc':'LC', 'cap':"CAP"};
 	let allColours = {'green':1, 'red':1, 'blue':1, 'white':1, 'brown':1, 'yellow':1, 'purple':1, 'pink':1, 'gray':1, 'black':1};
+	let allEggGroups = {'amorphous':'Amorphous', 'bug':'Bug', 'ditto':'Ditto', 'dragon':'Dragon', 'fairy':'Fairy', 'field':'Field', 'flying':'Flying', 'grass':'Grass', 'humanlike':'Human-Like', 'mineral':'Mineral', 'monster':'Monster', 'undiscovered':'Undiscovered', 'water1':'Water 1', 'water2':'Water 2', 'water3':'Water 3'};
 	let allStats = {'hp':1, 'atk':1, 'def':1, 'spa':1, 'spd':1, 'spe':1, 'bst':1};
 	let showAll = false;
 	let megaSearch = null;
@@ -318,7 +319,7 @@ function runDexsearch(target, cmd, canAll, message) {
 
 	let andGroups = target.split(',');
 	for (let i = 0; i < andGroups.length; i++) {
-		let orGroup = {abilities: {}, tiers: {}, colors: {}, gens: {}, moves: {}, types: {}, resists: {}, stats: {}, skip: false};
+		let orGroup = {abilities: {}, tiers: {}, colors: {}, 'egg groups': {}, gens: {}, moves: {}, types: {}, resists: {}, stats: {}, skip: false};
 		let parameters = andGroups[i].split("|");
 		if (parameters.length > 3) return {reply: "No more than 3 alternatives for each parameter may be used."};
 		for (let j = 0; j < parameters.length; j++) {
@@ -355,6 +356,14 @@ function runDexsearch(target, cmd, canAll, message) {
 				let invalid = validParameter("colors", target, isNotSearch, target);
 				if (invalid) return {reply: invalid};
 				orGroup.colors[target] = !isNotSearch;
+				continue;
+			}
+
+			if (toId(target) in allEggGroups) {
+				target = allEggGroups[toId(target)];
+				let invalid = validParameter("egg groups", target, isNotSearch, target);
+				if (invalid) return {reply: invalid};
+				orGroup['egg groups'][target] = !isNotSearch;
 				continue;
 			}
 
@@ -545,6 +554,13 @@ function runDexsearch(target, cmd, canAll, message) {
 			if (alts.colors && Object.keys(alts.colors).length) {
 				if (alts.colors[dex[mon].color]) continue;
 				if (Object.values(alts.colors).includes(false) && alts.colors[dex[mon].color] !== false) continue;
+			}
+
+			for (let eggGroup in alts['egg groups']) {
+				if (dex[mon].eggGroups.includes(eggGroup) === alts['egg groups'][eggGroup]) {
+					matched = true;
+					break;
+				}
 			}
 
 			if (alts.tiers && Object.keys(alts.tiers).length) {
