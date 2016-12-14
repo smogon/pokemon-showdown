@@ -8,7 +8,7 @@ exports.Formats = [
 	// SM Singles
 	///////////////////////////////////////////////////////////////////
 	{
-		section: "SM Singles (beta)",
+		section: "SM Singles (ß)",
 	},
 	{
 		name: "[Gen 7] Random Battle",
@@ -198,17 +198,26 @@ exports.Formats = [
 		ruleset: ['Team Preview', 'Cancel Mod'],
 	},
 
-	// SM Doubles
+	// SM Doubles/Triples
 	///////////////////////////////////////////////////////////////////
 
 	{
-		section: "SM Doubles (beta)",
+		section: "SM Doubles/Triples (ß)",
 	},
 	{
 		name: "[Gen 7] Random Doubles Battle",
 
 		mod: 'gen7',
 		gameType: 'doubles',
+		team: 'random',
+		ruleset: ['PotD', 'Pokemon', 'HP Percentage Mod', 'Cancel Mod'],
+	},
+
+	{
+		name: "Random Triples Battle",
+
+		mod: 'gen7',
+		gameType: 'triples',
 		team: 'random',
 		ruleset: ['PotD', 'Pokemon', 'HP Percentage Mod', 'Cancel Mod'],
 	},
