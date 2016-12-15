@@ -685,13 +685,13 @@ function runDexsearch(target, cmd, canAll, message) {
 		results = Tools.shuffle(results).slice(0, randomOutput);
 	}
 
-	let resultsStr = (message === "" ? message : "<font color=#999999>" + escapeHTML(message) + ":</font><br />");
+	let resultsStr = (message === "" ? message : "<span style=\"color:#999999;\">" + escapeHTML(message) + ":</span><br />");
 	if (results.length > 1) {
 		if (showAll || results.length <= RESULTS_MAX_LENGTH + 5) {
 			results.sort();
 			resultsStr += results.join(", ");
 		} else {
-			resultsStr += results.slice(0, RESULTS_MAX_LENGTH).join(", ") + ", and " + (results.length - RESULTS_MAX_LENGTH) + " more. <font color=#999999>Redo the search with 'all' as a search parameter to show all results.</font>";
+			resultsStr += results.slice(0, RESULTS_MAX_LENGTH).join(", ") + ", and " + (results.length - RESULTS_MAX_LENGTH) + " more. <span style=\"color:#999999;\">Redo the search with 'all' as a search parameter to show all results.</span>";
 		}
 	} else if (results.length === 1) {
 		return {dt: results[0]};
@@ -1039,16 +1039,16 @@ function runMovesearch(target, cmd, canAll, message) {
 
 	let resultsStr = "";
 	if (targetMon) {
-		resultsStr += "<font color=#999999>Matching moves found in learnset for</font> " + targetMon + ":<br />";
+		resultsStr += "<span style=\"color:#999999;\">Matching moves found in learnset for</span> " + targetMon + ":<br />";
 	} else {
-		resultsStr += (message === "" ? message : "<font color=#999999>" + escapeHTML(message) + ":</font><br />");
+		resultsStr += (message === "" ? message : "<span style=\"color:#999999;\">" + escapeHTML(message) + ":</span><br />");
 	}
 	if (results.length > 0) {
 		if (showAll || results.length <= RESULTS_MAX_LENGTH + 5) {
 			results.sort();
 			resultsStr += results.join(", ");
 		} else {
-			resultsStr += results.slice(0, RESULTS_MAX_LENGTH).join(", ") + ", and " + (results.length - RESULTS_MAX_LENGTH) + " more. <font color=#999999>Redo the search with 'all' as a search parameter to show all results.</font>";
+			resultsStr += results.slice(0, RESULTS_MAX_LENGTH).join(", ") + ", and " + (results.length - RESULTS_MAX_LENGTH) + " more. <span style=\"color:#999999;\">Redo the search with 'all' as a search parameter to show all results.</span>";
 		}
 	} else {
 		resultsStr += "No moves found.";
@@ -1257,13 +1257,13 @@ function runItemsearch(target, cmd, canAll, message) {
 		}
 	}
 
-	let resultsStr = (message === "" ? message : "<font color=#999999>" + escapeHTML(message) + ":</font><br />");
+	let resultsStr = (message === "" ? message : "<span style=\"color:#999999;\">" + escapeHTML(message) + ":</span><br />");
 	if (foundItems.length > 0) {
 		if (showAll || foundItems.length <= RESULTS_MAX_LENGTH + 5) {
 			foundItems.sort();
 			resultsStr += foundItems.join(", ");
 		} else {
-			resultsStr += foundItems.slice(0, RESULTS_MAX_LENGTH).join(", ") + ", and " + (foundItems.length - RESULTS_MAX_LENGTH) + " more. <font color=#999999>Redo the search with ', all' at the end to show all results.</font>";
+			resultsStr += foundItems.slice(0, RESULTS_MAX_LENGTH).join(", ") + ", and " + (foundItems.length - RESULTS_MAX_LENGTH) + " more. <span style=\"color:#999999;\">Redo the search with ', all' at the end to show all results.</span>";
 		}
 	} else {
 		resultsStr += "No items found. Try a more general search";
