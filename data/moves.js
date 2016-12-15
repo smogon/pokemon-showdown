@@ -14969,10 +14969,10 @@ exports.BattleMovedex = {
 			let moves = [];
 			for (let i = 0; i < pokemon.moveset.length; i++) {
 				let move = pokemon.moveset[i].id;
-				let NoSleepTalk = {
-					assist:1, belch:1, bide:1, chatter:1, copycat:1, focuspunch:1, mefirst:1, metronome:1, mimic:1, mirrormove:1, naturepower:1, sketch:1, sleeptalk:1, uproar:1,
+				let noSleepTalk = {
+					assist:1, beakblast:1, belch:1, bide:1, chatter:1, copycat:1, focuspunch:1, mefirst:1, metronome:1, mimic:1, mirrormove:1, naturepower:1, shelltrap:1, sketch:1, sleeptalk:1, uproar:1,
 				};
-				if (move && !(NoSleepTalk[move] || this.getMove(move).flags['charge'])) {
+				if (move && !(noSleepTalk[move] || this.getMove(move).flags['charge'] || (this.getMove(move).isZ && this.getMove(move).basePower !== 1))) {
 					moves.push(move);
 				}
 			}
