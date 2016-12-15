@@ -848,18 +848,10 @@ exports.BattleAbilities = {
 			if (!source || source === target || !target.hp || !move.totalDamage) return;
 			if (target.hp <= target.maxhp / 2 && target.hp + move.totalDamage > target.maxhp / 2) {
 				if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.switchFlag) return;
-				target.addVolatile('emergencyexit');
-			}
-		},
-		effect: {
-			onUpdatePriority: -10,
-			onUpdate: function (target) {
-				target.removeVolatile('emergencyexit');
-				if (target.hp > target.maxhp / 2) return;
 				target.switchFlag = true;
-				this.effectData.source.switchFlag = false;
+				source.switchFlag = false;
 				this.add('-activate', target, 'ability: Emergency Exit');
-			},
+			}
 		},
 		id: "emergencyexit",
 		name: "Emergency Exit",

@@ -460,6 +460,8 @@ exports.BattleScripts = {
 
 		if (!damage && damage !== 0) return damage;
 
+		this.eachEvent('Update');
+
 		if (target && !move.negateSecondary && !(pokemon.hasAbility('sheerforce') && pokemon.volatiles['sheerforce'])) {
 			this.singleEvent('AfterMoveSecondary', move, null, target, pokemon, move);
 			this.runEvent('AfterMoveSecondary', target, pokemon, move);
