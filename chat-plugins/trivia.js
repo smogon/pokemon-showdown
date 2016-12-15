@@ -395,7 +395,7 @@ class Trivia extends Rooms.RoomGame {
 				leaderboard[i] = [0, player.points, player.correctAnswers];
 			}
 
-			if (triviaData.ugm) {
+			if (triviaData.ugm && this.category === 'Ultimate Gaming Month') {
 				let ugmPoints = player.points / 5 | 0;
 				if (winner && winner.userid === i) ugmPoints *= 2;
 				triviaData.ugm[i] += ugmPoints;
