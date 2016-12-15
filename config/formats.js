@@ -640,8 +640,8 @@ exports.Formats = [
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3558546/\">RU Viability Ranking</a>",
 		],
 
-		ruleset: ['OU'],
-		banlist: ['OU', 'BL', 'UU', 'BL2', 'Drizzle', 'Drought'],
+		ruleset: ['UU'],
+		banlist: ['UU', 'BL2'],
 	},
 	{
 		name: "NU",
@@ -651,8 +651,8 @@ exports.Formats = [
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3555650/\">NU Viability Ranking</a>",
 		],
 
-		ruleset: ['RU', 'Baton Pass Speed Clause'],
-		banlist: ['RU', 'BL3'],
+		ruleset: ['OU', 'Baton Pass Speed Clause'],
+		banlist: ['OU', 'BL', 'UU', 'BL2', 'RU', 'BL3', 'Drizzle', 'Drought'],
 	},
 	{
 		name: "PU (suspect test)",
@@ -661,8 +661,8 @@ exports.Formats = [
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3528743/\">PU Viability Ranking</a>",
 		],
 
-		ruleset: ['RU'],
-		banlist: ['RU', 'BL3', 'NU', 'BL4', 'Chatter'],
+		ruleset: ['OU'],
+		banlist: ['OU', 'BL', 'UU', 'BL2', 'RU', 'BL3', 'NU', 'BL4', 'Drizzle', 'Drought', 'Chatter'],
 	},
 	{
 		name: "LC",
