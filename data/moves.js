@@ -18454,8 +18454,8 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "The user and its party members are protected from damaging attacks made by other Pokemon, including allies, during this turn that target all adjacent foes or all adjacent Pokemon. This move modifies the same 1/X chance of being successful used by other protection moves, where X starts at 1 and triples each time this move is successfully used, but does not use the chance to check for failure. X resets to 1 if this move fails or if the user's last move used is not Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, or Wide Guard. Fails if the user moves last this turn or if this move is already in effect for the user's side.",
-		shortDesc: "Protects allies from multi-target hits this turn.",
+		desc: "The user and its party members are protected from moves made by other Pokemon, including allies, during this turn that target all adjacent foes or all adjacent Pokemon. This move modifies the same 1/X chance of being successful used by other protection moves, where X starts at 1 and triples each time this move is successfully used, but does not use the chance to check for failure. X resets to 1 if this move fails or if the user's last move used is not Baneful Bunker, Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, or Wide Guard. Fails if the user moves last this turn or if this move is already in effect for the user's side.",
+		shortDesc: "Protects allies from multi-target moves this turn.",
 		id: "wideguard",
 		name: "Wide Guard",
 		pp: 10,
@@ -18475,8 +18475,8 @@ exports.BattleMovedex = {
 			},
 			onTryHitPriority: 4,
 			onTryHit: function (target, source, effect) {
-				// Wide Guard blocks damaging spread moves
-				if (effect && (effect.category === 'Status' || (effect.target !== 'allAdjacent' && effect.target !== 'allAdjacentFoes'))) {
+				// Wide Guard blocks all spread moves
+				if (effect && effect.target !== 'allAdjacent' && effect.target !== 'allAdjacentFoes') {
 					return;
 				}
 				this.add('-activate', target, 'move: Wide Guard');
