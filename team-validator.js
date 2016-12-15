@@ -345,6 +345,12 @@ class Validator {
 						}
 						problems.push(problemString);
 					}
+					if (move.id === 'hiddenpower' && move.type === 'Fighting') {
+						if (template.gen >= 6 && template.eggGroups[0] === 'Undiscovered' && !template.nfe && (template.baseSpecies !== 'Diancie' || !set.shiny)) {
+							// Legendary Pokemon must have at least 3 perfect IVs in gen 6+
+							problems.push(`${name} must not have Hidden Power Fighting because it starts with 3 perfect IVs because it's a gen 6+ legendary.`);
+						}
+					}
 				}
 			}
 
