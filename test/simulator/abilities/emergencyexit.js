@@ -21,6 +21,15 @@ describe(`Emergency Exit`, function () {
 		assert.strictEqual(battle.currentRequest, 'switch');
 	});
 
+	it(`should not request switch-out if first healed by berry`, function () {
+		battle = common.createBattle([
+			[{species: "Golisopod", ability: 'emergencyexit', moves: ['sleeptalk'], item: 'sitrusberry', ivs: EMPTY_IVS}, {species: "Clefable", ability: 'Unaware', moves: ['metronome']}],
+			[{species: "Raticate", ability: 'guts', moves: ['superfang']}],
+		]);
+		battle.commitDecisions();
+		assert.strictEqual(battle.currentRequest, 'move');
+	});
+
 	it(`should not request switch-out on usage of Substitute`, function () {
 		battle = common.createBattle([
 			[{species: "Golisopod", ability: 'emergencyexit', moves: ['substitute'], ivs: EMPTY_IVS}, {species: "Clefable", ability: 'Unaware', moves: ['metronome']}],
