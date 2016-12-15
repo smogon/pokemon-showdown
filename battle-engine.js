@@ -192,8 +192,11 @@ class BattlePokemon {
 			// In Gen 6, Hidden Power is always 60 base power
 			this.hpPower = (this.battle.gen && this.battle.gen < 6) ? Math.floor(hpPowerX * 40 / 63) + 30 : 60;
 		}
-		if (this.battle.gen >= 7 && desiredHPType && (this.level === 100 || set.forcedLevel || this.battle.getFormat().team)) {
-			this.hpType = desiredHPType;
+		if (this.battle.gen >= 7 && desiredHPType) {
+			const format = this.battle.getFormat();
+			if (this.level === 100 || this.level === format.forcedLevel || this.level === format.maxForcedLevel || format.team) {
+				this.hpType = desiredHPType;
+			}
 		}
 
 		this.boosts = {atk: 0, def: 0, spa: 0, spd: 0, spe: 0, accuracy: 0, evasion: 0};
