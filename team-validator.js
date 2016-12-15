@@ -530,6 +530,9 @@ class Validator {
 			if (!(template.baseSpecies in alolaDex) && !(template.species in alolaDex) && !islandScanList.includes(template.baseSpecies)) {
 				problems.push(template.baseSpecies + " is unreleased in gen 7. (It's not possible to transfer Pokemon to Sun/Moon yet)");
 			}
+			if (isHidden && islandScanList.includes(template.baseSpecies)) {
+				problems.push(template.baseSpecies + "'s hidden ability is unreleased in gen 7. (It's not possible to transfer Pokemon to Sun/Moon yet)");
+			}
 			if (template.species === 'Greninja' && ability.id !== 'battlebond') {
 				problems.push("Regular Greninja is unreleased in gen 7; only Battle Bond Greninja is available. (It's not possible to transfer Pokemon to Sun/Moon yet)");
 			}
