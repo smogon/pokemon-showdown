@@ -123,7 +123,7 @@ exports.BattleStatuses = {
 		onAfterMoveSelfPriority: 2,
 		onAfterMoveSelf: function (pokemon) {
 			pokemon.volatiles['residualdmg'].counter++;
-			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1) * pokemon.volatiles['residualdmg'].counter);
+			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1) * pokemon.volatiles['residualdmg'].counter, pokemon, pokemon);
 		},
 		onSwitchIn: function (pokemon) {
 			// Regular poison status and damage after a switchout -> switchin.
