@@ -62,6 +62,10 @@ exports.BattleFormats = {
 			'Diancie',
 			'Hoopa', 'Hoopa-Unbound',
 			'Volcanion',
+			'Solgaleo', 'Lunala', 'Cosmog', 'Cosmoem',
+			'Necrozma',
+			'Greninja + Battle Bond',
+			'Marshadow',
 		],
 	},
 	standarddoubles: {
