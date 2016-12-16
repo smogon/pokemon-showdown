@@ -533,9 +533,6 @@ function runDexsearch(target, cmd, canAll, message) {
 			dex[pokemon] = template;
 		}
 	}
-	dex = JSON.parse(JSON.stringify(dex)); // Don't modify the original template (when compiling learnsets)
-
-	let learnSetsCompiled = false;
 
 	// Prioritize searches with the least alternatives.
 	const accumulateKeyCount = (count, searchData) => count + (typeof searchData === 'object' ? Object.keys(searchData).length : 0);
@@ -628,26 +625,9 @@ function runDexsearch(target, cmd, canAll, message) {
 			}
 			if (matched) continue;
 
-			if (!learnSetsCompiled) {
-				for (let mon2 in dex) {
-					let template = dex[mon2];
-					if (!template.learnset) template = Tools.getTemplate(template.baseSpecies);
-					if (!template.learnset) continue;
-					let fullLearnset = template.learnset;
-					while (template.prevo) {
-						template = Tools.getTemplate(template.prevo);
-						for (let move in template.learnset) {
-							if (!fullLearnset[move]) fullLearnset[move] = template.learnset[move];
-						}
-					}
-					dex[mon2].learnset = fullLearnset;
-				}
-				learnSetsCompiled = true;
-			}
-
 			for (let move in alts.moves) {
-				let canLearn = (dex[mon].learnset.sketch && !['chatter', 'struggle', 'magikarpsrevenge'].includes(move)) || dex[mon].learnset[move];
-				if ((canLearn && alts.moves[move]) || (alts.moves[move] === false && !canLearn)) {
+				let lsetData = {fastCheck: true, set: {}};
+				if (!TeamValidator('gen7ou').checkLearnset(move, mon, lsetData) === alts.moves[move]) {
 					matched = true;
 					break;
 				}
@@ -662,23 +642,6 @@ function runDexsearch(target, cmd, canAll, message) {
 	for (let mon in dex) {
 		if (dex[mon].baseSpecies && results.includes(dex[mon].baseSpecies)) continue;
 		results.push(dex[mon].species);
-	}
-
-	let moveGroups = searches
-		.filter(alts => alts.moves && Object.keys(alts.moves).some(move => alts.moves[move]))
-		.map(alts => Object.keys(alts.moves));
-	if (moveGroups.length >= 2) {
-		results = results.filter(mon => {
-			let lsetData = {fastCheck: true, set: {}};
-			for (let group = 0; group < moveGroups.length; group++) {
-				for (let i = 0; i < moveGroups[group].length; i++) {
-					let problem = TeamValidator('gen7ou').checkLearnset(moveGroups[group][i], mon, lsetData);
-					if (!problem) break;
-					if (i === moveGroups[group].length - 1) return false;
-				}
-			}
-			return true;
-		});
 	}
 
 	if (randomOutput && randomOutput < results.length) {
