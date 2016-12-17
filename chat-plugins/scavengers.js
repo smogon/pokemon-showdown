@@ -159,7 +159,7 @@ exports.commands = {
 			'<strong>Player commands:</strong><br />' +
 			'- /scavengers - Join the scavengers room<br />' +
 			'- /joinhunt - Join the current scavenger hunt<br />' +
-			'- /scavenge <em>guess</em> - Attempt to answer the hint<br />' +
+			'- /scavenge _______ - Attempt to answer the hint<br />' +
 			'- /scavengerstatus - Get your current game status<br />' +
 			'<br />' +
 			'<strong>Staff commands:</strong><br />' +
