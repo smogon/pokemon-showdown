@@ -533,9 +533,6 @@ function runDexsearch(target, cmd, canAll, message) {
 			dex[pokemon] = template;
 		}
 	}
-	dex = JSON.parse(JSON.stringify(dex)); // Don't modify the original template (when compiling learnsets)
-
-	let learnSetsCompiled = false;
 
 	// Prioritize searches with the least alternatives.
 	const accumulateKeyCount = (count, searchData) => count + (typeof searchData === 'object' ? Object.keys(searchData).length : 0);
@@ -628,25 +625,18 @@ function runDexsearch(target, cmd, canAll, message) {
 			}
 			if (matched) continue;
 
-			if (!learnSetsCompiled) {
-				for (let mon2 in dex) {
-					let template = dex[mon2];
-					if (!template.learnset) template = Tools.getTemplate(template.baseSpecies);
-					if (!template.learnset) continue;
-					let fullLearnset = template.learnset;
-					while (template.prevo) {
-						template = Tools.getTemplate(template.prevo);
-						for (let move in template.learnset) {
-							if (!fullLearnset[move]) fullLearnset[move] = template.learnset[move];
-						}
-					}
-					dex[mon2].learnset = fullLearnset;
+			if (!dex[mon].fullLearnset) {
+				let template = dex[mon];
+				if (!template.learnset) template = Tools.getTemplate(template.baseSpecies);
+				dex[mon].fullLearnset = Object.assign({}, template.learnset);
+				while (template.prevo) {
+					template = Tools.getTemplate(template.prevo);
+					Object.assign(dex[mon].fullLearnset, template.learnset);
 				}
-				learnSetsCompiled = true;
 			}
 
 			for (let move in alts.moves) {
-				let canLearn = (dex[mon].learnset.sketch && !['chatter', 'struggle', 'magikarpsrevenge'].includes(move)) || dex[mon].learnset[move];
+				let canLearn = (dex[mon].fullLearnset.sketch && !['chatter', 'struggle', 'magikarpsrevenge'].includes(move)) || dex[mon].fullLearnset[move];
 				if ((canLearn && alts.moves[move]) || (alts.moves[move] === false && !canLearn)) {
 					matched = true;
 					break;
