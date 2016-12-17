@@ -143,6 +143,7 @@ exports.Formats = [
 		},
 		ruleset: ['Pokemon', 'Species Clause', 'Nickname Clause', 'Team Preview', 'Cancel Mod', 'Alola Pokedex'],
 		banlist: ['Illegal', 'Unreleased', 'Memento', 'Doom Desire', 'Psycho Boost', 'Roar of Time', 'Spacial Rend', 'Lunar Dance', 'Crush Grip', 'Magma Storm', 'Dark Void', 'Seed Flare', 'Shadow Force', 'Searing Shot', 'Techno Blast', 'Relic Song', 'Secret Sword', 'Glaciate', 'Bolt Strike', 'Blue Flare', 'V-create', 'Fusion Flare', 'Fusion Bolt', 'Parting Shot', 'Diamond Storm', 'Steam Eruption', 'Hyperspace Hole', 'Hold Hands', 'Origin Pulse', 'Precipice Blades', 'Dragon Ascent', 'Hyperspace Fury'],
+		unbanlist: ['Greninja'],
 		requirePentagon: true,
 		onValidateTeam: function (team) {
 			let specialPokemon = {"Zygarde":1, "Cosmog":1, "Cosmoem":1, "Solgaleo":1, "Lunala":1, "Necrozma":1, "Magearna":1};
