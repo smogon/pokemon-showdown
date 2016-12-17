@@ -360,17 +360,23 @@ exports.BattleScripts = {
 
 		if (move.stealsBoosts) {
 			let boosts = {};
+			let stolen = false;
 			for (let statName in target.boosts) {
 				let stage = target.boosts[statName];
-				if (stage > 0) boosts[statName] = stage;
+				if (stage > 0) {
+					boosts[statName] = stage;
+					stolen = true;
+				}
 			}
-			this.boost(boosts, pokemon);
+			if (stolen) {
+				this.add('-clearpositiveboost', target, pokemon, 'move: ' + move.name);
+				this.boost(boosts, pokemon);
 
-			for (let statName in boosts) {
-				boosts[statName] = 0;
+				for (let statName in boosts) {
+					boosts[statName] = 0;
+				}
+				target.setBoost(boosts);
 			}
-			target.setBoost(boosts);
-			this.add('-clearpositiveboost', target, pokemon, 'move: ' + move.name);
 		}
 
 		move.totalDamage = 0;
