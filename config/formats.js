@@ -250,6 +250,126 @@ exports.Formats = [
 	// Other Metagames
 	///////////////////////////////////////////////////////////////////
 
+
+	{
+		name: "[Gen 6] Create your Formats Battle (suspect test)",
+		desc: ["This is a full test of CYF game in Gen 6, Pok&eacute;mon with custom moves are testing!"],
+
+		mod: 'cyf',
+		team: 'randomCustomPSTestTeam',
+		ruleset: ['PotD', 'Pokemon', 'HP Percentage Mod', 'Cancel Mod'],
+ 		onBegin: function () { 
+ 			let globalRenamedMoves = {}; 
+ 
+ 
+ 			let allPokemon = this.p1.pokemon.concat(this.p2.pokemon); 
+ 			for (let i = 0, len = allPokemon.length; i < len; i++) { 
+ 				let pokemon = allPokemon[i]; 
+ 				let last = pokemon.moves.length - 1; 
+ 				if (pokemon.moves[last]) { 
+ 					pokemon.moves[last] = toId(pokemon.set.signatureMove); 
+ 					pokemon.moveset[last].move = pokemon.set.signatureMove; 
+ 					pokemon.baseMoveset[last].move = pokemon.set.signatureMove; 
+ 				} 
+ 				for (let j = 0; j < pokemon.moveset.length; j++) { 
+ 					let moveData = pokemon.moveset[j]; 
+ 					if (globalRenamedMoves[moveData.id]) { 
+ 						pokemon.moves[j] = toId(pokemon.set.signatureMove); 
+ 						moveData.move = globalRenamedMoves[moveData.id]; 
+ 						pokemon.baseMoveset[j].move = globalRenamedMoves[moveData.id]; 
+ 					} 
+ 
+ 
+ 					let customRenamedSet = customRenamedMoves[toId(pokemon.name)]; 
+ 					if (customRenamedSet && customRenamedSet[moveData.id]) { 
+ 						pokemon.moves[j] = toId(pokemon.set.signatureMove); 
+ 						moveData.move = customRenamedSet[moveData.id]; 
+ 						pokemon.baseMoveset[j].move = customRenamedSet[moveData.id]; 
+ 					} 
+ 				} 
+ 			} 
+ 		}, 
+ 	}, 
+	{
+		name: "[Gen 6] Create your Formats Battle (DOUBLES VERSION suspect test)",
+		desc: ["This is a full test of Pok&eacute;mon with custom moves call CYF Doubles only."],
+
+		mod: 'cyf',
+		gameType: 'doubles',
+		team: 'randomCustomPSTestTeam',
+		ruleset: ['PotD', 'Pokemon', 'HP Percentage Mod', 'Cancel Mod'],
+ 		onBegin: function () { 
+ 			let globalRenamedMoves = {}; 
+ 
+ 
+ 			let allPokemon = this.p1.pokemon.concat(this.p2.pokemon); 
+ 			for (let i = 0, len = allPokemon.length; i < len; i++) { 
+ 				let pokemon = allPokemon[i]; 
+ 				let last = pokemon.moves.length - 1; 
+ 				if (pokemon.moves[last]) { 
+ 					pokemon.moves[last] = toId(pokemon.set.signatureMove); 
+ 					pokemon.moveset[last].move = pokemon.set.signatureMove; 
+ 					pokemon.baseMoveset[last].move = pokemon.set.signatureMove; 
+ 				} 
+ 				for (let j = 0; j < pokemon.moveset.length; j++) { 
+ 					let moveData = pokemon.moveset[j]; 
+ 					if (globalRenamedMoves[moveData.id]) { 
+ 						pokemon.moves[j] = toId(pokemon.set.signatureMove); 
+ 						moveData.move = globalRenamedMoves[moveData.id]; 
+ 						pokemon.baseMoveset[j].move = globalRenamedMoves[moveData.id]; 
+ 					} 
+ 
+ 
+ 					let customRenamedSet = customRenamedMoves[toId(pokemon.name)]; 
+ 					if (customRenamedSet && customRenamedSet[moveData.id]) { 
+ 						pokemon.moves[j] = toId(pokemon.set.signatureMove); 
+ 						moveData.move = customRenamedSet[moveData.id]; 
+ 						pokemon.baseMoveset[j].move = customRenamedSet[moveData.id]; 
+ 					} 
+ 				} 
+ 			} 
+ 		}, 
+ 	}, 
+	{
+		name: "[Gen 6] Create your Formats Battle (TRIPLES VERSION suspect test)",
+		desc: ["This is a full test of Pok&eacute;mon with custom moves call CYF triples only."],
+
+		mod: 'cyf',
+		gameType: 'triples',
+		team: 'randomCustomPSTestTeam',
+		ruleset: ['PotD', 'Pokemon', 'HP Percentage Mod', 'Cancel Mod'],
+ 		onBegin: function () { 
+ 			let globalRenamedMoves = {}; 
+ 
+ 
+ 			let allPokemon = this.p1.pokemon.concat(this.p2.pokemon); 
+ 			for (let i = 0, len = allPokemon.length; i < len; i++) { 
+ 				let pokemon = allPokemon[i]; 
+ 				let last = pokemon.moves.length - 1; 
+ 				if (pokemon.moves[last]) { 
+ 					pokemon.moves[last] = toId(pokemon.set.signatureMove); 
+ 					pokemon.moveset[last].move = pokemon.set.signatureMove; 
+ 					pokemon.baseMoveset[last].move = pokemon.set.signatureMove; 
+ 				} 
+ 				for (let j = 0; j < pokemon.moveset.length; j++) { 
+ 					let moveData = pokemon.moveset[j]; 
+ 					if (globalRenamedMoves[moveData.id]) { 
+ 						pokemon.moves[j] = toId(pokemon.set.signatureMove); 
+ 						moveData.move = globalRenamedMoves[moveData.id]; 
+ 						pokemon.baseMoveset[j].move = globalRenamedMoves[moveData.id]; 
+ 					} 
+ 
+ 
+ 					let customRenamedSet = customRenamedMoves[toId(pokemon.name)]; 
+ 					if (customRenamedSet && customRenamedSet[moveData.id]) { 
+ 						pokemon.moves[j] = toId(pokemon.set.signatureMove); 
+ 						moveData.move = customRenamedSet[moveData.id]; 
+ 						pokemon.baseMoveset[j].move = customRenamedSet[moveData.id]; 
+ 					} 
+ 				} 
+ 			} 
+ 		}, 
+ 	},
 	{
 		section: "OM of the Month",
 		column: 2,
