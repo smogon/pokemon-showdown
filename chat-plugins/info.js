@@ -408,7 +408,7 @@ exports.commands = {
 				} else if (move.zMoveEffect) {
 					details["Z-Effect"] = {
 						'clearnegativeboost': "Restores negative stat stages to 0",
-						'crit1': "Crit ratio +1",
+						'crit2': "Crit ratio +2",
 						'heal': "Restores HP 100%",
 						'curse': "Restores HP 100% if user is Ghost type, otherwise Attack +1",
 						'redirect': "Redirects opposing attacks to user",
