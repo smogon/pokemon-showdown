@@ -202,18 +202,6 @@ exports.BattleStatuses = {
 	trapper: {
 		noCopy: true,
 	},
-	crit1: {
-		onStart: function (target, source, effect) {
-			if (effect && effect.id === 'zpower') {
-				this.add('-start', target, 'move: Focus Energy', '[zeffect]');
-			} else {
-				this.add('-start', target, 'move: Focus Energy');
-			}
-		},
-		onModifyCritRatio: function (critRatio) {
-			return critRatio + 1;
-		},
-	},
 	partiallytrapped: {
 		duration: 5,
 		durationCallback: function (target, source) {

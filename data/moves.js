@@ -227,7 +227,7 @@ exports.BattleMovedex = {
 		secondary: false,
 		target: "adjacentAllyOrSelf",
 		type: "Normal",
-		zMoveEffect: 'crit1',
+		zMoveEffect: 'crit2',
 		contestType: "Tough",
 	},
 	"aerialace": {
@@ -5644,8 +5644,12 @@ exports.BattleMovedex = {
 		flags: {snatch: 1},
 		volatileStatus: 'focusenergy',
 		effect: {
-			onStart: function (pokemon) {
-				this.add('-start', pokemon, 'move: Focus Energy');
+			onStart: function (target, source, effect) {
+				if (effect && effect.id === 'zpower') {
+					this.add('-start', target, 'move: Focus Energy', '[zeffect]');
+				} else {
+					this.add('-start', target, 'move: Focus Energy');
+				}
 			},
 			onModifyCritRatio: function (critRatio) {
 				return critRatio + 2;
@@ -5788,7 +5792,7 @@ exports.BattleMovedex = {
 		secondary: false,
 		target: "normal",
 		type: "Normal",
-		zMoveEffect: 'crit1',
+		zMoveEffect: 'crit2',
 		contestType: "Clever",
 	},
 	"forestscurse": {
@@ -7315,7 +7319,7 @@ exports.BattleMovedex = {
 		secondary: false,
 		target: "normal",
 		type: "Psychic",
-		zMoveEffect: 'crit1',
+		zMoveEffect: 'crit2',
 		contestType: "Clever",
 	},
 	"heatcrash": {
@@ -14987,7 +14991,7 @@ exports.BattleMovedex = {
 		secondary: false,
 		target: "self",
 		type: "Normal",
-		zMoveEffect: 'crit1',
+		zMoveEffect: 'crit2',
 		contestType: "Cute",
 	},
 	"sludge": {
@@ -16863,7 +16867,7 @@ exports.BattleMovedex = {
 		secondary: false,
 		target: "allySide",
 		type: "Flying",
-		zMoveEffect: 'crit1',
+		zMoveEffect: 'crit2',
 		contestType: "Cool",
 	},
 	"takedown": {
