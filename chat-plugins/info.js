@@ -27,12 +27,12 @@ exports.commands = {
 		if (!room) room = Rooms.global;
 		let targetUser = this.targetUserOrSelf(target, user.group === ' ');
 		let showAll = (cmd === 'ip' || cmd === 'whoare' || cmd === 'alt' || cmd === 'alts');
+		if (showAll && !user.trusted && targetUser !== user) {
+			return this.errorReply(`/${cmd} - Access denied.`);
+		}
 		if (!targetUser) {
 			if (showAll) return this.parse('/checkpunishment ' + target);
 			return this.errorReply("User " + this.targetUsername + " not found.");
-		}
-		if (showAll && !user.trusted && targetUser !== user) {
-			return this.errorReply(`/${cmd} - Access denied.`);
 		}
 
 		let buf = Chat.html`<strong class="username"><small style="display:none">${targetUser.group}</small>${targetUser.name}</strong> `;
