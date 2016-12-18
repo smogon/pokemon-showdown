@@ -3052,8 +3052,8 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1},
 		status: 'slp',
-		onTry: function (pokemon) {
-			if (pokemon.template.species === 'Darkrai') {
+		onTry: function (pokemon, target, move) {
+			if (pokemon.template.species === 'Darkrai' || move.hasBounced) {
 				return;
 			}
 			this.add('-fail', pokemon, 'move: Dark Void');
