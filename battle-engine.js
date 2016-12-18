@@ -970,7 +970,7 @@ class BattlePokemon {
 		return false;
 	}
 	useItem(item, source, sourceEffect) {
-		if (!this.isActive) return false;
+		if (!this.hp || !this.isActive) return false;
 		if (!this.item) return false;
 
 		let id = toId(item);
