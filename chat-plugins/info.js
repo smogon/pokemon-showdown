@@ -1037,6 +1037,13 @@ exports.commands = {
 		this.sendReplyBox("Uptime: <b>" + uptimeText + "</b>");
 	},
 
+	'!servertime': true,
+	servertime: function (target, room, user) {
+		if (!this.runBroadcast()) return;
+		let servertime = new Date();
+		this.sendReplyBox(`Server time: <b>${servertime.toLocaleString()}</b>`);
+	},
+
 	'!groups': true,
 	groups: function (target, room, user) {
 		if (!this.runBroadcast()) return;
