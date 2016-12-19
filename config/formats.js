@@ -132,32 +132,6 @@ exports.Formats = [
 		},
 	},
 	{
-		name: "[Gen 7] Battle of Alola",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3588887/\">Battle of Alola</a>"],
-
-		mod: 'gen7',
-		maxForcedLevel: 50,
-		teamLength: {
-			validate: [3, 6],
-			battle: 3,
-		},
-		ruleset: ['Pokemon', 'Species Clause', 'Nickname Clause', 'Team Preview', 'Cancel Mod', 'Alola Pokedex'],
-		banlist: ['Illegal', 'Unreleased', 'Memento', 'Doom Desire', 'Psycho Boost', 'Roar of Time', 'Spacial Rend', 'Lunar Dance', 'Crush Grip', 'Magma Storm', 'Dark Void', 'Seed Flare', 'Shadow Force', 'Searing Shot', 'Techno Blast', 'Relic Song', 'Secret Sword', 'Glaciate', 'Bolt Strike', 'Blue Flare', 'V-create', 'Fusion Flare', 'Fusion Bolt', 'Parting Shot', 'Diamond Storm', 'Steam Eruption', 'Hyperspace Hole', 'Hold Hands', 'Origin Pulse', 'Precipice Blades', 'Dragon Ascent', 'Hyperspace Fury'],
-		unbanlist: ['Greninja'],
-		requirePentagon: true,
-		onValidateTeam: function (team) {
-			let specialPokemon = {"Zygarde":1, "Cosmog":1, "Cosmoem":1, "Solgaleo":1, "Lunala":1, "Necrozma":1, "Magearna":1};
-			let hasSpecial = false;
-			for (let i = 0; i < team.length; i++) {
-				if (toId(team[i].item)) return ["Items are not permitted in Battle of Alola."];
-				let template = this.getTemplate(team[i].species);
-				if (!(template.baseSpecies in specialPokemon)) continue;
-				if (hasSpecial) return ["You are limited to one special Pokémon in Battle of Alola.", "(Special Pokémon are Zygarde, Cosmog, Cosmoem, Solgaleo, Lunala, Necrozma, and Magearna)"];
-				hasSpecial = true;
-			}
-		},
-	},
-	{
 		name: "[Gen 7] Custom Game",
 
 		mod: 'gen7',
