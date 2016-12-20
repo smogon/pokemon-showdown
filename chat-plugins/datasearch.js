@@ -739,7 +739,7 @@ function runMovesearch(target, cmd, canAll, message) {
 		if (template.exists) {
 			if (Object.keys(lsetData).length) return {reply: "A search can only include one Pok\u00e9mon learnset."};
 			if (!template.learnset) template = Tools.getTemplate(template.baseSpecies);
-			lsetData = template.learnset;
+			lsetData = Object.assign({}, template.learnset);
 			targetMon = template.name;
 			while (template.prevo) {
 				template = Tools.getTemplate(template.prevo);
