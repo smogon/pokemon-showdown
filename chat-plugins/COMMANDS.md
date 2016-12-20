@@ -18,12 +18,12 @@ But to actually define a command, it's a function:
 
 ```js
 avatars: function (target, room, user) {
-    if (!this.runBroadcast()) return;
-    this.sendReplyBox('You can <button name="avatars">change ' +
-        'your avatar</button> by clicking on it in the <button ' +
-        'name="openOptions"><i class="icon-cog"></i> Options' +
-        '</button> menu in the upper right. Custom avatars are ' +
-        'only obtainable by staff.');
+	if (!this.runBroadcast()) return;
+	this.sendReplyBox('You can <button name="avatars">change ' +
+		'your avatar</button> by clicking on it in the <button ' +
+		'name="openOptions"><i class="icon-cog"></i> Options' +
+		'</button> menu in the upper right. Custom avatars are ' +
+		'only obtainable by staff.');
 }
 ```
 
@@ -74,11 +74,11 @@ As an example:
 ip: 'whois',
 rooms: 'whois',
 whois: function (target, room, user, connection, cmd) {
-    <function body>
+	<function body>
 },
 whoishelp:["/whois - Get details on yourself: alts, group, IP address,
-    and rooms.",
-    "/whois [username] - Get details on a username: group and rooms."],
+	and rooms.",
+	"/whois [username] - Get details on a username: group and rooms."],
 ```
 
 `/help whois` will send the information in `whoishelp`.
@@ -102,26 +102,26 @@ Commands have access to the following functions:
 `this.add(message)`
 
 * Adds a message to the room so that everyone can see it.
-    This is like `this.sendReply`, except everyone in the room gets it,
-    instead of just the user that typed the command.
+	This is like `this.sendReply`, except everyone in the room gets it,
+	instead of just the user that typed the command.
 
 `this.send(message)`
 
 * Sends a message to the room so that everyone can see it.
-    This is like `this.add`, except it's not logged, and users who join the
-    room later won't see it in the log, and if it's a battle, it won't show
-    up in saved replays.
-    You USUALLY want to use `this.add` instead.
+	This is like `this.add`, except it's not logged, and users who join the
+	room later won't see it in the log, and if it's a battle, it won't show
+	up in saved replays.
+	You USUALLY want to use `this.add` instead.
 
 `this.logEntry(message)`
 
 * Log a message to the room's log without sending it to anyone. This is
-    like `this.add`, except no one will see it.
+	like `this.add`, except no one will see it.
 
 `this.addModCommand(message)`
 
 * Like this.add, but also logs the message to the moderator log which can
-    be seen with `/modlog`.
+	be seen with `/modlog`.
 
 `this.logModCommand(message)`
 
@@ -131,116 +131,116 @@ Commands have access to the following functions:
 `this.can(permission, targetUser)`
 
 * Checks if the user has the permission to do something, or if a
-    targetUser is passed, check if the user has permission to do it to that
-    user. Will automatically give the user an "Access denied" message if
-    the user doesn't have permission: use `user.can()` if you don't want that
-    message.
+	targetUser is passed, check if the user has permission to do it to that
+	user. Will automatically give the user an "Access denied" message if
+	the user doesn't have permission: use `user.can()` if you don't want that
+	message.
 
-    Should usually be near the top of the command, like:
+	Should usually be near the top of the command, like:
 
-    ```js
-    if (!this.can('potd')) return false;
-    ```
+	```js
+	if (!this.can('potd')) return false;
+	```
 
 `this.runBroadcast()`
 
 * Signifies that a message can be broadcast, as long as the user has
-    permission to. This will check to see if the user used `!command`
-    instead of `/command`. If so, it will check to see if the user has
-    permission to broadcast (by default, voice+ can), and return `false` if
-    not. Otherwise, it will add the message to the room, and turn on the
-    flag `this.broadcasting`, so that `this.sendReply` and `this.sendReplyBox`
-    will broadcast to the room instead of just the user that used the
-    command.
+	permission to. This will check to see if the user used `!command`
+	instead of `/command`. If so, it will check to see if the user has
+	permission to broadcast (by default, voice+ can), and return `false` if
+	not. Otherwise, it will add the message to the room, and turn on the
+	flag `this.broadcasting`, so that `this.sendReply` and `this.sendReplyBox`
+	will broadcast to the room instead of just the user that used the
+	command.
 
-    Should usually be near the top of the command, like:
+	Should usually be near the top of the command, like:
 
-    ```js
-    if (!this.canBroadcast()) return false;
-    ```
+	```js
+	if (!this.canBroadcast()) return false;
+	```
 
 `this.runBroadcast(suppressMessage)`
 
 * Functionally the same as `this.canBroadcast()`. However, it will look as
-    if the user had written the text `suppressMessage`.
+	if the user had written the text `suppressMessage`.
 
 `this.canTalk()`
 
 * Checks to see if the user can speak in the room. Returns false if the
-    user can't speak (is muted, the room has modchat on, etc), or true
-    otherwise.
+	user can't speak (is muted, the room has modchat on, etc), or true
+	otherwise.
 
-    Should usually be near the top of the command, like:
+	Should usually be near the top of the command, like:
 
-    ```js
-    if (!this.canTalk()) return false;
-    ```
+	```js
+	if (!this.canTalk()) return false;
+	```
 
 `this.canTalk(message, room)`
 
 * Checks to see if the user can say the message in the room.
-    If a room is not specified, it will default to the current one.
-    If it has a falsy value, the check won't be attached to any room.
-    In addition to running the checks from `this.canTalk()`, it also checks
-    to see if the message has any banned words, is too long, or was just
-    sent by the user. Returns the filtered message, or a falsy value if the
-    user can't speak.
+	If a room is not specified, it will default to the current one.
+	If it has a falsy value, the check won't be attached to any room.
+	In addition to running the checks from `this.canTalk()`, it also checks
+	to see if the message has any banned words, is too long, or was just
+	sent by the user. Returns the filtered message, or a falsy value if the
+	user can't speak.
 
-    Should usually be near the top of the command, like:
+	Should usually be near the top of the command, like:
 
-    ```js
-    target = this.canTalk(target);
-    if (!target) return false;
-    ```
+	```js
+	target = this.canTalk(target);
+	if (!target) return false;
+	```
 
 `this.parse(message, inNamespace)`
 
 * Runs the message as if the user had typed it in.
 
-    Mostly useful for giving help messages, like for commands that require
-    a target:
+	Mostly useful for giving help messages, like for commands that require
+	a target:
 
-    ```js
-    if (!target) return this.parse('/help msg');
-    ```
+	```js
+	if (!target) return this.parse('/help msg');
+	```
 
-    If `inNamespace` is true, then the message is parsed in that
-    corresponding namespace:
+	If `inNamespace` is true, then the message is parsed in that
+	corresponding namespace:
 
-    ```js
-    // command msg is in namespace test. (ie. /test msg)
-    this.parse('/help', true); // is parsed as if the user said
-                               // '/test help'
-    ```
+	```js
+	// command msg is in namespace test. (ie. /test msg)
+	this.parse('/help', true); // is parsed as if the user said
+							   // '/test help'
+	```
 
-    After 10 levels of recursion (calling `this.parse` from a command called
-    by `this.parse` from a command called by `this.parse` etc) we will assume
-    it's a bug in your command and error out.
+	After 10 levels of recursion (calling `this.parse` from a command called
+	by `this.parse` from a command called by `this.parse` etc) we will assume
+	it's a bug in your command and error out.
 
 `this.targetUserOrSelf(target, exactName)`
 
 * If `target` is blank, returns the user that sent the message.
-    Otherwise, returns the user with the username in target, or a falsy
-    value if no user with that username exists.
-    By default, this will track users across name changes. However, if
-    `exactName` is true, it will enforce exact matches.
+	Otherwise, returns the user with the username in target, or a falsy
+	value if no user with that username exists.
+	By default, this will track users across name changes. However, if
+	`exactName` is true, it will enforce exact matches.
 
 `this.splitTarget(target, exactName)`
 
 * Splits a target in the form `<user>, <message>` into its constituent parts.
-    Returns `<message>`, and sets `this.targetUser` to the user, and
-    `this.targetUsername` to the username.
+	Returns `<message>`, and sets `this.targetUser` to the user, and
+	`this.targetUsername` to the username.
 
-    If a user doesn't exist (because they are offline or otherwise),
-    `this.targetUser` will be falsy but `this.targetUsername` will still exist.
-    If `this.targetUser` exists, this.targetUsername will have the same
-    capitalization as the user's username, otherwise the capitalization
-    will be however it was passed into the function.
+	If a user doesn't exist (because they are offline or otherwise),
+	`this.targetUser` will be falsy but `this.targetUsername` will still exist.
+	If `this.targetUser` exists, this.targetUsername will have the same
+	capitalization as the user's username, otherwise the capitalization
+	will be however it was passed into the function.
 
-    By default, this will track users across name changes. However, if
-    `exactName` is true, it will enforce exact matches.
+	By default, this will track users across name changes. However, if
+	`exactName` is true, it will enforce exact matches.
 
-    Remember to check if `this.targetUser` exists before going further.
+	Remember to check if `this.targetUser` exists before going further.
 
 Unless otherwise specified, these functions will return undefined, so you
 can `return this.sendReply` or something to send a reply and stop the command
@@ -253,14 +253,14 @@ a namespace:
 
 ```js
 game: {
-    play: function (target, room, user) {
-        user.isPlaying = true;
-        this.sendReply("Playing.");
-    },
-    stop: function (target, room, user) {
-        user.isPlaying = false;
-        this.sendReply("Stopped.");
-    }
+	play: function (target, room, user) {
+		user.isPlaying = true;
+		this.sendReply("Playing.");
+	},
+	stop: function (target, room, user) {
+		user.isPlaying = false;
+		this.sendReply("Stopped.");
+	}
 }
 ```
 
@@ -277,20 +277,20 @@ commands:
 
 ```js
 game: {
-    play: function (target, room, user) {
-        user.isPlaying = true;
-        this.sendReply("Playing.");
-    },
-    playhelp: ["Tells you if the user is playing."],
-    stop: function (target, room, user) {
-        user.isPlaying = false;
-        this.sendReply("Stopped.");
-    },
-    stophelp: ["Tells you if the user has stopped playing."]
+	play: function (target, room, user) {
+		user.isPlaying = true;
+		this.sendReply("Playing.");
+	},
+	playhelp: ["Tells you if the user is playing."],
+	stop: function (target, room, user) {
+		user.isPlaying = false;
+		this.sendReply("Stopped.");
+	},
+	stophelp: ["Tells you if the user has stopped playing."]
 },
 gamehelp: ["commands for /game are:",
-    "/game play - Tells you if the user is playing.",
-    "/game stop - Tells you if the user stopped playing."]
+	"/game play - Tells you if the user is playing.",
+	"/game stop - Tells you if the user stopped playing."]
 ```
 
 The help entries are accessed with `/help game play` and `/help game`
