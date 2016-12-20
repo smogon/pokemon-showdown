@@ -53,7 +53,10 @@ exports.BattleScripts = {
 			sourceEffect = this.getEffect('lockedmove');
 		}
 		pokemon.moveUsed(move);
-		if (zMove) pokemon.side.zMoveUsed = true;
+		if (zMove) {
+			this.add('-zpower', pokemon);
+			pokemon.side.zMoveUsed = true;
+		}
 		this.useMove(move, pokemon, target, sourceEffect, zMove);
 		this.singleEvent('AfterMove', move, null, pokemon, target, move);
 		this.runEvent('AfterMove', pokemon, target, move);
@@ -779,7 +782,6 @@ exports.BattleScripts = {
 
 	runZMove: function (move, pokemon, target, sourceEffect) {
 		// Limit one Z move per side
-		this.add("-zpower", pokemon);
 		this.runMove(move, pokemon, target, sourceEffect, true);
 	},
 
