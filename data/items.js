@@ -2802,6 +2802,7 @@ exports.BattleItems = {
 			type: "Fighting",
 		},
 		onUpdate: function (pokemon) {
+			if (!pokemon.hp) return;
 			let move = pokemon.getMoveData(pokemon.lastMove);
 			if (move && move.pp === 0) {
 				pokemon.addVolatile('leppaberry');
