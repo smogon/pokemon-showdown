@@ -379,6 +379,7 @@ exports.BattleAliases = {
 	"ferro": "Ferrothorn",
 	"fini": "Tapu Fini",
 	"forry": "Forretress",
+	"fug": "Rayquaza",
 	"gar": "Gengar",
 	"garde": "Gardevoir",
 	"gatr": "Feraligatr",
