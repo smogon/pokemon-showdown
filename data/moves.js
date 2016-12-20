@@ -13221,7 +13221,9 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		onModifyMove: function (move, pokemon) {
-			move.type = pokemon.types[0]; // TODO: test with users other than Oricorio
+			let type = pokemon.types[0];
+			if (type === "Bird") type = "???";
+			move.type = type;
 		},
 		secondary: false,
 		target: "normal",
