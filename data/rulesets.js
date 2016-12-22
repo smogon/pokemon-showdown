@@ -580,49 +580,6 @@ exports.BattleFormats = {
 			return [(set.name || set.species) + " can Baton Pass both Speed and a different stat, which is banned by Baton Pass Clause."];
 		},
 	},
-	batonpassspeedclause: {
-		effectType: 'ValidatorRule',
-		name: 'Baton Pass Speed Clause',
-		banlist: ["Baton Pass > 1"],
-		onStart: function () {
-			this.add('rule', 'Baton Pass Speed Clause: Limit one Baton Passer, can\'t pass Speed');
-		},
-		onValidateSet: function (set, format, setHas) {
-			if (!('batonpass' in setHas)) return;
-
-			// check if Speed is boosted
-			let speedBoosted = false;
-			if (toId(set.item) === 'eeviumz') {
-				speedBoosted = true;
-			}
-			let item = this.getItem(set.item);
-			for (let i = 0; i < set.moves.length; i++) {
-				let move = this.getMove(set.moves[i]);
-				if (move.boosts && move.boosts.spe > 0) {
-					speedBoosted = true;
-				}
-				if (item.zMove && move.type === item.zMoveType) {
-					if (move.zMoveBoost && move.zMoveBoost.spe > 0) {
-						speedBoosted = true;
-					}
-				}
-			}
-
-			let boostSpeed = ['flamecharge', 'geomancy', 'motordrive', 'rattled', 'speedboost', 'steadfast', 'weakarmor', 'blazikenite', 'salacberry'];
-			if (!speedBoosted) {
-				for (let i = 0; i < boostSpeed.length; i++) {
-					if (boostSpeed[i] in setHas) {
-						speedBoosted = true;
-						break;
-					}
-				}
-			}
-			if (!speedBoosted) {
-				return;
-			}
-			return [(set.name || set.species) + " can Baton Pass Speed boosts, which is banned by Baton Pass Speed Clause."];
-		},
-	},
 	hppercentagemod: {
 		effectType: 'Rule',
 		name: 'HP Percentage Mod',
