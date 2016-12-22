@@ -3477,7 +3477,7 @@ class Battle extends Tools.BattleDex {
 			this.activeTurns = 0;
 			return;
 		}
-		if(this.data.Formats[this.formatData.id].desc) {	
+		if (this.data.Formats[this.formatData.id].desc) {
 			let desc = this.data.Formats[this.formatData.id].desc.join("<br />");
 			this.add("raw|<div class=\"infobox\">" + desc + "</div>");
 		}
