@@ -4130,71 +4130,71 @@ class Battle extends Tools.BattleDex {
 		return false;
 	}
 	resolvePriority(decision, midTurn) {
-		if (decision) {
-			if (!decision.side && decision.pokemon) decision.side = decision.pokemon.side;
-			if (!decision.choice && decision.move) decision.choice = 'move';
-			if (!decision.priority && decision.priority !== 0) {
-				let priorities = {
-					'beforeTurn': 100,
-					'beforeTurnMove': 99,
-					'switch': 7,
-					'runUnnerve': 7.3,
-					'runSwitch': 7.2,
-					'runPrimal': 7.1,
-					'instaswitch': 101,
-					'megaEvo': 6.9,
-					'residual': -100,
-					'team': 102,
-					'start': 101,
-				};
-				if (decision.choice in priorities) {
-					decision.priority = priorities[decision.choice];
-				}
-			}
-			if (!midTurn) {
-				if (decision.choice === 'move') {
-					if (this.getMove(decision.move).beforeTurnCallback) {
-						this.addQueue({choice: 'beforeTurnMove', pokemon: decision.pokemon, move: decision.move, targetLoc: decision.targetLoc});
-					}
-				} else if (decision.choice === 'switch' || decision.choice === 'instaswitch') {
-					if (decision.pokemon.switchFlag && decision.pokemon.switchFlag !== true) {
-						decision.pokemon.switchCopyFlag = decision.pokemon.switchFlag;
-					}
-					decision.pokemon.switchFlag = false;
-					if (!decision.speed && decision.pokemon && decision.pokemon.isActive) decision.speed = decision.pokemon.getDecisionSpeed();
-				}
-			}
+		if (!decision) return;
 
-			let deferPriority = this.gen >= 7 && decision.mega && !decision.pokemon.template.isMega;
-			if (decision.move) {
-				let target;
-
-				if (!decision.targetPosition) {
-					target = this.resolveTarget(decision.pokemon, decision.move);
-					decision.targetSide = target.side;
-					decision.targetPosition = target.position;
-				}
-
-				decision.move = this.getMoveCopy(decision.move);
-				if (!decision.priority && !deferPriority) {
-					let priority = decision.move.priority;
-					if (decision.zmove) {
-						let zMoveName = this.getZMove(decision.move, decision.pokemon, true);
-						let zMove = this.getMove(zMoveName);
-						if (zMove.exists) {
-							priority = zMove.priority;
-						}
-					}
-					priority = this.runEvent('ModifyPriority', decision.pokemon, target, decision.move, priority);
-					decision.priority = priority;
-					// In Gen 6, Quick Guard blocks moves with artificially enhanced priority.
-					if (this.gen > 5) decision.move.priority = priority;
-				}
+		if (!decision.side && decision.pokemon) decision.side = decision.pokemon.side;
+		if (!decision.choice && decision.move) decision.choice = 'move';
+		if (!decision.priority && decision.priority !== 0) {
+			let priorities = {
+				'beforeTurn': 100,
+				'beforeTurnMove': 99,
+				'switch': 7,
+				'runUnnerve': 7.3,
+				'runSwitch': 7.2,
+				'runPrimal': 7.1,
+				'instaswitch': 101,
+				'megaEvo': 6.9,
+				'residual': -100,
+				'team': 102,
+				'start': 101,
+			};
+			if (decision.choice in priorities) {
+				decision.priority = priorities[decision.choice];
 			}
-			if (!decision.pokemon && !decision.speed) decision.speed = 1;
-			if (!decision.speed && (decision.choice === 'switch' || decision.choice === 'instaswitch') && decision.target) decision.speed = decision.target.getDecisionSpeed();
-			if (!decision.speed && !deferPriority) decision.speed = decision.pokemon.getDecisionSpeed();
 		}
+		if (!midTurn) {
+			if (decision.choice === 'move') {
+				if (this.getMove(decision.move).beforeTurnCallback) {
+					this.addQueue({choice: 'beforeTurnMove', pokemon: decision.pokemon, move: decision.move, targetLoc: decision.targetLoc});
+				}
+			} else if (decision.choice === 'switch' || decision.choice === 'instaswitch') {
+				if (decision.pokemon.switchFlag && decision.pokemon.switchFlag !== true) {
+					decision.pokemon.switchCopyFlag = decision.pokemon.switchFlag;
+				}
+				decision.pokemon.switchFlag = false;
+				if (!decision.speed && decision.pokemon && decision.pokemon.isActive) decision.speed = decision.pokemon.getDecisionSpeed();
+			}
+		}
+
+		let deferPriority = this.gen >= 7 && decision.mega && !decision.pokemon.template.isMega;
+		if (decision.move) {
+			let target;
+
+			if (!decision.targetPosition) {
+				target = this.resolveTarget(decision.pokemon, decision.move);
+				decision.targetSide = target.side;
+				decision.targetPosition = target.position;
+			}
+
+			decision.move = this.getMoveCopy(decision.move);
+			if (!decision.priority && !deferPriority) {
+				let priority = decision.move.priority;
+				if (decision.zmove) {
+					let zMoveName = this.getZMove(decision.move, decision.pokemon, true);
+					let zMove = this.getMove(zMoveName);
+					if (zMove.exists) {
+						priority = zMove.priority;
+					}
+				}
+				priority = this.runEvent('ModifyPriority', decision.pokemon, target, decision.move, priority);
+				decision.priority = priority;
+				// In Gen 6, Quick Guard blocks moves with artificially enhanced priority.
+				if (this.gen > 5) decision.move.priority = priority;
+			}
+		}
+		if (!decision.pokemon && !decision.speed) decision.speed = 1;
+		if (!decision.speed && (decision.choice === 'switch' || decision.choice === 'instaswitch') && decision.target) decision.speed = decision.target.getDecisionSpeed();
+		if (!decision.speed && !deferPriority) decision.speed = decision.pokemon.getDecisionSpeed();
 	}
 	addQueue(decision) {
 		if (Array.isArray(decision)) {
