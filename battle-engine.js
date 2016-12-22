@@ -4129,7 +4129,7 @@ class Battle extends Tools.BattleDex {
 		}
 		return false;
 	}
-	resolvePriority(decision) {
+	resolvePriority(decision, midTurn) {
 		if (decision) {
 			if (!decision.side && decision.pokemon) decision.side = decision.pokemon.side;
 			if (!decision.choice && decision.move) decision.choice = 'move';
@@ -4151,16 +4151,18 @@ class Battle extends Tools.BattleDex {
 					decision.priority = priorities[decision.choice];
 				}
 			}
-			if (decision.choice === 'move') {
-				if (this.getMove(decision.move).beforeTurnCallback) {
-					this.addQueue({choice: 'beforeTurnMove', pokemon: decision.pokemon, move: decision.move, targetLoc: decision.targetLoc});
+			if (!midTurn) {
+				if (decision.choice === 'move') {
+					if (this.getMove(decision.move).beforeTurnCallback) {
+						this.addQueue({choice: 'beforeTurnMove', pokemon: decision.pokemon, move: decision.move, targetLoc: decision.targetLoc});
+					}
+				} else if (decision.choice === 'switch' || decision.choice === 'instaswitch') {
+					if (decision.pokemon.switchFlag && decision.pokemon.switchFlag !== true) {
+						decision.pokemon.switchCopyFlag = decision.pokemon.switchFlag;
+					}
+					decision.pokemon.switchFlag = false;
+					if (!decision.speed && decision.pokemon && decision.pokemon.isActive) decision.speed = decision.pokemon.getDecisionSpeed();
 				}
-			} else if (decision.choice === 'switch' || decision.choice === 'instaswitch') {
-				if (decision.pokemon.switchFlag && decision.pokemon.switchFlag !== true) {
-					decision.pokemon.switchCopyFlag = decision.pokemon.switchFlag;
-				}
-				decision.pokemon.switchFlag = false;
-				if (!decision.speed && decision.pokemon && decision.pokemon.isActive) decision.speed = decision.pokemon.getDecisionSpeed();
 			}
 
 			let deferPriority = this.gen >= 7 && decision.mega && !decision.pokemon.template.isMega;
@@ -4208,7 +4210,7 @@ class Battle extends Tools.BattleDex {
 	sortQueue() {
 		this.queue.sort(Battle.comparePriority);
 	}
-	insertQueue(decision, noResolve) {
+	insertQueue(decision, midTurn) {
 		if (Array.isArray(decision)) {
 			for (let i = 0; i < decision.length; i++) {
 				this.insertQueue(decision[i]);
@@ -4217,7 +4219,7 @@ class Battle extends Tools.BattleDex {
 		}
 
 		if (decision.pokemon) decision.pokemon.updateSpeed();
-		if (!noResolve) this.resolvePriority(decision);
+		this.resolvePriority(decision, midTurn);
 		for (let i = 0; i < this.queue.length; i++) {
 			if (Battle.comparePriority(decision, this.queue[i]) < 0) {
 				this.queue.splice(i, 0, decision);
