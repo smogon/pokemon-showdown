@@ -588,8 +588,8 @@ exports.Formats = [
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3555650/\">NU Viability Ranking</a>",
 		],
 
-		ruleset: ['OU', 'Baton Pass Speed Clause'],
-		banlist: ['OU', 'BL', 'UU', 'BL2', 'RU', 'BL3', 'Drizzle', 'Drought'],
+		ruleset: ['RU'],
+		banlist: ['RU', 'BL3'],
 	},
 	{
 		name: "PU (suspect test)",
