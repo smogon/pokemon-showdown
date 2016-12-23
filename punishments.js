@@ -22,7 +22,7 @@ const PUNISHMENT_FILE = path.resolve(__dirname, 'config/punishments.tsv');
 const ROOM_PUNISHMENT_FILE = path.resolve(__dirname, 'config/room-punishments.tsv');
 
 const RANGELOCK_DURATION = 60 * 60 * 1000; // 1 hour
-const LOCK_DURATION = 37 * 60 * 60 * 1000; // 37 hours
+const LOCK_DURATION = 48 * 60 * 60 * 1000; // 48 hours
 const BAN_DURATION = 7 * 24 * 60 * 60 * 1000; // 1 week
 
 const ROOMBAN_DURATION = 48 * 60 * 60 * 1000; // 48 hours
