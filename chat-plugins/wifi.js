@@ -119,8 +119,8 @@ class Giveaway {
 				}
 				if (value.otherFormes) {
 					for (let i = 0; i < value.otherFormes.length; i++) {
-						// Hardcore alola formes.
-						if (value.otherFormes[i].endsWith('alola')) {
+						// Hardcore Alolan formes.
+						if (value.otherFormes[i].endsWith('alolan')) {
 							if (/alolan?/.test(text)) {
 								spriteid += '-alolan';
 								break;
