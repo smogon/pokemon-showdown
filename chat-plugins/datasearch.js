@@ -107,7 +107,8 @@ exports.commands = {
 		});
 	},
 
-	dexsearchhelp: ["/dexsearch [parameter], [parameter], [parameter], ... - Searches for Pok\u00e9mon that fulfill the selected criteria",
+	dexsearchhelp: [
+		"/dexsearch [parameter], [parameter], [parameter], ... - Searches for Pok\u00e9mon that fulfill the selected criteria",
 		"Search categories are: type, tier, color, moves, ability, gen, resists, recovery, priority, stat, egg group.",
 		"Valid colors are: green, red, blue, white, brown, yellow, purple, pink, gray and black.",
 		"Valid tiers are: Uber/OU/BL/UU/BL2/RU/BL3/NU/BL4/PU/NFE/LC/CAP.",
@@ -117,7 +118,8 @@ exports.commands = {
 		"Parameters can be excluded through the use of '!', e.g., '!water type' excludes all water types.",
 		"The parameter 'mega' can be added to search for Mega Evolutions only, and the parameter 'NFE' can be added to search not-fully evolved Pok\u00e9mon only.",
 		"Parameters separated with '|' will be searched as alternatives for each other, e.g., 'trick | switcheroo' searches for all Pok\u00e9mon that learn either Trick or Switcheroo.",
-		"The order of the parameters does not matter."],
+		"The order of the parameters does not matter.",
+	],
 
 	'!randompokemon': true,
 	rollpokemon: 'randompokemon',
@@ -158,9 +160,11 @@ exports.commands = {
 			this.update();
 		});
 	},
-	randompokemonhelp: ["/randompokemon - Generates random Pok\u00e9mon based on given search conditions.",
+	randompokemonhelp: [
+		"/randompokemon - Generates random Pok\u00e9mon based on given search conditions.",
 		"/randompokemon uses the same parameters as /dexsearch (see '/help ds').",
-		"Adding a number as a parameter returns that many random Pok\u00e9mon, e.g., '/randpoke 6' returns 6 random Pok\u00e9mon."],
+		"Adding a number as a parameter returns that many random Pok\u00e9mon, e.g., '/randpoke 6' returns 6 random Pok\u00e9mon.",
+	],
 
 	'!movesearch': true,
 	ms: 'movesearch',
@@ -186,7 +190,8 @@ exports.commands = {
 			this.update();
 		});
 	},
-	movesearchhelp: ["/movesearch [parameter], [parameter], [parameter], ... - Searches for moves that fulfill the selected criteria.",
+	movesearchhelp: [
+		"/movesearch [parameter], [parameter], [parameter], ... - Searches for moves that fulfill the selected criteria.",
 		"Search categories are: type, category, contest condition, flag, status inflicted, type boosted, and numeric range for base power, pp, and accuracy.",
 		"Types must be followed by ' type', e.g., 'dragon type'.",
 		"Stat boosts must be preceded with 'boosts ', e.g., 'boosts attack' searches for moves that boost the attack stat.",
@@ -194,7 +199,8 @@ exports.commands = {
 		"Parameters can be excluded through the use of '!', e.g., !water type' excludes all water type moves.",
 		"Valid flags are: authentic (bypasses substitute), bite, bullet, contact, defrost, powder, pulse, punch, secondary, snatch, and sound.",
 		"If a Pok\u00e9mon is included as a parameter, moves will be searched from its movepool.",
-		"The order of the parameters does not matter."],
+		"The order of the parameters does not matter.",
+	],
 
 	'!itemsearch': true,
 	isearch: 'itemsearch',
@@ -254,12 +260,14 @@ exports.commands = {
 			this.update();
 		});
 	},
-	learnhelp: ["/learn [ruleset], [pokemon], [move, move, ...] - Displays how the Pok\u00e9mon can learn the given moves, if it can at all.",
+	learnhelp: [
+		"/learn [ruleset], [pokemon], [move, move, ...] - Displays how the Pok\u00e9mon can learn the given moves, if it can at all.",
 		"!learn [ruleset], [pokemon], [move, move, ...] - Show everyone that information. Requires: + % @ * # & ~",
 		"Specifying a ruleset is entirely optional. The ruleset can be a format, a generation (e.g.: gen3) or 'pentagon'. A value of 'pentagon' indicates that trading from previous generations is not allowed.",
 		"/learn5 displays how the Pok\u00e9mon can learn the given moves at level 5, if it can at all.",
 		"/learnall displays all of the possible fathers for egg moves.",
-		"/learn can also be prefixed by a generation acronym (e.g.: /dpplearn) to indicate which generation is used. Valid options are: rby gsc adv dpp bw2 oras"],
+		"/learn can also be prefixed by a generation acronym (e.g.: /dpplearn) to indicate which generation is used. Valid options are: rby gsc adv dpp bw2 oras",
+	],
 };
 
 if (process.send && module === process.mainModule) {
