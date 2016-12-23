@@ -1018,7 +1018,10 @@ exports.BattleScripts = {
 			let moves;
 			let pool = [];
 			for (let move in template.learnset) {
-				if (this.getMove(move).gen === 1) pool.push(move);
+				if (this.getMove(move).gen !== 1) continue;
+				if (template.learnset[move].some(learned => learned[0] === '1')) {
+					pool.push(move);
+				}
 			}
 			if (pool.length <= 4) {
 				moves = pool;
