@@ -13346,7 +13346,7 @@ exports.BattleMovedex = {
 		name: "Rock Blast",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {bullet: 1, protect: 1, mirror: 1},
 		multihit: [2, 5],
 		secondary: false,
 		target: "normal",

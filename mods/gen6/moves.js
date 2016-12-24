@@ -151,6 +151,10 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 50,
 	},
+	rockblast: {
+		inherit: true,
+		flags: {protect: 1, mirror: 1},
+	},
 	sheercold: {
 		inherit: true,
 		desc: "Deals damage to the target equal to the target's maximum HP. Ignores accuracy and evasiveness modifiers. This attack's accuracy is equal to (user's level - target's level + 30)%, and fails if the target is at a higher level. Pokemon with the Ability Sturdy are immune.",
