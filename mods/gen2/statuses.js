@@ -168,10 +168,10 @@ exports.BattleStatuses = {
 	stall: {
 		duration: 2,
 		onStart: function () {
-			this.effectData.counter = 128;
+			this.effectData.counter = 127;
 		},
 		onStallMove: function () {
-			let counter = Math.floor(this.effectData.counter) || 128;
+			let counter = Math.floor(this.effectData.counter) || 127;
 			this.debug("Success chance: " + Math.round(counter * 1000 / 255) / 10 + "% (" + counter + "/255)");
 			return (this.random(255) < counter);
 		},
