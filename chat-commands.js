@@ -2197,12 +2197,10 @@ exports.commands = {
 			return this.errorReply("This room is not going to last long enough for a blacklist to matter - just ban the user");
 		}
 
-		let parts = target.split('|');
-		if (parts.length < 2) {
-			return this.errorReply("Blacklists require a reason.");
-		}
-		let reason = parts[1];
-		let targets = parts[0].split(',').map(s => toId(s));
+		let [targetStr, reason] = target.split('|').map(val => val.trim());
+		if (!(targetStr && reason)) return this.errorReply("Usage: /blacklistname name1, name2, ... | reason");
+
+		let targets = targetStr.split(',').map(s => toId(s));
 
 		let duplicates = targets.filter(userid => {
 			let punishment = Punishments.roomUserids.nestedGet(room.id, userid);
