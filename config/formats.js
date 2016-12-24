@@ -52,8 +52,8 @@ exports.Formats = [
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3590692/\">SM OU Suspect Process, Round 1</a>"],
 
 		mod: 'gen7',
-		challengeShow: false,
 		ruleset: ['[Gen 7] Pokebank OU'],
+		banlist: ['Genesect'],
 	},
 	{
 		name: "[Gen 7] Pokebank UU (alpha)",
