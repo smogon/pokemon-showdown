@@ -43,8 +43,17 @@ exports.Formats = [
 		],
 
 		mod: 'gen7',
+		searchShow: false,
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Baton Pass Clause'],
 		banlist: ['Uber', 'Bank-Uber', 'Power Construct', 'Shadow Tag'],
+	},
+	{
+		name: "[Gen 7] Pokebank OU (suspect test)",
+		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3590692/\">SM OU Suspect Process, Round 1</a>"],
+
+		mod: 'gen7',
+		challengeShow: false,
+		ruleset: ['[Gen 7] Pokebank OU'],
 	},
 	{
 		name: "[Gen 7] Pokebank UU (alpha)",
