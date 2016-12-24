@@ -50,6 +50,10 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 80,
 	},
+	heavyslam: {
+		inherit: true,
+		desc: "The power of this move depends on (user's weight / target's weight), rounded down. Power is equal to 120 if the result is 5 or more, 100 if 4, 80 if 3, 60 if 2, and 40 if 1 or less.",
+	},
 	kingsshield: {
 		inherit: true,
 		desc: "The user is protected from most attacks made by other Pokemon during this turn, and Pokemon trying to make contact with the user have their Attack lowered by 2 stages. Non-damaging moves go through this protection. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails or if the user's last move used is not Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, or Wide Guard. Fails if the user moves last this turn.",
@@ -82,6 +86,24 @@ exports.BattleMovedex = {
 		basePower: 20,
 		isViable: false,
 		pp: 15,
+	},
+	minimize: {
+		inherit: true,
+		desc: "Raises the user's evasiveness by 2 stages. Whether or not the user's evasiveness was changed, Body Slam, Dragon Rush, Flying Press, Heat Crash, Phantom Force, Shadow Force, Steamroller, and Stomp will not check accuracy and have their damage doubled if used against the user while it is active.",
+		effect: {
+			noCopy: true,
+			onSourceModifyDamage: function (damage, source, target, move) {
+				if (move.id in {'stomp':1, 'steamroller':1, 'bodyslam':1, 'flyingpress':1, 'dragonrush':1, 'phantomforce':1, 'heatcrash':1, 'shadowforce':1}) {
+					return this.chainModify(2);
+				}
+			},
+			onAccuracy: function (accuracy, target, source, move) {
+				if (move.id in {'stomp':1, 'steamroller':1, 'bodyslam':1, 'flyingpress':1, 'dragonrush':1, 'phantomforce':1, 'heatcrash':1, 'shadowforce':1}) {
+					return true;
+				}
+				return accuracy;
+			},
+		},
 	},
 	mistyterrain: {
 		inherit: true,
