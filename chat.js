@@ -753,12 +753,11 @@ class CommandContext {
 		return [target.substr(0, commaIndex), target.substr(commaIndex + 1).trim()];
 	}
 	splitTarget(target, exactName) {
-		let [first, rest] = this.splitOne(target);
+		let [name, rest] = this.splitOne(target);
 
-		let targetUser = Users.get(first, exactName);
-		this.targetUser = Users.get(first, exactName);
-		this.inputUsername = first.trim();
-		this.targetUsername = targetUser ? targetUser.name : this.inputUsername;
+		this.targetUser = Users.get(name, exactName);
+		this.inputUsername = name.trim();
+		this.targetUsername = this.targetUser ? this.targetUser.name : this.inputUsername;
 		return rest;
 	}
 	splitTargetText(target) {
