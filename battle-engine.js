@@ -1521,7 +1521,7 @@ class BattleSide {
 		}
 
 		let move = this.battle.getMove(moveid);
-		let zMove = megaOrZ === 'zmove' ? this.battle.getZMove(move, activePokemon, false, true) : undefined;
+		let zMove = megaOrZ === 'zmove' ? this.battle.getZMove(move, activePokemon) : undefined;
 		if (megaOrZ === 'zmove') {
 			if (!zMove || this.choiceData.zmove) {
 				this.emitCallback('cantz', activePokemon); // TODO: The client shouldn't have sent this request in the first place.
