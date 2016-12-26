@@ -4166,10 +4166,9 @@ class Battle extends Tools.BattleDex {
 		if (decision.move) {
 			let target;
 
-			if (!decision.targetPosition) {
+			if (!decision.targetLoc) {
 				target = this.resolveTarget(decision.pokemon, decision.move);
-				decision.targetSide = target.side;
-				decision.targetPosition = target.position;
+				decision.targetLoc = this.getTargetLoc(target, decision.pokemon);
 			}
 
 			decision.move = this.getMoveCopy(decision.move);
