@@ -8602,7 +8602,7 @@ exports.BattleMovedex = {
 				return false;
 			}
 			this.add('-singleturn', target, 'move: Instruct', '[of] ' + source);
-			this.useMove(target.lastMove, target);
+			this.runMove(target.lastMove, target);
 		},
 		secondary: false,
 		target: "normal",
