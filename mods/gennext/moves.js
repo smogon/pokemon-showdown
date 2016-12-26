@@ -1202,25 +1202,30 @@ exports.BattleMovedex = {
 		priority: 0,
 		ignoreImmunity: true,
 		onHit: function (target, source) {
-			source.side.addSideCondition('futuremove');
-			if (source.side.sideConditions['futuremove'].positions[source.position]) {
+			target.side.addSideCondition('futuremove');
+			if (target.side.sideConditions['futuremove'].positions[target.position]) {
 				return false;
 			}
-			source.side.sideConditions['futuremove'].positions[source.position] = {
+			target.side.sideConditions['futuremove'].positions[target.position] = {
 				duration: 3,
 				move: 'echoedvoice',
-				targetPosition: target.position,
 				source: source,
 				moveData: {
-					name: "Future Sight",
+					id: 'echoedvoice',
+					name: "Echoed Voice",
+					accuracy: 100,
 					basePower: 80,
 					category: "Special",
+					priority: 0,
 					flags: {},
-					ignoreImmunity: true,
+					ignoreImmunity: false,
+					effectType: 'Move',
+					isFutureMove: true,
 					type: 'Normal',
 				},
 			};
-			this.add('-start', source, 'Echoed Voice');
+			this.add('-start', source, 'move: Echoed Voice');
+			return null;
 		},
 		target: "normal",
 		type: "Normal",
