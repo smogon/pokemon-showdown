@@ -4,15 +4,17 @@ const CHOOSABLE_TARGETS = new Set(['normal', 'any', 'adjacentAlly', 'adjacentAll
 
 exports.BattleScripts = {
 	gen: 7,
-	runMove: function (move, pokemon, target, sourceEffect, zMove) {
-		if (!sourceEffect && toId(move) !== 'struggle') {
+	runMove: function (move, pokemon, targetLoc, sourceEffect, zMove) {
+		let target = this.getTarget(pokemon, zMove || move, targetLoc);
+		if (!sourceEffect && toId(move) !== 'struggle' && !zMove) {
 			let changedMove = this.runEvent('OverrideDecision', pokemon, target, move);
 			if (changedMove && changedMove !== true) {
 				move = changedMove;
 				target = null;
 			}
 		}
-		move = this.getMove(move);
+		let baseMove = this.getMove(move);
+		move = this.getMove(zMove || move);
 		if (!target && target !== false) target = this.resolveTarget(pokemon, move);
 
 		this.setActiveMove(move, pokemon, target);
@@ -42,7 +44,7 @@ exports.BattleScripts = {
 		let lockedMove = this.runEvent('LockMove', pokemon);
 		if (lockedMove === true) lockedMove = false;
 		if (!lockedMove) {
-			if (!pokemon.deductPP(move, null, target) && (move.id !== 'struggle')) {
+			if (!pokemon.deductPP(baseMove, null, target) && (move.id !== 'struggle')) {
 				this.add('cant', pokemon, 'nopp', move);
 				let gameConsole = [null, 'Game Boy', 'Game Boy', 'Game Boy Advance', 'DS', 'DS'][this.gen] || '3DS';
 				this.add('-hint', "This is not a bug, this is really how it works on the " + gameConsole + "; try it yourself if you don't believe us.");
@@ -52,12 +54,13 @@ exports.BattleScripts = {
 		} else {
 			sourceEffect = this.getEffect('lockedmove');
 		}
-		pokemon.moveUsed(move);
+		pokemon.moveUsed(move, targetLoc);
+
 		if (zMove) {
 			this.add('-zpower', pokemon);
 			pokemon.side.zMoveUsed = true;
 		}
-		this.useMove(move, pokemon, target, sourceEffect, zMove);
+		this.useMove(baseMove, pokemon, target, sourceEffect, zMove);
 		this.singleEvent('AfterMove', move, null, pokemon, target, move);
 		this.runEvent('AfterMove', pokemon, target, move);
 	},
@@ -779,11 +782,6 @@ exports.BattleScripts = {
 			if (zMoveName) atLeastOne = true;
 		}
 		if (atLeastOne) return zMoves;
-	},
-
-	runZMove: function (move, pokemon, target, sourceEffect) {
-		// Limit one Z move per side
-		this.runMove(move, pokemon, target, sourceEffect, true);
 	},
 
 	canMegaEvo: function (pokemon) {

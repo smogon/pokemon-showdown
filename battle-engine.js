@@ -443,8 +443,9 @@ class BattlePokemon {
 		this.isStalePPTurns = 0;
 		return true;
 	}
-	moveUsed(move) {
+	moveUsed(move, targetLoc) {
 		this.lastMove = this.battle.getMove(move).id;
+		this.lastMoveTargetLoc = targetLoc;
 		this.moveThisTurn = this.lastMove;
 	}
 	gotAttacked(move, damage, source) {
@@ -3999,33 +4000,28 @@ class Battle extends Tools.BattleDex {
 	validTarget(target, source, targetType) {
 		return this.validTargetLoc(this.getTargetLoc(target, source), source, targetType);
 	}
-	getTarget(decision) {
-		let move = this.getMove(decision.zmove || decision.move);
+	getTarget(pokemon, move, targetLoc) {
+		move = this.getMove(move);
 		let target;
 		if ((move.target !== 'randomNormal') &&
-				this.validTargetLoc(decision.targetLoc, decision.pokemon, move.target)) {
-			if (decision.targetLoc > 0) {
-				target = decision.pokemon.side.foe.active[decision.targetLoc - 1];
+				this.validTargetLoc(targetLoc, pokemon, move.target)) {
+			if (targetLoc > 0) {
+				target = pokemon.side.foe.active[targetLoc - 1];
 			} else {
-				target = decision.pokemon.side.active[-decision.targetLoc - 1];
+				target = pokemon.side.active[-targetLoc - 1];
 			}
 			if (target) {
 				if (!target.fainted) {
 					// target exists and is not fainted
 					return target;
-				} else if (target.side === decision.pokemon.side) {
+				} else if (target.side === pokemon.side) {
 					// fainted allied targets don't retarget
 					return false;
 				}
 			}
 			// chosen target not valid, retarget randomly with resolveTarget
 		}
-		if (!decision.targetPosition || !decision.targetSide) {
-			target = this.resolveTarget(decision.pokemon, decision.zmove || decision.move);
-			decision.targetSide = target.side;
-			decision.targetPosition = target.position;
-		}
-		return decision.targetSide.active[decision.targetPosition];
+		return this.resolveTarget(pokemon, move);
 	}
 	resolveTarget(pokemon, move) {
 		// A move was used without a chosen target
@@ -4327,11 +4323,7 @@ class Battle extends Tools.BattleDex {
 		case 'move':
 			if (!decision.pokemon.isActive) return false;
 			if (decision.pokemon.fainted) return false;
-			if (decision.zmove) {
-				this.runZMove(decision.move, decision.pokemon, this.getTarget(decision), decision.sourceEffect);
-			} else {
-				this.runMove(decision.move, decision.pokemon, this.getTarget(decision), decision.sourceEffect);
-			}
+			this.runMove(decision.move, decision.pokemon, decision.targetLoc, decision.sourceEffect, decision.zmove);
 			break;
 		case 'megaEvo':
 			this.runMegaEvo(decision.pokemon);
@@ -4340,7 +4332,7 @@ class Battle extends Tools.BattleDex {
 			if (!decision.pokemon.isActive) return false;
 			if (decision.pokemon.fainted) return false;
 			this.debug('before turn callback: ' + decision.move.id);
-			let target = this.getTarget(decision);
+			let target = this.getTarget(decision.pokemon, decision.move, decision.targetLoc);
 			if (!target) return false;
 			decision.move.beforeTurnCallback.call(this, decision.pokemon, target);
 			break;
