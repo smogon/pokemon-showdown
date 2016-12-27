@@ -1197,7 +1197,7 @@ Punishments.monitorRoomPunishments = function (user) {
 		}).join(', ');
 
 		if (Config.punishmentautolock && points >= 10) {
-			let rooms = punishments.map(([room, _]) => room).join(', ');
+			let rooms = punishments.map(([room]) => room).join(', ');
 			let reason = `Autolocked for having punishments in ${punishments.length} rooms: ${rooms}`;
 			let message = `${user.name} was locked for having punishments in ${punishments.length} rooms: ${punishmentText}`;
 
