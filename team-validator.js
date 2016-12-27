@@ -872,7 +872,7 @@ class Validator {
 							// can tradeback
 							sources.push('1ST' + learned.slice(2) + ' ' + template.id);
 						}
-						if (set.ability && tools.gen >= 3) {
+						if (set.ability && tools.gen >= 3 && (!format.banlistTable || !format.banlistTable['ignoreillegalabilities'])) {
 							// The event ability must match the Pokémon's
 							let hiddenAbility = template.eventPokemon[learned.substr(2)].isHidden || false;
 							if (hiddenAbility !== isHidden) {
