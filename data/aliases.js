@@ -4,7 +4,7 @@ exports.BattleAliases = {
 	// formats
 	"randombattle": "[Gen 7] Random Battle",
 	"randbats": "[Gen 7] Random Battle",
-	"ag": "[Gen 7] Anything Goes",
+	"ag": "[Gen 7] Pokebank Anything Goes",
 	"randomdoublesbattle": "[Gen 7] Random Doubles Battle",
 	"randdubs": "[Gen 7] Random Doubles Battle",
 	"doubles": "[Gen 7] Doubles OU",
