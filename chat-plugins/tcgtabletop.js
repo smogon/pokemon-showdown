@@ -128,7 +128,7 @@ exports.commands = {
 		if (!this.canBroadcast()) return;
 		if (room.id !== 'tcgtabletop') return this.errorReply("This command can only be used in the TCG & Tabletop room.");
 		let domain = 'bulbapedia.bulbagarden.net';
-		let query = target.trim() + ' (TCG)';
+		let query = `${target.trim()} (TCG)`;
 
 		mediawikiSearch(domain, query).then(data => {
 			if (!this.runBroadcast()) return;
@@ -138,7 +138,7 @@ exports.commands = {
 				let redir = /\[\[(.+)\]\]/.exec(snippet);
 				if (redir) page = redir[1];
 			}
-			let htmlReply = `<strong>Best result for ${Chat.escapeHTML(query)}:</strong><br /><a href="http://${domain}/${encodeURIComponent(page)}">${Chat.escapeHTML(page)}</a>`;
+			let htmlReply = `<strong>Best result for ${Chat.escapeHTML(target)}:</strong><br /><a href="http://${domain}/wiki/${encodeURIComponent(page)}">${Chat.escapeHTML(page)}</a>`;
 			if (!this.broadcasting) return this.sendReply(`|raw|<div class="infobox">${htmlReply}</div>`);
 			room.addRaw(`<div class="infobox">${htmlReply}</div>`).update();
 		}, err => {
