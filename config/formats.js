@@ -323,7 +323,7 @@ exports.Formats = [
 		],
 	},
 	{
-		name: "[Gen 7] Mix and Mega (suspect test)",
+		name: "[Gen 7] Mix and Mega",
 		desc: [
 			"Mega Stones and Primal Orbs can be used on almost any fully evolved Pok&eacute;mon with no Mega Evolution limit.",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3587740/\">Mix and Mega</a>",
