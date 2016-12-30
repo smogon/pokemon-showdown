@@ -119,13 +119,6 @@ class Giveaway {
 				}
 				if (value.otherFormes) {
 					for (let i = 0; i < value.otherFormes.length; i++) {
-						// Hardcore Alolan formes.
-						if (value.otherFormes[i].endsWith('alolan')) {
-							if (/alolan?/.test(text)) {
-								spriteid += '-alolan';
-								break;
-							}
-						}
 						if (text.includes(value.otherFormes[i])) {
 							spriteid += '-' + value.otherFormes[i].substr(key.length);
 							break; // We don't want to end up with landorus-therian-therian
