@@ -8596,7 +8596,7 @@ exports.BattleMovedex = {
 			if (!target.lastMove) return false;
 			let lastMove = this.getMove(target.lastMove);
 			let noInstruct = {
-				beakblast:1, copycat:1, focuspunch:1, instruct:1, mefirst:1, metronome:1, mimic:1, mirrormove:1, outrage:1, petaldance:1, shelltrap:1, thrash:1, // TODO: fill this up
+				beakblast:1, bide:1, copycat:1, focuspunch:1, iceball:1, instruct:1, mefirst:1, metronome:1, mimic:1, mirrormove:1, outrage:1, petaldance:1, rollout:1, shelltrap:1, sleeptalk:1, thrash:1, // TODO: fill this up
 			};
 			if (noInstruct[lastMove.id] || lastMove.isZ || lastMove.flags['charge'] || lastMove.flags['recharge'] || target.volatiles['beakblast'] || target.volatiles['focuspunch'] || target.volatiles['shelltrap']) {
 				return false;
