@@ -4150,7 +4150,7 @@ class Battle extends Tools.BattleDex {
 		}
 		if (!midTurn) {
 			if (decision.choice === 'move') {
-				if (this.getMove(decision.move).beforeTurnCallback) {
+				if (!decision.zmove && this.getMove(decision.move).beforeTurnCallback) {
 					this.addQueue({choice: 'beforeTurnMove', pokemon: decision.pokemon, move: decision.move, targetLoc: decision.targetLoc});
 				}
 			} else if (decision.choice === 'switch' || decision.choice === 'instaswitch') {
