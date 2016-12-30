@@ -1137,11 +1137,14 @@ Punishments.isRoomBanned = function (user, roomid) {
 /**
  * Returns an array of all room punishments associated with a user.
  *
+ * options.publicOnly will make this only return public room punishments.
+ * options.checkIps will also check the IP of the user for IP-based punishments.
+ *
  * @param {User} user
- * @param {?boolean} publicOnly
+ * @param {?Object} options
  * @return {Array}
  */
-Punishments.getRoomPunishments = function (user, publicOnly) {
+Punishments.getRoomPunishments = function (user, options) {
 	if (!user) return;
 	let userid = toId(user);
 	let checkMutes = typeof user !== 'string';
@@ -1150,11 +1153,21 @@ Punishments.getRoomPunishments = function (user, publicOnly) {
 
 	for (let i = 0; i < Rooms.global.chatRooms.length; i++) {
 		const curRoom = Rooms.global.chatRooms[i];
-		if (!curRoom || curRoom.isPrivate === true || (publicOnly && (curRoom.isPersonal || curRoom.battle))) continue;
+		if (!curRoom || curRoom.isPrivate === true || ((options && options.publicOnly) && (curRoom.isPersonal || curRoom.battle))) continue;
 		let punishment = Punishments.roomUserids.nestedGet(curRoom.id, userid);
 		if (punishment) {
 			punishments.push([curRoom, punishment]);
-		} else if (checkMutes && curRoom.muteQueue) {
+			continue;
+		} else if (options && options.checkIps) {
+			for (let ip in user.ips) {
+				punishment = Punishments.roomIps.nestedGet(curRoom.id, ip);
+				if (punishment) {
+					punishments.push([curRoom, punishment]);
+					continue;
+				}
+			}
+		}
+		if (checkMutes && curRoom.muteQueue) {
 			for (let i = 0; i < curRoom.muteQueue.length; i++) {
 				let entry = curRoom.muteQueue[i];
 				if (userid === entry.userid ||
@@ -1180,7 +1193,7 @@ Punishments.monitorRoomPunishments = function (user) {
 	const minPunishments = (typeof Config.monitorminpunishments === 'number' ? Config.monitorminpunishments : 3); // Default to 3 if the Config option is not defined or valid
 	if (!minPunishments) return;
 
-	let punishments = Punishments.getRoomPunishments(user, true);
+	let punishments = Punishments.getRoomPunishments(user, {publicOnly: true});
 
 	if (punishments.length >= minPunishments) {
 		let points = 0;
