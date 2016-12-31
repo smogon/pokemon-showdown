@@ -1003,13 +1003,19 @@ exports.BattleScripts = {
 
 			// Random DVs.
 			let ivs = {
-				hp: this.random(30),
-				atk: this.random(30),
-				def: this.random(30),
-				spa: this.random(30),
-				spd: this.random(30),
-				spe: this.random(30),
+				hp: 0,
+				atk: this.random(15),
+				def: this.random(15),
+				spa: this.random(15),
+				spd: 0,
+				spe: this.random(15),
 			};
+			ivs["hp"] = (ivs["atk"] % 2) * 16 + (ivs["def"] % 2) * 8 + (ivs["spe"] % 2) * 4 + (ivs["spa"] % 2) * 2;
+			ivs["atk"] = ivs["atk"] * 2;
+			ivs["def"] = ivs["def"] * 2;
+			ivs["spa"] = ivs["spa"] * 2;
+			ivs["spd"] = ivs["spa"];
+			ivs["spe"] = ivs["spe"] * 2;
 
 			// Maxed EVs.
 			let evs = {hp: 255, atk: 255, def: 255, spa: 255, spd: 255,	spe: 255};
