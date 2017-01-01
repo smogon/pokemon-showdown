@@ -240,7 +240,7 @@ exports.Formats = [
 	{
 		name: "Pokébilities",
 		desc: [
-			"Pokémon have all their natural abilities at the same time.",
+			"Pokemon have all their natural abilities at the same time.",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3510241/\">Pokébilities</a>"
 		],
 		
@@ -281,13 +281,13 @@ exports.Formats = [
 	{
 		name: "[Gen 7] 350 Cup",
 		desc: [
-			"Pokémon with a base stat total of 350 or lower get their stats doubled.",
+			"Pokemon with a base stat total of 350 or lower get their stats doubled.",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3589641/\">350 Cup</a>",
 		],
 
 		mod: '350cup',
 		ruleset: ['[Gen 7] Pokebank Ubers'],
-		banlist: ['Eviolite', 'Light Ball', 'Deep Sea Tooth', 'Eevium Z'],
+		banlist: ['Deep Sea Tooth', 'Eevium Z', 'Eviolite', 'Light Ball'],
 	},
 	{
 		section: "Other Metagames",
