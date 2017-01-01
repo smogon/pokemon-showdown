@@ -241,26 +241,12 @@ exports.Formats = [
 		name: "Pokébilities",
 		desc: [
 			"Pokémon have all their natural abilities at the same time.",
-			"&bullet; <a href=\"http://www.smogon.com/forums/threads/pok%C3%A9bilities.3510241/\">Pokébilities</a>"
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3510241/\">Pokébilities</a>"
 		],
 		
 		mod: 'pokebilities',
 		ruleset: ["[Gen 7] Pokebank OU"],
 		onBegin: function() {
-			let statusability = {
-				"aerilate": true,
-				"aurabreak": true,
-				"flashfire": true,
-				"galvanize": true,
-				"parentalbond": true,
-				"pixilate": true,
-				"refrigerate": true,
-				"sheerforce": true,
-				"slowstart": true,
-				"truant": true,
-				"unburden": true,
-				"zenmode": true
-			};
 			for (let p = 0; p < this.sides.length; p++) {
 				for (let i = 0; i < this.sides[p].pokemon.length; i++) {
 					let pokemon = this.sides[p].pokemon[i];
@@ -274,7 +260,7 @@ exports.Formats = [
 						}
 						if (toId(a) == 'h' && template.unreleasedHidden) continue;
 						if (toId(template.abilities[a]) == pokemon.ability) continue;
-						if (statusability[toId(template.abilities[a])]) this.sides[p].pokemon[i].innates.push("other" + toId(template.abilities[a]));
+						if (this.statusability.includes(toId(template.abilities[a]))) this.sides[p].pokemon[i].innates.push("other" + toId(template.abilities[a]));
 						else this.sides[p].pokemon[i].innates.push(toId(template.abilities[a]));
 					}
 				}
@@ -295,8 +281,8 @@ exports.Formats = [
 	{
 		name: "[Gen 7] 350 Cup",
 		desc: [
-			"Pokémon having a base stat total 350 or below get their stats doubled..",
-			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3589641/\">350 Cup</a>",
+			"Pokémon with a base stat total of 350 or lower get their stats doubled.",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3589641/\">350 Cup</a>",
 		],
 
 		mod: '350cup',
