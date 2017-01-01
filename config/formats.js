@@ -240,7 +240,7 @@ exports.Formats = [
 	{
 		name: "Pokébilities",
 		desc: [
-			"Pokemon have all their natural abilities at the same time.",
+			"Pok&eacute;mon have all their natural abilities at the same time.",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3510241/\">Pokébilities</a>",
 		],
 
@@ -284,7 +284,7 @@ exports.Formats = [
 	{
 		name: "[Gen 7] 350 Cup",
 		desc: [
-			"Pokemon with a base stat total of 350 or lower get their stats doubled.",
+			"Pok&eacute;mon with a base stat total of 350 or lower get their stats doubled.",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3589641/\">350 Cup</a>",
 		],
 
