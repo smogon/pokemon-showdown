@@ -533,11 +533,11 @@ exports.Formats = [
 		column: 3,
 	},
 	{
-		name: "[Gen 5] Anything Goes",
+		name: "[Gen 1] No Big 4 OU",
 
-		mod: 'gen5',
-		ruleset: ['Pokemon', 'Endless Battle Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod'],
-		banlist: ['Illegal', 'Unreleased'],
+		mod: 'gen1',
+		ruleset: ['Pokemon', 'Standard'],
+		banlist: ['Uber', 'Chansey', 'Exeggutor', 'Tauros', 'Snorlax'],
 	},
 
 	// ORAS Singles
