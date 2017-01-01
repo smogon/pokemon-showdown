@@ -260,10 +260,12 @@ exports.Formats = [
 						}
 						if (toId(a) === 'h' && template.unreleasedHidden) continue;
 						if (toId(template.abilities[a]) === pokemon.ability) continue;
-						if (this.statusability.includes(toId(template.abilities[a]))) 
+						if (this.statusability.includes(toId(template.abilities[a]))) {
 							this.sides[p].pokemon[i].innates.push("other" + toId(template.abilities[a]));
-						else 
+						}
+						else {
 							this.sides[p].pokemon[i].innates.push(toId(template.abilities[a]));
+						}
 					}
 				}
 			}
