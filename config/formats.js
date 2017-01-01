@@ -238,39 +238,70 @@ exports.Formats = [
 		column: 2,
 	},
 	{
-		name: "[Gen 7] STABmons",
+		name: "Pokébilities",
 		desc: [
-			"Pok&eacute;mon can use any move of their typing, in addition to the moves they can normally learn.",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3587949/\">STABmons</a>",
+			"Pokémon have all their natural abilities at the same time.",
+			"&bullet; <a href=\"http://www.smogon.com/forums/threads/pok%C3%A9bilities.3510241/\">Pokébilities</a>"
 		],
-
-		mod: 'gen7',
-		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Baton Pass Clause'],
-		banlist: ['Ignore STAB Moves',
-			'Aegislash', 'Arceus', 'Blaziken', 'Darkrai', 'Deoxys', 'Dialga', 'Giratina', 'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-White',
-			'Landorus-Base', 'Lugia', 'Lunala', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Shaymin-Sky', 'Solgaleo', 'Xerneas', 'Yveltal', 'Zekrom',
-			'Power Construct', 'Shadow Tag', 'Aerodactylite', 'Gengarite', 'Kangaskhanite', "King's Rock", 'Lucarionite', 'Metagrossite', 'Razor Fang', 'Salamencite',
-		],
-	},
-	{
-		name: "[Gen 7] Middle Cup",
-		desc: [
-			"Only middle evolutions are allowed.",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3588047/\">Middle Cup</a>",
-		],
-
-		mod: 'gen7',
-		searchShow: false,
-		maxLevel: 50,
-		defaultLevel: 50,
-		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
-		banlist: ['Eviolite', 'Light Ball', 'Baton Pass'],
-		onValidateSet: function (set) {
-			let template = this.getTemplate(set.species || set.name);
-			if (!template.prevo || !template.nfe) {
-				return [set.species + " is not the middle Pokémon in an evolution chain."];
+		
+		mod: 'pokebilities',
+		ruleset: ["[Gen 7] Pokebank OU"],
+		onBegin: function() {
+			let statusability = {
+				"aerilate": true,
+				"aurabreak": true,
+				"flashfire": true,
+				"galvanize": true,
+				"parentalbond": true,
+				"pixilate": true,
+				"refrigerate": true,
+				"sheerforce": true,
+				"slowstart": true,
+				"truant": true,
+				"unburden": true,
+				"zenmode": true
+			};
+			for (let p = 0; p < this.sides.length; p++) {
+				for (let i = 0; i < this.sides[p].pokemon.length; i++) {
+					let pokemon = this.sides[p].pokemon[i];
+					let template = this.getTemplate(pokemon.species);
+					this.sides[p].pokemon[i].innates = [];
+					let bans = this.data.Formats.gen7pokebankou.banlist;
+					bans.push("Battle Bond");
+					for (let a in template.abilities) {
+						for (let k = 0; k < bans.length; k++) {
+							if (toId(bans[k]) === toId(template.abilities[a])) continue;
+						}
+						if (toId(a) == 'h' && template.unreleasedHidden) continue;
+						if (toId(template.abilities[a]) == pokemon.ability) continue;
+						if (statusability[toId(template.abilities[a])]) this.sides[p].pokemon[i].innates.push("ability: " + toId(template.abilities[a]));
+						else this.sides[p].pokemon[i].innates.push(toId(template.abilities[a]));
+					}
+				}
 			}
 		},
+		onSwitchInPriority: 1,
+		onSwitchIn: function(pokemon) {
+			for (let i = 0; i < pokemon.innates.length; i++) {
+				if (!pokemon.volatiles[pokemon.innates[i]]) pokemon.addVolatile(pokemon.innates[i]);
+			}
+		},
+		onAfterMega: function(pokemon) {
+			for (let i = 0; i < pokemon.innates.length; i++) {
+				pokemon.removeVolatile(pokemon.innates[i]);
+			}
+		},
+	},
+	{
+		name: "[Gen 7] 350 Cup",
+		desc: [
+			"Pokémon having a base stat total 350 or below get their stats doubled..",
+			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3589641/\">350 Cup</a>",
+		],
+
+		mod: '350cup',
+		ruleset: ['[Gen 7] Pokebank Ubers'],
+		banlist: ['Eviolite', 'Light Ball', 'Deep Sea Tooth', 'Eevium Z'],
 	},
 	{
 		section: "Other Metagames",
