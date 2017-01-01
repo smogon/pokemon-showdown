@@ -238,7 +238,7 @@ exports.Formats = [
 		column: 2,
 	},
 	{
-		name: "Pokébilities",
+		name: "[Gen 7] Pokébilities",
 		desc: [
 			"Pok&eacute;mon have all their natural abilities at the same time.",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3510241/\">Pokébilities</a>",
