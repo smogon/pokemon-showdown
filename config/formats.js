@@ -241,12 +241,12 @@ exports.Formats = [
 		name: "Pokébilities",
 		desc: [
 			"Pokemon have all their natural abilities at the same time.",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3510241/\">Pokébilities</a>"
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3510241/\">Pokébilities</a>",
 		],
-		
+
 		mod: 'pokebilities',
 		ruleset: ["[Gen 7] Pokebank OU"],
-		onBegin: function() {
+		onBegin: function () {
 			for (let p = 0; p < this.sides.length; p++) {
 				for (let i = 0; i < this.sides[p].pokemon.length; i++) {
 					let pokemon = this.sides[p].pokemon[i];
@@ -258,21 +258,23 @@ exports.Formats = [
 						for (let k = 0; k < bans.length; k++) {
 							if (toId(bans[k]) === toId(template.abilities[a])) continue;
 						}
-						if (toId(a) == 'h' && template.unreleasedHidden) continue;
-						if (toId(template.abilities[a]) == pokemon.ability) continue;
-						if (this.statusability.includes(toId(template.abilities[a]))) this.sides[p].pokemon[i].innates.push("other" + toId(template.abilities[a]));
-						else this.sides[p].pokemon[i].innates.push(toId(template.abilities[a]));
+						if (toId(a) === 'h' && template.unreleasedHidden) continue;
+						if (toId(template.abilities[a]) === pokemon.ability) continue;
+						if (this.statusability.includes(toId(template.abilities[a]))) 
+							this.sides[p].pokemon[i].innates.push("other" + toId(template.abilities[a]));
+						else 
+							this.sides[p].pokemon[i].innates.push(toId(template.abilities[a]));
 					}
 				}
 			}
 		},
 		onSwitchInPriority: 1,
-		onSwitchIn: function(pokemon) {
+		onSwitchIn: function (pokemon) {
 			for (let i = 0; i < pokemon.innates.length; i++) {
 				if (!pokemon.volatiles[pokemon.innates[i]]) pokemon.addVolatile(pokemon.innates[i]);
 			}
 		},
-		onAfterMega: function(pokemon) {
+		onAfterMega: function (pokemon) {
 			for (let i = 0; i < pokemon.innates.length; i++) {
 				pokemon.removeVolatile(pokemon.innates[i]);
 			}
