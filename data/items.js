@@ -4035,6 +4035,66 @@ exports.BattleItems = {
 		gen: 3,
 		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
 	},
+	"poweranklet": {
+		id: "poweranklet",
+		name: "Power Anklet",
+		isUnreleased: false,
+		spritenum: 354,
+		fling: {
+			basePower: 70,
+		},
+		onModifySpe: function (spe) {
+			return this.chainModify(0.5);
+		},
+		num: 293,
+		gen: 4,
+		desc: "Holder's Speed is halved.",
+	},
+	"powerband": {
+		id: "powerband",
+		name: "Power Band",
+		isUnreleased: false,
+		spritenum: 355,
+		fling: {
+			basePower: 70,
+		},
+		onModifySpe: function (spe) {
+			return this.chainModify(0.5);
+		},
+		num: 292,
+		gen: 4,
+		desc: "Holder's Speed is halved.",
+	},
+	"powerbelt": {
+		id: "powerbelt",
+		name: "Power Belt",
+		isUnreleased: false,
+		spritenum: 356,
+		fling: {
+			basePower: 70,
+		},
+		onModifySpe: function (spe) {
+			return this.chainModify(0.5);
+		},
+		num: 290,
+		gen: 4,
+		desc: "Holder's Speed is halved.",
+	},
+	"powerbracer": {
+		id: "powerbracer",
+		name: "Power Bracer",
+		isUnreleased: false,
+		spritenum: 357,
+		fling: {
+			basePower: 70,
+		},
+		onModifySpe: function (spe) {
+			return this.chainModify(0.5);
+		},
+		num: 289,
+		gen: 4,
+		desc: "Holder's Speed is halved.",
+	},
 	"powerherb": {
 		id: "powerherb",
 		onChargeMove: function (pokemon, target, move) {
@@ -4051,6 +4111,36 @@ exports.BattleItems = {
 		num: 271,
 		gen: 4,
 		desc: "Holder's two-turn moves complete in one turn (except Sky Drop). Single use.",
+	},
+	"powerlens": {
+		id: "powerlens",
+		name: "Power Lens",
+		isUnreleased: false,
+		spritenum: 359,
+		fling: {
+			basePower: 70,
+		},
+		onModifySpe: function (spe) {
+			return this.chainModify(0.5);
+		},
+		num: 291,
+		gen: 4,
+		desc: "Holder's Speed is halved.",
+	},
+	"powerweight": {
+		id: "powerweight",
+		name: "Power Weight",
+		isUnreleased: false,
+		spritenum: 360,
+		fling: {
+			basePower: 70,
+		},
+		onModifySpe: function (spe) {
+			return this.chainModify(0.5);
+		},
+		num: 294,
+		gen: 4,
+		desc: "Holder's Speed is halved.",
 	},
 	"premierball": {
 		id: "premierball",
