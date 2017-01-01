@@ -289,6 +289,7 @@ exports.Formats = [
 		],
 
 		mod: '350cup',
+		searchShow: false,
 		ruleset: ['[Gen 7] Pokebank Ubers'],
 		banlist: ['Deep Sea Tooth', 'Eevium Z', 'Eviolite', 'Light Ball'],
 	},
