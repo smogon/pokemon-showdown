@@ -4,7 +4,7 @@ exports.BattleScripts = {
 	init: function() {
 		Object.values(this.data.Abilities).forEach(ability => {
 			this.statusability = ["aerilate", "aurabreak", "flashfire", "parentalbond", "pixilate", "refrigerate", "sheerforce", "slowstart", "truant", "unburden", "zenmode"];
-			if (statusability.includes(ability.id)) {
+			if (this.statusability.includes(ability.id)) {
 				this.data.Statuses["other" + ability.id] = ability;
 				this.data.Statuses["other" + ability.id].effectType = "Ability";
 				this.data.Statuses["other" + ability.id]["name"] = "Other " + ability["name"];
@@ -27,17 +27,8 @@ exports.BattleScripts = {
 						let rand = 0;
 						if (possibleTargets.length > 1) rand = this.random(possibleTargets.length);
 						let target = possibleTargets[rand],
-						let abe = target.innates[this.random(target.innates.length)];
-						let bannedAbilities = {
-							flowergift: 1,
-							forecast: 1,
-							illusion: 1,
-							imposter: 1,
-							multitype: 1,
-							stancechange: 1,
-							trace: 1,
-							otherzenmode: 1
-						};
+						abe = target.innates[this.random(target.innates.length)];
+						let bannedAbilities = {comatose:1, disguise:1, flowergift:1, forecast:1, illusion:1, imposter:1, multitype:1, schooling:1, stancechange:1, trace:1, otherzenmode:1};
 						if (!bannedAbilities[abe]) {
 							this.add('-ability', pokemon, abe, '[from] ability: Trace', '[of] ' + target);
 							pokemon.removeVolatile("trace", pokemon);
