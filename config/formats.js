@@ -255,7 +255,7 @@ exports.Formats = [
 					pokemon.innates = [];
 					continue;
 				}
-				pokemon.innates = Object.keys(pokemon.template.abilities).filter(key => key != 'S' && (key != 'H' || !pokemon.template.unreleasedHidden)).map(key => toId(pokemon.template.abilities[key])).filter(ability => ability != pokemon.ability && !banlistTable[ability]);
+				pokemon.innates = Object.keys(pokemon.template.abilities).filter(key => key !== 'S' && (key !== 'H' || !pokemon.template.unreleasedHidden)).map(key => toId(pokemon.template.abilities[key])).filter(ability => ability !== pokemon.ability && !banlistTable[ability]);
 			}
 		},
 		onSwitchInPriority: 1,
