@@ -241,44 +241,30 @@ exports.Formats = [
 		name: "[Gen 7] Pokébilities",
 		desc: [
 			"Pok&eacute;mon have all their natural abilities at the same time.",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3510241/\">Pokébilities</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3588652/\">Pokébilities</a>",
 		],
 
 		mod: 'pokebilities',
 		ruleset: ["[Gen 7] Pokebank OU"],
 		onBegin: function () {
-			for (let p = 0; p < this.sides.length; p++) {
-				for (let i = 0; i < this.sides[p].pokemon.length; i++) {
-					let pokemon = this.sides[p].pokemon[i];
-					let template = this.getTemplate(pokemon.species);
-					this.sides[p].pokemon[i].innates = [];
-					let bans = this.data.Formats.gen7pokebankou.banlist;
-					bans.push("Battle Bond");
-					for (let a in template.abilities) {
-						for (let k = 0; k < bans.length; k++) {
-							if (toId(bans[k]) === toId(template.abilities[a])) continue;
-						}
-						if (toId(a) === 'h' && template.unreleasedHidden) continue;
-						if (toId(template.abilities[a]) === pokemon.ability) continue;
-						if (this.statusability.includes(toId(template.abilities[a]))) {
-							this.sides[p].pokemon[i].innates.push("other" + toId(template.abilities[a]));
-						} else {
-							this.sides[p].pokemon[i].innates.push(toId(template.abilities[a]));
-						}
-					}
+			let banlistTable = this.getBanlistTable(this.getFormat('gen7ou'));
+			let allPokemon = this.p1.pokemon.concat(this.p2.pokemon);
+			for (let i = 0, len = allPokemon.length; i < len; i++) {
+				let pokemon = allPokemon[i];
+				if (pokemon.ability === 'battlebond') {
+					pokemon.innates = [];
+					continue;
 				}
+				pokemon.innates = Object.keys(pokemon.template.abilities).filter(key => key !== 'S' && (key !== 'H' || !pokemon.template.unreleasedHidden)).map(key => toId(pokemon.template.abilities[key])).filter(ability => ability !== pokemon.ability && !banlistTable[ability]);
 			}
 		},
 		onSwitchInPriority: 1,
 		onSwitchIn: function (pokemon) {
-			for (let i = 0; i < pokemon.innates.length; i++) {
-				if (!pokemon.volatiles[pokemon.innates[i]]) pokemon.addVolatile(pokemon.innates[i]);
-			}
+			pokemon.innates.forEach(innate => pokemon.addVolatile("other" + innate, pokemon));
 		},
 		onAfterMega: function (pokemon) {
-			for (let i = 0; i < pokemon.innates.length; i++) {
-				pokemon.removeVolatile(pokemon.innates[i]);
-			}
+			pokemon.innates.forEach(innate => pokemon.removeVolatile("other" + innate, pokemon));
+			pokemon.innates = [];
 		},
 	},
 	{
