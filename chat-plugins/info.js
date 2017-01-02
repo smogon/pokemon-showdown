@@ -1479,12 +1479,15 @@ exports.commands = {
 		let ability = Tools.getAbility(targets[0]);
 		let format = Tools.getFormat(targets[0]);
 		let atLeastOne = false;
-		let generation = (targets[1] || 'xy').trim().toLowerCase();
-		let genNumber = 6;
+		let generation = (targets[1] || 'sm').trim().toLowerCase();
+		let genNumber = 7;
 		let extraFormat = Tools.getFormat(targets[2]);
 
-		if (generation === 'xy' || generation === 'oras' || generation === '6' || generation === 'six') {
+		if (generation === 'sm' || generation === 'sumo' || generation === '7' || generation === 'seven') {
+			generation = 'sm';
+		} else if (generation === 'xy' || generation === 'oras' || generation === '6' || generation === 'six') {
 			generation = 'xy';
+			genNumber = 6;
 		} else if (generation === 'bw' || generation === 'bw2' || generation === '5' || generation === 'five') {
 			generation = 'bw';
 			genNumber = 5;
@@ -1501,7 +1504,7 @@ exports.commands = {
 			generation = 'rb';
 			genNumber = 1;
 		} else {
-			generation = 'xy';
+			generation = 'sm';
 		}
 
 		// Pokemon
@@ -1521,7 +1524,14 @@ exports.commands = {
 
 			let formatName = extraFormat.name;
 			let formatId = extraFormat.id;
-			if (formatId === 'doublesou') {
+			if (formatId === 'battlespotdoubles') {
+				formatId = 'battle_spot_doubles';
+			} else if (formatId === 'battlespottriples') {
+				formatId = 'battle_spot_triples';
+				if (genNumber > 6) {
+					this.sendReplyBox("Triples formats are not an available format in Pok&eacute;mon generation " + generation.toUpperCase() + ".");
+				}
+			} else if (formatId === 'doublesou') {
 				formatId = 'doubles';
 			} else if (formatId === 'balancedhackmons') {
 				formatId = 'bh';
@@ -1534,7 +1544,7 @@ exports.commands = {
 				formatName = formatId = '';
 			}
 			let speciesid = pokemon.speciesid;
-			// Special case for Meowstic-M and Hoopa-Unbound
+			// Special case for Meowstic-M
 			if (speciesid === 'meowstic') speciesid = 'meowsticm';
 			if (pokemon.tier === 'CAP') {
 				this.sendReplyBox("<a href=\"https://www.smogon.com/cap/pokemon/strategies/" + speciesid + "\">" + generation.toUpperCase() + " " + Chat.escapeHTML(formatName) + " " + pokemon.name + " analysis preview</a>, brought to you by <a href=\"https://www.smogon.com\">Smogon University</a> <a href=\"https://smogon.com/cap/\">CAP Project</a>");
@@ -1565,10 +1575,19 @@ exports.commands = {
 		if (format.id) {
 			let formatName = format.name;
 			let formatId = format.id;
-			if (formatId === 'doublesou') {
+			if (formatId === 'battlespotdoubles') {
+				formatId = 'battle_spot_doubles';
+			} else if (formatId === 'battlespottriples') {
+				formatId = 'battle_spot_triples';
+				if (genNumber > 6) {
+					this.sendReplyBox("Triples formats are not an available format in Pok&eacute;mon generation " + generation.toUpperCase() + ".");
+				}
+			} else if (formatId === 'doublesou') {
 				formatId = 'doubles';
 			} else if (formatId === 'balancedhackmons') {
 				formatId = 'bh';
+			} else if (formatId === 'battlespotsingles') {
+				formatId = 'battle_spot_singles';
 			} else if (formatId.includes('vgc')) {
 				formatId = 'vgc' + formatId.slice(-2);
 				formatName = 'VGC20' + formatId.slice(-2);
