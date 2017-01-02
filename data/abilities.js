@@ -851,6 +851,14 @@ exports.BattleAbilities = {
 				this.add('-activate', target, 'ability: Emergency Exit');
 			}
 		},
+		onAfterDamage: function (damage, target, source, effect) {
+			if (!target.hp || effect.effectType === 'Move') return;
+			if (target.hp <= target.maxhp / 2 && target.hp + damage > target.maxhp / 2) {
+				if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.switchFlag) return;
+				target.switchFlag = true;
+				this.add('-activate', target, 'ability: Emergency Exit');
+			}
+		},
 		id: "emergencyexit",
 		name: "Emergency Exit",
 		rating: 2,
@@ -3958,6 +3966,14 @@ exports.BattleAbilities = {
 				if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.switchFlag) return;
 				target.switchFlag = true;
 				source.switchFlag = false;
+				this.add('-activate', target, 'ability: Wimp Out');
+			}
+		},
+		onAfterDamage: function (damage, target, source, effect) {
+			if (!target.hp || effect.effectType === 'Move') return;
+			if (target.hp <= target.maxhp / 2 && target.hp + damage > target.maxhp / 2) {
+				if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.switchFlag) return;
+				target.switchFlag = true;
 				this.add('-activate', target, 'ability: Wimp Out');
 			}
 		},
