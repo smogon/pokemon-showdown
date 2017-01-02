@@ -4038,7 +4038,6 @@ exports.BattleItems = {
 	"poweranklet": {
 		id: "poweranklet",
 		name: "Power Anklet",
-		isUnreleased: false,
 		spritenum: 354,
 		fling: {
 			basePower: 70,
@@ -4053,7 +4052,6 @@ exports.BattleItems = {
 	"powerband": {
 		id: "powerband",
 		name: "Power Band",
-		isUnreleased: false,
 		spritenum: 355,
 		fling: {
 			basePower: 70,
@@ -4068,7 +4066,6 @@ exports.BattleItems = {
 	"powerbelt": {
 		id: "powerbelt",
 		name: "Power Belt",
-		isUnreleased: false,
 		spritenum: 356,
 		fling: {
 			basePower: 70,
@@ -4083,7 +4080,6 @@ exports.BattleItems = {
 	"powerbracer": {
 		id: "powerbracer",
 		name: "Power Bracer",
-		isUnreleased: false,
 		spritenum: 357,
 		fling: {
 			basePower: 70,
@@ -4115,7 +4111,6 @@ exports.BattleItems = {
 	"powerlens": {
 		id: "powerlens",
 		name: "Power Lens",
-		isUnreleased: false,
 		spritenum: 359,
 		fling: {
 			basePower: 70,
@@ -4130,7 +4125,6 @@ exports.BattleItems = {
 	"powerweight": {
 		id: "powerweight",
 		name: "Power Weight",
-		isUnreleased: false,
 		spritenum: 360,
 		fling: {
 			basePower: 70,
