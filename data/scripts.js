@@ -375,6 +375,7 @@ exports.BattleScripts = {
 				}
 			}
 			if (stolen) {
+				this.attrLastMove('[still]');
 				this.add('-clearpositiveboost', target, pokemon, 'move: ' + move.name);
 				this.boost(boosts, pokemon);
 
@@ -382,6 +383,7 @@ exports.BattleScripts = {
 					boosts[statName] = 0;
 				}
 				target.setBoost(boosts);
+				this.add('-anim', pokemon, "Spectral Thief", target);
 			}
 		}
 
