@@ -17,7 +17,7 @@ exports.BattleScripts = {
 			if (this.ignoringAbility()) return false;
 			if (Array.isArray(ability)) return ability.some(ability => this.hasAbility(ability));
 			ability = toId(ability);
-			return this.ability === ability || !!this.volatiles[ability];
+			return this.ability === ability || !!this.volatiles["other" + ability];
 		},
 		transformInto: function (pokemon, user, effect) {
 			let template = pokemon.template;
