@@ -455,6 +455,15 @@ exports.Formats = [
 		ruleset: ['[Gen 7] Pokebank OU'],
 	},
 	{
+		name: "[Gen 7] BH Doubles",
+
+		mod: 'gen7',
+		gameType: 'doubles',
+		searchShow: false,
+		ruleset: ['[Gen 7] Balanced Hackmons (suspect test)'],
+		banlist: [],
+	},
+	{
 		name: "[Gen 7] 2v2 Doubles",
 		desc: ["Doubles battle where you bring four Pok&eacute;mon to Team Preview and choose only two."],
 
