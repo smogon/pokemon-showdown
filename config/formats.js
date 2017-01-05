@@ -82,7 +82,7 @@ exports.Formats = [
 			'Infernape', 'Jirachi', 'Keldeo', 'Krookodile', 'Kyurem-Black', 'Latias', 'Magneton', 'Mamoswine', 'Mandibuzz', 'Mew', 'Muk-Alola',
 			'Necrozma', 'Porygon-Z', 'Primarina', 'Raikou', 'Salamence', 'Scizor', 'Serperior', 'Starmie', 'Staraptor', 'Sylveon', 'Tentacruel',
 			'Terrakion', 'Thundurus', 'Tornadus-Therian', 'Tsareena', 'Victini', 'Volcanion', 'Volcarona', 'Weavile', 'Zygarde-10%',
-			'Aerodactylite', 'Blastoisinite', 'Charizardite X', 'Sharpedonite', 'Slowbronite',
+			'Aerodactylite', 'Blastoisinite', 'Charizardite Y', 'Sharpedonite', 'Slowbronite',
 		],
 	},
 	{
