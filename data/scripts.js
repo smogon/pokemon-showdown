@@ -2210,6 +2210,7 @@ exports.BattleScripts = {
 			BL2: 78,
 			UU: 77,
 			New: 77,
+			Bank: 77,
 			BL: 76,
 			OU: 75,
 			Uber: 73,
