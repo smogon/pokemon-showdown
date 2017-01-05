@@ -76,7 +76,7 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["fireblast", "airslash", "roost", "solarbeam", "focusblast", "dragonpulse"],
 		randomDoubleBattleMoves: ["heatwave", "fireblast", "airslash", "roost", "solarbeam", "focusblast", "protect"],
 		requiredItem: "Charizardite Y",
-		tier: "Bank",
+		tier: "Bank-BL",
 	},
 	squirtle: {
 		randomBattleMoves: ["icebeam", "hydropump", "rapidspin", "scald", "aquajet", "toxic"],
@@ -5170,7 +5170,7 @@ exports.BattleFormatsData = {
 			{"generation": 6, "level": 100, "moves":["freezeshock", "fusionbolt", "dracometeor", "ironhead"], "pokeball": "cherishball"},
 		],
 		eventOnly: true,
-		tier: "Bank",
+		tier: "Bank-BL",
 	},
 	kyuremwhite: {
 		randomBattleMoves: ["dracometeor", "icebeam", "fusionflare", "earthpower", "focusblast", "dragonpulse", "substitute", "roost", "toxic"],
