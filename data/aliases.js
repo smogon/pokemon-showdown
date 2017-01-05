@@ -27,6 +27,7 @@ exports.BattleAliases = {
 	"sketchmons": "[Gen 7] Sketchmons",
 	"hiddentype": "[Gen 7] Hidden Type",
 	"ht": "[Gen 7] Hidden Type",
+	"bhdoubles": "[Gen 7] BH Doubles",
 	"2v2doubles": "[Gen 7] 2v2 Doubles",
 	"2v2": "[Gen 7] 2v2 Doubles",
 	"theorymon": "OU Theorymon",
