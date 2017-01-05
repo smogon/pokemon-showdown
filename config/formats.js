@@ -63,18 +63,12 @@ exports.Formats = [
 		ruleset: ['Pokemon', 'Standard', 'Swagger Clause', 'Team Preview', 'Mega Rayquaza Clause'],
 	},
 	{
-		name: "[Gen 7] Pokebank UU (alpha)",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3587419/\">UU Metagame Discussion</a>"],
+		name: "[Gen 7] Pokebank UU (beta)",
+		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3591786/\">UU Metagame Discussion</a>"],
 
 		mod: 'gen7',
 		ruleset: ['[Gen 7] Pokebank OU'],
-		banlist: [
-			'Bisharp', 'Buzzwole', 'Celesteela', 'Chansey', 'Clefable', 'Dugtrio-Base', 'Excadrill', 'Ferrothorn', 'Garchomp', 'Genesect',
-			'Greninja', 'Heatran', 'Hippowdon', 'Hoopa-Unbound', 'Kartana', 'Kingdra', 'Landorus', 'Latios', 'Magearna', 'Magnezone',
-			'Manaphy', 'Mandibuzz', 'Mantine', 'Marowak-Alola', 'Mimikyu', 'Nihilego', 'Pelipper', 'Pheromosa', 'Porygon-Z', 'Rotom-Wash',
-			'Skarmory', 'Tapu Bulu', 'Tapu Fini', 'Tapu Koko', 'Tapu Lele', 'Toxapex', 'Tyranitar', 'Xurkitree', 'Zapdos', 'Zygarde-Base',
-			'Power Construct', 'Alakazite', 'Charizardite X', 'Gyaradosite', 'Metagrossite', 'Pinsirite', 'Sablenite', 'Scizorite', 'Venusaurite',
-		],
+		banlist: ['OU', 'Bank-OU', 'Power Construct'],
 	},
 	{
 		name: "[Gen 7] Pokebank LC",
