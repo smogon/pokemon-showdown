@@ -466,25 +466,15 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 7] BH Doubles",
+		desc: [
+			"Anything that can be hacked in-game and is usable in local battles is allowed.",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3587475/\">Balanced Hackmons</a>",
+		],
 
 		mod: 'gen7',
 		gameType: 'doubles',
 		searchShow: false,
 		ruleset: ['[Gen 7] Balanced Hackmons (suspect test)'],
-		banlist: [],
-	},
-	{
-		name: "[Gen 7] 2v2 Doubles",
-		desc: ["Doubles battle where you bring four Pok&eacute;mon to Team Preview and choose only two."],
-
-		mod: 'gen7',
-		gameType: 'doubles',
-		searchShow: false,
-		teamLength: {
-			validate: [2, 4],
-			battle: 2,
-		},
-		ruleset: ['[Gen 7] Pokebank Doubles OU'],
 		banlist: [],
 	},
 	{
