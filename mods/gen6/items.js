@@ -141,6 +141,10 @@ exports.BattleItems = {
 		inherit: true,
 		isUnreleased: false,
 	},
+	lightclay: {
+		inherit: true,
+		desc: "Holder's use of Light Screen or Reflect lasts 8 turns instead of 5.",
+	},
 	lopunnite: {
 		inherit: true,
 		isUnreleased: false,
