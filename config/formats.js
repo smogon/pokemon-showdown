@@ -71,6 +71,21 @@ exports.Formats = [
 		banlist: ['OU', 'Bank-OU', 'Power Construct'],
 	},
 	{
+		name: "[Gen 7] Pokebank RU (alpha)",
+		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3587352/\">RU Metagame Discussion</a>"],
+
+		mod: 'gen7',
+		ruleset: ['[Gen 7] Pokebank UU (beta)'],
+		banlist: [
+			'Amoonguss', 'Azumarill', 'Azelf', 'Bewear', 'Bisharp', 'Blissey', 'Breloom', 'Cobalion', 'Conkeldurr', 'Decidueye', 'Dhelmise',
+			'Diggersby', 'Dragonite', 'Empoleon', 'Forretress', 'Gengar', 'Gigalith', 'Gliscor', 'Gyarados', 'Hippowdon', 'Hydreigon',
+			'Infernape', 'Jirachi', 'Keldeo', 'Krookodile', 'Kyurem-Black', 'Latias', 'Magneton', 'Mamoswine', 'Mandibuzz', 'Mew', 'Muk-Alola',
+			'Necrozma', 'Porygon-Z', 'Primarina', 'Raikou', 'Salamence', 'Scizor', 'Serperior', 'Starmie', 'Staraptor', 'Sylveon', 'Tentacruel',
+			'Terrakion', 'Thundurus', 'Tornadus-Therian', 'Tsareena', 'Victini', 'Volcanion', 'Volcarona', 'Weavile', 'Zygarde-10%',
+			'Aerodactylite', 'Blastoisinite', 'Charizardite X', 'Sharpedonite', 'Slowbronite',
+		],
+	},
+	{
 		name: "[Gen 7] Pokebank LC",
 		desc: [
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3587196/\">LC Metagame Discussion</a>",
