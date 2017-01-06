@@ -315,9 +315,6 @@ class CommandContext {
 		if (room.filterCaps && user.name.match(/[A-Z\s]{6,}/)) {
 			return this.errorReply(`Your username contains too many capital letters, which this room doesn't allow.`);
 		}
-		if (this.checkBanwords(room, user.name)) {
-			return this.errorReply(`Your username contains a phrase banned by this room.`);
-		}
 		// Removes extra spaces and null characters
 		message = message.trim().replace(/[ \u0000\u200B-\u200F]+/g, ' ');
 
@@ -611,6 +608,10 @@ class CommandContext {
 				return false;
 			}
 
+			if (!this.checkBanwords(room, user.name)) {
+				this.errorReply(`Your username contains a phrase banned by this room.`);
+				return false;
+			}
 			if (!this.checkBanwords(room, message) && !user.can('mute', null, room)) {
 				this.errorReply("Your message contained banned words.");
 				return false;
