@@ -84,7 +84,6 @@ exports.Formats = [
 			'Terrakion', 'Thundurus', 'Tornadus-Therian', 'Tsareena', 'Victini', 'Volcanion', 'Volcarona', 'Weavile', 'Zygarde-10%',
 			'Aerodactylite', 'Blastoisinite', 'Sharpedonite', 'Slowbronite',
 		],
-		unbanlist: ['Baton Pass'],
 	},
 	{
 		name: "[Gen 7] Pokebank LC",
