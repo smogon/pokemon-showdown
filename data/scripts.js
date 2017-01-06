@@ -1207,7 +1207,7 @@ exports.BattleScripts = {
 		};
 		// Moves which boost Attack AND Special Attack:
 		let MixedSetup = {
-			growth:1, shellsmash:1, workup:1,
+			conversion: 1, growth:1, shellsmash:1, workup:1,
 		};
 		// Moves which boost Defense and/or Special Defense:
 		let DefenseSetup = {
@@ -1253,7 +1253,7 @@ exports.BattleScripts = {
 					// Certain moves aren't acceptable as a Pokemon's only STAB attack
 					if (!(moveid in NoStab) && (moveid !== 'hiddenpower' || Object.keys(hasType).length === 1)) counter['stab']++;
 				}
-				if (move.priority === 0 && hasAbility['Protean'] && !(moveid in NoStab)) counter['stab']++;
+				if (move.priority === 0 && (hasAbility['Protean'] || moves.includes('conversion')) && !(moveid in NoStab)) counter['stab']++;
 				if (move.category === 'Physical') counter['hustle']++;
 				if (movetype === 'Normal' && !(moveid in NoStab)) {
 					if (hasAbility['Aerilate'] || hasAbility['Pixilate'] || hasAbility['Refrigerate']) counter['stab']++;
@@ -1478,6 +1478,9 @@ exports.BattleScripts = {
 				case 'flamecharge':
 					if (counter.damagingMoves.length < 3 && !counter.setupType && !hasMove['batonpass']) rejected = true;
 					if (hasMove['dracometeor'] || hasMove['overheat']) rejected = true;
+					break;
+				case 'conversion':
+					if (teamDetails.zMove || hasMove['triattack']) rejected = true;
 					break;
 
 				// Bad after setup
@@ -1903,6 +1906,10 @@ exports.BattleScripts = {
 		if (hasMove['autotomize'] && hasMove['heavyslam']) {
 			moves[moves.indexOf('autotomize')] = 'rockpolish';
 		}
+		if (moves[0] === 'conversion') {
+			moves[0] = moves[3];
+			moves[3] = 'conversion';
+		}
 
 		let abilities = Object.values(baseTemplate.abilities);
 		abilities.sort((a, b) => this.getAbility(b).rating - this.getAbility(a).rating);
@@ -2087,6 +2094,8 @@ exports.BattleScripts = {
 		} else if (ability === 'Klutz' && hasMove['switcheroo']) {
 			// To perma-taunt a Pokemon by giving it Assault Vest
 			item = 'Assault Vest';
+		} else if (hasMove['conversion']) {
+			item = 'Normalium Z';
 		} else if (hasMove['geomancy']) {
 			item = 'Power Herb';
 		} else if (hasMove['switcheroo'] || hasMove['trick']) {
