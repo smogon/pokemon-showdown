@@ -1466,7 +1466,7 @@ exports.BattleFormatsData = {
 		tier: "New",
 	},
 	porygonz: {
-		randomBattleMoves: ["triattack", "darkpulse", "icebeam", "thunderbolt", "agility", "trick", "nastyplot"],
+		randomBattleMoves: ["triattack", "shadowball", "icebeam", "thunderbolt", "conversion", "trick", "nastyplot"],
 		randomDoubleBattleMoves: ["protect", "triattack", "darkpulse", "hiddenpowerfighting", "agility", "trick", "nastyplot"],
 		tier: "New",
 	},
