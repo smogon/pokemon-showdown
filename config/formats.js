@@ -328,6 +328,7 @@ exports.Formats = [
 		desc: [
 			"All the Pok&eacute;mon on a team must share a type.",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3587204/\">Monotype</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3589809/\">Monotype Viability Ranking</a>",
 		],
 
 		mod: 'gen7',
