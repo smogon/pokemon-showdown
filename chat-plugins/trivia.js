@@ -259,8 +259,25 @@ class Trivia extends Rooms.RoomGame {
 		if (message) buffer += '<br />' + message;
 		buffer += '</div>';
 
-		this.room.addRaw(buffer);
-		this.room.update();
+		// This shouldn't happen, but sometimes this will fire after
+		// Trivia#destroy has already set the instance's room to null.
+		let tarRoom = this.room;
+		if (!tarRoom) {
+			for (let [roomid, room] of Rooms.rooms) { // eslint-disable-line no-unused-vars
+				if (room.game === this)	return room.addRaw(buffer).update();
+			}
+
+			Monitor.debug(`
+				Trivia is FUBAR! Game instance tried to broadcast after having destroyed itself\n
+				Mode: ${this.mode}\n
+				Category: ${this.category}\n
+				Length: ${SCORE_CAPS[this.cap]}\n
+				UGM: ${triviaData.ugm ? 'enabled' : 'disabled'}
+			`);
+			return tarRoom;
+		}
+
+		return tarRoom.addRaw(buffer).update();
 	}
 
 	// Kicks a player from the game, preventing them from joining it again
