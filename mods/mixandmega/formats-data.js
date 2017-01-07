@@ -25,6 +25,10 @@ exports.BattleFormatsData = {
 		inherit: true,
 		tier: "OU",
 	},
+	regigigas: {
+		inherit: true,
+		tier: "Uber",
+	},
 	slaking: {
 		inherit: true,
 		tier: "Uber",
