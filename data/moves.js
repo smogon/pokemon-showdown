@@ -12710,10 +12710,14 @@ exports.BattleMovedex = {
 				this.add('-singleturn', source, 'Quick Guard');
 			},
 			onTryHitPriority: 4,
-			onTryHit: function (target, source, effect) {
+			onTryHit: function (target, source, move) {
 				// Quick Guard blocks moves with positive priority, even those given increased priority by Prankster or Gale Wings.
 				// (e.g. it blocks 0 priority moves boosted by Prankster or Gale Wings; Quick Claw/Custap Berry do not count)
-				if (effect && (effect.id === 'feint' || effect.priority <= 0.1 || effect.target === 'self')) {
+				if (move.id === 'feint' || move.priority <= 0.1 || move.target === 'self') {
+					return;
+				}
+				if (move.isZ) {
+					move.zBrokeProtect = true;
 					return;
 				}
 				this.add('-activate', target, 'move: Quick Guard');

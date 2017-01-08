@@ -17,6 +17,9 @@ exports.BattleScripts = {
 		move = zMove ? this.getZMoveCopy(move, pokemon) : baseMove;
 		if (!target && target !== false) target = this.resolveTarget(pokemon, move);
 
+		// copy the priority for Quick Guard
+		if (zMove) move.priority = baseMove.priority;
+
 		this.setActiveMove(move, pokemon, target);
 
 		/* if (pokemon.moveThisTurn) {
