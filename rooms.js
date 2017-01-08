@@ -1046,7 +1046,7 @@ class BattleRoom extends Room {
 			fs.mkdir(curpath, '0755', () => {
 				curpath += '/' + logsubfolder;
 				fs.mkdir(curpath, '0755', () => {
-					fs.writeFile(curpath + '/' + this.id + '.log.json', JSON.stringify(logData));
+					fs.writeFile(curpath + '/' + this.id + '.log.json', JSON.stringify(logData), () => {});
 				});
 			});
 		}); // asychronicity
