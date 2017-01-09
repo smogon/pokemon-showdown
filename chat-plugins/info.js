@@ -1458,6 +1458,9 @@ exports.commands = {
 		if (showAll || target === 'tiering' || target === 'tiers' || target === 'tier') {
 			buffer.push("<a href=\"https://www.smogon.com/ingame/battle/tiering-faq\">Tiering FAQ</a>");
 		}
+		if (showAll || target === 'badge' || target === 'badges') {
+			buffer.push("<a href=\"http://www.smogon.com/badge_faq\">Badge FAQ</a>");
+		}
 		if (showAll || !buffer.length) {
 			buffer.unshift("<a href=\"https://www.smogon.com/forums/threads/3570628/#post-6774128\">Frequently Asked Questions</a>");
 		}
