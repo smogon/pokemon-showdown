@@ -1512,12 +1512,12 @@ exports.BattleScripts = {
 				case 'nightshade': case 'seismictoss':
 					if (counter.stab || counter.setupType || counter.damagingMoves.length > 2) rejected = true;
 					break;
-				case 'pursuit':
-					if (counter.setupType || !!counter['speedsetup'] || (hasMove['rest'] && hasMove['sleeptalk']) || (hasMove['knockoff'] && !hasType['Dark'])) rejected = true;
-					break;
 				case 'protect':
 					if (counter.setupType && (hasAbility['Guts'] || hasAbility['Speed Boost']) && !hasMove['batonpass']) rejected = true;
 					if ((hasMove['lightscreen'] && hasMove['reflect']) || (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
+					break;
+				case 'pursuit':
+					if (counter.setupType || (hasMove['rest'] && hasMove['sleeptalk']) || (hasMove['knockoff'] && !hasType['Dark'])) rejected = true;
 					break;
 				case 'rapidspin':
 					if (counter.setupType || teamDetails.hazardClear) rejected = true;
