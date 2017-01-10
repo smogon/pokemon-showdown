@@ -1061,7 +1061,7 @@ exports.commands = {
 	},
 	groupshelp: ["/globalgroups - Explains what the symbols (like % and @) before people's names mean.",
 		"!globalgroups - Shows everyone that information. Requires: + % @ * # & ~", "/roomgroups - Explains the list of room ranks.", 
-		 "!roomgroups - Shows everyone that information. Requires: + % @ * # & ~ ],
+		 "!roomgroups - Shows everyone that information. Requires: + % @ * # & ~" ],
 	
 	'!roomgroups': true,
 	roomranks: 'roomgroups',
