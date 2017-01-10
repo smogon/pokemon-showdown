@@ -1056,12 +1056,11 @@ exports.commands = {
 			"@ <b>Global Moderator</b> - The above, and they can globally ban users<br />" +
 			"* <b>Global Bot</b> - Like Moderator, but makes it clear that this user is a bot<br />" +
 			"&amp; <b>Global Leader</b> - The above, and they can promote to global moderator and force ties<br />" +
-			"~ <b>Global Administrator</b> - The above, and they can promote up to global administrator and can do anything"
+			"~ <b>Global Administrator</b> - They can do anything, like change what this message says"
 		);
 	},
-	groupshelp: ["/globalgroups - Explains what the symbols (like % and @) before people's names mean.",
-		"!globalgroups - Shows everyone that information. Requires: + % @ * # & ~", "/roomgroups - Explains the list of room ranks.", 
-		 "!roomgroups - Shows everyone that information. Requires: + % @ * # & ~" ],
+	groupshelp: ["/globalgroups OR /roomgroups - Explains what the symbols (like % and @) before people's names mean.",
+-		"!globalgroups OR !roomgroups - Shows everyone that information. Requires: + % @ * # & ~"],
 	
 	'!roomgroups': true,
 	roomranks: 'roomgroups',
