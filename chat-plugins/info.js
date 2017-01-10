@@ -1045,27 +1045,37 @@ exports.commands = {
 		this.sendReplyBox(`Server time: <b>${servertime.toLocaleString()}</b>`);
 	},
 
-	'!groups': true,
-	groups: function (target, room, user) {
+	'!globalgroups': true,
+	globalranks: 'globalgroups',
+	globalgroups: function (target, room, user) {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(
-			"<b>Room Rank</b><br />" +
-			"+ <b>Voice</b> - They can use ! commands like !groups, and talk during moderated chat<br />" +
-			"% <b>Driver</b> - The above, and they can mute and warn<br />" +
-			"@ <b>Moderator</b> - The above, and they can room ban users<br />" +
-			"* <b>Bot</b> - Like Moderator, but makes it clear that this user is a bot<br />" +
-			"# <b>Room Owner</b> - They are leaders of the room and can almost totally control it<br /><br />" +
-			"<b>Global Rank</b><br />" +
+			"<b>Global Ranks:</b><br />" +
 			"+ <b>Global Voice</b> - They can use ! commands like !groups, and talk during moderated chat<br />" +
 			"% <b>Global Driver</b> - The above, and they can also lock users and check for alts<br />" +
 			"@ <b>Global Moderator</b> - The above, and they can globally ban users<br />" +
 			"* <b>Global Bot</b> - Like Moderator, but makes it clear that this user is a bot<br />" +
 			"&amp; <b>Global Leader</b> - The above, and they can promote to global moderator and force ties<br />" +
-			"~ <b>Global Administrator</b> -  They can do anything, like change what this message says"
+			"~ <b>Global Administrator</b> - The above, and they can promote up to global administrator and can do anything"
 		);
 	},
-	groupshelp: ["/groups - Explains what the symbols (like % and @) before people's names mean.",
-		"!groups - Shows everyone that information. Requires: + % @ * # & ~"],
+	groupshelp: ["/globalgroups - Explains what the symbols (like % and @) before people's names mean.",
+		"!globalgroups - Shows everyone that information. Requires: + % @ * # & ~", "/roomgroups - Explains the list of room ranks.", 
+		 "!roomgroups - Shows everyone that information. Requires: + % @ * # & ~ ],
+	
+	'!roomgroups': true,
+	roomranks: 'roomgroups',
+	roomgroups: function (target, room, user) {
+		if (!this.runBroadcast()) return;
+		this.sendReplyBox(
+			"<b>Room Ranks</b><br />" +
+			"+ <b>Voice</b> - They can use ! commands like !groups, and talk during moderated chat<br />" +
+			"% <b>Driver</b> - The above, and they can mute and warn<br />" +
+			"@ <b>Moderator</b> - The above, and they can room ban users<br />" +
+			"* <b>Bot</b> - Like Moderator, but makes it clear that this user is a bot<br />" +
+			"# <b>Room Owner</b> - They are leaders of the room and can almost totally control it"
+		);
+	},	
 
 	'!opensource': true,
 	repo: 'opensource',
