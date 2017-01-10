@@ -372,7 +372,7 @@ exports.BattleAliases = {
 
 	// pokemon
 	"aboma": "Abomasnow",
-	"arc": "Arceus"
+	"arc": "Arceus",
 	"aegi": "Aegislash",
 	"aegiblade": "Aegislash-Blade",
 	"aegis": "Aegislash",
@@ -403,7 +403,7 @@ exports.BattleAliases = {
 	"gar": "Gengar",
 	"garde": "Gardevoir",
 	"gatr": "Feraligatr",
-	"gira": "Giratina"
+	"gira": "Giratina",
 	"gren": "Greninja",
 	"gyara": "Gyarados",
 	"hera": "Heracross",
