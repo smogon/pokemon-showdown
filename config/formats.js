@@ -120,7 +120,6 @@ exports.Formats = [
 			battle: 3,
 		},
 		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview'],
-		banlist: ['Memento', 'Parting Shot'],
 		requirePentagon: true,
 	},
 	{
@@ -134,7 +133,7 @@ exports.Formats = [
 			battle: 3,
 		},
 		ruleset: ['Pokemon', 'Species Clause', 'Nickname Clause', 'Team Preview', 'Cancel Mod'],
-		banlist: ['Illegal', 'Unreleased', 'Memento', 'Parting Shot'],
+		banlist: ['Illegal', 'Unreleased'],
 		requirePentagon: true,
 		onValidateSet: function (set) {
 			if (set.item) return ["Items are not permitted in Battle Spot Special."];
@@ -227,7 +226,6 @@ exports.Formats = [
 			battle: 4,
 		},
 		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview'],
-		banlist: ['Memento', 'Parting Shot'],
 		requirePentagon: true,
 	},
 	{
