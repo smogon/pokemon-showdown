@@ -45,12 +45,6 @@ const linkRegex = new RegExp(
 	'ig'
 );
 
-function checkPlural(variable, plural, singular) {
-	if (!plural) plural = 's';
-	if (!singular) singular = '';
-	return ((variable.length || variable) > 1 ? plural : singular);
-}
-
 function toPokemonId(str) {
 	return str.toLowerCase().replace(/é/g, 'e').replace(/[^a-z0-9 /]/g, '');
 }
@@ -262,7 +256,7 @@ class QuestionGiveaway extends Giveaway {
 		let ans = QuestionGiveaway.sanitizeAnswers(value);
 		if (!ans.length) return user.sendTo(this.room, "You must specify at least one answer and it must not contain any special characters.");
 		this.answers = ans;
-		user.sendTo(this.room, `The answer${checkPlural(ans, "s have", "has")} been changed to ${ans.join(', ')}.`);
+		user.sendTo(this.room, `The answer${Chat.plural(ans, "s have", "has")} been changed to ${ans.join(', ')}.`);
 	}
 
 	end(force) {
@@ -280,7 +274,7 @@ class QuestionGiveaway extends Giveaway {
 				this.clearTimer();
 				this.room.modlog(`${this.winner.name} won ${this.giver.name}'s giveaway for a "${this.prize}"`);
 				this.send(this.generateWindow(`<p style="text-align:center;font-size:12pt;"><b>${Chat.escapeHTML(this.winner.name)}</b> won the giveaway! Congratulations!</p>` +
-				`<p style="text-align:center;">${this.question}<br />Correct answer${checkPlural(this.answers)}: ${this.answers.join(', ')}</p>`));
+				`<p style="text-align:center;">${this.question}<br />Correct answer${Chat.plural(this.answers)}: ${this.answers.join(', ')}</p>`));
 				if (this.winner.connected) this.winner.popup(`You have won the giveaway. PM **${Chat.escapeHTML(this.giver.name)}** to claim your prize!`);
 				if (this.giver.connected) this.giver.popup(`${Chat.escapeHTML(this.winner.name)} has won your question giveaway!`);
 			}
@@ -316,7 +310,7 @@ class LotteryGiveaway extends Giveaway {
 	generateReminder(joined) {
 		let cmd = (joined ? 'Leave' : 'Join');
 		let button = `<button style="margin:4px;" name="send" value="/giveaway ${toId(cmd)}lottery"><font size=1><b>${cmd}</b></font></button>`;
-		return this.generateWindow(`The lottery drawing will occur in 2 minutes, and with ${this.maxwinners} winner${checkPlural(this.maxwinners)}!<br />${button}</p>`);
+		return this.generateWindow(`The lottery drawing will occur in 2 minutes, and with ${this.maxwinners} winner${Chat.plural(this.maxwinners)}!<br />${button}</p>`);
 	}
 
 	display() {
@@ -382,11 +376,11 @@ class LotteryGiveaway extends Giveaway {
 			this.changeUhtml('<p style="text-align:center;font-size:13pt;font-weight:bold;">The giveaway was forcibly ended.</p>');
 			this.room.send("The giveaway was forcibly ended.");
 		} else {
-			this.changeUhtml(`<p style="text-align:center;font-size:13pt;font-weight:bold;">The giveaway has ended! Scroll down to see the winner${checkPlural(this.winners)}.</p>`);
+			this.changeUhtml(`<p style="text-align:center;font-size:13pt;font-weight:bold;">The giveaway has ended! Scroll down to see the winner${Chat.plural(this.winners)}.</p>`);
 			this.phase = 'ended';
 			let winnerNames = this.winners.map(winner => winner.name).join(', ');
 			this.room.modlog(`${winnerNames} won ${this.giver.name}'s giveaway for "${this.prize}"`);
-			this.send(this.generateWindow(`<p style="text-align:center;font-size:10pt;font-weight:bold;">Lottery Draw</p><p style="text-align:center;">${Object.keys(this.joined).length} users joined the giveaway.<br />Our lucky winner${checkPlural(this.winners)}: <b>${Chat.escapeHTML(winnerNames)}!</b> Congratulations!</p>`));
+			this.send(this.generateWindow(`<p style="text-align:center;font-size:10pt;font-weight:bold;">Lottery Draw</p><p style="text-align:center;">${Object.keys(this.joined).length} users joined the giveaway.<br />Our lucky winner${Chat.plural(this.winners)}: <b>${Chat.escapeHTML(winnerNames)}!</b> Congratulations!</p>`));
 			for (let i = 0; i < this.winners.length; i++) {
 				if (this.winners[i].connected) this.winners[i].popup(`You have won the lottery giveaway! PM **${this.giver.name}** to claim your prize!`);
 			}
@@ -435,7 +429,7 @@ let commands = {
 		if (user.userid !== giveaway.host.userid && user.userid !== giveaway.giver.userid) return;
 
 		this.sendReply(`The giveaway question is ${giveaway.question}.\n` +
-			`The answer${checkPlural(giveaway.answers, 's are', ' is')} ${giveaway.answers.join(', ')}.`);
+			`The answer${Chat.plural(giveaway.answers, 's are', ' is')} ${giveaway.answers.join(', ')}.`);
 	},
 	guessanswer: 'guess',
 	guess: function (target, room, user) {
