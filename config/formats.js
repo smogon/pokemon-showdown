@@ -257,8 +257,8 @@ exports.Formats = [
 		],
 
 		mod: 'pokebilities',
-		ruleset: ["[Gen 7] Pokebank OU", 'Evasion Abilities Clause'],
-		banlist: ["Excadrill"],
+		ruleset: ['[Gen 7] Pokebank OU', 'Evasion Abilities Clause'],
+		banlist: ['Excadrill'],
 		onBegin: function () {
 			let banlistTable = this.getBanlistTable(this.getFormat('gen7pokbilities'));
 			let allPokemon = this.p1.pokemon.concat(this.p2.pokemon);
