@@ -51,6 +51,10 @@ function checkPlural(variable, plural, singular) {
 	return ((variable.length || variable) > 1 ? plural : singular);
 }
 
+function toPokemonId(str) {
+	return str.toLowerCase().replace(/é/g, 'e').replace(/[^a-z0-9 /]/g, '');
+}
+
 class Giveaway {
 	constructor(host, giver, room, prize) {
 		if (room.gaNumber) {
@@ -123,11 +127,15 @@ class Giveaway {
 	}
 
 	static getSprite(text) {
-		text = text.toLowerCase();
+		text = toPokemonId(text);
 		let mons = new Map();
 		let output = '';
 		for (let i in Tools.data.Pokedex) {
-			let regexp = new RegExp(`\\b${i}\\b`);
+			let id = i;
+			if (!Tools.data.Pokedex[i].baseSpecies && (Tools.data.Pokedex[i].species.includes(' '))) {
+				id = toPokemonId(Tools.data.Pokedex[i].species);
+			}
+			let regexp = new RegExp(`\\b${id}\\b`);
 			if (regexp.test(text)) {
 				let mon = Tools.getTemplate(i);
 				mons.set(mon.baseSpecies, mon);
