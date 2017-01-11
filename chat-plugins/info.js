@@ -1061,10 +1061,9 @@ exports.commands = {
 	},
 	groupshelp: [
 		"/globalgroups OR /roomgroups - Explains what the symbols (like % and @) before people's names mean.",
--		"!globalgroups OR !roomgroups - Shows everyone that information. Requires: + % @ * # & ~",
+		"!globalgroups OR !roomgroups - Shows everyone that information. Requires: + % @ * # & ~",
 	],
-	
-	'!roomgroups': true,
+        '!roomgroups': true,
 	roomranks: 'roomgroups',
 	roomgroups: function (target, room, user) {
 		if (!this.runBroadcast()) return;
@@ -1077,8 +1076,7 @@ exports.commands = {
 			"# <b>Room Owner</b> - They are leaders of the room and can almost totally control it"
 		);
 	},	
-
-	'!opensource': true,
+        '!opensource': true,
 	repo: 'opensource',
 	repository: 'opensource',
 	git: 'opensource',
