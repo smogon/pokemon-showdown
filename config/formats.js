@@ -250,7 +250,7 @@ exports.Formats = [
 		column: 2,
 	},
 	{
-		name: "[Gen 7] Pokébilities",
+		name: "[Gen 7] Pokébilities (Suspect Test)",
 		desc: [
 			"Pok&eacute;mon have all their natural abilities at the same time.",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3588652/\">Pokébilities</a>",
@@ -258,8 +258,9 @@ exports.Formats = [
 
 		mod: 'pokebilities',
 		ruleset: ["[Gen 7] Pokebank OU"],
+		banlist: ["Sand Veil", "Snow Cloak", "Excadrill"],
 		onBegin: function () {
-			let banlistTable = this.getBanlistTable(this.getFormat('gen7ou'));
+			let banlistTable = this.getBanlistTable(this.getFormat('gen7pokbilitiessusptecttest'));
 			let allPokemon = this.p1.pokemon.concat(this.p2.pokemon);
 			for (let i = 0, len = allPokemon.length; i < len; i++) {
 				let pokemon = allPokemon[i];
