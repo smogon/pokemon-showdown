@@ -1075,7 +1075,7 @@ exports.commands = {
 			"* <b>Bot</b> - Like Moderator, but makes it clear that this user is a bot<br />" +
 			"# <b>Room Owner</b> - They are leaders of the room and can almost totally control it"
 		);
-	},	
+	},
 	'!opensource': true,
 	repo: 'opensource',
 	repository: 'opensource',
