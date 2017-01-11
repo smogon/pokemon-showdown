@@ -1059,8 +1059,10 @@ exports.commands = {
 			"~ <b>Global Administrator</b> - They can do anything, like change what this message says"
 		);
 	},
-	groupshelp: ["/globalgroups OR /roomgroups - Explains what the symbols (like % and @) before people's names mean.",
--		"!globalgroups OR !roomgroups - Shows everyone that information. Requires: + % @ * # & ~"],
+	groupshelp: [
+		"/globalgroups OR /roomgroups - Explains what the symbols (like % and @) before people's names mean.",
+-		"!globalgroups OR !roomgroups - Shows everyone that information. Requires: + % @ * # & ~",
+	],
 	
 	'!roomgroups': true,
 	roomranks: 'roomgroups',
