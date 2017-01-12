@@ -2455,8 +2455,8 @@ exports.BattleScripts = {
 				typeComboCount[typeCombo] = 1;
 			}
 
-			// Increment Uber/NU counters
-			if (tier === 'Uber') {
+			// Increment Uber/Bank-Uber/PU counters
+			if (tier === 'Uber' || tier === 'Bank-Uber') {
 				uberCount++;
 			} else if (tier === 'PU') {
 				puCount++;
