@@ -3083,15 +3083,11 @@ exports.BattleAbilities = {
 		num: 112,
 	},
 	"slushrush": {
-		desc: "If Hail is active, this Pokemon's Speed is doubled. This Pokemon takes no damage from Hail.",
-		shortDesc: "If Hail is active, this Pokemon's Speed is doubled; immunity to Hail.",
+		shortDesc: "If Hail is active, this Pokemon's Speed is doubled.",
 		onModifySpe: function (spe, pokemon) {
 			if (this.isWeather('hail')) {
 				return this.chainModify(2);
 			}
-		},
-		onImmunity: function (type, pokemon) {
-			if (type === 'hail') return false;
 		},
 		id: "slushrush",
 		name: "Slush Rush",
