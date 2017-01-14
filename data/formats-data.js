@@ -800,7 +800,7 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["calmmind", "scald", "psyshock", "slackoff", "fireblast", "psychic", "icebeam"],
 		randomDoubleBattleMoves: ["scald", "fireblast", "icebeam", "psychic", "thunderwave", "slackoff", "trickroom", "protect", "psyshock"],
 		requiredItem: "Slowbronite",
-		tier: "New",
+		tier: "BL",
 	},
 	slowking: {
 		randomBattleMoves: ["scald", "fireblast", "icebeam", "psychic", "grassknot", "thunderwave", "toxic", "slackoff", "trickroom", "nastyplot", "dragontail", "psyshock"],
@@ -4527,7 +4527,7 @@ exports.BattleFormatsData = {
 	scolipede: {
 		randomBattleMoves: ["substitute", "spikes", "toxicspikes", "megahorn", "rockslide", "earthquake", "swordsdance", "batonpass", "poisonjab"],
 		randomDoubleBattleMoves: ["substitute", "protect", "megahorn", "rockslide", "poisonjab", "swordsdance", "batonpass", "aquatail", "superpower"],
-		tier: "New",
+		tier: "BL",
 	},
 	cottonee: {
 		randomBattleMoves: ["encore", "taunt", "substitute", "leechseed", "toxic", "stunspore"],
@@ -5032,7 +5032,7 @@ exports.BattleFormatsData = {
 			{"generation": 5, "level": 35, "isHidden": false, "moves":["stringshot", "leechlife", "gust", "firespin"]},
 			{"generation": 5, "level": 77, "gender": "M", "nature": "Calm", "ivs": {"hp": 30, "atk": 30, "def": 30, "spa": 30, "spd": 30, "spe": 30}, "isHidden": false, "moves":["bugbuzz", "overheat", "hyperbeam", "quiverdance"], "pokeball": "cherishball"},
 		],
-		tier: "Bank",
+		tier: "Bank-BL",
 	},
 	cobalion: {
 		randomBattleMoves: ["closecombat", "ironhead", "swordsdance", "substitute", "stoneedge", "voltswitch", "hiddenpowerice", "taunt", "stealthrock"],
@@ -5086,7 +5086,7 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["hurricane", "airslash", "heatwave", "knockoff", "superpower", "uturn", "taunt"],
 		randomDoubleBattleMoves: ["hurricane", "airslash", "focusblast", "uturn", "heatwave", "skydrop", "tailwind", "taunt", "protect"],
 		eventOnly: true,
-		tier: "Bank",
+		tier: "Bank-BL",
 	},
 	thundurus: {
 		randomBattleMoves: ["thunderwave", "nastyplot", "thunderbolt", "hiddenpowerice", "hiddenpowerflying", "focusblast", "substitute", "knockoff", "taunt"],
@@ -5319,7 +5319,7 @@ exports.BattleFormatsData = {
 	diggersby: {
 		randomBattleMoves: ["earthquake", "return", "wildcharge", "uturn", "swordsdance", "quickattack", "knockoff", "agility"],
 		randomDoubleBattleMoves: ["earthquake", "uturn", "return", "wildcharge", "protect", "quickattack"],
-		tier: "Bank",
+		tier: "Bank-BL",
 	},
 	fletchling: {
 		randomBattleMoves: ["roost", "swordsdance", "uturn", "return", "overheat", "flamecharge", "tailwind"],
