@@ -737,7 +737,7 @@ exports.BattleScripts = {
 		if (item.zMoveFrom) {
 			if (move.name === item.zMoveFrom) return item.zMove;
 		} else if (item.zMove === true) {
-			if (move.type === item.zMoveType) {
+			if (move.type === item.zMoveType || (item.id === "normaliumz" && move.id.indexOf("hiddenpower", 0) > -1)) {
 				if (move.category === "Status") {
 					return move.name;
 				} else {
