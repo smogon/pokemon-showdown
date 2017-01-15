@@ -741,7 +741,7 @@ exports.BattleScripts = {
 				if (move.category === "Status") {
 					return move.name;
 				} else {
-					return this.zMoveTable[move.type];
+					return this.zMoveTable[item.zMoveType];
 				}
 			}
 		}
