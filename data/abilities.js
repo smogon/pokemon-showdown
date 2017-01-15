@@ -3753,7 +3753,7 @@ exports.BattleAbilities = {
 				boosts['spd'] = 0;
 				boosts['evasion'] = 0;
 			}
-			if (target === this.activePokemon && source === this.activeTarget && this.activeTarget === this.activePokemon) {
+			if (target === this.activePokemon && source === this.activeTarget) {
 				boosts['atk'] = 0;
 				boosts['spa'] = 0;
 				boosts['accuracy'] = 0;
