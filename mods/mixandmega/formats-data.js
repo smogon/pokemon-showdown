@@ -25,6 +25,10 @@ exports.BattleFormatsData = {
 		inherit: true,
 		tier: "OU",
 	},
+	kyuremblack: {
+		inherit: true,
+		tier: "Uber",
+	},
 	landorus: {
 		inherit: true,
 		tier: "OU",
