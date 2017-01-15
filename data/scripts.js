@@ -737,11 +737,11 @@ exports.BattleScripts = {
 		if (item.zMoveFrom) {
 			if (move.name === item.zMoveFrom) return item.zMove;
 		} else if (item.zMove === true) {
-			if (move.type === item.zMoveType) {
+			if (move.type === item.zMoveType || (item.id === "normaliumz" && move.indexOf("hiddenpower", 0) > -1) {
 				if (move.category === "Status") {
 					return move.name;
 				} else {
-					return this.zMoveTable[move.type];
+					return this.zMoveTable[item.zMoveType];
 				}
 			}
 		}
