@@ -286,7 +286,7 @@ class QuestionGiveaway extends Giveaway {
 	}
 
 	static sanitizeAnswers(answers) {
-		return answers.map(val => val.replace(/[^a-z0-9 .-]+/ig, "").trim()).filter((val, index, array) => toId(val).length && !array.includes(val));
+		return answers.map(val => val.replace(/[^a-z0-9 .-]+/ig, "").trim()).filter((val, index, array) => toId(val).length && array.indexOf(val) === index);
 	}
 }
 
