@@ -446,7 +446,7 @@ let commands = {
 		if (room.giveaway) return this.errorReply("There is already a giveaway going on!");
 
 		let [giver, ot, tid, prize, winners] = target.split(target.includes('|') ? '|' : ',').map(param => param.trim());
-		if (!(giver && ot && tid && prize)) return this.errorReply("Invalid arguments specified - /question giver, ot, tid, prize, question, answer(s)");
+		if (!(giver && ot && tid && prize)) return this.errorReply("Invalid arguments specified - /lottery giver, ot, tid, prize, winners");
 		tid = toId(tid);
 		if (!parseInt(tid) && tid.length !== 6) return this.errorReply("Invalid TID");
 		let targetUser = Users(giver);
