@@ -196,6 +196,9 @@ class Validator {
 
 		if (!template) {
 			template = tools.getTemplate(set.species);
+			if (ability.id === 'battlebond' && template.id === 'greninja') {
+				template = tools.getTemplate('greninjaash');
+			}
 		}
 		if (!template.exists) {
 			return [`The Pokemon "${set.species}" does not exist.`];
@@ -292,9 +295,6 @@ class Validator {
 		}
 		if (set.moves && Array.isArray(set.moves)) {
 			set.moves = set.moves.filter(val => val);
-		}
-		if (ability.id === 'battlebond' && template.id === 'greninja') {
-			template = tools.getTemplate('greninjaash');
 		}
 		if (!set.moves || !set.moves.length) {
 			problems.push(`${name} has no moves.`);
