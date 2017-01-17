@@ -310,13 +310,13 @@ exports.Formats = [
 		validateSet: function (set, teamHas) {
 			let problems = this.validateSet(set, teamHas) || [];
 			set.moves.forEach(move => {
-				if(this.tools.data.Movedex[toId(move)].isZ) {
+				if (this.tools.data.Movedex[toId(move)].isZ) {
 					problems.push((set.name || set.species) + " has a Crystal Free Z-Move, which is banned by Balanced Hackmons.");
 				}
 			});
 			return problems;
 		},
-},
+	},
 	{
 		name: "[Gen 7] 1v1",
 		desc: [
