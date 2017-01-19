@@ -588,6 +588,22 @@ exports.BattleFormats = {
 			this.add('rule', 'CFZ Clause: Crystal-free Z-Moves are banned');
 		},
 	},
+	metronomeclause: {
+		effectType: 'ValidatorRule',
+		name: 'Metronome Clause',
+		banlist: ['Illegal'],
+		onStart: function () {
+			this.add('rule', 'Metronome Clause: All moves are banned except Metronome');
+			this.add('rule', 'Metronome Clause: All Pokémon must hold Leppa Berry');
+		},
+		onValidateSet: function (set) {
+			if (set.item !== 'Leppa Berry') return set.species + ' is not holding a Leppa Berry.';
+
+			for (let i = 0; i < set.moves.length; i++) {
+				if (set.moves[i] !== 'Metronome') return set.species + ' knows a move that is not Metronome.';
+			}
+		},
+	},
 	hppercentagemod: {
 		effectType: 'Rule',
 		name: 'HP Percentage Mod',
