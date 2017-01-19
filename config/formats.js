@@ -497,6 +497,18 @@ exports.Formats = [
 		ruleset: ['Pokemon', 'Standard NEXT', 'Team Preview'],
 		banlist: ['Uber'],
 	},
+	{
+		name: '[Gen 7] Metronome',
+		desc: [
+			'All moves are banned, except Metronome.',
+			'All items are banned, except Leppa Berry.',
+		],
+
+		mod: 'gen7',
+		rated: false,
+		searchShow: false,
+		ruleset: ['Pokemon', 'Team Preview', 'Metronome Clause', 'Exact HP Mod', 'Species Clause'],
+	},
 
 	// Randomized Metas
 	///////////////////////////////////////////////////////////////////
