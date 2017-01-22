@@ -231,8 +231,10 @@ class QuestionGiveaway extends Giveaway {
 		if (!this.answered[user.userid]) this.answered[user.userid] = 0;
 		if (this.answered[user.userid] >= 3) return user.sendTo(this.room, "You have already guessed three times. You cannot guess anymore in this giveaway.");
 
+		let sanitized = QuestionGiveaway.sanitize(guess);
+
 		for (let i = 0; i < this.answers.length; i++) {
-			if (toId(this.answers[i]) === toId(guess)) {
+			if (toId(this.answers[i]) === sanitized) {
 				this.winner = user;
 				this.clearTimer();
 				return this.end();
@@ -285,8 +287,12 @@ class QuestionGiveaway extends Giveaway {
 		delete this.room.giveaway;
 	}
 
+	static sanitize(str) {
+		return str.toLowerCase().replace(/[^a-z0-9 .-]+/ig, "").trim();
+	}
+
 	static sanitizeAnswers(answers) {
-		return answers.map(val => val.replace(/[^a-z0-9 .-]+/ig, "").trim()).filter((val, index, array) => toId(val).length && array.indexOf(val) === index);
+		return answers.map(val => QuestionGiveaway.sanitize(val)).filter((val, index, array) => toId(val).length && array.indexOf(val) === index);
 	}
 }
 
