@@ -1625,7 +1625,8 @@ exports.BattleScripts = {
 					if ((hasMove['fireblast'] && counter.setupType !== 'Physical') || hasMove['overheat']) rejected = true;
 					break;
 				case 'fireblast':
-					if ((hasMove['flareblitz'] || hasMove['lavaplume']) && !counter.setupType && !counter['speedsetup']) rejected = true;
+					if (hasMove['lavaplume'] && !counter.setupType && !counter['speedsetup']) rejected = true;
+					if (hasMove['flareblitz'] && counter.setupType !== 'Special') rejected = true;
 					break;
 				case 'firepunch': case 'sacredfire':
 					if (hasMove['fireblast'] || hasMove['flareblitz']) rejected = true;
@@ -1641,6 +1642,9 @@ exports.BattleScripts = {
 					break;
 				case 'airslash': case 'oblivionwing':
 					if (hasMove['acrobatics'] || hasMove['bravebird'] || hasMove['hurricane']) rejected = true;
+					break;
+				case 'hex':
+					if (!hasMove['willowisp']) rejected = true;
 					break;
 				case 'shadowball':
 					if (hasMove['hex'] && hasMove['willowisp']) rejected = true;
