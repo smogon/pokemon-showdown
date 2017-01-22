@@ -873,7 +873,7 @@ function runMovesearch(target, cmd, canAll, message) {
 			searches['boost'][target] = !isNotSearch;
 			continue;
 		}
-		
+
 		if (target.substr(0, 8) === 'zboosts ') {
 			switch (target.substr(8)) {
 			case 'attack': target = 'atk'; break;
