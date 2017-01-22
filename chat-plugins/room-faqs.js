@@ -84,7 +84,7 @@ exports.commands = {
 		if (getAlias(room.id, topic)) return this.errorReply(`You cannot make an alias of an alias. Use /addalias ${alias}, ${getAlias(room.id, topic)} instead.`);
 		roomFaqs[room.id][alias] = `>${topic}`;
 		saveRoomFaqs();
-		this.privateModCommand(`(${user.name} added an alias for '${topic}: ${alias}')`);
+		this.privateModCommand(`(${user.name} added an alias for '${topic}': ${alias})`);
 	},
 	roomfaq: function (target, room, user) {
 		if (!roomFaqs[room.id]) return this.errorReply("This room has no FAQ topics.");
