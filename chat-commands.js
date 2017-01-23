@@ -3225,7 +3225,9 @@ exports.commands = {
 					return false;
 				}
 			}
-			Rooms.global.searchBattle(user, target);
+			setTimeout(function () {
+				Rooms.global.searchBattle(user, target);
+			}, 3000);
 		} else {
 			Rooms.global.cancelSearch(user);
 		}
