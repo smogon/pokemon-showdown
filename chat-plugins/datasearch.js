@@ -888,9 +888,9 @@ function runMovesearch(target, cmd, canAll, message) {
 			default: target = target.substr(8);
 			}
 			if (!(target in allBoosts)) return {reply: "'" + escapeHTML(target.substr(8)) + "' is not a recognized stat."};
-			if (!searches['boost']) searches['boost'] = {};
-			if ((searches['boost'][target] && isNotSearch) || (searches['boost'][target] === false && !isNotSearch)) return {reply: 'A search cannot both exclude and include a stat boost.'};
-			searches['boost'][target] = !isNotSearch;
+			if (!searches['zboost']) searches['zboost'] = {};
+			if ((searches['zboost'][target] && isNotSearch) || (searches['zboost'][target] === false && !isNotSearch)) return {reply: 'A search cannot both exclude and include a stat boost.'};
+			searches['zboost'][target] = !isNotSearch;
 			continue;
 		}
 
