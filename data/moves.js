@@ -1997,8 +1997,10 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, defrost: 1},
-		onTryHit: function (target, source, move) {
-			if (!source.hasType("Fire")) return false;
+		onTryMove: function (pokemon, target, move) {
+			if (pokemon.hasType('Fire')) return;
+			this.add('-fail', pokemon, 'move: Burn Up');
+			return null;
 		},
 		self: {
 			onHit: function (pokemon) {
@@ -3055,7 +3057,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1},
 		status: 'slp',
-		onTry: function (pokemon, target, move) {
+		onTryMove: function (pokemon, target, move) {
 			if (pokemon.template.species === 'Darkrai' || move.hasBounced) {
 				return;
 			}
@@ -11889,6 +11891,7 @@ exports.BattleMovedex = {
 			onStart: function (target) {
 				this.add('-singleturn', target, 'Powder');
 			},
+			onTryMovePriority: -1,
 			onTryMove: function (pokemon, target, move) {
 				if (move.type === 'Fire') {
 					this.add('-activate', pokemon, 'move: Powder');
