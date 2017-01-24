@@ -65,7 +65,7 @@ exports.BattleFormats = {
 			'Solgaleo', 'Lunala', 'Cosmog', 'Cosmoem',
 			'Necrozma',
 			'Magearna',
-			'Greninja + Battle Bond',
+			'Battle Bond',
 			'Marshadow',
 		],
 	},
