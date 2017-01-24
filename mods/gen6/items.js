@@ -48,6 +48,10 @@ exports.BattleItems = {
 		inherit: true,
 		isUnreleased: false,
 	},
+	bigroot: {
+		inherit: true,
+		desc: "Holder gains 1.3x HP from draining moves, Aqua Ring, Ingrain, and Leech Seed.",
+	},
 	blazikenite: {
 		inherit: true,
 		isUnreleased: false,

@@ -16154,7 +16154,7 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
-		desc: "The user restores its HP equal to the target's Attack stat, calculated with its stat stage, then lowers the target's Attack by 1 stage.",
+		desc: "Lowers the target's Attack by 1 stage. The user restores its HP equal to the target's Attack stat calculated with its stat stage before this move was used. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down. Fails if the target's Attack stat stage is -6.",
 		shortDesc: "User heals HP=target's Atk stat. Lowers Atk by 1.",
 		id: "strengthsap",
 		isViable: true,
@@ -16164,8 +16164,9 @@ exports.BattleMovedex = {
 		flags: {protect: 1, reflectable: 1, mirror: 1, heal: 1},
 		onHit: function (target, source) {
 			if (target.boosts.atk === -6) return false;
-			this.heal(target.getStat('atk', false, true), source);
+			let atk = target.getStat('atk', false, true);
 			this.boost({atk:-1}, target, source, null, null, true);
+			this.heal(atk, source, target);
 		},
 		secondary: false,
 		target: "normal",
