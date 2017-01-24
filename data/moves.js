@@ -16677,7 +16677,7 @@ exports.BattleMovedex = {
 				if (myItem) source.item = myItem.id;
 				return false;
 			}
-			if (!this.singleEvent('TakeItem', myItem, source.itemData, source, target, move, myItem)) {
+			if ((myItem && !this.singleEvent('TakeItem', myItem, source.itemData, target, source, move, myItem)) || (yourItem && !this.singleEvent('TakeItem', yourItem, target.itemData, source, target, move, yourItem))) {
 				if (yourItem) target.item = yourItem.id;
 				if (myItem) source.item = myItem.id;
 				return false;
@@ -17630,7 +17630,7 @@ exports.BattleMovedex = {
 				if (myItem) source.item = myItem.id;
 				return false;
 			}
-			if (!this.singleEvent('TakeItem', myItem, source.itemData, source, target, move, myItem)) {
+			if ((myItem && !this.singleEvent('TakeItem', myItem, source.itemData, target, source, move, myItem)) || (yourItem && !this.singleEvent('TakeItem', yourItem, target.itemData, source, target, move, yourItem))) {
 				if (yourItem) target.item = yourItem.id;
 				if (myItem) source.item = myItem.id;
 				return false;
