@@ -427,7 +427,7 @@ exports.BattleItems = {
 		},
 		num: 296,
 		gen: 4,
-		desc: "Holder gains 1.3x HP from draining moves, Aqua Ring, Ingrain, and Leech Seed.",
+		desc: "Holder gains 1.3x HP from draining/Aqua Ring/Ingrain/Leech Seed/Strength Sap.",
 	},
 	"bindingband": {
 		id: "bindingband",

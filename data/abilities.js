@@ -1713,7 +1713,7 @@ exports.BattleAbilities = {
 		id: "liquidooze",
 		onSourceTryHeal: function (damage, target, source, effect) {
 			this.debug("Heal is occurring: " + target + " <- " + source + " :: " + effect.id);
-			let canOoze = {drain: 1, leechseed: 1};
+			let canOoze = {drain: 1, leechseed: 1, strengthsap: 1};
 			if (canOoze[effect.id]) {
 				this.damage(damage);
 				return 0;
