@@ -403,7 +403,7 @@ let commands = {
 		let [giver, ot, tid, prize, question, ...answers] = target.split(target.includes('|') ? '|' : ',').map(param => param.trim());
 		if (!(giver && ot && tid && prize && question && answers.length)) return this.errorReply("Invalid arguments specified - /question giver, ot, tid, prize, question, answer(s)");
 		tid = toId(tid);
-		if (!parseInt(tid) && tid.length !== 6) return this.errorReply("Invalid TID");
+		if (!parseInt(tid) || tid.length < 5 || tid.length > 6) return this.errorReply("Invalid TID");
 		let targetUser = Users(giver);
 		if (!targetUser || !targetUser.connected) return this.errorReply(`User '${giver}' is not online.`);
 		if (!this.can('warn', null, room) && !(this.can('broadcast', null, room) && user === targetUser)) return this.errorReply("Permission denied.");
@@ -454,7 +454,7 @@ let commands = {
 		let [giver, ot, tid, prize, winners] = target.split(target.includes('|') ? '|' : ',').map(param => param.trim());
 		if (!(giver && ot && tid && prize)) return this.errorReply("Invalid arguments specified - /lottery giver, ot, tid, prize, winners");
 		tid = toId(tid);
-		if (!parseInt(tid) && tid.length !== 6) return this.errorReply("Invalid TID");
+		if (!parseInt(tid) || tid.length < 5 || tid.length > 6) return this.errorReply("Invalid TID");
 		let targetUser = Users(giver);
 		if (!targetUser || !targetUser.connected) return this.errorReply(`User '${giver}' is not online.`);
 		if (!this.can('warn', null, room) && !(this.can('broadcast', null, room) && user === targetUser)) return this.errorReply("Permission denied.");
