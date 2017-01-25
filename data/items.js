@@ -3377,7 +3377,6 @@ exports.BattleItems = {
 	"mewniumz": {
 		id: "mewniumz",
 		name: "Mewnium Z",
-		isUnreleased: true,
 		spritenum: 658,
 		onTakeItem: false,
 		zMove: "Genesis Supernova",
