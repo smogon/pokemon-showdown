@@ -6554,31 +6554,17 @@ exports.BattleMovedex = {
 			},
 			onResidualOrder: 5,
 			onResidualSubOrder: 2,
-			onResidual: function (battle) {
-				this.debug('onResidual battle');
-				let pokemon;
-				for (let s in battle.sides) {
-					for (let p in battle.sides[s].active) {
-						pokemon = battle.sides[s].active[p];
-						if (pokemon.isGrounded() && !pokemon.isSemiInvulnerable()) {
-							this.debug('Pokemon is grounded, healing through Grassy Terrain.');
-							this.heal(pokemon.maxhp / 16, pokemon, pokemon);
-						}
-					}
+			onResidual: function () {
+				this.eachEvent('Terrain');
+			},
+			onTerrain: function (pokemon) {
+				if (pokemon.isGrounded() && !pokemon.isSemiInvulnerable()) {
+					this.debug('Pokemon is grounded, healing through Grassy Terrain.');
+					this.heal(pokemon.maxhp / 16, pokemon, pokemon);
 				}
 			},
-			onEnd: function (battle) {
-				this.debug('onResidual battle');
-				let pokemon;
-				for (let s in battle.sides) {
-					for (let p in battle.sides[s].active) {
-						pokemon = battle.sides[s].active[p];
-						if (pokemon.isGrounded() && !pokemon.isSemiInvulnerable()) {
-							this.debug('Pokemon is grounded, healing through Grassy Terrain.');
-							this.heal(pokemon.maxhp / 16, pokemon, pokemon);
-						}
-					}
-				}
+			onEnd: function () {
+				this.eachEvent('Terrain');
 				this.add('-fieldend', 'move: Grassy Terrain');
 			},
 		},
