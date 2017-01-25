@@ -338,8 +338,8 @@ class Validator {
 						} else if (problem.type === 'oversketched') {
 							let plural = (parseInt(problem.maxSketches) === 1 ? '' : 's');
 							problemString = problemString.concat(` because it can only sketch ${problem.maxSketches} move${plural}.`);
-						} else if (problem.type === 'pokebank') {
-							problemString = problemString.concat(` because it's only obtainable from a previous generation.`);
+						} else if (problem.type === 'pentagon') {
+							problemString = problemString.concat(` because it's only obtainable before gen 6.`);
 						} else {
 							problemString = problemString.concat(`.`);
 						}
@@ -453,7 +453,7 @@ class Validator {
 				events:
 				for (let i = 0; i < eventPokemon.length; i++) {
 					let eventData = eventPokemon[i];
-					if (format.requirePentagon && eventData.generation < tools.gen) continue;
+					if (format.requirePentagon && eventData.generation < 6) continue;
 					if (eventData.level && set.level < eventData.level) continue;
 					if ((eventData.shiny === true && !set.shiny) || (!eventData.shiny && set.shiny)) continue;
 					if (eventData.nature && set.nature !== eventData.nature) continue;
@@ -685,7 +685,6 @@ class Validator {
 		// the equivalent of adding "every source at or before this gen" to sources
 		let sourcesBefore = 0;
 		if (lsetData.sourcesBefore === undefined) lsetData.sourcesBefore = tools.gen;
-		let noPastGen = !!format.requirePentagon;
 		// Pokemon cannot be traded to past generations except in Gen 1 Tradeback
 		let noFutureGen = !(format.banlistTable && format.banlistTable['allowtradeback']);
 		// if a move can only be learned from a gen 2-5 egg, we have to check chainbreeding validity
@@ -721,7 +720,7 @@ class Validator {
 				for (let i = 0, len = lset.length; i < len; i++) {
 					let learned = lset[i];
 					let learnedGen = parseInt(learned.charAt(0));
-					if (noPastGen && learnedGen < tools.gen) continue;
+					if (format.requirePentagon && learnedGen < 6) continue;
 					if (noFutureGen && learnedGen > tools.gen) continue;
 
 					// redundant
@@ -768,8 +767,7 @@ class Validator {
 					} else if (learned.charAt(1) === 'E') {
 						// egg moves:
 						//   only if that was the source
-						const noPastGenBreeding = noPastGen && tools.gen === 7;
-						if ((learnedGen >= 6 && !noPastGenBreeding) || lsetData.fastCheck) {
+						if (learnedGen >= 6 || lsetData.fastCheck) {
 							// gen 6 doesn't have egg move incompatibilities except for certain cases with baby Pokemon
 							learned = learnedGen + 'E' + (template.prevo ? template.id : '');
 							sources.push(learned);
@@ -809,9 +807,9 @@ class Validator {
 							if (!father.eggGroups.some(eggGroup => eggGroupsSet.has(eggGroup))) continue;
 
 							// detect unavailable egg moves
-							if (noPastGenBreeding) {
+							if (format.requirePentagon) {
 								const fatherLatestMoveGen = fatherSources[0].charAt(0);
-								if (fatherLatestMoveGen !== '7') continue;
+								if (parseInt(fatherLatestMoveGen) < 6) continue;
 								atLeastOne = true;
 								break;
 							}
@@ -825,7 +823,7 @@ class Validator {
 							sources.push(learned + father.id);
 							if (limitedEgg !== false) limitedEgg = true;
 						}
-						if (atLeastOne && noPastGenBreeding) {
+						if (atLeastOne) {
 							// gen 6+ doesn't have egg move incompatibilities except for certain cases with baby Pokemon
 							learned = learnedGen + 'E' + (template.prevo ? template.id : '');
 							sources.push(learned);
@@ -835,7 +833,6 @@ class Validator {
 						// chainbreeding with itself
 						// e.g. ExtremeSpeed Dragonite
 						if (!atLeastOne) {
-							if (noPastGenBreeding) continue;
 							sources.push(learned + template.id);
 							limitedEgg = 'self';
 						}
@@ -917,7 +914,7 @@ class Validator {
 
 		// Now that we have our list of possible sources, intersect it with the current list
 		if (!sourcesBefore && !sources.length) {
-			if (noPastGen && sometimesPossible) return {type:'pokebank'};
+			if (format.requirePentagon && sometimesPossible) return {type:'pentagon'};
 			if (incompatibleAbility) return {type:'incompatibleAbility'};
 			return true;
 		}
