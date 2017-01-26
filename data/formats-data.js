@@ -5951,7 +5951,7 @@ exports.BattleFormatsData = {
 		tier: "New",
 	},
 	pyukumuku: {
-		randomBattleMoves: ["curse", "batonpass", "recover", "counter", "reflect", "lightscreen"],
+		randomBattleMoves: ["batonpass", "counter", "reflect", "lightscreen"],
 		tier: "New",
 	},
 	typenull: {
