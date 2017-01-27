@@ -14293,12 +14293,12 @@ exports.BattleLearnsets = {
 		zenheadbutt: ["7L35", "6T", "6L35", "5T", "5L35", "4T", "4L29"],
 	}},
 	magikarp: {learnset: {
-		bounce: ["6T", "5T", "5S5", "5D", "4T"],
+		bounce: ["7S7", "6T", "5T", "5S5", "5D", "4T"],
 		celebrate: ["6S6"],
 		flail: ["7L30", "6L30", "5L30", "5S5", "4L30", "3L30"],
 		happyhour: ["6S6"],
 		hydropump: ["5S5"],
-		splash: ["7L1", "6L1", "6S6", "5L1", "5S5", "5D", "4L1", "4S0", "4S1", "4S2", "4S3", "4S4", "3L1"],
+		splash: ["7L1", "7S7", "6L1", "6S6", "5L1", "5S5", "5D", "4L1", "4S0", "4S1", "4S2", "4S3", "4S4", "3L1"],
 		tackle: ["7L15", "6L15", "5L15", "4L15", "3L15"],
 	}},
 	gyarados: {learnset: {
