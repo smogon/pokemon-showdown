@@ -481,7 +481,8 @@ exports.BattleAbilities = {
 	},
 	"contrary": {
 		shortDesc: "If this Pokemon has a stat stage raised it is lowered instead, and vice versa.",
-		onBoost: function (boost) {
+		onBoost: function (boost, target, source, effect) {
+			if (effect && effect.id === 'zpower') return;
 			for (let i in boost) {
 				boost[i] *= -1;
 			}
@@ -3029,7 +3030,8 @@ exports.BattleAbilities = {
 	},
 	"simple": {
 		shortDesc: "If this Pokemon's stat stages are raised or lowered, the effect is doubled instead.",
-		onBoost: function (boost) {
+		onBoost: function (boost, target, source, effect) {
+			if (effect && effect.id === 'zpower') return;
 			for (let i in boost) {
 				boost[i] *= 2;
 			}
