@@ -113,11 +113,12 @@ exports.Formats = [
 						this.add('-message', "The present was a makeover!");
 					};
 
-					let boosts = {};
-					let possibleBoosts = ['atk', 'def', 'spa', 'spd', 'spe', 'accuracy'].randomize();
-					boosts[possibleBoosts[0]] = 1;
-					boosts[possibleBoosts[1]] = -1;
-					boosts[possibleBoosts[2]] = -1;
+					let possibleBoosts = ['atk', 'def', 'spa', 'spd', 'spe', 'accuracy']; // Respect Evasion Clause
+					let boosts = {
+						[this.sampleNoReplace(possibleBoosts)]: 1,
+						[this.sampleNoReplace(possibleBoosts)]: -1,
+						[this.sampleNoReplace(possibleBoosts)]: -1,
+					};
 					move.boosts = boosts;
 					break;
 				}
@@ -151,39 +152,42 @@ exports.Formats = [
 		name: "[Seasonal] Spring Forward",
 
 		team: 'randomSeasonalSF',
+		teamLength: {
+			battle: 3,
+		},
+		greenPokemon: {
+			bulbasaur:1, ivysaur:1, venusaur:1, caterpie:1, metapod:1, bellsprout:1, weepinbell:1, victreebel:1, scyther:1,
+			chikorita:1, bayleef:1, meganium:1, spinarak:1, natu:1, xatu:1, bellossom:1, politoed:1, skiploom:1, lavitar:1,
+			tyranitar:1, celebi:1, treecko:1, grovyle:1, sceptile:1, dustox:1, lotad:1, lombre:1, ludicolo:1, breloom:1,
+			electrike:1, roselia:1, gulpin:1, vibrava:1, flygon:1, cacnea:1, cacturne:1, cradily:1, keckleon:1, tropius:1,
+			rayquaza:1, turtwig:1, grotle:1, torterra:1, budew:1, roserade:1, carnivine:1, yanmega:1, leafeon:1, shaymin:1,
+			shayminsky:1, snivy:1, servine:1, serperior:1, pansage:1, simisage:1, swadloon:1, cottonee:1, whimsicott:1,
+			petilil:1, lilligant:1, basculin:1, maractus:1, trubbish:1, garbodor:1, solosis:1, duosion:1, reuniclus:1,
+			axew:1, fraxure:1, golett:1, golurk:1, virizion:1, tornadus:1, tornadustherian:1, burmy:1,
+			kakuna:1, beedrill:1, sandshrew:1, nidoqueen:1, zubat:1, golbat:1, oddish:1, gloom:1, mankey:1, poliwrath:1,
+			machoke:1, machamp:1, doduo:1, dodrio:1, grimer:1, muk:1, kingler:1, cubone:1, marowak:1, hitmonlee:1, tangela:1,
+			mrmime:1, tauros:1, kabuto:1, dragonite:1, mewtwo:1, marill:1, hoppip:1, espeon:1, teddiursa:1, ursaring:1,
+			cascoon:1, taillow:1, swellow:1, pelipper:1, masquerain:1, azurill:1, minun:1, carvanha:1, huntail:1, bagon:1,
+			shelgon:1, salamence:1, latios:1, tangrowth:1, seismitoad:1, jellicent:1, elektross:1, druddigon:1,
+			bronzor:1, bronzong:1, gallade:1,
+		},
 		onBegin: function () {
 			if (this.random(100) < 75) {
 				this.add('-message', "March and April showers bring May flowers...");
 				this.setWeather('Rain Dance');
 				delete this.weatherData.duration;
 			}
-			this.debug('Cutting teams down to three.');
-			this.p1.pokemon = this.p1.pokemon.slice(0, 3);
-			this.p1.pokemonLeft = this.p1.pokemon.length;
-			this.p2.pokemon = this.p2.pokemon.slice(0, 3);
-			this.p2.pokemonLeft = this.p2.pokemon.length;
 		},
 		onSwitchIn: function (pokemon) {
-			let greenPokemon = {
-				bulbasaur:1, ivysaur:1, venusaur:1, caterpie:1, metapod:1, bellsprout:1, weepinbell:1, victreebel:1, scyther:1,
-				chikorita:1, bayleef:1, meganium:1, spinarak:1, natu:1, xatu:1, bellossom:1, politoed:1, skiploom:1, lavitar:1,
-				tyranitar:1, celebi:1, treecko:1, grovyle:1, sceptile:1, dustox:1, lotad:1, lombre:1, ludicolo:1, breloom:1,
-				electrike:1, roselia:1, gulpin:1, vibrava:1, flygon:1, cacnea:1, cacturne:1, cradily:1, keckleon:1, tropius:1,
-				rayquaza:1, turtwig:1, grotle:1, torterra:1, budew:1, roserade:1, carnivine:1, yanmega:1, leafeon:1, shaymin:1,
-				shayminsky:1, snivy:1, servine:1, serperior:1, pansage:1, simisage:1, swadloon:1, cottonee:1, whimsicott:1,
-				petilil:1, lilligant:1, basculin:1, maractus:1, trubbish:1, garbodor:1, solosis:1, duosion:1, reuniclus:1,
-				axew:1, fraxure:1, golett:1, golurk:1, virizion:1, tornadus:1, tornadustherian:1, burmy:1,
-				kakuna:1, beedrill:1, sandshrew:1, nidoqueen:1, zubat:1, golbat:1, oddish:1, gloom:1, mankey:1, poliwrath:1,
-				machoke:1, machamp:1, doduo:1, dodrio:1, grimer:1, muk:1, kingler:1, cubone:1, marowak:1, hitmonlee:1, tangela:1,
-				mrmime:1, tauros:1, kabuto:1, dragonite:1, mewtwo:1, marill:1, hoppip:1, espeon:1, teddiursa:1, ursaring:1,
-				cascoon:1, taillow:1, swellow:1, pelipper:1, masquerain:1, azurill:1, minun:1, carvanha:1, huntail:1, bagon:1,
-				shelgon:1, salamence:1, latios:1, tangrowth:1, seismitoad:1, jellicent:1, elektross:1, druddigon:1,
-				bronzor:1, bronzong:1, gallade:1,
-			};
-			if (pokemon.template.id in greenPokemon) {
+			if (pokemon.template.speciesid in this.getFormat().greenPokemon) {
 				this.add('-message', pokemon.name + " drank way too much!");
 				pokemon.addVolatile('confusion');
 				pokemon.statusData.time = 0;
+			}
+		},
+		onBeforeMove: function (attacker, defender, move) {
+			if (move.id === 'barrage') {
+				this.add('-message', "You found a little chocolate egg!");
 			}
 		},
 		onModifyMove: function (move) {
@@ -194,9 +198,6 @@ exports.Formats = [
 				move.critRatio = 2;
 				move.accuracy = 100;
 				move.multihit = [3, 5];
-				move.onBeforeMove = function () {
-					this.add('-message', "You found a little chocolate egg!");
-				};
 				move.onHit = function (target, source) {
 					this.heal(Math.ceil(source.maxhp / 40), source);
 				};
@@ -267,8 +268,7 @@ exports.Formats = [
 			case 'Slowpoke': case 'Slowbro':
 				let didYouHear = ['Black & White are coming out soon!', 'Genesect has been banned to Ubers!',
 					'Smogon is moving to Pokemon Showdown!', "We're having a new thing called Seasonal Ladder!", 'Deoxys is getting Nasty Plot!'];
-				didYouHear = didYouHear.randomize();
-				msg = 'Did you hear? ' + didYouHear[0];
+				msg = 'Did you hear? ' + this.sampleNoReplace(didYouHear);
 				break;
 			case 'Spinda':
 				msg = "LOOK AT ME I'M USING SPINDA";
@@ -361,46 +361,50 @@ exports.Formats = [
 					this.add('-message', name + ': Do you even lift, bro?!');
 				};
 			} else if (move.id === 'charm' || move.id === 'sweetkiss' || move.id === 'attract') {
-				let malePickUpLines = ['have you been to Fukushima recently? Because you are glowing tonight!',
+				let malePickUpLines = [
+					'have you been to Fukushima recently? Because you are glowing tonight!',
 					'did it hurt when you fell to the earth? Because you must be an angel!', 'can I buy you a drink?',
 					'roses are red / lemons are sour / spread your legs / and give me an hour',
 					"roses are red / violets are red / I'm not good with colors", "Let's go watch cherry bossoms together (´･ω･`)",
-					"Will you be my Denko? (´･ω･`)"];
-				malePickUpLines = malePickUpLines.randomize();
-				let femalePickUpLines = ['Do you go to the gym? You are buff!', "Guy, you make me hotter than July.",
+					"Will you be my Denko? (´･ω･`)",
+				];
+				let femalePickUpLines = [
+					'Do you go to the gym? You are buff!', "Guy, you make me hotter than July.",
 					"While I stare at you I feel like I just peed myself", "Let's go to my apartment to have midnight coffee",
-					"Marry me, I wanna have 10 kids of you!", "Go out with me or I'll twist your neck!", "Man, you have some nice abs, can I touch them?"];
-				femalePickUpLines = femalePickUpLines.randomize();
+					"Marry me, I wanna have 10 kids of you!", "Go out with me or I'll twist your neck!", "Man, you have some nice abs, can I touch them?",
+				];
 				move.onTryHit = function (target, source, move) {
 					let pickUpLine = '';
 					if (source.gender === 'M') {
-						pickUpLine = malePickUpLines[0];
+						pickUpLine = this.sampleNoReplace(malePickUpLines);
 					} else if (source.gender === 'F') {
-						pickUpLine = femalePickUpLines[0];
+						pickUpLine = this.sampleNoReplace(femalePickUpLines);
 					} else {
 						return;
 					}
-					let name = (source.ability === 'illusion' && source.illusion) ? source.illusion.toString().substr(4, source.illusion.toString().length) : source.name;
-					let targetName = (target.ability === 'illusion' && target.illusion) ? target.illusion.toString().substr(4, target.illusion.toString().length) : target.name;
+					let name = (source.ability === 'illusion' && source.illusion) ? source.illusion.name : source.name;
+					let targetName = (target.ability === 'illusion' && target.illusion) ? target.illusion.name : target.name;
 					this.add('-message', name + ': Hey, ' + targetName + ', ' + pickUpLine);
 				};
 				move.onMoveFail = function (target, source, move) {
 					// Returns false so move calls onHit and onMoveFail
-					let femaleRejectLines = ['Uuuh... how about no', "gtfo I'm taken", 'I have to water the plants. On Easter Island. For a year. Bye',
-						'GO AWAY CREEP', 'Do you smell like rotten eggs?', "I wouldn't date you even if you were the last Pokemon on earth."];
-					femaleRejectLines = femaleRejectLines.randomize();
-					let maleRejectLines = ["I'd rather get it on with a dirty daycare Ditto", "I'm not realy sure you're clean",
-						"Ew, you're disgusting!", "It's not me, it's you. Go away, ugly duckling.", "Not really interested *cough*weirdo*cough*"];
-					maleRejectLines = maleRejectLines.randomize();
+					let femaleRejectLines = [
+						'Uuuh... how about no', "gtfo I'm taken", 'I have to water the plants. On Easter Island. For a year. Bye',
+						'GO AWAY CREEP', 'Do you smell like rotten eggs?', "I wouldn't date you even if you were the last Pokemon on earth.",
+					];
+					let maleRejectLines = [
+						"I'd rather get it on with a dirty daycare Ditto", "I'm not realy sure you're clean",
+						"Ew, you're disgusting!", "It's not me, it's you. Go away, ugly duckling.", "Not really interested *cough*weirdo*cough*",
+					];
 					let answer = '';
 					if (target.gender === 'M') {
-						answer = maleRejectLines[0];
+						answer = this.sampleNoReplace(maleRejectLines);
 					} else if (target.gender === 'F') {
-						answer = femaleRejectLines[0];
+						answer = this.sampleNoReplace(femaleRejectLines);
 					} else {
 						return;
 					}
-					let targetName = (target.ability === 'illusion' && target.illusion) ? target.illusion.toString().substr(4, target.illusion.toString().length) : target.name;
+					let targetName = (target.ability === 'illusion' && target.illusion) ? target.illusion.name : target.name;
 					if (!target.volatiles['attract']) {
 						this.add('-message', targetName + ': ' + answer);
 					}
@@ -414,22 +418,23 @@ exports.Formats = [
 					"Yo mama so dumb, she thought Sylveon would be Light Type!",
 				];
 				move.onHit = function (target, source) {
-					let sourceName = (source.ability === 'illusion' && source.illusion) ? source.illusion.toString().substr(4, source.illusion.toString().length) : source.name;
+					let sourceName = (source.ability === 'illusion' && source.illusion) ? source.illusion.name : source.name;
 					this.add('-message', sourceName + ' said, "' + quotes.sample() + '"');
 				};
 			}
 		},
 		onFaint: function (pokemon) {
 			// A poem every time a Pokemon faints
-			let haikus = ["You suck a lot / You are a bad trainer / let a mon faint", "they see me driving / round town with the girl i love / and I'm like, haikou",
+			let haikus = [
+				"You suck a lot / You are a bad trainer / let a mon faint", "they see me driving / round town with the girl i love / and I'm like, haikou",
 				"Ain't no Pokemon tough enough / ain't no bulk decent enough / ain't no recovery good enough / to keep me from fainting you, babe",
 				"Roses are red / violets are blue / you must be on some med / 'coz as a trainer you suck",
 				"You're gonna be the very worst / like no one ever was / to lose all the battles is your test / to faint them all is your cause",
 				'Twinkle twinkle little star / fuck you that was my best sweeper', "I'm wheezy and I'm sleezy / but as a trainer you're measly",
 				"You're sharp as a rock / you're bright as a hole / you're one to mock / you could be beaten by a maimed mole",
-				"Alas, poor trainer! I knew him, your Pokémon, a fellow of infinite jest, of most excellent fancy."];
-			haikus = haikus.randomize();
-			this.add('-message', haikus[0]);
+				"Alas, poor trainer! I knew him, your Pokémon, a fellow of infinite jest, of most excellent fancy.",
+			];
+			this.add('-message', this.sampleNoReplace(haikus));
 		},
 		ruleset: ['PotD', 'Pokemon', 'Sleep Clause'],
 	},
@@ -439,12 +444,11 @@ exports.Formats = [
 		team: 'randomSeasonalMM',
 		onBegin: function () {
 			// Shameless plug
-			let date = Date();
-			date = date.split(' ');
-			if (parseInt(date[2]) === 12) {
+			let day = new Date().getDay();
+			if (day === 12) {
 				this.add('-message', 'Wish a HAPPY BIRTHDAY to Treecko32!!');
 			}
-			if (parseInt(date[2]) === 16) {
+			if (day === 16) {
 				this.add('-message', 'Wish a HAPPY BIRTHDAY to Joim!!');
 			}
 		},
@@ -464,10 +468,12 @@ exports.Formats = [
 			this.add('-message', "Greetings, trainer! Delibird needs your help! It's lost in the US and it needs to find its way back to the arctic before summer starts! Help your Delibird while travelling north, but you must defeat the opponent before he reaches there first!");
 			this.setWeather('Sunny Day');
 			delete this.weatherData.duration;
+
+			this.seasonal = {'none':false, 'drizzle':false, 'hail':false};
 		},
 		onBeforeMove: function (pokemon, target, move) {
 			// Reshiram changes weather with its tail until you reach the arctic
-			if (pokemon.template.speciesid === 'reshiram' && pokemon.side.battle.turn < 15) {
+			if (pokemon.template.speciesid === 'reshiram' && this.turn < 15) {
 				let weatherMsg = '';
 				let dice = this.random(100);
 				if (dice < 25) {
@@ -487,23 +493,22 @@ exports.Formats = [
 				delete this.weatherData.duration;
 			}
 
-			if (!pokemon.side.battle.seasonal) pokemon.side.battle.seasonal = {'none':false, 'drizzle':false, 'hail':false};
-			if (pokemon.side.battle.turn >= 4 && pokemon.side.battle.seasonal.none === false) {
+			if (this.turn >= 4 && this.seasonal.none === false) {
 				this.add('-message', "You are travelling north and you have arrived to North Dakota! There's a clear sky and the temperature is lower here.");
 				this.clearWeather();
-				pokemon.side.battle.seasonal.none = true;
+				this.seasonal.none = true;
 			}
-			if (pokemon.side.battle.turn >= 8 && pokemon.side.battle.seasonal.drizzle === false) {
+			if (this.turn >= 8 && this.seasonal.drizzle === false) {
 				this.add('-message', "You are travelling further north and you have arrived to Edmonton! It started raining a lot... and it's effing cold.");
 				this.setWeather('Rain Dance');
 				delete this.weatherData.duration;
-				pokemon.side.battle.seasonal.drizzle = true;
+				this.seasonal.drizzle = true;
 			}
-			if (pokemon.side.battle.turn >= 12 && pokemon.side.battle.seasonal.hail === false) {
+			if (this.turn >= 12 && this.seasonal.hail === false) {
 				this.add('-message', "You have arrived to the arctic! Defeat the other trainer so Delibird can be free!");
 				this.setWeather('Hail');
 				delete this.weatherData.duration;
-				pokemon.side.battle.seasonal.hail = true;
+				this.seasonal.hail = true;
 			}
 		},
 		onFaint: function (pokemon) {
@@ -528,9 +533,7 @@ exports.Formats = [
 		onBegin: function () {
 			this.add('-message', "You and your faithful favourite Pokémon are travelling around the world, and you will fight this trainer in many places until either win or finish the travel!");
 			// ~learn international independence days with PS~
-			let date = Date();
-			date = date.split(' ');
-			switch (parseInt(date[2])) {
+			switch (new Date().getDay()) {
 			case 4:
 				// 4th of July for the US
 				this.add('-message', "FUCK YEAH 'MURICA!");
@@ -544,7 +547,7 @@ exports.Formats = [
 				this.add('-message', "¡Che, viteh que somos libres!");
 				break;
 			case 10:
-				// Bahamas lol
+				// Bahamas
 				this.add('-message', "Free the beaches!");
 				break;
 			case 20:
@@ -553,42 +556,38 @@ exports.Formats = [
 				break;
 			case 28:
 				// Perú
-				this.add('-message', "¡Perú libre!");
+				this.add('-message', "¡Per\u00fa libre!");
 				break;
 			}
+
+			// Set up the cities you visit around the world
+			this.cities = {
+				'N': [
+					'Madrid', 'Paris', 'London', 'Ghent', 'Amsterdam', 'Gdansk',
+					'Munich', 'Rome', 'Rabat', 'Stockholm', 'Moscow', 'Beijing',
+					'Tokyo', 'Dubai', 'New York', 'Vancouver', 'Los Angeles',
+					'Edmonton', 'Houston', 'Mexico DF', 'Barcelona', 'Blanes',
+				],
+				'S': [
+					'Buenos Aires', 'Lima', 'Johanesburg', 'Sydney', 'Melbourne',
+					'Santiago de Chile', 'Bogota', 'Lima', 'Montevideo',
+					'Wellington', 'Canberra', 'Jakarta', 'Kampala', 'Mumbai',
+					'Auckland', 'Pretoria', 'Cape Town',
+				],
+			};
+			this.currentPlace = {'hemisphere':'N', 'city':'Townsville'};
+			this.cities.N = this.shuffle(this.cities.N.slice());
+			this.cities.S = this.shuffle(this.cities.S.slice());
+			this.indexes = {'N':0, 'S':0};
+
+			// We choose a hemisphere and city to be in at the beginning
+			if (this.random(100) < 50) this.currentPlace.hemisphere = 'S';
+			this.currentPlace.city = this.cities[this.currentPlace.hemisphere][0];
+			this.indexes[this.currentPlace.hemisphere]++;
 		},
 		onBeforeMove: function (pokemon) {
-			// Set all the stuff
-			let dice = this.random(100);
-			if (!pokemon.side.battle.cities) {
-				// Set up the cities you visit around the world
-				pokemon.side.battle.cities = {
-					'N': [
-						'Madrid', 'Paris', 'London', 'Ghent', 'Amsterdam', 'Gdansk',
-						'Munich', 'Rome', 'Rabat', 'Stockholm', 'Moscow', 'Beijing',
-						'Tokyo', 'Dubai', 'New York', 'Vancouver', 'Los Angeles',
-						'Edmonton', 'Houston', 'Mexico DF', 'Barcelona', 'Blanes',
-					],
-					'S': [
-						'Buenos Aires', 'Lima', 'Johanesburg', 'Sydney', 'Melbourne',
-						'Santiago de Chile', 'Bogota', 'Lima', 'Montevideo',
-						'Wellington', 'Canberra', 'Jakarta', 'Kampala', 'Mumbai',
-						'Auckland', 'Pretoria', 'Cape Town',
-					],
-				};
-				pokemon.side.battle.currentPlace = {'hemisphere':'N', 'city':'Townsville'};
-				pokemon.side.battle.cities.N = pokemon.side.battle.cities.N.randomize();
-				pokemon.side.battle.cities.S = pokemon.side.battle.cities.S.randomize();
-				pokemon.side.battle.indexes = {'N':0, 'S':0};
-				// We choose a hemisphere and city to be in at the beginning
-				if (dice < 50) pokemon.side.battle.currentPlace.hemisphere = 'S';
-				pokemon.side.battle.currentPlace.city = pokemon.side.battle.cities[pokemon.side.battle.currentPlace.hemisphere][0];
-				pokemon.side.battle.indexes[pokemon.side.battle.currentPlace.hemisphere]++;
-			}
-
-			// Snarky comments from one trainer to another
-			let diceTwo = this.random(100);
-			if (diceTwo > 75) {
+			if (this.random(100) > 75) {
+				// Snarky comments from one trainer to another
 				let comments = [
 					"I've heard your mom is also travelling around the world catchin' em all, if you get what I mean, %s.",
 					"You fight like a Miltank!", "I'm your Stealth Rock to your Charizard, %s!",
@@ -596,39 +595,38 @@ exports.Formats = [
 					"I've seen Slowpokes with more training prowess, %s.", "You are no match for me, %s!",
 					"%s, have you learned how to battle from Bianca?",
 				];
-				comments = comments.randomize();
 				let otherTrainer = (pokemon.side.id === 'p1') ? 'p2' : 'p1';
-				this.add('-message', pokemon.side.name + ': ' + comments[0].replace('%s', pokemon.side.battle[otherTrainer].name));
+				this.add('-message', pokemon.side.name + ': ' + this.sampleNoReplace(comments).replace('%s', this[otherTrainer].name));
 			}
 
 			// This is the stuff that is calculated every turn once
-			if (!pokemon.side.battle.lastMoveTurn) pokemon.side.battle.lastMoveTurn = 0;
-			if (pokemon.side.battle.lastMoveTurn !== pokemon.side.battle.turn) {
+			if (!this.lastMoveTurn) this.lastMoveTurn = 0;
+			if (this.lastMoveTurn !== this.turn) {
 				let nextChange = this.random(2, 4);
-				if (pokemon.side.battle.lastMoveTurn === 0 || pokemon.side.battle.lastMoveTurn + nextChange <= pokemon.side.battle.turn) {
-					pokemon.side.battle.lastMoveTurn = pokemon.side.battle.turn;
-					if (dice < 50) {
-						if (pokemon.side.battle.currentPlace.hemisphere === 'N') {
-							pokemon.side.battle.currentPlace.hemisphere = 'S';
+				if (this.lastMoveTurn === 0 || this.lastMoveTurn + nextChange <= this.turn) {
+					this.lastMoveTurn = this.turn;
+					if (this.random(100) < 50) {
+						if (this.currentPlace.hemisphere === 'N') {
+							this.currentPlace.hemisphere = 'S';
 							this.add('-fieldstart', 'move: Wonder Room', '[of] Seasonal');
 						} else {
-							pokemon.side.battle.currentPlace.hemisphere = 'N';
+							this.currentPlace.hemisphere = 'N';
 							this.add('-fieldend', 'move: Wonder Room', '[of] Seasonal');
 						}
 					}
 
 					// Let's check if there's cities to visit left
-					if (pokemon.side.battle.indexes.N === pokemon.side.battle.cities['N'].length - 1 &&
-						pokemon.side.battle.indexes.S === pokemon.side.battle.cities['S'].length - 1) {
+					if (this.indexes.N === this.cities['N'].length - 1 &&
+						this.indexes.S === this.cities['S'].length - 1) {
 						this.add('-message', "You have travelled all around the world, " + pokemon.side.name + "! You won!");
 						pokemon.battle.win(pokemon.side.id);
 						return false;
 					}
 					// Otherwise, move to the next city
-					pokemon.side.battle.currentPlace.city = pokemon.side.battle.cities[pokemon.side.battle.currentPlace.hemisphere][pokemon.side.battle.indexes[pokemon.side.battle.currentPlace.hemisphere]];
-					pokemon.side.battle.indexes[pokemon.side.battle.currentPlace.hemisphere]++;
+					this.currentPlace.city = this.cities[this.currentPlace.hemisphere][this.indexes[this.currentPlace.hemisphere]];
+					this.indexes[this.currentPlace.hemisphere]++;
 					let hemispheres = {'N':'northern', 'S':'southern'};
-					pokemon.side.battle.add('-message', "Travelling around the world, you have arrived to a new city in the " + hemispheres[pokemon.side.battle.currentPlace.hemisphere] + " hemisphere, " + pokemon.side.battle.currentPlace.city + "!");
+					this.add('-message', "Travelling around the world, you have arrived to a new city in the " + hemispheres[this.currentPlace.hemisphere] + " hemisphere, " + this.currentPlace.city + "!");
 				}
 			}
 		},
@@ -642,20 +640,22 @@ exports.Formats = [
 		team: 'randomSeasonalAA',
 		gameType: 'doubles',
 		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod'],
+		shipNames: [
+			'Zarelrules', 'Joimawesome', 'Treeckonoob', 'MJailBait', 'mikelpuns', 'TTTtttttt', 'Frazzle Dazzle',
+			'TIbot', 'CDXCIV', 'Srs Bsns Trts', 'Leemz', 'Eggymad', 'Snoffles', 'bmelted', 'Poopes', 'Hugonedugen',
+			'Il Haunter', 'chaospwns', 'WaterBro', 'niggie', 'DOOM', 'qhore', 'Jizzmine', 'Aldarown',
+		],
 		onBegin: function () {
 			// What does player 1 lead with?
 			let p1Where = 'boat';
 			let p2Where = 'boat';
 			if (this.p1.pokemon[0].name === 'Kyogre') p1Where = 'pirates';
 			if (this.p2.pokemon[0].name === 'Kyogre') p2Where = 'pirates';
-			let shipNames = [
-				'Zarelrules', 'Joimawesome', 'Treeckonoob', 'MJailBait', 'mikelpuns', 'TTTtttttt', 'Frazzle Dazzle',
-				'TIbot', 'CDXCIV', 'Srs Bsns Trts', 'Leemz', 'Eggymad', 'Snoffles', 'bmelted', 'Poopes', 'Hugonedugen',
-				'Il Haunter', 'chaospwns', 'WaterBro', 'niggie', 'DOOM', 'qhore', 'Jizzmine', 'Aldarown',
-			].randomize();
-			let whereAreThey = (p1Where === 'boat' && p2Where === 'boat') ? 'You both were aboard the fantastic ship S. S. ' + shipNames[0] :
-			((p1Where === 'pirates' && p2Where === 'pirates') ? 'You are two pirate gangs on a summer sea storm about to raze the ship S. S. ' + shipNames[0] :
-			((p1Where === 'pirates') ? this.p1.name : this.p2.name) + ' leads a pirate boat to raze the ship S. S. ' + shipNames[0] +
+			let ships = this.getFormat().shipNames;
+			let shipName = `S. S. ${ships[Math.floor(Math.random() * ships.length)]}`;
+			let whereAreThey = (p1Where === 'boat' && p2Where === 'boat') ? 'You both were aboard the fantastic ship ' + shipName :
+			((p1Where === 'pirates' && p2Where === 'pirates') ? 'You are two pirate gangs on a summer sea storm about to raze the ship ' + shipName :
+			((p1Where === 'pirates') ? this.p1.name : this.p2.name) + ' leads a pirate boat to raze the ship ' + shipName +
 			' where ' + ((p1Where === 'pirates') ? this.p2.name : this.p1.name)) + ' is enjoying a sea travel,';
 
 			this.add('-message',
@@ -664,23 +664,24 @@ exports.Formats = [
 				"so you'll have to fight to access a life boat! Good luck! You have to be fast to not to be hit by the Hurricane!"
 			);
 		},
-		onSwitchIn: function (pokemon) {
-			if (pokemon.battle.turn > 0) {
-				let result = true;
-				for (let i = 0; i < pokemon.battle.sides.length; i++) {
-					for (let j = 0; j < pokemon.battle.sides[i].active.length; j++) {
-						if (pokemon.battle.sides[i].active[j] && !pokemon.battle.sides[i].active[j].volatiles['perishsong']) {
-							result = false;
-						}
-						if (pokemon.battle.sides[i].active[j] && pokemon.battle.sides[i].active[j].ability !== 'soundproof') {
-							pokemon.battle.sides[i].active[j].addVolatile('perishsong');
-						} else {
-							this.add('-immune', pokemon.battle.sides[i].active[j], '[msg]');
-							this.add('-end', pokemon.battle.sides[i].active[j], 'Perish Song');
-						}
-					}
+		onSwitchIn: function () {
+			if (!this.turn) return;
+			let notifyActivate = false;
+			let allActives = this.p1.active.concat(this.p2.active);
+			for (let pokemon of allActives) {
+				if (!pokemon) continue;
+				if (!pokemon.volatiles['perishsong']) {
+					notifyActivate = true;
 				}
-				if (result) return false;
+				if (!pokemon.hasAbility('soundproof')) {
+					pokemon.addVolatile('perishsong');
+				} else {
+					this.add('-immune', pokemon, '[msg]');
+					this.add('-end', pokemon, 'Perish Song');
+				}
+			}
+
+			if (notifyActivate) {
 				this.add('-fieldactivate', 'move: Perish Song');
 			}
 		},
@@ -697,6 +698,7 @@ exports.Formats = [
 		mod: 'gen5',
 		team: 'randomSeasonalOF',
 		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod'],
+
 		onModifyMove: function (move) {
 			if (move.id === 'trick') {
 				delete move.onHit;
@@ -799,11 +801,13 @@ exports.Formats = [
 					move.onTryHit = function () {
 						this.add('-message', 'Treat: Uhm, these candy taste weird...');
 					};
-					let boosts = {};
-					let possibleBoosts = ['atk', 'def', 'spa', 'spd', 'spe', 'accuracy', 'evasion'].randomize();
-					boosts[possibleBoosts[0]] = 2;
-					boosts[possibleBoosts[1]] = -1;
-					boosts[possibleBoosts[2]] = -1;
+
+					let possibleBoosts = ['atk', 'def', 'spa', 'spd', 'spe', 'accuracy']; // Respect Evasion Clause
+					let boosts = {
+						[this.sampleNoReplace(possibleBoosts)]: 1,
+						[this.sampleNoReplace(possibleBoosts)]: -1,
+						[this.sampleNoReplace(possibleBoosts)]: -1,
+					};
 					move.boosts = boosts;
 					break;
 				}
@@ -820,6 +824,14 @@ exports.Formats = [
 					move.heal = [1, 2];
 					break;
 				}
+			} else if (move.id === 'present' && this.random(10) < 3) {
+				move.accuracy = 55;
+				move.basePower = 0;
+				move.category = 'Status';
+				move.status = 'slp';
+				move.heal = null;
+				move.name = 'Sing';
+				move.flags = Object.assign({}, this.getMove('sing').flags);
 			} else if (move.id === 'present') {
 				move.accuracy = 100;
 				move.basePower = 0;
@@ -832,14 +844,9 @@ exports.Formats = [
 				move.onTryHit = function () {
 					this.add('-message', "Oh, why, thank you! This beer is delicious!");
 				};
-				move.effect = {
-					onBeforeMove: function (pokemon, target, move) {
-						if (this.random(10) < 3) {
-							this.useMove('Sing', target);
-							return;
-						}
-					},
-				};
+				if (move.id === 'present' && this.random(10) < 3) {
+					return 'Sing';
+				}
 			}
 		},
 	},
@@ -938,11 +945,13 @@ exports.Formats = [
 					move.onTryHit = function () {
 						this.add('-message', "The present was a makeover!");
 					};
-					let boosts = {};
-					let possibleBoosts = ['atk', 'def', 'spa', 'spd', 'spe', 'accuracy', 'evasion'].randomize();
-					boosts[possibleBoosts[0]] = 1;
-					boosts[possibleBoosts[1]] = -1;
-					boosts[possibleBoosts[2]] = -1;
+
+					let possibleBoosts = ['atk', 'def', 'spa', 'spd', 'spe', 'accuracy']; // Respect Evasion Clause
+					let boosts = {
+						[this.sampleNoReplace(possibleBoosts)]: 1,
+						[this.sampleNoReplace(possibleBoosts)]: -1,
+						[this.sampleNoReplace(possibleBoosts)]: -1,
+					};
 					move.boosts = boosts;
 					break;
 				}
@@ -1000,9 +1009,7 @@ exports.Formats = [
 			this.setWeather('Hail');
 			delete this.weatherData.duration;
 		},
-		onModifyPokemon: function (pokemon) {
-			pokemon.negateImmunity['Type'] = true;
-		},
+		onNegateImmunity: false,
 		onEffectiveness: function (typeMod, target, type, move) {
 			// The effectiveness of Freeze Dry on Water isn't reverted
 			if (move && move.id === 'freezedry' && type === 'Water') return;
@@ -1021,12 +1028,13 @@ exports.Formats = [
 			this.add('-message', "新年快乐");
 		},
 		onModifyMove: function (move) {
-			if (move.id === 'explosion') move.name = 'Firecrackers';
-			else if (move.type === 'Fire') move.name = 'Fireworks';
+			if (move.id === 'explosion') {
+				move.name = 'Firecrackers';
+			} else if (move.type === 'Fire') {
+				move.name = 'Fireworks';
+			}
 		},
-		onModifyPokemon: function (pokemon) {
-			pokemon.negateImmunity['Type'] = true;
-		},
+		onNegateImmunity: false,
 		onEffectiveness: function (typeMod, target, type, move) {
 			// The effectiveness of Freeze Dry on Water isn't reverted
 			if (move && move.id === 'freezedry' && type === 'Water') return;
@@ -1122,11 +1130,13 @@ exports.Formats = [
 					move.onTryHit = function () {
 						this.add('-message', "The present was a makeover!");
 					};
-					let boosts = {};
-					let possibleBoosts = ['atk', 'def', 'spa', 'spd', 'spe', 'accuracy', 'evasion'].randomize();
-					boosts[possibleBoosts[0]] = 1;
-					boosts[possibleBoosts[1]] = -1;
-					boosts[possibleBoosts[2]] = -1;
+
+					let possibleBoosts = ['atk', 'def', 'spa', 'spd', 'spe', 'accuracy', 'evasion'];
+					let boosts = {
+						[this.sampleNoReplace(possibleBoosts)]: 1,
+						[this.sampleNoReplace(possibleBoosts)]: -1,
+						[this.sampleNoReplace(possibleBoosts)]: -1,
+					};
 					move.boosts = boosts;
 					break;
 				}
@@ -1152,7 +1162,7 @@ exports.Formats = [
 					break;
 				}
 			} else {
-				// Change move type time to time only when the move is not present.
+				// Change move type time to time only when the move is not Present.
 				if (this.random(100) < 35 && move.target !== 'self') {
 					let type = '';
 					switch (move.type.toLowerCase()) {
@@ -1218,15 +1228,16 @@ exports.Formats = [
 		},
 		onFaint: function (pokemon) {
 			// A poem every time a Pokemon faints
-			let haikus = ["You suck a lot / You are a bad trainer / let a mon faint", "they see me driving / round town with the girl i love / and I'm like, haikou",
+			let haikus = [
+				"You suck a lot / You are a bad trainer / let a mon faint", "they see me driving / round town with the girl i love / and I'm like, haikou",
 				"Ain't no Pokemon tough enough / ain't no bulk decent enough / ain't no recovery good enough / to keep me from fainting you, babe",
 				"Roses are red / violets are blue / you must be on some med / 'coz as a trainer you suck",
 				"You're gonna be the very worst / like no one ever was / to lose all the battles is your test / to faint them all is your cause",
 				'Twinkle twinkle little star / screw you that was my best sweeper', "I'm wheezy and I'm sleezy / but as a trainer you're measly",
 				"You're sharp as a rock / you're bright as a hole / you're one to mock / you could be beaten by a maimed mole",
-				"Alas, poor trainer! I knew him, your Pokémon, a fellow of infinite jest, of most excellent fancy."];
-			haikus = haikus.randomize();
-			this.add('-message', haikus[0]);
+				"Alas, poor trainer! I knew him, your Pokémon, a fellow of infinite jest, of most excellent fancy.",
+			];
+			this.add('-message', this.sampleNoReplace(haikus));
 		},
 	},
 	{
@@ -1348,9 +1359,11 @@ exports.Formats = [
 		},
 		onBeforeMove: function (pokemon, target, move) {
 			// Before every move, trainers advance on their sleighs. There might be obstacles.
-			// We add more speed the less loaded the sleigh is.
-			// Then, we get a random number from 0 to 99, then calculate if it's less than (Pokémon's speed * 0.083) + 5.
+			// The speed depends on the current load of the sleigh. Less load, more speed.
 			let speed = Math.abs(pokemon.speed) + Math.ceil((2500 - this.seasonal.weight[pokemon.side.n]) / 25);
+
+			// If no obstacles are found, we advance as much distance as the speed is.
+			// However, the faster the sleigh, the higher the chances of meeting an obstacle are!
 			if (this.random(100) < Math.ceil(speed * 0.083) + 5) {
 				let name = pokemon.illusion ? pokemon.illusion.name : pokemon.name;
 				// If an obstacle is found, the trainer won't advance this turn.

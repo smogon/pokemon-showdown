@@ -11,10 +11,10 @@
 exports.BattleScripts = {
 	randomSeasonalTeam: function (side) {
 		let seasonalPokemonList = ['alakazam', 'machamp', 'hypno', 'hitmonlee', 'hitmonchan', 'mrmime', 'jynx', 'hitmontop', 'hariyama', 'sableye', 'medicham', 'toxicroak', 'electivire', 'magmortar', 'conkeldurr', 'throh', 'sawk', 'gothitelle', 'beheeyem', 'bisharp', 'volbeat', 'illumise', 'spinda', 'cacturne', 'infernape', 'lopunny', 'lucario', 'mienshao', 'pidgeot', 'fearow', 'dodrio', 'aerodactyl', 'noctowl', 'crobat', 'xatu', 'skarmory', 'swellow', 'staraptor', 'honchkrow', 'chatot', 'unfezant', 'sigilyph', 'braviary', 'mandibuzz', 'farfetchd', 'pelipper', 'altaria', 'togekiss', 'swoobat', 'archeops', 'swanna', 'weavile', 'gallade', 'gardevoir', 'ludicolo', 'snorlax', 'wobbuffet', 'meloetta', 'blissey', 'landorus', 'tornadus', 'golurk', 'bellossom', 'lilligant', 'probopass', 'roserade', 'leavanny', 'zapdos', 'moltres', 'articuno', 'delibird'];
-		seasonalPokemonList = seasonalPokemonList.randomize();
+
 		let team = [];
 		for (let i = 0; i < 6; i++) {
-			let set = this.randomSet(seasonalPokemonList[i], i);
+			let set = this.randomSet(this.sampleNoReplace(seasonalPokemonList), i);
 			set.level = 100;
 			team.push(set);
 		}
@@ -23,22 +23,21 @@ exports.BattleScripts = {
 	randomSeasonalWWTeam: function (side) {
 		let seasonalPokemonList = ['raichu', 'nidoqueen', 'nidoking', 'clefable', 'wigglytuff', 'rapidash', 'dewgong', 'cloyster', 'exeggutor', 'starmie', 'jynx', 'lapras', 'snorlax', 'articuno', 'azumarill', 'granbull', 'delibird', 'stantler', 'miltank', 'blissey', 'swalot', 'lunatone', 'castform', 'chimecho', 'glalie', 'walrein', 'regice', 'jirachi', 'bronzong', 'chatot', 'abomasnow', 'weavile', 'togekiss', 'glaceon', 'probopass', 'froslass', 'rotom-frost', 'uxie', 'mesprit', 'azelf', 'victini', 'vanilluxe', 'sawsbuck', 'beartic', 'cryogonal', 'chandelure'];
 		let shouldHavePresent = {raichu:1, clefable:1, wigglytuff:1, azumarill:1, granbull:1, miltank:1, blissey:1, togekiss:1, delibird:1};
-		seasonalPokemonList = seasonalPokemonList.randomize();
+
+		let bannedMoves = new Set(['ironhead', 'fireblast', 'overhead', 'vcreate', 'blueflare']);
 
 		let team = [];
-		for (let i = 0; i < 6; i++) {
-			let template = this.getTemplate(seasonalPokemonList[i]);
 
-			// we're gonna modify the default template
-			template = Object.clone(template, true);
-			delete template.viableMoves.ironhead;
-			delete template.viableMoves.fireblast;
-			delete template.viableMoves.overheat;
-			delete template.viableMoves.vcreate;
-			delete template.viableMoves.blueflare;
-			if (template.id === 'chandelure') {
-				template.viableMoves.flameburst = 1;
-				template.abilities.DW = 'Flash Fire';
+		for (let i = 0; i < 6; i++) {
+			let template = this.getTemplate(this.sampleNoReplace(seasonalPokemonList));
+			if (template.id === 'chandelure' || template.randomBattleMoves.some(move => bannedMoves.has(move))) {
+				template = Object.assign({}, template);
+				template.randomBattleMoves = template.randomBattleMoves.filter(move => !bannedMoves.has(move));
+				if (template.id === 'chandelure') {
+					template.randomBattleMoves.push('flameburst');
+					template.abilities = Object.assign({}, template.abilities);
+					template.abiities['H'] = 'Flash Fire';
+				}
 			}
 
 			let set = this.randomSet(template, i);
@@ -50,27 +49,24 @@ exports.BattleScripts = {
 		return team;
 	},
 	randomSeasonalVVTeam: function (side) {
-		let couples = ['nidoranf+nidoranm', 'nidorina+nidorino', 'nidoqueen+nidoking', 'gallade+gardevoir', 'plusle+minun', 'illumise+volbeat', 'latias+latios', 'skitty+wailord', 'tauros+miltank', 'rufflet+vullaby', 'braviary+mandibuzz', 'mew+mesprit', 'audino+chansey', 'lickilicky+blissey', 'purugly+beautifly', 'clefairy+wigglytuff', 'clefable+jigglypuff', 'cleffa+igglybuff', 'pichu+pachirisu', 'alomomola+luvdisc', 'gorebyss+huntail', 'kyuremb+kyuremw', 'cherrim+cherubi', 'slowbro+slowking', 'jynx+lickitung', 'milotic+gyarados', 'slowpoke+shellder', 'happiny+mimejr', 'mrmime+smoochum', 'woobat+munna', 'swoobat+musharna', 'delcatty+lopunny', 'skitty+buneary', 'togetic+shaymin', 'glameow+snubbull', 'whismur+wormadam', 'finneon+porygon', 'ditto+porygon2', 'porygonz+togekiss', 'hoppip+togepi', 'lumineon+corsola', 'exeggcute+flaaffy'];
-		couples = couples.randomize();
+		let couples = [
+			'nidoranf+nidoranm', 'nidorina+nidorino', 'nidoqueen+nidoking', 'gallade+gardevoir', 'plusle+minun', 'illumise+volbeat',
+			'latias+latios', 'skitty+wailord', 'tauros+miltank', 'rufflet+vullaby', 'braviary+mandibuzz', 'mew+mesprit',
+			'audino+chansey', 'lickilicky+blissey', 'purugly+beautifly', 'clefairy+wigglytuff', 'clefable+jigglypuff',
+			'cleffa+igglybuff', 'pichu+pachirisu', 'alomomola+luvdisc', 'gorebyss+huntail', 'kyuremb+kyuremw', 'cherrim+cherubi',
+			'slowbro+slowking', 'jynx+lickitung', 'milotic+gyarados', 'slowpoke+shellder', 'happiny+mimejr', 'mrmime+smoochum',
+			'woobat+munna', 'swoobat+musharna', 'delcatty+lopunny', 'skitty+buneary', 'togetic+shaymin', 'glameow+snubbull', 'whismur+wormadam',
+			'finneon+porygon', 'ditto+porygon2', 'porygonz+togekiss', 'hoppip+togepi', 'lumineon+corsola', 'exeggcute+flaaffy',
+		];
 		let shouldHaveAttract = {audino:1, beautifly:1, delcatty:1, finneon:1, glameow:1, lumineon:1, purugly:1, swoobat:1, woobat:1, wormadam:1, wormadamsandy:1, wormadamtrash:1};
 		let shouldHaveKiss = {buneary:1, finneon:1, lopunny:1, lumineon:1, minun:1, pachirisu:1, pichu:1, plusle:1, shaymin:1, togekiss:1, togepi:1, togetic:1};
-		let team = [];
 
-		// First we get the first three couples and separate it in a list of Pokemon to deal with them
-		let pokemons = [];
-		for (let i = 0; i < 3; i++) {
-			let couple = couples[i].split('+');
-			pokemons.push(couple[0]);
-			pokemons.push(couple[1]);
-		}
+		let team = [];
+		let pokemons = [...this.sampleNoReplace(couples).split('+'), ...this.sampleNoReplace(couples).split('+'), ...this.sampleNoReplace(couples).split('+')];
 
 		for (let i = 0; i < 6; i++) {
 			let pokemon = pokemons[i];
-			if (pokemon === 'wormadam') {
-				let wormadams = ['wormadam', 'wormadamsandy', 'wormadamtrash'];
-				wormadams = wormadams.randomize();
-				pokemon = wormadams[0];
-			}
+			if (pokemon === 'wormadam') pokemon = ['wormadam', 'wormadamsandy', 'wormadamtrash'][this.random(3)];
 			let template = this.getTemplate(pokemon);
 			let set = this.randomSet(template, i);
 			// We set some arbitrary moves
@@ -106,7 +102,7 @@ exports.BattleScripts = {
 			'deerling', 'sawsbuck', 'meloetta', 'cherrim', 'gloom', 'vileplume', 'bellossom', 'lileep', 'venusaur',
 			'sunflora', 'gallade', 'vullaby',
 		];
-		seasonalPokemonList = seasonalPokemonList.randomize();
+
 		// Pokemon that must be shiny to be green
 		let mustBeShiny = {
 			kakuna:1, beedrill:1, sandshrew:1, nidoqueen:1, zubat:1, golbat:1, oddish:1, gloom:1, mankey:1, poliwrath:1,
@@ -124,7 +120,7 @@ exports.BattleScripts = {
 
 		// Now, let's make the team!
 		for (let i = 0; i < 6; i++) {
-			let pokemon = seasonalPokemonList[i];
+			let pokemon = this.sampleNoReplace(seasonalPokemonList);
 			let template = this.getTemplate(pokemon);
 			let set = this.randomSet(template, i);
 
@@ -183,13 +179,12 @@ exports.BattleScripts = {
 			'vileplume', 'bellossom', 'victreebel', 'jumpluff', 'carnivine', 'sawsbuck', 'virizion', 'shaymin', 'arceusgrass', 'shayminsky',
 			'tangrowth', 'pansage', 'maractus', 'cradily', 'celebi', 'exeggutor', 'ferrothorn', 'zorua', 'zoroark', 'dialga',
 		];
-		seasonalPokemonList = seasonalPokemonList.randomize();
-		let team = [];
 		let mustHavePrankster = {whimsicott:1, liepard:1, sableye:1, thundurus:1, tornadus:1, illumise:1, volbeat:1, murkrow:1, purrloin:1, riolu:1, missingno:1};
 
+		let team = [];
 		// Now, let's make the team!
 		for (let i = 0; i < 6; i++) {
-			let pokemon = seasonalPokemonList[i];
+			let pokemon = this.sampleNoReplace(seasonalPokemonList);
 			let template = this.getTemplate(pokemon);
 			let set = this.randomSet(template, i);
 			// Chance to have prankster or illusion
@@ -245,10 +240,8 @@ exports.BattleScripts = {
 			}
 
 			// This is purely for the lulz
-			if (set.ability === 'Prankster' && !('attract' in set.moves) && !('charm' in set.moves) && this.random(100) < 50) {
-				let attractMoves = ['Attract', 'Charm'];
-				attractMoves = attractMoves.randomize();
-				set.moves[3] = attractMoves[0];
+			if (set.ability === 'Prankster' && !set.moves.includes('attract') && !set.moves.includes('charm') && this.random(2)) {
+				set.moves[3] = ['Attract', 'Charm'][this.random(2)];
 			}
 
 			// For poison types with Illusion
@@ -272,12 +265,12 @@ exports.BattleScripts = {
 			'beautifly', 'skitty', 'venusaur', 'munchlax', 'wartortle', 'glaceon', 'manaphy', 'hitmonchan', 'liepard', 'sableye', 'zapdos', 'heatran',
 			'treecko', 'piloswine', 'duskull', 'dusclops', 'dusknoir', 'spiritomb',
 		];
-		seasonalPokemonList = seasonalPokemonList.randomize();
+
 		let team = [];
 
 		// Now, let's make the team!
 		for (let i = 0; i < 6; i++) {
-			let pokemon = seasonalPokemonList[i];
+			let pokemon = this.sampleNoReplace(seasonalPokemonList);
 			let template = this.getTemplate(pokemon);
 			let set = this.randomSet(template, i);
 			// Use metronome because month of music
@@ -333,12 +326,12 @@ exports.BattleScripts = {
 			'thundurus', 'tornadus', 'tropius', 'vanillish', 'vanillite', 'vanilluxe', 'venomoth', 'venusaur', 'vespiquen',
 			'victreebel', 'vileplume', 'volbeat', 'volcarona', 'wailord', 'wormadam', 'wormadamsandy', 'wormadamtrash', 'yanmega', 'zapdos',
 		];
-		seasonalPokemonList = seasonalPokemonList.randomize();
-		let team = [this.randomSet(this.getTemplate('delibird'), 0)];
+
+		let team = [this.randomSet('delibird', 0)];
 
 		// Now, let's make the team!
 		for (let i = 1; i < 6; i++) {
-			let pokemon = seasonalPokemonList[i];
+			let pokemon = this.sampleNoReplace(seasonalPokemonList);
 			let template = this.getTemplate(pokemon);
 			let set = this.randomSet(template, i);
 			if (template.id in {'vanilluxe':1, 'vanillite':1, 'vanillish':1}) {
@@ -382,7 +375,6 @@ exports.BattleScripts = {
 			'torkoal', 'toxicroak', 'tropius', 'typhlosion', 'venomoth', 'venusaur', 'vespiquen', 'victini', 'victreebel',
 			'vileplume', 'volcarona', 'vulpix', 'wailord', 'whimsicott', 'xatu', 'yanmega', 'zapdos', 'zebstrika', 'zoroark',
 		];
-		seasonalPokemonList = seasonalPokemonList.randomize();
 
 		// Create the specific Pokémon for the user
 		let crypto = require('crypto');
@@ -396,11 +388,12 @@ exports.BattleScripts = {
 				break;
 			}
 		}
+
 		let team = [this.randomSet(this.getTemplate(pokeName), 0)];
 
 		// Now, let's make the team!
 		for (let i = 1; i < 6; i++) {
-			let pokemon = seasonalPokemonList[i];
+			let pokemon = this.sampleNoReplace(seasonalPokemonList);
 			let template = this.getTemplate(pokemon);
 			let set = this.randomSet(template, i);
 			team.push(set);
@@ -425,14 +418,12 @@ exports.BattleScripts = {
 			'skarmory', 'staraptor', 'swanna', 'thundurus', 'thundurustherian', 'tornadus', 'tornadustherian',
 			'tyranitar', 'volcarona', 'wailord', 'weavile', 'whimsicott', 'wingull', 'zoroark',
 		];
-		groudonsSailors = groudonsSailors.randomize();
-		kyogresPirates = kyogresPirates.randomize();
 
 		// Add the lead.
 		let team = [this.randomSet(this.getTemplate(lead), 0)];
 
 		// Now, let's make the team. Each side has a different ability.
-		let teamPool = [];
+		let teamPool;
 		let ability = 'Illuminate', moveToGet;
 		if (lead === 'kyogre') {
 			ability = 'Thick Fat';
@@ -445,67 +436,61 @@ exports.BattleScripts = {
 			moveToGet = 'vcreate';
 		}
 		for (let i = 1; i < 6; i++) {
-			let pokemon = teamPool[i];
+			let pokemon = this.sampleNoReplace(teamPool);
 			let template = this.getTemplate(pokemon);
 			let set = this.randomSet(template, i);
 			set.ability = (template.baseSpecies && template.baseSpecies === 'Arceus') ? 'Multitype' : ability;
 			let hasMoves = {};
-			for (let m in set.moves) {
-				set.moves[m] = set.moves[m].toLowerCase();
-				if (set.moves[m] === 'dynamicpunch') set.moves[m] = 'closecombat';
-				hasMoves[set.moves[m]] = true;
+			for (let j = 0; j < set.moves.length; j++) {
+				if (set.moves[j] === 'dynamicpunch') set.moves[j] = 'closecombat';
+				hasMoves[set.moves[j]] = true;
 			}
 			if (!(moveToGet in hasMoves)) {
 				set.moves[3] = moveToGet;
 			}
-			if (set.item === 'Damp Rock' && !('rain dance' in hasMoves)) set.item = 'Life Orb';
-			if (set.item === 'Heat Rock' && !('sunny day' in hasMoves)) set.item = 'Life Orb';
+			if (set.item === 'Damp Rock' && !hasMoves['raindance']) set.item = 'Life Orb';
+			if (set.item === 'Heat Rock' && !hasMoves['sunnyday']) set.item = 'Life Orb';
 			team.push(set);
 		}
 
 		return team;
 	},
 	randomSeasonalSSTeam: function (side) {
-		let crypto = require('crypto');
-		let hash = parseInt(crypto.createHash('md5').update(toId(side.name)).digest('hex').substr(0, 8), 16);
-		let randNums = [
-			(13 * hash + 11) % 649,
-			(18 * hash + 66) % 649,
-			(25 * hash + 73) % 649,
-			(1 * hash + 16) % 649,
-			(23 * hash + 132) % 649,
-			(5 * hash + 6) % 649,
-		];
-		let randoms = {};
-		for (let i = 0; i < 6; i++) {
-			if (randNums[i] < 1) randNums[i] = 1;
-			randoms[randNums[i]] = true;
-		}
-		let team = [];
-		let mons = 0;
 		let fashion = [
 			'Choice Scarf', 'Choice Specs', 'Silk Scarf', 'Wise Glasses', 'Choice Band', 'Wide Lens',
 			'Zoom Lens', 'Destiny Knot', 'BlackGlasses', 'Expert Belt', 'Black Belt', 'Macho Brace',
 			'Focus Sash', "King's Rock", 'Muscle Band', 'Mystic Water', 'Binding Band', 'Rocky Helmet',
 		];
-		for (let p in this.data.Pokedex) {
-			if (this.data.Pokedex[p].num in randoms) {
-				let set = this.randomSet(this.getTemplate(p), mons);
-				fashion = fashion.randomize();
-				if (fashion.indexOf(set.item) === -1) set.item = fashion[0];
-				team.push(set);
-				delete randoms[this.data.Pokedex[p].num];
-				mons++;
+
+		let crypto = require('crypto');
+		let hash = parseInt(crypto.createHash('md5').update(toId(side.name)).digest('hex').slice(0, 8), 16);
+
+		let randoms = new Set([
+			(13 * hash + 11) % 649 || 1,
+			(18 * hash + 66) % 649 || 1,
+			(25 * hash + 73) % 649 || 1,
+			(1 * hash + 16) % 649 || 1,
+			(23 * hash + 132) % 649 || 1,
+			(5 * hash + 6) % 649 || 1,
+		]);
+
+		if (randoms.size < 6) {
+			// Just in case the randoms generated the same number... highly unlikely
+			let defaults = ['politoed', 'toxicroak', 'articuno', 'jirachi', 'tentacruel', 'liepard'];
+			for (let i = randoms.size; i < 6; i++) {
+				randoms.add(this.getTemplate(this.sampleNoReplace(defaults)).num);
 			}
 		}
-		// Just in case the randoms generated the same number... highly unlikely
-		let defaults = ['politoed', 'toxicroak', 'articuno', 'jirachi', 'tentacruel', 'liepard'].randomize();
-		while (mons < 6) {
-			let set = this.randomSet(this.getTemplate(defaults[mons]), mons);
-			fashion = fashion.randomize();
-			if (fashion.indexOf(set.item) === -1) set.item = fashion[0];
+
+		let team = [];
+
+		for (let p in this.data.Pokedex) {
+			if (!randoms.has(this.data.Pokedex[p].num)) continue;
+			let set = this.randomSet(this.getTemplate(p), team.length);
+			if (!fashion.includes(set.item)) set.item = fashion[this.random(fashion.length)];
 			team.push(set);
-			mons++;
+			randoms.delete(this.data.Pokedex[p].num);
+			if (!randoms.size) break;
 		}
 
 		return team;
@@ -523,23 +508,19 @@ exports.BattleScripts = {
 			'shiftry', 'shuppet', 'skuntank', 'sneasel', 'snorlax', 'spiritomb', 'stunky', 'throh', 'toxicroak', 'tyranitar', 'umbreon',
 			'vullaby', 'weavile', 'wobbuffet', 'yamask', 'zoroark', 'zorua', 'zweilous',
 		];
-		seasonalPokemonList = seasonalPokemonList.randomize();
+
 		let team = [];
 
 		for (let i = 0; i < 6; i++) {
-			let pokemon = seasonalPokemonList[i];
+			let pokemon = this.sampleNoReplace(seasonalPokemonList);
 			let template = this.getTemplate(pokemon);
 			let set = this.randomSet(template, i);
-			let trickindex = -1;
-			for (let j = 0, l = set.moves.length; j < l; j++) {
-				if (set.moves[j].toLowerCase() === 'trick') {
-					trickindex = j;
-				}
-			}
-			if (trickindex === -1 || trickindex === 2) {
+			let trickIndex = set.moves.indexOf('trick');
+			if (trickIndex < 0 || trickIndex === 2) {
+				// Force Trick into last slot. Third is reserved for Present.
 				set.moves[3] = 'trick';
 			}
-			set.moves[2] = 'Present';
+			set.moves[2] = 'present';
 			team.push(set);
 		}
 
@@ -556,11 +537,12 @@ exports.BattleScripts = {
 			'leavanny', 'zapdos', 'moltres', 'articuno', 'delibird', 'pancham', 'pangoro', 'hawlucha', 'noibat', 'noivern', 'fletchling',
 			'fletchinder', 'talonflame', 'vivillon', 'yveltal',
 		];
-		seasonalPokemonList = seasonalPokemonList.randomize();
+
 		let team = [];
 		for (let i = 0; i < 6; i++) {
-			let set = this.randomSet(seasonalPokemonList[i], i);
-			if (seasonalPokemonList[i] === 'talonflame') set.level = 74;
+			let speciesId = this.sampleNoReplace(seasonalPokemonList);
+			let set = this.randomSet(speciesId, i);
+			if (speciesId === 'talonflame') set.level = 74;
 			team.push(set);
 		}
 		return team;
@@ -573,11 +555,11 @@ exports.BattleScripts = {
 			'glaceon', 'probopass', 'froslass', 'rotom-frost', 'uxie', 'mesprit', 'azelf', 'victini', 'vanilluxe', 'sawsbuck', 'beartic',
 			'cryogonal', 'chandelure', 'gardevoir', 'amaura', 'aurorus', 'bergmite', 'avalugg',
 		];
-		seasonalPokemonList = seasonalPokemonList.randomize();
+
 		let team = [];
 		for (let i = 0; i < 6; i++) {
-			let set = this.randomSet(seasonalPokemonList[i], i);
-			set.moves[3] = 'Present';
+			let set = this.randomSet(this.sampleNoReplace(seasonalPokemonList), i);
+			set.moves[3] = 'present';
 			team.push(set);
 		}
 		return team;
@@ -590,28 +572,29 @@ exports.BattleScripts = {
 			'glaceon', 'probopass', 'froslass', 'rotom-frost', 'uxie', 'mesprit', 'azelf', 'victini', 'vanilluxe', 'sawsbuck', 'beartic',
 			'cryogonal', 'chandelure', 'gardevoir', 'amaura', 'aurorus', 'bergmite', 'avalugg', 'xerneas', 'kyogre', 'rotom-wash',
 		];
-		seasonalPokemonList = seasonalPokemonList.randomize();
+
 		let team = [];
 		for (let i = 0; i < 6; i++) {
-			let set = this.randomSet(seasonalPokemonList[i], i);
+			let set = this.randomSet(this.sampleNoReplace(seasonalPokemonList), i);
 			set.level *= 50;
 			team.push(set);
 		}
 		return team;
 	},
-	randomSeasonalFFTeam: function (side) { // duplicate key.
+	randomSeasonalFFTeam: function (side) {
 		let seasonalPokemonList = [
 			'charizard', 'ninetales', 'houndoom', 'arceusfire', 'arcanine', 'moltres', 'rapidash', 'magmar', 'quilava', 'typhlosion',
 			'entei', 'hooh', 'blaziken', 'rotomheat', 'chandelure', 'magcargo', 'reshiram', 'zekrom', 'heatran', 'arceusdragon',
 			'arceusfighting', 'seadra', 'kingdra', 'gyarados', 'dunsparce', 'milotic', 'drapion', 'growlithe', 'paras', 'parasect',
 			'magikarp', 'suicune', 'raikou', 'absol', 'spiritomb', 'horsea', 'ponyta', 'blitzle', 'zebstrika',
 		];
-		seasonalPokemonList = seasonalPokemonList.randomize();
+
 		let team = [];
 		for (let i = 0; i < 6; i++) {
-			let set = this.randomSet(seasonalPokemonList[i], i);
-			if (seasonalPokemonList[i] === 'gyarados') set.shiny = true;
-			set.moves[3] = 'Explosion';
+			let speciesId = this.sampleNoReplace(seasonalPokemonList);
+			let set = this.randomSet(speciesId, i);
+			if (speciesId === 'gyarados') set.shiny = true;
+			set.moves[3] = 'explosion';
 			team.push(set);
 		}
 		return team;
@@ -619,39 +602,34 @@ exports.BattleScripts = {
 	randomSeasonalSBTeam: function (side) {
 		let crypto = require('crypto');
 		let date = new Date();
-		let hash = parseInt(crypto.createHash('md5').update(toId(side.name)).digest('hex').substr(0, 8), 16) + date.getDate();
-		let randNums = [
-			(13 * hash + 6) % 721,
-			(18 * hash + 12) % 721,
-			(25 * hash + 24) % 721,
-			(1 * hash + 48) % 721,
-			(23 * hash + 96) % 721,
-			(5 * hash + 192) % 721,
-		];
-		let randoms = {};
-		for (let i = 0; i < 6; i++) {
-			if (randNums[i] < 1) randNums[i] = 1;
-			randoms[randNums[i]] = true;
-		}
-		let team = [];
-		let mons = 0;
-		for (let p in this.data.Pokedex) {
-			if (this.data.Pokedex[p].num in randoms) {
-				let set = this.randomSet(this.getTemplate(p), mons);
-				set.moves[3] = 'Present';
-				team.push(set);
-				delete randoms[this.data.Pokedex[p].num];
-				mons++;
+		let hash = parseInt(crypto.createHash('md5').update(toId(side.name)).digest('hex').slice(0, 8), 16) + date.getDate();
+
+		let randoms = new Set([
+			(13 * hash + 6) % 721 || 1,
+			(18 * hash + 12) % 721 || 1,
+			(25 * hash + 24) % 721 || 1,
+			(1 * hash + 48) % 721 || 1,
+			(23 * hash + 96) % 721 || 1,
+			(5 * hash + 192) % 721 || 1,
+		]);
+
+		if (randoms.size < 6) {
+			// There is a very improbable chance in which two hashes collide, leaving the player with five Pokémon. Fix that.
+			let defaults = ['zapdos', 'venusaur', 'aegislash', 'heatran', 'unown', 'liepard'];
+			for (let i = randoms.size; i < 6; i++) {
+				randoms.add(this.getTemplate(this.sampleNoReplace(defaults)).num);
 			}
 		}
 
-		// There is a very improbable chance in which two hashes collide, leaving the player with five Pokémon. Fix that.
-		let defaults = ['zapdos', 'venusaur', 'aegislash', 'heatran', 'unown', 'liepard'].randomize();
-		while (mons < 6) {
-			let set = this.randomSet(this.getTemplate(defaults[mons]), mons);
-			set.moves[3] = 'Present';
+		let team = [];
+
+		for (let p in this.data.Pokedex) {
+			if (!randoms.has(this.data.Pokedex[p].num)) continue;
+			let set = this.randomSet(this.getTemplate(p), team.length);
+			set.moves[3] = 'present';
 			team.push(set);
-			mons++;
+			randoms.delete(this.data.Pokedex[p].num);
+			if (!randoms.size) break;
 		}
 
 		return team;
@@ -677,20 +655,23 @@ exports.BattleScripts = {
 			'stoutland', 'sudowoodo', 'suicune', 'sunflora', 'swampert', 'sylveon', 'tangrowth', 'tauros', 'terrakion', 'throh', 'torkoal',
 			'torterra', 'typhlosion', 'tyrantrum', 'umbreon', 'ursaring', 'ursaring', 'vaporeon', 'venusaur', 'vileplume', 'virizion',
 			'whimsicott', 'wobbuffet', 'xerneas', 'zangoose', 'zebstrika', 'zekrom', 'zoroark',
-		].randomize();
+		];
 
 		// We create the team now
 		let team = [];
 		for (let i = 0; i < 6; i++) {
-			let pokemon = seasonalPokemonList[i];
+			let pokemon = this.sampleNoReplace(seasonalPokemonList);
 			let template = this.getTemplate(pokemon);
 			let set = this.randomSet(template, i);
-			// We presserve top priority moves over the rest.
-			if ((toId(set.item) === 'heatrock' && toId(set.moves[3]) === 'sunnyday') || toId(set.moves[3]) === 'geomancy' || (toId(set.moves[3]) === 'rest' && toId(set.item) === 'chestoberry') || (pokemon === 'haxorus' && toId(set.moves[3]) === 'dragondance') || (toId(set.ability) === 'guts' && toId(set.moves[3]) === 'facade')) {
-				set.moves[2] = 'Present';
-			} else {
-				set.moves[3] = 'Present';
+
+			let presentIndex = 3;
+			let currentMove = set.moves[presentIndex];
+			// We preserve top priority moves over the rest.
+			if (set.item === 'Heat Rock' && currentMove === 'sunnyday' || currentMove === 'geomancy' || currentMove === 'rest' && set.item === 'chestoberry' || pokemon === 'haxorus' && currentMove === 'dragondance' || set.ability === 'Guts' && currentMove === 'facade') {
+				presentIndex = 2;
 			}
+			set.moves[presentIndex] = 'present';
+
 			if (this.getItem(set.item).megaStone) set.item = 'Life Orb';
 			team.push(set);
 		}
