@@ -231,7 +231,7 @@ class QuestionGiveaway extends Giveaway {
 		if (!this.answered[user.userid]) this.answered[user.userid] = 0;
 		if (this.answered[user.userid] >= 3) return user.sendTo(this.room, "You have already guessed three times. You cannot guess anymore in this giveaway.");
 
-		let sanitized = QuestionGiveaway.sanitize(guess);
+		let sanitized = toId(guess);
 
 		for (let i = 0; i < this.answers.length; i++) {
 			if (toId(this.answers[i]) === sanitized) {
