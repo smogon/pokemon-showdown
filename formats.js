@@ -11,8 +11,10 @@
 exports.Formats = [
 	// Seasoning Greetings, November 2012
 	{
-		name: "[Seasonal] Seasoning's Greetings",
 		section: "OM of the Month",
+	},
+	{
+		name: "[Seasonal] Seasoning's Greetings",
 
 		team: 'randomSeasonal',
 		ruleset: ['PotD', 'Pokemon', 'Sleep Clause'],
@@ -20,7 +22,6 @@ exports.Formats = [
 	// Winter Wonderland, December 2012 and January 2013
 	{
 		name: "[Seasonal] Winter Wonderland",
-		section: "OM of the Month",
 
 		team: 'randomSeasonalWW',
 		onBegin: function () {
@@ -140,7 +141,6 @@ exports.Formats = [
 	// Valentine Venture, February 2013
 	{
 		name: "[Seasonal] Valentine Venture",
-		section: "OM of the Month",
 
 		team: 'randomSeasonalVV',
 		gameType: 'doubles',
@@ -149,7 +149,6 @@ exports.Formats = [
 	// Spring Forward, March 2013
 	{
 		name: "[Seasonal] Spring Forward",
-		section: "OM of the Month",
 
 		team: 'randomSeasonalSF',
 		onBegin: function () {
@@ -228,7 +227,6 @@ exports.Formats = [
 	// Fools Festival, April 2013
 	{
 		name: "[Seasonal] Fools Festival",
-		section: "OM of the Month",
 
 		team: 'randomSeasonalFF',
 		onBegin: function () {
@@ -437,7 +435,6 @@ exports.Formats = [
 	},
 	{
 		name: "[Seasonal] May Mayhem",
-		section: "OM of the Month",
 
 		team: 'randomSeasonalMM',
 		onBegin: function () {
@@ -460,7 +457,6 @@ exports.Formats = [
 	},
 	{
 		name: "[Seasonal] June Jubilee",
-		section: "OM of the Month",
 
 		team: 'randomSeasonalJJ',
 		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod'],
@@ -526,7 +522,6 @@ exports.Formats = [
 	},
 	{
 		name: "[Seasonal] Jolly July",
-		section: "OM of the Month",
 
 		team: 'randomSeasonalJuly',
 		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod'],
@@ -643,7 +638,6 @@ exports.Formats = [
 	},
 	{
 		name: "[Seasonal] Average August",
-		section: "OM of the Month",
 
 		team: 'randomSeasonalAA',
 		gameType: 'doubles',
@@ -693,14 +687,12 @@ exports.Formats = [
 	},
 	{
 		name: "[Seasonal] School Schemes",
-		section: "OM of the Month",
 
 		team: 'randomSeasonalSS',
 		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod'],
 	},
 	{
 		name: "[Seasonal] Octoberfest",
-		section: "OM of the Month",
 
 		mod: 'gen5',
 		team: 'randomSeasonalOF',
@@ -854,7 +846,6 @@ exports.Formats = [
 	// Thankless Thanksgiving, November 2013
 	{
 		name: "[Seasonal] Thankless Thanksgiving",
-		section: "OM of the Month",
 
 		team: 'randomSeasonalTT',
 		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod'],
@@ -862,7 +853,6 @@ exports.Formats = [
 	// Christmas Charade, December 2013
 	{
 		name: "[Seasonal] Christmas Charade",
-		section: "OM of the Month",
 
 		team: 'randomSeasonalCC',
 		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod'],
@@ -1001,7 +991,6 @@ exports.Formats = [
 	// Winter's Wont, January 2014
 	{
 		name: "[Seasonal] Winter's Wont",
-		section: "OM of the Month",
 
 		gameType: 'doubles',
 		team: 'randomSeasonalWinter',
@@ -1024,7 +1013,6 @@ exports.Formats = [
 	// Fabulous February, February 2014
 	{
 		name: "[Seasonal] Fabulous February",
-		section: "OM of the Month",
 
 		gameType: 'doubles',
 		team: 'randomSeasonalFFY',
@@ -1048,7 +1036,6 @@ exports.Formats = [
 	},
 	{
 		name: "[Seasonal] Strikes Back",
-		section: "OM of the Month",
 
 		gameType: 'triples',
 		team: 'randomSeasonalSB',
@@ -1244,7 +1231,6 @@ exports.Formats = [
 	},
 	{
 		name: "[Seasonal] Sleigh Showdown",
-		section: "OM of the Month",
 
 		team: 'randomSeasonalSleigh',
 		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod'],
