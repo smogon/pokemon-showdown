@@ -709,6 +709,7 @@ exports.BattleAbilities = {
 			}
 		},
 		onEffectiveness: function (typeMod, type, move) {
+			if (!this.activeTarget) return;
 			let pokemon = this.activeTarget;
 			if (pokemon.template.speciesid !== 'mimikyu' || pokemon.transformed) return;
 			if (!pokemon.runImmunity(move.type)) return;
