@@ -1512,9 +1512,6 @@ exports.BattleScripts = {
 				case 'nightshade': case 'seismictoss':
 					if (counter.stab || counter.setupType || counter.damagingMoves.length > 2) rejected = true;
 					break;
-				case 'partingshot':
-					if (counter.setupType) rejected = true;
-					break;
 				case 'protect':
 					if (counter.setupType && (hasAbility['Guts'] || hasAbility['Speed Boost']) && !hasMove['batonpass']) rejected = true;
 					if ((hasMove['lightscreen'] && hasMove['reflect']) || (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
@@ -2166,8 +2163,6 @@ exports.BattleScripts = {
 			item = template.baseStats.spe >= 60 && template.baseStats.spe <= 108 && !counter['priority'] && this.random(3) ? 'Choice Scarf' : 'Choice Specs';
 		} else if (counter.Special >= 3 && hasMove['uturn'] && template.baseStats.spe >= 60 && template.baseStats.spe <= 108 && !counter['priority'] && this.random(3)) {
 			item = 'Choice Scarf';
-		} else if (hasMove['partingshot'] && !teamDetails.zMove && this.random(2)) {
-			item = 'Darkinium Z';
 		} else if (ability === 'Defeatist' || hasMove['eruption'] || hasMove['waterspout']) {
 			item = counter.Status <= 1 ? 'Expert Belt' : 'Leftovers';
 		} else if ((hasMove['endeavor'] || hasMove['flail'] || hasMove['reversal']) && ability !== 'Sturdy') {
