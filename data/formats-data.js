@@ -351,7 +351,7 @@ exports.BattleFormatsData = {
 		tier: "New",
 	},
 	raichualola: {
-		randomBattleMoves: ["nastyplot", "encore", "thunderbolt", "psyshock", "focusblast", "voltswitch", "hiddenpowerice"],
+		randomBattleMoves: ["nastyplot", "thunderbolt", "psyshock", "focusblast", "voltswitch", "surf"],
 		tier: "New",
 	},
 	sandshrew: {
@@ -446,7 +446,7 @@ exports.BattleFormatsData = {
 		tier: "New",
 	},
 	ninetalesalola: {
-		randomBattleMoves: ["nastyplot", "blizzard", "moonblast", "substitute", "hiddenpowerfire"],
+		randomBattleMoves: ["nastyplot", "blizzard", "moonblast", "substitute", "hiddenpowerfire", "freezedry", "auroraveil"],
 		tier: "New",
 	},
 	igglybuff: {
@@ -555,7 +555,7 @@ exports.BattleFormatsData = {
 		tier: "OU",
 	},
 	dugtrioalola: {
-		randomBattleMoves: ["earthquake", "ironhead", "substitute", "reversal"],
+		randomBattleMoves: ["earthquake", "ironhead", "substitute", "reversal", "stoneedge", "suckerpunch"],
 		tier: "New",
 	},
 	meowth: {
@@ -1003,7 +1003,7 @@ exports.BattleFormatsData = {
 		tier: "New",
 	},
 	exeggutoralola: {
-		randomBattleMoves: ["dracometeor", "leafstorm", "flamethrower", "psyshock"],
+		randomBattleMoves: ["dracometeor", "leafstorm", "flamethrower", "earthquake", "woodhammer", "gigadrain", "dragonhammer"],
 		tier: "New",
 	},
 	cubone: {
