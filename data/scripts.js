@@ -2275,9 +2275,7 @@ exports.BattleScripts = {
 			if (hp % 2 > 0) evs.hp -= 4;
 		} else if (hasMove['substitute'] && hasMove['reversal']) {
 			// Reversal users should be able to use four Substitutes
-			if (hp % 4 === 0) {
-				evs.hp -= 4;
-			}
+			if (hp % 4 === 0) evs.hp -= 4;
 		} else {
 			// Maximize number of Stealth Rock switch-ins
 			if (this.getEffectiveness('Rock', template) === 1) {
