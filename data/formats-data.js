@@ -4662,7 +4662,7 @@ exports.BattleFormatsData = {
 		tier: "LC",
 	},
 	garbodor: {
-		randomBattleMoves: ["spikes", "toxicspikes", "gunkshot", "haze", "painsplit", "toxic", "seedbomb", "drainpunch"],
+		randomBattleMoves: ["spikes", "toxicspikes", "gunkshot", "haze", "painsplit", "toxic", "drainpunch"],
 		randomDoubleBattleMoves: ["protect", "painsplit", "gunkshot", "seedbomb", "drainpunch", "explosion", "rockblast"],
 		tier: "New",
 	},
@@ -6062,7 +6062,7 @@ exports.BattleFormatsData = {
 		tier: "New",
 	},
 	turtonator: {
-		randomBattleMoves: ["fireblast", "shelltrap", "earthquake", "dragontail", "explosion", "dragonpulse"],
+		randomBattleMoves: ["fireblast", "shelltrap", "earthquake", "dragontail", "explosion", "dracometeor"],
 		tier: "New",
 	},
 	togedemaru: {
