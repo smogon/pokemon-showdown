@@ -5851,7 +5851,7 @@ exports.BattleFormatsData = {
 		tier: "New",
 	},
 	lycanrocmidnight: {
-		randomBattleMoves: ["bulkup", "stoneedge", "stealthrock", "suckerpunch", "swordsdance", "firefang", "rockclimb"],
+		randomBattleMoves: ["bulkup", "stoneedge", "stealthrock", "suckerpunch", "swordsdance", "firefang"],
 		tier: "New",
 	},
 	wishiwashi: {
