@@ -2208,7 +2208,7 @@ exports.BattleScripts = {
 		} else if (hasType['Poison']) {
 			item = 'Black Sludge';
 		} else if (ability === 'Gale Wings' && hasMove['bravebird']) {
-			item = 'Sharp Beak';
+			item = !teamDetails.zMove ? 'Flyinium Z' : 'Sharp Beak';
 		} else if (this.getEffectiveness('Rock', template) >= 1 || hasMove['dragontail']) {
 			item = 'Leftovers';
 		} else if (this.getImmunity('Ground', template) && this.getEffectiveness('Ground', template) >= 1 && ability !== 'Levitate' && ability !== 'Solid Rock' && !hasMove['magnetrise'] && !hasMove['sleeptalk']) {
