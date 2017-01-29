@@ -12549,7 +12549,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "The target is cured if it has a major status condition. If the target was cured, the user restores 1/2 of its maximum HP, rounded half up.",
-		shortDesc: "Cures target's status; heals user 1/2 maxHP if so.",
+		shortDesc: "Cures target's status; heals user 1/2 max HP if so.",
 		id: "purify",
 		name: "Purify",
 		pp: 20,
