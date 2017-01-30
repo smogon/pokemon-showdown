@@ -4584,7 +4584,7 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		selfdestruct: true,
+		selfdestruct: "always",
 		secondary: false,
 		target: "allAdjacent",
 		type: "Normal",
@@ -4916,9 +4916,7 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 0,
 		damageCallback: function (pokemon) {
-			let damage = pokemon.hp;
-			pokemon.faint();
-			return damage;
+			return pokemon.hp;
 		},
 		category: "Special",
 		desc: "Deals damage to the target equal to the user's current HP. If this move is successful, the user faints.",
@@ -4929,7 +4927,7 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1},
-		selfdestruct: true,
+		selfdestruct: "ifHit",
 		secondary: false,
 		target: "normal",
 		type: "Fighting",
@@ -7224,7 +7222,7 @@ exports.BattleMovedex = {
 				return false;
 			}
 		},
-		selfdestruct: true,
+		selfdestruct: "ifHit",
 		sideCondition: 'healingwish',
 		effect: {
 			duration: 2,
@@ -9422,7 +9420,7 @@ exports.BattleMovedex = {
 				return false;
 			}
 		},
-		selfdestruct: true,
+		selfdestruct: "ifHit",
 		sideCondition: 'lunardance',
 		effect: {
 			duration: 2,
@@ -10021,7 +10019,7 @@ exports.BattleMovedex = {
 			atk: -2,
 			spa: -2,
 		},
-		selfdestruct: true,
+		selfdestruct: "ifHit",
 		secondary: false,
 		target: "normal",
 		type: "Dark",
@@ -14130,7 +14128,7 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		selfdestruct: true,
+		selfdestruct: "always",
 		secondary: false,
 		target: "allAdjacent",
 		type: "Normal",
