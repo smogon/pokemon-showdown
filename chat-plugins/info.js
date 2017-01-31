@@ -1139,7 +1139,7 @@ exports.commands = {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(`<button name="openSounds" class="button"><i style="font-size: 16px; vertical-align: -1px" class="fa fa-volume-up"></i> Sound</button> (The Sound and Options buttons are at the top right, next to your username)`);
 	},
-	
+
 	'!sanction': true,
 	punishment: 'sanction',
 	sanction: function (target, rom, user) {
