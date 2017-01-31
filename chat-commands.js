@@ -1308,10 +1308,10 @@ exports.commands = {
 
 	'!autojoin': true,
 	autojoin: function (target, room, user, connection) {
-		Rooms.global.autojoinRooms(user, connection);
 		let targets = target.split(',');
-		let autojoins = [];
 		if (targets.length > 11 || connection.inRooms.size > 1) return;
+		Rooms.global.autojoinRooms(user, connection);
+		let autojoins = [];
 		for (let i = 0; i < targets.length; i++) {
 			if (user.tryJoinRoom(targets[i], connection) === null) {
 				autojoins.push(targets[i]);
