@@ -847,6 +847,9 @@ class Validator {
 							limitedEgg = 'self';
 						}
 					} else if (learned.charAt(1) === 'S') {
+						// Mergemons hack
+						if (format.name === '[Gen 7] Mergemons') return false;
+
 						// event moves:
 						//   only if that was the source
 						// Event Pokémon:
