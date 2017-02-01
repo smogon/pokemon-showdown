@@ -260,6 +260,7 @@ exports.Formats = [
 				for (let speciesid in this.tools.data.Pokedex) {
 					let pokemon = this.tools.data.Pokedex[speciesid];
 					if (pokemon.num < 1 || pokemon.species in this.format.banlistTable || this.format.bannedDonors.includes(pokemon.species)) continue;
+					if (this.tools.data.FormatsData[speciesid].requiredItem || this.tools.data.FormatsData[speciesid].requiredMove) continue;
 					for (let key in pokemon.abilities) {
 						let abilityId = toId(pokemon.abilities[key]);
 						if (abilityMap[abilityId]) {
@@ -308,9 +309,7 @@ exports.Formats = [
 				}
 			}
 
-			set.name = set.species;
 			set.species = template.species;
-
 			if (!validSources.length && pokemonWithAbility.length > 1) {
 				return [`${template.species}'s set is illegal.`];
 			}
@@ -318,6 +317,7 @@ exports.Formats = [
 				problems.unshift(`${template.species} has an illegal set with an ability from ${this.tools.getTemplate(pokemonWithAbility[0]).name}.`);
 				return problems;
 			}
+			set.name = this.tools.data.Pokedex[validSources[0]].species;
 		},
 		onValidateTeam: function (team, format) {
 			// Donor Clause
