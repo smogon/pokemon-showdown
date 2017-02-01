@@ -622,6 +622,15 @@ exports.Formats = [
 		mod: 'adv200',
 		ruleset: ['Pokemon', 'Standard'],
 		banlist: ['Uber', 'Apricot Berry', 'Ganlon Berry', 'Lansat Berry', 'Petaya Berry', 'Salac Berry', 'Starf Berry'],
+		onValidateSet: function (set, format) {
+			let dex = {
+				'Treecko':1, 'Grovyle':1, 'Sceptile':1, 'Torchic':1, 'Combusken':1, 'Blaziken':1, 'Mudkip':1, 'Marshtomp':1, 'Swampert':1, 'Poochyena':1, 'Mightyena':1, 'Zigzagoon':1, 'Linoone':1, 'Wurmple':1, 'Silcoone':1, 'Cascoone':1, 'Beautifly':1, 'Dustox':1, 'Lotad':1, 'Lombre':1, 'Ludicolo':1, 'Seedot':1, 'Nuzleaf':1, 'Shiftry':1, 'Taillow':1, 'Swellow':1, 'Wingull':1, 'Pelipper':1, 'Ralts':1, 'Kirlia':1, 'Gardevoir':1, 'Surskit':1, 'Masquerain':1, 'Shroomish':1, 'Breloom':1, 'Slakoth':1, 'Vigoroth':1, 'Slaking':1, 'Abra':1, 'Kadabra':1, 'Alakazam':1, 'Nincada':1, 'Ninjask':1, 'Shedinja':1, 'Whismur':1, 'Loudred':1, 'Exploud':1, 'Makuhita':1, 'Haryiama':1, 'Goldeen':1, 'Seaking':1, 'Magikarp':1, 'Gyarados':1, 'Azurill':1, 'Marill':1, 'Azumarill':1, 'Geodude':1, 'Graveller':1, 'Golem':1, 'Nosepass':1, 'Skitty':1, 'Delcatty':1, 'Zubat':1, 'Golbat':1, 'Crobat':1, 'Tentacool':1, 'Tentacruel':1, 'Sableye':1, 'Mawile':1, 'Aron':1, 'Lairon':1, 'Aggron':1, 'Machop':1, 'Machoke':1, 'Machamp':1, 'Meditite':1, 'Medicham':1, 'Electrike':1, 'Manetric':1, 'Plusle':1, 'Minun':1, 'Magnemite':1, 'Magneton':1, 'Voltorb':1, 'Electrode':1, 'Volbeat':1, 'Illumise':1, 'Oddish':1, 'Gloom':1, 'Vileplume':1, 'Bellossom':1, 'Doduo':1, 'Dodrio':1, 'Roselia':1, 'Gulpin':1, 'Swalot':1, 'Carvanha':1, 'Sharpedo':1, 'Wailmer':1, 'Wailord':1, 'Numel':1, 'Camerupt':1, 'Slugma':1, 'Magcargo':1, 'Torkoal':1, 'Grimer':1, 'Muk':1, 'Koffing':1, 'Weezing':1, 'Spoink':1, 'Grumpig':1, 'Sandshrew':1, 'Sandslash':1, 'Skarmory':1, 'Spinda':1, 'Trapinch':1, 'Vibrava':1, 'Flygon':1, 'Cacnea':1, 'Cacturne':1, 'Swablu':1, 'Altaria':1, 'Zangoose':1, 'Seviper':1, 'Lunatone':1, 'Solrock':1, 'Barboach':1, 'Whiscash':1, 'Corphish':1, 'Crawdaunt':1, 'Baltoy':1, 'Claydol':1, 'Lileep':1, 'Cradily':1, 'Anorith':1, 'Armaldo':1, 'Igglybuff':1, 'Jigglypuff':1, 'Wigglytuff':1, 'Feebas':1, 'Milotic':1, 'Castform':1, 'Staryu':1, 'Starmie':1, 'Kecleon':1, 'Shuppet':1, 'Banette':1, 'Duskull':1, 'Dusclops':1, 'Tropius':1, 'Chimecho':1, 'Absol':1, 'Vulpix':1, 'Ninetails':1, 'Pichu':1, 'Pikachu':1, 'Raichu':1, 'Psyduck':1, 'Golduck':1, 'Wynaut':1, 'Wobbuffet':1, 'Natu':1, 'Xatu':1, 'Girafarig':1, 'Phanpy':1, 'Donphan':1, 'Pinsir':1, 'Heracross':1, 'Rhyhorn':1, 'Rhydon':1, 'Snorunt':1, 'Glalie':1, 'Spheal':1, 'Sealeo':1, 'Walrein':1, 'Clamperl':1, 'Huntail':1, 'Gorebyss':1, 'Relicanth':1, 'Corsola':1, 'Chinchou':1, 'Lanturn':1, 'Luvdisc':1, 'Horsea':1, 'Seadra':1, 'Kingdra':1, 'Bagon':1, 'Shelgon':1, 'Salamence':1, 'Beldum':1, 'Metang':1, 'Metagross':1, 'Regirock':1, 'Regice':1, 'Registeel':1,
+			};
+			let template = this.getTemplate(set.species || set.name);
+			if (!(template.species in dex)) {
+				return [template.baseSpecies + " is banned from ADV 200."];
+			}
+		},
 	},
 
 	// ORAS Singles
