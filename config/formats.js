@@ -8,7 +8,7 @@ exports.Formats = [
 	// SM Singles
 	///////////////////////////////////////////////////////////////////
 	{
-		section: "SM Singles (beta)",
+		section: "SM Singles",
 	},
 	{
 		name: "[Gen 7] Random Battle",
@@ -46,19 +46,19 @@ exports.Formats = [
 		ruleset: ['Pokemon', 'Standard', 'Swagger Clause', 'Team Preview', 'Mega Rayquaza Clause'],
 	},
 	{
-		name: "[Gen 7] UU (beta)",
+		name: "[Gen 7] UU",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3591786/\">UU Metagame Discussion</a>"],
 
 		mod: 'gen7',
 		ruleset: ['[Gen 7] OU'],
-		banlist: ['OU', 'BL', 'Power Construct', 'Baton Pass'],
+		banlist: ['OU', 'BL', 'Power Construct', 'Mewnium Z', 'Baton Pass'],
 	},
 	{
 		name: "[Gen 7] RU (alpha)",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3587352/\">RU Metagame Discussion</a>"],
 
 		mod: 'gen7',
-		ruleset: ['[Gen 7] UU (beta)'],
+		ruleset: ['[Gen 7] UU'],
 		banlist: [
 			'Amoonguss', 'Azumarill', 'Azelf', 'Bewear', 'Bisharp', 'Blissey', 'Breloom', 'Cobalion', 'Conkeldurr', 'Decidueye', 'Dhelmise',
 			'Diggersby', 'Dragonite', 'Empoleon', 'Forretress', 'Gengar', 'Gigalith', 'Gliscor', 'Gyarados', 'Hippowdon', 'Hydreigon',
@@ -169,7 +169,7 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
-		section: "SM Doubles (beta)",
+		section: "SM Doubles",
 	},
 	{
 		name: "[Gen 7] Random Doubles Battle",
