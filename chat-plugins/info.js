@@ -1140,8 +1140,8 @@ exports.commands = {
 		this.sendReplyBox(`<button name="openSounds" class="button"><i style="font-size: 16px; vertical-align: -1px" class="fa fa-volume-up"></i> Sound</button> (The Sound and Options buttons are at the top right, next to your username)`);
 	},
 
-	'!punishment': true,
-	punishment: function (target, rom, user) {
+	'!punishments': true,
+	punishments: function (target, rom, user) {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(
 			"<b>Room punishment</b>:" +
