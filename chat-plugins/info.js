@@ -1140,23 +1140,21 @@ exports.commands = {
 		this.sendReplyBox(`<button name="openSounds" class="button"><i style="font-size: 16px; vertical-align: -1px" class="fa fa-volume-up"></i> Sound</button> (The Sound and Options buttons are at the top right, next to your username)`);
 	},
 
-	'!sanction': true,
-	punishment: 'sanction',
-	sanction: function (target, rom, user) {
+	'!punishment': true,
+	punishment: function (target, rom, user) {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(
 			"<b>Room punishment</b>:" +
-			"Warning - show the rules, you have to wait 5 seconds for closed" +
+			"Warning - Shows the rules, and requires to wait 5 seconds" +
 			"Mute - Unable to talk in the room for 7 minutes" +
 			"Hourmute - Unable to talk in the room for 1 hour" +
 			"Roomban - Banned from the room, it during 1 week" +
-			"Balcklist - Banned for 1 year from the room" +
+			"Blacklist - Banned for 1 year from the room" +
 			"<br \>" +
 			"<b>Global punishment</b>:" +
 			"Lock - Unable to talk in all room and pm. You can just pm the global staff, it during 2 days" +
 			"weeklock - Unable to talk same as lock, it during 1 week" +
 			"Namelock - Unable to talk by staying on a guest account. During 2 days" +
-			"Rangelock - Locks all users on a certain ip range" +
 			"Globalban - Banned from Pokemon Showdown, it during 1 week"
 		);
 	},
