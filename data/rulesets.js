@@ -77,6 +77,9 @@ exports.BattleFormats = {
 			if (template.gen > this.gen) {
 				problems.push(set.species + ' does not exist in gen ' + this.gen + '.');
 			}
+			if ((template.num === 25 || template.num === 172) && template.tier === 'Illegal') {
+				problems.push(set.species + ' does not exist outside of gen ' + template.gen + '.');
+			}
 			let ability = {};
 			if (set.ability) {
 				ability = this.getAbility(set.ability);
