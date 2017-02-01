@@ -2512,12 +2512,12 @@ exports.BattleScripts = {
 		let ability = '';
 		let item = '';
 		let evs = {
-			hp: 0,
-			atk: 0,
-			def: 0,
-			spa: 0,
-			spd: 0,
-			spe: 0,
+			hp: 85,
+			atk: 85,
+			def: 85,
+			spa: 85,
+			spd: 85,
+			spe: 85,
 		};
 		let ivs = {
 			hp: 31,
@@ -3081,40 +3081,10 @@ exports.BattleScripts = {
 			}
 		}
 
-		// Make EVs comply with the sets.
-		// Quite simple right now, 252 attack, 252 hp if slow 252 speed if fast, 4 evs for the strong defense.
-		// TO-DO: Make this more complex
-		if (counter.Special >= 2) {
-			evs.atk = 0;
-			evs.spa = 252;
-		} else if (counter.Physical >= 2) {
-			evs.atk = 252;
-			evs.spa = 0;
-		} else {
-			// Fallback in case a Pokémon lacks attacks... go by stats
-			if (template.baseStats.spa >= template.baseStats.atk) {
-				evs.atk = 0;
-				evs.spa = 252;
-			} else {
-				evs.atk = 252;
-				evs.spa = 0;
-			}
-		}
-		if (template.baseStats.spe > 80 || template.species === 'Shedinja') {
-			evs.spe = 252;
-			evs.hp = 4;
-		} else {
-			evs.hp = 252;
-			if (template.baseStats.def > template.baseStats.spd) {
-				evs.def = 4;
-			} else {
-				evs.spd = 4;
-			}
-		}
-
 		// Naturally slow mons already have the proper EVs, check IVs for Gyro Ball and TR
 		if (hasMove['gyroball'] || hasMove['trickroom']) {
 			ivs.spe = 0;
+			evs.spe = 0;
 		}
 
 		item = 'Sitrus Berry';
