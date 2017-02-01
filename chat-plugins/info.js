@@ -1144,17 +1144,17 @@ exports.commands = {
 	punishments: function (target, rom, user) {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(
-			"<b>Room punishment</b>:" +
-			"Warning - Shows the rules, and requires to wait 5 seconds" +
-			"Mute - Unable to talk in the room for 7 minutes" +
-			"Hourmute - Unable to talk in the room for 1 hour" +
-			"Roomban - Banned from the room, it during 1 week" +
-			"Blacklist - Banned for 1 year from the room" +
-			"<br \>" +
-			"<b>Global punishment</b>:" +
-			"Lock - Unable to talk in all room and pm. You can just pm the global staff, it during 2 days" +
-			"weeklock - Unable to talk same as lock, it during 1 week" +
-			"Namelock - Unable to talk by staying on a guest account. During 2 days" +
+			"<b>Room punishment</b>:<br />" +
+			"Warning - Shows the rules, and requires to wait 5 seconds<br />" +
+			"Mute - Unable to talk in the room for 7 minutes<br />" +
+			"Hourmute - Unable to talk in the room for 1 hour<br />" +
+			"Roomban - Banned from the room, it during 1 week<br />" +
+			"Blacklist - Banned for 1 year from the room<br />" +
+			"<br />" +
+			"<b>Global punishment</b>:<br />" +
+			"Lock - Unable to talk in all room and pm. You can just pm the global staff, it during 2 days<br />" +
+			"weeklock - Unable to talk same as lock, it during 1 week<br />" +
+			"Namelock - Unable to talk by staying on a guest account. During 2 days<br />" +
 			"Globalban - Banned from Pokemon Showdown, it during 1 week"
 		);
 	},
