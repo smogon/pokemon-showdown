@@ -242,8 +242,8 @@ exports.Formats = [
 		],
 
 		mod: 'gen7',
-		ruleset: ['[Gen 7] OU'],
-		banlist: ['Kyurem-Black', 'Regigigas', 'Shedinja', 'Slaking'],
+		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
+		banlist: ['Uber', 'Kyurem-Black', 'Regigigas', 'Shedinja', 'Slaking', 'Power Construct', 'Shadow Tag', 'Baton Pass'],
 		bannedDonors: ['Araquanid', 'Azumarill', 'Azurill', 'Blaziken', 'Bunnelby', 'Carvanha', 'Chatot', 'Combusken', 'Dewpider', 'Diggersby', 'Diglett', 'Ditto', 'Dugtrio', 'Golett', 'Golurk', 'Liepard', 'Machamp', 'Machoke', 'Machop', 'Marill', 'Medicham', 'Meditite', 'Meowstic', 'Purrloin', 'Scolipede', 'Sharpedo', 'Smeargle', 'Torchic', 'Trapinch', 'Venipede', 'Whirlipede'],
 		noChangeForme: true,
 		noChangeAbility: true,
@@ -283,7 +283,7 @@ exports.Formats = [
 			let template = this.tools.getTemplate(species);
 			if (!template.exists) return [`The Pokemon "${set.species}" does not exist.`];
 			if (template.isUnreleased) return [`${template.species} is unreleased.`];
-			if (template.species in this.format.banlistTable) return [`${template.species} is banned.`];
+			if (template.tier === 'Uber' || template.species in this.format.banlistTable) return [`${template.species} is banned.`];
 
 			let name = set.name;
 
