@@ -557,11 +557,11 @@ exports.Formats = [
 		column: 3,
 	},
 	{
-		name: "[Gen 1] No Big 4 OU",
+		name: "[Gen 3] ADV 200",
 
-		mod: 'gen1',
+		mod: 'adv200',
 		ruleset: ['Pokemon', 'Standard'],
-		banlist: ['Uber', 'Chansey', 'Exeggutor', 'Tauros', 'Snorlax'],
+		banlist: ['Uber', 'Apricot Berry', 'Ganlon Berry', 'Lansat Berry', 'Petaya Berry', 'Salac Berry', 'Starf Berry'],
 	},
 
 	// ORAS Singles
