@@ -1156,7 +1156,7 @@ exports.commands = {
 			"Lock - Unable to talk in all room and pm. You can just pm the global staff, it during 2 days" +
 			"weeklock - Unable to talk same as lock, it during 1 week" +
 			"Namelock - Unable to talk by staying on a guest account. During 2 days" +
-			"Rangelock - Lock over a larger IP range" +
+			"Rangelock - Locks all users on a certain ip range" +
 			"Globalban - Banned from Pokemon Showdown, it during 1 week"
 		);
 	},
