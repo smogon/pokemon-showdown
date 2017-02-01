@@ -288,9 +288,9 @@ exports.Formats = [
 			let name = set.name;
 
 			let abilityId = toId(set.ability);
-			if (!abilityId) return [`${name} needs to have an ability.`];
+			if (!abilityId || !(abilityId in this.tools.data.Abilities)) return [`${name} needs to have a valid ability.`];
 			let pokemonWithAbility = this.format.abilityMap[abilityId];
-			if (!pokemonWithAbility) return [`"${set.ability}" is an invalid ability.`];
+			if (!pokemonWithAbility) return [`"${set.ability}" is not available on a legal Pokemon.`];
 
 			let validSources = set.abilitySources = []; // evolutionary families
 			for (let i = 0; i < pokemonWithAbility.length; i++) {
