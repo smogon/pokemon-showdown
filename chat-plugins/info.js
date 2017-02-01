@@ -1149,14 +1149,15 @@ exports.commands = {
 			"Warning - show the rules, you have to wait 5 seconds for closed" +
 			"Mute - Unable to talk in the room for 7 minutes" +
 			"Hourmute - Unable to talk in the room for 1 hour" +
-			"Roomban - Banned from the room, until the next restart" +
-			"Balcklist - Banned indefinitely from the room" +
+			"Roomban - Banned from the room, it during 1 week" +
+			"Balcklist - Banned for 1 year from the room" +
 			"<br \>" +
 			"<b>Global punishment</b>:" +
-			"Lock - Unable to talk in all room and pm. You can just pm the global staff, until after 2 days" +
-			"weeklock - Unable to talk same as lock, but it during 1 week" +
-			"Namelock - Unable to talk a name same as lock for indefinitely" +
-			"Globalban - Banned from Pokemon Showdown, until the next restart"
+			"Lock - Unable to talk in all room and pm. You can just pm the global staff, it during 2 days" +
+			"weeklock - Unable to talk same as lock, it during 1 week" +
+			"Namelock - Unable to talk by staying on a guest account. During 2 days" +
+			"Rangelock - Lock over a larger IP range" +
+			"Globalban - Banned from Pokemon Showdown, it during 1 week"
 		);
 	},
 
