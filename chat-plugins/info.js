@@ -1145,17 +1145,17 @@ exports.commands = {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(
 			"<b>Room punishment</b>:<br />" +
-			"Warning - Shows the rules, and requires to wait 5 seconds<br />" +
-			"Mute - Unable to talk in the room for 7 minutes<br />" +
-			"Hourmute - Unable to talk in the room for 1 hour<br />" +
-			"Roomban - Banned from the room, it during 1 week<br />" +
-			"Blacklist - Banned for 1 year from the room<br />" +
+			"Warning - Displays a popup with the rules, and requires the affected user to wait 5 seconds before being able to close the popup.<br />" +
+			"Mute - Unable to talk in the room for 7 minutes.<br />" +
+			"Hourmute - Unable to talk in the room for 1 hour.<br />" +
+			"Roomban - Banned from the room, unable to join the room for 1 week.<br />" +
+			"Blacklist - Banned for 1 year from the room.<br />" +
 			"<br />" +
 			"<b>Global punishment</b>:<br />" +
-			"Lock - Unable to talk in all room and pm. You can just pm the global staff, it during 2 days<br />" +
-			"weeklock - Unable to talk same as lock, it during 1 week<br />" +
-			"Namelock - Unable to talk by staying on a guest account. During 2 days<br />" +
-			"Globalban - Banned from Pokemon Showdown, it during 1 week"
+			"Lock - Unable to talk in all rooms, and unable to PM any non-staff user for 2 days.<br />" +
+			"weeklock - Unable to talk, similar to a lock, and lasts for 7 days.<br />" +
+			"Namelock - Similar to a lock, but the affected user will also be unable to choose a nickname as well.<br />" +
+			"Globalban - Banned from the Pokémon simulator for 7 days."
 		);
 	},
 
