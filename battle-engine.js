@@ -42,8 +42,7 @@ class BattlePokemon {
 		if (this.battle.format === "gen7inheritance") {
 			this.donorSpecies = this.battle.getTemplate(toId(set.name.split(" (")[1])).species;
 			this.name = set.name.split(" (")[0].substr(0, 20);
-		}
-		else {
+		} else {
 			this.name = set.name.substr(0, 20);
 		}
 		this.speciesid = toId(this.species);
