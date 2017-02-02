@@ -172,6 +172,10 @@ exports.BattleMovedex = {
 			},
 		},
 	},
+	reflecttype: {
+		inherit: true,
+		desc: "Causes the user's types to become the same as the current types of the target. Fails if the user is an Arceus.",
+	},
 	sheercold: {
 		inherit: true,
 		desc: "Deals damage to the target equal to the target's maximum HP. Ignores accuracy and evasiveness modifiers. This attack's accuracy is equal to (user's level - target's level + 30)%, and fails if the target is at a higher level. Pokemon with the Ability Sturdy are immune.",
