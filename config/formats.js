@@ -292,6 +292,7 @@ exports.Formats = [
 			let pokemonWithAbility = this.format.abilityMap[abilityId];
 			if (!pokemonWithAbility) return [`"${set.ability}" is not available on a legal Pokemon.`];
 
+			let canonicalSource = ''; // Specific for the basic implementation of Donor Clause (see onValidateTeam).
 			let validSources = set.abilitySources = []; // evolutionary families
 			for (let i = 0; i < pokemonWithAbility.length; i++) {
 				let donorTemplate = this.tools.getTemplate(pokemonWithAbility[i]);
@@ -302,9 +303,12 @@ exports.Formats = [
 				if (set.name === set.species) delete set.name;
 				set.species = donorTemplate.species;
 				problems = this.validateSet(set, teamHas) || [];
-				if (!problems.length) validSources.push(evoFamily);
+				if (!problems.length) {
+					canonicalSource = donorTemplate.species;
+					validSources.push(evoFamily);
+				}
 				if (validSources.length > 1) {
-					// This is an optimization only valid for the current basic implementation of Donor Clause.
+					// Specific for the basic implementation of Donor Clause (see onValidateTeam).
 					break;
 				}
 			}
@@ -317,7 +321,10 @@ exports.Formats = [
 				problems.unshift(`${template.species} has an illegal set with an ability from ${this.tools.getTemplate(pokemonWithAbility[0]).name}.`);
 				return problems;
 			}
-			set.name = this.tools.data.Pokedex[validSources[0]].species;
+
+			// Protocol: Include the data of the donor species in the `name` data slot.
+			// Afterwards, we are going to reset the name to what the user intended. :]
+			set.name = `${set.name || set.species} (${canonicalSource})`;
 		},
 		onValidateTeam: function (team, format) {
 			// Donor Clause
@@ -330,13 +337,38 @@ exports.Formats = [
 
 			// Checking actual full incompatibility would require expensive algebra.
 			// Instead, we only check the trivial case of multiple Pokémon only legal for exactly one family. FIXME?
+			// This clause has only gotten more complex over time, so this is probably a won't fix.
 			let requiredFamilies = Object.create(null);
 			for (let i = 0; i < evoFamilyLists.length; i++) {
 				let evoFamilies = evoFamilyLists[i];
-				if (evoFamilies.length !== 1) continue;
-				if (requiredFamilies[evoFamilies[0]]) return ["You are limited to one inheritance from each family by the Donor Clause.", "(You inherit more than once from " + this.getTemplate(evoFamilies[0]).species + ".)"];
-				requiredFamilies[evoFamilies[0]] = 1;
+				if (evoFamilies.size !== 1) continue;
+				let [familyId] = evoFamilies;
+				if (!(familyId in requiredFamilies)) requiredFamilies[familyId] = 1;
+				requiredFamilies[familyId]++;
+				if (requiredFamilies[familyId] > 2) return [`You are limited to up to two inheritances from each family by the Donor Clause.`, `(You inherit more than twice from ${this.getTemplate(familyId).species}).`];
 			}
+		},
+		onBegin: function () {
+			for (let pokemon of this.p1.pokemon.concat(this.p2.pokemon)) {
+				let lastParens = pokemon.set.name.lastIndexOf('(');
+				if (lastParens < 0) lastParens = pokemon.set.name.length; // If the engine is hotpatched without the validator.
+				let donorTemplate = this.getTemplate(pokemon.set.name.slice(lastParens + 1, -1));
+				while (donorTemplate.evos.length) donorTemplate = this.getTemplate(donorTemplate.evos[0]);
+				pokemon.donor = donorTemplate.species;
+				pokemon.name = pokemon.set.name.slice(0, lastParens).trim();
+
+				// Reproduce pokémon identity initialization in constructor
+				pokemon.name = pokemon.name.slice(0, 20);
+				pokemon.fullname = `${pokemon.side.id}: ${pokemon.name}`;
+				pokemon.id = pokemon.fullname;
+			}
+		},
+		onSwitchIn: function (pokemon) {
+			if (!pokemon.donor) return;
+			let donorTemplate = this.getTemplate(pokemon.donor);
+			if (!donorTemplate) return;
+			// Place volatiles on the Pokémon to show the donor details.
+			this.add('-start', pokemon, donorTemplate.species, '[silent]');
 		},
 	},
 	{
