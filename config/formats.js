@@ -294,7 +294,7 @@ exports.Formats = [
 
 			let item = this.tools.getItem(set.item);
 			if (item.id) {
-				if (item.megaStone && this.tools.getTemplate(item.megaStone).tier === 'Uber') return [`${set.item} is banned.`];
+				if (item.megaStone && this.tools.getTemplate(item.megaStone).tier === 'Uber') return [`${item.name} is banned.`];
 			}
 			let donorSpecies = "";
 			let validSources = set.abilitySources = []; // evolutionary families
