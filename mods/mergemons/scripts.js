@@ -15,6 +15,11 @@ exports.BattleScripts = {
 			let p1 = dex[(i === 0 ? dex.length - 1 : i - 1)];
 			let p2 = dex[(i === dex.length - 1 ? 0 : i + 1)];
 			this.modData('Learnsets', dex[i]).learnset = Object.assign({}, this.modData('Learnsets', p1).learnset, this.modData('Learnsets', p2).learnset, this.modData('Learnsets', dex[i]).learnset);
+			// Handle NFE's
+			let preForme = Tools.getTemplate(dex[i]).prevo;
+			if (preForme && !Tools.getTemplate(preForme).prevo) {
+				this.modData('Learnsets', preForme).learnset = Object.assign({}, this.modData('Learnsets', p1).learnset, this.modData('Learnsets', p2).learnset, this.modData('Learnsets', preForme).learnset);
+			}
 		}
 	},
 };
