@@ -294,7 +294,7 @@ exports.Formats = [
 
 			let item = this.tools.getItem(set.item);
 			if (item.id) {
-				if (item.megaStone && this.tools.getTemplate(item.megaStone).tier === 'Uber') return [`${set.item} is banned.`];	
+				if (item.megaStone && this.tools.getTemplate(item.megaStone).tier === 'Uber') return [`${set.item} is banned.`];
 			}
 			let donorSpecies = "";
 			let validSources = set.abilitySources = []; // evolutionary families
@@ -317,17 +317,15 @@ exports.Formats = [
 				}
 			}
 
-			// Restore the intended species, name and item.
 			set.species = template.species;
-			set.name = set.name || set.species;
 			if (!validSources.length && pokemonWithAbility.length > 1) {
-				return [`${set.name}'s set is illegal.`];
+				return [`${template.species}'s set is illegal.`];
 			}
 			if (!validSources.length) {
-				problems.unshift(`${set.name} has an illegal set with an ability from ${this.tools.getTemplate(pokemonWithAbility[0]).name}.`);
+				problems.unshift(`${template.species} has an illegal set with an ability from ${this.tools.getTemplate(pokemonWithAbility[0]).name}.`);
 				return problems;
 			}
-			set.name = (name ? (name+" ("+donorSpecies+")") : (set.species+" ("+donorSpecies+")"));
+			set.name = name ? `${name} (${donorSpecies})` : `${set.species} (${donorSpecies})`;
 		},
 		onValidateTeam: function (team, format) {
 			// Donor Clause
