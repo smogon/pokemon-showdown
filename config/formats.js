@@ -292,6 +292,13 @@ exports.Formats = [
 			let pokemonWithAbility = this.format.abilityMap[abilityId];
 			if (!pokemonWithAbility) return [`"${set.ability}" is not available on a legal Pokemon.`];
 
+			// Items must be fully validated here since we may pass a different item to the base set validator.
+			let item = this.tools.getItem(set.item);
+			if (item.id) {
+				if (item.megaEvolves && this.tools.getTemplate(item.megaEvolves).tier === 'Uber') return [`${set.item} is banned.`];
+				
+			}
+			let donorSpecies = "";
 			let validSources = set.abilitySources = []; // evolutionary families
 			for (let i = 0; i < pokemonWithAbility.length; i++) {
 				let donorTemplate = this.tools.getTemplate(pokemonWithAbility[i]);
@@ -302,22 +309,27 @@ exports.Formats = [
 				if (set.name === set.species) delete set.name;
 				set.species = donorTemplate.species;
 				problems = this.validateSet(set, teamHas) || [];
-				if (!problems.length) validSources.push(evoFamily);
+				if (!problems.length) {
+					validSources.push(evoFamily);
+					donorSpecies = donorTemplate.species;
+				}
 				if (validSources.length > 1) {
 					// This is an optimization only valid for the current basic implementation of Donor Clause.
 					break;
 				}
 			}
 
+			// Restore the intended species, name and item.
 			set.species = template.species;
+			set.name = set.name || set.species;
 			if (!validSources.length && pokemonWithAbility.length > 1) {
-				return [`${template.species}'s set is illegal.`];
+				return [`${set.name}'s set is illegal.`];
 			}
 			if (!validSources.length) {
-				problems.unshift(`${template.species} has an illegal set with an ability from ${this.tools.getTemplate(pokemonWithAbility[0]).name}.`);
+				problems.unshift(`${set.name} has an illegal set with an ability from ${this.tools.getTemplate(pokemonWithAbility[0]).name}.`);
 				return problems;
 			}
-			set.name = this.tools.data.Pokedex[validSources[0]].species;
+			set.name = (name ? (name+" ("+donorSpecies+")") : (set.species+" ("+donorSpecies+")"));
 		},
 		onValidateTeam: function (team, format) {
 			// Donor Clause
@@ -337,6 +349,9 @@ exports.Formats = [
 				if (requiredFamilies[evoFamilies[0]]) return ["You are limited to one inheritance from each family by the Donor Clause.", "(You inherit more than once from " + this.getTemplate(evoFamilies[0]).species + ".)"];
 				requiredFamilies[evoFamilies[0]] = 1;
 			}
+		},
+		onSwitchIn: function(pokemon) {
+			this.add('-start', pokemon, pokemon.donorSpecies || pokemon.species, '[silent]');
 		},
 	},
 	{
