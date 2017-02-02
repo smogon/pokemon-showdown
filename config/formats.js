@@ -292,11 +292,9 @@ exports.Formats = [
 			let pokemonWithAbility = this.format.abilityMap[abilityId];
 			if (!pokemonWithAbility) return [`"${set.ability}" is not available on a legal Pokemon.`];
 
-			// Items must be fully validated here since we may pass a different item to the base set validator.
 			let item = this.tools.getItem(set.item);
 			if (item.id) {
-				if (item.megaEvolves && this.tools.getTemplate(item.megaEvolves).tier === 'Uber') return [`${set.item} is banned.`];
-				
+				if (item.megaStone && this.tools.getTemplate(item.megaStone).tier === 'Uber') return [`${set.item} is banned.`];	
 			}
 			let donorSpecies = "";
 			let validSources = set.abilitySources = []; // evolutionary families
