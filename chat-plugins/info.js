@@ -1141,6 +1141,7 @@ exports.commands = {
 	},
 
 	'!punishments': true,
+	sanction: 'punishments',
 	punishments: function (target, room, user) {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(
