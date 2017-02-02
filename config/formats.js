@@ -346,7 +346,7 @@ exports.Formats = [
 				requiredFamilies[evoFamilies[0]] = 1;
 			}
 		},
-		onSwitchIn: function(pokemon) {
+		onSwitchIn: function (pokemon) {
 			this.add('-start', pokemon, pokemon.donorSpecies || pokemon.species, '[silent]');
 		},
 	},
