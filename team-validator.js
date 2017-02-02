@@ -811,16 +811,18 @@ class Validator {
 							if (!father.eggGroups.some(eggGroup => eggGroupsSet.has(eggGroup))) continue;
 
 							// detect unavailable egg moves
-							const fatherLatestMoveGen = parseInt(fatherSources[0].charAt(0));
-							if (format.requirePentagon) {
-								if (parseInt(fatherLatestMoveGen) < 6) continue;
-								atLeastOne = true;
-								break;
-							}
-							if (noPastGenBreeding) {
-								if (parseInt(fatherLatestMoveGen) < tools.gen) continue;
-								atLeastOne = true;
-								break;
+							if (fatherSources) {
+								const fatherLatestMoveGen = parseInt(fatherSources[0].charAt(0));
+								if (format.requirePentagon) {
+									if (parseInt(fatherLatestMoveGen) < 6) continue;
+									atLeastOne = true;
+									break;
+								}
+								if (noPastGenBreeding) {
+									if (parseInt(fatherLatestMoveGen) < tools.gen) continue;
+									atLeastOne = true;
+									break;
+								}
 							}
 
 							// we can breed with it
