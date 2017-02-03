@@ -20,9 +20,10 @@ const path = require('path');
 
 const PUNISHMENT_FILE = path.resolve(__dirname, 'config/punishments.tsv');
 const ROOM_PUNISHMENT_FILE = path.resolve(__dirname, 'config/room-punishments.tsv');
+const SHAREDIPS_FILE = path.resolve(__dirname, 'config/sharedips.tsv');
 
 const RANGELOCK_DURATION = 60 * 60 * 1000; // 1 hour
-const LOCK_DURATION = 37 * 60 * 60 * 1000; // 37 hours
+const LOCK_DURATION = 48 * 60 * 60 * 1000; // 48 hours
 const BAN_DURATION = 7 * 24 * 60 * 60 * 1000; // 1 week
 
 const ROOMBAN_DURATION = 48 * 60 * 60 * 1000; // 48 hours
@@ -30,6 +31,8 @@ const BLACKLIST_DURATION = 365 * 24 * 60 * 60 * 1000; // 1 year
 
 const USERID_REGEX = /^[a-z0-9]+$/;
 const PUNISH_TRUSTED = false;
+
+const PUNISHMENT_POINT_VALUES = {MUTE: 2, BLACKLIST: 3, ROOMBAN: 4};
 
 /**
  * a punishment is an array: [punishType, userid, expireTime, reason]
@@ -111,6 +114,11 @@ Punishments.roomUserids = new NestedPunishmentMap();
  * roomIps is a roomid:ip:punishment Map
  */
 Punishments.roomIps = new NestedPunishmentMap();
+
+/**
+ * sharedIps is an ip:note Map
+ */
+Punishments.sharedIps = new Map();
 
 
 /*********************************************************
@@ -332,10 +340,47 @@ Punishments.loadBanlist = function () {
 	});
 };
 
+// sharedips.tsv is in the format:
+// IP, type (in this case always SHARED), note
+
+Punishments.loadSharedIps = function () {
+	fs.readFile(SHAREDIPS_FILE, (err, data) => {
+		if (err) return;
+		data = String(data).split("\n");
+		for (let i = 0; i < data.length; i++) {
+			if (!data[i] || data[i] === '\r') continue;
+			const [ip, type, note] = data[i].trim().split("\t");
+			if (!ip.includes('.')) continue;
+			if (type !== 'SHARED') continue;
+
+			Punishments.sharedIps.set(ip, note);
+		}
+	});
+};
+
+/**
+ * @param {string} ip
+ * @param {string} note
+ */
+Punishments.appendSharedIp = function (ip, note) {
+	let buf = `${ip}\tSHARED\t${note}\r\n`;
+	fs.appendFile(SHAREDIPS_FILE, buf, () => {});
+};
+
+Punishments.saveSharedIps = function () {
+	let buf = 'IP\tType\tNote\r\n';
+	Punishments.sharedIps.forEach((note, ip) => {
+		buf += `${ip}\tSHARED\t${note}\r\n`;
+	});
+
+	fs.writeFile(SHAREDIPS_FILE, buf, () => {});
+};
+
 setImmediate(() => {
 	Punishments.loadPunishments();
 	Punishments.loadRoomPunishments();
 	Punishments.loadBanlist();
+	Punishments.loadSharedIps();
 });
 
 /*********************************************************
@@ -558,6 +603,27 @@ Punishments.lock = function (user, expireTime, id, ...reason) {
 	}
 };
 /**
+ * @param {User} user
+ * @param {Room} room
+ * @param {string} source
+ * @param {string} reason
+ * @param {?string} message
+ * @param {?boolean} week
+ */
+Punishments.autolock = function (user, room, source, reason, message, week) {
+	if (!message) message = reason;
+
+	let punishment = `LOCKED`;
+	let expires = null;
+	if (week) {
+		expires = Date.now() + 7 * 24 * 60 * 60 * 1000;
+		punishment = `WEEKLOCKED`;
+	}
+	Punishments.lock(user, expires, user.userid, `Autolock: ${user.name}: ${reason}`);
+	Monitor.log(`[${source}] ${punishment}: ${message}`);
+	Rooms.global.modlog(`(${toId(room)}) AUTOLOCK: [${user.userid}]: ${reason}`);
+};
+/**
  * @param {string} name
  */
 Punishments.unlock = function (name) {
@@ -762,6 +828,34 @@ Punishments.roomUnblacklistAll = function (room) {
 	return unblacklisted;
 };
 
+/**
+ * @param {string} ip
+ * @param {string} note
+ */
+Punishments.addSharedIp = function (ip, note) {
+	Punishments.sharedIps.set(ip, note);
+	Punishments.appendSharedIp(ip, note);
+
+	Users.users.forEach(user => {
+		if (user.locked && user.locked !== user.userid && ip in user.ips) {
+			if (!user.autoconfirmed) {
+				user.semilocked = `#sharedip ${user.locked}`;
+			}
+			user.locked = false;
+
+			user.updateIdentity();
+		}
+	});
+};
+
+/**
+ * @param {string} ip
+ */
+Punishments.removeSharedIp = function (ip) {
+	Punishments.sharedIps.delete(ip);
+	Punishments.saveSharedIps();
+};
+
 /*********************************************************
  * Checking
  *********************************************************/
@@ -891,9 +985,15 @@ Punishments.checkIp = function (user, connection) {
 	let punishment = Punishments.ipSearch(ip);
 
 	if (punishment) {
-		user.locked = punishment[1];
-		if (punishment[0] === 'NAMELOCK') {
-			user.namelocked = punishment[1];
+		if (Punishments.sharedIps.has(user.latestIp)) {
+			if (connection.user && !connection.user.locked && !connection.user.autoconfirmed) {
+				connection.user.semilocked = `#sharedip ${punishment[1]}`;
+			}
+		} else {
+			user.locked = punishment[1];
+			if (punishment[0] === 'NAMELOCK') {
+				user.namelocked = punishment[1];
+			}
 		}
 	}
 
@@ -932,6 +1032,8 @@ Punishments.checkIpBanned = function (connection) {
 		connection.send(`|popup||modal|PS is under heavy load and cannot accommodate your connection right now.`);
 		return '#cflood';
 	}
+
+	if (Punishments.sharedIps.has(ip)) return false;
 
 	let banned = false;
 	let punishment = Punishments.ipSearch(ip);
@@ -1020,18 +1122,29 @@ Punishments.isRoomBanned = function (user, roomid) {
 
 	for (let ip in user.ips) {
 		punishment = Punishments.roomIps.nestedGet(roomid, ip);
-		if (punishment && (punishment[0] === 'ROOMBAN' || punishment[0] === 'BLACKLIST')) return punishment;
+		if (punishment) {
+			 if (punishment[0] === 'ROOMBAN') {
+				return punishment;
+			 } else if (punishment[0] === 'BLACKLIST') {
+				if (Punishments.sharedIps.has(ip) && user.autoconfirmed) return;
+
+				return punishment;
+			 }
+		}
 	}
 };
 
 /**
  * Returns an array of all room punishments associated with a user.
  *
+ * options.publicOnly will make this only return public room punishments.
+ * options.checkIps will also check the IP of the user for IP-based punishments.
+ *
  * @param {User} user
- * @param {?boolean} publicOnly
+ * @param {?Object} options
  * @return {Array}
  */
-Punishments.getRoomPunishments = function (user, publicOnly) {
+Punishments.getRoomPunishments = function (user, options) {
 	if (!user) return;
 	let userid = toId(user);
 	let checkMutes = typeof user !== 'string';
@@ -1040,11 +1153,21 @@ Punishments.getRoomPunishments = function (user, publicOnly) {
 
 	for (let i = 0; i < Rooms.global.chatRooms.length; i++) {
 		const curRoom = Rooms.global.chatRooms[i];
-		if (!curRoom || curRoom.isPrivate === true || (publicOnly && (curRoom.isPersonal || curRoom.battle))) continue;
+		if (!curRoom || curRoom.isPrivate === true || ((options && options.publicOnly) && (curRoom.isPersonal || curRoom.battle))) continue;
 		let punishment = Punishments.roomUserids.nestedGet(curRoom.id, userid);
 		if (punishment) {
 			punishments.push([curRoom, punishment]);
-		} else if (checkMutes && curRoom.muteQueue) {
+			continue;
+		} else if (options && options.checkIps) {
+			for (let ip in user.ips) {
+				punishment = Punishments.roomIps.nestedGet(curRoom.id, ip);
+				if (punishment) {
+					punishments.push([curRoom, punishment]);
+					continue;
+				}
+			}
+		}
+		if (checkMutes && curRoom.muteQueue) {
 			for (let i = 0; i < curRoom.muteQueue.length; i++) {
 				let entry = curRoom.muteQueue[i];
 				if (userid === entry.userid ||
@@ -1065,14 +1188,19 @@ Punishments.getRoomPunishments = function (user, publicOnly) {
  * @param {User} user
  */
 Punishments.monitorRoomPunishments = function (user) {
+	if (user.locked) return;
+
 	const minPunishments = (typeof Config.monitorminpunishments === 'number' ? Config.monitorminpunishments : 3); // Default to 3 if the Config option is not defined or valid
 	if (!minPunishments) return;
 
-	let punishments = Punishments.getRoomPunishments(user, true);
+	let punishments = Punishments.getRoomPunishments(user, {publicOnly: true});
 
 	if (punishments.length >= minPunishments) {
+		let points = 0;
+
 		let punishmentText = punishments.map(([room, punishment]) => {
 			const [punishType, punishUserid, , reason] = punishment;
+			if (punishType in PUNISHMENT_POINT_VALUES) points += PUNISHMENT_POINT_VALUES[punishType];
 			let punishDesc = Punishments.roomPunishmentTypes.get(punishType);
 			if (!punishDesc) punishDesc = `punished`;
 			if (punishUserid !== user.userid) punishDesc += ` as ${punishUserid}`;
@@ -1081,6 +1209,15 @@ Punishments.monitorRoomPunishments = function (user) {
 			return `<<${room}>> (${punishDesc})`;
 		}).join(', ');
 
-		Monitor.log(`[PunishmentMonitor] ${user.name} currently has punishments in ${punishments.length} rooms: ${punishmentText}`);
+		if (Config.punishmentautolock && points >= 10) {
+			let rooms = punishments.map(([room]) => room).join(', ');
+			let reason = `Autolocked for having punishments in ${punishments.length} rooms: ${rooms}`;
+			let message = `${user.name} was locked for having punishments in ${punishments.length} rooms: ${punishmentText}`;
+
+			Punishments.autolock(user, 'staff', 'PunishmentMonitor', reason, message);
+			user.popup("|modal|You've been locked for breaking the rules in multiple chatrooms.\n\nIf you feel that your lock was unjustified, you can still PM staff members (%, @, &, and ~) to discuss it" + (Config.appealurl ? " or you can appeal:\n" + Config.appealurl : ".") + "\n\nYour lock will expire in a few days.");
+		} else {
+			Monitor.log(`[PunishmentMonitor] ${user.name} currently has punishments in ${punishments.length} rooms: ${punishmentText}`);
+		}
 	}
 };

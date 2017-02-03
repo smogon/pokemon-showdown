@@ -78,6 +78,15 @@ exports.BattleItems = {
 			}
 		},
 	},
+	"laxincense": {
+		inherit: true,
+		onModifyAccuracy: function (accuracy) {
+			if (typeof accuracy !== 'number') return;
+			this.debug('lax incense - decreasing accuracy');
+			return accuracy * 0.95;
+		},
+		desc: "The accuracy of attacks against the holder is 0.95x.",
+	},
 	"lightball": {
 		inherit: true,
 		onModifyAtk: function () {},
@@ -169,10 +178,10 @@ exports.BattleItems = {
 		inherit: true,
 		onBasePower: function (basePower, user, target, move) {
 			if (move && move.type === 'Water') {
-				return basePower * 1.1;
+				return basePower * 1.05;
 			}
 		},
-		desc: "Holder's Water-type attacks have 1.1x power.",
+		desc: "Holder's Water-type attacks have 1.05x power.",
 	},
 	"sharpbeak": {
 		inherit: true,

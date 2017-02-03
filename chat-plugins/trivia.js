@@ -240,8 +240,6 @@ class Trivia extends Rooms.RoomGame {
 	}
 
 	destroy() {
-		clearTimeout(this.phaseTimeout);
-		this.phaseTimeout = null;
 		this.kickedUsers.clear();
 
 		let room = this.room;
@@ -261,8 +259,25 @@ class Trivia extends Rooms.RoomGame {
 		if (message) buffer += '<br />' + message;
 		buffer += '</div>';
 
-		this.room.addRaw(buffer);
-		this.room.update();
+		// This shouldn't happen, but sometimes this will fire after
+		// Trivia#destroy has already set the instance's room to null.
+		let tarRoom = this.room;
+		if (!tarRoom) {
+			for (let [roomid, room] of Rooms.rooms) { // eslint-disable-line no-unused-vars
+				if (room.game === this)	return room.addRaw(buffer).update();
+			}
+
+			Monitor.debug(`
+				Trivia is FUBAR! Game instance tried to broadcast after having destroyed itself\n
+				Mode: ${this.mode}\n
+				Category: ${this.category}\n
+				Length: ${SCORE_CAPS[this.cap]}\n
+				UGM: ${triviaData.ugm ? 'enabled' : 'disabled'}
+			`);
+			return tarRoom;
+		}
+
+		return tarRoom.addRaw(buffer).update();
 	}
 
 	// Kicks a player from the game, preventing them from joining it again
@@ -326,6 +341,8 @@ class Trivia extends Rooms.RoomGame {
 	// a timeout to tally the answers received.
 	askQuestion() {
 		if (!this.questions.length) {
+			clearTimeout(this.phaseTimeout);
+			this.phaseTimeout = null;
 			this.broadcast(
 				'No questions are left!',
 				'The game has reached a stalemate. Nobody gained any points on the leaderboard.'
@@ -375,6 +392,9 @@ class Trivia extends Rooms.RoomGame {
 	// FIXME: this class and trivia database logic don't belong in bed with
 	// each other! Abstract all that away from this method as soon as possible.
 	win(winner, buffer) {
+		clearTimeout(this.phaseTimeout);
+		this.phaseTimeout = null;
+
 		buffer += Chat.escapeHTML(winner.name) + ' won the game with a final score of <strong>' + winner.points + '</strong>, ' +
 			'and their leaderboard score has increased by <strong>' + this.prize + '</strong> points!';
 		this.broadcast('The answering period has ended!', buffer);
@@ -392,7 +412,7 @@ class Trivia extends Rooms.RoomGame {
 				leaderboard[i] = [0, player.points, player.correctAnswers];
 			}
 
-			if (triviaData.ugm) {
+			if (triviaData.ugm && this.category === 'Ultimate Gaming Month') {
 				let ugmPoints = player.points / 5 | 0;
 				if (winner && winner.userid === i) ugmPoints *= 2;
 				triviaData.ugm[i] += ugmPoints;
@@ -453,6 +473,8 @@ class Trivia extends Rooms.RoomGame {
 
 	// Forcibly ends a trivia game.
 	end(user) {
+		clearTimeout(this.phaseTimeout);
+		this.phaseTimeout = null;
 		this.broadcast('The trivia game was forcibly ended by ' + Chat.escapeHTML(user.name) + '.');
 		this.destroy();
 	}

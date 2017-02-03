@@ -202,18 +202,6 @@ exports.BattleStatuses = {
 	trapper: {
 		noCopy: true,
 	},
-	crit1: {
-		onStart: function (target, source, effect) {
-			if (effect && effect.id === 'zpower') {
-				this.add('-start', target, 'move: Focus Energy', '[zeffect]');
-			} else {
-				this.add('-start', target, 'move: Focus Energy');
-			}
-		},
-		onModifyCritRatio: function (critRatio) {
-			return critRatio + 1;
-		},
-	},
 	partiallytrapped: {
 		duration: 5,
 		durationCallback: function (target, source) {
@@ -371,6 +359,22 @@ exports.BattleStatuses = {
 			}
 			if (finished) {
 				side.removeSideCondition('futuremove');
+			}
+		},
+	},
+	healreplacement: {
+		// this is a side condition
+		onStart: function (side, source, sourceEffect) {
+			this.effectData.position = source.position;
+			this.effectData.sourceEffect = sourceEffect;
+			this.add('-activate', source, 'healreplacement');
+		},
+		onSwitchInPriority: 1,
+		onSwitchIn: function (target) {
+			if (!target.fainted && target.position === this.effectData.position) {
+				target.heal(target.maxhp);
+				this.add('-heal', target, target.getHealth, '[from] move: ' + this.effectData.sourceEffect, '[zeffect]');
+				target.side.removeSideCondition('healreplacement');
 			}
 		},
 	},

@@ -70,7 +70,8 @@ exports.BattleScripts = {
 	// It deals with the beforeMove and AfterMoveSelf events.
 	// This leads with partial trapping moves shennanigans after the move has been used.
 	// It also deals with how PP reduction works on gen 1.
-	runMove: function (move, pokemon, target, sourceEffect) {
+	runMove: function (move, pokemon, targetLoc, sourceEffect) {
+		let target = this.getTarget(pokemon, move, targetLoc);
 		move = this.getMove(move);
 		if (!target) target = this.resolveTarget(pokemon, move);
 		if (target.subFainted) delete target.subFainted;
@@ -1002,13 +1003,19 @@ exports.BattleScripts = {
 
 			// Random DVs.
 			let ivs = {
-				hp: this.random(30),
-				atk: this.random(30),
-				def: this.random(30),
-				spa: this.random(30),
-				spd: this.random(30),
-				spe: this.random(30),
+				hp: 0,
+				atk: this.random(15),
+				def: this.random(15),
+				spa: this.random(15),
+				spd: 0,
+				spe: this.random(15),
 			};
+			ivs["hp"] = (ivs["atk"] % 2) * 16 + (ivs["def"] % 2) * 8 + (ivs["spe"] % 2) * 4 + (ivs["spa"] % 2) * 2;
+			ivs["atk"] = ivs["atk"] * 2;
+			ivs["def"] = ivs["def"] * 2;
+			ivs["spa"] = ivs["spa"] * 2;
+			ivs["spd"] = ivs["spa"];
+			ivs["spe"] = ivs["spe"] * 2;
 
 			// Maxed EVs.
 			let evs = {hp: 255, atk: 255, def: 255, spa: 255, spd: 255,	spe: 255};
@@ -1018,7 +1025,10 @@ exports.BattleScripts = {
 			let moves;
 			let pool = [];
 			for (let move in template.learnset) {
-				if (this.getMove(move).gen === 1) pool.push(move);
+				if (this.getMove(move).gen !== 1) continue;
+				if (template.learnset[move].some(learned => learned[0] === '1')) {
+					pool.push(move);
+				}
 			}
 			if (pool.length <= 4) {
 				moves = pool;

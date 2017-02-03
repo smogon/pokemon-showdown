@@ -12,13 +12,24 @@ describe(`Emergency Exit`, function () {
 
 	it(`should request switch-out if damaged below 50% HP`, function () {
 		battle = common.createBattle([
-			[{species: "Golisopod", ability: 'emergencyexit', moves: ['sleeptalk'], ivs: EMPTY_IVS}, {species: "Clefable", ability: 'Unaware', moves: ['metronome']}],
+			[{species: "Golisopod", ability: 'emergencyexit', moves: ['superfang'], ivs: EMPTY_IVS}, {species: "Clefable", ability: 'Unaware', moves: ['metronome']}],
 			[{species: "Raticate", ability: 'guts', moves: ['superfang']}],
 		]);
 		const eePokemon = battle.p1.active[0];
+		const foePokemon = battle.p2.active[0];
 		battle.commitDecisions();
+		assert.strictEqual(foePokemon.hp, foePokemon.maxhp);
 		assert.atMost(eePokemon.hp, eePokemon.maxhp / 2);
 		assert.strictEqual(battle.currentRequest, 'switch');
+	});
+
+	it(`should not request switch-out if first healed by berry`, function () {
+		battle = common.createBattle([
+			[{species: "Golisopod", ability: 'emergencyexit', moves: ['sleeptalk'], item: 'sitrusberry', ivs: EMPTY_IVS}, {species: "Clefable", ability: 'Unaware', moves: ['metronome']}],
+			[{species: "Raticate", ability: 'guts', moves: ['superfang']}],
+		]);
+		battle.commitDecisions();
+		assert.strictEqual(battle.currentRequest, 'move');
 	});
 
 	it(`should not request switch-out on usage of Substitute`, function () {
