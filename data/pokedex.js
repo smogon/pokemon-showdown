@@ -13139,7 +13139,7 @@ exports.BattlePokedex = {
 		types: ["Psychic", "Electric"],
 		gender: "N",
 		baseStats: {hp: 100, atk: 100, def: 100, spa: 100, spd: 100, spe: 100},
-		abilities: {0, "Levitate"},
+		abilities: {0: "Levitate"},
 		heightm: 122.5,
 		weightkg: 99999.9,
 		color: "Red",
