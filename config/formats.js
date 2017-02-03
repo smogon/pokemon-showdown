@@ -341,7 +341,7 @@ exports.Formats = [
 			let requiredFamilies = Object.create(null);
 			for (let i = 0; i < evoFamilyLists.length; i++) {
 				let evoFamilies = evoFamilyLists[i];
-				if (evoFamilies.size !== 1) continue;
+				if (evoFamilies.length !== 1) continue;
 				let [familyId] = evoFamilies;
 				if (!(familyId in requiredFamilies)) requiredFamilies[familyId] = 1;
 				requiredFamilies[familyId]++;
@@ -353,7 +353,6 @@ exports.Formats = [
 				let lastParens = pokemon.set.name.lastIndexOf('(');
 				if (lastParens < 0) lastParens = pokemon.set.name.length; // If the engine is hotpatched without the validator.
 				let donorTemplate = this.getTemplate(pokemon.set.name.slice(lastParens + 1, -1));
-				while (donorTemplate.evos.length) donorTemplate = this.getTemplate(donorTemplate.evos[0]);
 				pokemon.donor = donorTemplate.species;
 				pokemon.name = pokemon.set.name.slice(0, lastParens).trim();
 
@@ -366,7 +365,7 @@ exports.Formats = [
 		onSwitchIn: function (pokemon) {
 			if (!pokemon.donor) return;
 			let donorTemplate = this.getTemplate(pokemon.donor);
-			if (!donorTemplate) return;
+			if (!donorTemplate.exists) return;
 			// Place volatiles on the Pokémon to show the donor details.
 			this.add('-start', pokemon, donorTemplate.species, '[silent]');
 		},
