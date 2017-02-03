@@ -48,6 +48,10 @@ exports.BattleItems = {
 		inherit: true,
 		isUnreleased: false,
 	},
+	bigroot: {
+		inherit: true,
+		desc: "Holder gains 1.3x HP from draining moves, Aqua Ring, Ingrain, and Leech Seed.",
+	},
 	blazikenite: {
 		inherit: true,
 		isUnreleased: false,
@@ -140,6 +144,10 @@ exports.BattleItems = {
 	latiosite: {
 		inherit: true,
 		isUnreleased: false,
+	},
+	lightclay: {
+		inherit: true,
+		desc: "Holder's use of Light Screen or Reflect lasts 8 turns instead of 5.",
 	},
 	lopunnite: {
 		inherit: true,

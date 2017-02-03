@@ -129,6 +129,7 @@ exports.BattleAbilities = {
 		onBeforeMovePriority: 11,
 	},
 	"weakarmor": {
+		inherit: true,
 		desc: "If a physical attack hits this Pokemon, its Defense is lowered by 1 stage and its Speed is raised by 1 stage.",
 		shortDesc: "If a physical attack hits this Pokemon, Defense is lowered by 1, Speed is raised by 1.",
 		onAfterDamage: function (damage, target, source, move) {

@@ -123,7 +123,7 @@ exports.BattleStatuses = {
 		onAfterMoveSelfPriority: 2,
 		onAfterMoveSelf: function (pokemon) {
 			pokemon.volatiles['residualdmg'].counter++;
-			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1) * pokemon.volatiles['residualdmg'].counter, pokemon);
+			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1) * pokemon.volatiles['residualdmg'].counter, pokemon, pokemon);
 		},
 		onSwitchIn: function (pokemon) {
 			// Regular poison status and damage after a switchout -> switchin.
@@ -238,54 +238,6 @@ exports.BattleStatuses = {
 		inherit: true,
 		durationCallback: function () {
 			return this.random(3, 5);
-		},
-	},
-	futuremove: {
-		// this is a side condition
-		onStart: function (side) {
-			this.effectData.positions = [];
-			for (let i = 0; i < side.active.length; i++) {
-				this.effectData.positions[i] = null;
-			}
-		},
-		onResidualOrder: 3,
-		onResidual: function (side) {
-			let finished = true;
-			for (let i = 0; i < side.active.length; i++) {
-				let posData = this.effectData.positions[i];
-				if (!posData) continue;
-
-				posData.duration--;
-
-				if (posData.duration > 0) {
-					finished = false;
-					continue;
-				}
-
-				// time's up; time to hit! :D
-				let target = side.foe.active[posData.targetPosition];
-				let move = this.getMove(posData.move);
-				if (target.fainted) {
-					this.add('-hint', '' + move.name + ' did not hit because the target is fainted.');
-					this.effectData.positions[i] = null;
-					continue;
-				}
-
-				this.add('-fieldactivate', move);
-				target.removeVolatile('Protect');
-				target.removeVolatile('Endure');
-
-				if (posData.moveData.ignoreImmunity === undefined) {
-					posData.moveData.ignoreImmunity = false;
-				}
-
-				this.moveHit(target, posData.source, move, posData.moveData);
-
-				this.effectData.positions[i] = null;
-			}
-			if (finished) {
-				side.removeSideCondition('futuremove');
-			}
 		},
 	},
 	stall: {
