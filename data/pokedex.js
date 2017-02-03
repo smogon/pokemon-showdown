@@ -13163,7 +13163,7 @@ exports.BattlePokedex = {
 		types: ["Steel", "Electric"],
 		gender: "N",
 		baseStats: {hp: 100, atk: 100, def: 100, spa: 100, spd: 100, spe: 100},
-		abilities: [0: "Flash Fire"],
+		abilities: {0: "Flash Fire"},
 		heightm: 10.8,
 		weightkg: 42940.4,
 		color: "Black",
