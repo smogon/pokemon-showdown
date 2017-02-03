@@ -1633,7 +1633,7 @@ exports.BattleLearnsets = {
 		confusion: ["5S0"],
 		darkpulse: ["5S0"],
 	}},
-	f00: learnset: {
+	f00: {learnset: {
 		chatter: ["5S0"],
 		defensecurl: ["5S1"],
 		flail: ["5S0"],
