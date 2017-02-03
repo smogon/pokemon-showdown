@@ -243,7 +243,7 @@ exports.Formats = [
 
 		mod: 'gen7',
 		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
-		banlist: ['Kyurem-Black', 'Regigigas', 'Shedinja', 'Slaking', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Salamencite', 'Power Construct', 'Shadow Tag', 'Baton Pass'],
+		banlist: ['Uber', 'Kyurem-Black', 'Regigigas', 'Shedinja', 'Slaking', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Salamencite', 'Power Construct', 'Shadow Tag', 'Baton Pass'],
 		bannedDonors: ['Araquanid', 'Azumarill', 'Azurill', 'Blaziken', 'Bunnelby', 'Carvanha', 'Chatot', 'Combusken', 'Dewpider', 'Diggersby', 'Diglett', 'Ditto', 'Dugtrio', 'Golett', 'Golurk', 'Liepard', 'Machamp', 'Machoke', 'Machop', 'Marill', 'Medicham', 'Meditite', 'Meowstic', 'Purrloin', 'Scolipede', 'Sharpedo', 'Smeargle', 'Torchic', 'Trapinch', 'Venipede', 'Whirlipede'],
 		noChangeForme: true,
 		noChangeAbility: true,
@@ -345,7 +345,7 @@ exports.Formats = [
 				let [familyId] = evoFamilies;
 				if (!(familyId in requiredFamilies)) requiredFamilies[familyId] = 1;
 				requiredFamilies[familyId]++;
-				if (requiredFamilies[familyId] > 2) return [`You are limited to up to two inheritances from each family by the Donor Clause.`, `(You inherit more than twice from ${this.getTemplate(familyId).species}).`];
+				if (requiredFamilies[familyId] > 2) return [`You are limited to up to two inheritances from each evolution family by the Donor Clause.`, `(You inherit more than twice from ${this.getTemplate(familyId).species}).`];
 			}
 		},
 		onBegin: function () {
