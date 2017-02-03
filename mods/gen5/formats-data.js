@@ -3130,4 +3130,79 @@ exports.BattleFormatsData = {
 		eventOnly: true,
 		requiredItem: "Shock Drive",
 	},
+	brycenman: {
+		inherit: true,
+		isNonStandard: false,
+		tier: "Unreleased",
+	},
+	ufo: {
+		inherit: true,
+		isNonStandard: false,
+		tier: "Unreleased",
+	},
+	ufo2: {
+		inherit: true,
+		isNonStandard: false,
+		tier: "Unreleased",
+	},
+	mt: {
+		inherit: true,
+		isNonStandard: false,
+		tier: "Unreleased",
+	},
+	mt2: {
+		inherit: true,
+		isNonStandard: false,
+		tier: "Unreleased",
+	},
+	transport: {
+		inherit: true,
+		isNonStandard: false,
+		tier: "Unreleased",
+	},
+	blackbelt: {
+		inherit: true,
+		isNonStandard: false,
+		tier: "Unreleased",
+	},
+	blackdoor: {
+		inherit: true,
+		isNonStandard: false,
+		tier: "Unreleased",
+	},
+	whitedoor: {
+		inherit: true,
+		isNonStandard: false,
+		tier: "Unreleased",
+	},
+	monica: {
+		inherit: true,
+		isNonStandard: false,
+		tier: "Unreleased",
+	},
+	humanoid: {
+		inherit: true,
+		isNonStandard: false,
+		tier: "Unreleased",
+	},
+	monster: {
+		inherit: true,
+		isNonStandard: false,
+		tier: "Unreleased",
+	},
+	f00: {
+		inherit: true,
+		isNonStandard: false,
+		tier: "Unreleased",
+	},
+	f00runaway: {
+		inherit: true,
+		isNonStandard: false,
+		tier: "Unreleased",
+	},
+	majin: {
+		inherit: true,
+		isNonStandard: false,
+		tier: "Unreleased",
+	},
 };
