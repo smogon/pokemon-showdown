@@ -1213,6 +1213,10 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["spore", "spikes", "stealthrock", "uturn", "destinybond", "whirlwind"],
 		tier: "RU",
 	},
+	smearglebowtie: {
+		inherit: true,
+		tier: "Unreleased",
+	},
 	miltank: {
 		randomBattleMoves: ["milkdrink", "stealthrock", "bodyslam", "healbell", "curse", "earthquake"],
 		tier: "NU",
@@ -3130,17 +3134,17 @@ exports.BattleFormatsData = {
 		eventOnly: true,
 		requiredItem: "Shock Drive",
 	},
-	brycenman: {
-		inherit: true,
-		isNonStandard: false,
-		tier: "Unreleased",
-	},
 	ufo: {
 		inherit: true,
 		isNonStandard: false,
 		tier: "Unreleased",
 	},
 	ufo2: {
+		inherit: true,
+		isNonStandard: false,
+		tier: "Unreleased",
+	},
+	brycenman: {
 		inherit: true,
 		isNonStandard: false,
 		tier: "Unreleased",
@@ -3160,22 +3164,12 @@ exports.BattleFormatsData = {
 		isNonStandard: false,
 		tier: "Unreleased",
 	},
-	blackbelt: {
+	giant: {
 		inherit: true,
 		isNonStandard: false,
 		tier: "Unreleased",
 	},
-	blackdoor: {
-		inherit: true,
-		isNonStandard: false,
-		tier: "Unreleased",
-	},
-	whitedoor: {
-		inherit: true,
-		isNonStandard: false,
-		tier: "Unreleased",
-	},
-	monica: {
+	giant2: {
 		inherit: true,
 		isNonStandard: false,
 		tier: "Unreleased",
@@ -3195,12 +3189,107 @@ exports.BattleFormatsData = {
 		isNonStandard: false,
 		tier: "Unreleased",
 	},
-	f00runaway: {
+	f002: {
 		inherit: true,
 		isNonStandard: false,
 		tier: "Unreleased",
 	},
-	majin: {
+	spirit: {
+		inherit: true,
+		isNonStandard: false,
+		tier: "Unreleased",
+	},
+	blackdoor: {
+		inherit: true,
+		isNonStandard: false,
+		tier: "Unreleased",
+	},
+	whitedoor: {
+		inherit: true,
+		isNonStandard: false,
+		tier: "Unreleased",
+	},
+	propu1: {
+		inherit: true,
+		isNonStandard: false,
+		tier: "Unreleased",
+	},
+	propu2: {
+		inherit: true,
+		isNonStandard: false,
+		tier: "Unreleased",
+	},
+	proph1: {
+		inherit: true,
+		isNonStandard: false,
+		tier: "Unreleased",
+	},
+	propm1: {
+		inherit: true,
+		isNonStandard: false,
+		tier: "Unreleased",
+	},
+	propm2: {
+		inherit: true,
+		isNonStandard: false,
+		tier: "Unreleased",
+	},
+	propt1: {
+		inherit: true,
+		isNonStandard: false,
+		tier: "Unreleased",
+	},
+	propo1: {
+		inherit: true,
+		isNonStandard: false,
+		tier: "Unreleased",
+	},
+	propo2: {
+		inherit: true,
+		isNonStandard: false,
+		tier: "Unreleased",
+	},
+	propc1: {
+		inherit: true,
+		isNonStandard: false,
+		tier: "Unreleased",
+	},
+	propc2: {
+		inherit: true,
+		isNonStandard: false,
+		tier: "Unreleased",
+	},
+	propr1: {
+		inherit: true,
+		isNonStandard: false,
+		tier: "Unreleased",
+	},
+	propr2: {
+		inherit: true,
+		isNonStandard: false,
+		tier: "Unreleased",
+	},
+	propg1: {
+		inherit: true,
+		isNonStandard: false,
+		tier: "Unreleased",
+	},
+	propw1: {
+		inherit: true,
+		isNonStandard: false,
+		tier: "Unreleased",
+	},
+	propw2: {
+		inherit: true,
+		isNonStandard: false,
+		tier: "Unreleased",
+	},
+	propk1: {
+		inherit: true,
+		isNonStandard: false,
+		tier: "Unreleased",
+	},
+	blackbelt: {
 		inherit: true,
 		isNonStandard: false,
 		tier: "Unreleased",

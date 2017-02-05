@@ -1606,14 +1606,17 @@ exports.BattleLearnsets = {
 		mirrorcoat: ["5S0"],
 		toxic: ["5S0"],
 	}},
-	monica: {learnset: {
-		crushgrip: ["5S0", "5S1"],
-		doubleslap: ["5S1"],
+	giant: {learnset: {
+		crushgrip: ["5S0"],
 		focuspunch: ["5S0"],
 		growl: ["5S0"],
 		rage: ["5S0"],
-		stomp: ["5S1"],
-		teeterdance: ["5S1"],
+	}},
+	giant2: {learnset: {
+		crushgrip: ["5S0"],
+		doubleslap: ["5S0"],
+		stomp: ["5S0"],
+		teeterdance: ["5S0"],
 	}},
 	humanoid: {learnset: {
 		acid: ["5S0", "5S2", "5S3", "5S4", "5S5", "5S6"],
@@ -1647,17 +1650,29 @@ exports.BattleLearnsets = {
 		teeterdance: ["5S0"],
 		thrash: ["5S2"],
 	}},
-	f00runaway: {learnset: {
+	f002: {learnset: {
 		flareblitz: ["5S0"],
 		ironhead: ["5S0"],
 		psychic: ["5S0"],
 		wildcharge: ["5S0"],
 	}},
-	majin: {learnset: {
+	spirit: {learnset: {
 		crunch: ["5S0"],
 		dualchop: ["5S0"],
 		slackoff: ["5S0"],
 		swordsdance: ["5S0"],
+	}},
+	ufopropu2: {learnset: {
+		darkpulse: ["5S0"],
+		flamethrower: ["5S0"],
+		hyperbeam: ["5S0"],
+		icebeam: ["5S0"],
+	}},
+	giantpropo2: {learnset: {
+		crushgrip: ["5S0"],
+		doubleslap: ["5S0"],
+		stomp: ["5S0"],
+		teeterdance: ["5S0"],
 	}},
 	bulbasaur: {learnset: {
 		amnesia: ["7E", "6E", "5E", "4E"],
