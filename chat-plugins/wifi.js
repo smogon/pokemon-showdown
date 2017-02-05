@@ -561,7 +561,7 @@ let commands = {
 		let reply = '';
 		switch (target) {
 		case 'staff':
-			if (!this.can('warn', null, room)) return;
+			if (!this.can('broadcast', null, room)) return;
 			reply = '<strong>Staff commands:</strong><br />' +
 			        '- question or qg <em>User | OT | TID | Prize | Question | Answer[ | Answer2 | Answer3]</em> - Start a new question giveaway (voices can only host for themselves, staff can for all users) (Requires: + % @ * # & ~)<br />' +
 			        '- lottery or lg <em>User | OT | TID | Prize[| Number of Winners]</em> - Starts a lottery giveaway (voices can only host for themselves, staff can for all users) (Requires: + % @ * # & ~)<br />' +
@@ -586,7 +586,7 @@ let commands = {
 			if (!this.runBroadcast()) return;
 			reply = '<b>Wi-Fi room Giveaway help and info</b><br />' +
 			'- help user - shows list of participation commands<br />' +
-			'- help staff - shows giveaway staff commands (Requires: % @ * # & ~)';
+			'- help staff - shows giveaway staff commands (Requires: + % @ * # & ~)';
 		}
 		this.sendReplyBox(reply);
 	},
