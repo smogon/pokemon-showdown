@@ -1058,7 +1058,7 @@ exports.BattleScripts = {
 		let pokemonLeft = 0;
 		let pokemon = [];
 
-		let handicapMons = {'magikarp':1, 'weedle':1, 'kakuna':1, 'caterpie':1, 'metapod':1, 'ditto':1};
+		let handicapMons = {'magikarp':1, 'weedle':1, 'kakuna':1, 'caterpie':1, 'metapod':1};
 		let nuTiers = {'UU':1, 'BL':1, 'NFE':1, 'LC':1, 'NU':1};
 		let uuTiers = {'NFE':1, 'UU':1, 'BL':1, 'NU':1};
 
@@ -1072,7 +1072,7 @@ exports.BattleScripts = {
 
 		// Now let's store what we are getting.
 		let typeCount = {};
-		let weaknessCount = {'Electric':0, 'Psychic':0, 'Water':0, 'Ice':0};
+		let weaknessCount = {'Electric':0, 'Psychic':0, 'Water':0, 'Ice':0, 'Ground':0};
 		let uberCount = 0;
 		let nuCount = 0;
 		let hasShitmon = false;
@@ -1082,20 +1082,24 @@ exports.BattleScripts = {
 			if (!template.exists) continue;
 
 			// Bias the tiers so you get less shitmons and only one of the two Ubers.
-			// If you have a shitmon, you're covered in OUs and Ubers if possible
-			if ((template.speciesid in handicapMons) && nuCount > 1) continue;
+			// If you have a shitmon, don't get another
+			if ((template.speciesid in handicapMons) && hasShitmon) continue;
 
 			let tier = template.tier;
 			switch (tier) {
 			case 'LC':
-				if (nuCount > 1 || hasShitmon) continue;
+			case 'NFE':
+				// Don't add pre-evo mon if already 4 or more non-OUs, or if already 3 or more non-OUs with one being a shitmon
+				// Regardless, pre-evo mons are slightly less common.
+				if (nuCount > 3 || (hasShitmon && nuCount > 2) || this.random(3) === 0) continue;
 				break;
 			case 'Uber':
-				// Unless you have one of the worst mons, in that case we allow luck to give you all Ubers.
+				// If you have one of the worst mons we allow luck to give you all Ubers.
 				if (uberCount >= 1 && !hasShitmon) continue;
 				break;
 			default:
-				if (uuTiers[tier] && pokemonPool.length > 1 && (hasShitmon || (nuCount > 2 && this.random(2) >= 1))) continue;
+				// OUs are fine. Otherwise 50% chance to skip mon if already 4 or more non-OUs.
+				if (uuTiers[tier] && pokemonPool.length > 1 && (nuCount > 3 && this.random(2) >= 1)) continue;
 			}
 
 			let skip = false;
@@ -1112,7 +1116,7 @@ exports.BattleScripts = {
 			if (skip) continue;
 
 			// We need a weakness count of spammable attacks to avoid being swept by those.
-			// Spammable attacks are: Thunderbolt, Psychic, Surf, Blizzard.
+			// Spammable attacks are: Thunderbolt, Psychic, Surf, Blizzard, Earthquake.
 			let pokemonWeaknesses = [];
 			for (let type in weaknessCount) {
 				let increaseCount = Tools.getImmunity(type, template) && Tools.getEffectiveness(type, template) > 0;
@@ -1154,7 +1158,7 @@ exports.BattleScripts = {
 				nuCount++;
 			}
 
-			// Is it Magikarp?
+			// Is it Magikarp or one of the useless bugs?
 			if (template.speciesid in handicapMons) hasShitmon = true;
 		}
 
@@ -1184,11 +1188,25 @@ exports.BattleScripts = {
 			amnesia:1, growth:1,
 		};
 
-		// Add the mandatory move
-		if (template.essentialMove) {
+		// Either add all moves or add none
+		if (template.comboMoves) {
+			if (this.random(2) === 0) {
+				moves = moves.concat(template.comboMoves);
+			}
+		}
+
+		// Add one of the semi-mandatory moves
+		// Often, these are used so that the Pokemon only gets one of the less useful moves
+		if (moves.length < 4 && template.exclusiveMoves) {
+			moves.push(template.exclusiveMoves[this.random(template.exclusiveMoves.length)]);
+		}
+
+		// Add the mandatory move. SD Mew and Amnesia Snorlax are exceptions.
+		if (moves.length < 4 && template.essentialMove) {
 			moves.push(template.essentialMove);
 		}
-		do {
+
+		while (moves.length < 4 && movePool.length) {
 			// Choose next 4 moves from learnset/viable moves and add them to moves list:
 			while (moves.length < 4 && movePool.length) {
 				let moveid = this.sampleNoReplace(movePool);
@@ -1227,105 +1245,32 @@ exports.BattleScripts = {
 					let rejected = false;
 					if (!template.essentialMove || moveid !== template.essentialMove) {
 						switch (moveid) {
-						// bad after setup
-						case 'seismictoss': case 'nightshade':
-							if (setupType) rejected = true;
-							break;
-						// bit redundant to have both
-						case 'flamethrower':
-							if (hasMove['fireblast']) rejected = true;
-							break;
-						case 'fireblast':
-							if (hasMove['flamethrower']) rejected = true;
-							break;
-						case 'icebeam':
-							if (hasMove['blizzard']) rejected = true;
-							break;
-						// Hydropump and surf are both valid options, just avoid one with eachother.
+						// bit redundant to have both, but neither particularly better than the other
 						case 'hydropump':
 							if (hasMove['surf']) rejected = true;
 							break;
 						case 'surf':
 							if (hasMove['hydropump']) rejected = true;
 							break;
-						case 'petaldance': case 'solarbeam':
-							if (hasMove['megadrain'] || hasMove['razorleaf']) rejected = true;
-							break;
-						case 'megadrain':
-							if (hasMove['razorleaf']) rejected = true;
-							break;
-						case 'thunder':
-							if (hasMove['thunderbolt']) rejected = true;
-							break;
-						case 'thunderbolt':
-							if (hasMove['thunder']) rejected = true;
-							break;
-						case 'bonemerang':
-							if (hasMove['earthquake']) rejected = true;
+						// other redundancies that aren't handled within the movesets themselves
+						case 'selfdestruct':
+							if (hasMove['rest']) rejected = true;
 							break;
 						case 'rest':
-							if (hasMove['recover'] || hasMove['softboiled']) rejected = true;
-							break;
-						case 'softboiled':
-							if (hasMove['recover']) rejected = true;
+							if (hasMove['selfdestruct']) rejected = true;
 							break;
 						case 'sharpen':
 						case 'swordsdance':
-							if (counter['Special'] > counter['Physical'] || hasMove['slash'] || !counter['Physical'] || hasMove['growth']) rejected = true;
+							if (counter['Special'] > counter['Physical'] || !counter['Physical'] || hasMove['growth']) rejected = true;
 							break;
 						case 'growth':
-							if (counter['Special'] < counter['Physical'] || hasMove['swordsdance'] || hasMove['amnesia']) rejected = true;
-							break;
-						case 'doubleedge':
-							if (hasMove['bodyslam']) rejected = true;
-							break;
-						case 'mimic':
-							if (hasMove['mirrormove']) rejected = true;
-							break;
-						case 'superfang':
-							if (hasMove['bodyslam']) rejected = true;
-							break;
-						case 'rockslide':
-							if (hasMove['earthquake'] && hasMove['bodyslam'] && hasMove['hyperbeam']) rejected = true;
-							break;
-						case 'bodyslam':
-							if (hasMove['thunderwave']) rejected = true;
-							break;
-						case 'bubblebeam':
-							if (hasMove['blizzard']) rejected = true;
-							break;
-						case 'screech':
-							if (hasMove['slash']) rejected = true;
-							break;
-						case 'slash':
-							if (hasMove['swordsdance']) rejected = true;
-							break;
-						case 'megakick':
-							if (hasMove['bodyslam']) rejected = true;
-							break;
-						case 'eggbomb':
-							if (hasMove['hyperbeam']) rejected = true;
-							break;
-						case 'triattack':
-							if (hasMove['doubleedge']) rejected = true;
-							break;
-						case 'fissure':
-							if (hasMove['horndrill']) rejected = true;
-							break;
-						case 'supersonic':
-							if (hasMove['confuseray']) rejected = true;
+							if (counter['Special'] < counter['Physical'] || !counter['Special'] || hasMove['swordsdance']) rejected = true;
 							break;
 						case 'poisonpowder':
-							if (hasMove['toxic'] || counter['Status'] > 1) rejected = true;
-							break;
 						case 'stunspore':
-							if (hasMove['sleeppowder'] || counter['Status'] > 1) rejected = true;
-							break;
 						case 'sleeppowder':
-							if (hasMove['stunspore'] || counter['Status'] > 2) rejected = true;
-							break;
 						case 'toxic':
-							if (hasMove['sleeppowder'] || hasMove['stunspore'] || counter['Status'] > 1) rejected = true;
+							if (counter['Status'] > 1) rejected = true;
 							break;
 						} // End of switch for moveid
 					}
@@ -1336,25 +1281,37 @@ exports.BattleScripts = {
 					counter[move.category]++;
 				} // End of for
 			} // End of the check for more than 4 moves on moveset.
-		} while (moves.length < 4 && movePool.length);
+		}
 
 		let levelScale = {
-			LC: 96,
-			NFE: 90,
-			NU: 90,
-			UU: 85,
-			OU: 79,
-			Uber: 74,
+			LC: 82,
+			NFE: 70,
+			UU: 64,
+			OU: 58,
+			Uber: 52,
 		};
-		// Really bad Pokemon and jokemons, MEWTWO, Pokémon with higher tier in Wrap metas.
+
 		let customScale = {
-			Caterpie: 99, Kakuna: 99, Magikarp: 99, Metapod: 99, Weedle: 99,
-			Clefairy: 95, "Farfetch'd": 99, Jigglypuff: 99, Ditto: 99, Mewtwo: 70,
-			Dragonite: 85, Cloyster: 83, Staryu: 90,
+			Mew: 56,
+			Cloyster: 62, Gengar: 60, Golem: 60, Jolteon: 62, Jynx: 60, Rhydon: 60, Slowbro: 60,
+			Zapdos: 60, Aerodactyl: 66, Arbok: 66, Articuno: 60, Beedrill: 68, Butterfree: 68,
+			Clefable: 62, Ditto: 84, Dodrio: 62, Dragonite: 60, Electrode: 68, "Farfetch'd": 68,
+			Golbat: 68, Golduck: 62, Graveler: 68, Gyarados: 62, Haunter: 68, Hitmonchan: 68,
+			Hitmonlee: 68, Hypno: 62, Kadabra: 66, Kangaskhan: 62, Kingler: 62, Lickitung: 66,
+			Machamp: 66, Magneton: 66, Marowak: 66, Moltres: 60, Muk: 66, Onix: 72, Parasect: 66,
+			Persian: 62, Pidgeot: 66, Porygon: 66, Primeape: 66, Seaking: 66, Tangela: 66,
+			Vaporeon: 62, Venomoth: 66, Venusaur: 62, Victreebel: 62, Vileplume: 66, Weezing: 66,
+			Dragonair: 68, Gloom: 72, Kakuna: 99, Metapod: 99, Nidorina: 72, Nidorino: 72,
+			Pidgeotto: 74, Poliwhirl: 68, Abra: 74, Bellsprout: 80, Bulbasaur: 80, Caterpie: 99,
+			Charmander: 80, Clefairy: 78, Cubone: 78, Diglett: 80, Doduo: 76, Dratini: 80, Drowzee: 76,
+			Exeggcute: 78, Gastly: 76, Geodude: 76, Goldeen: 78, Grimer: 80, Growlithe: 78, Horsea: 78,
+			Jigglypuff: 80, Kabuto: 78, Koffing: 78, Krabby: 78, Machop: 80, Magikarp: 99, Magnemite: 80,
+			Mankey: 80, Meowth: 78, Omanyte: 76, Pidgey: 84, Pikachu: 78, Poliwag: 78, Ponyta: 72,
+			Psyduck: 78, Rattata: 80, Rhyhorn: 70, Sandshrew: 78, Seel: 76, Shellder: 80, Slowpoke: 74,
+			Squirtle: 80, Staryu: 74, Tentacool: 76, Vulpix: 80, Weedle: 99, Zubat: 84,
 		};
 		let level = levelScale[template.tier] || 90;
 		if (customScale[template.name]) level = customScale[template.name];
-		if (template.name === 'Mewtwo' && hasMove['amnesia']) level = 68;
 
 		return {
 			name: template.name,
