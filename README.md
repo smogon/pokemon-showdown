@@ -141,7 +141,6 @@ Owner
 Staff
 
 - Chris Monsanto [chaos] - Sysadmin
-- Juanma Serrano [Joim] - Development, Sysadmin
 - Leonardo Julca [Slayer95] - Development
 - Mathieu Dias-Martins [Marty-D] - Research (game mechanics), Development
 - [The Immortal] - Development
@@ -151,6 +150,7 @@ Retired Staff
 - Bill Meltsner [bmelts] - Development, Sysadmin
 - Cathy J. Fitzpatrick [cathyjf] - Development, Sysadmin
 - Hugh Gordon [V4] - Research (game mechanics), Development
+- Juanma Serrano [Joim] - Development, Sysadmin
 
 Major Contributors
 
