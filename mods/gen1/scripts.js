@@ -1306,8 +1306,8 @@ exports.BattleScripts = {
 			Charmander: 80, Clefairy: 78, Cubone: 78, Diglett: 80, Doduo: 76, Dratini: 80, Drowzee: 76,
 			Exeggcute: 78, Gastly: 76, Geodude: 76, Goldeen: 78, Grimer: 80, Growlithe: 78, Horsea: 78,
 			Jigglypuff: 80, Kabuto: 78, Koffing: 78, Krabby: 78, Machop: 80, Magikarp: 99, Magnemite: 80,
-			Mankey: 80, Meowth: 78, Omanyte: 76, Pidgey: 84, Pikachu: 78, Poliwag: 78, Ponyta: 72,
-			Psyduck: 78, Rattata: 80, Rhyhorn: 70, Sandshrew: 78, Seel: 76, Shellder: 80, Slowpoke: 74,
+			Mankey: 80, Meowth: 78, Omanyte: 76, Pidgey: 84, Pikachu: 78, Poliwag: 76, Ponyta: 72,
+			Psyduck: 76, Rattata: 80, Rhyhorn: 70, Sandshrew: 78, Seel: 76, Shellder: 78, Slowpoke: 74,
 			Squirtle: 80, Staryu: 74, Tentacool: 76, Vulpix: 80, Weedle: 99, Zubat: 84,
 		};
 		let level = levelScale[template.tier] || 90;
