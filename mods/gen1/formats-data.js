@@ -108,7 +108,7 @@ exports.BattleFormatsData = {
 		tier: "LC",
 	},
 	fearow: {
-		randomBattleMoves: ["drillpeck", "doubleedge", "hyperbeam", "agility", "substitute"],
+		randomBattleMoves: ["drillpeck", "doubleedge", "hyperbeam", "agility"],
 		eventPokemon: [
 			{"generation": 1, "level": 20, "moves":["growl", "leer", "furyattack", "payday"]},
 		],
