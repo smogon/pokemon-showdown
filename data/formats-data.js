@@ -631,7 +631,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 4, "level": 50, "abilities":["intimidate"], "moves":["flareblitz", "thunderfang", "crunch", "extremespeed"], "pokeball": "cherishball"},
 		],
-		tier: "UU",
+		tier: "New",
 	},
 	poliwag: {
 		randomBattleMoves: ["hydropump", "icebeam", "encore", "bellydrum", "hypnosis", "waterfall", "return"],
@@ -818,7 +818,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 3, "level": 30, "moves":["refresh", "doubleedge", "raindance", "thunder"]},
 		],
-		tier: "New",
+		tier: "UU",
 	},
 	magnezone: {
 		randomBattleMoves: ["thunderbolt", "substitute", "flashcannon", "hiddenpowerice", "voltswitch", "hiddenpowerfire"],
@@ -1464,7 +1464,7 @@ exports.BattleFormatsData = {
 	porygon2: {
 		randomBattleMoves: ["triattack", "icebeam", "recover", "toxic", "thunderwave", "thunderbolt"],
 		randomDoubleBattleMoves: ["triattack", "icebeam", "discharge", "shadowball", "protect", "recover"],
-		tier: "UU",
+		tier: "New",
 	},
 	porygonz: {
 		randomBattleMoves: ["triattack", "shadowball", "icebeam", "thunderbolt", "conversion", "trick", "nastyplot"],
@@ -1648,7 +1648,7 @@ exports.BattleFormatsData = {
 			{"generation": 6, "level": 100, "moves":["pound"], "pokeball": "cherishball"},
 		],
 		eventOnly: true,
-		tier: "New",
+		tier: "UU",
 	},
 	chikorita: {
 		randomBattleMoves: ["reflect", "lightscreen", "aromatherapy", "grasswhistle", "leechseed", "toxic", "gigadrain", "synthesis"],
@@ -2164,7 +2164,7 @@ exports.BattleFormatsData = {
 	donphan: {
 		randomBattleMoves: ["stealthrock", "rapidspin", "iceshard", "earthquake", "knockoff", "stoneedge"],
 		randomDoubleBattleMoves: ["stealthrock", "knockoff", "iceshard", "earthquake", "rockslide", "protect"],
-		tier: "UU",
+		tier: "New",
 	},
 	stantler: {
 		randomBattleMoves: ["doubleedge", "megahorn", "jumpkick", "earthquake", "suckerpunch"],
@@ -2307,7 +2307,7 @@ exports.BattleFormatsData = {
 			{"generation": 6, "level": 100, "moves":["confusion", "recover", "healbell", "safeguard"], "pokeball": "cherishball"},
 		],
 		eventOnly: true,
-		tier: "New",
+		tier: "UU",
 	},
 	treecko: {
 		randomBattleMoves: ["substitute", "leechseed", "leafstorm", "hiddenpowerice", "hiddenpowerrock", "endeavor"],
@@ -4432,7 +4432,7 @@ exports.BattleFormatsData = {
 	gigalith: {
 		randomBattleMoves: ["stealthrock", "rockblast", "earthquake", "explosion", "stoneedge", "superpower"],
 		randomDoubleBattleMoves: ["stealthrock", "rockslide", "earthquake", "explosion", "stoneedge", "autotomize", "superpower", "wideguard", "protect"],
-		tier: "UU",
+		tier: "New",
 	},
 	woobat: {
 		randomBattleMoves: ["calmmind", "psychic", "airslash", "gigadrain", "roost", "heatwave", "storedpower"],
@@ -4778,7 +4778,7 @@ exports.BattleFormatsData = {
 	amoonguss: {
 		randomBattleMoves: ["spore", "stunspore", "gigadrain", "clearsmog", "hiddenpowerfire", "synthesis", "sludgebomb", "foulplay"],
 		randomDoubleBattleMoves: ["spore", "stunspore", "gigadrain", "ragepowder", "hiddenpowerfire", "synthesis", "sludgebomb", "protect"],
-		tier: "New",
+		tier: "UU",
 	},
 	frillish: {
 		randomBattleMoves: ["scald", "willowisp", "recover", "toxic", "shadowball", "taunt"],
@@ -5045,7 +5045,7 @@ exports.BattleFormatsData = {
 			{"generation": 6, "level": 50, "shiny": 1, "moves":["retaliate", "ironhead", "sacredsword", "swordsdance"]},
 		],
 		eventOnly: true,
-		tier: "New",
+		tier: "UU",
 	},
 	terrakion: {
 		randomBattleMoves: ["stoneedge", "closecombat", "swordsdance", "substitute", "stealthrock", "earthquake"],
@@ -5099,7 +5099,7 @@ exports.BattleFormatsData = {
 			{"generation": 6, "level": 50, "shiny": 1, "isHidden": false, "moves":["healblock", "agility", "discharge", "crunch"]},
 		],
 		eventOnly: true,
-		tier: "New",
+		tier: "UU",
 	},
 	thundurustherian: {
 		randomBattleMoves: ["nastyplot", "thunderbolt", "hiddenpowerflying", "hiddenpowerice", "focusblast", "voltswitch"],
@@ -5582,7 +5582,7 @@ exports.BattleFormatsData = {
 	goodra: {
 		randomBattleMoves: ["dracometeor", "dragonpulse", "fireblast", "sludgebomb", "thunderbolt", "earthquake", "dragontail"],
 		randomDoubleBattleMoves: ["thunderbolt", "icebeam", "dragonpulse", "fireblast", "muddywater", "dracometeor", "focusblast", "protect"],
-		tier: "UU",
+		tier: "New",
 	},
 	klefki: {
 		randomBattleMoves: ["reflect", "lightscreen", "spikes", "magnetrise", "playrough", "thunderwave", "foulplay", "toxic"],
@@ -5848,7 +5848,7 @@ exports.BattleFormatsData = {
 	},
 	lycanroc: {
 		randomBattleMoves: ["swordsdance", "accelerock", "stoneedge", "crunch", "firefang"],
-		tier: "UU",
+		tier: "New",
 	},
 	lycanrocmidnight: {
 		randomBattleMoves: ["bulkup", "stoneedge", "stealthrock", "suckerpunch", "swordsdance", "firefang"],
@@ -5880,7 +5880,7 @@ exports.BattleFormatsData = {
 	},
 	araquanid: {
 		randomBattleMoves: ["liquidation", "leechlife", "lunge", "toxic", "mirrorcoat", "crunch"],
-		tier: "UU",
+		tier: "New",
 	},
 	fomantis: {
 		tier: "LC",
@@ -5901,7 +5901,7 @@ exports.BattleFormatsData = {
 	},
 	salazzle: {
 		randomBattleMoves: ["nastyplot", "fireblast", "sludgewave", "hiddenpowerground"],
-		tier: "UU",
+		tier: "New",
 	},
 	stufful: {
 		tier: "LC",
@@ -5942,7 +5942,7 @@ exports.BattleFormatsData = {
 	},
 	golisopod: {
 		randomBattleMoves: ["spikes", "firstimpression", "liquidation", "suckerpunch", "aquajet", "toxic", "leechlife"],
-		tier: "UU",
+		tier: "New",
 	},
 	sandygast: {
 		tier: "LC",
@@ -6053,7 +6053,7 @@ exports.BattleFormatsData = {
 	},
 	minior: {
 		randomBattleMoves: ["shellsmash", "powergem", "acrobatics", "earthquake"],
-		tier: "UU",
+		tier: "New",
 	},
 	miniormeteor: {
 		battleOnly: true,
