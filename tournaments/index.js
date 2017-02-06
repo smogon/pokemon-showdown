@@ -485,7 +485,7 @@ class Tournament {
 		this.availableMatches.forEach((availableMatches, user) => {
 			if (oldAvailableMatches.get(user)) return;
 
-			if (availableMatches.size && !this.autoDisqualifyWarnings.has(user)) this.lastActionTimes.set(user, now);
+			if (availableMatches.size) this.lastActionTimes.set(user, now);
 		});
 
 		return {
