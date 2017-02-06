@@ -14,12 +14,26 @@ exports.BattleScripts = {
 		}
 		for (let i = 0; i < dex.length; i++) {
 			let pokemon = dex[i];
-			let p1 = dex[(i === 0 ? dex.length - 1 : i - 1)];
-			let p2 = dex[(i === dex.length - 1 ? 0 : i + 1)];
-			this.modData('Learnsets', pokemon).learnset = Object.assign({}, learnsets[p1].learnset, learnsets[p2].learnset, learnsets[pokemon].learnset);
-			if (this.data.Pokedex[pokemon].prevo) {
-				this.modData('Learnsets', this.data.Pokedex[pokemon].prevo).learnset = this.modData('Learnsets', pokemon).learnset;
+			while (this.data.Pokedex[pokemon].prevo) {
+				pokemon = this.data.Pokedex[pokemon].prevo;
 			}
+			let target = dex[(i === 0 ? dex.length - 1 : i - 1)];
+			let merge = false;
+			do {
+				let learnset = learnsets[target].learnset;
+				for (let move in learnset) {
+					let source = learnset[move][0].charAt(0) + 'L0';
+					if (!(move in learnsets[pokemon].learnset)) this.modData('Learnsets', pokemon).learnset[move] = [source];
+				}
+				if (this.data.Pokedex[target].prevo) {
+					target = this.data.Pokedex[target].prevo;
+				} else if (!merge) {
+					merge = true;
+					target = dex[(i === dex.length - 1 ? 0 : i + 1)];
+				} else {
+					target = null;
+				}
+			} while (target && learnsets[target]);
 		}
 	},
 };
