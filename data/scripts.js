@@ -2689,6 +2689,9 @@ exports.BattleScripts = {
 				case 'acrobatics': case 'pluck': case 'drillpeck':
 					if (hasMove['bravebird']) rejected = true;
 					break;
+				case 'lunge':
+					if (hasMove['leechlife']) rejected = true;
+					break;
 				case 'solarbeam':
 					if ((!hasMove['sunnyday'] && !hasAbility['Drought']) || hasMove['gigadrain'] || hasMove['leafstorm']) rejected = true;
 					break;
