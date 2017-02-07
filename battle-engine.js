@@ -4174,15 +4174,15 @@ class Battle extends Tools.BattleDex {
 
 			decision.move = this.getMoveCopy(decision.move);
 			if (!decision.priority && !deferPriority) {
-				let priority = decision.move.priority;
+				let move = decision.move;
 				if (decision.zmove) {
 					let zMoveName = this.getZMove(decision.move, decision.pokemon, true);
 					let zMove = this.getMove(zMoveName);
 					if (zMove.exists) {
-						priority = zMove.priority;
+						move = zMove;
 					}
 				}
-				priority = this.runEvent('ModifyPriority', decision.pokemon, target, decision.move, priority);
+				let priority = this.runEvent('ModifyPriority', decision.pokemon, target, move, move.priority);
 				decision.priority = priority;
 				// In Gen 6, Quick Guard blocks moves with artificially enhanced priority.
 				if (this.gen > 5) decision.move.priority = priority;
