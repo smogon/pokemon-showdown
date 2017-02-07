@@ -892,6 +892,10 @@ class BattleRoom extends Room {
 		} else {
 			this.tour = false;
 		}
+		if (user.name != (selfR.battle.p1.user || selfR.battle.p2.user)) {
+			selfR.add(user.name+' requested that inactive players be kicked, but it isn\'t their battle.');
+			return;
+		}
 
 		this.p1 = p1 || null;
 		this.p2 = p2 || null;
