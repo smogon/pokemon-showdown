@@ -139,10 +139,10 @@ class Giveaway {
 		}
 		// the previous regex doesn't match "nidoran-m" or "nidoran male"
 		if (/\bnidoran\W{0,1}m(ale){0,1}\b/.test(text)) {
-			mons.set('nidoranm', Tools.getTemplate('nidoranm'));
+			mons.set('Nidoran-M', Tools.getTemplate('nidoranm'));
 		}
 		if (/\bnidoran\W{0,1}f(emale){0,1}\b/.test(text)) {
-			mons.set('nidoranf', Tools.getTemplate('nidoranf'));
+			mons.set('Nidoran-F', Tools.getTemplate('nidoranf'));
 		}
 		text = toId(text);
 		if (mons.size) {
