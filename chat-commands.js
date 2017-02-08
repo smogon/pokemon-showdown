@@ -690,7 +690,7 @@ exports.commands = {
 		let targetRoom = Rooms.search(id);
 		if (!targetRoom) return this.errorReply("The room '" + target + "' doesn't exist.");
 		target = targetRoom.title || targetRoom.id;
-		if (Rooms.global.deregisterChatRoom(id)) {
+		if (Rooms.global.deregisterChatRoom(targetRoom.id)) {
 			this.sendReply("The room '" + target + "' was deregistered.");
 			this.sendReply("It will be deleted as of the next server restart.");
 			return;
