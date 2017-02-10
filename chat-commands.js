@@ -2602,6 +2602,7 @@ exports.commands = {
 
 	adddatacenters: function (target, room, user) {
 		if (!this.can('hotpatch')) return false;
+		// should be in the format: IP, IP, name, URL
 
 		fs.readFile(require('path').resolve(__dirname, 'config/datacenters.csv'), (err, data) => {
 			if (err) return;
