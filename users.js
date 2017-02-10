@@ -151,7 +151,7 @@ function exportUsergroups() {
 	for (let i in usergroups) {
 		buffer += usergroups[i].substr(1).replace(/,/g, '') + ',' + usergroups[i].charAt(0) + "\n";
 	}
-	fs.writeFile('config/usergroups.csv', buffer);
+	fs.writeFile('config/usergroups.csv', buffer, () => {});
 }
 importUsergroups();
 
