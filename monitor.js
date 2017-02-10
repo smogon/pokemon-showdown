@@ -155,7 +155,7 @@ const Monitor = module.exports = {
 		for (let i in this.networkUse) {
 			buf += '' + this.networkUse[i] + '\t' + this.networkCount[i] + '\t' + i + '\n';
 		}
-		fs.writeFile(path.resolve(__dirname, 'logs/networkuse.tsv'), buf);
+		fs.writeFile(path.resolve(__dirname, 'logs/networkuse.tsv'), buf, () => {});
 	},
 	clearNetworkUse: function () {
 		if (Config.emergency) {

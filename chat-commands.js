@@ -2594,8 +2594,10 @@ exports.commands = {
 
 	savelearnsets: function (target, room, user) {
 		if (!this.can('hotpatch')) return false;
-		fs.writeFile('data/learnsets.js', 'exports.BattleLearnsets = ' + JSON.stringify(Tools.data.Learnsets) + ";\n");
-		this.sendReply("learnsets.js saved.");
+		this.sendReply("saving...");
+		fs.writeFile('data/learnsets.js', 'exports.BattleLearnsets = ' + JSON.stringify(Tools.data.Learnsets) + ";\n", () => {
+			this.sendReply("learnsets.js saved.");
+		});
 	},
 
 	adddatacenters: function (target, room, user) {
