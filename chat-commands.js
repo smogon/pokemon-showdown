@@ -2063,23 +2063,24 @@ exports.commands = {
 		let targetUser = this.targetUser;
 
 		if (!targetUser) {
-			return this.errorReply("User '" + this.targetUsername + "' not found.");
+			return this.errorReply(`User '${this.targetUsername}' not found.`);
 		}
 		if (!this.can('forcerename', targetUser)) return false;
-		if (targetUser.namelocked) return this.errorReply("User '" + target + "' is already namelocked.");
+		if (targetUser.namelocked) return this.errorReply(`User '${target}' is already namelocked.`);
 
-		let lockMessage = "" + targetUser.name + " was namelocked by " + user.name + "." + (reason ? " (" + reason + ")" : "");
-		this.addModCommand(lockMessage);
+		let reasonText = reason ? ` (${reason})` : `.`;
+		let lockMessage = `${targetUser.name} was namelocked by ${user.name}${reasonText}`;
+		this.addModCommand(lockMessage, `(${targetUser.latestIp})`);
 
 		// Notify staff room when a user is locked outside of it.
 		if (room.id !== 'staff' && Rooms('staff')) {
 			Rooms('staff').addLogMessage(user, "<<" + room.id + ">> " + lockMessage);
 		}
 
-		this.globalModlog("NAMELOCK", targetUser, " by " + user.name + (reason ? ": " + reason : ""));
+		this.globalModlog("NAMELOCK", targetUser, ` by ${user.name}${reasonText}`);
 		Rooms.global.cancelSearch(targetUser);
 		Punishments.namelock(targetUser, null, null, reason);
-		targetUser.popup("|modal|" + user.name + " has locked your name and you can't change names anymore" + (reason ? ": " + reason : "."));
+		targetUser.popup(`|modal|${user.name} has locked your name and you can't change names anymore${reasonText}`);
 		return true;
 	},
 	namelockhelp: ["/namelock OR /nl [username], [reason] - Name locks a user and shows them the [reason]. Requires: % @ * & ~"],
