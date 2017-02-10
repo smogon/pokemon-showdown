@@ -17,6 +17,21 @@ Even if we forget, we'll take the fact that your pull request contains a LICENSE
 Commit standards
 ------------------------------------------------------------------------
 
+Commits should describe what the code _does_, not how it does it.
+
+In other words:
+
+- BAD: `Add UU format slices`
+- GOOD: `Teambuilder: Add UU tier list`
+
+If this is not possible because your code does not make any functionality changes, your commit summary should ideally start with the word "Refactor" (or at least it contain it in some way).
+
+Commits should usually start with a verb in imperative mood, such as "Add", "Fix", "Refactor", etc (if the verb is there, it should be imperative, but it doesn't have to be there).
+
+- BAD: `Adding namefilter`
+- BAD: `Adds namefilter`
+- GOOD: `Add namefilter`
+
 The first line of the commit summary should be under 50 characters long.
 
 The first letter of a commit summary should be capitalized (unless the first word starts with a number or is case-sensitive, e.g. `ls`).
@@ -26,12 +41,6 @@ The commit summary should not end in a period.
 - BAD: `refactor users to use classes`
 - BAD: `Refactor Users to use classes.`
 - GOOD: `Refactor Users to use classes`
-
-If the first word is a verb, it should be in imperative mood (the first word doesn't have to be a verb, but we recommend it).
-
-- BAD: `Adding namefilter`
-- BAD: `Adds namefilter`
-- GOOD: `Add namefilter`
 
 Your commit summary should make it clear what part of the code you're talking about. For instance, if you're editing the Trivia plugin, you might want to add "Trivia: " to the beginning of your commit summary so it's clear.
 
