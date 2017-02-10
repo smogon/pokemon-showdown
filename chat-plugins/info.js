@@ -28,7 +28,7 @@ exports.commands = {
 		let targetUser = this.targetUserOrSelf(target, user.group === ' ');
 		let showAll = (cmd === 'ip' || cmd === 'whoare' || cmd === 'alt' || cmd === 'alts');
 		if (!targetUser) {
-			if (showAll) return this.parse('/checkpunishment ' + target);
+			if (showAll) return this.parse('/offlinewhois ' + target);
 			return this.errorReply("User " + this.targetUsername + " not found.");
 		}
 		if (showAll && !user.trusted && targetUser !== user) {
@@ -166,16 +166,28 @@ exports.commands = {
 	whoishelp: ["/whois - Get details on yourself: alts, group, IP address, and rooms.",
 		"/whois [username] - Get details on a username: alts (Requires: % @ * & ~), group, IP address (Requires: @ * & ~), and rooms."],
 
-	'!checkpunishment': true,
-	checkpunishment: function (target, room, user) {
+	'!offlinewhois': true,
+	checkpunishment: 'offlinewhois',
+	offlinewhois: function (target, room, user) {
 		if (!user.trusted) {
-			return this.errorReply("/checkpunishment - Access denied.");
+			return this.errorReply("/offlinewhois - Access denied.");
 		}
 		let userid = toId(target);
 		if (!userid) return this.errorReply("Please enter a valid username.");
 		let targetUser = Users(userid);
 		let buf = Chat.html`<strong class="username">${target}</strong>`;
 		if (!targetUser || !targetUser.connected) buf += ` <em style="color:gray">(offline)</em>`;
+
+		let roomauth = '';
+		if (room && room.auth && userid in room.auth) roomauth = room.auth[userid];
+		if (Config.groups[roomauth] && Config.groups[roomauth].name) {
+			buf += `<br />${Config.groups[roomauth].name} (${roomauth})`;
+		}
+		let group = (Users.usergroups[userid] || '').charAt(0);
+		if (Config.groups[group] && Config.groups[group].name) {
+			buf += `<br />Global ${Config.groups[group].name} (${group})`;
+		}
+
 		buf += `<br /><br />`;
 		let atLeastOne = false;
 
