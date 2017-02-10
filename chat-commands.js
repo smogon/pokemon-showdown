@@ -1234,9 +1234,11 @@ exports.commands = {
 		connection.popup(buffer.join("\n\n"));
 	},
 
-	rb: 'roomban',
-	roomban: function (target, room, user, connection) {
-		if (!target) return this.parse('/help roomban');
+	rb: 'ban',
+	roomban: 'ban',
+	b: 'ban',
+	ban: function (target, room, user, connection) {
+		if (!target) return this.parse('/help ban');
 		if (!this.canTalk()) return;
 
 		target = this.splitTarget(target);
@@ -1286,10 +1288,11 @@ exports.commands = {
 		Punishments.roomBan(room, targetUser, null, null, target);
 		return true;
 	},
-	roombanhelp: ["/roomban [username], [reason] - Bans the user from the room you are in. Requires: @ # & ~"],
+	banhelp: ["/roomban [username], [reason] - Bans the user from the room you are in. Requires: @ # & ~"],
 
-	unroomban: 'roomunban',
-	roomunban: function (target, room, user, connection) {
+	unroomban: 'unban',
+	roomunban: 'unban',
+	unban: function (target, room, user, connection) {
 		if (!target) return this.parse('/help unban');
 		if (!this.can('ban', null, room)) return false;
 
@@ -1304,7 +1307,7 @@ exports.commands = {
 			this.errorReply("User '" + target + "' is not banned.");
 		}
 	},
-	roomunbanhelp: ["/roomunban [username] - Unbans the user from the room you are in. Requires: @ # & ~"],
+	unbanhelp: ["/roomunban [username] - Unbans the user from the room you are in. Requires: @ # & ~"],
 
 	'!autojoin': true,
 	autojoin: function (target, room, user, connection) {
