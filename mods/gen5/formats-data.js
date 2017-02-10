@@ -3209,87 +3209,17 @@ exports.BattleFormatsData = {
 		isNonStandard: false,
 		tier: "Unreleased",
 	},
-	propu1: {
-		inherit: true,
-		isNonStandard: false,
-		tier: "Unreleased",
-	},
-	propu2: {
-		inherit: true,
-		isNonStandard: false,
-		tier: "Unreleased",
-	},
-	proph1: {
-		inherit: true,
-		isNonStandard: false,
-		tier: "Unreleased",
-	},
-	propm1: {
-		inherit: true,
-		isNonStandard: false,
-		tier: "Unreleased",
-	},
-	propm2: {
-		inherit: true,
-		isNonStandard: false,
-		tier: "Unreleased",
-	},
-	propt1: {
-		inherit: true,
-		isNonStandard: false,
-		tier: "Unreleased",
-	},
-	propo1: {
-		inherit: true,
-		isNonStandard: false,
-		tier: "Unreleased",
-	},
-	propo2: {
-		inherit: true,
-		isNonStandard: false,
-		tier: "Unreleased",
-	},
-	propc1: {
-		inherit: true,
-		isNonStandard: false,
-		tier: "Unreleased",
-	},
-	propc2: {
-		inherit: true,
-		isNonStandard: false,
-		tier: "Unreleased",
-	},
-	propr1: {
-		inherit: true,
-		isNonStandard: false,
-		tier: "Unreleased",
-	},
-	propr2: {
-		inherit: true,
-		isNonStandard: false,
-		tier: "Unreleased",
-	},
-	propg1: {
-		inherit: true,
-		isNonStandard: false,
-		tier: "Unreleased",
-	},
-	propw1: {
-		inherit: true,
-		isNonStandard: false,
-		tier: "Unreleased",
-	},
-	propw2: {
-		inherit: true,
-		isNonStandard: false,
-		tier: "Unreleased",
-	},
-	propk1: {
-		inherit: true,
-		isNonStandard: false,
-		tier: "Unreleased",
-	},
 	blackbelt: {
+		inherit: true,
+		isNonStandard: false,
+		tier: "Unreleased",
+	},
+	ufopropu2: {
+		inherit: true,
+		isNonStandard: false,
+		tier: "Unreleased",
+	},
+	giantpropo2: {
 		inherit: true,
 		isNonStandard: false,
 		tier: "Unreleased",
