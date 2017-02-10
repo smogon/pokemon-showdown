@@ -1079,6 +1079,27 @@ exports.commands = {
 	groupshelp: ["/groups - Explains what the symbols (like % and @) before people's names mean.",
 		"!groups - Shows everyone that information. Requires: + % @ * # & ~"],
 
+	'!punishments': true,
+	punishments: function (target, room, user) {
+		if (!this.runBroadcast()) return;
+		this.sendReplyBox(
+			"<b>Room punishments</b>:<br />" +
+			"warn - Displays a popup with the rules.<br />" +
+			"mute - Mutes a user (makes them unable to talk) for 7 minutes.<br />" +
+			"hourmute - Mutes a user for 60 minutes.<br />" +
+			"ban - Bans a user (makes them unable to join the room) for 2 days.<br />" +
+			"blacklist - Bans a user for a year.<br />" +
+			"<br />" +
+			"<b>Global punishments</b>:<br />" +
+			"lock - Locks a user (makes them unable to talk in any rooms or PM non-staff) for 2 days.<br />" +
+			"weeklock - Locks a user for a week.<br />" +
+			"namelock - Locks a user and prevents them from having a username for 2 days.<br />" +
+			"globalban - Globally bans (makes them unable to connect and play games) for a week."
+		);
+	},
+	punishmentshelp: ["/punishments - Explains punishments.",
+		"!punishments - Show everyone that information. Requires: + % @ * # & ~"],
+
 	'!opensource': true,
 	repo: 'opensource',
 	repository: 'opensource',
