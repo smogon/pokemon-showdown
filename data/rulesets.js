@@ -518,10 +518,10 @@ exports.BattleFormats = {
 				}
 				if (item.zMove && move.type === item.zMoveType) {
 					if (move.zMoveBoost && move.zMoveBoost.spe > 0) {
-						speedBoosted = true;
+						if (!speedBoosted) speedBoosted = move.name;
 					}
 					if (move.zMoveBoost && (move.zMoveBoost.atk > 0 || move.zMoveBoost.def > 0 || move.zMoveBoost.spa > 0 || move.zMoveBoost.spd > 0)) {
-						nonSpeedBoosted = true;
+						if (!nonSpeedBoosted || move.name === speedBoosted) nonSpeedBoosted = move.name;
 					}
 				}
 			}
@@ -550,6 +550,9 @@ exports.BattleFormats = {
 				}
 			}
 			if (!nonSpeedBoosted) return;
+
+			// if both boost sources are Z-moves, and they're distinct
+			if (speedBoosted !== nonSpeedBoosted && typeof speedBoosted === 'string' && typeof nonSpeedBoosted === 'string') return;
 
 			return [(set.name || set.species) + " can Baton Pass both Speed and a different stat, which is banned by Baton Pass Clause."];
 		},
