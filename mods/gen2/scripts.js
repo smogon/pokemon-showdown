@@ -635,7 +635,7 @@ exports.BattleScripts = {
 		};
 		// Moves which boost Special Attack:
 		let SpecialSetup = {
-			amnesia:1, growth:1,
+			growth:1,
 		};
 
 		do {
