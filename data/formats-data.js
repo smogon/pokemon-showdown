@@ -2184,7 +2184,6 @@ exports.BattleFormatsData = {
 		tier: "New",
 	},
 	smearglebowtie: {
-		randomBattleMoves: ["nastyplot", "attract", "shadowball"],
 		eventPokemon: [
 			{"generation": 5, "level": 60, "gender": "M", "abilities":["owntempo"], "moves":["mindreader", "guillotine", "tailwhip", "gastroacid"]},
 			{"generation": 5, "level": 30, "gender": "M", "abilities":["owntempo"], "moves":["outrage", "magiccoat"]},
@@ -6372,7 +6371,6 @@ exports.BattleFormatsData = {
 		tier: "CAP",
 	},
 	ufo: {
-		randomBattleMoves: ["bubblebeam", "counter", "recover", "signalbeam"],
 		isNonstandard: true,
 		eventPokemon: [
 			{"generation": 5, "level": 38, "moves": ["bubblebeam", "counter", "recover", "signalbeam"]},
@@ -6381,7 +6379,6 @@ exports.BattleFormatsData = {
 		tier: "Illegal",
 	},
 	ufo2: {
-		randomBattleMoves: ["darkpulse", "flamethrower", "hyperbeam", "icebeam"],
 		isNonstandard: true,
 		eventPokemon: [
 			{"generation": 5, "level": 47, "moves": ["darkpulse", "flamethrower", "hyperbeam", "icebeam"]},
@@ -6390,7 +6387,6 @@ exports.BattleFormatsData = {
 		tier: "Illegal",
 	},
 	brycenman: {
-		randomBattleMoves: ["icebeam", "nightshade", "psychic", "uturn"],
 		isNonstandard: true,
 		eventPokemon: [
 			{"generation": 5, "level": 56, "moves": ["icebeam", "nightshade", "psychic", "uturn"]},
@@ -6399,7 +6395,6 @@ exports.BattleFormatsData = {
 		teir: "Illegal",
 	},
 	mt: {
-		randomBattleMoves: ["earthquake", "ironhead", "spark", "surf"],
 		isNonstandard: true,
 		eventPokemon: [
 			{"generation": 5, "level": 63, "moves": ["earthquake", "ironhead", "spark", "surf"]},
@@ -6408,7 +6403,6 @@ exports.BattleFormatsData = {
 		tier: "Illegal",
 	},
 	mt2: {
-		randomBattleMoves: ["dragonpulse", "flamethrower", "metalburst", "thunderbolt"],
 		isNonstandard: true,
 		eventPokemon: [
 			{"generation": 5, "level": 72, "moves": ["dragonpulse", "flamethrower", "metalburst", "thunderbolt"]},
@@ -6417,7 +6411,6 @@ exports.BattleFormatsData = {
 		tier: "Illegal",
 	},
 	transport: {
-		randomBattleMoves: ["iciclecrash", "overheat", "signalbeam"],
 		isNonstandard: true,
 		eventPokemon: [
 			{"generation": 5, "level": 20, "moves": ["clearsmog", "flameburst", "discharge"]},
@@ -6427,7 +6420,6 @@ exports.BattleFormatsData = {
 		tier: "Illegal",
 	},
 	giant: {
-		randomBattleMoves: ["crushgrip", "focuspunch", "growl", "rage"],
 		isNonstandard: true,
 		eventPokemon: [
 			{"generation": 5, "level": 99, "moves": ["crushgrip", "focuspunch", "growl", "rage"]},
@@ -6436,7 +6428,6 @@ exports.BattleFormatsData = {
 		tier: "Illegal",
 	},
 	giant2: {
-		randomBattleMoves: ["crushgrip", "doubleslap", "teeterdance", "stomp"],
 		isNonstandard: true,
 		eventPokemon: [
 			{"generation": 5, "level": 99, "moves": ["crushgrip", "doubleslap", "teeterdance", "stomp"]},
@@ -6445,7 +6436,6 @@ exports.BattleFormatsData = {
 		tier: "Illegal",
 	},
 	humanoid: {
-		randomBattleMoves: ["darkpulse", "shadowclaw", "slash"],
 		isNonstandard: true,
 		eventPokemon: [
 			{"generation": 5, "level": 20, "gender": "M", "moves": ["scratch", "shadowclaw", "acid"]},
@@ -6465,7 +6455,6 @@ exports.BattleFormatsData = {
 		tier: "Illegal",
 	},
 	monster: {
-		randomBattleMoves: ["darkpulse", "confusion"],
 		isNonstandard: true,
 		eventPokemon: [
 			{"generation": 5, "level": 50, "moves": ["darkpulse", "confusion"]},
@@ -6474,7 +6463,6 @@ exports.BattleFormatsData = {
 		tier: "Illegal",
 	},
 	f00: {
-		randomBattleMoves: ["hammerarm", "perishsong", "ironhead", "thrash"],
 		isNonstandard: true,
 		eventPokemon: [
 			{"generation": 5, "level": 10, "moves": ["teeterdance", "growl", "flail", "chatter"]},
@@ -6485,7 +6473,6 @@ exports.BattleFormatsData = {
 		tier: "Illegal",
 	},
 	f002: {
-		randomBattleMoves: ["flareblitz", "ironhead", "psychic", "wildcharge"],
 		isNonstandard: true,
 		eventPokemon: [
 			{"generation": 5, "level": 52, "moves": ["flareblitz", "ironhead", "psychic", "wildcharge"]},
@@ -6494,7 +6481,6 @@ exports.BattleFormatsData = {
 		tier: "Illegal",
 	},
 	spirit: {
-		randomBattleMoves: ["crunch", "dualchop", "slackoff", "swordsdance"],
 		isNonstandard: true,
 		eventPokemon: [
 			{"generation": 5, "level": 99, "moves": ["crunch", "dualchop", "slackoff", "swordsdance"]},
@@ -6503,7 +6489,6 @@ exports.BattleFormatsData = {
 		tier: "Illegal",
 	},
 	blackdoor: {
-		randomBattleMoves: ["batonpass", "counter", "flamecharge", "toxic"],
 		isNonstandard: true,
 		eventPokemon: [
 			{"generation": 5, "level": 53, "moves": ["luckychant", "amnesia", "ingrain", "rest"]},
@@ -6513,7 +6498,6 @@ exports.BattleFormatsData = {
 		tier: "Illegal",
 	},
 	whitedoor: {
-		randomBattleMoves: ["batonpass", "inferno", "mirrorcoat", "toxic"],
 		isNonstandard: true,
 		eventPokemon: [
 			{"generation": 5, "level": 7, "moves": ["batonpass", "inferno", "mirrorcoat", "toxic"]},
@@ -6522,7 +6506,6 @@ exports.BattleFormatsData = {
 		tier: "Illegal",
 	},
 	blackbelt: {
-		randomBattleMoves: ["machpunch", "hammerarm", "jumpkick"],
 		isNonstandard: true,
 		eventPokemon: [
 			{"generation": 5, "level": 30, "moves": ["focuspunch", "machpunch", "taunt"]},
@@ -6532,7 +6515,6 @@ exports.BattleFormatsData = {
 		tier: "Illegal",
 	},
 	giantpropo2: {
-		randomBattleMoves: ["crushgrip", "doubleslap", "teeterdance", "stomp"],
 		isNonstandard: true,
 		eventPokemon: [
 			{"generation": 5, "level": 99, "moves": ["crushgrip", "doubleslap", "teeterdance", "stomp"]},
@@ -6541,7 +6523,6 @@ exports.BattleFormatsData = {
 		tier: "Illegal",
 	},
 	ufopropu2: {
-		randomBattleMoves: ["darkpulse", "flamethrower", "hyperbeam", "icebeam"],
 		isNonstandard: true,
 		eventPokemon: [
 			{"generation": 5, "level": 47, "moves": ["darkpulse", "flamethrower", "hyperbeam", "icebeam"]},
