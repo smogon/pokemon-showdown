@@ -1213,10 +1213,6 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["spore", "spikes", "stealthrock", "uturn", "destinybond", "whirlwind"],
 		tier: "RU",
 	},
-	smearglebowtie: {
-		inherit: true,
-		tier: "Unreleased",
-	},
 	miltank: {
 		randomBattleMoves: ["milkdrink", "stealthrock", "bodyslam", "healbell", "curse", "earthquake"],
 		tier: "NU",
