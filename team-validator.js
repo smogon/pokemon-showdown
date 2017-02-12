@@ -770,8 +770,7 @@ class Validator {
 					} else if (learned.charAt(1) === 'E') {
 						// egg moves:
 						//   only if that was the source
-						const noPastGenBreeding = noPastGen && tools.gen === 7;
-						if ((learnedGen >= 6 && !noPastGenBreeding) || lsetData.fastCheck) {
+						if (learnedGen >= 6 || lsetData.fastCheck) {
 							// gen 6 doesn't have egg move incompatibilities except for certain cases with baby Pokemon
 							learned = learnedGen + 'E' + (template.prevo ? template.id : '');
 							sources.push(learned);
@@ -818,7 +817,7 @@ class Validator {
 									atLeastOne = true;
 									break;
 								}
-								if (noPastGenBreeding) {
+								if (noPastGen) {
 									if (parseInt(fatherLatestMoveGen) < tools.gen) continue;
 									atLeastOne = true;
 									break;
@@ -834,7 +833,7 @@ class Validator {
 							sources.push(learned + father.id);
 							if (limitedEgg !== false) limitedEgg = true;
 						}
-						if (atLeastOne && noPastGenBreeding) {
+						if (atLeastOne && noPastGen) {
 							// gen 6+ doesn't have egg move incompatibilities except for certain cases with baby Pokemon
 							learned = learnedGen + 'E' + (template.prevo ? template.id : '');
 							sources.push(learned);
@@ -844,7 +843,7 @@ class Validator {
 						// chainbreeding with itself
 						// e.g. ExtremeSpeed Dragonite
 						if (!atLeastOne) {
-							if (noPastGenBreeding) continue;
+							if (noPastGen) continue;
 							sources.push(learned + template.id);
 							limitedEgg = 'self';
 						}
