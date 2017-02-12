@@ -35,6 +35,7 @@ exports.Formats = [
 		],
 
 		mod: 'gen7',
+		searchShow: false,
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Baton Pass Clause'],
 		banlist: ['Uber', 'Power Construct', 'Shadow Tag'],
 	},
