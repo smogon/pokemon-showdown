@@ -2443,12 +2443,12 @@ exports.BattleAbilities = {
 		num: 211,
 	},
 	"powerofalchemy": {
-		desc: "This Pokemon copies the Ability of an ally that faints. Abilities that cannot be copied are Flower Gift, Forecast, Illusion, Imposter, Multitype, Stance Change, Trace, Wonder Guard, and Zen Mode.",
+		desc: "This Pokemon copies the Ability of an ally that faints. Abilities that cannot be copied are Battle Bond, Flower Gift, Forecast, Illusion, Imposter, Multitype, Power Construct, RKS System, Shields Down, Stance Change, Trace, Wonder Guard, and Zen Mode.",
 		shortDesc: "This Pokemon copies the Ability of an ally that faints.",
 		onAllyFaint: function (target) {
 			if (!this.effectData.target.hp) return;
 			let ability = this.getAbility(target.ability);
-			let bannedAbilities = {comatose:1, flowergift:1, forecast:1, illusion:1, imposter:1, multitype:1, stancechange:1, trace:1, wonderguard:1, zenmode:1};
+			let bannedAbilities = {battlebond:1, comatose:1, flowergift:1, forecast:1, illusion:1, imposter:1, multitype:1, powerconstruct:1, rkssystem:1, shieldsdown:1, stancechange:1, trace:1, wonderguard:1, zenmode:1};
 			if (bannedAbilities[target.ability]) return;
 			this.add('-ability', this.effectData.target, ability, '[from] ability: Power of Alchemy', '[of] ' + target);
 			this.effectData.target.setAbility(ability);

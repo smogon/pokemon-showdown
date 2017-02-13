@@ -14531,7 +14531,7 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
-		desc: "Causes the target's Ability to become Simple. Fails if the target's Ability is Multitype, Simple, Stance Change, or Truant.",
+		desc: "Causes the target's Ability to become Simple. Fails if the target's Ability is Battle Bond, Multitype, Power Construct, RKS System, Shields Down, Simple, Stance Change, or Truant.",
 		shortDesc: "The target's Ability becomes Simple.",
 		id: "simplebeam",
 		name: "Simple Beam",
@@ -14539,7 +14539,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, mystery: 1},
 		onTryHit: function (pokemon) {
-			let bannedAbilities = {comatose:1, multitype:1, simple:1, stancechange:1, truant:1};
+			let bannedAbilities = {battlebond:1, comatose:1, multitype:1, powerconstruct:1, shieldsdown:1, simple:1, stancechange:1, truant:1};
 			if (bannedAbilities[pokemon.ability]) {
 				return false;
 			}
@@ -18705,7 +18705,7 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
-		desc: "Causes the target's Ability to become Insomnia. Fails if the target's Ability is Insomnia, Multitype, Stance Change, or Truant.",
+		desc: "Causes the target's Ability to become Insomnia. Fails if the target's Ability is Battle Bond, Insomnia, Multitype, Power Construct, RKS System, Shields Down, Stance Change, or Truant.",
 		shortDesc: "The target's Ability becomes Insomnia.",
 		id: "worryseed",
 		name: "Worry Seed",
@@ -18713,7 +18713,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, mystery: 1},
 		onTryHit: function (pokemon) {
-			let bannedAbilities = {comatose:1, insomnia:1, multitype:1, schooling:1, stancechange:1, truant:1};
+			let bannedAbilities = {battlebond:1, comatose:1, insomnia:1, multitype:1, powerconstruct:1, rkssystem:1, schooling:1, shieldsdown:1, stancechange:1, truant:1};
 			if (bannedAbilities[pokemon.ability]) {
 				return false;
 			}
