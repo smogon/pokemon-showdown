@@ -21,8 +21,10 @@ Commits should describe what the code _does_, not how it does it.
 
 In other words:
 
-- BAD: `Add UU format slices`
-- GOOD: `Teambuilder: Add UU tier list`
+- BAD: `Change Wonder Guard from onBeforeMove to onTryHit`
+- GOOD: `Fix Mold Breaker Wonder Guard interaction`
+
+The details of how you achieve the fix should be left for the second paragraph of the commit message.
 
 If this is not possible because your code does not make any functionality changes, your commit summary should ideally start with the word "Refactor" (or at least it contain it in some way).
 
