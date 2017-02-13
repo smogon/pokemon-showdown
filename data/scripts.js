@@ -2246,6 +2246,7 @@ exports.BattleScripts = {
 			// Blaziken: 74, 'Blaziken-Mega': 74, 'Lucario-Mega': 74,
 
 			// Banned Ability
+			Zygarde: 73,
 			// Gothitelle: 74, Wobbuffet: 74,
 
 			// Holistic judgement
@@ -2259,6 +2260,10 @@ exports.BattleScripts = {
 			tier = tier.slice(1, -1);
 		}
 		let level = levelScale[tier] || 75;
+		if (tier === 'Unreleased') {
+			let baseSpeciesTemplate = Tools.getTemplate(template.basespecies);
+			if (levelScale[baseSpeciesTemplate.tier] < 75) level = levelScale[baseSpeciesTemplate.tier] || 75;
+		}
 		if (customScale[template.name]) level = customScale[template.name];
 
 		// if (template.name === 'Slurpuff' && !counter.setupType) level = 81;
