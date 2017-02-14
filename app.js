@@ -42,6 +42,7 @@
 
 'use strict';
 
+const child_process = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
@@ -57,9 +58,8 @@ try {
 } catch (e) {
 	if (require.main !== module) throw new Error("Dependencies unmet");
 
-	let command = 'npm install --production';
-	console.log('Installing dependencies: `' + command + '`...');
-	require('child_process').spawnSync('sh', ['-c', command], {stdio: 'inherit'});
+	console.log('Installing dependencies...');
+	child_process.spawnSync('npm', ['install', '--production'], {stdio: 'inherit'});
 }
 
 /*********************************************************
