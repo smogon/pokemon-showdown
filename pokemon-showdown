@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 'use strict';
 
+const child_process = require('child_process');
+
 // Make sure we're Node 6+
 
 try {
@@ -16,15 +18,18 @@ try {
 try {
 	require.resolve('sockjs');
 } catch (e) {
-	let command = 'npm install --production';
-	console.log('Installing dependencies: `' + command + '`...');
-	require('child_process').spawnSync('sh', ['-c', command], {stdio: 'inherit'});
+	console.log('Installing dependencies...');
+	child_process.spawnSync('npm', ['install', '--production'], {stdio: 'inherit'});
 }
 
-// start the server
+// Start the server
 
 let port;
 if (process.argv[2]) {
 	port = parseInt(process.argv[2]); // eslint-disable-line radix
 }
-require('./app').listen(port);
+
+// Bootstrap manually to ensure any dependencies that were just installed can
+// be found when running on Windows
+
+require('module')._load('./app', module, true).listen(port);
