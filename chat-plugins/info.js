@@ -1088,6 +1088,7 @@ exports.commands = {
 			"mute - Mutes a user (makes them unable to talk) for 7 minutes.<br />" +
 			"hourmute - Mutes a user for 60 minutes.<br />" +
 			"ban - Bans a user (makes them unable to join the room) for 2 days.<br />" +
+			"longban - Bans a user for 2 weeks.<br />" +
 			"blacklist - Bans a user for a year.<br />" +
 			"<br />" +
 			"<b>Global punishments</b>:<br />" +
@@ -1390,6 +1391,8 @@ exports.commands = {
 			"- /declare <em>message</em>: make a large blue declaration to the room<br />" +
 			"- !htmlbox <em>HTML code</em>: broadcasts a box of HTML code to the room<br />" +
 			"- !showimage <em>[url], [width], [height]</em>: shows an image to the room<br />" +
+			"- /blacklist <em>username</em>, <em>reason</em>: blacklists a user from the room for 1 year<br />" +
+			"- /longroomban <em>username</em>, <em>reason</em>: bans user from the room for 2 weeks<br />" +
 			"- /roomsettings: change a variety of room settings, including modchat, capsfilter, etc<br />" +
 			"<br />" +
 			"More detailed help can be found in the <a href=\"https://www.smogon.com/forums/threads/3570628/#post-6774654\">roomauth guide</a><br />" +

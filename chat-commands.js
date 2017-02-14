@@ -1290,6 +1290,60 @@ exports.commands = {
 	},
 	banhelp: ["/roomban [username], [reason] - Bans the user from the room you are in. Requires: @ # & ~"],
 
+	longban: 'longroomban',
+	longroomban: function (target, room, user, connection) {
+		if (!target) return this.parse('/help longroomban');
+		if (!this.canTalk()) return;
+
+		target = this.splitTarget(target);
+		let targetUser = this.targetUser;
+		if (!targetUser) return this.errorReply(`User '${this.targetUsername}' not found.`);
+		if (target.length > MAX_REASON_LENGTH) {
+			return this.errorReply(`The reason is too long. It cannot exceed ${MAX_REASON_LENGTH} characters.`);
+		}
+		if (!this.can('declare', targetUser, room)) return false;
+		let name = targetUser.getLastName();
+		let userid = targetUser.getLastId();
+
+		if (Punishments.isRoomBanned(targetUser, room.id) && !target) {
+			let problem = " but was already banned";
+			return this.privateModCommand(`(${name} would be banned by ${user.name} for 2 weeks${problem}.)`);
+		}
+
+		if (targetUser.trusted && room.isPrivate !== true && !room.isPersonal) {
+			Monitor.log("[CrisisMonitor] Trusted user " + targetUser.name + (targetUser.trusted !== targetUser.userid ? " (" + targetUser.trusted + ")" : "") + " was roombanned from " + room.id + " for 2 weeks by " + user.name + ", and should probably be demoted.");
+		}
+
+		if (targetUser in room.users || user.can('lock')) {
+			targetUser.popup(
+				"|modal||html|<p>" + Chat.escapeHTML(user.name) + " has banned you from the room " + room.id + " for 2 weeks.</p>" + (target ? "<p>Reason: " + Chat.escapeHTML(target) + "</p>" : "") +
+				"<p>To appeal the ban, PM the staff member that banned you" + (!room.battle && room.auth ? " or a room owner. </p><p><button name=\"send\" value=\"/roomauth " + room.id + "\">List Room Staff</button></p>" : ".</p>")
+			);
+		}
+
+		const reason = (target ? ` (${target})` : ``);
+		this.addModCommand(`${name} was banned from ${room.title} for 2 weeks by ${user.name}.${reason}`, ` (${targetUser.latestIp})`);
+
+		if (!room.isPrivate && room.chatRoomData) {
+			let alts = targetUser.getAlts();
+			let acAccount = (targetUser.autoconfirmed !== userid && targetUser.autoconfirmed);
+			if (alts.length) {
+				this.privateModCommand("(" + name + "'s " + (acAccount ? " ac account: " + acAccount + ", " : "") + "banned alts: " + alts.join(", ") + ")");
+			} else if (acAccount) {
+				this.privateModCommand(`(${name}'s ac account: ${acAccount})`);
+			}
+		}
+		this.add('|unlink|hide|' + userid);
+		if (userid !== toId(this.inputUsername)) this.add(`|unlink|hide|${toId(this.inputUsername)}`);
+
+		if (!room.isPrivate && room.chatRoomData) {
+			this.globalModlog("LONGROOMBAN", targetUser, " by " + user.name + (target ? ": " + target : ""));
+		}
+		Punishments.roomBan(room, targetUser, Date.now() + 2 * 7 * 24 * 60 * 60 * 1000, null, target);
+		return true;
+	},
+	longroombanhelp: ["/longroomban [username], [reason] - Bans the user from the room you are in for 2 weeks. Requires: * # & ~"],
+
 	unroomban: 'unban',
 	roomunban: 'unban',
 	unban: function (target, room, user, connection) {
