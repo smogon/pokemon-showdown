@@ -18,6 +18,9 @@ exports.BattleScripts = {
 				pokemon = this.data.Pokedex[pokemon].prevo;
 			}
 			let target = dex[(i === 0 ? dex.length - 1 : i - 1)];
+			while (this.data.Pokedex[pokemon].num === this.data.Pokedex[target].num) {
+				target = dex[dex.indexOf(target) - 1];
+			}
 			let merge = false;
 			do {
 				let learnset = learnsets[target].learnset;
@@ -30,6 +33,9 @@ exports.BattleScripts = {
 				} else if (!merge) {
 					merge = true;
 					target = dex[(i === dex.length - 1 ? 0 : i + 1)];
+					while (this.data.Pokedex[pokemon].num === this.data.Pokedex[target].num) {
+						target = dex[dex.indexOf(target) + 1];
+					}
 				} else {
 					target = null;
 				}
