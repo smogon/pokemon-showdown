@@ -26,7 +26,7 @@ try {
 
 let port;
 if (process.argv[2]) {
-	port = parseInt(process.argv[2]); // eslint-disable-line radix
+	port = parseInt(process.argv[2]);
 }
 
 // Bootstrap manually to ensure any dependencies that were just installed can
