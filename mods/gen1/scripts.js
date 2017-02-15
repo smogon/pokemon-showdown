@@ -214,7 +214,7 @@ exports.BattleScripts = {
 		// Store 0 damage for last damage if move failed or dealt 0 damage.
 		// This only happens on moves that don't deal damage but call GetDamageVarsForPlayerAttack (disassembly).
 		if (!damage && (move.category !== 'Status' || (move.category === 'Status' && !(move.status in {'psn':1, 'tox':1, 'par':1}))) &&
-		!(move.id in {'conversion':1, 'haze':1, 'mist':1, 'focusenergy':1, 'confuseray':1, 'transform':1, 'lightscreen':1, 'reflect':1, 'substitute':1, 'mimic':1, 'leechseed':1, 'splash':1, 'softboiled':1, 'recover':1, 'rest':1})) {
+		!(move.id in {'conversion':1, 'haze':1, 'mist':1, 'focusenergy':1, 'confuseray':1, 'supersonic':1, 'transform':1, 'lightscreen':1, 'reflect':1, 'substitute':1, 'mimic':1, 'leechseed':1, 'splash':1, 'softboiled':1, 'recover':1, 'rest':1})) {
 			pokemon.battle.lastDamage = 0;
 		}
 
@@ -488,7 +488,14 @@ exports.BattleScripts = {
 			if (moveData.status) {
 				// Gen 1 bug: If the target has just used hyperbeam and must recharge, its status will be ignored and put to sleep.
 				// This does NOT revert the paralyse speed drop or the burn attack drop.
-				if (!target.status || moveData.status === 'slp' && target.volatiles['mustrecharge']) {
+				// Also, being put to sleep clears the recharge condition.
+				if (moveData.status === 'slp' && target.volatiles['mustrecharge']) {
+					// The sleep move is guaranteed to hit in this situation, unless Sleep Clause activates.
+					// Do not clear recharge in that case.
+					if (target.setStatus(moveData.status, pokemon, move)) {
+						target.removeVolatile('mustrecharge');
+					}
+				} else if (!target.status) {
 					if (target.setStatus(moveData.status, pokemon, move)) {
 						// Gen 1 mechanics: The burn attack drop and the paralyse speed drop are applied here directly on stat modifiers.
 						if (moveData.status === 'brn') target.modifyStat('atk', 0.5);
