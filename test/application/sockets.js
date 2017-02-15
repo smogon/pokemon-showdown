@@ -50,12 +50,12 @@ describe('Sockets', function () {
 	});
 
 	describe('master', function () {
-		it('should be able to spawn workers', function () {
+		it.skip('should be able to spawn workers', function () {
 			assert.doesNotThrow(spawnWorker);
 			assert.strictEqual(numWorkers(), 1);
 		});
 
-		it('should be able to spawn workers on listen', function () {
+		it.skip('should be able to spawn workers on listen', function () {
 			Sockets.listen(0, '127.0.0.1', 4);
 			assert.strictEqual(numWorkers(), 4);
 		});
@@ -100,7 +100,7 @@ describe('Sockets', function () {
 			});
 		}
 
-		it('should allow sockets to connect', function () {
+		it.skip('should allow sockets to connect', function () {
 			return mockWorker().then(worker => {
 				worker.once('message', data => {
 					let cmd = data.charAt(0);
@@ -113,7 +113,7 @@ describe('Sockets', function () {
 			});
 		});
 
-		it('should allow sockets to disconnect', function () {
+		it.skip('should allow sockets to disconnect', function () {
 			return mockWorker().then(worker => {
 				worker.once('message', data => {
 					let sid = data.substr(1, data.indexOf('\n'));
@@ -128,7 +128,7 @@ describe('Sockets', function () {
 			});
 		});
 
-		it('should allow sockets to send messages', function () {
+		it.skip('should allow sockets to send messages', function () {
 			return mockWorker().then(worker => {
 				worker.once('message', data => {
 					let sid = data.substr(1, data.indexOf('\n'));
@@ -141,7 +141,7 @@ describe('Sockets', function () {
 			});
 		});
 
-		it('should allow sockets to receive messages', function () {
+		it.skip('should allow sockets to receive messages', function () {
 			return mockWorker().then(worker => {
 				worker.once('message', data => {
 					let sid = data.substr(1, data.indexOf('\n'));
@@ -162,7 +162,7 @@ describe('Sockets', function () {
 			});
 		});
 
-		it('should create a channel for the first socket to get added to it', function () {
+		it.skip('should create a channel for the first socket to get added to it', function () {
 			return mockWorker().then(worker => {
 				worker.once('message', data => {
 					let sid = data.substr(1, data.indexOf('\n'));
@@ -184,7 +184,7 @@ describe('Sockets', function () {
 			});
 		});
 
-		it('should remove a channel if the last socket gets removed from it', function () {
+		it.skip('should remove a channel if the last socket gets removed from it', function () {
 			return mockWorker().then(worker => {
 				worker.once('message', data => {
 					let sid = data.substr(1, data.indexOf('\n'));
@@ -204,7 +204,7 @@ describe('Sockets', function () {
 			});
 		});
 
-		it('should send to all sockets in a channel', function () {
+		it.skip('should send to all sockets in a channel', function () {
 			return mockWorker().then(worker => {
 				worker.once('message', data => {
 					let sid = data.substr(1, data.indexOf('\n'));
@@ -228,7 +228,7 @@ describe('Sockets', function () {
 			});
 		});
 
-		it('should create a subchannel when moving a socket to it', function () {
+		it.skip('should create a subchannel when moving a socket to it', function () {
 			return mockWorker().then(worker => {
 				worker.once('message', data => {
 					let sid = data.substr(1, data.indexOf('\n'));
