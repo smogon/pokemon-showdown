@@ -1084,17 +1084,17 @@ exports.commands = {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(
 			"<b>Room punishments</b>:<br />" +
-			"warn - Displays a popup with the rules.<br />" +
-			"mute - Mutes a user (makes them unable to talk) for 7 minutes.<br />" +
-			"hourmute - Mutes a user for 60 minutes.<br />" +
-			"ban - Bans a user (makes them unable to join the room) for 2 days.<br />" +
-			"blacklist - Bans a user for a year.<br />" +
+			"<b>warn</b> - Displays a popup with the rules.<br />" +
+			"<b>mute</b> - Mutes a user (makes them unable to talk) for 7 minutes.<br />" +
+			"<b>hourmute</b> - Mutes a user for 60 minutes.<br />" +
+			"<b>ban</b> - Bans a user (makes them unable to join the room) for 2 days.<br />" +
+			"<b>blacklist</b> - Bans a user for a year.<br />" +
 			"<br />" +
 			"<b>Global punishments</b>:<br />" +
-			"lock - Locks a user (makes them unable to talk in any rooms or PM non-staff) for 2 days.<br />" +
-			"weeklock - Locks a user for a week.<br />" +
-			"namelock - Locks a user and prevents them from having a username for 2 days.<br />" +
-			"globalban - Globally bans (makes them unable to connect and play games) for a week."
+			"<b>lock</b> - Locks a user (makes them unable to talk in any rooms or PM non-staff) for 2 days.<br />" +
+			"<b>weeklock</b> - Locks a user for a week.<br />" +
+			"<b>namelock</b> - Locks a user and prevents them from having a username for 2 days.<br />" +
+			"<b>globalban</b> - Globally bans (makes them unable to connect and play games) for a week."
 		);
 	},
 	punishmentshelp: ["/punishments - Explains punishments.",
