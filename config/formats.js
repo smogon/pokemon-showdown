@@ -46,7 +46,7 @@ exports.Formats = [
 
 		mod: 'gen7',
 		ruleset: ['[Gen 7] OU'],
-		banlist: ['Dugtrio'],
+		banlist: ['Dugtrio-Base'],
 	},
 	{
 		name: "[Gen 7] Ubers",
