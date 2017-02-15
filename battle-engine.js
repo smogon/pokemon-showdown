@@ -2427,9 +2427,7 @@ class Battle extends Tools.BattleDex {
 			return Math.random() - 0.5;
 		});
 		for (let i = 0; i < actives.length; i++) {
-			if (actives[i].isStarted) {
-				this.runEvent(eventid, actives[i], null, effect, relayVar);
-			}
+			this.runEvent(eventid, actives[i], null, effect, relayVar);
 		}
 	}
 	residualEvent(eventid, relayVar) {
