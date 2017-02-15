@@ -42,24 +42,14 @@
 
 'use strict';
 
-const child_process = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
-/*********************************************************
- * Make sure we have everything set up correctly
- *********************************************************/
-
-// Make sure our dependencies are available, and install them if they
-// aren't
-
+// Check for dependencies
 try {
 	require.resolve('sockjs');
 } catch (e) {
-	if (require.main !== module) throw new Error("Dependencies unmet");
-
-	console.log('Installing dependencies...');
-	child_process.spawnSync('npm', ['install', '--production'], {stdio: 'inherit'});
+	throw new Error("Dependencies unmet; run npm install");
 }
 
 /*********************************************************
