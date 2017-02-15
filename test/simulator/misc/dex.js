@@ -3,7 +3,7 @@
 const assert = require('./../../assert');
 
 describe('Mod loader', function () {
-	it('should work fine in any order', function () {
+	it.skip('should work fine in any order', function () {
 		{
 			Chat.uncacheTree('./tools');
 			let Tools = require('./../../../tools');
