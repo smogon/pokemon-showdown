@@ -1061,19 +1061,19 @@ exports.commands = {
 	groups: function (target, room, user) {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(
-			"<b>Room Rank</b><br />" +
-			"+ <b>Voice</b> - They can use ! commands like !groups, and talk during moderated chat<br />" +
-			"% <b>Driver</b> - The above, and they can mute and warn<br />" +
-			"@ <b>Moderator</b> - The above, and they can room ban users<br />" +
-			"* <b>Bot</b> - Like Moderator, but makes it clear that this user is a bot<br />" +
-			"# <b>Room Owner</b> - They are leaders of the room and can almost totally control it<br /><br />" +
-			"<b>Global Rank</b><br />" +
-			"+ <b>Global Voice</b> - They can use ! commands like !groups, and talk during moderated chat<br />" +
-			"% <b>Global Driver</b> - The above, and they can also lock users and check for alts<br />" +
-			"@ <b>Global Moderator</b> - The above, and they can globally ban users<br />" +
-			"* <b>Global Bot</b> - Like Moderator, but makes it clear that this user is a bot<br />" +
-			"&amp; <b>Global Leader</b> - The above, and they can promote to global moderator and force ties<br />" +
-			"~ <b>Global Administrator</b> -  They can do anything, like change what this message says"
+			"<strong>Room Rank</strong><br />" +
+			"+ <strong>Voice</strong> - They can use ! commands like !groups, and talk during moderated chat<br />" +
+			"% <strong>Driver</strong> - The above, and they can mute and warn<br />" +
+			"@ <strong>Moderator</strong> - The above, and they can room ban users<br />" +
+			"* <strong>Bot</strong> - Like Moderator, but makes it clear that this user is a bot<br />" +
+			"# <strong>Room Owner</strong> - They are leaders of the room and can almost totally control it<br /><br />" +
+			"<strong>Global Rank</strong><br />" +
+			"+ <strong>Global Voice</strong> - They can use ! commands like !groups, and talk during moderated chat<br />" +
+			"% <strong>Global Driver</strong> - The above, and they can also lock users and check for alts<br />" +
+			"@ <strong>Global Moderator</strong> - The above, and they can globally ban users<br />" +
+			"* <strong>Global Bot</strong> - Like Moderator, but makes it clear that this user is a bot<br />" +
+			"&amp; <strong>Global Leader</strong> - The above, and they can promote to global moderator and force ties<br />" +
+			"~ <strong>Global Administrator</strong> -  They can do anything, like change what this message says"
 		);
 	},
 	groupshelp: ["/groups - Explains what the symbols (like % and @) before people's names mean.",
