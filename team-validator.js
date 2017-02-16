@@ -261,7 +261,7 @@ class Validator {
 			problems.push(`${name}'s item ${set.item} is unreleased.`);
 		}
 		if (banlistTable['Unreleased'] && template.isUnreleased) {
-			if (!format.requirePentagon || (template.eggGroups[0] === 'Undiscovered' && !template.evos)) {
+			if (template.eggGroups[0] === 'Undiscovered' && !template.evos) {
 				problems.push(`${name} (${template.species}) is unreleased.`);
 			}
 		}
@@ -338,8 +338,8 @@ class Validator {
 						} else if (problem.type === 'oversketched') {
 							let plural = (parseInt(problem.maxSketches) === 1 ? '' : 's');
 							problemString = problemString.concat(` because it can only sketch ${problem.maxSketches} move${plural}.`);
-						} else if (problem.type === 'pokebank') {
-							problemString = problemString.concat(` because it's only obtainable from a previous generation.`);
+						} else if (problem.type === 'pastgen') {
+							problemString = problemString.concat(` because it needs to be from generation ${problem.gen} or later.`);
 						} else {
 							problemString = problemString.concat(`.`);
 						}
@@ -453,7 +453,8 @@ class Validator {
 				events:
 				for (let i = 0; i < eventPokemon.length; i++) {
 					let eventData = eventPokemon[i];
-					if (format.requirePentagon && eventData.generation < tools.gen) continue;
+					if (format.requirePentagon && eventData.generation < 6) continue;
+					if (format.requirePlus && eventData.generation < 7) continue;
 					if (eventData.level && set.level < eventData.level) continue;
 					if ((eventData.shiny === true && !set.shiny) || (!eventData.shiny && set.shiny)) continue;
 					if (eventData.nature && set.nature !== eventData.nature) continue;
@@ -687,10 +688,9 @@ class Validator {
 		if (lsetData.sourcesBefore === undefined) lsetData.sourcesBefore = tools.gen;
 
 		/**
-		 * The format doesn't allow Pokemon who've been transferred from
-		 * other generations
+		 * The minimum past gen the format allows
 		 */
-		const noPastGen = !!format.requirePentagon;
+		const minPastGen = (format.requirePlus ? 7 : format.requirePentagon ? 6 : 1);
 		/**
 		 * The format doesn't allow Pokemon who've bred with past gen Pokemon
 		 * (e.g. Gen 6-7 before Pokebank was released)
@@ -736,7 +736,7 @@ class Validator {
 				for (let i = 0, len = lset.length; i < len; i++) {
 					let learned = lset[i];
 					let learnedGen = parseInt(learned.charAt(0));
-					if (noPastGen && learnedGen < tools.gen) continue;
+					if (learnedGen < minPastGen) continue;
 					if (noFutureGen && learnedGen > tools.gen) continue;
 
 					// redundant
@@ -931,7 +931,7 @@ class Validator {
 
 		// Now that we have our list of possible sources, intersect it with the current list
 		if (!sourcesBefore && !sources.length) {
-			if (noPastGen && sometimesPossible) return {type:'pokebank'};
+			if (minPastGen > 1 && sometimesPossible) return {type:'pastgen', gen: minPastGen};
 			if (incompatibleAbility) return {type:'incompatibleAbility'};
 			return true;
 		}
