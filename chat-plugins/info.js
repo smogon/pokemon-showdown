@@ -1087,7 +1087,7 @@ exports.commands = {
 			"<strong>warn</strong> - Displays a popup with the rules.<br />" +
 			"<strong>mute</strong> - Mutes a user (makes them unable to talk) for 7 minutes.<br />" +
 			"<strong>hourmute</strong> - Mutes a user for 60 minutes.<br />" +
-			"<strong>ban</strongb> - Bans a user (makes them unable to join the room) for 2 days.<br />" +
+			"<strong>ban</strong> - Bans a user (makes them unable to join the room) for 2 days.<br />" +
 			"<strong>blacklist</strong> - Bans a user for a year.<br />" +
 			"<br />" +
 			"<strong>Global punishments</strong>:<br />" +
