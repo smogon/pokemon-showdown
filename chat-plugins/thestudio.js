@@ -38,7 +38,7 @@ if (theStudio) {
 function saveWinners() {
 	let buf = "Artist\tNominator\tQuote\tSong\tLink\tImage\tTimestamp\n";
 	for (let i = 0; i < winners.length; i++) {
-		const {artist: artist, nominator: nominator, quote: quote, song: song, link: link, image: image, time: time} = winners[i];
+		const {artist, nominator, quote, song, link, image, time} = winners[i];
 
 		buf += `${artist || ''}\t${nominator || ''}\t${quote || ''}\t${song || ''}\t${link || ''}\t${image || ''}\t${time || 0}\n`;
 	}
