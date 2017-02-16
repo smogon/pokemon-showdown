@@ -685,11 +685,26 @@ class Validator {
 		// the equivalent of adding "every source at or before this gen" to sources
 		let sourcesBefore = 0;
 		if (lsetData.sourcesBefore === undefined) lsetData.sourcesBefore = tools.gen;
-		let noPastGen = !!format.requirePentagon;
-		// Pokemon cannot be traded to past generations except in Gen 1 Tradeback
-		let noFutureGen = !(format.banlistTable && format.banlistTable['allowtradeback']);
-		// if a move can only be learned from a gen 2-5 egg, we have to check chainbreeding validity
-		// limitedEgg is false if there are any legal non-egg sources for the move, and true otherwise
+
+		/**
+		 * The format doesn't allow Pokemon who've been transferred from
+		 * other generations
+		 */
+		const noPastGen = !!format.requirePentagon;
+		/**
+		 * The format doesn't allow Pokemon who've bred with past gen Pokemon
+		 * (e.g. Gen 6-7 before Pokebank was released)
+		 */
+		const noPastGenBreeding = false;
+		/**
+		 * The format doesn't allow Pokemon traded from the future
+		 * (This is everything except in Gen 1 Tradeback)
+		 */
+		const noFutureGen = !(format.banlistTable && format.banlistTable['allowtradeback']);
+		/**
+		 * If a move can only be learned from a gen 2-5 egg, we have to check chainbreeding validity
+		 * limitedEgg is false if there are any legal non-egg sources for the move, and true otherwise
+		 */
 		let limitedEgg = null;
 
 		let tradebackEligible = false;
@@ -768,7 +783,6 @@ class Validator {
 					} else if (learned.charAt(1) === 'E') {
 						// egg moves:
 						//   only if that was the source
-						const noPastGenBreeding = false;
 						if ((learnedGen >= 6 && !noPastGenBreeding) || lsetData.fastCheck) {
 							// gen 6 doesn't have egg move incompatibilities except for certain cases with baby Pokemon
 							learned = learnedGen + 'E' + (template.prevo ? template.id : '');
