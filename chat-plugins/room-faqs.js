@@ -86,6 +86,7 @@ exports.commands = {
 		saveRoomFaqs();
 		this.privateModCommand(`(${user.name} added an alias for '${topic}': ${alias})`);
 	},
+	rfaq: 'roomfaq',
 	roomfaq: function (target, room, user) {
 		if (!roomFaqs[room.id]) return this.errorReply("This room has no FAQ topics.");
 		let topic = toId(target);
