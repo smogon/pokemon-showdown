@@ -3458,6 +3458,7 @@ exports.commands = {
 	commands: 'help',
 	h: 'help',
 	'?': 'help',
+	man: 'help',
 	help: function (target, room, user) {
 		if (!this.runBroadcast()) return;
 		target = target.toLowerCase();
