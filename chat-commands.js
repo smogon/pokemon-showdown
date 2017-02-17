@@ -1869,39 +1869,39 @@ exports.commands = {
 			return this.errorReply("Please specify a group such as /globalvoice or /globaldeauth");
 		}
 		if (!Config.groups[nextGroup]) {
-			return this.errorReply("Group '" + nextGroup + "' does not exist.");
+			return this.errorReply(`Group '${nextGroup}' does not exist.`);
 		}
 		if (!cmd.startsWith('global')) {
 			let groupid = Config.groups[nextGroup].id;
 			if (!groupid && nextGroup === Config.groupsranking[0]) groupid = 'deauth';
-			if (Config.groups[nextGroup].globalonly) return this.errorReply('Did you mean "/global' + groupid + '"?');
-			return this.errorReply('Did you mean "/room' + groupid + '" or "/global' + groupid + '"?');
+			if (Config.groups[nextGroup].globalonly) return this.errorReply(`Did you mean "/global${groupid}"?`);
+			return this.errorReply(`Did you mean "/room${groupid}" or "/global${groupid}"?`);
 		}
 		if (Config.groups[nextGroup].roomonly || Config.groups[nextGroup].battleonly) {
-			return this.errorReply("Group '" + nextGroup + "' does not exist as a global rank.");
+			return this.errorReply(`Group '${nextGroup}' does not exist as a global rank.`);
 		}
 
 		let groupName = Config.groups[nextGroup].name || "regular user";
 		if (currentGroup === nextGroup) {
-			return this.errorReply("User '" + name + "' is already a " + groupName);
+			return this.errorReply(`User '${name}' is already a ${groupName}`);
 		}
 		if (!user.canPromote(currentGroup, nextGroup)) {
-			return this.errorReply("/" + cmd + " - Access denied.");
+			return this.errorReply(`/${cmd} - Access denied.`);
 		}
 
 		if (!Users.isUsernameKnown(userid)) {
-			return this.errorReply("/globalpromote - WARNING: '" + name + "' is offline and unrecognized. The username might be misspelled (either by you or the person or told you) or unregistered. Use /forcepromote if you're sure you want to risk it.");
+			return this.errorReply(`/globalpromote - WARNING: '${name}' is offline and unrecognized. The username might be misspelled (either by you or the person or told you) or unregistered. Use /forcepromote if you're sure you want to risk it.`);
 		}
 		if (targetUser && !targetUser.registered) {
-			return this.errorReply("User '" + name + "' is unregistered, and so can't be promoted.");
+			return this.errorReply(`User '${name}' is unregistered, and so can't be promoted.`);
 		}
 		Users.setOfflineGroup(name, nextGroup);
 		if (Config.groups[nextGroup].rank < Config.groups[currentGroup].rank) {
-			this.privateModCommand("(" + name + " was demoted to " + groupName + " by " + user.name + ".)");
-			if (targetUser) targetUser.popup("You were demoted to " + groupName + " by " + user.name + ".");
+			this.privateModCommand(`(${name} was demoted to ${groupName} by ${user.name}.)`);
+			if (targetUser) targetUser.popup(`You were demoted to ${groupName} by ${user.name}.`);
 		} else {
-			this.addModCommand("" + name + " was promoted to " + groupName + " by " + user.name + ".");
-			if (targetUser) targetUser.popup("You were promoted to " + groupName + " by " + user.name + ".");
+			this.addModCommand(`${name} was promoted to ${groupName} by ${user.name}.`);
+			if (targetUser) targetUser.popup(`You were promoted to ${groupName} by ${user.name}.`);
 		}
 
 		if (targetUser) targetUser.updateIdentity();
