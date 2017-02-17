@@ -380,7 +380,7 @@ class Battle {
 		if (!player) return false;
 		this.players[user.userid] = player;
 		this.playerCount++;
-		this.room.auth[user.userid] = '\u2605';
+		this.room.auth[user.userid] = '\u2606';
 		if (this.playerCount >= 2) {
 			this.room.title = "" + this.p1.name + " vs. " + this.p2.name;
 			this.room.send('|title|' + this.room.title);
