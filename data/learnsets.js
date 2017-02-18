@@ -1545,37 +1545,37 @@ exports.BattleLearnsets = {
 		vacuumwave: ["4T"],
 		wrap: ["4L1"],
 	}},
-	brycenman: {learnset: {
+	pokestarbrycenman: {learnset: {
 		icebeam: ["5S0"],
 		nightshade: ["5S0"],
 		psychic: ["5S0"],
 		uturn: ["5S0"],
 	}},
-	ufo: {learnset: {
+	pokestarufo: {learnset: {
 		bubblebeam: ["5S0"],
 		counter: ["5S0"],
 		recover: ["5S0"],
 		signalbeam: ["5S0"],
 	}},
-	ufo2: {learnset: {
+	pokestarufo2: {learnset: {
 		darkpulse: ["5S0"],
 		flamethrower: ["5S0"],
 		hyperbeam: ["5S0"],
 		icebeam: ["5S0"],
 	}},
-	mt: {learnset: {
+	pokestarmt: {learnset: {
 		earthquake: ["5S0"],
 		ironhead: ["5S0"],
 		spark: ["5S0"],
 		surf: ["5S0"],
 	}},
-	mt2: {learnset: {
+	pokestarmt2: {learnset: {
 		dragonpulse: ["5S0"],
 		flamethrower: ["5S0"],
 		metalburst: ["5S0"],
 		thunderbolt: ["5S0"],
 	}},
-	transport: {learnset: {
+	pokestartransport: {learnset: {
 		clearsmog: ["5S0"],
 		discharge: ["5S0"],
 		flameburst: ["5S0"],
@@ -1583,14 +1583,14 @@ exports.BattleLearnsets = {
 		overheat: ["5S1"],
 		signalbeam: ["5S1"],
 	}},
-	blackbelt: {learnset: {
+	pokestarblackbelt: {learnset: {
 		focuspunch: ["5S0"],
 		hammerarm: ["5S1"],
 		jumpkick: ["5S1"],
 		machpunch: ["5S0", "5S1"],
 		taunt: ["5S0"],
 	}},
-	blackdoor: {learnset: {
+	pokestarblackdoor: {learnset: {
 		amnesia: ["5S0"],
 		batonpass: ["5S1"],
 		counter: ["5S1"],
@@ -1600,25 +1600,25 @@ exports.BattleLearnsets = {
 		rest: ["5S0"],
 		toxic: ["5S1"],
 	}},
-	whitedoor: {learnset: {
+	pokestarwhitedoor: {learnset: {
 		batonpass: ["5S0"],
 		inferno: ["5S0"],
 		mirrorcoat: ["5S0"],
 		toxic: ["5S0"],
 	}},
-	giant: {learnset: {
+	pokestargiant: {learnset: {
 		crushgrip: ["5S0"],
 		focuspunch: ["5S0"],
 		growl: ["5S0"],
 		rage: ["5S0"],
 	}},
-	giant2: {learnset: {
+	pokestargiant2: {learnset: {
 		crushgrip: ["5S0"],
 		doubleslap: ["5S0"],
 		stomp: ["5S0"],
 		teeterdance: ["5S0"],
 	}},
-	humanoid: {learnset: {
+	pokestarhumanoid: {learnset: {
 		acid: ["5S0", "5S2", "5S3", "5S4", "5S5", "5S6"],
 		darkpulse: ["5S1"],
 		doubleedge: ["5S3", "5S10"],
@@ -1632,11 +1632,11 @@ exports.BattleLearnsets = {
 		slash: ["5S1"],
 		thunderpunch: ["5S5"],
 	}},
-	monster: {learnset: {
+	pokestarmonster: {learnset: {
 		confusion: ["5S0"],
 		darkpulse: ["5S0"],
 	}},
-	f00: {learnset: {
+	pokestarf00: {learnset: {
 		chatter: ["5S0"],
 		defensecurl: ["5S1"],
 		flail: ["5S0"],
@@ -1650,25 +1650,25 @@ exports.BattleLearnsets = {
 		teeterdance: ["5S0"],
 		thrash: ["5S2"],
 	}},
-	f002: {learnset: {
+	pokestarf002: {learnset: {
 		flareblitz: ["5S0"],
 		ironhead: ["5S0"],
 		psychic: ["5S0"],
 		wildcharge: ["5S0"],
 	}},
-	spirit: {learnset: {
+	pokestarspirit: {learnset: {
 		crunch: ["5S0"],
 		dualchop: ["5S0"],
 		slackoff: ["5S0"],
 		swordsdance: ["5S0"],
 	}},
-	ufopropu2: {learnset: {
+	pokestarufopropu2: {learnset: {
 		darkpulse: ["5S0"],
 		flamethrower: ["5S0"],
 		hyperbeam: ["5S0"],
 		icebeam: ["5S0"],
 	}},
-	giantpropo2: {learnset: {
+	pokestargiantpropo2: {learnset: {
 		crushgrip: ["5S0"],
 		doubleslap: ["5S0"],
 		stomp: ["5S0"],
