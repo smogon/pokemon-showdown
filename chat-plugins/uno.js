@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 const maxTime = 20; // seconds
 
@@ -21,27 +21,10 @@ function createDeck() {
 	}
 
 	return [...basic, ...basic, // two copies of the basic stuff (total 96)
-		...[...[...Array(4)].map((v, i) => {
-			return {colour: colours[i], value: "0", name: colours[i] + " 0"};
-		})], // the 4 0s
-		...[...[...Array(4)].map(v => {
-			return {colour: "Black", value: "Wild", name: "Wild"};
-		})], // wild cards
-		...[...[...Array(4)].map(v => {
-			return {colour: "Black", value: "+4", name: "Wild +4"};
-		})], // wild +4 cards
+		...new Array(4).fill(0).map((v, i) => ({colour: colours[i], value: "0", name: colours[i] + " 0"})), // the 4 0s
+		...new Array(4).fill(0).map(v => ({colour: "Black", value: "Wild", name: "Wild"})), // wild cards
+		...new Array(4).fill(0).map(v => ({colour: "Black", value: "+4", name: "Wild +4"})), // wild +4 cards
 	]; // 108 cards
-}
-
-// Durstenfeld shuffle algorithm - optimized Fisher-Yates shuffle.
-function shuffle(array) {
-	for (let i = array.length - 1; i > 0; i--) {
-		let j = Math.floor(Math.random() * (i + 1));
-		let temp = array[i];
-		array[i] = array[j];
-		array[j] = temp;
-	}
-	return array;
 }
 
 class UNOgame extends Rooms.RoomGame {
@@ -64,7 +47,7 @@ class UNOgame extends Rooms.RoomGame {
 		this.state = "signups";
 
 		this.currentPlayer = null;
-		this.deck = shuffle(createDeck());
+		this.deck = Tools.shuffle(createDeck());
 		this.discards = [];
 		this.topCard = null;
 
@@ -89,14 +72,14 @@ class UNOgame extends Rooms.RoomGame {
 			this.discards.unshift(this.topCard);
 		} while (this.topCard.colour === "Black");
 
-		this.sendToRoom(`|raw|The top card is <font color=${this.topCard.colour}>${this.topCard.name}</font>.`);
+		this.sendToRoom(`|raw|The top card is <span style="color: ${this.topCard.colour}">${this.topCard.name}</span>.`);
 
 		this.onRunEffect(this.topCard.value, true);
 		this.nextTurn(true);
 	}
 
 	joinGame(user) {
-		if (this.addPlayer(user)) return true;
+		if (this.state === "signups" && this.addPlayer(user)) return true;
 		return false;
 	}
 
@@ -161,7 +144,7 @@ class UNOgame extends Rooms.RoomGame {
 
 		if (this.awaitUno) {
 			this.unoId = Math.floor(Math.random() * 100).toString();
-			this.players[this.awaitUno].sendRoom(`|raw|<center><button name=send value="/uno uno ${this.unoId}" style="background-color: green; width: 80%; padding: 8px; border: 2px solid rgba(33 , 68 , 72 , 0.59); border-radius: 8px;">UNO!</button></center>`);
+			this.players[this.awaitUno].sendRoom(`|raw|<div style="text-align: center"><button name=send value="/uno uno ${this.unoId}" style="background-color: green; width: 80%; padding: 8px; border: 2px solid rgba(33 , 68 , 72 , 0.59); border-radius: 8px;">UNO!</button></div>`);
 		}
 
 		clearTimeout(this.timer);
@@ -223,7 +206,7 @@ class UNOgame extends Rooms.RoomGame {
 		this.topCard = card;
 		player.removeCard(cardName);
 		this.discards.unshift(card);
-		this.sendToRoom(`|raw|${Chat.escapeHTML(player.name)} has played a <font color=${card.colour}>${card.name}</font>.`);
+		this.sendToRoom(`|raw|${Chat.escapeHTML(player.name)} has played a <span style="color: ${card.colour}">${card.name}</span>.`);
 
 		// handle hand size
 		if (!player.hand.length) {
@@ -238,7 +221,7 @@ class UNOgame extends Rooms.RoomGame {
 	}
 
 	onRunEffect(value, initialize) {
-		const colourDisplay = `|uhtmlchange|uno-hand|<table style="width: 100%; border: 1px solid black;"><tr><td style="width: 50%"><button style="width: 100%; background-color: red; border: 2px solid rgba(0 , 0 , 0 , 0.59); border-radius: 5px; padding: 5px;" name=send value="/uno colour Red">Red</button></td><td style="width: 50%"><button style="width: 100%; background-color: blue; border: 2px solid rgba(0 , 0 , 0 , 0.59); border-radius: 5px; color: white; padding: 5px;" name=send value="/uno colour Blue">Blue</button></td></tr><tr><td style="width: 50%"><button style="width: 100%; background-color: green; border: 2px solid rgba(0 , 0 , 0 , 0.59); border-radius: 5px; padding: 5px;" name=send value="/uno colour Green">Green</button></td><td style="width: 50%"><button style="width: 100%; background-color: yellow; border: 2px solid rgba(0 , 0 , 0 , 0.59); border-radius: 5px; padding: 5px;" name=send value="/uno colour Yellow">Yellow</button></td></tr></table>`;
+		const colourDisplay = `|uhtml|uno-hand|<table style="width: 100%; border: 1px solid black;"><tr><td style="width: 50%"><button style="width: 100%; background-color: red; border: 2px solid rgba(0 , 0 , 0 , 0.59); border-radius: 5px; padding: 5px;" name=send value="/uno colour Red">Red</button></td><td style="width: 50%"><button style="width: 100%; background-color: blue; border: 2px solid rgba(0 , 0 , 0 , 0.59); border-radius: 5px; color: white; padding: 5px;" name=send value="/uno colour Blue">Blue</button></td></tr><tr><td style="width: 50%"><button style="width: 100%; background-color: green; border: 2px solid rgba(0 , 0 , 0 , 0.59); border-radius: 5px; padding: 5px;" name=send value="/uno colour Green">Green</button></td><td style="width: 50%"><button style="width: 100%; background-color: yellow; border: 2px solid rgba(0 , 0 , 0 , 0.59); border-radius: 5px; padding: 5px;" name=send value="/uno colour Yellow">Yellow</button></td></tr></table>`;
 
 		switch (value) {
 		case "Reverse":
@@ -302,7 +285,7 @@ class UNOgame extends Rooms.RoomGame {
 		let player = this.players[user.userid];
 		player.hand.push(...drawnCards);
 		player.sendDisplay();
-		player.sendRoom(`|raw|You have drawn the following card${drawnCards.length > 1 ? "s" : ""}: ${drawnCards.map(card => `<font color=${card.colour}>${card.name}</font>`).join(", ")}.`);
+		player.sendRoom(`|raw|You have drawn the following card${drawnCards.length > 1 ? "s" : ""}: ${drawnCards.map(card => `<span style="color: ${card.colour}">${card.name}</span>`).join(", ")}.`);
 		if (selfDraw) player.cardLock = drawnCards[0].name;
 	}
 
@@ -313,7 +296,7 @@ class UNOgame extends Rooms.RoomGame {
 
 		for (let i = 0; i < count; i++) {
 			if (!this.deck.length) {
-				this.deck = this.discards.length ? shuffle(this.discards) : shuffle(createDeck()); // shuffle the cards back into the deck, or if there are no discards, add another deck into the game.
+				this.deck = this.discards.length ? Tools.shuffle(this.discards) : Tools.shuffle(createDeck()); // shuffle the cards back into the deck, or if there are no discards, add another deck into the game.
 			}
 			drawnCards.push(this.deck.pop());
 		}
@@ -395,7 +378,7 @@ class UNOgamePlayer extends Rooms.RoomGamePlayer {
 		let draw = "<button style=\"border: 2px solid rgba(0 , 0 , 0 , 0.59); background-color: skyblue; border-radius: 8px; padding: 5px; font-weight: bold; width: 50%\" name=send value=\"/uno draw\">Draw a card!</button>";
 		let pass = "<button style=\"border: 2px solid rgba(0 , 0 , 0 , 0.59); background-color: pink; border-radius: 8px; padding: 5px; font-weight: bold; width: 50%\" name=send value=\"/uno pass\">Pass!</button>";
 
-		let top = `<strong>Top Card</strong>: <font color=${this.game.topCard.colour}>${this.game.topCard.name}</font>`;
+		let top = `<strong>Top Card</strong>: <span style="color: ${this.game.topCard.colour}">${this.game.topCard.name}</span>`;
 
 		// clear previous display and show new display
 		this.sendRoom("|uhtmlchange|uno-hand|");
@@ -439,13 +422,13 @@ exports.commands = {
 
 			room.game = new UNOgame(room, target);
 			room.add(`|uhtml|uno-${room.gameNumber}|<div class="broadcast-green"><p style="font-size: 14pt; text-align: center;">A new game of <strong>UNO</strong> is starting!</p><p style="font-size: 9pt; text-align: center;">Use <strong>/uno join</strong> to join the game.</p></div>`).update();
-			return this.privateModCommand("(A game of UNO was created by " + user.name + ".)");
+			this.privateModCommand(`(A game of UNO was created by ${user.name}.)`);
 		},
 
 		start: function (target, room, user) {
 			if (!this.can("minigame", null, room)) return;
 			if (!room.game || room.game.gameid !== "uno" || room.game.state !== "signups") return this.errorReply("There is no UNO game in signups phase in this room.");
-			if (room.game.onStart()) this.privateModCommand("(The game of UNO was started by " + user.name + ".)");
+			if (room.game.onStart()) this.privateModCommand(`(The game of UNO was started by ${user.name}.)`);
 		},
 
 		end: function (target, room, user) {
@@ -453,7 +436,7 @@ exports.commands = {
 			if (!room.game || room.game.gameid !== "uno") return this.errorReply("There is no UNO game going on in this room.");
 			room.game.destroy();
 			room.add("The game of UNO was forcibly ended.").update();
-			this.privateModCommand("(The game of UNO was ended by " + user.name + ".)");
+			this.privateModCommand(`(The game of UNO was ended by ${user.name}.)`);
 		},
 
 		timer: function (target, room, user) {
@@ -488,7 +471,7 @@ exports.commands = {
 		join: function (target, room, user) {
 			if (!room.game || room.game.gameid !== "uno") return false;
 			if (!this.canTalk()) return false;
-			if (!room.game.joinGame(user)) return this.errorReply("You have already joined the game.");
+			if (!room.game.joinGame(user)) return this.errorReply("Unable to join the game.");
 
 			return this.sendReply("You have joined the game of UNO.");
 		},
