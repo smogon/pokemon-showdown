@@ -141,7 +141,6 @@ exports.BattleAliases = {
 	"spirit": "Pokestar-Spirit",
 	"whitedoor": "Pokestar-White-Door",
 	"blackdoor": "Pokestar-Black-Door",
-	"blackbelt": "Pokestar-Black Belt",
 
 	// formes
 	"bugceus": "Arceus-Bug",
