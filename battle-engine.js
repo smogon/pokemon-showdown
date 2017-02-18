@@ -1056,16 +1056,12 @@ class BattlePokemon {
 		if (!this.hp) return false;
 		ability = this.battle.getAbility(ability);
 		let oldAbility = this.ability;
-		let cantModify = {battlebond:1, powerconstruct:1, rkssystem:1, shieldsdown:1};
-		if ((cantModify[ability.id] || cantModify[oldAbility]) && effect.id !== 'transform') {
-			return false;
-		}
 		if (noForce && oldAbility === ability.id) {
 			return false;
 		}
 		if (!effect || effect.id !== 'transform') {
-			if (ability.id in {illusion:1, multitype:1, stancechange:1}) return false;
-			if (oldAbility in {multitype:1, stancechange:1}) return false;
+			if (ability.id in {battlebond:1, illusion:1, multitype:1, powerconstruct:1, rkssystem:1, shieldsdown:1, stancechange:1}) return false;
+			if (oldAbility in {battlebond:1, multitype:1, powerconstruct:1, rkssystem:1, shieldsdown:1, stancechange:1}) return false;
 		}
 		this.battle.singleEvent('End', this.battle.getAbility(oldAbility), this.abilityData, this, source, effect);
 		if (!effect && this.battle.effect && this.battle.effect.effectType === 'Move') {
