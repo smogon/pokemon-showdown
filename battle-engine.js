@@ -1057,7 +1057,7 @@ class BattlePokemon {
 		ability = this.battle.getAbility(ability);
 		let oldAbility = this.ability;
 		let cantModify = {battlebond:1, powerconstruct:1, rkssystem:1, shieldsdown:1};
-		if (cantModify[ability.id] || cantModify[oldAbility]) {
+		if ((cantModify[ability.id] || cantModify[oldAbility]) && effect.id !== 'transform') {
 			return false;
 		}
 		if (noForce && oldAbility === ability.id) {
