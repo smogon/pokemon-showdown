@@ -185,7 +185,7 @@ class UNOgame extends Rooms.RoomGame {
 		let player = this.players[user.userid];
 
 		let card = player.hasCard(cardName);
-		if (!card) return "You do not have that card";
+		if (!card) return "You do not have that card.";
 
 		// check for legal play
 		if (player.cardLock && player.cardLock !== cardName) return `You can only play ${player.cardLock} after drawing.`;
@@ -348,9 +348,7 @@ class UNOgamePlayer extends Rooms.RoomGamePlayer {
 	}
 
 	hasCard(cardName) {
-		let matched = this.hand.filter(c => c.name === cardName);
-		if (!matched.length) return false;
-		return matched[0]; // returns the first instance of the matched card
+		return this.hand.find(c => c.name === cardName);
 	}
 
 	removeCard(cardName) {
@@ -363,12 +361,7 @@ class UNOgamePlayer extends Rooms.RoomGamePlayer {
 	}
 
 	buildHand() {
-		return this.hand.sort((a, b) => {
-			if (a.colour > b.colour) return 1;
-			if (a.colour < b.colour) return -1;
-			if (a.value > b.value) return 1;
-			return -1;
-		})
+		return this.hand.sort((a, b) => (a.colour > b.colour) || (a.colour === b.colour && a.value > b.value))
 		.map((c, i) => cardHTML(c, i === this.hand.length - 1));
 	}
 
@@ -382,7 +375,12 @@ class UNOgamePlayer extends Rooms.RoomGamePlayer {
 
 		// clear previous display and show new display
 		this.sendRoom("|uhtmlchange|uno-hand|");
-		this.sendRoom(`|uhtml|uno-hand|<table style="width: 100%; table-layout: fixed;">${this.game.currentPlayer === this.userid ? `<tr><td colspan=2></td><td style="border-radius: 50px 0 0 0; border: 1px solid; padding: 5px; text-align: right;">${top}</td></tr>` : ""}<tr><td colspan=2 style="border: 1px solid; padding: 5px;"><div style="overflow-x: auto; white-space: nowrap; width: 100%;">${hand}</div></td><td style="border: 1px solid; vertical-align: top; padding: 5px;"><div style="overflow-y: scroll;">${players}</div></td></tr>${this.game.currentPlayer === this.userid ? `<tr><td colspan=3 style="border: 1px solid;">${draw}${pass}</td></tr>` : ""}</table>`);
+		this.sendRoom(
+			`|uhtml|uno-hand|<table style="width: 100%; table-layout: fixed;">${this.game.currentPlayer === this.userid ? `<tr><td colspan=2></td><td style="border-radius: 50px 0 0 0; border: 1px solid; padding: 5px; text-align: right;">${top}</td></tr>` : ""}` +
+			`<tr><td colspan=2 style="border: 1px solid; padding: 5px;"><div style="overflow-x: auto; white-space: nowrap; width: 100%;">${hand}</div></td>` +
+			`<td style="border: 1px solid; vertical-align: top; padding: 5px;"><div style="overflow-y: scroll;">${players}</div></td></tr>` +
+			`${this.game.currentPlayer === this.userid ? `<tr><td colspan=3 style="border: 1px solid;">${draw}${pass}</td></tr>` : ""}</table>`
+		);
 	}
 }
 
@@ -444,7 +442,7 @@ exports.commands = {
 			if (!this.can("minigame", null, room)) return;
 			if (!room.game || room.game.gameid !== "uno") return this.errorReply("There is no UNO game going on in this room.");
 			let amount = parseInt(target);
-			if (!amount || amount < 5) return this.errorReply("The amount must be a number greater than 5.");
+			if (!amount || amount < 5 || amount > 300) return this.errorReply("The amount must be a number between 5 and 300.");
 
 			room.game.maxTime = amount;
 			if (room.game.timer) {
