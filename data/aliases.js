@@ -125,7 +125,7 @@ exports.BattleAliases = {
 	"alolanexeggutor": "Exeggutor-Alola",
 	"marowaka": "Marowak-Alola",
 	"alolanmarowak": "Marowak-Alola",
-	
+
 	// Pokéstar Studios
 	"ufo": "Pokestar-UFO",
 	"ufo2": "Pokestar-UFO-2",
