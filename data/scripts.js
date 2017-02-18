@@ -989,6 +989,9 @@ exports.BattleScripts = {
 			let mbstmin = 1307; // Sunkern has the lowest modified base stat total, and that total is 807
 
 			let stats = template.baseStats;
+			// If Wishiwashi, use the school-forme's much higher stats
+			if (template.baseSpecies === 'Wishiwashi')
+				stats = tools.getTemplate('wishiwashischool').baseStats;
 
 			// Modified base stat total assumes 31 IVs, 85 EVs in every stat
 			let mbst = (stats["hp"] * 2 + 31 + 21 + 100) + 10;
