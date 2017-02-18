@@ -1055,7 +1055,10 @@ class BattlePokemon {
 	setAbility(ability, source, effect, noForce) {
 		if (!this.hp) return false;
 		ability = this.battle.getAbility(ability);
-		let oldAbility = this.ability;
+		let oldAbility = this.ability, cantModify = {battlebond:1, powerconstruct:1, rkssystem:1, shieldsdown:1};
+		if (cantModify[ability.id] || cantModify[oldAbility]) {
+			return false;
+		}
 		if (noForce && oldAbility === ability.id) {
 			return false;
 		}
