@@ -418,6 +418,7 @@ exports.commands = {
 		// moderation commands
 		create: function (target, room, user) {
 			if (!this.can("minigame", null, room)) return;
+			if (room.unoDisabled) return this.errorReply("UNO is disabled for this room.");
 			if (room.game) return this.errorReply("There is already a game in progress in this room.");
 
 			room.game = new UNOgame(room, target);
