@@ -21,9 +21,9 @@ function createDeck() {
 	}
 
 	return [...basic, ...basic, // two copies of the basic stuff (total 96)
-		...new Array(4).fill(0).map((v, i) => ({colour: colours[i], value: "0", name: colours[i] + " 0"})), // the 4 0s
-		...new Array(4).fill(0).map(v => ({colour: "Black", value: "Wild", name: "Wild"})), // wild cards
-		...new Array(4).fill(0).map(v => ({colour: "Black", value: "+4", name: "Wild +4"})), // wild +4 cards
+		...[0, 1, 2, 3].map(v => ({colour: colours[v], value: "0", name: colours[v] + " 0"})), // the 4 0s
+		...[0, 1, 2, 3].map(v => ({colour: "Black", value: "Wild", name: "Wild"})), // wild cards
+		...[0, 1, 2, 3].fill(0).map(v => ({colour: "Black", value: "+4", name: "Wild +4"})), // wild +4 cards
 	]; // 108 cards
 }
 
