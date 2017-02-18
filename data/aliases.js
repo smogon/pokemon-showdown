@@ -134,8 +134,6 @@ exports.BattleAliases = {
 	"mt2": "Pokestar-MT2",
 	"transport": "Pokestar-Transport",
 	"giant": "Pokestar-Giant",
-	"humanoid": "Pokestar-Humanoid",
-	"monster": "Pokestar-Monster",
 	"f00": "Pokestar-F00",
 	"f002": "Pokestar-F002",
 	"spirit": "Pokestar-Spirit",
