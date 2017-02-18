@@ -486,9 +486,9 @@ if (process.send && module === process.mainModule) {
 						message: message,
 					}) === 'lockdown') {
 						let ministack = Chat.escapeHTML(err.stack).split("\n").slice(0, 2).join("<br />");
-						process.send(id + '\nupdate\n|html|<div class="broadcast-red"><b>A BATTLE PROCESS HAS CRASHED:</b> ' + ministack + '</div>');
+						process.send(id + '\nupdate\n|html|<div class="broadcast-red"><strong>A BATTLE PROCESS HAS CRASHED:</strong> ' + ministack + '</div>');
 					} else {
-						process.send(id + '\nupdate\n|html|<div class="broadcast-red"><b>The battle crashed!</b><br />Don\'t worry, we\'re working on fixing it.</div>');
+						process.send(id + '\nupdate\n|html|<div class="broadcast-red"><strong>The battle crashed!</strong><br />Don\'t worry, we\'re working on fixing it.</div>');
 					}
 				}
 			}
@@ -519,7 +519,7 @@ if (process.send && module === process.mainModule) {
 					});
 
 					let logPos = battle.log.length;
-					battle.add('html', '<div class="broadcast-red"><b>The battle crashed</b><br />You can keep playing but it might crash again.</div>');
+					battle.add('html', '<div class="broadcast-red"><strong>The battle crashed</strong><br />You can keep playing but it might crash again.</div>');
 					let nestedError;
 					try {
 						battle.makeRequest(prevRequest, prevRequestDetails);

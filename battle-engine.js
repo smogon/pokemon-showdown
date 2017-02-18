@@ -3073,7 +3073,7 @@ class Battle extends Tools.BattleDex {
 					// properly later
 					return this.makeRequest('move');
 				}
-				this.add('html', '<div class="broadcast-red"><b>The battle crashed</b></div>');
+				this.add('html', '<div class="broadcast-red"><strong>The battle crashed</strong></div>');
 				this.win();
 			} else {
 				// some kind of weird race condition?

@@ -124,12 +124,12 @@ class RoomSettings {
 	}
 	generateDisplay(user, room, connection) {
 		let output = '<div class="infobox">Room Settings for ' + Chat.escapeHTML(this.room.title) + '<br />';
-		output += "<b>Modchat:</b> <br />" + this.modchat() + "<br />";
-		output += "<b>Modjoin:</b> <br />" + this.modjoin() + "<br />";
-		output += "<b>Stretch filter:</b> <br />" + this.stretching() + "<br />";
-		output += "<b>Caps filter:</b> <br />" + this.capitals() + "<br />";
-		output += "<b>Slowchat:</b> <br />" + this.slowchat() + "<br />";
-		output += "<b>Tournaments:</b> <br />" + this.tourStatus() + "<br />";
+		output += "<strong>Modchat:</strong> <br />" + this.modchat() + "<br />";
+		output += "<strong>Modjoin:</strong> <br />" + this.modjoin() + "<br />";
+		output += "<strong>Stretch filter:</strong> <br />" + this.stretching() + "<br />";
+		output += "<strong>Caps filter:</strong> <br />" + this.capitals() + "<br />";
+		output += "<strong>Slowchat:</strong> <br />" + this.slowchat() + "<br />";
+		output += "<strong>Tournaments:</strong> <br />" + this.tourStatus() + "<br />";
 		output += "</div>";
 
 		this.user.sendTo(this.room, '|uhtml' + (this.sameCommand ? '' : 'change') + '|roomsettings|' + output);
@@ -204,10 +204,10 @@ exports.commands = {
 			return this.errorReply("Modchat is already set to " + currentModchat + ".");
 		}
 		if (!room.modchat) {
-			this.add("|raw|<div class=\"broadcast-blue\"><b>Moderated chat was disabled!</b><br />Anyone may talk now.</div>");
+			this.add("|raw|<div class=\"broadcast-blue\"><strong>Moderated chat was disabled!</strong><br />Anyone may talk now.</div>");
 		} else {
 			const modchatSetting = Chat.escapeHTML(room.modchat);
-			this.add("|raw|<div class=\"broadcast-red\"><b>Moderated chat was set to " + modchatSetting + "!</b><br />Only users of rank " + modchatSetting + " and higher can talk.</div>");
+			this.add("|raw|<div class=\"broadcast-red\"><strong>Moderated chat was set to " + modchatSetting + "!</strong><br />Only users of rank " + modchatSetting + " and higher can talk.</div>");
 		}
 		if (room.battle && !room.modchat && !user.can('modchat')) room.requestModchat(null);
 		this.privateModCommand("(" + user.name + " set modchat to " + room.modchat + ")");
@@ -248,7 +248,7 @@ exports.commands = {
 		if (target === 'off' || target === 'false') {
 			if (!room.modjoin) return this.errorReply(`Modjoin is already turned off in this room.`);
 			delete room.modjoin;
-			this.add(`|raw|<div class="broadcast-blue"><b>This room is no longer invite only!</b><br />Anyone may now join.</div>`);
+			this.add(`|raw|<div class="broadcast-blue"><strong>This room is no longer invite only!</strong><br />Anyone may now join.</div>`);
 			this.addModCommand(`${user.name} turned off modjoin.`);
 			if (room.chatRoomData) {
 				delete room.chatRoomData.modjoin;
@@ -258,7 +258,7 @@ exports.commands = {
 		} else if (target === 'sync') {
 			if (room.modjoin === true) return this.errorReply(`Modjoin is already set to sync modchat in this room.`);
 			room.modjoin = true;
-			this.add(`|raw|<div class="broadcast-red"><b>Moderated join is set to sync with modchat!</b><br />Only users who can speak in modchat can join.</div>`);
+			this.add(`|raw|<div class="broadcast-red"><strong>Moderated join is set to sync with modchat!</strong><br />Only users who can speak in modchat can join.</div>`);
 			this.addModCommand(`${user.name} set modjoin to sync with modchat.`);
 		} else if (target in Config.groups) {
 			if (room.battle && !user.can('makeroom') && target !== '+') return this.errorReply(`/modjoin - Access denied from setting modjoin past + in battles.`);
@@ -266,9 +266,9 @@ exports.commands = {
 			if (room.modjoin === target) return this.errorReply(`Modjoin is already set to ${target} in this room.`);
 			room.modjoin = target;
 			if (target === '+') {
-				this.add(`|raw|<div class="broadcast-red"><b>This room is now invite only!</b><br />Users must be rank + or invited with <code>/invite</code> to join</div>`);
+				this.add(`|raw|<div class="broadcast-red"><strong>This room is now invite only!</strong><br />Users must be rank + or invited with <code>/invite</code> to join</div>`);
 			} else {
-				this.add(`|raw|<div class="broadcast-red"><b>Moderated join was set to ${target}!</b><br />Only users of rank ${target} and higher can join.</div>`);
+				this.add(`|raw|<div class="broadcast-red"><strong>Moderated join was set to ${target}!</strong><br />Only users of rank ${target} and higher can join.</div>`);
 			}
 			this.addModCommand(`${user.name} set modjoin to ${target}.`);
 		} else {
@@ -298,14 +298,14 @@ exports.commands = {
 		if (target === 'off' || target === 'disable' || target === 'false') {
 			if (!room.slowchat) return this.errorReply(`Slow chat is already disabled in this room.`);
 			room.slowchat = false;
-			this.add("|raw|<div class=\"broadcast-blue\"><b>Slow chat was disabled!</b><br />There is no longer a set minimum time between messages.</div>");
+			this.add("|raw|<div class=\"broadcast-blue\"><strong>Slow chat was disabled!</strong><br />There is no longer a set minimum time between messages.</div>");
 		} else if (targetInt) {
 			if (!user.can('bypassall') && room.userCount < SLOWCHAT_USER_REQUIREMENT) return this.errorReply(`This room must have at least ${SLOWCHAT_USER_REQUIREMENT} users to set slowchat; it only has ${room.userCount} right now.`);
 			if (room.slowchat === targetInt) return this.errorReply(`Slow chat is already set to ${room.slowchat} seconds in this room.`);
 			if (targetInt < SLOWCHAT_MINIMUM) targetInt = SLOWCHAT_MINIMUM;
 			if (targetInt > SLOWCHAT_MAXIMUM) targetInt = SLOWCHAT_MAXIMUM;
 			room.slowchat = targetInt;
-			this.add("|raw|<div class=\"broadcast-red\"><b>Slow chat was enabled!</b><br />Messages must have at least " + room.slowchat + " seconds between them.</div>");
+			this.add("|raw|<div class=\"broadcast-red\"><strong>Slow chat was enabled!</strong><br />Messages must have at least " + room.slowchat + " seconds between them.</div>");
 		} else {
 			return this.parse("/help slowchat");
 		}

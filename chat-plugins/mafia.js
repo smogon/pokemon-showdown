@@ -428,7 +428,7 @@ class Mafia extends Rooms.RoomGame {
 
 		for (let i in votes) {
 			if (votes[i].num > (Object.keys(this.players).length / 2)) return this.progress();
-			text += '<b>' + (i === 'none' ? 'Abstain' : Chat.escapeHTML(this.players[i].name)) + '</b>: ';
+			text += '<strong>' + (i === 'none' ? 'Abstain' : Chat.escapeHTML(this.players[i].name)) + '</strong>: ';
 			if (this.anonVotes) {
 				text += this.currentVote[i].num + ' votes.';
 			} else {
