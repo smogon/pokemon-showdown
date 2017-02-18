@@ -5431,7 +5431,7 @@ exports.BattlePokedex = {
 		abilities: {0: "Forecast"},
 		heightm: 0.3,
 		weightkg: 0.8,
-		color: "Grey",
+		color: "Gray",
 		eggGroups: ["Fairy", "Amorphous"],
 		otherFormes: ["castformsunny", "castformrainy", "castformsnowy"],
 	},
