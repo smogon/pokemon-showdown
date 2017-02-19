@@ -4,7 +4,7 @@ const maxTime = 20; // seconds
 
 function cardHTML(card, fullsize) {
 	let surface = card.value.replace(/[^A-Z0-9\+]/g, "");
-	return `<button style="height: 140px; padding-bottom: 120px; text-align: left; font-weight: bold; border: 2px solid rgba(33 , 68 , 72 , 0.59); min-width: ${fullsize ? "80" : "30"}px; border-radius: 10px 2px 2px 3px; color: ${card.colour === "Black" ? "yellow" : "black"}; background-color: ${card.colour}" name=send value="/uno play ${card.name}">${surface}</button>`;
+	return `<button style="height: 140px; padding-bottom: 120px; text-align: left; font-weight: bold; border: 2px solid rgba(33 , 68 , 72 , 0.59); min-width: ${fullsize ? "80" : "30"}px; border-radius: 10px 2px 2px 3px; color: ${card.colour.charAt(0) === "B" ? "white" : "black"}; background-color: ${card.colour}" name=send value="/uno play ${card.name}">${surface}</button>`;
 }
 
 function createDeck() {
@@ -361,7 +361,7 @@ class UNOgamePlayer extends Rooms.RoomGamePlayer {
 	}
 
 	buildHand() {
-		return this.hand.sort((a, b) => (a.colour > b.colour) || (a.colour === b.colour && a.value > b.value))
+		return this.hand.sort((a, b) => a.colour.localeCompare(b.colour) || a.value.localeCompare(b.value))
 		.map((c, i) => cardHTML(c, i === this.hand.length - 1));
 	}
 
