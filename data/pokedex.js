@@ -3758,12 +3758,9 @@ exports.BattlePokedex = {
 		eggGroups: ["Field"],
 		otherFormes: ["smearglepokestar"],
 	},
-	smearglebowtie: {
+	pokestarsmeargle: {
 		num: 235,
-		species: "Smeargle-Pokestar",
-		baseSpecies: "Smeargle",
-		forme: "Pokestar",
-		formeLetter: "P",
+		species: "Pokestar Smeargle",
 		types: ["Normal"],
 		baseStats: {hp: 55, atk: 20, def: 35, spa: 20, spd: 45, spe: 75},
 		abilities: {0: "Own Tempo", 1: "Technician", H: "Moody"},

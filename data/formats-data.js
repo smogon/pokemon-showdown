@@ -2183,13 +2183,12 @@ exports.BattleFormatsData = {
 		],
 		tier: "New",
 	},
-	smearglepokestar: {
+	pokestarsmeargle: {
 		eventPokemon: [
 			{"generation": 5, "level": 60, "gender": "M", "abilities":["owntempo"], "moves":["mindreader", "guillotine", "tailwhip", "gastroacid"]},
 			{"generation": 5, "level": 30, "gender": "M", "abilities":["owntempo"], "moves":["outrage", "magiccoat"]},
 			{"generation": 5, "level": 99, "gender": "M", "abilities":["owntempo"], "moves":["nastyplot", "sheercold", "attract", "shadowball"]},
 		],
-		isEventOnly: true,
 		gen: 5,
 		tier: "Illegal",
 	},

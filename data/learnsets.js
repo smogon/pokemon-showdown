@@ -22823,6 +22823,18 @@ exports.BattleLearnsets = {
 		sleeptalk: ["5D"],
 		spore: ["5S1"],
 	}},
+	pokestarsmeargle: {learnset: {
+		attract: ["5S2"],
+		gastroacid: ["5S0"],
+		guillotine: ["5S0"],
+		magiccoat: ["5S1"],
+		mindreader: ["5S0"],
+		nastyplot: ["5S2"],
+		outrage: ["5S1"],
+		shadowball: ["5S2"],
+		sheercold: ["5S2"],
+		tailwhip: ["5S0"],
+	}},
 	miltank: {learnset: {
 		afteryou: ["6T", "5T"],
 		attract: ["7M", "6M", "6S0", "5M", "4M", "3M"],
