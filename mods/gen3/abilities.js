@@ -177,6 +177,7 @@ exports.BattleAbilities = {
 	"trace": {
 		inherit: true,
 		onUpdate: function (pokemon) {
+			if (!pokemon.isStarted) return;
 			let target = pokemon.side.foe.randomActive();
 			if (!target || target.fainted) return;
 			let ability = this.getAbility(target.ability);
