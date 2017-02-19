@@ -1,6 +1,10 @@
 'use strict';
 
 exports.BattlePokedex = {
+	charizardmegax: {
+		inherit: true,
+		color: "Red",
+	},
 	arbok: {
 		inherit: true,
 		baseStats: {hp: 60, atk: 85, def: 69, spa: 65, spd: 79, spe: 80},
@@ -111,13 +115,57 @@ exports.BattlePokedex = {
 		inherit: true,
 		baseStats: {hp: 70, atk: 95, def: 85, spa: 55, spd: 65, spe: 70},
 	},
+	castform: {
+		inherit: true,
+		color: "White",
+	},
+	castformsunny: {
+		inherit: true,
+		color: "White",
+	},
+	castformrainy: {
+		inherit: true,
+		color: "White",
+	},
 	chimecho: {
 		inherit: true,
 		baseStats: {hp: 65, atk: 50, def: 70, spa: 95, spd: 80, spe: 65},
 	},
+	latiasmega: {
+		inherit: true,
+		color: "Red",
+	},
+	latiosmega: {
+		inherit: true,
+		color: "Blue",
+	},
+	burmy: {
+		inherit: true,
+		color: "Gray",
+	},
+	wormadam: {
+		inherit: true,
+		color: "Gray",
+	},
+	wormadamsandy: {
+		inherit: true,
+		color: "Gray",
+	},
+	wormadamtrash: {
+		inherit: true,
+		color: "Gray",
+	},
+	cherrim: {
+		inherit: true,
+		color: "Pink",
+	},
 	heatran: {
 		inherit: true,
 		abilities: {0: "Flash Fire"},
+	},
+	arceus: {
+		inherit: true,
+		color: "Gray",
 	},
 	roggenrola: {
 		inherit: true,
@@ -135,6 +183,14 @@ exports.BattlePokedex = {
 		inherit: true,
 		baseStats: {hp: 55, atk: 45, def: 43, spa: 55, spd: 43, spe: 72},
 	},
+	audinomega: {
+		inherit: true,
+		color: "Pink",
+	},
+	darmanitanzen: {
+		inherit: true,
+		color: "Red",
+	},
 	crustle: {
 		inherit: true,
 		baseStats: {hp: 70, atk: 95, def: 125, spa: 65, spd: 75, spe: 45},
@@ -150,6 +206,10 @@ exports.BattlePokedex = {
 	vanilluxe: {
 		inherit: true,
 		abilities: {0: "Ice Body", H: "Weak Armor"},
+	},
+	deerling: {
+		inherit: true,
+		color: "Yellow",
 	},
 	cubchoo: {
 		inherit: true,
@@ -167,6 +227,14 @@ exports.BattlePokedex = {
 	greninja: {
 		inherit: true,
 		abilities: {0: "Torrent", H: "Protean"},
+	},
+	vivillon: {
+		inherit: true,
+		color: "Black",
+	},
+	meowstic: {
+		inherit: true,
+		color: "White",
 	},
 	pumpkaboosmall: {
 		inherit: true,
