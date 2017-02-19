@@ -13126,7 +13126,7 @@ exports.BattlePokedex = {
 	},
 	pokestarufo: {
 		num: -5001,
-		species: "Pokestar-UFO",
+		species: "Pokestar UFO",
 		types: ["Flying", "Electric"],
 		gender: "N",
 		baseStats: {hp: 100, atk: 100, def: 100, spa: 100, spd: 100, spe: 100},
@@ -13139,8 +13139,8 @@ exports.BattlePokedex = {
 	},
 	pokestarufo2: {
 		num: -5001,
-		species: "Pokestar-UFO-2",
-		baseSpecies: "Pokestar-UFO",
+		species: "Pokestar UFO-2",
+		baseSpecies: "Pokestar UFO",
 		forme: "2",
 		formeLetter: "2",
 		types: ["Psychic", "Electric"],
@@ -13154,7 +13154,7 @@ exports.BattlePokedex = {
 	},
 	pokestarbrycenman: {
 		num: -5002,
-		species: "Pokestar-Brycen-Man",
+		species: "Pokestar Brycen-Man",
 		types: ["Dark", "Psychic"],
 		gender: "M",
 		baseStats: {hp: 100, atk: 100, def: 100, spa: 100, spd: 100, spe: 100},
@@ -13167,7 +13167,7 @@ exports.BattlePokedex = {
 	},
 	pokestarmt: {
 		num: -5003,
-		species: "Pokestar-MT",
+		species: "Pokestar MT",
 		types: ["Steel"],
 		gender: "N",
 		baseStats: {hp: 100, atk: 100, def: 100, spa: 100, spd: 100, spe: 100},
@@ -13180,7 +13180,7 @@ exports.BattlePokedex = {
 	},
 	pokestarmt2: {
 		num: -5004,
-		species: "Pokestar-MT2",
+		species: "Pokestar MT2",
 		types: ["Steel", "Electric"],
 		gender: "N",
 		baseStats: {hp: 100, atk: 100, def: 100, spa: 100, spd: 100, spe: 100},
@@ -13193,7 +13193,7 @@ exports.BattlePokedex = {
 	},
 	pokestartransport: {
 		num: -5005,
-		species: "Pokestar-Transport",
+		species: "Pokestar Transport",
 		types: ["Steel"],
 		gender: "N",
 		baseStats: {hp: 100, atk: 100, def: 100, spa: 100, spd: 100, spe: 100},
@@ -13206,7 +13206,7 @@ exports.BattlePokedex = {
 	},
 	pokestargiant: {
 		num: -5006,
-		species: "Pokestar-Giant",
+		species: "Pokestar Giant",
 		types: ["Normal"],
 		gender: "F",
 		baseStats: {hp: 100, atk: 100, def: 100, spa: 100, spd: 100, spe: 100},
@@ -13219,7 +13219,7 @@ exports.BattlePokedex = {
 	},
 	pokestarhumanoid: {
 		num: -5007,
-		species: "Pokestar-Humanoid",
+		species: "Pokestar Humanoid",
 		types: ["Normal"],
 		baseStats: {hp: 100, atk: 100, def: 100, spa: 100, spd: 100, spe: 100},
 		abilities: {0: "Insomnia"},
@@ -13231,7 +13231,7 @@ exports.BattlePokedex = {
 	},
 	pokestarmonster: {
 		num: -5008,
-		species: "Pokestar-Monster",
+		species: "Pokestar Monster",
 		types: ["Dark"],
 		baseStats: {hp: 100, atk: 100, def: 100, spa: 100, spd: 100, spe: 100},
 		abilities: {0: "Pressure"},
@@ -13243,7 +13243,7 @@ exports.BattlePokedex = {
 	},
 	pokestarf00: {
 		num: -5009,
-		species: "Pokestar-F-00",
+		species: "Pokestar F-00",
 		types: ["Steel", "Normal"],
 		baseStats: {hp: 100, atk: 100, def: 100, spa: 100, spd: 100, spe: 100},
 		abilities: {0: "Volt Absorb"},
@@ -13255,7 +13255,7 @@ exports.BattlePokedex = {
 	},
 	pokestarf002: {
 		num: -5010,
-		species: "Pokestar-F-002",
+		species: "Pokestar F-002",
 		types: ["Steel", "Normal"],
 		baseStats: {hp: 100, atk: 100, def: 100, spa: 100, spd: 100, spe: 100},
 		abilities: {0: "Reckless"},
@@ -13267,7 +13267,7 @@ exports.BattlePokedex = {
 	},
 	pokestarspirit: {
 		num: -5011,
-		species: "Pokestar-Spirit",
+		species: "Pokestar Spirit",
 		types: ["Dark", "Ghost"],
 		baseStats: {hp: 100, atk: 100, def: 100, spa: 100, spd: 100, spe: 100},
 		abilities: {0: "Wonder Guard"},
@@ -13279,7 +13279,7 @@ exports.BattlePokedex = {
 	},
 	pokestarblackdoor: {
 		num: -5012,
-		species: "Pokestar-Black Door",
+		species: "Pokestar Black Door",
 		types: ["Grass"],
 		gender: "F",
 		baseStats: {hp: 100, atk: 100, def: 100, spa: 100, spd: 100, spe: 100},
@@ -13292,7 +13292,7 @@ exports.BattlePokedex = {
 	},
 	pokestarwhitedoor: {
 		num: -5013,
-		species: "Pokestar-White Door",
+		species: "Pokestar White Door",
 		types: ["Fire"],
 		gender: "M",
 		baseStats: {hp: 100, atk: 100, def: 100, spa: 100, spd: 100, spe: 100},
@@ -13305,7 +13305,7 @@ exports.BattlePokedex = {
 	},
 	pokestarblackbelt: {
 		num: -5014,
-		species: "Pokestar-Black Belt",
+		species: "Pokestar Black Belt",
 		types: ["Fighting"],
 		gender: "M",
 		baseStats: {hp: 100, atk: 100, def: 100, spa: 100, spd: 100, spe: 100},
@@ -13318,8 +13318,8 @@ exports.BattlePokedex = {
 	},
 	pokestarufopropu2: {
 		num: -5001,
-		species: "Pokestar-UFO-PropU2",
-		baseForme: "Pokestar-UFO",
+		species: "Pokestar UFO-PropU2",
+		baseForme: "Pokestar UFO",
 		forme: "PropU2",
 		types: ["Psychic", "Electric"],
 		gender: "N",
