@@ -196,7 +196,7 @@ exports.Formats = [
 		mod: 'gen7',
 		gameType: 'doubles',
 		ruleset: ['Pokemon', 'Species Clause', 'Moody Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Evasion Abilities Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
-		banlist: ['Illegal', 'Unreleased'],
+		banlist: ['Illegal', 'Unreleased', 'Dark Void'],
 	},
 	{
 		name: "[Gen 7] VGC 2017",
