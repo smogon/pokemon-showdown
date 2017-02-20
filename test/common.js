@@ -2,6 +2,8 @@
 
 const assert = require('assert');
 const Tools = require('./../tools').includeFormats();
+const PRNG = require('./../prng');
+const BattleEngine = require('./../battle-engine');
 
 let battleNum = 1;
 const cache = new Map();
@@ -94,13 +96,19 @@ class TestTools {
 		return format;
 	}
 
-	createBattle(options, teams) {
+	createBattle(options, teams, prng = new PRNG(this.minRollSeed)) {
 		if (Array.isArray(options)) {
 			teams = options;
 			options = {};
 		}
 		const format = this.getFormat(options || {});
-		const battle = BattleEngine.construct(`battle-test-${battleNum++}`, format.id);
+		const battle = BattleEngine.construct(
+			`battle-test-${battleNum++}`,
+			format.id,
+			undefined,
+			undefined,
+			prng
+		);
 		if (options && options.partialDecisions) battle.supportPartialDecisions = true;
 		if (teams) {
 			for (let i = 0; i < teams.length; i++) {
@@ -110,6 +118,10 @@ class TestTools {
 			}
 		}
 		return battle;
+	}
+
+	createBattleWithPRNG(prng) {
+		return this.createBattle({}, [], prng);
 	}
 }
 
