@@ -1000,6 +1000,11 @@ class BattleDex {
 			} else {
 				buf += '|';
 			}
+
+			if (set.pokeball || set.hpType) {
+				buf += ',' + set.hpType;
+				buf += ',' + toId(set.pokeball);
+			}
 		}
 
 		return buf;
@@ -1106,13 +1111,18 @@ class BattleDex {
 
 			// happiness
 			j = buf.indexOf(']', i);
+			let misc;
 			if (j < 0) {
-				if (buf.substring(i)) {
-					set.happiness = Number(buf.substring(i));
-				}
-				break;
+				if (i < buf.length) misc = buf.substring(i).split(',');
+			} else {
+				if (i !== j) misc = buf.substring(i, j).split(',');
 			}
-			if (i !== j) set.happiness = Number(buf.substring(i, j));
+			if (misc) {
+				set.happiness = Number(misc[0]);
+				set.hpType = misc[1];
+				set.pokeball = misc[2];
+			}
+			if (j < 0) break;
 			i = j + 1;
 		}
 
