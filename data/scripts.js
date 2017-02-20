@@ -114,7 +114,7 @@ exports.BattleScripts = {
 		let movename = move.name;
 		if (move.id === 'hiddenpower') movename = 'Hidden Power';
 		if (sourceEffect) attrs += '|[from]' + this.getEffect(sourceEffect);
-		if (zMove && (move.category === 'Status')) {
+		if (zMove && (move.category === 'Status') && !move.isZ) {
 			attrs = '|[anim]' + movename + attrs;
 			movename = 'Z-' + movename;
 		}
