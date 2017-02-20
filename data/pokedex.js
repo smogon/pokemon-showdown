@@ -3756,7 +3756,7 @@ exports.BattlePokedex = {
 		weightkg: 58,
 		color: "White",
 		eggGroups: ["Field"],
-		otherFormes: ["smearglepokestar"],
+		otherFormes: ["pokestarsmeargle"],
 	},
 	pokestarsmeargle: {
 		num: 235,
