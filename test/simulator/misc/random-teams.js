@@ -35,11 +35,10 @@ describe(`Random Team generator`, function () {
 		it(`should successfully create valid Gen ${gen} teams`, function () {
 			this.timeout(0);
 			battle = common.gen(gen).createBattle();
-			battle.seed = battle.generateSeed();
 
 			let teamCount = TOTAL_TEAMS;
 			while (teamCount--) {
-				let seed = battle.seed.slice();
+				let seed = battle.prng.seed.slice();
 				let team = null;
 				try {
 					team = battle.randomTeam(battle.p1);
@@ -61,11 +60,10 @@ describe(`Challenge Cup Team generator`, function () {
 		it(`should successfully create valid Gen ${gen} teams`, function () {
 			this.timeout(0);
 			battle = common.gen(gen).createBattle();
-			battle.seed = battle.generateSeed();
 
 			let teamCount = TOTAL_TEAMS;
 			while (teamCount--) {
-				let seed = battle.seed.slice();
+				let seed = battle.prng.seed.slice();
 				let team = null;
 				try {
 					team = battle.randomCCTeam(battle.p1);
@@ -87,11 +85,10 @@ describe(`Hackmons Cup Team generator`, function () {
 		it(`should successfully create valid Gen ${gen} teams`, function () {
 			this.timeout(0);
 			battle = common.gen(gen).createBattle();
-			battle.seed = battle.generateSeed();
 
 			let teamCount = TOTAL_TEAMS;
 			while (teamCount--) {
-				let seed = battle.seed.slice();
+				let seed = battle.prng.seed.slice();
 				let team = null;
 				try {
 					team = battle.randomHCTeam(battle.p1);

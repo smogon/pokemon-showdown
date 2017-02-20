@@ -1,5 +1,6 @@
 'use strict';
 
+const {PRNG} = require('./../prng');
 const CHOOSABLE_TARGETS = new Set(['normal', 'any', 'adjacentAlly', 'adjacentAllyOrSelf', 'adjacentFoe']);
 
 exports.BattleScripts = {
@@ -902,11 +903,11 @@ exports.BattleScripts = {
 		const teamGenerator = typeof format.team === 'string' && format.team.startsWith('random') ? format.team + 'Team' : '';
 		if (!teamGenerator && team) return team;
 		// Reinitialize the RNG seed to create random teams.
-		this.seed = this.generateSeed();
-		this.startingSeed = this.startingSeed.concat(this.seed);
+		const originalPrng = this.prng.clone();
+		this.prng = new PRNG();
 		team = this[teamGenerator || 'randomTeam'](side);
 		// Restore the default seed
-		this.seed = this.startingSeed.slice(0, 4);
+		this.seed = originalPrng;
 		return team;
 	},
 	randomCCTeam: function (side) {
@@ -3379,10 +3380,10 @@ exports.BattleScripts = {
 		let forceResult = (depth >= 4);
 
 		let availableTiers = ['Uber', 'OU', 'UU', 'RU', 'NU', 'PU'];
-		const prevSeed = this.seed;
-		this.seed = this.startingSeed.slice(0, 4);
+		const originalPrng = this.prng.clone();
+		this.prng = originalPrng.clone();
 		const chosenTier = availableTiers[this.random(availableTiers.length)];
-		this.seed = prevSeed;
+		this.prng = originalPrng;
 
 		let pokemon = [];
 
