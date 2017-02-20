@@ -260,7 +260,7 @@ exports.Formats = [
 
 		mod: 'gen7',
 		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
-		banlist: ['Uber', 'Kyurem-Black', 'Regigigas', 'Shedinja', 'Slaking', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Salamencite', 'Power Construct', 'Shadow Tag', 'Baton Pass'],
+		banlist: ['Uber', 'Kyurem-Black', 'Pheromosa', 'Regigigas', 'Shedinja', 'Slaking', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Salamencite', 'Power Construct', 'Shadow Tag', 'Baton Pass'],
 		bannedDonors: ['Araquanid', 'Azumarill', 'Azurill', 'Blaziken', 'Bunnelby', 'Carvanha', 'Chatot', 'Combusken', 'Dewpider', 'Diggersby', 'Diglett', 'Ditto', 'Dugtrio', 'Golett', 'Golurk', 'Liepard', 'Machamp', 'Machoke', 'Machop', 'Marill', 'Medicham', 'Meditite', 'Meowstic', 'Purrloin', 'Scolipede', 'Sharpedo', 'Smeargle', 'Torchic', 'Trapinch', 'Venipede', 'Whirlipede'],
 		noChangeForme: true,
 		noChangeAbility: true,
