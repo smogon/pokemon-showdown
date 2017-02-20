@@ -144,7 +144,7 @@ class UNOgame extends Rooms.RoomGame {
 
 		if (this.awaitUno) {
 			this.unoId = Math.floor(Math.random() * 100).toString();
-			this.players[this.awaitUno].sendRoom(`|raw|<div style="text-align: center"><button name=send value="/uno uno ${this.unoId}" style="background-color: green; width: 80%; padding: 8px; border: 2px solid rgba(33 , 68 , 72 , 0.59); border-radius: 8px;">UNO!</button></div>`);
+			this.players[this.awaitUno].sendRoom(`|uhtml|uno-hand|<div style="text-align: center"><button name=send value="/uno uno ${this.unoId}" style="background-color: green; width: 80%; padding: 8px; border: 2px solid rgba(33 , 68 , 72 , 0.59); border-radius: 8px;">UNO!</button></div>`);
 		}
 
 		clearTimeout(this.timer);
@@ -180,6 +180,20 @@ class UNOgame extends Rooms.RoomGame {
 		return player;
 	}
 
+	onDraw(user) {
+		if (this.currentPlayer !== user.userid || this.state !== "play") return false;
+		if (this.players[user.userid].cardLock) return true;
+
+		this.onCheckUno();
+
+		this.sendToRoom(`${user.name} has drawn a card.`);
+		let player = this.players[user.userid];
+
+		let card = this.onDrawCard(user, 1, true);
+		player.sendDisplay();
+		player.cardLock = card[0].name;
+	}
+
 	onPlay(user, cardName) {
 		if (this.currentPlayer !== user.userid || this.state !== "play") return false;
 		let player = this.players[user.userid];
@@ -194,13 +208,7 @@ class UNOgame extends Rooms.RoomGame {
 
 		clearTimeout(this.timer); // reset the autodq timer.
 
-		if (this.awaitUno) {
-			// if the previous player hasn't hit UNO before the next player plays something, they are forced to draw 2 cards.
-			this.sendToRoom(`${this.players[this.awaitUno].name} forgot to say UNO! and is forced to draw 2 cards.`);
-			this.onDrawCard({userid: this.awaitUno}, 2);
-			delete this.awaitUno;
-			delete this.unoId;
-		}
+		this.onCheckUno();
 
 		// update the game information.
 		this.topCard = card;
@@ -278,15 +286,14 @@ class UNOgame extends Rooms.RoomGame {
 		this.nextTurn();
 	}
 
-	onDrawCard(user, count, selfDraw) {
+	onDrawCard(user, count) {
 		if (!(user.userid in this.players)) return false;
 		let drawnCards = this.drawCard(count);
 
 		let player = this.players[user.userid];
 		player.hand.push(...drawnCards);
-		player.sendDisplay();
 		player.sendRoom(`|raw|You have drawn the following card${drawnCards.length > 1 ? "s" : ""}: ${drawnCards.map(card => `<span style="color: ${card.colour}">${card.name}</span>`).join(", ")}.`);
-		if (selfDraw) player.cardLock = drawnCards[0].name;
+		return drawnCards;
 	}
 
 	drawCard(count) {
@@ -309,6 +316,18 @@ class UNOgame extends Rooms.RoomGame {
 		this.sendToRoom(`|raw|<strong>UNO!</strong> ${user.name} is down to their last card!`);
 		delete this.awaitUno;
 		delete this.unoId;
+	}
+
+	onCheckUno() {
+		if (this.awaitUno) {
+			// if the previous player hasn't hit UNO before the next player plays something, they are forced to draw 2 cards;
+			if (this.awaitUno !== this.currentPlayer) {
+				this.sendToRoom(`${this.players[this.awaitUno].name} forgot to say UNO! and is forced to draw 2 cards.`);
+				this.onDrawCard({userid: this.awaitUno}, 2);
+			}
+			delete this.awaitUno;
+			delete this.unoId;
+		}
 	}
 
 	onSendHand(user) {
@@ -368,18 +387,17 @@ class UNOgamePlayer extends Rooms.RoomGamePlayer {
 	sendDisplay() {
 		let hand = this.buildHand().join("");
 		let players = `<p><strong>Players (${this.game.playerCount}):</strong></p>` + this.game.getPlayers(true).join("<br />");
-		let draw = "<button style=\"border: 2px solid rgba(0 , 0 , 0 , 0.59); background-color: skyblue; border-radius: 8px; padding: 5px; font-weight: bold; width: 50%\" name=send value=\"/uno draw\">Draw a card!</button>";
-		let pass = "<button style=\"border: 2px solid rgba(0 , 0 , 0 , 0.59); background-color: pink; border-radius: 8px; padding: 5px; font-weight: bold; width: 50%\" name=send value=\"/uno pass\">Pass!</button>";
+		let draw = "<button style=\"border: 2px solid rgba(0 , 0 , 0 , 0.59); background-color: skyblue; border-radius: 8px; padding: 5px; font-weight: bold; width: 100%\" name=send value=\"/uno draw\">Draw a card!</button>";
+		let pass = "<button style=\"border: 2px solid rgba(0 , 0 , 0 , 0.59); background-color: pink; border-radius: 8px; padding: 5px; font-weight: bold; width: 100%\" name=send value=\"/uno pass\">Pass!</button>";
 
-		let top = `<strong>Top Card</strong>: <span style="color: ${this.game.topCard.colour}">${this.game.topCard.name}</span>`;
+		let top = `<strong>Top Card: <span style="color: ${this.game.topCard.colour}">${this.game.topCard.name}</span></strong>`;
 
 		// clear previous display and show new display
 		this.sendRoom("|uhtmlchange|uno-hand|");
 		this.sendRoom(
-			`|uhtml|uno-hand|<table style="width: 100%; table-layout: fixed;">${this.game.currentPlayer === this.userid ? `<tr><td colspan=2></td><td style="border-radius: 50px 0 0 0; border: 1px solid; padding: 5px; text-align: right;">${top}</td></tr>` : ""}` +
-			`<tr><td colspan=2 style="border: 1px solid; padding: 5px;"><div style="overflow-x: auto; white-space: nowrap; width: 100%;">${hand}</div></td>` +
-			`<td style="border: 1px solid; vertical-align: top; padding: 5px;"><div style="overflow-y: scroll;">${players}</div></td></tr>` +
-			`${this.game.currentPlayer === this.userid ? `<tr><td colspan=3 style="border: 1px solid;">${draw}${pass}</td></tr>` : ""}</table>`
+			`|uhtml|uno-hand|<table style="width: 100%; table-layout: fixed; border: 1px solid skyblue; border-radius: 3px;"><tr><td colspan=4 rowspan=2 style="padding: 5px;"><div style="overflow-x: auto; white-space: nowrap; width: 100%;">${hand}</div></td>${this.game.currentPlayer === this.userid ? `<td colspan=2 style="padding: 5px 5px 0 5px;">${top}</td></tr>` : ""}` +
+			`<tr><td colspan=2 style="vertical-align: top; padding: 0px 5px 5px 5px;"><div style="overflow-y: scroll;">${players}</div></td></tr>` +
+			`${this.game.currentPlayer === this.userid ? `<tr><td colspan=3 style="padding: 5px 2.5px 5px 5px;">${draw}</td><td colspan=3 style="padding: 5px 5px 5px 2.5px;">${pass}</td></tr>` : ""}</table>`
 		);
 	}
 }
@@ -489,11 +507,8 @@ exports.commands = {
 
 		draw: function (target, room, user) {
 			if (!room.game || room.game.gameid !== "uno") return false;
-			if (room.game.currentPlayer !== user.userid) return false;
-			if (room.game.players[user.userid].cardLock) return this.errorReply("You have already drawn a card this turn.");
-			room.add(`${user.name} has drawn a card.`).update();
-
-			room.game.onDrawCard(user, 1, true);
+			let error = room.game.onDraw(user);
+			if (error) return this.errorReply("You have already drawn a card this turn.");
 		},
 
 		pass: function (target, room, user) {
