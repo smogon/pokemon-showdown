@@ -2,7 +2,6 @@
 
 const assert = require('./../../assert');
 const common = require('./../../common');
-const PRNG = require('./../../../prng');
 
 let battle;
 
@@ -21,16 +20,14 @@ describe('Burn', function () {
 	});
 
 	it('should halve damage from most Physical attacks', function () {
-		const a = new PRNG(common.minRollSeed);
-		const b = a.clone();
-		battle = common.createBattle({}, [
+		battle = common.createBattle([
 			[{species: 'Machamp', ability: 'noguard', moves: ['boneclub']}],
 			[{species: 'Sableye', ability: 'prankster', moves: ['splash', 'willowisp']}],
-		], a);
+		]);
 		const target = battle.p2.active[0];
 		battle.commitDecisions();
 		const baseDamage = target.maxhp - target.hp;
-		battle.prng = b;
+		battle.resetRNG();
 		battle.p2.chooseMove('willowisp');
 		assert.hurtsBy(target, battle.modify(baseDamage, 0.5), () => battle.commitDecisions());
 	});

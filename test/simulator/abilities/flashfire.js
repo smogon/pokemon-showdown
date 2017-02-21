@@ -2,7 +2,6 @@
 
 const assert = require('./../../assert');
 const common = require('./../../common');
-const {PRNG} = require('../../../prng');
 
 let battle;
 
@@ -37,13 +36,11 @@ describe('Flash Fire', function () {
 	});
 
 	it('should lose the Flash Fire boost if its ability is changed', function () {
-		const a = new PRNG(common.minRollSeed);
-		const b = a.clone();
-		battle = common.createBattleWithPRNG(a);
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Heatran', ability: 'flashfire', moves: ['sleeptalk', 'incinerate']}]);
 		const p2 = battle.join('p2', 'Guest 2', 1, [{species: 'Talonflame', ability: 'galewings', moves: ['incinerate', 'worryseed']}]);
 		battle.commitDecisions();
-		battle.prng = b;
+		battle.resetRNG();
 		p2.chooseMove('worryseed').foe.chooseMove('incinerate');
 		let damage = battle.p2.active[0].maxhp - battle.p2.active[0].hp;
 		assert.bounded(damage, [54, 65]);
