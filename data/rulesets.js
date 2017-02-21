@@ -372,10 +372,25 @@ exports.BattleFormats = {
 		},
 		onValidateTeam: function (team, format) {
 			let abilityTable = {};
+			let clones = {
+				airlock: ['cloud9'],
+				battlearmor: ['shellarmor'],
+				clearbody: ['whitesmoke'],
+				cloud9: ['airlock'],
+				dazzling: ['queenlymajesty'],
+				moldbreaker: ['teravolt', 'turboblaze'],
+				powerofalchemy: ['receiver'],
+				queenlymajesty: ['dazzling'],
+				receiver: ['powerofalchemy'],
+				shellarmor: ['battlearmor'],
+				teravolt: ['moldbreaker', 'turboblaze'],
+				moldbreaker: ['moldbreaker', 'teravolt'],
+				whitesmoke: ['clearbody'],
+			};
 			for (let i = 0; i < team.length; i++) {
 				let ability = toId(team[i].ability);
 				if (!ability) continue;
-				if (ability in abilityTable) {
+				if (ability in abilityTable || clones[ability].some(clone => {return clone in abilityTable;})) {
 					if (abilityTable[ability] >= 2) {
 						return ["You are limited to two of each ability by the Ability Clause.", "(You have more than two " + this.getAbility(ability).name + ")"];
 					}
