@@ -4,6 +4,7 @@ const assert = require('assert');
 const path = require('path');
 const fs = require('fs');
 const Module = require('module');
+const BattleEngine = require('../battle-engine');
 
 const mock = require('mock-fs-require-fix');
 
@@ -22,7 +23,6 @@ function init(callback) {
 	require('./../app');
 
 	// Run the battle engine in the main process to keep our sanity
-	let BattleEngine = global.BattleEngine = require('./../battle-engine');
 	for (let listener of process.listeners('message')) {
 		process.removeListener('message', listener);
 	}

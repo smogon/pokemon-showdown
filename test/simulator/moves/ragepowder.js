@@ -2,6 +2,7 @@
 
 const assert = require('./../../assert');
 const common = require('./../../common');
+const BattleEngine = require('./../../../battle-engine');
 
 let battle;
 
