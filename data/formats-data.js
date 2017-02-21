@@ -6409,7 +6409,7 @@ exports.BattleFormatsData = {
 			{"generation": 5, "level": 56, "moves": ["icebeam", "nightshade", "psychic", "uturn"]},
 		],
 		gen: 5,
-		teir: "Illegal",
+		tier: "Illegal",
 	},
 	pokestarmt: {
 		isNonstandard: true,
