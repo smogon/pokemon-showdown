@@ -384,7 +384,7 @@ exports.BattleFormats = {
 				receiver: ['powerofalchemy'],
 				shellarmor: ['battlearmor'],
 				teravolt: ['moldbreaker', 'turboblaze'],
-				moldbreaker: ['moldbreaker', 'teravolt'],
+				turboblaze: ['moldbreaker', 'teravolt'],
 				whitesmoke: ['clearbody'],
 			};
 			for (let i = 0; i < team.length; i++) {
