@@ -1050,7 +1050,7 @@ class BattleDex {
 			// moves
 			j = buf.indexOf('|', i);
 			if (j < 0) return;
-			set.moves = buf.substring(i, j).split(',');
+			set.moves = buf.substring(i, j).split(',', 24);
 			i = j + 1;
 
 			// nature
@@ -1063,7 +1063,7 @@ class BattleDex {
 			j = buf.indexOf('|', i);
 			if (j < 0) return;
 			if (j !== i) {
-				let evs = buf.substring(i, j).split(',');
+				let evs = buf.substring(i, j).split(',', 6);
 				set.evs = {
 					hp: Number(evs[0]) || 0,
 					atk: Number(evs[1]) || 0,
@@ -1085,7 +1085,7 @@ class BattleDex {
 			j = buf.indexOf('|', i);
 			if (j < 0) return;
 			if (j !== i) {
-				let ivs = buf.substring(i, j).split(',');
+				let ivs = buf.substring(i, j).split(',', 6);
 				set.ivs = {
 					hp: ivs[0] === '' ? 31 : Number(ivs[0]) || 0,
 					atk: ivs[1] === '' ? 31 : Number(ivs[1]) || 0,
@@ -1113,9 +1113,9 @@ class BattleDex {
 			j = buf.indexOf(']', i);
 			let misc;
 			if (j < 0) {
-				if (i < buf.length) misc = buf.substring(i).split(',');
+				if (i < buf.length) misc = buf.substring(i).split(',', 3);
 			} else {
-				if (i !== j) misc = buf.substring(i, j).split(',');
+				if (i !== j) misc = buf.substring(i, j).split(',', 3);
 			}
 			if (misc) {
 				set.happiness = Number(misc[0]);
