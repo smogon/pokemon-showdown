@@ -4,8 +4,6 @@ const assert = require('assert');
 const path = require('path');
 const fs = require('fs');
 const Module = require('module');
-const BattleEngine = require('../battle-engine');
-
 const mock = require('mock-fs-require-fix');
 
 const noop = () => {};
@@ -21,14 +19,6 @@ function getDirTypedContentsSync(dir, forceType) {
 
 function init(callback) {
 	require('./../app');
-
-	// Run the battle engine in the main process to keep our sanity
-	for (let listener of process.listeners('message')) {
-		process.removeListener('message', listener);
-	}
-
-	// Turn IPC methods into no-op
-	BattleEngine.Battle.prototype.receive = noop;
 
 	Rooms.RoomBattle.prototype.send = noop;
 	Rooms.RoomBattle.prototype.receive = noop;
@@ -117,4 +107,8 @@ describe('Native timer/event loop globals', function () {
 
 describe('Battle simulation', function () {
 	require('./simulator');
+});
+
+describe('mocks', function () {
+	require('./mocks/Battle.spec');
 });

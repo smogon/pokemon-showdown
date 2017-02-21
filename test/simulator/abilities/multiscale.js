@@ -2,7 +2,6 @@
 
 const assert = require('./../../assert');
 const common = require('./../../common');
-const {PRNG} = require('../../../prng');
 
 let battle;
 
@@ -12,9 +11,7 @@ describe('Multiscale', function () {
 	});
 
 	it('should halve damage when it is at full health', function () {
-		const a = new PRNG(common.minRollSeed);
-		const b = a.clone();
-		battle = common.createBattleWithPRNG(a);
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Dragonite", ability: 'multiscale', moves: ['splash']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Gyarados", ability: 'moxie', moves: ['incinerate']}]);
 		let damage, curhp;
@@ -22,15 +19,13 @@ describe('Multiscale', function () {
 		battle.commitDecisions();
 		damage = pokemon.maxhp - pokemon.hp;
 		curhp = pokemon.hp;
-		battle.prng = b;
+		battle.resetRNG();
 		battle.commitDecisions();
 		assert.strictEqual(damage, battle.modify(curhp - pokemon.hp, 0.5));
 	});
 
 	it('should be suppressed by Mold Breaker', function () {
-		const a = new PRNG(common.minRollSeed);
-		const b = a.clone();
-		battle = common.createBattleWithPRNG(a);
+		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Dragonite", ability: 'multiscale', moves: ['splash']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Gyarados", ability: 'moldbreaker', moves: ['incinerate']}]);
 		let damage, curhp;
@@ -38,7 +33,7 @@ describe('Multiscale', function () {
 		battle.commitDecisions();
 		damage = pokemon.maxhp - pokemon.hp;
 		curhp = pokemon.hp;
-		battle.prng = b;
+		battle.resetRNG();
 		battle.commitDecisions();
 		assert.strictEqual(curhp - pokemon.hp, damage);
 	});
