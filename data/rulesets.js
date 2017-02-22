@@ -372,12 +372,28 @@ exports.BattleFormats = {
 		},
 		onValidateTeam: function (team, format) {
 			let abilityTable = {};
+			let base = {
+				airlock: 'cloudnine',
+				battlearmor: 'shellarmor',
+				clearbody: 'whitesmoke',
+				dazzling: 'queenlymajesty',
+				emergencyexit: 'wimpout',
+				filter: 'solidrock',
+				gooey: 'tanglinghair',
+				insomnia: 'vitalspirit',
+				ironbarbs: 'roughskin',
+				minus: 'plus',
+				powerofalchemy: 'receiver',
+				teravolt: 'moldbreaker',
+				turboblaze: 'moldbreaker',
+			};
 			for (let i = 0; i < team.length; i++) {
 				let ability = toId(team[i].ability);
 				if (!ability) continue;
+				if (ability in base) ability = base[ability];
 				if (ability in abilityTable) {
 					if (abilityTable[ability] >= 2) {
-						return ["You are limited to two of each ability by the Ability Clause.", "(You have more than two " + this.getAbility(ability).name + ")"];
+						return ["You are limited to two of each ability by the Ability Clause.", `(You have more than two ${this.getAbility(ability).name} variants)`];
 					}
 					abilityTable[ability]++;
 				} else {
