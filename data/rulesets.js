@@ -390,20 +390,13 @@ exports.BattleFormats = {
 			for (let i = 0; i < team.length; i++) {
 				let ability = toId(team[i].ability);
 				if (!ability) continue;
-				if (ability in abilityTable || base[ability] in abilityTable) {
-					if (abilityTable[ability] >= 2 || abilityTable[base[ability]] >= 2) {
+				if(ability in base) ability = base[ability];
+				if (ability in abilityTable) {
+					if (abilityTable[ability] >= 2) {
 						return ["You are limited to two of each ability by the Ability Clause.", `(You have more than two ${this.getAbility(ability).name} variants)`];
-					}
-					if (base[ability]) {
-						abilityTable[base[ability]]++;
-						continue;
 					}
 					abilityTable[ability]++;
 				} else {
-					if (base[ability]) {
-						abilityTable[base[ability]] = 1;
-						continue;
-					}
 					abilityTable[ability] = 1;
 				}
 			}
