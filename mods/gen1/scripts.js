@@ -1284,33 +1284,19 @@ exports.BattleScripts = {
 		}
 
 		let levelScale = {
-			LC: 82,
-			NFE: 70,
-			UU: 64,
-			OU: 58,
-			Uber: 52,
+			LC: 88,
+			NFE: 80,
+			UU: 74,
+			OU: 68,
+			Uber: 65,
 		};
 
 		let customScale = {
-			Mew: 56,
-			Cloyster: 62, Gengar: 60, Golem: 60, Jolteon: 62, Jynx: 60, Rhydon: 60, Slowbro: 60,
-			Zapdos: 60, Aerodactyl: 66, Arbok: 66, Articuno: 60, Beedrill: 68, Butterfree: 68,
-			Clefable: 62, Ditto: 84, Dodrio: 62, Dragonite: 60, Electrode: 68, "Farfetch'd": 68,
-			Golbat: 68, Golduck: 62, Graveler: 68, Gyarados: 62, Haunter: 68, Hitmonchan: 68,
-			Hitmonlee: 68, Hypno: 62, Kadabra: 66, Kangaskhan: 62, Kingler: 62, Lickitung: 66,
-			Machamp: 66, Magneton: 66, Marowak: 66, Moltres: 60, Muk: 66, Onix: 72, Parasect: 66,
-			Persian: 62, Pidgeot: 66, Porygon: 66, Primeape: 66, Seaking: 66, Tangela: 66,
-			Vaporeon: 62, Venomoth: 66, Venusaur: 62, Victreebel: 62, Vileplume: 66, Weezing: 66,
-			Dragonair: 68, Gloom: 72, Kakuna: 99, Metapod: 99, Nidorina: 72, Nidorino: 72,
-			Pidgeotto: 74, Poliwhirl: 68, Abra: 74, Bellsprout: 80, Bulbasaur: 80, Caterpie: 99,
-			Charmander: 80, Clefairy: 78, Cubone: 78, Diglett: 80, Doduo: 76, Dratini: 80, Drowzee: 76,
-			Exeggcute: 78, Gastly: 76, Geodude: 76, Goldeen: 78, Grimer: 80, Growlithe: 78, Horsea: 78,
-			Jigglypuff: 80, Kabuto: 78, Koffing: 78, Krabby: 78, Machop: 80, Magikarp: 99, Magnemite: 80,
-			Mankey: 80, Meowth: 78, Omanyte: 76, Pidgey: 84, Pikachu: 78, Poliwag: 76, Ponyta: 72,
-			Psyduck: 76, Rattata: 80, Rhyhorn: 70, Sandshrew: 78, Seel: 76, Shellder: 78, Slowpoke: 74,
-			Squirtle: 80, Staryu: 74, Tentacool: 76, Vulpix: 80, Weedle: 99, Zubat: 84,
+			Mewtwo: 62,
+			Caterpie: 99, Metapod: 99, Weedle: 99, Kakuna: 99, Magikarp: 99,
+			Ditto: 88,
 		};
-		let level = levelScale[template.tier] || 90;
+		let level = levelScale[template.tier] || 80;
 		if (customScale[template.name]) level = customScale[template.name];
 
 		return {
