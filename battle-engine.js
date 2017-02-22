@@ -107,27 +107,12 @@ class BattlePokemon {
 		this.addedType = '';
 		this.knownType = true;
 
-		let desiredHPType;
 		if (this.set.moves) {
 			for (let i = 0; i < this.set.moves.length; i++) {
 				let move = this.battle.getMove(this.set.moves[i]);
 				if (!move.id) continue;
 				if (move.id === 'hiddenpower' && move.type !== 'Normal') {
-					const ivValues = this.set.ivs && Object.values(this.set.ivs);
-					desiredHPType = move.type;
-					if (this.battle.gen && this.battle.gen <= 2) {
-						if (!ivValues || Math.min.apply(null, ivValues) >= 30) {
-							let HPdvs = this.battle.getType(desiredHPType).HPdvs;
-							this.set.ivs = {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30};
-							for (let i in HPdvs) {
-								this.set.ivs[i] = HPdvs[i] * 2;
-							}
-						}
-					} else if (this.battle.gen <= 6) {
-						if (!ivValues || ivValues.every(val => val === 31)) {
-							this.set.ivs = this.battle.getType(desiredHPType).HPivs;
-						}
-					}
+					if (!set.hpType) set.hpType = move.type;
 					move = this.battle.getMove('hiddenpower');
 				}
 				this.baseMoveset.push({
@@ -171,14 +156,8 @@ class BattlePokemon {
 		}
 
 		let hpData = this.battle.getHiddenPower(this.set.ivs);
-		this.hpType = hpData.type;
+		this.hpType = set.hpType || hpData.type;
 		this.hpPower = hpData.power;
-		if (this.battle.gen >= 7 && desiredHPType) {
-			const format = this.battle.getFormat();
-			if (this.level === 100 || this.level === format.forcedLevel || this.level === format.maxForcedLevel || format.team) {
-				this.hpType = desiredHPType;
-			}
-		}
 
 		this.boosts = {atk: 0, def: 0, spa: 0, spd: 0, spe: 0, accuracy: 0, evasion: 0};
 		this.stats = {atk:0, def:0, spa:0, spd:0, spe:0};

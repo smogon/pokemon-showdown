@@ -306,6 +306,9 @@ class Validator {
 			// in the cartridge-compliant set validator: rulesets.js:pokemon
 			set.moves = set.moves.slice(0, 24);
 
+			if (!set.ivs) set.ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
+			let maxedIVs = Object.values(set.ivs).every(val => val === 31);
+
 			for (let i = 0; i < set.moves.length; i++) {
 				if (!set.moves[i]) continue;
 				let move = tools.getMove(Tools.getString(set.moves[i]));
@@ -316,6 +319,12 @@ class Validator {
 				if (banlistTable[check]) {
 					const reason = banReason`${banlistTable[check]}`;
 					problems.push(`${name}'s move ${set.moves[i]} is ${reason}.`);
+				}
+
+				// Note that we don't error out on multiple Hidden Power types
+				// That is checked in rulesets.js rule Pokemon
+				if (move.id === 'hiddenpower' && move.type !== 'Normal' && !set.hpType) {
+					set.hpType = move.type;
 				}
 
 				if (banlistTable['Unreleased']) {
@@ -345,13 +354,30 @@ class Validator {
 						}
 						problems.push(problemString);
 					}
-					if (move.id === 'hiddenpower' && move.type === 'Fighting') {
-						if (template.gen >= 6 && template.eggGroups[0] === 'Undiscovered' && !template.nfe && (template.baseSpecies !== 'Diancie' || !set.shiny)) {
-							// Legendary Pokemon must have at least 3 perfect IVs in gen 6+
-							problems.push(`${name} must not have Hidden Power Fighting because it starts with 3 perfect IVs because it's a gen 6+ legendary.`);
-						}
-					}
 				}
+			}
+
+			const canBottleCap = (tools.gen >= 7 && set.level === 100);
+			if (set.hpType && maxedIVs && banlistTable['Rule:pokemon']) {
+				if (tools.gen <= 2) {
+					let HPdvs = tools.getType(set.hpType).HPdvs;
+					set.ivs = {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30};
+					for (let i in HPdvs) {
+						set.ivs[i] = HPdvs[i] * 2;
+					}
+				} else if (!canBottleCap) {
+					set.ivs = tools.getType(set.hpType).HPivs;
+				}
+			}
+			if (set.hpType === 'Fighting' && banlistTable['Rule:pokemon']) {
+				if (template.gen >= 6 && template.eggGroups[0] === 'Undiscovered' && !template.nfe && (template.baseSpecies !== 'Diancie' || !set.shiny)) {
+					// Legendary Pokemon must have at least 3 perfect IVs in gen 6+
+					problems.push(`${name} must not have Hidden Power Fighting because it starts with 3 perfect IVs because it's a gen 6+ legendary.`);
+				}
+			}
+			const ivHpType = tools.getHiddenPower(set.ivs).type;
+			if (!canBottleCap && banlistTable['Rule:pokemon'] && set.hpType && set.hpType !== ivHpType) {
+				problems.push(`${name} has Hidden Power ${set.hpType}, but its IVs are for Hidden Power ${ivHpType}.`);
 			}
 
 			if (lsetData.limitedEgg && lsetData.limitedEgg.length > 1 && !lsetData.sourcesBefore && lsetData.sources) {
@@ -591,29 +617,50 @@ class Validator {
 			problems.push(`${name} must have a ${eventData.nature} nature${etc}.`);
 		}
 		if (eventData.ivs) {
-			if (tools.gen === 6 || tools.gen === 7 && set.level !== 100) {
-				if (!set.ivs) set.ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
-				let statTable = {hp:'HP', atk:'Attack', def:'Defense', spa:'Special Attack', spd:'Special Defense', spe:'Speed'};
-				for (let statId in eventData.ivs) {
-					if (set.ivs[statId] !== eventData.ivs[statId]) {
-						problems.push(`${name} must have ${eventData.ivs[statId]} ${statTable[statId]} IVs${etc}.`);
+			/** In Gen 7, IVs can be changed to 31 */
+			const canBottleCap = (tools.gen >= 7 && set.level === 100);
+
+			if (!set.ivs) set.ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
+			let statTable = {hp:'HP', atk:'Attack', def:'Defense', spa:'Special Attack', spd:'Special Defense', spe:'Speed'};
+			for (let statId in eventData.ivs) {
+				if (canBottleCap && set.ivs[statId] === 31) continue;
+				if (set.ivs[statId] !== eventData.ivs[statId]) {
+					problems.push(`${name} must have ${eventData.ivs[statId]} ${statTable[statId]} IVs${etc}.`);
+				}
+			}
+
+			if (canBottleCap) {
+				// IVs can be overridden but Hidden Power type can't
+				if (Object.keys(eventData.ivs).length >= 6) {
+					const requiredHpType = tools.getHiddenPower(eventData.ivs).type;
+					if (set.hpType && set.hpType !== requiredHpType) {
+						problems.push(`${name} can only have Hidden Power ${requiredHpType}${etc}.`);
 					}
+					set.hpType = requiredHpType;
 				}
 			}
 		} else if (set.ivs && (eventData.perfectIVs || (eventData.generation >= 6 && (template.eggGroups[0] === 'Undiscovered' || template.species === 'Manaphy') && !template.prevo && !template.nfe &&
 			template.species !== 'Unown' && template.baseSpecies !== 'Pikachu' && (template.baseSpecies !== 'Diancie' || !set.shiny)))) {
 			// Legendary Pokemon must have at least 3 perfect IVs in gen 6
 			// Events can also have a certain amount of guaranteed perfect IVs
-			if (tools.gen === 6 || tools.gen === 7 && set.level !== 100) {
+			const requiredIVs = eventData.perfectIVs || 3;
+			if (tools.gen >= 6) {
 				let perfectIVs = 0;
 				for (let i in set.ivs) {
 					if (set.ivs[i] >= 31) perfectIVs++;
 				}
-				if (eventData.perfectIVs) {
-					let or7 = tools.gen === 7 ? ' or be level 100' : '';
-					if (perfectIVs < eventData.perfectIVs) problems.push(`${name} must have at least ${eventData.perfectIVs} perfect IVs${or7}${etc}.`);
-				} else if (perfectIVs < 3) {
-					problems.push(`${name} must have at least three perfect IVs because it's a legendary and it has a move only available from a gen 6 event.`);
+				if (perfectIVs < requiredIVs) {
+					if (eventData.perfectIVs) {
+						problems.push(`${name} must have at least ${eventData.perfectIVs} perfect IVs${etc}.`);
+					} else {
+						problems.push(`${name} must have at least three perfect IVs because it's a legendary and it has a move only available from a gen 6 event.`);
+					}
+				}
+			}
+			// The perfect IV count affects Hidden Power availability
+			if (tools.gen >= 3) {
+				if (requiredIVs >= 3 && set.hpType === 'Fighting') {
+					problems.push(`${name} can't use Hidden Power Fighting because it must have at least three perfect IVs${etc}.`);
 				}
 			}
 		}
