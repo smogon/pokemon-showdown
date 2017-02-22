@@ -644,24 +644,20 @@ class Validator {
 			// Legendary Pokemon must have at least 3 perfect IVs in gen 6
 			// Events can also have a certain amount of guaranteed perfect IVs
 			const requiredIVs = eventData.perfectIVs || 3;
-			if (tools.gen >= 6) {
-				let perfectIVs = 0;
-				for (let i in set.ivs) {
-					if (set.ivs[i] >= 31) perfectIVs++;
-				}
-				if (perfectIVs < requiredIVs) {
-					if (eventData.perfectIVs) {
-						problems.push(`${name} must have at least ${eventData.perfectIVs} perfect IVs${etc}.`);
-					} else {
-						problems.push(`${name} must have at least three perfect IVs because it's a legendary and it has a move only available from a gen 6 event.`);
-					}
+			let perfectIVs = 0;
+			for (let i in set.ivs) {
+				if (set.ivs[i] >= 31) perfectIVs++;
+			}
+			if (perfectIVs < requiredIVs) {
+				if (eventData.perfectIVs) {
+					problems.push(`${name} must have at least ${eventData.perfectIVs} perfect IVs${etc}.`);
+				} else {
+					problems.push(`${name} must have at least three perfect IVs because it's a legendary and it has a move only available from a gen 6 event.`);
 				}
 			}
 			// The perfect IV count affects Hidden Power availability
-			if (tools.gen >= 3) {
-				if (requiredIVs >= 3 && set.hpType === 'Fighting') {
-					problems.push(`${name} can't use Hidden Power Fighting because it must have at least three perfect IVs${etc}.`);
-				}
+			if (tools.gen >= 3 && requiredIVs >= 3 && set.hpType === 'Fighting') {
+				problems.push(`${name} can't use Hidden Power Fighting because it must have at least three perfect IVs${etc}.`);
 			}
 		}
 		if (tools.gen <= 5 && eventData.abilities && eventData.abilities.length === 1 && !eventData.isHidden) {
