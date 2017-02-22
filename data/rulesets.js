@@ -378,6 +378,7 @@ exports.BattleFormats = {
 				clearbody: ['whitesmoke'],
 				cloud9: ['airlock'],
 				dazzling: ['queenlymajesty'],
+				insomnia: ['vitalspirit'],
 				moldbreaker: ['teravolt', 'turboblaze'],
 				powerofalchemy: ['receiver'],
 				queenlymajesty: ['dazzling'],
@@ -385,18 +386,25 @@ exports.BattleFormats = {
 				shellarmor: ['battlearmor'],
 				teravolt: ['moldbreaker', 'turboblaze'],
 				turboblaze: ['moldbreaker', 'teravolt'],
+				vitalspirit: ['insomnia'],
 				whitesmoke: ['clearbody'],
 			};
 			for (let i = 0; i < team.length; i++) {
 				let ability = toId(team[i].ability);
 				if (!ability) continue;
-				if (ability in abilityTable || clones[ability].some(clone => {return clone in abilityTable;})) {
-					if (abilityTable[ability] >= 2) {
-						return ["You are limited to two of each ability by the Ability Clause.", "(You have more than two " + this.getAbility(ability).name + ")"];
+				if (ability in abilityTable) {
+					if (abilityTable[ability] >= 2  || (clones[ability] && clones[ability].some(clone => {return abilityTable[clone] >= 2;}))) {
+						return ["You are limited to two of each ability by the Ability Clause.", "(You have more than two " + this.getAbility(ability).name + " or one of its variants)"];
 					}
 					abilityTable[ability]++;
+					if (clones[ability]) {
+						clones[ability].forEach(clone => {abilityTable[clone]++;});
+					}
 				} else {
 					abilityTable[ability] = 1;
+					if (clones[ability]) {
+						clones[ability].forEach(clone => {abilityTable[clone] = 1;});
+					}
 				}
 			}
 		},
