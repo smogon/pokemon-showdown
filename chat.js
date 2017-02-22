@@ -779,7 +779,7 @@ Chat.CommandContext = CommandContext;
  * Usage:
  *   Chat.parse(message, room, user, connection)
  *
- * Parses the message. If it's a command, the commnad is executed, if
+ * Parses the message. If it's a command, the command is executed, if
  * not, it's displayed directly in the room.
  *
  * Examples:
