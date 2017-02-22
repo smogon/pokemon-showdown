@@ -373,10 +373,10 @@ exports.BattleFormats = {
 		onValidateTeam: function (team, format) {
 			let abilityTable = {};
 			let clones = {
-				airlock: ['cloud9'],
+				airlock: ['cloudnine'],
 				battlearmor: ['shellarmor'],
 				clearbody: ['whitesmoke'],
-				cloud9: ['airlock'],
+				cloudnine: ['airlock'],
 				dazzling: ['queenlymajesty'],
 				insomnia: ['vitalspirit'],
 				moldbreaker: ['teravolt', 'turboblaze'],
