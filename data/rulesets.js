@@ -392,7 +392,7 @@ exports.BattleFormats = {
 				if (!ability) continue;
 				if (ability in abilityTable || base[ability] in abilityTable) {
 					if (abilityTable[ability] >= 2 || abilityTable[base[ability]] >= 2) {
-						return ["You are limited to two of each ability by the Ability Clause.", "(You have more than two " + this.getAbility(ability).name + " or one of its variants)"];
+						return ["You are limited to two of each ability by the Ability Clause.", `(You have more than two ${this.getAbility(ability).name} variants)`];
 					}
 					if (base[ability]) {
 						abilityTable[base[ability]]++;
