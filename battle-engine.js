@@ -170,28 +170,9 @@ class BattlePokemon {
 			}
 		}
 
-		let hpTypes = ['Fighting', 'Flying', 'Poison', 'Ground', 'Rock', 'Bug', 'Ghost', 'Steel', 'Fire', 'Water', 'Grass', 'Electric', 'Psychic', 'Ice', 'Dragon', 'Dark'];
-		if (this.battle.gen && this.battle.gen === 2) {
-			// Gen 2 specific Hidden Power check. IVs are still treated 0-31 so we get them 0-15
-			let atkDV = Math.floor(this.set.ivs.atk / 2);
-			let defDV = Math.floor(this.set.ivs.def / 2);
-			let speDV = Math.floor(this.set.ivs.spe / 2);
-			let spcDV = Math.floor(this.set.ivs.spa / 2);
-			this.hpType = hpTypes[4 * (atkDV % 4) + (defDV % 4)];
-			this.hpPower = Math.floor((5 * ((spcDV >> 3) + (2 * (speDV >> 3)) + (4 * (defDV >> 3)) + (8 * (atkDV >> 3))) + (spcDV > 2 ? 3 : spcDV)) / 2 + 31);
-		} else {
-			// Hidden Power check for gen 3 onwards
-			let hpTypeX = 0, hpPowerX = 0;
-			let i = 1;
-			for (let s in stats) {
-				hpTypeX += i * (this.set.ivs[s] % 2);
-				hpPowerX += i * (Math.floor(this.set.ivs[s] / 2) % 2);
-				i *= 2;
-			}
-			this.hpType = hpTypes[Math.floor(hpTypeX * 15 / 63)];
-			// In Gen 6, Hidden Power is always 60 base power
-			this.hpPower = (this.battle.gen && this.battle.gen < 6) ? Math.floor(hpPowerX * 40 / 63) + 30 : 60;
-		}
+		let hpData = this.battle.getHiddenPower(this.set.ivs);
+		this.hpType = hpData.type;
+		this.hpPower = hpData.power;
 		if (this.battle.gen >= 7 && desiredHPType) {
 			const format = this.battle.getFormat();
 			if (this.level === 100 || this.level === format.forcedLevel || this.level === format.maxForcedLevel || format.team) {

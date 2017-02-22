@@ -694,6 +694,36 @@ class BattleDex {
 		return stats;
 	}
 
+	getHiddenPower(ivs) {
+		const hpTypes = ['Fighting', 'Flying', 'Poison', 'Ground', 'Rock', 'Bug', 'Ghost', 'Steel', 'Fire', 'Water', 'Grass', 'Electric', 'Psychic', 'Ice', 'Dragon', 'Dark'];
+		const stats = {hp: 31, atk: 31, def: 31, spe: 31, spa: 31, spd: 31};
+		if (this.gen <= 2) {
+			// Gen 2 specific Hidden Power check. IVs are still treated 0-31 so we get them 0-15
+			const atkDV = Math.floor(ivs.atk / 2);
+			const defDV = Math.floor(ivs.def / 2);
+			const speDV = Math.floor(ivs.spe / 2);
+			const spcDV = Math.floor(ivs.spa / 2);
+			return {
+				type: hpTypes[4 * (atkDV % 4) + (defDV % 4)],
+				power: Math.floor((5 * ((spcDV >> 3) + (2 * (speDV >> 3)) + (4 * (defDV >> 3)) + (8 * (atkDV >> 3))) + (spcDV > 2 ? 3 : spcDV)) / 2 + 31),
+			};
+		} else {
+			// Hidden Power check for gen 3 onwards
+			let hpTypeX = 0, hpPowerX = 0;
+			let i = 1;
+			for (const s in stats) {
+				hpTypeX += i * (ivs[s] % 2);
+				hpPowerX += i * (Math.floor(ivs[s] / 2) % 2);
+				i *= 2;
+			}
+			return {
+				type: hpTypes[Math.floor(hpTypeX * 15 / 63)],
+				// In Gen 6, Hidden Power is always 60 base power
+				power: (this.gen && this.gen < 6) ? Math.floor(hpPowerX * 40 / 63) + 30 : 60,
+			};
+		}
+	}
+
 	getBanlistTable(format, subformat, depth) {
 		let banlistTable;
 		if (!depth) depth = 0;
