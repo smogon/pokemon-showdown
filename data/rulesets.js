@@ -372,41 +372,39 @@ exports.BattleFormats = {
 		},
 		onValidateTeam: function (team, format) {
 			let abilityTable = {};
-			let clones = {
-				airlock: ['cloudnine'],
-				battlearmor: ['shellarmor'],
-				clearbody: ['whitesmoke'],
-				cloudnine: ['airlock'],
-				dazzling: ['queenlymajesty'],
-				filter: ['solidrock'],
-				insomnia: ['vitalspirit'],
-				moldbreaker: ['teravolt', 'turboblaze'],
-				powerofalchemy: ['receiver'],
-				queenlymajesty: ['dazzling'],
-				receiver: ['powerofalchemy'],
-				shellarmor: ['battlearmor'],
-				solidrock: ['filter'],
-				teravolt: ['moldbreaker', 'turboblaze'],
-				turboblaze: ['moldbreaker', 'teravolt'],
-				vitalspirit: ['insomnia'],
-				whitesmoke: ['clearbody'],
+			let base = {
+				airlock: 'cloudnine',
+				battlearmor: 'shellarmor',
+				clearbody: 'whitesmoke',
+				dazzling: 'queenlymajesty',
+				emergencyexit: 'wimpout',
+				filter: 'solidrock',
+				gooey: 'tanglinghair',
+				insomnia: 'vitalspirit',
+				ironbarbs: 'roughskin',
+				minus: 'plus',
+				powerofalchemy: 'receiver',
+				teravolt: 'moldbreaker',
+				turboblaze: 'moldbreaker',
 			};
 			for (let i = 0; i < team.length; i++) {
 				let ability = toId(team[i].ability);
 				if (!ability) continue;
-				if (ability in abilityTable) {
-					if (abilityTable[ability] >= 2  || (clones[ability] && clones[ability].some(clone => {return abilityTable[clone] >= 2;}))) {
+				if (ability in abilityTable || base[ability] in abilityTable) {
+					if (abilityTable[ability] >= 2 || abilityTable[base[ability]] >= 2) {
 						return ["You are limited to two of each ability by the Ability Clause.", "(You have more than two " + this.getAbility(ability).name + " or one of its variants)"];
 					}
+					if (base[ability]) {
+						abilityTable[base[ability]]++;
+						continue;
+					}
 					abilityTable[ability]++;
-					if (clones[ability]) {
-						clones[ability].forEach(clone => {abilityTable[clone]++;});
-					}
 				} else {
-					abilityTable[ability] = 1;
-					if (clones[ability]) {
-						clones[ability].forEach(clone => {abilityTable[clone] = 1;});
+					if (base[ability]) {
+						abilityTable[base[ability]] = 1;
+						continue;
 					}
+					abilityTable[ability] = 1;
 				}
 			}
 		},
