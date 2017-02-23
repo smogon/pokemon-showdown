@@ -358,7 +358,7 @@ exports.Formats = [
 		},
 		onBegin: function () {
 			for (let pokemon of this.p1.pokemon.concat(this.p2.pokemon)) {
-				if(pokemon.baseAbility.includes('0')) {
+				if (pokemon.baseAbility.includes('0')) {
 					let donor = pokemon.baseAbility.split('0')[1];
 					pokemon.donor = toId(donor);
 					pokemon.baseAbility = pokemon.baseAbility.split('0')[0];
