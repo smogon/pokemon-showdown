@@ -1396,6 +1396,7 @@ function runLearn(target, cmd) {
 				let source = sources[i];
 				let hatchAs = ['6E', '7E'].includes(source.substr(0, 2)) ? 'hatched as ' : '';
 				if (source.substr(0, 2) === prevSourceType) {
+					if (!hatchAs && source.length <= 2) continue;
 					if (prevSourceCount < 0) {
 						buffer += ": " + hatchAs + source.substr(2);
 					} else if (all || prevSourceCount < 3) {
