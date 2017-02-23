@@ -2595,7 +2595,17 @@ exports.commands = {
 	savelearnsets: function (target, room, user) {
 		if (!this.can('hotpatch')) return false;
 		this.sendReply("saving...");
-		fs.writeFile('data/learnsets.js', 'exports.BattleLearnsets = ' + JSON.stringify(Tools.data.Learnsets) + ";\n", () => {
+		fs.writeFile('data/learnsets.js', `'use strict';\n\nexports.BattleLearnsets = {\n` +
+			Object.entries(Tools.data.Learnsets).map(([k, v]) => (
+				`\t${k}: {learnset: {\n` +
+				Object.entries(v.learnset).sort(
+					(a, b) => (a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0)
+				).map(([k, v]) => (
+					`\t\t${k}: ["` + v.join(`", "`) + `"],\n`
+				)).join('') +
+				`\t}},\n`
+			)).join('') +
+		`};\n`, () => {
 			this.sendReply("learnsets.js saved.");
 		});
 	},

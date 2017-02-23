@@ -49,6 +49,11 @@ if (!Object.values) {
 		for (let k in object) values.push(object[k]);
 		return values;
 	};
+	Object.entries = function (object) {
+		let entries = [];
+		for (let k in object) entries.push([k, object[k]]);
+		return entries;
+	};
 }
 
 // shim padStart
