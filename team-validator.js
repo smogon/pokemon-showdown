@@ -950,7 +950,7 @@ class Validator {
 					} else if (learned.charAt(1) === 'V') {
 						// Virtual Console moves:
 						//   only if that was the source
-						sources.push(learned);
+						if (sources[sources.length - 1] !== learned) sources.push(learned);
 					}
 				}
 			}
