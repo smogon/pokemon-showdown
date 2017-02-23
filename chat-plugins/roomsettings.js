@@ -181,7 +181,7 @@ exports.commands = {
 			room.modchat = 'autoconfirmed';
 			break;
 		case 'player':
-			target = '\u2605';
+			target = '\u2606';
 			/* falls through */
 		default: {
 			if (!Config.groups[target]) {

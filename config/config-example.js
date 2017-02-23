@@ -309,7 +309,7 @@ exports.grouplist = [
 		gamemanagement: true,
 	},
 	{
-		symbol: '\u2605',
+		symbol: '\u2606',
 		id: "player",
 		name: "Player",
 		inherit: '+',
