@@ -1184,7 +1184,7 @@ exports.BattleScripts = {
 		if (template.types[1]) hasType[template.types[1]] = true;
 		let hasMove = {};
 		let counter = {};
-		let setupType = '';
+		// let setupType = '';
 
 		// Moves that boost Attack:
 		let PhysicalSetup = {
@@ -1239,11 +1239,11 @@ exports.BattleScripts = {
 					}
 				}
 
-				if (counter['specialsetup']) {
-					setupType = 'Special';
-				} else if (counter['physicalsetup']) {
-					setupType = 'Physical';
-				}
+				// if (counter['specialsetup']) {
+				// 	setupType = 'Special';
+				// } else if (counter['physicalsetup']) {
+				// 	setupType = 'Physical';
+				// }
 
 				for (let k = 0; k < moves.length; k++) {
 					let moveid = moves[k];
