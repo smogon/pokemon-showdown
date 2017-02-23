@@ -1224,7 +1224,7 @@ exports.commands = {
 			"- <a href=\"https://www.smogon.com/forums/threads/3593752/\">Sample SM CAP teams</a>"
 		);
 	},
-	caphelp: ["/cap - Provides an introduction to the Create-A-Pok&eacute;mon project.",
+	caphelp: ["/cap - Provides an introduction to the Create-A-Pok\u00e9mon project.",
 		"!cap - Show everyone that information. Requires: + % @ * # & ~"],
 
 	'!gennext': true,
