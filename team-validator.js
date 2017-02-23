@@ -1064,7 +1064,7 @@ class Validator {
 	static fillStats(stats, fillNum = 0) {
 		let filledStats = {hp: fillNum, atk: fillNum, def: fillNum, spa: fillNum, spd: fillNum, spe: fillNum};
 		if (stats) {
-			for (const stat of filledStats) {
+			for (const stat in filledStats) {
 				if (typeof stats[stat] === 'number') filledStats[stat] = stats[stat];
 			}
 		}
