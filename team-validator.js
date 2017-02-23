@@ -290,6 +290,8 @@ class Validator {
 						set.gender = 'M';
 						lsetData.sources = ['5D'];
 					}
+				} else if (!template.abilities['H']) {
+					isHidden = null;
 				}
 			}
 		}
@@ -471,6 +473,29 @@ class Validator {
 						if (eventProblems) problems.push(...eventProblems);
 					}
 					isHidden = false;
+				} else if (source.charAt(1) === 'V') {
+					// virtual console transfer
+					if (format.requirePentagon || format.requirePlus) {
+						problems.push(`${name} can't have moves only available from Gen 1 Virtual Console transfer; this format does not allow old-gen Pokemon.`);
+					}
+					if (isHidden === false) {
+						problems.push(`${name} must have its Hidden Ability because it has moves only available from Gen 1 Virtual Console transfer.`);
+					}
+					const requiredIVs = (template.speciesid === 'mew' ? 5 : 3);
+					let perfectIVs = 0;
+					for (let i in set.ivs) {
+						if (set.ivs[i] >= 31) perfectIVs++;
+					}
+					if (perfectIVs < requiredIVs) {
+						problems.push(`${name} must have at least ${perfectIVs} perfect IVs because it has moves only available from Gen 1 Virtual Console transfer.`);
+					}
+					// The perfect IV count affects Hidden Power availability
+					if (set.hpType === 'Fighting') {
+						problems.push(`${name} can't use Hidden Power Fighting because it must have at least 3 perfect IVs because it has moves only available from Gen 1 Virtual Console transfer.`);
+					}
+					if (requiredIVs >= 5 && set.hpType && !['Dark', 'Dragon', 'Electric', 'Steel', 'Ice'].includes(set.hpType)) {
+						problems.push(`${name} can only use Hidden Power Dark/Dragon/Electric/Steel/Ice because it must have at least 5 perfect IVs because it has moves only available from Gen 1 Virtual Console transfer.`);
+					}
 				}
 			} else if (banlistTable['illegal'] && template.eventOnly) {
 				let eventTemplate = !template.learnset && template.baseSpecies !== template.species ? tools.getTemplate(template.baseSpecies) : template;
@@ -650,7 +675,7 @@ class Validator {
 			}
 			if (perfectIVs < requiredIVs) {
 				if (eventData.perfectIVs) {
-					problems.push(`${name} must have at least ${eventData.perfectIVs} perfect IVs${etc}.`);
+					problems.push(`${name} must have at least ${requiredIVs} perfect IVs${etc}.`);
 				} else {
 					problems.push(`${name} must have at least three perfect IVs because it's a legendary and it has a move only available from a gen 6 event.`);
 				}
@@ -921,6 +946,10 @@ class Validator {
 						// DW Pokemon are at level 10 or at the evolution level
 						let minLevel = (template.evoLevel && template.evoLevel > 10) ? template.evoLevel : 10;
 						if (set.level < minLevel) continue;
+						sources.push(learned);
+					} else if (learned.charAt(1) === 'V') {
+						// Virtual Console moves:
+						//   only if that was the source
 						sources.push(learned);
 					}
 				}
