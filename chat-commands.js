@@ -817,8 +817,8 @@ exports.commands = {
 		}
 	},
 	privateroomhelp: ["/secretroom - Makes a room secret. Secret rooms are visible to & and up. Requires: & ~",
-		"/hiddenroom [on/off] - Makes a room hidden. Hidden rooms are visible to % and up, and inherit global ranks. Requires: \u2605 & ~",
-		"/publicroom - Makes a room public. Requires: \u2605 & ~"],
+		"/hiddenroom [on/off] - Makes a room hidden. Hidden rooms are visible to % and up, and inherit global ranks. Requires: \u2606 & ~",
+		"/publicroom - Makes a room public. Requires: \u2606 & ~"],
 
 	officialchatroom: 'officialroom',
 	officialroom: function (target, room, user) {
@@ -3105,7 +3105,7 @@ exports.commands = {
 		}
 		if (!this.can('joinbattle', null, room)) return;
 
-		room.auth[targetUser.userid] = '\u2605';
+		room.auth[targetUser.userid] = '\u2606';
 		this.addModCommand("" + name + " was promoted to Player by " + user.name + ".");
 	},
 	addplayerhelp: ["/addplayer [username] - Allow the specified user to join the battle as a player."],
