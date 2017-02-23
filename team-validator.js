@@ -308,7 +308,7 @@ class Validator {
 			// in the cartridge-compliant set validator: rulesets.js:pokemon
 			set.moves = set.moves.slice(0, 24);
 
-			if (!set.ivs) set.ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
+			set.ivs = Validator.fillStats(set.ivs, 31);
 			let maxedIVs = Object.values(set.ivs).every(val => val === 31);
 
 			for (let i = 0; i < set.moves.length; i++) {
@@ -368,7 +368,7 @@ class Validator {
 						set.ivs[i] = HPdvs[i] * 2;
 					}
 				} else if (!canBottleCap) {
-					set.ivs = tools.getType(set.hpType).HPivs;
+					set.ivs = Validator.fillStats(tools.getType(set.hpType).HPivs, 31);
 				}
 			}
 			if (set.hpType === 'Fighting' && banlistTable['Rule:pokemon']) {
@@ -1059,6 +1059,16 @@ class Validator {
 		}
 
 		return false;
+	}
+
+	static fillStats(stats, fillNum = 0) {
+		let filledStats = {hp: fillNum, atk: fillNum, def: fillNum, spa: fillNum, spd: fillNum, spe: fillNum};
+		if (stats) {
+			for (const stat of filledStats) {
+				if (typeof stats[stat] === 'number') filledStats[stat] = stats[stat];
+			}
+		}
+		return filledStats;
 	}
 }
 TeamValidator.Validator = Validator;
