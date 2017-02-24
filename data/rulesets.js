@@ -41,7 +41,7 @@ exports.BattleFormats = {
 		],
 		onValidateSet(set, format) {
 			if (this.gen < 7 && toId(set.item) === 'souldew') {
-				return [`${set.name} has Soul Dew, which is banned in ${format.name}.`];
+				return [`${set.name || set.species} has Soul Dew, which is banned in ${format.name}.`];
 			}
 		},
 	},
