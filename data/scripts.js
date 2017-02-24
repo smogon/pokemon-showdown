@@ -31,6 +31,7 @@ exports.BattleScripts = {
 
 		// copy the priority for Quick Guard
 		if (zMove) move.priority = baseMove.priority;
+		move.isExternal = externalMove;
 
 		this.setActiveMove(move, pokemon, target);
 
