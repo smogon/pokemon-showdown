@@ -936,6 +936,7 @@ exports.BattleScripts = {
 		const originalPrng = this.prng.clone();
 		this.prng = new PRNG();
 		team = this[teamGenerator || 'randomTeam'](side);
+		console.log(team);
 		// Restore the default seed
 		this.seed = originalPrng;
 		return team;
@@ -3414,7 +3415,8 @@ exports.BattleScripts = {
 		let availableTiers = ['Uber', 'OU', 'UU', 'RU', 'NU', 'PU'];
 		const originalPrng = this.prng.clone();
 		this.prng = originalPrng.clone();
-		const chosenTier = availableTiers[this.random(availableTiers.length)];
+		const chosenTier = this.factoryTier || availableTiers[this.random(availableTiers.length)];
+		if (!this.factoryTier) this.factoryTier = chosenTier;
 		this.prng = originalPrng;
 
 		let pokemon = [];
