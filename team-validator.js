@@ -313,12 +313,11 @@ class Validator {
 				if (!set.moves[i]) continue;
 				let move = tools.getMove(Tools.getString(set.moves[i]));
 				if (!move.exists) return [`"${move.name}" is an invalid move.`];
-				set.moves[i] = move.name;
 				check = move.id;
 				setHas[check] = true;
 				if (banlistTable[check]) {
 					const reason = banReason`${banlistTable[check]}`;
-					problems.push(`${name}'s move ${set.moves[i]} is ${reason}.`);
+					problems.push(`${name}'s move ${move.name} is ${reason}.`);
 				}
 
 				// Note that we don't error out on multiple Hidden Power types
@@ -328,7 +327,7 @@ class Validator {
 				}
 
 				if (banlistTable['Unreleased']) {
-					if (move.isUnreleased) problems.push(`${name}'s move ${set.moves[i]} is unreleased.`);
+					if (move.isUnreleased) problems.push(`${name}'s move ${move.name} is unreleased.`);
 				}
 
 				if (banlistTable['illegal']) {
