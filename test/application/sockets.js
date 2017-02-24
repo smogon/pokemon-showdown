@@ -3,7 +3,7 @@
 const assert = require('assert');
 const cluster = require('cluster');
 
-describe('Sockets', function () {
+describe.skip('Sockets', function () {
 	const spawnWorker = () => (
 		new Promise(resolve => {
 			Sockets.spawnWorker();

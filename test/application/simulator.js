@@ -17,7 +17,7 @@ describe('Simulator abstraction layer features', function () {
 					p2.disconnectAll();
 					p2.destroy();
 				}
-				if (room) room.expire();
+				if (room) room.destroy();
 			});
 
 			it('should not get players out of sync in rated battles on rename', function () {
