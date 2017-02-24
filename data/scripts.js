@@ -936,7 +936,6 @@ exports.BattleScripts = {
 		const originalPrng = this.prng.clone();
 		this.prng = new PRNG();
 		team = this[teamGenerator || 'randomTeam'](side);
-		console.log(team);
 		// Restore the default seed
 		this.seed = originalPrng;
 		return team;
