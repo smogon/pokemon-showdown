@@ -1,6 +1,6 @@
 'use strict';
 
-const {PRNG} = require('./../prng');
+const PRNG = require('./../prng');
 const CHOOSABLE_TARGETS = new Set(['normal', 'any', 'adjacentAlly', 'adjacentAllyOrSelf', 'adjacentFoe']);
 
 exports.BattleScripts = {
