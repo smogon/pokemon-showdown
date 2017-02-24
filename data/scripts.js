@@ -5,7 +5,18 @@ const CHOOSABLE_TARGETS = new Set(['normal', 'any', 'adjacentAlly', 'adjacentAll
 
 exports.BattleScripts = {
 	gen: 7,
-	runMove: function (move, pokemon, targetLoc, sourceEffect, zMove) {
+	/**
+	 * runMove is the "outside" move caller. It handles deducting PP,
+	 * flinching, full paralysis, etc. All the stuff up to and including
+	 * the "POKEMON used MOVE" message.
+	 *
+	 * For details of the difference between runMove and useMove, see
+	 * useMove's info.
+	 *
+	 * externalMove skips LockMove and PP deduction, mostly for use by
+	 * Dancer.
+	 */
+	runMove: function (move, pokemon, targetLoc, sourceEffect, zMove, externalMove) {
 		let target = this.getTarget(pokemon, zMove || move, targetLoc);
 		if (!sourceEffect && toId(move) !== 'struggle' && !zMove) {
 			let changedMove = this.runEvent('OverrideDecision', pokemon, target, move);
@@ -45,20 +56,23 @@ exports.BattleScripts = {
 			}
 		}
 		pokemon.lastDamage = 0;
-		let lockedMove = this.runEvent('LockMove', pokemon);
-		if (lockedMove === true) lockedMove = false;
-		if (!lockedMove) {
-			if (!pokemon.deductPP(baseMove, null, target) && (move.id !== 'struggle')) {
-				this.add('cant', pokemon, 'nopp', move);
-				let gameConsole = [null, 'Game Boy', 'Game Boy', 'Game Boy Advance', 'DS', 'DS'][this.gen] || '3DS';
-				this.add('-hint', "This is not a bug, this is really how it works on the " + gameConsole + "; try it yourself if you don't believe us.");
-				this.clearActiveMove(true);
-				return;
+		let lockedMove;
+		if (!externalMove) {
+			lockedMove = this.runEvent('LockMove', pokemon);
+			if (lockedMove === true) lockedMove = false;
+			if (!lockedMove) {
+				if (!pokemon.deductPP(baseMove, null, target) && (move.id !== 'struggle')) {
+					this.add('cant', pokemon, 'nopp', move);
+					let gameConsole = [null, 'Game Boy', 'Game Boy', 'Game Boy Advance', 'DS', 'DS'][this.gen] || '3DS';
+					this.add('-hint', "This is not a bug, this is really how it works on the " + gameConsole + "; try it yourself if you don't believe us.");
+					this.clearActiveMove(true);
+					return;
+				}
+			} else {
+				sourceEffect = this.getEffect('lockedmove');
 			}
-		} else {
-			sourceEffect = this.getEffect('lockedmove');
+			pokemon.moveUsed(move, targetLoc);
 		}
-		pokemon.moveUsed(move, targetLoc);
 
 		if (zMove) {
 			this.add('-zpower', pokemon);
@@ -68,6 +82,16 @@ exports.BattleScripts = {
 		this.singleEvent('AfterMove', move, null, pokemon, target, move);
 		this.runEvent('AfterMove', pokemon, target, move);
 	},
+	/**
+	 * useMove is the "inside" move caller. It handles effects of the
+	 * move itself, but not the idea of using the move.
+	 *
+	 * Most caller effects, like Sleep Talk, Nature Power, Magic Bounce,
+	 * etc use useMove.
+	 *
+	 * The only ones that use runMove are Instruct, Pursuit, and
+	 * Dancer.
+	 */
 	useMove: function (move, pokemon, target, sourceEffect, zMove) {
 		if (!sourceEffect && this.effect.id) sourceEffect = this.effect;
 		if (zMove || (sourceEffect && sourceEffect.isZ)) {
