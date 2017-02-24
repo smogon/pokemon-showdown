@@ -30,6 +30,7 @@ function makeUser(name, connection) {
 	user.name = name;
 	user.userid = name.toLowerCase().replace(/[^a-z0-9-]+/g, '');
 	Users.users.set(user.userid, user);
+	user.joinRoom('trivia', connection);
 	return user;
 }
 
@@ -59,15 +60,15 @@ describe('Trivia', function () {
 
 	beforeEach(function () {
 		let questions = [{question: '', answers: ['answer'], category: 'ae'}];
-		this.game = this.room.game = new Trivia(this.room, 'first', 'ae', 'short', questions);
 		this.user = makeUser('Morfent', new Connection('127.0.0.1'));
 		this.tarUser = makeUser('ReallyNotMorfent', new Connection('127.0.0.2'));
+		this.game = this.room.game = new Trivia(this.room, 'first', 'ae', 'short', questions);
 	});
 
 	afterEach(function () {
-		if (this.room.game) this.room.game.destroy();
 		destroyUser(this.user);
 		destroyUser(this.tarUser);
+		if (this.room.game) this.room.game.destroy();
 	});
 
 	it('should have each of its score caps divisible by 5', function () {

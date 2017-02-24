@@ -58,12 +58,12 @@ class BattlePlayer {
 		if (this.active) this.simSend('leave');
 		let user = Users(this.userid);
 		if (user) {
-			user.games.delete(this.game.id);
-			user.updateSearch();
 			for (let j = 0; j < user.connections.length; j++) {
 				let connection = user.connections[j];
 				Sockets.subchannelMove(connection.worker, this.game.id, '0', connection.socketid);
 			}
+			user.games.delete(this.game.id);
+			user.updateSearch();
 		}
 		this.game[this.slot] = null;
 	}
