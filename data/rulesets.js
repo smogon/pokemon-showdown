@@ -179,7 +179,7 @@ exports.BattleFormats = {
 					let moveid = move.id;
 					if (hasMove[moveid]) continue;
 					hasMove[moveid] = true;
-					moves.push(set.moves[i]);
+					moves.push(moveid);
 				}
 			}
 			set.moves = moves;
