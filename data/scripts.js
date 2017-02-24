@@ -74,6 +74,10 @@ exports.BattleScripts = {
 			pokemon.moveUsed(move, targetLoc);
 		}
 
+		// Dancer Petal Dance hack
+		// TODO: implement properly
+		let noLock = externalMove && !pokemon.volatiles.lockedmove;
+
 		if (zMove) {
 			this.add('-zpower', pokemon);
 			pokemon.side.zMoveUsed = true;
@@ -81,6 +85,7 @@ exports.BattleScripts = {
 		this.useMove(baseMove, pokemon, target, sourceEffect, zMove);
 		this.singleEvent('AfterMove', move, null, pokemon, target, move);
 		this.runEvent('AfterMove', pokemon, target, move);
+		if (noLock && pokemon.volatiles.lockedmove) delete pokemon.volatiles.lockedmove;
 	},
 	/**
 	 * useMove is the "inside" move caller. It handles effects of the
