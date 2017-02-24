@@ -39,9 +39,9 @@ exports.BattleFormats = {
 			'Xerneas', 'Yveltal', 'Zygarde', 'Diancie', 'Hoopa', 'Volcanion',
 			'Cosmog', 'Cosmoem', 'Solgaleo', 'Lunala', 'Necrozma', 'Magearna', 'Marshadow',
 		],
-		onValidateSet(set) {
+		onValidateSet(set, format) {
 			if (this.gen < 7 && toId(set.item) === 'souldew') {
-				return [`${set.name} has Soul Dew, which is banned in past gen Battle Spot and GBU.`];
+				return [`${set.name} has Soul Dew, which is banned in ${format.name}.`];
 			}
 		},
 	},
