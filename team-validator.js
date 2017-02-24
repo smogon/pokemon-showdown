@@ -594,6 +594,9 @@ class Validator {
 			let splitSource = source.substr(2).split(' ');
 			eventTemplate = this.tools.getTemplate(splitSource[1]);
 			if (eventTemplate.eventPokemon) eventData = eventTemplate.eventPokemon[parseInt(splitSource[0])];
+			if (!eventData) {
+				throw new Error("${eventTemplate.species} doesn't have data for event ${splitSource[0]}");
+			}
 		} else if (source.charAt(1) === 'V') {
 			eventData = {
 				generation: 1,
@@ -607,6 +610,8 @@ class Validator {
 				level: 10,
 				from: 'Gen 5 Dream World',
 			};
+		} else {
+			throw new Error("Unidentified source ${source} passed to validateSource");
 		}
 
 		return this.validateEvent(set, eventData, eventTemplate, because, from);
