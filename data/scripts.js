@@ -3414,7 +3414,8 @@ exports.BattleScripts = {
 		let availableTiers = ['Uber', 'OU', 'UU', 'RU', 'NU', 'PU'];
 		const originalPrng = this.prng.clone();
 		this.prng = originalPrng.clone();
-		const chosenTier = availableTiers[this.random(availableTiers.length)];
+		const chosenTier = this.factoryTier || availableTiers[this.random(availableTiers.length)];
+		if (!this.factoryTier) this.factoryTier = chosenTier;
 		this.prng = originalPrng;
 
 		let pokemon = [];
