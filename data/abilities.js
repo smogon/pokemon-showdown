@@ -561,7 +561,7 @@ exports.BattleAbilities = {
 			if (move.id.includes('dance') && move.id !== 'raindance') {
 				this.faintMessages();
 				this.add('-activate', this.effectData.target, 'ability: Dancer');
-				this.useMove(move, this.effectData.target);
+				this.runMove(move, this.effectData.target, 0, this.getAbility('dancer'), undefined, true);
 			}
 		},
 		name: "Dancer",
