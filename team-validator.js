@@ -1090,8 +1090,7 @@ class Validator {
 		return false;
 	}
 
-	static hasLegendaryIVs(template, isShiny = false) {
-		if (template.baseSpecies === 'Diancie' && isShiny) return false;
+	static hasLegendaryIVs(template) {
 		return ((template.eggGroups[0] === 'Undiscovered' || template.species === 'Manaphy') && !template.prevo && !template.nfe &&
 			template.species !== 'Unown' && template.baseSpecies !== 'Pikachu');
 	}
