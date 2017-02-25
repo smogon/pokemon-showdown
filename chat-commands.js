@@ -1975,7 +1975,8 @@ exports.commands = {
 		if (!this.can('declare', null, room)) return false;
 		if (!this.canTalk()) return;
 
-		this.add('|highlight|<div class="broadcast-blue"><b>' + Chat.escapeHTML(target) + '</b></div>');
+		this.add('|highlight|' + Chat.escapeHTML(target));
+		this.add('|raw|<div class="broadcast-blue"><b>' + Chat.escapeHTML(target) + '</b></div>');
 		this.logModCommand(user.name + " declared " + target);
 	},
 	declarehelp: ["/declare [message] - Anonymously announces a message. Requires: # * & ~"],
@@ -1987,7 +1988,8 @@ exports.commands = {
 		target = this.canHTML(target);
 		if (!target) return;
 
-		this.add('|highlight|<div class="broadcast-blue"><b>' + target + '</b></div>');
+		this.add('|highlight|' + Chat.escapeHTML(target));
+		this.add('|raw|<div class="broadcast-blue"><b>' + target + '</b></div>');
 		this.logModCommand(user.name + " declared " + target);
 	},
 	htmldeclarehelp: ["/htmldeclare [message] - Anonymously announces a message using safe HTML. Requires: ~"],
@@ -2000,7 +2002,10 @@ exports.commands = {
 		if (!target) return;
 
 		Rooms.rooms.forEach((curRoom, id) => {
-			if (id !== 'global') curRoom.add('|highlight|global|<div class="broadcast-blue"><b>' + target + '</b></div>').update();
+			if (id !== 'global') {
+				curRoom.add('|globalhighlight|');
+				curRoom.addRaw('<div class="broadcast-blue"><b>' + target + '</b></div>').update();
+			}
 		});
 		this.logModCommand(user.name + " globally declared " + target);
 	},
@@ -2014,7 +2019,10 @@ exports.commands = {
 		if (!target) return;
 
 		Rooms.rooms.forEach((curRoom, id) => {
-			if (id !== 'global' && curRoom.type !== 'battle') curRoom.add('|highlight|global|<div class="broadcast-blue"><b>' + target + '</b></div>').update();
+			if (id !== 'global' && curRoom.type !== 'battle') {
+				curRoom.add('|globalhighlight|');
+				curRoom.addRaw('<div class="broadcast-blue"><b>' + target + '</b></div>').update();
+			}
 		});
 		this.logModCommand(user.name + " globally declared (chat level) " + target);
 	},
