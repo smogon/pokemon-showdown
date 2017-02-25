@@ -2290,8 +2290,8 @@ exports.BattleScripts = {
 			Unown: 100,
 		};
 		let tier = template.tier;
-		if (tier.includes('Unreleased') && template.battleOnly) {
-			tier = baseTemplate.tier;
+		if (tier.includes('Unreleased') && baseTemplate.tier === 'Uber') {
+			tier = 'Uber';
 		}
 		if (tier.charAt(0) === '(') {
 			tier = tier.slice(1, -1);
