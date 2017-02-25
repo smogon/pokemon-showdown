@@ -591,7 +591,7 @@ class User {
 			challenge = connection.challenge;
 		}
 		if (!challenge) {
-			console.log(`verification failed; no challenge`);
+			Monitor.warn(`verification failed; no challenge`);
 			return false;
 		}
 
@@ -640,8 +640,8 @@ class User {
 
 			Verifier.verify(tokenData, tokenSig).then(success => {
 				if (!success) {
-					console.log(`verify failed: ${token}`);
-					console.log(`challenge was: ${challenge}`);
+					Monitor.warn(`verify failed: ${token}`);
+					Monitor.warn(`challenge was: ${challenge}`);
 					return;
 				}
 				this.validateRename(name, tokenData, newlyRegistered, challenge);
@@ -658,7 +658,7 @@ class User {
 		let tokenDataSplit = tokenData.split(',');
 
 		if (tokenDataSplit.length < 5) {
-			console.log(`outdated assertion format: ${tokenData}`);
+			Monitor.warn(`outdated assertion format: ${tokenData}`);
 			this.send(`|nametaken|${name}|Your assertion is stale. This usually means that the clock on the server computer is incorrect. If this is your server, please set the clock to the correct time.`);
 			return;
 		}
@@ -673,14 +673,14 @@ class User {
 			if (tokenDataSplit[0] !== challenge) {
 				Monitor.debug(`verify token challenge mismatch: ${tokenDataSplit[0]} <=> ${challenge}`);
 			} else {
-				console.log(`verify token mismatch: ${tokenData}`);
+				Monitor.warn(`verify token mismatch: ${tokenData}`);
 			}
 			return;
 		}
 
 		let expiry = Config.tokenexpiry || 25 * 60 * 60;
 		if (Math.abs(parseInt(tokenDataSplit[3]) - Date.now() / 1000) > expiry) {
-			console.log(`stale assertion: ${tokenData}`);
+			Monitor.warn(`stale assertion: ${tokenData}`);
 			this.send(`|nametaken|${name}|Your assertion is stale. This usually means that the clock on the server computer is incorrect. If this is your server, please set the clock to the correct time.`);
 			return;
 		}
