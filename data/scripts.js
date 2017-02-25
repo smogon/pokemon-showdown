@@ -3412,11 +3412,8 @@ exports.BattleScripts = {
 		let forceResult = (depth >= 4);
 
 		let availableTiers = ['Uber', 'OU', 'UU', 'RU', 'NU', 'PU'];
-		const originalPrng = this.prng.clone();
-		this.prng = originalPrng.clone();
-		const chosenTier = this.factoryTier || availableTiers[this.random(availableTiers.length)];
-		if (!this.factoryTier) this.factoryTier = chosenTier;
-		this.prng = originalPrng;
+		if (!this.factoryTier) this.factoryTier = availableTiers[this.random(availableTiers.length)];
+		const chosenTier = this.factoryTier;
 
 		let pokemon = [];
 
