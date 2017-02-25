@@ -2282,6 +2282,9 @@ exports.BattleScripts = {
 		let customScale = {
 			// Between OU and Uber
 			// Blaziken: 74, 'Blaziken-Mega': 74, 'Lucario-Mega': 74,
+			
+			// Banned Abilities
+			Gothitelle: 74, Wobbuffet: 74, Zygarde: 73, 'Zygarde-10%': 73,
 
 			// Holistic judgement
 			Unown: 100,
@@ -2296,25 +2299,8 @@ exports.BattleScripts = {
 		let level = levelScale[tier] || 75;
 		if (customScale[template.name]) level = customScale[template.name];
 
-		// Banned abilities
-		if (ability === 'Power Construct' || ability === 'Shadow Tag') {
-			level = 73;
-		} else if (ability === 'Drizzle' && level < 76) {
-			level = 76;
-		}
-
-		// Banned moves
-		if (hasMove['batonpass']) {
-			// Baton Pass Clause
-			if (hasMove['batonpass'] && (counter['speedsetup'] > 0 || ability === 'Speed Boost') && (counter['physicalsetup'] > 0 || counter['specialsetup'] > 0 || counter['mixedsetup'] > 0) && level < 74) {
-				level = 74;
-			} else if (level < 76) {
-				level = 76;
-			}
-		}
-
-		// Banned items
-		if (item === 'Mewnium-Z' && level < 76) level = 76;
+		// Baton Pass Clause
+		if (hasMove['batonpass'] && (counter['speedsetup'] > 0 || ability === 'Speed Boost') && (counter['physicalsetup'] > 0 || counter['specialsetup'] > 0 || counter['mixedsetup'] > 0) && level < 74) level = 74;
 
 		// if (template.name === 'Slurpuff' && !counter.setupType) level = 81;
 		// if (template.name === 'Xerneas' && hasMove['geomancy']) level = 71;
