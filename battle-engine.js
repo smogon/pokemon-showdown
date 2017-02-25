@@ -1994,6 +1994,7 @@ class Battle extends Tools.BattleDex {
 		this.abilityOrder = 0;
 
 		this.prng = maybePrng || new PRNG();
+		this.prngSeed = this.prng.startingSeed.slice();
 	}
 
 	static logReplay(data, isReplay) {
@@ -3350,8 +3351,7 @@ class Battle extends Tools.BattleDex {
 		if (this.rated) {
 			this.add('rated');
 		}
-		// HACK here for backwards compatibility but ouchie
-		this.add('seed', Battle.logReplay.bind(this, this.prng.startingSeed.join(',')));
+		this.add('seed', Battle.logReplay.bind(this, this.prngSeed.join(',')));
 
 		if (format.onBegin) {
 			format.onBegin.call(this);
@@ -4960,7 +4960,7 @@ class Battle extends Tools.BattleDex {
 			if (alreadyEnded !== undefined && this.ended && !alreadyEnded) {
 				if (this.rated || Config.logchallenges) {
 					let log = {
-						seed: this.prng.startingSeed,
+						seed: this.prngSeed,
 						turns: this.turn,
 						p1: this.p1.name,
 						p2: this.p2.name,
