@@ -34,6 +34,8 @@ exports.commands = {
 			if (!room.events) room.events = {};
 			let [eventName, desc, ...date] = target.split('|');
 			if (!eventName || !desc || !date) return this.errorReply("You're missing a command parameter - see /help roomevents for this command's syntax.");
+			desc = this.canHTML(desc);
+			if (desc === false) return false; // HTML issue - line above will be more specific
 			eventName = eventName.trim();
 			if (room.events[eventName]) return this.errorReply("An event with this name is already added to the events list.");
 			room.events[eventName] = {
