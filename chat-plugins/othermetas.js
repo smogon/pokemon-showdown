@@ -3,7 +3,7 @@
 
 exports.commands = {
 	mixandmega: 'mnm',
-	mnm: function (target, room, user) {
+	mnm: function(target, room, user) {
 		if (!this.runBroadcast()) return;
 		if (!target || toId(target) === "" || !target.includes('@')) return this.parse('/help mixandmega');
 		let sep = target.split('@');
@@ -20,22 +20,38 @@ exports.commands = {
 			return this.errorReply(`You cannot mega evolve ${template.name} in Mix and Mega.`);
 		}
 		let deltas; //This hack is, yes, terribluh.
+		let baseTemplate = Tools.getTemplate(stone.megaEvolves), megaTemplate = Tools.getTemplate(stone.megaStone);
 		if (stone.id === 'redorb') {
-			deltas = Tools.mod('mixandmega').data.Scripts.getMegaDeltas.bind(Tools)(Tools.getTemplate("Groudon-Primal"));
+			megaTemplate = Tools.getTemplate("Groudon-Primal");
+			baseTemplate = Tools.getTemplate("Groudon");
+		} else if (stone.id === 'blueorb') {
+			megaTemplate = Tools.getTemplate("Kyogre-Primal");
+			baseTemplate = Tools.getTemplate("Kyogre");
 		}
-		if (stone.id === 'blueorb') {
-			deltas = Tools.mod('mixandmega').data.Scripts.getMegaDeltas.bind(Tools)(Tools.getTemplate("Kyogre-Primal"));
+		//Get Mega Deltas.
+		deltas = {
+			ability: megaTemplate.abilities['0'],
+			baseStats: {},
+			weightkg: megaTemplate.weightkg - baseTemplate.weightkg,
+		};
+		for (let statId in megaTemplate.baseStats) {
+			deltas.baseStats[statId] = megaTemplate.baseStats[statId] - baseTemplate.baseStats[statId];
 		}
-		else {
-			deltas = Tools.mod('mixandmega').data.Scripts.getMegaDeltas.bind(Tools)(Tools.getTemplate(stone.megaStone));
+		if (megaTemplate.types.length > baseTemplate.types.length) {
+			deltas.type = megaTemplate.types[1];
+		} else if (megaTemplate.types.length < baseTemplate.types.length) {
+			deltas.type = baseTemplate.types[0];
+		} else if (megaTemplate.types[1] !== baseTemplate.types[1]) {
+			deltas.type = megaTemplate.types[1];
 		}
+		//////////////////////////////////////////
 		let ability = deltas.ability, types = template.types, baseStats = Object.assign({}, template.baseStats);
 		if (types[0] === deltas.type) {
 			types = [deltas.type];
 		} else if (deltas.type) {
 			types = [types[0], deltas.type];
 		}
-		for (let statName in baseStats) {
+		for (let statName in baseStats) { //Add stats
 			baseStats[statName] = Tools.clampIntRange(baseStats[statName] + deltas.baseStats[statName], 1, 255);
 		}
 		let weightkg = Math.max(0.1, template.weightkg + deltas.weightkg);
