@@ -1,13 +1,14 @@
+//Other metas plugin by Spandan
 'use strict';
 
-exports.commands= {
+exports.commands = {
 	mixandmega: 'mnm',
 	mnm: function(target, room, user) {
 		if (!this.runBroadcast()) return;
 		if (!target || toId(target) === "" || !target.includes('@')) return this.parse('/help mixandmega');
 		let sep = target.split('@');
 		let stone = toId(sep[1]), template = toId(sep[0]), primals = ['redorb', 'blueorb'];
-		if ((!Tools.data.Items[stone] || !Tools.data.Items[stone].megaEvolves) && !primals.includes(stone)) {
+		if ((!Tools.data.Items[stone] || !Tools.data.Items[stone].megaEvolves) && !Tools.data.Items[stone].onPrimal) {
 			return this.errorReply('Error: Mega Stone not found');
 		}
 		if (!Tools.data.Pokedex[toId(template)]) {
