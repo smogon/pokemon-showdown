@@ -2299,14 +2299,18 @@ exports.BattleScripts = {
 		// Banned abilities
 		if (ability === 'Power Construct' || ability === 'Shadow Tag') {
 			level = 73;
-		} else if (ability === 'Drizzle') level = 76;
+		} else if (ability === 'Drizzle' && level < 76) {
+			level = 76;
+		}
 
 		// Banned moves
 		if (hasMove['batonpass']) {
 			// Baton Pass Clause
 			if (hasMove['batonpass'] && (counter['speedsetup'] > 0 || ability === 'Speed Boost') && (counter['physicalsetup'] > 0 || counter['specialsetup'] > 0 || counter['mixedsetup'] > 0) && level < 74) {
 				level = 74;
-			} else if (level < 76) level = 76;
+			} else if (level < 76) {
+				level = 76;
+			}
 		}
 
 		// Banned items
