@@ -591,11 +591,11 @@ class Validator {
 		let eventData;
 		let eventTemplate = template;
 		if (source.charAt(1) === 'S') {
-			let splitSource = source.substr(2).split(' ');
+			let splitSource = source.substr(source.charAt(2) === 'T' ? 3 : 2).split(' ');
 			eventTemplate = this.tools.getTemplate(splitSource[1]);
 			if (eventTemplate.eventPokemon) eventData = eventTemplate.eventPokemon[parseInt(splitSource[0])];
 			if (!eventData) {
-				throw new Error("${eventTemplate.species} doesn't have data for event ${splitSource[0]}");
+				throw new Error(`${eventTemplate.species} from ${template.species} doesn't have data for event ${source}`);
 			}
 		} else if (source.charAt(1) === 'V') {
 			eventData = {
@@ -611,7 +611,7 @@ class Validator {
 				from: 'Gen 5 Dream World',
 			};
 		} else {
-			throw new Error("Unidentified source ${source} passed to validateSource");
+			throw new Error(`Unidentified source ${source} passed to validateSource`);
 		}
 
 		return this.validateEvent(set, eventData, eventTemplate, because, from);
