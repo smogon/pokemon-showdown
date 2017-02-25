@@ -2282,7 +2282,7 @@ exports.BattleScripts = {
 		let customScale = {
 			// Between OU and Uber
 			// Blaziken: 74, 'Blaziken-Mega': 74, 'Lucario-Mega': 74,
-			
+
 			// Banned Abilities
 			Gothitelle: 74, Wobbuffet: 74, Zygarde: 73, 'Zygarde-10%': 73,
 
