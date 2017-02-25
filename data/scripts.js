@@ -3417,8 +3417,8 @@ exports.BattleScripts = {
 		// The teams generated depend on the tier choice in such a way that
 		// no exploitable information is leaked from rolling the tier in getTeam(p1).
 		let availableTiers = ['Uber', 'OU', 'UU', 'RU', 'NU', 'PU'];
-		const chosenTier = this.factoryTier || availableTiers[this.random(availableTiers.length)];
-		if (!this.factoryTier) this.factoryTier = chosenTier;
+		if (!this.factoryTier) this.factoryTier = availableTiers[this.random(availableTiers.length)];
+		const chosenTier = this.factoryTier;
 
 		let pokemon = [];
 
