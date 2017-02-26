@@ -714,7 +714,7 @@ class CommandContext {
 		}
 
 		// check for mismatched tags
-		let tags = html.toLowerCase().match(/<\/?(div|a|button|b|strong|em|i|u|center|font|marquee|blink|details|summary|code)\b/g);
+		let tags = html.toLowerCase().match(/<\/?(div|a|button|b|strong|em|i|u|center|font|marquee|blink|details|summary|code|table|td|tr)\b/g);
 		if (tags) {
 			let stack = [];
 			for (let i = 0; i < tags.length; i++) {
