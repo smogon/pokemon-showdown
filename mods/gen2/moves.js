@@ -699,6 +699,11 @@ exports.BattleMovedex = {
 			},
 		},
 	},
+	triplekick: {
+		inherit: true,
+		multiaccuracy: false,
+		multihit: [1, 3],
+	},
 	whirlwind: {
 		inherit: true,
 		onTryHit: function () {
