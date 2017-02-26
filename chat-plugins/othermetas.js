@@ -77,4 +77,27 @@ exports.commands = {
 		return this.sendReplyBox(text);
 	},
 	mixandmegahelp: ["/mnm <pokemon> @ <mega stone> - Shows the mix and mega evolved Pokemon's type and stats."],
+	
+	'350' : 'cup350',
+	cup350 : function(target, room, user) {
+		if (!this.runBroadcast()) return;
+		if(!Tools.data.Pokedex[toId(target)]) {
+			return this.errorReply("Error: Pokemon not found.")
+		}
+		var bst = 0, pokeobj = Tools.data.Pokedex[toId(arg)];
+		for(var i in pokeobj.baseStats) {
+			bst += pokeobj.baseStats[i];
+		}
+		if(bst>350) {
+			return this.parse('/dt '+arg);
+		}
+		var newStats = {};
+		for(var i in pokeobj.baseStats) {
+			newStats[i] = pokeobj.baseStats[i]*2;
+		}
+		var text = `${pokeobj.species} in 350 Cup: <br />`;
+		for(var i in newStats) text = `${text}newStats[i]/`;
+		text = text.substring(0,text.length-1);
+		this.sendReplyBox(text);
+	},
 };
