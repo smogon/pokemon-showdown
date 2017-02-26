@@ -150,7 +150,7 @@ class Tournament {
 			this.inProgressMatches.forEach(match => {
 				if (match) {
 					delete match.room.tour;
-					match.room.addRaw("<div class=\"broadcast-red\"><b>The tournament was forcefully ended.</b><br />You can finish playing, but this battle is no longer considered a tournament battle.</div>");
+					match.room.addRaw("<div class=\"broadcast-red\"><strong>The tournament was forcefully ended.</strong><br />You can finish playing, but this battle is no longer considered a tournament battle.</div>");
 				}
 			});
 		} else if (this.autoStartTimer) {
@@ -999,7 +999,7 @@ let commands = {
 			if (tournament.banlist.length < 1) {
 				return this.errorReply("The tournament's banlist is empty.");
 			}
-			this.sendReplyBox("<b>This tournament's banlist:</b><br />" + Chat.escapeHTML(tournament.banlist.join(', ')));
+			this.sendReplyBox("<strong>This tournament's banlist:</strong><br />" + Chat.escapeHTML(tournament.banlist.join(', ')));
 		},
 	},
 	creation: {
@@ -1039,7 +1039,7 @@ let commands = {
 			}
 			if (tournament.setBanlist(params, this)) {
 				const banlist = tournament.banlist.join(', ');
-				this.room.addRaw("<b>The tournament's banlist is now:</b> " + Chat.escapeHTML(banlist) + ".");
+				this.room.addRaw("<strong>The tournament's banlist is now:</strong> " + Chat.escapeHTML(banlist) + ".");
 				this.privateModCommand("(" + user.name + " set the tournament's banlist to " + banlist + ".)");
 			}
 		},
@@ -1051,7 +1051,7 @@ let commands = {
 				return this.errorReply("The tournament's banlist is already empty.");
 			}
 			tournament.banlist = [];
-			this.room.addRaw("<b>The tournament's banlist was cleared.</b>");
+			this.room.addRaw("<strong>The tournament's banlist was cleared.</strong>");
 			this.privateModCommand("(" + user.name + " cleared the tournament's banlist.)");
 		},
 	},

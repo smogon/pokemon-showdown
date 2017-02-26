@@ -29,7 +29,7 @@ exports.commands = {
 	'!version': true,
 	version: function (target, room, user) {
 		if (!this.runBroadcast()) return;
-		this.sendReplyBox("Server version: <b>" + Chat.package.version + "</b>");
+		this.sendReplyBox("Server version: <strong>" + Chat.package.version + "</strong>");
 	},
 
 	'!authority': true,
@@ -582,15 +582,15 @@ exports.commands = {
 			targetRoom.chatRoomData.isPrivate = true;
 			Rooms.global.writeChatRoomData();
 			if (Rooms.get('upperstaff')) {
-				Rooms.get('upperstaff').add('|raw|<div class="broadcast-green">Private chat room created: <b>' + Chat.escapeHTML(target) + '</b></div>').update();
+				Rooms.get('upperstaff').add('|raw|<div class="broadcast-green">Private chat room created: <strong>' + Chat.escapeHTML(target) + '</strong></div>').update();
 			}
 			this.sendReply("The private chat room '" + target + "' was created.");
 		} else {
 			if (Rooms.get('staff')) {
-				Rooms.get('staff').add('|raw|<div class="broadcast-green">Public chat room created: <b>' + Chat.escapeHTML(target) + '</b></div>').update();
+				Rooms.get('staff').add('|raw|<div class="broadcast-green">Public chat room created: <strong>' + Chat.escapeHTML(target) + '</strong></div>').update();
 			}
 			if (Rooms.get('upperstaff')) {
-				Rooms.get('upperstaff').add('|raw|<div class="broadcast-green">Public chat room created: <b>' + Chat.escapeHTML(target) + '</b></div>').update();
+				Rooms.get('upperstaff').add('|raw|<div class="broadcast-green">Public chat room created: <strong>' + Chat.escapeHTML(target) + '</strong></div>').update();
 			}
 			this.sendReply("The chat room '" + target + "' was created.");
 		}
@@ -718,19 +718,19 @@ exports.commands = {
 		if (targetRoom.chatRoomData) {
 			if (targetRoom.isPrivate) {
 				if (Rooms.get('upperstaff')) {
-					Rooms.get('upperstaff').add(`|raw|<div class="broadcast-red">Private chat room deleted by ${user.userid}: <b>${Chat.escapeHTML(target)}</b></div>`).update();
+					Rooms.get('upperstaff').add(`|raw|<div class="broadcast-red">Private chat room deleted by ${user.userid}: <strong>${Chat.escapeHTML(target)}</strong></div>`).update();
 				}
 			} else {
 				if (Rooms.get('staff')) {
-					Rooms.get('staff').add('|raw|<div class="broadcast-red">Public chat room deleted: <b>' + Chat.escapeHTML(target) + '</b></div>').update();
+					Rooms.get('staff').add('|raw|<div class="broadcast-red">Public chat room deleted: <strong>' + Chat.escapeHTML(target) + '</strong></div>').update();
 				}
 				if (Rooms.get('upperstaff')) {
-					Rooms.get('upperstaff').add(`|raw|<div class="broadcast-red">Public chat room deleted by ${user.userid}: <b>${Chat.escapeHTML(target)}</b></div>`).update();
+					Rooms.get('upperstaff').add(`|raw|<div class="broadcast-red">Public chat room deleted by ${user.userid}: <strong>${Chat.escapeHTML(target)}</strong></div>`).update();
 				}
 			}
 		}
 
-		targetRoom.add("|raw|<div class=\"broadcast-red\"><b>This room has been deleted.</b></div>");
+		targetRoom.add("|raw|<div class=\"broadcast-red\"><strong>This room has been deleted.</strong></div>");
 		targetRoom.update(); // |expire| needs to be its own message
 		targetRoom.add("|expire|This room has been deleted.");
 		this.sendReply("The room '" + target + "' was deleted.");
@@ -1973,7 +1973,7 @@ exports.commands = {
 		if (!this.can('declare', null, room)) return false;
 		if (!this.canTalk()) return;
 
-		this.add('|raw|<div class="broadcast-blue"><b>' + Chat.escapeHTML(target) + '</b></div>');
+		this.add('|raw|<div class="broadcast-blue"><strong>' + Chat.escapeHTML(target) + '</strong></div>');
 		this.logModCommand(user.name + " declared " + target);
 	},
 	declarehelp: ["/declare [message] - Anonymously announces a message. Requires: # * & ~"],
@@ -1985,7 +1985,7 @@ exports.commands = {
 		target = this.canHTML(target);
 		if (!target) return;
 
-		this.add('|raw|<div class="broadcast-blue"><b>' + target + '</b></div>');
+		this.add('|raw|<div class="broadcast-blue"><strong>' + target + '</strong></div>');
 		this.logModCommand(user.name + " declared " + target);
 	},
 	htmldeclarehelp: ["/htmldeclare [message] - Anonymously announces a message using safe HTML. Requires: ~"],
@@ -1998,7 +1998,7 @@ exports.commands = {
 		if (!target) return;
 
 		Rooms.rooms.forEach((curRoom, id) => {
-			if (id !== 'global') curRoom.addRaw('<div class="broadcast-blue"><b>' + target + '</b></div>').update();
+			if (id !== 'global') curRoom.addRaw('<div class="broadcast-blue"><strong>' + target + '</strong></div>').update();
 		});
 		this.logModCommand(user.name + " globally declared " + target);
 	},
@@ -2012,7 +2012,7 @@ exports.commands = {
 		if (!target) return;
 
 		Rooms.rooms.forEach((curRoom, id) => {
-			if (id !== 'global' && curRoom.type !== 'battle') curRoom.addRaw('<div class="broadcast-blue"><b>' + target + '</b></div>').update();
+			if (id !== 'global' && curRoom.type !== 'battle') curRoom.addRaw('<div class="broadcast-blue"><strong>' + target + '</strong></div>').update();
 		});
 		this.logModCommand(user.name + " globally declared (chat level) " + target);
 	},
@@ -2702,7 +2702,7 @@ exports.commands = {
 		}
 		LoginServer.disabled = true;
 		this.logModCommand("The ladder was disabled by " + user.name + ".");
-		this.add("|raw|<div class=\"broadcast-red\"><b>Due to high server load, the ladder has been temporarily disabled</b><br />Rated games will no longer update the ladder. It will be back momentarily.</div>");
+		this.add("|raw|<div class=\"broadcast-red\"><strong>Due to high server load, the ladder has been temporarily disabled</strong><br />Rated games will no longer update the ladder. It will be back momentarily.</div>");
 	},
 
 	enableladder: function (target, room, user) {
@@ -2712,7 +2712,7 @@ exports.commands = {
 		}
 		LoginServer.disabled = false;
 		this.logModCommand("The ladder was enabled by " + user.name + ".");
-		this.add("|raw|<div class=\"broadcast-green\"><b>The ladder is now back.</b><br />Rated games will update the ladder now.</div>");
+		this.add("|raw|<div class=\"broadcast-green\"><strong>The ladder is now back.</strong><br />Rated games will update the ladder now.</div>");
 	},
 
 	lockdown: function (target, room, user) {
@@ -2747,7 +2747,7 @@ exports.commands = {
 		}
 		if (Rooms.global.lockdown === true) {
 			Rooms.rooms.forEach((curRoom, id) => {
-				if (id !== 'global') curRoom.addRaw("<div class=\"broadcast-green\"><b>The server restart was canceled.</b></div>").update();
+				if (id !== 'global') curRoom.addRaw("<div class=\"broadcast-green\"><strong>The server restart was canceled.</strong></div>").update();
 			});
 		} else {
 			this.sendReply("Preparation for the server shutdown was canceled.");
@@ -2779,7 +2779,7 @@ exports.commands = {
 		}
 		Config.emergency = false;
 		Rooms.rooms.forEach((curRoom, id) => {
-			if (id !== 'global') curRoom.addRaw("<div class=\"broadcast-green\"><b>The server is no longer in emergency mode.</b></div>").update();
+			if (id !== 'global') curRoom.addRaw("<div class=\"broadcast-green\"><strong>The server is no longer in emergency mode.</strong></div>").update();
 		});
 
 		this.logEntry(user.name + " used /endemergency");
@@ -2873,7 +2873,7 @@ exports.commands = {
 		Rooms.global.lockdown = false;
 		if (Rooms.lobby) {
 			Rooms.lobby.modchat = false;
-			Rooms.lobby.addRaw("<div class=\"broadcast-green\"><b>We fixed the crash without restarting the server!</b><br />You may resume talking in the lobby and starting new battles.</div>").update();
+			Rooms.lobby.addRaw("<div class=\"broadcast-green\"><strong>We fixed the crash without restarting the server!</strong><br />You may resume talking in the lobby and starting new battles.</div>").update();
 		}
 		this.logEntry(user.name + " used /crashfixed");
 	},
