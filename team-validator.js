@@ -22,23 +22,30 @@ class Validator {
 		if (supplementaryBanlist && supplementaryBanlist.length) {
 			format = Object.assign({}, format);
 			if (format.banlistTable) delete format.banlistTable;
-			if (format.banlist) {
-				format.banlist = format.banlist.slice();
-			} else {
-				format.banlist = [];
-			}
-			if (format.unbanlist) {
-				format.unbanlist = format.unbanlist.slice();
-			} else {
-				format.unbanlist = [];
-			}
+			format.banlist = format.banlist ? format.banlist.slice() : [];
+			format.unbanlist = format.unbanlist ? format.unbanlist.slice() : [];
+			format.ruleset = format.ruleset ? format.ruleset.slice() : [];
 			for (let i = 0; i < supplementaryBanlist.length; i++) {
 				let ban = supplementaryBanlist[i];
+				let unban = false;
 				if (ban.charAt(0) === '!') {
+					unban = true;
 					ban = ban.substr(1);
-					if (!format.unbanlist.includes(ban)) format.unbanlist.push(ban);
+				}
+				if (ban.startsWith('Rule:')) {
+					ban = ban.substr(5);
+					if (unban) {
+						ban = 'Rule:' + toId(ban);
+						if (!format.unbanlist.includes(ban)) format.unbanlist.push(ban);
+					} else {
+						if (!format.ruleset.includes(ban)) format.ruleset.push(ban);
+					}
 				} else {
-					if (!format.banlist.includes(ban)) format.banlist.push(ban);
+					if (unban) {
+						if (!format.unbanlist.includes(ban)) format.unbanlist.push(ban);
+					} else {
+						if (!format.banlist.includes(ban)) format.banlist.push(ban);
+					}
 				}
 			}
 			supplementaryBanlist = supplementaryBanlist.join(',');
