@@ -14,56 +14,60 @@ exports.commands = {
 	roomevent: 'roomevents',
 	roomevents: {
 		'': function (target, room, user) {
-			if (room.battle) return this.errorReply("This command is not meant for battle rooms.");
-			if (!room.events || Object.keys(room.events).length === 0) {
+			if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
+			if (!room.events || !Object.keys(room.events).length) {
 				return this.errorReply("There are currently no planned upcoming events for this room.");
 			}
 			if (!this.runBroadcast()) return;
-			let buff = '<table border="1" cellspacing="0" cellpadding="3">';
-			buff += '<th>Event Name:</th><th>Event Description:</th><th>Event Date:</th>';
-			let events = Object.keys(room.events);
-			for (let i = 0; i < events.length; i++) {
-				buff += `<tr><td>${Chat.escapeHTML(events[i])}</td><td>${room.events[events[i]].desc}</td><td>${Chat.escapeHTML(room.events[events[i]].date)}</td></tr>`;
+
+			let buf = '<table border="1" cellspacing="0" cellpadding="3">';
+			buf += '<th>Event Name:</th><th>Event Description:</th><th>Event Date:</th>';
+			for (let i in room.events) {
+				buf += `<tr><td>${Chat.escapeHTML(i)}</td><td>${room.events[i].desc}</td><td>${Chat.escapeHTML(room.events[i].date)}</td></tr>`;
 			}
-			buff += '</table>';
-			return this.sendReply(`|raw|<div class="infobox-limited">${buff}</div>`);
+			buf += '</table>';
+			return this.sendReply(`|raw|<div class="infobox-limited">${buf}</div>`);
 		},
 		add: function (target, room, user) {
-			if (room.battle) return this.errorReply("This command is not meant for battle rooms.");
+			if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
 			if (!this.can('declare', null, room)) return false;
 			if (!room.events) room.events = {};
-			let [eventName, desc, ...date] = target.split('|');
-			date = date.join("|");
-			if (!eventName || !desc || !date) return this.errorReply("You're missing a command parameter - see /help roomevents for this command's syntax.");
+
+			let [eventName, desc, date] = target.split('|').map(param => param.trim());
+			if (!(eventName && desc && date)) return this.errorReply("You're missing a command parameter - see /help roomevents for this command's syntax.");
+
+			if (eventName.length > 50) return this.errorReply("Event names should not exceed 50 characters.");
+			if (date.length > 150) return this.errorReply("Event dates should not exceed 150 characters.");
+			if (desc.length > 750) return this.errorReply("Event descriptions should not exceed 750 characters.");
+
 			desc = this.canHTML(desc);
-			if (desc === false) return false; // HTML issue - line above will be more specific
-			eventName = eventName.trim();
+			if (!desc) return false; // HTML issue - line above will be more specific
 			if (room.events[eventName]) return this.errorReply("An event with this name is already added to the events list.");
+
 			room.events[eventName] = {
 				desc: desc,
 				date: date,
 			};
 			this.privateModCommand(`(${user.name} added a roomevent titled "${eventName}".)`);
-			if (room.chatRoomData) {
-				room.chatRoomData.events = room.events;
-				Rooms.global.writeChatRoomData();
-			}
+
+			room.chatRoomData.events = room.events;
+			Rooms.global.writeChatRoomData();
 		},
 		remove: function (target, room, user) {
-			if (room.battle) return this.errorReply("This command is not meant for battle rooms.");
+			if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
 			if (!this.can('declare', null, room)) return false;
-			if (!room.events || Object.keys(room.events).length === 0) {
+			if (!room.events || !Object.keys(room.events).length) {
 				return this.errorReply("There are currently no planned upcoming events for this room to remove.");
 			}
 			if (!target) return this.errorReply("Usage: /roomevents remove [event name]");
+
 			target = target.trim();
-			if (!room.events[target]) return this.errorReply(`There is no such event named '${target}'.  Check spelling?`);
+			if (!room.events[target]) return this.errorReply(`There is no event named '${target}'. Check spelling?`);
 			delete room.events[target];
 			this.privateModCommand(`(${user.name} removed a roomevent titled "${target}".)`);
-			if (room.chatRoomData) {
-				room.chatRoomData.events = room.events;
-				Rooms.global.writeChatRoomData();
-			}
+
+			room.chatRoomData.events = room.events;
+			Rooms.global.writeChatRoomData();
 		},
 		help: function (target, room, user) {
 			return this.parse('/help roomevents');
