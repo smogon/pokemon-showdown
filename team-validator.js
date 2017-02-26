@@ -125,7 +125,7 @@ class Validator {
 		if (format.ruleset) {
 			for (let i = 0; i < format.ruleset.length; i++) {
 				let subformat = tools.getFormat(format.ruleset[i]);
-				if (subformat.onValidateTeam) {
+				if (subformat.onValidateTeam && format.banlistTable['Rule:' + subformat.id]) {
 					problems = problems.concat(subformat.onValidateTeam.call(tools, team, format, teamHas) || []);
 				}
 			}
@@ -181,11 +181,12 @@ class Validator {
 		let lsetData = {set:set, format:format};
 
 		let setHas = {};
+		let banlistTable = tools.getBanlistTable(format);
 
 		if (format.ruleset) {
 			for (let i = 0; i < format.ruleset.length; i++) {
 				let subformat = tools.getFormat(format.ruleset[i]);
-				if (subformat.onChangeSet) {
+				if (subformat.onChangeSet && banlistTable['Rule:' + subformat.id]) {
 					problems = problems.concat(subformat.onChangeSet.call(tools, set, format) || []);
 				}
 			}
@@ -229,8 +230,6 @@ class Validator {
 		if (set.happiness !== undefined && isNaN(set.happiness)) {
 			problems.push(`${set.species} has an invalid happiness.`);
 		}
-
-		let banlistTable = tools.getBanlistTable(format);
 
 		let check = template.id;
 		setHas[check] = true;
@@ -565,7 +564,7 @@ class Validator {
 		if (format.ruleset) {
 			for (let i = 0; i < format.ruleset.length; i++) {
 				let subformat = tools.getFormat(format.ruleset[i]);
-				if (subformat.onValidateSet) {
+				if (subformat.onValidateSet && banlistTable['Rule:' + subformat.id]) {
 					problems = problems.concat(subformat.onValidateSet.call(tools, set, format, setHas, teamHas) || []);
 				}
 			}
