@@ -2280,11 +2280,8 @@ exports.BattleScripts = {
 			AG: 71,
 		};
 		let customScale = {
-			// Between OU and Uber
-			// Blaziken: 74, 'Blaziken-Mega': 74, 'Lucario-Mega': 74,
-
 			// Banned Abilities
-			Gothitelle: 74, Wobbuffet: 74, Zygarde: 73, 'Zygarde-10%': 73,
+			Gothitelle: 76, Politoed: 76, Wobbuffet: 76,
 
 			// Holistic judgement
 			Unown: 100,
@@ -2299,9 +2296,9 @@ exports.BattleScripts = {
 		let level = levelScale[tier] || 75;
 		if (customScale[template.name]) level = customScale[template.name];
 
-		// Baton Pass Clause
-		if (hasMove['batonpass'] && (counter['speedsetup'] > 0 || ability === 'Speed Boost') && (counter['physicalsetup'] > 0 || counter['specialsetup'] > 0 || counter['mixedsetup'] > 0) && level < 74) level = 74;
-
+		// Custom level based on moveset
+		if (ability === 'Power Construct') level = 73;
+		if (hasMove['batonpass'] && level < 75) level = 75;
 		// if (template.name === 'Slurpuff' && !counter.setupType) level = 81;
 		// if (template.name === 'Xerneas' && hasMove['geomancy']) level = 71;
 
