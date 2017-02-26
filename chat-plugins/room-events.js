@@ -9,6 +9,8 @@
 
 'use strict';
 
+const ALLOWED_HTML = ['a', 'font', 'i', 'u', 'b', 'strong', 'em', 'small', 'sub', 'sup', 'ins', 'del', 'code', 'br', 'button'];
+
 exports.commands = {
 	events: 'roomevents',
 	roomevent: 'roomevents',
@@ -40,7 +42,7 @@ exports.commands = {
 			if (date.length > 150) return this.errorReply("Event dates should not exceed 150 characters.");
 			if (desc.length > 750) return this.errorReply("Event descriptions should not exceed 750 characters.");
 
-			desc = this.canHTML(desc);
+			desc = this.canHTML(desc, ALLOWED_HTML);
 			if (!desc) return false; // HTML issue - line above will be more specific
 			if (room.events[eventName]) return this.errorReply("An event with this name is already added to the events list.");
 
