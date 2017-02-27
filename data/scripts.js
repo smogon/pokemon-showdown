@@ -775,7 +775,7 @@ exports.BattleScripts = {
 			if (move.type === item.zMoveType) {
 				if (move.category === "Status") {
 					return move.name;
-				} else {
+				} else if (move.zMovePower) {
 					return this.zMoveTable[move.type];
 				}
 			}
