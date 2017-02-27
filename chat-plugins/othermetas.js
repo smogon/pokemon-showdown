@@ -3,7 +3,7 @@
 
 exports.commands = {
 	mixandmega: 'mnm',
-	mnm: function(target, room, user) {
+	mnm: function (target, room, user) {
 		if (!this.runBroadcast()) return;
 		if (!target || toId(target) === "" || !target.includes('@')) return this.parse('/help mixandmega');
 		let sep = target.split('@');
@@ -28,7 +28,6 @@ exports.commands = {
 			megaTemplate = Tools.getTemplate("Kyogre-Primal");
 			baseTemplate = Tools.getTemplate("Kyogre");
 		}
-		//Get Mega Deltas.
 		deltas = {
 			ability: megaTemplate.abilities['0'],
 			baseStats: {},
@@ -51,7 +50,7 @@ exports.commands = {
 		} else if (deltas.type) {
 			types = [types[0], deltas.type];
 		}
-		for (let statName in baseStats) { //Add stats
+		for (let statName in baseStats) {
 			baseStats[statName] = Tools.clampIntRange(baseStats[statName] + deltas.baseStats[statName], 1, 255);
 		}
 		let weightkg = Math.max(0.1, template.weightkg + deltas.weightkg);
@@ -73,7 +72,7 @@ exports.commands = {
 			gnbp = 40;
 		}
 		let bst = baseStats['hp'] + baseStats['atk'] + baseStats['def'] + baseStats['spa'] + baseStats['spd'] + baseStats['spe'];
-		let text = `<b>Stats</b>: ${baseStats['hp']}/${baseStats['atk']}/${baseStats['def']}/${baseStats['spa']}/${baseStats['spd']}/${baseStats['spe']}<br /><b>BST</b>:${bst}<br /><b>Type:</b> ${type}<br /><b>Ability</b>: ${ability}<br /><b>Weight</b>: ${weightkg} kg (${gnbp} BP)`;
+		let text = `<b>Stats</b>: ${Object.values(baseStats).join('/')}<br /><b>BST</b>:${bst}<br /><b>Type:</b> ${type}<br /><b>Ability</b>: ${ability}<br /><b>Weight</b>: ${weightkg} kg (${gnbp} BP)`;
 		return this.sendReplyBox(text);
 	},
 	mixandmegahelp: ["/mnm <pokemon> @ <mega stone> - Shows the mix and mega evolved Pokemon's type and stats."],
