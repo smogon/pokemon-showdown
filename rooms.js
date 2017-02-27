@@ -1146,13 +1146,12 @@ class BattleRoom extends Room {
 		// a tick is 10 seconds
 
 		let maxTicksLeft = 15; // 2 minutes 30 seconds
-		if (!this.battle.p1 || !this.battle.p2 || !this.battle.p1.active || !this.battle.p2.active) {
-			// if a player has left, don't wait longer than 6 ticks (1 minute)
-			maxTicksLeft = 6;
-		}
 		if (!this.rated && !this.tour) maxTicksLeft = 30;
 
 		this.sideTurnTicks = [maxTicksLeft, maxTicksLeft];
+		// if a player has left, don't wait longer than 6 ticks (1 minute)
+		if (!this.battle.p1 || !this.battle.p1.active) this.sideTurnTicks[0] = 6;
+		if (!this.battle.p2 || !this.battle.p2.active) this.sideTurnTicks[1] = 6;
 
 		let inactiveSide = this.getInactiveSide();
 		if (inactiveSide < 0) {
