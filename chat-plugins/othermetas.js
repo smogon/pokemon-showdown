@@ -19,7 +19,7 @@ exports.commands = {
 		if (template.isMega || (template.evos && Object.keys(template.evos).length > 0)) {
 			return this.errorReply(`You cannot mega evolve ${template.name} in Mix and Mega.`);
 		}
-		let deltas; //This hack is, yes, terribluh.
+		let deltas; //Get mega deltas.
 		let baseTemplate = Tools.getTemplate(stone.megaEvolves), megaTemplate = Tools.getTemplate(stone.megaStone);
 		if (stone.id === 'redorb') {
 			megaTemplate = Tools.getTemplate("Groudon-Primal");
@@ -81,19 +81,17 @@ exports.commands = {
 	cup350 : function (target, room, user) {
 		if (!this.runBroadcast()) return;
 		if (!Tools.data.Pokedex[toId(target)]) {
-			return this.errorReply("Error: Pokemon not found.")
+			return this.errorReply("Error: Pokemon not found.");
 		}
 		let bst = 0, pokeobj = Tools.getTemplate(toId(target));
-		for(let i in pokeobj.baseStats) {
+		for (let i in pokeobj.baseStats) {
 			bst += pokeobj.baseStats[i];
 		}
 		let newStats = {};
-		for(let i in pokeobj.baseStats) {
+		for (let i in pokeobj.baseStats) {
 			newStats[i] = pokeobj.baseStats[i] * (bst <= 350 ? 2 : 1);
 		}
-		let text = `${pokeobj.species} in 350 Cup: <br />`;
-		for(let i in newStats) text = `${text+newStats[i]}/`;
-		text = text.substring(0,text.length-1);
+		let text = `${pokeobj.species} in 350 Cup: <br /> ${Object.values(newStats).join('/')}`;
 		this.sendReplyBox(text);
 	},
 	cup350help: ["/350 <pokemon> - Shows the base stats that a Pokemon would have in 350 cup."],
