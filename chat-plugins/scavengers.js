@@ -153,7 +153,7 @@ exports.commands = {
 	},
 	scavengershelp: 'scavengerhelp',
 	scavengerhelp: function (target, room, user) {
-		if (room.id !== 'scavengers') return this.errorReply('This command can only be used in the Scavengers room.');
+		if (room && room.id !== 'scavengers') return this.errorReply('This command can only be used in the Scavengers room.');
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(
 			'<strong>Player commands:</strong><br />' +
