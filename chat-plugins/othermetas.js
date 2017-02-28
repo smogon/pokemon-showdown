@@ -57,7 +57,7 @@ exports.commands = {
 		for (let statName in baseStats) { // Add the changed stats and weight
 			baseStats[statName] = Tools.clampIntRange(baseStats[statName] + deltas.baseStats[statName], 1, 255);
 		}
-		let weightkg = Math.round(Math.max(0.1, template.weightkg + deltas.weightkg)*100)/100;
+		let weightkg = Math.round(Math.max(0.1, template.weightkg + deltas.weightkg) * 100) / 100;
 		let type = '<span class="col typecol">';
 		for (let i = 0; i < types.length; i++) { // HTML for some nice type images.
 			type = `${type}<img src="https://play.pokemonshowdown.com/sprites/types/${types[i]}.png" alt="${types[i]}" height="14" width="32">`;
