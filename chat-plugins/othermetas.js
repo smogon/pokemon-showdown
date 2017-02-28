@@ -9,7 +9,7 @@ exports.commands = {
 		let sep = target.split('@');
 		let stone = toId(sep[1]);
 		let template = toId(sep[0]);
-		if (!Tools.data.Items[stone] || (!Tools.data.Items[stone] && !Tools.data.Items[stone].megaEvolves && !Tools.data.Items[stone].onPrimal)) {
+		if (!Tools.data.Items[stone] || (Tools.data.Items[stone] && !Tools.data.Items[stone].megaEvolves && !Tools.data.Items[stone].onPrimal)) {
 			return this.errorReply(`Error: Mega Stone not found`);
 		}
 		if (!Tools.data.Pokedex[toId(template)]) {
