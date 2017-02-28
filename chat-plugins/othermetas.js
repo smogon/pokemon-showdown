@@ -1,26 +1,28 @@
-//Other metas plugin by Spandan
+// Other metas plugin by Spandan
 'use strict';
 
 exports.commands = {
-	mixandmega: 'mnm',
-	mnm: function (target, room, user) {
+	mnm: 'mixandmega',
+	mixandmega: function (target, room, user) {
 		if (!this.runBroadcast()) return;
-		if (!target || toId(target) === "" || !target.includes('@')) return this.parse('/help mixandmega');
+		if (!toId(target) || !target.includes('@')) return this.parse('/help mixandmega');
 		let sep = target.split('@');
-		let stone = toId(sep[1]), template = toId(sep[0]);
+		let stone = toId(sep[1]);
+		let template = toId(sep[0]);
 		if ((!Tools.data.Items[stone] || !Tools.data.Items[stone].megaEvolves) && !Tools.data.Items[stone].onPrimal) {
-			return this.errorReply('Error: Mega Stone not found');
+			return this.errorReply(`Error: Mega Stone not found`);
 		}
 		if (!Tools.data.Pokedex[toId(template)]) {
-			return this.errorReply("Error: Pokemon not found");
+			return this.errorReply(`Error: Pokemon not found`);
 		}
 		template = Object.assign({}, Tools.getTemplate(template));
 		stone = Object.assign({}, Tools.getItem(stone));
 		if (template.isMega || (template.evos && Object.keys(template.evos).length > 0)) {
 			return this.errorReply(`You cannot mega evolve ${template.name} in Mix and Mega.`);
 		}
-		let deltas; //Get mega deltas.
-		let baseTemplate = Tools.getTemplate(stone.megaEvolves), megaTemplate = Tools.getTemplate(stone.megaStone);
+		let deltas; // Get mega deltas.
+		let baseTemplate = Tools.getTemplate(stone.megaEvolves);
+		let megaTemplate = Tools.getTemplate(stone.megaStone);
 		if (stone.id === 'redorb') {
 			megaTemplate = Tools.getTemplate("Groudon-Primal");
 			baseTemplate = Tools.getTemplate("Groudon");
@@ -44,7 +46,9 @@ exports.commands = {
 			deltas.type = megaTemplate.types[1];
 		}
 		//////////////////////////////////////////
-		let ability = deltas.ability, types = template.types, baseStats = Object.assign({}, template.baseStats);
+		let ability = deltas.ability;
+		let types = template.types;
+		let baseStats = Object.assign({}, template.baseStats);
 		if (types[0] === deltas.type) {
 			types = [deltas.type];
 		} else if (deltas.type) {
@@ -72,7 +76,11 @@ exports.commands = {
 			gnbp = 40;
 		}
 		let bst = baseStats['hp'] + baseStats['atk'] + baseStats['def'] + baseStats['spa'] + baseStats['spd'] + baseStats['spe'];
-		let text = `<b>Stats</b>: ${Object.values(baseStats).join('/')}<br /><b>BST</b>:${bst}<br /><b>Type:</b> ${type}<br /><b>Ability</b>: ${ability}<br /><b>Weight</b>: ${weightkg} kg (${gnbp} BP)`;
+		let text = `<b>Stats</b>: ${Object.values(baseStats).join('/')}<br />`;
+		text = `${text}<b>BST</b>:${bst}<br />`;
+		text = `${text}<b>Type:</b> ${type}<br />`;
+		text = `${text}<b>Ability</b>: ${ability}<br />`;
+		text = `${text}<b>Weight</b>: ${weightkg} kg (${gnbp} BP)`;
 		return this.sendReplyBox(text);
 	},
 	mixandmegahelp: ["/mnm <pokemon> @ <mega stone> - Shows the mix and mega evolved Pokemon's type and stats."],
