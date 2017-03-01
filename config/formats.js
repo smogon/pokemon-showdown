@@ -245,22 +245,25 @@ exports.Formats = [
 	{
 		name: "[Gen 7] Full Potential",
 		desc: [
-			'In this metagame, every Pok&eacute;mon uses their highest raw stat as their attacking stat.',
-			'&bullet; <a href="http://www.smogon.com/forums/threads/3596777/">Full Potential</a>'
+			"A Pok&eacute;mon's highest stat is used when calculating the damage their attacks inflict.",
+			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3596777/\">Full Potential</a>"
 		],
-		ruleset: ['[Gen 7] OU'],
+
 		mod: 'fullpotential',
+		ruleset: ['[Gen 7] OU'],
 		banlist: ['Pheromosa', 'Shuckle', 'Speed Boost'],
 	},
 	{
 		name: "[Gen 7] Automagic",
 		desc: [
-			"Whenever an attack activates a secondary effect, any setup moves in that Pok&eacute;mon's movepool are activated too.",
+			"Whenever an attack's secondary effect is triggered, any setup moves in that Pok&eacute;mon's movepool are run.",
 			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3594333/\">Automagic</a>"
 		],
-		ruleset: ['[Gen 7] OU'],
+
 		mod: 'automagic',
 		searchShow: false,
+		ruleset: ['[Gen 7] OU'],
+		banlist: [],
 		onAfterSecondaryEffect: function (target, source, move) {
 			let moreSetup = ['bellydrum'];
 			if (!source.types.includes("Ghost")) moreSetup.push("curse");
