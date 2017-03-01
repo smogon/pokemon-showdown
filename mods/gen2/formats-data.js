@@ -709,7 +709,7 @@ exports.BattleFormatsData = {
 	},
 	eevee: {
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": true, "moves":["tackle", "tailwhip", "growth"]},
+			{"generation": 2, "level": 5, "moves":["tackle", "tailwhip", "growth"]},
 		],
 		tier: "LC",
 	},
@@ -735,7 +735,7 @@ exports.BattleFormatsData = {
 	},
 	porygon: {
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": true, "moves":["tackle", "conversion", "barrier"]},
+			{"generation": 2, "level": 5, "moves":["tackle", "conversion", "barrier"]},
 		],
 		tier: "LC",
 	},
@@ -745,7 +745,7 @@ exports.BattleFormatsData = {
 	},
 	omanyte: {
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": true, "moves":["constrict", "withdraw", "rockthrow"]},
+			{"generation": 2, "level": 5, "moves":["constrict", "withdraw", "rockthrow"]},
 		],
 		tier: "LC",
 	},
@@ -755,7 +755,7 @@ exports.BattleFormatsData = {
 	},
 	kabuto: {
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": true, "moves":["scratch", "harden", "rockthrow"]},
+			{"generation": 2, "level": 5, "moves":["scratch", "harden", "rockthrow"]},
 		],
 		tier: "LC",
 	},
@@ -766,7 +766,7 @@ exports.BattleFormatsData = {
 	aerodactyl: {
 		randomBattleMoves: ["earthquake", "hiddenpowerrock", "ancientpower", "wingattack", "hiddenpowerflying", "fireblast", "curse", "substitute", "reflect", "rest", "whirlwind"],
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": true, "moves":["wingattack", "rockthrow"]},
+			{"generation": 2, "level": 5, "moves":["wingattack", "rockthrow"]},
 		],
 		tier: "BL",
 	},
