@@ -384,6 +384,49 @@ class Validator {
 			if (!canBottleCap && banlistTable['Rule:pokemon'] && set.hpType && set.hpType !== ivHpType) {
 				problems.push(`${name} has Hidden Power ${set.hpType}, but its IVs are for Hidden Power ${ivHpType}.`);
 			}
+			if (tools.gen <= 2) {
+				// validate DVs
+				const hpDV = Math.floor(set.ivs.hp / 2);
+				const atkDV = Math.floor(set.ivs.atk / 2);
+				const defDV = Math.floor(set.ivs.def / 2);
+				const speDV = Math.floor(set.ivs.spe / 2);
+				const spcDV = Math.floor(set.ivs.spa / 2);
+				const expectedHpDV = (atkDV % 2) * 8 + (defDV % 2) * 4 + (speDV % 2) * 2 + (spcDV % 2);
+				if (expectedHpDV !== hpDV) {
+					problems.push(`${name} has an HP DV of ${hpDV}, but its Atk, Def, Spe, and Spc DVs give it an HP DV of ${expectedHpDV}.`);
+				}
+				if (tools.gen > 1 && !template.gender) {
+					// Gen 2 gender calculation is crazily bad...
+					let genderThreshold = 7;
+					if (template.genderRatio) genderThreshold = template.genderRatio.F * 16;
+					if (genderThreshold === 4) genderThreshold = 5;
+
+					const expectedGender = (atkDV >= genderThreshold ? 'M' : 'F');
+					if (set.gender && set.gender !== expectedGender) {
+						problems.push(`${name} is ${set.gender}, but it has an Atk DV of ${atkDV}, which makes its gender ${expectedGender}.`);
+					} else {
+						set.gender = expectedGender;
+					}
+				}
+				if (tools.gen > 1) {
+					const expectedShiny = !!(defDV === 10 && speDV === 10 && spcDV === 10 && atkDV % 4 >= 2);
+					if (expectedShiny && !set.shiny) {
+						problems.push(`${name} is not shiny, which does not match its DVs.`);
+					} else if (!expectedShiny && set.shiny) {
+						problems.push(`${name} is shiny, which does not match its DVs (its DVs must all be 10, except Atk which must be 2, 3, 6, 7, 10, 11, 14, or 15).`);
+					}
+				}
+			}
+			if (tools.gen <= 2 || format.id === 'balancedhackmons') {
+				if (!set.evs) set.evs = Validator.fillStats(null, 252);
+				let evTotal = (set.evs.hp || 0) + (set.evs.atk || 0) + (set.evs.def || 0) + (set.evs.spa || 0) + (set.evs.spd || 0) + (set.evs.spe || 0);
+				if (evTotal === 508 || evTotal === 510) {
+					problems.push(`${name} has exactly 510 EVs, but this format does not restrict you to 510 EVs: you can max out every EV (If this was intentional, add exactly 1 to one of your EVs, which won't change its stats but will tell us that it wasn't a mistake).`);
+				}
+				if (evTotal === 0) {
+					problems.push(`${name} has exactly 0 EVs - did you forget to EV it? (If this was intentional, add exactly 1 to one of your EVs, which won't change its stats but will tell us that it wasn't a mistake).`);
+				}
+			}
 
 			if (lsetData.limitedEgg && lsetData.limitedEgg.length > 1 && !lsetData.sourcesBefore && lsetData.sources) {
 				// console.log("limitedEgg 1: " + lsetData.limitedEgg);
