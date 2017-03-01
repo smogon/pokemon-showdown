@@ -246,7 +246,7 @@ exports.Formats = [
 		name: "[Gen 7] Full Potential",
 		desc: [
 			"A Pok&eacute;mon's highest stat is used when calculating the damage their attacks inflict.",
-			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3596777/\">Full Potential</a>"
+			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3596777/\">Full Potential</a>",
 		],
 
 		mod: 'fullpotential',
@@ -257,7 +257,7 @@ exports.Formats = [
 		name: "[Gen 7] Automagic",
 		desc: [
 			"Whenever an attack's secondary effect is triggered, any setup moves in that Pok&eacute;mon's movepool are run.",
-			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3594333/\">Automagic</a>"
+			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3594333/\">Automagic</a>",
 		],
 
 		mod: 'automagic',
