@@ -539,7 +539,16 @@ class Validator {
 						problems.push(`${template.species} is only obtainable from events - it needs to match one of its events, such as:`);
 					}
 					let eventData = eventPokemon[0];
-					let eventProblems = this.validateEvent(set, eventData, eventTemplate, ` to be`, `from ` + eventPokemon.length === 1 ? `its event` : `its first event`);
+					const minPastGen = (format.requirePlus ? 7 : format.requirePentagon ? 6 : 1);
+					let eventNum = 1;
+					for (let i = 0; i < eventPokemon.length; i++) {
+						if (eventPokemon[i].generation <= tools.gen && eventPokemon[i].generation >= minPastGen) {
+							eventData = eventPokemon[i];
+							eventNum = i + 1;
+							break;
+						}
+					}
+					let eventProblems = this.validateEvent(set, eventData, eventTemplate, ` to be`, `from its event${eventPokemon.length > 1 ? " #" + eventNum : ""}`);
 					if (eventProblems) problems.push(...eventProblems);
 				}
 			}
@@ -691,6 +700,10 @@ class Validator {
 		if (this.format.requirePlus && eventData.generation < 7) {
 			if (fastReturn) return true;
 			problems.push(`This format requires Pokemon from gen 7 and ${name} is from gen ${eventData.generation}${etc}.`);
+		}
+		if (tools.gen < eventData.generation) {
+			if (fastReturn) return true;
+			problems.push(`This format is in gen ${tools.gen} and ${name} is from gen ${eventData.generation}${etc}.`);
 		}
 
 		if (eventData.level && set.level < eventData.level) {
