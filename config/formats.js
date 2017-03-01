@@ -145,6 +145,7 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 7] Kanto X Alola Regional Rumble",
+		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3597090/\">Kanto X Alola Regional Rumble</a>"],
 
 		mod: "gen7",
 		maxForcedLevel: 50,
