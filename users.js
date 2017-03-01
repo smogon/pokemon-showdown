@@ -162,7 +162,7 @@ function cacheGroupData() {
 		console.log(
 			`You are using a deprecated version of user group specification in config.\n` +
 			`Support for this will be removed soon.\n` +
-			`Please ensure that you update your config.js to the new format (see config-example.js, line 220)\n`
+			`Please ensure that you update your config.js to the new format (see config-example.js, line 220).\n`
 		);
 	} else {
 		Config.groups = Object.create(null);
@@ -945,7 +945,7 @@ class User {
 			if (this.semilocked.startsWith('#sharedip')) {
 				this.semilocked = false;
 			} else if (this.semilocked === '#dnsbl') {
-				this.popup(`You are locked because someone using your IP has spammed/hacked other websites. This usually means you're using a proxy, in a country where other people commonly hack, or have a virus on your computer that's spamming websites.`);
+				this.popup(`You are locked because someone using your IP has spammed/hacked other websites. This usually means either you're using a proxy, you're in a country where other people commonly hack, or you have a virus on your computer that's spamming websites.`);
 				this.semilocked = '#dnsbl.';
 			}
 		}
