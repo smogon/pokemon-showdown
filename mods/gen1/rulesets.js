@@ -34,43 +34,6 @@ exports.BattleFormats = {
 			// Automatically set ability to None
 			set.ability = 'None';
 
-			// Maximise EVs by default
-			if (!set.evs) {
-				set.evs = {hp: 255, atk: 255, def: 255, spa: 255, spd: 255, spe: 255};
-			} else {
-				// If EVs are set manually to lower attack for confusion damage, make attack minimum possible.
-				// Each EV is 257 Stat points, that is, 30 EVs.
-				// Minimum attack you can have at level 100 is 30.
-				set.evs.hp = 255;
-				set.evs.def = 255;
-				set.evs.spa = 255;
-				set.evs.spd = 255;
-				set.evs.spe = 255;
-				if (set.evs.atk < 30) {
-					set.evs.atk = 30;
-				} else {
-					set.evs.atk = 255;
-				}
-			}
-
-			// IVs worked different (DVs, 0 to 15, 2 points each) so we put all IVs to 30
-			if (!set.ivs) {
-				set.ivs = {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30};
-			} else {
-				// Unless minimising Attack DV for confusion damage.
-				set.ivs.hp = 30;
-				set.ivs.def = 30;
-				set.ivs.spa = 30;
-				set.ivs.spd = 30;
-				set.ivs.spe = 30;
-				if (set.ivs.atk < 30) {
-					// Make it odd DVs (1 DV = 2 IV) so we still have max HP.
-					set.ivs.atk = 2;
-				} else {
-					set.ivs.atk = 30;
-				}
-			}
-
 			// They also get a useless nature, since that didn't exist
 			set.nature = 'Serious';
 
