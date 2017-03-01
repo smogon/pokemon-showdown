@@ -89,7 +89,7 @@ class Validator {
 			if (format.gameType === 'doubles') lengthRange[0] = 2;
 			if (format.gameType === 'triples' || format.gameType === 'rotation') lengthRange[0] = 3;
 		}
-		if (team.length < lengthRange[0]) return [`You must bring at least ${lengthRange[0]} Pok\u00E9mon.`];
+		if (team.length < lengthRange[0]) problems.push([`You must bring at least ${lengthRange[0]} Pok\u00E9mon.`]);
 		if (team.length > lengthRange[1]) return [`You may only bring up to ${lengthRange[1]} Pok\u00E9mon.`];
 
 		let teamHas = {};
