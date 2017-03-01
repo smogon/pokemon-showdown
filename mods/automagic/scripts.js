@@ -205,8 +205,7 @@ exports.BattleScripts = {
 						Object.keys(moveData.secondary.self.boosts).forEach(boost => {
 							if (pokemon.boosts[boost] === 6) flag = false;
 						});
-					}
-					else {
+					} else {
 						flag = flag && !(target.hp === undefined || target.hp <= 0);
 					}
 					if (moveData.target === 'Normal' && moveData.secondary.boosts) {
