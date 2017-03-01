@@ -15,7 +15,6 @@ exports.BattleAliases = {
 	"bss": "[Gen 7] Battle Spot Singles",
 	"bsdoubles": "[Gen 7] Battle Spot Doubles",
 	"bstriples": "Battle Spot Triples",
-	"pokebilities": "[Gen 7] Pokébilities",
 	"balancedhackmons": "[Gen 7] Balanced Hackmons",
 	"bh": "[Gen 7] Balanced Hackmons",
 	"1v1": "[Gen 7] 1v1",
@@ -37,7 +36,6 @@ exports.BattleAliases = {
 	"monorandom": "[Gen 7] Monotype Random Battle",
 	"bf": "Battle Factory",
 	"inverse": "Inverse Battle",
-	"fp": "[Gen 7] Full Potential",
 	"fullpotential": "[Gen 7] Full Potential",
 	"automagic": "[Gen 7] Automagic",
 
