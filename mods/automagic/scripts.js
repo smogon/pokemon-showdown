@@ -209,12 +209,12 @@ exports.BattleScripts = {
 					else flag = flag && !(target.hp === undefined || target.hp <= 0);
 					if (moveData.target === 'Normal' && moveData.secondary.boosts) {
 						let cantLower = {
-							'atk': ['hypercutter', 'clearbody', 'fullmetalbody', 'whitesmoke'],
+							'atk': ['clearbody', 'fullmetalbody', 'hypercutter', 'whitesmoke'],
 							'def': ['bigpecks', 'clearbody', 'fullmetalbody', 'whitesmoke'],
 							'spa': ['clearbody', 'fullmetalbody', 'whitesmoke'],
 							'spd': ['clearbody', 'fullmetalbody', 'whitesmoke'],
 							'spe': ['clearbody', 'fullmetalbody', 'whitesmoke'],
-							'accuracy': ['keeneye', 'clearbody', 'fullmetalbody', 'whitesmoke'],
+							'accuracy': ['clearbody', 'fullmetalbody', 'keeneye', 'whitesmoke'],
 						}
 						for (let k in moveData.secondary.boosts) {
 							if (target.boosts[k] === -6) {
