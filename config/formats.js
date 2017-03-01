@@ -253,16 +253,36 @@ exports.Formats = [
 		banlist: ['Pheromosa', 'Shuckle', 'Speed Boost'],
 	},
 	{
-		name: "[Gen 7] Mergemons",
+		name: "[Gen 7] Automagic",
 		desc: [
-			"Pok&eacute;mon gain the movepool of the previous and the next fully evolved Pok&eacute;mon, according to the Pok&eacute;dex.",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3591780/\">Mergemons</a>",
+			"Whenever an attack activates a secondary effect, any setup moves in that Pok&eacute;mon's movepool are activated too.",
+			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3594333/\">Automagic</a>"
 		],
-
-		mod: 'mergemons',
-		searchShow: false,
 		ruleset: ['[Gen 7] OU'],
-		banlist: [],
+		mod: 'automagic',
+		searchShow: false,
+		onAfterSecondaryEffect: function (target, source, move) {
+			let moreSetup = ['bellydrum'];
+			if (!source.types.includes("Ghost")) moreSetup.push("curse");
+			source.baseMoveset.forEach(curmove => {
+				let move = this.getMove(curmove.id);
+				if (moreSetup.includes(move.id) || (move.category === "Status" && move.boosts && move.target === "self")) {
+					this.useMove(move, source);
+					curmove.pp = target.hasAbility("pressure") ? (curmove.pp - 2) : (curmove.pp - 1);
+				}
+			});
+		},
+		onAfterMove: function (source, target, move) {
+			if (move.id !== "genesissupernova") return;
+			source.baseMoveset.forEach(curmove => {
+				let move = this.getMove(curmove.id);
+				let isDead = target.hp === undefined || target.hp <= 0;
+				if ((move.id === 'bellydrum' || (move.category === "Status" && move.boosts && move.target === "self")) && this.terrain === "psychicterrain") {// This is so that its confirmed that it successfully set PTerrain
+					this.useMove(move, source);
+					curmove.pp = target.hasAbility("pressure") ? (curmove.pp - 2) : (curmove.pp - 1);
+				}
+			});
+		},
 	},
 	{
 		section: "Other Metagames",
