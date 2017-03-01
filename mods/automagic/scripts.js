@@ -203,10 +203,12 @@ exports.BattleScripts = {
 					this.moveHit(target, pokemon, move, secondaries[i], true, isSelf);
 					if (moveData.secondary.self && moveData.secondary.self.boosts) {
 						Object.keys(moveData.secondary.self.boosts).forEach(boost => {
-							if(pokemon.boosts[boost] === 6) flag = false;
+							if (pokemon.boosts[boost] === 6) flag = false;
 						});
 					}
-					else flag = flag && !(target.hp === undefined || target.hp <= 0);
+					else {
+						flag = flag && !(target.hp === undefined || target.hp <= 0);
+					}
 					if (moveData.target === 'Normal' && moveData.secondary.boosts) {
 						let cantLower = {
 							'atk': ['clearbody', 'fullmetalbody', 'hypercutter', 'whitesmoke'],
@@ -215,15 +217,15 @@ exports.BattleScripts = {
 							'spd': ['clearbody', 'fullmetalbody', 'whitesmoke'],
 							'spe': ['clearbody', 'fullmetalbody', 'whitesmoke'],
 							'accuracy': ['clearbody', 'fullmetalbody', 'keeneye', 'whitesmoke'],
-						}
+						};
 						for (let k in moveData.secondary.boosts) {
 							if (target.boosts[k] === -6) {
 								flag = false;
 								continue;
 							}
-							if (moveData.secondary.boosts[k]<0) {
-								for(let j = 0; j<cantLower[k].length; j++) {
-									if(target.hasAbility(cantLower[k][j])) {
+							if (moveData.secondary.boosts[k] < 0) {
+								for (let j = 0; j < cantLower[k].length; j++) {
+									if (target.hasAbility(cantLower[k][j])) {
 										flag = false;
 										break;
 									}

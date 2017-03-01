@@ -279,7 +279,6 @@ exports.Formats = [
 			if (move.id !== "genesissupernova") return;
 			source.baseMoveset.forEach(curmove => {
 				let move = this.getMove(curmove.id);
-				let isDead = target.hp === undefined || target.hp <= 0;
 				if ((move.id === 'bellydrum' || (move.category === "Status" && move.boosts && move.target === "self")) && this.terrain === "psychicterrain") {// This is so that its confirmed that it successfully set PTerrain
 					this.useMove(move, source);
 					curmove.pp = target.hasAbility("pressure") ? (curmove.pp - 2) : (curmove.pp - 1);
