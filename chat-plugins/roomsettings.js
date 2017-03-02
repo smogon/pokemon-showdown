@@ -36,9 +36,9 @@ class RoomSettings {
 		if (!this.user.can('modchat', null, this.room)) return this.button(this.room.modchat ? this.room.modchat : 'off', true);
 		let modchatOutput = [];
 		for (let i = 0; i <= RANKS.length; i++) {
-			if (RANKS[i] === ' ' && !this.room.modchat) {
+			if (RANKS[i] === Config.groupsranking[0] && !this.room.modchat) {
 				modchatOutput.push(this.button('off', true));
-			} else if (RANKS[i] === ' ') {
+			} else if (RANKS[i] === Config.groupsranking[0]) {
 				modchatOutput.push(this.button('off', null, 'modchat off'));
 			} else if (RANKS[i] === this.room.modchat) {
 				modchatOutput.push(this.button(RANKS[i], true));
@@ -62,9 +62,9 @@ class RoomSettings {
 		if (!this.user.can('makeroom') && !this.room.isPersonal) return this.button(this.room.modjoin ? this.room.modjoin : 'off', true);
 		let modjoinOutput = [];
 		for (let i = 0; i < RANKS.length; i++) {
-			if (RANKS[i] === ' ' && !this.room.modjoin) {
+			if (RANKS[i] === Config.groupsranking[0] && !this.room.modjoin) {
 				modjoinOutput.push(this.button('off', true));
-			} else if (RANKS[i] === ' ') {
+			} else if (RANKS[i] === Config.groupsranking[0]) {
 				modjoinOutput.push(this.button('off', null, 'modjoin off'));
 			} else if (RANKS[i] === this.room.modjoin) {
 				modjoinOutput.push(this.button(RANKS[i], true));
