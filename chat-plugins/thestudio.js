@@ -60,19 +60,23 @@ function addNomination(user, artist) {
 	if (winners.length && toArtistId(winners[winners.length - 1].artist) === id) return user.sendTo(theStudio, "This artist is already the current Artist of the Day.");
 
 	for (let value of removedNominations.values()) {
-		if (toId(user) in value.userids || user.latestIp in value.ips) return user.sendTo(theStudio, "Since your nomination has been removed, you cannot submit another artist until the next round.");
+		if (toId(user) in value.userids || user.latestIp in value.ips) return user.sendTo(theStudio, "Since your nomination has been removed by staff, you cannot submit another artist until the next round.");
 	}
 
 	if (nominations.has(toArtistId(artist))) return user.sendTo(theStudio, "This artist has already been nominated.");
 
-	for (let value of nominations.values()) {
-		if (toId(user) in value.userids || user.latestIp in value.ips) return user.sendTo(theStudio, "You've already submitted a nomination.");
+	for (let [key, value] of nominations) {
+		if (toId(user) in value.userids || user.latestIp in value.ips) {
+			user.sendTo(theStudio, `Your previous vote for ${value.artist} will be removed.`);
+			nominations.delete(key);
+		}
 	}
+
 	let obj = {};
 	obj[user.userid] = user.name;
 	nominations.set(toArtistId(artist), {artist: artist, name: user.name, userids: Object.assign(obj, user.prevNames), ips: Object.assign({}, user.ips)});
 
-	user.sendTo(theStudio, "Nomination successfully submitted.");
+	user.sendTo(theStudio, `Your nomination for ${artist} was successfully submitted.`);
 
 	if (theStudio.aotdVote) theStudio.aotdVote.display(true);
 }
