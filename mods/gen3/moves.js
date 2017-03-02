@@ -113,6 +113,26 @@ exports.BattleMovedex = {
 			}
 			return false;
 		},
+		effect: {
+			duration: 1,
+			noCopy: true,
+			onStart: function (target, source, source2, move) {
+				this.effectData.position = null;
+				this.effectData.damage = 0;
+			},
+			onRedirectTargetPriority: -1,
+			onRedirectTarget: function (target, source, source2) {
+				if (source !== this.effectData.target) return;
+				return source.side.foe.active[this.effectData.position];
+			},
+			onDamagePriority: -101,
+			onDamage: function (damage, target, source, effect) {
+				if (effect && effect.effectType === 'Move' && source.side !== target.side && this.getCategory(effect.id) === 'Physical') {
+					this.effectData.position = source.position;
+					this.effectData.damage = 2 * damage;
+				}
+			},
+		},
 	},
 	covet: {
 		inherit: true,
@@ -344,6 +364,29 @@ exports.BattleMovedex = {
 			if (moves.length) randomMove = moves[this.random(moves.length)];
 			if (!randomMove) return false;
 			this.useMove(randomMove, target);
+		},
+	},
+	mirrorcoat: {
+		inherit: true,
+		effect: {
+			duration: 1,
+			noCopy: true,
+			onStart: function (target, source, source2, move) {
+				this.effectData.position = null;
+				this.effectData.damage = 0;
+			},
+			onRedirectTargetPriority: -1,
+			onRedirectTarget: function (target, source, source2) {
+				if (source !== this.effectData.target) return;
+				return source.side.foe.active[this.effectData.position];
+			},
+			onDamagePriority: -101,
+			onDamage: function (damage, target, source, effect) {
+				if (effect && effect.effectType === 'Move' && source.side !== target.side && this.getCategory(effect.id) === 'Special') {
+					this.effectData.position = source.position;
+					this.effectData.damage = 2 * damage;
+				}
+			},
 		},
 	},
 	mirrormove: {
