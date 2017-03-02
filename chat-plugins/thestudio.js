@@ -246,7 +246,7 @@ let commands = {
 
 		if (!room.aotdVote.runAotd()) return this.errorReply("Can't select an Artist of the Day without nominations.");
 
-		this.privateModCommand(`${user.name} has started nominations for the Artist of the Day.)`);
+		this.privateModCommand(`(${user.name} has ended nominations for the Artist of the Day.)`);
 	},
 	endhelp: ["/aotd end - End nominations for the Artist of the Day and set it to a randomly selected artist. Requires: % @ # & ~"],
 
@@ -344,7 +344,7 @@ let commands = {
 
 		if (keys.length) {
 			setWinnerProperty(changelist);
-			return this.privateModCommand(`(${user.name} changes the following propertie${Chat.plural(keys)} of the Artist of the Day: ${keys.join(', ')})`);
+			return this.privateModCommand(`(${user.name} changed the following propert${Chat.plural(keys, 'ies', 'y')} of the Artist of the Day: ${keys.join(', ')})`);
 		}
 	},
 	sethelp: ["/aotd set property: value[, property: value] - Set the artist, quote, song, link or image for the current Artist of the Day. Requires: % @ * # & ~"],
