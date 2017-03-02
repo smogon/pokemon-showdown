@@ -1153,7 +1153,7 @@ class BattleDex {
 				if (i !== j) misc = buf.substring(i, j).split(',', 3);
 			}
 			if (misc) {
-				set.happiness = Number(misc[0]);
+				set.happiness = (misc[0] ? Number(misc[0]) : 255);
 				set.hpType = misc[1];
 				set.pokeball = misc[2];
 			}
