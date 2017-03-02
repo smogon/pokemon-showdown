@@ -110,7 +110,7 @@ function generateAotd() {
 	if (!winners.length) return false;
 	let aotd = winners[winners.length - 1];
 
-	let output = Chat.html `<div class="broadcast-blue" style="text-align:center;"><p><span style="font-weight:bold;font-size:10pt">The Artist of the Day is ${aotd.artist || "Various Artists"}.</span>`;
+	let output = Chat.html `<div class="broadcast-blue" style="text-align:center;"><p><span style="font-weight:bold;font-size:11pt">The Artist of the Day is ${aotd.artist || "Various Artists"}.</span>`;
 	if (aotd.quote) output += Chat.html `<br/><span style="font-style:italic;">"${aotd.quote}"</span>`;
 	output += `</p><table style="margin:auto;"><tr>`;
 	if (aotd.image) output += Chat.html `<td><img src="${aotd.image}" width=100 height=100></td>`;
@@ -214,7 +214,7 @@ class ArtistOfTheDayVote {
 		let winner = this.nominations.get(keys[Math.floor(Math.random() * keys.length)]);
 		appendWinner(winner.artist, winner.name);
 
-		this.room.add(Chat.html `|html|<div class="broadcast-blue"><p style="font-weight:bold;text-align:center;font-size:10pt;">Nominations for Artist of the Day are over!</p><p style="tex-align:center;font-size:8pt;">Out of ${keys.length} nominations, we randomly selected <strong>${winner.artist}</strong> as the winner! (Nomination by ${winner.name})</p></div>`);
+		this.room.add(Chat.html `|html|<div class="broadcast-blue"><p style="font-weight:bold;text-align:center;font-size:12pt;">Nominations for Artist of the Day are over!</p><p style="tex-align:center;font-size:10pt;">Out of ${keys.length} nominations, we randomly selected <strong>${winner.artist}</strong> as the winner! (Nomination by ${winner.name})</p></div>`);
 
 		this.finish();
 		return true;
