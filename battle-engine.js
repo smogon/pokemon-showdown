@@ -163,13 +163,9 @@ class BattlePokemon {
 		this.boosts = {atk: 0, def: 0, spa: 0, spd: 0, spe: 0, accuracy: 0, evasion: 0};
 		this.stats = {atk:0, def:0, spa:0, spd:0, spe:0};
 
-		this.baseStats = this.battle.spreadModify(this.template.baseStats, this.set);
 		// This is used in gen 1 only, here to avoid code repetition.
 		// Only declared if gen 1 to avoid declaring an object we aren't going to need.
 		if (this.battle.gen === 1) this.modifiedStats = {atk:0, def:0, spa:0, spd:0, spe:0};
-
-		this.maxhp = this.template.maxHP || this.baseStats.hp;
-		this.hp = this.hp || this.maxhp;
 
 		this.isStale = 0;
 		this.isStaleCon = 0;
@@ -182,6 +178,9 @@ class BattlePokemon {
 		this.baseHpPower = this.hpPower;
 
 		this.clearVolatile(true);
+
+		this.maxhp = this.template.maxHP || this.baseStats.hp;
+		this.hp = this.hp || this.maxhp;
 	}
 
 	toString() {
@@ -587,7 +586,7 @@ class BattlePokemon {
 		if (!template.abilities || (pokemon && pokemon.transformed && this.battle.gen >= 2) || (user && user.transformed && this.battle.gen >= 5)) {
 			return false;
 		}
-		if (!this.formeChange(template, true)) {
+		if (!this.formeChange(template, pokemon)) {
 			return false;
 		}
 		this.transformed = true;
@@ -658,18 +657,24 @@ class BattlePokemon {
 
 		return true;
 	}
-	formeChange(template, dontRecalculateStats) {
+	formeChange(template, source) {
 		template = this.battle.getTemplate(template);
 
 		if (!template.abilities) return false;
+
+		template = this.battle.singleEvent('ModifyTemplate', this.battle.getFormat(), null, this, source, null, template);
+
+		if (!template) return false;
+
 		this.template = template;
 
 		this.types = template.types;
-		this.addedType = '';
+		this.addedType = template.addedType || '';
 		this.knownType = true;
 
-		if (!dontRecalculateStats) {
+		if (!source) {
 			let stats = this.battle.spreadModify(this.template.baseStats, this.set);
+			if (!this.baseStats) this.baseStats = stats;
 			for (let statName in this.stats) {
 				this.stats[statName] = stats[statName];
 				this.baseStats[statName] = stats[statName];

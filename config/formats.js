@@ -491,6 +491,10 @@ exports.Formats = [
 		searchShow: false,
 		mod: 'hiddentype',
 		ruleset: ['[Gen 7] OU'],
+		onModifyTemplate: function (template, pokemon) {
+			if (template.types.includes(pokemon.hpType)) return;
+			return Object.assign({addedType: pokemon.hpType}, template);
+		},
 	},
 	{
 		name: "[Gen 7] BH Doubles",
