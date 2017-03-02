@@ -5721,6 +5721,7 @@ exports.BattleFormatsData = {
 		gen: 7,
 		requiredAbility: "Power Construct",
 		battleOnly: true,
+		tier: "Uber",
 	},
 	diancie: {
 		randomBattleMoves: ["reflect", "lightscreen", "stealthrock", "diamondstorm", "moonblast", "hiddenpowerfire"],
