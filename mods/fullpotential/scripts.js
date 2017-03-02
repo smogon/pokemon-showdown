@@ -76,7 +76,7 @@ exports.BattleScripts = {
 		let attack;
 		let defense;
 
-		let atkBoosts = move.useTargetOffensive ? defender.boosts[attackStat] : attacker.boosts[attackStat];
+		let atkBoosts = move.useTargetOffensive ? defender.boosts[attackStat] : ((defender.hasAbility('unaware') && attackStat === 'spe') ? 0 : attacker.boosts[attackStat]);
 		let defBoosts = move.useSourceDefensive ? attacker.boosts[defenseStat] : defender.boosts[defenseStat];
 
 		let ignoreNegativeOffensive = !!move.ignoreNegativeOffensive;
