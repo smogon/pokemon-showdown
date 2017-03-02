@@ -70,6 +70,9 @@ exports.BattleScripts = {
 				highestStat = stat;
 			}
 		}
+		if (move.useTargetOffensive) {
+			attackStat = category === 'Physical' ? 'atk' : 'spa';
+		}
 		let attack;
 		let defense;
 

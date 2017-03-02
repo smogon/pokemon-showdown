@@ -279,7 +279,7 @@ exports.Formats = [
 	{
 		name: "[Gen 7] Automagic",
 		desc: [
-			"Whenever an attack's secondary effect is triggered, any setup moves in that Pok&eacute;mon's movepool are run.",
+			"Whenever an attack's secondary effect is triggered, any setup moves in that Pok&eacute;mon's moveset are run.",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3594333/\">Automagic</a>",
 		],
 
