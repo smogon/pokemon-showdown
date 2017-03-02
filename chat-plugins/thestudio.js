@@ -175,7 +175,7 @@ function generateNomWindow() {
 	}
 
 	nominations.forEach((value, key) => {
-		buffer += Chat.html `<li><b>${value.artist}</b> <i>(Submitted by ${value.name}.)</i></li>`;
+		buffer += Chat.html `<li><b>${value.artist}</b> <i>(Submitted by ${value.name})</i></li>`;
 	});
 
 	buffer += `</ul></div>`;
