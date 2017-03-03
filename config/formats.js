@@ -285,7 +285,7 @@ exports.Formats = [
 		mod: 'automagic',
 		searchShow: false,
 		ruleset: ['[Gen 7] OU'],
-		banlist: [],
+		banlist: ["King's Rock", 'Razor Fang'],
 		onAfterSecondaryEffect: function (target, source, move) {
 			let moreSetup = ['bellydrum'];
 			if (!source.types.includes("Ghost")) moreSetup.push("curse");
