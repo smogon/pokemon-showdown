@@ -164,7 +164,6 @@ exports.Formats = [
 				return [template.baseSpecies + " is not in the Kanto or Alola Pokédex."];
 			}
 		},
-		requirePentagon: true,
 	},
 	{
 		name: "[Gen 7] Custom Game",
