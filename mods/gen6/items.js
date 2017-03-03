@@ -188,14 +188,6 @@ exports.BattleItems = {
 		inherit: true,
 		isUnreleased: false,
 	},
-	mewtwonitex: {
-		inherit: true,
-		isUnreleased: false,
-	},
-	mewtwonitey: {
-		inherit: true,
-		isUnreleased: false,
-	},
 	micleberry: {
 		inherit: true,
 		isUnreleased: false,
