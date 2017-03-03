@@ -3389,7 +3389,6 @@ exports.BattleItems = {
 	"mewtwonitex": {
 		id: "mewtwonitex",
 		name: "Mewtwonite X",
-		isUnreleased: true,
 		spritenum: 600,
 		megaStone: "Mewtwo-Mega-X",
 		megaEvolves: "Mewtwo",
@@ -3404,7 +3403,6 @@ exports.BattleItems = {
 	"mewtwonitey": {
 		id: "mewtwonitey",
 		name: "Mewtwonite Y",
-		isUnreleased: true,
 		spritenum: 601,
 		megaStone: "Mewtwo-Mega-Y",
 		megaEvolves: "Mewtwo",
