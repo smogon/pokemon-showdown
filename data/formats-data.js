@@ -1842,7 +1842,7 @@ exports.BattleFormatsData = {
 	azumarill: {
 		randomBattleMoves: ["waterfall", "aquajet", "playrough", "superpower", "bellydrum", "knockoff"],
 		randomDoubleBattleMoves: ["waterfall", "aquajet", "playrough", "superpower", "bellydrum", "knockoff", "protect"],
-		tier: "BL",
+		tier: "UU",
 	},
 	bonsly: {
 		randomBattleMoves: ["rockslide", "brickbreak", "doubleedge", "toxic", "stealthrock", "suckerpunch", "explosion"],
@@ -3615,7 +3615,7 @@ exports.BattleFormatsData = {
 	staraptor: {
 		randomBattleMoves: ["bravebird", "closecombat", "uturn", "quickattack", "roost", "doubleedge"],
 		randomDoubleBattleMoves: ["bravebird", "closecombat", "uturn", "quickattack", "doubleedge", "tailwind", "protect"],
-		tier: "UU",
+		tier: "BL",
 	},
 	bidoof: {
 		randomBattleMoves: ["return", "aquatail", "curse", "quickattack", "stealthrock", "superfang"],
