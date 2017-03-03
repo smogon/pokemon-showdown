@@ -2190,6 +2190,7 @@ exports.BattleFormatsData = {
 		tier: "New",
 	},
 	pokestarsmeargle: {
+		isNonstandard: true,
 		eventPokemon: [
 			{"generation": 5, "level": 60, "gender": "M", "abilities":["owntempo"], "moves":["mindreader", "guillotine", "tailwhip", "gastroacid"]},
 			{"generation": 5, "level": 30, "gender": "M", "abilities":["owntempo"], "moves":["outrage", "magiccoat"]},
