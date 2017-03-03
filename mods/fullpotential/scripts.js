@@ -73,6 +73,9 @@ exports.BattleScripts = {
 		if (move.useTargetOffensive) {
 			attackStat = category === 'Physical' ? 'atk' : 'spa';
 		}
+		if (move.id === 'confusion') {
+			attackStat = 'atk';
+		}
 		let attack;
 		let defense;
 
