@@ -710,7 +710,7 @@ exports.Formats = [
 		name: "Inverse Battle",
 
 		searchShow: false,
-		ruleset: ['Pokemon', 'Inverse', 'Endless Battle Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod'],
+		ruleset: ['Pokemon', 'Inverse Clause', 'Endless Battle Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod'],
 		banlist: ['Illegal', 'Unreleased'],
 	},
 	{
