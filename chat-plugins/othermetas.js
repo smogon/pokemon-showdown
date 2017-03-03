@@ -86,7 +86,7 @@ exports.commands = {
 	mixandmegahelp: ["/mnm <pokemon> @ <mega stone> - Shows the mix and mega evolved Pokemon's type and stats."],
 
 	'350': 'cup350',
-	cup350: function (target, room, user) {
+	'350cup': function (target, room, user) {
 		if (!this.runBroadcast()) return;
 		if (!Tools.data.Pokedex[toId(target)]) {
 			return this.errorReply("Error: Pokemon not found.");
@@ -103,5 +103,5 @@ exports.commands = {
 		let text = `${pokeobj.species} in 350 Cup: <br /> ${Object.values(newStats).join('/')}`;
 		this.sendReplyBox(text);
 	},
-	cup350help: ["/cup350 OR /350 <pokemon> - Shows the base stats that a Pokemon would have in 350 cup."],
+	'350cuphelp': ["/350 OR /350cup <pokemon> - Shows the base stats that a Pokemon would have in 350 cup."],
 };
