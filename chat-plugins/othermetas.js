@@ -1,4 +1,4 @@
-// Other metas plugin by Spandan
+// Other Metas plugin by Spandan
 'use strict';
 
 exports.commands = {
@@ -77,7 +77,7 @@ exports.commands = {
 		} // Aah, only if `template` had a `bst` property.
 		let bst = baseStats['hp'] + baseStats['atk'] + baseStats['def'] + baseStats['spa'] + baseStats['spd'] + baseStats['spe'];
 		let text = `<b>Stats</b>: ${Object.values(baseStats).join('/')}<br />`;
-		text = `${text}<b>BST</b>:${bst}<br />`;
+		text = `${text}<b>BST</b>: ${bst}<br />`;
 		text = `${text}<b>Type:</b> ${type}<br />`;
 		text = `${text}<b>Ability</b>: ${ability}<br />`;
 		text = `${text}<b>Weight</b>: ${weightkg} kg (${gnbp} BP)`;
