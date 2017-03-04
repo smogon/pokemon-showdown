@@ -497,7 +497,6 @@ exports.Formats = [
 		],
 
 		searchShow: false,
-		mod: 'hiddentype',
 		ruleset: ['[Gen 7] OU'],
 		onModifyTemplate: function (template, pokemon) {
 			if (template.types.includes(pokemon.hpType)) return;
