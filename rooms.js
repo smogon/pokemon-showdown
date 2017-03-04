@@ -1266,7 +1266,7 @@ class BattleRoom extends Room {
 		if (!user) return false;
 		if (this.users[user.userid]) return user;
 
-		if (user.named) {
+		if (user.named && !user.locked) {
 			this.add((this.reportJoins ? '|j|' : '|J|') + user.name).update();
 		}
 
@@ -1296,7 +1296,7 @@ class BattleRoom extends Room {
 		}
 		delete this.users[user.userid];
 		this.userCount--;
-		this.add((this.reportJoins ? '|l|' : '|L|') + user.name);
+		if (!user.locked) this.add((this.reportJoins ? '|l|' : '|L|') + user.name);
 
 		if (this.game && this.game.onLeave) {
 			this.game.onLeave(user);
