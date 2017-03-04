@@ -692,9 +692,9 @@ exports.BattleFormats = {
 			}
 		},
 	},
-	inverseclause: {
+	inversemod: {
 		effectType: 'Rule',
-		name: 'Inverse Clause',
+		name: 'Inverse Mod',
 		onNegateImmunity: false,
 		onEffectiveness: function (typeMod, target, type, move) {
 			// The effectiveness of Freeze Dry on Water isn't reverted
