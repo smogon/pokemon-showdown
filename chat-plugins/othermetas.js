@@ -100,8 +100,36 @@ exports.commands = {
 		for (let i in pokeobj.baseStats) {
 			newStats[i] = pokeobj.baseStats[i] * (bst <= 350 ? 2 : 1);
 		}
-		let text = `${pokeobj.species} in 350 Cup: <br /> ${Object.values(newStats).join('/')}`;
-		this.sendReplyBox(text);
+		this.sendReplyBox(`${pokeobj.species} in 350 Cup: <br /> ${Object.values(newStats).join('/')}`);
 	},
-	'350cuphelp': ["/350 OR /350cup <pokemon> - Shows the base stats that a Pokemon would have in 350 cup."],
+	'350cuphelp': ["/350 OR /350cup <pokemon> - Shows the base stats that a Pokemon would have in 350 cup."],'350': 'cup350',
+
+	ts: 'tiershift',
+	tiershift: function (target, room, user) {
+		if (!this.runBroadcast()) return;
+		if (!Tools.data.Pokedex[toId(target)]) {
+			return this.errorReply("Error: Pokemon not found.");
+		}
+		let boosts = {
+			'UU': 5,
+			'BL2': 5,
+			'RU': 10,
+			'BL3': 10,
+			'NU': 15,
+			'BL4': 15,
+			'PU': 20,
+			'NFE': 20,
+			'LC Uber': 20,
+			'LC': 20,
+		};
+		let template = Object.assign({}, Tools.getTemplate(target));
+		if (!(template.tier in boosts)) return this.sendReplyBox(`${template.species} in Tier Shift: <br /> ${Object.values(template.baseStats).join('/')}`);
+		let boost = boosts[template.tier];
+		let newStats = Object.assign({}, template.baseStats);
+		for (let statName in template.baseStats) {
+			newStats[statName] = Tools.clampIntRange(newStats[statName] + boost, 1, 255);
+		}
+		this.sendReplyBox(`${template.species} in Tier Shift: <br /> ${Object.values(newStats).join('/')}`);
+	},
+	'tiershifthelp': ["/ts OR /tiershift <pokemon> - Shows the base stats that a Pokemon would have in Tier Shift."],
 };
