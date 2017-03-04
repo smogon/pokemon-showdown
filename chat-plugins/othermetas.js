@@ -102,7 +102,7 @@ exports.commands = {
 		}
 		this.sendReplyBox(`${pokeobj.species} in 350 Cup: <br /> ${Object.values(newStats).join('/')}`);
 	},
-	'350cuphelp': ["/350 OR /350cup <pokemon> - Shows the base stats that a Pokemon would have in 350 cup."],'350': 'cup350',
+	'350cuphelp': ["/350 OR /350cup <pokemon> - Shows the base stats that a Pokemon would have in 350 cup."],
 
 	ts: 'tiershift',
 	tiershift: function (target, room, user) {
