@@ -134,7 +134,7 @@ exports.BattleFormats = {
 				totalEV += set.evs[k];
 			}
 			// In gen 6, it is impossible to battle other players with pokemon that break the EV limit
-			if (totalEV > 510 && this.gen >= 6) {
+			if (totalEV > 510 && this.gen === 6) {
 				problems.push((set.name || set.species) + " has more than 510 total EVs.");
 			}
 
