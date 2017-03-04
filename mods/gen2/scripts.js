@@ -175,6 +175,10 @@ exports.BattleScripts = {
 			}
 
 			if (moveData.boosts && !target.fainted) {
+				if (pokemon.volatiles['lockon'] && target === pokemon.volatiles['lockon'].source && target.isSemiInvulnerable() && !isSelf) {
+					if (!isSecondary) this.add('-fail', target);
+					return false;
+				}
 				hitResult = this.boost(moveData.boosts, target, pokemon, move);
 				didSomething = didSomething || hitResult;
 			}
