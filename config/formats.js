@@ -77,9 +77,20 @@ exports.Formats = [
 		],
 
 		mod: 'gen7',
+		searchShow: false,
 		maxLevel: 5,
 		ruleset: ['Pokemon', 'Standard', 'Swagger Clause', 'Team Preview', 'Little Cup'],
 		banlist: ['Cutiefly', 'Drifloon', 'Gligar', 'Gothita', 'Meditite', 'Misdreavus', 'Murkrow', 'Porygon', 'Scyther', 'Sneasel', 'Swirlix', 'Tangela', 'Yanma', 'Eevium Z', 'Dragon Rage', 'Sonic Boom'],
+	},
+	{
+		name: "[Gen 7] LC (suspect test)",
+		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3597499/\">LC Suspect Discussion</a>"],
+
+		mod: 'gen7',
+		challengeShow: false,
+		maxLevel: 5,
+		ruleset: ['[Gen 7] LC'],
+		banlist: [],
 	},
 	{
 		name: "[Gen 7] Anything Goes",
@@ -285,7 +296,7 @@ exports.Formats = [
 		mod: 'automagic',
 		searchShow: false,
 		ruleset: ['[Gen 7] OU'],
-		banlist: [],
+		banlist: ["King's Rock", 'Razor Fang'],
 		onAfterSecondaryEffect: function (target, source, move) {
 			let moreSetup = ['bellydrum'];
 			if (!source.types.includes("Ghost")) moreSetup.push("curse");
@@ -293,7 +304,6 @@ exports.Formats = [
 				let move = this.getMove(curmove.id);
 				if (moreSetup.includes(move.id) || (move.category === "Status" && move.boosts && move.target === "self")) {
 					this.useMove(move, source);
-					curmove.pp = target.hasAbility("pressure") ? (curmove.pp - 2) : (curmove.pp - 1);
 				}
 			});
 		},
@@ -301,9 +311,8 @@ exports.Formats = [
 			if (move.id !== "genesissupernova") return;
 			source.baseMoveset.forEach(curmove => {
 				let move = this.getMove(curmove.id);
-				if ((move.id === 'bellydrum' || (move.category === "Status" && move.boosts && move.target === "self")) && this.terrain === "psychicterrain") {// This is so that its confirmed that it successfully set PTerrain
+				if ((move.id === 'bellydrum' || (move.category === "Status" && move.boosts && move.target === "self")) && this.terrain === "psychicterrain") { // Confirm that it successfully set Psychic Terrain
 					this.useMove(move, source);
-					curmove.pp = target.hasAbility("pressure") ? (curmove.pp - 2) : (curmove.pp - 1);
 				}
 			});
 		},
@@ -712,15 +721,8 @@ exports.Formats = [
 		name: "Inverse Battle",
 
 		searchShow: false,
-		ruleset: ['Pokemon', 'Endless Battle Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod'],
+		ruleset: ['Pokemon', 'Inverse Clause', 'Endless Battle Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod'],
 		banlist: ['Illegal', 'Unreleased'],
-		onNegateImmunity: false,
-		onEffectiveness: function (typeMod, target, type, move) {
-			// The effectiveness of Freeze Dry on Water isn't reverted
-			if (move && move.id === 'freezedry' && type === 'Water') return;
-			if (move && !this.getImmunity(move, type)) return 1;
-			return -typeMod;
-		},
 	},
 	{
 		name: "[Gen 6] Random Battle",
