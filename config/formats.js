@@ -298,7 +298,7 @@ exports.Formats = [
 		ruleset: ['[Gen 7] OU'],
 		banlist: ["King's Rock", 'Razor Fang'],
 		onAfterSecondaryEffect: function (target, source, move) {
-			let moreSetup = ['bellydrum'];
+			let moreSetup = ['acupressure', 'bellydrum', 'stockpile'];
 			if (!source.types.includes("Ghost")) moreSetup.push("curse");
 			source.baseMoveset.forEach(curmove => {
 				let move = this.getMove(curmove.id);
