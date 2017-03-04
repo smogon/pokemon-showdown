@@ -51,7 +51,7 @@ class Room {
 	send(message, errorArgument) {
 		if (errorArgument) throw new Error("Use Room#sendUser");
 		if (this.id !== 'lobby') message = '>' + this.id + '\n' + message;
-		Sockets.channelBroadcast(this.id, message);
+		if (this.userCount) Sockets.channelBroadcast(this.id, message);
 	}
 	sendAuth(message) {
 		for (let i in this.users) {
@@ -604,7 +604,7 @@ class GlobalRoom {
 	send(message, user) {
 		if (user) {
 			user.sendTo(this, message);
-		} else {
+		} else if (this.userCount) {
 			Sockets.channelBroadcast(this.id, message);
 		}
 	}
@@ -990,7 +990,9 @@ class BattleRoom extends Room {
 	update(excludeUser) {
 		if (this.log.length <= this.lastUpdate) return;
 
-		Sockets.subchannelBroadcast(this.id, '>' + this.id + '\n\n' + this.log.slice(this.lastUpdate).join('\n'));
+		if (this.userCount) {
+			Sockets.subchannelBroadcast(this.id, '>' + this.id + '\n\n' + this.log.slice(this.lastUpdate).join('\n'));
+		}
 
 		this.lastUpdate = this.log.length;
 
@@ -1144,13 +1146,12 @@ class BattleRoom extends Room {
 		// a tick is 10 seconds
 
 		let maxTicksLeft = 15; // 2 minutes 30 seconds
-		if (!this.battle.p1 || !this.battle.p2 || !this.battle.p1.active || !this.battle.p2.active) {
-			// if a player has left, don't wait longer than 6 ticks (1 minute)
-			maxTicksLeft = 6;
-		}
 		if (!this.rated && !this.tour) maxTicksLeft = 30;
 
 		this.sideTurnTicks = [maxTicksLeft, maxTicksLeft];
+		// if a player has left, don't wait longer than 6 ticks (1 minute)
+		if (!this.battle.p1 || !this.battle.p1.active) this.sideTurnTicks[0] = 6;
+		if (!this.battle.p2 || !this.battle.p2.active) this.sideTurnTicks[1] = 6;
 
 		let inactiveSide = this.getInactiveSide();
 		if (inactiveSide < 0) {

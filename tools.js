@@ -49,6 +49,11 @@ if (!Object.values) {
 		for (let k in object) values.push(object[k]);
 		return values;
 	};
+	Object.entries = function (object) {
+		let entries = [];
+		for (let k in object) entries.push([k, object[k]]);
+		return entries;
+	};
 }
 
 // shim padStart
@@ -1148,7 +1153,7 @@ class BattleDex {
 				if (i !== j) misc = buf.substring(i, j).split(',', 3);
 			}
 			if (misc) {
-				set.happiness = Number(misc[0]);
+				set.happiness = (misc[0] ? Number(misc[0]) : 255);
 				set.hpType = misc[1];
 				set.pokeball = misc[2];
 			}

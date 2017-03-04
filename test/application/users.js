@@ -31,24 +31,19 @@ describe('Users features', function () {
 			describe('#onDisconnect', function () {
 				beforeEach(function () {
 					this.connection = new Connection('127.0.0.1');
-					this.connection.user = new User(this.connection);
-					this.connection.user.name = 'Morfent';
-					this.connection.user.userid = 'morfent';
-				});
-
-				afterEach(function () {
-					this.connection.destroy();
 				});
 
 				it('should remove the connection from Users.connections', function () {
-					let connectionid = Users.connections.id;
+					let connectionid = this.connection.id;
 					this.connection.destroy();
 					assert.strictEqual(Users.connections.has(connectionid), false);
 				});
 
 				it('should destroy any user on the connection as well', function () {
-					let userid = this.connection.user.userid;
-					this.connection.destroy();
+					let user = new User(this.connection);
+					let {userid} = user;
+					user.disconnectAll();
+					user.destroy();
 					assert.strictEqual(Users.users.has(userid), false);
 				});
 			});

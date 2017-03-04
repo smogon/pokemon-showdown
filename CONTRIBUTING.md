@@ -11,7 +11,7 @@ License
 
 Your submitted code should be MIT licensed (for simplicity, it should be MIT licensed even if you're submitting client code). The first time you make a pull request, we'll ask you to explicitly state that you agree to MIT license it, just to be safe.
 
-Even if we forget, we'll take the fact that your pull request contains a LICENSE file that says "MIT licensed" as evidence that your submitted code is MIT licensed.
+Even if we forget, we'll take the fact that your pull request contains a LICENSE file that says "MIT licensed" as evidence that your submitted code is MIT licensed. GitHub's ToS also makes you use the license when you submit a pull request.
 
 
 Commit standards
@@ -49,17 +49,17 @@ Your commit summary should make it clear what part of the code you're talking ab
 - BAD: `Ban Genesect`
 - GOOD: `Monotype: Ban Genesect` (notice the uppercase "B")
 
-OPTIONAL: If you make commits to fix commits in your pull request, you can squash/amend them into one commit.
+OPTIONAL: If you make commits to fix commits in your pull request, you can squash/amend them into one commit. This is no longer required now that GitHub supports squash-merging.
 
 - BAD: `Add /lock`, `Fix crash in /lock`, `Fix another crash in /lock` (if these are the same pullreq, they should be the same commit)
 - GOOD: `Add /lock`
 - GOOD: `Fix crash in /lock`
 
-You may have more than one commit, as long as they make sense as separate commits, and none of your commits are just fixing an earlier commit in your pull request.
+If you want to have more than one commit in Git master's history after merge (i.e. you want your pull request to be rebase-merged instead of squash-merged), your commits need to all make sense as separate commits, and none of your commits should be just fixing an earlier commit in your pull request (those need to be squashed/amended).
 
 Here is a guide for squashing, if you need help with that: https://redew.github.io/rebaseguide/
 
-If while rebasing, you somehow unintentionally break your pull request, do not close it and make a new one to replace it. Instead, you can ask in the Development chatroom for help on trying to fix it; it can almost always be fixed. 
+If while rebasing, you somehow unintentionally break your pull request, do not close it and make a new one to replace it. Instead, you can ask in the Development chatroom for help on trying to fix it; it can almost always be fixed.
 
 
 Code standards
@@ -79,7 +79,7 @@ The codebase currently uses a mix of `"` and `'` and `` ` `` for strings.
 
 Our current convention is to use `'` for IDs; `"` for names (i.e. usernames, move names, etc), English text in object literals such as in `data/`, and help entries of chat commands; and `` ` `` for code (i.e. protocol code and HTML) and English text outside of object literals (yes, including strings that don't need interpolation). As far as I know, we don't use strings for anything else, but if you need to use strings in a way that doesn't conform the the above three, ask Zarel in the Development chatroom to decide (and default to `` ` `` in lieu of a decision).
 
-Unfortunately, since this is not a convention the linter can text for (and also because our older string standards predate PS), a lot of existing code is wrong on this, so you can't look at surrounding code to get an idea of what the convention should be. Refer to the above paragraph as the definitive rule.
+Unfortunately, since this is not a convention the linter can test for (and also because our older string standards predate PS), a lot of existing code is wrong on this, so you can't look at surrounding code to get an idea of what the convention should be. Refer to the above paragraph as the definitive rule.
 
 ES5 and ES6
 ------------------------------------------------------------------------
@@ -108,10 +108,10 @@ In general, use modern features only if they're supported in Node 6 and reasonab
 
 - **Function#bind: ALMOST NEVER** - Horrible performance. Use arrow functions. Basically, never use outside of the (deprecated) trick we use in battle-engine for split logs.
 
-- **classes and subclasses: ALWAYS** - Supported in Node 4+ and good performance in Node 6+, please start refactoring existing code over.
+- **classes and subclasses: ALWAYS** - Supported in Node 4+ and good performance in Node 6+; please start refactoring existing code over.
 
 - **String#includes: ALWAYS** - Supported in Node 4+, poor performance, but not really noticeable and worth the better readability.
 
-- **Template strings: ALWAYS** - Supported in Node 4+ and good performance in Node 6+, please start refactoring existing code over, but be careful since code standards having settled for template strings yet. Look at existing uses for guidance.
+- **Template strings: ALWAYS** - Supported in Node 4+ and good performance in Node 6+; please start refactoring existing code over, but be careful not to use them for IDs (follow the String standards). Look at existing uses for guidance.
 
 Take "good performance" to mean "approximately on par with ES3" and "great performance" to mean "better than ES3".

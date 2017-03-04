@@ -1060,23 +1060,27 @@ exports.commands = {
 	'!groups': true,
 	groups: function (target, room, user) {
 		if (!this.runBroadcast()) return;
+		const showRoom = (target !== 'global');
+		const showGlobal = (target !== 'room' && target !== 'rooms');
 		this.sendReplyBox(
-			"<strong>Room Rank</strong><br />" +
-			"+ <strong>Voice</strong> - They can use ! commands like !groups, and talk during moderated chat<br />" +
-			"% <strong>Driver</strong> - The above, and they can mute and warn<br />" +
-			"@ <strong>Moderator</strong> - The above, and they can room ban users<br />" +
-			"* <strong>Bot</strong> - Like Moderator, but makes it clear that this user is a bot<br />" +
-			"# <strong>Room Owner</strong> - They are leaders of the room and can almost totally control it<br /><br />" +
-			"<strong>Global Rank</strong><br />" +
-			"+ <strong>Global Voice</strong> - They can use ! commands like !groups, and talk during moderated chat<br />" +
-			"% <strong>Global Driver</strong> - The above, and they can also lock users and check for alts<br />" +
-			"@ <strong>Global Moderator</strong> - The above, and they can globally ban users<br />" +
-			"* <strong>Global Bot</strong> - Like Moderator, but makes it clear that this user is a bot<br />" +
-			"&amp; <strong>Global Leader</strong> - The above, and they can promote to global moderator and force ties<br />" +
-			"~ <strong>Global Administrator</strong> -  They can do anything, like change what this message says"
+			(showRoom ? `<strong>Room ranks</strong><br />` +
+			`+ <strong>Voice</strong> - They can use ! commands like !groups, and talk during moderated chat<br />` +
+			`% <strong>Driver</strong> - The above, and they can mute and warn<br />` +
+			`@ <strong>Moderator</strong> - The above, and they can room ban users<br />` +
+			`* <strong>Bot</strong> - Like Moderator, but makes it clear that this user is a bot<br />` +
+			`# <strong>Room Owner</strong> - They are leaders of the room and can almost totally control it<br />` : ``) +
+			(showRoom && showGlobal ? `<br />` : ``) +
+			(showGlobal ? `<strong>Global ranks</strong><br />` +
+			`+ <strong>Global Voice</strong> - They can use ! commands like !groups, and talk during moderated chat<br />` +
+			`% <strong>Global Driver</strong> - The above, and they can also lock users and check for alts<br />` +
+			`@ <strong>Global Moderator</strong> - The above, and they can globally ban users<br />` +
+			`* <strong>Global Bot</strong> - Like Moderator, but makes it clear that this user is a bot<br />` +
+			`&amp; <strong>Global Leader</strong> - The above, and they can promote to global moderator and force ties<br />` +
+			`~ <strong>Global Administrator</strong> -  They can do anything, like change what this message says` : ``)
 		);
 	},
 	groupshelp: ["/groups - Explains what the symbols (like % and @) before people's names mean.",
+		"/groups [global|room] - Explains only global or room symbols.",
 		"!groups - Shows everyone that information. Requires: + % @ * # & ~"],
 
 	'!punishments': true,
@@ -1554,7 +1558,7 @@ exports.commands = {
 				this.errorReply("CAP is not currently supported by Smogon Strategic Pokedex.");
 			}
 
-			if (pokemon.battleOnly || pokemon.baseSpecies === 'Keldeo' || pokemon.baseSpecies === 'Genesect') {
+			if ((pokemon.battleOnly && pokemon.baseSpecies !== 'Greninja') || pokemon.baseSpecies === 'Keldeo' || pokemon.baseSpecies === 'Genesect') {
 				pokemon = Tools.getTemplate(pokemon.baseSpecies);
 			}
 

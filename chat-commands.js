@@ -473,20 +473,18 @@ exports.commands = {
 		if (!this.can('addhtml', null, room)) return false;
 		if (!target) return this.parse("/help pminfobox");
 
-		target = this.canHTML(target);
+		target = this.canHTML(this.splitTarget(target));
 		if (!target) return;
-
-		target = this.splitTarget(target);
 		let targetUser = this.targetUser;
 
-		if (!targetUser || !targetUser.connected) return this.errorReply("User " + targetUser + " is not currently online.");
+		if (!targetUser || !targetUser.connected) return this.errorReply(`User ${this.targetUsername} is not currently online.`);
 		if (!(targetUser in room.users) && !user.can('addhtml')) return this.errorReply("You do not have permission to use this command to users who are not in this room.");
-		if (targetUser.ignorePMs) return this.errorReply("This user is currently ignoring PMs.");
-		if (targetUser.locked) return this.errorReply("This user is currently locked, so you cannot send them a pminfobox.");
+		if (targetUser.ignorePMs && targetUser.ignorePMs !== user.group && !user.can('lock')) return this.errorReply("This user is currently ignoring PMs.");
+		if (targetUser.locked && !user.can('lock')) return this.errorReply("This user is currently locked, so you cannot send them a pminfobox.");
 
 		// Apply the infobox to the message
-		target = '/raw <div class="infobox">' + target + '</div>';
-		let message = '|pm|' + user.getIdentity() + '|' + targetUser.getIdentity() + '|' + target;
+		target = `/raw <div class="infobox">${target}</div>`;
+		let message = `|pm|${user.getIdentity()}|${targetUser.getIdentity()}|${target}`;
 
 		user.send(message);
 		if (targetUser !== user) targetUser.send(message);
@@ -817,8 +815,8 @@ exports.commands = {
 		}
 	},
 	privateroomhelp: ["/secretroom - Makes a room secret. Secret rooms are visible to & and up. Requires: & ~",
-		"/hiddenroom [on/off] - Makes a room hidden. Hidden rooms are visible to % and up, and inherit global ranks. Requires: \u2605 & ~",
-		"/publicroom - Makes a room public. Requires: \u2605 & ~"],
+		"/hiddenroom [on/off] - Makes a room hidden. Hidden rooms are visible to % and up, and inherit global ranks. Requires: \u2606 & ~",
+		"/publicroom - Makes a room public. Requires: \u2606 & ~"],
 
 	officialchatroom: 'officialroom',
 	officialroom: function (target, room, user) {
@@ -2323,8 +2321,8 @@ exports.commands = {
 	showblacklishelp: ["/showblacklist OR /showbl - show a list of blacklisted users in the room"],
 
 	markshared: function (target, room, user) {
+		if (!target) return this.parse('/help markshared');
 		if (!this.can('ban')) return false;
-		if (!target) return this.errorReply("No IP entered.");
 		let [ip, note] = this.splitOne(target);
 		if (!/^[0-9.*]+$/.test(ip)) return this.errorReply("Please enter a valid IP address.");
 
@@ -2337,8 +2335,8 @@ exports.commands = {
 	marksharedhelp: ["/markshared [ip] - Marks an IP address as shared. Requires @, &, ~"],
 
 	unmarkshared: function (target, room, user) {
+		if (!target) return this.parse('/help unmarkshared');
 		if (!this.can('ban')) return false;
-		if (!target) return this.errorReply("No IP entered.");
 		if (!/^[0-9.*]+$/.test(target)) return this.errorReply("Please enter a valid IP address.");
 
 		if (!Punishments.sharedIps.has(target)) return this.errorReply("This IP isn't marked as shared.");
@@ -2595,7 +2593,17 @@ exports.commands = {
 	savelearnsets: function (target, room, user) {
 		if (!this.can('hotpatch')) return false;
 		this.sendReply("saving...");
-		fs.writeFile('data/learnsets.js', 'exports.BattleLearnsets = ' + JSON.stringify(Tools.data.Learnsets) + ";\n", () => {
+		fs.writeFile('data/learnsets.js', `'use strict';\n\nexports.BattleLearnsets = {\n` +
+			Object.entries(Tools.data.Learnsets).map(([k, v]) => (
+				`\t${k}: {learnset: {\n` +
+				Object.entries(v.learnset).sort(
+					(a, b) => (a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0)
+				).map(([k, v]) => (
+					`\t\t${k}: ["` + v.join(`", "`) + `"],\n`
+				)).join('') +
+				`\t}},\n`
+			)).join('') +
+		`};\n`, () => {
 			this.sendReply("learnsets.js saved.");
 		});
 	},
@@ -3105,7 +3113,7 @@ exports.commands = {
 		}
 		if (!this.can('joinbattle', null, room)) return;
 
-		room.auth[targetUser.userid] = '\u2605';
+		room.auth[targetUser.userid] = '\u2606';
 		this.addModCommand("" + name + " was promoted to Player by " + user.name + ".");
 	},
 	addplayerhelp: ["/addplayer [username] - Allow the specified user to join the battle as a player."],

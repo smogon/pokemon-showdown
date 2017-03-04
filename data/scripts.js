@@ -1,11 +1,22 @@
 'use strict';
 
-const {PRNG} = require('./../prng');
+const PRNG = require('./../prng');
 const CHOOSABLE_TARGETS = new Set(['normal', 'any', 'adjacentAlly', 'adjacentAllyOrSelf', 'adjacentFoe']);
 
 exports.BattleScripts = {
 	gen: 7,
-	runMove: function (move, pokemon, targetLoc, sourceEffect, zMove) {
+	/**
+	 * runMove is the "outside" move caller. It handles deducting PP,
+	 * flinching, full paralysis, etc. All the stuff up to and including
+	 * the "POKEMON used MOVE" message.
+	 *
+	 * For details of the difference between runMove and useMove, see
+	 * useMove's info.
+	 *
+	 * externalMove skips LockMove and PP deduction, mostly for use by
+	 * Dancer.
+	 */
+	runMove: function (move, pokemon, targetLoc, sourceEffect, zMove, externalMove) {
 		let target = this.getTarget(pokemon, zMove || move, targetLoc);
 		if (!sourceEffect && toId(move) !== 'struggle' && !zMove) {
 			let changedMove = this.runEvent('OverrideDecision', pokemon, target, move);
@@ -20,6 +31,7 @@ exports.BattleScripts = {
 
 		// copy the priority for Quick Guard
 		if (zMove) move.priority = baseMove.priority;
+		move.isExternal = externalMove;
 
 		this.setActiveMove(move, pokemon, target);
 
@@ -45,20 +57,27 @@ exports.BattleScripts = {
 			}
 		}
 		pokemon.lastDamage = 0;
-		let lockedMove = this.runEvent('LockMove', pokemon);
-		if (lockedMove === true) lockedMove = false;
-		if (!lockedMove) {
-			if (!pokemon.deductPP(baseMove, null, target) && (move.id !== 'struggle')) {
-				this.add('cant', pokemon, 'nopp', move);
-				let gameConsole = [null, 'Game Boy', 'Game Boy', 'Game Boy Advance', 'DS', 'DS'][this.gen] || '3DS';
-				this.add('-hint', "This is not a bug, this is really how it works on the " + gameConsole + "; try it yourself if you don't believe us.");
-				this.clearActiveMove(true);
-				return;
+		let lockedMove;
+		if (!externalMove) {
+			lockedMove = this.runEvent('LockMove', pokemon);
+			if (lockedMove === true) lockedMove = false;
+			if (!lockedMove) {
+				if (!pokemon.deductPP(baseMove, null, target) && (move.id !== 'struggle')) {
+					this.add('cant', pokemon, 'nopp', move);
+					let gameConsole = [null, 'Game Boy', 'Game Boy', 'Game Boy Advance', 'DS', 'DS'][this.gen] || '3DS';
+					this.add('-hint', "This is not a bug, this is really how it works on the " + gameConsole + "; try it yourself if you don't believe us.");
+					this.clearActiveMove(true);
+					return;
+				}
+			} else {
+				sourceEffect = this.getEffect('lockedmove');
 			}
-		} else {
-			sourceEffect = this.getEffect('lockedmove');
+			pokemon.moveUsed(move, targetLoc);
 		}
-		pokemon.moveUsed(move, targetLoc);
+
+		// Dancer Petal Dance hack
+		// TODO: implement properly
+		let noLock = externalMove && !pokemon.volatiles.lockedmove;
 
 		if (zMove) {
 			this.add('-zpower', pokemon);
@@ -67,7 +86,18 @@ exports.BattleScripts = {
 		this.useMove(baseMove, pokemon, target, sourceEffect, zMove);
 		this.singleEvent('AfterMove', move, null, pokemon, target, move);
 		this.runEvent('AfterMove', pokemon, target, move);
+		if (noLock && pokemon.volatiles.lockedmove) delete pokemon.volatiles.lockedmove;
 	},
+	/**
+	 * useMove is the "inside" move caller. It handles effects of the
+	 * move itself, but not the idea of using the move.
+	 *
+	 * Most caller effects, like Sleep Talk, Nature Power, Magic Bounce,
+	 * etc use useMove.
+	 *
+	 * The only ones that use runMove are Instruct, Pursuit, and
+	 * Dancer.
+	 */
 	useMove: function (move, pokemon, target, sourceEffect, zMove) {
 		if (!sourceEffect && this.effect.id) sourceEffect = this.effect;
 		if (zMove || (sourceEffect && sourceEffect.isZ)) {
@@ -115,7 +145,7 @@ exports.BattleScripts = {
 		let movename = move.name;
 		if (move.id === 'hiddenpower') movename = 'Hidden Power';
 		if (sourceEffect) attrs += '|[from]' + this.getEffect(sourceEffect);
-		if (move.isZ === true) {
+		if (zMove && move.isZ === true) {
 			attrs = '|[anim]' + movename + attrs;
 			movename = 'Z-' + movename;
 		}
@@ -745,7 +775,7 @@ exports.BattleScripts = {
 			if (move.type === item.zMoveType) {
 				if (move.category === "Status") {
 					return move.name;
-				} else {
+				} else if (move.zMovePower) {
 					return this.zMoveTable[move.type];
 				}
 			}
@@ -902,12 +932,15 @@ exports.BattleScripts = {
 		const format = this.getFormat();
 		const teamGenerator = typeof format.team === 'string' && format.team.startsWith('random') ? format.team + 'Team' : '';
 		if (!teamGenerator && team) return team;
-		// Reinitialize the RNG seed to create random teams.
-		const originalPrng = this.prng.clone();
+
+		// Teams are generated each one with a shiny new PRNG to prevent
+		// information leaks that would empower brute-force attacks.
+		const originalPrng = this.prng;
 		this.prng = new PRNG();
+		this.prngSeed.push(...this.prng.startingSeed);
 		team = this[teamGenerator || 'randomTeam'](side);
-		// Restore the default seed
-		this.seed = originalPrng;
+		this.prng = originalPrng;
+
 		return team;
 	},
 	randomCCTeam: function (side) {
@@ -1393,7 +1426,7 @@ exports.BattleScripts = {
 			dracometeor:1, leafstorm:1, overheat:1,
 		};
 		let counterAbilities = {
-			'Adaptability':1, 'Contrary':1, 'Hustle':1, 'Iron Fist':1, 'Sheer Force':1, 'Skill Link':1,
+			'Adaptability':1, 'Contrary':1, 'Hustle':1, 'Iron Fist':1, 'Skill Link':1,
 		};
 		let ateAbilities = {
 			'Aerilate':1, 'Pixilate':1, 'Refrigerate':1,
@@ -1946,7 +1979,7 @@ exports.BattleScripts = {
 
 			let rejectAbility = false;
 			if (ability in counterAbilities) {
-				// Adaptability, Contrary, Hustle, Iron Fist, Sheer Force, Skill Link
+				// Adaptability, Contrary, Hustle, Iron Fist, Skill Link
 				rejectAbility = !counter[toId(ability)];
 			} else if (ability in ateAbilities) {
 				rejectAbility = !counter['Normal'];
@@ -1980,6 +2013,8 @@ exports.BattleScripts = {
 				rejectAbility = !teamDetails['sand'];
 			} else if (ability === 'Serene Grace') {
 				rejectAbility = !counter['serenegrace'] || template.id === 'chansey' || template.id === 'blissey';
+			} else if (ability === 'Sheer Force') {
+				rejectAbility = !counter['sheerforce'] || (abilities.includes('Iron Fist') && counter['sheerforce'] < 2 && counter['ironfist'] > counter['sheerforce']);
 			} else if (ability === 'Simple') {
 				rejectAbility = !counter.setupType && !hasMove['cosmicpower'] && !hasMove['flamecharge'];
 			} else if (ability === 'Snow Cloak') {
@@ -2245,18 +2280,15 @@ exports.BattleScripts = {
 			AG: 71,
 		};
 		let customScale = {
-			// Between OU and Uber
-			// Blaziken: 74, 'Blaziken-Mega': 74, 'Lucario-Mega': 74,
-
-			// Banned Ability
-			// Gothitelle: 74, Wobbuffet: 74,
+			// Banned Abilities
+			Gothitelle: 76, Politoed: 76, Wobbuffet: 76,
 
 			// Holistic judgement
 			Unown: 100,
 		};
 		let tier = template.tier;
-		if (tier.includes('Unreleased') && template.battleOnly) {
-			tier = baseTemplate.tier;
+		if (tier.includes('Unreleased') && baseTemplate.tier === 'Uber') {
+			tier = 'Uber';
 		}
 		if (tier.charAt(0) === '(') {
 			tier = tier.slice(1, -1);
@@ -2264,6 +2296,9 @@ exports.BattleScripts = {
 		let level = levelScale[tier] || 75;
 		if (customScale[template.name]) level = customScale[template.name];
 
+		// Custom level based on moveset
+		if (ability === 'Power Construct') level = 73;
+		if (hasMove['batonpass'] && level < 75) level = 75;
 		// if (template.name === 'Slurpuff' && !counter.setupType) level = 81;
 		// if (template.name === 'Xerneas' && hasMove['geomancy']) level = 71;
 
@@ -3019,7 +3054,7 @@ exports.BattleScripts = {
 			} else if (ability === 'Serene Grace') {
 				rejectAbility = !counter['serenegrace'] || template.id === 'chansey' || template.id === 'blissey';
 			} else if (ability === 'Sheer Force') {
-				rejectAbility = !counter['sheerforce'] || hasMove['fakeout'];
+				rejectAbility = !counter['sheerforce'] || hasMove['fakeout'] || (abilities.includes('Iron Fist') && counter['sheerforce'] < 2 && counter['ironfist'] > counter['sheerforce']);
 			} else if (ability === 'Simple') {
 				rejectAbility = !counter.setupType && !hasMove['cosmicpower'] && !hasMove['flamecharge'];
 			} else if (ability === 'Snow Cloak') {
@@ -3379,11 +3414,11 @@ exports.BattleScripts = {
 		if (!depth) depth = 0;
 		let forceResult = (depth >= 4);
 
+		// The teams generated depend on the tier choice in such a way that
+		// no exploitable information is leaked from rolling the tier in getTeam(p1).
 		let availableTiers = ['Uber', 'OU', 'UU', 'RU', 'NU', 'PU'];
-		const originalPrng = this.prng.clone();
-		this.prng = originalPrng.clone();
-		const chosenTier = availableTiers[this.random(availableTiers.length)];
-		this.prng = originalPrng;
+		if (!this.factoryTier) this.factoryTier = availableTiers[this.random(availableTiers.length)];
+		const chosenTier = this.factoryTier;
 
 		let pokemon = [];
 

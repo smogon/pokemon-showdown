@@ -1376,7 +1376,7 @@ function runLearn(target, cmd) {
 	let buffer = "In " + formatName + ", ";
 	buffer += "" + template.name + (problem ? " <span class=\"message-learn-cannotlearn\">can't</span> learn " : " <span class=\"message-learn-canlearn\">can</span> learn ") + (targets.length > 2 ? "these moves" : move.name);
 	if (!problem) {
-		let sourceNames = {E:"egg", S:"event", D:"dream world", X:"egg, traded back", Y: "event, traded back"};
+		let sourceNames = {E:"egg", S:"event", D:"dream world", V:"virtual console transfer from gen 1", X:"egg, traded back", Y:"event, traded back"};
 		let sourcesBefore = lsetData.sourcesBefore;
 		if (lsetData.sources || sourcesBefore < gen) buffer += " only when obtained";
 		buffer += " from:<ul class=\"message-learn-list\">";
@@ -1396,6 +1396,7 @@ function runLearn(target, cmd) {
 				let source = sources[i];
 				let hatchAs = ['6E', '7E'].includes(source.substr(0, 2)) ? 'hatched as ' : '';
 				if (source.substr(0, 2) === prevSourceType) {
+					if (!hatchAs && source.length <= 2) continue;
 					if (prevSourceCount < 0) {
 						buffer += ": " + hatchAs + source.substr(2);
 					} else if (all || prevSourceCount < 3) {

@@ -1618,12 +1618,10 @@ exports.BattleFormatsData = {
 	mewtwomegax: {
 		randomBattleMoves: ["bulkup", "drainpunch", "earthquake", "taunt", "stoneedge", "zenheadbutt", "icebeam"],
 		requiredItem: "Mewtwonite X",
-		tier: "Unreleased",
 	},
 	mewtwomegay: {
 		randomBattleMoves: ["psystrike", "aurasphere", "shadowball", "fireblast", "icebeam", "calmmind", "recover", "willowisp", "taunt"],
 		requiredItem: "Mewtwonite Y",
-		tier: "Unreleased",
 	},
 	mew: {
 		randomBattleMoves: ["defog", "roost", "willowisp", "knockoff", "taunt", "icebeam", "earthpower", "aurasphere", "stealthrock", "nastyplot", "psyshock", "batonpass"],
@@ -1842,7 +1840,7 @@ exports.BattleFormatsData = {
 	azumarill: {
 		randomBattleMoves: ["waterfall", "aquajet", "playrough", "superpower", "bellydrum", "knockoff"],
 		randomDoubleBattleMoves: ["waterfall", "aquajet", "playrough", "superpower", "bellydrum", "knockoff", "protect"],
-		tier: "BL",
+		tier: "UU",
 	},
 	bonsly: {
 		randomBattleMoves: ["rockslide", "brickbreak", "doubleedge", "toxic", "stealthrock", "suckerpunch", "explosion"],
@@ -2190,6 +2188,7 @@ exports.BattleFormatsData = {
 		tier: "New",
 	},
 	pokestarsmeargle: {
+		isNonstandard: true,
 		eventPokemon: [
 			{"generation": 5, "level": 60, "gender": "M", "abilities":["owntempo"], "moves":["mindreader", "guillotine", "tailwhip", "gastroacid"]},
 			{"generation": 5, "level": 30, "gender": "M", "abilities":["owntempo"], "moves":["outrage", "magiccoat"]},
@@ -3614,7 +3613,7 @@ exports.BattleFormatsData = {
 	staraptor: {
 		randomBattleMoves: ["bravebird", "closecombat", "uturn", "quickattack", "roost", "doubleedge"],
 		randomDoubleBattleMoves: ["bravebird", "closecombat", "uturn", "quickattack", "doubleedge", "tailwind", "protect"],
-		tier: "UU",
+		tier: "BL",
 	},
 	bidoof: {
 		randomBattleMoves: ["return", "aquatail", "curse", "quickattack", "stealthrock", "superfang"],
@@ -5721,12 +5720,13 @@ exports.BattleFormatsData = {
 		gen: 7,
 		requiredAbility: "Power Construct",
 		battleOnly: true,
+		tier: "Uber",
 	},
 	diancie: {
 		randomBattleMoves: ["reflect", "lightscreen", "stealthrock", "diamondstorm", "moonblast", "hiddenpowerfire"],
 		randomDoubleBattleMoves: ["diamondstorm", "moonblast", "reflect", "lightscreen", "safeguard", "substitute", "calmmind", "psychic", "dazzlinggleam", "protect"],
 		eventPokemon: [
-			{"generation": 6, "level": 50, "moves":["diamondstorm", "reflect", "return", "moonblast"], "pokeball": "cherishball"},
+			{"generation": 6, "level": 50, "perfectIVs": 0, "moves":["diamondstorm", "reflect", "return", "moonblast"], "pokeball": "cherishball"},
 			{"generation": 6, "level": 50, "shiny": true, "moves":["diamondstorm", "moonblast", "reflect", "return"], "pokeball": "cherishball"},
 		],
 		eventOnly: true,
