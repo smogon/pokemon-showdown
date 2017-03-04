@@ -233,7 +233,7 @@ exports.BattleScripts = {
 						}
 					}
 					if (pokemon.hasAbility('sheerforce')) flag = false;
-					if (target.hasAbility('shielddust') && !move.ignoreAbility && !move.secondary.self.boosts) {
+					if (target && target.hasAbility('shielddust') && !move.ignoreAbility && !move.secondary.self.boosts) {
 						flag = false;
 					}
 					if (flag) this.runEvent('AfterSecondaryEffect', target, pokemon, moveData);
