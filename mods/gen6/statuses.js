@@ -35,4 +35,7 @@ exports.BattleStatuses = {
 			return false;
 		},
 	},
+	choicelock: {
+		onBeforeMove: function () {},
+	},
 };
