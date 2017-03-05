@@ -415,11 +415,14 @@ class User {
 	}
 	authAtLeast(minAuth, room) {
 		if (!minAuth || minAuth === ' ') return true;
-		if (minAuth === 'trusted') return this.trusted;
-		if (minAuth === 'autoconfirmed') return this.autoconfirmed;
-		if (!(minAuth in Config.groups)) return true;
-		let auth = (room ? room.getAuth(this) : this.group);
-		if (room && this.can('makeroom')) auth = this.group;
+		if (minAuth === 'trusted' && this.trusted) return true;
+		if (minAuth === 'autoconfirmed' && this.autoconfirmed) return true;
+
+		if (minAuth === 'trusted' || minAuth === 'autoconfirmed') {
+			minAuth = Config.groupsranking[1];
+		}
+		if (!(minAuth in Config.groups)) return false;
+		let auth = (room && !this.can('makeroom') ? room.getAuth(this) : this.group);
 		return auth in Config.groups && Config.groups[auth].rank >= Config.groups[minAuth].rank;
 	}
 	can(permission, target, room) {
