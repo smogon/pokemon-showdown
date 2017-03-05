@@ -549,7 +549,8 @@ class Validator {
 							break;
 						}
 					}
-					let eventProblems = this.validateEvent(set, eventData, eventTemplate, ` to be`, `from its event${eventPokemon.length > 1 ? " #" + eventNum : ""}`);
+					let eventName = eventPokemon.length > 1 ? ` #${eventNum}` : ``;
+					let eventProblems = this.validateEvent(set, eventData, eventTemplate, ` to be`, `from its event${eventName}`);
 					if (eventProblems) problems.push(...eventProblems);
 				}
 			}
@@ -1230,6 +1231,7 @@ class TeamValidatorManager extends ProcessManager {
 			require('./crashlogger')(err, 'A team validation', {
 				format: format,
 				team: team,
+				supplementaryBanlist: supplementaryBanlist,
 			});
 			problems = [`Your team crashed the team validator. We've been automatically notified and will fix this crash, but you should use a different team for now.`];
 		}
