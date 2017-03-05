@@ -1275,8 +1275,8 @@ class BattleRoom extends Room {
 		if (!user) return false;
 		if (this.users[user.userid]) return user;
 
-		if (user.named && !user.locked) {
-			this.add((this.reportJoins ? '|j|' : '|J|') + user.name).update();
+		if (user.named) {
+			this.add((this.reportJoins && !user.locked ? '|j|' : '|J|') + user.name).update();
 		}
 
 		this.users[user.userid] = user;
@@ -1289,7 +1289,7 @@ class BattleRoom extends Room {
 	}
 	onRename(user, oldid, joining) {
 		if (joining) {
-			this.add((this.reportJoins ? '|j|' : '|J|') + user.name);
+			this.add((this.reportJoins && !user.locked ? '|j|' : '|J|') + user.name);
 		}
 		delete this.users[oldid];
 		this.users[user.userid] = user;
@@ -1305,7 +1305,7 @@ class BattleRoom extends Room {
 		}
 		delete this.users[user.userid];
 		this.userCount--;
-		if (!user.locked) this.add((this.reportJoins ? '|l|' : '|L|') + user.name);
+		this.add((this.reportJoins && !user.locked ? '|l|' : '|L|') + user.name);
 
 		if (this.game && this.game.onLeave) {
 			this.game.onLeave(user);
