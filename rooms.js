@@ -159,16 +159,25 @@ class Room {
 		return user.group;
 	}
 	checkModjoin(user) {
-		if (!this.modjoin) return true;
+		if (this.staffRoom && !user.isStaff && (!this.auth || (this.auth[user.userid] || ' ') === ' ')) return false;
 		if (user.userid in this.users) return true;
-		if (user.can('makeroom')) return true;
-		if (this.staffRoom && !user.isStaff) return false;
-		let userGroup = this.getAuth(user);
+		if (!this.modjoin) return true;
+		const userGroup = user.can('makeroom') ? user.group : this.getAuth(user);
+
 		let modjoinGroup = this.modjoin !== true ? this.modjoin : this.modchat;
-		if (Config.groupsranking.indexOf(userGroup) < Config.groupsranking.indexOf(modjoinGroup)) {
-			return false;
+		if (!modjoinGroup) return true;
+
+		if (modjoinGroup === 'trusted') {
+			if (user.trusted) return true;
+			modjoinGroup = Config.groupsranking[1];
 		}
-		return true;
+		if (modjoinGroup === 'autoconfirmed') {
+			if (user.autoconfirmed) return true;
+			modjoinGroup = Config.groupsranking[1];
+		}
+		if (!(userGroup in Config.groups)) return false;
+		if (!(modjoinGroup in Config.groups)) throw new Error(`Invalid modjoin setting in ${this.id}: ${modjoinGroup}`);
+		return Config.groups[userGroup].rank >= Config.groups[modjoinGroup].rank;
 	}
 	mute(user, setTime) {
 		let userid = user.userid;
