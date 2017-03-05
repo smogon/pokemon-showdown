@@ -828,6 +828,13 @@ class User {
 		oldUser.inRooms.clear();
 		oldUser.connections = [];
 
+		if (oldUser.chatQueue) {
+			if (!this.chatQueue) this.chatQueue = [];
+			this.chatQueue.push(...oldUser.chatQueue);
+			oldUser.clearChatQueue();
+			if (!this.chatQueueTimeout) this.startChatQueue();
+		}
+
 		this.s1 = oldUser.s1;
 		this.s2 = oldUser.s2;
 		this.s3 = oldUser.s3;
@@ -1351,7 +1358,7 @@ class User {
 	 * Returns false if the rest of the user's messages should be discarded.
 	 */
 	chat(message, room, connection) {
-		let now = new Date().getTime();
+		let now = Date.now();
 
 		if (message.substr(0, 16) === '/cmd userdetails') {
 			// certain commands are exempt from the queue
@@ -1376,15 +1383,21 @@ class User {
 			}
 		} else if (now < this.lastChatMessage + throttleDelay) {
 			this.chatQueue = [[message, room.id, connection]];
-			this.chatQueueTimeout = setTimeout(
-				() => this.processChatQueue(),
-				throttleDelay - (now - this.lastChatMessage));
+			this.startChatQueue(throttleDelay - (now - this.lastChatMessage));
 		} else {
 			this.lastChatMessage = now;
 			Monitor.activeIp = connection.ip;
 			Chat.parse(message, room, this, connection);
 			Monitor.activeIp = null;
 		}
+	}
+	startChatQueue(delay) {
+		if (delay === undefined) delay = (this.group !== ' ' ? THROTTLE_DELAY / 2 : THROTTLE_DELAY) - (Date.now() - this.lastChatMessage);
+
+		this.chatQueueTimeout = setTimeout(
+			() => this.processChatQueue(),
+			delay
+		);
 	}
 	clearChatQueue() {
 		this.chatQueue = null;
