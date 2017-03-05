@@ -197,7 +197,24 @@ exports.BattleScripts = {
 				if (typeof secondaries[i].chance === 'undefined' || secondaryRoll < secondaries[i].chance) {
 					// mod for automagic start
 					let flag = true;
-					if (moveData.secondary.status) flag = moveData.secondary.status !== target.status;
+					let canSetStatus = function (status, mon, sauce) {
+						if(!!mon.status || !status) return false;
+						let cantStatus = {
+							brn: ['Fire', 'comatose', 'waterveil', 'waterbubble'],
+							frz: ['Ice', 'comatose', 'magmaarmor'],
+							par: ['Electric', 'comatose', 'limber'],
+							psn: tox,
+							slp: ['comatose', 'insomnia', 'vitalspirit'],
+							tox: ['comatose', 'immunity'],
+						};
+						if(mon.hasType(['Poison', 'Steel']) && sauce.hasAbility('corrosion')) return true;
+						if(mon.hasType(cantStatus[status])[1]) return false;
+						if(move.ignoreAbility) return true;
+						if(mon.hasAbility('leafguard') && this.isWeather(['sunnyday', 'desolateland'])) return false;
+						if(mon.hasAbility('shieldsdown') && mon.template.speciesid === 'miniormeteor') return false;
+						if(mon.hasAbility(cantStatus[status])) return false;
+					};
+					if (moveData.secondary.status) flag = canSetStatus(moveData.secondary.status, target, pokemon);
 					if (moveData.secondary.volatileStatus) flag = !(moveData.secondary.volatileStatus in target.volatiles);
 					if (moveData.secondary.volatileStatus === 'flinch') flag = flag && target.activeTurns && !target.moveThisTurn;
 					this.moveHit(target, pokemon, move, secondaries[i], true, isSelf);
@@ -222,13 +239,9 @@ exports.BattleScripts = {
 								flag = false;
 								continue;
 							}
-							if (moveData.secondary.boosts[k] < 0) {
-								for (let j = 0; j < cantLower[k].length; j++) {
-									if (target.hasAbility(cantLower[k][j])) {
-										flag = false;
-										break;
-									}
-								}
+							if (moveData.secondary.boosts[k] < 0 && target.hasAbility(cantLower[k]) && !move.ignoreAbility) {
+								flag = false;
+								break;
 							}
 						}
 					}
