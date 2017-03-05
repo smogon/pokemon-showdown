@@ -232,7 +232,7 @@ exports.BattleScripts = {
 					} else {
 						flag = flag && !(target.hp === undefined || target.hp <= 0);
 					}
-					if (moveData.target === 'Normal' && moveData.secondary.boosts) {
+					if (moveData.target !== 'self' && moveData.secondary.boosts) {
 						let cantLower = {
 							'atk': ['clearbody', 'fullmetalbody', 'hypercutter', 'whitesmoke'],
 							'def': ['bigpecks', 'clearbody', 'fullmetalbody', 'whitesmoke'],
