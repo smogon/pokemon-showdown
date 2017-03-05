@@ -124,8 +124,8 @@ class Validator {
 			}
 			let limit = entry[2];
 			if (count > limit) {
-				let clause = entry[1] ? " by " + entry[1] : '';
-				problems.push("You are limited to " + limit + " of " + entry[0] + clause + ".");
+				let clause = entry[1] ? ` by ${entry[1]}` : ``;
+				problems.push(`You are limited to ${limit} of ${entry[0]}${clause}.`);
 			}
 		}
 
