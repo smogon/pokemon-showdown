@@ -203,11 +203,11 @@ exports.BattleScripts = {
 							brn: ['Fire', 'comatose', 'waterveil', 'waterbubble'],
 							frz: ['Ice', 'comatose', 'magmaarmor'],
 							par: ['Electric', 'comatose', 'limber'],
-							psn: tox,
+							psn: ['comatose', 'immunity'],
 							slp: ['comatose', 'insomnia', 'vitalspirit'],
 							tox: ['comatose', 'immunity'],
 						};
-						if(mon.hasType(['Poison', 'Steel']) && sauce.hasAbility('corrosion')) return true;
+						if(mon.hasType(['Poison', 'Steel']) && sauce.hasAbility('corrosion') && (status === 'psn' || status === 'tox') return true;
 						if(mon.hasType(cantStatus[status])[1]) return false;
 						if(move.ignoreAbility) return true;
 						if(mon.hasAbility('leafguard') && this.isWeather(['sunnyday', 'desolateland'])) return false;
