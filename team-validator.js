@@ -396,10 +396,11 @@ class Validator {
 					problems.push(`${name} has an HP DV of ${hpDV}, but its Atk, Def, Spe, and Spc DVs give it an HP DV of ${expectedHpDV}.`);
 				}
 				if (tools.gen > 1 && !template.gender) {
-					// Gen 2 gender calculation is crazily bad...
-					let genderThreshold = 7;
-					if (template.genderRatio) genderThreshold = template.genderRatio.F * 16;
+					// Gen 2 gender is calculated from the Atk DV.
+					// High Atk DV <-> M. The meaning of "high" depends on the gender ratio.
+					let genderThreshold = template.genderRatio.F * 16;
 					if (genderThreshold === 4) genderThreshold = 5;
+					if (genderThreshold === 8) genderThreshold = 7;
 
 					const expectedGender = (atkDV >= genderThreshold ? 'M' : 'F');
 					if (set.gender && set.gender !== expectedGender) {
@@ -417,7 +418,7 @@ class Validator {
 					}
 				}
 			}
-			if (tools.gen <= 2 || format.id === 'balancedhackmons') {
+			if (tools.gen <= 2 || tools.gen !== 6 && (format.id.endsWith('hackmons') || format.name.includes('BH'))) {
 				if (!set.evs) set.evs = Validator.fillStats(null, 252);
 				let evTotal = (set.evs.hp || 0) + (set.evs.atk || 0) + (set.evs.def || 0) + (set.evs.spa || 0) + (set.evs.spd || 0) + (set.evs.spe || 0);
 				if (evTotal === 508 || evTotal === 510) {
