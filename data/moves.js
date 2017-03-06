@@ -17223,6 +17223,13 @@ exports.BattleMovedex = {
 			onStart: function (target) {
 				this.add('-start', target, 'Throat Chop', '[silent]');
 			},
+			onDisableMove: function (pokemon) {
+				for (let i = 0; i < pokemon.moveset.length; i++) {
+					if (this.getMove(pokemon.moveset[i].id).flags['sound']) {
+						pokemon.disableMove(pokemon.moveset[i].id);
+					}
+				}
+			},
 			onBeforeMovePriority: 6,
 			onBeforeMove: function (pokemon, target, move) {
 				if (move.flags['sound']) {
