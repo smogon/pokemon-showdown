@@ -2143,7 +2143,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's Special Defense by 1 stage. If the user uses an Electric-type attack on the next turn, its power will be doubled.",
-		shortDesc: "Doubles next Electric move and boosts user's Sp. Def by 1.",
+		shortDesc: "Doubles next Electric move's power; boosts user's Sp. Def by 1.",
 		id: "charge",
 		name: "Charge",
 		pp: 20,
