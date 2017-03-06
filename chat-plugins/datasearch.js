@@ -746,6 +746,26 @@ function runMovesearch(target, cmd, canAll, message) {
 			continue;
 		}
 
+		if (target.startsWith('gen')) {
+			let targetInt = parseInt(target.substr(3));
+			if (targetInt && targetInt < 8 && targetInt > 0) {
+				if (searches['gens']) {
+					if (searches['gens'][targetInt]) {
+						if (searches['gens'][targetInt] === isNotSearch) {
+							return {reply: "A search cannot both include and exclude '" + escapeHTML(target) + "'."};
+						} else {
+							return {reply: "The search included '" + escapeHTML(target) + "' more than once."};
+						}
+					} else {
+						return {reply: "A move cannot have multiple gens."};
+					}
+				}
+				searches['gens'] = {};
+				searches['gens'][targetInt] = !isNotSearch;
+				continue;
+			}
+		}
+
 		if (target === 'all') {
 			if (!canAll) return {reply: "A search with the parameter 'all' cannot be broadcast."};
 			showAll = true;
@@ -965,6 +985,17 @@ function runMovesearch(target, cmd, canAll, message) {
 						} else {
 							if (dex[move].secondary && dex[move].secondaries) delete dex[move];
 						}
+					}
+				}
+			}
+			break;
+
+		case 'gens':
+			for (let gen in searches[search]) {
+				let targetGen = parseInt(gen);
+				for (let move in dex) {
+					if ((dex[move].gen === targetGen) !== searches[search][gen]) {
+						delete dex[move];
 					}
 				}
 			}
