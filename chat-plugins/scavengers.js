@@ -149,7 +149,7 @@ exports.commands = {
 		}
 		if (scavengers.participants[user.userid].room >= 3) return this.sendReply('You have finished the current scavenger hunt.');
 		let roomnum = scavengers.participants[user.userid].room;
-		this.sendReply(`You are on hint number ${(roomnum + 1)} : ${scavengers.hints[roomnum]}`);
+		this.sendReply(`You are on hint number ${(roomnum + 1)}: ${scavengers.hints[roomnum]}`);
 	},
 	endhunt: function (target, room, user) {
 		if (room.id !== 'scavengers') return this.errorReply("This command can only be used in the Scavengers room.");
