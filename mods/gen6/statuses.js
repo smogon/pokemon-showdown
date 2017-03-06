@@ -36,6 +36,7 @@ exports.BattleStatuses = {
 		},
 	},
 	choicelock: {
+		inherit: true,
 		onBeforeMove: function () {},
 	},
 };
