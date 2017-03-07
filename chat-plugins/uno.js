@@ -3,21 +3,21 @@
 const maxTime = 30; // seconds
 
 const rgb_Gradients = {
-	"Green": "rgba(0, 122, 0, 1), rgba(0, 122, 0, 0.75)",
-	"Yellow": "rgba(255, 255, 0, 1), rgba(255, 255, 0, 0.75)",
-	"Blue": "rgba(0, 0, 255, 1), rgba(0, 0, 255, 0.75)",
-	"Red": "rgba(255, 0, 0, 1), rgba(255, 0, 0, 0.75)",
-	"Black": "rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.75)",
+	"Green": "rgba(0, 122, 0, 1), rgba(0, 122, 0, 0.65)",
+	"Yellow": "rgba(255, 255, 0, 1), rgba(255, 255, 0, 0.65)",
+	"Blue": "rgba(0, 0, 255, 1), rgba(0, 0, 255, 0.65)",
+	"Red": "rgba(255, 0, 0, 1), rgba(255, 0, 0, 0.65)",
+	"Black": "rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.65)",
 };
 
-const text_shadow = "text-shadow: 1px 1px black, -1px 1px black, -1px -1px black, 1px -1px black, 3px -3px black;";
+const text_shadow = "text-shadow: 1px 1px black, -1px 1px black, -1px -1px black, 3px -3px black;";
 
 function cardHTML(card, fullsize) {
 	let surface = card.value.replace(/[^A-Z0-9\+]/g, "");
 	let background = rgb_Gradients[card.colour];
 	if (surface === "R") surface = '<i class="fa fa-refresh" aria-hidden="true"></i>';
 
-	return `<button class="button" style="font-size: 18px; font-weight: bold; color: white; ${text_shadow} padding-bottom: 152px; text-align: left; height: 180px; width: ${fullsize ? "95" : "46"}px; border-radius: 10px 2px 2px 3px; color: white; background: ${card.colour}; background: -webkit-radial-gradient(${background}); background: -o-radial-gradient(${background}); background: -moz-radial-gradient(${background}); background: radial-gradient(${background});" name=send value="/uno play ${card.name}">${surface}</button>`;
+	return `<button class="button" style="font-size: 18px; font-weight: bold; color: white; ${text_shadow} padding-bottom: 152px; text-align: left; height: 180px; width: ${fullsize ? "95" : "46"}px; border-radius: 10px 2px 2px 3px; color: white; background: ${card.colour}; background: -webkit-linear-gradient(${background}); background: -o-linear-gradient(${background}); background: -moz-linear-gradient(${background}); background: linear-gradient(${background});" name=send value="/uno play ${card.name}">${surface}</button>`;
 }
 
 function createDeck() {
