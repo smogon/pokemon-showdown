@@ -11505,6 +11505,7 @@ exports.BattleMovedex = {
 				this.add('-start', target, 'perish0');
 				target.faint();
 			},
+			onResidualOrder: 20,
 			onResidual: function (pokemon) {
 				let duration = pokemon.volatiles['perishsong'].duration;
 				this.add('-start', pokemon, 'perish' + duration);
