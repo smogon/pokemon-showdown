@@ -230,7 +230,7 @@ exports.BattleScripts = {
 							if (pokemon.boosts[boost] === 6) flag = false;
 						});
 					} else {
-						flag = flag && !(target.hp === undefined || target.hp <= 0);
+						flag = flag && target && !(target.hp === undefined || target.hp <= 0);
 					}
 					if (moveData.target !== 'self' && moveData.secondary.boosts) {
 						let cantLower = {
