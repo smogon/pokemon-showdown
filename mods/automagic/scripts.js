@@ -197,6 +197,7 @@ exports.BattleScripts = {
 				if (typeof secondaries[i].chance === 'undefined' || secondaryRoll < secondaries[i].chance) {
 					// mod for automagic start
 					let flag = true;
+					let subBlocks = !target || (target.volatiles['substitute'] && !move.infiltrates && !moveData.flags['authentic']);
 					let canSetStatus = function (status, target, pokemon) {
 						if (target.status) return false;
 						let cantStatus = {
@@ -221,8 +222,8 @@ exports.BattleScripts = {
 						if (target.hasAbility(cantStatus[status])) return false;
 						return true;
 					};
-					if (moveData.secondary.status) flag = canSetStatus(moveData.secondary.status, target, pokemon);
-					if (moveData.secondary.volatileStatus) flag = !(moveData.secondary.volatileStatus in target.volatiles);
+					if (moveData.secondary.status) flag = !subBlocks && canSetStatus(moveData.secondary.status, target, pokemon);
+					if (moveData.secondary.volatileStatus) flag = !subBlocks && !(moveData.secondary.volatileStatus in target.volatiles);
 					if (moveData.secondary.volatileStatus === 'flinch') flag = flag && target.activeTurns && !target.moveThisTurn;
 					this.moveHit(target, pokemon, move, secondaries[i], true, isSelf);
 					if (moveData.secondary.self && moveData.secondary.self.boosts) {
@@ -232,7 +233,7 @@ exports.BattleScripts = {
 					} else {
 						flag = flag && target && !(target.hp === undefined || target.hp <= 0);
 					}
-					if (moveData.target !== 'self' && moveData.secondary.boosts) {
+					if (moveData.target !== 'self' && moveData.secondary.boosts && !subBlocks) {
 						let cantLower = {
 							'atk': ['clearbody', 'fullmetalbody', 'hypercutter', 'whitesmoke'],
 							'def': ['bigpecks', 'clearbody', 'fullmetalbody', 'whitesmoke'],
