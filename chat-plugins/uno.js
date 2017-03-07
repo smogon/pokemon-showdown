@@ -1,10 +1,23 @@
 'use strict';
 
-const maxTime = 20; // seconds
+const maxTime = 30; // seconds
+
+const rgb_Gradients = {
+	"Green": "rgba(0, 122, 0, 1), rgba(0, 122, 0, 0.75)",
+	"Yellow": "rgba(255, 255, 0, 1), rgba(255, 255, 0, 0.75)",
+	"Blue": "rgba(0, 0, 255, 1), rgba(0, 0, 255, 0.75)",
+	"Red": "rgba(255, 0, 0, 1), rgba(255, 0, 0, 0.75)",
+	"Black": "rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.75)",
+};
+
+const text_shadow = "text-shadow: 1px 1px black, -1px 1px black, -1px -1px black, 1px -1px black, 3px -3px black;";
 
 function cardHTML(card, fullsize) {
 	let surface = card.value.replace(/[^A-Z0-9\+]/g, "");
-	return `<button style="height: 140px; padding-bottom: 120px; text-align: left; font-weight: bold; border: 2px solid rgba(33 , 68 , 72 , 0.59); min-width: ${fullsize ? "80" : "30"}px; border-radius: 10px 2px 2px 3px; color: ${card.colour.charAt(0) === "B" ? "white" : "black"}; background-color: ${card.colour}" name=send value="/uno play ${card.name}">${surface}</button>`;
+	let background = rgb_Gradients[card.colour];
+	if (surface === "R") surface = '<i class="fa fa-refresh" aria-hidden="true"></i>';
+
+	return `<button class="button" style="font-size: 18px; font-weight: bold; color: white; ${text_shadow} padding-bottom: 152px; text-align: left; height: 180px; width: ${fullsize ? "95" : "46"}px; border-radius: 10px 2px 2px 3px; color: white; background: ${card.colour}; background: -webkit-radial-gradient(${background}); background: -o-radial-gradient(${background}); background: -moz-radial-gradient(${background}); background: radial-gradient(${background});" name=send value="/uno play ${card.name}">${surface}</button>`;
 }
 
 function createDeck() {
@@ -214,6 +227,9 @@ class UNOgame extends Rooms.RoomGame {
 		this.topCard = card;
 		player.removeCard(cardName);
 		this.discards.unshift(card);
+
+		player.sendDisplay(); // update display without the card in it for purposes such as choosing colours
+
 		this.sendToRoom(`|raw|${Chat.escapeHTML(player.name)} has played a <span style="color: ${card.colour}">${card.name}</span>.`);
 
 		// handle hand size
@@ -387,17 +403,17 @@ class UNOgamePlayer extends Rooms.RoomGamePlayer {
 	sendDisplay() {
 		let hand = this.buildHand().join("");
 		let players = `<p><strong>Players (${this.game.playerCount}):</strong></p>` + this.game.getPlayers(true).join("<br />");
-		let draw = "<button style=\"border: 2px solid rgba(0 , 0 , 0 , 0.59); background-color: skyblue; border-radius: 8px; padding: 5px; font-weight: bold; width: 100%\" name=send value=\"/uno draw\">Draw a card!</button>";
-		let pass = "<button style=\"border: 2px solid rgba(0 , 0 , 0 , 0.59); background-color: pink; border-radius: 8px; padding: 5px; font-weight: bold; width: 100%\" name=send value=\"/uno pass\">Pass!</button>";
+		let draw = "<button class=\"button\" style=\"width: 30%; background: rgba(0, 0, 255, 0.05);\" name=send value=\"/uno draw\">Draw a card!</button>";
+		let pass = "<button class=\"button\" style=\" width: 30%; background: rgba(255, 0, 0, 0.05);\" name=send value=\"/uno pass\">Pass!</button>";
 
 		let top = `<strong>Top Card: <span style="color: ${this.game.topCard.colour}">${this.game.topCard.name}</span></strong>`;
 
 		// clear previous display and show new display
 		this.sendRoom("|uhtmlchange|uno-hand|");
 		this.sendRoom(
-			`|uhtml|uno-hand|<table style="width: 100%; table-layout: fixed; border: 1px solid skyblue; border-radius: 3px;"><tr><td colspan=4 rowspan=2 style="padding: 5px;"><div style="overflow-x: auto; white-space: nowrap; width: 100%;">${hand}</div></td>${this.game.currentPlayer === this.userid ? `<td colspan=2 style="padding: 5px 5px 0 5px;">${top}</td></tr>` : ""}` +
-			`<tr><td colspan=2 style="vertical-align: top; padding: 0px 5px 5px 5px;"><div style="overflow-y: scroll;">${players}</div></td></tr>` +
-			`${this.game.currentPlayer === this.userid ? `<tr><td colspan=3 style="padding: 5px 2.5px 5px 5px;">${draw}</td><td colspan=3 style="padding: 5px 5px 5px 2.5px;">${pass}</td></tr>` : ""}</table>`
+			`|uhtml|uno-hand|<div style="border: 1px solid skyblue; padding: 0 0 5px 0;"><table style="width: 100%; table-layout: fixed; border-radius: 3px;"><tr><td colspan=4 rowspan=2 style="padding: 5px;"><div style="overflow-x: auto; white-space: nowrap; width: 100%;">${hand}</div></td>${this.game.currentPlayer === this.userid ? `<td colspan=2 style="padding: 5px 5px 0 5px;">${top}</td></tr>` : ""}` +
+			`<tr><td colspan=2 style="vertical-align: top; padding: 0px 5px 5px 5px;"><div style="overflow-y: scroll;">${players}</div></td></tr></table>` +
+			`${this.game.currentPlayer === this.userid ? `<div style="text-align: center">${draw}<span style="padding: 15px"></span>${pass}</div>` : ""}</div>`
 		);
 	}
 }
