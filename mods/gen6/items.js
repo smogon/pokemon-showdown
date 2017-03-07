@@ -40,10 +40,6 @@ exports.BattleItems = {
 		inherit: true,
 		isUnreleased: false,
 	},
-	beedrillite: {
-		inherit: true,
-		isUnreleased: false,
-	},
 	belueberry: {
 		inherit: true,
 		isUnreleased: false,
@@ -177,10 +173,6 @@ exports.BattleItems = {
 		isUnreleased: false,
 	},
 	manectite: {
-		inherit: true,
-		isUnreleased: false,
-	},
-	mawilite: {
 		inherit: true,
 		isUnreleased: false,
 	},
