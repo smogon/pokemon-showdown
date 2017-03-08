@@ -10,7 +10,7 @@ const rgb_Gradients = {
 	"Black": "rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.65)",
 };
 
-const text_shadow = "text-shadow: 1px 0px black, -1px 0px black, 0px -1px black, 0px 1px black, 3px -3px black;";
+const text_shadow = "text-shadow: 1px 0px black, -1px 0px black, 0px -1px black, 0px 1px black, 2px -2px black;";
 
 function cardHTML(card, fullsize) {
 	let surface = card.value.replace(/[^A-Z0-9\+]/g, "");
