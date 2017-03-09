@@ -3,11 +3,11 @@
 const maxTime = 30; // seconds
 
 const rgb_Gradients = {
-	"Green": "rgba(0, 122, 0, 1), rgba(0, 122, 0, 0.65)",
-	"Yellow": "rgba(255, 255, 0, 1), rgba(255, 255, 0, 0.65)",
-	"Blue": "rgba(0, 0, 255, 1), rgba(0, 0, 255, 0.65)",
-	"Red": "rgba(255, 0, 0, 1), rgba(255, 0, 0, 0.65)",
-	"Black": "rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.65)",
+	"Green": "rgba(0, 122, 0, 1), rgba(0, 175, 0, 0.8)",
+	"Yellow": "rgba(255, 255, 0, 1), rgba(255, 255, 125, 0.8)",
+	"Blue": "rgba(0, 0, 255, 1), rgba(125, 125, 255, 0.8)",
+	"Red": "rgba(255, 0, 0, 1), rgba(255, 125, 125, 0.8)",
+	"Black": "rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.55)",
 };
 
 const text_shadow = "text-shadow: 1px 0px black, -1px 0px black, 0px -1px black, 0px 1px black, 2px -2px black;";
