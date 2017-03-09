@@ -21,6 +21,10 @@ exports.BattleFormatsData = {
 		inherit: true,
 		tier: "OU",
 	},
+	dragonite: {
+		inherit: true,
+		tier: "Uber",
+	},
 	genesect: {
 		inherit: true,
 		tier: "OU",
