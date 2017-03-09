@@ -1946,11 +1946,9 @@ class Battle extends Tools.BattleDex {
 	 *
 	 * @param {PRNG} [maybePrng]
 	 */
-	init(roomid, format, rated, send, maybePrng) {
+	init(format, rated, send, maybePrng) {
 		this.log = [];
 		this.sides = [null, null];
-		this.roomid = roomid;
-		this.id = roomid;
 		this.rated = rated;
 		this.weatherData = {id:''};
 		this.terrainData = {id:''};
@@ -5010,7 +5008,7 @@ exports.BattleSide = BattleSide;
 exports.Battle = Battle;
 
 let battleProtoCache = new Map();
-exports.construct = function (roomid, format, rated, send) {
+exports.construct = function (format, rated, send) {
 	format = Tools.getFormat(format);
 	let mod = format.mod || 'base';
 	if (!battleProtoCache.has(mod)) {
@@ -5022,6 +5020,6 @@ exports.construct = function (roomid, format, rated, send) {
 		battleProtoCache.set(mod, proto);
 	}
 	let battle = Object.create(battleProtoCache.get(mod));
-	Battle.prototype.init.call(battle, roomid, format, rated, send);
+	Battle.prototype.init.call(battle, format, rated, send);
 	return battle;
 };

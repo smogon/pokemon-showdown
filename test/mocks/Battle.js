@@ -3,8 +3,8 @@
 const {Battle} = require('../../battle-engine');
 
 class MockBattle extends Battle {
-	init(roomid, format, rated, send, maybePrng) {
-		super.init(roomid, format, rated, send, maybePrng);
+	init(format, rated, send, maybePrng) {
+		super.init(format, rated, send, maybePrng);
 		this.initialPrng = this.prng.clone();
 	}
 
@@ -23,7 +23,7 @@ class MockBattle extends Battle {
 const battleProtoCache = new Map();
 // HACK Copy pasted from battle-engine
 // The ultimate idea obviously being to remove this from being necessary.
-function construct(roomid, format, rated, send, prng) {
+function construct(format, rated, send, prng) {
 	format = Tools.getFormat(format);
 	const mod = format.mod || 'base';
 	if (!battleProtoCache.has(mod)) {
@@ -34,7 +34,7 @@ function construct(roomid, format, rated, send, prng) {
 		battleProtoCache.set(mod, proto);
 	}
 	const battle = Object.create(battleProtoCache.get(mod));
-	MockBattle.prototype.init.call(battle, roomid, format, rated, send, prng);
+	MockBattle.prototype.init.call(battle, format, rated, send, prng);
 	return battle;
 }
 
