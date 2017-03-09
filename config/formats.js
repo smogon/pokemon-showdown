@@ -283,8 +283,8 @@ exports.Formats = [
 		],
 
 		mod: 'fullpotential',
-		ruleset: ['[Gen 7] OU'],
-		banlist: ['Dugtrio-Base', 'Pheromosa', 'Shuckle', 'Speed Boost'],
+		ruleset: ['[Gen 7] OU', 'Item Clause'],
+		banlist: ['Dugtrio-Base', 'Pheromosa', 'Shuckle', 'Speed Boost', 'Unburden'],
 	},
 	{
 		name: "[Gen 7] Automagic",
