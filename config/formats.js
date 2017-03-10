@@ -61,7 +61,7 @@ exports.Formats = [
 		banlist: ['OU', 'BL', 'Drizzle', 'Power Construct', 'Mewnium Z', 'Baton Pass'],
 	},
 	{
-		name: "[Gen 7] RU (alpha)",
+		name: "[Gen 7] RU (beta)",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3587352/\">RU Metagame Discussion</a>"],
 
 		mod: 'gen7',
