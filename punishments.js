@@ -33,6 +33,7 @@ const USERID_REGEX = /^[a-z0-9]+$/;
 const PUNISH_TRUSTED = false;
 
 const PUNISHMENT_POINT_VALUES = {MUTE: 2, BLACKLIST: 3, ROOMBAN: 4};
+const AUTOLOCK_POINT_THRESHOLD = 8;
 
 /**
  * a punishment is an array: [punishType, userid, expireTime, reason]
@@ -1209,7 +1210,7 @@ Punishments.monitorRoomPunishments = function (user) {
 			return `<<${room}>> (${punishDesc})`;
 		}).join(', ');
 
-		if (Config.punishmentautolock && points >= 10) {
+		if (Config.punishmentautolock && points >= AUTOLOCK_POINT_THRESHOLD) {
 			let rooms = punishments.map(([room]) => room).join(', ');
 			let reason = `Autolocked for having punishments in ${punishments.length} rooms: ${rooms}`;
 			let message = `${user.name} was locked for having punishments in ${punishments.length} rooms: ${punishmentText}`;
