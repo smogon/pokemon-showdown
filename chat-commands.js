@@ -491,7 +491,7 @@ exports.commands = {
 		targetUser.lastPM = user.userid;
 		user.lastPM = targetUser.userid;
 	},
-	pminfoboxhelp: ["/pminfobox [user], [html]- PMs an [html] infobox to [user]. Requires * ~"],
+	pminfoboxhelp: ["/pminfobox [user], [html]- PMs an [html] infobox to [user]. " + Chat.require('*')],
 
 	'!ignorepms': true,
 	blockpm: 'ignorepms',
@@ -595,7 +595,7 @@ exports.commands = {
 			this.sendReply("The chat room '" + target + "' was created.");
 		}
 	},
-	makechatroomhelp: ["/makechatroom [roomname] - Creates a new room named [roomname]. Requires: & ~"],
+	makechatroomhelp: ["/makechatroom [roomname] - Creates a new room named [roomname]. " + Chat.require('&')],
 
 	makegroupchat: function (target, room, user, connection, cmd) {
 		if (!user.autoconfirmed) {
@@ -695,7 +695,7 @@ exports.commands = {
 		}
 		return this.errorReply("The room '" + target + "' isn't registered.");
 	},
-	deregisterchatroomhelp: ["/deregisterchatroom [roomname] - Deletes room [roomname] after the next server restart. Requires: & ~"],
+	deregisterchatroomhelp: ["/deregisterchatroom [roomname] - Deletes room [roomname] after the next server restart. " + Chat.require('&')],
 
 	deletechatroom: 'deleteroom',
 	deletegroupchat: 'deleteroom',
@@ -737,7 +737,7 @@ exports.commands = {
 		targetRoom.update();
 		targetRoom.destroy();
 	},
-	deleteroomhelp: ["/deleteroom [roomname] - Deletes room [roomname]. Requires: & ~"],
+	deleteroomhelp: ["/deleteroom [roomname] - Deletes room [roomname]. " + Chat.require('&')],
 
 	hideroom: 'privateroom',
 	hiddenroom: 'privateroom',
@@ -814,9 +814,9 @@ exports.commands = {
 			room.privacySetter = new Set([user.userid]);
 		}
 	},
-	privateroomhelp: ["/secretroom - Makes a room secret. Secret rooms are visible to & and up. Requires: & ~",
-		"/hiddenroom [on/off] - Makes a room hidden. Hidden rooms are visible to % and up, and inherit global ranks. Requires: \u2606 & ~",
-		"/publicroom - Makes a room public. Requires: \u2606 & ~"],
+	privateroomhelp: ["/secretroom - Makes a room secret. Secret rooms are visible to & and up. " + Chat.require('&'),
+		"/hiddenroom [on/off] - Makes a room hidden. Hidden rooms are visible to % and up, and inherit global ranks. " + Chat.require('\u2606'),
+		"/publicroom - Makes a room public. " + Chat.require('\u2606')],
 
 	officialchatroom: 'officialroom',
 	officialroom: function (target, room, user) {
@@ -1046,7 +1046,7 @@ exports.commands = {
 		}
 		Rooms.global.writeChatRoomData();
 	},
-	roomownerhelp: ["/roomowner [username] - Appoints [username] as a room owner. Requires: & ~"],
+	roomownerhelp: ["/roomowner [username] - Appoints [username] as a room owner. " + Chat.require('&')],
 
 	'!roompromote': true,
 	roomdemote: 'roompromote',
@@ -1138,9 +1138,9 @@ exports.commands = {
 		if (room.chatRoomData) Rooms.global.writeChatRoomData();
 	},
 	roompromotehelp: [
-		"/roompromote OR /roomdemote [username], [group symbol] - Promotes/demotes the user to the specified room rank. Requires: @ * # & ~",
-		"/room[group] [username] - Promotes/demotes the user to the specified room rank. Requires: @ * # & ~",
-		"/roomdeauth [username] - Removes all room rank from the user. Requires: @ * # & ~",
+		"/roompromote OR /roomdemote [username], [group symbol] - Promotes/demotes the user to the specified room rank. " + Chat.require('@'),
+		"/room[group] [username] - Promotes/demotes the user to the specified room rank. " + Chat.require('@'),
+		"/roomdeauth [username] - Removes all room rank from the user. " + Chat.require('@'),
 	],
 
 	'!roomauth': true,
@@ -1286,7 +1286,7 @@ exports.commands = {
 		Punishments.roomBan(room, targetUser, null, null, target);
 		return true;
 	},
-	banhelp: ["/roomban [username], [reason] - Bans the user from the room you are in. Requires: @ # & ~"],
+	banhelp: ["/roomban [username], [reason] - Bans the user from the room you are in. " + Chat.require('@')],
 
 	unroomban: 'unban',
 	roomunban: 'unban',
@@ -1305,7 +1305,7 @@ exports.commands = {
 			this.errorReply("User '" + target + "' is not banned.");
 		}
 	},
-	unbanhelp: ["/roomunban [username] - Unbans the user from the room you are in. Requires: @ # & ~"],
+	unbanhelp: ["/roomunban [username] - Unbans the user from the room you are in. " + Chat.require('@')],
 
 	'!autojoin': true,
 	autojoin: function (target, room, user, connection) {
@@ -1374,7 +1374,7 @@ exports.commands = {
 		this.add('|unlink|' + userid);
 		if (userid !== toId(this.inputUsername)) this.add('|unlink|' + toId(this.inputUsername));
 	},
-	warnhelp: ["/warn OR /k [username], [reason] - Warns a user showing them the Pok\u00e9mon Showdown Rules and [reason] in an overlay. Requires: % @ # & ~"],
+	warnhelp: ["/warn OR /k [username], [reason] - Warns a user showing them the Pok\u00e9mon Showdown Rules and [reason] in an overlay. " + Chat.require('%')],
 
 	redirect: 'redir',
 	redir: function (target, room, user, connection) {
@@ -1405,7 +1405,7 @@ exports.commands = {
 		this.addModCommand("" + targetUser.name + " was redirected to room " + targetRoom.title + " by " + user.name + ".");
 		targetUser.leaveRoom(room);
 	},
-	redirhelp: ["/redirect OR /redir [username], [roomname] - Attempts to redirect the user [username] to the room [roomname]. Requires: % @ & ~"],
+	redirhelp: ["/redirect OR /redir [username], [roomname] - Attempts to redirect the user [username] to the room [roomname]. " + Chat.require('%')],
 
 	m: 'mute',
 	mute: function (target, room, user, connection, cmd) {
@@ -1439,14 +1439,14 @@ exports.commands = {
 
 		room.mute(targetUser, muteDuration, false);
 	},
-	mutehelp: ["/mute OR /m [username], [reason] - Mutes a user with reason for 7 minutes. Requires: % @ * # & ~"],
+	mutehelp: ["/mute OR /m [username], [reason] - Mutes a user with reason for 7 minutes. " + Chat.require('%')],
 
 	hm: 'hourmute',
 	hourmute: function (target) {
 		if (!target) return this.parse('/help hourmute');
 		this.run('mute');
 	},
-	hourmutehelp: ["/hourmute OR /hm [username], [reason] - Mutes a user with reason for an hour. Requires: % @ * # & ~"],
+	hourmutehelp: ["/hourmute OR /hm [username], [reason] - Mutes a user with reason for an hour. " + Chat.require('%')],
 
 	um: 'unmute',
 	unmute: function (target, room, user) {
@@ -1464,7 +1464,7 @@ exports.commands = {
 			this.errorReply("" + (targetUser ? targetUser.name : this.targetUsername) + " is not muted.");
 		}
 	},
-	unmutehelp: ["/unmute [username] - Removes mute from user. Requires: % @ * # & ~"],
+	unmutehelp: ["/unmute [username] - Removes mute from user. " + Chat.require('%')],
 
 	forcelock: 'lock',
 	l: 'lock',
@@ -1533,7 +1533,7 @@ exports.commands = {
 		Punishments.lock(targetUser, null, null, target);
 		return true;
 	},
-	lockhelp: ["/lock OR /l [username], [reason] - Locks the user from talking in all chats. Requires: % @ * & ~"],
+	lockhelp: ["/lock OR /l [username], [reason] - Locks the user from talking in all chats. " + Chat.require('%')],
 
 	wl: 'weeklock',
 	weeklock: function (target, room, user, connection, cmd) {
@@ -1599,7 +1599,7 @@ exports.commands = {
 		Punishments.lock(targetUser, Date.now() + 7 * 24 * 60 * 60 * 1000, null, target);
 		return true;
 	},
-	weeklockhelp: ["/weeklock OR /wl [username], [reason] - Locks the user from talking in all chats for one week. Requires: % @ * & ~"],
+	weeklockhelp: ["/weeklock OR /wl [username], [reason] - Locks the user from talking in all chats for one week. " + Chat.require('%')],
 
 	unlock: function (target, room, user) {
 		if (!target) return this.parse('/help unlock');
@@ -1625,7 +1625,7 @@ exports.commands = {
 			this.errorReply("User '" + target + "' is not locked.");
 		}
 	},
-	unlockhelp: ["/unlock [username] - Unlocks the user. Requires: % @ * & ~"],
+	unlockhelp: ["/unlock [username] - Unlocks the user. " + Chat.require('%')],
 
 	forceglobalban: 'globalban',
 	gban: 'globalban',
@@ -1696,7 +1696,7 @@ exports.commands = {
 		this.globalModlog("BAN", targetUser, " by " + user.name + (target ? ": " + target : ""));
 		return true;
 	},
-	globalbanhelp: ["/globalban OR /gban [username], [reason] - Kick user from all rooms and ban user's IP address with reason. Requires: @ * & ~"],
+	globalbanhelp: ["/globalban OR /gban [username], [reason] - Kick user from all rooms and ban user's IP address with reason. " + Chat.require('@')],
 
 	globalunban: 'unglobalban',
 	unglobalban: function (target, room, user) {
@@ -1712,7 +1712,7 @@ exports.commands = {
 			this.errorReply("User '" + target + "' is not globally banned.");
 		}
 	},
-	unglobalbanhelp: ["/unglobalban [username] - Unban a user. Requires: @ * & ~"],
+	unglobalbanhelp: ["/unglobalban [username] - Unban a user. " + Chat.require('@')],
 
 	unbanall: function (target, room, user) {
 		if (!this.can('rangeban')) return false;
@@ -1730,7 +1730,7 @@ exports.commands = {
 		Punishments.savePunishments();
 		this.addModCommand("All bans and locks have been lifted by " + user.name + ".");
 	},
-	unbanallhelp: ["/unbanall - Unban all IP addresses. Requires: & ~"],
+	unbanallhelp: ["/unbanall - Unban all IP addresses. " + Chat.require('&')],
 
 	deroomvoiceall: function (target, room, user) {
 		if (!this.can('editroom', null, room)) return false;
@@ -1760,7 +1760,7 @@ exports.commands = {
 		}
 		this.addModCommand("All " + count + " roomvoices have been cleared by " + user.name + ".");
 	},
-	deroomvoiceallhelp: ["/deroomvoiceall - Devoice all roomvoiced users. Requires: # & ~"],
+	deroomvoiceallhelp: ["/deroomvoiceall - Devoice all roomvoiced users. " + Chat.require('#')],
 
 	rangeban: 'banip',
 	banip: function (target, room, user) {
@@ -1779,7 +1779,7 @@ exports.commands = {
 		Punishments.banRange(targetIp, target);
 		this.addModCommand(`${user.name} hour-banned the ${targetDesc}: ${target}`);
 	},
-	baniphelp: ["/banip [ip] - Globally bans this IP or IP range for an hour. Accepts wildcards to ban ranges. Existing users on the IP will not be banned. Requires: & ~"],
+	baniphelp: ["/banip [ip] - Globally bans this IP or IP range for an hour. Accepts wildcards to ban ranges. Existing users on the IP will not be banned. " + Chat.require('&')],
 
 	unrangeban: 'unbanip',
 	unbanip: function (target, room, user) {
@@ -1794,7 +1794,7 @@ exports.commands = {
 		Punishments.ips.delete(target);
 		this.addModCommand("" + user.name + " unbanned the " + (target.charAt(target.length - 1) === '*' ? "IP range" : "IP") + ": " + target);
 	},
-	unbaniphelp: ["/unbanip [ip] - Unbans. Accepts wildcards to ban ranges. Requires: & ~"],
+	unbaniphelp: ["/unbanip [ip] - Unbans. Accepts wildcards to ban ranges. " + Chat.require('&')],
 
 	rangelock: 'lockip',
 	lockip: function (target, room, user) {
@@ -1815,7 +1815,7 @@ exports.commands = {
 		Punishments.lockRange(targetIp, target);
 		this.addModCommand(`${user.name} hour-locked the ${targetDesc}: ${target}`);
 	},
-	lockiphelp: ["/lockip [ip] - Globally locks this IP or IP range for an hour. Accepts wildcards to ban ranges. Existing users on the IP will not be banned. Requires: & ~"],
+	lockiphelp: ["/lockip [ip] - Globally locks this IP or IP range for an hour. Accepts wildcards to ban ranges. Existing users on the IP will not be banned. " + Chat.require('&')],
 
 	unrangelock: 'unlockip',
 	rangeunlock: 'unlockip',
@@ -1847,7 +1847,7 @@ exports.commands = {
 		if (!this.can('receiveauthmessages', null, room)) return false;
 		return this.privateModCommand("(" + user.name + " notes: " + target + ")");
 	},
-	modnotehelp: ["/modnote [note] - Adds a moderator note that can be read through modlog. Requires: % @ * # & ~"],
+	modnotehelp: ["/modnote [note] - Adds a moderator note that can be read through modlog. " + Chat.require('%')],
 
 	globalpromote: 'promote',
 	promote: function (target, room, user, connection, cmd) {
@@ -1904,7 +1904,7 @@ exports.commands = {
 
 		if (targetUser) targetUser.updateIdentity();
 	},
-	promotehelp: ["/promote [username], [group] - Promotes the user to the specified group. Requires: & ~"],
+	promotehelp: ["/promote [username], [group] - Promotes the user to the specified group. " + Chat.require('&')],
 
 	confirmuser: 'trustuser',
 	trustuser: function (target) {
@@ -1924,14 +1924,14 @@ exports.commands = {
 		targetUser.setGroup(Config.groupsranking[0], true);
 		this.sendReply("User '" + name + "' is now trusted.");
 	},
-	trustuserhelp: ["/trustuser [username] - Trusts the user (makes them immune to locks). Requires: & ~"],
+	trustuserhelp: ["/trustuser [username] - Trusts the user (makes them immune to locks). " + Chat.require('&')],
 
 	globaldemote: 'demote',
 	demote: function (target) {
 		if (!target) return this.parse('/help demote');
 		this.run('promote');
 	},
-	demotehelp: ["/demote [username], [group] - Demotes the user to the specified group. Requires: & ~"],
+	demotehelp: ["/demote [username], [group] - Demotes the user to the specified group. " + Chat.require('&')],
 
 	forcepromote: function (target, room, user) {
 		// warning: never document this command in /help
@@ -1976,7 +1976,7 @@ exports.commands = {
 		this.add('|raw|<div class="broadcast-blue"><b>' + Chat.escapeHTML(target) + '</b></div>');
 		this.logModCommand(user.name + " declared " + target);
 	},
-	declarehelp: ["/declare [message] - Anonymously announces a message. Requires: # * & ~"],
+	declarehelp: ["/declare [message] - Anonymously announces a message. " + Chat.require('#')],
 
 	htmldeclare: function (target, room, user) {
 		if (!target) return this.parse('/help htmldeclare');
@@ -1988,7 +1988,7 @@ exports.commands = {
 		this.add('|raw|<div class="broadcast-blue"><b>' + target + '</b></div>');
 		this.logModCommand(user.name + " declared " + target);
 	},
-	htmldeclarehelp: ["/htmldeclare [message] - Anonymously announces a message using safe HTML. Requires: ~"],
+	htmldeclarehelp: ["/htmldeclare [message] - Anonymously announces a message using safe HTML. " + Chat.require('~')],
 
 	gdeclare: 'globaldeclare',
 	globaldeclare: function (target, room, user) {
@@ -2002,7 +2002,7 @@ exports.commands = {
 		});
 		this.logModCommand(user.name + " globally declared " + target);
 	},
-	globaldeclarehelp: ["/globaldeclare [message] - Anonymously announces a message to every room on the server. Requires: ~"],
+	globaldeclarehelp: ["/globaldeclare [message] - Anonymously announces a message to every room on the server. " + Chat.require('~')],
 
 	cdeclare: 'chatdeclare',
 	chatdeclare: function (target, room, user) {
@@ -2016,7 +2016,7 @@ exports.commands = {
 		});
 		this.logModCommand(user.name + " globally declared (chat level) " + target);
 	},
-	chatdeclarehelp: ["/cdeclare [message] - Anonymously announces a message to all chatrooms on the server. Requires: ~"],
+	chatdeclarehelp: ["/cdeclare [message] - Anonymously announces a message to all chatrooms on the server. " + Chat.require('~')],
 
 	'!announce': true,
 	wall: 'announce',
@@ -2030,7 +2030,7 @@ exports.commands = {
 
 		return '/announce ' + target;
 	},
-	announcehelp: ["/announce OR /wall [message] - Makes an announcement. Requires: % @ * # & ~"],
+	announcehelp: ["/announce OR /wall [message] - Makes an announcement. " + Chat.require('%')],
 
 	fr: 'forcerename',
 	forcerename: function (target, room, user) {
@@ -2054,7 +2054,7 @@ exports.commands = {
 		targetUser.send("|nametaken||" + user.name + " considers your name inappropriate" + (reason ? ": " + reason : "."));
 		return true;
 	},
-	forcerenamehelp: ["/forcerename OR /fr [username], [reason] - Forcibly change a user's name and shows them the [reason]. Requires: % @ * & ~"],
+	forcerenamehelp: ["/forcerename OR /fr [username], [reason] - Forcibly change a user's name and shows them the [reason]. " + Chat.require('%')],
 
 	nl: 'namelock',
 	namelock: function (target, room, user) {
@@ -2084,7 +2084,7 @@ exports.commands = {
 		targetUser.popup(`|modal|${user.name} has locked your name and you can't change names anymore${reasonText}`);
 		return true;
 	},
-	namelockhelp: ["/namelock OR /nl [username], [reason] - Name locks a user and shows them the [reason]. Requires: % @ * & ~"],
+	namelockhelp: ["/namelock OR /nl [username], [reason] - Name locks a user and shows them the [reason]. " + Chat.require('%')],
 
 	unl: 'unnamelock',
 	unnamelock: function (target, room, user) {
@@ -2107,7 +2107,7 @@ exports.commands = {
 			this.errorReply("User '" + target + "' is not namelocked.");
 		}
 	},
-	unnamelockhelp: ["/unnamelock [username] - Unnamelocks the user. Requires: % @ * & ~"],
+	unnamelockhelp: ["/unnamelock [username] - Unnamelocks the user. " + Chat.require('%')],
 
 	hidetext: function (target, room, user) {
 		if (!target) return this.parse('/help hidetext');
@@ -2189,7 +2189,7 @@ exports.commands = {
 		Punishments.roomBlacklist(room, targetUser, null, null, target);
 		return true;
 	},
-	blacklisthelp: ["/blacklist [username], [reason] - Blacklists the user from the room you are in for a year. Requires: # & ~"],
+	blacklisthelp: ["/blacklist [username], [reason] - Blacklists the user from the room you are in for a year. " + Chat.require('#')],
 
 	blacklistname: function (target, room, user) {
 		if (!target) return this.parse('/help blacklistname');
@@ -2226,7 +2226,7 @@ exports.commands = {
 		this.addModCommand("" + targets.join(', ') + (targets.length > 1 ? " were" : " was") + " nameblacklisted by " + user.name + ".");
 		return true;
 	},
-	blacklistnamehelp: ["/blacklistname [username1, username2, etc.] | reason - Blacklists the given username(s) from the room you are in for a year. Requires: # & ~"],
+	blacklistnamehelp: ["/blacklistname [username1, username2, etc.] | reason - Blacklists the given username(s) from the room you are in for a year. " + Chat.require('#')],
 
 	unab: 'unblacklist',
 	unblacklist: function (target, room, user) {
@@ -2244,7 +2244,7 @@ exports.commands = {
 			this.errorReply("User '" + target + "' is not blacklisted.");
 		}
 	},
-	unblacklisthelp: ["/unblacklist [username] - Unblacklists the user from the room you are in. Requires: # & ~"],
+	unblacklisthelp: ["/unblacklist [username] - Unblacklists the user from the room you are in. " + Chat.require('#')],
 
 	unblacklistall: function (target, room, user) {
 		if (!this.can('editroom', null, room)) return false;
@@ -2264,7 +2264,7 @@ exports.commands = {
 		this.addModCommand(`All blacklists in this room have been lifted by ${user.name}.`);
 		this.logEntry(`Unblacklisted users: ${unblacklisted.join(', ')}`);
 	},
-	unblacklistallhelp: ["/unblacklistall - Unblacklists all blacklisted users in the current room. Requires #, &, ~"],
+	unblacklistallhelp: ["/unblacklistall - Unblacklists all blacklisted users in the current room. " + Chat.require('#')],
 
 	blacklists: 'showblacklist',
 	showbl: 'showblacklist',
@@ -2332,7 +2332,7 @@ exports.commands = {
 		if (note) note = ` (${note})`;
 		return this.addModCommand(`The IP '${ip}' was marked as shared by ${user.name}.${note}`);
 	},
-	marksharedhelp: ["/markshared [ip] - Marks an IP address as shared. Requires @, &, ~"],
+	marksharedhelp: ["/markshared [ip] - Marks an IP address as shared. " + Chat.require('@')],
 
 	unmarkshared: function (target, room, user) {
 		if (!target) return this.parse('/help unmarkshared');
@@ -2344,7 +2344,7 @@ exports.commands = {
 		Punishments.removeSharedIp(target);
 		return this.addModCommand(`The IP '${target}' was unmarked as shared by ${user.name}.`);
 	},
-	unmarksharedhelp: ["/unmarkshared [ip] - Unmarks a shared IP address. Requires @, &, ~"],
+	unmarksharedhelp: ["/unmarkshared [ip] - Unmarks a shared IP address. " + Chat.require('@')],
 
 	modlog: function (target, room, user, connection) {
 		let lines = 0;
@@ -2487,7 +2487,7 @@ exports.commands = {
 	modloghelp: ["/modlog [roomid|all|public], [n] - Roomid defaults to current room.",
 		"If n is a number or omitted, display the last n lines of the moderator log. Defaults to 20.",
 		"If n is not a number, search the moderator log for 'n' on room's log [roomid]. If you set [all] as [roomid], searches for 'n' on all rooms's logs.",
-		"If you set [public] as [roomid], searches for 'n' in all public room's logs, excluding battles. Requires: % @ * # & ~"],
+		"If you set [public] as [roomid], searches for 'n' in all public room's logs, excluding battles. " + Chat.require('%')],
 
 	/*********************************************************
 	 * Server management commands
@@ -2581,7 +2581,7 @@ exports.commands = {
 		}
 		this.errorReply("Your hot-patch command was unrecognized.");
 	},
-	hotpatchhelp: ["Hot-patching the game engine allows you to update parts of Showdown without interrupting currently-running battles. Requires: ~",
+	hotpatchhelp: ["Hot-patching the game engine allows you to update parts of Showdown without interrupting currently-running battles. " + Chat.require('~'),
 		"Hot-patching has greater memory requirements than restarting.",
 		"/hotpatch chat - reload chat-commands.js and the chat-plugins",
 		"/hotpatch battles - spawn new simulator processes",
@@ -2722,7 +2722,7 @@ exports.commands = {
 
 		this.logEntry(user.name + " used /lockdown");
 	},
-	lockdownhelp: ["/lockdown - locks down the server, which prevents new battles from starting so that the server can eventually be restarted. Requires: ~"],
+	lockdownhelp: ["/lockdown - locks down the server, which prevents new battles from starting so that the server can eventually be restarted. " + Chat.require('~')],
 
 	prelockdown: function (target, room, user) {
 		if (!this.can('lockdown')) return false;
@@ -2816,7 +2816,7 @@ exports.commands = {
 			process.exit();
 		}, 10000);
 	},
-	killhelp: ["/kill - kills the server. Can't be done unless the server is in lockdown state. Requires: ~"],
+	killhelp: ["/kill - kills the server. Can't be done unless the server is in lockdown state. " + Chat.require('~')],
 
 	loadbanlist: function (target, room, user, connection) {
 		if (!this.can('hotpatch')) return false;
@@ -2827,7 +2827,7 @@ exports.commands = {
 			error => connection.sendTo(room, "Something went wrong while loading ipbans.txt: " + error)
 		);
 	},
-	loadbanlisthelp: ["/loadbanlist - Loads the bans located at ipbans.txt. The command is executed automatically at startup. Requires: ~"],
+	loadbanlisthelp: ["/loadbanlist - Loads the bans located at ipbans.txt. The command is executed automatically at startup. " + Chat.require('~')],
 
 	refreshpage: function (target, room, user) {
 		if (!this.can('hotpatch')) return false;
@@ -2877,7 +2877,7 @@ exports.commands = {
 		}
 		this.logEntry(user.name + " used /crashfixed");
 	},
-	crashfixedhelp: ["/crashfixed - Ends the active lockdown caused by a crash without the need of a restart. Requires: ~"],
+	crashfixedhelp: ["/crashfixed - Ends the active lockdown caused by a crash without the need of a restart. " + Chat.require('~')],
 
 	memusage: 'memoryusage',
 	memoryusage: function (target) {
@@ -3153,7 +3153,7 @@ exports.commands = {
 			this.errorReply("/kickbattle - User isn't in battle.");
 		}
 	},
-	kickbattlehelp: ["/kickbattle [username], [reason] - Kicks a user from a battle with reason. Requires: % @ * & ~"],
+	kickbattlehelp: ["/kickbattle [username], [reason] - Kicks a user from a battle with reason. " + Chat.require('%')],
 
 	kickinactive: function (target, room, user) {
 		if (room.requestKickInactive) {
@@ -3221,8 +3221,8 @@ exports.commands = {
 			this.logModCommand(user.name + " forced a win for " + target + ".");
 		}
 	},
-	forcewinhelp: ["/forcetie - Forces the current match to end in a tie. Requires: & ~",
-		"/forcewin [user] - Forces the current match to end in a win for a user. Requires: & ~"],
+	forcewinhelp: ["/forcetie - Forces the current match to end in a tie. " + Chat.require('&'),
+		"/forcewin [user] - Forces the current match to end in a win for a user. " + Chat.require('&')],
 
 	/*********************************************************
 	 * Challenging and searching commands

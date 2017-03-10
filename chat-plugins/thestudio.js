@@ -236,7 +236,7 @@ let commands = {
 		room.aotdVote.display(false);
 		this.privateModCommand(`(${user.name} has started nominations for the Artist of the Day.)`);
 	},
-	starthelp: ["/aotd start - Starts nominations for the Artist of the Day. Requires: % @ # & ~"],
+	starthelp: ["/aotd start - Starts nominations for the Artist of the Day. " + Chat.require('%')],
 
 	end: function (target, room, user) {
 		if (room !== theStudio) return this.errorReply('This command can only be used in The Studio.');
@@ -248,7 +248,7 @@ let commands = {
 
 		this.privateModCommand(`(${user.name} has ended nominations for the Artist of the Day.)`);
 	},
-	endhelp: ["/aotd end - End nominations for the Artist of the Day and set it to a randomly selected artist. Requires: % @ # & ~"],
+	endhelp: ["/aotd end - End nominations for the Artist of the Day and set it to a randomly selected artist. " + Chat.require('%')],
 
 	nom: function (target, room, user) {
 		if (room !== theStudio) return this.errorReply('This command can only be used in The Studio.');
@@ -279,7 +279,7 @@ let commands = {
 			room.aotdVote.displayTo(connection);
 		}
 	},
-	viewhelp: ["/aotd view - View the current nominations for the Artist of the Day. Requires: % @ * # & ~"],
+	viewhelp: ["/aotd view - View the current nominations for the Artist of the Day. " + Chat.require('%')],
 
 	remove: function (target, room, user) {
 		if (room !== theStudio) return this.errorReply('This command can only be used in The Studio.');
@@ -297,7 +297,7 @@ let commands = {
 			this.sendReply(`User '${name}' has no nomination for the Artist of the Day.`);
 		}
 	},
-	removehelp: ["/aotd remove [username] - Remove a user's nomination for the Artist of the Day and prevent them from voting again until the next round. Requires: % @ * # & ~"],
+	removehelp: ["/aotd remove [username] - Remove a user's nomination for the Artist of the Day and prevent them from voting again until the next round. " + Chat.require('%')],
 
 	set: function (target, room, user) {
 		if (room !== theStudio) return this.errorReply('This command can only be used in The Studio.');
@@ -347,7 +347,7 @@ let commands = {
 			return this.privateModCommand(`(${user.name} changed the following propert${Chat.plural(keys, 'ies', 'y')} of the Artist of the Day: ${keys.join(', ')})`);
 		}
 	},
-	sethelp: ["/aotd set property: value[, property: value] - Set the artist, quote, song, link or image for the current Artist of the Day. Requires: % @ * # & ~"],
+	sethelp: ["/aotd set property: value[, property: value] - Set the artist, quote, song, link or image for the current Artist of the Day. " + Chat.require('%')],
 
 	winners: function (target, room, user, connection) {
 		if (room !== theStudio) return this.errorReply('This command can only be used in The Studio.');
@@ -377,11 +377,11 @@ exports.commands = {
 	aotdhelp: [
 		"The Studio: Artist of the Day plugin commands:",
 		"- /aotd - View the Artist of the Day.",
-		"- /aotd start - Start nominations for the Artist of the Day. Requires: % @ * # & ~",
+		"- /aotd start - Start nominations for the Artist of the Day. " + Chat.require('%'),
 		"- /aotd nom [artist] - Nominate an artist for the Artist of the Day.",
-		"- /aotd remove [username] - Remove a user's nomination for the Artist of the Day and prevent them from voting again until the next round. Requires: % @ * # & ~",
-		"- /aotd end - End nominations for the Artist of the Day and set it to a randomly selected artist. Requires: % @ * # & ~",
-		"- /aotd set property: value[, property: value] - Set the artist, quote, song, link or image for the current Artist of the Day. Requires: % @ * # & ~",
+		"- /aotd remove [username] - Remove a user's nomination for the Artist of the Day and prevent them from voting again until the next round. " + Chat.require('%'),
+		"- /aotd end - End nominations for the Artist of the Day and set it to a randomly selected artist. " + Chat.require('%'),
+		"- /aotd set property: value[, property: value] - Set the artist, quote, song, link or image for the current Artist of the Day. " + Chat.require('%'),
 		"- /aotd winners [year] - Displays a list of previous artists of the day of the past year. Optionally, specify a year to see all winners in that year.",
 	],
 };

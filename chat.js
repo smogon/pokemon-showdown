@@ -861,6 +861,24 @@ Chat.escapeHTML = function (str) {
 };
 
 /**
+ * Sends the required rank text for help commands.
+ *
+ * @param  {string} rank
+ * @return {string}
+ */
+Chat.require = function (rank) {
+	if (!Config.groups[rank]) return "";
+	let startIndex = Config.groupsranking.indexOf(rank);
+	let buff = [];
+	for (let i = 0; i < Config.groupsranking.length; i++) {
+		if (i >= startIndex && (Config.groupsranking[i] !== '\u2606' || rank === '\u2606')) {
+			buff.push(Config.groupsranking[i]);
+		}
+	}
+	return `Requires: ${buff.join(' ')}`;
+};
+
+/**
  * Template string tag function for escaping HTML
  *
  * @param  {string[]} strings

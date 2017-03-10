@@ -291,13 +291,13 @@ exports.commands = {
 			'- /scavrank [user] - View the rank of the specified user on the official leaderboard. If no name is given, view your own.<br />' +
 			'<br />' +
 			'<strong>Staff commands:</strong><br />' +
-			'- /starthunt <em>hint | answer | hint | answer | hint | answer</em> - Start a new scavenger hunt (Requires: % @ * # & ~)<br />' +
-			'- /startofficialhunt <em>hint | answer | hint | answer | hint | answer</em> - Start an official hunt with 60 seconds blitz period (Requires: % @ * # & ~)<br />' +
-			'- /endhunt - Finish the current hunt and announce the winners (Requires: % @ * # & ~)<br />' +
-			'- /resethunt - Reset the scavenger hunt to mint status (Requires: % @ * # & ~)<br />' +
-			'- /scavrmpoints [user],[num] - Remove [num] points from [user] on the official leaderboard (Requires: % @ * # & ~)<br />' +
-			'- /scavaddpoints [user],[num] - Add [num] points to [user] on the official leaderboard (Requires: % @ * # & ~)<br />' +
-			'- /scavresetlb - Reset the official leaderboard (Require: # & ~)'
+			'- /starthunt <em>hint | answer | hint | answer | hint | answer</em> - Start a new scavenger hunt (' + Chat.require('%') + ')<br />' +
+			'- /startofficialhunt <em>hint | answer | hint | answer | hint | answer</em> - Start an official hunt with 60 seconds blitz period (' + Chat.require('%') + ')<br />' +
+			'- /endhunt - Finish the current hunt and announce the winners (' + Chat.require('%') + ')<br />' +
+			'- /resethunt - Reset the scavenger hunt to mint status (' + Chat.require('%') + ')<br />' +
+			'- /scavrmpoints [user],[num] - Remove [num] points from [user] on the official leaderboard (' + Chat.require('%') + ')<br />' +
+			'- /scavaddpoints [user],[num] - Add [num] points to [user] on the official leaderboard (' + Chat.require('%') + ')<br />' +
+			'- /scavresetlb - Reset the official leaderboard (' + Chat.require('#') + ')'
 		);
 	},
 };

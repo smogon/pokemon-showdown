@@ -71,7 +71,7 @@ exports.commands = {
 	},
 	roomeventshelp: [
 		"/roomevents - Displays a list of upcoming room-specific events.",
-		"/roomevents add [event name] | [event description] | [event date/time] - Adds a room event. Requires: # & ~",
-		"/roomevents remove [event name] - Deletes an event. Requires: # & ~",
+		"/roomevents add [event name] | [event description] | [event date/time] - Adds a room event. " + Chat.require('#'),
+		"/roomevents remove [event name] - Deletes an event. " + Chat.require('#'),
 	],
 };
