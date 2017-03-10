@@ -4,7 +4,7 @@ const maxTime = 30; // seconds
 
 const rgb_Gradients = {
 	"Green": "rgba(0, 122, 0, 1), rgba(0, 185, 0, 0.9)",
-	"Yellow": "rgba(255, 200, 0, 1), rgba(255, 255, 0, 0.9)",
+	"Yellow": "rgba(235, 235, 0, 1), rgba(255, 255, 0, 0.85)",
 	"Blue": "rgba(0, 0, 255, 1), rgba(125, 125, 255, 0.9)",
 	"Red": "rgba(255, 0, 0, 1), rgba(255, 125, 125, 0.9)",
 	"Black": "rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.55)",
@@ -17,7 +17,7 @@ function cardHTML(card, fullsize) {
 	let background = rgb_Gradients[card.colour];
 	if (surface === "R") surface = '<i class="fa fa-refresh" aria-hidden="true"></i>';
 
-	return `<button class="button" style="font-size: 14px; font-weight: bold; color: white; ${text_shadow} padding-bottom: 127px; text-align: left; height: 145px; width: ${fullsize ? "76" : "37"}px; border-radius: 10px 2px 2px 3px; color: white; background: ${card.colour}; background: -webkit-linear-gradient(${background}); background: -o-linear-gradient(${background}); background: -moz-linear-gradient(${background}); background: linear-gradient(${background});" name=send value="/uno play ${card.name}">${surface}</button>`;
+	return `<button class="button" style="font-size: 14px; font-weight: bold; color: white; ${text_shadow} padding-bottom: 117px; text-align: left; height: 135px; width: ${fullsize ? "72" : "37"}px; border-radius: 10px 2px 2px 3px; color: white; background: ${card.colour}; background: -webkit-linear-gradient(${background}); background: -o-linear-gradient(${background}); background: -moz-linear-gradient(${background}); background: linear-gradient(${background});" name=send value="/uno play ${card.name}">${surface}</button>`;
 }
 
 function createDeck() {
