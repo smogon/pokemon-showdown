@@ -222,18 +222,18 @@ exports.BattleScripts = {
 						if (target.hasAbility(cantStatus[status])) return false;
 						return true;
 					};
-					if (moveData.secondary.status) flag = !subBlocks && canSetStatus(moveData.secondary.status, target, pokemon);
-					if (moveData.secondary.volatileStatus) flag = !subBlocks && !(moveData.secondary.volatileStatus in target.volatiles);
-					if (moveData.secondary.volatileStatus === 'flinch') flag = flag && target.activeTurns && !target.moveThisTurn;
+					if (secondaries[i].status) flag = !subBlocks && canSetStatus(secondaries[i].status, target, pokemon);
+					if (secondaries[i].volatileStatus) flag = !subBlocks && !(secondaries[i].volatileStatus in target.volatiles);
+					if (secondaries[i].volatileStatus === 'flinch') flag = flag && target.activeTurns && !target.moveThisTurn;
 					this.moveHit(target, pokemon, move, secondaries[i], true, isSelf);
-					if (moveData.secondary.self && moveData.secondary.self.boosts) {
-						Object.keys(moveData.secondary.self.boosts).forEach(boost => {
+					if (secondaries[i].self && secondaries[i].self.boosts) {
+						Object.keys(secondaries[i].self.boosts).forEach(boost => {
 							if (pokemon.boosts[boost] === 6) flag = false;
 						});
 					} else {
 						flag = flag && target && !(target.hp === undefined || target.hp <= 0);
 					}
-					if (moveData.target !== 'self' && moveData.secondary.boosts && !subBlocks) {
+					if (moveData.target !== 'self' && secondaries[i].boosts && !subBlocks) {
 						let cantLower = {
 							'atk': ['clearbody', 'fullmetalbody', 'hypercutter', 'whitesmoke'],
 							'def': ['bigpecks', 'clearbody', 'fullmetalbody', 'whitesmoke'],
@@ -242,19 +242,19 @@ exports.BattleScripts = {
 							'spe': ['clearbody', 'fullmetalbody', 'whitesmoke'],
 							'accuracy': ['clearbody', 'fullmetalbody', 'keeneye', 'whitesmoke'],
 						};
-						for (let k in moveData.secondary.boosts) {
+						for (let k in secondaries[i].boosts) {
 							if (target.boosts[k] === -6) {
 								flag = false;
 								continue;
 							}
-							if (moveData.secondary.boosts[k] < 0 && target.hasAbility(cantLower[k]) && !move.ignoreAbility) {
+							if (secondaries[i].boosts[k] < 0 && target.hasAbility(cantLower[k]) && !move.ignoreAbility) {
 								flag = false;
 								break;
 							}
 						}
 					}
 					if (pokemon.hasAbility('sheerforce')) flag = false;
-					if (target && target.hasAbility('shielddust') && !move.ignoreAbility && !move.secondary.self.boosts) {
+					if (target && target.hasAbility('shielddust') && !move.ignoreAbility && !secondaries[i].self.boosts) {
 						flag = false;
 					}
 					if (flag) this.runEvent('AfterSecondaryEffect', target, pokemon, moveData);
