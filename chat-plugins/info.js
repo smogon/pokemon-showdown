@@ -313,13 +313,13 @@ exports.commands = {
 		}
 		let challenges = [];
 		if (user1.challengeTo && user1.challengeTo.to === user2.userid) {
-			challenges.push(`${user1.name} is challenging ${user2.name} in ${Tools.getFormat(user1.challengeTo.format).name}.`);
+			challenges.push(Chat.html`${user1.name} is challenging ${user2.name} in ${Tools.getFormat(user1.challengeTo.format).name}.`);
 		}
 		if (user2.challengeTo && user2.challengeTo.to === user1.userid) {
-			challenges.push(`${user2.name} is challenging ${user1.name} in ${Tools.getFormat(user2.challengeTo.format).name}.`);
+			challenges.push(Chat.html`${user2.name} is challenging ${user1.name} in ${Tools.getFormat(user2.challengeTo.format).name}.`);
 		}
 		if (!challenges.length) {
-			return this.sendReplyBox(`${user1.name} and ${user2.name} are not challenging each other.`);
+			return this.sendReplyBox(Chat.html`${user1.name} and ${user2.name} are not challenging each other.`);
 		}
 		this.sendReplyBox(challenges.join(`<br />`));
 	},
