@@ -208,13 +208,7 @@ exports.BattleScripts = {
 							slp: ['comatose', 'insomnia', 'vitalspirit'],
 							tox: ['comatose', 'immunity'],
 						};
-						if (target.hasType(['Poison', 'Steel']) && (status === 'psn' || status === 'tox')) {
-							if (pokemon.hasAbility('corrosion')) {
-								return true;
-							} else {
-								return false;
-							}
-						}
+						if (target.hasType(['Poison', 'Steel']) && (status === 'psn' || status === 'tox')) return pokemon.hasAbility('corrosion'));
 						if (target.hasType(cantStatus[status][0])) return false;
 						if (move.ignoreAbility) return true;
 						if (target.hasAbility('leafguard') && this.isWeather(['sunnyday', 'desolateland'])) return false;
@@ -243,11 +237,11 @@ exports.BattleScripts = {
 							'accuracy': ['clearbody', 'fullmetalbody', 'keeneye', 'whitesmoke'],
 						};
 						for (let k in moveData.secondary.boosts) {
-							if (target.boosts[k] === -6) {
+							if (target && target.boosts[k] === -6) {
 								flag = false;
 								continue;
 							}
-							if (moveData.secondary.boosts[k] < 0 && target.hasAbility(cantLower[k]) && !move.ignoreAbility) {
+							if (moveData.secondary.boosts[k] < 0 && target && target.hasAbility(cantLower[k]) && !move.ignoreAbility) {
 								flag = false;
 								break;
 							}
