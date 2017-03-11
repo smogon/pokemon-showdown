@@ -238,6 +238,22 @@ exports.Formats = [
 		banlist: ['Illegal', 'Unreleased', 'Dark Void'],
 	},
 	{
+		name: "[Gen 7] Doubles UU",
+		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3598014/\">Doubles UU Metagame Discussion</a>"],
+
+		mod: 'gen7',
+		gameType: 'doubles',
+		ruleset: ['[Gen 7] Doubles OU'],
+		banlist: [
+			'Aegislash', 'Amoonguss', 'Araquanid', 'Arcanine', 'Azumarill', 'Bronzong', 'Celesteela', 'Cresselia',
+			'Deoxys-Attack', 'Diancie', 'Excadrill', 'Ferrothorn', 'Garchomp', 'Gastrodon', 'Heatran', 'Hoopa-Unbound', 'Jirachi',
+			'Kartana', 'Kingdra', 'Landorus-Therian', 'Marowak-Alola', 'Milotic', 'Mimikyu', 'Muk-Alola', 'Ninetales-Alola',
+			'Oranguru', 'Pelipper', 'Politoed', 'Porygon2', 'Rotom-Wash', 'Shaymin-Sky', 'Tapu Bulu', 'Tapu Fini',
+			'Tapu Koko', 'Tapu Lele', 'Tyranitar', 'Volcanion', 'Volcarona', 'Weavile', 'Whimsicott', 'Zapdos', 'Zygarde',
+			'Battle Bond', 'Charizardite Y', 'Gengarite', 'Gyaradosite', 'Kangaskhanite', 'Metagrossite', 'Salamencite'
+		],
+	},
+	{
 		name: "[Gen 7] VGC 2017",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3583926/\">VGC 2017 Discussion</a>"],
 
