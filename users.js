@@ -415,11 +415,14 @@ class User {
 	}
 	authAtLeast(minAuth, room) {
 		if (!minAuth || minAuth === ' ') return true;
-		if (minAuth === 'trusted') return this.trusted;
-		if (minAuth === 'autoconfirmed') return this.autoconfirmed;
-		if (!(minAuth in Config.groups)) return true;
-		let auth = (room ? room.getAuth(this) : this.group);
-		if (room && this.can('makeroom')) auth = this.group;
+		if (minAuth === 'trusted' && this.trusted) return true;
+		if (minAuth === 'autoconfirmed' && this.autoconfirmed) return true;
+
+		if (minAuth === 'trusted' || minAuth === 'autoconfirmed') {
+			minAuth = Config.groupsranking[1];
+		}
+		if (!(minAuth in Config.groups)) return false;
+		let auth = (room && !this.can('makeroom') ? room.getAuth(this) : this.group);
 		return auth in Config.groups && Config.groups[auth].rank >= Config.groups[minAuth].rank;
 	}
 	can(permission, target, room) {
@@ -827,6 +830,13 @@ class User {
 		}
 		oldUser.inRooms.clear();
 		oldUser.connections = [];
+
+		if (oldUser.chatQueue) {
+			if (!this.chatQueue) this.chatQueue = [];
+			this.chatQueue.push(...oldUser.chatQueue);
+			oldUser.clearChatQueue();
+			if (!this.chatQueueTimeout) this.startChatQueue();
+		}
 
 		this.s1 = oldUser.s1;
 		this.s2 = oldUser.s2;
@@ -1351,7 +1361,7 @@ class User {
 	 * Returns false if the rest of the user's messages should be discarded.
 	 */
 	chat(message, room, connection) {
-		let now = new Date().getTime();
+		let now = Date.now();
 
 		if (message.substr(0, 16) === '/cmd userdetails') {
 			// certain commands are exempt from the queue
@@ -1376,15 +1386,21 @@ class User {
 			}
 		} else if (now < this.lastChatMessage + throttleDelay) {
 			this.chatQueue = [[message, room.id, connection]];
-			this.chatQueueTimeout = setTimeout(
-				() => this.processChatQueue(),
-				throttleDelay - (now - this.lastChatMessage));
+			this.startChatQueue(throttleDelay - (now - this.lastChatMessage));
 		} else {
 			this.lastChatMessage = now;
 			Monitor.activeIp = connection.ip;
 			Chat.parse(message, room, this, connection);
 			Monitor.activeIp = null;
 		}
+	}
+	startChatQueue(delay) {
+		if (delay === undefined) delay = (this.group !== ' ' ? THROTTLE_DELAY / 2 : THROTTLE_DELAY) - (Date.now() - this.lastChatMessage);
+
+		this.chatQueueTimeout = setTimeout(
+			() => this.processChatQueue(),
+			delay
+		);
 	}
 	clearChatQueue() {
 		this.chatQueue = null;

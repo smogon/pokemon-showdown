@@ -366,7 +366,6 @@ exports.BattleItems = {
 	"beedrillite": {
 		id: "beedrillite",
 		name: "Beedrillite",
-		isUnreleased: true,
 		spritenum: 628,
 		megaStone: "Beedrill-Mega",
 		megaEvolves: "Beedrill",
@@ -3200,7 +3199,6 @@ exports.BattleItems = {
 	"mawilite": {
 		id: "mawilite",
 		name: "Mawilite",
-		isUnreleased: true,
 		spritenum: 598,
 		megaStone: "Mawile-Mega",
 		megaEvolves: "Mawile",

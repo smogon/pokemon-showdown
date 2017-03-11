@@ -5,7 +5,6 @@ const Tools = require('./../tools').includeFormats();
 const PRNG = require('./../prng');
 const MockBattle = require('./mocks/Battle');
 
-let battleNum = 1;
 const cache = new Map();
 
 const RULE_FLAGS = {
@@ -111,7 +110,6 @@ class TestTools {
 		}
 		const format = this.getFormat(options || {});
 		const battle = MockBattle.construct(
-			`battle-test-${battleNum++}`,
 			format.id,
 			undefined,
 			undefined,

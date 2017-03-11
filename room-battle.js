@@ -480,7 +480,9 @@ if (process.send && module === process.mainModule) {
 			const id = data[0];
 			if (!Battles.has(id)) {
 				try {
-					Battles.set(id, BattleEngine.construct(id, data[2], data[3], sendBattleMessage));
+					const battle = BattleEngine.construct(data[2], data[3], sendBattleMessage);
+					battle.id = id;
+					Battles.set(id, battle);
 				} catch (err) {
 					if (require('./crashlogger')(err, 'A battle', {
 						message: message,

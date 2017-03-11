@@ -441,10 +441,12 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		onHit: function (target, source, move) {
-			if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
+		secondary: {
+			chance: 100,
+			onHit: function (target, source, move) {
+				if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
+			},
 		},
-		secondary: false,
 		target: "normal",
 		type: "Steel",
 		zMovePower: 160,
@@ -6235,10 +6237,13 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {},
 		isZ: "mewniumz",
-		onHit: function () {
-			this.setTerrain('psychicterrain');
+		secondary: {
+			dustproof: true,
+			chance: 100,
+			onHit: function () {
+				this.setTerrain('psychicterrain');
+			},
 		},
-		secondary: false,
 		target: "normal",
 		type: "Psychic",
 		contestType: "Cool",
@@ -11500,6 +11505,7 @@ exports.BattleMovedex = {
 				this.add('-start', target, 'perish0');
 				target.faint();
 			},
+			onResidualOrder: 20,
 			onResidual: function (pokemon) {
 				let duration = pokemon.volatiles['perishsong'].duration;
 				this.add('-start', pokemon, 'perish' + duration);
@@ -15392,10 +15398,12 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onHit: function (target, source, move) {
-			if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
+		secondary: {
+			chance: 100,
+			onHit: function (target, source, move) {
+				if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
+			},
 		},
-		secondary: false,
 		target: "normal",
 		type: "Ghost",
 		zMovePower: 160,
@@ -15607,10 +15615,13 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, sound: 1, authentic: 1},
-		onHit: function (target) {
-			if (target.status === 'brn') target.cureStatus();
+		secondary: {
+			dustproof: true,
+			chance: 100,
+			onHit: function (target) {
+				if (target.status === 'brn') target.cureStatus();
+			},
 		},
-		secondary: false,
 		target: "allAdjacent",
 		type: "Water",
 		zMovePower: 175,
@@ -16674,11 +16685,15 @@ exports.BattleMovedex = {
 			this.add('-activate', source, 'move: Trick', '[of] ' + target);
 			if (myItem) {
 				target.setItem(myItem);
-				this.add('-item', target, myItem, '[from] Trick');
+				this.add('-item', target, myItem, '[from] move: Switcheroo');
+			} else {
+				this.add('-enditem', target, yourItem, '[silent]', '[from] move: Switcheroo');
 			}
 			if (yourItem) {
 				source.setItem(yourItem);
-				this.add('-item', source, yourItem, '[from] Trick');
+				this.add('-item', source, yourItem, '[from] move: Switcheroo');
+			} else {
+				this.add('-enditem', source, myItem, '[silent]', '[from] move: Switcheroo');
 			}
 		},
 		secondary: false,
@@ -17204,11 +17219,17 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		volatileStatus: 'throatchop',
 		effect: {
 			duration: 2,
 			onStart: function (target) {
 				this.add('-start', target, 'Throat Chop', '[silent]');
+			},
+			onDisableMove: function (pokemon) {
+				for (let i = 0; i < pokemon.moveset.length; i++) {
+					if (this.getMove(pokemon.moveset[i].id).flags['sound']) {
+						pokemon.disableMove(pokemon.moveset[i].id);
+					}
+				}
 			},
 			onBeforeMovePriority: 6,
 			onBeforeMove: function (pokemon, target, move) {
@@ -17222,7 +17243,12 @@ exports.BattleMovedex = {
 				this.add('-end', target, 'Throat Chop', '[silent]');
 			},
 		},
-		secondary: false,
+		secondary: {
+			chance: 100,
+			onHit: function (target) {
+				target.addVolatile('throatchop');
+			},
+		},
 		target: "normal",
 		type: "Dark",
 		zMovePower: 160,
@@ -17629,13 +17655,13 @@ exports.BattleMovedex = {
 				target.setItem(myItem);
 				this.add('-item', target, myItem, '[from] move: Trick');
 			} else {
-				this.add('-enditem', target, yourItem, '[silent]');
+				this.add('-enditem', target, yourItem, '[silent]', '[from] move: Trick');
 			}
 			if (yourItem) {
 				source.setItem(yourItem);
 				this.add('-item', source, yourItem, '[from] move: Trick');
 			} else {
-				this.add('-enditem', source, myItem, '[silent]');
+				this.add('-enditem', source, myItem, '[silent]', '[from] move: Trick');
 			}
 		},
 		secondary: false,

@@ -33,8 +33,7 @@ class BattlePokemon {
 
 		this.baseTemplate = this.battle.getTemplate(set.species || set.name);
 		if (!this.baseTemplate.exists) {
-			this.battle.debug('Unidentified species: ' + this.species);
-			this.baseTemplate = this.battle.getTemplate('Unown');
+			throw new Error(`Unidentified species: ${this.baseTemplate.name}`);
 		}
 		this.species = Tools.getSpecies(set.species);
 		if (set.name === set.species || !set.name) {
@@ -1946,11 +1945,9 @@ class Battle extends Tools.BattleDex {
 	 *
 	 * @param {PRNG} [maybePrng]
 	 */
-	init(roomid, format, rated, send, maybePrng) {
+	init(format, rated, send, maybePrng) {
 		this.log = [];
 		this.sides = [null, null];
-		this.roomid = roomid;
-		this.id = roomid;
 		this.rated = rated;
 		this.weatherData = {id:''};
 		this.terrainData = {id:''};
@@ -4860,9 +4857,7 @@ class Battle extends Tools.BattleDex {
 		if (slot === 'p1' || slot === 'p2') {
 			let side = this[slot];
 			if (!side) {
-				console.log('**** ' + slot + ' tried to leave before it was possible in ' + this.id);
-				require('./crashlogger')(new Error('**** ' + slot + ' tried to leave before it was possible in ' + this.id), 'A simulator process');
-				return;
+				throw new Error(`${slot} tried to leave before it was possible`);
 			}
 
 			side.emitRequest(null);
@@ -4881,12 +4876,7 @@ class Battle extends Tools.BattleDex {
 		switch (data[1]) {
 		case 'join': {
 			let team = '';
-			try {
-				if (more) team = Tools.fastUnpackTeam(more);
-			} catch (e) {
-				console.log('TEAM PARSE ERROR: ' + more);
-				team = null;
-			}
+			if (more) team = Tools.fastUnpackTeam(more);
 			this.join(data[2], data[3], data[4], team);
 			break;
 		}
@@ -5010,7 +5000,7 @@ exports.BattleSide = BattleSide;
 exports.Battle = Battle;
 
 let battleProtoCache = new Map();
-exports.construct = function (roomid, format, rated, send) {
+exports.construct = function (format, rated, send) {
 	format = Tools.getFormat(format);
 	let mod = format.mod || 'base';
 	if (!battleProtoCache.has(mod)) {
@@ -5022,6 +5012,6 @@ exports.construct = function (roomid, format, rated, send) {
 		battleProtoCache.set(mod, proto);
 	}
 	let battle = Object.create(battleProtoCache.get(mod));
-	Battle.prototype.init.call(battle, roomid, format, rated, send);
+	Battle.prototype.init.call(battle, format, rated, send);
 	return battle;
 };
