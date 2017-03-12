@@ -20,7 +20,6 @@ exports.commands = {
 		if (template.isMega || (template.evos && Object.keys(template.evos).length > 0)) { // Mega Pokemon cannot be mega evolved
 			return this.errorReply(`You cannot mega evolve ${template.name} in Mix and Mega.`);
 		}
-		let deltas; // Get mega deltas.
 		let baseTemplate = Tools.getTemplate(stone.megaEvolves);
 		let megaTemplate = Tools.getTemplate(stone.megaStone);
 		if (stone.id === 'redorb') { // Orbs do not have 'Item.megaStone' or 'Item.megaEvolves' properties.
@@ -30,7 +29,7 @@ exports.commands = {
 			megaTemplate = Tools.getTemplate("Kyogre-Primal");
 			baseTemplate = Tools.getTemplate("Kyogre");
 		}
-		deltas = {
+		let deltas = {
 			ability: megaTemplate.abilities['0'],
 			baseStats: {},
 			weightkg: megaTemplate.weightkg - baseTemplate.weightkg,
@@ -85,7 +84,7 @@ exports.commands = {
 	},
 	mixandmegahelp: ["/mnm <pokemon> @ <mega stone> - Shows the mix and mega evolved Pokemon's type and stats."],
 
-	'350': 'cup350',
+	'350': '350cup',
 	'350cup': function (target, room, user) {
 		if (!this.runBroadcast()) return;
 		if (!Tools.data.Pokedex[toId(target)]) {
