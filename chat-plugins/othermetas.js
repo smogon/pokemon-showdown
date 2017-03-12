@@ -82,7 +82,7 @@ exports.commands = {
 		text = `${text}<b>Weight</b>: ${weightkg} kg (${gnbp} BP)`;
 		return this.sendReplyBox(text);
 	},
-	mixandmegahelp: ["/mnm <pokemon> @ <mega stone> - Shows the mix and mega evolved Pokemon's type and stats."],
+	mixandmegahelp: ["/mnm <pokemon> @ <mega stone> - Shows the Mix and Mega evolved Pokemon's type and stats."],
 
 	'350': '350cup',
 	'350cup': function (target, room, user) {
@@ -101,7 +101,7 @@ exports.commands = {
 		}
 		this.sendReplyBox(`${pokeobj.species} in 350 Cup: <br /> ${Object.values(newStats).join('/')}`);
 	},
-	'350cuphelp': ["/350 OR /350cup <pokemon> - Shows the base stats that a Pokemon would have in 350 cup."],
+	'350cuphelp': ["/350 OR /350cup <pokemon> - Shows the base stats that a Pokemon would have in 350 Cup."],
 
 	ts: 'tiershift',
 	tiershift: function (target, room, user) {
