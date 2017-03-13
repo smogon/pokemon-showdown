@@ -1305,7 +1305,6 @@ class BattleSide {
 		this.active = [null];
 		this.sideConditions = {};
 
-		this.isActive = false;
 		this.pokemonLeft = 0;
 		this.faintedLastTurn = false;
 		this.faintedThisTurn = false;
@@ -1428,16 +1427,7 @@ class BattleSide {
 		this.battle.send('sideupdate', `${this.id}\n|callback|${args.join('|')}`);
 	}
 	emitRequest(update) {
-		this.battle.send('request', `${this.id}\n${this.battle.rqid}\n${JSON.stringify(update)}`);
-	}
-	updateChoice() {
-		const offset = this.choiceData.choices.length;
-		this.battle.send('choice', this.id + "\n" + this.battle.rqid + "\n" + offset + "\n" + JSON.stringify({
-			done: this.choiceData.choices.map((choice, index) => choice === 'skip' ? '' : '' + index).join(""),
-			leave: Array.from(this.choiceData.leaveIndices).join(""),
-			enter: Array.from(this.choiceData.enterIndices).join(""),
-			team: this.currentRequest === 'teampreview' ? this.choiceData.decisions.map(decision => decision.pokemon.position + 1).join("") : null,
-		}));
+		this.battle.send('request', `${this.id}\n${JSON.stringify(update)}`);
 	}
 
 	getDecisionsFinished() {
@@ -1987,7 +1977,6 @@ class Battle extends Tools.BattleDex {
 		this.midTurn = false;
 		this.currentRequest = '';
 		this.currentRequestDetails = '';
-		this.rqid = 0;
 		this.lastMoveLine = 0;
 		this.reportPercentages = false;
 		this.supportCancel = false;
@@ -2839,7 +2828,6 @@ class Battle extends Tools.BattleDex {
 		if (type) {
 			this.currentRequest = type;
 			this.currentRequestDetails = requestDetails || '';
-			this.rqid++;
 			this.p1.clearChoice();
 			this.p2.clearChoice();
 		} else {
@@ -2862,7 +2850,7 @@ class Battle extends Tools.BattleDex {
 			}
 			if (switchTable.some(flag => flag === true)) {
 				this.p1.currentRequest = 'switch';
-				p1request = {forceSwitch: switchTable, side: this.p1.getData(), rqid: this.rqid};
+				p1request = {forceSwitch: switchTable, side: this.p1.getData()};
 			}
 			switchTable = [];
 			for (let i = 0, l = this.p2.active.length; i < l; i++) {
@@ -2871,7 +2859,7 @@ class Battle extends Tools.BattleDex {
 			}
 			if (switchTable.some(flag => flag === true)) {
 				this.p2.currentRequest = 'switch';
-				p2request = {forceSwitch: switchTable, side: this.p2.getData(), rqid: this.rqid};
+				p2request = {forceSwitch: switchTable, side: this.p2.getData()};
 			}
 			break;
 		}
@@ -2879,35 +2867,22 @@ class Battle extends Tools.BattleDex {
 		case 'teampreview':
 			this.add('teampreview' + (requestDetails ? '|' + requestDetails : ''));
 			this.p1.currentRequest = 'teampreview';
-			p1request = {teamPreview: true, side: this.p1.getData(), rqid: this.rqid};
+			p1request = {teamPreview: true, side: this.p1.getData()};
 			this.p2.currentRequest = 'teampreview';
-			p2request = {teamPreview: true, side: this.p2.getData(), rqid: this.rqid};
+			p2request = {teamPreview: true, side: this.p2.getData()};
 			break;
 
 		default: {
 			this.p1.currentRequest = 'move';
 			let activeData = this.p1.active.map(pokemon => pokemon && pokemon.getRequestData());
-			p1request = {active: activeData, side: this.p1.getData(), rqid: this.rqid};
+			p1request = {active: activeData, side: this.p1.getData()};
 
 			this.p2.currentRequest = 'move';
 			activeData = this.p2.active.map(pokemon => pokemon && pokemon.getRequestData());
-			p2request = {active: activeData, side: this.p2.getData(), rqid: this.rqid};
+			p2request = {active: activeData, side: this.p2.getData()};
 			break;
 		}
 
-		}
-
-		if (this.p1 && this.p2) {
-			let inactiveSide = -1;
-			if (p1request && !p2request) {
-				inactiveSide = 0;
-			} else if (!p1request && p2request) {
-				inactiveSide = 1;
-			}
-			if (inactiveSide !== this.inactiveSide) {
-				this.send('inactiveside', inactiveSide);
-				this.inactiveSide = inactiveSide;
-			}
 		}
 
 		if (p1request) {
@@ -3326,18 +3301,14 @@ class Battle extends Tools.BattleDex {
 	start() {
 		if (this.active) return;
 
-		if (!this.p1 || !this.p1.isActive || !this.p2 || !this.p2.isActive) {
+		if (!this.p1 || !this.p2) {
 			// need two players to start
 			return;
 		}
 
 		if (this.started) {
-			this.makeRequest();
-			this.isActive = true;
-			this.activeTurns = 0;
 			return;
 		}
-		this.isActive = true;
 		this.activeTurns = 0;
 		this.started = true;
 		this.p2.foe = this.p1;
@@ -4435,22 +4406,12 @@ class Battle extends Tools.BattleDex {
 	 * Takes a choice string passed from the client. Starts the next
 	 * turn if all required choices have been made.
 	 */
-	choose(sideid, input, rqid) {
+	choose(sideid, input) {
 		let side = null;
 		if (sideid === 'p1' || sideid === 'p2') side = this[sideid];
-		// This condition should be impossible because the sideid comes
-		// from our forked process and if the player id were invalid, we would
-		// not have even got to this function.
-		if (!side) return; // wtf
+		if (!side) throw new Error(`Invalid side ${sideid}`);
 
-		// This condition can occur if the client sends a decision at the
-		// wrong time.
-		if (!side.currentRequest) return;
-
-		// Make sure the decision is for the right request.
-		if ((rqid !== undefined) && (parseInt(rqid) !== this.rqid)) {
-			return;
-		}
+		if (!side.currentRequest) throw new Error(`Side ${side.name} (${sideid}) has no request`);
 
 		if (side.choiceData.finalDecision) {
 			this.debug("Can't override decision: the last pokemon could have been trapped or disabled");
@@ -4545,7 +4506,6 @@ class Battle extends Tools.BattleDex {
 			}
 		}
 
-		side.updateChoice();
 		this.checkDecisions();
 	}
 
@@ -4758,7 +4718,6 @@ class Battle extends Tools.BattleDex {
 		if (stepsBack !== true && isNaN(stepsBack)) return;
 
 		side.undoChoices(stepsBack);
-		side.updateChoice();
 	}
 	checkDecisions() {
 		let totalDecisions = 0;
@@ -4814,11 +4773,11 @@ class Battle extends Tools.BattleDex {
 	// players
 
 	join(slot, name, avatar, team) {
-		if (this.p1 && this.p1.isActive && this.p2 && this.p2.isActive) return false;
-		if ((this.p1 && this.p1.isActive && this.p1.name === name) || (this.p2 && this.p2.isActive && this.p2.name === name)) return false;
+		if (this.p1 && this.p2) return false;
+		if ((this.p1 && this.p1.name === name) || (this.p2 && this.p2.name === name)) return false;
 
 		let player = null;
-		if (this.p1 && this.p1.isActive || slot === 'p2') {
+		if (this.p1 || slot === 'p2') {
 			if (this.started) {
 				this.p2.name = name;
 			} else {
@@ -4839,33 +4798,10 @@ class Battle extends Tools.BattleDex {
 		}
 
 		if (avatar) player.avatar = avatar;
-		player.isActive = true;
 		this.add('player', player.id, player.name, avatar);
 
 		this.start();
 		return player;
-	}
-	rename(slot, name, avatar) {
-		if (slot === 'p1' || slot === 'p2') {
-			let side = this[slot];
-			side.name = name;
-			if (avatar) side.avatar = avatar;
-			this.add('player', slot, name, side.avatar);
-		}
-	}
-	leave(slot) {
-		if (slot === 'p1' || slot === 'p2') {
-			let side = this[slot];
-			if (!side) {
-				throw new Error(`${slot} tried to leave before it was possible`);
-			}
-
-			side.emitRequest(null);
-			side.isActive = false;
-			this.add('player', slot);
-			this.active = false;
-		}
-		return true;
 	}
 
 	// This function is called by this process's 'message' event.
@@ -4880,18 +4816,6 @@ class Battle extends Tools.BattleDex {
 			this.join(data[2], data[3], data[4], team);
 			break;
 		}
-
-		case 'rename':
-			this.rename(data[2], data[3], data[4]);
-			break;
-
-		case 'leave':
-			this.leave(data[2]);
-			break;
-
-		case 'chat':
-			this.add('chat', data[2], more);
-			break;
 
 		case 'win':
 		case 'tie':
@@ -4931,26 +4855,6 @@ class Battle extends Tools.BattleDex {
 		this.sendUpdates(logPos, alreadyEnded);
 	}
 	sendUpdates(logPos, alreadyEnded) {
-		if (this.p1 && this.p2) {
-			let inactiveSide = -1;
-			if (!this.p1.isActive && this.p2.isActive) {
-				inactiveSide = 0;
-			} else if (this.p1.isActive && !this.p2.isActive) {
-				inactiveSide = 1;
-			} else {
-				let sidesDecided = this.sides.map(side => side.getDecisionsFinished());
-				if (sidesDecided[0] && !sidesDecided[1]) {
-					inactiveSide = 1;
-				} else if (sidesDecided[1] && !sidesDecided[0]) {
-					inactiveSide = 0;
-				}
-			}
-			if (inactiveSide !== this.inactiveSide) {
-				this.send('inactiveside', inactiveSide);
-				this.inactiveSide = inactiveSide;
-			}
-		}
-
 		if (this.log.length > logPos) {
 			if (alreadyEnded !== undefined && this.ended && !alreadyEnded) {
 				if (this.rated || Config.logchallenges) {
