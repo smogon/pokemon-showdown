@@ -3259,7 +3259,7 @@ exports.BattleAbilities = {
 		},
 		id: "stamina",
 		name: "Stamina",
-		rating: 1.5,
+		rating: 2,
 		num: 192,
 	},
 	"stancechange": {
