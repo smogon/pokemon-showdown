@@ -1042,7 +1042,7 @@ let commands = {
 			if (tournament.banlist.length < 1) {
 				return this.errorReply("The tournament's banlist is empty.");
 			}
-			this.sendReplyBox("This tournament includes:<br />" + tournament.getBanlist());
+			this.sendReply('|html|<div class="infobox infobox-limited">This tournament includes:<br />' + tournament.getBanlist() + '</div>');
 		},
 	},
 	creation: {
@@ -1082,7 +1082,7 @@ let commands = {
 				return this.errorReply("The banlist cannot be changed once the tournament has started.");
 			}
 			if (tournament.setBanlist(params, this)) {
-				this.room.addRaw("<div class='infobox'>This tournament includes:<br />" + tournament.getBanlist() + "</div>");
+				this.room.addRaw('<div class="infobox infobox-limited">This tournament includes:<br />' + tournament.getBanlist() + '</div>');
 				this.privateModCommand("(" + user.name + " set the tournament's banlist to " + tournament.banlist.join(", ") + ".)");
 			}
 		},
