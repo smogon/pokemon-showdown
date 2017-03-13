@@ -116,18 +116,18 @@ class Battle {
 		this.p2 = null;
 
 		this.playerNames = [room.p1.name, room.p2.name];
+		/** {playerid: [rqid, request, isWait, choice]} */
 		this.requests = {};
 
-		// log information
+		// data to be logged
 		this.logData = null;
 		this.endType = 'normal';
 
-		this.rqid = '';
-		this.inactiveQueued = false;
+		this.rqid = 1;
 
 		this.process = SimulatorProcess.acquire();
 		if (this.process.pendingTasks.has(room.id)) {
-			throw new Error("Battle with ID " + room.id + " already exists.");
+			throw new Error(`Battle with ID ${room.id} already exists.`);
 		}
 
 		this.send('init', this.format, rated ? '1' : '');
@@ -158,23 +158,34 @@ class Battle {
 		this.active = active;
 	}
 	choose(user, data) {
-		this.sendFor(user, 'choose', data);
+		const player = this.players[user];
+		const [choice, rqid] = data.split('|', 2);
+		if (!player) return;
+		let request = this.requests[player.slot];
+		if (rqid && rqid !== '' + request[0]) return;
+		request[2] = true;
+		request[3] = choice;
+
+		this.sendFor(user, 'choose', choice);
 	}
 	undo(user, data) {
-		this.sendFor(user, 'undo', data);
+		const player = this.players[user];
+		let request = this.requests[player.slot];
+
+		request[2] = false;
 	}
 	joinGame(user, team) {
 		if (this.playerCount >= 2) {
-			user.popup("This battle already has two players.");
+			user.popup(`This battle already has two players.`);
 			return false;
 		}
 		if (!user.can('joinbattle', null, this.room)) {
-			user.popup("You must be a set as a player to join a battle you didn't start. Ask a player to use /addplayer on you to join this battle.");
+			user.popup(`You must be a set as a player to join a battle you didn't start. Ask a player to use /addplayer on you to join this battle.`);
 			return false;
 		}
 
 		if (!this.addPlayer(user, team)) {
-			user.popup("Failed to join battle.");
+			user.popup(`Failed to join battle.`);
 			return false;
 		}
 		this.room.update();
@@ -184,11 +195,11 @@ class Battle {
 	leaveGame(user) {
 		if (!user) return false; // ...
 		if (this.room.rated || this.room.tour) {
-			user.popup("Players can't be swapped out in a " + (this.room.tour ? "tournament" : "rated") + " battle.");
+			user.popup(`Players can't be swapped out in a ${this.room.tour ? "tournament" : "rated"} battle.`);
 			return false;
 		}
 		if (!this.removePlayer(user)) {
-			user.popup("Failed to leave battle.");
+			user.popup(`Failed to leave battle.`);
 			return false;
 		}
 		this.room.auth[user.userid] = '+';
@@ -204,16 +215,12 @@ class Battle {
 			this.checkActive();
 			this.room.push(lines.slice(2));
 			this.room.update();
-			if (this.inactiveQueued) {
-				this.room.nextInactive();
-				this.inactiveQueued = false;
-			}
+			this.room.nextInactive();
 			break;
 
 		case 'winupdate':
 			this.room.push(lines.slice(3));
 			this.started = true;
-			this.inactiveSide = -1;
 			if (!this.ended) {
 				this.ended = true;
 				this.room.win(lines[2]);
@@ -232,41 +239,20 @@ class Battle {
 
 		case 'request': {
 			let player = this[lines[2]];
-			let rqid = lines[3];
 
-			if (rqid !== this.rqid) {
-				this.rqid = rqid;
-				this.inactiveQueued = true;
-			}
+			this.rqid++;
 			if (player) {
-				const isNewRequest = !this.requests[player.slot] || +this.requests[player.slot][0] < +rqid;
-				if (isNewRequest) {
-					player.choiceIndex = 0;
-				}
-				this.requests[player.slot] = [rqid, lines[4]];
-				player.sendRoom('|request|' + (player.choiceIndex ? player.choiceIndex + '|' + player.choiceData + '\n' : '') + lines[4]);
-			}
-			break;
-		}
-
-		case 'choice': {
-			let player = this[lines[2]];
-			let rqid = lines[3];
-			let choiceIndex = +lines[4];
-			let choiceData = lines[5];
-			if (rqid === this.rqid && player) {
-				player.choiceIndex = choiceIndex;
-				player.choiceData = choiceData;
+				let request = JSON.parse(lines[3]);
+				request.rqid = this.rqid;
+				const requestJSON = JSON.stringify(request);
+				this.requests[player.slot] = [this.rqid, requestJSON, request.wait, ''];
+				player.sendRoom(`|request|${requestJSON}`);
 			}
 			break;
 		}
 
 		case 'log':
 			this.logData = JSON.parse(lines[2]);
-			break;
-
-		case 'inactiveside':
-			this.inactiveSide = parseInt(lines[2]);
 			break;
 
 		case 'score':
@@ -280,12 +266,14 @@ class Battle {
 		// this handles joining a battle in which a user is a participant,
 		// where the user has already identified before attempting to join
 		// the battle
-		let player = this.players[user];
+		const player = this.players[user];
 		if (!player) return;
 		player.updateSubchannel(connection || user);
-		let request = this.requests[player.slot];
+		const request = this.requests[player.slot];
 		if (request) {
-			(connection || user).sendTo(this.id, '|request|' + (player.choiceIndex ? player.choiceIndex + '|' + player.choiceData + '\n' : '') + request[1]);
+			let data = `|request|${request[1]}`;
+			if (request[3]) data += `\n|sentchoice|${request[3]}`;
+			(connection || user).sendTo(this.id, data);
 		}
 	}
 	onUpdateConnection(user, connection) {
@@ -320,20 +308,21 @@ class Battle {
 		player.userid = user.userid;
 		player.name = user.name;
 		delete this.players[oldUserid];
-		player.simSend('rename', user.name, user.avatar);
+		player.simSend('join', user.name, user.avatar);
 	}
 	onJoin(user) {
 		let player = this.players[user];
 		if (player && !player.active) {
 			player.active = true;
-			player.simSend('join', user.name, user.avatar);
+			this.room.add(`|player|${player.slot}|${user.name}|${user.avatar}`);
 		}
 	}
 	onLeave(user) {
 		let player = this.players[user];
 		if (player && player.active) {
+			player.sendRoom(`|request|null`);
 			player.active = false;
-			player.simSend('leave');
+			this.room.add(`|player|${player.slot}|`);
 		}
 	}
 
@@ -408,8 +397,12 @@ class Battle {
 
 	removePlayer(user) {
 		if (!this.allowRenames) return false;
-		if (!(user.userid in this.players)) return false;
-		this.players[user.userid].destroy();
+		let player = this.players[user.userid];
+		if (!player) return false;
+		if (player.active) {
+			this.room.add(`|player|${player.slot}|`);
+		}
+		player.destroy();
 		delete this.players[user.userid];
 		this.playerCount--;
 		return true;
