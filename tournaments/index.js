@@ -1042,7 +1042,7 @@ let commands = {
 			if (tournament.banlist.length < 1) {
 				return this.errorReply("The tournament's banlist is empty.");
 			}
-			this.sendReply('|html|<div class="infobox infobox-limited">This tournament includes:<br />' + tournament.getBanlist() + '</div>');
+			this.sendReplyBox('<div class="infobox infobox-limited">This tournament includes:<br />' + tournament.getBanlist() + '</div>');
 		},
 	},
 	creation: {
