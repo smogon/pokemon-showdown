@@ -4,8 +4,8 @@ const maxTime = 30; // seconds
 
 const rgb_Gradients = {
 	"Green": "rgba(0, 122, 0, 1), rgba(0, 185, 0, 0.9)",
-	"Yellow": "rgba(235, 235, 0, 1), rgba(255, 255, 0, 0.85)",
-	"Blue": "rgba(0, 0, 255, 1), rgba(125, 125, 255, 0.9)",
+	"Yellow": "rgba(255, 225, 0, 1), rgba(255, 255, 85, 0.9)",
+	"Blue": "rgba(40, 40, 255, 1), rgba(125, 125, 255, 0.9)",
 	"Red": "rgba(255, 0, 0, 1), rgba(255, 125, 125, 0.9)",
 	"Black": "rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.55)",
 };
