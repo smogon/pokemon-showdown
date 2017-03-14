@@ -14,29 +14,29 @@ const text_shadow = "text-shadow: 1px 0px black, -1px 0px black, 0px -1px black,
 
 function cardHTML(card, fullsize) {
 	let surface = card.value.replace(/[^A-Z0-9\+]/g, "");
-	let background = rgb_Gradients[card.colour];
+	let background = rgb_Gradients[card.color];
 	if (surface === "R") surface = '<i class="fa fa-refresh" aria-hidden="true"></i>';
 
-	return `<button class="button" style="font-size: 14px; font-weight: bold; color: white; ${text_shadow} padding-bottom: 117px; text-align: left; height: 135px; width: ${fullsize ? "72" : "37"}px; border-radius: 10px 2px 2px 3px; color: white; background: ${card.colour}; background: -webkit-linear-gradient(${background}); background: -o-linear-gradient(${background}); background: -moz-linear-gradient(${background}); background: linear-gradient(${background});" name=send value="/uno play ${card.name}">${surface}</button>`;
+	return `<button class="button" style="font-size: 14px; font-weight: bold; color: white; ${text_shadow} padding-bottom: 117px; text-align: left; height: 135px; width: ${fullsize ? "72" : "37"}px; border-radius: 10px 2px 2px 3px; color: white; background: ${card.color}; background: -webkit-linear-gradient(${background}); background: -o-linear-gradient(${background}); background: -moz-linear-gradient(${background}); background: linear-gradient(${background});" name=send value="/uno play ${card.name}">${surface}</button>`;
 }
 
 function createDeck() {
-	let colours = ["Red", "Blue", "Green", "Yellow"];
-	let values = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "Reverse", "Skip", "+2"];
+	const colors = ["Red", "Blue", "Green", "Yellow"];
+	const values = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "Reverse", "Skip", "+2"];
 
 	let basic = [];
 
 	for (let i = 0; i < 4; i++) {
-		let colour = colours[i];
+		let color = colors[i];
 		basic.push(...values.map(v => {
-			return {value: v, colour: colour, name: colour + " " + v};
+			return {value: v, color: color, name: color + " " + v};
 		}));
 	}
 
 	return [...basic, ...basic, // two copies of the basic stuff (total 96)
-		...[0, 1, 2, 3].map(v => ({colour: colours[v], value: "0", name: colours[v] + " 0"})), // the 4 0s
-		...[0, 1, 2, 3].map(v => ({colour: "Black", value: "Wild", name: "Wild"})), // wild cards
-		...[0, 1, 2, 3].map(v => ({colour: "Black", value: "+4", name: "Wild +4"})), // wild +4 cards
+		...[0, 1, 2, 3].map(v => ({color: colors[v], value: "0", name: colors[v] + " 0"})), // the 4 0s
+		...[0, 1, 2, 3].map(v => ({color: "Black", value: "Wild", name: "Wild"})), // wild cards
+		...[0, 1, 2, 3].map(v => ({color: "Black", value: "+4", name: "Wild +4"})), // wild +4 cards
 	]; // 108 cards
 }
 
@@ -83,9 +83,9 @@ class UNOgame extends Rooms.RoomGame {
 		do {
 			this.topCard = this.drawCard(1)[0];
 			this.discards.unshift(this.topCard);
-		} while (this.topCard.colour === "Black");
+		} while (this.topCard.color === "Black");
 
-		this.sendToRoom(`|raw|The top card is <span style="color: ${this.topCard.colour}">${this.topCard.name}</span>.`);
+		this.sendToRoom(`|raw|The top card is <span style="color: ${this.topCard.color}">${this.topCard.name}</span>.`);
 
 		this.onRunEffect(this.topCard.value, true);
 		this.nextTurn(true);
@@ -216,8 +216,8 @@ class UNOgame extends Rooms.RoomGame {
 
 		// check for legal play
 		if (player.cardLock && player.cardLock !== cardName) return `You can only play ${player.cardLock} after drawing.`;
-		if (card.colour !== "Black" && card.colour !== this.topCard.colour && card.value !== this.topCard.value) return "You cannot play this card.";
-		if (card.value === "+4" && !player.canPlayWildFour()) return "You cannot play Wild +4 when you still have a card with the same colour as the top card.";
+		if (card.color !== "Black" && card.color !== this.topCard.color && card.value !== this.topCard.value) return "You cannot play this card.";
+		if (card.value === "+4" && !player.canPlayWildFour()) return "You cannot play Wild +4 when you still have a card with the same color as the top card.";
 
 		clearTimeout(this.timer); // reset the autodq timer.
 
@@ -228,9 +228,9 @@ class UNOgame extends Rooms.RoomGame {
 		player.removeCard(cardName);
 		this.discards.unshift(card);
 
-		player.sendDisplay(); // update display without the card in it for purposes such as choosing colours
+		player.sendDisplay(); // update display without the card in it for purposes such as choosing colors
 
-		this.sendToRoom(`|raw|${Chat.escapeHTML(player.name)} has played a <span style="color: ${card.colour}">${card.name}</span>.`);
+		this.sendToRoom(`|raw|${Chat.escapeHTML(player.name)} has played a <span style="color: ${card.color}">${card.name}</span>.`);
 
 		// handle hand size
 		if (!player.hand.length) {
@@ -245,7 +245,7 @@ class UNOgame extends Rooms.RoomGame {
 	}
 
 	onRunEffect(value, initialize) {
-		const colourDisplay = `|uhtml|uno-hand|<table style="width: 100%; border: 1px solid black;"><tr><td style="width: 50%"><button style="width: 100%; background-color: red; border: 2px solid rgba(0 , 0 , 0 , 0.59); border-radius: 5px; padding: 5px;" name=send value="/uno colour Red">Red</button></td><td style="width: 50%"><button style="width: 100%; background-color: blue; border: 2px solid rgba(0 , 0 , 0 , 0.59); border-radius: 5px; color: white; padding: 5px;" name=send value="/uno colour Blue">Blue</button></td></tr><tr><td style="width: 50%"><button style="width: 100%; background-color: green; border: 2px solid rgba(0 , 0 , 0 , 0.59); border-radius: 5px; padding: 5px;" name=send value="/uno colour Green">Green</button></td><td style="width: 50%"><button style="width: 100%; background-color: yellow; border: 2px solid rgba(0 , 0 , 0 , 0.59); border-radius: 5px; padding: 5px;" name=send value="/uno colour Yellow">Yellow</button></td></tr></table>`;
+		const colorDisplay = `|uhtml|uno-hand|<table style="width: 100%; border: 1px solid black;"><tr><td style="width: 50%"><button style="width: 100%; background-color: red; border: 2px solid rgba(0 , 0 , 0 , 0.59); border-radius: 5px; padding: 5px;" name=send value="/uno color Red">Red</button></td><td style="width: 50%"><button style="width: 100%; background-color: blue; border: 2px solid rgba(0 , 0 , 0 , 0.59); border-radius: 5px; color: white; padding: 5px;" name=send value="/uno color Blue">Blue</button></td></tr><tr><td style="width: 50%"><button style="width: 100%; background-color: green; border: 2px solid rgba(0 , 0 , 0 , 0.59); border-radius: 5px; padding: 5px;" name=send value="/uno color Green">Green</button></td><td style="width: 50%"><button style="width: 100%; background-color: yellow; border: 2px solid rgba(0 , 0 , 0 , 0.59); border-radius: 5px; padding: 5px;" name=send value="/uno color Yellow">Yellow</button></td></tr></table>`;
 
 		switch (value) {
 		case "Reverse":
@@ -263,9 +263,9 @@ class UNOgame extends Rooms.RoomGame {
 			this.onDrawCard({userid: this.currentPlayer}, 2);
 			break;
 		case "+4":
-			this.players[this.currentPlayer].sendRoom(colourDisplay);
-			this.state = "colour";
-			// apply to the next in line, since the current player still has to choose the colour
+			this.players[this.currentPlayer].sendRoom(colorDisplay);
+			this.state = "color";
+			// apply to the next in line, since the current player still has to choose the color
 			let next = this.getNextPlayer();
 			this.sendToRoom(this.players[next].name + " has been forced to draw 4 cards.");
 			this.onDrawCard({userid: next}, 4);
@@ -276,8 +276,8 @@ class UNOgame extends Rooms.RoomGame {
 			}, this.maxTime * 1000);
 			break;
 		case "Wild":
-			this.players[this.currentPlayer].sendRoom(colourDisplay);
-			this.state = "colour";
+			this.players[this.currentPlayer].sendRoom(colorDisplay);
+			this.state = "color";
 			this.timer = setTimeout(() => {
 				this.sendToRoom(`${this.players[this.currentPlayer].name} has been automatically disqualified.`);
 				this.eliminate(this.currentPlayer);
@@ -287,10 +287,10 @@ class UNOgame extends Rooms.RoomGame {
 		if (initialize) this.onNextPlayer();
 	}
 
-	onSelectColour(user, colour) {
-		if (!["Red", "Blue", "Green", "Yellow"].includes(colour) || user.userid !== this.currentPlayer || this.state !== "colour") return false;
-		this.topCard.colour = colour; // manually change the top card's colour
-		this.sendToRoom(`The colour has been changed to ${colour}.`);
+	onSelectcolor(user, color) {
+		if (!["Red", "Blue", "Green", "Yellow"].includes(color) || user.userid !== this.currentPlayer || this.state !== "color") return false;
+		this.topCard.color = color; // manually change the top card's color
+		this.sendToRoom(`The color has been changed to ${color}.`);
 		clearTimeout(this.timer);
 		this.state = "play";
 
@@ -308,7 +308,7 @@ class UNOgame extends Rooms.RoomGame {
 
 		let player = this.players[user.userid];
 		player.hand.push(...drawnCards);
-		player.sendRoom(`|raw|You have drawn the following card${drawnCards.length > 1 ? "s" : ""}: ${drawnCards.map(card => `<span style="color: ${card.colour}">${card.name}</span>`).join(", ")}.`);
+		player.sendRoom(`|raw|You have drawn the following card${drawnCards.length > 1 ? "s" : ""}: ${drawnCards.map(card => `<span style="color: ${card.color}">${card.name}</span>`).join(", ")}.`);
 		return drawnCards;
 	}
 
@@ -376,9 +376,9 @@ class UNOgamePlayer extends Rooms.RoomGamePlayer {
 	}
 
 	canPlayWildFour() {
-		let colour = this.game.topCard.colour;
+		let color = this.game.topCard.color;
 
-		if (this.hand.some(c => c.colour === colour)) return false;
+		if (this.hand.some(c => c.color === color)) return false;
 		return true;
 	}
 
@@ -396,7 +396,7 @@ class UNOgamePlayer extends Rooms.RoomGamePlayer {
 	}
 
 	buildHand() {
-		return this.hand.sort((a, b) => a.colour.localeCompare(b.colour) || a.value.localeCompare(b.value))
+		return this.hand.sort((a, b) => a.color.localeCompare(b.color) || a.value.localeCompare(b.value))
 		.map((c, i) => cardHTML(c, i === this.hand.length - 1));
 	}
 
@@ -406,7 +406,7 @@ class UNOgamePlayer extends Rooms.RoomGamePlayer {
 		let draw = "<button class=\"button\" style=\"width: 30%; background: rgba(0, 0, 255, 0.05);\" name=send value=\"/uno draw\">Draw a card!</button>";
 		let pass = "<button class=\"button\" style=\" width: 30%; background: rgba(255, 0, 0, 0.05);\" name=send value=\"/uno pass\">Pass!</button>";
 
-		let top = `<strong>Top Card: <span style="color: ${this.game.topCard.colour}">${this.game.topCard.name}</span></strong>`;
+		let top = `<strong>Top Card: <span style="color: ${this.game.topCard.color}">${this.game.topCard.name}</span></strong>`;
 
 		// clear previous display and show new display
 		this.sendRoom("|uhtmlchange|uno-hand|");
@@ -536,9 +536,9 @@ exports.commands = {
 			room.game.nextTurn();
 		},
 
-		colour: function (target, room, user) {
+		color: function (target, room, user) {
 			if (!room.game || room.game.gameid !== "uno") return false;
-			room.game.onSelectColour(user, target);
+			room.game.onSelectcolor(user, target);
 		},
 
 		uno: function (target, room, user) {
