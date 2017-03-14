@@ -80,6 +80,9 @@ exports.BattleScripts = {
 		let noLock = externalMove && !pokemon.volatiles.lockedmove;
 
 		if (zMove) {
+			if (pokemon.illusion) {
+				this.singleEvent('End', this.getAbility('Illusion'), pokemon.abilityData, pokemon);
+			}
 			this.add('-zpower', pokemon);
 			pokemon.side.zMoveUsed = true;
 		}
