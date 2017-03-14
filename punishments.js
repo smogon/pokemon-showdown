@@ -407,8 +407,9 @@ Punishments.punish = function (user, punishment, recursionKeys) {
 		Punishments.ips.set(ip, punishment);
 		keys.add(ip);
 	}
-	if (!user.userid.startsWith('guest')) {
-		Punishments.userids.set(user.userid, punishment);
+	let lastUserId = user.getLastId();
+	if (!lastUserId.startsWith('guest')) {
+		Punishments.userids.set(lastUserId, punishment);
 	}
 	if (user.autoconfirmed) {
 		Punishments.userids.set(user.autoconfirmed, punishment);
