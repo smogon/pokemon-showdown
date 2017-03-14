@@ -6238,10 +6238,11 @@ exports.BattleMovedex = {
 		flags: {},
 		isZ: "mewniumz",
 		secondary: {
-			dustproof: true,
 			chance: 100,
-			onHit: function () {
-				this.setTerrain('psychicterrain');
+			self: {
+				onHit: function () {
+					this.setTerrain('psychicterrain');
+				},
 			},
 		},
 		target: "normal",
