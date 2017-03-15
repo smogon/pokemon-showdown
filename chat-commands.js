@@ -984,16 +984,21 @@ exports.commands = {
 		if (!target) {
 			if (!this.runBroadcast()) return;
 			if (!room.aliases || !room.aliases.length) return this.sendReplyBox("This room does not have any aliases.");
-			return this.sendReplyBox("This room has the following aliases: " + room.aliases.join(", ") + "");
+			return this.sendReplyBox(`This room has the following aliases: ${room.aliases.join(", ")}`);
 		}
 		if (!this.can('makeroom')) return false;
+		if (target.includes(',')) {
+			this.errorReply(`Invalid room alias: ${target.trim()}`);
+			return this.parse('/help roomalias');
+		}
+
 		let alias = toId(target);
 		if (!alias.length) return this.errorReply("Only alphanumeric characters are valid in an alias.");
 		if (Rooms(alias) || Rooms.aliases.has(alias)) return this.errorReply("You cannot set an alias to an existing room or alias.");
 		if (room.isPersonal) return this.errorReply("Personal rooms can't have aliases.");
 
 		Rooms.aliases.set(alias, room.id);
-		this.privateModCommand(`(${user.name} added the room alias '${target}'.)`);
+		this.privateModCommand(`(${user.name} added the room alias '${target.trim()}'.)`);
 
 		if (!room.aliases) room.aliases = [];
 		room.aliases.push(alias);
@@ -1002,10 +1007,19 @@ exports.commands = {
 			Rooms.global.writeChatRoomData();
 		}
 	},
+	roomaliashelp: [
+		"/roomalias - displays a list of all room aliases of the room the command was entered in.",
+		"/roomalias [alias] - adds the given room alias to the room the command was entered in. Requires: & ~",
+	],
 
 	removeroomalias: function (target, room, user) {
 		if (!room.aliases) return this.errorReply("This room does not have any aliases.");
 		if (!this.can('makeroom')) return false;
+		if (target.includes(',')) {
+			this.errorReply(`Invalid room alias: ${target.trim()}`);
+			return this.parse('/help removeroomalias');
+		}
+
 		let alias = toId(target);
 		if (!alias || !Rooms.aliases.has(alias)) return this.errorReply("Please specify an existing alias.");
 		if (Rooms.aliases.get(alias) !== room.id) return this.errorReply("You may only remove an alias from the current room.");
@@ -1019,6 +1033,7 @@ exports.commands = {
 			Rooms.global.writeChatRoomData();
 		}
 	},
+	removeroomaliashelp: ["/removeroomalias [alias] - removes the given room alias of the room the command was entered in. Requires: & ~"],
 
 	roomowner: function (target, room, user) {
 		if (!room.chatRoomData) {
