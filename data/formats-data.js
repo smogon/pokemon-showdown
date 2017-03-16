@@ -540,7 +540,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 3, "level": 32, "abilities":["shielddust"], "moves":["refresh", "silverwind", "substitute", "psychic"]},
 		],
-		tier: "New",
+		tier: "BL2",
 	},
 	diglett: {
 		randomBattleMoves: ["earthquake", "rockslide", "stealthrock", "suckerpunch", "reversal", "substitute", "shadowclaw"],
@@ -3041,7 +3041,7 @@ exports.BattleFormatsData = {
 			{"generation": 3, "level": 100, "moves":["taunt", "crabhammer", "swordsdance", "guillotine"]},
 			{"generation": 3, "level": 50, "moves":["knockoff", "taunt", "crabhammer", "swordsdance"]},
 		],
-		tier: "New",
+		tier: "BL2",
 	},
 	baltoy: {
 		randomBattleMoves: ["stealthrock", "earthquake", "toxic", "psychic", "reflect", "lightscreen", "icebeam", "rapidspin"],
@@ -3860,7 +3860,7 @@ exports.BattleFormatsData = {
 			{"generation": 5, "level": 50, "gender": "M", "nature": "Naughty", "ivs": {"atk": 31}, "isHidden": true, "moves":["bulletpunch", "closecombat", "stoneedge", "shadowclaw"], "pokeball": "cherishball"},
 			{"generation": 6, "level": 100, "nature": "Jolly", "isHidden": false, "abilities":["innerfocus"], "moves":["closecombat", "aurasphere", "flashcannon", "quickattack"], "pokeball": "cherishball"},
 		],
-		tier: "New",
+		tier: "BL2",
 	},
 	lucariomega: {
 		randomBattleMoves: ["swordsdance", "closecombat", "crunch", "icepunch", "bulletpunch", "nastyplot", "aurasphere", "darkpulse", "flashcannon"],
@@ -5177,7 +5177,7 @@ exports.BattleFormatsData = {
 			{"generation": 6, "level": 100, "moves":["glaciate", "scaryface", "dracometeor", "ironhead"], "pokeball": "cherishball"},
 		],
 		eventOnly: true,
-		tier: "New",
+		tier: "BL2",
 	},
 	kyuremblack: {
 		randomBattleMoves: ["outrage", "fusionbolt", "icebeam", "roost", "substitute", "earthpower", "dragonclaw"],
@@ -5577,7 +5577,7 @@ exports.BattleFormatsData = {
 	hawlucha: {
 		randomBattleMoves: ["substitute", "swordsdance", "highjumpkick", "acrobatics", "roost", "stoneedge"],
 		randomDoubleBattleMoves: ["swordsdance", "highjumpkick", "uturn", "stoneedge", "skydrop", "encore", "protect"],
-		tier: "New",
+		tier: "BL2",
 	},
 	dedenne: {
 		randomBattleMoves: ["substitute", "recycle", "thunderbolt", "nuzzle", "grassknot", "hiddenpowerice", "toxic"],
