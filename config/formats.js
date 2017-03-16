@@ -52,7 +52,7 @@ exports.Formats = [
 	{
 		name: "[Gen 7] UU",
 		desc: [
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3591786/\">UU Metagame Discussion</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3595341/\">UU Metagame Discussion</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3595093/\">UU Viability Ranking</a>",
 		],
 
@@ -62,7 +62,7 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 7] RU (beta)",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3587352/\">RU Metagame Discussion</a>"],
+		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3598017/\">RU Metagame Discussion</a>"],
 
 		mod: 'gen7',
 		ruleset: ['[Gen 7] UU'],
@@ -734,6 +734,7 @@ exports.Formats = [
 	},
 	{
 		name: "Inverse Battle",
+		desc: ["The effectiveness of attacks is inverted."],
 
 		searchShow: false,
 		ruleset: ['Pokemon', 'Inverse Mod', 'Endless Battle Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod'],
