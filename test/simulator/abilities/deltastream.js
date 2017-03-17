@@ -52,7 +52,7 @@ describe('Delta Stream', function () {
 			{species: "Abomasnow", ability: 'snowwarning', moves: ['hail']},
 		]);
 		for (let i = 2; i <= 5; i++) {
-			battle.p2.chooseSwitch(i).chooseDefault();
+			battle.p2.chooseSwitch(i).foe.chooseDefault();
 			assert.ok(battle.isWeather('deltastream'));
 			battle.commitDecisions();
 			assert.ok(battle.isWeather('deltastream'));
