@@ -233,6 +233,11 @@ class Battle {
 			let player = this[lines[2]];
 			if (player) {
 				player.sendRoom(lines[3]);
+				if (lines[3].startsWith('|error|[Invalid choice]')) {
+					let request = this.requests[player.slot];
+					this.requests[player.slot][2] = false;
+					this.requests[player.slot][3] = '';
+				}
 			}
 			break;
 		}

@@ -1292,6 +1292,12 @@ class BattlePokemon {
 }
 
 class BattleSide {
+	/**
+	 * @param {string} name
+	 * @param {Battle} battle
+	 * @param {number} n
+	 * @param {any} team
+	 */
 	constructor(name, battle, n, team) {
 		let sideScripts = battle.data.Scripts.side;
 		if (sideScripts) Object.assign(this, sideScripts);
@@ -1301,14 +1307,40 @@ class BattleSide {
 		this.battle = battle;
 		this.n = n;
 		this.name = name;
+		/** @type {BattlePokemon[]} */
 		this.pokemon = [];
+		/** @type {BattlePokemon[]} */
 		this.active = [null];
 		this.sideConditions = {};
 
 		this.pokemonLeft = 0;
 		this.faintedLastTurn = false;
 		this.faintedThisTurn = false;
-		this.choiceData = null;
+		/**
+		 * An object representing what the player has chosen to happen.
+		 *
+		 * @typedef {Object} Choice
+		 * @property {boolean} cantUndo - true if the choice can't be cancelled because of the maybeTrapped issue
+		 * @property {string} error - contains error text in the case of a choice error
+		 * @property {Action[]} actions - array of chosen actions
+		 * @property {number} forcedSwitchesLeft - number of switches left that need to be performed
+		 * @property {number} forcedPassesLeft - number of passes left that need to be performed
+		 * @property {Set<number>} switchIns - indexes of pokemon chosen to switch in
+		 * @property {boolean} zMove - true if a Z-move has already been selected
+		 * @property {boolean} mega - true if a mega evolution has already been selected
+		 */
+		/** @type {?Choice} */
+		this.choice = null;
+		/**
+		 * Must be one of:
+		 * 'move' - Move request, at the beginning of every turn
+		 * 'switch' - Switch request, at the end of every turn with fainted Pokémon, or mid-turn for U-turn etc
+		 * 'teampreview' - Team Preview, at the beginning of a battle
+		 * '' - No request (waiting for other player's switch request)
+		 */
+		this.currentRequest = '';
+		this.maxTeamSize = 6;
+		/** @type {BattleSide} */
 		this.foe = null;
 
 		this.id = n ? 'p2' : 'p1';
@@ -1335,7 +1367,23 @@ class BattleSide {
 
 	static getChoice(side) {
 		if (side !== this && side !== true) return '';
-		return this.choiceData.choices.join(', ');
+		return this.choice.actions.map(action => {
+			switch (action.choice) {
+			case 'move':
+				let details = ``;
+				if (action.targetLoc && this.active.length > 1) details += ` ${action.targetLoc}`;
+				if (action.mega) details += ` mega`;
+				if (action.zmove) details += ` zmove`;
+				return `move ${toId(action.move)}${details}`;
+			case 'switch':
+			case 'instaswitch':
+				return `switch ${action.target.position + 1}`;
+			case 'team':
+				return `team ${action.pokemon.position + 1}`;
+			default:
+				return action.choice;
+			}
+		}).join(', ');
 	}
 
 	toString() {
@@ -1429,111 +1477,120 @@ class BattleSide {
 	emitRequest(update) {
 		this.battle.send('request', `${this.id}\n${JSON.stringify(update)}`);
 	}
-
-	getDecisionsFinished() {
-		if (this.choiceData.decisions === true) return true;
-		if (this.choiceData.skipsIndices.size) return false;
-		if (this.currentRequest === 'teampreview') return this.choiceData.choices.length >= this.pokemon.length;
-		return this.choiceData.choices.length >= this.active.length;
+	emitChoiceError(message) {
+		this.choice.error = message;
+		this.battle.send('sideupdate', `${this.id}\n|error|[Invalid choice] ${message}`);
+		return false;
 	}
-	chooseMove(data, targetLoc, megaOrZ, dontPlay) {
+
+	isChoiceDone() {
+		if (!this.currentRequest) return true;
+		if (this.choice.forcedSwitchesLeft) return false;
+
+		if (this.currentRequest === 'teampreview') {
+			return this.choice.actions.length >= Math.min(this.maxTeamSize, this.pokemon.length);
+		}
+
+		// current request is move/switch
+		this.getChoiceIndex(); // auto-pass
+		return this.choice.actions.length >= this.active.length;
+	}
+	chooseMove(moveText, targetLoc, megaOrZ) {
+		if (this.currentRequest !== 'move') {
+			return this.emitChoiceError(`Can't move: You need a ${this.currentRequest} response`);
+		}
+		const index = this.getChoiceIndex();
+		if (index >= this.active.length) {
+			return this.emitChoiceError(`Can't move: You do not have a Pokémon in slot ${index + 1}`);
+		}
+		const autoChoose = !moveText;
+		const pokemon = this.active[index];
+
 		if (megaOrZ === true) megaOrZ = 'mega';
 		if (!targetLoc) targetLoc = 0;
-		const activePokemon = this.active[this.choiceData.choices.length];
 
-		/**
-		 *  Parse the move identifier (name or index), according to the request sent to the client.
-		 *  If the move is not found, the decision is invalid without requiring further inspection.
-		 */
+		// Parse moveText (name or index)
+		// If the move is not found, the decision is invalid without requiring further inspection.
 
-		const requestMoves = activePokemon.getRequestData().moves;
-		let moveid = data;
+		const requestMoves = pokemon.getRequestData().moves;
+		let moveid = '';
 		let targetType = '';
-		if (typeof data === 'number' || /^[0-9]+$/.test(data)) {
+		if (autoChoose) moveText = 1;
+		if (typeof moveText === 'number' || /^[0-9]+$/.test(moveText)) {
 			// Parse a one-based move index.
-			const moveIndex = +data - 1;
+			const moveIndex = +moveText - 1;
 			if (moveIndex < 0 || moveIndex >= requestMoves.length || !requestMoves[moveIndex]) {
-				this.battle.debug("Can't use an unexpected move");
-				return false;
+				return this.emitChoiceError(`Can't move: Your ${pokemon.name} doesn't have a move ${moveIndex + 1}`);
 			}
 			moveid = requestMoves[moveIndex].id;
 			targetType = requestMoves[moveIndex].target;
 		} else {
 			// Parse a move ID.
 			// Move names are also allowed, but may cause ambiguity (see client issue #167).
-			moveid = toId(data);
+			moveid = toId(moveText);
 			if (moveid.startsWith('hiddenpower')) {
 				moveid = 'hiddenpower';
 			}
 			for (let i = 0; i < requestMoves.length; i++) {
 				if (requestMoves[i].id !== moveid) continue;
-				targetType = requestMoves[i].target;
+				targetType = requestMoves[i].target || 'normal';
 				break;
 			}
 			if (!targetType) {
-				this.battle.debug("Can't use an unexpected move");
-				return false;
+				return this.emitChoiceError(`Can't move: Your ${pokemon.name} doesn't have a move matching ${moveid}`);
 			}
 		}
 
-		let move = this.battle.getMove(moveid);
-		let zMove = megaOrZ === 'zmove' ? this.battle.getZMove(move, activePokemon) : undefined;
-		if (megaOrZ === 'zmove') {
-			if (!zMove || this.choiceData.zmove) {
-				this.emitCallback('cantz', activePokemon); // TODO: The client shouldn't have sent this request in the first place.
-				this.battle.debug(`Can't use an unexpected z-move`);
-				return false;
-			}
-
-			targetType = this.battle.getMove(zMove).target;
-
-			if (!targetLoc && this.active.length >= 2 && this.battle.targetTypeChoices(targetType)) {
-				// Compatibility fix:
-				// Clients failed to select a target for Z-Moves based on spread moves
-				// in the early stages of Gen 7 implementation.
-				targetLoc = 1;
+		const moves = pokemon.getMoves();
+		if (autoChoose) {
+			for (let i = 0; i < moves.length; i++) {
+				if (!moves[i].disabled) {
+					moveid = moves[i].id;
+					targetType = requestMoves[i].target;
+					break;
+				}
 			}
 		}
+		const move = this.battle.getMove(moveid);
 
-		/**
-		 * Validate targetting
-		 */
+		// Z-move
 
-		if (this.battle.targetTypeChoices(targetType)) {
+		const zMove = megaOrZ === 'zmove' ? this.battle.getZMove(move, pokemon) : undefined;
+		if (megaOrZ === 'zmove' && !zMove) {
+			return this.emitChoiceError(`Can't move: ${pokemon.name} can't use ${move.name} as a Z-move`);
+		}
+		if (zMove && this.choice.zMove) {
+			// TODO: The client shouldn't have sent this request in the first place.
+			this.emitCallback('cantz', pokemon);
+			return this.emitChoiceError(`Can't move: You can't Z-move more than once per battle`);
+		}
+
+		if (zMove) targetType = this.battle.getMove(zMove).target;
+
+		// Validate targetting
+
+		if (autoChoose) {
+			targetLoc = 0;
+		} else if (this.battle.targetTypeChoices(targetType)) {
 			if (!targetLoc && this.active.length >= 2) {
-				this.battle.debug("Can't use the move without a target");
-				return false;
+				return this.emitChoiceError(`Can't move: ${move.name} needs a target`);
+			}
+			if (!this.battle.validTargetLoc(targetLoc, pokemon, targetType)) {
+				return this.emitChoiceError(`Can't move: Invalid target for ${move.name}`);
 			}
 		} else {
 			if (targetLoc) {
-				this.battle.debug("Can't specify a target for the move");
-				return false;
+				return this.emitChoiceError(`Can't move: You can't choose a target for ${move.name}`);
 			}
 		}
 
-		if (targetLoc && !this.battle.validTargetLoc(targetLoc, activePokemon, targetType)) {
-			this.battle.debug("Invalid target selected for the move");
-			return false;
-		}
-
-		/**
-		 *  Check whether the chosen move is really valid, accounting for
-		 *  effects active in battle which could be unknown for the client.
-		 *  Note that a Z-Move cannot be disabled.
-		 *
-		 *  Upon reaching this stage, if a new decision is required, a server
-		 *  reply is mandatory.
-		 */
-
-		const moves = activePokemon.getMoves();
 		if (!moves.length && !zMove) {
 			// Override decision and use Struggle if there are no enabled moves with PP
 			// Gen 4 and earlier announce a Pokemon has no moves left before the turn begins, and only to that player's side.
-			if (this.gen <= 4) this.send('-activate', activePokemon, 'move: Struggle');
+			if (this.gen <= 4) this.send('-activate', pokemon, 'move: Struggle');
 			moveid = 'struggle';
 		} else if (!zMove) {
-			// At least a move is valid. Check if the chosen one is.
-			// This may include Struggle in Hackmons.
+			// Check for disabled moves
 			let isEnabled = false;
 			let disabledSource = '';
 			for (let i = 0; i < moves.length; i++) {
@@ -1547,357 +1604,256 @@ class BattleSide {
 			}
 			if (!isEnabled) {
 				// Request a different choice
-				this.emitCallback('cant', activePokemon, disabledSource, moveid);
-				return false;
+				if (autoChoose) throw new Error(`autoChoose chose a disabled move`);
+				this.emitCallback('cant', pokemon, disabledSource, moveid);
+				return this.emitChoiceError(`Can't move: ${pokemon.name}'s ${move.name} is disabled`);
 			}
 			// The chosen move is valid yay
 		}
 
-		const decision = [];
+		// Mega evolution
 
-		if (megaOrZ === 'mega') {
-			if (!activePokemon.canMegaEvo || this.choiceData.mega) {
-				this.emitCallback('cantmega', activePokemon); // TODO: The client shouldn't have sent this request in the first place.
-				this.battle.debug(`Can't issue more than one Mega-Evolution command`);
-				return false;
-			}
-
-			// TODO: Check that the Pokémon is not affected by Sky Drop.
-			// (This is currently being done in `runMegaEvo`).
-			decision.push({
-				choice: 'megaEvo',
-				pokemon: activePokemon,
-			});
+		const mega = (megaOrZ === 'mega');
+		if (mega && !pokemon.canMegaEvo) {
+			return this.emitChoiceError(`Can't move: ${pokemon.name} can't mega evolve`);
+		}
+		if (mega && this.choice.mega) {
+			// TODO: The client shouldn't have sent this request in the first place.
+			this.emitCallback('cantmega', pokemon);
+			return this.emitChoiceError(`Can't move: You can only mega-evolve once per battle`);
 		}
 
-		decision.push({
+		this.choice.actions.push({
 			choice: 'move',
-			pokemon: activePokemon,
+			pokemon: pokemon,
 			targetLoc: targetLoc,
 			move: moveid,
-			mega: megaOrZ === 'mega',
+			mega: mega,
 			zmove: zMove,
 		});
 
-		this.choiceData.choices.push('move ' + moveid + (targetLoc ? ' ' + targetLoc : '') + (megaOrZ ? ' ' + megaOrZ : ''));
-		this.choiceData.decisions.push(decision);
-
-		if (activePokemon.maybeDisabled) {
-			this.choiceData.finalDecision = this.choiceData.finalDecision || activePokemon.isLastActive();
+		if (pokemon.maybeDisabled) {
+			this.choice.cantUndo = this.choice.cantUndo || pokemon.isLastActive();
 		}
 
-		if (megaOrZ) {
-			if (megaOrZ === 'mega') this.choiceData.mega = (this.choiceData.mega || 0) + 1;
-			if (megaOrZ === 'zmove') this.choiceData.zmove = (this.choiceData.zmove || 0) + 1;
-		}
+		if (mega) this.choice.mega = true;
+		if (zMove) this.choice.zMove = true;
 
-		if (!dontPlay && !this.battle.checkDecisions()) return this; // allow chaining
+		if (this.battle.LEGACY_API_DO_NOT_USE && !this.battle.checkDecisions()) return this;
 		return true;
 	}
-	chooseSwitch(data, index, dontPlay) {
-		const slot = +data - 1;
-		if (slot >= this.pokemon.length || !this.pokemon[slot]) {
-			this.battle.debug("Can't switch: You can't switch to a Pokémon that doesn't exist");
-			return false;
+	chooseSwitch(slotText) {
+		if (this.currentRequest !== 'move' && this.currentRequest !== 'switch') {
+			return this.emitChoiceError(`Can't switch: You need a ${this.currentRequest} response`);
 		}
-		if (slot < this.active.length) {
-			this.battle.debug("Can't switch: You can't switch to an active Pokémon");
-			return false;
+		const index = this.getChoiceIndex();
+		if (index >= this.active.length) {
+			return this.emitChoiceError(`Can't switch: You do not have a Pokémon in slot ${index + 1}`);
 		}
-		if (this.pokemon[slot].fainted) {
-			this.battle.debug("Can't switch: You can't switch to a fainted Pokémon");
-			return false;
+		const pokemon = this.active[index];
+		const autoChoose = !slotText;
+		let slot = parseInt(slotText) - 1;
+		if (autoChoose) {
+			if (this.currentRequest !== 'switch') {
+				return this.emitChoiceError(`Can't switch: You need to select a Pokémon to switch in`);
+			}
+			if (!this.choice.forcedSwitchesLeft) return this.choosePass();
+			slot = this.active.length;
+			while (this.choice.switchIns.has(slot)) slot++;
 		}
-		if (this.choiceData.enterIndices.has(slot)) {
-			this.battle.debug("Can't switch: You can't switch to a Pokémon already queued to be switched");
-			return false;
+		if (isNaN(slot) || slot >= this.pokemon.length) {
+			return this.emitChoiceError(`Can't switch: You do not have a Pokémon in slot ${slot + 1} to switch to`);
+		} else if (slot < this.active.length) {
+			return this.emitChoiceError(`Can't switch: You can't switch to an active Pokémon`);
+		} else if (this.choice.switchIns.has(slot)) {
+			return this.emitChoiceError(`Can't switch: The Pokémon in slot ${slot + 1} can only switch in once`);
+		}
+		const targetPokemon = this.pokemon[slot];
+
+		if (targetPokemon.fainted) {
+			return this.emitChoiceError(`Can't switch: You can't switch to a fainted Pokémon`);
 		}
 
-		if (typeof index === 'undefined') index = this.choiceData.choices.length;
-		if (index < this.choiceData.choices.length && this.choiceData.choices[index] !== 'skip') {
-			this.battle.debug("Can't switch: You can't override the decision for a Pokémon.");
-			return false;
-		}
-
-		const activePokemon = this.active[index];
 		if (this.currentRequest === 'move') {
-			if (activePokemon.trapped) {
-				this.battle.debug("Can't switch: The active Pokémon is trapped");
-				this.emitCallback('trapped', activePokemon.position);
-				return false;
-			} else if (activePokemon.maybeTrapped) {
-				this.choiceData.finalDecision = this.choiceData.finalDecision || activePokemon.isLastActive();
+			if (pokemon.trapped) {
+				this.emitCallback('trapped', pokemon.position);
+				return this.emitChoiceError(`Can't switch: The active Pokémon is trapped`);
+			} else if (pokemon.maybeTrapped) {
+				this.choice.cantUndo = this.choice.cantUndo || pokemon.isLastActive();
 			}
 		} else if (this.currentRequest === 'switch') {
-			if (this.choiceData.switchCounters.switch[0] >= this.choiceData.switchCounters.switch[1]) {
-				this.battle.debug("Can't switch: You can't switch in more Pokémon than there are available.");
-				return false;
+			if (!this.choice.forcedSwitchesLeft) {
+				throw new Error(`Player somehow switched too many Pokemon`);
 			}
-			this.choiceData.switchCounters.switch[0]++;
+			this.choice.forcedSwitchesLeft--;
 		}
 
-		this.choiceData.enterIndices.add(slot);
-		this.choiceData.leaveIndices.add(activePokemon.position);
+		this.choice.switchIns.add(slot);
 
-		this.choiceData.choices[index] = 'switch ' + data;
-		this.choiceData.decisions[index] = {
+		this.choice.actions.push({
 			choice: (this.currentRequest === 'switch' ? 'instaswitch' : 'switch'),
-			pokemon: activePokemon,
-			target: this.pokemon[slot],
-		};
-		this.choiceData.skipsIndices.delete(index);
+			pokemon: pokemon,
+			target: targetPokemon,
+		});
 
-		if (!dontPlay && !this.battle.checkDecisions()) return this; // allow chaining
+		if (this.battle.LEGACY_API_DO_NOT_USE && !this.battle.checkDecisions()) return this;
 		return true;
 	}
-	chooseTeam(data, dontPlay) {
-		const positions = ('' + data).split('').map(datum => +datum - 1);
+	chooseTeam(data) {
+		const autoFill = !data;
+		if (autoFill) data = `123456`;
+		const positions = ('' + data).split('').map(datum => parseInt(datum) - 1);
+
+		if (autoFill && this.choice.actions.length >= this.maxTeamSize) return true;
+		if (this.currentRequest !== 'teampreview') {
+			return this.emitChoiceError(`Can't choose for Team Preview: You're not in a Team Preview phase`);
+		}
 
 		for (const pos of positions) {
-			const choiceOffset = this.choiceData.choices.length;
-			if (pos >= this.pokemon.length) return false;
-			if (this.choiceData.decisions.some(decision => decision.pokemon.position === pos)) return false;
+			const index = this.choice.actions.length;
+			if (index >= this.maxTeamSize || index >= this.pokemon.length) {
+				if (autoFill) break;
+				return this.emitChoiceError(`Can't choose for Team Preview: You are limited to ${this.maxTeamSize} Pokémon`);
+			}
+			if (isNaN(pos) || pos >= this.pokemon.length) {
+				return this.emitChoiceError(`Can't choose for Team Preview: You do not have a Pokémon in slot ${pos + 1}`);
+			}
+			if (this.choice.switchIns.has(pos)) {
+				if (autoFill) continue;
+				return this.emitChoiceError(`Can't choose for Team Preview: The Pokémon in slot ${pos + 1} can only switch in once`);
+			}
 
-			this.choiceData.choices.push('team ' + (pos + 1));
-			this.choiceData.decisions.push({
+			this.choice.switchIns.add(pos);
+			this.choice.actions.push({
 				choice: 'team',
-				side: this,
-				index: choiceOffset,
+				index: index,
 				pokemon: this.pokemon[pos],
-				priority: -choiceOffset,
+				priority: -index,
 			});
 		}
 
-		if (!dontPlay && !this.battle.checkDecisions()) return this; // allow chaining
+		if (this.battle.LEGACY_API_DO_NOT_USE && !this.battle.checkDecisions()) return this;
 		return true;
 	}
 	chooseShift(dontPlay) {
-		const activePokemon = this.active[this.choiceData.choices.length];
-
-		this.choiceData.choices.push('shift');
-		this.choiceData.decisions.push({
-			choice: 'shift',
-			pokemon: activePokemon,
-		});
-
-		if (!dontPlay && !this.battle.checkDecisions()) return this; // allow chaining
-		return true;
-	}
-
-	undoChoices(count, nextIndex) {
-		if (count === 0 || !this.choiceData.choices.length) return null;
-		if (count === true) count = this.choiceData.choices.length;
-		if (nextIndex === undefined) nextIndex = this.choiceData.choices.length;
-		if (count > nextIndex) return null;
-
-		for (let i = 1; i <= count; i++) {
-			this.undoChoice(nextIndex - i);
+		const index = this.getChoiceIndex();
+		if (index >= this.active.length) {
+			return this.emitChoiceError(`Can't shift: You do not have a Pokémon in slot ${index + 1}`);
+		} else if (this.currentRequest !== 'move') {
+			return this.emitChoiceError(`Can't shift: You can only shift during a move phase`);
+		} else if (this.battle.gameType !== 'triples') {
+			return this.emitChoiceError(`Can't shift: You can only shift to the center in triples`);
+		} else if (index === 1) {
+			return this.emitChoiceError(`Can't shift: You can only shift from the edge to the center`);
 		}
-	}
-
-	undoChoice(index) {
-		const decision = this.choiceData.decisions.splice(index, 1)[0];
-		if (Array.isArray(decision) && decision[decision.length - 1].choice === 'move') {
-			const moveDecision = decision[decision.length - 1];
-			// It probably doesn't make sense anymore to have a separate `mega` choice in the decider...
-			if (moveDecision.mega) this.choiceData.mega--;
-			if (moveDecision.zmove) this.choiceData.zmove--;
-		}
-		if (decision.choice === 'switch' || decision.choice === 'instaswitch') {
-			this.choiceData.enterIndices.delete(decision.target.position);
-			this.choiceData.leaveIndices.delete(this.choiceData.decisions.length);
-			if (this.currentRequest === 'switch') {
-				this.choiceData.switchCounters.switch[0]--;
-			}
-		} else if (decision.choice === 'pass') {
-			if (this.currentRequest === 'switch' && decision.pokemon && decision.pokemon.switchFlag) {
-				this.choiceData.switchCounters.pass[0]--;
-			}
-		} else if (this.currentRequest !== 'switch') {
-			if (index !== this.choiceData.decisions.length) throw new Error(`Undoing decisions except the last during ${this.currentRequest} phase is unsupported (${index} !== ${this.choiceData.decisions.length})`);
-		}
-		this.choiceData.choices.splice(index, 1);
-	}
-	clearChoice() {
-		const canSwitchOut = this.active.filter(pokemon => pokemon && pokemon.switchFlag).length;
-		const canSwitchIn = this.pokemon.slice(this.active.length).filter(pokemon => pokemon && !pokemon.fainted).length;
-		this.choiceData = {
-			finalDecision: false,
-			choices: [],
-			decisions: [],
-
-			switchCounters: {
-				'switch': [0, this.battle.currentRequest !== 'switch' ? 0 : Math.min(canSwitchOut, canSwitchIn)],
-				'pass': [0, this.battle.currentRequest !== 'switch' ? 0 : canSwitchOut - Math.min(canSwitchOut, canSwitchIn)],
-				// When all the decisions go through, it should happen that
-				// (switch|pass)Counter[0] === (switch|pass)Counter[1]
-				// Otherwise, a player could illegally skip a turn.
-				// TODO: Cover this in the test suite.
-			},
-			enterIndices: new Set(),
-			leaveIndices: new Set(),
-			skipsIndices: new Set(),
-		};
-	}
-
-	// Special choices
-	choosePass(index, dontPlay) {
-		if (typeof index === 'undefined') index = this.choiceData.choices.length;
-		if (index < this.choiceData.choices.length && this.choiceData.choices[index] !== 'skip') {
-			this.battle.debug("Can't pass: You can't override the decision for a Pokémon.");
-			return false;
-		}
-
 		const pokemon = this.active[index];
 
-		if (this.currentRequest === 'switch') {
-			if (pokemon && pokemon.switchFlag) { // This condition will always happen if called by Battle#choose()
-				if (this.choiceData.switchCounters.pass[0] >= this.choiceData.switchCounters.pass[1]) {
-					this.battle.debug("Can't pass: You can't skip switching Pokémon in needlessly.");
-					return false;
+		this.choice.actions.push({
+			choice: 'shift',
+			pokemon: pokemon,
+		});
+
+		if (this.battle.LEGACY_API_DO_NOT_USE && !this.battle.checkDecisions()) return this;
+		return true;
+	}
+
+	clearChoice() {
+		let forcedSwitches = 0;
+		let forcedPasses = 0;
+		if (this.battle.currentRequest === 'switch') {
+			const canSwitchOut = this.active.filter(pokemon => pokemon && pokemon.switchFlag).length;
+			const canSwitchIn = this.pokemon.slice(this.active.length).filter(pokemon => pokemon && !pokemon.fainted).length;
+			forcedSwitches = Math.min(canSwitchOut, canSwitchIn);
+			forcedPasses = canSwitchOut - forcedSwitches;
+		}
+		this.choice = {
+			cantUndo: false,
+			error: ``,
+			actions: [],
+			forcedSwitchesLeft: forcedSwitches,
+			forcedPassesLeft: forcedPasses,
+			switchIns: new Set(),
+		};
+	}
+	getChoiceIndex(isPass) {
+		let index = this.choice.actions.length;
+
+		if (!isPass) {
+			switch (this.currentRequest) {
+			case 'move':
+				// auto-pass
+				while (index < this.active.length && this.active[index].fainted) {
+					this.choosePass();
+					index++;
 				}
-				this.choiceData.switchCounters.pass[0]++;
+				break;
+			case 'switch':
+				while (index < this.active.length && !this.active[index].switchFlag) {
+					this.choosePass();
+					index++;
+				}
+				break;
 			}
 		}
 
-		this.choiceData.choices[index] = 'pass';
-		this.choiceData.decisions[index] = {
-			choice: 'pass',
-			priority: 102,
-			pokemon: pokemon,
-		};
-		this.choiceData.skipsIndices.delete(this.choiceData.choices.length);
+		return index;
+	}
 
-		if (!dontPlay && !this.battle.checkDecisions()) return this; // allow chaining
+	choosePass() {
+		const index = this.getChoiceIndex(true);
+		if (index >= this.active.length) return false;
+		const pokemon = this.active[index];
+
+		switch (this.currentRequest) {
+		case 'switch':
+			if (pokemon.switchFlag) { // This condition will always happen if called by Battle#choose()
+				if (!this.choice.forcedPassesLeft) {
+					return this.emitChoiceError(`Can't pass: You need to switch in a Pokémon to replace ${pokemon.name}`);
+				}
+				this.choice.forcedPassesLeft--;
+			}
+			break;
+		case 'move':
+			if (!pokemon.fainted) {
+				return this.emitChoiceError(`Can't pass: Your ${pokemon.name} must make a move (or switch)`);
+			}
+			break;
+		default:
+			return this.emitChoiceError(`Can't pass: Not a move or switch request`);
+		}
+
+		this.choice.actions.push({
+			choice: 'pass',
+		});
+		if (this.battle.LEGACY_API_DO_NOT_USE && !this.battle.checkDecisions()) return this;
 		return true;
 	}
-	chooseSkip(index) {
-		if (this.currentRequest !== 'switch') {
-			this.battle.debug("Can't skip a Pokémon action");
-			return false;
+	chooseDefault() {
+		if (!this.battle.LEGACY_API_DO_NOT_USE) throw new Error(`This is a legacy API, it's called autoChoose now`);
+		if (this.isChoiceDone()) {
+			throw new Error(`You've already chosen actions for ${this.id}.`);
 		}
-		if (this.active.pokemon.filter(pokemon => pokemon && pokemon.switchFlag).length <= 1) {
-			this.battle.debug("Can't skip a Pokémon action except in a multiple K.O.");
-			return false;
+		if (this.currentRequest === 'teampreview') {
+			this.chooseTeam();
+		} else if (this.currentRequest === 'switch') {
+			while (this.chooseSwitch() !== true && !this.isChoiceDone());
+		} else if (this.currentRequest === 'move') {
+			while (this.chooseMove() !== true && !this.isChoiceDone());
 		}
-		if (index !== this.choiceData.choices.length) {
-			return this;
-		}
-
-		this.choiceData.choices.push('skip');
-		this.choiceData.decisions.push({
-			// Should never hit the battle queue
-			choice: 'skip',
-			pokemon: this.active[this.choiceData.choices.length],
-		});
-		this.choiceData.skipsIndices.add(this.choiceData.choices.length);
-
 		return this;
 	}
-	chooseDefault(dontPlay) {
-		const choiceOffset = this.choiceData.choices.length;
+	/**
+	 * Automatically finish a choice if not currently complete
+	 */
+	autoChoose() {
 		if (this.currentRequest === 'teampreview') {
-			const chosenPositions = new Set(this.choiceData.decisions.map(decision => decision.pokemon.position));
-			const leftPositions = '012345'.slice(0, this.pokemon.length).split('').filter(pos => !chosenPositions.has(pos));
-
-			for (let i = 0; i < leftPositions.length; i++) {
-				const pos = leftPositions[i];
-				this.choiceData.choices.push('team ' + (pos + 1));
-				this.choiceData.decisions.push({
-					choice: 'team',
-					side: this,
-					pokemon: this.pokemon[pos],
-					index: choiceOffset + i,
-					priority: -choiceOffset - i,
-				});
-			}
+			if (!this.isChoiceDone()) this.chooseTeam();
 		} else if (this.currentRequest === 'switch') {
-			this.choiceData.choices.length = this.active.length;
-			this.choiceData.decisions.length = this.active.length;
-			const leaveIndices = [];
-			const enterIndices = [];
-
-			for (let i = 0; i < this.pokemon.length; i++) {
-				if (!this.pokemon[i]) continue;
-				if (i < this.choiceData.choices.length && this.choiceData.choices[i] && this.choiceData.choices[i] !== 'skip') {
-					// Already decided
-					continue;
-				}
-				if (i < this.active.length) {
-					if (!this.pokemon[i].switchFlag || this.choiceData.leaveIndices.has(i)) continue;
-					leaveIndices.push(i);
-					this.choiceData.leaveIndices.add(i);
-				} else {
-					if (this.pokemon[i].fainted || this.choiceData.enterIndices.has(i)) continue;
-					enterIndices.push(i);
-					this.choiceData.enterIndices.add(i);
-				}
-			}
-
-			// Some Pokémon might not have available substitutes.
-			const willPass = leaveIndices.splice(Math.min(leaveIndices.length, enterIndices.length));
-			for (let i = 0; i < leaveIndices.length; i++) {
-				this.choiceData.decisions[leaveIndices[i]] = {
-					choice: this.foe.currentRequest === 'switch' ? 'instaswitch' : 'switch',
-					pokemon: this.active[leaveIndices[i]],
-					target: this.pokemon[enterIndices[i]],
-				};
-				this.choiceData.choices[leaveIndices[i]] = 'switch ' + (enterIndices[i] + 1);
-			}
-			for (let i = 0; i < willPass.length; i++) {
-				this.choiceData.decisions[willPass[i]] = {
-					choice: 'pass',
-					pokemon: this.active[willPass[i]],
-					priority: 102,
-				};
-				this.choiceData.choices[willPass[i]] = 'pass';
-			}
+			while (!this.isChoiceDone()) this.chooseSwitch();
 		} else if (this.currentRequest === 'move') {
-			for (let i = choiceOffset; i < this.active.length; i++) {
-				let pokemon = this.active[i];
-				if (!pokemon || pokemon.fainted) continue;
-
-				let lockedMove = pokemon.getLockedMove();
-				if (lockedMove) {
-					const lockedMoveTarget = this.battle.runEvent('LockMoveTarget', pokemon);
-					this.choiceData.choices.push('move ' + lockedMove + (typeof lockedMoveTarget === 'number' ? ' ' + lockedMoveTarget : ''));
-					this.choiceData.decisions.push({
-						choice: 'move',
-						pokemon: pokemon,
-						targetLoc: lockedMoveTarget || 0,
-						move: lockedMove,
-					});
-					continue;
-				}
-
-				let moveid = 'struggle';
-				let moves = pokemon.getMoves();
-				for (let j = 0; j < moves.length; j++) {
-					if (moves[j].disabled) continue;
-					moveid = moves[j].id;
-					break;
-				}
-				this.choiceData.choices.push('move ' + moveid + ' 0');
-				this.choiceData.decisions.push({
-					choice: 'move',
-					pokemon: pokemon,
-					targetLoc: 0,
-					move: moveid,
-				});
-			}
+			while (!this.isChoiceDone()) this.chooseMove();
 		}
-
-		if (!dontPlay && !this.battle.checkDecisions()) return this; // allow chaining
 		return true;
-	}
-
-	resolveDecision() {
-		if (this.currentRequest && !this.getDecisionsFinished()) {
-			this.chooseDefault(true);
-			this.choiceData.choices = [];
-		} else if (this.choiceData.decisions === true) {
-			this.choiceData.choices = [];
-		}
 	}
 
 	destroy() {
@@ -1914,14 +1870,14 @@ class BattleSide {
 		}
 		this.active = null;
 
-		if (this.choiceData.decisions && this.choiceData.decisions !== true) {
-			this.choiceData.decisions.forEach(decision => {
-				delete decision.side;
-				delete decision.pokemon;
-				delete decision.target;
+		if (this.choice.actions && this.choice.actions !== true) {
+			this.choice.actions.forEach(action => {
+				delete action.side;
+				delete action.pokemon;
+				delete action.target;
 			});
 		}
-		this.choiceData = null;
+		this.choice = null;
 
 		// get rid of some possibly-circular references
 		this.battle = null;
@@ -1937,6 +1893,7 @@ class Battle extends Tools.BattleDex {
 	 */
 	init(format, rated, send, maybePrng) {
 		this.log = [];
+		/** @type {BattleSide[]} */
 		this.sides = [null, null];
 		this.rated = rated;
 		this.weatherData = {id:''};
@@ -1961,7 +1918,9 @@ class Battle extends Tools.BattleDex {
 		this.send = send || (() => {});
 
 		this.turn = 0;
+		/** @type {BattleSide} */
 		this.p1 = null;
+		/** @type {BattleSide} */
 		this.p2 = null;
 		this.lastUpdate = 0;
 		this.weather = '';
@@ -1976,7 +1935,6 @@ class Battle extends Tools.BattleDex {
 		this.activeTarget = null;
 		this.midTurn = false;
 		this.currentRequest = '';
-		this.currentRequestDetails = '';
 		this.lastMoveLine = 0;
 		this.reportPercentages = false;
 		this.supportCancel = false;
@@ -2824,15 +2782,13 @@ class Battle extends Tools.BattleDex {
 		}
 		return null;
 	}
-	makeRequest(type, requestDetails) {
+	makeRequest(type) {
 		if (type) {
 			this.currentRequest = type;
-			this.currentRequestDetails = requestDetails || '';
 			this.p1.clearChoice();
 			this.p2.clearChoice();
 		} else {
 			type = this.currentRequest;
-			requestDetails = this.currentRequestDetails;
 		}
 
 		// default to no request
@@ -2865,11 +2821,16 @@ class Battle extends Tools.BattleDex {
 		}
 
 		case 'teampreview':
-			this.add('teampreview' + (requestDetails ? '|' + requestDetails : ''));
+			let maxTeamSize = 6;
+			let teamLengthData = this.getFormat().teamLength;
+			if (teamLengthData && teamLengthData.battle) maxTeamSize = teamLengthData.battle;
+			this.p1.maxTeamSize = maxTeamSize;
+			this.p2.maxTeamSize = maxTeamSize;
+			this.add('teampreview' + (maxTeamSize !== 6 ? '|' + maxTeamSize : ''));
 			this.p1.currentRequest = 'teampreview';
-			p1request = {teamPreview: true, side: this.p1.getData()};
+			p1request = {teamPreview: true, maxTeamSize: maxTeamSize, side: this.p1.getData()};
 			this.p2.currentRequest = 'teampreview';
-			p2request = {teamPreview: true, side: this.p2.getData()};
+			p2request = {teamPreview: true, maxTeamSize: maxTeamSize, side: this.p2.getData()};
 			break;
 
 		default: {
@@ -2889,7 +2850,6 @@ class Battle extends Tools.BattleDex {
 			if (!this.supportCancel || !p2request) p1request.noCancel = true;
 			this.p1.emitRequest(p1request);
 		} else {
-			this.p1.choiceData.decisions = true;
 			this.p1.emitRequest({wait: true, side: this.p1.getData()});
 		}
 
@@ -2897,24 +2857,11 @@ class Battle extends Tools.BattleDex {
 			if (!this.supportCancel || !p1request) p2request.noCancel = true;
 			this.p2.emitRequest(p2request);
 		} else {
-			this.p2.choiceData.decisions = true;
 			this.p2.emitRequest({wait: true, side: this.p2.getData()});
 		}
 
-		if (this.p1.getDecisionsFinished() && this.p2.getDecisionsFinished()) {
-			if (this.p1.choiceData.decisions === true && this.p2.choiceData.decisions === true) {
-				if (type !== 'move') {
-					// TODO: investigate this race condition; should be fixed
-					// properly later
-					return this.makeRequest('move');
-				}
-				this.add('html', '<div class="broadcast-red"><b>The battle crashed</b></div>');
-				this.win();
-			} else {
-				// some kind of weird race condition?
-				this.commitDecisions();
-			}
-			return;
+		if (this.p1.isChoiceDone() && this.p2.isChoiceDone()) {
+			throw new Error(`Choices are done immediately after a request`);
 		}
 	}
 	tie() {
@@ -2940,7 +2887,6 @@ class Battle extends Tools.BattleDex {
 		this.ended = true;
 		this.active = false;
 		this.currentRequest = '';
-		this.currentRequestDetails = '';
 		return true;
 	}
 	switchIn(pokemon, pos) {
@@ -3336,8 +3282,7 @@ class Battle extends Tools.BattleDex {
 		}
 
 		if (!this.p1.pokemon[0] || !this.p2.pokemon[0]) {
-			this.add('message', 'Battle not started: One of you has an empty team.');
-			return;
+			throw new Error('Battle not started: A player has an empty team.');
 		}
 
 		this.residualEvent('TeamPreview');
@@ -3983,6 +3928,14 @@ class Battle extends Tools.BattleDex {
 				if (!decision.zmove && this.getMove(decision.move).beforeTurnCallback) {
 					this.addQueue({choice: 'beforeTurnMove', pokemon: decision.pokemon, move: decision.move, targetLoc: decision.targetLoc});
 				}
+				if (decision.mega) {
+					// TODO: Check that the Pokémon is not affected by Sky Drop.
+					// (This is currently being done in `runMegaEvo`).
+					this.addQueue({
+						choice: 'megaEvo',
+						pokemon: decision.pokemon,
+					});
+				}
 			} else if (decision.choice === 'switch' || decision.choice === 'instaswitch') {
 				if (decision.pokemon.switchFlag && decision.pokemon.switchFlag !== true) {
 					decision.pokemon.switchCopyFlag = decision.pokemon.switchFlag;
@@ -4021,16 +3974,17 @@ class Battle extends Tools.BattleDex {
 		if (!decision.speed && (decision.choice === 'switch' || decision.choice === 'instaswitch') && decision.target) decision.speed = decision.target.getDecisionSpeed();
 		if (!decision.speed && !deferPriority) decision.speed = decision.pokemon.getDecisionSpeed();
 	}
-	addQueue(decision) {
-		if (Array.isArray(decision)) {
-			for (let i = 0; i < decision.length; i++) {
-				this.addQueue(decision[i]);
+	addQueue(action) {
+		if (Array.isArray(action)) {
+			for (let i = 0; i < action.length; i++) {
+				this.addQueue(action[i]);
 			}
 			return;
 		}
 
-		this.resolvePriority(decision);
-		this.queue.push(decision);
+		if (action.choice === 'pass') return;
+		this.resolvePriority(action);
+		this.queue.push(action);
 	}
 	sortQueue() {
 		this.queue.sort(Battle.comparePriority);
@@ -4331,6 +4285,8 @@ class Battle extends Tools.BattleDex {
 				this.insertQueue(moveDecision, true);
 			}
 			return false;
+		} else if (this.queue.length && this.queue[0].choice === 'instaswitch') {
+			return false;
 		}
 
 		let p1switch = this.p1.active.some(mon => mon && mon.switchFlag);
@@ -4365,7 +4321,6 @@ class Battle extends Tools.BattleDex {
 		this.add('');
 		if (this.currentRequest) {
 			this.currentRequest = '';
-			this.currentRequestDetails = '';
 		}
 
 		if (!this.midTurn) {
@@ -4413,266 +4368,67 @@ class Battle extends Tools.BattleDex {
 
 		if (!side.currentRequest) throw new Error(`Side ${side.name} (${sideid}) has no request`);
 
-		if (side.choiceData.finalDecision) {
-			this.debug("Can't override decision: the last pokemon could have been trapped or disabled");
-			return;
+		if (side.choice.cantUndo) {
+			return side.emitChoiceError(`Can't undo: A trapping/disabling effect would cause undo to leak information`);
 		}
 
-		if (side.getDecisionsFinished()) {
-			side.undoChoices(true);
-		}
+		side.clearChoice();
 
-		const choices = this.parseChoice(side, input);
-		if (!choices) return; // Malformed input
+		const choiceStrings = input.split(',');
 
-		let choiceOffset = side.choiceData.choices.indexOf('skip');
-		if (choiceOffset < 0) choiceOffset = side.choiceData.choices.length;
-
-		for (let i = 0; i < choices.length; i++) {
-			const choiceIndex = i + choiceOffset;
-			const pokemon = choiceIndex <= side.active.length ? side.active[choiceIndex] : null;
-			const choice = choices[i][0];
-			let data = choices[i][1];
-
-			if (side.currentRequest === 'switch' && (!pokemon || !pokemon.switchFlag)) {
-				// The choice here must be always `pass`, as it was automatically filled by the parser.
-				// Note that this pass isn't included in the `pass` counter, as the player
-				// has no freedom regarding this action.
-				side.choiceData.choices[choiceIndex] = 'pass';
-				side.choiceData.decisions[choiceIndex] = {
-					choice: 'pass',
-					pokemon: pokemon,
-					priority: 102,
-				};
-				continue;
-			} else if (side.currentRequest === 'move') {
-				// The same comment regarding passing above applies.
-				if (!pokemon || pokemon.fainted) {
-					side.choiceData.choices[choiceIndex] = 'pass';
-					side.choiceData.decisions[choiceIndex] = {
-						choice: 'pass',
-					};
-					continue;
-				}
-				// Figure out whether we are locked into a move,
-				// and override the choice if that's the case.
-				const lockedMove = pokemon.getLockedMove();
-				if (lockedMove) {
-					const lockedMoveTarget = this.runEvent('LockMoveTarget', pokemon);
-					side.choiceData.choices[choiceIndex] = 'move ' + lockedMove + (typeof lockedMoveTarget === 'number' ? ' ' + lockedMoveTarget : '');
-					side.choiceData.decisions[choiceIndex] = {
-						choice: 'move',
-						pokemon: pokemon,
-						targetLoc: lockedMoveTarget || 0,
-						move: lockedMove,
-					};
-					continue;
-				}
+		for (let choiceString of choiceStrings) {
+			let choiceType = '';
+			let data = '';
+			choiceString = choiceString.trim();
+			let firstSpaceIndex = choiceString.indexOf(' ');
+			if (firstSpaceIndex >= 0) {
+				data = choiceString.slice(firstSpaceIndex + 1).trim();
+				choiceType = choiceString.slice(0, firstSpaceIndex);
+			} else {
+				choiceType = choiceString;
 			}
 
-			switch (choice) {
-			case 'move': {
+			switch (choiceType) {
+			case 'move':
 				let targetLoc = 0;
 				if (/\s\-?[1-3]$/.test(data)) {
 					targetLoc = parseInt(data.slice(-2));
 					data = data.slice(0, data.lastIndexOf(' '));
 				}
-				let willMega = data.endsWith(' mega') ? 'mega' : '';
+				const willMega = data.endsWith(' mega') ? 'mega' : '';
 				if (willMega) data = data.slice(0, -5);
-				let willZ = data.endsWith(' zmove') ? 'zmove' : '';
+				const willZ = data.endsWith(' zmove') ? 'zmove' : '';
 				if (willZ) data = data.slice(0, -6);
-				let move = data; // `move` is expected to be either a one-based index or a move id
-				if (!side.chooseMove(move.trim(), targetLoc, willMega || willZ, true)) return side.undoChoices(i, choiceIndex);
+				side.chooseMove(data, targetLoc, willMega || willZ);
 				break;
-			}
 			case 'switch':
-				if (!side.chooseSwitch(data, pokemon.position, true)) return side.undoChoices(i, choiceIndex);
+				side.chooseSwitch(data);
 				break;
 			case 'shift':
-				if (!side.chooseShift()) return side.undoChoices(i, choiceIndex);
+				if (data) return side.emitChoiceError(`Unrecognized data after "shift": ${data}`);
+				side.chooseShift();
 				break;
 			case 'team':
-				if (!side.chooseTeam(data, true)) return side.undoChoices(i, choiceIndex);
+				if (side.chooseTeam(data)) side.chooseTeam();
 				break;
 			case 'pass':
-				if (!side.choosePass(pokemon.position, true)) return side.undoChoices(i, choiceIndex);
+			case 'skip':
+				if (data) return side.emitChoiceError(`Unrecognized data after "pass": ${data}`);
+				side.choosePass();
 				break;
 			case 'default':
-				if (!side.chooseDefault(true)) return side.undoChoices(i, choiceIndex);
-				break;
-			case 'skip':
-				if (!side.chooseSkip(pokemon.position, true)) return side.undoChoices(i, choiceIndex);
-				break;
-			}
-		}
-
-		this.checkDecisions();
-	}
-
-	/**
-	 * Parses a choice string passed from a client into a list of
-	 * [choice, data] tuples after validating the type of each choice.
-	 *
-	 * The `data` entry is only validated for type, and it's the
-	 * responsibility of the caller to verify its content.
-	 *
-	 * Zero side effects.
-	 */
-
-	parseChoice(side, input) {
-		let isOverride = false;
-		let choiceOffset = this.supportPartialDecisions ? side.choiceData.choices.indexOf('skip') : -1;
-		if (choiceOffset >= 0) {
-			isOverride = true;
-		} else {
-			choiceOffset = side.choiceData.choices.length;
-		}
-
-		const isPreview = side.currentRequest === 'teampreview'; // Team Preview parsing has lots of nuances
-		const expectedLength = (isPreview ? side.pokemon.length : side.active.length) - choiceOffset;
-		if (isPreview) {
-			if (!input.startsWith('team ')) return null;
-			input = input.slice(5);
-		}
-
-		const parts = isPreview && /^[1-9]+$/.test(input) ? input.split('', expectedLength) : input.split(',', expectedLength); // input
-		const choices = new Array(expectedLength); // output
-		const teamSlots = isPreview ? new Set(side.choiceData.decisions.map(decision => decision.pokemon.position + 1)) : null; // for autocompletion
-
-		let hasDefault = false;
-
-		for (let i = 0; i < choices.length; i++) {
-			if (i >= parts.length) {
-				// `parts` can grow due to autocompletion (explained below),
-				// so we can't check this before the loop.
-				// It won't grow at its end, though...
-				if (i < side.active.length && side.currentRequest !== 'teampreview' && (!side.active[i] || (side.currentRequest === 'move' ? side.active[i].fainted : !side.active[i].switchFlag))) {
-					parts.push('pass');
-				} else if (side.currentRequest !== 'teampreview') {
-					// Incomplete request!
-					return this.supportPartialDecisions ? choices.slice(0, i) : null;
-				} else {
-					choices.splice(i, choices.length - i);
-					break;
-				}
-			}
-			if (i >= side.choiceData.choices.length) {
-				isOverride = false;
-			}
-			let choice = parts[i].trim();
-			let pokemon = side.active[i + choiceOffset];
-
-			let data = '';
-			let firstSpaceIndex = choice.indexOf(' ');
-			if (firstSpaceIndex >= 0) {
-				data = choice.substr(firstSpaceIndex + 1).trim();
-				choice = choice.substr(0, firstSpaceIndex).trim();
-			} else if (isPreview) {
-				// Support for short notation:
-				// /choose team 1234
-				data = choice;
-				choice = 'team';
-			}
-
-			if (choice === 'default') {
-				// No decisions are allowed after the default.
-				if (i + 1 < parts.length) return null;
-				hasDefault = true;
-			}
-
-			switch (side.currentRequest) {
-			case 'teampreview':
-				if (choice !== 'team' && choice !== 'default') return null;
-				break;
-			case 'switch':
-				if (!pokemon || !pokemon.switchFlag) {
-					// We are going to be friendly towards command-line dubs/triples players,
-					// and automatically fill any mandatory passes.
-					if (choice !== 'pass' && !(choice === 'skip' && isOverride) && parts.length < choices.length) {
-						parts.splice(i, 0, 'pass');
-						choice = 'pass';
-						data = '';
-					}
-				} else if (choice === 'pass' && side.active.length <= 1) {
-					// Passing only makes sense in the context of a multiple switch-in.
-					return null;
-				}
-				if (choice !== 'switch' && choice !== 'pass' && choice !== 'default' && choice !== 'skip') {
-					return null;
-				}
-				break;
-			case 'move':
-				if (!pokemon || pokemon.fainted) {
-					// Ditto. Automatically fill passes.
-					if (choice !== 'pass' && parts.length < choices.length) {
-						parts.splice(i, 0, 'pass');
-						choice = 'pass';
-						data = '';
-					}
-				} else if (choice === 'pass') {
-					return null;
-				}
-				if (choice !== 'move' && choice !== 'switch' && choice !== 'shift' && choice !== 'pass') {
-					return null;
-				}
-				break;
-			}
-
-			if (isOverride && choice !== 'skip' && side.choiceData.choices[i + choiceOffset] !== 'skip') {
-				// Either the original or the new choice should be a skip.
-				return null;
-			}
-
-			switch (choice) {
-			case 'move':
-				// All sorts of input formats for `move` choices.
-				// But at least we are going to restrict its length.
-				// In regular play, the longest message for legacy clients is
-				// `move Hidden Power Electric -1 mega` (length: 34).
-				if (!data || data.length >= 64) return null;
-				break;
-			case 'switch':
-				if (!data || data.length >= 2 || /[^1-9]/.test(data)) return null;
-				break;
-			case 'team':
-				if (!data || data.length >= 2 || /[^1-9]/.test(data)) return null;
-				if (data > side.pokemon.length || teamSlots.has(+data)) return null;
-				teamSlots.add(+data);
-				break;
-			case 'shift':
-				// Shifting is only a valid choice type in Triples,
-				// and only for the Pokémon on the sides.
-				if (this.gameType !== 'triples' || i + choiceOffset === 1) return null;
-				if (data) return null;
-				break;
-			case 'skip':
-				if (!this.supportPartialDecisions) return null;
-				if (data) return null;
-				break;
-			case 'pass':
-			case 'default':
-				if (data) return null;
+				side.autoChoose();
 				break;
 			default:
-				return null;
-			}
-
-			choices[i] = [choice, data];
-		}
-
-		// Auto-complete multi-slot /team decisions.
-		// Also auto-complete single-slot decisions, if it's Singles and no Pokémon in the team has Illusion.
-		// We should be able to remove this eventually -it really has no place in this function.
-		// TODO: Investigate and patch 3rd party clients that may need this backwards-compat fix.
-		if (side.currentRequest === 'teampreview' && !hasDefault && choices.length < side.pokemon.length) {
-			if (choices.length >= 2 || choices.length >= 1 && side.active.length <= 1 && !side.pokemon.some(pokemon => pokemon.ability === 'illusion')) {
-				for (let i = 1; i <= side.pokemon.length; i++) {
-					if (!teamSlots.has(i)) choices.push(['team', i]);
-				}
+				side.emitChoiceError(`Unrecognized choice: ${choiceString}`);
+				break;
 			}
 		}
 
-		return choices;
+		if (side.choice.error) return false;
+
+		this.checkDecisions();
+		return true;
 	}
 
 	commitDecisions() {
@@ -4680,58 +4436,57 @@ class Battle extends Tools.BattleDex {
 
 		let oldQueue = this.queue;
 		this.queue = [];
-		for (let i = 0; i < this.sides.length; i++) {
-			this.sides[i].resolveDecision();
-			if (this.sides[i].choiceData.decisions === true) continue;
-			this.addQueue(this.sides[i].choiceData.decisions);
+		let oldFlag = this.LEGACY_API_DO_NOT_USE;
+		this.LEGACY_API_DO_NOT_USE = false;
+		for (const side of this.sides) {
+			side.autoChoose();
 		}
+		this.LEGACY_API_DO_NOT_USE = oldFlag;
 		this.add('choice', this.p1.getChoice, this.p2.getChoice);
+		for (const side of this.sides) {
+			this.addQueue(side.choice.actions);
+		}
 
 		this.sortQueue();
 		Array.prototype.push.apply(this.queue, oldQueue);
 
 		this.currentRequest = '';
-		this.currentRequestDetails = '';
 		this.p1.currentRequest = '';
 		this.p2.currentRequest = '';
-
-		this.p1.choiceData.decisions = true;
-		this.p2.choiceData.decisions = true;
 
 		this.go();
 	}
 	undoChoice(sideid, count) {
 		let side = null;
 		if (sideid === 'p1' || sideid === 'p2') side = this[sideid];
-		// The following condition can never occur for the reasons given in
-		// the choose() function above.
-		if (!side) return; // wtf
-		// This condition can occur.
+		if (!side) throw new Error(`Invalid side ${sideid}`);
 		if (!side.currentRequest) return;
 
-		if (side.choiceData.finalDecision) {
-			this.debug("Can't cancel decision: the last pokemon could have been trapped or disabled");
+		if (side.choice.cantUndo) {
+			side.choice.error = `Can't undo: A trapping/disabling effect would cause undo to leak information`;
 			return;
 		}
 
-		const stepsBack = count === undefined || count === '' ? true : +count;
-		if (stepsBack !== true && isNaN(stepsBack)) return;
-
-		side.undoChoices(stepsBack);
+		side.clearChoice();
 	}
+	/**
+	 * @return true if both decisions are complete
+	 */
 	checkDecisions() {
 		let totalDecisions = 0;
-		if (this.p1.getDecisionsFinished()) {
-			if (!this.supportCancel) this.p1.choiceData.finalDecision = true;
+		if (this.p1.isChoiceDone()) {
+			if (!this.supportCancel) this.p1.choice.cantUndo = true;
 			totalDecisions++;
 		}
-		if (this.p2.getDecisionsFinished()) {
-			if (!this.supportCancel) this.p2.choiceData.finalDecision = true;
+		if (this.p2.isChoiceDone()) {
+			if (!this.supportCancel) this.p2.choice.cantUndo = true;
 			totalDecisions++;
 		}
 		if (totalDecisions >= this.sides.length) {
 			this.commitDecisions();
+			return true;
 		}
+		return false;
 	}
 
 	add(...parts) {

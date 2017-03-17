@@ -298,8 +298,7 @@ exports.BattleFormats = {
 			}
 		},
 		onTeamPreview: function () {
-			let lengthData = this.getFormat().teamLength;
-			this.makeRequest('teampreview', lengthData && lengthData.battle || '');
+			this.makeRequest('teampreview');
 		},
 	},
 	littlecup: {
