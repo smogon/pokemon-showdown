@@ -23,8 +23,7 @@ describe('Rooms features', function () {
 		});
 	});
 
-	// FIXME: these tests don't handle matchmaking properly!
-	describe.skip('BattleRoom', function () {
+	describe('BattleRoom', function () {
 		const packedTeam = 'Weavile||lifeorb||swordsdance,knockoff,iceshard,iciclecrash|Jolly|,252,,,4,252|||||';
 
 		let room;

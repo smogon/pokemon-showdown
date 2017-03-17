@@ -78,8 +78,12 @@ const writeTriviaData = (() => {
 				writing = false;
 				if (writePending) {
 					writePending = false;
-					process.nextTick(() => writeTriviaData());
+					setImmediate(() => writeTriviaData());
 				}
+
+				data = null;
+				path = null;
+				tempPath = null;
 			});
 		});
 	};

@@ -334,7 +334,7 @@ class GlobalRoom {
 						writing = false;
 						if (writePending) {
 							writePending = false;
-							process.nextTick(() => this.writeChatRoomData());
+							setImmediate(() => this.writeChatRoomData());
 						}
 					});
 				});
