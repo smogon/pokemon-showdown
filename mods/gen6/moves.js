@@ -21,6 +21,8 @@ exports.BattleMovedex = {
 	},
 	darkvoid: {
 		inherit: true,
+		desc: "Causes the target to fall asleep.",
+		shortDesc: "Puts the foe(s) to sleep.",
 		accuracy: 80,
 		onTryMove: function () {},
 	},
