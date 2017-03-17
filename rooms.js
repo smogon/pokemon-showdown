@@ -14,7 +14,6 @@
 const TIMEOUT_EMPTY_DEALLOCATE = 10 * 60 * 1000;
 const TIMEOUT_INACTIVE_DEALLOCATE = 40 * 60 * 1000;
 const REPORT_USER_STATS_INTERVAL = 10 * 60 * 1000;
-const PERIODIC_MATCH_INTERVAL = 60 * 1000;
 
 const CRASH_REPORT_THROTTLE = 60 * 60 * 1000;
 
@@ -272,14 +271,6 @@ class GlobalRoom {
 
 		// init battle rooms
 		this.battleCount = 0;
-		this.searches = Object.create(null);
-
-		// Never do any other file IO synchronously
-		// but this is okay to prevent race conditions as we start up PS
-		this.lastBattle = 0;
-		try {
-			this.lastBattle = parseInt(fs.readFileSync('logs/lastbattle.txt', 'utf8')) || 0;
-		} catch (e) {} // file doesn't exist [yet]
 
 		this.chatRoomData = [];
 		try {
@@ -323,29 +314,6 @@ class GlobalRoom {
 		}
 		Rooms.lobby = Rooms.rooms.get('lobby');
 
-		// this function is complex in order to avoid several race conditions
-		this.writeNumRooms = (() => {
-			let writing = false;
-			let lastBattle = -1;	// last lastBattle to be written to file
-			return () => {
-				if (writing) return;
-
-				// batch writing lastbattle.txt for every 10 battles
-				if (lastBattle >= this.lastBattle) return;
-				lastBattle = this.lastBattle + 10;
-
-				writing = true;
-				fs.writeFile('logs/lastbattle.txt.0', '' + lastBattle, () => {
-					fs.rename('logs/lastbattle.txt.0', 'logs/lastbattle.txt', () => {
-						writing = false;
-						if (lastBattle < this.lastBattle) {
-							process.nextTick(() => this.writeNumRooms());
-						}
-					});
-				});
-			};
-		})();
-
 		this.writeChatRoomData = (() => {
 			let writing = false;
 			let writePending = false;
@@ -382,11 +350,6 @@ class GlobalRoom {
 		this.reportUserStatsInterval = setInterval(
 			() => this.reportUserStats(),
 			REPORT_USER_STATS_INTERVAL
-		);
-
-		this.periodicMatchInterval = setInterval(
-			() => this.periodicMatch(),
-			PERIODIC_MATCH_INTERVAL
 		);
 
 		// Create writestream for modlog
@@ -480,128 +443,6 @@ class GlobalRoom {
 			});
 		}
 		return roomsData;
-	}
-	cancelSearch(user, format) {
-		if (format && !user.searching[format]) return false;
-
-		let searchedFormats = Object.keys(user.searching);
-		if (!searchedFormats.length) return false;
-
-		for (let i = 0; i < searchedFormats.length; i++) {
-			if (format && searchedFormats[i] !== format) continue;
-			let formatSearches = this.searches[searchedFormats[i]];
-			for (let j = 0, len = formatSearches.length; j < len; j++) {
-				let search = formatSearches[j];
-				if (search.userid !== user.userid) continue;
-				formatSearches.splice(j, 1);
-				delete user.searching[searchedFormats[i]];
-				break;
-			}
-		}
-
-		user.updateSearch();
-		return true;
-	}
-	searchBattle(user, formatid) {
-		if (!user.connected) return;
-
-		formatid = Tools.getFormat(formatid).id;
-
-		user.prepBattle(formatid, 'search', null).then(result => this.finishSearchBattle(user, formatid, result));
-	}
-	finishSearchBattle(user, formatid, result) {
-		if (!result) return;
-
-		let newSearch = {
-			userid: '',
-			team: user.team,
-			rating: 1000,
-			time: new Date().getTime(),
-		};
-
-		// Get the user's rating before actually starting to search.
-		Ladders(formatid).getRating(user.userid).then(rating => {
-			newSearch.rating = rating;
-			newSearch.userid = user.userid;
-			this.addSearch(newSearch, user, formatid);
-		}, error => {
-			// Rejects iff we retrieved the rating but the user had changed their name;
-			// the search simply doesn't happen in this case.
-		});
-	}
-	matchmakingOK(search1, search2, user1, user2, formatid) {
-		// This should never happen.
-		if (!user1 || !user2) return void require('./crashlogger')(new Error("Matched user " + (user1 ? search2.userid : search1.userid) + " not found"), "The main process");
-
-		// users must be different
-		if (user1 === user2) return false;
-
-		// users must have different IPs
-		if (user1.latestIp === user2.latestIp) return false;
-
-		// users must not have been matched immediately previously
-		if (user1.lastMatch === user2.userid || user2.lastMatch === user1.userid) return false;
-
-		// search must be within range
-		let searchRange = 100, elapsed = Date.now() - Math.min(search1.time, search2.time);
-		if (formatid === 'ou' || formatid === 'oucurrent' || formatid === 'oususpecttest' || formatid === 'randombattle') searchRange = 50;
-		searchRange += elapsed / 300; // +1 every .3 seconds
-		if (searchRange > 300) searchRange = 300 + (searchRange - 300) / 10; // +1 every 3 sec after 300
-		if (searchRange > 600) searchRange = 600;
-		if (Math.abs(search1.rating - search2.rating) > searchRange) return false;
-
-		user1.lastMatch = user2.userid;
-		user2.lastMatch = user1.userid;
-		return Math.min(search1.rating, search2.rating) || 1;
-	}
-	addSearch(newSearch, user, formatid) {
-		// Filter racing conditions
-		if (!user.connected || user !== Users.getExact(user.userid)) return;
-		if (user.searching[formatid]) return;
-
-		if (!this.searches[formatid]) this.searches[formatid] = [];
-		let formatSearches = this.searches[formatid];
-
-		// Prioritize players who have been searching for a match the longest.
-		for (let i = 0; i < formatSearches.length; i++) {
-			let search = formatSearches[i];
-			let searchUser = Users.getExact(search.userid);
-			let minRating = this.matchmakingOK(search, newSearch, searchUser, user, formatid);
-			if (minRating) {
-				delete user.searching[formatid];
-				delete searchUser.searching[formatid];
-				formatSearches.splice(i, 1);
-				this.startBattle(searchUser, user, formatid, search.team, newSearch.team, {rated: minRating});
-				return;
-			}
-		}
-		user.searching[formatid] = 1;
-		formatSearches.push(newSearch);
-		user.updateSearch();
-	}
-	periodicMatch() {
-		for (let formatid in this.searches) {
-			let formatSearches = this.searches[formatid];
-			if (formatSearches.length < 2) continue;
-
-			let longestSearch = formatSearches[0];
-			let longestSearcher = Users.getExact(longestSearch.userid);
-
-			// Prioritize players who have been searching for a match the longest.
-			for (let i = 1; i < formatSearches.length; i++) {
-				let search = formatSearches[i];
-				let searchUser = Users.getExact(search.userid);
-				let minRating = this.matchmakingOK(search, longestSearch, searchUser, longestSearcher, formatid);
-				if (minRating) {
-					delete longestSearcher.searching[formatid];
-					delete searchUser.searching[formatid];
-					formatSearches.splice(i, 1);
-					formatSearches.splice(0, 1);
-					this.startBattle(searchUser, longestSearcher, formatid, search.team, longestSearch.team, {rated: minRating});
-					return;
-				}
-			}
-		}
 	}
 	checkModjoin() {
 		return true;
@@ -746,65 +587,6 @@ class GlobalRoom {
 		if (!user) return; // ...
 		delete this.users[user.userid];
 		--this.userCount;
-		user.cancelChallengeTo();
-		this.cancelSearch(user);
-	}
-	startBattle(p1, p2, format, p1team, p2team, options) {
-		p1 = Users.get(p1);
-		p2 = Users.get(p2);
-
-		if (!p1 || !p2) {
-			// most likely, a user was banned during the battle start procedure
-			this.cancelSearch(p1);
-			this.cancelSearch(p2);
-			return;
-		}
-		if (p1 === p2) {
-			this.cancelSearch(p1);
-			this.cancelSearch(p2);
-			p1.popup("You can't battle your own account. Please use something like Private Browsing to battle yourself.");
-			return;
-		}
-
-		if (this.lockdown === true) {
-			this.cancelSearch(p1);
-			this.cancelSearch(p2);
-			p1.popup("The server is restarting. Battles will be available again in a few minutes.");
-			p2.popup("The server is restarting. Battles will be available again in a few minutes.");
-			return;
-		}
-
-		//console.log('BATTLE START BETWEEN: ' + p1.userid + ' ' + p2.userid);
-		let i = this.lastBattle + 1;
-		let formaturlid = format.toLowerCase().replace(/[^a-z0-9]+/g, '');
-		while (Rooms.rooms.has('battle-' + formaturlid + '-' + i)) {
-			i++;
-		}
-		this.lastBattle = i;
-		this.writeNumRooms();
-
-		let newRoom = Rooms.createBattle('battle-' + formaturlid + '-' + i, format, p1, p2, options);
-		p1.joinRoom(newRoom);
-		p2.joinRoom(newRoom);
-		newRoom.battle.addPlayer(p1, p1team);
-		newRoom.battle.addPlayer(p2, p2team);
-		this.cancelSearch(p1);
-		this.cancelSearch(p2);
-		if (Config.reportbattles) {
-			let reportRoom = Rooms(Config.reportbattles === true ? 'lobby' : Config.reportbattles);
-			if (reportRoom) {
-				reportRoom.add('|b|' + newRoom.id + '|' + p1.getIdentity() + '|' + p2.getIdentity());
-				reportRoom.update();
-			}
-		}
-		if (Config.logladderip && options.rated) {
-			if (!this.ladderIpLog) {
-				this.ladderIpLog = fs.createWriteStream('logs/ladderip/ladderip.txt', {flags: 'a'});
-			}
-			this.ladderIpLog.write(p1.userid + ': ' + p1.latestIp + '\n');
-			this.ladderIpLog.write(p2.userid + ': ' + p2.latestIp + '\n');
-		}
-		return newRoom;
 	}
 	modlog(text) {
 		this.modlogStream.write('[' + (new Date().toJSON()) + '] ' + text + '\n');

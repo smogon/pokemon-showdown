@@ -1,8 +1,9 @@
 'use strict';
 
 const assert = require('assert');
-let userUtils = require('./../../dev-tools/users-utils');
-let User = userUtils.User;
+
+const {matchmaker} = require('../../ladders-matchmaker');
+const {User} = require('./../../dev-tools/users-utils');
 
 describe('Simulator abstraction layer features', function () {
 	describe('Battle', function () {
@@ -26,7 +27,7 @@ describe('Simulator abstraction layer features', function () {
 				p1 = new User();
 				p2 = new User();
 				p1.forceRename("Missingno."); // Don't do this at home
-				room = Rooms.global.startBattle(p1, p2, '', packedTeam, packedTeam, {rated: true});
+				room = matchmaker.startBattle(p1, p2, '', packedTeam, packedTeam, {rated: true});
 				p1.resetName();
 				for (let i = 0; i < room.battle.playerNames.length; i++) {
 					let playerName = room.battle.playerNames[i];
