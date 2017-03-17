@@ -115,6 +115,7 @@ class TestTools {
 			undefined,
 			prng
 		);
+		battle.LEGACY_API_DO_NOT_USE = true;
 		if (options && options.partialDecisions) battle.supportPartialDecisions = true;
 		if (teams) {
 			for (let i = 0; i < teams.length; i++) {
