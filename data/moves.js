@@ -3050,7 +3050,7 @@ exports.BattleMovedex = {
 		accuracy: 50,
 		basePower: 0,
 		category: "Status",
-		desc: "Causes the target to fall asleep. This move cannot be used successfully unless the user's current form, while considering Transform, is Darkrai. ",
+		desc: "Causes the target to fall asleep. This move cannot be used successfully unless the user's current form, while considering Transform, is Darkrai.",
 		shortDesc: "Darkrai: Puts the foe(s) to sleep.",
 		id: "darkvoid",
 		isViable: true,
