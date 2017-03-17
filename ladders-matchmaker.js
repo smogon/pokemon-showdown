@@ -56,7 +56,7 @@ class Matchmaker {
 						lastBattle = null;
 						filename = null;
 						if (lastBattle < this.lastBattle) {
-							process.nextTick(() => this.writeNumRooms());
+							setImmediate(() => this.writeNumRooms());
 						}
 					});
 				});
