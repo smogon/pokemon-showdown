@@ -5591,6 +5591,9 @@ exports.BattleFormatsData = {
 	},
 	goomy: {
 		randomBattleMoves: ["sludgebomb", "thunderbolt", "toxic", "protect", "infestation"],
+		eventPokemon: [
+			{"generation": 7, "level": 1, "shiny": 1, "isHidden": true, "moves":["bodyslam", "dragonpulse", "counter"], "pokeball": "cherishball"},
+		],
 		tier: "LC",
 	},
 	sliggoo: {
@@ -5882,6 +5885,9 @@ exports.BattleFormatsData = {
 		battleOnly: true,
 	},
 	mareanie: {
+		eventPokemon: [
+			{"generation": 7, "level": 1, "shiny": 1, "isHidden": true, "moves":["toxic", "stockpile", "swallow"], "pokeball": "cherishball"},
+		],
 		tier: "LC",
 	},
 	toxapex: {
@@ -5951,11 +5957,17 @@ exports.BattleFormatsData = {
 	},
 	oranguru: {
 		randomBattleMoves: ["nastyplot", "psyshock", "focusblast", "thunderbolt"],
+		eventPokemon: [
+			{"generation": 7, "level": 1, "shiny": 1, "isHidden": false, "abilities":["telepathy"], "moves":["instruct", "psychic", "psychicterrain"], "pokeball": "cherishball"},
+		],
 		unreleasedHidden: true,
 		tier: "New",
 	},
 	passimian: {
 		randomBattleMoves: ["rocktomb", "closecombat", "earthquake", "ironhead", "uturn"],
+		eventPokemon: [
+			{"generation": 7, "level": 1, "shiny": 1, "isHidden": false, "moves":["bestow", "fling", "feint"], "pokeball": "cherishball"},
+		],
 		unreleasedHidden: true,
 		tier: "New",
 	},
@@ -6086,6 +6098,9 @@ exports.BattleFormatsData = {
 	},
 	turtonator: {
 		randomBattleMoves: ["fireblast", "shelltrap", "earthquake", "dragontail", "explosion", "dracometeor"],
+		eventPokemon: [
+			{"generation": 7, "level": 1, "shiny": 1, "moves":["flamethrower", "bodyslam", "wideguard"], "pokeball": "cherishball"},
+		],
 		tier: "New",
 	},
 	togedemaru: {
@@ -6105,6 +6120,9 @@ exports.BattleFormatsData = {
 	},
 	drampa: {
 		randomBattleMoves: ["dracometeor", "dragonpulse", "hypervoice", "fireblast", "thunderbolt", "glare", "substitute", "roost"],
+		eventPokemon: [
+			{"generation": 7, "level": 1, "shiny": 1, "isHidden": true, "moves":["playnice", "echoedvoice", "hurricane"], "pokeball": "cherishball"},
+		],
 		tier: "New",
 	},
 	dhelmise: {
