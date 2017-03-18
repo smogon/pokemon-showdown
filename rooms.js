@@ -527,9 +527,12 @@ class GlobalRoom {
 	autojoinRooms(user, connection) {
 		// we only autojoin regular rooms if the client requests it with /autojoin
 		// note that this restriction doesn't apply to staffAutojoin
+		let includesLobby = false;
 		for (let i = 0; i < this.autojoin.length; i++) {
 			user.joinRoom(this.autojoin[i], connection);
+			if (this.autojoin[i] === 'lobby') includesLobby = true;
 		}
+		if (!includesLobby && Config.serverid !== 'showdown') user.send(`>lobby\n|deinit`);
 	}
 	checkAutojoin(user, connection) {
 		if (!user.named) return;
