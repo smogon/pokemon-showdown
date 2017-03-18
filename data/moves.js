@@ -4383,6 +4383,7 @@ exports.BattleMovedex = {
 		volatileStatus: 'encore',
 		effect: {
 			duration: 3,
+			noCopy: true, // doesn't get copied by Z-Baton Pass
 			onStart: function (target) {
 				let noEncore = {encore:1, mimic:1, mirrormove:1, sketch:1, struggle:1, transform:1};
 				let moveIndex = target.moves.indexOf(target.lastMove);
