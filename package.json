@@ -51,7 +51,6 @@
   "devDependencies": {
     "eslint": "^3.2.2",
     "mocha": "^3.0.0",
-    "mock-fs-require-fix": "~1.0.0",
-    "fuzzur": "0.1.2"
+    "mock-fs-require-fix": "~1.0.0"
   }
 }
