@@ -26,7 +26,7 @@ describe('Rooms features', function () {
 	describe('BattleRoom', function () {
 		const packedTeam = 'Weavile||lifeorb||swordsdance,knockoff,iceshard,iciclecrash|Jolly|,252,,,4,252|||||';
 
-		let room;
+		let room = null;
 		before(function () {
 			matchmaker.ladderIpLog.end();
 			clearInterval(matchmaker.periodicMatchInterval);
@@ -34,11 +34,14 @@ describe('Rooms features', function () {
 		});
 		afterEach(function () {
 			Users.users.forEach(user => {
-				room.onLeave(user);
 				user.disconnectAll();
+				user.resetName();
 				user.destroy();
 			});
-			if (room) room.destroy();
+			if (room) {
+				room.destroy();
+				room = null;
+			}
 		});
 		after(function () {
 			Object.assign(matchmaker, new Matchmaker());

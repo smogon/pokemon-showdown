@@ -1068,21 +1068,26 @@ class BattleRoom extends Room {
 		if (!user) return false;
 		if (this.users[user.userid]) return user;
 
-		if (user.named) {
-			this.add((this.reportJoins && !user.locked ? '|j|' : '|J|') + user.name).update();
-		}
+		let isPlayer = user.userid in this.game.players;
+		if (isPlayer && user.named) this.game.onJoin(user);
 
 		this.users[user.userid] = user;
 		this.userCount++;
 
-		if (this.game && this.game.onJoin) {
-			this.game.onJoin(user, connection);
+		if (user.named) {
+			this.add((this.reportJoins && !user.locked ? '|j|' : '|J|') + user.name);
 		}
+		this.update();
 		return user;
 	}
 	onRename(user, oldid, joining) {
-		if (joining) {
-			this.add((this.reportJoins && !user.locked ? '|j|' : '|J|') + user.name);
+		if (joining && user.userid !== oldid) {
+			let isPlayer = user.userid in this.game.players;
+			if (isPlayer) {
+				this.game.onRename(user, oldid);
+			} else if (user.named) {
+				this.add((this.reportJoins && !user.locked ? '|j|' : '|J|') + user.name);
+			}
 		}
 		delete this.users[oldid];
 		this.users[user.userid] = user;
@@ -1091,18 +1096,38 @@ class BattleRoom extends Room {
 	}
 	onUpdateIdentity() {}
 	onLeave(user) {
-		if (!user) return; // ...
-		if (!user.named) {
-			delete this.users[user.userid];
-			return;
-		}
-		delete this.users[user.userid];
-		this.userCount--;
-		this.add((this.reportJoins && !user.locked ? '|l|' : '|L|') + user.name);
+		if (!user) return; // ...?
 
-		if (this.game && this.game.onLeave) {
-			this.game.onLeave(user);
+		let userid;
+		let username;
+		let isLocked;
+		if (user.named) {
+			userid = user.userid;
+			username = user.name;
+			isLocked = user.locked;
+		} else {
+			let prevUserids = Object.keys(user.prevNames);
+			let success = false;
+			for (let i = prevUserids.length; i--;) {
+				let prevUserid = prevUserids[i];
+				if (prevUserid in this.users) {
+					userid = prevUserid;
+					username = user.prevNames.get(prevUserid);
+					isLocked = user.locked;
+					success = true;
+					break;
+				}
+			}
+			if (!success) return;
 		}
+
+		let isPlayer = userid in this.game.players;
+		if (isPlayer) this.game.onLeave(user);
+
+		delete this.users[userid];
+		this.userCount--;
+
+		this.add((this.reportJoins && !isLocked ? '|l|' : '|L|') + username);
 		this.update();
 		this.kickInactiveUpdate();
 	}

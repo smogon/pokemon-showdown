@@ -80,6 +80,7 @@ describe('Users features', function () {
 						let iterations = totalConnections;
 						while (--iterations) user.mergeConnection(new Connection());
 
+						user.resetName();
 						user.disconnectAll();
 						assert.strictEqual(user.connections.length, 0);
 						assert.strictEqual(user.connected, false);
@@ -92,6 +93,7 @@ describe('Users features', function () {
 
 						let connections = user.connections.slice();
 
+						user.resetName();
 						user.disconnectAll();
 						for (let i = 0; i < totalConnections; i++) {
 							assert.ok(!Users.connections.has(connections[i].id));
@@ -104,6 +106,7 @@ describe('Users features', function () {
 						while (--iterations) user.mergeConnection(new Connection());
 						let connections = user.connections.slice();
 
+						user.resetName();
 						user.disconnectAll();
 						for (let i = 0; i < totalConnections; i++) {
 							assert.strictEqual(connections[i].user, null);

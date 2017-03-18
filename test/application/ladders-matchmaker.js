@@ -10,6 +10,8 @@ describe('Matchmaker', function () {
 		matchmaker.ladderIpLog.end();
 		clearInterval(matchmaker.periodicMatchInterval);
 		matchmaker.periodicMatchInterval = null;
+
+		this.room = null;
 	});
 
 	beforeEach(function () {
@@ -27,13 +29,18 @@ describe('Matchmaker', function () {
 	});
 
 	afterEach(function () {
-		this.p1.resetName();
 		this.p1.disconnectAll();
+		this.p1.resetName();
 		this.p1.destroy();
 
-		this.p2.resetName();
 		this.p2.disconnectAll();
+		this.p2.resetName();
 		this.p2.destroy();
+
+		if (this.room) {
+			this.room.destroy();
+			this.room = null;
+		}
 	});
 
 	after(function () {
@@ -109,19 +116,20 @@ describe('Matchmaker', function () {
 		assert.strictEqual(matchmaker.searches.get(formatid).size, 0);
 	});
 
-	// FIXME: a race condition in battles and sockets breaks this test
-	it.skip('should create a new battle room after matchmaking', function () {
+	// FIXME: refactor Matchmaker#startbattle to be more pure so this test can
+	// work better.
+	it('should create a new battle room after matchmaking', function () {
 		let formatid = 'gen7ou';
 		let {startBattle} = matchmaker;
-		matchmaker.startBattle = (...args) => {
+		matchmaker.startBattle = () => {
 			matchmaker.startBattle = startBattle;
-			let room = matchmaker.startBattle(...args);
-			assert.ok(room instanceof Rooms.BattleRoom);
+			this.room = matchmaker.startBattle(this.p1, this.p2, formatid, this.p1.team, this.p2.team, {rated: true});
+			assert.ok(this.room instanceof Rooms.BattleRoom);
 		};
 
 		let s1 = new Search(this.p1.userid, this.p1.team);
-		let s2 = new Search(this.p1.userid, this.p2.team);
+		let s2 = new Search(this.p2.userid, this.p2.team);
 		matchmaker.addSearch(s1, this.p1, formatid);
-		matchmaker.addSearch(s2, this.p2, formatid);
+		matchmaker.addSearch(s2, this.p1, formatid);
 	});
 });
