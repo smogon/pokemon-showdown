@@ -2,6 +2,124 @@
 'use strict';
 
 exports.commands = {
+	'!othermetas': true,
+	om: 'othermetas',
+	othermetas: function (target, room, user) {
+		if (!this.runBroadcast()) return;
+		target = toId(target);
+		let buffer = "";
+
+		if (target === 'all' && this.broadcasting) {
+			return this.sendReplyBox("You cannot broadcast information about all Other Metagames at once.");
+		}
+
+		if (!target || target === 'all') {
+			buffer += "- <a href=\"https://www.smogon.com/forums/forums/other-metagames.394/\">Other Metagames Forum</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/forums/om-analyses.416/\">Other Metagames Analyses</a><br />";
+			if (!target) return this.sendReplyBox(buffer);
+		}
+		let showMonthly = (target === 'all' || target === 'omofthemonth' || target === 'omotm' || target === 'month');
+
+		if (target === 'all') {
+			// Display OMotM formats, with forum thread links as caption
+			this.parse('/formathelp omofthemonth');
+
+			// Display the rest of OM formats, with OM hub/index forum links as caption
+			this.parse('/formathelp othermetagames');
+			return this.sendReply('|raw|<center>' + buffer + '</center>');
+		}
+		if (showMonthly) {
+			this.target = 'omofthemonth';
+			this.run('formathelp');
+		} else {
+			this.run('formathelp');
+		}
+	},
+	othermetashelp: ["/om - Provides links to information on the Other Metagames.",
+		"!om - Show everyone that information. Requires: + % @ * # & ~"],
+
+	ce: "crossevolve",
+	crossevo: "crossevolve",
+	crossevolve: function(target, user, room)
+	{
+		if (!this.runBroadcast()) return;
+		if (!target || !target.includes(',')) return this.parse('/help crossevo')
+		let pokes = target.split(",");
+		if (!Tools.data.Pokedex[toId(pokes[0])] || !Tools.data.Pokedex[toId(pokes[1])]) {
+			return this.errorReply('Error: Pokemon not found.')
+		}
+		let poke1 = Tools.getTemplate(pokes[0]), poke2 = Tools.getTemplate(pokes[1]);
+		let prevo = Tools.getTemplate(poke2.prevo);
+		if (!poke1.evos || !poke1.evos.length) {
+			return this.errorReply(`Error: ${poke1.species} does not evolve.`);
+		}
+		if (!prevo.exists) {
+			return this.errorReply(`Error: You cannot cross evolve into ${poke2.species}.`);
+		}
+		let setStage = 1, crossStage = 1;
+		if (poke1.prevo) {
+			setStage++;
+			if (Tools.data.Pokedex[poke1.prevo].prevo) {
+				setStage++;
+			}
+		}
+		if (poke2.prevo) {
+			crossStage++;
+			if (prevo.prevo) {
+				crossStage++;
+			}
+		}
+		if (setStage + 1 !== crossStage) {
+			return this.sendReply(`Error: Cross evolution must follow evolutionary stages. (${poke1.species} is Stage ${setStage} and can only cross evolve to Stage ${setStage + 1})`);
+		}
+		let stats = {};
+		let ability = Object.values(poke2.abilities).join('/');
+		for (let statName in poke1.baseStats) {
+			let stat = poke1.baseStats[statName];
+			stat += poke2.baseStats[statName] - prevo.baseStats[statName];
+			stats[statName] = stat;
+		}
+		let typ1 = "", typ2 = "";
+		typ1 = typ1 + poke1.types[0];
+		if (poke1.types[1]) typ2 = typ2 + poke1.types[1];
+		if (poke2.types[0] !== prevo.types[0]) typ1 = poke2.types[0];
+		if (poke2.types[1] !== prevo.types[1]) typ2 = poke2.types[1] || poke2.types[0];
+		if (typ1 === typ2) typ2 = "";
+		let weightkg = poke2.weightkg - prevo.weightkg + poke1.weightkg;
+		if (weightkg <= 0) {
+			weightkg = 0.1;
+		}
+		for (var i in stats) {
+			if (stats[i] <= 0 || stats[i] > 255) {
+				return this.errorReply(`This Cross Evolution cannot happen since a stat goes below 0 or above 255.`);
+			}
+		}
+		let type = `<span class="col typecol"><img src="https://play.pokemonshowdown.com/sprites/types/${typ1}.png" alt="${typ1}" height="14" width="32">`;
+		if (typ2) type = `${type}<img src="https://play.pokemonshowdown.com/sprites/types/${typ2}.png" alt="${typ2}" height="14" width="32">`;
+		type += "</span>";
+		let gnbp = 20;
+		if (weightkg >= 200) { // Calculate Grass Knot/Low Kick Base Power
+			gnbp = 120;
+		} else if (weightkg >= 100) {
+			gnbp = 100;
+		} else if (weightkg >= 50) {
+			gnbp = 80;
+		} else if (weightkg >= 25) {
+			gnbp = 60;
+		} else if (weightkg >= 10) {
+			gnbp = 40;
+		} // Aah, only if `template` had a `bst` property.
+		let bst = stats['hp'] + stats['atk'] + stats['def'] + stats['spa'] + stats['spd'] + stats['spe'];
+		let text = `<b>${poke1.species}</b> ===> <b>${poke2.species}</b>:<br />`;
+		text = `${text}<b>Stats</b>: ${Object.values(stats).join('/')}<br />`;
+		text = `${text}<b>BST</b>: ${bst}<br />`;
+		text = `${text}<b>Type:</b> ${type}<br />`;
+		text = `${text}<b>Abilities</b>: ${ability}<br />`;
+		text = `${text}<b>Weight</b>: ${weightkg} kg (${gnbp} BP)`;
+		return this.sendReplyBox(text);
+	},
+	crossevolvehelp: ["/crossevo <base pokemon>, <evolved pokemon> - Shows the type and stats for the Cross Evolved Pokemon."],
+
 	mnm: 'mixandmega',
 	mixandmega: function (target, room, user) {
 		if (!this.runBroadcast()) return;
