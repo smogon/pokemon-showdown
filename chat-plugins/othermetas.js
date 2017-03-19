@@ -40,13 +40,12 @@ exports.commands = {
 
 	ce: "crossevolve",
 	crossevo: "crossevolve",
-	crossevolve: function(target, user, room)
-	{
+	crossevolve: function (target, user, room) {
 		if (!this.runBroadcast()) return;
-		if (!target || !target.includes(',')) return this.parse('/help crossevo')
+		if (!target || !target.includes(',')) return this.parse('/help crossevo');
 		let pokes = target.split(",");
 		if (!Tools.data.Pokedex[toId(pokes[0])] || !Tools.data.Pokedex[toId(pokes[1])]) {
-			return this.errorReply('Error: Pokemon not found.')
+			return this.errorReply('Error: Pokemon not found.');
 		}
 		let poke1 = Tools.getTemplate(pokes[0]), poke2 = Tools.getTemplate(pokes[1]);
 		let prevo = Tools.getTemplate(poke2.prevo);
@@ -89,7 +88,7 @@ exports.commands = {
 		if (weightkg <= 0) {
 			weightkg = 0.1;
 		}
-		for (var i in stats) {
+		for (let i in stats) {
 			if (stats[i] <= 0 || stats[i] > 255) {
 				return this.errorReply(`This Cross Evolution cannot happen since a stat goes below 0 or above 255.`);
 			}
