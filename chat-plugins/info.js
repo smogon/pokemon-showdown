@@ -357,7 +357,8 @@ exports.commands = {
 		if (!this.runBroadcast()) return;
 
 		let buffer = '';
-		let targetId = toId(target);
+		let sep = target.split(',');
+		let targetId = toId(sep[0]);
 		if (!targetId) return this.parse('/help data');
 		let targetNum = parseInt(targetId);
 		if (!isNaN(targetNum)) {
@@ -370,12 +371,18 @@ exports.commands = {
 				}
 			}
 		}
+		let mod = Dex;
+		if (sep[1] && toId(sep[1]) in Dex.dexes) {
+			mod = Dex.mod(toId(sep[1]));
+		} else if (sep[1] && Dex.getFormat(sep[1]).mod) {
+			mod = Dex.mod(Dex.getFormat(sep[1]).mod);
+		}
 		let newTargets = Dex.dataSearch(target);
 		let showDetails = (cmd === 'dt' || cmd === 'details');
 		if (newTargets && newTargets.length) {
 			for (let i = 0; i < newTargets.length; ++i) {
 				if (newTargets[i].isInexact && !i) {
-					buffer = "No Pok\u00e9mon, item, move, ability or nature named '" + target + "' was found. Showing the data of '" + newTargets[0].isInexact + "' instead.\n";
+					buffer = `No Pok\u00e9mon, item, move, ability or nature named '${sep[0]}' was found${Dex.gen > mod.gen ? ` in Gen ${mod.gen}` : ""}. Showing the data of '${newTargets[0].name}' instead.\n`;
 				}
 				if (newTargets[i].searchType === 'nature') {
 					let nature = Dex.getNature(newTargets[i].name);
@@ -388,11 +395,17 @@ exports.commands = {
 					}
 					return this.sendReply(buffer);
 				} else {
-					buffer += '|c|~|/data-' + newTargets[i].searchType + ' ' + newTargets[i].name + '\n';
+					let sType = newTargets[i].searchType.charAt(0).toUpperCase() + newTargets[i].searchType.substring(1, newTargets[i].searchType.length);
+					if (Chat[`getData${sType}HTML`]) {
+						let template = mod["get" + (sType === "Pokemon" ? "Template" : sType)](newTargets[i].name);
+						buffer += `|raw|${Chat[`getData${sType}HTML`](template)}\n`;
+					} else {
+						buffer += '|c|~|/data-' + newTargets[i].searchType + ' ' + newTargets[i].name + '\n';
+					}
 				}
 			}
 		} else {
-			return this.errorReply("No Pok\u00e9mon, item, move, ability or nature named '" + target + "' was found. (Check your spelling?)");
+			return this.errorReply(`No Pok\u00e9mon, item, move, ability or nature named '${sep[0]}' was found${Dex.gen > mod.gen ? ` in Gen ${mod.gen}` : ""}. (Check your spelling?)`);
 		}
 
 		if (showDetails) {
@@ -400,7 +413,7 @@ exports.commands = {
 			let isSnatch = false;
 			let isMirrorMove = false;
 			if (newTargets[0].searchType === 'pokemon') {
-				let pokemon = Dex.getTemplate(newTargets[0].name);
+				let pokemon = mod.getTemplate(newTargets[0].name);
 				let weighthit = 20;
 				if (pokemon.weightkg >= 200) {
 					weighthit = 120;
@@ -425,12 +438,12 @@ exports.commands = {
 					details['<font color="#686868">Does Not Evolve</font>'] = "";
 				} else {
 					details["Evolution"] = pokemon.evos.map(evo => {
-						evo = Dex.getTemplate(evo);
+						evo = mod.getTemplate(evo);
 						return evo.name + " (" + evo.evoLevel + ")";
 					}).join(", ");
 				}
 			} else if (newTargets[0].searchType === 'move') {
-				let move = Dex.getMove(newTargets[0].name);
+				let move = mod.getMove(newTargets[0].name);
 				details = {
 					"Priority": move.priority,
 					"Gen": move.gen,
@@ -473,10 +486,10 @@ exports.commands = {
 					}
 				} else if (move.isZ) {
 					details["&#10003; Z-Move"] = "";
-					details["Z-Crystal"] = Dex.getItem(move.isZ).name;
+					details["Z-Crystal"] = mod.getItem(move.isZ).name;
 					if (move.basePower !== 1) {
-						details["User"] = Dex.getItem(move.isZ).zMoveUser.join(", ");
-						details["Required Move"] = Dex.getItem(move.isZ).zMoveFrom;
+						details["User"] = mod.getItem(move.isZ).zMoveUser.join(", ");
+						details["Required Move"] = mod.getItem(move.isZ).zMoveFrom;
 					}
 				} else {
 					details["Z-Effect"] = "None";
@@ -497,7 +510,7 @@ exports.commands = {
 					'all': "All Pok\u00e9mon",
 				}[move.target] || "Unknown";
 			} else if (newTargets[0].searchType === 'item') {
-				let item = Dex.getItem(newTargets[0].name);
+				let item = mod.getItem(newTargets[0].name);
 				details = {
 					"Gen": item.gen,
 				};
@@ -531,6 +544,7 @@ exports.commands = {
 		this.sendReply(buffer);
 	},
 	datahelp: ["/data [pokemon/item/move/ability] - Get details on this pokemon/item/move/ability/nature.",
+		"/data [pokemon/item/move/ability], Gen [generation number] - Get details on this pokemon/item/move/ability/nature for that generation.",
 		"!data [pokemon/item/move/ability] - Show everyone these details. Requires: + % @ * # & ~"],
 
 	'!details': true,
@@ -539,8 +553,9 @@ exports.commands = {
 		if (!target) return this.parse('/help details');
 		this.run('data');
 	},
-	detailshelp: ["/details [pokemon] - Get additional details on this pokemon/item/move/ability/nature.",
-		"!details [pokemon] - Show everyone these details. Requires: + % @ * # & ~"],
+	detailshelp: ["/details [pokemon/item/move/ability] - Get additional details on this pokemon/item/move/ability/nature.",
+		"/details [pokemon/item/move/ability], Gen [generation number] - Get details on this pokemon/item/move/ability/nature for that generation.",
+		"!details [pokemon/item/move/ability] - Show everyone these details. Requires: + % @ * # & ~"],
 
 	'!weakness': true,
 	weaknesses: 'weakness',
