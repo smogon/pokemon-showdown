@@ -117,7 +117,10 @@ class Battle {
 
 		this.playerNames = [room.p1.name, room.p2.name];
 		/** {playerid: [rqid, request, isWait, choice]} */
-		this.requests = {};
+		this.requests = {
+			p1: [0, '', true, ''],
+			p2: [0, '', true, ''],
+		};
 
 		// data to be logged
 		this.logData = null;
@@ -162,7 +165,11 @@ class Battle {
 		const [choice, rqid] = data.split('|', 2);
 		if (!player) return;
 		let request = this.requests[player.slot];
-		if (rqid && rqid !== '' + request[0]) return;
+		if ((this.requests.p1[2] && this.requests.p2[2]) || // too late
+			(rqid && rqid !== '' + request[0])) { // WAY too late
+			player.sendRoom(`|error|[Invalid choice] Sorry, too late to make a different move; the next turn has already started`);
+			return;
+		}
 		request[2] = true;
 		request[3] = choice;
 
@@ -173,7 +180,11 @@ class Battle {
 		const [, rqid] = data.split('|', 2);
 		if (!player) return;
 		let request = this.requests[player.slot];
-		if (rqid && rqid !== '' + request[0]) return;
+		if ((this.requests.p1[2] && this.requests.p2[2]) || // too late
+			(rqid && rqid !== '' + request[0])) { // WAY too late
+			player.sendRoom(`|error|[Invalid choice] Sorry, too late to cancel; the next turn has already started`);
+			return;
+		}
 		request[2] = false;
 
 		this.sendFor(user, 'undo');
@@ -237,7 +248,7 @@ class Battle {
 			let player = this[lines[2]];
 			if (player) {
 				player.sendRoom(lines[3]);
-				if (lines[3].startsWith('|error|[Invalid choice]')) {
+				if (lines[3].startsWith(`|error|[Invalid choice]`)) {
 					let request = this.requests[player.slot];
 					request[2] = false;
 					request[3] = '';
