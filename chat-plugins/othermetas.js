@@ -24,8 +24,8 @@ exports.commands = {
 		if (stone.id in bannedStones) {
 			return this.errorReply(`You cannot use ${stone.name} on anything besides ${stone.megaEvolves} in Mix and Mega.`);
 		}
-		for (let i in Tools.mod.("mixandmega").data.BattleFormatsData) { // Separate messages because there's a difference between being already mega evolved / NFE and being banned from mega evolving
-			let mnmTemplate = Tools.mod.("mixandmega").data.BattleFormatsData;
+		for (let i in Tools.mod("mixandmega").data.BattleFormatsData) { // Separate messages because there's a difference between being already mega evolved / NFE and being banned from mega evolving
+			let mnmTemplate = Tools.mod("mixandmega").data.BattleFormatsData;
 			if (mnmTemplate[i] && mnmTemplate[i].tier === "Uber") {
 				return this.errorReply(`${template.name} is banned from mega evolving in Mix and Mega.`);
 			}
