@@ -1584,7 +1584,17 @@ class BattleSide {
 			}
 		}
 
-		if (!moves.length && !zMove) {
+		const lockedMove = pokemon.getLockedMove();
+		if (lockedMove) {
+			const lockedMoveTarget = this.battle.runEvent('LockMoveTarget', pokemon);
+			this.choice.actions.push({
+				choice: 'move',
+				pokemon: pokemon,
+				targetLoc: lockedMoveTarget || 0,
+				move: lockedMove,
+			});
+			return true;
+		} else if (!moves.length && !zMove) {
 			// Override decision and use Struggle if there are no enabled moves with PP
 			// Gen 4 and earlier announce a Pokemon has no moves left before the turn begins, and only to that player's side.
 			if (this.gen <= 4) this.send('-activate', pokemon, 'move: Struggle');
