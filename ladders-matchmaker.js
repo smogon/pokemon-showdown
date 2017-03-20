@@ -207,7 +207,7 @@ class Matchmaker {
 			return;
 		}
 
-		if (Rooms.global.lockdown) {
+		if (Rooms.global.lockdown === true) {
 			this.cancelSearch(p1);
 			this.cancelSearch(p2);
 			p1.popup("The server is restarting. Battles will be available again in a few minutes.");
