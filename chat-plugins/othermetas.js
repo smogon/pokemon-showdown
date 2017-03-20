@@ -21,7 +21,7 @@ exports.commands = {
 			return this.errorReply(`You cannot mega evolve ${template.name} in Mix and Mega.`);
 		}
 		let bannedStones = {'beedrillite':1, 'gengarite':1, 'kangaskhanite':1, 'mawilite':1};
-		if (stone.id in bannedStones) {
+		if (stone.id in bannedStones && template.name !== stone.megaEvolves) {
 			return this.errorReply(`You cannot use ${stone.name} on anything besides ${stone.megaEvolves} in Mix and Mega.`);
 		}
 		for (let i in Tools.mod("mixandmega").data.BattleFormatsData) { // Separate messages because there's a difference between being already mega evolved / NFE and being banned from mega evolving
