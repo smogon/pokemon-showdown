@@ -1787,6 +1787,70 @@ class BattleSide {
 			switchIns: new Set(),
 		};
 	}
+	choose(input) {
+		if (!this.currentRequest) throw new Error(`Side ${this.name} (${this.id}) has no request`);
+
+		if (this.choice.cantUndo) {
+			return this.emitChoiceError(`Can't undo: A trapping/disabling effect would cause undo to leak information`);
+		}
+
+		this.clearChoice();
+
+		const choiceStrings = input.split(',');
+
+		for (let choiceString of choiceStrings) {
+			let choiceType = '';
+			let data = '';
+			choiceString = choiceString.trim();
+			let firstSpaceIndex = choiceString.indexOf(' ');
+			if (firstSpaceIndex >= 0) {
+				data = choiceString.slice(firstSpaceIndex + 1).trim();
+				choiceType = choiceString.slice(0, firstSpaceIndex);
+			} else {
+				choiceType = choiceString;
+			}
+
+			switch (choiceType) {
+			case 'move':
+				let targetLoc = 0;
+				if (/\s\-?[1-3]$/.test(data)) {
+					targetLoc = parseInt(data.slice(-2));
+					data = data.slice(0, data.lastIndexOf(' '));
+				}
+				const willMega = data.endsWith(' mega') ? 'mega' : '';
+				if (willMega) data = data.slice(0, -5);
+				const willZ = data.endsWith(' zmove') ? 'zmove' : '';
+				if (willZ) data = data.slice(0, -6);
+				this.chooseMove(data, targetLoc, willMega || willZ);
+				break;
+			case 'switch':
+				this.chooseSwitch(data);
+				break;
+			case 'shift':
+				if (data) return this.emitChoiceError(`Unrecognized data after "shift": ${data}`);
+				this.chooseShift();
+				break;
+			case 'team':
+				if (this.chooseTeam(data)) this.chooseTeam();
+				break;
+			case 'pass':
+			case 'skip':
+				if (data) return this.emitChoiceError(`Unrecognized data after "pass": ${data}`);
+				this.choosePass();
+				break;
+			case 'default':
+				this.autoChoose();
+				break;
+			default:
+				this.emitChoiceError(`Unrecognized choice: ${choiceString}`);
+				break;
+			}
+		}
+
+		if (this.choice.error) return false;
+
+		return true;
+	}
 	getChoiceIndex(isPass) {
 		let index = this.choice.actions.length;
 
@@ -4378,66 +4442,7 @@ class Battle extends Tools.BattleDex {
 		if (sideid === 'p1' || sideid === 'p2') side = this[sideid];
 		if (!side) throw new Error(`Invalid side ${sideid}`);
 
-		if (!side.currentRequest) throw new Error(`Side ${side.name} (${sideid}) has no request`);
-
-		if (side.choice.cantUndo) {
-			return side.emitChoiceError(`Can't undo: A trapping/disabling effect would cause undo to leak information`);
-		}
-
-		side.clearChoice();
-
-		const choiceStrings = input.split(',');
-
-		for (let choiceString of choiceStrings) {
-			let choiceType = '';
-			let data = '';
-			choiceString = choiceString.trim();
-			let firstSpaceIndex = choiceString.indexOf(' ');
-			if (firstSpaceIndex >= 0) {
-				data = choiceString.slice(firstSpaceIndex + 1).trim();
-				choiceType = choiceString.slice(0, firstSpaceIndex);
-			} else {
-				choiceType = choiceString;
-			}
-
-			switch (choiceType) {
-			case 'move':
-				let targetLoc = 0;
-				if (/\s\-?[1-3]$/.test(data)) {
-					targetLoc = parseInt(data.slice(-2));
-					data = data.slice(0, data.lastIndexOf(' '));
-				}
-				const willMega = data.endsWith(' mega') ? 'mega' : '';
-				if (willMega) data = data.slice(0, -5);
-				const willZ = data.endsWith(' zmove') ? 'zmove' : '';
-				if (willZ) data = data.slice(0, -6);
-				side.chooseMove(data, targetLoc, willMega || willZ);
-				break;
-			case 'switch':
-				side.chooseSwitch(data);
-				break;
-			case 'shift':
-				if (data) return side.emitChoiceError(`Unrecognized data after "shift": ${data}`);
-				side.chooseShift();
-				break;
-			case 'team':
-				if (side.chooseTeam(data)) side.chooseTeam();
-				break;
-			case 'pass':
-			case 'skip':
-				if (data) return side.emitChoiceError(`Unrecognized data after "pass": ${data}`);
-				side.choosePass();
-				break;
-			case 'default':
-				side.autoChoose();
-				break;
-			default:
-				side.emitChoiceError(`Unrecognized choice: ${choiceString}`);
-				break;
-			}
-		}
-
-		if (side.choice.error) return false;
+		if (!side.choose(input)) return false;
 
 		this.checkDecisions();
 		return true;
