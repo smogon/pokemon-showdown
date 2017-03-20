@@ -124,4 +124,28 @@ describe('Matchmaker', function () {
 		matchmaker.addSearch(s1, this.p1, formatid);
 		matchmaker.addSearch(s2, this.p2, formatid);
 	});
+
+	it('should cancel search on disconnect', function () {
+		let formatid = 'gen7ou';
+		let s1 = new Search(this.p1.userid, this.p1.team);
+		matchmaker.addSearch(s1, this.p1, formatid);
+		this.p1.onDisconnect(this.p1.connections[0]);
+		assert.strictEqual(matchmaker.searches.get(formatid).size, 0);
+	});
+
+	it('should cancel search on leaving the global room', function () {
+		let formatid = 'gen7ou';
+		let s1 = new Search(this.p1.userid, this.p1.team);
+		matchmaker.addSearch(s1, this.p1, formatid);
+		this.p1.leaveRoom(Rooms.global, this.p1.connections[0], true);
+		assert.strictEqual(matchmaker.searches.get(formatid).size, 0);
+	});
+
+	it('should cancel search on merge', function () {
+		let formatid = 'gen7ou';
+		let s1 = new Search(this.p1.userid, this.p1.team);
+		matchmaker.addSearch(s1, this.p1, formatid);
+		this.p2.merge(this.p1);
+		assert.strictEqual(matchmaker.searches.get(formatid).size, 0);
+	});
 });
