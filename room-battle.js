@@ -170,9 +170,13 @@ class Battle {
 	}
 	undo(user, data) {
 		const player = this.players[user];
+		const [, rqid] = data.split('|', 2);
+		if (!player) return;
 		let request = this.requests[player.slot];
-
+		if (rqid && rqid !== '' + request[0]) return;
 		request[2] = false;
+
+		this.sendFor(user, 'undo');
 	}
 	joinGame(user, team) {
 		if (this.playerCount >= 2) {
@@ -235,8 +239,8 @@ class Battle {
 				player.sendRoom(lines[3]);
 				if (lines[3].startsWith('|error|[Invalid choice]')) {
 					let request = this.requests[player.slot];
-					this.requests[player.slot][2] = false;
-					this.requests[player.slot][3] = '';
+					request[2] = false;
+					request[3] = '';
 				}
 			}
 			break;
