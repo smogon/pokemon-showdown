@@ -4473,14 +4473,14 @@ class Battle extends Tools.BattleDex {
 
 		this.go();
 	}
-	undoChoice(sideid, count) {
+	undoChoice(sideid) {
 		let side = null;
 		if (sideid === 'p1' || sideid === 'p2') side = this[sideid];
 		if (!side) throw new Error(`Invalid side ${sideid}`);
 		if (!side.currentRequest) return;
 
 		if (side.choice.cantUndo) {
-			side.choice.error = `Can't undo: A trapping/disabling effect would cause undo to leak information`;
+			side.emitChoiceError(`Can't undo: A trapping/disabling effect would cause undo to leak information`);
 			return;
 		}
 
