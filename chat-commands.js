@@ -1923,6 +1923,59 @@ exports.commands = {
 	},
 	promotehelp: ["/promote [username], [group] - Promotes the user to the specified group. Requires: & ~"],
 
+	transferauth: 'transferauthority',
+	transferauthority: (function () {
+		function transferAuth(user1, user2, transfereeAuth) { // bits and pieces taken from /userauth
+			let buff = [];
+			let user1ID = toId(user1);
+			let user2ID = toId(user2);
+			let ranks = Config.groupsranking;
+
+			// global authority
+			let globalGroup = Users.usergroups[user1ID];
+			if (globalGroup) {
+				let symbol = globalGroup.charAt(0);
+				if (ranks.indexOf(symbol) > ranks.indexOf(transfereeAuth)) return buff;
+				Users.setOfflineGroup(user1ID, Config.groupsranking[0]);
+				Users.setOfflineGroup(user2ID, symbol);
+				buff.push(`Global ${symbol}`);
+			}
+			// room authority
+			Rooms.rooms.forEach((curRoom, id) => {
+				if (!curRoom.auth) return;
+				let roomGroup = curRoom.auth[user1ID];
+				if (!roomGroup) return;
+				delete curRoom.auth[user1ID];
+				curRoom.auth[user2ID] = roomGroup;
+				buff.push(roomGroup + id);
+			});
+			if (buff.length >= 2) { // did they have roomauth?
+				Rooms.global.writeChatRoomData();
+			}
+
+			if (Users(user1ID)) Users(user1ID).updateIdentity();
+			if (Users(user2ID)) Users(user2ID).updateIdentity();
+
+			return buff;
+		}
+		return function (target, room, user) {
+			if (!this.can('declare')) return false;
+			if (!target || !target.includes(',')) return this.parse(`/help transferauthority`);
+			target = target.split(',');
+			let user1 = target[0].trim();
+			let user2 = target[1].trim();
+			if (toId(user1).length < 1 || toId(user2).length < 1) return this.errorReply(`One or more of the given usernames are too short to be a valid username (min 1 character).`);
+			if (toId(user1).length > 17 || toId(user2).length > 17) return this.errorReply(`One or more of the given usernames are too long to be a valid username (max 17 characters).`);
+			let transferSuccess = transferAuth(user1, user2, user.group);
+			if (transferSuccess.length >= 1) {
+				this.addModCommand(`${user1} has had their authority (${transferSuccess.join(', ')}) transfered onto new name: ${user2} - by ${user.name}.`);
+			} else {
+				return this.errorReply(`User '${user1}' has no global or room authority, or they have higher global authority than you.`);
+			}
+		};
+	})(),
+	transferauthorityhelp: ["/transferauthority [old alt], [new alt] - Transfers a user's global/room authority onto their new alt. Requires & ~"],
+
 	confirmuser: 'trustuser',
 	trustuser: function (target) {
 		if (!target) return this.parse('/help trustuser');
