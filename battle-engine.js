@@ -3818,6 +3818,7 @@ class Battle extends Tools.BattleDex {
 	 * Returns whether a proposed target for a move is valid.
 	 */
 	validTargetLoc(targetLoc, source, targetType) {
+		if (targetLoc === 0) return true;
 		let numSlots = source.side.active.length;
 		if (!Math.abs(targetLoc) && Math.abs(targetLoc) > numSlots) return false;
 
