@@ -454,7 +454,7 @@ exports.commands = {
 			if (room.game) return this.errorReply("There is already a game in progress in this room.");
 
 			room.game = new UNOgame(room, target);
-			room.add(`|uhtml|uno-${room.gameNumber}|<div class="broadcast-green"><p style="font-size: 14pt; text-align: center;">A new game of <strong>UNO</strong> is starting!</p><p style="font-size: 9pt; text-align: center;">Use <strong>/uno join</strong> to join the game.</p></div>`).update();
+			room.add(`|uhtml|uno-${room.gameNumber}|<div class="broadcast-green"><p style="font-size: 14pt; text-align: center;">A new game of <strong>UNO</strong> is starting!</p><p style="font-size: 9pt; text-align: center;">Click <button name = "send" value = "/uno join">HERE</button> to join.</p></div>`).update();
 			this.privateModCommand(`(A game of UNO was created by ${user.name}.)`);
 		},
 
