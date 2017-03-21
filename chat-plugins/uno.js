@@ -163,6 +163,7 @@ class UNOgame extends Rooms.RoomGame {
 		clearTimeout(this.timer);
 		let player = this.players[this.currentPlayer];
 		this.room.send(`${player.name}'s turn.`);
+		this.state = "play";
 		if (player.cardLock) delete player.cardLock;
 		player.sendDisplay();
 
@@ -292,7 +293,6 @@ class UNOgame extends Rooms.RoomGame {
 		this.topCard.color = color; // manually change the top card's color
 		this.sendToRoom(`The color has been changed to ${color}.`);
 		clearTimeout(this.timer);
-		this.state = "play";
 
 		if (this.isPlusFour) {
 			this.isPlusFour = false;
