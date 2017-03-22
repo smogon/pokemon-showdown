@@ -456,6 +456,9 @@ exports.commands = {
 			if (!this.can("minigame", null, room)) return;
 			if (room.unoDisabled) return this.errorReply("UNO is disabled for this room.");
 			if (room.game) return this.errorReply("There is already a game in progress in this room.");
+			let num = (target === '') ? 3 : parseInt(target);
+			if (!Number.isInteger(num)) return this.errorReply("Please enter a valid player cap.");
+			if (num > 6 || num < 2) return this.errorReply("Please enter a valid player cap range (2-6).");
 
 			room.game = new UNOgame(room, target);
 			room.add(`|uhtml|uno-${room.gameNumber}|<div class="broadcast-green"><p style="font-size: 14pt; text-align: center">A new game of <strong>UNO</strong> is starting!</p><p style="font-size: 9pt; text-align: center"><button name="send" value="/uno join">Join</button><br />Or use <strong>/uno join</strong> to join the game.</p></div>`).update();
@@ -480,6 +483,7 @@ exports.commands = {
 		timer: function (target, room, user) {
 			if (!this.can("minigame", null, room)) return;
 			if (!room.game || room.game.gameid !== "uno") return this.errorReply("There is no UNO game going on in this room.");
+			target = target.replace(/[0-9]/g, '');
 			let amount = parseInt(target);
 			if (!amount || amount < 5 || amount > 300) return this.errorReply("The amount must be a number between 5 and 300.");
 
