@@ -2623,7 +2623,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		onHit: function (target) {
 			if (target.ability in {multitype:1, stancechange:1}) return;
-			if (!this.willMove(target)) target.addVolatile('gastroacid');
+			if (!this.willMove(target) || (!this.willMove(target) && target.volatiles['substitute'])) target.addVolatile('gastroacid');
 		},
 		secondary: false,
 		target: "allAdjacentFoes",
