@@ -421,6 +421,7 @@ class UNOgamePlayer extends Rooms.RoomGamePlayer {
 exports.commands = {
 	uno: {
 		// roomowner commands
+		"off": "disable",
 		disable: function (target, room, user) {
 			if (!this.can('gamemanagement', null, room)) return;
 			if (room.unoDisabled) {
@@ -434,6 +435,7 @@ exports.commands = {
 			return this.sendReply("UNO has been disabled for this room.");
 		},
 
+		"on": "enable",
 		enable: function (target, room, user) {
 			if (!this.can('gamemanagement', null, room)) return;
 			if (!room.unoDisabled) {
@@ -448,6 +450,8 @@ exports.commands = {
 		},
 
 		// moderation commands
+		"new": "create",
+		"make": "create",
 		create: function (target, room, user) {
 			if (!this.can("minigame", null, room)) return;
 			if (room.unoDisabled) return this.errorReply("UNO is disabled for this room.");
@@ -464,6 +468,7 @@ exports.commands = {
 			if (room.game.onStart()) this.privateModCommand(`(The game of UNO was started by ${user.name}.)`);
 		},
 
+		"stop": "end",
 		end: function (target, room, user) {
 			if (!this.can("minigame", null, room)) return;
 			if (!room.game || room.game.gameid !== "uno") return this.errorReply("There is no UNO game going on in this room.");
@@ -501,6 +506,7 @@ exports.commands = {
 		},
 
 		// player/user commands
+		"j": "join",
 		join: function (target, room, user) {
 			if (!room.game || room.game.gameid !== "uno") return false;
 			if (!this.canTalk()) return false;
@@ -509,6 +515,7 @@ exports.commands = {
 			return this.sendReply("You have joined the game of UNO.");
 		},
 
+		"l": "leave",
 		leave: function (target, room, user) {
 			if (!room.game || room.game.gameid !== "uno") return false;
 			if (!room.game.leaveGame(user)) return this.errorReply("Unable to leave the game.");
@@ -553,6 +560,9 @@ exports.commands = {
 			room.game.onSendHand(user);
 		},
 
+		"players": "getusers",
+		"users": "getusers",
+		"getplayers": "getusers",
 		getusers: function (target, room, user) {
 			if (!room.game || room.game.gameid !== "uno") return false;
 			if (!this.runBroadcast()) return false;
