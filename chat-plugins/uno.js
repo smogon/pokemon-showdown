@@ -19,6 +19,14 @@ const rgb_Gradients = {
 	'Black': "rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.55)",
 };
 
+const text_colors = {
+	'Green': "rgb(0, 128, 0)",
+	'Yellow': "rgb(175, 165, 40)",
+	'Blue': "rgb(75, 75, 255)",
+	'Red': "rgb(255, 0, 0)",
+	'Black': "inherit",
+};
+
 const text_shadow = 'text-shadow: 1px 0px black, -1px 0px black, 0px -1px black, 0px 1px black, 2px -2px black;';
 
 function cardHTML(card, fullsize) {
@@ -94,7 +102,7 @@ class UNOgame extends Rooms.RoomGame {
 			this.discards.unshift(this.topCard);
 		} while (this.topCard.color === "Black");
 
-		this.sendToRoom(`|raw|The top card is <span style="color: ${this.topCard.color}">${this.topCard.name}</span>.`);
+		this.sendToRoom(`|raw|The top card is <span style="color: ${text_colors[this.topCard.color]}">${this.topCard.name}</span>.`);
 
 		this.onRunEffect(this.topCard.value, true);
 		this.nextTurn(true);
@@ -240,7 +248,7 @@ class UNOgame extends Rooms.RoomGame {
 
 		player.sendDisplay(); // update display without the card in it for purposes such as choosing colors
 
-		this.sendToRoom(`|raw|${Chat.escapeHTML(player.name)} has played a <span style="color: ${card.color}">${card.name}</span>.`);
+		this.sendToRoom(`|raw|${Chat.escapeHTML(player.name)} has played a <span style="color: ${text_colors[card.color]}">${card.name}</span>.`);
 
 		// handle hand size
 		if (!player.hand.length) {
@@ -317,7 +325,7 @@ class UNOgame extends Rooms.RoomGame {
 
 		let player = this.players[user.userid];
 		player.hand.push(...drawnCards);
-		player.sendRoom(`|raw|You have drawn the following card${drawnCards.length > 1 ? "s" : ""}: ${drawnCards.map(card => `<span style="color: ${card.color}">${card.name}</span>`).join(", ")}.`);
+		player.sendRoom(`|raw|You have drawn the following card${drawnCards.length > 1 ? "s" : ""}: ${drawnCards.map(card => `<span style="color: ${text_colors[card.color]}">${card.name}</span>`).join(", ")}.`);
 		return drawnCards;
 	}
 
@@ -415,7 +423,7 @@ class UNOgamePlayer extends Rooms.RoomGamePlayer {
 		let draw = '<button class="button" style="width: 30%; background: rgba(0, 0, 255, 0.05)" name=send value="/uno draw">Draw a card!</button>';
 		let pass = '<button class="button" style=" width: 30%; background: rgba(255, 0, 0, 0.05)" name=send value="/uno pass">Pass!</button>';
 
-		let top = `<strong>Top Card: <span style="color: ${this.game.topCard.color}">${this.game.topCard.name}</span></strong>`;
+		let top = `<strong>Top Card: <span style="color: ${text_colors[this.game.topCard.color]}">${this.game.topCard.name}</span></strong>`;
 
 		// clear previous display and show new display
 		this.sendRoom("|uhtmlchange|uno-hand|");
