@@ -234,7 +234,7 @@ class UNOgame extends Rooms.RoomGame {
 
 		// check for legal play
 		if (player.cardLock && player.cardLock !== cardName) return `You can only play ${player.cardLock} after drawing.`;
-		if (card.color !== 'Black' && card.color !== this.topCard.color && card.value !== this.topCard.value) return "You cannot play this card.";
+		if (card.color !== 'Black' && card.color !== (this.changedColor || this.topCard.color) && card.value !== this.topCard.value) return `You cannot play this card - you can only play: Wild cards, ${(this.changedColor ? "and" : "")} ${(this.changedColor || this.topCard.color)} cards${this.changedColor ? "" : ` and ${this.topCard.value}'s`}.`;
 		if (card.value === '+4' && !player.canPlayWildFour()) return "You cannot play Wild +4 when you still have a card with the same color as the top card.";
 
 		clearTimeout(this.timer); // reset the autodq timer.
@@ -245,6 +245,7 @@ class UNOgame extends Rooms.RoomGame {
 		this.topCard = card;
 		player.removeCard(cardName);
 		this.discards.unshift(card);
+		this.changedColor = null; // clear any previous colour changes
 
 		player.sendDisplay(); // update display without the card in it for purposes such as choosing colors
 
@@ -307,7 +308,7 @@ class UNOgame extends Rooms.RoomGame {
 
 	onSelectcolor(user, color) {
 		if (!["Red", "Blue", "Green", "Yellow"].includes(color) || user.userid !== this.currentPlayer || this.state !== 'color') return false;
-		this.topCard.color = color; // manually change the top card's color
+		this.changedColor = color;
 		this.sendToRoom(`The color has been changed to ${color}.`);
 		clearTimeout(this.timer);
 
