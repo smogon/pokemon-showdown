@@ -231,7 +231,7 @@ exports.commands = {
 			return this.parse('/modjoin ' + target);
 		}
 	},
-	inviteonlyhelp: ["/inviteonly [on|off] - Sets modjoin +. Users can't join unless invited with /invite. Requires: # & ~",
+	inviteonlyhelp: ["/inviteonly [on|off] - Sets modjoin +. Users can't join unless invited with /invite. " + Chat.require('#'),
 		"/ioo - Shortcut for /inviteonly on"],
 
 	modjoin: function (target, room, user) {
@@ -283,8 +283,8 @@ exports.commands = {
 		if (target === 'sync' && !room.modchat) this.parse('/modchat ' + Config.groupsranking[1]);
 		if (!room.isPrivate) this.parse('/hiddenroom');
 	},
-	modjoinhelp: ["/modjoin [+|%|@|*|&|~|#|off] - Sets modjoin. Users lower than the specified rank can't join this room. Requires: # & ~",
-		"/modjoin [sync|off] - Sets modjoin. Only users who can speak in modchat can join this room. Requires: # & ~"],
+	modjoinhelp: ["/modjoin [+|%|@|*|&|~|#|off] - Sets modjoin. Users lower than the specified rank can't join this room. " + Chat.require('#'),
+		"/modjoin [sync|off] - Sets modjoin. Only users who can speak in modchat can join this room. " + Chat.require('#')],
 
 	slowchat: function (target, room, user) {
 		if (!target) {
@@ -317,8 +317,8 @@ exports.commands = {
 			Rooms.global.writeChatRoomData();
 		}
 	},
-	slowchathelp: ["/slowchat [number] - Sets a limit on how often users in the room can send messages, between 2 and 60 seconds. Requires @ * # & ~",
-		"/slowchat off - Disables slowchat in the room. Requires @ * # & ~"],
+	slowchathelp: ["/slowchat [number] - Sets a limit on how often users in the room can send messages, between 2 and 60 seconds. " + Chat.require('@'),
+		"/slowchat off - Disables slowchat in the room. " + Chat.require('@')],
 
 	stretching: 'stretchfilter',
 	stretchingfilter: 'stretchfilter',
@@ -347,7 +347,7 @@ exports.commands = {
 			Rooms.global.writeChatRoomData();
 		}
 	},
-	stretchfilterhelp: ["/stretchfilter [on/off] - Toggles filtering messages in the room for stretchingggggggg. Requires # & ~"],
+	stretchfilterhelp: ["/stretchfilter [on/off] - Toggles filtering messages in the room for stretchingggggggg. " + Chat.require('#')],
 
 	capitals: 'capsfilter',
 	capitalsfilter: 'capsfilter',
@@ -376,7 +376,7 @@ exports.commands = {
 			Rooms.global.writeChatRoomData();
 		}
 	},
-	capsfilterhelp: ["/capsfilter [on/off] - Toggles filtering messages in the room for EXCESSIVE CAPS. Requires # & ~"],
+	capsfilterhelp: ["/capsfilter [on/off] - Toggles filtering messages in the room for EXCESSIVE CAPS. " + Chat.require('#')],
 
 	banwords: 'banword',
 	banword: {
@@ -464,8 +464,8 @@ exports.commands = {
 		},
 	},
 	banwordhelp: [
-		"/banword add [words] - Adds the comma-separated list of phrases (& or ~ can also input regex) to the banword list of the current room. Requires: # & ~",
-		"/banword delete [words] - Removes the comma-separated list of phrases from the banword list. Requires: # & ~",
-		"/banword list - Shows the list of banned words in the current room. Requires: % @ * # & ~",
+		"/banword add [words] - Adds the comma-separated list of phrases (& or ~ can also input regex) to the banword list of the current room. " + Chat.require('#'),
+		"/banword delete [words] - Removes the comma-separated list of phrases from the banword list. " + Chat.require('#'),
+		"/banword list - Shows the list of banned words in the current room. " + Chat.require('%'),
 	],
 };
