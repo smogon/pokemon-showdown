@@ -24,11 +24,8 @@ exports.commands = {
 		if (stone.id in bannedStones && template.name !== stone.megaEvolves) {
 			return this.errorReply(`You cannot use ${stone.name} on anything besides ${stone.megaEvolves} in Mix and Mega.`);
 		}
-		let mnmTemplate = Tools.mod("mixandmega").data.FormatsData;
-		for (let i in mnmTemplate) { // Separate messages because there's a difference between being already mega evolved / NFE and being banned from mega evolving
-			if (mnmTemplate[i] && mnmTemplate[i].tier === "Uber") {
-				return this.errorReply(`${template.name} is banned from mega evolving in Mix and Mega.`);
-			}
+		if (Tools.mod("mixandmega").getTemplate(sep[0]).tier === "Uber") { // Separate messages because there's a difference between being already mega evolved / NFE and being banned from mega evolving
+			return this.errorReply(`${template.name} is banned from mega evolving in Mix and Mega.`);
 		}
 		let baseTemplate = Tools.getTemplate(stone.megaEvolves);
 		let megaTemplate = Tools.getTemplate(stone.megaStone);
