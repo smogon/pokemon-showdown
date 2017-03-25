@@ -42,9 +42,7 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 7] OU (suspect test)",
-		desc: [
-			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3599206/\">OU Suspect Discussion</a>",
-		],
+		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3599206/\">OU Suspect Discussion</a>"],
 
 		mod: 'gen7',
 		challengeShow: false,
