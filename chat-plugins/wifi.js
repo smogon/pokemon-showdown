@@ -590,10 +590,12 @@ let commands = {
 	},
 	left: function (target, room, user) {
 		if (room.id !== 'wifi') return false;
-		if (!this.runBroadcast()) return this.errorReply("Permission denied");
 		if (!room.gtsga) return this.errorReply("There is no GTS giveaway going on!");
 		if (!user.can('warn', null, room) && user !== room.gtsga.giver) return this.errorReply("Only the host or a staff member can update GTS giveaways.");
-		if(!target) return this.sendReply(`The GTS giveaway from ${user} has ${room.gtsga.left} Pokémon remaining!`)
+		if (!target) {
+			if (!this.runBroadcast()) return;
+			return this.sendReply(`The GTS giveaway from ${room.gtsga.giver} has ${room.gtsga.left} Pokémon remaining!`);
+		}
 		let newamount = parseInt(target);
 		if (isNaN(newamount)) return this.errorReply("Please enter a valid amount.");
 		if (newamount > room.gtsga.left) return this.errorReply("The new amount must be lower than the old amount.");
