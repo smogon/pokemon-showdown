@@ -12869,6 +12869,8 @@ exports.BattlePokedex = {
 		heightm: 1.27,
 		weightkg: 37.2,
 		color: "Red",
+		prevo: "scratchet",
+		evoLevel: 23,
 		eggGroups: ["Field", "Flying"],
 	},
 	necturna: {
@@ -12881,6 +12883,8 @@ exports.BattlePokedex = {
 		heightm: 1.65,
 		weightkg: 49.6,
 		color: "Black",
+		prevo: "necturine",
+		evoLevel: 31,
 		eggGroups: ["Grass", "Field"],
 	},
 	mollux: {
@@ -12903,6 +12907,8 @@ exports.BattlePokedex = {
 		heightm: 2.1,
 		weightkg: 193,
 		color: "Purple",
+		prevo: "argalis",
+		evoLevel: 50,
 		eggGroups: ["Bug"],
 	},
 	malaconda: {
@@ -12914,6 +12920,8 @@ exports.BattlePokedex = {
 		heightm: 5.5,
 		weightkg: 108.8,
 		color: "Brown",
+		prevo: "brattler",
+		evoLevel: 33,
 		eggGroups: ["Grass", "Dragon"],
 	},
 	cawmodore: {
@@ -12925,6 +12933,8 @@ exports.BattlePokedex = {
 		heightm: 1.7,
 		weightkg: 37,
 		color: "Black",
+		prevo: "cawdet",
+		evoLevel: 33,
 		eggGroups: ["Flying"],
 	},
 	volkraken: {
@@ -12936,6 +12946,8 @@ exports.BattlePokedex = {
 		heightm: 1.3,
 		weightkg: 44.5,
 		color: "Red",
+		prevo: "volkritter",
+		evoLevel: 34,
 		eggGroups: ["Water 1", "Water 2"],
 	},
 	plasmanta: {
@@ -12947,6 +12959,8 @@ exports.BattlePokedex = {
 		heightm: 7,
 		weightkg: 460,
 		color: "Purple",
+		prevo: "snugglow",
+		evoLevel: 29,
 		eggGroups: ["Water 1", "Water 2"],
 	},
 	naviathan: {
@@ -12958,6 +12972,8 @@ exports.BattlePokedex = {
 		heightm: 3,
 		weightkg: 510,
 		color: "Gray",
+		prevo: "caimanoe",
+		evoLevel: 40,
 		eggGroups: ["Water 1", "Field"],
 	},
 	crucibelle: {
@@ -12997,6 +13013,8 @@ exports.BattlePokedex = {
 		heightm: 2.1,
 		weightkg: 24.2,
 		color: "Pink",
+		prevo: "pluffle",
+		evoLevel: 2,
 		eggGroups: ["Fairy", "Human-Like"],
 	},
 	syclant: {
@@ -13008,6 +13026,8 @@ exports.BattlePokedex = {
 		heightm: 1.7,
 		weightkg: 52,
 		color: "Blue",
+		prevo: "syclar",
+		evoLevel: 30,
 		eggGroups: ["Bug"],
 	},
 	revenankh: {
@@ -13030,6 +13050,8 @@ exports.BattlePokedex = {
 		heightm: 2.1,
 		weightkg: 168,
 		color: "Brown",
+		prevo: "flarelm",
+		evoLevel: 38,
 		eggGroups: ["Monster", "Dragon"],
 	},
 	fidgit: {
@@ -13041,6 +13063,8 @@ exports.BattlePokedex = {
 		heightm: 0.9,
 		weightkg: 53,
 		color: "Purple",
+		prevo: "breezi",
+		evoLevel: 33,
 		eggGroups: ["Field"],
 	},
 	stratagem: {
