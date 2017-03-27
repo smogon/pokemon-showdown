@@ -11,7 +11,7 @@
 
 const maxTime = 30; // seconds
 
-const rgb_Gradients = {
+const rgbGradients = {
 	'Green': "rgba(0, 122, 0, 1), rgba(0, 185, 0, 0.9)",
 	'Yellow': "rgba(255, 225, 0, 1), rgba(255, 255, 85, 0.9)",
 	'Blue': "rgba(40, 40, 255, 1), rgba(125, 125, 255, 0.9)",
@@ -19,7 +19,7 @@ const rgb_Gradients = {
 	'Black': "rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.55)",
 };
 
-const text_colors = {
+const textColors = {
 	'Green': "rgb(0, 128, 0)",
 	'Yellow': "rgb(175, 165, 40)",
 	'Blue': "rgb(75, 75, 255)",
@@ -27,14 +27,14 @@ const text_colors = {
 	'Black': "inherit",
 };
 
-const text_shadow = 'text-shadow: 1px 0px black, -1px 0px black, 0px -1px black, 0px 1px black, 2px -2px black;';
+const textShadow = 'text-shadow: 1px 0px black, -1px 0px black, 0px -1px black, 0px 1px black, 2px -2px black;';
 
 function cardHTML(card, fullsize) {
 	let surface = card.value.replace(/[^A-Z0-9\+]/g, "");
-	let background = rgb_Gradients[card.color];
+	let background = rgbGradients[card.color];
 	if (surface === 'R') surface = '<i class="fa fa-refresh" aria-hidden="true"></i>';
 
-	return `<button class="button" style="font-size: 14px; font-weight: bold; color: white; ${text_shadow} padding-bottom: 117px; text-align: left; height: 135px; width: ${fullsize ? "72" : "37"}px; border-radius: 10px 2px 2px 3px; color: white; background: ${card.color}; background: -webkit-linear-gradient(${background}); background: -o-linear-gradient(${background}); background: -moz-linear-gradient(${background}); background: linear-gradient(${background})" name=send value="/uno play ${card.name}">${surface}</button>`;
+	return `<button class="button" style="font-size: 14px; font-weight: bold; color: white; ${textShadow} padding-bottom: 117px; text-align: left; height: 135px; width: ${fullsize ? "72" : "37"}px; border-radius: 10px 2px 2px 3px; color: white; background: ${card.color}; background: -webkit-linear-gradient(${background}); background: -o-linear-gradient(${background}); background: -moz-linear-gradient(${background}); background: linear-gradient(${background})" name=send value="/uno play ${card.name}">${surface}</button>`;
 }
 
 function createDeck() {
@@ -102,7 +102,7 @@ class UNOgame extends Rooms.RoomGame {
 			this.discards.unshift(this.topCard);
 		} while (this.topCard.color === "Black");
 
-		this.sendToRoom(`|raw|The top card is <span style="color: ${text_colors[this.topCard.color]}">${this.topCard.name}</span>.`);
+		this.sendToRoom(`|raw|The top card is <span style="color: ${textColors[this.topCard.color]}">${this.topCard.name}</span>.`);
 
 		this.onRunEffect(this.topCard.value, true);
 		this.nextTurn(true);
@@ -249,7 +249,7 @@ class UNOgame extends Rooms.RoomGame {
 
 		player.sendDisplay(); // update display without the card in it for purposes such as choosing colors
 
-		this.sendToRoom(`|raw|${Chat.escapeHTML(player.name)} has played a <span style="color: ${text_colors[card.color]}">${card.name}</span>.`);
+		this.sendToRoom(`|raw|${Chat.escapeHTML(player.name)} has played a <span style="color: ${textColors[card.color]}">${card.name}</span>.`);
 
 		// handle hand size
 		if (!player.hand.length) {
@@ -326,7 +326,7 @@ class UNOgame extends Rooms.RoomGame {
 
 		let player = this.players[user.userid];
 		player.hand.push(...drawnCards);
-		player.sendRoom(`|raw|You have drawn the following card${drawnCards.length > 1 ? "s" : ""}: ${drawnCards.map(card => `<span style="color: ${text_colors[card.color]}">${card.name}</span>`).join(", ")}.`);
+		player.sendRoom(`|raw|You have drawn the following card${drawnCards.length > 1 ? "s" : ""}: ${drawnCards.map(card => `<span style="color: ${textColors[card.color]}">${card.name}</span>`).join(", ")}.`);
 		return drawnCards;
 	}
 
@@ -424,7 +424,7 @@ class UNOgamePlayer extends Rooms.RoomGamePlayer {
 		let draw = '<button class="button" style="width: 30%; background: rgba(0, 0, 255, 0.05)" name=send value="/uno draw">Draw a card!</button>';
 		let pass = '<button class="button" style=" width: 30%; background: rgba(255, 0, 0, 0.05)" name=send value="/uno pass">Pass!</button>';
 
-		let top = `<strong>Top Card: <span style="color: ${text_colors[this.game.topCard.color]}">${this.game.topCard.name}</span></strong>`;
+		let top = `<strong>Top Card: <span style="color: ${textColors[this.game.topCard.color]}">${this.game.topCard.name}</span></strong>`;
 
 		// clear previous display and show new display
 		this.sendRoom("|uhtmlchange|uno-hand|");
