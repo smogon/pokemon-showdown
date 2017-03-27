@@ -1,14 +1,24 @@
+/**
+ * Scavengers Plugin
+ * Pokemon Showdown - http://pokemonshowdown.com/
+ *
+ * This is a game plugin to host scavenger games specifically in the Scavengers room,
+ * where the players will race answer several hints.
+ *
+ * @license MIT license
+ */
+
 'use strict';
 
-const fs = require("fs");
+const fs = require('fs');
 
-const dataFile = "./config/chat-plugins/scavdata.json";
+const dataFile = './config/chat-plugins/scavdata.json';
 const points = [20, 15, 10, 5, 1];
 
 let leaderboard = {};
 
-fs.readFile(dataFile, 'utf8', function (err, content) {
-	if (err) return console.log("ERROR: Unable to load scavenger leaderboard: " + err);
+fs.readFile(dataFile, 'utf8', (err, content) => {
+	if (err) return console.log(`ERROR: Unable to load scavenger leaderboard: ${err}`);
 
 	try {
 		leaderboard = JSON.parse(content);
@@ -32,7 +42,6 @@ function writePoints() {
 }
 
 function visualizeLadder(userid) {
-	userid = toId(userid);
 	// return a promise for async sorting - make this less exploitable
 	return new Promise((resolve, reject) => {
 		let lowestScore = Infinity;
@@ -106,7 +115,7 @@ class ScavengerHunt extends Rooms.RoomGame {
 	onConnect(user, connection) {
 		// send the fact that a hunt is currently going on.
 		if (user.userid in this.players) return false;
-		connection.sendTo(this.room, `|raw|<div class="broadcast-blue"><strong>${(this.isOfficial ? "An official" : "A")} scavenger hunt was started by <em>${Chat.escapeHTML(this.hostName)}</em>.<br />The first hint is: ${Chat.escapeHTML(this.questions[0].hint)}</strong></div>`);
+		connection.sendTo(this.room, `|raw|<div class="broadcast-blue"><strong>${(this.isOfficial ? "An official" : "A")} Scavenger Hunt was started by <em>${Chat.escapeHTML(this.hostName)}</em>.<br />The first hint is: ${Chat.escapeHTML(this.questions[0].hint)}</strong></div>`);
 	}
 
 	joinGame(user) {
@@ -143,7 +152,7 @@ class ScavengerHunt extends Rooms.RoomGame {
 			this.setTimer(60);
 		}
 
-		this.announce(`A new ${(this.isOfficial ? 'official' : '')} scavenger hunt has been started by <em>${Chat.escapeHTML(this.hostName)}</em>.<br />The first hint is: ${Chat.escapeHTML(this.questions[0].hint)}`);
+		this.announce(`A new ${(this.isOfficial ? 'official' : '')} Scavenger Hunt has been started by <em>${Chat.escapeHTML(this.hostName)}</em>.<br />The first hint is: ${Chat.escapeHTML(this.questions[0].hint)}`);
 	}
 
 	onEditQuestion(number, question_answer, ...value) {
