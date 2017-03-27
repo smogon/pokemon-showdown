@@ -18954,6 +18954,7 @@ exports.BattleMovedex = {
 		},
 		target: "normal",
 		type: "Rock",
+		zMovePower: 160,
 		contestType: "Beautiful",
 	},
 	"shadowstrike": {
@@ -18977,6 +18978,7 @@ exports.BattleMovedex = {
 		},
 		target: "normal",
 		type: "Ghost",
+		zMovePower: 160,
 		contestType: "Clever",
 	},
 	"magikarpsrevenge": {
