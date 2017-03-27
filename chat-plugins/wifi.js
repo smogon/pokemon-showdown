@@ -456,7 +456,7 @@ class GtsGiveaway {
 			this.clearTimer();
 			this.changeUhtml(`<p style="text-align:center;font-size:13pt;font-weight:bold;">The GTS giveaway has finished.</p>`);
 			this.room.modlog(`${this.giver.name} has finished his GTS giveaway for "${this.summary}"`);
-			this.send(`The GTS giveaway for a "${this.summary}" has finished.`);
+			this.send(`<p style="text-align:center;font-size:13pt;font-weight:bold;">The GTS giveaway for a "${this.summary}" has finished.</p>`);
 		}
 		delete this.room.gtsga;
 	}
@@ -580,7 +580,7 @@ let commands = {
 		if (!amount || amount < 30 || amount > 100) return this.errorReply("Please enter a valid amount. For a GTS giveaway, you need to give away at least 30 mons, and no more than 100.");
 		let targetUser = Users(giver);
 		if (!targetUser || !targetUser.connected) return this.errorReply(`User '${giver}' is not online.`);
-		if (!this.can('warn', null, room) && !(this.can('broadcast', null, room) && user === targetUser)) return this.errorReply("Permission denied.");
+		if (!this.can('warn', null, room)) return this.errorReply("Permission denied.");
 		if (!targetUser.autoconfirmed) return this.errorReply(`User '${targetUser.name}' needs to be autoconfirmed to host a giveaway.`);
 		if (Giveaway.checkBanned(room, targetUser)) return this.errorReply(`User '${targetUser.name}' is giveaway banned.`);
 
@@ -589,10 +589,13 @@ let commands = {
 		this.privateModCommand(`(${user.name} started a GTS giveaway for ${targetUser.name})`);
 	},
 	left: function (target, room, user) {
-		if (room.id !== 'wifi' || !target) return false;
+		if (room.id !== 'wifi') return false;
 		if (!room.gtsga) return this.errorReply("There is no GTS giveaway going on!");
-		if (!this.can('warn', null, room) && user !== room.gtsga.giver) return this.errorReply("Only the host or a staff member can update GTS giveaways.");
-
+		if (!user.can('warn', null, room) && user !== room.gtsga.giver) return this.errorReply("Only the host or a staff member can update GTS giveaways.");
+		if (!target) {
+			if (!this.runBroadcast()) return;
+			return this.sendReply(`The GTS giveaway from ${room.gtsga.giver} has ${room.gtsga.left} Pokémon remaining!`);
+		}
 		let newamount = parseInt(target);
 		if (isNaN(newamount)) return this.errorReply("Please enter a valid amount.");
 		if (newamount > room.gtsga.left) return this.errorReply("The new amount must be lower than the old amount.");
