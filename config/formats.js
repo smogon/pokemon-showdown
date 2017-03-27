@@ -114,6 +114,14 @@ exports.Formats = [
 		banlist: ['Allow CAP'],
 	},
 	{
+		name: "[Gen 7] CAP LC",
+
+		mod: 'gen7',
+		searchShow: false,
+		ruleset: ['[Gen 7] LC'],
+		banlist: ['Allow CAP'],
+	},
+	{
 		name: "[Gen 7] Battle Spot Singles",
 		desc: [
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3587473/\">Battle Spot Singles Discussion</a>",
