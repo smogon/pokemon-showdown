@@ -394,7 +394,7 @@ class UNOgamePlayer extends Rooms.RoomGamePlayer {
 	}
 
 	canPlayWildFour() {
-		let color = this.game.topCard.color;
+		let color = (this.game.changedColor || this.game.topCard.color);
 
 		if (this.hand.some(c => c.color === color)) return false;
 		return true;
