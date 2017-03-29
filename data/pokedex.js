@@ -13529,8 +13529,7 @@ exports.BattlePokedex = {
 		weightkg: 61,
 		color: "White",
 		eggGroups: ["Undiscovered"],
-		otherForms: ["pokestargiant"],
-		otherFormes: ["pokestargiant2", "pokestargiantpropo2"],
+		otherForms: ["pokestargiant2", "pokestargiantpropo1", "pokestargiantpropo2"],
 	},
 	pokestarhumanoid: {
 		num: -5007,
