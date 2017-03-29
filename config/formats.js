@@ -118,6 +118,7 @@ exports.Formats = [
 
 		mod: 'gen7',
 		searchShow: false,
+		maxLevel: 5,
 		ruleset: ['[Gen 7] LC'],
 		banlist: ['Allow CAP'],
 	},
