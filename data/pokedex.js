@@ -13448,7 +13448,8 @@ exports.BattlePokedex = {
 		weightkg: 61,
 		color: "White",
 		eggGroups: ["Undiscovered"],
-		otherFormes: ["pokestarufo2", "pokestarufopropu1", "pokestarufopropu2"],
+		otherForms: ["pokestarufopropu1"],
+		otherFormes: ["pokestarufo2", "pokestarufopropu2"],
 	},
 	pokestarufo2: {
 		num: -5001,
@@ -13476,7 +13477,7 @@ exports.BattlePokedex = {
 		weightkg: 61,
 		color: "White",
 		eggGroups: ["Undiscovered"],
-		otherFormes: ["pokestarbrycenmanprop"],
+		otherForms: ["pokestarbrycenmanprop"],
 	},
 	pokestarmt: {
 		num: -5003,
@@ -13489,7 +13490,7 @@ exports.BattlePokedex = {
 		weightkg: 61,
 		color: "White",
 		eggGroups: ["Undiscovered"],
-		otherFormes: ["pokestarmtprop"],
+		otherForms: ["pokestarmtprop"],
 	},
 	pokestarmt2: {
 		num: -5004,
@@ -13502,7 +13503,7 @@ exports.BattlePokedex = {
 		weightkg: 61,
 		color: "White",
 		eggGroups: ["Undiscovered"],
-		otherFormes: ["pokestarmt2prop"],
+		otherForms: ["pokestarmt2prop"],
 	},
 	pokestartransport: {
 		num: -5005,
@@ -13515,7 +13516,7 @@ exports.BattlePokedex = {
 		weightkg: 61,
 		color: "White",
 		eggGroups: ["Undiscovered"],
-		otherFormes: ["pokestartransportprop"],
+		otherForms: ["pokestartransportprop"],
 	},
 	pokestargiant: {
 		num: -5006,
@@ -13528,7 +13529,8 @@ exports.BattlePokedex = {
 		weightkg: 61,
 		color: "White",
 		eggGroups: ["Undiscovered"],
-		otherFormes: ["pokestargiant2", "pokestargiantpropo1", "pokestargiantpropo2"],
+		otherForms: ["pokestargiant"],
+		otherFormes: ["pokestargiant2", "pokestargiantpropo2"],
 	},
 	pokestarhumanoid: {
 		num: -5007,
@@ -13540,7 +13542,7 @@ exports.BattlePokedex = {
 		weightkg: 61,
 		color: "White",
 		eggGroups: ["Undiscovered"],
-		otherFormes: ["pokestarhumanoidprop"],
+		otherForms: ["pokestarhumanoidprop"],
 	},
 	pokestarmonster: {
 		num: -5008,
@@ -13552,7 +13554,7 @@ exports.BattlePokedex = {
 		weightkg: 61,
 		color: "White",
 		eggGroups: ["Undiscovered"],
-		otherFormes: ["pokestarmonsterprop"],
+		otherForms: ["pokestarmonsterprop"],
 	},
 	pokestarf00: {
 		num: -5009,
@@ -13564,7 +13566,7 @@ exports.BattlePokedex = {
 		weightkg: 61,
 		color: "White",
 		eggGroups: ["Undiscovered"],
-		otherFormes: ["pokestarf00prop"],
+		otherForms: ["pokestarf00prop"],
 	},
 	pokestarf002: {
 		num: -5010,
@@ -13576,7 +13578,7 @@ exports.BattlePokedex = {
 		weightkg: 61,
 		color: "White",
 		eggGroups: ["Undiscovered"],
-		otherFormes: ["pokestarf002prop"],
+		otherForms: ["pokestarf002prop"],
 	},
 	pokestarspirit: {
 		num: -5011,
@@ -13588,7 +13590,7 @@ exports.BattlePokedex = {
 		weightkg: 61,
 		color: "White",
 		eggGroups: ["Undiscovered"],
-		otherFormes: ["pokestarspiritprop"],
+		otherForms: ["pokestarspiritprop"],
 	},
 	pokestarblackdoor: {
 		num: -5012,
@@ -13601,7 +13603,7 @@ exports.BattlePokedex = {
 		weightkg: 61,
 		color: "White",
 		eggGroups: ["Undiscovered"],
-		otherFormes: ["pokestarblackdoorprop"],
+		otherForms: ["pokestarblackdoorprop"],
 	},
 	pokestarwhitedoor: {
 		num: -5013,
@@ -13614,7 +13616,7 @@ exports.BattlePokedex = {
 		weightkg: 61,
 		color: "White",
 		eggGroups: ["Undiscovered"],
-		otherFormes: ["pokestarwhitedoorprop"],
+		otherForms: ["pokestarwhitedoorprop"],
 	},
 	pokestarblackbelt: {
 		num: -5014,
@@ -13627,7 +13629,7 @@ exports.BattlePokedex = {
 		weightkg: 61,
 		color: "White",
 		eggGroups: ["Undiscovered"],
-		otherFormes: ["pokestarblackbeltprop"],
+		otherForms: ["pokestarblackbeltprop"],
 	},
 	pokestarufopropu2: {
 		num: -5001,
