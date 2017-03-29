@@ -6470,6 +6470,10 @@ exports.BattleFormatsData = {
 		isNonstandard: true,
 		tier: "CAP",
 	},
+	flarelm: {
+		isNonstandard: true,
+		tier: "CAP",
+	},
 	breezi: {
 		isNonstandard: true,
 		tier: "CAP",
