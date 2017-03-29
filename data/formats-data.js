@@ -6329,6 +6329,10 @@ exports.BattleFormatsData = {
 		eventOnly: true,
 		tier: "OU",
 	},
+	magearnaoriginal: {
+		isUnreleased: true,
+		tier: "Unreleased",
+	},
 	marshadow: {
 		randomBattleMoves: ["spectralthief", "closecombat", "stoneedge", "shadowsneak", "icepunch"],
 		isUnreleased: true,
