@@ -347,6 +347,54 @@ exports.BattleFormatsData = {
 		gen: 6,
 		tier: "Illegal",
 	},
+	pikachuoriginal: {
+		eventPokemon: [
+			{"generation": 7, "level": 1, "moves":["thunderbolt", "quickattack", "thunder", "agility"]},
+		],
+		eventOnly: true,
+		isUnreleased: true,
+		tier: "Unreleased",
+	},
+	pikachuhoenn: {
+		eventPokemon: [
+			{"generation": 7, "level": 6, "moves":["thunderbolt", "quickattack", "thunder", "irontail"]},
+		],
+		eventOnly: true,
+		isUnreleased: true,
+		tier: "Unreleased",
+	},
+	pikachusinnoh: {
+		eventPokemon: [
+			{"generation": 7, "level": 10, "moves":["thunderbolt", "quickattack", "irontail", "volttackle"]},
+		],
+		eventOnly: true,
+		isUnreleased: true,
+		tier: "Unreleased",
+	},
+	pikachuunova: {
+		eventPokemon: [
+			{"generation": 7, "level": 14, "moves":["thunderbolt", "quickattack", "irontail", "volttackle"]},
+		],
+		eventOnly: true,
+		isUnreleased: true,
+		tier: "Unreleased",
+	},
+	pikachukalos: {
+		eventPokemon: [
+			{"generation": 7, "level": 17, "moves":["thunderbolt", "quickattack", "irontail", "electroball"]},
+		],
+		eventOnly: true,
+		isUnreleased: true,
+		tier: "Unreleased",
+	},
+	pikachualola: {
+		eventPokemon: [
+			{"generation": 7, "level": 20, "moves":["thunderbolt", "quickattack", "irontail", "electroball"]},
+		],
+		eventOnly: true,
+		isUnreleased: true,
+		tier: "Unreleased",
+	},
 	raichu: {
 		randomBattleMoves: ["nastyplot", "encore", "thunderbolt", "grassknot", "hiddenpowerice", "focusblast", "voltswitch"],
 		randomDoubleBattleMoves: ["fakeout", "encore", "thunderbolt", "grassknot", "hiddenpowerice", "focusblast", "substitute", "extremespeed", "knockoff", "protect"],
