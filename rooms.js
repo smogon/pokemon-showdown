@@ -1435,6 +1435,10 @@ class ChatRoom extends Room {
 			}
 		}
 
+		if (this.game) {
+			this.game.destroy();
+		}
+
 		// Clear any active timers for the room
 		if (this.muteTimer) {
 			clearTimeout(this.muteTimer);
