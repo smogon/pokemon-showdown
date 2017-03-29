@@ -13284,7 +13284,7 @@ exports.BattlePokedex = {
 	},
 	snugglow: {
 		num: -112,
-		species: "snugglow",
+		species: "Snugglow",
 		types: ["Electric", "Poison"],
 		baseStats: {hp: 40, atk: 37, def: 79, spa: 91, spd: 68, spe: 70},
 		abilities: {0: "Storm Drain", 1: "Vital Spirit", H: "Telepathy"},
