@@ -1434,7 +1434,7 @@ class ChatRoom extends Room {
 				Rooms.aliases.delete(this.aliases[i]);
 			}
 		}
-		
+
 		if (this.game) {
 			this.game.destroy();
 		}
