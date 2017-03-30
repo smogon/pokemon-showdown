@@ -130,7 +130,7 @@ exports.BattleAliases = {
 	// Pokéstar Studios
 	"ufo": "Pokestar UFO",
 	"ufo2": "Pokestar UFO-2",
-	"brycen-man": "Pokestar Brycen-Man",
+	"brycenman": "Pokestar Brycen-Man",
 	"mt": "Pokestar MT",
 	"mt2": "Pokestar MT2",
 	"transport": "Pokestar Transport",
