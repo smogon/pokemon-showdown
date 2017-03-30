@@ -117,11 +117,7 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 7] CAP LC",
-		desc: [
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3599594/\">CAP LC Metagame Discussion</a>",
-			"&bullet; <a href=\"https://www.smogon.com/forums/posts/7291332/\">CAP LC Viability Ranking</a>",
-			"&bullet; <a href=\"https://www.smogon.com/forums/posts/7291333/\">CAP LC Sample Teams</a>",
-		],
+		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3599594/\">CAP LC</a>"],
 
 		mod: 'gen7',
 		searchShow: false,
