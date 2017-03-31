@@ -4919,7 +4919,9 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 0,
 		damageCallback: function (pokemon) {
-			return pokemon.hp;
+			let damage = pokemon.hp;
+			pokemon.faint();
+			return damage;
 		},
 		category: "Special",
 		desc: "Deals damage to the target equal to the user's current HP. If this move is successful, the user faints.",
