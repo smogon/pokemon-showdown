@@ -12,9 +12,9 @@
 
 const fs = require('fs');
 
-const Points = [20, 15, 10, 5, 1];
+const POINTS = [20, 15, 10, 5, 1];
 const path = require('path');
-const DataFile = path.resolve(__dirname, '../config/chat-plugins/scavdata.json');
+const DATA_FILE = path.resolve(__dirname, '../config/chat-plugins/scavdata.json');
 
 class Ladder {
 	constructor(file) {
@@ -87,7 +87,7 @@ class Ladder {
 	}
 }
 
-let Leaderboard = new Ladder(DataFile);
+let Leaderboard = new Ladder(DATA_FILE);
 
 function formatQueue(queue, viewer) {
 	let buf = queue.map((item, index) => `<tr${(viewer.userid !== item.hostId ? ` style="background-color: lightgray"` : "")}><td><button name="send" value="/scav dequeue ${index}" style="color: red; background-color: transparent; border: none; padding: 1px;">[x]</button>${Chat.escapeHTML(item.hostName)}</td><td>${(item.hostId === viewer.userid ? item.questions.map((q, i) => i % 2 ? `<span style="color: green"><em>[${Chat.escapeHTML(q)}]</em></span><br />` : Chat.escapeHTML(q)).join(" ") : `[${item.questions.length / 2} hidden questions]`)}</td></tr>`).join("");
@@ -264,7 +264,7 @@ class ScavengerHunt extends Rooms.RoomGame {
 				for (let i = 0; i < this.completed.length; i++) {
 					if (!this.completed[i].blitz && i > 5) break; // there won't be any more need to keep going
 					let name = this.completed[i].name;
-					if (Points[i]) Leaderboard.addPoints(name, Points[i]);
+					if (POINTS[i]) Leaderboard.addPoints(name, POINTS[i]);
 					if (this.completed[i].blitz) Leaderboard.addPoints(name, 10);
 				}
 				Leaderboard.write();
