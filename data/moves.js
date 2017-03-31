@@ -2625,6 +2625,10 @@ exports.BattleMovedex = {
 			if (target.ability in {multitype:1, stancechange:1}) return;
 			if (!this.willMove(target)) target.addVolatile('gastroacid');
 		},
+		onAfterSubDamage: function (target) {
+			if (target.ability in {multitype:1, stancechange:1}) return;
+			if (!this.willMove(target)) target.addVolatile('gastroacid');
+		},
 		secondary: false,
 		target: "allAdjacentFoes",
 		type: "Dragon",
@@ -16348,6 +16352,7 @@ exports.BattleMovedex = {
 				if (move.drain) {
 					this.heal(Math.ceil(damage * move.drain[0] / move.drain[1]), source, target, 'drain');
 				}
+				this.singleEvent('AfterSubDamage', move, null, target, source, move);
 				this.runEvent('AfterSubDamage', target, source, move, damage);
 				return 0; // hit
 			},
