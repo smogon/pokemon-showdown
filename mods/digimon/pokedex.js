@@ -191,7 +191,7 @@ exports.BattlePokedex = {
 		prevo: ["Koromon"],
 	},
 	gabumon: {
-		num: 774,
+		num: 775,
 		species: "Gabumon",
 		types: ["Battle", "Fire"],
 		baseStats: {
