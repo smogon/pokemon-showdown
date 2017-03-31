@@ -12,62 +12,82 @@
 
 const fs = require('fs');
 
-const dataFile = './config/chat-plugins/scavdata.json';
-const points = [20, 15, 10, 5, 1];
+const Points = [20, 15, 10, 5, 1];
+const path = require('path');
+const DataFile = path.resolve(__dirname, '../config/chat-plugins/scavdata.json');
 
-let leaderboard = {};
+class Ladder {
+	constructor(file) {
+		this.file = file;
+		this.data = {};
 
-fs.readFile(dataFile, 'utf8', (err, content) => {
-	if (err) return console.log(`ERROR: Unable to load scavenger leaderboard: ${err}`);
+		this.load();
+	}
 
-	try {
-		leaderboard = JSON.parse(content);
-	} catch (e) {}
-});
+	load() {
+		fs.readFile(this.file, 'utf8', (err, content) => {
+			if (err) return console.log(`ERROR: Unable to load scavenger leaderboard: ${err}`);
 
-function addPoints(name, points, noUpdate) {
-	let userid = toId(name);
+			try {
+				this.data = JSON.parse(content);
+			} catch (e) {}
+		});
+	}
 
-	if (!userid || userid === 'constructor' || !points) return false;
+	addPoints(name, points, noUpdate) {
+		let userid = toId(name);
 
-	if (!leaderboard[userid]) leaderboard[userid] = {name: name, points: 0};
-	leaderboard[userid].points += points;
-	if (!noUpdate) leaderboard[userid].name = name; // always keep the last used name
+		if (!userid || userid === 'constructor' || !points) return this;
+
+		if (!this.data[userid]) this.data[userid] = {name: name, points: 0};
+		this.data[userid].points += points;
+		if (!noUpdate) this.data[userid].name = name; // always keep the last used name
+
+		return this; // allow chaining
+	}
+
+	reset() {
+		this.data = {};
+		return this; // allow chaining
+	}
+
+	write() {
+		fs.writeFile(this.file, JSON.stringify(this.data), err => {
+			if (err) console.log(`ERROR: Failed to write scavengers ladder - ${err}`);
+		});
+	}
+
+	visualize(userid) {
+		// return a promise for async sorting - make this less exploitable
+		return new Promise((resolve, reject) => {
+			let lowestScore = Infinity;
+			let lastPlacement = 1;
+
+			let ladder = Object.keys(this.data)
+				.sort((a, b) => this.data[b].points - this.data[a].points)
+				.map((u, i) => {
+					u = this.data[u];
+					if (u.points !== lowestScore) {
+						lowestScore = u.points;
+						lastPlacement = i + 1;
+					}
+					return {
+						name: u.name,
+						points: u.points,
+						rank: lastPlacement,
+					};
+				}); // identify ties
+			if (userid) {
+				let rank = ladder.find(entry => toId(entry.name) === userid);
+				resolve(rank);
+			} else {
+				resolve(ladder);
+			}
+		});
+	}
 }
 
-function writePoints() {
-	fs.writeFile(dataFile, JSON.stringify(leaderboard), err => {
-		if (err) console.log(`ERROR: Failed to write scavengers ladder - ${err}`);
-	});
-}
-
-function visualizeLadder(userid) {
-	// return a promise for async sorting - make this less exploitable
-	return new Promise((resolve, reject) => {
-		let lowestScore = Infinity;
-		let lastPlacement = 1;
-
-		let ladder = Object.keys(leaderboard)
-			.sort((a, b) => leaderboard[b].points - leaderboard[a].points)
-			.map((u, i) => {
-				u = leaderboard[u];
-				if (u.points === lowestScore) {
-					u.rank = lastPlacement;
-				} else {
-					lowestScore = u.points;
-					lastPlacement = i + 1;
-					u.rank = lastPlacement;
-				}
-				return u;
-			}); // identify ties
-		if (userid) {
-			let rank = ladder.find(entry => toId(entry.name) === userid);
-			resolve(rank);
-		} else {
-			resolve(ladder);
-		}
-	});
-}
+let Leaderboard = new Ladder(DataFile);
 
 function formatQueue(queue, viewer) {
 	let buf = queue.map((item, index) => `<tr${(viewer.userid !== item.hostId ? ` style="background-color: lightgray"` : "")}><td><button name="send" value="/scav dequeue ${index}" style="color: red; background-color: transparent; border: none; padding: 1px;">[x]</button>${Chat.escapeHTML(item.hostName)}</td><td>${(item.hostId === viewer.userid ? item.questions.map((q, i) => i % 2 ? `<span style="color: green"><em>[${Chat.escapeHTML(q)}]</em></span><br />` : Chat.escapeHTML(q)).join(" ") : `[${item.questions.length / 2} hidden questions]`)}</td></tr>`).join("");
@@ -244,10 +264,10 @@ class ScavengerHunt extends Rooms.RoomGame {
 				for (let i = 0; i < this.completed.length; i++) {
 					if (!this.completed[i].blitz && i > 5) break; // there won't be any more need to keep going
 					let name = this.completed[i].name;
-					if (points[i]) addPoints(name, points[i]);
-					if (this.completed[i].blitz) addPoints(name, 10);
+					if (Points[i]) Leaderboard.addPoints(name, Points[i]);
+					if (this.completed[i].blitz) Leaderboard.addPoints(name, 10);
 				}
-				writePoints();
+				Leaderboard.write();
 			}
 
 			this.announce(
@@ -470,8 +490,7 @@ let commands = {
 		if (!targetId || targetId === 'constructor' || targetId.length > 18) return this.errorReply("Invalid username.");
 		if (!points || points < 0) return this.errorReply("Points must be an integer greater than 0.");
 
-		addPoints(targetId, points, true);
-		writePoints();
+		Leaderboard.addPoints(targetId, points, true).write();
 
 		this.privateModCommand(`(${targetId} was given ${points} points on the monthly scavengers ladder by ${user.name}.)`);
 	},
@@ -487,18 +506,16 @@ let commands = {
 		if (!targetId || targetId === 'constructor' || targetId.length > 18) return this.errorReply("Invalid username.");
 		if (!points || points < 0) return this.errorReply("Points must be an integer greater than 0.");
 
-		addPoints(targetId, -points, true);
-		writePoints();
+		Leaderboard.addPoints(targetId, -points, true).write();
 
 		this.privateModCommand(`(${user.name} has taken ${points} points from ${targetId} on the monthly scavengers ladder.)`);
 	},
 
-	resetlb: function (target, room, user) {
+	resetladder: function (target, room, user) {
 		if (room.id !== 'scavengers') return this.errorReply("This command can only be used in the scavenger room.");
 		if (!this.can('declare', null, room)) return false;
 
-		leaderboard = {};
-		writePoints();
+		Leaderboard.reset().write();
 
 		this.privateModCommand(`(${user.name} has reset the monthly scavengers ladder.)`);
 	},
@@ -509,7 +526,7 @@ let commands = {
 
 		let nonStaff = {count: 0, lastScore: 0};
 
-		visualizeLadder().then(ladder => {
+		Leaderboard.visualize().then(ladder => {
 			this.sendReply(`|raw|<div class="ladder" style="overflow-y: scroll; max-height: 300px;"><table style="width: 100%"><tr><th>Rank</th><th>Name</th><th>Points</th></tr>${ladder.map(entry => {
 				let isStaff = room.auth && room.auth[toId(entry.name)];
 
@@ -533,7 +550,7 @@ let commands = {
 
 		let targetId = toId(target) || user.userid;
 
-		visualizeLadder(targetId).then(rank => {
+		Leaderboard.visualize(targetId).then(rank => {
 			if (!rank) return this.sendReplyBox(`User '${targetId}' does not have any points on the scavengers leaderboard.`);
 
 			this.sendReplyBox(`User '${Chat.escapeHTML(rank.name)}' is #${rank.rank} on the scavengers leaderboard with ${rank.points} points.`);
@@ -568,7 +585,7 @@ exports.commands = {
 	scavengersremovepoints: commands.addpoints,
 
 	scavresetlb: 'scavengersresetlb',
-	scavengersresetlb: commands.resetlb,
+	scavengersresetlb: commands.resetladder,
 
 	scavrank: commands.rank,
 	scavladder: 'scavtop',
@@ -599,7 +616,7 @@ exports.commands = {
 			"- /scav timer <em>[minutes | off]</em> - sets a timer to automatically end the current hunt. (Requires: % @ * # & ~)",
 			"- /scav addpoints <em>[user], [amount]</em> - gives the user the amount of scavenger points towards the monthly ladder. (Requires: % @ * # & ~)",
 			"- /scav removepoints <em>[user], [amount]</em> - takes the amount of scavenger points from the user towards the monthly ladder. (Requires: % @ * # & ~)",
-			"- /scav resetlb - resets the monthly scavenger leaderboard. (Requires: # & ~)",
+			"- /scav resetladder - resets the monthly scavenger leaderboard. (Requires: # & ~)",
 			"- /scav queue <em>[hint] | [answer] | [hint] | [answer] | [hint] | [answer] | ...</em> - queues a scavenger hunt to be started after the current hunt is finished. (Requires: % @ * # & ~)",
 			"- /scav viewqueue - shows the list of queued scavenger hunts to be automatically started, as well as the option to remove hunts from the queue. (Requires: % @ * # & ~)",
 		].join("<br />");
