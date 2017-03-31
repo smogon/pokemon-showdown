@@ -558,7 +558,7 @@ exports.BattleAbilities = {
 		id: "dancer",
 		onAnyAfterMove: function (source, target, move) {
 			if (!this.effectData.target.hp || source === this.effectData.target || move.isExternal) return;
-			if (move.id.includes('dance') && move.id !== 'raindance') {
+			if (move.flags['dance']) {
 				this.faintMessages();
 				this.add('-activate', this.effectData.target, 'ability: Dancer');
 				this.runMove(move.id, this.effectData.target, 0, this.getAbility('dancer'), undefined, true);
