@@ -294,10 +294,14 @@ exports.Formats = [
 		mod: 'gen7',
 		ruleset: ['[Gen 7] OU'],
 		onModifyTemplate: function (template, pokemon) {
-			let types = [this.getMove(pokemon.moves[0]).type];
-			if (pokemon.moves[1] && this.getMove(pokemon.moves[1]).type !== types[0]) types.push(this.getMove(pokemon.moves[1]).type);
-			template.types = types;
-			return template;
+			let temp = Object.assign({}, template);
+			let types = [pokemon.moves[0] === 'hiddenpower' ? pokemon.hpType : this.getMove(pokemon.moves[0]).type];
+			if (pokemon.moves[1]) {
+				let move2type = pokemon.moves[1] === 'hiddenpower' ? pokemon.hpType : this.getMove(pokemon.moves[1]).type;
+				if (move2type !== types[0]) types.push(move2type);
+			}
+			temp.types = types;
+			return temp;
 		},
 		onAfterMega: function (pokemon) {
 			this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[silent]');
