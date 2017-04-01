@@ -35,9 +35,9 @@ exports.BattleAliases = {
 	"monotyperandombattle": "[Gen 7] Monotype Random Battle",
 	"monorandom": "[Gen 7] Monotype Random Battle",
 	"bf": "Battle Factory",
-	"inverse": "Inverse Battle",
-	"fullpotential": "[Gen 7] Full Potential",
-	"automagic": "[Gen 7] Automagic",
+	"gen6inverse": "Inverse Battle",
+	"camomons": "[Gen 7] Camomons",
+	"inverse": "[Gen 7] Inverse",
 
 	// mega evos
 	"maero": "Aerodactyl-Mega",
