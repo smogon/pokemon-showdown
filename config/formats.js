@@ -289,7 +289,7 @@ exports.Formats = [
 		name: "[Gen 7] Camomons",
 		desc: [
 			"Pok&eacute;mon change type to match their first two moves.",
-			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3598418/\">Camomons</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3598418/\">Camomons</a>",
 		],
 		mod: 'gen7',
 		ruleset: ['[Gen 7] OU'],
@@ -310,7 +310,7 @@ exports.Formats = [
 		name: "[Gen 7] Inverse Battle",
 		desc: [
 			"Battle with an inverted type chart.",
-			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3590154/\">Inverse Battle</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3590154/\">Inverse Battle</a>",
 		],
 
 		mod: 'gen7',
