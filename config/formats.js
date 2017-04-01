@@ -286,45 +286,43 @@ exports.Formats = [
 		column: 2,
 	},
 	{
-		name: "[Gen 7] Full Potential",
+		name: "[Gen 7] Camomons",
 		desc: [
-			"A Pok&eacute;mon's highest stat, barring HP, is used when calculating the damage their attacks inflict.",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3596777/\">Full Potential</a>",
+			"Pok&eacute;mon change type to match their first two moves.",
+			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3598418/\">Camomons</a>",
 		],
-
-		mod: 'fullpotential',
-		ruleset: ['[Gen 7] OU', 'Item Clause'],
-		banlist: ['Dugtrio-Base', 'Pheromosa', 'Raichu-Alola', 'Shuckle', 'Chlorophyll', 'Sand Rush', 'Slush Rush', 'Speed Boost', 'Swift Swim', 'Unburden'],
+		mod: 'gen7',
+		ruleset: ['[Gen 7] OU'],
+		onModifyTemplate: function (template, pokemon) {
+			let types = [this.getMove(pokemon.moves[0]).type];
+			if (pokemon.moves[1] && this.getMove(pokemon.moves[1]).type !== types[0]) types.push(this.getMove(pokemon.moves[1]).type);
+			template.types = types;
+			return template;
+		},
+		onAfterMega: function (pokemon) {
+			this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[silent]');
+		},
+		onSwitchIn: function (pokemon) {
+			this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[silent]');
+		},
 	},
 	{
-		name: "[Gen 7] Automagic",
+		name: "[Gen 7] Inverse Battle",
 		desc: [
-			"Whenever an attack's secondary effect is triggered, any setup moves in that Pok&eacute;mon's moveset are run.",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3594333/\">Automagic</a>",
+			"Battle with an inverted type chart.",
+			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3590154/\">Inverse Battle</a>",
 		],
 
-		mod: 'automagic',
-		searchShow: false,
+		mod: 'gen7',
 		ruleset: ['[Gen 7] OU'],
-		banlist: ["King's Rock", 'Razor Fang'],
-		onAfterSecondaryEffect: function (target, source, move) {
-			let moreSetup = ['acupressure', 'bellydrum', 'stockpile'];
-			if (!source.types.includes("Ghost")) moreSetup.push("curse");
-			source.moveset.forEach(curmove => {
-				let move = this.getMove(curmove.id);
-				if (moreSetup.includes(move.id) || (move.category === "Status" && move.boosts && move.target === "self")) {
-					this.useMove(move, source);
-				}
-			});
-		},
-		onAfterMove: function (source, target, move) {
-			if (move.id !== "genesissupernova") return;
-			source.moveset.forEach(curmove => {
-				let move = this.getMove(curmove.id);
-				if ((move.id === 'bellydrum' || (move.category === "Status" && move.boosts && move.target === "self")) && this.terrain === "psychicterrain") { // Confirm that it successfully set Psychic Terrain
-					this.useMove(move, source);
-				}
-			});
+		banlist: ['Hoopa-Unbound', 'Kyurem-Black', 'Serperior'],
+		unbanlist: ['Aegislash', 'Dialga', 'Giratina', 'Lucarionite', 'Solgaleo'],
+		onNegateImmunity: false,
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
 		},
 	},
 	{
