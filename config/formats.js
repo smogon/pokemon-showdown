@@ -293,6 +293,7 @@ exports.Formats = [
 		],
 		mod: 'gen7',
 		ruleset: ['[Gen 7] OU'],
+		banlist: ['Shedinja'],
 		onModifyTemplate: function (template, pokemon) {
 			let temp = Object.assign({}, template);
 			let types = [pokemon.moves[0] === 'hiddenpower' ? pokemon.hpType : this.getMove(pokemon.moves[0]).type];
