@@ -5997,7 +5997,7 @@ exports.BattleFormatsData = {
 		tier: "UU",
 	},
 	comfey: {
-		randomBattleMoves: ["aromatherapy", "drainingkiss", "toxic", "synthesis", "uturn"],
+		randomBattleMoves: ["aromatherapy", "drainingkiss", "calmmind", "leechseed", "synthesis", "uturn"],
 		eventPokemon: [
 			{"generation": 7, "level": 10, "nature": "Jolly", "isHidden": false, "moves":["celebrate", "leechseed", "drainingkiss", "magicalleaf"], "pokeball": "cherishball"},
 		],
