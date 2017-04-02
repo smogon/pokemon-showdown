@@ -26,11 +26,10 @@ class Ladder {
 
 	load() {
 		fs.readFile(this.file, 'utf8', (err, content) => {
+			if (err && err.code === 'ENOENT') return false; // file doesn't exist (yet)
 			if (err) return console.log(`ERROR: Unable to load scavenger leaderboard: ${err}`);
 
-			try {
-				this.data = JSON.parse(content);
-			} catch (e) {}
+			this.data = JSON.parse(content);
 		});
 	}
 
