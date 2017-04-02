@@ -79,7 +79,7 @@ class RoomGame {
 	}
 
 	makePlayer(user) {
-		return new RoomGamePlayer(user);
+		return new RoomGamePlayer(user, this);
 	}
 
 	removePlayer(user) {
