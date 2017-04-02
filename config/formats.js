@@ -619,11 +619,11 @@ exports.Formats = [
 		column: 3,
 	},
 	{
-		name: "[Gen 4] Anything Goes",
+		name: "[Gen 2] OU (no Snorlax)",
 
-		mod: 'gen4',
-		ruleset: ['Pokemon', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod'],
-		banlist: ['Illegal', 'Unreleased'],
+		mod: 'gen2',
+		ruleset: ['Pokemon', 'Standard'],
+		banlist: ['Uber', 'Snorlax'],
 	},
 
 	// ORAS Singles
