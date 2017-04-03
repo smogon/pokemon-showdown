@@ -474,7 +474,7 @@ class GtsGiveaway {
 			let res = regexp.exec(parsed);
 			if (res) {
 				let num = Tools.data.Pokedex[i].num < 100 ? (Tools.data.Pokedex[i].num < 10 ? `00${Tools.data.Pokedex[i].num}` : `0${Tools.data.Pokedex[i].num}`) : Tools.data.Pokedex[i].num;
-				return `${text.slice(0, res.index)}<a href="http://www.serebii.net/pokedex-sm/${num}.shtml">${text.slice(res.index, res.index + res[0].length)}</a>${text.slice(res.index + res[0].length)}`;
+				return `${text.slice(0, res.index)}<a href="http://www.serebii.net/pokedex-sm/location/${num}.shtml">${text.slice(res.index, res.index + res[0].length)}</a>${text.slice(res.index + res[0].length)}`;
 			}
 		}
 		return text;
