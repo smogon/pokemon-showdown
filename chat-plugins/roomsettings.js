@@ -407,9 +407,9 @@ exports.commands = {
 			// Most of the regex code is copied from the client. TODO: unify them?
 			let words = target.match(/[^,]+(,\d*}[^,]*)?/g);
 			if (!words) return this.errorReply("You have not included any words to be banned.");
-			
+
 			words = words.map(word => word.replace(/\n/g, '').trim());
-			
+
 			for (let i = 0; i < words.length; i++) {
 				if (/[\\^$*+?()|{}[\]]/.test(words[i])) {
 					if (!user.can('makeroom')) return this.errorReply("Regex banwords are only allowed for leaders or above.");
@@ -449,7 +449,7 @@ exports.commands = {
 
 			let words = target.match(/[^,]+(,\d*}[^,]*)?/g);
 			if (!words) return this.errorReply("You have not included any words to be banned.");
-			
+
 			words = words.map(word => word.replace(/\n/g, '').trim());
 
 			for (let i = 0; i < words.length; i++) {
