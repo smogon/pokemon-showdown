@@ -387,7 +387,7 @@ let commands = {
 		if (!room.game || room.game.gameid !== 'scavengers') return false;
 		let elapsed = Date.now() - room.game.startTime;
 
-		this.sendReplyBox(`The current scavenger hunt has been up for: ${Chat.toDurationString(elapsed, {hhmmss: true})}<br />Completed (${room.game.completed.length}): ${room.game.completed.map(u => Chat.escapeHTML(u.name)).join('')}`);
+		this.sendReplyBox(`The current scavenger hunt has been up for: ${Chat.toDurationString(elapsed, {hhmmss: true})}<br />Completed (${room.game.completed.length}): ${room.game.completed.map(u => Chat.escapeHTML(u.name)).join(', ')}`);
 	},
 
 	hint: function (target, room, user) {
