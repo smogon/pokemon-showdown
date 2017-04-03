@@ -1285,7 +1285,7 @@ exports.Formats = [
 		ruleset: ['Pokemon', 'HP Percentage Mod', 'Cancel Mod'],
 	},
 	{
-		name: "Digimon Showdown",
+		name: "[Gen 7] Digimon Showdown",
 		section: "Digimon Showdown",
 		column: 4,
 		mod: "digimon",
