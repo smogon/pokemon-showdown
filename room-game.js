@@ -153,14 +153,14 @@ class RoomGame {
 	// need to handle the other events.
 
 	onRename(user, oldUserid) {
-		if (!this.allowRenames) {
+		if (!this.allowRenames || !user.named) {
 			if (!(user.userid in this.players)) {
 				user.games.delete(this.id);
+				user.updateSearch();
 			}
 			return;
 		}
 		if (!(oldUserid in this.players)) return;
-		if (!user.named) return; // allow users that have logged out to join back on the name they last used.
 		if (user.userid === oldUserid) {
 			this.players[user.userid].name = user.name;
 		} else {
