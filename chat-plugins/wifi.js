@@ -455,7 +455,7 @@ class GtsGiveaway {
 		} else {
 			this.clearTimer();
 			this.changeUhtml(`<p style="text-align:center;font-size:13pt;font-weight:bold;">The GTS giveaway has finished.</p>`);
-			this.room.modlog(`${this.giver.name} has finished his GTS giveaway for "${this.summary}"`);
+			this.room.modlog(`${this.giver.name} has finished their GTS giveaway for "${this.summary}"`);
 			this.send(`<p style="text-align:center;font-size:13pt;font-weight:bold;">The GTS giveaway for a "${this.summary}" has finished.</p>`);
 		}
 		delete this.room.gtsga;
