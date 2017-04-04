@@ -886,8 +886,7 @@ class User {
 				}
 				room.onJoin(this, connection);
 				this.inRooms.add(roomid);
-			}
-			if (room.game && room.game.onUpdateConnection) {
+			} else if (room.game && room.game.onUpdateConnection) {
 				room.game.onUpdateConnection(this, connection);
 			}
 		});
