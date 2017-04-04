@@ -2067,7 +2067,7 @@ exports.commands = {
 		let entry = targetUser.name + " was forced to choose a new name by " + user.name + (reason ? ": " + reason : "");
 		this.privateModCommand("(" + entry + ")");
 		Matchmaker.cancelSearch(targetUser);
-		targetUser.resetName();
+		targetUser.resetName(true);
 		targetUser.send("|nametaken||" + user.name + " considers your name inappropriate" + (reason ? ": " + reason : "."));
 		return true;
 	},

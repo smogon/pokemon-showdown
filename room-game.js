@@ -152,10 +152,11 @@ class RoomGame {
 	// the game should be sent during `onConnect`. You should rarely
 	// need to handle the other events.
 
-	onRename(user, oldUserid) {
-		if (!this.allowRenames) {
+	onRename(user, oldUserid, isJoining, isForceRenamed) {
+		if (!this.allowRenames || (!user.named && !isForceRenamed)) {
 			if (!(user.userid in this.players)) {
 				user.games.delete(this.id);
+				user.updateSearch();
 			}
 			return;
 		}
