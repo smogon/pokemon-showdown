@@ -123,19 +123,19 @@ class RoomSettings {
 		}
 	}
 	uno() {
-		if (!this.user.can('editroom', null, this.room)) return this.button(this.room.unoDisabled ? 'Disabled' : 'Enabled', true);
+		if (!this.user.can('editroom', null, this.room)) return this.button(this.room.unoDisabled ? 'UNO disabled' : 'UNO enabled', true);
 		if (this.room.unoDisabled) {
-			return `${this.button('Enable', null, 'uno enable')} ${this.button('Disable', true)}`;
+			return `${this.button('UNO enable', null, 'uno enable')} ${this.button('UNO disable', true)}`;
 		} else {
-			return `${this.button('Enable', true)} ${this.button('Disable', null, 'uno disable')}`;
+			return `${this.button('UNO enable', true)} ${this.button('UNO disable', null, 'uno disable')}`;
 		}
 	}
 	hangman() {
 		if (!this.user.can('editroom', null, this.room)) return this.button(this.room.hangmanDisabled ? 'Disabled' : 'Enabled', true);
 		if (this.room.hangmanDisabled) {
-			return `${this.button('Enable', null, 'hangman enable')} ${this.button('Disable', true)}`;
+			return `${this.button('Hangman enable', null, 'hangman enable')} ${this.button('Hangman disable', true)}`;
 		} else {
-			return `${this.button('Enable', true)} ${this.button('Disable', null, 'hangman disable')}`;
+			return `${this.button('Hangman enable', true)} ${this.button('Hangman disable', null, 'hangman disable')}`;
 		}
 	}
 	generateDisplay(user, room, connection) {
@@ -143,8 +143,8 @@ class RoomSettings {
 		output += `<strong>Modchat:</strong> <br />${this.modchat()}<br />`;
 		output += `<strong>Modjoin:</strong> <br />${this.modjoin()}<br />`;
 		output += `<strong>Stretch filter:</strong> <br />${this.stretching()}<br />`;
-		output += `<strong>Caps filter:</strong> <br />${this.capitals()}<br />"`;
-		output += `<strong>Slowchat:</strong> <br />${this.slowchat()}<br />"`;
+		output += `<strong>Caps filter:</strong> <br />${this.capitals()}<br />`;
+		output += `<strong>Slowchat:</strong> <br />${this.slowchat()}<br />`;
 		output += `<strong>Tournaments:</strong> <br />${this.tourStatus()}<br />`;
 		output += `<strong>UNO:</strong> <br />${this.uno()}<br />`;
 		output += `<strong>Hangman:</strong> <br />${this.hangman()}<br />`;
@@ -406,7 +406,7 @@ exports.commands = {
 
 			// Most of the regex code is copied from the client. TODO: unify them?
 			let words = target.match(/[^,]+(,\d*}[^,]*)?/g);
-			if (!words) return this.errorReply("You have not included any words to be banned.");
+			if (!words) return this.parse('/help banword');
 
 			words = words.map(word => word.replace(/\n/g, '').trim());
 
@@ -448,7 +448,7 @@ exports.commands = {
 			if (!room.banwords) return this.errorReply("This room has no banned phrases.");
 
 			let words = target.match(/[^,]+(,\d*}[^,]*)?/g);
-			if (!words) return this.errorReply("You have not included any words to be banned.");
+			if (!words) return this.parse('/help banword');
 
 			words = words.map(word => word.replace(/\n/g, '').trim());
 
