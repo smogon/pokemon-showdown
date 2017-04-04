@@ -137,9 +137,9 @@ class UNOgame extends Rooms.RoomGame {
 		return new UNOgamePlayer(user, this);
 	}
 
-	onRename(user, oldUserid, isJoining) {
+	onRename(user, oldUserid, isJoining, isForceRenamed) {
 		if (!(oldUserid in this.players) || user.userid === oldUserid) return false;
-		if (!user.named) {
+		if (!user.named && !isForceRenamed) {
 			user.games.delete(this.id);
 			user.updateSearch();
 			return; // dont set users to their guest accounts.
