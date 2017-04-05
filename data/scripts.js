@@ -2193,7 +2193,7 @@ exports.BattleScripts = {
 			item = (ability === 'Swift Swim' && counter.Status < 2) ? 'Life Orb' : 'Damp Rock';
 		} else if (hasMove['sunnyday']) {
 			item = (ability === 'Chlorophyll' && counter.Status < 2) ? 'Life Orb' : 'Heat Rock';
-		} else if (hasMove['lightscreen'] && hasMove['reflect']) {
+		} else if ((hasMove['lightscreen'] && hasMove['reflect']) || hasMove['auroraveil']) {
 			item = 'Light Clay';
 		} else if ((ability === 'Guts' || hasMove['facade']) && !hasMove['sleeptalk']) {
 			item = (hasType['Fire'] || ability === 'Quick Feet') ? 'Toxic Orb' : 'Flame Orb';
@@ -3205,7 +3205,7 @@ exports.BattleScripts = {
 			item = 'Scope Lens';
 		} else if (template.evos.length) {
 			item = 'Eviolite';
-		} else if (hasMove['reflect'] && hasMove['lightscreen']) {
+		} else if ((hasMove['reflect'] && hasMove['lightscreen']) || hasMove['auroraveil']) {
 			item = 'Light Clay';
 		} else if (hasMove['shellsmash']) {
 			item = (ability === 'Solid Rock' && counter['priority']) ? 'Weakness Policy' : 'White Herb';
