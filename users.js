@@ -887,7 +887,7 @@ class User {
 				room.onJoin(this, connection);
 				this.inRooms.add(roomid);
 			}
-			if (room.game && room.game.onUpdateConnection && room.type === "battle") {
+			if (room.game && room.game.onUpdateConnection && room.type === 'battle') {
 				room.game.onUpdateConnection(this, connection);
 			}
 		});
