@@ -442,7 +442,7 @@ exports.BattleScripts = {
 		};
 		//Generate the team randomly.
 		let pool = Object.keys(sets);
-		for (let i = 0; i < 4; i++) {
+		for (let i = 0; i < 6; i++) {
 			let name = this.sampleNoReplace(pool);
 			let set = sets[name];
 			if (set.rate && Math.ceil(Math.random() * set.rate !== 1)) {
