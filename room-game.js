@@ -153,7 +153,10 @@ class RoomGame {
 
 	// onConnect(user, connection)
 	//   Called each time a connection joins a room (after onJoin if
-	//   applicable).
+	//   applicable). By default, this is also called when connection
+	//   is updated in some way (such as by changing user or renaming).
+	//   If you don't want this behavior, override onUpdateConnection
+	//   and/or onRename.
 
 	// onUpdateConnection(user, connection)
 	//   Called for each connection in a room that changes users by
