@@ -887,7 +887,10 @@ class User {
 				room.onJoin(this, connection);
 				this.inRooms.add(roomid);
 			}
-			if (room.game && room.game.onUpdateConnection && room.type === 'battle') {
+			if (room.game && room.game.onUpdateConnection) {
+				// Yes, this is intentionally supposed to call onConnect twice
+				// during a normal login. Override onUpdateConnection if you
+				// don't want this behavior.
 				room.game.onUpdateConnection(this, connection);
 			}
 		});
