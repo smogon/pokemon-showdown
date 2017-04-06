@@ -1435,7 +1435,7 @@ class ChatRoom extends Room {
 			}
 		}
 
-		if (this.game) {
+		if (this.game && typeof this.game.destroy === 'function') {
 			this.game.destroy();
 		}
 
