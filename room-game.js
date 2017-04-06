@@ -91,6 +91,17 @@ class RoomGame {
 		return true;
 	}
 
+	renamePlayer(user, oldUserid) {
+		if (user.userid === oldUserid) {
+			this.players[user.userid].name = user.name;
+		} else {
+			this.players[user.userid] = this.players[oldUserid];
+			this.players[user.userid].userid = user.userid;
+			this.players[user.userid].name = user.name;
+			delete this.players[oldUserid];
+		}
+	}
+
 	// Commands:
 
 	// These are all optional to implement:
@@ -129,11 +140,12 @@ class RoomGame {
 	//   Called when a user joins a room. (i.e. when the user's first
 	//   connection joins)
 
-	// onRename(user, oldUserid, isJoining)
+	// onRename(user, oldUserid, isJoining, isForceRenamed)
 	//   Called when a user in the game is renamed. `isJoining` is true
 	//   if the user was previously a guest, but now has a username.
 	//   Check `!user.named` for the case where a user previously had a
-	//   username but is now a guest.
+	//   username but is now a guest. By default, updates a player's
+	//   name as long as allowRenames is set to true.
 
 	// onLeave(user)
 	//   Called when a user leaves the room. (i.e. when the user's last
@@ -161,14 +173,7 @@ class RoomGame {
 			return;
 		}
 		if (!(oldUserid in this.players)) return;
-		if (user.userid === oldUserid) {
-			this.players[user.userid].name = user.name;
-		} else {
-			this.players[user.userid] = this.players[oldUserid];
-			this.players[user.userid].userid = user.userid;
-			this.players[user.userid].name = user.name;
-			delete this.players[oldUserid];
-		}
+		this.renamePlayer(user, oldUserid);
 	}
 
 	onUpdateConnection(user, connection) {
