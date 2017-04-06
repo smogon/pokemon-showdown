@@ -295,8 +295,8 @@ class Battle {
 		this.playerNames = ["Player 1", "Player 2"];
 		/** {playerid: [rqid, request, isWait, choice]} */
 		this.requests = {
-			p1: [0, '', true, ''],
-			p2: [0, '', true, ''],
+			p1: [0, '', 'cantUndo', ''],
+			p2: [0, '', 'cantUndo', ''],
 		};
 		this.timer = new BattleTimer(this);
 
@@ -343,6 +343,10 @@ class Battle {
 		const [choice, rqid] = data.split('|', 2);
 		if (!player) return;
 		let request = this.requests[player.slot];
+		if (request[2] !== false && request[2] !== true) {
+			player.sendRoom(`|error|[Invalid choice] There's nothing to choose`);
+			return;
+		}
 		if ((this.requests.p1[2] && this.requests.p2[2]) || // too late
 			(rqid && rqid !== '' + request[0])) { // WAY too late
 			player.sendRoom(`|error|[Invalid choice] Sorry, too late to make a different move; the next turn has already started`);
@@ -358,6 +362,10 @@ class Battle {
 		const [, rqid] = data.split('|', 2);
 		if (!player) return;
 		let request = this.requests[player.slot];
+		if (request[2] !== true) {
+			player.sendRoom(`|error|[Invalid choice] There's nothing to cancel`);
+			return;
+		}
 		if ((this.requests.p1[2] && this.requests.p2[2]) || // too late
 			(rqid && rqid !== '' + request[0])) { // WAY too late
 			player.sendRoom(`|error|[Invalid choice] Sorry, too late to cancel; the next turn has already started`);
@@ -424,7 +432,9 @@ class Battle {
 			let player = this[lines[2]];
 			if (player) {
 				player.sendRoom(lines[3]);
-				if (lines[3].startsWith(`|error|[Invalid choice]`)) {
+				if (lines[3].startsWith(`|error|[Invalid choice] Can't do anything`)) {
+					// ... should not happen
+				} else if (lines[3].startsWith(`|error|[Invalid choice]`)) {
 					let request = this.requests[player.slot];
 					request[2] = false;
 					request[3] = '';
@@ -441,7 +451,7 @@ class Battle {
 				let request = JSON.parse(lines[3]);
 				request.rqid = this.rqid;
 				const requestJSON = JSON.stringify(request);
-				this.requests[player.slot] = [this.rqid, requestJSON, request.wait, ''];
+				this.requests[player.slot] = [this.rqid, requestJSON, request.wait ? 'cantUndo' : false, ''];
 				player.sendRoom(`|request|${requestJSON}`);
 			}
 			break;

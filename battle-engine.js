@@ -1788,7 +1788,9 @@ class BattleSide {
 		};
 	}
 	choose(input) {
-		if (!this.currentRequest) throw new Error(`Side ${this.name} (${this.id}) has no request`);
+		if (!this.currentRequest) {
+			return this.emitChoiceError(this.battle.ended ? `Can't do anything: The game is over` : `Can't do anything: It's not your turn`);
+		}
 
 		if (this.choice.cantUndo) {
 			return this.emitChoiceError(`Can't undo: A trapping/disabling effect would cause undo to leak information`);
@@ -2963,6 +2965,9 @@ class Battle extends Tools.BattleDex {
 		this.ended = true;
 		this.active = false;
 		this.currentRequest = '';
+		for (let side of this.sides) {
+			side.currentRequest = '';
+		}
 		return true;
 	}
 	switchIn(pokemon, pos) {
