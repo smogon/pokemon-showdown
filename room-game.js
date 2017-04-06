@@ -182,6 +182,14 @@ class RoomGame {
 	onUpdateConnection(user, connection) {
 		if (this.onConnect) this.onConnect(user, connection);
 	}
+
+	destroy() {
+		for (let i in this.players) {
+			this.players[i].destroy();
+		}
+		this.players = null;
+		this.room = null;
+	}
 }
 
 // these exports are traditionally attached to rooms.js
