@@ -185,7 +185,7 @@ class ScavengerHunt extends Rooms.RoomGame {
 		number--; // indexOf starts at 0
 
 		this.questions[number][question_answer] = value;
-		this.announce(`The ${question_answer} for question ${number + 1} has been editted.`);
+		this.announce(`The ${question_answer} for question ${number + 1} has been edited.`);
 		if (question_answer === 'hint') {
 			for (let p in this.players) {
 				this.players[p].onNotifyChange(number);
