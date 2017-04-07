@@ -305,7 +305,6 @@ exports.BattleItems = {
 	"audinite": {
 		id: "audinite",
 		name: "Audinite",
-		isUnreleased: true,
 		spritenum: 617,
 		megaStone: "Audino-Mega",
 		megaEvolves: "Audino",
@@ -3235,7 +3234,6 @@ exports.BattleItems = {
 	"medichamite": {
 		id: "medichamite",
 		name: "Medichamite",
-		isUnreleased: true,
 		spritenum: 599,
 		megaStone: "Medicham-Mega",
 		megaEvolves: "Medicham",
