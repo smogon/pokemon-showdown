@@ -932,7 +932,7 @@ class BattleRoom extends Room {
 		this.resetUser = '';
 	}
 	requestKickInactive(user, force) {
-		if (this.resetTimer && user && (this.resetUser === user.userid || (user in this.game.players && this.resetUser === '+') || this.resetUser === '~')){
+		if (this.resetTimer && user && (this.resetUser === user.userid || (user in this.game.players && this.resetUser === '+') || this.resetUser === '~')) {
 			this.sendUser(user, '|inactive|The inactivity timer is already counting down.');
 			return false;
 		}
