@@ -933,9 +933,13 @@ class BattleRoom extends Room {
 	}
 	requestKickInactive(user, force) {
 		let timerSetByUser = user && (this.resetUser === user.userid || (user in this.game.players && this.resetUser === '+'));
-		if (this.resetTimer && (timerSetByUser || this.resetUser === '~')) {
-			this.sendUser(user, '|inactive|The inactivity timer is already counting down.');
-			return false;
+		if (this.resetTimer) {
+			if (timerSetByUser) {
+				this.sendUser(user, '|inactive|The inactivity timer is already counting down.');
+				return false;
+			} else if (this.resetUser === '~') {
+				return false;
+			}
 		}
 		if (user) {
 			if (!force && !(user in this.game.players)) return false;
