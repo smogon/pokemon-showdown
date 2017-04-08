@@ -932,8 +932,8 @@ class BattleRoom extends Room {
 		this.resetUser = '';
 	}
 	requestKickInactive(user, force) {
-		let timerSetByUser = user && (this.resetUser === user.userid || (user in this.game.players && this.resetUser === '+'));
 		if (this.resetTimer) {
+			let timerSetByUser = user && (this.resetUser === user.userid || (user in this.game.players && this.resetUser === '+'));
 			if (timerSetByUser) {
 				this.sendUser(user, '|inactive|The inactivity timer is already counting down.');
 				return false;
