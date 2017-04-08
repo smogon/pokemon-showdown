@@ -932,16 +932,22 @@ class BattleRoom extends Room {
 		this.resetUser = '';
 	}
 	requestKickInactive(user, force) {
-		if (this.resetTimer && user && (this.resetUser === user.userid || (user in this.game.players && this.resetUser === '+') || this.resetUser === '~')) {
+		let timerSetByUser = user && (this.resetUser === user.userid || (user in this.game.players && this.resetUser === '+'));
+		if (this.resetTimer && (timerSetByUser || this.resetUser === '~')) {
 			this.sendUser(user, '|inactive|The inactivity timer is already counting down.');
 			return false;
 		}
 		if (user) {
 			if (!force && !(user in this.game.players)) return false;
 			if (user in this.game.players && this.resetTimer) {
-				// both players want the timer on
-				this.resetUser = '+';
-				this.send('|inactive|Battle timer has been requested by both players; it will now stay ON until they both turn it off, or until it is forced off by staff.');
+				for (let p in this.game.players) {
+					if (p.userid === this.resetUser) {
+						// both players want the timer on
+						this.resetUser = '+';
+						this.send('|inactive|Battle timer has been requested by both players; it will now stay ON until they both turn it off, or until it is forced off by staff.');
+						break;
+					}
+				}
 			} else {
 				this.resetUser = user.userid;
 				this.send('|inactive|Battle timer is now ON; inactive players will automatically lose when time\'s up. (requested by ' + user.name + ')');
