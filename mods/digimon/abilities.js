@@ -9,11 +9,11 @@ exports.BattleAbilities = {
 			if (attacker.ability) {
 				if (attacker.ability === 'vaccine') {
 					this.debug('Data boost');
-					return this.chainModify(1.5);
+					return this.chainModify(1.2);
 				} else
 				if (attacker.ability === 'virus') {
 					this.debug('Data weaken');
-					return this.chainModify(0.5);
+					return this.chainModify(0.8);
 				}
 			}
 		},
@@ -26,11 +26,11 @@ exports.BattleAbilities = {
 			if (attacker.ability) {
 				if (attacker.ability === 'virus') {
 					this.debug('Vaccine boost');
-					return this.chainModify(1.5);
+					return this.chainModify(1.2);
 				} else
 				if (attacker.ability === 'data') {
 					this.debug('Vaccine weaken');
-					return this.chainModify(0.5);
+					return this.chainModify(0.8);
 				}
 			}
 		},
@@ -43,11 +43,11 @@ exports.BattleAbilities = {
 			if (attacker.ability) {
 				if (attacker.ability === 'data') {
 					this.debug('Virus boost');
-					return this.chainModify(1.5);
+					return this.chainModify(1.2);
 				} else
 				if (attacker.ability === 'vaccine') {
 					this.debug('Virus weaken');
-					return this.chainModify(0.5);
+					return this.chainModify(0.8);
 				}
 			}
 		},
