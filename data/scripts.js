@@ -2317,7 +2317,7 @@ exports.BattleScripts = {
 
 		// Prepare optimal HP
 		let hp = Math.floor(Math.floor(2 * template.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
-		if (hasMove['substitute'] && (item === 'Sitrus Berry' || ability === 'Power Construct') {
+		if (hasMove['substitute'] && (item === 'Sitrus Berry' || ability === 'Power Construct')) {
 			// Two Substitutes should activate Sitrus Berry or Power Construct
 			while (hp % 4 > 0) {
 				evs.hp -= 4;
