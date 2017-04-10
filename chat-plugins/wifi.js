@@ -41,9 +41,46 @@ const linkRegex = new RegExp(
 			')?' +
 		')?' +
 		'|[a-z0-9.]+\\b@' + domainRegex + '[.][a-z]{2,3}' +
-	')',
+	')' +
+	'(?![^(?:&lt;)]*&gt;)',
 	'ig'
 );
+const hyperlinkRegex = new RegExp(`(.+)&lt;(.+)&gt;`, 'i');
+
+const formattingResolvers = [
+	{token: "**", resolver: str => `<b>${str}</b>`},
+	{token: "__", resolver: str => `<i>${str}</i>`},
+	{token: "``", resolver: str => `<code>${str}</code>`},
+	{token: "~~", resolver: str => `<s>${str}</s>`},
+	{token: "^^", resolver: str => `<sup>${str}</sup>`},
+	{token: "\\", resolver: str => `<sub>${str}</sub>`},
+	{token: "&lt;&lt;", endToken: "&gt;&gt;", resolver: str => str.replace(/[a-z0-9-]/g, '').length ? false : `&laquo;<a href="${str}" target="_blank">${str}</a>&raquo;`},
+	{token: "[[", endToken: "]]", resolver: str => {
+		console.log(str);
+		let hl = hyperlinkRegex.exec(str);
+		if (hl) return `<a href="${encodeURIComponent(hl[2].trim().replace(/^([a-z]*[^a-z:])/g, 'http://$1'))}">${hl[1].trim()}</a>`;
+
+		let query = str;
+		let querystr = str;
+		let split = str.split(':');
+		if (split.length > 1) {
+			let opt = toId(split[0]);
+			query = split.slice(1).join(':').trim();
+
+			switch (opt) {
+			case 'wiki':
+			case 'wikipedia':
+				return `<a href="http://en.wikipedia.org/w/index.php?title=Special:Search&search=${encodeURIComponent(query)}" target="_blank">${querystr}</a>`;
+			case 'yt':
+			case 'youtube':
+				query += " site:youtube.com";
+				querystr = `yt: ${query}`;
+			}
+		}
+
+		return `<a href="http://www.google.com/search?ie=UTF-8&btnI&q=${encodeURIComponent(query)}" target="_blank">${querystr}</a>`;
+	}},
+];
 
 function toPokemonId(str) {
 	return str.toLowerCase().replace(/é/g, 'e').replace(/[^a-z0-9 /]/g, '');
@@ -186,9 +223,70 @@ class Giveaway {
 		return output;
 	}
 
-	static parseText(text) {
+	static parseText(str) {
 		// Manually unescape '/' since this is needed for links.
-		return Chat.escapeHTML(text).replace(/&#x2f;/g, '/').replace(linkRegex, uri => `<a href=${uri}>${uri}</a>`);
+		str = Chat.escapeHTML(str).replace(/&#x2f;/g, '/').replace(linkRegex, uri => `<a href=${uri.replace(/^([a-z]*[^a-z:])/g, 'http://$1')}>${uri}</a>`);
+
+		// Primarily a test for a new way of parsing chat formatting. Will be moved to Chat once it's sufficiently finished and polished.
+		let output = [''];
+		let stack = [];
+
+		let parse = true;
+
+		let i = 0;
+		mainLoop: while (i < str.length) {
+			let token = str[i];
+
+			// Hardcoded parsing
+			if (parse && token === '`' && str.substr(i, 2) === '``') {
+				stack.push('``');
+				output.push('');
+				parse = false;
+				i += 2;
+				continue;
+			}
+
+			for (let f = 0; f < formattingResolvers.length; f++) {
+				let start = formattingResolvers[f].token;
+				let end = formattingResolvers[f].endToken || start;
+
+				if (stack.length && end.startsWith(token) && str.substr(i, end.length) === end && output[stack.length].replace(token, '').length) {
+					for (let j = stack.length - 1; j >= 0; j--) {
+						if (stack[j] === start) {
+							parse = true;
+
+							while (stack.length > j + 1) {
+								output[stack.length - 1] += stack.pop() + output.pop();
+							}
+
+							let str = output.pop();
+							let outstr = formattingResolvers[f].resolver(str.trim());
+							if (!outstr) outstr = `${start}${str}${end}`;
+							output[stack.length - 1] += outstr;
+							i += end.length;
+							stack.pop();
+							continue mainLoop;
+						}
+					}
+				}
+
+				if (parse && start.startsWith(token) && str.substr(i, start.length) === start) {
+					stack.push(start);
+					output.push('');
+					i += start.length;
+					continue mainLoop;
+				}
+			}
+
+			output[stack.length] += token;
+			i++;
+		}
+
+		while (stack.length) {
+			output[stack.length - 1] += stack.pop() + output.pop();
+		}
+
+		return output[0];
 	}
 
 	generateWindow(rightSide) {
