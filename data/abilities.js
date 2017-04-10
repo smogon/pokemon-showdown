@@ -109,6 +109,7 @@ exports.BattleAbilities = {
 				if (target === pokemon) continue;
 				if (this.willMove(target)) {
 					boosted = false;
+					break;
 				}
 			}
 			if (boosted) {
