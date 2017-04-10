@@ -97,10 +97,22 @@ exports.Formats = [
 		name: "[Gen 7] CAP",
 		desc: [
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3587865/\">CAP Metagame Discussion</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3597893/\">CAP Viability Ranking</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/posts/7203358/\">CAP Sample Teams</a>",
 		],
 
 		mod: 'gen7',
 		ruleset: ['[Gen 7] OU'],
+		banlist: ['Allow CAP'],
+	},
+	{
+		name: "[Gen 7] CAP LC",
+		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3599594/\">CAP LC</a>"],
+
+		mod: 'gen7',
+		searchShow: false,
+		maxLevel: 5,
+		ruleset: ['[Gen 7] LC'],
 		banlist: ['Allow CAP'],
 	},
 	{
@@ -254,46 +266,43 @@ exports.Formats = [
 		column: 2,
 	},
 	{
-		name: "[Gen 7] Full Potential",
+		name: "[Gen 7] Camomons",
 		desc: [
-			"A Pok&eacute;mon's highest stat, barring HP, is used when calculating the damage their attacks inflict.",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3596777/\">Full Potential</a>",
+			"Pok&eacute;mon change type to match their first two moves.",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3598418/\">Camomons</a>",
 		],
-
-		mod: 'fullpotential',
-		ruleset: ['[Gen 7] OU', 'Item Clause'],
-		banlist: ['Dugtrio-Base', 'Pheromosa', 'Raichu-Alola', 'Shuckle', 'Chlorophyll', 'Sand Rush', 'Slush Rush', 'Speed Boost', 'Swift Swim', 'Unburden'],
+		mod: 'gen7',
+		ruleset: ['[Gen 7] OU'],
+		banlist: ['Shedinja'],
+		onModifyTemplate: function (template, pokemon) {
+			let temp = Object.assign({}, template);
+			let types = [pokemon.moves[0] === 'hiddenpower' ? 'Normal' : this.getMove(pokemon.moves[0]).type];
+			if (pokemon.moves[1]) {
+				let move2type = pokemon.moves[1] === 'hiddenpower' ? 'Normal' : this.getMove(pokemon.moves[1]).type;
+				if (move2type !== types[0]) types.push(move2type);
+			}
+			temp.types = types;
+			return temp;
+		},
+		onAfterMega: function (pokemon) {
+			this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[silent]');
+		},
+		onSwitchIn: function (pokemon) {
+			this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[silent]');
+		},
 	},
 	{
-		name: "[Gen 7] Automagic",
+		name: "[Gen 7] Inverse",
 		desc: [
-			"Whenever an attack's secondary effect is triggered, any setup moves in that Pok&eacute;mon's moveset are run.",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3594333/\">Automagic</a>",
+			"The effectiveness of each attack is inverted.",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3590154/\">Inverse</a>",
 		],
 
-		mod: 'automagic',
+		mod: 'gen7',
 		searchShow: false,
-		ruleset: ['[Gen 7] OU'],
-		banlist: ["King's Rock", 'Razor Fang'],
-		onAfterSecondaryEffect: function (target, source, move) {
-			let moreSetup = ['acupressure', 'bellydrum', 'stockpile'];
-			if (!source.types.includes("Ghost")) moreSetup.push("curse");
-			source.baseMoveset.forEach(curmove => {
-				let move = this.getMove(curmove.id);
-				if (moreSetup.includes(move.id) || (move.category === "Status" && move.boosts && move.target === "self")) {
-					this.useMove(move, source);
-				}
-			});
-		},
-		onAfterMove: function (source, target, move) {
-			if (move.id !== "genesissupernova") return;
-			source.baseMoveset.forEach(curmove => {
-				let move = this.getMove(curmove.id);
-				if ((move.id === 'bellydrum' || (move.category === "Status" && move.boosts && move.target === "self")) && this.terrain === "psychicterrain") { // Confirm that it successfully set Psychic Terrain
-					this.useMove(move, source);
-				}
-			});
-		},
+		ruleset: ['[Gen 7] OU', 'Inverse Mod'],
+		banlist: ['Hoopa-Unbound', 'Kyurem-Black', 'Serperior'],
+		unbanlist: ['Aegislash', 'Dialga', 'Giratina', 'Pheromosa', 'Solgaleo', 'Lucarionite'],
 	},
 	{
 		section: "Other Metagames",
@@ -350,7 +359,7 @@ exports.Formats = [
 		],
 	},
 	{
-		name: "[Gen 7] Mix and Mega (suspect test)",
+		name: "[Gen 7] Mix and Mega",
 		desc: [
 			"Mega Stones and Primal Orbs can be used on almost any fully evolved Pok&eacute;mon with no Mega Evolution limit.",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3587740/\">Mix and Mega</a>",
@@ -420,33 +429,13 @@ exports.Formats = [
 		],
 
 		mod: 'gen7',
-		searchShow: false,
 		ruleset: ['Pokemon', 'Standard', 'Ability Clause', 'Baton Pass Clause', 'Swagger Clause', 'Team Preview'],
 		banlist: ['Ignore Illegal Abilities',
 			'Aegislash', 'Arceus', 'Archeops', 'Blaziken', 'Darkrai', 'Deoxys', 'Dialga', 'Dragonite', 'Dugtrio-Base', 'Giratina', 'Groudon',
-			'Ho-Oh', 'Keldeo', 'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Lugia', 'Lunala', 'Mewtwo', 'Palkia', 'Pheromosa',
+			'Ho-Oh', 'Kartana', 'Keldeo', 'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Lugia', 'Lunala', 'Mewtwo', 'Palkia', 'Pheromosa',
 			'Rayquaza', 'Regigigas', 'Reshiram', 'Shaymin-Sky', 'Shedinja', 'Slaking', 'Solgaleo', 'Xerneas', 'Yveltal', 'Zekrom',
 			'Power Construct', 'Shadow Tag', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Salamencite',
 		],
-		onValidateSet: function (set) {
-			let bannedAbilities = {'Arena Trap': 1, 'Comatose': 1, 'Contrary': 1, 'Fluffy': 1, 'Fur Coat': 1, 'Huge Power': 1, 'Illusion': 1, 'Imposter': 1, 'Innards Out': 1, 'Parental Bond': 1, 'Protean': 1, 'Pure Power': 1, 'Simple':1, 'Speed Boost': 1, 'Stakeout': 1, 'Water Bubble': 1, 'Wonder Guard': 1};
-			if (set.ability in bannedAbilities) {
-				let template = this.getTemplate(set.species || set.name);
-				let legalAbility = false;
-				for (let i in template.abilities) {
-					if (set.ability === template.abilities[i]) legalAbility = true;
-				}
-				if (!legalAbility) return ['The ability ' + set.ability + ' is banned on Pok\u00e9mon that do not naturally have it.'];
-			}
-		},
-	},
-	{
-		name: "[Gen 7] Almost Any Ability (suspect test)",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/posts/7281372/\">Almost Any Ability: Suspect Test</a>"],
-
-		mod: 'gen7',
-		challengeShow: false,
-		ruleset: ['[Gen 7] Almost Any Ability'],
 		onValidateSet: function (set) {
 			let bannedAbilities = {'Arena Trap': 1, 'Comatose': 1, 'Contrary': 1, 'Fluffy': 1, 'Fur Coat': 1, 'Huge Power': 1, 'Illusion': 1, 'Imposter': 1, 'Innards Out': 1, 'Parental Bond': 1, 'Protean': 1, 'Pure Power': 1, 'Simple':1, 'Speed Boost': 1, 'Stakeout': 1, 'Water Bubble': 1, 'Wonder Guard': 1};
 			if (set.ability in bannedAbilities) {
@@ -468,11 +457,8 @@ exports.Formats = [
 		],
 
 		mod: 'gen7',
-		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Baton Pass Clause'],
+		ruleset: ['[Gen 7] OU'],
 		banlist: ['Allow One Sketch',
-			'Aegislash', 'Arceus', 'Blaziken', 'Darkrai', 'Deoxys', 'Dialga', 'Genesect', 'Giratina', 'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-White',
-			'Landorus-Base', 'Lugia', 'Lunala', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Shaymin-Sky', 'Solgaleo', 'Xerneas', 'Yveltal', 'Zekrom',
-			'Power Construct', 'Shadow Tag', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Salamencite',
 			'Arena Trap + Dark Void', 'Arena Trap + Grass Whistle', 'Arena Trap + Hypnosis', 'Arena Trap + Relic Song', 'Arena Trap + Sing', 'Arena Trap + Sleep Powder',
 		],
 		noSketch: ['Belly Drum', 'Celebrate', 'Conversion', "Forest's Curse", 'Geomancy', 'Happy Hour', 'Hold Hands', 'Lovely Kiss', 'Purify', 'Shell Smash', 'Shift Gear', 'Sketch', 'Spore', 'Trick-or-Treat'],
@@ -590,11 +576,11 @@ exports.Formats = [
 		column: 3,
 	},
 	{
-		name: "[Gen 4] Anything Goes",
+		name: "[Gen 2] OU (no Snorlax)",
 
-		mod: 'gen4',
-		ruleset: ['Pokemon', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod'],
-		banlist: ['Illegal', 'Unreleased'],
+		mod: 'gen2',
+		ruleset: ['Pokemon', 'Standard'],
+		banlist: ['Uber', 'Snorlax'],
 	},
 
 	// ORAS Singles
@@ -695,6 +681,7 @@ exports.Formats = [
 		desc: [
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3537407/\">CAP Metagame Discussion</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3545628/\">CAP Viability Ranking</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/posts/5594694/\">CAP Sample Teams</a>",
 		],
 
 		searchShow: false,

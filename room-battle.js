@@ -299,7 +299,7 @@ class Battle {
 	onUpdateConnection(user, connection) {
 		this.onConnect(user, connection);
 	}
-	onRename(user, oldUserid) {
+	onRename(user, oldUserid, isJoining, isForceRenamed) {
 		if (user.userid === oldUserid) return;
 		if (!this.players) {
 			// !! should never happen but somehow still does
@@ -316,7 +316,10 @@ class Battle {
 		}
 		if (!this.allowRenames) {
 			let player = this.players[oldUserid];
-			if (player) this.forfeit(null, " forfeited by changing their name.", player.slotNum);
+			if (player) {
+				const message = isForceRenamed ? " lost by having an inappropriate name." : " forfeited by changing their name.";
+				this.forfeit(null, message, player.slotNum);
+			}
 			if (!(user.userid in this.players)) {
 				user.games.delete(this.id);
 			}

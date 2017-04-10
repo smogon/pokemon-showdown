@@ -2625,6 +2625,10 @@ exports.BattleMovedex = {
 			if (target.ability in {multitype:1, stancechange:1}) return;
 			if (!this.willMove(target)) target.addVolatile('gastroacid');
 		},
+		onAfterSubDamage: function (target) {
+			if (target.ability in {multitype:1, stancechange:1}) return;
+			if (!this.willMove(target)) target.addVolatile('gastroacid');
+		},
 		secondary: false,
 		target: "allAdjacentFoes",
 		type: "Dragon",
@@ -3790,7 +3794,7 @@ exports.BattleMovedex = {
 		name: "Dragon Dance",
 		pp: 20,
 		priority: 0,
-		flags: {snatch: 1},
+		flags: {snatch: 1, dance: 1},
 		boosts: {
 			atk: 1,
 			spe: 1,
@@ -4830,7 +4834,7 @@ exports.BattleMovedex = {
 		name: "Feather Dance",
 		pp: 15,
 		priority: 0,
-		flags: {protect: 1, reflectable: 1, mirror: 1, mystery: 1},
+		flags: {protect: 1, reflectable: 1, mirror: 1, mystery: 1, dance: 1},
 		boosts: {
 			atk: -2,
 		},
@@ -4900,7 +4904,7 @@ exports.BattleMovedex = {
 		name: "Fiery Dance",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1, dance: 1},
 		secondary: {
 			chance: 50,
 			self: {
@@ -4919,7 +4923,9 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 0,
 		damageCallback: function (pokemon) {
-			return pokemon.hp;
+			let damage = pokemon.hp;
+			pokemon.faint();
+			return damage;
 		},
 		category: "Special",
 		desc: "Deals damage to the target equal to the user's current HP. If this move is successful, the user faints.",
@@ -9420,7 +9426,7 @@ exports.BattleMovedex = {
 		name: "Lunar Dance",
 		pp: 10,
 		priority: 0,
-		flags: {snatch: 1, heal: 1},
+		flags: {snatch: 1, heal: 1, dance: 1},
 		onTryHit: function (pokemon, target, move) {
 			if (!this.canSwitch(pokemon.side)) {
 				delete move.selfdestruct;
@@ -11550,7 +11556,7 @@ exports.BattleMovedex = {
 		name: "Petal Dance",
 		pp: 10,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, dance: 1},
 		self: {
 			volatileStatus: 'lockedmove',
 		},
@@ -12756,7 +12762,7 @@ exports.BattleMovedex = {
 		name: "Quiver Dance",
 		pp: 20,
 		priority: 0,
-		flags: {snatch: 1},
+		flags: {snatch: 1, dance: 1},
 		boosts: {
 			spa: 1,
 			spd: 1,
@@ -13230,7 +13236,7 @@ exports.BattleMovedex = {
 		name: "Revelation Dance",
 		pp: 15,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1, dance: 1},
 		onModifyMove: function (move, pokemon) {
 			let type = pokemon.types[0];
 			if (type === "Bird") type = "???";
@@ -16346,6 +16352,7 @@ exports.BattleMovedex = {
 				if (move.drain) {
 					this.heal(Math.ceil(damage * move.drain[0] / move.drain[1]), source, target, 'drain');
 				}
+				this.singleEvent('AfterSubDamage', move, null, target, source, move);
 				this.runEvent('AfterSubDamage', target, source, move, damage);
 				return 0; // hit
 			},
@@ -16716,7 +16723,7 @@ exports.BattleMovedex = {
 		name: "Swords Dance",
 		pp: 20,
 		priority: 0,
-		flags: {snatch: 1},
+		flags: {snatch: 1, dance: 1},
 		boosts: {
 			atk: 2,
 		},
@@ -17036,7 +17043,7 @@ exports.BattleMovedex = {
 		name: "Teeter Dance",
 		pp: 20,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1, dance: 1},
 		volatileStatus: 'confusion',
 		secondary: false,
 		target: "allAdjacent",
@@ -18954,6 +18961,7 @@ exports.BattleMovedex = {
 		},
 		target: "normal",
 		type: "Rock",
+		zMovePower: 160,
 		contestType: "Beautiful",
 	},
 	"shadowstrike": {
@@ -18977,6 +18985,7 @@ exports.BattleMovedex = {
 		},
 		target: "normal",
 		type: "Ghost",
+		zMovePower: 160,
 		contestType: "Clever",
 	},
 	"magikarpsrevenge": {

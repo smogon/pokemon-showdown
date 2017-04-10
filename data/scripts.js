@@ -103,7 +103,12 @@ exports.BattleScripts = {
 	 */
 	useMove: function (move, pokemon, target, sourceEffect, zMove) {
 		if (!sourceEffect && this.effect.id) sourceEffect = this.effect;
-		if (zMove || (sourceEffect && sourceEffect.isZ)) {
+		if (zMove && move.id === 'weatherball') {
+			let baseMove = move;
+			this.singleEvent('ModifyMove', move, null, pokemon, target, move, move);
+			move = this.getZMoveCopy(move, pokemon);
+			if (move.type !== 'Normal') sourceEffect = baseMove;
+		} else if (zMove || (sourceEffect && sourceEffect.isZ)) {
 			move = this.getZMoveCopy(move, pokemon);
 		} else {
 			move = this.getMoveCopy(move);
@@ -1521,7 +1526,7 @@ exports.BattleScripts = {
 					isSetup = true;
 					break;
 				case 'agility': case 'autotomize': case 'rockpolish':
-					if (counter.damagingMoves.length < 2 && !counter.setupType && !hasMove['batonpass']) rejected = true;
+					if (counter.damagingMoves.length < 2 && !hasMove['batonpass']) rejected = true;
 					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					if (!counter.setupType) isSetup = true;
 					break;
@@ -1546,6 +1551,7 @@ exports.BattleScripts = {
 					break;
 				case 'foulplay':
 					if (counter.setupType || !!counter['speedsetup'] || counter['Dark'] > 2 || (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
+					if (counter.damagingMoves.length - 1 === counter['priority']) rejected = true;
 					break;
 				case 'haze': case 'spikes': case 'waterspout':
 					if (counter.setupType || !!counter['speedsetup'] || (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
@@ -1638,7 +1644,7 @@ exports.BattleScripts = {
 					if (hasMove['playrough'] && counter.setupType !== 'Special') rejected = true;
 					break;
 				case 'drainingkiss':
-					if (hasMove['dazzlinggleam'] || counter.setupType !== 'Special') rejected = true;
+					if (hasMove['dazzlinggleam'] || counter.setupType !== 'Special' && !hasAbility['triage']) rejected = true;
 					break;
 				case 'aurasphere': case 'focusblast':
 					if ((hasMove['closecombat'] || hasMove['superpower']) && counter.setupType !== 'Special') rejected = true;
@@ -2192,7 +2198,7 @@ exports.BattleScripts = {
 			item = (ability === 'Swift Swim' && counter.Status < 2) ? 'Life Orb' : 'Damp Rock';
 		} else if (hasMove['sunnyday']) {
 			item = (ability === 'Chlorophyll' && counter.Status < 2) ? 'Life Orb' : 'Heat Rock';
-		} else if (hasMove['lightscreen'] && hasMove['reflect']) {
+		} else if ((hasMove['lightscreen'] && hasMove['reflect']) || hasMove['auroraveil']) {
 			item = 'Light Clay';
 		} else if ((ability === 'Guts' || hasMove['facade']) && !hasMove['sleeptalk']) {
 			item = (hasType['Fire'] || ability === 'Quick Feet') ? 'Toxic Orb' : 'Flame Orb';
@@ -2224,7 +2230,7 @@ exports.BattleScripts = {
 			item = 'Air Balloon';
 		} else if (hasMove['outrage'] && (counter.setupType || ability === 'Multiscale')) {
 			item = 'Lum Berry';
-		} else if (ability === 'Slow Start' || hasMove['clearsmog'] || hasMove['detect'] || hasMove['protect'] || hasMove['sleeptalk']) {
+		} else if (ability === 'Slow Start' || hasMove['clearsmog'] || hasMove['curse'] || hasMove['detect'] || hasMove['protect'] || hasMove['sleeptalk']) {
 			item = 'Leftovers';
 		} else if (hasMove['substitute']) {
 			item = !counter['drain'] || counter.damagingMoves.length < 2 ? 'Leftovers' : 'Life Orb';
@@ -3204,7 +3210,7 @@ exports.BattleScripts = {
 			item = 'Scope Lens';
 		} else if (template.evos.length) {
 			item = 'Eviolite';
-		} else if (hasMove['reflect'] && hasMove['lightscreen']) {
+		} else if ((hasMove['reflect'] && hasMove['lightscreen']) || hasMove['auroraveil']) {
 			item = 'Light Clay';
 		} else if (hasMove['shellsmash']) {
 			item = (ability === 'Solid Rock' && counter['priority']) ? 'Weakness Policy' : 'White Herb';

@@ -122,13 +122,17 @@ You can also visit the [Pokémon Showdown forums][8] for discussion and help.
 
   [8]: http://www.smogon.com/forums/forums/pok%C3%A9mon-showdown.209/
 
+If you'd like to contribute to programming and don't know where to start, feel free to check out [Ideas for New Developers][9].
+
+  [9]: https://github.com/Zarel/Pokemon-Showdown/issues/2444
+
 
 License
 ------------------------------------------------------------------------
 
-Pokémon Showdown's server is distributed under the terms of the [MIT License][9].
+Pokémon Showdown's server is distributed under the terms of the [MIT License][10].
 
-  [9]: https://github.com/Zarel/Pokemon-Showdown/blob/master/LICENSE
+  [10]: https://github.com/Zarel/Pokemon-Showdown/blob/master/LICENSE
 
 
 Credits

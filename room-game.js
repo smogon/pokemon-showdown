@@ -79,7 +79,7 @@ class RoomGame {
 	}
 
 	makePlayer(user) {
-		return new RoomGamePlayer(user);
+		return new RoomGamePlayer(user, this);
 	}
 
 	removePlayer(user) {
@@ -89,6 +89,17 @@ class RoomGame {
 		delete this.players[user.userid];
 		this.playerCount--;
 		return true;
+	}
+
+	renamePlayer(user, oldUserid) {
+		if (user.userid === oldUserid) {
+			this.players[user.userid].name = user.name;
+		} else {
+			this.players[user.userid] = this.players[oldUserid];
+			this.players[user.userid].userid = user.userid;
+			this.players[user.userid].name = user.name;
+			delete this.players[oldUserid];
+		}
 	}
 
 	// Commands:
@@ -129,11 +140,12 @@ class RoomGame {
 	//   Called when a user joins a room. (i.e. when the user's first
 	//   connection joins)
 
-	// onRename(user, oldUserid, isJoining)
+	// onRename(user, oldUserid, isJoining, isForceRenamed)
 	//   Called when a user in the game is renamed. `isJoining` is true
 	//   if the user was previously a guest, but now has a username.
 	//   Check `!user.named` for the case where a user previously had a
-	//   username but is now a guest.
+	//   username but is now a guest. By default, updates a player's
+	//   name as long as allowRenames is set to true.
 
 	// onLeave(user)
 	//   Called when a user leaves the room. (i.e. when the user's last
@@ -141,7 +153,10 @@ class RoomGame {
 
 	// onConnect(user, connection)
 	//   Called each time a connection joins a room (after onJoin if
-	//   applicable).
+	//   applicable). By default, this is also called when connection
+	//   is updated in some way (such as by changing user or renaming).
+	//   If you don't want this behavior, override onUpdateConnection
+	//   and/or onRename.
 
 	// onUpdateConnection(user, connection)
 	//   Called for each connection in a room that changes users by
@@ -152,22 +167,16 @@ class RoomGame {
 	// the game should be sent during `onConnect`. You should rarely
 	// need to handle the other events.
 
-	onRename(user, oldUserid) {
-		if (!this.allowRenames) {
+	onRename(user, oldUserid, isJoining, isForceRenamed) {
+		if (!this.allowRenames || (!user.named && !isForceRenamed)) {
 			if (!(user.userid in this.players)) {
 				user.games.delete(this.id);
+				user.updateSearch();
 			}
 			return;
 		}
 		if (!(oldUserid in this.players)) return;
-		if (user.userid === oldUserid) {
-			this.players[user.userid].name = user.name;
-		} else {
-			this.players[user.userid] = this.players[oldUserid];
-			this.players[user.userid].userid = user.userid;
-			this.players[user.userid].name = user.name;
-			delete this.players[oldUserid];
-		}
+		this.renamePlayer(user, oldUserid);
 	}
 
 	onUpdateConnection(user, connection) {

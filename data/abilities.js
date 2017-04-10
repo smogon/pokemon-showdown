@@ -409,6 +409,7 @@ exports.BattleAbilities = {
 		desc: "This Pokemon's type changes to match the type of the last move that hit it, unless that type is already one of its types. This effect applies after all hits from a multi-hit move; Sheer Force prevents it from activating if the move has a secondary effect.",
 		shortDesc: "This Pokemon's type changes to the type of a move it's hit by, unless it has the type.",
 		onAfterMoveSecondary: function (target, source, move) {
+			if (!target.hp) return;
 			let type = move.type;
 			if (target.isActive && move.effectType === 'Move' && move.category !== 'Status' && type !== '???' && !target.hasType(type)) {
 				if (!target.setType(type)) return false;
@@ -558,7 +559,7 @@ exports.BattleAbilities = {
 		id: "dancer",
 		onAnyAfterMove: function (source, target, move) {
 			if (!this.effectData.target.hp || source === this.effectData.target || move.isExternal) return;
-			if (move.id.includes('dance') && move.id !== 'raindance') {
+			if (move.flags['dance']) {
 				this.faintMessages();
 				this.add('-activate', this.effectData.target, 'ability: Dancer');
 				this.runMove(move.id, this.effectData.target, 0, this.getAbility('dancer'), undefined, true);

@@ -2067,7 +2067,7 @@ exports.commands = {
 		let entry = targetUser.name + " was forced to choose a new name by " + user.name + (reason ? ": " + reason : "");
 		this.privateModCommand("(" + entry + ")");
 		Matchmaker.cancelSearch(targetUser);
-		targetUser.resetName();
+		targetUser.resetName(true);
 		targetUser.send("|nametaken||" + user.name + " considers your name inappropriate" + (reason ? ": " + reason : "."));
 		return true;
 	},
@@ -2088,7 +2088,7 @@ exports.commands = {
 
 		let reasonText = reason ? ` (${reason})` : `.`;
 		let lockMessage = `${targetUser.name} was namelocked by ${user.name}${reasonText}`;
-		this.addModCommand(lockMessage, `(${targetUser.latestIp})`);
+		this.addModCommand(lockMessage, ` (${targetUser.latestIp})`);
 
 		// Notify staff room when a user is locked outside of it.
 		if (room.id !== 'staff' && Rooms('staff')) {
