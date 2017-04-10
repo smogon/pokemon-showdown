@@ -101,8 +101,17 @@ exports.BattleAbilities = {
 		desc: "The power of this Pokemon's move is multiplied by 1.3 if it is the last to move in a turn. Does not affect Doom Desire and Future Sight.",
 		shortDesc: "This Pokemon's attacks have 1.3x power if it is the last to move in a turn.",
 		onBasePowerPriority: 8,
-		onBasePower: function (basePower, attacker, defender, move) {
-			if (!this.willMove(defender)) {
+		onBasePower: function (basePower, pokemon) {
+			let boosted = true;
+			let allActives = pokemon.side.active.concat(pokemon.side.foe.active);
+			for (let i = 0; i < allActives.length; i++) {
+				let target = allActives[i];
+				if (target === pokemon) continue;
+				if (this.willMove(target)) {
+					boosted = false;
+				}
+			}
+			if (boosted) {
 				this.debug('Analytic boost');
 				return this.chainModify([0x14CD, 0x1000]);
 			}
