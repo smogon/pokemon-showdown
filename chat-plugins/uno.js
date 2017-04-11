@@ -216,7 +216,7 @@ class UNOgame extends Rooms.RoomGame {
 
 		clearTimeout(this.timer);
 		let player = this.players[this.currentPlayer];
-		this.sendToRoom(`|c|~|${player.name}'s turn.`);
+		this.sendToRoom(`|c:|${(Math.floor(Date.now() / 1000))}|~|${player.name}'s turn.`);
 		this.state = 'play';
 		if (player.cardLock) delete player.cardLock;
 		player.sendDisplay();
