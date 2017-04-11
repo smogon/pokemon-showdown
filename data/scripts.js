@@ -2317,8 +2317,8 @@ exports.BattleScripts = {
 
 		// Prepare optimal HP
 		let hp = Math.floor(Math.floor(2 * template.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
-		if (hasMove['substitute'] && item === 'Sitrus Berry') {
-			// Two Substitutes should activate Sitrus Berry
+		if (hasMove['substitute'] && (item === 'Sitrus Berry' || (ability === 'Power Construct' && item !== 'Leftovers'))) {
+			// Two Substitutes should activate Sitrus Berry or Power Construct
 			while (hp % 4 > 0) {
 				evs.hp -= 4;
 				hp = Math.floor(Math.floor(2 * template.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
@@ -2331,18 +2331,8 @@ exports.BattleScripts = {
 			if (hp % 4 === 0) evs.hp -= 4;
 		} else {
 			// Maximize number of Stealth Rock switch-ins
-			if (this.getEffectiveness('Rock', template) === 1) {
-				while (hp % 4 === 0) {
-					evs.hp -= 4;
-					hp = Math.floor(Math.floor(2 * template.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
-				}
-			}
-			if (this.getEffectiveness('Rock', template) === 2) {
-				while (hp % 2 === 0) {
-					evs.hp -= 4;
-					hp = Math.floor(Math.floor(2 * template.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
-				}
-			}
+			let srWeakness = this.getEffectiveness('Rock', template);
+			if (srWeakness > 0 && hp % (4 / srWeakness) === 0) evs.hp -= 4;
 		}
 
 		// Minimize confusion damage
