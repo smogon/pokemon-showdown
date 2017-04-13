@@ -1159,6 +1159,10 @@ Chat.getDataPokemonHTML = function (template) {
 		}
 		buf += '</span>';
 	}
+	let bst = 0;
+	for (let i in template.baseStats) {
+		bst += template.baseStats[i];
+	}
 	buf += '<span style="float:left;min-height:26px">';
 	buf += '<span class="col statcol"><em>HP</em><br />' + template.baseStats.hp + '</span> ';
 	buf += '<span class="col statcol"><em>Atk</em><br />' + template.baseStats.atk + '</span> ';
@@ -1168,12 +1172,10 @@ Chat.getDataPokemonHTML = function (template) {
 	} else {
 		buf += '<span class="col statcol"><em>SpA</em><br />' + template.baseStats.spa + '</span> ';
 		buf += '<span class="col statcol"><em>SpD</em><br />' + template.baseStats.spd + '</span> ';
+		buf -= template.baseStats.spa;
+		buf -= template.baseStats.spd;
 	}
 	buf += '<span class="col statcol"><em>Spe</em><br />' + template.baseStats.spe + '</span> ';
-	let bst = 0;
-	for (let i in template.baseStats) {
-		bst += template.baseStats[i];
-	}
 	buf += '<span class="col bstcol"><em>BST<br />' + bst + '</em></span> ';
 	buf += '</span>';
 	buf += '</li>';
