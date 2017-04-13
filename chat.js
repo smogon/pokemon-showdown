@@ -1172,8 +1172,7 @@ Chat.getDataPokemonHTML = function (template) {
 	} else {
 		buf += '<span class="col statcol"><em>SpA</em><br />' + template.baseStats.spa + '</span> ';
 		buf += '<span class="col statcol"><em>SpD</em><br />' + template.baseStats.spd + '</span> ';
-		buf -= template.baseStats.spa;
-		buf -= template.baseStats.spd;
+		buf -= template.baseStats.spa + template.baseStats.spd;
 	}
 	buf += '<span class="col statcol"><em>Spe</em><br />' + template.baseStats.spe + '</span> ';
 	buf += '<span class="col bstcol"><em>BST<br />' + bst + '</em></span> ';
@@ -1200,7 +1199,7 @@ Chat.getDataAbilityHTML = function (ability) {
 	if (typeof ability === 'string') ability = Object.assign({}, Dex.getAbility(ability));
 	let buf = `<ul class="utilichart"><li class="result">`;
 	buf += `<a data-entry="ability|${ability.name}"><span class="col namecol">${ability.name}</span> `;
-	buf += `<span class="col abilitydesccol">${ability.desc || ability.shortDesc}</span> `;
+	buf += `<span class="col abilitydesccol">${ability.shortDesc || ability.desc}</span> `;
 	buf += `</a></li><li style="clear:both"></li></ul>`;
 	return buf;
 };
@@ -1209,7 +1208,7 @@ Chat.getDataItemHTML = function (item) {
 	if (typeof item === 'string') item = Object.assign({}, Dex.getItem(item));
 	let buf = `<ul class="utilichart"><li class="result">`;
 	buf += `<a data-entry="item|${item.name}"><span class="col itemiconcol"><psicon item="${item.id}"></span> <span class="col namecol">${item.name}</span> `;
-	buf += `<span class="col itemdesccol">${item.desc || item.shortDesc}</span> `;
+	buf += `<span class="col itemdesccol">${item.shortDesc || item.desc}</span> `;
 	buf += `</a></li><li style="clear:both"></li></ul>`;
 	return buf;
 };
