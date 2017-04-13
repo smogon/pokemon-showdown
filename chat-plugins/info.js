@@ -398,6 +398,14 @@ exports.commands = {
 					let sType = newTargets[i].searchType.charAt(0).toUpperCase() + newTargets[i].searchType.substring(1, newTargets[i].searchType.length);
 					if (Chat[`getData${sType}HTML`]) {
 						let template = mod["get" + (sType === "Pokemon" ? "Template" : sType)](newTargets[i].name);
+						if (sType === "Pokemon") {
+							if (mod.gen === 1) {
+								template.baseStats["spc"] = template.baseStats.spa;
+								delete template.baseStats.spa;
+								delete template.baseStats.spd;
+							}
+							if (mod.gen < 3) delete template.abilities;
+						}
 						buffer += `|raw|${Chat[`getData${sType}HTML`](template)}\n`;
 					} else {
 						buffer += '|c|~|/data-' + newTargets[i].searchType + ' ' + newTargets[i].name + '\n';
@@ -431,16 +439,20 @@ exports.commands = {
 					"Gen": pokemon.gen,
 					"Height": pokemon.heightm + " m",
 					"Weight": pokemon.weightkg + " kg <em>(" + weighthit + " BP)</em>",
-					"Dex Colour": pokemon.color,
 				};
-				if (pokemon.eggGroups) details["Egg Group(s)"] = pokemon.eggGroups.join(", ");
-				if (!pokemon.evos.length) {
+				if (pokemon.color && mod.gen >= 5) details["Dex Colour"] = pokemon.color;
+				if (pokemon.eggGroups && mod.gen >= 2) details["Egg Group(s)"] = pokemon.eggGroups.join(", ");
+				let evos = [];
+				pokemon.evos.forEach(evo => {
+					evo = mod.getTemplate(evo);
+					if (evo.gen <= mod.gen) {
+						evos.push(evo.name + " (" + evo.evoLevel + ")");
+					}
+				});
+				if (!evos.length) {
 					details['<font color="#686868">Does Not Evolve</font>'] = "";
 				} else {
-					details["Evolution"] = pokemon.evos.map(evo => {
-						evo = mod.getTemplate(evo);
-						return evo.name + " (" + evo.evoLevel + ")";
-					}).join(", ");
+					details["Evolution"] = evos.join(", ");
 				}
 			} else if (newTargets[0].searchType === 'move') {
 				let move = mod.getMove(newTargets[0].name);
@@ -461,38 +473,40 @@ exports.commands = {
 				if (move.flags['punch']) details["&#10003; Punch"] = "";
 				if (move.flags['powder']) details["&#10003; Powder"] = "";
 				if (move.flags['reflectable']) details["&#10003; Bounceable"] = "";
-				if (move.flags['gravity']) details["&#10007; Suppressed by Gravity"] = "";
+				if (move.flags['gravity'] && mod.gen >= 4) details["&#10007; Suppressed by Gravity"] = "";
 
-				if (move.id === 'snatch') isSnatch = true;
+				if (move.id === 'snatch' && mod.gen >= 3) isSnatch = true;
 				if (move.id === 'mirrormove') isMirrorMove = true;
 
-				if (move.zMovePower) {
-					details["Z-Power"] = move.zMovePower;
-				} else if (move.zMoveEffect) {
-					details["Z-Effect"] = {
-						'clearnegativeboost': "Restores negative stat stages to 0",
-						'crit2': "Crit ratio +2",
-						'heal': "Restores HP 100%",
-						'curse': "Restores HP 100% if user is Ghost type, otherwise Attack +1",
-						'redirect': "Redirects opposing attacks to user",
-						'healreplacement': "Restores replacement's HP 100%",
-					}[move.zMoveEffect];
-				} else if (move.zMoveBoost) {
-					details["Z-Effect"] = "";
-					let boost = move.zMoveBoost;
-					let stats = {atk: 'Attack', def: 'Defense', spa: 'Sp. Atk', spd: 'Sp. Def', spe: 'Speed', accuracy: 'Accuracy', evasion: 'Evasiveness'};
-					for (let i in boost) {
-						details["Z-Effect"] += " " + stats[i] + " +" + boost[i];
+				if (mod.gen >= 7) {
+					if (move.zMovePower) {
+						details["Z-Power"] = move.zMovePower;
+					} else if (move.zMoveEffect) {
+						details["Z-Effect"] = {
+							'clearnegativeboost': "Restores negative stat stages to 0",
+							'crit2': "Crit ratio +2",
+							'heal': "Restores HP 100%",
+							'curse': "Restores HP 100% if user is Ghost type, otherwise Attack +1",
+							'redirect': "Redirects opposing attacks to user",
+							'healreplacement': "Restores replacement's HP 100%",
+						}[move.zMoveEffect];
+					} else if (move.zMoveBoost) {
+						details["Z-Effect"] = "";
+						let boost = move.zMoveBoost;
+						let stats = {atk: 'Attack', def: 'Defense', spa: 'Sp. Atk', spd: 'Sp. Def', spe: 'Speed', accuracy: 'Accuracy', evasion: 'Evasiveness'};
+						for (let i in boost) {
+							details["Z-Effect"] += " " + stats[i] + " +" + boost[i];
+						}
+					} else if (move.isZ) {
+						details["&#10003; Z-Move"] = "";
+						details["Z-Crystal"] = mod.getItem(move.isZ).name;
+						if (move.basePower !== 1) {
+							details["User"] = mod.getItem(move.isZ).zMoveUser.join(", ");
+							details["Required Move"] = mod.getItem(move.isZ).zMoveFrom;
+						}
+					} else {
+						details["Z-Effect"] = "None";
 					}
-				} else if (move.isZ) {
-					details["&#10003; Z-Move"] = "";
-					details["Z-Crystal"] = mod.getItem(move.isZ).name;
-					if (move.basePower !== 1) {
-						details["User"] = mod.getItem(move.isZ).zMoveUser.join(", ");
-						details["Required Move"] = mod.getItem(move.isZ).zMoveFrom;
-					}
-				} else {
-					details["Z-Effect"] = "None";
 				}
 
 				details["Target"] = {
@@ -515,7 +529,7 @@ exports.commands = {
 					"Gen": item.gen,
 				};
 
-				if (item.fling) {
+				if (item.fling && mod.gen >= 4) {
 					details["Fling Base Power"] = item.fling.basePower;
 					if (item.fling.status) details["Fling Effect"] = item.fling.status;
 					if (item.fling.volatileStatus) details["Fling Effect"] = item.fling.volatileStatus;
@@ -525,7 +539,7 @@ exports.commands = {
 				} else {
 					details["Fling"] = "This item cannot be used with Fling.";
 				}
-				if (item.naturalGift) {
+				if (item.naturalGift && mod.gen >= 3) {
 					details["Natural Gift Type"] = item.naturalGift.type;
 					details["Natural Gift Base Power"] = item.naturalGift.basePower;
 				}
