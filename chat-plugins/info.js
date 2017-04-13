@@ -401,8 +401,6 @@ exports.commands = {
 						if (sType === "Pokemon") {
 							if (mod.gen === 1) {
 								template.baseStats["spc"] = template.baseStats.spa;
-								delete template.baseStats.spa;
-								delete template.baseStats.spd;
 							}
 							if (mod.gen < 3) delete template.abilities;
 						}
