@@ -106,7 +106,7 @@ exports.BattleFormatsData = {
 		tier: "New",
 	},
 	blastoisemega: {
-		randomBattleMoves: ["icebeam", "hydropump", "rapidspin", "scald", "toxic", "dragontail", "darkpulse", "aurasphere"],
+		randomBattleMoves: ["icebeam", "hydropump", "rapidspin", "scald", "dragontail", "darkpulse", "aurasphere"],
 		randomDoubleBattleMoves: ["muddywater", "icebeam", "hydropump", "fakeout", "scald", "darkpulse", "aurasphere", "followme", "icywind", "protect"],
 		requiredItem: "Blastoisinite",
 		tier: "UU",

@@ -47,7 +47,7 @@ exports.BattleAbilities = {
 		},
 		id: "adaptability",
 		name: "Adaptability",
-		rating: 3.5,
+		rating: 4,
 		num: 91,
 	},
 	"aftermath": {
