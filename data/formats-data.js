@@ -352,8 +352,7 @@ exports.BattleFormatsData = {
 			{"generation": 7, "level": 1, "moves":["thunderbolt", "quickattack", "thunder", "agility"]},
 		],
 		eventOnly: true,
-		isUnreleased: true,
-		tier: "Unreleased",
+		tier: "New",
 	},
 	pikachuhoenn: {
 		eventPokemon: [
