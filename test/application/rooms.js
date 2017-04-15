@@ -28,7 +28,7 @@ describe('Rooms features', function () {
 
 		let room;
 		before(function () {
-			matchmaker.ladderIpLog.end();
+			Rooms.global.ladderIpLog.end();
 			clearInterval(matchmaker.periodicMatchInterval);
 			matchmaker.periodicMatchInterval = null;
 		});

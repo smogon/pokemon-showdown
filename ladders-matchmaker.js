@@ -10,8 +10,6 @@
 
 'use strict';
 
-const fs = require('fs');
-
 const PERIODIC_MATCH_INTERVAL = 60 * 1000;
 
 function Search(userid, team, rating = 1000) {
@@ -24,45 +22,6 @@ function Search(userid, team, rating = 1000) {
 class Matchmaker {
 	constructor() {
 		this.searches = new Map();
-		if (('Config' in global) && Config.logladderip) {
-			this.ladderIpLog = fs.createWriteStream('logs/ladderip/ladderip.txt', {encoding: 'utf8', flags: 'a'});
-		} else {
-			// Prevent there from being two possible hidden classes an instance
-			// of Matchmaker can have.
-			this.ladderIpLog = new (require('stream')).Writable();
-		}
-
-		let lastBattle;
-		try {
-			lastBattle = fs.readFileSync('logs/lastbattle.txt', 'utf8');
-		} catch (e) {}
-		this.lastBattle = (!lastBattle || isNaN(lastBattle)) ? 0 : +lastBattle;
-
-		this.writeNumRooms = (() => {
-			let writing = false;
-			let lastBattle = -1; // last lastBattle to be written to file
-			return () => {
-				if (writing) return;
-
-				// batch writing lastbattle.txt for every 10 battles
-				if (lastBattle >= this.lastBattle) return;
-				lastBattle = this.lastBattle + 10;
-
-				let filename = 'logs/lastbattle.txt';
-				writing = true;
-				fs.writeFile(`${filename}.0`, '' + lastBattle, () => {
-					fs.rename(`${filename}.0`, filename, () => {
-						writing = false;
-						lastBattle = null;
-						filename = null;
-						if (lastBattle < this.lastBattle) {
-							setImmediate(() => this.writeNumRooms());
-						}
-					});
-				});
-			};
-		})();
-
 		this.periodicMatchInterval = setInterval(
 			() => this.periodicMatch(),
 			PERIODIC_MATCH_INTERVAL
@@ -191,61 +150,47 @@ class Matchmaker {
 		});
 	}
 
-	startBattle(p1, p2, format, p1team, p2team, options) {
-		p1 = Users.get(p1);
-		p2 = Users.get(p2);
+	verifyPlayers(player1, player2, format) {
+		let p1 = (typeof player1 === 'string') ? Users(player1) : player1;
+		let p2 = (typeof player2 === 'string') ? Users(player2) : player2;
 		if (!p1 || !p2) {
-			// most likely, a user was banned during the battle start procedure
-			this.cancelSearch(p1);
-			this.cancelSearch(p2);
-			return;
+			this.cancelSearch(p1, format);
+			this.cancelSearch(p2, format);
+			return false;
 		}
+
 		if (p1 === p2) {
-			this.cancelSearch(p1);
-			this.cancelSearch(p2);
+			this.cancelSearch(p1, format);
+			this.cancelSearch(p2, format);
 			p1.popup("You can't battle your own account. Please use something like Private Browsing to battle yourself.");
-			return;
+			return false;
 		}
 
 		if (Rooms.global.lockdown === true) {
-			this.cancelSearch(p1);
-			this.cancelSearch(p2);
+			this.cancelSearch(p1, format);
+			this.cancelSearch(p2, format);
 			p1.popup("The server is restarting. Battles will be available again in a few minutes.");
 			p2.popup("The server is restarting. Battles will be available again in a few minutes.");
-			return;
+			return false;
 		}
 
-		//console.log('BATTLE START BETWEEN: ' + p1.userid + ' ' + p2.userid);
-		let i = this.lastBattle + 1;
-		let roomPrefix = `battle-${format.toLowerCase().replace(/[^a-z0-9]+/g, '')}-`;
-		while (Rooms.rooms.has(`${roomPrefix}${i}`)) {
-			i++;
-		}
-		this.lastBattle = i;
-		this.writeNumRooms();
+		return true;
+	}
 
-		let newRoom = Rooms.createBattle(`${roomPrefix}${i}`, format, p1, p2, options);
-		p1.joinRoom(newRoom);
-		p2.joinRoom(newRoom);
-		newRoom.battle.addPlayer(p1, p1team);
-		newRoom.battle.addPlayer(p2, p2team);
-		this.cancelSearch(p1);
-		this.cancelSearch(p2);
-		if (Config.reportbattles) {
-			let reportRoom = Rooms(Config.reportbattles === true ? 'lobby' : Config.reportbattles);
-			if (reportRoom) {
-				reportRoom
-					.add(`|b|${newRoom.id}|${p1.getIdentity()}|${p2.getIdentity()}`)
-					.update();
-			}
-		}
-		if (Config.logladderip && options.rated) {
-			this.ladderIpLog.write(
-				`${p1.userid}: ${p1.latestIp}\n` +
-				`${p2.userid}: ${p2.latestIp}\n`
-			);
-		}
-		return newRoom;
+	startBattle(p1, p2, format, p1team, p2team, options) {
+		if (!this.verifyPlayers(p1, p2, format)) return;
+
+		let roomid = Rooms.global.prepBattleRoom(format);
+		let room = Rooms.createBattle(roomid, format, p1, p2, options);
+		p1.joinRoom(room);
+		p2.joinRoom(room);
+		room.battle.addPlayer(p1, p1team);
+		room.battle.addPlayer(p2, p2team);
+		this.cancelSearch(p1, format);
+		this.cancelSearch(p2, format);
+		Rooms.global.onCreateBattleRoom(p1, p2, room, options);
+
+		return room;
 	}
 }
 
