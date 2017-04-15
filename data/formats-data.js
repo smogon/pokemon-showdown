@@ -5983,6 +5983,9 @@ exports.BattleFormatsData = {
 	},
 	bewear: {
 		randomBattleMoves: ["hammerarm", "icepunch", "swordsdance", "return", "shadowclaw", "doubleedge"],
+		eventPokemon: [
+			{"generation": 7, "level": 50, "gender": "F", "isHidden": true, "moves":["babydolleyes", "brutalswing", "superpower", "bind"], "pokeball": "cherishball"},
+		],
 		tier: "BL2",
 	},
 	bounsweet: {
