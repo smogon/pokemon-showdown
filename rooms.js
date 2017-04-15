@@ -314,6 +314,22 @@ class GlobalRoom {
 		}
 		Rooms.lobby = Rooms.rooms.get('lobby');
 
+		// init battle room logging
+		if (Config.logladderip) {
+			this.ladderIpLog = fs.createWriteStream('logs/ladderip/ladderip.txt', {encoding: 'utf8', flags: 'a'});
+		} else {
+			// Prevent there from being two possible hidden classes an instance
+			// of GlobalRoom can have.
+			this.ladderIpLog = new (require('stream')).Writable();
+		}
+
+		let lastBattle;
+		try {
+			lastBattle = fs.readFileSync('logs/lastbattle.txt', 'utf8');
+		} catch (e) {}
+		this.lastBattle = (!lastBattle || isNaN(lastBattle)) ? 0 : +lastBattle;
+
+
 		this.writeChatRoomData = (() => {
 			let writing = false;
 			let writePending = false;
@@ -335,6 +351,31 @@ class GlobalRoom {
 						if (writePending) {
 							writePending = false;
 							setImmediate(() => this.writeChatRoomData());
+						}
+					});
+				});
+			};
+		})();
+
+		this.writeNumRooms = (() => {
+			let writing = false;
+			let lastBattle = -1; // last lastBattle to be written to file
+			return () => {
+				if (writing) return;
+
+				// batch writing lastbattle.txt for every 10 battles
+				if (lastBattle >= this.lastBattle) return;
+				lastBattle = this.lastBattle + 10;
+
+				let filename = 'logs/lastbattle.txt';
+				writing = true;
+				fs.writeFile(`${filename}.0`, '' + lastBattle, () => {
+					fs.rename(`${filename}.0`, filename, () => {
+						writing = false;
+						lastBattle = null;
+						filename = null;
+						if (lastBattle < this.lastBattle) {
+							setImmediate(() => this.writeNumRooms());
 						}
 					});
 				});
@@ -488,6 +529,38 @@ class GlobalRoom {
 		this.writeChatRoomData();
 		return true;
 	}
+
+	prepBattleRoom(format) {
+		//console.log('BATTLE START BETWEEN: ' + p1.userid + ' ' + p2.userid);
+		let roomPrefix = `battle-${toId(format)}-`;
+		let battleNum = this.lastBattle;
+		let roomid;
+		do {
+			roomid = `${roomPrefix}${++battleNum}`;
+		} while (Rooms.rooms.has(roomid));
+
+		this.lastBattle = battleNum;
+		this.writeNumRooms();
+		return roomid;
+	}
+
+	onCreateBattleRoom(p1, p2, room, options) {
+		if (Config.reportbattles) {
+			let reportRoom = Rooms(Config.reportbattles === true ? 'lobby' : Config.reportbattles);
+			if (reportRoom) {
+				reportRoom
+					.add(`|b|${room.id}|${p1.getIdentity()}|${p2.getIdentity()}`)
+					.update();
+			}
+		}
+		if (Config.logladderip && options.rated) {
+			this.ladderIpLog.write(
+				`${p1.userid}: ${p1.latestIp}\n` +
+				`${p2.userid}: ${p2.latestIp}\n`
+			);
+		}
+	}
+
 	deregisterChatRoom(id) {
 		id = toId(id);
 		let room = Rooms(id);
@@ -1489,7 +1562,7 @@ Rooms.createBattle = function (roomid, format, p1, p2, options) {
 		Monitor.countBattle(p2.latestIp, p2.name);
 		Rooms.rooms.set(roomid, new BattleRoom(roomid, format, p1, p2, options));
 	}
-	return Rooms.rooms.get(roomid);
+	return Rooms(roomid);
 };
 Rooms.createChatRoom = function (roomid, title, data) {
 	let room = Rooms.rooms.get(roomid);
