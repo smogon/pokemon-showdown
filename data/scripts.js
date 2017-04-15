@@ -115,7 +115,7 @@ exports.BattleScripts = {
 		}
 		if (this.activeMove) {
 			move.priority = this.activeMove.priority;
-			move.pranksterBoosted = this.activeMove.pranksterBoosted;
+			move.pranksterBoosted = move.hasBounced ? false : this.activeMove.pranksterBoosted;
 		}
 		let baseTarget = move.target;
 		if (!target && target !== false) target = this.resolveTarget(pokemon, move);
