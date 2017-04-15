@@ -85,7 +85,7 @@ describe('Matchmaker', function () {
 
 	it('should cancel searches', function () {
 		addSearch(this.p1);
-		matchmaker.cancelSearch(this.p1);
+		matchmaker.cancelSearch(this.p1, FORMATID);
 		assert.strictEqual(matchmaker.searches.get(FORMATID).size, 0);
 	});
 

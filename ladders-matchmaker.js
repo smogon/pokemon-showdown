@@ -150,25 +150,25 @@ class Matchmaker {
 		});
 	}
 
-	verifyPlayers(player1, player2) {
+	verifyPlayers(player1, player2, format) {
 		let p1 = (typeof player1 === 'string') ? Users(player1) : player1;
 		let p2 = (typeof player2 === 'string') ? Users(player2) : player2;
 		if (!p1 || !p2) {
-			this.cancelSearch(p1);
-			this.cancelSearch(p2);
+			this.cancelSearch(p1, format);
+			this.cancelSearch(p2, format);
 			return false;
 		}
 
 		if (p1 === p2) {
-			this.cancelSearch(p1);
-			this.cancelSearch(p2);
+			this.cancelSearch(p1, format);
+			this.cancelSearch(p2, format);
 			p1.popup("You can't battle your own account. Please use something like Private Browsing to battle yourself.");
 			return false;
 		}
 
 		if (Rooms.global.lockdown === true) {
-			this.cancelSearch(p1);
-			this.cancelSearch(p2);
+			this.cancelSearch(p1, format);
+			this.cancelSearch(p2, format);
 			p1.popup("The server is restarting. Battles will be available again in a few minutes.");
 			p2.popup("The server is restarting. Battles will be available again in a few minutes.");
 			return false;
@@ -178,7 +178,7 @@ class Matchmaker {
 	}
 
 	startBattle(p1, p2, format, p1team, p2team, options) {
-		if (!this.verifyPlayers(p1, p2)) return;
+		if (!this.verifyPlayers(p1, p2, format)) return;
 
 		let roomid = Rooms.global.prepBattleRoom(format);
 		let room = Rooms.createBattle(roomid, format, p1, p2, options);
@@ -186,8 +186,8 @@ class Matchmaker {
 		p2.joinRoom(room);
 		room.battle.addPlayer(p1, p1team);
 		room.battle.addPlayer(p2, p2team);
-		this.cancelSearch(p1);
-		this.cancelSearch(p2);
+		this.cancelSearch(p1, format);
+		this.cancelSearch(p2, format);
 		Rooms.global.onCreateBattleRoom(p1, p2, room, options);
 
 		return room;

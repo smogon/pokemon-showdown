@@ -3259,7 +3259,7 @@ exports.commands = {
 			}
 			Matchmaker.searchBattle(user, target);
 		} else {
-			Matchmaker.cancelSearch(user);
+			Matchmaker.cancelSearch(user, target);
 		}
 	},
 
