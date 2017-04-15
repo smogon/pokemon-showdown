@@ -13642,6 +13642,7 @@ exports.BattleMovedex = {
 		},
 		effect: {
 			duration: 1,
+			onResidualOrder: 20,
 			// implemented in BattlePokemon#getTypes
 		},
 		secondary: false,
