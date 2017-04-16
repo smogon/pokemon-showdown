@@ -2118,6 +2118,24 @@ exports.BattleScripts = {
 			moves[moves.indexOf('thunderpunch')] = 'return';
 		}
 
+		// make offensive EV and IV spreads less redundant
+		if (counter.Physical === 0 && counter.Special > 0) {
+			// if has no physical attack moves but has special attack moves
+			ivs.atk = 0;
+			evs.spa += evs.atk;
+			evs.atk = 0;
+		} else if (counter.Special === 0 && counter.Physical > 0) {
+			// if has no special attack moves but has physical attack moves
+			evs.atk += evs.spa;
+			evs.spa = 0;
+		} else if (counter.Physical + counter.Special === 0) {
+			// if both are 0
+			ivs.atk = 0;
+			evs.hp += evs.atk + evs.spa;
+			evs.atk = 0;
+			evs.spa = 0;
+		}
+
 		item = 'Leftovers';
 		if (template.requiredItems) {
 			if (template.baseSpecies === 'Arceus' && hasMove['judgment']) {
