@@ -1439,6 +1439,14 @@ exports.BattleMovedex = {
 		},
 		accuracy: 100,
 	},
+	triplekick: {
+		inherit: true,
+		basePower: 10,
+		onBasePower: function (power, user) {
+			if (user.template.id === 'hitmontop') return this.chainModify(1.5);
+		},
+		accuracy: 100
+	},
 	mudshot: {
 		inherit: true,
 		basePower: 60,
