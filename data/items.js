@@ -409,6 +409,11 @@ exports.BattleItems = {
 		gen: 2,
 		desc: "Restores 20 HP when at 1/2 max HP or less. Single use.",
 	},
+	
+	
+	//Berserk Gene is missing//
+	
+	
 	"bigroot": {
 		id: "bigroot",
 		name: "Big Root",
