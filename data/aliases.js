@@ -212,6 +212,7 @@ exports.BattleAliases = {
 	"kyuremb": "Kyurem-Black",
 	"kyuremw": "Kyurem-White",
 	"landorust": "Landorus-Therian",
+	"landot": "Landorus-Therian",
 	"meloettap": "Meloetta-Pirouette",
 	"meloettas": "Meloetta-Pirouette",
 	"meloettastep": "Meloetta-Pirouette",
