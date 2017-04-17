@@ -1674,12 +1674,15 @@ exports.BattleScripts = {
 				case 'blazekick':
 					if (hasMove['flamethrower'] && counter.setupType !== 'Physical') rejected = true;
 					break;
-				case 'fierydance': case 'firefang': case 'flamethrower':
-					if ((hasMove['fireblast'] && counter.setupType !== 'Physical') || hasMove['overheat']) rejected = true;
+				case 'fierydance': case 'flamethrower':
+					if (hasMove['fireblast'] || hasMove['overheat']) rejected = true;
 					break;
 				case 'fireblast':
 					if (hasMove['lavaplume'] && !counter.setupType && !counter['speedsetup']) rejected = true;
 					if (hasMove['flareblitz'] && counter.setupType !== 'Special') rejected = true;
+					break;
+				case 'firefang':
+					if (counter.setupType !== 'Physical' && (hasMove['fireblast'] || movePool.indexOf('fireblast') >= 0)) rejected = true;
 					break;
 				case 'firepunch': case 'sacredfire':
 					if (hasMove['fireblast'] || hasMove['flareblitz']) rejected = true;
