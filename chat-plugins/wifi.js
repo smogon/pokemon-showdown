@@ -58,7 +58,7 @@ const formattingResolvers = [
 	{token: "[[", endToken: "]]", resolver: str => {
 		console.log(str);
 		let hl = hyperlinkRegex.exec(str);
-		if (hl) return `<a href="${encodeURIComponent(hl[2].trim().replace(/^([a-z]*[^a-z:])/g, 'http://$1'))}">${hl[1].trim()}</a>`;
+		if (hl) return `<a href="${hl[2].trim().replace(/^([a-z]*[^a-z:])/g, 'http://$1')}">${hl[1].trim()}</a>`;
 
 		let query = str;
 		let querystr = str;
