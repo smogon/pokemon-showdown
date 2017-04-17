@@ -423,6 +423,7 @@ exports.BattleAbilities = {
 			let type = move.type;
 			if (target.isActive && move.effectType === 'Move' && move.category !== 'Status' && type !== '???' && !target.hasType(type)) {
 				if (!target.setType(type)) return false;
+				this.add('-ability', target, 'colorchange', '[silent]');
 				this.add('-start', target, 'typechange', type, '[from] Color Change');
 
 				if (target.side.active.length === 2 && target.position === 1) {
@@ -961,6 +962,7 @@ exports.BattleAbilities = {
 		effect: {
 			noCopy: true, // doesn't get copied by Baton Pass
 			onStart: function (target) {
+				this.add('-ability', target, 'flashfire', '[silent]');
 				this.add('-start', target, 'ability: Flash Fire');
 			},
 			onModifyAtkPriority: 5,
@@ -2555,6 +2557,7 @@ exports.BattleAbilities = {
 			let type = move.type;
 			if (type && type !== '???' && source.getTypes().join() !== type) {
 				if (!source.setType(type)) return;
+				this.add('-ability', source, 'protean', '[silent]');
 				this.add('-start', source, 'typechange', type, '[from] Protean');
 			}
 		},
@@ -3091,6 +3094,7 @@ exports.BattleAbilities = {
 		effect: {
 			duration: 5,
 			onStart: function (target) {
+				this.add('-ability', target, 'slowstart', '[silent]');
 				this.add('-start', target, 'ability: Slow Start');
 			},
 			onModifyAtkPriority: 5,
