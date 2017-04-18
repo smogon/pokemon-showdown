@@ -1,23 +1,10 @@
 'use strict';
 
 const assert = require('assert');
-const Module = require('module');
 
 const userUtils = require('../../dev-tools/users-utils');
 const User = userUtils.User;
 const Connection = userUtils.Connection;
-
-// We can't import trivia outside of the test suite's context, since the trivia
-// module doesn't have access to any of the globals defined in app.js from this
-// context. For now we'll just construct a skeleton module representing the
-// trivia module and wait...
-const triviaModule = (() => {
-	let pathname = require.resolve('../../chat-plugins/trivia');
-	let ret = new Module(pathname, module);
-	Module._preloadModules(ret);
-
-	return ret;
-})();
 
 let SCORE_CAPS;
 let Trivia;
@@ -27,32 +14,32 @@ let NumberModeTrivia;
 
 function makeUser(name, connection) {
 	let user = new User(connection);
-	user.name = name;
-	user.userid = name.toLowerCase().replace(/[^a-z0-9-]+/g, '');
+	user.forceRename(name, true);
+	user.connected = true;
 	Users.users.set(user.userid, user);
 	user.joinRoom('trivia', connection);
 	return user;
 }
 
 function destroyUser(user) {
-	if (user.connected) {
-		user.disconnectAll();
-		user.destroy();
-	}
+	if (!user || !user.connected) return false;
+	user.resetName();
+	user.disconnectAll();
+	user.destroy();
 }
 
 describe('Trivia', function () {
 	before(function () {
-		// ...until we can load the trivia module right before the tests begin,
-		// where the context contains the globals missing from when this was
-		// first defined.
-		triviaModule.load(triviaModule.id);
-
-		SCORE_CAPS = triviaModule.exports.SCORE_CAPS;
-		Trivia = triviaModule.exports.Trivia;
-		FirstModeTrivia = triviaModule.exports.FirstModeTrivia;
-		TimerModeTrivia = triviaModule.exports.TimerModeTrivia;
-		NumberModeTrivia = triviaModule.exports.NumberModeTrivia;
+		// The trivia module cannot be loaded outside of this scope because
+		// it makes reference to global.Config in the modules outermost scope,
+		// which makes the module fail to be loaded. Within the scope of thess
+		// unit test blocks however, Config is defined.
+		const trivia = require('../../chat-plugins/trivia');
+		SCORE_CAPS = trivia.SCORE_CAPS;
+		Trivia = trivia.Trivia;
+		FirstModeTrivia = trivia.FirstModeTrivia;
+		TimerModeTrivia = trivia.TimerModeTrivia;
+		NumberModeTrivia = trivia.NumberModeTrivia;
 
 		Rooms.global.addChatRoom('Trivia');
 		this.room = Rooms('trivia');
@@ -69,6 +56,13 @@ describe('Trivia', function () {
 		destroyUser(this.user);
 		destroyUser(this.tarUser);
 		if (this.room.game) this.room.game.destroy();
+	});
+
+	after(function () {
+		this.user = null;
+		this.tarUser = null;
+		this.room.destroy();
+		this.room = null;
 	});
 
 	it('should have each of its score caps divisible by 5', function () {
