@@ -1629,6 +1629,10 @@ exports.BattleScripts = {
 					break;
 				case 'outrage':
 					if (hasMove['dracometeor'] && counter.damagingMoves.length < 3) rejected = true;
+					if (!rejected && !movePool.includes('dracometeor')) {
+						let dclaw = movePool.indexOf('dragonclaw');
+						if (dclaw >= 0) this.fastPop(movePool, dclaw);
+					}
 					break;
 				case 'chargebeam':
 					if (hasMove['thunderbolt'] && counter.Special < 3) rejected = true;
