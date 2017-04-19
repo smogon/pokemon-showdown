@@ -579,6 +579,20 @@ class BattlePokemon {
 	}
 	transformInto(pokemon, user, effect) {
 		let template = pokemon.template;
+		if ((user && user.transformed && this.battle.gen >= 5) && (BattleSide.prototype.chooseMove)) {
+			this.transformed = false;
+			this.types = this.types;
+			this.addedType = this.addedType;
+			this.knownType = this.side === this.side && this.knownType;
+			for (let statName in this.stats) {
+				this.stats[statName] = this.stats[statName];
+			}
+			this.moveset = [];
+			this.moves = [];
+			this.set.ivs = (this.battle.gen >= 5 ? this.set.ivs : this.set.ivs);
+			this.hpType = (this.battle.gen >= 5 ? this.hpType : this.hpType);
+			this.hpPower = (this.battle.gen >= 5 ? this.hpPower : this.hpPower);
+		}
 		if (pokemon.fainted || pokemon.illusion || (pokemon.volatiles['substitute'] && this.battle.gen >= 5)) {
 			return false;
 		}
@@ -653,7 +667,6 @@ class BattlePokemon {
 				}
 			}
 		}
-
 		return true;
 	}
 	formeChange(template, source) {
