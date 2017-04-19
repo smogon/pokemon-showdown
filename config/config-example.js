@@ -22,6 +22,11 @@ exports.potd = '';
 //   crash, so this option is provided
 exports.crashguard = true;
 
+// dnsbl - a very basic way that detects proxies, and will attempt to block
+//  It should be noted that this isn't overly reliable, and can possibly give
+//  false positives
+exports.dnsbl = false;
+
 // login server data - don't forget the http:// and the trailing slash
 //   This is the URL of the user database and ladder mentioned earlier.
 //   Don't change this setting - there aren't any other login servers right now
