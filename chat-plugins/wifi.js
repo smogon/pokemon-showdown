@@ -509,6 +509,7 @@ class GtsGiveaway {
 		this.lookfor = lookfor;
 
 		this.sprite = Giveaway.getSprite(this.summary);
+		this.sent = [];
 
 		this.timer = setInterval(() => this.send(this.generateWindow()), 1000 * 60 * 5);
 		this.send(this.generateWindow());
@@ -532,15 +533,28 @@ class GtsGiveaway {
 	}
 
 	generateWindow() {
+		let sentModifier = this.sent.length ? 5 : 0;
 		return `<p style="text-align:center;font-size:14pt;font-weight:bold;margin-bottom:2px;">There is a GTS giveaway going on!</p>` +
 			`<p style="text-align:center;font-size:10pt;margin-top:0px;">Hosted by: ${Chat.escapeHTML(this.giver.name)} | Left: <b>${this.left}</b></p>` +
-			`<table style="margin-left:auto;margin-right:auto;"><tr><td style="text-align:center;width:15%">${this.sprite}</td><td style="text-align:center;width:40%">${Giveaway.parseText(this.summary)}</td>` +
-			`<td style="text-align:center;width:35%">To participate, deposit <strong>${this.deposit}</strong> into the GTS and look for <strong>${Chat.escapeHTML(this.lookfor)}</strong></td></tr></table>`;
+			`<table style="margin-left:auto;margin-right:auto;"><tr>` +
+			(sentModifier ? `<td style="text-align:center;width:16%><b>Last winners:</b><br/>${this.sent.join('<br/>')}</td>` : '') +
+			`<td style="text-align:center;width:15%">${this.sprite}</td><td style="text-align:center;width:${40 - sentModifier}%">${Giveaway.parseText(this.summary)}</td>` +
+			`<td style="text-align:center;width:${35 - sentModifier}%">To participate, deposit <strong>${this.deposit}</strong> into the GTS and look for <strong>${Chat.escapeHTML(this.lookfor)}</strong></td></tr></table>`;
 	}
 
 	updateLeft(number) {
 		this.left = number;
 		if (this.left < 1) return this.end();
+
+		this.changeUhtml(this.generateWindow());
+	}
+
+	updateSent(ign) {
+		this.left--;
+		if (this.left < 1) return this.end();
+
+		this.sent.push(Chat.escapeHTML(ign));
+		if (this.sent.length > 5) this.sent.shift();
 
 		this.changeUhtml(this.generateWindow());
 	}
@@ -719,6 +733,15 @@ let commands = {
 
 		room.gtsga.updateLeft(newamount);
 	},
+	sent: function (target, room, user) {
+		if (room.id !== 'wifi') return false;
+		if (!room.gtsga) return this.errorReply("There is no GTS giveaway going on!");
+		if (!user.can('warn', null, room) && user !== room.gtsga.giver) return this.errorReply("Only the host or a staff member can update GTS giveaways.");
+
+		if (!target || target.length > 12) return this.errorReply("Please enter a valid IGN.");
+
+		room.gtsga.updateSent(target);
+	},
 	endgts: function (target, room, user) {
 		if (room.id !== 'wifi') return this.errorReply("This command can only be used in the Wi-Fi room.");
 		if (!room.gtsga) return this.errorReply("There is no GTS giveaway going on at the moment.");
@@ -837,4 +860,5 @@ exports.commands = {
 	'lg': commands.lottery,
 	'gts': commands.gts,
 	'left': commands.left,
+	'sent': commands.sent,
 };
