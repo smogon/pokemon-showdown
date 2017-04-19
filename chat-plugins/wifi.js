@@ -42,7 +42,7 @@ const linkRegex = new RegExp(
 		')?' +
 		'|[a-z0-9.]+\\b@' + domainRegex + '[.][a-z]{2,3}' +
 	')' +
-	'(?![^(?:&lt;)]*&gt;)',
+	'(?!.*&gt;)',
 	'ig'
 );
 const hyperlinkRegex = new RegExp(`(.+)&lt;(.+)&gt;`, 'i');
@@ -56,7 +56,6 @@ const formattingResolvers = [
 	{token: "\\", resolver: str => `<sub>${str}</sub>`},
 	{token: "&lt;&lt;", endToken: "&gt;&gt;", resolver: str => str.replace(/[a-z0-9-]/g, '').length ? false : `&laquo;<a href="${str}" target="_blank">${str}</a>&raquo;`},
 	{token: "[[", endToken: "]]", resolver: str => {
-		console.log(str);
 		let hl = hyperlinkRegex.exec(str);
 		if (hl) return `<a href="${hl[2].trim().replace(/^([a-z]*[^a-z:])/g, 'http://$1')}">${hl[1].trim()}</a>`;
 
