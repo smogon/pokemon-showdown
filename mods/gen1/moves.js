@@ -92,17 +92,7 @@ exports.BattleMovedex = {
 				this.add('-activate', pokemon, 'Bide');
 				return false;
 			},
-			onDisableMove: function (pokemon) {
-				if (!pokemon.hasMove('bide')) {
-					return;
-				}
-				let moves = pokemon.moveset;
-				for (let i = 0; i < moves.length; i++) {
-					if (moves[i].id !== 'bide') {
-						pokemon.disableMove(moves[i].id);
-					}
-				}
-			},
+			onLockMove: 'bide',
 		},
 		type: "???", // Will look as Normal but it's STAB-less
 	},
