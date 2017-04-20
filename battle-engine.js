@@ -110,7 +110,7 @@ class BattlePokemon {
 		if (this.set.moves) {
 			for (let i = 0; i < this.set.moves.length; i++) {
 				let move = this.battle.getMove(this.set.moves[i]);
-				if (!move.id) continue;
+				if (!move.id || this.moves.indexOf(move.id) > -1) continue;
 				if (move.id === 'hiddenpower' && move.type !== 'Normal') {
 					if (!set.hpType) set.hpType = move.type;
 					move = this.battle.getMove('hiddenpower');
