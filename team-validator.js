@@ -396,6 +396,9 @@ class Validator {
 				if (expectedHpDV !== hpDV) {
 					problems.push(`${name} has an HP DV of ${hpDV}, but its Atk, Def, Spe, and Spc DVs give it an HP DV of ${expectedHpDV}.`);
 				}
+				if (set.ivs.spa !== set.ivs.spd) {
+					problems.push(`${name} has differnt SpA and SpD DVs (its SpA and SpD DVs has to be equal).`);
+				}
 				if (tools.gen > 1 && !template.gender) {
 					// Gen 2 gender is calculated from the Atk DV.
 					// High Atk DV <-> M. The meaning of "high" depends on the gender ratio.
