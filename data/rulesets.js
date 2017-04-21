@@ -726,6 +726,7 @@ exports.BattleFormats = {
 		effectType: 'ValidorRule',
 		name: 'Allow One Sketch',
 		// Implemented in teamvalidator.js
+	},
 	allowcap: {
 		effectType: 'ValidatorRule',
 		name: 'Allow CAP',
