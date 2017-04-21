@@ -138,7 +138,7 @@ class ScavengerHunt extends Rooms.RoomGame {
 	// alert new users that are joining the room about the current hunt.
 	onConnect(user, connection) {
 		// send the fact that a hunt is currently going on.
-		connection.sendTo(this.room, `|raw|<div class="broadcast-blue"><strong>${(this.isOfficial ? "An official" : "A")} Scavenger Hunt by <em>${Chat.escapeHTML(this.hostName)}</em> has been started${(this.hostId === this.staffHostId ? '' : ` by <em>${Chat.escapeHTML(this.staffHostId)}</em>`)}.<br />The first hint is: ${Chat.escapeHTML(this.questions[0].hint)}</strong></div>`);
+		connection.sendTo(this.room, `|raw|<div class="broadcast-blue"><strong>${(this.isOfficial ? "An official" : "A")} Scavenger Hunt by <em>${Chat.escapeHTML(this.hostName)}</em> has been started${(this.hostId === this.staffHostId ? '' : ` by <em>${Chat.escapeHTML(this.staffHostName)}</em>`)}.<br />The first hint is: ${Chat.escapeHTML(this.questions[0].hint)}</strong></div>`);
 	}
 
 	joinGame(user) {
@@ -175,7 +175,7 @@ class ScavengerHunt extends Rooms.RoomGame {
 			this.setTimer(60);
 		}
 
-		this.announce(`A new ${(this.isOfficial ? 'official' : '')} Scavenger Hunt by <em>${Chat.escapeHTML(this.hostName)}</em> has been started${(this.hostId === this.staffHostId ? '' : ` by <em>${Chat.escapeHTML(this.staffHostId)}</em>`)}.<br />The first hint is: ${Chat.escapeHTML(this.questions[0].hint)}`);
+		this.announce(`A new ${(this.isOfficial ? 'official' : '')} Scavenger Hunt by <em>${Chat.escapeHTML(this.hostName)}</em> has been started${(this.hostId === this.staffHostId ? '' : ` by <em>${Chat.escapeHTML(this.staffHostName)}</em>`)}.<br />The first hint is: ${Chat.escapeHTML(this.questions[0].hint)}`);
 	}
 
 	onEditQuestion(number, question_answer, ...value) {
@@ -608,8 +608,10 @@ let commands = {
 	 * Leaderboard Point Distribution Editing
 	 */
 	setblitz: function (target, room, user) {
-		if (!this.can("declare", null, room)) return false;
+		if (!this.can("mute", null, room)) return false; // perms for viewing only
 		if (!target) return this.sendReply(`The points rewarded for winning official hunts is: ${(room.blitzPoints || DEFAULT_BLITZ_POINTS)}`);
+
+		if (!this.can("declare", null, room)) return false; // perms for editing
 
 		let blitzPoints = parseInt(target);
 		if (isNaN(blitzPoints) || blitzPoints < 0) return this.errorReply("The points value awarded for blitz must be an integer greater than or equal to zero.");
@@ -624,11 +626,12 @@ let commands = {
 	},
 
 	setpoints: function (target, room, user) {
-		if (!this.can("declare", null, room)) return false;
-
+		if (!this.can("mute", null, room)) return false; // perms for viewing only
 		if (!target) return this.sendReply(`The points rewarded for winning official hunts is: ${(room.winPoints || DEFAULT_POINTS).map((p, i) => `(${(i + 1)}) ${p}`).join(', ')}`);
 
-		let winPoints = target.split(", ").map(p => parseInt(p));
+		if (!this.can("declare", null, room)) return false; // perms for editting
+
+		let winPoints = target.split(",").map(p => parseInt(p));
 
 		if (winPoints.some(p => isNaN(p) || p < 0) || !winPoints.length) return this.errorReply("The points value awarded for winning a scavenger hunt must be an integer greater than or equal to zero.");
 
@@ -638,7 +641,7 @@ let commands = {
 			room.chatRoomData.winPoints = room.winPoints;
 			Rooms.global.writeChatRoomData();
 		}
-		this.privateModCommand(`(${user.name} has set the points awarded for winning an official scavenger hunt to - ${winPoints.map((p, i) => `(${(i + 1)}) ${p}`).join(', ')})'`);
+		this.privateModCommand(`(${user.name} has set the points awarded for winning an official scavenger hunt to - ${winPoints.map((p, i) => `(${(i + 1)}) ${p}`).join(', ')})`);
 	},
 };
 
