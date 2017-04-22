@@ -20,13 +20,11 @@ class Jeopardy extends Rooms.RoomGame {
 		this.title = 'Jeopardy';
 		this.questions = [];
 		this.started = false;
-		this.buzzed = new Set();
 		this.categoryCount = categoryCount;
 		this.questionCount = questionCount;
 		this.round = 1;
 		this.points = new Map();
 		this.wagers = new Map();
-		this.finalanswers = new Map();
 		this.playerCap = 3;
 		this.canBuzz = false;
 		this.answers = new Map();
@@ -34,6 +32,10 @@ class Jeopardy extends Rooms.RoomGame {
 		this.buzzedEarly = new Set();
 		this.finalCategory = "";
 		this.setupGrid();
+	}
+
+	makePlayer(user) {
+		return new JeopardyGamePlayer(user, this);
 	}
 
 	setupGrid() {
@@ -87,7 +89,7 @@ class Jeopardy extends Rooms.RoomGame {
 		let lowest = [];
 		let minpoints;
 		for (let userID in this.players) {
-			let points = this.points.get(this.players[userID]);
+			let points = this.players[userID].points;
 			if (!minpoints) {
 				lowest.push(userID);
 				minpoints = points;
@@ -111,7 +113,7 @@ class Jeopardy extends Rooms.RoomGame {
 	getgrid() {
 		let buffer = "<div class=\"infobox\"><html><body><table align=\"center\" border=\"2\" style=\"table-layout: fixed; width: 100%\"><tr>";
 		for (let i = 0; i < this.categoryCount; i++) {
-			buffer += `<td style="word-wrap: break-word" bgcolor="${BACKGROUND_COLOR}"; height="${HEIGHT}px"; width="30px" align="center"><font color="white">${this.categories[i]}</font></td>`;
+			buffer += `<td style="word-wrap: break-word" bgcolor="${BACKGROUND_COLOR}"; height="${HEIGHT}px"; width="30px" align="center"><font color="white">${Chat.escapeHTML(this.categories[i])}</font></td>`;
 		}
 		buffer += "</tr>";
 		for (let i = 0; i < this.questionCount; i++) {
@@ -127,7 +129,7 @@ class Jeopardy extends Rooms.RoomGame {
 		}
 		for (let userID in this.players) {
 			let player = this.players[userID];
-			buffer += `<center>${this.curPlayer && this.curPlayer.name === player.name ? "<b>" : ""}<font size=4>${player.name}(${(this.points.get(player) || 0)})${this.curPlayer && this.curPlayer.name === player.name ? "</b>" : ""}</center><br />`;
+			buffer += `<center>${this.curPlayer && this.curPlayer.name === player.name ? "<b>" : ""}<font size=4>${Chat.escapeHTML(player.name)}(${(player.points || 0)})${this.curPlayer && this.curPlayer.name === player.name ? "</b>" : ""}</center><br />`;
 		}
 		buffer += "</body></html></div>";
 		return buffer;
@@ -150,7 +152,7 @@ class Jeopardy extends Rooms.RoomGame {
 	dailyDouble() {
 		clearTimeout(this.timeout);
 		this.state = 'answering';
-		if (!this.wagers.has(this.curPlayer)) this.wagers.set(this.curPlayer, 0);
+		if (!this.curPlayer.wager) this.curPlayer.wager = 0;
 		this.askQuestion();
 	}
 
@@ -170,7 +172,7 @@ class Jeopardy extends Rooms.RoomGame {
 		this.question = question;
 		if (question.dd) {
 			this.room.add(`That was a daily double! ${this.curPlayer.name}, how much would you like to wager?`);
-			this.wagers.clear();
+			this.clearwagers();
 			this.state = 'wagering';
 			this.timeout = setTimeout(() => this.dailyDouble(), 30 * 1000);
 		} else {
@@ -179,11 +181,23 @@ class Jeopardy extends Rooms.RoomGame {
 		}
 	}
 
+	clearwagers() {
+		for (let userID in this.players) {
+			this.players[userID].wager = null;
+		}
+	}
+
+	clearbuzzes() {
+		for (let userID in this.players) {
+			this.players[userID].buzzed = false;
+		}
+	}
+
 	askQuestion() {
 		if (!this.question.dd) {
 			this.curPlayer = null;
 		}
-		this.buzzed.clear();
+		this.clearbuzzes();
 		this.room.addRaw(`<div class=\"broadcast-blue\">Your question is: ${this.question.question}</div>`);
 		if (!this.finals) {
 			this.canBuzz = false;
@@ -199,11 +213,13 @@ class Jeopardy extends Rooms.RoomGame {
 	}
 
 	allowAllBuzzes() {
-		this.buzzedEarly.clear();
+		for (let userID in this.players) {
+			this.players[userID].buzzedEarly = false;
+		}
 	}
 
 	revealAnswer() {
-		this.room.addRaw(`<div class=\"broadcast-blue\">The answer was: ${this.question.answer}</div>`);
+		this.room.addRaw(`<div class=\"broadcast-blue\">The answer was: ${Chat.escapeHTML(this.question.answer)}</div>`);
 		this.question.answered = true;
 	}
 
@@ -211,16 +227,16 @@ class Jeopardy extends Rooms.RoomGame {
 		if (this.state !== 'buzzing') return "You cannot buzz in at this time.";
 		let player = this.players[user.userid];
 		if (!player) return "You are not in the game of Jeopardy.";
-		if (this.buzzed.has(player)) return "You have already buzzed in to the current question.";
+		if (player.buzzed) return "You have already buzzed in to the current question.";
 		if (!this.canBuzz) {
-			this.buzzedEarly.add(player);
+			player.buzzedEarly = true;
 			player.send("You buzzed early! You now have a delay before you will be able to buzz.");
 			return;
-		} else if (this.buzzedEarly.has(player)) {
+		} else if (player.buzzedEarly) {
 			return "Your buzzing cooldown has not yet ended.";
 		}
 		this.curPlayer = player;
-		this.buzzed.add(this.curPlayer);
+		this.curPlayer.buzzed = true;
 		this.room.add(`${user.name} has buzzed in!`);
 		this.state = "answering";
 		this.timeout = setTimeout(() => this.check(false), 10 * 1000);
@@ -240,7 +256,7 @@ class Jeopardy extends Rooms.RoomGame {
 		this.room.add("Time to begin finals! The category is: " + this.finalCategory + "! Please wager your amounts now.");
 		this.finals = true;
 		this.state = "wagering";
-		this.wagers.clear();
+		this.clearwagers();
 		this.timeout = setTimeout(() => this.finalWagers(), 30 * 1000);
 	}
 
@@ -249,19 +265,19 @@ class Jeopardy extends Rooms.RoomGame {
 		let player = this.players[user.userid];
 		if (!player) return "You are not in the game of Jeopardy.";
 		amount = toId(amount);
-		let wager = (amount === 'all' ? this.points.get(player) : parseInt(amount));
+		let wager = (amount === 'all' ? player.points : parseInt(amount));
 		if (!wager) return "Your wager must be a number, or 'all'";
 		if (wager < 0) return "You cannot wager a negative amount";
-		if (wager > this.points.get(player) && (wager > (this.round * 1000) || this.finals)) return "You cannot wager more than your current number of points";
-		if (this.wagers.has(player)) return "You have already wagered";
-		this.wagers.set(player, wager);
+		if (wager > player.points && (wager > (this.round * 1000) || this.finals)) return "You cannot wager more than your current number of points";
+		if (player.wager) return "You have already wagered";
+		player.wager = wager;
 		player.send(`You have wagered ${wager} points!`);
 		if (!this.finals) {
 			this.dailyDouble();
 		} else {
 			for (let userID in this.players) {
 				let player = this.players[userID];
-				if (!this.wagers.has(player)) return;
+				if (!player.wager) return;
 			}
 			clearTimeout(this.timeout);
 			this.finalWagers();
@@ -270,7 +286,7 @@ class Jeopardy extends Rooms.RoomGame {
 	finalWagers() {
 		for (let userID in this.players) {
 			let player = this.players[userID];
-			if (!this.wagers.has(player)) this.wagers.set(player, 0);
+			if (!player.wager) player.wager = 0;
 		}
 		this.question = this.finalQuestion;
 		this.state = "answering";
@@ -290,7 +306,7 @@ class Jeopardy extends Rooms.RoomGame {
 			let maxpoints;
 			for (let userID in this.players) {
 				let player = this.players[userID];
-				let points = this.points.get(player);
+				let points = player.points;
 				if (!maxpoints) {
 					highest.push(player.name);
 					maxpoints = points;
@@ -301,21 +317,21 @@ class Jeopardy extends Rooms.RoomGame {
 					highest.push(player.name);
 				}
 			}
-			this.room.add(`|raw|<div class=broadcast-green>Congratulations to ${highest.join(", ")} for winning the game of Jeopardy with ${maxpoints} points!`);
-			this.end(false);
+			this.room.add(`|raw|<div class=broadcast-green>Congratulations to ${highest.map(n => Chat.escapeHTML(n)).join(", ")} for winning the game of Jeopardy with ${maxpoints} points!`);
+			this.destroy();
 			return;
 		} else {
 			this.curPlayer = this.players[this.order.shift()];
-			let answer = this.answers.get(this.curPlayer);
+			let answer = this.curPlayer.finalanswer;
 			if (answer) {
 				this.room.add(`${this.curPlayer.name} has answered ${Chat.escapeHTML(answer)}!`);
 				this.state = "checking";
 			} else {
-				let wager = this.wagers.get(this.curPlayer);
+				let wager = this.curPlayer.wager;
 				this.room.add(`${this.curPlayer.name} did not answer the final Jeopardy and loses ${wager} points`);
-				let points = this.points.get(this.curPlayer);
+				let points = this.curPlayer.points;
 				points -= wager;
-				this.points.set(this.curPlayer, points);
+				this.curPlayer.points = points;
 				this.timeout = setTimeout(() => this.doFinalPlayer(), 5 * 1000);
 			}
 		}
@@ -326,14 +342,14 @@ class Jeopardy extends Rooms.RoomGame {
 		let player = this.players[user.userid];
 		if (!player) return "You are not in the game of Jeopardy.";
 		if (this.finals) {
-			if (this.answers.has(player)) return "You have already answered the final jeopardy";
-			this.answers.set(player, Chat.escapeHTML(target));
+			if (player.finalanswer) return "You have already answered the final jeopardy";
+			player.answer = Chat.escapeHTML(target);
 			player.send(`You have selected your answer as ${Chat.escapeHTML(target)}`);
 		} else {
 			clearTimeout(this.timeout);
 			if (!this.curPlayer || this.curPlayer.userid !== user.userid) return "It is not your turn to answer.";
 			this.state = "checking";
-			this.room.add(user.name + " has answered " + Chat.escapeHTML(target) + "!");
+			this.room.add(`${user.name} has answered ${Chat.escapeHTML(target)}!`);
 		}
 	}
 
@@ -344,10 +360,10 @@ class Jeopardy extends Rooms.RoomGame {
 
 	check(correct) {
 		if (correct) {
-			let gainpoints = ((this.question.dd || this.finals) ? this.wagers.get(this.curPlayer) : this.question.points);
-			let points = this.points.get(this.curPlayer);
+			let gainpoints = ((this.question.dd || this.finals) ? this.curPlayer.wager : this.question.points);
+			let points = this.curPlayer.points;
 			points += gainpoints;
-			this.points.set(this.curPlayer, points);
+			this.curPlayer.points = points;
 			this.room.add(`${this.curPlayer.name} has answered the question correctly and gained ${gainpoints} points!`);
 			if (!this.finals) {
 				this.revealAnswer();
@@ -369,19 +385,26 @@ class Jeopardy extends Rooms.RoomGame {
 				this.update();
 			}
 		} else {
-			let losspoints = ((this.question.dd || this.finals) ? this.wagers.get(this.curPlayer) : this.question.points);
+			let losspoints = ((this.question.dd || this.finals) ? this.curPlayer.wager : this.question.points);
 			this.room.add(`${this.curPlayer.name} answered incorrectly and loses ${losspoints} points!`);
-			let points = this.points.get(this.curPlayer);
+			let points = this.curPlayer.points;
 			points -= losspoints;
-			this.points.set(this.curPlayer, points);
+			this.curPlayer.points = points;
 			if (this.finals) {
 				this.doFinalPlayer();
-			} else if (this.buzzed.size === this.playerCount || this.question.dd) {
+			} else if (this.everyBuzzed() || this.question.dd) {
 				this.nextQuestion();
 			} else {
 				this.state = 'buzzing';
 			}
 		}
+	}
+
+	everyBuzzed() {
+		for (let userID in this.players) {
+			if (!this.players[userID].buzzed) return false;
+		}
+		return true;
 	}
 	setCategory(categoryNumber, category) {
 		if (categoryNumber === "final") {
@@ -421,7 +444,7 @@ class Jeopardy extends Rooms.RoomGame {
 	getQuestion(categoryNumber, questionNumber) {
 		let question = this.questions[questionNumber][categoryNumber];
 		if (question.question) {
-			return `<strong>Question: </strong>${question.question}<br><strong>Answer: </strong>${question.answer}`;
+			return `<strong>Question: </strong>${Chat.escapeHTML(question.question)}<br><strong>Answer: </strong>${Chat.escapeHTML(question.answer)}`;
 		} else {
 			return "That question has not yet been imported.";
 		}
@@ -460,14 +483,16 @@ class Jeopardy extends Rooms.RoomGame {
 			this.finalQuestion.answer = split[1].trim();
 		}
 	}
+}
 
-	end() {
-		clearTimeout(this.timeout);
-		for (let userID in this.players) {
-			let player = this.players[userID];
-			player.destroy();
-		}
-		delete this.room.game;
+class JeopardyGamePlayer extends Rooms.RoomGamePlayer {
+	constructor(user, game) {
+		super(user, game);
+		this.points = 0;
+		this.wager = null;
+		this.buzzedEarly = false;
+		this.finalanswer = null;
+		this.buzzed = false;
 	}
 }
 
@@ -691,7 +716,7 @@ exports.commands = {
 		end: function (target, room, user) {
 			if (!room.game || room.game.gameid !== 'jeopardy') return this.errorReply("There is no game of Jeopardy going on in this room.");
 			if (!this.can('minigame', null, room)) return;
-			room.game.end();
+			room.game.destroy();
 			this.privateModCommand(`The game of Jeopardy was ended by ${user.name}`);
 		},
 
