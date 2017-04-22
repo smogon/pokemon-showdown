@@ -273,7 +273,7 @@ class ScavengerHunt extends Rooms.RoomGame {
 
 			if (this.isOfficial) {
 				for (let i = 0; i < this.completed.length; i++) {
-					if (!this.completed[i].blitz && i > 5) break; // there won't be any more need to keep going
+					if (!this.completed[i].blitz && i >= winPoints.length) break; // there won't be any more need to keep going
 					let name = this.completed[i].name;
 					if (winPoints[i]) Leaderboard.addPoints(name, winPoints[i]);
 					if (this.completed[i].blitz) Leaderboard.addPoints(name, blitzPoints);
