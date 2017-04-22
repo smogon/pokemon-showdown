@@ -76,7 +76,7 @@ exports.BattleFormats = {
 			let template = this.getTemplate(set.species);
 			let problems = [];
 			let totalEV = 0;
-			let allowCAP = !!(format && format.banlistTable && format.banlistTable['allowcap']);
+			let allowCAP = !!(format && format.banlistTable && format.banlistTable['Rule:allowcap']);
 
 			if (set.species === set.name) delete set.name;
 			if (template.gen > this.gen) {
@@ -228,7 +228,7 @@ exports.BattleFormats = {
 				// Autofixed forme.
 				template = this.getTemplate(set.species);
 
-				if (!format.banlistTable['ignoreillegalabilities'] && !format.noChangeAbility) {
+				if (!format.banlistTable['Rule:ignoreillegalabilities'] && !format.noChangeAbility) {
 					// Ensure that the ability is (still) legal.
 					let legalAbility = false;
 					for (let i in template.abilities) {
@@ -701,5 +701,35 @@ exports.BattleFormats = {
 			if (move && !this.getImmunity(move, type)) return 1;
 			return -typeMod;
 		},
+	},
+	sketchclause: {
+		effectType: 'ValidatorRule',
+		name: 'Sketch Clause',
+		onValidateTeam: function (team) {
+			let sketchedMoves = {};
+			for (let i = 0; i < team.length; i++) {
+				let move = team[i].sketchmonsMove;
+				if (!move) continue;
+				if (move in sketchedMoves) {
+					return ["You are limited to sketching one of each move by the Sketch Clause.", "(You have sketched " + this.getMove(move).name + " more than once)"];
+				}
+				sketchedMoves[move] = (team[i].name || team[i].species);
+			}
+		},
+	},
+	ignoreillegalabilities: {
+		effectType: 'ValidatorRule',
+		name: 'Ignore Illegal Abilities',
+		// Implemented in the 'pokemon' ruleset and in teamvalidator.js
+	},
+	allowonesketch: {
+		effectType: 'ValidorRule',
+		name: 'Allow One Sketch',
+		// Implemented in teamvalidator.js
+	},
+	allowcap: {
+		effectType: 'ValidatorRule',
+		name: 'Allow CAP',
+		// Implemented in the 'pokemon' ruleset
 	},
 };

@@ -277,7 +277,7 @@ class Validator {
 			// Don't check abilities for metagames with All Abilities
 			if (tools.gen <= 2) {
 				set.ability = 'None';
-			} else if (!banlistTable['ignoreillegalabilities']) {
+			} else if (!banlistTable['Rule:ignoreillegalabilities']) {
 				if (!ability.name) {
 					problems.push(`${name} needs to have an ability.`);
 				} else if (!Object.values(template.abilities).includes(ability.name)) {
@@ -341,7 +341,8 @@ class Validator {
 					let problem = this.checkLearnset(move, template, lsetData);
 					if (problem) {
 						// Sketchmons hack
-						if (banlistTable['allowonesketch'] && format.noSketch.indexOf(move.name) < 0 && !set.sketchmonsMove && !move.noSketch && !move.isZ) {
+						const noSketch = format.noSketch || tools.getFormat('gen7sketchmons').noSketch;
+						if (banlistTable['Rule:allowonesketch'] && noSketch.indexOf(move.name) < 0 && !set.sketchmonsMove && !move.noSketch && !move.isZ) {
 							set.sketchmonsMove = move.id;
 							continue;
 						}
