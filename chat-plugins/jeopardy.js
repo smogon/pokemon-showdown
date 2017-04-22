@@ -23,13 +23,9 @@ class Jeopardy extends Rooms.RoomGame {
 		this.categoryCount = categoryCount;
 		this.questionCount = questionCount;
 		this.round = 1;
-		this.points = new Map();
-		this.wagers = new Map();
 		this.playerCap = 3;
 		this.canBuzz = false;
-		this.answers = new Map();
 		this.numUpdates = 0;
-		this.buzzedEarly = new Set();
 		this.finalCategory = "";
 		this.setupGrid();
 	}
@@ -700,11 +696,11 @@ exports.commands = {
 
 		subhost: function (target, room, user) {
 			if (!room.game || room.game.gameid !== 'jeopardy') return this.errorReply("There is no game of Jeopardy going on in this room.");
-			if (user.userid !== room.game.host.userid) return this.errorReply("This command can only be used by the host.");
+			if (!this.can('mute', null, room)) return;
 			let targetUser = Users.get(target);
 			if (!targetUser) return this.errorReply(`User '${target}' not found.`);
 			room.game.host = targetUser;
-			this.sendReply(`${targetUser.name} has subbed in as the host.`);
+			this.room.add(`${targetUser.name} has subbed in as the host.`);
 		},
 
 		state: function (target, room, user) {
@@ -742,7 +738,7 @@ exports.commands = {
 		"/jp adduser [User] - Add a user to the game of Jeopardy. Must be the host.",
 		"/jp removeuser [User] - Remove a user from the game of Jeopardy. Must be the host.",
 		"/jp view [Category Number], [Question Number] - View a specific question and answer. Must be the host.",
-		"/jp subhost [User] - Sub a new host into the game. Must be the host.",
+		"/jp subhost [User] - Sub a new host into the game. Requires: % @ # & ~",
 		"/jp import [Category Number Start], [Question Number Start], [Question 1 | Answer 1], [Question 2 | Answer 2], etc. - Import questions into the current game of Jeopardy. Must be the host.",
 		"/jp pass - Skip the current question of Jeopardy. Must be the host.",
 		"/jp state - Check the state of the current Jeopardy game. Must be the host",
