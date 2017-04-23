@@ -21,12 +21,12 @@ if (cluster.isMaster) {
 		exec: require('path').resolve(__dirname, 'sockets'),
 	});
 
-	let workers = exports.workers = {};
+	const workers = exports.workers = new Map();
 
-	let spawnWorker = exports.spawnWorker = function () {
+	const spawnWorker = exports.spawnWorker = function () {
 		let worker = cluster.fork({PSPORT: Config.port, PSBINDADDR: Config.bindaddress || '', PSNOSSL: Config.ssl ? 0 : 1});
 		let id = worker.id;
-		workers[id] = worker;
+		workers.set(id, worker);
 		worker.on('message', data => {
 			// console.log('master received: ' + data);
 			switch (data.charAt(0)) {
@@ -58,6 +58,8 @@ if (cluster.isMaster) {
 			// unhandled
 			}
 		});
+
+		return worker;
 	};
 
 	cluster.on('disconnect', worker => {
@@ -117,14 +119,13 @@ if (cluster.isMaster) {
 		try {
 			worker.kill();
 		} catch (e) {}
-		delete workers[worker.id];
+		workers.delete(worker.id);
 		return count;
 	};
 
 	exports.killPid = function (pid) {
 		pid = '' + pid;
-		for (let id in workers) {
-			let worker = workers[id];
+		for (let [workerid, worker] of workers) { // eslint-disable-line no-unused-vars
 			if (pid === '' + worker.process.pid) {
 				return this.killWorker(worker);
 			}
@@ -140,9 +141,9 @@ if (cluster.isMaster) {
 	};
 
 	exports.channelBroadcast = function (channelid, message) {
-		for (let workerid in workers) {
-			workers[workerid].send('#' + channelid + '\n' + message);
-		}
+		workers.forEach(worker => {
+			worker.send('#' + channelid + '\n' + message);
+		});
 	};
 	exports.channelSend = function (worker, channelid, message) {
 		worker.send('#' + channelid + '\n' + message);
@@ -155,9 +156,9 @@ if (cluster.isMaster) {
 	};
 
 	exports.subchannelBroadcast = function (channelid, message) {
-		for (let workerid in workers) {
-			workers[workerid].send(':' + channelid + '\n' + message);
-		}
+		workers.forEach(worker => {
+			worker.send(':' + channelid + '\n' + message);
+		});
 	};
 	exports.subchannelMove = function (worker, channelid, subchannelid, socketid) {
 		worker.send('.' + channelid + '\n' + subchannelid + '\n' + socketid);

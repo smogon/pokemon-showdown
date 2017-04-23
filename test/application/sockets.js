@@ -6,9 +6,7 @@ const cluster = require('cluster');
 describe.skip('Sockets', function () {
 	const spawnWorker = () => (
 		new Promise(resolve => {
-			Sockets.spawnWorker();
-			let workerids = Object.keys(Sockets.workers);
-			let worker = Sockets.workers[workerids[workerids.length - 1]];
+			let worker = Sockets.spawnWorker();
 			worker.removeAllListeners('message');
 			resolve(worker);
 		})
@@ -20,37 +18,34 @@ describe.skip('Sockets', function () {
 	});
 
 	afterEach(function () {
-		for (let i in Sockets.workers) {
-			let worker = Sockets.workers[i];
+		Sockets.workers.forEach((worker, workerid) => {
 			worker.kill();
-			delete Sockets.workers[i];
-		}
+			Sockets.workers.delete(workerid);
+		});
 	});
 
 	describe('master', function () {
-		const numWorkers = () => Object.keys(Sockets.workers).length;
-
 		it('should be able to spawn workers', function () {
 			Sockets.spawnWorker();
-			assert.strictEqual(numWorkers(), 1);
+			assert.strictEqual(Sockets.workers.size, 1);
 		});
 
 		it('should be able to spawn workers on listen', function () {
 			Sockets.listen(0, '127.0.0.1', 1);
-			assert.strictEqual(numWorkers(), 1);
+			assert.strictEqual(Sockets.workers.size, 1);
 		});
 
 		it('should be able to kill workers', function () {
 			return spawnWorker().then(worker => {
 				Sockets.killWorker(worker);
-				assert.strictEqual(numWorkers(), 0);
+				assert.strictEqual(Sockets.workers.size, 0);
 			});
 		});
 
 		it('should be able to kill workers by PID', function () {
 			return spawnWorker().then(worker => {
 				Sockets.killPid(worker.process.pid);
-				assert.strictEqual(numWorkers(), 0);
+				assert.strictEqual(Sockets.workers.size, 0);
 			});
 		});
 	});
