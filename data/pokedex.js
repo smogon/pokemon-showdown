@@ -6554,7 +6554,7 @@ exports.BattlePokedex = {
 	burmy: {
 		num: 412,
 		species: "Burmy",
-		baseForme: "Grass",
+		baseForme: "Plant",
 		types: ["Bug"],
 		baseStats: {hp: 40, atk: 29, def: 45, spa: 29, spd: 45, spe: 36},
 		abilities: {0: "Shed Skin", H: "Overcoat"},
@@ -6568,7 +6568,7 @@ exports.BattlePokedex = {
 	wormadam: {
 		num: 413,
 		species: "Wormadam",
-		baseForme: "Grass",
+		baseForme: "Plant",
 		types: ["Bug", "Grass"],
 		gender: "F",
 		baseStats: {hp: 60, atk: 59, def: 85, spa: 79, spd: 105, spe: 36},
@@ -10630,6 +10630,7 @@ exports.BattlePokedex = {
 	flabebe: {
 		num: 669,
 		species: "Flabebe",
+		baseForme: "Red",
 		types: ["Fairy"],
 		gender: "F",
 		baseStats: {hp: 44, atk: 38, def: 39, spa: 61, spd: 79, spe: 42},
@@ -10644,7 +10645,7 @@ exports.BattlePokedex = {
 	floette: {
 		num: 670,
 		species: "Floette",
-		baseForme: "Red-Flower",
+		baseForme: "Red",
 		types: ["Fairy"],
 		gender: "F",
 		baseStats: {hp: 54, atk: 45, def: 47, spa: 75, spd: 98, spe: 52},
@@ -10677,6 +10678,7 @@ exports.BattlePokedex = {
 	florges: {
 		num: 671,
 		species: "Florges",
+		baseForme: "Red",
 		types: ["Fairy"],
 		gender: "F",
 		baseStats: {hp: 78, atk: 65, def: 68, spa: 112, spd: 154, spe: 75},
