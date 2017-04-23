@@ -10,7 +10,7 @@ class Worker extends EventEmitter {
 		this.sockets = new Set();
 		this.channels = new Map();
 		this.subchannels = new Map();
-		Sockets.workers[this.id] = this;
+		Sockets.workers.set(this.id, this);
 	}
 
 	kill() {}
@@ -135,21 +135,21 @@ function createConnection(ip, workerid, socketid) {
 	let worker;
 	if (workerid) {
 		workerid = +workerid;
-		worker = Sockets.workers[workerid] || new Worker(workerid);
+		worker = Sockets.workers.get(workerid) || new Worker(workerid);
 	} else {
-		worker = Sockets.workers[1] || new Worker(1);
+		worker = Sockets.workers.get(1) || new Worker(1);
 		workerid = worker.id;
 	}
 
 	if (!socketid) {
 		socketid = 1;
-		while (Users.connections.has('' + workerid + '-' + socketid)) {
+		while (Users.connections.has(`${workerid}-${socketid}`)) {
 			socketid++;
 		}
 	}
 	worker.addSocket(socketid);
 
-	let connectionid = '' + workerid + '-' + socketid;
+	let connectionid = `${workerid}-${socketid}`;
 	let connection = new Users.Connection(connectionid, worker, socketid, null, ip || '127.0.0.1');
 	Users.connections.set(connectionid, connection);
 
