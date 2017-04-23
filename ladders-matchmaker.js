@@ -183,8 +183,8 @@ class Matchmaker {
 		let roomid = Rooms.global.prepBattleRoom(format);
 		let room = Rooms.createBattle(roomid, format, p1, p2, options);
 		p1.joinRoom(room);
-		p2.joinRoom(room);
 		room.battle.addPlayer(p1, p1team);
+		p2.joinRoom(room);
 		room.battle.addPlayer(p2, p2team);
 		this.cancelSearch(p1, format);
 		this.cancelSearch(p2, format);
