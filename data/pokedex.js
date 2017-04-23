@@ -10630,6 +10630,7 @@ exports.BattlePokedex = {
 	flabebe: {
 		num: 669,
 		species: "Flabebe",
+		baseForme: "Red",
 		types: ["Fairy"],
 		gender: "F",
 		baseStats: {hp: 44, atk: 38, def: 39, spa: 61, spd: 79, spe: 42},
@@ -10644,7 +10645,7 @@ exports.BattlePokedex = {
 	floette: {
 		num: 670,
 		species: "Floette",
-		baseForme: "Red-Flower",
+		baseForme: "Red",
 		types: ["Fairy"],
 		gender: "F",
 		baseStats: {hp: 54, atk: 45, def: 47, spa: 75, spd: 98, spe: 52},
@@ -10677,6 +10678,7 @@ exports.BattlePokedex = {
 	florges: {
 		num: 671,
 		species: "Florges",
+		baseForme: "Red",
 		types: ["Fairy"],
 		gender: "F",
 		baseStats: {hp: 78, atk: 65, def: 68, spa: 112, spd: 154, spe: 75},
