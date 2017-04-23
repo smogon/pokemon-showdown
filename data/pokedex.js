@@ -6554,7 +6554,7 @@ exports.BattlePokedex = {
 	burmy: {
 		num: 412,
 		species: "Burmy",
-		baseForme: "Grass",
+		baseForme: "Plant",
 		types: ["Bug"],
 		baseStats: {hp: 40, atk: 29, def: 45, spa: 29, spd: 45, spe: 36},
 		abilities: {0: "Shed Skin", H: "Overcoat"},
@@ -6568,7 +6568,7 @@ exports.BattlePokedex = {
 	wormadam: {
 		num: 413,
 		species: "Wormadam",
-		baseForme: "Grass",
+		baseForme: "Plant",
 		types: ["Bug", "Grass"],
 		gender: "F",
 		baseStats: {hp: 60, atk: 59, def: 85, spa: 79, spd: 105, spe: 36},
