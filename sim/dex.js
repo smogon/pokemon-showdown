@@ -933,21 +933,23 @@ class ModdedDex {
 		let searchResults = [];
 		for (let i = 0; i < searchIn.length; i++) {
 			let res = this[searchFunctions[searchIn[i]]](target);
-			if (res.exists) {
+			if (res.exists && res.gen <= this.gen) {
 				searchResults.push({
 					exactMatch: !isInexact,
 					searchType: searchTypes[searchIn[i]],
-					name: res.name,
+					name: isInexact || res.name,
 				});
 			}
 		}
 		if (searchResults.length) {
 			return searchResults;
 		}
+		if (isInexact) {
+			return false; // prevent infinite loop
+		}
 
-		let cmpTarget = target.toLowerCase();
+		let cmpTarget = toId(target);
 		let maxLd = 3;
-		let fuzzyResults = [];
 		if (cmpTarget.length <= 1) {
 			return false;
 		} else if (cmpTarget.length <= 4) {
@@ -955,46 +957,27 @@ class ModdedDex {
 		} else if (cmpTarget.length <= 6) {
 			maxLd = 2;
 		}
-		for (let i = 0; i < searchIn.length; i++) {
-			let searchObj = this.data[searchIn[i]];
+		searchResults = false;
+		for (let i = 0; i <= searchIn.length; i++) {
+			let searchObj = this.data[searchIn[i] || 'Aliases'];
 			if (!searchObj) {
 				continue;
 			}
 
 			for (let j in searchObj) {
-				let word = searchObj[j];
-				if (typeof word === "object") {
-					word = word.name || word.species;
-				}
-				if (!word) {
-					continue;
-				}
-
-				let ld = this.levenshtein(cmpTarget, word.toLowerCase(), maxLd);
+				let ld = this.levenshtein(cmpTarget, j, maxLd);
 				if (ld <= maxLd) {
-					fuzzyResults.push({word: word, ld: ld});
+					let word = searchObj[j].name || searchObj[j].species || j;
+					let results = this.dataSearch(word, searchIn, word);
+					if (results) {
+						searchResults = results;
+						maxLd = ld;
+					}
 				}
 			}
 		}
 
-		if (fuzzyResults.length) {
-			/** @type {any} */
-			let newTarget = "";
-			let newLD = 10;
-			for (let i = 0, l = fuzzyResults.length; i < l; i++) {
-				if (fuzzyResults[i].ld < newLD) {
-					newTarget = fuzzyResults[i];
-					newLD = fuzzyResults[i].ld;
-				}
-			}
-
-			// To make sure we aren't in an infinite loop...
-			if (cmpTarget !== newTarget.word) {
-				return this.dataSearch(newTarget.word, null, true);
-			}
-		}
-
-		return false;
+		return searchResults;
 	}
 
 	packTeam(team) {
