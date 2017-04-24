@@ -835,7 +835,7 @@ class Tournament {
 
 		this.isBracketInvalidated = true;
 		if (this.autoDisqualifyTimeout !== Infinity) this.runAutoDisqualify(this.room);
-		if (this.forceTimer) room.requestKickInactive(false);
+		if (this.forceTimer) room.battle.timer.start();
 		this.update();
 	}
 	forfeit(user) {

@@ -3171,29 +3171,37 @@ exports.commands = {
 	kickbattlehelp: ["/kickbattle [username], [reason] - Kicks a user from a battle with reason. Requires: % @ * & ~"],
 
 	kickinactive: function (target, room, user) {
-		if (room.requestKickInactive) {
-			room.requestKickInactive(user);
-		} else {
-			this.errorReply("You can only kick inactive players from inside a room.");
-		}
+		this.parse(`/timer on`);
 	},
 
 	timer: function (target, room, user) {
 		target = toId(target);
-		if (room.requestKickInactive) {
-			if (target === 'off' || target === 'false' || target === 'stop') {
-				let canForceTimer = user.can('timer', null, room);
-				if (room.resetTimer) {
-					room.stopKickInactive(user, canForceTimer);
-					if (canForceTimer) room.send('|inactiveoff|Timer was turned off by staff. Please do not turn it back on until our staff say it\'s okay');
-				}
-			} else if (target === 'on' || target === 'true' || !target) {
-				room.requestKickInactive(user, user.can('timer'));
-			} else {
-				this.errorReply("'" + target + "' is not a recognized timer state.");
+		if (!room.game || !room.game.timer) {
+			this.errorReply(`You can only set the timer from inside a battle room.`);
+		}
+		const timer = room.game.timer;
+		if (!target) {
+			if (!timer.timerRequesters) {
+				this.sendReply(`The game timer is OFF`);
 			}
+			this.sendReply(`The game timer is ON (requested by ${[...timer.timerRequesters].join(', ')})`);
+			return;
+		}
+		const force = user.can('timer', null, room);
+		if (!force && !room.game.players[user]) {
+			this.errorReply(`Access denied`);
+		}
+		if (target === 'off' || target === 'false' || target === 'stop') {
+			if (timer.timerRequesters.size) {
+				timer.stop(force ? undefined : user);
+				if (force) room.send(`|inactiveoff|Timer was turned off by staff. Please do not turn it back on until our staff say it's okay`);
+			} else {
+				this.errorReply(`The timer is already off`);
+			}
+		} else if (target === 'on' || target === 'true') {
+			timer.start(user);
 		} else {
-			this.errorReply("You can only set the timer from inside a battle room.");
+			this.errorReply(`"${target}" is not a recognized timer state.`);
 		}
 	},
 
