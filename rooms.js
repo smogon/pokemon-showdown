@@ -1006,16 +1006,34 @@ class BattleRoom extends Room {
 	}
 	requestKickInactive(user, force) {
 		if (this.resetTimer) {
-			if (user) this.sendUser(user, '|inactive|The inactivity timer is already counting down.');
-			return false;
+			let timerSetByUser = user && (this.resetUser === user.userid || (user in this.game.players && this.resetUser === '+'));
+			if (timerSetByUser) {
+				this.sendUser(user, '|inactive|The inactivity timer is already counting down.');
+				return false;
+			} else if (this.resetUser === '~') {
+				return false;
+			}
 		}
 		if (user) {
 			if (!force && !(user in this.game.players)) return false;
-			this.resetUser = user.userid;
-			this.send('|inactive|Battle timer is now ON: inactive players will automatically lose when time\'s up. (requested by ' + user.name + ')');
+			if (user in this.game.players && this.resetTimer) {
+				for (let p in this.game.players) {
+					if (p.userid === this.resetUser) {
+						// both players want the timer on
+						this.resetUser = '+';
+						this.send('|inactive|Battle timer has been requested by both players; it will now stay ON until they both turn it off, or until it is forced off by staff.');
+						break;
+					}
+				}
+			} else {
+				this.resetUser = user.userid;
+				this.send('|inactive|Battle timer is now ON; inactive players will automatically lose when time\'s up. (requested by ' + user.name + ')');
+			}
+			// don't restart the timer
+			if (this.resetTimer) return true;
 		} else if (user === false) {
 			this.resetUser = '~';
-			this.add('|inactive|Battle timer is ON: inactive players will automatically lose when time\'s up.');
+			this.add('|inactive|Battle timer is now ON; inactive players will automatically lose when time\'s up.');
 		}
 
 		// a tick is 10 seconds
@@ -1059,8 +1077,18 @@ class BattleRoom extends Room {
 		}
 	}
 	stopKickInactive(user, force) {
-		if (!force && user && user.userid !== this.resetUser) return false;
+		if (!force && user && (user.userid !== this.resetUser || !(user in this.game.players) || this.resetUser !== '+')) return false;
 		if (this.resetTimer) {
+			if (this.resetUser === '+' && user in this.game.players) {
+				// the other player still wants the timer on
+				for (let p in this.game.players) {
+					if (p && p !== user) {
+						this.resetTimer = p.userid;
+						this.send('|inactive|Player ' + user.name + ' has requested that the timer be turned off. It will stay ON until ' + p.name + ' also turns it off, or until it is forced off.');
+						return true;
+					}
+				}
+			}
 			clearTimeout(this.resetTimer);
 			this.resetTimer = null;
 			this.send('|inactiveoff|Battle timer is now OFF.');
