@@ -19,7 +19,7 @@ try {
 	require.resolve('sockjs');
 } catch (e) {
 	console.log('Installing dependencies...');
-	child_process.spawnSync('npm', ['install', '--production'], {stdio: 'inherit'});
+	child_process.execSync('npm install --production', {stdio: 'inherit'});
 }
 
 // Start the server
