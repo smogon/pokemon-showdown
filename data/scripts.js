@@ -2020,6 +2020,8 @@ exports.BattleScripts = {
 				rejectAbility = abilities.includes('Technician') && !!counter['technician'];
 			} else if (ability === 'Prankster') {
 				rejectAbility = !counter['Status'];
+			} else if (ability === 'Quick Feet') {
+				rejectAbility = hasMove['bellydrum'];
 			} else if (ability === 'Reckless' || ability === 'Rock Head') {
 				rejectAbility = !counter['recoil'];
 			} else if (ability === 'Sand Veil') {
@@ -3037,7 +3039,7 @@ exports.BattleScripts = {
 			} else if (ability === 'Defiant' || ability === 'Moxie') {
 				rejectAbility = !counter['Physical'] && !hasMove['batonpass'];
 			} else if (ability === 'Gluttony') {
-				rejectAbility = true;
+				rejectAbility = !hasMove['bellydrum'];
 			} else if (ability === 'Limber') {
 				rejectAbility = template.types.includes('Electric');
 			} else if (ability === 'Lightning Rod') {
@@ -3082,6 +3084,8 @@ exports.BattleScripts = {
 				rejectAbility = !counter['Water'];
 			} else if (ability === 'Unburden') {
 				rejectAbility = template.baseStats.spe > 120 || (template.id === 'slurpuff' && !counter.setupType);
+			} else if (ability === 'Quick Feet') {
+				rejectAbility = hasMove['bellydrum'] && abilities.includes('Gluttony');
 			}
 
 			if (rejectAbility) {
@@ -3167,6 +3171,14 @@ exports.BattleScripts = {
 				item = 'Choice Specs';
 			} else {
 				item = 'Choice Scarf';
+			}
+		} else if (hasMove['bellydrum']) {
+			if (ability === 'Gluttony') {
+				item = ['Aguav', 'Figy', 'Iapapa', 'Mago', 'Wiki'][this.random(5)] + ' Berry';
+			} else if (template.baseStats.spe <= 50 && !teamDetails.zMove && this.random(2)) {
+				item = 'Normalium Z';
+			} else {
+				item = 'Sitrus Berry';
 			}
 		} else if (hasMove['rest'] && !hasMove['sleeptalk'] && ability !== 'Natural Cure' && ability !== 'Shed Skin') {
 			item = 'Chesto Berry';
