@@ -2020,6 +2020,8 @@ exports.BattleScripts = {
 				rejectAbility = abilities.includes('Technician') && !!counter['technician'];
 			} else if (ability === 'Prankster') {
 				rejectAbility = !counter['Status'];
+			} else if (ability === 'Quick Feet') {
+				rejectAbility = hasMove['bellydrum'];
 			} else if (ability === 'Reckless' || ability === 'Rock Head') {
 				rejectAbility = !counter['recoil'];
 			} else if (ability === 'Sand Veil') {
@@ -2052,8 +2054,6 @@ exports.BattleScripts = {
 				rejectAbility = !counter['Water'];
 			} else if (ability === 'Unburden') {
 				rejectAbility = !counter.setupType && !hasMove['acrobatics'];
-			} else if (ability === 'Quick Feet') {
-				rejectAbility = hasMove['bellydrum'] && abilities.includes('Gluttony');
 			}
 
 			if (rejectAbility) {
