@@ -723,7 +723,7 @@ exports.BattleFormats = {
 		// Implemented in the 'pokemon' ruleset and in teamvalidator.js
 	},
 	allowonesketch: {
-		effectType: 'ValidorRule',
+		effectType: 'ValidatorRule',
 		name: 'Allow One Sketch',
 		// Implemented in teamvalidator.js
 	},
