@@ -13,6 +13,15 @@
 
 'use strict';
 
+/** 10 seconds */
+const TICK_TIME = 10 * 1000;
+
+// Timer constants: A tick is 10 seconds
+const STARTING_TICKS = 21;
+const MAX_TURN_TICKS = 15;
+const STARTING_TICKS_CHALLENGE = 28;
+const MAX_TURN_TICKS_CHALLENGE = 30;
+
 global.Config = require('./config/config');
 
 const ProcessManager = require('./process-manager');
@@ -26,7 +35,7 @@ class SimulatorManager extends ProcessManager {
 
 	eval(code) {
 		for (let process of this.processes) {
-			process.send('|eval|' + code);
+			process.send(`|eval|${code}`);
 		}
 	}
 }
@@ -95,6 +104,174 @@ class BattlePlayer {
 	}
 }
 
+class BattleTimer {
+	constructor(battle) {
+		/** @type {Battle} */
+		this.battle = battle;
+
+		/** @type {?NodeJS.Timer} */
+		this.timer = undefined;
+		/** @type {Set<string>} */
+		this.timerRequesters = new Set();
+		/**
+		 * Overall timer.
+		 * Starts at 21 per player (210 seconds) in a ladder battle. Goes
+		 * down by 1 every tick (10 seconds). Goes up by 1 every request (2
+		 * if below 15). The player loses if this reaches 0.
+		 * @type {[number]}
+		 */
+		this.ticksLeft = [];
+		/**
+		 * Turn timer.
+		 * Set equal to the player's overall timer, but capped at 15 in a
+		 * ladder battle. Goes down by 1 every tick. Tracked separately from
+		 * the overall timer, and the player also loses if this reaches 0.
+		 * @type {[number]}
+		 */
+		this.turnTicksLeft = [];
+		/**
+		 * Disconnect timer.
+		 * Normally 7 while the player is connected. If the player
+		 * disconnects, this will go down by 1 every tick. If the player
+		 * reconnects, this will reset to 7. Tracked separately from the
+		 * overall timer, and the player also loses if this reaches 0.
+		 * @type {[number]}
+		 */
+		this.dcTicksLeft = [];
+
+		this.isChallenge = !battle.rated && !battle.room.tour;
+
+		const ticksLeft = (this.isChallenge ? STARTING_TICKS_CHALLENGE : STARTING_TICKS);
+		for (let slotNum = 0; slotNum < 2; slotNum++) {
+			this.ticksLeft.push(ticksLeft);
+			this.turnTicksLeft.push(-1);
+			this.dcTicksLeft.push(10);
+		}
+	}
+	start(requester) {
+		let userid = requester ? requester.userid : 'staff';
+		if (this.timerRequesters.has(userid)) return false;
+		this.timerRequesters.add(userid);
+		if (this.timer && requester) {
+			this.battle.room.send(`|inactive|${requester.userid} also wants the timer to be on`);
+			return false;
+		}
+		this.nextRequest();
+		const requestedBy = requester ? ` (requested by ${requester.name})` : ``;
+		this.battle.room.add(`|inactive|Battle timer is ON: inactive players will automatically lose when time's up.${requestedBy}`);
+		return true;
+	}
+	stop(requester) {
+		if (requester) {
+			if (!this.timerRequesters.has(requester.userid)) return false;
+			this.timerRequesters.delete(requester.userid);
+		} else {
+			this.timerRequesters.clear();
+		}
+		if (this.timerRequesters.size) {
+			this.battle.room.send(`|inactive|${requester.name} no longer wants the timer on, but the timer is staying on because ${[...this.timerRequesters].join(', ')} still does.`);
+			return false;
+		}
+		if (!this.timer) return false;
+		clearTimeout(this.timer);
+		this.timer = undefined;
+		this.battle.room.send(`|inactiveoff|Battle timer is now OFF.`);
+		return true;
+	}
+	isActive(slot) {
+		if (!this.battle[slot] || !this.battle[slot].active) return false;
+		if (!this.battle.requests[slot][2]) return false;
+		return true;
+	}
+	nextRequest() {
+		if (this.timer) clearTimeout(this.timer);
+		if (!this.timerRequesters.size) return;
+		const maxTicksLeft = (this.isChallenge ? MAX_TURN_TICKS_CHALLENGE : MAX_TURN_TICKS);
+
+		for (const slotNum of this.ticksLeft.keys()) {
+			const slot = 'p' + (slotNum + 1);
+			const player = this.battle[slot];
+
+			this.ticksLeft[slotNum]++;
+			// add 10 seconds to bank if they're below 160 seconds
+			if (this.ticksLeft[slotNum] < 16) this.ticksLeft[slotNum]++;
+			this.turnTicksLeft[slotNum] = Math.min(this.ticksLeft[slotNum], maxTicksLeft);
+
+			const ticksLeft = this.turnTicksLeft[slotNum];
+			if (player) player.sendRoom(`|inactive|You have ${ticksLeft * 10} seconds to make your decision.`);
+		}
+		this.timer = setTimeout(() => this.nextTick(), TICK_TIME);
+	}
+	nextTick() {
+		if (this.timer) clearTimeout(this.timer);
+		if (this.battle.ended) return;
+		for (const slotNum of this.ticksLeft.keys()) {
+			const slot = 'p' + (slotNum + 1);
+
+			if (this.isActive(slot)) continue;
+			this.ticksLeft[slotNum]--;
+			this.turnTicksLeft[slotNum]--;
+
+			if (this.dcTicksLeft[slotNum] < 10) {
+				this.dcTicksLeft[slotNum]--;
+			}
+
+			let dcTicksLeft = this.dcTicksLeft[slotNum];
+			if (!dcTicksLeft) this.turnTicksLeft[slotNum] = 0;
+			const ticksLeft = this.turnTicksLeft[slotNum];
+			if (!ticksLeft) continue;
+			if (ticksLeft < dcTicksLeft) dcTicksLeft = 10; // turn timer supersedes dc timer
+
+			if (dcTicksLeft <= 4) {
+				this.battle.room.send(`|inactive|${this.battle.playerNames[slotNum]} has ${dcTicksLeft * 10} seconds to reconnect!`);
+			}
+			if (dcTicksLeft < 10) continue;
+			if (ticksLeft % 3 === 0 || ticksLeft <= 4) {
+				this.battle.room.send(`|inactive|${this.battle.playerNames[slotNum]} has ${ticksLeft * 10} seconds left.`);
+			}
+		}
+		if (!this.checkTimeout()) {
+			this.timer = setTimeout(() => this.nextTick(), TICK_TIME);
+		}
+	}
+	checkActivity() {
+		if (!this.timerRequesters.size) return;
+		for (const slotNum of this.ticksLeft.keys()) {
+			const slot = 'p' + (slotNum + 1);
+			const player = this.battle[slot];
+
+			// if a player has disconnected, don't wait longer than 6 ticks (1 minute)
+			if (!player || !player.active) {
+				if (this.dcTicksLeft[slotNum] === 10) {
+					this.dcTicksLeft[slotNum] = 7;
+					this.battle.room.send(`|inactive|${this.battle.playerNames[slotNum]} disconnected and has a minute to reconnect!`);
+				}
+			} else if (this.dcTicksLeft[slotNum] < 10) {
+				this.dcTicksLeft[slotNum] = 10;
+				let timeLeft = ``;
+				if (!this.isActive(slot)) {
+					const ticksLeft = this.turnTicksLeft[slotNum];
+					timeLeft = ` and has ${ticksLeft * 10} seconds left`;
+				}
+				this.battle.room.send(`|inactive|${this.battle.playerNames[slotNum]} reconnected${timeLeft}.`);
+			}
+		}
+	}
+	checkTimeout() {
+		if (this.turnTicksLeft.every(c => !c)) {
+			this.battle.room.add(`|-message|All players are inactive.`);
+			this.battle.tie();
+			return true;
+		}
+		for (const [slotNum, ticks] of this.turnTicksLeft.entries()) {
+			if (ticks) continue;
+			this.battle.forfeit(null, ' lost due to inactivity.', slotNum);
+			return true;
+		}
+		return false;
+	}
+}
+
 class Battle {
 	constructor(room, format, rated) {
 		this.id = room.id;
@@ -115,12 +292,13 @@ class Battle {
 		this.p1 = null;
 		this.p2 = null;
 
-		this.playerNames = [room.p1.name, room.p2.name];
+		this.playerNames = ["Player 1", "Player 2"];
 		/** {playerid: [rqid, request, isWait, choice]} */
 		this.requests = {
 			p1: [0, '', true, ''],
 			p2: [0, '', true, ''],
 		};
+		this.timer = new BattleTimer(this);
 
 		// data to be logged
 		this.logData = null;
@@ -204,7 +382,6 @@ class Battle {
 			return false;
 		}
 		this.room.update();
-		this.room.kickInactiveUpdate();
 		return true;
 	}
 	leaveGame(user) {
@@ -219,7 +396,6 @@ class Battle {
 		}
 		this.room.auth[user.userid] = '+';
 		this.room.update();
-		this.room.kickInactiveUpdate();
 		return true;
 	}
 
@@ -230,7 +406,7 @@ class Battle {
 			this.checkActive();
 			this.room.push(lines.slice(2));
 			this.room.update();
-			this.room.nextInactive();
+			this.timer.nextRequest();
 			break;
 
 		case 'winupdate':
@@ -337,6 +513,7 @@ class Battle {
 		let player = this.players[user];
 		if (player && !player.active) {
 			player.active = true;
+			this.timer.checkActivity();
 			this.room.add(`|player|${player.slot}|${user.name}|${user.avatar}`);
 		}
 	}
@@ -345,6 +522,7 @@ class Battle {
 		if (player && player.active) {
 			player.sendRoom(`|request|null`);
 			player.active = false;
+			this.timer.checkActivity();
 			this.room.add(`|player|${player.slot}|`);
 		}
 	}
@@ -371,16 +549,11 @@ class Battle {
 		}
 		if (side === undefined) return false;
 
-		let ids = ['p1', 'p2'];
-		let otherids = ['p2', 'p1'];
+		let name = this.playerNames[side];
 
-		let name = 'Player ' + (side + 1);
-		if (this[ids[side]]) {
-			name = this[ids[side]].name;
-		}
-
-		this.room.add('|-message|' + name + message);
+		this.room.add(`|-message|${name}${message}`);
 		this.endType = 'forfeit';
+		const otherids = ['p2', 'p1'];
 		this.send('win', otherids[side]);
 		return true;
 	}
@@ -391,11 +564,12 @@ class Battle {
 		let player = this.makePlayer(user, team);
 		if (!player) return false;
 		this.players[user.userid] = player;
+		this.playerNames[this.playerCount] = player.name;
 		this.playerCount++;
 		this.room.auth[user.userid] = '\u2606';
 		if (this.playerCount >= 2) {
-			this.room.title = "" + this.p1.name + " vs. " + this.p2.name;
-			this.room.send('|title|' + this.room.title);
+			this.room.title = `${this.p1.name} vs. ${this.p2.name}`;
+			this.room.send(`|title|${this.room.title}`);
 		}
 		return true;
 	}
@@ -458,6 +632,7 @@ class Battle {
 }
 
 exports.RoomBattlePlayer = BattlePlayer;
+exports.RoomBattleTimer = BattleTimer;
 exports.RoomBattle = Battle;
 exports.SimulatorManager = SimulatorManager;
 exports.SimulatorProcess = SimulatorProcess;
