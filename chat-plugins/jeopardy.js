@@ -23,9 +23,13 @@ class Jeopardy extends Rooms.RoomGame {
 		this.categoryCount = categoryCount;
 		this.questionCount = questionCount;
 		this.round = 1;
+		this.points = new Map();
+		this.wagers = new Map();
 		this.playerCap = 3;
 		this.canBuzz = false;
+		this.answers = new Map();
 		this.numUpdates = 0;
+		this.buzzedEarly = new Set();
 		this.finalCategory = "";
 		this.setupGrid();
 	}
@@ -471,12 +475,12 @@ class Jeopardy extends Rooms.RoomGame {
 					questions.shift();
 				}
 			}
-		}
-		if (questions.length > 0) {
-			let split = questions[0].split("|");
-			if (split.length !== 2) return `Questions before ${questions[0]} imported successfully, but ${questions[0]} did not have a question and one answer.`;
-			this.finalQuestion.question = split[0].trim();
-			this.finalQuestion.answer = split[1].trim();
+			if (questions.length > 0) {
+				let split = questions[0].split("|");
+				if (split.length !== 2) return `Questions before ${questions[0]} imported successfully, but ${questions[0]} did not have a question and one answer.`;
+				this.finalQuestion.question = split[0].trim();
+				this.finalQuestion.answer = split[1].trim();
+			}
 		}
 	}
 }
@@ -660,6 +664,7 @@ exports.commands = {
 			if (user.userid !== room.game.host.userid) return this.errorReply("This command can only be used by the host.");
 			let targetUser = Users.get(target);
 			if (!targetUser) return this.errorReply("User '" + target + "' not found.");
+			if (room.game.host.userid === targetUser.userid) return this.errorReply("You can't add yourself to the game.");
 			if (room.game.addPlayer(targetUser)) {
 				room.game.update();
 			} else {
@@ -696,11 +701,11 @@ exports.commands = {
 
 		subhost: function (target, room, user) {
 			if (!room.game || room.game.gameid !== 'jeopardy') return this.errorReply("There is no game of Jeopardy going on in this room.");
-			if (!this.can('mute', null, room)) return;
+			if (user.userid !== room.game.host.userid) return this.errorReply("This command can only be used by the host.");
 			let targetUser = Users.get(target);
 			if (!targetUser) return this.errorReply(`User '${target}' not found.`);
 			room.game.host = targetUser;
-			this.room.add(`${targetUser.name} has subbed in as the host.`);
+			this.sendReply(`${targetUser.name} has subbed in as the host.`);
 		},
 
 		state: function (target, room, user) {
@@ -738,7 +743,7 @@ exports.commands = {
 		"/jp adduser [User] - Add a user to the game of Jeopardy. Must be the host.",
 		"/jp removeuser [User] - Remove a user from the game of Jeopardy. Must be the host.",
 		"/jp view [Category Number], [Question Number] - View a specific question and answer. Must be the host.",
-		"/jp subhost [User] - Sub a new host into the game. Requires: % @ # & ~",
+		"/jp subhost [User] - Sub a new host into the game. Must be the host.",
 		"/jp import [Category Number Start], [Question Number Start], [Question 1 | Answer 1], [Question 2 | Answer 2], etc. - Import questions into the current game of Jeopardy. Must be the host.",
 		"/jp pass - Skip the current question of Jeopardy. Must be the host.",
 		"/jp state - Check the state of the current Jeopardy game. Must be the host",
