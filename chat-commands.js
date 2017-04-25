@@ -3200,7 +3200,7 @@ exports.commands = {
 		if (target === 'off' || target === 'false' || target === 'stop') {
 			if (timer.timerRequesters.size) {
 				timer.stop(force ? undefined : user);
-				if (force) room.send(`|inactiveoff|Timer was turned off by staff. Please do not turn it back on until our staff say it's okay`);
+				if (force) room.send(`|inactiveoff|Timer was turned off by staff. Please do not turn it back on until our staff say it's okay.`);
 			} else {
 				this.errorReply(`The timer is already off`);
 			}
