@@ -2072,6 +2072,9 @@ exports.BattleScripts = {
 			if (abilities.includes('Marvel Scale') && hasMove['rest'] && hasMove['sleeptalk']) {
 				ability = 'Marvel Scale';
 			}
+			if (abilities.includes('Prankster') && counter.Status > 1) {
+				ability = 'Prankster';
+			}
 			if (abilities.includes('Swift Swim') && hasMove['raindance']) {
 				ability = 'Swift Swim';
 			}
@@ -2104,7 +2107,7 @@ exports.BattleScripts = {
 				ability = 'Sheer Force';
 			} else if (template.id === 'rhyperior') {
 				ability = 'Solid Rock';
-			} else if (template.id === 'reuniclus' || template.id === 'sigilyph') {
+			} else if (template.id === 'reuniclus') {
 				ability = 'Magic Guard';
 			} else if (template.id === 'togetic' || template.id === 'unfezant') {
 				ability = 'Super Luck';

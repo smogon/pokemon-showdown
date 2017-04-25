@@ -119,7 +119,7 @@ exports.BattleAbilities = {
 		},
 		id: "analytic",
 		name: "Analytic",
-		rating: 2,
+		rating: 2.5,
 		num: 148,
 	},
 	"angerpoint": {
@@ -3543,7 +3543,7 @@ exports.BattleAbilities = {
 		},
 		id: "synchronize",
 		name: "Synchronize",
-		rating: 2.5,
+		rating: 2,
 		num: 28,
 	},
 	"tangledfeet": {
