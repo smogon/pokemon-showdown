@@ -2371,6 +2371,7 @@ exports.commands = {
 		let hideIps = !user.can('lock');
 		let path = require('path');
 		let isWin = process.platform === 'win32';
+		let isLinux = process.platform === 'linux';
 		let logPath = 'logs/modlog/';
 
 		if (target.includes(',')) {
@@ -2394,17 +2395,19 @@ exports.commands = {
 		let roomNames = '';
 		let filename = '';
 		let command = '';
-		if (roomId === 'all' && wordSearch) {
+		if (roomId === 'all') {
 			if (!this.can('modlog')) return;
 			roomNames = "all rooms";
+			if (!wordSearch) return connection.popup(`The modlog for ${roomNames} cannot be viewed by line count. Did you mean to run \`\`/modlog ${roomId}, "${lines}"\`\` instead?`);
 			// Get a list of all the rooms
 			let fileList = fs.readdirSync('logs/modlog');
 			for (let i = 0; i < fileList.length; ++i) {
 				filename += path.normalize(`${__dirname}/${logPath}${fileList[i]}`) + ' ';
 			}
-		} else if (roomId === 'public' && wordSearch) {
+		} else if (roomId === 'public') {
 			if (!this.can('modlog')) return;
 			roomNames = "all public rooms";
+			if (!wordSearch) return connection.popup(`The modlog for ${roomNames} cannot be viewed by line count. Did you mean to run \`\`/modlog ${roomId}, "${lines}"\`\` instead?`);
 			const isPublicRoom = (room => !(room.isPrivate || room.battle || room.isPersonal || room.id === 'global'));
 			const publicRoomIds = Array.from(Rooms.rooms.values()).filter(isPublicRoom).map(room => room.id);
 			for (let i = 0; i < publicRoomIds.length; i++) {
@@ -2421,8 +2424,10 @@ exports.commands = {
 		// Seek for all input rooms for the lines or text
 		if (isWin) {
 			command = `${path.normalize(__dirname + '/lib/winmodlog')} tail ${lines} ${filename}`;
-		} else {
+		} else if (isLinux) {
 			command = `tail -${lines} ${filename} | tac`;
+		} else {
+			command = `awk '{a[i++]=$0} END {for (j=i-1; j>=i-${lines};) print a[j--]}' ${filename}`;
 		}
 		let grepLimit = 100;
 		let strictMatch = false;
@@ -2452,10 +2457,11 @@ exports.commands = {
 					// doesn't happen. ID search with RegEx isn't implemented for windows yet (feel free to add it to winmodlog.cmd and call it from here)
 				}
 			} else {
+				command = isLinux ? `tac ${filename}` : `awk '{a[i++]=$0} END {for (j=i-1; j>=0;) print a[j--]}' ${filename}`;
 				if (strictMatch) {
-					command = `awk '{print NR,$0}' ${filename} | sort -nr | cut -d' ' -f2- | grep -m${grepLimit} -i '${searchString.replace(/\\/g, '\\\\\\\\').replace(/["'`]/g, '\'\\$&\'').replace(/[\{\}\[\]\(\)\$\^\.\?\+\-\*]/g, '[$&]')}'`;
+					command += ` | grep -m${grepLimit} -i '${searchString.replace(/\\/g, '\\\\\\\\').replace(/["'`]/g, '\'\\$&\'').replace(/[\{\}\[\]\(\)\$\^\.\?\+\-\*]/g, '[$&]')}'`;
 				} else {
-					command = `awk '{print NR,$0}' ${filename} | sort -nr | cut -d' ' -f2- | grep -m${grepLimit} -Ei '${searchString}'`;
+					command += ` | grep -m${grepLimit} -Ei '${searchString}'`;
 				}
 			}
 		}
