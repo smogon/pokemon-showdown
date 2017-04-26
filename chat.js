@@ -308,6 +308,7 @@ class CommandContext {
 	checkFormat(room, user, message) {
 		if (!room) return true;
 		if (!room.filterStretching && !room.filterCaps) return true;
+		if (user.can('bypassall')) return true;
 
 		if (room.filterStretching && user.name.match(/(.+?)\1{5,}/i)) {
 			return this.errorReply(`Your username contains too much stretching, which this room doesn't allow.`);
@@ -318,12 +319,13 @@ class CommandContext {
 		// Removes extra spaces and null characters
 		message = message.trim().replace(/[ \u0000\u200B-\u200F]+/g, ' ');
 
-		if (room.filterStretching && message.match(/(.+?)\1{7,}/i) && !user.can('mute', null, room)) {
+		if (room.filterStretching && message.match(/(.+?)\1{7,}/i)) {
 			return this.errorReply(`Your message contains too much stretching, which this room doesn't allow.`);
 		}
-		if (room.filterCaps && message.match(/[A-Z\s]{18,}/) && !user.can('mute', null, room)) {
+		if (room.filterCaps && message.match(/[A-Z\s]{18,}/)) {
 			return this.errorReply(`Your message contains too many capital letters, which this room doesn't allow.`);
 		}
+
 
 		return true;
 	}
@@ -608,7 +610,7 @@ class CommandContext {
 				return false;
 			}
 
-			if (!this.checkBanwords(room, user.name)) {
+			if (!this.checkBanwords(room, user.name) && !user.can('bypassall')) {
 				this.errorReply(`Your username contains a phrase banned by this room.`);
 				return false;
 			}
