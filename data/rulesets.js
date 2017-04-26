@@ -116,17 +116,20 @@ exports.BattleFormats = {
 				if (template.isNonstandard) {
 					problems.push(set.species + ' does not exist.');
 				}
-				if (ability.isNonstandard) {
-					problems.push(ability.name + ' does not exist.');
-				}
-				if (item.isNonstandard) {
-					if (item.isNonstandard === 'gen2') {
-						problems.push(item.name + ' does not exist outside of gen 2.');
-					} else {
-						problems.push(item.name + ' does not exist.');
-					}
+			}
+
+			if (!allowCAP && ability.isNonstandard) {
+				problems.push(ability.name + ' does not exist.');
+			}
+
+			if (item.isNonstandard) {
+				if (item.isNonstandard === 'gen2') {
+					problems.push(item.name + ' does not exist outside of gen 2.');
+				} else if (!allowCAP) {
+					problems.push(item.name + ' does not exist.');
 				}
 			}
+
 			for (let k in set.evs) {
 				if (typeof set.evs[k] !== 'number' || set.evs[k] < 0) {
 					set.evs[k] = 0;
