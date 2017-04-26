@@ -2328,7 +2328,7 @@ exports.BattleScripts = {
 				evs.hp -= 4;
 				hp = Math.floor(Math.floor(2 * template.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
 			}
-		} else if (hasMove['bellydrum'] && item === 'Sitrus Berry') {
+		} else if (hasMove['bellydrum'] && (item === 'Sitrus Berry' || ability === 'Gluttony')) {
 			// Belly Drum should activate Sitrus Berry
 			if (hp % 2 > 0) evs.hp -= 4;
 		} else if (hasMove['substitute'] && hasMove['reversal']) {
