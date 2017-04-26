@@ -11486,14 +11486,13 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {sound: 1, distance: 1, authentic: 1},
-		onHitField: function (target, source) {
+		onHitField: function (target, source, move) {
 			let result = false;
 			let message = false;
 			for (let i = 0; i < this.sides.length; i++) {
 				for (let j = 0; j < this.sides[i].active.length; j++) {
 					if (this.sides[i].active[j] && this.sides[i].active[j].isActive) {
-						if (this.sides[i].active[j].hasAbility('soundproof')) {
-							this.add('-immune', this.sides[i].active[j], '[msg]', '[from] ability: Soundproof');
+						if (this.runEvent('TryHit', this.sides[i].active[j], source, move) === null) {
 							result = true;
 						} else if (!this.sides[i].active[j].volatiles['perishsong']) {
 							this.sides[i].active[j].addVolatile('perishsong');
