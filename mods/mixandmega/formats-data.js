@@ -33,10 +33,6 @@ exports.BattleFormatsData = {
 		inherit: true,
 		tier: "OU",
 	},
-	pheromosa: {
-		inherit: true,
-		tier: "OU",
-	},
 	regigigas: {
 		inherit: true,
 		tier: "Uber",
