@@ -221,7 +221,7 @@ exports.Formats = [
 			'Kartana', 'Kingdra', 'Landorus-Therian', 'Marowak-Alola', 'Milotic', 'Mimikyu', 'Muk-Alola', 'Ninetales-Alola',
 			'Oranguru', 'Pelipper', 'Politoed', 'Porygon2', 'Rotom-Wash', 'Shaymin-Sky', 'Tapu Bulu', 'Tapu Fini',
 			'Tapu Koko', 'Tapu Lele', 'Tyranitar', 'Volcanion', 'Volcarona', 'Weavile', 'Whimsicott', 'Zapdos', 'Zygarde-Base',
-			'Battle Bond', 'Charizardite Y', 'Gengarite', 'Gyaradosite', 'Kangaskhanite', 'Metagrossite', 'Salamencite',
+			'Battle Bond', 'Beedrillite', 'Charizardite Y', 'Gengarite', 'Gyaradosite', 'Kangaskhanite', 'Mawilite', 'Metagrossite', 'Pidgeotite', 'Salamencite', 'Steelixite',
 		],
 	},
 	{
