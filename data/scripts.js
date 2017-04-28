@@ -2070,6 +2070,9 @@ exports.BattleScripts = {
 			if (abilities.includes('Guts') && ability !== 'Quick Feet' && (hasMove['facade'] || hasMove['protect'] || (hasMove['rest'] && hasMove['sleeptalk']))) {
 				ability = 'Guts';
 			}
+			if (abilities.includes('Liquid Voice') && hasMove['hypervoice']) {
+				ability = 'Liquid Voice';
+			}
 			if (abilities.includes('Marvel Scale') && hasMove['rest'] && hasMove['sleeptalk']) {
 				ability = 'Marvel Scale';
 			}
@@ -3107,6 +3110,9 @@ exports.BattleScripts = {
 			}
 			if (abilities.includes('Intimidate') || template.id === 'mawilemega') {
 				ability = 'Intimidate';
+			}
+			if (abilities.includes('Liquid Voice') && hasMove['hypervoice']) {
+				ability = 'Liquid Voice';
 			}
 			if (abilities.includes('Swift Swim') && hasMove['raindance']) {
 				ability = 'Swift Swim';
