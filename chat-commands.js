@@ -3516,7 +3516,7 @@ exports.commands = {
 			this.sendReply("INFORMATIONAL COMMANDS: /data, /dexsearch, /movesearch, /groups, /faq, /rules, /intro, /formatshelp, /othermetas, /learn, /analysis, /calc (replace / with ! to broadcast. Broadcasting requires: + % @ * # & ~)");
 			if (user.group !== Config.groupsranking[0]) {
 				this.sendReply("DRIVER COMMANDS: /warn, /mute, /hourmute, /unmute, /alts, /forcerename, /modlog, /modnote, /lock, /unlock, /announce, /redirect");
-				this.sendReply("MODERATOR COMMANDS: /ban, /unban, /ip, /modchat");
+				this.sendReply("MODERATOR COMMANDS: /ban, /unban, /ip, /tournament, /modchat");
 				this.sendReply("LEADER COMMANDS: /declare, /forcetie, /forcewin, /promote, /demote, /banip, /host, /unbanall");
 			}
 			this.sendReply("For an overview of room commands, use /roomhelp");
