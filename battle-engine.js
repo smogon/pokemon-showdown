@@ -2139,6 +2139,7 @@ class Battle extends Tools.BattleDex {
 			this.terrainData = prevTerrainData;
 			return false;
 		}
+		this.runEvent('SetTerrain', source);
 		return true;
 	}
 	clearTerrain() {
