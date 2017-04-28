@@ -555,6 +555,13 @@ class Battle {
 		if (!message) message = ' forfeited.';
 
 		if (side === undefined) {
+			if (!this.players) {
+				// should never happen
+				console.log("user is: " + user.name);
+				console.log("  alts: " + Object.keys(user.prevNames));
+				console.log("  battle: " + this.id);
+				return false;
+			}
 			if (user in this.players) side = this.players[user].slotNum;
 		}
 		if (side === undefined) return false;
