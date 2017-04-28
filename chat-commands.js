@@ -1634,8 +1634,13 @@ exports.commands = {
 		let unlocked = Punishments.unlock(target);
 
 		if (unlocked) {
-			this.addModCommand(unlocked.join(", ") + " " + ((unlocked.length > 1) ? "were" : "was") +
-				" unlocked by " + user.name + "." + reason);
+			const unlockMessage = unlocked.join(", ") + " " + ((unlocked.length > 1) ? "were" : "was") +
+				" unlocked by " + user.name + "." + reason;
+			this.addModCommand(unlockMessage);
+			// Notify staff room when a user is unlocked outside of it.
+			if (!reason && room.id !== 'staff' && Rooms('staff')) {
+				Rooms('staff').addLogMessage(user, "<<" + room.id + ">> " + unlockMessage);
+			}
 			if (!reason) this.globalModlog("UNLOCK", target, " by " + user.name);
 			if (targetUser) targetUser.popup("" + user.name + " has unlocked you.");
 		} else {
