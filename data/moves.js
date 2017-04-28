@@ -8930,6 +8930,9 @@ exports.BattleMovedex = {
 			onModifyCritRatio: function (critRatio) {
 				return 5;
 			},
+			onEnd: function (pokemon) {
+				this.add('-end', pokemon, 'move: Laser Focus', '[silent]');
+			},
 		},
 		secondary: false,
 		target: "self",
