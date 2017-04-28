@@ -965,7 +965,15 @@ function createTournament(room, format, generator, playerCap, isRated, args, out
 	format = Tools.getFormat(format);
 	if (format.effectType !== 'Format' || !format.tournamentShow) {
 		output.errorReply(format.id + " is not a valid tournament format.");
-		output.errorReply("Valid formats: " + Object.values(Tools.data.Formats).filter(f => f.effectType === 'Format' && f.tournamentShow).map(format => format.name).join(", "));
+		output.errorReply("Valid formats: " + Object.values(Tools.data.Formats).filter(f => f.effectType === 'Format' && f.tournamentShow).map(format => {
+			if (!toId(format.name).startsWith('gen')) {
+				return '[Gen 6] ' + format.name;
+			} else if (format.name.startsWith('[Gen 7] ')) {
+				return format.name.substr(8);
+			} else {
+				return format.name;
+			}
+		}).join(", "));
 		return;
 	}
 	if (!TournamentGenerators[toId(generator)]) {
@@ -1382,7 +1390,14 @@ Chat.commands.tournament = function (paramString, room, user) {
 			return this.sendReply("Usage: " + cmd + " <format>, <type> [, <comma-separated arguments>]");
 		}
 
-		let tour = createTournament(room, params.shift(), params.shift(), params.shift(), Config.ratedtours, params, this);
+		let format = toId(params.shift());
+		if (format.startsWith('gen6')) {
+			format = format.substr(4);
+		} else if (!format.startsWith('gen')) {
+			format = 'gen7' + format;
+		}
+
+		let tour = createTournament(room, format, params.shift(), params.shift(), Config.ratedtours, params, this);
 		if (tour) {
 			this.privateModCommand("(" + user.name + " created a tournament in " + tour.format + " format.)");
 			if (room.tourAnnouncements) {
