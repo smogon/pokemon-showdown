@@ -3188,15 +3188,17 @@ exports.commands = {
 	timer: function (target, room, user) {
 		target = toId(target);
 		if (!room.game || !room.game.timer) {
-			this.errorReply(`You can only set the timer from inside a battle room.`);
+			return this.errorReply(`You can only set the timer from inside a battle room.`);
 		}
 		const timer = room.game.timer;
+		if (!timer.timerRequesters) {
+			return this.sendReply(`This game's timer is managed by a different command.`);
+		}
 		if (!target) {
-			if (!timer.timerRequesters) {
-				this.sendReply(`The game timer is OFF`);
+			if (!timer.timerRequesters.size) {
+				return this.sendReply(`The game timer is OFF`);
 			}
-			this.sendReply(`The game timer is ON (requested by ${[...timer.timerRequesters].join(', ')})`);
-			return;
+			return this.sendReply(`The game timer is ON (requested by ${[...timer.timerRequesters].join(', ')})`);
 		}
 		const force = user.can('timer', null, room);
 		if (!force && !room.game.players[user]) {
