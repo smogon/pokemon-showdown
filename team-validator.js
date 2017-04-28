@@ -205,6 +205,7 @@ class Validator {
 		if (!template) {
 			template = tools.getTemplate(set.species);
 			if (ability.id === 'battlebond' && template.id === 'greninja') {
+				if (set.gender !== 'M') return ['Greninja-Ash has to be Male.'];
 				template = tools.getTemplate('greninjaash');
 				set.gender = 'M';
 			}
