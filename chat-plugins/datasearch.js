@@ -654,9 +654,19 @@ function runDexsearch(target, cmd, canAll, message) {
 			}
 			if (matched) continue;
 
+			if (!dex[mon].fullLearnset) {
+				let template = dex[mon];
+				if (!template.learnset) template = Tools.getTemplate(template.baseSpecies);
+				dex[mon].fullLearnset = Object.assign({}, template.learnset);
+				while (template.prevo) {
+					template = Tools.getTemplate(template.prevo);
+					Object.assign(dex[mon].fullLearnset, template.learnset);
+				}
+			}
+
 			for (let move in alts.moves) {
-				let lsetData = {fastCheck: true, set: {}};
-				if (!TeamValidator('gen7ou').checkLearnset(move, mon, lsetData) === alts.moves[move]) {
+				let canLearn = (dex[mon].fullLearnset.sketch && !['chatter', 'struggle', 'magikarpsrevenge'].includes(move)) || dex[mon].fullLearnset[move];
+				if ((canLearn && alts.moves[move]) || (alts.moves[move] === false && !canLearn)) {
 					matched = true;
 					break;
 				}
@@ -671,6 +681,23 @@ function runDexsearch(target, cmd, canAll, message) {
 	for (let mon in dex) {
 		if (dex[mon].baseSpecies && results.includes(dex[mon].baseSpecies)) continue;
 		results.push(dex[mon].species);
+	}
+
+	let moveGroups = searches
+		.filter(alts => alts.moves && Object.keys(alts.moves).some(move => alts.moves[move]))
+		.map(alts => Object.keys(alts.moves));
+	if (moveGroups.length >= 2) {
+		results = results.filter(mon => {
+			let lsetData = {fastCheck: true, set: {}};
+			for (let group = 0; group < moveGroups.length; group++) {
+				for (let i = 0; i < moveGroups[group].length; i++) {
+					let problem = TeamValidator('gen7ou').checkLearnset(moveGroups[group][i], mon, lsetData);
+					if (!problem) break;
+					if (i === moveGroups[group].length - 1) return false;
+				}
+			}
+			return true;
+		});
 	}
 
 	if (randomOutput && randomOutput < results.length) {
