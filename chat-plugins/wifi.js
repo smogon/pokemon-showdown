@@ -724,7 +724,9 @@ let commands = {
 		if (!user.can('warn', null, room) && user !== room.gtsga.giver) return this.errorReply("Only the host or a staff member can update GTS giveaways.");
 		if (!target) {
 			if (!this.runBroadcast()) return;
-			return this.sendReply(`The GTS giveaway from ${room.gtsga.giver} has ${room.gtsga.left} Pokémon remaining!`);
+			let output = `The GTS giveaway from ${room.gtsga.giver} has ${room.gtsga.left} Pokémon remaining!`;
+			if (room.gtsga.sent.length) output += `Last winners: ${room.gtsga.sent.join(', ')}`;
+			return this.sendReply(output);
 		}
 		let newamount = parseInt(target);
 		if (isNaN(newamount)) return this.errorReply("Please enter a valid amount.");
