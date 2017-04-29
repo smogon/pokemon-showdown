@@ -1331,6 +1331,8 @@ class BattleDex {
 				suspectLadder.ruleset = [format.name];
 				if (suspect.startsWith('Allow: ')) {
 					suspectLadder.unbanlist = Object.assign([], [suspect.split(": ")]);
+				} else if (suspect.startsWith('Rule: ')) {
+					suspectLadder.ruleset.push(suspect.split(": "));
 				} else {
 					suspectLadder.banlist = Object.assign([], [suspect]);
 				}
