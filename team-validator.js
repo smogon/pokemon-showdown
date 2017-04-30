@@ -204,7 +204,7 @@ class Validator {
 
 		if (!template) {
 			template = tools.getTemplate(set.species);
-			if (ability.id === 'battlebond' && template.id === 'greninja') {
+			if (ability.id === 'battlebond' && template.id === 'greninja' && !banlistTable['Rule:ignoreillegalabilities']) {
 				template = tools.getTemplate('greninjaash');
 				set.gender = 'M';
 			}
