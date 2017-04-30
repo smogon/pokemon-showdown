@@ -3202,7 +3202,7 @@ exports.commands = {
 		}
 		const force = user.can('timer', null, room);
 		if (!force && !room.game.players[user]) {
-			this.errorReply(`Access denied`);
+			return this.errorReply(`Access denied`);
 		}
 		if (target === 'off' || target === 'false' || target === 'stop') {
 			if (timer.timerRequesters.size) {
