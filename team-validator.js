@@ -178,7 +178,7 @@ class Validator {
 		}
 
 		let nameTemplate = tools.getTemplate(set.name);
-		if (nameTemplate.exists && nameTemplate.name.toLowerCase() === set.name.toLowerCase()) {
+		if (toId(format.name) !== 'gen7crossevolution' && nameTemplate.exists && nameTemplate.name.toLowerCase() === set.name.toLowerCase()) {
 			set.name = null;
 		}
 		set.name = set.name || set.baseSpecies;

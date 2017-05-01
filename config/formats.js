@@ -288,43 +288,119 @@ exports.Formats = [
 		column: 2,
 	},
 	{
-		name: "[Gen 7] Camomons",
+		name: "[Gen 7] Last Will",
 		desc: [
-			"Pok&eacute;mon change type to match their first two moves.",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3598418/\">Camomons</a>",
+			"Before fainting, Pok&eacute;mon will use the move in their last moveslot.",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3601362/\">Last Will</a>",
 		],
 		mod: 'gen7',
 		ruleset: ['[Gen 7] OU'],
-		banlist: ['Shedinja'],
-		onModifyTemplate: function (template, pokemon) {
-			let temp = Object.assign({}, template);
-			let types = [pokemon.moves[0] === 'hiddenpower' ? 'Normal' : this.getMove(pokemon.moves[0]).type];
-			if (pokemon.moves[1]) {
-				let move2type = pokemon.moves[1] === 'hiddenpower' ? 'Normal' : this.getMove(pokemon.moves[1]).type;
-				if (move2type !== types[0]) types.push(move2type);
-			}
-			temp.types = types;
-			return temp;
-		},
-		onAfterMega: function (pokemon) {
-			this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[silent]');
-		},
-		onSwitchIn: function (pokemon) {
-			this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[silent]');
+		banlist: ['Endeavor'],
+		onBeforeFaint: function (pokemon, source) {
+			this.add('-hint', `${pokemon.name || pokemon.species}'s Last Will made it get off one last move!`);
+			this.useMove(pokemon.moves[pokemon.moves.length - 1], pokemon, source);
 		},
 	},
 	{
-		name: "[Gen 7] Inverse",
+		name: "[Gen 7] Cross Evolution",
 		desc: [
-			"The effectiveness of each attack is inverted.",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3590154/\">Inverse</a>",
+			"You can \"cross-evolve\" your Pok&eacute;mon by naming them after the intended Pok&eacute;mon.",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3594854/\">Cross Evolution</a>",
 		],
-
 		mod: 'gen7',
+		ruleset: ['[Gen 7] Ubers', 'Baton Pass Clause'],
+		banlist: ['Rule:nicknameclause'],
 		searchShow: false,
-		ruleset: ['[Gen 7] OU', 'Inverse Mod'],
-		banlist: ['Hoopa-Unbound', 'Kyurem-Black', 'Serperior'],
-		unbanlist: ['Aegislash', 'Dialga', 'Giratina', 'Pheromosa', 'Solgaleo', 'Lucarionite'],
+		onValidateTeam: function (team) {
+			let nameTable = {};
+			for (let i = 0; i < team.length; i++) {
+				let name = team[i].name;
+				if (name) {
+					if (nameTable[name]) {
+						return ["Your Pokémon must have different nicknames.", "(You have more than one " + name + ")"];
+					}
+					nameTable[name] = true;
+				}
+			}
+		},
+		validateSet: function (set, teamHas) {
+			let crossTemplate = this.tools.getTemplate(set.name);
+			if (!crossTemplate.exists || crossTemplate.isNonstandard) return this.validateSet(set, teamHas);
+			let template = this.tools.getTemplate(set.species);
+			if (!template.exists) return [`The Pokemon ${set.species} does not exist.`];
+			if (!template.evos.length) return [`${template.species} cannot cross evolve because it doesn't evolve.`];
+			if (template.species === 'Sneasel') return [`Sneasel as a base Pokemon is banned.`];
+			let crossBans = {'shedinja': 1, 'solgaleo': 1, 'lunala': 1};
+			if (crossTemplate.id in crossBans) return [`${template.species} cannot cross evolve into ${crossTemplate.species} because it is banned.`];
+			if (crossTemplate.battleOnly || !crossTemplate.prevo) return [`${template.species} cannot cross evolve into ${crossTemplate.species} because it isn't an evolution.`];
+			let crossPrevoTemplate = this.tools.getTemplate(crossTemplate.prevo);
+			if (!crossPrevoTemplate.prevo !== !template.prevo) return [`${template.species} cannot cross into ${crossTemplate.species} because they are not consecutive evolutionary stages.`];
+
+			// Make sure no stat is too high/low to cross evolve to
+			let stats = {
+				'hp': 'HP',
+				'atk': 'Attack',
+				'def': 'Defense',
+				'spa': 'Special Attack',
+				'spd': 'Special Defense',
+				'spe': 'Speed',
+			};
+			for (let statid in template.baseStats) {
+				let evoStat = template.baseStats[statid] + crossTemplate.baseStats[statid] - crossPrevoTemplate.baseStats[statid];
+				if (evoStat < 1) {
+					return [`${template.species} cannot cross evolve to ${crossTemplate.species} because its ${stats[statid]} would be too low.`];
+				} else if (evoStat > 255) {
+					return [`{template.species} cannot cross evolve to ${crossTemplate.species} because its ${stats[statid]} would be too high.`];
+				}
+			}
+
+			let mixedTemplate = Object.assign({}, template);
+			// Ability test
+			let ability = this.tools.getAbility(set.ability);
+			let abilityBans = {'hugepower': 1, 'purepower': 1, 'shadowtag': 1};
+			if (!(ability.id in abilityBans)) mixedTemplate.abilities = crossTemplate.abilities;
+
+			mixedTemplate.learnset = Object.assign({}, template.learnset);
+			let newMoves = 0;
+			for (let i in set.moves) {
+				let move = toId(set.moves[i]);
+				if (!this.checkLearnset(move, template)) continue;
+				if (this.checkLearnset(move, crossTemplate)) continue;
+				if (++newMoves > 2) continue;
+				mixedTemplate.learnset[move] = ['7T'];
+			}
+			return this.validateSet(set, teamHas, mixedTemplate);
+		},
+		onModifyTemplate: function (template, pokemon) {
+			if (pokemon.set.name === pokemon.set.species) return template;
+			let crossTemplate = this.getTemplate(pokemon.name);
+			if (!crossTemplate.exists) return template;
+			let crossPrevoTemplate = this.getTemplate(crossTemplate.prevo);
+			let mixedTemplate = Object.assign({}, template);
+			mixedTemplate.baseSpecies = mixedTemplate.species = template.species + '-' + crossTemplate.species;
+			mixedTemplate.weightkg = Math.max(0.1, template.weightkg + crossTemplate.weightkg - crossPrevoTemplate.weightkg);
+			mixedTemplate.nfe = false;
+
+			mixedTemplate.baseStats = {};
+			for (let statid in template.baseStats) {
+				mixedTemplate.baseStats[statid] = template.baseStats[statid] + crossTemplate.baseStats[statid] - crossPrevoTemplate.baseStats[statid];
+			}
+
+			mixedTemplate.types = template.types.slice();
+			if (crossTemplate.types[0] !== crossPrevoTemplate.types[0]) mixedTemplate.types[0] = crossTemplate.types[0];
+			if (crossTemplate.types[1] !== crossPrevoTemplate.types[1]) mixedTemplate.types[1] = crossTemplate.types[1] || crossTemplate.types[0];
+			if (mixedTemplate.types[0] === mixedTemplate.types[1]) mixedTemplate.types.length = 1;
+
+			pokemon.baseTemplate = mixedTemplate;
+			pokemon.crossEvolved = true;
+			return mixedTemplate;
+		},
+		onSwitchInPriority: 1,
+		onSwitchIn: function (pokemon) {
+			if (pokemon.crossEvolved) {
+				this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[silent]');
+			}
+		},
 	},
 	{
 		section: "Other Metagames",
