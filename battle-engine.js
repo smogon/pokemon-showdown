@@ -759,6 +759,7 @@ class BattlePokemon {
 			source: source,
 			effect: effect,
 		});
+		this.battle.runEvent('BeforeFaint', this, source, effect);
 		return d;
 	}
 	damage(d, source, effect) {
