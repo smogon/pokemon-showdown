@@ -685,7 +685,7 @@ class GlobalRoom {
 				curRoom.addRaw(`<div class="broadcast-red"><b>The server is restarting soon.</b><br />Please finish your battles quickly. No new battles can be started until the server resets in a few minutes.</div>`).update();
 			}
 			const game = curRoom.game;
-			if (!slow && game && game.timer && !game.ended) {
+			if (!slow && game && game.timer && typeof game.timer.start === 'function' && !game.ended) {
 				game.timer.start();
 				if (curRoom.modchat !== '+') {
 					curRoom.modchat = '+';
