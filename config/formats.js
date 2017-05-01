@@ -298,7 +298,11 @@ exports.Formats = [
 		banlist: ['Endeavor'],
 		onBeforeFaint: function (pokemon, source) {
 			this.add('-hint', `${pokemon.name || pokemon.species}'s Last Will made it get off one last move!`);
-			this.useMove(pokemon.moves[pokemon.moves.length - 1], pokemon, source);
+			if (pokemon === source) {
+				this.useMove(pokemon.moves[pokemon.moves.length - 1], pokemon);
+			} else {
+				this.useMove(pokemon.moves[pokemon.moves.length - 1], pokemon, source);
+			}
 		},
 	},
 	{
