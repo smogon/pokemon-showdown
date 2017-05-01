@@ -300,7 +300,7 @@ exports.Formats = [
 			this.add('-hint', `${pokemon.name || pokemon.species}'s Last Will made it get off one last move!`);
 			if (pokemon === source) {
 				this.useMove(pokemon.moves[pokemon.moves.length - 1], pokemon);
-			} else  {
+			} else {
 				this.useMove(pokemon.moves[pokemon.moves.length - 1], pokemon, source);
 			}
 		},
