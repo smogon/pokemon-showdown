@@ -325,7 +325,7 @@ exports.Formats = [
 		},
 		validateSet: function (set, teamHas) {
 			let crossTemplate = this.tools.getTemplate(set.name);
-			if (!crossTemplate.exists) return this.validateSet(set, teamHas);
+			if (!crossTemplate.exists || crossTemplate.isNonstandard) return this.validateSet(set, teamHas);
 			let template = this.tools.getTemplate(set.species);
 			if (!template.exists) return [`The Pokemon ${set.species} does not exist.`];
 			if (!template.evos.length) return [`${template.species} cannot cross evolve because it doesn't evolve.`];
@@ -358,7 +358,7 @@ exports.Formats = [
 			// Ability test
 			let ability = this.tools.getAbility(set.ability);
 			let abilityBans = {'hugepower': 1, 'purepower': 1, 'shadowtag': 1};
-			if ((!ability.id in abilityBans)) mixedTemplate.abilities = crossTemplate.abilities;
+			if (!(ability.id in abilityBans)) mixedTemplate.abilities = crossTemplate.abilities;
 
 			mixedTemplate.learnset = Object.assign({}, template.learnset);
 			let newMoves = 0;
