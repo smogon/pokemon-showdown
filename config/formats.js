@@ -305,7 +305,7 @@ exports.Formats = [
 		name: "[Gen 7] Cross Evolution",
 		desc: [
 			"You can \"cross-evolve\" your Pok&eacute;mon by naming them after the intended Pok&eacute;mon.",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3594854\">Cross Evolution</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3594854/\">Cross Evolution</a>",
 		],
 		mod: 'gen7',
 		ruleset: ['[Gen 7] Ubers', 'Baton Pass Clause'],
@@ -327,13 +327,14 @@ exports.Formats = [
 			let crossTemplate = this.tools.getTemplate(set.name);
 			if (!crossTemplate.exists) return this.validateSet(set, teamHas);
 			let template = this.tools.getTemplate(set.species);
-			if (!template.exists) return ["The Pokemon '" + set.species + "' does not exist."];
-			if (!template.evos.length) return ["" + template.species + " cannot cross evolve because it doesn't evolve."];
+			if (!template.exists) return [`The Pokemon ${set.species} does not exist.`];
+			if (!template.evos.length) return [`${template.species} cannot cross evolve because it doesn't evolve.`];
 			if (template.species === 'Sneasel') return [`Sneasel as a base Pokemon is banned.`];
-			if (crossTemplate.species === 'Shedinja' || crossTemplate.species === 'Lunala' || crossTemplate.species === 'Solgaleo') return ["" + template.species + " cannot cross evolve into " + crossTemplate.species + " because it is banned."];
-			if (crossTemplate.battleOnly || !crossTemplate.prevo) return ["" + template.species + " cannot cross evolve into " + crossTemplate.species + " because it isn't an evolution."];
+			let crossBans = {'shedinja': 1, 'solgaleo': 1, 'lunala': 1};
+			if (crossTemplate.id in crossBans) return [`${template.species} cannot cross evolve into ${crossTemplate.species} because it is banned.`];
+			if (crossTemplate.battleOnly || !crossTemplate.prevo) return [`${template.species} cannot cross evolve into ${crossTemplate.species} because it isn't an evolution.`];
 			let crossPrevoTemplate = this.tools.getTemplate(crossTemplate.prevo);
-			if (!crossPrevoTemplate.prevo !== !template.prevo) return ["" + template.species + " cannot cross into " + crossTemplate.species + " because they are not consecutive evolutionary stages."];
+			if (!crossPrevoTemplate.prevo !== !template.prevo) return [`${template.species} cannot cross into ${crossTemplate.species} because they are not consecutive evolutionary stages.`];
 
 			// Make sure no stat is too high/low to cross evolve to
 			let stats = {
@@ -347,16 +348,17 @@ exports.Formats = [
 			for (let statid in template.baseStats) {
 				let evoStat = template.baseStats[statid] + crossTemplate.baseStats[statid] - crossPrevoTemplate.baseStats[statid];
 				if (evoStat < 1) {
-					return ["" + template.species + " cannot cross evolve to " + crossTemplate.species + " because its " + stats[statid] + " would be too low."];
+					return [`${template.species} cannot cross evolve to ${crossTemplate.species} because its ${stats[statid]} would be too low.`];
 				} else if (evoStat > 255) {
-					return ["" + template.species + " cannot cross evolve to " + crossTemplate.species + " because its " + stats[statid] + " would be too high."];
+					return [`{template.species} cannot cross evolve to ${crossTemplate.species} because its ${stats[statid]} would be too high.`];
 				}
 			}
 
 			let mixedTemplate = Object.assign({}, template);
 			// Ability test
 			let ability = this.tools.getAbility(set.ability);
-			if (ability.name !== 'Huge Power' && ability.name !== 'Pure Power' && ability.name !== 'Shadow Tag') mixedTemplate.abilities = crossTemplate.abilities;
+			let abilityBans = {'hugepower': 1, 'purepower': 1, 'shadowtag': 1};
+			if ((!ability.id in abilityBans)) mixedTemplate.abilities = crossTemplate.abilities;
 
 			mixedTemplate.learnset = Object.assign({}, template.learnset);
 			let newMoves = 0;
