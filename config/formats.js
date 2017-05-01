@@ -290,7 +290,7 @@ exports.Formats = [
 	{
 		name: "[Gen 7] Last Will",
 		desc: [
-			"Every Pokemon will use the move in their last moveslot before fainting in battle.",
+			"Before fainting, Pok&eacute;mon will use the move in their last moveslot.",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3601362/\">Last Will</a>",
 		],
 		mod: 'gen7',
