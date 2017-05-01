@@ -669,11 +669,12 @@ exports.Formats = [
 		column: 3,
 	},
 	{
-		name: "[Gen 2] OU (no Snorlax)",
+		name: "[Gen 4] OU (LatiMence)",
 
-		mod: 'gen2',
-		ruleset: ['Pokemon', 'Standard'],
-		banlist: ['Uber', 'Snorlax'],
+		mod: 'gen4',
+		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause'],
+		banlist: ['Uber', 'Soul Dew'],
+		unbanlist: ['Latias', 'Salamence'],
 	},
 
 	// ORAS Singles
