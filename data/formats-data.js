@@ -356,7 +356,7 @@ exports.BattleFormatsData = {
 	},
 	pikachuhoenn: {
 		eventPokemon: [
-			{"generation": 7, "level": 6, "moves":["thunderbolt", "quickattack", "thunder", "irontail"]},
+			{"generation": 7, "level": 6, "nature": "Hardy", "moves":["thunderbolt", "quickattack", "thunder", "irontail"]},
 		],
 		eventOnly: true,
 		tier: "New",
@@ -411,6 +411,9 @@ exports.BattleFormatsData = {
 		tier: "LC",
 	},
 	sandshrewalola: {
+		eventPokemon: [
+			{"generation": 7, "level": 10, "isHidden": false, "moves":["rapidspin", "iceball", "powdersnow", "bide"], "pokeball": "cherishball"},
+		],
 		tier: "LC",
 	},
 	sandslash: {
@@ -594,6 +597,9 @@ exports.BattleFormatsData = {
 		tier: "LC",
 	},
 	diglettalola: {
+		eventPokemon: [
+			{"generation": 7, "level": 10, "isHidden": false, "abilities":["tanglinghair"], "moves":["mudslap", "astonish", "growl", "metalclaw"], "pokeball": "cherishball"},
+		],
 		tier: "LC",
 	},
 	dugtrio: {
@@ -922,6 +928,9 @@ exports.BattleFormatsData = {
 		tier: "LC",
 	},
 	grimeralola: {
+		eventPokemon: [
+			{"generation": 7, "level": 10, "isHidden": false, "abilities":["poisontouch"], "moves":["bite", "harden", "poisongas", "pound"], "pokeball": "cherishball"},
+		],
 		tier: "LC",
 	},
 	muk: {
