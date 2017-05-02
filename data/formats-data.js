@@ -3816,7 +3816,7 @@ exports.BattleFormatsData = {
 		tier: "New",
 	},
 	lopunnymega: {
-		randomBattleMoves: ["return", "highjumpkick", "substitute", "thunderpunch", "icepunch"],
+		randomBattleMoves: ["return", "highjumpkick", "substitute", "fakeout", "icepunch"],
 		randomDoubleBattleMoves: ["return", "highjumpkick", "protect", "fakeout", "icepunch", "encore"],
 		requiredItem: "Lopunnite",
 		tier: "Unreleased",
