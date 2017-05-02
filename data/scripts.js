@@ -3188,7 +3188,7 @@ exports.BattleScripts = {
 				item = 'Choice Scarf';
 			}
 		} else if (ability === 'Gluttony' || ability === 'Schooling') {
-				item = ['Aguav', 'Figy', 'Iapapa', 'Mago', 'Wiki'][this.random(5)] + ' Berry';
+			item = ['Aguav', 'Figy', 'Iapapa', 'Mago', 'Wiki'][this.random(5)] + ' Berry';
 		} else if (hasMove['bellydrum']) {
 			if (template.baseStats.spe <= 50 && !teamDetails.zMove && this.random(2)) {
 				item = 'Normalium Z';
@@ -3345,7 +3345,7 @@ exports.BattleScripts = {
 		} else if (templateAbility === 'Slow Start') {
 			bst -= baseStats.atk / 2 + baseStats.spe / 2;
 		} else if (templateAbility === 'Truant') {
-			bst *= 2/3;
+			bst *= 2 / 3;
 		}
 		if (item === 'Eviolite') {
 			bst += 0.5 * (baseStats.def + baseStats.spd);
