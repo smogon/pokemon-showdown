@@ -297,7 +297,7 @@ exports.Formats = [
 		ruleset: ['[Gen 7] OU'],
 		banlist: ['Endeavor'],
 		onBeforeFaint: function (pokemon, source) {
-			this.add('-hint', `${pokemon.name || pokemon.species}'s Last Will made it get off one last move!`);
+			this.add('-hint', `${pokemon.name || pokemon.species}'s Last Will let it use one last move!`);
 			if (pokemon === source) {
 				this.useMove(pokemon.moves[pokemon.moves.length - 1], pokemon);
 			} else {
