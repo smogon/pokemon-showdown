@@ -1062,7 +1062,7 @@ exports.BattleFormatsData = {
 	},
 	exeggutoralola: {
 		randomBattleMoves: ["dracometeor", "leafstorm", "flamethrower", "earthquake", "woodhammer", "gigadrain", "dragonhammer"],
-		randomDoubleBattleMoves: ["dracometoer", "leafstorm", "protect", "flamethrower", "trickroom", "woodhammer", "dragonhammer", "protect"],
+		randomDoubleBattleMoves: ["dracometeor", "leafstorm", "protect", "flamethrower", "trickroom", "woodhammer", "dragonhammer", "protect"],
 		tier: "New",
 	},
 	cubone: {
@@ -6127,7 +6127,7 @@ exports.BattleFormatsData = {
 	},
 	silvallyflying: {
 		randomBattleMoves: ["multiattack", "flamethrower", "ironhead", "partingshot", "thunderwave"],
-		randomDoubleBattleMoves: ["protect", "multitattack", "partingshot", "swordsdance", "flamecharge", "uturn", "ironhead", "thunderwave"],
+		randomDoubleBattleMoves: ["protect", "multiattack", "partingshot", "swordsdance", "flamecharge", "uturn", "ironhead", "thunderwave"],
 		requiredItem: "Flying Memory",
 		tier: "New",
 	},
