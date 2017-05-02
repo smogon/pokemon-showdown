@@ -1325,6 +1325,23 @@ class BattleDex {
 			if (format.tournamentShow === undefined) format.tournamentShow = true;
 			if (format.mod === undefined) format.mod = 'gen6';
 			if (!dexes[format.mod]) throw new Error("Format `" + format.name + "` requires nonexistent mod: `" + format.mod + "`");
+			if (format.suspect) {
+				let suspect = typeof format.suspect === 'object' ? format.suspect.suspect : format.suspect;
+				let suspectLadder = Object.assign({}, format);
+				suspectLadder.ruleset = [format.name];
+				if (suspect.startsWith('Allow: ')) {
+					suspectLadder.unbanlist = Object.assign([], [suspect.split(": ")]);
+				} else if (suspect.startsWith('Rule: ')) {
+					suspectLadder.ruleset.push(suspect.split(": "));
+				} else {
+					suspectLadder.banlist = Object.assign([], [suspect]);
+				}
+				if (format.suspect.desc) suspectLadder.desc = format.suspect.desc;
+				format.searchShow = false;
+				suspectLadder.challengeShow = false;
+				suspectLadder.name = `${format.name} (Suspect Test)`;
+				this.installFormat(toId(suspectLadder.name), suspectLadder);
+			}
 			this.installFormat(id, format);
 		}
 
