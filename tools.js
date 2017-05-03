@@ -21,7 +21,7 @@
  *   Note that you don't need this for Dex.mod, Dex.mod will
  *   automatically populate this.
  * - Dex.includeFormats() ~30ms
- *   As above, but will also populate Dex.data.Formats, giving an object
+ *   As above, but will also populate Dex.formats, giving an object
  *   containing formats.
  * - Dex.includeData() ~500ms
  *   As above, but will also populate all of Dex.data, giving access to
@@ -33,6 +33,9 @@
  *   As above, but will also populate Dex.dexes[...].data for all mods.
  *   Note that Dex.mod(...) will automatically populate .data, so use
  *   this only if you need to manually iterate Dex.dexes.
+ *
+ * Note that preloading is unnecessary. The getters for Dex.data etc
+ * will automatically load this data as needed.
  *
  * @license MIT license
  */
@@ -49,6 +52,7 @@ if (!Object.values) {
 		for (let k in object) values.push(object[k]);
 		return values;
 	};
+	// @ts-ignore
 	Object.entries = function (object) {
 		let entries = [];
 		for (let k in object) entries.push([k, object[k]]);
@@ -68,8 +72,10 @@ if (!Object.values) {
 // 	};
 // }
 
+/** @type {{[mod: string]: BattleDex}} */
 let dexes = {};
 
+/** @typedef {'Pokedex' | 'FormatsData' | 'Learnsets' | 'Movedex' | 'Statuses' | 'TypeChart' | 'Scripts' | 'Items' | 'Abilities' | 'Natures' | 'Formats' | 'Aliases'} DataType */
 const DATA_TYPES = ['Pokedex', 'FormatsData', 'Learnsets', 'Movedex', 'Statuses', 'TypeChart', 'Scripts', 'Items', 'Abilities', 'Natures', 'Formats', 'Aliases'];
 
 const DATA_FILES = {
@@ -86,6 +92,13 @@ const DATA_FILES = {
 	'Aliases': 'aliases',
 	'Natures': 'natures',
 };
+
+/** @typedef {{
+ id: string,
+ name: string,
+}} DexTemplate */
+
+/** @typedef {{Pokedex: object, Movedex: object, Statuses: object, TypeChart: object, Scripts: object, Items: object, Abilities: object, FormatsData: object, Learnsets: object, Aliases: object, Natures: object}} BattleDexData */
 
 const BattleNatures = {
 	adamant: {name:"Adamant", plus:'atk', minus:'spa'},
@@ -128,32 +141,60 @@ function toId(text) {
 
 class BattleDex {
 
-	constructor(mod) {
-		if (!mod) mod = 'base';
+	/**
+	 * @param {string=} mod
+	 */
+	constructor(mod = 'base') {
+		this.gen = 0;
 
-		this.formatsLoaded = false;
-		this.modsLoaded = false;
-		this.dataLoaded = false;
+		this.name = "[BattleDex]";
 
 		this.isBase = (mod === 'base');
 		this.currentMod = mod;
 		this.parentMod = '';
-		this.data = null;
-		this.dexes = dexes;
+
+		/** @type {any} */
+		this.dataCache = null;
+		/** @type {any} */
+		this.formatsCache = null;
+		this.modsLoaded = false;
+
+		this.BattleDex = BattleDex;
 	}
 
+	get data() {
+		this.includeData();
+		return this.dataCache;
+	}
+	get formats() {
+		this.includeFormats();
+		return this.formatsCache;
+	}
+	get dexes() {
+		this.includeMods();
+		return dexes;
+	}
+
+	/**
+	 * @param {string} mod
+	 * @return {BattleDex}
+	 */
 	mod(mod) {
 		if (!dexes['base'].modsLoaded) dexes['base'].includeMods();
 		if (!mod) mod = 'base';
-		return dexes[mod].includeData();
+		return dexes[mod];
 	}
 	format(format) {
 		if (!this.modsLoaded) this.includeMods();
 		const mod = this.getFormat(format).mod;
 		// TODO: change default format mod as gen7 becomes stable
-		if (!mod) return dexes['gen6'].includeData();
-		return dexes[mod].includeData();
+		if (!mod) return dexes['gen6'];
+		return dexes[mod];
 	}
+	/**
+	 * @param {DataType} dataType
+	 * @param {string} id
+	 */
 	modData(dataType, id) {
 		if (this.isBase) return this.data[dataType][id];
 		if (this.data[dataType][id] !== dexes[this.parentMod].data[dataType][id]) return this.data[dataType][id];
@@ -173,7 +214,7 @@ class BattleDex {
 	 * or isn't a function. Instead, Tools.getString simply returns '' if the
 	 * passed variable isn't a string or a number.
 	 *
-	 * @param {mixed} str
+	 * @param {any} str
 	 * @return {string}
 	 */
 	getString(str) {
@@ -202,7 +243,7 @@ class BattleDex {
 	 * characters in the name, although this is not strictly necessary for
 	 * safety.
 	 *
-	 * @param {mixed} name
+	 * @param {any} name
 	 * @return {string}
 	 */
 	getName(name) {
@@ -228,7 +269,7 @@ class BattleDex {
 	 * Tools.getId is generally assigned to the global toId, because of how
 	 * commonly it's used.
 	 *
-	 * @param {mixed} text
+	 * @param {any} text
 	 * @return {string}
 	 */
 	getId(text) {
@@ -421,6 +462,7 @@ class BattleDex {
 			}
 			if (id.substr(0, 11) === 'hiddenpower') {
 				let matches = /([a-z]*)([0-9]*)/.exec(id);
+				// @ts-ignore
 				id = matches[1];
 			}
 			if (id && this.data.Movedex.hasOwnProperty(id)) {
@@ -814,9 +856,15 @@ class BattleDex {
 		return arr;
 	}
 
-	levenshtein(s, t, l) { // s = string 1, t = string 2, l = limit
+	/**
+	 * @param {string} s - string 1
+	 * @param {string} t - string 2
+	 * @param {number} l - limit
+	 */
+	levenshtein(s, t, l) {
 		// Original levenshtein distance function by James Westgate, turned out to be the fastest
-		let d = []; // 2d matrix
+		/** @type {number[][]} */
+		let d = [];
 
 		// Step 1
 		let n = s.length;
@@ -895,6 +943,7 @@ class BattleDex {
 
 		let cmpTarget = target.toLowerCase();
 		let maxLd = 3;
+		let fuzzyResults = [];
 		if (cmpTarget.length <= 1) {
 			return false;
 		} else if (cmpTarget.length <= 4) {
@@ -919,18 +968,19 @@ class BattleDex {
 
 				let ld = this.levenshtein(cmpTarget, word.toLowerCase(), maxLd);
 				if (ld <= maxLd) {
-					searchResults.push({word: word, ld: ld});
+					fuzzyResults.push({word: word, ld: ld});
 				}
 			}
 		}
 
-		if (searchResults.length) {
+		if (fuzzyResults.length) {
+			/** @type {any} */
 			let newTarget = "";
 			let newLD = 10;
-			for (let i = 0, l = searchResults.length; i < l; i++) {
-				if (searchResults[i].ld < newLD) {
-					newTarget = searchResults[i];
-					newLD = searchResults[i].ld;
+			for (let i = 0, l = fuzzyResults.length; i < l; i++) {
+				if (fuzzyResults[i].ld < newLD) {
+					newTarget = fuzzyResults[i];
+					newLD = fuzzyResults[i].ld;
 				}
 			}
 
@@ -1193,7 +1243,7 @@ class BattleDex {
 	}
 
 	includeMods() {
-		if (!this.isBase) throw new Error("This must be called on the base Dex.");
+		if (!this.isBase) throw new Error(`This must be called on the base Dex`);
 		if (this.modsLoaded) return this;
 
 		let modList = fs.readdirSync(path.resolve(__dirname, 'mods'));
@@ -1206,16 +1256,15 @@ class BattleDex {
 	}
 
 	includeModData() {
-		this.includeMods();
-		for (const mod in dexes) {
+		for (const mod in this.dexes) {
 			dexes[mod].includeData();
 		}
 	}
 
 	includeData() {
-		if (this.dataLoaded) return this;
+		if (this.dataCache) return this;
 		dexes['base'].includeMods();
-		if (!this.data) this.data = {mod: this.currentMod};
+		this.dataCache = {};
 
 		let basePath = this.isBase ? './data/' : './mods/' + this.currentMod + '/';
 
@@ -1226,29 +1275,29 @@ class BattleDex {
 		if (this.parentMod) {
 			parentDex = dexes[this.parentMod];
 			if (!parentDex || parentDex === this) throw new Error("Unable to load " + this.currentMod + ". `inherit` should specify a parent mod from which to inherit data, or must be not specified.");
-			parentDex.includeData();
 		}
 
 		for (let dataType of DATA_TYPES) {
 			if (dataType === 'Natures' && this.isBase) {
-				this.data[dataType] = BattleNatures;
+				this.dataCache[dataType] = BattleNatures;
 				continue;
 			}
 			let BattleData = this.loadDataFile(basePath, dataType);
 			if (!BattleData || typeof BattleData !== 'object') throw new TypeError("Exported property `Battle" + dataType + "`from `" + './data/' + DATA_FILES[dataType] + "` must be an object except `null`.");
-			if (BattleData !== this.data[dataType]) this.data[dataType] = Object.assign(BattleData, this.data[dataType]);
+			if (BattleData !== this.dataCache[dataType]) this.dataCache[dataType] = Object.assign(BattleData, this.dataCache[dataType]);
+			if (dataType === 'Formats' && !parentDex) Object.assign(BattleData, this.formats);
 		}
-		this.data['MoveCache'] = new Map();
-		this.data['ItemCache'] = new Map();
-		this.data['AbilityCache'] = new Map();
-		this.data['TemplateCache'] = new Map();
-		if (this.isBase) {
+		this.dataCache['MoveCache'] = new Map();
+		this.dataCache['ItemCache'] = new Map();
+		this.dataCache['AbilityCache'] = new Map();
+		this.dataCache['TemplateCache'] = new Map();
+		if (!parentDex) {
 			// Formats are inherited by mods
 			this.includeFormats();
 		} else {
 			for (let dataType of DATA_TYPES) {
 				const parentTypedData = parentDex.data[dataType];
-				const childTypedData = this.data[dataType] || (this.data[dataType] = {});
+				const childTypedData = this.dataCache[dataType] || (this.dataCache[dataType] = {});
 				for (let entryId in parentTypedData) {
 					if (childTypedData[entryId] === null) {
 						// null means don't inherit
@@ -1278,25 +1327,20 @@ class BattleDex {
 		}
 
 		// Flag the generation. Required for team validator.
-		this.gen = this.data.Scripts.gen || 7;
+		this.gen = this.dataCache.Scripts.gen || 7;
 
 		// Execute initialization script.
 		if (BattleScripts.init) BattleScripts.init.call(this);
 
-		this.dataLoaded = true;
 		return this;
 	}
 
 	includeFormats() {
+		if (!this.isBase) throw new Error(`This should only be run on the base mod`);
 		this.includeMods();
-		if (this.formatsLoaded) return this;
+		if (this.formatsCache) return this;
 
-		if (!this.data) this.data = {mod: this.currentMod};
-		if (!this.data.Formats) this.data.Formats = {};
-
-		// Load [formats] aliases
-		let BattleAliases = this.loadDataFile('./data/', 'Aliases');
-		this.data.Aliases = BattleAliases;
+		if (!this.formatsCache) this.formatsCache = {};
 
 		// Load formats
 		let Formats;
@@ -1305,7 +1349,7 @@ class BattleDex {
 		} catch (e) {
 			if (e.code !== 'MODULE_NOT_FOUND') throw e;
 		}
-		if (!Array.isArray(Formats)) throw new TypeError("Exported property `Formats` from `" + "./config/formats.js" + "` must be an array.");
+		if (!Array.isArray(Formats)) throw new TypeError(`Exported property 'Formats' from "./config/formats.js" must be an array`);
 
 		let section = '';
 		let column = 1;
@@ -1315,27 +1359,28 @@ class BattleDex {
 			if (format.section) section = format.section;
 			if (format.column) column = format.column;
 			if (!format.name && format.section) continue;
-			if (!id) throw new RangeError("Format #" + (i + 1) + " must have a name with alphanumeric characters");
+			if (!id) throw new RangeError(`Format #${i + 1} must have a name with alphanumeric characters, not '${format.name}'`);
 			if (!format.section) format.section = section;
 			if (!format.column) format.column = column;
-			if (this.data.Formats[id]) throw new Error("Format #" + (i + 1) + " has a duplicate ID: `" + id + "`");
+			if (this.formatsCache[id]) throw new Error(`Format #${i + 1} has a duplicate ID: '${id}'`);
 			format.effectType = 'Format';
 			if (format.challengeShow === undefined) format.challengeShow = true;
 			if (format.searchShow === undefined) format.searchShow = true;
 			if (format.tournamentShow === undefined) format.tournamentShow = true;
 			if (format.mod === undefined) format.mod = 'gen6';
-			if (!dexes[format.mod]) throw new Error("Format `" + format.name + "` requires nonexistent mod: `" + format.mod + "`");
-			this.installFormat(id, format);
+			if (!dexes[format.mod]) throw new Error(`Format "${format.name}" requires nonexistent mod: '${format.mod}'`);
+			this.formatsCache[id] = format;
 		}
 
-		this.formatsLoaded = true;
 		return this;
 	}
 
 	installFormat(id, format) {
-		this.data.Formats[id] = format;
+		dexes['base'].includeFormats();
+		dexes['base'].formatsCache[id] = format;
+		if (this.dataCache) this.dataCache.Formats[id] = format;
 		if (!this.isBase) {
-			dexes['base'].data.Formats[id] = format;
+			if (dexes['base'].dataCache) dexes['base'].dataCache.Formats[id] = format;
 		}
 	}
 
@@ -1350,7 +1395,6 @@ class BattleDex {
 }
 
 dexes['base'] = new BattleDex();
-dexes['base'].BattleDex = BattleDex;
 
 // "gen7" is an alias for the current base data
 dexes['gen7'] = dexes['base'];

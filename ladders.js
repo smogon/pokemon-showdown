@@ -313,8 +313,8 @@ class Ladder {
 	 */
 	static visualizeAll(username) {
 		let ratings = [];
-		for (let i in Tools.data.Formats) {
-			if (Tools.data.Formats[i].searchShow) {
+		for (let i in Tools.formats) {
+			if (Tools.formats[i].searchShow) {
 				ratings.push(Ladders(i).visualize(username));
 			}
 		}
