@@ -2817,7 +2817,7 @@ class Battle extends Tools.BattleDex {
 		if (!rest.length) throw new TypeError("Event handlers must have a callback");
 
 		if (target.effectType !== 'Format') {
-			throw new TypeError(`${target.effectType} targets are not supported at this time`);
+			throw new TypeError(`${target.name} is a ${target.effectType} but only Format targets are supported right now`);
 		}
 
 		let callback, priority, order, subOrder, data;

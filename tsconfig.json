@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+        "lib": ["es2017"],
+        "noEmit": true,
+        "target": "ESNext",
+        "strictNullChecks": true,
+        "allowJs": true,
+        "checkJs": true
+    },
+    "types": ["node"],
+    "include": [
+        "./tools.js"
+    ]
+}
