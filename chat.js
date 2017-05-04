@@ -326,7 +326,6 @@ class CommandContext {
 			return this.errorReply(`Your message contains too many capital letters, which this room doesn't allow.`);
 		}
 
-
 		return true;
 	}
 
