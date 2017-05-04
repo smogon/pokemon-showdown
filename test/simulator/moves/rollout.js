@@ -23,7 +23,7 @@ for (let i = 0; i < moves.length; i++) {
 
 			let ebp = 30;
 			let count = 0;
-			battle.on('BasePower', battle.getFormat(), function (basePower) {
+			battle.onEvent('BasePower', battle.getFormat(), function (basePower) {
 				count++;
 				assert.strictEqual(basePower, ebp);
 				if (count % 5 === 0) {
@@ -47,7 +47,7 @@ for (let i = 0; i < moves.length; i++) {
 
 			let ebp = 30;
 			let count = 0;
-			battle.on('Accuracy', battle.getFormat(), function (accuracy, target, pokemon, move) {
+			battle.onEvent('Accuracy', battle.getFormat(), function (accuracy, target, pokemon, move) {
 				if (move.id === 'recover') return;
 
 				count++;
@@ -58,7 +58,7 @@ for (let i = 0; i < moves.length; i++) {
 					return true;
 				}
 			});
-			battle.on('BasePower', battle.getFormat(), function (basePower) {
+			battle.onEvent('BasePower', battle.getFormat(), function (basePower) {
 				assert.strictEqual(basePower, ebp);
 				ebp *= 2;
 			});
@@ -77,7 +77,7 @@ for (let i = 0; i < moves.length; i++) {
 
 			let ebp = 30;
 			let count = 0;
-			battle.on('BeforeMove', battle.getFormat(), function (attacker, defender, move) {
+			battle.onEvent('BeforeMove', battle.getFormat(), function (attacker, defender, move) {
 				if (move.id === 'recover') return;
 
 				count++;
@@ -86,7 +86,7 @@ for (let i = 0; i < moves.length; i++) {
 					return false; // Imitate immobilization from Paralysis, etc.
 				}
 			});
-			battle.on('BasePower', battle.getFormat(), function (basePower) {
+			battle.onEvent('BasePower', battle.getFormat(), function (basePower) {
 				assert.strictEqual(basePower, ebp);
 				ebp *= 2;
 			});
@@ -104,7 +104,7 @@ for (let i = 0; i < moves.length; i++) {
 			]);
 
 			let runCount = 0;
-			battle.on('BasePower', battle.getFormat(), function (basePower) {
+			battle.onEvent('BasePower', battle.getFormat(), function (basePower) {
 				assert.strictEqual(basePower, 60);
 				runCount++;
 			});
@@ -122,7 +122,7 @@ for (let i = 0; i < moves.length; i++) {
 			]);
 
 			let hitCount = 0;
-			battle.on('BasePower', battle.getFormat(), function (basePower) {
+			battle.onEvent('BasePower', battle.getFormat(), function (basePower) {
 				assert.strictEqual(basePower, 30);
 				hitCount++;
 			});

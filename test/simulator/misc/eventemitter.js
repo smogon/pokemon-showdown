@@ -17,14 +17,14 @@ describe('Battle#on', function () {
 		]);
 		let eventCount = 0;
 		let eventCount2 = 0;
-		battle.on('Hit', battle.getFormat(), function () {
+		battle.onEvent('Hit', battle.getFormat(), function () {
 			eventCount++;
 		});
-		battle.on('Hit', battle.getFormat(), function () {
+		battle.onEvent('Hit', battle.getFormat(), function () {
 			eventCount++;
 			eventCount2++;
 		});
-		battle.on('ModifyDamage', battle.getFormat(), function () {
+		battle.onEvent('ModifyDamage', battle.getFormat(), function () {
 			return 5;
 		});
 		battle.commitDecisions();
@@ -46,7 +46,7 @@ describe('Battle#on', function () {
 			};
 		};
 		for (let i = 0; i < 9; i++) {
-			battle.on('ModifyDamage', battle.getFormat(), -i, modHandler(i));
+			battle.onEvent('ModifyDamage', battle.getFormat(), -i, modHandler(i));
 		}
 		battle.commitDecisions();
 		assert.strictEqual(eventCount, 9);
@@ -57,8 +57,8 @@ describe('Battle#on', function () {
 			[{species: 'Pidgeot', ability: 'keeneye', moves: ['bulkup']}],
 			[{species: 'Talonflame', ability: 'galewings', moves: ['peck']}],
 		]);
-		assert.throws(battle.on, TypeError);
-		assert.throws(function () {battle.on('Hit');}, TypeError);
-		assert.throws(function () {battle.on('Hit', battle.getFormat());}, TypeError);
+		assert.throws(battle.onEvent, TypeError);
+		assert.throws(function () {battle.onEvent('Hit');}, TypeError);
+		assert.throws(function () {battle.onEvent('Hit', battle.getFormat());}, TypeError);
 	});
 });
