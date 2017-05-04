@@ -9,6 +9,7 @@
     },
     "types": ["node"],
     "include": [
-        "./tools.js"
+        "./tools.js",
+        "./prng.js"
     ]
 }

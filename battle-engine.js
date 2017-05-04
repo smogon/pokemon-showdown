@@ -25,9 +25,10 @@ class BattlePokemon {
 
 		if (typeof set === 'string') set = {name: set};
 
-		// "pre-bound" functions for nicer syntax (avoids repeated use of `bind`)
-		this.getHealth = (this.getHealth || BattlePokemon.getHealth).bind(this);
-		this.getDetails = (this.getDetails || BattlePokemon.getDetails).bind(this);
+		// "pre-bound" functions for nicer syntax
+		// allows them to be passed directly to Battle#add
+		this.getHealth = (side => this.getHealthInner(side));
+		this.getDetails = (side => this.getDetailsInner(side));
 
 		this.set = set;
 
@@ -68,7 +69,9 @@ class BattlePokemon {
 		this.newlySwitched = false;
 		this.beingCalledBack = false;
 		this.isActive = false;
-		this.isStarted = false; // has this pokemon's Start events run yet?
+		this.activeTurns = 0;
+		/** Has this pokemon's Start events run yet? */
+		this.isStarted = false;
 		this.transformed = false;
 		this.duringMove = false;
 		this.speed = 0;
@@ -190,9 +193,9 @@ class BattlePokemon {
 		if (this.isActive) return fullname.substr(0, 2) + positionList[this.position] + fullname.substr(2);
 		return fullname;
 	}
-	static getDetails(side) {
-		if (this.illusion) return this.illusion.details + '|' + this.getHealth(side);
-		return this.details + '|' + this.getHealth(side);
+	getDetailsInner(side) {
+		if (this.illusion) return this.illusion.details + '|' + this.getHealthInner(side);
+		return this.details + '|' + this.getHealthInner(side);
 	}
 	updateSpeed() {
 		this.speed = this.getDecisionSpeed();
@@ -722,6 +725,7 @@ class BattlePokemon {
 		}
 		this.volatiles = {};
 		this.switchFlag = false;
+		this.forceSwitchFlag = false;
 
 		this.lastMove = '';
 		this.moveThisTurn = '';
@@ -1131,7 +1135,7 @@ class BattlePokemon {
 		}
 		return true;
 	}
-	static getHealth(side) {
+	getHealthInner(side) {
 		if (!this.hp) return '0 fnt';
 		let hpstring;
 		// side === true in replays
@@ -1292,6 +1296,31 @@ class BattlePokemon {
 	}
 }
 
+/**
+ * An object representing a single action that can be chosen.
+ *
+ * @typedef {Object} Action
+ * @property {string} choice - a choice
+ * @property {BattlePokemon} pokemon - the pokemon making the choice
+ * @property {number} targetLoc - location of the target, relative to pokemon's side
+ * @property {string} move - a move to use
+ * @property {?boolean} mega - true if megaing
+ * @property {?boolean} zmove - true if zmoving
+ */
+/**
+ * An object representing what the player has chosen to happen.
+ *
+ * @typedef {Object} Choice
+ * @property {boolean} cantUndo - true if the choice can't be cancelled because of the maybeTrapped issue
+ * @property {string} error - contains error text in the case of a choice error
+ * @property {Action[]} actions - array of chosen actions
+ * @property {number} forcedSwitchesLeft - number of switches left that need to be performed
+ * @property {number} forcedPassesLeft - number of passes left that need to be performed
+ * @property {Set<number>} switchIns - indexes of pokemon chosen to switch in
+ * @property {boolean} zMove - true if a Z-move has already been selected
+ * @property {boolean} mega - true if a mega evolution has already been selected
+ */
+
 class BattleSide {
 	/**
 	 * @param {string} name
@@ -1308,6 +1337,8 @@ class BattleSide {
 		this.battle = battle;
 		this.n = n;
 		this.name = name;
+		this.avatar = '';
+
 		/** @type {BattlePokemon[]} */
 		this.pokemon = [];
 		/** @type {BattlePokemon[]} */
@@ -1317,21 +1348,17 @@ class BattleSide {
 		this.pokemonLeft = 0;
 		this.faintedLastTurn = false;
 		this.faintedThisTurn = false;
-		/**
-		 * An object representing what the player has chosen to happen.
-		 *
-		 * @typedef {Object} Choice
-		 * @property {boolean} cantUndo - true if the choice can't be cancelled because of the maybeTrapped issue
-		 * @property {string} error - contains error text in the case of a choice error
-		 * @property {Action[]} actions - array of chosen actions
-		 * @property {number} forcedSwitchesLeft - number of switches left that need to be performed
-		 * @property {number} forcedPassesLeft - number of passes left that need to be performed
-		 * @property {Set<number>} switchIns - indexes of pokemon chosen to switch in
-		 * @property {boolean} zMove - true if a Z-move has already been selected
-		 * @property {boolean} mega - true if a mega evolution has already been selected
-		 */
-		/** @type {?Choice} */
-		this.choice = null;
+		/** @type {Choice} */
+		this.choice = {
+			cantUndo: false,
+			error: ``,
+			actions: [],
+			forcedSwitchesLeft: 0,
+			forcedPassesLeft: 0,
+			switchIns: new Set(),
+			zMove: false,
+			mega: false,
+		};
 		/**
 		 * Must be one of:
 		 * 'move' - Move request, at the beginning of every turn
@@ -1786,6 +1813,8 @@ class BattleSide {
 			forcedSwitchesLeft: forcedSwitches,
 			forcedPassesLeft: forcedPasses,
 			switchIns: new Set(),
+			zMove: false,
+			mega: false,
 		};
 	}
 	choose(input) {
@@ -1949,13 +1978,11 @@ class BattleSide {
 		}
 		this.active = null;
 
-		if (this.choice.actions && this.choice.actions !== true) {
-			this.choice.actions.forEach(action => {
-				delete action.side;
-				delete action.pokemon;
-				delete action.target;
-			});
-		}
+		this.choice.actions.forEach(action => {
+			delete action.side;
+			delete action.pokemon;
+			delete action.target;
+		});
 		this.choice = null;
 
 		// get rid of some possibly-circular references
@@ -1968,6 +1995,9 @@ class Battle extends Tools.BattleDex {
 	/**
 	 * Initialises a Battle.
 	 *
+	 * @param {object} Format
+	 * @param {boolean} rated
+	 * @param {Function} send
 	 * @param {PRNG} [maybePrng]
 	 */
 	init(format, rated, send, maybePrng) {
@@ -2871,7 +2901,9 @@ class Battle extends Tools.BattleDex {
 		}
 
 		// default to no request
+		/** @type {any} */
 		let p1request = null;
+		/** @type {any} */
 		let p2request = null;
 		this.p1.currentRequest = '';
 		this.p2.currentRequest = '';
@@ -3121,7 +3153,8 @@ class Battle extends Tools.BattleDex {
 	nextTurn() {
 		this.turn++;
 		let allStale = true;
-		let oneStale = false;
+		/** @type {BattlePokemon} */
+		let oneStale;
 		for (let i = 0; i < this.sides.length; i++) {
 			for (let j = 0; j < this.sides[i].active.length; j++) {
 				let pokemon = this.sides[i].active[j];
@@ -4590,7 +4623,7 @@ class Battle extends Tools.BattleDex {
 		let alreadyEnded = this.ended;
 		switch (data[1]) {
 		case 'join': {
-			let team = '';
+			let team;
 			if (more) team = Tools.fastUnpackTeam(more);
 			this.join(data[2], data[3], data[4], team);
 			break;
@@ -4602,11 +4635,11 @@ class Battle extends Tools.BattleDex {
 			break;
 
 		case 'choose':
-			this.choose(data[2], data[3], data[4]);
+			this.choose(data[2], data[3]);
 			break;
 
 		case 'undo':
-			this.undoChoice(data[2], data[3]);
+			this.undoChoice(data[2]);
 			break;
 
 		case 'eval': {
