@@ -54,7 +54,7 @@ describe('Intimidate', function () {
 		let p1 = battle.join('p1', 'Guest 1', 1, [{species: "Arcanine", ability: 'intimidate', moves: ['morningsun']}]);
 		let p2 = battle.join('p2', 'Guest 2', 1, [{species: "Gyarados", ability: 'intimidate', moves: ['dragondance']}]);
 		let intimidateCount = 0;
-		battle.on('Boost', battle.getFormat(), function (boost, target, source) {
+		battle.onEvent('Boost', battle.getFormat(), function (boost, target, source) {
 			assert.species(source, intimidateCount === 0 ? 'Arcanine' : 'Gyarados');
 			intimidateCount++;
 		});
@@ -69,7 +69,7 @@ describe('Intimidate', function () {
 		p1 = battle.join('p1', 'Guest 1', 1, [{species: "Gyarados", ability: 'intimidate', moves: ['dragondance']}]);
 		p2 = battle.join('p2', 'Guest 2', 1, [{species: "Arcanine", ability: 'intimidate', moves: ['morningsun']}]);
 		intimidateCount = 0;
-		battle.on('Boost', battle.getFormat(), function (boost, target, source) {
+		battle.onEvent('Boost', battle.getFormat(), function (boost, target, source) {
 			assert.species(source, intimidateCount === 0 ? 'Arcanine' : 'Gyarados');
 			intimidateCount++;
 		});
@@ -92,7 +92,7 @@ describe('Intimidate', function () {
 			{species: "Arcanine", ability: 'intimidate', moves: ['healingwish']},
 		]);
 		let intimidateCount = 0;
-		battle.on('Boost', battle.getFormat(), function (boost, target, source) {
+		battle.onEvent('Boost', battle.getFormat(), function (boost, target, source) {
 			assert.species(source, intimidateCount % 2 === 0 ? 'Arcanine' : 'Gyarados');
 			intimidateCount++;
 		});

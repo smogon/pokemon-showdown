@@ -96,7 +96,7 @@ describe('Trick Room', function () {
 		battle.p1.active[0].boostBy({spe: 4}); // 1809 Speed
 		battle.p2.active[0].boostBy({spe: 6}); // 1808 Speed
 
-		battle.on('BasePower', battle.getFormat(), function (bp, pokemon, target, move) {
+		battle.onEvent('BasePower', battle.getFormat(), function (bp, pokemon, target, move) {
 			if (move.id !== 'gyroball') return;
 			assert.strictEqual(bp, 25); // BP should theoretically be this based on speed values
 		});

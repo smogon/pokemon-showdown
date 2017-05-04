@@ -2831,17 +2831,17 @@ class Battle extends Tools.BattleDex {
 	 *
 	 * Try to use this sparingly. Most event handlers can be simply placed in a format instead.
 	 *
-	 *     this.on(eventid, target, callback)
+	 *     this.onEvent(eventid, target, callback)
 	 * will set the callback as an event handler for the target when eventid is called with the
 	 * default priority. Currently only valid formats are supported as targets but this will
 	 * eventually be expanded to support other target types.
 	 *
-	 *     this.on(eventid, target, priority, callback)
+	 *     this.onEvent(eventid, target, priority, callback)
 	 * will set the callback as an event handler for the target when eventid is called with the
 	 * provided priority. Priority can either be a number or an object that contains the priority,
 	 * order, and subOrder for the evend handler as needed (undefined keys will use default values)
 	 */
-	on(eventid, target, ...rest) { // rest = [priority, callback]
+	onEvent(eventid, target, ...rest) { // rest = [priority, callback]
 		if (!eventid) throw new TypeError("Event handlers must have an event to listen to");
 		if (!target) throw new TypeError("Event handlers must have a target");
 		if (!rest.length) throw new TypeError("Event handlers must have a callback");

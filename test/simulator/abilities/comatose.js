@@ -58,7 +58,7 @@ describe('Comatose', function () {
 		const p2 = battle.join('p2', 'Guest 2', 1, [{species: "Smeargle", ability: 'technician', moves: ['hex', 'wakeupslap']}]);
 
 		let bp = 0;
-		battle.on('BasePower', battle.getFormat(), function (basePower, pokemon, target, move) {
+		battle.onEvent('BasePower', battle.getFormat(), function (basePower, pokemon, target, move) {
 			bp = basePower;
 		});
 
