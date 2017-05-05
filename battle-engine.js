@@ -1978,6 +1978,7 @@ class Battle extends Tools.BattleDex {
 		this.weatherData = {id:''};
 		this.terrainData = {id:''};
 		this.pseudoWeather = {};
+		this.primalWeather = {deltastream: 0, desolateland: 0, primordialsea: 0};
 
 		this.format = toId(format);
 		this.formatData = {id:this.format};
