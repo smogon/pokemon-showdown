@@ -108,7 +108,3 @@ describe('Native timer/event loop globals', function () {
 describe('Battle simulation', function () {
 	require('./simulator');
 });
-
-describe('mocks', function () {
-	require('./mocks/Battle.spec');
-});
