@@ -488,7 +488,7 @@ describe('Decisions', function () {
 			]];
 
 			for (let i = 0; i < 10; i++) {
-				const teamOrder = [BASE_TEAM_ORDER, BASE_TEAM_ORDER].map(teamOrder => Tools.shuffle(teamOrder.slice(0, 4)));
+				const teamOrder = [BASE_TEAM_ORDER, BASE_TEAM_ORDER].map(teamOrder => Dex.shuffle(teamOrder.slice(0, 4)));
 				battle = common.createBattle({preview: true}, TEAMS);
 				battle.p1.chooseTeam(teamOrder[0].join(''));
 				battle.p2.chooseTeam(teamOrder[1].join(''));
@@ -503,7 +503,7 @@ describe('Decisions', function () {
 			// Backwards-compatibility with the client. It should be useful for 3rd party bots/clients (Android?)
 			for (let i = 0; i < 5; i++) {
 				battle = common.createBattle({preview: true}, SINGLES_TEAMS.full);
-				const teamOrder = Tools.shuffle(BASE_TEAM_ORDER.slice()).slice(0, 1);
+				const teamOrder = Dex.shuffle(BASE_TEAM_ORDER.slice()).slice(0, 1);
 				const fullTeamOrder = teamOrder.concat(BASE_TEAM_ORDER.filter(elem => !teamOrder.includes(elem)));
 
 				battle.choose('p1', 'team ' + teamOrder.join(''));
@@ -518,7 +518,7 @@ describe('Decisions', function () {
 		it('should allow specifying the team order in a slot-per-slot basis in Singles with Illusion', function () {
 			for (let i = 0; i < 5; i++) {
 				battle = common.createBattle({preview: true}, SINGLES_TEAMS.illusion);
-				const teamOrder = Tools.shuffle(BASE_TEAM_ORDER.slice());
+				const teamOrder = Dex.shuffle(BASE_TEAM_ORDER.slice());
 
 				battle.choose('p1', 'team ' + teamOrder.join(''));
 				battle.p2.chooseDefault();
@@ -532,7 +532,7 @@ describe('Decisions', function () {
 		it('should allow specifying the team order in a slot-per-slot basis in Doubles', function () {
 			for (let i = 0; i < 5; i++) {
 				battle = common.createBattle({preview: true, gameType: 'doubles'}, DOUBLES_TEAMS.full);
-				const teamOrder = Tools.shuffle(BASE_TEAM_ORDER.slice());
+				const teamOrder = Dex.shuffle(BASE_TEAM_ORDER.slice());
 
 				battle.choose('p1', 'team ' + teamOrder.join(''));
 				battle.p2.chooseDefault();
@@ -546,7 +546,7 @@ describe('Decisions', function () {
 		it('should allow specifying the team order in a slot-per-slot basis in Triples', function () {
 			for (let i = 0; i < 5; i++) {
 				battle = common.createBattle({preview: true, gameType: 'triples'}, TRIPLES_TEAMS.full);
-				const teamOrder = Tools.shuffle(BASE_TEAM_ORDER.slice());
+				const teamOrder = Dex.shuffle(BASE_TEAM_ORDER.slice());
 
 				battle.choose('p1', 'team ' + teamOrder.join(''));
 				battle.p2.chooseDefault();
@@ -560,7 +560,7 @@ describe('Decisions', function () {
 		it('should autocomplete multi-slot decisions', function () {
 			for (let i = 0; i < 5; i++) {
 				battle = common.createBattle({preview: true}, SINGLES_TEAMS.full);
-				const teamOrder = Tools.shuffle(BASE_TEAM_ORDER.slice()).slice(0, 2);
+				const teamOrder = Dex.shuffle(BASE_TEAM_ORDER.slice()).slice(0, 2);
 				const fullTeamOrder = teamOrder.concat(BASE_TEAM_ORDER.filter(elem => !teamOrder.includes(elem)));
 
 				battle.choose('p1', 'team ' + teamOrder.slice(0, 2).join(''));

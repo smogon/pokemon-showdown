@@ -18,7 +18,7 @@ function banReason(strings, reason) {
 
 class Validator {
 	constructor(format, supplementaryBanlist) {
-		format = Tools.getFormat(format);
+		format = Dex.getFormat(format);
 		if (supplementaryBanlist && supplementaryBanlist.length) {
 			format = Object.assign({}, format);
 			if (format.banlistTable) delete format.banlistTable;
@@ -54,7 +54,7 @@ class Validator {
 		}
 		this.format = format;
 		this.supplementaryBanlist = supplementaryBanlist;
-		this.tools = Tools.format(this.format);
+		this.tools = Dex.format(this.format);
 	}
 
 	validateTeam(team, removeNicknames) {
@@ -154,13 +154,13 @@ class Validator {
 			return [`This is not a Pokemon.`];
 		}
 
-		set.species = Tools.getSpecies(set.species);
+		set.species = Dex.getSpecies(set.species);
 		set.name = tools.getName(set.name);
-		let item = tools.getItem(Tools.getString(set.item));
+		let item = tools.getItem(Dex.getString(set.item));
 		set.item = item.name;
-		let ability = tools.getAbility(Tools.getString(set.ability));
+		let ability = tools.getAbility(Dex.getString(set.ability));
 		set.ability = ability.name;
-		set.nature = tools.getNature(Tools.getString(set.nature)).name;
+		set.nature = tools.getNature(Dex.getString(set.nature)).name;
 		if (!Array.isArray(set.moves)) set.moves = [];
 
 		let maxLevel = format.maxLevel || 100;
@@ -318,7 +318,7 @@ class Validator {
 
 			for (let i = 0; i < set.moves.length; i++) {
 				if (!set.moves[i]) continue;
-				let move = tools.getMove(Tools.getString(set.moves[i]));
+				let move = tools.getMove(Dex.getString(set.moves[i]));
 				if (!move.exists) return [`"${move.name}" is an invalid move.`];
 				check = move.id;
 				setHas[check] = true;
@@ -1229,7 +1229,7 @@ class TeamValidatorManager extends ProcessManager {
 	}
 
 	receive(format, supplementaryBanlist, removeNicknames, team) {
-		let parsedTeam = Tools.fastUnpackTeam(team);
+		let parsedTeam = Dex.fastUnpackTeam(team);
 		supplementaryBanlist = supplementaryBanlist === '0' ? false : supplementaryBanlist.split(',');
 		removeNicknames = removeNicknames === '1';
 
@@ -1248,7 +1248,7 @@ class TeamValidatorManager extends ProcessManager {
 		if (problems && problems.length) {
 			return '0' + problems.join('\n');
 		} else {
-			let packedTeam = Tools.packTeam(parsedTeam);
+			let packedTeam = Dex.packTeam(parsedTeam);
 			// console.log('FROM: ' + message.substr(pipeIndex2 + 1));
 			// console.log('TO: ' + packedTeam);
 			return '1' + packedTeam;
@@ -1275,8 +1275,8 @@ if (process.send && module === process.mainModule) {
 		});
 	}
 
-	global.Tools = require('./tools').includeData();
-	global.toId = Tools.getId;
+	global.Dex = require('./sim/dex').includeData();
+	global.toId = Dex.getId;
 	global.Chat = require('./chat');
 
 	require('./repl').start('team-validator-', process.pid, cmd => eval(cmd));

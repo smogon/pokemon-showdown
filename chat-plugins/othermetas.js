@@ -9,14 +9,14 @@ exports.commands = {
 		let sep = target.split('@');
 		let stone = toId(sep[1]);
 		let template = toId(sep[0]);
-		if (!Tools.data.Items[stone] || (Tools.data.Items[stone] && !Tools.data.Items[stone].megaEvolves && !Tools.data.Items[stone].onPrimal)) {
+		if (!Dex.data.Items[stone] || (Dex.data.Items[stone] && !Dex.data.Items[stone].megaEvolves && !Dex.data.Items[stone].onPrimal)) {
 			return this.errorReply(`Error: Mega Stone not found`);
 		}
-		if (!Tools.data.Pokedex[toId(template)]) {
+		if (!Dex.data.Pokedex[toId(template)]) {
 			return this.errorReply(`Error: Pokemon not found`);
 		}
-		template = Object.assign({}, Tools.getTemplate(template));
-		stone = Object.assign({}, Tools.getItem(stone));
+		template = Object.assign({}, Dex.getTemplate(template));
+		stone = Object.assign({}, Dex.getItem(stone));
 		if (template.isMega || (template.evos && Object.keys(template.evos).length > 0)) { // Mega Pokemon cannot be mega evolved
 			return this.errorReply(`You cannot mega evolve ${template.name} in Mix and Mega.`);
 		}
@@ -24,17 +24,17 @@ exports.commands = {
 		if (stone.id in bannedStones && template.name !== stone.megaEvolves) {
 			return this.errorReply(`You cannot use ${stone.name} on anything besides ${stone.megaEvolves} in Mix and Mega.`);
 		}
-		if (Tools.mod("mixandmega").getTemplate(sep[0]).tier === "Uber") { // Separate messages because there's a difference between being already mega evolved / NFE and being banned from mega evolving
+		if (Dex.mod("mixandmega").getTemplate(sep[0]).tier === "Uber") { // Separate messages because there's a difference between being already mega evolved / NFE and being banned from mega evolving
 			return this.errorReply(`${template.name} is banned from mega evolving in Mix and Mega.`);
 		}
-		let baseTemplate = Tools.getTemplate(stone.megaEvolves);
-		let megaTemplate = Tools.getTemplate(stone.megaStone);
+		let baseTemplate = Dex.getTemplate(stone.megaEvolves);
+		let megaTemplate = Dex.getTemplate(stone.megaStone);
 		if (stone.id === 'redorb') { // Orbs do not have 'Item.megaStone' or 'Item.megaEvolves' properties.
-			megaTemplate = Tools.getTemplate("Groudon-Primal");
-			baseTemplate = Tools.getTemplate("Groudon");
+			megaTemplate = Dex.getTemplate("Groudon-Primal");
+			baseTemplate = Dex.getTemplate("Groudon");
 		} else if (stone.id === 'blueorb') {
-			megaTemplate = Tools.getTemplate("Kyogre-Primal");
-			baseTemplate = Tools.getTemplate("Kyogre");
+			megaTemplate = Dex.getTemplate("Kyogre-Primal");
+			baseTemplate = Dex.getTemplate("Kyogre");
 		}
 		let deltas = {
 			ability: megaTemplate.abilities['0'],
@@ -61,7 +61,7 @@ exports.commands = {
 			types = [types[0], deltas.type];
 		}
 		for (let statName in baseStats) { // Add the changed stats and weight
-			baseStats[statName] = Tools.clampIntRange(baseStats[statName] + deltas.baseStats[statName], 1, 255);
+			baseStats[statName] = Dex.clampIntRange(baseStats[statName] + deltas.baseStats[statName], 1, 255);
 		}
 		let weightkg = Math.round(Math.max(0.1, template.weightkg + deltas.weightkg) * 100) / 100;
 		let type = '<span class="col typecol">';
@@ -94,11 +94,11 @@ exports.commands = {
 	'350': '350cup',
 	'350cup': function (target, room, user) {
 		if (!this.runBroadcast()) return;
-		if (!Tools.data.Pokedex[toId(target)]) {
+		if (!Dex.data.Pokedex[toId(target)]) {
 			return this.errorReply("Error: Pokemon not found.");
 		}
 		let bst = 0;
-		let pokeobj = Tools.getTemplate(toId(target));
+		let pokeobj = Dex.getTemplate(toId(target));
 		for (let i in pokeobj.baseStats) {
 			bst += pokeobj.baseStats[i];
 		}
@@ -113,7 +113,7 @@ exports.commands = {
 	ts: 'tiershift',
 	tiershift: function (target, room, user) {
 		if (!this.runBroadcast()) return;
-		if (!Tools.data.Pokedex[toId(target)]) {
+		if (!Dex.data.Pokedex[toId(target)]) {
 			return this.errorReply("Error: Pokemon not found.");
 		}
 		let boosts = {
@@ -128,12 +128,12 @@ exports.commands = {
 			'LC Uber': 20,
 			'LC': 20,
 		};
-		let template = Object.assign({}, Tools.getTemplate(target));
+		let template = Object.assign({}, Dex.getTemplate(target));
 		if (!(template.tier in boosts)) return this.sendReplyBox(`${template.species} in Tier Shift: <br /> ${Object.values(template.baseStats).join('/')}`);
 		let boost = boosts[template.tier];
 		let newStats = Object.assign({}, template.baseStats);
 		for (let statName in template.baseStats) {
-			newStats[statName] = Tools.clampIntRange(newStats[statName] + boost, 1, 255);
+			newStats[statName] = Dex.clampIntRange(newStats[statName] + boost, 1, 255);
 		}
 		this.sendReplyBox(`${template.species} in Tier Shift: <br /> ${Object.values(newStats).join('/')}`);
 	},

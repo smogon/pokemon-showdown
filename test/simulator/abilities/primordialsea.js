@@ -25,7 +25,7 @@ describe('Primordial Sea', function () {
 		const attacker = battle.p1.active[0];
 		const defender = battle.p2.active[0];
 		assert.hurtsBy(defender, 104, () => battle.commitDecisions());
-		const move = Tools.getMove('waterpledge');
+		const move = Dex.getMove('waterpledge');
 		const basePower = battle.runEvent('BasePower', attacker, defender, move, move.basePower, true);
 		assert.strictEqual(basePower, move.basePower);
 	});

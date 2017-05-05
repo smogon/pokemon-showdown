@@ -25,10 +25,10 @@ describe('Cloud Nine', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: 'Groudon', ability: 'drought', moves: ['rest']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Golduck', ability: 'cloudnine', moves: ['calmmind']}]);
 		battle.commitDecisions();
-		move = Tools.getMove('firepledge');
+		move = Dex.getMove('firepledge');
 		basePower = battle.runEvent('BasePower', battle.p2.active[0], battle.p1.active[0], move, move.basePower, true);
 		assert.strictEqual(basePower, move.basePower);
-		move = Tools.getMove('waterpledge');
+		move = Dex.getMove('waterpledge');
 		basePower = battle.runEvent('BasePower', battle.p2.active[0], battle.p1.active[0], move, move.basePower, true);
 		assert.strictEqual(basePower, move.basePower);
 	});
@@ -39,10 +39,10 @@ describe('Cloud Nine', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: 'Kyogre', ability: 'drizzle', moves: ['rest']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Golduck', ability: 'cloudnine', moves: ['calmmind']}]);
 		battle.commitDecisions();
-		move = Tools.getMove('firepledge');
+		move = Dex.getMove('firepledge');
 		basePower = battle.runEvent('BasePower', battle.p2.active[0], battle.p1.active[0], move, move.basePower, true);
 		assert.strictEqual(basePower, move.basePower);
-		move = Tools.getMove('waterpledge');
+		move = Dex.getMove('waterpledge');
 		basePower = battle.runEvent('BasePower', battle.p2.active[0], battle.p1.active[0], move, move.basePower, true);
 		assert.strictEqual(basePower, move.basePower);
 	});

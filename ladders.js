@@ -133,7 +133,7 @@ class Ladder {
 	 */
 	getTop() {
 		let formatid = this.formatid;
-		let name = Tools.getFormat(formatid).name;
+		let name = Dex.getFormat(formatid).name;
 		return this.ladder.then(ladder => {
 			let buf = `<h3>${name} Top 100</h3>`;
 			buf += `<table>`;
@@ -286,7 +286,7 @@ class Ladder {
 				room.update();
 			}
 
-			if (!Tools.getFormat(formatid).noLog) {
+			if (!Dex.getFormat(formatid).noLog) {
 				room.logBattle(p1score, p1newElo, p2newElo);
 			}
 		});
@@ -313,8 +313,8 @@ class Ladder {
 	 */
 	static visualizeAll(username) {
 		let ratings = [];
-		for (let i in Tools.formats) {
-			if (Tools.formats[i].searchShow) {
+		for (let i in Dex.formats) {
+			if (Dex.formats[i].searchShow) {
 				ratings.push(Ladders(i).visualize(username));
 			}
 		}

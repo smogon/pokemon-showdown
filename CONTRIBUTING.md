@@ -106,7 +106,7 @@ In general, use modern features only if they're supported in Node 6 and reasonab
 
 - **Promises: ALWAYS** - Supported in Node 4+, great performance.
 
-- **Function#bind: ALMOST NEVER** - Horrible performance. Use arrow functions. Basically, never use outside of the (deprecated) trick we use in battle-engine for split logs.
+- **Function#bind: NEVER** - Horrible performance. Use arrow functions.
 
 - **classes and subclasses: ALWAYS** - Supported in Node 4+ and good performance in Node 6+; please start refactoring existing code over.
 

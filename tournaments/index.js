@@ -31,7 +31,7 @@ class Tournament {
 
 		this.id = room.id;
 		this.room = room;
-		this.title = Tools.getFormat(format).name + ' tournament';
+		this.title = Dex.getFormat(format).name + ' tournament';
 		this.allowRenames = false;
 		this.players = Object.create(null);
 		this.playerCount = 0;
@@ -106,12 +106,12 @@ class Tournament {
 	}
 
 	setBanlist(params, output) {
-		let format = Tools.getFormat(this.format);
+		let format = Dex.getFormat(this.format);
 		if (format.team) {
 			output.errorReply(format.name + " does not support supplementary banlists.");
 			return false;
 		}
-		if (!format.banlistTable) Tools.getBanlistTable(format);
+		if (!format.banlistTable) Dex.getBanlistTable(format);
 		let banlist = [];
 		for (let i = 0; i < params.length; i++) {
 			let param = params[i].trim();
@@ -121,7 +121,7 @@ class Tournament {
 				param = param.substr(1);
 			}
 			let ban, oppositeBan;
-			let subformat = Tools.getFormat(param);
+			let subformat = Dex.getFormat(param);
 			if (subformat.effectType === 'ValidatorRule' || subformat.effectType === 'Format') {
 				if (unban) {
 					if (format.banlistTable['Rule:' + subformat.id] === false) continue;
@@ -130,7 +130,7 @@ class Tournament {
 				}
 				ban = 'Rule:' + subformat.name;
 			} else {
-				let search = Tools.dataSearch(param);
+				let search = Dex.dataSearch(param);
 				if (!search || search.length < 1) continue;
 				search = search[0];
 				if (!search.exactMatch || search.searchType === 'nature') continue;
@@ -962,10 +962,10 @@ function createTournament(room, format, generator, playerCap, isRated, args, out
 		output.errorReply("The server is restarting soon, so a tournament cannot be created.");
 		return;
 	}
-	format = Tools.getFormat(format);
+	format = Dex.getFormat(format);
 	if (format.effectType !== 'Format' || !format.tournamentShow) {
 		output.errorReply(format.id + " is not a valid tournament format.");
-		output.errorReply("Valid formats: " + Object.values(Tools.formats).filter(f => f.tournamentShow).map(format => format.name).join(", "));
+		output.errorReply("Valid formats: " + Object.values(Dex.formats).filter(f => f.tournamentShow).map(format => format.name).join(", "));
 		return;
 	}
 	if (!TournamentGenerators[toId(generator)]) {
@@ -1387,7 +1387,7 @@ Chat.commands.tournament = function (paramString, room, user) {
 			this.privateModCommand("(" + user.name + " created a tournament in " + tour.format + " format.)");
 			if (room.tourAnnouncements) {
 				let tourRoom = Rooms.search(Config.tourroom || 'tournaments');
-				if (tourRoom && tourRoom !== room) tourRoom.addRaw('<div class="infobox"><a href="/' + room.id + '" class="ilink"><strong>' + Chat.escapeHTML(Tools.getFormat(tour.format).name) + '</strong> tournament created in <strong>' + Chat.escapeHTML(room.title) + '</strong>.</a></div>').update();
+				if (tourRoom && tourRoom !== room) tourRoom.addRaw('<div class="infobox"><a href="/' + room.id + '" class="ilink"><strong>' + Chat.escapeHTML(Dex.getFormat(tour.format).name) + '</strong> tournament created in <strong>' + Chat.escapeHTML(room.title) + '</strong>.</a></div>').update();
 			}
 		}
 	} else {

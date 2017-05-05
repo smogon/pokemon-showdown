@@ -9,7 +9,7 @@
     },
     "types": ["node"],
     "include": [
-        "./tools.js",
-        "./prng.js"
+        "./sim/dex.js",
+        "./sim/prng.js"
     ]
 }

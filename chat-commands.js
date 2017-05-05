@@ -2563,10 +2563,10 @@ exports.commands = {
 				Rooms.SimulatorProcess.respawn();
 				return this.sendReply("Battles have been hotpatched. Any battles started after now will use the new code; however, in-progress battles will continue to use the old code.");
 			} else if (target === 'formats') {
-				// uncache the tools.js dependency tree
-				Chat.uncacheTree('./tools');
-				// reload tools.js
-				global.Tools = require('./tools').includeData(); // note: this will lock up the server for a few seconds
+				// uncache the sim/dex.js dependency tree
+				Chat.uncacheTree('./sim/dex');
+				// reload sim/dex.js
+				global.Dex = require('./sim/dex'); // note: this will lock up the server for a few seconds
 				// rebuild the formats list
 				delete Rooms.global.formatList;
 				// respawn validator processes
@@ -2614,7 +2614,7 @@ exports.commands = {
 		"/hotpatch chat - reload chat-commands.js and the chat-plugins",
 		"/hotpatch battles - spawn new simulator processes",
 		"/hotpatch validator - spawn new team validator processes",
-		"/hotpatch formats - reload the tools.js tree, rebuild and rebroad the formats list, and spawn new simulator and team validator processes",
+		"/hotpatch formats - reload the sim/dex.js tree, rebuild and rebroad the formats list, and spawn new simulator and team validator processes",
 		"/hotpatch dnsbl - reloads Dnsbl datacenters",
 		"/hotpatch disable, [reason] - disables the use of hotpatch until the next server restart"],
 
@@ -2622,7 +2622,7 @@ exports.commands = {
 		if (!this.can('hotpatch')) return false;
 		this.sendReply("saving...");
 		fs.writeFile('data/learnsets.js', `'use strict';\n\nexports.BattleLearnsets = {\n` +
-			Object.entries(Tools.data.Learnsets).map(([k, v]) => (
+			Object.entries(Dex.data.Learnsets).map(([k, v]) => (
 				`\t${k}: {learnset: {\n` +
 				Object.entries(v.learnset).sort(
 					(a, b) => (a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0)
@@ -3307,7 +3307,7 @@ exports.commands = {
 				return false;
 			}
 		}
-		user.prepBattle(Tools.getFormat(target).id, 'challenge', connection).then(result => {
+		user.prepBattle(Dex.getFormat(target).id, 'challenge', connection).then(result => {
 			if (result) user.makeChallenge(targetUser, target);
 		});
 	},
@@ -3351,7 +3351,7 @@ exports.commands = {
 			this.popupReply(target + " isn't challenging you - maybe they cancelled before you could accept?");
 			return false;
 		}
-		user.prepBattle(Tools.getFormat(format).id, 'challenge', connection).then(result => {
+		user.prepBattle(Dex.getFormat(format).id, 'challenge', connection).then(result => {
 			if (result) user.acceptChallengeFrom(userid);
 		});
 	},
@@ -3376,9 +3376,9 @@ exports.commands = {
 			return;
 		}
 		if (!target) return this.errorReply("Provide a valid format.");
-		let originalFormat = Tools.getFormat(target);
+		let originalFormat = Dex.getFormat(target);
 		// Note: The default here of [Gen 7] Pokebank Anything Goes isn't normally hit; since the web client will send a default format
-		let format = originalFormat.effectType === 'Format' ? originalFormat : Tools.getFormat('[Gen 7] Pokebank Anything Goes');
+		let format = originalFormat.effectType === 'Format' ? originalFormat : Dex.getFormat('[Gen 7] Pokebank Anything Goes');
 		if (format.effectType !== 'Format') return this.popupReply("Please provide a valid format.");
 
 		TeamValidator(format.id).prepTeam(user.team).then(result => {

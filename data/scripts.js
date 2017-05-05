@@ -1,6 +1,6 @@
 'use strict';
 
-const PRNG = require('./../prng');
+const PRNG = require('./../sim/prng');
 const CHOOSABLE_TARGETS = new Set(['normal', 'any', 'adjacentAlly', 'adjacentAllyOrSelf', 'adjacentFoe']);
 
 exports.BattleScripts = {
@@ -1033,7 +1033,7 @@ exports.BattleScripts = {
 
 			let stats = template.baseStats;
 			// If Wishiwashi, use the school-forme's much higher stats
-			if (template.baseSpecies === 'Wishiwashi') stats = Tools.getTemplate('wishiwashischool').baseStats;
+			if (template.baseSpecies === 'Wishiwashi') stats = Dex.getTemplate('wishiwashischool').baseStats;
 
 			// Modified base stat total assumes 31 IVs, 85 EVs in every stat
 			let mbst = (stats["hp"] * 2 + 31 + 21 + 100) + 10;
@@ -1236,7 +1236,7 @@ exports.BattleScripts = {
 			setupType: '',
 		};
 
-		for (let type in Tools.data.TypeChart) {
+		for (let type in Dex.data.TypeChart) {
 			counter[type] = 0;
 		}
 
@@ -3327,7 +3327,7 @@ exports.BattleScripts = {
 		// Every 10.34 BST adds a level from 70 up to 99. Results are floored. Uses the Mega's stats if holding a Mega Stone
 		let baseStats = template.baseStats;
 		// If Wishiwashi, use the school-forme's much higher stats
-		if (template.baseSpecies === 'Wishiwashi') baseStats = Tools.getTemplate('wishiwashischool').baseStats;
+		if (template.baseSpecies === 'Wishiwashi') baseStats = Dex.getTemplate('wishiwashischool').baseStats;
 
 		let bst = baseStats.hp + baseStats.atk + baseStats.def + baseStats.spa + baseStats.spd + baseStats.spe;
 		// Adjust levels of mons based on abilities (Pure Power, Sheer Force, etc.) and also Eviolite

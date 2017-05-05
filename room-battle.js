@@ -6,7 +6,7 @@
  * interface. It also abstracts away the multi-process nature of the
  * simulator.
  *
- * For the actual battle simulation, see battle-engine.js
+ * For the actual battle simulation, see sim/
  *
  * @license MIT license
  */
@@ -276,7 +276,7 @@ class Battle {
 	constructor(room, format, rated) {
 		this.id = room.id;
 		this.room = room;
-		this.title = Tools.getFormat(format).name;
+		this.title = Dex.getFormat(format).name;
 		if (!this.title.endsWith(" Battle")) this.title += " Battle";
 		this.allowRenames = !rated;
 
@@ -657,10 +657,10 @@ exports.SimulatorProcess = SimulatorProcess;
 if (process.send && module === process.mainModule) {
 	// This is a child process!
 
-	global.Tools = require('./tools').includeFormats();
-	global.toId = Tools.getId;
 	global.Chat = require('./chat');
-	const BattleEngine = require('./battle-engine');
+	const Sim = require('./sim');
+	global.Dex = require('./sim/dex');
+	global.toId = Dex.getId;
 
 	if (Config.crashguard) {
 		// graceful crash - allow current battles to finish before restarting
@@ -669,7 +669,7 @@ if (process.send && module === process.mainModule) {
 		});
 	}
 
-	require('./repl').start('battle-engine-', process.pid, cmd => eval(cmd));
+	require('./repl').start('sim-', process.pid, cmd => eval(cmd));
 
 	let Battles = new Map();
 
@@ -688,7 +688,7 @@ if (process.send && module === process.mainModule) {
 			const id = data[0];
 			if (!Battles.has(id)) {
 				try {
-					const battle = BattleEngine.construct(data[2], data[3], sendBattleMessage);
+					const battle = Sim.construct(data[2], data[3], sendBattleMessage);
 					battle.id = id;
 					Battles.set(id, battle);
 				} catch (err) {

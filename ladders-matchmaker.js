@@ -50,7 +50,7 @@ class Matchmaker {
 
 	searchBattle(user, formatid) {
 		if (!user.connected) return;
-		formatid = Tools.getFormat(formatid).id;
+		formatid = Dex.getFormat(formatid).id;
 		return user.prepBattle(formatid, 'search', null)
 			.then(result => this.finishSearchBattle(user, formatid, result));
 	}

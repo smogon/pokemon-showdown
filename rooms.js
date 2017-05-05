@@ -418,8 +418,8 @@ class GlobalRoom {
 		this.formatList = '|formats' + (Ladders.formatsListPrefix || '');
 		let section = '', prevSection = '';
 		let curColumn = 1;
-		for (let i in Tools.formats) {
-			let format = Tools.formats[i];
+		for (let i in Dex.formats) {
+			let format = Dex.formats[i];
 			if (format.section) section = format.section;
 			if (format.column) curColumn = format.column;
 			if (!format.name) continue;
@@ -748,7 +748,7 @@ class BattleRoom extends Room {
 		}
 
 		let rated;
-		if (options.rated && Tools.getFormat(formatid).rated !== false) {
+		if (options.rated && Dex.getFormat(formatid).rated !== false) {
 			rated = options.rated;
 		} else {
 			rated = false;
