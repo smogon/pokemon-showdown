@@ -302,7 +302,7 @@ exports.Formats = [
 		},
 		onValidateTeam: function (team) {
 			let counter = 0;
-			let restrictions = {"blastburn": 1, "explosion": 1, "frenzyplant": 1, "gigaimpact": 1, "hydrocannon": 1, "hyperbeam": 1, "vcreate": 1,};
+			let restrictions = {"blastburn": 1, "explosion": 1, "frenzyplant": 1, "gigaimpact": 1, "hydrocannon": 1, "hyperbeam": 1, "vcreate": 1};
 			for (let i = 0; i < team.length; i++) {
 				for (let j = 0; j < team[i].moves.length; j++) {
 					if (team[i].moves[j] in restrictions && ++counter > 2) return ["Your team has more than two of the restricted moves Hydro Cannon, Frenzy Plant, Blast Burn, Hyper Beam, Giga Impact, V-Create, Explosion."];
