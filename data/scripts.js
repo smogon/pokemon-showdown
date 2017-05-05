@@ -2888,6 +2888,11 @@ exports.BattleScripts = {
 				case 'toxic':
 					if (hasMove['thunderwave'] || hasMove['willowisp'] || hasMove['scald'] || hasMove['yawn'] || hasMove['spore'] || hasMove['sleeppowder']) rejected = true;
 					break;
+
+				// Z-status
+				case 'hypnosis':
+					if ((teamDetails.zMove || !counter.setupType) && template.baseStats.spe < 100) rejected = true;
+					break;
 				}
 
 				// Increased/decreased priority moves unneeded with moves that boost only speed
@@ -3182,14 +3187,16 @@ exports.BattleScripts = {
 			} else {
 				item = 'Choice Scarf';
 			}
+		} else if (ability === 'Gluttony' || ability === 'Schooling') {
+			item = ['Aguav', 'Figy', 'Iapapa', 'Mago', 'Wiki'][this.random(5)] + ' Berry';
 		} else if (hasMove['bellydrum']) {
-			if (ability === 'Gluttony') {
-				item = ['Aguav', 'Figy', 'Iapapa', 'Mago', 'Wiki'][this.random(5)] + ' Berry';
-			} else if (template.baseStats.spe <= 50 && !teamDetails.zMove && this.random(2)) {
+			if (template.baseStats.spe <= 50 && !teamDetails.zMove && this.random(2)) {
 				item = 'Normalium Z';
 			} else {
 				item = 'Sitrus Berry';
 			}
+		} else if (hasMove['hypnosis'] && (!teamDetails.zMove && counter.setupType && template.baseStats.spe < 100)) {
+			item = 'Psychium Z';
 		} else if (hasMove['rest'] && !hasMove['sleeptalk'] && ability !== 'Natural Cure' && ability !== 'Shed Skin') {
 			item = 'Chesto Berry';
 		} else if (hasMove['naturalgift']) {
@@ -3335,6 +3342,10 @@ exports.BattleScripts = {
 			bst += 0.3 * (counter.Physical > counter.Special ? baseStats.atk : baseStats.spa);
 		} else if (templateAbility === 'Fur Coat') {
 			bst += baseStats.def;
+		} else if (templateAbility === 'Slow Start') {
+			bst -= baseStats.atk / 2 + baseStats.spe / 2;
+		} else if (templateAbility === 'Truant') {
+			bst *= 2 / 3;
 		}
 		if (item === 'Eviolite') {
 			bst += 0.5 * (baseStats.def + baseStats.spd);
