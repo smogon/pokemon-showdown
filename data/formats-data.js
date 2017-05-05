@@ -1714,6 +1714,7 @@ exports.BattleFormatsData = {
 			{"generation": 4, "level": 50, "moves":["synthesis", "return", "hypnosis", "teleport"], "pokeball": "cherishball"},
 			{"generation": 4, "level": 5, "moves":["pound"], "pokeball": "cherishball"},
 			{"generation": 6, "level": 100, "moves":["pound"], "pokeball": "cherishball"},
+			{"generation": 7, "level": 5, "moves":["pound"], "pokeball": "cherishball"},
 		],
 		eventOnly: true,
 		tier: "UU",
@@ -5949,6 +5950,9 @@ exports.BattleFormatsData = {
 	lycanrocmidnight: {
 		randomBattleMoves: ["bulkup", "stoneedge", "stealthrock", "suckerpunch", "swordsdance", "firefang"],
 		randomDoubleBattleMoves: ["stoneedge", "suckerpunch", "swordsdance", "protect", "taunt"],
+		eventPokemon: [
+			{"generation": 7, "level": 50, "isHidden": true, "moves":["stoneedge", "firefang", "suckerpunch", "swordsdance"], "pokeball": "cherishball"},
+		],
 		tier: "New",
 	},
 	wishiwashi: {
