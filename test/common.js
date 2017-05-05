@@ -3,7 +3,7 @@
 const assert = require('assert');
 const Dex = require('./../sim/dex');
 const PRNG = require('./../sim/prng');
-const MockBattle = require('./mocks/Battle');
+const Sim = require('./../sim');
 
 const cache = new Map();
 
@@ -100,8 +100,7 @@ class TestTools {
 	 * @param {PRNG} [prng] A pseudo-random number generator. If not provided, a pseudo-random number
 	 * generator will be generated for the user with a seed that is guaranteed to be the same across
 	 * test executions to help with determinism.
-	 * @returns {MockBattle} A mocked battle. This has mostly the same behaviour as regular Battles,
-	 * but some behaviour may differ specifically for testing.
+	 * @returns {Sim.Battle} A battle.
 	 */
 	createBattle(options, teams, prng = new PRNG(DEFAULT_SEED)) {
 		if (Array.isArray(options)) {
@@ -109,7 +108,7 @@ class TestTools {
 			options = {};
 		}
 		const format = this.getFormat(options || {});
-		const battle = MockBattle.construct(
+		const battle = Sim.construct(
 			format.id,
 			undefined,
 			undefined,

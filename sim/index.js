@@ -19,19 +19,19 @@ const Side = require('./side');
 const Pokemon = require('./pokemon');
 
 let battleProtoCache = new Map();
-exports.construct = function (format, rated, send) {
+exports.construct = function (format, rated, send, prng) {
 	format = Dex.getFormat(format);
-	let mod = format.mod || 'base';
+	const mod = format.mod || 'base';
 	if (!battleProtoCache.has(mod)) {
 		// Scripts overrides Battle overrides Dex
-		let dex = Dex.mod(mod);
-		let proto = Object.create(Battle.prototype);
+		const dex = Dex.mod(mod);
+		const proto = Object.create(Battle.prototype);
 		Object.assign(proto, dex);
 		dex.install(proto);
 		battleProtoCache.set(mod, proto);
 	}
-	let battle = Object.create(battleProtoCache.get(mod));
-	Battle.prototype.init.call(battle, format, rated, send);
+	const battle = Object.create(battleProtoCache.get(mod));
+	Battle.prototype.init.call(battle, format, rated, send, prng);
 	return battle;
 };
 
