@@ -469,7 +469,7 @@ exports.BattleFormats = {
 	endlessbattleclause: {
 		effectType: 'Rule',
 		name: 'Endless Battle Clause',
-		// implemented in battle-engine.js
+		// implemented in sim/battle.js
 
 		// A Pokémon has a confinement counter, which starts at 0:
 		// +1 confinement whenever:

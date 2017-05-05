@@ -17,7 +17,7 @@ describe('Pressure', function () {
 		]);
 		battle.choose('p1', 'move 1, move 1 -1');
 		battle.choose('p2', 'move 1, move 1 1');
-		let move = Tools.getMove('peck');
+		let move = Dex.getMove('peck');
 		assert.strictEqual(battle.p1.active[1].getMoveData(move).pp, 55);
 		assert.strictEqual(battle.p2.active[1].getMoveData(move).pp, 54);
 	});
@@ -29,7 +29,7 @@ describe('Pressure', function () {
 		]);
 		battle.choose('p1', 'move 1, move 1 2');
 		battle.choose('p2', 'move 1, move 1 2');
-		let move = Tools.getMove('peck');
+		let move = Dex.getMove('peck');
 		assert.strictEqual(battle.p1.active[1].getMoveData(move).pp, 55);
 		assert.strictEqual(battle.p2.active[1].getMoveData(move).pp, 54);
 	});
@@ -39,16 +39,16 @@ describe('Pressure', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: "Giratina", ability: 'pressure', item: 'laggingtail', moves: ['mistyterrain', 'shadowforce']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Smeargle", ability: 'desolateland', moves: ['doubleedge', 'spore', 'moonblast', 'surf']}]);
 		battle.commitDecisions();
-		assert.strictEqual(battle.p2.active[0].getMoveData(Tools.getMove('doubleedge')).pp, 22);
+		assert.strictEqual(battle.p2.active[0].getMoveData(Dex.getMove('doubleedge')).pp, 22);
 		battle.choose('p1', 'move 2');
 		battle.choose('p2', 'move 2');
-		assert.strictEqual(battle.p2.active[0].getMoveData(Tools.getMove('spore')).pp, 22);
+		assert.strictEqual(battle.p2.active[0].getMoveData(Dex.getMove('spore')).pp, 22);
 		battle.choose('p2', 'move 3');
 		battle.commitDecisions();
-		assert.strictEqual(battle.p2.active[0].getMoveData(Tools.getMove('moonblast')).pp, 22);
+		assert.strictEqual(battle.p2.active[0].getMoveData(Dex.getMove('moonblast')).pp, 22);
 		battle.choose('p2', 'move 4');
 		battle.commitDecisions();
-		assert.strictEqual(battle.p2.active[0].getMoveData(Tools.getMove('surf')).pp, 22);
+		assert.strictEqual(battle.p2.active[0].getMoveData(Dex.getMove('surf')).pp, 22);
 	});
 
 	it('should deduct PP for each Pressure Pokemon targetted', function () {
@@ -65,9 +65,9 @@ describe('Pressure', function () {
 			{species: "Reshiram", ability: 'turboblaze', moves: ['rockslide']},
 		]);
 		battle.commitDecisions();
-		assert.strictEqual(battle.p2.active[0].getMoveData(Tools.getMove('hail')).pp, 12);
-		assert.strictEqual(battle.p2.active[1].getMoveData(Tools.getMove('spikes')).pp, 28);
-		assert.strictEqual(battle.p2.active[2].getMoveData(Tools.getMove('rockslide')).pp, 13);
+		assert.strictEqual(battle.p2.active[0].getMoveData(Dex.getMove('hail')).pp, 12);
+		assert.strictEqual(battle.p2.active[1].getMoveData(Dex.getMove('spikes')).pp, 28);
+		assert.strictEqual(battle.p2.active[2].getMoveData(Dex.getMove('rockslide')).pp, 13);
 	});
 
 	it('should deduct PP for each opposing Pressure Pokemon when Snatch of Imprison are used', function () {
@@ -84,8 +84,8 @@ describe('Pressure', function () {
 			{species: "Reshiram", ability: 'turboblaze', moves: ['rest']},
 		]);
 		battle.commitDecisions();
-		assert.strictEqual(battle.p2.active[0].getMoveData(Tools.getMove('snatch')).pp, 12);
-		assert.strictEqual(battle.p2.active[1].getMoveData(Tools.getMove('imprison')).pp, 12);
+		assert.strictEqual(battle.p2.active[0].getMoveData(Dex.getMove('snatch')).pp, 12);
+		assert.strictEqual(battle.p2.active[1].getMoveData(Dex.getMove('imprison')).pp, 12);
 	});
 });
 
@@ -101,7 +101,7 @@ describe('Pressure [Gen 4]', function () {
 		]);
 		battle.choose('p1', 'move 1, move 1 -1');
 		battle.choose('p2', 'move 1, move 1 1');
-		let move = Tools.getMove('peck');
+		let move = Dex.getMove('peck');
 		assert.strictEqual(battle.p1.active[1].getMoveData(move).pp, 54);
 		assert.strictEqual(battle.p2.active[1].getMoveData(move).pp, 54);
 	});
@@ -113,7 +113,7 @@ describe('Pressure [Gen 4]', function () {
 		]);
 		battle.choose('p1', 'move 1, move 1 2');
 		battle.choose('p2', 'move 1, move 1 2');
-		let move = Tools.getMove('peck');
+		let move = Dex.getMove('peck');
 		assert.strictEqual(battle.p1.active[1].getMoveData(move).pp, 55);
 		assert.strictEqual(battle.p2.active[1].getMoveData(move).pp, 54);
 	});
@@ -125,10 +125,10 @@ describe('Pressure [Gen 4]', function () {
 		]);
 		const attacker = battle.p2.active[0];
 		battle.commitDecisions();
-		assert.strictEqual(attacker.getMoveData(Tools.getMove('doubleedge')).pp, 22);
+		assert.strictEqual(attacker.getMoveData(Dex.getMove('doubleedge')).pp, 22);
 		battle.choose('p2', 'move 2');
 		battle.commitDecisions();
-		assert.strictEqual(attacker.getMoveData(Tools.getMove('dragonpulse')).pp, 14);
+		assert.strictEqual(attacker.getMoveData(Dex.getMove('dragonpulse')).pp, 14);
 	});
 
 	it('should deduct PP for each Pressure Pokemon targetted', function () {
@@ -137,8 +137,8 @@ describe('Pressure [Gen 4]', function () {
 			[{species: "Lugia", ability: 'pressure', moves: ['hail']}, {species: "Ho-Oh", ability: 'pressure', moves: ['earthquake']}],
 		]);
 		battle.commitDecisions();
-		assert.strictEqual(battle.p2.active[0].getMoveData(Tools.getMove('hail')).pp, 12);
-		assert.strictEqual(battle.p2.active[1].getMoveData(Tools.getMove('earthquake')).pp, 12);
+		assert.strictEqual(battle.p2.active[0].getMoveData(Dex.getMove('hail')).pp, 12);
+		assert.strictEqual(battle.p2.active[1].getMoveData(Dex.getMove('earthquake')).pp, 12);
 	});
 
 	it('should not deduct PP from self-targeting moves', function () {
@@ -147,7 +147,7 @@ describe('Pressure [Gen 4]', function () {
 			[{species: "Dialga", ability: 'pressure', moves: ['calmmind']}],
 		]);
 		battle.commitDecisions();
-		let move = Tools.getMove('calmmind');
+		let move = Dex.getMove('calmmind');
 		assert.strictEqual(battle.p1.active[0].getMoveData(move).pp, 31);
 		assert.strictEqual(battle.p1.active[0].getMoveData(move).pp, 31);
 	});

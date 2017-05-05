@@ -80,7 +80,7 @@ class UNOgame extends Rooms.RoomGame {
 		this.state = 'signups';
 
 		this.currentPlayer = null;
-		this.deck = Tools.shuffle(createDeck());
+		this.deck = Dex.shuffle(createDeck());
 		this.discards = [];
 		this.topCard = null;
 
@@ -374,7 +374,7 @@ class UNOgame extends Rooms.RoomGame {
 
 		for (let i = 0; i < count; i++) {
 			if (!this.deck.length) {
-				this.deck = this.discards.length ? Tools.shuffle(this.discards) : Tools.shuffle(createDeck()); // shuffle the cards back into the deck, or if there are no discards, add another deck into the game.
+				this.deck = this.discards.length ? Dex.shuffle(this.discards) : Dex.shuffle(createDeck()); // shuffle the cards back into the deck, or if there are no discards, add another deck into the game.
 				this.discards = []; // clear discard pile
 			}
 			drawnCards.push(this.deck.pop());

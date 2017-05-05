@@ -164,23 +164,23 @@ class Giveaway {
 		text = toPokemonId(text);
 		let mons = new Map();
 		let output = '';
-		for (let i in Tools.data.Pokedex) {
+		for (let i in Dex.data.Pokedex) {
 			let id = i;
-			if (!Tools.data.Pokedex[i].baseSpecies && (Tools.data.Pokedex[i].species.includes(' '))) {
-				id = toPokemonId(Tools.data.Pokedex[i].species);
+			if (!Dex.data.Pokedex[i].baseSpecies && (Dex.data.Pokedex[i].species.includes(' '))) {
+				id = toPokemonId(Dex.data.Pokedex[i].species);
 			}
 			let regexp = new RegExp(`\\b${id}\\b`);
 			if (regexp.test(text)) {
-				let mon = Tools.getTemplate(i);
+				let mon = Dex.getTemplate(i);
 				mons.set(mon.baseSpecies, mon);
 			}
 		}
 		// the previous regex doesn't match "nidoran-m" or "nidoran male"
 		if (/\bnidoran\W{0,1}m(ale){0,1}\b/.test(text)) {
-			mons.set('Nidoran-M', Tools.getTemplate('nidoranm'));
+			mons.set('Nidoran-M', Dex.getTemplate('nidoranm'));
 		}
 		if (/\bnidoran\W{0,1}f(emale){0,1}\b/.test(text)) {
-			mons.set('Nidoran-F', Tools.getTemplate('nidoranf'));
+			mons.set('Nidoran-F', Dex.getTemplate('nidoranf'));
 		}
 		text = toId(text);
 		if (mons.size) {
@@ -585,15 +585,15 @@ class GtsGiveaway {
 	static linkify(text) {
 		let parsed = text.toLowerCase().replace(/é/g, 'e');
 
-		for (let i in Tools.data.Pokedex) {
+		for (let i in Dex.data.Pokedex) {
 			let id = i;
-			if (!Tools.data.Pokedex[i].baseSpecies && (Tools.data.Pokedex[i].species.includes(' '))) {
-				id = toPokemonId(Tools.data.Pokedex[i].species);
+			if (!Dex.data.Pokedex[i].baseSpecies && (Dex.data.Pokedex[i].species.includes(' '))) {
+				id = toPokemonId(Dex.data.Pokedex[i].species);
 			}
 			let regexp = new RegExp(`\\b${id}\\b`, 'ig');
 			let res = regexp.exec(parsed);
 			if (res) {
-				let num = Tools.data.Pokedex[i].num < 100 ? (Tools.data.Pokedex[i].num < 10 ? `00${Tools.data.Pokedex[i].num}` : `0${Tools.data.Pokedex[i].num}`) : Tools.data.Pokedex[i].num;
+				let num = Dex.data.Pokedex[i].num < 100 ? (Dex.data.Pokedex[i].num < 10 ? `00${Dex.data.Pokedex[i].num}` : `0${Dex.data.Pokedex[i].num}`) : Dex.data.Pokedex[i].num;
 				return `${text.slice(0, res.index)}<a href="http://www.serebii.net/pokedex-sm/location/${num}.shtml">${text.slice(res.index, res.index + res[0].length)}</a>${text.slice(res.index + res[0].length)}`;
 			}
 		}

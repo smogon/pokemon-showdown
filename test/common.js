@@ -1,8 +1,8 @@
 'use strict';
 
 const assert = require('assert');
-const Tools = require('./../tools').includeFormats();
-const PRNG = require('./../prng');
+const Dex = require('./../sim/dex');
+const PRNG = require('./../sim/prng');
 const MockBattle = require('./mocks/Battle');
 
 const cache = new Map();
@@ -31,7 +31,7 @@ class TestTools {
 
 		const mod = options.mod || 'base';
 		this.baseFormat = options.baseFormat || {effectType: 'Format', mod: mod};
-		this.tools = Tools.mod(mod);
+		this.tools = Dex.mod(mod);
 
 		this.modPrefix = this.baseFormat.name ? `[${this.baseFormat.name}]` : '';
 		if (!this.modPrefix && !this.tools.isBase) {
@@ -45,8 +45,8 @@ class TestTools {
 
 	mod(mod) {
 		if (cache.has(mod)) return cache.get(mod);
-		if (Tools.dexes[mod]) return new TestTools({mod: mod});
-		const baseFormat = Tools.getFormat(mod);
+		if (Dex.dexes[mod]) return new TestTools({mod: mod});
+		const baseFormat = Dex.getFormat(mod);
 		if (baseFormat.effectType === 'Format') return new TestTools({mod: baseFormat.mod, baseFormat});
 		throw new Error(`Mod ${mod} does not exist`);
 	}
@@ -61,12 +61,12 @@ class TestTools {
 			if (property === 'gameType' || !options[property]) continue;
 			mask |= RULE_FLAGS[property];
 		}
-		const gameType = Tools.getId(options.gameType || 'singles');
+		const gameType = Dex.getId(options.gameType || 'singles');
 		if (this.formats.get(gameType).has(mask)) return this.formats.get(gameType).get(mask);
 
 		const gameTypePrefix = gameType === 'singles' ? '' : capitalize(gameType);
 		const formatName = [this.modPrefix, gameTypePrefix, "Custom Game", '' + mask].filter(part => part).join(" ");
-		const formatId = Tools.getId(formatName);
+		const formatId = Dex.getId(formatName);
 
 		const format = Object.assign(Object.assign({}, this.baseFormat), {
 			id: formatId,

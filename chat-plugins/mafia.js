@@ -752,7 +752,7 @@ exports.commands = {
 						return this.errorReply(Chat.escapeHTML(i) + " is not a valid mafia class.");
 					}
 
-					let amt = parseInt(Tools.getString(targetObj.classes[i]));
+					let amt = parseInt(Dex.getString(targetObj.classes[i]));
 					if (isNaN(amt) || amt < 0 || amt > 25) return this.errorReply("Invalid amount for class " + Chat.escapeHTML(i));
 
 					for (let j = 0; j < amt; j++) {

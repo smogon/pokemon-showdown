@@ -33,7 +33,7 @@ describe('Misty Terrain', function () {
 		battle.join('p2', 'Guest 2', 1, [{species: "Shaymin-Sky", ability: 'serenegrace', moves: ['leechseed']}]);
 		battle.commitDecisions();
 		let basePower;
-		let move = Tools.getMove('dragonpulse');
+		let move = Dex.getMove('dragonpulse');
 		basePower = battle.runEvent('BasePower', battle.p2.active[0], battle.p1.active[0], move, move.basePower, true);
 		assert.strictEqual(basePower, battle.modify(move.basePower, 0.5));
 		basePower = battle.runEvent('BasePower', battle.p1.active[0], battle.p2.active[0], move, move.basePower, true);

@@ -8,7 +8,7 @@ const TOTAL_TEAMS = 100;
 const ALL_GENS = [1, 2/*, 3, 4*/, 5, 6, 7];
 
 function isValidSet(gen, set) {
-	const tools = Tools.mod(`gen${gen}`);
+	const tools = Dex.mod(`gen${gen}`);
 	const template = tools.getTemplate(set.species || set.name);
 	if (!template.exists || template.gen > gen) return false;
 	if (set.item) {

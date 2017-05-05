@@ -281,9 +281,9 @@ if (process.send && module === process.mainModule) {
 		});
 	}
 
-	global.Tools = require('../tools');
-	global.toId = Tools.getId;
-	Tools.includeData();
+	global.Dex = require('../sim/dex');
+	global.toId = Dex.getId;
+	Dex.includeData();
 	global.TeamValidator = require('../team-validator');
 
 	process.on('message', message => PM.onMessageDownstream(message));
@@ -338,7 +338,7 @@ function runDexsearch(target, cmd, canAll, message) {
 				target = target.substr(1);
 			}
 
-			let targetAbility = Tools.getAbility(target);
+			let targetAbility = Dex.getAbility(target);
 			if (targetAbility.exists) {
 				let invalid = validParameter("abilities", targetAbility, isNotSearch, targetAbility);
 				if (invalid) return {reply: invalid};
@@ -445,8 +445,8 @@ function runDexsearch(target, cmd, canAll, message) {
 
 			if (target === 'priority') {
 				if (parameters.length > 1) return {reply: "The parameter 'priority' cannot have alternative parameters"};
-				for (let move in Tools.data.Movedex) {
-					let moveData = Tools.getMove(move);
+				for (let move in Dex.data.Movedex) {
+					let moveData = Dex.getMove(move);
 					if (moveData.category === "Status" || moveData.id === "bide") continue;
 					if (moveData.priority > 0) {
 						let invalid = validParameter("moves", move, isNotSearch, target);
@@ -466,7 +466,7 @@ function runDexsearch(target, cmd, canAll, message) {
 
 			if (target.substr(0, 8) === 'resists ') {
 				let targetResist = target.substr(8, 1).toUpperCase() + target.substr(9);
-				if (targetResist in Tools.data.TypeChart) {
+				if (targetResist in Dex.data.TypeChart) {
 					let invalid = validParameter("resists", targetResist, isNotSearch, target);
 					if (invalid) return {reply: invalid};
 					orGroup.resists[targetResist] = !isNotSearch;
@@ -476,7 +476,7 @@ function runDexsearch(target, cmd, canAll, message) {
 				}
 			}
 
-			let targetMove = Tools.getMove(target);
+			let targetMove = Dex.getMove(target);
 			if (targetMove.exists) {
 				let invalid = validParameter("moves", targetMove.id, isNotSearch, target);
 				if (invalid) return {reply: invalid};
@@ -487,7 +487,7 @@ function runDexsearch(target, cmd, canAll, message) {
 			let typeIndex = target.indexOf(' type');
 			if (typeIndex >= 0) {
 				target = target.charAt(0).toUpperCase() + target.substring(1, typeIndex);
-				if (target in Tools.data.TypeChart) {
+				if (target in Dex.data.TypeChart) {
 					let invalid = validParameter("types", target, isNotSearch, target + ' type');
 					if (invalid) return {reply: invalid};
 					orGroup.types[target] = !isNotSearch;
@@ -553,8 +553,8 @@ function runDexsearch(target, cmd, canAll, message) {
 	if (showAll && searches.length === 0 && megaSearch === null) return {reply: "No search parameters other than 'all' were found. Try '/help dexsearch' for more information on this command."};
 
 	let dex = {};
-	for (let pokemon in Tools.data.Pokedex) {
-		let template = Tools.getTemplate(pokemon);
+	for (let pokemon in Dex.data.Pokedex) {
+		let template = Dex.getTemplate(pokemon);
 		let megaSearchResult = (megaSearch === null || (megaSearch === true && template.isMega) || (megaSearch === false && !template.isMega));
 		if (template.tier !== 'Unreleased' && template.tier !== 'Illegal' && (template.tier !== 'CAP' || capSearch) && megaSearchResult) {
 			dex[pokemon] = template;
@@ -592,7 +592,7 @@ function runDexsearch(target, cmd, canAll, message) {
 				if (alts.tiers[dex[mon].tier]) continue;
 				if (Object.values(alts.tiers).includes(false) && alts.tiers[dex[mon].tier] !== false) continue;
 				// some LC Pokemon are also in other tiers and need to be handled separately
-				if (alts.tiers.LC && !dex[mon].prevo && dex[mon].nfe && dex[mon].tier !== 'LC Uber' && !Tools.formats.lc.banlist.includes(dex[mon].species)) continue;
+				if (alts.tiers.LC && !dex[mon].prevo && dex[mon].nfe && dex[mon].tier !== 'LC Uber' && !Dex.formats.lc.banlist.includes(dex[mon].species)) continue;
 			}
 
 			for (let type in alts.types) {
@@ -605,8 +605,8 @@ function runDexsearch(target, cmd, canAll, message) {
 
 			for (let type in alts.resists) {
 				let effectiveness = 0;
-				let notImmune = Tools.getImmunity(type, dex[mon]);
-				if (notImmune) effectiveness = Tools.getEffectiveness(type, dex[mon]);
+				let notImmune = Dex.getImmunity(type, dex[mon]);
+				if (notImmune) effectiveness = Dex.getEffectiveness(type, dex[mon]);
 				if (!alts.resists[type]) {
 					if (notImmune && effectiveness >= 0) matched = true;
 				} else {
@@ -675,7 +675,7 @@ function runDexsearch(target, cmd, canAll, message) {
 	}
 
 	if (randomOutput && randomOutput < results.length) {
-		results = Tools.shuffle(results).slice(0, randomOutput);
+		results = Dex.shuffle(results).slice(0, randomOutput);
 	}
 
 	let resultsStr = (message === "" ? message : "<span style=\"color:#999999;\">" + escapeHTML(message) + ":</span><br />");
@@ -719,7 +719,7 @@ function runMovesearch(target, cmd, canAll, message) {
 		let typeIndex = target.indexOf(' type');
 		if (typeIndex >= 0) {
 			target = target.charAt(0).toUpperCase() + target.substring(1, typeIndex);
-			if (!(target in Tools.data.TypeChart)) return {reply: "Type '" + escapeHTML(target) + "' not found."};
+			if (!(target in Dex.data.TypeChart)) return {reply: "Type '" + escapeHTML(target) + "' not found."};
 			if (!searches['type']) searches['type'] = {};
 			if ((searches['type'][target] && isNotSearch) || (searches['type'][target] === false && !isNotSearch)) return {reply: 'A search cannot both exclude and include a type.'};
 			searches['type'][target] = !isNotSearch;
@@ -794,14 +794,14 @@ function runMovesearch(target, cmd, canAll, message) {
 			continue;
 		}
 
-		let template = Tools.getTemplate(target);
+		let template = Dex.getTemplate(target);
 		if (template.exists) {
 			if (Object.keys(lsetData).length) return {reply: "A search can only include one Pok\u00e9mon learnset."};
-			if (!template.learnset) template = Tools.getTemplate(template.baseSpecies);
+			if (!template.learnset) template = Dex.getTemplate(template.baseSpecies);
 			lsetData = Object.assign({}, template.learnset);
 			targetMon = template.name;
 			while (template.prevo) {
-				template = Tools.getTemplate(template.prevo);
+				template = Dex.getTemplate(template.prevo);
 				for (let move in template.learnset) {
 					if (!lsetData[move]) lsetData[move] = template.learnset[move];
 				}
@@ -956,11 +956,11 @@ function runMovesearch(target, cmd, canAll, message) {
 	let dex = {};
 	if (targetMon) {
 		for (let move in lsetData) {
-			dex[move] = Tools.getMove(move);
+			dex[move] = Dex.getMove(move);
 		}
 	} else {
-		for (let move in Tools.data.Movedex) {
-			dex[move] = Tools.getMove(move);
+		for (let move in Dex.data.Movedex) {
+			dex[move] = Dex.getMove(move);
 		}
 		delete dex.magikarpsrevenge;
 	}
@@ -1242,8 +1242,8 @@ function runItemsearch(target, cmd, canAll, message) {
 			}
 		}
 
-		for (let n in Tools.data.Items) {
-			let item = Tools.getItem(n);
+		for (let n in Dex.data.Items) {
+			let item = Dex.getItem(n);
 			if (!item.fling) continue;
 
 			if (basePower && effect) {
@@ -1262,7 +1262,7 @@ function runItemsearch(target, cmd, canAll, message) {
 
 		for (let k = 0; k < searchedWords.length; k++) {
 			searchedWords[k] = searchedWords[k].charAt(0).toUpperCase() + searchedWords[k].slice(1);
-			if (searchedWords[k] in Tools.data.TypeChart) {
+			if (searchedWords[k] in Dex.data.TypeChart) {
 				if (type) return {reply: "Only specify natural gift type once."};
 				type = searchedWords[k];
 			} else {
@@ -1274,8 +1274,8 @@ function runItemsearch(target, cmd, canAll, message) {
 			}
 		}
 
-		for (let n in Tools.data.Items) {
-			let item = Tools.getItem(n);
+		for (let n in Dex.data.Items) {
+			let item = Dex.getItem(n);
 			if (!item.isBerry) continue;
 
 			if (basePower && type) {
@@ -1289,8 +1289,8 @@ function runItemsearch(target, cmd, canAll, message) {
 		if (foundItems.length === 0) return {reply: 'No berries inflict ' + basePower + 'bp damage when used with Natural Gift.'};
 	} else {
 		let bestMatched = 0;
-		for (let n in Tools.data.Items) {
-			let item = Tools.getItem(n);
+		for (let n in Dex.data.Items) {
+			let item = Dex.getItem(n);
 			let matched = 0;
 			// splits words in the description into a toId()-esk format except retaining / and . in numbers
 			let descWords = item.desc;
@@ -1310,7 +1310,7 @@ function runItemsearch(target, cmd, canAll, message) {
 
 		// iterate over found items again to make sure they all are the best match
 		for (let l = 0; l < foundItems.length; l++) {
-			let item = Tools.getItem(foundItems[l]);
+			let item = Dex.getItem(foundItems[l]);
 			let matched = 0;
 			let descWords = item.desc;
 			if (/[1-9\.]+x/.test(descWords)) descWords += ' increases';
@@ -1352,11 +1352,11 @@ function runLearn(target, cmd) {
 
 	while (targets.length) {
 		let targetid = toId(targets[0]);
-		if (Tools.getFormat(targetid).exists) {
+		if (Dex.getFormat(targetid).exists) {
 			if (format.requirePentagon) {
 				return {error: "'pentagon' can't be used with formats."};
 			}
-			format = Tools.getFormat(targetid);
+			format = Dex.getFormat(targetid);
 			formatid = targetid;
 			formatName = format.name;
 		}
@@ -1379,7 +1379,7 @@ function runLearn(target, cmd) {
 	if (!formatName) formatName = 'Gen ' + gen;
 	let lsetData = {set: {}, format: format};
 
-	let template = Tools.getTemplate(targets[0]);
+	let template = Dex.getTemplate(targets[0]);
 	let move = {};
 	let problem;
 	let all = (cmd === 'learnall');
@@ -1398,7 +1398,7 @@ function runLearn(target, cmd) {
 	}
 
 	for (let i = 1, len = targets.length; i < len; i++) {
-		move = Tools.getMove(targets[i]);
+		move = Dex.getMove(targets[i]);
 		if (!move.exists || move.id === 'magikarpsrevenge') {
 			return {error: "Move '" + move.id + "' not found."};
 		}

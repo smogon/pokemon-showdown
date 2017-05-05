@@ -45,6 +45,10 @@
 const fs = require('fs');
 const path = require('path');
 
+const DATA_DIR = path.resolve(__dirname, '../data');
+const MODS_DIR = path.resolve(__dirname, '../mods');
+const FORMATS = path.resolve(__dirname, '../config/formats');
+
 // shim Object.values
 if (!Object.values) {
 	Object.values = function (object) {
@@ -72,7 +76,7 @@ if (!Object.values) {
 // 	};
 // }
 
-/** @type {{[mod: string]: BattleDex}} */
+/** @type {{[mod: string]: ModdedDex}} */
 let dexes = {};
 
 /** @typedef {'Pokedex' | 'FormatsData' | 'Learnsets' | 'Movedex' | 'Statuses' | 'TypeChart' | 'Scripts' | 'Items' | 'Abilities' | 'Natures' | 'Formats' | 'Aliases'} DataType */
@@ -98,7 +102,7 @@ const DATA_FILES = {
  name: string,
 }} DexTemplate */
 
-/** @typedef {{Pokedex: object, Movedex: object, Statuses: object, TypeChart: object, Scripts: object, Items: object, Abilities: object, FormatsData: object, Learnsets: object, Aliases: object, Natures: object}} BattleDexData */
+/** @typedef {{Pokedex: object, Movedex: object, Statuses: object, TypeChart: object, Scripts: object, Items: object, Abilities: object, FormatsData: object, Learnsets: object, Aliases: object, Natures: object}} ModdedDex */
 
 const BattleNatures = {
 	adamant: {name:"Adamant", plus:'atk', minus:'spa'},
@@ -139,7 +143,7 @@ function toId(text) {
 	return ('' + text).toLowerCase().replace(/[^a-z0-9]+/g, '');
 }
 
-class BattleDex {
+class ModdedDex {
 
 	/**
 	 * @param {string=} mod
@@ -147,7 +151,7 @@ class BattleDex {
 	constructor(mod = 'base') {
 		this.gen = 0;
 
-		this.name = "[BattleDex]";
+		this.name = "[ModdedDex]";
 
 		this.isBase = (mod === 'base');
 		this.currentMod = mod;
@@ -159,7 +163,7 @@ class BattleDex {
 		this.formatsCache = null;
 		this.modsLoaded = false;
 
-		this.BattleDex = BattleDex;
+		this.ModdedDex = ModdedDex;
 	}
 
 	get data() {
@@ -177,7 +181,7 @@ class BattleDex {
 
 	/**
 	 * @param {string} mod
-	 * @return {BattleDex}
+	 * @return {ModdedDex}
 	 */
 	mod(mod) {
 		if (!dexes['base'].modsLoaded) dexes['base'].includeMods();
@@ -207,11 +211,11 @@ class BattleDex {
 
 	/**
 	 * Safely converts the passed variable into a string. Unlike '' + str,
-	 * String(str), or str.toString(), Tools.getString is guaranteed not to
+	 * String(str), or str.toString(), Dex.getString is guaranteed not to
 	 * crash.
 	 *
 	 * The other methods of casting to string can crash if str.toString crashes
-	 * or isn't a function. Instead, Tools.getString simply returns '' if the
+	 * or isn't a function. Instead, Dex.getString simply returns '' if the
 	 * passed variable isn't a string or a number.
 	 *
 	 * @param {any} str
@@ -266,7 +270,7 @@ class BattleDex {
 	 * If an object with an ID is passed, its ID will be returned.
 	 * Otherwise, an empty string will be returned.
 	 *
-	 * Tools.getId is generally assigned to the global toId, because of how
+	 * Dex.getId is generally assigned to the global toId, because of how
 	 * commonly it's used.
 	 *
 	 * @param {any} text
@@ -323,8 +327,8 @@ class BattleDex {
 
 	/**
 	 * Convert a pokemon name, ID, or template into its species name, preserving
-	 * form name (which is the main way Tools.getSpecies(id) differs from
-	 * Tools.getTemplate(id).species).
+	 * form name (which is the main way Dex.getSpecies(id) differs from
+	 * Dex.getTemplate(id).species).
 	 *
 	 * @param {string|DexTemplate} species
 	 * @return {string}
@@ -509,10 +513,10 @@ class BattleDex {
 	 * Ensure we're working on a copy of a move (and make a copy if we aren't)
 	 *
 	 * Remember: "ensure" - by default, it won't make a copy of a copy:
-	 *     moveCopy === Tools.getMoveCopy(moveCopy)
+	 *     moveCopy === Dex.getMoveCopy(moveCopy)
 	 *
 	 * If you really want to, use:
-	 *     moveCopyCopy = Tools.getMoveCopy(moveCopy.id)
+	 *     moveCopyCopy = Dex.getMoveCopy(moveCopy.id)
 	 *
 	 * @param  move    Move ID, move object, or movecopy object describing move to copy
 	 * @return         movecopy object
@@ -1246,9 +1250,9 @@ class BattleDex {
 		if (!this.isBase) throw new Error(`This must be called on the base Dex`);
 		if (this.modsLoaded) return this;
 
-		let modList = fs.readdirSync(path.resolve(__dirname, 'mods'));
+		let modList = fs.readdirSync(MODS_DIR);
 		for (let i = 0; i < modList.length; i++) {
-			dexes[modList[i]] = new BattleDex(modList[i]);
+			dexes[modList[i]] = new ModdedDex(modList[i]);
 		}
 		this.modsLoaded = true;
 
@@ -1266,7 +1270,7 @@ class BattleDex {
 		dexes['base'].includeMods();
 		this.dataCache = {};
 
-		let basePath = this.isBase ? './data/' : './mods/' + this.currentMod + '/';
+		let basePath = (this.isBase ? DATA_DIR : MODS_DIR + '/' + this.currentMod) + '/';
 
 		let BattleScripts = this.loadDataFile(basePath, 'Scripts');
 		this.parentMod = this.isBase ? '' : (BattleScripts.inherit || 'base');
@@ -1345,7 +1349,7 @@ class BattleDex {
 		// Load formats
 		let Formats;
 		try {
-			Formats = require('./config/formats').Formats;
+			Formats = require(FORMATS).Formats;
 		} catch (e) {
 			if (e.code !== 'MODULE_NOT_FOUND') throw e;
 		}
@@ -1385,7 +1389,7 @@ class BattleDex {
 	}
 
 	/**
-	 * Install our Tools functions into the battle object
+	 * Install our Dex functions into the battle object
 	 */
 	install(battle) {
 		for (let i in this.data.Scripts) {
@@ -1394,7 +1398,7 @@ class BattleDex {
 	}
 }
 
-dexes['base'] = new BattleDex();
+dexes['base'] = new ModdedDex();
 
 // "gen7" is an alias for the current base data
 dexes['gen7'] = dexes['base'];
