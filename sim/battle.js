@@ -30,6 +30,8 @@ class Battle extends Dex.ModdedDex {
 
 		this.format = toId(format);
 		this.formatData = {id:this.format};
+		Dex.mod(format.mod).getBanlistTable(format); // fill in format ruleset
+		this.ruleset = format.ruleset;
 
 		this.effect = {id:''};
 		this.effectData = {id:''};
@@ -1401,7 +1403,6 @@ class Battle extends Dex.ModdedDex {
 		this.add('gen', this.gen);
 
 		let format = this.getFormat();
-		Dex.mod(format.mod).getBanlistTable(format); // fill in format ruleset
 
 		this.add('tier', format.name);
 		if (this.rated) {
@@ -1412,9 +1413,9 @@ class Battle extends Dex.ModdedDex {
 		if (format.onBegin) {
 			format.onBegin.call(this);
 		}
-		if (format && format.ruleset) {
-			for (let i = 0; i < format.ruleset.length; i++) {
-				this.addPseudoWeather(format.ruleset[i]);
+		if (this.ruleset) {
+			for (let i = 0; i < this.ruleset.length; i++) {
+				this.addPseudoWeather(this.ruleset[i]);
 			}
 		}
 

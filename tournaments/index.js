@@ -122,7 +122,7 @@ class Tournament {
 			}
 			let ban, oppositeBan;
 			let subformat = Dex.getFormat(param);
-			if (subformat.effectType === 'ValidatorRule' || subformat.effectType === 'Format') {
+			if (subformat.effectType === 'ValidatorRule' || subformat.effectType === 'Rule' || subformat.effectType === 'Format') {
 				if (unban) {
 					if (format.banlistTable['Rule:' + subformat.id] === false) continue;
 				} else {
@@ -822,7 +822,7 @@ class Tournament {
 		let player = this.players[user.userid];
 		if (!this.pendingChallenges.get(player)) return;
 
-		let room = Matchmaker.startBattle(from, user, this.format, challenge.team, user.team, {rated: this.isRated, tour: this});
+		let room = Matchmaker.startBattle(from, user, this.format, challenge.team, user.team, {rated: this.isRated, tour: this, supplementaryRuleset: this.banlist});
 		if (!room) return;
 
 		this.pendingChallenges.set(challenge.from, null);

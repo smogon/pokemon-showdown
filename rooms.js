@@ -764,7 +764,7 @@ class BattleRoom extends Room {
 		this.p2 = p2 || null;
 
 		this.rated = rated;
-		this.battle = new Rooms.RoomBattle(this, format, rated);
+		this.battle = new Rooms.RoomBattle(this, format, rated, options.supplementaryRuleset);
 		this.game = this.battle;
 
 		this.sideTicksLeft = [21, 21];
@@ -878,6 +878,7 @@ class BattleRoom extends Room {
 		}
 	}
 	logBattle(p1score, p1rating, p2rating) {
+		if (this.battle.supplementaryRuleset) return;
 		let logData = this.battle.logData;
 		if (!logData) return;
 		this.battle.logData = null; // deallocate to save space
