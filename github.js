@@ -14,7 +14,7 @@ if (!Config.github) {
 	config = {
 		port: Config.github.port,
 		secret: Config.github.secret,
-	}
+	};
 }
 
 let git = exports.github = require('githubhook')(config);
@@ -24,9 +24,9 @@ let updates = {};
 let sendReport = function (html) {
 	if (Config.github && Config.github.rooms) {
 		Object.keys(Config.github.rooms).forEach(room => {
-			let boom = Rooms(room);
-			if (!boom) return;
-			boom.add(`|html|${html}`);
+			let r = Rooms(room);
+			if (!r) return;
+			r.add(`|html|${html}`);
 		});
 	} else if (Rooms('development')) {
 		Rooms('development').add(`|html|${html}`);
