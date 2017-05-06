@@ -167,4 +167,4 @@ require('./repl').start('app', cmd => eval(cmd));
  * Github Alerts
  *********************************************************/
 
-require('./github');
+require('./chat-plugins/github');
