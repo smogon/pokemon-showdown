@@ -74,7 +74,7 @@ git.on('pull_request', function pullRequest(repo, ref, result) {
 	if (action === 'synchronize') {
 		action = 'updated';
 	}
-	if (action === 'labeled') {
+	if (action === 'labeled' || action === 'unlabeled') {
 		// Nobody cares about labels
 		return;
 	}
