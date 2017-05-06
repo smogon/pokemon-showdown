@@ -1,7 +1,7 @@
 /*
 	Github plugin by Spandamn
 	this is based on https://github.com/Ecuacion/Pokemon-Showdown-Node-Bot/blob/master/features/github/index.js
-	yes some of the code is copied so credits to xfix, ECuacion and anyone who's name I forgot to put here
+	yes some of the code is copied so credits to xfix, Ecuacion and anyone who's name I forgot to put here
 */
 'use strict';
 
