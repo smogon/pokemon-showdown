@@ -1,13 +1,15 @@
 /*
 	Github plugin by Spandamn
-	this is based on https://github.com/Ecuacion/Pokemon-Showdown-Node-Bot/blob/master/features/github/index.js
-	yes some of the code is copied so credits to xfix, Ecuacion and anyone who's name I forgot to put here
+	This is based on https://github.com/Ecuacion/Pokemon-Showdown-Node-Bot/blob/master/features/github/index.js
+	Yes, some of the code is copied so credits to xfix, Ecuacion, jd, and anyone who's name I forgot to put here
 */
 'use strict';
 
 let config = {};
 
 if (!Config.github) {
+	return;
+} else if (Config.github === {}) {
 	config.port = 3420;
 	config.secret = "";
 } else {
@@ -26,10 +28,10 @@ let sendReport = function (html) {
 		Object.keys(Config.github.rooms).forEach(room => {
 			let r = Rooms(room);
 			if (!r) return;
-			r.add(`|html|${html}`);
+			r.add(`|html|<div class="infobox">${html}</div>`);
 		});
 	} else if (Rooms('development')) {
-		Rooms('development').add(`|html|${html}`);
+		Rooms('development').add(`|html|<div class="infobox">${html}</div>`);
 	}
 };
 
