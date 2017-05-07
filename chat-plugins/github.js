@@ -19,19 +19,21 @@ if (!Config.github) {
 	};
 }
 
-let git = exports.github = require('githubhook')(config);
+const git = exports.github = require('githubhook')(config);
 
 let updates = {};
 
 let sendReport = function (html) {
 	if (Config.github && Config.github.rooms) {
-		Object.keys(Config.github.rooms).forEach(room => {
-			let r = Rooms(room);
-			if (!r) return;
-			r.add(`|html|<div class="infobox">${html}</div>`);
-		});
+		for (let i in Config.github.rooms) {
+			let room = Rooms(i);
+			if (!room) return;
+			room.add(`|html|<div class="infobox">${html}</div>`);
+			room.update();
+		}
 	} else if (Rooms('development')) {
 		Rooms('development').add(`|html|<div class="infobox">${html}</div>`);
+		Rooms('development').update();
 	}
 };
 
@@ -40,13 +42,13 @@ git.on('push', (repo, ref, result) => {
 	let branch = /[^/]+$/.exec(ref)[0];
 	let messages = [];
 	let message = "";
-	message += "[<font color='FF00FF'>" + Chat.escapeHTML(repo) + '</font>] ';
-	message += "<font color='909090'>" + Chat.escapeHTML(result.pusher.name) + "</font> ";
+	message += `[<font color='FF00FF'>${Chat.escapeHTML(repo)}</font>] `;
+	message += `<font color='909090'>${Chat.escapeHTML(result.pusher.name)}</font> `;
 	message += (result.forced ? '<font color="red">force-pushed</font>' : 'pushed') + " ";
-	message += "<b>" + Chat.escapeHTML(result.commits.length) + "</b> ";
-	message += "new commit" + (result.commits.length === 1 ? '' : 's') + " to ";
-	message += "<font color='800080'>" + Chat.escapeHTML(branch) + "</font>: ";
-	message += "<a href=\"" + Chat.escapeHTML(url) + "\">View &amp; compare</a>";
+	message += `<b>${Chat.escapeHTML(result.commits.length)}</b> `;
+	message += `new commit${(result.commits.length === 1 ? '' : 's')} to `;
+	message += `<font color='800080'>${Chat.escapeHTML(branch)}</font>: `;
+	message += `<a href="${Chat.escapeHTML(url)}">View &amp; compare</a>`;
 	messages.push(message);
 	result.commits.forEach(function (commit) {
 		let commitMessage = commit.message;
@@ -55,11 +57,11 @@ git.on('push', (repo, ref, result) => {
 			shortCommit += '&hellip;';
 		}
 		message = "";
-		message += "<font color='FF00FF'>" + Chat.escapeHTML(repo) + "</font>/";
-		message += "<font color='800080'>" + Chat.escapeHTML(branch) + "</font> ";
-		message += "<a href=\"" + Chat.escapeHTML(commit.url) + "\">";
-		message += "<font color='606060'>" + Chat.escapeHTML(commit.id.substring(0, 6)) + "</font></a> ";
-		message += "<font color='909090'>" + Chat.escapeHTML(commit.author.name) + "</font>: " + Chat.escapeHTML(shortCommit);
+		message += `<font color='FF00FF'>${Chat.escapeHTML(repo)}</font>/`;
+		message += `<font color='800080'>${Chat.escapeHTML(branch)}</font> `;
+		message += `<a href="${Chat.escapeHTML(commit.url)}">`;
+		message += `<font color='606060'>${Chat.escapeHTML(commit.id.substring(0, 6))}</font></a> `;
+		message += `<font color='909090'>${Chat.escapeHTML(commit.author.name)}</font>: ${Chat.escapeHTML(shortCommit)}`;
 		messages.push(message);
 	});
 	sendReport(messages.join('<br>'));
@@ -84,9 +86,9 @@ git.on('pull_request', function pullRequest(repo, ref, result) {
 	}
 	updates[repo][requestNumber] = now;
 	let message = "";
-	message += "[<font color='FF00FF'>" + repo + "</font>] ";
-	message += "<font color='909090'>" + result.sender.login + "</font> ";
-	message += action + " pull request <a href=\"" + url + "\">#" + requestNumber + "</a>: ";
+	message += `[<font color='FF00FF'>${repo}</font>] `;
+	message += `<font color='909090'>${result.sender.login}</font> `;
+	message += `${action} pull request <a href=\"${url}\">#${requestNumber}</a>: `;
 	message += result.pull_request.title;
 	sendReport(message);
 });

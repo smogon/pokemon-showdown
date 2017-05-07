@@ -210,7 +210,7 @@ exports.appealurl = '';
 exports.replsocketprefix = './logs/repl/';
 exports.replsocketmode = 0o600;
 
-// Github plugin
+// Github plugin configuration
 // This is used for alerts from a github repository.
 // To use, make this an object with the properties:
 // exports.github = {
@@ -218,8 +218,8 @@ exports.replsocketmode = 0o600;
 // 	secret: "", The secret specified during webhook creation.
 // 	rooms: [], The list of rooms to report to. If this is unspecified, the plugin will check for a development room.
 // };
-// If the value is set to undefined, the plugin would be disabled.
-exports.github = undefined;
+// If the value is set to false, the plugin is disabled.
+exports.github = false;
 
 // permissions and groups:
 //   Each entry in `grouplist' is a seperate group. Some of the members are "special"
