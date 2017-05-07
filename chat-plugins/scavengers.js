@@ -135,7 +135,7 @@ class ScavengerHunt extends Rooms.RoomGame {
 		this.completed = [];
 
 		this.onLoad(questions);
-		if (gameType !== "practice") HostLeaderboard.addPoints(host.name, 1).write();
+		if (gameType !== 'practice') HostLeaderboard.addPoints(host.name, 1).write();
 	}
 
 	// alert new users that are joining the room about the current hunt.
@@ -174,11 +174,11 @@ class ScavengerHunt extends Rooms.RoomGame {
 			this.questions.push({hint: hint, answer: answer});
 		}
 
-		if (this.gameType === "official") {
+		if (this.gameType === 'official') {
 			this.setTimer(60);
 		}
 
-		this.announce(`A new ${(this.gameType === 'official' ? "official" : this.gameType === "practice" ? "practice" : '')} Scavenger Hunt by <em>${Chat.escapeHTML(this.hostName)}</em> has been started${(this.hostId === this.staffHostId ? '' : ` by <em>${Chat.escapeHTML(this.staffHostName)}</em>`)}.<br />The first hint is: ${Chat.escapeHTML(this.questions[0].hint)}`);
+		this.announce(`A new ${(this.gameType === 'official' ? "official" : this.gameType === 'practice' ? "practice" : '')} Scavenger Hunt by <em>${Chat.escapeHTML(this.hostName)}</em> has been started${(this.hostId === this.staffHostId ? '' : ` by <em>${Chat.escapeHTML(this.staffHostName)}</em>`)}.<br />The first hint is: ${Chat.escapeHTML(this.questions[0].hint)}`);
 	}
 
 	onEditQuestion(number, question_answer, ...value) {
@@ -254,7 +254,7 @@ class ScavengerHunt extends Rooms.RoomGame {
 		let now = Date.now();
 		let time = Chat.toDurationString(now - this.startTime, {hhmmss: true});
 
-		let blitz = this.gameType === "official" && now - this.startTime <= 60000;
+		let blitz = this.gameType === 'official' && now - this.startTime <= 60000;
 
 		player.completed = true;
 		this.completed.push({name: player.name, time: time, blitz: blitz});
@@ -274,7 +274,7 @@ class ScavengerHunt extends Rooms.RoomGame {
 			let winPoints = this.room.winPoints || DEFAULT_POINTS;
 			let blitzPoints = this.room.blitzPoints || DEFAULT_BLITZ_POINTS;
 
-			if (this.gameType === "official") {
+			if (this.gameType === 'official') {
 				for (let i = 0; i < this.completed.length; i++) {
 					if (!this.completed[i].blitz && i >= winPoints.length) break; // there won't be any more need to keep going
 					let name = this.completed[i].name;
@@ -284,7 +284,7 @@ class ScavengerHunt extends Rooms.RoomGame {
 				Leaderboard.write();
 			}
 
-			let sliceIndex = this.gameType === "official" ? 5 : 3;
+			let sliceIndex = this.gameType === 'official' ? 5 : 3;
 
 			this.announce(
 				`The ${this.gameType ? `${this.gameType} ` : ""}scavenger hunt has ended ${(endedBy ? "by " + Chat.escapeHTML(endedBy.name) : "automatically")}.<br />` +
@@ -448,7 +448,7 @@ let commands = {
 		if (!this.can('mute', null, room)) return false;
 		if (!room.game || room.game.gameid !== 'scavengers') return false;
 
-		if (room.game.gameType !== "practice") HostLeaderboard.addPoints(room.game.hostName, -1); // only deduct for non practice games.
+		if (room.game.gameType !== 'practice') HostLeaderboard.addPoints(room.game.hostName, -1); // only deduct for non practice games.
 		room.game.onEnd(true, user);
 		this.privateModCommand(`(${user.name} has reset the scavenger hunt.)`);
 	},
