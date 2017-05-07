@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "lib": ["es2017"],
+        "lib": ["es2016"],
         "noEmit": true,
         "target": "ESNext",
         "strictNullChecks": true,

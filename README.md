@@ -24,18 +24,31 @@ You can use your own computer as a server, but for other people to connect to yo
   [5]: http://en.wikipedia.org/wiki/Port_forwarding
 
 
+Previous Requisites
+------------------------------------------------------------------------
+Supported Node version is latest LTS 6.10.3. You can set the specific node version using:
+- [nvm](https://github.com/creationix/nvm) for Linux or Mac OS
+- [nvm-windows](https://github.com/coreybutler/nvm-windows) for Windows users
+
+Then you can install this project's node version by running:
+```
+nvm install
+```
+
+And from then on you can simply run `nvm use` to use this project's node version
+
+Install dependencies:
+- npm install
+
 Installing
 ------------------------------------------------------------------------
 
     ./pokemon-showdown
 
-(Requires Node.js 6+)
-
-
 Detailed installation instructions
 ------------------------------------------------------------------------
 
-Pokémon Showdown requires you to have [Node.js][6] installed, 6.x or later.
+Pokémon Showdown requires you to have [Node.js][6] installed, 6.x or later. See [Previous Requisites section](#previou-requisites)
 
 Next, obtain a copy of Pokémon Showdown. If you're reading this outside of GitHub, you've probably already done this. If you're reading this in GitHub, there's a "Clone or download" button near the top right (it's green). I recommend the "Open in Desktop" method - you need to install GitHub Desktop which is more work than "Download ZIP", but it makes it much easier to update in the long run (it lets you use the `/updateserver` command).
 
