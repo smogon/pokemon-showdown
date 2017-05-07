@@ -22,6 +22,9 @@ const MAX_TURN_TICKS = 15;
 const STARTING_TICKS_CHALLENGE = 28;
 const MAX_TURN_TICKS_CHALLENGE = 30;
 
+// time after a player disabling the timer before they can re-enable it
+const TIMER_COOLDOWN = 20 * 1000;
+
 global.Config = require('./config/config');
 
 const ProcessManager = require('./process-manager');
@@ -139,6 +142,9 @@ class BattleTimer {
 		 */
 		this.dcTicksLeft = [];
 
+		this.lastDisabledTime = 0;
+		this.lastDisabledByUser = null;
+
 		this.isChallenge = !battle.rated && !battle.room.tour;
 
 		const ticksLeft = (this.isChallenge ? STARTING_TICKS_CHALLENGE : STARTING_TICKS);
@@ -151,11 +157,19 @@ class BattleTimer {
 	start(requester) {
 		let userid = requester ? requester.userid : 'staff';
 		if (this.timerRequesters.has(userid)) return false;
-		this.timerRequesters.add(userid);
 		if (this.timer && requester) {
 			this.battle.room.send(`|inactive|${requester.userid} also wants the timer to be on`);
+			this.timerRequesters.add(userid);
 			return false;
 		}
+		if (requester && this.battle.players[requester.userid] && this.lastDisabledByUser === requester.userid) {
+			const remainingCooldownTime = (this.lastDisabledTime || 0) + TIMER_COOLDOWN - Date.now();
+			if (remainingCooldownTime > 0) {
+				this.battle.players[requester.userid].sendRoom(`|inactive|The timer can't be re-enabled so soon after disabling it (${Math.ceil(remainingCooldownTime / 1000)} seconds remaining).`);
+				return false;
+			}
+		}
+		this.timerRequesters.add(userid);
 		this.nextRequest();
 		const requestedBy = requester ? ` (requested by ${requester.name})` : ``;
 		this.battle.room.add(`|inactive|Battle timer is ON: inactive players will automatically lose when time's up.${requestedBy}`);
@@ -165,6 +179,8 @@ class BattleTimer {
 		if (requester) {
 			if (!this.timerRequesters.has(requester.userid)) return false;
 			this.timerRequesters.delete(requester.userid);
+			this.lastDisabledByUser = requester.userid;
+			this.lastDisabledTime = Date.now();
 		} else {
 			this.timerRequesters.clear();
 		}
