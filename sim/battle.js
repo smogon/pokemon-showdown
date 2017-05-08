@@ -2678,6 +2678,7 @@ class Battle extends Dex.ModdedDex {
 
 		if (avatar) player.avatar = avatar;
 		this.add('player', player.id, player.name, avatar);
+		this.add('teamsize', player.id, player.pokemon.length);
 
 		this.start();
 		return player;
