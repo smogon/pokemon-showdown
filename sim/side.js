@@ -45,7 +45,7 @@ class Side {
 		let sideScripts = battle.data.Scripts.side;
 		if (sideScripts) Object.assign(this, sideScripts);
 
-		this.getChoice = (this.getChoice || Side.getChoice).bind(this);
+		this.getChoice = (side => this.getChoiceInner(side));
 
 		this.battle = battle;
 		this.n = n;
@@ -106,7 +106,7 @@ class Side {
 		}
 	}
 
-	static getChoice(side) {
+	getChoiceInner(side) {
 		if (side !== this && side !== true) return '';
 		return this.choice.actions.map(action => {
 			switch (action.choice) {

@@ -3,7 +3,7 @@
         "lib": ["es2017"],
         "noEmit": true,
         "target": "ESNext",
-        "strictNullChecks": true,
+        "strict": true,
         "allowJs": true,
         "checkJs": true
     },

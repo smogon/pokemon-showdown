@@ -27,7 +27,11 @@ exports.construct = function (format, rated, send, prng) {
 		const dex = Dex.mod(mod);
 		const proto = Object.create(Battle.prototype);
 		Object.assign(proto, dex);
-		dex.install(proto);
+
+		for (let i in dex.data.Scripts) {
+			proto[i] = dex.data.Scripts[i];
+		}
+
 		battleProtoCache.set(mod, proto);
 	}
 	const battle = Object.create(battleProtoCache.get(mod));

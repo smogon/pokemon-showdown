@@ -1126,7 +1126,7 @@ exports.BattleScripts = {
 			// Spammable attacks are: Thunderbolt, Psychic, Surf, Blizzard, Earthquake.
 			let pokemonWeaknesses = [];
 			for (let type in weaknessCount) {
-				let increaseCount = Dex.getImmunity(type, template) && Dex.getEffectiveness(type, template) > 0;
+				let increaseCount = this.getImmunity(type, template) && this.getEffectiveness(type, template) > 0;
 				if (!increaseCount) continue;
 				if (weaknessCount[type] >= 2) {
 					skip = true;
