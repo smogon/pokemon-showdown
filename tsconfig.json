@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "lib": ["es2017"],
+        "lib": ["es2015", "es2016.array.include", "es2017.object"],
         "noEmit": true,
         "target": "ESNext",
         "strict": true,
