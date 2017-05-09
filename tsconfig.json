@@ -9,7 +9,9 @@
     },
     "types": ["node"],
     "include": [
+        "./dev-tools/globals.ts",
         "./sim/dex.js",
+        "./sim/dex-data.js",
         "./sim/prng.js"
     ]
 }

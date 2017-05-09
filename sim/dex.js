@@ -45,6 +45,8 @@
 const fs = require('fs');
 const path = require('path');
 
+const DexData = require('./dex-data');
+
 const DATA_DIR = path.resolve(__dirname, '../data');
 const MODS_DIR = path.resolve(__dirname, '../mods');
 const FORMATS = path.resolve(__dirname, '../config/formats');
@@ -77,14 +79,11 @@ if (!Object.values) {
 // 	};
 // }
 
-/** @typedef {{[k: string]: any}} AnyObject */
-
 /** @type {{[mod: string]: ModdedDex}} */
 let dexes = {};
 
 /** @typedef {'Pokedex' | 'FormatsData' | 'Learnsets' | 'Movedex' | 'Statuses' | 'TypeChart' | 'Scripts' | 'Items' | 'Abilities' | 'Natures' | 'Formats' | 'Aliases'} DataType */
 /** @type {DataType[]} */
-// @ts-ignore TypeScript bug
 const DATA_TYPES = ['Pokedex', 'FormatsData', 'Learnsets', 'Movedex', 'Statuses', 'TypeChart', 'Scripts', 'Items', 'Abilities', 'Natures', 'Formats', 'Aliases'];
 
 const DATA_FILES = {
@@ -135,20 +134,7 @@ const BattleNatures = {
 	timid: {name:"Timid", plus:'spe', minus:'atk'},
 };
 
-/**
- * @param {any} text
- * @return {string}
- */
-function toId(text) {
-	// this is a duplicate of Dex.getId, for performance reasons
-	if (text && text.id) {
-		text = text.id;
-	} else if (text && text.userid) {
-		text = text.userid;
-	}
-	if (typeof text !== 'string' && typeof text !== 'number') return '';
-	return ('' + text).toLowerCase().replace(/[^a-z0-9]+/g, '');
-}
+const toId = DexData.Tools.getId;
 
 class ModdedDex {
 
@@ -170,6 +156,8 @@ class ModdedDex {
 		this.formatsCache = null;
 		this.modsLoaded = false;
 
+		this.getString = DexData.Tools.getString;
+		this.getId = DexData.Tools.getId;
 		this.ModdedDex = ModdedDex;
 	}
 
@@ -230,23 +218,6 @@ class ModdedDex {
 	}
 
 	/**
-	 * Safely converts the passed variable into a string. Unlike '' + str,
-	 * String(str), or str.toString(), Dex.getString is guaranteed not to
-	 * crash.
-	 *
-	 * The other methods of casting to string can crash if str.toString crashes
-	 * or isn't a function. Instead, Dex.getString simply returns '' if the
-	 * passed variable isn't a string or a number.
-	 *
-	 * @param {any} str
-	 * @return {string}
-	 */
-	getString(str) {
-		if (typeof str === 'string' || typeof str === 'number') return '' + str;
-		return '';
-	}
-
-	/**
 	 * Sanitizes a username or Pokemon nickname
 	 *
 	 * Returns the passed name, sanitized for safe use as a name in the PS
@@ -280,30 +251,6 @@ class ModdedDex {
 		name = name.replace(/[\u239b-\u23b9]/g, '');
 
 		return name;
-	}
-
-	/**
-	 * Converts anything to an ID. An ID must have only lowercase alphanumeric
-	 * characters.
-	 * If a string is passed, it will be converted to lowercase and
-	 * non-alphanumeric characters will be stripped.
-	 * If an object with an ID is passed, its ID will be returned.
-	 * Otherwise, an empty string will be returned.
-	 *
-	 * Dex.getId is generally assigned to the global toId, because of how
-	 * commonly it's used.
-	 *
-	 * @param {any} text
-	 * @return {string}
-	 */
-	getId(text) {
-		if (text && text.id) {
-			text = text.id;
-		} else if (text && text.userid) {
-			text = text.userid;
-		}
-		if (typeof text !== 'string' && typeof text !== 'number') return '';
-		return ('' + text).toLowerCase().replace(/[^a-z0-9]+/g, '');
 	}
 
 	/**
@@ -589,8 +536,7 @@ class ModdedDex {
 		let id = toId(name);
 		let effect = {};
 		if (id && this.data.Statuses[id]) {
-			effect = this.data.Statuses[id];
-			effect.name = effect.name || this.data.Statuses[id].name;
+			effect = new DexData.Effect(this.data.Statuses[id]);
 		} else if (id && this.data.Movedex[id] && this.data.Movedex[id].effect) {
 			effect = this.data.Movedex[id].effect;
 			effect.name = effect.name || this.data.Movedex[id].name;
@@ -1039,6 +985,7 @@ class ModdedDex {
 			return false;
 		}
 
+		/** @type {DataType[]} */
 		searchIn = searchIn || ['Pokedex', 'Movedex', 'Abilities', 'Items', 'Natures'];
 
 		let searchFunctions = {Pokedex: 'getTemplate', Movedex: 'getMove', Abilities: 'getAbility', Items: 'getItem', Natures: 'getNature'};
@@ -1046,7 +993,7 @@ class ModdedDex {
 		let searchResults = [];
 		for (let i = 0; i < searchIn.length; i++) {
 			/** @type {AnyObject} */
-			// @ts-ignore TypeScript bug
+			// @ts-ignore
 			let res = this[searchFunctions[searchIn[i]]](target);
 			if (res.exists) {
 				searchResults.push({
@@ -1541,7 +1488,6 @@ class ModdedDex {
 		dexes['base'].formatsCache[id] = format;
 		if (this.dataCache) this.dataCache.Formats[id] = format;
 		if (!this.isBase) {
-			// @ts-ignore
 			if (dexes['base'].dataCache) dexes['base'].dataCache.Formats[id] = format;
 		}
 	}
