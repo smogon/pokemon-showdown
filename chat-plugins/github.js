@@ -62,9 +62,9 @@ git.on('push', (repo, ref, result) => {
 		}
 		message = "";
 		message += `<font color='FF00FF'>${Chat.escapeHTML(repo)}</font>/`;
-		message += `<font color='800080'>${Chat.escapeHTML(branch)}</font> `;
-		message += `<a href="${Chat.escapeHTML(commit.url)}">`;
-		message += `<font color='606060'>${Chat.escapeHTML(commit.id.substring(0, 6))}</font></a> `;
+		message += Chat.html`<font color='800080'>${branch}</font> `;
+		message += Chat.html`<a href="${commit.url}">`;
+		message += Chat.html`<font color='606060'>${commit.id.substring(0, 6)}</font></a> `;
 		message += Chat.html`<font color='909090'>${commit.author.name}</font>: ${shortCommit}`;
 		messages.push(message);
 	});
