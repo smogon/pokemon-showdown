@@ -139,7 +139,7 @@ class RoomSettings {
 		}
 	}
 	generateDisplay(user, room, connection) {
-		let output = `<div class="infobox">Room Settings for ${Chat.escapeHTML(this.room.title)}<br />`;
+		let output = Chat.html`<div class="infobox">Room Settings for ${this.room.title}<br />`;
 		output += `<strong>Modchat:</strong> <br />${this.modchat()}<br />`;
 		output += `<strong>Modjoin:</strong> <br />${this.modjoin()}<br />`;
 		output += `<strong>Stretch filter:</strong> <br />${this.stretching()}<br />`;
