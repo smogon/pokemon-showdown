@@ -307,6 +307,61 @@ class ModdedDex {
 	}
 
 	/**
+	 * returns false if the target is immune; true otherwise
+	 *
+	 * also checks immunity to some statuses
+	 * @param {{type: string} | string} source
+	 * @param {{types: string[]} | string[] | string} target
+	 * @return {boolean}
+	 */
+	getImmunity(source, target) {
+		/** @type {string} */
+		// @ts-ignore
+		let sourceType = source.type || source;
+		/** @type {string[] | string} */
+		// @ts-ignore
+		let targetTyping = target.getTypes && target.getTypes() || target.types || target;
+		if (Array.isArray(targetTyping)) {
+			for (let i = 0; i < targetTyping.length; i++) {
+				if (!this.getImmunity(sourceType, targetTyping[i])) return false;
+			}
+			return true;
+		}
+		let typeData = this.data.TypeChart[targetTyping];
+		if (typeData && typeData.damageTaken[sourceType] === 3) return false;
+		return true;
+	}
+	/**
+	 * @param {{type: string} | string} source
+	 * @param {{types: string[]} | string[] | string} target
+	 * @return {number}
+	 */
+	getEffectiveness(source, target) {
+		/** @type {string} */
+		// @ts-ignore
+		let sourceType = source.type || source;
+		let totalTypeMod = 0;
+		/** @type {string[] | string} */
+		// @ts-ignore
+		let targetTyping = target.getTypes && target.getTypes() || target.types || target;
+		if (Array.isArray(targetTyping)) {
+			for (let i = 0; i < targetTyping.length; i++) {
+				totalTypeMod += this.getEffectiveness(sourceType, targetTyping[i]);
+			}
+			return totalTypeMod;
+		}
+		let typeData = this.data.TypeChart[targetTyping];
+		if (!typeData) return 0;
+		switch (typeData.damageTaken[sourceType]) {
+		case 1: return 1; // super-effective
+		case 2: return -1; // resist
+		// in case of weird situations like Gravity, immunity is
+		// handled elsewhere
+		default: return 0;
+		}
+	}
+
+	/**
 	 * Convert a pokemon name, ID, or template into its species name, preserving
 	 * form name (which is the main way Dex.getSpecies(id) differs from
 	 * Dex.getTemplate(id).species).
