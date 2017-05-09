@@ -27,13 +27,10 @@ let sendReport = function (html) {
 	if (Config.github && Config.github.rooms) {
 		for (let curRoom of Config.github.rooms) {
 			let room = Rooms(curRoom);
-			if (!room) return;
-			room.add(`|html|<div class="infobox">${html}</div>`);
-			room.update();
+			if (room) room.add(`|html|<div class="infobox">${html}</div>`).update();
 		}
 	} else if (Rooms('development')) {
-		Rooms('development').add(`|html|<div class="infobox">${html}</div>`);
-		Rooms('development').update();
+		Rooms('development').add(`|html|<div class="infobox">${html}</div>`).update();
 	}
 };
 
