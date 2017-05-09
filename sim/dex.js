@@ -45,6 +45,8 @@
 const fs = require('fs');
 const path = require('path');
 
+const {Tools, Effect} = require('./dex-data');
+
 const DATA_DIR = path.resolve(__dirname, '../data');
 const MODS_DIR = path.resolve(__dirname, '../mods');
 const FORMATS = path.resolve(__dirname, '../config/formats');
@@ -77,14 +79,11 @@ if (!Object.values) {
 // 	};
 // }
 
-/** @typedef {{[k: string]: any}} AnyObject */
-
 /** @type {{[mod: string]: ModdedDex}} */
 let dexes = {};
 
 /** @typedef {'Pokedex' | 'FormatsData' | 'Learnsets' | 'Movedex' | 'Statuses' | 'TypeChart' | 'Scripts' | 'Items' | 'Abilities' | 'Natures' | 'Formats' | 'Aliases'} DataType */
 /** @type {DataType[]} */
-// @ts-ignore TypeScript bug
 const DATA_TYPES = ['Pokedex', 'FormatsData', 'Learnsets', 'Movedex', 'Statuses', 'TypeChart', 'Scripts', 'Items', 'Abilities', 'Natures', 'Formats', 'Aliases'];
 
 const DATA_FILES = {
@@ -105,7 +104,7 @@ const DATA_FILES = {
 /** @typedef {{id: string, name: string, [k: string]: any}} DexTemplate */
 /** @typedef {{[id: string]: AnyObject}} DexTable */
 
-/** @typedef {{Pokedex: DexTable, Movedex: DexTable, Statuses: DexTable, TypeChart: DexTable, Scripts: DexTable, Items: DexTable, Abilities: DexTable, FormatsData: DexTable, Learnsets: DexTable, Aliases: DexTable, Natures: DexTable, Formats: DexTable, MoveCache: Map, ItemCache: Map, AbilityCache: Map, TemplateCache: Map}} DexData */
+/** @typedef {{Pokedex: DexTable, Movedex: DexTable, Statuses: DexTable, TypeChart: DexTable, Scripts: DexTable, Items: DexTable, Abilities: DexTable, FormatsData: DexTable, Learnsets: DexTable, Aliases: DexTable, Natures: DexTable, Formats: DexTable, MoveCache: Map, ItemCache: Map, AbilityCache: Map, TemplateCache: Map}} DexTableData */
 
 const BattleNatures = {
 	adamant: {name:"Adamant", plus:'atk', minus:'spa'},
@@ -135,20 +134,7 @@ const BattleNatures = {
 	timid: {name:"Timid", plus:'spe', minus:'atk'},
 };
 
-/**
- * @param {any} text
- * @return {string}
- */
-function toId(text) {
-	// this is a duplicate of Dex.getId, for performance reasons
-	if (text && text.id) {
-		text = text.id;
-	} else if (text && text.userid) {
-		text = text.userid;
-	}
-	if (typeof text !== 'string' && typeof text !== 'number') return '';
-	return ('' + text).toLowerCase().replace(/[^a-z0-9]+/g, '');
-}
+const toId = Tools.getId;
 
 class ModdedDex {
 
@@ -164,17 +150,19 @@ class ModdedDex {
 		this.currentMod = mod;
 		this.parentMod = '';
 
-		/** @type {?DexData} */
+		/** @type {?DexTableData} */
 		this.dataCache = null;
 		/** @type {?DexTable} */
 		this.formatsCache = null;
 		this.modsLoaded = false;
 
+		this.getString = Tools.getString;
+		this.getId = Tools.getId;
 		this.ModdedDex = ModdedDex;
 	}
 
 	/**
-	 * @return {DexData}
+	 * @return {DexTableData}
 	 */
 	get data() {
 		return this.loadData();
@@ -230,23 +218,6 @@ class ModdedDex {
 	}
 
 	/**
-	 * Safely converts the passed variable into a string. Unlike '' + str,
-	 * String(str), or str.toString(), Dex.getString is guaranteed not to
-	 * crash.
-	 *
-	 * The other methods of casting to string can crash if str.toString crashes
-	 * or isn't a function. Instead, Dex.getString simply returns '' if the
-	 * passed variable isn't a string or a number.
-	 *
-	 * @param {any} str
-	 * @return {string}
-	 */
-	getString(str) {
-		if (typeof str === 'string' || typeof str === 'number') return '' + str;
-		return '';
-	}
-
-	/**
 	 * Sanitizes a username or Pokemon nickname
 	 *
 	 * Returns the passed name, sanitized for safe use as a name in the PS
@@ -280,30 +251,6 @@ class ModdedDex {
 		name = name.replace(/[\u239b-\u23b9]/g, '');
 
 		return name;
-	}
-
-	/**
-	 * Converts anything to an ID. An ID must have only lowercase alphanumeric
-	 * characters.
-	 * If a string is passed, it will be converted to lowercase and
-	 * non-alphanumeric characters will be stripped.
-	 * If an object with an ID is passed, its ID will be returned.
-	 * Otherwise, an empty string will be returned.
-	 *
-	 * Dex.getId is generally assigned to the global toId, because of how
-	 * commonly it's used.
-	 *
-	 * @param {any} text
-	 * @return {string}
-	 */
-	getId(text) {
-		if (text && text.id) {
-			text = text.id;
-		} else if (text && text.userid) {
-			text = text.userid;
-		}
-		if (typeof text !== 'string' && typeof text !== 'number') return '';
-		return ('' + text).toLowerCase().replace(/[^a-z0-9]+/g, '');
 	}
 
 	/**
@@ -585,41 +532,25 @@ class ModdedDex {
 		if (name && typeof name !== 'string') {
 			return name;
 		}
-		name = (name || '').trim();
 		let id = toId(name);
-		let effect = {};
-		if (id && this.data.Statuses[id]) {
-			effect = this.data.Statuses[id];
-			effect.name = effect.name || this.data.Statuses[id].name;
-		} else if (id && this.data.Movedex[id] && this.data.Movedex[id].effect) {
-			effect = this.data.Movedex[id].effect;
-			effect.name = effect.name || this.data.Movedex[id].name;
-		} else if (id && this.data.Abilities[id] && this.data.Abilities[id].effect) {
-			effect = this.data.Abilities[id].effect;
-			effect.name = effect.name || this.data.Abilities[id].name;
-		} else if (id && this.data.Items[id] && this.data.Items[id].effect) {
-			effect = this.data.Items[id].effect;
-			effect.name = effect.name || this.data.Items[id].name;
-		} else if (id && this.data.Formats[id]) {
-			effect = this.data.Formats[id];
-			effect.name = effect.name || this.data.Formats[id].name;
-			if (!effect.mod) effect.mod = 'gen6';
-			if (!effect.effectType) effect.effectType = 'Format';
+		let effect;
+		if (id && this.data.Statuses.hasOwnProperty(id)) {
+			effect = new Effect({name}, this.data.Statuses[id]);
+		} else if (id && this.data.Movedex.hasOwnProperty(id) && this.data.Movedex[id].effect) {
+			effect = new Effect({name}, this.data.Movedex[id].effect);
+		} else if (id && this.data.Abilities.hasOwnProperty(id) && this.data.Abilities[id].effect) {
+			effect = new Effect({name}, this.data.Abilities[id].effect);
+		} else if (id && this.data.Items.hasOwnProperty(id) && this.data.Items[id].effect) {
+			effect = new Effect({name}, this.data.Items[id].effect);
+		} else if (id && this.data.Formats.hasOwnProperty(id)) {
+			effect = new Effect({name, mod: 'gen6', effectType: 'Format'}, this.data.Formats[id]);
 		} else if (id === 'recoil') {
-			effect = {
-				effectType: 'Recoil',
-			};
+			effect = new Effect({name: 'Recoil', effectType: 'Recoil'});
 		} else if (id === 'drain') {
-			effect = {
-				effectType: 'Drain',
-			};
+			effect = new Effect({name: 'Drain', effectType: 'Drain'});
+		} else {
+			effect = new Effect({name, exists: false});
 		}
-		if (!effect.id) effect.id = id;
-		if (!effect.name) effect.name = name;
-		if (!effect.fullname) effect.fullname = effect.name;
-		effect.toString = this.effectToString;
-		if (!effect.category) effect.category = 'Effect';
-		if (!effect.effectType) effect.effectType = 'Effect';
 		return effect;
 	}
 	/**
@@ -1039,6 +970,7 @@ class ModdedDex {
 			return false;
 		}
 
+		/** @type {DataType[]} */
 		searchIn = searchIn || ['Pokedex', 'Movedex', 'Abilities', 'Items', 'Natures'];
 
 		let searchFunctions = {Pokedex: 'getTemplate', Movedex: 'getMove', Abilities: 'getAbility', Items: 'getItem', Natures: 'getNature'};
@@ -1046,7 +978,7 @@ class ModdedDex {
 		let searchResults = [];
 		for (let i = 0; i < searchIn.length; i++) {
 			/** @type {AnyObject} */
-			// @ts-ignore TypeScript bug
+			// @ts-ignore
 			let res = this[searchFunctions[searchIn[i]]](target);
 			if (res.exists) {
 				searchResults.push({
@@ -1412,7 +1344,7 @@ class ModdedDex {
 		return this;
 	}
 	/**
-	 * @return {DexData}
+	 * @return {DexTableData}
 	 */
 	loadData() {
 		if (this.dataCache) return this.dataCache;
@@ -1541,7 +1473,6 @@ class ModdedDex {
 		dexes['base'].formatsCache[id] = format;
 		if (this.dataCache) this.dataCache.Formats[id] = format;
 		if (!this.isBase) {
-			// @ts-ignore
 			if (dexes['base'].dataCache) dexes['base'].dataCache.Formats[id] = format;
 		}
 	}
