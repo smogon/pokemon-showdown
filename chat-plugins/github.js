@@ -1,30 +1,37 @@
-/*
-	Github plugin by Spandamn
-	This is based on https://github.com/Ecuacion/Pokemon-Showdown-Node-Bot/blob/master/features/github/index.js
-	Yes, some of the code is copied so credits to xfix, Ecuacion, jd, and anyone who's name I forgot to put here
-*/
+/**
+ * GitHub Alert Notifications
+ * Pokemon Showdown - http://pokemonshowdown.com/
+ *
+ * This notifies a set of rooms of changes to specific repositor(y/ies).
+ *
+ * Much of this comes from Ecuacion's bot, which is based on xfix's bot,
+ * and jd who originally converted this to PS server-side.
+ *
+ * @license MIT license
+ */
+
 'use strict';
 
-let config = {};
+let gitConfig = {};
 
 if (!Config.github) {
 	return;
 } else if (Config.github === {}) {
-	config.port = 3420;
-	config.secret = "";
+	gitConfig.port = 3420;
+	gitConfig.secret = "";
 } else {
-	config = {
+	gitConfig = {
 		port: Config.github.port,
 		secret: Config.github.secret,
 	};
 }
 
-const git = exports.github = require('githubhook')(config);
+const git = exports.github = require('githubhook')(gitConfig);
 
 let updates = {};
 
 let sendReport = function (html) {
-	if (Config.github && Config.github.rooms) {
+	if (Config.github && Config.github.rooms && Config.github.rooms !== []) {
 		for (let curRoom of Config.github.rooms) {
 			let room = Rooms(curRoom);
 			if (room) room.add(`|html|<div class="infobox">${html}</div>`).update();
@@ -58,10 +65,10 @@ git.on('push', (repo, ref, result) => {
 		message += `<font color='800080'>${Chat.escapeHTML(branch)}</font> `;
 		message += `<a href="${Chat.escapeHTML(commit.url)}">`;
 		message += `<font color='606060'>${Chat.escapeHTML(commit.id.substring(0, 6))}</font></a> `;
-		message += `<font color='909090'>${Chat.escapeHTML(commit.author.name)}</font>: ${Chat.escapeHTML(shortCommit)}`;
+		message += Chat.html`<font color='909090'>${commit.author.name}</font>: ${shortCommit}`;
 		messages.push(message);
 	});
-	sendReport(messages.join('<br>'));
+	sendReport(messages.join('<br />'));
 });
 
 git.on('pull_request', function pullRequest(repo, ref, result) {
