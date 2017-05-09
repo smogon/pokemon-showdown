@@ -556,7 +556,7 @@ exports.commands = {
 		this.sendReply(buffer);
 	},
 	datahelp: ["/data [pokemon/item/move/ability] - Get details on this pokemon/item/move/ability/nature.",
-		"/data [pokemon/item/move/ability], Gen [generation number] - Get details on this pokemon/item/move/ability/nature for that generation.",
+		"/data [pokemon/item/move/ability], Gen [generation number/format name] - Get details on this pokemon/item/move/ability/nature for that generation/format.",
 		"!data [pokemon/item/move/ability] - Show everyone these details. Requires: + % @ * # & ~"],
 
 	'!details': true,
@@ -566,7 +566,7 @@ exports.commands = {
 		this.run('data');
 	},
 	detailshelp: ["/details [pokemon/item/move/ability] - Get additional details on this pokemon/item/move/ability/nature.",
-		"/details [pokemon/item/move/ability], Gen [generation number] - Get details on this pokemon/item/move/ability/nature for that generation.",
+		"/details [pokemon/item/move/ability], Gen [generation number/format name] - Get details on this pokemon/item/move/ability/nature for that generation/format.",
 		"!details [pokemon/item/move/ability] - Show everyone these details. Requires: + % @ * # & ~"],
 
 	'!weakness': true,
