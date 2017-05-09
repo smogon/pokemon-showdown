@@ -823,8 +823,8 @@ exports.BattleFormatsData = {
 		tier: "New",
 	},
 	golemalola: {
-		randomBattleMoves: ["stealthrock", "stoneedge", "thunderpunch", "earthquake", "suckerpunch", "toxic"],
-		randomDoubleBattleMoves: ["doubleedge", "stoneedge", "rockslide", "suckerpunch", "protect"],
+		randomBattleMoves: ["stealthrock", "stoneedge", "thunderpunch", "earthquake", "toxic"],
+		randomDoubleBattleMoves: ["doubleedge", "stoneedge", "rockslide", "protect"],
 		tier: "New",
 	},
 	ponyta: {
