@@ -1874,6 +1874,7 @@ exports.commands = {
 	},
 	pickrandomhelp: ["/pick [option], [option], ... - Randomly selects an item from a list containing 2 or more elements."],
 
+	"8ball": 'm8b',
 	helixfossil: 'm8b',
 	helix: 'm8b',
 	magic8ball: 'm8b',
