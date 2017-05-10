@@ -2032,7 +2032,7 @@ exports.commands = {
 			if (id !== 'global') curRoom.addRaw(`<div class="broadcast-blue"><b>${target}</b></div>`).update();
 		});
 		Users.users.forEach(u => {
-			if (u.connected) u.send(`|pm|~|${u.group}${u.name}|<div class="broadcast-blue"><b>${target}</b></div>`);
+			if (u.connected) u.send(`|pm|~|${u.group}${u.name}|/raw <div class="broadcast-blue"><b>${target}</b></div>`);
 		});
 		this.logModCommand(user.name + " globally declared " + target);
 	},
@@ -2049,7 +2049,7 @@ exports.commands = {
 			if (id !== 'global' && curRoom.type !== 'battle') curRoom.addRaw(`<div class="broadcast-blue"><b>${target}</b></div>`).update();
 		});
 		Users.users.forEach(u => {
-			if (u.connected) u.send(`|pm|~|${u.group}${u.name}|<div class="broadcast-blue"><b>${target}</b></div>`);
+			if (u.connected) u.send(`|pm|~|${u.group}${u.name}|/raw <div class="broadcast-blue"><b>${target}</b></div>`);
 		});
 		this.logModCommand(user.name + " globally declared (chat level) " + target);
 	},
