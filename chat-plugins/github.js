@@ -29,15 +29,14 @@ if (!Config.github) {
 const git = exports.github = require('githubhook')(gitConfig);
 
 let updates = {};
+let targetRooms = (Config.github.rooms && Config.github.rooms.length) ? Config.github.rooms : ['development'];
+targetRooms = targetRooms.map(toId);
+let gitBans = {};
 
 let sendReport = function (html) {
-	if (Config.github && Config.github.rooms && Config.github.rooms !== []) {
-		for (let curRoom of Config.github.rooms) {
-			let room = Rooms(curRoom);
-			if (room) room.add(`|html|<div class="infobox">${html}</div>`).update();
-		}
-	} else if (Rooms('development')) {
-		Rooms('development').add(`|html|<div class="infobox">${html}</div>`).update();
+	for (let curRoom of targetRooms) {
+		let room = Rooms(curRoom);
+		if (room) room.add(`|html|<div class="infobox">${html}</div>`).update();
 	}
 };
 
@@ -62,9 +61,9 @@ git.on('push', (repo, ref, result) => {
 		}
 		message = "";
 		message += `<font color='FF00FF'>${Chat.escapeHTML(repo)}</font>/`;
-		message += `<font color='800080'>${Chat.escapeHTML(branch)}</font> `;
-		message += `<a href="${Chat.escapeHTML(commit.url)}">`;
-		message += `<font color='606060'>${Chat.escapeHTML(commit.id.substring(0, 6))}</font></a> `;
+		message += Chat.html`<font color='800080'>${branch}</font> `;
+		message += Chat.html`<a href="${commit.url}">`;
+		message += Chat.html`<font color='606060'>${commit.id.substring(0, 6)}</font></a> `;
 		message += Chat.html`<font color='909090'>${commit.author.name}</font>: ${shortCommit}`;
 		messages.push(message);
 	});
@@ -73,6 +72,8 @@ git.on('push', (repo, ref, result) => {
 
 git.on('pull_request', function pullRequest(repo, ref, result) {
 	let COOLDOWN = 10 * 60 * 1000;
+	let requestUsername = toId(result.sender.login);
+	if (requestUsername in gitBans) return;
 	let requestNumber = result.pull_request.number;
 	let url = result.pull_request.html_url;
 	let action = result.action;
@@ -98,3 +99,31 @@ git.on('pull_request', function pullRequest(repo, ref, result) {
 });
 
 git.listen();
+
+exports.commands = {
+	'gb': 'gitban',
+	gitban: function (target, room, user, connection, cmd) {
+		if (!targetRooms.some(curRoom => toId(room) === curRoom)) return this.sendReply(`|html|<div class="message-error">The command "/${cmd}" does not exist. To send a message starting with "/${cmd}", type "//${cmd}".</div>`);
+		if (!this.can('ban', null, room)) return false;
+		if (!target) return this.parse('/help gitban');
+		target = target.trim();
+		if (gitBans[toId(target)]) return this.errorReply(`The Github Username '${target} already exists on the Github Alert Blacklist.'`);
+		gitBans[toId(target)] = 1;
+		this.addModCommand(`${target} was added to Github Alert Blacklist by ${user.name}.`);
+		this.sendReply(`The Github username '${target}' was successfully added to the Github Alert Blacklist.`);
+	},
+	'gitbanhelp': ["/gitban <github username>: Makes the Github Plugin ignore the github username's alerts. Requires: @ # & ~"],
+
+	'gub': 'gitunban',
+	gitunban: function (target, room, user, connection, cmd) {
+		if (!targetRooms.some(curRoom => toId(room) === curRoom)) return this.sendReply(`|html|<div class="message-error">The command "/${cmd}" does not exist. To send a message starting with "/${cmd}", type "//${cmd}".</div>`);
+		if (!this.can('ban', null, room)) return false;
+		if (!target) return this.parse('/help gitunban');
+		target = target.trim();
+		if (!gitBans[toId(target)]) return this.errorReply(`The Github Username '${target} does not exist on the Github Alert Blacklist.'`);
+		delete gitBans[toId(target)];
+		this.addModCommand(`${target} was removed from the Github Alert Blacklist by ${user.name}.`);
+		this.sendReply(`The Github username '${target}' was successfully removed from the Github Alert Blacklist.`);
+	},
+	'gitunbanhelp': ["/gitunban <github username>: Removes the Github Username from Github Alert Blacklist. Requires: @ # & ~"],
+};
