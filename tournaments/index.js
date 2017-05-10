@@ -79,7 +79,9 @@ class Tournament {
 		}));
 		this.update();
 	}
-	destroy() {}
+	destroy() {
+		this.forceEnd();
+	}
 
 	setGenerator(generator, output) {
 		if (this.isTournamentStarted) {
