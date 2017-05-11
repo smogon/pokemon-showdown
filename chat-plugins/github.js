@@ -99,29 +99,25 @@ git.on('pull_request', function pullRequest(repo, ref, result) {
 git.listen();
 
 exports.commands = {
-	'gb': 'gitban',
 	gitban: function (target, room, user, connection, cmd) {
-		if (!targetRooms.some(curRoom => toId(room) === curRoom)) return this.sendReply(`|html|<div class="message-error">The command "/${cmd}" does not exist. To send a message starting with "/${cmd}", type "//${cmd}".</div>`);
+		if (!targetRooms.includes(toId(room))) return this.errorReply(`The command "/${cmd}" does not exist. To send a message starting with "/${cmd}", type "//${cmd}".`);
 		if (!this.can('ban', null, room)) return false;
 		if (!target) return this.parse('/help gitban');
 		target = target.trim();
-		if (gitBans[toId(target)]) return this.errorReply(`The Github Username '${target} already exists on the Github Alert Blacklist.'`);
+		if (gitBans[toId(target)]) return this.errorReply(`The GitHub Username '${target} already exists on the GitHub Alert Blacklist.'`);
 		gitBans[toId(target)] = 1;
-		this.addModCommand(`${target} was added to Github Alert Blacklist by ${user.name}.`);
-		this.sendReply(`The Github username '${target}' was successfully added to the Github Alert Blacklist.`);
+		this.addModCommand(`${target} was added to GitHub Alert Blacklist by ${user.name}.`);
 	},
-	'gitbanhelp': ["/gitban <github username>: Makes the Github Plugin ignore the github username's alerts. Requires: @ # & ~"],
+	gitbanhelp: ["/gitban <github username>: Makes the GitHub Plugin ignore the github username's alerts. Requires: @ # & ~"],
 
-	'gub': 'gitunban',
 	gitunban: function (target, room, user, connection, cmd) {
-		if (!targetRooms.some(curRoom => toId(room) === curRoom)) return this.sendReply(`|html|<div class="message-error">The command "/${cmd}" does not exist. To send a message starting with "/${cmd}", type "//${cmd}".</div>`);
+		if (!targetRooms.includes(toId(room))) return this.errorReply(`The command "/${cmd}" does not exist. To send a message starting with "/${cmd}", type "//${cmd}".`);
 		if (!this.can('ban', null, room)) return false;
 		if (!target) return this.parse('/help gitunban');
 		target = target.trim();
-		if (!gitBans[toId(target)]) return this.errorReply(`The Github Username '${target} does not exist on the Github Alert Blacklist.'`);
+		if (!gitBans[toId(target)]) return this.errorReply(`The GitHub Username '${target} does not exist on the GitHub Alert Blacklist.'`);
 		delete gitBans[toId(target)];
-		this.addModCommand(`${target} was removed from the Github Alert Blacklist by ${user.name}.`);
-		this.sendReply(`The Github username '${target}' was successfully removed from the Github Alert Blacklist.`);
+		this.addModCommand(`${target} was removed from the GitHub Alert Blacklist by ${user.name}.`);
 	},
-	'gitunbanhelp': ["/gitunban <github username>: Removes the Github Username from Github Alert Blacklist. Requires: @ # & ~"],
+	gitunbanhelp: ["/gitunban <github username>: Removes the GitHub Username from GitHub Alert Blacklist. Requires: @ # & ~"],
 };
