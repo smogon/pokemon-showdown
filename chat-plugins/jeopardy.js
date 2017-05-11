@@ -36,11 +36,7 @@ class Jeopardy extends Rooms.RoomGame {
 
 	destroy() {
 		clearTimeout(this.timeout);
-		delete this.room.game;
-		this.room = null;
-		for (let i in this.players) {
-			this.players[i].destroy();
-		}
+		super.destroy();
 	}
 
 	makePlayer(user) {
