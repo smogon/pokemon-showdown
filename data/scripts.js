@@ -3334,9 +3334,8 @@ exports.BattleScripts = {
 		if (templateAbility === 'Huge Power' || templateAbility === 'Pure Power') {
 			bst += baseStats.atk;
 		} else if (templateAbility === 'Parental Bond') {
-			bst += 0.5 * (counter.Physical > counter.Special ? baseStats.atk : baseStats.spa);
+			bst += 0.25 * (counter.Physical > counter.Special ? baseStats.atk : baseStats.spa);
 		} else if (templateAbility === 'Protean') {
-			// Holistic judgment. Don't boost Protean as much as Parental Bond
 			bst += 0.3 * (counter.Physical > counter.Special ? baseStats.atk : baseStats.spa);
 		} else if (templateAbility === 'Fur Coat') {
 			bst += baseStats.def;
