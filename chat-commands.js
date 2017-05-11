@@ -1345,7 +1345,7 @@ exports.commands = {
 		if (!target) return this.parse('/help join');
 		target = target.split(',');
 		for (let i = 0; i < target.length; i++) {
-			let tarRoom = target.trim();
+			let tarRoom = target[i].trim();
 			if (tarRoom.startsWith('http://')) tarRoom = tarRoom.slice(7);
 			if (tarRoom.startsWith('https://')) tarRoom = tarRoom.slice(8);
 			if (tarRoom.startsWith('play.pokemonshowdown.com/')) tarRoom = tarRoom.slice(25);
