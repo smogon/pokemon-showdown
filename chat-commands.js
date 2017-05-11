@@ -1344,16 +1344,16 @@ exports.commands = {
 	join: function (target, room, user, connection) {
 		if (!target) return this.parse('/help join');
 		target = target.split(',');
+		let failed = [];
 		for (let i = 0; i < target.length; i++) {
 			let tarRoom = target[i].trim();
 			if (tarRoom.startsWith('http://')) tarRoom = tarRoom.slice(7);
 			if (tarRoom.startsWith('https://')) tarRoom = tarRoom.slice(8);
 			if (tarRoom.startsWith('play.pokemonshowdown.com/')) tarRoom = tarRoom.slice(25);
 			if (tarRoom.startsWith('psim.us/')) tarRoom = tarRoom.slice(8);
-			if (user.tryJoinRoom(tarRoom, connection) === null) {
-				connection.sendTo(target, "|noinit|namerequired|The room '" + tarRoom + "' does not exist or requires a login to join.");
-			}
+			if (user.tryJoinRoom(tarRoom, connection) === null) failed.push(tarRoom);
 		}
+		if (failed.length) connection.sendTo(target.join(','), `|noinit|namerequired|The room${(failed.length > 1 ? `s` : ``)} '${failed.join(', ')}' do${(failed.length > 1 ? `` : `es`)} not exist or require${(failed.length > 1 ? `s` : ``)} a login to join.`);
 	},
 	joinhelp: ["/join [roomname] - Attempt to join the room [roomname]. Seperate rooms with commas to attempt to join multiple rooms at once."],
 
