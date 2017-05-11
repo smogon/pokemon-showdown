@@ -3049,9 +3049,6 @@ exports.BattleScripts = {
 			} else if (ability === 'Compound Eyes' || ability === 'No Guard') {
 				rejectAbility = !counter['inaccurate'];
 			} else if (ability === 'Defiant' || ability === 'Moxie') {
-				rejectAbility = !counter['Physical'] && !hasMove['batonpass'];
-			} else if (ability === 'Simple') {
-				rejectAbility = !counter.setupType;
 			} else if (ability === 'Limber') {
 				rejectAbility = template.types.includes('Electric');
 			} else if (ability === 'Lightning Rod') {
