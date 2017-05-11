@@ -1350,7 +1350,7 @@ exports.commands = {
 			if (tarRoom.startsWith('https://')) tarRoom = tarRoom.slice(8);
 			if (tarRoom.startsWith('play.pokemonshowdown.com/')) tarRoom = tarRoom.slice(25);
 			if (tarRoom.startsWith('psim.us/')) tarRoom = tarRoom.slice(8);
-			user.tryJoinRoom(tarRoom, connection)
+			user.tryJoinRoom(tarRoom, connection);
 		}
 	},
 	joinhelp: ["/join [roomname] - Attempt to join the room [roomname]. Seperate rooms with commas to attempt to join multiple rooms at once."],
