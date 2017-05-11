@@ -3050,8 +3050,6 @@ exports.BattleScripts = {
 				rejectAbility = !counter['inaccurate'];
 			} else if (ability === 'Defiant' || ability === 'Moxie') {
 				rejectAbility = !counter['Physical'] && !hasMove['batonpass'];
-			} else if (ability === 'Gluttony') {
-				rejectAbility = !hasMove['bellydrum'];
 			} else if (ability === 'Limber') {
 				rejectAbility = template.types.includes('Electric');
 			} else if (ability === 'Lightning Rod') {
@@ -3259,7 +3257,7 @@ exports.BattleScripts = {
 		// medium priority
 		} else if (ability === 'Guts') {
 			item = hasType['Fire'] ? 'Toxic Orb' : 'Flame Orb';
-		} else if (ability === 'Marvel Scale' && hasMove['psychoshift']) {
+		} else if (ability === 'Marvel Scale') {
 			item = 'Flame Orb';
 		} else if (counter.Physical >= 4 && template.baseStats.spe > 55 && !hasMove['fakeout'] && !hasMove['suckerpunch'] && !hasMove['flamecharge'] && !hasMove['rapidspin'] && ability !== 'Sturdy' && ability !== 'Multiscale') {
 			item = 'Life Orb';
@@ -3336,9 +3334,8 @@ exports.BattleScripts = {
 		if (templateAbility === 'Huge Power' || templateAbility === 'Pure Power') {
 			bst += baseStats.atk;
 		} else if (templateAbility === 'Parental Bond') {
-			bst += 0.5 * (counter.Physical > counter.Special ? baseStats.atk : baseStats.spa);
+			bst += 0.25 * (counter.Physical > counter.Special ? baseStats.atk : baseStats.spa);
 		} else if (templateAbility === 'Protean') {
-			// Holistic judgment. Don't boost Protean as much as Parental Bond
 			bst += 0.3 * (counter.Physical > counter.Special ? baseStats.atk : baseStats.spa);
 		} else if (templateAbility === 'Fur Coat') {
 			bst += baseStats.def;
