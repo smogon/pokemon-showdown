@@ -1353,7 +1353,7 @@ exports.commands = {
 			user.tryJoinRoom(tarRoom, connection);
 		}
 	},
-	joinhelp: ["/join [roomname] - Attempt to join the room [roomname]. Seperate rooms with commas to attempt to join multiple rooms at once."],
+	joinhelp: ["/join [roomname] - Attempt to join the room [roomname]. Separate rooms with commas to attempt to join multiple rooms at once."],
 
 	'!part': true,
 	leave: 'part',
