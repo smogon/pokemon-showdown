@@ -88,7 +88,7 @@ class TestTools {
 		if (options.cancel) format.ruleset.push('Cancel Mod');
 		// if (options.partialDecisions) format.ruleset.push('Partial Decisions');
 
-		this.tools.installFormat(formatId, format);
+		this.dex.installFormat(formatId, format);
 		return format;
 	}
 
