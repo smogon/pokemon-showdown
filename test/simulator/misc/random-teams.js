@@ -8,17 +8,17 @@ const TOTAL_TEAMS = 100;
 const ALL_GENS = [1, 2/*, 3, 4*/, 5, 6, 7];
 
 function isValidSet(gen, set) {
-	const tools = Dex.mod(`gen${gen}`);
-	const template = tools.getTemplate(set.species || set.name);
+	const dex = Dex.mod(`gen${gen}`);
+	const template = dex.getTemplate(set.species || set.name);
 	if (!template.exists || template.gen > gen) return false;
 	if (set.item) {
-		const item = tools.getItem(set.item);
+		const item = dex.getItem(set.item);
 		if (!item.exists || item.gen > gen) {
 			return false;
 		}
 	}
 	if (set.ability && set.ability !== 'None') {
-		const ability = tools.getAbility(set.ability);
+		const ability = dex.getAbility(set.ability);
 		if (!ability.exists || ability.gen > gen) {
 			return false;
 		}

@@ -31,11 +31,11 @@ class TestTools {
 
 		const mod = options.mod || 'base';
 		this.baseFormat = options.baseFormat || {effectType: 'Format', mod: mod};
-		this.tools = Dex.mod(mod);
+		this.dex = Dex.mod(mod);
 
 		this.modPrefix = this.baseFormat.name ? `[${this.baseFormat.name}]` : '';
-		if (!this.modPrefix && !this.tools.isBase) {
-			this.modPrefix = (/^gen\d$/.test(mod) ? `[Gen ${this.tools.gen}]` : `[${mod}]`);
+		if (!this.modPrefix && !this.dex.isBase) {
+			this.modPrefix = (/^gen\d$/.test(mod) ? `[Gen ${this.dex.gen}]` : `[${mod}]`);
 		}
 
 		// Handle caches
@@ -88,7 +88,7 @@ class TestTools {
 		if (options.cancel) format.ruleset.push('Cancel Mod');
 		// if (options.partialDecisions) format.ruleset.push('Partial Decisions');
 
-		this.tools.installFormat(formatId, format);
+		this.dex.installFormat(formatId, format);
 		return format;
 	}
 
