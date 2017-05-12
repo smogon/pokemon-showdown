@@ -102,10 +102,10 @@ class Effect {
 
 		Object.assign(this, data);
 		if (moreData) Object.assign(this, moreData);
-		this.name = Tools.getString(data.name).trim();
-		this.fullname = Tools.getString(data.fullname) || this.name;
+		this.name = Tools.getString(this.name).trim();
+		this.fullname = Tools.getString(this.fullname) || this.name;
 		this.id = toId(this.name);
-		this.effectType = Tools.getString(data.effectType) || "Effect";
+		this.effectType = Tools.getString(this.effectType) || "Effect";
 		this.exists = !!(this.exists && this.id);
 	}
 	toString() {
