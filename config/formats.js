@@ -301,7 +301,7 @@ exports.Formats = [
 				this.add('-hint', `${pokemon.name || pokemon.species}'s Last Will let it use one last move!`);
 				this.runMove(pokemon.moves[pokemon.moves.length - 1], pokemon);
 			} catch (e) {
-				this.add('-hint', `Oops! ${pokemon.name || pokemon.species}'s Last Will caused a crash. You can still continue playing the battle, though.`);
+				this.add('-message', 'But it failed!');
 			}
 		},
 	},
