@@ -31,7 +31,8 @@ const git = exports.github = require('githubhook')(gitConfig);
 let updates = {};
 let targetRooms = (Config.github.rooms && Config.github.rooms.length) ? Config.github.rooms : ['development'];
 targetRooms = targetRooms.map(toId).map(Rooms);
-targetRooms[0].chatRoomData.gitBans = {};
+let gitBans = {};
+if (targetRooms[0].chatRoomData) targetRooms[0].chatRoomData.gitBans = gitBans;
 
 let sendReport = function (html) {
 	for (let curRoom of targetRooms) {
@@ -70,7 +71,7 @@ git.on('push', (repo, ref, result) => {
 git.on('pull_request', function pullRequest(repo, ref, result) {
 	let COOLDOWN = 10 * 60 * 1000;
 	let requestUsername = toId(result.sender.login);
-	if (requestUsername in targetRooms[0].chatRoomData.gitBans) return;
+	if (requestUsername in gitBans) return;
 	let requestNumber = result.pull_request.number;
 	let url = result.pull_request.html_url;
 	let action = result.action;
@@ -102,7 +103,6 @@ exports.commands = {
 		if (!targetRooms.includes(toId(room))) return this.errorReply(`The command "/${cmd}" does not exist. To send a message starting with "/${cmd}", type "//${cmd}".`);
 		if (!this.can('ban', null, room)) return false;
 		if (!target) return this.parse('/help gitban');
-		let gitBans = targetRooms[0].chatRoomData.gitBans;
 		target = target.trim();
 		if (gitBans[toId(target)]) return this.errorReply(`The GitHub Username '${target} already exists on the GitHub Alert Blacklist.'`);
 		gitBans[toId(target)] = 1;
@@ -114,7 +114,6 @@ exports.commands = {
 		if (!targetRooms.includes(toId(room))) return this.errorReply(`The command "/${cmd}" does not exist. To send a message starting with "/${cmd}", type "//${cmd}".`);
 		if (!this.can('ban', null, room)) return false;
 		if (!target) return this.parse('/help gitunban');
-		let gitBans = targetRooms[0].chatRoomData.gitBans;
 		target = target.trim();
 		if (!gitBans[toId(target)]) return this.errorReply(`The GitHub Username '${target} does not exist on the GitHub Alert Blacklist.'`);
 		delete gitBans[toId(target)];
