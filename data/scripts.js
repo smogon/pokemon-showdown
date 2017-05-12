@@ -258,7 +258,7 @@ exports.BattleScripts = {
 					lacksTarget = !this.isAdjacent(target, pokemon);
 				}
 			}
-			if (lacksTarget) {
+			if (lacksTarget && (!move.flags['charge'] || pokemon.volatiles['twoturnmove'])) {
 				this.attrLastMove('[notarget]');
 				this.add('-notarget');
 				if (move.target === 'normal') pokemon.isStaleCon = 0;
