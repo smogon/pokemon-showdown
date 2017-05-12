@@ -1840,7 +1840,7 @@ exports.BattleScripts = {
 					if (hasMove['scald']) rejected = true;
 					break;
 				case 'moonlight': case 'painsplit': case 'recover': case 'roost': case 'softboiled': case 'synthesis':
-					if (hasMove['rest'] || hasMove['wish']) rejected = true;
+					if (hasMove['leechseed'] || hasMove['rest'] || hasMove['wish']) rejected = true;
 					break;
 				case 'safeguard':
 					if (hasMove['destinybond']) rejected = true;
