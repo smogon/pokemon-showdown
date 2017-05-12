@@ -984,7 +984,7 @@ class ModdedDex {
 				searchResults.push({
 					exactMatch: !isInexact,
 					searchType: searchTypes[searchIn[i]],
-					name: isInexact || res.name,
+					name: res.name || isInexact,
 				});
 			}
 		}
