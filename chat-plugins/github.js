@@ -70,7 +70,7 @@ git.on('push', (repo, ref, result) => {
 git.on('pull_request', function pullRequest(repo, ref, result) {
 	let COOLDOWN = 10 * 60 * 1000;
 	let requestUsername = toId(result.sender.login);
-	if (requestUsername in gitBans) return;
+	if (requestUsername in targetRooms[0].chatRoomData.gitBans) return;
 	let requestNumber = result.pull_request.number;
 	let url = result.pull_request.html_url;
 	let action = result.action;
