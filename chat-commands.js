@@ -2002,7 +2002,7 @@ exports.commands = {
 		if (!this.can('declare', null, room)) return false;
 		if (!this.canTalk()) return;
 
-		this.add(`|notify|${room.id} announcement!|${Chat.stripHTML(target)}`);
+		this.add(`|notify|${room.title} announcement!|${Chat.stripHTML(target)}`);
 		this.add(`|raw|<div class="broadcast-blue"><b>${Chat.escapeHTML(target)}</b></div>`);
 		this.logModCommand(user.name + " declared " + target);
 	},
@@ -2015,7 +2015,7 @@ exports.commands = {
 		target = this.canHTML(target);
 		if (!target) return;
 
-		this.add(`|notify|${room.id} announcement!|${Chat.stripHTML(target)}`);
+		this.add(`|notify|${room.title} announcement!|${Chat.stripHTML(target)}`);
 		this.add(`|raw|<div class="broadcast-blue"><b>${target}</b></div>`);
 		this.logModCommand(user.name + " declared " + target);
 	},
