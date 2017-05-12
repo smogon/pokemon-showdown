@@ -45,7 +45,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const {Tools, Effect} = require('./dex-data');
+const {Dex, Effect} = require('./dex-data');
 
 const DATA_DIR = path.resolve(__dirname, '../data');
 const MODS_DIR = path.resolve(__dirname, '../mods');
@@ -134,7 +134,7 @@ const BattleNatures = {
 	timid: {name:"Timid", plus:'spe', minus:'atk'},
 };
 
-const toId = Tools.getId;
+const toId = Dex.getId;
 
 class ModdedDex {
 
@@ -156,8 +156,8 @@ class ModdedDex {
 		this.formatsCache = null;
 		this.modsLoaded = false;
 
-		this.getString = Tools.getString;
-		this.getId = Tools.getId;
+		this.getString = Dex.getString;
+		this.getId = Dex.getId;
 		this.ModdedDex = ModdedDex;
 	}
 
