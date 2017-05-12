@@ -297,8 +297,12 @@ exports.Formats = [
 		ruleset: ['[Gen 7] OU'],
 		banlist: ['Endeavor', 'Blast Burn + Explosion + Frenzy Plant + Giga Impact + Hydro Cannon + Hyper Beam + Self Destruct + V-Create > 2'],
 		onBeforeFaint: function (pokemon, source) {
-			this.add('-hint', `${pokemon.name || pokemon.species}'s Last Will let it use one last move!`);
-			this.runMove(pokemon.moves[pokemon.moves.length - 1], pokemon);
+			try {
+				this.add('-hint', `${pokemon.name || pokemon.species}'s Last Will let it use one last move!`);
+				this.runMove(pokemon.moves[pokemon.moves.length - 1], pokemon);
+			} catch (e) {
+				this.add('-message', 'But it failed!');
+			}
 		},
 	},
 	{
