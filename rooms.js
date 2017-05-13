@@ -439,7 +439,7 @@ class GlobalRoom {
 		}
 		return this.formatList;
 	}
-	get configRankList
+	get configRankList() {
 		// putting the resultant object in Config would enable this to be run again should config.js be reloaded.
 		if (Config.rankList) {
 			return Config.rankList;
