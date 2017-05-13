@@ -106,7 +106,7 @@ exports.commands = {
 		target = target.trim();
 		if (gitBans[toId(target)]) return this.errorReply(`The GitHub Username '${target} already exists on the GitHub Alert Blacklist.'`);
 		gitBans[toId(target)] = 1;
-		this.addModCommand(`${target} was added to GitHub Alert Blacklist by ${user.name}.`);
+		this.privateModCommand(`(${target} was added to GitHub Alert Blacklist by ${user.name}.)`);
 	},
 	gitbanhelp: ["/gitban <github username>: Makes the GitHub Plugin ignore the github username's alerts. Requires: @ # & ~"],
 
@@ -117,7 +117,7 @@ exports.commands = {
 		target = target.trim();
 		if (!gitBans[toId(target)]) return this.errorReply(`The GitHub Username '${target} does not exist on the GitHub Alert Blacklist.'`);
 		delete gitBans[toId(target)];
-		this.addModCommand(`${target} was removed from the GitHub Alert Blacklist by ${user.name}.`);
+		this.privateModCommand(`(${target} was removed from the GitHub Alert Blacklist by ${user.name}.)`);
 	},
 	gitunbanhelp: ["/gitunban <github username>: Removes the GitHub Username from GitHub Alert Blacklist. Requires: @ # & ~"],
 };
