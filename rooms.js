@@ -440,7 +440,6 @@ class GlobalRoom {
 		return this.formatList;
 	}
 
-	get configRankList() {
 		// putting the resultant object in Config would enable this to be run again should config.js be reloaded.
 		if (Config.rankList) {
 			return Config.rankList;
@@ -653,7 +652,7 @@ class GlobalRoom {
 	}
 	onConnect(user, connection) {
 		let initdata = '|updateuser|' + user.name + '|' + (user.named ? '1' : '0') + '|' + user.avatar + '\n';
-		connection.send(initdata + this.configRankList + '\n' + this.formatListText);
+		connection.send(initdata + (Config.serverid !== 'showdown' ? this.configRankList : '') + '\n' + this.formatListText);
 		if (this.chatRooms.length > 2) connection.send('|queryresponse|rooms|null'); // should display room list
 	}
 	onJoin(user, connection) {
