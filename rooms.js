@@ -440,6 +440,21 @@ class GlobalRoom {
 		return this.formatList;
 	}
 
+	get configRankList() {
+		// putting the resultant object in Config would enable this to be run again should config.js be reloaded.
+		if (Config.rankList) {
+			return Config.rankList;
+		}
+		let rankList = [];
+		for (let rank in Config.groups) {
+			if (!Config.groups[rank].name || !rank) continue; // shouldn't be displayed if they dont have a group name.
+			rankList.push(rank.charAt(0) + Config.groups[rank].name); // send the first character in the rank, incase they put a string several characters long
+		}
+
+		Config.rankList = '|authconfig|' + rankList.join("|");
+		return Config.rankList;
+	}
+
 	getRoomList(filter) {
 		let rooms = [];
 		let skipCount = 0;
@@ -638,7 +653,7 @@ class GlobalRoom {
 	}
 	onConnect(user, connection) {
 		let initdata = '|updateuser|' + user.name + '|' + (user.named ? '1' : '0') + '|' + user.avatar + '\n';
-		connection.send(initdata + this.formatListText);
+		connection.send(initdata + this.configRankList + '\n' + this.formatListText);
 		if (this.chatRooms.length > 2) connection.send('|queryresponse|rooms|null'); // should display room list
 	}
 	onJoin(user, connection) {
