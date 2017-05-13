@@ -652,7 +652,7 @@ class GlobalRoom {
 	}
 	onConnect(user, connection) {
 		let initdata = '|updateuser|' + user.name + '|' + (user.named ? '1' : '0') + '|' + user.avatar + '\n';
-		connection.send(initdata + (Config.serverid !== 'showdown' ? this.configRankList : '') + '\n' + this.formatListText);
+		connection.send(initdata + (Config.noCustomGroupList ? '' : this.configRankList) + '\n' + this.formatListText);
 		if (this.chatRooms.length > 2) connection.send('|queryresponse|rooms|null'); // should display room list
 	}
 	onJoin(user, connection) {
