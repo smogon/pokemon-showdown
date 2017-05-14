@@ -17,6 +17,7 @@ function makeUser(name, connection) {
 	user.forceRename(name, true);
 	user.connected = true;
 	Users.users.set(user.userid, user);
+	user.joinRoom('global', connection);
 	user.joinRoom('trivia', connection);
 	return user;
 }
@@ -55,7 +56,11 @@ describe('Trivia', function () {
 	afterEach(function () {
 		destroyUser(this.user);
 		destroyUser(this.tarUser);
-		if (this.room.game) this.room.game.destroy();
+		if (this.room.game) {
+			clearTimeout(this.room.game.phaseTimeout);
+			this.room.game.phaseTimeout = null;
+			this.room.game.destroy();
+		}
 	});
 
 	after(function () {
@@ -178,6 +183,57 @@ describe('Trivia', function () {
 		assert.doesNotThrow(() => this.game.broadcast('ayy', 'lmao'));
 	});
 
+	context('marking player absence', function () {
+		beforeEach(function () {
+			let questions = [null, null].fill({question: '', answers: ['answer'], category: 'ae'});
+			let game = new FirstModeTrivia(this.room, 'first', 'ae', 'short', questions);
+
+			this.user = makeUser('Morfent', new Connection('127.0.0.1'));
+			this.user2 = makeUser('user2', new Connection('127.0.0.2'));
+			this.user3 = makeUser('user3', new Connection('127.0.0.3'));
+
+			this.user.joinRoom(this.room);
+			game.addPlayer(this.user);
+			this.user2.joinRoom(this.room);
+			game.addPlayer(this.user2);
+			this.user3.joinRoom(this.room);
+			game.addPlayer(this.user3);
+			game.start();
+			game.askQuestion();
+			clearTimeout(game.phaseTimeout);
+			game.phaseTimeout = null;
+
+			this.game = this.room.game = game;
+			this.player = this.room.game.players[this.user.userid];
+		});
+
+		afterEach(function () {
+			destroyUser(this.user);
+			destroyUser(this.user2);
+			destroyUser(this.user3);
+			if (this.room.game) {
+				clearTimeout(this.game.phaseTimeout);
+				this.game.phaseTimeout = null;
+				this.game.destroy();
+			}
+		});
+
+		it('should mark a player absent on leave and pause the game', function () {
+			this.user.leaveRoom(this.room);
+			assert.strictEqual(this.player.isAbsent, true);
+			assert.strictEqual(this.game.phase, 'limbo');
+			assert.strictEqual(this.game.phaseTimeout, null);
+		});
+
+		it('should unpause the game once enough players have returned', function () {
+			this.user.leaveRoom(this.room);
+			this.user.joinRoom(this.room);
+			assert.strictEqual(this.player.isAbsent, false);
+			assert.strictEqual(this.game.phase, 'question');
+			assert.ok(this.game.phaseTimeout);
+		});
+	});
+
 	context('first mode', function () {
 		beforeEach(function () {
 			let questions = [{question: '', answers: ['answer'], category: 'ae'}];
@@ -198,10 +254,14 @@ describe('Trivia', function () {
 		});
 
 		afterEach(function () {
-			if (this.room.game) this.game.destroy();
 			destroyUser(this.user);
 			destroyUser(this.user2);
 			destroyUser(this.user3);
+			if (this.room.game) {
+				clearTimeout(this.game.phaseTimeout);
+				this.game.phaseTimeout = null;
+				this.game.destroy();
+			}
 		});
 
 		it('should calculate player points correctly', function () {
@@ -258,10 +318,14 @@ describe('Trivia', function () {
 		});
 
 		afterEach(function () {
-			if (this.room.game) this.game.destroy();
 			destroyUser(this.user);
 			destroyUser(this.user2);
 			destroyUser(this.user3);
+			if (this.room.game) {
+				clearTimeout(this.game.phaseTimeout);
+				this.game.phaseTimeout = null;
+				this.game.destroy();
+			}
 		});
 
 		it('should calculate points correctly', function () {
@@ -329,10 +393,14 @@ describe('Trivia', function () {
 		});
 
 		afterEach(function () {
-			if (this.room.game) this.game.destroy();
 			destroyUser(this.user);
 			destroyUser(this.user2);
 			destroyUser(this.user3);
+			if (this.room.game) {
+				clearTimeout(this.game.phaseTimeout);
+				this.game.phaseTimeout = null;
+				this.game.destroy();
+			}
 		});
 
 		it('should calculate points correctly', function () {
