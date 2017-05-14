@@ -379,8 +379,3 @@ exports.grouplist = [
 		ip: 's',
 	},
 ];
-
-// noCustomGroupList - set this to false if your server has custom ranks
-// it will send an additional |authconfig| message on connection for the
-// client to pick up the additional non-conventional ranks.
-exports.noCustomGroupList = true;
