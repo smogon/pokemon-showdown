@@ -729,6 +729,7 @@ class ModdedDex {
 			if (!nature.name) nature.name = name;
 			nature.toString = this.effectToString;
 			if (!nature.effectType) nature.effectType = 'Nature';
+			if (!nature.gen) nature.gen = 3;
 		}
 		return nature;
 	}
