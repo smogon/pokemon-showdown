@@ -452,12 +452,12 @@ class GlobalRoom {
 			if (!Config.groups[rank] || !rank) continue;
 
 			let tarGroup = Config.groups[rank];
-			let groupId = tarGroup.addhtml || (!tarGroup.mute && !tarGroup.root) ? 0 : (tarGroup.root || tarGroup.declare) ? 2 : 1;
+			let groupType = tarGroup.addhtml || (!tarGroup.mute && !tarGroup.root) ? 0 : (tarGroup.root || tarGroup.declare) ? 2 : 1;
 
-			rankList.push(rank + ',' + (Config.groups[rank].name || ' ') + ',' + groupId); // send the first character in the rank, incase they put a string several characters long
+			rankList.push({symbol: rank, name: (Config.groups[rank].name || null), type: groupType}); // send the first character in the rank, incase they put a string several characters long
 		}
 
-		Config.rankList = '|groups|' + rankList.join('|') + '\n';
+		Config.rankList = '|groups|' + JSON.stringify(rankList) + '\n';
 		return Config.rankList;
 	}
 
