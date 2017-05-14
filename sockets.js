@@ -4,568 +4,703 @@
  *
  * Abstraction layer for multi-process SockJS connections.
  *
- * This file handles all the communications between the users'
- * browsers, the networking processes, and users.js in the
- * main process.
+ * This file handles all the communications between the networking processes
+ * and users.js.
  *
  * @license MIT license
  */
 
 'use strict';
 
+const child_process = require('child_process');
 const cluster = require('cluster');
-const fs = require('fs');
+const EventEmitter = require('events');
+const path = require('path');
 
 if (cluster.isMaster) {
 	cluster.setupMaster({
-		exec: require('path').resolve(__dirname, 'sockets'),
+		exec: path.resolve(__dirname, 'sockets-workers'),
 	});
+}
 
-	const workers = exports.workers = new Map();
+/**
+ * IPC delimiter byte. This byte must stringify as a hexadeimal
+ * escape code when stringified as JSON to prevent messages from being able to
+ * contain the byte itself.
+ *
+ * @type {string}
+ */
+const DELIM = '\x03';
 
-	const spawnWorker = exports.spawnWorker = function () {
-		let worker = cluster.fork({PSPORT: Config.port, PSBINDADDR: Config.bindaddress || '0.0.0.0', PSNOSSL: Config.ssl ? 0 : 1});
-		let id = worker.id;
-		workers.set(id, worker);
-		worker.on('message', data => {
-			// console.log('master received: ' + data);
-			switch (data.charAt(0)) {
-			case '*': {
-				// *socketid, ip, protocol
-				// connect
-				let nlPos = data.indexOf('\n');
-				let nlPos2 = data.indexOf('\n', nlPos + 1);
-				Users.socketConnect(worker, id, data.slice(1, nlPos), data.slice(nlPos + 1, nlPos2), data.slice(nlPos2 + 1));
-				break;
+/**
+ * Map of worker IDs to worker wrappers.
+ * 
+ * @type {Map<number, any>}
+ */
+const workers = new Map();
+
+/**
+ * A wrapper class for native Node.js Worker and GoWorker
+ * instances. This parses upstream messages from both types of workers and
+ * cleans up when workers crash or get killed before respawning them. In other
+ * words this listens for events emitted from both types of workers and handles
+ * them accordingly.
+ */
+class WorkerWrapper {
+	/**
+	 * @param {any} worker
+	 * @param {number} id
+	 */
+	constructor(worker, id) {
+		/** @type {any} */
+		this.worker = worker;
+		/** @type {number} */
+		this.id = id;
+		/** @type {function(string): boolean} */
+		this.isTrustedProxyIp = Dnsbl.checker(Config.proxyip);
+		/** @type {?Error} */
+		this.error = null;
+
+		worker.once('listening', () => this.onListen());
+		worker.on('message', /** @param {string} data */ data => this.onMessage(data));
+		worker.once('error', /** @param {?Error} err */ err => this.onError(err));
+		worker.once('exit',
+			/**
+			 * @param {any} worker
+			 * @param {?number} code
+			 * @param {?string} status
+			 */
+			(worker, code, status) => this.onExit(worker, code, status)
+		);
+	}
+
+	/**
+	 * Worker process getter
+	 *
+	 * @return {any}
+	 */
+	get process() {
+		return this.worker.process;
+	}
+
+	/**
+	 * Worker exitedAfterDisconnect getter
+	 *
+	 * @return {boolean | void}
+	 */
+	get exitedAfterDisconnect() {
+		return this.worker.exitedAfterDisconnect;
+	}
+
+	/**
+	 * Worker suicide getter
+	 *
+	 * @return {boolean | void}
+	 */
+	get suicide() {
+		return this.worker.exitedAfterDisconnect;
+	}
+
+	/**
+	 * Worker#disconnect wrapper
+	 *
+	 */
+	disconnect() {
+		return this.worker.disconnect();
+	}
+
+	/**
+	 * Worker#kill wrapper
+	 *
+	 * @param {string=} signal
+	 */
+	kill(signal) {
+		return this.worker.kill(signal);
+	}
+
+	/**
+	 * Worker#destroy wrapper
+	 *
+	 * @param {string=} signal
+	 */
+	destroy(signal) {
+		return this.worker.kill(signal);
+	}
+
+	/**
+	 * Worker#send wrapper
+	 *
+	 * @param {string} message
+	 * @return {boolean}
+	 */
+	send(message) {
+		return this.worker.send(message);
+	}
+
+	/**
+	 * Worker#isConnected wrapper
+	 *
+	 * @return {boolean}
+	 */
+	isConnected() {
+		return this.worker.isConnected();
+	}
+
+	/**
+	 * Worker#isDead wrapper
+	 *
+	 * @return {boolean}
+	 */
+	isDead() {
+		return this.worker.isDead();
+	}
+
+	/**
+	 * 'listening' event handler for the worker. Logs which
+	 * hostname and worker ID is listening to console.
+	 */
+	onListen() {
+		console.log(`Worker ${this.id} now listening on ${Config.bindaddress}:${Config.port}`);
+		if (Config.ssl) console.log(`Worker ${this.id} now listening for SSL on port ${Config.ssl.port}`);
+		console.log(`Test your server at http://${Config.bindaddress === '0.0.0.0' ? 'localhost' : Config.bindaddress}:${Config.port}`);
+	}
+
+	/**
+	 * 'message' event handler for the worker. Parses which type
+	 * of command the incoming IPC message is calling, then passes its
+	 * parametres to the appropriate method to handle.
+	 *
+	 * @param {string} data
+	 */
+	onMessage(data) {
+		// console.log(`master received: ${data}`);
+		let token = data.charAt(0);
+		let params = data.substr(1);
+		switch (token) {
+		case '*':
+			this.onSocketConnect(params);
+			break;
+		case '!':
+			this.onSocketDisconnect(params);
+			break;
+		case '<':
+			this.onSocketReceive(params);
+			break;
+		default:
+			console.error(`Sockets: received unknown IPC message with token ${token}: ${params}`);
+			break;
+		}
+	}
+
+	/**
+	 * Socket connection message handler.
+	 *
+	 * @param {string} params
+	 */
+	onSocketConnect(params) {
+		let [socketid, ip, header, protocol] = params.split('\n');
+
+		if (this.isTrustedProxyIp(ip)) {
+			let ips = header.split(',');
+			for (let i = ips.length; i--;) {
+				let proxy = ips[i].trim();
+				if (proxy && !this.isTrustedProxyIp(proxy)) {
+					ip = proxy;
+					break;
+				}
 			}
+		}
 
-			case '!': {
-				// !socketid
-				// disconnect
-				Users.socketDisconnect(worker, id, data.substr(1));
-				break;
-			}
+		Users.socketConnect(this, this.id, socketid, ip, protocol);
+	}
 
-			case '<': {
-				// <socketid, message
-				// message
-				let nlPos = data.indexOf('\n');
-				Users.socketReceive(worker, id, data.substr(1, nlPos - 1), data.substr(nlPos + 1));
-				break;
-			}
+	/**
+	 * Socket disconnect handler.
+	 *
+	 * @param {string} socketid
+	 */
+	onSocketDisconnect(socketid) {
+		Users.socketDisconnect(this, this.id, socketid);
+	}
 
-			default:
-			// unhandled
-			}
-		});
+	/**
+	 * Socket message receive handler.
+	 *
+	 * @param {string} params
+	 */
+	onSocketReceive(params) {
+		let idx = params.indexOf('\n');
+		let socketid = params.substr(0, idx);
+		let message = params.substr(idx + 1);
+		Users.socketReceive(this, this.id, socketid, message);
+	}
 
-		return worker;
-	};
+	/**
+	 * Worker 'error' event handler.
+	 *
+	 * @param {?Error} err
+	 */
+	onError(err) {
+		this.error = err;
+	}
 
-	cluster.on('exit', (worker, code, signal) => {
+	/**
+	 * Worker 'exit' event handler.
+	 *
+	 * @param {any} worker
+	 * @param {?number} code
+	 * @param {?string} signal
+	 */
+	onExit(worker, code, signal) {
 		if (code === null && signal !== null) {
-			// Worker was killed by Sockets.killWorker or Sockets.killPid, probably.
-			console.log(`Worker ${worker.id} was forcibly killed with status ${signal}.`);
+			// Worker was killed by Sockets.killWorker or Sockets.killPid.
+			console.warn(`Worker ${this.id} was forcibly killed with the signal ${signal}`);
 			workers.delete(worker.id);
 		} else if (code === 0 && signal === null) {
-			// Happens when killing PS with ^C
-			console.log(`Worker ${worker.id} died, but returned a successful exit code.`);
+			console.warn(`Worker ${this.id} died, but returned a successful exit code.`);
 			workers.delete(worker.id);
-		} else if (code > 0) {
-			// Worker was killed abnormally, likely because of a crash.
-			require('./crashlogger')(new Error(`Worker ${worker.id} abruptly died with code ${code} and signal ${signal}`), "The main process");
-			// Don't delete the worker so it can be inspected if need be.
-		}
-
-		if (worker.isConnected()) worker.disconnect();
-		// FIXME: this is a bad hack to get around a race condition in
-		// Connection#onDisconnect sending room deinit messages after already
-		// having removed the sockets from their channels.
-		worker.send = () => {};
-
-		let count = 0;
-		Users.connections.forEach(connection => {
-			if (connection.worker === worker) {
-				Users.socketDisconnect(worker, worker.id, connection.socketid);
-				count++;
-			}
-		});
-		console.log(`${count} connections were lost.`);
-
-		// Attempt to recover.
-		spawnWorker();
-	});
-
-	exports.listen = function (port, bindAddress, workerCount) {
-		if (port !== undefined && !isNaN(port)) {
-			Config.port = port;
-			Config.ssl = null;
-		} else {
-			port = Config.port;
-
-			// Autoconfigure when running in cloud environments.
-			try {
-				const cloudenv = require('cloud-env');
-				bindAddress = cloudenv.get('IP', bindAddress);
-				port = cloudenv.get('PORT', port);
-			} catch (e) {}
-		}
-		if (bindAddress !== undefined) {
-			Config.bindaddress = bindAddress;
-		}
-		if (workerCount === undefined) {
-			workerCount = (Config.workers !== undefined ? Config.workers : 1);
-		}
-		for (let i = 0; i < workerCount; i++) {
-			spawnWorker();
-		}
-	};
-
-	exports.killWorker = function (worker) {
-		let count = 0;
-		Users.connections.forEach(connection => {
-			if (connection.worker === worker) {
-				Users.socketDisconnect(worker, worker.id, connection.socketid);
-				count++;
-			}
-		});
-		console.log(`${count} connections were lost.`);
-
-		try {
-			worker.kill('SIGTERM');
-		} catch (e) {}
-
-		return count;
-	};
-
-	exports.killPid = function (pid) {
-		for (let [workerid, worker] of workers) { // eslint-disable-line no-unused-vars
-			if (pid === worker.process.pid) {
-				return this.killWorker(worker);
-			}
-		}
-		return false;
-	};
-
-	exports.socketSend = function (worker, socketid, message) {
-		worker.send(`>${socketid}\n${message}`);
-	};
-	exports.socketDisconnect = function (worker, socketid) {
-		worker.send(`!${socketid}`);
-	};
-
-	exports.channelBroadcast = function (channelid, message) {
-		workers.forEach(worker => {
-			worker.send(`#${channelid}\n${message}`);
-		});
-	};
-	exports.channelSend = function (worker, channelid, message) {
-		worker.send(`#${channelid}\n${message}`);
-	};
-	exports.channelAdd = function (worker, channelid, socketid) {
-		worker.send(`+${channelid}\n${socketid}`);
-	};
-	exports.channelRemove = function (worker, channelid, socketid) {
-		worker.send(`-${channelid}\n${socketid}`);
-	};
-
-	exports.subchannelBroadcast = function (channelid, message) {
-		workers.forEach(worker => {
-			worker.send(`:${channelid}\n${message}`);
-		});
-	};
-	exports.subchannelMove = function (worker, channelid, subchannelid, socketid) {
-		worker.send(`.${channelid}\n${subchannelid}\n${socketid}`);
-	};
-} else {
-	// is worker
-	global.Config = require('./config/config');
-
-	if (process.env.PSPORT) Config.port = +process.env.PSPORT;
-	if (process.env.PSBINDADDR) Config.bindaddress = process.env.PSBINDADDR;
-	if (+process.env.PSNOSSL) Config.ssl = null;
-
-	if (Config.ofe) {
-		try {
-			require.resolve('ofe');
-		} catch (e) {
-			if (e.code !== 'MODULE_NOT_FOUND') throw e; // should never happen
-			throw new Error(
-				'ofe is not installed, but it is a required dependency if Config.ofe is set to true! ' +
-				'Run npm install ofe and restart the server.'
-			);
-		}
-
-		// Create a heapdump if the process runs out of memory.
-		require('ofe').call();
-	}
-
-	// Static HTTP server
-
-	// This handles the custom CSS and custom avatar features, and also
-	// redirects yourserver:8001 to yourserver-8001.psim.us
-
-	// It's optional if you don't need these features.
-
-	global.Dnsbl = require('./dnsbl');
-
-	if (Config.crashguard) {
-		// graceful crash
-		process.on('uncaughtException', err => {
-			require('./crashlogger')(err, `Socket process ${cluster.worker.id} (${process.pid})`, true);
-		});
-	}
-
-	let app = require('http').createServer();
-	let appssl = null;
-	if (Config.ssl) {
-		let key;
-		try {
-			key = require('path').resolve(__dirname, Config.ssl.options.key);
-			if (!fs.lstatSync(key).isFile()) throw new Error();
-			try {
-				key = fs.readFileSync(key);
-			} catch (e) {
-				require('./crashlogger')(new Error(`Failed to read the configured SSL private key PEM file:\n${e.stack}`), `Socket process ${cluster.worker.id} (${process.pid})`, true);
-			}
-		} catch (e) {
-			console.warn('SSL private key config values will not support HTTPS server option values in the future. Please set it to use the absolute path of its PEM file.');
-			key = Config.ssl.options.key;
-		}
-
-		let cert;
-		try {
-			cert = require('path').resolve(__dirname, Config.ssl.options.cert);
-			if (!fs.lstatSync(cert).isFile()) throw new Error();
-			try {
-				cert = fs.readFileSync(cert);
-			} catch (e) {
-				require('./crashlogger')(new Error(`Failed to read the configured SSL certificate PEM file:\n${e.stack}`), `Socket process ${cluster.worker.id} (${process.pid})`, true);
-			}
-		} catch (e) {
-			console.warn('SSL certificate config values will not support HTTPS server option values in the future. Please set it to use the absolute path of its PEM file.');
-			cert = Config.ssl.options.cert;
-		}
-
-		if (key && cert) {
-			try {
-				// In case there are additional SSL config settings besides the key and cert...
-				appssl = require('https').createServer(Object.assign({}, Config.ssl.options, {key, cert}));
-			} catch (e) {
-				require('./crashlogger')(`The SSL settings are misconfigured:\n${e.stack}`, `Socket process ${cluster.worker.id} (${process.pid})`, true);
-			}
-		}
-	}
-
-	// Static server
-	const StaticServer = require('node-static').Server;
-	const roomidRegex = /^\/(?:[A-Za-z0-9][A-Za-z0-9-]*)\/?$/;
-	const cssServer = new StaticServer('./config');
-	const avatarServer = new StaticServer('./config/avatars');
-	const staticServer = new StaticServer('./static');
-	const staticRequestHandler = (req, res) => {
-		// console.log(`static rq: ${req.socket.remoteAddress}:${req.socket.remotePort} -> ${req.socket.localAddress}:${req.socket.localPort} - ${req.method} ${req.url} ${req.httpVersion} - ${req.rawHeaders.join('|')}`);
-		req.resume();
-		req.addListener('end', () => {
-			if (Config.customhttpresponse &&
-					Config.customhttpresponse(req, res)) {
-				return;
-			}
-
-			let server = staticServer;
-			if (req.url === '/custom.css') {
-				server = cssServer;
-			} else if (req.url.startsWith('/avatars/')) {
-				req.url = req.url.substr(8);
-				server = avatarServer;
-			} else if (roomidRegex.test(req.url)) {
-				req.url = '/';
-			}
-
-			server.serve(req, res, e => {
-				if (e && (e.status === 404)) {
-					staticServer.serveFile('404.html', 404, {}, req, res);
-				}
-			});
-		});
-	};
-
-	app.on('request', staticRequestHandler);
-	if (appssl) appssl.on('request', staticRequestHandler);
-
-	// SockJS server
-
-	// This is the main server that handles users connecting to our server
-	// and doing things on our server.
-
-	const sockjs = require('sockjs');
-	const server = sockjs.createServer({
-		sockjs_url: "//play.pokemonshowdown.com/js/lib/sockjs-1.1.1-nwjsfix.min.js",
-		log: (severity, message) => {
-			if (severity === 'error') console.log('ERROR: ' + message);
-		},
-		prefix: '/showdown',
-	});
-
-	const sockets = new Map();
-	const channels = new Map();
-	const subchannels = new Map();
-
-	// Deal with phantom connections.
-	const sweepSocketInterval = setInterval(() => {
-		sockets.forEach(socket => {
-			if (socket.protocol === 'xhr-streaming' &&
-				socket._session &&
-				socket._session.recv) {
-				socket._session.recv.didClose();
-			}
-
-			// A ghost connection's `_session.to_tref._idlePrev` (and `_idleNext`) property is `null` while
-			// it is an object for normal users. Under normal circumstances, those properties should only be
-			// `null` when the timeout has already been called, but somehow it's not happening for some connections.
-			// Simply calling `_session.timeout_cb` (the function bound to the aformentioned timeout) manually
-			// on those connections kills those connections. For a bit of background, this timeout is the timeout
-			// that sockjs sets to wait for users to reconnect within that time to continue their session.
-			if (socket._session &&
-				socket._session.to_tref &&
-				!socket._session.to_tref._idlePrev) {
-				socket._session.timeout_cb();
-			}
-		});
-	}, 1000 * 60 * 10);
-
-	process.on('message', data => {
-		// console.log('worker received: ' + data);
-		let socket = null;
-		let socketid = '';
-		let channel = null;
-		let channelid = '';
-		let subchannel = null;
-		let subchannelid = '';
-		let nlLoc = -1;
-		let message = '';
-
-		switch (data.charAt(0)) {
-		case '$': // $code
-			eval(data.substr(1));
-			break;
-
-		case '!': // !socketid
-			// destroy
-			socketid = data.substr(1);
-			socket = sockets.get(socketid);
-			if (!socket) return;
-			socket.destroy();
-			sockets.delete(socketid);
-			channels.forEach(channel => channel.delete(socketid));
-			break;
-
-		case '>':
-			// >socketid, message
-			// message
-			nlLoc = data.indexOf('\n');
-			socketid = data.substr(1, nlLoc - 1);
-			socket = sockets.get(socketid);
-			if (!socket) return;
-			message = data.substr(nlLoc + 1);
-			socket.write(message);
-			break;
-
-		case '#':
-			// #channelid, message
-			// message to channel
-			nlLoc = data.indexOf('\n');
-			channelid = data.substr(1, nlLoc - 1);
-			channel = channels.get(channelid);
-			if (!channel) return;
-			message = data.substr(nlLoc + 1);
-			channel.forEach(socket => socket.write(message));
-			break;
-
-		case '+':
-			// +channelid, socketid
-			// add to channel
-			nlLoc = data.indexOf('\n');
-			socketid = data.substr(nlLoc + 1);
-			socket = sockets.get(socketid);
-			if (!socket) return;
-			channelid = data.substr(1, nlLoc - 1);
-			channel = channels.get(channelid);
-			if (!channel) {
-				channel = new Map();
-				channels.set(channelid, channel);
-			}
-			channel.set(socketid, socket);
-			break;
-
-		case '-':
-			// -channelid, socketid
-			// remove from channel
-			nlLoc = data.indexOf('\n');
-			channelid = data.slice(1, nlLoc);
-			channel = channels.get(channelid);
-			if (!channel) return;
-			socketid = data.slice(nlLoc + 1);
-			channel.delete(socketid);
-			subchannel = subchannels.get(channelid);
-			if (subchannel) subchannel.delete(socketid);
-			if (!channel.size) {
-				channels.delete(channelid);
-				if (subchannel) subchannels.delete(channelid);
-			}
-			break;
-
-		case '.':
-			// .channelid, subchannelid, socketid
-			// move subchannel
-			nlLoc = data.indexOf('\n');
-			channelid = data.slice(1, nlLoc);
-			let nlLoc2 = data.indexOf('\n', nlLoc + 1);
-			subchannelid = data.slice(nlLoc + 1, nlLoc2);
-			socketid = data.slice(nlLoc2 + 1);
-
-			subchannel = subchannels.get(channelid);
-			if (!subchannel) {
-				subchannel = new Map();
-				subchannels.set(channelid, subchannel);
-			}
-			if (subchannelid === '0') {
-				subchannel.delete(socketid);
+		} else if (code !== null && code > 0) {
+			// Worker crashed.
+			if (this.error) {
+				require('./crashlogger')(new Error(`Worker ${this.id} abruptly died with the following stack trace: ${this.error.stack}`), 'The main process');
 			} else {
-				subchannel.set(socketid, subchannelid);
+				require('./crashlogger')(new Error(`Worker ${this.id} abruptly died`), 'The main process');
 			}
-			break;
-
-		case ':':
-			// :channelid, message
-			// message to subchannel
-			nlLoc = data.indexOf('\n');
-			channelid = data.slice(1, nlLoc);
-			channel = channels.get(channelid);
-			if (!channel) return;
-
-			let messages = [null, null, null];
-			message = data.substr(nlLoc + 1);
-			subchannel = subchannels.get(channelid);
-			channel.forEach((socket, socketid) => {
-				switch (subchannel ? subchannel.get(socketid) : '0') {
-				case '1':
-					if (!messages[1]) {
-						messages[1] = message.replace(/\n\|split\n[^\n]*\n([^\n]*)\n[^\n]*\n[^\n]*/g, '\n$1');
-					}
-					socket.write(messages[1]);
-					break;
-				case '2':
-					if (!messages[2]) {
-						messages[2] = message.replace(/\n\|split\n[^\n]*\n[^\n]*\n([^\n]*)\n[^\n]*/g, '\n$1');
-					}
-					socket.write(messages[2]);
-					break;
-				default:
-					if (!messages[0]) {
-						messages[0] = message.replace(/\n\|split\n([^\n]*)\n[^\n]*\n[^\n]*\n[^\n]*/g, '\n$1');
-					}
-					socket.write(messages[0]);
-					break;
-				}
-			});
-			break;
-		}
-	});
-
-	// Clean up any remaining connections on disconnect. If this isn't done,
-	// the process will not exit until any remaining connections have been destroyed.
-	// Afterwards, the worker process will die on its own.
-	process.once('disconnect', () => {
-		clearInterval(sweepSocketInterval);
-
-		sockets.forEach(socket => {
-			try {
-				socket.destroy();
-			} catch (e) {}
-		});
-		sockets.clear();
-		channels.clear();
-		subchannels.clear();
-
-		app.close();
-		if (appssl) appssl.close();
-
-		// Let the server(s) finish closing.
-		setImmediate(() => process.exit(0));
-	});
-
-	// this is global so it can be hotpatched if necessary
-	let isTrustedProxyIp = Dnsbl.checker(Config.proxyip);
-	let socketCounter = 0;
-	server.on('connection', socket => {
-		// For reasons that are not entirely clear, SockJS sometimes triggers
-		// this event with a null `socket` argument.
-		if (!socket) return;
-
-		if (!socket.remoteAddress) {
-			// SockJS sometimes fails to be able to cache the IP, port, and
-			// address from connection request headers.
-			try {
-				socket.destroy();
-			} catch (e) {}
-			return;
+			// Don't delete the worker - keep it for inspection.
 		}
 
-		let socketid = '' + (++socketCounter);
-		sockets.set(socketid, socket);
+		if (this.isConnected()) this.disconnect();
+		// FIXME: this is a bad hack to get around a race condition in
+		// Connection#onDiscconnect sending room deinit messages after already
+		// having removed the sockets from their channels.
+		// @ts-ignore
+		this.send = () => {};
 
-		let socketip = socket.remoteAddress;
-		if (isTrustedProxyIp(socketip)) {
-			let ips = (socket.headers['x-forwarded-for'] || '')
-				.split(',')
-				.reverse();
-			for (let ip of ips) {
-				let proxy = ip.trim();
-				if (!isTrustedProxyIp(proxy)) {
-					socketip = proxy;
-					break;
-				}
-			}
-		}
+		let count = Users.socketDisconnectAll(this);
+		console.log(`${count} connections were lost.`);
 
-		process.send(`*${socketid}\n${socketip}\n${socket.protocol}`);
+		spawnWorker();
+	}
+}
 
-		socket.on('data', message => {
-			// drop empty messages (DDoS?)
-			if (!message) return;
-			// drop messages over 100KB
-			if (message.length > (100 * 1024)) {
-				console.log(`Dropping client message ${message.length / 1024} KB...`);
-				console.log(message.slice(0, 160));
-				return;
-			}
-			// drop legacy JSON messages
-			if (typeof message !== 'string' || message.startsWith('{')) return;
-			// drop blank messages (DDoS?)
-			let pipeIndex = message.indexOf('|');
-			if (pipeIndex < 0 || pipeIndex === message.length - 1) return;
+/**
+ * A mock Worker class for Go child processes. Similarly to
+ * Node.js workers, it uses a TCP net server to perform IPC. After launching
+ * the server, it will spawn the Go child process and wait for it to make a
+ * connection to the worker's server before performing IPC with it.
+ */
+class GoWorker extends EventEmitter {
+	/**
+	 * @param {number} id
+	 */
+	constructor(id) {
+		super();
 
-			process.send(`<${socketid}\n${message}`);
-		});
+		/** @type {number} */
+		this.id = id;
+		/** @type {boolean | void} */
+		this.exitedAfterDisconnect = undefined;
 
-		socket.once('close', () => {
-			process.send(`!${socketid}`);
-			sockets.delete(socketid);
-			channels.forEach(channel => channel.delete(socketid));
-		});
-	});
-	server.installHandlers(app, {});
-	app.listen(Config.port, Config.bindaddress);
-	console.log(`Worker ${cluster.worker.id} now listening on ${Config.bindaddress}:${Config.port}`);
+		/** @type {string} */
+		this.ibuf = '';
+		/** @type {?Error} */
+		this.error = null;
 
-	if (appssl) {
-		server.installHandlers(appssl, {});
-		appssl.listen(Config.ssl.port, Config.bindaddress);
-		console.log(`Worker ${cluster.worker.id} now listening for SSL on port ${Config.ssl.port}`);
+		/** @type {any} */
+		this.process = null;
+		/** @type {any} */
+		this.connection = null;
+		/** @type {any} */
+		this.server = require('net').createServer();
+		this.server.once('connection', /** @param {any} connection */ connection => this.onChildConnect(connection));
+		this.server.on('error', () => {});
+		this.server.listen(() => process.nextTick(() => this.spawnChild()));
 	}
 
-	console.log(`Test your server at http://${Config.bindaddress === '0.0.0.0' ? 'localhost' : Config.bindaddress}:${Config.port}`);
+	/**
+	 * Worker#disconnect mock
+	 */
+	disconnect() {
+		if (this.isConnected()) this.connection.destroy();
+	}
 
-	require('./repl').start(`sockets-${cluster.worker.id}-${process.pid}`, cmd => eval(cmd));
+	/**
+	 * Worker#kill mock
+	 *
+	 * @param {string} [signal = 'SIGTERM']
+	 */
+	kill(signal = 'SIGTERM') {
+		if (this.process) this.process.kill(signal);
+	}
+
+	/**
+	 * Worker#destroy mock
+	 *
+	 * @param {string=} signal
+	 */
+	destroy(signal) {
+		return this.kill(signal);
+	}
+
+	/**
+	 * Worker#send mock
+	 *
+	 * @param {string} message
+	 * @return {boolean}
+	 */
+	send(message) {
+		if (!this.isConnected()) return false;
+		return this.connection.write(JSON.stringify(message) + DELIM);
+	}
+
+	/**
+	 * Worker#isConnected mock
+	 *
+	 * @return {boolean}
+	 */
+	isConnected() {
+		return this.connection && !this.connection.destroyed;
+	}
+
+	/**
+	 * Worker#isDead mock
+	 *
+	 * @return {boolean}
+	 */
+	isDead() {
+		return this.process && (this.process.exitCode !== null || this.process.statusCode !== null);
+	}
+
+	/**
+	 * Spawns the Go child process. Once the process has started, it will make
+	 * a connection to the worker's TCP server.
+	 */
+	spawnChild() {
+		const GOPATH = child_process.execSync('go env GOPATH', {stdio: null, encoding: 'utf8'})
+			.trim()
+			.split(path.delimiter)[0]
+			.replace(/^"(.*)"$/, '$1');
+
+		this.process = child_process.spawn(
+			path.resolve(GOPATH, 'bin/sockets'), [], {
+				env: {
+					PS_IPC_PORT: `:${this.server.address().port}`,
+					PS_CONFIG: JSON.stringify({
+						workers: Config.workers || 1,
+						port: `:${Config.port || 8000}`,
+						bindAddress: Config.bindaddress || '0.0.0.0',
+						ssl: Config.ssl ? Object.assign({}, Config.ssl, {port: `:${Config.ssl.port}`}) : null,
+					}),
+				},
+				stdio: ['inherit', 'inherit', 'pipe'],
+			}
+		);
+
+		this.process.once('exit', /** @param {any[]} args */ (...args) => {
+			// Clean up the IPC server.
+			this.server.close(() => {
+				// @ts-ignore
+				if (this.server._eventsCount <= 2) {
+					// The child process died before ever opening the IPC
+					// connection and sending any messages over it. Let's avoid
+					// getting trapped in an endless loop of respawns and crashes
+					// if it crashed.
+					if (this.error) throw this.error;
+				}
+
+				this.emit('exit', this, ...args);
+			});
+		});
+
+		this.process.stderr.setEncoding('utf8');
+		this.process.stderr.once('data', /** @param {string} data */ data => {
+			this.error = new Error(data);
+			this.emit('error', this.error);
+		});
+	}
+
+	/**
+	 * 'connection' event handler for the TCP server. Begins the parsing of
+	 * incoming IPC messages.
+	 * @param {any} connection
+	 */
+	onChildConnect(connection) {
+		this.connection = connection;
+		this.connection.setEncoding('utf8');
+		this.connection.on('data', /** @param {string} data */ data => {
+			let idx = data.lastIndexOf(DELIM);
+			if (idx < 0) {
+				this.ibuf += data;
+				return;
+			}
+
+			let messages = '';
+			if (this.ibuf) {
+				messages += this.ibuf.slice(0);
+				this.ibuf = '';
+			}
+
+			if (idx === data.length - 1) {
+				messages += data.slice(0, -1);
+			} else {
+				messages += data.slice(0, idx);
+				this.ibuf += data.slice(idx + 1);
+			}
+
+			for (let message of messages.split(DELIM)) {
+				this.emit('message', JSON.parse(message));
+			}
+		});
+		this.connection.on('error', () => {});
+
+		process.nextTick(() => this.emit('listening'));
+	}
 }
+
+/**
+ * Worker ID counter. We don't use cluster's internal counter so
+ * Config.golang can be freely changed while the server is still running.
+ *
+ * @type {number}
+ */
+let nextWorkerid = 1;
+
+/**
+ * Config.golang cache. Checked when spawning new workers to
+ * ensure that Node and Go workers will not try to run at the same time.
+ *
+ * @type {boolean}
+ */
+let golangCache = !!Config.golang;
+
+/**
+ * Spawns a new worker.
+ *
+ * @return {WorkerWrapper}
+ */
+function spawnWorker() {
+	if (golangCache === !Config.golang) {
+		// Config settings were changed. Make sure none of the wrong kind of
+		// worker is already listening.
+		let workerType = Config.golang ? GoWorker : cluster.Worker;
+		for (let [workerid, worker] of workers) {
+			if (worker.isConnected() && !(worker.worker instanceof workerType)) {
+				let oldType = golangCache ? 'Go' : 'Node';
+				let newType = Config.golang ? 'Go' : 'Node';
+				throw new Error(
+					`Sockets: worker of ID ${workerid} is a ${oldType} worker, but config was changed to spawn ${newType} ones!
+					Set Config.golang back to ${golangCache} or kill all active workers before attempting to spawn more.`
+				);
+			}
+		}
+		golangCache = !!Config.golang;
+	} else if (golangCache) {
+		// Prevent spawning multiple Go child processes by accident.
+		for (let [workerid, worker] of workers) { // eslint-disable-line no-unused-vars
+			if (worker.isConnected() && worker.worker instanceof GoWorker) {
+				throw new Error('Sockets: multiple Go child processes cannot be spawned!');
+			}
+		}
+	}
+
+	let worker;
+	if (golangCache) {
+		worker = new GoWorker(nextWorkerid);
+	} else {
+		worker = cluster.fork({
+			PSPORT: Config.port,
+			PSBINDADDR: Config.bindaddress || '0.0.0.0',
+			PSNOSSL: Config.ssl ? 0 : 1,
+		});
+	}
+
+	let wrapper = new WorkerWrapper(worker, nextWorkerid++);
+	workers.set(wrapper.id, wrapper);
+	return wrapper;
+}
+
+/**
+ * Initializes the configured number of worker processes.
+ *
+ * @param {any} port
+ * @param {any} bindAddress
+ * @param {any} workerCount
+ */
+function listen(port, bindAddress, workerCount) {
+	if (port !== undefined && !isNaN(port)) {
+		Config.port = port;
+		Config.ssl = null;
+	} else {
+		port = Config.port;
+		// Autoconfigure the app when running in cloud hosting environments:
+		try {
+			const cloudenv = require('cloud-env');
+			bindAddress = cloudenv.get('IP', bindAddress);
+			port = cloudenv.get('PORT', port);
+		} catch (e) {}
+	}
+	if (bindAddress !== undefined) {
+		Config.bindaddress = bindAddress;
+	}
+
+	// Go only uses one child process since it does not share FD handles for
+	// serving like Node.js workers do. Workers are instead used to limit the
+	// number of concurrent requests that can be handled at once in the child
+	// process.
+	if (golangCache) {
+		spawnWorker();
+		return;
+	}
+
+	if (workerCount === undefined) {
+		workerCount = (Config.workers !== undefined ? Config.workers : 1);
+	}
+	for (let i = 0; i < workerCount; i++) {
+		spawnWorker();
+	}
+}
+
+/**
+ * Kills a worker process using the given worker object.
+ *
+ * @param {WorkerWrapper} worker
+ * @return {number}
+ */
+function killWorker(worker) {
+	let count = Users.socketDisconnectAll(worker);
+	console.log(`${count} connections were lost.`);
+	try {
+		worker.kill('SIGTERM');
+	} catch (e) {}
+	workers.delete(worker.id);
+	return count;
+}
+
+/**
+ * Kills a worker process using the given worker PID.
+ *
+ * @param {number} pid
+ * @return {number | false}
+ */
+function killPid(pid) {
+	for (let [workerid, worker] of workers) { // eslint-disable-line no-unused-vars
+		if (pid === worker.process.pid) {
+			return killWorker(worker);
+		}
+	}
+	return false;
+}
+
+/**
+ * Sends a message to a socket in a given worker by ID.
+ *
+ * @param {WorkerWrapper} worker
+ * @param {string} socketid
+ * @param {string} message
+ */
+function socketSend(worker, socketid, message) {
+	worker.send(`>${socketid}\n${message}`);
+}
+
+/**
+ * Forcefully disconnects a socket in a given worker by ID.
+ *
+ * @param {WorkerWrapper} worker
+ * @param {string} socketid
+ */
+function socketDisconnect(worker, socketid) {
+	worker.send(`!${socketid}`);
+}
+
+/**
+ * Broadcasts a message to all sockets in a given channel across
+ * all workers.
+ *
+ * @param {string} channelid
+ * @param {string} message
+ */
+function channelBroadcast(channelid, message) {
+	workers.forEach(worker => {
+		worker.send(`#${channelid}\n${message}`);
+	});
+}
+
+/**
+ * Broadcasts a message to all sockets in a given channel and a
+ * given worker.
+ *
+ * @param {WorkerWrapper} worker
+ * @param {string} channelid
+ * @param {string} message
+ */
+function channelSend(worker, channelid, message) {
+	worker.send(`#${channelid}\n${message}`);
+}
+
+/**
+ * Adds a socket to a given channel in a given worker by ID.
+ *
+ * @param {WorkerWrapper} worker
+ * @param {string} channelid
+ * @param {string} socketid
+ */
+function channelAdd(worker, channelid, socketid) {
+	worker.send(`+${channelid}\n${socketid}`);
+}
+
+/**
+ * Removes a socket from a given channel in a given worker by ID.
+ *
+ * @param {WorkerWrapper} worker
+ * @param {string} channelid
+ * @param {string} socketid
+ */
+function channelRemove(worker, channelid, socketid) {
+	worker.send(`-${channelid}\n${socketid}`);
+}
+
+/**
+ * Broadcasts a message to be demuxed into three separate messages
+ * across three subchannels in a given channel across all workers.
+ *
+ * @param {string} channelid
+ * @param {string} message
+ */
+function subchannelBroadcast(channelid, message) {
+	workers.forEach(worker => {
+		worker.send(`:${channelid}\n${message}`);
+	});
+}
+
+/**
+ * Moves a given socket to a different subchannel in a channel by
+ * ID in the given worker.
+ *
+ * @param {WorkerWrapper} worker
+ * @param {string} channelid
+ * @param {string} subchannelid
+ * @param {string} socketid
+ */
+function subchannelMove(worker, channelid, subchannelid, socketid) {
+	worker.send(`.${channelid}\n${subchannelid}\n${socketid}`);
+}
+
+module.exports = {
+	WorkerWrapper,
+	GoWorker,
+
+	workers,
+	spawnWorker,
+	listen,
+	killWorker,
+	killPid,
+
+	socketSend,
+	socketDisconnect,
+	channelBroadcast,
+	channelSend,
+	channelAdd,
+	channelRemove,
+	subchannelBroadcast,
+	subchannelMove,
+};

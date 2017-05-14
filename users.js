@@ -1545,23 +1545,32 @@ Users.pruneInactiveTimer = setInterval(() => {
  * Routing
  *********************************************************/
 
+/**
+ * Creates a user and connection object for a new socket and sends a challenge
+ * string to the user for authentication.
+ * @param {WorkerWrapper} worker
+ * @param {number} workerid
+ * @param {string} socketid
+ * @param {string} ip
+ * @param {string} protocol
+ */
 Users.socketConnect = function (worker, workerid, socketid, ip, protocol) {
-	let id = '' + workerid + '-' + socketid;
+	let id = `${workerid}-${socketid}`;
 	let connection = new Connection(id, worker, socketid, null, ip, protocol);
 	connections.set(id, connection);
 
 	let banned = Punishments.checkIpBanned(connection);
-	if (banned) {
-		return connection.destroy();
-	}
+	if (banned) return connection.destroy();
+
 	// Emergency mode connections logging
 	if (Config.emergency) {
-		FS('logs/cons.emergency.log').append('[' + ip + ']\n');
+		FS('logs/cons.emergency.log').append(`[${ip}]\n`);
 	}
 
 	let user = new User(connection);
 	connection.user = user;
 	Punishments.checkIp(user, connection);
+
 	// Generate 1024-bit challenge string.
 	require('crypto').randomBytes(128, (err, buffer) => {
 		if (err) {
@@ -1582,17 +1591,29 @@ Users.socketConnect = function (worker, workerid, socketid, ip, protocol) {
 	user.joinRoom('global', connection);
 };
 
+/**
+ * Forcefully disconnects a socket.
+ * @param {WorkerWrapper} worker
+ * @param {number} workerid
+ * @param {string} socketid
+ */
 Users.socketDisconnect = function (worker, workerid, socketid) {
-	let id = '' + workerid + '-' + socketid;
-
+	let id = `${workerid}-${socketid}`;
 	let connection = connections.get(id);
 	if (!connection) return;
+
 	connection.onDisconnect();
 };
 
-Users.socketReceive = function (worker, workerid, socketid, message) {
-	let id = '' + workerid + '-' + socketid;
-
+/**
+ * Parses a chat message received by a socket.
+ * @param {WorkerWrapper} worker
+ * @param {number} workerid
+ * @param {string} socketid
+ * @param {string} data
+ */
+Users.socketReceive = function (worker, workerid, socketid, data) {
+	let id = `${workerid}-${socketid}`;
 	let connection = connections.get(id);
 	if (!connection) return;
 
@@ -1601,36 +1622,31 @@ Users.socketReceive = function (worker, workerid, socketid, message) {
 	// `data` event. To prevent this, we log exceptions and prevent them
 	// from propagating out of this function.
 
-	// drop legacy JSON messages
-	if (message.charAt(0) === '{') return;
-
-	// drop invalid messages without a pipe character
-	let pipeIndex = message.indexOf('|');
-	if (pipeIndex < 0) return;
-
-	const user = connection.user;
+	let {user} = connection;
 	if (!user) return;
 
 	// The client obviates the room id when sending messages to Lobby by default
-	const roomId = message.substr(0, pipeIndex) || (Rooms.lobby || Rooms.global).id;
-	message = message.slice(pipeIndex + 1);
-
-	const room = Rooms(roomId);
+	let pipeIndex = data.indexOf('|');
+	let roomid = data.substr(0, pipeIndex) || (Rooms.lobby || Rooms.global).id;
+	let message = data.slice(pipeIndex + 1);
+	let room = Rooms(roomid);
 	if (!room) return;
+
 	if (Chat.multiLinePattern.test(message)) {
 		user.chat(message, room, connection);
 		return;
 	}
 
-	const lines = message.split('\n');
+	let lines = message.split('\n');
 	if (!lines[lines.length - 1]) lines.pop();
 	if (lines.length > (user.isStaff ? THROTTLE_MULTILINE_WARN_STAFF : THROTTLE_MULTILINE_WARN)) {
 		connection.popup(`You're sending too many lines at once. Try using a paste service like [[Pastebin]].`);
 		return;
 	}
+
 	// Emergency logging
 	if (Config.emergency) {
-		FS('logs/emergency.log').append(`[${user} (${connection.ip})] ${roomId}|${message}\n`);
+		FS('logs/emergency.log').append(`[${user} (${connection.ip})] ${data}\n`);
 	}
 
 	let startTime = Date.now();
@@ -1639,6 +1655,23 @@ Users.socketReceive = function (worker, workerid, socketid, message) {
 	}
 	let deltaTime = Date.now() - startTime;
 	if (deltaTime > 1000) {
-		Monitor.warn(`[slow] ${deltaTime}ms - ${user.name} <${connection.ip}>: ${roomId}|${message}`);
+		Monitor.warn(`[slow] ${deltaTime}ms - ${user.name} <${connection.ip}>: ${data}`);
 	}
+};
+
+/**
+ * Clears all connections whose sockets were contained by a
+ * worker. Called after a worker's process crashes or gets killed.
+ * @param {WorkerWrapper} worker
+ * @return {number}
+ */
+Users.socketDisconnectAll = function (worker) {
+	let count = 0;
+	connections.forEach(connection => {
+		if (connection.worker === worker) {
+			Users.socketDisconnect(worker, worker.id, connection.socketid);
+			count++;
+		}
+	});
+	return count;
 };

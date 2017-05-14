@@ -25,6 +25,14 @@ exports.workers = 1;
 // TODO: allow SSL to actually be possible to use for third-party servers at
 // some point.
 
+// golang - toggle using Go instead of Node for sockets workers
+//   Node workers are more unstable at handling connections because of bugs in
+//   sockjs-node, but sending/receiving messages over connections on Go workers
+//   is slightly slower due to the extra work involved in performing IPC with
+//   them safely. This should be left set to false unless you know what you are
+//   doing.
+exports.golang = false;
+
 // proxyip - proxy IPs with trusted X-Forwarded-For headers
 //   This can be either false (meaning not to trust any proxies) or an array
 //   of strings. Each string should be either an IP address or a subnet given
@@ -32,7 +40,7 @@ exports.workers = 1;
 //   know what you are doing.
 exports.proxyip = false;
 
-// ofe - write heapdumps if sockets.js workers run out of memory.
+// ofe - write heapdumps if Node sockets workers run out of memory
 //   If you wish to enable this, you will need to install ofe, as it is not a
 //   installed by default:
 //     $ npm install --no-save ofe

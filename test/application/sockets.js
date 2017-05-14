@@ -1,212 +1,96 @@
 'use strict';
 
 const assert = require('assert');
-const cluster = require('cluster');
 
-describe.skip('Sockets', function () {
-	const spawnWorker = () => (
-		new Promise(resolve => {
-			let worker = Sockets.spawnWorker();
-			worker.removeAllListeners('message');
-			resolve(worker);
-		})
-	);
+let sockets;
 
+describe('Sockets workers', function () {
 	before(function () {
-		cluster.settings.silent = true;
-		cluster.removeAllListeners('disconnect');
+		sockets = require('../../sockets-workers');
+
+		this.mux = new sockets.Multiplexer();
+		clearInterval(this.mux.cleanupInterval);
+		this.mux.cleanupInterval = null;
+
+		this.socket = require('../../dev-tools/sockets').createSocket();
 	});
 
 	afterEach(function () {
-		Sockets.workers.forEach((worker, workerid) => {
-			worker.kill();
-			Sockets.workers.delete(workerid);
-		});
+		this.mux.socketCounter = 0;
+		this.mux.sockets.clear();
+		this.mux.channels.clear();
 	});
 
-	describe('master', function () {
-		it('should be able to spawn workers', function () {
-			Sockets.spawnWorker();
-			assert.strictEqual(Sockets.workers.size, 1);
-		});
-
-		it('should be able to spawn workers on listen', function () {
-			Sockets.listen(0, '127.0.0.1', 1);
-			assert.strictEqual(Sockets.workers.size, 1);
-		});
-
-		it('should be able to kill workers', function () {
-			return spawnWorker().then(worker => {
-				Sockets.killWorker(worker);
-				assert.strictEqual(Sockets.workers.size, 0);
-			});
-		});
-
-		it('should be able to kill workers by PID', function () {
-			return spawnWorker().then(worker => {
-				Sockets.killPid(worker.process.pid);
-				assert.strictEqual(Sockets.workers.size, 0);
-			});
-		});
+	after(function () {
+		this.mux.tryDestroySocket(this.socket);
+		this.socket = null;
+		this.mux = null;
 	});
 
-	describe('workers', function () {
-		// This composes a sequence of HOFs that send a message to a worker,
-		// wait for its response, then return the worker for the next function
-		// to use.
-		const chain = (eventHandler, msg) => worker => {
-			worker.once('message', eventHandler(worker));
-			msg = msg || `$
-				const {Session} = require('sockjs/lib/transport');
-				const socket = new Session('aaaaaaaa', server);
-				socket.remoteAddress = '127.0.0.1';
-				if (!('headers' in socket)) socket.headers = {};
-				socket.headers['x-forwarded-for'] = '';
-				socket.protocol = 'websocket';
-				socket.write = msg => process.send(msg);
-				server.emit('connection', socket);`;
-			worker.send(msg);
-			return worker;
-		};
+	it('should parse more than two params', function () {
+		let params = '1\n1\n0\n';
+		let ret = this.mux.parseParams(params, 4);
+		assert.deepStrictEqual(ret, ['1', '1', '0', '']);
+	});
 
-		const spawnSocket = eventHandler => spawnWorker().then(chain(eventHandler));
+	it('should parse params with multiple newlines', function () {
+		let params = '0\n|1\n|2';
+		let ret = this.mux.parseParams(params, 2);
+		assert.deepStrictEqual(ret, ['0', '|1\n|2']);
+	});
 
-		it('should allow sockets to connect', function () {
-			return spawnSocket(worker => data => {
-				let cmd = data.charAt(0);
-				let [sid, ip, protocol] = data.substr(1).split('\n');
-				assert.strictEqual(cmd, '*');
-				assert.strictEqual(sid, '1');
-				assert.strictEqual(ip, '127.0.0.1');
-				assert.strictEqual(protocol, 'websocket');
-			});
-		});
+	it('should add sockets on connect', function () {
+		let res = this.mux.onSocketConnect(this.socket);
+		assert.ok(res);
+	});
 
-		it('should allow sockets to disconnect', function () {
-			let querySocket;
-			return spawnSocket(worker => data => {
-				let sid = data.substr(1, data.indexOf('\n'));
-				querySocket = `$
-					let socket = sockets.get(${sid});
-					process.send(!socket);`;
-				Sockets.socketDisconnect(worker, sid);
-			}).then(chain(worker => data => {
-				assert.ok(data);
-			}, querySocket));
-		});
+	it('should remove sockets on disconnect', function () {
+		this.mux.onSocketConnect(this.socket);
+		let res = this.mux.onSocketDisconnect('0', this.socket);
+		assert.ok(res);
+	});
 
-		it('should allow sockets to send messages', function () {
-			let msg = 'ayy lmao';
-			let socketSend;
-			return spawnSocket(worker => data => {
-				let sid = data.substr(1, data.indexOf('\n'));
-				socketSend = `>${sid}\n${msg}`;
-			}).then(chain(worker => data => {
-				assert.strictEqual(data, msg);
-			}, socketSend));
-		});
+	it('should add sockets to channels', function () {
+		this.mux.onSocketConnect(this.socket);
+		let res = this.mux.onChannelAdd('global', '0');
+		assert.ok(res);
+		res = this.mux.onChannelAdd('global', '0');
+		assert.ok(!res);
+		this.mux.channels.set('lobby', new Map());
+		res = this.mux.onChannelAdd('lobby', '0');
+		assert.ok(res);
+	});
 
-		it('should allow sockets to receive messages', function () {
-			let sid;
-			let msg;
-			let mockReceive;
-			return spawnSocket(worker => data => {
-				sid = data.substr(1, data.indexOf('\n'));
-				msg = '|/cmd rooms';
-				mockReceive = `$
-					let socket = sockets.get(${sid});
-					socket.emit('data', ${msg});`;
-			}).then(chain(worker => data => {
-				let cmd = data.charAt(0);
-				let params = data.substr(1).split('\n');
-				assert.strictEqual(cmd, '<');
-				assert.strictEqual(sid, params[0]);
-				assert.strictEqual(msg, params[1]);
-			}, mockReceive));
-		});
+	it('should remove sockets from channels', function () {
+		this.mux.onSocketConnect(this.socket);
+		this.mux.onChannelAdd('global', '0');
+		let res = this.mux.onChannelRemove('global', '0');
+		assert.ok(res);
+		res = this.mux.onChannelRemove('global', '0');
+		assert.ok(!res);
+	});
 
-		it('should create a channel for the first socket to get added to it', function () {
-			let queryChannel;
-			return spawnSocket(worker => data => {
-				let sid = data.substr(1, data.indexOf('\n'));
-				let cid = 'global';
-				queryChannel = `$
-					let channel = channels.get(${cid});
-					process.send(channel && channel.has(${sid}));`;
-				Sockets.channelAdd(worker, cid, sid);
-			}).then(chain(worker => data => {
-				assert.ok(data);
-			}, queryChannel));
-		});
+	it('should move sockets to subchannels', function () {
+		this.mux.onSocketConnect(this.socket);
+		this.mux.onChannelAdd('global', '0');
+		let res = this.mux.onSubchannelMove('global', '1', '0');
+		assert.ok(res);
+	});
 
-		it('should remove a channel if the last socket gets removed from it', function () {
-			let queryChannel;
-			return spawnSocket(worker => data => {
-				let sid = data.substr(1, data.indexOf('\n'));
-				let cid = 'global';
-				queryChannel = `$
-					process.send(!sockets.has(${sid}) && !channels.has(${cid}));`;
-				Sockets.channelAdd(worker, cid, sid);
-				Sockets.channelRemove(worker, cid, sid);
-			}).then(chain(worker => data => {
-				assert.ok(data);
-			}, queryChannel));
-		});
+	it('should broadcast to subchannels', function () {
+		let messages = '|split\n0\n1\n2\n|\n|split\n3\n4\n5\n|';
+		for (let i = 0; i < 3; i++) {
+			let message = messages.replace(sockets.SUBCHANNEL_MESSAGE_REGEX, `$${i + 1}`);
+			assert.strictEqual(message, `${i}\n${i + 3}`);
+		}
 
-		it('should send to all sockets in a channel', function () {
-			let msg = 'ayy lmao';
-			let cid = 'global';
-			let channelSend = `#${cid}\n${msg}`;
-			return spawnSocket(worker => data => {
-				let sid = data.substr(1, data.indexOf('\n'));
-				Sockets.channelAdd(worker, cid, sid);
-			}).then(chain(worker => data => {
-				assert.strictEqual(data, msg);
-			}, channelSend));
-		});
-
-		it('should create a subchannel when moving a socket to it', function () {
-			let querySubchannel;
-			return spawnSocket(worker => data => {
-				let sid = data.substr(1, data.indexOf('\n'));
-				let cid = 'battle-ou-1';
-				let scid = '1';
-				querySubchannel = `$
-					let subchannel = subchannels[${cid}];
-					process.send(!!subchannel && (subchannel.get(${sid}) === ${scid}));`;
-				Sockets.subchannelMove(worker, cid, scid, sid);
-			}).then(chain(worker => data => {
-				assert.ok(data);
-			}, querySubchannel));
-		});
-
-		it('should remove a subchannel when removing its last socket', function () {
-			let querySubchannel;
-			return spawnSocket(worker => data => {
-				let sid = data.substr(1, data.indexOf('\n'));
-				let cid = 'battle-ou-1';
-				let scid = '1';
-				querySubchannel = `$
-					let subchannel = subchannels.get(${cid});
-					process.send(!!subchannel && (subchannel.get(${sid}) === ${scid}));`;
-				Sockets.subchannelMove(worker, cid, scid, sid);
-				Sockets.channelRemove(worker, cid, sid);
-			}).then(chain(worker => data => {
-				assert.ok(data);
-			}, querySubchannel));
-		});
-
-		it('should send to sockets in a subchannel', function () {
-			let cid = 'battle-ou-1';
-			let msg = 'ayy lmao';
-			let subchannelSend = `.${cid}\n\n|split\n\n${msg}\n\n`;
-			return spawnSocket(worker => data => {
-				let sid = data.substr(1, data.indexOf('\n'));
-				let scid = '1';
-				Sockets.subchannelMove(worker, cid, scid, sid);
-			}).then(chain(worker => data => {
-				assert.strictEqual(data, msg);
-			}, subchannelSend));
-		});
+		this.mux.onSocketConnect(this.socket);
+		this.mux.onChannelAdd('global', '0');
+		this.mux.onSubchannelMove('global', '1', '0');
+		let res = this.mux.onSubchannelBroadcast('global', messages);
+		assert.ok(res);
+		this.mux.onChannelRemove('global', '0');
+		res = this.mux.onSubchannelBroadcast('global', messages);
+		assert.ok(!res);
 	});
 });

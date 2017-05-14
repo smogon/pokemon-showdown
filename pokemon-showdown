@@ -40,6 +40,88 @@ try {
 }
 
 if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
+	// Check if the server is configured to use Go, and ensure the required
+	// environment variables and dependencies are available if that is the case
+
+	let config;
+	try {
+		config = require('./config/config');
+	} catch (e) {}
+
+	if (config && config.golang) {
+		// GOPATH and GOROOT are optional to a degree, but we need them in order
+		// to be able to handle Go dependencies. Since Go only cares about the
+		// first path in the list, so will we.
+		const GOPATH = child_process.execSync('go env GOPATH', {stdio: null, encoding: 'utf8'})
+			.trim()
+			.split(path.delimiter)[0]
+			.replace(/^"(.*)"$/, '$1');
+		if (!GOPATH) {
+			// Should never happen, but it does on Bash on Ubuntu on Windows.
+			console.error('There is no $GOPATH environment variable set.');
+			process.exit(1);
+		}
+
+		const dependencies = ['github.com/gorilla/mux', 'github.com/igm/sockjs-go/sockjs'];
+		let packages = child_process.execSync('go list all', {stdio: null, encoding: 'utf8'});
+		for (let dep of dependencies) {
+			if (!packages.includes(dep)) {
+				console.log(`Installing ${dep}...`);
+				child_process.execSync(`go install ${dep}`, {stdio: 'inherit'});
+			}
+		}
+
+		let stat;
+		let needsSrcDir = false;
+		try {
+			stat = fs.lstatSync(path.resolve(GOPATH, 'src/github.com/Zarel'));
+		} catch (e) {
+			needsSrcDir = true;
+		} finally {
+			if (stat && !stat.isDirectory()) {
+				needsSrcDir = true;
+			}
+		}
+
+		let srcPath = path.resolve(process.cwd(), 'sockets');
+		let tarPath = path.resolve(GOPATH, 'src/github.com/Zarel/Pokemon-Showdown/sockets');
+		if (needsSrcDir) {
+			try {
+				fs.mkdirSync(path.resolve(GOPATH, 'src/github.com/Zarel'));
+				fs.mkdirSync(path.resolve(GOPATH, 'src/github.com/Zarel/Pokemon-Showdown'));
+			} catch (e) {
+				console.error(`Cannot make go source directory for the sockets library files! Symlink them manually from ${srcPath} to ${tarPath}`);
+				process.exit(1);
+			}
+		}
+
+		try {
+			stat = fs.lstatSync(tarPath);
+		} catch (e) {}
+
+		if (!stat || !stat.isSymbolicLink()) {
+			// Windows requires administrator privileges to make symlinks, so we
+			// make junctions instead. For our purposes they're compatible enough
+			// with symlinks on UNIX-like OSes.
+			let symlinkType = (process.platform === 'win32') ? 'junction' : 'dir';
+			try {
+				fs.symlinkSync(srcPath, tarPath, symlinkType);
+			} catch (e) {
+				console.error(`Cannot make go source directory for the sockets library files! Symlink them manually from ${srcPath} to ${tarPath}`);
+				process.exit(1);
+			}
+		}
+
+		console.log('Building Go source libs...');
+		try {
+			child_process.execSync('go install github.com/Zarel/Pokemon-Showdown/sockets', {stdio: 'inherit'});
+		} catch (e) {
+			// Go will show the errors that caused compiling Go's files to fail, so
+			// there's no reason to bother logging anything of our own.
+			process.exit(1);
+		}
+	}
+
 	// Start the server. We manually load app.js so it can be configured to run as
 	// the main module, rather than this file being considered the main module.
 	// This ensures any dependencies that were just installed can be found when

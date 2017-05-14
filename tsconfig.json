@@ -15,11 +15,13 @@
         "./sim/prng.js",
         "./crashlogger.js",
         "./dnsbl.js",
+        "./fs.js",
         "./ladders-matchmaker.js",
         "./monitor.js",
-        "./repl.js",
-        "./fs.js",
         "./process-manager.js",
+        "./repl.js",
+        "./sockets.js",
+        "./sockets-workers.js",
         "./verifier.js"
     ]
 }
