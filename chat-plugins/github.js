@@ -100,7 +100,10 @@ git.listen();
 
 exports.commands = {
 	gitban: function (target, room, user, connection, cmd) {
-		if (!targetRooms.includes(toId(room))) return this.errorReply(`The command "/${cmd}" does not exist. To send a message starting with "/${cmd}", type "//${cmd}".`);
+		let targetRoomIDs = targetRooms.map(room => {
+			return room.id;
+		});
+		if (!targetRoomIDs.includes(toId(room))) return this.errorReply(`The command "/${cmd}" does not exist. To send a message starting with "/${cmd}", type "//${cmd}".`);
 		if (!this.can('ban', null, room)) return false;
 		if (!target) return this.parse('/help gitban');
 		target = target.trim();
@@ -111,7 +114,10 @@ exports.commands = {
 	gitbanhelp: ["/gitban <github username>: Makes the GitHub Plugin ignore the github username's alerts. Requires: @ # & ~"],
 
 	gitunban: function (target, room, user, connection, cmd) {
-		if (!targetRooms.includes(toId(room))) return this.errorReply(`The command "/${cmd}" does not exist. To send a message starting with "/${cmd}", type "//${cmd}".`);
+		let targetRoomIDs = targetRooms.map(room => {
+			return room.id;
+		});
+		if (!targetRoomIDs.includes(toId(room))) return this.errorReply(`The command "/${cmd}" does not exist. To send a message starting with "/${cmd}", type "//${cmd}".`);
 		if (!this.can('ban', null, room)) return false;
 		if (!target) return this.parse('/help gitunban');
 		target = target.trim();
