@@ -445,12 +445,17 @@ class GlobalRoom {
 			return Config.rankList;
 		}
 		let rankList = [];
+
 		for (let rank in Config.groups) {
-			if (!Config.groups[rank].name || !rank) continue; // shouldn't be displayed if they dont have a group name.
-			rankList.push(rank.charAt(0) + Config.groups[rank].name); // send the first character in the rank, incase they put a string several characters long
+			if (!Config.groups[rank] || !rank) continue;
+
+			let tarGroup = Config.groups[rank];
+			let groupId = tarGroup.addhtml || (!tarGroup.mute && !tarGroup.root) ? 0 : (tarGroup.root || tarGroup.declare) ? 2 : 1;
+
+			rankList.push(rank + ',' + (Config.groups[rank].name || ' ') + ',' + groupId); // send the first character in the rank, incase they put a string several characters long
 		}
 
-		Config.rankList = '|authconfig|' + rankList.join("|");
+		Config.rankList = '|groups|' + rankList.join("|");
 		return Config.rankList;
 	}
 
@@ -652,7 +657,7 @@ class GlobalRoom {
 	}
 	onConnect(user, connection) {
 		let initdata = '|updateuser|' + user.name + '|' + (user.named ? '1' : '0') + '|' + user.avatar + '\n';
-		connection.send(initdata + (Config.noCustomGroupList ? '' : this.configRankList) + '\n' + this.formatListText);
+		connection.send(initdata + (Config.noCustomGroupList ? '' : this.configRankList + '\n') + this.formatListText);
 		if (this.chatRooms.length > 2) connection.send('|queryresponse|rooms|null'); // should display room list
 	}
 	onJoin(user, connection) {
