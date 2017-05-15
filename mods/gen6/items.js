@@ -95,14 +95,6 @@ exports.BattleItems = {
 		inherit: true,
 		isUnreleased: false,
 	},
-	heracronite: {
-		inherit: true,
-		isUnreleased: false,
-	},
-	houndoominite: {
-		inherit: true,
-		isUnreleased: false,
-	},
 	iapapaberry: {
 		inherit: true,
 		onUpdate: function (pokemon) {
