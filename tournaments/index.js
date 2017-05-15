@@ -135,7 +135,7 @@ class Tournament {
 				let search = Dex.dataSearch(param);
 				if (!search || search.length < 1) continue;
 				search = search[0];
-				if (!search.exactMatch || search.searchType === 'nature') continue;
+				if (search.isInexact || search.searchType === 'nature') continue;
 				if (unban) {
 					if (format.banlistTable[search.name] === false) continue;
 				} else {
