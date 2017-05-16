@@ -976,6 +976,7 @@ class ModdedDex {
 
 		let searchFunctions = {Pokedex: 'getTemplate', Movedex: 'getMove', Abilities: 'getAbility', Items: 'getItem', Natures: 'getNature'};
 		let searchTypes = {Pokedex: 'pokemon', Movedex: 'move', Abilities: 'ability', Items: 'item', Natures: 'nature'};
+		/** @type {AnyObject[] | false} */
 		let searchResults = [];
 		for (let i = 0; i < searchIn.length; i++) {
 			/** @type {AnyObject} */
@@ -1333,7 +1334,7 @@ class ModdedDex {
 	loadData() {
 		if (this.dataCache) return this.dataCache;
 		dexes['base'].includeMods();
-		this.dataCache = {};
+		let dataCache = {};
 
 		let basePath = (this.isBase ? DATA_DIR : MODS_DIR + '/' + this.currentMod) + '/';
 
@@ -1348,25 +1349,25 @@ class ModdedDex {
 
 		for (let dataType of DATA_TYPES) {
 			if (dataType === 'Natures' && this.isBase) {
-				this.dataCache[dataType] = BattleNatures;
+				dataCache[dataType] = BattleNatures;
 				continue;
 			}
 			let BattleData = this.loadDataFile(basePath, dataType);
 			if (!BattleData || typeof BattleData !== 'object') throw new TypeError("Exported property `Battle" + dataType + "`from `" + './data/' + DATA_FILES[dataType] + "` must be an object except `null`.");
-			if (BattleData !== this.dataCache[dataType]) this.dataCache[dataType] = Object.assign(BattleData, this.dataCache[dataType]);
+			if (BattleData !== dataCache[dataType]) dataCache[dataType] = Object.assign(BattleData, dataCache[dataType]);
 			if (dataType === 'Formats' && !parentDex) Object.assign(BattleData, this.formats);
 		}
-		this.dataCache['MoveCache'] = new Map();
-		this.dataCache['ItemCache'] = new Map();
-		this.dataCache['AbilityCache'] = new Map();
-		this.dataCache['TemplateCache'] = new Map();
+		dataCache['MoveCache'] = new Map();
+		dataCache['ItemCache'] = new Map();
+		dataCache['AbilityCache'] = new Map();
+		dataCache['TemplateCache'] = new Map();
 		if (!parentDex) {
 			// Formats are inherited by mods
 			this.includeFormats();
 		} else {
 			for (let dataType of DATA_TYPES) {
 				const parentTypedData = parentDex.data[dataType];
-				const childTypedData = this.dataCache[dataType] || (this.dataCache[dataType] = {});
+				const childTypedData = dataCache[dataType] || (dataCache[dataType] = {});
 				for (let entryId in parentTypedData) {
 					if (childTypedData[entryId] === null) {
 						// null means don't inherit
@@ -1396,12 +1397,14 @@ class ModdedDex {
 		}
 
 		// Flag the generation. Required for team validator.
-		this.gen = this.dataCache.Scripts.gen || 7;
+		this.gen = dataCache.Scripts.gen || 7;
+		// @ts-ignore
+		this.dataCache = dataCache;
 
 		// Execute initialization script.
 		if (BattleScripts.init) BattleScripts.init.call(this);
 
-		return this.dataCache;
+		return dataCache;
 	}
 
 	/**
@@ -1457,6 +1460,7 @@ class ModdedDex {
 		dexes['base'].formatsCache[id] = format;
 		if (this.dataCache) this.dataCache.Formats[id] = format;
 		if (!this.isBase) {
+			// @ts-ignore
 			if (dexes['base'].dataCache) dexes['base'].dataCache.Formats[id] = format;
 		}
 	}
