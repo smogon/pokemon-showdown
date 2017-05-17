@@ -45,7 +45,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const {Tools, Effect} = require('./dex-data');
+const Data = require('./dex-data');
 
 const DATA_DIR = path.resolve(__dirname, '../data');
 const MODS_DIR = path.resolve(__dirname, '../mods');
@@ -104,7 +104,7 @@ const DATA_FILES = {
 /** @typedef {{id: string, name: string, [k: string]: any}} DexTemplate */
 /** @typedef {{[id: string]: AnyObject}} DexTable */
 
-/** @typedef {{Pokedex: DexTable, Movedex: DexTable, Statuses: DexTable, TypeChart: DexTable, Scripts: DexTable, Items: DexTable, Abilities: DexTable, FormatsData: DexTable, Learnsets: DexTable, Aliases: DexTable, Natures: DexTable, Formats: DexTable, MoveCache: Map, ItemCache: Map, AbilityCache: Map, TemplateCache: Map}} DexTableData */
+/** @typedef {{Pokedex: DexTable, Movedex: DexTable, Statuses: DexTable, TypeChart: DexTable, Scripts: DexTable, Items: DexTable, Abilities: DexTable, FormatsData: DexTable, Learnsets: DexTable, Aliases: DexTable, Natures: DexTable, Formats: DexTable, MoveCache: Map<string, AnyObject>, ItemCache: Map<string, AnyObject>, AbilityCache: Map<string, AnyObject>, TemplateCache: Map<string, AnyObject>}} DexTableData */
 
 const BattleNatures = {
 	adamant: {name:"Adamant", plus:'atk', minus:'spa'},
@@ -134,7 +134,7 @@ const BattleNatures = {
 	timid: {name:"Timid", plus:'spe', minus:'atk'},
 };
 
-const toId = Tools.getId;
+const toId = Data.Tools.getId;
 
 class ModdedDex {
 
@@ -156,8 +156,8 @@ class ModdedDex {
 		this.formatsCache = null;
 		this.modsLoaded = false;
 
-		this.getString = Tools.getString;
-		this.getId = Tools.getId;
+		this.getString = Data.Tools.getString;
+		this.getId = Data.Tools.getId;
 		this.ModdedDex = ModdedDex;
 	}
 
@@ -329,108 +329,56 @@ class ModdedDex {
 	}
 
 	/**
-	 * @param {string | AnyObject} template
+	 * @param {string | AnyObject} name
 	 * @return {AnyObject}
 	 */
-	getTemplate(template) {
-		if (!template || typeof template === 'string') {
-			let name = (template || '').trim();
-			let id = toId(name);
-			if (id === 'nidoran' && name.slice(-1) === '♀') {
-				id = 'nidoranf';
-			} else if (id === 'nidoran' && name.slice(-1) === '♂') {
-				id = 'nidoranm';
-			}
-			template = this.data.TemplateCache.get(id);
-			if (template) return template;
-			if (this.data.Aliases.hasOwnProperty(id)) {
-				template = this.getTemplate(this.data.Aliases[id]);
-				if (template) {
-					this.data.TemplateCache.set(id, template);
-				}
-				return template;
-			}
-			if (!this.data.Pokedex.hasOwnProperty(id)) {
-				let aliasTo = '';
-				if (id.startsWith('mega') && this.data.Pokedex[id.slice(4) + 'mega']) {
-					aliasTo = id.slice(4) + 'mega';
-				} else if (id.startsWith('m') && this.data.Pokedex[id.slice(1) + 'mega']) {
-					aliasTo = id.slice(1) + 'mega';
-				} else if (id.startsWith('primal') && this.data.Pokedex[id.slice(6) + 'primal']) {
-					aliasTo = id.slice(6) + 'primal';
-				} else if (id.startsWith('p') && this.data.Pokedex[id.slice(1) + 'primal']) {
-					aliasTo = id.slice(1) + 'primal';
-				}
-				if (aliasTo) {
-					template = this.getTemplate(aliasTo);
-					if (template.exists) {
-						this.data.TemplateCache.set(id, template);
-						return template;
-					}
-				}
-			}
-			if (id && this.data.Pokedex.hasOwnProperty(id)) {
-				template = this.deepClone(this.data.Pokedex[id]);
-				template.exists = true;
-			} else {
-				template = {};
-			}
-			name = template.species || template.name || name;
-			if (this.data.FormatsData[id]) {
-				Object.assign(template, this.data.FormatsData[id]);
-			}
-			if (this.data.Learnsets[id]) {
-				Object.assign(template, this.data.Learnsets[id]);
-			}
-			if (!template.id) template.id = id;
-			if (!template.name) template.name = name;
-			if (!template.speciesid) template.speciesid = id;
-			if (!template.species) template.species = name;
-			if (!template.baseSpecies) template.baseSpecies = name;
-			if (!template.forme) template.forme = '';
-			if (!template.formeLetter) template.formeLetter = '';
-			if (!template.spriteid) template.spriteid = toId(template.baseSpecies) + (template.baseSpecies !== name ? '-' + toId(template.forme) : '');
-			if (!template.prevo) template.prevo = '';
-			if (!template.evos) template.evos = [];
-			if (!template.nfe) template.nfe = !!template.evos.length;
-			if (!template.eggGroups) template.eggGroups = [];
-			if (!template.gender) template.gender = '';
-			if (!template.genderRatio && template.gender === 'M') template.genderRatio = {M:1, F:0};
-			if (!template.genderRatio && template.gender === 'F') template.genderRatio = {M:0, F:1};
-			if (!template.genderRatio && template.gender === 'N') template.genderRatio = {M:0, F:0};
-			if (!template.genderRatio) template.genderRatio = {M:0.5, F:0.5};
-			if (!template.tier && template.baseSpecies !== template.species) template.tier = this.data.FormatsData[toId(template.baseSpecies)].tier;
-			if (!template.requiredItems && template.requiredItem) template.requiredItems = [template.requiredItem];
-			if (!template.tier) template.tier = 'Illegal';
-			if (!template.gen) {
-				if (template.num >= 722 || template.forme === 'Alola') {
-					template.gen = 7;
-				} else if (template.forme && template.forme in {'Mega':1, 'Mega-X':1, 'Mega-Y':1}) {
-					template.gen = 6;
-					template.isMega = true;
-					template.battleOnly = true;
-				} else if (template.forme === 'Primal') {
-					template.gen = 6;
-					template.isPrimal = true;
-					template.battleOnly = true;
-				} else if (template.num >= 650) {
-					template.gen = 6;
-				} else if (template.num >= 494) {
-					template.gen = 5;
-				} else if (template.num >= 387) {
-					template.gen = 4;
-				} else if (template.num >= 252) {
-					template.gen = 3;
-				} else if (template.num >= 152) {
-					template.gen = 2;
-				} else if (template.num >= 1) {
-					template.gen = 1;
-				} else {
-					template.gen = 0;
-				}
-			}
-			if (template.exists) this.data.TemplateCache.set(id, template);
+	getTemplate(name) {
+		if (name && typeof name !== 'string') {
+			return name;
 		}
+		name = (name || '').trim();
+		let id = toId(name);
+		if (id === 'nidoran' && name.slice(-1) === '♀') {
+			id = 'nidoranf';
+		} else if (id === 'nidoran' && name.slice(-1) === '♂') {
+			id = 'nidoranm';
+		}
+		let template = this.data.TemplateCache.get(id);
+		if (template) return template;
+		if (this.data.Aliases.hasOwnProperty(id)) {
+			template = this.getTemplate(this.data.Aliases[id]);
+			if (template) {
+				this.data.TemplateCache.set(id, template);
+			}
+			return template;
+		}
+		if (!this.data.Pokedex.hasOwnProperty(id)) {
+			let aliasTo = '';
+			if (id.startsWith('mega') && this.data.Pokedex[id.slice(4) + 'mega']) {
+				aliasTo = id.slice(4) + 'mega';
+			} else if (id.startsWith('m') && this.data.Pokedex[id.slice(1) + 'mega']) {
+				aliasTo = id.slice(1) + 'mega';
+			} else if (id.startsWith('primal') && this.data.Pokedex[id.slice(6) + 'primal']) {
+				aliasTo = id.slice(6) + 'primal';
+			} else if (id.startsWith('p') && this.data.Pokedex[id.slice(1) + 'primal']) {
+				aliasTo = id.slice(1) + 'primal';
+			}
+			if (aliasTo) {
+				template = this.getTemplate(aliasTo);
+				if (template.exists) {
+					this.data.TemplateCache.set(id, template);
+					return template;
+				}
+			}
+		}
+		if (id && this.data.Pokedex.hasOwnProperty(id)) {
+			template = new Data.Template({name}, this.data.Pokedex[id], this.data.FormatsData[id], this.data.Learnsets[id]);
+			if (!template.tier && template.baseSpecies !== template.species) template.tier = this.data.FormatsData[toId(template.baseSpecies)].tier;
+			if (!template.tier) template.tier = 'Illegal';
+		} else {
+			template = new Data.Template({name, exists: false});
+		}
+		if (template.exists) this.data.TemplateCache.set(id, template);
 		return template;
 	}
 	/**
@@ -443,65 +391,35 @@ class ModdedDex {
 		return this.data.Learnsets[id].learnset;
 	}
 	/**
-	 * @param {string | AnyObject} move
+	 * @param {string | AnyObject} name
 	 * @return {AnyObject}
 	 */
-	getMove(move) {
-		if (!move || typeof move === 'string') {
-			let name = (move || '').trim();
-			let id = toId(name);
-			move = this.data.MoveCache.get(id);
-			if (move) return move;
-			if (this.data.Aliases.hasOwnProperty(id)) {
-				move = this.getMove(this.data.Aliases[id]);
-				if (move.exists) {
-					this.data.MoveCache.set(id, move);
-				}
-				return move;
-			}
-			if (id.substr(0, 11) === 'hiddenpower') {
-				let matches = /([a-z]*)([0-9]*)/.exec(id);
-				// @ts-ignore
-				id = matches[1];
-			}
-			if (id && this.data.Movedex.hasOwnProperty(id)) {
-				move = this.deepClone(this.data.Movedex[id]);
-				move.exists = true;
-			} else {
-				move = {};
-			}
-			if (!move.id) move.id = id;
-			if (!move.name) move.name = name;
-			if (!move.fullname) move.fullname = 'move: ' + move.name;
-			move.toString = this.effectToString;
-			if (!move.critRatio) move.critRatio = 1;
-			if (!move.baseType) move.baseType = move.type;
-			if (!move.effectType) move.effectType = 'Move';
-			if (!move.secondaries && move.secondary) move.secondaries = [move.secondary];
-			if (!move.gen) {
-				if (move.num >= 622) {
-					move.gen = 7;
-				} else if (move.num >= 560) {
-					move.gen = 6;
-				} else if (move.num >= 468) {
-					move.gen = 5;
-				} else if (move.num >= 355) {
-					move.gen = 4;
-				} else if (move.num >= 252) {
-					move.gen = 3;
-				} else if (move.num >= 166) {
-					move.gen = 2;
-				} else if (move.num >= 1) {
-					move.gen = 1;
-				} else {
-					move.gen = 0;
-				}
-			}
-			if (!move.priority) move.priority = 0;
-			if (move.ignoreImmunity === undefined) move.ignoreImmunity = (move.category === 'Status');
-			if (!move.flags) move.flags = {};
-			if (move.exists) this.data.MoveCache.set(id, move);
+	getMove(name) {
+		if (name && typeof name !== 'string') {
+			return name;
 		}
+		name = (name || '').trim();
+		let id = toId(name);
+		let move = this.data.MoveCache.get(id);
+		if (move) return move;
+		if (this.data.Aliases.hasOwnProperty(id)) {
+			move = this.getMove(this.data.Aliases[id]);
+			if (move.exists) {
+				this.data.MoveCache.set(id, move);
+			}
+			return move;
+		}
+		if (id.substr(0, 11) === 'hiddenpower') {
+			let matches = /([a-z]*)([0-9]*)/.exec(id);
+			// @ts-ignore
+			id = matches[1];
+		}
+		if (id && this.data.Movedex.hasOwnProperty(id)) {
+			move = new Data.Move({name}, this.data.Movedex[id]);
+		} else {
+			move = new Data.Move({name, exists: false});
+		}
+		if (move.exists) this.data.MoveCache.set(id, move);
 		return move;
 	}
 	/**
@@ -526,7 +444,7 @@ class ModdedDex {
 	}
 	/**
 	 * @param {string | AnyObject} name
-	 * @return {AnyObject}
+	 * @return {AnyEffect}
 	 */
 	getEffect(name) {
 		if (name && typeof name !== 'string') {
@@ -535,21 +453,21 @@ class ModdedDex {
 		let id = toId(name);
 		let effect;
 		if (id && this.data.Statuses.hasOwnProperty(id)) {
-			effect = new Effect({name}, this.data.Statuses[id]);
+			effect = new Data.PureEffect({name}, this.data.Statuses[id]);
 		} else if (id && this.data.Movedex.hasOwnProperty(id) && this.data.Movedex[id].effect) {
-			effect = new Effect({name}, this.data.Movedex[id].effect);
+			effect = new Data.PureEffect({name}, this.data.Movedex[id].effect);
 		} else if (id && this.data.Abilities.hasOwnProperty(id) && this.data.Abilities[id].effect) {
-			effect = new Effect({name}, this.data.Abilities[id].effect);
+			effect = new Data.PureEffect({name}, this.data.Abilities[id].effect);
 		} else if (id && this.data.Items.hasOwnProperty(id) && this.data.Items[id].effect) {
-			effect = new Effect({name}, this.data.Items[id].effect);
+			effect = new Data.PureEffect({name}, this.data.Items[id].effect);
 		} else if (id && this.data.Formats.hasOwnProperty(id)) {
-			effect = new Effect({name, mod: 'gen6', effectType: 'Format'}, this.data.Formats[id]);
+			effect = new Data.Format({name}, this.data.Formats[id]);
 		} else if (id === 'recoil') {
-			effect = new Effect({name: 'Recoil', effectType: 'Recoil'});
+			effect = new Data.PureEffect({name: 'Recoil', effectType: 'Recoil'});
 		} else if (id === 'drain') {
-			effect = new Effect({name: 'Drain', effectType: 'Drain'});
+			effect = new Data.PureEffect({name: 'Drain', effectType: 'Drain'});
 		} else {
-			effect = new Effect({name, exists: false});
+			effect = new Data.PureEffect({name, exists: false});
 		}
 		return effect;
 	}
@@ -567,122 +485,65 @@ class ModdedDex {
 			name = this.data.Aliases[id];
 			id = toId(name);
 		}
-		let effect = {};
+		let effect;
 		if (this.data.Formats.hasOwnProperty(id)) {
-			effect = this.data.Formats[id];
-			if (effect.cached) return effect;
-			effect.cached = true;
-			effect.exists = true;
-			effect.name = effect.name || this.data.Formats[id].name;
-			if (!effect.mod) effect.mod = 'gen6';
-			if (!effect.effectType) effect.effectType = 'Format';
+			effect = new Data.Format({name}, this.data.Formats[id]);
+		} else {
+			effect = new Data.Format({name, exists: false});
 		}
-		if (!effect.id) effect.id = id;
-		if (!effect.name) effect.name = name;
-		if (!effect.fullname) effect.fullname = effect.name;
-		effect.toString = this.effectToString;
-		if (!effect.category) effect.category = 'Effect';
-		if (!effect.effectType) effect.effectType = 'Effect';
 		return effect;
 	}
 	/**
-	 * @param {string | AnyObject} item
+	 * @param {string | AnyObject} name
 	 * @return {AnyObject}
 	 */
-	getItem(item) {
-		if (!item || typeof item === 'string') {
-			let name = (item || '').trim();
-			let id = toId(name);
-			item = this.data.ItemCache.get(id);
-			if (item) return item;
-			if (this.data.Aliases.hasOwnProperty(id)) {
-				item = this.getItem(this.data.Aliases[id]);
-				if (item.exists) {
-					this.data.ItemCache.set(id, item);
-				}
-				return item;
-			}
-			if (id && !this.data.Items[id] && this.data.Items[id + 'berry']) {
-				item = this.getItem(id + 'berry');
-				this.data.ItemCache.set(id, item);
-				return item;
-			}
-			if (id && this.data.Items.hasOwnProperty(id)) {
-				item = this.data.Items[id];
-				item.exists = true;
-			} else {
-				item = {};
-			}
-			if (!item.id) item.id = id;
-			if (!item.name) item.name = name;
-			if (!item.fullname) item.fullname = 'item: ' + item.name;
-			item.toString = this.effectToString;
-			if (!item.category) item.category = 'Effect';
-			if (!item.effectType) item.effectType = 'Item';
-			if (item.isBerry) item.fling = {basePower: 10};
-			if (item.id.endsWith('plate')) item.fling = {basePower: 90};
-			if (item.onDrive) item.fling = {basePower: 70};
-			if (item.megaStone) item.fling = {basePower: 80};
-			if (item.onMemory) item.fling = {basePower: 50};
-			if (!item.gen) {
-				if (item.num >= 689) {
-					item.gen = 7;
-				} else if (item.num >= 577) {
-					item.gen = 6;
-				} else if (item.num >= 537) {
-					item.gen = 5;
-				} else if (item.num >= 377) {
-					item.gen = 4;
-				} else {
-					item.gen = 3;
-				}
-				// Due to difference in storing items, gen 2 items must be specified manually
-			}
-			if (item.exists) this.data.ItemCache.set(id, item);
+	getItem(name) {
+		if (name && typeof name !== 'string') {
+			return name;
 		}
+		name = (name || '').trim();
+		let id = toId(name);
+		let item = this.data.ItemCache.get(id);
+		if (item) return item;
+		if (this.data.Aliases.hasOwnProperty(id)) {
+			item = this.getItem(this.data.Aliases[id]);
+			if (item.exists) {
+				this.data.ItemCache.set(id, item);
+			}
+			return item;
+		}
+		if (id && !this.data.Items[id] && this.data.Items[id + 'berry']) {
+			item = this.getItem(id + 'berry');
+			this.data.ItemCache.set(id, item);
+			return item;
+		}
+		if (id && this.data.Items.hasOwnProperty(id)) {
+			item = new Data.Item({name}, this.data.Items[id]);
+		} else {
+			item = new Data.Item({name, exists: false});
+		}
+
+		if (item.exists) this.data.ItemCache.set(id, item);
 		return item;
 	}
 	/**
-	 * @param {string | AnyObject} ability
+	 * @param {string | AnyObject} name
 	 * @return {AnyObject}
 	 */
-	getAbility(ability) {
-		if (!ability || typeof ability === 'string') {
-			let name = (ability || '').trim();
-			let id = toId(name);
-			ability = this.data.AbilityCache.get(id);
-			if (ability) return ability;
-			if (id && this.data.Abilities.hasOwnProperty(id)) {
-				ability = this.data.Abilities[id];
-				if (ability.cached) return ability;
-				ability.cached = true;
-				ability.exists = true;
-			} else {
-				ability = {};
-			}
-			if (!ability.id) ability.id = id;
-			if (!ability.name) ability.name = name;
-			if (!ability.fullname) ability.fullname = 'ability: ' + ability.name;
-			ability.toString = this.effectToString;
-			if (!ability.category) ability.category = 'Effect';
-			if (!ability.effectType) ability.effectType = 'Ability';
-			if (!ability.gen) {
-				if (ability.num >= 192) {
-					ability.gen = 7;
-				} else if (ability.num >= 165) {
-					ability.gen = 6;
-				} else if (ability.num >= 124) {
-					ability.gen = 5;
-				} else if (ability.num >= 77) {
-					ability.gen = 4;
-				} else if (ability.num >= 1) {
-					ability.gen = 3;
-				} else {
-					ability.gen = 0;
-				}
-			}
-			if (ability.exists) this.data.AbilityCache.set(id, ability);
+	getAbility(name) {
+		if (name && typeof name !== 'string') {
+			return name;
 		}
+		let id = toId(name);
+		let ability = this.data.AbilityCache.get(id);
+		if (ability) return ability;
+		if (id && this.data.Abilities.hasOwnProperty(id)) {
+			ability = new Data.Ability({name}, this.data.Abilities[id]);
+		} else {
+			ability = new Data.Ability({name, exists: false});
+		}
+
+		if (ability.exists) this.data.AbilityCache.set(id, ability);
 		return ability;
 	}
 	/**
