@@ -75,6 +75,16 @@ exports.Formats = [
 		banlist: ['UU', 'BL2'],
 	},
 	{
+		name: "[Gen 7] NFE",
+		section: "Exiled's Custom Gamemodes",
+		ruleset: ['NFE', 'Team Preview', 'Pokemon', 'Species Clause', 'Swagger Clause', 'Standard', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Baton Pass Clause', 'OHKO Clause'],
+		desc: [
+			"NFE stands for Not Fully Evolved.",
+			"NFE threats: Zweilous, Dragonair, Grovyle, Dusclops, Fraxure.",
+		],
+		column: 5,
+	},
+	{
 		name: "[Gen 7] LC",
 		desc: [
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3587196/\">LC Metagame Discussion</a>",
