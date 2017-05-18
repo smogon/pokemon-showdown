@@ -139,21 +139,21 @@ exports.Formats = [
 		requirePentagon: true,
 	},
 	{
-		name: "[Gen 7] Battle Spot Special 3",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3598297/\">Battle Spot Special</a>"],
+		name: "[Gen 7] Battle Spot Special 4",
+		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3603342/\">Battle Spot Special</a>"],
 
 		mod: 'gen7',
 		maxForcedLevel: 50,
 		teamLength: {
-			validate: [3, 6],
-			battle: 3,
+			validate: [1, 6],
+			battle: 1,
 		},
 		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview'],
-		unbanlist: ['Mew'],
+		banlist: ['Eviolite', 'Focus Sash'],
 		onValidateSet(set) {
 			let item = this.getItem(set.item);
-			if (item.exists && !item.zMove) {
-				return [`${set.name || set.species} has ${item.name}, which is banned in Battle Spot Special 3.`];
+			if (item.exists && (item.megaStone || item.zMove)) {
+				return [`${set.name || set.species} has ${item.name}, which is banned in Battle Spot Special 4.`];
 			}
 		},
 	},
