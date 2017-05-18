@@ -160,9 +160,3 @@ TeamValidator.PM.spawn();
  *********************************************************/
 
 require('./repl').start('app', cmd => eval(cmd));
-
-/*********************************************************
- * Load the GitHub plugin
- *********************************************************/
-
-Object.assign(Chat.commands, require('./chat-plugins/github').commands);
