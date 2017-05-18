@@ -106,7 +106,6 @@ global.Chat = require('./chat');
 
 global.Rooms = require('./rooms');
 
-delete process.send; // in case we're a child process
 global.Verifier = require('./verifier');
 Verifier.PM.spawn();
 
@@ -141,12 +140,11 @@ exports.listen = function (port, bindAddress, workerCount) {
 };
 
 if (require.main === module) {
-	// if running with node app.js, set up the server directly
-	// (otherwise, wait for app.listen())
+	// Launch the server directly when app.js is the main module. Otherwise,
+	// in the case of app.js being imported as a module (e.g. unit tests),
+	// postpone launching until app.listen() is called.
 	let port;
-	if (process.argv[2]) {
-		port = parseInt(process.argv[2]); // eslint-disable-line radix
-	}
+	if (process.argv[2]) port = parseInt(process.argv[2]);
 	Sockets.listen(port);
 }
 
