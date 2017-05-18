@@ -47,9 +47,7 @@ class Poll {
 		let ip = user.latestIp;
 		let userid = user.userid;
 
-		if (userid in this.voters || ip in this.voterIps) {
-			user.sendTo(this.room, "You're already looking at the results.");
-		} else {
+		if (!(userid in this.voters) || !(ip in this.voterIps)) {
 			this.voters[userid] = 0;
 			this.voterIps[ip] = 0;
 		}
