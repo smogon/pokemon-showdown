@@ -62,6 +62,7 @@ class RoomGame {
 	}
 
 	destroy() {
+		this.room.game = null;
 		this.room = null;
 		for (let i in this.players) {
 			this.players[i].destroy();

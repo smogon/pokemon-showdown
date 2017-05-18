@@ -364,15 +364,14 @@ exports.BattleFormatsData = {
 	},
 	pikachusinnoh: {
 		eventPokemon: [
-			{"generation": 7, "level": 10, "moves":["thunderbolt", "quickattack", "irontail", "volttackle"]},
+			{"generation": 7, "level": 10, "nature": "Hardy", "moves":["thunderbolt", "quickattack", "irontail", "volttackle"]},
 		],
 		eventOnly: true,
-		isUnreleased: true,
-		tier: "Unreleased",
+		tier: "New",
 	},
 	pikachuunova: {
 		eventPokemon: [
-			{"generation": 7, "level": 14, "moves":["thunderbolt", "quickattack", "irontail", "volttackle"]},
+			{"generation": 7, "level": 14, "nature": "Hardy", "moves":["thunderbolt", "quickattack", "irontail", "volttackle"]},
 		],
 		eventOnly: true,
 		isUnreleased: true,
@@ -380,7 +379,7 @@ exports.BattleFormatsData = {
 	},
 	pikachukalos: {
 		eventPokemon: [
-			{"generation": 7, "level": 17, "moves":["thunderbolt", "quickattack", "irontail", "electroball"]},
+			{"generation": 7, "level": 17, "nature": "Hardy", "moves":["thunderbolt", "quickattack", "irontail", "electroball"]},
 		],
 		eventOnly: true,
 		isUnreleased: true,
@@ -388,7 +387,7 @@ exports.BattleFormatsData = {
 	},
 	pikachualola: {
 		eventPokemon: [
-			{"generation": 7, "level": 20, "moves":["thunderbolt", "quickattack", "irontail", "electroball"]},
+			{"generation": 7, "level": 20, "nature": "Hardy", "moves":["thunderbolt", "quickattack", "irontail", "electroball"]},
 		],
 		eventOnly: true,
 		isUnreleased: true,
@@ -823,8 +822,8 @@ exports.BattleFormatsData = {
 		tier: "New",
 	},
 	golemalola: {
-		randomBattleMoves: ["stealthrock", "stoneedge", "thunderpunch", "earthquake", "suckerpunch", "toxic"],
-		randomDoubleBattleMoves: ["doubleedge", "stoneedge", "rockslide", "suckerpunch", "protect"],
+		randomBattleMoves: ["stealthrock", "stoneedge", "thunderpunch", "earthquake", "toxic"],
+		randomDoubleBattleMoves: ["doubleedge", "stoneedge", "rockslide", "protect"],
 		tier: "New",
 	},
 	ponyta: {
@@ -1463,6 +1462,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 5, "level": 10, "gender": "M", "isHidden": true, "moves":["tailwhip", "tackle", "helpinghand", "sandattack"]},
 			{"generation": 6, "level": 10, "isHidden": false, "moves":["celebrate", "tailwhip", "sandattack", "watergun"], "pokeball": "cherishball"},
+			{"generation": 7, "level": 50, "gender": "F", "isHidden": true, "moves":["scald", "icebeam", "raindance", "rest"], "pokeball": "cherishball"},
 		],
 		tier: "New",
 	},
@@ -1472,6 +1472,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 5, "level": 10, "gender": "M", "isHidden": true, "moves":["tailwhip", "tackle", "helpinghand", "sandattack"]},
 			{"generation": 6, "level": 10, "isHidden": false, "moves":["celebrate", "tailwhip", "sandattack", "thundershock"], "pokeball": "cherishball"},
+			{"generation": 7, "level": 50, "gender": "F", "isHidden": false, "moves":["thunderbolt", "shadowball", "lightscreen", "voltswitch"], "pokeball": "cherishball"},
 		],
 		tier: "New",
 	},
@@ -1481,6 +1482,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 5, "level": 10, "gender": "M", "isHidden": true, "moves":["tailwhip", "tackle", "helpinghand", "sandattack"]},
 			{"generation": 6, "level": 10, "isHidden": false, "moves":["celebrate", "tailwhip", "sandattack", "ember"], "pokeball": "cherishball"},
+			{"generation": 7, "level": 50, "gender": "F", "isHidden": true, "moves":["flareblitz", "facade", "willowisp", "quickattack"], "pokeball": "cherishball"},
 		],
 		tier: "New",
 	},
@@ -1491,6 +1493,7 @@ exports.BattleFormatsData = {
 			{"generation": 3, "level": 70, "moves":["psybeam", "psychup", "psychic", "morningsun"]},
 			{"generation": 5, "level": 10, "gender": "M", "isHidden": true, "moves":["tailwhip", "tackle", "helpinghand", "sandattack"]},
 			{"generation": 6, "level": 10, "isHidden": false, "moves":["celebrate", "tailwhip", "sandattack", "confusion"], "pokeball": "cherishball"},
+			{"generation": 7, "level": 50, "gender": "F", "isHidden": true, "moves":["psychic", "dazzlinggleam", "shadowball", "reflect"], "pokeball": "cherishball"},
 		],
 		tier: "New",
 	},
@@ -1501,6 +1504,7 @@ exports.BattleFormatsData = {
 			{"generation": 3, "level": 70, "moves":["feintattack", "meanlook", "screech", "moonlight"]},
 			{"generation": 5, "level": 10, "gender": "M", "isHidden": true, "moves":["tailwhip", "tackle", "helpinghand", "sandattack"]},
 			{"generation": 6, "level": 10, "isHidden": false, "moves":["celebrate", "tailwhip", "sandattack", "pursuit"], "pokeball": "cherishball"},
+			{"generation": 7, "level": 50, "gender": "F", "isHidden": false, "moves":["snarl", "toxic", "protect", "moonlight"], "pokeball": "cherishball"},
 		],
 		tier: "New",
 	},
@@ -1510,6 +1514,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 5, "level": 10, "gender": "M", "isHidden": true, "moves":["tailwhip", "tackle", "helpinghand", "sandattack"]},
 			{"generation": 6, "level": 10, "isHidden": false, "moves":["celebrate", "tailwhip", "sandattack", "razorleaf"], "pokeball": "cherishball"},
+			{"generation": 7, "level": 50, "gender": "F", "isHidden": true, "moves":["leafblade", "swordsdance", "sunnyday", "synthesis"], "pokeball": "cherishball"},
 		],
 		tier: "New",
 	},
@@ -1519,6 +1524,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 5, "level": 10, "gender": "M", "isHidden": true, "moves":["tailwhip", "tackle", "helpinghand", "sandattack"]},
 			{"generation": 6, "level": 10, "isHidden": false, "moves":["celebrate", "tailwhip", "sandattack", "icywind"], "pokeball": "cherishball"},
+			{"generation": 7, "level": 50, "gender": "F", "isHidden": false, "moves":["blizzard", "shadowball", "hail", "auroraveil"], "pokeball": "cherishball"},
 		],
 		tier: "New",
 	},
@@ -2095,7 +2101,7 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["closecombat", "pinmissile", "rockblast", "swordsdance", "bulletseed", "substitute"],
 		randomDoubleBattleMoves: ["closecombat", "pinmissile", "rockblast", "swordsdance", "bulletseed", "knockoff", "earthquake", "protect"],
 		requiredItem: "Heracronite",
-		tier: "Unreleased",
+		tier: "OU",
 	},
 	sneasel: {
 		randomBattleMoves: ["iceshard", "iciclecrash", "lowkick", "pursuit", "swordsdance", "knockoff"],
@@ -2224,7 +2230,7 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["nastyplot", "darkpulse", "taunt", "fireblast", "hiddenpowergrass"],
 		randomDoubleBattleMoves: ["nastyplot", "darkpulse", "taunt", "heatwave", "hiddenpowergrass", "protect"],
 		requiredItem: "Houndoominite",
-		tier: "Unreleased",
+		tier: "OU",
 	},
 	phanpy: {
 		randomBattleMoves: ["stealthrock", "earthquake", "iceshard", "headsmash", "knockoff", "seedbomb", "superpower", "playrough"],
@@ -3382,7 +3388,7 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["meteormash", "earthquake", "agility", "zenheadbutt", "hammerarm", "icepunch"],
 		randomDoubleBattleMoves: ["meteormash", "earthquake", "protect", "zenheadbutt", "thunderpunch", "icepunch"],
 		requiredItem: "Metagrossite",
-		tier: "OU",
+		tier: "Uber",
 	},
 	regirock: {
 		randomBattleMoves: ["stealthrock", "thunderwave", "stoneedge", "drainpunch", "curse", "rest", "rockslide", "toxic"],
@@ -5632,6 +5638,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 6, "level": 10, "isHidden": false, "moves":["celebrate", "helpinghand", "sandattack", "fairywind"], "pokeball": "cherishball"},
 			{"generation": 6, "level": 10, "gender": "F", "isHidden": false, "moves":["disarmingvoice", "babydolleyes", "quickattack", "drainingkiss"], "pokeball": "cherishball"},
+			{"generation": 7, "level": 50, "gender": "F", "isHidden": true, "moves":["hyperbeam", "drainingkiss", "psyshock", "calmmind"], "pokeball": "cherishball"},
 		],
 		tier: "UU",
 	},
@@ -6092,7 +6099,7 @@ exports.BattleFormatsData = {
 	},
 	silvally: {
 		randomBattleMoves: ["swordsdance", "return", "doubleedge", "crunch", "flamecharge", "flamethrower", "icebeam", "uturn", "ironhead"],
-		randomDoubleBattleMoves: ["protect", "doubledge", "uturn", "crunch", "icebeam", "partingshot", "flamecharge", "partingshot", "swordsdance", "explosion"],
+		randomDoubleBattleMoves: ["protect", "doubleedge", "uturn", "crunch", "icebeam", "partingshot", "flamecharge", "partingshot", "swordsdance", "explosion"],
 		tier: "New",
 	},
 	silvallybug: {

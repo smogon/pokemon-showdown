@@ -21,9 +21,10 @@ class PRNG {
 	constructor(seed = PRNG.generateSeed()) {
 		// We slice() the seed so we get a copy of it instead of the original seed.
 		/** @type {PRNGSeed} */
-		// @ts-ignore
+		// @ts-ignore TypeScript bug
 		this.initialSeed = seed.slice();
 		/** @type {PRNGSeed} */
+		// @ts-ignore TypeScript bug
 		this.seed = seed.slice();
 	}
 
@@ -127,6 +128,7 @@ class PRNG {
 		This is all ignoring overflow/carry because that cannot be shown in a pseudo-mathematical equation.
 		The below code implements a optimised version of that equation while also checking for overflow/carry.
 
+		@param {PRNGSeed} initialSeed
 		@param {number} [framesToAdvance = 1]
 		@return {PRNGSeed} the new seed
 	*/

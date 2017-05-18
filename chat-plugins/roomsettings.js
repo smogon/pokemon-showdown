@@ -123,23 +123,23 @@ class RoomSettings {
 		}
 	}
 	uno() {
-		if (!this.user.can('editroom', null, this.room)) return this.button(this.room.unoDisabled ? 'UNO disabled' : 'UNO enabled', true);
+		if (!this.user.can('editroom', null, this.room)) return this.button(this.room.unoDisabled ? 'off' : 'UNO enabled', true);
 		if (this.room.unoDisabled) {
-			return `${this.button('UNO enable', null, 'uno enable')} ${this.button('UNO disable', true)}`;
+			return `${this.button('UNO enabled', null, 'uno enable')} ${this.button('off', true)}`;
 		} else {
-			return `${this.button('UNO enable', true)} ${this.button('UNO disable', null, 'uno disable')}`;
+			return `${this.button('UNO enabled', true)} ${this.button('off', null, 'uno disable')}`;
 		}
 	}
 	hangman() {
-		if (!this.user.can('editroom', null, this.room)) return this.button(this.room.hangmanDisabled ? 'Disabled' : 'Enabled', true);
+		if (!this.user.can('editroom', null, this.room)) return this.button(this.room.hangmanDisabled ? 'off' : 'Hangman enabled', true);
 		if (this.room.hangmanDisabled) {
-			return `${this.button('Hangman enable', null, 'hangman enable')} ${this.button('Hangman disable', true)}`;
+			return `${this.button('Hangman enabled', null, 'hangman enable')} ${this.button('off', true)}`;
 		} else {
-			return `${this.button('Hangman enable', true)} ${this.button('Hangman disable', null, 'hangman disable')}`;
+			return `${this.button('Hangman enabled', true)} ${this.button('off', null, 'hangman disable')}`;
 		}
 	}
 	generateDisplay(user, room, connection) {
-		let output = `<div class="infobox">Room Settings for ${Chat.escapeHTML(this.room.title)}<br />`;
+		let output = Chat.html`<div class="infobox">Room Settings for ${this.room.title}<br />`;
 		output += `<strong>Modchat:</strong> <br />${this.modchat()}<br />`;
 		output += `<strong>Modjoin:</strong> <br />${this.modjoin()}<br />`;
 		output += `<strong>Stretch filter:</strong> <br />${this.stretching()}<br />`;
@@ -286,7 +286,7 @@ exports.commands = {
 			if (target === '+') {
 				this.add(`|raw|<div class="broadcast-red"><strong>This room is now invite only!</strong><br />Users must be rank + or invited with <code>/invite</code> to join</div>`);
 			} else {
-				this.add(`|raw|<div class="broadcast-red"><strong>Moderated join was set to ${target}!</strong><br />Only users of rank ${target} and higher can join.</div>`);
+				this.add(Chat.html`|raw|<div class="broadcast-red"><strong>Moderated join was set to ${target}!</strong><br />Only users of rank ${target} and higher can join.</div>`);
 			}
 			this.addModCommand(`${user.name} set modjoin to ${target}.`);
 		} else {
