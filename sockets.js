@@ -24,7 +24,7 @@ if (cluster.isMaster) {
 	const workers = exports.workers = new Map();
 
 	const spawnWorker = exports.spawnWorker = function () {
-		let worker = cluster.fork({PSPORT: Config.port, PSBINDADDR: Config.bindaddress || '', PSNOSSL: Config.ssl ? 0 : 1});
+		let worker = cluster.fork({PSPORT: Config.port, PSBINDADDR: Config.bindaddress || '0.0.0.0', PSNOSSL: Config.ssl ? 0 : 1});
 		let id = worker.id;
 		workers.set(id, worker);
 		worker.on('message', data => {
@@ -485,7 +485,6 @@ if (cluster.isMaster) {
 		});
 	});
 	server.installHandlers(app, {});
-	if (!Config.bindaddress) Config.bindaddress = '0.0.0.0';
 	app.listen(Config.port, Config.bindaddress);
 	console.log(`Worker ${cluster.worker.id} now listening on ${Config.bindaddress}:${Config.port}`);
 
