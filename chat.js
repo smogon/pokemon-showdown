@@ -52,13 +52,14 @@ const linkRegex = new RegExp(
 				// URLs usually don't end with punctuation, so don't allow
 				// punctuation symbols that probably aren't related to URL.
 				'(?:' +
-					'[^\\s`()\\[\\]{}\'".,!?;:&<>]' +
+					'[^\\s`()\\[\\]{}\'".,!?;:&<>*_`^~\\\\]' +
 					'|' + parenthesisRegex +
 				')' +
 			')?' +
 		')?' +
 		'|[a-z0-9.]+\\b@' + domainRegex + '[.][a-z]{2,3}' +
-	')',
+	')' +
+	'(?!.*&gt;)',
 	'ig'
 );
 const hyperlinkRegex = new RegExp(`(.+)&lt;(.+)&gt;`, 'i');
@@ -1024,11 +1025,10 @@ Chat.toDurationString = function (number, options) {
  * Takes a string and converts it to HTML by replacing standard chat formatting with the appropriate HTML tags.
  *
  * @param  {string} str
- * @param  {object} ignoreFormatting
  * @return {string}
  */
-Chat.parseText = function (str, ignoreFormatting) {
-	str = Chat.escapeHTML(str);
+Chat.parseText = function (str) {
+	str = Chat.escapeHTML(str).replace(/&#x2f;/g, '/').replace(linkRegex, uri => `<a href=${uri.replace(/^([a-z]*[^a-z:])/g, 'http://$1')}>${uri}</a>`);
 
 	// Primarily a test for a new way of parsing chat formatting. Will be moved to Chat once it's sufficiently finished and polished.
 	let output = [''];
@@ -1052,7 +1052,6 @@ Chat.parseText = function (str, ignoreFormatting) {
 		for (let f = 0; f < formattingResolvers.length; f++) {
 			let start = formattingResolvers[f].token;
 			let end = formattingResolvers[f].endToken || start;
-			if (ignoreFormatting && ignoreFormatting[start]) continue;
 
 			if (stack.length && end.startsWith(token) && str.substr(i, end.length) === end && output[stack.length].replace(token, '').length) {
 				for (let j = stack.length - 1; j >= 0; j--) {
@@ -1091,7 +1090,6 @@ Chat.parseText = function (str, ignoreFormatting) {
 	}
 
 	let result = output[0];
-	if (!ignoreFormatting || !ignoreFormatting['autolink']) result = result.replace(/&#x2f;/g, '/').replace(linkRegex, uri => `<a href=${uri.replace(/^([a-z]*[^a-z:])/g, 'http://$1')}>${uri}</a>`);
 
 	return result;
 };

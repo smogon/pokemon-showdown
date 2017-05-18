@@ -141,7 +141,7 @@ class ScavengerHunt extends Rooms.RoomGame {
 	// alert new users that are joining the room about the current hunt.
 	onConnect(user, connection) {
 		// send the fact that a hunt is currently going on.
-		connection.sendTo(this.room, `|raw|<div class="broadcast-blue"><strong>${(this.gameType === 'official' ? "An official" : this.gameType === 'practice' ? "A practice" : "A")} Scavenger Hunt by <em>${Chat.escapeHTML(this.hostName)}</em> has been started${(this.hostId === this.staffHostId ? '' : ` by <em>${Chat.escapeHTML(this.staffHostName)}</em>`)}.<br />The first hint is: ${Chat.parseText(this.questions[0].hint, {'**': 1, '[[': 1})}</strong></div>`);
+		connection.sendTo(this.room, `|raw|<div class="broadcast-blue"><strong>${(this.gameType === 'official' ? "An official" : this.gameType === 'practice' ? "A practice" : "A")} Scavenger Hunt by <em>${Chat.escapeHTML(this.hostName)}</em> has been started${(this.hostId === this.staffHostId ? '' : ` by <em>${Chat.escapeHTML(this.staffHostName)}</em>`)}.<br />The first hint is: ${Chat.parseText(this.questions[0].hint)}</strong></div>`);
 	}
 
 	joinGame(user) {
@@ -178,7 +178,7 @@ class ScavengerHunt extends Rooms.RoomGame {
 			this.setTimer(60);
 		}
 
-		this.announce(`A new ${(this.gameType === 'official' ? "official" : this.gameType === 'practice' ? "practice" : '')} Scavenger Hunt by <em>${Chat.escapeHTML(this.hostName)}</em> has been started${(this.hostId === this.staffHostId ? '' : ` by <em>${Chat.escapeHTML(this.staffHostName)}</em>`)}.<br />The first hint is: ${Chat.parseText(this.questions[0].hint, {'**': 1, '[[': 1})}`);
+		this.announce(`A new ${(this.gameType === 'official' ? "official" : this.gameType === 'practice' ? "practice" : '')} Scavenger Hunt by <em>${Chat.escapeHTML(this.hostName)}</em> has been started${(this.hostId === this.staffHostId ? '' : ` by <em>${Chat.escapeHTML(this.staffHostName)}</em>`)}.<br />The first hint is: ${Chat.parseText(this.questions[0].hint)}`);
 	}
 
 	onEditQuestion(number, question_answer, ...value) {
@@ -244,7 +244,7 @@ class ScavengerHunt extends Rooms.RoomGame {
 
 		let current = player.getCurrentQuestion();
 
-		player.sendRoom(`|raw|You are on ${(current.number === this.questions.length ? "final " : "")}hint #${current.number}: ${Chat.parseText(current.question.hint, {'**': 1, '[[': 1})}`);
+		player.sendRoom(`|raw|You are on ${(current.number === this.questions.length ? "final " : "")}hint #${current.number}: ${Chat.parseText(current.question.hint)}`);
 		return true;
 	}
 
@@ -367,7 +367,7 @@ class ScavengerHuntPlayer extends Rooms.RoomGamePlayer {
 
 	onNotifyChange(num) {
 		if (num === this.currentQuestion) {
-			this.sendRoom(`|raw|The hint has been changed to: ${Chat.parseText(this.game.questions[num].hint, {'**': 1, '[[': 1})}`);
+			this.sendRoom(`|raw|The hint has been changed to: ${Chat.parseText(this.game.questions[num].hint)}`);
 		}
 	}
 }
@@ -464,7 +464,7 @@ let commands = {
 		if (!room.game || room.game.gameid !== 'scavengers') return false;
 		if (room.game.hostId !== user.userid && room.game.staffHostId !== user.userid) return this.errorReply("You cannot view the hints and answers if you are not the host.");
 
-		this.sendReply(`|raw|<div class="ladder"><table style="width: 100%"><tr><th>Hint</th><th>Answer</th></tr>${room.game.questions.map(q => `<tr><td>${Chat.parseText(q.hint, {'**': 1, '[[': 1})}</td><td>${Chat.escapeHTML(q.answer)}</td></tr>`).join("")}</table><div>`);
+		this.sendReply(`|raw|<div class="ladder"><table style="width: 100%"><tr><th>Hint</th><th>Answer</th></tr>${room.game.questions.map(q => `<tr><td>${Chat.parseText(q.hint)}</td><td>${Chat.escapeHTML(q.answer)}</td></tr>`).join("")}</table><div>`);
 	},
 
 	edithunt: function (target, room, user) {
