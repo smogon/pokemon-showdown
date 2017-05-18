@@ -38,17 +38,17 @@ class Side {
 	/**
 	 * @param {string} name
 	 * @param {Battle} battle
-	 * @param {number} n
+	 * @param {number} sideNum
 	 * @param {any} team
 	 */
-	constructor(name, battle, n, team) {
+	constructor(name, battle, sideNum, team) {
 		let sideScripts = battle.data.Scripts.side;
 		if (sideScripts) Object.assign(this, sideScripts);
 
 		this.getChoice = (side => this.getChoiceInner(side));
 
 		this.battle = battle;
-		this.n = n;
+		this.n = sideNum;
 		this.name = name;
 		this.avatar = '';
 
@@ -84,7 +84,7 @@ class Side {
 		/** @type {Side} */
 		this.foe = null;
 
-		this.id = n ? 'p2' : 'p1';
+		this.id = sideNum ? 'p2' : 'p1';
 
 		switch (this.battle.gameType) {
 		case 'doubles':
