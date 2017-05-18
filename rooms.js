@@ -25,6 +25,13 @@ let Rooms = module.exports = getRoom;
 Rooms.rooms = new Map();
 Rooms.aliases = new Map();
 
+if (!Config.punishgroups) {
+	Config.punishgroups = {
+		muted: '!',
+		locked: '‽',
+	};
+}
+
 /*********************************************************
  * the Room object.
  *********************************************************/
@@ -440,7 +447,7 @@ class GlobalRoom {
 		return this.formatList;
 	}
 	get configRankList() {
-		if (Config.nocustomgroulist) return '';
+		if (Config.nocustomgrouplist) return '';
 
 		// putting the resultant object in Config would enable this to be run again should config.js be reloaded.
 		if (Config.rankList) {
@@ -452,9 +459,16 @@ class GlobalRoom {
 			if (!Config.groups[rank] || !rank) continue;
 
 			let tarGroup = Config.groups[rank];
-			let groupType = tarGroup.addhtml || (!tarGroup.mute && !tarGroup.root) ? 0 : (tarGroup.root || tarGroup.declare) ? 2 : 1;
+			let groupType = tarGroup.addhtml || (!tarGroup.mute && !tarGroup.root) ? 'user' : (tarGroup.root || tarGroup.declare) ? 'leadership' : 'staff';
 
 			rankList.push({symbol: rank, name: (Config.groups[rank].name || null), type: groupType}); // send the first character in the rank, incase they put a string several characters long
+		}
+
+		rankList = rankList.sort((a, b) => a.type.localeCompare(b.type));
+
+		// add the punishment types at the very end.
+		for (let rank in Config.punishgroups) {
+			rankList.push({symbol: Config.punishgroups[rank], name: rank, type: 'user'});
 		}
 
 		Config.rankList = '|groups|' + JSON.stringify(rankList) + '\n';
