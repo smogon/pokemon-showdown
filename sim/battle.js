@@ -2612,29 +2612,20 @@ class Battle extends Dex.ModdedDex {
 		if ((this.p1 && this.p1.name === name) || (this.p2 && this.p2.name === name)) return false;
 
 		let player = null;
-		if (this.p1 || slot === 'p2') {
-			if (this.started) {
-				this.p2.name = name;
-			} else {
-				//console.log("NEW SIDE: " + name);
-				this.p2 = new Sim.Side(name, this, 1, team);
-				this.sides[1] = this.p2;
-			}
-			player = this.p2;
+		if (slot !== 'p1' && slot !== 'p2') slot = (this.p1 ? 'p2' : 'p1');
+		let slotNum = (slot === 'p2' ? 1 : 0);
+		if (this.started) {
+			this[slot].name = name;
 		} else {
-			if (this.started) {
-				this.p1.name = name;
-			} else {
-				//console.log("NEW SIDE: " + name);
-				this.p1 = new Sim.Side(name, this, 0, team);
-				this.sides[0] = this.p1;
-			}
-			player = this.p1;
+			//console.log("NEW SIDE: " + name);
+			this[slot] = new Sim.Side(name, this, slotNum, team);
+			this.sides[slotNum] = this[slot];
 		}
+		player = this[slot];
 
 		if (avatar) player.avatar = avatar;
 		this.add('player', player.id, player.name, avatar);
-		this.add('teamsize', player.id, player.pokemon.length);
+		if (!this.started) this.add('teamsize', player.id, player.pokemon.length);
 
 		this.start();
 		return player;
