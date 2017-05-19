@@ -34,6 +34,7 @@ exports.BattleAliases = {
 	"hc": "[Gen 7] Hackmons Cup",
 	"monotyperandombattle": "[Gen 7] Monotype Random Battle",
 	"monorandom": "[Gen 7] Monotype Random Battle",
+	"cyf": "Create your Formats Battle",
 	"bf": "Battle Factory",
 	"gen6inverse": "Inverse Battle",
 	"lastwill": "[Gen 7] Last Will",
