@@ -134,16 +134,23 @@ class Tournament {
 				}
 				ban = 'Rule:' + subformat.name;
 			} else {
+				param = param.toLowerCase();
+				let baseForme = false;
+				if (param.endsWith('-base')) {
+					baseForme = true;
+					param = param.substr(0, param.length - 5);
+				}
 				let search = Dex.dataSearch(param);
 				if (!search || search.length < 1) continue;
 				search = search[0];
 				if (search.isInexact || search.searchType === 'nature') continue;
-				if (unban) {
-					if (format.banlistTable[search.name] === false) continue;
-				} else {
-					if (format.banlistTable[search.name]) continue;
-				}
 				ban = search.name;
+				if (baseForme) ban += '-Base';
+				if (unban) {
+					if (format.banlistTable[ban] === false) continue;
+				} else {
+					if (format.banlistTable[ban]) continue;
+				}
 			}
 			if (unban) {
 				oppositeBan = ban;
