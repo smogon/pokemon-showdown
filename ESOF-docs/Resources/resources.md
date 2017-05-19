@@ -1,0 +1,1 @@
+Pasta destinada a guardar imagens, e outros recursos utilizados nos relatórios
