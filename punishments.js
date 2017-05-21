@@ -6,7 +6,7 @@
  *
  * Handles the punishing of users on PS.
  *
- * There are four types of punishments on PS. Locks, bans, namelocks and rangelocks.
+ * There are four types of global punishments on PS. Locks, bans, namelocks and rangelocks.
  * This file contains the lists of users that have been punished (both IPs and usernames),
  * as well as the functions that handle the execution of said punishments.
  *
