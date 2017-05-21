@@ -819,7 +819,10 @@ exports.BattleScripts = {
 		let atLeastOne = false;
 		let zMoves = [];
 		for (let i = 0; i < pokemon.moves.length; i++) {
-			if (pokemon.moveset[i].pp <= 0) continue;
+			if (pokemon.moveset[i].pp <= 0) {
+				zMoves.push(null);
+				continue;
+			}
 			let move = this.getMove(pokemon.moves[i]);
 			let zMoveName = this.getZMove(move, pokemon, true) || '';
 			if (zMoveName) {
