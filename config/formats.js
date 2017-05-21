@@ -75,6 +75,17 @@ exports.Formats = [
 		banlist: ['UU', 'BL2'],
 	},
 	{
+		name: "[Gen 7] NU (alpha)",
+
+		mod: 'gen7',
+		ruleset: ['[Gen 7] RU (beta)'],
+		banlist: [
+			'Aerodactyl', 'Araquanid', 'Blastoise', 'Bronzong', 'Bruxish', 'Chesnaught', 'Cloyster', 'Comfey', 'Cresselia', 'Dhelmise', 'Diancie', 'Donphan', 'Doublade', 'Durant', 'Escavalier', 'Espeon', 'Feraligatr',
+			'Florges', 'Flygon', 'Froslass', 'Galvantula', 'Gardevoir', 'Gigalith', 'Glalie-Mega', 'Gligar', 'Golisopod', 'Goodra', 'Heliolisk', 'Heracross', 'Honchkrow', 'Hoopa', 'Jellicent', 'Jolteon', 'Kommo-o',
+			'Linoone', 'Mantine', 'Milotic', 'Nidoqueen', 'Registeel', 'Reuniclus', 'Rhyperior', 'Roserade', 'Rotom-Heat', 'Salazzle', 'Sharpedo', 'Shaymin', 'Snorlax', 'Swellow', 'Torkoal', 'Umbreon', 'Venusaur', 'Zoroark',
+		],
+	},
+	{
 		name: "[Gen 7] LC",
 		desc: [
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3587196/\">LC Metagame Discussion</a>",
