@@ -165,7 +165,7 @@ class BattleTimer {
 		if (requester && this.battle.players[requester.userid] && this.lastDisabledByUser === requester.userid) {
 			const remainingCooldownTime = (this.lastDisabledTime || 0) + TIMER_COOLDOWN - Date.now();
 			if (remainingCooldownTime > 0) {
-				this.battle.players[requester.userid].sendRoom(`|inactive|The timer can't be re-enabled so soon after disabling it (${Math.ceil(remainingCooldownTime / 1000)} seconds remaining).`);
+				this.battle.players[requester.userid].sendRoom(`|inactiveoff|The timer can't be re-enabled so soon after disabling it (${Math.ceil(remainingCooldownTime / 1000)} seconds remaining).`);
 				return false;
 			}
 		}
