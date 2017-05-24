@@ -294,7 +294,7 @@ exports.Formats = [
 			"Before fainting, Pok&eacute;mon will use the move in their last moveslot.",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3601362/\">Last Will</a>",
 		],
-		mod: 'gen7',
+		mod: 'lastwill',
 		ruleset: ['[Gen 7] OU'],
 		banlist: ['Endeavor', 'Blast Burn + Explosion + Frenzy Plant + Giga Impact + Hydro Cannon + Hyper Beam + Self Destruct + V-Create > 2'],
 		onBeforeFaint: function (pokemon, source) {
