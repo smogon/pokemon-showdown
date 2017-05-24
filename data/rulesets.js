@@ -409,14 +409,6 @@ exports.BattleFormats = {
 			}
 		},
 	},
-	ateclause: {
-		effectType: 'ValidatorRule',
-		name: '-ate Clause',
-		banlist: ['Aerilate + Pixilate + Refrigerate > 1'],
-		onStart: function () {
-			this.add('rule', '-ate Clause: Limit one of Aerilate/Refrigerate/Pixilate');
-		},
-	},
 	ohkoclause: {
 		effectType: 'ValidatorRule',
 		name: 'OHKO Clause',
