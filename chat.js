@@ -422,6 +422,10 @@ class CommandContext {
 		}
 		return true;
 	}
+	checkGameFilter() {
+		if (!this.room || !this.room.game || !this.room.game.onChatMessage) return false;
+		return this.room.game.onChatMessage(this.message);
+	}
 	pmTransform(message) {
 		let prefix = `|pm|${this.user.getIdentity()}|${this.pmTarget.getIdentity()}|`;
 		return message.split('\n').map(message => {
@@ -686,6 +690,12 @@ class CommandContext {
 			}
 			if (!this.checkBanwords(room, message) && !user.can('mute', null, room)) {
 				this.errorReply("Your message contained banned words.");
+				return false;
+			}
+
+			let gameFilter = this.checkGameFilter();
+			if (gameFilter && !user.can('bypassall')) {
+				this.errorReply(gameFilter);
 				return false;
 			}
 
