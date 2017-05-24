@@ -83,7 +83,7 @@ class Effect {
 		this.fullname = '';
 		/**
 		 * Effect type.
-		 * @type {'Effect' | 'Pokemon' | 'Move' | 'Item' | 'Ability' | 'Format' | 'Ruleset' | 'Weather'}
+		 * @type {'Effect' | 'Pokemon' | 'Move' | 'Item' | 'Ability' | 'Format' | 'Ruleset' | 'Weather' | 'Status'}
 		 */
 		this.effectType = 'Effect';
 		/**
@@ -146,8 +146,8 @@ class PureEffect extends Effect {
 	 */
 	constructor(data, moreData = null) {
 		super(data, moreData);
-		/** @type {'Effect' | 'Weather'} */
-		this.effectType = (this.effectType === 'Weather' ? 'Weather' : 'Effect');
+		/** @type {'Effect' | 'Weather' | 'Status'} */
+		this.effectType = (this.effectType in {Weather:1, Status:1} ? this.effectType : 'Effect');
 	}
 }
 
