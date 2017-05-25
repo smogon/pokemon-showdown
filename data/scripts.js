@@ -3434,7 +3434,7 @@ exports.BattleScripts = {
 		return {
 			name: setData.set.name || template.baseSpecies,
 			species: setData.set.species,
-			gender: setData.set.gender || template.gender || (this.random() ? 'M' : 'F'),
+			gender: setData.set.gender || template.gender || (this.random(2) ? 'M' : 'F'),
 			item: setData.set.item || '',
 			ability: setData.set.ability || template.abilities['0'],
 			shiny: typeof setData.set.shiny === 'undefined' ? !this.random(1024) : setData.set.shiny,
