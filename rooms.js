@@ -471,7 +471,7 @@ class GlobalRoom {
 			rankList.push({symbol: Config.punishgroups[rank], name: rank, type: 'user'});
 		}
 
-		Config.rankList = '|groups|' + JSON.stringify(rankList) + '\n';
+		Config.rankList = '|customgroups|' + JSON.stringify(rankList) + '\n';
 		return Config.rankList;
 	}
 
