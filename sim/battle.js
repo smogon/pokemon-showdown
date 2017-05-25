@@ -1511,9 +1511,6 @@ class Battle extends Dex.ModdedDex {
 				this.debug('damage event failed');
 				return damage;
 			}
-			if (target.illusion && target.hasAbility('Illusion') && effect && effect.effectType === 'Move' && effect.id !== 'confused') {
-				this.singleEvent('End', this.getAbility('Illusion'), target.abilityData, target, source, effect);
-			}
 		}
 		if (damage !== 0) damage = this.clampIntRange(damage, 1);
 		damage = target.damage(damage, source, effect);
