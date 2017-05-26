@@ -104,8 +104,7 @@ describe('Matchmaker', function () {
 		assert.strictEqual(matchmaker.searches.get(FORMATID).size, 0);
 	});
 
-	// FIXME: a race condition in battles and sockets breaks this test
-	it.skip('should create a new battle room after matchmaking', function () {
+	it('should create a new battle room after matchmaking', function () {
 		let {startBattle} = matchmaker;
 		matchmaker.startBattle = (...args) => {
 			matchmaker.startBattle = startBattle;
