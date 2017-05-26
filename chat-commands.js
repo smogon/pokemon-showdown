@@ -1727,8 +1727,14 @@ exports.commands = {
 
 		let name = Punishments.unban(target);
 
+		let unbanMessage = "" + name + " was globally unbanned by " + user.name + "." + (target ? " (" + target + ")" : "");
+				
 		if (name) {
 			this.addModCommand("" + name + " was globally unbanned by " + user.name + ".");
+			// Notify staff room when a user is unbanned outside of it.
+			if (room.id !== 'staff' && Rooms('staff')) {
+				Rooms('staff').addLogMessage(user, "<<" + room.id + ">> " + unbanMessage);
+			}
 			this.globalModlog("UNBAN", name, " by " + user.name);
 		} else {
 			this.errorReply("User '" + target + "' is not globally banned.");
