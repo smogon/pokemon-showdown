@@ -1728,7 +1728,7 @@ exports.commands = {
 		let name = Punishments.unban(target);
 
 		let unbanMessage = "" + name + " was globally unbanned by " + user.name + "." + (target ? " (" + target + ")" : "");
-				
+
 		if (name) {
 			this.addModCommand("" + name + " was globally unbanned by " + user.name + ".");
 			// Notify staff room when a user is unbanned outside of it.
