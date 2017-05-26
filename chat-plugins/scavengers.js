@@ -861,7 +861,7 @@ let commands = {
 
 		if (!sortingFields.includes(sortMethod)) sortMethod = 'finish'; // default sort method
 
-		PlayerLeaderboard.visualize(sortMethod.includes('ratio') ? 'join' : sortMethod).then(raw => {
+		PlayerLeaderboard.visualize(sortMethod).then(raw => {
 			new Promise((resolve, reject) => {
 				// apply ratio
 				raw = raw.map(d => {
