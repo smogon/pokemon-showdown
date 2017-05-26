@@ -624,19 +624,18 @@ exports.Formats = [
 		ruleset: ['Pokemon', 'Sleep Clause Mod', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Mega Rayquaza Clause'],
 	},
 	{
-		name: "[Gen 7] BSS Random Battle",
+		name: "[Gen 7] BSS Factory",
 		desc: [
 			"Randomised 3v3 Singles featuring Pok&eacute;mon and movesets popular in Battle Spot Singles.",
-			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3604845/\">Information and Suggestions Thread</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3604845/\">Information and Suggestions Thread</a>",
 		],
+
 		mod: 'gen7',
-		maxForcedLevel: 50,
+		team: 'randomBSSFactory',
 		teamLength: {
 			validate: [3, 6],
 			battle: 3,
 		},
-		team: 'randomBSSFactory',
-		searchShow: false,
 		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview'],
 	},
 	{
