@@ -3695,7 +3695,7 @@ exports.BattleScripts = {
 
 			// Limit to one of each species (Species Clause)
 			if (teamData.baseFormes[template.baseSpecies]) continue;
-			
+
 			// Limit the number of Megas + Z-moves to 3
 			if (teamData.megaCount + teamData.zCount >= 3 && speciesFlags.megaOnly) continue;
 
