@@ -112,7 +112,7 @@ exports.BattleAbilities = {
 			duration: 1,
 			onBasePowerPriority: 8,
 			onBasePower: function (basePower, pokemon, target, move) {
-				return this.chainModify([0x1333, 0x1000]);
+				return this.chainModify([0x14CD, 0x1000]);
 			},
 		},
 	},
