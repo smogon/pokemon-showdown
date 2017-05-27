@@ -307,10 +307,11 @@ class Connection {
 		this.inRooms.add(room.id);
 		Sockets.channelAdd(this.worker, room.id, this.socketid);
 	}
-	leaveRoom(room) {
+	leaveRoom(room, isDisconnecting = false) {
 		if (this.inRooms.has(room.id)) {
 			this.inRooms.delete(room.id);
-			Sockets.channelRemove(this.worker, room.id, this.socketid);
+			// If the user is disconnecting, they're no longer in the channel anyways
+			if (!isDisconnecting) Sockets.channelRemove(this.worker, room.id, this.socketid);
 		}
 	}
 }
@@ -1036,7 +1037,7 @@ class User {
 					this.markInactive();
 				}
 				connection.inRooms.forEach(roomid => {
-					this.leaveRoom(Rooms(roomid), connection, true);
+					this.leaveRoom(roomid, connection, true);
 				});
 				--this.ips[connection.ip];
 				this.connections.splice(i, 1);
@@ -1071,7 +1072,7 @@ class User {
 			// console.log('DESTROY: ' + this.userid);
 			connection = this.connections[i];
 			connection.inRooms.forEach(roomid => {
-				this.leaveRoom(Rooms(roomid), connection, true);
+				this.leaveRoom(roomid, connection, true);
 			});
 			connection.destroy();
 		}
@@ -1185,34 +1186,39 @@ class User {
 		}
 		return true;
 	}
-	leaveRoom(room, connection, force) {
+	leaveRoom(room, connection, isDisconnecting = false) {
 		room = Rooms(room);
 		if (room.id === 'global') {
 			// you can't leave the global room except while disconnecting
-			if (!force) return false;
+			if (!isDisconnecting) return false;
 			this.cancelChallengeTo();
 			this.cancelSearch();
 		}
+
 		if (!this.inRooms.has(room.id)) {
 			return false;
 		}
-		for (let i = 0; i < this.connections.length; i++) {
-			if (connection && this.connections[i] !== connection) continue;
-			if (this.connections[i].inRooms.has(room.id)) {
-				this.connections[i].sendTo(room.id, '|deinit');
-				this.connections[i].leaveRoom(room);
+
+		if (connection) {
+			if (connection.inRooms.has(room.id)) {
+				if (!isDisconnecting) connection.sendTo(room.id, '|deinit');
+				connection.leaveRoom(room, isDisconnecting);
 			}
-			if (connection) break;
+
+			// Check if any other connections are still in the room.
+			let inRoom = this.connections.some(c => c.inRooms.has(room.id));
+			if (inRoom) return false;
+		} else {
+			for (let c of this.connections) {
+				if (c.inRooms.has(room.id)) {
+					if (!isDisconnecting) c.sendTo(room.id, '|deinit');
+					c.leaveRoom(room, isDisconnecting);
+				}
+			}
 		}
 
-		let stillInRoom = false;
-		if (connection) {
-			stillInRoom = this.connections.some(connection => connection.inRooms.has(room.id));
-		}
-		if (!stillInRoom) {
-			room.onLeave(this);
-			this.inRooms.delete(room.id);
-		}
+		room.onLeave(this);
+		this.inRooms.delete(room.id);
 	}
 	prepBattle(formatid, type, connection, supplementaryBanlist) {
 		// all validation for a battle goes through here

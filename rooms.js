@@ -1019,7 +1019,7 @@ class BattleRoom extends Room {
 
 		// remove references to ourself
 		for (let i in this.users) {
-			this.users[i].leaveRoom(this, null, true);
+			this.users[i].leaveRoom(this, null);
 			delete this.users[i];
 		}
 		this.users = null;
@@ -1315,7 +1315,7 @@ class ChatRoom extends Room {
 
 		// remove references to ourself
 		for (let i in this.users) {
-			this.users[i].leaveRoom(this, null, true);
+			this.users[i].leaveRoom(this, null);
 			delete this.users[i];
 		}
 		this.users = null;
