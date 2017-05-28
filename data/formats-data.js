@@ -1069,7 +1069,7 @@ exports.BattleFormatsData = {
 	},
 	exeggutoralola: {
 		randomBattleMoves: ["dracometeor", "leafstorm", "flamethrower", "earthquake", "woodhammer", "gigadrain", "dragonhammer"],
-		randomDoubleBattleMoves: ["dracometeor", "leafstorm", "protect", "flamethrower", "trickroom", "woodhammer", "dragonhammer", "protect"],
+		randomDoubleBattleMoves: ["dracometeor", "leafstorm", "protect", "flamethrower", "trickroom", "woodhammer", "dragonhammer"],
 		tier: "New",
 	},
 	cubone: {
@@ -6099,7 +6099,7 @@ exports.BattleFormatsData = {
 	},
 	silvally: {
 		randomBattleMoves: ["swordsdance", "return", "doubleedge", "crunch", "flamecharge", "flamethrower", "icebeam", "uturn", "ironhead"],
-		randomDoubleBattleMoves: ["protect", "doubleedge", "uturn", "crunch", "icebeam", "partingshot", "flamecharge", "partingshot", "swordsdance", "explosion"],
+		randomDoubleBattleMoves: ["protect", "doubleedge", "uturn", "crunch", "icebeam", "partingshot", "flamecharge", "swordsdance", "explosion"],
 		tier: "New",
 	},
 	silvallybug: {
