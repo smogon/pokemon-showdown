@@ -3707,10 +3707,7 @@ exports.BattleAbilities = {
 		shortDesc: "On switch-in, or when it can, this Pokemon copies a random adjacent foe's Ability.",
 		onUpdate: function (pokemon) {
 			if (!pokemon.isStarted) return;
-			let possibleTargets = [];
-			for (let i = 0; i < pokemon.side.foe.active.length; i++) {
-				if (pokemon.side.foe.active[i] && !pokemon.side.foe.active[i].fainted) possibleTargets.push(pokemon.side.foe.active[i]);
-			}
+			let possibleTargets = pokemon.side.foe.active.filter(foeActive => foeActive && this.isAdjacent(pokemon, foeActive));
 			while (possibleTargets.length) {
 				let rand = 0;
 				if (possibleTargets.length > 1) rand = this.random(possibleTargets.length);
