@@ -1476,6 +1476,8 @@ exports.BattleScripts = {
 
 			counter = this.queryMoves(moves, hasType, hasAbility, movePool);
 
+			if (!movePool.length) break;
+
 			// Iterate through the moves again, this time to cull them:
 			for (let k = 0; k < moves.length; k++) {
 				let move = this.getMove(moves[k]);
@@ -2641,6 +2643,8 @@ exports.BattleScripts = {
 			}
 
 			counter = this.queryMoves(moves, hasType, hasAbility);
+
+			if (!movePool.length) break;
 
 			// Iterate through the moves again, this time to cull them:
 			for (let k = 0; k < moves.length; k++) {
