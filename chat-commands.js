@@ -1727,7 +1727,7 @@ exports.commands = {
 
 		let name = Punishments.unban(target);
 
-		let unbanMessage = "" + name + " was globally unbanned by " + user.name + "." + (target ? " (" + target + ")" : "");
+		let unbanMessage = "" + name + " was globally unbanned by " + user.name + ".";
 
 		if (name) {
 			this.addModCommand("" + name + " was globally unbanned by " + user.name + ".");
