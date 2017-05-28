@@ -61,7 +61,7 @@ exports.Formats = [
 
 		mod: 'gen7',
 		ruleset: ['[Gen 7] OU'],
-		banlist: ['OU', 'BL', 'Drizzle', 'Power Construct', 'Mewnium Z', 'Baton Pass'],
+		banlist: ['OU', 'BL', 'Drizzle', 'Power Construct', 'Mewnium Z'],
 	},
 	{
 		name: "[Gen 7] RU (beta)",
@@ -71,7 +71,7 @@ exports.Formats = [
 		],
 
 		mod: 'gen7',
-		ruleset: ['[Gen 7] UU', 'Baton Pass Clause'],
+		ruleset: ['[Gen 7] UU'],
 		banlist: ['UU', 'BL2'],
 	},
 	{
