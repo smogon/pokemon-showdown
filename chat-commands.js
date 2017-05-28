@@ -1722,22 +1722,22 @@ exports.commands = {
 
 	globalunban: 'unglobalban',
 	unglobalban: function (target, room, user) {
-		if (!target) return this.parse('/help unglobalban');
+		if (!target) return this.parse(`/help unglobalban`);
 		if (!this.can('ban')) return false;
 
 		let name = Punishments.unban(target);
 
-		let unbanMessage = "" + name + " was globally unbanned by " + user.name + ".";
+		let unbanMessage = `${name} was globally unbanned by ${user.name}.`;
 
 		if (name) {
-			this.addModCommand("" + name + " was globally unbanned by " + user.name + ".");
+			this.addModCommand(unbanMessage);
 			// Notify staff room when a user is unbanned outside of it.
 			if (room.id !== 'staff' && Rooms('staff')) {
-				Rooms('staff').addLogMessage(user, "<<" + room.id + ">> " + unbanMessage);
+				Rooms('staff').addLogMessage(user, `<<${room.id}>> ${unbanMessage}`);
 			}
-			this.globalModlog("UNBAN", name, " by " + user.name);
+			this.globalModlog("UNBAN", name, ` by ${user.name}`);
 		} else {
-			this.errorReply("User '" + target + "' is not globally banned.");
+			this.errorReply(`User '${target}' is not globally banned.`);
 		}
 	},
 	unglobalbanhelp: ["/unglobalban [username] - Unban a user. Requires: @ * & ~"],
