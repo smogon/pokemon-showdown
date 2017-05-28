@@ -2147,7 +2147,7 @@ exports.BattleScripts = {
 
 		// First, the extra high-priority items
 		} else if (template.species === 'Clamperl' && !hasMove['shellsmash']) {
-			item = 'DeepSeaTooth';
+			item = 'Deep Sea Tooth';
 		} else if (template.species === 'Cubone' || template.baseSpecies === 'Marowak') {
 			item = 'Thick Club';
 		} else if (template.species === 'Dedenne') {
@@ -3211,7 +3211,7 @@ exports.BattleScripts = {
 		} else if (template.baseSpecies === 'Pikachu') {
 			item = 'Light Ball';
 		} else if (template.species === 'Clamperl') {
-			item = 'DeepSeaTooth';
+			item = 'Deep Sea Tooth';
 		} else if (template.species === 'Spiritomb') {
 			item = 'Leftovers';
 		} else if (template.species === 'Scrafty' && counter['Status'] === 0) {

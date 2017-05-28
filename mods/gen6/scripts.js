@@ -737,7 +737,7 @@ exports.BattleScripts = {
 
 		// First, the extra high-priority items
 		} else if (template.species === 'Clamperl' && !hasMove['shellsmash']) {
-			item = 'DeepSeaTooth';
+			item = 'Deep Sea Tooth';
 		} else if (template.species === 'Cubone' || template.species === 'Marowak') {
 			item = 'Thick Club';
 		} else if (template.species === 'Dedenne') {
