@@ -1175,7 +1175,7 @@ exports.BattleScripts = {
 					evpool -= y;
 				} while (evpool > 0);
 			} else {
-				for (let x in s) evs[x] = this.random(256);
+				for (let x of s) evs[x] = this.random(256);
 			}
 
 			// Random IVs
