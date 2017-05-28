@@ -1,0 +1,73 @@
+body {
+    background-image:url("http://fc05.deviantart.net/fs70/f/2009/346/e/b/Suicune_Wallpaper_by_Super_Bastard.jpg");
+    background-repeat:no-repeat;
+    background-position:center
+}
+
+.menugroup .button {
+    background:url(235, 35, 242, .8);
+    color:#FFFFFF;
+}
+
+.menugroup .button:hover {
+    background:#EB23F2;
+    color:#FFFFFF;
+}
+
+.menugroup {
+    background:rgba(62, 214, 238, .34);
+}
+
+.header {
+    background:#3ED6EE;
+}
+
+.userlist {
+    background:rgba(62, 214, 238, .7);
+}
+
+.userlist li {
+    border-bottom: 1px solid #000;
+}
+
+.userlist li em.group {
+    color: #000;
+}
+
+.userlist li button:hover {
+    background:#1DA7BC;
+}
+
+.teambuilder-results { 
+    color:#FFF812;
+}
+
+.ps-room.ps-room-light.scrollable {
+    background:url(235, 35, 242, .44);
+        color:#FFFFFF;
+}
+
+.pm-window {
+    background: rgba(34, 34, 34, 0.8);
+}
+
+.pm-log {
+    background:url("http://i.imgur.com/Q8vHT0Y.png");
+    color:#333333;
+    font-style:italic;
+}
+
+.pm-log:hover {
+    color:#000000;
+}
+
+.pm-log-add {
+    background: rgba(34, 34, 34, 0.8);
+    border-radius: 0px;
+}
+
+.pm-log-add:hover {
+    background:#222;
+}
+
+.chat-log-add {background:rgba(62, 214, 238, 0.7);}
