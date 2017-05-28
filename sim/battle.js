@@ -1994,6 +1994,7 @@ class Battle extends Dex.ModdedDex {
 		while (this.faintQueue.length) {
 			faintData = this.faintQueue.shift();
 			if (!faintData.target.fainted) {
+				this.runEvent('BeforeFaint', faintData.target, faintData.source, faintData.effect);
 				this.add('faint', faintData.target);
 				faintData.target.side.pokemonLeft--;
 				this.runEvent('Faint', faintData.target, faintData.source, faintData.effect);
