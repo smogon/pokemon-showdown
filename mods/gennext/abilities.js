@@ -136,13 +136,21 @@ exports.BattleAbilities = {
 			}
 		},
 	},
+	"cutecharm": {
+		inherit: true,
+		onAfterDamage: function (damage, target, source, move) {
+			if (move && move.isContact) {
+				source.addVolatile('Attract', target);
+			}
+		}
+	},
 	"poisonpoint": {
 		inherit: true,
 		onAfterDamage: function (damage, target, source, move) {
 			if (move && move.flags['contact']) {
 				source.trySetStatus('psn', target);
 			}
-		},
+		}
 	},
 	"flowergift": {
 		inherit: true,
