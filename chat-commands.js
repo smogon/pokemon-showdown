@@ -1343,15 +1343,17 @@ exports.commands = {
 	j: 'join',
 	join: function (target, room, user, connection) {
 		if (!target) return this.parse('/help join');
-		if (target.startsWith('http://')) target = target.slice(7);
-		if (target.startsWith('https://')) target = target.slice(8);
-		if (target.startsWith('play.pokemonshowdown.com/')) target = target.slice(25);
-		if (target.startsWith('psim.us/')) target = target.slice(8);
-		if (user.tryJoinRoom(target, connection) === null) {
-			connection.sendTo(target, "|noinit|namerequired|The room '" + target + "' does not exist or requires a login to join.");
+		target = target.split(',');
+		for (let i = 0; i < target.length; i++) {
+			let tarRoom = target[i].trim();
+			if (tarRoom.startsWith('http://')) tarRoom = tarRoom.slice(7);
+			if (tarRoom.startsWith('https://')) tarRoom = tarRoom.slice(8);
+			if (tarRoom.startsWith('play.pokemonshowdown.com/')) tarRoom = tarRoom.slice(25);
+			if (tarRoom.startsWith('psim.us/')) tarRoom = tarRoom.slice(8);
+			user.tryJoinRoom(tarRoom, connection);
 		}
 	},
-	joinhelp: ["/join [roomname] - Attempt to join the room [roomname]."],
+	joinhelp: ["/join [roomname] - Attempt to join the room [roomname]. Separate rooms with commas to attempt to join multiple rooms at once."],
 
 	'!part': true,
 	leave: 'part',
