@@ -44,10 +44,6 @@ exports.BattleItems = {
 		inherit: true,
 		desc: "Holder gains 1.3x HP from draining moves, Aqua Ring, Ingrain, and Leech Seed.",
 	},
-	blazikenite: {
-		inherit: true,
-		isUnreleased: false,
-	},
 	cameruptite: {
 		inherit: true,
 		isUnreleased: false,
@@ -207,15 +203,7 @@ exports.BattleItems = {
 			}
 		},
 	},
-	sceptilite: {
-		inherit: true,
-		isUnreleased: false,
-	},
 	spelonberry: {
-		inherit: true,
-		isUnreleased: false,
-	},
-	swampertite: {
 		inherit: true,
 		isUnreleased: false,
 	},
