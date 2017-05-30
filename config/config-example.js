@@ -378,11 +378,16 @@ exports.grouplist = [
 		symbol: ' ',
 		ip: 's',
 	},
+	{
+		name: 'Locked',
+		id: 'locked',
+		symbol: '‽',
+		punishgroup: true,
+	},
+	{
+		name: 'Muted',
+		id: 'muted',
+		symbol: '!',
+		punishgroup: true,
+	},
 ];
-
-// punishgroups - the symbols used to mark the different punishment groups, locked and muted
-// these will be sent along with the above groups to the client for parsing purposes.
-exports.punishgroups = {
-	Muted: '!',
-	Locked: '‽',
-};
