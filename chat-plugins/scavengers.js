@@ -733,21 +733,11 @@ let commands = {
 		if (room.id !== 'scavengers') return this.errorReply("This command can only be used in the scavenger room.");
 		if (!this.runBroadcast()) return false;
 
-		let nonStaff = {count: 0, lastScore: 0};
-
 		Leaderboard.visualize('points').then(ladder => {
 			this.sendReply(`|raw|<div class="ladder" style="overflow-y: scroll; max-height: 300px;"><table style="width: 100%"><tr><th>Rank</th><th>Name</th><th>Points</th></tr>${ladder.map(entry => {
 				let isStaff = room.auth && room.auth[toId(entry.name)];
 
-				// handle ties and only bold the top 3 non staff - as requested
-				if (!isStaff) {
-					nonStaff.count++;
-					if (nonStaff.count <= 3) {
-						nonStaff.lastScore = entry.points;
-					}
-				}
-
-				return `<tr><td>${entry.rank}</td><td>${(isStaff ? `<em>${Chat.escapeHTML(entry.name)}</em>` : (nonStaff.lastScore === entry.points ? `<strong>${Chat.escapeHTML(entry.name)}</strong>` : Chat.escapeHTML(entry.name)))}</td><td>${entry.points}</td></tr>`;
+				return `<tr><td>${entry.rank}</td><td>${(isStaff ? `<em>${Chat.escapeHTML(entry.name)}</em>` : (entry.rank <= 5 ? `<strong>${Chat.escapeHTML(entry.name)}</strong>` : Chat.escapeHTML(entry.name)))}</td><td>${entry.points}</td></tr>`;
 			}).join('')}</table></div>`);
 			if (this.broadcasting) setImmediate(() => room.update()); // make sure the room updates for broadcasting since this is async.
 		});
