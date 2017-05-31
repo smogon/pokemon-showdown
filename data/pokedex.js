@@ -13356,9 +13356,9 @@ exports.BattlePokedex = {
 	brattler: {
 		num: -109,
 		species: "Brattler",
-		types: ["Grass", "Dark"],
+		types: ["Dark", "Grass"],
 		baseStats: {hp: 80, atk: 70, def: 40, spa: 20, spd: 90, spe: 30},
-		abilities: {0: "Harvest", H: "Infiltrator"},
+		abilities: {0: "Harvest", 1: "Infiltrator"},
 		heightm: 1.8,
 		weightkg: 11.5,
 		color: "Brown",
