@@ -740,12 +740,12 @@ exports.Formats = [
 		column: 3,
 	},
 	{
-		name: "[Gen 4] OU (LatiMence)",
+		name: "[Gen 5] OU (blind)",
+		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3604732/\">Blind BW</a>"],
 
-		mod: 'gen4',
-		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause'],
-		banlist: ['Uber', 'Soul Dew'],
-		unbanlist: ['Latias', 'Salamence'],
+		mod: 'gen5',
+		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Baton Pass Clause', 'Swagger Clause'],
+		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Drought ++ Chlorophyll', 'Sand Stream ++ Sand Rush', 'Soul Dew'],
 	},
 
 	// ORAS Singles
