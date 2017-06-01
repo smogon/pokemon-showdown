@@ -38,8 +38,8 @@ exports.BattleAliases = {
 	"monorandom": "[Gen 7] Monotype Random Battle",
 	"bf": "Battle Factory",
 	"gen6inverse": "Inverse Battle",
-	"lastwill": "[Gen 7] Last Will",
-	"crossevolution": "[Gen 7] Cross Evolution",
+	"godlygift": "[Gen 7] Godly Gift",
+	"dancerability": "[Gen 7] Dancerability",
 
 	// mega evos
 	"maero": "Aerodactyl-Mega",
