@@ -296,8 +296,8 @@ exports.Formats = [
 		],
 
 		mod: 'gen7',
-		ruleset: ['Ubers', 'Baton Pass Clause'],
-		banlist: ['Huge Power', 'Pure Power', 'Shadow Tag', 'Blissey', 'Chansey', 'Uber > 1', 'AG + Uber > 1', 'Gengarite', 'Mawilite', 'Medichamite'],
+		ruleset: ['[Gen 7] Ubers'],
+		banlist: ['Blissey', 'Chansey', 'Uber > 1', 'AG + Uber > 1', 'Huge Power', 'Pure Power', 'Shadow Tag', 'Gengarite', 'Mawilite', 'Medichamite', 'Baton Pass'],
 		onModifyTemplate: function (template, target, source, effect) {
 			if (source || !target.side) return;
 			let uber = target.side.team.find(set => {
@@ -319,8 +319,8 @@ exports.Formats = [
 		],
 
 		mod: 'dancerability',
-		ruleset: ['OU'],
 		searchShow: false,
+		ruleset: ['[Gen 7] OU'],
 	},
 	{
 		section: "Other Metagames",
