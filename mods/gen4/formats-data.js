@@ -1482,7 +1482,7 @@ exports.BattleFormatsData = {
 	meditite: {
 		inherit: true,
 		randomBattleMoves: ["highjumpkick", "psychocut", "icepunch", "thunderpunch", "trick", "fakeout", "bulletpunch", "drainpunch"],
-		tier: "LC",
+		tier: "NU",
 	},
 	medicham: {
 		randomBattleMoves: ["highjumpkick", "drainpunch", "psychocut", "icepunch", "thunderpunch", "trick", "fakeout", "bulletpunch"],
