@@ -1111,9 +1111,7 @@ let commands = {
 				return this.errorReply("The tournament's banlist is already empty.");
 			}
 			tournament.banlist = [];
-			tournament.format = tournament.teambuilderFormat;
 			this.room.addRaw("<b>The tournament's banlist was cleared.</b>");
-			this.room.send('|tournament|update|' + JSON.stringify({format: tournament.format}));
 			this.privateModCommand("(" + user.name + " cleared the tournament's banlist.)");
 		},
 		name: 'setname',
@@ -1121,9 +1119,6 @@ let commands = {
 		setname: function (tournament, user, params, cmd) {
 			if (params.length < 1) {
 				return this.sendReply("Usage: " + cmd + " <comma-separated arguments>");
-			}
-			if (tournament.banlist.length < 1) {
-				return this.errorReply("The tournament cannot be named unless it has a banlist.");
 			}
 			const name = Chat.escapeHTML(params[0].trim());
 			if (!name.length) return this.errorReply("The tournament's name cannot be blank.");
@@ -1474,7 +1469,7 @@ Chat.commands.tournamenthelp = function (target, room, user) {
 		"- banlist &lt;comma-separated arguments>: Sets the supplementary banlist for the tournament before it has started.<br />" +
 		"- viewbanlist: Shows the supplementary banlist for the tournament.<br />" +
 		"- clearbanlist: Clears the supplementary banlist for the tournament before it has started.<br />" +
-		"- name &lt;name>: Sets a custom name for the tournament if it has a supplementary banlist.<br />" +
+		"- name &lt;name>: Sets a custom name for the tournament.<br />" +
 		"- clearname: Clears the custom name of the tournament.<br />" +
 		"- end/stop/delete: Forcibly ends the tournament in the current room.<br />" +
 		"- begin/start: Starts the tournament in the current room.<br />" +
