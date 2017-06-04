@@ -248,8 +248,8 @@ class Jeopardy extends Rooms.RoomGame {
 	}
 
 	hasRemainingQuestion() {
-		for (let i = 0; i < this.categoryCount; i++) {
-			for (let j = 0; j < this.questionCount; j++) {
+		for (let i = 0; i < this.questionCount; i++) {
+			for (let j = 0; j < this.categoryCount; j++) {
 				if (!this.questions[i][j].answered) return true;
 			}
 		}
