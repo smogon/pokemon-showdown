@@ -733,23 +733,23 @@ exports.commands = {
 			if (user.userid !== room.game.host.userid) return this.errorReply("This command can only be used by the host.");
 			room.game.nextQuestion();
 		},
-		
+
 		timer: function (target, room, user) {
 			if (!room.game || room.game.gameid !== 'jeopardy') return this.errorReply("There is no game of Jeopardy going on in this room.");
 			if (user.userid !== room.game.host.userid) return this.errorReplay("This command can only be used by the host.");
 			let amount = parseInt(target);
 			if (!amount || amount < 2 || amount > 120) return this.errorReply("The amount must be a number between 5 and 300.");
-			
+
 			room.game.answeringTime = amount;
 			this.addModCommand(`${user.name} has set the answering window for questions to ${amount} seconds`);
 		},
-	
+
 		finaltimer: function (target, room, user) {
 			if (!room.game || room.game.gameid !== 'jeopardy') return this.errorReply("There is no game of Jeopardy going on in this room.");
 			if (user.userid !== room.game.host.userid) return this.errorReplay("This command can only be used by the host.");
 			let amount = parseInt(target);
 			if (!amount || amount < 2 || amount > 300) return this.errorReply("The amount must be a number between 5 and 300.");
-			
+
 			room.game.finalAnsweringTime = amount;
 			this.addModCommand(`${user.name} has set the answering window for the final question to ${amount} seconds`);
 		},
