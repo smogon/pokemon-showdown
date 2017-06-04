@@ -352,7 +352,7 @@ exports.commands = {
 			zinnia: '#zinnia',
 			clemont: '#clemont',
 		};
-		if (avatarid in avatarTable) {
+		if (avatarTable.hasOwnProperty(avatarid)) {
 			avatar = avatarTable[avatarid];
 		} else {
 			avatar = parseInt(avatarid);
