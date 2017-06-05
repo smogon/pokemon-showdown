@@ -180,7 +180,7 @@ class UNOgame extends Rooms.RoomGame {
 		if (userid === this.currentPlayer) {
 			// handle getting eliminated during the color selection of a wild card
 			if (this.state === 'color') this.topCard.color = this.discards[1].color;
-			
+
 			clearTimeout(this.timer);
 			this.nextTurn();
 		}
