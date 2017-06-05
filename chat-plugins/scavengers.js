@@ -309,12 +309,13 @@ class ScavengerHunt extends Rooms.RoomGame {
 			return false;
 		}
 
-		if (user.connections.length > 1) {
+		let uniqueConnections = this.getUniqueConnections(user);
+		if (uniqueConnections > 1) {
 			// multiple users on one alt
 			player.sendRoom("You have been automatically disqualified for attempting a hunt with multiple connections on your account.  Staff have been notified.");
 
 			// notify staff
-			let staffMsg = `(${user.name} has been caught attempting a hunt with ${user.connections.length} connections on the account, and was automatically disqualified. The user has also been given 1 infraction point on the player leaderboard.)`;
+			let staffMsg = `(${user.name} has been caught attempting a hunt with ${uniqueConnections} connections on the account, and was automatically disqualified. The user has also been given 1 infraction point on the player leaderboard.)`;
 			this.room.sendModCommand(staffMsg);
 			this.room.logEntry(staffMsg);
 			this.room.modlog(staffMsg);
@@ -480,6 +481,11 @@ class ScavengerHunt extends Rooms.RoomGame {
 
 	hasFinished(user) {
 		return this.players[user.userid] && this.players[user.userid].completed;
+	}
+
+	getUniqueConnections(user) {
+		let ips = user.connections.map(c => c.ip);
+		return ips.filter((ip, index) => ips.indexOf(ip) === index).length;
 	}
 
 	static parseQuestions(questionArray) {
