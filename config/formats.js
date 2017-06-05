@@ -316,7 +316,7 @@ exports.Formats = [
 
 		mod: 'gen7',
 		ruleset: ['[Gen 7] Ubers'],
-		banlist: ['Blissey', 'Chansey', 'Uber > 1', 'Uber ++ Power Construct', 'Huge Power', 'Pure Power', 'Shadow Tag', 'Gengarite', 'Mawilite', 'Medichamite', 'Baton Pass'],
+		banlist: ['Blissey', 'Chansey', 'Uber > 1', 'Uber ++ Power Construct', 'Huge Power', 'Pure Power', 'Shadow Tag', 'Gengarite', 'Mawilite', 'Medichamite', 'Sablenite', 'Baton Pass'],
 		onModifyTemplate: function (template, target, source, effect) {
 			if (source || !target.side) return;
 			let uber = target.side.team.find(set => {
