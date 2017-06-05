@@ -470,7 +470,7 @@ class ScavengerHunt extends Rooms.RoomGame {
 		let commandMatch = msg.match(SCAVENGE_REGEX);
 		if (commandMatch) msgId = msgId.slice(toId(commandMatch[0]).length);
 
-		let filtered = this.questions.map(q => q.answer).some(a => {
+		let filtered = this.questions.map(q => toId(q.answer)).some(a => {
 			let md = Math.ceil((a.length - 3) / FILTER_LENIENCY);
 			if (Dex.levenshtein(msgId, a, md) <= md) return true;
 			return false;
