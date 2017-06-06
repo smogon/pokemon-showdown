@@ -1,10 +1,6 @@
 'use strict';
 
 exports.BattleItems = {
-	abomasite: {
-		inherit: true,
-		isUnreleased: false,
-	},
 	aggronite: {
 		inherit: true,
 		isUnreleased: false,
@@ -156,10 +152,6 @@ exports.BattleItems = {
 		inherit: true,
 		isUnreleased: false,
 	},
-	manectite: {
-		inherit: true,
-		isUnreleased: false,
-	},
 	micleberry: {
 		inherit: true,
 		isUnreleased: false,
@@ -204,10 +196,6 @@ exports.BattleItems = {
 		},
 	},
 	spelonberry: {
-		inherit: true,
-		isUnreleased: false,
-	},
-	tyranitarite: {
 		inherit: true,
 		isUnreleased: false,
 	},
