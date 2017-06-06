@@ -269,7 +269,7 @@ exports.Formats = [
 		requirePentagon: true,
 	},
 	{
-		name: "[Gen 7] tiny tourney",
+		name: "[Gen 7] Tiny Tourney",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3605226/\">tiny tourney Discussion</a>"],
 
 		mod: 'gen7',
