@@ -942,7 +942,7 @@ exports.BattleScripts = {
 
 		if (hasMove['gyroball'] || hasMove['trickroom']) {
 			evs.spe = 0;
-			ivs.spe = 0;
+			ivs.spe = hasMove['hiddenpower'] ? ivs.spe - 30 : 0;
 		}
 
 		return {
