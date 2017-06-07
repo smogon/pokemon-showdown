@@ -13,6 +13,7 @@
 'use strict';
 
 const path = require('path');
+const http = require('http');
 
 exports.commands = {
 
@@ -1950,6 +1951,24 @@ exports.commands = {
 		"/htmlbox [message] - Displays a message, parsing HTML code contained.",
 		"!htmlbox [message] - Shows everyone a message, parsing HTML code contained. Requires: ~ & #",
 	],
+	'!ai': true,
+	askai: 'ai',
+	'8ball': 'ai',
+	ai: function (target, room, user) {
+		if (!this.runBroadcast()) return;
+		target = target.replace(/^[^a-z0-9]+/i, "");
+		let output = `<strong>Question:</strong> ${target}<br />`;
+		http.get(("http://qmarkai.com/qmai.php?q=" + target), res => {
+			let data = '';
+			res.on('data', chunk => {
+				data += chunk;
+			}).on('end', () => {
+				output += `<strong>Answer:</strong> ${data.replace(/[\r\n]/g, "")}`;
+				this.sendReplyBox(output);
+			});
+		});
+	},
+	aihelp: ["/ai [question] - Asks Question to QMarkAI(http://qmarkai.com/)"],
 };
 
 process.nextTick(() => {
