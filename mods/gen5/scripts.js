@@ -596,12 +596,12 @@ exports.BattleScripts = {
 		// Minimize confusion damage
 		if (!counter['Physical']) {
 			evs.atk = 0;
-			ivs.atk = hasMove['hiddenpower'] ? ivs.atk - 30 : 0;
+			ivs.atk = hasMove['hiddenpower'] ? ivs.atk - 28 : 0;
 		}
 
 		if (hasMove['gyroball'] || hasMove['trickroom']) {
 			evs.spe = 0;
-			ivs.spe = 0;
+			ivs.spe = hasMove['hiddenpower'] ? ivs.spe - 28 : 0;
 		}
 
 		return {
