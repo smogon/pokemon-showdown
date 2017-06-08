@@ -549,7 +549,7 @@ function runDexsearch(target, cmd, canAll, message) {
 			searches.push(orGroup);
 		}
 	}
-	if (showAll && searches.length === 0 && megaSearch === null) return {reply: "No search parameters other than 'all' were found. Try '/help dexsearch' for more information on this command."};
+	// if (showAll && searches.length === 0 && megaSearch === null) return {reply: "No search parameters other than 'all' were found. Try '/help dexsearch' for more information on this command."};
 
 	let dex = {};
 	for (let pokemon in Dex.data.Pokedex) {
@@ -949,9 +949,9 @@ function runMovesearch(target, cmd, canAll, message) {
 		return {reply: "'" + escapeHTML(oldTarget) + "' could not be found in any of the search categories."};
 	}
 
-	if (showAll && !Object.keys(searches).length && !targetMon) {
-		return {reply: "No search parameters other than 'all' were found. Try '/help movesearch' for more information on this command."};
-	}
+	//if (showAll && !Object.keys(searches).length && !targetMon) {
+	//	return {reply: "No search parameters other than 'all' were found. Try '/help movesearch' for more information on this command."};
+	//}
 
 	let dex = {};
 	if (targetMon) {
