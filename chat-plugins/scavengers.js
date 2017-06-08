@@ -1049,6 +1049,9 @@ exports.commands = {
 			"- /scav setblitz [value] ... - sets the blitz award to `value`. Use `/scav setblitz` to view what the current blitz value is. (Requires: & # ~)",
 			"- /scav queue <em>[host] | [hint] | [answer] | [hint] | [answer] | [hint] | [answer] | ...</em> - queues a scavenger hunt to be started after the current hunt is finished. (Requires: % @ * # & ~)",
 			"- /scav viewqueue - shows the list of queued scavenger hunts to be automatically started, as well as the option to remove hunts from the queue. (Requires: % @ * # & ~)",
+			"- /scav games kogames - starts a new scripted Knockout Game. (Requires: % @ * # & ~)",
+			"- /scav games end - ends the current scavenger game. (Requires: % @ * # & ~)",
+			"- /scav games kick [user] - kicks the user from the current scavenger game. (Requires: % @ * # & ~)",
 		].join("<br />");
 
 		target = toId(target);
