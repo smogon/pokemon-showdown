@@ -1052,6 +1052,20 @@ let commands = {
 		acceptchallenge: function (tournament, user) {
 			tournament.acceptChallenge(user, this);
 		},
+		vtm: function (tournament, user, params, cmd, connection) {
+			if (tournament.banlist.length < 1) return this.parse("/vtm " + tournament.teambuilderFormat);
+			if (Monitor.countPrepBattle(connection.ip, connection)) {
+				return;
+			}
+			TeamValidator(tournament.teambuilderFormat, tournament.banlist).prepTeam(user.team).then(result => {
+				if (result.charAt(0) === '1') {
+					connection.popup("Your team is valid for this tournament.");
+				} else {
+					const format = Dex.getFormat(tournament.teambuilderFormat).name.replace(/\[/, "\\[").replace(/\]/, "\\]");
+					connection.popup("Your team was rejected for the following reasons:\n\n- " + result.slice(1).replace(/\n/g, '\n- ').replace(new RegExp(format, "g"), "this tournament"));
+				}
+			});
+		},
 		viewruleset: 'viewbanlist',
 		viewbanlist: function (tournament) {
 			if (!this.runBroadcast()) return;
@@ -1321,7 +1335,7 @@ Chat.loadCommands();
 Chat.commands.tour = 'tournament';
 Chat.commands.tours = 'tournament';
 Chat.commands.tournaments = 'tournament';
-Chat.commands.tournament = function (paramString, room, user) {
+Chat.commands.tournament = function (paramString, room, user, connection) {
 	let cmdParts = paramString.split(' ');
 	let cmd = cmdParts.shift().trim().toLowerCase();
 	let params = cmdParts.join(' ').split(',').map(param => param.trim());
@@ -1457,7 +1471,7 @@ Chat.commands.tournament = function (paramString, room, user) {
 		if (!commandHandler) {
 			this.errorReply(cmd + " is not a tournament command.");
 		} else {
-			commandHandler.call(this, tournament, user, params, cmd);
+			commandHandler.call(this, tournament, user, params, cmd, connection);
 		}
 	}
 };
