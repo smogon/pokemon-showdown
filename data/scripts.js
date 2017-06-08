@@ -2296,7 +2296,6 @@ exports.BattleScripts = {
 			NU: 81,
 			BL3: 80,
 			RU: 79,
-			New: 79,
 			BL2: 78,
 			UU: 77,
 			BL: 76,
