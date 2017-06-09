@@ -194,7 +194,6 @@ exports.commands = {
 			canAll: (!this.broadcastMessage || (room && room.isPersonal)),
 			message: (this.broadcastMessage ? "" : message),
 		}).then(response => {
-			console.log(response);
 			if (!this.runBroadcast()) return;
 			if (response.error) {
 				this.errorReply(response.error);
@@ -206,7 +205,6 @@ exports.commands = {
 			this.update();
 		});
 	},
-
 	randompokemonhelp: [
 		"/randompokemon - Generates random Pok\u00e9mon based on given search conditions.",
 		"/randompokemon uses the same parameters as /dexsearch (see '/help ds').",
@@ -1159,6 +1157,7 @@ function runMovesearch(target, cmd, canAll, message) {
 	for (let move in dex) {
 		results.push(dex[move].name);
 	}
+
 	let resultsStr = "";
 	if (targetMon) {
 		resultsStr += "<span style=\"color:#999999;\">Matching moves found in learnset for</span> " + targetMon + ":<br />";
