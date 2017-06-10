@@ -1177,6 +1177,13 @@ exports.Formats = [
 		banlist: ['LC Uber', 'Misdreavus', 'Murkrow', 'Scyther', 'Sneasel', 'Tangela', 'Yanma', 'Berry Juice', 'Deep Sea Tooth', 'Dragon Rage', 'Sonic Boom'],
 	},
 	{
+		name: "[Gen 4] Random Battle",
+
+		mod: 'gen4',
+		team: 'random',
+		ruleset: ['Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod'],
+	},
+	{
 		name: "[Gen 4] Custom Game",
 
 		mod: 'gen4',
