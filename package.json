@@ -7,10 +7,10 @@
     "sockjs": "0.3.18"
   },
   "optionalDependencies": {
-    "cloud-env": "0.1.1",
-    "http-proxy": "0.10.0",
-    "nodemailer": "1.4.0",
-    "node-static": "0.7.7"
+    "cloud-env": "0.2.2",
+    "http-proxy": "1.16.2",
+    "nodemailer": "4.0.1",
+    "node-static": "0.7.9"
   },
   "nonDefaultDependencies": {
     "ofe": "0.1.2"
@@ -51,7 +51,6 @@
   "devDependencies": {
     "eslint": "^3.2.2",
     "mocha": "^3.0.0",
-    "mock-fs-require-fix": "~1.0.0",
-    "fuzzur": "0.1.2"
+    "mock-fs-require-fix": "~1.0.0"
   }
 }

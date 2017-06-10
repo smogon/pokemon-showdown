@@ -1,11 +1,10 @@
 'use strict';
 
 const assert = require('assert');
-const Tools = require('./../tools').includeFormats();
-const PRNG = require('./../prng');
-const MockBattle = require('./mocks/Battle');
+const Dex = require('./../sim/dex');
+const PRNG = require('./../sim/prng');
+const Sim = require('./../sim');
 
-let battleNum = 1;
 const cache = new Map();
 
 const RULE_FLAGS = {
@@ -32,11 +31,11 @@ class TestTools {
 
 		const mod = options.mod || 'base';
 		this.baseFormat = options.baseFormat || {effectType: 'Format', mod: mod};
-		this.tools = Tools.mod(mod);
+		this.dex = Dex.mod(mod);
 
 		this.modPrefix = this.baseFormat.name ? `[${this.baseFormat.name}]` : '';
-		if (!this.modPrefix && !this.tools.isBase) {
-			this.modPrefix = (/^gen\d$/.test(mod) ? `[Gen ${this.tools.gen}]` : `[${mod}]`);
+		if (!this.modPrefix && !this.dex.isBase) {
+			this.modPrefix = (/^gen\d$/.test(mod) ? `[Gen ${this.dex.gen}]` : `[${mod}]`);
 		}
 
 		// Handle caches
@@ -46,8 +45,8 @@ class TestTools {
 
 	mod(mod) {
 		if (cache.has(mod)) return cache.get(mod);
-		if (Tools.dexes[mod]) return new TestTools({mod: mod});
-		const baseFormat = Tools.getFormat(mod);
+		if (Dex.dexes[mod]) return new TestTools({mod: mod});
+		const baseFormat = Dex.getFormat(mod);
 		if (baseFormat.effectType === 'Format') return new TestTools({mod: baseFormat.mod, baseFormat});
 		throw new Error(`Mod ${mod} does not exist`);
 	}
@@ -62,12 +61,12 @@ class TestTools {
 			if (property === 'gameType' || !options[property]) continue;
 			mask |= RULE_FLAGS[property];
 		}
-		const gameType = Tools.getId(options.gameType || 'singles');
+		const gameType = Dex.getId(options.gameType || 'singles');
 		if (this.formats.get(gameType).has(mask)) return this.formats.get(gameType).get(mask);
 
 		const gameTypePrefix = gameType === 'singles' ? '' : capitalize(gameType);
 		const formatName = [this.modPrefix, gameTypePrefix, "Custom Game", '' + mask].filter(part => part).join(" ");
-		const formatId = Tools.getId(formatName);
+		const formatId = Dex.getId(formatName);
 
 		const format = Object.assign(Object.assign({}, this.baseFormat), {
 			id: formatId,
@@ -89,7 +88,7 @@ class TestTools {
 		if (options.cancel) format.ruleset.push('Cancel Mod');
 		// if (options.partialDecisions) format.ruleset.push('Partial Decisions');
 
-		this.tools.installFormat(formatId, format);
+		this.dex.installFormat(formatId, format);
 		return format;
 	}
 
@@ -101,8 +100,7 @@ class TestTools {
 	 * @param {PRNG} [prng] A pseudo-random number generator. If not provided, a pseudo-random number
 	 * generator will be generated for the user with a seed that is guaranteed to be the same across
 	 * test executions to help with determinism.
-	 * @returns {MockBattle} A mocked battle. This has mostly the same behaviour as regular Battles,
-	 * but some behaviour may differ specifically for testing.
+	 * @returns {Sim.Battle} A battle.
 	 */
 	createBattle(options, teams, prng = new PRNG(DEFAULT_SEED)) {
 		if (Array.isArray(options)) {
@@ -110,13 +108,13 @@ class TestTools {
 			options = {};
 		}
 		const format = this.getFormat(options || {});
-		const battle = MockBattle.construct(
-			`battle-test-${battleNum++}`,
+		const battle = Sim.construct(
 			format.id,
 			undefined,
 			undefined,
 			prng
 		);
+		battle.LEGACY_API_DO_NOT_USE = true;
 		if (options && options.partialDecisions) battle.supportPartialDecisions = true;
 		if (teams) {
 			for (let i = 0; i < teams.length; i++) {

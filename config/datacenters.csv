@@ -33,7 +33,7 @@
 5.153.0.0,5.153.63.255,SoftLayer,http://www.softlayer.com/
 5.187.49.184,5.187.49.191,OneProvider,http://oneprovider.com/
 5.189.144.0,5.189.159.255,Contabo GmbH,https://contabo.de/
-5.196.1.0,5.196.255.255,OVH FR,http://www.ovh.com
+5.196.0.0,5.196.255.255,OVH FR,http://www.ovh.com
 5.199.129.64,5.199.129.95,myLoc,http://www.myloc.de/
 5.199.132.0,5.199.132.255,myLoc,http://www.myloc.de/
 5.199.135.0,5.199.135.192,myLoc,http://www.myloc.de/
@@ -1039,6 +1039,7 @@
 79.99.0.0,79.99.7.255,GleSys,http://glesys.se/
 79.125.0.0,79.125.127.255,Amazon AWS,http://www.amazon.com/aws/
 79.133.32.0,79.133.63.255,First Colo GmbH,http://www.first-colo.net/EN/
+79.137.0.0,79.137.127.255,OVH,http://www.ovh.co.uk/
 79.137.208.0,79.137.239.255,Digital Network JSC,http://www.di-net.ru/
 79.140.80.0,79.140.82.255,Akamai,http://akamai.com/
 79.140.84.0,79.140.85.127,Akamai,http://akamai.com/
@@ -1253,10 +1254,12 @@
 89.250.112.0,89.250.127.255,basefarm.com,http://basefarm.com/
 89.255.0.0,89.255.63.255,Hosting Concepts,http://hosting-concepts.nl/
 91.90.24.0,91.90.31.255,PatrikWeb,http://patrikweb.net/
+91.90.88.0,91.90.95.255,OVH,http://www.ovh.co.uk/
 91.102.88.0,91.102.95.255,Solido Hosting A/S,http://solidohosting.com/
 91.105.232.0,91.105.239.255,H1 Host,https://www.h1host.ru/
 91.109.240.0,91.109.247.255,UK2,https://www.uk2.net/
 91.121.0.0,91.121.255.255,OVH,http://www.ovh.co.uk/
+91.134.0.0,91.134.255.255,OVH,http://www.ovh.co.uk/
 91.143.80.0,91.143.95.255,ISPpro Germany,http://isppro.de/
 91.184.0.0,91.184.31.255,hostnet.nl,http://www.hostnet.nl/
 91.186.0.0,91.186.31.255,BlueConnex,http://www.simplytransit.net/
@@ -1350,6 +1353,7 @@
 92.114.96.0,92.114.97.255,simpliq.com,http://www.simpliq.com/
 92.114.98.0,92.114.98.255,Elvsoft,http://www.elvsoft.com/
 92.122.0.0,92.123.255.255,Akamai,http://akamai.com/
+92.222.0.0,92.222.255.255,OVH,http://www.ovh.co.uk/
 92.241.160.0,92.241.191.255,Webalta,http://www.wahome.ru/
 92.243.0.0,92.243.7.255,Gandi.net,http://www.gandi.net/
 93.90.16.0,93.90.31.255,acens Technologies S.L.,http://www.acens.com/
@@ -1614,7 +1618,7 @@
 109.109.224.0,109.109.255.255,Tagadab,http://tagadab.com/
 109.123.64.0,109.123.127.255,UK2 Group,http://www.uk2.net/
 109.169.0.0,109.169.95.255,iomart Hosting Ltd,http://www.rapidswitch.com/
-109.190.64.0,109.190.255.255,OVH,http://www.ovh.co.uk/
+109.190.0.0,109.190.255.255,OVH,http://www.ovh.co.uk/
 109.200.0.0,109.200.31.255,Redstation Limited,http://redstation.com/
 109.200.192.0,109.200.223.255,i3d.net,http://i3d.net/
 109.201.133.0,109.201.133.255,NFOrce,https://www.nforce.com/
@@ -1693,6 +1697,7 @@
 134.170.192.0,134.170.199.255,Microsoft Azure,http://www.windowsazure.com/en-us/
 134.255.192.0,134.255.255.255,Optimate Server,http://optimate-server.de/
 136.0.0.0,136.0.255.255,EGIHosting.com,http://www.egihosting.com/
+137.74.0.0,137.74.255.255,OVH,http://www.ovh.co.uk/
 137.116.0.0,137.116.99.255,Microsoft Azure,http://www.windowsazure.com/en-us/
 137.116.112.0,137.116.175.255,Microsoft Azure,http://www.windowsazure.com/en-us/
 137.116.184.0,137.117.255.255,Microsoft Azure,http://www.windowsazure.com/en-us/
@@ -2118,6 +2123,7 @@
 185.12.64.0,185.12.67.255,Hetzner Online AG,http://www.hetzner.de/
 185.14.28.0,185.14.29.255,UA Servers,https://itldc.com/
 185.14.184.0,185.14.187.255,DigitalOcean Europe,https://www.digitalocean.com/
+185.15.68.0,185.15.71.255,OVH,http://www.ovh.co.uk/
 185.17.43.56,185.17.43.59,OneProvider,http://oneprovider.com/
 185.17.184.0,185.17.187.255,Leaseweb,http://www.leaseweb.com/
 185.19.218.152,185.19.218.159,Velia,http://www.velia.net/
@@ -2356,6 +2362,9 @@
 193.37.152.0,193.37.152.255,Giga-Hosting GmbH,http://giga-hosting.biz/
 193.47.99.0,193.47.99.255,Hetzner Online AG,http://www.hetzner.de/
 193.47.184.0,193.47.184.255,euro-web.com,http://fr.euro-web.com/
+193.70.0.0,193.70.127.255,OVH,http://www.ovh.co.uk/
+193.104.19.0,193.104.19.255,OVH,http://www.ovh.co.uk/
+193.104.56.0,193.104.56.255,OVH,http://www.ovh.co.uk/
 193.104.68.0,193.104.68.255,EvoVPS,http://evovps.com/
 193.105.171.0,193.105.171.255,CoolVDS,http://coolvds.com/
 193.105.210.0,193.105.210.255,galahost,http://galahost.net/
@@ -3193,6 +3202,7 @@
 217.172.128.0,217.172.143.255,host-it.co.uk,http://www.host-it.co.uk/
 217.172.160.0,217.172.191.255,plusserver.de,http://plusserver.de/
 217.174.240.0,217.174.255.255,Fasthosts Internet Ltd,http://www.fasthosts.co.uk/
+217.182.0.0,217.182.255.255,OVH,http://www.ovh.co.uk/
 217.194.0.0,217.194.15.255,seeweb.it,http://seeweb.it/
 217.194.208.0,217.194.223.255,Hosting UK,http://hostinguk.net/
 217.195.176.0,217.195.176.255,activewebs.dk,http://activewebs.dk/

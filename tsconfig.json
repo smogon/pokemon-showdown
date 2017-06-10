@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "lib": ["es2015", "es2016.array.include", "es2017.object"],
+        "noEmit": true,
+        "target": "ESNext",
+        "strict": true,
+        "allowJs": true,
+        "checkJs": true
+    },
+    "types": ["node"],
+    "include": [
+        "./dev-tools/globals.ts",
+        "./sim/dex-data.js",
+        "./sim/dex.js",
+        "./sim/prng.js"
+    ]
+}

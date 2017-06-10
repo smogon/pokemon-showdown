@@ -12,7 +12,7 @@ exports.BattleStatuses = {
 				this.add('-status', target, 'brn');
 			}
 		},
-		// Damage reduction is handled directly in the battle-engine.js damage function
+		// Damage reduction is handled directly in the sim/battle.js damage function
 		onResidualOrder: 9,
 		onResidual: function (pokemon) {
 			this.damage(pokemon.maxhp / 16);
@@ -284,6 +284,15 @@ exports.BattleStatuses = {
 		onStart: function (pokemon) {
 			if (!this.activeMove.id || this.activeMove.sourceEffect && this.activeMove.sourceEffect !== this.activeMove.id) return false;
 			this.effectData.move = this.activeMove.id;
+		},
+		onBeforeMove: function (pokemon, target, move) {
+			if (move.id !== this.effectData.move && move.id !== 'struggle') {
+				// Fails even if the Choice item is being ignored, and no PP is lost
+				this.addMove('move', pokemon, move.name);
+				this.attrLastMove('[still]');
+				this.add('-fail', pokemon);
+				return false;
+			}
 		},
 		onDisableMove: function (pokemon) {
 			if (!pokemon.getItem().isChoice || !pokemon.hasMove(this.effectData.move)) {

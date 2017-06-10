@@ -60,19 +60,23 @@ function addNomination(user, artist) {
 	if (winners.length && toArtistId(winners[winners.length - 1].artist) === id) return user.sendTo(theStudio, "This artist is already the current Artist of the Day.");
 
 	for (let value of removedNominations.values()) {
-		if (toId(user) in value.userids || user.latestIp in value.ips) return user.sendTo(theStudio, "Since your nomination has been removed, you cannot submit another artist until the next round.");
+		if (toId(user) in value.userids || user.latestIp in value.ips) return user.sendTo(theStudio, "Since your nomination has been removed by staff, you cannot submit another artist until the next round.");
 	}
 
 	if (nominations.has(toArtistId(artist))) return user.sendTo(theStudio, "This artist has already been nominated.");
 
-	for (let value of nominations.values()) {
-		if (toId(user) in value.userids || user.latestIp in value.ips) return user.sendTo(theStudio, "You've already submitted a nomination.");
+	for (let [key, value] of nominations) {
+		if (toId(user) in value.userids || user.latestIp in value.ips) {
+			user.sendTo(theStudio, `Your previous vote for ${value.artist} will be removed.`);
+			nominations.delete(key);
+		}
 	}
+
 	let obj = {};
 	obj[user.userid] = user.name;
 	nominations.set(toArtistId(artist), {artist: artist, name: user.name, userids: Object.assign(obj, user.prevNames), ips: Object.assign({}, user.ips)});
 
-	user.sendTo(theStudio, "Nomination successfully submitted.");
+	user.sendTo(theStudio, `Your nomination for ${artist} was successfully submitted.`);
 
 	if (theStudio.aotdVote) theStudio.aotdVote.display(true);
 }
@@ -110,7 +114,7 @@ function generateAotd() {
 	if (!winners.length) return false;
 	let aotd = winners[winners.length - 1];
 
-	let output = Chat.html `<div class="broadcast-blue" style="text-align:center;"><p><span style="font-weight:bold;font-size:10pt">The Artist of the Day is ${aotd.artist || "Various Artists"}.</span>`;
+	let output = Chat.html `<div class="broadcast-blue" style="text-align:center;"><p><span style="font-weight:bold;font-size:11pt">The Artist of the Day is ${aotd.artist || "Various Artists"}.</span>`;
 	if (aotd.quote) output += Chat.html `<br/><span style="font-style:italic;">"${aotd.quote}"</span>`;
 	output += `</p><table style="margin:auto;"><tr>`;
 	if (aotd.image) output += Chat.html `<td><img src="${aotd.image}" width=100 height=100></td>`;
@@ -175,7 +179,7 @@ function generateNomWindow() {
 	}
 
 	nominations.forEach((value, key) => {
-		buffer += Chat.html `<li><b>${value.artist}</b> <i>(Submitted by ${value.name}.)</i></li>`;
+		buffer += Chat.html `<li><b>${value.artist}</b> <i>(Submitted by ${value.name})</i></li>`;
 	});
 
 	buffer += `</ul></div>`;
@@ -214,7 +218,7 @@ class ArtistOfTheDayVote {
 		let winner = this.nominations.get(keys[Math.floor(Math.random() * keys.length)]);
 		appendWinner(winner.artist, winner.name);
 
-		this.room.add(Chat.html `|html|<div class="broadcast-blue"><p style="font-weight:bold;text-align:center;font-size:10pt;">Nominations for Artist of the Day are over!</p><p style="tex-align:center;font-size:8pt;">Out of ${keys.length} nominations, we randomly selected <strong>${winner.artist}</strong> as the winner! (Nomination by ${winner.name})</p></div>`);
+		this.room.add(Chat.html `|html|<div class="broadcast-blue"><p style="font-weight:bold;text-align:center;font-size:12pt;">Nominations for Artist of the Day are over!</p><p style="tex-align:center;font-size:10pt;">Out of ${keys.length} nominations, we randomly selected <strong>${winner.artist}</strong> as the winner! (Nomination by ${winner.name})</p></div>`);
 
 		this.finish();
 		return true;
@@ -242,7 +246,7 @@ let commands = {
 
 		if (!room.aotdVote.runAotd()) return this.errorReply("Can't select an Artist of the Day without nominations.");
 
-		this.privateModCommand(`${user.name} has started nominations for the Artist of the Day.)`);
+		this.privateModCommand(`(${user.name} has ended nominations for the Artist of the Day.)`);
 	},
 	endhelp: ["/aotd end - End nominations for the Artist of the Day and set it to a randomly selected artist. Requires: % @ # & ~"],
 
@@ -340,7 +344,7 @@ let commands = {
 
 		if (keys.length) {
 			setWinnerProperty(changelist);
-			return this.privateModCommand(`(${user.name} changes the following propertie${Chat.plural(keys)} of the Artist of the Day: ${keys.join(', ')})`);
+			return this.privateModCommand(`(${user.name} changed the following propert${Chat.plural(keys, 'ies', 'y')} of the Artist of the Day: ${keys.join(', ')})`);
 		}
 	},
 	sethelp: ["/aotd set property: value[, property: value] - Set the artist, quote, song, link or image for the current Artist of the Day. Requires: % @ * # & ~"],

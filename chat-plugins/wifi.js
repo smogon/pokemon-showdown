@@ -1,7 +1,7 @@
 /**
 * Wi-Fi chat-plugin. Only works in a room with id 'wifi'
-* Handles giveaways in the formats: question, lottery
-* Credits: Codelegend, SilverTactic, DanielCranham, bumbadadabum
+* Handles giveaways in the formats: question, lottery, gts
+* Written by bumbadadabum, based on the original plugin as written by Codelegend, SilverTactic, DanielCranham
 **/
 
 'use strict';
@@ -10,47 +10,12 @@ Punishments.roomPunishmentTypes.set('GIVEAWAYBAN', 'banned from giveaways');
 
 const BAN_DURATION = 7 * 24 * 60 * 60 * 1000;
 
-// Regex copied from the client
-const domainRegex = '[a-z0-9\\-]+(?:[.][a-z0-9\\-]+)*';
-const parenthesisRegex = '[(](?:[^\\s()<>&]|&amp;)*[)]';
-const linkRegex = new RegExp(
-	'\\b' +
-	'(?:' +
-		'(?:' +
-			// When using www. or http://, allow any-length TLD (like .museum)
-			'(?:https?://|www[.])' + domainRegex +
-			'|' + domainRegex + '[.]' +
-				// Allow a common TLD, or any 2-3 letter TLD followed by : or /
-				'(?:com?|org|net|edu|info|us|jp|[a-z]{2,3}(?=[:/]))' +
-		')' +
-		'(?:[:][0-9]+)?' +
-		'\\b' +
-		'(?:' +
-			'/' +
-			'(?:' +
-				'(?:' +
-					'[^\\s()&]|&amp;|&quot;' +
-					'|' + parenthesisRegex +
-				')*' +
-				// URLs usually don't end with punctuation, so don't allow
-				// punctuation symbols that probably aren't related to URL.
-				'(?:' +
-					'[^\\s`()\\[\\]{}\'".,!?;:&]' +
-					'|' + parenthesisRegex +
-				')' +
-			')?' +
-		')?' +
-		'|[a-z0-9.]+\\b@' + domainRegex + '[.][a-z]{2,3}' +
-	')',
-	'ig'
-);
-
 function toPokemonId(str) {
 	return str.toLowerCase().replace(/é/g, 'e').replace(/[^a-z0-9 /]/g, '');
 }
 
 class Giveaway {
-	constructor(host, giver, room, ot, tid, prize) {
+	constructor(host, giver, room, ot, tid, fc, prize) {
 		if (room.gaNumber) {
 			room.gaNumber++;
 		} else {
@@ -61,6 +26,8 @@ class Giveaway {
 		this.room = room;
 		this.ot = ot;
 		this.tid = tid;
+		this.fc = `${fc.substr(0, 4)}-${fc.substr(4, 4)}-${fc.substr(8, 4)}`;
+
 		this.prize = prize;
 		this.phase = 'pending';
 
@@ -126,23 +93,23 @@ class Giveaway {
 		text = toPokemonId(text);
 		let mons = new Map();
 		let output = '';
-		for (let i in Tools.data.Pokedex) {
+		for (let i in Dex.data.Pokedex) {
 			let id = i;
-			if (!Tools.data.Pokedex[i].baseSpecies && (Tools.data.Pokedex[i].species.includes(' '))) {
-				id = toPokemonId(Tools.data.Pokedex[i].species);
+			if (!Dex.data.Pokedex[i].baseSpecies && (Dex.data.Pokedex[i].species.includes(' '))) {
+				id = toPokemonId(Dex.data.Pokedex[i].species);
 			}
 			let regexp = new RegExp(`\\b${id}\\b`);
 			if (regexp.test(text)) {
-				let mon = Tools.getTemplate(i);
+				let mon = Dex.getTemplate(i);
 				mons.set(mon.baseSpecies, mon);
 			}
 		}
 		// the previous regex doesn't match "nidoran-m" or "nidoran male"
 		if (/\bnidoran\W{0,1}m(ale){0,1}\b/.test(text)) {
-			mons.set('Nidoran-M', Tools.getTemplate('nidoranm'));
+			mons.set('Nidoran-M', Dex.getTemplate('nidoranm'));
 		}
 		if (/\bnidoran\W{0,1}f(emale){0,1}\b/.test(text)) {
-			mons.set('Nidoran-F', Tools.getTemplate('nidoranf'));
+			mons.set('Nidoran-F', Dex.getTemplate('nidoranf'));
 		}
 		text = toId(text);
 		if (mons.size) {
@@ -184,22 +151,17 @@ class Giveaway {
 		return output;
 	}
 
-	static parseText(text) {
-		// Manually unescape '/' since this is needed for links.
-		return Chat.escapeHTML(text).replace(/&#x2f;/g, '/').replace(linkRegex, uri => `<a href=${uri}>${uri}</a>`);
-	}
-
 	generateWindow(rightSide) {
 		return `<p style="text-align:center;font-size:14pt;font-weight:bold;margin-bottom:2px;">It's giveaway time!</p>` +
 			`<p style="text-align:center;font-size:7pt;">Giveaway started by ${Chat.escapeHTML(this.host.name)}</p>` +
-			`<table style="margin-left:auto;margin-right:auto;"><tr><td style="text-align:center;width:45%">${this.sprite}<p style="font-weight:bold;">Giver: ${this.giver}</p>${Giveaway.parseText(this.prize)}<br />OT: ${Chat.escapeHTML(this.ot)}, TID: ${this.tid}</td>` +
-			`<td style="text-align:center;width:45%">${rightSide}</td></tr></table><p style="text-align:center;font-size:7pt;font-weight:bold;"><u>Note:</u> Please do not join if you don't have a 3DS and a copy of Pokémon Sun/Moon.</p>`;
+			`<table style="margin-left:auto;margin-right:auto;"><tr><td style="text-align:center;width:45%">${this.sprite}<p style="font-weight:bold;">Giver: ${this.giver}</p>${Chat.parseText(this.prize)}<br />OT: ${Chat.escapeHTML(this.ot)}, TID: ${this.tid}</td>` +
+			`<td style="text-align:center;width:45%">${rightSide}</td></tr></table><p style="text-align:center;font-size:7pt;font-weight:bold;"><u>Note:</u> Please do not join if you don't have a 3DS, a copy of Pokémon Sun/Moon, or are currently unable to receive the prize.</p>`;
 	}
 }
 
 class QuestionGiveaway extends Giveaway {
-	constructor(host, giver, room, ot, tid, prize, question, answers) {
-		super(host, giver, room, ot, tid, prize);
+	constructor(host, giver, room, ot, tid, fc, prize, question, answers) {
+		super(host, giver, room, ot, tid, fc, prize);
 		this.type = 'question';
 
 		this.question = question;
@@ -276,10 +238,11 @@ class QuestionGiveaway extends Giveaway {
 				this.changeUhtml('<p style="text-align:center;font-size:13pt;font-weight:bold;">The giveaway has ended! Scroll down to see the answer.</p>');
 				this.phase = 'ended';
 				this.clearTimer();
-				this.room.modlog(`${this.winner.name} won ${this.giver.name}'s giveaway for a "${this.prize}" (OT: ${this.ot} TID: ${this.tid})`);
+				this.room.modlog(`${this.winner.name} won ${this.giver.name}'s giveaway for a "${this.prize}" (OT: ${this.ot} TID: ${this.tid} FC: ${this.fc})`);
 				this.send(this.generateWindow(`<p style="text-align:center;font-size:12pt;"><b>${Chat.escapeHTML(this.winner.name)}</b> won the giveaway! Congratulations!</p>` +
 				`<p style="text-align:center;">${this.question}<br />Correct answer${Chat.plural(this.answers)}: ${this.answers.join(', ')}</p>`));
-				if (this.winner.connected) this.winner.popup(`You have won the giveaway. PM **${Chat.escapeHTML(this.giver.name)}** to claim your prize!`);
+				this.winner.sendTo(this.room, `You have won the giveaway. PM **${Chat.escapeHTML(this.giver.name)}** (FC: ${this.fc}) to claim your prize!`);
+				if (this.winner.connected) this.winner.popup(`You have won the giveaway. PM **${Chat.escapeHTML(this.giver.name)}** (FC: ${this.fc}) to claim your prize!`);
 				if (this.giver.connected) this.giver.popup(`${Chat.escapeHTML(this.winner.name)} has won your question giveaway!`);
 			}
 		}
@@ -297,8 +260,8 @@ class QuestionGiveaway extends Giveaway {
 }
 
 class LotteryGiveaway extends Giveaway {
-	constructor(host, giver, room, ot, tid, prize, winners) {
-		super(host, giver, room, ot, tid, prize);
+	constructor(host, giver, room, ot, tid, fc, prize, winners) {
+		super(host, giver, room, ot, tid, fc, prize);
 
 		this.type = 'lottery';
 
@@ -381,14 +344,123 @@ class LotteryGiveaway extends Giveaway {
 			this.changeUhtml(`<p style="text-align:center;font-size:13pt;font-weight:bold;">The giveaway has ended! Scroll down to see the winner${Chat.plural(this.winners)}.</p>`);
 			this.phase = 'ended';
 			let winnerNames = this.winners.map(winner => winner.name).join(', ');
-			this.room.modlog(`${winnerNames} won ${this.giver.name}'s giveaway for "${this.prize}" (OT: ${this.ot} TID: ${this.tid})`);
+			this.room.modlog(`${winnerNames} won ${this.giver.name}'s giveaway for "${this.prize}" (OT: ${this.ot} TID: ${this.tid} FC: ${this.fc})`);
 			this.send(this.generateWindow(`<p style="text-align:center;font-size:10pt;font-weight:bold;">Lottery Draw</p><p style="text-align:center;">${Object.keys(this.joined).length} users joined the giveaway.<br />Our lucky winner${Chat.plural(this.winners)}: <b>${Chat.escapeHTML(winnerNames)}!</b> Congratulations!</p>`));
 			for (let i = 0; i < this.winners.length; i++) {
-				if (this.winners[i].connected) this.winners[i].popup(`You have won the lottery giveaway! PM **${this.giver.name}** to claim your prize!`);
+				this.winners[i].sendTo(this.room, `You have won the lottery giveaway! PM **${this.giver.name}** (FC: ${this.fc}) to claim your prize!`);
+				if (this.winners[i].connected) this.winners[i].popup(`You have won the lottery giveaway! PM **${this.giver.name}** (FC: ${this.fc}) to claim your prize!`);
 			}
 			if (this.giver.connected) this.giver.popup(`The following users have won your lottery giveaway:\n${Chat.escapeHTML(winnerNames)}`);
 		}
 		delete this.room.giveaway;
+	}
+}
+
+class GtsGiveaway {
+	constructor(room, giver, amount, summary, deposit, lookfor) {
+		if (room.gtsNumber) {
+			room.gtsNumber++;
+		} else {
+			room.gtsNumber = 1;
+		}
+		this.room = room;
+		this.giver = giver;
+		this.left = amount;
+		this.summary = summary;
+		this.deposit = GtsGiveaway.linkify(Chat.escapeHTML(deposit));
+		this.lookfor = lookfor;
+
+		this.sprite = Giveaway.getSprite(this.summary);
+		this.sent = [];
+		this.noDeposits = false;
+
+		this.timer = setInterval(() => this.send(this.generateWindow()), 1000 * 60 * 5);
+		this.send(this.generateWindow());
+	}
+
+	send(content) {
+		this.room.add(`|uhtml|gtsga${this.room.gtsNumber}|<div class="broadcast-blue">${content}</div>`);
+		this.room.update();
+	}
+
+	changeUhtml(content) {
+		this.room.add(`|uhtmlchange|gtsga${this.room.gtsNumber}|<div class="broadcast-blue">${content}</div>`);
+		this.room.update();
+	}
+
+	clearTimer() {
+		if (this.timer) {
+			clearTimeout(this.timer);
+			delete this.timer;
+		}
+	}
+
+	generateWindow() {
+		let sentModifier = this.sent.length ? 5 : 0;
+		let rightSide = this.noDeposits ? `<strong>More Pokémon have been deposited than there are prizes in this giveaway and new deposits will not be accepted. If you have already deposited a Pokémon, please be patient, and do not withdraw your Pokémon.</strong>` : `To participate, deposit <strong>${this.deposit}</strong> into the GTS and look for <strong>${Chat.escapeHTML(this.lookfor)}</strong>`;
+		return `<p style="text-align:center;font-size:14pt;font-weight:bold;margin-bottom:2px;">There is a GTS giveaway going on!</p>` +
+			`<p style="text-align:center;font-size:10pt;margin-top:0px;">Hosted by: ${Chat.escapeHTML(this.giver.name)} | Left: <b>${this.left}</b></p>` +
+			`<table style="margin-left:auto;margin-right:auto;"><tr>` +
+			(sentModifier ? `<td style="text-align:center;width:10%"><b>Last winners:</b><br/>${this.sent.join('<br/>')}</td>` : '') +
+			`<td style="text-align:center;width:15%">${this.sprite}</td><td style="text-align:center;width:${40 - sentModifier}%">${Chat.parseText(this.summary)}</td>` +
+			`<td style="text-align:center;width:${35 - sentModifier}%">${rightSide}</td></tr></table>`;
+	}
+
+	updateLeft(number) {
+		this.left = number;
+		if (this.left < 1) return this.end();
+
+		this.changeUhtml(this.generateWindow());
+	}
+
+	updateSent(ign) {
+		this.left--;
+		if (this.left < 1) return this.end();
+
+		this.sent.push(Chat.escapeHTML(ign));
+		if (this.sent.length > 5) this.sent.shift();
+
+		this.changeUhtml(this.generateWindow());
+	}
+
+	stopDeposits() {
+		this.noDeposits = true;
+
+		this.room.send(`<p style="text-align:center;font-size:11pt">More Pokémon have been deposited than there are prizes in this giveaway and new deposits will not be accepted. If you have already deposited a Pokémon, please be patient, and do not withdraw your Pokémon.</p>`);
+		this.changeUhtml(this.generateWindow());
+	}
+
+	end(force) {
+		if (force) {
+			this.clearTimer();
+			this.changeUhtml('<p style="text-align:center;font-size:13pt;font-weight:bold;">The GTS giveaway was forcibly ended.</p>');
+			this.room.send("The GTS giveaway was forcibly ended.");
+		} else {
+			this.clearTimer();
+			this.changeUhtml(`<p style="text-align:center;font-size:13pt;font-weight:bold;">The GTS giveaway has finished.</p>`);
+			this.room.modlog(`${this.giver.name} has finished their GTS giveaway for "${this.summary}"`);
+			this.send(`<p style="text-align:center;font-size:11pt">The GTS giveaway for a "<strong>${Chat.escapeHTML(this.summary)}</strong>" has finished.</p>`);
+		}
+		delete this.room.gtsga;
+	}
+
+	// This currently doesn't match some of the edge cases the other pokemon matching function does account for (such as Type: Null). However, this should never be used as a fodder mon anyway, so I don't see a huge need to implement it.
+	static linkify(text) {
+		let parsed = text.toLowerCase().replace(/é/g, 'e');
+
+		for (let i in Dex.data.Pokedex) {
+			let id = i;
+			if (!Dex.data.Pokedex[i].baseSpecies && (Dex.data.Pokedex[i].species.includes(' '))) {
+				id = toPokemonId(Dex.data.Pokedex[i].species);
+			}
+			let regexp = new RegExp(`\\b${id}\\b`, 'ig');
+			let res = regexp.exec(parsed);
+			if (res) {
+				let num = Dex.data.Pokedex[i].num < 100 ? (Dex.data.Pokedex[i].num < 10 ? `00${Dex.data.Pokedex[i].num}` : `0${Dex.data.Pokedex[i].num}`) : Dex.data.Pokedex[i].num;
+				return `${text.slice(0, res.index)}<a href="http://www.serebii.net/pokedex-sm/location/${num}.shtml">${text.slice(res.index, res.index + res[0].length)}</a>${text.slice(res.index + res[0].length)}`;
+			}
+		}
+		return text;
 	}
 }
 
@@ -400,17 +472,19 @@ let commands = {
 		if (room.id !== 'wifi' || !target) return false;
 		if (room.giveaway) return this.errorReply("There is already a giveaway going on!");
 
-		let [giver, ot, tid, prize, question, ...answers] = target.split(target.includes('|') ? '|' : ',').map(param => param.trim());
-		if (!(giver && ot && tid && prize && question && answers.length)) return this.errorReply("Invalid arguments specified - /question giver, ot, tid, prize, question, answer(s)");
+		let [giver, ot, tid, fc, prize, question, ...answers] = target.split(target.includes('|') ? '|' : ',').map(param => param.trim());
+		if (!(giver && ot && tid && fc && prize && question && answers.length)) return this.errorReply("Invalid arguments specified - /question giver, ot, tid, fc, prize, question, answer(s)");
 		tid = toId(tid);
-		if (!parseInt(tid) || tid.length < 5 || tid.length > 6) return this.errorReply("Invalid TID");
+		if (isNaN(tid) || tid.length < 5 || tid.length > 6) return this.errorReply("Invalid TID");
+		fc = toId(fc);
+		if (!parseInt(fc) || fc.length !== 12) return this.errorReply("Invalid FC");
 		let targetUser = Users(giver);
 		if (!targetUser || !targetUser.connected) return this.errorReply(`User '${giver}' is not online.`);
 		if (!this.can('warn', null, room) && !(this.can('broadcast', null, room) && user === targetUser)) return this.errorReply("Permission denied.");
 		if (!targetUser.autoconfirmed) return this.errorReply(`User '${targetUser.name}' needs to be autoconfirmed to give something away.`);
 		if (Giveaway.checkBanned(room, targetUser)) return this.errorReply(`User '${targetUser.name}' is giveaway banned.`);
 
-		room.giveaway = new QuestionGiveaway(user, targetUser, room, ot, tid, prize, question, answers);
+		room.giveaway = new QuestionGiveaway(user, targetUser, room, ot, tid, fc, prize, question, answers);
 
 		this.privateModCommand(`(${user.name} started a question giveaway for ${targetUser.name})`);
 	},
@@ -451,10 +525,12 @@ let commands = {
 		if (room.id !== 'wifi' || !target) return false;
 		if (room.giveaway) return this.errorReply("There is already a giveaway going on!");
 
-		let [giver, ot, tid, prize, winners] = target.split(target.includes('|') ? '|' : ',').map(param => param.trim());
-		if (!(giver && ot && tid && prize)) return this.errorReply("Invalid arguments specified - /lottery giver, ot, tid, prize, winners");
+		let [giver, ot, tid, fc, prize, winners] = target.split(target.includes('|') ? '|' : ',').map(param => param.trim());
+		if (!(giver && ot && tid && fc && prize)) return this.errorReply("Invalid arguments specified - /lottery giver, ot, tid, fc, prize, winners");
 		tid = toId(tid);
-		if (!parseInt(tid) || tid.length < 5 || tid.length > 6) return this.errorReply("Invalid TID");
+		if (isNaN(tid) || tid.length < 5 || tid.length > 6) return this.errorReply("Invalid TID");
+		fc = toId(fc);
+		if (!parseInt(fc) || fc.length !== 12) return this.errorReply("Invalid FC");
 		let targetUser = Users(giver);
 		if (!targetUser || !targetUser.connected) return this.errorReply(`User '${giver}' is not online.`);
 		if (!this.can('warn', null, room) && !(this.can('broadcast', null, room) && user === targetUser)) return this.errorReply("Permission denied.");
@@ -467,7 +543,7 @@ let commands = {
 			if (isNaN(numWinners) || numWinners < 1 || numWinners > 10) return this.errorReply("The lottery giveaway can have a minimum of 1 and a maximum of 10 winners.");
 		}
 
-		room.giveaway = new LotteryGiveaway(user, targetUser, room, ot, tid, prize, numWinners);
+		room.giveaway = new LotteryGiveaway(user, targetUser, room, ot, tid, fc, prize, numWinners);
 
 		this.privateModCommand(`(${user.name} started a lottery giveaway for ${targetUser.name})`);
 	},
@@ -495,6 +571,73 @@ let commands = {
 			giveaway.removeUser(user);
 			break;
 		}
+	},
+	// gts commands
+	gts: {
+		new: 'start',
+		start: function (target, room, user) {
+			if (room.id !== 'wifi' || !target) return false;
+			if (room.gtsga) return this.errorReply("There is already a GTS giveaway going on!");
+
+			let [giver, amount, summary, deposit, lookfor] = target.split(target.includes('|') ? '|' : ',').map(param => param.trim());
+			if (!(giver && amount && summary && deposit && lookfor)) return this.errorReply("Invalid arguments specified - /gts start giver, amount, summary, deposit, lookfor");
+			amount = parseInt(amount);
+			if (!amount || amount < 30 || amount > 100) return this.errorReply("Please enter a valid amount. For a GTS giveaway, you need to give away at least 30 mons, and no more than 100.");
+			let targetUser = Users(giver);
+			if (!targetUser || !targetUser.connected) return this.errorReply(`User '${giver}' is not online.`);
+			if (!this.can('warn', null, room)) return this.errorReply("Permission denied.");
+			if (!targetUser.autoconfirmed) return this.errorReply(`User '${targetUser.name}' needs to be autoconfirmed to host a giveaway.`);
+			if (Giveaway.checkBanned(room, targetUser)) return this.errorReply(`User '${targetUser.name}' is giveaway banned.`);
+
+			room.gtsga = new GtsGiveaway(room, targetUser, amount, summary, deposit, lookfor);
+
+			this.privateModCommand(`(${user.name} started a GTS giveaway for ${targetUser.name})`);
+		},
+		left: function (target, room, user) {
+			if (room.id !== 'wifi') return false;
+			if (!room.gtsga) return this.errorReply("There is no GTS giveaway going on!");
+			if (!user.can('warn', null, room) && user !== room.gtsga.giver) return this.errorReply("Only the host or a staff member can update GTS giveaways.");
+			if (!target) {
+				if (!this.runBroadcast()) return;
+				let output = `The GTS giveaway from ${room.gtsga.giver} has ${room.gtsga.left} Pokémon remaining!`;
+				if (room.gtsga.sent.length) output += `Last winners: ${room.gtsga.sent.join(', ')}`;
+				return this.sendReply(output);
+			}
+			let newamount = parseInt(target);
+			if (isNaN(newamount)) return this.errorReply("Please enter a valid amount.");
+			if (newamount > room.gtsga.left) return this.errorReply("The new amount must be lower than the old amount.");
+
+			room.gtsga.updateLeft(newamount);
+		},
+		sent: function (target, room, user) {
+			if (room.id !== 'wifi') return false;
+			if (!room.gtsga) return this.errorReply("There is no GTS giveaway going on!");
+			if (!user.can('warn', null, room) && user !== room.gtsga.giver) return this.errorReply("Only the host or a staff member can update GTS giveaways.");
+
+			if (!target || target.length > 12) return this.errorReply("Please enter a valid IGN.");
+
+			room.gtsga.updateSent(target);
+		},
+		full: function (target, room, user) {
+			if (room.id !== 'wifi') return false;
+			if (!room.gtsga) return this.errorReply("There is no GTS giveaway going on!");
+			if (!user.can('warn', null, room) && user !== room.gtsga.giver) return this.errorReply("Only the host or a staff member can update GTS giveaways.");
+			if (room.gtsga.noDeposits) return this.errorReply("The GTS giveaway was already set to not accept deposits.");
+
+			room.gtsga.stopDeposits();
+		},
+		end: function (target, room, user) {
+			if (room.id !== 'wifi') return this.errorReply("This command can only be used in the Wi-Fi room.");
+			if (!room.gtsga) return this.errorReply("There is no GTS giveaway going on at the moment.");
+			if (!this.can('warn', null, room)) return false;
+
+			if (target && target.length > 300) {
+				return this.errorReply("The reason is too long. It cannot exceed 300 characters.");
+			}
+			room.gtsga.end(true);
+			if (target) target = `: ${target}`;
+			this.privateModCommand(`(The giveaway was forcibly ended by ${user.name}${target})`);
+		},
 	},
 	// general.
 	ban: function (target, room, user) {
@@ -563,13 +706,22 @@ let commands = {
 		case 'staff':
 			if (!this.can('broadcast', null, room)) return;
 			reply = '<strong>Staff commands:</strong><br />' +
-			        '- question or qg <em>User | OT | TID | Prize | Question | Answer[ | Answer2 | Answer3]</em> - Start a new question giveaway (voices can only host for themselves, staff can for all users) (Requires: + % @ * # & ~)<br />' +
-			        '- lottery or lg <em>User | OT | TID | Prize[| Number of Winners]</em> - Starts a lottery giveaway (voices can only host for themselves, staff can for all users) (Requires: + % @ * # & ~)<br />' +
+			        '- question or qg <em>User | OT | TID | Friend Code | Prize | Question | Answer[ | Answer2 | Answer3]</em> - Start a new question giveaway (voices can only host for themselves, staff can for all users) (Requires: + % @ * # & ~)<br />' +
+			        '- lottery or lg <em>User | OT | TID | Friend Code | Prize[| Number of Winners]</em> - Starts a lottery giveaway (voices can only host for themselves, staff can for all users) (Requires: + % @ * # & ~)<br />' +
 			        '- changequestion - Changes the question of a question giveaway (Requires: giveaway host)<br />' +
 			        '- changeanswer - Changes the answer of a question giveaway (Requires: giveaway host)<br />' +
 					'- viewanswer - Shows the answer in a question giveaway (only to giveaway host/giver)<br />' +
 					'- ban - Temporarily bans a user from entering giveaways (Requires: % @ * # & ~)<br />' +
 			        '- end - Forcibly ends the current giveaway (Requires: % @ * # & ~)<br />';
+			break;
+		case 'gts':
+			if (!this.can('broadcast', null, room)) return;
+			reply = '<strong>GTS giveaway commands:</strong><br />' +
+			        '- gts start <em>User | Amount | Summary of given mon | What to deposit | What to look for</em> - Starts a gts giveaway (Requires: % @ * # & ~)<br />' +
+					'- gts left <em>Amount</em> - Updates the amount left for the current GTS giveaway. Without an amount specified, shows how many Pokémon are left, and who the latest winners are.<br />' +
+					'- gts sent <em>IGN</em> - Adds an ign to the list of latest winners, and updates left count accordingly.<br />' +
+					'- gts full - Signifies enough mons have been received, and will update the GTS giveaway to reflect that.<br />' +
+			        '- gts end - Forcibly ends the current gts giveaway (Requires: % @ * # & ~)<br />';
 			break;
 		case 'game':
 		case 'giveaway':
@@ -586,7 +738,8 @@ let commands = {
 			if (!this.runBroadcast()) return;
 			reply = '<b>Wi-Fi room Giveaway help and info</b><br />' +
 			'- help user - shows list of participation commands<br />' +
-			'- help staff - shows giveaway staff commands (Requires: + % @ * # & ~)';
+			'- help staff - shows giveaway staff commands (Requires: + % @ * # & ~)' +
+			'- help gts - shows gts giveaway commands (Requires: + % @ * # & ~)';
 		}
 		this.sendReplyBox(reply);
 	},
@@ -598,4 +751,7 @@ exports.commands = {
 	'gh': commands.help,
 	'qg': commands.question,
 	'lg': commands.lottery,
+	'gts': commands.gts,
+	'left': commands.left,
+	'sent': commands.sent,
 };

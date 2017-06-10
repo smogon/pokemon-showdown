@@ -6,7 +6,7 @@
  *
  * Handles the punishing of users on PS.
  *
- * There are four types of punishments on PS. Locks, bans, namelocks and rangelocks.
+ * There are four types of global punishments on PS. Locks, bans, namelocks and rangelocks.
  * This file contains the lists of users that have been punished (both IPs and usernames),
  * as well as the functions that handle the execution of said punishments.
  *
@@ -33,6 +33,7 @@ const USERID_REGEX = /^[a-z0-9]+$/;
 const PUNISH_TRUSTED = false;
 
 const PUNISHMENT_POINT_VALUES = {MUTE: 2, BLACKLIST: 3, ROOMBAN: 4};
+const AUTOLOCK_POINT_THRESHOLD = 8;
 
 /**
  * a punishment is an array: [punishType, userid, expireTime, reason]
@@ -406,8 +407,9 @@ Punishments.punish = function (user, punishment, recursionKeys) {
 		Punishments.ips.set(ip, punishment);
 		keys.add(ip);
 	}
-	if (!user.userid.startsWith('guest')) {
-		Punishments.userids.set(user.userid, punishment);
+	let lastUserId = user.getLastId();
+	if (!lastUserId.startsWith('guest')) {
+		Punishments.userids.set(lastUserId, punishment);
 	}
 	if (user.autoconfirmed) {
 		Punishments.userids.set(user.autoconfirmed, punishment);
@@ -1096,6 +1098,8 @@ Punishments.checkLockExpiration = function (userid) {
 	const punishment = Punishments.userids.get(userid);
 
 	if (punishment) {
+		let user = Users(userid);
+		if (user && user.permalocked) return ` (never expires; you are permalocked)`;
 		let expiresIn = new Date(punishment[2]).getTime() - Date.now();
 		let expiresDays = Math.round(expiresIn / 1000 / 60 / 60 / 24);
 		if (expiresIn > 1) return ` (expires in around ${expiresDays} day${Chat.plural(expiresDays)})`;
@@ -1209,7 +1213,7 @@ Punishments.monitorRoomPunishments = function (user) {
 			return `<<${room}>> (${punishDesc})`;
 		}).join(', ');
 
-		if (Config.punishmentautolock && points >= 10) {
+		if (Config.punishmentautolock && points >= AUTOLOCK_POINT_THRESHOLD) {
 			let rooms = punishments.map(([room]) => room).join(', ');
 			let reason = `Autolocked for having punishments in ${punishments.length} rooms: ${rooms}`;
 			let message = `${user.name} was locked for having punishments in ${punishments.length} rooms: ${punishmentText}`;

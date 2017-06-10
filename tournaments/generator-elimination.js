@@ -74,7 +74,7 @@ module.exports = (() => {
 	};
 
 	Elimination.prototype.generateBracket = function () {
-		Tools.shuffle(this.getUsers()).forEach(user => {
+		Dex.shuffle(this.getUsers()).forEach(user => {
 			if (!this.tree) {
 				this.tree = {
 					tree: new TreeNode(null, {user: user}),

@@ -16,7 +16,7 @@ exports.BattleScripts = {
 			return this.modifiedStats[statName];
 		},
 		// Gen 1 function to apply a stat modification that is only active until the stat is recalculated or mon switched.
-		// Modified stats are declared in BattlePokemon object in battle-engine.js in about line 303.
+		// Modified stats are declared in the Pokemon object in sim/pokemon.js in about line 681.
 		modifyStat: function (stat, modifier) {
 			if (!(stat in this.stats)) return;
 			this.modifiedStats[stat] = this.battle.clampIntRange(Math.floor(this.modifiedStats[stat] * modifier), 1);
