@@ -531,64 +531,112 @@ exports.BattleScripts = {
 		return damage;
 	},
 	randomTeam: function (side) {
-		let pokemonLeft = 0;
+		let pokemonLeft = 6;
 		let pokemon = [];
-
-		let handicapMons = {'magikarp':1, 'weedle':1, 'kakuna':1, 'caterpie':1, 'metapod':1, 'ditto':1};
-		let nuTiers = {'UU':1, 'BL':1, 'NFE':1, 'LC':1};
-		let uuTiers = {'NFE':1, 'UU':1, 'BL':1};
 
 		let n = 1;
 		let pokemonPool = [];
 		for (let id in this.data.FormatsData) {
 			// FIXME: Not ES-compliant
-			if (n++ > 251 || !this.data.FormatsData[id].randomBattleMoves) continue;
+			if (n++ > 251 || !this.data.FormatsData[id].randomSet1) continue;
 			pokemonPool.push(id);
+			/***** TODO: Remove this block eventually ******/
+			let template = this.getTemplate(id);
+			this.doRandbatsTests(template, id);
+			/***********************************************/
 		}
 
 		// Setup storage.
+		let tierCount = {};
 		let typeCount = {};
-		let uberCount = 0;
-		let nuCount = 0;
-		let hasShitmon = false;
+		let weaknessCount = {
+			'Normal':0,'Fighting':0,'Flying':0,'Poison':0,'Ground':0,'Rock':0,'Bug':0,'Ghost':0,'Steel':0,
+			'Fire':0,'Water':0,'Grass':0,'Electric':0,'Psychic':0,'Ice':0,'Dragon':0,'Dark':0
+		};
+		let resistanceCount = {
+			'Normal':0,'Fighting':0,'Flying':0,'Poison':0,'Ground':0,'Rock':0,'Bug':0,'Ghost':0,'Steel':0,
+			'Fire':0,'Water':0,'Grass':0,'Electric':0,'Psychic':0,'Ice':0,'Dragon':0,'Dark':0
+		};
+		let restrictMoves = {'reflect':1,'lightscreen':1,'rapidspin':1,'spikes':1,'bellydrum':1,'haze':1,'healbell':1,'thief':1,'phazing':1,'sleeptalk':2,'sleeping':2};
 
-		while (pokemonPool.length && pokemonLeft < 6) {
+		while (pokemonPool.length && pokemonLeft > 0) {
 			let template = this.getTemplate(this.sampleNoReplace(pokemonPool));
 			if (!template.exists) continue;
+			let skip = false;
 
-			// Bias the tiers so you get less shitmons and only one of the two Ubers.
-			// If you have a shitmon, you're covered in OUs and Ubers if possible
+			// Ensure 1 Uber at most
+			// Ensure 2 mons of same tier at most (this includes OU,BL,UU,NU; other tiers not supported yet)
 			let tier = template.tier;
 			switch (tier) {
-			case 'LC':
-				if (nuCount > 1 || hasShitmon) continue;
-				break;
 			case 'Uber':
-				// Unless you have one of the worst mons, in that case we allow luck to give you all Ubers.
-				if (uberCount >= 1 && !hasShitmon) continue;
+				if (tierCount['Uber']) skip = true;
 				break;
 			default:
-				if (uuTiers[tier] && (hasShitmon || (nuCount > 2 && this.random(2) >= 1))) continue;
+				if (tierCount[tier] > 1) skip = true;
 			}
 
-			// Limit 2 of any type. Diversity and minor weakness count.
-			// The second of a same type has halved chance of being added.
+			// Ensure the same type not more than twice
+			// 33% discard single-type mon if that type already exists
+			// 66% discard double-type mon if both types already exist
 			let types = template.types;
-			let skip = false;
-			for (let t = 0; t < types.length; t++) {
-				if (typeCount[types[t]] > 1 || (typeCount[types[t]] === 1 && this.random(2) >= 1)) {
-					skip = true;
-					break;
-				}
+			if (types.length === 1) {
+				if (typeCount[types[0]] > 1) skip = true;
+				if (typeCount[types[0]] && this.random(3) === 0) skip = true;
+			} else if (types.length === 2) {
+				if (typeCount[types[0]] > 1 || typeCount[types[1]] > 1) skip = true;
+				if (typeCount[types[0]] && typeCount[types[1]] && this.random(3) > 0) skip = true;
 			}
-			if (skip) continue;
 
-			// The set passes the limitations.
-			let set = this.randomSet(template, pokemon.length);
-			pokemon.push(set);
+			// Ensure the weakness-resistance balance is 2 points or lower for all types,
+			// but ensure no more than 3 pokemon weak to the same regardless.
+			let weaknesses = [];
+			for (let type in weaknessCount) {
+				let weak = Tools.getImmunity(type, template) && Tools.getEffectiveness(type, template) > 0;
+				if (!weak) continue;
+				if (weaknessCount[type] > 2 || weaknessCount[type] - resistanceCount[type] > 1) {
+					skip = true;
+				}
+				weaknesses.push(type);
+			}
+			let resistances = [];
+			for (let type in resistanceCount) {
+				let resist = !Tools.getImmunity(type, template) || Tools.getEffectiveness(type, template) < 0;
+				if (resist) resistances.push(type);
+			}
 
-			// Now let's increase the counters. First, the Pokémon left.
-			pokemonLeft++;
+			// In worst case scenario, make sure teams have 6 mons. This shouldn't be necessary
+			if (skip && pokemonPool.length + 1 > pokemonLeft) continue;
+
+			// The set passes the randomTeam limitations.
+			let set = this.randomSet(template, pokemon.length, restrictMoves);
+			if (set.other.discard && pokemonPool.length + 1 > pokemonLeft) continue;
+
+			// TODO: delete this line
+			console.log(pokemonPool.length + ' ' + pokemonLeft);
+
+			// The set also passes the randomSet limitations.
+			pokemon.push(set.moveset);
+
+			// Now let's update the counters. First, the Pokémon left.
+			pokemonLeft --;
+
+			// Moves counter.
+			restrictMoves = set.other.restrictMoves;
+			let moves = set.moveset.moves;
+			for (let t = 0; t < moves.length; t++) {
+				if (restrictMoves[moves[t]]) restrictMoves[moves[t]]--;
+				if (restrictMoves['phazing'] && (moves[t] === "roar" || moves[t] === "whirlwind"))
+					restrictMoves['phazing']--;
+				if (restrictMoves['sleeping'] && (moves[t] === "sleeppowder" || moves[t] === "lovelykiss" || moves[t] === "sing" || moves[t] === "hypnosis" || moves[t] === "spore"))
+					restrictMoves['sleeping']--;
+			}
+
+			// Tier counter.
+			if (tierCount[tier]) {
+				tierCount[tier]++;
+			} else {
+				tierCount[tier] = 1;
+			}
 
 			// Type counter.
 			for (let t = 0; t < types.length; t++) {
@@ -599,243 +647,232 @@ exports.BattleScripts = {
 				}
 			}
 
-			// Increment type bias counters.
-			if (tier === 'Uber') {
-				uberCount++;
-			} else if (nuTiers[tier]) {
-				nuCount++;
+			// Weakness and resistance counter.
+			for (let t = 0; t < weaknesses.length; t++) {
+				weaknessCount[weaknesses[t]]++;
 			}
-
-			// Is it a shitmon?
-			if (handicapMons[template.speciesid]) hasShitmon = true;
+			for (let t = 0; t < resistances.length; t++) {
+				resistanceCount[resistances[t]]++;
+			}
 		}
+
+		// TODO: delete these lines
+		console.log(JSON.stringify(restrictMoves));
+		console.log(JSON.stringify(weaknessCount));
+		console.log(JSON.stringify(resistanceCount));
 
 		return pokemon;
 	},
+	doRandbatsTests: function (template, id) {
+	// Temporary tests; TODO remove this function eventually
+
+		template = this.getTemplate(template);
+
+		let numMoves = 0;
+		let set1 = template.randomSet1;
+		let set2 = template.randomSet2;
+		let set3 = template.randomSet3;
+		let set4 = template.randomSet4;
+		let set5 = template.randomSet5;
+		if (set2 && !set1) console.log('Set error in pokemon ' + id);
+		if (set3 && !set2) console.log('Set error in pokemon ' + id);
+		if (set4 && !set3) console.log('Set error in pokemon ' + id);
+		if (set5 && !set4) console.log('Set error in pokemon ' + id);
+		if (set1) {
+			if (set1.baseMove1) numMoves ++;
+			if (set1.baseMove2) numMoves ++;
+			if (set1.baseMove3) numMoves ++;
+			if (set1.baseMove4) numMoves ++;
+			if (set1.fillerMoves1) numMoves ++;
+			if (set1.fillerMoves2) numMoves ++;
+			if (set1.fillerMoves3) numMoves ++;
+			if (set1.fillerMoves4) numMoves ++;
+			if (numMoves !== 4) console.log('Error in pokemon ' + id);
+		}
+		numMoves = 0;
+		if (set2) {
+			if (set2.baseMove1) numMoves ++;
+			if (set2.baseMove2) numMoves ++;
+			if (set2.baseMove3) numMoves ++;
+			if (set2.baseMove4) numMoves ++;
+			if (set2.fillerMoves1) numMoves ++;
+			if (set2.fillerMoves2) numMoves ++;
+			if (set2.fillerMoves3) numMoves ++;
+			if (set2.fillerMoves4) numMoves ++;
+			if (numMoves !== 4) console.log('Error in pokemon ' + id);
+		}
+		numMoves = 0;
+		if (set3) {
+			if (set3.baseMove1) numMoves ++;
+			if (set3.baseMove2) numMoves ++;
+			if (set3.baseMove3) numMoves ++;
+			if (set3.baseMove4) numMoves ++;
+			if (set3.fillerMoves1) numMoves ++;
+			if (set3.fillerMoves2) numMoves ++;
+			if (set3.fillerMoves3) numMoves ++;
+			if (set3.fillerMoves4) numMoves ++;
+			if (numMoves !== 4) console.log('Error in pokemon ' + id);
+		}
+		numMoves = 0;
+		if (set4) {
+			if (set4.baseMove1) numMoves ++;
+			if (set4.baseMove2) numMoves ++;
+			if (set4.baseMove3) numMoves ++;
+			if (set4.baseMove4) numMoves ++;
+			if (set4.fillerMoves1) numMoves ++;
+			if (set4.fillerMoves2) numMoves ++;
+			if (set4.fillerMoves3) numMoves ++;
+			if (set4.fillerMoves4) numMoves ++;
+			if (numMoves !== 4) console.log('Error in pokemon ' + id);
+		}
+		numMoves = 0;
+		if (set5) {
+			if (set5.baseMove1) numMoves ++;
+			if (set5.baseMove2) numMoves ++;
+			if (set5.baseMove3) numMoves ++;
+			if (set5.baseMove4) numMoves ++;
+			if (set5.fillerMoves1) numMoves ++;
+			if (set5.fillerMoves2) numMoves ++;
+			if (set5.fillerMoves3) numMoves ++;
+			if (set5.fillerMoves4) numMoves ++;
+			if (numMoves !== 4) console.log('Error in pokemon ' + id);
+		}
+	},
 	// Random set generation for Gen 2 Random Battles.
-	randomSet: function (template, slot) {
+	randomSet: function (template, slot, restrictMoves) {
 		if (slot === undefined) slot = 1;
 		template = this.getTemplate(template);
 		if (!template.exists) template = this.getTemplate('unown');
 
-		let movePool = template.randomBattleMoves.slice();
+		let randomSetNumber = 0;
+		let set = template.randomSet1;
 		let moves = [];
-		let hasType = {};
-		hasType[template.types[0]] = true;
-		if (template.types[1]) hasType[template.types[1]] = true;
 		let hasMove = {};
-		let counter = {};
-		let setupType = '';
-		let item = 'leftovers';
+		let item = '';
 		let ivs = {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30};
 
-		// Moves that boost Attack:
-		let PhysicalSetup = {
-			swordsdance:1, sharpen:1,
+		let discard = false;
+		let rerollsLeft = 3;
+		let isPhazingMove = function(move) {
+			return (move === "roar" || move === "whirlwind");
 		};
-		// Moves which boost Special Attack:
-		let SpecialSetup = {
-			growth:1,
+		let isSleepMove = function(move) {
+			return (move === "sleeppowder" || move === "lovelykiss" || move === "sing" || move === "hypnosis" || move === "spore");
 		};
 
+		// Choose one of the available sets (up to four) at random
+		// Prevent certain moves from showing up more than once or twice:
+		// sleeptalk, reflect, lightscreen, rapidspin, spikes, bellydrum, heal bell, (p)hazing moves, sleep moves
 		do {
-			// Keep track of all moves we have:
+			moves = [];
 			hasMove = {};
-			for (let k = 0; k < moves.length; k++) {
-				if (moves[k].substr(0, 11) === 'hiddenpower') {
-					hasMove['hiddenpower'] = true;
-				} else {
-					hasMove[moves[k]] = true;
-				}
+
+			if (template.randomSet2) {
+				randomSetNumber = this.random(15);
+				if (randomSetNumber < template.randomSet1.chance) set = template.randomSet1;
+				else if (randomSetNumber < template.randomSet2.chance) set = template.randomSet2;
+				else if (template.randomSet3 && randomSetNumber < template.randomSet3.chance) set = template.randomSet3;
+				else if (template.randomSet4 && randomSetNumber < template.randomSet4.chance) set = template.randomSet4;
+				else if (template.randomSet5) set = template.randomSet5;
 			}
 
-			// Choose next 4 moves from learnset/viable moves and add them to moves list:
-			while (moves.length < 4 && movePool.length) {
-				let moveid = this.sampleNoReplace(movePool);
-				if (moveid.substr(0, 11) === 'hiddenpower') {
-					if (hasMove['hiddenpower']) continue;
-					hasMove['hiddenpower'] = true;
-				} else {
-					hasMove[moveid] = true;
-				}
-				moves.push(moveid);
+			// Even if we want to discard this set, return a proper moveset in case there's no room to discard more Pokemon
+			// Add the base moves (between 0 and 4) of the chosen set
+			if (set.baseMove1 && moves.length < 4) moves.push(set.baseMove1);
+			if (set.baseMove2 && moves.length < 4) moves.push(set.baseMove2);
+			if (set.baseMove3 && moves.length < 4) moves.push(set.baseMove3);
+			if (set.baseMove4 && moves.length < 4) moves.push(set.baseMove4);
+
+			// Add the filler moves (between 0 and 4) of the chosen set
+			if (set.fillerMoves1 && moves.length < 4) this.randomMove(moves, hasMove, set.fillerMoves1);
+			if (set.fillerMoves2 && moves.length < 4) this.randomMove(moves, hasMove, set.fillerMoves2);
+			if (set.fillerMoves3 && moves.length < 4) this.randomMove(moves, hasMove, set.fillerMoves3);
+			if (set.fillerMoves4 && moves.length < 4) this.randomMove(moves, hasMove, set.fillerMoves4);
+
+			// Make sure it's not an undesired moveset according to restrictMoves and the rest of the team
+			rerollsLeft --;
+			discard = false;
+			for (let t = 0; t < moves.length; t++) {
+				if (restrictMoves[moves[t]] === 0) { discard = true; break; }
+				if (isPhazingMove(moves[t]) && restrictMoves['phazing'] === 0) { discard = true; break; }
+				if (isSleepMove(moves[t]) && restrictMoves['sleeping'] === 0) { discard = true; break; }
 			}
 
-			counter = {Physical: 0, Special: 0, Status: 0, physicalsetup: 0, specialsetup: 0};
-			for (let k = 0; k < moves.length; k++) {
-				let move = this.getMove(moves[k]);
-				let moveid = move.id;
-				if (!move.damage && !move.damageCallback) {
-					counter[move.category]++;
-				}
-				if (PhysicalSetup[moveid]) {
-					counter['physicalsetup']++;
-				}
-				if (SpecialSetup[moveid]) {
-					counter['specialsetup']++;
-				}
+		} while (rerollsLeft > 0 && discard);
+
+		// many restrictMoves are also rare and/or useful all around, so encourage adding them once to the team
+		// Start accounting for this after the first half of the team has been added
+		let discourage = false;
+		if (!discard && slot > 3) {
+			discourage = true;
+			for (let t = 0; t < moves.length; t++) {
+				if (moves[t] === "sleeptalk" && restrictMoves['sleeptalk'] > 1) { discourage = false; break; }
+				if (moves[t] !== "bellydrum" && moves[t] !== "haze" && moves[t] !== "thief" && restrictMoves[moves[t]] > 0) { discourage = false; break; }
+				if (isPhazingMove(moves[t]) && restrictMoves['phazing'] > 0) { discourage = false; break; }
+				if (isSleepMove(moves[t]) && restrictMoves['sleeping'] > 1) { discourage = false; break; }
 			}
-
-			if (counter['specialsetup']) {
-				setupType = 'Special';
-			} else if (counter['physicalsetup']) {
-				setupType = 'Physical';
-			}
-
-			for (let k = 0; k < moves.length; k++) {
-				let moveid = moves[k];
-				let move = this.getMove(moveid);
-				let rejected = false;
-				if (moveid.substr(0, 11) === 'hiddenpower') {
-					// Check for hidden power DVs
-					let HPdvs = this.getType(move.type).HPdvs;
-					for (let dv in HPdvs) {
-						ivs[dv] = HPdvs[dv] * 2;
-					}
-					moveid = 'hiddenpower';
-				}
-				if (!template.essentialMove || moveid !== template.essentialMove) {
-					switch (moveid) {
-					// bad after setup
-					case 'seismictoss': case 'nightshade':
-						if (setupType) rejected = true;
-						break;
-					// bit redundant to have both
-					case 'flamethrower':
-						if (hasMove['fireblast']) rejected = true;
-						break;
-					case 'fireblast':
-						if (hasMove['flamethrower']) rejected = true;
-						break;
-					case 'icebeam':
-						if (hasMove['blizzard']) rejected = true;
-						break;
-					// Hydropump and surf are both valid options, just avoid one with eachother.
-					case 'hydropump':
-						if (hasMove['surf']) rejected = true;
-						break;
-					case 'surf':
-						if (hasMove['hydropump']) rejected = true;
-						break;
-					case 'petaldance': case 'solarbeam':
-						if (hasMove['megadrain'] || hasMove['razorleaf']) rejected = true;
-						break;
-					case 'megadrain':
-						if (hasMove['razorleaf']) rejected = true;
-						break;
-					case 'thunder':
-						if (hasMove['thunderbolt']) rejected = true;
-						break;
-					case 'thunderbolt':
-						if (hasMove['thunder']) rejected = true;
-						break;
-					case 'bonemerang':
-						if (hasMove['earthquake']) rejected = true;
-						break;
-					case 'rest':
-						if (hasMove['recover'] || hasMove['softboiled'] || hasMove['roar']) rejected = true;
-						break;
-					case 'softboiled':
-						if (hasMove['recover']) rejected = true;
-						break;
-					case 'sharpen':
-					case 'swordsdance':
-						if (counter['Special'] > counter['Physical'] || hasMove['slash'] || !counter['Physical'] || hasMove['growth']) rejected = true;
-						break;
-					case 'growth':
-						if (counter['Special'] < counter['Physical'] || hasMove['swordsdance'] || hasMove['amnesia']) rejected = true;
-						break;
-					case 'doubleedge':
-						if (hasMove['bodyslam']) rejected = true;
-						break;
-					case 'mimic':
-						if (hasMove['mirrormove']) rejected = true;
-						break;
-					case 'superfang':
-						if (hasMove['bodyslam']) rejected = true;
-						break;
-					case 'rockslide':
-						if (hasMove['earthquake'] && hasMove['bodyslam'] && hasMove['hyperbeam']) rejected = true;
-						break;
-					case 'bodyslam':
-						if (hasMove['thunderwave']) rejected = true;
-						break;
-					case 'megakick':
-						if (hasMove['bodyslam']) rejected = true;
-						break;
-					case 'eggbomb':
-						if (hasMove['hyperbeam']) rejected = true;
-						break;
-					case 'triattack':
-						if (hasMove['doubleedge']) rejected = true;
-						break;
-					case 'supersonic':
-						if (hasMove['confuseray']) rejected = true;
-						break;
-					case 'poisonpowder':
-						if (hasMove['toxic'] || counter['Status'] > 1) rejected = true;
-						break;
-					case 'stunspore':
-						if (hasMove['sleeppowder'] || counter['Status'] > 1) rejected = true;
-						break;
-					case 'sleeppowder':
-						if (hasMove['stunspore'] || counter['Status'] > 2) rejected = true;
-						break;
-					case 'toxic':
-						if (hasMove['sleeppowder'] || hasMove['stunspore'] || counter['Status'] > 1) rejected = true;
-						break;
-					} // End of switch for moveid
-				}
-				if (rejected && movePool.length) {
-					moves.splice(k, 1);
-					break;
-				}
-				counter[move.category]++;
-			} // End of for
-		} while (moves.length < 4 && movePool.length);
-
-		// Add specific items.
-		switch (template.species) {
-		case 'Cubone':
-		case 'Marowak':
-			item = 'thickclub';
-			ivs.atk = 26;
-			break;
-		case 'Pikachu':
-			item = 'lightball';
-			break;
-		case 'Ditto':
-			item = 'metalpowder';
-			break;
 		}
+		if (discourage && this.random(2) === 0) discard = true;
+
+		// Add the held item
+		// TODO: for some reason, items like Thick Club are not working in randbats
+		if (set.item) item = set.item[this.random(set.item.length)];
+
+		//TODO: adjust ivs for hiddenpower, and careful with gender
 
 		let levelScale = {
-			LC: 96,
-			NFE: 90,
-			UU: 85,
-			BL: 83,
-			OU: 79,
-			Uber: 74,
+			LC: 90, // unused
+			NFE: 84, // unused
+			NU: 78,
+			UU: 74,
+			BL: 70,
+			OU: 68,
+			Uber: 64,
 		};
-		// Hollistic judgment.
 		let customScale = {
-			Caterpie: 99, Kakuna: 99, Magikarp: 99, Metapod: 99, Weedle: 99, Pichu: 99, Smoochum: 99,
-			Clefairy: 95, "Farfetch'd": 99, Igglybuff: 99, Jigglypuff: 99, Ditto: 99, Mewtwo: 70,
-			Dragonite: 85, Cloyster: 83, Staryu: 90,
+			Caterpie: 99, Kakuna: 99, Magikarp: 99, Metapod: 99, Weedle: 99, // unused
+			Unown: 98, Wobbuffet: 82, Ditto: 82,
+			Snorlax: 66, Nidoqueen: 70,
 		};
 		let level = levelScale[template.tier] || 90;
 		if (customScale[template.name]) level = customScale[template.name];
 
 		return {
-			name: template.name,
-			moves: moves,
-			ability: 'None',
-			evs: {hp: 255, atk: 255, def: 255, spa: 255, spd: 255, spe: 255},
-			ivs: ivs,
-			item: item,
-			level: level,
-			shiny: false,
-			gender: template.gender ? template.gender : 'M',
+			moveset: {
+				name: template.name,
+				moves: moves,
+				ability: 'None',
+				evs: {hp: 255, atk: 255, def: 255, spa: 255, spd: 255, spe: 255},
+				ivs: ivs,
+				item: item,
+				level: level,
+				shiny: false,
+				gender: template.gender ? template.gender : 'M',
+			},
+			other: {
+				discard: discard,
+				restrictMoves: restrictMoves,
+			},
 		};
 	},
+	randomMove: function (moves, hasMove, fillerMoves) {
+		let index = 0;
+		let done = false;
+
+		do {
+			index = this.random(fillerMoves.length);
+			if (!hasMove[fillerMoves[index]] && !(hasMove[fillerMoves[index].substr(0, 11)])) {
+				// push the move if not yet known
+				moves.push(fillerMoves[index]);
+				done = true;
+
+				if (fillerMoves[index].substr(0, 11) === 'hiddenpower') {
+					// only one hiddenpower is allowed
+					hasMove['hiddenpower'] = true;
+				} else {
+					hasMove[fillerMoves[index]] = true;
+				}
+			}
+		} while (!done);
+	}
 };
