@@ -594,7 +594,7 @@ exports.BattleScripts = {
 			// but ensure no more than 3 pokemon weak to the same regardless.
 			let weaknesses = [];
 			for (let type in weaknessCount) {
-				let weak = Dex.getImmunity(type, template) && Dex.getEffectiveness(type, template) > 0;
+				let weak = this.getImmunity(type, template) && this.getEffectiveness(type, template) > 0;
 				if (!weak) continue;
 				if (weaknessCount[type] > 2 || weaknessCount[type] - resistanceCount[type] > 1) {
 					skip = true;
@@ -603,7 +603,7 @@ exports.BattleScripts = {
 			}
 			let resistances = [];
 			for (let type in resistanceCount) {
-				let resist = !Dex.getImmunity(type, template) || Dex.getEffectiveness(type, template) < 0;
+				let resist = !this.getImmunity(type, template) || this.getEffectiveness(type, template) < 0;
 				if (resist) resistances.push(type);
 			}
 
