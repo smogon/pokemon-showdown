@@ -686,7 +686,7 @@ if (process.send && module === process.mainModule) {
 		});
 	}
 
-	require('./repl').start('sim-', process.pid, cmd => eval(cmd));
+	require('./repl').start(`sim-${process.pid}`, cmd => eval(cmd));
 
 	let Battles = new Map();
 

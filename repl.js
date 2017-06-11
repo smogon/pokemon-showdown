@@ -1,65 +1,77 @@
 'use strict';
 
-const REPL_ENABLED = true;
-
 const fs = require('fs');
 const path = require('path');
 const net = require('net');
+const repl = require('repl');
 
-let sockets = [];
+/**
+ * Contains the pathnames of all active REPL sockets.
+ * @type {Set<string>}
+ */
+const socketPathnames = new Set();
 
-function cleanup() {
-	for (let s = 0; s < sockets.length; ++s) {
+process.once("exit", () => {
+	socketPathnames.forEach(s => {
 		try {
-			fs.unlinkSync(sockets[s]);
+			fs.unlinkSync(s);
 		} catch (e) {}
-	}
-}
-process.on("exit", cleanup);
+	});
+});
 
 // exit handlers aren't called by the default handler
 if (process.listeners('SIGHUP').length === 0) {
-	process.on('SIGHUP', () => process.exit(128 + 1));
+	process.once('SIGHUP', () => process.exit(128 + 1));
 }
 if (process.listeners('SIGINT').length === 0) {
-	process.on('SIGINT', () => process.exit(128 + 2));
+	process.once('SIGINT', () => process.exit(128 + 2));
 }
 
-// The eval function is passed in because there is no other way to access a file's non-global context
-exports.start = function (prefix, suffix, evalFunction) {
-	if (!REPL_ENABLED) return;
-	if (process.platform === 'win32') return; // Windows doesn't support sockets mounted in the filesystem
+/**
+ * Starts a REPL server, using a UNIX socket for IPC. The eval function
+ * parametre is passed in because there is no other way to access a file's
+ * non-global context.
+ *
+ * @param {string} filename
+ * @param {Function} evalFunction
+ */
+exports.start = function start(filename, evalFunction) {
+	if ('repl' in Config && !Config.repl) return;
 
-	let resolvedPrefix = path.resolve(__dirname, Config.replsocketprefix || 'logs/repl', prefix);
-	if (!evalFunction) {
-		evalFunction = suffix;
-		suffix = "";
-	}
-	let name = resolvedPrefix + suffix;
+	// TODO: Windows does support the REPL when using named pipes. For now,
+	// this only supports UNIX sockets.
+	if (process.platform === 'win32') return;
 
-	if (prefix === 'app') {
-		// Clear out any old sockets
-		let directory = path.dirname(resolvedPrefix);
+	if (filename === 'app') {
+		// Clean up old REPL sockets.
+		let directory = path.dirname(path.resolve(__dirname, Config.replsocketprefix || 'logs/repl', 'app'));
 		for (let file of fs.readdirSync(directory)) {
-			let stat = fs.statSync(directory + '/' + file);
-			if (!stat.isSocket()) {
-				continue;
-			}
+			let pathname = path.resolve(directory, file);
+			let stat = fs.statSync(pathname);
+			if (!stat.isSocket()) continue;
 
-			let socket = net.connect(directory + '/' + file, () => {
+			let socket = net.connect(pathname, () => {
 				socket.end();
 				socket.destroy();
 			}).on('error', () => {
-				fs.unlink(directory + '/' + file, () => {});
+				fs.unlink(pathname, () => {});
 			});
 		}
 	}
 
-	net.createServer(socket => {
-		require('repl').start({
+	let server = net.createServer(socket => {
+		// @ts-ignore
+		repl.start({
 			input: socket,
 			output: socket,
-			eval: (cmd, context, filename, callback) => {
+			/**
+			 * @param {string} cmd
+			 * @param {any} context
+			 * @param {string} filename
+			 * @param {Function} callback
+			 * @return {any}
+			 */
+			eval(cmd, context, filename, callback) {
 				try {
 					return callback(null, evalFunction(cmd));
 				} catch (e) {
@@ -68,22 +80,32 @@ exports.start = function (prefix, suffix, evalFunction) {
 			},
 		}).on('exit', () => socket.end());
 		socket.on('error', () => socket.destroy());
-	}).listen(name, () => {
-		fs.chmodSync(name, Config.replsocketmode || 0o600);
-		sockets.push(name);
-	}).on('error', e => {
-		if (e.code === "EADDRINUSE") {
-			fs.unlink(name, e => {
-				if (e && e.code !== "ENOENT") {
-					require('./crashlogger')(e, 'REPL: ' + name);
-					return;
+	});
+
+	let pathname = path.resolve(__dirname, Config.replsocketprefix || 'logs/repl', filename);
+	server.listen(pathname, () => {
+		fs.chmodSync(pathname, Config.replsocketmode || 0o600);
+		socketPathnames.add(pathname);
+	});
+
+	server.once('error', err => {
+		// @ts-ignore
+		if (err.code === "EADDRINUSE") {
+			fs.unlink(pathname, _err => {
+				// @ts-ignore
+				if (_err && _err.code !== "ENOENT") {
+					require('./crashlogger')(_err, `REPL: ${filename}`);
 				}
-
-				exports.start(prefix, suffix, evalFunction);
+				server.close();
 			});
-			return;
+		} else {
+			require('./crashlogger')(err, `REPL: ${filename}`);
+			server.close();
 		}
+	});
 
-		require('./crashlogger')(e, 'REPL: ' + name);
+	server.once('close', () => {
+		socketPathnames.delete(pathname);
+		start(filename, evalFunction);
 	});
 };
