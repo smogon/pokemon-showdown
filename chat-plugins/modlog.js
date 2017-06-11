@@ -279,6 +279,13 @@ exports.commands = {
 		if (targetRoom) roomId = targetRoom.id;
 		if (roomId.startsWith('battle-') || roomId.startsWith('groupchat-')) this.errorReply("Battles and groupchats don't have individual modlogs.");
 
+		// permission checking
+		if (roomId === 'all' || roomId === 'public') {
+			if (!this.can('modlog')) return;
+		} else {
+			if (!this.can('modlog', null, targetRoom)) return;
+		}
+
 		let addModlogLinks = Config.modloglink && (!hideIps || (targetRoom && !targetRoom.isPrivate));
 		// Let's check the number of lines to retrieve or if it's a word instead
 		let lines = 0;
