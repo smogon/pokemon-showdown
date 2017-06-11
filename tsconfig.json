@@ -13,6 +13,7 @@
         "./sim/dex-data.js",
         "./sim/dex.js",
         "./sim/prng.js",
+        "./crashlogger.js",
         "./repl.js"
     ]
 }

@@ -1,4 +1,5 @@
 interface AnyObject {[k: string]: any}
 
-var Dex = require('./sim/dex');
-// var Sim = require('./sim');
+let Config = require('./config/config');
+let Dex = require('./sim/dex');
+// let Sim = require('./sim');
