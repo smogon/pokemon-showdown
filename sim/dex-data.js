@@ -133,9 +133,19 @@ class Format extends Effect {
 		super(data, moreData);
 		/** @type {string} */
 		this.mod = Tools.getString(this.mod) || 'gen6';
-		/** @type {'Format', 'Ruleset'} */
+		/** @type {'Format' | 'Ruleset'} */
 		// @ts-ignore
 		this.effectType = Tools.getString(this.effectType) || 'Format';
+		/**
+		 * List of rule names.
+		 * @type {string[]}
+		 */
+		this.ruleset = this.ruleset;
+		/**
+		 * List of banned effecdts.
+		 * @type {string[]}
+		 */
+		this.banlist = this.banlist;
 	}
 }
 
@@ -510,5 +520,3 @@ exports.Item = Item;
 exports.Template = Template;
 exports.Move = Move;
 exports.Ability = Ability;
-
-/** @typedef {{[k: string]: any}} AnyEffect */
