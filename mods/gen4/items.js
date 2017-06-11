@@ -135,7 +135,10 @@ exports.BattleItems = {
 			if (!target.volatiles['substitute']) {
 				user.addVolatile('lifeorb');
 			}
-			return basePower * 1.3;
+			return basePower;
+		},
+		onModifyDamagePhase2: function (damage, source, target, move) {
+			return damage * 1.3;
 		},
 		effect: {
 			duration: 1,
@@ -197,18 +200,24 @@ exports.BattleItems = {
 	"metronome": {
 		inherit: true,
 		effect: {
-			onBasePower: function (basePower, pokemon, target, move) {
-				if (pokemon.item !== 'metronome') {
+			onStart: function (pokemon) {
+				this.effectData.numConsecutive = 0;
+				this.effectData.lastMove = '';
+			},
+			onBeforeMove: function (pokemon, target, move) {
+				if (!pokemon.hasItem('metronome')) {
 					pokemon.removeVolatile('metronome');
 					return;
 				}
-				if (!this.effectData.move || this.effectData.move !== move.id) {
-					this.effectData.move = move.id;
-					this.effectData.numConsecutive = 0;
-				} else if (this.effectData.numConsecutive < 10) {
+				if (this.effectData.lastMove === move.id) {
 					this.effectData.numConsecutive++;
+				} else {
+					this.effectData.numConsecutive = 0;
 				}
-				return basePower * (1 + (this.effectData.numConsecutive / 10));
+				this.effectData.lastMove = move.id;
+			},
+			onModifyDamagePhase2: function (damage, source, target, move) {
+				return damage * (1 + (this.effectData.numConsecutive / 10));
 			},
 		},
 	},
