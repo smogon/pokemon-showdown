@@ -1703,9 +1703,7 @@ class Battle extends Dex.ModdedDex {
 		if (!move) {
 			move = {};
 		}
-		if (!move.type) move.type = '???';
-		let type = move.type;
-		// '???' is typeless damage: used for Struggle and Confusion etc
+
 		let category = this.getCategory(move);
 		let defensiveCategory = move.defensiveCategory || category;
 
@@ -1795,7 +1793,16 @@ class Battle extends Dex.ModdedDex {
 		defense = this.runEvent('Modify' + statTable[defenseStat], defender, attacker, move, defense);
 
 		//int(int(int(2 * L / 5 + 2) * A * P / D) / 50);
-		let baseDamage = Math.floor(Math.floor(Math.floor(2 * level / 5 + 2) * basePower * attack / defense) / 50) + 2;
+		let baseDamage = Math.floor(Math.floor(Math.floor(2 * level / 5 + 2) * basePower * attack / defense) / 50);
+		
+		// Calculate damage modifiers separately (order differs between generations)
+		return this.modifyDamage(baseDamage, pokemon, target, move, suppressMessages);
+	}
+	modifyDamage(baseDamage, pokemon, target, move, suppressMessages) {
+		if (!move.type) move.type = '???';
+		let type = move.type;
+
+		baseDamage += 2;
 
 		// multi-target modifier (doubles only)
 		if (move.spreadHit) {
@@ -1844,14 +1851,14 @@ class Battle extends Dex.ModdedDex {
 
 		if (move.crit && !suppressMessages) this.add('-crit', target);
 
-		if (pokemon.status === 'brn' && basePower && move.category === 'Physical' && !pokemon.hasAbility('guts')) {
+		if (pokemon.status === 'brn' && move.category === 'Physical' && !pokemon.hasAbility('guts')) {
 			if (this.gen < 6 || move.id !== 'facade') {
 				baseDamage = this.modify(baseDamage, 0.5);
 			}
 		}
 
 		// Generation 5 sets damage to 1 before the final damage modifiers only
-		if (this.gen === 5 && basePower && !Math.floor(baseDamage)) {
+		if (this.gen === 5 && !Math.floor(baseDamage)) {
 			baseDamage = 1;
 		}
 
@@ -1864,7 +1871,7 @@ class Battle extends Dex.ModdedDex {
 			this.add('-message', target.name + " couldn't fully protect itself and got hurt! (placeholder)");
 		}
 
-		if (this.gen !== 5 && basePower && !Math.floor(baseDamage)) {
+		if (this.gen !== 5 && !Math.floor(baseDamage)) {
 			return 1;
 		}
 
