@@ -1279,7 +1279,7 @@ if (process.send && module === process.mainModule) {
 	global.toId = Dex.getId;
 	global.Chat = require('./chat');
 
-	require('./repl').start('team-validator-', process.pid, cmd => eval(cmd));
+	require('./repl').start(`team-validator-${process.pid}`, cmd => eval(cmd));
 
 	process.on('message', message => PM.onMessageDownstream(message));
 	process.on('disconnect', () => process.exit());

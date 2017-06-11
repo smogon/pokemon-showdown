@@ -496,5 +496,5 @@ if (cluster.isMaster) {
 
 	console.log(`Test your server at http://${Config.bindaddress === '0.0.0.0' ? 'localhost' : Config.bindaddress}:${Config.port}`);
 
-	require('./repl').start('sockets-', `${cluster.worker.id}-${process.pid}`, cmd => eval(cmd));
+	require('./repl').start(`sockets-${cluster.worker.id}-${process.pid}`, cmd => eval(cmd));
 }
