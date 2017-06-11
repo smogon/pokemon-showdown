@@ -51,9 +51,9 @@ exports.BattleScripts = {
 			}
 
 			// Treat here the items.
-			if ((this.species in {'Cubone':1, 'Marowak':1} && this.item === 'thickclub' && statName === 'atk') || (this.species === 'Pikachu' && this.item === 'lightball' && statName === 'spa')) {
+			if ((this.name in {'Cubone':1, 'Marowak':1} && this.item === 'thickclub' && statName === 'atk') || (this.name === 'Pikachu' && this.item === 'lightball' && statName === 'spa')) {
 				stat *= 2;
-			} else if (this.species === 'Ditto' && this.item === 'metalpowder' && statName in {'def':1, 'spd':1}) {
+			} else if (this.name === 'Ditto' && this.item === 'metalpowder' && statName in {'def':1, 'spd':1}) {
 				// what. the. fuck. stop playing pokémon
 				stat *= 1.5;
 			}
