@@ -141,7 +141,7 @@ function runModlog(room, searchString, exactSearch, maxLines) {
 		const escapedSearchString = searchString.replace(/\W/g, '\\$&');
 		searchStringRegex = new RegExp(escapedSearchString, 'i');
 	} else {
-		searchString = searchString.replace(/[^a-zA-Z0-9]/, '');
+		searchString = toId(searchString);
 		searchStringRegex = new RegExp(`\\b${searchString.split('').join('\\W*')}\\b`, 'i');
 	}
 
@@ -296,7 +296,7 @@ exports.commands = {
 		let wordSearch = (!lines || lines < 0);
 		let searchString = '';
 		if (wordSearch) {
-			searchString = target;
+			searchString = target.trim();
 			lines = RESULTS_MAX_LENGTH;
 		}
 		let exactSearch = '0';
