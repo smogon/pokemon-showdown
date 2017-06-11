@@ -46,6 +46,7 @@ const fs = require('fs');
 const path = require('path');
 
 const Data = require('./dex-data');
+const {Effect, PureEffect, Format, Item, Template, Move, Ability} = Data;
 
 const DATA_DIR = path.resolve(__dirname, '../data');
 const MODS_DIR = path.resolve(__dirname, '../mods');
@@ -82,9 +83,9 @@ if (!Object.values) {
 /** @type {{[mod: string]: ModdedDex}} */
 let dexes = {};
 
-/** @typedef {'Pokedex' | 'FormatsData' | 'Learnsets' | 'Movedex' | 'Statuses' | 'TypeChart' | 'Scripts' | 'Items' | 'Abilities' | 'Natures' | 'Formats' | 'Aliases'} DataType */
+/** @typedef {'Pokedex' | 'FormatsData' | 'Learnsets' | 'Movedex' | 'Statuses' | 'TypeChart' | 'Scripts' | 'Items' | 'Abilities' | 'Natures' | 'Formats'} DataType */
 /** @type {DataType[]} */
-const DATA_TYPES = ['Pokedex', 'FormatsData', 'Learnsets', 'Movedex', 'Statuses', 'TypeChart', 'Scripts', 'Items', 'Abilities', 'Natures', 'Formats', 'Aliases'];
+const DATA_TYPES = ['Pokedex', 'FormatsData', 'Learnsets', 'Movedex', 'Statuses', 'TypeChart', 'Scripts', 'Items', 'Abilities', 'Natures', 'Formats'];
 
 const DATA_FILES = {
 	'Pokedex': 'pokedex',
@@ -104,7 +105,7 @@ const DATA_FILES = {
 /** @typedef {{id: string, name: string, [k: string]: any}} DexTemplate */
 /** @typedef {{[id: string]: AnyObject}} DexTable */
 
-/** @typedef {{Pokedex: DexTable, Movedex: DexTable, Statuses: DexTable, TypeChart: DexTable, Scripts: DexTable, Items: DexTable, Abilities: DexTable, FormatsData: DexTable, Learnsets: DexTable, Aliases: DexTable, Natures: DexTable, Formats: DexTable, MoveCache: Map<string, AnyObject>, ItemCache: Map<string, AnyObject>, AbilityCache: Map<string, AnyObject>, TemplateCache: Map<string, AnyObject>}} DexTableData */
+/** @typedef {{Pokedex: DexTable, Movedex: DexTable, Statuses: DexTable, TypeChart: DexTable, Scripts: DexTable, Items: DexTable, Abilities: DexTable, FormatsData: DexTable, Learnsets: DexTable, Aliases: {[id: string]: string}, Natures: DexTable, Formats: DexTable, MoveCache: Map<string, AnyObject>, ItemCache: Map<string, AnyObject>, AbilityCache: Map<string, AnyObject>, TemplateCache: Map<string, AnyObject>}} DexTableData */
 
 const BattleNatures = {
 	adamant: {name:"Adamant", plus:'atk', minus:'spa'},
@@ -193,7 +194,7 @@ class ModdedDex {
 		return dexes[mod];
 	}
 	/**
-	 * @param {AnyObject | string} format
+	 * @param {Format | string} format
 	 * @return {ModdedDex}
 	 */
 	format(format) {
@@ -313,7 +314,7 @@ class ModdedDex {
 	 * form name (which is the main way Dex.getSpecies(id) differs from
 	 * Dex.getTemplate(id).species).
 	 *
-	 * @param {string | AnyObject} species
+	 * @param {string | Template} species
 	 * @return {string}
 	 */
 	getSpecies(species) {
@@ -321,11 +322,10 @@ class ModdedDex {
 		let template = this.getTemplate(id);
 		if (template.otherForms && template.otherForms.indexOf(id) >= 0) {
 			let form = id.slice(template.species.length);
-			species = template.species + '-' + form[0].toUpperCase() + form.slice(1);
+			return template.species + '-' + form[0].toUpperCase() + form.slice(1);
 		} else {
-			species = template.species;
+			return template.species;
 		}
-		return species;
 	}
 
 	/**
@@ -383,7 +383,7 @@ class ModdedDex {
 	}
 	/**
 	 * @param {string | AnyObject} template
-	 * @return {AnyObject}
+	 * @return {?AnyObject}
 	 */
 	getLearnset(template) {
 		const id = toId(template);
@@ -443,8 +443,8 @@ class ModdedDex {
 		return moveCopy;
 	}
 	/**
-	 * @param {string | AnyObject} name
-	 * @return {AnyEffect}
+	 * @param {string | Effect} name
+	 * @return {Effect}
 	 */
 	getEffect(name) {
 		if (name && typeof name !== 'string') {
@@ -475,8 +475,8 @@ class ModdedDex {
 		return effect;
 	}
 	/**
-	 * @param {string | AnyObject} name
-	 * @return {AnyObject}
+	 * @param {string | Format} name
+	 * @return {Format}
 	 */
 	getFormat(name) {
 		if (name && typeof name !== 'string') {
@@ -668,7 +668,7 @@ class ModdedDex {
 	getBanlistTable(format, subformat, depth) {
 		let banlistTable;
 		if (!depth) depth = 0;
-		if (depth > 8) return; // avoid infinite recursion
+		if (depth > 8) return {}; // avoid infinite recursion
 		if (format.banlistTable && !subformat) {
 			banlistTable = format.banlistTable;
 		} else {
@@ -880,6 +880,7 @@ class ModdedDex {
 			for (let j in searchObj) {
 				let ld = this.levenshtein(cmpTarget, j, maxLd);
 				if (ld <= maxLd) {
+					// @ts-ignore
 					let word = searchObj[j].name || searchObj[j].species || j;
 					let results = this.dataSearch(word, searchIn, word);
 					if (results) {
@@ -1001,7 +1002,7 @@ class ModdedDex {
 
 	/**
 	 * @param {string} buf
-	 * @return {AnyObject[]}
+	 * @return {?AnyObject[]}
 	 */
 	fastUnpackTeam(buf) {
 		if (!buf) return null;
@@ -1016,25 +1017,25 @@ class ModdedDex {
 
 			// name
 			j = buf.indexOf('|', i);
-			if (j < 0) return;
+			if (j < 0) return null;
 			set.name = buf.substring(i, j);
 			i = j + 1;
 
 			// species
 			j = buf.indexOf('|', i);
-			if (j < 0) return;
+			if (j < 0) return null;
 			set.species = buf.substring(i, j) || set.name;
 			i = j + 1;
 
 			// item
 			j = buf.indexOf('|', i);
-			if (j < 0) return;
+			if (j < 0) return null;
 			set.item = buf.substring(i, j);
 			i = j + 1;
 
 			// ability
 			j = buf.indexOf('|', i);
-			if (j < 0) return;
+			if (j < 0) return null;
 			let ability = buf.substring(i, j);
 			let template = dexes['base'].getTemplate(set.species);
 			set.ability = (template.abilities && ability in {'':1, 0:1, 1:1, H:1} ? template.abilities[ability || '0'] : ability);
@@ -1042,19 +1043,19 @@ class ModdedDex {
 
 			// moves
 			j = buf.indexOf('|', i);
-			if (j < 0) return;
+			if (j < 0) return null;
 			set.moves = buf.substring(i, j).split(',', 24);
 			i = j + 1;
 
 			// nature
 			j = buf.indexOf('|', i);
-			if (j < 0) return;
+			if (j < 0) return null;
 			set.nature = buf.substring(i, j);
 			i = j + 1;
 
 			// evs
 			j = buf.indexOf('|', i);
-			if (j < 0) return;
+			if (j < 0) return null;
 			if (j !== i) {
 				let evs = buf.substring(i, j).split(',', 6);
 				set.evs = {
@@ -1070,13 +1071,13 @@ class ModdedDex {
 
 			// gender
 			j = buf.indexOf('|', i);
-			if (j < 0) return;
+			if (j < 0) return null;
 			if (i !== j) set.gender = buf.substring(i, j);
 			i = j + 1;
 
 			// ivs
 			j = buf.indexOf('|', i);
-			if (j < 0) return;
+			if (j < 0) return null;
 			if (j !== i) {
 				let ivs = buf.substring(i, j).split(',', 6);
 				set.ivs = {
@@ -1092,13 +1093,13 @@ class ModdedDex {
 
 			// shiny
 			j = buf.indexOf('|', i);
-			if (j < 0) return;
+			if (j < 0) return null;
 			if (i !== j) set.shiny = true;
 			i = j + 1;
 
 			// level
 			j = buf.indexOf('|', i);
-			if (j < 0) return;
+			if (j < 0) return null;
 			if (i !== j) set.level = parseInt(buf.substring(i, j));
 			i = j + 1;
 
@@ -1123,8 +1124,8 @@ class ModdedDex {
 	}
 
 	/**
-	 * @param {AnyObject} obj
-	 * @return {AnyObject}
+	 * @param {any} obj
+	 * @return {any}
 	 */
 	deepClone(obj) {
 		if (typeof obj === 'function') return obj;
@@ -1211,7 +1212,8 @@ class ModdedDex {
 			if (!parentDex || parentDex === this) throw new Error("Unable to load " + this.currentMod + ". `inherit` should specify a parent mod from which to inherit data, or must be not specified.");
 		}
 
-		for (let dataType of DATA_TYPES) {
+		// @ts-ignore
+		for (let dataType of DATA_TYPES.concat('Aliases')) {
 			if (dataType === 'Natures' && this.isBase) {
 				dataCache[dataType] = BattleNatures;
 				continue;
@@ -1258,6 +1260,7 @@ class ModdedDex {
 					}
 				}
 			}
+			dataCache['Aliases'] = parentDex.data['Aliases'];
 		}
 
 		// Flag the generation. Required for team validator.
@@ -1268,7 +1271,8 @@ class ModdedDex {
 		// Execute initialization script.
 		if (BattleScripts.init) BattleScripts.init.call(this);
 
-		return dataCache;
+		// @ts-ignore TypeScript bug
+		return this.dataCache;
 	}
 
 	/**
@@ -1316,7 +1320,7 @@ class ModdedDex {
 
 	/**
 	 * @param {string} id - Format ID
-	 * @param {object} format - Format
+	 * @param {Format} format - Format
 	 */
 	installFormat(id, format) {
 		dexes['base'].includeFormats();

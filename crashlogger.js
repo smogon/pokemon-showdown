@@ -25,10 +25,10 @@ let hadException = false;
  *
  * @param {Error} err
  * @param {string} description
- * @param {any} data
- * @return {string}
+ * @param {?Object} data
+ * @return {?string}
  */
-module.exports = function crashLogger(err, description, data) {
+module.exports = function crashLogger(err, description, data = null) {
 	const datenow = Date.now();
 
 	let stack = (err.stack || err);
@@ -72,4 +72,5 @@ module.exports = function crashLogger(err, description, data) {
 		// lock down the server
 		return 'lockdown';
 	}
+	return null;
 };
