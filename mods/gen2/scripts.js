@@ -544,10 +544,6 @@ exports.BattleScripts = {
 			// FIXME: Not ES-compliant
 			if (n++ > 251 || !this.data.FormatsData[id].randomSet1) continue;
 			pokemonPool.push(id);
-			/***** TODO: Remove this block eventually ******/
-			let template = this.getTemplate(id);
-			this.doRandbatsTests(template, id);
-			/***********************************************/
 		}
 
 		// Setup storage.
@@ -615,9 +611,6 @@ exports.BattleScripts = {
 			let set = this.randomSet(template, pokemon.length, restrictMoves);
 			if (set.other.discard && pokemonPool.length + 1 > pokemonLeft) continue;
 
-			// TODO: delete this line
-			console.log(pokemonPool.length + ' ' + pokemonLeft);
-
 			// The set also passes the randomSet limitations.
 			pokemon.push(set.moveset);
 
@@ -627,11 +620,11 @@ exports.BattleScripts = {
 			// Moves counter.
 			restrictMoves = set.other.restrictMoves;
 			let moves = set.moveset.moves;
-			for (let t = 0; t < moves.length; t++) {
-				if (restrictMoves[moves[t]]) restrictMoves[moves[t]]--;
-				if (restrictMoves['phazing'] && (moves[t] === "roar" || moves[t] === "whirlwind"))
+			for (let i = 0; i < moves.length; i++) {
+				if (restrictMoves[moves[i]]) restrictMoves[moves[i]]--;
+				if (restrictMoves['phazing'] && (moves[i] === "roar" || moves[i] === "whirlwind"))
 					restrictMoves['phazing']--;
-				if (restrictMoves['sleeping'] && (moves[t] === "sleeppowder" || moves[t] === "lovelykiss" || moves[t] === "sing" || moves[t] === "hypnosis" || moves[t] === "spore"))
+				if (restrictMoves['sleeping'] && (moves[i] === "sleeppowder" || moves[i] === "lovelykiss" || moves[i] === "sing" || moves[i] === "hypnosis" || moves[i] === "spore"))
 					restrictMoves['sleeping']--;
 			}
 
@@ -643,104 +636,24 @@ exports.BattleScripts = {
 			}
 
 			// Type counter.
-			for (let t = 0; t < types.length; t++) {
-				if (typeCount[types[t]]) {
-					typeCount[types[t]]++;
+			for (let i = 0; i < types.length; i++) {
+				if (typeCount[types[i]]) {
+					typeCount[types[i]]++;
 				} else {
-					typeCount[types[t]] = 1;
+					typeCount[types[i]] = 1;
 				}
 			}
 
 			// Weakness and resistance counter.
-			for (let t = 0; t < weaknesses.length; t++) {
-				weaknessCount[weaknesses[t]]++;
+			for (let i = 0; i < weaknesses.length; i++) {
+				weaknessCount[weaknesses[i]]++;
 			}
-			for (let t = 0; t < resistances.length; t++) {
-				resistanceCount[resistances[t]]++;
+			for (let i = 0; i < resistances.length; i++) {
+				resistanceCount[resistances[i]]++;
 			}
 		}
-
-		// TODO: delete these lines
-		console.log(JSON.stringify(restrictMoves));
-		console.log(JSON.stringify(weaknessCount));
-		console.log(JSON.stringify(resistanceCount));
 
 		return pokemon;
-	},
-	doRandbatsTests: function (template, id) {
-	// Temporary tests; TODO remove this function eventually
-
-		template = this.getTemplate(template);
-
-		let numMoves = 0;
-		let set1 = template.randomSet1;
-		let set2 = template.randomSet2;
-		let set3 = template.randomSet3;
-		let set4 = template.randomSet4;
-		let set5 = template.randomSet5;
-		if (set2 && !set1) console.log('Set error in pokemon ' + id);
-		if (set3 && !set2) console.log('Set error in pokemon ' + id);
-		if (set4 && !set3) console.log('Set error in pokemon ' + id);
-		if (set5 && !set4) console.log('Set error in pokemon ' + id);
-		if (set1) {
-			if (set1.baseMove1) numMoves ++;
-			if (set1.baseMove2) numMoves ++;
-			if (set1.baseMove3) numMoves ++;
-			if (set1.baseMove4) numMoves ++;
-			if (set1.fillerMoves1) numMoves ++;
-			if (set1.fillerMoves2) numMoves ++;
-			if (set1.fillerMoves3) numMoves ++;
-			if (set1.fillerMoves4) numMoves ++;
-			if (numMoves !== 4) console.log('Error in pokemon ' + id);
-		}
-		numMoves = 0;
-		if (set2) {
-			if (set2.baseMove1) numMoves ++;
-			if (set2.baseMove2) numMoves ++;
-			if (set2.baseMove3) numMoves ++;
-			if (set2.baseMove4) numMoves ++;
-			if (set2.fillerMoves1) numMoves ++;
-			if (set2.fillerMoves2) numMoves ++;
-			if (set2.fillerMoves3) numMoves ++;
-			if (set2.fillerMoves4) numMoves ++;
-			if (numMoves !== 4) console.log('Error in pokemon ' + id);
-		}
-		numMoves = 0;
-		if (set3) {
-			if (set3.baseMove1) numMoves ++;
-			if (set3.baseMove2) numMoves ++;
-			if (set3.baseMove3) numMoves ++;
-			if (set3.baseMove4) numMoves ++;
-			if (set3.fillerMoves1) numMoves ++;
-			if (set3.fillerMoves2) numMoves ++;
-			if (set3.fillerMoves3) numMoves ++;
-			if (set3.fillerMoves4) numMoves ++;
-			if (numMoves !== 4) console.log('Error in pokemon ' + id);
-		}
-		numMoves = 0;
-		if (set4) {
-			if (set4.baseMove1) numMoves ++;
-			if (set4.baseMove2) numMoves ++;
-			if (set4.baseMove3) numMoves ++;
-			if (set4.baseMove4) numMoves ++;
-			if (set4.fillerMoves1) numMoves ++;
-			if (set4.fillerMoves2) numMoves ++;
-			if (set4.fillerMoves3) numMoves ++;
-			if (set4.fillerMoves4) numMoves ++;
-			if (numMoves !== 4) console.log('Error in pokemon ' + id);
-		}
-		numMoves = 0;
-		if (set5) {
-			if (set5.baseMove1) numMoves ++;
-			if (set5.baseMove2) numMoves ++;
-			if (set5.baseMove3) numMoves ++;
-			if (set5.baseMove4) numMoves ++;
-			if (set5.fillerMoves1) numMoves ++;
-			if (set5.fillerMoves2) numMoves ++;
-			if (set5.fillerMoves3) numMoves ++;
-			if (set5.fillerMoves4) numMoves ++;
-			if (numMoves !== 4) console.log('Error in pokemon ' + id);
-		}
 	},
 	// Random set generation for Gen 2 Random Battles.
 	randomSet: function (template, slot, restrictMoves) {
@@ -796,10 +709,10 @@ exports.BattleScripts = {
 			// Make sure it's not an undesired moveset according to restrictMoves and the rest of the team
 			rerollsLeft --;
 			discard = false;
-			for (let t = 0; t < moves.length; t++) {
-				if (restrictMoves[moves[t]] === 0) { discard = true; break; }
-				if (isPhazingMove(moves[t]) && restrictMoves['phazing'] === 0) { discard = true; break; }
-				if (isSleepMove(moves[t]) && restrictMoves['sleeping'] === 0) { discard = true; break; }
+			for (let i = 0; i < moves.length; i++) {
+				if (restrictMoves[moves[i]] === 0) { discard = true; break; }
+				if (isPhazingMove(moves[i]) && restrictMoves['phazing'] === 0) { discard = true; break; }
+				if (isSleepMove(moves[i]) && restrictMoves['sleeping'] === 0) { discard = true; break; }
 			}
 
 		} while (rerollsLeft > 0 && discard);
@@ -809,11 +722,11 @@ exports.BattleScripts = {
 		let discourage = false;
 		if (!discard && slot > 3) {
 			discourage = true;
-			for (let t = 0; t < moves.length; t++) {
-				if (moves[t] === "sleeptalk" && restrictMoves['sleeptalk'] > 1) { discourage = false; break; }
-				if (moves[t] !== "bellydrum" && moves[t] !== "haze" && moves[t] !== "thief" && restrictMoves[moves[t]] > 0) { discourage = false; break; }
-				if (isPhazingMove(moves[t]) && restrictMoves['phazing'] > 0) { discourage = false; break; }
-				if (isSleepMove(moves[t]) && restrictMoves['sleeping'] > 1) { discourage = false; break; }
+			for (let i = 0; i < moves.length; i++) {
+				if (moves[i] === "sleeptalk" && restrictMoves['sleeptalk'] > 1) { discourage = false; break; }
+				if (moves[i] !== "bellydrum" && moves[i] !== "haze" && moves[i] !== "thief" && restrictMoves[moves[i]] > 0) { discourage = false; break; }
+				if (isPhazingMove(moves[i]) && restrictMoves['phazing'] > 0) { discourage = false; break; }
+				if (isSleepMove(moves[i]) && restrictMoves['sleeping'] > 1) { discourage = false; break; }
 			}
 		}
 		if (discourage && this.random(2) === 0) discard = true;
@@ -822,7 +735,30 @@ exports.BattleScripts = {
 		// TODO: for some reason, items like Thick Club are not working in randbats
 		if (set.item) item = set.item[this.random(set.item.length)];
 
-		//TODO: adjust ivs for hiddenpower, and careful with gender
+		// Adjust ivs for hiddenpower
+		for (let i = 0; i < moves.length; i ++) {
+			if (moves[i].substr(0, 11) !== 'hiddenpower') continue;
+			let hpType = moves[i].substr(11, moves[i].length);
+			switch (hpType) {
+				case 'dragon':                 ivs.def = 28; break;
+				case 'ice':                    ivs.def = 26; break;
+				case 'psychic':                ivs.def = 24; break;
+				case 'electric': ivs.atk = 28;               break;
+				case 'grass':    ivs.atk = 28; ivs.def = 28; break;
+				case 'water':    ivs.atk = 28; ivs.def = 26; break;
+				case 'fire':     ivs.atk = 28; ivs.def = 24; break;
+				case 'steel':    ivs.atk = 26;               break;
+				case 'ghost':    ivs.atk = 26; ivs.def = 28; break;
+				case 'bug':      ivs.atk = 26; ivs.def = 26; break;
+				case 'rock':     ivs.atk = 26; ivs.def = 24; break;
+				case 'ground':   ivs.atk = 24;               break;
+				case 'poison':   ivs.atk = 24; ivs.def = 28; break;			
+				case 'flying':   ivs.atk = 24; ivs.def = 26; break;
+				case 'fighting': ivs.atk = 24; ivs.def = 24; break;
+			}
+			if (ivs.atk === 28 || ivs.atk === 24) ivs.hp = 14;
+			if (ivs.def === 28 || ivs.def === 24) ivs.hp -= 8;
+		}
 
 		let levelScale = {
 			LC: 90, // unused
