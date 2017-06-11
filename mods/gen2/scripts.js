@@ -550,14 +550,17 @@ exports.BattleScripts = {
 		let tierCount = {};
 		let typeCount = {};
 		let weaknessCount = {
-			'Normal':0,'Fighting':0,'Flying':0,'Poison':0,'Ground':0,'Rock':0,'Bug':0,'Ghost':0,'Steel':0,
-			'Fire':0,'Water':0,'Grass':0,'Electric':0,'Psychic':0,'Ice':0,'Dragon':0,'Dark':0
+			'Normal':0, 'Fighting':0, 'Flying':0, 'Poison':0, 'Ground':0, 'Rock':0, 'Bug':0, 'Ghost':0, 'Steel':0,
+			'Fire':0, 'Water':0, 'Grass':0, 'Electric':0, 'Psychic':0, 'Ice':0, 'Dragon':0, 'Dark':0,
 		};
 		let resistanceCount = {
-			'Normal':0,'Fighting':0,'Flying':0,'Poison':0,'Ground':0,'Rock':0,'Bug':0,'Ghost':0,'Steel':0,
-			'Fire':0,'Water':0,'Grass':0,'Electric':0,'Psychic':0,'Ice':0,'Dragon':0,'Dark':0
+			'Normal':0, 'Fighting':0, 'Flying':0, 'Poison':0, 'Ground':0, 'Rock':0, 'Bug':0, 'Ghost':0, 'Steel':0,
+			'Fire':0, 'Water':0, 'Grass':0, 'Electric':0, 'Psychic':0, 'Ice':0, 'Dragon':0, 'Dark':0,
 		};
-		let restrictMoves = {'reflect':1,'lightscreen':1,'rapidspin':1,'spikes':1,'bellydrum':1,'haze':1,'healbell':1,'thief':1,'phazing':1,'sleeptalk':2,'sleeping':2};
+		let restrictMoves = {
+			'reflect':1, 'lightscreen':1, 'rapidspin':1, 'spikes':1, 'bellydrum':1, 'haze':1,
+			'healbell':1, 'thief':1, 'phazing':1, 'sleeptalk':2, 'sleeping':2,
+		};
 
 		while (pokemonPool.length && pokemonLeft > 0) {
 			let template = this.getTemplate(this.sampleNoReplace(pokemonPool));
@@ -591,7 +594,7 @@ exports.BattleScripts = {
 			// but ensure no more than 3 pokemon weak to the same regardless.
 			let weaknesses = [];
 			for (let type in weaknessCount) {
-				let weak = Tools.getImmunity(type, template) && Tools.getEffectiveness(type, template) > 0;
+				let weak = Dex.getImmunity(type, template) && Dex.getEffectiveness(type, template) > 0;
 				if (!weak) continue;
 				if (weaknessCount[type] > 2 || weaknessCount[type] - resistanceCount[type] > 1) {
 					skip = true;
@@ -600,7 +603,7 @@ exports.BattleScripts = {
 			}
 			let resistances = [];
 			for (let type in resistanceCount) {
-				let resist = !Tools.getImmunity(type, template) || Tools.getEffectiveness(type, template) < 0;
+				let resist = !Dex.getImmunity(type, template) || Dex.getEffectiveness(type, template) < 0;
 				if (resist) resistances.push(type);
 			}
 
@@ -615,17 +618,19 @@ exports.BattleScripts = {
 			pokemon.push(set.moveset);
 
 			// Now let's update the counters. First, the Pokémon left.
-			pokemonLeft --;
+			pokemonLeft--;
 
 			// Moves counter.
 			restrictMoves = set.other.restrictMoves;
 			let moves = set.moveset.moves;
 			for (let i = 0; i < moves.length; i++) {
 				if (restrictMoves[moves[i]]) restrictMoves[moves[i]]--;
-				if (restrictMoves['phazing'] && (moves[i] === "roar" || moves[i] === "whirlwind"))
+				if (restrictMoves['phazing'] && (moves[i] === "roar" || moves[i] === "whirlwind")) {
 					restrictMoves['phazing']--;
-				if (restrictMoves['sleeping'] && (moves[i] === "sleeppowder" || moves[i] === "lovelykiss" || moves[i] === "sing" || moves[i] === "hypnosis" || moves[i] === "spore"))
+				}
+				if (restrictMoves['sleeping'] && (moves[i] === "sleeppowder" || moves[i] === "lovelykiss" || moves[i] === "sing" || moves[i] === "hypnosis" || moves[i] === "spore")) {
 					restrictMoves['sleeping']--;
+				}
 			}
 
 			// Tier counter.
@@ -670,10 +675,10 @@ exports.BattleScripts = {
 
 		let discard = false;
 		let rerollsLeft = 3;
-		let isPhazingMove = function(move) {
+		let isPhazingMove = function (move) {
 			return (move === "roar" || move === "whirlwind");
 		};
-		let isSleepMove = function(move) {
+		let isSleepMove = function (move) {
 			return (move === "sleeppowder" || move === "lovelykiss" || move === "sing" || move === "hypnosis" || move === "spore");
 		};
 
@@ -686,11 +691,17 @@ exports.BattleScripts = {
 
 			if (template.randomSet2) {
 				randomSetNumber = this.random(15);
-				if (randomSetNumber < template.randomSet1.chance) set = template.randomSet1;
-				else if (randomSetNumber < template.randomSet2.chance) set = template.randomSet2;
-				else if (template.randomSet3 && randomSetNumber < template.randomSet3.chance) set = template.randomSet3;
-				else if (template.randomSet4 && randomSetNumber < template.randomSet4.chance) set = template.randomSet4;
-				else if (template.randomSet5) set = template.randomSet5;
+				if (randomSetNumber < template.randomSet1.chance) {
+					set = template.randomSet1;
+				} else if (randomSetNumber < template.randomSet2.chance) {
+					set = template.randomSet2;
+				} else if (template.randomSet3 && randomSetNumber < template.randomSet3.chance) {
+					set = template.randomSet3;
+				} else if (template.randomSet4 && randomSetNumber < template.randomSet4.chance) {
+					set = template.randomSet4;
+				} else if (template.randomSet5) {
+					set = template.randomSet5;
+				}
 			}
 
 			// Even if we want to discard this set, return a proper moveset in case there's no room to discard more Pokemon
@@ -707,14 +718,13 @@ exports.BattleScripts = {
 			if (set.fillerMoves4 && moves.length < 4) this.randomMove(moves, hasMove, set.fillerMoves4);
 
 			// Make sure it's not an undesired moveset according to restrictMoves and the rest of the team
-			rerollsLeft --;
+			rerollsLeft--;
 			discard = false;
 			for (let i = 0; i < moves.length; i++) {
 				if (restrictMoves[moves[i]] === 0) { discard = true; break; }
 				if (isPhazingMove(moves[i]) && restrictMoves['phazing'] === 0) { discard = true; break; }
 				if (isSleepMove(moves[i]) && restrictMoves['sleeping'] === 0) { discard = true; break; }
 			}
-
 		} while (rerollsLeft > 0 && discard);
 
 		// many restrictMoves are also rare and/or useful all around, so encourage adding them once to the team
@@ -736,25 +746,25 @@ exports.BattleScripts = {
 		if (set.item) item = set.item[this.random(set.item.length)];
 
 		// Adjust ivs for hiddenpower
-		for (let i = 0; i < moves.length; i ++) {
+		for (let i = 0; i < moves.length; i++) {
 			if (moves[i].substr(0, 11) !== 'hiddenpower') continue;
 			let hpType = moves[i].substr(11, moves[i].length);
 			switch (hpType) {
-				case 'dragon':                 ivs.def = 28; break;
-				case 'ice':                    ivs.def = 26; break;
-				case 'psychic':                ivs.def = 24; break;
-				case 'electric': ivs.atk = 28;               break;
-				case 'grass':    ivs.atk = 28; ivs.def = 28; break;
-				case 'water':    ivs.atk = 28; ivs.def = 26; break;
-				case 'fire':     ivs.atk = 28; ivs.def = 24; break;
-				case 'steel':    ivs.atk = 26;               break;
-				case 'ghost':    ivs.atk = 26; ivs.def = 28; break;
-				case 'bug':      ivs.atk = 26; ivs.def = 26; break;
-				case 'rock':     ivs.atk = 26; ivs.def = 24; break;
-				case 'ground':   ivs.atk = 24;               break;
-				case 'poison':   ivs.atk = 24; ivs.def = 28; break;			
-				case 'flying':   ivs.atk = 24; ivs.def = 26; break;
-				case 'fighting': ivs.atk = 24; ivs.def = 24; break;
+			case 'dragon': ivs.def = 28; break;
+			case 'ice': ivs.def = 26; break;
+			case 'psychic': ivs.def = 24; break;
+			case 'electric': ivs.atk = 28; break;
+			case 'grass': ivs.atk = 28; ivs.def = 28; break;
+			case 'water': ivs.atk = 28; ivs.def = 26; break;
+			case 'fire': ivs.atk = 28; ivs.def = 24; break;
+			case 'steel': ivs.atk = 26; break;
+			case 'ghost': ivs.atk = 26; ivs.def = 28; break;
+			case 'bug': ivs.atk = 26; ivs.def = 26; break;
+			case 'rock': ivs.atk = 26; ivs.def = 24; break;
+			case 'ground': ivs.atk = 24; break;
+			case 'poison': ivs.atk = 24; ivs.def = 28; break;
+			case 'flying': ivs.atk = 24; ivs.def = 26; break;
+			case 'fighting': ivs.atk = 24; ivs.def = 24; break;
 			}
 			if (ivs.atk === 28 || ivs.atk === 24) ivs.hp = 14;
 			if (ivs.def === 28 || ivs.def === 24) ivs.hp -= 8;
@@ -814,5 +824,5 @@ exports.BattleScripts = {
 				}
 			}
 		} while (!done);
-	}
+	},
 };

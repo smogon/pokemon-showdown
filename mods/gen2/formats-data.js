@@ -543,14 +543,14 @@ exports.BattleFormatsData = {
 			baseMove1: "leechseed", baseMove2: "moonlight", baseMove3: "sludgebomb",
 			fillerMoves1: ["gigadrain", "sleeppowder", "stunspore", "reflect"],
 		},
-		randomSet1: { // Defensive
+		randomSet2: { // Defensive
 			chance: 12,
 			item: ["leftovers"],
 			baseMove1: "razorleaf", baseMove2: "moonlight",
 			fillerMoves1: ["sleeppowder", "stunspore", "stunspore", "toxic", "reflect"],
 			fillerMoves2: ["sleeppowder", "reflect"],
 		},
-		randomSet1: { // Two attacks
+		randomSet3: { // Two attacks
 			chance: 16,
 			item: ["leftovers"],
 			baseMove1: "gigadrain",
@@ -611,7 +611,7 @@ exports.BattleFormatsData = {
 			baseMove1: "curse", baseMove2: "sludgebomb", baseMove3: "gigadrain",
 			fillerMoves1: ["hiddenpowerground", "hiddenpowerground", "return"],
 		},
-		randomSet2: {
+		randomSet3: {
 			chance: 16, // Special based
 			item: ["leftovers"],
 			baseMove1: "sludgebomb", baseMove2: "psychic",
@@ -706,7 +706,7 @@ exports.BattleFormatsData = {
 		tier: "LC",
 	},
 	arcanine: {
-		randomSet3: { // Attacker
+		randomSet1: { // Attacker
 			chance: 9,
 			item: ["leftovers"],
 			baseMove1: "fireblast",
@@ -751,7 +751,7 @@ exports.BattleFormatsData = {
 			baseMove1: "bellydrum", baseMove2: "bodyslam", baseMove3: "earthquake",
 			fillerMoves1: ["surf", "surf", "hiddenpowerbug", "hiddenpowerrock"],
 		},
-		randomSet2: { // Mixed attacker
+		randomSet3: { // Mixed attacker
 			chance: 16,
 			item: ["leftovers"],
 			baseMove1: "earthquake",
@@ -1224,7 +1224,7 @@ exports.BattleFormatsData = {
 			baseMove1: "rest", baseMove2: "sleeptalk", baseMove3: "psychic",
 			fillerMoves1: ["seismictoss", "seismictoss", "thunderwave"],
 		},
-		randomSet3: { // Curse
+		randomSet4: { // Curse
 			chance: 16,
 			item: ["leftovers"],
 			baseMove1: "curse", baseMove2: "bodyslam", baseMove3: "psychic",
@@ -1515,7 +1515,7 @@ exports.BattleFormatsData = {
 			fillerMoves1: ["reflect", "reflect", "synthesis"],
 			fillerMoves2: ["stunspore", "stunspore", "synthesis"],
 		},
-		randomSet2: { // Swords Dance
+		randomSet3: { // Swords Dance
 			chance: 16,
 			item: ["leftovers"],
 			baseMove1: "sleeppowder", baseMove2: "swordsdance", baseMove3: "gigadrain", baseMove4: "bodyslam",
@@ -1579,7 +1579,7 @@ exports.BattleFormatsData = {
 			item: ["leftovers", "leftovers", "mintberry"],
 			baseMove1: "curse", baseMove2: "return", baseMove3: "surf", baseMove4: "rest",
 		},
-		randomSet3: { // Curse
+		randomSet4: { // Curse
 			chance: 16,
 			item: ["leftovers"],
 			baseMove1: "curse", baseMove2: "return", baseMove3: "surf",
@@ -1637,14 +1637,14 @@ exports.BattleFormatsData = {
 			fillerMoves1: ["thunderwave", "thunderwave", "thunderwave", "lightscreen", "lightscreen", "reflect"],
 			fillerMoves2: ["thunderbolt", "icebeam", "psychic"],
 		},
-		randomSet2: { // Defensive
+		randomSet3: { // Defensive
 			chance: 15,
 			item: ["leftovers"],
 			baseMove1: "surf", baseMove2: "recover",
 			fillerMoves1: ["thunderwave", "thunderwave", "rapidspin"],
 			fillerMoves2: ["lightscreen", "lightscreen", "reflect", "rapidspin"],
 		},
-		randomSet3: { // Parafusion
+		randomSet4: { // Parafusion
 			chance: 16,
 			item: ["leftovers"],
 			baseMove1: "surf", baseMove2: "recover", baseMove3: "thunderwave", baseMove4: "confuseray",
@@ -2034,7 +2034,7 @@ exports.BattleFormatsData = {
 			item: ["leftovers"],
 			baseMove1: "growth", baseMove2: "thunderbolt", baseMove3: "substitute", baseMove4: "batonpass",
 		},
-		randomSet3: { // Agility Baton Pass
+		randomSet4: { // Agility Baton Pass
 			chance: 16,
 			item: ["leftovers", "miracleberry"],
 			baseMove1: "growth", baseMove2: "thunderbolt", baseMove3: "agility", baseMove4: "batonpass",
@@ -2165,7 +2165,7 @@ exports.BattleFormatsData = {
 			item: ["leftovers"],
 			baseMove1: "surf", baseMove2: "rest",
 			fillerMoves1: ["icebeam", "icebeam", "reflect", "haze", "toxic"],
-			fillerMoves2: ["icebeam", "reflect", "haze", "toxic"]
+			fillerMoves2: ["icebeam", "reflect", "haze", "toxic"],
 		},
 		randomSet2: { // RestTalk
 			chance: 14,
@@ -2179,7 +2179,7 @@ exports.BattleFormatsData = {
 			baseMove1: "icebeam",
 			fillerMoves1: ["surf", "surf", "hydropump"],
 			fillerMoves2: ["hiddenpowerelectric", "hiddenpowerelectric", "hiddenpowergrass"],
-			fillerMoves3: ["reflect", "toxic", "rest", "hydropump"]
+			fillerMoves3: ["reflect", "toxic", "rest", "hydropump"],
 		},
 		tier: "UU",
 	},
@@ -2249,7 +2249,7 @@ exports.BattleFormatsData = {
 			fillerMoves2: ["lovelykiss", "lovelykiss", "rockslide", "rockslide", "fireblast", "surf", "counter"],
 			fillerMoves3: ["selfdestruct", "selfdestruct", "rest"],
 		},
-		randomSet3: { // Belly Drum
+		randomSet4: { // Belly Drum
 			chance: 16,
 			item: ["leftovers"],
 			baseMove1: "bellydrum", baseMove2: "return", baseMove3: "earthquake", baseMove4: "lovelykiss",
@@ -2654,7 +2654,7 @@ exports.BattleFormatsData = {
 			baseMove1: "thief",
 			fillerMoves1: ["reflect", "lightscreen", "safeguard"],
 			fillerMoves2: ["reflect", "lightscreen", "safeguard"],
-			fillerMoves3: ["toxic", "hiddenpowerbug"]
+			fillerMoves3: ["toxic", "hiddenpowerbug"],
 		},
 		tier: "NU",
 	},
@@ -2707,7 +2707,7 @@ exports.BattleFormatsData = {
 			fillerMoves1: ["thunderbolt", "thunder"],
 			fillerMoves2: ["surf", "icebeam"],
 		},
-		randomSet2: { // Rain Dance
+		randomSet3: { // Rain Dance
 			chance: 16,
 			item: ["leftovers"],
 			baseMove1: "raindance", baseMove2: "surf", baseMove3: "thunder", baseMove4: "icebeam",
@@ -2959,7 +2959,7 @@ exports.BattleFormatsData = {
 			baseMove1: "bellydrum", baseMove2: "earthquake", baseMove3: "sludgebomb",
 			fillerMoves1: ["ancientpower", "hiddenpowerrock"],
 		},
-		randomSet2: { // Defensive
+		randomSet3: { // Defensive
 			chance: 16,
 			item: ["leftovers"],
 			baseMove1: "earthquake", baseMove2: "rest",
@@ -3381,13 +3381,13 @@ exports.BattleFormatsData = {
 		tier: "NU",
 	},
 	skarmory: {
-		randomSet3: { // Standard
+		randomSet1: { // Standard
 			chance: 12,
 			item: ["leftovers"],
 			baseMove1: "drillpeck", baseMove2: "whirlwind", baseMove3: "rest",
 			fillerMoves1: ["toxic", "toxic", "curse"],
 		},
-		randomSet3: { // Thief
+		randomSet2: { // Thief
 			chance: 16,
 			item: ["", "", "mintberry"],
 			baseMove1: "drillpeck", baseMove2: "whirlwind", baseMove3: "rest", baseMove4: "thief",
@@ -3401,13 +3401,13 @@ exports.BattleFormatsData = {
 		tier: "LC",
 	},
 	houndoom: {
-		randomSet3: { // SunnyBeam
+		randomSet1: { // SunnyBeam
 			chance: 8,
 			item: ["leftovers", "leftovers", "miracleberry"],
 			baseMove1: "sunnyday", baseMove2: "fireblast", baseMove3: "solarbeam",
 			fillerMoves1: ["crunch", "crunch", "crunch", "pursuit", "counter"],
 		},
-		randomSet3: { // Pursuit
+		randomSet2: { // Pursuit
 			chance: 13,
 			item: ["leftovers", "leftovers", "miracleberry"],
 			baseMove1: "fireblast", baseMove2: "crunch", baseMove3: "pursuit",
@@ -3419,7 +3419,7 @@ exports.BattleFormatsData = {
 			baseMove1: "fireblast", baseMove2: "crunch", baseMove3: "substitute",
 			fillerMoves1: ["counter", "pursuit", "pursuit", "hiddenpowergrass"],
 		},
-		randomSet3: { // Thief
+		randomSet4: { // Thief
 			chance: 16,
 			item: ["", "", "miracleberry"],
 			baseMove1: "fireblast", baseMove2: "crunch", baseMove3: "thief",
@@ -3450,10 +3450,10 @@ exports.BattleFormatsData = {
 		randomSet3: { // Attacker
 			chance: 16,
 			item: ["leftovers"],
-			baseMove1: "earthquake", baseMove2: "ancientpower", 
+			baseMove1: "earthquake", baseMove2: "ancientpower",
 			fillerMoves1: ["bodyslam", "bodyslam", "hiddenpowerbug"],
 			fillerMoves2: ["rapidspin", "roar", "roar", "hiddenpowerbug"],
-		},		
+		},
 		tier: "BL",
 	},
 	stantler: {
@@ -3468,18 +3468,18 @@ exports.BattleFormatsData = {
 			item: ["leftovers"],
 			baseMove1: "return", baseMove2: "earthquake", baseMove3: "curse",
 			fillerMoves1: ["hypnosis", "hypnosis", "rest", "lightscreen"],
-		},		
+		},
 		randomSet3: { // Defensive
 			chance: 13,
 			item: ["leftovers", "leftovers", "leftovers", "mintberry"],
 			baseMove1: "return", baseMove2: "earthquake", baseMove3: "rest",
 			fillerMoves1: ["reflect", "lightscreen"],
 		},
-		randomSet3: { // RestTalk
+		randomSet4: { // RestTalk
 			chance: 16,
 			item: ["leftovers"],
 			baseMove1: "return", baseMove2: "earthquake", baseMove3: "rest", baseMove4: "sleeptalk",
-		},		
+		},
 		eventPokemon: [
 			{"generation": 2, "level": 5, "shiny": 1, "moves":["tackle", "safeguard"]},
 		],
@@ -3504,8 +3504,8 @@ exports.BattleFormatsData = {
 			item: ["leftovers"],
 			baseMove1: "spiderweb", baseMove2: "batonpass",
 			fillerMoves1: ["counter", "mirrorcoat", "destinybond", "recover", "encore", "disable"],
-			fillerMoves2: ["destinybond", "spikes", "substitute", "recover", "encore", "disable", "healbell"],			
-		},		
+			fillerMoves2: ["destinybond", "spikes", "substitute", "recover", "encore", "disable", "healbell"],
+		},
 		tier: "BL",
 	},
 	miltank: {
@@ -3538,7 +3538,7 @@ exports.BattleFormatsData = {
 			item: ["leftovers"],
 			baseMove1: "thunderbolt", baseMove2: "crunch", baseMove3: "hiddenpowerice",
 			fillerMoves1: ["rest", "roar", "reflect", "toxic"],
-		},		
+		},
 		eventPokemon: [
 			{"generation": 2, "level": 40, "shiny": true, "moves":["leer", "thundershock", "roar", "quickattack"]},
 		],
@@ -3559,7 +3559,7 @@ exports.BattleFormatsData = {
 			chance: 16,
 			item: ["leftovers"],
 			baseMove1: "fireblast", baseMove2: "return", baseMove3: "sunnyday", baseMove4: "solarbeam",
-		},		
+		},
 		eventPokemon: [
 			{"generation": 2, "level": 40, "shiny": true, "moves":["leer", "ember", "roar", "firespin"]},
 		],
@@ -3577,7 +3577,7 @@ exports.BattleFormatsData = {
 			item: ["leftovers"],
 			baseMove1: "surf", baseMove2: "rest",
 			fillerMoves1: ["icebeam", "toxic", "toxic"],
-			fillerMoves2: ["roar", "roar", "mirrorcoat"],			
+			fillerMoves2: ["roar", "roar", "mirrorcoat"],
 		},
 		eventPokemon: [
 			{"generation": 2, "level": 40, "shiny": true, "moves":["leer", "watergun", "roar", "gust"]},
@@ -3629,7 +3629,7 @@ exports.BattleFormatsData = {
 			baseMove1: "aeroblast",
 			fillerMoves1: ["psychic", "icebeam", "hydropump", "earthquake", "earthquake"],
 			fillerMoves2: ["thunderbolt", "thunder", "whirlwind", "whirlwind", "whirlwind"],
-			fillerMoves3: ["recover", "recover", "rest"],			
+			fillerMoves3: ["recover", "recover", "rest"],
 		},
 		eventPokemon: [
 			{"generation": 2, "level": 40, "shiny": true, "moves":["aeroblast", "safeguard", "gust", "recover"]},
