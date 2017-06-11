@@ -1045,6 +1045,8 @@ exports.commands = {
 			"- /scav timer <em>[minutes | off]</em> - sets a timer to automatically end the current hunt. (Requires: % @ * # & ~)",
 			"- /scav addpoints <em>[user], [amount]</em> - gives the user the amount of scavenger points towards the monthly ladder. (Requires: % @ * # & ~)",
 			"- /scav removepoints <em>[user], [amount]</em> - takes the amount of scavenger points from the user towards the monthly ladder. (Requires: % @ * # & ~)",
+			"- /scav infract <em>[user]</em> - gives the user one infraction point. (Requires: % @ * # & ~)",
+			"- /scav uninfract <em>[user]</em> - removes one infraction point from the user. (Requires: % @ * # & ~)",
 			"- /scav resetladder - resets the monthly scavenger leaderboard. (Requires: # & ~)",
 			"- /scav setpoints [1st place], [2nd place], [3rd place], [4th place], [5th place], ... - sets the point values for the wins. Use `/scav setpoints` to view what the current point values are. (Requires: # & ~)",
 			"- /scav setblitz [value] ... - sets the blitz award to `value`. Use `/scav setblitz` to view what the current blitz value is. (Requires: # & ~)",
