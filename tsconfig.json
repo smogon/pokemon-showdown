@@ -12,6 +12,7 @@
         "./dev-tools/globals.ts",
         "./sim/dex-data.js",
         "./sim/dex.js",
-        "./sim/prng.js"
+        "./sim/prng.js",
+        "./repl.js"
     ]
 }
