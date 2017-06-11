@@ -701,7 +701,7 @@ class CommandContext {
 
 			if (room) {
 				let normalized = message.trim();
-				if (room.id === 'lobby' && (normalized === user.lastMessage) &&
+				if ((room.id === 'lobby' || room.id === 'help') && (normalized === user.lastMessage) &&
 						((Date.now() - user.lastMessageTime) < MESSAGE_COOLDOWN)) {
 					this.errorReply("You can't send the same message again so soon.");
 					return false;
