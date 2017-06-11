@@ -3,7 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 const ProcessManager = require('./../process-manager');
-const execSync = require('child_process').execSync;
+const execFileSync = require('child_process').execFileSync;
 
 const MAX_PROCESSES = 1;
 const RESULTS_MAX_LENGTH = 100;
@@ -107,7 +107,7 @@ class SortedLimitedLengthList {
 function checkRipgrepAvailability() {
 	if (Config.ripgrepmodlog === undefined) {
 		try {
-			execSync(`rg --version`, {cwd: path.normalize(`${__dirname}/${LOG_PATH}`)});
+			execFileSync('rg', ['--version'], {cwd: path.normalize(`${__dirname}/${LOG_PATH}`)});
 			Config.ripgrepmodlog = true;
 		} catch (error) {
 			Config.ripgrepmodlog = false;
@@ -138,7 +138,7 @@ function runModlog(room, searchString, exactSearch, maxLines) {
 	if (!searchString) {
 		searchStringRegex = new RegExp('.');
 	} else if (exactSearch) {
-		const escapedSearchString = searchString.replace(/\\/g, '\\\\\\\\').replace(/["'`]/g, '\'\\$&\'').replace(/[\{\}\[\]\(\)\$\^\.\?\+\-\*]/g, '[$&]');
+		const escapedSearchString = searchString.replace(/\W/g, '\\$&');
 		searchStringRegex = new RegExp(escapedSearchString, 'i');
 	} else {
 		searchString = searchString.replace(/[^a-zA-Z0-9]/, '');
@@ -148,7 +148,7 @@ function runModlog(room, searchString, exactSearch, maxLines) {
 	let results = new SortedLimitedLengthList(maxLines);
 	if (useRipgrep && searchString) {
 		if (room === 'all') fileNameList = [`${__dirname}/${LOG_PATH}`];
-		runRipgrepModlog(fileNameList.join(' '), searchStringRegex, results);
+		runRipgrepModlog(fileNameList, searchStringRegex, results);
 	} else {
 		fileNameList = fileNameList.map(filename => path.normalize(`${__dirname}/${LOG_PATH}${filename}`));
 		for (let i = 0; i < fileNameList.length; i++) {
@@ -197,10 +197,9 @@ function checkRoomModlog(path, regex, results) {
 
 function runRipgrepModlog(paths, regex, results) {
 	let regexString = regex.source;
-	if (process.platform !== 'win32') regexString = regexString.replace(/\\/, '\\\\');
 	let stdout;
 	try {
-		stdout = execSync(`rg -i -e "${regexString}" --no-filename --no-line-number ${paths}`, {cwd: path.normalize(`${__dirname}/${LOG_PATH}`)});
+		stdout = execFileSync('rg', ['-i', '-e', regexString, '--no-filename', '--no-line-number', ...paths], {cwd: path.normalize(`${__dirname}/${LOG_PATH}`)});
 	} catch (error) {
 		return results;
 	}
