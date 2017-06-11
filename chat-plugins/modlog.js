@@ -97,7 +97,7 @@ class SortedLimitedLengthList {
 		}
 		if (insertedAt < 0) this.list.splice(0, 0, element);
 		if (this.list.length > this.maxSize) {
-			this.list.splice(-1, 1);
+			this.list.pop();
 			if (insertedAt === this.list.length) return false;
 		}
 		return true;
@@ -107,7 +107,7 @@ class SortedLimitedLengthList {
 function checkRipgrepAvailability() {
 	if (Config.ripgrepmodlog === undefined) {
 		try {
-			execSync(`rg --version`, {cwd: `${__dirname}/${LOG_PATH}`});
+			execSync(`rg --version`, {cwd: path.normalize(`${__dirname}/${LOG_PATH}`)});
 			Config.ripgrepmodlog = true;
 		} catch (error) {
 			Config.ripgrepmodlog = false;
@@ -148,7 +148,7 @@ function runModlog(room, searchString, exactSearch, maxLines) {
 	let results = new SortedLimitedLengthList(maxLines);
 	if (useRipgrep && searchString) {
 		if (room === 'all') fileNameList = [`${__dirname}/${LOG_PATH}`];
-		runRipgrepModlog(fileNameList.join(' '), searchStringRegex.toString().slice(1, -2), results);
+		runRipgrepModlog(fileNameList.join(' '), searchStringRegex, results);
 	} else {
 		fileNameList = fileNameList.map(filename => path.normalize(`${__dirname}/${LOG_PATH}${filename}`));
 		for (let i = 0; i < fileNameList.length; i++) {
@@ -195,10 +195,12 @@ function checkRoomModlog(path, regex, results) {
 	return results;
 }
 
-function runRipgrepModlog(paths, regexString, results) {
+function runRipgrepModlog(paths, regex, results) {
+	let regexString = regex.source;
+	if (process.platform !== 'win32') regexString = regexString.replace(/\\/, '\\\\');
 	let stdout;
 	try {
-		stdout = execSync(`rg -i -e ${regexString} --no-filename --no-line-number ${paths}`, {cwd: `${__dirname}/${LOG_PATH}`});
+		stdout = execSync(`rg -i -e "${regexString}" --no-filename --no-line-number ${paths}`, {cwd: path.normalize(`${__dirname}/${LOG_PATH}`)});
 	} catch (error) {
 		return results;
 	}
