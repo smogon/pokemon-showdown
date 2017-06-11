@@ -693,7 +693,7 @@ exports.BattleFormatsData = {
 			item: ["leftovers"],
 			baseMove1: "rest", baseMove2: "sleeptalk", baseMove3: "crosschop", baseMove4: "rockslide",
 		},
-		randomSet2: { // Reversal
+		randomSet3: { // Reversal
 			chance: 16,
 			item: ["miracleberry"],
 			baseMove1: "endure", baseMove2: "reversal",
