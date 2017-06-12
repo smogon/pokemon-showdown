@@ -85,7 +85,7 @@ exports.Formats = [
 
 		mod: 'gen7',
 		ruleset: ['[Gen 7] RU'],
-		banlist: ['RU', 'BL3'],
+		banlist: ['RU', 'BL3', 'Drought'],
 	},
 	{
 		name: "[Gen 7] LC",
