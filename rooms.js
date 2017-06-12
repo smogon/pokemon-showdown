@@ -517,7 +517,7 @@ class GlobalRoom {
 	}
 	addChatRoom(title) {
 		let id = toId(title);
-		if (id === 'battles' || id === 'rooms' || id === 'ladder' || id === 'teambuilder' || id === 'home') return false;
+		if (id === 'battles' || id === 'rooms' || id === 'ladder' || id === 'teambuilder' || id === 'home' || id === 'all' || id === 'public') return false;
 		if (Rooms.rooms.has(id)) return false;
 
 		let chatRoomData = {
