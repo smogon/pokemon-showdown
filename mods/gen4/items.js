@@ -21,6 +21,19 @@ exports.BattleItems = {
 		inherit: true,
 		onStart: function () { },
 	},
+	"chopleberry": {
+		inherit: true,
+		onSourceModifyDamage: function (damage, source, target, move) {
+			if (move.causedCrashDamage) return damage;
+			if (move.type === 'Fighting' && move.typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'])) {
+				if (target.eatItem()) {
+					this.debug('-50% reduction');
+					this.add('-enditem', target, this.effect, '[weaken]');
+					return this.chainModify(0.5);
+				}
+			}
+		},
+	},
 	"custapberry": {
 		id: "custapberry",
 		name: "Custap Berry",

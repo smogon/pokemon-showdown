@@ -679,6 +679,7 @@ exports.BattleMovedex = {
 		shortDesc: "If miss, user takes 1/2 damage it would've dealt.",
 		pp: 20,
 		onMoveFail: function (target, source, move) {
+			move.causedCrashDamage = true;
 			let damage = this.getDamage(source, target, move, true);
 			if (!damage) damage = target.maxhp;
 			this.damage(this.clampIntRange(damage / 2, 1, Math.floor(target.maxhp / 2)), source, source, 'highjumpkick');
@@ -710,6 +711,7 @@ exports.BattleMovedex = {
 		shortDesc: "If miss, user takes 1/2 damage it would've dealt.",
 		pp: 25,
 		onMoveFail: function (target, source, move) {
+			move.causedCrashDamage = true;
 			let damage = this.getDamage(source, target, move, true);
 			if (!damage) damage = target.maxhp;
 			this.damage(this.clampIntRange(damage / 2, 1, Math.floor(target.maxhp / 2)), source, source, 'jumpkick');
