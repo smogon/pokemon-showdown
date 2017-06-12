@@ -2347,7 +2347,7 @@ exports.commands = {
 
 		this.sendReplyBox(buf);
 	},
-	showblacklishelp: ["/showblacklist OR /showbl - show a list of blacklisted users in the room"],
+	showblacklisthelp: ["/showblacklist OR /showbl - show a list of blacklisted users in the room"],
 
 	markshared: function (target, room, user) {
 		if (!target) return this.parse('/help markshared');
