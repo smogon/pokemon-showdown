@@ -3601,12 +3601,10 @@ exports.BattleScripts = {
 		let movesMax = {'batonpass':1, 'stealthrock':1, 'spikes':1, 'toxicspikes':1, 'doubleedge':1, 'trickroom':1};
 		let requiredMoves = {};
 		let weatherAbilitiesRequire = {
-			'hydration': 'raindance', 'swiftswim': 'raindance',
-			'leafguard': 'sunnyday', 'solarpower': 'sunnyday', 'chlorophyll': 'sunnyday',
-			'sandforce': 'sandstorm', 'sandrush': 'sandstorm', 'sandveil': 'sandstorm',
-			'snowcloak': 'hail',
+			'swiftswim': 'raindance',
+			'sandrush': 'sandstorm', 'sandveil': 'sandstorm',
 		};
-		let weatherAbilitiesSet = {'drizzle':1, 'drought':1, 'snowwarning':1, 'sandstream':1};
+		let weatherAbilitiesSet = {'drizzle':1, 'sandstream':1};
 
 		// Build a pool of eligible sets, given the team partners
 		// Also keep track of sets with moves the team requires
@@ -3687,7 +3685,7 @@ exports.BattleScripts = {
 		let teamData = {typeCount: {}, typeComboCount: {}, baseFormes: {}, megaCount: 0, zCount: 0, has: {}, forceResult: forceResult, weaknesses: {}, resistances: {}};
 		let requiredMoveFamilies = {};
 		let requiredMoves = {};
-		let weatherAbilitiesSet = {'drizzle': 'raindance', 'drought': 'sunnyday', 'snowwarning': 'hail', 'sandstream': 'sandstorm'};
+		let weatherAbilitiesSet = {'drizzle': 'raindance', 'sandstream': 'sandstorm'};
 		let resistanceAbilities = {
 			'dryskin': ['Water'], 'waterabsorb': ['Water'], 'stormdrain': ['Water'],
 			'flashfire': ['Fire'], 'heatproof': ['Fire'],
