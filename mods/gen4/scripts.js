@@ -103,11 +103,6 @@ exports.BattleScripts = {
 
 		if (template.battleOnly) species = template.baseSpecies;
 
-		let battleForme = this.checkBattleForme(template);
-		if (battleForme && battleForme.randomBattleMoves && this.random(2)) {
-			template = this.getTemplate(template.otherFormes.length >= 2 ? template.otherFormes[this.random(template.otherFormes.length)] : template.otherFormes[0]);
-		}
-
 		let movePool = (template.randomBattleMoves ? template.randomBattleMoves.slice() : Object.keys(template.learnset));
 		let moves = [];
 		let ability = '';
@@ -642,7 +637,6 @@ exports.BattleScripts = {
 		for (let id in this.data.FormatsData) {
 			let template = this.getTemplate(id);
 			if (template.gen > this.gen || excludedTiers[template.tier] || template.isNonstandard || !template.randomBattleMoves) continue;
-			if (template.forme && template.forme in {'Mega': 1, 'Mega-X': 1, 'Mega-Y': 1, 'Primal': 1}) continue;
 			pokemonPool.push(id);
 		}
 
