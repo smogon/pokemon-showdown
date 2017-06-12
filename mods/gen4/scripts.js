@@ -309,6 +309,9 @@ exports.BattleScripts = {
 				case 'leechseed': case 'painsplit':
 					if (hasMove['rest'] || hasMove['synthesis']) rejected = true;
 					break;
+				case 'substitute':
+					if (hasMove['pursuit'] || hasMove['taunt']) rejected = true;
+					break;
 				case 'thunderwave':
 					if (hasMove['toxic'] || hasMove['trickroom']) rejected = true;
 					break;
@@ -638,9 +641,9 @@ exports.BattleScripts = {
 		let pokemonPool = [];
 		for (let id in this.data.FormatsData) {
 			let template = this.getTemplate(id);
-			if (template.gen <= this.gen && !excludedTiers[template.tier] && !template.isNonstandard && template.randomBattleMoves) {
-				pokemonPool.push(id);
-			}
+			if (template.gen > this.gen || excludedTiers[template.tier] || template.isNonstandard || !template.randomBattleMoves) continue;
+			if (template.forme && template.forme in {'Mega': 1, 'Mega-X': 1, 'Mega-Y': 1, 'Primal': 1}) continue;
+			pokemonPool.push(id);
 		}
 
 		let typeCount = {};
