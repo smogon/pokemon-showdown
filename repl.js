@@ -11,7 +11,7 @@ const repl = require('repl');
  */
 const socketPathnames = new Set();
 
-process.once("exit", () => {
+process.once('exit', () => {
 	socketPathnames.forEach(s => {
 		try {
 			fs.unlinkSync(s);
@@ -88,11 +88,9 @@ exports.start = function start(filename, evalFunction) {
 		socketPathnames.add(pathname);
 	});
 
-	server.once('error', err => {
-		// @ts-ignore
+	server.once('error', /** @param {NodeJS.ErrnoException} err */ err => {
 		if (err.code === "EADDRINUSE") {
 			fs.unlink(pathname, _err => {
-				// @ts-ignore
 				if (_err && _err.code !== "ENOENT") {
 					require('./crashlogger')(_err, `REPL: ${filename}`);
 				}
