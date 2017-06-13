@@ -165,9 +165,8 @@ Major Contributors
 
 Contributors
 
-- Tobias Mann [asgdf] - Development
-- Avery Zimmer [Lyren, SolarisFox] - Development
 - Andrew Goodsell [Zracknel] - Art (battle weather backdrops)
+- Avery Zimmer [Lyren, SolarisFox] - Development
 - Ben Davies [Morfent] - Development
 - Ben Frengley [TalkTakesTime] - Development
 - Cody Thompson [Rising_Dusk] - Development
@@ -176,6 +175,7 @@ Contributors
 - Neil Rashbrook [urkerab] - Development
 - Robin Vandenbrande [Quinella] - Development
 - [Ridaz] - Art (battle animations)
+- Tobias Mann [asgdf] - Development
 
 Special thanks
 
