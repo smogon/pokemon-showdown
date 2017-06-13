@@ -18693,7 +18693,7 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 5,
 			onStart: function (side, source) {
-				this.add('-fieldstart', 'move: WonderRoom', '[of] ' + source);
+				this.add('-fieldstart', 'move: Wonder Room', '[of] ' + source);
 			},
 			// Swapping defenses implemented in sim/pokemon.js:Pokemon#calculateStat and Pokemon#getStat
 			onResidualOrder: 24,
