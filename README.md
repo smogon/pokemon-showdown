@@ -158,19 +158,20 @@ Retired Staff
 
 Major Contributors
 
+- Bär Halberkamp [bumbadadabum] - Development
 - Kevin Lau [Ascriptmaster] - Development, Art (battle animations)
 - Konrad Borowski [xfix] - Development
 - Quinton Lee [sirDonovan] - Development
 
 Contributors
 
+- Tobias Mann [asgdf] - Development
+- Avery Zimmer [Lyren, SolarisFox] - Development
 - Andrew Goodsell [Zracknel] - Art (battle weather backdrops)
-- Bär Halberkamp [bumbadadabum] - Development
 - Ben Davies [Morfent] - Development
 - Ben Frengley [TalkTakesTime] - Development
 - Cody Thompson [Rising_Dusk] - Development
 - Ian Clail [Layell] - Art (battle graphics, sprites)
-- Avery Zimmer [Lyren, SolarisFox] - Development
 - Jeremy Piemonte [panpawn] - Development
 - Neil Rashbrook [urkerab] - Development
 - Robin Vandenbrande [Quinella] - Development
