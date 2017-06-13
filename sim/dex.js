@@ -102,10 +102,16 @@ const DATA_FILES = {
 	'Natures': 'natures',
 };
 
-/** @typedef {{id: string, name: string, [k: string]: any}} DexTemplate */
 /** @typedef {{[id: string]: AnyObject}} DexTable */
 
-/** @typedef {{Pokedex: DexTable, Movedex: DexTable, Statuses: DexTable, TypeChart: DexTable, Scripts: DexTable, Items: DexTable, Abilities: DexTable, FormatsData: DexTable, Learnsets: DexTable, Aliases: {[id: string]: string}, Natures: DexTable, Formats: DexTable, MoveCache: Map<string, AnyObject>, ItemCache: Map<string, AnyObject>, AbilityCache: Map<string, AnyObject>, TemplateCache: Map<string, AnyObject>}} DexTableData */
+/** @typedef {{Pokedex: DexTable, Movedex: DexTable, Statuses: DexTable, TypeChart: DexTable, Scripts: DexTable, Items: DexTable, Abilities: DexTable, FormatsData: DexTable, Learnsets: DexTable, Aliases: {[id: string]: string}, Natures: DexTable, Formats: DexTable, MoveCache: Map<string, AnyObject>, ItemCache: Map<string, AnyObject>, AbilityCache: Map<string, AnyObject>, TemplateCache: Map<string, Template>}} DexTableData */
+
+/** @typedef {{Pokedex: DexTable, Movedex: DexTable, Statuses: DexTable, TypeChart: DexTable, Scripts: DexTable, Items: DexTable, Abilities: DexTable, FormatsData: DexTable, Learnsets: DexTable, Aliases: {[id: string]: string}, Natures: DexTable, Formats: DexTable, MoveCache: Map<string, AnyObject>, ItemCache: Map<string, AnyObject>, AbilityCache: Map<string, AnyObject>, TemplateCache: Map<string, Template>}} DexTableData2 */
+
+/** @typedef {Data.Template} Template2 */
+
+/** @param {Data.Template} a */
+function pt1(a) { return a; }
 
 const BattleNatures = {
 	adamant: {name:"Adamant", plus:'atk', minus:'spa'},
