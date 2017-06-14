@@ -178,7 +178,6 @@ class UNOgame extends Rooms.RoomGame {
 
 		// handle current player...
 		if (userid === this.currentPlayer) {
-
 			if (this.state === 'color') {
 				this.topCard.changedColor = this.discards[1].changedColor || this.discards[1].color;
 				this.sendToRoom(`|raw|${Chat.escapeHTML(name)} has not picked a color, the color will stay as <span style="color: ${textColors[this.topCard.changedColor]}">${this.topCard.changedColor}</span>.`);
