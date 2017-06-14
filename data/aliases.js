@@ -476,7 +476,6 @@ exports.BattleAliases = {
 	"sitrus": "Sitrus Berry",
 	"specs": "Choice Specs",
 	"wp": "Weakness Policy",
-	"policy": "Weakness Policy",
 	"yache": "Yache Berry",
 
 	// pokemon
