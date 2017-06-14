@@ -136,7 +136,7 @@ exports.commands = {
 			if (Number.isInteger(num)) {
 				if (qty) return this.errorReply("Only specify the number of Pok\u00e9mon Moves once.");
 				qty = num;
-				if (qty < 1 || 15 < qty) return this.errorReply("Number of random Pok\u00e9mon  Movesmust be between 1 and 15.");
+				if (qty < 1 || 15 < qty) return this.errorReply("Number of random Pok\u00e9mon Moves must be between 1 and 15.");
 				targetsBuffer.push("random" + qty);
 			} else {
 				targetsBuffer.push(targets[i]);
