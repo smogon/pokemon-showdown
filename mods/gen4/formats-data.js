@@ -689,7 +689,7 @@ exports.BattleFormatsData = {
 		tier: "UU",
 	},
 	aerodactyl: {
-		randomBattleMoves: ["stealthrock", "taunt", "stoneedge", "rockslide", "earthquake", "taunt", "roost"],
+		randomBattleMoves: ["stealthrock", "taunt", "stoneedge", "rockslide", "earthquake", "roost"],
 		tier: "OU",
 	},
 	munchlax: {
@@ -819,7 +819,7 @@ exports.BattleFormatsData = {
 		tier: "NU",
 	},
 	togekiss: {
-		randomBattleMoves: ["healbell", "roost", "nastyplot", "airslash", "aurasphere", "fireblast"],
+		randomBattleMoves: ["healbell", "roost", "nastyplot", "airslash", "aurasphere", "fireblast", "thunderwave"],
 		tier: "OU",
 	},
 	natu: {
@@ -1531,6 +1531,15 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["icebeam", "thunderbolt", "fireblast", "energyball", "shadowball"],
 		tier: "NU",
 	},
+	castformsunny: {
+		battleOnly: true,
+	},
+	castformrainy: {
+		battleOnly: true,
+	},
+	castformsnowy: {
+		battleOnly: true,
+	},
 	kecleon: {
 		randomBattleMoves: ["stealthrock", "recover", "return", "aquatail", "thunderwave"],
 		tier: "NU",
@@ -1756,14 +1765,14 @@ exports.BattleFormatsData = {
 		tier: "LC",
 	},
 	bibarel: {
-		randomBattleMoves: ["return", "waterfall", "taunt", "quickattack", "toxic"],
+		randomBattleMoves: ["return", "waterfall", "superfang", "quickattack", "toxic", "stealthrock", "thunderwave"],
 		tier: "NU",
 	},
 	kricketot: {
 		tier: "LC",
 	},
 	kricketune: {
-		randomBattleMoves: ["swordsdance", "xscissor", "nightslash", "brickbreak", "taunt", "return"],
+		randomBattleMoves: ["swordsdance", "xscissor", "nightslash", "brickbreak", "return"],
 		tier: "NU",
 	},
 	shinx: {
