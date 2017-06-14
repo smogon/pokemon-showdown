@@ -178,6 +178,11 @@ exports.simulatorprocesses = 1;
 // from the `users` array. The default is 1 hour.
 exports.inactiveuserthreshold = 1000 * 60 * 60;
 
+// autolockdown - whether or not to automatically kill the server when it is
+// in lockdown mode and the final battle finishes.  This is potentially useful
+// to prevent forgetting to restart after a lockdown where battles are finished.
+exports.autolockdown = true;
+
 // Custom avatars.
 // This allows you to specify custom avatar images for users on your server.
 // Place custom avatar files under the /config/avatars/ directory.

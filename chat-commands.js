@@ -2658,6 +2658,30 @@ exports.commands = {
 	},
 	lockdownhelp: ["/lockdown - locks down the server, which prevents new battles from starting so that the server can eventually be restarted. Requires: ~"],
 
+	autolockdown: 'autolockdownkill',
+	autolockdownkill: function (target, room, user) {
+		if (!this.can('lockdown')) return false;
+		if (Config.autolockdown === undefined) Config.autolockdown = true;
+
+		if (target === 'on' || target === 'enable') {
+			if (Config.autolockdown) return this.errorReply("The server is already set to automatically kill itself upon the final battle finishing.");
+			Config.autolockdown = true;
+			this.sendReply("The server is now set to automatically kill itself upon the final battle finishing.");
+			this.logEntry(`${user.name} used /autolockdownkill on`);
+		} else if  (target === 'off' || target === 'disable') {
+			if (!Config.autolockdown) return this.errorReply("The server is already set to not automatically kill itself upon the final battle finishing.");
+			Config.autolockdown = false;
+			this.sendReply("The server is now set to not automatically kill itself upon the final battle finishing.");
+			this.logEntry(`${user.name} used /autolockdownkill off`);
+		} else {
+			return this.parse('/help autolockdownkill');
+		}
+	},
+	autolockdownkillhelp: [
+		"/autolockdownkill on - Turns on the setting to enable the server to automatically kill itself upon the final battle finishing. Requires ~",
+		"/autolockdownkill off - Turns off the setting to enable the server to automatically kill itself upon the final battle finishing. Requires ~",
+	],
+
 	prelockdown: function (target, room, user) {
 		if (!this.can('lockdown')) return false;
 		Rooms.global.lockdown = 'pre';
