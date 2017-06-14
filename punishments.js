@@ -394,6 +394,20 @@ setImmediate(() => {
  * @param {?Set<string>} recursionKeys
  */
 Punishments.punish = function (user, punishment, recursionKeys) {
+	let existingPunishment = Punishments.userids.get(toId(user.name));
+	if (existingPunishment) {
+		// don't reduce the duration of an existing punishment
+		if (existingPunishment[2] > punishment[2]) {
+			punishment[2] = existingPunishment[2];
+		}
+
+		// don't override stronger punishment types
+		const types = ['LOCK', 'NAMELOCK', 'BAN'];
+		if (types.indexOf(existingPunishment[0]) > types.indexOf(punishment[0])) {
+			punishment[0] = existingPunishment[0];
+		}
+	}
+
 	let keys = recursionKeys || new Set();
 
 	if (!recursionKeys) {
