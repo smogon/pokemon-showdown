@@ -660,7 +660,7 @@ exports.BattleFormatsData = {
 		tier: "UU",
 	},
 	glaceon: {
-		randomBattleMoves: ["icebeam", "hiddenpowerground", "hiddenpowergrass", "shadowball", "batonpass"],
+		randomBattleMoves: ["icebeam", "hiddenpowerground", "shadowball", "batonpass", "wish"],
 		tier: "NU",
 	},
 	porygon: {
@@ -1087,7 +1087,7 @@ exports.BattleFormatsData = {
 	},
 	suicune: {
 		inherit: true,
-		randomBattleMoves: ["icebeam", "hiddenpowerelectric", "rest", "sleeptalk", "roar", "calmmind"],
+		randomBattleMoves: ["surf", "icebeam", "hiddenpowerelectric", "rest", "sleeptalk", "roar", "calmmind"],
 		tier: "OU",
 	},
 	larvitar: {

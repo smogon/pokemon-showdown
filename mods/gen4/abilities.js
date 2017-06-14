@@ -254,6 +254,7 @@ exports.BattleAbilities = {
 	"sturdy": {
 		inherit: true,
 		onDamage: function () {},
+		rating: 0,
 	},
 	"synchronize": {
 		inherit: true,
