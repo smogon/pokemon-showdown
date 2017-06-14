@@ -69,6 +69,7 @@ exports.BattleAliases = {
 	"megaray": "Rayquaza-Mega",
 	"megasab": "Sableye-Mega",
 	"megasable": "Sableye-Mega",
+	"megasnow": "Abomasnow-Mega",
 	"megamence": "Salamence-Mega",
 	"megascept": "Sceptile-Mega",
 	"megapert": "Swampert-Mega",
@@ -474,6 +475,7 @@ exports.BattleAliases = {
 	"scarf": "Choice Scarf",
 	"sitrus": "Sitrus Berry",
 	"specs": "Choice Specs",
+	"wp": "Weakness Policy",
 	"yache": "Yache Berry",
 
 	// pokemon
@@ -488,6 +490,7 @@ exports.BattleAliases = {
 	"azu": "Azumarill",
 	"bliss": "Blissey",
 	"bee": "Beedrill",
+	"bdrill": "Beedrill",
 	"bulu": "Tapu Bulu",
 	"cathy": "Trevenant",
 	"chomp": "Garchomp",
@@ -516,6 +519,7 @@ exports.BattleAliases = {
 	"hera": "Heracross",
 	"hippo": "Hippowdon",
 	"honch": "Honchkrow",
+	"karp": "Magikarp",
 	"keld": "Keldeo",
 	"klef": "Klefki",
 	"koko": "Tapu Koko",
