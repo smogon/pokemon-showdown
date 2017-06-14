@@ -188,6 +188,9 @@ exports.BattleScripts = {
 				case 'batonpass':
 					if (!counter.setupType && !counter['speedsetup'] && !hasMove['substitute']) rejected = true;
 					break;
+				case 'eruption': case 'waterspout':
+					if (counter.Physical + counter.Special < 4) rejected = true;
+					break;
 				case 'focuspunch':
 					if (!hasMove['substitute'] || counter.damagingMoves.length < 2) rejected = true;
 					if (hasMove['hammerarm']) rejected = true;
@@ -251,9 +254,6 @@ exports.BattleScripts = {
 					if (counter.setupType || !!counter['speedsetup'] || hasMove['batonpass'] || hasMove['substitute']) rejected = true;
 					if (hasType['Bug'] && counter.stab < 2 && counter.damagingMoves.length > 2) rejected = true;
 					break;
-				case 'waterspout':
-					if (counter.setupType === 'Special') rejected = true;
-					break;
 
 				// Bit redundant to have both
 				// Attacks:
@@ -262,6 +262,9 @@ exports.BattleScripts = {
 					break;
 				case 'judgment':
 					if (counter.setupType !== 'Special' && counter.stab > 1) rejected = true;
+					break;
+				case 'quickattack':
+					if (hasMove['thunderwave']) rejected = true;
 					break;
 				case 'flamethrower':
 					if (hasMove['fireblast']) rejected = true;
@@ -275,8 +278,11 @@ exports.BattleScripts = {
 				case 'discharge':
 					if (hasMove['thunderbolt']) rejected = true;
 					break;
+				case 'energyball':
+					if (hasMove['grassknot']) rejected = true;
+					break;
 				case 'leafstorm':
-					if (hasMove['powerwhip']) rejected = true;
+					if (counter.setupType || hasMove['batonpass'] || hasMove['powerwhip']) rejected = true;
 					break;
 				case 'solarbeam':
 					if (counter.setupType === 'Physical' || !hasMove['sunnyday'] && !movePool.includes('sunnyday')) rejected = true;
@@ -288,7 +294,7 @@ exports.BattleScripts = {
 					if (hasMove['crosschop']) rejected = true;
 					break;
 				case 'seismictoss':
-					if (counter.Physical + counter.Special >= 1) rejected = true;
+					if (hasMove['nightshade'] || counter.Physical + counter.Special >= 1) rejected = true;
 					break;
 				case 'gunkshot':
 					if (hasMove['poisonjab']) rejected = true;
@@ -299,13 +305,16 @@ exports.BattleScripts = {
 				case 'dragonclaw':
 					if (hasMove['outrage']) rejected = true;
 					break;
-				case 'crunch': case 'nightslash': case 'pursuit':
-					if (hasMove['payback'] || hasMove['suckerpunch']) rejected = true;
+				case 'crunch': case 'nightslash':
+					if (hasMove['suckerpunch']) rejected = true;
+					break;
+				case 'pursuit':
+					if (counter.setupType || hasMove['payback']) rejected = true;
 					break;
 
 				// Status:
 				case 'leechseed': case 'painsplit': case 'wish':
-					if (hasMove['moonlight'] || hasMove['rest'] || hasMove['synthesis']) rejected = true;
+					if (hasMove['moonlight'] || hasMove['rest'] || hasMove['rockpolish'] || hasMove['synthesis']) rejected = true;
 					break;
 				case 'substitute':
 					if (hasMove['pursuit'] || hasMove['rest'] || hasMove['taunt']) rejected = true;
