@@ -59,7 +59,10 @@ class RoomSettings {
 		return modchatOutput.join(' ');
 	}
 	modjoin() {
-		if (!this.user.can('makeroom') && !this.room.isPersonal) return this.button(this.room.modjoin ? this.room.modjoin : 'off', true);
+		if (!this.user.can('makeroom') && !this.room.isPersonal ||
+			!this.user.can('editroom', null, this.room)) {
+			return this.button(this.room.modjoin ? this.room.modjoin : 'off', true);
+		}
 		let modjoinOutput = [];
 		for (let i = 0; i < RANKS.length; i++) {
 			if (RANKS[i] === Config.groupsranking[0] && !this.room.modjoin) {
@@ -69,7 +72,7 @@ class RoomSettings {
 			} else if (RANKS[i] === this.room.modjoin) {
 				modjoinOutput.push(this.button(RANKS[i], true));
 			} else if (RANKS[i]) {
-				// Personal rooms modjoin check
+				// groupchat hosts can set modjoin, but only to +
 				if (this.room.isPersonal && !this.user.can('makeroom') && RANKS[i] !== '+') continue;
 
 				modjoinOutput.push(this.button(RANKS[i], false, `modjoin ${RANKS[i]}`));
