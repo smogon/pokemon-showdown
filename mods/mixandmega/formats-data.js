@@ -41,8 +41,4 @@ exports.BattleFormatsData = {
 		inherit: true,
 		tier: "Uber",
 	},
-	shayminsky: {
-		inherit: true,
-		tier: "OU",
-	},
 };
