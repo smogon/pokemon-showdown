@@ -171,6 +171,7 @@ exports.BattleStatuses = {
 			if (this.random(3) > 0) {
 				return;
 			}
+			this.activeTarget = pokemon;
 			this.damage(this.getDamage(pokemon, pokemon, 40), pokemon, pokemon, {
 				id: 'confused',
 				effectType: 'Move',
