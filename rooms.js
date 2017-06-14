@@ -708,14 +708,14 @@ class GlobalRoom {
 			// The server is in lockdown, the final battle has finished, and the option is set
 			// so we will now automatically kill the server here if it is not updating.
 			if (Chat.updateServerLock) {
-				this.notifyRooms(notifyPlaces, '<div class="broadcast-red"><b>Automatic server lockdown kill canceled.</b><br /><br />The server tried to automatically kill itself upon the final battle finishing, but the server was updating while trying to kill itself.</div>');
+				this.notifyRooms(notifyPlaces, `|html|<div class="broadcast-red"><b>Automatic server lockdown kill canceled.</b><br /><br />The server tried to automatically kill itself upon the final battle finishing, but the server was updating while trying to kill itself.</div>`);
 				return;
 			}
 
 			Sockets.workers.forEach(worker => worker.kill());
 
 			// final warning
-			this.notifyRooms(notifyPlaces, '<div class="broadcast-red"><b>The server is about to automatically kill itself in 10 seconds.</b></div>');
+			this.notifyRooms(notifyPlaces, `|html|<div class="broadcast-red"><b>The server is about to automatically kill itself in 10 seconds.</b></div>`);
 
 			// kill server in 10 seconds if it's still set to
 			setTimeout(() => {
@@ -723,7 +723,7 @@ class GlobalRoom {
 					// finally kill the server
 					process.exit();
 				} else {
-					this.notifyRooms(notifyPlaces, '<div class="broadcsat-red"><b>Automatic server lockdown kill canceled.</b><br /><br />In the last final seconds, the automatic lockdown was manually disabled.</div>');
+					this.notifyRooms(notifyPlaces, `|html|<div class="broadcsat-red"><b>Automatic server lockdown kill canceled.</b><br /><br />In the last final seconds, the automatic lockdown was manually disabled.</div>`);
 				}
 			}, 10 * 1000);
 		}
@@ -732,8 +732,7 @@ class GlobalRoom {
 		if (!rooms || !message) return;
 		for (let roomid of rooms) {
 			let curRoom = Rooms(roomid);
-			if (curRoom) curRoom.addRaw(message);
-			curRoom.update();
+			if (curRoom) curRoom.add(message).update();
 		}
 	}
 	reportCrash(err) {
