@@ -43,7 +43,7 @@ exports.commands = {
 		if (target) {
 			let targetRoom = Rooms.search(target);
 			let unavailableRoom = targetRoom && targetRoom.checkModjoin(user);
-			if (targetRoom && !unavailableRoom) return this.parse('/roomauth1 ' + target);
+			if (targetRoom && unavailableRoom) return this.parse('/roomauth1 ' + target);
 			return this.parse('/userauth ' + target);
 		}
 		let rankLists = {};
