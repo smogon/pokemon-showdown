@@ -299,6 +299,14 @@ class Template extends Effect {
 		this.forme = this.forme || '';
 
 		/**
+		 * Other forms. List of names of cosmetic forms. These should have
+		 * `aliases.js` aliases to this entry, but not have their own
+		 * entry in `pokedex.js`.
+		 * @type {?string[]}
+		 */
+		this.otherForms = this.otherForms || null;
+
+		/**
 		 * Forme letter. One-letter version of the forme name. Usually the
 		 * first letter of the forme, but not always - e.g. Rotom-S is
 		 * Rotom-Fan because Rotom-F is Rotom-Frost.
@@ -314,10 +322,23 @@ class Template extends Effect {
 		this.spriteid = this.spriteid || (toId(this.baseSpecies) + (this.baseSpecies !== this.name ? '-' + toId(this.forme) : ''));
 
 		/**
+		 * Abilities
+		 * @type {{0: string, 1?: string, H?: string}}
+		 */
+		this.abilities = this.abilities || {0: ""};
+
+		/**
 		 * Pre-evolution. '' if nothing evolves into this Pokemon.
 		 * @type {string}
 		 */
 		this.prevo = this.prevo || '';
+
+		/**
+		 * Singles Tier. The Pokemon's location in the Smogon tier system.
+		 * Do not use for LC bans.
+		 * @type {string}
+		 */
+		this.tier = this.tier || '';
 
 		/**
 		 * Evolutions. Array because many Pokemon have multiple evolutions.
