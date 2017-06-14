@@ -42,8 +42,8 @@ exports.commands = {
 	authority: function (target, room, user, connection) {
 		if (target) {
 			let targetRoom = Rooms.search(target);
-			let unavailableRoom = targetRoom && targetRoom.checkModjoin(user);
-			if (targetRoom && !unavailableRoom) return this.parse('/roomauth1 ' + target);
+			let availableRoom = targetRoom && targetRoom.checkModjoin(user);
+			if (targetRoom && availableRoom) return this.parse('/roomauth1 ' + target);
 			return this.parse('/userauth ' + target);
 		}
 		let rankLists = {};
