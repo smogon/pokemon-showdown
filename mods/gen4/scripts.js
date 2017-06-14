@@ -632,7 +632,7 @@ exports.BattleScripts = {
 		let pokemonPool = [];
 		for (let id in this.data.FormatsData) {
 			let template = this.getTemplate(id);
-			if (template.isNonstandard || !template.randomBattleMoves || template.nfe && !allowedNFE[template.species]) continue;
+			if (template.gen > 4 || template.isNonstandard || !template.randomBattleMoves || template.nfe && !allowedNFE[template.species]) continue;
 			pokemonPool.push(id);
 		}
 
