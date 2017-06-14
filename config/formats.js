@@ -99,7 +99,7 @@ exports.Formats = [
 		mod: 'gen7',
 		maxLevel: 5,
 		ruleset: ['Pokemon', 'Standard', 'Swagger Clause', 'Team Preview', 'Little Cup'],
-		banlist: ['LC Uber', 'Eevium Z', 'Dragon Rage', 'Sonic Boom'],
+		banlist: ['Cutiefly', 'Drifloon', 'Gligar', 'Gothita', 'Meditite', 'Misdreavus', 'Murkrow', 'Porygon', 'Scyther', 'Sneasel', 'Swirlix', 'Tangela', 'Vulpix-Base', 'Yanma', 'Eevium Z', 'Dragon Rage', 'Sonic Boom'],
 	},
 	{
 		name: "[Gen 7] Anything Goes",
