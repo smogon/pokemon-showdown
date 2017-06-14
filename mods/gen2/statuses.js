@@ -109,7 +109,7 @@ exports.BattleStatuses = {
 				this.effectData.time = this.random(2, 6);
 			}
 		},
-		onBeforeMove: function (pokemon) {
+		onBeforeMove: function (pokemon, target, move) {
 			pokemon.volatiles.confusion.time--;
 			if (!pokemon.volatiles.confusion.time) {
 				pokemon.removeVolatile('confusion');
@@ -119,7 +119,17 @@ exports.BattleStatuses = {
 			if (this.random(2) === 0) {
 				return;
 			}
-			this.directDamage(this.getDamage(pokemon, pokemon, 40));
+			move = {
+				basePower: 40,
+				type: '???',
+				baseMoveType: move.type,
+				category: 'Physical',
+				willCrit: false,
+				isSelfHit: true,
+				noDamageVariance: true,
+				flags: {},
+			};
+			this.directDamage(this.getDamage(pokemon, pokemon, move));
 			return false;
 		},
 	},
