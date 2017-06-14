@@ -450,10 +450,6 @@ exports.BattleAliases = {
 	// abilities
 	"ph": "Poison Heal",
 	"stag": "Shadow Tag",
-	"atrap": "Arena Trap",
-	"tvolt": "Teravolt",
-	"ifist": "Iron Fist",
-	"tclaws": "Tough Claws",
 
 	// items
 	"assvest": "Assault Vest",
@@ -491,7 +487,6 @@ exports.BattleAliases = {
 	"aegiblade": "Aegislash-Blade",
 	"aegis": "Aegislash",
 	"aero": "Aerodactyl",
-	"agumon": "Charmander",
 	"amph": "Ampharos",
 	"azu": "Azumarill",
 	"bliss": "Blissey",
