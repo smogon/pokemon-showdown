@@ -381,8 +381,7 @@ exports.BattleFormatsData = {
 			{"generation": 7, "level": 17, "nature": "Hardy", "moves":["thunderbolt", "quickattack", "irontail", "electroball"]},
 		],
 		eventOnly: true,
-		isUnreleased: true,
-		tier: "Unreleased",
+		tier: "NU",
 	},
 	pikachualola: {
 		eventPokemon: [
