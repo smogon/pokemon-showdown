@@ -945,7 +945,7 @@ Chat.escapeHTML = function (str) {
 /**
  * Strips HTML from a string.
  *
- * @param  {string} html
+ * @param {string} html
  * @return {string}
  */
 Chat.stripHTML = function (html) {
