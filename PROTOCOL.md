@@ -17,6 +17,8 @@ Client implementations you might want to look at for reference include:
     https://github.com/pickdenis/ps-chatbot
 - Quinella and TalkTakesTime's chat bot (Node.js) -
     https://github.com/TalkTakesTime/Pokemon-Showdown-Bot
+- Nixola's chat bot (Lua) -
+    https://github.com/Nixola/NixPSbot
 - the official client (HTML5 + JavaScript) -
     https://github.com/Zarel/Pokemon-Showdown-Client
 
