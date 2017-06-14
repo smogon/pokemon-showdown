@@ -943,6 +943,17 @@ Chat.escapeHTML = function (str) {
 };
 
 /**
+ * Strips HTML from a string.
+ *
+ * @param {string} html
+ * @return {string}
+ */
+Chat.stripHTML = function (html) {
+	if (!html) return '';
+	return html.replace(/<[^>]*>/g, '');
+};
+
+/**
  * Template string tag function for escaping HTML
  *
  * @param  {string[]} strings

@@ -2045,8 +2045,9 @@ exports.commands = {
 		if (!this.can('declare', null, room)) return false;
 		if (!this.canTalk()) return;
 
-		this.add('|raw|<div class="broadcast-blue"><b>' + Chat.escapeHTML(target) + '</b></div>');
-		this.logModCommand(user.name + " declared " + target);
+		this.add(`|notify|${room.title} announcement!|${target}`);
+		this.add(Chat.html`|raw|<div class="broadcast-blue"><b>${target}</b></div>`);
+		this.logModCommand(`${user.name} declared: ${target}`);
 	},
 	declarehelp: ["/declare [message] - Anonymously announces a message. Requires: # * & ~"],
 
@@ -2057,8 +2058,9 @@ exports.commands = {
 		target = this.canHTML(target);
 		if (!target) return;
 
-		this.add('|raw|<div class="broadcast-blue"><b>' + target + '</b></div>');
-		this.logModCommand(user.name + " declared " + target);
+		this.add(`|notify|${room.title} announcement!|${Chat.stripHTML(target)}`);
+		this.add(`|raw|<div class="broadcast-blue"><b>${target}</b></div>`);
+		this.logModCommand(`${user.name} HTML-declared: ${target}`);
 	},
 	htmldeclarehelp: ["/htmldeclare [message] - Anonymously announces a message using safe HTML. Requires: ~"],
 
@@ -2070,9 +2072,12 @@ exports.commands = {
 		if (!target) return;
 
 		Rooms.rooms.forEach((curRoom, id) => {
-			if (id !== 'global') curRoom.addRaw('<div class="broadcast-blue"><b>' + target + '</b></div>').update();
+			if (id !== 'global') curRoom.addRaw(`<div class="broadcast-blue"><b>${target}</b></div>`).update();
 		});
-		this.logModCommand(user.name + " globally declared " + target);
+		Users.users.forEach(u => {
+			if (u.connected) u.send(`|pm|~|${u.group}${u.name}|/raw <div class="broadcast-blue"><b>${target}</b></div>`);
+		});
+		this.logModCommand(`${user.name} globally declared: ${target}`);
 	},
 	globaldeclarehelp: ["/globaldeclare [message] - Anonymously announces a message to every room on the server. Requires: ~"],
 
@@ -2084,9 +2089,9 @@ exports.commands = {
 		if (!target) return;
 
 		Rooms.rooms.forEach((curRoom, id) => {
-			if (id !== 'global' && curRoom.type !== 'battle') curRoom.addRaw('<div class="broadcast-blue"><b>' + target + '</b></div>').update();
+			if (id !== 'global' && curRoom.type !== 'battle') curRoom.addRaw(`<div class="broadcast-blue"><b>${target}</b></div>`).update();
 		});
-		this.logModCommand(user.name + " globally declared (chat level) " + target);
+		this.logModCommand(`${user.name} declared to all chat rooms: ${target}`);
 	},
 	chatdeclarehelp: ["/cdeclare [message] - Anonymously announces a message to all chatrooms on the server. Requires: ~"],
 
