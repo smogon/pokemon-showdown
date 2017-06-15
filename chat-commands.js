@@ -2492,7 +2492,7 @@ exports.commands = {
 				delete require.cache[require.resolve('./punishments')];
 				global.Punishments = require('./punishments');
 				return this.sendReply("Punishments have been hotpatched.");
-			} else if (target === 'dnsbl') {
+			} else if (target === 'dnsbl' || target === 'datacenters') {
 				Dnsbl.loadDatacenters();
 				return this.sendReply("Dnsbl has been hotpatched.");
 			} else if (target.startsWith('disablechat')) {
@@ -2539,9 +2539,11 @@ exports.commands = {
 		});
 	},
 
-	adddatacenters: function (target, room, user) {
+	widendatacenters: 'adddatacenters',
+	adddatacenters: function (target, room, user, connection, cmd) {
 		if (!this.can('hotpatch')) return false;
 		// should be in the format: IP, IP, name, URL
+		let widen = (cmd === 'widendatacenters');
 
 		fs.readFile(require('path').resolve(__dirname, 'config/datacenters.csv'), (err, data) => {
 			if (err) return;
@@ -2562,6 +2564,7 @@ exports.commands = {
 			data = String(target).split("\n");
 			let successes = 0;
 			let identicals = 0;
+			let widenSuccesses = 0;
 			for (let row of data) {
 				if (!row) continue;
 				let rowSplit = row.split(',');
@@ -2593,6 +2596,11 @@ exports.commands = {
 						continue;
 					}
 					if (rowData[0] <= next[0] && rowData[1] >= next[1]) {
+						if (widen === true) {
+							widenSuccesses++;
+							datacenters.splice(iMin, 1, rowData);
+							continue;
+						}
 						this.errorReply('too wide: ' + row);
 						this.errorReply('intersects with: ' + next[3]);
 						continue;
@@ -2623,6 +2631,7 @@ exports.commands = {
 			let output = datacenters.map(r => r[3]).join('\n') + '\n';
 			fs.writeFile(require('path').resolve(__dirname, 'config/datacenters.csv'), output);
 			this.sendReply(`done: ${successes} successes, ${identicals} unchanged`);
+			if (widenSuccesses) this.sendReply(`${widenSuccesses} widens`);
 		});
 	},
 
@@ -3493,6 +3502,6 @@ exports.commands = {
 process.nextTick(() => {
 	// We might want to migrate most of this to a JSON schema of command attributes.
 	Chat.multiLinePattern.register(
-		'>>>? ', '/(?:room|staff)intro ', '/(?:staff)?topic ', '/adddatacenters ', '/bash '
+		'>>>? ', '/(?:room|staff)intro ', '/(?:staff)?topic ', '/(?:add|widen)datacenters ', '/bash '
 	);
 });
