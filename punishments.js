@@ -876,6 +876,45 @@ Punishments.removeSharedIp = function (ip) {
  * Checking
  *********************************************************/
 
+Punishments.search = function (searchId) {
+	const foundKeys = [];
+	let foundRest = null;
+	Punishments.ips.forEach((punishment, ip) => {
+		const [, id, ...rest] = punishment;
+
+		if (searchId === id || searchId === ip) {
+			foundKeys.push(ip);
+			foundRest = rest;
+		}
+	});
+	Punishments.userids.forEach((punishment, userid) => {
+		const [, id, ...rest] = punishment;
+
+		if (searchId === id || searchId === userid) {
+			foundKeys.push(userid);
+			foundRest = rest;
+		}
+	});
+	Punishments.roomIps.nestedForEach((punishment, roomid, ip) => {
+		const [, punishUserid, ...rest] = punishment;
+
+		if (searchId === punishUserid || searchId === ip) {
+			foundKeys.push(ip + ':' + roomid);
+			foundRest = rest;
+		}
+	});
+	Punishments.roomUserids.nestedForEach((punishment, roomid, userid) => {
+		const [, punishUserid, ...rest] = punishment;
+
+		if (searchId === punishUserid || searchId === userid) {
+			foundKeys.push(userid + ':' + roomid);
+			foundRest = rest;
+		}
+	});
+
+	return [foundKeys, foundRest];
+};
+
 /**
  * @param {string} name
  */
