@@ -177,7 +177,7 @@ exports.BattleFormatsData = {
 	},
 	crobat: {
 		inherit: true,
-		randomBattleMoves: ["bravebird", "roost", "superfang", "taunt", "nastyplot", "sludgebomb", "airslash", "uturn", "heatwave", "superfang", "hiddenpowerfighting", "crosspoison", "pursuit"],
+		randomBattleMoves: ["bravebird", "roost", "superfang", "taunt", "nastyplot", "sludgebomb", "airslash", "uturn", "heatwave", "hiddenpowerfighting", "crosspoison", "pursuit"],
 		tier: "BL",
 	},
 	oddish: {
@@ -329,7 +329,7 @@ exports.BattleFormatsData = {
 	},
 	rapidash: {
 		inherit: true,
-		randomBattleMoves: ["flareblitz", "morningsun", "hypnosis", "megahorn", "hypnosis", "willowisp"],
+		randomBattleMoves: ["flareblitz", "morningsun", "hypnosis", "megahorn", "willowisp"],
 		tier: "NU",
 	},
 	slowpoke: {
