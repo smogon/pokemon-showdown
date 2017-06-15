@@ -134,23 +134,23 @@ function runModlog(room, searchString, exactSearch, maxLines) {
 		fileNameList = [`modlog_${room}.txt`];
 	}
 
-	let searchStringRegex;
+	let regexString;
 	if (!searchString) {
-		searchStringRegex = new RegExp('.');
+		regexString = '.';
 	} else if (exactSearch) {
-		const escapedSearchString = searchString.replace(/\W/g, '\\$&');
-		searchStringRegex = new RegExp(escapedSearchString, 'i');
+		regexString = searchString.replace(/[\\.+*?()|\[\]{}\^$]/g, '\\$&');
 	} else {
 		searchString = toId(searchString);
-		searchStringRegex = new RegExp(`\\b${searchString.split('').join('\\W*')}\\b`, 'i');
+		regexString = `\\b${searchString.split('').join('\\W*')}\\b`;
 	}
 
 	let results = new SortedLimitedLengthList(maxLines);
 	if (useRipgrep && searchString) {
 		if (room === 'all') fileNameList = [`${__dirname}/${LOG_PATH}`];
-		runRipgrepModlog(fileNameList, searchStringRegex, results);
+		runRipgrepModlog(fileNameList, regexString, results);
 	} else {
 		fileNameList = fileNameList.map(filename => path.normalize(`${__dirname}/${LOG_PATH}${filename}`));
+		const searchStringRegex = new RegExp(regexString, 'i');
 		for (let i = 0; i < fileNameList.length; i++) {
 			checkRoomModlog(fileNameList[i], searchStringRegex, results);
 		}
@@ -195,8 +195,7 @@ function checkRoomModlog(path, regex, results) {
 	return results;
 }
 
-function runRipgrepModlog(paths, regex, results) {
-	let regexString = regex.source;
+function runRipgrepModlog(paths, regexString, results) {
 	let stdout;
 	try {
 		stdout = execFileSync('rg', ['-i', '-e', regexString, '--no-filename', '--no-line-number', ...paths], {cwd: path.normalize(`${__dirname}/${LOG_PATH}`)});
