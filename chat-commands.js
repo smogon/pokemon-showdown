@@ -2674,7 +2674,7 @@ exports.commands = {
 			Config.autolockdown = true;
 			this.sendReply("The server is now set to automatically kill itself upon the final battle finishing.");
 			this.logEntry(`${user.name} used /autolockdownkill on`);
-		} else if  (target === 'off' || target === 'disable') {
+		} else if (target === 'off' || target === 'disable') {
 			if (!Config.autolockdown) return this.errorReply("The server is already set to not automatically kill itself upon the final battle finishing.");
 			Config.autolockdown = false;
 			this.sendReply("The server is now set to not automatically kill itself upon the final battle finishing.");
