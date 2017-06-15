@@ -2492,7 +2492,7 @@ exports.commands = {
 				delete require.cache[require.resolve('./punishments')];
 				global.Punishments = require('./punishments');
 				return this.sendReply("Punishments have been hotpatched.");
-			} else if (target === 'dnsbl') {
+			} else if (target === 'dnsbl' || target === 'datacenters') {
 				Dnsbl.loadDatacenters();
 				return this.sendReply("Dnsbl has been hotpatched.");
 			} else if (target.startsWith('disablechat')) {
