@@ -80,7 +80,6 @@ class ScavGame extends Rooms.RoomGame {
 
 		this.childGame = null;
 		this.playerCap = Infinity;
-		this.allowRenames = true;
 
 		this.leaderboard = null;
 
@@ -358,6 +357,14 @@ class JumpStart extends ScavGame {
 		return true;
 	}
 
+	onSendQuestion(user) {
+		if (this.round === 1 && this.childGame && this.childGame.players[user.userid] && this.childGame.players[user.userid].completed) {
+			user.sendTo(this.room, `The first hint to the next hunt is: ${this.hunts[1][4][0]}`);
+			return true;
+		}
+		if (this.childGame && this.childGame.onSendQuestion) return this.childGame.onSendQuestion(user);
+	}
+
 	canJoinGame(user) {
 		return this.round === 1 || (user.userid in this.players);
 	}
@@ -365,7 +372,6 @@ class JumpStart extends ScavGame {
 	onCompleteEvent(player) {
 		if (this.round === 1 && this.hunts.length === 2) {
 			let questions = this.hunts[1][4];
-			console.log(questions);
 			player.sendRoom(`The first hint to the next hunt is: ${questions[0]}`);
 		}
 	}
