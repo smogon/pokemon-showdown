@@ -1085,9 +1085,6 @@ class User {
 		});
 		this.inRooms.clear();
 	}
-	getAlts(includeTrusted, forPunishment) {
-		return this.getAltUsers(includeTrusted, forPunishment).map(user => user.getLastName());
-	}
 	getAltUsers(includeTrusted, forPunishment) {
 		let alts = [];
 		if (forPunishment) alts.push(this);

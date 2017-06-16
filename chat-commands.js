@@ -1285,11 +1285,12 @@ exports.commands = {
 		const reason = (target ? ` (${target})` : ``);
 		this.addModCommand(`${name} was banned from ${room.title} by ${user.name}.${reason}`, ` (${targetUser.latestIp})`);
 
+		let affected = Punishments.roomBan(room, targetUser, null, null, target);
+
 		if (!room.isPrivate && room.chatRoomData) {
-			let alts = targetUser.getAlts(false, true);
 			let acAccount = (targetUser.autoconfirmed !== userid && targetUser.autoconfirmed);
-			if (alts.length) {
-				this.privateModCommand("(" + name + "'s " + (acAccount ? " ac account: " + acAccount + ", " : "") + "banned alts: " + alts.join(", ") + ")");
+			if (affected.length > 1) {
+				this.privateModCommand("(" + name + "'s " + (acAccount ? " ac account: " + acAccount + ", " : "") + "banned alts: " + affected.slice(1).map(user => user.getLastName()).join(", ") + ")");
 			} else if (acAccount) {
 				this.privateModCommand("(" + name + "'s ac account: " + acAccount + ")");
 			}
@@ -1300,7 +1301,6 @@ exports.commands = {
 		if (!room.isPrivate && room.chatRoomData) {
 			this.globalModlog("ROOMBAN", targetUser, " by " + user.name + (target ? ": " + target : ""));
 		}
-		Punishments.roomBan(room, targetUser, null, null, target);
 		return true;
 	},
 	banhelp: ["/roomban [username], [reason] - Bans the user from the room you are in. Requires: @ # & ~"],
@@ -1548,10 +1548,11 @@ exports.commands = {
 			Rooms('staff').addLogMessage(user, "<<" + room.id + ">> " + lockMessage);
 		}
 
-		let alts = targetUser.getAlts(false, true);
+		let affected = Punishments.lock(targetUser, null, null, userReason);
+
 		let acAccount = (targetUser.autoconfirmed !== userid && targetUser.autoconfirmed);
-		if (alts.length) {
-			this.privateModCommand("(" + name + "'s " + (acAccount ? " ac account: " + acAccount + ", " : "") + "locked alts: " + alts.join(", ") + ")");
+		if (affected.length > 1) {
+			this.privateModCommand("(" + name + "'s " + (acAccount ? " ac account: " + acAccount + ", " : "") + "locked alts: " + affected.slice(1).map(user => user.getLastName()).join(", ") + ")");
 		} else if (acAccount) {
 			this.privateModCommand("(" + name + "'s ac account: " + acAccount + ")");
 		}
@@ -1560,7 +1561,6 @@ exports.commands = {
 
 		const globalReason = (target ? `: ${userReason} ${proof}` : ``);
 		this.globalModlog("LOCK", targetUser, ` by ${user.name}${globalReason}`);
-		Punishments.lock(targetUser, null, null, userReason);
 		return true;
 	},
 	lockhelp: [
@@ -1629,10 +1629,10 @@ exports.commands = {
 			Rooms('staff').addLogMessage(user, "<<" + room.id + ">> " + lockMessage);
 		}
 
-		let alts = targetUser.getAlts(false, true);
+		let affected = Punishments.lock(targetUser, Date.now() + 7 * 24 * 60 * 60 * 1000, null, userReason);
 		let acAccount = (targetUser.autoconfirmed !== userid && targetUser.autoconfirmed);
-		if (alts.length) {
-			this.privateModCommand("(" + name + "'s " + (acAccount ? " ac account: " + acAccount + ", " : "") + "locked alts: " + alts.join(", ") + ")");
+		if (affected.length > 1) {
+			this.privateModCommand("(" + name + "'s " + (acAccount ? " ac account: " + acAccount + ", " : "") + "locked alts: " + affected.slice(1).map(user => user.getLastName()).join(", ") + ")");
 		} else if (acAccount) {
 			this.privateModCommand("(" + name + "'s ac account: " + acAccount + ")");
 		}
@@ -1641,7 +1641,6 @@ exports.commands = {
 
 		const globalReason = (target ? `: ${userReason} ${proof}` : ``);
 		this.globalModlog("WEEKLOCK", targetUser, ` by ${user.name}${globalReason}`);
-		Punishments.lock(targetUser, Date.now() + 7 * 24 * 60 * 60 * 1000, null, userReason);
 		return true;
 	},
 	weeklockhelp: [
@@ -1740,15 +1739,15 @@ exports.commands = {
 			Rooms('staff').addLogMessage(user, "<<" + room.id + ">> " + banMessage);
 		}
 
-		let alts = targetUser.getAlts(false, true);
+		let affected = Punishments.ban(targetUser, null, null, userReason);
 		let acAccount = (targetUser.autoconfirmed !== userid && targetUser.autoconfirmed);
-		if (alts.length) {
-			let guests = alts.length;
-			alts = alts.filter(alt => alt.substr(0, 7) !== '[Guest ');
-			guests -= alts.length;
-			this.privateModCommand("(" + name + "'s " + (acAccount ? " ac account: " + acAccount + ", " : "") + "banned alts: " + alts.join(", ") + (guests ? " [" + guests + " guests]" : "") + ")");
-			for (let i = 0; i < alts.length; ++i) {
-				this.add('|unlink|' + toId(alts[i]));
+		if (affected.length > 1) {
+			let guests = affected.length - 1;
+			affected = affected.slice(1).map(user => user.getLastName()).filter(alt => alt.substr(0, 7) !== '[Guest ');
+			guests -= affected.length;
+			this.privateModCommand("(" + name + "'s " + (acAccount ? " ac account: " + acAccount + ", " : "") + "banned alts: " + affected.join(", ") + (guests ? " [" + guests + " guests]" : "") + ")");
+			for (let i = 0; i < affected.length; ++i) {
+				this.add('|unlink|' + toId(affected[i]));
 			}
 		} else if (acAccount) {
 			this.privateModCommand("(" + name + "'s ac account: " + acAccount + ")");
@@ -1756,7 +1755,6 @@ exports.commands = {
 
 		this.add('|unlink|hide|' + userid);
 		if (userid !== toId(this.inputUsername)) this.add('|unlink|hide|' + toId(this.inputUsername));
-		Punishments.ban(targetUser, null, null, userReason);
 
 		const globalReason = (target ? `: ${userReason} ${proof}` : ``);
 		this.globalModlog("BAN", targetUser, ` by ${user.name}${globalReason}`);
@@ -2253,11 +2251,13 @@ exports.commands = {
 		}
 
 		this.addModCommand("" + name + " was blacklisted by " + user.name + "." + (target ? " (" + target + ")" : ""), " (" + targetUser.latestIp + ")");
+
+		let affected = Punishments.roomBlacklist(room, targetUser, null, null, target);
+
 		if (!room.isPrivate && room.chatRoomData) {
-			let alts = targetUser.getAlts(false, true);
 			let acAccount = (targetUser.autoconfirmed !== userid && targetUser.autoconfirmed);
-			if (alts.length) {
-				this.privateModCommand("(" + name + "'s " + (acAccount ? " ac account: " + acAccount + ", " : "") + "blacklisted alts: " + alts.join(", ") + ")");
+			if (affected.length > 1) {
+				this.privateModCommand("(" + name + "'s " + (acAccount ? " ac account: " + acAccount + ", " : "") + "blacklisted alts: " + affected.slice(1).map(user => user.getLastName()).join(", ") + ")");
 			} else if (acAccount) {
 				this.privateModCommand("(" + name + "'s ac account: " + acAccount + ")");
 			}
@@ -2268,7 +2268,6 @@ exports.commands = {
 		if (!room.isPrivate && room.chatRoomData) {
 			this.globalModlog("BLACKLIST", targetUser, " by " + user.name + (target ? ": " + target : ""));
 		}
-		Punishments.roomBlacklist(room, targetUser, null, null, target);
 		return true;
 	},
 	blacklisthelp: ["/blacklist [username], [reason] - Blacklists the user from the room you are in for a year. Requires: # & ~"],
