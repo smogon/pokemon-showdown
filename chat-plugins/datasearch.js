@@ -894,8 +894,7 @@ function runMovesearch(target, cmd, canAll, message) {
 			if (direction === 'equal') {
 				if (searches['property'][prop]) return {reply: "Invalid property range for " + prop + "."};
 				searches['property'][prop] = {};
-				searches['property'][prop]['less'] = parseFloat(targetParts[numSide]);
-				searches['property'][prop]['greater'] = parseFloat(targetParts[numSide]);
+				searches['property'][prop]['equals'] = parseFloat(targetParts[numSide]);
 			} else {
 				if (!searches['property'][prop]) searches['property'][prop] = {};
 				if (searches['property'][prop][direction]) {
@@ -1076,7 +1075,7 @@ function runMovesearch(target, cmd, canAll, message) {
 							delete dex[move];
 							continue;
 						}
-						if (dex[move][prop] > searches[search][prop].less) {
+						if (dex[move][prop] >= searches[search][prop].less) {
 							delete dex[move];
 							continue;
 						}
@@ -1086,7 +1085,13 @@ function runMovesearch(target, cmd, canAll, message) {
 							if (dex[move].category === "Status") delete dex[move];
 							continue;
 						}
-						if (dex[move][prop] < searches[search][prop].greater) {
+						if (dex[move][prop] <= searches[search][prop].greater) {
+							delete dex[move];
+							continue;
+						}
+					}
+					if (typeof searches[search][prop].equals === "number") {
+						if (dex[move][prop] !== searches[search][prop].equals) {
 							delete dex[move];
 							continue;
 						}
