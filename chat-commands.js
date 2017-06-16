@@ -1286,7 +1286,7 @@ exports.commands = {
 		this.addModCommand(`${name} was banned from ${room.title} by ${user.name}.${reason}`, ` (${targetUser.latestIp})`);
 
 		if (!room.isPrivate && room.chatRoomData) {
-			let alts = targetUser.getAlts();
+			let alts = targetUser.getAlts(false, true);
 			let acAccount = (targetUser.autoconfirmed !== userid && targetUser.autoconfirmed);
 			if (alts.length) {
 				this.privateModCommand("(" + name + "'s " + (acAccount ? " ac account: " + acAccount + ", " : "") + "banned alts: " + alts.join(", ") + ")");
@@ -1548,7 +1548,7 @@ exports.commands = {
 			Rooms('staff').addLogMessage(user, "<<" + room.id + ">> " + lockMessage);
 		}
 
-		let alts = targetUser.getAlts();
+		let alts = targetUser.getAlts(false, true);
 		let acAccount = (targetUser.autoconfirmed !== userid && targetUser.autoconfirmed);
 		if (alts.length) {
 			this.privateModCommand("(" + name + "'s " + (acAccount ? " ac account: " + acAccount + ", " : "") + "locked alts: " + alts.join(", ") + ")");
@@ -1629,7 +1629,7 @@ exports.commands = {
 			Rooms('staff').addLogMessage(user, "<<" + room.id + ">> " + lockMessage);
 		}
 
-		let alts = targetUser.getAlts();
+		let alts = targetUser.getAlts(false, true);
 		let acAccount = (targetUser.autoconfirmed !== userid && targetUser.autoconfirmed);
 		if (alts.length) {
 			this.privateModCommand("(" + name + "'s " + (acAccount ? " ac account: " + acAccount + ", " : "") + "locked alts: " + alts.join(", ") + ")");
@@ -1740,7 +1740,7 @@ exports.commands = {
 			Rooms('staff').addLogMessage(user, "<<" + room.id + ">> " + banMessage);
 		}
 
-		let alts = targetUser.getAlts();
+		let alts = targetUser.getAlts(false, true);
 		let acAccount = (targetUser.autoconfirmed !== userid && targetUser.autoconfirmed);
 		if (alts.length) {
 			let guests = alts.length;
@@ -2254,7 +2254,7 @@ exports.commands = {
 
 		this.addModCommand("" + name + " was blacklisted by " + user.name + "." + (target ? " (" + target + ")" : ""), " (" + targetUser.latestIp + ")");
 		if (!room.isPrivate && room.chatRoomData) {
-			let alts = targetUser.getAlts();
+			let alts = targetUser.getAlts(false, true);
 			let acAccount = (targetUser.autoconfirmed !== userid && targetUser.autoconfirmed);
 			if (alts.length) {
 				this.privateModCommand("(" + name + "'s " + (acAccount ? " ac account: " + acAccount + ", " : "") + "blacklisted alts: " + alts.join(", ") + ")");
