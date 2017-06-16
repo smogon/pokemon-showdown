@@ -1091,11 +1091,13 @@ class User {
 	getAltUsers(includeTrusted, forPunishment) {
 		let alts = [];
 		if (forPunishment) alts.push(this);
+		let ips = Object.keys(this.ips);
+		if (forPunishment) ips = ips.filter(ip => !Punishments.sharedIps.has(ip));
 		users.forEach(user => {
 			if (user === this) return;
 			if (!forPunishment && !user.named && !user.connected) return;
 			if (!includeTrusted && user.trusted) return;
-			for (let myIp in this.ips) {
+			for (let myIp of ips) {
 				if (myIp in user.ips) {
 					alts.push(user);
 					return;
