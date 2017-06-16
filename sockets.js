@@ -62,23 +62,27 @@ if (cluster.isMaster) {
 		return worker;
 	};
 
-	cluster.on('disconnect', worker => {
-		// worker crashed, try our best to clean up
-		require('./crashlogger')(new Error(`Worker ${worker.id} abruptly died`), "The main process");
+	cluster.on('exit', (worker, code, signal) => {
+		if (code === null && signal === 'SIGTERM') {
+			// worker was killed by Sockets.killWorker or Sockets.killPid
+		} else {
+			// worker crashed, try our best to clean up
+			require('./crashlogger')(new Error(`Worker ${worker.id} abruptly died`), "The main process");
 
-		// this could get called during cleanup; prevent it from crashing
-		// note: overwriting Worker#send is unnecessary in Node.js v7.0.0 and above
-		// see https://github.com/nodejs/node/commit/8c53d2fe9f102944cc1889c4efcac7a86224cf0a
-		worker.send = () => {};
+			// this could get called during cleanup; prevent it from crashing
+			// note: overwriting Worker#send is unnecessary in Node.js v7.0.0 and above
+			// see https://github.com/nodejs/node/commit/8c53d2fe9f102944cc1889c4efcac7a86224cf0a
+			worker.send = () => {};
 
-		let count = 0;
-		Users.connections.forEach(connection => {
-			if (connection.worker === worker) {
-				Users.socketDisconnect(worker, worker.id, connection.socketid);
-				count++;
-			}
-		});
-		console.error(`${count} connections were lost.`);
+			let count = 0;
+			Users.connections.forEach(connection => {
+				if (connection.worker === worker) {
+					Users.socketDisconnect(worker, worker.id, connection.socketid);
+					count++;
+				}
+			});
+			console.error(`${count} connections were lost.`);
+		}
 
 		// don't delete the worker, so we can investigate it if necessary.
 
@@ -118,10 +122,14 @@ if (cluster.isMaster) {
 				count++;
 			}
 		});
+		console.log(`${count} connections were lost.`);
+
 		try {
-			worker.kill();
+			worker.disconnect();
+			worker.kill('SIGTERM');
 		} catch (e) {}
 		workers.delete(worker.id);
+
 		return count;
 	};
 
@@ -423,8 +431,21 @@ if (cluster.isMaster) {
 		}
 	});
 
-	process.on('disconnect', () => {
-		process.exit();
+	// Clean up any remaining connections on disconnect. If this isn't done,
+	// the process will not exit until any remaining connections have been destroyed.
+	// Afterwards, the worker process will die on its own.
+	process.once('disconnect', () => {
+		sockets.forEach(socket => {
+			try {
+				socket.end();
+				socket.destroy();
+			} catch (e) {}
+		});
+		sockets.clear();
+		channels.clear();
+		subchannels.clear();
+		app.close();
+		if (appssl) appssl.close();
 	});
 
 	// this is global so it can be hotpatched if necessary
