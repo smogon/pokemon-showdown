@@ -1944,6 +1944,7 @@ exports.commands = {
 			let groupid = Config.groups[nextGroup].id;
 			if (!groupid && nextGroup === Config.groupsranking[0]) groupid = 'deauth';
 			if (Config.groups[nextGroup].globalonly) return this.errorReply(`Did you mean "/global${groupid}"?`);
+			if (Config.groups[nextGroup].roomonly) return this.errorReply(`Did you mean "/room${groupid}"?`);
 			return this.errorReply(`Did you mean "/room${groupid}" or "/global${groupid}"?`);
 		}
 		if (Config.groups[nextGroup].roomonly || Config.groups[nextGroup].battleonly) {
