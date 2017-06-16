@@ -9,12 +9,67 @@
 
 'use strict';
 
-function listString(array) {
-	if (array.length === 1) return array[0];
-	return `${array.slice(0, -1).join(", ")} and ${array.slice(-1)}`;
-}
+class Leaderboard {
+	constructor(game) {
+		this.game = game;
+		this.data = {};
+	}
 
-const ScavengerHunt = require("./scavengers").game;
+	addPoints(name, aspect, points, noUpdate) {
+		let userid = toId(name);
+
+		if (!userid || userid === 'constructor' || !points) return this;
+		if (!this.data[userid]) this.data[userid] = {name: name};
+
+		if (!this.data[userid][aspect]) this.data[userid][aspect] = 0;
+		this.data[userid][aspect] += points;
+
+		if (!noUpdate) this.data[userid].name = name; // always keep the last used name
+
+		return this; // allow chaining
+	}
+
+	visualize(sortBy, userid) {
+		// return a promise for async sorting - make this less exploitable
+		return new Promise((resolve, reject) => {
+			let lowestScore = Infinity;
+			let lastPlacement = 1;
+
+			let ladder = Object.keys(this.data)
+				.filter(k => sortBy in this.data[k])
+				.sort((a, b) => this.data[b][sortBy] - this.data[a][sortBy])
+				.map((u, i) => {
+					u = this.data[u];
+					if (u[sortBy] !== lowestScore) {
+						lowestScore = u[sortBy];
+						lastPlacement = i + 1;
+					}
+					return Object.assign(
+						{rank: lastPlacement},
+						u
+					);
+				}); // identify ties
+			if (userid) {
+				let rank = ladder.find(entry => toId(entry.name) === userid);
+				resolve(rank);
+			} else {
+				resolve(ladder);
+			}
+		});
+	}
+
+	htmlLadder() {
+		return new Promise((resolve, reject) => {
+			this.visualize('points').then(data => {
+				let display = `<div class="ladder" style="overflow-y: scroll; max-height: 170px;"><table style="width: 100%">` +
+					`<tr><th>Rank</th><th>Name</th><th>Points</th></tr>` +
+					data.map(line => `<tr><td>${line.rank}</td><td>${line.name}</td><td>${line.points}</td></tr>`).join('') +
+					`</table></div>`;
+				resolve(display);
+			});
+		});
+	}
+}
 
 class ScavGame extends Rooms.RoomGame {
 	constructor(room, gameType = "Scavenger Game") {
@@ -25,6 +80,11 @@ class ScavGame extends Rooms.RoomGame {
 
 		this.childGame = null;
 		this.playerCap = Infinity;
+		this.allowRenames = true;
+
+		this.leaderboard = null;
+
+		this.round = 0;
 
 		// identify this as a scav game.
 		this.scavParentGame = true;
@@ -90,9 +150,6 @@ class ScavGame extends Rooms.RoomGame {
 	leaveGame(...args) {
 		if (this.childGame && this.childGame.leaveGame) this.childGame.leaveGame(...args);
 	}
-	onEditQuestion(...args) {
-		if (this.childGame && this.childGame.onEditQuestion) return this.childGame.onEditQuestion(...args);
-	}
 	setTimer(...args) {
 		if (this.childGame && this.childGame.setTimer) this.childGame.setTimer(...args);
 	}
@@ -110,7 +167,9 @@ class ScavGame extends Rooms.RoomGame {
 	 * Functions for the child hunt to call once a certain condition is met
 	 * in the child roomgame
 	 */
-	onStartEvent() {}
+	onStartEvent() {
+		this.round++;
+	}
 	onCompleteEvent(player) {}
 	onEndEvent() {}
 	onDestroyEvent() {
@@ -121,9 +180,9 @@ class ScavGame extends Rooms.RoomGame {
 	 * General Game functions.
 	 */
 	createHunt(room, staffHost, host, gameType, questions) {
-		if (this.childGame) return host.sendTo(this.room, "There is already a scavenger hunt in progress.");
+		if (this.childGame) return staffHost.sendTo(this.room, "There is already a scavenger hunt in progress.");
 		this.onStartEvent();
-		this.childGame = new ScavengerHunt(room, staffHost, host, gameType, questions, this);
+		this.childGame = new Rooms.ScavengerHunt(room, staffHost, host, gameType, questions, this);
 		return true;
 	}
 
@@ -141,6 +200,10 @@ class ScavGame extends Rooms.RoomGame {
 		delete this.players[userid];
 		this.playerCount--;
 
+		if (this.leaderboard) {
+			delete this.leaderboard.data[userid]; // remove their points in the leaderboard
+		}
+
 		return name;
 	}
 }
@@ -151,8 +214,6 @@ class ScavGame extends Rooms.RoomGame {
 class KOGame extends ScavGame {
 	constructor(room) {
 		super(room, "Knockout Games");
-
-		this.round = 0;
 	}
 
 	canJoinGame(user) {
@@ -164,26 +225,26 @@ class KOGame extends ScavGame {
 		if (this.round === 1) {
 			this.announce(`Knockout Games - Round 1.  Everyone is welcome to join!`);
 		} else {
-			this.announce(`Knockout Games - Round ${this.round}. Only the following players are allowed to join: ${Object.keys(this.players).map(p => this.players[p].name).join(", ")}`);
+			let participants = Object.keys(this.players).map(p => this.players[p].name);
+			this.announce(`Knockout Games - Round ${this.round}. Only the following ${participants.length} players are allowed to join: ${participants.join(', ')}.`);
 		}
 	}
 
 	onEndEvent() {
 		let completed = this.childGame.completed.map(u => toId(u.name)); // list of userids
 		if (!completed.length) {
-			this.announce(`No one has completed the hunt! Better luck next time!`);
+			this.announce(`No one has completed the hunt! This round has been void!`);
+			this.round--;
 
-			setImmediate(() => this.destroy());
 			return;
 		}
 
 		if (this.round === 1) {
-			this.announce(`Congratulations to ${listString(completed.map(p => this.players[p].name))}! They have completed the first round, and have moved on to the next round!`);
-
 			// prune the players that havent finished
 			for (let i in this.players) {
 				if (!(i in this.childGame.players) || !this.childGame.players[i].completed) this.eliminate(i); // user hasnt finished.
 			}
+			this.announce(`Congratulations to ${Chat.toListString(Object.keys(this.players).map(i => this.players[i].name))}! They have completed the first round, and have moved on to the next round!`);
 			return;
 		}
 
@@ -208,10 +269,186 @@ class KOGame extends ScavGame {
 			return;
 		}
 
-		this.announce(`${listString(eliminated.map(n => `<em>${n}</em>`))} ${(eliminated.length > 1 ? 'have' : 'has')} been eliminated! ${listString(Object.keys(this.players).map(p => `<em>${this.players[p].name}</em>`))} have successfully completed the last hunt and have moved on to the next round!`);
+		this.announce(`${Chat.toListString(eliminated.map(n => `<em>${n}</em>`))} ${(eliminated.length > 1 ? 'have' : 'has')} been eliminated! ${Chat.toListString(Object.keys(this.players).map(p => `<em>${this.players[p].name}</em>`))} have successfully completed the last hunt and have moved on to the next round!`);
 	}
 }
 
+class ScavengerGames extends ScavGame {
+	constructor(room) {
+		super(room, "Scavenger Games");
+	}
+
+	canJoinGame(user) {
+		return this.round === 1 || (user.userid in this.players);
+	}
+
+	onStartEvent() {
+		this.round++;
+		if (this.round === 1) {
+			this.announce(`Scavenger Games - Round 1.  Everyone is welcome to join!`);
+		} else {
+			let participants = Object.keys(this.players).map(p => this.players[p].name);
+			this.announce(`Scavenger Games - Round ${this.round}. Only the following ${participants.length} players are allowed to join: ${participants.join(', ')}. You have one minute to complete the hunt!`);
+			setImmediate(() => this.childGame.setTimer(1));
+		}
+	}
+
+	onEndEvent() {
+		let completed = this.childGame.completed.map(u => toId(u.name)); // list of userids
+		if (!completed.length) {
+			this.announce(`No one has completed the hunt! This round has been voided!`);
+			this.round--;
+
+			return;
+		}
+
+		if (this.round === 1) {
+			// prune the players that havent finished
+			for (let i in this.players) {
+				if (!(i in this.childGame.players) || !this.childGame.players[i].completed) this.eliminate(i); // user hasnt finished.
+			}
+			this.announce(`Congratulations to ${Chat.toListString(Object.keys(this.players).map(i => this.players[i].name))}! They have completed the first round, and have moved on to the next round!`);
+			return;
+		}
+
+		let unfinished = Object.keys(this.players).filter(id => !completed.includes(id));
+
+		let eliminated = unfinished.map(id => this.eliminate(id)).filter(n => n); // this.eliminate() returns the players name.
+
+		if (Object.keys(this.players).length <= 1) {
+			// game over
+			let winner = this.players[Object.keys(this.players)[0]];
+
+			if (winner) {
+				this.announce(`Congratulations to ${winner.name} for winning the Knockout Games!`);
+			} else {
+				this.announce(`Sorry, no winners this time!`); // a catch - this should not realistically happen.
+			}
+			setImmediate(() => this.destroy()); // destroy the parent game after the child game finishes running their destroy functions.
+			return;
+		}
+
+		this.announce(`${Chat.toListString(eliminated.map(n => `<em>${n}</em>`))} ${(eliminated.length > 1 ? 'have' : 'has')} been eliminated! ${Chat.toListString(Object.keys(this.players).map(p => `<em>${this.players[p].name}</em>`))} have successfully completed the last hunt and have moved on to the next round!`);
+	}
+}
+
+class JumpStart extends ScavGame {
+	constructor(room) {
+		super(room, "Jump Start");
+
+		// the place to store both hunts
+		this.hunts = [];
+	}
+
+	// alter the create hunt function so that both hunts are entered before the actual hunt starts
+	createHunt(room, staffHost, host, gameType, questions) {
+		if (this.hunts.length === 0) {
+			this.hunts.push([room, staffHost, host, gameType, questions]);
+			staffHost.sendTo(this.room, "The first hunt has been set. Please use /starthunt again to add the second hunt.");
+			return false;
+		} else if (this.hunts.length === 1) {
+			this.hunts.push([room, staffHost, host, gameType, questions]);
+			// start the hunt
+			this.onStartEvent();
+			this.childGame = new Rooms.ScavengerHunt(...this.hunts[0], this);
+		} else {
+			staffHost.sendTo(this.room, "There are already 2 hunts set for this scavenger game.");
+			return false;
+		}
+		return true;
+	}
+
+	canJoinGame(user) {
+		return this.round === 1 || (user.userid in this.players);
+	}
+
+	onCompleteEvent(player) {
+		if (this.round === 1 && this.hunts.length === 2) {
+			let questions = this.hunts[1][4];
+			console.log(questions);
+			player.sendRoom(`The first hint to the next hunt is: ${questions[0]}`);
+		}
+	}
+
+	onEndEvent() {
+		let completed = this.childGame.completed.map(u => toId(u.name)); // list of userids
+		if (!completed.length) {
+			this.announce(`No one has completed the hunt! Better luck next time!`);
+
+			setImmediate(() => this.destroy());
+			return;
+		}
+
+		if (this.round === 1) {
+			// prune the players that havent finished
+			for (let i in this.players) {
+				if (!(i in this.childGame.players) || !this.childGame.players[i].completed) this.eliminate(i); // user hasnt finished.
+			}
+			this.announce(`Congratulations to ${Chat.toListString(Object.keys(this.players).map(i => this.players[i].name))}! They have completed the first round, and have moved on to the next round!`);
+			if (this.hunts.length === 2) {
+				setImmediate(() => {
+					this.onStartEvent();
+					this.childGame = new Rooms.ScavengerHunt(...this.hunts[1], this);  // start it after the last hunt object has been destroyed
+				});
+			} else {
+				// technically should never happen
+				this.announce("ERROR: The scavenger game has been abruptly ended due to the lack of a second game.");
+				setImmediate(() => this.destroy());
+			}
+		} else {
+			this.announce(`Congratulations to the winners of the Jump Start game!`);
+			setImmediate(() => this.destroy());
+		}
+	}
+}
+
+class PointRally extends ScavGame {
+	constructor(room) {
+		super(room, "Point Rally");
+
+		this.pointDistribution = [50, 40, 32, 25, 20, 15, 10];
+
+		this.leaderboard = new Leaderboard(this);
+	}
+
+	getPoints(place) {
+		return this.pointDistribution[place] || this.pointDistribution[this.pointDistribution.length - 1];
+	}
+
+	onStartEvent() {
+		this.round++;
+		this.announce(`Hunt #${this.round}`);
+	}
+
+	onEndEvent() {
+		// give points
+		let completed = this.childGame.completed.map(e => e.name);
+		let length = completed.length;
+
+		for (let i = 0; i < length; i++) {
+			this.leaderboard.addPoints(completed[i], 'points', this.getPoints(i));
+		}
+
+		// post leaderboard
+		this.leaderboard.htmlLadder().then(html => {
+			this.room.add(`|raw|${html}`).update();
+		});
+	}
+
+	destroy() {
+		if (this.childGame && this.childGame.destroy) this.childGame.destroy();
+		this.room.game = null;
+		this.room = null;
+		for (let i in this.players) {
+			this.players[i].destroy();
+		}
+	}
+}
+
+
 module.exports = {
 	KOGame: KOGame,
+	JumpStart: JumpStart,
+	PointRally: PointRally,
+	ScavengerGames: ScavengerGames,
 };
