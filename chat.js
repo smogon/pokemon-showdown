@@ -1114,3 +1114,15 @@ Chat.parseText = function (str) {
 
 	return result;
 };
+
+/**
+ * Takes an array and turns it into a sentence string by adding commas and the word 'and' at the end
+ *
+ * @param  {array} array
+ * @return {string}
+ */
+Chat.toListString = function (array) {
+	if (!array.length) return '';
+	if (array.length === 1) return array[0];
+	return `${array.slice(0, -1).join(", ")} and ${array.slice(-1)}`;
+};
