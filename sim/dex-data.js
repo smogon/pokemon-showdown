@@ -426,11 +426,13 @@ class Template extends Effect {
  * @property {?1} bullet - Has no effect on Pokemon with the Ability Bulletproof.
  * @property {?1} charge - The user is unable to make a move between turns.
  * @property {?1} contact - Makes contact.
+ * @property {?1} dance - When used by a Pokemon, other Pokemon with the Ability Dancer can attempt to execute the same move.
  * @property {?1} defrost - Thaws the user if executed successfully while the user is frozen.
  * @property {?1} distance - Can target a Pokemon positioned anywhere in a Triple Battle.
  * @property {?1} gravity - Prevented from being executed or selected during Gravity's effect.
  * @property {?1} heal - Prevented from being executed or selected during Heal Block's effect.
  * @property {?1} mirror - Can be copied by Mirror Move.
+ * @property {?1} mystery - Unknown effect.
  * @property {?1} nonsky - Prevented from being executed or selected in a Sky Battle.
  * @property {?1} powder - Has no effect on Grass-type Pokemon, Pokemon with the Ability Overcoat, and Pokemon holding Safety Goggles.
  * @property {?1} protect - Blocked by Detect, Protect, Spiky Shield, and if not a Status move, King's Shield.
