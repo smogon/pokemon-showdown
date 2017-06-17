@@ -365,7 +365,7 @@ class JumpStart extends ScavGame {
 		timesArray = timesArray.map(t => Number(t));
 		this.jumpStartTimes = [];
 
-		const MIN_WAIT_TIME = 1; // seconds
+		const MIN_WAIT_TIME = 60; // seconds
 		for (let i = 0; i < timesArray.length; i++) {
 			let diff = timesArray[i];
 			if (!diff || diff < 0) return "The times must be numbers greater than 0 in seconds.";
