@@ -217,6 +217,15 @@ exports.repl = true;
 exports.replsocketprefix = './logs/repl/';
 exports.replsocketmode = 0o600;
 
+// github - this is used for update alerts for a GitHub repository.
+// To use this, uncomment this and fill in the object with the
+// appropriate attributes.
+/**exports.github = {
+ 	port: 3420, // the port for your webhook
+ 	secret: '', // the secret specified during webhook creation
+ 	rooms: [], // list of rooms to be notified on GitHub updates.  If left unspecified, it will check for a Development room.
+};**/
+
 // permissions and groups:
 //   Each entry in `grouplist' is a seperate group. Some of the members are "special"
 //     while the rest is just a normal permission.

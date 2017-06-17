@@ -926,8 +926,13 @@ Chat.loadCommands = function () {
 	Object.assign(commands, require('./chat-plugins/info').commands);
 
 	for (let file of fs.readdirSync(path.resolve(__dirname, 'chat-plugins'))) {
-		if (file.substr(-3) !== '.js' || file === 'info.js') continue;
+		if (file.substr(-3) !== '.js' || file === 'info.js' || file === 'github.js') continue;
 		Object.assign(commands, require('./chat-plugins/' + file).commands);
+	}	
+
+	try {
+		Object.assign(commands, require('./chat-plugins/github').commands);
+	} catch (e) {
 	}
 };
 
