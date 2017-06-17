@@ -130,6 +130,10 @@ class ScavGame extends Rooms.RoomGame {
 	// get rid of childgame
 	destroy() {
 		if (this.childGame && this.childGame.destroy) this.childGame.destroy();
+		if (this.timer) {
+			clearTimeout(this.timer);
+			this.timer = null;
+		}
 		this.room.game = null;
 		this.room = null;
 		for (let i in this.players) {
@@ -161,6 +165,7 @@ class ScavGame extends Rooms.RoomGame {
 	onChatMessage(msg) {
 		if (this.childGame && this.childGame.onChatMessage) return this.childGame.onChatMessage(msg);
 	}
+	onUpdateConnection() {}
 
 	/**
 	 * Functions for the child hunt to call once a certain condition is met
@@ -337,6 +342,7 @@ class JumpStart extends ScavGame {
 
 		// the place to store both hunts
 		this.hunts = [];
+		this.completed = [];
 	}
 
 	// alter the create hunt function so that both hunts are entered before the actual hunt starts
@@ -344,35 +350,84 @@ class JumpStart extends ScavGame {
 		if (this.hunts.length === 0) {
 			this.hunts.push([room, staffHost, host, gameType, questions]);
 			staffHost.sendTo(this.room, "The first hunt has been set. Please use /starthunt again to add the second hunt.");
-			return false;
 		} else if (this.hunts.length === 1) {
 			this.hunts.push([room, staffHost, host, gameType, questions]);
-			// start the hunt
-			this.onStartEvent();
-			this.childGame = new Rooms.ScavengerHunt(...this.hunts[0], this);
+			staffHost.sendTo(this.room, "The second hunt has been set. Please use /scav game jumpstart set [seconds], [seconds]... to set how many seconds early the hints should be automatically given out.");
 		} else {
 			staffHost.sendTo(this.room, "There are already 2 hunts set for this scavenger game.");
-			return false;
 		}
-		return true;
+		return false;
 	}
 
-	onSendQuestion(user) {
-		if (this.round === 1 && this.childGame && this.childGame.players[user.userid] && this.childGame.players[user.userid].completed) {
-			user.sendTo(this.room, `The first hint to the next hunt is: ${this.hunts[1][4][0]}`);
-			return true;
+	setJumpStart(timesArray) {
+		if (this.jumpStartTimes) return "The times for the jump start has already been set.";
+
+		timesArray = timesArray.map(t => Number(t));
+		this.jumpStartTimes = [];
+
+		const MIN_WAIT_TIME = 1; // seconds
+		for (let i = 0; i < timesArray.length; i++) {
+			let diff = timesArray[i];
+			if (!diff || diff < 0) return "The times must be numbers greater than 0 in seconds.";
+			if (i) {
+				let prevDiff = timesArray[i - 1];
+				this.jumpStartTimes.push(prevDiff - diff); // make the timer call itself as one runs out
+				if (i === timesArray.length - 1) {
+					this.huntWait = diff; // the last wait tme
+				}
+			} else {
+				this.jumpStartTimes.push(MIN_WAIT_TIME); // the first one is always 0 + the minimum wait
+			}
 		}
-		if (this.childGame && this.childGame.onSendQuestion) return this.childGame.onSendQuestion(user);
+
+		if (this.jumpStartTimes.some(t => t < 0)) {
+			this.jumpStartTimes = null;
+			return "Invalid ordering of times.";
+		}
+		this.earlyTimes = timesArray;
+
+		// start the hunt
+		this.onStartEvent();
+		this.childGame = new Rooms.ScavengerHunt(...this.hunts[0], this);
 	}
 
-	canJoinGame(user) {
-		return this.round === 1 || (user.userid in this.players);
+	runJumpStartTimer() {
+		if (this.jumpStartTimes.length) {
+			let targetUserId = this.completed.shift();
+
+			// if there are no more to distribute - set one timer with all of the remaining times together
+			if (!targetUserId) {
+				this.timer = setTimeout(() => {
+					this.onStartEvent();
+					this.childGame = new Rooms.ScavengerHunt(...this.hunts[1], this);  // start it after the last hunt object has been destroyed
+				}, this.huntWait + (this.jumpStartTimes.reduce((a, b) => a + b) * 1000));
+				return;
+			}
+
+			// set the (recursive) timer to give out hints.
+			let duration = this.jumpStartTimes.shift() * 1000;
+			this.timer = setTimeout(() => {
+				let targetUser = Users(targetUserId);
+				if (targetUser) {
+					targetUser.sendTo(this.room, `|raw|<strong>The first hint to the next hunt is:</strong> ${Chat.parseText(this.hunts[1][4][0])}`);
+					targetUser.sendTo(this.room, `|notify|Early Hint|The first hint to the next hunt is: ${this.hunts[1][4][0]}`);
+				}
+				this.runJumpStartTimer();
+			}, duration);
+		} else {
+			// there are no more slots for early delivery - start the new hunt
+			this.timer = setTimeout(() => {
+				this.onStartEvent();
+				this.childGame = new Rooms.ScavengerHunt(...this.hunts[1], this);
+				this.room.add(`|c|~|[ScavengerManager] A scavenger hunt by ${Chat.toListString(this.childGame.hosts.map(h => h.name))} has been automatically started.`).update(); // highlight the users with "hunt by"
+			}, this.huntWait);
+		}
 	}
 
 	onCompleteEvent(player) {
-		if (this.round === 1 && this.hunts.length === 2) {
-			let questions = this.hunts[1][4];
-			player.sendRoom(`The first hint to the next hunt is: ${questions[0]}`);
+		if (this.round === 1 && this.completed.length < this.jumpStartTimes.length) {
+			player.sendRoom(`You will receive your hint ${this.earlyTimes.shift()} seconds ahead of time!`);
+			this.completed.push(player.userid);
 		}
 	}
 
@@ -384,18 +439,15 @@ class JumpStart extends ScavGame {
 			setImmediate(() => this.destroy());
 			return;
 		}
-
 		if (this.round === 1) {
 			// prune the players that havent finished
 			for (let i in this.players) {
 				if (!(i in this.childGame.players) || !this.childGame.players[i].completed) this.eliminate(i); // user hasnt finished.
 			}
-			this.announce(`Congratulations to ${Chat.toListString(Object.keys(this.players).map(i => this.players[i].name))}! They have completed the first round, and have moved on to the next round!`);
+			this.announce(`The early distribution of hints will start in one minute!`);
+
 			if (this.hunts.length === 2) {
-				setImmediate(() => {
-					this.onStartEvent();
-					this.childGame = new Rooms.ScavengerHunt(...this.hunts[1], this);  // start it after the last hunt object has been destroyed
-				});
+				this.runJumpStartTimer();
 			} else {
 				// technically should never happen
 				this.announce("ERROR: The scavenger game has been abruptly ended due to the lack of a second game.");

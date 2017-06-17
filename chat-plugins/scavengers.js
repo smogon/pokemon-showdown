@@ -616,30 +616,23 @@ let commands = {
 
 	/**
 	 * Scavenger Games
+	 * --------------
+	 * Individual game commands for each Scavenger Game
 	 */
-	game: 'games',
-	games: {
-		/**
-		 * Individual game commands for each Scavenger Game
-		 */
+	 game: 'games',
+	 games: {
 		knockoutgames: 'kogames',
-		kogames: {
-			'': 'new',
-			'create': 'new',
-			new: function (target, room, user) {
-				if (room.id !== 'scavengers') return this.errorReply("Scavenger games can only be created in the scavengers room.");
-				if (!this.can('mute', null, room)) return false;
-				if (room.game) return this.errorReply(`There is already a game in this room - ${room.game.title}.`);
+		kogames: function (target, room, user) {
+			if (room.id !== 'scavengers') return this.errorReply("Scavenger games can only be created in the scavengers room.");
+			if (!this.can('mute', null, room)) return false;
+			if (room.game) return this.errorReply(`There is already a game in this room - ${room.game.title}.`);
 
-				room.game = new ScavengerGames.KOGame(room);
-				room.game.announce("A new Knockout Games has been started!");
-			},
+			room.game = new ScavengerGames.KOGame(room);
+			room.game.announce("A new Knockout Games has been started!");
 		},
 
 		jumpstart: {
-			'': 'new',
-			'create': 'new',
-			new: function (target, room, user) {
+			"": function (target, room, user) {
 				if (room.id !== 'scavengers') return this.errorReply("Scavenger games can only be created in the scavengers room.");
 				if (!this.can('mute', null, room)) return false;
 				if (room.game) return this.errorReply(`There is already a game in this room - ${room.game.title}.`);
@@ -647,37 +640,38 @@ let commands = {
 				room.game = new ScavengerGames.JumpStart(room);
 				room.game.announce("A new Jump Start game has been started!");
 			},
-		},
 
-		"scav": "scavengergames",
-		scavengergames: {
-			'': 'new',
-			'create': 'new',
-			new: function (target, room, user) {
+			set: function (target, room, user) {
 				if (room.id !== 'scavengers') return this.errorReply("Scavenger games can only be created in the scavengers room.");
 				if (!this.can('mute', null, room)) return false;
-				if (room.game) return this.errorReply(`There is already a game in this room - ${room.game.title}.`);
+				if (!room.game || room.game.gameid !== "jumpstart") return this.errorReply("There is no Jump Start game currently running.");
 
-				room.game = new ScavengerGames.ScavengerGames(room);
-				room.game.announce("A new Scavenger Games has been started!");
+				let error = room.game.setJumpStart(target.split(', '));
+				if (error) return this.errorReply(error);
 			},
 		},
 
-		pointrally: {
-			'': 'new',
-			'create': 'new',
-			new: function (target, room, user) {
-				if (room.id !== 'scavengers') return this.errorReply("Scavenger games can only be created in the scavengers room.");
-				if (!this.can('mute', null, room)) return false;
-				if (room.game) return this.errorReply(`There is already a game in this room - ${room.game.title}.`);
+		scav: 'scavengergames',
+		scavengergames: function (target, room, user) {
+			if (room.id !== 'scavengers') return this.errorReply("Scavenger games can only be created in the scavengers room.");
+			if (!this.can('mute', null, room)) return false;
+			if (room.game) return this.errorReply(`There is already a game in this room - ${room.game.title}.`);
 
-				room.game = new ScavengerGames.PointRally(room);
-				room.game.announce("A new Point Rally game has been started!");
-			},
+			room.game = new ScavengerGames.ScavengerGames(room);
+			room.game.announce("A new Scavenger Games has been started!");
+		},
+
+		pointrally: function (target, room, user) {
+			if (room.id !== 'scavengers') return this.errorReply("Scavenger games can only be created in the scavengers room.");
+			if (!this.can('mute', null, room)) return false;
+			if (room.game) return this.errorReply(`There is already a game in this room - ${room.game.title}.`);
+
+			room.game = new ScavengerGames.PointRally(room);
+			room.game.announce("A new Point Rally game has been started!");
 		},
 
 		/**
-		 * General
+		 * General game commands
 		 */
 		end: function (target, room, user) {
 			if (!this.can('mute', null, room)) return false;
