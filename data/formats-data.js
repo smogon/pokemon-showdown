@@ -6034,6 +6034,9 @@ exports.BattleFormatsData = {
 		tier: "LC",
 	},
 	steenee: {
+		eventPokemon: [
+			{"generation": 7, "level": 20, "nature": "Naive", "isHidden": false, "abilities":["leafguard"], "moves":["magicalleaf", "doubleslap", "sweetscent"], "pokeball": "cherishball"},
+		],
 		tier: "NFE",
 	},
 	tsareena: {
