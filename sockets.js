@@ -96,9 +96,10 @@ if (cluster.isMaster) {
 			Config.ssl = null;
 		} else {
 			port = Config.port;
-			// Autoconfigure the app when running in cloud hosting environments:
+
+			// Autoconfigure when running in cloud environments.
 			try {
-				let cloudenv = require('cloud-env');
+				const cloudenv = require('cloud-env');
 				bindAddress = cloudenv.get('IP', bindAddress);
 				port = cloudenv.get('PORT', port);
 			} catch (e) {}
@@ -180,11 +181,20 @@ if (cluster.isMaster) {
 	if (process.env.PSBINDADDR) Config.bindaddress = process.env.PSBINDADDR;
 	if (+process.env.PSNOSSL) Config.ssl = null;
 
-	// ofe is optional
-	// if installed, it will heap dump if the process runs out of memory
-	try {
+	if (Config.ofe) {
+		try {
+			require.resolve('ofe');
+		} catch (e) {
+			if (e.code !== 'MODULE_NOT_FOUND') throw e; // should never happen
+			throw new Error(
+				'ofe is not installed, but it is a required dependency if Config.ofe is set to true! ' +
+				'Run npm install ofe and restart the server.'
+			);
+		}
+
+		// Create a heapdump if the process runs out of memory.
 		require('ofe').call();
-	} catch (e) {}
+	}
 
 	// Static HTTP server
 
@@ -203,49 +213,43 @@ if (cluster.isMaster) {
 	}
 
 	let app = require('http').createServer();
-	let appssl;
-	if (Config.ssl) {
-		appssl = require('https').createServer(Config.ssl.options);
-	}
-	try {
-		let nodestatic = require('node-static');
-		let cssserver = new nodestatic.Server('./config');
-		let avatarserver = new nodestatic.Server('./config/avatars');
-		let staticserver = new nodestatic.Server('./static');
-		let staticRequestHandler = (request, response) => {
-			// console.log("static rq: " + request.socket.remoteAddress + ":" + request.socket.remotePort + " -> " + request.socket.localAddress + ":" + request.socket.localPort + " - " + request.method + " " + request.url + " " + request.httpVersion + " - " + request.rawHeaders.join('|'));
-			request.resume();
-			request.addListener('end', () => {
-				if (Config.customhttpresponse &&
-						Config.customhttpresponse(request, response)) {
-					return;
+	let appssl = Config.ssl ? require('https').createServer(Config.ssl.options) : null;
+
+	// Static server
+	const StaticServer = require('node-static').Server;
+	const roomidRegex = /^\/(?:[A-Za-z0-9][A-Za-z0-9-]*)\/?$/;
+	const cssServer = new StaticServer('./config');
+	const avatarServer = new StaticServer('./config/avatars');
+	const staticServer = new StaticServer('./static');
+	const staticRequestHandler = (req, res) => {
+		// console.log(`static rq: ${req.socket.remoteAddress}:${req.socket.remotePort} -> ${req.socket.localAddress}:${req.socket.localPort} - ${req.method} ${req.url} ${req.httpVersion} - ${req.rawHeaders.join('|')}`);
+		req.resume();
+		req.addListener('end', () => {
+			if (Config.customhttpresponse &&
+					Config.customhttpresponse(req, res)) {
+				return;
+			}
+
+			let server = staticServer;
+			if (req.url === '/custom.css') {
+				server = cssServer;
+			} else if (req.url.startsWith('/avatars/')) {
+				req.url = req.url.substr(8);
+				server = avatarServer;
+			} else if (roomidRegex.test(req.url)) {
+				req.url = '/';
+			}
+
+			server.serve(req, res, e => {
+				if (e && (e.status === 404)) {
+					staticServer.serveFile('404.html', 404, {}, req, res);
 				}
-				let server;
-				if (request.url === '/custom.css') {
-					server = cssserver;
-				} else if (request.url.substr(0, 9) === '/avatars/') {
-					request.url = request.url.substr(8);
-					server = avatarserver;
-				} else {
-					if (/^\/([A-Za-z0-9][A-Za-z0-9-]*)\/?$/.test(request.url)) {
-						request.url = '/';
-					}
-					server = staticserver;
-				}
-				server.serve(request, response, (e, res) => {
-					if (e && (e.status === 404)) {
-						staticserver.serveFile('404.html', 404, {}, request, response);
-					}
-				});
 			});
-		};
-		app.on('request', staticRequestHandler);
-		if (appssl) {
-			appssl.on('request', staticRequestHandler);
-		}
-	} catch (e) {
-		console.log('Could not start node-static - try `npm install` if you want to use it');
-	}
+		});
+	};
+
+	app.on('request', staticRequestHandler);
+	if (appssl) appssl.on('request', staticRequestHandler);
 
 	// SockJS server
 
@@ -253,7 +257,6 @@ if (cluster.isMaster) {
 	// and doing things on our server.
 
 	const sockjs = require('sockjs');
-
 	const server = sockjs.createServer({
 		sockjs_url: "//play.pokemonshowdown.com/js/lib/sockjs-1.1.1-nwjsfix.min.js",
 		log: (severity, message) => {
