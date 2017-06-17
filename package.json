@@ -1,19 +1,18 @@
 {
   "name": "pokemon-showdown",
   "preferGlobal": true,
-  "description": "The server for the Pokémon Showdown battle simulator",
+  "description": "The server for the Pok\u00e9mon Showdown battle simulator",
   "version": "0.11.0",
   "dependencies": {
     "sockjs": "0.3.18"
   },
   "optionalDependencies": {
     "cloud-env": "0.2.2",
-    "http-proxy": "1.16.2",
-    "nodemailer": "4.0.1",
     "node-static": "0.7.9"
   },
   "nonDefaultDependencies": {
-    "ofe": "0.1.2"
+    "nodemailer": "4.0.1",
+    "ofe": "0.5.1"
   },
   "engines": {
     "node": ">=6.0.0"
