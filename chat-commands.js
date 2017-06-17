@@ -1558,7 +1558,8 @@ exports.commands = {
 		this.add('|unlink|hide|' + userid);
 		if (userid !== toId(this.inputUsername)) this.add('|unlink|hide|' + toId(this.inputUsername));
 
-		this.globalModlog("LOCK", targetUser, " by " + user.name + (target ? ": " + target : ""));
+		const globalReason = (target ? `: ${userReason} ${proof}` : ``);
+		this.globalModlog("LOCK", targetUser, ` by ${user.name}${globalReason}`);
 		Punishments.lock(targetUser, null, null, userReason);
 		return true;
 	},
@@ -1638,7 +1639,8 @@ exports.commands = {
 		this.add('|unlink|hide|' + userid);
 		if (userid !== toId(this.inputUsername)) this.add('|unlink|hide|' + toId(this.inputUsername));
 
-		this.globalModlog("WEEKLOCK", targetUser, " by " + user.name + (target ? ": " + target : ""));
+		const globalReason = (target ? `: ${userReason} ${proof}` : ``);
+		this.globalModlog("WEEKLOCK", targetUser, ` by ${user.name}${globalReason}`);
 		Punishments.lock(targetUser, Date.now() + 7 * 24 * 60 * 60 * 1000, null, userReason);
 		return true;
 	},
@@ -1755,7 +1757,9 @@ exports.commands = {
 		this.add('|unlink|hide|' + userid);
 		if (userid !== toId(this.inputUsername)) this.add('|unlink|hide|' + toId(this.inputUsername));
 		Punishments.ban(targetUser, null, null, userReason);
-		this.globalModlog("BAN", targetUser, " by " + user.name + (target ? ": " + target : ""));
+
+		const globalReason = (target ? `: ${userReason} ${proof}` : ``);
+		this.globalModlog("BAN", targetUser, ` by ${user.name}${globalReason}`);
 		return true;
 	},
 	globalbanhelp: [
