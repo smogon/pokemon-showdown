@@ -91,6 +91,10 @@ const formattingResolvers = [
 			case 'youtube':
 				query += " site:youtube.com";
 				querystr = `yt: ${query}`;
+				break;
+			case 'pokemon':
+			case 'item':
+				return `<psicon title="${query}" ${opt}="${query}" />`;
 			}
 		}
 
@@ -1051,7 +1055,6 @@ Chat.toDurationString = function (number, options) {
 Chat.parseText = function (str) {
 	str = Chat.escapeHTML(str).replace(/&#x2f;/g, '/').replace(linkRegex, uri => `<a href=${uri.replace(/^([a-z]*[^a-z:])/g, 'http://$1')}>${uri}</a>`);
 
-	// Primarily a test for a new way of parsing chat formatting. Will be moved to Chat once it's sufficiently finished and polished.
 	let output = [''];
 	let stack = [];
 
