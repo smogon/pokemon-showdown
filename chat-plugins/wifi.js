@@ -139,9 +139,7 @@ class Giveaway {
 					}
 				}
 				if (mons.size > 1) {
-					let top = Math.floor(value.num / 12) * 30;
-					let left = (value.num % 12) * 40;
-					output += `<div style="display:inline-block;width:40px;height:30px;background:transparent url('/sprites/smicons-sheet.png?a1') no-repeat scroll -${left}px -${top}px'"></div>`;
+					output += `<psicon pokemon="${spriteid}" />`;
 				} else {
 					let shiny = (text.includes("shiny") && !text.includes("shinystone") ? '-shiny' : '');
 					output += `<img src="/sprites/xyani${shiny}/${spriteid}.gif">`;
