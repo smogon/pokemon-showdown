@@ -73,7 +73,6 @@ class Giveaway {
 	checkExcluded(user) {
 		if (Giveaway.checkBanned(this.room, user)) return true;
 		if (user === this.giver || user.latestIp in this.giver.ips || toId(user) in this.giver.prevNames) return true;
-		if (user === this.host || user.latestIp in this.host.ips || toId(user) in this.host.prevNames) return true;
 		return false;
 	}
 
@@ -254,6 +253,11 @@ class QuestionGiveaway extends Giveaway {
 
 	static sanitizeAnswers(answers) {
 		return answers.map(val => QuestionGiveaway.sanitize(val)).filter((val, index, array) => toId(val).length && array.indexOf(val) === index);
+	}
+
+	checkExcluded(user) {
+		if (user === this.host || user.latestIp in this.host.ips || toId(user) in this.host.prevNames) return true;
+		return super.checkExcluded(user);
 	}
 }
 
