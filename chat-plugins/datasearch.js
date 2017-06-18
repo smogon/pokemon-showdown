@@ -727,9 +727,9 @@ function runDexsearch(target, cmd, canAll, message) {
 	if (results.length > 1) {
 		if (showAll || results.length <= RESULTS_MAX_LENGTH + 5) {
 			results.sort();
-			resultsStr += results.map(result => `<psicon title="${result}" pokemon="${result}" />`).join(", ");
+			resultsStr += results.map(result => `<psicon title="${result}" pokemon="${result}" />`).join(" ");
 		} else {
-			resultsStr += results.slice(0, RESULTS_MAX_LENGTH).map(result => `<psicon title="${result}" pokemon="${result}" />`).join(", ") + ", and " + (results.length - RESULTS_MAX_LENGTH) + " more. <span style=\"color:#999999;\">Redo the search with 'all' as a search parameter to show all results.</span>";
+			resultsStr += results.slice(0, RESULTS_MAX_LENGTH).map(result => `<psicon title="${result}" pokemon="${result}" />`).join(" ") + ", and " + (results.length - RESULTS_MAX_LENGTH) + " more. <span style=\"color:#999999;\">Redo the search with 'all' as a search parameter to show all results.</span>";
 		}
 	} else if (results.length === 1) {
 		return {dt: results[0]};
@@ -1392,9 +1392,9 @@ function runItemsearch(target, cmd, canAll, message) {
 	if (foundItems.length > 0) {
 		if (showAll || foundItems.length <= RESULTS_MAX_LENGTH + 5) {
 			foundItems.sort();
-			resultsStr += foundItems.map(result => `<psicon title="${result}" item="${result}" />`).join(", ");
+			resultsStr += foundItems.map(result => `<psicon title="${result}" item="${result}" />`).join(" ");
 		} else {
-			resultsStr += foundItems.slice(0, RESULTS_MAX_LENGTH).map(result => `<psicon title="${result}" item="${result}" />`).join(", ") + ", and " + (foundItems.length - RESULTS_MAX_LENGTH) + " more. <span style=\"color:#999999;\">Redo the search with ', all' at the end to show all results.</span>";
+			resultsStr += foundItems.slice(0, RESULTS_MAX_LENGTH).map(result => `<psicon title="${result}" item="${result}" />`).join(" ") + ", and " + (foundItems.length - RESULTS_MAX_LENGTH) + " more. <span style=\"color:#999999;\">Redo the search with ', all' at the end to show all results.</span>";
 		}
 	} else {
 		resultsStr += "No items found. Try a more general search";
