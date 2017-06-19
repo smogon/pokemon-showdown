@@ -48,7 +48,7 @@
   "private": true,
   "license": "MIT",
   "devDependencies": {
-    "eslint": "^3.2.2",
+    "eslint": "^4.0.0",
     "mocha": "^3.0.0",
     "mock-fs-require-fix": "~1.0.0"
   }
