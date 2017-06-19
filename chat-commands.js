@@ -895,7 +895,7 @@ exports.commands = {
 		if (!target) return;
 		if (!/</.test(target)) {
 			// not HTML, do some simple URL linking
-			let re = /(https?:\/\/(([-\w\.]+)+(:\d+)?(\/([\w/_\.]*(\?\S+)?)?)?))/g;
+			let re = /(https?:\/\/(([\w.-]+)+(:\d+)?(\/([\w/_.]*(\?\S+)?)?)?))/g;
 			target = target.replace(re, '<a href="$1">$1</a>');
 		}
 		if (target.substr(0, 11) === '/roomintro ') target = target.substr(11);
@@ -950,7 +950,7 @@ exports.commands = {
 		if (!target) return;
 		if (!/</.test(target)) {
 			// not HTML, do some simple URL linking
-			let re = /(https?:\/\/(([-\w\.]+)+(:\d+)?(\/([\w/_\.]*(\?\S+)?)?)?))/g;
+			let re = /(https?:\/\/(([\w.-]+)+(:\d+)?(\/([\w/_.]*(\?\S+)?)?)?))/g;
 			target = target.replace(re, '<a href="$1">$1</a>');
 		}
 		if (target.substr(0, 12) === '/staffintro ') target = target.substr(12);

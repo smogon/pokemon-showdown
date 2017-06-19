@@ -127,7 +127,7 @@ class PlayerLadder extends Ladder {
 			for (let u in this.data) {
 				let userData = this.data[u];
 				for (let a in userData) {
-					if (/^(?:cumulative|history)\-/i.test(a) || a === 'name') continue; // cumulative does not need to be soft reset
+					if (/^(?:cumulative|history)-/i.test(a) || a === 'name') continue; // cumulative does not need to be soft reset
 					let historyKey = 'history-' + a;
 
 					if (!userData[historyKey]) userData[historyKey] = [];

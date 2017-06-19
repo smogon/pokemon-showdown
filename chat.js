@@ -137,7 +137,7 @@ class PatternTester {
 	register(...elems) {
 		for (let elem of elems) {
 			this.elements.push(elem);
-			if (/^[^ \^\$\?\|\(\)\[\]]+ $/.test(elem)) {
+			if (/^[^ ^$?|()[\]]+ $/.test(elem)) {
 				this.fastElements.add(this.fastNormalize(elem));
 			}
 		}
@@ -373,7 +373,7 @@ class CommandContext {
 				message: this.message,
 			});
 			Rooms.global.reportCrash(err);
-			this.sendReply(`|html|<div class="broadcast-red"><b>Pokemon Showdown crashed!</b><br />Don't worry, we\'re working on fixing it.</div>`);
+			this.sendReply(`|html|<div class="broadcast-red"><b>Pokemon Showdown crashed!</b><br />Don't worry, we're working on fixing it.</div>`);
 		}
 		if (result === undefined) result = false;
 
@@ -727,7 +727,7 @@ class CommandContext {
 		if (uri.startsWith('//')) return uri;
 		if (uri.startsWith('data:')) return uri;
 		if (!uri.startsWith('http://')) {
-			if (/^[a-z]+\:\/\//.test(uri) || isRelative) {
+			if (/^[a-z]+:\/\//.test(uri) || isRelative) {
 				return this.errorReply("URIs must begin with 'https://' or 'http://' or 'data:'");
 			}
 		} else {
@@ -780,7 +780,7 @@ class CommandContext {
 				this.errorReply('All images must have a width and height attribute');
 				return false;
 			}
-			let srcMatch = /src\s*\=\s*"?([^ "]+)(\s*")?/i.exec(match[0]);
+			let srcMatch = /src\s*=\s*"?([^ "]+)(\s*")?/i.exec(match[0]);
 			if (srcMatch) {
 				let uri = this.canEmbedURI(srcMatch[1], true);
 				if (!uri) return false;
@@ -789,7 +789,7 @@ class CommandContext {
 				images.lastIndex = match.index + 11;
 			}
 		}
-		if ((this.room.isPersonal || this.room.isPrivate === true) && !this.user.can('lock') && html.replace(/\s*style\s*=\s*\"?[^\"]*\"\s*>/g, '>').match(/<button[^>]/)) {
+		if ((this.room.isPersonal || this.room.isPrivate === true) && !this.user.can('lock') && html.replace(/\s*style\s*=\s*"?[^"]*"\s*>/g, '>').match(/<button[^>]/)) {
 			this.errorReply('You do not have permission to use scripted buttons in HTML.');
 			this.errorReply('If you just want to link to a room, you can do this: <a href="/roomid"><button>button contents</button></a>');
 			return false;

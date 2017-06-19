@@ -341,7 +341,7 @@ class GlobalRoom {
 				writing = true;
 
 				let data = JSON.stringify(this.chatRoomData)
-					.replace(/\{"title"\:/g, '\n{"title":')
+					.replace(/\{"title":/g, '\n{"title":')
 					.replace(/\]$/, '\n]');
 
 				fs.writeFile('config/chatrooms.json.0', data, () => {
