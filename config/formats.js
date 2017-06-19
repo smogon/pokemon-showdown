@@ -291,7 +291,6 @@ exports.Formats = [
 			let template = this.getTemplate(set.species || set.name);
 			if (template.heightm > 1) return [`${set.name || set.species} is over 1.0 m tall, which is banned in tiny tourney.`];
 		},
-		requirePentagon: true,
 	},
 	{
 		name: "[Gen 7] Doubles Custom Game",
