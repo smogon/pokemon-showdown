@@ -34,6 +34,10 @@ exports.BattleScripts = {
 		// Weather
 		baseDamage = this.runEvent('WeatherModifyDamage', pokemon, target, move, baseDamage);
 
+		if (this.gen === 3 && move.category === 'Physical' && !Math.floor(baseDamage)) {
+			baseDamage = 1;
+		}
+
 		baseDamage += 2;
 
 		if (move.crit) {
