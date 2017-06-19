@@ -187,7 +187,6 @@ exports.BattleScripts = {
 				let isSetup = false;
 
 				switch (moveid) {
-
 				// Not very useful without their supporting moves
 				case 'batonpass':
 					if (!counter.setupType && !counter['speedsetup'] && !hasMove['substitute']) rejected = true;

@@ -132,7 +132,7 @@ class Jeopardy extends Rooms.RoomGame {
 		}
 		buffer += "</table><br />";
 		if (this.question && !this.finals) {
-			buffer += `<table align=\"left\"><tr><td bgcolor="${this.canBuzz ? "00FF00" : "0000FF"}" height="30px" width="30px"></td></tr></table>`;
+			buffer += `<table align="left"><tr><td bgcolor="${this.canBuzz ? "00FF00" : "0000FF"}" height="30px" width="30px"></td></tr></table>`;
 		}
 		for (let userID in this.players) {
 			let player = this.players[userID];
@@ -205,7 +205,7 @@ class Jeopardy extends Rooms.RoomGame {
 			this.curPlayer = null;
 		}
 		this.clearbuzzes();
-		this.room.addRaw(`<div class=\"broadcast-blue\">Your question is: ${this.question.question}</div>`);
+		this.room.addRaw(`<div class="broadcast-blue">Your question is: ${this.question.question}</div>`);
 		if (!this.finals) {
 			this.canBuzz = false;
 			this.update(true);
@@ -226,7 +226,7 @@ class Jeopardy extends Rooms.RoomGame {
 	}
 
 	revealAnswer() {
-		this.room.addRaw(`<div class=\"broadcast-blue\">The answer was: ${Chat.escapeHTML(this.question.answer)}</div>`);
+		this.room.addRaw(`<div class="broadcast-blue">The answer was: ${Chat.escapeHTML(this.question.answer)}</div>`);
 		this.question.answered = true;
 	}
 

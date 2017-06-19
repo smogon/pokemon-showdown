@@ -138,7 +138,7 @@ function runModlog(room, searchString, exactSearch, maxLines) {
 	if (!searchString) {
 		regexString = '.';
 	} else if (exactSearch) {
-		regexString = searchString.replace(/[\\.+*?()|\[\]{}\^$]/g, '\\$&');
+		regexString = searchString.replace(/[\\.+*?()|[\]{}^$]/g, '\\$&');
 	} else {
 		searchString = toId(searchString);
 		regexString = `\\b${searchString.split('').join('[\\W_]*')}\\b`;

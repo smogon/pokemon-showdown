@@ -399,7 +399,7 @@ class JumpStart extends ScavGame {
 			if (!targetUserId) {
 				this.timer = setTimeout(() => {
 					this.onStartEvent();
-					this.childGame = new Rooms.ScavengerHunt(...this.hunts[1], this);  // start it after the last hunt object has been destroyed
+					this.childGame = new Rooms.ScavengerHunt(...this.hunts[1], this); // start it after the last hunt object has been destroyed
 				}, this.huntWait + (this.jumpStartTimes.reduce((a, b) => a + b) * 1000));
 				return;
 			}

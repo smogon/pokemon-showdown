@@ -1204,7 +1204,7 @@ function runItemsearch(target, cmd, canAll, message) {
 		target = target.substr(0, target.length - 5);
 	}
 
-	target = target.toLowerCase().replace('-', ' ').replace(/[^a-z0-9.\s\/]/g, '');
+	target = target.toLowerCase().replace('-', ' ').replace(/[^a-z0-9.\s/]/g, '');
 	let rawSearch = target.split(' ');
 	let searchedWords = [];
 	let foundItems = [];
@@ -1268,7 +1268,7 @@ function runItemsearch(target, cmd, canAll, message) {
 		case 'burns': newWord = 'burn'; break;
 		case 'poisons': newWord = 'poison'; break;
 		default:
-			if (/x[\d\.]+/.test(newWord)) {
+			if (/x[\d.]+/.test(newWord)) {
 				newWord = newWord.substr(1) + 'x';
 			}
 		}
@@ -1362,10 +1362,10 @@ function runItemsearch(target, cmd, canAll, message) {
 			// splits words in the description into a toId()-esk format except retaining / and . in numbers
 			let descWords = item.desc;
 			// add more general quantifier words to descriptions
-			if (/[1-9\.]+x/.test(descWords)) descWords += ' increases';
+			if (/[1-9.]+x/.test(descWords)) descWords += ' increases';
 			if (item.isBerry) descWords += ' berry';
-			descWords = descWords.replace(/super[\-\s]effective/g, 'supereffective');
-			descWords = descWords.toLowerCase().replace('-', ' ').replace(/[^a-z0-9\s\/]/g, '').replace(/(\D)\./, (p0, p1) => p1).split(' ');
+			descWords = descWords.replace(/super[-\s]effective/g, 'supereffective');
+			descWords = descWords.toLowerCase().replace('-', ' ').replace(/[^a-z0-9\s/]/g, '').replace(/(\D)\./, (p0, p1) => p1).split(' ');
 
 			for (let k = 0; k < searchedWords.length; k++) {
 				if (descWords.includes(searchedWords[k])) matched++;
@@ -1380,10 +1380,10 @@ function runItemsearch(target, cmd, canAll, message) {
 			let item = Dex.getItem(foundItems[l]);
 			let matched = 0;
 			let descWords = item.desc;
-			if (/[1-9\.]+x/.test(descWords)) descWords += ' increases';
+			if (/[1-9.]+x/.test(descWords)) descWords += ' increases';
 			if (item.isBerry) descWords += ' berry';
-			descWords = descWords.replace(/super[\-\s]effective/g, 'supereffective');
-			descWords = descWords.toLowerCase().replace('-', ' ').replace(/[^a-z0-9\s\/]/g, '').replace(/(\D)\./, (p0, p1) => p1).split(' ');
+			descWords = descWords.replace(/super[-\s]effective/g, 'supereffective');
+			descWords = descWords.toLowerCase().replace('-', ' ').replace(/[^a-z0-9\s/]/g, '').replace(/(\D)\./, (p0, p1) => p1).split(' ');
 
 			for (let k = 0; k < searchedWords.length; k++) {
 				if (descWords.includes(searchedWords[k])) matched++;
