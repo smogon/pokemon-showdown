@@ -424,7 +424,7 @@ class User {
 	}
 	getIdentity(roomid) {
 		if (this.locked || this.namelocked) {
-			return (Config.punishgroups.locked || '‽') + this.name;
+			return (Config.punishgroups && Config.punishgroups.locked ? Config.punishgroups.locked.symbol : '‽') + this.name;
 		}
 		if (roomid && roomid !== 'global') {
 			let room = Rooms(roomid);
@@ -432,7 +432,7 @@ class User {
 				throw new Error(`Room doesn't exist: ${roomid}`);
 			}
 			if (room.isMuted(this)) {
-				return (Config.punishgroups.muted || '!') + this.name;
+				return (Config.punishgroups && Config.punishgroups.muted ? Config.punishgroups.muted.symbol : '!') + this.name;
 			}
 			return room.getAuth(this) + this.name;
 		}
