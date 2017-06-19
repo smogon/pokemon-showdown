@@ -167,10 +167,13 @@ function cacheGroupData() {
 			`Please ensure that you update your config.js to the new format (see config-example.js, line 220).\n`
 		);
 	} else {
+		Config.punishgroups = Object.create(null);
 		Config.groups = Object.create(null);
 		Config.groupsranking = [];
 	}
+
 	let groups = Config.groups;
+	let punishgroups = Config.punishgroups;
 	let cachedGroups = {};
 
 	function cacheGroup(sym, groupData) {
@@ -197,6 +200,13 @@ function cacheGroupData() {
 		let numGroups = grouplist.length;
 		for (let i = 0; i < numGroups; i++) {
 			let groupData = grouplist[i];
+
+			// punish groups
+			if (groupData.punishgroup) {
+				punishgroups[groupData.id] = groupData;
+				continue;
+			}
+
 			groupData.rank = numGroups - i - 1;
 			groups[groupData.symbol] = groupData;
 			Config.groupsranking.unshift(groupData.symbol);
@@ -206,6 +216,22 @@ function cacheGroupData() {
 	for (let sym in groups) {
 		let groupData = groups[sym];
 		cacheGroup(sym, groupData);
+	}
+
+	// hardcode default punishgroups.
+	if (!punishgroups.locked) {
+		punishgroups.locked = {
+			name: 'Locked',
+			id: 'locked',
+			symbol: '‽',
+		};
+	}
+	if (!punishgroups.muted) {
+		punishgroups.muted = {
+			name: 'Muted',
+			id: 'muted',
+			symbol: '!',
+		};
 	}
 }
 cacheGroupData();
@@ -397,11 +423,8 @@ class User {
 		this.send(`|popup|` + message.replace(/\n/g, '||'));
 	}
 	getIdentity(roomid) {
-		if (this.locked) {
-			return '‽' + this.name;
-		}
-		if (this.namelocked) {
-			return '‽' + this.name;
+		if (this.locked || this.namelocked) {
+			return (Config.punishgroups && Config.punishgroups.locked ? Config.punishgroups.locked.symbol : '‽') + this.name;
 		}
 		if (roomid && roomid !== 'global') {
 			let room = Rooms(roomid);
@@ -409,7 +432,7 @@ class User {
 				throw new Error(`Room doesn't exist: ${roomid}`);
 			}
 			if (room.isMuted(this)) {
-				return '!' + this.name;
+				return (Config.punishgroups && Config.punishgroups.muted ? Config.punishgroups.muted.symbol : '!') + this.name;
 			}
 			return room.getAuth(this) + this.name;
 		}
