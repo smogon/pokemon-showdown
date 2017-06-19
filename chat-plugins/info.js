@@ -385,7 +385,8 @@ exports.commands = {
 				if (!newTargets[i].exactMatch && !i) {
 					buffer = `No Pok\u00e9mon, item, move, ability or nature named '${target}' was found${Dex.gen > mod.gen ? ` in Gen ${mod.gen}` : ""}. Showing the data of '${newTargets[0].name}' instead.\n`;
 				}
-				if (newTargets[i].searchType === 'nature') {
+				switch (newTargets[i].searchType) {
+				case 'nature':
 					let nature = Dex.getNature(newTargets[i].name);
 					buffer += "" + nature.name + " nature: ";
 					if (nature.plus) {
@@ -395,20 +396,24 @@ exports.commands = {
 						buffer += "No effect.";
 					}
 					return this.sendReply(buffer);
-				} else {
-					let sType = newTargets[i].searchType.charAt(0).toUpperCase() + newTargets[i].searchType.substring(1, newTargets[i].searchType.length);
-					if (Chat[`getData${sType}HTML`]) {
-						let template = mod["get" + (sType === "Pokemon" ? "Template" : sType)](newTargets[i].name);
-						if (sType === "Pokemon") {
-							if (mod.gen === 1) {
-								template.baseStats["spc"] = template.baseStats.spa;
-							}
-							if (mod.gen < 3) delete template.abilities;
-						}
-						buffer += `|raw|${Chat[`getData${sType}HTML`](template)}\n`;
-					} else {
-						buffer += '|c|~|/data-' + newTargets[i].searchType + ' ' + newTargets[i].name + '\n';
-					}
+				case 'pokemon':
+					let template = mod.getTemplate(newTargets[i].name);
+					buffer += `|raw|${Chat.getDataPokemonHTML(template, mod.gen)}\n`;
+					break;
+				case 'item':
+					let item = mod.getItem(newTargets[i].name);
+					buffer += `|raw|${Chat.getDataItemHTML(item)}\n`;
+					break;
+				case 'move':
+					let move = mod.getMove(newTargets[i].name);
+					buffer += `|raw|${Chat.getDataMoveHTML(move)}\n`;
+					break;
+				case 'ability':
+					let ability = mod.getAbility(newTargets[i].name);
+					buffer += `|raw|${Chat.getDataAbilityHTML(ability)}\n`;
+					break;
+				default:
+					throw new Error(`Unrecognized searchType`);
 				}
 			}
 		} else {

@@ -1130,7 +1130,7 @@ Chat.toListString = function (array) {
 	return `${array.slice(0, -1).join(", ")} and ${array.slice(-1)}`;
 };
 
-Chat.getDataPokemonHTML = function (template) {
+Chat.getDataPokemonHTML = function (template, gen = 7) {
 	if (typeof template === 'string') template = Object.assign({}, Dex.getTemplate(template));
 	let buf = '<li class="result">';
 	buf += '<span class="col numcol">' + (template.tier) + '</span> ';
@@ -1143,14 +1143,14 @@ Chat.getDataPokemonHTML = function (template) {
 		}
 	}
 	buf += '</span> ';
-	if (template.abilities) {
+	if (gen >= 3) {
 		buf += '<span style="float:left;min-height:26px">';
 		if (template.abilities['1']) {
 			buf += '<span class="col twoabilitycol">' + template.abilities['0'] + '<br />' + template.abilities['1'] + '</span>';
 		} else {
 			buf += '<span class="col abilitycol">' + template.abilities['0'] + '</span>';
 		}
-		if (template.abilities && template.abilities['S']) {
+		if (template.abilities['S']) {
 			buf += '<span class="col twoabilitycol' + (template.unreleasedHidden ? ' unreleasedhacol' : '') + '"><em>' + template.abilities['H'] + '<br />' + template.abilities['S'] + '</em></span>';
 		} else if (template.abilities['H']) {
 			buf += '<span class="col abilitycol' + (template.unreleasedHidden ? ' unreleasedhacol' : '') + '"><em>' + template.abilities['H'] + '</em></span>';
@@ -1167,9 +1167,9 @@ Chat.getDataPokemonHTML = function (template) {
 	buf += '<span class="col statcol"><em>HP</em><br />' + template.baseStats.hp + '</span> ';
 	buf += '<span class="col statcol"><em>Atk</em><br />' + template.baseStats.atk + '</span> ';
 	buf += '<span class="col statcol"><em>Def</em><br />' + template.baseStats.def + '</span> ';
-	if (template.baseStats.spc) {
-		bst -= template.baseStats.spa + template.baseStats.spd;
-		buf += '<span class="col statcol"><em>Spc</em><br />' + template.baseStats.spc + '</span> ';
+	if (gen <= 1) {
+		bst -= template.baseStats.spd;
+		buf += '<span class="col statcol"><em>Spc</em><br />' + template.baseStats.spa + '</span> ';
 	} else {
 		buf += '<span class="col statcol"><em>SpA</em><br />' + template.baseStats.spa + '</span> ';
 		buf += '<span class="col statcol"><em>SpD</em><br />' + template.baseStats.spd + '</span> ';
