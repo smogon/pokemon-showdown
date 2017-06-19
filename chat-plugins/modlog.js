@@ -190,7 +190,7 @@ function checkRoomModlog(path, regex, results) {
 		}
 	} while (startPos > 0);
 
-	fs.close(fd);
+	fs.close(fd, () => {});
 
 	return results;
 }
