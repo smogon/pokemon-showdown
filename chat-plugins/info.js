@@ -365,7 +365,7 @@ exports.commands = {
 			for (let p in Dex.data.Pokedex) {
 				let pokemon = Dex.getTemplate(p);
 				if (pokemon.num === targetNum) {
-					target = pokemon.species;
+					sep[0] = pokemon.species;
 					targetId = pokemon.id;
 					break;
 				}
@@ -377,11 +377,11 @@ exports.commands = {
 		} else if (sep[1] && Dex.getFormat(sep[1]).mod) {
 			mod = Dex.mod(Dex.getFormat(sep[1]).mod);
 		}
-		let newTargets = Dex.dataSearch(target);
+		let newTargets = mod.dataSearch(sep[0]);
 		let showDetails = (cmd === 'dt' || cmd === 'details');
 		if (newTargets && newTargets.length) {
 			for (let i = 0; i < newTargets.length; ++i) {
-				if (newTargets[i].isInexact && !i) {
+				if (!newTargets[i].exactMatch && !i) {
 					buffer = `No Pok\u00e9mon, item, move, ability or nature named '${sep[0]}' was found${Dex.gen > mod.gen ? ` in Gen ${mod.gen}` : ""}. Showing the data of '${newTargets[0].name}' instead.\n`;
 				}
 				if (newTargets[i].searchType === 'nature') {
