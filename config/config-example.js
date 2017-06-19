@@ -394,4 +394,16 @@ exports.grouplist = [
 		symbol: ' ',
 		ip: 's',
 	},
+	{
+		name: 'Locked',
+		id: 'locked',
+		symbol: '‽',
+		punishgroup: 'LOCK',
+	},
+	{
+		name: 'Muted',
+		id: 'muted',
+		symbol: '!',
+		punishgroup: 'MUTE',
+	},
 ];
