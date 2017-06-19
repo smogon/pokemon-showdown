@@ -2352,7 +2352,7 @@ exports.commands = {
 	expiringblacklists: 'showblacklist',
 	blacklists: 'showblacklist',
 	showbl: 'showblacklist',
-	showblacklist: function (target, room, user, cmd, connection) {
+	showblacklist: function (target, room, user, connection, cmd) {
 		if (target) room = Rooms.search(target);
 		if (!room) return this.errorReply(`The room "${target}" was not found.`);
 		if (!this.can('mute', null, room)) return false;
