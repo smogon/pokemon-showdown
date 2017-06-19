@@ -228,7 +228,7 @@ exports.BattleScripts = {
 
 				// Bad after setup
 				case 'explosion':
-					if (counter.setupType || hasMove['rest']) rejected = true;
+					if (counter.setupType || !!counter['recovery'] || hasMove['rest']) rejected = true;
 					break;
 				case 'foresight': case 'protect': case 'roar':
 					if (counter.setupType && !hasAbility['Speed Boost']) rejected = true;
@@ -243,7 +243,7 @@ exports.BattleScripts = {
 					if (counter.Physical + counter.Special < 3 || counter.setupType) rejected = true;
 					if (hasMove['lightscreen'] || hasMove['reflect'] || hasMove['suckerpunch'] || hasMove['trickroom']) rejected = true;
 					break;
-				case 'toxicspikes':
+				case 'toxic': case 'toxicspikes':
 					if (counter.setupType || teamDetails.toxicSpikes) rejected = true;
 					break;
 				case 'trickroom':
@@ -299,17 +299,26 @@ exports.BattleScripts = {
 				case 'gunkshot':
 					if (hasMove['poisonjab']) rejected = true;
 					break;
+				case 'rockslide':
+					if (hasMove['stoneedge']) rejected = true;
+					break;
 				case 'shadowclaw':
 					if (hasMove['shadowforce']) rejected = true;
 					break;
 				case 'dragonclaw':
 					if (hasMove['outrage']) rejected = true;
 					break;
+				case 'dracometeor':
+					if (hasMove['calmmind']) rejected = true;
+					break;
 				case 'crunch': case 'nightslash':
 					if (hasMove['suckerpunch']) rejected = true;
 					break;
 				case 'pursuit':
 					if (counter.setupType || hasMove['payback']) rejected = true;
+					break;
+				case 'gyroball': case 'flashcannon':
+					if (hasMove['ironhead'] && counter.setupType !== 'Special') rejected = true;
 					break;
 
 				// Status:
@@ -540,8 +549,6 @@ exports.BattleScripts = {
 			item = template.baseStats.spe >= 60 && template.baseStats.spe <= 108 && !counter['priority'] && this.random(3) ? 'Choice Scarf' : 'Choice Band';
 		} else if ((counter.Special >= 4 || (counter.Special >= 3 && (hasMove['batonpass'] || hasMove['uturn']))) && !hasMove['chargebeam']) {
 			item = template.baseStats.spe >= 60 && template.baseStats.spe <= 108 && ability !== 'Speed Boost' && !counter['priority'] && this.random(3) ? 'Choice Scarf' : 'Choice Specs';
-		} else if (hasMove['eruption'] || hasMove['waterspout']) {
-			item = counter.Status <= 1 ? 'Expert Belt' : 'Leftovers';
 		} else if (hasMove['endeavor'] || hasMove['flail'] || hasMove['reversal']) {
 			item = 'Focus Sash';
 		} else if (hasMove['outrage'] && counter.setupType) {
@@ -553,7 +560,7 @@ exports.BattleScripts = {
 		} else if (hasMove['lightscreen'] || hasMove['reflect']) {
 			item = 'Light Clay';
 		} else if (counter.damagingMoves.length >= 4) {
-			item = (!!counter['Normal'] || (hasMove['suckerpunch'] && !hasType['Dark'])) ? 'Life Orb' : 'Expert Belt';
+			item = (!!counter['Normal'] || hasMove['chargebeam'] || (hasMove['suckerpunch'] && !hasType['Dark'])) ? 'Life Orb' : 'Expert Belt';
 		} else if (counter.damagingMoves.length >= 3 && !hasMove['superfang']) {
 			item = (template.baseStats.hp + template.baseStats.def + template.baseStats.spd < 285 || !!counter['speedsetup'] || hasMove['trickroom']) ? 'Life Orb' : 'Leftovers';
 		} else if (template.species === 'Palkia' && (hasMove['dracometeor'] || hasMove['spacialrend']) && hasMove['hydropump']) {
