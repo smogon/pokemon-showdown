@@ -358,14 +358,15 @@ exports.commands = {
 
 		let buffer = '';
 		let sep = target.split(',');
-		let targetId = toId(sep[0]);
+		target = sep[0];
+		let targetId = toId(target);
 		if (!targetId) return this.parse('/help data');
 		let targetNum = parseInt(targetId);
 		if (!isNaN(targetNum)) {
 			for (let p in Dex.data.Pokedex) {
 				let pokemon = Dex.getTemplate(p);
 				if (pokemon.num === targetNum) {
-					sep[0] = pokemon.species;
+					target = pokemon.species;
 					targetId = pokemon.id;
 					break;
 				}
@@ -377,12 +378,12 @@ exports.commands = {
 		} else if (sep[1] && Dex.getFormat(sep[1]).mod) {
 			mod = Dex.mod(Dex.getFormat(sep[1]).mod);
 		}
-		let newTargets = mod.dataSearch(sep[0]);
+		let newTargets = mod.dataSearch(target);
 		let showDetails = (cmd === 'dt' || cmd === 'details');
 		if (newTargets && newTargets.length) {
 			for (let i = 0; i < newTargets.length; ++i) {
 				if (!newTargets[i].exactMatch && !i) {
-					buffer = `No Pok\u00e9mon, item, move, ability or nature named '${sep[0]}' was found${Dex.gen > mod.gen ? ` in Gen ${mod.gen}` : ""}. Showing the data of '${newTargets[0].name}' instead.\n`;
+					buffer = `No Pok\u00e9mon, item, move, ability or nature named '${target}' was found${Dex.gen > mod.gen ? ` in Gen ${mod.gen}` : ""}. Showing the data of '${newTargets[0].name}' instead.\n`;
 				}
 				if (newTargets[i].searchType === 'nature') {
 					let nature = Dex.getNature(newTargets[i].name);
@@ -411,7 +412,7 @@ exports.commands = {
 				}
 			}
 		} else {
-			return this.errorReply(`No Pok\u00e9mon, item, move, ability or nature named '${sep[0]}' was found${Dex.gen > mod.gen ? ` in Gen ${mod.gen}` : ""}. (Check your spelling?)`);
+			return this.errorReply(`No Pok\u00e9mon, item, move, ability or nature named '${target}' was found${Dex.gen > mod.gen ? ` in Gen ${mod.gen}` : ""}. (Check your spelling?)`);
 		}
 
 		if (showDetails) {
