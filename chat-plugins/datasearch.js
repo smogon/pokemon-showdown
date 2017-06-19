@@ -347,7 +347,8 @@ function runDexsearch(target, cmd, canAll, message) {
 	let megaSearch = null;
 	let capSearch = null;
 	let randomOutput = 0;
-
+	let showIcons = true;
+	
 	let validParameter = (cat, param, isNotSearch, input) => {
 		let uniqueTraits = {'colors':1, 'gens':1};
 		for (let h = 0; h < searches.length; h++) {
@@ -369,7 +370,6 @@ function runDexsearch(target, cmd, canAll, message) {
 		}
 		return false;
 	};
-
 	let andGroups = target.split(',');
 	for (let i = 0; i < andGroups.length; i++) {
 		let orGroup = {abilities: {}, tiers: {}, colors: {}, 'egg groups': {}, gens: {}, moves: {}, types: {}, resists: {}, stats: {}, skip: false};
@@ -437,6 +437,12 @@ function runDexsearch(target, cmd, canAll, message) {
 				break;
 			}
 
+			if (target === 'text') {
+				showIcons = false;
+				orGroup.skip = true;
+				break;
+			}
+			
 			if (target.substr(0, 6) === 'random' && cmd === 'randpoke') {
 				//validation for this is in the /randpoke command
 				randomOutput = parseInt(target.substr(6));
@@ -595,7 +601,9 @@ function runDexsearch(target, cmd, canAll, message) {
 		}
 	}
 	if (showAll && searches.length === 0 && megaSearch === null) return {reply: "No search parameters other than 'all' were found. Try '/help dexsearch' for more information on this command."};
+	if (!showIcons && searches.length === 0 && megaSearch === null) return {reply: "No search parameters other than 'text' were found. Try '/help dexsearch' for more information on this command."};
 
+	
 	let dex = {};
 	for (let pokemon in Dex.data.Pokedex) {
 		let template = Dex.getTemplate(pokemon);
@@ -727,9 +735,17 @@ function runDexsearch(target, cmd, canAll, message) {
 	if (results.length > 1) {
 		if (showAll || results.length <= RESULTS_MAX_LENGTH + 5) {
 			results.sort();
-			resultsStr += results.map(result => `<psicon title="${result}" pokemon="${result}" />`).join(" ");
+			if (showIcons) { 
+				resultsStr += results.map(result => `<psicon title="${result}" pokemon="${result}" />`).join(" ");
+			} else {  
+				resultsStr += results.join(", "); 
+			}
 		} else {
-			resultsStr += results.slice(0, RESULTS_MAX_LENGTH).map(result => `<psicon title="${result}" pokemon="${result}" />`).join(" ") + ", and " + (results.length - RESULTS_MAX_LENGTH) + " more. <span style=\"color:#999999;\">Redo the search with 'all' as a search parameter to show all results.</span>";
+			if (showIcons) {
+				resultsStr += results.slice(0, RESULTS_MAX_LENGTH).map(result => `<psicon title="${result}" pokemon="${result}" />`).join(" ") + ", and " + (results.length - RESULTS_MAX_LENGTH) + " more. <span style=\"color:#999999;\">Redo the search with 'all' as a search parameter to show all results.</span>";
+			} else {
+				resultsStr += results.join(", "); 
+			}
 		}
 	} else if (results.length === 1) {
 		return {dt: results[0]};
