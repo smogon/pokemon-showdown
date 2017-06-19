@@ -93,7 +93,7 @@ exports.BattleFormatsData = {
 			baseMove1: "rest", baseMove2: "sleeptalk", baseMove3: "surf",
 			fillerMoves1: ["icebeam", "icebeam", "toxic", "zapcannon"],
 		},
-		randomSet2: {  // Toxic
+		randomSet2: { // Toxic
 			chance: 10,
 			item: ["leftovers"],
 			baseMove1: "surf", baseMove2: "toxic", baseMove3: "rest",
@@ -954,7 +954,7 @@ exports.BattleFormatsData = {
 			item: ["leftovers"],
 			baseMove1: "surf", baseMove2: "psychic", baseMove3: "icebeam", baseMove4: "thunderwave",
 		},
-		randomSet2: {  // Defensive
+		randomSet2: { // Defensive
 			chance: 13,
 			item: ["leftovers"],
 			baseMove1: "surf", baseMove2: "rest",
@@ -975,7 +975,7 @@ exports.BattleFormatsData = {
 			item: ["leftovers"],
 			baseMove1: "surf", baseMove2: "psychic", baseMove3: "icebeam", baseMove4: "thunderwave",
 		},
-		randomSet2: {  // Defensive
+		randomSet2: { // Defensive
 			chance: 13,
 			item: ["leftovers"],
 			baseMove1: "surf", baseMove2: "rest",
