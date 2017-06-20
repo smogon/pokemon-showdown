@@ -2115,7 +2115,7 @@ exports.BattleFormatsData = {
 			{"generation": 4, "level": 30, "gender": "M", "nature": "Jolly", "moves":["fakeout", "iceshard", "nightslash", "brickbreak"], "pokeball": "cherishball"},
 			{"generation": 6, "level": 48, "gender": "M", "perfectIVs": 2, "isHidden": false, "moves":["nightslash", "icepunch", "brickbreak", "xscissor"], "pokeball": "cherishball"},
 		],
-		tier: "BL",
+		tier: "UU",
 	},
 	teddiursa: {
 		randomBattleMoves: ["swordsdance", "protect", "facade", "closecombat", "firepunch", "crunch", "playrough", "gunkshot"],
@@ -2228,7 +2228,7 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["nastyplot", "darkpulse", "taunt", "fireblast", "hiddenpowergrass"],
 		randomDoubleBattleMoves: ["nastyplot", "darkpulse", "taunt", "heatwave", "hiddenpowergrass", "protect"],
 		requiredItem: "Houndoominite",
-		tier: "UU",
+		tier: "BL",
 	},
 	phanpy: {
 		randomBattleMoves: ["stealthrock", "earthquake", "iceshard", "headsmash", "knockoff", "seedbomb", "superpower", "playrough"],
