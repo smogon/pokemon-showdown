@@ -20,7 +20,7 @@ exports.commands = {
 		if (template.isMega || (template.evos && Object.keys(template.evos).length > 0)) { // Mega Pokemon cannot be mega evolved
 			return this.errorReply(`You cannot mega evolve ${template.name} in Mix and Mega.`);
 		}
-		let bannedStones = {'beedrillite':1, 'gengarite':1, 'kangaskhanite':1, 'mawilite':1, 'medichamite':1};
+		let bannedStones = {'beedrillite':1, 'gengarite':1, 'kangaskhanite':1, 'mawilite':1};
 		if (stone.id in bannedStones && template.name !== stone.megaEvolves) {
 			return this.errorReply(`You cannot use ${stone.name} on anything besides ${stone.megaEvolves} in Mix and Mega.`);
 		}
@@ -37,7 +37,6 @@ exports.commands = {
 			baseTemplate = Dex.getTemplate("Kyogre");
 		}
 		let deltas = {
-			ability: megaTemplate.abilities['0'],
 			baseStats: {},
 			weightkg: megaTemplate.weightkg - baseTemplate.weightkg,
 		};
@@ -52,42 +51,46 @@ exports.commands = {
 			deltas.type = megaTemplate.types[1];
 		}
 		//////////////////////////////////////////
-		let ability = deltas.ability;
-		let types = template.types;
-		let baseStats = Object.assign({}, template.baseStats);
-		if (types[0] === deltas.type) { // Add any type gains
-			types = [deltas.type];
+		let mixedTemplate = Object.assign({}, template);
+		mixedTemplate.abilities = Object.assign({}, megaTemplate.abilities);
+		if (mixedTemplate.types[0] === deltas.type) { // Add any type gains
+			mixedTemplate.types = [deltas.type];
 		} else if (deltas.type) {
-			types = [types[0], deltas.type];
+			mixedTemplate.types = [mixedTemplate.types[0], deltas.type];
 		}
-		for (let statName in baseStats) { // Add the changed stats and weight
-			baseStats[statName] = Dex.clampIntRange(baseStats[statName] + deltas.baseStats[statName], 1, 255);
+		mixedTemplate.baseStats = {};
+		for (let statName in template.baseStats) { // Add the changed stats and weight
+			mixedTemplate.baseStats[statName] = Dex.clampIntRange(Dex.data.Pokedex[template.id].baseStats[statName] + deltas.baseStats[statName], 1, 255);
 		}
-		let weightkg = Math.round(Math.max(0.1, template.weightkg + deltas.weightkg) * 100) / 100;
-		let type = '<span class="col typecol">';
-		for (let i = 0; i < types.length; i++) { // HTML for some nice type images.
-			type = `${type}<img src="https://play.pokemonshowdown.com/sprites/types/${types[i]}.png" alt="${types[i]}" height="14" width="32">`;
+		mixedTemplate.weightkg = Math.round(Math.max(0.1, template.weightkg + deltas.weightkg) * 100) / 100;
+		mixedTemplate.tier = "MnM";
+		let details;
+		let weighthit = 20;
+		if (mixedTemplate.weightkg >= 200) {
+			weighthit = 120;
+		} else if (mixedTemplate.weightkg >= 100) {
+			weighthit = 100;
+		} else if (mixedTemplate.weightkg >= 50) {
+			weighthit = 80;
+		} else if (mixedTemplate.weightkg >= 25) {
+			weighthit = 60;
+		} else if (mixedTemplate.weightkg >= 10) {
+			weighthit = 40;
 		}
-		type = type + "</span>";
-		let gnbp = 20;
-		if (weightkg >= 200) { // Calculate Grass Knot/Low Kick Base Power
-			gnbp = 120;
-		} else if (weightkg >= 100) {
-			gnbp = 100;
-		} else if (weightkg >= 50) {
-			gnbp = 80;
-		} else if (weightkg >= 25) {
-			gnbp = 60;
-		} else if (weightkg >= 10) {
-			gnbp = 40;
-		} // Aah, only if `template` had a `bst` property.
-		let bst = baseStats['hp'] + baseStats['atk'] + baseStats['def'] + baseStats['spa'] + baseStats['spd'] + baseStats['spe'];
-		let text = `<b>Stats</b>: ${Object.values(baseStats).join('/')}<br />`;
-		text = `${text}<b>BST</b>: ${bst}<br />`;
-		text = `${text}<b>Type:</b> ${type}<br />`;
-		text = `${text}<b>Ability</b>: ${ability}<br />`;
-		text = `${text}<b>Weight</b>: ${weightkg} kg (${gnbp} BP)`;
-		return this.sendReplyBox(text);
+		details = {
+			"Dex#": mixedTemplate.num,
+			"Gen": mixedTemplate.gen,
+			"Height": mixedTemplate.heightm + " m",
+			"Weight": mixedTemplate.weightkg + " kg <em>(" + weighthit + " BP)</em>",
+			"Dex Colour": mixedTemplate.color,
+		};
+		if (mixedTemplate.eggGroups) details["Egg Group(s)"] = mixedTemplate.eggGroups.join(", ");
+		details['<font color="#686868">Does Not Evolve</font>'] = "";
+		this.sendReply(`|raw|${Chat.getDataPokemonHTML(mixedTemplate)}`);
+		this.sendReply('|raw|<font size="1">' + Object.keys(details).map(detail => {
+			if (details[detail] === '') return detail;
+			return '<font color="#686868">' + detail + ':</font> ' + details[detail];
+		}).join("&nbsp;|&ThickSpace;") + '</font>');
 	},
 	mixandmegahelp: ["/mnm <pokemon> @ <mega stone> - Shows the Mix and Mega evolved Pokemon's type and stats."],
 
@@ -98,7 +101,7 @@ exports.commands = {
 			return this.errorReply("Error: Pokemon not found.");
 		}
 		let bst = 0;
-		let pokeobj = Dex.getTemplate(toId(target));
+		let pokeobj = Object.assign({}, Dex.getTemplate(target));
 		for (let i in pokeobj.baseStats) {
 			bst += pokeobj.baseStats[i];
 		}
@@ -106,7 +109,8 @@ exports.commands = {
 		for (let i in pokeobj.baseStats) {
 			newStats[i] = pokeobj.baseStats[i] * (bst <= 350 ? 2 : 1);
 		}
-		this.sendReplyBox(`${pokeobj.species} in 350 Cup: <br /> ${Object.values(newStats).join('/')}`);
+		pokeobj.baseStats = Object.assign({}, newStats);
+		this.sendReply(`|html|${Chat.getDataPokemonHTML(pokeobj)}`);
 	},
 	'350cuphelp': ["/350 OR /350cup <pokemon> - Shows the base stats that a Pokemon would have in 350 Cup."],
 
@@ -135,7 +139,8 @@ exports.commands = {
 		for (let statName in template.baseStats) {
 			newStats[statName] = Dex.clampIntRange(newStats[statName] + boost, 1, 255);
 		}
-		this.sendReplyBox(`${template.species} in Tier Shift: <br /> ${Object.values(newStats).join('/')}`);
+		template.baseStats = Object.assign({}, newStats);
+		this.sendReply(`|raw|${Chat.getDataPokemonHTML(template)}`);
 	},
 	'tiershifthelp': ["/ts OR /tiershift <pokemon> - Shows the base stats that a Pokemon would have in Tier Shift."],
 };
