@@ -1129,3 +1129,86 @@ Chat.toListString = function (array) {
 	if (array.length === 1) return array[0];
 	return `${array.slice(0, -1).join(", ")} and ${array.slice(-1)}`;
 };
+
+Chat.getDataPokemonHTML = function (template, gen = 7) {
+	if (typeof template === 'string') template = Object.assign({}, Dex.getTemplate(template));
+	let buf = '<li class="result">';
+	buf += '<span class="col numcol">' + (template.tier) + '</span> ';
+	buf += `<span class="col iconcol"><psicon pokemon="${template.id}"/></span> `;
+	buf += '<span class="col pokemonnamecol" style="white-space:nowrap"><a href="https://pokemonshowdown.com/dex/pokemon/' + template.id + '" target="_blank">' + template.species + '</a></span> ';
+	buf += '<span class="col typecol">';
+	if (template.types) {
+		for (let i = 0; i < template.types.length; i++) {
+			buf += `<img src="https://play.pokemonshowdown.com/sprites/types/${template.types[i]}.png" alt="${template.types[i]}" height="14" width="32">`;
+		}
+	}
+	buf += '</span> ';
+	if (gen >= 3) {
+		buf += '<span style="float:left;min-height:26px">';
+		if (template.abilities['1']) {
+			buf += '<span class="col twoabilitycol">' + template.abilities['0'] + '<br />' + template.abilities['1'] + '</span>';
+		} else {
+			buf += '<span class="col abilitycol">' + template.abilities['0'] + '</span>';
+		}
+		if (template.abilities['S']) {
+			buf += '<span class="col twoabilitycol' + (template.unreleasedHidden ? ' unreleasedhacol' : '') + '"><em>' + template.abilities['H'] + '<br />' + template.abilities['S'] + '</em></span>';
+		} else if (template.abilities['H']) {
+			buf += '<span class="col abilitycol' + (template.unreleasedHidden ? ' unreleasedhacol' : '') + '"><em>' + template.abilities['H'] + '</em></span>';
+		} else {
+			buf += '<span class="col abilitycol"></span>';
+		}
+		buf += '</span>';
+	}
+	let bst = 0;
+	for (let i in template.baseStats) {
+		bst += template.baseStats[i];
+	}
+	buf += '<span style="float:left;min-height:26px">';
+	buf += '<span class="col statcol"><em>HP</em><br />' + template.baseStats.hp + '</span> ';
+	buf += '<span class="col statcol"><em>Atk</em><br />' + template.baseStats.atk + '</span> ';
+	buf += '<span class="col statcol"><em>Def</em><br />' + template.baseStats.def + '</span> ';
+	if (gen <= 1) {
+		bst -= template.baseStats.spd;
+		buf += '<span class="col statcol"><em>Spc</em><br />' + template.baseStats.spa + '</span> ';
+	} else {
+		buf += '<span class="col statcol"><em>SpA</em><br />' + template.baseStats.spa + '</span> ';
+		buf += '<span class="col statcol"><em>SpD</em><br />' + template.baseStats.spd + '</span> ';
+	}
+	buf += '<span class="col statcol"><em>Spe</em><br />' + template.baseStats.spe + '</span> ';
+	buf += '<span class="col bstcol"><em>BST<br />' + bst + '</em></span> ';
+	buf += '</span>';
+	buf += '</li>';
+	return `<div class="message"><ul class="utilichart">${buf}<li style="clear:both"></li></ul></div>`;
+};
+
+Chat.getDataMoveHTML = function (move) {
+	if (typeof move === 'string') move = Object.assign({}, Dex.getMove(move));
+	let buf = `<ul class="utilichart"><li class="result">`;
+	buf += `<a data-entry="move|${move.name}"><span class="col movenamecol">${move.name}</span> `;
+	buf += `<span class="col typecol"><img src="//play.pokemonshowdown.com/sprites/types/${move.type}.png" alt="${move.type}" width="32" height="14">`;
+	buf += `<img src="//play.pokemonshowdown.com/sprites/categories/${move.category}.png" alt="${move.category}" width="32" height="14"></span> `;
+	if (move.basePower) buf += `<span class="col labelcol"><em>Power</em><br>${typeof move.basePower === 'number' ? move.basePower : '—'}</span> `;
+	buf += `<span class="col widelabelcol"><em>Accuracy</em><br>${typeof move.accuracy === 'number' ? (move.accuracy + '%') : '—'}</span> `;
+	buf += `<span class="col pplabelcol"><em>PP</em><br>${move.pp ? move.pp : 1}</span> `;
+	buf += `<span class="col movedesccol">${move.shortDesc || move.desc}</span> `;
+	buf += `</a></li><li style="clear:both"></li></ul>`;
+	return buf;
+};
+
+Chat.getDataAbilityHTML = function (ability) {
+	if (typeof ability === 'string') ability = Object.assign({}, Dex.getAbility(ability));
+	let buf = `<ul class="utilichart"><li class="result">`;
+	buf += `<a data-entry="ability|${ability.name}"><span class="col namecol">${ability.name}</span> `;
+	buf += `<span class="col abilitydesccol">${ability.shortDesc || ability.desc}</span> `;
+	buf += `</a></li><li style="clear:both"></li></ul>`;
+	return buf;
+};
+
+Chat.getDataItemHTML = function (item) {
+	if (typeof item === 'string') item = Object.assign({}, Dex.getItem(item));
+	let buf = `<ul class="utilichart"><li class="result">`;
+	buf += `<a data-entry="item|${item.name}"><span class="col itemiconcol"><psicon item="${item.id}"></span> <span class="col namecol">${item.name}</span> `;
+	buf += `<span class="col itemdesccol">${item.shortDesc || item.desc}</span> `;
+	buf += `</a></li><li style="clear:both"></li></ul>`;
+	return buf;
+};
