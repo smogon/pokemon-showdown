@@ -1534,7 +1534,6 @@ exports.commands = {
 			proof = `(PROOF: ${target.substr(proofIndex + bump, target.length).trim()}) `;
 			userReason = target.substr(0, proofIndex).trim();
 		}
-		userReason = userReason || target; // staff did not use proof
 
 		targetUser.popup("|modal|" + user.name + " has locked you from talking in chats, battles, and PMing regular users." + (userReason ? "\n\nReason: " + userReason : "") + "\n\nIf you feel that your lock was unjustified, you can still PM staff members (%, @, &, and ~) to discuss it" + (Config.appealurl ? " or you can appeal:\n" + Config.appealurl : ".") + "\n\nYour lock will expire in a few days.");
 
@@ -1617,7 +1616,6 @@ exports.commands = {
 			proof = `(PROOF: ${target.substr(proofIndex + bump, target.length).trim()}) `;
 			userReason = target.substr(0, proofIndex).trim();
 		}
-		userReason = userReason || target; // staff did not use proof
 
 		targetUser.popup("|modal|" + user.name + " has locked you from talking in chats, battles, and PMing regular users for a week." + (userReason ? "\n\nReason: " + userReason : "") + "\n\nIf you feel that your lock was unjustified, you can still PM staff members (%, @, &, and ~) to discuss it" + (Config.appealurl ? " or you can appeal:\n" + Config.appealurl : ".") + "\n\nYour lock will expire in a few days.");
 
@@ -1727,7 +1725,6 @@ exports.commands = {
 			proof = `(PROOF: ${target.substr(proofIndex + bump, target.length).trim()}) `;
 			userReason = target.substr(0, proofIndex).trim();
 		}
-		userReason = userReason || target; // staff did not use proof
 
 		targetUser.popup("|modal|" + user.name + " has globally banned you." + (userReason ? "\n\nReason: " + userReason : "") + (Config.appealurl ? "\n\nIf you feel that your ban was unjustified, you can appeal:\n" + Config.appealurl : "") + "\n\nYour ban will expire in a few days.");
 
