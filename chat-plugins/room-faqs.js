@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOMFAQ_FILE = path.resolve(__dirname, '../config/chat-plugins/faqs.json');
-const ALLOWED_HTML = ['a', 'font', 'i', 'u', 'b', 'strong', 'em', 'small', 'sub', 'sup', 'ins', 'del', 'code'];
+const ALLOWED_HTML = ['a', 'font', 'i', 'u', 'b', 'strong', 'em', 'small', 'sub', 'sup', 'ins', 'del', 'code', 'br'];
 
 let roomFaqs = {};
 try {
@@ -42,13 +42,7 @@ exports.commands = {
 
 		text = text.replace(/^>/, '&gt;');
 
-		let htmltags = text.toLowerCase().match(/<\/?(\w+)\b/g);
-		if (htmltags && htmltags.some(val => !ALLOWED_HTML.includes(toId(val)))) {
-			let tagList = ALLOWED_HTML.map(tag => `<${tag}>`).join(', ');
-			return this.errorReply(`Disallowed HTML tags found. Allowed html tags: ${tagList}`);
-		}
-
-		text = this.canHTML(text);
+		text = this.canHTML(text, ALLOWED_HTML);
 		if (!text) return;
 
 		if (!roomFaqs[room.id]) roomFaqs[room.id] = {};

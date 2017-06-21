@@ -762,16 +762,26 @@ class CommandContext {
 		// unknown URI, allow HTTP to be safe
 		return 'http://' + uri;
 	}
-	canHTML(html) {
+	canHTML(html, whitelist) {
 		html = ('' + (html || '')).trim();
 		if (!html) return '';
-		let images = /<img\b[^<>]*/ig;
-		let match;
-		while ((match = images.exec(html))) {
-			if (this.room.isPersonal && !this.user.can('announce')) {
+
+		let usedTags = html.toLowerCase().match(/<\/?(\w+)\b/g).map(toId);
+		if (usedTags) {
+			if (whitelist && usedTags.some(val => !whitelist.includes(val))) {
+				let tagList = whitelist.map(tag => `<${tag}>`).join(', ');
+				this.errorReply(`Disallowed HTML tags found. Allowed html tags: ${tagList}`);
+				return false;
+			}
+			if (usedTags.includes('img') && this.room.isPersonal && !this.user.can('announce')) {
 				this.errorReply("Images are not allowed in personal rooms.");
 				return false;
 			}
+		}
+
+		let images = /<img\b[^<>]*/ig;
+		let match;
+		while ((match = images.exec(html))) {
 			if (!/width=([0-9]+|"[0-9]+")/i.test(match[0]) || !/height=([0-9]+|"[0-9]+")/i.test(match[0])) {
 				// Width and height are required because most browsers insert the
 				// <img> element before width and height are known, and when the
