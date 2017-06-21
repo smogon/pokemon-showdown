@@ -1734,6 +1734,8 @@ exports.commands = {
 	veekun: function (target, broadcast, user) {
 		if (!this.runBroadcast()) return;
 
+		if (!target) return this.parse('/help veekun');
+
 		let baseLink = 'http://veekun.com/dex/';
 
 		let pokemon = Dex.getTemplate(target);
