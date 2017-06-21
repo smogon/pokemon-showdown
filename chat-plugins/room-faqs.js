@@ -15,7 +15,7 @@ try {
 if (!roomFaqs || typeof roomFaqs !== 'object') roomFaqs = {};
 
 function saveRoomFaqs() {
-	fs.writeFileSync(ROOMFAQ_FILE, JSON.stringify(roomFaqs));
+	fs.writeFile(ROOMFAQ_FILE, JSON.stringify(roomFaqs), () => {});
 }
 
 // Aliases are implemented as a "regular" FAQ entry starting with a >. EX: {a: "text", b: ">a"}
