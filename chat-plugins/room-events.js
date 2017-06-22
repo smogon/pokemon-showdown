@@ -23,7 +23,7 @@ exports.commands = {
 			buff += '<th>Event Name:</th><th>Event Description:</th><th>Event Date:</th>';
 			let events = Object.keys(room.events);
 			for (let i = 0; i < events.length; i++) {
-				buff += `<tr><td>${Chat.escapeHTML(events[i])}</td><td>${room.events[events[i]].desc}</td><td>${Chat.escapeHTML(room.events[events[i]].date)}</td></tr>`;
+				buff += `<tr><td>${Chat.escapeHTML(events[i])}</td><td>${room.events[events[i]].desc}</td><td><time>${Chat.escapeHTML(room.events[events[i]].date)}</time></td></tr>`;
 			}
 			buff += '</table>';
 			return this.sendReply(`|raw|<div class="infobox-limited">${buff}</div>`);
