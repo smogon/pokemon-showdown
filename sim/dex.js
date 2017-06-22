@@ -509,7 +509,7 @@ class ModdedDex {
 				format.supplementaryBanlist = supplementaryBanlist;
 				format.banlist = format.banlist ? format.banlist.slice() : [];
 				format.unbanlist = format.unbanlist ? format.unbanlist.slice() : [];
-				format.ruleset = format.ruleset ? format.ruleset.slice() : [];
+				format.ruleset = format.baseRuleset.slice();
 				for (let i = 0; i < supplementaryBanlist.length; i++) {
 					let ban = supplementaryBanlist[i];
 					let unban = false;
@@ -794,7 +794,7 @@ class ModdedDex {
 	getSupplementaryBanlist(format, params) {
 		format = this.getFormat(format);
 		if (typeof params === 'string') params = params.split(',');
-		if (!format.banlistTable) this.getBanlistTable(format);
+		if (!format.banlistTable) format.banlistTable = this.getBanlistTable(format);
 		let banlist = [];
 		for (let i = 0; i < params.length; i++) {
 			let param = params[i].trim();
@@ -1411,6 +1411,7 @@ class ModdedDex {
 			if (!format.column) format.column = column;
 			if (this.formatsCache[id]) throw new Error(`Format #${i + 1} has a duplicate ID: '${id}'`);
 			format.effectType = 'Format';
+			format.baseRuleset = format.ruleset ? format.ruleset.slice() : [];
 			if (format.challengeShow === undefined) format.challengeShow = true;
 			if (format.searchShow === undefined) format.searchShow = true;
 			if (format.tournamentShow === undefined) format.tournamentShow = true;
