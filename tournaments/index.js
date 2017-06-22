@@ -28,6 +28,11 @@ function usersToNames(users) {
 
 class Tournament {
 	constructor(room, format, generator, playerCap, isRated) {
+		if (room.tourNumber) {
+			room.tourNumber++;
+		} else {
+			room.tourNumber = 1;
+		}
 		format = toId(format);
 
 		this.id = room.id;
@@ -39,6 +44,7 @@ class Tournament {
 		this.playerCap = parseInt(playerCap) || Config.tourdefaultplayercap || 0;
 
 		this.format = format;
+		this.originalFormat = format;
 		this.teambuilderFormat = format;
 		this.banlist = [];
 		this.generator = generator;
@@ -110,65 +116,18 @@ class Tournament {
 	}
 
 	setBanlist(params, output) {
-		let format = Dex.getFormat(this.teambuilderFormat);
+		let format = Dex.getFormat(this.originalFormat);
 		if (format.team) {
 			output.errorReply(format.name + " does not support supplementary banlists.");
 			return false;
 		}
-		if (!format.banlistTable) Dex.getBanlistTable(format);
-		let banlist = [];
-		for (let i = 0; i < params.length; i++) {
-			let param = params[i].trim();
-			let unban = false;
-			if (param.charAt(0) === '!') {
-				unban = true;
-				param = param.substr(1);
-			}
-			let ban, oppositeBan;
-			let subformat = Dex.getFormat(param);
-			if (subformat.effectType === 'ValidatorRule' || subformat.effectType === 'Rule' || subformat.effectType === 'Format') {
-				if (unban) {
-					if (format.banlistTable['Rule:' + subformat.id] === false) continue;
-				} else {
-					if (format.banlistTable['Rule:' + subformat.id]) continue;
-				}
-				ban = 'Rule:' + subformat.name;
-			} else {
-				param = param.toLowerCase();
-				let baseForme = false;
-				if (param.endsWith('-base')) {
-					baseForme = true;
-					param = param.substr(0, param.length - 5);
-				}
-				let search = Dex.dataSearch(param);
-				if (!search || search.length < 1) continue;
-				search = search[0];
-				if (search.isInexact || search.searchType === 'nature') continue;
-				ban = search.name;
-				if (baseForme) ban += '-Base';
-				if (unban) {
-					if (format.banlistTable[ban] === false) continue;
-				} else {
-					if (format.banlistTable[ban]) continue;
-				}
-			}
-			if (unban) {
-				oppositeBan = ban;
-				ban = '!' + ban;
-			} else {
-				oppositeBan = '!' + ban;
-			}
-			let index = banlist.indexOf(oppositeBan);
-			if (index > -1) {
-				banlist.splice(index, 1);
-			} else {
-				banlist.push(ban);
-			}
-		}
+		let banlist = Dex.getSupplementaryBanlist(format, params);
 		if (banlist.length < 1) {
 			output.errorReply("The specified banlist is invalid or already included in " + format.name + ".");
 			return false;
 		}
+		if (this.teambuilderFormat === this.originalFormat) this.teambuilderFormat = 'customgame-' + this.room.id + '-' + this.room.tourNumber;
+		Dex.getFormat(this.originalFormat, banlist, this.teambuilderFormat);
 		this.banlist = banlist;
 		return true;
 	}
@@ -239,7 +198,7 @@ class Tournament {
 			isJoined: isJoined,
 			bracketData: this.bracketCache,
 		};
-		if (this.format !== this.teambuilderFormat) update.teambuilderFormat = this.teambuilderFormat;
+		if (this.format !== this.originalFormat) update.teambuilderFormat = this.originalFormat;
 		connection.sendTo(this.room, '|tournament|update|' + JSON.stringify(update));
 		if (this.isTournamentStarted && isJoined) {
 			connection.sendTo(this.room, '|tournament|update|' + JSON.stringify({
@@ -835,7 +794,7 @@ class Tournament {
 		let player = this.players[user.userid];
 		if (!this.pendingChallenges.get(player)) return;
 
-		let room = Matchmaker.startBattle(from, user, this.teambuilderFormat, challenge.team, user.team, {rated: this.isRated, tour: this, supplementaryRuleset: this.banlist});
+		let room = Matchmaker.startBattle(from, user, this.teambuilderFormat, challenge.team, user.team, {rated: this.isRated, tour: this});
 		if (!room) return;
 
 		this.pendingChallenges.set(challenge.from, null);
@@ -1053,15 +1012,14 @@ let commands = {
 			tournament.acceptChallenge(user, this);
 		},
 		vtm: function (tournament, user, params, cmd, connection) {
-			if (tournament.banlist.length < 1) return this.parse("/vtm " + tournament.teambuilderFormat);
 			if (Monitor.countPrepBattle(connection.ip, connection)) {
 				return;
 			}
-			TeamValidator(tournament.teambuilderFormat, tournament.banlist).prepTeam(user.team).then(result => {
+			TeamValidator(tournament.teambuilderFormat).prepTeam(user.team).then(result => {
 				if (result.charAt(0) === '1') {
 					connection.popup("Your team is valid for this tournament.");
 				} else {
-					const format = Dex.getFormat(tournament.teambuilderFormat).name.replace(/\[/, "\\[").replace(/\]/, "\\]");
+					const format = Dex.getFormat(tournament.originalFormat).name.replace(/\[/, "\\[").replace(/\]/, "\\]");
 					connection.popup("Your team was rejected for the following reasons:\n\n- " + result.slice(1).replace(/\n/g, '\n- ').replace(new RegExp(format, "g"), "this tournament"));
 				}
 			});
@@ -1125,6 +1083,7 @@ let commands = {
 				return this.errorReply("The tournament's banlist is already empty.");
 			}
 			tournament.banlist = [];
+			tournament.teambuilderFormat = tournament.originalFormat;
 			this.room.addRaw("<b>The tournament's banlist was cleared.</b>");
 			this.privateModCommand("(" + user.name + " cleared the tournament's banlist.)");
 		},
@@ -1143,8 +1102,8 @@ let commands = {
 		},
 		resetname: 'clearname',
 		clearname: function (tournament, user) {
-			if (tournament.format === tournament.teambuilderFormat) return this.errorReply("The tournament does not have a name.");
-			tournament.format = tournament.teambuilderFormat;
+			if (tournament.format === tournament.originalFormat) return this.errorReply("The tournament does not have a name.");
+			tournament.format = tournament.originalFormat;
 			this.room.send('|tournament|update|' + JSON.stringify({format: tournament.format}));
 			this.privateModCommand("(" + user.name + " cleared the tournament's name.)");
 		},
