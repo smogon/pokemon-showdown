@@ -317,10 +317,10 @@ exports.commands = {
 			searchString = searchString.substring(1, searchString.length - 1);
 		}
 
-		PM.send(roomId, searchString, exactSearch, lines).then(response => connection.popup(prettifyResults(response, roomId, searchString, exactSearch, addModlogLinks, hideIps)))
-			.then(() => {
-				if (cmd === 'timedmodlog') this.sendReply(`The modlog query took ${Date.now() - startTime} ms to complete.`);
-			});
+		PM.send(roomId, searchString, exactSearch, lines).then(response => {
+			connection.popup(prettifyResults(response, roomId, searchString, exactSearch, addModlogLinks, hideIps)));
+			if (cmd === 'timedmodlog') this.sendReply(`The modlog query took ${Date.now() - startTime} ms to complete.`);
+		});
 	},
 	modloghelp: ["/modlog [roomid|all|public], [n] - Roomid defaults to current room.",
 		"If n is a number or omitted, display the last n lines of the moderator log. Defaults to 20.",
