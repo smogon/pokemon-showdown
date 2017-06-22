@@ -558,7 +558,7 @@ class Side {
 			switch (choiceType) {
 			case 'move':
 				let targetLoc = 0;
-				if (/\s\-?[1-3]$/.test(data)) {
+				if (/\s-?[1-3]$/.test(data)) {
 					targetLoc = parseInt(data.slice(-2));
 					data = data.slice(0, data.lastIndexOf(' '));
 				}

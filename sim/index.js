@@ -13,7 +13,7 @@
 
 const Dex = require('./dex');
 global.toId = Dex.getId;
-const PRNG = require('./prng');
+// const PRNG = require('./prng');
 const Battle = require('./battle');
 const Side = require('./side');
 const Pokemon = require('./pokemon');

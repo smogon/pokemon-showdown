@@ -372,8 +372,8 @@ class Template extends Effect {
 		 */
 		this.genderRatio = this.genderRatio || (this.gender === 'M' ? {M:1, F:0} :
 			this.gender === 'F' ? {M:0, F:1} :
-			this.gender === 'N' ? {M:0, F:0} :
-			{M:0.5, F:0.5});
+				this.gender === 'N' ? {M:0, F:0} :
+					{M:0.5, F:0.5});
 
 		/**
 		 * Required item. Do not use this directly; see requiredItems.
