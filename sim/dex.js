@@ -485,9 +485,11 @@ class ModdedDex {
 	}
 	/**
 	 * @param {string | Format} name
+	 * @param {string | string[]} [supplementaryBanlist]
+	 * @param {string} [customId]
 	 * @return {Format}
 	 */
-	getFormat(name) {
+	getFormat(name, supplementaryBanlist, customId) {
 		if (name && typeof name !== 'string') {
 			return name;
 		}
@@ -499,7 +501,44 @@ class ModdedDex {
 		}
 		let effect;
 		if (this.data.Formats.hasOwnProperty(id)) {
-			effect = new Data.Format({name}, this.data.Formats[id]);
+			let format = this.data.Formats[id];
+			if (supplementaryBanlist) {
+				if (typeof supplementaryBanlist === 'string') supplementaryBanlist = supplementaryBanlist.split(',');
+				if (!format.banlistTable) this.getBanlistTable(format);
+				format = Object.assign({}, format);
+				format.supplementaryBanlist = supplementaryBanlist;
+				format.banlist = format.banlist ? format.banlist.slice() : [];
+				format.unbanlist = format.unbanlist ? format.unbanlist.slice() : [];
+				format.ruleset = format.ruleset ? format.ruleset.slice() : [];
+				for (let i = 0; i < supplementaryBanlist.length; i++) {
+					let ban = supplementaryBanlist[i];
+					let unban = false;
+					if (ban.charAt(0) === '!') {
+						unban = true;
+						ban = ban.substr(1);
+					}
+					if (ban.startsWith('Rule:')) {
+						ban = ban.substr(5);
+						if (unban) {
+							ban = 'Rule:' + toId(ban);
+							if (!format.unbanlist.includes(ban)) format.unbanlist.push(ban);
+						} else {
+							if (!format.ruleset.includes(ban)) format.ruleset.push(ban);
+						}
+					} else {
+						if (unban) {
+							if (!format.unbanlist.includes(ban)) format.unbanlist.push(ban);
+						} else {
+							if (!format.banlist.includes(ban)) format.banlist.push(ban);
+						}
+					}
+				}
+				delete format.banlistTable;
+				if (customId) this.data.Formats[customId] = format;
+			}
+			effect = new Data.Format({name}, format);
+		} else if (this.data.Formats.hasOwnProperty(name)) {
+			effect = new Data.Format({name}, this.data.Formats[name]);
 		} else {
 			effect = new Data.Format({name, exists: false});
 		}
@@ -745,6 +784,66 @@ class ModdedDex {
 			}
 		}
 		return banlistTable;
+	}
+
+	/**
+	 * @param {string | Format} format
+	 * @param {string | string[]} params
+	 * @return {string[]}
+	 */
+	getSupplementaryBanlist(format, params) {
+		format = this.getFormat(format);
+		if (typeof params === 'string') params = params.split(',');
+		if (!format.banlistTable) this.getBanlistTable(format);
+		let banlist = [];
+		for (let i = 0; i < params.length; i++) {
+			let param = params[i].trim();
+			let unban = false;
+			if (param.charAt(0) === '!') {
+				unban = true;
+				param = param.substr(1);
+			}
+			let ban, oppositeBan;
+			let subformat = this.getFormat(param);
+			if (subformat.effectType === 'ValidatorRule' || subformat.effectType === 'Rule' || subformat.effectType === 'Format') {
+				if (unban) {
+					if (format.banlistTable['Rule:' + subformat.id] === false) continue;
+				} else {
+					if (format.banlistTable['Rule:' + subformat.id]) continue;
+				}
+				ban = 'Rule:' + subformat.name;
+			} else {
+				param = param.toLowerCase();
+				let baseForme = false;
+				if (param.endsWith('-base')) {
+					baseForme = true;
+					param = param.substr(0, param.length - 5);
+				}
+				let search = this.dataSearch(param);
+				if (!search || search.length < 1) continue;
+				if (search[0].isInexact || search[0].searchType === 'nature') continue;
+				ban = search[0].name;
+				if (baseForme) ban += '-Base';
+				if (unban) {
+					if (format.banlistTable[ban] === false) continue;
+				} else {
+					if (format.banlistTable[ban]) continue;
+				}
+			}
+			if (unban) {
+				oppositeBan = ban;
+				ban = '!' + ban;
+			} else {
+				oppositeBan = '!' + ban;
+			}
+			let index = banlist.indexOf(oppositeBan);
+			if (index > -1) {
+				banlist.splice(index, 1);
+			} else {
+				banlist.push(ban);
+			}
+		}
+		return banlist;
 	}
 
 	/**

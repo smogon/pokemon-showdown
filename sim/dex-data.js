@@ -83,7 +83,7 @@ class Effect {
 		this.fullname = '';
 		/**
 		 * Effect type.
-		 * @type {'Effect' | 'Pokemon' | 'Move' | 'Item' | 'Ability' | 'Format' | 'Ruleset' | 'Weather' | 'Status'}
+		 * @type {'Effect' | 'Pokemon' | 'Move' | 'Item' | 'Ability' | 'Format' | 'Ruleset' | 'Weather' | 'Status' | 'Rule' | 'ValidatorRule'}
 		 */
 		this.effectType = 'Effect';
 		/**
@@ -133,7 +133,7 @@ class Format extends Effect {
 		super(data, moreData);
 		/** @type {string} */
 		this.mod = Tools.getString(this.mod) || 'gen6';
-		/** @type {'Format' | 'Ruleset'} */
+		/** @type {'Format' | 'Ruleset' | 'Rule' | 'ValidatorRule'} */
 		// @ts-ignore
 		this.effectType = Tools.getString(this.effectType) || 'Format';
 		/**
@@ -142,10 +142,15 @@ class Format extends Effect {
 		 */
 		this.ruleset = this.ruleset;
 		/**
-		 * List of banned effecdts.
+		 * List of banned effects.
 		 * @type {string[]}
 		 */
 		this.banlist = this.banlist;
+		/**
+		 * Table of rule names and banned effects.
+		 * @type {{[mod: string]: string | boolean}}
+		 */
+		this.banlistTable = this.banlistTable;
 	}
 }
 

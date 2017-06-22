@@ -289,14 +289,15 @@ class BattleTimer {
 }
 
 class Battle {
-	constructor(room, format, rated, supplementaryRuleset) {
+	constructor(room, format, rated) {
+		format = Dex.getFormat(format);
 		this.id = room.id;
 		this.room = room;
-		this.title = Dex.getFormat(format).name;
+		this.title = format.name;
 		if (!this.title.endsWith(" Battle")) this.title += " Battle";
 		this.allowRenames = !rated;
 
-		this.format = toId(format);
+		this.format = format.id;
 		this.rated = rated;
 		this.started = false;
 		this.ended = false;
@@ -319,7 +320,7 @@ class Battle {
 		// data to be logged
 		this.logData = null;
 		this.endType = 'normal';
-		this.supplementaryRuleset = !!supplementaryRuleset;
+		this.supplementaryBanlist = !!format.supplementaryBanlist;
 
 		this.rqid = 1;
 
@@ -328,7 +329,7 @@ class Battle {
 			throw new Error(`Battle with ID ${room.id} already exists.`);
 		}
 
-		this.send('init', this.format, rated ? '1' : '', supplementaryRuleset ? supplementaryRuleset.join(',') : '');
+		this.send('init', this.format, rated ? '1' : '', format.supplementaryBanlist ? format.supplementaryBanlist.join(',') : '');
 		this.process.pendingTasks.set(room.id, this);
 	}
 
@@ -706,29 +707,7 @@ if (process.send && module === process.mainModule) {
 			const id = data[0];
 			if (!Battles.has(id)) {
 				try {
-					let format = Dex.getFormat(data[2]);
-					if (data[4]) {
-						Dex.mod(format.mod || 'base').getBanlistTable(format);
-						format = Object.assign({}, format);
-						format.ruleset = format.ruleset ? format.ruleset.slice() : [];
-						const supplementaryRuleset = data[4].split(',');
-						for (let i = 0; i < supplementaryRuleset.length; i++) {
-							let rule = supplementaryRuleset[i];
-							let remove = false;
-							if (rule.charAt(0) === '!') {
-								remove = true;
-								rule = rule.substr(1);
-							}
-							if (!rule.startsWith('Rule:')) continue;
-							rule = rule.substr(5);
-							if (remove) {
-								if (format.ruleset.includes(rule)) format.ruleset.splice(format.ruleset.indexOf(rule), 1);
-							} else {
-								if (!format.ruleset.includes(rule)) format.ruleset.push(rule);
-							}
-						}
-					}
-					const battle = Sim.construct(format, data[3], sendBattleMessage);
+					const battle = Sim.construct(Dex.getFormat(data[2], data[4]), data[3], sendBattleMessage);
 					battle.id = id;
 					Battles.set(id, battle);
 				} catch (err) {
