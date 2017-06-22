@@ -353,6 +353,7 @@ exports.BattleFormatsData = {
 			{"generation": 7, "level": 1, "nature": "Hardy", "moves":["thunderbolt", "quickattack", "thunder", "agility"]},
 		],
 		eventOnly: true,
+		gen: 7,
 		tier: "NU",
 	},
 	pikachuhoenn: {
@@ -360,6 +361,7 @@ exports.BattleFormatsData = {
 			{"generation": 7, "level": 6, "nature": "Hardy", "moves":["thunderbolt", "quickattack", "thunder", "irontail"]},
 		],
 		eventOnly: true,
+		gen: 7,
 		tier: "NU",
 	},
 	pikachusinnoh: {
@@ -367,6 +369,7 @@ exports.BattleFormatsData = {
 			{"generation": 7, "level": 10, "nature": "Hardy", "moves":["thunderbolt", "quickattack", "irontail", "volttackle"]},
 		],
 		eventOnly: true,
+		gen: 7,
 		tier: "NU",
 	},
 	pikachuunova: {
@@ -374,6 +377,7 @@ exports.BattleFormatsData = {
 			{"generation": 7, "level": 14, "nature": "Hardy", "moves":["thunderbolt", "quickattack", "irontail", "volttackle"]},
 		],
 		eventOnly: true,
+		gen: 7,
 		tier: "NU",
 	},
 	pikachukalos: {
@@ -381,6 +385,7 @@ exports.BattleFormatsData = {
 			{"generation": 7, "level": 17, "nature": "Hardy", "moves":["thunderbolt", "quickattack", "irontail", "electroball"]},
 		],
 		eventOnly: true,
+		gen: 7,
 		tier: "NU",
 	},
 	pikachualola: {
@@ -388,6 +393,7 @@ exports.BattleFormatsData = {
 			{"generation": 7, "level": 20, "nature": "Hardy", "moves":["thunderbolt", "quickattack", "irontail", "electroball"]},
 		],
 		eventOnly: true,
+		gen: 7,
 		isUnreleased: true,
 		tier: "Unreleased",
 	},
