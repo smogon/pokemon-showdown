@@ -140,15 +140,31 @@ class Format extends Effect {
 		 * List of rule names.
 		 * @type {string[]}
 		 */
-		this.ruleset = this.ruleset;
+		this.ruleset = this.ruleset || [];
+		/**
+		 * Base list of rule names as specified in "./config/formats.js".
+		 * Used in a custom format to correctly display the altered ruleset.
+		 * @type {string[]}
+		 */
+		this.baseRuleset = this.baseRuleset || [];
 		/**
 		 * List of banned effects.
 		 * @type {string[]}
 		 */
-		this.banlist = this.banlist;
+		this.banlist = this.banlist || [];
+		/**
+		 * List of inherited banned effects to override.
+		 * @type {string[]}
+		 */
+		this.unbanlist = this.unbanlist || [];
+		/**
+		 * List of ruleset and banlist changes in a custom format.
+		 * @type {string[]}
+		 */
+		this.supplementaryBanlist = this.supplementaryBanlist || [];
 		/**
 		 * Table of rule names and banned effects.
-		 * @type {{[mod: string]: string | boolean}}
+		 * @type {?{[mod: string]: string | boolean}}
 		 */
 		this.banlistTable = this.banlistTable;
 	}
