@@ -18,42 +18,8 @@ function banReason(strings, reason) {
 
 class Validator {
 	constructor(format, supplementaryBanlist) {
-		format = Dex.getFormat(format);
-		if (supplementaryBanlist && supplementaryBanlist.length) {
-			format = Object.assign({}, format);
-			if (format.banlistTable) delete format.banlistTable;
-			format.banlist = format.banlist ? format.banlist.slice() : [];
-			format.unbanlist = format.unbanlist ? format.unbanlist.slice() : [];
-			format.ruleset = format.ruleset ? format.ruleset.slice() : [];
-			for (let i = 0; i < supplementaryBanlist.length; i++) {
-				let ban = supplementaryBanlist[i];
-				let unban = false;
-				if (ban.charAt(0) === '!') {
-					unban = true;
-					ban = ban.substr(1);
-				}
-				if (ban.startsWith('Rule:')) {
-					ban = ban.substr(5);
-					if (unban) {
-						ban = 'Rule:' + toId(ban);
-						if (!format.unbanlist.includes(ban)) format.unbanlist.push(ban);
-					} else {
-						if (!format.ruleset.includes(ban)) format.ruleset.push(ban);
-					}
-				} else {
-					if (unban) {
-						if (!format.unbanlist.includes(ban)) format.unbanlist.push(ban);
-					} else {
-						if (!format.banlist.includes(ban)) format.banlist.push(ban);
-					}
-				}
-			}
-			supplementaryBanlist = supplementaryBanlist.join(',');
-		} else {
-			supplementaryBanlist = '0';
-		}
-		this.format = format;
-		this.supplementaryBanlist = supplementaryBanlist;
+		this.format = Dex.getFormat(format, supplementaryBanlist);
+		this.supplementaryBanlist = this.format.supplementaryBanlist ? this.format.supplementaryBanlist.join(',') : '0';
 		this.dex = Dex.format(this.format);
 	}
 
