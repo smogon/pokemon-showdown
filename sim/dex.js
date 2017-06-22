@@ -46,7 +46,7 @@ const fs = require('fs');
 const path = require('path');
 
 const Data = require('./dex-data');
-const {Effect, PureEffect, Format, Item, Template, Move, Ability} = Data;
+const {Effect, PureEffect, Format, Item, Template, Move, Ability} = Data; // eslint-disable-line no-unused-vars
 
 const DATA_DIR = path.resolve(__dirname, '../data');
 const MODS_DIR = path.resolve(__dirname, '../mods');
@@ -138,7 +138,6 @@ const BattleNatures = {
 const toId = Data.Tools.getId;
 
 class ModdedDex {
-
 	/**
 	 * @param {string} [mod = 'base']
 	 */
@@ -254,7 +253,7 @@ class ModdedDex {
 	 */
 	getName(name) {
 		if (typeof name !== 'string' && typeof name !== 'number') return '';
-		name = ('' + name).replace(/[\|\s\[\]\,\u202e]+/g, ' ').trim();
+		name = ('' + name).replace(/[|\s[\],\u202e]+/g, ' ').trim();
 		if (name.length > 18) name = name.substr(0, 18).trim();
 
 		// remove zalgo
