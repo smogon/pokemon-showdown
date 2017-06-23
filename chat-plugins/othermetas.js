@@ -95,7 +95,7 @@ exports.commands = {
 	mixandmegahelp: ["/mnm <pokemon> @ <mega stone> - Shows the Mix and Mega evolved Pokemon's type and stats."],
 
 	'350': '350cup',
-	'350cup': function (target, room, user) {
+	'350cup': function (target, room, user, connection, cmd) {
 		if (!this.runBroadcast()) return;
 		if (!Dex.data.Pokedex[toId(target)]) {
 			return this.errorReply("Error: Pokemon not found.");
@@ -105,9 +105,13 @@ exports.commands = {
 		for (let i in pokeobj.baseStats) {
 			bst += pokeobj.baseStats[i];
 		}
+		if (bst > 350) {
+			Chat.commands.data.call(this, pokeobj.name, room, user, connection, 'data');
+			return;
+		}
 		let newStats = {};
 		for (let i in pokeobj.baseStats) {
-			newStats[i] = pokeobj.baseStats[i] * (bst <= 350 ? 2 : 1);
+			newStats[i] = pokeobj.baseStats[i] * 2;
 		}
 		pokeobj.baseStats = Object.assign({}, newStats);
 		this.sendReply(`|html|${Chat.getDataPokemonHTML(pokeobj)}`);
@@ -133,7 +137,10 @@ exports.commands = {
 			'LC': 40,
 		};
 		let template = Object.assign({}, Dex.getTemplate(target));
-		if (!(template.tier in boosts)) return this.sendReplyBox(`${template.species} in Tier Shift: <br /> ${Object.values(template.baseStats).join('/')}`);
+		if (!(template.tier in boosts)) {
+			Chat.commands.data.call(this, template.name, room, user, connection, 'data');
+			return;
+		}
 		let boost = boosts[template.tier];
 		let newStats = Object.assign({}, template.baseStats);
 		for (let statName in template.baseStats) {
