@@ -42,7 +42,7 @@
 
 'use strict';
 
-const fs = require('fs');
+const FS = require('./fs');
 
 // Check for dependencies
 try {
@@ -66,8 +66,7 @@ global.Config = require('./config/config');
 
 if (Config.watchconfig) {
 	let configPath = require.resolve('./config/config');
-	fs.watchFile(configPath, (curr, prev) => {
-		if (curr.mtime <= prev.mtime) return;
+	FS(configPath).onModify(() => {
 		try {
 			delete require.cache[configPath];
 			global.Config = require('./config/config');

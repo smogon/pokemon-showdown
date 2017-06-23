@@ -38,6 +38,7 @@ before('initialization', function () {
 	config.logladderip = false;
 	config.logchallenges = false;
 	config.logchat = false;
+	config.nofswriting = true;
 
 	try {
 		let chatRoomsPath = require.resolve('../config/chatrooms.json');
