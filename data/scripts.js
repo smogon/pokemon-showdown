@@ -1579,6 +1579,9 @@ exports.BattleScripts = {
 				case 'rapidspin':
 					if (counter.setupType || teamDetails.hazardClear) rejected = true;
 					break;
+				case 'reversal':
+					if (hasMove['substitute'] && teamDetails.zMove) rejected = true;
+					break;
 				case 'roar': case 'whirlwind':
 					if (counter.setupType || hasMove['dragontail']) rejected = true;
 					break;
@@ -2236,6 +2239,8 @@ exports.BattleScripts = {
 			item = 'Choice Scarf';
 		} else if (ability === 'Defeatist' || hasMove['eruption'] || hasMove['waterspout']) {
 			item = counter.Status <= 1 ? 'Expert Belt' : 'Leftovers';
+		} else if (hasMove['reversal'] && hasMove['substitute'] && !teamDetails.zMove) {
+			item = 'Fightinium Z';
 		} else if ((hasMove['endeavor'] || hasMove['flail'] || hasMove['reversal']) && ability !== 'Sturdy') {
 			item = 'Focus Sash';
 		} else if (this.getEffectiveness('Ground', template) >= 2 && ability !== 'Levitate' && !hasMove['magnetrise']) {
