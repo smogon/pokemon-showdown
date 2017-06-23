@@ -5,12 +5,12 @@ const child_process = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
-// Make sure we're Node 6+
+// Make sure we're Node 8+
 
 try {
-	eval('{ let [a] = [1]; }');
+	eval('{ let a = async () => {}; }');
 } catch (e) {
-	console.log("We require Node.js v6 or later; you're using " + process.version);
+	console.log("We require Node.js version 8 or later; you're using " + process.version);
 	process.exit(1);
 }
 

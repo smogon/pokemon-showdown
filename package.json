@@ -15,7 +15,7 @@
     "ofe": "0.5.1"
   },
   "engines": {
-    "node": ">=6.0.0"
+    "node": ">=7.7.0"
   },
   "main": "app.js",
   "scripts": {

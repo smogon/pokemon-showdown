@@ -44,11 +44,18 @@
 
 const FS = require('./fs');
 
-// Check for dependencies
+// Check for version and dependencies
+try {
+	// I've gotten enough reports by people who don't use the launch
+	// script that this is worth repeating here
+	eval('{ let a = async () => {}; }');
+} catch (e) {
+	throw new Error("We require Node.js version 8 or later; you're using " + process.version);
+}
 try {
 	require.resolve('sockjs');
 } catch (e) {
-	throw new Error('Dependencies are unmet; run node pokemon-showdown before launching Pokemon Showdown again.');
+	throw new Error("Dependencies are unmet; run node pokemon-showdown before launching Pokemon Showdown again.");
 }
 
 /*********************************************************
