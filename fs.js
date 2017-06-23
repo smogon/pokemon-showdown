@@ -5,7 +5,7 @@
  * An abstraction layer around Node's filesystem.
  *
  * Advantages:
- * - TODO: write() etc do nothing in unit tests
+ * - write() etc do nothing in unit tests
  * - paths are always relative to PS's base directory
  * - Promises (seriously wtf Node Core what are you thinking)
  * - PS-style API: FS("foo.txt").write("bar") for easier argument order
@@ -68,6 +68,7 @@ class Path {
 	 * @param {Object} options
 	 */
 	write(data, options = {}) {
+		if (Config.nofswriting) return Promise.resolve();
 		return new Promise((resolve, reject) => {
 			fs.writeFile(this.path, data, options, err => {
 				err ? reject(err) : resolve();
@@ -79,6 +80,7 @@ class Path {
 	 * @param {Object} options
 	 */
 	writeSync(data, options = {}) {
+		if (Config.nofswriting) return;
 		return fs.writeFileSync(this.path, data, options);
 	}
 	/**
@@ -86,6 +88,7 @@ class Path {
 	 * @param {Object} options
 	 */
 	append(data, options = {}) {
+		if (Config.nofswriting) return Promise.resolve();
 		return new Promise((resolve, reject) => {
 			fs.appendFile(this.path, data, options, err => {
 				err ? reject(err) : resolve();
@@ -97,12 +100,14 @@ class Path {
 	 * @param {Object} options
 	 */
 	appendSync(data, options = {}) {
+		if (Config.nofswriting) return;
 		return fs.appendFileSync(this.path, data, options);
 	}
 	/**
 	 * @param {string} target
 	 */
 	symlinkTo(target) {
+		if (Config.nofswriting) return Promise.resolve();
 		return new Promise((resolve, reject) => {
 			// @ts-ignore TypeScript bug
 			fs.symlink(target, this.path, err => {
@@ -114,12 +119,14 @@ class Path {
 	 * @param {string} target
 	 */
 	symlinkToSync(target) {
+		if (Config.nofswriting);
 		return fs.symlinkSync(target, this.path);
 	}
 	/**
 	 * @param {string} target
 	 */
 	rename(target) {
+		if (Config.nofswriting) return Promise.resolve();
 		return new Promise((resolve, reject) => {
 			fs.rename(target, this.path, err => {
 				err ? reject(err) : resolve();
@@ -130,6 +137,7 @@ class Path {
 	 * @param {string} target
 	 */
 	renameSync(target) {
+		if (Config.nofswriting) return;
 		return fs.renameSync(target, this.path);
 	}
 	readdir() {
@@ -143,13 +151,22 @@ class Path {
 		return fs.readdirSync(this.path);
 	}
 	createWriteStream(options = {}) {
+		if (Config.nofswriting) {
+			const Writable = require('stream').Writable;
+			return new Writable({write: (chunk, encoding, callback) => callback()});
+		}
 		return fs.createWriteStream(this.path, options);
 	}
 	createAppendStream(options = {}) {
+		if (Config.nofswriting) {
+			const Writable = require('stream').Writable;
+			return new Writable({write: (chunk, encoding, callback) => callback()});
+		}
 		options.mode = options.mode || 'a';
 		return fs.createWriteStream(this.path, options);
 	}
 	unlinkIfExists() {
+		if (Config.nofswriting) return Promise.resolve();
 		return new Promise((resolve, reject) => {
 			fs.unlink(this.path, err => {
 				if (err && err.code === 'ENOENT') return resolve();
@@ -158,6 +175,7 @@ class Path {
 		});
 	}
 	unlinkIfExistsSync() {
+		if (Config.nofswriting) return;
 		try {
 			fs.unlinkSync(this.path);
 		} catch (err) {
@@ -168,6 +186,7 @@ class Path {
 	 * @param {string | number} mode
 	 */
 	mkdir(mode = 0o755) {
+		if (Config.nofswriting) return Promise.resolve();
 		return new Promise((resolve, reject) => {
 			// @ts-ignore
 			fs.mkdir(this.path, mode, err => {
@@ -179,6 +198,7 @@ class Path {
 	 * @param {string | number} mode
 	 */
 	mkdirSync(mode = 0o755) {
+		if (Config.nofswriting) return;
 		// @ts-ignore
 		return fs.mkdirSync(this.path, mode);
 	}
@@ -186,6 +206,7 @@ class Path {
 	 * @param {string | number} mode
 	 */
 	mkdirIfNonexistent(mode = 0o755) {
+		if (Config.nofswriting) return Promise.resolve();
 		return new Promise((resolve, reject) => {
 			// @ts-ignore
 			fs.mkdir(this.path, mode, err => {
@@ -198,6 +219,7 @@ class Path {
 	 * @param {string | number} mode
 	 */
 	mkdirIfNonexistentSync(mode = 0o755) {
+		if (Config.nofswriting) return;
 		try {
 			// @ts-ignore
 			fs.mkdirSync(this.path, mode);
