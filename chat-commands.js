@@ -267,7 +267,7 @@ exports.commands = {
 			brock: 154,
 			misty: 155,
 			ltsurge: 156,
-			erica: 157,
+			erika: 157,
 			janine: 158,
 			sabrina: 159,
 			blaine: 160,
