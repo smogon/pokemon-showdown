@@ -362,7 +362,7 @@ exports.commands = {
 		let targetId = toId(target);
 		if (!targetId) return this.parse('/help data');
 		let targetNum = parseInt(targetId);
-		if (!isNaN(targetNum)) {
+		if (!isNaN(targetNum) && targetNum == targetId) {
 			for (let p in Dex.data.Pokedex) {
 				let pokemon = Dex.getTemplate(p);
 				if (pokemon.num === targetNum) {
