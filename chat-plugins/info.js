@@ -1505,10 +1505,10 @@ exports.commands = {
 		});
 
 		const ProcessManager = require('../process-manager');
-		ProcessManager.cache.forEach((processManager, execFile) => {
+		ProcessManager.cache.forEach((execFile, processManager) => {
 			let i = 0;
 			processManager.processes.forEach(process => {
-				buf += `<strong>${process.process.pid}</strong> - ${path.baseName(execFile)} ${i++}<br />`;
+				buf += `<strong>${process.process.pid}</strong> - ${path.basename(execFile)} ${i++}<br />`;
 			});
 		});
 
