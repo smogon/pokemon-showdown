@@ -28,10 +28,6 @@ exports.BattleItems = {
 		inherit: true,
 		isUnreleased: false,
 	},
-	banettite: {
-		inherit: true,
-		isUnreleased: false,
-	},
 	belueberry: {
 		inherit: true,
 		isUnreleased: false,
@@ -39,10 +35,6 @@ exports.BattleItems = {
 	bigroot: {
 		inherit: true,
 		desc: "Holder gains 1.3x HP from draining moves, Aqua Ring, Ingrain, and Leech Seed.",
-	},
-	cameruptite: {
-		inherit: true,
-		isUnreleased: false,
 	},
 	cornnberry: {
 		inherit: true,
