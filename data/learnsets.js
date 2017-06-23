@@ -17647,7 +17647,7 @@ exports.BattleLearnsets = {
 		strength: ["6M", "5M", "4M"],
 		substitute: ["7M", "6M", "5M", "4M", "4E"],
 		sunnyday: ["7M", "6M", "5M", "4M"],
-		superpower: ["6T", "5T"],
+		superpower: ["6T", "5T", "4T"],
 		surf: ["7M", "6M", "5M", "4M"],
 		swagger: ["7M", "6M", "5M", "4M"],
 		swallow: ["7L33", "6L33", "5L33", "4L28"],
