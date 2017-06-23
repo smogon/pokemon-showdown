@@ -11,19 +11,21 @@ const repl = require('repl');
  */
 const socketPathnames = new Set();
 
-process.once('exit', () => {
+// Clean up REPL sockets and child processes on forced exit.
+process.once('exit', code => {
 	socketPathnames.forEach(s => {
 		try {
 			fs.unlinkSync(s);
 		} catch (e) {}
 	});
+	if (code === 129 || code === 130) {
+		process.exitCode = 0;
+	}
 });
-
-// exit handlers aren't called by the default handler
-if (process.listeners('SIGHUP').length === 0) {
+if (!process.listeners('SIGHUP').length) {
 	process.once('SIGHUP', () => process.exit(128 + 1));
 }
-if (process.listeners('SIGINT').length === 0) {
+if (!process.listeners('SIGINT').length) {
 	process.once('SIGINT', () => process.exit(128 + 2));
 }
 
