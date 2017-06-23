@@ -1196,7 +1196,7 @@ class TeamValidatorManager extends ProcessManager {
 
 	receive(format, supplementaryBanlist, removeNicknames, team) {
 		let parsedTeam = Dex.fastUnpackTeam(team);
-		supplementaryBanlist = supplementaryBanlist === '0' ? false : supplementaryBanlist.split(',');
+		supplementaryBanlist = (!supplementaryBanlist || supplementaryBanlist === '0') ? false : supplementaryBanlist.split(',');
 		removeNicknames = removeNicknames === '1';
 
 		let problems;
