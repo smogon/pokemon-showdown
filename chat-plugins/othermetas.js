@@ -121,16 +121,16 @@ exports.commands = {
 			return this.errorReply("Error: Pokemon not found.");
 		}
 		let boosts = {
-			'UU': 5,
-			'BL2': 5,
-			'RU': 10,
-			'BL3': 10,
-			'NU': 15,
-			'BL4': 15,
-			'PU': 20,
-			'NFE': 20,
-			'LC Uber': 20,
-			'LC': 20,
+			'UU': 10,
+			'BL2': 10,
+			'RU': 20,
+			'BL3': 20,
+			'NU': 30,
+			'BL4': 30,
+			'PU': 40,
+			'NFE': 40,
+			'LC Uber': 40,
+			'LC': 40,
 		};
 		let template = Object.assign({}, Dex.getTemplate(target));
 		if (!(template.tier in boosts)) return this.sendReplyBox(`${template.species} in Tier Shift: <br /> ${Object.values(template.baseStats).join('/')}`);
