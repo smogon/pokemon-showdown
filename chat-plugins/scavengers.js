@@ -937,7 +937,7 @@ let commands = {
 
 		this.privateModCommand(`(${user.name} has reset the monthly scavengers ladder.)`);
 	},
-
+	top: 'ladder',
 	ladder: function (target, room, user) {
 		if (room.id !== 'scavengers') return this.errorReply("This command can only be used in the scavengers room.");
 		if (!this.runBroadcast()) return false;
