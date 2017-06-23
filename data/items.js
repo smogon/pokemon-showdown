@@ -341,7 +341,6 @@ exports.BattleItems = {
 	"banettite": {
 		id: "banettite",
 		name: "Banettite",
-		isUnreleased: true,
 		spritenum: 582,
 		megaStone: "Banette-Mega",
 		megaEvolves: "Banette",
@@ -649,7 +648,6 @@ exports.BattleItems = {
 	"cameruptite": {
 		id: "cameruptite",
 		name: "Cameruptite",
-		isUnreleased: true,
 		spritenum: 625,
 		megaStone: "Camerupt-Mega",
 		megaEvolves: "Camerupt",
