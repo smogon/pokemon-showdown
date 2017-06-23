@@ -85,8 +85,8 @@ class Matchmaker {
 
 		// search must be within range
 		let searchRange = 100, elapsed = Date.now() - Math.min(search1.time, search2.time);
-		if (formatid === 'ou' || formatid === 'oucurrent' ||
-				formatid === 'oususpecttest' || formatid === 'randombattle') {
+		if (formatid === 'gen7ou' || formatid === 'gen7oucurrent' ||
+				formatid === 'gen7oususpecttest' || formatid === 'gen7randombattle') {
 			searchRange = 50;
 		}
 
