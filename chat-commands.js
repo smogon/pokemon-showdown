@@ -1526,7 +1526,7 @@ exports.commands = {
 		});
 
 		let proof = '';
-		let userReason = '';
+		let userReason = target;
 		let targetLowercase = target.toLowerCase();
 		if (target && (targetLowercase.includes('spoiler:') || targetLowercase.includes('spoilers:'))) {
 			let proofIndex = (targetLowercase.includes('spoilers:') ? targetLowercase.indexOf('spoilers:') : targetLowercase.indexOf('spoiler:'));
@@ -1608,7 +1608,7 @@ exports.commands = {
 		});
 
 		let proof = '';
-		let userReason = '';
+		let userReason = target;
 		let targetLowercase = target.toLowerCase();
 		if (target && (targetLowercase.includes('spoiler:') || targetLowercase.includes('spoilers:'))) {
 			let proofIndex = (targetLowercase.includes('spoilers:') ? targetLowercase.indexOf('spoilers:') : targetLowercase.indexOf('spoiler:'));
@@ -1717,7 +1717,7 @@ exports.commands = {
 		});
 
 		let proof = '';
-		let userReason = '';
+		let userReason = target;
 		let targetLowercase = target.toLowerCase();
 		if (target && (targetLowercase.includes('spoiler:') || targetLowercase.includes('spoilers:'))) {
 			let proofIndex = (targetLowercase.includes('spoilers:') ? targetLowercase.indexOf('spoilers:') : targetLowercase.indexOf('spoiler:'));
