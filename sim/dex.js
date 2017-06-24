@@ -186,6 +186,9 @@ class ModdedDex {
 		return this.formatsCache;
 	}
 	/**
+	 * A map from mod names to moddedDex instances.
+	 * This getter will create the necessary ModdedDex instances if
+	 * 	they do not yet exist.
 	 * @return {{[mod: string]: ModdedDex}}
 	 */
 	get dexes() {
@@ -194,7 +197,10 @@ class ModdedDex {
 	}
 
 	/**
-	 * @param {string} mod
+	 * Applies a mod to the dex.
+	 * Returns a ModdedDex, which can be used to find data specific to
+	 * 	a generation or other mod context.
+	 * @param {string} mod 	The mod to use
 	 * @return {ModdedDex}
 	 */
 	mod(mod) {
@@ -338,6 +344,7 @@ class ModdedDex {
 	}
 
 	/**
+	 * Finds mod-specific data for a pokemon, including generation and tier.
 	 * @param {string | Template} name
 	 * @return {Template}
 	 */
