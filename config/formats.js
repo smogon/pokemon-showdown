@@ -643,7 +643,7 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
-		section: "[Gen 6] ORAS Singles",
+		section: "ORAS Singles",
 		column: 3,
 	},
 	{
