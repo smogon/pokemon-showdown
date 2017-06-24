@@ -105,10 +105,7 @@ exports.commands = {
 		for (let i in pokeobj.baseStats) {
 			bst += pokeobj.baseStats[i];
 		}
-		if (bst > 350) {
-			Chat.commands.data.call(this, pokeobj.name, room, user, connection, 'data');
-			return;
-		}
+		if (bst > 350) return this.sendReply(`|html|${Chat.getDataPokemonHTML(pokeobj)}`);
 		let newStats = {};
 		for (let i in pokeobj.baseStats) {
 			newStats[i] = pokeobj.baseStats[i] * 2;
@@ -137,10 +134,7 @@ exports.commands = {
 			'LC': 40,
 		};
 		let template = Object.assign({}, Dex.getTemplate(target));
-		if (!(template.tier in boosts)) {
-			Chat.commands.data.call(this, template.name, room, user, connection, 'data');
-			return;
-		}
+		if (!(template.tier in boosts)) return this.sendReply(`|html|${Chat.getDataPokemonHTML(template)}`);
 		let boost = boosts[template.tier];
 		let newStats = Object.assign({}, template.baseStats);
 		for (let statName in template.baseStats) {
