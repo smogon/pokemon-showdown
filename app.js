@@ -42,13 +42,20 @@
 
 'use strict';
 
-const fs = require('fs');
+const FS = require('./fs');
 
-// Check for dependencies
+// Check for version and dependencies
+try {
+	// I've gotten enough reports by people who don't use the launch
+	// script that this is worth repeating here
+	eval('{ let a = async () => {}; }');
+} catch (e) {
+	throw new Error("We require Node.js version 8 or later; you're using " + process.version);
+}
 try {
 	require.resolve('sockjs');
 } catch (e) {
-	throw new Error('Dependencies are unmet; run node pokemon-showdown before launching Pokemon Showdown again.');
+	throw new Error("Dependencies are unmet; run node pokemon-showdown before launching Pokemon Showdown again.");
 }
 
 /*********************************************************
@@ -66,8 +73,7 @@ global.Config = require('./config/config');
 
 if (Config.watchconfig) {
 	let configPath = require.resolve('./config/config');
-	fs.watchFile(configPath, (curr, prev) => {
-		if (curr.mtime <= prev.mtime) return;
+	FS(configPath).onModify(() => {
 		try {
 			delete require.cache[configPath];
 			global.Config = require('./config/config');

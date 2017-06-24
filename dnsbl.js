@@ -19,8 +19,7 @@
 const BLOCKLISTS = ['sbl.spamhaus.org', 'rbl.efnetrbl.org'];
 
 const dns = require('dns');
-const fs = require('fs');
-const path = require('path');
+const FS = require('./fs');
 
 let Dnsbl = module.exports;
 
@@ -217,23 +216,21 @@ Dnsbl.urlToHost = function (url) {
 };
 
 Dnsbl.datacenters = [];
-Dnsbl.loadDatacenters = function () {
-	fs.readFile(path.resolve(__dirname, 'config/datacenters.csv'), 'utf8', (err, data) => {
-		if (err) return;
-		let rows = data.split('\n');
-		let datacenters = [];
-		for (let row of rows) {
-			if (!row) continue;
-			let rowSplit = row.split(',');
-			let rowData = [
-				Dnsbl.ipToNumber(rowSplit[0]),
-				Dnsbl.ipToNumber(rowSplit[1]),
-				Dnsbl.urlToHost(rowSplit[3]),
-			];
-			datacenters.push(rowData);
-		}
-		Dnsbl.datacenters = datacenters;
-	});
+Dnsbl.loadDatacenters = async function () {
+	const data = await FS('config/datacenters.csv').readTextIfExists();
+	const rows = data.split('\n');
+	let datacenters = [];
+	for (const row of rows) {
+		if (!row) continue;
+		const rowSplit = row.split(',');
+		const rowData = [
+			Dnsbl.ipToNumber(rowSplit[0]),
+			Dnsbl.ipToNumber(rowSplit[1]),
+			Dnsbl.urlToHost(rowSplit[3]),
+		];
+		datacenters.push(rowData);
+	}
+	Dnsbl.datacenters = datacenters;
 };
 
 let rangeTmobile = Dnsbl.cidrToPattern('172.32.0.0/11');
