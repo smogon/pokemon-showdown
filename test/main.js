@@ -2,19 +2,8 @@
 
 const path = require('path');
 const fs = require('fs');
-const Module = require('module');
-const mock = require('mock-fs-require-fix');
 
 const noop = () => {};
-
-function getDirTypedContentsSync(dir, forceType) {
-	// Return value can be fed to mock-fs
-	if (forceType !== 'dir' && forceType !== 'file') throw new Error("Not implemented");
-	return fs.readdirSync(dir).reduce((dict, elem) => {
-		dict[elem] = forceType === 'dir' ? {} : '';
-		return dict;
-	}, {});
-}
 
 before('initialization', function () {
 	// Load and override configuration before starting the server
@@ -34,39 +23,13 @@ before('initialization', function () {
 
 	// Actually crash if we crash
 	config.crashguard = false;
+	// Don't allow config to be overridden while test is running
+	config.watchconfig = false;
 	// Don't try to write to file system
-	config.logladderip = false;
-	config.logchallenges = false;
-	config.logchat = false;
-
-	try {
-		let chatRoomsPath = require.resolve('../config/chatrooms.json');
-		let chatRoomsData = require.cache[chatRoomsPath] = new Module(chatRoomsPath, module);
-		chatRoomsData.filename = chatRoomsData.id;
-		chatRoomsData.exports = []; // empty chatrooms list
-		chatRoomsData.loaded = true;
-	} catch (e) {}
+	config.nofswriting = true;
 
 	// Don't create a REPL
 	require('../repl').start = noop;
-
-	// `watchFile` is unsupported and throws with mock-fs
-	Object.defineProperty(fs, 'watchFile', {
-		get: function () {return noop;},
-		set: noop,
-	});
-
-	// Sandbox file system: it's possible for a production server to be running in the same directory.
-	// And using a sandbox is safer anyway.
-	mock({
-		'config': {},
-		'chat-plugins': getDirTypedContentsSync('chat-plugins', 'file'),
-		'mods': getDirTypedContentsSync('mods', 'dir'),
-		'logs': {
-			'chat': {}, 'ladderip': {}, 'modlog': {}, 'repl': {},
-			'lastbattle.txt': '0',
-		},
-	});
 
 	// Start the server.
 	require('../app');
@@ -79,7 +42,4 @@ before('initialization', function () {
 	}
 
 	LoginServer.disabled = true;
-
-	// Disable writing to modlog
-	Rooms.Room.prototype.modlog = noop;
 });

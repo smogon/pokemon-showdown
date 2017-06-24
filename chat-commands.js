@@ -18,7 +18,7 @@
 /* eslint no-else-return: "error" */
 
 const crypto = require('crypto');
-const fs = require('fs');
+const FS = require('./fs');
 
 const Matchmaker = require('./ladders-matchmaker').matchmaker;
 
@@ -2491,7 +2491,7 @@ exports.commands = {
 
 				return this.sendReply("Formats have been hotpatched.");
 			} else if (target === 'loginserver') {
-				fs.unwatchFile('./config/custom.css');
+				FS('config/custom.css').unwatch();
 				Chat.uncacheTree('./loginserver');
 				global.LoginServer = require('./loginserver');
 				return this.sendReply("The login server has been hotpatched. New login server requests will use the new code.");
@@ -2534,7 +2534,7 @@ exports.commands = {
 	savelearnsets: function (target, room, user) {
 		if (!this.can('hotpatch')) return false;
 		this.sendReply("saving...");
-		fs.writeFile('data/learnsets.js', `'use strict';\n\nexports.BattleLearnsets = {\n` +
+		FS('data/learnsets.js').write(`'use strict';\n\nexports.BattleLearnsets = {\n` +
 			Object.entries(Dex.data.Learnsets).map(([k, v]) => (
 				`\t${k}: {learnset: {\n` +
 				Object.entries(v.learnset).sort(
@@ -2544,7 +2544,7 @@ exports.commands = {
 				)).join('') +
 				`\t}},\n`
 			)).join('') +
-		`};\n`, () => {
+		`};\n`).then(() => {
 			this.sendReply("learnsets.js saved.");
 		});
 	},
@@ -2555,14 +2555,12 @@ exports.commands = {
 		// should be in the format: IP, IP, name, URL
 		let widen = (cmd === 'widendatacenters');
 
-		fs.readFile(require('path').resolve(__dirname, 'config/datacenters.csv'), (err, data) => {
-			if (err) return;
-			data = String(data).split("\n");
+		FS('config/datacenters.csv').readTextIfExists().then(data => {
 			let datacenters = [];
-			for (let row of data) {
+			for (const row of data.split("\n")) {
 				if (!row) continue;
-				let rowSplit = row.split(',');
-				let rowData = [
+				const rowSplit = row.split(',');
+				const rowData = [
 					Dnsbl.ipToNumber(rowSplit[0]),
 					Dnsbl.ipToNumber(rowSplit[1]),
 					Dnsbl.urlToHost(rowSplit[3]),
@@ -2639,7 +2637,7 @@ exports.commands = {
 			}
 
 			let output = datacenters.map(r => r[3]).join('\n') + '\n';
-			fs.writeFile(require('path').resolve(__dirname, 'config/datacenters.csv'), output);
+			FS('config/datacenters.csv').write(output);
 			this.sendReply(`done: ${successes} successes, ${identicals} unchanged`);
 			if (widenSuccesses) this.sendReply(`${widenSuccesses} widens`);
 		});
@@ -2776,9 +2774,8 @@ exports.commands = {
 			process.exit();
 			return;
 		}
+		room.logEntry(user.name + " used /kill");
 		room.destroyLog(() => {
-			room.logEntry(user.name + " used /kill");
-		}, () => {
 			process.exit();
 		});
 

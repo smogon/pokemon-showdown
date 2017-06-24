@@ -8,8 +8,7 @@
  */
 'use strict';
 
-const fs = require('fs');
-const path = require('path');
+const FS = require('./fs');
 
 class TimedCounter extends Map {
 	increment(key, timeLimit) {
@@ -165,7 +164,7 @@ const Monitor = module.exports = {
 		for (let i in this.networkUse) {
 			buf += '' + this.networkUse[i] + '\t' + this.networkCount[i] + '\t' + i + '\n';
 		}
-		fs.writeFile(path.resolve(__dirname, 'logs/networkuse.tsv'), buf, () => {});
+		FS('logs/networkuse.tsv').write(buf);
 	},
 	clearNetworkUse: function () {
 		if (Config.emergency) {
