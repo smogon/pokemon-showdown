@@ -128,7 +128,7 @@ class Path {
 	rename(target) {
 		if (Config.nofswriting) return Promise.resolve();
 		return new Promise((resolve, reject) => {
-			fs.rename(target, this.path, err => {
+			fs.rename(this.path, target, err => {
 				err ? reject(err) : resolve();
 			});
 		});
@@ -138,7 +138,7 @@ class Path {
 	 */
 	renameSync(target) {
 		if (Config.nofswriting) return;
-		return fs.renameSync(target, this.path);
+		return fs.renameSync(this.path, target);
 	}
 	readdir() {
 		return new Promise((resolve, reject) => {
