@@ -105,10 +105,9 @@ exports.commands = {
 		for (let i in pokeobj.baseStats) {
 			bst += pokeobj.baseStats[i];
 		}
-		if (bst > 350) return this.sendReply(`|html|${Chat.getDataPokemonHTML(pokeobj)}`);
 		let newStats = {};
 		for (let i in pokeobj.baseStats) {
-			newStats[i] = pokeobj.baseStats[i] * 2;
+			newStats[i] = pokeobj.baseStats[i] * (bst <= 350 ? 2 : 1);
 		}
 		pokeobj.baseStats = Object.assign({}, newStats);
 		this.sendReply(`|html|${Chat.getDataPokemonHTML(pokeobj)}`);
