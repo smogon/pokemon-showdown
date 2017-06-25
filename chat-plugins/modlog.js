@@ -1,6 +1,6 @@
 'use strict';
 
-const fs = require('fs');
+const FS = require('./../fs');
 const path = require('path');
 const ProcessManager = require('./../process-manager');
 const execFileSync = require('child_process').execFileSync;
@@ -24,7 +24,7 @@ class ModlogManager extends ProcessManager {
 		}
 	}
 
-	onMessageDownstream(message) {
+	async onMessageDownstream(message) {
 		// protocol:
 		// "[id]|[comma-separated list of room ids]|[searchString]|[exactSearch]|[maxLines]"
 		let pipeIndex = message.indexOf('|');
@@ -41,16 +41,16 @@ class ModlogManager extends ProcessManager {
 		let exactSearch = message.substr(pipeIndex + 1, nextPipeIndex - pipeIndex - 1);
 		let maxLines = message.substr(nextPipeIndex + 1);
 
-		process.send(id + '|' + this.receive(rooms, searchString, exactSearch, maxLines));
+		process.send(id + '|' + await this.receive(rooms, searchString, exactSearch, maxLines));
 	}
 
-	receive(rooms, searchString, exactSearch, maxLines) {
+	async receive(rooms, searchString, exactSearch, maxLines) {
 		let result;
 		exactSearch = exactSearch === '1';
 		maxLines = Number(maxLines);
 		if (isNaN(maxLines) || maxLines > RESULTS_MAX_LENGTH || maxLines < 1) maxLines = RESULTS_MAX_LENGTH;
 		try {
-			result = '1|' + runModlog(rooms.split(','), searchString, exactSearch, maxLines);
+			result = '1|' + await runModlog(rooms.split(','), searchString, exactSearch, maxLines);
 		} catch (err) {
 			require('../crashlogger')(err, 'A modlog query', {
 				rooms: rooms,
@@ -129,14 +129,14 @@ function checkRipgrepAvailability() {
 	return Config.ripgrepmodlog;
 }
 
-function runModlog(rooms, searchString, exactSearch, maxLines) {
+async function runModlog(rooms, searchString, exactSearch, maxLines) {
 	const useRipgrep = checkRipgrepAvailability();
 	let fileNameList = [];
 	let checkAllRooms = false;
 	for (let i = 0; i < rooms.length; i++) {
 		if (rooms[i] === 'all') {
 			checkAllRooms = true;
-			const fileList = fs.readdirSync(`${__dirname}/${LOG_PATH}`);
+			const fileList = await FS(LOG_PATH).readdir();
 			for (let i = 0; i < fileList.length; i++) {
 				fileNameList.push(fileList[i]);
 			}
@@ -158,52 +158,27 @@ function runModlog(rooms, searchString, exactSearch, maxLines) {
 	let results = new SortedLimitedLengthList(maxLines);
 	if (useRipgrep && searchString) {
 		// the entire directory is searched by default, no need to list every file manually
-		if (checkAllRooms) fileNameList = [`${__dirname}/${LOG_PATH}`];
+		if (checkAllRooms) fileNameList = [LOG_PATH];
 		runRipgrepModlog(fileNameList, regexString, results);
 	} else {
-		fileNameList = fileNameList.map(filename => path.normalize(`${__dirname}/${LOG_PATH}${filename}`));
+		fileNameList = fileNameList.map(filename => `${LOG_PATH}${filename}`);
 		const searchStringRegex = new RegExp(regexString, 'i');
 		for (let i = 0; i < fileNameList.length; i++) {
-			checkRoomModlog(fileNameList[i], searchStringRegex, results);
+			await checkRoomModlog(fileNameList[i], searchStringRegex, results);
 		}
 	}
 	const resultData = results.getListClone();
 	return resultData.join('\n');
 }
 
-function checkRoomModlog(path, regex, results) {
-	if (!fs.existsSync(path)) return results;
-	let newLines = [];
-	let lineFragment = '';
-	let blockSize = 1024;
-	let buf = Buffer.alloc(blockSize);
-	const stats = fs.statSync(path);
-	let startPos = stats.size;
-	const fd = fs.openSync(path, 'r');
-
-	outerLoop: do {
-		startPos -= blockSize;
-		if (startPos < 0) {
-			blockSize += startPos;
-			startPos = 0;
+async function checkRoomModlog(path, regex, results) {
+	const fileContents = await FS(path).read();
+	for (const line of fileContents.toString().split('\n').reverse()) {
+		if (regex.test(line)) {
+			const insertionSuccessful = results.tryInsert(line);
+			if (!insertionSuccessful) break;
 		}
-		const bytesRead = fs.readSync(fd, buf, 0, blockSize, startPos);
-		newLines = buf.toString().substr(0, bytesRead).split('\n').reverse();
-		newLines[0] += lineFragment;
-		lineFragment = newLines[newLines.length - 1];
-		if (startPos > 0) newLines.splice(-1, 1);
-		for (let i = 0; i < newLines.length; i++) {
-			if (newLines[i] && regex.test(newLines[i])) {
-				const insertionSuccessful = results.tryInsert(newLines[i]);
-				if (!insertionSuccessful) {
-					break outerLoop;
-				}
-			}
-		}
-	} while (startPos > 0);
-
-	fs.close(fd, () => {});
-
+	}
 	return results;
 }
 
