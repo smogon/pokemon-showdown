@@ -1990,7 +1990,7 @@ exports.BattleLearnsets = {
 		psyshock: ["5M"],
 		raindance: ["5M"],
 		recycle: ["5T"],
-		reflet: ["5L57"],
+		reflect: ["5L57"],
 		rest: ["5M"],
 		retaliate: ["5M"],
 		return: ["5M"],
