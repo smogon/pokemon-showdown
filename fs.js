@@ -162,7 +162,7 @@ class Path {
 			const Writable = require('stream').Writable;
 			return new Writable({write: (chunk, encoding, callback) => callback()});
 		}
-		options.mode = options.mode || 'a';
+		options.flags = options.flags || 'a';
 		return fs.createWriteStream(this.path, options);
 	}
 	unlinkIfExists() {
