@@ -129,6 +129,33 @@ let getExactUser = Users.getExact = function (name) {
 	return getUser(name, true);
 };
 
+/**
+ * Get a list of all users matching a list of userids and ips.
+ *
+ * Usage:
+ *   Users.findUsers([userids], [ips])
+ *
+ */
+let findUsers = Users.findUsers = function (userids, ips, options) {
+	let matches = [];
+	if (options && options.forPunishment) ips = ips.filter(ip => !Punishments.sharedIps.has(ip));
+	users.forEach(user => {
+		if (!(options && options.forPunishment) && !user.named && !user.connected) return;
+		if (!(options && options.includeTrusted) && user.trusted) return;
+		if (userids.includes(user.userid)) {
+			matches.push(user);
+			return;
+		}
+		for (let myIp of ips) {
+			if (myIp in user.ips) {
+				matches.push(user);
+				return;
+			}
+		}
+	});
+	return matches;
+};
+
 /*********************************************************
  * User groups
  *********************************************************/
@@ -1107,21 +1134,8 @@ class User {
 		this.inRooms.clear();
 	}
 	getAltUsers(includeTrusted, forPunishment) {
-		let alts = [];
-		if (forPunishment) alts.push(this);
-		let ips = Object.keys(this.ips);
-		if (forPunishment) ips = ips.filter(ip => !Punishments.sharedIps.has(ip));
-		users.forEach(user => {
-			if (user === this) return;
-			if (!forPunishment && !user.named && !user.connected) return;
-			if (!includeTrusted && user.trusted) return;
-			for (let myIp of ips) {
-				if (myIp in user.ips) {
-					alts.push(user);
-					return;
-				}
-			}
-		});
+		let alts = findUsers([this.getLastId()], Object.keys(this.ips), {includeTrusted: includeTrusted, forPunishment: forPunishment});
+		if (!forPunishment) alts.filter(user => user !== this);
 		return alts;
 	}
 	getLastName() {
