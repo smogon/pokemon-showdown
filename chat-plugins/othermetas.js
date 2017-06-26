@@ -7,7 +7,7 @@ exports.commands = {
 		if (!this.runBroadcast()) return;
 		if (!toId(target) || !target.includes('@')) return this.parse('/help mixandmega');
 		let sep = target.split('@');
-		let stone = Object.assign({}, Dex.getItem(sep[1]));
+		let stone = Dex.getItem(sep[1]);
 		let template = Object.assign({}, Dex.getTemplate(sep[0]));
 		if (!stone.exists || (stone.exists && !stone.megaEvolves && !stone.onPrimal)) return this.errorReply(`Error: Mega Stone not found`);
 		if (!template.exists) return this.errorReply(`Error: Pokemon not found`);
