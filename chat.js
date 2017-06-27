@@ -1186,7 +1186,8 @@ Chat.getDataMoveHTML = function (move) {
 	buf += `<img src="//play.pokemonshowdown.com/sprites/categories/${move.category}.png" alt="${move.category}" width="32" height="14"></span> `;
 	if (move.basePower) buf += `<span class="col labelcol"><em>Power</em><br>${typeof move.basePower === 'number' ? move.basePower : '—'}</span> `;
 	buf += `<span class="col widelabelcol"><em>Accuracy</em><br>${typeof move.accuracy === 'number' ? (move.accuracy + '%') : '—'}</span> `;
-	const pp = (move.noPPBoosts ? move.pp : move.pp * 8 / 5) || 1;
+	const basePP = move.pp || 1;
+	const pp = (basePP === 1 || move.noPPBoosts ? basePP : basePP * 8 / 5) || 1;
 	buf += `<span class="col pplabelcol"><em>PP</em><br>${pp}</span> `;
 	buf += `<span class="col movedesccol">${move.shortDesc || move.desc}</span> `;
 	buf += `</a></li><li style="clear:both"></li></ul>`;
