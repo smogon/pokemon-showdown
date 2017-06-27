@@ -394,8 +394,7 @@ exports.BattleFormatsData = {
 		],
 		eventOnly: true,
 		gen: 7,
-		isUnreleased: true,
-		tier: "Unreleased",
+		tier: "NU",
 	},
 	raichu: {
 		randomBattleMoves: ["nastyplot", "encore", "thunderbolt", "grassknot", "hiddenpowerice", "focusblast", "voltswitch"],
