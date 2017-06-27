@@ -1187,7 +1187,7 @@ Chat.getDataMoveHTML = function (move) {
 	if (move.basePower) buf += `<span class="col labelcol"><em>Power</em><br>${typeof move.basePower === 'number' ? move.basePower : '—'}</span> `;
 	buf += `<span class="col widelabelcol"><em>Accuracy</em><br>${typeof move.accuracy === 'number' ? (move.accuracy + '%') : '—'}</span> `;
 	const basePP = move.pp || 1;
-	const pp = (basePP === 1 || move.noPPBoosts ? basePP : basePP * 8 / 5) || 1;
+	const pp = basePP === 1 || move.noPPBoosts ? basePP : basePP * 8 / 5;
 	buf += `<span class="col pplabelcol"><em>PP</em><br>${pp}</span> `;
 	buf += `<span class="col movedesccol">${move.shortDesc || move.desc}</span> `;
 	buf += `</a></li><li style="clear:both"></li></ul>`;
