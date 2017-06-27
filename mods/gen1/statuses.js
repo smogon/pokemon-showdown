@@ -61,8 +61,8 @@ exports.BattleStatuses = {
 		effectType: 'Status',
 		onStart: function (target) {
 			this.add('-status', target, 'slp');
-			// 1-7 turns. Put 1-7 since they awake at end of turn.
-			this.effectData.startTime = this.random(1, 7);
+			// 1-7 turns
+			this.effectData.startTime = this.random(1, 8);
 			this.effectData.time = this.effectData.startTime;
 		},
 		onBeforeMovePriority: 10,

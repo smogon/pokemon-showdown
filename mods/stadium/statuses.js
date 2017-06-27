@@ -40,7 +40,7 @@ exports.BattleStatuses = {
 		onStart: function (target) {
 			this.add('-status', target, 'slp');
 			// 1-3 turns
-			this.effectData.startTime = this.random(1, 3);
+			this.effectData.startTime = this.random(1, 4);
 			this.effectData.time = this.effectData.startTime;
 		},
 		onBeforeMovePriority: 2,
