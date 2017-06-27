@@ -28,8 +28,8 @@ exports.BattleStatuses = {
 		effectType: 'Status',
 		onStart: function (target) {
 			this.add('-status', target, 'slp');
-			// 1-5 turns
-			this.effectData.time = this.random(2, 6);
+			// 1-6 turns
+			this.effectData.time = this.random(2, 8);
 		},
 		onBeforeMovePriority: 10,
 		onBeforeMove: function (pokemon, target, move) {
