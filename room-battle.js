@@ -158,7 +158,7 @@ class BattleTimer {
 		let userid = requester ? requester.userid : 'staff';
 		if (this.timerRequesters.has(userid)) return false;
 		if (this.timer && requester) {
-			this.battle.room.send(`|inactive|${requester.userid} also wants the timer to be on`);
+			this.battle.room.send(`|inactive|${requester.name} also wants the timer to be on.`);
 			this.timerRequesters.add(userid);
 			return false;
 		}
