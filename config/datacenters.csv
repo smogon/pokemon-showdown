@@ -1441,7 +1441,7 @@
 94.245.123.176,94.245.127.255,Microsoft Azure,http://www.windowsazure.com/en-us/
 94.247.0.0,94.247.7.255,Red Hosting,http://redhosting.nl/
 94.247.168.0,94.247.175.255,GleSYS,http://www.glesys.se
-95.57.120.0,95.57.120.255,Kazakhtelecom Colocation,
+95.57.120.0,95.57.120.255,Kazakhtelecom Colocation,https://telecom.kz
 95.85.40.0,95.85.47.255,DigitalOcean Netherlands,https://www.digitalocean.com/
 95.100.0.0,95.101.255.255,Akamai,http://akamai.com/
 95.108.120.0,95.108.127.255,hosteam.pl,http://hosteam.pl/
