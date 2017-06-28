@@ -2297,7 +2297,7 @@ exports.commands = {
 			Punishments.roomBlacklist(room, null, null, userid, reason);
 
 			let trusted = Users.isTrusted(userid);
-			if (trusted) {
+			if (trusted && room.isPrivate !== true) {
 				Monitor.log("[CrisisMonitor] Trusted user " + userid + (trusted !== userid ? " (" + trusted + ")" : "") + " was nameblacklisted from " + room.id + " by " + user.name + ", and should probably be demoted.");
 			}
 		}
