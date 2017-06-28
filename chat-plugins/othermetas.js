@@ -7,16 +7,10 @@ exports.commands = {
 		if (!this.runBroadcast()) return;
 		if (!toId(target) || !target.includes('@')) return this.parse('/help mixandmega');
 		let sep = target.split('@');
-		let stone = toId(sep[1]);
-		let template = toId(sep[0]);
-		if (!Dex.data.Items[stone] || (Dex.data.Items[stone] && !Dex.data.Items[stone].megaEvolves && !Dex.data.Items[stone].onPrimal)) {
-			return this.errorReply(`Error: Mega Stone not found`);
-		}
-		if (!Dex.data.Pokedex[toId(template)]) {
-			return this.errorReply(`Error: Pokemon not found`);
-		}
-		template = Object.assign({}, Dex.getTemplate(template));
-		stone = Object.assign({}, Dex.getItem(stone));
+		let stone = Dex.getItem(sep[1]);
+		let template = Object.assign({}, Dex.getTemplate(sep[0]));
+		if (!stone.exists || (stone.exists && !stone.megaEvolves && !stone.onPrimal)) return this.errorReply(`Error: Mega Stone not found`);
+		if (!template.exists) return this.errorReply(`Error: Pokemon not found`);
 		if (template.isMega || (template.evos && Object.keys(template.evos).length > 0)) { // Mega Pokemon cannot be mega evolved
 			return this.errorReply(`You cannot mega evolve ${template.name} in Mix and Mega.`);
 		}
@@ -97,29 +91,28 @@ exports.commands = {
 	'350': '350cup',
 	'350cup': function (target, room, user) {
 		if (!this.runBroadcast()) return;
-		if (!Dex.data.Pokedex[toId(target)]) {
-			return this.errorReply("Error: Pokemon not found.");
-		}
+		if (!toId(target)) return this.parse('/help 350cup');
+		let template = Object.assign({}, Dex.getTemplate(target));
+		if (!template.exists) return this.errorReply("Error: Pokemon not found.");
 		let bst = 0;
-		let pokeobj = Object.assign({}, Dex.getTemplate(target));
-		for (let i in pokeobj.baseStats) {
-			bst += pokeobj.baseStats[i];
+		for (let i in template.baseStats) {
+			bst += template.baseStats[i];
 		}
 		let newStats = {};
-		for (let i in pokeobj.baseStats) {
-			newStats[i] = pokeobj.baseStats[i] * (bst <= 350 ? 2 : 1);
+		for (let i in template.baseStats) {
+			newStats[i] = template.baseStats[i] * (bst <= 350 ? 2 : 1);
 		}
-		pokeobj.baseStats = Object.assign({}, newStats);
-		this.sendReply(`|html|${Chat.getDataPokemonHTML(pokeobj)}`);
+		template.baseStats = Object.assign({}, newStats);
+		this.sendReply(`|html|${Chat.getDataPokemonHTML(template)}`);
 	},
 	'350cuphelp': ["/350 OR /350cup <pokemon> - Shows the base stats that a Pokemon would have in 350 Cup."],
 
 	ts: 'tiershift',
 	tiershift: function (target, room, user) {
 		if (!this.runBroadcast()) return;
-		if (!Dex.data.Pokedex[toId(target)]) {
-			return this.errorReply("Error: Pokemon not found.");
-		}
+		if (!toId(target)) return this.parse('/help tiershift');
+		let template = Object.assign({}, Dex.getTemplate(target));
+		if (!template.exists) return this.errorReply("Error: Pokemon not found.");
 		let boosts = {
 			'UU': 10,
 			'BL2': 10,
@@ -132,8 +125,7 @@ exports.commands = {
 			'LC Uber': 40,
 			'LC': 40,
 		};
-		let template = Object.assign({}, Dex.getTemplate(target));
-		if (!(template.tier in boosts)) return this.sendReplyBox(`${template.species} in Tier Shift: <br /> ${Object.values(template.baseStats).join('/')}`);
+		if (!(template.tier in boosts)) return this.sendReply(`|html|${Chat.getDataPokemonHTML(template)}`);
 		let boost = boosts[template.tier];
 		let newStats = Object.assign({}, template.baseStats);
 		for (let statName in template.baseStats) {
