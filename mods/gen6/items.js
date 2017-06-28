@@ -71,14 +71,6 @@ exports.BattleItems = {
 		},
 		desc: "Restores 1/8 max HP at 1/2 max HP or less; confuses if -Atk Nature. Single use.",
 	},
-	galladite: {
-		inherit: true,
-		isUnreleased: false,
-	},
-	gardevoirite: {
-		inherit: true,
-		isUnreleased: false,
-	},
 	iapapaberry: {
 		inherit: true,
 		onUpdate: function (pokemon) {
@@ -116,10 +108,6 @@ exports.BattleItems = {
 	lightclay: {
 		inherit: true,
 		desc: "Holder's use of Light Screen or Reflect lasts 8 turns instead of 5.",
-	},
-	lopunnite: {
-		inherit: true,
-		isUnreleased: false,
 	},
 	machobrace: {
 		inherit: true,
