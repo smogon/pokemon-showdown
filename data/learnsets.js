@@ -8391,7 +8391,7 @@ exports.BattleLearnsets = {
 		captivate: ["4M"],
 		closecombat: ["7L39", "6L59", "5L59", "4L59"],
 		confide: ["7M", "6M"],
-		counter: ["7V"],
+		counter: ["7V", "3T"],
 		covet: ["6T", "5T"],
 		crosschop: ["7L22", "6L41", "5L41", "4L41", "3L35", "3S0"],
 		defensecurl: ["3T"],
