@@ -15,9 +15,25 @@
 'use strict';
 
 const crypto = require('crypto');
+
 const ProcessManager = require('./process-manager');
 
+/**
+ * @class VerifierManager
+ * @extends ProcessManager
+ */
 class VerifierManager extends ProcessManager {
+	onFork() {
+		// @ts-ignore
+		global.Config = require('./config/config');
+
+		process.on('message', message => this.onMessageDownstream(message));
+		process.once('disconnect', () => process.exit(0));
+
+		require('./repl').start('verifier', /** @param {string} cmd */ cmd => eval(cmd));
+	}
+
+	/** @param {string} message */
 	onMessageUpstream(message) {
 		// Protocol:
 		// success: "[id]|1"
@@ -25,27 +41,35 @@ class VerifierManager extends ProcessManager {
 		let pipeIndex = message.indexOf('|');
 		let id = +message.substr(0, pipeIndex);
 		let result = Boolean(~~message.slice(pipeIndex + 1));
-
+		// @ts-ignore
 		if (this.pendingTasks.has(id)) {
+			// @ts-ignore
 			this.pendingTasks.get(id)(result);
+			// @ts-ignore
 			this.pendingTasks.delete(id);
+			// @ts-ignore
 			this.release();
 		}
 	}
 
+	/** @param {string} message */
 	onMessageDownstream(message) {
 		// protocol:
 		// "[id]|{data, sig}"
 		let pipeIndex = message.indexOf('|');
 		let id = message.substr(0, pipeIndex);
-
 		let data = JSON.parse(message.slice(pipeIndex + 1));
-		process.send(id + '|' + this.receive(data));
+		if (process.send) process.send(`${id}|${this.receive(data)}`);
 	}
 
+	/**
+	 * @param {{data: string, sig: string}} data
+	 * @return {number}
+	 */
 	receive(data) {
 		let verifier = crypto.createVerify(Config.loginserverkeyalgo);
 		verifier.update(data.data);
+
 		let success = false;
 		try {
 			success = verifier.verify(Config.loginserverpublickey, data.sig, 'hex');
@@ -55,25 +79,19 @@ class VerifierManager extends ProcessManager {
 	}
 }
 
-exports.VerifierManager = VerifierManager;
-
-const PM = exports.PM = new VerifierManager({
-	execFile: __filename,
-	maxProcesses: global.Config ? Config.verifierprocesses : 1,
-	isChatBased: false,
-});
-
-if (process.send && module === process.mainModule) {
-	// This is a child process!
-
-	global.Config = require('./config/config');
-
-	require('./repl').start('verifier', cmd => eval(cmd));
-
-	process.on('message', message => PM.onMessageDownstream(message));
-	process.on('disconnect', () => process.exit());
-}
-
-exports.verify = function (data, signature) {
-	return PM.send({data: data, sig: signature});
+module.exports = {
+	VerifierManager,
+	PM: new VerifierManager({
+		execFile: __filename,
+		maxProcesses: ('Config' in global) ? Config.verifierprocesses : 1,
+		isChatBased: false,
+	}),
+	/**
+	 * @param {string} data
+	 * @param {string} sig
+	 * @return {Promise<boolean>}
+	 */
+	verify(data, sig) {
+		return this.PM.send({data, sig});
+	},
 };
