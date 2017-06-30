@@ -22,14 +22,14 @@ exports.commands = {
 		if (template.isMega || (template.evos && Object.keys(template.evos).length > 0)) { // Mega Pokemon cannot be mega evolved
 			return this.errorReply(`You cannot mega evolve ${template.name} in Mix and Mega.`);
 		}
-	 	let bannedStones = {'beedrillite':1, 'blazikenite':1, 'gengarite':1, 'kangaskhanite':1, 'mawilite':1, 'medichamite':1};
- 		if (stone.id in bannedStones && template.name !== stone.megaEvolves) {
- 			this.errorReply(`Warning: ${stone.name} is restricted to ${stone.megaEvolves} in Mix and Mega; therefore, ${template.name} cannot use ${stone.name} in actual play.`);
- 		}
+		let bannedStones = {'beedrillite':1, 'blazikenite':1, 'gengarite':1, 'kangaskhanite':1, 'mawilite':1, 'medichamite':1};
+		if (stone.id in bannedStones && template.name !== stone.megaEvolves) {
+			this.errorReply(`Warning: ${stone.name} is restricted to ${stone.megaEvolves} in Mix and Mega; therefore, ${template.name} cannot use ${stone.name} in actual play.`);
+		}
 		if (Dex.mod("mixandmega").getTemplate(sep[0]).tier === "Uber") { // Separate messages because there's a difference between being already mega evolved / NFE and being banned from mega evolving
 			this.errorReply(`Warning: ${template.name} is banned from mega evolving with a non-native in Mix and Mega and therefore cannot use ${stone.name} in actual play.`);
 		}
-	 	if (stone.isUnreleased) {
+		if (stone.isUnreleased) {
 			this.errorReply(`Warning: ${stone.name} is unreleased and is not usable in current Mix and Mega.`);
 		}
 		let baseTemplate = Dex.getTemplate(stone.megaEvolves);
