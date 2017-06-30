@@ -16,6 +16,8 @@
         "./crashlogger.js",
         "./dnsbl.js",
         "./repl.js",
-        "./fs.js"
+        "./fs.js",
+        "./process-manager.js",
+        "./verifier.js"
     ]
 }
