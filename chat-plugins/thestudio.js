@@ -305,7 +305,7 @@ let commands = {
 		if (!room.chatRoomData || !this.can('mute', null, room)) return false;
 		if (!this.canTalk()) return;
 
-		let params = target.split(',').map(param => param.trim());
+		let params = target.split(target.includes('|') ? '|' : ',').map(param => param.trim());
 
 		let changelist = {};
 
