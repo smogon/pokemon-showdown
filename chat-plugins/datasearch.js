@@ -21,13 +21,31 @@ function escapeHTML(str) {
 }
 
 class DatasearchManager extends ProcessManager {
+	onFork() {
+		global.Config = require('../config/config');
+		process.on('uncaughtException', err => {
+			if (Config.crashguard) {
+				require('../crashlogger')(err, 'A dexsearch process', true);
+			}
+		});
+
+		global.Dex = require('../sim/dex');
+		global.toId = Dex.getId;
+		Dex.includeData();
+		global.TeamValidator = require('../team-validator');
+
+		process.on('message', message => this.onMessageDownstream(message));
+		process.on('disconnect', () => process.exit(0));
+
+		require('../repl').start('dexsearch', cmd => eval(cmd));
+	}
+
 	onMessageUpstream(message) {
 		// Protocol:
 		// "[id]|JSON"
 		let pipeIndex = message.indexOf('|');
 		let id = +message.substr(0, pipeIndex);
 		let result = JSON.parse(message.slice(pipeIndex + 1));
-
 		if (this.pendingTasks.has(id)) {
 			this.pendingTasks.get(id)(result);
 			this.pendingTasks.delete(id);
@@ -40,9 +58,8 @@ class DatasearchManager extends ProcessManager {
 		// "[id]|{data, sig}"
 		let pipeIndex = message.indexOf('|');
 		let id = message.substr(0, pipeIndex);
-
 		let data = JSON.parse(message.slice(pipeIndex + 1));
-		process.send(id + '|' + JSON.stringify(this.receive(data)));
+		process.send(`${id}|${this.receive(data)}`);
 	}
 
 	receive(data) {
@@ -70,7 +87,7 @@ class DatasearchManager extends ProcessManager {
 			require('./../crashlogger')(err, 'A search query', data);
 			result = {error: "Sorry! Our search engine crashed on your query. We've been automatically notified and will fix this crash."};
 		}
-		return result;
+		return JSON.stringify(result);
 	}
 }
 
@@ -314,28 +331,6 @@ exports.commands = {
 		"/learn can also be prefixed by a generation acronym (e.g.: /dpplearn) to indicate which generation is used. Valid options are: rby gsc adv dpp bw2 oras",
 	],
 };
-
-if (process.send && module === process.mainModule) {
-	// This is a child process!
-
-	global.Config = require('../config/config');
-
-	if (Config.crashguard) {
-		process.on('uncaughtException', err => {
-			require('../crashlogger')(err, 'A dexsearch process', true);
-		});
-	}
-
-	global.Dex = require('../sim/dex');
-	global.toId = Dex.getId;
-	Dex.includeData();
-	global.TeamValidator = require('../team-validator');
-
-	process.on('message', message => PM.onMessageDownstream(message));
-	process.on('disconnect', () => process.exit());
-
-	require('../repl').start('dexsearch', cmd => eval(cmd));
-}
 
 function runDexsearch(target, cmd, canAll, message) {
 	let searches = [];
@@ -1530,8 +1525,4 @@ function runLearn(target, cmd) {
 
 function runSearch(query) {
 	return PM.send(query);
-}
-
-if (!process.send) {
-	PM.spawn();
 }

@@ -107,7 +107,6 @@ global.Chat = require('./chat');
 global.Rooms = require('./rooms');
 
 global.Verifier = require('./verifier');
-Verifier.PM.spawn();
 
 global.Tournaments = require('./tournaments');
 
@@ -153,7 +152,6 @@ if (require.main === module) {
  *********************************************************/
 
 global.TeamValidator = require('./team-validator');
-TeamValidator.PM.spawn();
 
 /*********************************************************
  * Start up the REPL server

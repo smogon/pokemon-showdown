@@ -9,7 +9,7 @@
 
 'use strict';
 
-let TeamValidator = module.exports = getValidator;
+const TeamValidator = module.exports = getValidator;
 let PM;
 
 function banReason(strings, reason) {
@@ -1160,13 +1160,30 @@ function getValidator(format, supplementaryBanlist) {
 const ProcessManager = require('./process-manager');
 
 class TeamValidatorManager extends ProcessManager {
+	onFork() {
+		global.Config = require('./config/config');
+		process.on('uncaughtException', err => {
+			if (Config.crashguard) {
+				require('./crashlogger')(err, `A team validator process`, true);
+			}
+		});
+
+		global.Dex = require('./sim/dex').includeData();
+		global.toId = Dex.getId;
+		global.Chat = require('./chat');
+
+		process.on('message', message => this.onMessageDownstream(message));
+		process.once('disconnect', () => process.exit(0));
+
+		require('./repl').start(`team-validator-${process.pid}`, cmd => eval(cmd));
+	}
+
 	onMessageUpstream(message) {
 		// Protocol:
 		// success: "[id]|1[details]"
 		// failure: "[id]|0[details]"
 		let pipeIndex = message.indexOf('|');
 		let id = +message.substr(0, pipeIndex);
-
 		if (this.pendingTasks.has(id)) {
 			this.pendingTasks.get(id)(message.slice(pipeIndex + 1));
 			this.pendingTasks.delete(id);
@@ -1229,24 +1246,3 @@ PM = TeamValidator.PM = new TeamValidatorManager({
 	maxProcesses: global.Config ? Config.validatorprocesses : 1,
 	isChatBased: false,
 });
-
-if (process.send && module === process.mainModule) {
-	// This is a child process!
-
-	global.Config = require('./config/config');
-
-	if (Config.crashguard) {
-		process.on('uncaughtException', err => {
-			require('./crashlogger')(err, `A team validator process`, true);
-		});
-	}
-
-	global.Dex = require('./sim/dex').includeData();
-	global.toId = Dex.getId;
-	global.Chat = require('./chat');
-
-	require('./repl').start(`team-validator-${process.pid}`, cmd => eval(cmd));
-
-	process.on('message', message => PM.onMessageDownstream(message));
-	process.on('disconnect', () => process.exit());
-}
