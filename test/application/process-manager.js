@@ -64,10 +64,10 @@ describe('ProcessManager', function () {
 			assert.ok(this.PW.release());
 		});
 
-		it('should only send while activated and connected', function (done) {
+		it('should only send while connected', function (done) {
 			assert.ok(this.PW.send(''));
 			this.PW.active = false;
-			assert.ok(!this.PW.send(''));
+			assert.ok(this.PW.send(''));
 			this.PW.once('disconnect', () => {
 				assert.ok(!this.PW.send(''));
 				this.PW.active = true;

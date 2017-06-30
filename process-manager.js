@@ -53,7 +53,7 @@ class ProcessWrapper extends EventEmitter {
 	 * @return {boolean}
 	 */
 	send(data) {
-		if (!this.active || !this.connected) return false;
+		if (!this.connected) return false;
 		return this.process.send(data);
 	}
 
