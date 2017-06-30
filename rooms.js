@@ -369,7 +369,6 @@ class GlobalRoom {
 				await FS(`${filename}.0`).write('' + lastBattle);
 				await FS(`${filename}.0`).rename(filename);
 				writing = false;
-				lastBattle = null;
 				filename = null;
 				if (lastBattle < this.lastBattle) {
 					setImmediate(() => this.writeNumRooms());
