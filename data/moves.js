@@ -19032,6 +19032,7 @@ exports.BattleMovedex = {
 		stealsBoosts: true,
 		target: "normal",
 		type: "Water",
+		zMovePower: 190,
 		contestType: "Cute",
 	},
 };
