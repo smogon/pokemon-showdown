@@ -269,7 +269,7 @@ exports.BattleScripts = {
 				case 'quickattack':
 					if (hasMove['thunderwave']) rejected = true;
 					break;
-				case 'flamethrower':
+				case 'firepunch': case 'flamethrower':
 					if (hasMove['fireblast']) rejected = true;
 					break;
 				case 'hydropump':
@@ -290,6 +290,9 @@ exports.BattleScripts = {
 				case 'solarbeam':
 					if (counter.setupType === 'Physical' || !hasMove['sunnyday'] && !movePool.includes('sunnyday')) rejected = true;
 					break;
+				case 'icepunch':
+					if (!counter.setupType && hasMove['icebeam']) rejected = true;
+					break;
 				case 'brickbreak':
 					if (hasMove['substitute'] && hasMove['focuspunch']) rejected = true;
 					break;
@@ -301,6 +304,9 @@ exports.BattleScripts = {
 					break;
 				case 'gunkshot':
 					if (hasMove['poisonjab']) rejected = true;
+					break;
+				case 'zenheadbutt':
+					if (hasMove['psychocut']) rejected = true;
 					break;
 				case 'rockslide':
 					if (hasMove['stoneedge']) rejected = true;
