@@ -1,80 +1,61 @@
 'use strict';
 
 const assert = require('assert');
+const path = require('path');
 
 const ProcessManager = require('../../process-manager');
-const {ProcessWrapper} = ProcessManager;
+const ProcessWrapper = ProcessManager.ProcessWrapper;
 
+// const DatasearchManager = require('../../chat-plugins/datasearch.js').DatasearchManager;
+// const SimulatorManager = require('../../room-battle.js').SimulatorManager;
+// const TeamValidatorManager = require('../../team-validator.js').TeamValidatorManager;
+// const VerifierManager = require('../../verifier.js').VerifierManager;
+
+// DO NOT CLEAR PROCESSMANAGER'S CACHE DURING THESE TESTS
+// Delete the ProcessManager instances from it manually unless you want to break
+// other tests that rely on what's already there at the beginning of these tests
+// and watch the world burn.
 describe('ProcessManager', function () {
-	const setup = isChild => {
-		before(function () {
-			process.env.PS_MANAGED_PROCESS = '' + +isChild;
-
-			this.PM = new ProcessManager({
-				execFile: require.resolve('../../process-manager'),
-				maxProcesses: 1,
+	it('should construct', function () {
+		let pm;
+		let cacheSize = ProcessManager.cache.size;
+		assert.doesNotThrow(() => {
+			pm = new ProcessManager({
+				execFile: path.resolve('./process-manager'),
+				maxProcesses: 0,
 				isChatBased: false,
 			});
 		});
-
-		after(function () {
-			this.PM.unspawn();
-			ProcessManager.cache.delete(this.PM);
-			delete process.env.PS_MANAGED_PROCESS;
-		});
-	};
-
-	context('in the parent process', function () {
-		setup(false);
-
-		it('should spawn child processes', function () {
-			assert.strictEqual(this.PM.processes.size, this.PM.maxProcesses);
-		});
-	});
-
-	context('in child processes', function () {
-		setup(true);
-
-		it('should not spawn any child processes', function () {
-			assert.ok(!this.PM.processes.size);
-		});
+		assert.strictEqual(ProcessManager.cache.size, cacheSize + 1);
+		assert.ok(ProcessManager.cache.delete(pm));
 	});
 
 	describe('ProcessWrapper', function () {
 		beforeEach(function () {
-			let execFile = require.resolve('../../process-manager');
-			this.PW = new ProcessWrapper(execFile);
-		});
-
-		afterEach(function (done) {
-			if (!this.PW.connected) return done();
-			this.PW.once('disconnect', done);
-			this.PW.release();
-		});
-
-		it('should only disconnect while deactivated and connected', function (done) {
-			assert.ok(!this.PW.release());
-			this.PW.active = false;
-			this.PW.once('disconnect', () => {
-				assert.ok(!this.PW.release());
-				this.PW.active = true;
-				assert.ok(!this.PW.release());
-				done();
+			this.pm = new ProcessManager({
+				execFile: path.resolve('./process-manager'),
+				maxProcesses: 0,
+				isChatBased: false,
 			});
-			assert.ok(this.PW.release());
 		});
 
-		it('should only send while activated and connected', function (done) {
-			assert.ok(this.PW.send(''));
-			this.PW.active = false;
-			assert.ok(!this.PW.send(''));
-			this.PW.once('disconnect', () => {
-				assert.ok(!this.PW.send(''));
-				this.PW.active = true;
-				assert.ok(!this.PW.send(''));
-				done();
+		afterEach(function () {
+			// Temporary until final process-manager.js refactor
+			this.pm.processes.forEach(pw => {
+				pw.process.removeAllListeners('message');
+				pw.process.disconnect();
+				pw.process = null;
+				pw.removeAllListeners('message');
+				pw.pendingTasks.clear();
+				pw.PM.processes.splice(pw.PM.processes.indexOf(pw), 1);
+				pw.PM = null;
 			});
-			this.PW.release();
+
+			ProcessManager.cache.delete(this.pm);
+		});
+
+		it('should construct', function () {
+			assert.doesNotThrow(() => new ProcessWrapper(this.pm));
 		});
 	});
 });
