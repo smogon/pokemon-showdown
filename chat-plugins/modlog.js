@@ -7,7 +7,7 @@ const execFileSync = require('child_process').execFileSync;
 
 const MAX_PROCESSES = 1;
 const RESULTS_MAX_LENGTH = 100;
-const LOG_PATH = '../logs/modlog/';
+const LOG_PATH = path.normalize(`${__dirname}/../logs/modlog/`);
 
 class ModlogManager extends ProcessManager {
 	onFork() {
@@ -117,7 +117,7 @@ class SortedLimitedLengthList {
 function checkRipgrepAvailability() {
 	if (Config.ripgrepmodlog === undefined) {
 		try {
-			execFileSync('rg', ['--version'], {cwd: path.normalize(`${__dirname}/${LOG_PATH}`)});
+			execFileSync('rg', ['--version'], {cwd: LOG_PATH});
 			Config.ripgrepmodlog = true;
 		} catch (error) {
 			Config.ripgrepmodlog = false;
@@ -182,7 +182,7 @@ async function checkRoomModlog(path, regex, results) {
 function runRipgrepModlog(paths, regexString, results) {
 	let stdout;
 	try {
-		stdout = execFileSync('rg', ['-i', '-e', regexString, '--no-filename', '--no-line-number', ...paths], {cwd: path.normalize(`${__dirname}/${LOG_PATH}`)});
+		stdout = execFileSync('rg', ['-i', '-e', regexString, '--no-filename', '--no-line-number', ...paths], {cwd: LOG_PATH});
 	} catch (error) {
 		return results;
 	}
