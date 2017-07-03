@@ -1372,7 +1372,7 @@ exports.BattleLearnsets = {
 		flash: ["7M", "4M"],
 		flashcannon: ["7M", "4M"],
 		fling: ["7M", "4M"],
-		foul: ["7M"],
+		foulplay: ["7M"],
 		frustration: ["7M", "4M"],
 		furycutter: ["4T"],
 		gigaimpact: ["7M", "4M"],
