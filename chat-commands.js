@@ -794,7 +794,7 @@ exports.commands = {
 			delete room.isPrivate;
 			room.privacySetter = null;
 			this.addModCommand(`${user.name} made this room public.`);
-			this.add("|privacy|public");
+			this.add(room.metadata);
 			if (room.chatRoomData) {
 				delete room.chatRoomData.isPrivate;
 				Rooms.global.writeChatRoomData();
@@ -810,7 +810,7 @@ exports.commands = {
 			}
 			room.isPrivate = setting;
 			this.addModCommand(`${user.name} made this room ${settingName}.`);
-			this.add(`|privacy|${setting === true ? 'secret' : 'hidden'}`);
+			this.add(room.metadata);
 			if (room.chatRoomData) {
 				room.chatRoomData.isPrivate = setting;
 				Rooms.global.writeChatRoomData();
