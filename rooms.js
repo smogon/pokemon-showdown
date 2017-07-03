@@ -261,6 +261,11 @@ class Room {
 			}
 		}
 	}
+
+	get metadata() {
+		let settings = {title: this.title, id: this.id, privacy: (this.isPrivate === true ? 'secret' : this.isPrivate === 'hidden' ? 'hidden' : 'public'), type: this.type, modchat: this.modchat, modjoin: this.modjoin, auth: (this.auth || {}), uno: (!this.unoDisabled), tournaments: (this.toursEnabled === '%' ? '%' : this.toursEnabled ? '@' : '#'), hangman: (!this.hangmanDisabled)};
+		return `|metadata|${JSON.stringify(settings)}\n`;
+	}
 }
 
 class GlobalRoom {
@@ -960,7 +965,7 @@ class BattleRoom extends Room {
 		}
 	}
 	onConnect(user, connection) {
-		this.sendUser(connection, '|init|battle\n' + (this.isPrivate === true ? '|privacy|secret\n' : this.isPrivate === 'hidden' ? '|privacy|hidden\n' : '') + '|title|' + this.title + '\n' + this.getLogForUser(user).join('\n'));
+		this.sendUser(connection, '|init|battle\n' + this.metadata + '|title|' + this.title + '\n' + this.getLogForUser(user).join('\n'));
 		if (this.game && this.game.onConnect) this.game.onConnect(user, connection);
 	}
 	onJoin(user, connection) {
@@ -1258,7 +1263,7 @@ class ChatRoom extends Room {
 	}
 	onConnect(user, connection) {
 		let userList = this.userList ? this.userList : this.getUserList();
-		this.sendUser(connection, '|init|chat\n' + (this.isPrivate === true ? '|privacy|secret\n' : this.isPrivate === 'hidden' ? '|privacy|hidden\n' : '') + '|title|' + this.title + '\n' + userList + '\n' + this.getLogSlice(-100).join('\n') + this.getIntroMessage(user));
+		this.sendUser(connection, '|init|chat\n' + this.metadata + '|title|' + this.title + '\n' + userList + '\n' + this.getLogSlice(-100).join('\n') + this.getIntroMessage(user));
 		if (this.poll) this.poll.onConnect(user, connection);
 		if (this.game && this.game.onConnect) this.game.onConnect(user, connection);
 	}
