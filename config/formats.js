@@ -123,6 +123,7 @@ exports.Formats = [
 
 		mod: 'gen7',
 		ruleset: ['[Gen 7] OU', 'Allow CAP'],
+		banlist: ['Tomohawk + Earth Power', 'Tomohawk + Reflect'],
 	},
 	{
 		name: "[Gen 7] CAP LC",
