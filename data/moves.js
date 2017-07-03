@@ -15308,7 +15308,7 @@ exports.BattleMovedex = {
 		desc: "The target's raised stat stages are stolen from it and applied to the user before dealing damage.",
 		shortDesc: "Steals target's boosts before dealing damage.",
 		id: "spectralthief",
-		isUnreleased: true,
+		isUnreleased: false,
 		isViable: true,
 		name: "Spectral Thief",
 		pp: 10,
