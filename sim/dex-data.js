@@ -161,7 +161,7 @@ class Format extends Effect {
 		 * List of ruleset and banlist changes in a custom format.
 		 * @type {?string[]}
 		 */
-		this.supplementaryBanlist = this.supplementaryBanlist || null;
+		this.customBanlist = this.customBanlist || null;
 		/**
 		 * Table of rule names and banned effects.
 		 * @type {?{[mod: string]: string | boolean}}
