@@ -422,7 +422,7 @@ class User {
 	}
 	getIdentity(roomid) {
 		if (this.locked || this.namelocked) {
-			let lockedSymbol = (Config.punishgroups && Config.punishgroups.locked ? Config.punishgroups.locked.symbol : '‽');
+			const lockedSymbol = (Config.punishgroups && Config.punishgroups.locked ? Config.punishgroups.locked.symbol : '‽');
 			return lockedSymbol + this.name;
 		}
 		if (roomid && roomid !== 'global') {
@@ -431,7 +431,7 @@ class User {
 				throw new Error(`Room doesn't exist: ${roomid}`);
 			}
 			if (room.isMuted(this)) {
-				let mutedSymbol = (Config.punishgroups && Config.punishgroups.muted ? Config.punishgroups.muted.symbol : '!');
+				const mutedSymbol = (Config.punishgroups && Config.punishgroups.muted ? Config.punishgroups.muted.symbol : '!');
 				return mutedSymbol + this.name;
 			}
 			return room.getAuth(this) + this.name;
