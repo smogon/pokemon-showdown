@@ -1920,7 +1920,7 @@ exports.BattleItems = {
 	"galladite": {
 		id: "galladite",
 		name: "Galladite",
-		isUnreleased: true,
+		isUnreleased: false,
 		spritenum: 616,
 		megaStone: "Gallade-Mega",
 		megaEvolves: "Gallade",
@@ -1970,7 +1970,7 @@ exports.BattleItems = {
 	"gardevoirite": {
 		id: "gardevoirite",
 		name: "Gardevoirite",
-		isUnreleased: true,
+		isUnreleased: false,
 		spritenum: 587,
 		megaStone: "Gardevoir-Mega",
 		megaEvolves: "Gardevoir",
@@ -2924,7 +2924,7 @@ exports.BattleItems = {
 	"lopunnite": {
 		id: "lopunnite",
 		name: "Lopunnite",
-		isUnreleased: true,
+		isUnreleased: false,
 		spritenum: 626,
 		megaStone: "Lopunny-Mega",
 		megaEvolves: "Lopunny",
