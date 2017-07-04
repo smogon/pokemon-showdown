@@ -17,9 +17,9 @@ function banReason(strings, reason) {
 }
 
 class Validator {
-	constructor(format, supplementaryBanlist) {
-		this.format = Dex.getFormat(format, supplementaryBanlist);
-		this.supplementaryBanlist = this.format.supplementaryBanlist ? this.format.supplementaryBanlist.join(',') : '0';
+	constructor(format, customBanlist) {
+		this.format = Dex.getFormat(format, customBanlist);
+		this.customBanlist = this.format.customBanlist ? this.format.customBanlist.join(',') : '0';
 		this.dex = Dex.format(this.format);
 	}
 
@@ -30,7 +30,7 @@ class Validator {
 
 	prepTeam(team, removeNicknames) {
 		removeNicknames = removeNicknames ? '1' : '0';
-		return PM.send(this.format.id, this.supplementaryBanlist, removeNicknames, team);
+		return PM.send(this.format.id, this.customBanlist, removeNicknames, team);
 	}
 
 	baseValidateTeam(team, removeNicknames) {
@@ -1158,8 +1158,8 @@ class Validator {
 }
 TeamValidator.Validator = Validator;
 
-function getValidator(format, supplementaryBanlist) {
-	return new Validator(format, supplementaryBanlist);
+function getValidator(format, customBanlist) {
+	return new Validator(format, customBanlist);
 }
 
 /*********************************************************
@@ -1185,7 +1185,7 @@ class TeamValidatorManager extends ProcessManager {
 
 	onMessageDownstream(message) {
 		// protocol:
-		// "[id]|[format]|[supplementaryBanlist]|[removeNicknames]|[team]"
+		// "[id]|[format]|[customBanlist]|[removeNicknames]|[team]"
 		let pipeIndex = message.indexOf('|');
 		let nextPipeIndex = message.indexOf('|', pipeIndex + 1);
 		let id = message.substr(0, pipeIndex);
@@ -1193,29 +1193,29 @@ class TeamValidatorManager extends ProcessManager {
 
 		pipeIndex = nextPipeIndex;
 		nextPipeIndex = message.indexOf('|', pipeIndex + 1);
-		let supplementaryBanlist = message.substr(pipeIndex + 1, nextPipeIndex - pipeIndex - 1);
+		let customBanlist = message.substr(pipeIndex + 1, nextPipeIndex - pipeIndex - 1);
 
 		pipeIndex = nextPipeIndex;
 		nextPipeIndex = message.indexOf('|', pipeIndex + 1);
 		let removeNicknames = message.substr(pipeIndex + 1, nextPipeIndex - pipeIndex - 1);
 		let team = message.substr(nextPipeIndex + 1);
 
-		process.send(id + '|' + this.receive(format, supplementaryBanlist, removeNicknames, team));
+		process.send(id + '|' + this.receive(format, customBanlist, removeNicknames, team));
 	}
 
-	receive(format, supplementaryBanlist, removeNicknames, team) {
+	receive(format, customBanlist, removeNicknames, team) {
 		let parsedTeam = Dex.fastUnpackTeam(team);
-		supplementaryBanlist = (!supplementaryBanlist || supplementaryBanlist === '0') ? false : supplementaryBanlist.split(',');
+		customBanlist = (!customBanlist || customBanlist === '0') ? false : customBanlist.split(',');
 		removeNicknames = removeNicknames === '1';
 
 		let problems;
 		try {
-			problems = TeamValidator(format, supplementaryBanlist).validateTeam(parsedTeam, removeNicknames);
+			problems = TeamValidator(format, customBanlist).validateTeam(parsedTeam, removeNicknames);
 		} catch (err) {
 			require('./crashlogger')(err, 'A team validation', {
 				format: format,
 				team: team,
-				supplementaryBanlist: supplementaryBanlist,
+				customBanlist: customBanlist,
 			});
 			problems = [`Your team crashed the team validator. We've been automatically notified and will fix this crash, but you should use a different team for now.`];
 		}

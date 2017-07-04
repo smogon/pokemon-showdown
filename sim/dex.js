@@ -485,11 +485,11 @@ class ModdedDex {
 	}
 	/**
 	 * @param {string | Format} name
-	 * @param {string | string[]} [supplementaryBanlist]
+	 * @param {string | string[]} [customBanlist]
 	 * @param {string} [customId]
 	 * @return {Format}
 	 */
-	getFormat(name, supplementaryBanlist, customId) {
+	getFormat(name, customBanlist, customId) {
 		if (name && typeof name !== 'string') {
 			return name;
 		}
@@ -502,16 +502,16 @@ class ModdedDex {
 		let effect;
 		if (this.data.Formats.hasOwnProperty(id)) {
 			let format = this.data.Formats[id];
-			if (supplementaryBanlist) {
-				if (typeof supplementaryBanlist === 'string') supplementaryBanlist = supplementaryBanlist.split(',');
+			if (customBanlist) {
+				if (typeof customBanlist === 'string') customBanlist = customBanlist.split(',');
 				if (!format.banlistTable) this.getBanlistTable(format);
 				format = Object.assign({}, format);
-				format.supplementaryBanlist = supplementaryBanlist;
+				format.customBanlist = customBanlist;
 				format.banlist = format.banlist ? format.banlist.slice() : [];
 				format.unbanlist = format.unbanlist ? format.unbanlist.slice() : [];
 				format.ruleset = format.baseRuleset.slice();
-				for (let i = 0; i < supplementaryBanlist.length; i++) {
-					let ban = supplementaryBanlist[i];
+				for (let i = 0; i < customBanlist.length; i++) {
+					let ban = customBanlist[i];
 					let unban = false;
 					if (ban.charAt(0) === '!') {
 						unban = true;

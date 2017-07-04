@@ -320,7 +320,7 @@ class Battle {
 		// data to be logged
 		this.logData = null;
 		this.endType = 'normal';
-		this.supplementaryBanlist = !!format.supplementaryBanlist;
+		this.customBanlist = !!format.customBanlist;
 
 		this.rqid = 1;
 
@@ -329,7 +329,7 @@ class Battle {
 			throw new Error(`Battle with ID ${room.id} already exists.`);
 		}
 
-		this.send('init', this.format, rated ? '1' : '', format.supplementaryBanlist ? format.supplementaryBanlist.join(',') : '');
+		this.send('init', this.format, rated ? '1' : '', format.customBanlist ? format.customBanlist.join(',') : '');
 		this.process.pendingTasks.set(room.id, this);
 	}
 
