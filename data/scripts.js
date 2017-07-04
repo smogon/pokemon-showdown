@@ -2060,6 +2060,8 @@ exports.BattleScripts = {
 				rejectAbility = counter['damage'] >= counter.damagingMoves.length;
 			} else if (ability === 'Torrent') {
 				rejectAbility = !counter['Water'];
+			} else if (ability === 'Triage') {
+				rejectAbility = !counter['recovery'] && !counter['drain'];
 			} else if (ability === 'Unburden') {
 				rejectAbility = !counter.setupType && !hasMove['acrobatics'];
 			}
@@ -2088,6 +2090,9 @@ exports.BattleScripts = {
 			}
 			if (abilities.includes('Swift Swim') && hasMove['raindance']) {
 				ability = 'Swift Swim';
+			}
+			if (abilities.includes('Triage') && hasMove['drainingkiss']) {
+				ability = 'Triage';
 			}
 			if (abilities.includes('Unburden') && hasMove['acrobatics']) {
 				ability = 'Unburden';
