@@ -941,7 +941,6 @@ class BattleRoom extends Room {
 		}
 	}
 	async logBattle(p1score, p1rating, p2rating) {
-		if (this.battle.supplementaryBanlist) return;
 		let logData = this.battle.logData;
 		if (!logData) return;
 		this.battle.logData = null; // deallocate to save space
