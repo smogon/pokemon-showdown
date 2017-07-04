@@ -76,7 +76,7 @@ class Ladder {
 			let lastPlacement = 1;
 
 			let ladder = Object.keys(this.data)
-				.filter(k => sortBy in this.data[k])
+				.filter(k => this.data[k][sortBy])
 				.sort((a, b) => this.data[b][sortBy] - this.data[a][sortBy])
 				.map((u, i) => {
 					u = this.data[u];
@@ -154,7 +154,7 @@ class PlayerLadder extends Ladder {
 }
 
 let Leaderboard = new Ladder(DATA_FILE);
-let HostLeaderboard = new Ladder(HOST_DATA_FILE);
+let HostLeaderboard = new PlayerLadder(HOST_DATA_FILE);
 let PlayerLeaderboard = new PlayerLadder(PLAYER_DATA_FILE);
 
 function formatQueue(queue, viewer) {
@@ -198,6 +198,8 @@ class ScavengerHunt extends Rooms.RoomGame {
 		this.questions = [];
 		this.completed = [];
 
+		this.leftHunt = {};
+
 		this.parentGame = parentGame || null;
 
 		this.onLoad(questions);
@@ -217,7 +219,7 @@ class ScavengerHunt extends Rooms.RoomGame {
 			for (let ip in user.ips) {
 				this.joinedIps.push(ip);
 			}
-
+			delete this.leftHunt[user.userid];
 			user.sendTo("You joined the scavenger hunt! Use the command /scavenge to answer.");
 			this.onSendQuestion(user);
 			return true;
@@ -234,6 +236,7 @@ class ScavengerHunt extends Rooms.RoomGame {
 
 		this.joinedIps = this.joinedIps.filter(ip => !player.joinIps.includes(ip));
 		this.removePlayer(user);
+		this.leftHunt[user.userid] = 1;
 		user.sendTo(this.room, "You have left the scavenger hunt.");
 	}
 
@@ -397,9 +400,14 @@ class ScavengerHunt extends Rooms.RoomGame {
 			PlayerLeaderboard.addPoints(player.name, 'join', 1);
 			if (player.completed) PlayerLeaderboard.addPoints(player.name, 'finish', 1);
 		}
+		for (let id in this.leftHunt) {
+			if (id in this.players) continue; // this should never happen, but just in case;
+
+			PlayerLeaderboard.addPoints(id, 'join', 1, true);
+		}
 		if (this.gameType !== 'practice') {
 			for (let i = 0; i < this.hosts.length; i++) {
-				HostLeaderboard.addPoints(this.hosts[i].name, 'points', 1).write();
+				HostLeaderboard.addPoints(this.hosts[i].name, 'points', 1, this.hosts[i].noUpdate).write();
 			}
 		}
 		PlayerLeaderboard.write();
@@ -461,7 +469,6 @@ class ScavengerHunt extends Rooms.RoomGame {
 			this.room.logEntry(staffMsg);
 			this.room.modlog(staffMsg);
 
-
 			PlayerLeaderboard.addPoints(player.name, 'infraction', 1);
 			player.infracted = true;
 		}
@@ -519,10 +526,13 @@ class ScavengerHunt extends Rooms.RoomGame {
 		return ips.filter((ip, index) => ips.indexOf(ip) === index).length;
 	}
 
-	static parseHosts(hostsArray, room) {
-		let hosts = hostsArray.map(id => {
+	static parseHosts(hostsArray, room, allowOffline) {
+		let hosts = hostsArray.map(u => {
+			let id = toId(u);
 			let user = Users.getExact(id);
-			if (!user || !user.connected || !(user.userid in room.users)) return null;
+			if (!allowOffline && (!user || !user.connected || !(user.userid in room.users))) return null;
+
+			if (!user) return {name: id, userid: id, noUpdate: true}; // simply stick the ID's in there - dont keep any benign symbols passed by the hunt maker
 
 			return {userid: '' + user.userid, name: '' + user.name};
 		});
@@ -736,14 +746,14 @@ let commands = {
 		if (!this.can('mute', null, room)) return false;
 		if (room.game && !room.game.scavParentGame) return this.errorReply(`There is already a game in this room - ${room.game.title}.`);
 
+		let gameType = cmd.includes('official') ? 'official' : cmd.includes('practice') ? 'practice' : null;
+
 		let [hostsArray, ...params] = target.split('|');
-		let hosts = ScavengerHunt.parseHosts(hostsArray.split(','), room);
+		let hosts = ScavengerHunt.parseHosts(hostsArray.split(','), room, gameType === 'official');
 		if (!hosts) return this.errorReply("The user(s) you specified as the host is not online, or is not in the room.");
 
 		params = ScavengerHunt.parseQuestions(params);
 		if (params.err) return this.errorReply(params.err);
-
-		let gameType = cmd.includes('official') ? 'official' : cmd.includes('practice') ? 'practice' : null;
 
 		if (room.game && room.game.scavParentGame) {
 			let success = room.game.createHunt(room, user, hosts, gameType, params.result);
@@ -1018,21 +1028,39 @@ let commands = {
 
 		if (target === 'RESET') {
 			if (!this.can('declare', null, room)) return false;
-			HostLeaderboard.reset().write();
-			this.privateModCommand(`(${user.name} has reset the host log leaderbaord.)`);
-
+			HostLeaderboard.softReset().then(() => {
+				HostLeaderboard.write();
+				this.privateModCommand(`(${user.name} has reset the host log leaderboard into the next month.)`);
+			});
+			return;
+		} else if (target === 'HARD RESET') {
+			if (!this.can('declare', null, room)) return false;
+			HostLeaderboard.hardReset().write();
+			this.privateModCommand(`(${user.name} has hard reset the host log leaderboard.)`);
 			return;
 		}
 
-		HostLeaderboard.visualize('points').then(ladder => {
-			this.sendReply(`|raw|<div class="ladder" style="overflow-y: scroll; max-height: 300px;"><table style="width: 100%"><tr><th>Rank</th><th>Name</th><th>Points</th></tr>${ladder.map(entry => {
-				let userid = toId(entry.name);
+		let [sortMethod, isUhtmlChange] = target.split(',');
 
-				let auth = room.auth && room.auth[userid] ? room.auth[userid] : Users.usergroups[userid] ? Users.usergroups[userid].charAt(0) : '&nbsp;';
-				let color = room.auth && userid in room.auth ? 'inherit' : 'gray';
+		const sortingFields = ['points', 'cumulative-points'];
 
-				return `<tr><td>${entry.rank}</td><td><span style="color: ${color}">${auth}</span>${Chat.escapeHTML(entry.name)}</td><td>${entry.points}</td></tr>`;
-			}).join('')}</table></div>`);
+		if (!sortingFields.includes(sortMethod)) sortMethod = 'points'; // default sort method
+
+		HostLeaderboard.visualize(sortMethod).then(data => {
+			this.sendReply(`|${isUhtmlChange ? 'uhtmlchange' : 'uhtml'}|scav-huntlogs|<div class="ladder" style="overflow-y: scroll; max-height: 300px;"><table style="width: 100%"><tr><th>Rank</th><th>Name</th><th>Hunts Created</th><th>Total Hunts Created</th><th>History</th></tr>${
+				data.map(entry => {
+					let userid = toId(entry.name);
+
+					let auth = room.auth && room.auth[userid] ? room.auth[userid] : Users.usergroups[userid] ? Users.usergroups[userid].charAt(0) : '&nbsp;';
+					let color = room.auth && userid in room.auth ? 'inherit' : 'gray';
+
+					return `<tr><td>${entry.rank}</td><td><span style="color: ${color}">${auth}</span>${Chat.escapeHTML(entry.name)}</td>` +
+						`<td style="text-align: right;">${(entry.points || 0)}</td>` +
+						`<td style="text-align: right;">${(entry['cumulative-points'] || 0)}</td>` +
+						`<td style="text-align: left;">${entry['history-points'] ? `<span style="color: gray">{ ${entry['history-points'].join(', ')} }</span>` : ''}</td>` +
+						`</tr>`;
+				}).join('')
+			}</table></div><div style="text-align: center">${sortingFields.map(f => `<button class="button${f === sortMethod ? ' disabled' : ''}" name="send" value="/scav huntlogs ${f}, 1">${f}</button>`).join(' ')}</div>`);
 		});
 	},
 
@@ -1044,7 +1072,7 @@ let commands = {
 			if (!this.can('declare', null, room)) return false;
 			PlayerLeaderboard.softReset().then(() => {
 				PlayerLeaderboard.write();
-				this.privateModCommand(`(${user.name} has reset the player log leaderbaord into the next month.)`);
+				this.privateModCommand(`(${user.name} has reset the player log leaderboard into the next month.)`);
 			});
 			return;
 		} else if (target === 'HARD RESET') {
