@@ -975,7 +975,7 @@ class BattleRoom extends Room {
 		const tier = this.format.toLowerCase().replace(/[^a-z0-9]+/g, '');
 		const logpath = `logs/${logfolder}/${tier}/${logsubfolder}/`;
 		await FS(logpath).mkdirp();
-		await FS(logpath + '/' + this.id + '.log.json').write(JSON.stringify(logData));
+		await FS(logpath + this.id + '.log.json').write(JSON.stringify(logData));
 		//console.log(JSON.stringify(logData));
 	}
 	tryExpire() {

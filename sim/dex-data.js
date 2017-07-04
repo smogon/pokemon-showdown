@@ -159,9 +159,9 @@ class Format extends Effect {
 		this.unbanlist = this.unbanlist || [];
 		/**
 		 * List of ruleset and banlist changes in a custom format.
-		 * @type {string[]}
+		 * @type {?string[]}
 		 */
-		this.supplementaryBanlist = this.supplementaryBanlist || [];
+		this.supplementaryBanlist = this.supplementaryBanlist || null;
 		/**
 		 * Table of rule names and banned effects.
 		 * @type {?{[mod: string]: string | boolean}}
