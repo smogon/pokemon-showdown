@@ -679,6 +679,7 @@ exports.BattleAliases = {
 	"oceanic": "Oceanic Operetta",
 	"sar": "Sinister Arrow Raid",
 	"sssss": "Soul-Stealing 7-Star Strike",
+	"soulstealingsevenstarstrike": "Soul-Stealing 7-Star Strike",
 	"stoked": "Stoked Sparksurfer",
 	"zbug": "Savage Spin-Out",
 	"zdark": "Black Hole Eclipse",
