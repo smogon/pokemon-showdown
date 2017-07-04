@@ -269,13 +269,13 @@ class Room {
 			modchat: this.modchat,
 			modjoin: this.modjoin,
 			auth: (this.auth || {}),
-			
+
 			// games
 			uno: (!this.unoDisabled),
 			tournaments: (this.toursEnabled === '%' ? '%' : this.toursEnabled ? '@' : '#'),
-			hangman: (!this.hangmanDisabled)
+			hangman: (!this.hangmanDisabled),
 		};
-		
+
 		return `|metadata|${JSON.stringify(settings)}\n`;
 	}
 }
