@@ -6595,7 +6595,7 @@ exports.BattleLearnsets = {
 		mist: ["7L20"],
 		moonblast: ["7E"],
 		payback: ["7M", "7L18"],
-		powdersnow: ["7L1"],
+		powdersnow: ["7L1", "7S1"],
 		powerswap: ["7E"],
 		protect: ["7M"],
 		psychup: ["7M"],
