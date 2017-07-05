@@ -72,17 +72,20 @@ const PM = exports.PM = new ModlogManager({
 	isChatBased: true,
 });
 
-if (!process.send) {
-	PM.spawn();
-}
-
 if (process.send && module === process.mainModule) {
 	global.Config = require('../config/config');
+	process.on('uncaughtException', err => {
+		if (Config.crashguard) {
+			require('../crashlogger')(err, 'A modlog child process');
+		}
+	});
 	global.Dex = require('../sim/dex');
 	global.toId = Dex.getId;
 	process.on('message', message => PM.onMessageDownstream(message));
 	process.on('disconnect', () => process.exit());
 	require('../repl').start('modlog', cmd => eval(cmd));
+} else {
+	PM.spawn();
 }
 
 class SortedLimitedLengthList {
