@@ -261,6 +261,7 @@ class ScavengerHunt extends Rooms.RoomGame {
 	}
 
 	onEditQuestion(number, question_answer, ...value) {
+		if (question_answer === 'question') question_answer = 'hint';
 		if (!['hint', 'answer'].includes(question_answer)) return false;
 
 		value = question_answer === 'answer' ? value.map(p => p.trim()) : value.join(", ");
@@ -332,6 +333,18 @@ class ScavengerHunt extends Rooms.RoomGame {
 		return true;
 	}
 
+	onViewHunt(user) {
+		let qLimit = 0;
+		if (this.hosts.some(h => h.userid === user.userid) || user.userid === this.staffHostId)	{
+			qLimit = this.questions.length;
+		} else if (user.userid in this.players) {
+			let player = this.players[user.userid];
+			qLimit = player.currentQuestion;
+		}
+
+		user.sendTo(this.room, `|raw|<div class="ladder"><table style="width: 100%"><tr><th style="width: 10%;">#</th><th>Hint</th><th>Answer</th></tr>${(qLimit ? this.questions.slice(0, qLimit).map((q, i) => `<tr><td>${(i + 1)}</td><td>${Chat.parseText(q.hint)}</td><td>${Chat.escapeHTML(q.answer.join(' / '))}</td></tr>`).join("") : '<tr><td colspan="3">You have not completed any of the questions yet!</td></tr>')}</table><div>`);
+	}
+
 	onComplete(player) {
 		if (player.completed) return false;
 
@@ -374,7 +387,7 @@ class ScavengerHunt extends Rooms.RoomGame {
 			this.announce(
 				`The ${this.gameType ? `${this.gameType} ` : ""}scavenger hunt was ended ${(endedBy ? "by " + Chat.escapeHTML(endedBy.name) : "automatically")}.<br />` +
 				`${this.completed.slice(0, sliceIndex).map((p, i) => `${formatOrder(i + 1)} place: <em>${Chat.escapeHTML(p.name)}</em>.<br />`).join("")}${this.completed.length > sliceIndex ? `Consolation Prize: ${this.completed.slice(sliceIndex).map(e => Chat.escapeHTML(e.name)).join(', ')}<br />` : ''}<br />` +
-				`<details style="cursor: pointer;"><summary>Solution: </summary><br />${this.questions.map((q, i) => `${i + 1}) ${Chat.escapeHTML(q.hint)} <span style="color: lightgreen">[<em>${Chat.escapeHTML(q.answer.join(' / '))}</em>]</span>`).join("<br />")}</details>`
+				`<details style="cursor: pointer;"><summary>Solution: </summary><br />${this.questions.map((q, i) => `${i + 1}) ${Chat.parseText(q.hint)} <span style="color: lightgreen">[<em>${Chat.escapeHTML(q.answer.join(' / '))}</em>]</span>`).join("<br />")}</details>`
 			);
 
 			if (this.parentGame) this.parentGame.onEndEvent();
@@ -807,9 +820,8 @@ let commands = {
 		if (!room.game || !room.game.scavGame) return this.errorReply(`There is no scavenger game currently running.`);
 
 		let game = room.game.childGame || room.game;
-		if (!game.hosts.some(h => h.userid === user.userid) && game.staffHostId !== user.userid && !game.hasFinished(user)) return this.errorReply("You cannot view the hints and answers if you are not the host, or if you have not finished the hunt yet.");
 
-		this.sendReply(`|raw|<div class="ladder"><table style="width: 100%"><tr><th>Hint</th><th>Answer</th></tr>${game.questions.map(q => `<tr><td>${Chat.parseText(q.hint)}</td><td>${Chat.escapeHTML(q.answer.join(' / '))}</td></tr>`).join("")}</table><div>`);
+		game.onViewHunt(user);
 	},
 
 	edithunt: function (target, room, user) {
