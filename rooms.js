@@ -268,7 +268,6 @@ class Room {
 			privacy: (this.isPrivate === true ? 'secret' : this.isPrivate === 'hidden' ? 'hidden' : 'public'),
 			modchat: this.modchat,
 			modjoin: this.modjoin,
-			auth: (this.auth || {}),
 
 			// games
 			uno: (!this.unoDisabled),
