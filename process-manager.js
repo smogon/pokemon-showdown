@@ -39,6 +39,8 @@ class ProcessWrapper extends EventEmitter {
 
 	release() {
 		if (this.load || this.active) return;
+		this.PM = null;
+		this.removeAllListeners('message');
 		this.process.disconnect();
 	}
 
