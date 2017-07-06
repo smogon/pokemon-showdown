@@ -430,6 +430,8 @@ class GlobalRoom {
 			if (format.searchShow) displayCode |= 2;
 			if (format.challengeShow) displayCode |= 4;
 			if (format.tournamentShow) displayCode |= 8;
+			const level = format.maxLevel || format.maxForcedLevel || format.forcedLevel;
+			if (level === 50) displayCode |= 16;
 			this.formatList += ',' + displayCode.toString(16);
 		}
 		return this.formatList;
