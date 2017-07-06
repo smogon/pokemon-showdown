@@ -3030,7 +3030,6 @@ exports.BattleScripts = {
 			hasMove[toId(template.requiredMove)] = true;
 			changedMove = true;
 		}
-
 		// Re-query in case a moveset modification occurred
 		if (changedMove) counter = this.queryMoves(moves, hasType, hasAbility);
 
@@ -3189,7 +3188,7 @@ exports.BattleScripts = {
 			item = 'Focus Sash';
 		} else if (template.species === 'Unown') {
 			item = 'Choice Specs';
-		} else if (hasMove['trick'] || hasMove['switcheroo']) {
+		} else if (hasMove['trick'] || hasMove['switcheroo'] && !hasMove['roost'] && !hasMove['recover']) {
 			let randomNum = this.random(2);
 			if (counter.Physical >= 3 && (template.baseStats.spe >= 95 || randomNum)) {
 				item = 'Choice Band';
@@ -3288,7 +3287,7 @@ exports.BattleScripts = {
 			item = 'Chople Berry';
 		} else if (ability === 'Iron Barbs' || ability === 'Rough Skin') {
 			item = 'Rocky Helmet';
-		} else if (counter.Physical + counter.Special >= 4 && ability === 'Regenerator' && template.baseStats[counter.Special >= 2 ? 'atk' : 'spa'] > 99 && template.baseStats.spe <= 80) {
+		} else if (counter.Physical + counter.Special >= 4 && ability === 'Regenerator' && template.baseStats[counter.Special >= 2 ? 'atk' : 'spa'] > 99 && template.baseStats.spe <= 80 && !hasMove['wideguard']) {
 			item = 'Assault Vest';
 		} else if ((template.baseStats.hp + 75) * (template.baseStats.def + template.baseStats.spd + 175) > 60000 || template.species === 'Skarmory' || template.species === 'Forretress') {
 			// skarmory and forretress get exceptions for their typing
@@ -3297,7 +3296,7 @@ exports.BattleScripts = {
 			item = 'Life Orb';
 		} else if (counter.Special >= 3 && counter.setupType && ability !== 'Sturdy') {
 			item = 'Life Orb';
-		} else if (counter.Physical + counter.Special >= 4 && template.baseStats.def + template.baseStats.spd > 179) {
+		} else if (counter.Physical + counter.Special >= 4 && template.baseStats.def + template.baseStats.spd > 179 && !hasMove['wideguard']) {
 			item = 'Assault Vest';
 		} else if (counter.damagingMoves.length >= 3 && !!counter['speedsetup'] && template.baseStats.hp + template.baseStats.def + template.baseStats.spd >= 300) {
 			item = 'Weakness Policy';
