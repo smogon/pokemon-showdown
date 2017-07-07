@@ -928,7 +928,7 @@ let commands = {
 		points = parseInt(points);
 
 		if (!targetId || targetId === 'constructor' || targetId.length > 18) return this.errorReply("Invalid username.");
-		if (!points || points < 0) return this.errorReply("Points must be an integer greater than 0.");
+		if (!points || points < 0 || points === Infinity) return this.errorReply("Points must be a non-Infinity integer greater than 0.");
 
 		Leaderboard.addPoints(targetId, 'points', points, true).write();
 
@@ -944,7 +944,7 @@ let commands = {
 		points = parseInt(points);
 
 		if (!targetId || targetId === 'constructor' || targetId.length > 18) return this.errorReply("Invalid username.");
-		if (!points || points < 0) return this.errorReply("Points must be an integer greater than 0.");
+		if (!points || points < 0 || points === Infinity) return this.errorReply("Points must be a non-Infinity integer greater than 0.");
 
 		Leaderboard.addPoints(targetId, 'points', -points, true).write();
 
@@ -999,7 +999,7 @@ let commands = {
 		if (!this.can('declare', null, room)) return false; // perms for editing
 
 		let blitzPoints = parseInt(target);
-		if (isNaN(blitzPoints) || blitzPoints < 0) return this.errorReply("The points value awarded for blitz must be an integer greater than or equal to zero.");
+		if (isNaN(blitzPoints) || blitzPoints < 0 || blitzPoints === Infinity) return this.errorReply("The points value awarded for blitz must be a non-Infinity integer greater than or equal to zero.");
 
 		room.blitzPoints = blitzPoints;
 
@@ -1019,7 +1019,7 @@ let commands = {
 
 		let winPoints = target.split(',').map(p => parseInt(p));
 
-		if (winPoints.some(p => isNaN(p) || p < 0) || !winPoints.length) return this.errorReply("The points value awarded for winning a scavenger hunt must be an integer greater than or equal to zero.");
+		if (winPoints.some(p => isNaN(p) || p < 0 || p === Infinity) || !winPoints.length) return this.errorReply("The points value awarded for winning a scavenger hunt must be a non-Infinity integer greater than or equal to zero.");
 
 		room.winPoints = winPoints;
 
