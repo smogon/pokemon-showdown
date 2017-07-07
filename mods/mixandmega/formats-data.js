@@ -33,6 +33,10 @@ exports.BattleFormatsData = {
 		inherit: true,
 		tier: "OU",
 	},
+	marshadow: {
+		inherit: true,
+		tier: "OU",
+	},
 	regigigas: {
 		inherit: true,
 		tier: "Uber",
