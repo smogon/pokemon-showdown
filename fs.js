@@ -119,7 +119,7 @@ class Path {
 	 * @param {string} target
 	 */
 	symlinkToSync(target) {
-		if (Config.nofswriting);
+		if (Config.nofswriting) return;
 		return fs.symlinkSync(target, this.path);
 	}
 	/**
