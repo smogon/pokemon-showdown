@@ -639,6 +639,7 @@ exports.BattleAliases = {
 	"se": "Stone Edge",
 	"spin": "Rapid Spin",
 	"sr": "Stealth Rock",
+	"st": "Spectral Thief",
 	"sub": "Substitute",
 	"tr": "Trick Room",
 	"troom": "Trick Room",
