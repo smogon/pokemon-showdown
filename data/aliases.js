@@ -520,7 +520,7 @@ exports.BattleAliases = {
 	"hera": "Heracross",
 	"hippo": "Hippowdon",
 	"honch": "Honchkrow",
-	"kanga": "Kangakhan",
+	"kanga": "Kangaskhan",
 	"karp": "Magikarp",
 	"keld": "Keldeo",
 	"klef": "Klefki",
