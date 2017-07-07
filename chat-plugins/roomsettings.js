@@ -408,9 +408,9 @@ exports.commands = {
 	},
 	capsfilterhelp: ["/capsfilter [on/off] - Toggles filtering messages in the room for EXCESSIVE CAPS. Requires # & ~"],
 
-    emojis: 'emojifilter',
-    emoji: 'emojifilter',
-    emojifilter : function (target, room, user) {
+	emojis: 'emojifilter',
+	emoji: 'emojifilter',
+	emojifilter : function (target, room, user) {
 		if (!target) {
 			const emojiSetting = (room.filterEmojis ? "ON" : "OFF");
 			return this.sendReply(`This room's emoji filter is currently: ${emojiSetting}`);
@@ -434,9 +434,9 @@ exports.commands = {
 			room.chatRoomData.filterEmojis = room.filterEmojis;
 			Rooms.global.writeChatRoomData();
 		}
-    },
+	},
 
-    emojifilterhelp: ["/emojifilter [on/off] - Toggles filtering messages in the room for emojis. Requires # & ~"],
+	emojifilterhelp: ["/emojifilter [on/off] - Toggles filtering messages in the room for emojis. Requires # & ~"],
 
 	banwords: 'banword',
 	banword: {

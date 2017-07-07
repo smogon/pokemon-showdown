@@ -397,9 +397,9 @@ class CommandContext {
 		if (room.filterCaps && user.name.match(/[A-Z\s]{6,}/)) {
 			return this.errorReply(`Your username contains too many capital letters, which this room doesn't allow.`);
 		}
-        if (room.filterEmojis && emojiRegex.exec(user.name)) {
+		if (room.filterEmojis && emojiRegex.exec(user.name)) {
 			return this.errorReply(`Your username contains emojis, which this room doesn't allow.`);
-        }
+		}
 		// Removes extra spaces and null characters
 		message = message.trim().replace(/[ \u0000\u200B-\u200F]+/g, ' ');
 
@@ -409,7 +409,7 @@ class CommandContext {
 		if (room.filterCaps && message.match(/[A-Z\s]{18,}/)) {
 			return this.errorReply(`Your message contains too many capital letters, which this room doesn't allow.`);
 		}
-		if (room.filterEmojis && emojiRegex.exec(message)){
+		if (room.filterEmojis && emojiRegex.exec(message)) {
 			return this.errorReply(`Your message contains emojis, which this room doesn't allow.`);
 		}
 
