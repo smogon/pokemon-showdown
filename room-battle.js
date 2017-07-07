@@ -105,6 +105,9 @@ class BattlePlayer {
 	simSend(action, ...rest) {
 		this.game.send(action, this.slot, ...rest);
 	}
+	sendError(error) {
+		this.sendRoom(Chat.html`|html|<div class="message-error">${error}</div>`);
+	}
 }
 
 class BattleTimer {
@@ -309,6 +312,10 @@ class Battle {
 		this.p1 = null;
 		this.p2 = null;
 
+		this.tieRequests = [];
+		this.tieRequest = '';
+		this.lastTieRequest = '';
+
 		this.playerNames = ["Player 1", "Player 2"];
 		/** {playerid: [rqid, request, isWait, choice]} */
 		this.requests = {
@@ -375,6 +382,32 @@ class Battle {
 		request[3] = choice;
 
 		this.sendFor(user, 'choose', choice);
+	}
+	requestTie(user, room) {
+		const player = this.players[user];
+		const REQUEST_TIMEOUT_MINUTES = 1;
+		if (!player) return user.sendTo(room, `|error|Only players of this battle can request a tie.`);
+
+		const allowTie = Dex.getFormat(this.format).allowTies; // TODO: Refactor this
+		if (!allowTie) return player.sendError(`This tier does not allow ties.`);
+		if (this.ended) return player.sendError(`This battle has already ended.`);
+		if (this.tieRequest === user.userid || this.lastTieRequest === user.userid) return player.sendError(`You have already requested this battle end in a tie.`);
+
+		setTimeout(() => {
+			this.tieRequest = '';
+			if (!this.ended) room.add(`|tierequestend|The tie request has expired.`).update();
+		}, REQUEST_TIMEOUT_MINUTES * 60000);
+
+		if (this.tieRequest && this.tieRequest !== user.userid) {
+			// two (or more) players have agreed to tie
+			return this.tie();
+		}
+
+		this.tieRequest = user.userid;
+		this.lastTieRequest = user.userid;
+
+		room.add(`|tierequest|${REQUEST_TIMEOUT_MINUTES * 60}|${user.userid}`).update();
+		return room.add(Chat.html`${user.getIdentity(room)} has requested to tie. This request will automatically expire in ${REQUEST_TIMEOUT_MINUTES} minute${Chat.plural(REQUEST_TIMEOUT_MINUTES)}.`);
 	}
 	undo(user, data) {
 		const player = this.players[user];
