@@ -789,6 +789,7 @@ class BattleRoom extends Room {
 		this.modjoin = false;
 		this.slowchat = false;
 		this.filterStretching = false;
+		this.filterEmojis = false;
 		this.filterCaps = false;
 		this.reportJoins = Config.reportbattlejoins;
 
@@ -1121,6 +1122,7 @@ class ChatRoom extends Room {
 		if (!this.modchat) this.modchat = (Config.chatmodchat || false);
 		if (!this.modjoin) this.modjoin = false;
 		if (!this.filterStretching) this.filterStretching = false;
+		if (!this.filterEmojis) this.filterEmojis = false;
 		if (!this.filterCaps) this.filterCaps = false;
 
 		this.type = 'chat';

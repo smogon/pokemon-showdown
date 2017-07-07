@@ -37,6 +37,13 @@ const BROADCAST_TOKEN = '!';
 
 const FS = require('./fs');
 
+const emojiRegexImport = require('emoji-regex');
+// Note: because the regular expression has the global flag set, this module
+// exports a function that returns the regex rather than exporting the regular
+// expression itself, to make it impossible to (accidentally) mutate the
+// original regular expression.
+
+
 let Chat = module.exports;
 
 // Regex copied from the client
@@ -74,6 +81,7 @@ const linkRegex = new RegExp(
 	'ig'
 );
 const hyperlinkRegex = new RegExp(`(.+)&lt;(.+)&gt;`, 'i');
+const emojiRegex = emojiRegexImport();
 
 const formattingResolvers = [
 	{token: "**", resolver: str => `<b>${str}</b>`},
@@ -380,7 +388,7 @@ class CommandContext {
 
 	checkFormat(room, user, message) {
 		if (!room) return true;
-		if (!room.filterStretching && !room.filterCaps) return true;
+		if (!room.filterStretching && !room.filterCaps && !room.filterEmojis) return true;
 		if (user.can('bypassall')) return true;
 
 		if (room.filterStretching && user.name.match(/(.+?)\1{5,}/i)) {
@@ -389,6 +397,9 @@ class CommandContext {
 		if (room.filterCaps && user.name.match(/[A-Z\s]{6,}/)) {
 			return this.errorReply(`Your username contains too many capital letters, which this room doesn't allow.`);
 		}
+        if (room.filterEmojis && emojiRegex.exec(user.name)) {
+			return this.errorReply(`Your username contains emojis, which this room doesn't allow.`);
+        }
 		// Removes extra spaces and null characters
 		message = message.trim().replace(/[ \u0000\u200B-\u200F]+/g, ' ');
 
@@ -397,6 +408,9 @@ class CommandContext {
 		}
 		if (room.filterCaps && message.match(/[A-Z\s]{18,}/)) {
 			return this.errorReply(`Your message contains too many capital letters, which this room doesn't allow.`);
+		}
+		if (room.filterEmojis && emojiRegex.exec(message)){
+			return this.errorReply(`Your message contains emojis, which this room doesn't allow.`);
 		}
 
 		return true;
