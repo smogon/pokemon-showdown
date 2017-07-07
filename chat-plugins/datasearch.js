@@ -249,6 +249,7 @@ exports.commands = {
 
 	'!itemsearch': true,
 	isearch: 'itemsearch',
+	is: 'itemsearch',
 	itemsearch: function (target, room, user, connection, cmd, message) {
 		if (!this.canBroadcast()) return;
 		if (!target) return this.parse('/help itemsearch');
