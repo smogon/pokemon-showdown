@@ -4,7 +4,6 @@
   "description": "The server for the Pokémon Showdown battle simulator",
   "version": "0.11.1",
   "dependencies": {
-    "emoji-regex": "^6.4.3",
     "sockjs": "0.3.18"
   },
   "optionalDependencies": {
