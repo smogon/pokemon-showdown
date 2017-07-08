@@ -435,7 +435,6 @@ exports.commands = {
 			Rooms.global.writeChatRoomData();
 		}
 	},
-
 	emojifilterhelp: ["/emojifilter [on/off] - Toggles filtering messages in the room for emojis. Requires # & ~"],
 
 	banwords: 'banword',
