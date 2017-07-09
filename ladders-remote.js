@@ -75,7 +75,7 @@ class Ladder {
 			if (!data) {
 				room.add(`||Ladder (probably) updated, but score could not be retrieved (${error.message}).`);
 				// log the battle anyway
-				if (!Tools.getFormat(room.format).noLog) {
+				if (!Dex.getFormat(room.format).noLog) {
 					room.logBattle(p1score);
 				}
 				return;
@@ -113,7 +113,7 @@ class Ladder {
 					room.update();
 				}
 
-				if (!Tools.getFormat(formatid).noLog) {
+				if (!Dex.getFormat(formatid).noLog) {
 					room.logBattle(p1score, p1rating, p2rating);
 				}
 			}

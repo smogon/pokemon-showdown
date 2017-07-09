@@ -18,7 +18,7 @@
 /* eslint no-else-return: "error" */
 
 const crypto = require('crypto');
-const fs = require('fs');
+const FS = require('./fs');
 
 const Matchmaker = require('./ladders-matchmaker').matchmaker;
 
@@ -42,8 +42,8 @@ exports.commands = {
 	authority: function (target, room, user, connection) {
 		if (target) {
 			let targetRoom = Rooms.search(target);
-			let unavailableRoom = targetRoom && targetRoom.checkModjoin(user);
-			if (targetRoom && !unavailableRoom) return this.parse('/roomauth1 ' + target);
+			let availableRoom = targetRoom && targetRoom.checkModjoin(user);
+			if (targetRoom && availableRoom) return this.parse('/roomauth1 ' + target);
 			return this.parse('/userauth ' + target);
 		}
 		let rankLists = {};
@@ -267,7 +267,7 @@ exports.commands = {
 			brock: 154,
 			misty: 155,
 			ltsurge: 156,
-			erica: 157,
+			erika: 157,
 			janine: 158,
 			sabrina: 159,
 			blaine: 160,
@@ -352,7 +352,7 @@ exports.commands = {
 			zinnia: '#zinnia',
 			clemont: '#clemont',
 		};
-		if (avatarid in avatarTable) {
+		if (avatarTable.hasOwnProperty(avatarid)) {
 			avatar = avatarTable[avatarid];
 		} else {
 			avatar = parseInt(avatarid);
@@ -895,7 +895,7 @@ exports.commands = {
 		if (!target) return;
 		if (!/</.test(target)) {
 			// not HTML, do some simple URL linking
-			let re = /(https?:\/\/(([-\w\.]+)+(:\d+)?(\/([\w/_\.]*(\?\S+)?)?)?))/g;
+			let re = /(https?:\/\/(([\w.-]+)+(:\d+)?(\/([\w/_.]*(\?\S+)?)?)?))/g;
 			target = target.replace(re, '<a href="$1">$1</a>');
 		}
 		if (target.substr(0, 11) === '/roomintro ') target = target.substr(11);
@@ -950,7 +950,7 @@ exports.commands = {
 		if (!target) return;
 		if (!/</.test(target)) {
 			// not HTML, do some simple URL linking
-			let re = /(https?:\/\/(([-\w\.]+)+(:\d+)?(\/([\w/_\.]*(\?\S+)?)?)?))/g;
+			let re = /(https?:\/\/(([\w.-]+)+(:\d+)?(\/([\w/_.]*(\?\S+)?)?)?))/g;
 			target = target.replace(re, '<a href="$1">$1</a>');
 		}
 		if (target.substr(0, 12) === '/staffintro ') target = target.substr(12);
@@ -1285,11 +1285,12 @@ exports.commands = {
 		const reason = (target ? ` (${target})` : ``);
 		this.addModCommand(`${name} was banned from ${room.title} by ${user.name}.${reason}`, ` (${targetUser.latestIp})`);
 
+		let affected = Punishments.roomBan(room, targetUser, null, null, target);
+
 		if (!room.isPrivate && room.chatRoomData) {
-			let alts = targetUser.getAlts();
 			let acAccount = (targetUser.autoconfirmed !== userid && targetUser.autoconfirmed);
-			if (alts.length) {
-				this.privateModCommand("(" + name + "'s " + (acAccount ? " ac account: " + acAccount + ", " : "") + "banned alts: " + alts.join(", ") + ")");
+			if (affected.length > 1) {
+				this.privateModCommand("(" + name + "'s " + (acAccount ? " ac account: " + acAccount + ", " : "") + "banned alts: " + affected.slice(1).map(user => user.getLastName()).join(", ") + ")");
 			} else if (acAccount) {
 				this.privateModCommand("(" + name + "'s ac account: " + acAccount + ")");
 			}
@@ -1300,7 +1301,6 @@ exports.commands = {
 		if (!room.isPrivate && room.chatRoomData) {
 			this.globalModlog("ROOMBAN", targetUser, " by " + user.name + (target ? ": " + target : ""));
 		}
-		Punishments.roomBan(room, targetUser, null, null, target);
 		return true;
 	},
 	banhelp: ["/roomban [username], [reason] - Bans the user from the room you are in. Requires: @ # & ~"],
@@ -1525,32 +1525,47 @@ exports.commands = {
 			}
 		});
 
-		targetUser.popup("|modal|" + user.name + " has locked you from talking in chats, battles, and PMing regular users." + (target ? "\n\nReason: " + target : "") + "\n\nIf you feel that your lock was unjustified, you can still PM staff members (%, @, &, and ~) to discuss it" + (Config.appealurl ? " or you can appeal:\n" + Config.appealurl : ".") + "\n\nYour lock will expire in a few days.");
+		let proof = '';
+		let userReason = target;
+		let targetLowercase = target.toLowerCase();
+		if (target && (targetLowercase.includes('spoiler:') || targetLowercase.includes('spoilers:'))) {
+			let proofIndex = (targetLowercase.includes('spoilers:') ? targetLowercase.indexOf('spoilers:') : targetLowercase.indexOf('spoiler:'));
+			let bump = (targetLowercase.includes('spoilers:') ? 9 : 8);
+			proof = `(PROOF: ${target.substr(proofIndex + bump, target.length).trim()}) `;
+			userReason = target.substr(0, proofIndex).trim();
+		}
 
-		let lockMessage = "" + name + " was locked from talking by " + user.name + "." + (target ? " (" + target + ")" : "");
+		targetUser.popup("|modal|" + user.name + " has locked you from talking in chats, battles, and PMing regular users." + (userReason ? "\n\nReason: " + userReason : "") + "\n\nIf you feel that your lock was unjustified, you can still PM staff members (%, @, &, and ~) to discuss it" + (Config.appealurl ? " or you can appeal:\n" + Config.appealurl : ".") + "\n\nYour lock will expire in a few days.");
 
-		this.addModCommand(lockMessage, " (" + targetUser.latestIp + ")");
+		let lockMessage = "" + name + " was locked from talking by " + user.name + "." + (userReason ? " (" + userReason + ")" : "");
+
+
+		this.addModCommand(lockMessage, ` ${proof}(${targetUser.latestIp})`);
 
 		// Notify staff room when a user is locked outside of it.
 		if (room.id !== 'staff' && Rooms('staff')) {
 			Rooms('staff').addLogMessage(user, "<<" + room.id + ">> " + lockMessage);
 		}
 
-		let alts = targetUser.getAlts();
+		let affected = Punishments.lock(targetUser, null, null, userReason);
+
 		let acAccount = (targetUser.autoconfirmed !== userid && targetUser.autoconfirmed);
-		if (alts.length) {
-			this.privateModCommand("(" + name + "'s " + (acAccount ? " ac account: " + acAccount + ", " : "") + "locked alts: " + alts.join(", ") + ")");
+		if (affected.length > 1) {
+			this.privateModCommand("(" + name + "'s " + (acAccount ? " ac account: " + acAccount + ", " : "") + "locked alts: " + affected.slice(1).map(user => user.getLastName()).join(", ") + ")");
 		} else if (acAccount) {
 			this.privateModCommand("(" + name + "'s ac account: " + acAccount + ")");
 		}
 		this.add('|unlink|hide|' + userid);
 		if (userid !== toId(this.inputUsername)) this.add('|unlink|hide|' + toId(this.inputUsername));
 
-		this.globalModlog("LOCK", targetUser, " by " + user.name + (target ? ": " + target : ""));
-		Punishments.lock(targetUser, null, null, target);
+		const globalReason = (target ? `: ${userReason} ${proof}` : ``);
+		this.globalModlog("LOCK", targetUser, ` by ${user.name}${globalReason}`);
 		return true;
 	},
-	lockhelp: ["/lock OR /l [username], [reason] - Locks the user from talking in all chats. Requires: % @ * & ~"],
+	lockhelp: [
+		"/lock OR /l [username], [reason] - Locks the user from talking in all chats. Requires: % @ * & ~",
+		"/lock OR /l [username], [reason] spoiler: [proof] - Marks proof in modlog only.",
+	],
 
 	wl: 'weeklock',
 	weeklock: function (target, room, user, connection, cmd) {
@@ -1592,31 +1607,44 @@ exports.commands = {
 			}
 		});
 
-		targetUser.popup("|modal|" + user.name + " has locked you from talking in chats, battles, and PMing regular users for a week." + (target ? "\n\nReason: " + target : "") + "\n\nIf you feel that your lock was unjustified, you can still PM staff members (%, @, &, and ~) to discuss it" + (Config.appealurl ? " or you can appeal:\n" + Config.appealurl : ".") + "\n\nYour lock will expire in a few days.");
+		let proof = '';
+		let userReason = target;
+		let targetLowercase = target.toLowerCase();
+		if (target && (targetLowercase.includes('spoiler:') || targetLowercase.includes('spoilers:'))) {
+			let proofIndex = (targetLowercase.includes('spoilers:') ? targetLowercase.indexOf('spoilers:') : targetLowercase.indexOf('spoiler:'));
+			let bump = (targetLowercase.includes('spoilers:') ? 9 : 8);
+			proof = `(PROOF: ${target.substr(proofIndex + bump, target.length).trim()}) `;
+			userReason = target.substr(0, proofIndex).trim();
+		}
 
-		let lockMessage = "" + name + " was locked from talking for a week by " + user.name + "." + (target ? " (" + target + ")" : "");
-		this.addModCommand(lockMessage, " (" + targetUser.latestIp + ")");
+		targetUser.popup("|modal|" + user.name + " has locked you from talking in chats, battles, and PMing regular users for a week." + (userReason ? "\n\nReason: " + userReason : "") + "\n\nIf you feel that your lock was unjustified, you can still PM staff members (%, @, &, and ~) to discuss it" + (Config.appealurl ? " or you can appeal:\n" + Config.appealurl : ".") + "\n\nYour lock will expire in a few days.");
+
+		let lockMessage = "" + name + " was locked from talking for a week by " + user.name + "." + (userReason ? " (" + userReason + ")" : "");
+		this.addModCommand(lockMessage, ` ${proof}(${targetUser.latestIp})`);
 
 		// Notify staff room when a user is locked outside of it.
 		if (room.id !== 'staff' && Rooms('staff')) {
 			Rooms('staff').addLogMessage(user, "<<" + room.id + ">> " + lockMessage);
 		}
 
-		let alts = targetUser.getAlts();
+		let affected = Punishments.lock(targetUser, Date.now() + 7 * 24 * 60 * 60 * 1000, null, userReason);
 		let acAccount = (targetUser.autoconfirmed !== userid && targetUser.autoconfirmed);
-		if (alts.length) {
-			this.privateModCommand("(" + name + "'s " + (acAccount ? " ac account: " + acAccount + ", " : "") + "locked alts: " + alts.join(", ") + ")");
+		if (affected.length > 1) {
+			this.privateModCommand("(" + name + "'s " + (acAccount ? " ac account: " + acAccount + ", " : "") + "locked alts: " + affected.slice(1).map(user => user.getLastName()).join(", ") + ")");
 		} else if (acAccount) {
 			this.privateModCommand("(" + name + "'s ac account: " + acAccount + ")");
 		}
 		this.add('|unlink|hide|' + userid);
 		if (userid !== toId(this.inputUsername)) this.add('|unlink|hide|' + toId(this.inputUsername));
 
-		this.globalModlog("WEEKLOCK", targetUser, " by " + user.name + (target ? ": " + target : ""));
-		Punishments.lock(targetUser, Date.now() + 7 * 24 * 60 * 60 * 1000, null, target);
+		const globalReason = (target ? `: ${userReason} ${proof}` : ``);
+		this.globalModlog("WEEKLOCK", targetUser, ` by ${user.name}${globalReason}`);
 		return true;
 	},
-	weeklockhelp: ["/weeklock OR /wl [username], [reason] - Locks the user from talking in all chats for one week. Requires: % @ * & ~"],
+	weeklockhelp: [
+		"/weeklock OR /wl [username], [reason] - Locks the user from talking in all chats for one week. Requires: % @ * & ~",
+		"/weeklock OR /wl [username], [reason] spoiler: [proof] - Marks proof in modlog only.",
+	],
 
 	unlock: function (target, room, user) {
 		if (!target) return this.parse('/help unlock');
@@ -1634,8 +1662,13 @@ exports.commands = {
 		let unlocked = Punishments.unlock(target);
 
 		if (unlocked) {
-			this.addModCommand(unlocked.join(", ") + " " + ((unlocked.length > 1) ? "were" : "was") +
-				" unlocked by " + user.name + "." + reason);
+			const unlockMessage = unlocked.join(", ") + " " + ((unlocked.length > 1) ? "were" : "was") +
+				" unlocked by " + user.name + "." + reason;
+			this.addModCommand(unlockMessage);
+			// Notify staff room when a user is unlocked outside of it.
+			if (!reason && room.id !== 'staff' && Rooms('staff')) {
+				Rooms('staff').addLogMessage(user, "<<" + room.id + ">> " + unlockMessage);
+			}
 			if (!reason) this.globalModlog("UNLOCK", target, " by " + user.name);
 			if (targetUser) targetUser.popup("" + user.name + " has unlocked you.");
 		} else {
@@ -1683,25 +1716,35 @@ exports.commands = {
 			}
 		});
 
-		targetUser.popup("|modal|" + user.name + " has globally banned you." + (target ? "\n\nReason: " + target : "") + (Config.appealurl ? "\n\nIf you feel that your ban was unjustified, you can appeal:\n" + Config.appealurl : "") + "\n\nYour ban will expire in a few days.");
+		let proof = '';
+		let userReason = target;
+		let targetLowercase = target.toLowerCase();
+		if (target && (targetLowercase.includes('spoiler:') || targetLowercase.includes('spoilers:'))) {
+			let proofIndex = (targetLowercase.includes('spoilers:') ? targetLowercase.indexOf('spoilers:') : targetLowercase.indexOf('spoiler:'));
+			let bump = (targetLowercase.includes('spoilers:') ? 9 : 8);
+			proof = `(PROOF: ${target.substr(proofIndex + bump, target.length).trim()}) `;
+			userReason = target.substr(0, proofIndex).trim();
+		}
 
-		let banMessage = "" + name + " was globally banned by " + user.name + "." + (target ? " (" + target + ")" : "");
-		this.addModCommand(banMessage, " (" + targetUser.latestIp + ")");
+		targetUser.popup("|modal|" + user.name + " has globally banned you." + (userReason ? "\n\nReason: " + userReason : "") + (Config.appealurl ? "\n\nIf you feel that your ban was unjustified, you can appeal:\n" + Config.appealurl : "") + "\n\nYour ban will expire in a few days.");
+
+		let banMessage = "" + name + " was globally banned by " + user.name + "." + (userReason ? " (" + userReason + ")" : "");
+		this.addModCommand(banMessage, ` ${proof}(${targetUser.latestIp})`);
 
 		// Notify staff room when a user is banned outside of it.
 		if (room.id !== 'staff' && Rooms('staff')) {
 			Rooms('staff').addLogMessage(user, "<<" + room.id + ">> " + banMessage);
 		}
 
-		let alts = targetUser.getAlts();
+		let affected = Punishments.ban(targetUser, null, null, userReason);
 		let acAccount = (targetUser.autoconfirmed !== userid && targetUser.autoconfirmed);
-		if (alts.length) {
-			let guests = alts.length;
-			alts = alts.filter(alt => alt.substr(0, 7) !== '[Guest ');
-			guests -= alts.length;
-			this.privateModCommand("(" + name + "'s " + (acAccount ? " ac account: " + acAccount + ", " : "") + "banned alts: " + alts.join(", ") + (guests ? " [" + guests + " guests]" : "") + ")");
-			for (let i = 0; i < alts.length; ++i) {
-				this.add('|unlink|' + toId(alts[i]));
+		if (affected.length > 1) {
+			let guests = affected.length - 1;
+			affected = affected.slice(1).map(user => user.getLastName()).filter(alt => alt.substr(0, 7) !== '[Guest ');
+			guests -= affected.length;
+			this.privateModCommand("(" + name + "'s " + (acAccount ? " ac account: " + acAccount + ", " : "") + "banned alts: " + affected.join(", ") + (guests ? " [" + guests + " guests]" : "") + ")");
+			for (let i = 0; i < affected.length; ++i) {
+				this.add('|unlink|' + toId(affected[i]));
 			}
 		} else if (acAccount) {
 			this.privateModCommand("(" + name + "'s ac account: " + acAccount + ")");
@@ -1709,24 +1752,34 @@ exports.commands = {
 
 		this.add('|unlink|hide|' + userid);
 		if (userid !== toId(this.inputUsername)) this.add('|unlink|hide|' + toId(this.inputUsername));
-		Punishments.ban(targetUser, null, null, target);
-		this.globalModlog("BAN", targetUser, " by " + user.name + (target ? ": " + target : ""));
+
+		const globalReason = (target ? `: ${userReason} ${proof}` : ``);
+		this.globalModlog("BAN", targetUser, ` by ${user.name}${globalReason}`);
 		return true;
 	},
-	globalbanhelp: ["/globalban OR /gban [username], [reason] - Kick user from all rooms and ban user's IP address with reason. Requires: @ * & ~"],
+	globalbanhelp: [
+		"/globalban OR /gban [username], [reason] - Kick user from all rooms and ban user's IP address with reason. Requires: @ * & ~",
+		"/globalban OR /gban [username], [reason] spoiler: [proof] - Marks proof in modlog only.",
+	],
 
 	globalunban: 'unglobalban',
 	unglobalban: function (target, room, user) {
-		if (!target) return this.parse('/help unglobalban');
+		if (!target) return this.parse(`/help unglobalban`);
 		if (!this.can('ban')) return false;
 
 		let name = Punishments.unban(target);
 
+		let unbanMessage = `${name} was globally unbanned by ${user.name}.`;
+
 		if (name) {
-			this.addModCommand("" + name + " was globally unbanned by " + user.name + ".");
-			this.globalModlog("UNBAN", name, " by " + user.name);
+			this.addModCommand(unbanMessage);
+			// Notify staff room when a user is unbanned outside of it.
+			if (room.id !== 'staff' && Rooms('staff')) {
+				Rooms('staff').addLogMessage(user, `<<${room.id}>> ${unbanMessage}`);
+			}
+			this.globalModlog("UNBAN", name, ` by ${user.name}`);
 		} else {
-			this.errorReply("User '" + target + "' is not globally banned.");
+			this.errorReply(`User '${target}' is not globally banned.`);
 		}
 	},
 	unglobalbanhelp: ["/unglobalban [username] - Unban a user. Requires: @ * & ~"],
@@ -1890,6 +1943,7 @@ exports.commands = {
 			let groupid = Config.groups[nextGroup].id;
 			if (!groupid && nextGroup === Config.groupsranking[0]) groupid = 'deauth';
 			if (Config.groups[nextGroup].globalonly) return this.errorReply(`Did you mean "/global${groupid}"?`);
+			if (Config.groups[nextGroup].roomonly) return this.errorReply(`Did you mean "/room${groupid}"?`);
 			return this.errorReply(`Did you mean "/room${groupid}" or "/global${groupid}"?`);
 		}
 		if (Config.groups[nextGroup].roomonly || Config.groups[nextGroup].battleonly) {
@@ -1957,6 +2011,7 @@ exports.commands = {
 		let name = this.targetUsername;
 		let nextGroup = target;
 		if (!Config.groups[nextGroup]) return this.errorReply("Group '" + nextGroup + "' does not exist.");
+		if (Config.groups[nextGroup].roomonly || Config.groups[nextGroup].battleonly) return this.errorReply(`Group '${nextGroup}' does not exist as a global rank.`);
 
 		if (Users.isUsernameKnown(name)) {
 			return this.errorReply("/forcepromote - Don't forcepromote unless you have to.");
@@ -1990,8 +2045,9 @@ exports.commands = {
 		if (!this.can('declare', null, room)) return false;
 		if (!this.canTalk()) return;
 
-		this.add('|raw|<div class="broadcast-blue"><b>' + Chat.escapeHTML(target) + '</b></div>');
-		this.logModCommand(user.name + " declared " + target);
+		this.add(`|notify|${room.title} announcement!|${target}`);
+		this.add(Chat.html`|raw|<div class="broadcast-blue"><b>${target}</b></div>`);
+		this.logModCommand(`${user.name} declared: ${target}`);
 	},
 	declarehelp: ["/declare [message] - Anonymously announces a message. Requires: # * & ~"],
 
@@ -2002,8 +2058,9 @@ exports.commands = {
 		target = this.canHTML(target);
 		if (!target) return;
 
-		this.add('|raw|<div class="broadcast-blue"><b>' + target + '</b></div>');
-		this.logModCommand(user.name + " declared " + target);
+		this.add(`|notify|${room.title} announcement!|${Chat.stripHTML(target)}`);
+		this.add(`|raw|<div class="broadcast-blue"><b>${target}</b></div>`);
+		this.logModCommand(`${user.name} HTML-declared: ${target}`);
 	},
 	htmldeclarehelp: ["/htmldeclare [message] - Anonymously announces a message using safe HTML. Requires: ~"],
 
@@ -2015,9 +2072,12 @@ exports.commands = {
 		if (!target) return;
 
 		Rooms.rooms.forEach((curRoom, id) => {
-			if (id !== 'global') curRoom.addRaw('<div class="broadcast-blue"><b>' + target + '</b></div>').update();
+			if (id !== 'global') curRoom.addRaw(`<div class="broadcast-blue"><b>${target}</b></div>`).update();
 		});
-		this.logModCommand(user.name + " globally declared " + target);
+		Users.users.forEach(u => {
+			if (u.connected) u.send(`|pm|~|${u.group}${u.name}|/raw <div class="broadcast-blue"><b>${target}</b></div>`);
+		});
+		this.logModCommand(`${user.name} globally declared: ${target}`);
 	},
 	globaldeclarehelp: ["/globaldeclare [message] - Anonymously announces a message to every room on the server. Requires: ~"],
 
@@ -2029,9 +2089,9 @@ exports.commands = {
 		if (!target) return;
 
 		Rooms.rooms.forEach((curRoom, id) => {
-			if (id !== 'global' && curRoom.type !== 'battle') curRoom.addRaw('<div class="broadcast-blue"><b>' + target + '</b></div>').update();
+			if (id !== 'global' && curRoom.type !== 'battle') curRoom.addRaw(`<div class="broadcast-blue"><b>${target}</b></div>`).update();
 		});
-		this.logModCommand(user.name + " globally declared (chat level) " + target);
+		this.logModCommand(`${user.name} declared to all chat rooms: ${target}`);
 	},
 	chatdeclarehelp: ["/cdeclare [message] - Anonymously announces a message to all chatrooms on the server. Requires: ~"],
 
@@ -2067,7 +2127,7 @@ exports.commands = {
 		let entry = targetUser.name + " was forced to choose a new name by " + user.name + (reason ? ": " + reason : "");
 		this.privateModCommand("(" + entry + ")");
 		Matchmaker.cancelSearch(targetUser);
-		targetUser.resetName();
+		targetUser.resetName(true);
 		targetUser.send("|nametaken||" + user.name + " considers your name inappropriate" + (reason ? ": " + reason : "."));
 		return true;
 	},
@@ -2187,12 +2247,14 @@ exports.commands = {
 			);
 		}
 
-		this.addModCommand("" + name + " was blacklisted by " + user.name + "." + (target ? " (" + target + ")" : ""), " (" + targetUser.latestIp + ")");
+		this.addModCommand(`${name} was blacklisted from ${room.title} by ${user.name}. ${(target ? ` (${target})` : ``)}`, ` (${targetUser.latestIp})`);
+
+		let affected = Punishments.roomBlacklist(room, targetUser, null, null, target);
+
 		if (!room.isPrivate && room.chatRoomData) {
-			let alts = targetUser.getAlts();
 			let acAccount = (targetUser.autoconfirmed !== userid && targetUser.autoconfirmed);
-			if (alts.length) {
-				this.privateModCommand("(" + name + "'s " + (acAccount ? " ac account: " + acAccount + ", " : "") + "blacklisted alts: " + alts.join(", ") + ")");
+			if (affected.length > 1) {
+				this.privateModCommand("(" + name + "'s " + (acAccount ? " ac account: " + acAccount + ", " : "") + "blacklisted alts: " + affected.slice(1).map(user => user.getLastName()).join(", ") + ")");
 			} else if (acAccount) {
 				this.privateModCommand("(" + name + "'s ac account: " + acAccount + ")");
 			}
@@ -2203,11 +2265,11 @@ exports.commands = {
 		if (!room.isPrivate && room.chatRoomData) {
 			this.globalModlog("BLACKLIST", targetUser, " by " + user.name + (target ? ": " + target : ""));
 		}
-		Punishments.roomBlacklist(room, targetUser, null, null, target);
 		return true;
 	},
 	blacklisthelp: ["/blacklist [username], [reason] - Blacklists the user from the room you are in for a year. Requires: # & ~"],
 
+	nameblacklist: 'blacklistname',
 	blacklistname: function (target, room, user) {
 		if (!target) return this.parse('/help blacklistname');
 		if (!this.canTalk()) return;
@@ -2235,15 +2297,15 @@ exports.commands = {
 			Punishments.roomBlacklist(room, null, null, userid, reason);
 
 			let trusted = Users.isTrusted(userid);
-			if (trusted) {
+			if (trusted && room.isPrivate !== true) {
 				Monitor.log("[CrisisMonitor] Trusted user " + userid + (trusted !== userid ? " (" + trusted + ")" : "") + " was nameblacklisted from " + room.id + " by " + user.name + ", and should probably be demoted.");
 			}
 		}
 
-		this.addModCommand("" + targets.join(', ') + (targets.length > 1 ? " were" : " was") + " nameblacklisted by " + user.name + ".");
+		this.addModCommand(`${targets.join(', ')}${(targets.length > 1 ? " were" : " was")} nameblacklisted from ${room.title} by ${user.name}.`);
 		return true;
 	},
-	blacklistnamehelp: ["/blacklistname [username1, username2, etc.] | reason - Blacklists the given username(s) from the room you are in for a year. Requires: # & ~"],
+	blacklistnamehelp: ["/blacklistname OR /nameblacklist [username1, username2, etc.] | reason - Blacklists the given username(s) from the room you are in for a year. Requires: # & ~"],
 
 	unab: 'unblacklist',
 	unblacklist: function (target, room, user) {
@@ -2283,12 +2345,15 @@ exports.commands = {
 	},
 	unblacklistallhelp: ["/unblacklistall - Unblacklists all blacklisted users in the current room. Requires #, &, ~"],
 
+	expiringbls: 'showblacklist',
+	expiringblacklists: 'showblacklist',
 	blacklists: 'showblacklist',
 	showbl: 'showblacklist',
-	showblacklist: function (target, room, user) {
+	showblacklist: function (target, room, user, connection, cmd) {
 		if (target) room = Rooms.search(target);
 		if (!room) return this.errorReply(`The room "${target}" was not found.`);
 		if (!this.can('mute', null, room)) return false;
+		const SOON_EXPIRING_TIME = 3 * 30 * 24 * 60 * 60 * 1000; // 3 months
 
 		if (!room.chatRoomData) return this.errorReply("This room does not support blacklists.");
 
@@ -2322,10 +2387,12 @@ exports.commands = {
 			}
 		}
 
-		let buf = Chat.html`Blacklist for ${room.title}:<br />`;
+		let soonExpiring = (cmd === 'expiringblacklists' || cmd === 'expiringbls');
+		let buf = Chat.html`Blacklist for ${room.title}${soonExpiring ? ` (expiring within 3 months)` : ``}:<br />`;
 
 		blMap.forEach((data, userid) => {
 			const [expireTime, ...alts] = data;
+			if (soonExpiring && expireTime > Date.now() + SOON_EXPIRING_TIME) return;
 			const expiresIn = new Date(expireTime).getTime() - Date.now();
 			const expiresDays = Math.round(expiresIn / 1000 / 60 / 60 / 24);
 			buf += `- <strong>${userid}</strong>, for ${expiresDays} day${Chat.plural(expiresDays)}`;
@@ -2335,7 +2402,10 @@ exports.commands = {
 
 		this.sendReplyBox(buf);
 	},
-	showblacklishelp: ["/showblacklist OR /showbl - show a list of blacklisted users in the room"],
+	showblacklisthelp: [
+		"/showblacklist OR /showbl - show a list of blacklisted users in the room. Requires: % @ # & ~",
+		"/expiringblacklists OR /expiringbls - show a list of blacklisted users from the room whose blacklists are expiring in 3 months or less. Requires: % @ # & ~",
+	],
 
 	markshared: function (target, room, user) {
 		if (!target) return this.parse('/help markshared');
@@ -2363,149 +2433,6 @@ exports.commands = {
 	},
 	unmarksharedhelp: ["/unmarkshared [ip] - Unmarks a shared IP address. Requires @, &, ~"],
 
-	modlog: function (target, room, user, connection) {
-		let lines = 0;
-		// Specific case for modlog command. Room can be indicated with a comma, lines go after the comma.
-		// Otherwise, the text is defaulted to text search in current room's modlog.
-		let roomId = (room.id === 'staff' ? 'global' : room.id);
-		let hideIps = !user.can('lock');
-		let path = require('path');
-		let isWin = process.platform === 'win32';
-		let logPath = 'logs/modlog/';
-
-		if (target.includes(',')) {
-			let targets = target.split(',');
-			target = targets[1].trim();
-			roomId = toId(targets[0]) || room.id;
-		}
-		let targetRoom = Rooms.search(roomId);
-		// if a room alias was used, replace alias with actual id
-		if (targetRoom) roomId = targetRoom.id;
-		let addModlogLinks = Config.modloglink && (!hideIps || (targetRoom && !targetRoom.isPrivate));
-
-		// Let's check the number of lines to retrieve or if it's a word instead
-		if (!target.match(/[^0-9]/)) {
-			lines = parseInt(target || 20);
-			if (lines > 100) lines = 100;
-		}
-		let wordSearch = (!lines || lines < 0);
-
-		// Control if we really, really want to check all modlogs for a word.
-		let roomNames = '';
-		let filename = '';
-		let command = '';
-		if (roomId === 'all' && wordSearch) {
-			if (!this.can('modlog')) return;
-			roomNames = "all rooms";
-			// Get a list of all the rooms
-			let fileList = fs.readdirSync('logs/modlog');
-			for (let i = 0; i < fileList.length; ++i) {
-				filename += path.normalize(`${__dirname}/${logPath}${fileList[i]}`) + ' ';
-			}
-		} else if (roomId === 'public' && wordSearch) {
-			if (!this.can('modlog')) return;
-			roomNames = "all public rooms";
-			const isPublicRoom = (room => !(room.isPrivate || room.battle || room.isPersonal || room.id === 'global'));
-			const publicRoomIds = Array.from(Rooms.rooms.values()).filter(isPublicRoom).map(room => room.id);
-			for (let i = 0; i < publicRoomIds.length; i++) {
-				filename += path.normalize(`${__dirname}/${logPath}modlog_${publicRoomIds[i]}.txt`) + ' ';
-			}
-		} else if (roomId.startsWith('battle-') || roomId.startsWith('groupchat-')) {
-			return this.errorReply("Battles and groupchats do not have modlogs.");
-		} else {
-			if (!user.can('modlog') && !this.can('modlog', null, targetRoom)) return;
-			roomNames = "the room " + roomId;
-			filename = path.normalize(`${__dirname}/${logPath}modlog_${roomId}.txt`);
-		}
-
-		// Seek for all input rooms for the lines or text
-		if (isWin) {
-			command = `${path.normalize(__dirname + '/lib/winmodlog')} tail ${lines} ${filename}`;
-		} else {
-			command = `tail -${lines} ${filename} | tac`;
-		}
-		let grepLimit = 100;
-		let strictMatch = false;
-		if (wordSearch) { // searching for a word instead
-			let searchString = target;
-			strictMatch = true; // search for a 1:1 match?
-
-			if (searchString.match(/^["'].+["']$/)) {
-				searchString = searchString.substring(1, searchString.length - 1);
-			} else if (searchString.includes('_')) {
-				// do an exact search, the approximate search fails for underscores
-			} else if (isWin) {  // ID search with RegEx isn't implemented for windows yet (feel free to add it to winmodlog.cmd)
-				target = `"${target}"`;  // add quotes to target so the caller knows they are getting a strict match
-			} else {
-				// search for ID: allow any number of non-word characters (\W*) in between the letters we have to match.
-				// i.e. if searching for "myUsername", also match on "My User-Name".
-				// note that this doesn't really add a lot of unwanted results, since we use \b..\b
-				target = toId(target);
-				searchString = `\\b${target.split('').join('\\W*')}\\b`;
-				strictMatch = false;
-			}
-
-			if (isWin) {
-				if (strictMatch) {
-					command = `${path.normalize(__dirname + '/lib/winmodlog')} ws ${grepLimit} "${searchString.replace(/%/g, "%%").replace(/([\^"&<>\|])/g, "^$1")}" ${filename}`;
-				} else {
-					// doesn't happen. ID search with RegEx isn't implemented for windows yet (feel free to add it to winmodlog.cmd and call it from here)
-				}
-			} else {
-				if (strictMatch) {
-					command = `awk '{print NR,$0}' ${filename} | sort -nr | cut -d' ' -f2- | grep -m${grepLimit} -i '${searchString.replace(/\\/g, '\\\\\\\\').replace(/["'`]/g, '\'\\$&\'').replace(/[\{\}\[\]\(\)\$\^\.\?\+\-\*]/g, '[$&]')}'`;
-				} else {
-					command = `awk '{print NR,$0}' ${filename} | sort -nr | cut -d' ' -f2- | grep -m${grepLimit} -Ei '${searchString}'`;
-				}
-			}
-		}
-
-		// Execute the file search to see modlog
-		require('child_process').exec(command, (error, stdout, stderr) => {
-			if (error && stderr) {
-				connection.popup(`/modlog empty on ${roomNames} or erred`);
-				console.log(`/modlog error: ${error}`);
-				return false;
-			}
-			if (stdout && hideIps) {
-				stdout = stdout.replace(/\([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+\)/g, '');
-			}
-			stdout = stdout.split('\n').map(line => {
-				let bracketIndex = line.indexOf(']');
-				let parenIndex = line.indexOf(')');
-				if (bracketIndex < 0) return Chat.escapeHTML(line);
-				const time = line.slice(1, bracketIndex);
-				let timestamp = Chat.toTimestamp(new Date(time), {hour12: true});
-				parenIndex = line.indexOf(')');
-				let thisRoomID = line.slice(bracketIndex + 3, parenIndex);
-				if (addModlogLinks) {
-					let url = Config.modloglink(time, thisRoomID);
-					if (url) timestamp = `<a href="${url}">${timestamp}</a>`;
-				}
-				return `<small>[${timestamp}] (${thisRoomID})</small>${Chat.escapeHTML(line.slice(parenIndex + 1))}`;
-			}).join('<br />');
-			if (lines) {
-				if (!stdout) {
-					connection.popup("The modlog is empty. (Weird.)");
-				} else {
-					connection.popup(`|wide||html|<p>The last ${lines} lines of the Moderator Log of ${roomNames}.</p><p><small>[${Chat.toTimestamp(new Date(), {hour12: true})}] \u2190 current server time</small></p>${stdout}`);
-				}
-			} else {
-				if (!stdout) {
-					connection.popup(`No moderator actions containing ${target} were found on ${roomNames}.` +
-					                 (strictMatch ? "" : " Add quotes to the search parameter to search for a phrase, rather than a user."));
-				} else {
-					connection.popup(`|wide||html|<p>The last ${grepLimit} logged actions containing ${target} on ${roomNames}.` +
-					                 (strictMatch ? "" : " Add quotes to the search parameter to search for a phrase, rather than a user.") + `</p><p><small>[${Chat.toTimestamp(new Date(), {hour12: true})}] \u2190 current server time</small></p>${stdout}`);
-				}
-			}
-		});
-	},
-	modloghelp: ["/modlog [roomid|all|public], [n] - Roomid defaults to current room.",
-		"If n is a number or omitted, display the last n lines of the moderator log. Defaults to 20.",
-		"If n is not a number, search the moderator log for 'n' on room's log [roomid]. If you set [all] as [roomid], searches for 'n' on all rooms's logs.",
-		"If you set [public] as [roomid], searches for 'n' in all public room's logs, excluding battles. Requires: % @ * # & ~"],
-
 	/*********************************************************
 	 * Server management commands
 	 *********************************************************/
@@ -2515,10 +2442,7 @@ exports.commands = {
 		if (!this.can('hotpatch')) return false;
 		if (Monitor.hotpatchLock) return this.errorReply("Hotpatch is currently been disabled. (" + Monitor.hotpatchLock + ")");
 
-		for (let roomid of ['development', 'staff', 'upperstaff']) {
-			let curRoom = Rooms(roomid);
-			if (curRoom) curRoom.add(`|c|${user.getIdentity()}|/log ${user.name} used /hotpatch ${target}`).update();
-		}
+		Rooms.global.notifyRooms(['development', 'staff', 'upperstaff'], `|c|${user.getIdentity()}|/log ${user.name} used /hotpatch ${target}`);
 
 		try {
 			if (target === 'chat' || target === 'commands') {
@@ -2552,10 +2476,10 @@ exports.commands = {
 				Rooms.SimulatorProcess.respawn();
 				return this.sendReply("Battles have been hotpatched. Any battles started after now will use the new code; however, in-progress battles will continue to use the old code.");
 			} else if (target === 'formats') {
-				// uncache the tools.js dependency tree
-				Chat.uncacheTree('./tools');
-				// reload tools.js
-				global.Tools = require('./tools').includeData(); // note: this will lock up the server for a few seconds
+				// uncache the sim/dex.js dependency tree
+				Chat.uncacheTree('./sim/dex');
+				// reload sim/dex.js
+				global.Dex = require('./sim/dex'); // note: this will lock up the server for a few seconds
 				// rebuild the formats list
 				delete Rooms.global.formatList;
 				// respawn validator processes
@@ -2567,7 +2491,7 @@ exports.commands = {
 
 				return this.sendReply("Formats have been hotpatched.");
 			} else if (target === 'loginserver') {
-				fs.unwatchFile('./config/custom.css');
+				FS('config/custom.css').unwatch();
 				Chat.uncacheTree('./loginserver');
 				global.LoginServer = require('./loginserver');
 				return this.sendReply("The login server has been hotpatched. New login server requests will use the new code.");
@@ -2578,7 +2502,7 @@ exports.commands = {
 				delete require.cache[require.resolve('./punishments')];
 				global.Punishments = require('./punishments');
 				return this.sendReply("Punishments have been hotpatched.");
-			} else if (target === 'dnsbl') {
+			} else if (target === 'dnsbl' || target === 'datacenters') {
 				Dnsbl.loadDatacenters();
 				return this.sendReply("Dnsbl has been hotpatched.");
 			} else if (target.startsWith('disablechat')) {
@@ -2603,15 +2527,15 @@ exports.commands = {
 		"/hotpatch chat - reload chat-commands.js and the chat-plugins",
 		"/hotpatch battles - spawn new simulator processes",
 		"/hotpatch validator - spawn new team validator processes",
-		"/hotpatch formats - reload the tools.js tree, rebuild and rebroad the formats list, and spawn new simulator and team validator processes",
+		"/hotpatch formats - reload the sim/dex.js tree, rebuild and rebroad the formats list, and spawn new simulator and team validator processes",
 		"/hotpatch dnsbl - reloads Dnsbl datacenters",
 		"/hotpatch disable, [reason] - disables the use of hotpatch until the next server restart"],
 
 	savelearnsets: function (target, room, user) {
 		if (!this.can('hotpatch')) return false;
 		this.sendReply("saving...");
-		fs.writeFile('data/learnsets.js', `'use strict';\n\nexports.BattleLearnsets = {\n` +
-			Object.entries(Tools.data.Learnsets).map(([k, v]) => (
+		FS('data/learnsets.js').write(`'use strict';\n\nexports.BattleLearnsets = {\n` +
+			Object.entries(Dex.data.Learnsets).map(([k, v]) => (
 				`\t${k}: {learnset: {\n` +
 				Object.entries(v.learnset).sort(
 					(a, b) => (a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0)
@@ -2620,23 +2544,23 @@ exports.commands = {
 				)).join('') +
 				`\t}},\n`
 			)).join('') +
-		`};\n`, () => {
+		`};\n`).then(() => {
 			this.sendReply("learnsets.js saved.");
 		});
 	},
 
-	adddatacenters: function (target, room, user) {
+	widendatacenters: 'adddatacenters',
+	adddatacenters: function (target, room, user, connection, cmd) {
 		if (!this.can('hotpatch')) return false;
 		// should be in the format: IP, IP, name, URL
+		let widen = (cmd === 'widendatacenters');
 
-		fs.readFile(require('path').resolve(__dirname, 'config/datacenters.csv'), (err, data) => {
-			if (err) return;
-			data = String(data).split("\n");
+		FS('config/datacenters.csv').readTextIfExists().then(data => {
 			let datacenters = [];
-			for (let row of data) {
+			for (const row of data.split("\n")) {
 				if (!row) continue;
-				let rowSplit = row.split(',');
-				let rowData = [
+				const rowSplit = row.split(',');
+				const rowData = [
 					Dnsbl.ipToNumber(rowSplit[0]),
 					Dnsbl.ipToNumber(rowSplit[1]),
 					Dnsbl.urlToHost(rowSplit[3]),
@@ -2648,6 +2572,7 @@ exports.commands = {
 			data = String(target).split("\n");
 			let successes = 0;
 			let identicals = 0;
+			let widenSuccesses = 0;
 			for (let row of data) {
 				if (!row) continue;
 				let rowSplit = row.split(',');
@@ -2679,6 +2604,11 @@ exports.commands = {
 						continue;
 					}
 					if (rowData[0] <= next[0] && rowData[1] >= next[1]) {
+						if (widen === true) {
+							widenSuccesses++;
+							datacenters.splice(iMin, 1, rowData);
+							continue;
+						}
 						this.errorReply('too wide: ' + row);
 						this.errorReply('intersects with: ' + next[3]);
 						continue;
@@ -2707,8 +2637,9 @@ exports.commands = {
 			}
 
 			let output = datacenters.map(r => r[3]).join('\n') + '\n';
-			fs.writeFile(require('path').resolve(__dirname, 'config/datacenters.csv'), output);
+			FS('config/datacenters.csv').write(output);
 			this.sendReply(`done: ${successes} successes, ${identicals} unchanged`);
+			if (widenSuccesses) this.sendReply(`${widenSuccesses} widens`);
 		});
 	},
 
@@ -2740,6 +2671,30 @@ exports.commands = {
 		this.logEntry(user.name + " used /lockdown");
 	},
 	lockdownhelp: ["/lockdown - locks down the server, which prevents new battles from starting so that the server can eventually be restarted. Requires: ~"],
+
+	autolockdown: 'autolockdownkill',
+	autolockdownkill: function (target, room, user) {
+		if (!this.can('lockdown')) return false;
+		if (Config.autolockdown === undefined) Config.autolockdown = true;
+
+		if (target === 'on' || target === 'enable') {
+			if (Config.autolockdown) return this.errorReply("The server is already set to automatically kill itself upon the final battle finishing.");
+			Config.autolockdown = true;
+			this.sendReply("The server is now set to automatically kill itself upon the final battle finishing.");
+			this.logEntry(`${user.name} used /autolockdownkill on`);
+		} else if (target === 'off' || target === 'disable') {
+			if (!Config.autolockdown) return this.errorReply("The server is already set to not automatically kill itself upon the final battle finishing.");
+			Config.autolockdown = false;
+			this.sendReply("The server is now set to not automatically kill itself upon the final battle finishing.");
+			this.logEntry(`${user.name} used /autolockdownkill off`);
+		} else {
+			return this.parse('/help autolockdownkill');
+		}
+	},
+	autolockdownkillhelp: [
+		"/autolockdownkill on - Turns on the setting to enable the server to automatically kill itself upon the final battle finishing. Requires ~",
+		"/autolockdownkill off - Turns off the setting to enable the server to automatically kill itself upon the final battle finishing. Requires ~",
+	],
 
 	prelockdown: function (target, room, user) {
 		if (!this.can('lockdown')) return false;
@@ -2813,17 +2768,14 @@ exports.commands = {
 			return this.errorReply("Wait for /updateserver to finish before using /kill.");
 		}
 
-		for (let i in Sockets.workers) {
-			Sockets.workers[i].kill();
-		}
+		Sockets.workers.forEach(worker => worker.kill());
 
 		if (!room.destroyLog) {
 			process.exit();
 			return;
 		}
+		room.logEntry(user.name + " used /kill");
 		room.destroyLog(() => {
-			room.logEntry(user.name + " used /kill");
-		}, () => {
 			process.exit();
 		});
 
@@ -3173,29 +3125,39 @@ exports.commands = {
 	kickbattlehelp: ["/kickbattle [username], [reason] - Kicks a user from a battle with reason. Requires: % @ * & ~"],
 
 	kickinactive: function (target, room, user) {
-		if (room.requestKickInactive) {
-			room.requestKickInactive(user);
-		} else {
-			this.errorReply("You can only kick inactive players from inside a room.");
-		}
+		this.parse(`/timer on`);
 	},
 
 	timer: function (target, room, user) {
 		target = toId(target);
-		if (room.requestKickInactive) {
-			if (target === 'off' || target === 'false' || target === 'stop') {
-				let canForceTimer = user.can('timer', null, room);
-				if (room.resetTimer) {
-					room.stopKickInactive(user, canForceTimer);
-					if (canForceTimer) room.send('|inactiveoff|Timer was turned off by staff. Please do not turn it back on until our staff say it\'s okay');
-				}
-			} else if (target === 'on' || target === 'true' || !target) {
-				room.requestKickInactive(user, user.can('timer'));
-			} else {
-				this.errorReply("'" + target + "' is not a recognized timer state.");
+		if (!room.game || !room.game.timer) {
+			return this.errorReply(`You can only set the timer from inside a battle room.`);
+		}
+		const timer = room.game.timer;
+		if (!timer.timerRequesters) {
+			return this.sendReply(`This game's timer is managed by a different command.`);
+		}
+		if (!target) {
+			if (!timer.timerRequesters.size) {
+				return this.sendReply(`The game timer is OFF`);
 			}
+			return this.sendReply(`The game timer is ON (requested by ${[...timer.timerRequesters].join(', ')})`);
+		}
+		const force = user.can('timer', null, room);
+		if (!force && !room.game.players[user]) {
+			return this.errorReply(`Access denied`);
+		}
+		if (target === 'off' || target === 'false' || target === 'stop') {
+			if (timer.timerRequesters.size) {
+				timer.stop(force ? undefined : user);
+				if (force) room.send(`|inactiveoff|Timer was turned off by staff. Please do not turn it back on until our staff say it's okay.`);
+			} else {
+				this.errorReply(`The timer is already off`);
+			}
+		} else if (target === 'on' || target === 'true') {
+			timer.start(user);
 		} else {
-			this.errorReply("You can only set the timer from inside a battle room.");
+			this.errorReply(`"${target}" is not a recognized timer state.`);
 		}
 	},
 
@@ -3259,7 +3221,7 @@ exports.commands = {
 			}
 			Matchmaker.searchBattle(user, target);
 		} else {
-			Matchmaker.cancelSearch(user);
+			Matchmaker.cancelSearch(user, target);
 		}
 	},
 
@@ -3288,7 +3250,7 @@ exports.commands = {
 				return false;
 			}
 		}
-		user.prepBattle(Tools.getFormat(target).id, 'challenge', connection).then(result => {
+		user.prepBattle(Dex.getFormat(target).id, 'challenge', connection).then(result => {
 			if (result) user.makeChallenge(targetUser, target);
 		});
 	},
@@ -3332,7 +3294,7 @@ exports.commands = {
 			this.popupReply(target + " isn't challenging you - maybe they cancelled before you could accept?");
 			return false;
 		}
-		user.prepBattle(Tools.getFormat(format).id, 'challenge', connection).then(result => {
+		user.prepBattle(Dex.getFormat(format).id, 'challenge', connection).then(result => {
 			if (result) user.acceptChallengeFrom(userid);
 		});
 	},
@@ -3357,9 +3319,9 @@ exports.commands = {
 			return;
 		}
 		if (!target) return this.errorReply("Provide a valid format.");
-		let originalFormat = Tools.getFormat(target);
+		let originalFormat = Dex.getFormat(target);
 		// Note: The default here of [Gen 7] Pokebank Anything Goes isn't normally hit; since the web client will send a default format
-		let format = originalFormat.effectType === 'Format' ? originalFormat : Tools.getFormat('[Gen 7] Pokebank Anything Goes');
+		let format = originalFormat.effectType === 'Format' ? originalFormat : Dex.getFormat('[Gen 7] Pokebank Anything Goes');
 		if (format.effectType !== 'Format') return this.popupReply("Please provide a valid format.");
 
 		TeamValidator(format.id).prepTeam(user.team).then(result => {
@@ -3547,6 +3509,6 @@ exports.commands = {
 process.nextTick(() => {
 	// We might want to migrate most of this to a JSON schema of command attributes.
 	Chat.multiLinePattern.register(
-		'>>>? ', '/(?:room|staff)intro ', '/(?:staff)?topic ', '/adddatacenters ', '/bash '
+		'>>>? ', '/(?:room|staff)intro ', '/(?:staff)?topic ', '/(?:add|widen)datacenters ', '/bash '
 	);
 });

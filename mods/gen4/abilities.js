@@ -28,6 +28,24 @@ exports.BattleAbilities = {
 			}
 		},
 	},
+	"flashfire": {
+		inherit: true,
+		effect: {
+			noCopy: true, // doesn't get copied by Baton Pass
+			onStart: function (target) {
+				this.add('-start', target, 'ability: Flash Fire');
+			},
+			onModifyDamagePhase1: function (atk, attacker, defender, move) {
+				if (move.type === 'Fire') {
+					this.debug('Flash Fire boost');
+					return this.chainModify(1.5);
+				}
+			},
+			onEnd: function (target) {
+				this.add('-end', target, 'ability: Flash Fire', '[silent]');
+			},
+		},
+	},
 	"flowergift": {
 		inherit: true,
 		onAllyModifyAtk: function (atk) {
@@ -236,6 +254,7 @@ exports.BattleAbilities = {
 	"sturdy": {
 		inherit: true,
 		onDamage: function () {},
+		rating: 0,
 	},
 	"synchronize": {
 		inherit: true,

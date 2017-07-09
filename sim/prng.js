@@ -1,34 +1,30 @@
+/**
+ * PRNG
+ * Pokemon Showdown - http://pokemonshowdown.com/
+ *
+ * This file handles the random number generator for battles.
+ *
+ * @license MIT license
+ */
 'use strict';
-// This function is designed to emulate the on-cartridge PRNG for Gens 3 and 4, as described in
-// http://www.smogon.com/ingame/rng/pid_iv_creation#pokemon_random_number_generator
-// This RNG uses a 32-bit initial seed
-// m and n are converted to integers via Math.floor. If the result is NaN, they are ignored.
-/*
-random(m, n) {
-	this.seed = (this.seed * 0x41C64E6D + 0x6073) >>> 0; // truncate the result to the last 32 bits
-	let result = this.seed >>> 16; // the first 16 bits of the seed are the random value
-	m = Math.floor(m)
-	n = Math.floor(n)
-	return (m ? (n ? (result % (n - m)) + m : result % m) : result / 0x10000)
-}
-*/
 
-// This function is designed to emulate the on-cartridge PRNG for Gen 5 and uses a 64-bit initial seed
+// This PNG is designed to emulate the on-cartridge PRNG for Gen 5 and uses a 64-bit initial seed
 
-// This function has three different results, depending on arguments:
-// - random() returns a real number in [0, 1), just like Math.random()
-// - random(n) returns an integer in [0, n)
-// - random(m, n) returns an integer in [m, n)
-// m and n are converted to integers via Math.floor. If the result is NaN, they are ignored.
+/** @typedef {[number, number, number, number]} PRNGSeed */
+
 class PRNG {
 	/**
 	 * Creates a new source of randomness for the given seed.
 	 *
-	 * @param {number[]} [seed]
+	 * @param {PRNGSeed} [seed]
 	 */
 	constructor(seed = PRNG.generateSeed()) {
 		// We slice() the seed so we get a copy of it instead of the original seed.
+		/** @type {PRNGSeed} */
+		// @ts-ignore TypeScript bug
 		this.initialSeed = seed.slice();
+		/** @type {PRNGSeed} */
+		// @ts-ignore TypeScript bug
 		this.seed = seed.slice();
 	}
 
@@ -36,6 +32,7 @@ class PRNG {
 	 * Getter to the initial seed.
 	 *
 	 * This should be considered a hack and is only here for backwards compatibility.
+	 * @return {PRNGSeed}
 	 */
 	get startingSeed() {
 		return this.initialSeed;
@@ -45,6 +42,8 @@ class PRNG {
 	 * Creates a clone of the current PRNG.
 	 *
 	 * The new PRNG will have its initial seed set to the seed of the current instance.
+	 *
+	 * @return {PRNG} - clone
 	 */
 	clone() {
 		return new PRNG(this.seed);
@@ -52,12 +51,15 @@ class PRNG {
 
 	/**
 	 * Retrieves the next random number in the sequence.
+	 * This function has three different results, depending on arguments:
+	 * - random() returns a real number in [0, 1), just like Math.random()
+	 * - random(n) returns an integer in [0, n)
+	 * - random(m, n) returns an integer in [m, n)
+	 * m and n are converted to integers via Math.floor. If the result is NaN, they are ignored.
 	 *
 	 * @param {number} [from]
 	 * @param {number} [to]
-	 * @returns {number} a real number in [0, 1) if no arguments are specified
-	 * @returns {number} an integer in [0, from) if from is specified
-	 * @returns {number} an integer in [from, to) if from and to are specified
+	 * @return {number} - a real number in [0, 1) if no arguments are specified, an integer in [0, from) if from is specified, an integer in [from, to) if from and to are specified
 	 */
 	next(from, to) {
 		this.seed = this.nextFrame(this.seed); // Advance the RNG
@@ -126,16 +128,20 @@ class PRNG {
 		This is all ignoring overflow/carry because that cannot be shown in a pseudo-mathematical equation.
 		The below code implements a optimised version of that equation while also checking for overflow/carry.
 
+		@param {PRNGSeed} initialSeed
 		@param {number} [framesToAdvance = 1]
-		@return {number[]} the new seed
+		@return {PRNGSeed} the new seed
 	*/
 	nextFrame(initialSeed, framesToAdvance = 1) {
 		// Use Slice so we don't actually alter the original seed.
+		/** @type {PRNGSeed} */
+		// @ts-ignore TypeScript bug
 		let seed = initialSeed.slice();
 		for (let frame = 0; frame < framesToAdvance; ++frame) {
 			const a = [0x5D58, 0x8B65, 0x6C07, 0x8965];
 			const c = [0, 0, 0x26, 0x9EC3];
 
+			/** @type {PRNGSeed} */
 			const nextSeed = [0, 0, 0, 0];
 			let carry = 0;
 
@@ -159,6 +165,9 @@ class PRNG {
 		return seed;
 	}
 
+	/**
+	 * @return {PRNGSeed}
+	 */
 	static generateSeed() {
 		// use a random initial seed (64-bit, [high -> low])
 		return [
@@ -169,5 +178,21 @@ class PRNG {
 		];
 	}
 }
+
+// The following commented-out function is designed to emulate the on-cartridge
+// PRNG for Gens 3 and 4, as described in
+// http://www.smogon.com/ingame/rng/pid_iv_creation#pokemon_random_number_generator
+// This RNG uses a 32-bit initial seed
+// m and n are converted to integers via Math.floor. If the result is NaN, they
+// are ignored.
+/*
+random(m, n) {
+	this.seed = (this.seed * 0x41C64E6D + 0x6073) >>> 0; // truncate the result to the last 32 bits
+	let result = this.seed >>> 16; // the first 16 bits of the seed are the random value
+	m = Math.floor(m)
+	n = Math.floor(n)
+	return (m ? (n ? (result % (n - m)) + m : result % m) : result / 0x10000)
+}
+*/
 
 module.exports = PRNG;

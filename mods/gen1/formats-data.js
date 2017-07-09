@@ -74,7 +74,9 @@ exports.BattleFormatsData = {
 		tier: "NFE",
 	},
 	beedrill: {
-		randomBattleMoves: ["twineedle", "hyperbeam", "swordsdance", "agility"],
+		randomBattleMoves: ["twineedle", "megadrain", "swordsdance"],
+		exclusiveMoves: ["doubleedge", "doubleedge", "hyperbeam"],
+		comboMoves: ["twineedle", "hyperbeam", "swordsdance", "agility"],
 		tier: "UU",
 	},
 	pidgey: {
@@ -535,7 +537,7 @@ exports.BattleFormatsData = {
 	exeggcute: {
 		randomBattleMoves: ["sleeppowder", "stunspore"],
 		essentialMove: "psychic",
-		exclusiveMoves: ["megadrain", "explosion"],
+		exclusiveMoves: ["explosion", "explosion", "doubleedge"],
 		tier: "LC",
 	},
 	exeggutor: {

@@ -15,7 +15,7 @@
 
 'use strict';
 
-const fs = require('fs');
+const FS = require('./fs');
 
 let Ladders = module.exports = getLadder;
 
@@ -42,40 +42,34 @@ class Ladder {
 	/**
 	 * Internal function, returns a Promise for a ladder
 	 */
-	load() {
+	async load() {
 		// ladderCaches[formatid]
 		if (this.formatid in ladderCaches) {
 			let cachedLadder = ladderCaches[this.formatid];
 			if (cachedLadder.then) {
-				return cachedLadder.then(ladder => {
-					this.loadedLadder = ladder;
-					return ladder;
-				});
-			} else {
-				return Promise.resolve(this.loadedLadder = cachedLadder);
+				let ladder = await cachedLadder;
+				return (this.loadedLadder = ladder);
 			}
+			return (this.loadedLadder = cachedLadder);
 		}
-		return (ladderCaches[this.formatid] = new Promise((resolve, reject) => {
-			fs.readFile('config/ladders/' + this.formatid + '.tsv', (err, data) => {
-				if (err) {
-					this.loadedLadder = ladderCaches[this.formatid] = [];
-					// console.log('Ladders(' + this.formatid + ') err loading tsv: ' + JSON.stringify(this.loadedLadder));
-					resolve(this.loadedLadder);
-					return;
-				}
-				let ladder = [];
-				let dataLines = ('' + data).split('\n');
-				for (let i = 1; i < dataLines.length; i++) {
-					let line = dataLines[i].trim();
-					if (!line) continue;
-					let row = line.split('\t');
-					ladder.push([toId(row[1]), Number(row[0]), row[1], Number(row[2]), Number(row[3]), Number(row[4]), row[5]]);
-				}
-				this.loadedLadder = ladderCaches[this.formatid] = ladder;
-				// console.log('Ladders(' + this.formatid + ') loaded tsv: ' + JSON.stringify(this.loadedLadder));
-				resolve(this.loadedLadder);
-			});
-		}));
+		try {
+			const data = await FS('config/ladders/' + this.formatid + '.tsv').read('utf8');
+			let ladder = [];
+			let dataLines = data.split('\n');
+			for (let i = 1; i < dataLines.length; i++) {
+				let line = dataLines[i].trim();
+				if (!line) continue;
+				let row = line.split('\t');
+				ladder.push([toId(row[1]), Number(row[0]), row[1], Number(row[2]), Number(row[3]), Number(row[4]), row[5]]);
+			}
+			// console.log('Ladders(' + this.formatid + ') loaded tsv: ' + JSON.stringify(this.loadedLadder));
+			this.loadedLadder = ladderCaches[this.formatid] = ladder;
+			return this.loadedLadder;
+		} catch (err) {
+			// console.log('Ladders(' + this.formatid + ') err loading tsv: ' + JSON.stringify(this.loadedLadder));
+		}
+		this.loadedLadder = ladderCaches[this.formatid] = [];
+		return this.loadedLadder;
 	}
 
 	/**
@@ -97,7 +91,7 @@ class Ladder {
 			this.saving = false;
 			return;
 		}
-		let stream = fs.createWriteStream('config/ladders/' + this.formatid + '.tsv');
+		let stream = FS(`config/ladders/${this.formatid}.tsv`).createWriteStream();
 		stream.write('Elo\tUsername\tW\tL\tT\tLast update\r\n');
 		for (let i = 0; i < this.loadedLadder.length; i++) {
 			let row = this.loadedLadder[i];
@@ -133,7 +127,7 @@ class Ladder {
 	 */
 	getTop() {
 		let formatid = this.formatid;
-		let name = Tools.getFormat(formatid).name;
+		let name = Dex.getFormat(formatid).name;
 		return this.ladder.then(ladder => {
 			let buf = `<h3>${name} Top 100</h3>`;
 			buf += `<table>`;
@@ -286,7 +280,7 @@ class Ladder {
 				room.update();
 			}
 
-			if (!Tools.getFormat(formatid).noLog) {
+			if (!Dex.getFormat(formatid).noLog) {
 				room.logBattle(p1score, p1newElo, p2newElo);
 			}
 		});
@@ -313,8 +307,8 @@ class Ladder {
 	 */
 	static visualizeAll(username) {
 		let ratings = [];
-		for (let i in Tools.data.Formats) {
-			if (Tools.data.Formats[i].searchShow) {
+		for (let i in Dex.formats) {
+			if (Dex.formats[i].searchShow) {
 				ratings.push(Ladders(i).visualize(username));
 			}
 		}

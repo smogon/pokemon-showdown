@@ -6,9 +6,7 @@ const cluster = require('cluster');
 describe.skip('Sockets', function () {
 	const spawnWorker = () => (
 		new Promise(resolve => {
-			Sockets.spawnWorker();
-			let workerids = Object.keys(Sockets.workers);
-			let worker = Sockets.workers[workerids[workerids.length - 1]];
+			let worker = Sockets.spawnWorker();
 			worker.removeAllListeners('message');
 			resolve(worker);
 		})
@@ -20,37 +18,34 @@ describe.skip('Sockets', function () {
 	});
 
 	afterEach(function () {
-		for (let i in Sockets.workers) {
-			let worker = Sockets.workers[i];
+		Sockets.workers.forEach((worker, workerid) => {
 			worker.kill();
-			delete Sockets.workers[i];
-		}
+			Sockets.workers.delete(workerid);
+		});
 	});
 
 	describe('master', function () {
-		const numWorkers = () => Object.keys(Sockets.workers).length;
-
 		it('should be able to spawn workers', function () {
 			Sockets.spawnWorker();
-			assert.strictEqual(numWorkers(), 1);
+			assert.strictEqual(Sockets.workers.size, 1);
 		});
 
 		it('should be able to spawn workers on listen', function () {
 			Sockets.listen(0, '127.0.0.1', 1);
-			assert.strictEqual(numWorkers(), 1);
+			assert.strictEqual(Sockets.workers.size, 1);
 		});
 
 		it('should be able to kill workers', function () {
 			return spawnWorker().then(worker => {
 				Sockets.killWorker(worker);
-				assert.strictEqual(numWorkers(), 0);
+				assert.strictEqual(Sockets.workers.size, 0);
 			});
 		});
 
 		it('should be able to kill workers by PID', function () {
 			return spawnWorker().then(worker => {
 				Sockets.killPid(worker.process.pid);
-				assert.strictEqual(numWorkers(), 0);
+				assert.strictEqual(Sockets.workers.size, 0);
 			});
 		});
 	});
@@ -92,7 +87,7 @@ describe.skip('Sockets', function () {
 			return spawnSocket(worker => data => {
 				let sid = data.substr(1, data.indexOf('\n'));
 				querySocket = `$
-					let socket = sockets[${sid}];
+					let socket = sockets.get(${sid});
 					process.send(!socket);`;
 				Sockets.socketDisconnect(worker, sid);
 			}).then(chain(worker => data => {
@@ -119,7 +114,7 @@ describe.skip('Sockets', function () {
 				sid = data.substr(1, data.indexOf('\n'));
 				msg = '|/cmd rooms';
 				mockReceive = `$
-					let socket = sockets[${sid}];
+					let socket = sockets.get(${sid});
 					socket.emit('data', ${msg});`;
 			}).then(chain(worker => data => {
 				let cmd = data.charAt(0);
@@ -136,8 +131,8 @@ describe.skip('Sockets', function () {
 				let sid = data.substr(1, data.indexOf('\n'));
 				let cid = 'global';
 				queryChannel = `$
-					let channel = channels[${cid}];
-					process.send(channel && (${sid} in channel));`;
+					let channel = channels.get(${cid});
+					process.send(channel && channel.has(${sid}));`;
 				Sockets.channelAdd(worker, cid, sid);
 			}).then(chain(worker => data => {
 				assert.ok(data);
@@ -150,9 +145,7 @@ describe.skip('Sockets', function () {
 				let sid = data.substr(1, data.indexOf('\n'));
 				let cid = 'global';
 				queryChannel = `$
-					let socket = sockets[${sid}];
-					let channel = channels[${cid}];
-					process.send(!socket && !channel);`;
+					process.send(!sockets.has(${sid}) && !channels.has(${cid}));`;
 				Sockets.channelAdd(worker, cid, sid);
 				Sockets.channelRemove(worker, cid, sid);
 			}).then(chain(worker => data => {
@@ -179,10 +172,8 @@ describe.skip('Sockets', function () {
 				let cid = 'battle-ou-1';
 				let scid = '1';
 				querySubchannel = `$
-					let socket = sockets[${sid}];
 					let subchannel = subchannels[${cid}];
-					if (subchannel) subchannel = subchannel[${scid}];
-					process.send(!!subchannel && !!subchannel[${sid}]);`;
+					process.send(!!subchannel && (subchannel.get(${sid}) === ${scid}));`;
 				Sockets.subchannelMove(worker, cid, scid, sid);
 			}).then(chain(worker => data => {
 				assert.ok(data);
@@ -196,10 +187,8 @@ describe.skip('Sockets', function () {
 				let cid = 'battle-ou-1';
 				let scid = '1';
 				querySubchannel = `$
-					let socket = sockets[${sid}];
-					let subchannel = subchannels[${cid}];
-					if (subchannel) subchannel = subchannel[${scid}];
-					process.send(!subchannel);`;
+					let subchannel = subchannels.get(${cid});
+					process.send(!!subchannel && (subchannel.get(${sid}) === ${scid}));`;
 				Sockets.subchannelMove(worker, cid, scid, sid);
 				Sockets.channelRemove(worker, cid, sid);
 			}).then(chain(worker => data => {

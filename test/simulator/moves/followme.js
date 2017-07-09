@@ -25,7 +25,7 @@ describe('Follow Me', function () {
 			{species: 'Alakazam', ability: 'synchronize', moves: ['lowkick']},
 		]);
 		let hitCount = 0;
-		battle.on('Damage', battle.getFormat(), function (damage, pokemon) {
+		battle.onEvent('Damage', battle.getFormat(), function (damage, pokemon) {
 			if (pokemon.template.speciesid === 'clefable') {
 				hitCount++;
 			}

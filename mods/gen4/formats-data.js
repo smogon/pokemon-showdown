@@ -3,115 +3,99 @@
 exports.BattleFormatsData = {
 	bulbasaur: {
 		inherit: true,
-		randomBattleMoves: ["sleeppowder", "gigadrain", "growth", "hiddenpowerfire", "hiddenpowerice", "sludgebomb", "swordsdance", "powerwhip", "leechseed", "synthesis"],
 		tier: "LC",
 	},
 	ivysaur: {
-		randomBattleMoves: ["sleeppowder", "gigadrain", "growth", "hiddenpowerfire", "hiddenpowerice", "sludgebomb", "swordsdance", "powerwhip", "leechseed", "synthesis"],
 		tier: "NFE",
 	},
 	venusaur: {
-		randomBattleMoves: ["sleeppowder", "gigadrain", "growth", "hiddenpowerfire", "hiddenpowerice", "sludgebomb", "swordsdance", "powerwhip", "leechseed", "synthesis", "earthquake"],
+		randomBattleMoves: ["sleeppowder", "leafstorm", "sludgebomb", "hiddenpowerice", "swordsdance", "powerwhip", "earthquake", "synthesis", "leechseed"],
 		tier: "UU",
 	},
 	charmander: {
 		inherit: true,
-		randomBattleMoves: ["flamethrower", "overheat", "dragonpulse", "hiddenpowergrass", "fireblast"],
 		tier: "LC",
 	},
 	charmeleon: {
-		randomBattleMoves: ["flamethrower", "overheat", "dragonpulse", "hiddenpowergrass", "fireblast"],
 		tier: "NFE",
 	},
 	charizard: {
 		inherit: true,
-		randomBattleMoves: ["flamethrower", "fireblast", "substitute", "airslash", "dragonpulse", "hiddenpowergrass", "roost"],
+		randomBattleMoves: ["fireblast", "flamethrower", "airslash", "dragonpulse", "hiddenpowergrass", "roost"],
 		tier: "NU",
 	},
 	squirtle: {
 		inherit: true,
-		randomBattleMoves: ["surf", "icebeam", "hydropump", "rapidspin", "scald", "aquajet", "toxic"],
 		tier: "LC",
 	},
 	wartortle: {
-		randomBattleMoves: ["surf", "icebeam", "hydropump", "rapidspin", "scald", "aquajet", "toxic"],
 		tier: "NFE",
 	},
 	blastoise: {
 		inherit: true,
-		randomBattleMoves: ["surf", "icebeam", "hydropump", "rapidspin", "scald", "aquajet", "toxic", "dragontail"],
+		randomBattleMoves: ["hydropump", "surf", "icebeam", "rapidspin", "roar", "rest", "sleeptalk"],
 		tier: "UU",
 	},
 	caterpie: {
-		randomBattleMoves: ["bugbite", "snore", "tackle", "electroweb"],
 		tier: "LC",
 	},
 	metapod: {
-		randomBattleMoves: ["irondefense", "bugbite", "tackle", "electroweb"],
 		tier: "NFE",
 	},
 	butterfree: {
 		inherit: true,
-		randomBattleMoves: ["quiverdance", "roost", "bugbuzz", "airslash", "substitute", "sleeppowder", "gigadrain", "stunspore", "uturn"],
+		randomBattleMoves: ["sleeppowder", "stunspore", "uturn", "bugbuzz", "safeguard"],
 		tier: "NU",
 	},
 	weedle: {
-		randomBattleMoves: ["bugbite", "stringshot", "poisonsting", "electroweb"],
 		tier: "LC",
 	},
 	kakuna: {
-		randomBattleMoves: ["electroweb", "bugbite", "irondefense", "poisonsting"],
 		tier: "NFE",
 	},
 	beedrill: {
 		inherit: true,
-		randomBattleMoves: ["toxicspikes", "xscissor", "swordsdance", "uturn", "endeavor", "poisonjab", "drillrun", "nightslash", "brickbreak"],
+		randomBattleMoves: ["swordsdance", "xscissor", "brickbreak", "batonpass", "poisonjab", "substitute"],
 		tier: "NU",
 	},
 	pidgey: {
-		randomBattleMoves: ["roost", "bravebird", "heatwave", "hurricane", "return", "workup", "uturn"],
 		tier: "LC",
 	},
 	pidgeotto: {
 		inherit: true,
-		randomBattleMoves: ["roost", "bravebird", "heatwave", "hurricane", "return", "workup", "uturn"],
 		tier: "NFE",
 	},
 	pidgeot: {
-		randomBattleMoves: ["roost", "bravebird", "pursuit", "heatwave", "return", "workup", "uturn"],
+		randomBattleMoves: ["bravebird", "doubleedge", "uturn", "pursuit", "quickattack"],
 		tier: "NU",
 	},
 	rattata: {
-		randomBattleMoves: ["facade", "flamewheel", "wildcharge", "suckerpunch", "uturn"],
 		tier: "LC",
 	},
 	raticate: {
 		inherit: true,
-		randomBattleMoves: ["facade", "flamewheel", "wildcharge", "suckerpunch", "uturn"],
+		randomBattleMoves: ["facade", "suckerpunch", "crunch", "uturn", "protect", "swordsdance"],
 		tier: "NU",
 	},
 	spearow: {
 		inherit: true,
-		randomBattleMoves: ["return", "drillpeck", "doubleedge", "uturn", "quickattack", "pursuit"],
 		tier: "LC",
 	},
 	fearow: {
-		randomBattleMoves: ["return", "drillpeck", "doubleedge", "uturn", "quickattack", "pursuit", "drillrun", "roost"],
+		randomBattleMoves: ["drillpeck", "return", "uturn", "quickattack", "pursuit"],
 		tier: "NU",
 	},
 	ekans: {
 		inherit: true,
-		randomBattleMoves: ["coil", "gunkshot", "seedbomb", "glare", "suckerpunch", "aquatail", "crunch", "earthquake", "rest"],
 		tier: "LC",
 	},
 	arbok: {
 		inherit: true,
-		randomBattleMoves: ["coil", "gunkshot", "seedbomb", "glare", "suckerpunch", "aquatail", "crunch", "earthquake", "rest"],
+		randomBattleMoves: ["glare", "gunkshot", "poisonjab", "earthquake", "seedbomb", "crunch", "aquatail", "switcheroo"],
 		tier: "NU",
 	},
 	pichu: {
 		inherit: true,
-		randomBattleMoves: ["fakeout", "volttackle", "encore", "irontail", "toxic", "thunderpunch"],
 		tier: "LC",
 	},
 	pichuspikyeared: {
@@ -120,159 +104,141 @@ exports.BattleFormatsData = {
 	},
 	pikachu: {
 		inherit: true,
-		randomBattleMoves: ["thunderbolt", "volttackle", "grassknot", "hiddenpowerice", "brickbreak", "extremespeed", "encore", "substitute"],
+		randomBattleMoves: ["nastyplot", "thunderbolt", "hiddenpowerice", "grassknot", "encore", "substitute", "focuspunch"],
 		tier: "NU",
 	},
 	raichu: {
-		randomBattleMoves: ["nastyplot", "encore", "thunderbolt", "grassknot", "hiddenpowerice", "focusblast", "substitute", "extremespeed"],
+		randomBattleMoves: ["nastyplot", "thunderbolt", "hiddenpowerice", "focusblast", "encore", "grassknot", "substitute", "focuspunch"],
 		tier: "NU",
 	},
 	sandshrew: {
 		inherit: true,
-		randomBattleMoves: ["earthquake", "stoneedge", "swordsdance", "rapidspin", "nightslash", "xscissor", "stealthrock", "toxic"],
 		tier: "LC",
 	},
 	sandslash: {
-		randomBattleMoves: ["earthquake", "stoneedge", "swordsdance", "rapidspin", "nightslash", "xscissor", "stealthrock", "toxic"],
+		randomBattleMoves: ["earthquake", "stoneedge", "swordsdance", "rapidspin", "nightslash", "stealthrock", "substitute"],
 		tier: "NU",
 	},
 	nidoranf: {
-		randomBattleMoves: ["toxicspikes", "crunch", "poisonjab", "honeclaws", "doublekick"],
 		tier: "LC",
 	},
 	nidorina: {
-		randomBattleMoves: ["toxicspikes", "crunch", "poisonjab", "honeclaws", "doublekick", "icebeam"],
 		tier: "NFE",
 	},
 	nidoqueen: {
-		randomBattleMoves: ["toxicspikes", "stealthrock", "fireblast", "thunderbolt", "icebeam", "earthpower", "sludgewave", "dragontail", "focusblast"],
+		randomBattleMoves: ["toxicspikes", "stealthrock", "fireblast", "roar", "icebeam", "earthquake"],
 		tier: "NU",
 	},
 	nidoranm: {
-		randomBattleMoves: ["suckerpunch", "poisonjab", "headsmash", "honeclaws"],
 		tier: "LC",
 	},
 	nidorino: {
-		randomBattleMoves: ["suckerpunch", "poisonjab", "headsmash", "honeclaws"],
 		tier: "NFE",
 	},
 	nidoking: {
-		randomBattleMoves: ["fireblast", "thunderbolt", "icebeam", "earthpower", "sludgewave", "focusblast"],
+		randomBattleMoves: ["fireblast", "thunderbolt", "icebeam", "earthquake", "superpower", "stealthrock"],
 		tier: "UU",
 	},
 	cleffa: {
-		randomBattleMoves: ["reflect", "thunderwave", "lightscreen", "toxic", "fireblast", "encore", "wish", "protect", "softboiled", "aromatherapy"],
 		tier: "LC",
 	},
 	clefairy: {
-		randomBattleMoves: ["healingwish", "reflect", "thunderwave", "lightscreen", "toxic", "fireblast", "encore", "wish", "protect", "softboiled", "aromatherapy", "stealthrock"],
 		tier: "NFE",
 	},
 	clefable: {
-		randomBattleMoves: ["fireblast", "thunderbolt", "icebeam", "seismictoss", "wish", "protect", "softboiled", "healingwish", "doubleedge", "facade", "meteormash", "aromatherapy", "bellydrum", "trick", "calmmind", "stealthrock", "grassknot", "cosmicpower", "storedpower"],
+		randomBattleMoves: ["fireblast", "thunderwave", "icebeam", "doubleedge", "healbell", "softboiled"],
 		tier: "UU",
 	},
 	vulpix: {
 		inherit: true,
-		randomBattleMoves: ["flamethrower", "fireblast", "willowisp", "solarbeam", "nastyplot", "substitute", "toxic", "hypnosis", "painsplit"],
 		tier: "LC",
 	},
 	ninetales: {
-		randomBattleMoves: ["flamethrower", "fireblast", "willowisp", "solarbeam", "nastyplot", "substitute", "toxic", "hypnosis", "painsplit"],
+		randomBattleMoves: ["nastyplot", "fireblast", "energyball", "extrasensory", "hiddenpowerrock", "hypnosis"],
 		tier: "NU",
 	},
 	igglybuff: {
 		inherit: true,
-		randomBattleMoves: ["wish", "thunderwave", "reflect", "lightscreen", "healbell", "seismictoss", "counter", "protect"],
 		tier: "LC",
 	},
 	jigglypuff: {
-		randomBattleMoves: ["wish", "thunderwave", "reflect", "lightscreen", "healbell", "seismictoss", "counter", "stealthrock", "protect"],
 		tier: "NFE",
 	},
 	wigglytuff: {
-		randomBattleMoves: ["wish", "thunderwave", "reflect", "lightscreen", "healbell", "seismictoss", "counter", "stealthrock", "protect"],
+		randomBattleMoves: ["wish", "protect", "thunderwave", "reflect", "lightscreen", "healbell", "seismictoss", "toxic", "stealthrock"],
 		tier: "NU",
 	},
 	zubat: {
-		randomBattleMoves: ["bravebird", "roost", "toxic", "taunt", "nastyplot", "gigadrain", "sludgebomb", "airslash", "uturn", "whirlwind", "acrobatics", "heatwave", "superfang"],
 		tier: "LC",
 	},
 	golbat: {
-		randomBattleMoves: ["bravebird", "roost", "toxic", "taunt", "nastyplot", "gigadrain", "sludgebomb", "airslash", "uturn", "whirlwind", "acrobatics", "heatwave", "superfang"],
+		randomBattleMoves: ["bravebird", "roost", "taunt", "uturn", "nastyplot", "gigadrain", "sludgebomb", "airslash", "heatwave"],
 		tier: "NU",
 	},
 	crobat: {
 		inherit: true,
-		randomBattleMoves: ["bravebird", "roost", "toxic", "taunt", "nastyplot", "gigadrain", "sludgebomb", "airslash", "uturn", "whirlwind", "acrobatics", "heatwave", "superfang"],
+		randomBattleMoves: ["bravebird", "roost", "superfang", "taunt", "nastyplot", "sludgebomb", "airslash", "uturn", "heatwave", "hiddenpowerfighting", "crosspoison", "pursuit"],
 		tier: "BL",
 	},
 	oddish: {
 		inherit: true,
-		randomBattleMoves: ["gigadrain", "sludgebomb", "synthesis", "sleeppowder", "stunspore", "toxic", "hiddenpowerfire", "leechseed"],
 		tier: "LC",
 	},
 	gloom: {
 		inherit: true,
-		randomBattleMoves: ["gigadrain", "sludgebomb", "synthesis", "sleeppowder", "stunspore", "toxic", "hiddenpowerfire", "leechseed"],
 		tier: "NFE",
 	},
 	vileplume: {
-		randomBattleMoves: ["gigadrain", "sludgebomb", "synthesis", "sleeppowder", "stunspore", "toxic", "hiddenpowerfire", "leechseed", "aromatherapy"],
+		randomBattleMoves: ["energyball", "sludgebomb", "moonlight", "sleeppowder", "sunnyday", "solarbeam"],
 		tier: "NU",
 	},
 	bellossom: {
-		randomBattleMoves: ["gigadrain", "sludgebomb", "synthesis", "sleeppowder", "stunspore", "toxic", "hiddenpowerfire", "leechseed", "aromatherapy", "leafstorm"],
+		randomBattleMoves: ["leafstorm", "sludgebomb", "moonlight", "sleeppowder", "sunnyday", "solarbeam", "hiddenpowerfire"],
 		tier: "NU",
 	},
 	paras: {
 		inherit: true,
-		randomBattleMoves: ["spore", "stunspore", "xscissor", "seedbomb", "synthesis", "leechseed", "aromatherapy"],
 		tier: "LC",
 	},
 	parasect: {
-		randomBattleMoves: ["spore", "stunspore", "xscissor", "seedbomb", "synthesis", "leechseed", "aromatherapy"],
+		randomBattleMoves: ["spore", "stunspore", "xscissor", "seedbomb", "synthesis"],
 		tier: "NU",
 	},
 	venonat: {
-		randomBattleMoves: ["sleeppowder", "morningsun", "toxicspikes", "sludgebomb", "signalbeam", "stunspore"],
 		tier: "LC",
 	},
 	venomoth: {
 		inherit: true,
-		randomBattleMoves: ["sleeppowder", "roost", "toxicspikes", "quiverdance", "batonpass", "bugbuzz", "sludgebomb", "gigadrain", "substitute"],
+		randomBattleMoves: ["bugbuzz", "psychic", "substitute", "sleeppowder", "roost", "toxicspikes", "uturn", "stunspore"],
 		tier: "NU",
 	},
 	diglett: {
-		randomBattleMoves: ["earthquake", "rockslide", "stealthrock", "suckerpunch", "reversal", "substitute"],
+		randomBattleMoves: ["earthquake", "rockslide", "substitute", "nightslash", "suckerpunch"],
 		tier: "NU",
 	},
 	dugtrio: {
 		inherit: true,
-		randomBattleMoves: ["earthquake", "stoneedge", "stealthrock", "suckerpunch", "reversal", "substitute"],
+		randomBattleMoves: ["earthquake", "stoneedge", "substitute", "nightslash", "suckerpunch"],
 		tier: "UU",
 	},
 	meowth: {
 		inherit: true,
-		randomBattleMoves: ["fakeout", "uturn", "bite", "taunt", "return", "hypnosis", "waterpulse"],
 		tier: "LC",
 	},
 	persian: {
-		randomBattleMoves: ["fakeout", "uturn", "bite", "taunt", "return", "hypnosis", "waterpulse", "switcheroo"],
+		randomBattleMoves: ["nastyplot", "hypnosis", "swift", "waterpulse", "fakeout", "uturn", "return", "taunt"],
 		tier: "NU",
 	},
 	psyduck: {
 		inherit: true,
-		randomBattleMoves: ["hydropump", "surf", "icebeam", "hiddenpowergrass", "crosschop", "encore"],
 		tier: "LC",
 	},
 	golduck: {
 		inherit: true,
-		randomBattleMoves: ["hydropump", "surf", "icebeam", "hiddenpowergrass", "encore", "focusblast"],
+		randomBattleMoves: ["hydropump", "surf", "icebeam", "hiddenpowergrass", "encore", "calmmind", "crosschop"],
 		tier: "NU",
 	},
 	mankey: {
-		randomBattleMoves: ["closecombat", "uturn", "icepunch", "rockslide", "punishment"],
 		tier: "LC",
 	},
 	primeape: {
@@ -282,134 +248,120 @@ exports.BattleFormatsData = {
 	},
 	growlithe: {
 		inherit: true,
-		randomBattleMoves: ["flareblitz", "wildcharge", "hiddenpowergrass", "hiddenpowerice", "closecombat", "morningsun", "willowisp", "toxic"],
 		tier: "LC",
 	},
 	arcanine: {
 		inherit: true,
-		randomBattleMoves: ["flareblitz", "wildcharge", "hiddenpowergrass", "hiddenpowerice", "extremespeed", "closecombat", "morningsun", "willowisp", "toxic"],
+		randomBattleMoves: ["flareblitz", "hiddenpowergrass", "extremespeed", "thunderfang", "morningsun", "willowisp", "toxic"],
 		tier: "UU",
 	},
 	poliwag: {
 		inherit: true,
-		randomBattleMoves: ["hydropump", "icebeam", "encore", "bellydrum", "hypnosis", "waterfall", "return"],
 		tier: "LC",
 	},
 	poliwhirl: {
-		randomBattleMoves: ["hydropump", "icebeam", "encore", "bellydrum", "hypnosis", "waterfall", "return"],
 		tier: "NFE",
 	},
 	poliwrath: {
 		inherit: true,
-		randomBattleMoves: ["substitute", "circlethrow", "focuspunch", "bulkup", "encore", "waterfall", "toxic", "rest", "sleeptalk", "icepunch"],
+		randomBattleMoves: ["substitute", "focuspunch", "bulkup", "brickbreak", "waterfall", "toxic", "rest", "sleeptalk", "icepunch"],
 		tier: "NU",
 	},
 	politoed: {
-		randomBattleMoves: ["scald", "hypnosis", "toxic", "encore", "perishsong", "protect", "icebeam", "focusblast", "surf", "hydropump", "hiddenpowergrass"],
+		randomBattleMoves: ["toxic", "encore", "protect", "icebeam", "focusblast", "surf", "hydropump", "hiddenpowergrass"],
 		tier: "NU",
 	},
 	abra: {
-		randomBattleMoves: ["calmmind", "psychic", "psyshock", "hiddenpowerfighting", "shadowball", "encore", "substitute"],
 		tier: "LC",
 	},
 	kadabra: {
-		randomBattleMoves: ["calmmind", "psychic", "psyshock", "hiddenpowerfighting", "shadowball", "encore", "substitute"],
+		randomBattleMoves: ["calmmind", "psychic", "hiddenpowerfighting", "shadowball", "encore", "substitute"],
 		tier: "NU",
 	},
 	alakazam: {
 		inherit: true,
-		randomBattleMoves: ["calmmind", "psychic", "psyshock", "focusblast", "shadowball", "encore", "substitute"],
+		randomBattleMoves: ["signalbeam", "psychic", "focusblast", "shadowball", "hiddenpowerfire", "encore", "substitute", "trick"],
 		tier: "UU",
 	},
 	machop: {
-		randomBattleMoves: ["dynamicpunch", "payback", "bulkup", "icepunch", "rockslide", "bulletpunch"],
 		tier: "LC",
 	},
 	machoke: {
-		randomBattleMoves: ["dynamicpunch", "payback", "bulkup", "icepunch", "rockslide", "bulletpunch"],
+		randomBattleMoves: ["closecombat", "payback", "icepunch", "thunderpunch", "bulletpunch"],
 		tier: "NU",
 	},
 	machamp: {
 		inherit: true,
-		randomBattleMoves: ["dynamicpunch", "payback", "bulkup", "icepunch", "stoneedge", "bulletpunch"],
+		randomBattleMoves: ["dynamicpunch", "payback", "bulkup", "icepunch", "stoneedge", "bulletpunch", "substitute"],
 		tier: "OU",
 	},
 	bellsprout: {
 		inherit: true,
-		randomBattleMoves: ["swordsdance", "sleeppowder", "sunnyday", "growth", "solarbeam", "gigadrain", "sludgebomb", "weatherball", "suckerpunch", "seedbomb"],
 		tier: "LC",
 	},
 	weepinbell: {
 		inherit: true,
-		randomBattleMoves: ["swordsdance", "sleeppowder", "sunnyday", "growth", "solarbeam", "gigadrain", "sludgebomb", "weatherball", "suckerpunch", "seedbomb"],
 		tier: "NFE",
 	},
 	victreebel: {
-		randomBattleMoves: ["swordsdance", "sleeppowder", "sunnyday", "growth", "solarbeam", "gigadrain", "sludgebomb", "weatherball", "suckerpunch", "powerwhip"],
+		randomBattleMoves: ["swordsdance", "sleeppowder", "suckerpunch", "leafblade", "sunnyday", "solarbeam", "hiddenpowerrock", "weatherball"],
 		tier: "NU",
 	},
 	tentacool: {
-		randomBattleMoves: ["toxicspikes", "rapidspin", "scald", "sludgebomb", "icebeam", "knockoff", "gigadrain", "toxic"],
 		tier: "LC",
 	},
 	tentacruel: {
-		randomBattleMoves: ["toxicspikes", "rapidspin", "scald", "sludgebomb", "icebeam", "knockoff", "gigadrain", "toxic"],
+		randomBattleMoves: ["toxicspikes", "rapidspin", "surf", "sludgebomb", "icebeam", "hydropump"],
 		tier: "OU",
 	},
 	geodude: {
-		randomBattleMoves: ["stealthrock", "earthquake", "stoneedge", "suckerpunch", "hammerarm", "firepunch"],
 		tier: "LC",
 	},
 	graveler: {
-		randomBattleMoves: ["stealthrock", "earthquake", "stoneedge", "suckerpunch", "hammerarm", "firepunch"],
 		tier: "NFE",
 	},
 	golem: {
-		randomBattleMoves: ["stealthrock", "earthquake", "stoneedge", "suckerpunch", "hammerarm", "firepunch"],
+		randomBattleMoves: ["stealthrock", "earthquake", "stoneedge", "suckerpunch", "hammerarm", "explosion"],
 		tier: "NU",
 	},
 	ponyta: {
-		randomBattleMoves: ["flareblitz", "wildcharge", "morningsun", "hypnosis", "flamecharge"],
 		tier: "LC",
 	},
 	rapidash: {
 		inherit: true,
-		randomBattleMoves: ["flareblitz", "wildcharge", "morningsun", "hypnosis", "flamecharge", "megahorn", "drillrun"],
+		randomBattleMoves: ["flareblitz", "morningsun", "hypnosis", "megahorn", "willowisp"],
 		tier: "NU",
 	},
 	slowpoke: {
 		inherit: true,
-		randomBattleMoves: ["scald", "aquatail", "zenheadbutt", "thunderwave", "toxic", "slackoff", "trickroom", "trick"],
 		tier: "LC",
 	},
 	slowbro: {
-		randomBattleMoves: ["scald", "surf", "fireblast", "icebeam", "psychic", "grassknot", "calmmind", "thunderwave", "toxic", "slackoff", "trickroom", "trick"],
+		randomBattleMoves: ["surf", "calmmind", "psychic", "rest", "sleeptalk", "thunderwave", "toxic", "slackoff", "trickroom"],
 		tier: "UU",
 	},
 	slowking: {
-		randomBattleMoves: ["scald", "surf", "fireblast", "icebeam", "psychic", "grassknot", "calmmind", "thunderwave", "toxic", "slackoff", "trickroom", "trick", "nastyplot"],
+		randomBattleMoves: ["surf", "icebeam", "psychic", "thunderwave", "toxic", "slackoff", "trickroom", "nastyplot", "trick"],
 		tier: "NU",
 	},
 	magnemite: {
-		randomBattleMoves: ["thunderbolt", "thunderwave", "magnetrise", "substitute", "flashcannon", "hiddenpowerice", "voltswitch"],
 		tier: "LC",
 	},
 	magneton: {
 		inherit: true,
-		randomBattleMoves: ["thunderbolt", "thunderwave", "magnetrise", "substitute", "flashcannon", "hiddenpowerice", "voltswitch"],
+		randomBattleMoves: ["thunderbolt", "hiddenpowerfire", "chargebeam", "substitute", "flashcannon", "hiddenpowerice", "explosion"],
 		tier: "NU",
 	},
 	magnezone: {
-		randomBattleMoves: ["thunderbolt", "thunderwave", "magnetrise", "substitute", "flashcannon", "hiddenpowerice", "voltswitch"],
+		randomBattleMoves: ["thunderbolt", "explosion", "magnetrise", "substitute", "flashcannon", "hiddenpowerice", "hiddenpowergrass"],
 		tier: "OU",
 	},
 	farfetchd: {
 		inherit: true,
-		randomBattleMoves: ["bravebird", "swordsdance", "return", "leafblade", "roost"],
+		randomBattleMoves: ["aerialace", "swordsdance", "slash", "leafblade", "roost"],
 		tier: "NU",
 	},
 	doduo: {
-		randomBattleMoves: ["bravebird", "return", "doubleedge", "roost", "quickattack", "pursuit"],
 		tier: "LC",
 	},
 	dodrio: {
@@ -419,105 +371,94 @@ exports.BattleFormatsData = {
 	},
 	seel: {
 		inherit: true,
-		randomBattleMoves: ["surf", "icebeam", "aquajet", "iceshard", "raindance", "protect", "rest", "toxic", "drillrun"],
 		tier: "LC",
 	},
 	dewgong: {
-		randomBattleMoves: ["surf", "icebeam", "aquajet", "iceshard", "raindance", "protect", "rest", "toxic", "drillrun"],
+		randomBattleMoves: ["surf", "icebeam", "raindance", "rest", "toxic", "protect"],
 		tier: "NU",
 	},
 	grimer: {
 		inherit: true,
-		randomBattleMoves: ["curse", "gunkshot", "poisonjab", "shadowsneak", "payback", "brickbreak", "rest", "icepunch", "firepunch", "sleeptalk"],
 		tier: "LC",
 	},
 	muk: {
-		randomBattleMoves: ["curse", "gunkshot", "poisonjab", "shadowsneak", "payback", "brickbreak", "rest", "icepunch", "firepunch", "sleeptalk"],
+		randomBattleMoves: ["curse", "gunkshot", "poisonjab", "brickbreak", "shadowsneak", "payback", "explosion", "icepunch", "rest", "sleeptalk"],
 		tier: "NU",
 	},
 	shellder: {
 		inherit: true,
-		randomBattleMoves: ["shellsmash", "hydropump", "razorshell", "rockblast", "iciclespear", "rapidspin"],
 		tier: "LC",
 	},
 	cloyster: {
-		randomBattleMoves: ["shellsmash", "hydropump", "razorshell", "rockblast", "iciclespear", "iceshard", "rapidspin", "spikes", "toxicspikes"],
+		randomBattleMoves: ["surf", "rockblast", "iceshard", "rapidspin", "spikes", "toxicspikes", "explosion"],
 		tier: "UU",
 	},
 	gastly: {
-		randomBattleMoves: ["shadowball", "sludgebomb", "hiddenpowerfighting", "thunderbolt", "substitute", "disable", "painsplit", "hypnosis", "gigadrain", "trick"],
 		tier: "LC",
 	},
 	haunter: {
-		randomBattleMoves: ["shadowball", "sludgebomb", "hiddenpowerfighting", "thunderbolt", "substitute", "disable", "painsplit", "hypnosis", "gigadrain", "trick"],
+		randomBattleMoves: ["shadowball", "sludgebomb", "hiddenpowerground", "thunderbolt", "substitute", "painsplit", "hypnosis", "explosion"],
 		tier: "NU",
 	},
 	gengar: {
 		inherit: true,
-		randomBattleMoves: ["shadowball", "sludgebomb", "focusblast", "thunderbolt", "substitute", "disable", "painsplit", "hypnosis", "gigadrain", "trick"],
+		randomBattleMoves: ["shadowball", "sludgebomb", "focusblast", "thunderbolt", "substitute", "painsplit", "hypnosis", "hiddenpowerfire", "trick"],
 		tier: "OU",
 	},
 	onix: {
-		randomBattleMoves: ["stealthrock", "earthquake", "stoneedge", "dragontail", "curse"],
 		tier: "LC",
 	},
 	steelix: {
-		randomBattleMoves: ["stealthrock", "earthquake", "ironhead", "curse", "dragontail", "roar", "toxic", "stoneedge", "icefang", "firefang"],
+		randomBattleMoves: ["stealthrock", "earthquake", "ironhead", "curse", "roar", "toxic", "stoneedge", "gyroball"],
 		tier: "UU",
 	},
 	drowzee: {
 		inherit: true,
-		randomBattleMoves: ["psychic", "seismictoss", "thunderwave", "wish", "protect", "healbell", "toxic", "nastyplot", "shadowball", "trickroom", "calmmind", "barrier"],
 		tier: "LC",
 	},
 	hypno: {
 		inherit: true,
-		randomBattleMoves: ["psychic", "seismictoss", "thunderwave", "wish", "protect", "healbell", "toxic", "nastyplot", "shadowball", "trickroom", "batonpass", "calmmind", "barrier", "bellydrum", "zenheadbutt", "firepunch"],
+		randomBattleMoves: ["wish", "protect", "psychic", "seismictoss", "thunderwave", "nastyplot", "batonpass", "calmmind", "grassknot"],
 		tier: "NU",
 	},
 	krabby: {
-		randomBattleMoves: ["crabhammer", "return", "swordsdance", "agility", "rockslide", "substitute", "xscissor", "superpower"],
 		tier: "LC",
 	},
 	kingler: {
-		randomBattleMoves: ["crabhammer", "return", "swordsdance", "agility", "rockslide", "substitute", "xscissor", "superpower"],
+		randomBattleMoves: ["crabhammer", "return", "swordsdance", "agility", "rockslide", "xscissor", "superpower"],
 		tier: "NU",
 	},
 	voltorb: {
 		inherit: true,
-		randomBattleMoves: ["voltswitch", "thunderbolt", "taunt", "foulplay", "hiddenpowerice"],
 		tier: "LC",
 	},
 	electrode: {
-		randomBattleMoves: ["voltswitch", "thunderbolt", "taunt", "foulplay", "hiddenpowerice"],
+		randomBattleMoves: ["signalbeam", "thunderbolt", "taunt", "hiddenpowerice", "explosion"],
 		tier: "NU",
 	},
 	exeggcute: {
 		inherit: true,
-		randomBattleMoves: ["substitute", "leechseed", "gigadrain", "psychic", "sleeppowder", "stunspore", "hiddenpowerfire", "synthesis"],
 		tier: "LC",
 	},
 	exeggutor: {
 		inherit: true,
-		randomBattleMoves: ["substitute", "leechseed", "gigadrain", "leafstorm", "psychic", "sleeppowder", "stunspore", "hiddenpowerfire", "synthesis"],
+		randomBattleMoves: ["sunnyday", "solarbeam", "explosion", "leafstorm", "psychic", "sleeppowder", "hiddenpowerfire", "synthesis"],
 		tier: "UU",
 	},
 	cubone: {
-		randomBattleMoves: ["substitute", "bonemerang", "doubleedge", "stoneedge", "firepunch", "earthquake"],
 		tier: "LC",
 	},
 	marowak: {
 		inherit: true,
-		randomBattleMoves: ["substitute", "bonemerang", "doubleedge", "stoneedge", "swordsdance", "firepunch", "earthquake"],
+		randomBattleMoves: ["substitute", "earthquake", "doubleedge", "thunderpunch", "swordsdance", "firepunch"],
 		tier: "NU",
 	},
 	tyrogue: {
-		randomBattleMoves: ["highjumpkick", "rapidspin", "fakeout", "bulletpunch", "machpunch", "toxic", "counter"],
 		tier: "LC",
 	},
 	hitmonlee: {
 		inherit: true,
-		randomBattleMoves: ["highjumpkick", "suckerpunch", "stoneedge", "machpunch", "substitute", "fakeout", "closecombat", "earthquake", "blazekick"],
+		randomBattleMoves: ["suckerpunch", "stoneedge", "machpunch", "substitute", "closecombat", "earthquake", "blazekick"],
 		tier: "UU",
 	},
 	hitmonchan: {
@@ -526,74 +467,67 @@ exports.BattleFormatsData = {
 		tier: "NU",
 	},
 	hitmontop: {
-		randomBattleMoves: ["fakeout", "suckerpunch", "machpunch", "bulkup", "rapidspin", "closecombat", "stoneedge", "toxic", "bulletpunch"],
+		randomBattleMoves: ["fakeout", "suckerpunch", "machpunch", "bulkup", "rapidspin", "closecombat", "stoneedge", "pursuit", "bulletpunch", "foresight"],
 		tier: "UU",
 	},
 	lickitung: {
 		inherit: true,
-		randomBattleMoves: ["wish", "protect", "dragontail", "curse", "bodyslam", "return", "powerwhip", "swordsdance", "earthquake", "toxic", "healbell"],
 		tier: "LC",
 	},
 	lickilicky: {
-		randomBattleMoves: ["wish", "protect", "dragontail", "curse", "bodyslam", "return", "powerwhip", "swordsdance", "earthquake", "toxic", "healbell", "explosion"],
+		randomBattleMoves: ["wish", "protect", "curse", "bodyslam", "return", "powerwhip", "swordsdance", "toxic", "healbell", "explosion"],
 		tier: "NU",
 	},
 	koffing: {
-		randomBattleMoves: ["painsplit", "sludgebomb", "willowisp", "fireblast", "toxic", "clearsmog", "rest", "sleeptalk", "thunderbolt"],
 		tier: "LC",
 	},
 	weezing: {
-		randomBattleMoves: ["painsplit", "sludgebomb", "willowisp", "fireblast", "toxic", "clearsmog", "rest", "sleeptalk", "thunderbolt"],
+		randomBattleMoves: ["rest", "sleeptalk", "sludgebomb", "willowisp", "painsplit", "fireblast", "thunderbolt"],
 		tier: "UU",
 	},
 	rhyhorn: {
-		randomBattleMoves: ["stoneedge", "earthquake", "aquatail", "megahorn", "stealthrock", "rockblast"],
 		tier: "LC",
 	},
 	rhydon: {
 		inherit: true,
-		randomBattleMoves: ["stoneedge", "earthquake", "aquatail", "megahorn", "stealthrock", "rockblast"],
 		tier: "NFE",
 	},
 	rhyperior: {
-		randomBattleMoves: ["stoneedge", "earthquake", "aquatail", "megahorn", "stealthrock", "rockblast"],
+		randomBattleMoves: ["stoneedge", "earthquake", "rockpolish", "megahorn", "stealthrock", "rockblast"],
 		tier: "UU",
 	},
 	happiny: {
-		randomBattleMoves: ["aromatherapy", "toxic", "thunderwave", "counter", "endeavor"],
 		tier: "LC",
 	},
 	chansey: {
 		inherit: true,
-		randomBattleMoves: ["wish", "softboiled", "protect", "toxic", "aromatherapy", "seismictoss", "counter", "thunderwave", "stealthrock"],
+		randomBattleMoves: ["wish", "softboiled", "protect", "toxic", "aromatherapy", "seismictoss", "thunderwave", "stealthrock"],
 		tier: "UU",
 	},
 	blissey: {
-		randomBattleMoves: ["wish", "softboiled", "protect", "toxic", "aromatherapy", "seismictoss", "counter", "thunderwave", "stealthrock", "flamethrower", "icebeam"],
+		randomBattleMoves: ["wish", "softboiled", "protect", "toxic", "aromatherapy", "seismictoss", "thunderwave", "stealthrock", "flamethrower", "icebeam"],
 		tier: "OU",
 	},
 	tangela: {
 		inherit: true,
-		randomBattleMoves: ["gigadrain", "sleeppowder", "hiddenpowerrock", "hiddenpowerice", "leechseed", "knockoff", "leafstorm", "stunspore", "synthesis"],
+		randomBattleMoves: ["sunnyday", "sleeppowder", "endeavor", "leafstorm", "solarbeam", "hiddenpowerfire"],
 		tier: "NU",
 	},
 	tangrowth: {
 		inherit: true,
-		randomBattleMoves: ["gigadrain", "sleeppowder", "hiddenpowerrock", "hiddenpowerice", "leechseed", "knockoff", "leafstorm", "stunspore", "focusblast", "synthesis", "powerwhip"],
+		randomBattleMoves: ["sleeppowder", "hiddenpowerice", "hiddenpowerfire", "leafstorm", "stunspore", "synthesis", "swordsdance", "rockslide", "earthquake", "powerwhip"],
 		tier: "UU",
 	},
 	kangaskhan: {
 		inherit: true,
-		randomBattleMoves: ["fakeout", "return", "hammerarm", "doubleedge", "suckerpunch", "earthquake", "substitute", "focuspunch", "circlethrow", "wish"],
+		randomBattleMoves: ["fakeout", "return", "hammerarm", "doubleedge", "suckerpunch", "earthquake", "substitute", "focuspunch"],
 		tier: "UU",
 	},
 	horsea: {
-		randomBattleMoves: ["hydropump", "icebeam", "substitute", "hiddenpowergrass", "raindance"],
 		tier: "LC",
 	},
 	seadra: {
 		inherit: true,
-		randomBattleMoves: ["hydropump", "icebeam", "agility", "substitute", "hiddenpowergrass"],
 		tier: "NFE",
 	},
 	kingdra: {
@@ -602,101 +536,93 @@ exports.BattleFormatsData = {
 		tier: "OU",
 	},
 	goldeen: {
-		randomBattleMoves: ["raindance", "waterfall", "megahorn", "return", "drillrun"],
 		tier: "LC",
 	},
 	seaking: {
-		randomBattleMoves: ["raindance", "waterfall", "megahorn", "return", "drillrun"],
+		randomBattleMoves: ["raindance", "waterfall", "megahorn", "return", "icebeam"],
 		tier: "NU",
 	},
 	staryu: {
 		inherit: true,
-		randomBattleMoves: ["surf", "thunderbolt", "icebeam", "rapidspin", "recover"],
 		tier: "LC",
 	},
 	starmie: {
 		inherit: true,
-		randomBattleMoves: ["surf", "thunderbolt", "icebeam", "rapidspin", "recover", "psychic", "trick"],
+		randomBattleMoves: ["surf", "hydropump", "thunderbolt", "icebeam", "rapidspin", "recover", "trick"],
 		tier: "OU",
 	},
 	mimejr: {
-		randomBattleMoves: ["substitute", "calmmind", "batonpass", "barrier", "psychic", "hiddenpowerfighting", "healingwish", "nastyplot", "shadowball", "thunderbolt", "encore"],
 		tier: "LC",
 	},
 	mrmime: {
 		inherit: true,
-		randomBattleMoves: ["substitute", "calmmind", "batonpass", "barrier", "psychic", "hiddenpowerfighting", "healingwish", "nastyplot", "shadowball", "thunderbolt", "encore"],
+		randomBattleMoves: ["substitute", "focusblast", "batonpass", "psychic", "taunt", "nastyplot", "shadowball", "thunderbolt", "encore"],
 		tier: "NU",
 	},
 	scyther: {
 		inherit: true,
-		randomBattleMoves: ["swordsdance", "roost", "bugbite", "quickattack", "brickbreak", "aerialace", "batonpass", "uturn"],
+		randomBattleMoves: ["swordsdance", "roost", "bugbite", "quickattack", "brickbreak", "aerialace", "batonpass", "uturn", "pursuit"],
 		tier: "UU",
 	},
 	scizor: {
 		inherit: true,
-		randomBattleMoves: ["swordsdance", "roost", "bulletpunch", "bugbite", "superpower", "uturn", "batonpass", "pursuit"],
+		randomBattleMoves: ["swordsdance", "roost", "bulletpunch", "bugbite", "superpower", "uturn", "pursuit"],
 		tier: "OU",
 	},
 	smoochum: {
-		randomBattleMoves: ["icebeam", "psychic", "hiddenpowerfighting", "trick", "shadowball", "grassknot"],
 		tier: "LC",
 	},
 	jynx: {
-		randomBattleMoves: ["icebeam", "psychic", "focusblast", "trick", "shadowball", "nastyplot", "lovelykiss", "substitute", "energyball"],
+		randomBattleMoves: ["icebeam", "psychic", "focusblast", "trick", "shadowball", "nastyplot", "lovelykiss", "substitute"],
 		tier: "NU",
 	},
 	elekid: {
 		inherit: true,
-		randomBattleMoves: ["thunderbolt", "crosschop", "voltswitch", "substitute", "hiddenpowerice", "psychic"],
 		tier: "LC",
 	},
 	electabuzz: {
 		inherit: true,
-		randomBattleMoves: ["thunderbolt", "voltswitch", "substitute", "hiddenpowerice", "focusblast", "psychic"],
+		randomBattleMoves: ["thunderbolt", "substitute", "hiddenpowerice", "hiddenpowergrass", "crosschop", "focusblast", "psychic"],
 		tier: "NU",
 	},
 	electivire: {
 		inherit: true,
-		randomBattleMoves: ["wildcharge", "crosschop", "icepunch", "substitute", "flamethrower", "earthquake"],
+		randomBattleMoves: ["crosschop", "icepunch", "thunderbolt", "hiddenpowergrass", "flamethrower", "earthquake"],
 		tier: "OU",
 	},
 	magby: {
-		randomBattleMoves: ["flareblitz", "substitute", "fireblast", "hiddenpowergrass", "crosschop", "thunderpunch", "overheat"],
 		tier: "LC",
 	},
 	magmar: {
 		inherit: true,
-		randomBattleMoves: ["flareblitz", "substitute", "fireblast", "hiddenpowergrass", "crosschop", "thunderpunch", "overheat", "focusblast"],
 		tier: "NFE",
 	},
 	magmortar: {
 		inherit: true,
-		randomBattleMoves: ["fireblast", "substitute", "focusblast", "hiddenpowergrass", "thunderbolt", "overheat"],
+		randomBattleMoves: ["fireblast", "substitute", "crosschop", "focusblast", "hiddenpowergrass", "hiddenpowerice", "thunderbolt"],
 		tier: "NU",
 	},
 	pinsir: {
 		inherit: true,
-		randomBattleMoves: ["swordsdance", "xscissor", "earthquake", "closecombat", "stealthrock", "substitute", "stoneedge", "quickattack"],
+		randomBattleMoves: ["swordsdance", "xscissor", "earthquake", "closecombat", "stealthrock", "stoneedge", "quickattack"],
 		tier: "NU",
 	},
 	tauros: {
 		inherit: true,
-		randomBattleMoves: ["return", "earthquake", "zenheadbutt", "rockslide", "pursuit"],
+		randomBattleMoves: ["doubleedge", "earthquake", "payback", "stoneedge", "pursuit", "substitute", "return"],
 		tier: "NU",
 	},
 	magikarp: {
 		inherit: true,
-		randomBattleMoves: ["bounce", "flail", "tackle", "splash"],
 		tier: "LC",
 	},
 	gyarados: {
-		randomBattleMoves: ["dragondance", "waterfall", "earthquake", "bounce", "rest", "sleeptalk", "dragontail", "stoneedge", "substitute", "thunderwave", "icefang"],
+		randomBattleMoves: ["dragondance", "waterfall", "earthquake", "bounce", "rest", "sleeptalk", "stoneedge", "roar", "taunt", "icefang"],
 		tier: "OU",
 	},
 	lapras: {
 		inherit: true,
-		randomBattleMoves: ["icebeam", "thunderbolt", "healbell", "toxic", "surf", "dragondance", "substitute", "waterfall", "return", "avalanche", "rest", "sleeptalk", "curse", "iceshard", "drillrun"],
+		randomBattleMoves: ["surf", "hydropump", "icebeam", "thunderbolt", "healbell", "toxic", "dragondance", "substitute", "waterfall", "return", "zenheadbutt"],
 		tier: "NU",
 	},
 	ditto: {
@@ -705,45 +631,43 @@ exports.BattleFormatsData = {
 	},
 	eevee: {
 		inherit: true,
-		randomBattleMoves: ["quickattack", "return", "bite", "batonpass", "irontail", "yawn", "protect", "wish"],
 		tier: "LC",
 	},
 	vaporeon: {
-		randomBattleMoves: ["wish", "protect", "scald", "roar", "icebeam", "toxic", "batonpass", "substitute", "acidarmor", "hydropump", "hiddenpowergrass", "rest", "raindance"],
+		randomBattleMoves: ["wish", "protect", "roar", "icebeam", "toxic", "surf"],
 		tier: "OU",
 	},
 	jolteon: {
-		randomBattleMoves: ["thunderbolt", "voltswitch", "hiddenpowergrass", "hiddenpowerice", "chargebeam", "batonpass", "substitute"],
+		randomBattleMoves: ["thunderbolt", "hiddenpowergrass", "hiddenpowerice", "chargebeam", "batonpass", "substitute", "shadowball"],
 		tier: "OU",
 	},
 	flareon: {
-		randomBattleMoves: ["rest", "sleeptalk", "flamecharge", "facade"],
+		randomBattleMoves: ["rest", "sleeptalk", "lavaplume", "roar"],
 		tier: "NU",
 	},
 	espeon: {
 		inherit: true,
-		randomBattleMoves: ["psychic", "psyshock", "substitute", "wish", "shadowball", "hiddenpowerfighting", "calmmind", "morningsun", "storedpower", "batonpass"],
+		randomBattleMoves: ["psychic", "shadowball", "hiddenpowerground", "calmmind", "morningsun", "batonpass", "substitute"],
 		tier: "BL2",
 	},
 	umbreon: {
 		inherit: true,
-		randomBattleMoves: ["curse", "payback", "moonlight", "wish", "protect", "healbell", "toxic", "batonpass"],
+		randomBattleMoves: ["curse", "payback", "moonlight", "wish", "protect", "healbell", "toxic"],
 		tier: "OU",
 	},
 	leafeon: {
-		randomBattleMoves: ["swordsdance", "leafblade", "substitute", "return", "xscissor", "yawn", "roar", "healbell", "batonpass"],
+		randomBattleMoves: ["swordsdance", "leafblade", "substitute", "doubleedge", "yawn", "synthesis", "healbell", "batonpass"],
 		tier: "UU",
 	},
 	glaceon: {
-		randomBattleMoves: ["icebeam", "hiddenpowerground", "shadowball", "wish", "protect"],
+		randomBattleMoves: ["icebeam", "hiddenpowerground", "shadowball", "batonpass", "wish"],
 		tier: "NU",
 	},
 	porygon: {
-		randomBattleMoves: ["triattack", "icebeam", "recover", "toxic", "thunderwave", "discharge", "trick"],
 		tier: "LC",
 	},
 	porygon2: {
-		randomBattleMoves: ["triattack", "icebeam", "recover", "toxic", "thunderwave", "discharge", "trick"],
+		randomBattleMoves: ["triattack", "icebeam", "recover", "toxic", "discharge"],
 		tier: "NU",
 	},
 	porygonz: {
@@ -751,197 +675,176 @@ exports.BattleFormatsData = {
 		tier: "BL",
 	},
 	omanyte: {
-		randomBattleMoves: ["shellsmash", "surf", "icebeam", "earthpower", "hiddenpowerelectric", "spikes", "toxicspikes", "stealthrock", "hydropump"],
 		tier: "LC",
 	},
 	omastar: {
-		randomBattleMoves: ["shellsmash", "surf", "icebeam", "earthpower", "hiddenpowerelectric", "spikes", "toxicspikes", "stealthrock", "hydropump"],
+		randomBattleMoves: ["surf", "icebeam", "earthpower", "raindance", "spikes", "stealthrock", "hydropump", "hiddenpowergrass"],
 		tier: "UU",
 	},
 	kabuto: {
-		randomBattleMoves: ["aquajet", "rockslide", "rapidspin", "stealthrock", "honeclaws", "waterfall", "toxic"],
 		tier: "LC",
 	},
 	kabutops: {
-		randomBattleMoves: ["aquajet", "stoneedge", "rapidspin", "stealthrock", "swordsdance", "waterfall", "toxic", "superpower"],
+		randomBattleMoves: ["swordsdance", "waterfall", "aquajet", "stoneedge", "rapidspin", "stealthrock", "superpower"],
 		tier: "UU",
 	},
 	aerodactyl: {
-		randomBattleMoves: ["stealthrock", "taunt", "stoneedge", "rockslide", "earthquake", "aquatail", "roost", "firefang"],
+		randomBattleMoves: ["stealthrock", "taunt", "stoneedge", "rockslide", "earthquake", "roost"],
 		tier: "OU",
 	},
 	munchlax: {
 		inherit: true,
-		randomBattleMoves: ["rest", "curse", "sleeptalk", "bodyslam", "earthquake", "return", "firepunch", "icepunch", "whirlwind"],
 		tier: "LC",
 	},
 	snorlax: {
 		inherit: true,
-		randomBattleMoves: ["rest", "curse", "sleeptalk", "bodyslam", "earthquake", "return", "firepunch", "icepunch", "crunch", "selfdestruct", "pursuit", "whirlwind"],
+		randomBattleMoves: ["rest", "curse", "sleeptalk", "bodyslam", "earthquake", "return", "firepunch", "crunch", "selfdestruct", "pursuit", "whirlwind"],
 		tier: "OU",
 	},
 	articuno: {
 		inherit: true,
-		randomBattleMoves: ["icebeam", "roost", "roar", "healbell", "toxic", "substitute", "hurricane"],
+		randomBattleMoves: ["icebeam", "roost", "roar", "healbell", "toxic", "substitute"],
 		tier: "NU",
 	},
 	zapdos: {
 		inherit: true,
-		randomBattleMoves: ["thunderbolt", "heatwave", "hiddenpowergrass", "hiddenpowerice", "roost", "toxic", "substitute", "batonpass", "agility", "discharge"],
+		randomBattleMoves: ["thunderbolt", "heatwave", "hiddenpowergrass", "hiddenpowerice", "roost", "toxic", "substitute", "uturn"],
 		tier: "OU",
 	},
 	moltres: {
 		inherit: true,
-		randomBattleMoves: ["fireblast", "hiddenpowergrass", "airslash", "roost", "substitute", "toxic", "overheat", "uturn", "willowisp", "hurricane"],
+		randomBattleMoves: ["fireblast", "hiddenpowergrass", "airslash", "roost", "substitute", "toxic", "uturn"],
 		tier: "UU",
 	},
 	dratini: {
-		randomBattleMoves: ["dragondance", "outrage", "waterfall", "fireblast", "extremespeed", "dracometeor", "substitute", "aquatail"],
 		tier: "LC",
 	},
 	dragonair: {
-		randomBattleMoves: ["dragondance", "outrage", "waterfall", "fireblast", "extremespeed", "dracometeor", "substitute", "aquatail"],
+		randomBattleMoves: ["dragondance", "outrage", "fireblast", "extremespeed", "dracometeor", "aquatail"],
 		tier: "NU",
 	},
 	dragonite: {
 		inherit: true,
-		randomBattleMoves: ["dragondance", "outrage", "firepunch", "extremespeed", "dragonclaw", "earthquake", "roost", "waterfall", "substitute", "thunderwave", "dragontail", "hurricane", "superpower", "dracometeor"],
+		randomBattleMoves: ["dragondance", "outrage", "firepunch", "extremespeed", "dragonclaw", "earthquake", "roost", "healbell", "superpower", "dracometeor"],
 		tier: "OU",
 	},
 	mewtwo: {
 		inherit: true,
-		randomBattleMoves: ["psystrike", "aurasphere", "fireblast", "icebeam", "calmmind", "substitute", "recover", "thunderbolt"],
+		randomBattleMoves: ["aurasphere", "fireblast", "icebeam", "calmmind", "trick", "recover", "willowisp", "taunt", "substitute"],
 		tier: "Uber",
 	},
 	mew: {
 		inherit: true,
-		randomBattleMoves: ["taunt", "willowisp", "roost", "psychic", "nastyplot", "aurasphere", "shadowball", "fireblast", "swordsdance", "superpower", "zenheadbutt", "calmmind", "batonpass", "rockpolish", "substitute", "toxic", "explosion", "icebeam", "thunderbolt", "earthquake", "uturn", "stealthrock", "transform"],
+		randomBattleMoves: ["thunderwave", "willowisp", "uturn", "softboiled", "taunt", "stealthrock", "explosion"],
 		tier: "Uber",
 	},
 	chikorita: {
 		inherit: true,
-		randomBattleMoves: ["reflect", "lightscreen", "safeguard", "aromatherapy", "grasswhistle", "leechseed", "toxic", "gigadrain", "synthesis"],
 		tier: "LC",
 	},
 	bayleef: {
-		randomBattleMoves: ["reflect", "lightscreen", "safeguard", "aromatherapy", "grasswhistle", "leechseed", "toxic", "gigadrain", "synthesis"],
 		tier: "NFE",
 	},
 	meganium: {
-		randomBattleMoves: ["reflect", "lightscreen", "safeguard", "aromatherapy", "grasswhistle", "leechseed", "toxic", "gigadrain", "synthesis", "dragontail"],
+		randomBattleMoves: ["reflect", "lightscreen", "synthesis", "aromatherapy", "leechseed", "toxic", "energyball", "seedbomb"],
 		tier: "NU",
 	},
 	cyndaquil: {
 		inherit: true,
-		randomBattleMoves: ["eruption", "fireblast", "flamethrower", "hiddenpowergrass", "naturepower"],
 		tier: "LC",
 	},
 	quilava: {
-		randomBattleMoves: ["eruption", "fireblast", "flamethrower", "hiddenpowergrass", "naturepower"],
 		tier: "NFE",
 	},
 	typhlosion: {
 		inherit: true,
-		randomBattleMoves: ["eruption", "fireblast", "flamethrower", "hiddenpowergrass", "naturepower", "focusblast"],
+		randomBattleMoves: ["sunnyday", "fireblast", "solarbeam", "hiddenpowerrock", "eruption", "focusblast"],
 		tier: "NU",
 	},
 	totodile: {
 		inherit: true,
-		randomBattleMoves: ["aquajet", "waterfall", "crunch", "icepunch", "superpower", "dragondance", "swordsdance", "return"],
 		tier: "LC",
 	},
 	croconaw: {
-		randomBattleMoves: ["aquajet", "waterfall", "crunch", "icepunch", "superpower", "dragondance", "swordsdance", "return"],
 		tier: "NFE",
 	},
 	feraligatr: {
-		randomBattleMoves: ["aquajet", "waterfall", "crunch", "icepunch", "dragondance", "swordsdance", "return", "earthquake", "superpower"],
+		randomBattleMoves: ["swordsdance", "aquajet", "waterfall", "icepunch", "dragondance", "return", "earthquake", "lowkick"],
 		tier: "UU",
 	},
 	sentret: {
-		randomBattleMoves: ["superfang", "trick", "toxic", "uturn", "knockoff"],
 		tier: "LC",
 	},
 	furret: {
-		randomBattleMoves: ["return", "uturn", "suckerpunch", "trick", "icepunch", "firepunch", "thunderpunch"],
+		randomBattleMoves: ["return", "uturn", "suckerpunch", "trick", "brickbreak", "shadowclaw"],
 		tier: "NU",
 	},
 	hoothoot: {
 		inherit: true,
-		randomBattleMoves: ["reflect", "toxic", "roost", "lightscreen", "whirlwind", "nightshade", "magiccoat"],
 		tier: "LC",
 	},
 	noctowl: {
-		randomBattleMoves: ["roost", "whirlwind", "airslash", "nightshade", "toxic", "reflect", "lightscreen", "magiccoat"],
+		randomBattleMoves: ["roost", "whirlwind", "nightshade", "toxic", "reflect"],
 		tier: "NU",
 	},
 	ledyba: {
 		inherit: true,
-		randomBattleMoves: ["roost", "agility", "lightscreen", "encore", "reflect", "knockoff", "swordsdance", "batonpass", "toxic"],
 		tier: "LC",
 	},
 	ledian: {
-		randomBattleMoves: ["roost", "agility", "lightscreen", "encore", "reflect", "knockoff", "swordsdance", "batonpass", "toxic"],
+		randomBattleMoves: ["roost", "agility", "swordsdance", "batonpass", "encore"],
 		tier: "NU",
 	},
 	spinarak: {
 		inherit: true,
-		randomBattleMoves: ["agility", "toxic", "xscissor", "toxicspikes", "poisonjab", "batonpass", "swordsdance"],
 		tier: "LC",
 	},
 	ariados: {
-		randomBattleMoves: ["agility", "toxic", "xscissor", "toxicspikes", "poisonjab", "batonpass", "swordsdance"],
+		randomBattleMoves: ["protect", "bugbite", "toxicspikes", "poisonjab", "shadowsneak", "suckerpunch"],
 		tier: "NU",
 	},
 	chinchou: {
-		randomBattleMoves: ["voltswitch", "thunderbolt", "hiddenpowergrass", "hydropump", "icebeam", "surf", "thunderwave", "scald", "discharge"],
 		tier: "LC",
 	},
 	lanturn: {
-		randomBattleMoves: ["voltswitch", "thunderbolt", "hiddenpowergrass", "hydropump", "icebeam", "surf", "thunderwave", "scald", "discharge"],
+		randomBattleMoves: ["healbell", "confuseray", "icebeam", "surf", "discharge"],
 		tier: "UU",
 	},
 	togepi: {
 		inherit: true,
-		randomBattleMoves: ["wish", "protect", "fireblast", "toxic", "thunderwave", "softboiled"],
 		tier: "LC",
 	},
 	togetic: {
-		randomBattleMoves: ["wish", "protect", "fireblast", "toxic", "thunderwave", "roost"],
+		randomBattleMoves: ["nastyplot", "batonpass", "hiddenpowerflying", "roost"],
 		tier: "NU",
 	},
 	togekiss: {
-		randomBattleMoves: ["wish", "roost", "thunderwave", "nastyplot", "airslash", "aurasphere", "batonpass"],
+		randomBattleMoves: ["healbell", "roost", "nastyplot", "airslash", "aurasphere", "fireblast", "thunderwave"],
 		tier: "OU",
 	},
 	natu: {
 		inherit: true,
-		randomBattleMoves: ["thunderwave", "roost", "toxic", "reflect", "lightscreen", "uturn", "wish", "psychic", "nightshade"],
 		tier: "LC",
 	},
 	xatu: {
-		randomBattleMoves: ["thunderwave", "toxic", "roost", "psychic", "nightshade", "uturn", "reflect", "lightscreen", "wish", "calmmind"],
+		randomBattleMoves: ["reflect", "lightscreen", "wish", "uturn", "calmmind", "psychic", "heatwave", "roost"],
 		tier: "NU",
 	},
 	mareep: {
 		inherit: true,
-		randomBattleMoves: ["reflect", "lightscreen", "thunderbolt", "discharge", "thunderwave", "toxic", "hiddenpowerice", "cottonguard"],
 		tier: "LC",
 	},
 	flaaffy: {
-		randomBattleMoves: ["reflect", "lightscreen", "thunderbolt", "discharge", "thunderwave", "toxic", "hiddenpowerice", "cottonguard"],
 		tier: "NFE",
 	},
 	ampharos: {
-		randomBattleMoves: ["voltswitch", "focusblast", "hiddenpowerice", "hiddenpowergrass", "thunderbolt", "healbell"],
+		randomBattleMoves: ["substitute", "hiddenpowerice", "focuspunch", "thunderbolt", "focusblast", "signalbeam"],
 		tier: "NU",
 	},
 	azurill: {
-		randomBattleMoves: ["scald", "return", "doubleedge", "encore", "toxic", "protect"],
 		tier: "LC",
 	},
 	marill: {
-		randomBattleMoves: ["waterfall", "return", "doubleedge", "encore", "toxic", "aquajet", "superpower", "icepunch", "protect"],
 		tier: "NFE",
 	},
 	azumarill: {
@@ -949,75 +852,69 @@ exports.BattleFormatsData = {
 		tier: "UU",
 	},
 	bonsly: {
-		randomBattleMoves: ["rockslide", "brickbreak", "doubleedge", "toxic", "stealthrock", "suckerpunch"],
 		tier: "LC",
 	},
 	sudowoodo: {
-		randomBattleMoves: ["hammerarm", "stoneedge", "earthquake", "suckerpunch", "woodhammer", "explosion", "stealthrock"],
+		randomBattleMoves: ["toxic", "stoneedge", "earthquake", "suckerpunch", "woodhammer", "explosion", "stealthrock"],
 		tier: "NU",
 	},
 	hoppip: {
-		randomBattleMoves: ["encore", "sleeppowder", "uturn", "toxic", "leechseed", "substitute", "protect"],
 		tier: "LC",
 	},
 	skiploom: {
-		randomBattleMoves: ["encore", "sleeppowder", "uturn", "toxic", "leechseed", "substitute", "protect"],
 		tier: "NFE",
 	},
 	jumpluff: {
-		randomBattleMoves: ["encore", "sleeppowder", "uturn", "toxic", "leechseed", "substitute", "gigadrain", "acrobatics", "synthesis"],
+		randomBattleMoves: ["leechseed", "substitute", "encore", "sleeppowder", "uturn", "stunspore"],
 		tier: "NU",
 	},
 	aipom: {
 		inherit: true,
-		randomBattleMoves: ["fakeout", "return", "brickbreak", "seedbomb", "shadowclaw", "uturn"],
 		tier: "LC",
 	},
 	ambipom: {
-		randomBattleMoves: ["fakeout", "return", "payback", "uturn", "lowsweep", "switcheroo", "seedbomb"],
+		randomBattleMoves: ["fakeout", "return", "payback", "lowkick", "uturn", "pursuit"],
 		tier: "UU",
 	},
 	sunkern: {
 		inherit: true,
-		randomBattleMoves: ["sunnyday", "gigadrain", "solarbeam", "hiddenpowerfire", "toxic", "earthpower"],
 		tier: "LC",
 	},
 	sunflora: {
-		randomBattleMoves: ["sunnyday", "leafstorm", "gigadrain", "solarbeam", "hiddenpowerfire", "earthpower"],
+		randomBattleMoves: ["leafstorm", "synthesis", "hiddenpowerice", "earthpower"],
 		tier: "NU",
 	},
 	yanma: {
-		randomBattleMoves: ["bugbuzz", "airslash", "hiddenpowerground", "uturn", "protect", "gigadrain"],
+		randomBattleMoves: ["bugbuzz", "airslash", "hiddenpowerground", "hypnosis", "protect"],
 		tier: "NU",
 	},
 	yanmega: {
-		randomBattleMoves: ["bugbuzz", "airslash", "hiddenpowerground", "uturn", "protect", "gigadrain"],
+		randomBattleMoves: ["bugbuzz", "airslash", "hiddenpowerground", "uturn", "protect", "hiddenpowerfire"],
 		tier: "BL",
 	},
 	wooper: {
-		randomBattleMoves: ["recover", "earthquake", "scald", "toxic", "stockpile", "yawn", "protect"],
 		tier: "LC",
 	},
 	quagsire: {
-		randomBattleMoves: ["recover", "earthquake", "waterfall", "scald", "toxic", "curse", "stoneedge", "stockpile", "yawn"],
+		randomBattleMoves: ["recover", "earthquake", "encore", "toxic", "icepunch", "waterfall", "yawn"],
 		tier: "NU",
 	},
 	murkrow: {
 		inherit: true,
-		randomBattleMoves: ["substitute", "suckerpunch", "bravebird", "heatwave", "hiddenpowergrass", "roost", "darkpulse", "thunderwave"],
+		randomBattleMoves: ["suckerpunch", "bravebird", "heatwave", "hiddenpowergrass"],
 		tier: "NU",
 	},
 	honchkrow: {
-		randomBattleMoves: ["substitute", "superpower", "suckerpunch", "bravebird", "roost", "hiddenpowergrass", "heatwave", "pursuit"],
+		randomBattleMoves: ["superpower", "suckerpunch", "bravebird", "heatwave", "pursuit"],
 		tier: "BL",
 	},
 	misdreavus: {
 		inherit: true,
-		randomBattleMoves: ["nastyplot", "substitute", "calmmind", "willowisp", "shadowball", "thunderbolt", "hiddenpowerfighting"],
+		randomBattleMoves: ["rest", "sleeptalk", "calmmind", "willowisp", "shadowball"],
 		tier: "NU",
 	},
 	mismagius: {
-		randomBattleMoves: ["nastyplot", "substitute", "calmmind", "willowisp", "shadowball", "thunderbolt", "hiddenpowerfighting"],
+		randomBattleMoves: ["nastyplot", "substitute", "taunt", "painsplit", "willowisp", "shadowball", "thunderbolt", "hiddenpowerfighting"],
 		tier: "UU",
 	},
 	unown: {
@@ -1035,57 +932,55 @@ exports.BattleFormatsData = {
 		tier: "Uber",
 	},
 	girafarig: {
-		randomBattleMoves: ["psychic", "thunderbolt", "calmmind", "batonpass", "agility", "hypervoice", "thunderwave"],
+		randomBattleMoves: ["psychic", "thunderbolt", "calmmind", "batonpass", "hiddenpowerfighting"],
 		tier: "NU",
 	},
 	pineco: {
 		inherit: true,
-		randomBattleMoves: ["rapidspin", "toxicspikes", "spikes", "bugbite", "stealthrock"],
 		tier: "LC",
 	},
 	forretress: {
-		randomBattleMoves: ["rapidspin", "toxicspikes", "spikes", "bugbite", "earthquake", "voltswitch", "stealthrock"],
+		randomBattleMoves: ["rapidspin", "toxicspikes", "spikes", "gyroball", "earthquake", "explosion"],
 		tier: "OU",
 	},
 	dunsparce: {
-		randomBattleMoves: ["coil", "rockslide", "bite", "headbutt", "glare", "thunderwave", "bodyslam", "roost"],
+		randomBattleMoves: ["rockslide", "bite", "headbutt", "zenheadbutt", "thunderwave", "bodyslam", "roost"],
 		tier: "NU",
 	},
 	gligar: {
 		inherit: true,
-		randomBattleMoves: ["stealthrock", "toxic", "roost", "taunt", "swordsdance", "earthquake", "uturn", "stoneedge", "acrobatics"],
+		randomBattleMoves: ["substitute", "toxic", "roost", "taunt", "earthquake", "aerialace"],
 		tier: "NU",
 	},
 	gliscor: {
-		randomBattleMoves: ["swordsdance", "acrobatics", "earthquake", "roost", "substitute", "taunt", "icefang", "protect", "toxic", "stealthrock"],
+		randomBattleMoves: ["swordsdance", "earthquake", "roost", "stoneedge", "taunt", "uturn", "toxic", "stealthrock"],
 		tier: "OU",
 	},
 	snubbull: {
 		inherit: true,
-		randomBattleMoves: ["thunderwave", "return", "crunch", "closecombat"],
 		tier: "LC",
 	},
 	granbull: {
-		randomBattleMoves: ["thunderwave", "return", "crunch", "closecombat", "healbell", "icepunch"],
+		randomBattleMoves: ["thunderwave", "bodyslam", "return", "crunch", "earthquake", "healbell", "toxic"],
 		tier: "NU",
 	},
 	qwilfish: {
 		inherit: true,
-		randomBattleMoves: ["toxicspikes", "waterfall", "spikes", "swordsdance", "poisonjab", "painsplit", "thunderwave", "taunt", "destinybond"],
+		randomBattleMoves: ["waterfall", "spikes", "swordsdance", "poisonjab", "explosion", "taunt", "destinybond"],
 		tier: "UU",
 	},
 	shuckle: {
 		inherit: true,
-		randomBattleMoves: ["rollout", "acupressure", "powersplit", "rest"],
+		randomBattleMoves: ["toxic", "encore", "knockoff", "rest", "protect"],
 		tier: "NU",
 	},
 	heracross: {
-		randomBattleMoves: ["closecombat", "megahorn", "stoneedge", "swordsdance", "facade"],
+		randomBattleMoves: ["closecombat", "megahorn", "stoneedge", "pursuit", "substitute"],
 		tier: "BL",
 	},
 	sneasel: {
 		inherit: true,
-		randomBattleMoves: ["iceshard", "icepunch", "nightslash", "lowkick", "pursuit", "swordsdance"],
+		randomBattleMoves: ["iceshard", "brickbreak", "lowkick", "pursuit", "punishment"],
 		tier: "NU",
 	},
 	weavile: {
@@ -1095,47 +990,43 @@ exports.BattleFormatsData = {
 	},
 	teddiursa: {
 		inherit: true,
-		randomBattleMoves: ["swordsdance", "protect", "facade", "closecombat", "firepunch", "crunch"],
 		tier: "LC",
 	},
 	ursaring: {
-		randomBattleMoves: ["swordsdance", "protect", "facade", "closecombat", "firepunch", "crunch"],
+		randomBattleMoves: ["swordsdance", "protect", "facade", "closecombat", "earthquake", "crunch"],
 		tier: "UU",
 	},
 	slugma: {
-		randomBattleMoves: ["stockpile", "recover", "lavaplume", "willowisp", "toxic", "hiddenpowergrass"],
 		tier: "LC",
 	},
 	magcargo: {
 		inherit: true,
-		randomBattleMoves: ["stockpile", "recover", "lavaplume", "willowisp", "toxic", "hiddenpowergrass", "hiddenpowerrock", "stealthrock", "shellsmash", "fireblast", "earthpower"],
+		randomBattleMoves: ["recover", "lavaplume", "willowisp", "toxic", "hiddenpowerrock", "stealthrock", "fireblast"],
 		tier: "NU",
 	},
 	swinub: {
 		inherit: true,
-		randomBattleMoves: ["earthquake", "iciclecrash", "iceshard", "stealthrock", "superpower", "endeavor"],
 		tier: "LC",
 	},
 	piloswine: {
-		randomBattleMoves: ["earthquake", "iciclecrash", "iceshard", "stealthrock", "superpower", "endeavor"],
+		randomBattleMoves: ["earthquake", "iceshard", "stoneedge", "substitute", "icefang"],
 		tier: "NU",
 	},
 	mamoswine: {
-		randomBattleMoves: ["iceshard", "earthquake", "endeavor", "iciclecrash", "stoneedge", "superpower", "stealthrock"],
+		randomBattleMoves: ["iceshard", "earthquake", "endeavor", "stoneedge", "superpower", "stealthrock"],
 		tier: "OU",
 	},
 	corsola: {
 		inherit: true,
-		randomBattleMoves: ["recover", "toxic", "powergem", "scald", "stealthrock"],
+		randomBattleMoves: ["recover", "toxic", "reflect", "surf", "stealthrock"],
 		tier: "NU",
 	},
 	remoraid: {
-		randomBattleMoves: ["waterspout", "hydropump", "fireblast", "hiddenpowerground", "icebeam", "seedbomb", "rockblast"],
 		tier: "LC",
 	},
 	octillery: {
 		inherit: true,
-		randomBattleMoves: ["hydropump", "fireblast", "icebeam", "energyball", "rockblast", "thunderwave"],
+		randomBattleMoves: ["waterspout", "surf", "icebeam", "energyball", "fireblast", "waterfall", "gunkshot", "seedbomb", "rockblast"],
 		tier: "NU",
 	},
 	delibird: {
@@ -1144,12 +1035,11 @@ exports.BattleFormatsData = {
 		tier: "NU",
 	},
 	mantyke: {
-		randomBattleMoves: ["raindance", "hydropump", "surf", "airslash", "icebeam", "rest", "sleeptalk", "toxic"],
 		tier: "LC",
 	},
 	mantine: {
 		inherit: true,
-		randomBattleMoves: ["raindance", "hydropump", "surf", "airslash", "icebeam", "rest", "sleeptalk", "toxic"],
+		randomBattleMoves: ["surf", "rest", "sleeptalk", "toxic"],
 		tier: "NU",
 	},
 	skarmory: {
@@ -1158,29 +1048,27 @@ exports.BattleFormatsData = {
 	},
 	houndour: {
 		inherit: true,
-		randomBattleMoves: ["pursuit", "suckerpunch", "fireblast", "darkpulse", "hiddenpowerfighting", "nastyplot"],
 		tier: "LC",
 	},
 	houndoom: {
-		randomBattleMoves: ["nastyplot", "pursuit", "darkpulse", "suckerpunch", "fireblast", "hiddenpowerfighting"],
+		randomBattleMoves: ["nastyplot", "darkpulse", "suckerpunch", "fireblast", "hiddenpowergrass"],
 		tier: "UU",
 	},
 	phanpy: {
-		randomBattleMoves: ["stealthrock", "earthquake", "iceshard", "headsmash", "knockoff", "seedbomb", "superpower"],
 		tier: "LC",
 	},
 	donphan: {
-		randomBattleMoves: ["stealthrock", "rapidspin", "iceshard", "earthquake", "headsmash", "seedbomb", "superpower"],
+		randomBattleMoves: ["stealthrock", "rapidspin", "iceshard", "earthquake", "seedbomb", "stoneedge", "assurance"],
 		tier: "UU",
 	},
 	stantler: {
 		inherit: true,
-		randomBattleMoves: ["return", "megahorn", "jumpkick", "earthquake", "thunderwave", "suckerpunch"],
+		randomBattleMoves: ["return", "megahorn", "confuseray", "earthquake", "thunderwave", "suckerpunch", "bite"],
 		tier: "NU",
 	},
 	smeargle: {
 		inherit: true,
-		randomBattleMoves: ["spore", "spikes", "stealthrock", "uturn", "destinybond", "whirlwind"],
+		randomBattleMoves: ["spore", "spikes", "stealthrock", "uturn", "counter", "trick"],
 		tier: "OU",
 	},
 	miltank: {
@@ -1189,220 +1077,195 @@ exports.BattleFormatsData = {
 	},
 	raikou: {
 		inherit: true,
-		randomBattleMoves: ["thunderbolt", "hiddenpowerice", "aurasphere", "calmmind", "substitute"],
+		randomBattleMoves: ["thunderbolt", "hiddenpowerice", "aurasphere", "calmmind", "shadowball"],
 		tier: "BL",
 	},
 	entei: {
 		inherit: true,
-		randomBattleMoves: ["extremespeed", "flareblitz", "ironhead", "flamecharge", "stoneedge"],
+		randomBattleMoves: ["extremespeed", "flareblitz", "hiddenpowergrass", "stoneedge", "calmmind", "fireblast"],
 		tier: "BL2",
 	},
 	suicune: {
 		inherit: true,
-		randomBattleMoves: ["hydropump", "icebeam", "scald", "hiddenpowergrass", "hiddenpowerelectric", "rest", "sleeptalk", "roar", "calmmind"],
+		randomBattleMoves: ["surf", "icebeam", "hiddenpowerelectric", "rest", "sleeptalk", "roar", "calmmind"],
 		tier: "OU",
 	},
 	larvitar: {
 		inherit: true,
-		randomBattleMoves: ["earthquake", "stoneedge", "rockpolish", "dragondance", "superpower"],
 		tier: "LC",
 	},
 	pupitar: {
-		randomBattleMoves: ["earthquake", "stoneedge", "rockpolish", "dragondance", "superpower"],
 		tier: "NFE",
 	},
 	tyranitar: {
 		inherit: true,
-		randomBattleMoves: ["crunch", "stoneedge", "pursuit", "superpower", "fireblast", "icebeam", "stealthrock", "aquatail", "dragondance"],
+		randomBattleMoves: ["crunch", "stoneedge", "pursuit", "superpower", "earthquake", "dragondance", "icepunch", "fireblast", "icebeam"],
 		tier: "OU",
 	},
 	lugia: {
 		inherit: true,
-		randomBattleMoves: ["toxic", "dragontail", "roost", "substitute", "whirlwind", "icebeam"],
+		randomBattleMoves: ["calmmind", "aeroblast", "roost", "earthpower", "icebeam", "whirlwind"],
 		tier: "Uber",
 	},
 	hooh: {
 		inherit: true,
-		randomBattleMoves: ["substitute", "sacredfire", "bravebird", "earthquake", "roost", "flamecharge"],
+		randomBattleMoves: ["substitute", "sacredfire", "bravebird", "earthquake", "roost", "punishment"],
 		tier: "Uber",
 	},
 	celebi: {
 		inherit: true,
-		randomBattleMoves: ["nastyplot", "psychic", "gigadrain", "recover", "healbell", "batonpass", "stealthrock", "earthpower", "hiddenpowerfire", "hiddenpowerice", "calmmind"],
+		randomBattleMoves: ["thunderwave", "leafstorm", "hiddenpowerfire", "psychic", "uturn", "recover", "nastyplot", "grassknot", "earthpower", "substitute", "leechseed", "batonpass"],
 		tier: "OU",
 	},
 	treecko: {
 		inherit: true,
-		randomBattleMoves: ["substitute", "leechseed", "gigadrain", "leafstorm", "hiddenpowerice", "hiddenpowerrock", "endeavor"],
 		tier: "LC",
 	},
 	grovyle: {
-		randomBattleMoves: ["substitute", "leechseed", "gigadrain", "leafstorm", "hiddenpowerice", "hiddenpowerrock", "endeavor"],
 		tier: "NFE",
 	},
 	sceptile: {
-		randomBattleMoves: ["substitute", "leechseed", "gigadrain", "leafstorm", "hiddenpowerice", "focusblast", "synthesis", "hiddenpowerrock"],
+		randomBattleMoves: ["substitute", "leechseed", "grassknot", "hiddenpowerice", "hiddenpowerfire", "leafstorm", "earthquake", "focusblast"],
 		tier: "UU",
 	},
 	torchic: {
 		inherit: true,
-		randomBattleMoves: ["fireblast", "protect", "batonpass", "substitute", "hiddenpowergrass"],
 		tier: "LC",
 	},
 	combusken: {
-		randomBattleMoves: ["flareblitz", "skyuppercut", "protect", "swordsdance", "substitute", "batonpass"],
 		tier: "NFE",
 	},
 	blaziken: {
 		inherit: true,
-		randomBattleMoves: ["flareblitz", "highjumpkick", "protect", "swordsdance", "substitute", "batonpass", "bravebird"],
+		randomBattleMoves: ["flareblitz", "superpower", "thunderpunch", "stoneedge", "lowkick", "blazekick", "fireblast", "hiddenpowerice"],
 		tier: "UU",
 	},
 	mudkip: {
 		inherit: true,
-		randomBattleMoves: ["waterfall", "earthpower", "superpower", "icebeam"],
 		tier: "LC",
 	},
 	marshtomp: {
-		randomBattleMoves: ["waterfall", "earthquake", "superpower", "icepunch", "rockslide", "stealthrock"],
 		tier: "NFE",
 	},
 	swampert: {
-		randomBattleMoves: ["waterfall", "earthquake", "icepunch", "stealthrock", "roar", "superpower", "stoneedge", "rest", "sleeptalk", "curse"],
+		randomBattleMoves: ["stealthrock", "earthquake", "icebeam", "roar", "surf", "waterfall", "stoneedge", "icepunch"],
 		tier: "OU",
 	},
 	poochyena: {
 		inherit: true,
-		randomBattleMoves: ["superfang", "foulplay", "suckerpunch", "toxic"],
 		tier: "LC",
 	},
 	mightyena: {
-		randomBattleMoves: ["suckerpunch", "crunch", "icefang", "firefang", "howl"],
+		randomBattleMoves: ["suckerpunch", "crunch", "facade", "taunt", "howl", "superfang", "toxic"],
 		tier: "NU",
 	},
 	zigzagoon: {
 		inherit: true,
-		randomBattleMoves: ["bellydrum", "extremespeed", "seedbomb", "substitute"],
 		tier: "LC",
 	},
 	linoone: {
-		randomBattleMoves: ["bellydrum", "extremespeed", "seedbomb", "substitute", "shadowclaw"],
+		randomBattleMoves: ["bellydrum", "extremespeed", "seedbomb", "return", "switcheroo", "shadowclaw"],
 		tier: "NU",
 	},
 	wurmple: {
-		randomBattleMoves: ["bugbite", "poisonsting", "tackle", "electroweb"],
 		tier: "LC",
 	},
 	silcoon: {
-		randomBattleMoves: ["bugbite", "poisonsting", "tackle", "electroweb"],
 		tier: "NFE",
 	},
 	beautifly: {
-		randomBattleMoves: ["quiverdance", "bugbuzz", "psychic", "hiddenpowerfighting", "hiddenpowerrock", "substitute", "roost"],
+		randomBattleMoves: ["bugbuzz", "shadowball", "uturn", "hiddenpowerground", "stunspore"],
 		tier: "NU",
 	},
 	cascoon: {
-		randomBattleMoves: ["bugbite", "poisonsting", "tackle", "electroweb"],
 		tier: "NFE",
 	},
 	dustox: {
-		randomBattleMoves: ["toxic", "roost", "whirlwind", "bugbuzz", "protect", "sludgebomb", "quiverdance"],
+		randomBattleMoves: ["toxic", "roost", "whirlwind", "bugbuzz", "protect"],
 		tier: "NU",
 	},
 	lotad: {
 		inherit: true,
-		randomBattleMoves: ["gigadrain", "icebeam", "scald", "substitute", "leechseed"],
 		tier: "LC",
 	},
 	lombre: {
-		randomBattleMoves: ["gigadrain", "icebeam", "scald", "substitute", "leechseed"],
 		tier: "NFE",
 	},
 	ludicolo: {
-		randomBattleMoves: ["raindance", "hydropump", "surf", "gigadrain", "icebeam", "scald", "leechseed", "substitute", "toxic"],
+		randomBattleMoves: ["raindance", "surf", "energyball", "icebeam", "grassknot", "substitute", "leechseed"],
 		tier: "UU",
 	},
 	seedot: {
 		inherit: true,
-		randomBattleMoves: ["leechseed", "naturepower", "seedbomb", "explosion", "foulplay"],
 		tier: "LC",
 	},
 	nuzleaf: {
-		randomBattleMoves: ["foulplay", "naturepower", "seedbomb", "explosion", "swordsdance"],
 		tier: "NFE",
 	},
 	shiftry: {
-		randomBattleMoves: ["hiddenpowerfire", "swordsdance", "seedbomb", "suckerpunch", "naturepower", "nastyplot", "gigadrain", "darkpulse"],
+		randomBattleMoves: ["swordsdance", "seedbomb", "suckerpunch", "lowkick", "nastyplot", "grassknot", "darkpulse", "hiddenpowerfire", "leafstorm"],
 		tier: "NU",
 	},
 	taillow: {
 		inherit: true,
-		randomBattleMoves: ["bravebird", "facade", "quickattack", "uturn", "protect"],
 		tier: "LC",
 	},
 	swellow: {
 		inherit: true,
-		randomBattleMoves: ["bravebird", "facade", "quickattack", "uturn", "protect"],
+		randomBattleMoves: ["bravebird", "facade", "quickattack", "uturn", "protect", "pursuit"],
 		tier: "UU",
 	},
 	wingull: {
-		randomBattleMoves: ["scald", "icebeam", "hiddenpowergrass", "uturn", "airslash", "hurricane"],
 		tier: "LC",
 	},
 	pelipper: {
-		randomBattleMoves: ["scald", "icebeam", "hiddenpowergrass", "uturn", "airslash", "hurricane", "toxic", "roost"],
+		randomBattleMoves: ["hydropump", "surf", "airslash", "hiddenpowergrass", "toxic", "roost", "uturn"],
 		tier: "NU",
 	},
 	ralts: {
 		inherit: true,
-		randomBattleMoves: ["trickroom", "destinybond", "hypnosis", "willowisp"],
 		tier: "LC",
 	},
 	kirlia: {
-		randomBattleMoves: ["trickroom", "destinybond", "hypnosis", "willowisp"],
 		tier: "NFE",
 	},
 	gardevoir: {
-		randomBattleMoves: ["psychic", "focusblast", "shadowball", "trick", "calmmind", "willowisp", "wish", "thunderbolt", "protect", "healingwish"],
+		randomBattleMoves: ["psychic", "thunderbolt", "focusblast", "trick", "shadowball", "calmmind", "taunt"],
 		tier: "NU",
 	},
 	gallade: {
-		randomBattleMoves: ["closecombat", "trick", "stoneedge", "shadowsneak", "swordsdance", "bulkup", "drainpunch", "icepunch", "psychocut"],
+		randomBattleMoves: ["swordsdance", "closecombat", "psychocut", "stoneedge", "icepunch", "zenheadbutt", "shadowsneak", "trick"],
 		tier: "BL",
 	},
 	surskit: {
 		inherit: true,
-		randomBattleMoves: ["hydropump", "signalbeam", "hiddenpowerfire", "hiddenpowerfighting", "gigadrain"],
 		tier: "LC",
 	},
 	masquerain: {
-		randomBattleMoves: ["hydropump", "bugbuzz", "airslash", "quiverdance", "substitute", "batonpass", "roost"],
+		randomBattleMoves: ["hydropump", "bugbuzz", "airslash", "agility", "batonpass", "roost"],
 		tier: "NU",
 	},
 	shroomish: {
 		inherit: true,
-		randomBattleMoves: ["spore", "substitute", "leechseed", "gigadrain", "protect", "toxic", "stunspore"],
 		tier: "LC",
 	},
 	breloom: {
-		randomBattleMoves: ["spore", "substitute", "leechseed", "focuspunch", "machpunch", "lowsweep", "bulletseed", "stoneedge", "swordsdance", "thunderpunch"],
+		randomBattleMoves: ["substitute", "focuspunch", "spore", "seedbomb", "stoneedge", "leechseed", "swordsdance", "machpunch", "facade"],
 		tier: "OU",
 	},
 	slakoth: {
-		randomBattleMoves: ["return", "hammerarm", "firepunch", "suckerpunch", "gigaimpact", "retaliate", "toxic"],
 		tier: "LC",
 	},
 	vigoroth: {
-		randomBattleMoves: ["bulkup", "return", "earthquake", "firepunch", "suckerpunch", "slackoff"],
+		randomBattleMoves: ["bulkup", "return", "earthquake", "nightslash", "lowkick", "suckerpunch", "slackoff", "encore", "substitute", "focuspunch"],
 		tier: "NU",
 	},
 	slaking: {
 		inherit: true,
-		randomBattleMoves: ["return", "earthquake", "pursuit", "firepunch", "suckerpunch", "doubleedge", "retaliate", "gigaimpact", "hammerarm"],
+		randomBattleMoves: ["return", "earthquake", "pursuit", "firepunch", "suckerpunch", "icepunch", "doubleedge", "shadowclaw"],
 		tier: "NU",
 	},
 	nincada: {
-		randomBattleMoves: ["xscissor", "toxic", "aerialace", "nightslash"],
 		tier: "LC",
 	},
 	ninjask: {
@@ -1416,107 +1279,97 @@ exports.BattleFormatsData = {
 	},
 	whismur: {
 		inherit: true,
-		randomBattleMoves: ["hypervoice", "fireblast", "shadowball", "icebeam"],
 		tier: "LC",
 	},
 	loudred: {
-		randomBattleMoves: ["hypervoice", "fireblast", "shadowball", "icebeam"],
 		tier: "NFE",
 	},
 	exploud: {
 		inherit: true,
-		randomBattleMoves: ["hypervoice", "overheat", "shadowball", "icebeam", "surf", "focusblast"],
+		randomBattleMoves: ["return", "crunch", "earthquake", "icebeam", "surf"],
 		tier: "NU",
 	},
 	makuhita: {
 		inherit: true,
-		randomBattleMoves: ["crosschop", "bulletpunch", "closecombat", "icepunch", "bulkup"],
 		tier: "LC",
 	},
 	hariyama: {
-		randomBattleMoves: ["crosschop", "bulletpunch", "closecombat", "icepunch", "stoneedge", "bulkup"],
+		randomBattleMoves: ["substitute", "focuspunch", "bulletpunch", "closecombat", "icepunch", "stoneedge", "fakeout", "payback"],
 		tier: "UU",
 	},
 	nosepass: {
 		inherit: true,
-		randomBattleMoves: ["stoneedge", "toxic", "stealthrock", "thunderwave"],
 		tier: "LC",
 	},
 	probopass: {
-		randomBattleMoves: ["stealthrock", "thunderwave", "toxic", "earthpower", "powergem", "voltswitch"],
+		randomBattleMoves: ["stealthrock", "thunderwave", "toxic", "earthpower", "powergem"],
 		tier: "NU",
 	},
 	skitty: {
 		inherit: true,
-		randomBattleMoves: ["return", "suckerpunch", "zenheadbutt", "thunderwave", "fakeout"],
 		tier: "LC",
 	},
 	delcatty: {
 		inherit: true,
-		randomBattleMoves: ["return", "suckerpunch", "zenheadbutt", "thunderwave", "fakeout", "wish"],
+		randomBattleMoves: ["doubleedge", "return", "wish", "thunderwave", "sing", "healbell"],
 		tier: "NU",
 	},
 	sableye: {
 		inherit: true,
-		randomBattleMoves: ["recover", "willowisp", "taunt", "trick", "toxic", "nightshade", "seismictoss"],
+		randomBattleMoves: ["recover", "willowisp", "taunt", "toxic", "nightshade", "seismictoss"],
 		tier: "NU",
 	},
 	mawile: {
 		inherit: true,
-		randomBattleMoves: ["swordsdance", "ironhead", "firefang", "crunch", "batonpass", "substitute"],
+		randomBattleMoves: ["swordsdance", "ironhead", "taunt", "batonpass", "substitute"],
 		tier: "NU",
 	},
 	aron: {
-		randomBattleMoves: ["headsmash", "ironhead", "earthquake", "superpower", "stealthrock"],
 		tier: "LC",
 	},
 	lairon: {
-		randomBattleMoves: ["headsmash", "ironhead", "earthquake", "superpower", "stealthrock"],
 		tier: "NFE",
 	},
 	aggron: {
 		inherit: true,
-		randomBattleMoves: ["rockpolish", "headsmash", "earthquake", "superpower", "heavyslam", "aquatail", "icepunch", "stealthrock", "thunderwave"],
+		randomBattleMoves: ["rockpolish", "headsmash", "earthquake", "aquatail", "icepunch", "lowkick"],
 		tier: "UU",
 	},
 	meditite: {
 		inherit: true,
-		randomBattleMoves: ["highjumpkick", "psychocut", "icepunch", "thunderpunch", "trick", "fakeout", "bulletpunch", "drainpunch"],
-		tier: "LC",
+		tier: "LC Uber",
 	},
 	medicham: {
-		randomBattleMoves: ["highjumpkick", "drainpunch", "psychocut", "icepunch", "thunderpunch", "trick", "fakeout", "bulletpunch"],
+		randomBattleMoves: ["highjumpkick", "brickbreak", "zenheadbutt", "psychocut", "icepunch", "thunderpunch", "trick", "fakeout", "bulletpunch"],
 		tier: "NU",
 	},
 	electrike: {
-		randomBattleMoves: ["voltswitch", "thunderbolt", "hiddenpowerice", "overheat", "switcheroo", "flamethrower"],
 		tier: "LC",
 	},
 	manectric: {
 		inherit: true,
-		randomBattleMoves: ["voltswitch", "thunderbolt", "hiddenpowerice", "overheat", "switcheroo", "flamethrower"],
+		randomBattleMoves: ["thunderbolt", "hiddenpowergrass", "overheat", "switcheroo", "flamethrower"],
 		tier: "NU",
 	},
 	plusle: {
 		inherit: true,
-		randomBattleMoves: ["nastyplot", "thunderbolt", "substitute", "batonpass", "hiddenpowerice"],
+		randomBattleMoves: ["nastyplot", "thunderbolt", "encore", "batonpass", "hiddenpowerice"],
 		tier: "NU",
 	},
 	minun: {
 		inherit: true,
-		randomBattleMoves: ["nastyplot", "thunderbolt", "substitute", "batonpass", "hiddenpowerice"],
+		randomBattleMoves: ["nastyplot", "thunderbolt", "encore", "batonpass", "hiddenpowerice"],
 		tier: "NU",
 	},
 	volbeat: {
-		randomBattleMoves: ["tailglow", "batonpass", "substitute", "bugbuzz", "thunderwave", "encore"],
+		randomBattleMoves: ["tailglow", "batonpass", "substitute", "bugbuzz", "encore"],
 		tier: "NU",
 	},
 	illumise: {
-		randomBattleMoves: ["substitute", "batonpass", "wish", "bugbuzz", "encore", "thunderbolt"],
+		randomBattleMoves: ["hiddenpowerice", "hiddenpowerground", "uturn", "bugbuzz", "encore", "thunderbolt"],
 		tier: "NU",
 	},
 	budew: {
-		randomBattleMoves: ["spikes", "toxicspikes", "sleeppowder", "gigadrain", "stunspore", "rest"],
 		tier: "LC",
 	},
 	roselia: {
@@ -1525,118 +1378,108 @@ exports.BattleFormatsData = {
 		tier: "NU",
 	},
 	roserade: {
-		randomBattleMoves: ["sludgebomb", "gigadrain", "sleeppowder", "leafstorm", "spikes", "toxicspikes", "rest", "synthesis", "hiddenpowerfire"],
+		randomBattleMoves: ["sludgebomb", "hiddenpowerice", "sleeppowder", "leafstorm", "energyball", "spikes", "toxicspikes", "rest", "leechseed", "hiddenpowerfire"],
 		tier: "OU",
 	},
 	gulpin: {
 		inherit: true,
-		randomBattleMoves: ["stockpile", "sludgebomb", "icebeam", "toxic", "painsplit", "yawn", "encore"],
 		tier: "LC",
 	},
 	swalot: {
-		randomBattleMoves: ["stockpile", "sludgebomb", "icebeam", "toxic", "painsplit", "yawn", "encore", "earthquake"],
+		randomBattleMoves: ["sludgebomb", "icebeam", "painsplit", "yawn", "encore", "toxic"],
 		tier: "NU",
 	},
 	carvanha: {
 		inherit: true,
-		randomBattleMoves: ["protect", "hydropump", "icebeam", "waterfall", "crunch", "hiddenpowergrass", "aquajet"],
 		tier: "LC",
 	},
 	sharpedo: {
-		randomBattleMoves: ["protect", "hydropump", "icebeam", "crunch", "earthquake", "waterfall", "hiddenpowergrass", "aquajet"],
+		randomBattleMoves: ["hydropump", "icebeam", "crunch", "earthquake", "waterfall", "hiddenpowergrass", "aquajet"],
 		tier: "NU",
 	},
 	wailmer: {
-		randomBattleMoves: ["waterspout", "surf", "hydropump", "icebeam", "hiddenpowergrass", "hiddenpowerelectric"],
 		tier: "LC",
 	},
 	wailord: {
 		inherit: true,
-		randomBattleMoves: ["waterspout", "surf", "hydropump", "icebeam", "hiddenpowergrass", "hiddenpowerelectric"],
+		randomBattleMoves: ["waterspout", "surf", "hydropump", "icebeam", "hiddenpowergrass", "selfdestruct"],
 		tier: "NU",
 	},
 	numel: {
 		inherit: true,
-		randomBattleMoves: ["curse", "earthquake", "rockslide", "fireblast", "flamecharge", "rest", "sleeptalk", "stockpile"],
 		tier: "LC",
 	},
 	camerupt: {
-		randomBattleMoves: ["rockpolish", "fireblast", "earthpower", "stoneedge", "lavaplume", "stealthrock", "earthquake"],
+		randomBattleMoves: ["rockpolish", "fireblast", "earthpower", "stoneedge", "lavaplume", "explosion", "earthquake"],
 		tier: "NU",
 	},
 	torkoal: {
-		randomBattleMoves: ["rapidspin", "stealthrock", "yawn", "lavaplume", "earthquake", "toxic", "willowisp"],
+		randomBattleMoves: ["rapidspin", "stealthrock", "yawn", "lavaplume", "earthquake", "toxic", "explosion"],
 		tier: "NU",
 	},
 	spoink: {
 		inherit: true,
-		randomBattleMoves: ["psychic", "reflect", "lightscreen", "thunderwave", "trick", "healbell"],
 		tier: "LC",
 	},
 	grumpig: {
-		randomBattleMoves: ["calmmind", "psychic", "focusblast", "shadowball", "thunderwave", "trick", "healbell"],
+		randomBattleMoves: ["calmmind", "psychic", "focusblast", "shadowball", "thunderwave", "toxic", "healbell", "reflect", "lightscreen"],
 		tier: "NU",
 	},
 	spinda: {
 		inherit: true,
-		randomBattleMoves: ["wish", "protect", "return", "superpower", "suckerpunch"],
+		randomBattleMoves: ["substitute", "bodyslam", "teeterdance", "rockslide"],
 		tier: "NU",
 	},
 	trapinch: {
-		randomBattleMoves: ["earthquake", "rockslide", "crunch", "quickattack", "superpower"],
 		tier: "LC",
 	},
 	vibrava: {
-		randomBattleMoves: ["substitute", "earthquake", "outrage", "roost", "uturn", "superpower"],
 		tier: "NFE",
 	},
 	flygon: {
 		inherit: true,
-		randomBattleMoves: ["earthquake", "outrage", "dragonclaw", "uturn", "roost", "substitute", "stoneedge", "firepunch", "superpower"],
+		randomBattleMoves: ["earthquake", "outrage", "dragonclaw", "uturn", "roost", "toxic", "stoneedge", "fireblast", "firepunch"],
 		tier: "OU",
 	},
 	cacnea: {
 		inherit: true,
-		randomBattleMoves: ["swordsdance", "spikes", "suckerpunch", "seedbomb", "drainpunch"],
 		tier: "LC",
 	},
 	cacturne: {
 		inherit: true,
-		randomBattleMoves: ["swordsdance", "spikes", "suckerpunch", "seedbomb", "drainpunch"],
+		randomBattleMoves: ["swordsdance", "substitute", "suckerpunch", "seedbomb", "focuspunch"],
 		tier: "NU",
 	},
 	swablu: {
 		inherit: true,
-		randomBattleMoves: ["roost", "toxic", "cottonguard", "return"],
 		tier: "LC",
 	},
 	altaria: {
 		inherit: true,
-		randomBattleMoves: ["dragondance", "outrage", "dragonclaw", "earthquake", "roost", "fireblast"],
+		randomBattleMoves: ["dragondance", "outrage", "dragonclaw", "earthquake", "roost", "healbell", "fireblast"],
 		tier: "UU",
 	},
 	zangoose: {
 		inherit: true,
-		randomBattleMoves: ["swordsdance", "closecombat", "nightslash", "quickattack", "facade"],
+		randomBattleMoves: ["swordsdance", "closecombat", "shadowclaw", "quickattack", "return"],
 		tier: "NU",
 	},
 	seviper: {
 		inherit: true,
-		randomBattleMoves: ["sludgebomb", "flamethrower", "gigadrain", "switcheroo", "earthquake", "suckerpunch", "aquatail"],
+		randomBattleMoves: ["earthquake", "suckerpunch", "aquatail", "switcheroo", "flamethrower", "darkpulse", "sludgebomb"],
 		tier: "NU",
 	},
 	lunatone: {
 		inherit: true,
-		randomBattleMoves: ["psychic", "earthpower", "stealthrock", "rockpolish", "batonpass", "calmmind", "icebeam", "hiddenpowerrock", "moonlight"],
+		randomBattleMoves: ["psychic", "earthpower", "rockpolish", "batonpass", "calmmind", "shadowball", "substitute"],
 		tier: "NU",
 	},
 	solrock: {
 		inherit: true,
-		randomBattleMoves: ["stealthrock", "explosion", "stoneedge", "zenheadbutt", "earthquake", "batonpass", "willowisp", "rockpolish", "morningsun"],
+		randomBattleMoves: ["stealthrock", "explosion", "stoneedge", "zenheadbutt", "earthquake", "batonpass", "rockpolish"],
 		tier: "NU",
 	},
 	barboach: {
-		randomBattleMoves: ["dragondance", "waterfall", "earthquake", "return"],
 		tier: "LC",
 	},
 	whiscash: {
@@ -1646,60 +1489,63 @@ exports.BattleFormatsData = {
 	},
 	corphish: {
 		inherit: true,
-		randomBattleMoves: ["dragondance", "waterfall", "crunch", "superpower", "swordsdance"],
 		tier: "LC",
 	},
 	crawdaunt: {
 		inherit: true,
-		randomBattleMoves: ["dragondance", "waterfall", "crunch", "superpower", "swordsdance"],
+		randomBattleMoves: ["dragondance", "waterfall", "crunch", "superpower", "xscissor", "swordsdance"],
 		tier: "NU",
 	},
 	baltoy: {
 		inherit: true,
-		randomBattleMoves: ["stealthrock", "earthquake", "toxic", "psychic", "reflect", "lightscreen", "icebeam", "rapidspin"],
 		tier: "LC",
 	},
 	claydol: {
-		randomBattleMoves: ["stealthrock", "toxic", "psychic", "icebeam", "earthquake", "rapidspin", "reflect", "lightscreen"],
+		randomBattleMoves: ["stealthrock", "explosion", "icebeam", "earthquake", "rapidspin", "reflect", "lightscreen"],
 		tier: "UU",
 	},
 	lileep: {
-		randomBattleMoves: ["stealthrock", "recover", "ancientpower", "hiddenpowerfire", "gigadrain", "stockpile"],
 		tier: "LC",
 	},
 	cradily: {
-		randomBattleMoves: ["stealthrock", "recover", "stockpile", "seedbomb", "rockslide", "earthquake", "curse", "swordsdance"],
+		randomBattleMoves: ["stealthrock", "toxic", "seedbomb", "recover", "rest", "sleeptalk", "rockslide", "earthquake", "curse"],
 		tier: "NU",
 	},
 	anorith: {
-		randomBattleMoves: ["stealthrock", "brickbreak", "toxic", "xscissor", "rockslide", "swordsdance", "rockpolish"],
 		tier: "LC",
 	},
 	armaldo: {
-		randomBattleMoves: ["stealthrock", "stoneedge", "toxic", "xscissor", "swordsdance", "earthquake", "superpower"],
+		randomBattleMoves: ["stealthrock", "rapidspin", "stoneedge", "toxic", "xscissor", "swordsdance", "earthquake", "rockpolish"],
 		tier: "NU",
 	},
 	feebas: {
 		inherit: true,
-		randomBattleMoves: ["protect", "confuseray", "hypnosis", "scald", "toxic"],
 		tier: "LC",
 	},
 	milotic: {
 		inherit: true,
-		randomBattleMoves: ["recover", "scald", "hypnosis", "toxic", "icebeam", "dragontail", "rest", "sleeptalk", "hiddenpowergrass"],
+		randomBattleMoves: ["recover", "surf", "haze", "toxic", "icebeam", "rest", "sleeptalk"],
 		tier: "UU",
 	},
 	castform: {
-		randomBattleMoves: ["sunnyday", "raindance", "fireblast", "hydropump", "thunder", "icebeam", "solarbeam"],
+		randomBattleMoves: ["icebeam", "thunderbolt", "fireblast", "energyball", "shadowball"],
 		tier: "NU",
 	},
+	castformsunny: {
+		battleOnly: true,
+	},
+	castformrainy: {
+		battleOnly: true,
+	},
+	castformsnowy: {
+		battleOnly: true,
+	},
 	kecleon: {
-		randomBattleMoves: ["stealthrock", "recover", "return", "thunderwave", "suckerpunch"],
+		randomBattleMoves: ["stealthrock", "recover", "return", "aquatail", "thunderwave"],
 		tier: "NU",
 	},
 	shuppet: {
 		inherit: true,
-		randomBattleMoves: ["trickroom", "destinybond", "taunt", "shadowsneak", "willowisp"],
 		tier: "LC",
 	},
 	banette: {
@@ -1709,11 +1555,10 @@ exports.BattleFormatsData = {
 	},
 	duskull: {
 		inherit: true,
-		randomBattleMoves: ["willowisp", "shadowsneak", "icebeam", "painsplit", "substitute", "nightshade"],
 		tier: "LC",
 	},
 	dusclops: {
-		randomBattleMoves: ["willowisp", "shadowsneak", "icebeam", "painsplit", "substitute", "seismictoss"],
+		randomBattleMoves: ["willowisp", "sleeptalk", "rest", "painsplit", "seismictoss", "shadowpunch"],
 		tier: "NU",
 	},
 	dusknoir: {
@@ -1722,63 +1567,59 @@ exports.BattleFormatsData = {
 	},
 	tropius: {
 		inherit: true,
-		randomBattleMoves: ["leechseed", "substitute", "airslash", "gigadrain", "earthquake", "hiddenpowerfire", "roost", "leafstorm"],
+		randomBattleMoves: ["swordsdance", "leafblade", "aerialace", "earthquake", "airslash", "energyball", "whirlwind", "roost", "toxic"],
 		tier: "NU",
 	},
 	chingling: {
-		randomBattleMoves: ["hypnosis", "reflect", "lightscreen", "toxic", "wish", "psychic"],
 		tier: "LC",
 	},
 	chimecho: {
 		inherit: true,
-		randomBattleMoves: ["hypnosis", "toxic", "wish", "psychic", "thunderwave", "recover", "calmmind", "shadowball", "hiddenpowerfighting", "healingwish"],
+		randomBattleMoves: ["wish", "psychic", "thunderwave", "recover", "calmmind", "shadowball", "yawn"],
 		tier: "NU",
 	},
 	absol: {
 		inherit: true,
-		randomBattleMoves: ["swordsdance", "suckerpunch", "nightslash", "psychocut", "superpower", "pursuit", "megahorn"],
+		randomBattleMoves: ["swordsdance", "suckerpunch", "nightslash", "psychocut", "superpower", "pursuit"],
 		tier: "UU",
 	},
 	snorunt: {
 		inherit: true,
-		randomBattleMoves: ["spikes", "icebeam", "hiddenpowerground", "iceshard", "crunch"],
 		tier: "LC",
 	},
 	glalie: {
-		randomBattleMoves: ["spikes", "icebeam", "iceshard", "crunch", "explosion", "earthquake"],
+		randomBattleMoves: ["spikes", "icebeam", "iceshard", "crunch", "explosion", "taunt"],
 		tier: "NU",
 	},
 	froslass: {
-		randomBattleMoves: ["icebeam", "spikes", "destinybond", "shadowball", "substitute", "thunderbolt", "thunderwave"],
+		randomBattleMoves: ["icebeam", "spikes", "destinybond", "shadowball", "taunt", "trick"],
 		tier: "BL",
 	},
 	spheal: {
 		inherit: true,
-		randomBattleMoves: ["substitute", "protect", "toxic", "surf", "icebeam"],
 		tier: "LC",
 	},
 	sealeo: {
-		randomBattleMoves: ["substitute", "protect", "toxic", "surf", "icebeam"],
 		tier: "NFE",
 	},
 	walrein: {
-		randomBattleMoves: ["substitute", "protect", "toxic", "surf", "icebeam", "roar"],
+		randomBattleMoves: ["substitute", "protect", "toxic", "surf", "icebeam", "superfang", "roar"],
 		tier: "NU",
 	},
 	clamperl: {
-		randomBattleMoves: ["shellsmash", "icebeam", "surf", "hiddenpowergrass", "hiddenpowerelectric", "substitute"],
+		randomBattleMoves: ["icebeam", "surf", "hiddenpowergrass", "brine"],
 		tier: "NU",
 	},
 	huntail: {
-		randomBattleMoves: ["shellsmash", "return", "hydropump", "batonpass", "suckerpunch"],
+		randomBattleMoves: ["hiddenpowergrass", "hydropump", "doubleedge", "icebeam", "suckerpunch"],
 		tier: "NU",
 	},
 	gorebyss: {
-		randomBattleMoves: ["shellsmash", "batonpass", "hydropump", "icebeam", "hiddenpowergrass", "substitute"],
+		randomBattleMoves: ["surf", "hydropump", "icebeam", "hiddenpowergrass", "raindance"],
 		tier: "NU",
 	},
 	relicanth: {
-		randomBattleMoves: ["headsmash", "waterfall", "earthquake", "doubleedge", "stealthrock"],
+		randomBattleMoves: ["headsmash", "waterfall", "aquatail", "earthquake", "doubleedge", "rockpolish"],
 		tier: "NU",
 	},
 	luvdisc: {
@@ -1787,7 +1628,6 @@ exports.BattleFormatsData = {
 	},
 	bagon: {
 		inherit: true,
-		randomBattleMoves: ["outrage", "dragondance", "firefang", "rockslide", "dragonclaw"],
 		tier: "LC",
 	},
 	shelgon: {
@@ -1796,26 +1636,25 @@ exports.BattleFormatsData = {
 	},
 	salamence: {
 		inherit: true,
-		randomBattleMoves: ["outrage", "fireblast", "earthquake", "dracometeor", "roost", "dragondance", "dragonclaw"],
+		randomBattleMoves: ["outrage", "fireblast", "earthquake", "dracometeor", "roost", "dragondance"],
 		tier: "Uber",
 	},
 	beldum: {
-		randomBattleMoves: ["ironhead", "zenheadbutt", "headbutt", "irondefense"],
 		tier: "LC",
 	},
 	metang: {
 		inherit: true,
-		randomBattleMoves: ["stealthrock", "meteormash", "toxic", "earthquake", "bulletpunch"],
+		randomBattleMoves: ["stealthrock", "meteormash", "explosion", "toxic", "lightscreen", "reflect"],
 		tier: "NU",
 	},
 	metagross: {
 		inherit: true,
-		randomBattleMoves: ["meteormash", "earthquake", "agility", "stealthrock", "zenheadbutt", "bulletpunch", "trick"],
+		randomBattleMoves: ["meteormash", "earthquake", "agility", "stealthrock", "zenheadbutt", "bulletpunch", "explosion"],
 		tier: "OU",
 	},
 	regirock: {
 		inherit: true,
-		randomBattleMoves: ["stealthrock", "thunderwave", "stoneedge", "earthquake", "curse", "rest", "sleeptalk", "rockslide", "toxic"],
+		randomBattleMoves: ["stealthrock", "thunderwave", "stoneedge", "earthquake", "curse", "rest", "sleeptalk", "rockslide", "explosion"],
 		tier: "NU",
 	},
 	regice: {
@@ -1825,17 +1664,17 @@ exports.BattleFormatsData = {
 	},
 	registeel: {
 		inherit: true,
-		randomBattleMoves: ["stealthrock", "ironhead", "curse", "rest", "thunderwave", "toxic"],
+		randomBattleMoves: ["stealthrock", "ironhead", "curse", "rest", "sleeptalk", "thunderwave", "toxic"],
 		tier: "UU",
 	},
 	latias: {
 		inherit: true,
-		randomBattleMoves: ["dragonpulse", "surf", "hiddenpowerfire", "roost", "calmmind", "wish", "healingwish"],
+		randomBattleMoves: ["dragonpulse", "hiddenpowerfire", "roost", "calmmind", "refresh", "reflect", "lightscreen", "healingwish"],
 		tier: "Uber",
 	},
 	latios: {
 		inherit: true,
-		randomBattleMoves: ["dracometeor", "dragonpulse", "surf", "hiddenpowerfire", "psyshock", "roost"],
+		randomBattleMoves: ["dracometeor", "dragonpulse", "surf", "hiddenpowerfire", "psychic", "calmmind", "roost"],
 		tier: "Uber",
 	},
 	kyogre: {
@@ -1845,156 +1684,141 @@ exports.BattleFormatsData = {
 	},
 	groudon: {
 		inherit: true,
-		randomBattleMoves: ["earthquake", "dragontail", "stealthrock", "stoneedge", "swordsdance", "rockpolish", "thunderwave", "firepunch"],
+		randomBattleMoves: ["earthquake", "stealthrock", "stoneedge", "swordsdance", "rockpolish", "toxic", "overheat"],
 		tier: "Uber",
 	},
 	rayquaza: {
 		inherit: true,
-		randomBattleMoves: ["outrage", "vcreate", "extremespeed", "dragondance", "swordsdance", "dracometeor", "dragonclaw"],
+		randomBattleMoves: ["outrage", "extremespeed", "dragondance", "swordsdance", "overheat", "dragonclaw"],
 		tier: "Uber",
 	},
 	jirachi: {
 		inherit: true,
-		randomBattleMoves: ["ironhead", "firepunch", "thunderwave", "stealthrock", "wish", "uturn", "calmmind", "psychic", "thunder", "icepunch", "flashcannon"],
+		randomBattleMoves: ["ironhead", "firepunch", "substitute", "bodyslam", "wish", "uturn", "trick", "calmmind", "psychic", "thunderbolt", "icepunch", "flashcannon"],
 		tier: "OU",
 	},
 	deoxys: {
 		inherit: true,
-		randomBattleMoves: ["psychoboost", "superpower", "extremespeed", "icebeam", "thunderbolt", "firepunch", "spikes", "stealthrock"],
+		randomBattleMoves: ["psychoboost", "superpower", "extremespeed", "icebeam", "spikes", "stealthrock"],
 		tier: "Uber",
 	},
 	deoxysattack: {
-		randomBattleMoves: ["psychoboost", "superpower", "extremespeed", "icebeam", "thunderbolt", "firepunch", "spikes", "stealthrock"],
+		randomBattleMoves: ["shadowball", "superpower", "extremespeed", "icebeam", "hiddenpowerfire", "stealthrock"],
 		eventOnly: true,
 		tier: "Uber",
 	},
 	deoxysdefense: {
-		randomBattleMoves: ["spikes", "stealthrock", "recover", "taunt", "toxic", "agility", "seismictoss", "magiccoat"],
+		randomBattleMoves: ["spikes", "stealthrock", "recover", "taunt", "toxic", "psychoboost"],
 		eventOnly: true,
 		tier: "Uber",
 	},
 	deoxysspeed: {
-		randomBattleMoves: ["spikes", "stealthrock", "superpower", "icebeam", "psychoboost", "taunt", "lightscreen", "reflect", "magiccoat", "trick"],
+		randomBattleMoves: ["spikes", "stealthrock", "icebeam", "psychoboost", "taunt", "lightscreen", "reflect", "superpower", "extremespeed"],
 		eventOnly: true,
 		tier: "Uber",
 	},
 	turtwig: {
-		randomBattleMoves: ["reflect", "lightscreen", "stealthrock", "seedbomb", "substitute", "leechseed", "toxic"],
 		tier: "LC",
 	},
 	grotle: {
-		randomBattleMoves: ["reflect", "lightscreen", "stealthrock", "seedbomb", "substitute", "leechseed", "toxic"],
 		tier: "NFE",
 	},
 	torterra: {
-		randomBattleMoves: ["stealthrock", "earthquake", "woodhammer", "stoneedge", "synthesis", "leechseed"],
+		randomBattleMoves: ["stealthrock", "earthquake", "woodhammer", "stoneedge", "rockpolish", "leechseed", "roar"],
 		tier: "UU",
 	},
 	chimchar: {
 		inherit: true,
-		randomBattleMoves: ["stealthrock", "overheat", "hiddenpowergrass", "fakeout"],
 		tier: "LC",
 	},
 	monferno: {
-		randomBattleMoves: ["stealthrock", "overheat", "hiddenpowergrass", "fakeout", "vacuumwave"],
+		randomBattleMoves: ["stealthrock", "endeavor", "fireblast", "taunt", "vacuumwave"],
 		tier: "NU",
 	},
 	infernape: {
-		randomBattleMoves: ["stealthrock", "fireblast", "closecombat", "uturn", "grassknot", "stoneedge", "machpunch", "swordsdance", "nastyplot", "flareblitz", "hiddenpowerice", "thunderpunch"],
+		randomBattleMoves: ["stealthrock", "fireblast", "closecombat", "uturn", "grassknot", "stoneedge", "machpunch", "fakeout", "nastyplot", "hiddenpowerice", "flareblitz", "vacuumwave"],
 		tier: "OU",
 	},
 	piplup: {
-		randomBattleMoves: ["stealthrock", "hydropump", "scald", "icebeam", "hiddenpowerelectric", "hiddenpowerfire", "yawn"],
 		tier: "LC",
 	},
 	prinplup: {
-		randomBattleMoves: ["stealthrock", "hydropump", "scald", "icebeam", "hiddenpowerelectric", "hiddenpowerfire", "yawn"],
 		tier: "NFE",
 	},
 	empoleon: {
-		randomBattleMoves: ["stealthrock", "hydropump", "scald", "icebeam", "hiddenpowerelectric", "hiddenpowerfire", "roar", "grassknot"],
+		randomBattleMoves: ["stealthrock", "hydropump", "surf", "icebeam", "hiddenpowerelectric", "roar", "grassknot", "agility"],
 		tier: "OU",
 	},
 	starly: {
 		inherit: true,
-		randomBattleMoves: ["bravebird", "return", "uturn", "pursuit"],
 		tier: "LC",
 	},
 	staravia: {
-		randomBattleMoves: ["bravebird", "return", "uturn", "pursuit"],
 		tier: "NFE",
 	},
 	staraptor: {
-		randomBattleMoves: ["bravebird", "closecombat", "return", "uturn", "quickattack", "substitute", "roost", "doubleedge"],
+		randomBattleMoves: ["bravebird", "closecombat", "return", "uturn", "pursuit", "quickattack", "substitute", "roost", "doubleedge"],
 		tier: "BL",
 	},
 	bidoof: {
 		inherit: true,
-		randomBattleMoves: ["return", "aquatail", "curse", "quickattack", "stealthrock"],
 		tier: "LC",
 	},
 	bibarel: {
-		randomBattleMoves: ["return", "waterfall", "curse", "quickattack", "stealthrock"],
+		randomBattleMoves: ["return", "waterfall", "superfang", "quickattack", "toxic", "stealthrock", "thunderwave"],
 		tier: "NU",
 	},
 	kricketot: {
-		randomBattleMoves: ["endeavor", "mudslap", "bugbite", "strugglebug"],
 		tier: "LC",
 	},
 	kricketune: {
-		randomBattleMoves: ["swordsdance", "bugbite", "aerialace", "brickbreak", "toxic"],
+		randomBattleMoves: ["swordsdance", "xscissor", "nightslash", "brickbreak", "return"],
 		tier: "NU",
 	},
 	shinx: {
-		randomBattleMoves: ["wildcharge", "icefang", "firefang", "crunch"],
 		tier: "LC",
 	},
 	luxio: {
-		randomBattleMoves: ["wildcharge", "icefang", "firefang", "crunch"],
 		tier: "NFE",
 	},
 	luxray: {
-		randomBattleMoves: ["wildcharge", "icefang", "firefang", "crunch", "superpower"],
+		randomBattleMoves: ["icefang", "thunderbolt", "crunch", "superpower", "toxic", "protect", "roar"],
 		tier: "NU",
 	},
 	cranidos: {
-		randomBattleMoves: ["headsmash", "rockslide", "earthquake", "zenheadbutt", "firepunch", "rockpolish", "crunch"],
 		tier: "LC",
 	},
 	rampardos: {
-		randomBattleMoves: ["headsmash", "rockslide", "earthquake", "zenheadbutt", "firepunch", "rockpolish", "crunch"],
+		randomBattleMoves: ["stoneedge", "earthquake", "zenheadbutt", "firepunch", "rockpolish", "icebeam"],
 		tier: "NU",
 	},
 	shieldon: {
-		randomBattleMoves: ["stealthrock", "metalburst", "fireblast", "icebeam", "protect", "toxic", "roar"],
 		tier: "LC",
 	},
 	bastiodon: {
-		randomBattleMoves: ["stealthrock", "metalburst", "fireblast", "icebeam", "protect", "toxic", "roar"],
+		randomBattleMoves: ["stealthrock", "metalburst", "earthquake", "stoneedge", "ironhead", "protect", "toxic", "roar"],
 		tier: "NU",
 	},
 	burmy: {
-		randomBattleMoves: ["bugbite", "hiddenpowerice", "electroweb", "protect"],
 		tier: "LC",
 	},
 	wormadam: {
-		randomBattleMoves: ["leafstorm", "gigadrain", "signalbeam", "hiddenpowerice", "hiddenpowerrock", "toxic", "psychic", "protect"],
+		randomBattleMoves: ["leafstorm", "signalbeam", "hiddenpowerice", "hiddenpowerrock", "psychic"],
 		tier: "NU",
 	},
 	wormadamsandy: {
-		randomBattleMoves: ["earthquake", "toxic", "bugbite", "protect", "suckerpunch"],
+		randomBattleMoves: ["earthquake", "toxic", "sleeptalk", "rest"],
 		tier: "NU",
 	},
 	wormadamtrash: {
-		randomBattleMoves: ["stealthrock", "toxic", "ironhead", "protect"],
+		randomBattleMoves: ["stealthrock", "toxic", "gyroball", "protect"],
 		tier: "NU",
 	},
 	mothim: {
-		randomBattleMoves: ["quiverdance", "bugbuzz", "airslash", "gigadrain", "roost"],
+		randomBattleMoves: ["bugbuzz", "airslash", "hiddenpowerground", "uturn", "shadowball", "roost"],
 		tier: "NU",
 	},
 	combee: {
-		randomBattleMoves: ["bugbuzz", "aircutter", "endeavor", "ominouswind"],
 		tier: "LC",
 	},
 	vespiquen: {
@@ -2002,59 +1826,56 @@ exports.BattleFormatsData = {
 		tier: "NU",
 	},
 	pachirisu: {
-		randomBattleMoves: ["lightscreen", "discharge", "superfang", "toxic", "voltswitch"],
+		randomBattleMoves: ["lightscreen", "discharge", "superfang", "toxic", "uturn"],
 		tier: "NU",
 	},
 	buizel: {
-		randomBattleMoves: ["waterfall", "return", "aquajet", "switcheroo", "brickbreak", "bulkup", "batonpass", "icepunch"],
 		tier: "LC",
 	},
 	floatzel: {
-		randomBattleMoves: ["waterfall", "return", "aquajet", "switcheroo", "brickbreak", "bulkup", "batonpass", "icepunch", "crunch"],
+		randomBattleMoves: ["waterfall", "return", "aquajet", "bulkup", "batonpass", "icepunch", "crunch", "taunt"],
 		tier: "NU",
 	},
 	cherubi: {
-		randomBattleMoves: ["sunnyday", "solarbeam", "weatherball", "hiddenpowerice"],
 		tier: "LC",
 	},
 	cherrim: {
-		randomBattleMoves: ["sunnyday", "solarbeam", "weatherball", "hiddenpowerice"],
+		randomBattleMoves: ["energyball", "aromatherapy", "grasswhistle", "hiddenpowerfire", "hiddenpowerground"],
 		tier: "NU",
 	},
+	cherrimsunshine: {
+		randomBattleMoves: ["sunnyday", "solarbeam", "grasswhistle", "weatherball", "hiddenpowerice"],
+		battleOnly: true,
+	},
 	shellos: {
-		randomBattleMoves: ["scald", "clearsmog", "recover", "toxic", "icebeam"],
 		tier: "LC",
 	},
 	gastrodon: {
-		randomBattleMoves: ["earthpower", "icebeam", "scald", "toxic", "recover", "clearsmog"],
+		randomBattleMoves: ["earthpower", "icebeam", "surf", "toxic", "recover"],
 		tier: "NU",
 	},
 	drifloon: {
-		randomBattleMoves: ["acrobatics", "shadowball", "substitute", "calmmind", "hypnosis", "hiddenpowerfighting", "thunderbolt", "destinybond", "willowisp", "stockpile", "batonpass"],
 		tier: "LC",
 	},
 	drifblim: {
-		randomBattleMoves: ["acrobatics", "shadowball", "substitute", "calmmind", "hypnosis", "hiddenpowerfighting", "thunderbolt", "destinybond", "willowisp", "stockpile", "batonpass"],
+		randomBattleMoves: ["shadowball", "substitute", "calmmind", "hypnosis", "hiddenpowerfighting", "thunderbolt", "rest", "batonpass"],
 		tier: "NU",
 	},
 	buneary: {
-		randomBattleMoves: ["fakeout", "return", "switcheroo", "thunderpunch", "jumpkick", "quickattack", "firepunch", "circlethrow", "icepunch", "healingwish"],
 		tier: "LC",
 	},
 	lopunny: {
-		randomBattleMoves: ["fakeout", "return", "switcheroo", "thunderpunch", "jumpkick", "quickattack", "firepunch", "circlethrow", "icepunch", "healingwish"],
+		randomBattleMoves: ["encore", "return", "switcheroo", "healbell", "thunderwave", "batonpass", "substitute"],
 		tier: "NU",
 	},
 	glameow: {
-		randomBattleMoves: ["fakeout", "uturn", "suckerpunch", "hypnosis", "quickattack", "return", "foulplay"],
 		tier: "LC",
 	},
 	purugly: {
-		randomBattleMoves: ["fakeout", "uturn", "suckerpunch", "hypnosis", "quickattack", "return"],
+		randomBattleMoves: ["fakeout", "uturn", "shadowclaw", "taunt", "bodyslam", "return"],
 		tier: "NU",
 	},
 	stunky: {
-		randomBattleMoves: ["pursuit", "suckerpunch", "crunch", "fireblast", "explosion", "taunt"],
 		tier: "LC",
 	},
 	skuntank: {
@@ -2062,11 +1883,10 @@ exports.BattleFormatsData = {
 		tier: "NU",
 	},
 	bronzor: {
-		randomBattleMoves: ["stealthrock", "psychic", "toxic", "hypnosis", "reflect", "lightscreen", "trickroom", "explosion"],
 		tier: "LC",
 	},
 	bronzong: {
-		randomBattleMoves: ["stealthrock", "psychic", "earthquake", "toxic", "hypnosis", "reflect", "lightscreen", "trickroom", "explosion"],
+		randomBattleMoves: ["stealthrock", "gyroball", "earthquake", "payback", "hypnosis", "reflect", "lightscreen", "explosion"],
 		tier: "OU",
 	},
 	chatot: {
@@ -2075,61 +1895,56 @@ exports.BattleFormatsData = {
 		tier: "NU",
 	},
 	spiritomb: {
-		randomBattleMoves: ["shadowsneak", "suckerpunch", "pursuit", "trick", "willowisp", "calmmind", "darkpulse", "rest", "sleeptalk"],
+		randomBattleMoves: ["calmmind", "darkpulse", "rest", "sleeptalk", "shadowball", "willowisp"],
 		tier: "UU",
 	},
 	gible: {
-		randomBattleMoves: ["outrage", "dragonclaw", "earthquake", "fireblast", "stoneedge", "stealthrock"],
 		tier: "LC",
 	},
 	gabite: {
-		randomBattleMoves: ["outrage", "dragonclaw", "earthquake", "fireblast", "stoneedge", "stealthrock"],
+		randomBattleMoves: ["outrage", "dragonclaw", "earthquake", "fireblast", "stoneedge"],
 		tier: "NU",
 	},
 	garchomp: {
-		randomBattleMoves: ["outrage", "dragonclaw", "earthquake", "stoneedge", "firefang", "swordsdance"],
+		randomBattleMoves: ["outrage", "dragonclaw", "earthquake", "stoneedge", "firefang", "swordsdance", "substitute"],
 		tier: "Uber",
 	},
 	riolu: {
 		inherit: true,
-		randomBattleMoves: ["crunch", "roar", "copycat", "drainpunch"],
 		tier: "LC",
 	},
 	lucario: {
 		inherit: true,
-		randomBattleMoves: ["swordsdance", "closecombat", "crunch", "extremespeed", "icepunch", "bulletpunch", "nastyplot", "aurasphere", "darkpulse", "vacuumwave"],
+		randomBattleMoves: ["swordsdance", "closecombat", "crunch", "extremespeed", "icepunch", "bulletpunch", "nastyplot", "aurasphere", "shadowball", "vacuumwave"],
 		tier: "OU",
 	},
 	hippopotas: {
-		randomBattleMoves: ["earthquake", "slackoff", "roar", "stealthrock", "protect", "toxic"],
+		randomBattleMoves: ["earthquake", "slackoff", "roar", "stealthrock", "protect", "toxic", "yawn"],
 		tier: "BL2",
 	},
 	hippowdon: {
-		randomBattleMoves: ["earthquake", "slackoff", "roar", "stealthrock", "protect", "toxic", "icefang", "stoneedge", "stockpile"],
+		randomBattleMoves: ["earthquake", "slackoff", "roar", "stealthrock", "toxic", "icefang", "stoneedge"],
 		tier: "OU",
 	},
 	skorupi: {
-		randomBattleMoves: ["toxicspikes", "xscissor", "poisonjab", "protect"],
 		tier: "LC",
 	},
 	drapion: {
-		randomBattleMoves: ["crunch", "whirlwind", "toxicspikes", "pursuit", "earthquake", "aquatail", "swordsdance", "poisonjab", "rest", "sleeptalk"],
+		randomBattleMoves: ["swordsdance", "crunch", "earthquake", "aquatail", "whirlwind", "pursuit", "icefang", "taunt", "toxicspikes"],
 		tier: "UU",
 	},
 	croagunk: {
-		randomBattleMoves: ["fakeout", "vacuumwave", "suckerpunch", "drainpunch", "darkpulse"],
 		tier: "LC",
 	},
 	toxicroak: {
-		randomBattleMoves: ["fakeout", "suckerpunch", "drainpunch", "bulkup", "substitute", "swordsdance", "crosschop", "icepunch"],
+		randomBattleMoves: ["suckerpunch", "focuspunch", "substitute", "swordsdance", "crosschop", "icepunch"],
 		tier: "UU",
 	},
 	carnivine: {
-		randomBattleMoves: ["swordsdance", "powerwhip", "return", "sleeppowder", "substitute", "leechseed"],
+		randomBattleMoves: ["swordsdance", "powerwhip", "return", "sleeppowder", "substitute", "synthesis"],
 		tier: "NU",
 	},
 	finneon: {
-		randomBattleMoves: ["surf", "uturn", "icebeam", "hiddenpowerelectric", "hiddenpowergrass", "raindance"],
 		tier: "LC",
 	},
 	lumineon: {
@@ -2137,91 +1952,91 @@ exports.BattleFormatsData = {
 		tier: "NU",
 	},
 	snover: {
-		randomBattleMoves: ["blizzard", "iceshard", "gigadrain", "leechseed", "substitute"],
+		randomBattleMoves: ["blizzard", "iceshard", "protect", "leechseed", "substitute", "swordsdance", "seedbomb"],
 		tier: "BL2",
 	},
 	abomasnow: {
-		randomBattleMoves: ["blizzard", "iceshard", "gigadrain", "leechseed", "substitute", "focusblast"],
+		randomBattleMoves: ["blizzard", "iceshard", "woodhammer", "leechseed", "substitute", "earthquake", "hiddenpowerfire", "grassknot"],
 		tier: "BL",
 	},
 	rotom: {
-		randomBattleMoves: ["thunderbolt", "discharge", "voltswitch", "shadowball", "substitute", "painsplit", "hiddenpowerice", "hiddenpowerfighting", "willowisp", "rest", "sleeptalk", "trick"],
+		randomBattleMoves: ["thunderbolt", "shadowball", "substitute", "painsplit", "hiddenpowerfighting", "willowisp", "trick"],
 		tier: "UU",
 	},
 	rotomheat: {
-		randomBattleMoves: ["thunderbolt", "discharge", "voltswitch", "substitute", "painsplit", "hiddenpowerice", "willowisp", "rest", "sleeptalk", "overheat", "trick"],
+		randomBattleMoves: ["thunderbolt", "hiddenpowerice", "shadowball", "willowisp", "overheat", "trick"],
 		tier: "OU",
 	},
 	rotomwash: {
-		randomBattleMoves: ["thunderbolt", "discharge", "voltswitch", "substitute", "painsplit", "hiddenpowerice", "willowisp", "rest", "sleeptalk", "trick", "hydropump"],
+		randomBattleMoves: ["thunderbolt", "substitute", "painsplit", "shadowball", "hiddenpowerice", "willowisp", "trick", "hydropump"],
 		tier: "OU",
 	},
 	rotomfrost: {
-		randomBattleMoves: ["thunderbolt", "discharge", "voltswitch", "substitute", "painsplit", "hiddenpowerfighting", "willowisp", "rest", "sleeptalk", "trick", "blizzard"],
+		randomBattleMoves: ["thunderbolt", "hiddenpowerfighting", "shadowball", "trick", "blizzard", "substitute", "painsplit"],
 		tier: "OU",
 	},
 	rotomfan: {
-		randomBattleMoves: ["thunderbolt", "discharge", "voltswitch", "thunderwave", "substitute", "painsplit", "hiddenpowerfighting", "willowisp", "rest", "sleeptalk", "trick", "airslash", "confuseray"],
+		randomBattleMoves: ["discharge", "substitute", "painsplit", "rest", "sleeptalk", "airslash", "confuseray"],
 		tier: "OU",
 	},
 	rotommow: {
-		randomBattleMoves: ["thunderbolt", "discharge", "voltswitch", "substitute", "painsplit", "hiddenpowerice", "willowisp", "rest", "sleeptalk", "trick", "leafstorm"],
+		randomBattleMoves: ["thunderbolt", "discharge", "substitute", "painsplit", "hiddenpowerice", "willowisp", "rest", "sleeptalk", "trick", "leafstorm"],
 		tier: "OU",
 	},
 	uxie: {
 		inherit: true,
-		randomBattleMoves: ["reflect", "lightscreen", "uturn", "psychic", "thunderwave", "yawn", "healbell", "stealthrock", "trick", "toxic"],
+		randomBattleMoves: ["reflect", "lightscreen", "uturn", "psychic", "thunderwave", "yawn", "stealthrock"],
 		tier: "UU",
 	},
 	mesprit: {
 		inherit: true,
-		randomBattleMoves: ["calmmind", "psychic", "thunderbolt", "icebeam", "substitute", "healingwish", "uturn", "trick", "stealthrock"],
+		randomBattleMoves: ["hiddenpowerfire", "thunderbolt", "icebeam", "psychic", "thunderwave", "uturn", "stealthrock", "trick"],
 		tier: "UU",
 	},
 	azelf: {
 		inherit: true,
-		randomBattleMoves: ["nastyplot", "psychic", "fireblast", "grassknot", "thunderbolt", "icepunch", "uturn", "trick", "taunt", "stealthrock", "explosion"],
+		randomBattleMoves: ["stealthrock", "fireblast", "psychic", "explosion", "taunt", "uturn", "nastyplot", "flamethrower", "hiddenpowerfighting"],
 		tier: "OU",
 	},
 	dialga: {
 		inherit: true,
-		randomBattleMoves: ["stealthrock", "dracometeor", "dragonpulse", "roar", "dragontail", "thunderbolt", "outrage", "bulkup", "fireblast", "aurasphere", "rest", "sleeptalk", "dragonclaw"],
+		randomBattleMoves: ["stealthrock", "dracometeor", "toxic", "thunderbolt", "outrage", "fireblast", "aurasphere", "dragonclaw", "bulkup"],
 		tier: "Uber",
 	},
 	palkia: {
 		inherit: true,
-		randomBattleMoves: ["spacialrend", "dracometeor", "surf", "hydropump", "thunderbolt", "outrage", "fireblast"],
+		randomBattleMoves: ["spacialrend", "dracometeor", "surf", "hydropump", "thunderbolt", "outrage", "fireblast", "aquatail", "earthquake", "stoneedge", "dragonclaw"],
 		tier: "Uber",
 	},
 	heatran: {
 		inherit: true,
-		randomBattleMoves: ["substitute", "fireblast", "lavaplume", "willowisp", "stealthrock", "earthpower", "hiddenpowergrass", "hiddenpowerice", "dragonpulse", "protect", "toxic", "roar", "overheat"],
+		randomBattleMoves: ["substitute", "fireblast", "lavaplume", "stealthrock", "earthpower", "hiddenpowergrass", "dragonpulse", "protect", "explosion", "roar"],
 		tier: "OU",
 	},
 	regigigas: {
 		inherit: true,
-		randomBattleMoves: ["thunderwave", "substitute", "return", "drainpunch", "earthquake", "firepunch", "toxic", "confuseray"],
+		randomBattleMoves: ["thunderwave", "substitute", "return", "earthquake", "firepunch", "toxic", "confuseray"],
 		tier: "NU",
 	},
 	giratina: {
 		inherit: true,
-		randomBattleMoves: ["rest", "sleeptalk", "dragontail", "roar", "willowisp", "calmmind", "dragonpulse", "shadowball"],
+		randomBattleMoves: ["rest", "sleeptalk", "roar", "willowisp", "calmmind", "dragonpulse", "shadowball"],
 		tier: "Uber",
 	},
 	giratinaorigin: {
-		randomBattleMoves: ["dracometeor", "shadowsneak", "dragontail", "hiddenpowerfire", "willowisp", "calmmind", "substitute", "dragonpulse", "shadowball", "aurasphere", "outrage"],
+		randomBattleMoves: ["dracometeor", "shadowsneak", "hiddenpowerfire", "calmmind", "substitute", "dragonpulse", "shadowball", "aurasphere", "outrage"],
 		eventOnly: true,
 		requiredItem: "Griseous Orb",
 		tier: "Uber",
 	},
 	cresselia: {
 		inherit: true,
-		randomBattleMoves: ["moonlight", "psychic", "icebeam", "thunderwave", "toxic", "lunardance", "rest", "sleeptalk", "calmmind", "reflect", "lightscreen"],
+		randomBattleMoves: ["moonlight", "psychic", "hiddenpowerfire", "icebeam", "thunderwave", "lunardance", "calmmind", "reflect", "lightscreen"],
 		tier: "BL",
 	},
 	phione: {
 		inherit: true,
-		randomBattleMoves: ["raindance", "scald", "uturn", "rest", "icebeam", "surf"],
+		randomBattleMoves: ["raindance", "toxic", "rest", "icebeam", "surf"],
 		tier: "NU",
 	},
 	manaphy: {
@@ -2236,7 +2051,7 @@ exports.BattleFormatsData = {
 	},
 	shaymin: {
 		inherit: true,
-		randomBattleMoves: ["seedflare", "earthpower", "airslash", "hiddenpowerfire", "rest", "substitute", "leechseed"],
+		randomBattleMoves: ["seedflare", "earthpower", "hiddenpowerice", "hiddenpowerfire", "rest", "substitute", "leechseed"],
 		tier: "OU",
 	},
 	shayminsky: {
@@ -2246,26 +2061,26 @@ exports.BattleFormatsData = {
 	},
 	arceus: {
 		inherit: true,
-		randomBattleMoves: ["swordsdance", "extremespeed", "shadowclaw", "earthquake", "recover"],
+		randomBattleMoves: ["swordsdance", "extremespeed", "shadowclaw", "earthquake", "recover", "overheat"],
 		tier: "Uber",
 	},
 	arceusbug: {
-		randomBattleMoves: ["swordsdance", "xscissor", "stoneedge", "recover", "calmmind", "judgment", "icebeam", "fireblast"],
+		randomBattleMoves: ["swordsdance", "xscissor", "stoneedge", "earthquake", "recover"],
 		eventOnly: true,
 		requiredItem: "Insect Plate",
 	},
 	arceusdark: {
-		randomBattleMoves: ["calmmind", "judgment", "recover", "refresh"],
+		randomBattleMoves: ["calmmind", "judgment", "focusblast", "recover", "refresh"],
 		eventOnly: true,
 		requiredItem: "Dread Plate",
 	},
 	arceusdragon: {
-		randomBattleMoves: ["swordsdance", "outrage", "extremespeed", "earthquake", "recover"],
+		randomBattleMoves: ["swordsdance", "dragonclaw", "earthquake", "recover", "overheat"],
 		eventOnly: true,
 		requiredItem: "Draco Plate",
 	},
 	arceuselectric: {
-		randomBattleMoves: ["calmmind", "judgment", "recover", "icebeam"],
+		randomBattleMoves: ["calmmind", "judgment", "recover", "icebeam", "earthpower"],
 		eventOnly: true,
 		requiredItem: "Zap Plate",
 	},
@@ -2275,57 +2090,57 @@ exports.BattleFormatsData = {
 		requiredItem: "Fist Plate",
 	},
 	arceusfire: {
-		randomBattleMoves: ["calmmind", "flamethrower", "fireblast", "thunderbolt", "recover"],
+		randomBattleMoves: ["calmmind", "judgment", "fireblast", "thunderbolt", "recover"],
 		eventOnly: true,
 		requiredItem: "Flame Plate",
 	},
 	arceusflying: {
-		randomBattleMoves: ["calmmind", "judgment", "refresh", "recover"],
+		randomBattleMoves: ["calmmind", "judgment", "substitute", "hiddenpowerfighting", "recover"],
 		eventOnly: true,
 		requiredItem: "Sky Plate",
 	},
 	arceusghost: {
-		randomBattleMoves: ["calmmind", "judgment", "focusblast", "flamethrower", "recover", "swordsdance", "shadowclaw", "brickbreak", "willowisp", "roar"],
+		randomBattleMoves: ["swordsdance", "extremespeed", "shadowclaw", "shadowforce", "recover", "brickbreak", "judgment", "flamethrower", "willowisp", "roar"],
 		eventOnly: true,
 		requiredItem: "Spooky Plate",
 	},
 	arceusgrass: {
-		randomBattleMoves: ["calmmind", "icebeam", "judgment", "earthpower", "recover", "stealthrock", "thunderwave"],
+		randomBattleMoves: ["calmmind", "icebeam", "judgment", "earthpower", "flamethrower", "recover", "thunderwave"],
 		eventOnly: true,
 		requiredItem: "Meadow Plate",
 	},
 	arceusground: {
-		randomBattleMoves: ["swordsdance", "earthquake", "stoneedge", "recover", "calmmind", "judgment", "icebeam", "stealthrock"],
+		randomBattleMoves: ["swordsdance", "earthquake", "stoneedge", "recover", "calmmind", "judgment", "icebeam"],
 		eventOnly: true,
 		requiredItem: "Earth Plate",
 	},
 	arceusice: {
-		randomBattleMoves: ["calmmind", "judgment", "icebeam", "thunderbolt", "focusblast", "recover"],
+		randomBattleMoves: ["calmmind", "judgment", "earthpower", "thunderbolt", "flamethrower", "recover"],
 		eventOnly: true,
 		requiredItem: "Icicle Plate",
 	},
 	arceuspoison: {
-		randomBattleMoves: ["calmmind", "judgment", "sludgebomb", "focusblast", "fireblast", "recover", "willowisp", "icebeam", "stealthrock"],
+		randomBattleMoves: ["calmmind", "judgment", "focusblast", "recover", "willowisp", "icebeam", "roar"],
 		eventOnly: true,
 		requiredItem: "Toxic Plate",
 	},
 	arceuspsychic: {
-		randomBattleMoves: ["calmmind", "psyshock", "focusblast", "recover", "willowisp", "judgment"],
+		randomBattleMoves: ["calmmind", "focusblast", "recover", "shadowball", "judgment"],
 		eventOnly: true,
 		requiredItem: "Mind Plate",
 	},
 	arceusrock: {
-		randomBattleMoves: ["calmmind", "judgment", "recover", "willowisp", "swordsdance", "stoneedge", "earthquake", "refresh"],
+		randomBattleMoves: ["swordsdance", "stoneedge", "earthquake", "extremespeed", "recover"],
 		eventOnly: true,
 		requiredItem: "Stone Plate",
 	},
 	arceussteel: {
-		randomBattleMoves: ["calmmind", "judgment", "recover", "roar", "willowisp", "swordsdance", "ironhead"],
+		randomBattleMoves: ["swordsdance", "ironhead", "earthquake", "recover"],
 		eventOnly: true,
 		requiredItem: "Iron Plate",
 	},
 	arceuswater: {
-		randomBattleMoves: ["swordsdance", "waterfall", "extremespeed", "dragonclaw", "recover", "calmmind", "judgment", "icebeam", "fireblast"],
+		randomBattleMoves: ["recover", "calmmind", "judgment", "icebeam", "substitute"],
 		eventOnly: true,
 		requiredItem: "Splash Plate",
 	},

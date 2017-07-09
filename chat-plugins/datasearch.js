@@ -53,6 +53,7 @@ class DatasearchManager extends ProcessManager {
 			case 'dexsearch':
 				result = runDexsearch(data.target, data.cmd, data.canAll, data.message);
 				break;
+			case 'randmove':
 			case 'movesearch':
 				result = runMovesearch(data.target, data.cmd, data.canAll, data.message);
 				break;
@@ -109,7 +110,7 @@ exports.commands = {
 
 	dexsearchhelp: [
 		"/dexsearch [parameter], [parameter], [parameter], ... - Searches for Pok\u00e9mon that fulfill the selected criteria",
-		"Search categories are: type, tier, color, moves, ability, gen, resists, recovery, priority, stat, egg group.",
+		"Search categories are: type, tier, color, moves, ability, gen, resists, recovery, priority, stat, weight, height, egg group.",
 		"Valid colors are: green, red, blue, white, brown, yellow, purple, pink, gray and black.",
 		"Valid tiers are: Uber/OU/BL/UU/BL2/RU/BL3/NU/BL4/PU/NFE/LC/CAP.",
 		"Types must be followed by ' type', e.g., 'dragon type'.",
@@ -121,6 +122,50 @@ exports.commands = {
 		"The order of the parameters does not matter.",
 	],
 
+	'!randommove': true,
+	rollmove: 'randommove',
+	randmove: 'randommove',
+	randommove: function (target, room, user, connection, cmd, message) {
+		if (!this.canBroadcast()) return;
+		let targets = target.split(",");
+		let targetsBuffer = [];
+		let qty;
+		for (let i = 0; i < targets.length; i++) {
+			if (!targets[i]) continue;
+			let num = Number(targets[i]);
+			if (Number.isInteger(num)) {
+				if (qty) return this.errorReply("Only specify the number of Pok\u00e9mon Moves once.");
+				qty = num;
+				if (qty < 1 || 15 < qty) return this.errorReply("Number of random Pok\u00e9mon Moves must be between 1 and 15.");
+				targetsBuffer.push("random" + qty);
+			} else {
+				targetsBuffer.push(targets[i]);
+			}
+		}
+		if (!qty) targetsBuffer.push("random1");
+
+		return runSearch({
+			target: targetsBuffer.join(","),
+			cmd: 'randmove',
+			canAll: (!this.broadcastMessage || (room && room.isPersonal)),
+			message: (this.broadcastMessage ? "" : message),
+		}).then(response => {
+			if (!this.runBroadcast()) return;
+			if (response.error) {
+				this.errorReply(response.error);
+			} else if (response.reply) {
+				this.sendReplyBox(response.reply);
+			} else if (response.dt) {
+				Chat.commands.data.call(this, response.dt, room, user, connection, 'dt');
+			}
+			this.update();
+		});
+	},
+	randommovehelp: [
+		"/randommove - Generates random Pok\u00e9mon Moves based on given search conditions.",
+		"/randommove uses the same parameters as /movesearch (see '/help ms').",
+		"Adding a number as a parameter returns that many random Pok\u00e9mon Moves, e.g., '/randmove 6' returns 6 random Pok\u00e9mon Moves.",
+	],
 	'!randompokemon': true,
 	rollpokemon: 'randompokemon',
 	randpoke: 'randompokemon',
@@ -192,7 +237,7 @@ exports.commands = {
 	},
 	movesearchhelp: [
 		"/movesearch [parameter], [parameter], [parameter], ... - Searches for moves that fulfill the selected criteria.",
-		"Search categories are: type, category, contest condition, flag, status inflicted, type boosted, and numeric range for base power, pp, and accuracy.",
+		"Search categories are: type, category, gen, contest condition, flag, status inflicted, type boosted, and numeric range for base power, pp, and accuracy.",
 		"Types must be followed by ' type', e.g., 'dragon type'.",
 		"Stat boosts must be preceded with 'boosts ', e.g., 'boosts attack' searches for moves that boost the attack stat.",
 		"Inequality ranges use the characters '>' and '<' though they behave as '≥' and '≤', e.g., 'bp > 100' searches for all moves equal to and greater than 100 base power.",
@@ -204,6 +249,7 @@ exports.commands = {
 
 	'!itemsearch': true,
 	isearch: 'itemsearch',
+	is: 'itemsearch',
 	itemsearch: function (target, room, user, connection, cmd, message) {
 		if (!this.canBroadcast()) return;
 		if (!target) return this.parse('/help itemsearch');
@@ -281,9 +327,9 @@ if (process.send && module === process.mainModule) {
 		});
 	}
 
-	global.Tools = require('../tools');
-	global.toId = Tools.getId;
-	Tools.includeData();
+	global.Dex = require('../sim/dex');
+	global.toId = Dex.getId;
+	Dex.includeData();
 	global.TeamValidator = require('../team-validator');
 
 	process.on('message', message => PM.onMessageDownstream(message));
@@ -297,7 +343,7 @@ function runDexsearch(target, cmd, canAll, message) {
 	let allTiers = {'uber':'Uber', 'ou':'OU', 'bl':"BL", 'uu':'UU', 'bl2':"BL2", 'ru':'RU', 'bl3':"BL3", 'nu':'NU', 'bl4':"BL4", 'pu':'PU', 'nfe':'NFE', 'lc uber':"LC Uber", 'lc':'LC', 'cap':"CAP"};
 	let allColours = {'green':1, 'red':1, 'blue':1, 'white':1, 'brown':1, 'yellow':1, 'purple':1, 'pink':1, 'gray':1, 'black':1};
 	let allEggGroups = {'amorphous':'Amorphous', 'bug':'Bug', 'ditto':'Ditto', 'dragon':'Dragon', 'fairy':'Fairy', 'field':'Field', 'flying':'Flying', 'grass':'Grass', 'humanlike':'Human-Like', 'mineral':'Mineral', 'monster':'Monster', 'undiscovered':'Undiscovered', 'water1':'Water 1', 'water2':'Water 2', 'water3':'Water 3'};
-	let allStats = {'hp':1, 'atk':1, 'def':1, 'spa':1, 'spd':1, 'spe':1, 'bst':1, 'weight':1};
+	let allStats = {'hp':1, 'atk':1, 'def':1, 'spa':1, 'spd':1, 'spe':1, 'bst':1, 'weight':1, 'height':1};
 	let showAll = false;
 	let megaSearch = null;
 	let capSearch = null;
@@ -338,7 +384,7 @@ function runDexsearch(target, cmd, canAll, message) {
 				target = target.substr(1);
 			}
 
-			let targetAbility = Tools.getAbility(target);
+			let targetAbility = Dex.getAbility(target);
 			if (targetAbility.exists) {
 				let invalid = validParameter("abilities", targetAbility, isNotSearch, targetAbility);
 				if (invalid) return {reply: invalid};
@@ -445,8 +491,8 @@ function runDexsearch(target, cmd, canAll, message) {
 
 			if (target === 'priority') {
 				if (parameters.length > 1) return {reply: "The parameter 'priority' cannot have alternative parameters"};
-				for (let move in Tools.data.Movedex) {
-					let moveData = Tools.getMove(move);
+				for (let move in Dex.data.Movedex) {
+					let moveData = Dex.getMove(move);
 					if (moveData.category === "Status" || moveData.id === "bide") continue;
 					if (moveData.priority > 0) {
 						let invalid = validParameter("moves", move, isNotSearch, target);
@@ -466,7 +512,7 @@ function runDexsearch(target, cmd, canAll, message) {
 
 			if (target.substr(0, 8) === 'resists ') {
 				let targetResist = target.substr(8, 1).toUpperCase() + target.substr(9);
-				if (targetResist in Tools.data.TypeChart) {
+				if (targetResist in Dex.data.TypeChart) {
 					let invalid = validParameter("resists", targetResist, isNotSearch, target);
 					if (invalid) return {reply: invalid};
 					orGroup.resists[targetResist] = !isNotSearch;
@@ -476,7 +522,7 @@ function runDexsearch(target, cmd, canAll, message) {
 				}
 			}
 
-			let targetMove = Tools.getMove(target);
+			let targetMove = Dex.getMove(target);
 			if (targetMove.exists) {
 				let invalid = validParameter("moves", targetMove.id, isNotSearch, target);
 				if (invalid) return {reply: invalid};
@@ -487,7 +533,7 @@ function runDexsearch(target, cmd, canAll, message) {
 			let typeIndex = target.indexOf(' type');
 			if (typeIndex >= 0) {
 				target = target.charAt(0).toUpperCase() + target.substring(1, typeIndex);
-				if (target in Tools.data.TypeChart) {
+				if (target in Dex.data.TypeChart) {
 					let invalid = validParameter("types", target, isNotSearch, target + ' type');
 					if (invalid) return {reply: invalid};
 					orGroup.types[target] = !isNotSearch;
@@ -505,30 +551,25 @@ function runDexsearch(target, cmd, canAll, message) {
 				} else {
 					inequality = target.charAt(inequality);
 				}
-				let inequalityOffset = (inequality.charAt(1) === '=' ? 0 : -1);
 				let targetParts = target.replace(/\s/g, '').split(inequality);
-				let num, stat, direction;
+				let num, stat;
+				let directions = [];
 				if (!isNaN(targetParts[0])) {
 					// e.g. 100 < spe
 					num = parseFloat(targetParts[0]);
 					stat = targetParts[1];
-					switch (inequality.charAt(0)) {
-					case '>': direction = 'less'; num += inequalityOffset; break;
-					case '<': direction = 'greater'; num -= inequalityOffset; break;
-					case '=': direction = 'equal'; break;
-					}
+					if (inequality[0] === '>') directions.push('less');
+					if (inequality[0] === '<') directions.push('greater');
 				} else if (!isNaN(targetParts[1])) {
 					// e.g. spe > 100
 					num = parseFloat(targetParts[1]);
 					stat = targetParts[0];
-					switch (inequality.charAt(0)) {
-					case '<': direction = 'less'; num += inequalityOffset; break;
-					case '>': direction = 'greater'; num -= inequalityOffset; break;
-					case '=': direction = 'equal'; break;
-					}
+					if (inequality[0] === '<') directions.push('less');
+					if (inequality[0] === '>') directions.push('greater');
 				} else {
 					return {reply: "No value given to compare with '" + escapeHTML(target) + "'."};
 				}
+				if (inequality.slice(-1) === '=') directions.push('equal');
 				switch (toId(stat)) {
 				case 'attack': stat = 'atk'; break;
 				case 'defense': stat = 'def'; break;
@@ -538,23 +579,27 @@ function runDexsearch(target, cmd, canAll, message) {
 				case 'spdef': stat = 'spd'; break;
 				case 'speed': stat = 'spe'; break;
 				case 'wt': stat = 'weight'; break;
+				case 'ht': stat = 'height'; break;
 				}
 				if (!(stat in allStats)) return {reply: "'" + escapeHTML(target) + "' did not contain a valid stat."};
 				if (!orGroup.stats[stat]) orGroup.stats[stat] = {};
-				if (orGroup.stats[stat][direction]) return {reply: "Invalid stat range for " + stat + "."};
-				orGroup.stats[stat][direction] = num;
+				for (let direction of directions) {
+					if (orGroup.stats[stat][direction]) return {reply: "Invalid stat range for " + stat + "."};
+					orGroup.stats[stat][direction] = num;
+				}
 				continue;
 			}
 			return {reply: "'" + escapeHTML(target) + "' could not be found in any of the search categories."};
 		}
-		searches.push(orGroup);
+		if (!orGroup.skip) {
+			searches.push(orGroup);
+		}
 	}
-
 	if (showAll && searches.length === 0 && megaSearch === null) return {reply: "No search parameters other than 'all' were found. Try '/help dexsearch' for more information on this command."};
 
 	let dex = {};
-	for (let pokemon in Tools.data.Pokedex) {
-		let template = Tools.getTemplate(pokemon);
+	for (let pokemon in Dex.data.Pokedex) {
+		let template = Dex.getTemplate(pokemon);
 		let megaSearchResult = (megaSearch === null || (megaSearch === true && template.isMega) || (megaSearch === false && !template.isMega));
 		if (template.tier !== 'Unreleased' && template.tier !== 'Illegal' && (template.tier !== 'CAP' || capSearch) && megaSearchResult) {
 			dex[pokemon] = template;
@@ -565,6 +610,7 @@ function runDexsearch(target, cmd, canAll, message) {
 	const accumulateKeyCount = (count, searchData) => count + (typeof searchData === 'object' ? Object.keys(searchData).length : 0);
 	searches.sort((a, b) => Object.values(a).reduce(accumulateKeyCount, 0) - Object.values(b).reduce(accumulateKeyCount, 0));
 
+	let lsetData = {};
 	for (let group = 0; group < searches.length; group++) {
 		let alts = searches[group];
 		if (alts.skip) continue;
@@ -591,7 +637,7 @@ function runDexsearch(target, cmd, canAll, message) {
 				if (alts.tiers[dex[mon].tier]) continue;
 				if (Object.values(alts.tiers).includes(false) && alts.tiers[dex[mon].tier] !== false) continue;
 				// some LC Pokemon are also in other tiers and need to be handled separately
-				if (alts.tiers.LC && !dex[mon].prevo && dex[mon].nfe && dex[mon].tier !== 'LC Uber' && !Tools.data.Formats.lc.banlist.includes(dex[mon].species)) continue;
+				if (alts.tiers.LC && !dex[mon].prevo && dex[mon].nfe && dex[mon].tier !== 'LC Uber' && !Dex.formats.gen7lc.banlist.includes(dex[mon].species)) continue;
 			}
 
 			for (let type in alts.types) {
@@ -604,8 +650,8 @@ function runDexsearch(target, cmd, canAll, message) {
 
 			for (let type in alts.resists) {
 				let effectiveness = 0;
-				let notImmune = Tools.getImmunity(type, dex[mon]);
-				if (notImmune) effectiveness = Tools.getEffectiveness(type, dex[mon]);
+				let notImmune = Dex.getImmunity(type, dex[mon]);
+				if (notImmune) effectiveness = Dex.getEffectiveness(type, dex[mon]);
 				if (!alts.resists[type]) {
 					if (notImmune && effectiveness >= 0) matched = true;
 				} else {
@@ -630,17 +676,19 @@ function runDexsearch(target, cmd, canAll, message) {
 					}
 				} else if (stat === 'weight') {
 					monStat = dex[mon].weightkg;
+				} else if (stat === 'height') {
+					monStat = dex[mon].heightm;
 				} else {
 					monStat = dex[mon].baseStats[stat];
 				}
 				if (typeof alts.stats[stat].less === 'number') {
-					if (monStat <= alts.stats[stat].less) {
+					if (monStat < alts.stats[stat].less) {
 						matched = true;
 						break;
 					}
 				}
 				if (typeof alts.stats[stat].greater === 'number') {
-					if (monStat >= alts.stats[stat].greater) {
+					if (monStat > alts.stats[stat].greater) {
 						matched = true;
 						break;
 					}
@@ -655,8 +703,8 @@ function runDexsearch(target, cmd, canAll, message) {
 			if (matched) continue;
 
 			for (let move in alts.moves) {
-				let lsetData = {fastCheck: true, set: {}};
-				if (!TeamValidator('gen7ou').checkLearnset(move, mon, lsetData) === alts.moves[move]) {
+				if (!lsetData[mon]) lsetData[mon] = {fastCheck: true, set: {}};
+				if (!TeamValidator('gen7ou').checkLearnset(move, mon, lsetData[mon]) === alts.moves[move]) {
 					matched = true;
 					break;
 				}
@@ -666,7 +714,6 @@ function runDexsearch(target, cmd, canAll, message) {
 			delete dex[mon];
 		}
 	}
-
 	let results = [];
 	for (let mon in dex) {
 		if (dex[mon].baseSpecies && results.includes(dex[mon].baseSpecies)) continue;
@@ -674,16 +721,20 @@ function runDexsearch(target, cmd, canAll, message) {
 	}
 
 	if (randomOutput && randomOutput < results.length) {
-		results = Tools.shuffle(results).slice(0, randomOutput);
+		results = Dex.shuffle(results).slice(0, randomOutput);
 	}
 
 	let resultsStr = (message === "" ? message : "<span style=\"color:#999999;\">" + escapeHTML(message) + ":</span><br />");
 	if (results.length > 1) {
-		if (showAll || results.length <= RESULTS_MAX_LENGTH + 5) {
-			results.sort();
-			resultsStr += results.join(", ");
-		} else {
-			resultsStr += results.slice(0, RESULTS_MAX_LENGTH).join(", ") + ", and " + (results.length - RESULTS_MAX_LENGTH) + " more. <span style=\"color:#999999;\">Redo the search with 'all' as a search parameter to show all results.</span>";
+		results.sort();
+		let notShown = 0;
+		if (!showAll && results.length > RESULTS_MAX_LENGTH + 5) {
+			notShown = results.length - RESULTS_MAX_LENGTH;
+			results = results.slice(0, RESULTS_MAX_LENGTH);
+		}
+		resultsStr += results.map(result => `<a href="//dex.pokemonshowdown.com/pokemon/${toId(result)}" target="_blank" class="subtle" style="white-space:nowrap"><psicon pokemon="${result}" style="vertical-align:-7px;margin:-2px" />${result}</a>`).join(", ");
+		if (notShown) {
+			resultsStr += `, and ${notShown} more. <span style="color:#999999;">Redo the search with ', all' at the end to show all results.</span>`;
 		}
 	} else if (results.length === 1) {
 		return {dt: results[0]};
@@ -706,7 +757,7 @@ function runMovesearch(target, cmd, canAll, message) {
 	let showAll = false;
 	let lsetData = {};
 	let targetMon = '';
-
+	let randomOutput = 0;
 	for (let i = 0; i < targets.length; i++) {
 		let isNotSearch = false;
 		target = targets[i].toLowerCase().trim();
@@ -718,7 +769,7 @@ function runMovesearch(target, cmd, canAll, message) {
 		let typeIndex = target.indexOf(' type');
 		if (typeIndex >= 0) {
 			target = target.charAt(0).toUpperCase() + target.substring(1, typeIndex);
-			if (!(target in Tools.data.TypeChart)) return {reply: "Type '" + escapeHTML(target) + "' not found."};
+			if (!(target in Dex.data.TypeChart)) return {reply: "Type '" + escapeHTML(target) + "' not found."};
 			if (!searches['type']) searches['type'] = {};
 			if ((searches['type'][target] && isNotSearch) || (searches['type'][target] === false && !isNotSearch)) return {reply: 'A search cannot both exclude and include a type.'};
 			searches['type'][target] = !isNotSearch;
@@ -783,7 +834,11 @@ function runMovesearch(target, cmd, canAll, message) {
 			}
 			continue;
 		}
-
+		if (target.substr(0, 6) === 'random' && cmd === 'randmove') {
+			//validation for this is in the /randmove command
+			randomOutput = parseInt(target.substr(6));
+			continue;
+		}
 		if (target === 'zrecovery') {
 			if (!searches['zrecovery']) {
 				searches['zrecovery'] = !isNotSearch;
@@ -793,14 +848,14 @@ function runMovesearch(target, cmd, canAll, message) {
 			continue;
 		}
 
-		let template = Tools.getTemplate(target);
+		let template = Dex.getTemplate(target);
 		if (template.exists) {
 			if (Object.keys(lsetData).length) return {reply: "A search can only include one Pok\u00e9mon learnset."};
-			if (!template.learnset) template = Tools.getTemplate(template.baseSpecies);
+			if (!template.learnset) template = Dex.getTemplate(template.baseSpecies);
 			lsetData = Object.assign({}, template.learnset);
 			targetMon = template.name;
 			while (template.prevo) {
-				template = Tools.getTemplate(template.prevo);
+				template = Dex.getTemplate(template.prevo);
 				for (let move in template.learnset) {
 					if (!lsetData[move]) lsetData[move] = template.learnset[move];
 				}
@@ -844,8 +899,7 @@ function runMovesearch(target, cmd, canAll, message) {
 			if (direction === 'equal') {
 				if (searches['property'][prop]) return {reply: "Invalid property range for " + prop + "."};
 				searches['property'][prop] = {};
-				searches['property'][prop]['less'] = parseFloat(targetParts[numSide]);
-				searches['property'][prop]['greater'] = parseFloat(targetParts[numSide]);
+				searches['property'][prop]['equals'] = parseFloat(targetParts[numSide]);
 			} else {
 				if (!searches['property'][prop]) searches['property'][prop] = {};
 				if (searches['property'][prop][direction]) {
@@ -955,11 +1009,11 @@ function runMovesearch(target, cmd, canAll, message) {
 	let dex = {};
 	if (targetMon) {
 		for (let move in lsetData) {
-			dex[move] = Tools.getMove(move);
+			dex[move] = Dex.getMove(move);
 		}
 	} else {
-		for (let move in Tools.data.Movedex) {
-			dex[move] = Tools.getMove(move);
+		for (let move in Dex.data.Movedex) {
+			dex[move] = Dex.getMove(move);
 		}
 		delete dex.magikarpsrevenge;
 	}
@@ -1026,7 +1080,7 @@ function runMovesearch(target, cmd, canAll, message) {
 							delete dex[move];
 							continue;
 						}
-						if (dex[move][prop] > searches[search][prop].less) {
+						if (dex[move][prop] >= searches[search][prop].less) {
 							delete dex[move];
 							continue;
 						}
@@ -1036,7 +1090,13 @@ function runMovesearch(target, cmd, canAll, message) {
 							if (dex[move].category === "Status") delete dex[move];
 							continue;
 						}
-						if (dex[move][prop] < searches[search][prop].greater) {
+						if (dex[move][prop] <= searches[search][prop].greater) {
+							delete dex[move];
+							continue;
+						}
+					}
+					if (typeof searches[search][prop].equals === "number") {
+						if (dex[move][prop] !== searches[search][prop].equals) {
 							delete dex[move];
 							continue;
 						}
@@ -1114,13 +1174,22 @@ function runMovesearch(target, cmd, canAll, message) {
 	} else {
 		resultsStr += (message === "" ? message : "<span style=\"color:#999999;\">" + escapeHTML(message) + ":</span><br />");
 	}
-	if (results.length > 0) {
-		if (showAll || results.length <= RESULTS_MAX_LENGTH + 5) {
-			results.sort();
-			resultsStr += results.join(", ");
-		} else {
-			resultsStr += results.slice(0, RESULTS_MAX_LENGTH).join(", ") + ", and " + (results.length - RESULTS_MAX_LENGTH) + " more. <span style=\"color:#999999;\">Redo the search with 'all' as a search parameter to show all results.</span>";
+	if (randomOutput && randomOutput < results.length) {
+		results = Dex.shuffle(results).slice(0, randomOutput);
+	}
+	if (results.length > 1) {
+		results.sort();
+		let notShown = 0;
+		if (!showAll && results.length > RESULTS_MAX_LENGTH + 5) {
+			notShown = results.length - RESULTS_MAX_LENGTH;
+			results = results.slice(0, RESULTS_MAX_LENGTH);
 		}
+		resultsStr += results.map(result => `<a href="//dex.pokemonshowdown.com/moves/${toId(result)}" target="_blank" class="subtle" style="white-space:nowrap">${result}</a>`).join(", ");
+		if (notShown) {
+			resultsStr += `, and ${notShown} more. <span style="color:#999999;">Redo the search with ', all' at the end to show all results.</span>`;
+		}
+	} else if (results.length === 1) {
+		return {dt: results[0]};
 	} else {
 		resultsStr += "No moves found.";
 	}
@@ -1136,7 +1205,7 @@ function runItemsearch(target, cmd, canAll, message) {
 		target = target.substr(0, target.length - 5);
 	}
 
-	target = target.toLowerCase().replace('-', ' ').replace(/[^a-z0-9.\s\/]/g, '');
+	target = target.toLowerCase().replace('-', ' ').replace(/[^a-z0-9.\s/]/g, '');
 	let rawSearch = target.split(' ');
 	let searchedWords = [];
 	let foundItems = [];
@@ -1200,7 +1269,7 @@ function runItemsearch(target, cmd, canAll, message) {
 		case 'burns': newWord = 'burn'; break;
 		case 'poisons': newWord = 'poison'; break;
 		default:
-			if (/x[\d\.]+/.test(newWord)) {
+			if (/x[\d.]+/.test(newWord)) {
 				newWord = newWord.substr(1) + 'x';
 			}
 		}
@@ -1241,8 +1310,8 @@ function runItemsearch(target, cmd, canAll, message) {
 			}
 		}
 
-		for (let n in Tools.data.Items) {
-			let item = Tools.getItem(n);
+		for (let n in Dex.data.Items) {
+			let item = Dex.getItem(n);
 			if (!item.fling) continue;
 
 			if (basePower && effect) {
@@ -1261,7 +1330,7 @@ function runItemsearch(target, cmd, canAll, message) {
 
 		for (let k = 0; k < searchedWords.length; k++) {
 			searchedWords[k] = searchedWords[k].charAt(0).toUpperCase() + searchedWords[k].slice(1);
-			if (searchedWords[k] in Tools.data.TypeChart) {
+			if (searchedWords[k] in Dex.data.TypeChart) {
 				if (type) return {reply: "Only specify natural gift type once."};
 				type = searchedWords[k];
 			} else {
@@ -1273,8 +1342,8 @@ function runItemsearch(target, cmd, canAll, message) {
 			}
 		}
 
-		for (let n in Tools.data.Items) {
-			let item = Tools.getItem(n);
+		for (let n in Dex.data.Items) {
+			let item = Dex.getItem(n);
 			if (!item.isBerry) continue;
 
 			if (basePower && type) {
@@ -1288,16 +1357,16 @@ function runItemsearch(target, cmd, canAll, message) {
 		if (foundItems.length === 0) return {reply: 'No berries inflict ' + basePower + 'bp damage when used with Natural Gift.'};
 	} else {
 		let bestMatched = 0;
-		for (let n in Tools.data.Items) {
-			let item = Tools.getItem(n);
+		for (let n in Dex.data.Items) {
+			let item = Dex.getItem(n);
 			let matched = 0;
 			// splits words in the description into a toId()-esk format except retaining / and . in numbers
 			let descWords = item.desc;
 			// add more general quantifier words to descriptions
-			if (/[1-9\.]+x/.test(descWords)) descWords += ' increases';
+			if (/[1-9.]+x/.test(descWords)) descWords += ' increases';
 			if (item.isBerry) descWords += ' berry';
-			descWords = descWords.replace(/super[\-\s]effective/g, 'supereffective');
-			descWords = descWords.toLowerCase().replace('-', ' ').replace(/[^a-z0-9\s\/]/g, '').replace(/(\D)\./, (p0, p1) => p1).split(' ');
+			descWords = descWords.replace(/super[-\s]effective/g, 'supereffective');
+			descWords = descWords.toLowerCase().replace('-', ' ').replace(/[^a-z0-9\s/]/g, '').replace(/(\D)\./, (p0, p1) => p1).split(' ');
 
 			for (let k = 0; k < searchedWords.length; k++) {
 				if (descWords.includes(searchedWords[k])) matched++;
@@ -1309,13 +1378,13 @@ function runItemsearch(target, cmd, canAll, message) {
 
 		// iterate over found items again to make sure they all are the best match
 		for (let l = 0; l < foundItems.length; l++) {
-			let item = Tools.getItem(foundItems[l]);
+			let item = Dex.getItem(foundItems[l]);
 			let matched = 0;
 			let descWords = item.desc;
-			if (/[1-9\.]+x/.test(descWords)) descWords += ' increases';
+			if (/[1-9.]+x/.test(descWords)) descWords += ' increases';
 			if (item.isBerry) descWords += ' berry';
-			descWords = descWords.replace(/super[\-\s]effective/g, 'supereffective');
-			descWords = descWords.toLowerCase().replace('-', ' ').replace(/[^a-z0-9\s\/]/g, '').replace(/(\D)\./, (p0, p1) => p1).split(' ');
+			descWords = descWords.replace(/super[-\s]effective/g, 'supereffective');
+			descWords = descWords.toLowerCase().replace('-', ' ').replace(/[^a-z0-9\s/]/g, '').replace(/(\D)\./, (p0, p1) => p1).split(' ');
 
 			for (let k = 0; k < searchedWords.length; k++) {
 				if (descWords.includes(searchedWords[k])) matched++;
@@ -1330,11 +1399,15 @@ function runItemsearch(target, cmd, canAll, message) {
 
 	let resultsStr = (message === "" ? message : "<span style=\"color:#999999;\">" + escapeHTML(message) + ":</span><br />");
 	if (foundItems.length > 0) {
-		if (showAll || foundItems.length <= RESULTS_MAX_LENGTH + 5) {
-			foundItems.sort();
-			resultsStr += foundItems.join(", ");
-		} else {
-			resultsStr += foundItems.slice(0, RESULTS_MAX_LENGTH).join(", ") + ", and " + (foundItems.length - RESULTS_MAX_LENGTH) + " more. <span style=\"color:#999999;\">Redo the search with ', all' at the end to show all results.</span>";
+		foundItems.sort();
+		let notShown = 0;
+		if (!showAll && foundItems.length > RESULTS_MAX_LENGTH + 5) {
+			notShown = foundItems.length - RESULTS_MAX_LENGTH;
+			foundItems = foundItems.slice(0, RESULTS_MAX_LENGTH);
+		}
+		resultsStr += foundItems.map(result => `<a href="//dex.pokemonshowdown.com/items/${toId(result)}" target="_blank" class="subtle" style="white-space:nowrap"><psicon item="${result}" style="vertical-align:-7px" />${result}</a>`).join(", ");
+		if (notShown) {
+			resultsStr += `, and ${notShown} more. <span style="color:#999999;">Redo the search with ', all' at the end to show all results.</span>`;
 		}
 	} else {
 		resultsStr += "No items found. Try a more general search";
@@ -1351,11 +1424,11 @@ function runLearn(target, cmd) {
 
 	while (targets.length) {
 		let targetid = toId(targets[0]);
-		if (Tools.getFormat(targetid).exists) {
+		if (Dex.getFormat(targetid).exists) {
 			if (format.requirePentagon) {
 				return {error: "'pentagon' can't be used with formats."};
 			}
-			format = Tools.getFormat(targetid);
+			format = Dex.getFormat(targetid);
 			formatid = targetid;
 			formatName = format.name;
 		}
@@ -1378,7 +1451,7 @@ function runLearn(target, cmd) {
 	if (!formatName) formatName = 'Gen ' + gen;
 	let lsetData = {set: {}, format: format};
 
-	let template = Tools.getTemplate(targets[0]);
+	let template = Dex.getTemplate(targets[0]);
 	let move = {};
 	let problem;
 	let all = (cmd === 'learnall');
@@ -1397,7 +1470,7 @@ function runLearn(target, cmd) {
 	}
 
 	for (let i = 1, len = targets.length; i < len; i++) {
-		move = Tools.getMove(targets[i]);
+		move = Dex.getMove(targets[i]);
 		if (!move.exists || move.id === 'magikarpsrevenge') {
 			return {error: "Move '" + move.id + "' not found."};
 		}

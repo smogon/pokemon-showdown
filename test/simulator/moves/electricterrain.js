@@ -33,7 +33,7 @@ describe('Electric Terrain', function () {
 		battle.join('p2', 'Guest 2', 1, [{species: "Thundurus", ability: 'defiant', moves: ['thunderwave']}]);
 		battle.commitDecisions();
 		let basePower;
-		let move = Tools.getMove('thunderbolt');
+		let move = Dex.getMove('thunderbolt');
 		basePower = battle.runEvent('BasePower', battle.p1.active[0], battle.p2.active[0], move, move.basePower, true);
 		assert.strictEqual(basePower, battle.modify(move.basePower, 1.5));
 		basePower = battle.runEvent('BasePower', battle.p2.active[0], battle.p1.active[0], move, move.basePower, true);

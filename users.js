@@ -32,7 +32,7 @@ const THROTTLE_MULTILINE_WARN_STAFF = 6;
 
 const PERMALOCK_CACHE_TIME = 30 * 24 * 60 * 60 * 1000;
 
-const fs = require('fs');
+const FS = require('./fs');
 
 const Matchmaker = require('./ladders-matchmaker').matchmaker;
 
@@ -138,13 +138,11 @@ function importUsergroups() {
 	// can't just say usergroups = {} because it's exported
 	for (let i in usergroups) delete usergroups[i];
 
-	fs.readFile('config/usergroups.csv', (err, data) => {
-		if (err) return;
-		data = ('' + data).split("\n");
-		for (let i = 0; i < data.length; i++) {
-			if (!data[i]) continue;
-			let row = data[i].split(",");
-			usergroups[toId(row[0])] = (row[1] || Config.groupsranking[0]) + row[0];
+	FS('config/usergroups.csv').readTextIfExists().then(data => {
+		for (const row of data.split("\n")) {
+			if (!row) continue;
+			let cells = row.split(",");
+			usergroups[toId(cells[0])] = (cells[1] || Config.groupsranking[0]) + cells[0];
 		}
 	});
 }
@@ -153,7 +151,7 @@ function exportUsergroups() {
 	for (let i in usergroups) {
 		buffer += usergroups[i].substr(1).replace(/,/g, '') + ',' + usergroups[i].charAt(0) + "\n";
 	}
-	fs.writeFile('config/usergroups.csv', buffer, () => {});
+	FS('config/usergroups.csv').write(buffer);
 }
 importUsergroups();
 
@@ -167,10 +165,13 @@ function cacheGroupData() {
 			`Please ensure that you update your config.js to the new format (see config-example.js, line 220).\n`
 		);
 	} else {
+		Config.punishgroups = Object.create(null);
 		Config.groups = Object.create(null);
 		Config.groupsranking = [];
 	}
+
 	let groups = Config.groups;
+	let punishgroups = Config.punishgroups;
 	let cachedGroups = {};
 
 	function cacheGroup(sym, groupData) {
@@ -197,6 +198,13 @@ function cacheGroupData() {
 		let numGroups = grouplist.length;
 		for (let i = 0; i < numGroups; i++) {
 			let groupData = grouplist[i];
+
+			// punish groups
+			if (groupData.punishgroup) {
+				punishgroups[groupData.id] = groupData;
+				continue;
+			}
+
 			groupData.rank = numGroups - i - 1;
 			groups[groupData.symbol] = groupData;
 			Config.groupsranking.unshift(groupData.symbol);
@@ -206,6 +214,22 @@ function cacheGroupData() {
 	for (let sym in groups) {
 		let groupData = groups[sym];
 		cacheGroup(sym, groupData);
+	}
+
+	// hardcode default punishgroups.
+	if (!punishgroups.locked) {
+		punishgroups.locked = {
+			name: 'Locked',
+			id: 'locked',
+			symbol: '‽',
+		};
+	}
+	if (!punishgroups.muted) {
+		punishgroups.muted = {
+			name: 'Muted',
+			id: 'muted',
+			symbol: '!',
+		};
 	}
 }
 cacheGroupData();
@@ -397,11 +421,9 @@ class User {
 		this.send(`|popup|` + message.replace(/\n/g, '||'));
 	}
 	getIdentity(roomid) {
-		if (this.locked) {
-			return '‽' + this.name;
-		}
-		if (this.namelocked) {
-			return '‽' + this.name;
+		if (this.locked || this.namelocked) {
+			const lockedSymbol = (Config.punishgroups && Config.punishgroups.locked ? Config.punishgroups.locked.symbol : '‽');
+			return lockedSymbol + this.name;
 		}
 		if (roomid && roomid !== 'global') {
 			let room = Rooms(roomid);
@@ -409,7 +431,8 @@ class User {
 				throw new Error(`Room doesn't exist: ${roomid}`);
 			}
 			if (room.isMuted(this)) {
-				return '!' + this.name;
+				const mutedSymbol = (Config.punishgroups && Config.punishgroups.muted ? Config.punishgroups.muted.symbol : '!');
+				return mutedSymbol + this.name;
 			}
 			return room.getAuth(this) + this.name;
 		}
@@ -525,8 +548,8 @@ class User {
 	canPromote(sourceGroup, targetGroup) {
 		return this.can('promote', {group:sourceGroup}) && this.can('promote', {group:targetGroup});
 	}
-	resetName() {
-		return this.forceRename('Guest ' + this.guestNum);
+	resetName(isForceRenamed) {
+		return this.forceRename('Guest ' + this.guestNum, false, isForceRenamed);
 	}
 	updateIdentity(roomid) {
 		if (roomid) {
@@ -547,7 +570,7 @@ class User {
 			// \u2E80-\u32FF              CJK symbols
 			// \u3400-\u9FFF              CJK
 			// \uF900-\uFAFF\uFE00-\uFE6F CJK extended
-			name = name.replace(/[^a-zA-Z0-9 \/\\.~()<>^*%&=+$@#_'?!"\u00A1-\u00BF\u00D7\u00F7\u02B9-\u0362\u2012-\u2027\u2030-\u205E\u2050-\u205F\u2190-\u23FA\u2500-\u2BD1\u2E80-\u32FF\u3400-\u9FFF\uF900-\uFAFF\uFE00-\uFE6F-]+/g, '');
+			name = name.replace(/[^a-zA-Z0-9 /\\.~()<>^*%&=+$@#_'?!"\u00A1-\u00BF\u00D7\u00F7\u02B9-\u0362\u2012-\u2027\u2030-\u205E\u2050-\u205F\u2190-\u23FA\u2500-\u2BD1\u2E80-\u32FF\u3400-\u9FFF\uF900-\uFAFF\uFE00-\uFE6F-]+/g, '');
 
 			// blacklist
 			// \u00a1 upside-down exclamation mark (i)
@@ -568,7 +591,7 @@ class User {
 			name = name.slice(0, 18);
 		}
 
-		name = Tools.getName(name);
+		name = Dex.getName(name);
 		if (Config.namefilter) {
 			name = Config.namefilter(name, this);
 		}
@@ -586,7 +609,7 @@ class User {
 		for (let roomid of this.games) {
 			let game = Rooms(roomid).game;
 			if (!game || game.ended) continue; // should never happen
-			if (game.allowRenames) continue;
+			if (game.allowRenames || !this.named) continue;
 			this.popup(`You can't change your name right now because you're in the middle of a rated game.`);
 			return false;
 		}
@@ -758,7 +781,7 @@ class User {
 		}
 		return false;
 	}
-	forceRename(name, registered) {
+	forceRename(name, registered, isForceRenamed) {
 		// skip the login server
 		let userid = toId(name);
 
@@ -808,7 +831,7 @@ class User {
 				this.games.delete(roomid);
 				return;
 			}
-			room.game.onRename(this, oldid, joining);
+			room.game.onRename(this, oldid, joining, isForceRenamed);
 		});
 		this.inRooms.forEach(roomid => {
 			Rooms(roomid).onRename(this, oldid, joining);
@@ -888,6 +911,9 @@ class User {
 				this.inRooms.add(roomid);
 			}
 			if (room.game && room.game.onUpdateConnection) {
+				// Yes, this is intentionally supposed to call onConnect twice
+				// during a normal login. Override onUpdateConnection if you
+				// don't want this behavior.
 				room.game.onUpdateConnection(this, connection);
 			}
 		});
@@ -942,7 +968,7 @@ class User {
 			this.avatar = Config.customavatars[this.userid];
 		}
 
-		this.isStaff = (this.group in {'%':1, '@':1, '&':1, '~':1});
+		this.isStaff = Config.groups[this.group] && Config.groups[this.group].lock;
 		if (!this.isStaff) {
 			let staffRoom = Rooms('staff');
 			this.isStaff = (staffRoom && staffRoom.auth && staffRoom.auth[this.userid]);
@@ -1082,17 +1108,16 @@ class User {
 		});
 		this.inRooms.clear();
 	}
-	getAlts(includeTrusted, forPunishment) {
-		return this.getAltUsers(includeTrusted, forPunishment).map(user => user.getLastName());
-	}
 	getAltUsers(includeTrusted, forPunishment) {
 		let alts = [];
 		if (forPunishment) alts.push(this);
+		let ips = Object.keys(this.ips);
+		if (forPunishment) ips = ips.filter(ip => !Punishments.sharedIps.has(ip));
 		users.forEach(user => {
 			if (user === this) return;
 			if (!forPunishment && !user.named && !user.connected) return;
 			if (!includeTrusted && user.trusted) return;
-			for (let myIp in this.ips) {
+			for (let myIp of ips) {
 				if (myIp in user.ips) {
 					alts.push(user);
 					return;
@@ -1211,7 +1236,7 @@ class User {
 			this.inRooms.delete(room.id);
 		}
 	}
-	prepBattle(formatid, type, connection, supplementaryBanlist) {
+	prepBattle(formatid, type, connection, customBanlist) {
 		// all validation for a battle goes through here
 		if (!connection) connection = this;
 		if (!type) type = 'challenge';
@@ -1232,7 +1257,7 @@ class User {
 			return Promise.resolve(false);
 		}
 
-		let format = Tools.getFormat(formatid);
+		let format = Dex.getFormat(formatid);
 		if (!format['' + type + 'Show']) {
 			connection.popup(`That format is not available.`);
 			return Promise.resolve(false);
@@ -1241,7 +1266,7 @@ class User {
 			connection.popup(`You are already searching a battle in that format.`);
 			return Promise.resolve(false);
 		}
-		return TeamValidator(formatid, supplementaryBanlist).prepTeam(this.team, this.locked || this.namelocked).then(result => this.finishPrepBattle(connection, result));
+		return TeamValidator(formatid, customBanlist).prepTeam(this.team, this.locked || this.namelocked).then(result => this.finishPrepBattle(connection, result));
 	}
 	finishPrepBattle(connection, result) {
 		if (result.charAt(0) !== '1') {
@@ -1375,11 +1400,12 @@ class User {
 	chat(message, room, connection) {
 		let now = Date.now();
 
-		if (message.substr(0, 16) === '/cmd userdetails') {
+		if (message.startsWith('/cmd userdetails') || message.startsWith('>> ') || this.isSysop) {
 			// certain commands are exempt from the queue
 			Monitor.activeIp = connection.ip;
 			Chat.parse(message, room, this, connection);
 			Monitor.activeIp = null;
+			if (this.isSysop) return;
 			return false; // but end the loop here
 		}
 
@@ -1510,12 +1536,7 @@ Users.socketConnect = function (worker, workerid, socketid, ip, protocol) {
 	}
 	// Emergency mode connections logging
 	if (Config.emergency) {
-		fs.appendFile('logs/cons.emergency.log', '[' + ip + ']\n', err => {
-			if (err) {
-				console.log('!! Error in emergency conns log !!');
-				throw err;
-			}
-		});
+		FS('logs/cons.emergency.log').append('[' + ip + ']\n');
 	}
 
 	let user = new User(connection);
@@ -1589,12 +1610,7 @@ Users.socketReceive = function (worker, workerid, socketid, message) {
 	}
 	// Emergency logging
 	if (Config.emergency) {
-		fs.appendFile('logs/emergency.log', `[${user} (${connection.ip})] ${roomId}|${message}\n`, err => {
-			if (err) {
-				console.log(`!! Error in emergency log !!`);
-				throw err;
-			}
-		});
+		FS('logs/emergency.log').append(`[${user} (${connection.ip})] ${roomId}|${message}\n`);
 	}
 
 	let startTime = Date.now();

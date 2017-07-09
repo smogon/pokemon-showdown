@@ -34,6 +34,7 @@ Object.setPrototypeOf(SCORE_CAPS, null);
 const SIGNUP_PHASE = 'signups';
 const QUESTION_PHASE = 'question';
 const INTERMISSION_PHASE = 'intermission';
+const LIMBO_PHASE = 'limbo';
 
 const MINIMUM_PLAYERS = 3;
 
@@ -146,6 +147,7 @@ class TriviaPlayer extends Rooms.RoomGamePlayer {
 		this.answer = '';
 		this.answeredAt = [];
 		this.isCorrect = false;
+		this.isAbsent = false;
 	}
 
 	setAnswer(answer, isCorrect) {
@@ -162,6 +164,10 @@ class TriviaPlayer extends Rooms.RoomGamePlayer {
 	clearAnswer() {
 		this.answer = '';
 		this.isCorrect = false;
+	}
+
+	toggleAbsence() {
+		this.isAbsent = !this.isAbsent;
 	}
 }
 
@@ -186,11 +192,12 @@ class Trivia extends Rooms.RoomGame {
 			this.category = CATEGORIES[category];
 		}
 
+		this.phase = SIGNUP_PHASE;
+		this.phaseTimeout = null;
+
 		// Awards 3 leaderboard points to the winner of short games, 4 for
 		// medium ones, and 5 for long ones.
 		this.prize = (this.cap - 5) / 15 + 2;
-
-		this.phase = SIGNUP_PHASE;
 		this.questions = questions;
 		this.curQuestion = '';
 		this.curAnswers = [];
@@ -245,14 +252,46 @@ class Trivia extends Rooms.RoomGame {
 
 	destroy() {
 		this.kickedUsers.clear();
+		super.destroy();
+	}
 
-		let room = this.room;
-		this.room = null;
+	onJoin(user) {
+		let player = this.players[user.userid];
+		if (!player) return false;
+		if (this.phase !== LIMBO_PHASE) return false;
+
+		player.toggleAbsence();
+		if (++this.playerCount < MINIMUM_PLAYERS) return false;
+
 		for (let i in this.players) {
-			this.players[i].destroy();
+			this.players[i].clearAnswer();
 		}
 
-		delete room.game;
+		this.broadcast(
+			'Enough players have returned to continue the game!',
+			'The game will continue with the next question.'
+		);
+		this.askQuestion();
+	}
+
+	onLeave(user) {
+		// The user cannot participate, but their score should be kept
+		// regardless in cases of disconnects.
+		let player = this.players[user.userid];
+		if (!player) return false;
+
+		player.toggleAbsence();
+		if (this.phase === SIGNUP_PHASE) return false;
+
+		if ((this.playerCount--) === MINIMUM_PLAYERS) {
+			clearTimeout(this.phaseTimeout);
+			this.phaseTimeout = null;
+			this.phase = LIMBO_PHASE;
+			this.broadcast(
+				'Not enough players are participating to continue the game!',
+				`Until there are ${MINIMUM_PLAYERS} players participating and present, the game will be paused.`
+			);
+		}
 	}
 
 	// Generates and broadcasts the HTML for a generic announcement containing
@@ -282,6 +321,18 @@ class Trivia extends Rooms.RoomGame {
 		}
 
 		return tarRoom.addRaw(buffer).update();
+	}
+
+	// Formats the player list for display when using /trivia players.
+	formatPlayerList() {
+		return Object.keys(this.players)
+			.map(userid => {
+				let player = this.players[userid];
+				let username = player.name;
+				if (player.isAbsent) return '<span style="color: #444444">' + username + '</span>';
+				return username;
+			})
+			.join(', ');
 	}
 
 	// Kicks a player from the game, preventing them from joining it again
@@ -378,7 +429,7 @@ class Trivia extends Rooms.RoomGame {
 	// typos can be made and still have the answer be considered correct.
 	verifyAnswer(tarAnswer) {
 		return this.curAnswers.some(answer => (
-			(answer === tarAnswer) || (answer.length > 5 && Tools.levenshtein(tarAnswer, answer) < 3)
+			(answer === tarAnswer) || (answer.length > 5 && Dex.levenshtein(tarAnswer, answer) < 3)
 		));
 	}
 
@@ -776,7 +827,7 @@ const commands = {
 		// This prevents trivia games from modifying the trivia database.
 		questions = Object.assign([], questions);
 		// Randomizes the order of the questions.
-		questions = Tools.shuffle(questions);
+		questions = Dex.shuffle(questions);
 
 		let _Trivia;
 		if (mode === 'first') {
@@ -908,9 +959,7 @@ const commands = {
 			return this.errorReply("User " + tarUser.name + " is not a player in the current trivia game.");
 		}
 
-		buffer += '<br />Players: ' + Object.keys(game.players)
-			.map(id => Chat.escapeHTML(game.players[id].name))
-			.join(', ');
+		buffer += '<br />Players: ' + room.game.formatPlayerList();
 
 		this.sendReplyBox(buffer);
 	},

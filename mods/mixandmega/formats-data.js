@@ -33,6 +33,10 @@ exports.BattleFormatsData = {
 		inherit: true,
 		tier: "OU",
 	},
+	marshadow: {
+		inherit: true,
+		tier: "OU",
+	},
 	regigigas: {
 		inherit: true,
 		tier: "Uber",
@@ -40,9 +44,5 @@ exports.BattleFormatsData = {
 	slaking: {
 		inherit: true,
 		tier: "Uber",
-	},
-	shayminsky: {
-		inherit: true,
-		tier: "OU",
 	},
 };
