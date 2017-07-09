@@ -441,7 +441,7 @@ exports.commands = {
 				}
 				details = {
 					"Dex#": pokemon.num,
-					"Gen": pokemon.gen,
+					"Gen": pokemon.gen || 'CAP',
 					"Height": pokemon.heightm + " m",
 					"Weight": pokemon.weightkg + " kg <em>(" + weighthit + " BP)</em>",
 				};
@@ -463,7 +463,7 @@ exports.commands = {
 				let move = mod.getMove(newTargets[0].name);
 				details = {
 					"Priority": move.priority,
-					"Gen": move.gen,
+					"Gen": move.gen || 'CAP',
 				};
 
 				if (move.secondary || move.secondaries) details["&#10003; Secondary effect"] = "";
