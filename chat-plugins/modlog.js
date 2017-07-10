@@ -266,7 +266,7 @@ exports.commands = {
 		let targetRoom = Rooms.search(roomId);
 		// if a room alias was used, replace alias with actual id
 		if (targetRoom) roomId = targetRoom.id;
-		if (roomId.startsWith('battle-') || roomId.startsWith('groupchat-')) this.errorReply("Battles and groupchats don't have individual modlogs.");
+		if (roomId.startsWith('battle-') || roomId.startsWith('groupchat-')) return this.errorReply("Battles and groupchats don't have individual modlogs.");
 
 		// permission checking
 		if (roomId === 'all' || roomId === 'public') {
