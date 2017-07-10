@@ -1280,7 +1280,7 @@ exports.BattleScripts = {
 		};
 		// Moves that shouldn't be the only STAB moves:
 		let NoStab = {
-			aquajet:1, bounce:1, explosion:1, fakeout:1, flamecharge:1, iceshard:1, pursuit:1, quickattack:1, skyattack:1,
+			aquajet:1, bounce:1, explosion:1, fakeout:1, flamecharge:1, fly:1, iceshard:1, pursuit:1, quickattack:1, skyattack:1,
 			chargebeam:1, clearsmog:1, eruption:1, vacuumwave:1, waterspout:1,
 		};
 
@@ -1703,6 +1703,9 @@ exports.BattleScripts = {
 					break;
 				case 'airslash': case 'oblivionwing':
 					if (hasMove['acrobatics'] || hasMove['bravebird'] || hasMove['hurricane']) rejected = true;
+					break;
+				case 'fly':
+					if (teamDetails.zMove || counter.setupType !== 'Physical') rejected = true;
 					break;
 				case 'hex':
 					if (!hasMove['willowisp']) rejected = true;
@@ -2184,6 +2187,8 @@ exports.BattleScripts = {
 			item = 'Assault Vest';
 		} else if (hasMove['conversion']) {
 			item = 'Normalium Z';
+		} else if (!teamDetails.zMove && (hasMove['fly'] || hasMove['bounce'])) {
+			item = 'Flyinium Z';
 		} else if (hasMove['geomancy']) {
 			item = 'Power Herb';
 		} else if (hasMove['switcheroo'] || hasMove['trick']) {
