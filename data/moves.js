@@ -7499,6 +7499,7 @@ exports.BattleMovedex = {
 		contestType: "Clever",
 	},
 	"hiddenpowerbug": {
+		num: 237,
 		accuracy: 100,
 		basePower: 60,
 		category: "Special",
@@ -7515,6 +7516,7 @@ exports.BattleMovedex = {
 		contestType: "Clever",
 	},
 	"hiddenpowerdark": {
+		num: 237,
 		accuracy: 100,
 		basePower: 60,
 		category: "Special",
@@ -7531,6 +7533,7 @@ exports.BattleMovedex = {
 		contestType: "Clever",
 	},
 	"hiddenpowerdragon": {
+		num: 237,
 		accuracy: 100,
 		basePower: 60,
 		category: "Special",
@@ -7547,6 +7550,7 @@ exports.BattleMovedex = {
 		contestType: "Clever",
 	},
 	"hiddenpowerelectric": {
+		num: 237,
 		accuracy: 100,
 		basePower: 60,
 		category: "Special",
@@ -7564,6 +7568,7 @@ exports.BattleMovedex = {
 		contestType: "Clever",
 	},
 	"hiddenpowerfighting": {
+		num: 237,
 		accuracy: 100,
 		basePower: 60,
 		category: "Special",
@@ -7581,6 +7586,7 @@ exports.BattleMovedex = {
 		contestType: "Clever",
 	},
 	"hiddenpowerfire": {
+		num: 237,
 		accuracy: 100,
 		basePower: 60,
 		category: "Special",
@@ -7598,6 +7604,7 @@ exports.BattleMovedex = {
 		contestType: "Clever",
 	},
 	"hiddenpowerflying": {
+		num: 237,
 		accuracy: 100,
 		basePower: 60,
 		category: "Special",
@@ -7614,6 +7621,7 @@ exports.BattleMovedex = {
 		contestType: "Clever",
 	},
 	"hiddenpowerghost": {
+		num: 237,
 		accuracy: 100,
 		basePower: 60,
 		category: "Special",
@@ -7630,6 +7638,7 @@ exports.BattleMovedex = {
 		contestType: "Clever",
 	},
 	"hiddenpowergrass": {
+		num: 237,
 		accuracy: 100,
 		basePower: 60,
 		category: "Special",
@@ -7647,6 +7656,7 @@ exports.BattleMovedex = {
 		contestType: "Clever",
 	},
 	"hiddenpowerground": {
+		num: 237,
 		accuracy: 100,
 		basePower: 60,
 		category: "Special",
@@ -7663,6 +7673,7 @@ exports.BattleMovedex = {
 		contestType: "Clever",
 	},
 	"hiddenpowerice": {
+		num: 237,
 		accuracy: 100,
 		basePower: 60,
 		category: "Special",
@@ -7680,6 +7691,7 @@ exports.BattleMovedex = {
 		contestType: "Clever",
 	},
 	"hiddenpowerpoison": {
+		num: 237,
 		accuracy: 100,
 		basePower: 60,
 		category: "Special",
@@ -7696,6 +7708,7 @@ exports.BattleMovedex = {
 		contestType: "Clever",
 	},
 	"hiddenpowerpsychic": {
+		num: 237,
 		accuracy: 100,
 		basePower: 60,
 		category: "Special",
@@ -7712,6 +7725,7 @@ exports.BattleMovedex = {
 		contestType: "Clever",
 	},
 	"hiddenpowerrock": {
+		num: 237,
 		accuracy: 100,
 		basePower: 60,
 		category: "Special",
@@ -7728,6 +7742,7 @@ exports.BattleMovedex = {
 		contestType: "Clever",
 	},
 	"hiddenpowersteel": {
+		num: 237,
 		accuracy: 100,
 		basePower: 60,
 		category: "Special",
@@ -7744,6 +7759,7 @@ exports.BattleMovedex = {
 		contestType: "Clever",
 	},
 	"hiddenpowerwater": {
+		num: 237,
 		accuracy: 100,
 		basePower: 60,
 		category: "Special",
