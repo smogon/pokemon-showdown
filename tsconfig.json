@@ -2,7 +2,7 @@
     "compilerOptions": {
         "lib": ["es2015", "es2016.array.include", "es2017.object"],
         "noEmit": true,
-        "target": "ESNext",
+        "target": "esnext",
         "strict": true,
         "allowJs": true,
         "checkJs": true
@@ -12,6 +12,12 @@
         "./dev-tools/globals.ts",
         "./sim/dex-data.js",
         "./sim/dex.js",
-        "./sim/prng.js"
+        "./sim/prng.js",
+        "./crashlogger.js",
+        "./dnsbl.js",
+        "./repl.js",
+        "./fs.js",
+        "./process-manager.js",
+        "./verifier.js"
     ]
 }

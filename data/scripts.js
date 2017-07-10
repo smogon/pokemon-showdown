@@ -364,8 +364,10 @@ exports.BattleScripts = {
 		if (move.ohko) { // bypasses accuracy modifiers
 			if (!target.isSemiInvulnerable()) {
 				accuracy = 30;
+				if (move.ohko === 'Ice' && this.gen >= 7 && !pokemon.hasType('Ice')) {
+					accuracy = 20;
+				}
 				if (pokemon.level >= target.level && (move.ohko === true || !target.hasType(move.ohko))) {
-					// TODO: Research dependency of accuracy on user typing
 					accuracy += (pokemon.level - target.level);
 				} else {
 					this.add('-immune', target, '[ohko]');
@@ -1484,7 +1486,6 @@ exports.BattleScripts = {
 				let isSetup = false;
 
 				switch (moveid) {
-
 				// Not very useful without their supporting moves
 				case 'batonpass':
 					if (!counter.setupType && !counter['speedsetup'] && !hasMove['substitute'] && !hasMove['wish'] && !hasAbility['Speed Boost']) rejected = true;
@@ -1578,6 +1579,9 @@ exports.BattleScripts = {
 					break;
 				case 'rapidspin':
 					if (counter.setupType || teamDetails.hazardClear) rejected = true;
+					break;
+				case 'reversal':
+					if (hasMove['substitute'] && teamDetails.zMove) rejected = true;
 					break;
 				case 'roar': case 'whirlwind':
 					if (counter.setupType || hasMove['dragontail']) rejected = true;
@@ -2056,6 +2060,8 @@ exports.BattleScripts = {
 				rejectAbility = counter['damage'] >= counter.damagingMoves.length;
 			} else if (ability === 'Torrent') {
 				rejectAbility = !counter['Water'];
+			} else if (ability === 'Triage') {
+				rejectAbility = !counter['recovery'] && !counter['drain'];
 			} else if (ability === 'Unburden') {
 				rejectAbility = !counter.setupType && !hasMove['acrobatics'];
 			}
@@ -2084,6 +2090,9 @@ exports.BattleScripts = {
 			}
 			if (abilities.includes('Swift Swim') && hasMove['raindance']) {
 				ability = 'Swift Swim';
+			}
+			if (abilities.includes('Triage') && hasMove['drainingkiss']) {
+				ability = 'Triage';
 			}
 			if (abilities.includes('Unburden') && hasMove['acrobatics']) {
 				ability = 'Unburden';
@@ -2229,13 +2238,15 @@ exports.BattleScripts = {
 		} else if (template.baseStats.spe <= 50 && hasMove['sleeppowder'] && counter.setupType && !teamDetails.zMove) {
 			item = 'Grassium Z';
 		} else if (counter.Physical >= 4 && !hasMove['bodyslam'] && !hasMove['dragontail'] && !hasMove['fakeout'] && !hasMove['flamecharge'] && !hasMove['rapidspin'] && !hasMove['suckerpunch']) {
-			item = template.baseStats.spe >= 60 && template.baseStats.spe <= 108 && !counter['priority'] && this.random(3) ? 'Choice Scarf' : 'Choice Band';
+			item = template.baseStats.atk >= 100 && template.baseStats.spe >= 60 && template.baseStats.spe <= 108 && !counter['priority'] && this.random(3) ? 'Choice Scarf' : 'Choice Band';
 		} else if (counter.Special >= 4 && !hasMove['acidspray'] && !hasMove['chargebeam'] && !hasMove['clearsmog'] && !hasMove['fierydance']) {
-			item = template.baseStats.spe >= 60 && template.baseStats.spe <= 108 && !counter['priority'] && this.random(3) ? 'Choice Scarf' : 'Choice Specs';
+			item = template.baseStats.spa >= 100 && template.baseStats.spe >= 60 && template.baseStats.spe <= 108 && !counter['priority'] && this.random(3) ? 'Choice Scarf' : 'Choice Specs';
 		} else if (counter.Special >= 3 && hasMove['uturn'] && template.baseStats.spe >= 60 && template.baseStats.spe <= 108 && !counter['priority'] && this.random(3)) {
 			item = 'Choice Scarf';
 		} else if (ability === 'Defeatist' || hasMove['eruption'] || hasMove['waterspout']) {
 			item = counter.Status <= 1 ? 'Expert Belt' : 'Leftovers';
+		} else if (hasMove['reversal'] && hasMove['substitute'] && !teamDetails.zMove) {
+			item = 'Fightinium Z';
 		} else if ((hasMove['endeavor'] || hasMove['flail'] || hasMove['reversal']) && ability !== 'Sturdy') {
 			item = 'Focus Sash';
 		} else if (this.getEffectiveness('Ground', template) >= 2 && ability !== 'Levitate' && !hasMove['magnetrise']) {
@@ -2296,7 +2307,6 @@ exports.BattleScripts = {
 			NU: 81,
 			BL3: 80,
 			RU: 79,
-			New: 79,
 			BL2: 78,
 			UU: 77,
 			BL: 76,
@@ -3602,10 +3612,8 @@ exports.BattleScripts = {
 		let movesMax = {'batonpass':1, 'stealthrock':1, 'spikes':1, 'toxicspikes':1, 'doubleedge':1, 'trickroom':1};
 		let requiredMoves = {};
 		let weatherAbilitiesRequire = {
-			'hydration': 'raindance', 'swiftswim': 'raindance',
-			'leafguard': 'sunnyday', 'solarpower': 'sunnyday', 'chlorophyll': 'sunnyday',
-			'sandforce': 'sandstorm', 'sandrush': 'sandstorm', 'sandveil': 'sandstorm',
-			'snowcloak': 'hail',
+			'swiftswim': 'raindance',
+			'sandrush': 'sandstorm', 'sandveil': 'sandstorm',
 		};
 		let weatherAbilitiesSet = {'drizzle':1, 'drought':1, 'snowwarning':1, 'sandstream':1};
 
@@ -3690,10 +3698,9 @@ exports.BattleScripts = {
 		let requiredMoves = {};
 		let weatherAbilitiesSet = {'drizzle': 'raindance', 'drought': 'sunnyday', 'snowwarning': 'hail', 'sandstream': 'sandstorm'};
 		let resistanceAbilities = {
-			'dryskin': ['Water'], 'waterabsorb': ['Water'], 'stormdrain': ['Water'],
-			'flashfire': ['Fire'], 'heatproof': ['Fire'],
-			'lightningrod': ['Electric'], 'motordrive': ['Electric'], 'voltabsorb': ['Electric'],
-			'sapsipper': ['Grass'],
+			'waterabsorb': ['Water'],
+			'flashfire': ['Fire'],
+			'lightningrod': ['Electric'], 'voltabsorb': ['Electric'],
 			'thickfat': ['Ice', 'Fire'],
 			'levitate': ['Ground'],
 		};

@@ -1193,7 +1193,7 @@ class Pokemon {
 	}
 	isGrounded(negateImmunity) {
 		if ('gravity' in this.battle.pseudoWeather) return true;
-		if ('ingrain' in this.volatiles) return true;
+		if ('ingrain' in this.volatiles && this.battle.gen >= 4) return true;
 		if ('smackdown' in this.volatiles) return true;
 		let item = (this.ignoringItem() ? '' : this.item);
 		if (item === 'ironball') return true;

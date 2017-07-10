@@ -664,10 +664,12 @@ exports.BattleFormats = {
 				} else {
 					typeTable = typeTable.filter(type => template.types.indexOf(type) >= 0);
 				}
-				let item = this.getItem(team[i].item);
-				if (item.megaStone && template.species === item.megaEvolves) {
-					template = this.getTemplate(item.megaStone);
-					typeTable = typeTable.filter(type => template.types.indexOf(type) >= 0);
+				if (this.gen >= 7) {
+					let item = this.getItem(team[i].item);
+					if (item.megaStone && template.species === item.megaEvolves) {
+						template = this.getTemplate(item.megaStone);
+						typeTable = typeTable.filter(type => template.types.indexOf(type) >= 0);
+					}
 				}
 				if (!typeTable.length) return ["Your team must share a type."];
 			}

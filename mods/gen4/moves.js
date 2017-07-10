@@ -679,6 +679,7 @@ exports.BattleMovedex = {
 		shortDesc: "If miss, user takes 1/2 damage it would've dealt.",
 		pp: 20,
 		onMoveFail: function (target, source, move) {
+			move.causedCrashDamage = true;
 			let damage = this.getDamage(source, target, move, true);
 			if (!damage) damage = target.maxhp;
 			this.damage(this.clampIntRange(damage / 2, 1, Math.floor(target.maxhp / 2)), source, source, 'highjumpkick');
@@ -710,6 +711,7 @@ exports.BattleMovedex = {
 		shortDesc: "If miss, user takes 1/2 damage it would've dealt.",
 		pp: 25,
 		onMoveFail: function (target, source, move) {
+			move.causedCrashDamage = true;
 			let damage = this.getDamage(source, target, move, true);
 			if (!damage) damage = target.maxhp;
 			this.damage(this.clampIntRange(damage / 2, 1, Math.floor(target.maxhp / 2)), source, source, 'jumpkick');
@@ -718,6 +720,34 @@ exports.BattleMovedex = {
 	lastresort: {
 		inherit: true,
 		basePower: 130,
+	},
+	lightscreen: {
+		inherit: true,
+		effect: {
+			duration: 5,
+			durationCallback: function (target, source, effect) {
+				if (source && source.hasItem('lightclay')) {
+					return 8;
+				}
+				return 5;
+			},
+			onAnyModifyDamagePhase1: function (damage, source, target, move) {
+				if (target !== source && target.side === this.effectData.target && this.getCategory(move) === 'Special') {
+					if (!move.crit && !move.infiltrates) {
+						this.debug('Light Screen weaken');
+						if (target.side.active.length > 1) return this.chainModify([0xAAC, 0x1000]);
+						return this.chainModify(0.5);
+					}
+				}
+			},
+			onStart: function (side) {
+				this.add('-sidestart', side, 'Light Screen');
+			},
+			onResidualOrder: 21,
+			onEnd: function (side) {
+				this.add('-sideend', side, 'Light Screen');
+			},
+		},
 	},
 	luckychant: {
 		inherit: true,
@@ -792,6 +822,15 @@ exports.BattleMovedex = {
 			onResidualSubOrder: 9,
 			onEnd: function (target) {
 				this.add('-end', target, 'Magnet Rise');
+			},
+		},
+	},
+	mefirst: {
+		inherit: true,
+		effect: {
+			duration: 1,
+			onModifyDamagePhase2: function (damage) {
+				return damage * 1.5;
 			},
 		},
 	},
@@ -949,6 +988,34 @@ exports.BattleMovedex = {
 	recycle: {
 		inherit: true,
 		flags: {},
+	},
+	reflect: {
+		inherit: true,
+		effect: {
+			duration: 5,
+			durationCallback: function (target, source, effect) {
+				if (source && source.hasItem('lightclay')) {
+					return 8;
+				}
+				return 5;
+			},
+			onAnyModifyDamagePhase1: function (damage, source, target, move) {
+				if (target !== source && target.side === this.effectData.target && this.getCategory(move) === 'Physical') {
+					if (!move.crit && !move.infiltrates) {
+						this.debug('Reflect weaken');
+						if (target.side.active.length > 1) return this.chainModify([0xAAC, 0x1000]);
+						return this.chainModify(0.5);
+					}
+				}
+			},
+			onStart: function (side) {
+				this.add('-sidestart', side, 'Reflect');
+			},
+			onResidualOrder: 21,
+			onEnd: function (side) {
+				this.add('-sideend', side, 'Reflect');
+			},
+		},
 	},
 	reversal: {
 		inherit: true,

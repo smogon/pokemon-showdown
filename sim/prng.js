@@ -134,11 +134,14 @@ class PRNG {
 	*/
 	nextFrame(initialSeed, framesToAdvance = 1) {
 		// Use Slice so we don't actually alter the original seed.
+		/** @type {PRNGSeed} */
+		// @ts-ignore TypeScript bug
 		let seed = initialSeed.slice();
 		for (let frame = 0; frame < framesToAdvance; ++frame) {
 			const a = [0x5D58, 0x8B65, 0x6C07, 0x8965];
 			const c = [0, 0, 0x26, 0x9EC3];
 
+			/** @type {PRNGSeed} */
 			const nextSeed = [0, 0, 0, 0];
 			let carry = 0;
 

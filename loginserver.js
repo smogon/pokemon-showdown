@@ -15,6 +15,8 @@ const LOGIN_SERVER_BATCH_TIME = 1000;
 const http = require("http");
 const url = require('url');
 
+const FS = require('./fs');
+
 let TimeoutError = function (message) {
 	Error.captureStackTrace(this, TimeoutError);
 	this.name = "TimeoutError";
@@ -234,7 +236,7 @@ LoginServer.TimeoutError = TimeoutError;
 if (Config.remoteladder) LoginServer.ladderupdateServer = new LoginServerInstance();
 LoginServer.prepreplayServer = new LoginServerInstance();
 
-require('fs').watchFile('./config/custom.css', (curr, prev) => {
+FS('./config/custom.css').onModify(() => {
 	LoginServer.request('invalidatecss', {}, () => {});
 });
 LoginServer.request('invalidatecss', {}, () => {});

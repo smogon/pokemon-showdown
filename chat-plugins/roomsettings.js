@@ -59,7 +59,10 @@ class RoomSettings {
 		return modchatOutput.join(' ');
 	}
 	modjoin() {
-		if (!this.user.can('makeroom') && !this.room.isPersonal) return this.button(this.room.modjoin ? this.room.modjoin : 'off', true);
+		if (!this.user.can('makeroom') && !this.room.isPersonal ||
+			!this.user.can('editroom', null, this.room)) {
+			return this.button(this.room.modjoin ? this.room.modjoin : 'off', true);
+		}
 		let modjoinOutput = [];
 		for (let i = 0; i < RANKS.length; i++) {
 			if (RANKS[i] === Config.groupsranking[0] && !this.room.modjoin) {
@@ -69,7 +72,7 @@ class RoomSettings {
 			} else if (RANKS[i] === this.room.modjoin) {
 				modjoinOutput.push(this.button(RANKS[i], true));
 			} else if (RANKS[i]) {
-				// Personal rooms modjoin check
+				// groupchat hosts can set modjoin, but only to +
 				if (this.room.isPersonal && !this.user.can('makeroom') && RANKS[i] !== '+') continue;
 
 				modjoinOutput.push(this.button(RANKS[i], false, `modjoin ${RANKS[i]}`));
@@ -225,7 +228,7 @@ exports.commands = {
 			this.add("|raw|<div class=\"broadcast-blue\"><strong>Moderated chat was disabled!</strong><br />Anyone may talk now.</div>");
 		} else {
 			const modchatSetting = Chat.escapeHTML(room.modchat);
-			this.add(`|raw|<div class=\"broadcast-red\"><strong>Moderated chat was set to ${modchatSetting}!</strong><br />Only users of rank ${modchatSetting} and higher can talk.</div>`);
+			this.add(`|raw|<div class="broadcast-red"><strong>Moderated chat was set to ${modchatSetting}!</strong><br />Only users of rank ${modchatSetting} and higher can talk.</div>`);
 		}
 		if (room.battle && !room.modchat && !user.can('modchat')) room.requestModchat(null);
 		this.privateModCommand(`(${user.name} set modchat to ${room.modchat})`);
@@ -323,7 +326,7 @@ exports.commands = {
 			if (targetInt < SLOWCHAT_MINIMUM) targetInt = SLOWCHAT_MINIMUM;
 			if (targetInt > SLOWCHAT_MAXIMUM) targetInt = SLOWCHAT_MAXIMUM;
 			room.slowchat = targetInt;
-			this.add(`|raw|<div class=\"broadcast-red\"><strong>Slow chat was enabled!</strong><br />Messages must have at least ${room.slowchat} seconds between them.</div>`);
+			this.add(`|raw|<div class="broadcast-red"><strong>Slow chat was enabled!</strong><br />Messages must have at least ${room.slowchat} seconds between them.</div>`);
 		} else {
 			return this.parse("/help slowchat");
 		}

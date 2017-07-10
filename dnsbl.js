@@ -19,26 +19,25 @@
 const BLOCKLISTS = ['sbl.spamhaus.org', 'rbl.efnetrbl.org'];
 
 const dns = require('dns');
-const fs = require('fs');
-const path = require('path');
+const FS = require('./fs');
 
 let Dnsbl = module.exports;
 
 /** @type {Map<string, ?string>} */
 let dnsblCache = Dnsbl.cache = new Map();
-dnsblCache.set('127.0.0.1', undefined);
+dnsblCache.set('127.0.0.1', null);
 
 /**
  * @param {string} ip
- * @param {(blocklist: ?string) => any} callback
+ * @param {function(?string): void} callback
  * @param {string} reversedIpDot
  * @param {number} index
  */
 function queryDnsblLoop(ip, callback, reversedIpDot, index) {
 	if (index >= BLOCKLISTS.length) {
 		// not in any blocklist
-		dnsblCache.set(ip, undefined);
-		callback(undefined);
+		dnsblCache.set(ip, null);
+		callback(null);
 		return;
 	}
 	let blocklist = BLOCKLISTS[index];
@@ -46,7 +45,8 @@ function queryDnsblLoop(ip, callback, reversedIpDot, index) {
 		if (!err) {
 			// blocked
 			dnsblCache.set(ip, blocklist);
-			return callback(blocklist);
+			callback(blocklist);
+			return;
 		}
 		// not blocked, try next blocklist
 		queryDnsblLoop(ip, callback, reversedIpDot, index + 1);
@@ -65,7 +65,7 @@ function queryDnsblLoop(ip, callback, reversedIpDot, index) {
  */
 Dnsbl.query = function queryDnsbl(ip) {
 	if (dnsblCache.has(ip)) {
-		return Promise.resolve(dnsblCache.get(ip));
+		return Promise.resolve(dnsblCache.get(ip) || null);
 	}
 	let reversedIpDot = ip.split('.').reverse().join('.') + '.';
 	return new Promise((resolve, reject) => {
@@ -79,7 +79,7 @@ Dnsbl.query = function queryDnsbl(ip) {
 
 /**
  * @param {string} ip
- * @return {number} ipNum
+ * @return {number}
  */
 Dnsbl.ipToNumber = function (ip) {
 	let num = 0;
@@ -90,12 +90,13 @@ Dnsbl.ipToNumber = function (ip) {
 	}
 	return num;
 };
+
 /**
  * @param {string} cidr
  * @return {?[number, number]}
  */
 Dnsbl.getCidrPattern = function (cidr) {
-	if (!cidr) return undefined;
+	if (!cidr) return null;
 	let index = cidr.indexOf('/');
 	if (index <= 0) {
 		return [Dnsbl.ipToNumber(cidr), Dnsbl.ipToNumber(cidr)];
@@ -112,7 +113,7 @@ Dnsbl.getCidrPattern = function (cidr) {
  * @return {?[number, number]}
  */
 Dnsbl.getRangePattern = function (range) {
-	if (!range) return undefined;
+	if (!range) return null;
 	let index = range.indexOf(' - ');
 	if (index <= 0) {
 		return [Dnsbl.ipToNumber(range), Dnsbl.ipToNumber(range)];
@@ -126,7 +127,7 @@ Dnsbl.getRangePattern = function (range) {
  * @return {?[number, number]}
  */
 Dnsbl.getPattern = function (str) {
-	if (!str) return undefined;
+	if (!str) return null;
 	if (str.indexOf(' - ') > 0) return Dnsbl.getRangePattern(str);
 	return Dnsbl.getCidrPattern(str);
 };
@@ -163,7 +164,7 @@ Dnsbl.rangeToPattern = function (range) {
 	return range.map(Dnsbl.getRangePattern).filter(x => x);
 };
 /**
- * @param {Array<Array<number>>} patterns
+ * @param {number[][]} patterns
  * @param {number} num
  * @return {boolean}
  */
@@ -182,11 +183,12 @@ Dnsbl.checkPattern = function (patterns, num) {
  * ranges. The checker function returns true if its passed IP is
  * in the range.
  *
- * @param {string | Array<string>} ranges
- * @return {(ip: string) => boolean}
+ * @param {string | string[]} ranges
+ * @return {function(string): boolean}
  */
 Dnsbl.checker = function (ranges) {
 	if (!ranges || !ranges.length) return () => false;
+	/** @type {[number, number][]} */
 	let patterns;
 	if (typeof ranges === 'string') {
 		patterns = [Dnsbl.getPattern(ranges)];
@@ -214,23 +216,21 @@ Dnsbl.urlToHost = function (url) {
 };
 
 Dnsbl.datacenters = [];
-Dnsbl.loadDatacenters = function () {
-	fs.readFile(path.resolve(__dirname, 'config/datacenters.csv'), (err, data) => {
-		if (err) return;
-		data = String(data).split("\n");
-		let datacenters = [];
-		for (let row of data) {
-			if (!row) continue;
-			let rowSplit = row.split(',');
-			let rowData = [
-				Dnsbl.ipToNumber(rowSplit[0]),
-				Dnsbl.ipToNumber(rowSplit[1]),
-				Dnsbl.urlToHost(rowSplit[3]),
-			];
-			datacenters.push(rowData);
-		}
-		Dnsbl.datacenters = datacenters;
-	});
+Dnsbl.loadDatacenters = async function () {
+	const data = await FS('config/datacenters.csv').readTextIfExists();
+	const rows = data.split('\n');
+	let datacenters = [];
+	for (const row of rows) {
+		if (!row) continue;
+		const rowSplit = row.split(',');
+		const rowData = [
+			Dnsbl.ipToNumber(rowSplit[0]),
+			Dnsbl.ipToNumber(rowSplit[1]),
+			Dnsbl.urlToHost(rowSplit[3]),
+		];
+		datacenters.push(rowData);
+	}
+	Dnsbl.datacenters = datacenters;
 };
 
 let rangeTmobile = Dnsbl.cidrToPattern('172.32.0.0/11');
@@ -256,6 +256,7 @@ Dnsbl.reverse = function reverseDns(ip) {
 			resolve('');
 			return;
 		}
+
 		let ipNumber = Dnsbl.ipToNumber(ip);
 		if (Dnsbl.checkPattern(rangeOVHres, ipNumber)) {
 			resolve('ovh.fr.res-nohost');
@@ -335,7 +336,7 @@ Dnsbl.reverse = function reverseDns(ip) {
 			resolve('anchorfree.proxy-nohost');
 			return;
 		}
-		require('dns').reverse(ip, (err, hosts) => {
+		dns.reverse(ip, (err, hosts) => {
 			if (err) {
 				resolve('' + ip.split('.').slice(0, 2).join('.') + '.unknown-nohost');
 				return;

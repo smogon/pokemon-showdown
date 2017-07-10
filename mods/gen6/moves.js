@@ -193,7 +193,7 @@ exports.BattleMovedex = {
 	sheercold: {
 		inherit: true,
 		desc: "Deals damage to the target equal to the target's maximum HP. Ignores accuracy and evasiveness modifiers. This attack's accuracy is equal to (user's level - target's level + 30)%, and fails if the target is at a higher level. Pokemon with the Ability Sturdy are immune.",
-		shortDesc: "OHKOs a non-Ice target. Fails if user is a lower level.",
+		shortDesc: "OHKOs the target. Fails if user is a lower level.",
 		ohko: true,
 	},
 	suckerpunch: {

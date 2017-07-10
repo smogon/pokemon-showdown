@@ -1,10 +1,6 @@
 'use strict';
 
 exports.BattleItems = {
-	abomasite: {
-		inherit: true,
-		isUnreleased: false,
-	},
 	aggronite: {
 		inherit: true,
 		isUnreleased: false,
@@ -32,10 +28,6 @@ exports.BattleItems = {
 		inherit: true,
 		isUnreleased: false,
 	},
-	banettite: {
-		inherit: true,
-		isUnreleased: false,
-	},
 	belueberry: {
 		inherit: true,
 		isUnreleased: false,
@@ -43,10 +35,6 @@ exports.BattleItems = {
 	bigroot: {
 		inherit: true,
 		desc: "Holder gains 1.3x HP from draining moves, Aqua Ring, Ingrain, and Leech Seed.",
-	},
-	cameruptite: {
-		inherit: true,
-		isUnreleased: false,
 	},
 	cornnberry: {
 		inherit: true,
@@ -82,14 +70,6 @@ exports.BattleItems = {
 			}
 		},
 		desc: "Restores 1/8 max HP at 1/2 max HP or less; confuses if -Atk Nature. Single use.",
-	},
-	galladite: {
-		inherit: true,
-		isUnreleased: false,
-	},
-	gardevoirite: {
-		inherit: true,
-		isUnreleased: false,
 	},
 	iapapaberry: {
 		inherit: true,
@@ -129,10 +109,6 @@ exports.BattleItems = {
 		inherit: true,
 		desc: "Holder's use of Light Screen or Reflect lasts 8 turns instead of 5.",
 	},
-	lopunnite: {
-		inherit: true,
-		isUnreleased: false,
-	},
 	machobrace: {
 		inherit: true,
 		isUnreleased: false,
@@ -153,10 +129,6 @@ exports.BattleItems = {
 		desc: "Restores 1/8 max HP at 1/2 max HP or less; confuses if -Spe Nature. Single use.",
 	},
 	magostberry: {
-		inherit: true,
-		isUnreleased: false,
-	},
-	manectite: {
 		inherit: true,
 		isUnreleased: false,
 	},
@@ -204,10 +176,6 @@ exports.BattleItems = {
 		},
 	},
 	spelonberry: {
-		inherit: true,
-		isUnreleased: false,
-	},
-	tyranitarite: {
 		inherit: true,
 		isUnreleased: false,
 	},

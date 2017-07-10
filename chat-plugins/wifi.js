@@ -73,7 +73,6 @@ class Giveaway {
 	checkExcluded(user) {
 		if (Giveaway.checkBanned(this.room, user)) return true;
 		if (user === this.giver || user.latestIp in this.giver.ips || toId(user) in this.giver.prevNames) return true;
-		if (user === this.host || user.latestIp in this.host.ips || toId(user) in this.host.prevNames) return true;
 		return false;
 	}
 
@@ -139,9 +138,7 @@ class Giveaway {
 					}
 				}
 				if (mons.size > 1) {
-					let top = Math.floor(value.num / 12) * 30;
-					let left = (value.num % 12) * 40;
-					output += `<div style="display:inline-block;width:40px;height:30px;background:transparent url('/sprites/smicons-sheet.png?a1') no-repeat scroll -${left}px -${top}px'"></div>`;
+					output += `<psicon pokemon="${spriteid}" />`;
 				} else {
 					let shiny = (text.includes("shiny") && !text.includes("shinystone") ? '-shiny' : '');
 					output += `<img src="/sprites/xyani${shiny}/${spriteid}.gif">`;
@@ -241,7 +238,7 @@ class QuestionGiveaway extends Giveaway {
 				this.room.modlog(`${this.winner.name} won ${this.giver.name}'s giveaway for a "${this.prize}" (OT: ${this.ot} TID: ${this.tid} FC: ${this.fc})`);
 				this.send(this.generateWindow(`<p style="text-align:center;font-size:12pt;"><b>${Chat.escapeHTML(this.winner.name)}</b> won the giveaway! Congratulations!</p>` +
 				`<p style="text-align:center;">${this.question}<br />Correct answer${Chat.plural(this.answers)}: ${this.answers.join(', ')}</p>`));
-				this.winner.sendTo(this.room, `You have won the giveaway. PM **${Chat.escapeHTML(this.giver.name)}** (FC: ${this.fc}) to claim your prize!`);
+				this.winner.sendTo(this.room, `|raw|You have won the giveaway. PM <b>${Chat.escapeHTML(this.giver.name)}</b> (FC: ${this.fc}) to claim your prize!`);
 				if (this.winner.connected) this.winner.popup(`You have won the giveaway. PM **${Chat.escapeHTML(this.giver.name)}** (FC: ${this.fc}) to claim your prize!`);
 				if (this.giver.connected) this.giver.popup(`${Chat.escapeHTML(this.winner.name)} has won your question giveaway!`);
 			}
@@ -256,6 +253,11 @@ class QuestionGiveaway extends Giveaway {
 
 	static sanitizeAnswers(answers) {
 		return answers.map(val => QuestionGiveaway.sanitize(val)).filter((val, index, array) => toId(val).length && array.indexOf(val) === index);
+	}
+
+	checkExcluded(user) {
+		if (user === this.host || user.latestIp in this.host.ips || toId(user) in this.host.prevNames) return true;
+		return super.checkExcluded(user);
 	}
 }
 
@@ -347,7 +349,7 @@ class LotteryGiveaway extends Giveaway {
 			this.room.modlog(`${winnerNames} won ${this.giver.name}'s giveaway for "${this.prize}" (OT: ${this.ot} TID: ${this.tid} FC: ${this.fc})`);
 			this.send(this.generateWindow(`<p style="text-align:center;font-size:10pt;font-weight:bold;">Lottery Draw</p><p style="text-align:center;">${Object.keys(this.joined).length} users joined the giveaway.<br />Our lucky winner${Chat.plural(this.winners)}: <b>${Chat.escapeHTML(winnerNames)}!</b> Congratulations!</p>`));
 			for (let i = 0; i < this.winners.length; i++) {
-				this.winners[i].sendTo(this.room, `You have won the lottery giveaway! PM **${this.giver.name}** (FC: ${this.fc}) to claim your prize!`);
+				this.winners[i].sendTo(this.room, `|raw|You have won the lottery giveaway! PM <b>${this.giver.name}</b> (FC: ${this.fc}) to claim your prize!`);
 				if (this.winners[i].connected) this.winners[i].popup(`You have won the lottery giveaway! PM **${this.giver.name}** (FC: ${this.fc}) to claim your prize!`);
 			}
 			if (this.giver.connected) this.giver.popup(`The following users have won your lottery giveaway:\n${Chat.escapeHTML(winnerNames)}`);

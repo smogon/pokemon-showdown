@@ -13,10 +13,10 @@
 
 const Dex = require('./dex');
 global.toId = Dex.getId;
-const PRNG = require('./prng');
 const Battle = require('./battle');
 const Side = require('./side');
 const Pokemon = require('./pokemon');
+const PRNG = require('./prng');
 
 let battleProtoCache = new Map();
 exports.construct = function (format, rated, send, prng) {
@@ -42,3 +42,4 @@ exports.construct = function (format, rated, send, prng) {
 exports.Pokemon = Pokemon;
 exports.Side = Side;
 exports.Battle = Battle;
+exports.PRNG = PRNG;

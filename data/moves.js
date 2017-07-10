@@ -7,11 +7,13 @@ bite: Power is multiplied by 1.5 when used by a Pokemon with the Ability Strong 
 bullet: Has no effect on Pokemon with the Ability Bulletproof.
 charge: The user is unable to make a move between turns.
 contact: Makes contact.
+dance: When used by a Pokemon, other Pokemon with the Ability Dancer can attempt to execute the same move.
 defrost: Thaws the user if executed successfully while the user is frozen.
 distance: Can target a Pokemon positioned anywhere in a Triple Battle.
 gravity: Prevented from being executed or selected during Gravity's effect.
 heal: Prevented from being executed or selected during Heal Block's effect.
 mirror: Can be copied by Mirror Move.
+mystery: Unknown effect.
 nonsky: Prevented from being executed or selected in a Sky Battle.
 powder: Has no effect on Grass-type Pokemon, Pokemon with the Ability Overcoat, and Pokemon holding Safety Goggles.
 protect: Blocked by Detect, Protect, Spiky Shield, and if not a Status move, King's Shield.
@@ -9609,13 +9611,12 @@ exports.BattleMovedex = {
 		},
 		effect: {
 			duration: 5,
-			/*durationCallback: function (source, effect) {
-				// Persistent isn't updated for BW moves
-				if (source && source.hasAbility('Persistent')) {
+			durationCallback: function (source, effect) {
+				if (source && source.hasAbility('persistent')) {
 					return 7;
 				}
 				return 5;
-			},*/
+			},
 			onStart: function (target, source) {
 				this.add('-fieldstart', 'move: Magic Room', '[of] ' + source);
 			},
@@ -12123,7 +12124,7 @@ exports.BattleMovedex = {
 		basePower: 120,
 		category: "Physical",
 		desc: "No additional effect.",
-		shortDesc: "No additional effect. Hits adjacent Pokemon.",
+		shortDesc: "No additional effect. Hits adjacent foes.",
 		id: "precipiceblades",
 		isViable: true,
 		name: "Precipice Blades",
@@ -14347,7 +14348,7 @@ exports.BattleMovedex = {
 		accuracy: 30,
 		basePower: 0,
 		category: "Special",
-		desc: "Deals damage to the target equal to the target's maximum HP. Ignores accuracy and evasiveness modifiers. This attack's accuracy is equal to (user's level - target's level + 30)%, and fails if the target is at a higher level. Pokemon with Ice typing or with the Ability Sturdy are immune.",
+		desc: "Deals damage to the target equal to the target's maximum HP. Ignores accuracy and evasiveness modifiers. This attack's accuracy is equal to (user's level - target's level + X)%, where X is 30 if the user is an Ice type and 20 otherwise, and fails if the target is at a higher level. Ice-type Pokemon and Pokemon with the Ability Sturdy are immune.",
 		shortDesc: "OHKOs non-Ice targets. Fails if user's lower level.",
 		id: "sheercold",
 		name: "Sheer Cold",
@@ -15306,7 +15307,6 @@ exports.BattleMovedex = {
 		desc: "The target's raised stat stages are stolen from it and applied to the user before dealing damage.",
 		shortDesc: "Steals target's boosts before dealing damage.",
 		id: "spectralthief",
-		isUnreleased: true,
 		isViable: true,
 		name: "Spectral Thief",
 		pp: 10,
@@ -18692,8 +18692,14 @@ exports.BattleMovedex = {
 		},
 		effect: {
 			duration: 5,
+			durationCallback: function (source, effect) {
+				if (source && source.hasAbility('persistent')) {
+					return 7;
+				}
+				return 5;
+			},
 			onStart: function (side, source) {
-				this.add('-fieldstart', 'move: WonderRoom', '[of] ' + source);
+				this.add('-fieldstart', 'move: Wonder Room', '[of] ' + source);
 			},
 			// Swapping defenses implemented in sim/pokemon.js:Pokemon#calculateStat and Pokemon#getStat
 			onResidualOrder: 24,
@@ -19030,6 +19036,7 @@ exports.BattleMovedex = {
 		stealsBoosts: true,
 		target: "normal",
 		type: "Water",
+		zMovePower: 190,
 		contestType: "Cute",
 	},
 };
