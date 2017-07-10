@@ -522,6 +522,9 @@ exports.BattleScripts = {
 			// Limit to one of each species (Species Clause)
 			if (baseFormes[template.baseSpecies]) continue;
 
+			// Limit to one Wobbuffet per battle (not just per team)
+			if (this.hasWobbuffet) continue;
+
 			let tier = template.tier;
 			switch (tier) {
 			case 'Uber':
@@ -561,6 +564,10 @@ exports.BattleScripts = {
 
 			// Okay, the set passes, add it to our team
 			pokemon.push(set);
+
+			// In Gen 3, Shadow Tag users can prevent each other from switching out, possibly causing and endless battle or at least causing a long stall war
+			// To prevent this, we prevent more than one Wobbuffet in a single battle.
+			if (template.species === 'Wobbuffet') this.hasWobbuffet = true;
 
 			// Now that our Pokemon has passed all checks, we can increment our counters
 			baseFormes[template.baseSpecies] = 1;
