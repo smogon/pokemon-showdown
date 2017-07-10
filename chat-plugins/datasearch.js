@@ -341,6 +341,10 @@ if (process.send && module === process.mainModule) {
 function runDexsearch(target, cmd, canAll, message) {
 	let searches = [];
 	let allTiers = {'uber':'Uber', 'ou':'OU', 'bl':"BL", 'uu':'UU', 'bl2':"BL2", 'ru':'RU', 'bl3':"BL3", 'nu':'NU', 'bl4':"BL4", 'pu':'PU', 'nfe':'NFE', 'lc uber':"LC Uber", 'lc':'LC', 'cap':"CAP"};
+	let allTypes = {};
+	for (let i in Dex.data.TypeChart) {
+		allTypes[toId(i)] = i;
+	}
 	let allColours = {'green':1, 'red':1, 'blue':1, 'white':1, 'brown':1, 'yellow':1, 'purple':1, 'pink':1, 'gray':1, 'black':1};
 	let allEggGroups = {'amorphous':'Amorphous', 'bug':'Bug', 'ditto':'Ditto', 'dragon':'Dragon', 'fairy':'Fairy', 'field':'Field', 'flying':'Flying', 'grass':'Grass', 'humanlike':'Human-Like', 'mineral':'Mineral', 'monster':'Monster', 'undiscovered':'Undiscovered', 'water1':'Water 1', 'water2':'Water 2', 'water3':'Water 3'};
 	let allStats = {'hp':1, 'atk':1, 'def':1, 'spa':1, 'spd':1, 'spe':1, 'bst':1, 'weight':1, 'height':1};
@@ -413,6 +417,42 @@ function runDexsearch(target, cmd, canAll, message) {
 				continue;
 			}
 
+			let targetMove = Dex.getMove(target);
+			if (targetMove.exists) {
+				let invalid = validParameter("moves", targetMove.id, isNotSearch, target);
+				if (invalid) return {reply: invalid};
+				orGroup.moves[targetMove.id] = !isNotSearch;
+				continue;
+			}
+
+			let typeIndex = target.indexOf('type');
+			if (typeIndex === -1) typeIndex = target.length;
+			if (typeIndex !== target.length || toId(target) in allTypes) {
+				target = toId(target.substring(0, typeIndex));
+				if (target in allTypes) {
+					target = allTypes[target];
+					let invalid = validParameter("types", target, isNotSearch, target + ' type');
+					if (invalid) return {reply: invalid};
+					orGroup.types[target] = !isNotSearch;
+					continue;
+				} else {
+					return {reply: "'" + target + "' is not a recognized type."};
+				}
+			}
+			let groupIndex = target.indexOf('group');
+			if (groupIndex === -1) groupIndex = target.length;
+			if (groupIndex !== target.length || toId(target) in allEggGroups) {
+				target = toId(target.substring(0, groupIndex));
+				if (target in allEggGroups) {
+					target = allEggGroups[toId(target)];
+					let invalid = validParameter("egg groups", target, isNotSearch, target);
+					if (invalid) return {reply: invalid};
+					orGroup['egg groups'][target] = !isNotSearch;
+					continue;
+				} else {
+					return {reply: "'" + target + "' is not a recognized egg group."};
+				}
+			}
 			if (toId(target) in allEggGroups) {
 				target = allEggGroups[toId(target)];
 				let invalid = validParameter("egg groups", target, isNotSearch, target);
@@ -422,7 +462,11 @@ function runDexsearch(target, cmd, canAll, message) {
 			}
 
 			let targetInt = 0;
-			if (target.substr(0, 3) === 'gen' && Number.isInteger(parseFloat(target.substr(3)))) targetInt = parseInt(target.substr(3).trim());
+			if (target.substr(0, 1) === 'g' && Number.isInteger(parseFloat(target.substr(1)))) {
+				targetInt = parseInt(target.substr(1).trim());
+			} else if (target.substr(0, 3) === 'gen' && Number.isInteger(parseFloat(target.substr(3)))) {
+				targetInt = parseInt(target.substr(3).trim());
+			}
 			if (0 < targetInt && targetInt < 8) {
 				let invalid = validParameter("gens", targetInt, isNotSearch, target);
 				if (invalid) return {reply: invalid};
@@ -519,27 +563,6 @@ function runDexsearch(target, cmd, canAll, message) {
 					continue;
 				} else {
 					return {reply: "'" + targetResist + "' is not a recognized type."};
-				}
-			}
-
-			let targetMove = Dex.getMove(target);
-			if (targetMove.exists) {
-				let invalid = validParameter("moves", targetMove.id, isNotSearch, target);
-				if (invalid) return {reply: invalid};
-				orGroup.moves[targetMove.id] = !isNotSearch;
-				continue;
-			}
-
-			let typeIndex = target.indexOf(' type');
-			if (typeIndex >= 0) {
-				target = target.charAt(0).toUpperCase() + target.substring(1, typeIndex);
-				if (target in Dex.data.TypeChart) {
-					let invalid = validParameter("types", target, isNotSearch, target + ' type');
-					if (invalid) return {reply: invalid};
-					orGroup.types[target] = !isNotSearch;
-					continue;
-				} else {
-					return {reply: "'" + target + "' is not a recognized type."};
 				}
 			}
 
@@ -754,6 +777,10 @@ function runMovesearch(target, cmd, canAll, message) {
 	let allStatus = {'psn':1, 'tox':1, 'brn':1, 'par':1, 'frz':1, 'slp':1};
 	let allVolatileStatus = {'flinch':1, 'confusion':1, 'partiallytrapped':1};
 	let allBoosts = {'hp':1, 'atk':1, 'def':1, 'spa':1, 'spd':1, 'spe':1, 'accuracy':1, 'evasion':1};
+	let allTypes = {};
+	for (let i in Dex.data.TypeChart) {
+		allTypes[toId(i)] = i;
+	}
 	let showAll = false;
 	let lsetData = {};
 	let targetMon = '';
@@ -766,14 +793,19 @@ function runMovesearch(target, cmd, canAll, message) {
 			target = target.substr(1);
 		}
 
-		let typeIndex = target.indexOf(' type');
-		if (typeIndex >= 0) {
-			target = target.charAt(0).toUpperCase() + target.substring(1, typeIndex);
-			if (!(target in Dex.data.TypeChart)) return {reply: "Type '" + escapeHTML(target) + "' not found."};
-			if (!searches['type']) searches['type'] = {};
-			if ((searches['type'][target] && isNotSearch) || (searches['type'][target] === false && !isNotSearch)) return {reply: 'A search cannot both exclude and include a type.'};
-			searches['type'][target] = !isNotSearch;
-			continue;
+		let typeIndex = target.indexOf('type');
+		if (typeIndex === -1) typeIndex = target.length;
+		if (typeIndex !== target.length || toId(target) in allTypes) {
+			target = toId(target.substring(0, typeIndex));
+			if (target in allTypes) {
+				target = allTypes[target];
+				if (!searches['type']) searches['type'] = {};
+				if ((searches['type'][target] && isNotSearch) || (searches['type'][target] === false && !isNotSearch)) return {reply: 'A search cannot both exclude and include a type.'};
+				searches['type'][target] = !isNotSearch;
+				continue;
+			} else {
+				return {reply: "'" + target + "' is not a recognized type."};
+			}
 		}
 
 		if (target in allCategories) {
@@ -799,25 +831,27 @@ function runMovesearch(target, cmd, canAll, message) {
 			searches['flags'][target] = !isNotSearch;
 			continue;
 		}
-
-		if (target.startsWith('gen')) {
-			let targetInt = parseInt(target.substr(3));
-			if (targetInt && targetInt < 8 && targetInt > 0) {
-				if (searches['gens']) {
-					if (searches['gens'][targetInt]) {
-						if (searches['gens'][targetInt] === isNotSearch) {
-							return {reply: "A search cannot both include and exclude '" + escapeHTML(target) + "'."};
-						} else {
-							return {reply: "The search included '" + escapeHTML(target) + "' more than once."};
-						}
+		let targetInt = 0;
+		if (target.substr(0, 1) === 'g' && Number.isInteger(parseFloat(target.substr(1)))) {
+			targetInt = parseInt(target.substr(1).trim());
+		} else if (target.substr(0, 3) === 'gen' && Number.isInteger(parseFloat(target.substr(3)))) {
+			targetInt = parseInt(target.substr(3).trim());
+		}
+		if (0 < targetInt && targetInt < 8) {
+			if (searches['gens']) {
+				if (searches['gens'][targetInt]) {
+					if (searches['gens'][targetInt] === isNotSearch) {
+						return {reply: "A search cannot both include and exclude '" + escapeHTML(target) + "'."};
 					} else {
-						return {reply: "A move cannot have multiple gens."};
+						return {reply: "The search included '" + escapeHTML(target) + "' more than once."};
 					}
+				} else {
+					return {reply: "A move cannot have multiple gens."};
 				}
-				searches['gens'] = {};
-				searches['gens'][targetInt] = !isNotSearch;
-				continue;
 			}
+			searches['gens'] = {};
+			searches['gens'][targetInt] = !isNotSearch;
+			continue;
 		}
 
 		if (target === 'all') {
