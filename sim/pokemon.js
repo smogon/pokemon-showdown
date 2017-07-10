@@ -63,7 +63,7 @@ class Pokemon {
 		this.beingCalledBack = false;
 		this.isActive = false;
 		this.activeTurns = 0;
-		/** Has this pokemon's Start events run yet? */
+		/** Have this pokemon's Start events run yet? */
 		this.isStarted = false;
 		this.transformed = false;
 		this.duringMove = false;
