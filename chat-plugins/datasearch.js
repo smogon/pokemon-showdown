@@ -417,6 +417,14 @@ function runDexsearch(target, cmd, canAll, message) {
 				continue;
 			}
 
+			let targetMove = Dex.getMove(target);
+			if (targetMove.exists) {
+				let invalid = validParameter("moves", targetMove.id, isNotSearch, target);
+				if (invalid) return {reply: invalid};
+				orGroup.moves[targetMove.id] = !isNotSearch;
+				continue;
+			}
+
 			let typeIndex = target.indexOf('type');
 			if (typeIndex === -1) typeIndex = target.length;
 			if (typeIndex !== target.length || toId(target) in allTypes) {
@@ -556,14 +564,6 @@ function runDexsearch(target, cmd, canAll, message) {
 				} else {
 					return {reply: "'" + targetResist + "' is not a recognized type."};
 				}
-			}
-
-			let targetMove = Dex.getMove(target);
-			if (targetMove.exists) {
-				let invalid = validParameter("moves", targetMove.id, isNotSearch, target);
-				if (invalid) return {reply: invalid};
-				orGroup.moves[targetMove.id] = !isNotSearch;
-				continue;
 			}
 
 			let inequality = target.search(/>|<|=/);
