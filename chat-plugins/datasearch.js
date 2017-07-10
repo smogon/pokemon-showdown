@@ -454,8 +454,8 @@ function runDexsearch(target, cmd, canAll, message) {
 			}
 
 			let targetInt = 0;
-			if (target.substr(0, 3) === 'gen' && Number.isInteger(parseFloat(target.substr(3)))) targetInt = parseInt(target.substr(3).trim());
-			if (Number.isInteger(parseFloat(target))) targetInt = parseInt(target);
+			if (target.substr(0, 1) === 'g' && Number.isInteger(parseFloat(target.substr(1)))) targetInt = parseInt(target.substr(1).trim());
+			else if (target.substr(0, 3) === 'gen' && Number.isInteger(parseFloat(target.substr(3)))) targetInt = parseInt(target.substr(3).trim());		
 			if (0 < targetInt && targetInt < 8) {
 				let invalid = validParameter("gens", targetInt, isNotSearch, target);
 				if (invalid) return {reply: invalid};
