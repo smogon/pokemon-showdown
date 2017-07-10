@@ -62,7 +62,7 @@ class Effect {
 	constructor(data, moreData = null) {
 		/**
 		 * ID. This will be a lowercase version of the name with all the
-		 * alphanumeric characters removed. So, for instance, "Mr. Mime"
+		 * non-alphanumeric characters removed. So, for instance, "Mr. Mime"
 		 * becomes "mrmime", and "Basculin-Blue-Striped" becomes
 		 * "basculinbluestriped".
 		 * @type {string}
