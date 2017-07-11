@@ -194,7 +194,7 @@ exports.BattleFormatsData = {
 		tier: "LC",
 	},
 	parasect: {
-		randomBattleMoves: ["swordsdance", "spore", "frustration", "hiddenpowerground", "sludgebomb", "aromatherapy", "gigadrain"],
+		randomBattleMoves: ["swordsdance", "spore", "return", "hiddenpowerground", "sludgebomb", "aromatherapy", "gigadrain"],
 		tier: "NU",
 	},
 	venonat: {
