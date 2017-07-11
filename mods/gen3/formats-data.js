@@ -1061,7 +1061,7 @@ exports.BattleFormatsData = {
 		tier: "LC",
 	},
 	linoone: {
-		randomBattleMoves: ["bellydrum", "extremespeed", "return", "shadowball", "flail", "subsitute", "hiddenpowerfighting"],
+		randomBattleMoves: ["bellydrum", "extremespeed", "return", "shadowball", "flail", "substitute", "hiddenpowerfighting"],
 		tier: "UU",
 	},
 	wurmple: {
