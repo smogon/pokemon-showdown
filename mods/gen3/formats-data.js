@@ -876,7 +876,7 @@ exports.BattleFormatsData = {
 	},
 	qwilfish: {
 		inherit: true,
-		randomBattleMoves: ["spikes", "surf", "hydropump", "sludgebomb", "selfdestruct", "destinybond", "sworddance", "thunderwave", "shadowball", "return"],
+		randomBattleMoves: ["spikes", "surf", "hydropump", "sludgebomb", "selfdestruct", "destinybond", "swordsdance", "thunderwave", "shadowball", "return"],
 		tier: "UU",
 	},
 	shuckle: {
