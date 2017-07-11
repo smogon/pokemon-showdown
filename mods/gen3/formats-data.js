@@ -876,7 +876,7 @@ exports.BattleFormatsData = {
 	},
 	qwilfish: {
 		inherit: true,
-		randomBattleMoves: ["spikes", "surf", "hydropump", "sludgebomb", "selfdestruct", "destinybond", "sworddance", "thunderwave", "shadowball", "return"],
+		randomBattleMoves: ["spikes", "surf", "hydropump", "sludgebomb", "selfdestruct", "destinybond", "swordsdance", "thunderwave", "shadowball", "return"],
 		tier: "UU",
 	},
 	shuckle: {
@@ -1061,7 +1061,7 @@ exports.BattleFormatsData = {
 		tier: "LC",
 	},
 	linoone: {
-		randomBattleMoves: ["bellydrum", "extremespeed", "return", "shadowball", "flail", "subsitute", "hiddenpowerfighting"],
+		randomBattleMoves: ["bellydrum", "extremespeed", "return", "shadowball", "flail", "substitute", "hiddenpowerfighting"],
 		tier: "UU",
 	},
 	wurmple: {
