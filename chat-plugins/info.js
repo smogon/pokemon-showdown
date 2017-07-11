@@ -374,6 +374,7 @@ exports.commands = {
 			}
 		}
 		let mod = Dex;
+		console.log(toId(sep[1]));
 		if (sep[1] && toId(sep[1]) in Dex.dexes) {
 			mod = Dex.mod(toId(sep[1]));
 		} else if (sep[1] && Dex.getFormat(sep[1]).mod) {

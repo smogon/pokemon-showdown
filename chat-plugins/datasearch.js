@@ -95,9 +95,9 @@ exports.commands = {
 	dsearch: 'dexsearch',
 	dexsearch: function (target, room, user, connection, cmd, message) {
 		if (!this.canBroadcast()) return;
-		let targetGen = parseInt(cmd[cmd.length - 1]);
-		if (targetGen) target += ", gen<" + (targetGen + 1);
 		if (!target) return this.parse('/help dexsearch');
+		let targetGen = parseInt(cmd[cmd.length - 1]);
+		if (targetGen) target += ", maxgen" + targetGen;
 		return runSearch({
 			target: target,
 			cmd: 'dexsearch',
@@ -360,7 +360,7 @@ function runDexsearch(target, cmd, canAll, message) {
 	let megaSearch = null;
 	let capSearch = null;
 	let randomOutput = 0;
-
+	let maxGen = 0;
 	let validParameter = (cat, param, isNotSearch, input) => {
 		let uniqueTraits = {'colors':1, 'gens':1};
 		for (let h = 0; h < searches.length; h++) {
@@ -446,6 +446,11 @@ function runDexsearch(target, cmd, canAll, message) {
 				} else {
 					return {reply: "'" + target + "' is not a recognized type."};
 				}
+			}
+			if (target.substr(0, 6) === 'maxgen') {
+				maxGen = parseInt(target[6]);
+				orGroup.skip = true;
+				continue;
 			}
 			let groupIndex = target.indexOf('group');
 			if (groupIndex === -1) groupIndex = target.length;
@@ -628,12 +633,16 @@ function runDexsearch(target, cmd, canAll, message) {
 		}
 	}
 	if (showAll && searches.length === 0 && megaSearch === null) return {reply: "No search parameters other than 'all' were found. Try '/help dexsearch' for more information on this command."};
-
+	let mod = Dex;
+	if (maxGen) {
+		mod = Dex.mod('gen' + maxGen);
+	}
 	let dex = {};
-	for (let pokemon in Dex.data.Pokedex) {
-		let template = Dex.getTemplate(pokemon);
+	let i = 0;
+	for (let pokemon in mod.data.Pokedex) {
+		let template = mod.getTemplate(pokemon);
 		let megaSearchResult = (megaSearch === null || (megaSearch === true && template.isMega) || (megaSearch === false && !template.isMega));
-		if (template.tier !== 'Unreleased' && template.tier !== 'Illegal' && (template.tier !== 'CAP' || capSearch) && megaSearchResult) {
+		if (template.tier !== 'Unreleased' && template.tier !== 'Illegal' && (template.tier !== 'CAP' || capSearch) && megaSearchResult && (!maxGen || template.gen <= maxGen)) {
 			dex[pokemon] = template;
 		}
 	}
