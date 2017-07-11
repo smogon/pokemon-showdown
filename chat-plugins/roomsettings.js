@@ -96,6 +96,14 @@ class RoomSettings {
 			return `${this.button('off', true)} ${this.button('filter capitals', null, 'capsfilter on')}`;
 		}
 	}
+	emojis() {
+		if (!this.user.can('editroom', null, this.room)) return this.button(this.room.filterEmojis ? 'filter emojis' : 'off', true);
+		if (this.room.filterEmojis) {
+			return `${this.button('off', null, 'emojifilter off')} ${this.button('filter emojis', true)}`;
+		} else {
+			return `${this.button('off', true)} ${this.button('filter emojis', null, 'emojifilter on')}`;
+		}
+	}
 	slowchat() {
 		if (!this.user.can('editroom', null, this.room) || (!this.user.can('bypassall') && this.room.userCount < SLOWCHAT_USER_REQUIREMENT)) return this.button(this.room.slowchat ? this.room.slowchat : 'off', true);
 
@@ -147,6 +155,7 @@ class RoomSettings {
 		output += `<strong>Modjoin:</strong> <br />${this.modjoin()}<br />`;
 		output += `<strong>Stretch filter:</strong> <br />${this.stretching()}<br />`;
 		output += `<strong>Caps filter:</strong> <br />${this.capitals()}<br />`;
+		output += `<strong>Emoji filter:</strong> <br />${this.emojis()}<br />`;
 		output += `<strong>Slowchat:</strong> <br />${this.slowchat()}<br />`;
 		output += `<strong>Tournaments:</strong> <br />${this.tourStatus()}<br />`;
 		output += `<strong>UNO:</strong> <br />${this.uno()}<br />`;
@@ -398,6 +407,35 @@ exports.commands = {
 		}
 	},
 	capsfilterhelp: ["/capsfilter [on/off] - Toggles filtering messages in the room for EXCESSIVE CAPS. Requires # & ~"],
+
+	emojis: 'emojifilter',
+	emoji: 'emojifilter',
+	emojifilter : function (target, room, user) {
+		if (!target) {
+			const emojiSetting = (room.filterEmojis ? "ON" : "OFF");
+			return this.sendReply(`This room's emoji filter is currently: ${emojiSetting}`);
+		}
+		if (!this.canTalk()) return;
+		if (!this.can('editroom', null, room)) return false;
+
+		if (target === 'enable' || target === 'on' || target === 'true') {
+			if (room.filterEmojis) return this.errorReply(`This room's emoji filter is already ON`);
+			room.filterEmojis = true;
+		} else if (target === 'disable' || target === 'off' || target === 'false') {
+			if (!room.filterEmojis) return this.errorReply(`This room's emoji filter is already OFF`);
+			room.filterEmojis = false;
+		} else {
+			return this.parse("/help emojifilter");
+		}
+		const emojiSetting = (room.filterEmojis ? "ON" : "OFF");
+		this.privateModCommand(`(${user.name} turned the emoji filter ${emojiSetting})`);
+
+		if (room.chatRoomData) {
+			room.chatRoomData.filterEmojis = room.filterEmojis;
+			Rooms.global.writeChatRoomData();
+		}
+	},
+	emojifilterhelp: ["/emojifilter [on/off] - Toggles filtering messages in the room for emojis. Requires # & ~"],
 
 	banwords: 'banword',
 	banword: {
