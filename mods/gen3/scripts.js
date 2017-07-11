@@ -523,7 +523,7 @@ exports.BattleScripts = {
 			if (baseFormes[template.baseSpecies]) continue;
 
 			// Limit to one Wobbuffet per battle (not just per team)
-			if (this.hasWobbuffet) continue;
+			if (template.species === 'Wobbuffet' && this.hasWobbuffet) continue;
 
 			let tier = template.tier;
 			switch (tier) {
