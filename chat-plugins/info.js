@@ -423,8 +423,6 @@ exports.commands = {
 
 		if (showDetails) {
 			let details;
-			let isSnatch = false;
-			let isMirrorMove = false;
 			if (newTargets[0].searchType === 'pokemon') {
 				let pokemon = mod.getTemplate(newTargets[0].name);
 				let weighthit = 20;
@@ -480,9 +478,6 @@ exports.commands = {
 				if (move.flags['reflectable']) details["&#10003; Bounceable"] = "";
 				if (move.flags['gravity'] && mod.gen >= 4) details["&#10007; Suppressed by Gravity"] = "";
 
-				if (move.id === 'snatch' && mod.gen >= 3) isSnatch = true;
-				if (move.id === 'mirrormove') isMirrorMove = true;
-
 				if (mod.gen >= 7) {
 					if (move.zMovePower) {
 						details["Z-Power"] = move.zMovePower;
@@ -528,6 +523,13 @@ exports.commands = {
 					'any': "Any Pok\u00e9mon",
 					'all': "All Pok\u00e9mon",
 				}[move.target] || "Unknown";
+
+				if (move.id === 'snatch' && mod.gen >= 3) {
+					details['<a href="https://pokemonshowdown.com/dex/moves/snatch">Snatchable Moves</a>'] = '';
+				}
+				if (move.id === 'mirrormove') {
+					details['<a href="https://pokemonshowdown.com/dex/moves/mirrormove">Mirrorable Moves</a>'] = '';
+				}
 			} else if (newTargets[0].searchType === 'item') {
 				let item = mod.getItem(newTargets[0].name);
 				details = {
@@ -558,9 +560,6 @@ exports.commands = {
 				if (details[detail] === '') return detail;
 				return '<font color="#686868">' + detail + ':</font> ' + details[detail];
 			}).join("&nbsp;|&ThickSpace;") + '</font>';
-
-			if (isSnatch) buffer += '&nbsp;|&ThickSpace;<a href="https://pokemonshowdown.com/dex/moves/snatch"><font size="1">Snatchable Moves</font></a>';
-			if (isMirrorMove) buffer += '&nbsp;|&ThickSpace;<a href="https://pokemonshowdown.com/dex/moves/mirrormove"><font size="1">Mirrorable Moves</font></a>';
 		}
 		this.sendReply(buffer);
 	},
