@@ -2476,10 +2476,20 @@ exports.commands = {
 				Rooms.SimulatorProcess.respawn();
 				return this.sendReply("Battles have been hotpatched. Any battles started after now will use the new code; however, in-progress battles will continue to use the old code.");
 			} else if (target === 'formats') {
+				// store custom formats
+				let customFormats = {};
+				for (let i in Dex.data.Formats) {
+					if (!Dex.data.Formats[i].customBanlist) continue;
+					customFormats[i] = {name: Dex.data.Formats[i].name, customBanlist: Dex.data.Formats[i].customBanlist};
+				}
 				// uncache the sim/dex.js dependency tree
 				Chat.uncacheTree('./sim/dex');
 				// reload sim/dex.js
 				global.Dex = require('./sim/dex'); // note: this will lock up the server for a few seconds
+				// rebuild custom formats
+				for (let i in customFormats) {
+					Dex.getFormat(customFormats[i].name, customFormats[i].customBanlist, i);
+				}
 				// rebuild the formats list
 				delete Rooms.global.formatList;
 				// respawn validator processes
