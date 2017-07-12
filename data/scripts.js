@@ -2187,7 +2187,7 @@ exports.BattleScripts = {
 			item = 'Assault Vest';
 		} else if (hasMove['conversion']) {
 			item = 'Normalium Z';
-		} else if (!teamDetails.zMove && (hasMove['fly'] || hasMove['bounce'])) {
+		} else if (!teamDetails.zMove && (hasMove['fly'] || hasMove['bounce'] && counter.setupType)) {
 			item = 'Flyinium Z';
 		} else if (hasMove['geomancy']) {
 			item = 'Power Herb';
