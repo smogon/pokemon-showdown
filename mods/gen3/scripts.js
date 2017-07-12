@@ -6,7 +6,7 @@ exports.BattleScripts = {
 	init: function () {
 		for (let i in this.data.Pokedex) {
 			delete this.data.Pokedex[i].abilities['H'];
-			if (Dex.getAbility(this.data.Pokedex[i].abilities[1]).gen > 3) delete this.data.Pokedex[i].abilities[1];
+			if (this.getAbility(this.data.Pokedex[i].abilities[1]).gen > 3) delete this.data.Pokedex[i].abilities[1];
 		}
 		let specialTypes = {Fire:1, Water:1, Grass:1, Ice:1, Electric:1, Dark:1, Psychic:1, Dragon:1};
 		let newCategory = '';
