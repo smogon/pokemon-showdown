@@ -61,7 +61,7 @@ class DatasearchManager extends ProcessManager {
 				result = runItemsearch(data.target, data.cmd, data.canAll, data.message);
 				break;
 			case 'learn':
-				result = runLearn(data.target, data.message);
+				result = runLearn(data.target, data.canAll, data.message);
 				break;
 			default:
 				result = null;
@@ -295,6 +295,7 @@ exports.commands = {
 		return runSearch({
 			target: target,
 			cmd: 'learn',
+			canAll: (!this.broadcastMessage || (room && room.isPersonal)),
 			message: cmd,
 		}).then(response => {
 			if (!this.runBroadcast()) return;
@@ -1415,7 +1416,7 @@ function runItemsearch(target, cmd, canAll, message) {
 	return {reply: resultsStr};
 }
 
-function runLearn(target, cmd) {
+function runLearn(target, canAll, cmd) {
 	let format = {};
 	let targets = target.split(',');
 	let gen = ({rby:1, gsc:2, adv:3, dpp:4, bw2:5, oras:6}[cmd.slice(0, -5)] || 7);
@@ -1455,6 +1456,7 @@ function runLearn(target, cmd) {
 	let move = {};
 	let problem;
 	let all = (cmd === 'learnall');
+	if (!canAll && all) return {reply: "A search with the parameter 'all' cannot be broadcast."};
 	if (cmd === 'learn5') lsetData.set.level = 5;
 
 	if (!template.exists || template.id === 'missingno') {
