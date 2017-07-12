@@ -1255,7 +1255,6 @@ exports.Formats = [
 		name: "[Gen 2] Random Battle",
 
 		mod: 'gen2',
-		searchShow: false,
 		team: 'random',
 		ruleset: ['Pokemon', 'Standard'],
 	},
