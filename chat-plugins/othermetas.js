@@ -35,6 +35,13 @@ exports.commands = {
 		if (toId(sep[1]) === 'dragonascent' && toId(sep[0]) !== 'smeargle') {
 			this.errorReply(`Warning: Only Pokemon with access to Dragon Ascent can mega evolve with Mega Rayquaza's traits; therefore, ${template.name} cannot mega evolve with Dragon Ascent.`);
 		}
+		// Fake Pokemon and Mega Stones
+		if (template.isNonstandard) {
+			this.errorReply(`Warning: ${template.name} is not a real Pokemon and is therefore not usable in Mix and Mega.`);
+		}
+		if (toId(sep[1]) === 'crucibellite') {
+			this.errorReply(`Warning: Crucibellite is a fake mega stone created by the CAP Project and is restricted to the CAP Crucibelle.`);
+		}
 		let baseTemplate = Dex.getTemplate(stone.megaEvolves);
 		let megaTemplate = Dex.getTemplate(stone.megaStone);
 		if (stone.id === 'redorb') { // Orbs do not have 'Item.megaStone' or 'Item.megaEvolves' properties.
