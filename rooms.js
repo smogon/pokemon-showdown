@@ -783,7 +783,7 @@ class GlobalRoom {
 }
 
 class BattleRoom extends Room {
-	constructor(roomid, format, p1, p2, options) {
+	constructor(roomid, formatid, p1, p2, options) {
 		super(roomid, "" + p1.name + " vs. " + p2.name);
 		this.modchat = (Config.battlemodchat || false);
 		this.modjoin = false;
@@ -800,13 +800,12 @@ class BattleRoom extends Room {
 		this.expireTimer = null;
 		this.active = false;
 
-		format = '' + (format || '');
+		formatid = '' + (formatid || '');
+		let format = Dex.getFormat(formatid);
 
-		this.format = format;
+		this.format = format.id;
 		this.auth = Object.create(null);
 		//console.log("NEW BATTLE");
-
-		let formatid = toId(format);
 
 		// Sometimes we might allow BattleRooms to have no options
 		if (!options) {
@@ -814,7 +813,7 @@ class BattleRoom extends Room {
 		}
 
 		let rated;
-		if (options.rated && Dex.getFormat(formatid).rated !== false) {
+		if (options.rated && format.rated !== false) {
 			rated = options.rated;
 		} else {
 			rated = false;
@@ -830,7 +829,7 @@ class BattleRoom extends Room {
 		this.p2 = p2 || null;
 
 		this.rated = rated;
-		this.battle = new Rooms.RoomBattle(this, format, rated);
+		this.battle = new Rooms.RoomBattle(this, formatid, rated);
 		this.game = this.battle;
 
 		this.sideTicksLeft = [21, 21];
