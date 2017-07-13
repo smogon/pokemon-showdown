@@ -25,14 +25,6 @@ function serialize(str) {
 	return JSON.stringify(str);
 }
 
-/**
- * @class ProcessWrapper
- * @extends NodeJS.EventEmitter
- * @property {any} PM
- * @property {boolean} active
- * @property {Map<number, any>} pendingTasks
- * @property {any} process
- */
 class ProcessWrapper extends EventEmitter {
 	/**
 	 * @param {any} PM
@@ -40,13 +32,17 @@ class ProcessWrapper extends EventEmitter {
 	constructor(PM) {
 		super();
 
+		/** @type {any} */
 		this.PM = PM;
+		/** @type {boolean} */
 		this.active = true;
+		/** @type {Map<number, any>} */
 		this.pendingTasks = new Map();
+		/** @type {any} */
 		this.process = require('child_process').fork(PM.execFile, [], {cwd: __dirname});
 
 		// Allow events to bubble-up to the wrapper
-		this.process.on('message', message => this.emit('message', message));
+		this.process.on('message', /** @param {string} message */ message => this.emit('message', message));
 		this.on('message', PM.onMessageUpstream);
 	}
 
@@ -82,14 +78,6 @@ class ProcessWrapper extends EventEmitter {
  * @property {boolean} [isChatBased]
  */
 
-/**
- * @class ProcessManager
- * @property {ProcessWrapper[]} processes
- * @property {number} taskId
- * @property {string} execFile
- * @property {number} maxProcesses
- * @property {boolean} isChatBased
- */
 class ProcessManager {
 	/**
 	 * @param {PMOptions} options
@@ -104,9 +92,13 @@ class ProcessManager {
 
 		/** @type {ProcessWrapper[]} */
 		this.processes = [];
+		/** @type {number} */
 		this.taskId = 0;
+		/** @type {string} */
 		this.execFile = '' + options.execFile;
+		/** @type {number} */
 		this.maxProcesses = (typeof options.maxProcesses === 'number') ? options.maxProcesses : 1;
+		/** @type {boolean} */
 		this.isChatBased = !!options.isChatBased;
 
 		processManagers.set(this, options.execFile);

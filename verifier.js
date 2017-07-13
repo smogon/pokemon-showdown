@@ -17,10 +17,6 @@
 const crypto = require('crypto');
 const ProcessManager = require('./process-manager');
 
-/**
- * @class VerifierManager
- * @extends ProcessManager
- */
 class VerifierManager extends ProcessManager {
 	/**
 	 * @param {string} message
