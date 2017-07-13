@@ -149,17 +149,28 @@ class RoomSettings {
 			return `${this.button('Hangman enabled', true)} ${this.button('off', null, 'hangman disable')}`;
 		}
 	}
+	proWrestling() {
+		if (!this.user.can('editroom', null, this.room)) return this.button(this.room.pwQuestionsDisabled ? 'Closed' : 'Open', true);
+		if (this.room.pwQuestionsDisabled) {
+			return `${this.button('Open', null, 'prowrestling open')} ${this.button('Closed', true)}`;
+		} else {
+			return `${this.button('Open', true)} ${this.button('Closed', null, 'prowrestling close')}`;
+		}
+	}
 	generateDisplay(user, room, connection) {
 		let output = Chat.html`<div class="infobox">Room Settings for ${this.room.title}<br />`;
-		output += `<strong>Modchat:</strong> <br />${this.modchat()}<br />`;
-		output += `<strong>Modjoin:</strong> <br />${this.modjoin()}<br />`;
-		output += `<strong>Stretch filter:</strong> <br />${this.stretching()}<br />`;
-		output += `<strong>Caps filter:</strong> <br />${this.capitals()}<br />`;
-		output += `<strong>Emoji filter:</strong> <br />${this.emojis()}<br />`;
-		output += `<strong>Slowchat:</strong> <br />${this.slowchat()}<br />`;
-		output += `<strong>Tournaments:</strong> <br />${this.tourStatus()}<br />`;
-		output += `<strong>UNO:</strong> <br />${this.uno()}<br />`;
-		output += `<strong>Hangman:</strong> <br />${this.hangman()}<br />`;
+		output += `<strong>Modchat:</strong><br />${this.modchat()}<br />`;
+		output += `<strong>Modjoin:</strong><br />${this.modjoin()}<br />`;
+		output += `<strong>Stretch filter:</strong><br />${this.stretching()}<br />`;
+		output += `<strong>Caps filter:</strong><br />${this.capitals()}<br />`;
+		output += `<strong>Emoji filter:</strong><br />${this.emojis()}<br />`;
+		output += `<strong>Slowchat:</strong><br />${this.slowchat()}<br />`;
+		output += `<strong>Tournaments:</strong><br />${this.tourStatus()}<br />`;
+		output += `<strong>UNO:</strong><br />${this.uno()}<br />`;
+		output += `<strong>Hangman:</strong><br />${this.hangman()}<br />`;
+		// Room-specific settings
+		if (this.room.id === 'prowrestling') output += `<strong>Pro Wrestling (Podcast question submissions):</strong><br />${this.proWrestling()}<br />`;
+
 		output += '</div>';
 
 		this.user.sendTo(this.room, `|uhtml${(this.sameCommand ? '' : 'change')}|roomsettings|${output}`);
