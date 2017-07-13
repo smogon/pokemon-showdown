@@ -2186,7 +2186,9 @@ exports.commands = {
 	},
 	unnamelockhelp: ["/unnamelock [username] - Unnamelocks the user. Requires: % @ * & ~"],
 
-	hidetext: function (target, room, user) {
+	hidetextalts: 'hidetext',
+	hidealtstext: 'hidetext',
+	hidetext: function (target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help hidetext');
 
 		this.splitTarget(target);
@@ -2203,11 +2205,22 @@ exports.commands = {
 			return this.errorReply("User '" + name + "' is not banned from this room or locked.");
 		}
 
-		this.addModCommand("" + targetUser.name + "'s messages were cleared from  " + room.title + " by " + user.name + ".");
-		this.add('|unlink|' + hidetype + userid);
-		if (userid !== toId(this.inputUsername)) this.add('|unlink|' + hidetype + toId(this.inputUsername));
+		if (cmd === 'hidealtstext' || cmd === 'hidetextalts') {
+			this.addModCommand(`${targetUser.name}'s alts' messages were cleared from ${room.title} by ${user.name}.`);
+			this.add(`|unlink|${hidetype}${userid}`);
+			for (let i in targetUser.prevNames) {
+				this.add(`|unlink|${hidetype}${targetUser.prevNames[i]}`);
+			}
+		} else {
+			this.addModCommand("" + targetUser.name + "'s messages were cleared from  " + room.title + " by " + user.name + ".");
+			this.add('|unlink|' + hidetype + userid);
+			if (userid !== toId(this.inputUsername)) this.add('|unlink|' + hidetype + toId(this.inputUsername));
+		}
 	},
-	hidetexthelp: ["/hidetext [username] - Removes a locked or banned user's messages from chat (includes users banned from the room). Requires: % (global only), @ * # & ~"],
+	hidetexthelp: [
+		"/hidetext [username] - Removes a locked or banned user's messages from chat (includes users banned from the room). Requires: % (global only), @ * # & ~",
+		"/hidealtstext OR /hidetextalts [username] - Removes a locked or banned user's messages, and their alternate account's messages from the chat (includes users banned from the room).  Requires: % (global only), @ * # & ~",
+	],
 
 	ab: 'blacklist',
 	blacklist: function (target, room, user) {
