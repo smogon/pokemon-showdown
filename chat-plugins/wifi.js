@@ -740,7 +740,7 @@ let commands = {
 			if (!this.runBroadcast()) return;
 			reply = '<b>Wi-Fi room Giveaway help and info</b><br />' +
 			'- help user - shows list of participation commands<br />' +
-			'- help staff - shows giveaway staff commands (Requires: + % @ * # & ~)' +
+			'- help staff - shows giveaway staff commands (Requires: + % @ * # & ~)<br />' +
 			'- help gts - shows gts giveaway commands (Requires: + % @ * # & ~)';
 		}
 		this.sendReplyBox(reply);
