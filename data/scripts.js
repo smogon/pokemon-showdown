@@ -3673,7 +3673,7 @@ exports.BattleScripts = {
 		}
 
 		return {
-			name: setData.set.name || template.baseSpecies,
+			name: setData.set.nickname || setData.set.name || template.baseSpecies,
 			species: setData.set.species,
 			gender: setData.set.gender || template.gender || (this.random(2) ? 'M' : 'F'),
 			item: setData.set.item || '',
