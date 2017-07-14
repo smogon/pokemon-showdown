@@ -330,24 +330,7 @@ exports.BattleMovedex = {
 	},
 	metronome: {
 		inherit: true,
-		onHit: function (target) {
-			let moves = [];
-			for (let i in exports.BattleMovedex) {
-				let move = exports.BattleMovedex[i];
-				if (i !== move.id) continue;
-				if (move.isNonstandard) continue;
-				let noMetronome = {
-					counter:1, destinybond:1, detect:1, endure:1, metronome:1, mimic:1, mirrorcoat:1, protect:1, sketch:1, sleeptalk:1, struggle:1, thief:1,
-				};
-				if (!noMetronome[move.id] && move.num < 252) {
-					moves.push(move.id);
-				}
-			}
-			let randomMove = '';
-			if (moves.length) randomMove = moves[this.random(moves.length)];
-			if (!randomMove) return false;
-			this.useMove(randomMove, target);
-		},
+		noMetronome: {counter:1, destinybond:1, detect:1, endure:1, metronome:1, mimic:1, mirrorcoat:1, protect:1, sketch:1, sleeptalk:1, struggle:1, thief:1},
 		noSketch: true,
 	},
 	mimic: {
