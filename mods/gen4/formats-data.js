@@ -735,7 +735,7 @@ exports.BattleFormatsData = {
 	},
 	mew: {
 		inherit: true,
-		randomBattleMoves: ["psychic", "aurasphere", "darkpulse", "flamethrower", "nastyplot", "willowisp", "uturn", "softboiled", "taunt", "stealthrock", "explosion"],
+		randomBattleMoves: ["psychic", "aurasphere", "flamethrower", "nastyplot", "willowisp", "uturn", "softboiled", "taunt", "stealthrock", "explosion"],
 		tier: "Uber",
 	},
 	chikorita: {
