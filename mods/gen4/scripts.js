@@ -231,7 +231,7 @@ exports.BattleScripts = {
 
 				// Bad after setup
 				case 'explosion': case 'selfdestruct':
-					if (counter.stab < 2 || counter.setupType || !!counter['recovery'] || hasMove['rest']) rejected = true;
+					if (counter.stab < 2 || counter.setupType || !!counter['recovery'] || hasMove['rest'] || hasMove['substitute']) rejected = true;
 					break;
 				case 'foresight': case 'protect': case 'roar':
 					if (counter.setupType && !hasAbility['Speed Boost']) rejected = true;
