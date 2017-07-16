@@ -52,22 +52,6 @@ const DATA_DIR = path.resolve(__dirname, '../data');
 const MODS_DIR = path.resolve(__dirname, '../mods');
 const FORMATS = path.resolve(__dirname, '../config/formats');
 
-// shim Object.values
-if (!Object.values) {
-	// @ts-ignore
-	Object.values = function (object) {
-		let values = [];
-		for (let k in object) values.push(object[k]);
-		return values;
-	};
-	// @ts-ignore
-	Object.entries = function (object) {
-		let entries = [];
-		for (let k in object) entries.push([k, object[k]]);
-		return entries;
-	};
-}
-
 // shim padStart
 // if (!String.prototype.padStart) {
 // 	String.prototype.padStart = function padStart(maxLength, filler) {
