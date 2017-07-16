@@ -495,13 +495,18 @@ class ModdedDex {
 		}
 		name = (name || '').trim();
 		let id = toId(name);
+		const Formats = this.data.Formats;
 		if (this.data.Aliases[id]) {
 			name = this.data.Aliases[id];
 			id = toId(name);
 		}
+		if (!Formats.hasOwnProperty(id) && Formats.hasOwnProperty(`gen7${id}`)) {
+			name = `[Gen 7] ${name}`;
+			id = `gen7${id}`;
+		}
 		let effect;
-		if (this.data.Formats.hasOwnProperty(id)) {
-			let format = this.data.Formats[id];
+		if (Formats.hasOwnProperty(id)) {
+			let format = Formats[id];
 			if (customBanlist) {
 				if (typeof customBanlist === 'string') customBanlist = customBanlist.split(',');
 				if (!format.banlistTable) this.getBanlistTable(format);
