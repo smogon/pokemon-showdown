@@ -2208,6 +2208,11 @@ exports.commands = {
 		if (cmd === 'hidealtstext' || cmd === 'hidetextalts') {
 			this.addModCommand(`${targetUser.name}'s alts' messages were cleared from ${room.title} by ${user.name}.`);
 			this.add(`|unlink|${hidetype}${userid}`);
+
+			const alts = targetUser.getAltUsers(true);
+			for (let i = 0; i < alts.length; ++i) {
+				this.add(`|unlink|${hidetype}${alts[i].name}`);
+			}
 			for (let i in targetUser.prevNames) {
 				this.add(`|unlink|${hidetype}${targetUser.prevNames[i]}`);
 			}
