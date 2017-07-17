@@ -260,12 +260,14 @@ class ScavengerHunt extends Rooms.RoomGame {
 		this.announce(`A new ${(this.gameType === 'official' ? "official" : this.gameType === 'practice' ? "practice" : '')} Scavenger Hunt by <em>${Chat.escapeHTML(Chat.toListString(this.hosts.map(h => h.name)))}</em> has been started${(this.hosts.some(h => h.userid === this.staffHostId) ? '' : ` by <em>${Chat.escapeHTML(this.staffHostName)}</em>`)}.<br />The first hint is: ${Chat.parseText(this.questions[0].hint)}`);
 	}
 
-	onEditQuestion(number, question_answer, ...value) {
+	onEditQuestion(number, question_answer, value) {
 		if (question_answer === 'question') question_answer = 'hint';
 		if (!['hint', 'answer'].includes(question_answer)) return false;
 
-		value = question_answer === 'answer' ? value.map(p => p.trim()) : value.join(", ");
-		number = parseInt(number);
+		if (question_answer === 'answer') {
+			if (value.includes(',')) return false;
+			value = value.split(';').map(p => p.trim());
+		}
 
 		if (!number || number < 1 || number > this.questions.length || !value) return false;
 
@@ -559,7 +561,11 @@ class ScavengerHunt extends Rooms.RoomGame {
 
 		for (let i = 0; i < questionArray.length; i++) {
 			if (i % 2) {
-				questionArray[i] = questionArray[i].split(',').map(p => p.trim());
+				// This check will likely be removed within a week or so, as having access to a comma
+				// in an answer is actually fairly useful and actually a reason why a separator was changed to
+				// a semicolon. It's just here to give time for people to get used to that change.
+				if (questionArray[i].includes(',')) return {err: "Commas are no longer correct syntax for separating answers - please use semicolons instead."};
+				questionArray[i] = questionArray[i].split(';').map(p => p.trim());
 				if (!questionArray[i].length || questionArray[i].some(a => !toId(a))) return {err: "Empty answer - only alphanumeric characters will count in answers."};
 			} else {
 				questionArray[i] = questionArray[i].trim();
@@ -762,7 +768,7 @@ let commands = {
 		let gameType = cmd.includes('official') ? 'official' : cmd.includes('practice') ? 'practice' : null;
 
 		let [hostsArray, ...params] = target.split('|');
-		let hosts = ScavengerHunt.parseHosts(hostsArray.split(','), room, gameType === 'official');
+		let hosts = ScavengerHunt.parseHosts(hostsArray.split(/[,;]/), room, gameType === 'official');
 		if (!hosts) return this.errorReply("The user(s) you specified as the host is not online, or is not in the room.");
 
 		params = ScavengerHunt.parseQuestions(params);
@@ -829,7 +835,10 @@ let commands = {
 		let game = room.game.childGame || room.game;
 		if ((!game.hosts.some(h => h.userid === user.userid) || !user.can('broadcast', null, room)) && game.staffHostId !== user.userid) return this.errorReply("You cannot edit the hints and answers if you are not the host.");
 
-		if (!game.onEditQuestion(...target.split(',').map(p => p.trim()))) return this.sendReply("/scavengers edithunt [question number], [hint | answer], [value] - edits the current scavenger hunt.");
+		let [question, type, ...value] = target.split(',');
+		if (!game.onEditQuestion(parseInt(question), toId(type), value.join(',').trim())) {
+			return this.sendReply("/scavengers edithunt [question number], [hint | answer], [value] - edits the current scavenger hunt.");
+		}
 	},
 
 	kick: function (target, room, user) {
@@ -854,7 +863,7 @@ let commands = {
 		if (!this.can('mute', null, room)) return false;
 
 		let [hostsArray, ...params] = target.split('|');
-		let hosts = ScavengerHunt.parseHosts(hostsArray.split(','), room);
+		let hosts = ScavengerHunt.parseHosts(hostsArray.split(/[,;]/), room);
 		if (!hosts) return this.errorReply("The user(s) you specified as the host is not online, or is not in the room.");
 
 		params = ScavengerHunt.parseQuestions(params);
