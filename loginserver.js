@@ -17,20 +17,14 @@ const url = require('url');
 
 const FS = require('./fs');
 
-let TimeoutError = function (message) {
-	Error.captureStackTrace(this, TimeoutError);
-	this.name = "TimeoutError";
-	this.message = message || "";
-};
-TimeoutError.prototype = Object.create(Error.prototype);
-TimeoutError.prototype.constructor = TimeoutError;
-TimeoutError.prototype.toString = function () {
-	if (!this.message) return this.name;
-	return this.name + ": " + this.message;
-};
+/**
+ * A custom error type used when requests to the login server take too long.
+ */
+class TimeoutError extends Error {}
+TimeoutError.prototype.name = TimeoutError.name;
 
 function parseJSON(json) {
-	if (json[0] === ']') json = json.substr(1);
+	if (json.startsWith(']')) json = json.substr(1);
 	let data = {error: null};
 	try {
 		data.json = JSON.parse(json);
