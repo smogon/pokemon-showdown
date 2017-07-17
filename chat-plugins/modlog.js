@@ -241,10 +241,10 @@ function prettifyResults(rawResults, room, searchString, exactSearch, addModlogL
 	}).join(`<br />`);
 	let preamble;
 	if (searchString) {
-		preamble = `|wide||modal||html|<p>The last ${lines} logged actions containing ${searchString} on ${roomName}.` +
+		preamble = `|popup||wide||modal||html|<p>The last ${lines} logged actions containing ${searchString} on ${roomName}.` +
 						(exactSearch ? "" : " Add quotes to the search parameter to search for a phrase, rather than a user.");
 	} else {
-		preamble = `|wide||modal||html|<p>The last ${lines} lines of the Moderator Log of ${roomName}.`;
+		preamble = `|popup||wide||modal||html|<p>The last ${lines} lines of the Moderator Log of ${roomName}.`;
 	}
 	preamble +=	`</p><p><small>[${Chat.toTimestamp(new Date(), {hour12: true})}] \u2190 current server time</small></p>`;
 	return preamble + resultString;
@@ -304,7 +304,7 @@ exports.commands = {
 		}
 
 		PM.send(roomIdList.join(','), searchString, exactSearch, lines).then(response => {
-			connection.popup(`${prettifyResults(response, roomId, searchString, exactSearch, addModlogLinks, hideIps)}`);
+			connection.send(`${prettifyResults(response, roomId, searchString, exactSearch, addModlogLinks, hideIps)}`);
 			if (cmd === 'timedmodlog') this.sendReply(`The modlog query took ${Date.now() - startTime} ms to complete.`);
 		});
 	},
