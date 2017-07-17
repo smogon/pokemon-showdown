@@ -870,7 +870,7 @@ class Validator {
 				if (template.baseSpecies === 'Shaymin') types = ['Grass', 'Flying'];
 				if (template.baseSpecies === 'Hoopa') types = ['Psychic', 'Ghost', 'Dark'];
 				if (template.baseSpecies === 'Oricorio') types = ['Fire', 'Flying', 'Electric', 'Psychic', 'Ghost'];
-				if (template.baseSpecies === 'Silvally' || types.includes(move.type)) return false;
+				if (template.baseSpecies === 'Arceus' || template.baseSpecies === 'Silvally' || types.includes(move.type)) return false;
 			}
 			if (!template.learnset) {
 				if (template.baseSpecies !== template.species) {
