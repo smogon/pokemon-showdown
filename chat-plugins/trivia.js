@@ -451,7 +451,7 @@ class Trivia extends Rooms.RoomGame {
 		clearTimeout(this.phaseTimeout);
 		this.phaseTimeout = null;
 
-		buffer += `${Chat.escapeHTML(winner.name)} won the game with a final score of <strong>${winner.points}</strong>, ` +
+		buffer += Chat.html`${winner.name} won the game with a final score of <strong>${winner.points}</strong>, ` +
 			`and their leaderboard score has increased by <strong>${this.prize}</strong> points!`;
 		this.broadcast('The answering period has ended!', buffer);
 
@@ -524,7 +524,7 @@ class Trivia extends Rooms.RoomGame {
 	end(user) {
 		clearTimeout(this.phaseTimeout);
 		this.phaseTimeout = null;
-		this.broadcast(`The trivia game was forcibly ended by ${Chat.escapeHTML(user.name)}.`);
+		this.broadcast(Chat.html`The trivia game was forcibly ended by ${user.name}.`);
 		this.destroy();
 	}
 }
@@ -550,7 +550,7 @@ class FirstModeTrivia extends Trivia {
 		clearTimeout(this.phaseTimeout);
 		this.phase = INTERMISSION_PHASE;
 
-		let buffer = `Correct: ${Chat.escapeHTML(user.name)}<br />` +
+		let buffer = Chat.html`Correct: ${user.name}<br />` +
 			`Answer(s): ${this.curAnswers.join(', ')}<br />`;
 
 		let points = this.calculatePoints();
@@ -1712,7 +1712,7 @@ class WeakestLink extends Rooms.RoomGame {
 		buffer += Object.keys(this.players)
 			.map(p => {
 				let player = this.players[p];
-				return `${Chat.escapeHTML(player.name)}${this.finals ? " (" + player.correctAnswers + ")" : ''}`;
+				return Chat.html`${player.name}${this.finals ? " (" + player.correctAnswers + ")" : ''}`;
 			}).join(', ');
 
 		if (!this.finals) {
@@ -1723,12 +1723,12 @@ class WeakestLink extends Rooms.RoomGame {
 			buffer += Object.keys(this.players).sort()
 				.map(userID => {
 					let player = this.players[userID];
-					return `<button class="button" name="send" value="/wl vote ${player.userid}">${Chat.escapeHTML(player.name)}</button>`;
+					return Chat.html`<button class="button" name="send" value="/wl vote ${player.userid}">${player.name}</button>`;
 				});
 		}
 		buffer += "</div>";
 		if (this.state === 'beginround') {
-			buffer += `<hr>The ${this.finals ? 'final' : 'next'} round will begin in 30 seconds. It will be <em style="font-weight: bold">${Chat.escapeHTML(this.curPlayer.name)}</em>'s turn to answer.`;
+			buffer += Chat.html`<hr>The ${this.finals ? 'final' : 'next'} round will begin in 30 seconds. It will be <em style="font-weight: bold">${this.curPlayer.name}</em>'s turn to answer.`;
 		}
 		buffer += "</div>";
 		return buffer;
@@ -1763,7 +1763,7 @@ class WeakestLink extends Rooms.RoomGame {
 			}
 		}
 		if (this.state === 'beforeround' || this.state === 'banking') {
-			this.sendToRoom(`|c:|${(Math.floor(Date.now() / 1000))}|~|The ${this.state === 'banking' ? 'next question' : (this.finals ? 'final round' : 'next round')} will begin in ${this.state === 'banking' ? '6' : '5'} seconds. It will be **${Chat.escapeHTML(this.curPlayer.name)}**'s turn to answer.`);
+			this.sendToRoom(Chat.html`|c:|${(Math.floor(Date.now() / 1000))}|~|The ${this.state === 'banking' ? 'next question' : (this.finals ? 'final round' : 'next round')} will begin in ${this.state === 'banking' ? '6' : '5'} seconds. It will be **${this.curPlayer.name}**'s turn to answer.`);
 		}
 	}
 
