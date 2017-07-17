@@ -2271,7 +2271,7 @@ exports.BattleFormatsData = {
 		},
 		randomSet2: { // RestTalk
 			chance: 16,
-			item: ["charcoal"],
+			item: ["leftovers"],
 			baseMove1: "icebeam", baseMove2: "rest", baseMove3: "sleeptalk",
 			fillerMoves1: ["toxic", "toxic", "toxic", "hiddenpowerelectric", "hiddenpowerflying", "return"],
 		},
@@ -3663,7 +3663,7 @@ exports.BattleFormatsData = {
 		},
 		randomSet2: { // Curse + BP
 			chance: 16,
-			item: ["charcoal"],
+			item: ["leftovers"],
 			baseMove1: "healbell", baseMove2: "recover", baseMove3: "curse", baseMove4: "batonpass",
 		},
 		eventPokemon: [
