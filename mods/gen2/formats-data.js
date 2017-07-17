@@ -2862,7 +2862,7 @@ exports.BattleFormatsData = {
 			baseMove1: "sleeppowder", baseMove2: "toxic",
 			fillerMoves1: ["leechseed", "leechseed", "synthesis", "reflect"],
 			fillerMoves2: ["reflect", "reflect", "synthesis", "encore", "gigadrain"],
-		},	
+		},
 		tier: "UU",
 	},
 	aipom: {
