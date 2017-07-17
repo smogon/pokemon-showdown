@@ -3050,6 +3050,13 @@ exports.BattleAbilities = {
 			this.add('-immune', target, '[msg]', '[from] ability: Shields Down');
 			return false;
 		},
+		onTryAddVolatile: function (status, target) {
+			if (target.template.speciesid !== 'miniormeteor' || target.transformed) return;
+			if (status.id !== 'yawn') return;
+			this.add('-immune', target, '[msg]', '[from] ability: Shields Down');
+			return null;
+		},
+		isUnbreakable: true,
 		id: "shieldsdown",
 		name: "Shields Down",
 		rating: 2.5,
