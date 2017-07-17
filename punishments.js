@@ -876,7 +876,7 @@ Punishments.removeSharedIp = function (ip) {
  *********************************************************/
 
 Punishments.search = function (searchId) {
-	const foundKeys = [];
+	let foundKeys = [];
 	let foundRest = null;
 	Punishments.ips.forEach((punishment, ip) => {
 		const [, id, ...rest] = punishment;
