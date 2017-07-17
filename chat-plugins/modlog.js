@@ -304,7 +304,7 @@ exports.commands = {
 		}
 
 		PM.send(roomIdList.join(','), searchString, exactSearch, lines).then(response => {
-			connection.send(`${prettifyResults(response, roomId, searchString, exactSearch, addModlogLinks, hideIps)}`);
+			connection.send(prettifyResults(response, roomId, searchString, exactSearch, addModlogLinks, hideIps));
 			if (cmd === 'timedmodlog') this.sendReply(`The modlog query took ${Date.now() - startTime} ms to complete.`);
 		});
 	},
