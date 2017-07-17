@@ -481,18 +481,25 @@ class Trivia extends Rooms.RoomGame {
 		let ladder = triviaData.ladder = [];
 		for (let i = 0; i < 3; i++) {
 			leaders.sort((a, b) => leaderboard[b][i] - leaderboard[a][i]);
+
+			let max = Infinity;
 			let rank = 0;
 			let rankIdx = i + 3;
 			for (let j = 0; j < leaders.length; j++) {
 				let leader = leaders[j];
-				if (!i) {
-					if (ladder[rank]) {
-						ladder[rank].push(leader);
-					} else {
-						ladder[rank] = [leader];
+				let score = leaderboard[leader][i];
+				if (max !== score) {
+					if (!i && rank < 15) {
+						if (ladder[rank]) {
+							ladder[rank].push(leader);
+						} else {
+							ladder[rank] = [leader];
+						}
 					}
+
+					rank++;
+					max = score;
 				}
-				rank++;
 				leaderboard[leader][rankIdx] = rank;
 			}
 		}
@@ -1273,7 +1280,7 @@ const trivcommands = {
 		let buffer = "|raw|<div class=\"ladder\" style=\"overflow-y: scroll; max-height: 300px;\"><table style=\"width: 100%\">" +
 			"<tr><th>Rank</th><th>User</th><th>Leaderboard score</th><th>Total game points</th><th>Total correct answers</th></tr>";
 		let num = parseInt(target);
-		if (!num) num = 100;
+		if (!num || num < 0) num = 100;
 		if (num > ladder.length) num = ladder.length;
 		for (let i = Math.max(0, num - 100); i < num; i++) {
 			let leaders = ladder[i];
