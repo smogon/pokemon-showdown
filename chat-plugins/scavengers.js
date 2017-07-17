@@ -836,7 +836,7 @@ let commands = {
 		if ((!game.hosts.some(h => h.userid === user.userid) || !user.can('broadcast', null, room)) && game.staffHostId !== user.userid) return this.errorReply("You cannot edit the hints and answers if you are not the host.");
 
 		let [question, type, ...value] = target.split(',');
-		if (!game.onEditQuestion(parseInt(question), toId(type), value.join(','))) {
+		if (!game.onEditQuestion(parseInt(question), toId(type), value.join(',').trim())) {
 			return this.sendReply("/scavengers edithunt [question number], [hint | answer], [value] - edits the current scavenger hunt.");
 		}
 	},
