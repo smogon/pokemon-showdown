@@ -10201,7 +10201,7 @@ exports.BattleMovedex = {
 				if (move.isZ || move.isNonstandard) continue;
 				if (effect.noMetronome[move.id]) continue;
 				if (this.getMove(i).gen > this.gen) continue;
-				moves.push(i);
+				moves.push(move);
 			}
 			let randomMove = '';
 			if (moves.length) {
