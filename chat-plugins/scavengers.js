@@ -937,7 +937,7 @@ let commands = {
 		points = parseInt(points);
 
 		if (!targetId || targetId === 'constructor' || targetId.length > 18) return this.errorReply("Invalid username.");
-		if (!points || points < 0) return this.errorReply("Points must be an integer greater than 0.");
+		if (!points || points < 0 || points > 1000) return this.errorReply("Points must be an integer between 1 and 1000.");
 
 		Leaderboard.addPoints(targetId, 'points', points, true).write();
 
@@ -953,7 +953,7 @@ let commands = {
 		points = parseInt(points);
 
 		if (!targetId || targetId === 'constructor' || targetId.length > 18) return this.errorReply("Invalid username.");
-		if (!points || points < 0) return this.errorReply("Points must be an integer greater than 0.");
+		if (!points || points < 0 || points > 1000) return this.errorReply("Points must be an integer between 1 and 1000.");
 
 		Leaderboard.addPoints(targetId, 'points', -points, true).write();
 
@@ -1008,7 +1008,7 @@ let commands = {
 		if (!this.can('declare', null, room)) return false; // perms for editing
 
 		let blitzPoints = parseInt(target);
-		if (isNaN(blitzPoints) || blitzPoints < 0) return this.errorReply("The points value awarded for blitz must be an integer greater than or equal to zero.");
+		if (isNaN(blitzPoints) || blitzPoints < 0 || blitzPoints > 1000) return this.errorReply("The points value awarded for blitz must be an integer bewteen 0 and 1000.");
 
 		room.blitzPoints = blitzPoints;
 
@@ -1028,7 +1028,7 @@ let commands = {
 
 		let winPoints = target.split(',').map(p => parseInt(p));
 
-		if (winPoints.some(p => isNaN(p) || p < 0) || !winPoints.length) return this.errorReply("The points value awarded for winning a scavenger hunt must be an integer greater than or equal to zero.");
+		if (winPoints.some(p => isNaN(p) || p < 0 || p > 1000) || !winPoints.length) return this.errorReply("The points value awarded for winning a scavenger hunt must be an integer between 0 and 1000.");
 
 		room.winPoints = winPoints;
 
