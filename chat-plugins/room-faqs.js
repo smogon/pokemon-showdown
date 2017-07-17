@@ -4,7 +4,6 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOMFAQ_FILE = path.resolve(__dirname, '../config/chat-plugins/faqs.json');
-const ALLOWED_HTML = ['a', 'font', 'i', 'u', 'b', 'strong', 'em', 'small', 'sub', 'sup', 'ins', 'del', 'code'];
 
 let roomFaqs = {};
 try {
@@ -42,19 +41,10 @@ exports.commands = {
 
 		text = text.replace(/^>/, '&gt;');
 
-		let htmltags = text.toLowerCase().match(/<\/?(\w+)\b/g);
-		if (htmltags && htmltags.some(val => !ALLOWED_HTML.includes(toId(val)))) {
-			let tagList = ALLOWED_HTML.map(tag => `<${tag}>`).join(', ');
-			return this.errorReply(`Disallowed HTML tags found. Allowed html tags: ${tagList}`);
-		}
-
-		text = this.canHTML(text);
-		if (!text) return;
-
 		if (!roomFaqs[room.id]) roomFaqs[room.id] = {};
 		roomFaqs[room.id][topic] = text;
 		saveRoomFaqs();
-		this.sendReplyBox(text);
+		this.sendReplyBox(Chat.parseText(text));
 		this.privateModCommand(`(${user.name} added a FAQ for '${topic}')`);
 	},
 	removefaq: function (target, room, user) {
@@ -96,8 +86,8 @@ exports.commands = {
 		topic = getAlias(room.id, topic) || topic;
 
 		if (!this.runBroadcast()) return;
-		this.sendReplyBox(roomFaqs[room.id][topic]);
-		if (!this.broadcasting && user.can('declare', null, room)) this.sendReplyBox('<code>/addfaq ' + topic + ', ' + Chat.escapeHTML(roomFaqs[room.id][topic]) + '</code>');
+		this.sendReplyBox(Chat.parseText(roomFaqs[room.id][topic]));
+		if (!this.broadcasting && user.can('declare', null, room)) this.sendReplyBox(`<code>/addfaq ${topic}, ${Chat.escapeHTML(roomFaqs[room.id][topic])}</code>`);
 	},
 	roomfaqhelp: [
 		"/roomfaq - Shows the list of all available FAQ topics",
