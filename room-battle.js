@@ -158,7 +158,7 @@ class BattleTimer {
 		let userid = requester ? requester.userid : 'staff';
 		if (this.timerRequesters.has(userid)) return false;
 		if (this.timer && requester) {
-			this.battle.room.send(`|inactive|${requester.name} also wants the timer to be on.`);
+			this.battle.room.add(`|inactive|${requester.name} also wants the timer to be on.`).update();
 			this.timerRequesters.add(userid);
 			return false;
 		}
@@ -172,7 +172,7 @@ class BattleTimer {
 		this.timerRequesters.add(userid);
 		this.nextRequest();
 		const requestedBy = requester ? ` (requested by ${requester.name})` : ``;
-		this.battle.room.add(`|inactive|Battle timer is ON: inactive players will automatically lose when time's up.${requestedBy}`);
+		this.battle.room.add(`|inactive|Battle timer is ON: inactive players will automatically lose when time's up.${requestedBy}`).update();
 		return true;
 	}
 	stop(requester) {
@@ -185,13 +185,13 @@ class BattleTimer {
 			this.timerRequesters.clear();
 		}
 		if (this.timerRequesters.size) {
-			this.battle.room.send(`|inactive|${requester.name} no longer wants the timer on, but the timer is staying on because ${[...this.timerRequesters].join(', ')} still does.`);
+			this.battle.room.add(`|inactive|${requester.name} no longer wants the timer on, but the timer is staying on because ${[...this.timerRequesters].join(', ')} still does.`).update();
 			return false;
 		}
 		if (!this.timer) return false;
 		clearTimeout(this.timer);
 		this.timer = undefined;
-		this.battle.room.send(`|inactiveoff|Battle timer is now OFF.`);
+		this.battle.room.add(`|inactiveoff|Battle timer is now OFF.`).update();
 		return true;
 	}
 	isActive(slot) {
@@ -239,11 +239,11 @@ class BattleTimer {
 			if (ticksLeft < dcTicksLeft) dcTicksLeft = 10; // turn timer supersedes dc timer
 
 			if (dcTicksLeft <= 4) {
-				this.battle.room.send(`|inactive|${this.battle.playerNames[slotNum]} has ${dcTicksLeft * 10} seconds to reconnect!`);
+				this.battle.room.add(`|inactive|${this.battle.playerNames[slotNum]} has ${dcTicksLeft * 10} seconds to reconnect!`).update();
 			}
 			if (dcTicksLeft < 10) continue;
 			if (ticksLeft % 3 === 0 || ticksLeft <= 4) {
-				this.battle.room.send(`|inactive|${this.battle.playerNames[slotNum]} has ${ticksLeft * 10} seconds left.`);
+				this.battle.room.add(`|inactive|${this.battle.playerNames[slotNum]} has ${ticksLeft * 10} seconds left.`).update();
 			}
 		}
 		if (!this.checkTimeout()) {
@@ -260,7 +260,7 @@ class BattleTimer {
 			if (!player || !player.active) {
 				if (this.dcTicksLeft[slotNum] === 10) {
 					this.dcTicksLeft[slotNum] = 7;
-					this.battle.room.send(`|inactive|${this.battle.playerNames[slotNum]} disconnected and has a minute to reconnect!`);
+					this.battle.room.add(`|inactive|${this.battle.playerNames[slotNum]} disconnected and has a minute to reconnect!`).update();
 				}
 			} else if (this.dcTicksLeft[slotNum] < 10) {
 				this.dcTicksLeft[slotNum] = 10;
@@ -269,13 +269,13 @@ class BattleTimer {
 					const ticksLeft = this.turnTicksLeft[slotNum];
 					timeLeft = ` and has ${ticksLeft * 10} seconds left`;
 				}
-				this.battle.room.send(`|inactive|${this.battle.playerNames[slotNum]} reconnected${timeLeft}.`);
+				this.battle.room.add(`|inactive|${this.battle.playerNames[slotNum]} reconnected${timeLeft}.`).update();
 			}
 		}
 	}
 	checkTimeout() {
 		if (this.turnTicksLeft.every(c => !c)) {
-			this.battle.room.add(`|-message|All players are inactive.`);
+			this.battle.room.add(`|-message|All players are inactive.`).update();
 			this.battle.tie();
 			return true;
 		}
