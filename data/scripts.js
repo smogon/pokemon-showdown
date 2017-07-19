@@ -992,8 +992,8 @@ exports.BattleScripts = {
 				} while (itemData.gen > this.gen || itemData.isNonstandard || itemData.forcedForme && species === this.getTemplate(itemData.forcedForme).baseSpecies);
 			}
 
-			// Random ability
-			let abilities = Object.values(template.abilities);
+			// Random legal ability
+			let abilities = Object.values(template.abilities).filter(a => this.getAbility(a).gen <= this.gen);
 			let ability = this.gen <= 2 ? 'None' : abilities[this.random(abilities.length)];
 
 			// Four random unique moves from the movepool
