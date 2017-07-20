@@ -153,6 +153,7 @@ class ModdedDex {
 		this.getString = Data.Tools.getString;
 		this.getId = Data.Tools.getId;
 		this.ModdedDex = ModdedDex;
+		this.Data = Data;
 	}
 
 	/**
