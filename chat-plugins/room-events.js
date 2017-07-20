@@ -51,6 +51,10 @@ exports.commands = {
 				this.errorReply('The event already exists.  If you want to overwrite this event, use /roomevents edit.');
 				this.sendReplyBox(Chat.html `<code>/roomevents edit ${room.events[eventId].eventName} | ${room.events[eventId].date} | ${room.events[eventId].desc}</code>`);
 				return;
+			} else if (this.cmd === 'edit' && !room.events[eventId]) {
+				this.errorReply('This event does not exist; use /roomevents add.');
+				this.sendReplyBox(Chat.html `<code>/roomevents add ${eventName} | ${date} | ${desc}</code>`);
+				return;
 			}
 
 			room.events[eventId] = {
