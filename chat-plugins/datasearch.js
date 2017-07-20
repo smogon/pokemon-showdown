@@ -1447,6 +1447,7 @@ function runLearn(target, cmd) {
 		}
 		break;
 	}
+	if (!formatid) format = new Dex.Data.Format(format);
 	if (!formatid) formatid = 'gen' + gen + 'ou';
 	if (!formatName) formatName = 'Gen ' + gen;
 	let lsetData = {set: {}, format: format};

@@ -779,7 +779,7 @@ class Validator {
 
 		lsetData = lsetData || {};
 		let set = (lsetData.set || (lsetData.set = {}));
-		let format = (lsetData.format || (lsetData.format = dex.getFormat()));
+		let format = (lsetData.format = dex.getFormat(lsetData.format));
 		let ruleTable = dex.getRuleTable(format);
 		let alreadyChecked = {};
 		let level = set.level || 100;
