@@ -48,12 +48,12 @@ exports.commands = {
 			if (!eventId) return this.errorReply("Event names must contain at least one alphanumerical character.");
 
 			if (room.events[eventId] && this.cmd === 'add') {
-				this.errorReply('The event already exists.  If you want to overwrite this event, use /roomevents edit.');
-				this.sendReplyBox(Chat.html `<code>/roomevents edit ${room.events[eventId].eventName} | ${room.events[eventId].date} | ${room.events[eventId].desc}</code>`);
+				this.errorReply(`There's already an event named '${eventId}'. If you want to replace that event, use /roomevents edit.`);
+				this.sendReplyBox(Chat.html`<code>/roomevents edit ${room.events[eventId].eventName} | ${room.events[eventId].date} | ${room.events[eventId].desc}</code>`);
 				return;
 			} else if (this.cmd === 'edit' && !room.events[eventId]) {
-				this.errorReply('This event does not exist; use /roomevents add.');
-				this.sendReplyBox(Chat.html `<code>/roomevents add ${eventName} | ${date} | ${desc}</code>`);
+				this.errorReply(`There's no event with the name '${eventId}'; use /roomevents add.`);
+				this.sendReplyBox(Chat.html`<code>/roomevents add ${eventName} | ${date} | ${desc}</code>`);
 				return;
 			}
 
@@ -94,7 +94,7 @@ exports.commands = {
 
 			if (!this.runBroadcast()) return;
 			this.sendReplyBox(`<table border="1" cellspacing="0" cellpadding="3"><tr><td>${Chat.escapeHTML(room.events[target].eventName)}</td><td>${Chat.parseText(room.events[target].desc)}</td><td>${Chat.escapeHTML(room.events[target].date)}</td></tr></table>`);
-			if (!this.broadcasting && user.can('declare', null, room)) this.sendReplyBox(Chat.html `<code>/roomevents add ${room.events[target].eventName} | ${room.events[target].date} | ${room.events[target].desc}</code>`);
+			if (!this.broadcasting && user.can('declare', null, room)) this.sendReplyBox(Chat.html`<code>/roomevents add ${room.events[target].eventName} | ${room.events[target].date} | ${room.events[target].desc}</code>`);
 		},
 		help: function (target, room, user) {
 			return this.parse('/help roomevents');
