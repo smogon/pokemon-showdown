@@ -27,6 +27,7 @@ exports.commands = {
 			buff += '</table>';
 			return this.sendReply(`|raw|<div class="infobox-limited">${buff}</div>`);
 		},
+		edit: 'add',
 		add: function (target, room, user) {
 			if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
 			if (!this.can('declare', null, room)) return false;
@@ -46,12 +47,18 @@ exports.commands = {
 			const eventId = toId(eventName);
 			if (!eventId) return this.errorReply("Event names must contain at least one alphanumerical character.");
 
+			if (room.events[eventId] && this.cmd === 'add') {
+				this.errorReply('The event already exists.  If you want to overwrite this event, use /roomevents edit.');
+				this.sendReplyBox(Chat.html `<code>/roomevents edit ${room.events[eventId].eventName} | ${room.events[eventId].date} | ${room.events[eventId].desc}</code>`);
+				return;
+			}
+
 			room.events[eventId] = {
 				eventName: eventName,
 				date: date,
 				desc: desc,
 			};
-			this.privateModCommand(`(${user.name} added a roomevent titled "${eventName}".)`);
+			this.privateModCommand(`(${user.name} ${this.cmd}ed ${this.cmd === 'add' ? 'a' : 'the'} roomevent titled "${eventName}".)`);
 
 			room.chatRoomData.events = room.events;
 			Rooms.global.writeChatRoomData();
