@@ -219,7 +219,7 @@ function prettifyResults(rawResults, room, searchString, exactSearch, addModlogL
 	if (pipeIndex < 0) pipeIndex = 0;
 	rawResults = rawResults.substr(pipeIndex + 1, rawResults.length);
 	if (!rawResults) {
-		return `No moderator actions containing ${searchString} found on ${roomName}.` +
+		return `|popup|No moderator actions containing ${searchString} found on ${roomName}.` +
 				(exactSearch ? "" : " Add quotes to the search parameter to search for a phrase, rather than a user.");
 	}
 	const resultArray = rawResults.split('\n');
