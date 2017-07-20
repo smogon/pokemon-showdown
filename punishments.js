@@ -69,7 +69,10 @@ Punishments.ips = new PunishmentMap();
  */
 Punishments.userids = new PunishmentMap();
 
-class NestedPunishmentMap extends Map/*:: <string, Map<string, Punishment>> */ {
+/**
+ * @augments {Map<string, Punishment>}
+ */
+class NestedPunishmentMap extends Map {
 	nestedSet(k1, k2, value) {
 		if (!this.get(k1)) {
 			this.set(k1, new Map());

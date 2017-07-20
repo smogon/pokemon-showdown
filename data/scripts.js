@@ -2411,7 +2411,7 @@ exports.BattleScripts = {
 
 		// PotD stuff
 		let potd;
-		if (Config.potd && 'Rule:potd' in this.getBanlistTable(this.getFormat())) {
+		if (Config.potd && this.getRuleTable(this.getFormat()).has('potd')) {
 			potd = this.getTemplate(Config.potd);
 		}
 
