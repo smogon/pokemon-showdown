@@ -6624,6 +6624,10 @@ exports.BattleFormatsData = {
 		isNonstandard: true,
 		tier: "CAP LC",
 	},
+	voodoll: {
+		isNonstandard: true,
+		tier: "CAP LC",
+	},
 	pokestarufo: {
 		isNonstandard: true,
 		eventPokemon: [
