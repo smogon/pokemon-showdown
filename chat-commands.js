@@ -2930,7 +2930,7 @@ exports.commands = {
 			connection.sendTo(room, ("" + stdout + stderr));
 		});
 	},
-	bashhelp:["/bash [argument] - Carries out execution by running a child process. Requires console access.(~ and user.id/IP in Config.consoleips)"],
+	bashhelp: ["/bash [argument] - Carries out execution by running a child process. Requires console access.(~ and user.id/IP in Config.consoleips)"],
 
 	eval: function (target, room, user, connection) {
 		if (!user.hasConsoleAccess(connection)) {
