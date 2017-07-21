@@ -102,7 +102,7 @@ exports.BattleScripts = {
 			template = this.getTemplate('unown');
 
 			let err = new Error('Template incompatible with random battles: ' + species);
-			require('../crashlogger')(err, 'The gen 4 randbat set generator');
+			require('../../crashlogger')(err, 'The gen 4 randbat set generator');
 		}
 
 		if (template.battleOnly) species = template.baseSpecies;
@@ -230,8 +230,8 @@ exports.BattleScripts = {
 					break;
 
 				// Bad after setup
-				case 'explosion':
-					if (counter.setupType || !!counter['recovery'] || hasMove['rest']) rejected = true;
+				case 'explosion': case 'selfdestruct':
+					if (counter.stab < 2 || counter.setupType || !!counter['recovery'] || hasMove['rest'] || hasMove['substitute']) rejected = true;
 					break;
 				case 'foresight': case 'protect': case 'roar':
 					if (counter.setupType && !hasAbility['Speed Boost']) rejected = true;
@@ -548,8 +548,10 @@ exports.BattleScripts = {
 			item = (ability === 'Chlorophyll' && counter.Status < 2) ? 'Life Orb' : 'Heat Rock';
 		} else if (hasMove['lightscreen'] && hasMove['reflect']) {
 			item = 'Light Clay';
-		} else if ((ability === 'Guts' || hasMove['facade']) && !hasMove['sleeptalk']) {
-			item = (hasType['Fire'] || ability === 'Quick Feet') ? 'Toxic Orb' : 'Flame Orb';
+		} else if (ability === 'Guts') {
+			item = 'Flame Orb';
+		} else if (ability === 'Quick Feet' && hasMove['facade']) {
+			item = 'Toxic Orb';
 		} else if (ability === 'Unburden') {
 			item = 'Sitrus Berry';
 

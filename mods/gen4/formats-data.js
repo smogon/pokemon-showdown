@@ -730,12 +730,12 @@ exports.BattleFormatsData = {
 	},
 	mewtwo: {
 		inherit: true,
-		randomBattleMoves: ["aurasphere", "fireblast", "icebeam", "calmmind", "trick", "recover", "willowisp", "taunt", "substitute"],
+		randomBattleMoves: ["psychic", "aurasphere", "fireblast", "icebeam", "calmmind", "trick", "recover", "willowisp", "taunt", "substitute", "selfdestruct"],
 		tier: "Uber",
 	},
 	mew: {
 		inherit: true,
-		randomBattleMoves: ["thunderwave", "willowisp", "uturn", "softboiled", "taunt", "stealthrock", "explosion"],
+		randomBattleMoves: ["psychic", "aurasphere", "flamethrower", "nastyplot", "willowisp", "uturn", "softboiled", "taunt", "stealthrock", "explosion"],
 		tier: "Uber",
 	},
 	chikorita: {
@@ -1104,7 +1104,7 @@ exports.BattleFormatsData = {
 	},
 	lugia: {
 		inherit: true,
-		randomBattleMoves: ["calmmind", "aeroblast", "roost", "earthpower", "icebeam", "whirlwind"],
+		randomBattleMoves: ["calmmind", "aeroblast", "roost", "earthpower", "icebeam", "whirlwind", "toxic", "substitute"],
 		tier: "Uber",
 	},
 	hooh: {
@@ -1212,7 +1212,7 @@ exports.BattleFormatsData = {
 	},
 	swellow: {
 		inherit: true,
-		randomBattleMoves: ["bravebird", "facade", "quickattack", "uturn", "protect", "pursuit"],
+		randomBattleMoves: ["bravebird", "facade", "quickattack", "uturn", "protect"],
 		tier: "UU",
 	},
 	wingull: {
@@ -1619,7 +1619,7 @@ exports.BattleFormatsData = {
 		tier: "NU",
 	},
 	relicanth: {
-		randomBattleMoves: ["headsmash", "waterfall", "aquatail", "earthquake", "doubleedge", "rockpolish"],
+		randomBattleMoves: ["headsmash", "waterfall", "aquatail", "earthquake", "doubleedge", "rockpolish", "stealthrock"],
 		tier: "NU",
 	},
 	luvdisc: {
@@ -1669,12 +1669,12 @@ exports.BattleFormatsData = {
 	},
 	latias: {
 		inherit: true,
-		randomBattleMoves: ["dragonpulse", "hiddenpowerfire", "roost", "calmmind", "refresh", "reflect", "lightscreen", "healingwish"],
+		randomBattleMoves: ["dragonpulse", "psychic", "surf", "roost", "calmmind", "refresh", "reflect", "lightscreen", "healingwish"],
 		tier: "Uber",
 	},
 	latios: {
 		inherit: true,
-		randomBattleMoves: ["dracometeor", "dragonpulse", "surf", "hiddenpowerfire", "psychic", "calmmind", "roost"],
+		randomBattleMoves: ["dracometeor", "dragonpulse", "surf", "hiddenpowerfire", "psychic", "thunderbolt", "trick", "calmmind", "roost"],
 		tier: "Uber",
 	},
 	kyogre: {
@@ -1703,7 +1703,7 @@ exports.BattleFormatsData = {
 		tier: "Uber",
 	},
 	deoxysattack: {
-		randomBattleMoves: ["shadowball", "superpower", "extremespeed", "icebeam", "hiddenpowerfire", "stealthrock"],
+		randomBattleMoves: ["psychoboost", "shadowball", "superpower", "extremespeed", "icebeam", "hiddenpowerfire", "stealthrock"],
 		eventOnly: true,
 		tier: "Uber",
 	},
@@ -1872,7 +1872,7 @@ exports.BattleFormatsData = {
 		tier: "LC",
 	},
 	purugly: {
-		randomBattleMoves: ["fakeout", "uturn", "shadowclaw", "taunt", "bodyslam", "return"],
+		randomBattleMoves: ["fakeout", "uturn", "shadowclaw", "taunt", "suckerpunch", "return"],
 		tier: "NU",
 	},
 	stunky: {
@@ -1902,7 +1902,7 @@ exports.BattleFormatsData = {
 		tier: "LC",
 	},
 	gabite: {
-		randomBattleMoves: ["outrage", "dragonclaw", "earthquake", "fireblast", "stoneedge"],
+		randomBattleMoves: ["outrage", "dragonclaw", "earthquake", "stoneedge"],
 		tier: "NU",
 	},
 	garchomp: {

@@ -428,7 +428,7 @@ class GtsGiveaway {
 	stopDeposits() {
 		this.noDeposits = true;
 
-		this.room.send(`<p style="text-align:center;font-size:11pt">More Pokémon have been deposited than there are prizes in this giveaway and new deposits will not be accepted. If you have already deposited a Pokémon, please be patient, and do not withdraw your Pokémon.</p>`);
+		this.room.send(`|html|<p style="text-align:center;font-size:11pt">More Pokémon have been deposited than there are prizes in this giveaway and new deposits will not be accepted. If you have already deposited a Pokémon, please be patient, and do not withdraw your Pokémon.</p>`);
 		this.changeUhtml(this.generateWindow());
 	}
 
@@ -441,7 +441,7 @@ class GtsGiveaway {
 			this.clearTimer();
 			this.changeUhtml(`<p style="text-align:center;font-size:13pt;font-weight:bold;">The GTS giveaway has finished.</p>`);
 			this.room.modlog(`${this.giver.name} has finished their GTS giveaway for "${this.summary}"`);
-			this.send(`<p style="text-align:center;font-size:11pt">The GTS giveaway for a "<strong>${Chat.escapeHTML(this.summary)}</strong>" has finished.</p>`);
+			this.send(`<p style="text-align:center;font-size:11pt">The GTS giveaway for a "<strong>${Chat.escapeHTML(this.lookfor)}</strong>" has finished.</p>`);
 		}
 		delete this.room.gtsga;
 	}
@@ -482,7 +482,7 @@ let commands = {
 		if (!parseInt(fc) || fc.length !== 12) return this.errorReply("Invalid FC");
 		let targetUser = Users(giver);
 		if (!targetUser || !targetUser.connected) return this.errorReply(`User '${giver}' is not online.`);
-		if (!this.can('warn', null, room) && !(this.can('broadcast', null, room) && user === targetUser)) return this.errorReply("Permission denied.");
+		if (!user.can('warn', null, room) && !(user.can('broadcast', null, room) && user === targetUser)) return this.errorReply("/qg - Access denied.");
 		if (!targetUser.autoconfirmed) return this.errorReply(`User '${targetUser.name}' needs to be autoconfirmed to give something away.`);
 		if (Giveaway.checkBanned(room, targetUser)) return this.errorReply(`User '${targetUser.name}' is giveaway banned.`);
 
@@ -535,7 +535,7 @@ let commands = {
 		if (!parseInt(fc) || fc.length !== 12) return this.errorReply("Invalid FC");
 		let targetUser = Users(giver);
 		if (!targetUser || !targetUser.connected) return this.errorReply(`User '${giver}' is not online.`);
-		if (!this.can('warn', null, room) && !(this.can('broadcast', null, room) && user === targetUser)) return this.errorReply("Permission denied.");
+		if (!user.can('warn', null, room) && !(user.can('broadcast', null, room) && user === targetUser)) return this.errorReply("/lg - Access denied.");
 		if (!targetUser.autoconfirmed) return this.errorReply(`User '${targetUser.name}' needs to be autoconfirmed to give something away.`);
 		if (Giveaway.checkBanned(room, targetUser)) return this.errorReply(`User '${targetUser.name}' is giveaway banned.`);
 
@@ -740,7 +740,7 @@ let commands = {
 			if (!this.runBroadcast()) return;
 			reply = '<b>Wi-Fi room Giveaway help and info</b><br />' +
 			'- help user - shows list of participation commands<br />' +
-			'- help staff - shows giveaway staff commands (Requires: + % @ * # & ~)' +
+			'- help staff - shows giveaway staff commands (Requires: + % @ * # & ~)<br />' +
 			'- help gts - shows gts giveaway commands (Requires: + % @ * # & ~)';
 		}
 		this.sendReplyBox(reply);

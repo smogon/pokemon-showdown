@@ -321,10 +321,10 @@ exports.commands = {
 			return this.errorReply(`Both users must be in this room.`);
 		}
 		let challenges = [];
-		if (user1.challengeTo && user1.challengeTo.to === user2.userid) {
+		if (user1.challengeTo && Users.get(user1.challengeTo.to) === user2) {
 			challenges.push(Chat.html`${user1.name} is challenging ${user2.name} in ${Dex.getFormat(user1.challengeTo.format).name}.`);
 		}
-		if (user2.challengeTo && user2.challengeTo.to === user1.userid) {
+		if (user2.challengeTo && Users.get(user2.challengeTo.to) === user1) {
 			challenges.push(Chat.html`${user2.name} is challenging ${user1.name} in ${Dex.getFormat(user2.challengeTo.format).name}.`);
 		}
 		if (!challenges.length) {
@@ -423,8 +423,6 @@ exports.commands = {
 
 		if (showDetails) {
 			let details;
-			let isSnatch = false;
-			let isMirrorMove = false;
 			if (newTargets[0].searchType === 'pokemon') {
 				let pokemon = mod.getTemplate(newTargets[0].name);
 				let weighthit = 20;
@@ -441,7 +439,7 @@ exports.commands = {
 				}
 				details = {
 					"Dex#": pokemon.num,
-					"Gen": pokemon.gen,
+					"Gen": pokemon.gen || 'CAP',
 					"Height": pokemon.heightm + " m",
 					"Weight": pokemon.weightkg + " kg <em>(" + weighthit + " BP)</em>",
 				};
@@ -463,7 +461,7 @@ exports.commands = {
 				let move = mod.getMove(newTargets[0].name);
 				details = {
 					"Priority": move.priority,
-					"Gen": move.gen,
+					"Gen": move.gen || 'CAP',
 				};
 
 				if (move.secondary || move.secondaries) details["&#10003; Secondary effect"] = "";
@@ -479,9 +477,6 @@ exports.commands = {
 				if (move.flags['powder']) details["&#10003; Powder"] = "";
 				if (move.flags['reflectable']) details["&#10003; Bounceable"] = "";
 				if (move.flags['gravity'] && mod.gen >= 4) details["&#10007; Suppressed by Gravity"] = "";
-
-				if (move.id === 'snatch' && mod.gen >= 3) isSnatch = true;
-				if (move.id === 'mirrormove') isMirrorMove = true;
 
 				if (mod.gen >= 7) {
 					if (move.zMovePower) {
@@ -528,21 +523,30 @@ exports.commands = {
 					'any': "Any Pok\u00e9mon",
 					'all': "All Pok\u00e9mon",
 				}[move.target] || "Unknown";
+
+				if (move.id === 'snatch' && mod.gen >= 3) {
+					details['<a href="https://pokemonshowdown.com/dex/moves/snatch">Snatchable Moves</a>'] = '';
+				}
+				if (move.id === 'mirrormove') {
+					details['<a href="https://pokemonshowdown.com/dex/moves/mirrormove">Mirrorable Moves</a>'] = '';
+				}
 			} else if (newTargets[0].searchType === 'item') {
 				let item = mod.getItem(newTargets[0].name);
 				details = {
 					"Gen": item.gen,
 				};
 
-				if (item.fling && mod.gen >= 4) {
-					details["Fling Base Power"] = item.fling.basePower;
-					if (item.fling.status) details["Fling Effect"] = item.fling.status;
-					if (item.fling.volatileStatus) details["Fling Effect"] = item.fling.volatileStatus;
-					if (item.isBerry) details["Fling Effect"] = "Activates the Berry's effect on the target.";
-					if (item.id === 'whiteherb') details["Fling Effect"] = "Restores the target's negative stat stages to 0.";
-					if (item.id === 'mentalherb') details["Fling Effect"] = "Removes the effects of Attract, Disable, Encore, Heal Block, Taunt, and Torment from the target.";
-				} else {
-					details["Fling"] = "This item cannot be used with Fling.";
+				if (mod.gen >= 4) {
+					if (item.fling) {
+						details["Fling Base Power"] = item.fling.basePower;
+						if (item.fling.status) details["Fling Effect"] = item.fling.status;
+						if (item.fling.volatileStatus) details["Fling Effect"] = item.fling.volatileStatus;
+						if (item.isBerry) details["Fling Effect"] = "Activates the Berry's effect on the target.";
+						if (item.id === 'whiteherb') details["Fling Effect"] = "Restores the target's negative stat stages to 0.";
+						if (item.id === 'mentalherb') details["Fling Effect"] = "Removes the effects of Attract, Disable, Encore, Heal Block, Taunt, and Torment from the target.";
+					} else {
+						details["Fling"] = "This item cannot be used with Fling.";
+					}
 				}
 				if (item.naturalGift && mod.gen >= 3) {
 					details["Natural Gift Type"] = item.naturalGift.type;
@@ -556,9 +560,6 @@ exports.commands = {
 				if (details[detail] === '') return detail;
 				return '<font color="#686868">' + detail + ':</font> ' + details[detail];
 			}).join("&nbsp;|&ThickSpace;") + '</font>';
-
-			if (isSnatch) buffer += '&nbsp;|&ThickSpace;<a href="https://pokemonshowdown.com/dex/moves/snatch"><font size="1">Snatchable Moves</font></a>';
-			if (isMirrorMove) buffer += '&nbsp;|&ThickSpace;<a href="https://pokemonshowdown.com/dex/moves/mirrormove"><font size="1">Mirrorable Moves</font></a>';
 		}
 		this.sendReply(buffer);
 	},
@@ -1221,7 +1222,7 @@ exports.commands = {
 			this.sendReplyBox(
 				"Have a replay showcasing a bug on Pok&eacute;mon Showdown?<br />" +
 				"- <a href=\"https://www.smogon.com/forums/threads/3520646/\">Questions</a><br />" +
-				"- <a href=\"https://www.smogon.com/forums/threads/3469932/\">Bug Reports</a>"
+				"- <a href=\"https://www.smogon.com/forums/threads/3469932/\">Bug Reports</a> (ask in <a href=\"/help\">Help</a> before posting in the thread if you're unsure)"
 			);
 		}
 	},

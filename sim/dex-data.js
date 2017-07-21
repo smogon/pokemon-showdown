@@ -58,11 +58,12 @@ class Effect {
 	/**
 	 * @param {AnyObject} data
 	 * @param {?AnyObject} [moreData]
+	 * @param {?AnyObject} [moreData2]
 	 */
-	constructor(data, moreData = null) {
+	constructor(data, moreData = null, moreData2 = null) {
 		/**
 		 * ID. This will be a lowercase version of the name with all the
-		 * alphanumeric characters removed. So, for instance, "Mr. Mime"
+		 * non-alphanumeric characters removed. So, for instance, "Mr. Mime"
 		 * becomes "mrmime", and "Basculin-Blue-Striped" becomes
 		 * "basculinbluestriped".
 		 * @type {string}
@@ -112,6 +113,7 @@ class Effect {
 
 		Object.assign(this, data);
 		if (moreData) Object.assign(this, moreData);
+		if (moreData2) Object.assign(this, moreData2);
 		this.name = Tools.getString(this.name).trim();
 		this.fullname = Tools.getString(this.fullname) || this.name;
 		if (!this.id) this.id = toId(this.name); // Hidden Power hack
@@ -124,13 +126,56 @@ class Effect {
 	}
 }
 
+/**
+ * A RuleTable keeps track of the rules that a format has. The key can be:
+ * - '[ruleid]' the ID of a rule in effect
+ * - '-[thing]' or '-[category]:[thing]' ban a thing
+ * - '+[thing]' or '+[category]:[thing]' allow a thing (override a ban)
+ * [category] is one of: item, move, ability, species, basespecies
+ * @augments {Map<string, string>}
+ */
+// @ts-ignore TypeScript bug
+class RuleTable extends Map {
+	constructor() {
+		super();
+		/**
+		 * rule, source, limit, bans
+		 * @type {[string, string, number, string[]][]}
+		 */
+		this.complexBans = [];
+		/**
+		 * rule, source, limit, bans
+		 * @type {[string, string, number, string[]][]}
+		 */
+		this.complexTeamBans = [];
+	}
+	/**
+	 * @param {string} thing
+	 * @param {{[id: string]: true}} setHas
+	 * @return {string}
+	 */
+	check(thing, setHas) {
+		setHas[thing] = true;
+		return this.getReason(this.get('-' + thing));
+	}
+	/**
+	 * @param {string | undefined} source
+	 * @return {string}
+	 */
+	getReason(source) {
+		if (source === undefined) return '';
+		return source ? `banned by ${source}` : `banned`;
+	}
+}
+
 class Format extends Effect {
 	/**
 	 * @param {AnyObject} data
 	 * @param {?AnyObject} [moreData]
+	 * @param {?AnyObject} [moreData2]
 	 */
-	constructor(data, moreData = null) {
-		super(data, moreData);
+	constructor(data, moreData = null, moreData2 = null) {
+		super(data, moreData, moreData2);
 		/** @type {string} */
 		this.mod = Tools.getString(this.mod) || 'gen6';
 		/** @type {'Format' | 'Ruleset' | 'Rule' | 'ValidatorRule'} */
@@ -161,12 +206,12 @@ class Format extends Effect {
 		 * List of ruleset and banlist changes in a custom format.
 		 * @type {?string[]}
 		 */
-		this.customBanlist = this.customBanlist || null;
+		this.customRules = this.customRules || null;
 		/**
 		 * Table of rule names and banned effects.
-		 * @type {?{[mod: string]: string | boolean}}
+		 * @type {?RuleTable}
 		 */
-		this.banlistTable = this.banlistTable;
+		this.ruleTable = null;
 	}
 }
 
@@ -559,6 +604,7 @@ class Move extends Effect {
 exports.Tools = Tools;
 exports.Effect = Effect;
 exports.PureEffect = PureEffect;
+exports.RuleTable = RuleTable;
 exports.Format = Format;
 exports.Item = Item;
 exports.Template = Template;

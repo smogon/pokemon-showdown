@@ -992,8 +992,8 @@ exports.BattleScripts = {
 				} while (itemData.gen > this.gen || itemData.isNonstandard || itemData.forcedForme && species === this.getTemplate(itemData.forcedForme).baseSpecies);
 			}
 
-			// Random ability
-			let abilities = Object.values(template.abilities);
+			// Random legal ability
+			let abilities = Object.values(template.abilities).filter(a => this.getAbility(a).gen <= this.gen);
 			let ability = this.gen <= 2 ? 'None' : abilities[this.random(abilities.length)];
 
 			// Four random unique moves from the movepool
@@ -1280,7 +1280,7 @@ exports.BattleScripts = {
 		};
 		// Moves that shouldn't be the only STAB moves:
 		let NoStab = {
-			aquajet:1, bounce:1, explosion:1, fakeout:1, flamecharge:1, iceshard:1, pursuit:1, quickattack:1, skyattack:1,
+			aquajet:1, bounce:1, explosion:1, fakeout:1, flamecharge:1, fly:1, iceshard:1, pursuit:1, quickattack:1, skyattack:1,
 			chargebeam:1, clearsmog:1, eruption:1, vacuumwave:1, waterspout:1,
 		};
 
@@ -1703,6 +1703,9 @@ exports.BattleScripts = {
 					break;
 				case 'airslash': case 'oblivionwing':
 					if (hasMove['acrobatics'] || hasMove['bravebird'] || hasMove['hurricane']) rejected = true;
+					break;
+				case 'fly':
+					if (teamDetails.zMove || counter.setupType !== 'Physical') rejected = true;
 					break;
 				case 'hex':
 					if (!hasMove['willowisp']) rejected = true;
@@ -2184,6 +2187,8 @@ exports.BattleScripts = {
 			item = 'Assault Vest';
 		} else if (hasMove['conversion']) {
 			item = 'Normalium Z';
+		} else if (!teamDetails.zMove && (hasMove['fly'] || hasMove['bounce'] && counter.setupType)) {
+			item = 'Flyinium Z';
 		} else if (hasMove['geomancy']) {
 			item = 'Power Herb';
 		} else if (hasMove['switcheroo'] || hasMove['trick']) {
@@ -2406,7 +2411,7 @@ exports.BattleScripts = {
 
 		// PotD stuff
 		let potd;
-		if (Config.potd && 'Rule:potd' in this.getBanlistTable(this.getFormat())) {
+		if (Config.potd && this.getRuleTable(this.getFormat()).has('potd')) {
 			potd = this.getTemplate(Config.potd);
 		}
 
@@ -3668,7 +3673,7 @@ exports.BattleScripts = {
 		}
 
 		return {
-			name: setData.set.name || template.baseSpecies,
+			name: setData.set.nickname || setData.set.name || template.baseSpecies,
 			species: setData.set.species,
 			gender: setData.set.gender || template.gender || (this.random(2) ? 'M' : 'F'),
 			item: setData.set.item || '',

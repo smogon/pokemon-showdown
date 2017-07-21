@@ -115,15 +115,10 @@ class Tournament {
 		return true;
 	}
 
-	setBanlist(params, output) {
+	setBanlist(banlist, output) {
 		let format = Dex.getFormat(this.originalFormat);
 		if (format.team) {
-			output.errorReply(format.name + " does not support supplementary banlists.");
-			return false;
-		}
-		let banlist = Dex.getSupplementaryBanlist(format, params);
-		if (banlist.length < 1) {
-			output.errorReply("The specified banlist is invalid or already included in " + format.name + ".");
+			output.errorReply(format.name + " does not support custom banlists.");
 			return false;
 		}
 		if (this.teambuilderFormat === this.originalFormat) this.teambuilderFormat = 'customgame-' + this.room.id + '-' + this.room.tourNumber;
@@ -1439,9 +1434,9 @@ Chat.commands.tournamenthelp = function (target, room, user) {
 	return this.sendReplyBox(
 		"- create/new &lt;format>, &lt;type> [, &lt;comma-separated arguments>]: Creates a new tournament in the current room.<br />" +
 		"- settype &lt;type> [, &lt;comma-separated arguments>]: Modifies the type of tournament after it's been created, but before it has started.<br />" +
-		"- banlist &lt;comma-separated arguments>: Sets the supplementary banlist for the tournament before it has started.<br />" +
-		"- viewbanlist: Shows the supplementary banlist for the tournament.<br />" +
-		"- clearbanlist: Clears the supplementary banlist for the tournament before it has started.<br />" +
+		"- banlist &lt;comma-separated arguments>: Sets the custom banlist for the tournament before it has started.<br />" +
+		"- viewbanlist: Shows the custom banlist for the tournament.<br />" +
+		"- clearbanlist: Clears the custom banlist for the tournament before it has started.<br />" +
 		"- name &lt;name>: Sets a custom name for the tournament.<br />" +
 		"- clearname: Clears the custom name of the tournament.<br />" +
 		"- end/stop/delete: Forcibly ends the tournament in the current room.<br />" +

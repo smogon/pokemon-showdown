@@ -128,6 +128,34 @@ exports.commands = {
 			'How many digits of pi do YOU know? Test it out <a href="http://guangcongluo.com/mempi/">here</a>!');
 	},
 
+	code: function (target, room, user) {
+		if (!target) return this.parse('/help code');
+		if (!this.canTalk()) return;
+		const separator = '\n';
+		if (target.includes(separator)) {
+			const params = target.split(separator);
+			let output = [];
+			for (let i = 0; i < params.length; i++) {
+				output.push(Chat.escapeHTML(params[i]));
+			}
+			let code = `<div class="chat"><code style="white-space: pre-wrap; display: table">${output.join('<br />')}</code></div>`;
+			if (output.length > 3) code = `<details><summary>See code...</summary>${code}</details>`;
+
+			if (!this.canBroadcast('!code')) return;
+			if (this.broadcastMessage && !this.can('broadcast', null, room)) return false;
+
+			if (!this.runBroadcast('!code')) return;
+
+			this.sendReplyBox(code);
+		} else {
+			return this.errorReply("You can simply use ``[code]`` for code messages that are only one line.");
+		}
+	},
+	codehelp: [
+		"!code [code] - Broadcasts code to a room. Accepts multi-line arguments. Requires: + % @ & # ~",
+		"/code [code] - Shows you code. Accepts multi-line arguments.",
+	],
+
 	'!avatar': true,
 	avatar: function (target, room, user) {
 		if (!target) return this.parse('/avatars');
@@ -1795,6 +1823,7 @@ exports.commands = {
 		if (user.lastCommand !== '/unbanall' || target !== 'confirm') {
 			return this.parse('/help unbanall');
 		}
+		user.lastCommand = '';
 		Punishments.userids.clear();
 		Punishments.ips.clear();
 		Punishments.savePunishments();
@@ -1814,6 +1843,7 @@ exports.commands = {
 		if (user.lastCommand !== '/deroomvoiceall' || target !== 'confirm') {
 			return this.parse('/help deroomvoiceall');
 		}
+		user.lastCommand = '';
 		let count = 0;
 		for (let userid in room.auth) {
 			if (room.auth[userid] === '+') {
@@ -2186,7 +2216,9 @@ exports.commands = {
 	},
 	unnamelockhelp: ["/unnamelock [username] - Unnamelocks the user. Requires: % @ * & ~"],
 
-	hidetext: function (target, room, user) {
+	hidetextalts: 'hidetext',
+	hidealtstext: 'hidetext',
+	hidetext: function (target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help hidetext');
 
 		this.splitTarget(target);
@@ -2203,11 +2235,27 @@ exports.commands = {
 			return this.errorReply("User '" + name + "' is not banned from this room or locked.");
 		}
 
-		this.addModCommand("" + targetUser.name + "'s messages were cleared from  " + room.title + " by " + user.name + ".");
-		this.add('|unlink|' + hidetype + userid);
-		if (userid !== toId(this.inputUsername)) this.add('|unlink|' + hidetype + toId(this.inputUsername));
+		if (cmd === 'hidealtstext' || cmd === 'hidetextalts') {
+			this.addModCommand(`${targetUser.name}'s alts' messages were cleared from ${room.title} by ${user.name}.`);
+			this.add(`|unlink|${hidetype}${userid}`);
+
+			const alts = targetUser.getAltUsers(true);
+			for (let i = 0; i < alts.length; ++i) {
+				this.add(`|unlink|${hidetype}${alts[i].name}`);
+			}
+			for (let i in targetUser.prevNames) {
+				this.add(`|unlink|${hidetype}${targetUser.prevNames[i]}`);
+			}
+		} else {
+			this.addModCommand("" + targetUser.name + "'s messages were cleared from  " + room.title + " by " + user.name + ".");
+			this.add('|unlink|' + hidetype + userid);
+			if (userid !== toId(this.inputUsername)) this.add('|unlink|' + hidetype + toId(this.inputUsername));
+		}
 	},
-	hidetexthelp: ["/hidetext [username] - Removes a locked or banned user's messages from chat (includes users banned from the room). Requires: % (global only), @ * # & ~"],
+	hidetexthelp: [
+		"/hidetext [username] - Removes a locked or banned user's messages from chat (includes users banned from the room). Requires: % (global only), @ * # & ~",
+		"/hidealtstext OR /hidetextalts [username] - Removes a locked or banned user's messages, and their alternate account's messages from the chat (includes users banned from the room).  Requires: % (global only), @ * # & ~",
+	],
 
 	ab: 'blacklist',
 	blacklist: function (target, room, user) {
@@ -2337,7 +2385,7 @@ exports.commands = {
 		if (user.lastCommand !== '/unblacklistall' || target !== 'confirm') {
 			return this.parse('/help unblacklistall');
 		}
-
+		user.lastCommand = '';
 		let unblacklisted = Punishments.roomUnblacklistAll(room);
 		if (!unblacklisted) return this.errorReply("No users are currently blacklisted in this room to unblacklist.");
 		this.addModCommand(`All blacklists in this room have been lifted by ${user.name}.`);
@@ -2476,10 +2524,20 @@ exports.commands = {
 				Rooms.SimulatorProcess.respawn();
 				return this.sendReply("Battles have been hotpatched. Any battles started after now will use the new code; however, in-progress battles will continue to use the old code.");
 			} else if (target === 'formats') {
+				// store custom formats
+				let customFormats = {};
+				for (let i in Dex.data.Formats) {
+					if (!Dex.data.Formats[i].customBanlist) continue;
+					customFormats[i] = {name: Dex.data.Formats[i].name, customBanlist: Dex.data.Formats[i].customBanlist};
+				}
 				// uncache the sim/dex.js dependency tree
 				Chat.uncacheTree('./sim/dex');
 				// reload sim/dex.js
 				global.Dex = require('./sim/dex'); // note: this will lock up the server for a few seconds
+				// rebuild custom formats
+				for (let i in customFormats) {
+					Dex.getFormat(customFormats[i].name, customFormats[i].customBanlist, i);
+				}
 				// rebuild the formats list
 				delete Rooms.global.formatList;
 				// respawn validator processes
@@ -2865,13 +2923,14 @@ exports.commands = {
 		if (!user.hasConsoleAccess(connection)) {
 			return this.errorReply("/bash - Access denied.");
 		}
+		if (!target) return this.parse('/help bash');
 
 		connection.sendTo(room, "$ " + target);
-		let exec = require('child_process').exec;
-		exec(target, (error, stdout, stderr) => {
+		require('child_process').exec(target, (error, stdout, stderr) => {
 			connection.sendTo(room, ("" + stdout + stderr));
 		});
 	},
+	bashhelp: ["/bash [command] - Executes a bash command on the server. Requires: ~ console access"],
 
 	eval: function (target, room, user, connection) {
 		if (!user.hasConsoleAccess(connection)) {
@@ -3456,7 +3515,7 @@ exports.commands = {
 		} else if (!target) {
 			this.sendReply("COMMANDS: /msg, /reply, /logout, /challenge, /search, /rating, /whois");
 			this.sendReply("OPTION COMMANDS: /nick, /avatar, /ignore, /away, /back, /timestamps, /highlight");
-			this.sendReply("INFORMATIONAL COMMANDS: /data, /dexsearch, /movesearch, /groups, /faq, /rules, /intro, /formatshelp, /othermetas, /learn, /analysis, /calc (replace / with ! to broadcast. Broadcasting requires: + % @ * # & ~)");
+			this.sendReply("INFORMATIONAL COMMANDS: /data, /dexsearch, /movesearch, /itemsearch, /groups, /faq, /rules, /intro, /formatshelp, /othermetas, /learn, /analysis, /calc (replace / with ! to broadcast. Broadcasting requires: + % @ * # & ~)");
 			if (user.group !== Config.groupsranking[0]) {
 				this.sendReply("DRIVER COMMANDS: /warn, /mute, /hourmute, /unmute, /alts, /forcerename, /modlog, /modnote, /lock, /unlock, /announce, /redirect");
 				this.sendReply("MODERATOR COMMANDS: /ban, /unban, /ip, /modchat");
@@ -3509,6 +3568,6 @@ exports.commands = {
 process.nextTick(() => {
 	// We might want to migrate most of this to a JSON schema of command attributes.
 	Chat.multiLinePattern.register(
-		'>>>? ', '/(?:room|staff)intro ', '/(?:staff)?topic ', '/(?:add|widen)datacenters ', '/bash '
+		'>>>? ', '/(?:room|staff)intro ', '/(?:staff)?topic ', '/(?:add|widen)datacenters ', '/bash ', '!code ', '/code '
 	);
 });

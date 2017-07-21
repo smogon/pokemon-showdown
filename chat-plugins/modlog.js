@@ -219,7 +219,7 @@ function prettifyResults(rawResults, room, searchString, exactSearch, addModlogL
 	if (pipeIndex < 0) pipeIndex = 0;
 	rawResults = rawResults.substr(pipeIndex + 1, rawResults.length);
 	if (!rawResults) {
-		return `No moderator actions containing ${searchString} found on ${roomName}.` +
+		return `|popup|No moderator actions containing ${searchString} found on ${roomName}.` +
 				(exactSearch ? "" : " Add quotes to the search parameter to search for a phrase, rather than a user.");
 	}
 	const resultArray = rawResults.split('\n');
@@ -241,10 +241,10 @@ function prettifyResults(rawResults, room, searchString, exactSearch, addModlogL
 	}).join(`<br />`);
 	let preamble;
 	if (searchString) {
-		preamble = `|wide||html|<p>The last ${lines} logged actions containing ${searchString} on ${roomName}.` +
+		preamble = `|popup||wide||html|<p>The last ${lines} logged actions containing ${searchString} on ${roomName}.` +
 						(exactSearch ? "" : " Add quotes to the search parameter to search for a phrase, rather than a user.");
 	} else {
-		preamble = `|wide||html|<p>The last ${lines} lines of the Moderator Log of ${roomName}.`;
+		preamble = `|popup||wide||html|<p>The last ${lines} lines of the Moderator Log of ${roomName}.`;
 	}
 	preamble +=	`</p><p><small>[${Chat.toTimestamp(new Date(), {hour12: true})}] \u2190 current server time</small></p>`;
 	return preamble + resultString;
@@ -266,7 +266,7 @@ exports.commands = {
 		let targetRoom = Rooms.search(roomId);
 		// if a room alias was used, replace alias with actual id
 		if (targetRoom) roomId = targetRoom.id;
-		if (roomId.startsWith('battle-') || roomId.startsWith('groupchat-')) this.errorReply("Battles and groupchats don't have individual modlogs.");
+		if (roomId.startsWith('battle-') || roomId.startsWith('groupchat-')) return this.errorReply("Battles and groupchats don't have individual modlogs.");
 
 		// permission checking
 		if (roomId === 'all' || roomId === 'public') {
@@ -304,7 +304,7 @@ exports.commands = {
 		}
 
 		PM.send(roomIdList.join(','), searchString, exactSearch, lines).then(response => {
-			connection.popup(prettifyResults(response, roomId, searchString, exactSearch, addModlogLinks, hideIps));
+			connection.send(prettifyResults(response, roomId, searchString, exactSearch, addModlogLinks, hideIps));
 			if (cmd === 'timedmodlog') this.sendReply(`The modlog query took ${Date.now() - startTime} ms to complete.`);
 		});
 	},

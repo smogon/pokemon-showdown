@@ -26,14 +26,22 @@ exports.commands = {
 		if (stone.id in bannedStones && template.name !== stone.megaEvolves) {
 			this.errorReply(`Warning: ${stone.name} is restricted to ${stone.megaEvolves} in Mix and Mega; therefore, ${template.name} cannot use ${stone.name} in actual play.`);
 		}
-		if (Dex.mod("mixandmega").getTemplate(sep[0]).tier === "Uber") { // Separate messages because there's a difference between being already mega evolved / NFE and being banned from mega evolving
-			this.errorReply(`Warning: ${template.name} is banned from mega evolving with a non-native mega stone in Mix and Mega and therefore cannot use ${stone.name} in actual play.`);
+		if (Dex.mod("mixandmega").getTemplate(sep[0]).tier === "Uber" && !template.isMega) { // Separate messages because there's a difference between being already mega evolved / NFE and being banned from mega evolving
+			this.errorReply(`Warning: ${template.name} is banned from mega evolving with a non-native mega stone in Mix and Mega and therefore cannot use ${toId(sep[1]) === 'dragonascent' ? 'Dragon Ascent' : stone.name} in actual play.`);
 		}
 		if (stone.isUnreleased) {
 			this.errorReply(`Warning: ${stone.name} is unreleased and is not usable in current Mix and Mega.`);
 		}
-		if (toId(sep[1]) === 'dragonascent' && toId(sep[0]) !== 'smeargle') {
+		let dragonAscentUsers = {'smeargle':1, 'rayquaza':1, 'rayquazamega':1};
+		if (toId(sep[1]) === 'dragonascent' && !(toId(sep[0]) in dragonAscentUsers)) {
 			this.errorReply(`Warning: Only Pokemon with access to Dragon Ascent can mega evolve with Mega Rayquaza's traits; therefore, ${template.name} cannot mega evolve with Dragon Ascent.`);
+		}
+		// Fake Pokemon and Mega Stones
+		if (template.isNonstandard) {
+			this.errorReply(`Warning: ${template.name} is not a real Pokemon and is therefore not usable in Mix and Mega.`);
+		}
+		if (toId(sep[1]) === 'crucibellite') {
+			this.errorReply(`Warning: Crucibellite is a fake mega stone created by the CAP Project and is restricted to the CAP Crucibelle.`);
 		}
 		let baseTemplate = Dex.getTemplate(stone.megaEvolves);
 		let megaTemplate = Dex.getTemplate(stone.megaStone);

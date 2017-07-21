@@ -48,7 +48,7 @@ All moves but Swift and Bide (while on duration, not first hit) have a 1/256 cha
 
 Partial Trapping Moves
 ----------------------
-Partial trapping moves let eiher Pokémon switch but target will be unable to move for its duration.
+Partial trapping moves let either Pokémon switch but target will be unable to move for its duration.
 
 TODO. Glitches not implemented
 ------------------------------
