@@ -717,16 +717,16 @@ class ModdedDex {
 		for (const rule of ruleset) {
 			if (rule.charAt(0) === '-' || rule.charAt(0) === '+') { // ban or unban
 				const type = rule.charAt(0);
-				let buf = rule.slice(0);
+				let buf = rule.slice(1);
 				const gtIndex = buf.lastIndexOf('>');
-				let limit = 1;
+				let limit = 0;
 				if (gtIndex >= 0 && /^[0-9]+$/.test(buf.slice(gtIndex + 1).trim())) {
 					limit = parseInt(buf.slice(gtIndex + 1));
 					buf = buf.slice(0, gtIndex);
 				}
 				let checkTeam = buf.includes('++');
 				const banNames = buf.split(checkTeam ? '++' : '+').map(v => v.trim());
-				if (banNames.length === 1 && limit > 1) checkTeam = true;
+				if (banNames.length === 1 && limit > 0) checkTeam = true;
 				const innerRule = banNames.join(checkTeam ? ' ++ ' : ' + ');
 				const bans = banNames.map(v => toId(v));
 
@@ -734,7 +734,7 @@ class ModdedDex {
 					ruleTable.complexTeamBans.push([innerRule, '', limit, bans]);
 					continue;
 				}
-				if (bans.length > 1 || limit !== 1) {
+				if (bans.length > 1 || limit > 0) {
 					ruleTable.complexBans.push([innerRule, '', limit, bans]);
 				}
 				const ban = toId(buf);
