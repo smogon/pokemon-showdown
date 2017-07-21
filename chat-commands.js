@@ -1795,7 +1795,7 @@ exports.commands = {
 		if (user.lastCommand !== '/unbanall' || target !== 'confirm') {
 			return this.parse('/help unbanall');
 		}
-		delete user.lastCommand; // remove this so the check happens every time
+		user.lastCommand = '';
 		Punishments.userids.clear();
 		Punishments.ips.clear();
 		Punishments.savePunishments();
@@ -1815,7 +1815,7 @@ exports.commands = {
 		if (user.lastCommand !== '/deroomvoiceall' || target !== 'confirm') {
 			return this.parse('/help deroomvoiceall');
 		}
-		delete user.lastCommand; // remove this so the check happens every time
+		user.lastCommand = '';
 		let count = 0;
 		for (let userid in room.auth) {
 			if (room.auth[userid] === '+') {
@@ -2357,7 +2357,7 @@ exports.commands = {
 		if (user.lastCommand !== '/unblacklistall' || target !== 'confirm') {
 			return this.parse('/help unblacklistall');
 		}
-		delete user.lastCommand; // remove this so the check happens every time
+		user.lastCommand = '';
 		let unblacklisted = Punishments.roomUnblacklistAll(room);
 		if (!unblacklisted) return this.errorReply("No users are currently blacklisted in this room to unblacklist.");
 		this.addModCommand(`All blacklists in this room have been lifted by ${user.name}.`);
