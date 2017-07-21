@@ -2921,13 +2921,16 @@ exports.commands = {
 		if (!user.hasConsoleAccess(connection)) {
 			return this.errorReply("/bash - Access denied.");
 		}
-
+		if (!target) {
+			return this.parse('/help bash');
+		}
 		connection.sendTo(room, "$ " + target);
 		let exec = require('child_process').exec;
 		exec(target, (error, stdout, stderr) => {
 			connection.sendTo(room, ("" + stdout + stderr));
 		});
 	},
+	bashhelp: ["/bash [argument] - Carries out execution by running a child process. Requires console access.(~ and user.id/IP in Config.consoleips)"],
 
 	eval: function (target, room, user, connection) {
 		if (!user.hasConsoleAccess(connection)) {
