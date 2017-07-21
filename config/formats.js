@@ -38,7 +38,7 @@ exports.Formats = [
 
 		mod: 'gen7',
 		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
-		banlist: ['Uber', 'Power Construct', 'Shadow Tag', 'Baton Pass', 'Swords Dance + Dragon Dance + Quiver Dance + Fiery Dance > 2'],
+		banlist: ['Uber', 'Power Construct', 'Shadow Tag', 'Baton Pass'],
 	},
 	{
 		name: "[Gen 7] Ubers",
