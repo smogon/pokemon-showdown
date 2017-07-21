@@ -2922,7 +2922,7 @@ exports.commands = {
 			return this.errorReply("/bash - Access denied.");
 		}
 		if (!target) {
-			return this.sendReply("/bash (Console Access) needs arguments to carry out execution by running a child process. \nExample Execution: /bash ls");
+			return this.parse('/help bash');
 		}
 		connection.sendTo(room, "$ " + target);
 		let exec = require('child_process').exec;
@@ -2930,6 +2930,8 @@ exports.commands = {
 			connection.sendTo(room, ("" + stdout + stderr));
 		});
 	},
+	bashhelp:["/bash [argument] - Carries out execution by running a child process",
+	 	  "Requires console access."],
 
 	eval: function (target, room, user, connection) {
 		if (!user.hasConsoleAccess(connection)) {
