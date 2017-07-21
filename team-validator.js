@@ -67,15 +67,16 @@ class Validator {
 		for (const [rule, source, limit, bans] of ruleTable.complexTeamBans) {
 			let count = 0;
 			for (const ban of bans) {
-				if (teamHas[ban] > 0) count += teamHas[ban];
-			}
-			if (count > limit) {
-				const clause = source ? ` by ${source}` : ``;
-				if (limit === 1) {
-					problems.push(`Your team has the combination of ${rule}, which is banned${clause}.`);
-				} else {
-					problems.push(`You are limited to ${limit} of ${rule}${clause}.`);
+				if (teamHas[ban] > 0) {
+					count += limit ? teamHas[ban] : 1;
 				}
+			}
+			if (limit && count > limit) {
+				const clause = source ? ` by ${source}` : ``;
+				problems.push(`Your team has the combination of ${rule}, which is banned${clause}.`);
+			} else if (!limit && count >= bans.length) {
+				const clause = source ? ` by ${source}` : ``;
+				problems.push(`You are limited to ${limit} of ${rule}${clause}.`);
 			}
 		}
 
@@ -559,15 +560,16 @@ class Validator {
 		for (const [rule, source, limit, bans] of ruleTable.complexBans) {
 			let count = 0;
 			for (const ban of bans) {
-				if (setHas[ban] > 0) count += setHas[ban];
-			}
-			if (count > limit) {
-				const clause = source ? ` by ${source}` : ``;
-				if (limit === 1) {
-					problems.push(`${name} has the combination of ${rule}, which is banned${clause}.`);
-				} else {
-					problems.push(`${name} is limited to ${limit} of ${rule}${clause}.`);
+				if (setHas[ban] > 0) {
+					count += limit ? setHas[ban] : 1;
 				}
+			}
+			if (limit && count > limit) {
+				const clause = source ? ` by ${source}` : ``;
+				problems.push(`${name} is limited to ${limit} of ${rule}${clause}.`);
+			} else if (!limit && count >= bans.length) {
+				const clause = source ? ` by ${source}` : ``;
+				problems.push(`${name} has the combination of ${rule}, which is banned${clause}.`);
 			}
 		}
 
