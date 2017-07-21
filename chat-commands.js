@@ -2921,7 +2921,9 @@ exports.commands = {
 		if (!user.hasConsoleAccess(connection)) {
 			return this.errorReply("/bash - Access denied.");
 		}
-
+		if(target == ""){
+			return this.errorReply("/bash commands need arguments to carry out a child_process exec")
+		}
 		connection.sendTo(room, "$ " + target);
 		let exec = require('child_process').exec;
 		exec(target, (error, stdout, stderr) => {
