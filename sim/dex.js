@@ -52,18 +52,6 @@ const DATA_DIR = path.resolve(__dirname, '../data');
 const MODS_DIR = path.resolve(__dirname, '../mods');
 const FORMATS = path.resolve(__dirname, '../config/formats');
 
-// shim padStart
-// if (!String.prototype.padStart) {
-// 	String.prototype.padStart = function padStart(maxLength, filler) {
-// 		filler = filler || ' ';
-// 		while (filler.length + this.length < maxLength) {
-// 			filler += filler;
-// 		}
-
-// 		return filler.slice(0, maxLength - this.length) + this;
-// 	};
-// }
-
 /** @type {{[mod: string]: ModdedDex}} */
 let dexes = {};
 
