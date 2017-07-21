@@ -13439,6 +13439,18 @@ exports.BattlePokedex = {
 		evos: ["kerfluffle"],
 		eggGroups: ["Fairy", "Human-Like"],
 	},
+	voodoll: {
+		num: -116,
+		species: "Voodoll",
+		types: ["Normal", "Dark"],
+		baseStats: {hp: 55, atk: 40, def: 55, spa: 75, spd: 50, spe: 70},
+		abilities: {0: "Volt Absorb", 1: "Lightning Rod", H: "Cursed Body"},
+		heightm: 0.7,
+		weightkg: 32.4,
+		color: "Brown",
+		evos: ["voodoom"],
+		eggGroups: ["Human-Like", "Ground"],
+	},
 	pokestarufo: {
 		num: -5001,
 		species: "Pokestar UFO",
