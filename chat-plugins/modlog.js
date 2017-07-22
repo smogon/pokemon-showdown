@@ -251,9 +251,11 @@ function prettifyResults(rawResults, room, searchString, exactSearch, addModlogL
 }
 
 exports.commands = {
+	'!modlog': true,
 	timedmodlog: 'modlog',
 	modlog: function (target, room, user, connection, cmd) {
 		const startTime = Date.now();
+		if (!room) room = Rooms('global');
 		let roomId = (room.id === 'staff' ? 'global' : room.id);
 		let hideIps = !user.can('lock');
 
