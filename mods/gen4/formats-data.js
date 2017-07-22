@@ -660,7 +660,7 @@ exports.BattleFormatsData = {
 		tier: "UU",
 	},
 	glaceon: {
-		randomBattleMoves: ["icebeam", "hiddenpowerground", "hiddenpowerfire", "shadowball", "batonpass", "wish", "substitute", "toxic", "protect"],
+		randomBattleMoves: ["icebeam", "hiddenpowerground", "hiddenpowerfire", "shadowball", "wish", "toxic", "protect"],
 		tier: "NU",
 	},
 	porygon: {
