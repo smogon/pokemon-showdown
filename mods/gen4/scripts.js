@@ -245,12 +245,11 @@ exports.BattleScripts = {
 					if (!(hasAbility['Guts'] || hasAbility['Quick Feet'] || hasAbility['Speed Boost'] || hasMove['Toxic'] || hasMove['Wish'])) rejected = true;
 					break;
 				case 'wish':
-					if (!(hasMove['Protect'] || hasMove['U-turn'] || hasMove['Baton Pass'])) rejected = true;
+					if (!(hasMove['batonpass'] || hasMove['protect'] || hasMove['uturn'])) rejected = true;
 					if (hasMove['rest'] || !!counter['speedsetup']) rejected = true;
 					break;
 				case 'rapidspin':
-					if (teamDetails.rapidSpin) rejected = true;
-					if (counter.setupType && counter.Physical + counter.Special < 2) rejected = true;
+					if (teamDetails.rapidSpin || counter.setupType && counter.Physical + counter.Special < 2) rejected = true;
 					break;
 				case 'stealthrock':
 					if (counter.setupType || !!counter['speedsetup'] || hasMove['rest'] || teamDetails.stealthRock) rejected = true;
