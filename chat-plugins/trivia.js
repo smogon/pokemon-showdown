@@ -300,7 +300,7 @@ class Trivia extends Rooms.RoomGame {
 		}
 	}
 
-  // Handles setup that shouldn't be done from the constructor.
+	// Handles setup that shouldn't be done from the constructor.
 	init() {
 		this.broadcast(
 			'Signups for a new trivia game have begun!',
@@ -436,7 +436,7 @@ class Trivia extends Rooms.RoomGame {
 
 		this.phaseTimeout = setTimeout(() => this.tallyAnswers(), this.getRoundLength());
 	}
-  // Broadcasts to the room what the next question is.
+	// Broadcasts to the room what the next question is.
 	sendQuestion(question) {
 		this.broadcast(
 			`Question: ${question.question}`,
