@@ -650,9 +650,9 @@ class CommandContext {
 				if (targetUser.locked && !user.can('lock')) {
 					return this.errorReply(`The user "${targetUser.name}" is locked and cannot be PMed.`);
 				}
-				if (Config.pmmodchat && !user.authAtLeast(Config.pmmodchat)) {
+				if (Config.pmmodchat && !user.authAtLeast(Config.pmmodchat) && !targetUser.canPromote(user.group, Config.pmmodchat)) {
 					let groupName = Config.groups[Config.pmmodchat] && Config.groups[Config.pmmodchat].name || Config.pmmodchat;
-					return this.errorReply(`Because moderated chat is set, you must be of rank ${groupName} or higher to PM users.`);
+					return this.errorReply(`On this server, you must be of rank ${groupName} or higher to PM users.`);
 				}
 				if (targetUser.ignorePMs && targetUser.ignorePMs !== user.group && !user.can('lock')) {
 					if (!targetUser.can('lock')) {

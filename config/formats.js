@@ -61,8 +61,18 @@ exports.Formats = [
 		],
 
 		mod: 'gen7',
+		searchShow: false,
 		ruleset: ['[Gen 7] OU'],
 		banlist: ['OU', 'BL', 'Drizzle', 'Power Construct', 'Mewnium Z'],
+	},
+	{
+		name: "[Gen 7] UU (suspect test)",
+		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3609643/\">UU Suspect Test</a>"],
+
+		mod: 'gen7',
+		challengeShow: false,
+		ruleset: ['[Gen 7] UU'],
+		banlist: ['Conkeldurr'],
 	},
 	{
 		name: "[Gen 7] RU",
@@ -73,6 +83,16 @@ exports.Formats = [
 		],
 
 		mod: 'gen7',
+		searchShow: false,
+		ruleset: ['[Gen 7] UU'],
+		banlist: ['UU', 'BL2'],
+	},
+	{
+		name: "[Gen 7] RU (suspect test)",
+		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3609531/\">RU Suspect Test</a>"],
+
+		mod: 'gen7',
+		challengeShow: false,
 		ruleset: ['[Gen 7] UU'],
 		banlist: ['UU', 'BL2'],
 	},
@@ -176,6 +196,7 @@ exports.Formats = [
 			battle: 3,
 		},
 		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview', 'Inverse Mod'],
+		requirePentagon: true,
 	},
 	{
 		name: "[Gen 7] Custom Game",
@@ -382,7 +403,7 @@ exports.Formats = [
 
 		mod: 'gen7',
 		ruleset: ['Pokemon', 'Ability Clause', 'OHKO Clause', 'Evasion Moves Clause', 'CFZ Clause', 'Endless Battle Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod'],
-		banlist: ['Arena Trap', 'Huge Power', 'Innards Out', 'Moody', 'Parental Bond', 'Protean', 'Pure Power', 'Shadow Tag', 'Water Bubble', 'Wonder Guard', 'Chatter', 'Comatose + Sleep Talk'],
+		banlist: ['Arena Trap', 'Huge Power', 'Innards Out', 'Magnet Pull', 'Moody', 'Parental Bond', 'Protean', 'Pure Power', 'Shadow Tag', 'Water Bubble', 'Wonder Guard', 'Gengarite', 'Chatter', 'Comatose + Sleep Talk'],
 	},
 	{
 		name: "[Gen 7] 1v1",
@@ -848,6 +869,7 @@ exports.Formats = [
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3542755/\">Doubles UU</a>"],
 
 		gameType: 'doubles',
+		searchShow: false,
 		ruleset: ['[Gen 6] Doubles OU'],
 		banlist: [
 			'Aegislash', 'Amoonguss', 'Arcanine', 'Azumarill', 'Bisharp', 'Breloom', 'Charizard-Mega-Y', 'Charizardite Y',

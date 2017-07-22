@@ -44,7 +44,7 @@ const INTERMISSION_PHASE = 'intermission';
 const LIMBO_PHASE = 'limbo';
 const MINIMUM_PLAYERS = 3;
 
-const START_TIMEOUT = 1 * 1000;
+const START_TIMEOUT = 30 * 1000;
 const INTERMISSION_INTERVAL = 30 * 1000;
 
 const MAX_QUESTION_LENGTH = 252;
@@ -187,6 +187,7 @@ class Trivia extends Rooms.RoomGame {
 		this.title = 'Trivia';
 		this.allowRenames = true;
 		this.playerCap = Number.MAX_SAFE_INTEGER;
+
 		this.minPlayers = MINIMUM_PLAYERS;
 		this.kickedUsers = new Set();
 		this.canLateJoin = true;
@@ -214,6 +215,7 @@ class Trivia extends Rooms.RoomGame {
 		this.init();
 	}
 
+	// How long the players should have to answer a question.
 	getRoundLength() {
 		return 12 * 1000 + 500;
 	}
@@ -298,6 +300,7 @@ class Trivia extends Rooms.RoomGame {
 		}
 	}
 
+  // Handles setup that shouldn't be done from the constructor.
 	init() {
 		this.broadcast(
 			'Signups for a new trivia game have begun!',
@@ -330,6 +333,7 @@ class Trivia extends Rooms.RoomGame {
 				Length: ${SCORE_CAPS[this.cap]}\n
 				UGM: ${triviaData.ugm ? 'enabled' : 'disabled'}`
 			);
+
 			return tarRoom;
 		}
 
@@ -432,7 +436,7 @@ class Trivia extends Rooms.RoomGame {
 
 		this.phaseTimeout = setTimeout(() => this.tallyAnswers(), this.getRoundLength());
 	}
-
+  // Broadcasts to the room what the next question is.
 	sendQuestion(question) {
 		this.broadcast(
 			`Question: ${question.question}`,
@@ -550,7 +554,7 @@ class Trivia extends Rooms.RoomGame {
 	end(user) {
 		clearTimeout(this.phaseTimeout);
 		this.phaseTimeout = null;
-		this.broadcast(Chat.html`The game was forcibly ended by ${user.name}.`);
+		this.broadcast(Chat.html`The game was forcibly ended by ${user.name}.`)
 		this.destroy();
 	}
 }

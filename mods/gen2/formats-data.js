@@ -2271,7 +2271,7 @@ exports.BattleFormatsData = {
 		},
 		randomSet2: { // RestTalk
 			chance: 16,
-			item: ["charcoal"],
+			item: ["leftovers"],
 			baseMove1: "icebeam", baseMove2: "rest", baseMove3: "sleeptalk",
 			fillerMoves1: ["toxic", "toxic", "toxic", "hiddenpowerelectric", "hiddenpowerflying", "return"],
 		},
@@ -2850,13 +2850,18 @@ exports.BattleFormatsData = {
 		tier: "NFE",
 	},
 	jumpluff: {
-		randomSet1: { // Status
+		randomSet1: { // Status 1
+			chance: 10,
+			item: ["leftovers"],
+			baseMove1: "sleeppowder", baseMove2: "stunspore", baseMove3: "leechseed",
+			fillerMoves1: ["encore", "gigadrain", "hiddenpowerflying", "hiddenpowerflying", "substitute"],
+		},
+		randomSet2: { // Status 2
 			chance: 16,
 			item: ["leftovers"],
-			baseMove1: "sleeppowder",
-			fillerMoves1: ["stunspore", "stunspore", "stunspore", "toxic", "toxic"],
-			fillerMoves2: ["leechseed", "leechseed", "reflect"],
-			fillerMoves3: ["reflect", "synthesis", "synthesis", "encore", "gigadrain"],
+			baseMove1: "sleeppowder", baseMove2: "toxic",
+			fillerMoves1: ["leechseed", "leechseed", "synthesis", "reflect"],
+			fillerMoves2: ["reflect", "reflect", "synthesis", "encore", "gigadrain"],
 		},
 		tier: "UU",
 	},
@@ -2963,7 +2968,7 @@ exports.BattleFormatsData = {
 			chance: 16,
 			item: ["leftovers"],
 			baseMove1: "earthquake", baseMove2: "rest",
-			fillerMoves1: ["bodyslam", "sludgebomb", "icebeam"],
+			fillerMoves1: ["surf", "surf", "surf", "bodyslam", "sludgebomb", "icebeam"],
 			fillerMoves2: ["haze", "sleeptalk"],
 		},
 		tier: "UU",
@@ -3348,8 +3353,8 @@ exports.BattleFormatsData = {
 			item: ["", "", "miracleberry"],
 			baseMove1: "icebeam", baseMove2: "spikes", baseMove3: "thief", baseMove4: "toxic",
 		},
-		randomSet2: { // Thief
-			chance: 12,
+		randomSet2: { // Other
+			chance: 16,
 			item: ["", "", "miracleberry"],
 			baseMove1: "icebeam", baseMove2: "spikes", baseMove3: "toxic",
 			fillerMoves1: ["hiddenpowerelectric", "hiddenpowergrass", "hiddenpowerflying", "present", "sleeptalk"],
@@ -3658,7 +3663,7 @@ exports.BattleFormatsData = {
 		},
 		randomSet2: { // Curse + BP
 			chance: 16,
-			item: ["charcoal"],
+			item: ["leftovers"],
 			baseMove1: "healbell", baseMove2: "recover", baseMove3: "curse", baseMove4: "batonpass",
 		},
 		eventPokemon: [

@@ -2811,7 +2811,7 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["earthquake", "heavyslam", "icepunch", "stealthrock", "thunderwave", "roar", "toxic"],
 		randomDoubleBattleMoves: ["rockslide", "earthquake", "lowkick", "heavyslam", "aquatail", "protect"],
 		requiredItem: "Aggronite",
-		tier: "Unreleased",
+		tier: "OU",
 	},
 	meditite: {
 		randomBattleMoves: ["highjumpkick", "psychocut", "icepunch", "thunderpunch", "trick", "fakeout", "bulletpunch", "drainpunch", "zenheadbutt"],
@@ -4725,7 +4725,7 @@ exports.BattleFormatsData = {
 	cofagrigus: {
 		randomBattleMoves: ["nastyplot", "trickroom", "shadowball", "hiddenpowerfighting", "willowisp", "haze", "painsplit"],
 		randomDoubleBattleMoves: ["nastyplot", "trickroom", "shadowball", "hiddenpowerfighting", "willowisp", "protect", "painsplit"],
-		tier: "NU",
+		tier: "BL3",
 	},
 	tirtouga: {
 		randomBattleMoves: ["shellsmash", "aquajet", "waterfall", "stoneedge", "earthquake", "stealthrock"],
@@ -6560,69 +6560,69 @@ exports.BattleFormatsData = {
 		tier: "CAP",
 	},
 	voodoom: {
-		randomBattleMoves: ["aurasphere", "darkpulse", "taunt", "painsplit", "substitute", "hiddenpowerice", "vacuumwave"],
+		randomBattleMoves: ["aurasphere", "darkpulse", "taunt", "painsplit", "substitute", "hiddenpowerice", "vacuumwave", "flashcannon"],
 		isNonstandard: true,
 		tier: "CAP",
 	},
 	syclar: {
 		isNonstandard: true,
-		tier: "CAP",
+		tier: "CAP LC",
 	},
 	embirch: {
 		isNonstandard: true,
-		tier: "CAP",
+		tier: "CAP LC",
 	},
 	flarelm: {
 		isNonstandard: true,
-		tier: "CAP",
+		tier: "CAP LC",
 	},
 	breezi: {
 		isNonstandard: true,
-		tier: "CAP",
+		tier: "CAP LC",
 	},
 	scratchet: {
 		isNonstandard: true,
-		tier: "CAP",
+		tier: "CAP LC",
 	},
 	necturine: {
 		isNonstandard: true,
-		tier: "CAP",
+		tier: "CAP LC",
 	},
 	cupra: {
 		isNonstandard: true,
-		tier: "CAP",
+		tier: "CAP LC",
 	},
 	argalis: {
 		isNonstandard: true,
-		tier: "CAP",
+		tier: "CAP LC",
 	},
 	brattler: {
 		isNonstandard: true,
-		tier: "CAP",
+		tier: "CAP LC",
 	},
 	cawdet: {
 		isNonstandard: true,
-		tier: "CAP",
+		tier: "CAP LC",
 	},
 	volkritter: {
 		isNonstandard: true,
-		tier: "CAP",
+		tier: "CAP LC",
 	},
 	snugglow: {
 		isNonstandard: true,
-		tier: "CAP",
+		tier: "CAP LC",
 	},
 	floatoy: {
 		isNonstandard: true,
-		tier: "CAP",
+		tier: "CAP LC",
 	},
 	caimanoe: {
 		isNonstandard: true,
-		tier: "CAP",
+		tier: "CAP LC",
 	},
 	pluffle: {
 		isNonstandard: true,
-		tier: "CAP",
+		tier: "CAP LC",
 	},
 	pokestarufo: {
 		isNonstandard: true,

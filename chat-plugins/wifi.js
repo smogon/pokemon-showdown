@@ -482,7 +482,7 @@ let commands = {
 		if (!parseInt(fc) || fc.length !== 12) return this.errorReply("Invalid FC");
 		let targetUser = Users(giver);
 		if (!targetUser || !targetUser.connected) return this.errorReply(`User '${giver}' is not online.`);
-		if (!this.can('warn', null, room) && !(this.can('broadcast', null, room) && user === targetUser)) return this.errorReply("Permission denied.");
+		if (!user.can('warn', null, room) && !(user.can('broadcast', null, room) && user === targetUser)) return this.errorReply("/qg - Access denied.");
 		if (!targetUser.autoconfirmed) return this.errorReply(`User '${targetUser.name}' needs to be autoconfirmed to give something away.`);
 		if (Giveaway.checkBanned(room, targetUser)) return this.errorReply(`User '${targetUser.name}' is giveaway banned.`);
 
@@ -535,7 +535,7 @@ let commands = {
 		if (!parseInt(fc) || fc.length !== 12) return this.errorReply("Invalid FC");
 		let targetUser = Users(giver);
 		if (!targetUser || !targetUser.connected) return this.errorReply(`User '${giver}' is not online.`);
-		if (!this.can('warn', null, room) && !(this.can('broadcast', null, room) && user === targetUser)) return this.errorReply("Permission denied.");
+		if (!user.can('warn', null, room) && !(user.can('broadcast', null, room) && user === targetUser)) return this.errorReply("/lg - Access denied.");
 		if (!targetUser.autoconfirmed) return this.errorReply(`User '${targetUser.name}' needs to be autoconfirmed to give something away.`);
 		if (Giveaway.checkBanned(room, targetUser)) return this.errorReply(`User '${targetUser.name}' is giveaway banned.`);
 

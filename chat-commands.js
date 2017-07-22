@@ -128,6 +128,34 @@ exports.commands = {
 			'How many digits of pi do YOU know? Test it out <a href="http://guangcongluo.com/mempi/">here</a>!');
 	},
 
+	code: function (target, room, user) {
+		if (!target) return this.parse('/help code');
+		if (!this.canTalk()) return;
+		const separator = '\n';
+		if (target.includes(separator)) {
+			const params = target.split(separator);
+			let output = [];
+			for (let i = 0; i < params.length; i++) {
+				output.push(Chat.escapeHTML(params[i]));
+			}
+			let code = `<div class="chat"><code style="white-space: pre-wrap; display: table">${output.join('<br />')}</code></div>`;
+			if (output.length > 3) code = `<details><summary>See code...</summary>${code}</details>`;
+
+			if (!this.canBroadcast('!code')) return;
+			if (this.broadcastMessage && !this.can('broadcast', null, room)) return false;
+
+			if (!this.runBroadcast('!code')) return;
+
+			this.sendReplyBox(code);
+		} else {
+			return this.errorReply("You can simply use ``[code]`` for code messages that are only one line.");
+		}
+	},
+	codehelp: [
+		"!code [code] - Broadcasts code to a room. Accepts multi-line arguments. Requires: + % @ & # ~",
+		"/code [code] - Shows you code. Accepts multi-line arguments.",
+	],
+
 	'!avatar': true,
 	avatar: function (target, room, user) {
 		if (!target) return this.parse('/avatars');
@@ -1795,6 +1823,7 @@ exports.commands = {
 		if (user.lastCommand !== '/unbanall' || target !== 'confirm') {
 			return this.parse('/help unbanall');
 		}
+		user.lastCommand = '';
 		Punishments.userids.clear();
 		Punishments.ips.clear();
 		Punishments.savePunishments();
@@ -1814,6 +1843,7 @@ exports.commands = {
 		if (user.lastCommand !== '/deroomvoiceall' || target !== 'confirm') {
 			return this.parse('/help deroomvoiceall');
 		}
+		user.lastCommand = '';
 		let count = 0;
 		for (let userid in room.auth) {
 			if (room.auth[userid] === '+') {
@@ -2208,6 +2238,11 @@ exports.commands = {
 		if (cmd === 'hidealtstext' || cmd === 'hidetextalts') {
 			this.addModCommand(`${targetUser.name}'s alts' messages were cleared from ${room.title} by ${user.name}.`);
 			this.add(`|unlink|${hidetype}${userid}`);
+
+			const alts = targetUser.getAltUsers(true);
+			for (let i = 0; i < alts.length; ++i) {
+				this.add(`|unlink|${hidetype}${alts[i].name}`);
+			}
 			for (let i in targetUser.prevNames) {
 				this.add(`|unlink|${hidetype}${targetUser.prevNames[i]}`);
 			}
@@ -2350,7 +2385,7 @@ exports.commands = {
 		if (user.lastCommand !== '/unblacklistall' || target !== 'confirm') {
 			return this.parse('/help unblacklistall');
 		}
-
+		user.lastCommand = '';
 		let unblacklisted = Punishments.roomUnblacklistAll(room);
 		if (!unblacklisted) return this.errorReply("No users are currently blacklisted in this room to unblacklist.");
 		this.addModCommand(`All blacklists in this room have been lifted by ${user.name}.`);
@@ -2888,13 +2923,14 @@ exports.commands = {
 		if (!user.hasConsoleAccess(connection)) {
 			return this.errorReply("/bash - Access denied.");
 		}
+		if (!target) return this.parse('/help bash');
 
 		connection.sendTo(room, "$ " + target);
-		let exec = require('child_process').exec;
-		exec(target, (error, stdout, stderr) => {
+		require('child_process').exec(target, (error, stdout, stderr) => {
 			connection.sendTo(room, ("" + stdout + stderr));
 		});
 	},
+	bashhelp: ["/bash [command] - Executes a bash command on the server. Requires: ~ console access"],
 
 	eval: function (target, room, user, connection) {
 		if (!user.hasConsoleAccess(connection)) {
@@ -3479,7 +3515,7 @@ exports.commands = {
 		} else if (!target) {
 			this.sendReply("COMMANDS: /msg, /reply, /logout, /challenge, /search, /rating, /whois");
 			this.sendReply("OPTION COMMANDS: /nick, /avatar, /ignore, /away, /back, /timestamps, /highlight");
-			this.sendReply("INFORMATIONAL COMMANDS: /data, /dexsearch, /movesearch, /groups, /faq, /rules, /intro, /formatshelp, /othermetas, /learn, /analysis, /calc (replace / with ! to broadcast. Broadcasting requires: + % @ * # & ~)");
+			this.sendReply("INFORMATIONAL COMMANDS: /data, /dexsearch, /movesearch, /itemsearch, /groups, /faq, /rules, /intro, /formatshelp, /othermetas, /learn, /analysis, /calc (replace / with ! to broadcast. Broadcasting requires: + % @ * # & ~)");
 			if (user.group !== Config.groupsranking[0]) {
 				this.sendReply("DRIVER COMMANDS: /warn, /mute, /hourmute, /unmute, /alts, /forcerename, /modlog, /modnote, /lock, /unlock, /announce, /redirect");
 				this.sendReply("MODERATOR COMMANDS: /ban, /unban, /ip, /modchat");
@@ -3532,6 +3568,6 @@ exports.commands = {
 process.nextTick(() => {
 	// We might want to migrate most of this to a JSON schema of command attributes.
 	Chat.multiLinePattern.register(
-		'>>>? ', '/(?:room|staff)intro ', '/(?:staff)?topic ', '/(?:add|widen)datacenters ', '/bash '
+		'>>>? ', '/(?:room|staff)intro ', '/(?:staff)?topic ', '/(?:add|widen)datacenters ', '/bash ', '!code ', '/code '
 	);
 });

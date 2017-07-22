@@ -9,9 +9,9 @@ For large projects, please discuss with us at http://psim.us/development first. 
 License
 ------------------------------------------------------------------------
 
-Your submitted code should be MIT licensed (for simplicity, it should be MIT licensed even if you're submitting client code). The first time you make a pull request, we'll ask you to explicitly state that you agree to MIT license it, just to be safe.
+Your submitted code should be MIT licensed (for simplicity, it should be MIT licensed even if you're submitting client code). The first time you make a client pull request, we'll ask you to explicitly state that you agree to MIT license it, just to be safe.
 
-Even if we forget, we'll take the fact that your pull request contains a LICENSE file that says "MIT licensed" as evidence that your submitted code is MIT licensed. GitHub's ToS also makes you use the license when you submit a pull request.
+On the server, we won't do this, because GitHub's ToS makes you use the included license when you submit a pull request.
 
 
 Commit standards

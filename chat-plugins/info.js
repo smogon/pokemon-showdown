@@ -1222,7 +1222,7 @@ exports.commands = {
 			this.sendReplyBox(
 				"Have a replay showcasing a bug on Pok&eacute;mon Showdown?<br />" +
 				"- <a href=\"https://www.smogon.com/forums/threads/3520646/\">Questions</a><br />" +
-				"- <a href=\"https://www.smogon.com/forums/threads/3469932/\">Bug Reports</a>"
+				"- <a href=\"https://www.smogon.com/forums/threads/3469932/\">Bug Reports</a> (ask in <a href=\"/help\">Help</a> before posting in the thread if you're unsure)"
 			);
 		}
 	},
@@ -1316,42 +1316,6 @@ exports.commands = {
 			"- <a href=\"https://replay.pokemonshowdown.com/gennextou-130756055\">NickMP vs Khalogie</a>"
 		);
 	},
-
-	'!othermetas': true,
-	om: 'othermetas',
-	othermetas: function (target, room, user) {
-		if (!this.runBroadcast()) return;
-		target = toId(target);
-		let buffer = "";
-
-		if (target === 'all' && this.broadcasting) {
-			return this.sendReplyBox("You cannot broadcast information about all Other Metagames at once.");
-		}
-
-		if (!target || target === 'all') {
-			buffer += "- <a href=\"https://www.smogon.com/forums/forums/other-metagames.394/\">Other Metagames Forum</a><br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/forums/om-analyses.416/\">Other Metagames Analyses</a><br />";
-			if (!target) return this.sendReplyBox(buffer);
-		}
-		let showMonthly = (target === 'all' || target === 'omofthemonth' || target === 'omotm' || target === 'month');
-
-		if (target === 'all') {
-			// Display OMotM formats, with forum thread links as caption
-			this.parse('/formathelp omofthemonth');
-
-			// Display the rest of OM formats, with OM hub/index forum links as caption
-			this.parse('/formathelp othermetagames');
-			return this.sendReply('|raw|<center>' + buffer + '</center>');
-		}
-		if (showMonthly) {
-			this.target = 'omofthemonth';
-			this.run('formathelp');
-		} else {
-			this.run('formathelp');
-		}
-	},
-	othermetashelp: ["/om - Provides links to information on the Other Metagames.",
-		"!om - Show everyone that information. Requires: + % @ * # & ~"],
 
 	'!formathelp': true,
 	banlists: 'formathelp',

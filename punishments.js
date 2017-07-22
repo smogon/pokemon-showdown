@@ -69,7 +69,10 @@ Punishments.ips = new PunishmentMap();
  */
 Punishments.userids = new PunishmentMap();
 
-class NestedPunishmentMap extends Map/*:: <string, Map<string, Punishment>> */ {
+/**
+ * @augments {Map<string, Punishment>}
+ */
+class NestedPunishmentMap extends Map {
 	nestedSet(k1, k2, value) {
 		if (!this.get(k1)) {
 			this.set(k1, new Map());
@@ -876,7 +879,7 @@ Punishments.removeSharedIp = function (ip) {
  *********************************************************/
 
 Punishments.search = function (searchId) {
-	const foundKeys = [];
+	let foundKeys = [];
 	let foundRest = null;
 	Punishments.ips.forEach((punishment, ip) => {
 		const [, id, ...rest] = punishment;
@@ -1154,7 +1157,13 @@ Punishments.checkLockExpiration = function (userid) {
 		if (user && user.permalocked) return ` (never expires; you are permalocked)`;
 		let expiresIn = new Date(punishment[2]).getTime() - Date.now();
 		let expiresDays = Math.round(expiresIn / 1000 / 60 / 60 / 24);
-		if (expiresIn > 1) return ` (expires in around ${expiresDays} day${Chat.plural(expiresDays)})`;
+		let expiresText = '';
+		if (expiresDays >= 1) {
+			expiresText = `in around ${expiresDays} day${Chat.plural(expiresDays)}`;
+		} else {
+			expiresText = `soon`;
+		}
+		if (expiresIn > 1) return ` (expires ${expiresText})`;
 	}
 
 	return ``;

@@ -12,10 +12,6 @@
 let TeamValidator = module.exports = getValidator;
 let PM;
 
-function banReason(strings, reason) {
-	return reason && typeof reason === 'string' ? `banned by ${reason}` : `banned`;
-}
-
 class Validator {
 	constructor(format, customBanlist) {
 		this.format = Dex.getFormat(format, customBanlist);
@@ -38,7 +34,7 @@ class Validator {
 		let dex = this.dex;
 
 		let problems = [];
-		dex.getBanlistTable(format);
+		const ruleTable = dex.getRuleTable(format);
 		if (format.team) {
 			return false;
 		}
@@ -68,37 +64,26 @@ class Validator {
 			if (removeNicknames) team[i].name = team[i].baseSpecies;
 		}
 
-		for (let i = 0; i < format.teamBanTable.length; i++) {
-			let bannedCombo = true;
-			for (let j = 1; j < format.teamBanTable[i].length; j++) {
-				if (!teamHas[format.teamBanTable[i][j]]) {
-					bannedCombo = false;
-					break;
+		for (const [rule, source, limit, bans] of ruleTable.complexTeamBans) {
+			let count = 0;
+			for (const ban of bans) {
+				if (teamHas[ban] > 0) {
+					count += limit ? teamHas[ban] : 1;
 				}
 			}
-			if (bannedCombo) {
-				const reason = banReason`${format.name}`;
-				problems.push(`Your team has the combination of ${format.teamBanTable[i][0]}, which is ${reason}.`);
-			}
-		}
-
-		for (let i = 0; i < format.teamLimitTable.length; i++) {
-			let entry = format.teamLimitTable[i];
-			let count = 0;
-			for (let j = 3; j < entry.length; j++) {
-				if (teamHas[entry[j]] > 0) count += teamHas[entry[j]];
-			}
-			let limit = entry[2];
-			if (count > limit) {
-				let clause = entry[1] ? ` by ${entry[1]}` : ``;
-				problems.push(`You are limited to ${limit} of ${entry[0]}${clause}.`);
+			if (limit && count > limit) {
+				const clause = source ? ` by ${source}` : ``;
+				problems.push(`Your team has the combination of ${rule}, which is banned${clause}.`);
+			} else if (!limit && count >= bans.length) {
+				const clause = source ? ` by ${source}` : ``;
+				problems.push(`You are limited to ${limit} of ${rule}${clause}.`);
 			}
 		}
 
 		if (format.ruleset) {
 			for (let i = 0; i < format.ruleset.length; i++) {
 				let subformat = dex.getFormat(format.ruleset[i]);
-				if (subformat.onValidateTeam && format.banlistTable['Rule:' + subformat.id]) {
+				if (subformat.onValidateTeam && ruleTable.has(subformat.id)) {
 					problems = problems.concat(subformat.onValidateTeam.call(dex, team, format, teamHas) || []);
 				}
 			}
@@ -154,12 +139,12 @@ class Validator {
 		let lsetData = {set:set, format:format};
 
 		let setHas = {};
-		let banlistTable = dex.getBanlistTable(format);
+		const ruleTable = dex.getRuleTable(format);
 
 		if (format.ruleset) {
 			for (let i = 0; i < format.ruleset.length; i++) {
 				let subformat = dex.getFormat(format.ruleset[i]);
-				if (subformat.onChangeSet && banlistTable['Rule:' + subformat.id]) {
+				if (subformat.onChangeSet && ruleTable.has(subformat.id)) {
 					problems = problems.concat(subformat.onChangeSet.call(dex, set, format) || []);
 				}
 			}
@@ -170,7 +155,7 @@ class Validator {
 
 		if (!template) {
 			template = dex.getTemplate(set.species);
-			if (ability.id === 'battlebond' && template.id === 'greninja' && !banlistTable['Rule:ignoreillegalabilities']) {
+			if (ability.id === 'battlebond' && template.id === 'greninja' && !ruleTable.has('ignoreillegalabilities')) {
 				template = dex.getTemplate('greninjaash');
 				set.gender = 'M';
 			}
@@ -205,45 +190,38 @@ class Validator {
 			problems.push(`${set.species} has an invalid happiness.`);
 		}
 
-		let check = template.id;
-		setHas[check] = true;
-		if (banlistTable[check] || banlistTable[check + 'base']) {
-			const reason = banReason`${banlistTable[check]}`;
-			return [`${set.species} is ${reason}.`];
+		let banReason = ruleTable.check(template.id, setHas) || ruleTable.check(template.id + 'base', setHas);
+		if (banReason) {
+			return [`${set.species} is ${banReason}.`];
 		} else {
-			check = toId(template.baseSpecies);
-			if (banlistTable[check]) {
-				const reason = banReason`${banlistTable[check]}`;
-				return [`${template.baseSpecies} is ${reason}.`];
+			banReason = ruleTable.check(toId(template.baseSpecies), setHas);
+			if (banReason) {
+				return [`${template.baseSpecies} is ${banReason}.`];
 			}
 		}
 
-		check = toId(set.ability);
-		setHas[check] = true;
-		if (banlistTable[check]) {
-			const reason = banReason`${banlistTable[check]}`;
-			problems.push(`${name}'s ability ${set.ability} is ${reason}.`);
+		banReason = ruleTable.check(toId(set.ability), setHas);
+		if (banReason) {
+			problems.push(`${name}'s ability ${set.ability} is ${banReason}.`);
 		}
-		check = toId(set.item);
-		setHas[check] = true;
-		if (banlistTable[check]) {
-			const reason = banReason`${banlistTable[check]}`;
-			problems.push(`${name}'s item ${set.item} is ${reason}.`);
+		banReason = ruleTable.check(toId(set.item), setHas);
+		if (banReason) {
+			problems.push(`${name}'s item ${set.item} is ${banReason}.`);
 		}
-		if (banlistTable['Unreleased'] && item.isUnreleased) {
+		if (ruleTable.has('-unreleased') && item.isUnreleased) {
 			problems.push(`${name}'s item ${set.item} is unreleased.`);
 		}
-		if (banlistTable['Unreleased'] && template.isUnreleased) {
+		if (ruleTable.has('-unreleased') && template.isUnreleased) {
 			if (template.eggGroups[0] === 'Undiscovered' && !template.evos) {
 				problems.push(`${name} (${template.species}) is unreleased.`);
 			}
 		}
 		setHas[toId(set.ability)] = true;
-		if (banlistTable['illegal']) {
+		if (ruleTable.has('-illegal')) {
 			// Don't check abilities for metagames with All Abilities
 			if (dex.gen <= 2) {
 				set.ability = 'None';
-			} else if (!banlistTable['Rule:ignoreillegalabilities']) {
+			} else if (!ruleTable.has('ignoreillegalabilities')) {
 				if (!ability.name) {
 					problems.push(`${name} needs to have an ability.`);
 				} else if (!Object.values(template.abilities).includes(ability.name)) {
@@ -252,7 +230,7 @@ class Validator {
 				if (ability.name === template.abilities['H']) {
 					isHidden = true;
 
-					if (template.unreleasedHidden && banlistTable['Unreleased']) {
+					if (template.unreleasedHidden && ruleTable.has('-unreleased')) {
 						problems.push(`${name}'s hidden ability is unreleased.`);
 					} else if (set.species.endsWith('Orange') || set.species.endsWith('White') && ability.name === 'Symbiosis') {
 						problems.push(`${name}'s hidden ability is unreleased for the Orange and White forms.`);
@@ -286,11 +264,9 @@ class Validator {
 				if (!set.moves[i]) continue;
 				let move = dex.getMove(Dex.getString(set.moves[i]));
 				if (!move.exists) return [`"${move.name}" is an invalid move.`];
-				check = move.id;
-				setHas[check] = true;
-				if (banlistTable[check]) {
-					const reason = banReason`${banlistTable[check]}`;
-					problems.push(`${name}'s move ${move.name} is ${reason}.`);
+				banReason = ruleTable.check(move.id, setHas);
+				if (banReason) {
+					problems.push(`${name}'s move ${move.name} is ${banReason}.`);
 				}
 
 				// Note that we don't error out on multiple Hidden Power types
@@ -299,16 +275,16 @@ class Validator {
 					set.hpType = move.type;
 				}
 
-				if (banlistTable['Unreleased']) {
+				if (ruleTable.has('-unreleased')) {
 					if (move.isUnreleased) problems.push(`${name}'s move ${move.name} is unreleased.`);
 				}
 
-				if (banlistTable['illegal']) {
+				if (ruleTable.has('-illegal')) {
 					let problem = this.checkLearnset(move, template, lsetData);
 					if (problem) {
 						// Sketchmons hack
 						const noSketch = format.noSketch || dex.getFormat('gen7sketchmons').noSketch;
-						if (banlistTable['Rule:allowonesketch'] && noSketch.indexOf(move.name) < 0 && !set.sketchmonsMove && !move.noSketch && !move.isZ) {
+						if (ruleTable.has('allowonesketch') && noSketch.indexOf(move.name) < 0 && !set.sketchmonsMove && !move.noSketch && !move.isZ) {
 							set.sketchmonsMove = move.id;
 							continue;
 						}
@@ -331,7 +307,7 @@ class Validator {
 			}
 
 			const canBottleCap = (dex.gen >= 7 && set.level === 100);
-			if (set.hpType && maxedIVs && banlistTable['Rule:pokemon']) {
+			if (set.hpType && maxedIVs && ruleTable.has('pokemon')) {
 				if (dex.gen <= 2) {
 					let HPdvs = dex.getType(set.hpType).HPdvs;
 					set.ivs = {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30};
@@ -342,14 +318,14 @@ class Validator {
 					set.ivs = Validator.fillStats(dex.getType(set.hpType).HPivs, 31);
 				}
 			}
-			if (set.hpType === 'Fighting' && banlistTable['Rule:pokemon']) {
+			if (set.hpType === 'Fighting' && ruleTable.has('pokemon')) {
 				if (template.gen >= 6 && template.eggGroups[0] === 'Undiscovered' && !template.nfe && (template.baseSpecies !== 'Diancie' || !set.shiny)) {
 					// Legendary Pokemon must have at least 3 perfect IVs in gen 6+
 					problems.push(`${name} must not have Hidden Power Fighting because it starts with 3 perfect IVs because it's a gen 6+ legendary.`);
 				}
 			}
 			const ivHpType = dex.getHiddenPower(set.ivs).type;
-			if (!canBottleCap && banlistTable['Rule:pokemon'] && set.hpType && set.hpType !== ivHpType) {
+			if (!canBottleCap && ruleTable.has('pokemon') && set.hpType && set.hpType !== ivHpType) {
 				problems.push(`${name} has Hidden Power ${set.hpType}, but its IVs are for Hidden Power ${ivHpType}.`);
 			}
 			if (dex.gen <= 2) {
@@ -497,7 +473,7 @@ class Validator {
 					let eventProblems = this.validateSource(set, lsetData.sources[0], template, ` because it has a move only available`);
 					if (eventProblems) problems.push(...eventProblems);
 				}
-			} else if (banlistTable['illegal'] && template.eventOnly) {
+			} else if (ruleTable.has('-illegal') && template.eventOnly) {
 				let eventTemplate = !template.learnset && template.baseSpecies !== template.species ? dex.getTemplate(template.baseSpecies) : template;
 				let eventPokemon = eventTemplate.eventPokemon;
 				let legal = false;
@@ -545,7 +521,7 @@ class Validator {
 					}
 				}
 			}
-			if (banlistTable['illegal'] && set.level < template.evoLevel) {
+			if (ruleTable.has('-illegal') && set.level < template.evoLevel) {
 				// FIXME: Event pokemon given at a level under what it normally can be attained at gives a false positive
 				problems.push(`${name} must be at least level ${template.evoLevel} to be evolved.`);
 			}
@@ -562,15 +538,13 @@ class Validator {
 		if (item.megaEvolves === template.species) {
 			template = dex.getTemplate(item.megaStone);
 		}
-		if (banlistTable['mega'] && template.forme in {'Mega': 1, 'Mega-X': 1, 'Mega-Y': 1}) {
+		if (ruleTable.has('-mega') && template.forme in {'Mega': 1, 'Mega-X': 1, 'Mega-Y': 1}) {
 			problems.push(`Mega evolutions are banned.`);
 		}
 		if (template.tier) {
-			let tier = template.tier;
-			if (tier.charAt(0) === '(') tier = tier.slice(1, -1);
-			setHas[toId(tier)] = true;
-			if (banlistTable[tier] && banlistTable[template.id] !== false) {
-				problems.push(`${template.species} is in ${tier}, which is banned.`);
+			banReason = ruleTable.check(toId(template.tier), setHas);
+			if (banReason && !ruleTable.has('+' + template.id)) {
+				problems.push(`${template.species} is in ${template.tier}, which is ${banReason}.`);
 			}
 		}
 
@@ -583,24 +557,26 @@ class Validator {
 				}
 			}
 		}
-		for (let i = 0; i < format.setBanTable.length; i++) {
-			let bannedCombo = true;
-			for (let j = 1; j < format.setBanTable[i].length; j++) {
-				if (!setHas[format.setBanTable[i][j]]) {
-					bannedCombo = false;
-					break;
+		for (const [rule, source, limit, bans] of ruleTable.complexBans) {
+			let count = 0;
+			for (const ban of bans) {
+				if (setHas[ban] > 0) {
+					count += limit ? setHas[ban] : 1;
 				}
 			}
-			if (bannedCombo) {
-				const reason = banReason`${format.name}`;
-				problems.push(`${name} has the combination of ${format.setBanTable[i][0]}, which is ${reason}.`);
+			if (limit && count > limit) {
+				const clause = source ? ` by ${source}` : ``;
+				problems.push(`${name} is limited to ${limit} of ${rule}${clause}.`);
+			} else if (!limit && count >= bans.length) {
+				const clause = source ? ` by ${source}` : ``;
+				problems.push(`${name} has the combination of ${rule}, which is banned${clause}.`);
 			}
 		}
 
 		if (format.ruleset) {
 			for (let i = 0; i < format.ruleset.length; i++) {
 				let subformat = dex.getFormat(format.ruleset[i]);
-				if (subformat.onValidateSet && banlistTable['Rule:' + subformat.id]) {
+				if (subformat.onValidateSet && ruleTable.has(subformat.id)) {
 					problems = problems.concat(subformat.onValidateSet.call(dex, set, format, setHas, teamHas) || []);
 				}
 			}
@@ -805,7 +781,8 @@ class Validator {
 
 		lsetData = lsetData || {};
 		let set = (lsetData.set || (lsetData.set = {}));
-		let format = (lsetData.format || (lsetData.format = {}));
+		let format = (lsetData.format = dex.getFormat(lsetData.format));
+		let ruleTable = dex.getRuleTable(format);
 		let alreadyChecked = {};
 		let level = set.level || 100;
 
@@ -852,7 +829,7 @@ class Validator {
 		 * The format doesn't allow Pokemon traded from the future
 		 * (This is everything except in Gen 1 Tradeback)
 		 */
-		const noFutureGen = !(format.banlistTable && format.banlistTable['Rule:allowtradeback']);
+		const noFutureGen = !dex.getRuleTable(format).has('allowtradeback');
 		/**
 		 * If a move can only be learned from a gen 2-5 egg, we have to check chainbreeding validity
 		 * limitedEgg is false if there are any legal non-egg sources for the move, and true otherwise
@@ -864,13 +841,13 @@ class Validator {
 			alreadyChecked[template.speciesid] = true;
 			if (dex.gen === 2 && template.gen === 1) tradebackEligible = true;
 			// STABmons hack
-			if (format.banlistTable && format.banlistTable['ignorestabmoves'] && !(moveid in {'acupressure':1, 'bellydrum':1, 'chatter':1, 'geomancy':1, 'shellsmash':1, 'shiftgear':1, 'thousandarrows':1}) && !move.isZ) {
+			if (ruleTable.has('ignorestabmoves') && !(moveid in {'acupressure':1, 'bellydrum':1, 'chatter':1, 'geomancy':1, 'shellsmash':1, 'shiftgear':1, 'thousandarrows':1}) && !move.isZ) {
 				let types = template.types;
 				if (template.baseSpecies === 'Rotom') types = ['Electric', 'Ghost', 'Fire', 'Water', 'Ice', 'Flying', 'Grass'];
 				if (template.baseSpecies === 'Shaymin') types = ['Grass', 'Flying'];
 				if (template.baseSpecies === 'Hoopa') types = ['Psychic', 'Ghost', 'Dark'];
 				if (template.baseSpecies === 'Oricorio') types = ['Fire', 'Flying', 'Electric', 'Psychic', 'Ghost'];
-				if (template.baseSpecies === 'Silvally' || types.includes(move.type)) return false;
+				if (template.baseSpecies === 'Arceus' || template.baseSpecies === 'Silvally' || types.includes(move.type)) return false;
 			}
 			if (!template.learnset) {
 				if (template.baseSpecies !== template.species) {

@@ -10201,7 +10201,7 @@ exports.BattleMovedex = {
 				if (move.isZ || move.isNonstandard) continue;
 				if (effect.noMetronome[move.id]) continue;
 				if (this.getMove(i).gen > this.gen) continue;
-				moves.push(i);
+				moves.push(move);
 			}
 			let randomMove = '';
 			if (moves.length) {
@@ -19015,7 +19015,7 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 120,
 		category: "Physical",
-		desc: "Has a 100% chance to confuse the target and lower its Defense and Special Attack by 1 stage. The user recovers 1/2 the HP lost by the target, rounded half up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down. If this move is successful, the weather changes to rain unless it is already in effect, and the user gains the effects of Aqua Ring and Magic Coat.",
+		desc: "Has a 100% chance to confuse the target and lower its Defense and Special Attack by 1 stage. The user recovers 1/2 the HP lost by the target, rounded half up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down. The user steals the foe's boosts. If this move is successful, the weather changes to rain unless it is already in effect, and the user gains the effects of Aqua Ring and Magic Coat.",
 		shortDesc: "Does many things turn 1. Can't move turn 2.",
 		id: "magikarpsrevenge",
 		isNonstandard: true,

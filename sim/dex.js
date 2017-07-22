@@ -46,27 +46,11 @@ const fs = require('fs');
 const path = require('path');
 
 const Data = require('./dex-data');
-const {Effect, PureEffect, Format, Item, Template, Move, Ability} = Data; // eslint-disable-line no-unused-vars
+const {Effect, PureEffect, RuleTable, Format, Item, Template, Move, Ability} = Data; // eslint-disable-line no-unused-vars
 
 const DATA_DIR = path.resolve(__dirname, '../data');
 const MODS_DIR = path.resolve(__dirname, '../mods');
 const FORMATS = path.resolve(__dirname, '../config/formats');
-
-// shim Object.values
-if (!Object.values) {
-	// @ts-ignore
-	Object.values = function (object) {
-		let values = [];
-		for (let k in object) values.push(object[k]);
-		return values;
-	};
-	// @ts-ignore
-	Object.entries = function (object) {
-		let entries = [];
-		for (let k in object) entries.push([k, object[k]]);
-		return entries;
-	};
-}
 
 // shim padStart
 // if (!String.prototype.padStart) {
@@ -169,6 +153,7 @@ class ModdedDex {
 		this.getString = Data.Tools.getString;
 		this.getId = Data.Tools.getId;
 		this.ModdedDex = ModdedDex;
+		this.Data = Data;
 	}
 
 	/**
@@ -504,39 +489,34 @@ class ModdedDex {
 			let format = this.data.Formats[id];
 			if (customBanlist) {
 				if (typeof customBanlist === 'string') customBanlist = customBanlist.split(',');
-				if (!format.banlistTable) this.getBanlistTable(format);
-				format = Object.assign({}, format);
-				format.customBanlist = customBanlist;
-				format.banlist = format.banlist ? format.banlist.slice() : [];
-				format.unbanlist = format.unbanlist ? format.unbanlist.slice() : [];
-				format.ruleset = format.baseRuleset.slice();
-				for (let i = 0; i < customBanlist.length; i++) {
-					let ban = customBanlist[i];
+				let customRules = [];
+				for (let ban of customBanlist) {
 					let unban = false;
 					if (ban.charAt(0) === '!') {
 						unban = true;
 						ban = ban.substr(1);
 					}
 					if (ban.startsWith('Rule:')) {
-						ban = ban.substr(5);
+						ban = ban.substr(5).trim();
 						if (unban) {
-							ban = 'Rule:' + toId(ban);
-							if (!format.unbanlist.includes(ban)) format.unbanlist.push(ban);
+							customRules.unshift('!' + ban);
 						} else {
-							if (!format.ruleset.includes(ban)) format.ruleset.push(ban);
+							customRules.push(ban);
 						}
 					} else {
 						if (unban) {
-							if (!format.unbanlist.includes(ban)) format.unbanlist.push(ban);
+							customRules.push('+' + ban);
 						} else {
-							if (!format.banlist.includes(ban)) format.banlist.push(ban);
+							customRules.push('-' + ban);
 						}
 					}
 				}
-				delete format.banlistTable;
+				effect = new Data.Format({name}, format, {customRules});
+				if (customId === 'pokemon') throw new Error('wtf');
 				if (customId) this.data.Formats[customId] = format;
+			} else {
+				effect = new Data.Format({name}, format);
 			}
-			effect = new Data.Format({name}, format);
 		} else if (this.data.Formats.hasOwnProperty(name)) {
 			effect = new Data.Format({name}, this.data.Formats[name]);
 		} else {
@@ -708,142 +688,86 @@ class ModdedDex {
 	}
 
 	/**
-	 * @param {AnyObject} format
-	 * @param {AnyObject} [subformat]
+	 * @param {Format} format
 	 * @param {number} [depth = 0]
-	 * @return {AnyObject}
+	 * @return {RuleTable}
 	 */
-	getBanlistTable(format, subformat, depth = 0) {
-		let banlistTable;
-		if (depth > 8) return {}; // avoid infinite recursion
-		if (format.banlistTable && !subformat) {
-			banlistTable = format.banlistTable;
-		} else {
-			if (!format.banlistTable) format.banlistTable = {};
-			if (!format.setBanTable) format.setBanTable = [];
-			if (!format.teamBanTable) format.teamBanTable = [];
-			if (!format.teamLimitTable) format.teamLimitTable = [];
+	getRuleTable(format, depth = 0) {
+		/** @type {RuleTable} */
+		let ruleTable = new RuleTable();
+		if (format.ruleTable) return format.ruleTable;
 
-			banlistTable = format.banlistTable;
-			if (!subformat) subformat = format;
-			if (subformat.unbanlist) {
-				for (let i = 0; i < subformat.unbanlist.length; i++) {
-					banlistTable[subformat.unbanlist[i]] = false;
-					banlistTable[toId(subformat.unbanlist[i])] = false;
-				}
-			}
-			if (subformat.banlist) {
-				for (let i = 0; i < subformat.banlist.length; i++) {
-					// don't revalidate what we already validate
-					if (banlistTable[toId(subformat.banlist[i])] !== undefined) continue;
-
-					banlistTable[subformat.banlist[i]] = subformat.name || true;
-					banlistTable[toId(subformat.banlist[i])] = subformat.name || true;
-
-					let complexList;
-					if (subformat.banlist[i].includes('>')) {
-						complexList = subformat.banlist[i].split('>');
-						let limit = parseInt(complexList[1]);
-						let banlist = complexList[0].trim();
-						complexList = banlist.split('+').map(toId);
-						complexList.unshift(banlist, subformat.name, limit);
-						format.teamLimitTable.push(complexList);
-					} else if (subformat.banlist[i].includes('+')) {
-						if (subformat.banlist[i].includes('++')) {
-							complexList = subformat.banlist[i].split('++');
-							let banlist = complexList.join('+');
-							for (let j = 0; j < complexList.length; j++) {
-								complexList[j] = toId(complexList[j]);
-							}
-							complexList.unshift(banlist);
-							format.teamBanTable.push(complexList);
-						} else {
-							complexList = subformat.banlist[i].split('+');
-							for (let j = 0; j < complexList.length; j++) {
-								complexList[j] = toId(complexList[j]);
-							}
-							complexList.unshift(subformat.banlist[i]);
-							format.setBanTable.push(complexList);
-						}
-					}
-				}
-			}
-			if (subformat.ruleset) {
-				for (let i = 0; i < subformat.ruleset.length; i++) {
-					// don't revalidate what we already validate
-					if (banlistTable['Rule:' + toId(subformat.ruleset[i])] !== undefined) continue;
-
-					banlistTable['Rule:' + toId(subformat.ruleset[i])] = subformat.ruleset[i];
-					if (!format.ruleset.includes(subformat.ruleset[i])) format.ruleset.push(subformat.ruleset[i]);
-
-					let subsubformat = this.getFormat(subformat.ruleset[i]);
-					if (subsubformat.ruleset || subsubformat.banlist) {
-						this.getBanlistTable(format, subsubformat, depth + 1);
-					}
+		const ruleset = format.ruleset.slice();
+		for (const ban of format.banlist) {
+			ruleset.push('-' + ban);
+		}
+		for (const ban of format.unbanlist) {
+			ruleset.push('+' + ban);
+		}
+		if (format.customRules) {
+			for (const rule of format.customRules) {
+				if (rule.startsWith('!')) {
+					ruleset.unshift(rule);
+				} else {
+					ruleset.push(rule);
 				}
 			}
 		}
-		return banlistTable;
-	}
 
-	/**
-	 * @param {string | Format} format
-	 * @param {string | string[]} params
-	 * @return {string[]}
-	 */
-	getSupplementaryBanlist(format, params) {
-		format = this.getFormat(format);
-		if (typeof params === 'string') params = params.split(',');
-		if (!format.banlistTable) format.banlistTable = this.getBanlistTable(format);
-		let banlist = [];
-		for (let i = 0; i < params.length; i++) {
-			let param = params[i].trim();
-			let unban = false;
-			if (param.charAt(0) === '!') {
-				unban = true;
-				param = param.substr(1);
-			}
-			let ban, oppositeBan;
-			let subformat = this.getFormat(param);
-			if (subformat.effectType === 'ValidatorRule' || subformat.effectType === 'Rule' || subformat.effectType === 'Format') {
-				if (unban) {
-					if (format.banlistTable['Rule:' + subformat.id] === false) continue;
-				} else {
-					if (format.banlistTable['Rule:' + subformat.id]) continue;
+		for (const rule of ruleset) {
+			if (rule.charAt(0) === '-' || rule.charAt(0) === '+') { // ban or unban
+				const type = rule.charAt(0);
+				let buf = rule.slice(1);
+				const gtIndex = buf.lastIndexOf('>');
+				let limit = 0;
+				if (gtIndex >= 0 && /^[0-9]+$/.test(buf.slice(gtIndex + 1).trim())) {
+					limit = parseInt(buf.slice(gtIndex + 1));
+					buf = buf.slice(0, gtIndex);
 				}
-				ban = 'Rule:' + subformat.name;
-			} else {
-				param = param.toLowerCase();
-				let baseForme = false;
-				if (param.endsWith('-base')) {
-					baseForme = true;
-					param = param.substr(0, param.length - 5);
+				let checkTeam = buf.includes('++');
+				const banNames = buf.split(checkTeam ? '++' : '+').map(v => v.trim());
+				if (banNames.length === 1 && limit > 0) checkTeam = true;
+				const innerRule = banNames.join(checkTeam ? ' ++ ' : ' + ');
+				const bans = banNames.map(v => toId(v));
+
+				if (checkTeam) {
+					ruleTable.complexTeamBans.push([innerRule, '', limit, bans]);
+					continue;
 				}
-				let search = this.dataSearch(param);
-				if (!search || search.length < 1) continue;
-				if (search[0].isInexact || search[0].searchType === 'nature') continue;
-				ban = search[0].name;
-				if (baseForme) ban += '-Base';
-				if (unban) {
-					if (format.banlistTable[ban] === false) continue;
-				} else {
-					if (format.banlistTable[ban]) continue;
+				if (bans.length > 1 || limit > 0) {
+					ruleTable.complexBans.push([innerRule, '', limit, bans]);
 				}
+				const ban = toId(buf);
+				ruleTable.delete('+' + ban);
+				ruleTable.delete('-' + ban);
+				ruleTable.set(type + ban, '');
+				continue;
 			}
-			if (unban) {
-				oppositeBan = ban;
-				ban = '!' + ban;
-			} else {
-				oppositeBan = '!' + ban;
+			if (rule.startsWith('!')) {
+				ruleTable.set('!' + toId(rule), '');
+				continue;
 			}
-			let index = banlist.indexOf(oppositeBan);
-			if (index > -1) {
-				banlist.splice(index, 1);
-			} else {
-				banlist.push(ban);
+			const subformat = this.getFormat(rule);
+			if (ruleTable.has('!' + subformat.id)) continue;
+			ruleTable.set(subformat.id, '');
+			if (!subformat.exists) continue;
+			if (depth > 16) {
+				throw new Error(`Excessive ruleTable recursion in ${format.name}: ${rule} of ${format.ruleset}`);
+			}
+			const subRuleTable = this.getRuleTable(subformat, depth + 1);
+			subRuleTable.forEach((v, k) => {
+				ruleTable.set(k, v || subformat.name);
+			});
+			for (const [rule, source, limit, bans] of subRuleTable.complexBans) {
+				ruleTable.complexBans.push([rule, source || subformat.name, limit, bans]);
+			}
+			for (const [rule, source, limit, bans] of subRuleTable.complexTeamBans) {
+				ruleTable.complexTeamBans.push([rule, source || subformat.name, limit, bans]);
 			}
 		}
-		return banlist;
+
+		format.ruleTable = ruleTable;
+		return ruleTable;
 	}
 
 	/**

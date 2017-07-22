@@ -1,10 +1,6 @@
 'use strict';
 
 exports.BattleItems = {
-	aggronite: {
-		inherit: true,
-		isUnreleased: false,
-	},
 	aguavberry: {
 		inherit: true,
 		onUpdate: function (pokemon) {

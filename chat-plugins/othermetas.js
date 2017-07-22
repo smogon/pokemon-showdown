@@ -2,6 +2,43 @@
 'use strict';
 
 exports.commands = {
+	'!othermetas': true,
+	om: 'othermetas',
+	othermetas: function (target, room, user) {
+		if (!this.runBroadcast()) return;
+		target = toId(target);
+		let buffer = "";
+
+		if (target === 'all' && this.broadcasting) {
+			return this.sendReplyBox("You cannot broadcast information about all Other Metagames at once.");
+		}
+
+		if (!target || target === 'all') {
+			buffer += "- <a href=\"https://www.smogon.com/forums/forums/other-metagames.394/\">Other Metagames Forum</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/forums/om-analyses.416/\">Other Metagames Analyses</a><br />";
+			if (!target) return this.sendReplyBox(buffer);
+		}
+		let showMonthly = (target === 'all' || target === 'omofthemonth' || target === 'omotm' || target === 'month');
+
+		if (target === 'all') {
+			// Display OMotM formats, with forum thread links as caption
+			this.parse('/formathelp omofthemonth');
+
+			// Display the rest of OM formats, with OM hub/index forum links as caption
+			this.parse('/formathelp othermetagames');
+			return this.sendReply('|raw|<center>' + buffer + '</center>');
+		}
+		if (showMonthly) {
+			this.target = 'omofthemonth';
+			this.run('formathelp');
+		} else {
+			this.run('formathelp');
+		}
+	},
+	othermetashelp: ["/om - Provides links to information on the Other Metagames.",
+		"!om - Show everyone that information. Requires: + % @ * # & ~"],
+
+	'!mixandmega': true,
 	mnm: 'mixandmega',
 	mixandmega: function (target, room, user) {
 		if (!this.runBroadcast()) return;
@@ -110,6 +147,7 @@ exports.commands = {
 	},
 	mixandmegahelp: ["/mnm <pokemon> @ <mega stone> - Shows the Mix and Mega evolved Pokemon's type and stats."],
 
+	'!350cup': true,
 	'350': '350cup',
 	'350cup': function (target, room, user) {
 		if (!this.runBroadcast()) return;
@@ -129,6 +167,7 @@ exports.commands = {
 	},
 	'350cuphelp': ["/350 OR /350cup <pokemon> - Shows the base stats that a Pokemon would have in 350 Cup."],
 
+	'!tiershift': true,
 	ts: 'tiershift',
 	tiershift: function (target, room, user) {
 		if (!this.runBroadcast()) return;
