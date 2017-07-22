@@ -198,16 +198,21 @@ exports.BattleScripts = {
 					if (!hasMove['substitute'] || counter.damagingMoves.length < 2) rejected = true;
 					if (hasMove['hammerarm']) rejected = true;
 					break;
-				case 'rest': {
+				case 'raindance':
+					if (counter.Physical + counter.Special < 2 && !(hasAbility['Hydration'] && hasMove['rest'])) rejected = true;
+					break;
+				case 'rest':
 					if (movePool.includes('sleeptalk')) rejected = true;
 					break;
-				}
 				case 'sleeptalk':
 					if (!hasMove['rest']) rejected = true;
 					if (movePool.length > 1) {
 						let rest = movePool.indexOf('rest');
 						if (rest >= 0) this.fastPop(movePool, rest);
 					}
+					break;
+				case 'sunnyday':
+					if (!hasMove['solarbeam']) rejected = true;
 					break;
 
 				// Set up once and only if we have the moves for it
@@ -237,7 +242,7 @@ exports.BattleScripts = {
 					if (counter.setupType && !hasAbility['Speed Boost']) rejected = true;
 					break;
 				case 'protect':
-					if (!(hasAbility['Speed Boost'] || hasAbility['Guts'] || hasAbility['Quick Feet'] || hasMove['Wish'] || hasMove['Toxic'])) rejected = true;
+					if (!(hasAbility['Guts'] || hasAbility['Quick Feet'] || hasAbility['Speed Boost'] || hasMove['Toxic'] || hasMove['Wish'])) rejected = true;
 					break;
 				case 'wish':
 					if (!(hasMove['Protect'] || hasMove['U-turn'] || hasMove['Baton Pass'])) rejected = true;
@@ -272,18 +277,10 @@ exports.BattleScripts = {
 				// Bit redundant to have both
 				// Attacks:
 				case 'bodyslam': case 'slash':
-					if (hasMove['return']) rejected = true;
-					if (hasMove['facade'] && (hasAbility['Guts'] || hasAbility['Quick Feet'] || hasAbility['Poison Heal'])) rejected = true;
+					if (hasMove['facade'] || hasMove['return']) rejected = true;
 					break;
 				case 'doubleedge':
-					if (hasMove['return'] || hasMove['bodyslam']) rejected = true;
-					if (hasMove['facade'] && (hasAbility['Guts'] || hasAbility['Quick Feet'] || hasAbility['Poison Heal'])) rejected = true;
-					break;
-				case 'return':
-					if (hasMove['facade'] && (hasAbility['Guts'] || hasAbility['Quick Feet'] || hasAbility['Poison Heal'])) rejected = true;
-					break;
-				case 'facade':
-					if (!(hasAbility['Guts'] || hasAbility['Quick Feet'] || hasAbility['Poison Heal'])) rejected = true;
+					if (hasMove['bodyslam'] || hasMove['facade'] || hasMove['return']) rejected = true;
 					break;
 				case 'judgment':
 					if (counter.setupType !== 'Special' && counter.stab > 1) rejected = true;
@@ -292,8 +289,7 @@ exports.BattleScripts = {
 					if (hasMove['thunderwave']) rejected = true;
 					break;
 				case 'firepunch': case 'flamethrower':
-					if (hasMove['fireblast']) rejected = true;
-					if (hasMove['overheat'] && !counter.setupType) rejected = true;
+					if (hasMove['fireblast'] || hasMove['overheat'] && !counter.setupType) rejected = true;
 					break;
 				case 'lavaplume':
 					if (hasMove['fireblast'] && !!counter['speedsetup']) rejected = true;
@@ -306,6 +302,9 @@ exports.BattleScripts = {
 				case 'overheat':
 					if (counter.setupType === 'Special' || hasMove['batonpass'] || hasMove['fireblast'] || hasMove['flareblitz']) rejected = true;
 					break;
+				case 'aquajet':
+					if (hasMove['waterfall'] && counter.Physical < 3) rejected = true;
+					break;
 				case 'hydropump':
 					if (hasMove['surf']) rejected = true;
 					break;
@@ -313,14 +312,11 @@ exports.BattleScripts = {
 					if (hasMove['aquatail']) rejected = true;
 					if ((hasMove['hydropump'] || hasMove['surf']) && counter.setupType !== 'Physical') rejected = true;
 					break;
-				case 'aqua jet':
-					if (hasMove['waterfall'] && counter.Physical < 3) rejected = true;
+				case 'chargebeam':
+					if (hasMove['thunderbolt'] && counter.Special < 3) rejected = true;
 					break;
 				case 'discharge':
 					if (hasMove['thunderbolt']) rejected = true;
-					break;
-				case 'chargebeam':
-					if (hasMove['thunderbolt'] && counter.Special < 3) rejected = true;
 					break;
 				case 'energyball': case 'seedbomb':
 					if (hasMove['grassknot'] || (hasMove['sunnyday'] && hasMove['solarbeam'])) rejected = true;
@@ -330,12 +326,6 @@ exports.BattleScripts = {
 					break;
 				case 'solarbeam':
 					if (counter.setupType === 'Physical' || !hasMove['sunnyday']) rejected = true;
-					break;
-				case 'sunnyday':
-					if (!hasMove['solarbeam']) rejected = true;
-					break;
-				case 'raindance':
-					if (counter.Physical + counter.Special < 2 && !(hasAbility['Hydration'] && hasMove['rest'])) rejected = true;
 					break;
 				case 'weatherball':
 					if (!hasMove['raindance'] && !hasMove['sunnyday']) rejected = true;
@@ -355,11 +345,11 @@ exports.BattleScripts = {
 				case 'gunkshot':
 					if (hasMove['poisonjab']) rejected = true;
 					break;
-				case 'zenheadbutt':
-					if (hasMove['psychocut']) rejected = true;
-					break;
 				case 'earthpower':
 					if (hasMove['earthquake']) rejected = true;
+					break;
+				case 'zenheadbutt':
+					if (hasMove['psychocut']) rejected = true;
 					break;
 				case 'rockslide':
 					if (hasMove['stoneedge']) rejected = true;
@@ -394,8 +384,7 @@ exports.BattleScripts = {
 					if (hasMove['toxic'] || hasMove['trickroom']) rejected = true;
 					break;
 				case 'encore':
-					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
-					if (hasMove['whirlwind'] || hasMove['roar'] || hasMove['taunt']) rejected = true;
+					if (hasMove['roar'] || hasMove['taunt'] || hasMove['whirlwind'] || hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					break;
 				}
 
