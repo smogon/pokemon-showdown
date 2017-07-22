@@ -345,6 +345,7 @@ function runDexsearch(target, cmd, canAll, message) {
 	let allEggGroups = {'amorphous':'Amorphous', 'bug':'Bug', 'ditto':'Ditto', 'dragon':'Dragon', 'fairy':'Fairy', 'field':'Field', 'flying':'Flying', 'grass':'Grass', 'humanlike':'Human-Like', 'mineral':'Mineral', 'monster':'Monster', 'undiscovered':'Undiscovered', 'water1':'Water 1', 'water2':'Water 2', 'water3':'Water 3'};
 	let allStats = {'hp':1, 'atk':1, 'def':1, 'spa':1, 'spd':1, 'spe':1, 'bst':1, 'weight':1, 'height':1};
 	let showAll = false;
+	let showText = false;
 	let megaSearch = null;
 	let capSearch = null;
 	let randomOutput = 0;
@@ -434,6 +435,13 @@ function runDexsearch(target, cmd, canAll, message) {
 				if (!canAll) return {reply: "A search with the parameter 'all' cannot be broadcast."};
 				if (parameters.length > 1) return {reply: "The parameter 'all' cannot have alternative parameters"};
 				showAll = true;
+				orGroup.skip = true;
+				break;
+			}
+
+			if (target === 'text') {
+				if (parameters.length > 1) return {reply: "The parameter 'text' cannot have alternative parameters"};
+				showText = true;
 				orGroup.skip = true;
 				break;
 			}
@@ -595,7 +603,7 @@ function runDexsearch(target, cmd, canAll, message) {
 			searches.push(orGroup);
 		}
 	}
-	if (showAll && searches.length === 0 && megaSearch === null) return {reply: "No search parameters other than 'all' were found. Try '/help dexsearch' for more information on this command."};
+	if ((showAll || showText) && searches.length === 0 && megaSearch === null) return {reply: "No search parameters other than 'all' or 'text' were found. Try '/help dexsearch' for more information on this command."};
 
 	let dex = {};
 	for (let pokemon in Dex.data.Pokedex) {
@@ -732,7 +740,7 @@ function runDexsearch(target, cmd, canAll, message) {
 			notShown = results.length - RESULTS_MAX_LENGTH;
 			results = results.slice(0, RESULTS_MAX_LENGTH);
 		}
-		resultsStr += results.map(result => `<a href="//dex.pokemonshowdown.com/pokemon/${toId(result)}" target="_blank" class="subtle" style="white-space:nowrap"><psicon pokemon="${result}" style="vertical-align:-7px;margin:-2px" />${result}</a>`).join(", ");
+		resultsStr += results.map(result => `<a href="//dex.pokemonshowdown.com/pokemon/${toId(result)}" target="_blank" class="subtle" style="white-space:nowrap">${(showText ? '' : `<psicon pokemon="${result}" style="vertical-align:-7px;margin:-2px" />`)}${result}</a>`).join(", ");
 		if (notShown) {
 			resultsStr += `, and ${notShown} more. <span style="color:#999999;">Redo the search with ', all' at the end to show all results.</span>`;
 		}
