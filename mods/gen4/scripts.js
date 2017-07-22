@@ -255,15 +255,15 @@ exports.BattleScripts = {
 				case 'stealthrock':
 					if (counter.setupType || !!counter['speedsetup'] || hasMove['rest'] || teamDetails.stealthRock) rejected = true;
 					break;
-				case 'reflect': case 'lightscreen':
-					if (counter.setupType) rejected = true;
+				case 'reflect': case 'lightscreen': case 'fakeout':
+					if (counter.setupType || !!counter['speedsetup'] || hasMove['substitute']) rejected = true;
 					break;
 				case 'switcheroo': case 'trick':
 					if (counter.Physical + counter.Special < 3 || counter.setupType) rejected = true;
 					if (hasMove['lightscreen'] || hasMove['reflect'] || hasMove['suckerpunch'] || hasMove['trickroom']) rejected = true;
 					break;
 				case 'toxic': case 'toxicspikes':
-					if (isSetup || counter.setupType || teamDetails.toxicSpikes) rejected = true;
+					if (counter.setupType || teamDetails.toxicSpikes) rejected = true;
 					break;
 				case 'trickroom':
 					if (counter.setupType || !!counter['speedsetup'] || counter.damagingMoves.length < 2) rejected = true;
@@ -319,7 +319,10 @@ exports.BattleScripts = {
 					if (hasMove['thunderbolt']) rejected = true;
 					break;
 				case 'energyball': case 'seedbomb':
-					if (hasMove['grassknot'] || (hasMove['sunnyday'] && hasMove['solarbeam'])) rejected = true;
+					if (hasMove['grassknot'] || hasMove['woodhammer'] || (hasMove['sunnyday'] && hasMove['solarbeam'])) rejected = true;
+					break;
+				case 'grassknot':
+					if (hasMove['woodhammer'] || (hasMove['sunnyday'] && hasMove['solarbeam'])) rejected = true;
 					break;
 				case 'leafstorm':
 					if (counter.setupType || hasMove['batonpass'] || hasMove['powerwhip'] || (hasMove['sunnyday'] && hasMove['solarbeam'])) rejected = true;
