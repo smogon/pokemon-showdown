@@ -6574,7 +6574,7 @@ exports.BattleFormatsData = {
 	},
 	flarelm: {
 		isNonstandard: true,
-		tier: "CAP LC",
+		tier: "CAP NFE",
 	},
 	breezi: {
 		isNonstandard: true,
@@ -6594,7 +6594,7 @@ exports.BattleFormatsData = {
 	},
 	argalis: {
 		isNonstandard: true,
-		tier: "CAP LC",
+		tier: "CAP NFE",
 	},
 	brattler: {
 		isNonstandard: true,
@@ -6618,7 +6618,7 @@ exports.BattleFormatsData = {
 	},
 	caimanoe: {
 		isNonstandard: true,
-		tier: "CAP LC",
+		tier: "CAP NFE",
 	},
 	pluffle: {
 		isNonstandard: true,
