@@ -226,7 +226,7 @@ class UNOgame extends Rooms.RoomGame {
 			if (!this.awaitUno) return resolve();
 
 			// the throttle for sending messages is at 600ms for non-authed users,
-			// wait 700ms before sending the next person's turn.
+			// wait 750ms before sending the next person's turn.
 			// this allows games to be fairer, so the next player would not spam the pass command blindly
 			// to force the player to draw 2 cards.
 			// this also makes games with uno bots not always turn in the bot's favour.
