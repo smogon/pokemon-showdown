@@ -112,7 +112,7 @@ exports.BattleFormats = {
 				problems.push((set.name || set.species) + ' is higher than level 100.');
 			}
 
-			if (!allowCAP || template.tier !== 'CAP') {
+			if (!allowCAP || !template.tier.startsWith('CAP')) {
 				if (template.isNonstandard) {
 					problems.push(set.species + ' does not exist.');
 				}
