@@ -421,7 +421,7 @@ class Trivia extends Rooms.RoomGame {
 			this.phaseTimeout = null;
 			this.broadcast(
 				'No questions are left!',
-				'The game has reached a stalemate',
+				'The game has reached a stalemate'
 			);
 			return this.destroy();
 		}
