@@ -214,6 +214,9 @@ exports.BattleScripts = {
 				case 'sunnyday':
 					if (!hasMove['solarbeam']) rejected = true;
 					break;
+				case 'weatherball':
+					if (!hasMove['raindance'] && !hasMove['sunnyday']) rejected = true;
+					break;
 
 				// Set up once and only if we have the moves for it
 				case 'bellydrum': case 'bulkup': case 'curse': case 'dragondance': case 'swordsdance':
@@ -329,9 +332,6 @@ exports.BattleScripts = {
 				case 'solarbeam':
 					if (counter.setupType === 'Physical' || !hasMove['sunnyday']) rejected = true;
 					break;
-				case 'weatherball':
-					if (!hasMove['raindance'] && !hasMove['sunnyday']) rejected = true;
-					break;
 				case 'icepunch':
 					if (!counter.setupType && hasMove['icebeam']) rejected = true;
 					break;
@@ -376,6 +376,9 @@ exports.BattleScripts = {
 					break;
 
 				// Status:
+				case 'encore':
+					if (hasMove['roar'] || hasMove['taunt'] || hasMove['whirlwind'] || hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
+					break;
 				case 'leechseed': case 'painsplit':
 					if (hasMove['moonlight'] || hasMove['rest'] || hasMove['rockpolish'] || hasMove['synthesis']) rejected = true;
 					break;
@@ -384,9 +387,6 @@ exports.BattleScripts = {
 					break;
 				case 'thunderwave':
 					if (hasMove['toxic'] || hasMove['trickroom']) rejected = true;
-					break;
-				case 'encore':
-					if (hasMove['roar'] || hasMove['taunt'] || hasMove['whirlwind'] || hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					break;
 				}
 
