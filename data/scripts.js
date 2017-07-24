@@ -2552,7 +2552,7 @@ exports.BattleScripts = {
 			if (set.moves.includes('toxicspikes')) teamDetails['toxicSpikes'] = 1;
 			if (set.moves.includes('defog') || set.moves.includes('rapidspin')) teamDetails['hazardClear'] = 1;
 		}
-		return pokemon;
+		return Dex.shuffle(pokemon);
 	},
 	randomDoublesSet: function (template, slot, teamDetails) {
 		let baseTemplate = (template = this.getTemplate(template));
