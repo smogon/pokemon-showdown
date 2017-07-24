@@ -80,12 +80,10 @@ class Validator {
 			}
 		}
 
-		if (format.ruleset) {
-			for (let i = 0; i < format.ruleset.length; i++) {
-				let subformat = dex.getFormat(format.ruleset[i]);
-				if (subformat.onValidateTeam && ruleTable.has(subformat.id)) {
-					problems = problems.concat(subformat.onValidateTeam.call(dex, team, format, teamHas) || []);
-				}
+		for (const [rule] of ruleTable) {
+			let subformat = dex.getFormat(rule);
+			if (subformat.onValidateTeam && ruleTable.has(subformat.id)) {
+				problems = problems.concat(subformat.onValidateTeam.call(dex, team, format, teamHas) || []);
 			}
 		}
 		if (format.onValidateTeam) {
@@ -141,12 +139,10 @@ class Validator {
 		let setHas = {};
 		const ruleTable = dex.getRuleTable(format);
 
-		if (format.ruleset) {
-			for (let i = 0; i < format.ruleset.length; i++) {
-				let subformat = dex.getFormat(format.ruleset[i]);
-				if (subformat.onChangeSet && ruleTable.has(subformat.id)) {
-					problems = problems.concat(subformat.onChangeSet.call(dex, set, format) || []);
-				}
+		for (const [rule] of ruleTable) {
+			let subformat = dex.getFormat(rule);
+			if (subformat.onChangeSet && ruleTable.has(subformat.id)) {
+				problems = problems.concat(subformat.onChangeSet.call(dex, set, format) || []);
 			}
 		}
 		if (format.onChangeSet) {
@@ -573,12 +569,10 @@ class Validator {
 			}
 		}
 
-		if (format.ruleset) {
-			for (let i = 0; i < format.ruleset.length; i++) {
-				let subformat = dex.getFormat(format.ruleset[i]);
-				if (subformat.onValidateSet && ruleTable.has(subformat.id)) {
-					problems = problems.concat(subformat.onValidateSet.call(dex, set, format, setHas, teamHas) || []);
-				}
+		for (const [rule] of ruleTable) {
+			let subformat = dex.getFormat(rule);
+			if (subformat.onValidateSet && ruleTable.has(subformat.id)) {
+				problems = problems.concat(subformat.onValidateSet.call(dex, set, format, setHas, teamHas) || []);
 			}
 		}
 		if (format.onValidateSet) {
