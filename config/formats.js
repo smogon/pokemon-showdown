@@ -574,6 +574,42 @@ exports.Formats = [
 		banlist: [],
 	},
 	{
+		name: "[Gen 7] Tier Shift",
+		ruleset: ['[Gen 7] OU'],
+		desc: ['&bullet; <a href="http://www.smogon.com/forums/threads/3610073/">Tier Shift</a>: Pokemon get a +10 boost to each stat per tier below OU they are in. UU gets +10, RU +20, NU +30, and PU +40.'],
+
+		mod: 'gen7',
+		searchShow: false,
+		onModifyTemplate: function (template, pokemon) {
+			if (pokemon.tierShifted) return template;
+			let TSTemplate = Object.assign({}, template);
+			const boosts = {
+				'UU': 5,
+				'BL2': 5,
+				'RU': 10,
+				'BL3': 10,
+				'NU': 15,
+				'BL4': 15,
+				'PU': 20,
+				'NFE': 20,
+				'LC Uber': 20,
+				'LC': 20,
+			};
+			let tier = template.tier;
+			if (pokemon.set.item) {
+				let item = this.getItem(pokemon.set.item);
+				if (item.megaEvolves === template.species) tier = this.getTemplate(item.megaStone).tier;
+			}
+			if (tier.charAt(0) === '(') tier = tier.slice(1, -1);
+			let boost = (tier in boosts) ? boosts[tier] : 0;
+			for (let statName in template.baseStats) {
+				TSTemplate.baseStats[statName] = this.clampIntRange(template.baseStats[statName] + boost, 1, 255);
+			}
+			pokemon.tierShifted = true;
+			return TSTemplate;
+		},
+	},
+	{
 		name: "[Gen 6] OU Theorymon",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3559611/\">OU Theorymon</a>"],
 
