@@ -926,7 +926,7 @@ function runMovesearch(target, cmd, canAll, message) {
 				return {reply: "Priority cannot be set with both shorthand and inequality range."};
 			} else {
 				searches['property']['priority'] = {};
-				searches['property']['priority'][sign] = (sign === 'less' ? -1 : 1);
+				searches['property']['priority'][sign] = 0;
 			}
 			continue;
 		}
