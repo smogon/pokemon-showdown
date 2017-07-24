@@ -30,7 +30,6 @@ class Battle extends Dex.ModdedDex {
 
 		this.format = toId(format);
 		this.formatData = {id:this.format};
-		this.ruleset = format.ruleset;
 
 		this.effect = {id:''};
 		this.effectData = {id:''};
@@ -1411,11 +1410,10 @@ class Battle extends Dex.ModdedDex {
 		if (format.onBegin) {
 			format.onBegin.call(this);
 		}
-		if (this.ruleset) {
-			for (let i = 0; i < this.ruleset.length; i++) {
-				this.addPseudoWeather(this.ruleset[i]);
-			}
-		}
+		this.getRuleTable(this.getFormat()).forEach((v, rule) => {
+			if (rule.startsWith('+') || rule.startsWith('-') || rule.startsWith('!')) return;
+			if (this.getFormat(rule).exists) this.addPseudoWeather(rule);
+		});
 
 		if (!this.p1.pokemon[0] || !this.p2.pokemon[0]) {
 			throw new Error('Battle not started: A player has an empty team.');
