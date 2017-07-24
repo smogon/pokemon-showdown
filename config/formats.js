@@ -574,12 +574,12 @@ exports.Formats = [
 		banlist: [],
 	},
 	{
-		name: "[Gen 6] OU Theorymon",
+		name: "[Gen 7] OU Theorymon",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3559611/\">OU Theorymon</a>"],
 
 		mod: 'theorymon',
 		searchShow: false,
-		ruleset: ['[Gen 6] OU'],
+		ruleset: ['[Gen 7] OU'],
 	},
 	{
 		name: "[Gen 6] Gen-NEXT OU",
