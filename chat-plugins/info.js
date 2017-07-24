@@ -1988,9 +1988,7 @@ exports.commands = {
 				this.sendReply('You are now hiding your auth symbol as \'' + tar + '\'.');
 			}
 		}
-		user.getIdentity = function (roomid) {
-			return tar + this.name;
-		};
+		user.getIdentity();
 		user.updateIdentity();
 		return this.sendReply("You are now hiding your auth as ' " + tar + "'.");
 	},
