@@ -552,6 +552,9 @@ class User {
 	resetName(isForceRenamed) {
 		return this.forceRename('Guest ' + this.guestNum, false, isForceRenamed);
 	}
+	getIdentity = function (roomid) {
+		return tar + this.name;
+	}
 	updateIdentity(roomid) {
 		if (roomid) {
 			return Rooms(roomid).onUpdateIdentity(this);
