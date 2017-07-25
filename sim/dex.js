@@ -847,16 +847,18 @@ class ModdedDex {
 
 	/**
 	 * @param {Format} format
+	 * @param {[number, number, number, number]} [seed]
 	 */
-	getTeamGenerator(format) {
+	getTeamGenerator(format, seed) {
 		const TeamGenerator = require(this.format(format).dataDir + '/random-teams');
-		return new TeamGenerator(format);
+		return new TeamGenerator(format, seed);
 	}
 	/**
 	 * @param {Format} format
+	 * @param {[number, number, number, number]} [seed]
 	 */
-	generateTeam(format) {
-		return this.getTeamGenerator(format).generateTeam();
+	generateTeam(format, seed) {
+		return this.getTeamGenerator(format, seed).generateTeam();
 	}
 
 	/**
@@ -974,7 +976,7 @@ class ModdedDex {
 			buf += '|' + set.moves.map(toId).join(',');
 
 			// nature
-			buf += '|' + set.nature;
+			buf += '|' + (set.nature || '');
 
 			// evs
 			let evs = '|';
