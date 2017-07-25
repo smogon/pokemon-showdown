@@ -72,6 +72,7 @@ class Battle extends Dex.ModdedDex {
 
 		this.prng = prng;
 		this.prngSeed = this.prng.startingSeed.slice();
+		this.teamGenerator = null;
 	}
 
 	static logReplay(data, isReplay) {
@@ -2608,6 +2609,20 @@ class Battle extends Dex.ModdedDex {
 
 	// players
 
+	getTeam(team) {
+		const format = this.getFormat();
+		if (!format.team && team) return team;
+
+		if (!this.teamGenerator) {
+			this.teamGenerator = this.getTeamGenerator(format);
+		} else {
+			this.teamGenerator.prng = new PRNG();
+		}
+		team = this.teamGenerator.generateTeam();
+		this.prngSeed.push(...this.teamGenerator.prng.startingSeed);
+
+		return team;
+	}
 	join(slot, name, avatar, team) {
 		if (this.p1 && this.p2) return false;
 		if ((this.p1 && this.p1.name === name) || (this.p2 && this.p2.name === name)) return false;
@@ -2619,6 +2634,7 @@ class Battle extends Dex.ModdedDex {
 			this[slot].name = name;
 		} else {
 			//console.log("NEW SIDE: " + name);
+			team = this.getTeam(team);
 			this[slot] = new Sim.Side(name, this, slotNum, team);
 			this.sides[slotNum] = this[slot];
 		}

@@ -178,6 +178,12 @@ class Format extends Effect {
 		super(data, moreData, moreData2);
 		/** @type {string} */
 		this.mod = Tools.getString(this.mod) || 'gen6';
+		/**
+		 * Name of the team generator algorithm, if this format uses
+		 * random/fixed teams. null if players can bring teams.
+		 * @type {?string}
+		 */
+		this.team = this.team;
 		/** @type {'Format' | 'Ruleset' | 'Rule' | 'ValidatorRule'} */
 		// @ts-ignore
 		this.effectType = Tools.getString(this.effectType) || 'Format';

@@ -2,15 +2,8 @@
  * Dex
  * Pokemon Showdown - http://pokemonshowdown.com/
  *
- * Handles getting data about pokemon, items, etc.
- *
- * This file is used by basically every PS process. Sim processes use it
- * to get game data for simulation, team validators use it to get data
- * for validation, dexsearch uses it for dex data, and the main process
- * uses it for format listing and miscellaneous dex lookup chat commands.
- *
- * It currently also contains our shims, since it has no dependencies and
- * is included by nearly every process.
+ * Handles getting data about pokemon, items, etc. Also contains some useful
+ * helper functions for using dex data.
  *
  * By default, nothing is loaded until you call Dex.mod(mod) or
  * Dex.format(format).
@@ -24,18 +17,13 @@
  *   As above, but will also populate Dex.formats, giving an object
  *   containing formats.
  * - Dex.includeData() ~500ms
- *   As above, but will also populate all of Dex.data, giving access to
+ *   As above, but will also preload all of Dex.data, giving access to
  *   the data access functions like Dex.getTemplate, Dex.getMove, etc.
- *   Note that you don't need this if you access the functions through
- *   Dex.mod(...).getTemplate, because Dex.mod automatically populates
- *   data for the relevant mod.
  * - Dex.includeModData() ~1500ms
- *   As above, but will also populate Dex.dexes[...].data for all mods.
- *   Note that Dex.mod(...) will automatically populate .data, so use
- *   this only if you need to manually iterate Dex.dexes.
+ *   As above, but will also preload Dex.dexes[...].data for all mods.
  *
- * Note that preloading is unnecessary. The getters for Dex.data etc
- * will automatically load this data as needed.
+ * Note that preloading is only necessary for iterating Dex.dexes. Getters
+ * like Dex.getTemplate will automatically load this data as needed.
  *
  * @license MIT license
  */
@@ -112,14 +100,18 @@ const toId = Data.Tools.getId;
 class ModdedDex {
 	/**
 	 * @param {string} [mod = 'base']
+	 * @param {boolean} [isOriginal]
 	 */
-	constructor(mod = 'base') {
+	constructor(mod = 'base', isOriginal = false) {
+		/** @type {number} */
 		this.gen = 0;
 
 		this.name = "[ModdedDex]";
 
 		this.isBase = (mod === 'base');
+		/** @type {string} */
 		this.currentMod = mod;
+		/** @type {string} */
 		this.parentMod = '';
 
 		/** @type {?DexTableData} */
@@ -136,6 +128,19 @@ class ModdedDex {
 		/** @type {Map<string, Ability>} */
 		this.abilityCache = new Map();
 
+		if (!isOriginal) {
+			const original = dexes['base'].mod(mod).includeData();
+			this.gen = original.gen;
+			this.currentMod = original.currentMod;
+			this.parentMod = original.parentMod;
+			this.dataCache = original.dataCache;
+			this.formatsCache = original.formatsCache;
+			this.templateCache = original.templateCache;
+			this.moveCache = original.moveCache;
+			this.itemCache = original.itemCache;
+			this.abilityCache = original.abilityCache;
+		}
+
 		this.modsLoaded = false;
 
 		this.getString = Data.Tools.getString;
@@ -144,23 +149,21 @@ class ModdedDex {
 		this.Data = Data;
 	}
 
-	/**
-	 * @return {DexTableData}
-	 */
+	/** @return {string} */
+	get dataDir() {
+		return (this.isBase ? DATA_DIR : MODS_DIR + '/' + this.currentMod);
+	}
+	/** @return {DexTableData} */
 	get data() {
 		return this.loadData();
 	}
-	/**
-	 * @return {DexTable}
-	 */
+	/** @return {DexTable} */
 	get formats() {
 		this.includeFormats();
 		// @ts-ignore
 		return this.formatsCache;
 	}
-	/**
-	 * @return {{[mod: string]: ModdedDex}}
-	 */
+	/** @return {{[mod: string]: ModdedDex}} */
 	get dexes() {
 		this.includeMods();
 		return dexes;
@@ -182,8 +185,7 @@ class ModdedDex {
 	format(format) {
 		if (!this.modsLoaded) this.includeMods();
 		const mod = this.getFormat(format).mod;
-		// TODO: change default format mod as gen7 becomes stable
-		if (!mod) return dexes['gen6'];
+		if (!mod) return dexes['gen7'];
 		return dexes[mod];
 	}
 	/**
@@ -844,6 +846,20 @@ class ModdedDex {
 	}
 
 	/**
+	 * @param {Format} format
+	 */
+	getTeamGenerator(format) {
+		const TeamGenerator = require(this.format(format).dataDir + '/random-teams');
+		return new TeamGenerator(format);
+	}
+	/**
+	 * @param {Format} format
+	 */
+	generateTeam(format) {
+		return this.getTeamGenerator(format).generateTeam();
+	}
+
+	/**
 	 * @param {string} target
 	 * @param {DataType[] | null=} searchIn
 	 * @param {boolean=} isInexact
@@ -1189,7 +1205,7 @@ class ModdedDex {
 
 		let modList = fs.readdirSync(MODS_DIR);
 		for (let i = 0; i < modList.length; i++) {
-			dexes[modList[i]] = new ModdedDex(modList[i]);
+			dexes[modList[i]] = new ModdedDex(modList[i], true);
 		}
 		this.modsLoaded = true;
 
@@ -1221,7 +1237,7 @@ class ModdedDex {
 		dexes['base'].includeMods();
 		let dataCache = {};
 
-		let basePath = (this.isBase ? DATA_DIR : MODS_DIR + '/' + this.currentMod) + '/';
+		let basePath = this.dataDir + '/';
 
 		let BattleScripts = this.loadDataFile(basePath, 'Scripts');
 		this.parentMod = this.isBase ? '' : (BattleScripts.inherit || 'base');
@@ -1327,7 +1343,7 @@ class ModdedDex {
 			if (format.challengeShow === undefined) format.challengeShow = true;
 			if (format.searchShow === undefined) format.searchShow = true;
 			if (format.tournamentShow === undefined) format.tournamentShow = true;
-			if (format.mod === undefined) format.mod = 'gen6';
+			if (format.mod === undefined) format.mod = 'gen7';
 			if (!dexes[format.mod]) throw new Error(`Format "${format.name}" requires nonexistent mod: '${format.mod}'`);
 			this.formatsCache[id] = format;
 		}
@@ -1351,7 +1367,7 @@ class ModdedDex {
 	}
 }
 
-dexes['base'] = new ModdedDex();
+dexes['base'] = new ModdedDex(undefined, true);
 
 // "gen7" is an alias for the current base data
 dexes['gen7'] = dexes['base'];
