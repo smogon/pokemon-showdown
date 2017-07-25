@@ -1188,7 +1188,7 @@ function runMovesearch(target, cmd, canAll, message) {
 
 	let resultsStr = "";
 	if (targetMon) {
-		resultsStr += `<span style=\"color:#999999;\">Matching moves found in learnset for</span> ${targetMon}:<br />`;
+		resultsStr += `<span style="color:#999999;">Matching moves found in learnset for</span> ${targetMon}:<br />`;
 	} else {
 		resultsStr += (message === "" ? message : `<span style="color:#999999;">${escapeHTML(message)}:</span><br />`);
 	}
@@ -1415,7 +1415,7 @@ function runItemsearch(target, cmd, canAll, message) {
 		}
 	}
 
-	let resultsStr = (message === "" ? message : `<span style=\"color:#999999;\">${escapeHTML(message)}:</span><br />`);
+	let resultsStr = (message === "" ? message : `<span style="color:#999999;">${escapeHTML(message)}:</span><br />`);
 	if (foundItems.length > 0) {
 		foundItems.sort();
 		let notShown = 0;
