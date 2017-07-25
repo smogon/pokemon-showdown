@@ -18,25 +18,9 @@ const Side = require('./side');
 const Pokemon = require('./pokemon');
 const PRNG = require('./prng');
 
-let battleProtoCache = new Map();
 exports.construct = function (format, rated, send, prng) {
 	format = Dex.getFormat(format);
-	const mod = format.mod || 'base';
-	if (!battleProtoCache.has(mod)) {
-		// Scripts overrides Battle overrides Dex
-		const dex = Dex.mod(mod);
-		const proto = Object.create(Battle.prototype);
-		Object.assign(proto, dex);
-
-		for (let i in dex.data.Scripts) {
-			proto[i] = dex.data.Scripts[i];
-		}
-
-		battleProtoCache.set(mod, proto);
-	}
-	const battle = Object.create(battleProtoCache.get(mod));
-	Battle.prototype.init.call(battle, format, rated, send, prng);
-	return battle;
+	return new Battle(format, rated, send, prng);
 };
 
 exports.Pokemon = Pokemon;
