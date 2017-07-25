@@ -33,11 +33,11 @@ describe(`Random Team generator`, function () {
 
 			let teamCount = TOTAL_TEAMS;
 			while (teamCount--) {
-				let seed = generator.prng.initialSeed;
+				let seed = generator.prng.seed;
 				try {
 					let team = generator.generateTeam();
 					let invalidSet = team.find(set => !isValidSet(gen, set));
-					if (invalidSet) throw new Error(`Invalid set: ${JSON.stringify(invalidSet)} (seed ${seed})`);
+					if (invalidSet) throw new Error(`Invalid set: ${JSON.stringify(invalidSet)}`);
 				} catch (err) {
 					err.message += ` (seed ${seed})`;
 					throw err;
@@ -56,11 +56,11 @@ describe(`Challenge Cup Team generator`, function () {
 
 			let teamCount = TOTAL_TEAMS;
 			while (teamCount--) {
-				let seed = generator.prng.initialSeed;
+				let seed = generator.prng.seed;
 				try {
 					let team = generator.generateTeam();
 					let invalidSet = team.find(set => !isValidSet(gen, set));
-					if (invalidSet) throw new Error(`Invalid set: ${JSON.stringify(invalidSet)} (seed ${seed})`);
+					if (invalidSet) throw new Error(`Invalid set: ${JSON.stringify(invalidSet)}`);
 				} catch (err) {
 					err.message += ` (seed ${seed})`;
 					throw err;
@@ -79,11 +79,11 @@ describe(`Hackmons Cup Team generator`, function () {
 
 			let teamCount = TOTAL_TEAMS;
 			while (teamCount--) {
-				let seed = generator.prng.initialSeed;
+				let seed = generator.prng.seed;
 				try {
 					let team = generator.generateTeam();
 					let invalidSet = team.find(set => !isValidSet(gen, set));
-					if (invalidSet) throw new Error(`Invalid set: ${JSON.stringify(invalidSet)} (seed ${seed})`);
+					if (invalidSet) throw new Error(`Invalid set: ${JSON.stringify(invalidSet)}`);
 				} catch (err) {
 					err.message += ` (seed ${seed})`;
 					throw err;
