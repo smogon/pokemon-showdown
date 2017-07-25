@@ -7,7 +7,7 @@ const randomBSSFactorySets = require('./bss-factory-sets.json');
 const randomFactorySets = require('./factory-sets.json');
 
 class RandomTeams extends Dex.ModdedDex {
-	constructor(format) {
+	constructor(format, seed) {
 		format = Dex.getFormat(format);
 		super(format.mod);
 		this.randomBSSFactorySets = randomBSSFactorySets;
@@ -15,7 +15,7 @@ class RandomTeams extends Dex.ModdedDex {
 
 		this.factoryTier = '';
 		this.format = format;
-		this.prng = new PRNG();
+		this.prng = new PRNG(seed);
 	}
 	generateTeam() {
 		const generatorName = typeof this.format.team === 'string' && this.format.team.startsWith('random') ? this.format.team + 'Team' : '';
@@ -1530,7 +1530,7 @@ class RandomTeams extends Dex.ModdedDex {
 
 		// PotD stuff
 		let potd;
-		if (Config.potd && this.getRuleTable(this.getFormat()).has('potd')) {
+		if (global.Config && Config.potd && this.getRuleTable(this.getFormat()).has('potd')) {
 			potd = this.getTemplate(Config.potd);
 		}
 
