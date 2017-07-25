@@ -2,15 +2,8 @@
  * Dex
  * Pokemon Showdown - http://pokemonshowdown.com/
  *
- * Handles getting data about pokemon, items, etc.
- *
- * This file is used by basically every PS process. Sim processes use it
- * to get game data for simulation, team validators use it to get data
- * for validation, dexsearch uses it for dex data, and the main process
- * uses it for format listing and miscellaneous dex lookup chat commands.
- *
- * It currently also contains our shims, since it has no dependencies and
- * is included by nearly every process.
+ * Handles getting data about pokemon, items, etc. Also contains some useful
+ * helper functions for using dex data.
  *
  * By default, nothing is loaded until you call Dex.mod(mod) or
  * Dex.format(format).
@@ -24,18 +17,13 @@
  *   As above, but will also populate Dex.formats, giving an object
  *   containing formats.
  * - Dex.includeData() ~500ms
- *   As above, but will also populate all of Dex.data, giving access to
+ *   As above, but will also preload all of Dex.data, giving access to
  *   the data access functions like Dex.getTemplate, Dex.getMove, etc.
- *   Note that you don't need this if you access the functions through
- *   Dex.mod(...).getTemplate, because Dex.mod automatically populates
- *   data for the relevant mod.
  * - Dex.includeModData() ~1500ms
- *   As above, but will also populate Dex.dexes[...].data for all mods.
- *   Note that Dex.mod(...) will automatically populate .data, so use
- *   this only if you need to manually iterate Dex.dexes.
+ *   As above, but will also preload Dex.dexes[...].data for all mods.
  *
- * Note that preloading is unnecessary. The getters for Dex.data etc
- * will automatically load this data as needed.
+ * Note that preloading is only necessary for iterating Dex.dexes. Getters
+ * like Dex.getTemplate will automatically load this data as needed.
  *
  * @license MIT license
  */
@@ -46,39 +34,11 @@ const fs = require('fs');
 const path = require('path');
 
 const Data = require('./dex-data');
-const {Effect, PureEffect, Format, Item, Template, Move, Ability} = Data; // eslint-disable-line no-unused-vars
+const {Effect, PureEffect, RuleTable, Format, Item, Template, Move, Ability} = Data; // eslint-disable-line no-unused-vars
 
 const DATA_DIR = path.resolve(__dirname, '../data');
 const MODS_DIR = path.resolve(__dirname, '../mods');
 const FORMATS = path.resolve(__dirname, '../config/formats');
-
-// shim Object.values
-if (!Object.values) {
-	// @ts-ignore
-	Object.values = function (object) {
-		let values = [];
-		for (let k in object) values.push(object[k]);
-		return values;
-	};
-	// @ts-ignore
-	Object.entries = function (object) {
-		let entries = [];
-		for (let k in object) entries.push([k, object[k]]);
-		return entries;
-	};
-}
-
-// shim padStart
-// if (!String.prototype.padStart) {
-// 	String.prototype.padStart = function padStart(maxLength, filler) {
-// 		filler = filler || ' ';
-// 		while (filler.length + this.length < maxLength) {
-// 			filler += filler;
-// 		}
-
-// 		return filler.slice(0, maxLength - this.length) + this;
-// 	};
-// }
 
 /** @type {{[mod: string]: ModdedDex}} */
 let dexes = {};
@@ -140,14 +100,18 @@ const toId = Data.Tools.getId;
 class ModdedDex {
 	/**
 	 * @param {string} [mod = 'base']
+	 * @param {boolean} [isOriginal]
 	 */
-	constructor(mod = 'base') {
+	constructor(mod = 'base', isOriginal = false) {
+		/** @type {number} */
 		this.gen = 0;
 
 		this.name = "[ModdedDex]";
 
 		this.isBase = (mod === 'base');
+		/** @type {string} */
 		this.currentMod = mod;
+		/** @type {string} */
 		this.parentMod = '';
 
 		/** @type {?DexTableData} */
@@ -164,30 +128,42 @@ class ModdedDex {
 		/** @type {Map<string, Ability>} */
 		this.abilityCache = new Map();
 
+		if (!isOriginal) {
+			const original = dexes['base'].mod(mod).includeData();
+			this.gen = original.gen;
+			this.currentMod = original.currentMod;
+			this.parentMod = original.parentMod;
+			this.dataCache = original.dataCache;
+			this.formatsCache = original.formatsCache;
+			this.templateCache = original.templateCache;
+			this.moveCache = original.moveCache;
+			this.itemCache = original.itemCache;
+			this.abilityCache = original.abilityCache;
+		}
+
 		this.modsLoaded = false;
 
 		this.getString = Data.Tools.getString;
 		this.getId = Data.Tools.getId;
 		this.ModdedDex = ModdedDex;
+		this.Data = Data;
 	}
 
-	/**
-	 * @return {DexTableData}
-	 */
+	/** @return {string} */
+	get dataDir() {
+		return (this.isBase ? DATA_DIR : MODS_DIR + '/' + this.currentMod);
+	}
+	/** @return {DexTableData} */
 	get data() {
 		return this.loadData();
 	}
-	/**
-	 * @return {DexTable}
-	 */
+	/** @return {DexTable} */
 	get formats() {
 		this.includeFormats();
 		// @ts-ignore
 		return this.formatsCache;
 	}
-	/**
-	 * @return {{[mod: string]: ModdedDex}}
-	 */
+	/** @return {{[mod: string]: ModdedDex}} */
 	get dexes() {
 		this.includeMods();
 		return dexes;
@@ -209,8 +185,7 @@ class ModdedDex {
 	format(format) {
 		if (!this.modsLoaded) this.includeMods();
 		const mod = this.getFormat(format).mod;
-		// TODO: change default format mod as gen7 becomes stable
-		if (!mod) return dexes['gen6'];
+		if (!mod) return dexes['gen7'];
 		return dexes[mod];
 	}
 	/**
@@ -504,39 +479,34 @@ class ModdedDex {
 			let format = this.data.Formats[id];
 			if (customBanlist) {
 				if (typeof customBanlist === 'string') customBanlist = customBanlist.split(',');
-				if (!format.banlistTable) this.getBanlistTable(format);
-				format = Object.assign({}, format);
-				format.customBanlist = customBanlist;
-				format.banlist = format.banlist ? format.banlist.slice() : [];
-				format.unbanlist = format.unbanlist ? format.unbanlist.slice() : [];
-				format.ruleset = format.baseRuleset.slice();
-				for (let i = 0; i < customBanlist.length; i++) {
-					let ban = customBanlist[i];
+				let customRules = [];
+				for (let ban of customBanlist) {
 					let unban = false;
 					if (ban.charAt(0) === '!') {
 						unban = true;
 						ban = ban.substr(1);
 					}
 					if (ban.startsWith('Rule:')) {
-						ban = ban.substr(5);
+						ban = ban.substr(5).trim();
 						if (unban) {
-							ban = 'Rule:' + toId(ban);
-							if (!format.unbanlist.includes(ban)) format.unbanlist.push(ban);
+							customRules.unshift('!' + ban);
 						} else {
-							if (!format.ruleset.includes(ban)) format.ruleset.push(ban);
+							customRules.push(ban);
 						}
 					} else {
 						if (unban) {
-							if (!format.unbanlist.includes(ban)) format.unbanlist.push(ban);
+							customRules.push('+' + ban);
 						} else {
-							if (!format.banlist.includes(ban)) format.banlist.push(ban);
+							customRules.push('-' + ban);
 						}
 					}
 				}
-				delete format.banlistTable;
+				effect = new Data.Format({name}, format, {customRules});
+				if (customId === 'pokemon') throw new Error('wtf');
 				if (customId) this.data.Formats[customId] = format;
+			} else {
+				effect = new Data.Format({name}, format);
 			}
-			effect = new Data.Format({name}, format);
 		} else if (this.data.Formats.hasOwnProperty(name)) {
 			effect = new Data.Format({name}, this.data.Formats[name]);
 		} else {
@@ -708,142 +678,86 @@ class ModdedDex {
 	}
 
 	/**
-	 * @param {AnyObject} format
-	 * @param {AnyObject} [subformat]
+	 * @param {Format} format
 	 * @param {number} [depth = 0]
-	 * @return {AnyObject}
+	 * @return {RuleTable}
 	 */
-	getBanlistTable(format, subformat, depth = 0) {
-		let banlistTable;
-		if (depth > 8) return {}; // avoid infinite recursion
-		if (format.banlistTable && !subformat) {
-			banlistTable = format.banlistTable;
-		} else {
-			if (!format.banlistTable) format.banlistTable = {};
-			if (!format.setBanTable) format.setBanTable = [];
-			if (!format.teamBanTable) format.teamBanTable = [];
-			if (!format.teamLimitTable) format.teamLimitTable = [];
+	getRuleTable(format, depth = 0) {
+		/** @type {RuleTable} */
+		let ruleTable = new RuleTable();
+		if (format.ruleTable) return format.ruleTable;
 
-			banlistTable = format.banlistTable;
-			if (!subformat) subformat = format;
-			if (subformat.unbanlist) {
-				for (let i = 0; i < subformat.unbanlist.length; i++) {
-					banlistTable[subformat.unbanlist[i]] = false;
-					banlistTable[toId(subformat.unbanlist[i])] = false;
-				}
-			}
-			if (subformat.banlist) {
-				for (let i = 0; i < subformat.banlist.length; i++) {
-					// don't revalidate what we already validate
-					if (banlistTable[toId(subformat.banlist[i])] !== undefined) continue;
-
-					banlistTable[subformat.banlist[i]] = subformat.name || true;
-					banlistTable[toId(subformat.banlist[i])] = subformat.name || true;
-
-					let complexList;
-					if (subformat.banlist[i].includes('>')) {
-						complexList = subformat.banlist[i].split('>');
-						let limit = parseInt(complexList[1]);
-						let banlist = complexList[0].trim();
-						complexList = banlist.split('+').map(toId);
-						complexList.unshift(banlist, subformat.name, limit);
-						format.teamLimitTable.push(complexList);
-					} else if (subformat.banlist[i].includes('+')) {
-						if (subformat.banlist[i].includes('++')) {
-							complexList = subformat.banlist[i].split('++');
-							let banlist = complexList.join('+');
-							for (let j = 0; j < complexList.length; j++) {
-								complexList[j] = toId(complexList[j]);
-							}
-							complexList.unshift(banlist);
-							format.teamBanTable.push(complexList);
-						} else {
-							complexList = subformat.banlist[i].split('+');
-							for (let j = 0; j < complexList.length; j++) {
-								complexList[j] = toId(complexList[j]);
-							}
-							complexList.unshift(subformat.banlist[i]);
-							format.setBanTable.push(complexList);
-						}
-					}
-				}
-			}
-			if (subformat.ruleset) {
-				for (let i = 0; i < subformat.ruleset.length; i++) {
-					// don't revalidate what we already validate
-					if (banlistTable['Rule:' + toId(subformat.ruleset[i])] !== undefined) continue;
-
-					banlistTable['Rule:' + toId(subformat.ruleset[i])] = subformat.ruleset[i];
-					if (!format.ruleset.includes(subformat.ruleset[i])) format.ruleset.push(subformat.ruleset[i]);
-
-					let subsubformat = this.getFormat(subformat.ruleset[i]);
-					if (subsubformat.ruleset || subsubformat.banlist) {
-						this.getBanlistTable(format, subsubformat, depth + 1);
-					}
+		const ruleset = format.ruleset.slice();
+		for (const ban of format.banlist) {
+			ruleset.push('-' + ban);
+		}
+		for (const ban of format.unbanlist) {
+			ruleset.push('+' + ban);
+		}
+		if (format.customRules) {
+			for (const rule of format.customRules) {
+				if (rule.startsWith('!')) {
+					ruleset.unshift(rule);
+				} else {
+					ruleset.push(rule);
 				}
 			}
 		}
-		return banlistTable;
-	}
 
-	/**
-	 * @param {string | Format} format
-	 * @param {string | string[]} params
-	 * @return {string[]}
-	 */
-	getSupplementaryBanlist(format, params) {
-		format = this.getFormat(format);
-		if (typeof params === 'string') params = params.split(',');
-		if (!format.banlistTable) format.banlistTable = this.getBanlistTable(format);
-		let banlist = [];
-		for (let i = 0; i < params.length; i++) {
-			let param = params[i].trim();
-			let unban = false;
-			if (param.charAt(0) === '!') {
-				unban = true;
-				param = param.substr(1);
-			}
-			let ban, oppositeBan;
-			let subformat = this.getFormat(param);
-			if (subformat.effectType === 'ValidatorRule' || subformat.effectType === 'Rule' || subformat.effectType === 'Format') {
-				if (unban) {
-					if (format.banlistTable['Rule:' + subformat.id] === false) continue;
-				} else {
-					if (format.banlistTable['Rule:' + subformat.id]) continue;
+		for (const rule of ruleset) {
+			if (rule.charAt(0) === '-' || rule.charAt(0) === '+') { // ban or unban
+				const type = rule.charAt(0);
+				let buf = rule.slice(1);
+				const gtIndex = buf.lastIndexOf('>');
+				let limit = 0;
+				if (gtIndex >= 0 && /^[0-9]+$/.test(buf.slice(gtIndex + 1).trim())) {
+					limit = parseInt(buf.slice(gtIndex + 1));
+					buf = buf.slice(0, gtIndex);
 				}
-				ban = 'Rule:' + subformat.name;
-			} else {
-				param = param.toLowerCase();
-				let baseForme = false;
-				if (param.endsWith('-base')) {
-					baseForme = true;
-					param = param.substr(0, param.length - 5);
+				let checkTeam = buf.includes('++');
+				const banNames = buf.split(checkTeam ? '++' : '+').map(v => v.trim());
+				if (banNames.length === 1 && limit > 0) checkTeam = true;
+				const innerRule = banNames.join(checkTeam ? ' ++ ' : ' + ');
+				const bans = banNames.map(v => toId(v));
+
+				if (checkTeam) {
+					ruleTable.complexTeamBans.push([innerRule, '', limit, bans]);
+					continue;
 				}
-				let search = this.dataSearch(param);
-				if (!search || search.length < 1) continue;
-				if (search[0].isInexact || search[0].searchType === 'nature') continue;
-				ban = search[0].name;
-				if (baseForme) ban += '-Base';
-				if (unban) {
-					if (format.banlistTable[ban] === false) continue;
-				} else {
-					if (format.banlistTable[ban]) continue;
+				if (bans.length > 1 || limit > 0) {
+					ruleTable.complexBans.push([innerRule, '', limit, bans]);
 				}
+				const ban = toId(buf);
+				ruleTable.delete('+' + ban);
+				ruleTable.delete('-' + ban);
+				ruleTable.set(type + ban, '');
+				continue;
 			}
-			if (unban) {
-				oppositeBan = ban;
-				ban = '!' + ban;
-			} else {
-				oppositeBan = '!' + ban;
+			if (rule.startsWith('!')) {
+				ruleTable.set('!' + toId(rule), '');
+				continue;
 			}
-			let index = banlist.indexOf(oppositeBan);
-			if (index > -1) {
-				banlist.splice(index, 1);
-			} else {
-				banlist.push(ban);
+			const subformat = this.getFormat(rule);
+			if (ruleTable.has('!' + subformat.id)) continue;
+			ruleTable.set(subformat.id, '');
+			if (!subformat.exists) continue;
+			if (depth > 16) {
+				throw new Error(`Excessive ruleTable recursion in ${format.name}: ${rule} of ${format.ruleset}`);
+			}
+			const subRuleTable = this.getRuleTable(subformat, depth + 1);
+			subRuleTable.forEach((v, k) => {
+				ruleTable.set(k, v || subformat.name);
+			});
+			for (const [rule, source, limit, bans] of subRuleTable.complexBans) {
+				ruleTable.complexBans.push([rule, source || subformat.name, limit, bans]);
+			}
+			for (const [rule, source, limit, bans] of subRuleTable.complexTeamBans) {
+				ruleTable.complexTeamBans.push([rule, source || subformat.name, limit, bans]);
 			}
 		}
-		return banlist;
+
+		format.ruleTable = ruleTable;
+		return ruleTable;
 	}
 
 	/**
@@ -929,6 +843,22 @@ class ModdedDex {
 		if (num < min) num = min;
 		if (max !== undefined && num > max) num = max;
 		return num;
+	}
+
+	/**
+	 * @param {Format} format
+	 * @param {[number, number, number, number]} [seed]
+	 */
+	getTeamGenerator(format, seed) {
+		const TeamGenerator = require(this.format(format).dataDir + '/random-teams');
+		return new TeamGenerator(format, seed);
+	}
+	/**
+	 * @param {Format} format
+	 * @param {[number, number, number, number]} [seed]
+	 */
+	generateTeam(format, seed) {
+		return this.getTeamGenerator(format, seed).generateTeam();
 	}
 
 	/**
@@ -1046,7 +976,7 @@ class ModdedDex {
 			buf += '|' + set.moves.map(toId).join(',');
 
 			// nature
-			buf += '|' + set.nature;
+			buf += '|' + (set.nature || '');
 
 			// evs
 			let evs = '|';
@@ -1277,7 +1207,7 @@ class ModdedDex {
 
 		let modList = fs.readdirSync(MODS_DIR);
 		for (let i = 0; i < modList.length; i++) {
-			dexes[modList[i]] = new ModdedDex(modList[i]);
+			dexes[modList[i]] = new ModdedDex(modList[i], true);
 		}
 		this.modsLoaded = true;
 
@@ -1309,7 +1239,7 @@ class ModdedDex {
 		dexes['base'].includeMods();
 		let dataCache = {};
 
-		let basePath = (this.isBase ? DATA_DIR : MODS_DIR + '/' + this.currentMod) + '/';
+		let basePath = this.dataDir + '/';
 
 		let BattleScripts = this.loadDataFile(basePath, 'Scripts');
 		this.parentMod = this.isBase ? '' : (BattleScripts.inherit || 'base');
@@ -1415,7 +1345,7 @@ class ModdedDex {
 			if (format.challengeShow === undefined) format.challengeShow = true;
 			if (format.searchShow === undefined) format.searchShow = true;
 			if (format.tournamentShow === undefined) format.tournamentShow = true;
-			if (format.mod === undefined) format.mod = 'gen6';
+			if (format.mod === undefined) format.mod = 'gen7';
 			if (!dexes[format.mod]) throw new Error(`Format "${format.name}" requires nonexistent mod: '${format.mod}'`);
 			this.formatsCache[id] = format;
 		}
@@ -1439,7 +1369,7 @@ class ModdedDex {
 	}
 }
 
-dexes['base'] = new ModdedDex();
+dexes['base'] = new ModdedDex(undefined, true);
 
 // "gen7" is an alias for the current base data
 dexes['gen7'] = dexes['base'];

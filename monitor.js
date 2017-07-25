@@ -2,7 +2,7 @@
  * Monitor
  * Pokemon Showdown - http://pokemonshowdown.com/
  *
- * Various utility functions to make sure PS is running healthy.
+ * Various utility functions to make sure PS is running healthily.
  *
  * @license MIT license
  */
@@ -10,7 +10,25 @@
 
 const FS = require('./fs');
 
+const MONITOR_CLEAN_TIMEOUT = 2 * 60 * 60 * 1000;
+
+/**
+ * This counts the number of times an action has been committed, and tracks the
+ * delta of time since the last time it was committed. Actions include
+ * connecting to the server, starting a battle, validating a team, and
+ * sending/receiving data over a connection's socket.
+ * @augments {Map<string, [number, number]>}
+ */
+// @ts-ignore TypeScript bug
 class TimedCounter extends Map {
+	/**
+	 * Increments the number of times an action has been committed by one, and
+	 * updates the delta of time since it was last committed.
+	 *
+	 * @param {string} key
+	 * @param {number} timeLimit
+	 * @return {[number, number]} - [action count, time delta]
+	 */
 	increment(key, timeLimit) {
 		let val = this.get(key);
 		let now = Date.now();
@@ -31,39 +49,65 @@ class TimedCounter extends Map {
 // 3 = warning
 // (4 is currently unused)
 // 5 = supposedly completely silent, but for now a lot of PS output doesn't respect loglevel
-if (Config.loglevel === undefined) Config.loglevel = 2;
+if (('Config' in global) &&
+		(typeof Config.loglevel !== 'number' || Config.loglevel < 0 || Config.loglevel > 5)) {
+	Config.loglevel = 2;
+}
 
+// @ts-ignore
 const Monitor = module.exports = {
-
 	/*********************************************************
 	 * Logging
 	 *********************************************************/
 
-	log: function (text) {
+	/**
+	 * @param {string} text
+	 */
+	log(text) {
 		this.notice(text);
 		if (Rooms('staff')) {
-			Rooms('staff').add('|c|~|' + text).update();
+			Rooms('staff').add(`|c|~|${text}`).update();
 		}
 	},
-	adminlog: function (text) {
+
+	/**
+	 * @param {string} text
+	 */
+	adminlog(text) {
 		this.notice(text);
 		if (Rooms('upperstaff')) {
-			Rooms('upperstaff').add('|c|~|' + text).update();
+			Rooms('upperstaff').add(`|c|~|${text}`).update();
 		}
 	},
-	logHTML: function (text) {
+
+	/**
+	 * @param {string} text
+	 */
+	logHTML(text) {
 		this.notice(text);
 		if (Rooms('staff')) {
-			Rooms('staff').add('|html|' + text).update();
+			Rooms('staff').add(`|html|${text}`).update();
 		}
 	},
-	debug: function (text) {
+
+	/**
+	 * @param {string} text
+	 */
+	debug(text) {
 		if (Config.loglevel <= 1) console.log(text);
 	},
-	warn: function (text) {
+
+	/**
+	 * @param {string} text
+	 */
+	warn(text) {
 		if (Config.loglevel <= 3) console.log(text);
 	},
-	notice: function (text) {
+
+	/**
+	 * @param {string} text
+	 */
+	notice(text) {
 		if (Config.loglevel <= 2) console.log(text);
 	},
 
@@ -71,85 +115,121 @@ const Monitor = module.exports = {
 	 * Resource Monitor
 	 *********************************************************/
 
-	clean: function () {
-		Monitor.clearNetworkUse();
-		Monitor.battlePreps.clear();
-		Monitor.battles.clear();
-		Monitor.connections.clear();
+	clean() {
+		this.clearNetworkUse();
+		this.battlePreps.clear();
+		this.battles.clear();
+		this.connections.clear();
 		Dnsbl.cache.clear();
 	},
+
 	connections: new TimedCounter(),
 	battles: new TimedCounter(),
 	battlePreps: new TimedCounter(),
 	groupChats: new TimedCounter(),
+
+	/** @type {?string} */
+	activeIp: null,
 	networkUse: {},
 	networkCount: {},
 	hotpatchLock: false,
+
 	/**
 	 * Counts a connection. Returns true if the connection should be terminated for abuse.
+	 *
+	 * @param {string} ip
+	 * @param {string} [name = '']
+	 * @return {boolean}
 	 */
-	countConnection: function (ip, name) {
-		let val = this.connections.increment(ip, 30 * 60 * 1000);
-		let count = val[0], duration = val[1];
-		name = (name ? ': ' + name : '');
+	countConnection(ip, name = '') {
+		let [count, duration] = this.connections.increment(ip, 30 * 60 * 1000);
 		if (count === 500) {
-			this.adminlog('[ResourceMonitor] IP ' + ip + ' banned for cflooding (' + count + ' times in ' + Chat.toDurationString(duration) + name + ')');
+			this.adminlog(`[ResourceMonitor] IP ${ip} banned for cflooding (${count} times in ${Chat.toDurationString(duration)}${name ? `: ${name}` : ''})`);
 			return true;
-		} else if (count > 500) {
+		}
+
+		if (count > 500) {
 			if (count % 500 === 0) {
 				let c = count / 500;
 				if (c === 2 || c === 4 || c === 10 || c === 20 || c % 40 === 0) {
-					this.adminlog('[ResourceMonitor] IP ' + ip + ' still cflooding (' + count + ' times in ' + Chat.toDurationString(duration) + name + ')');
+					this.adminlog(`[ResourceMonitor] IP ${ip} still cflooding (${count} times in ${Chat.toDurationString(duration)}${name ? `: ${name}` : ''})`);
 				}
 			}
 			return true;
 		}
+
+		return false;
 	},
+
 	/**
-	 * Counts a battle. Returns true if the connection should be terminated for abuse.
+	 * Counts battles created. Returns true if the connection should be
+	 * terminated for abuse.
+	 *
+	 * @param {string} ip
+	 * @param {string} [name = '']
+	 * @return {boolean}
 	 */
-	countBattle: function (ip, name) {
-		let val = this.battles.increment(ip, 30 * 60 * 1000);
-		let count = val[0], duration = val[1];
-		name = (name ? ': ' + name : '');
+	countBattle(ip, name = '') {
+		let [count, duration] = this.battles.increment(ip, 30 * 60 * 1000);
 		if (duration < 5 * 60 * 1000 && count % 30 === 0) {
-			this.adminlog('[ResourceMonitor] IP ' + ip + ' has battled ' + count + ' times in the last ' + Chat.toDurationString(duration) + name);
-		} else if (count % 150 === 0) {
-			this.adminlog('[ResourceMonitor] IP ' + ip + ' has battled ' + count + ' times in the last ' + Chat.toDurationString(duration) + name);
+			this.adminlog(`[ResourceMonitor] IP ${ip} has battled ${count} times in the last ${Chat.toDurationString(duration)}${name ? `: name` : ''})`);
+			return true;
 		}
+
+		if (count % 150 === 0) {
+			this.adminlog('[ResourceMonitor] IP ' + ip + ' has battled ' + count + ' times in the last ' + Chat.toDurationString(duration) + name);
+			return true;
+		}
+
+		return false;
 	},
+
 	/**
-	 * Counts battle prep. Returns true if too much
+	 * Counts team validations. Returns true if too many.
+	 *
+	 * @param {string} ip
+	 * @param {Connection} connection
+	 * @return {boolean}
 	 */
-	countPrepBattle: function (ip, connection) {
+	countPrepBattle(ip, connection) {
 		let count = this.battlePreps.increment(ip, 3 * 60 * 1000)[0];
-		if (count > 12) {
-			if (Punishments.sharedIps.has(ip) && count < 120) return;
-			connection.popup(`Due to high load, you are limited to 12 battles and team validations every 3 minutes.`);
-			return true;
-		}
+		if (count <= 12) return false;
+		if (count < 120 && Punishments.sharedIps.has(ip)) return false;
+		connection.popup('Due to high load, you are limited to 12 battles and team validations every 3 minutes.');
+		return true;
 	},
+
 	/**
-	 * Counts concurrent battles. Returns true if too much
+	 * Counts concurrent battles. Returns true if too many.
+	 *
+	 * @param {number} count
+	 * @param {Connection} connection
+	 * @return {boolean}
 	 */
-	countConcurrentBattle: function (count, connection) {
-		if (count > 5) {
-			connection.popup(`Due to high load, you are limited to 5 games at the same time.`);
-			return true;
-		}
+	countConcurrentBattle(count, connection) {
+		if (count <= 5) return false;
+		connection.popup(`Due to high load, you are limited to 5 games at the same time.`);
+		return true;
 	},
 	/**
 	 * Counts group chat creation. Returns true if too much.
+	 *
+	 * @param {string} ip
+	 * @return {boolean}
 	 */
-	countGroupChat: function (ip) {
+	countGroupChat(ip) {
 		let count = this.groupChats.increment(ip, 60 * 60 * 1000)[0];
-		if (count > 4) return true;
+		return count > 4;
 	},
+
 	/**
-	 * data
+	 * Counts the data length received by the last connection to send a
+	 * message, as well as the data length in the server's response.
+	 *
+	 * @param {number} size
 	 */
-	countNetworkUse: function (size) {
-		if (Config.emergency) {
+	countNetworkUse(size) {
+		if (Config.emergency && this.activeIp) {
 			if (this.activeIp in this.networkUse) {
 				this.networkUse[this.activeIp] += size;
 				this.networkCount[this.activeIp]++;
@@ -159,43 +239,62 @@ const Monitor = module.exports = {
 			}
 		}
 	},
-	writeNetworkUse: function () {
+
+	writeNetworkUse() {
 		let buf = '';
 		for (let i in this.networkUse) {
-			buf += '' + this.networkUse[i] + '\t' + this.networkCount[i] + '\t' + i + '\n';
+			buf += `${this.networkUse[i]}\t${this.networkCount[i]}\t${i}\n`;
 		}
 		FS('logs/networkuse.tsv').write(buf);
 	},
-	clearNetworkUse: function () {
+
+	clearNetworkUse() {
 		if (Config.emergency) {
 			this.networkUse = {};
 			this.networkCount = {};
 		}
 	},
+
 	/**
 	 * Counts roughly the size of an object to have an idea of the server load.
+	 *
+	 * @param {any} object
+	 * @return {number}
 	 */
-	sizeOfObject: function (object) {
-		let objectList = [];
+	sizeOfObject(object) {
+		/** @type {Set<(Array | Object)>} */
+		let objectCache = new Set();
 		let stack = [object];
 		let bytes = 0;
 
 		while (stack.length) {
 			let value = stack.pop();
-			if (typeof value === 'boolean') {
+			switch (typeof value) {
+			case 'boolean':
 				bytes += 4;
-			} else if (typeof value === 'string') {
+				break;
+			case 'string':
 				bytes += value.length * 2;
-			} else if (typeof value === 'number') {
+				break;
+			case 'number':
 				bytes += 8;
-			} else if (typeof value === 'object' && !objectList.includes(value)) {
-				objectList.push(value);
-				for (let i in value) stack.push(value[i]);
+				break;
+			case 'object':
+				if (!objectCache.has(value)) objectCache.add(value);
+				if (Array.isArray(value)) {
+					for (let el of value) stack.push(el);
+				} else {
+					for (let i in value) stack.push(value[i]);
+				}
+				break;
 			}
 		}
 
 		return bytes;
 	},
+
+	/** @type {{new(entries: [any, [number, number]]): TimedCounter}} */
+	TimedCounter,
 };
 
-Monitor.cleanInterval = setInterval(() => Monitor.clean(), 2 * 60 * 60 * 1000);
+Monitor.cleanInterval = setInterval(() => Monitor.clean(), MONITOR_CLEAN_TIMEOUT);

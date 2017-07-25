@@ -677,7 +677,7 @@ function runDexsearch(target, cmd, canAll, message) {
 				if (alts.tiers[dex[mon].tier]) continue;
 				if (Object.values(alts.tiers).includes(false) && alts.tiers[dex[mon].tier] !== false) continue;
 				// some LC Pokemon are also in other tiers and need to be handled separately
-				if (alts.tiers.LC && !dex[mon].prevo && dex[mon].nfe && dex[mon].tier !== 'LC Uber' && !Dex.formats.gen7lc.banlist.includes(dex[mon].species)) continue;
+				if (alts.tiers.LC && !dex[mon].prevo && dex[mon].nfe && !Dex.formats.gen7lc.banlist.includes(dex[mon].species)) continue;
 			}
 
 			for (let type in alts.types) {
@@ -976,7 +976,6 @@ function runMovesearch(target, cmd, canAll, message) {
 				}
 				continue;
 			}
-
 			if (target.substr(0, 7) === 'boosts ') {
 				switch (target.substr(7)) {
 				case 'attack': target = 'atk'; break;
@@ -1466,6 +1465,7 @@ function runLearn(target, cmd) {
 		}
 		break;
 	}
+	if (!formatid) format = new Dex.Data.Format(format);
 	if (!formatid) formatid = 'gen' + gen + 'ou';
 	if (!formatName) formatName = 'Gen ' + gen;
 	let lsetData = {set: {}, format: format};

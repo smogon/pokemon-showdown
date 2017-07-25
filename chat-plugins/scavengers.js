@@ -158,8 +158,8 @@ let HostLeaderboard = new PlayerLadder(HOST_DATA_FILE);
 let PlayerLeaderboard = new PlayerLadder(PLAYER_DATA_FILE);
 
 function formatQueue(queue, viewer) {
-	let buf = queue.map((item, index) => `<tr${(!item.hosts.some(h => h.userid === viewer.userid) && viewer.userid !== item.staffHostId ? ` style="background-color: lightgray"` : "")}><td><button name="send" value="/scav dequeue ${index}" style="color: red; background-color: transparent; border: none; padding: 1px;">[x]</button>${Chat.escapeHTML(Chat.toListString(item.hosts.map(h => h.name)))}${item.hosts.every(h => h.userid !== item.staffHostId) ? ` / ${item.staffHostId}` : ''}</td><td>${(item.hosts.some(h => h.userid === viewer.userid) || viewer.userid === item.staffHostId ? item.questions.map((q, i) => i % 2 ? `<span style="color: green"><em>[${Chat.escapeHTML(q.join(' / '))}]</em></span><br />` : Chat.escapeHTML(q)).join(" ") : `[${item.questions.length / 2} hidden questions]`)}</td></tr>`).join("");
-	return `<div class="ladder"><table style="width: 100%"><tr><th>By</th><th>Questions</th></tr>${buf}</table></div><div style="text-align: right;"><button class="button" name="send" value="/scav next 1">Start the next hunt</button></div>`;
+	let buf = queue.map((item, index) => `<tr${(!item.hosts.some(h => h.userid === viewer.userid) && viewer.userid !== item.staffHostId ? ` style="background-color: lightgray"` : "")}><td><button name="send" value="/scav dequeue ${index}" style="color: red; background-color: transparent; border: none; padding: 1px;">[x]</button><button name="send" value="/scav next ${index}" style="color: green; background-color: transparent; border: none; padding: 1px;">[start]</button>&nbsp;${Chat.escapeHTML(Chat.toListString(item.hosts.map(h => h.name)))}${item.hosts.every(h => h.userid !== item.staffHostId) ? ` / ${item.staffHostId}` : ''}</td><td>${(item.hosts.some(h => h.userid === viewer.userid) || viewer.userid === item.staffHostId ? item.questions.map((q, i) => i % 2 ? `<span style="color: green"><em>[${Chat.escapeHTML(q.join(' / '))}]</em></span><br />` : Chat.escapeHTML(q)).join(" ") : `[${item.questions.length / 2} hidden questions]`)}</td></tr>`).join("");
+	return `<div class="ladder"><table style="width: 100%"><tr><th>By</th><th>Questions</th></tr>${buf}</table></div><div style="text-align: right;"><button class="button" name="send" value="/scav next 0">Start the next hunt</button></div>`;
 }
 
 function formatOrder(place) {
@@ -253,19 +253,17 @@ class ScavengerHunt extends Rooms.RoomGame {
 			this.questions.push({hint: hint, answer: answer});
 		}
 
-		if (this.gameType === 'official') {
-			this.setTimer(60);
-		}
-
-		this.announce(`A new ${(this.gameType === 'official' ? "official" : this.gameType === 'practice' ? "practice" : '')} Scavenger Hunt by <em>${Chat.escapeHTML(Chat.toListString(this.hosts.map(h => h.name)))}</em> has been started${(this.hosts.some(h => h.userid === this.staffHostId) ? '' : ` by <em>${Chat.escapeHTML(this.staffHostName)}</em>`)}.<br />The first hint is: ${Chat.parseText(this.questions[0].hint)}`);
+		this.announce(`A new${(this.gameType === 'official' ? " official" : this.gameType === 'practice' ? " practice" : '')} Scavenger Hunt by <em>${Chat.escapeHTML(Chat.toListString(this.hosts.map(h => h.name)))}</em> has been started${(this.hosts.some(h => h.userid === this.staffHostId) ? '' : ` by <em>${Chat.escapeHTML(this.staffHostName)}</em>`)}.<br />The first hint is: ${Chat.parseText(this.questions[0].hint)}`);
 	}
 
-	onEditQuestion(number, question_answer, ...value) {
+	onEditQuestion(number, question_answer, value) {
 		if (question_answer === 'question') question_answer = 'hint';
 		if (!['hint', 'answer'].includes(question_answer)) return false;
 
-		value = question_answer === 'answer' ? value.map(p => p.trim()) : value.join(", ");
-		number = parseInt(number);
+		if (question_answer === 'answer') {
+			if (value.includes(',')) return false;
+			value = value.split(';').map(p => p.trim());
+		}
 
 		if (!number || number < 1 || number > this.questions.length || !value) return false;
 
@@ -438,7 +436,7 @@ class ScavengerHunt extends Rooms.RoomGame {
 				room.game = new ScavengerHunt(room, {userid: next.staffHostId, name: next.staffHostName}, next.hosts, false, next.questions);
 				room.game.setTimer(120); // auto timer of 2 hours for queue'd games.
 
-				room.add(`|c|~|[ScavengerManager] A scavenger hunt by ${Chat.toListString(this.hosts.map(h => h.name))} has been automatically started. It will automatically end in 2 hours.`).update(); // highlight the users with "hunt by"
+				room.add(`|c|~|[ScavengerManager] A scavenger hunt by ${Chat.toListString(next.hosts.map(h => h.name))} has been automatically started. It will automatically end in 2 hours.`).update(); // highlight the users with "hunt by"
 
 				// update the saved queue.
 				if (room.chatRoomData) {
@@ -559,7 +557,11 @@ class ScavengerHunt extends Rooms.RoomGame {
 
 		for (let i = 0; i < questionArray.length; i++) {
 			if (i % 2) {
-				questionArray[i] = questionArray[i].split(',').map(p => p.trim());
+				// This check will likely be removed within a week or so, as having access to a comma
+				// in an answer is actually fairly useful and actually a reason why a separator was changed to
+				// a semicolon. It's just here to give time for people to get used to that change.
+				if (questionArray[i].includes(',')) return {err: "Commas are no longer correct syntax for separating answers - please use semicolons instead."};
+				questionArray[i] = questionArray[i].split(';').map(p => p.trim());
 				if (!questionArray[i].length || questionArray[i].some(a => !toId(a))) return {err: "Empty answer - only alphanumeric characters will count in answers."};
 			} else {
 				questionArray[i] = questionArray[i].trim();
@@ -762,7 +764,7 @@ let commands = {
 		let gameType = cmd.includes('official') ? 'official' : cmd.includes('practice') ? 'practice' : null;
 
 		let [hostsArray, ...params] = target.split('|');
-		let hosts = ScavengerHunt.parseHosts(hostsArray.split(','), room, gameType === 'official');
+		let hosts = ScavengerHunt.parseHosts(hostsArray.split(/[,;]/), room, gameType === 'official');
 		if (!hosts) return this.errorReply("The user(s) you specified as the host is not online, or is not in the room.");
 
 		params = ScavengerHunt.parseQuestions(params);
@@ -782,7 +784,7 @@ let commands = {
 
 		let game = room.game.childGame || room.game;
 		let elapsed = Date.now() - game.startTime;
-		this.sendReplyBox(`The current ${game.gameType ? `<em>${game.gameType}</em> ` : ""}scavenger hunt has been up for: ${Chat.toDurationString(elapsed, {hhmmss: true})}<br />Completed (${game.completed.length}): ${game.completed.map(u => Chat.escapeHTML(u.name)).join(', ')}`);
+		this.sendReplyBox(`The current ${game.gameType ? `<em>${game.gameType}</em> ` : ""}scavenger hunt by <em>${Chat.escapeHTML(Chat.toListString(game.hosts.map(h => h.name)))}${(game.hosts.some(h => h.userid === game.staffHostId) ? '' : ` (started by - ${Chat.escapeHTML(game.staffHostName)})`)}</em> has been up for: ${Chat.toDurationString(elapsed, {hhmmss: true})}<br />Completed (${game.completed.length}): ${game.completed.map(u => Chat.escapeHTML(u.name)).join(', ')}<br />`);
 	},
 
 	hint: function (target, room, user) {
@@ -809,9 +811,20 @@ let commands = {
 		this.privateModCommand(`(${user.name} has reset the scavenger hunt.)`);
 	},
 
+	forceend: 'end',
 	end: function (target, room, user) {
 		if (!this.can('mute', null, room)) return false;
 		if (!room.game || !room.game.scavGame) return this.errorReply(`There is no scavenger game currently running.`);
+
+		let completed = room.game.scavParentGame ? room.game.game.completed : room.game.completed;
+		if (!this.cmd.includes('force')) {
+			if (!completed.length) {
+				return this.errorReply('No one has finished the hunt yet.  Use /forceendhunt if you want to end the hunt and reveal the answers.');
+			}
+		} else if (completed.length) {
+			return this.errorReply(`This hunt has ${completed.length} finisher${Chat.plural(completed.length)}; use /endhunt`);
+		}
+
 		room.game.onEnd(null, user);
 		this.privateModCommand(`(${user.name} has ended the scavenger hunt.)`);
 	},
@@ -829,7 +842,10 @@ let commands = {
 		let game = room.game.childGame || room.game;
 		if ((!game.hosts.some(h => h.userid === user.userid) || !user.can('broadcast', null, room)) && game.staffHostId !== user.userid) return this.errorReply("You cannot edit the hints and answers if you are not the host.");
 
-		if (!game.onEditQuestion(...target.split(',').map(p => p.trim()))) return this.sendReply("/scavengers edithunt [question number], [hint | answer], [value] - edits the current scavenger hunt.");
+		let [question, type, ...value] = target.split(',');
+		if (!game.onEditQuestion(parseInt(question), toId(type), value.join(',').trim())) {
+			return this.sendReply("/scavengers edithunt [question number], [hint | answer], [value] - edits the current scavenger hunt.");
+		}
 	},
 
 	kick: function (target, room, user) {
@@ -854,7 +870,7 @@ let commands = {
 		if (!this.can('mute', null, room)) return false;
 
 		let [hostsArray, ...params] = target.split('|');
-		let hosts = ScavengerHunt.parseHosts(hostsArray.split(','), room);
+		let hosts = ScavengerHunt.parseHosts(hostsArray.split(/[,;]/), room);
 		if (!hosts) return this.errorReply("The user(s) you specified as the host is not online, or is not in the room.");
 
 		params = ScavengerHunt.parseQuestions(params);
@@ -904,7 +920,11 @@ let commands = {
 		if (!room.scavQueue || !room.scavQueue.length) return this.errorReply("The scavenger hunt queue is currently empty.");
 		if (room.game) return this.errorReply(`There is already a game in this room - ${room.game.title}.`);
 
-		let next = room.scavQueue.shift();
+		target = parseInt(target) || 0;
+
+		if (!room.scavQueue[target]) return false; // no need for an error reply - this is done via UI anyways
+
+		let next = room.scavQueue.splice(target, 1)[0]; // returns [ hunt ]
 		room.game = new ScavengerHunt(room, {userid: next.staffHostId, name: next.staffHostName}, next.hosts, false, next.questions);
 
 		if (target) this.sendReply(`|uhtmlchange|scav-queue|${formatQueue(room.scavQueue, user)}`);
@@ -928,7 +948,7 @@ let commands = {
 		points = parseInt(points);
 
 		if (!targetId || targetId === 'constructor' || targetId.length > 18) return this.errorReply("Invalid username.");
-		if (!points || points < 0) return this.errorReply("Points must be an integer greater than 0.");
+		if (!points || points < 0 || points > 1000) return this.errorReply("Points must be an integer between 1 and 1000.");
 
 		Leaderboard.addPoints(targetId, 'points', points, true).write();
 
@@ -944,7 +964,7 @@ let commands = {
 		points = parseInt(points);
 
 		if (!targetId || targetId === 'constructor' || targetId.length > 18) return this.errorReply("Invalid username.");
-		if (!points || points < 0) return this.errorReply("Points must be an integer greater than 0.");
+		if (!points || points < 0 || points > 1000) return this.errorReply("Points must be an integer between 1 and 1000.");
 
 		Leaderboard.addPoints(targetId, 'points', -points, true).write();
 
@@ -999,7 +1019,7 @@ let commands = {
 		if (!this.can('declare', null, room)) return false; // perms for editing
 
 		let blitzPoints = parseInt(target);
-		if (isNaN(blitzPoints) || blitzPoints < 0) return this.errorReply("The points value awarded for blitz must be an integer greater than or equal to zero.");
+		if (isNaN(blitzPoints) || blitzPoints < 0 || blitzPoints > 1000) return this.errorReply("The points value awarded for blitz must be an integer bewteen 0 and 1000.");
 
 		room.blitzPoints = blitzPoints;
 
@@ -1019,7 +1039,7 @@ let commands = {
 
 		let winPoints = target.split(',').map(p => parseInt(p));
 
-		if (winPoints.some(p => isNaN(p) || p < 0) || !winPoints.length) return this.errorReply("The points value awarded for winning a scavenger hunt must be an integer greater than or equal to zero.");
+		if (winPoints.some(p => isNaN(p) || p < 0 || p > 1000) || !winPoints.length) return this.errorReply("The points value awarded for winning a scavenger hunt must be an integer between 0 and 1000.");
 
 		room.winPoints = winPoints;
 
@@ -1157,6 +1177,7 @@ exports.commands = {
 	joinhunt: commands.join,
 	leavehunt: commands.leave,
 	resethunt: commands.reset,
+	forceendhunt: 'endhunt',
 	endhunt: commands.end,
 	edithunt: commands.edithunt,
 	viewhunt: commands.viewhunt,
