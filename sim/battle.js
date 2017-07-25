@@ -12,14 +12,15 @@ const Sim = require('./');
 
 class Battle extends Dex.ModdedDex {
 	/**
-	 * Initialises a Battle.
-	 *
 	 * @param {object} format
 	 * @param {boolean} rated
 	 * @param {Function} send
 	 * @param {PRNG} [maybePrng]
 	 */
-	init(format, rated = false, send = (() => {}), prng = new PRNG()) {
+	constructor(format, rated = false, send = (() => {}), prng = new PRNG()) {
+		super(format.mod);
+		Object.assign(this, this.data.Scripts);
+
 		this.log = [];
 		/** @type {Sim.Side[]} */
 		this.sides = [null, null];
