@@ -1508,7 +1508,7 @@ class RandomTeams extends Dex.ModdedDex {
 		let pokemon = [];
 
 		let excludedTiers = {'NFE':1, 'LC Uber':1, 'LC':1};
-		let allowedNFE = {'Chansey':1, 'Doublade':1, 'Gligar':1, 'Porygon2':1, 'Scyther':1, 'Togetic':1};
+		let allowedNFE = {'Chansey':1, 'Doublade':1, 'Electabuzz': 1, 'Gligar':1, 'Magmar': 1, 'Piloswine': 1, 'Porygon2':1, 'Scyther':1, 'Sneasel':1, 'Togetic':1};
 
 		// For Monotype
 		let isMonotype = this.format === 'gen7monotyperandombattle';
