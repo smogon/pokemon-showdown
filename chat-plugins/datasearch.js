@@ -239,7 +239,7 @@ exports.commands = {
 		"/movesearch [parameter], [parameter], [parameter], ... - Searches for moves that fulfill the selected criteria.",
 		"Search categories are: type, category, gen, contest condition, flag, status inflicted, type boosted, and numeric range for base power, pp, and accuracy.",
 		"Types must be followed by ' type', e.g., 'dragon type'.",
-		"Stat boosts must be preceded with 'boosts ', e.g., 'boosts attack' searches for moves that boost the attack stat.",
+		"Stat boosts must be preceded with 'boosts ', and stat-lowering moves with 'lowers ', e.g., 'boosts attack' searches for moves that boost the attack stat.",
 		"Inequality ranges use the characters '>' and '<' though they behave as '≥' and '≤', e.g., 'bp > 100' searches for all moves equal to and greater than 100 base power.",
 		"Parameters can be excluded through the use of '!', e.g., !water type' excludes all water type moves.",
 		"Valid flags are: authentic (bypasses substitute), bite, bullet, contact, defrost, powder, pulse, punch, secondary, snatch, and sound.",
@@ -931,7 +931,12 @@ function runMovesearch(target, cmd, canAll, message) {
 			continue;
 		}
 
-		if (target.substr(0, 7) === 'boosts ') {
+		if (target.substr(0, 7) === 'boosts ' || target.substr(0, 7) === 'lowers ') {
+			let isBoost = false;
+			if (target.substr(0, 7) === 'boosts ') {
+				isBoost = true;
+			}
+
 			switch (target.substr(7)) {
 			case 'attack': target = 'atk'; break;
 			case 'defense': target = 'def'; break;
@@ -945,9 +950,15 @@ function runMovesearch(target, cmd, canAll, message) {
 			default: target = target.substr(7);
 			}
 			if (!(target in allBoosts)) return {reply: "'" + escapeHTML(target.substr(7)) + "' is not a recognized stat."};
-			if (!searches['boost']) searches['boost'] = {};
-			if ((searches['boost'][target] && isNotSearch) || (searches['boost'][target] === false && !isNotSearch)) return {reply: 'A search cannot both exclude and include a stat boost.'};
-			searches['boost'][target] = !isNotSearch;
+			if (isBoost) {
+				if (!searches['boost']) searches['boost'] = {};
+				if ((searches['boost'][target] && isNotSearch) || (searches['boost'][target] === false && !isNotSearch)) return {reply: 'A search cannot both exclude and include a stat boost.'};
+				searches['boost'][target] = !isNotSearch;
+			} else {
+				if (!searches['lower']) searches['lower'] = {};
+				if ((searches['lower'][target] && isNotSearch) || (searches['lower'][target] === false && !isNotSearch)) return {reply: 'A search cannot both exclude and include a stat lower.'};
+				searches['lower'][target] = !isNotSearch;
+			}
 			continue;
 		}
 
@@ -1114,6 +1125,24 @@ function runMovesearch(target, cmd, canAll, message) {
 					} else if (dex[move].secondary && dex[move].secondary.self && dex[move].secondary.self.boosts) {
 						if ((dex[move].secondary.self.boosts[boost] > 0 && searches[search][boost]) ||
 							(dex[move].secondary.self.boosts[boost] < 1 && !searches[search][boost])) continue;
+					}
+					delete dex[move];
+				}
+			}
+			break;
+
+		case 'lower':
+			for (let boost in searches[search]) {
+				for (let move in dex) {
+					if (dex[move].boosts) {
+						if ((dex[move].boosts[boost] < 0 && searches[search][boost]) ||
+							(dex[move].boosts[boost] > -1 && !searches[search][boost])) continue;
+					} else if (dex[move].self && dex[move].self.boosts) {
+						if ((dex[move].self.boosts[boost] < 0 && searches[search][boost]) ||
+							(dex[move].self.boosts[boost] > -1 && !searches[search][boost])) continue;
+					} else if (dex[move].secondary && dex[move].secondary.self && dex[move].secondary.self.boosts) {
+						if ((dex[move].secondary.self.boosts[boost] < 0 && searches[search][boost]) ||
+							(dex[move].secondary.self.boosts[boost] > -1 && !searches[search][boost])) continue;
 					}
 					delete dex[move];
 				}
