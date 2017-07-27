@@ -251,25 +251,31 @@ class BattleTimer {
 		}
 	}
 	checkActivity() {
-		if (!this.timerRequesters.size) return;
 		for (const slotNum of this.ticksLeft.keys()) {
 			const slot = 'p' + (slotNum + 1);
 			const player = this.battle[slot];
+			const active = player && player.active;
 
-			// if a player has disconnected, don't wait longer than 6 ticks (1 minute)
-			if (!player || !player.active) {
-				if (this.dcTicksLeft[slotNum] === 10) {
-					this.dcTicksLeft[slotNum] = 7;
-					this.battle.room.add(`|inactive|${this.battle.playerNames[slotNum]} disconnected and has a minute to reconnect!`).update();
+			if (this.timerRequesters.size) {
+				// if a player has disconnected, don't wait longer than 6 ticks (1 minute)
+				if (!active) {
+					if (this.dcTicksLeft[slotNum] === 10) {
+						this.dcTicksLeft[slotNum] = 7;
+						this.battle.room.add(`|inactive|${this.battle.playerNames[slotNum]} disconnected and has a minute to reconnect!`).update();
+					}
+				} else if (this.dcTicksLeft[slotNum] < 10) {
+					this.dcTicksLeft[slotNum] = 10;
+					let timeLeft = ``;
+					if (!this.isActive(slot)) {
+						const ticksLeft = this.turnTicksLeft[slotNum];
+						timeLeft = ` and has ${ticksLeft * 10} seconds left`;
+					}
+					this.battle.room.add(`|inactive|${this.battle.playerNames[slotNum]} reconnected${timeLeft}.`).update();
 				}
-			} else if (this.dcTicksLeft[slotNum] < 10) {
+			// Still reset reconnection timer even when timer is disabled to prevent it
+			// from continuing when timer will be enabled again after user reconnects.
+			} else if (active) {
 				this.dcTicksLeft[slotNum] = 10;
-				let timeLeft = ``;
-				if (!this.isActive(slot)) {
-					const ticksLeft = this.turnTicksLeft[slotNum];
-					timeLeft = ` and has ${ticksLeft * 10} seconds left`;
-				}
-				this.battle.room.add(`|inactive|${this.battle.playerNames[slotNum]} reconnected${timeLeft}.`).update();
 			}
 		}
 	}
