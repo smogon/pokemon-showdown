@@ -210,7 +210,7 @@ class Ladder {
 		let p2score = 1 - p1score;
 		if (p1score < 0) {
 			p1score = 0;
-			p2scor = 0;
+			p2score = 0;
 		}
 		this.ladder.then(() => {
 			let p1newElo, p2newElo;
