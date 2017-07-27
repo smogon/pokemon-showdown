@@ -1511,7 +1511,7 @@ class RandomTeams extends Dex.ModdedDex {
 		let allowedNFE = {'Chansey':1, 'Doublade':1, 'Gligar':1, 'Porygon2':1, 'Scyther':1, 'Togetic':1};
 
 		// For Monotype
-		let isMonotype = this.format === 'gen7monotyperandombattle';
+		let isMonotype = this.format.id === 'gen7monotyperandombattle';
 		let typePool = Object.keys(this.data.TypeChart);
 		let type = typePool[this.random(typePool.length)];
 
