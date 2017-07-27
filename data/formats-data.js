@@ -3082,6 +3082,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 3, "level": 10, "moves":["tackle", "harden", "confusion"]},
 			{"generation": 3, "level": 25, "moves":["batonpass", "psychic", "raindance", "rocktomb"]},
+			{"generation": 7, "level": 30, "moves":["cosmicpower", "hiddenpower", "moonblast", "powergem"], "pokeball": "cherishball"},
 		],
 		tier: "NU",
 	},
@@ -3091,6 +3092,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 3, "level": 10, "moves":["tackle", "harden", "confusion"]},
 			{"generation": 3, "level": 41, "moves":["batonpass", "psychic", "sunnyday", "cosmicpower"]},
+			{"generation": 7, "level": 30, "moves":["cosmicpower", "hiddenpower", "solarbeam", "stoneedge"], "pokeball": "cherishball"},
 		],
 		tier: "NU",
 	},
