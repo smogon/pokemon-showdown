@@ -2104,7 +2104,7 @@ exports.BattleFormatsData = {
 			{"generation": 6, "level": 50, "gender": "F", "nature": "Adamant", "isHidden": false, "moves":["bulletseed", "pinmissile", "closecombat", "megahorn"], "pokeball": "cherishball"},
 			{"generation": 6, "level": 50, "nature": "Adamant", "isHidden": false, "abilities":["guts"], "moves":["pinmissile", "bulletseed", "earthquake", "rockblast"], "pokeball": "cherishball"},
 		],
-		tier: "RU",
+		tier: "BL2",
 	},
 	heracrossmega: {
 		randomBattleMoves: ["closecombat", "pinmissile", "rockblast", "swordsdance", "bulletseed", "substitute"],
