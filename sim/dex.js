@@ -850,7 +850,7 @@ class ModdedDex {
 	 * @param {[number, number, number, number]} [seed]
 	 */
 	getTeamGenerator(format, seed) {
-		const TeamGenerator = require(this.forFormat(format).dataDir + '/random-teams');
+		const TeamGenerator = require(dexes['base'].forFormat(format).dataDir + '/random-teams');
 		return new TeamGenerator(format, seed);
 	}
 	/**
