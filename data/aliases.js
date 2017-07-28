@@ -590,7 +590,7 @@ exports.BattleAliases = {
 	"majin": "Spirit",
 	"gross": "Metagross",
 	"mgross": "Metagross-Mega",
-	
+
 	// ultra beasts
 	"ub01": "Nihilego",
 	"ub02a": "Buzzwole",
