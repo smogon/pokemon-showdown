@@ -230,6 +230,7 @@ exports.BattleAliases = {
 	"shaymins": "Shaymin-Sky",
 	"skymin": "Shaymin-Sky",
 	"thundurust": "Thundurus-Therian",
+	"thundyt": "Thundurus-Therian",
 	"tornadust": "Tornadus-Therian",
 	"tornt": "Tornadus-Therian",
 	"wormadamg": "Wormadam-Sandy",
@@ -587,7 +588,9 @@ exports.BattleAliases = {
 	"mechatyranitar2": "MT2",
 	"monica": "Giant",
 	"majin": "Spirit",
-
+	"gross": "Metagross",
+	"mgross": "Metagross-Mega",
+	
 	// ultra beasts
 	"ub01": "Nihilego",
 	"ub02a": "Buzzwole",
