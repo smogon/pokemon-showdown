@@ -100,7 +100,7 @@ exports.commands = {
 				if (punishment) {
 					let expiresIn = Punishments.checkLockExpiration(targetUser.locked);
 					if (expiresIn) buf += expiresIn;
-					if (punishment[3]) buf += ` (reason: ${punishment[3]})`;
+					if (punishment[3]) buf += Chat.html` (reason: ${punishment[3]})`;
 				}
 			} else if (targetUser.locked) {
 				buf += `<br />LOCKED: ${targetUser.locked}`;
@@ -119,7 +119,7 @@ exports.commands = {
 				if (punishment) {
 					let expiresIn = Punishments.checkLockExpiration(targetUser.locked);
 					if (expiresIn) buf += expiresIn;
-					if (punishment[3]) buf += ` (reason: ${punishment[3]})`;
+					if (punishment[3]) buf += Chat.html` (reason: ${punishment[3]})`;
 				}
 			}
 			if (targetUser.semilocked) {
@@ -207,7 +207,7 @@ exports.commands = {
 			buf += `${punishName}: ${punishUserid}`;
 			let expiresIn = Punishments.checkLockExpiration(userid);
 			if (expiresIn) buf += expiresIn;
-			if (reason) buf += ` (reason: ${reason})`;
+			if (reason) buf += Chat.html` (reason: ${reason})`;
 			buf += '<br />';
 			atLeastOne = true;
 		}
