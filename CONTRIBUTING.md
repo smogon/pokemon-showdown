@@ -3,15 +3,17 @@ Contributing to Pokémon Showdown
 
 In general, we welcome pull requests that fix bugs.
 
-For large projects, please discuss with us at http://psim.us/development first. We'd hate to have to reject a pull request that you spent a long time working on...
+For feature additions and large projects, please discuss with us at http://psim.us/development first. We'd hate to have to reject a pull request that you spent a long time working on...
+
+If you're looking for inspiration for something to do, the Ideas issue is a good place to look: https://github.com/Zarel/Pokemon-Showdown/issues/2444
 
 
 License
 ------------------------------------------------------------------------
 
-Your submitted code should be MIT licensed (for simplicity, it should be MIT licensed even if you're submitting client code). The first time you make a client pull request, we'll ask you to explicitly state that you agree to MIT license it, just to be safe.
+Your submitted code should be MIT licensed. The GitHub ToS (and the fact that your fork also contains our LICENSE file) ensures this, so we won't ask when you submit a pull request, but keep this in mind.
 
-On the server, we won't do this, because GitHub's ToS makes you use the included license when you submit a pull request.
+For simplicity (mostly to make relicensing easier), client code should be also be MIT licensed. The first time you make a client pull request, we'll ask you to explicitly state that you agree to MIT license it.
 
 
 Commit standards
@@ -69,10 +71,6 @@ We enforce most of our code standards through `eslint`. Just run `npm test` and 
 
 Looking at your surrounding text is also a way to get a good idea of our coding style.
 
-In particular:
-
-- Tabs, not spaces (sorry! our more opinionated developers like tabs more)
-
 ### Strings
 
 The codebase currently uses a mix of `"` and `'` and `` ` `` for strings.
@@ -81,6 +79,7 @@ Our current convention is to use `'` for IDs; `"` for names (i.e. usernames, mov
 
 Unfortunately, since this is not a convention the linter can test for (and also because our older string standards predate PS), a lot of existing code is wrong on this, so you can't look at surrounding code to get an idea of what the convention should be. Refer to the above paragraph as the definitive rule.
 
+
 ES5 and ES6
 ------------------------------------------------------------------------
 
@@ -88,13 +87,15 @@ In general, use modern features only if they're supported in Node 6 and reasonab
 
 - **let, const: ALWAYS** - Supported in Node 4+, good performance.
 
-- **for-of on Arrays: SPARINGLY** - Poor performance. Acceptable outside of inner loops. For inner loops, use `for (let i = 0; i < array.length; i++)`
+- **for-of on Arrays: SOMETIMES** - Poor performance. Acceptable outside of inner loops. For inner loops, use `for (let i = 0; i < array.length; i++)`
 
 - **Array#forEach: NEVER** - Worse performance than `for-of` on Arrays. See `for-of`.
 
 - **for-in on Arrays: NEVER** - Horrible performance, weird bugs due to string keys, poor interaction with Array prototype modification. Everyone tells you never to do it; we're no different. See `for-of`.
 
 - **Map, Set: SOMETIMES** - Much worse write/iteration performance, much better read performance than `Object.create(null)`. Use whatever's faster for your use case.
+
+- **for-in on Objects: SOMETIMES** - `Object.keys` is apparently a lot faster. Use that if you can.
 
 - **for-of on Maps: NEVER** - Poor performance. Use `Map#forEach`.
 
@@ -104,11 +105,13 @@ In general, use modern features only if they're supported in Node 6 and reasonab
 
 - **Arrow functions: ALWAYS** - Supported in Node 4+, good performance. Obviously use only for callbacks; don't use in situations where `this` shouldn't be bound.
 
-- **Promises: ALWAYS** - Supported in Node 4+, great performance.
+- **Promises: ALWAYS** - Supported in Node 4+, poor performance but worth the readability.
+
+- **async/await: ALWAYS** - Supported in Node 8+, good performance.
 
 - **Function#bind: NEVER** - Horrible performance. Use arrow functions.
 
-- **classes and subclasses: ALWAYS** - Supported in Node 4+ and good performance in Node 6+; please start refactoring existing code over.
+- **classes and subclasses: ALWAYS** - Supported in Node 4+ and good performance in Node 6+.
 
 - **String#includes: ALWAYS** - Supported in Node 4+, poor performance, but not really noticeable and worth the better readability.
 
