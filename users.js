@@ -1138,7 +1138,7 @@ class User {
 	}
 	getAltUsers(includeTrusted, forPunishment) {
 		let alts = findUsers([this.getLastId()], Object.keys(this.ips), {includeTrusted: includeTrusted, forPunishment: forPunishment});
-		if (!forPunishment) alts.filter(user => user !== this);
+		if (!forPunishment) alts = alts.filter(user => user !== this);
 		return alts;
 	}
 	getLastName() {
