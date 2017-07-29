@@ -141,6 +141,7 @@ class BattleTimer {
 		 * @type {[number]}
 		 */
 		this.dcTicksLeft = [];
+		this.hasLongTurns = Dex.getFormat(battle.format).gameType !== 'singles';
 
 		this.lastDisabledTime = 0;
 		this.lastDisabledByUser = null;
@@ -208,9 +209,8 @@ class BattleTimer {
 			const slot = 'p' + (slotNum + 1);
 			const player = this.battle[slot];
 
-			this.ticksLeft[slotNum]++;
-			// add 10 seconds to bank if they're below 160 seconds
-			if (this.ticksLeft[slotNum] < 16) this.ticksLeft[slotNum]++;
+			// +20 sec/turn in doubles/triples, +10 sec/turn in singles
+			this.ticksLeft[slotNum] += (this.hasLongTurns ? 2 : 1);
 			this.turnTicksLeft[slotNum] = Math.min(this.ticksLeft[slotNum], maxTicksLeft);
 
 			const ticksLeft = this.turnTicksLeft[slotNum];
