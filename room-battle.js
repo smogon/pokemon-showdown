@@ -16,11 +16,11 @@
 /** 10 seconds */
 const TICK_TIME = 10 * 1000;
 
-// Timer constants: A tick is 10 seconds
-const STARTING_TICKS = 21;
-const MAX_TURN_TICKS = 15;
-const STARTING_TICKS_CHALLENGE = 28;
-const MAX_TURN_TICKS_CHALLENGE = 30;
+// Timer constants: In seconds, should be multiple of ten
+const STARTING_TIME = 210;
+const MAX_TURN_TIME = 150;
+const STARTING_TIME_CHALLENGE = 280;
+const MAX_TURN_TIME_CHALLENGE = 300;
 
 // time after a player disabling the timer before they can re-enable it
 const TIMER_COOLDOWN = 20 * 1000;
@@ -141,16 +141,29 @@ class BattleTimer {
 		 * @type {[number]}
 		 */
 		this.dcTicksLeft = [];
-		this.hasLongTurns = Dex.getFormat(battle.format).gameType !== 'singles';
 
 		this.lastDisabledTime = 0;
 		this.lastDisabledByUser = null;
 
-		this.isChallenge = !battle.rated && !battle.room.tour;
+		const hasLongTurns = Dex.getFormat(battle.format).gameType !== 'singles';
+		const isChallenge = (!battle.rated && !battle.room.tour);
+		this.settings = Object.assign({}, Dex.getFormat(battle.format).timer);
+		if (this.settings.perTurn === undefined) {
+			this.settings.perTurn = hasLongTurns ? 20 : 10;
+		}
+		if (this.settings.starting === undefined) {
+			this.settings.starting = isChallenge ? STARTING_TIME_CHALLENGE : STARTING_TIME;
+		}
+		if (this.settings.maxPerTurn === undefined) {
+			this.settings.maxPerTurn = isChallenge ? MAX_TURN_TIME_CHALLENGE : MAX_TURN_TIME;
+		}
+		if (this.settings.maxPerTurn <= 0) this.settings.maxPerTurn = Infinity;
+		this.settings.perTurnTicks = Math.floor(this.settings.perTurn / 10);
+		this.settings.startingTicks = Math.ceil(this.settings.starting / 10);
+		this.settings.maxPerTurnTicks = Math.ceil(this.settings.maxPerTurn / 10);
 
-		const ticksLeft = (this.isChallenge ? STARTING_TICKS_CHALLENGE : STARTING_TICKS);
 		for (let slotNum = 0; slotNum < 2; slotNum++) {
-			this.ticksLeft.push(ticksLeft);
+			this.ticksLeft.push(this.settings.startingTicks);
 			this.turnTicksLeft.push(-1);
 			this.dcTicksLeft.push(10);
 		}
@@ -203,15 +216,12 @@ class BattleTimer {
 	nextRequest() {
 		if (this.timer) clearTimeout(this.timer);
 		if (!this.timerRequesters.size) return;
-		const maxTicksLeft = (this.isChallenge ? MAX_TURN_TICKS_CHALLENGE : MAX_TURN_TICKS);
-
 		for (const slotNum of this.ticksLeft.keys()) {
 			const slot = 'p' + (slotNum + 1);
 			const player = this.battle[slot];
 
-			// +20 sec/turn in doubles/triples, +10 sec/turn in singles
-			this.ticksLeft[slotNum] += (this.hasLongTurns ? 2 : 1);
-			this.turnTicksLeft[slotNum] = Math.min(this.ticksLeft[slotNum], maxTicksLeft);
+			this.ticksLeft[slotNum] += this.settings.perTurnTicks;
+			this.turnTicksLeft[slotNum] = Math.min(this.ticksLeft[slotNum], this.settings.maxPerTurnTicks);
 
 			const ticksLeft = this.turnTicksLeft[slotNum];
 			if (player) player.sendRoom(`|inactive|Time left: ${ticksLeft * 10} sec this turn | ${this.ticksLeft[slotNum] * 10} sec total`);
