@@ -247,7 +247,7 @@ exports.commands = {
 		"/movesearch [parameter], [parameter], [parameter], ... - Searches for moves that fulfill the selected criteria.",
 		"Search categories are: type, category, gen, contest condition, flag, status inflicted, type boosted, and numeric range for base power, pp, and accuracy.",
 		"Types must be followed by ' type', e.g., 'dragon type'.",
-		"Stat boosts must be preceded with 'boosts ', e.g., 'boosts attack' searches for moves that boost the attack stat.",
+		"Stat boosts must be preceded with 'boosts ', e.g., 'boosts attack' searches for moves that boost the attack stat of either Pok\u00e9mon.",
 		"Inequality ranges use the characters '>' and '<' though they behave as '≥' and '≤', e.g., 'bp > 100' searches for all moves equal to and greater than 100 base power.",
 		"Parameters can be excluded through the use of '!', e.g., !water type' excludes all water type moves.",
 		"Valid flags are: authentic (bypasses substitute), bite, bullet, contact, defrost, powder, pulse, punch, secondary, snatch, and sound.",
@@ -805,7 +805,7 @@ function runMovesearch(target, cmd, canAll, message) {
 	let targetMon = '';
 	let randomOutput = 0;
 	for (let i = 0; i < targets.length; i++) {
-		let orGroup = {types: {}, categories: {}, contestTypes: {}, flags: {}, gens: {}, recovery: {}, mon: {}, property: {}, boost: {}, zboost: {}, status: {}, volatileStatus: {}, skip: false};
+		let orGroup = {types: {}, categories: {}, contestTypes: {}, flags: {}, gens: {}, recovery: {}, mon: {}, property: {}, boost: {}, lower: {}, zboost: {}, status: {}, volatileStatus: {}, skip: false};
 		let parameters = targets[i].split("|");
 		if (parameters.length > 3) return {reply: "No more than 3 alternatives for each parameter may be used."};
 		for (let j = 0; j < parameters.length; j++) {
@@ -976,7 +976,11 @@ function runMovesearch(target, cmd, canAll, message) {
 				}
 				continue;
 			}
-			if (target.substr(0, 7) === 'boosts ') {
+			if (target.substr(0, 7) === 'boosts ' || target.substr(0, 7) === 'lowers ') {
+				let isBoost = true;
+				if (target.substr(0, 7) === 'lowers ') {
+					isBoost = false;
+				}
 				switch (target.substr(7)) {
 				case 'attack': target = 'atk'; break;
 				case 'defense': target = 'def'; break;
@@ -990,8 +994,13 @@ function runMovesearch(target, cmd, canAll, message) {
 				default: target = target.substr(7);
 				}
 				if (!(target in allBoosts)) return {reply: `'${escapeHTML(target.substr(7))}' is not a recognized stat.`};
-				if ((orGroup.boost[target] && isNotSearch) || (orGroup.boost[target] === false && !isNotSearch)) return {reply: 'A search cannot both exclude and include a stat boost.'};
-				orGroup.boost[target] = !isNotSearch;
+				if (isBoost) {
+					if ((orGroup.boost[target] && isNotSearch) || (orGroup.boost[target] === false && !isNotSearch)) return {reply: 'A search cannot both exclude and include a stat boost.'};
+					orGroup.boost[target] = !isNotSearch;
+				} else {
+					if ((orGroup.lower[target] && isNotSearch) || (orGroup.lower[target] === false && !isNotSearch)) return {reply: 'A search cannot both exclude and include a stat boost.'};
+					orGroup.lower[target] = !isNotSearch;
+				}
 				continue;
 			}
 
@@ -1142,6 +1151,20 @@ function runMovesearch(target, cmd, canAll, message) {
 					}
 				} else if (dex[move].secondary && dex[move].secondary.self && dex[move].secondary.self.boosts) {
 					if ((dex[move].secondary.self.boosts[boost] > 0) === alts.boost[boost]) {
+						matched = true;
+						break;
+					}
+				}
+			}
+			if (matched) continue;
+			for (let lower in alts.lower) {
+				if (dex[move].boosts) {
+					if ((dex[move].boosts[lower] < 0) === alts.lower[lower]) {
+						matched = true;
+						break;
+					}
+				} else if (dex[move].secondary && dex[move].secondary.self && dex[move].secondary.self.boosts) {
+					if ((dex[move].secondary.self.boosts[lower] < 0) === alts.boost[lower]) {
 						matched = true;
 						break;
 					}
