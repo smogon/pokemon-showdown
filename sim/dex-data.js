@@ -188,6 +188,11 @@ class Format extends Effect {
 		// @ts-ignore
 		this.effectType = Tools.getString(this.effectType) || 'Format';
 		/**
+		 * Game type.
+		 * @type {'singles' | 'doubles' | 'triples'}
+		 */
+		this.gameType = this.gameType || 'singles';
+		/**
 		 * List of rule names.
 		 * @type {string[]}
 		 */

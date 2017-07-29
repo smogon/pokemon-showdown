@@ -247,7 +247,7 @@ exports.commands = {
 		"/movesearch [parameter], [parameter], [parameter], ... - Searches for moves that fulfill the selected criteria.",
 		"Search categories are: type, category, gen, contest condition, flag, status inflicted, type boosted, and numeric range for base power, pp, and accuracy.",
 		"Types must be followed by ' type', e.g., 'dragon type'.",
-		"Stat boosts must be preceded with 'boosts ', e.g., 'boosts attack' searches for moves that boost the attack stat of either Pok\u00e9mon.",
+		"Stat boosts must be preceded with 'boosts ', and stat-lowering moves with 'lowers ', e.g., 'boosts attack' searches for moves that boost the attack stat of either Pok\u00e9mon.",
 		"Inequality ranges use the characters '>' and '<' though they behave as '≥' and '≤', e.g., 'bp > 100' searches for all moves equal to and greater than 100 base power.",
 		"Parameters can be excluded through the use of '!', e.g., !water type' excludes all water type moves.",
 		"Valid flags are: authentic (bypasses substitute), bite, bullet, contact, defrost, powder, pulse, punch, secondary, snatch, and sound.",

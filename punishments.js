@@ -420,6 +420,7 @@ Punishments.punish = function (user, punishment, recursionKeys) {
 	if (user.trusted) {
 		Punishments.userids.set(user.trusted, punishment);
 		keys.add(user.trusted);
+		if (!PUNISH_TRUSTED) affected.unshift(user);
 	}
 	if (!recursionKeys) {
 		const [punishType, id, ...rest] = punishment;
@@ -432,6 +433,36 @@ Punishments.punish = function (user, punishment, recursionKeys) {
 		return affected;
 	}
 };
+
+Punishments.punishName = function (userid, punishment) {
+	let foundKeys = Punishments.search(userid)[0].map(key => key.split(':')[0]);
+	let userids = new Set([userid]);
+	let ips = new Set();
+	for (let key of foundKeys) {
+		if (key.includes('.')) {
+			ips.add(key);
+		} else {
+			userids.add(key);
+		}
+	}
+	userids.forEach(id => {
+		Punishments.userids.set(id, punishment);
+	});
+	ips.forEach(ip => {
+		Punishments.ips.set(ip, punishment);
+	});
+	const [punishType, id, ...rest] = punishment;
+	let affected = Users.findUsers(Array.from(userids), Array.from(ips), {includeTrusted: PUNISH_TRUSTED, forPunishment: true});
+	userids.delete(id);
+	Punishments.appendPunishment({
+		keys: Array.from(userids).concat(Array.from(ips)),
+		punishType: punishType,
+		rest: rest,
+	}, id, PUNISHMENT_FILE);
+
+	return affected;
+};
+
 /**
  * @param {string} id
  * @param {string} punishType
@@ -495,6 +526,7 @@ Punishments.roomPunish = function (room, user, punishment, recursionKeys) {
 	if (user.trusted) {
 		Punishments.roomUserids.nestedSet(room.id, user.trusted, punishment);
 		keys.add(user.trusted);
+		if (!PUNISH_TRUSTED) affected.unshift(user);
 	}
 	if (!recursionKeys) {
 		const [punishType, id, ...rest] = punishment;
@@ -512,15 +544,33 @@ Punishments.roomPunish = function (room, user, punishment, recursionKeys) {
 };
 
 Punishments.roomPunishName = function (room, userid, punishment) {
-	Punishments.roomUserids.nestedSet(room.id, userid, punishment);
+	let foundKeys = Punishments.search(userid)[0].map(key => key.split(':')[0]);
+	let userids = new Set([userid]);
+	let ips = new Set();
+	for (let key of foundKeys) {
+		if (key.includes('.')) {
+			ips.add(key);
+		} else {
+			userids.add(key);
+		}
+	}
+	userids.forEach(id => {
+		Punishments.roomUserids.nestedSet(room.id, id, punishment);
+	});
+	ips.forEach(ip => {
+		Punishments.roomIps.nestedSet(room.id, ip, punishment);
+	});
 	const [punishType, id, ...rest] = punishment;
+	let affected = Users.findUsers(Array.from(userids), Array.from(ips), {includeTrusted: PUNISH_TRUSTED, forPunishment: true});
+	userids.delete(id);
 	Punishments.appendPunishment({
-		keys: [userid],
+		keys: Array.from(userids).concat(Array.from(ips)),
 		punishType: punishType,
 		rest: rest,
 	}, room.id + ':' + id, ROOM_PUNISHMENT_FILE);
 
 	if (!(room.isPrivate === true || room.isPersonal || room.battle)) Punishments.monitorRoomPunishments(userid);
+	return affected;
 };
 
 /**
@@ -602,12 +652,20 @@ Punishments.unban = function (name) {
  * @return {?Array}
  */
 Punishments.lock = function (user, expireTime, id, ...reason) {
-	if (!id) id = user.getLastId();
+	if (!id && user) id = user.getLastId();
+	if (!user || typeof user === 'string') user = Users(id);
 
 	if (!expireTime) expireTime = Date.now() + LOCK_DURATION;
 	let punishment = ['LOCK', id, expireTime, ...reason];
 
-	let affected = Punishments.punish(user, punishment);
+	let affected = [];
+
+	if (user) {
+		affected = Punishments.punish(user, punishment);
+	} else {
+		affected = Punishments.punishName(id, punishment);
+	}
+
 	for (let curUser of affected) {
 		curUser.locked = id;
 		curUser.updateIdentity();
@@ -632,9 +690,9 @@ Punishments.autolock = function (user, room, source, reason, message, week) {
 		expires = Date.now() + 7 * 24 * 60 * 60 * 1000;
 		punishment = `WEEKLOCKED`;
 	}
-	Punishments.lock(user, expires, user.userid, `Autolock: ${user.name}: ${reason}`);
+	Punishments.lock(user, expires, toId(user), `Autolock: ${user.name || toId(user)}: ${reason}`);
 	Monitor.log(`[${source}] ${punishment}: ${message}`);
-	Rooms.global.modlog(`(${toId(room)}) AUTOLOCK: [${user.userid}]: ${reason}`);
+	Rooms.global.modlog(`(${toId(room)}) AUTOLOCK: [${toId(user)}]: ${reason}`);
 };
 /**
  * @param {string} name
@@ -782,21 +840,24 @@ Punishments.roomBlacklist = function (room, user, expireTime, userId, ...reason)
 	if (!expireTime) expireTime = Date.now() + BLACKLIST_DURATION;
 	let punishment = ['BLACKLIST', userId, expireTime].concat(reason);
 
+	let affected = [];
+
 	if (!user || userId && userId !== user.userid) {
-		Punishments.roomPunishName(room, userId, punishment);
+		affected = Punishments.roomPunishName(room, userId, punishment);
 	}
 
 	if (user) {
-		let affected = Punishments.roomPunish(room, user, punishment);
-		for (let curUser of affected) {
-			if (room.game && room.game.removeBannedUser) {
-				room.game.removeBannedUser(curUser);
-			}
-			curUser.leaveRoom(room.id);
-		}
-
-		return affected;
+		affected = affected.concat(Punishments.roomPunish(room, user, punishment));
 	}
+
+	for (let curUser of affected) {
+		if (room.game && room.game.removeBannedUser) {
+			room.game.removeBannedUser(curUser);
+		}
+		curUser.leaveRoom(room.id);
+	}
+
+	return affected;
 };
 
 /**
@@ -1205,7 +1266,7 @@ Punishments.isRoomBanned = function (user, roomid) {
  * options.publicOnly will make this only return public room punishments.
  * options.checkIps will also check the IP of the user for IP-based punishments.
  *
- * @param {User} user
+ * @param {User | string} user
  * @param {?Object} options
  * @return {Array}
  */
@@ -1250,7 +1311,7 @@ Punishments.getRoomPunishments = function (user, options) {
 /**
  * Notifies staff if a user has three or more room punishments.
  *
- * @param {User} user
+ * @param {User | string} user
  */
 Punishments.monitorRoomPunishments = function (user) {
 	if (user.locked) return;
@@ -1277,10 +1338,10 @@ Punishments.monitorRoomPunishments = function (user) {
 		if (Config.punishmentautolock && points >= AUTOLOCK_POINT_THRESHOLD) {
 			let rooms = punishments.map(([room]) => room).join(', ');
 			let reason = `Autolocked for having punishments in ${punishments.length} rooms: ${rooms}`;
-			let message = `${user.name} was locked for having punishments in ${punishments.length} rooms: ${punishmentText}`;
+			let message = `${user.name || `[${toId(user)}]`} was locked for having punishments in ${punishments.length} rooms: ${punishmentText}`;
 
 			Punishments.autolock(user, 'staff', 'PunishmentMonitor', reason, message);
-			user.popup("|modal|You've been locked for breaking the rules in multiple chatrooms.\n\nIf you feel that your lock was unjustified, you can still PM staff members (%, @, &, and ~) to discuss it" + (Config.appealurl ? " or you can appeal:\n" + Config.appealurl : ".") + "\n\nYour lock will expire in a few days.");
+			if (typeof user !== 'string') user.popup("|modal|You've been locked for breaking the rules in multiple chatrooms.\n\nIf you feel that your lock was unjustified, you can still PM staff members (%, @, &, and ~) to discuss it" + (Config.appealurl ? " or you can appeal:\n" + Config.appealurl : ".") + "\n\nYour lock will expire in a few days.");
 		} else {
 			Monitor.log(`[PunishmentMonitor] ${user.name} currently has punishments in ${punishments.length} rooms: ${punishmentText}`);
 		}

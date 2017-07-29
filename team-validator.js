@@ -16,7 +16,7 @@ class Validator {
 	constructor(format, customBanlist) {
 		this.format = Dex.getFormat(format, customBanlist);
 		this.customBanlist = this.format.customBanlist ? this.format.customBanlist.join(',') : '0';
-		this.dex = Dex.format(this.format);
+		this.dex = Dex.forFormat(this.format);
 	}
 
 	validateTeam(team, removeNicknames) {

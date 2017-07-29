@@ -1511,7 +1511,7 @@ class RandomTeams extends Dex.ModdedDex {
 		let allowedNFE = {'Chansey':1, 'Doublade':1, 'Gligar':1, 'Porygon2':1, 'Scyther':1, 'Togetic':1};
 
 		// For Monotype
-		let isMonotype = this.format === 'gen7monotyperandombattle';
+		let isMonotype = this.format.id === 'gen7monotyperandombattle';
 		let typePool = Object.keys(this.data.TypeChart);
 		let type = typePool[this.random(typePool.length)];
 
@@ -1613,7 +1613,7 @@ class RandomTeams extends Dex.ModdedDex {
 				if (skip) continue;
 			}
 
-			let set = this[this.gameType === 'singles' ? 'randomSet' : 'randomDoublesSet'](template, pokemon.length, teamDetails);
+			let set = this[this.format.gameType === 'singles' ? 'randomSet' : 'randomDoublesSet'](template, pokemon.length, teamDetails);
 
 			// Illusion shouldn't be the last Pokemon of the team
 			if (set.ability === 'Illusion' && pokemon.length > 4) continue;
@@ -2485,6 +2485,22 @@ class RandomTeams extends Dex.ModdedDex {
 			bst += 0.5 * (baseStats.def + baseStats.spd);
 		}
 		let level = 70 + Math.floor(((600 - this.clampIntRange(bst, 300, 600)) / 10.34));
+
+		// Prepare optimal HP
+		let hp = Math.floor(Math.floor(2 * template.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
+		if (hasMove['substitute'] && (item === 'Sitrus Berry' || (ability === 'Power Construct' && item !== 'Leftovers'))) {
+			// Two Substitutes should activate Sitrus Berry or Power Construct
+			while (hp % 4 > 0) {
+				evs.hp -= 4;
+				hp = Math.floor(Math.floor(2 * template.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
+			}
+		} else if (hasMove['bellydrum'] && (item === 'Sitrus Berry' || ability === 'Gluttony')) {
+			// Belly Drum should activate Sitrus Berry
+			if (hp % 2 > 0) evs.hp -= 4;
+		} else if (hasMove['substitute'] && hasMove['reversal']) {
+			// Reversal users should be able to use four Substitutes
+			if (hp % 4 === 0) evs.hp -= 4;
+		}
 
 		return {
 			name: template.baseSpecies,

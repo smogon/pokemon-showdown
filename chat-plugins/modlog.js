@@ -6,7 +6,10 @@ const ProcessManager = require('./../process-manager');
 const execFileSync = require('child_process').execFileSync;
 
 const MAX_PROCESSES = 1;
-const RESULTS_MAX_LENGTH = 100;
+const DEFAULT_RESULTS_LENGTH = 100;
+const MORE_BUTTON_INCREMENTS = [200, 400, 800, 1600, 3200];
+const LINES_SEPARATOR = 'lines=';
+const MAX_RESULTS_LENGTH = MORE_BUTTON_INCREMENTS[MORE_BUTTON_INCREMENTS.length - 1];
 const LOG_PATH = 'logs/modlog/';
 
 class ModlogManager extends ProcessManager {
@@ -45,10 +48,9 @@ class ModlogManager extends ProcessManager {
 	}
 
 	async receive(rooms, searchString, exactSearch, maxLines) {
-		let result;
+		let result = '';
 		exactSearch = exactSearch === '1';
 		maxLines = Number(maxLines);
-		if (isNaN(maxLines) || maxLines > RESULTS_MAX_LENGTH || maxLines < 1) maxLines = RESULTS_MAX_LENGTH;
 		try {
 			result = '1|' + await runModlog(rooms.split(','), searchString, exactSearch, maxLines);
 		} catch (err) {
@@ -130,6 +132,21 @@ function checkRipgrepAvailability() {
 		}
 	}
 	return Config.ripgrepmodlog;
+}
+
+function getMoreButton(room, search, lines) {
+	let newLines = 0;
+	for (let increase of MORE_BUTTON_INCREMENTS) {
+		if (increase > lines) {
+			newLines = increase;
+			break;
+		}
+	}
+	if (!newLines) {
+		return ''; // don't show a button if no more pre-set increments are valid
+	} else {
+		return `<br /><div style="float:right"><button class="button" name="send" value="/modlog ${room}, ${search} ${LINES_SEPARATOR}${newLines}" title="View more results">More results...</button></div>`;
+	}
 }
 
 async function runModlog(rooms, searchString, exactSearch, maxLines) {
@@ -214,6 +231,7 @@ function prettifyResults(rawResults, room, searchString, exactSearch, addModlogL
 	default:
 		roomName = `room ${room}`;
 	}
+	const preSearchString = searchString;
 	if (exactSearch) searchString = `"${searchString}"`;
 	let pipeIndex = rawResults.indexOf('|');
 	if (pipeIndex < 0) pipeIndex = 0;
@@ -241,13 +259,14 @@ function prettifyResults(rawResults, room, searchString, exactSearch, addModlogL
 	}).join(`<br />`);
 	let preamble;
 	if (searchString) {
-		preamble = `|popup||wide||html|<p>The last ${lines} logged actions containing ${searchString} on ${roomName}.` +
+		preamble = `|popup||wide||html|<p>The last ${lines} logged action${Chat.plural(lines)} containing ${searchString} on ${roomName}.` +
 						(exactSearch ? "" : " Add quotes to the search parameter to search for a phrase, rather than a user.");
 	} else {
-		preamble = `|popup||wide||html|<p>The last ${lines} lines of the Moderator Log of ${roomName}.`;
+		preamble = `|popup||wide||html|<p>The last ${lines} line${Chat.plural(lines)} of the Moderator Log of ${roomName}.`;
 	}
 	preamble +=	`</p><p><small>[${Chat.toTimestamp(new Date(), {hour12: true})}] \u2190 current server time</small></p>`;
-	return preamble + resultString;
+	let moreButton = getMoreButton(room, preSearchString, lines);
+	return `${preamble}${resultString}${moreButton}`;
 }
 
 exports.commands = {
@@ -257,7 +276,7 @@ exports.commands = {
 		const startTime = Date.now();
 		if (!room) room = Rooms('global');
 		let roomId = (room.id === 'staff' ? 'global' : room.id);
-		let hideIps = !user.can('lock');
+		const hideIps = !user.can('lock');
 
 		if (target.includes(',')) {
 			let targets = target.split(',');
@@ -277,19 +296,28 @@ exports.commands = {
 			if (!this.can('modlog', null, targetRoom)) return;
 		}
 
-		let addModlogLinks = Config.modloglink && (!hideIps || (targetRoom && targetRoom.isPrivate !== true));
-		// Let's check the number of lines to retrieve or if it's a word instead
+		const addModlogLinks = Config.modloglink && (!hideIps || (targetRoom && targetRoom.isPrivate !== true));
 		let lines = 0;
-		if (!target.match(/[^0-9]/)) {
-			lines = parseInt(target || 20);
-			if (lines > RESULTS_MAX_LENGTH) lines = RESULTS_MAX_LENGTH;
+		if (target.includes(LINES_SEPARATOR)) { // undocumented line specification
+			const reqIndex = target.indexOf(LINES_SEPARATOR);
+			const requestedLines = parseInt(target.substr(reqIndex + 6, target.length));
+			if (isNaN(requestedLines) || requestedLines < 1) {
+				this.errorReply(`${LINES_SEPARATOR}${requestedLines} is not a valid line count.`);
+				return;
+			}
+			lines = requestedLines;
+			target = target.substr(0, reqIndex).trim(); // strip search out
 		}
-		let wordSearch = (!lines || lines < 0);
+
+		if (!target && !lines) {
+			lines = 20;
+		}
+
 		let searchString = '';
-		if (wordSearch) {
-			searchString = target.trim();
-			lines = RESULTS_MAX_LENGTH;
-		}
+		if (target) searchString = target.trim();
+
+		if (!lines) lines = DEFAULT_RESULTS_LENGTH;
+
 		let exactSearch = '0';
 		if (searchString.match(/^["'].+["']$/)) {
 			exactSearch = '1';
@@ -305,14 +333,16 @@ exports.commands = {
 			roomIdList = [roomId];
 		}
 
+		if (lines > MAX_RESULTS_LENGTH) lines = MAX_RESULTS_LENGTH;
+
 		PM.send(roomIdList.join(','), searchString, exactSearch, lines).then(response => {
 			connection.send(prettifyResults(response, roomId, searchString, exactSearch, addModlogLinks, hideIps));
 			if (cmd === 'timedmodlog') this.sendReply(`The modlog query took ${Date.now() - startTime} ms to complete.`);
 		});
 	},
-	modloghelp: ["/modlog [roomid|all|public], [n] - Roomid defaults to current room.",
-		"If n is a number or omitted, display the last n lines of the moderator log. Defaults to 20.",
-		"If n is not a number, search the moderator log for 'n' on room's log [roomid]. If you set [all] as [roomid], searches for 'n' on all rooms's logs.",
-		"If you set [public] as [roomid], searches for 'n' in all public room's logs, excluding battles. Requires: % @ * # & ~",
+	modloghelp: [
+		"/modlog [roomid], [search] - Searches the moderator log - defaults to the current room unless specified otherwise.",
+		"If you set [roomid] as [all], it searches for [search] on all rooms' moderator logs.",
+		"If you set [roomid] as [public], it searches for [search] in all public rooms' moderator logs, excluding battles. Requires: % @ * # & ~",
 	],
 };
