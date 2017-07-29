@@ -342,7 +342,7 @@ exports.commands = {
 	},
 	modloghelp: [
 		"/modlog [roomid], [search] - Searches the moderator log - defaults to the current room unless specified otherwise.",
-		"If you set [roomid] as [all], it searches for [search] on all rooms's moderator logs.",
+		"If you set [roomid] as [all], it searches for [search] on all room's moderator logs.",
 		"If you set [roomid] as [public], it searches for [search] in all public room's moderator logs, excluding battles. Requires: % @ * # & ~",
 	],
 };
