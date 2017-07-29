@@ -502,7 +502,7 @@ class UNOgamePlayer extends Rooms.RoomGamePlayer {
 		this.sendRoom(
 			`|uhtml|uno-hand|<div style="border: 1px solid skyblue; padding: 0 0 5px 0"><table style="width: 100%; table-layout: fixed; border-radius: 3px"><tr><td colspan=4 rowspan=2 style="padding: 5px"><div style="overflow-x: auto; white-space: nowrap; width: 100%">${hand}</div></td>${this.game.currentPlayer === this.userid ? `<td colspan=2 style="padding: 5px 5px 0 5px">${top}</td></tr>` : ""}` +
 			`<tr><td colspan=2 style="vertical-align: top; padding: 0px 5px 5px 5px"><div style="overflow-y: scroll">${players}</div></td></tr></table>` +
-			`${this.game.currentPlayer === this.userid ? `<div style="text-align: center">${draw} <span style="padding-left: 10px;></span> ${pass} <span style="padding-left: 10px;"></span> ${uno}</div>` : ""}</div>`
+			`${this.game.currentPlayer === this.userid ? `<div style="text-align: center">${draw} <span style="padding-left: 10px;"></span> ${pass} <span style="padding-left: 10px;"></span> ${uno}</div>` : ""}</div>`
 		);
 	}
 }
