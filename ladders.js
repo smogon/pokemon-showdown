@@ -207,6 +207,11 @@ class Ladder {
 	 */
 	updateRating(p1name, p2name, p1score, room) {
 		let formatid = this.formatid;
+		let p2score = 1 - p1score;
+		if (p1score < 0) {
+			p1score = 0;
+			p2score = 0;
+		}
 		this.ladder.then(() => {
 			let p1newElo, p2newElo;
 			try {
@@ -217,7 +222,7 @@ class Ladder {
 				let p2elo = this.loadedLadder[p2index][1];
 
 				this.updateRow(this.loadedLadder[p1index], p1score, p2elo);
-				this.updateRow(this.loadedLadder[p2index], 1 - p1score, p1elo);
+				this.updateRow(this.loadedLadder[p2index], p2score, p1elo);
 
 				p1newElo = this.loadedLadder[p1index][1];
 				p2newElo = this.loadedLadder[p2index][1];
@@ -268,7 +273,7 @@ class Ladder {
 				if (reasons.charAt(0) !== '-') reasons = '+' + reasons;
 				room.addRaw(Chat.html`${p1name}'s rating: ${Math.round(p1elo)} &rarr; <strong>${Math.round(p1newElo)}</strong><br />(${reasons})`);
 
-				reasons = '' + (Math.round(p2newElo) - Math.round(p2elo)) + ' for ' + (p1score > 0.9 ? 'losing' : (p1score < 0.1 ? 'winning' : 'tying'));
+				reasons = '' + (Math.round(p2newElo) - Math.round(p2elo)) + ' for ' + (p2score > 0.9 ? 'winning' : (p2score < 0.1 ? 'losing' : 'tying'));
 				if (reasons.charAt(0) !== '-') reasons = '+' + reasons;
 				room.addRaw(Chat.html`${p2name}'s rating: ${Math.round(p2elo)} &rarr; <strong>${Math.round(p2newElo)}</strong><br />(${reasons})`);
 

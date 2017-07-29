@@ -6,7 +6,7 @@
  * helper functions for using dex data.
  *
  * By default, nothing is loaded until you call Dex.mod(mod) or
- * Dex.format(format).
+ * Dex.forFormat(format).
  *
  * You may choose to preload some things:
  * - Dex.includeMods() ~10ms
@@ -182,7 +182,7 @@ class ModdedDex {
 	 * @param {Format | string} format
 	 * @return {ModdedDex}
 	 */
-	format(format) {
+	forFormat(format) {
 		if (!this.modsLoaded) this.includeMods();
 		const mod = this.getFormat(format).mod;
 		if (!mod) return dexes['gen7'];
@@ -848,7 +848,7 @@ class ModdedDex {
 	 * @param {[number, number, number, number]} [seed]
 	 */
 	getTeamGenerator(format, seed) {
-		const TeamGenerator = require(this.format(format).dataDir + '/random-teams');
+		const TeamGenerator = require(dexes['base'].forFormat(format).dataDir + '/random-teams');
 		return new TeamGenerator(format, seed);
 	}
 	/**

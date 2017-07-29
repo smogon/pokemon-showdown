@@ -17,7 +17,7 @@ class Validator {
 		this.format = Dex.getFormat(format, customRules);
 		this.initalCustomRules = customRules ? customRules.join(',') : '';
 		this.customRules = this.format.customRules ? this.format.customRules.join(',') : '0';
-		this.dex = Dex.format(this.format);
+		this.dex = Dex.forFormat(this.format);
 	}
 
 	validateTeam(team, removeNicknames) {

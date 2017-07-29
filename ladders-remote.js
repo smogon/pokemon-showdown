@@ -98,7 +98,7 @@ class Ladder {
 
 					oldelo = Math.round(p2rating.oldelo);
 					elo = Math.round(p2rating.elo);
-					act = (p1score > 0.9 ? `losing` : (p1score < 0.1 ? `winning` : `tying`));
+					act = (p1score > 0.9 || p1score < 0 ? `losing` : (p1score < 0.1 ? `winning` : `tying`));
 					reasons = `${elo - oldelo} for ${act}`;
 					if (reasons.charAt(0) !== '-') reasons = '+' + reasons;
 					room.addRaw(Chat.html`${p2name}'s rating: ${oldelo} &rarr; <strong>${elo}</strong><br />(${reasons})`);
