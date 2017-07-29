@@ -214,7 +214,7 @@ class BattleTimer {
 			this.turnTicksLeft[slotNum] = Math.min(this.ticksLeft[slotNum], maxTicksLeft);
 
 			const ticksLeft = this.turnTicksLeft[slotNum];
-			if (player) player.sendRoom(`|inactive|You have ${ticksLeft * 10} seconds to make your decision.`);
+			if (player) player.sendRoom(`|inactive|Time left: ${ticksLeft * 10} sec this turn | ${this.ticksLeft[slotNum] * 10} sec total`);
 		}
 		this.timer = setTimeout(() => this.nextTick(), TICK_TIME);
 	}
