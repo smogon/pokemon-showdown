@@ -2291,7 +2291,7 @@ exports.BattleAbilities = {
 				}
 			},
 			onAnyAfterMove: function () {
-				this.effectData.target.removeVolatile("parentalbond");
+				this.effectData.target.removeVolatile('parentalbond');
 			},
 		},
 		id: "parentalbond",
