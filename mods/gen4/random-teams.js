@@ -185,7 +185,7 @@ class RandomGen4Teams extends RandomGen5Teams {
 					if (hasMove['lightscreen'] || hasMove['reflect'] || hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					break;
 				case 'uturn':
-					if (counter.setupType || !!counter['speedsetup'] || hasMove['batonpass'] || hasMove['substitute'] || hasAbility['Speed Boost']) rejected = true;
+					if (counter.setupType || !!counter['speedsetup'] || hasMove['batonpass'] || hasMove['substitute'] || (hasAbility['Speed Boost'] && hasMove['protect'])) rejected = true;
 					if (hasType['Bug'] && counter.stab < 2 && counter.damagingMoves.length > 2) rejected = true;
 					break;
 
@@ -452,6 +452,8 @@ class RandomGen4Teams extends RandomGen5Teams {
 				rejectAbility = !teamDetails['hail'];
 			} else if (ability === 'Solar Power') {
 				rejectAbility = !counter['Special'];
+			} else if (ability === 'Speed Boost') {
+				rejectAbility = hasMove['uturn'];
 			} else if (ability === 'Sturdy') {
 				rejectAbility = !!counter['recoil'] && !counter['recovery'];
 			} else if (ability === 'Swift Swim') {
