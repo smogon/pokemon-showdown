@@ -300,7 +300,7 @@ exports.commands = {
 		let lines = 0;
 		if (target.includes(LINES_SEPARATOR)) { // undocumented line specification
 			const reqIndex = target.indexOf(LINES_SEPARATOR);
-			const requestedLines = parseInt(target.substr(reqIndex + 6, target.length));
+			const requestedLines = parseInt(target.substr(reqIndex + LINES_SEPARATOR.length, target.length));
 			if (isNaN(requestedLines) || requestedLines < 1) {
 				this.errorReply(`${LINES_SEPARATOR}${requestedLines} is not a valid line count.`);
 				return;
