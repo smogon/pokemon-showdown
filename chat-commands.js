@@ -3226,11 +3226,11 @@ exports.commands = {
 	cancelsearch: 'search',
 	search: function (target, room, user) {
 		if (target) {
-			if (Config.pmmodchat) {
+			if (Config.laddermodchat) {
 				let userGroup = user.group;
-				if (Config.groupsranking.indexOf(userGroup) < Config.groupsranking.indexOf(Config.pmmodchat)) {
-					let groupName = Config.groups[Config.pmmodchat].name || Config.pmmodchat;
-					this.popupReply("Because moderated chat is set, you must be of rank " + groupName + " or higher to search for a battle.");
+				if (Config.groupsranking.indexOf(userGroup) < Config.groupsranking.indexOf(Config.laddermodchat)) {
+					let groupName = Config.groups[Config.laddermodchat].name || Config.laddermodchat;
+					this.popupReply("On this server, you must be of rank " + groupName + " or higher to search for a battle.");
 					return false;
 				}
 			}

@@ -130,8 +130,10 @@ exports.punishmentautolock = false;
 exports.chatmodchat = false;
 // battle modchat - default minimum group for speaking in battles; changeable with /modchat
 exports.battlemodchat = false;
-// pm modchat - minimum group for PMing other users, challenging other users, and laddering
+// pm modchat - minimum group for PMing other users, challenging other users
 exports.pmmodchat = false;
+// ladder modchat - minimum group for laddering
+exports.laddermodchat = false;
 
 // forced timer - force the timer on for all battles
 //   Players will be unable to turn it off.
