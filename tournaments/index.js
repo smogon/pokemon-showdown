@@ -1010,7 +1010,7 @@ let commands = {
 			if (Monitor.countPrepBattle(connection.ip, connection)) {
 				return;
 			}
-			TeamValidator(tournament.teambuilderFormat).prepTeam(user.team).then(result => {
+			TeamValidator(tournament.teambuilderFormat, tournament.banlist).prepTeam(user.team).then(result => {
 				if (result.charAt(0) === '1') {
 					connection.popup("Your team is valid for this tournament.");
 				} else {
