@@ -354,7 +354,7 @@ exports.Formats = [
 
 		mod: 'gen7',
 		ruleset: ['Gen 7] OU', 'Ignore STAB Moves'],
-		banlist: ['Kartana', 'Komala', 'Kyurem-Black', 'Silvally-Ghost', 'Tapu Lele', 'Aerodactylite', 'King\'s Rock', 'Metagrossite', 'Razor Fang'],
+		banlist: ['Kartana', 'Komala', 'Kyurem-Black', 'Silvally-Ghost', 'Tapu Koko', 'Tapu Lele', 'Aerodactylite', 'King\'s Rock', 'Metagrossite', 'Razor Fang'],
 	},
 	{
 		name: "[Gen 7] Godly Gift",
