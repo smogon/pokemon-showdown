@@ -285,6 +285,17 @@ class Validator {
 							set.sketchmonsMove = move.id;
 							continue;
 						}
+						// Typemons hack
+						if (format.id.includes('typemons') && !(move.id in {geomancy:1, quiverdance:1, shiftgear:1, struggle:1}) && !move.isZ) {
+							if (!teamHas.typemons) {
+								teamHas.typemons = {type: move.type, moves: [move.id]};
+								continue;
+							}
+							if (teamHas.typemons.type === move.type && teamHas.typemons.moves.indexOf(move.id) < 0) {
+								teamHas.typemons.moves.push(move.id);
+								continue;
+							}
+						}
 						let problemString = `${name} can't learn ${move.name}`;
 						if (problem.type === 'incompatibleAbility') {
 							problemString = problemString.concat(` because it's incompatible with its ability.`);
