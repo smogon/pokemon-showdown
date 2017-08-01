@@ -233,11 +233,11 @@ class RandomGen4Teams extends RandomGen5Teams {
 				case 'discharge':
 					if (hasMove['thunderbolt']) rejected = true;
 					break;
-				case 'energyball': case 'seedbomb':
+				case 'energyball':
 					if (hasMove['grassknot'] || hasMove['woodhammer'] || (hasMove['sunnyday'] && hasMove['solarbeam'])) rejected = true;
 					break;
-				case 'grassknot':
-					if (hasMove['woodhammer'] || (hasMove['sunnyday'] && hasMove['solarbeam'])) rejected = true;
+				case 'grassknot': case 'seedbomb':
+					if (hasMove['energyball'] || hasMove['woodhammer'] || (hasMove['sunnyday'] && hasMove['solarbeam'])) rejected = true;
 					break;
 				case 'leafstorm':
 					if (counter.setupType || hasMove['batonpass'] || hasMove['powerwhip'] || (hasMove['sunnyday'] && hasMove['solarbeam'])) rejected = true;
