@@ -837,14 +837,7 @@ class Validator {
 			alreadyChecked[template.speciesid] = true;
 			if (dex.gen === 2 && template.gen === 1) tradebackEligible = true;
 			// STABmons hack
-			if (ruleTable.has('ignorestabmoves') && !(moveid in {'acupressure':1, 'bellydrum':1, 'chatter':1, 'geomancy':1, 'lovelykiss':1, 'shellsmash':1, 'shiftgear':1, 'thousandarrows':1}) && !move.isZ) {
-				let types = template.types;
-				if (template.baseSpecies === 'Rotom') types = ['Electric', 'Ghost', 'Fire', 'Water', 'Ice', 'Flying', 'Grass'];
-				if (template.baseSpecies === 'Shaymin') types = ['Grass', 'Flying'];
-				if (template.baseSpecies === 'Hoopa') types = ['Psychic', 'Ghost', 'Dark'];
-				if (template.baseSpecies === 'Oricorio') types = ['Fire', 'Flying', 'Electric', 'Psychic', 'Ghost'];
-				if (template.baseSpecies === 'Arceus' || template.baseSpecies === 'Silvally' || types.includes(move.type)) return false;
-			}
+			if (ruleTable.has('ignorestabmoves') && template.types.includes(move.type)) return false;
 			if (!template.learnset) {
 				if (template.baseSpecies !== template.species) {
 					// forme without its own learnset

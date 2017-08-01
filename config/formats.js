@@ -655,11 +655,11 @@ exports.Formats = [
 		column: 3,
 	},
 	{
-		name: "[Gen 1] OU + Mew",
+		name: "[Gen 2] STABmons",
 
-		mod: 'gen1',
-		ruleset: ['Pokemon', 'Standard'],
-		banlist: ['Mewtwo'],
+		mod: 'gen2',
+		ruleset: ['[Gen 2] OU', 'Ignore STAB Moves'],
+		banlist: [],
 	},
 
 	// ORAS Singles
