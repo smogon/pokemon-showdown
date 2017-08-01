@@ -649,6 +649,10 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 2] STABmons",
+		desc: [
+			"Pok&eacute;mon can use any move of their typing, in addition to the moves they can normally learn.",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3611000/\">GSC STABmons</a>",
+		],
 
 		mod: 'gen2',
 		ruleset: ['[Gen 2] OU', 'Ignore STAB Moves'],
