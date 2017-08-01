@@ -330,39 +330,32 @@ exports.Formats = [
 		column: 2,
 	},
 	{
-		name: "[Gen 7] STABmons",
+		name: "[Gen 7] 2v2 Doubles",
 		desc: [
-			"Pok&eacute;mon can use any move of their typing, in addition to the moves they can normally learn.",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3587949/\">STABmons</a>",
+			"Double battle where you bring four Pok&eacute;mon to Team Preview and choose only two.",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3606989/\">2v2 Doubles</a>",
 		],
 
 		mod: 'gen7',
-		ruleset: ['Gen 7] OU', 'Ignore STAB Moves'],
-		banlist: ['Kartana', 'Komala', 'Kyurem-Black', 'Silvally-Ghost', 'Tapu Koko', 'Tapu Lele', 'Aerodactylite', 'King\'s Rock', 'Metagrossite', 'Razor Fang'],
+		gameType: 'doubles',
+		teamLength: {
+			validate: [2, 4],
+			battle: 2,
+		},
+		ruleset: ['Gen 7] Doubles OU'],
+		banlist: ['Perish Song'],
 	},
 	{
-		name: "[Gen 7] Godly Gift",
+		name: "[Gen 7] Typemons",
 		desc: [
-			"Each Pok&eacute;mon receives one base stat from your God depending on its position in your team.",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3597618/\">Godly Gift</a>",
+			"All Pok&eacute;mon on a team get access to all moves of a chosen type. The type is chosen for the entire team, not individual Pok&eacute;mon.",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3606351/\">Typemons</a>",
 		],
 
 		mod: 'gen7',
 		searchShow: false,
-		ruleset: ['[Gen 7] Ubers'],
-		banlist: ['Uber > 1', 'Uber ++ Power Construct', 'Blissey', 'Chansey', 'Deoxys-Attack', 'Toxapex', 'Huge Power', 'Pure Power', 'Shadow Tag', 'Gengarite', 'Mawilite', 'Medichamite', 'Sablenite', 'Baton Pass'],
-		onModifyTemplate: function (template, target, source, effect) {
-			if (source || !target.side) return;
-			let uber = target.side.team.find(set => {
-				let item = this.getItem(set.item);
-				return toId(set.ability) === 'powerconstruct' || this.getTemplate(item.megaEvolves === set.species ? item.megaStone : set.species).tier === 'Uber';
-			}) || target.side.team[0];
-			let stat = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'][target.side.team.indexOf(target.set)];
-			template = Object.assign({}, template);
-			template.baseStats = Object.assign({}, template.baseStats);
-			template.baseStats[stat] = this.getTemplate(uber.species).baseStats[stat];
-			return template;
-		},
+		ruleset: ['[Gen 7] OU'],
+		banlist: [],
 	},
 	{
 		section: "Other Metagames",
