@@ -151,11 +151,11 @@ class RandomGen4Teams extends RandomGen5Teams {
 				case 'explosion': case 'selfdestruct':
 					if (counter.stab < 2 || counter.setupType || !!counter['recovery'] || hasMove['rest'] || hasMove['substitute']) rejected = true;
 					break;
-				case 'healingwish': case 'lunardance':
-					if (counter.setupType || hasMove['rest'] || hasMove['substitute']) rejected = true;
-					break;
 				case 'foresight': case 'roar': case 'whirlwind':
 					if (counter.setupType && !hasAbility['Speed Boost']) rejected = true;
+					break;
+				case 'healingwish': case 'lunardance':
+					if (counter.setupType || hasMove['rest'] || hasMove['substitute']) rejected = true;
 					break;
 				case 'protect':
 					if (!(hasAbility['Guts'] || hasAbility['Quick Feet'] || hasAbility['Speed Boost'] || hasMove['Toxic'] || hasMove['Wish'])) rejected = true;
@@ -185,7 +185,7 @@ class RandomGen4Teams extends RandomGen5Teams {
 					if (hasMove['lightscreen'] || hasMove['reflect'] || hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					break;
 				case 'uturn':
-					if (counter.setupType || !!counter['speedsetup'] || hasMove['batonpass'] || hasMove['substitute'] || (hasAbility['Speed Boost'] && hasMove['protect'])) rejected = true;
+					if (counter.setupType || !!counter['speedsetup'] || hasMove['batonpass'] || hasMove['substitute'] || hasAbility['Speed Boost'] && hasMove['protect']) rejected = true;
 					if (hasType['Bug'] && counter.stab < 2 && counter.damagingMoves.length > 2) rejected = true;
 					break;
 
@@ -298,11 +298,11 @@ class RandomGen4Teams extends RandomGen5Teams {
 				case 'encore':
 					if (hasMove['roar'] || hasMove['taunt'] || hasMove['whirlwind'] || hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					break;
-				case 'taunt': case 'haze':
+				case 'haze': case 'taunt':
 					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					break;
 				case 'leechseed': case 'painsplit':
-					if (hasMove['moonlight'] || hasMove['rest'] || counter.setupType || !!counter['speedsetup'] || hasMove['synthesis']) rejected = true;
+					if (counter.setupType || !!counter['speedsetup'] || hasMove['moonlight'] || hasMove['rest'] || hasMove['synthesis']) rejected = true;
 					break;
 				case 'substitute':
 					if (hasMove['pursuit'] || hasMove['rest'] || hasMove['taunt']) rejected = true;
@@ -475,10 +475,10 @@ class RandomGen4Teams extends RandomGen5Teams {
 					ability = ability1.name;
 				}
 			}
-			if (abilities.includes('Swift Swim') && hasMove['raindance']) {
-				ability = 'Swift Swim';
-			} else if (abilities.includes('Hydration') && hasMove['raindance'] && hasMove['rest']) {
+			if (abilities.includes('Hydration') && hasMove['raindance'] && hasMove['rest']) {
 				ability = 'Hydration';
+			} else if (abilities.includes('Swift Swim') && hasMove['raindance']) {
+				ability = 'Swift Swim';
 			}
 		}
 
