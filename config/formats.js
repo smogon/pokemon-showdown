@@ -190,6 +190,19 @@ exports.Formats = [
 		requirePentagon: true,
 	},
 	{
+		name: "[Gen 7] 2017 No Holds Barred",
+		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3610937/\">2017 No Holds Barred</a>"],
+
+		mod: 'gen7',
+		forcedLevel: 100,
+		teamLength: {
+			validate: [3, 6],
+			battle: 3,
+		},
+		ruleset: ['Pokemon', 'Nickname Clause', 'Team Preview', 'Cancel Mod'],
+		banlist: ['Illegal', 'Unreleased', 'Mewtwo', 'Lugia', 'Ho-Oh', 'Kyogre', 'Groudon', 'Rayquaza', 'Dialga', 'Palkia', 'Giratina', 'Arceus', 'Reshiram', 'Zekrom', 'Kyurem', 'Xerneas', 'Yveltal', 'Solgaleo', 'Lunala'],
+	},
+	{
 		name: "[Gen 7] Custom Game",
 
 		mod: 'gen7',
@@ -294,35 +307,6 @@ exports.Formats = [
 		},
 		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview'],
 		requirePentagon: true,
-	},
-	{
-		name: "[Gen 7] Weakness Cup",
-		desc: [
-			"Pokemon must be weak to at least five types to be allowed.",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3608162/\">Weakness Cup Discussion</a>",
-		],
-
-		mod: 'gen7',
-		gameType: 'doubles',
-		maxForcedLevel: 50,
-		teamLength: {
-			validate: [4, 6],
-			battle: 4,
-		},
-		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview'],
-		onValidateSet: function (set) {
-			let item = this.getItem(set.item);
-			if (item.exists && !(item.onSourceModifyDamage || item.id === 'weaknesspolicy')) {
-				return [`${set.name || set.species} has ${item.name}, which is banned in Weakness Cup.`];
-			}
-			let template = this.getTemplate(set.species || set.name);
-			let weaknesses = 0;
-			for (let i in this.data.TypeChart) {
-				if (this.getImmunity(i, template) && this.getEffectiveness(i, template) > 0) weaknesses++;
-				if (weaknesses >= 5) return;
-			}
-			return [`${set.name || set.species} must be weak to at least five types to be allowed in Weakness Cup.`];
-		},
 	},
 	{
 		name: "[Gen 7] Doubles Custom Game",
