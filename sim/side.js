@@ -410,7 +410,7 @@ class Side {
 			}
 			if (!this.choice.forcedSwitchesLeft) return this.choosePass();
 			slot = this.active.length;
-			while (this.choice.switchIns.has(slot)) slot++;
+			while (this.choice.switchIns.has(slot) || this.pokemon[slot].fainted) slot++;
 		}
 		if (isNaN(slot) || slot >= this.pokemon.length) {
 			return this.emitChoiceError(`Can't switch: You do not have a Pokémon in slot ${slot + 1} to switch to`);
