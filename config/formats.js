@@ -343,7 +343,7 @@ exports.Formats = [
 			battle: 2,
 		},
 		ruleset: ['Gen 7] Doubles OU'],
-		banlist: ['Perish Song'],
+		banlist: ['Tapu Lele', 'Perish Song'],
 	},
 	{
 		name: "[Gen 7] Typemons",
