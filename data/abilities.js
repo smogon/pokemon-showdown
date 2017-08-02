@@ -2160,7 +2160,9 @@ exports.BattleAbilities = {
 			if (!move.isZ && move.id !== 'struggle' && this.getMove(move.id).type !== 'Normal') {
 				move.type = 'Normal';
 			}
-			if (move.category !== 'Status') pokemon.addVolatile('normalize');
+			if (move.category !== 'Status' && !(move.id in {hiddenpower:1, judgment:1, naturalgift:1, revelationdance:1, technoblast:1, weatherball:1})) {
+				pokemon.addVolatile('normalize');
+			}
 		},
 		effect: {
 			duration: 1,
