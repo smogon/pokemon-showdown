@@ -2029,6 +2029,7 @@ exports.commands = {
 		if (!target) return this.parse('/help declare');
 		if (!this.can('declare', null, room)) return false;
 		if (!this.canTalk()) return;
+		if (target.length > 2000) return this.errorReply("Declares should not exceed 2000 characters.");
 
 		this.add(`|notify|${room.title} announcement!|${target}`);
 		this.add(Chat.html`|raw|<div class="broadcast-blue"><b>${target}</b></div>`);
@@ -3225,11 +3226,11 @@ exports.commands = {
 	cancelsearch: 'search',
 	search: function (target, room, user) {
 		if (target) {
-			if (Config.pmmodchat) {
+			if (Config.laddermodchat) {
 				let userGroup = user.group;
-				if (Config.groupsranking.indexOf(userGroup) < Config.groupsranking.indexOf(Config.pmmodchat)) {
-					let groupName = Config.groups[Config.pmmodchat].name || Config.pmmodchat;
-					this.popupReply("Because moderated chat is set, you must be of rank " + groupName + " or higher to search for a battle.");
+				if (Config.groupsranking.indexOf(userGroup) < Config.groupsranking.indexOf(Config.laddermodchat)) {
+					let groupName = Config.groups[Config.laddermodchat].name || Config.laddermodchat;
+					this.popupReply("On this server, you must be of rank " + groupName + " or higher to search for a battle.");
 					return false;
 				}
 			}
