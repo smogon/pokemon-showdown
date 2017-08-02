@@ -601,7 +601,7 @@ function runDexsearch(target, cmd, canAll, message) {
 	for (let pokemon in Dex.data.Pokedex) {
 		let template = Dex.getTemplate(pokemon);
 		let megaSearchResult = (megaSearch === null || (megaSearch === true && template.isMega) || (megaSearch === false && !template.isMega));
-		if (template.tier !== 'Unreleased' && template.tier !== 'Illegal' && (template.tier !== 'CAP' || capSearch) && megaSearchResult) {
+		if (template.tier !== 'Unreleased' && template.tier !== 'Illegal' && (!template.tier.startsWith("CAP") || capSearch) && megaSearchResult) {
 			dex[pokemon] = template;
 		}
 	}
