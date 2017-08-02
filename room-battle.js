@@ -293,23 +293,25 @@ class BattleTimer {
 	}
 	checkTimeout() {
 		if (this.turnTicksLeft.every(c => !c)) {
-			if (!this.settings.timeoutAutoChoose || !this.ticksLeft.every(c => !c)) {
+			if (!this.settings.timeoutAutoChoose || this.ticksLeft.every(c => !c)) {
 				this.battle.room.add(`|-message|All players are inactive.`).update();
 				this.battle.tie();
 				return true;
 			}
 		}
+		let didSomething = false;
 		for (const [slotNum, ticks] of this.turnTicksLeft.entries()) {
 			if (ticks) continue;
 			if (this.settings.timeoutAutoChoose && this.ticksLeft[slotNum]) {
 				const slot = 'p' + (slotNum + 1);
 				this.battle.send('choose', slot, 'default');
+				didSomething = true;
 			} else {
 				this.battle.forfeit(null, ' lost due to inactivity.', slotNum);
+				return true;
 			}
-			return true;
 		}
-		return false;
+		return didSomething;
 	}
 }
 
