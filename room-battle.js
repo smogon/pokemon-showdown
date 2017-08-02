@@ -161,6 +161,7 @@ class BattleTimer {
 		this.settings.perTurnTicks = Math.floor(this.settings.perTurn / 10);
 		this.settings.startingTicks = Math.ceil(this.settings.starting / 10);
 		this.settings.maxPerTurnTicks = Math.ceil(this.settings.maxPerTurn / 10);
+		this.settings.maxFirstTurnTicks = Math.ceil((this.settings.maxFirstTurn || 0) / 10);
 
 		for (let slotNum = 0; slotNum < 2; slotNum++) {
 			this.ticksLeft.push(this.settings.startingTicks);
@@ -184,7 +185,7 @@ class BattleTimer {
 			}
 		}
 		this.timerRequesters.add(userid);
-		this.nextRequest();
+		this.nextRequest(true);
 		const requestedBy = requester ? ` (requested by ${requester.name})` : ``;
 		this.battle.room.add(`|inactive|Battle timer is ON: inactive players will automatically lose when time's up.${requestedBy}`).update();
 		return true;
@@ -213,15 +214,16 @@ class BattleTimer {
 		if (!this.battle.requests[slot][2]) return false;
 		return true;
 	}
-	nextRequest() {
+	nextRequest(isFirst) {
 		if (this.timer) clearTimeout(this.timer);
 		if (!this.timerRequesters.size) return;
+		const maxTurnTicks = isFirst ? this.settings.maxFirstTurnTicks : this.settings.maxPerTurnTicks;
 		for (const slotNum of this.ticksLeft.keys()) {
 			const slot = 'p' + (slotNum + 1);
 			const player = this.battle[slot];
 
 			this.ticksLeft[slotNum] += this.settings.perTurnTicks;
-			this.turnTicksLeft[slotNum] = Math.min(this.ticksLeft[slotNum], this.settings.maxPerTurnTicks);
+			this.turnTicksLeft[slotNum] = Math.min(this.ticksLeft[slotNum], maxTurnTicks);
 
 			const ticksLeft = this.turnTicksLeft[slotNum];
 			if (player) player.sendRoom(`|inactive|Time left: ${ticksLeft * 10} sec this turn | ${this.ticksLeft[slotNum] * 10} sec total`);
@@ -297,7 +299,12 @@ class BattleTimer {
 		}
 		for (const [slotNum, ticks] of this.turnTicksLeft.entries()) {
 			if (ticks) continue;
-			this.battle.forfeit(null, ' lost due to inactivity.', slotNum);
+			if (this.settings.timeoutAutoChoose && this.ticksLeft[slotNum]) {
+				const slot = 'p' + (slotNum + 1);
+				this.battle.choose(slot, 'default');
+			} else {
+				this.battle.forfeit(null, ' lost due to inactivity.', slotNum);
+			}
 			return true;
 		}
 		return false;
