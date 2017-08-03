@@ -1321,7 +1321,7 @@ exports.BattleFormatsData = {
 	},
 	mawile: {
 		inherit: true,
-		randomBattleMoves: ["swordsdance", "ironhead", "taunt", "batonpass", "substitute"],
+		randomBattleMoves: ["swordsdance", "ironhead", "focuspunch", "suckerpunch", "batonpass", "substitute"],
 		tier: "NU",
 	},
 	aron: {
@@ -1340,7 +1340,7 @@ exports.BattleFormatsData = {
 		tier: "LC Uber",
 	},
 	medicham: {
-		randomBattleMoves: ["highjumpkick", "brickbreak", "zenheadbutt", "psychocut", "icepunch", "thunderpunch", "trick", "fakeout", "bulletpunch"],
+		randomBattleMoves: ["highjumpkick", "psychocut", "icepunch", "thunderpunch", "trick", "fakeout", "bulletpunch"],
 		tier: "NU",
 	},
 	electrike: {
@@ -1664,7 +1664,7 @@ exports.BattleFormatsData = {
 	},
 	registeel: {
 		inherit: true,
-		randomBattleMoves: ["stealthrock", "ironhead", "curse", "rest", "sleeptalk", "thunderwave", "toxic"],
+		randomBattleMoves: ["stealthrock", "ironhead", "curse", "rest", "sleeptalk", "thunderwave", "toxic", "protect", "seismictoss"],
 		tier: "UU",
 	},
 	latias: {
@@ -1724,7 +1724,7 @@ exports.BattleFormatsData = {
 		tier: "NFE",
 	},
 	torterra: {
-		randomBattleMoves: ["stealthrock", "earthquake", "woodhammer", "stoneedge", "rockpolish", "leechseed", "roar"],
+		randomBattleMoves: ["stealthrock", "earthquake", "woodhammer", "stoneedge", "rockpolish", "leechseed", "roar", "synthesis"],
 		tier: "UU",
 	},
 	chimchar: {
@@ -1796,7 +1796,7 @@ exports.BattleFormatsData = {
 		tier: "LC",
 	},
 	bastiodon: {
-		randomBattleMoves: ["stealthrock", "metalburst", "earthquake", "stoneedge", "ironhead", "protect", "toxic", "roar"],
+		randomBattleMoves: ["stealthrock", "metalburst", "earthquake", "rockslide", "protect", "toxic", "roar"],
 		tier: "NU",
 	},
 	burmy: {
@@ -1840,11 +1840,11 @@ exports.BattleFormatsData = {
 		tier: "LC",
 	},
 	cherrim: {
-		randomBattleMoves: ["energyball", "aromatherapy", "grasswhistle", "hiddenpowerfire", "hiddenpowerground"],
+		randomBattleMoves: ["energyball", "aromatherapy", "grasswhistle", "hiddenpowerfire", "hiddenpowerground", "synthesis"],
 		tier: "NU",
 	},
 	cherrimsunshine: {
-		randomBattleMoves: ["sunnyday", "solarbeam", "grasswhistle", "weatherball", "hiddenpowerice"],
+		randomBattleMoves: ["sunnyday", "solarbeam", "weatherball", "hiddenpowerice"],
 		battleOnly: true,
 	},
 	shellos: {
