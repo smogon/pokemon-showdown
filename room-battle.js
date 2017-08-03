@@ -217,7 +217,7 @@ class BattleTimer {
 	nextRequest(isFirst) {
 		if (this.timer) clearTimeout(this.timer);
 		if (!this.timerRequesters.size) return;
-		const maxTurnTicks = isFirst ? this.settings.maxFirstTurnTicks : this.settings.maxPerTurnTicks;
+		const maxTurnTicks = (isFirst ? this.settings.maxFirstTurnTicks : 0) || this.settings.maxPerTurnTicks;
 		for (const slotNum of this.ticksLeft.keys()) {
 			const slot = 'p' + (slotNum + 1);
 			const player = this.battle[slot];
