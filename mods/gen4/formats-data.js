@@ -1137,7 +1137,7 @@ exports.BattleFormatsData = {
 	},
 	blaziken: {
 		inherit: true,
-		randomBattleMoves: ["flareblitz", "superpower", "thunderpunch", "stoneedge", "lowkick", "blazekick", "fireblast", "hiddenpowerice"],
+		randomBattleMoves: ["flareblitz", "superpower", "thunderpunch", "stoneedge", "lowkick", "vacuumwave", "fireblast", "hiddenpowerice", "agility"],
 		tier: "UU",
 	},
 	mudkip: {
