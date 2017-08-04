@@ -22,6 +22,9 @@ const MAX_TURN_TIME = 150;
 const STARTING_TIME_CHALLENGE = 280;
 const MAX_TURN_TIME_CHALLENGE = 300;
 
+const NOT_DISCONNECTED = 10;
+const DISCONNECTION_TICKS = 7;
+
 // time after a player disabling the timer before they can re-enable it
 const TIMER_COOLDOWN = 20 * 1000;
 
@@ -209,10 +212,8 @@ class BattleTimer {
 		this.battle.room.add(`|inactiveoff|Battle timer is now OFF.`).update();
 		return true;
 	}
-	isActive(slot) {
-		if (!this.battle[slot] || !this.battle[slot].active) return false;
-		if (!this.battle.requests[slot][2]) return false;
-		return true;
+	waitingForChoice(slot) {
+		return !!this.battle.requests[slot][2];
 	}
 	nextRequest(isFirst) {
 		if (this.timer) clearTimeout(this.timer);
@@ -236,11 +237,11 @@ class BattleTimer {
 		for (const slotNum of this.ticksLeft.keys()) {
 			const slot = 'p' + (slotNum + 1);
 
-			if (this.isActive(slot)) continue;
+			if (!this.waitingForChoice(slot)) continue;
 			this.ticksLeft[slotNum]--;
 			this.turnTicksLeft[slotNum]--;
 
-			if (this.dcTicksLeft[slotNum] < 10) {
+			if (this.dcTicksLeft[slotNum] !== NOT_DISCONNECTED) {
 				this.dcTicksLeft[slotNum]--;
 			}
 
@@ -248,12 +249,12 @@ class BattleTimer {
 			if (!dcTicksLeft) this.turnTicksLeft[slotNum] = 0;
 			const ticksLeft = this.turnTicksLeft[slotNum];
 			if (!ticksLeft) continue;
-			if (ticksLeft < dcTicksLeft) dcTicksLeft = 10; // turn timer supersedes dc timer
+			if (ticksLeft < dcTicksLeft) dcTicksLeft = NOT_DISCONNECTED; // turn timer supersedes dc timer
 
 			if (dcTicksLeft <= 4) {
 				this.battle.room.add(`|inactive|${this.battle.playerNames[slotNum]} has ${dcTicksLeft * 10} seconds to reconnect!`).update();
 			}
-			if (dcTicksLeft < 10) continue;
+			if (dcTicksLeft !== NOT_DISCONNECTED) continue;
 			if (ticksLeft % 3 === 0 || ticksLeft <= 4) {
 				this.battle.room.add(`|inactive|${this.battle.playerNames[slotNum]} has ${ticksLeft * 10} seconds left.`).update();
 			}
@@ -266,28 +267,27 @@ class BattleTimer {
 		for (const slotNum of this.ticksLeft.keys()) {
 			const slot = 'p' + (slotNum + 1);
 			const player = this.battle[slot];
-			const active = player && player.active;
+			const isConnected = player && player.active;
 
-			if (this.timerRequesters.size) {
-				// if a player has disconnected, don't wait longer than 6 ticks (1 minute)
-				if (!active) {
-					if (this.dcTicksLeft[slotNum] === 10) {
-						this.dcTicksLeft[slotNum] = 7;
-						this.battle.room.add(`|inactive|${this.battle.playerNames[slotNum]} disconnected and has a minute to reconnect!`).update();
-					}
-				} else if (this.dcTicksLeft[slotNum] < 10) {
-					this.dcTicksLeft[slotNum] = 10;
+			if (isConnected === (this.dcTicksLeft[slotNum] !== NOT_DISCONNECTED)) continue;
+
+			if (!isConnected) {
+				// player has disconnected: don't wait longer than 6 ticks (1 minute)
+				this.dcTicksLeft[slotNum] = DISCONNECTION_TICKS;
+				if (this.timerRequesters.size) {
+					this.battle.room.add(`|inactive|${this.battle.playerNames[slotNum]} disconnected and has a minute to reconnect!`).update();
+				}
+			} else {
+				// player has reconnected
+				this.dcTicksLeft[slotNum] = NOT_DISCONNECTED;
+				if (this.timerRequesters.size) {
 					let timeLeft = ``;
-					if (!this.isActive(slot)) {
+					if (this.waitingForChoice(slot)) {
 						const ticksLeft = this.turnTicksLeft[slotNum];
 						timeLeft = ` and has ${ticksLeft * 10} seconds left`;
 					}
 					this.battle.room.add(`|inactive|${this.battle.playerNames[slotNum]} reconnected${timeLeft}.`).update();
 				}
-			// Still reset reconnection timer even when timer is disabled to prevent it
-			// from continuing when timer will be enabled again after user reconnects.
-			} else if (active) {
-				this.dcTicksLeft[slotNum] = 10;
 			}
 		}
 	}
