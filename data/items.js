@@ -159,7 +159,9 @@ exports.BattleItems = {
 			this.debug('effect: ' + effect.id);
 			if (effect.effectType === 'Move' && effect.id !== 'confused') {
 				this.add('-enditem', target, 'Air Balloon');
-				target.setItem('');
+				target.item = '';
+				this.itemData = {id: '', target: this};
+				this.runEvent('AfterUseItem', target, null, null, 'airballoon');
 			}
 		},
 		num: 541,
