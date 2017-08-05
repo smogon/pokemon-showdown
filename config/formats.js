@@ -222,7 +222,7 @@ exports.Formats = [
 	{
 		name: "[Gen 7] Doubles OU",
 		desc: [
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3586596/\">Doubles OU Metagame Discussion</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3610992/\">Doubles OU Metagame Discussion</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3592903/\">Doubles OU Viability Rankings</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3590987/\">Doubles OU Sample Teams</a>",
 		],
@@ -693,7 +693,7 @@ exports.Formats = [
 		desc: [
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3582473/\">np: UU Stage 7.3</a>",
 			"&bullet; <a href=\"https://www.smogon.com/dex/xy/tags/uu/\">UU Banlist</a>",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3555277/\">UU Viability Ranking</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3580117/\">UU Viability Ranking</a>",
 		],
 
 		mod: 'gen6',
@@ -1247,7 +1247,7 @@ exports.Formats = [
 	{
 		name: "[Gen 2] OU",
 		desc: [
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3503082/\">GSC OU Viability Ranking</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3556533/\">GSC OU Viability Ranking</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/posts/6431086/\">GSC Sample Teams</a>",
 		],
 
