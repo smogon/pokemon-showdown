@@ -1284,7 +1284,7 @@ exports.Formats = [
 	{
 		name: "[Gen 1] OU",
 		desc: [
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3486845/\">RBY OU Viability Ranking</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3572352/\">RBY OU Viability Ranking</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/posts/6431045/\">RBY Sample Teams</a>",
 		],
 
