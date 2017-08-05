@@ -1072,7 +1072,7 @@ function runMovesearch(target, cmd, canAll, message) {
 	}
 	for (let i = 0; i < searches.length; i++) {
 		let alts = searches[i];
-		if (alts.slip) continue;
+		if (alts.skip) continue;
 		for (let move in dex) {
 			let matched = false;
 			if (Object.keys(alts.types).length) {
@@ -1097,7 +1097,7 @@ function runMovesearch(target, cmd, canAll, message) {
 						break;
 					}
 				} else {
-					if (dex[move].secondary === alts.flags[flag]) {
+					if ((!dex[move].secondary && !dex[move].secondaries) === !alts.flags[flag]) {
 						matched = true;
 						break;
 					}
