@@ -145,6 +145,12 @@ class BattleTimer {
 		 */
 		this.dcTicksLeft = [];
 
+		/**
+		 * Last tick.
+		 * Represents the last time a tick happened.
+		 */
+		this.lastTick = 0;
+
 		this.lastDisabledTime = 0;
 		this.lastDisabledByUser = null;
 
@@ -213,7 +219,7 @@ class BattleTimer {
 		return true;
 	}
 	waitingForChoice(slot) {
-		return !!this.battle.requests[slot][2];
+		return !this.battle.requests[slot][2];
 	}
 	nextRequest(isFirst) {
 		if (this.timer) clearTimeout(this.timer);
