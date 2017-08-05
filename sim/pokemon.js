@@ -345,7 +345,7 @@ class Pokemon {
 			}
 			if (target.side.active.length > 1) {
 				if (!move.flags['charge'] || this.volatiles['twoturnmove'] ||
-						(move.id === 'solarbeam' && this.battle.isWeather(['sunnyday', 'desolateland'])) ||
+						(move.id.startsWith('solarb') && this.battle.isWeather(['sunnyday', 'desolateland'])) ||
 						(this.hasItem('powerherb') && move.id !== 'skydrop')) {
 					target = this.battle.priorityEvent('RedirectTarget', this, this, move, target);
 				}
