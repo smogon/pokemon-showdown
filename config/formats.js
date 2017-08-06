@@ -77,7 +77,7 @@ exports.Formats = [
 		banlist: ['UU', 'BL2'],
 	},
 	{
-		name: "[Gen 7] NU (beta)",
+		name: "[Gen 7] NU",
 		desc: [
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3606077/\">NU Metagame Discussion</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3607629/\">NU Viability Rankings</a>",
@@ -89,17 +89,12 @@ exports.Formats = [
 		banlist: ['RU', 'BL3', 'Drought'],
 	},
 	{
-		name: "[Gen 7] PU (alpha)",
+		name: "[Gen 7] PU (beta)",
+		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3611417/\">np: PU Stage 0</a>"],
 
 		mod: 'gen7',
-		ruleset: ['[Gen 7] NU (beta)'],
-		banlist: [
-			'Absol', 'Accelgor', 'Ambipom', 'Archeops', 'Aromatisse', 'Braviary', 'Clawitzer', 'Claydol', 'Cofagrigus', 'Cryogonal',
-			'Delphox', 'Dodrio', 'Drapion', 'Druddigon', 'Emboar', 'Garbodor', 'Golbat', 'Hitmonlee', 'Hitmontop', 'Houndoom',
-			'Incineroar', 'Jellicent', 'Komala', 'Machamp', 'Medicham', 'Meloetta', 'Minior', 'Mismagius', 'Omastar', 'Rhydon',
-			'Rotom-Base', 'Rotom-Mow', 'Sceptile', 'Scrafty', 'Seismitoad', 'Shuckle', 'Sigilyph', 'Slowbro', 'Slowking', 'Sneasel',
-			'Spiritomb', 'Steelix', 'Toxicroak', 'Uxie', 'Vaporeon', 'Vikavolt', 'Virizion', 'Vivillon', 'Whimsicott', 'Xatu',
-		],
+		ruleset: ['[Gen 7] NU'],
+		banlist: ['NU', 'BL4'],
 	},
 	{
 		name: "[Gen 7] LC",
