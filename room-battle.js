@@ -252,7 +252,7 @@ class BattleTimer {
 			}
 
 			let dcTicksLeft = this.dcTicksLeft[slotNum];
-			if (!dcTicksLeft) this.turnTicksLeft[slotNum] = 0;
+			if (dcTicksLeft <= 0) this.turnTicksLeft[slotNum] = 0;
 			const ticksLeft = this.turnTicksLeft[slotNum];
 			if (!ticksLeft) continue;
 			if (ticksLeft < dcTicksLeft) dcTicksLeft = NOT_DISCONNECTED; // turn timer supersedes dc timer
