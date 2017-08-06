@@ -77,7 +77,7 @@ exports.Formats = [
 		banlist: ['UU', 'BL2'],
 	},
 	{
-		name: "[Gen 7] NU (beta)",
+		name: "[Gen 7] NU",
 		desc: [
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3606077/\">NU Metagame Discussion</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3607629/\">NU Viability Rankings</a>",
@@ -89,7 +89,7 @@ exports.Formats = [
 		banlist: ['RU', 'BL3', 'Drought'],
 	},
 	{
-		name: "[Gen 7] PU (alpha)",
+		name: "[Gen 7] PU (beta)",
 
 		mod: 'gen7',
 		ruleset: ['[Gen 7] NU (beta)'],
