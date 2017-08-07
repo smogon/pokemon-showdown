@@ -18,6 +18,7 @@ let Ladders = module.exports = getLadder;
 
 Ladders.get = Ladders;
 Ladders.formatsListPrefix = '';
+Ladders.disabled = false;
 
 class Ladder {
 	constructor(formatid) {
@@ -33,6 +34,9 @@ class Ladder {
 		let user = Users.getExact(userid);
 		if (!user) {
 			return Promise.reject(new Error(`Expired rating for ${userid}`));
+		}
+		if (Ladders.disabled === true || Ladders.disabled === 'db' && !user.mmrCache[formatid]) {
+			return Promise.reject(new Error(`Ladders are disabled.`));
 		}
 		if (user.mmrCache[formatid]) {
 			return Promise.resolve(user.mmrCache[formatid]);
@@ -58,6 +62,10 @@ class Ladder {
 	}
 
 	updateRating(p1name, p2name, p1score, room) {
+		if (Ladders.disabled) {
+			return room.addRaw(`Ratings not updated. The ladders are currently disabled.`).update();
+		}
+
 		let formatid = this.formatid;
 		let p1rating, p2rating;
 		room.update();

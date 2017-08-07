@@ -789,7 +789,7 @@ class Tournament {
 		let player = this.players[user.userid];
 		if (!this.pendingChallenges.get(player)) return;
 
-		let room = Matchmaker.startBattle(from, user, this.teambuilderFormat, challenge.team, validTeam, {rated: this.isRated, tour: this});
+		let room = Matchmaker.startBattle(from, user, this.teambuilderFormat, challenge.team, validTeam, {rated: !Ladders.disabled && this.isRated, tour: this});
 		if (!room) return;
 
 		this.pendingChallenges.set(challenge.from, null);

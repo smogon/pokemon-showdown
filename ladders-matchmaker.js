@@ -70,8 +70,11 @@ class Matchmaker {
 			if (userId !== user.userid) return;
 			return this.finishSearchBattle(user, formatid, validTeam, rating);
 		}, err => {
-			// Rejects iff we retrieved the rating but the user had changed their name;
-			// the search simply doesn't happen in this case.
+			// Rejects iff ladders are disabled, or if we
+			// retrieved the rating but the user had changed their name.
+
+			if (Ladders.disabled) return user.popup(`The ladder is currently disabled due to high server load.`);
+			// User feedback for renames handled elsewhere.
 		});
 	}
 
@@ -133,7 +136,7 @@ class Matchmaker {
 				delete user.searching[formatid];
 				delete searchUser.searching[formatid];
 				formatSearches.delete(search);
-				this.startBattle(searchUser, user, formatid, search.team, newSearch.team, {rated: minRating});
+				this.startBattle(searchUser, user, formatid, search.team, newSearch.team, {rated: !Ladders.disabled && minRating});
 				return;
 			}
 		}
@@ -157,7 +160,7 @@ class Matchmaker {
 					delete searchUser.searching[formatid];
 					formatSearches.delete(search);
 					formatSearches.delete(longestSearch);
-					this.startBattle(searchUser, longestSearcher, formatid, search.team, longestSearch.team, {rated: minRating});
+					this.startBattle(searchUser, longestSearcher, formatid, search.team, longestSearch.team, {rated: !Ladders.disabled && minRating});
 					return;
 				}
 			}
