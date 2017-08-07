@@ -1351,7 +1351,7 @@ class User {
 	cancelSearch(format) {
 		return Matchmaker.cancelSearch(this, format);
 	}
-	makeChallenge(user, format/*, isPrivate*/) {
+	makeChallenge(user, format, team/*, isPrivate*/) {
 		user = getUser(user);
 		if (!user || this.challengeTo) {
 			return false;
@@ -1370,7 +1370,7 @@ class User {
 			to: user.userid,
 			format: '' + (format || ''),
 			//isPrivate: !!isPrivate, // currently unused
-			team: this.team,
+			team: team,
 		};
 		this.lastChallenge = time;
 		this.challengeTo = challenge;
@@ -1401,7 +1401,7 @@ class User {
 		}
 		this.updateChallenges();
 	}
-	acceptChallengeFrom(user) {
+	acceptChallengeFrom(user, team) {
 		let userid = toId(user);
 		user = getUser(user);
 		if (!user || !user.challengeTo || user.challengeTo.to !== this.userid || !this.connected || !user.connected) {
@@ -1411,7 +1411,7 @@ class User {
 			}
 			return false;
 		}
-		Matchmaker.startBattle(this, user, user.challengeTo.format, this.team, user.challengeTo.team, {rated: false});
+		Matchmaker.startBattle(this, user, user.challengeTo.format, team, user.challengeTo.team, {rated: false});
 		delete this.challengesFrom[user.userid];
 		user.challengeTo = null;
 		this.updateChallenges();
