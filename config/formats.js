@@ -90,7 +90,7 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 7] PU (beta)",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3611417/\">np: PU Stage 0</a>"],
+		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3611417/\">PU Metagame Discussion</a>"],
 
 		mod: 'gen7',
 		ruleset: ['[Gen 7] NU'],
