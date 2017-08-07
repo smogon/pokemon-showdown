@@ -152,7 +152,7 @@ class Ladder {
 			return Promise.resolve(user.mmrCache[formatid]);
 		}
 		return this.ladder.then(() => {
-			if (user.userid !== userid) return;
+			if (user.userid !== userid) return Promise.reject(`Expired rating for ${userid}`);
 			let index = this.indexOfUser(userid);
 			if (index < 0) return (user.mmrCache[formatid] = 1000);
 			return (user.mmrCache[formatid] = this.loadedLadder[index][1]);
