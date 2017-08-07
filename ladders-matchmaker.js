@@ -12,11 +12,21 @@
 
 const PERIODIC_MATCH_INTERVAL = 60 * 1000;
 
-function Search(userid, team, rating = 1000) {
-	this.userid = userid;
-	this.team = team;
-	this.rating = rating;
-	this.time = new Date().getTime();
+class Search {
+	constructor(userid, team, rating = 1000) {
+		this.userid = userid;
+		this.team = team;
+		this.rating = rating;
+		this.time = 0;
+	}
+
+	setRating(rating) {
+		this.rating = rating;
+	}
+
+	setStart() {
+		this.time = Date.now();
+	}
 }
 
 class Matchmaker {
