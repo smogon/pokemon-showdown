@@ -17,6 +17,8 @@ const url = require('url');
 
 const FS = require('./fs');
 
+const noop = () => null;
+
 /**
  * A custom error type used when requests to the login server take too long.
  */
@@ -44,6 +46,7 @@ class LoginServerInstance {
 		this.requestLog = '';
 		this.lastRequest = 0;
 		this.openRequests = 0;
+		this.disabled = false;
 	}
 
 	instantRequest(action, data, callback) {
@@ -84,7 +87,12 @@ class LoginServerInstance {
 
 		req.end();
 	}
-	request(action, data, callback) {
+	request(action, data, callback = noop) {
+		if (this.disabled) {
+			setImmediate(callback, null, null, new Error(`Login server connection disabled.`));
+			return;
+		}
+
 		// ladderupdate and mmr are the most common actions
 		// prepreplay is also common
 		if (this[action + 'Server']) {
@@ -94,11 +102,7 @@ class LoginServerInstance {
 			callback = data;
 			data = null;
 		}
-		if (typeof callback === 'undefined') callback = () => {};
-		if (this.disabled) {
-			setImmediate(callback, null, null, new Error("Ladder disabled"));
-			return;
-		}
+
 		if (!data) data = {};
 		data.act = action;
 		data.callback = callback;
