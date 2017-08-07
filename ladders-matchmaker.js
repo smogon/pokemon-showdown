@@ -17,7 +17,7 @@ class Search {
 		this.userid = userid;
 		this.team = team;
 		this.rating = rating;
-		this.time = 0;
+		this.time = Date.now();
 	}
 
 	setRating(rating) {
@@ -61,23 +61,23 @@ class Matchmaker {
 	searchBattle(user, formatid) {
 		if (!user.connected) return;
 		formatid = Dex.getFormat(formatid).id;
-		return user.prepBattle(formatid, 'search', null)
-			.then(validTeam => this.finishSearchBattle(user, formatid, validTeam));
-	}
 
-	finishSearchBattle(user, formatid, validTeam) {
-		if (validTeam === false) return;
-
-		const search = new Search(user.userid, validTeam);
-		// Get the user's rating before actually starting to search.
-		Ladders(formatid).getRating(user.userid).then(rating => {
-			search.setRating(rating);
-			search.setStart();
-			this.addSearch(search, user, formatid);
-		}, error => {
-			// Rejects if we retrieved the rating but the user had changed their name;
+		return Promise.all([
+			user.prepBattle(formatid, 'search', null),
+			Ladders(formatid).getRating(user.userid),
+		]).then(([validTeam, rating]) => {
+			return this.finishSearchBattle(user, formatid, validTeam, rating);
+		}, err => {
+			// Rejects iff we retrieved the rating but the user had changed their name;
 			// the search simply doesn't happen in this case.
 		});
+	}
+
+	finishSearchBattle(user, formatid, validTeam, rating) {
+		if (validTeam === false) return;
+
+		const search = new Search(user.userid, validTeam, rating);
+		this.addSearch(search, user, formatid);
 	}
 
 	matchmakingOK(search1, search2, user1, user2, formatid) {
