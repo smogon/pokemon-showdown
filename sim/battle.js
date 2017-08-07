@@ -1795,7 +1795,7 @@ class Battle extends Dex.ModdedDex {
 		if (this.gen == 4) {
 			baseDamage = Math.floor(Math.floor(Math.floor(Math.floor(2 * level / 5 + 2) * basePower * attack) / 50) / defense);
 		} else {
-			baseDamage = Math.floor(Math.floor(Math.floor(2 * level / 5 + 2) * basePower * attack / defense) / 50);
+			baseDamage = Math.floor(Math.floor(Math.floor((level * 2) / 5 + 2) * basePower * attack / defense) / 50);
 		}
 
 		// Calculate damage modifiers separately (order differs between generations)
