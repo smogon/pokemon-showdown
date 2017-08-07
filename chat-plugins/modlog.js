@@ -134,7 +134,7 @@ function checkRipgrepAvailability() {
 	return Config.ripgrepmodlog;
 }
 
-function getMoreButton(room, search, lines) {
+function getMoreButton(room, search, useExactSearch, lines, maxLines) {
 	let newLines = 0;
 	for (let increase of MORE_BUTTON_INCREMENTS) {
 		if (increase > lines) {
@@ -142,9 +142,10 @@ function getMoreButton(room, search, lines) {
 			break;
 		}
 	}
-	if (!newLines) {
-		return ''; // don't show a button if no more pre-set increments are valid
+	if (!newLines || lines < maxLines) {
+		return ''; // don't show a button if no more pre-set increments are valid or if the amount of results is already below the max
 	} else {
+		if (useExactSearch) search = Chat.escapeHTML(`"${search}"`);
 		return `<br /><div style="float:right"><button class="button" name="send" value="/modlog ${room}, ${search} ${LINES_SEPARATOR}${newLines}" title="View more results">More results...</button></div>`;
 	}
 }
@@ -216,7 +217,7 @@ function runRipgrepModlog(paths, regexString, results) {
 	return results;
 }
 
-function prettifyResults(rawResults, room, searchString, exactSearch, addModlogLinks, hideIps) {
+function prettifyResults(rawResults, room, searchString, exactSearch, addModlogLinks, hideIps, maxLines) {
 	if (rawResults === '0') {
 		return "The modlog query has crashed.";
 	}
@@ -231,8 +232,6 @@ function prettifyResults(rawResults, room, searchString, exactSearch, addModlogL
 	default:
 		roomName = `room ${room}`;
 	}
-	const preSearchString = searchString;
-	if (exactSearch) searchString = `"${searchString}"`;
 	let pipeIndex = rawResults.indexOf('|');
 	if (pipeIndex < 0) pipeIndex = 0;
 	rawResults = rawResults.substr(pipeIndex + 1, rawResults.length);
@@ -259,13 +258,14 @@ function prettifyResults(rawResults, room, searchString, exactSearch, addModlogL
 	}).join(`<br />`);
 	let preamble;
 	if (searchString) {
-		preamble = `|popup||wide||html|<p>The last ${lines} logged action${Chat.plural(lines)} containing ${searchString} on ${roomName}.` +
+		const searchStringDescription = (exactSearch ? `containing the string "${searchString}"` : `matching the username "${searchString}"`);
+		preamble = `|popup||wide||html|<p>The last ${lines} logged action${Chat.plural(lines)} ${searchStringDescription} on ${roomName}.` +
 						(exactSearch ? "" : " Add quotes to the search parameter to search for a phrase, rather than a user.");
 	} else {
 		preamble = `|popup||wide||html|<p>The last ${lines} line${Chat.plural(lines)} of the Moderator Log of ${roomName}.`;
 	}
 	preamble +=	`</p><p><small>[${Chat.toTimestamp(new Date(), {hour12: true})}] \u2190 current server time</small></p>`;
-	let moreButton = getMoreButton(room, preSearchString, lines);
+	let moreButton = getMoreButton(room, searchString, exactSearch, lines, maxLines);
 	return `${preamble}${resultString}${moreButton}`;
 }
 
@@ -312,11 +312,11 @@ exports.commands = {
 		if (!target && !lines) {
 			lines = 20;
 		}
+		if (!lines) lines = DEFAULT_RESULTS_LENGTH;
+		if (lines > MAX_RESULTS_LENGTH) lines = MAX_RESULTS_LENGTH;
 
 		let searchString = '';
 		if (target) searchString = target.trim();
-
-		if (!lines) lines = DEFAULT_RESULTS_LENGTH;
 
 		let exactSearch = '0';
 		if (searchString.match(/^["'].+["']$/)) {
@@ -333,10 +333,8 @@ exports.commands = {
 			roomIdList = [roomId];
 		}
 
-		if (lines > MAX_RESULTS_LENGTH) lines = MAX_RESULTS_LENGTH;
-
 		PM.send(roomIdList.join(','), searchString, exactSearch, lines).then(response => {
-			connection.send(prettifyResults(response, roomId, searchString, exactSearch, addModlogLinks, hideIps));
+			connection.send(prettifyResults(response, roomId, searchString, exactSearch === '1', addModlogLinks, hideIps, lines));
 			if (cmd === 'timedmodlog') this.sendReply(`The modlog query took ${Date.now() - startTime} ms to complete.`);
 		});
 	},
