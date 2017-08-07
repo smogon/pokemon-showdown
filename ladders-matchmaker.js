@@ -63,9 +63,11 @@ class Matchmaker {
 		formatid = Dex.getFormat(formatid).id;
 
 		return Promise.all([
+			Promise.resolve(user.userid),
 			user.prepBattle(formatid, 'search', null),
 			Ladders(formatid).getRating(user.userid),
-		]).then(([validTeam, rating]) => {
+		]).then(([userId, validTeam, rating]) => {
+			if (userId !== user.userid) return;
 			return this.finishSearchBattle(user, formatid, validTeam, rating);
 		}, err => {
 			// Rejects iff we retrieved the rating but the user had changed their name;
