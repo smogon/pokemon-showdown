@@ -68,9 +68,11 @@ class Matchmaker {
 	finishSearchBattle(user, formatid, result) {
 		if (!result) return;
 
+		const search = new Search(user.userid, user.team);
 		// Get the user's rating before actually starting to search.
 		Ladders(formatid).getRating(user.userid).then(rating => {
-			let search = new Search(user.userid, user.team, rating);
+			search.setRating(rating);
+			search.setStart();
 			this.addSearch(search, user, formatid);
 		}, error => {
 			// Rejects if we retrieved the rating but the user had changed their name;
