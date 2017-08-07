@@ -62,13 +62,13 @@ class Matchmaker {
 		if (!user.connected) return;
 		formatid = Dex.getFormat(formatid).id;
 		return user.prepBattle(formatid, 'search', null)
-			.then(result => this.finishSearchBattle(user, formatid, result));
+			.then(validTeam => this.finishSearchBattle(user, formatid, validTeam));
 	}
 
-	finishSearchBattle(user, formatid, result) {
-		if (!result) return;
+	finishSearchBattle(user, formatid, validTeam) {
+		if (validTeam === false) return;
 
-		const search = new Search(user.userid, user.team);
+		const search = new Search(user.userid, validTeam);
 		// Get the user's rating before actually starting to search.
 		Ladders(formatid).getRating(user.userid).then(rating => {
 			search.setRating(rating);
