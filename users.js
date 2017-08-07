@@ -1283,16 +1283,26 @@ class User {
 		}
 		return TeamValidator(formatid, customBanlist).prepTeam(this.team, this.locked || this.namelocked).then(result => this.finishPrepBattle(connection, result));
 	}
+
+	/**
+	 * Parses the result of a team validation and notifies the user.
+	 *
+	 * @param {Connection} connection - The connection from which the team validation was requested.
+	 * @param {string} result - The raw result received by the team validator.
+	 * @return {string|boolean} - The packed team if the validation was successful. False otherwise.
+	 */
 	finishPrepBattle(connection, result) {
 		if (result.charAt(0) !== '1') {
 			connection.popup(`Your team was rejected for the following reasons:\n\n- ` + result.slice(1).replace(/\n/g, `\n- `));
 			return false;
 		}
 
-		if (result.length > 1) {
-			this.team = result.slice(1);
+		if (this !== users.get(this.userid)) {
+			// TODO: User feedback.
+			return false;
 		}
-		return (this === users.get(this.userid));
+
+		return result.slice(1);
 	}
 	updateChallenges() {
 		let challengeTo = this.challengeTo;
