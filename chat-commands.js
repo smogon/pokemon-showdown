@@ -3267,8 +3267,7 @@ exports.commands = {
 		}
 		user.prepBattle(Dex.getFormat(target).id, 'challenge', connection).then(validTeam => {
 			if (validTeam === false) return;
-			user.team = validTeam;
-			user.makeChallenge(targetUser, target);
+			user.makeChallenge(targetUser, target, validTeam);
 		});
 	},
 
@@ -3313,8 +3312,7 @@ exports.commands = {
 		}
 		user.prepBattle(Dex.getFormat(format).id, 'challenge', connection).then(validTeam => {
 			if (validTeam === false) return;
-			user.team = validTeam;
-			user.acceptChallengeFrom(userid);
+			user.acceptChallengeFrom(userid, validTeam);
 		});
 	},
 
