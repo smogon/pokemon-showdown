@@ -2659,22 +2659,50 @@ exports.commands = {
 
 	disableladder: function (target, room, user) {
 		if (!this.can('disableladder')) return false;
-		if (LoginServer.disabled) {
-			return this.errorReply("/disableladder - Ladder is already disabled.");
+		if (Ladders.disabled) {
+			return this.errorReply(`/disableladder - Ladder is already disabled.`);
 		}
-		LoginServer.disabled = true;
-		this.logModCommand("The ladder was disabled by " + user.name + ".");
-		this.add("|raw|<div class=\"broadcast-red\"><b>Due to high server load, the ladder has been temporarily disabled</b><br />Rated games will no longer update the ladder. It will be back momentarily.</div>");
+
+		Ladders.disabled = true;
+
+		this.logModCommand(`The ladder was disabled by ${user.name}.`);
+		Monitor.log(`The ladder was disabled by ${user.name}.`);
+
+		const innerHTML = (
+			`<b>Due to high server load, the ladder has been temporarily disabled.</b><br />` +
+			`Rated games will no longer update the ladder. It will be back momentarily.`
+		);
+
+		Rooms.rooms.forEach((curRoom, id) => {
+			if (curRoom.type === 'battle') curRoom.rated = false;
+			if (id !== 'global') curRoom.addRaw(`<div class="broadcast-red">${innerHTML}</div>`).update();
+		});
+		Users.users.forEach(u => {
+			if (u.connected) u.send(`|pm|~|${u.group}${u.name}|/raw <div class="broadcast-red">${innerHTML}</div>`);
+		});
 	},
 
 	enableladder: function (target, room, user) {
 		if (!this.can('disableladder')) return false;
-		if (!LoginServer.disabled) {
-			return this.errorReply("/enable - Ladder is already enabled.");
+		if (!Ladders.disabled) {
+			return this.errorReply(`/enable - Ladder is already enabled.`);
 		}
-		LoginServer.disabled = false;
-		this.logModCommand("The ladder was enabled by " + user.name + ".");
-		this.add("|raw|<div class=\"broadcast-green\"><b>The ladder is now back.</b><br />Rated games will update the ladder now.</div>");
+		Ladders.disabled = false;
+
+		this.logModCommand(`The ladder was enabled by ${user.name}.`);
+		Monitor.log(`The ladder was enabled by ${user.name}.`);
+
+		const innerHTML = (
+			`<b>The ladder is now back.</b><br />` +
+			`Rated games will update the ladder now..`
+		);
+
+		Rooms.rooms.forEach((curRoom, id) => {
+			if (id !== 'global') curRoom.addRaw(`<div class="broadcast-green">${innerHTML}</div>`).update();
+		});
+		Users.users.forEach(u => {
+			if (u.connected) u.send(`|pm|~|${u.group}${u.name}|/raw <div class="broadcast-green">${innerHTML}</div>`);
+		});
 	},
 
 	lockdown: function (target, room, user) {
