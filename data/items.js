@@ -197,7 +197,6 @@ exports.BattleItems = {
 	"altarianite": {
 		id: "altarianite",
 		name: "Altarianite",
-		isUnreleased: true,
 		spritenum: 615,
 		megaStone: "Altaria-Mega",
 		megaEvolves: "Altaria",
@@ -212,7 +211,6 @@ exports.BattleItems = {
 	"ampharosite": {
 		id: "ampharosite",
 		name: "Ampharosite",
-		isUnreleased: true,
 		spritenum: 580,
 		megaStone: "Ampharos-Mega",
 		megaEvolves: "Ampharos",
@@ -2724,7 +2722,6 @@ exports.BattleItems = {
 	"latiasite": {
 		id: "latiasite",
 		name: "Latiasite",
-		isUnreleased: true,
 		spritenum: 629,
 		megaStone: "Latias-Mega",
 		megaEvolves: "Latias",
@@ -2739,7 +2736,6 @@ exports.BattleItems = {
 	"latiosite": {
 		id: "latiosite",
 		name: "Latiosite",
-		isUnreleased: true,
 		spritenum: 630,
 		megaStone: "Latios-Mega",
 		megaEvolves: "Latios",
