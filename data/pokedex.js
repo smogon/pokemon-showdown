@@ -12018,7 +12018,7 @@ exports.BattlePokedex = {
 		abilities: {0: "Leaf Guard", H: "Contrary"},
 		heightm: 0.9,
 		weightkg: 18.5,
-		color: "Green",
+		color: "Pink",
 		prevo: "fomantis",
 		evoLevel: 34,
 		eggGroups: ["Grass"],
