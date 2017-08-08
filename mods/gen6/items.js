@@ -16,14 +16,6 @@ exports.BattleItems = {
 		},
 		desc: "Restores 1/8 max HP at 1/2 max HP or less; confuses if -SpD Nature. Single use.",
 	},
-	altarianite: {
-		inherit: true,
-		isUnreleased: false,
-	},
-	ampharosite: {
-		inherit: true,
-		isUnreleased: false,
-	},
 	belueberry: {
 		inherit: true,
 		isUnreleased: false,
@@ -92,14 +84,6 @@ exports.BattleItems = {
 				}
 			}
 		},
-	},
-	latiasite: {
-		inherit: true,
-		isUnreleased: false,
-	},
-	latiosite: {
-		inherit: true,
-		isUnreleased: false,
 	},
 	lightclay: {
 		inherit: true,
