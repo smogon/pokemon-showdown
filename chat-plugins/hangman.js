@@ -306,7 +306,8 @@ exports.commands = {
 		room.game.guess(target, user);
 	},
 	guesshelp: [
-		"/guess - Shortcut for /hangman guess.", "/hangman guess [letter] - Makes a guess for the letter entered.",
+		"/guess - Shortcut for /hangman guess.",
+		"/hangman guess [letter] - Makes a guess for the letter entered.",
 		"/hangman guess [word] - Same as a letter, but guesses an entire word.",
 	],
 };
