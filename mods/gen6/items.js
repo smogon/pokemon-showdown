@@ -32,10 +32,6 @@ exports.BattleItems = {
 		inherit: true,
 		isUnreleased: false,
 	},
-	diancite: {
-		inherit: true,
-		isUnreleased: false,
-	},
 	durinberry: {
 		inherit: true,
 		isUnreleased: false,
