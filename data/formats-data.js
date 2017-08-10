@@ -5830,7 +5830,7 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["calmmind", "moonblast", "earthpower", "hiddenpowerfire", "psyshock", "diamondstorm"],
 		randomDoubleBattleMoves: ["diamondstorm", "moonblast", "calmmind", "psyshock", "earthpower", "hiddenpowerfire", "dazzlinggleam", "protect"],
 		requiredItem: "Diancite",
-		tier: "Unreleased",
+		tier: "OU",
 	},
 	hoopa: {
 		randomBattleMoves: ["nastyplot", "psyshock", "shadowball", "focusblast", "trick"],
