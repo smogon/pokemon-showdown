@@ -66,6 +66,15 @@ exports.BattleMovedex = {
 		inherit: true,
 		desc: "The power of this move depends on (user's weight / target's weight), rounded down. Power is equal to 120 if the result is 5 or more, 100 if 4, 80 if 3, 60 if 2, and 40 if 1 or less.",
 	},
+	judgment: {
+		inherit: true,
+		onModifyMove: function (move, pokemon) {
+			const item = pokemon.getItem();
+			if (item.id && item.onPlate) {
+				move.type = item.onPlate;
+			}
+		},
+	},
 	kingsshield: {
 		inherit: true,
 		desc: "The user is protected from most attacks made by other Pokemon during this turn, and Pokemon trying to make contact with the user have their Attack lowered by 2 stages. Non-damaging moves go through this protection. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails or if the user's last move used is not Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, or Wide Guard. Fails if the user moves last this turn.",
