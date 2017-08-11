@@ -561,14 +561,8 @@ class User {
 		if (!this.can('console')) return false; // normal permission check
 
 		let whitelist = Config.consoleips || ['127.0.0.1'];
-		if (whitelist.includes(connection.ip)) {
-			return true; // on the IP whitelist
-		}
-		if (whitelist.includes(this.userid)) {
-			return true; // on the userid whitelist
-		}
-
-		return false;
+		// on the IP whitelist OR the userid whitelist
+		return whitelist.includes(connection.ip) || whitelist.includes(this.userid);
 	}
 	/**
 	 * Special permission check for promoting and demoting
