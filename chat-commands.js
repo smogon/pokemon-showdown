@@ -2847,7 +2847,7 @@ exports.commands = {
 	},
 
 	updateserver: function (target, room, user, connection) {
-		if (!user.hasConsoleAccess(connection)) {
+		if (!user.can('hotpatch')) {
 			return this.errorReply("/updateserver - Access denied.");
 		}
 
