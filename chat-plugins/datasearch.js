@@ -434,7 +434,7 @@ function runDexsearch(target, cmd, canAll, message) {
 
 			let typeIndex = target.indexOf('type');
 			if (typeIndex === -1) typeIndex = target.length;
-			if (typeIndex !== target.length || toId(target) in allTypes) {
+			if ((typeIndex !== target.length && target.endsWith('type')) || toId(target) in allTypes) {
 				target = toId(target.substring(0, typeIndex));
 				if (target in allTypes) {
 					target = allTypes[target];
@@ -816,7 +816,7 @@ function runMovesearch(target, cmd, canAll, message) {
 			}
 			let typeIndex = target.indexOf('type');
 			if (typeIndex === -1) typeIndex = target.length;
-			if (typeIndex !== target.length || toId(target) in allTypes) {
+			if ((typeIndex !== target.length && target.endsWith('type')) || toId(target) in allTypes) {
 				target = toId(target.substring(0, typeIndex));
 				if (target in allTypes) {
 					target = allTypes[target];
@@ -881,6 +881,7 @@ function runMovesearch(target, cmd, canAll, message) {
 			if (target.substr(0, 6) === 'random' && cmd === 'randmove') {
 				//validation for this is in the /randmove command
 				randomOutput = parseInt(target.substr(6));
+				orGroup.skip = true;
 				continue;
 			}
 
