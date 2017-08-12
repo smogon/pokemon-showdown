@@ -89,7 +89,7 @@ exports.BattleAbilities = {
 	},
 	"insomnia": {
 		inherit: true,
-		rating: 2.5, // more valuable than in later gens due to sleep lasting longer and having fewer natural immunities
+		rating: 2.5,
 	},
 	"leafguard": {
 		inherit: true,
@@ -290,7 +290,7 @@ exports.BattleAbilities = {
 	},
 	"vitalspirit": {
 		inherit: true,
-		rating: 2.5, // more valuable than in later gens due to sleep lasting longer and having fewer natural immunities
+		rating: 2.5,
 	},
 	"wonderguard": {
 		inherit: true,
