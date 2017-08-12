@@ -169,7 +169,7 @@ class RandomGen4Teams extends RandomGen5Teams {
 					if (counter.setupType || hasMove['rest'] || hasMove['substitute']) rejected = true;
 					break;
 				case 'protect':
-					if (!(hasAbility['Guts'] || hasAbility['Quick Feet'] || hasAbility['Speed Boost'] || hasMove['Toxic'] || hasMove['Wish'])) rejected = true;
+					if (!(hasAbility['Guts'] || hasAbility['Quick Feet'] || hasAbility['Speed Boost'] || hasMove['toxic'] || hasMove['wish'])) rejected = true;
 					break;
 				case 'wish':
 					if (!(hasMove['batonpass'] || hasMove['protect'] || hasMove['uturn'])) rejected = true;
