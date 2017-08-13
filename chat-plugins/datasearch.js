@@ -432,25 +432,25 @@ function runDexsearch(target, cmd, canAll, message) {
 				continue;
 			}
 
-			let typeIndex = target.indexOf('type');
-			if (typeIndex === -1) typeIndex = target.length;
-			if (typeIndex !== target.length || toId(target) in allTypes) {
-				target = toId(target.substring(0, typeIndex));
-				if (target in allTypes) {
-					target = allTypes[target];
-					let invalid = validParameter("types", target, isNotSearch, target + ' type');
-					if (invalid) return {reply: invalid};
-					orGroup.types[target] = !isNotSearch;
-					continue;
-				} else {
-					return {reply: `'${target}' is not a recognized type.`};
-				}
+			let targetType;
+			if (target.endsWith('type')) {
+				targetType = toId(target.substring(0, target.indexOf('type')));
+			} else {
+				targetType = toId(target);
 			}
+			if (targetType in allTypes) {
+				target = allTypes[targetType];
+				if ((orGroup.types[target] && isNotSearch) || (orGroup.types[target] === false && !isNotSearch)) return {reply: 'A search cannot both exclude and include a type.'};
+				orGroup.types[target] = !isNotSearch;
+				continue;
+			}
+
 			if (target.substr(0, 6) === 'maxgen') {
 				maxGen = parseInt(target[6]);
 				orGroup.skip = true;
 				continue;
 			}
+
 			let groupIndex = target.indexOf('group');
 			if (groupIndex === -1) groupIndex = target.length;
 			if (groupIndex !== target.length || toId(target) in allEggGroups) {
@@ -814,18 +814,17 @@ function runMovesearch(target, cmd, canAll, message) {
 				isNotSearch = true;
 				target = target.substr(1);
 			}
-			let typeIndex = target.indexOf('type');
-			if (typeIndex === -1) typeIndex = target.length;
-			if (typeIndex !== target.length || toId(target) in allTypes) {
-				target = toId(target.substring(0, typeIndex));
-				if (target in allTypes) {
-					target = allTypes[target];
-					if ((orGroup.types[target] && isNotSearch) || (orGroup.types[target] === false && !isNotSearch)) return {reply: 'A search cannot both exclude and include a type.'};
-					orGroup.types[target] = !isNotSearch;
-					continue;
-				} else {
-					return {reply: `'${target}' is not a recognized type.`};
-				}
+			let targetType;
+			if (target.endsWith('type')) {
+				targetType = toId(target.substring(0, target.indexOf('type')));
+			} else {
+				targetType = toId(target);
+			}
+			if (targetType in allTypes) {
+				target = allTypes[targetType];
+				if ((orGroup.types[target] && isNotSearch) || (orGroup.types[target] === false && !isNotSearch)) return {reply: 'A search cannot both exclude and include a type.'};
+				orGroup.types[target] = !isNotSearch;
+				continue;
 			}
 
 			if (target in allCategories) {
@@ -881,6 +880,7 @@ function runMovesearch(target, cmd, canAll, message) {
 			if (target.substr(0, 6) === 'random' && cmd === 'randmove') {
 				//validation for this is in the /randmove command
 				randomOutput = parseInt(target.substr(6));
+				orGroup.skip = true;
 				continue;
 			}
 
