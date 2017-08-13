@@ -1091,6 +1091,7 @@ let commands = {
 			const name = Chat.escapeHTML(params[0].trim());
 			if (!name.length) return this.errorReply("The tournament's name cannot be blank.");
 			if (name.length > MAX_CUSTOM_NAME_LENGTH) return this.errorReply("The tournament's name cannot exceed " + MAX_CUSTOM_NAME_LENGTH + " characters.");
+			if (name.includes('|')) return this.errorReply("The tournament's name cannot include the | symbol.");
 			tournament.format = name;
 			this.room.send('|tournament|update|' + JSON.stringify({format: tournament.format}));
 			this.privateModCommand("(" + user.name + " set the tournament's name to " + tournament.format + ".)");
