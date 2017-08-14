@@ -261,17 +261,6 @@ exports.Formats = [
 		],
 	},
 	{
-		name: "[Gen 7] Doubles OU (suspect test)",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3610992/\">Doubles OU Suspect Test</a>"],
-
-		mod: 'gen7',
-		challengeShow: false,
-		ladderShow: false,
-		searchShow: false,
-		gameType: 'doubles',
-		ruleset: ['[Gen 7] Doubles OU'],
-	},
-	{
 		name: "[Gen 7] Doubles Ubers",
 
 		mod: 'gen7',
