@@ -253,7 +253,6 @@ exports.Formats = [
 		],
 
 		mod: 'gen7',
-		searchShow: false,
 		gameType: 'doubles',
 		ruleset: ['Pokemon', 'Standard Doubles', 'Swagger Clause', 'Team Preview'],
 		banlist: ['Arceus', 'Dialga', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Jirachi', 'Kyogre', 'Kyurem-White',
@@ -267,6 +266,8 @@ exports.Formats = [
 
 		mod: 'gen7',
 		challengeShow: false,
+		ladderShow: false,
+		searchShow: false,
 		gameType: 'doubles',
 		ruleset: ['[Gen 7] Doubles OU'],
 	},
