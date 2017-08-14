@@ -253,22 +253,12 @@ exports.Formats = [
 		],
 
 		mod: 'gen7',
-		searchShow: false,
 		gameType: 'doubles',
 		ruleset: ['Pokemon', 'Standard Doubles', 'Swagger Clause', 'Team Preview'],
 		banlist: ['Arceus', 'Dialga', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Jirachi', 'Kyogre', 'Kyurem-White',
 			'Lugia', 'Lunala', 'Magearna', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Solgaleo', 'Xerneas', 'Yveltal', 'Zekrom',
 			'Power Construct', 'Eevium Z', 'Kangaskhanite', 'Dark Void', 'Gravity ++ Grass Whistle', 'Gravity ++ Hypnosis', 'Gravity ++ Lovely Kiss', 'Gravity ++ Sing', 'Gravity ++ Sleep Powder',
 		],
-	},
-	{
-		name: "[Gen 7] Doubles OU (suspect test)",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3610992/\">Doubles OU Suspect Test</a>"],
-
-		mod: 'gen7',
-		challengeShow: false,
-		gameType: 'doubles',
-		ruleset: ['[Gen 7] Doubles OU'],
 	},
 	{
 		name: "[Gen 7] Doubles Ubers",
