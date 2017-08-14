@@ -370,7 +370,7 @@ exports.Formats = [
 		mod: 'gen7',
 		searchShow: false,
 		ruleset: ['[Gen 7] OU'],
-		banlist: [],
+		banlist: ['Serperior'],
 	},
 	{
 		section: "Other Metagames",
