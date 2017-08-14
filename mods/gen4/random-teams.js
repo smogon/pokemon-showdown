@@ -256,20 +256,14 @@ class RandomGen4Teams extends RandomGen5Teams {
 				case 'solarbeam':
 					if (counter.setupType === 'Physical' || !hasMove['sunnyday']) rejected = true;
 					break;
-				case 'airslash':
-					if (!counter.setupType && hasMove['bravebird']) rejected = true;
-					break;
 				case 'icepunch':
 					if (!counter.setupType && hasMove['icebeam']) rejected = true;
 					break;
-				case 'aurasphere':
+				case 'aurasphere': case 'drainpunch':
 					if (hasMove['closecombat'] && counter.setupType !== 'Special') rejected = true;
 					break;
 				case 'brickbreak': case 'closecombat': case 'crosschop':
 					if (hasMove['substitute'] && hasMove['focuspunch']) rejected = true;
-					break;
-				case 'drainpunch':
-					if (hasMove['closecombat']) rejected = true;
 					break;
 				case 'focusblast':
 					if (hasMove['crosschop']) rejected = true;
@@ -285,6 +279,9 @@ class RandomGen4Teams extends RandomGen5Teams {
 					break;
 				case 'earthpower':
 					if (hasMove['earthquake']) rejected = true;
+					break;
+				case 'airslash':
+					if (!counter.setupType && hasMove['bravebird']) rejected = true;
 					break;
 				case 'zenheadbutt':
 					if (hasMove['psychocut']) rejected = true;
@@ -570,7 +567,6 @@ class RandomGen4Teams extends RandomGen5Teams {
 		} else if (hasMove['outrage'] && counter.setupType) {
 			item = 'Lum Berry';
 		} else if (hasMove['substitute']) {
-			// allow Life Orb for Pokemon with a draining attack + at least one other attack, and for very frail Pokemon with 3 attacks (Dugtrio, Alakazam, Hitmonlee)
 			item = counter.damagingMoves.length < 2 ||
 				!counter['drain'] && (counter.damagingMoves.length < 3 || template.baseStats.hp < 60 && template.baseStats.def + template.baseStats.spd < 180) ? 'Leftovers' : 'Life Orb';
 		} else if (hasMove['lightscreen'] || hasMove['reflect']) {
