@@ -39,6 +39,7 @@ exports.BattleItems = {
 				return 3;
 			}
 		},
+		desc: "If holder is a Farfetch'd, its critical hit ratio is raised by 3 stages.",
 	},
 	thickclub: {
 		inherit: true,
