@@ -95,6 +95,7 @@ exports.BattleItems = {
 				return this.chainModify(2);
 			}
 		},
+		desc: "If holder is a Pikachu, its Special Attack is doubled.",
 	},
 	"luckypunch": {
 		inherit: true,
@@ -120,6 +121,7 @@ exports.BattleItems = {
 				pokemon.removeVolatile('attract');
 			}
 		},
+		desc: "Cures holder of being infatuated. Single use.",
 	},
 	"metalcoat": {
 		inherit: true,
@@ -215,6 +217,7 @@ exports.BattleItems = {
 		onEat: function (pokemon) {
 			this.heal(30);
 		},
+		desc: "The holder heals 30 HP.",
 	},
 	"softsand": {
 		inherit: true,
