@@ -216,7 +216,6 @@ exports.BattleItems = {
 		onEat: function (pokemon) {
 			this.heal(30);
 		},
-		desc: "The holder heals 30 HP.",
 	},
 	"softsand": {
 		inherit: true,
