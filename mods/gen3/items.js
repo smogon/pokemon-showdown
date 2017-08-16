@@ -121,7 +121,6 @@ exports.BattleItems = {
 				pokemon.removeVolatile('attract');
 			}
 		},
-		desc: "Cures holder of being infatuated. Single use.",
 	},
 	"metalcoat": {
 		inherit: true,
