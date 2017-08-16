@@ -2631,7 +2631,7 @@ exports.BattleFormatsData = {
 	gallade: {
 		randomBattleMoves: ["bulkup", "drainpunch", "icepunch", "shadowsneak", "closecombat", "zenheadbutt", "knockoff", "trick"],
 		randomDoubleBattleMoves: ["closecombat", "trick", "stoneedge", "shadowsneak", "drainpunch", "icepunch", "zenheadbutt", "knockoff", "trickroom", "protect", "helpinghand"],
-		tier: "PU",
+		tier: "BL4",
 	},
 	gallademega: {
 		randomBattleMoves: ["swordsdance", "closecombat", "drainpunch", "knockoff", "zenheadbutt", "substitute"],
@@ -4936,7 +4936,7 @@ exports.BattleFormatsData = {
 	klinklang: {
 		randomBattleMoves: ["shiftgear", "return", "geargrind", "wildcharge", "substitute"],
 		randomDoubleBattleMoves: ["shiftgear", "return", "geargrind", "wildcharge", "protect"],
-		tier: "PU",
+		tier: "BL4",
 	},
 	tynamo: {
 		randomBattleMoves: ["spark", "chargebeam", "thunderwave", "tackle"],
@@ -5456,7 +5456,7 @@ exports.BattleFormatsData = {
 	vivillon: {
 		randomBattleMoves: ["sleeppowder", "quiverdance", "hurricane", "bugbuzz", "substitute"],
 		randomDoubleBattleMoves: ["sleeppowder", "quiverdance", "hurricane", "bugbuzz", "roost", "protect"],
-		tier: "PU",
+		tier: "BL4",
 	},
 	vivillonfancy: {
 		eventPokemon: [
