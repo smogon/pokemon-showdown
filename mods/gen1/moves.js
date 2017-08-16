@@ -225,7 +225,7 @@ exports.BattleMovedex = {
 				}
 			},
 		},
-		desc: "This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks, and is also unaffected by weather.",
+		desc: "This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks.",
 	},
 	disable: {
 		inherit: true,
