@@ -225,6 +225,7 @@ exports.BattleMovedex = {
 				}
 			},
 		},
+		desc: "This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks, and is also unaffected by weather.",
 	},
 	disable: {
 		inherit: true,
@@ -356,6 +357,8 @@ exports.BattleMovedex = {
 	glare: {
 		inherit: true,
 		ignoreImmunity: true,
+		desc: "Paralyzes the target. Ignores Immunities.",
+		shortDesc: "Paralyzes the target. Ignores Immunities.",
 	},
 	growth: {
 		inherit: true,
@@ -530,6 +533,8 @@ exports.BattleMovedex = {
 		inherit: true,
 		ignoreImmunity: true,
 		basePower: 1,
+		desc: "Deals damage to the target equal to the user's level. Ignores Immunities.",
+		shortDesc: "Does damage equal to the user's level. Ignores Immunities.",
 	},
 	poisonsting: {
 		inherit: true,
@@ -537,11 +542,13 @@ exports.BattleMovedex = {
 			chance: 20,
 			status: 'psn',
 		},
+		desc: "Has a 20% chance to poison the target.",
+		shortDesc: "20% chance to poison the target.",
 	},
 	psychic: {
 		inherit: true,
-		desc: "Deals damage to one target with a 30% chance to lower its Special by 1 stage.",
-		shortDesc: "30% chance to lower the target's Special by 1.",
+		desc: "Deals damage to one target with a 33% chance to lower its Special by 1 stage.",
+		shortDesc: "33% chance to lower the target's Special by 1.",
 		secondary: {
 			chance: 33,
 			boosts: {
@@ -664,6 +671,8 @@ exports.BattleMovedex = {
 	},
 	sandattack: {
 		inherit: true,
+		desc: "Lowers the target's accuracy by 1 stage. Ignores Immunities",
+		shortDesc: "Lowers the target's accuracy by 1. Ignores Immunities.",
 		ignoreImmunity: true,
 		type: "Normal",
 	},
@@ -671,6 +680,8 @@ exports.BattleMovedex = {
 		inherit: true,
 		ignoreImmunity: true,
 		basePower: 1,
+		desc: "Deals damage to the target equal to the user's level. Ignores Immunities.",
+		shortDesc: "Does damage equal to the user's level. Ignores Immunities.",
 	},
 	selfdestruct: {
 		inherit: true,
@@ -804,6 +815,8 @@ exports.BattleMovedex = {
 		inherit: true,
 		ignoreImmunity: true,
 		basePower: 1,
+		desc: "Deals damage to the target equal to half of its current HP, rounded down, but not less than 1 HP. Ignores Immunities.",
+		shortDesc: "Does damage equal to 1/2 target's current HP. Ignores Immunities.",
 	},
 	thunder: {
 		inherit: true,
@@ -811,6 +824,8 @@ exports.BattleMovedex = {
 			chance: 10,
 			status: 'par',
 		},
+		desc: "Has a 10% chance to paralyze the target. If the weather is Rain Dance, this move does not check accuracy. If the weather is Sunny Day, this move's accuracy is 50%.",
+		shortDesc: "10% chance to paralyze target. Can't miss in rain.",
 	},
 	thunderwave: {
 		inherit: true,
