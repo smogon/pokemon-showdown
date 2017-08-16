@@ -357,8 +357,8 @@ exports.BattleMovedex = {
 	glare: {
 		inherit: true,
 		ignoreImmunity: true,
-		desc: "Paralyzes the target. Ignores Immunities.",
-		shortDesc: "Paralyzes the target. Ignores Immunities.",
+		desc: "Paralyzes the target.",
+		shortDesc: "Paralyzes the target.",
 	},
 	growth: {
 		inherit: true,
@@ -824,8 +824,8 @@ exports.BattleMovedex = {
 			chance: 10,
 			status: 'par',
 		},
-		desc: "Has a 10% chance to paralyze the target. If the weather is Rain Dance, this move does not check accuracy. If the weather is Sunny Day, this move's accuracy is 50%.",
-		shortDesc: "10% chance to paralyze target. Can't miss in rain.",
+		desc: "Has a 10% chance to paralyze the target.",
+		shortDesc: "10% chance to paralyze target.",
 	},
 	thunderwave: {
 		inherit: true,
