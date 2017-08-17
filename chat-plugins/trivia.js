@@ -1354,40 +1354,40 @@ module.exports = {
 	commands: {
 		trivia: commands,
 		ta: commands.answer,
-		// TODO: this is ugly as all hell, split it into sections
-		triviahelp: [
-			"Modes:",
-			"- First: the first correct responder gains 5 points.",
-			"- Timer: each correct responder gains up to 5 points based on how quickly they answer.",
-			"- Number: each correct responder gains up to 5 points based on how many participants are correct.",
-			"Categories: Arts & Entertainment, Pok\u00e9mon, Science & Geography, Society & Humanities, Random, and All.",
-			"Game lengths:",
-			"- Short: 20 point score cap. The winner gains 3 leaderboard points.",
-			"- Medium: 35 point score cap. The winner gains 4 leaderboard points.",
-			"- Long: 50 point score cap. The winner gains 5 leaderboard points.",
-			"Game commands:",
-			"- /trivia new [mode], [category], [length] - Begin signups for a new trivia game. Requires: + % @ # & ~",
-			"- /trivia join - Join a trivia game during signups.",
-			"- /trivia start - Begin the game once enough users have signed up. Requires: + % @ # & ~",
-			"- /ta [answer] - Answer the current question.",
-			"- /trivia kick [username] - Disqualify a participant from the current trivia game. Requires: % @ # & ~",
-			"- /trivia leave - Makes the player leave the game.",
-			"- /trivia end - End a trivia game. Requires: + % @ # ~",
-			"Question modifying commands:",
-			"- /trivia submit [category] | [question] | [answer1], [answer2] ... [answern] - Add a question to the submission database for staff to review.",
-			"- /trivia review - View the list of submitted questions. Requires: @ # & ~",
-			"- /trivia accept [index1], [index2], ... [indexn] OR all - Add questions from the submission database to the question database using their index numbers or ranges of them. Requires: @ # & ~",
-			"- /trivia reject [index1], [index2], ... [indexn] OR all - Remove questions from the submission database using their index numbers or ranges of them. Requires: @ # & ~",
-			"- /trivia add [category] | [question] | [answer1], [answer2], ... [answern] - Add a question to the question database. Requires: % @ # & ~",
-			"- /trivia delete [question] - Delete a question from the trivia database. Requires: % @ # & ~",
-			"- /trivia qs - View the distribution of questions in the question database.",
-			"- /trivia qs [category] - View the questions in the specified category. Requires: % @ # & ~",
-			"Informational commands:",
-			"- /trivia search [type], [query] - Searches for questions based on their type and their query. Valid types: submissions, subs, questions, qs. Requires: + % @ # & ~",
-			"- /trivia status [player] - lists the player's standings (your own if no player is specified) and the list of players in the current trivia game.",
-			"- /trivia rank [username] - View the rank of the specified user. If none is given, view your own.",
-			"- /trivia ladder - View information about the top 15 users on the trivia leaderboard.",
-			"- /trivia ugm [setting] - Enable or disable UGM mode. Requires: # & ~",
-		],
+		triviahelp: function (target, room, user) {
+			const buff = "<details><summary>Modes:</summary>" +
+				"- First: the first correct responder gains 5 points.<br />" +
+				"- Timer: each correct responder gains up to 5 points based on how quickly they answer.<br />" +
+				"- Number: each correct responder gains up to 5 points based on how many participants are correct.</details>" +
+				"Categories: Arts & Entertainment, Pok\u00e9mon, Science & Geography, Society & Humanities, Random, and All." +
+				"<details><summary>Game lengths:</summary>" +
+				"- Short: 20 point score cap. The winner gains 3 leaderboard points.<br />" +
+				"- Medium: 35 point score cap. The winner gains 4 leaderboard points.<br />" +
+				"- Long: 50 point score cap. The winner gains 5 leaderboard points.</details>" +
+				"<details><summary>Game commands:</summary>" +
+				"- /trivia new [mode], [category], [length] - Begin signups for a new trivia game. Requires: + % @ # & ~<br />" +
+				"- /trivia join - Join a trivia game during signups.<br />" +
+				"- /trivia start - Begin the game once enough users have signed up. Requires: + % @ # & ~<br />" +
+				"- /ta [answer] - Answer the current question.<br />" +
+				"- /trivia kick [username] - Disqualify a participant from the current trivia game. Requires: % @ # & ~<br />" +
+				"- /trivia leave - Makes the player leave the game.<br />" +
+				"- /trivia end - End a trivia game. Requires: + % @ # ~</details>" +
+				"<details><summary>Question modifying commands:</summary>" +
+				"- /trivia submit [category] | [question] | [answer1], [answer2] ... [answern] - Add a question to the submission database for staff to review.<br />" +
+				"- /trivia review - View the list of submitted questions. Requires: @ # & ~<br />" +
+				"- /trivia accept [index1], [index2], ... [indexn] OR all - Add questions from the submission database to the question database using their index numbers or ranges of them. Requires: @ # & ~<br />" +
+				"- /trivia reject [index1], [index2], ... [indexn] OR all - Remove questions from the submission database using their index numbers or ranges of them. Requires: @ # & ~<br />" +
+				"- /trivia add [category] | [question] | [answer1], [answer2], ... [answern] - Add a question to the question database. Requires: % @ # & ~<br />" +
+				"- /trivia delete [question] - Delete a question from the trivia database. Requires: % @ # & ~<br />" +
+				"- /trivia qs - View the distribution of questions in the question database.<br />" +
+				"- /trivia qs [category] - View the questions in the specified category. Requires: % @ # & ~</details>" +
+				"<details><summary>Informational commands:</summary>" +
+				"- /trivia search [type], [query] - Searches for questions based on their type and their query. Valid types: submissions, subs, questions, qs. Requires: + % @ # & ~<br />" +
+				"- /trivia status [player] - lists the player's standings (your own if no player is specified) and the list of players in the current trivia game.<br />" +
+				"- /trivia rank [username] - View the rank of the specified user. If none is given, view your own.<br />" +
+				"- /trivia ladder - View information about the top 15 users on the trivia leaderboard.<br />" +
+				"- /trivia ugm [setting] - Enable or disable UGM mode. Requires: # & ~</details>";
+			return this.sendReply(`|html|${buff}`);
+		},
 	},
 };
