@@ -357,8 +357,6 @@ exports.BattleMovedex = {
 	glare: {
 		inherit: true,
 		ignoreImmunity: true,
-		desc: "Paralyzes the target.",
-		shortDesc: "Paralyzes the target.",
 	},
 	growth: {
 		inherit: true,
@@ -533,8 +531,8 @@ exports.BattleMovedex = {
 		inherit: true,
 		ignoreImmunity: true,
 		basePower: 1,
-		desc: "Deals damage to the target equal to the user's level. Ignores Immunities.",
-		shortDesc: "Does damage equal to the user's level. Ignores Immunities.",
+		desc: "Deals damage to the target equal to the user's level. Ignores immunities.",
+		shortDesc: "Does damage equal to the user's level. Ignores immunities.",
 	},
 	poisonsting: {
 		inherit: true,
@@ -671,8 +669,8 @@ exports.BattleMovedex = {
 	},
 	sandattack: {
 		inherit: true,
-		desc: "Lowers the target's accuracy by 1 stage. Ignores Immunities",
-		shortDesc: "Lowers the target's accuracy by 1. Ignores Immunities.",
+		desc: "Lowers the target's accuracy by 1 stage. Ignores immunities",
+		shortDesc: "Lowers the target's accuracy by 1. Ignores immunities.",
 		ignoreImmunity: true,
 		type: "Normal",
 	},
@@ -680,8 +678,8 @@ exports.BattleMovedex = {
 		inherit: true,
 		ignoreImmunity: true,
 		basePower: 1,
-		desc: "Deals damage to the target equal to the user's level. Ignores Immunities.",
-		shortDesc: "Does damage equal to the user's level. Ignores Immunities.",
+		desc: "Deals damage to the target equal to the user's level. Ignores immunities.",
+		shortDesc: "Does damage equal to the user's level. Ignores immunities.",
 	},
 	selfdestruct: {
 		inherit: true,
@@ -815,8 +813,8 @@ exports.BattleMovedex = {
 		inherit: true,
 		ignoreImmunity: true,
 		basePower: 1,
-		desc: "Deals damage to the target equal to half of its current HP, rounded down, but not less than 1 HP. Ignores Immunities.",
-		shortDesc: "Does damage equal to 1/2 target's current HP. Ignores Immunities.",
+		desc: "Deals damage to the target equal to half of its current HP, rounded down, but not less than 1 HP. Ignores immunities.",
+		shortDesc: "Does damage equal to 1/2 target's current HP. Ignores immunities.",
 	},
 	thunder: {
 		inherit: true,
