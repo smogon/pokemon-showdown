@@ -128,6 +128,7 @@ exports.commands = {
 			'How many digits of pi do YOU know? Test it out <a href="http://guangcongluo.com/mempi/">here</a>!');
 	},
 
+	'!code': true,
 	code: function (target, room, user) {
 		if (!target) return this.parse('/help code');
 		if (!this.canTalk()) return;
