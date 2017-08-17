@@ -3541,7 +3541,7 @@ exports.commands = {
 					// If the help command is a function, parse it instead
 					this.run(allCommands[helpCmd]);
 				} else if (Array.isArray(allCommands[helpCmd])) {
-					if (allCommands[helpCmd].length > 20) return this.sendReply(`|html|<div class="infobox-limited">${allCommands[helpCmd].join('<br />')}</div>`);
+					if (allCommands[helpCmd].length > 15) return this.sendReply(`|html|<div class="infobox-limited">${allCommands[helpCmd].join('<br />')}</div>`);
 					this.sendReply(allCommands[helpCmd].join('\n'));
 				}
 			} else {
