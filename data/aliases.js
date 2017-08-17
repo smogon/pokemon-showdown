@@ -498,6 +498,7 @@ exports.BattleAliases = {
 	"aero": "Aerodactyl",
 	"amph": "Ampharos",
 	"ashgren": "Greninja-Ash",
+	"ashninja": "Greninja-Ash",
 	"azu": "Azumarill",
 	"bliss": "Blissey",
 	"birdjesus": "Pidgeot",
