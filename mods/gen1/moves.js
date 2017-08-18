@@ -207,6 +207,7 @@ exports.BattleMovedex = {
 	},
 	dig: {
 		inherit: true,
+		desc: "This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks other than Bide and Swift.",
 		basePower: 100,
 		effect: {
 			duration: 2,
@@ -225,7 +226,6 @@ exports.BattleMovedex = {
 				}
 			},
 		},
-		desc: "This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks.",
 	},
 	disable: {
 		inherit: true,
@@ -322,8 +322,7 @@ exports.BattleMovedex = {
 	},
 	fly: {
 		inherit: true,
-		desc: "Deals damage to target. This attack charges on the first turn and strikes on the second. The user cannot make a move between turns. (Field: Can be used to fly to a previously visited area.)",
-		shortDesc: "Flies up on first turn, then strikes the next turn.",
+		desc: "This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks other than Bide and Swift.",
 		effect: {
 			duration: 2,
 			onLockMove: 'fly',
@@ -529,23 +528,23 @@ exports.BattleMovedex = {
 	},
 	nightshade: {
 		inherit: true,
+		desc: "Deals damage to the target equal to the user's level. This move can hit Normal-type Pokemon.",
+		shortDesc: "Damage = user's level. Can hit Normal types.",
 		ignoreImmunity: true,
 		basePower: 1,
-		desc: "Deals damage to the target equal to the user's level. Ignores immunities.",
-		shortDesc: "Does damage equal to the user's level. Ignores immunities.",
 	},
 	poisonsting: {
 		inherit: true,
+		desc: "Has a 20% chance to poison the target.",
+		shortDesc: "20% chance to poison the target.",
 		secondary: {
 			chance: 20,
 			status: 'psn',
 		},
-		desc: "Has a 20% chance to poison the target.",
-		shortDesc: "20% chance to poison the target.",
 	},
 	psychic: {
 		inherit: true,
-		desc: "Deals damage to one target with a 33% chance to lower its Special by 1 stage.",
+		desc: "Has a 33% chance to lower the target's Special by 1 stage.",
 		shortDesc: "33% chance to lower the target's Special by 1.",
 		secondary: {
 			chance: 33,
@@ -669,17 +668,15 @@ exports.BattleMovedex = {
 	},
 	sandattack: {
 		inherit: true,
-		desc: "Lowers the target's accuracy by 1 stage. Ignores immunities",
-		shortDesc: "Lowers the target's accuracy by 1. Ignores immunities.",
 		ignoreImmunity: true,
 		type: "Normal",
 	},
 	seismictoss: {
 		inherit: true,
+		desc: "Deals damage to the target equal to the user's level. This move can hit Ghost-type Pokemon.",
+		shortDesc: "Damage = user's level. Can hit Ghost types.",
 		ignoreImmunity: true,
 		basePower: 1,
-		desc: "Deals damage to the target equal to the user's level. Ignores immunities.",
-		shortDesc: "Does damage equal to the user's level. Ignores immunities.",
 	},
 	selfdestruct: {
 		inherit: true,
@@ -811,19 +808,19 @@ exports.BattleMovedex = {
 	},
 	superfang: {
 		inherit: true,
+		desc: "Deals damage to the target equal to half of its current HP, rounded down, but not less than 1 HP. This move can hit Ghost-type Pokemon.",
+		shortDesc: "Damage = 1/2 target's current HP. Hits Ghosts.",
 		ignoreImmunity: true,
 		basePower: 1,
-		desc: "Deals damage to the target equal to half of its current HP, rounded down, but not less than 1 HP. Ignores immunities.",
-		shortDesc: "Does damage equal to 1/2 target's current HP. Ignores immunities.",
 	},
 	thunder: {
 		inherit: true,
+		desc: "Has a 10% chance to paralyze the target.",
+		shortDesc: "10% chance to paralyze the target.",
 		secondary: {
 			chance: 10,
 			status: 'par',
 		},
-		desc: "Has a 10% chance to paralyze the target.",
-		shortDesc: "10% chance to paralyze target.",
 	},
 	thunderwave: {
 		inherit: true,
