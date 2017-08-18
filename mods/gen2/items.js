@@ -31,7 +31,8 @@ exports.BattleItems = {
 			}
 		},
 		desc: "If holder is a Chansey, it overrides all crit boosting effects, and sets Chansey's crit ratio to 3 (crit chance = 1/3).",	
-		shortDesc: "If holder is a Chansey, it removes all crit boosting effects, and crit ratio = 1/3",
+		shortDesc: "If holder is a Chansey, it removes all crit boosting effects, and crit ratio = 3",
+	},
 	stick: {
 		inherit: true,
 		onModifyCritRatioPriority: -1,
@@ -40,7 +41,7 @@ exports.BattleItems = {
 				return 3;
 			}
 		},
-		desc: "If holder is a Farfetch'd, it removes all crit boosting effects, and crit ratio = 1/3.",
+		desc: "If holder is a Farfetch'd, it removes all crit boosting effects, and crit ratio = 3.",
 		desc: "If holder is a Farfetch'd, it overrides all crit boosting effects, and sets Farfetch'd's crit ratio to 3 (crit chance = 1/3).",
 		
 	},
