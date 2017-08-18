@@ -216,7 +216,7 @@ exports.BattleItems = {
 		onEat: function (pokemon) {
 			this.heal(30);
 		},
-		desc: "Restores 30 of the holder's health when at 1/2 max HP or less. Single use.",
+		desc: "Restores 30 of the holder's HP when at 1/2 max HP or less. Single use.",
 	},
 	"softsand": {
 		inherit: true,
