@@ -252,6 +252,7 @@ exports.BattleAliases = {
 	"floetteeternalflower": "Floette-Eternal",
 	"ashgreninja": "Greninja-Ash",
 	"zydog": "Zygarde-10%",
+	"zydoge": "Zygarde-10%",
 	"zygardedog": "Zygarde-10%",
 	"zygarde50": "Zygarde",
 	"zyc": "Zygarde-Complete",
