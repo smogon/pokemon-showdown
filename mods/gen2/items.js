@@ -30,8 +30,8 @@ exports.BattleItems = {
 				return 3;
 			}
 		},
-		desc: "If holder is a Chansey, it overrides all crit boosting effects, and sets Chansey's crit ratio to 3 (crit chance = 1/3).",
-		shortDesc: "If holder is a Chansey, it removes all crit boosting effects, and crit ratio = 3",
+		desc: "If held by a Chansey, its critical hit ratio is set to +3 stages (for a crit chance of 33%), overriding all other crit rate changes.",
+		shortDesc: "If holder is Chansey, its critical hit ratio is set to +3 stages and overrides all other crit rate changes.",
 	},
 	stick: {
 		inherit: true,
@@ -41,8 +41,8 @@ exports.BattleItems = {
 				return 3;
 			}
 		},
-		desc: "If holder is a Farfetch'd, it removes all crit boosting effects, and crit ratio = 3.",
-		shortDesc: "If holder is a Farfetch'd, it overrides all crit boosting effects, and sets Farfetch'd's crit ratio to 3 (crit chance = 1/3).",
+		desc: "If held by a Farfetch'd, its critical hit ratio is set to +3 stages (for a crit chance of 33%), overriding all other crit rate changes.",
+		shortDesc: "If holder is Farfetch'd, its critical hit ratio is set to +3 stages and overrides all other crit rate changes.",
 	},
 	thickclub: {
 		inherit: true,
