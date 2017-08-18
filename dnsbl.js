@@ -23,13 +23,13 @@ const FS = require('./fs');
 
 let Dnsbl = module.exports;
 
-/** @type {Map<string, ?string>} */
+/** @type {Map<string, string?>} */
 let dnsblCache = Dnsbl.cache = new Map();
 dnsblCache.set('127.0.0.1', null);
 
 /**
  * @param {string} ip
- * @param {function(?string): void} callback
+ * @param {function(string?): void} callback
  * @param {string} reversedIpDot
  * @param {number} index
  */
@@ -61,7 +61,7 @@ function queryDnsblLoop(ip, callback, reversedIpDot, index) {
  * not in any blocklist.
  *
  * @param {string} ip
- * @return {Promise<?string>}
+ * @return {Promise<string?>}
  */
 Dnsbl.query = function queryDnsbl(ip) {
 	if (dnsblCache.has(ip)) {
