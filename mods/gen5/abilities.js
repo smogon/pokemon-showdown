@@ -14,6 +14,8 @@ exports.BattleAbilities = {
 	},
 	"keeneye": {
 		inherit: true,
+		desc: "Prevents other Pokemon from lowering this Pokemon's accuracy stat stage.",
+		shortDesc: "Prevents other Pokemon from lowering this Pokemon's accuracy stat stage.",
 		onModifyMove: function () {},
 	},
 	"oblivious": {
