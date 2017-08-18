@@ -600,12 +600,12 @@ exports.BattleMovedex = {
 	},
 	poisonfang: {
 		inherit: true,
+		desc: "Has a 30% chance to badly poison the target.",
+		shortDesc: "30% chance to badly poison the target.",
 		secondary: {
 			chance: 30,
 			status: 'tox',
 		},
-		desc: "Has a 30% chance to badly poison the target.",
-		shortDesc: "30% chance to badly poison the target.",
 	},
 	poisongas: {
 		inherit: true,
