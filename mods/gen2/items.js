@@ -24,25 +24,23 @@ exports.BattleItems = {
 	},
 	luckypunch: {
 		inherit: true,
+		desc: "If holder is a Chansey, its critical hit ratio is always at stage 2. (25% crit rate)",
 		onModifyCritRatioPriority: -1,
 		onModifyCritRatio: function (critRatio, user) {
 			if (user.template.species === 'Chansey') {
 				return 3;
 			}
 		},
-		desc: "If held by a Chansey, its critical hit ratio is set to +3 stages (for a crit chance of 33%), overriding all other crit rate changes.",
-		shortDesc: "If holder is Chansey, its critical hit ratio is set to +3 stages and overrides all other crit rate changes.",
 	},
 	stick: {
 		inherit: true,
+		desc: "If holder is a Farfetch'd, its critical hit ratio is always at stage 2. (25% crit rate)",
 		onModifyCritRatioPriority: -1,
 		onModifyCritRatio: function (critRatio, user) {
 			if (user.template.species === 'Farfetch\'d') {
 				return 3;
 			}
 		},
-		desc: "If held by a Farfetch'd, its critical hit ratio is set to +3 stages (for a crit chance of 33%), overriding all other crit rate changes.",
-		shortDesc: "If holder is Farfetch'd, its critical hit ratio is set to +3 stages and overrides all other crit rate changes.",
 	},
 	thickclub: {
 		inherit: true,
