@@ -252,13 +252,16 @@ class Trivia extends Rooms.RoomGame {
 		super.destroy();
 	}
 
-	onJoin(user) {
+	onConnect(user) {
 		let player = this.players[user.userid];
-		if (!player) return false;
-		if (this.phase !== LIMBO_PHASE) return false;
+		if (!player || !player.isAbsent) return false;
 
 		player.toggleAbsence();
 		if (++this.playerCount < MINIMUM_PLAYERS) return false;
+		if (this.phase !== LIMBO_PHASE) return false;
+
+		// At least let the game start first!!
+		if (this.phase === SIGNUP_PHASE) return false;
 
 		for (let i in this.players) {
 			this.players[i].clearAnswer();
@@ -275,20 +278,21 @@ class Trivia extends Rooms.RoomGame {
 		// The user cannot participate, but their score should be kept
 		// regardless in cases of disconnects.
 		let player = this.players[user.userid];
-		if (!player) return false;
+		if (!player || player.isAbsent) return false;
 
 		player.toggleAbsence();
+		if (--this.playerCount >= MINIMUM_PLAYERS) return false;
+
+		// At least let the game start first!!
 		if (this.phase === SIGNUP_PHASE) return false;
 
-		if (--this.playerCount < MINIMUM_PLAYERS) {
-			clearTimeout(this.phaseTimeout);
-			this.phaseTimeout = null;
-			this.phase = LIMBO_PHASE;
-			this.broadcast(
-				'Not enough players are participating to continue the game!',
-				`Until there are ${MINIMUM_PLAYERS} players participating and present, the game will be paused.`
-			);
-		}
+		clearTimeout(this.phaseTimeout);
+		this.phaseTimeout = null;
+		this.phase = LIMBO_PHASE;
+		this.broadcast(
+			'Not enough players are participating to continue the game!',
+			`Until there are ${MINIMUM_PLAYERS} players participating and present, the game will be paused.`
+		);
 	}
 
 	// Handles setup that shouldn't be done from the constructor.
