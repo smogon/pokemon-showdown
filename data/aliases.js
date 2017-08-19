@@ -561,7 +561,6 @@ exports.BattleAliases = {
 	"lurk": "Golurk",
 	"mage": "Magearna",
 	"mamo": "Mamoswine",
-	"mage": "Magearna",
 	"mandi": "Mandibuzz",
 	"mence": "Salamence",
 	"meta": "Metagross",
