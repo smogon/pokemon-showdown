@@ -221,25 +221,38 @@ class UNOgame extends Rooms.RoomGame {
 		return playerList.map(id => `${(this.currentPlayer && this.currentPlayer === id ? '<strong>' : '')}${Chat.escapeHTML(this.players[id].name)} (${this.players[id].hand.length}) ${(this.currentPlayer && this.currentPlayer === id ? '</strong>' : "")}`);
 	}
 
+	onAwaitUno() {
+		return new Promise((resolve, reject) => {
+			if (!this.awaitUno) return resolve();
+
+			// the throttle for sending messages is at 600ms for non-authed users,
+			// wait 750ms before sending the next person's turn.
+			// this allows games to be fairer, so the next player would not spam the pass command blindly
+			// to force the player to draw 2 cards.
+			// this also makes games with uno bots not always turn in the bot's favour.
+			// without a delayed turn, 3 bots playing will always result in a endless game
+			setTimeout(() => resolve(), 750);
+		});
+	}
+
 	nextTurn(starting) {
-		if (!starting) this.onNextPlayer();
+		this.onAwaitUno()
+			.then(() => {
+				if (!starting) this.onNextPlayer();
 
-		if (this.awaitUno) {
-			this.unoId = Math.floor(Math.random() * 100).toString();
-			this.players[this.awaitUno].sendRoom(`|uhtml|uno-hand|<div style="text-align: center"><button name=send value="/uno uno ${this.unoId}" style="background-color: green; width: 80%; padding: 8px; border: 2px solid rgba(33 , 68 , 72 , 0.59); border-radius: 8px">UNO!</button></div>`);
-		}
+				clearTimeout(this.timer);
+				let player = this.players[this.currentPlayer];
 
-		clearTimeout(this.timer);
-		let player = this.players[this.currentPlayer];
-		this.sendToRoom(`|c:|${(Math.floor(Date.now() / 1000))}|~|${player.name}'s turn.`);
-		this.state = 'play';
-		if (player.cardLock) delete player.cardLock;
-		player.sendDisplay();
+				this.sendToRoom(`|c:|${(Math.floor(Date.now() / 1000))}|~|${player.name}'s turn.`);
+				this.state = 'play';
+				if (player.cardLock) delete player.cardLock;
+				player.sendDisplay();
 
-		this.timer = setTimeout(() => {
-			this.sendToRoom(`${player.name} has been automatically disqualified.`);
-			this.eliminate(this.currentPlayer);
-		}, this.maxTime * 1000);
+				this.timer = setTimeout(() => {
+					this.sendToRoom(`${player.name} has been automatically disqualified.`);
+					this.eliminate(this.currentPlayer);
+				}, this.maxTime * 1000);
+			});
 	}
 
 	onNextPlayer() {
@@ -298,6 +311,12 @@ class UNOgame extends Rooms.RoomGame {
 		player.removeCard(cardName);
 		this.discards.unshift(card);
 
+		// update the unoId here, so when the display is sent to the player when the play is made
+		if (player.hand.length === 1) {
+			this.awaitUno = user.userid;
+			this.unoId = Math.floor(Math.random() * 100).toString();
+		}
+
 		player.sendDisplay(); // update display without the card in it for purposes such as choosing colors
 
 		this.sendToRoom(`|raw|${Chat.escapeHTML(player.name)} has played a <span style="color: ${textColors[card.color]}">${card.name}</span>.`);
@@ -307,7 +326,6 @@ class UNOgame extends Rooms.RoomGame {
 			this.onWin(player);
 			return;
 		}
-		if (player.hand.length === 1) this.awaitUno = user.userid;
 
 		// continue with effects and next player
 		this.onRunEffect(card.value);
@@ -399,7 +417,7 @@ class UNOgame extends Rooms.RoomGame {
 	onUno(user, unoId) {
 		// uno id makes spamming /uno uno impossible
 		if (this.unoId !== unoId || user.userid !== this.awaitUno) return false;
-		this.sendToRoom(`|raw|<strong>UNO!</strong> ${user.name} is down to their last card!`);
+		this.sendToRoom(Chat.html`|raw|<strong>UNO!</strong> ${user.name} is down to their last card!`);
 		delete this.awaitUno;
 		delete this.unoId;
 	}
@@ -423,7 +441,7 @@ class UNOgame extends Rooms.RoomGame {
 	}
 
 	onWin(player) {
-		this.sendToRoom(`|raw|<div class="broadcast-green">Congratulations to ${player.name} for winning the game of UNO!</div>`, true);
+		this.sendToRoom(Chat.html`|raw|<div class="broadcast-green">Congratulations to ${player.name} for winning the game of UNO!</div>`, true);
 		this.destroy();
 	}
 
@@ -475,6 +493,7 @@ class UNOgamePlayer extends Rooms.RoomGamePlayer {
 		let players = `<p><strong>Players (${this.game.playerCount}):</strong></p>${this.game.getPlayers(true).join('<br />')}`;
 		let draw = '<button class="button" style="width: 30%; background: rgba(0, 0, 255, 0.05)" name=send value="/uno draw">Draw a card!</button>';
 		let pass = '<button class="button" style=" width: 30%; background: rgba(255, 0, 0, 0.05)" name=send value="/uno pass">Pass!</button>';
+		let uno = `<button class="button" style=" width: 30%; background: rgba(0, 255, 0, 0.05)" name=send value="/uno uno ${this.game.unoId || '0'}">UNO!</button>`;
 
 		let top = `<strong>Top Card: <span style="color: ${textColors[this.game.topCard.changedColor || this.game.topCard.color]}">${this.game.topCard.name}</span></strong>`;
 
@@ -483,7 +502,7 @@ class UNOgamePlayer extends Rooms.RoomGamePlayer {
 		this.sendRoom(
 			`|uhtml|uno-hand|<div style="border: 1px solid skyblue; padding: 0 0 5px 0"><table style="width: 100%; table-layout: fixed; border-radius: 3px"><tr><td colspan=4 rowspan=2 style="padding: 5px"><div style="overflow-x: auto; white-space: nowrap; width: 100%">${hand}</div></td>${this.game.currentPlayer === this.userid ? `<td colspan=2 style="padding: 5px 5px 0 5px">${top}</td></tr>` : ""}` +
 			`<tr><td colspan=2 style="vertical-align: top; padding: 0px 5px 5px 5px"><div style="overflow-y: scroll">${players}</div></td></tr></table>` +
-			`${this.game.currentPlayer === this.userid ? `<div style="text-align: center">${draw}<span style="padding: 15px"></span>${pass}</div>` : ""}</div>`
+			`${this.game.currentPlayer === this.userid ? `<div style="text-align: center">${draw} <span style="padding-left: 10px;"></span> ${pass} <span style="padding-left: 10px;"></span> ${uno}</div>` : ""}</div>`
 		);
 	}
 }

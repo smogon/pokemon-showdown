@@ -24,6 +24,8 @@ Ladders.get = Ladders;
 // tells the client to ask the server for format information
 Ladders.formatsListPrefix = '|,LL';
 
+Ladders.disabled = false;
+
 // ladderCaches = {formatid: ladder OR Promise(ladder)}
 // Use Ladders(formatid).ladder to guarantee a Promise(ladder).
 // ladder is basically a 2D array representing the corresponding ladder.tsv
@@ -148,11 +150,14 @@ class Ladder {
 	getRating(userid) {
 		let formatid = this.formatid;
 		let user = Users.getExact(userid);
+		if (Ladders.disabled === true || Ladders.disabled === 'db' && (!user || !user.mmrCache[formatid])) {
+			return Promise.reject(new Error(`Ladders are disabled.`));
+		}
 		if (user && user.mmrCache[formatid]) {
 			return Promise.resolve(user.mmrCache[formatid]);
 		}
 		return this.ladder.then(() => {
-			if (user.userid !== userid) return;
+			if (user.userid !== userid) return Promise.reject(`Expired rating for ${userid}`);
 			let index = this.indexOfUser(userid);
 			if (index < 0) return (user.mmrCache[formatid] = 1000);
 			return (user.mmrCache[formatid] = this.loadedLadder[index][1]);
@@ -206,7 +211,16 @@ class Ladder {
 	 * the results in the passed room.
 	 */
 	updateRating(p1name, p2name, p1score, room) {
+		if (Ladders.disabled) {
+			return room.addRaw(`Ratings not updated. The ladders are currently disabled.`).update();
+		}
+
 		let formatid = this.formatid;
+		let p2score = 1 - p1score;
+		if (p1score < 0) {
+			p1score = 0;
+			p2score = 0;
+		}
 		this.ladder.then(() => {
 			let p1newElo, p2newElo;
 			try {
@@ -217,7 +231,7 @@ class Ladder {
 				let p2elo = this.loadedLadder[p2index][1];
 
 				this.updateRow(this.loadedLadder[p1index], p1score, p2elo);
-				this.updateRow(this.loadedLadder[p2index], 1 - p1score, p1elo);
+				this.updateRow(this.loadedLadder[p2index], p2score, p1elo);
 
 				p1newElo = this.loadedLadder[p1index][1];
 				p2newElo = this.loadedLadder[p2index][1];
@@ -268,7 +282,7 @@ class Ladder {
 				if (reasons.charAt(0) !== '-') reasons = '+' + reasons;
 				room.addRaw(Chat.html`${p1name}'s rating: ${Math.round(p1elo)} &rarr; <strong>${Math.round(p1newElo)}</strong><br />(${reasons})`);
 
-				reasons = '' + (Math.round(p2newElo) - Math.round(p2elo)) + ' for ' + (p1score > 0.9 ? 'losing' : (p1score < 0.1 ? 'winning' : 'tying'));
+				reasons = '' + (Math.round(p2newElo) - Math.round(p2elo)) + ' for ' + (p2score > 0.9 ? 'winning' : (p2score < 0.1 ? 'losing' : 'tying'));
 				if (reasons.charAt(0) !== '-') reasons = '+' + reasons;
 				room.addRaw(Chat.html`${p2name}'s rating: ${Math.round(p2elo)} &rarr; <strong>${Math.round(p2newElo)}</strong><br />(${reasons})`);
 

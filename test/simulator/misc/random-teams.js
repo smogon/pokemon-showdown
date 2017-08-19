@@ -1,10 +1,6 @@
 'use strict';
 
-const common = require('./../../common');
-
-let battle;
-
-const TOTAL_TEAMS = 100;
+const TOTAL_TEAMS = 10;
 const ALL_GENS = [1, 2, 3, 4, 5, 6, 7];
 
 function isValidSet(gen, set) {
@@ -29,19 +25,17 @@ function isValidSet(gen, set) {
 }
 
 describe(`Random Team generator`, function () {
-	afterEach(() => battle.destroy());
-
 	for (const gen of ALL_GENS) {
 		it(`should successfully create valid Gen ${gen} teams`, function () {
 			this.timeout(0);
-			battle = common.gen(gen).createBattle();
+			const generator = Dex.getTeamGenerator(`gen${gen}randombattle`);
+			if (generator.gen !== gen) return; // format doesn't exist for this gen
 
 			let teamCount = TOTAL_TEAMS;
 			while (teamCount--) {
-				let seed = battle.prng.seed.slice();
-				let team = null;
+				let seed = generator.prng.seed;
 				try {
-					team = battle.randomTeam(battle.p1);
+					let team = generator.generateTeam();
 					let invalidSet = team.find(set => !isValidSet(gen, set));
 					if (invalidSet) throw new Error(`Invalid set: ${JSON.stringify(invalidSet)}`);
 				} catch (err) {
@@ -54,19 +48,17 @@ describe(`Random Team generator`, function () {
 });
 
 describe(`Challenge Cup Team generator`, function () {
-	afterEach(() => battle.destroy());
-
 	for (const gen of ALL_GENS) {
 		it(`should successfully create valid Gen ${gen} teams`, function () {
 			this.timeout(0);
-			battle = common.gen(gen).createBattle();
+			const generator = Dex.getTeamGenerator(`gen${gen}challengecup`);
+			if (generator.gen !== gen) return; // format doesn't exist for this gen
 
 			let teamCount = TOTAL_TEAMS;
 			while (teamCount--) {
-				let seed = battle.prng.seed.slice();
-				let team = null;
+				let seed = generator.prng.seed;
 				try {
-					team = battle.randomCCTeam(battle.p1);
+					let team = generator.generateTeam();
 					let invalidSet = team.find(set => !isValidSet(gen, set));
 					if (invalidSet) throw new Error(`Invalid set: ${JSON.stringify(invalidSet)}`);
 				} catch (err) {
@@ -79,19 +71,17 @@ describe(`Challenge Cup Team generator`, function () {
 });
 
 describe(`Hackmons Cup Team generator`, function () {
-	afterEach(() => battle.destroy());
-
 	for (const gen of ALL_GENS) {
 		it(`should successfully create valid Gen ${gen} teams`, function () {
 			this.timeout(0);
-			battle = common.gen(gen).createBattle();
+			const generator = Dex.getTeamGenerator(`gen${gen}hackmonscup`);
+			if (generator.gen !== gen) return; // format doesn't exist for this gen
 
 			let teamCount = TOTAL_TEAMS;
 			while (teamCount--) {
-				let seed = battle.prng.seed.slice();
-				let team = null;
+				let seed = generator.prng.seed;
 				try {
-					team = battle.randomHCTeam(battle.p1);
+					let team = generator.generateTeam();
 					let invalidSet = team.find(set => !isValidSet(gen, set));
 					if (invalidSet) throw new Error(`Invalid set: ${JSON.stringify(invalidSet)}`);
 				} catch (err) {

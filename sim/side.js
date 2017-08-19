@@ -95,7 +95,7 @@ class Side {
 			break;
 		}
 
-		this.team = this.battle.getTeam(this, team);
+		this.team = team;
 		for (let i = 0; i < this.team.length && i < 6; i++) {
 			//console.log("NEW POKEMON: " + (this.team[i] ? this.team[i].name : '[unidentified]'));
 			this.pokemon.push(new Sim.Pokemon(this.team[i], this));
@@ -284,12 +284,12 @@ class Side {
 
 		const moves = pokemon.getMoves();
 		if (autoChoose) {
-			for (let i = 0; i < moves.length; i++) {
-				if (!moves[i].disabled) {
-					moveid = moves[i].id;
-					targetType = requestMoves[i].target;
-					break;
-				}
+			for (let i = 0; i < requestMoves.length; i++) {
+				if (requestMoves[i].disabled) continue;
+				if (i < moves.length && requestMoves[i].id === moves[i].id && moves[i].disabled) continue;
+				moveid = requestMoves[i].id;
+				targetType = requestMoves[i].target;
+				break;
 			}
 		}
 		const move = this.battle.getMove(moveid);
@@ -410,7 +410,7 @@ class Side {
 			}
 			if (!this.choice.forcedSwitchesLeft) return this.choosePass();
 			slot = this.active.length;
-			while (this.choice.switchIns.has(slot)) slot++;
+			while (this.choice.switchIns.has(slot) || this.pokemon[slot].fainted) slot++;
 		}
 		if (isNaN(slot) || slot >= this.pokemon.length) {
 			return this.emitChoiceError(`Can't switch: You do not have a Pokémon in slot ${slot + 1} to switch to`);

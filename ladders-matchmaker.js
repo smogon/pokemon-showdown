@@ -12,11 +12,21 @@
 
 const PERIODIC_MATCH_INTERVAL = 60 * 1000;
 
-function Search(userid, team, rating = 1000) {
-	this.userid = userid;
-	this.team = team;
-	this.rating = rating;
-	this.time = new Date().getTime();
+class Search {
+	constructor(userid, team, rating = 1000) {
+		this.userid = userid;
+		this.team = team;
+		this.rating = rating;
+		this.time = Date.now();
+	}
+
+	setRating(rating) {
+		this.rating = rating;
+	}
+
+	setStart() {
+		this.time = Date.now();
+	}
 }
 
 class Matchmaker {
@@ -51,21 +61,28 @@ class Matchmaker {
 	searchBattle(user, formatid) {
 		if (!user.connected) return;
 		formatid = Dex.getFormat(formatid).id;
-		return user.prepBattle(formatid, 'search', null)
-			.then(result => this.finishSearchBattle(user, formatid, result));
+
+		return Promise.all([
+			Promise.resolve(user.userid),
+			user.prepBattle(formatid, 'search', null),
+			Ladders(formatid).getRating(user.userid),
+		]).then(([userId, validTeam, rating]) => {
+			if (userId !== user.userid) return;
+			return this.finishSearchBattle(user, formatid, validTeam, rating);
+		}, err => {
+			// Rejects iff ladders are disabled, or if we
+			// retrieved the rating but the user had changed their name.
+
+			if (Ladders.disabled) return user.popup(`The ladder is currently disabled due to high server load.`);
+			// User feedback for renames handled elsewhere.
+		});
 	}
 
-	finishSearchBattle(user, formatid, result) {
-		if (!result) return;
+	finishSearchBattle(user, formatid, validTeam, rating) {
+		if (validTeam === false) return;
 
-		// Get the user's rating before actually starting to search.
-		Ladders(formatid).getRating(user.userid).then(rating => {
-			let search = new Search(user.userid, user.team, rating);
-			this.addSearch(search, user, formatid);
-		}, error => {
-			// Rejects if we retrieved the rating but the user had changed their name;
-			// the search simply doesn't happen in this case.
-		});
+		const search = new Search(user.userid, validTeam, rating);
+		this.addSearch(search, user, formatid);
 	}
 
 	matchmakingOK(search1, search2, user1, user2, formatid) {
@@ -119,7 +136,7 @@ class Matchmaker {
 				delete user.searching[formatid];
 				delete searchUser.searching[formatid];
 				formatSearches.delete(search);
-				this.startBattle(searchUser, user, formatid, search.team, newSearch.team, {rated: minRating});
+				this.startBattle(searchUser, user, formatid, search.team, newSearch.team, {rated: !Ladders.disabled && minRating});
 				return;
 			}
 		}
@@ -143,7 +160,7 @@ class Matchmaker {
 					delete searchUser.searching[formatid];
 					formatSearches.delete(search);
 					formatSearches.delete(longestSearch);
-					this.startBattle(searchUser, longestSearcher, formatid, search.team, longestSearch.team, {rated: minRating});
+					this.startBattle(searchUser, longestSearcher, formatid, search.team, longestSearch.team, {rated: !Ladders.disabled && minRating});
 					return;
 				}
 			}

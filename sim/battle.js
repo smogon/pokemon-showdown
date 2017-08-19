@@ -12,14 +12,15 @@ const Sim = require('./');
 
 class Battle extends Dex.ModdedDex {
 	/**
-	 * Initialises a Battle.
-	 *
 	 * @param {object} format
 	 * @param {boolean} rated
 	 * @param {Function} send
 	 * @param {PRNG} [maybePrng]
 	 */
-	init(format, rated = false, send = (() => {}), prng = new PRNG()) {
+	constructor(format, rated = false, send = (() => {}), prng = new PRNG()) {
+		super(format.mod);
+		Object.assign(this, this.data.Scripts);
+
 		this.log = [];
 		/** @type {Sim.Side[]} */
 		this.sides = [null, null];
@@ -30,7 +31,6 @@ class Battle extends Dex.ModdedDex {
 
 		this.format = toId(format);
 		this.formatData = {id:this.format};
-		this.ruleset = format.ruleset;
 
 		this.effect = {id:''};
 		this.effectData = {id:''};
@@ -73,6 +73,7 @@ class Battle extends Dex.ModdedDex {
 
 		this.prng = prng;
 		this.prngSeed = this.prng.startingSeed.slice();
+		this.teamGenerator = null;
 	}
 
 	static logReplay(data, isReplay) {
@@ -1411,11 +1412,10 @@ class Battle extends Dex.ModdedDex {
 		if (format.onBegin) {
 			format.onBegin.call(this);
 		}
-		if (this.ruleset) {
-			for (let i = 0; i < this.ruleset.length; i++) {
-				this.addPseudoWeather(this.ruleset[i]);
-			}
-		}
+		this.getRuleTable(this.getFormat()).forEach((v, rule) => {
+			if (rule.startsWith('+') || rule.startsWith('-') || rule.startsWith('!')) return;
+			if (this.getFormat(rule).exists) this.addPseudoWeather(rule);
+		});
 
 		if (!this.p1.pokemon[0] || !this.p2.pokemon[0]) {
 			throw new Error('Battle not started: A player has an empty team.');
@@ -2610,6 +2610,20 @@ class Battle extends Dex.ModdedDex {
 
 	// players
 
+	getTeam(team) {
+		const format = this.getFormat();
+		if (!format.team && team) return team;
+
+		if (!this.teamGenerator) {
+			this.teamGenerator = this.getTeamGenerator(format);
+		} else {
+			this.teamGenerator.prng = new PRNG();
+		}
+		team = this.teamGenerator.generateTeam();
+		this.prngSeed.push(...this.teamGenerator.prng.startingSeed);
+
+		return team;
+	}
 	join(slot, name, avatar, team) {
 		if (this.p1 && this.p2) return false;
 		if ((this.p1 && this.p1.name === name) || (this.p2 && this.p2.name === name)) return false;
@@ -2621,6 +2635,7 @@ class Battle extends Dex.ModdedDex {
 			this[slot].name = name;
 		} else {
 			//console.log("NEW SIDE: " + name);
+			team = this.getTeam(team);
 			this[slot] = new Sim.Side(name, this, slotNum, team);
 			this.sides[slotNum] = this[slot];
 		}

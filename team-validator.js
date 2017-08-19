@@ -13,10 +13,11 @@ let TeamValidator = module.exports = getValidator;
 let PM;
 
 class Validator {
-	constructor(format, customBanlist) {
-		this.format = Dex.getFormat(format, customBanlist);
-		this.customBanlist = this.format.customBanlist ? this.format.customBanlist.join(',') : '0';
-		this.dex = Dex.format(this.format);
+	constructor(format, customRules) {
+		this.format = Dex.getFormat(format, customRules);
+		this.initalCustomRules = customRules ? customRules.join(',') : '';
+		this.customRules = this.format.customRules ? this.format.customRules.join(',') : '0';
+		this.dex = Dex.forFormat(this.format);
 	}
 
 	validateTeam(team, removeNicknames) {
@@ -26,7 +27,7 @@ class Validator {
 
 	prepTeam(team, removeNicknames) {
 		removeNicknames = removeNicknames ? '1' : '0';
-		return PM.send(this.format.id, this.customBanlist, removeNicknames, team);
+		return PM.send(this.format.id, this.initalCustomRules, removeNicknames, team);
 	}
 
 	baseValidateTeam(team, removeNicknames) {
@@ -80,12 +81,10 @@ class Validator {
 			}
 		}
 
-		if (format.ruleset) {
-			for (let i = 0; i < format.ruleset.length; i++) {
-				let subformat = dex.getFormat(format.ruleset[i]);
-				if (subformat.onValidateTeam && ruleTable.has(subformat.id)) {
-					problems = problems.concat(subformat.onValidateTeam.call(dex, team, format, teamHas) || []);
-				}
+		for (const [rule] of ruleTable) {
+			let subformat = dex.getFormat(rule);
+			if (subformat.onValidateTeam && ruleTable.has(subformat.id)) {
+				problems = problems.concat(subformat.onValidateTeam.call(dex, team, format, teamHas) || []);
 			}
 		}
 		if (format.onValidateTeam) {
@@ -141,12 +140,10 @@ class Validator {
 		let setHas = {};
 		const ruleTable = dex.getRuleTable(format);
 
-		if (format.ruleset) {
-			for (let i = 0; i < format.ruleset.length; i++) {
-				let subformat = dex.getFormat(format.ruleset[i]);
-				if (subformat.onChangeSet && ruleTable.has(subformat.id)) {
-					problems = problems.concat(subformat.onChangeSet.call(dex, set, format) || []);
-				}
+		for (const [rule] of ruleTable) {
+			let subformat = dex.getFormat(rule);
+			if (subformat.onChangeSet && ruleTable.has(subformat.id)) {
+				problems = problems.concat(subformat.onChangeSet.call(dex, set, format) || []);
 			}
 		}
 		if (format.onChangeSet) {
@@ -287,6 +284,17 @@ class Validator {
 						if (ruleTable.has('allowonesketch') && noSketch.indexOf(move.name) < 0 && !set.sketchmonsMove && !move.noSketch && !move.isZ) {
 							set.sketchmonsMove = move.id;
 							continue;
+						}
+						// Typemons hack
+						if (format.id.includes('typemons') && move.type !== 'Normal' && !(move.id in {geomancy:1, quiverdance:1, shiftgear:1, stickyweb:1, struggle:1, tailglow:1}) && !move.isZ) {
+							if (!teamHas.typemons) {
+								teamHas.typemons = {type: move.type, moves: [move.id]};
+								continue;
+							}
+							if (teamHas.typemons.type === move.type && teamHas.typemons.moves.indexOf(move.id) < 0) {
+								teamHas.typemons.moves.push(move.id);
+								continue;
+							}
 						}
 						let problemString = `${name} can't learn ${move.name}`;
 						if (problem.type === 'incompatibleAbility') {
@@ -573,12 +581,11 @@ class Validator {
 			}
 		}
 
-		if (format.ruleset) {
-			for (let i = 0; i < format.ruleset.length; i++) {
-				let subformat = dex.getFormat(format.ruleset[i]);
-				if (subformat.onValidateSet && ruleTable.has(subformat.id)) {
-					problems = problems.concat(subformat.onValidateSet.call(dex, set, format, setHas, teamHas) || []);
-				}
+		for (const [rule] of ruleTable) {
+			if (rule.startsWith('!')) continue;
+			let subformat = dex.getFormat(rule);
+			if (subformat.onValidateSet && ruleTable.has(subformat.id)) {
+				problems = problems.concat(subformat.onValidateSet.call(dex, set, format, setHas, teamHas) || []);
 			}
 		}
 		if (format.onValidateSet) {
@@ -841,14 +848,7 @@ class Validator {
 			alreadyChecked[template.speciesid] = true;
 			if (dex.gen === 2 && template.gen === 1) tradebackEligible = true;
 			// STABmons hack
-			if (ruleTable.has('ignorestabmoves') && !(moveid in {'acupressure':1, 'bellydrum':1, 'chatter':1, 'geomancy':1, 'shellsmash':1, 'shiftgear':1, 'thousandarrows':1}) && !move.isZ) {
-				let types = template.types;
-				if (template.baseSpecies === 'Rotom') types = ['Electric', 'Ghost', 'Fire', 'Water', 'Ice', 'Flying', 'Grass'];
-				if (template.baseSpecies === 'Shaymin') types = ['Grass', 'Flying'];
-				if (template.baseSpecies === 'Hoopa') types = ['Psychic', 'Ghost', 'Dark'];
-				if (template.baseSpecies === 'Oricorio') types = ['Fire', 'Flying', 'Electric', 'Psychic', 'Ghost'];
-				if (template.baseSpecies === 'Arceus' || template.baseSpecies === 'Silvally' || types.includes(move.type)) return false;
-			}
+			if (ruleTable.has('ignorestabmoves') && template.types.includes(move.type)) return false;
 			if (!template.learnset) {
 				if (template.baseSpecies !== template.species) {
 					// forme without its own learnset
@@ -1135,8 +1135,8 @@ class Validator {
 }
 TeamValidator.Validator = Validator;
 
-function getValidator(format, customBanlist) {
-	return new Validator(format, customBanlist);
+function getValidator(format, customRules) {
+	return new Validator(format, customRules);
 }
 
 /*********************************************************
@@ -1162,7 +1162,7 @@ class TeamValidatorManager extends ProcessManager {
 
 	onMessageDownstream(message) {
 		// protocol:
-		// "[id]|[format]|[customBanlist]|[removeNicknames]|[team]"
+		// "[id]|[format]|[customRules]|[removeNicknames]|[team]"
 		let pipeIndex = message.indexOf('|');
 		let nextPipeIndex = message.indexOf('|', pipeIndex + 1);
 		let id = message.substr(0, pipeIndex);
@@ -1170,29 +1170,29 @@ class TeamValidatorManager extends ProcessManager {
 
 		pipeIndex = nextPipeIndex;
 		nextPipeIndex = message.indexOf('|', pipeIndex + 1);
-		let customBanlist = message.substr(pipeIndex + 1, nextPipeIndex - pipeIndex - 1);
+		let customRules = message.substr(pipeIndex + 1, nextPipeIndex - pipeIndex - 1);
 
 		pipeIndex = nextPipeIndex;
 		nextPipeIndex = message.indexOf('|', pipeIndex + 1);
 		let removeNicknames = message.substr(pipeIndex + 1, nextPipeIndex - pipeIndex - 1);
 		let team = message.substr(nextPipeIndex + 1);
 
-		process.send(id + '|' + this.receive(format, customBanlist, removeNicknames, team));
+		process.send(id + '|' + this.receive(format, customRules, removeNicknames, team));
 	}
 
-	receive(format, customBanlist, removeNicknames, team) {
+	receive(format, customRules, removeNicknames, team) {
 		let parsedTeam = Dex.fastUnpackTeam(team);
-		customBanlist = (!customBanlist || customBanlist === '0') ? false : customBanlist.split(',');
+		customRules = (!customRules || customRules === '0') ? false : customRules.split(',');
 		removeNicknames = removeNicknames === '1';
 
 		let problems;
 		try {
-			problems = TeamValidator(format, customBanlist).validateTeam(parsedTeam, removeNicknames);
+			problems = TeamValidator(format, customRules).validateTeam(parsedTeam, removeNicknames);
 		} catch (err) {
 			require('./crashlogger')(err, 'A team validation', {
 				format: format,
 				team: team,
-				customBanlist: customBanlist,
+				customRules: customRules,
 			});
 			problems = [`Your team crashed the team validator. We've been automatically notified and will fix this crash, but you should use a different team for now.`];
 		}

@@ -1514,44 +1514,66 @@ exports.commands = {
 	forcelock: 'lock',
 	l: 'lock',
 	ipmute: 'lock',
+	wl: 'lock',
+	weeklock: 'lock',
 	lock: function (target, room, user, connection, cmd) {
-		if (!target) return this.parse('/help lock');
+		let week = cmd === 'wl' || cmd === 'weeklock';
+
+		if (!target) {
+			if (week) return this.parse('/help weeklock');
+			return this.parse('/help lock');
+		}
 
 		target = this.splitTarget(target);
 		let targetUser = this.targetUser;
-		if (!targetUser) return this.errorReply("User '" + this.targetUsername + "' not found.");
+		if (!targetUser && !Punishments.search(toId(this.targetUsername))[0].length) return this.errorReply(`User '${this.targetUsername}' not found.`);
 		if (target.length > MAX_REASON_LENGTH) {
-			return this.errorReply("The reason is too long. It cannot exceed " + MAX_REASON_LENGTH + " characters.");
+			return this.errorReply(`The reason is too long. It cannot exceed ${MAX_REASON_LENGTH} characters.`);
 		}
 		if (!this.can('lock', targetUser)) return false;
-		let name = targetUser.getLastName();
-		let userid = targetUser.getLastId();
 
-		if (targetUser.locked && !target) {
-			let problem = " but was already locked";
-			return this.privateModCommand("(" + name + " would be locked by " + user.name + problem + ".)");
-		}
+		let name, userid;
 
-		if (targetUser.trusted) {
-			if (cmd === 'forcelock') {
-				let from = targetUser.distrust();
-				Monitor.log("[CrisisMonitor] " + name + " was locked by " + user.name + " and demoted from " + from.join(", ") + ".");
-				this.globalModlog("CRISISDEMOTE", targetUser, " from " + from.join(", "));
-			} else {
-				return this.sendReply("" + name + " is a trusted user. If you are sure you would like to lock them use /forcelock.");
+		if (targetUser) {
+			name = targetUser.getLastName();
+			userid = targetUser.getLastId();
+
+			if (targetUser.locked && !target) {
+				return this.privateModCommand(`(${name} would be locked by ${user.name} but was already locked.)`);
 			}
-		} else if (cmd === 'forcelock') {
-			return this.errorReply("Use /lock; " + name + " is not a trusted user.");
-		}
 
-		// Destroy personal rooms of the locked user.
-		targetUser.inRooms.forEach(roomid => {
-			if (roomid === 'global') return;
-			let targetRoom = Rooms.get(roomid);
-			if (targetRoom.isPersonal && targetRoom.auth[userid] === '#') {
-				targetRoom.destroy();
+			if (targetUser.trusted) {
+				if (cmd === 'forcelock') {
+					let from = targetUser.distrust();
+					Monitor.log(`[CrisisMonitor] ${name} was locked by ${user.name} and demoted from ${from.join(", ")}.`);
+					this.globalModlog("CRISISDEMOTE", targetUser, ` from ${from.join(", ")}`);
+				} else {
+					return this.sendReply(`${name} is a trusted user. If you are sure you would like to lock them use /forcelock.`);
+				}
+			} else if (cmd === 'forcelock') {
+				return this.errorReply(`Use /lock; ${name} is not a trusted user.`);
 			}
-		});
+
+			let roomauth = [];
+			Rooms.rooms.forEach((curRoom, id) => {
+				if (id === 'global' || !curRoom.auth) return;
+				// Destroy personal rooms of the locked user.
+				if (curRoom.isPersonal && curRoom.auth[userid] === '#') {
+					curRoom.destroy();
+				} else {
+					if (curRoom.isPrivate || curRoom.battle) return;
+
+					let group = curRoom.auth[userid];
+
+					if (group) roomauth.push(`${group}${id}`);
+				}
+			});
+
+			if (roomauth.length) Monitor.log(`[CrisisMonitor] Locked user ${name} has public roomauth (${roomauth.join(', ')}), and should probably be demoted.`);
+		} else {
+			name = this.targetUsername;
+			userid = toId(this.targetUsername);
+		}
 
 		let proof = '';
 		let userReason = target;
@@ -1563,115 +1585,48 @@ exports.commands = {
 			userReason = target.substr(0, proofIndex).trim();
 		}
 
-		targetUser.popup("|modal|" + user.name + " has locked you from talking in chats, battles, and PMing regular users." + (userReason ? "\n\nReason: " + userReason : "") + "\n\nIf you feel that your lock was unjustified, you can still PM staff members (%, @, &, and ~) to discuss it" + (Config.appealurl ? " or you can appeal:\n" + Config.appealurl : ".") + "\n\nYour lock will expire in a few days.");
+		let weekMsg = week ? ' for a week' : '';
 
-		let lockMessage = "" + name + " was locked from talking by " + user.name + "." + (userReason ? " (" + userReason + ")" : "");
+		if (targetUser) {
+			targetUser.popup(`|modal|${user.name} has locked you from talking in chats, battles, and PMing regular users${weekMsg}.` + (userReason ? `\n\nReason: ${userReason}` : "") + `\n\nIf you feel that your lock was unjustified, you can still PM staff members (%, @, &, and ~) to discuss it` + (Config.appealurl ? ` or you can appeal:\n${Config.appealurl}` : ".") + `\n\nYour lock will expire in a few days.`);
+		}
 
+		let lockMessage = `${name} was locked from talking${weekMsg} by ${user.name}.` + (userReason ? ` (${userReason})` : "");
 
-		this.addModCommand(lockMessage, ` ${proof}(${targetUser.latestIp})`);
+		this.addModCommand(lockMessage, ` ${proof}` + (targetUser ? `(${targetUser.latestIp})` : ''));
 
 		// Notify staff room when a user is locked outside of it.
 		if (room.id !== 'staff' && Rooms('staff')) {
-			Rooms('staff').addLogMessage(user, "<<" + room.id + ">> " + lockMessage);
+			Rooms('staff').addLogMessage(user, `<<${room.id}>> ${lockMessage}`);
 		}
 
-		let affected = Punishments.lock(targetUser, null, null, userReason);
+		// Use default time for locks.
+		let duration = week ? Date.now() + 7 * 24 * 60 * 60 * 1000 : null;
+		let affected = [];
 
-		let acAccount = (targetUser.autoconfirmed !== userid && targetUser.autoconfirmed);
+		if (targetUser) {
+			affected = Punishments.lock(targetUser, duration, null, userReason);
+		} else {
+			affected = Punishments.lock(null, duration, userid, userReason);
+		}
+
+		let acAccount = (targetUser && targetUser.autoconfirmed !== userid && targetUser.autoconfirmed);
 		if (affected.length > 1) {
-			this.privateModCommand("(" + name + "'s " + (acAccount ? " ac account: " + acAccount + ", " : "") + "locked alts: " + affected.slice(1).map(user => user.getLastName()).join(", ") + ")");
+			this.privateModCommand(`(${name}'s ` + (acAccount ? ` ac account: ${acAccount}, ` : "") + `locked alts: ${affected.slice(1).map(user => user.getLastName()).join(", ")})`);
 		} else if (acAccount) {
-			this.privateModCommand("(" + name + "'s ac account: " + acAccount + ")");
+			this.privateModCommand(`(${name}'s ac account: ${acAccount})`);
 		}
-		this.add('|unlink|hide|' + userid);
-		if (userid !== toId(this.inputUsername)) this.add('|unlink|hide|' + toId(this.inputUsername));
+		this.add(`|unlink|hide|${userid}`);
+		if (userid !== toId(this.inputUsername)) this.add(`|unlink|hide|${toId(this.inputUsername)}`);
 
 		const globalReason = (target ? `: ${userReason} ${proof}` : ``);
-		this.globalModlog("LOCK", targetUser, ` by ${user.name}${globalReason}`);
+		this.globalModlog((week ? "WEEKLOCK" : "LOCK"), targetUser || userid, ` by ${user.name}${globalReason}`);
 		return true;
 	},
 	lockhelp: [
 		"/lock OR /l [username], [reason] - Locks the user from talking in all chats. Requires: % @ * & ~",
+		"/weeklock OR /wl [username], [reason] - Same as /lock, but locks users for a week.",
 		"/lock OR /l [username], [reason] spoiler: [proof] - Marks proof in modlog only.",
-	],
-
-	wl: 'weeklock',
-	weeklock: function (target, room, user, connection, cmd) {
-		if (!target) return this.parse('/help weeklock');
-
-		target = this.splitTarget(target);
-		let targetUser = this.targetUser;
-		if (!targetUser) return this.errorReply("User '" + this.targetUsername + "' not found.");
-		if (target.length > MAX_REASON_LENGTH) {
-			return this.errorReply("The reason is too long. It cannot exceed " + MAX_REASON_LENGTH + " characters.");
-		}
-		if (!this.can('lock', targetUser)) return false;
-		let name = targetUser.getLastName();
-		let userid = targetUser.getLastId();
-
-		if (targetUser.locked && !target) {
-			let problem = " but was already locked";
-			return this.privateModCommand("(" + name + " would be locked by " + user.name + problem + ".)");
-		}
-
-		if (targetUser.trusted) {
-			if (cmd === 'forcelock') {
-				let from = targetUser.distrust();
-				Monitor.log("[CrisisMonitor] " + name + " was locked by " + user.name + " and demoted from " + from.join(", ") + ".");
-				this.globalModlog("CRISISDEMOTE", targetUser, " from " + from.join(", "));
-			} else {
-				return this.sendReply("" + name + " is a trusted user. If you are sure you would like to lock them use /forcelock.");
-			}
-		} else if (cmd === 'forcelock') {
-			return this.errorReply("Use /lock; " + name + " is not a trusted user.");
-		}
-
-		// Destroy personal rooms of the locked user.
-		targetUser.inRooms.forEach(roomid => {
-			if (roomid === 'global') return;
-			let targetRoom = Rooms.get(roomid);
-			if (targetRoom.isPersonal && targetRoom.auth[userid] === '#') {
-				targetRoom.destroy();
-			}
-		});
-
-		let proof = '';
-		let userReason = target;
-		let targetLowercase = target.toLowerCase();
-		if (target && (targetLowercase.includes('spoiler:') || targetLowercase.includes('spoilers:'))) {
-			let proofIndex = (targetLowercase.includes('spoilers:') ? targetLowercase.indexOf('spoilers:') : targetLowercase.indexOf('spoiler:'));
-			let bump = (targetLowercase.includes('spoilers:') ? 9 : 8);
-			proof = `(PROOF: ${target.substr(proofIndex + bump, target.length).trim()}) `;
-			userReason = target.substr(0, proofIndex).trim();
-		}
-
-		targetUser.popup("|modal|" + user.name + " has locked you from talking in chats, battles, and PMing regular users for a week." + (userReason ? "\n\nReason: " + userReason : "") + "\n\nIf you feel that your lock was unjustified, you can still PM staff members (%, @, &, and ~) to discuss it" + (Config.appealurl ? " or you can appeal:\n" + Config.appealurl : ".") + "\n\nYour lock will expire in a few days.");
-
-		let lockMessage = "" + name + " was locked from talking for a week by " + user.name + "." + (userReason ? " (" + userReason + ")" : "");
-		this.addModCommand(lockMessage, ` ${proof}(${targetUser.latestIp})`);
-
-		// Notify staff room when a user is locked outside of it.
-		if (room.id !== 'staff' && Rooms('staff')) {
-			Rooms('staff').addLogMessage(user, "<<" + room.id + ">> " + lockMessage);
-		}
-
-		let affected = Punishments.lock(targetUser, Date.now() + 7 * 24 * 60 * 60 * 1000, null, userReason);
-		let acAccount = (targetUser.autoconfirmed !== userid && targetUser.autoconfirmed);
-		if (affected.length > 1) {
-			this.privateModCommand("(" + name + "'s " + (acAccount ? " ac account: " + acAccount + ", " : "") + "locked alts: " + affected.slice(1).map(user => user.getLastName()).join(", ") + ")");
-		} else if (acAccount) {
-			this.privateModCommand("(" + name + "'s ac account: " + acAccount + ")");
-		}
-		this.add('|unlink|hide|' + userid);
-		if (userid !== toId(this.inputUsername)) this.add('|unlink|hide|' + toId(this.inputUsername));
-
-		const globalReason = (target ? `: ${userReason} ${proof}` : ``);
-		this.globalModlog("WEEKLOCK", targetUser, ` by ${user.name}${globalReason}`);
-		return true;
-	},
-	weeklockhelp: [
-		"/weeklock OR /wl [username], [reason] - Locks the user from talking in all chats for one week. Requires: % @ * & ~",
-		"/weeklock OR /wl [username], [reason] spoiler: [proof] - Marks proof in modlog only.",
 	],
 
 	unlock: function (target, room, user) {
@@ -2074,6 +2029,7 @@ exports.commands = {
 		if (!target) return this.parse('/help declare');
 		if (!this.can('declare', null, room)) return false;
 		if (!this.canTalk()) return;
+		if (target.length > 2000) return this.errorReply("Declares should not exceed 2000 characters.");
 
 		this.add(`|notify|${room.title} announcement!|${target}`);
 		this.add(Chat.html`|raw|<div class="broadcast-blue"><b>${target}</b></div>`);
@@ -2703,22 +2659,50 @@ exports.commands = {
 
 	disableladder: function (target, room, user) {
 		if (!this.can('disableladder')) return false;
-		if (LoginServer.disabled) {
-			return this.errorReply("/disableladder - Ladder is already disabled.");
+		if (Ladders.disabled) {
+			return this.errorReply(`/disableladder - Ladder is already disabled.`);
 		}
-		LoginServer.disabled = true;
-		this.logModCommand("The ladder was disabled by " + user.name + ".");
-		this.add("|raw|<div class=\"broadcast-red\"><b>Due to high server load, the ladder has been temporarily disabled</b><br />Rated games will no longer update the ladder. It will be back momentarily.</div>");
+
+		Ladders.disabled = true;
+
+		this.logModCommand(`The ladder was disabled by ${user.name}.`);
+		Monitor.log(`The ladder was disabled by ${user.name}.`);
+
+		const innerHTML = (
+			`<b>Due to high server load, the ladder has been temporarily disabled.</b><br />` +
+			`Rated games will no longer update the ladder. It will be back momentarily.`
+		);
+
+		Rooms.rooms.forEach((curRoom, id) => {
+			if (curRoom.type === 'battle') curRoom.rated = false;
+			if (id !== 'global') curRoom.addRaw(`<div class="broadcast-red">${innerHTML}</div>`).update();
+		});
+		Users.users.forEach(u => {
+			if (u.connected) u.send(`|pm|~|${u.group}${u.name}|/raw <div class="broadcast-red">${innerHTML}</div>`);
+		});
 	},
 
 	enableladder: function (target, room, user) {
 		if (!this.can('disableladder')) return false;
-		if (!LoginServer.disabled) {
-			return this.errorReply("/enable - Ladder is already enabled.");
+		if (!Ladders.disabled) {
+			return this.errorReply(`/enable - Ladder is already enabled.`);
 		}
-		LoginServer.disabled = false;
-		this.logModCommand("The ladder was enabled by " + user.name + ".");
-		this.add("|raw|<div class=\"broadcast-green\"><b>The ladder is now back.</b><br />Rated games will update the ladder now.</div>");
+		Ladders.disabled = false;
+
+		this.logModCommand(`The ladder was enabled by ${user.name}.`);
+		Monitor.log(`The ladder was enabled by ${user.name}.`);
+
+		const innerHTML = (
+			`<b>The ladder is now back.</b><br />` +
+			`Rated games will update the ladder now..`
+		);
+
+		Rooms.rooms.forEach((curRoom, id) => {
+			if (id !== 'global') curRoom.addRaw(`<div class="broadcast-green">${innerHTML}</div>`).update();
+		});
+		Users.users.forEach(u => {
+			if (u.connected) u.send(`|pm|~|${u.group}${u.name}|/raw <div class="broadcast-green">${innerHTML}</div>`);
+		});
 	},
 
 	lockdown: function (target, room, user) {
@@ -3270,11 +3254,11 @@ exports.commands = {
 	cancelsearch: 'search',
 	search: function (target, room, user) {
 		if (target) {
-			if (Config.pmmodchat) {
+			if (Config.laddermodchat) {
 				let userGroup = user.group;
-				if (Config.groupsranking.indexOf(userGroup) < Config.groupsranking.indexOf(Config.pmmodchat)) {
-					let groupName = Config.groups[Config.pmmodchat].name || Config.pmmodchat;
-					this.popupReply("Because moderated chat is set, you must be of rank " + groupName + " or higher to search for a battle.");
+				if (Config.groupsranking.indexOf(userGroup) < Config.groupsranking.indexOf(Config.laddermodchat)) {
+					let groupName = Config.groups[Config.laddermodchat].name || Config.laddermodchat;
+					this.popupReply("On this server, you must be of rank " + groupName + " or higher to search for a battle.");
 					return false;
 				}
 			}
@@ -3309,8 +3293,9 @@ exports.commands = {
 				return false;
 			}
 		}
-		user.prepBattle(Dex.getFormat(target).id, 'challenge', connection).then(result => {
-			if (result) user.makeChallenge(targetUser, target);
+		user.prepBattle(Dex.getFormat(target).id, 'challenge', connection).then(validTeam => {
+			if (validTeam === false) return;
+			user.makeChallenge(targetUser, target, validTeam);
 		});
 	},
 
@@ -3353,8 +3338,9 @@ exports.commands = {
 			this.popupReply(target + " isn't challenging you - maybe they cancelled before you could accept?");
 			return false;
 		}
-		user.prepBattle(Dex.getFormat(format).id, 'challenge', connection).then(result => {
-			if (result) user.acceptChallengeFrom(userid);
+		user.prepBattle(Dex.getFormat(format).id, 'challenge', connection).then(validTeam => {
+			if (validTeam === false) return;
+			user.acceptChallengeFrom(userid, validTeam);
 		});
 	},
 

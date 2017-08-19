@@ -129,6 +129,33 @@ let getExactUser = Users.getExact = function (name) {
 	return getUser(name, true);
 };
 
+/**
+ * Get a list of all users matching a list of userids and ips.
+ *
+ * Usage:
+ *   Users.findUsers([userids], [ips])
+ *
+ */
+let findUsers = Users.findUsers = function (userids, ips, options) {
+	let matches = [];
+	if (options && options.forPunishment) ips = ips.filter(ip => !Punishments.sharedIps.has(ip));
+	users.forEach(user => {
+		if (!(options && options.forPunishment) && !user.named && !user.connected) return;
+		if (!(options && options.includeTrusted) && user.trusted) return;
+		if (userids.includes(user.userid)) {
+			matches.push(user);
+			return;
+		}
+		for (let myIp of ips) {
+			if (myIp in user.ips) {
+				matches.push(user);
+				return;
+			}
+		}
+	});
+	return matches;
+};
+
 /*********************************************************
  * User groups
  *********************************************************/
@@ -389,6 +416,7 @@ class User {
 		this.chatQueue = null;
 		this.chatQueueTimeout = null;
 		this.lastChatMessage = 0;
+		this.lastCommand = '';
 
 		// for the anti-spamming mechanism
 		this.lastMessage = ``;
@@ -533,14 +561,8 @@ class User {
 		if (!this.can('console')) return false; // normal permission check
 
 		let whitelist = Config.consoleips || ['127.0.0.1'];
-		if (whitelist.includes(connection.ip)) {
-			return true; // on the IP whitelist
-		}
-		if (whitelist.includes(this.userid)) {
-			return true; // on the userid whitelist
-		}
-
-		return false;
+		// on the IP whitelist OR the userid whitelist
+		return whitelist.includes(connection.ip) || whitelist.includes(this.userid);
 	}
 	/**
 	 * Special permission check for promoting and demoting
@@ -1109,21 +1131,8 @@ class User {
 		this.inRooms.clear();
 	}
 	getAltUsers(includeTrusted, forPunishment) {
-		let alts = [];
-		if (forPunishment) alts.push(this);
-		let ips = Object.keys(this.ips);
-		if (forPunishment) ips = ips.filter(ip => !Punishments.sharedIps.has(ip));
-		users.forEach(user => {
-			if (user === this) return;
-			if (!forPunishment && !user.named && !user.connected) return;
-			if (!includeTrusted && user.trusted) return;
-			for (let myIp of ips) {
-				if (myIp in user.ips) {
-					alts.push(user);
-					return;
-				}
-			}
-		});
+		let alts = findUsers([this.getLastId()], Object.keys(this.ips), {includeTrusted: includeTrusted, forPunishment: forPunishment});
+		if (!forPunishment) alts = alts.filter(user => user !== this);
 		return alts;
 	}
 	getLastName() {
@@ -1268,16 +1277,26 @@ class User {
 		}
 		return TeamValidator(formatid, customBanlist).prepTeam(this.team, this.locked || this.namelocked).then(result => this.finishPrepBattle(connection, result));
 	}
+
+	/**
+	 * Parses the result of a team validation and notifies the user.
+	 *
+	 * @param {Connection} connection - The connection from which the team validation was requested.
+	 * @param {string} result - The raw result received by the team validator.
+	 * @return {string|boolean} - The packed team if the validation was successful. False otherwise.
+	 */
 	finishPrepBattle(connection, result) {
 		if (result.charAt(0) !== '1') {
 			connection.popup(`Your team was rejected for the following reasons:\n\n- ` + result.slice(1).replace(/\n/g, `\n- `));
 			return false;
 		}
 
-		if (result.length > 1) {
-			this.team = result.slice(1);
+		if (this !== users.get(this.userid)) {
+			// TODO: User feedback.
+			return false;
 		}
-		return (this === users.get(this.userid));
+
+		return result.slice(1);
 	}
 	updateChallenges() {
 		let challengeTo = this.challengeTo;
@@ -1326,7 +1345,7 @@ class User {
 	cancelSearch(format) {
 		return Matchmaker.cancelSearch(this, format);
 	}
-	makeChallenge(user, format/*, isPrivate*/) {
+	makeChallenge(user, format, team/*, isPrivate*/) {
 		user = getUser(user);
 		if (!user || this.challengeTo) {
 			return false;
@@ -1345,7 +1364,7 @@ class User {
 			to: user.userid,
 			format: '' + (format || ''),
 			//isPrivate: !!isPrivate, // currently unused
-			team: this.team,
+			team: team,
 		};
 		this.lastChallenge = time;
 		this.challengeTo = challenge;
@@ -1376,7 +1395,7 @@ class User {
 		}
 		this.updateChallenges();
 	}
-	acceptChallengeFrom(user) {
+	acceptChallengeFrom(user, team) {
 		let userid = toId(user);
 		user = getUser(user);
 		if (!user || !user.challengeTo || user.challengeTo.to !== this.userid || !this.connected || !user.connected) {
@@ -1386,7 +1405,7 @@ class User {
 			}
 			return false;
 		}
-		Matchmaker.startBattle(this, user, user.challengeTo.format, this.team, user.challengeTo.team, {rated: false});
+		Matchmaker.startBattle(this, user, user.challengeTo.format, team, user.challengeTo.team, {rated: false});
 		delete this.challengesFrom[user.userid];
 		user.challengeTo = null;
 		this.updateChallenges();

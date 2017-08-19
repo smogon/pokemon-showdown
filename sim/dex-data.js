@@ -177,10 +177,21 @@ class Format extends Effect {
 	constructor(data, moreData = null, moreData2 = null) {
 		super(data, moreData, moreData2);
 		/** @type {string} */
-		this.mod = Tools.getString(this.mod) || 'gen6';
+		this.mod = Tools.getString(this.mod) || 'gen7';
+		/**
+		 * Name of the team generator algorithm, if this format uses
+		 * random/fixed teams. null if players can bring teams.
+		 * @type {?string}
+		 */
+		this.team = this.team;
 		/** @type {'Format' | 'Ruleset' | 'Rule' | 'ValidatorRule'} */
 		// @ts-ignore
 		this.effectType = Tools.getString(this.effectType) || 'Format';
+		/**
+		 * Game type.
+		 * @type {'singles' | 'doubles' | 'triples'}
+		 */
+		this.gameType = this.gameType || 'singles';
 		/**
 		 * List of rule names.
 		 * @type {string[]}

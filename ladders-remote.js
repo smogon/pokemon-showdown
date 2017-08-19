@@ -18,6 +18,7 @@ let Ladders = module.exports = getLadder;
 
 Ladders.get = Ladders;
 Ladders.formatsListPrefix = '';
+Ladders.disabled = false;
 
 class Ladder {
 	constructor(formatid) {
@@ -33,6 +34,9 @@ class Ladder {
 		let user = Users.getExact(userid);
 		if (!user) {
 			return Promise.reject(new Error(`Expired rating for ${userid}`));
+		}
+		if (Ladders.disabled === true || Ladders.disabled === 'db' && !user.mmrCache[formatid]) {
+			return Promise.reject(new Error(`Ladders are disabled.`));
 		}
 		if (user.mmrCache[formatid]) {
 			return Promise.resolve(user.mmrCache[formatid]);
@@ -58,6 +62,10 @@ class Ladder {
 	}
 
 	updateRating(p1name, p2name, p1score, room) {
+		if (Ladders.disabled) {
+			return room.addRaw(`Ratings not updated. The ladders are currently disabled.`).update();
+		}
+
 		let formatid = this.formatid;
 		let p1rating, p2rating;
 		room.update();
@@ -98,7 +106,7 @@ class Ladder {
 
 					oldelo = Math.round(p2rating.oldelo);
 					elo = Math.round(p2rating.elo);
-					act = (p1score > 0.9 ? `losing` : (p1score < 0.1 ? `winning` : `tying`));
+					act = (p1score > 0.9 || p1score < 0 ? `losing` : (p1score < 0.1 ? `winning` : `tying`));
 					reasons = `${elo - oldelo} for ${act}`;
 					if (reasons.charAt(0) !== '-') reasons = '+' + reasons;
 					room.addRaw(Chat.html`${p2name}'s rating: ${oldelo} &rarr; <strong>${elo}</strong><br />(${reasons})`);

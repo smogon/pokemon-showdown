@@ -501,7 +501,7 @@ exports.BattleFormatsData = {
 	},
 	kingdra: {
 		inherit: true,
-		randomBattleMoves: ["hydropump", "surf", "icebeam", "hiddenpowergrass", "dragonbreath", "doubleedge", "return", "dragondance", "raindance", "rest", "sleeptalk"],
+		randomBattleMoves: ["hydropump", "surf", "icebeam", "hiddenpowergrass", "dragonbreath", "doubleedge", "return", "raindance", "rest", "sleeptalk"],
 		tier: "BL",
 	},
 	goldeen: {
@@ -721,7 +721,7 @@ exports.BattleFormatsData = {
 		tier: "LC",
 	},
 	noctowl: {
-		randomBattleMoves: ["psychic", "rest", "sleeptalk", "toxic", "whirlwind", "reflect", "hypnosis"],
+		randomBattleMoves: ["psychic", "toxic", "whirlwind", "reflect", "hypnosis"],
 		tier: "NU",
 	},
 	ledyba: {
@@ -1100,7 +1100,7 @@ exports.BattleFormatsData = {
 		tier: "NFE",
 	},
 	shiftry: {
-		randomBattleMoves: ["swordsdance", "shadowball", "brickbreak", "explosion", "fakeout", "sunnyday", "solarbeam", "hiddenpowerfire", "hiddenpowerice"],
+		randomBattleMoves: ["shadowball", "brickbreak", "fakeout", "sunnyday", "solarbeam", "hiddenpowerfire", "hiddenpowerice"],
 		tier: "UU",
 	},
 	taillow: {
@@ -1411,12 +1411,15 @@ exports.BattleFormatsData = {
 		tier: "NU",
 	},
 	castformsunny: {
+		battleOnly: true,
 		randomBattleMoves: ["sunnyday", "thunderbolt", "icebeam", "flamethrower", "weatherball", "solarbeam"],
 	},
 	castformrainy: {
+		battleOnly: true,
 		randomBattleMoves: ["raindance", "thunderbolt", "thunder", "weatherball", "icebeam"],
 	},
 	castformsnowy: {
+		battleOnly: true,
 		randomBattleMoves: ["hail", "weatherball", "thunderbolt", "thunderwave", "flamethrower", "blizzard"],
 	},
 	kecleon: {
