@@ -631,6 +631,7 @@ exports.commands = {
 			if (!room.game || room.game.gameid !== 'uno') return this.errorReply("There is no UNO game going on in this room right now.");
 			if (room.game.currentPlayer !== user.userid) return this.errorReply("It is currently not your turn.");
 			if (!room.game.players[user.userid].cardLock) return this.errorReply("You cannot pass until you draw a card.");
+			if (room.game.state === 'color') return this.errorReply("You cannot pass until you choose a color.");
 
 			room.game.sendToRoom(`${user.name} has passed.`);
 			room.game.nextTurn();
