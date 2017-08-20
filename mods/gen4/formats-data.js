@@ -154,7 +154,7 @@ exports.BattleFormatsData = {
 		tier: "LC",
 	},
 	ninetales: {
-		randomBattleMoves: ["nastyplot", "fireblast", "energyball", "extrasensory", "hiddenpowerrock", "hypnosis"],
+		randomBattleMoves: ["nastyplot", "fireblast", "energyball", "hiddenpowerrock", "hypnosis"],
 		tier: "NU",
 	},
 	igglybuff: {
@@ -458,7 +458,7 @@ exports.BattleFormatsData = {
 	},
 	hitmonlee: {
 		inherit: true,
-		randomBattleMoves: ["suckerpunch", "stoneedge", "machpunch", "substitute", "closecombat", "earthquake", "blazekick"],
+		randomBattleMoves: ["suckerpunch", "stoneedge", "machpunch", "substitute", "closecombat", "earthquake"],
 		tier: "UU",
 	},
 	hitmonchan: {
@@ -475,7 +475,7 @@ exports.BattleFormatsData = {
 		tier: "LC",
 	},
 	lickilicky: {
-		randomBattleMoves: ["wish", "protect", "curse", "bodyslam", "return", "powerwhip", "swordsdance", "toxic", "healbell", "explosion"],
+		randomBattleMoves: ["wish", "protect", "bodyslam", "return", "powerwhip", "earthquake", "aquatail", "fireblast", "swordsdance", "toxic", "healbell", "explosion"],
 		tier: "NU",
 	},
 	koffing: {
@@ -971,11 +971,11 @@ exports.BattleFormatsData = {
 	},
 	shuckle: {
 		inherit: true,
-		randomBattleMoves: ["toxic", "encore", "knockoff", "rest", "protect"],
+		randomBattleMoves: ["toxic", "encore", "knockoff", "rest", "protect", "stealthrock"],
 		tier: "NU",
 	},
 	heracross: {
-		randomBattleMoves: ["closecombat", "megahorn", "stoneedge", "pursuit", "substitute"],
+		randomBattleMoves: ["closecombat", "megahorn", "stoneedge", "nightslash", "substitute"],
 		tier: "BL",
 	},
 	sneasel: {
@@ -1063,7 +1063,7 @@ exports.BattleFormatsData = {
 	},
 	stantler: {
 		inherit: true,
-		randomBattleMoves: ["return", "megahorn", "confuseray", "earthquake", "thunderwave", "suckerpunch", "bite"],
+		randomBattleMoves: ["return", "megahorn", "energyball", "earthquake", "hypnosis", "suckerpunch"],
 		tier: "NU",
 	},
 	smeargle: {
@@ -1164,7 +1164,7 @@ exports.BattleFormatsData = {
 		tier: "LC",
 	},
 	linoone: {
-		randomBattleMoves: ["bellydrum", "extremespeed", "seedbomb", "return", "switcheroo", "shadowclaw"],
+		randomBattleMoves: ["bellydrum", "extremespeed", "seedbomb", "shadowclaw"],
 		tier: "NU",
 	},
 	wurmple: {
@@ -1234,7 +1234,7 @@ exports.BattleFormatsData = {
 		tier: "NU",
 	},
 	gallade: {
-		randomBattleMoves: ["swordsdance", "closecombat", "psychocut", "stoneedge", "icepunch", "shadowsneak", "trick"],
+		randomBattleMoves: ["swordsdance", "closecombat", "psychocut", "stoneedge", "icepunch", "shadowsneak", "nightslash", "trick"],
 		tier: "BL",
 	},
 	surskit: {
@@ -1664,7 +1664,7 @@ exports.BattleFormatsData = {
 	},
 	registeel: {
 		inherit: true,
-		randomBattleMoves: ["stealthrock", "ironhead", "curse", "rest", "sleeptalk", "thunderwave", "toxic", "protect", "seismictoss"],
+		randomBattleMoves: ["stealthrock", "ironhead", "curse", "rest", "sleeptalk", "thunderwave", "toxic", "protect"],
 		tier: "UU",
 	},
 	latias: {
@@ -2090,7 +2090,7 @@ exports.BattleFormatsData = {
 		requiredItem: "Fist Plate",
 	},
 	arceusfire: {
-		randomBattleMoves: ["calmmind", "judgment", "fireblast", "thunderbolt", "recover"],
+		randomBattleMoves: ["calmmind", "judgment", "earthpower", "thunderbolt", "recover"],
 		eventOnly: true,
 		requiredItem: "Flame Plate",
 	},

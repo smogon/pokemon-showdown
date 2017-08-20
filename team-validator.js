@@ -286,7 +286,7 @@ class Validator {
 							continue;
 						}
 						// Typemons hack
-						if (format.id.includes('typemons') && move.type !== 'Normal' && !(move.id in {geomancy:1, quiverdance:1, shiftgear:1, stickyweb:1, struggle:1}) && !move.isZ) {
+						if (format.id.includes('typemons') && move.type !== 'Normal' && !(move.id in {geomancy:1, quiverdance:1, shiftgear:1, stickyweb:1, struggle:1, tailglow:1}) && !move.isZ) {
 							if (!teamHas.typemons) {
 								teamHas.typemons = {type: move.type, moves: [move.id]};
 								continue;

@@ -299,6 +299,7 @@ exports.BattleFormatsData = {
 			{"generation": 7, "level": 10, "nature": "Jolly", "isHidden": false, "moves":["celebrate", "growl", "playnice", "quickattack"], "pokeball": "cherishball"},
 			{"generation": 7, "level": 10, "isHidden": false, "moves":["bestow", "holdhands", "return", "playnice"], "pokeball": "cherishball"},
 			{"generation": 7, "level": 10, "isHidden": false, "moves":["holdhands", "playnice", "teeterdance", "happyhour"], "pokeball": "cherishball"},
+			{"generation": 7, "level": 10, "isHidden": false, "moves":["growl", "quickattack", "thundershock", "happyhour"], "pokeball": "cherishball"},
 		],
 		tier: "NFE",
 	},
@@ -1077,6 +1078,9 @@ exports.BattleFormatsData = {
 	exeggutoralola: {
 		randomBattleMoves: ["dracometeor", "leafstorm", "flamethrower", "earthquake", "woodhammer", "gigadrain", "dragonhammer"],
 		randomDoubleBattleMoves: ["dracometeor", "leafstorm", "protect", "flamethrower", "trickroom", "woodhammer", "dragonhammer"],
+		eventPokemon: [
+			{"generation": 7, "level": 50, "gender": "M", "nature": "Modest", "isHidden": true, "moves":["powerswap", "celebrate", "leafstorm", "dracometeor"], "pokeball": "cherishball"},
+		],
 		tier: "PU",
 	},
 	cubone: {
@@ -1448,6 +1452,9 @@ exports.BattleFormatsData = {
 	},
 	ditto: {
 		randomBattleMoves: ["transform"],
+		eventPokemon: [
+			{"generation": 7, "level": 10, "isHidden": false, "moves":["transform"], "pokeball": "cherishball"},
+		],
 		tier: "PU",
 	},
 	eevee: {
@@ -2627,7 +2634,7 @@ exports.BattleFormatsData = {
 	gallade: {
 		randomBattleMoves: ["bulkup", "drainpunch", "icepunch", "shadowsneak", "closecombat", "zenheadbutt", "knockoff", "trick"],
 		randomDoubleBattleMoves: ["closecombat", "trick", "stoneedge", "shadowsneak", "drainpunch", "icepunch", "zenheadbutt", "knockoff", "trickroom", "protect", "helpinghand"],
-		tier: "PU",
+		tier: "BL4",
 	},
 	gallademega: {
 		randomBattleMoves: ["swordsdance", "closecombat", "drainpunch", "knockoff", "zenheadbutt", "substitute"],
@@ -4932,7 +4939,7 @@ exports.BattleFormatsData = {
 	klinklang: {
 		randomBattleMoves: ["shiftgear", "return", "geargrind", "wildcharge", "substitute"],
 		randomDoubleBattleMoves: ["shiftgear", "return", "geargrind", "wildcharge", "protect"],
-		tier: "PU",
+		tier: "BL4",
 	},
 	tynamo: {
 		randomBattleMoves: ["spark", "chargebeam", "thunderwave", "tackle"],
@@ -5452,7 +5459,7 @@ exports.BattleFormatsData = {
 	vivillon: {
 		randomBattleMoves: ["sleeppowder", "quiverdance", "hurricane", "bugbuzz", "substitute"],
 		randomDoubleBattleMoves: ["sleeppowder", "quiverdance", "hurricane", "bugbuzz", "roost", "protect"],
-		tier: "PU",
+		tier: "BL4",
 	},
 	vivillonfancy: {
 		eventPokemon: [
@@ -6040,6 +6047,9 @@ exports.BattleFormatsData = {
 	salazzle: {
 		randomBattleMoves: ["nastyplot", "fireblast", "sludgewave", "hiddenpowerground"],
 		randomDoubleBattleMoves: ["protect", "flamethrower", "sludgebomb", "hiddenpowerground", "hiddenpowerice", "fakeout", "encore", "willowisp", "taunt"],
+		eventPokemon: [
+			{"generation": 7, "level": 50, "isHidden": false, "moves":["fakeout", "toxic", "sludgebomb", "flamethrower"], "pokeball": "cherishball"},
+		],
 		tier: "RU",
 	},
 	stufful: {
@@ -6258,6 +6268,9 @@ exports.BattleFormatsData = {
 	mimikyu: {
 		randomBattleMoves: ["swordsdance", "shadowsneak", "playrough", "woodhammer", "shadowclaw"],
 		randomDoubleBattleMoves: ["trickroom", "shadowclaw", "playrough", "woodhammer", "willowisp", "shadowsneak", "swordsdance", "protect"],
+		eventPokemon: [
+			{"generation": 7, "level": 10, "moves":["copycat", "babydolleyes", "splash", "astonish"], "pokeball": "cherishball"},
+		],
 		tier: "OU",
 	},
 	mimikyubusted: {

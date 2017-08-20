@@ -12,6 +12,7 @@ exports.BattleAbilities = {
 				this.add('-setboost', target, 'atk', 12, '[from] ability: Anger Point');
 			}
 		},
+		rating: 1.5,
 	},
 	"effectspore": {
 		inherit: true,
@@ -85,6 +86,10 @@ exports.BattleAbilities = {
 			let warnMove = warnMoves[this.random(warnMoves.length)];
 			this.add('-activate', pokemon, 'ability: Forewarn', warnMove);
 		},
+	},
+	"insomnia": {
+		inherit: true,
+		rating: 2.5,
 	},
 	"leafguard": {
 		inherit: true,
@@ -282,6 +287,10 @@ exports.BattleAbilities = {
 				this.add('-ability', pokemon, ability, '[from] ability: Trace', '[of] ' + target);
 			}
 		},
+	},
+	"vitalspirit": {
+		inherit: true,
+		rating: 2.5,
 	},
 	"wonderguard": {
 		inherit: true,
