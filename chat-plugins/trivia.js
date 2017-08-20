@@ -223,6 +223,9 @@ class Trivia extends Rooms.RoomGame {
 	// Overwrite some RoomGame prototype methods...
 	addPlayer(user) {
 		if (this.players[user.userid]) return 'You have already signed up for this game.';
+		for (let id in user.prevNames) {
+			if (this.players[id]) return 'You have already signed up for this game.';
+		}
 		if (this.kickedUsers.has(user.userid)) {
 			return 'You were kicked from the game and thus cannot join it again.';
 		}
@@ -245,7 +248,7 @@ class Trivia extends Rooms.RoomGame {
 				if (ipMatch) return 'You have already signed up for this game.';
 			}
 		}
-
+		if (this.phase !== SIGNUP_PHASE && !this.canLateJoin) return "This game does not allow latejoins.";
 		let player = this.makePlayer(user);
 		this.players[user.userid] = player;
 		this.playerCount++;
@@ -844,9 +847,8 @@ const commands = {
 		}
 
 		// This prevents trivia games from modifying the trivia database.
-		questions = Object.assign([], questions);
+		questions = questions.slice();
 		// Randomizes the order of the questions.
-		questions = Dex.shuffle(questions);
 		if (MODES[mode] === 'Weakest Link') {
 			questions = questions.filter(q => q.type === "weakestlink");
 		} else {
@@ -873,7 +875,7 @@ const commands = {
 		} else {
 			_Trivia = WeakestLink;
 		}
-
+		questions = Dex.shuffle(questions);
 		room.game = new _Trivia(room, mode, category, length, questions);
 	},
 	newhelp: ["/trivia new [mode], [category], [length] - Begin a new trivia game. Requires: + % @ # & ~"],
@@ -884,7 +886,6 @@ const commands = {
 		if (room.game.gameid !== 'trivia') {
 			return this.errorReply(`There is already a game of ${room.game.title} in progress.`);
 		}
-		if (room.game.phase !== SIGNUP_PHASE && !room.game.canLateJoin) return this.errorReply("This game does not allow latejoins.");
 		let res = room.game.addPlayer(user);
 		if (typeof res === 'string') this.sendReply(res);
 	},
@@ -1675,11 +1676,7 @@ module.exports = {
 	commands: {
 		trivia: commands,
 		ta: commands.answer,
-		wl: {
-			add: commands.add,
-			submit: commands.submit,
-			qs: commands.qs,
-		},
+		wl: commands,
 		triviahelp: [
 			"Modes:",
 			"- First: the first correct responder gains 5 points.",
