@@ -530,6 +530,9 @@ exports.commands = {
 				if (move.id === 'mirrormove') {
 					details['<a href="https://pokemonshowdown.com/dex/moves/mirrormove">Mirrorable Moves</a>'] = '';
 				}
+				if (move.isUnreleased) {
+					details["Unreleased in Gen " + mod.gen] = "";
+				}
 			} else if (newTargets[0].searchType === 'item') {
 				let item = mod.getItem(newTargets[0].name);
 				details = {
@@ -551,6 +554,9 @@ exports.commands = {
 				if (item.naturalGift && mod.gen >= 3) {
 					details["Natural Gift Type"] = item.naturalGift.type;
 					details["Natural Gift Base Power"] = item.naturalGift.basePower;
+				}
+				if (item.isUnreleased) {
+					details["Unreleased in Gen " + mod.gen] = "";
 				}
 			} else {
 				details = {};
