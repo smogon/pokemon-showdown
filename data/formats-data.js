@@ -1512,7 +1512,7 @@ exports.BattleFormatsData = {
 		tier: "RU",
 	},
 	umbreon: {
-		randomBattleMoves: ["wish", "protect", "healbell", "toxic", "batonpass", "foulplay"],
+		randomBattleMoves: ["wish", "protect", "healbell", "toxic", "foulplay"],
 		randomDoubleBattleMoves: ["moonlight", "wish", "protect", "healbell", "snarl", "foulplay", "helpinghand"],
 		eventPokemon: [
 			{"generation": 3, "level": 70, "moves":["feintattack", "meanlook", "screech", "moonlight"]},
@@ -6409,7 +6409,7 @@ exports.BattleFormatsData = {
 		tier: "UU",
 	},
 	celesteela: {
-		randomBattleMoves: ["autotomize", "flashcannon", "airslash", "fireblast", "energyball"],
+		randomBattleMoves: ["autotomize", "heavyslam", "airslash", "fireblast", "earthquake", "leechseed", "protect"],
 		randomDoubleBattleMoves: ["protect", "heavyslam", "fireblast", "earthquake", "wideguard", "leechseed", "flamethrower", "substitute"],
 		eventPokemon: [
 			{"generation": 7, "level": 65, "moves":["autotomize", "seedbomb", "skullbash", "irondefense"]},
