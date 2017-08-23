@@ -876,7 +876,7 @@ exports.commands = {
 			this.sendReplyBox(Chat.html`The room description is: ${room.desc}`);
 			return;
 		}
-		if (!this.can('declare')) return false;
+		if (!this.can('roommod')) return false;
 		if (target.length > 80) return this.errorReply(`Error: Room description is too long (must be at most 80 characters).`);
 		let normalizedTarget = ' ' + target.toLowerCase().replace('[^a-zA-Z0-9]+', ' ').trim() + ' ';
 
