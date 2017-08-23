@@ -6,7 +6,7 @@ exports.BattleAbilities = {
 		desc: "This Pokemon's Normal-type moves become Flying-type moves and have their power multiplied by 1.3. This effect comes after other effects that change a move's type, but before Ion Deluge and Electrify's effects.",
 		shortDesc: "This Pokemon's Normal-type moves become Flying type and have 1.3x power.",
 		onBasePower: function (basePower, pokemon, target, move) {
-			if (move.aerilate) return this.chainModify([0x14CD, 0x1000]);
+			if (move.aerilateBoosted) return this.chainModify([0x14CD, 0x1000]);
 		},
 	},
 	"aftermath": {
@@ -65,7 +65,7 @@ exports.BattleAbilities = {
 		desc: "This Pokemon's damaging moves become multi-hit moves that hit twice. The second hit has its damage halved. Does not affect multi-hit moves or moves that have multiple targets.",
 		shortDesc: "This Pokemon's damaging moves hit twice. The second hit has its damage halved.",
 		onBasePower: function (basePower, pokemon, target, move) {
-			if (move.parentalbond && ++move.hits > 1) return this.chainModify(0.5);
+			if (move.hasParentalBond && ++move.hits > 1) return this.chainModify(0.5);
 		},
 	},
 	"pixilate": {
@@ -73,7 +73,7 @@ exports.BattleAbilities = {
 		desc: "This Pokemon's Normal-type moves become Fairy-type moves and have their power multiplied by 1.3. This effect comes after other effects that change a move's type, but before Ion Deluge and Electrify's effects.",
 		shortDesc: "This Pokemon's Normal-type moves become Fairy type and have 1.3x power.",
 		onBasePower: function (basePower, pokemon, target, move) {
-			if (move.pixilate) return this.chainModify([0x14CD, 0x1000]);
+			if (move.pixilateBoosted) return this.chainModify([0x14CD, 0x1000]);
 		},
 	},
 	"prankster": {
@@ -86,7 +86,7 @@ exports.BattleAbilities = {
 		desc: "This Pokemon's Normal-type moves become Ice-type moves and have their power multiplied by 1.3. This effect comes after other effects that change a move's type, but before Ion Deluge and Electrify's effects.",
 		shortDesc: "This Pokemon's Normal-type moves become Ice type and have 1.3x power.",
 		onBasePower: function (basePower, pokemon, target, move) {
-			if (move.refrigerate) return this.chainModify([0x14CD, 0x1000]);
+			if (move.refrigerateBoosted) return this.chainModify([0x14CD, 0x1000]);
 		},
 	},
 	"roughskin": {
