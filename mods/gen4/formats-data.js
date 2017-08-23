@@ -827,7 +827,7 @@ exports.BattleFormatsData = {
 		tier: "LC",
 	},
 	xatu: {
-		randomBattleMoves: ["reflect", "lightscreen", "wish", "uturn", "calmmind", "psychic", "heatwave", "roost"],
+		randomBattleMoves: ["reflect", "lightscreen", "wish", "uturn", "calmmind", "psychic", "heatwave", "airslash", "hiddenpowerfighting", "batonpass", "trick", "roost"],
 		tier: "NU",
 	},
 	mareep: {
@@ -1736,7 +1736,7 @@ exports.BattleFormatsData = {
 		tier: "NU",
 	},
 	infernape: {
-		randomBattleMoves: ["stealthrock", "fireblast", "closecombat", "uturn", "grassknot", "stoneedge", "machpunch", "fakeout", "nastyplot", "hiddenpowerice", "flareblitz", "vacuumwave"],
+		randomBattleMoves: ["stealthrock", "fireblast", "closecombat", "uturn", "grassknot", "stoneedge", "machpunch", "focusblast", "swordsdance", "nastyplot", "hiddenpowerice", "flareblitz", "vacuumwave"],
 		tier: "OU",
 	},
 	piplup: {
@@ -1915,7 +1915,7 @@ exports.BattleFormatsData = {
 	},
 	lucario: {
 		inherit: true,
-		randomBattleMoves: ["swordsdance", "closecombat", "crunch", "extremespeed", "icepunch", "bulletpunch", "nastyplot", "aurasphere", "shadowball", "vacuumwave"],
+		randomBattleMoves: ["swordsdance", "closecombat", "crunch", "extremespeed", "icepunch", "bulletpunch", "agility", "vacuumwave"],
 		tier: "OU",
 	},
 	hippopotas: {
