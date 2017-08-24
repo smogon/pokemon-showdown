@@ -32,22 +32,6 @@ exports.BattleItems = {
 			}
 		},
 	},
-	"deepseascale": {
-		inherit: true,
-		onModifySpD: function (spd, pokemon) {
-			if (pokemon.template.species === 'Clamperl') {
-				return this.chainModify(2);
-			}
-		},
-	},
-	"deepseatooth": {
-		inherit: true,
-		onModifySpA: function (spa, pokemon) {
-			if (pokemon.template.species === 'Clamperl') {
-				return this.chainModify(2);
-			}
-		},
-	},
 	"dragonfang": {
 		inherit: true,
 		desc: "Holder's Dragon-type attacks have 1.1x power.",
@@ -89,21 +73,8 @@ exports.BattleItems = {
 	},
 	"lightball": {
 		inherit: true,
-		desc: "If holder is a Pikachu, its Special Attack is doubled.",
+		desc: "If held by a Pikachu, its Special Attack is doubled.",
 		onModifyAtk: function () {},
-		onModifySpA: function (spa, pokemon) {
-			if (pokemon.template.species === 'Pikachu') {
-				return this.chainModify(2);
-			}
-		},
-	},
-	"luckypunch": {
-		inherit: true,
-		onModifyCritRatio: function (critRatio, user) {
-			if (user.template.species === 'Chansey') {
-				return critRatio + 2;
-			}
-		},
 	},
 	"magnet": {
 		inherit: true,
@@ -111,14 +82,6 @@ exports.BattleItems = {
 		onBasePower: function (basePower, user, target, move) {
 			if (move.type === 'Electric') {
 				return basePower * 1.1;
-			}
-		},
-	},
-	"mentalherb": {
-		inherit: true,
-		onUpdate: function (pokemon) {
-			if (pokemon.volatiles.attract && pokemon.useItem()) {
-				pokemon.removeVolatile('attract');
 			}
 		},
 	},
@@ -233,22 +196,6 @@ exports.BattleItems = {
 		onBasePower: function (basePower, user, target, move) {
 			if (move.type === 'Ghost') {
 				return basePower * 1.1;
-			}
-		},
-	},
-	"stick": {
-		inherit: true,
-		onModifyCritRatio: function (critRatio, user) {
-			if (user.template.species === 'Farfetch\'d') {
-				return critRatio + 2;
-			}
-		},
-	},
-	"thickclub": {
-		inherit: true,
-		onModifyAtk: function (atk, pokemon) {
-			if (pokemon.template.species === 'Cubone' || pokemon.template.species === 'Marowak') {
-				return this.chainModify(2);
 			}
 		},
 	},

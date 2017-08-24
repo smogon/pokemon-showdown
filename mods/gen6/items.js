@@ -3,6 +3,7 @@
 exports.BattleItems = {
 	aguavberry: {
 		inherit: true,
+		desc: "Restores 1/8 max HP at 1/2 max HP or less; confuses if -SpD Nature. Single use.",
 		onUpdate: function (pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.eatItem();
@@ -14,7 +15,6 @@ exports.BattleItems = {
 				pokemon.addVolatile('confusion');
 			}
 		},
-		desc: "Restores 1/8 max HP at 1/2 max HP or less; confuses if -SpD Nature. Single use.",
 	},
 	belueberry: {
 		inherit: true,
@@ -42,6 +42,7 @@ exports.BattleItems = {
 	},
 	figyberry: {
 		inherit: true,
+		desc: "Restores 1/8 max HP at 1/2 max HP or less; confuses if -Atk Nature. Single use.",
 		onUpdate: function (pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.eatItem();
@@ -53,10 +54,10 @@ exports.BattleItems = {
 				pokemon.addVolatile('confusion');
 			}
 		},
-		desc: "Restores 1/8 max HP at 1/2 max HP or less; confuses if -Atk Nature. Single use.",
 	},
 	iapapaberry: {
 		inherit: true,
+		desc: "Restores 1/8 max HP at 1/2 max HP or less; confuses if -Def Nature. Single use.",
 		onUpdate: function (pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.eatItem();
@@ -68,7 +69,6 @@ exports.BattleItems = {
 				pokemon.addVolatile('confusion');
 			}
 		},
-		desc: "Restores 1/8 max HP at 1/2 max HP or less; confuses if -Def Nature. Single use.",
 	},
 	jabocaberry: {
 		inherit: true,
@@ -91,6 +91,7 @@ exports.BattleItems = {
 	},
 	magoberry: {
 		inherit: true,
+		desc: "Restores 1/8 max HP at 1/2 max HP or less; confuses if -Spe Nature. Single use.",
 		onUpdate: function (pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.eatItem();
@@ -102,7 +103,6 @@ exports.BattleItems = {
 				pokemon.addVolatile('confusion');
 			}
 		},
-		desc: "Restores 1/8 max HP at 1/2 max HP or less; confuses if -Spe Nature. Single use.",
 	},
 	magostberry: {
 		inherit: true,
@@ -156,12 +156,9 @@ exports.BattleItems = {
 		isUnreleased: false,
 	},
 	souldew: {
-		id: "souldew",
-		name: "Soul Dew",
-		spritenum: 459,
-		fling: {
-			basePower: 30,
-		},
+		inherit: true,
+		desc: "If held by a Latias or a Latios, its Sp. Atk and Sp. Def are 1.5x.",
+		onBasePower: function () {},
 		onModifySpAPriority: 1,
 		onModifySpA: function (spa, pokemon) {
 			if (pokemon.baseTemplate.num === 380 || pokemon.baseTemplate.num === 381) {
@@ -174,9 +171,6 @@ exports.BattleItems = {
 				return this.chainModify(1.5);
 			}
 		},
-		num: 225,
-		gen: 3,
-		desc: "If holder is a Latias or a Latios, its Sp. Atk and Sp. Def are 1.5x.",
 	},
 	watmelberry: {
 		inherit: true,
@@ -188,6 +182,7 @@ exports.BattleItems = {
 	},
 	wikiberry: {
 		inherit: true,
+		desc: "Restores 1/8 max HP at 1/2 max HP or less; confuses if -SpA Nature. Single use.",
 		onUpdate: function (pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.eatItem();
@@ -199,6 +194,5 @@ exports.BattleItems = {
 				pokemon.addVolatile('confusion');
 			}
 		},
-		desc: "Restores 1/8 max HP at 1/2 max HP or less; confuses if -SpA Nature. Single use.",
 	},
 };
