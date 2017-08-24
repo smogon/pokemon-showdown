@@ -3066,7 +3066,7 @@ exports.BattleAbilities = {
 		num: 197,
 	},
 	"simple": {
-		shortDesc: "If this Pokemon's stat stages are raised or lowered, the effect is doubled instead.",
+		shortDesc: "When this Pokemon's stat stages are raised or lowered, the effect is doubled instead.",
 		onBoost: function (boost, target, source, effect) {
 			if (effect && effect.id === 'zpower') return;
 			for (let i in boost) {
