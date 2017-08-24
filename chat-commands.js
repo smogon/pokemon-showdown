@@ -2450,7 +2450,7 @@ exports.commands = {
 
 		try {
 			if (target === 'all') {
-				if (lock['all']) return this.errorReply(`Hot-patching all has been disabled by ${lock['all'].by} (${lock['all'].reason}`);
+				if (lock['all']) return this.errorReply(`Hot-patching all has been disabled by ${lock['all'].by} (${lock['all'].reason})`);
 				if (Config.disablehotpatchall) return this.errorReply("This server does not allow for the use of /hotpatch all");
 
 				for (let i = 0; i < hotpatches.length; i++) {
