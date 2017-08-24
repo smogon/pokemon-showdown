@@ -139,7 +139,7 @@ class Tournament {
 				unban = true;
 				ban = ban.substr(1);
 			}
-			if (ban.startsWith('Rule:')) {
+			if (ban.toLowerCase().startsWith('rule:')) {
 				ban = ban.substr(5);
 				(unban ? removedRules : addedRules).push(ban);
 			} else {

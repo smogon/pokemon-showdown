@@ -486,7 +486,7 @@ class ModdedDex {
 						unban = true;
 						ban = ban.substr(1);
 					}
-					if (ban.startsWith('Rule:')) {
+					if (ban.toLowerCase().startsWith('rule:')) {
 						ban = ban.substr(5).trim();
 						if (unban) {
 							customRules.unshift('!' + ban);
