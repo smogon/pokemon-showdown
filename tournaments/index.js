@@ -1095,7 +1095,7 @@ let commands = {
 			tournament.format = name;
 			this.room.send('|tournament|update|' + JSON.stringify({format: tournament.format}));
 			this.privateModCommand("(" + user.name + " set the tournament's name to " + tournament.format + ".)");
-			this.update();
+			tournament.update();
 		},
 		resetname: 'clearname',
 		clearname: function (tournament, user) {
@@ -1103,7 +1103,7 @@ let commands = {
 			tournament.format = tournament.originalFormat;
 			this.room.send('|tournament|update|' + JSON.stringify({format: tournament.format}));
 			this.privateModCommand("(" + user.name + " cleared the tournament's name.)");
-			this.update();
+			tournament.update();
 		},
 	},
 	moderation: {
