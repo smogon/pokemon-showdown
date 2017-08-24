@@ -2496,20 +2496,10 @@ exports.commands = {
 				if (lock['battles']) return this.errorReply(`Hot-patching battles has been disabled by ${lock['battles'].by} (${lock['battles'].reason})`);
 				if (lock['validator']) return this.errorReply(`Hot-patching the validator has been disabled by ${lock['validator'].by} (${lock['validator'].reason})`);
 
-				// store custom formats
-				let customFormats = {};
-				for (let i in Dex.data.Formats) {
-					if (!Dex.data.Formats[i].customBanlist) continue;
-					customFormats[i] = {name: Dex.data.Formats[i].name, customBanlist: Dex.data.Formats[i].customBanlist};
-				}
 				// uncache the sim/dex.js dependency tree
 				Chat.uncacheTree('./sim/dex');
 				// reload sim/dex.js
 				global.Dex = require('./sim/dex'); // note: this will lock up the server for a few seconds
-				// rebuild custom formats
-				for (let i in customFormats) {
-					Dex.getFormat(customFormats[i].name, customFormats[i].customBanlist, i);
-				}
 				// rebuild the formats list
 				delete Rooms.global.formatList;
 				// respawn validator processes

@@ -13,10 +13,8 @@ let TeamValidator = module.exports = getValidator;
 let PM;
 
 class Validator {
-	constructor(format, customRules) {
-		this.format = Dex.getFormat(format, customRules);
-		this.initalCustomRules = customRules ? customRules.join(',') : '';
-		this.customRules = this.format.customRules ? this.format.customRules.join(',') : '0';
+	constructor(format) {
+		this.format = Dex.getFormat(format);
 		this.dex = Dex.forFormat(this.format);
 	}
 
@@ -27,7 +25,9 @@ class Validator {
 
 	prepTeam(team, removeNicknames) {
 		removeNicknames = removeNicknames ? '1' : '0';
-		return PM.send(this.format.id, this.initalCustomRules, removeNicknames, team);
+		let id = this.format.id;
+		if (this.format.customRules) id += '@@@' + this.format.customRules.join(',');
+		return PM.send(id, removeNicknames, team);
 	}
 
 	baseValidateTeam(team, removeNicknames) {
@@ -1135,8 +1135,8 @@ class Validator {
 }
 TeamValidator.Validator = Validator;
 
-function getValidator(format, customRules) {
-	return new Validator(format, customRules);
+function getValidator(format) {
+	return new Validator(format);
 }
 
 /*********************************************************
@@ -1162,7 +1162,7 @@ class TeamValidatorManager extends ProcessManager {
 
 	onMessageDownstream(message) {
 		// protocol:
-		// "[id]|[format]|[customRules]|[removeNicknames]|[team]"
+		// "[id]|[format]|[removeNicknames]|[team]"
 		let pipeIndex = message.indexOf('|');
 		let nextPipeIndex = message.indexOf('|', pipeIndex + 1);
 		let id = message.substr(0, pipeIndex);
@@ -1170,29 +1170,23 @@ class TeamValidatorManager extends ProcessManager {
 
 		pipeIndex = nextPipeIndex;
 		nextPipeIndex = message.indexOf('|', pipeIndex + 1);
-		let customRules = message.substr(pipeIndex + 1, nextPipeIndex - pipeIndex - 1);
-
-		pipeIndex = nextPipeIndex;
-		nextPipeIndex = message.indexOf('|', pipeIndex + 1);
 		let removeNicknames = message.substr(pipeIndex + 1, nextPipeIndex - pipeIndex - 1);
 		let team = message.substr(nextPipeIndex + 1);
 
-		process.send(id + '|' + this.receive(format, customRules, removeNicknames, team));
+		process.send(id + '|' + this.receive(format, removeNicknames, team));
 	}
 
-	receive(format, customRules, removeNicknames, team) {
+	receive(format, removeNicknames, team) {
 		let parsedTeam = Dex.fastUnpackTeam(team);
-		customRules = (!customRules || customRules === '0') ? false : customRules.split(',');
 		removeNicknames = removeNicknames === '1';
 
 		let problems;
 		try {
-			problems = TeamValidator(format, customRules).validateTeam(parsedTeam, removeNicknames);
+			problems = TeamValidator(format).validateTeam(parsedTeam, removeNicknames);
 		} catch (err) {
 			require('./crashlogger')(err, 'A team validation', {
 				format: format,
 				team: team,
-				customRules: customRules,
 			});
 			problems = [`Your team crashed the team validator. We've been automatically notified and will fix this crash, but you should use a different team for now.`];
 		}
