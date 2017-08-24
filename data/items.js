@@ -13,7 +13,7 @@ exports.BattleItems = {
 		},
 		num: 674,
 		gen: 6,
-		desc: "If holder is an Abomasnow, this item allows it to Mega Evolve in battle.",
+		desc: "If held by an Abomasnow, this item allows it to Mega Evolve in battle.",
 	},
 	"absolite": {
 		id: "absolite",
@@ -27,7 +27,7 @@ exports.BattleItems = {
 		},
 		num: 677,
 		gen: 6,
-		desc: "If holder is an Absol, this item allows it to Mega Evolve in battle.",
+		desc: "If held by an Absol, this item allows it to Mega Evolve in battle.",
 	},
 	"absorbbulb": {
 		id: "absorbbulb",
@@ -60,7 +60,7 @@ exports.BattleItems = {
 		},
 		num: 135,
 		gen: 4,
-		desc: "If holder is a Dialga, its Steel- and Dragon-type attacks have 1.2x power.",
+		desc: "If held by a Dialga, its Steel- and Dragon-type attacks have 1.2x power.",
 	},
 	"adrenalineorb": {
 		id: "adrenalineorb",
@@ -90,7 +90,7 @@ exports.BattleItems = {
 		},
 		num: 672,
 		gen: 6,
-		desc: "If holder is an Aerodactyl, this item allows it to Mega Evolve in battle.",
+		desc: "If held by an Aerodactyl, this item allows it to Mega Evolve in battle.",
 	},
 	"aggronite": {
 		id: "aggronite",
@@ -104,7 +104,7 @@ exports.BattleItems = {
 		},
 		num: 667,
 		gen: 6,
-		desc: "If holder is an Aggron, this item allows it to Mega Evolve in battle.",
+		desc: "If held by an Aggron, this item allows it to Mega Evolve in battle.",
 	},
 	"aguavberry": {
 		id: "aguavberry",
@@ -180,7 +180,7 @@ exports.BattleItems = {
 		},
 		num: 679,
 		gen: 6,
-		desc: "If holder is an Alakazam, this item allows it to Mega Evolve in battle.",
+		desc: "If held by an Alakazam, this item allows it to Mega Evolve in battle.",
 	},
 	"aloraichiumz": {
 		id: "aloraichiumz",
@@ -192,7 +192,7 @@ exports.BattleItems = {
 		zMoveUser: ["Raichu-Alola"],
 		num: 803,
 		gen: 7,
-		desc: "If holder is an Alolan Raichu with Thunderbolt, it can use Stoked Sparksurfer.",
+		desc: "If held by an Alolan Raichu with Thunderbolt, it can use Stoked Sparksurfer.",
 	},
 	"altarianite": {
 		id: "altarianite",
@@ -206,7 +206,7 @@ exports.BattleItems = {
 		},
 		num: 755,
 		gen: 6,
-		desc: "If holder is an Altaria, this item allows it to Mega Evolve in battle.",
+		desc: "If held by an Altaria, this item allows it to Mega Evolve in battle.",
 	},
 	"ampharosite": {
 		id: "ampharosite",
@@ -220,7 +220,7 @@ exports.BattleItems = {
 		},
 		num: 658,
 		gen: 6,
-		desc: "If holder is an Ampharos, this item allows it to Mega Evolve in battle.",
+		desc: "If held by an Ampharos, this item allows it to Mega Evolve in battle.",
 	},
 	"apicotberry": {
 		id: "apicotberry",
@@ -312,7 +312,7 @@ exports.BattleItems = {
 		},
 		num: 757,
 		gen: 6,
-		desc: "If holder is an Audino, this item allows it to Mega Evolve in battle.",
+		desc: "If held by an Audino, this item allows it to Mega Evolve in battle.",
 	},
 	"babiriberry": {
 		id: "babiriberry",
@@ -349,7 +349,7 @@ exports.BattleItems = {
 		},
 		num: 668,
 		gen: 6,
-		desc: "If holder is a Banette, this item allows it to Mega Evolve in battle.",
+		desc: "If held by a Banette, this item allows it to Mega Evolve in battle.",
 	},
 	"beastball": {
 		id: "beastball",
@@ -371,7 +371,7 @@ exports.BattleItems = {
 		},
 		num: 770,
 		gen: 6,
-		desc: "If holder is a Beedrill, this item allows it to Mega Evolve in battle.",
+		desc: "If held by a Beedrill, this item allows it to Mega Evolve in battle.",
 	},
 	"belueberry": {
 		id: "belueberry",
@@ -502,7 +502,7 @@ exports.BattleItems = {
 		},
 		num: 661,
 		gen: 6,
-		desc: "If holder is a Blastoise, this item allows it to Mega Evolve in battle.",
+		desc: "If held by a Blastoise, this item allows it to Mega Evolve in battle.",
 	},
 	"blazikenite": {
 		id: "blazikenite",
@@ -516,7 +516,7 @@ exports.BattleItems = {
 		},
 		num: 664,
 		gen: 6,
-		desc: "If holder is a Blaziken, this item allows it to Mega Evolve in battle.",
+		desc: "If held by a Blaziken, this item allows it to Mega Evolve in battle.",
 	},
 	"blueorb": {
 		id: "blueorb",
@@ -548,7 +548,7 @@ exports.BattleItems = {
 		},
 		num: 535,
 		gen: 6,
-		desc: "If holder is a Kyogre, this item triggers its Primal Reversion in battle.",
+		desc: "If held by a Kyogre, this item triggers its Primal Reversion in battle.",
 	},
 	"blukberry": {
 		id: "blukberry",
@@ -656,7 +656,7 @@ exports.BattleItems = {
 		},
 		num: 767,
 		gen: 6,
-		desc: "If holder is a Camerupt, this item allows it to Mega Evolve in battle.",
+		desc: "If held by a Camerupt, this item allows it to Mega Evolve in battle.",
 	},
 	"cellbattery": {
 		id: "cellbattery",
@@ -703,7 +703,7 @@ exports.BattleItems = {
 		},
 		num: 660,
 		gen: 6,
-		desc: "If holder is a Charizard, this item allows it to Mega Evolve in battle.",
+		desc: "If held by a Charizard, this item allows it to Mega Evolve in battle.",
 	},
 	"charizarditey": {
 		id: "charizarditey",
@@ -717,7 +717,7 @@ exports.BattleItems = {
 		},
 		num: 678,
 		gen: 6,
-		desc: "If holder is a Charizard, this item allows it to Mega Evolve in battle.",
+		desc: "If held by a Charizard, this item allows it to Mega Evolve in battle.",
 	},
 	"chartiberry": {
 		id: "chartiberry",
@@ -1109,7 +1109,7 @@ exports.BattleItems = {
 		zMoveUser: ["Decidueye"],
 		num: 798,
 		gen: 7,
-		desc: "If holder is a Decidueye with Spirit Shackle, it can use Sinister Arrow Raid.",
+		desc: "If held by a Decidueye with Spirit Shackle, it can use Sinister Arrow Raid.",
 	},
 	"deepseascale": {
 		id: "deepseascale",
@@ -1126,7 +1126,7 @@ exports.BattleItems = {
 		},
 		num: 227,
 		gen: 3,
-		desc: "If holder is a Clamperl, its Sp. Def is doubled.",
+		desc: "If held by a Clamperl, its Sp. Def is doubled.",
 	},
 	"deepseatooth": {
 		id: "deepseatooth",
@@ -1143,7 +1143,7 @@ exports.BattleItems = {
 		},
 		num: 226,
 		gen: 3,
-		desc: "If holder is a Clamperl, its Sp. Atk is doubled.",
+		desc: "If held by a Clamperl, its Sp. Atk is doubled.",
 	},
 	"destinyknot": {
 		id: "destinyknot",
@@ -1174,7 +1174,7 @@ exports.BattleItems = {
 		},
 		num: 764,
 		gen: 6,
-		desc: "If holder is a Diancie, this item allows it to Mega Evolve in battle.",
+		desc: "If held by a Diancie, this item allows it to Mega Evolve in battle.",
 	},
 	"diveball": {
 		id: "diveball",
@@ -1383,7 +1383,7 @@ exports.BattleItems = {
 		zMoveUser: ["Eevee"],
 		num: 805,
 		gen: 7,
-		desc: "If holder is an Eevee with Last Resort, it can use Extreme Evoboost.",
+		desc: "If held by an Eevee with Last Resort, it can use Extreme Evoboost.",
 	},
 	"ejectbutton": {
 		id: "ejectbutton",
@@ -1927,7 +1927,7 @@ exports.BattleItems = {
 		},
 		num: 756,
 		gen: 6,
-		desc: "If holder is a Gallade, this item allows it to Mega Evolve in battle.",
+		desc: "If held by a Gallade, this item allows it to Mega Evolve in battle.",
 	},
 	"ganlonberry": {
 		id: "ganlonberry",
@@ -1962,7 +1962,7 @@ exports.BattleItems = {
 		},
 		num: 683,
 		gen: 6,
-		desc: "If holder is a Garchomp, this item allows it to Mega Evolve in battle.",
+		desc: "If held by a Garchomp, this item allows it to Mega Evolve in battle.",
 	},
 	"gardevoirite": {
 		id: "gardevoirite",
@@ -1976,7 +1976,7 @@ exports.BattleItems = {
 		},
 		num: 657,
 		gen: 6,
-		desc: "If holder is a Gardevoir, this item allows it to Mega Evolve in battle.",
+		desc: "If held by a Gardevoir, this item allows it to Mega Evolve in battle.",
 	},
 	"gengarite": {
 		id: "gengarite",
@@ -1990,7 +1990,7 @@ exports.BattleItems = {
 		},
 		num: 656,
 		gen: 6,
-		desc: "If holder is a Gengar, this item allows it to Mega Evolve in battle.",
+		desc: "If held by a Gengar, this item allows it to Mega Evolve in battle.",
 	},
 	"ghostgem": {
 		id: "ghostgem",
@@ -2052,7 +2052,7 @@ exports.BattleItems = {
 		},
 		num: 763,
 		gen: 6,
-		desc: "If holder is a Glalie, this item allows it to Mega Evolve in battle.",
+		desc: "If held by a Glalie, this item allows it to Mega Evolve in battle.",
 	},
 	"grassgem": {
 		id: "grassgem",
@@ -2174,7 +2174,7 @@ exports.BattleItems = {
 		forcedForme: "Giratina-Origin",
 		num: 112,
 		gen: 4,
-		desc: "If holder is a Giratina, its Ghost- and Dragon-type attacks have 1.2x power.",
+		desc: "If held by a Giratina, its Ghost- and Dragon-type attacks have 1.2x power.",
 	},
 	"groundgem": {
 		id: "groundgem",
@@ -2236,7 +2236,7 @@ exports.BattleItems = {
 		},
 		num: 676,
 		gen: 6,
-		desc: "If holder is a Gyarados, this item allows it to Mega Evolve in battle.",
+		desc: "If held by a Gyarados, this item allows it to Mega Evolve in battle.",
 	},
 	"habanberry": {
 		id: "habanberry",
@@ -2328,7 +2328,7 @@ exports.BattleItems = {
 		},
 		num: 680,
 		gen: 6,
-		desc: "If holder is a Heracross, this item allows it to Mega Evolve in battle.",
+		desc: "If held by a Heracross, this item allows it to Mega Evolve in battle.",
 	},
 	"hondewberry": {
 		id: "hondewberry",
@@ -2356,7 +2356,7 @@ exports.BattleItems = {
 		},
 		num: 666,
 		gen: 6,
-		desc: "If holder is a Houndoom, this item allows it to Mega Evolve in battle.",
+		desc: "If held by a Houndoom, this item allows it to Mega Evolve in battle.",
 	},
 	"iapapaberry": {
 		id: "iapapaberry",
@@ -2476,7 +2476,7 @@ exports.BattleItems = {
 		zMoveUser: ["Incineroar"],
 		num: 799,
 		gen: 7,
-		desc: "If holder is an Incineroar with Darkest Lariat, it can use Malicious Moonsault.",
+		desc: "If held by an Incineroar with Darkest Lariat, it can use Malicious Moonsault.",
 	},
 	"insectplate": {
 		id: "insectplate",
@@ -2656,7 +2656,7 @@ exports.BattleItems = {
 		},
 		num: 675,
 		gen: 6,
-		desc: "If holder is a Kangaskhan, this item allows it to Mega Evolve in battle.",
+		desc: "If held by a Kangaskhan, this item allows it to Mega Evolve in battle.",
 	},
 	"kingsrock": {
 		id: "kingsrock",
@@ -2730,7 +2730,7 @@ exports.BattleItems = {
 		},
 		num: 684,
 		gen: 6,
-		desc: "If holder is a Latias, this item allows it to Mega Evolve in battle.",
+		desc: "If held by a Latias, this item allows it to Mega Evolve in battle.",
 	},
 	"latiosite": {
 		id: "latiosite",
@@ -2744,7 +2744,7 @@ exports.BattleItems = {
 		},
 		num: 685,
 		gen: 6,
-		desc: "If holder is a Latios, this item allows it to Mega Evolve in battle.",
+		desc: "If held by a Latios, this item allows it to Mega Evolve in battle.",
 	},
 	"laxincense": {
 		id: "laxincense",
@@ -2901,7 +2901,7 @@ exports.BattleItems = {
 		},
 		num: 236,
 		gen: 2,
-		desc: "If holder is a Pikachu, its Attack and Sp. Atk are doubled.",
+		desc: "If held by a Pikachu, its Attack and Sp. Atk are doubled.",
 	},
 	"lightclay": {
 		id: "lightclay",
@@ -2927,7 +2927,7 @@ exports.BattleItems = {
 		},
 		num: 768,
 		gen: 6,
-		desc: "If holder is a Lopunny, this item allows it to Mega Evolve in battle.",
+		desc: "If held by a Lopunny, this item allows it to Mega Evolve in battle.",
 	},
 	"loveball": {
 		id: "loveball",
@@ -2949,7 +2949,7 @@ exports.BattleItems = {
 		},
 		num: 673,
 		gen: 6,
-		desc: "If holder is a Lucario, this item allows it to Mega Evolve in battle.",
+		desc: "If held by a Lucario, this item allows it to Mega Evolve in battle.",
 	},
 	"luckypunch": {
 		id: "luckypunch",
@@ -2965,7 +2965,7 @@ exports.BattleItems = {
 		},
 		num: 256,
 		gen: 2,
-		desc: "If holder is a Chansey, its critical hit ratio is raised by 2 stages.",
+		desc: "If held by a Chansey, its critical hit ratio is raised by 2 stages.",
 	},
 	"lumberry": {
 		id: "lumberry",
@@ -3028,7 +3028,7 @@ exports.BattleItems = {
 		},
 		num: 136,
 		gen: 4,
-		desc: "If holder is a Palkia, its Water- and Dragon-type attacks have 1.2x power.",
+		desc: "If held by a Palkia, its Water- and Dragon-type attacks have 1.2x power.",
 	},
 	"luxuryball": {
 		id: "luxuryball",
@@ -3137,7 +3137,7 @@ exports.BattleItems = {
 		},
 		num: 682,
 		gen: 6,
-		desc: "If holder is a Manectric, this item allows it to Mega Evolve in battle.",
+		desc: "If held by a Manectric, this item allows it to Mega Evolve in battle.",
 	},
 	"marangaberry": {
 		id: "marangaberry",
@@ -3170,7 +3170,7 @@ exports.BattleItems = {
 		zMoveUser: ["Marshadow"],
 		num: 802,
 		gen: 7,
-		desc: "If holder is Marshadow with Spectral Thief, it can use Soul-Stealing 7-Star Strike.",
+		desc: "If held by Marshadow with Spectral Thief, it can use Soul-Stealing 7-Star Strike.",
 	},
 	"masterball": {
 		id: "masterball",
@@ -3192,7 +3192,7 @@ exports.BattleItems = {
 		},
 		num: 681,
 		gen: 6,
-		desc: "If holder is a Mawile, this item allows it to Mega Evolve in battle.",
+		desc: "If held by a Mawile, this item allows it to Mega Evolve in battle.",
 	},
 	"meadowplate": {
 		id: "meadowplate",
@@ -3228,7 +3228,7 @@ exports.BattleItems = {
 		},
 		num: 665,
 		gen: 6,
-		desc: "If holder is a Medicham, this item allows it to Mega Evolve in battle.",
+		desc: "If held by a Medicham, this item allows it to Mega Evolve in battle.",
 	},
 	"mentalherb": {
 		id: "mentalherb",
@@ -3282,7 +3282,7 @@ exports.BattleItems = {
 		},
 		num: 758,
 		gen: 6,
-		desc: "If holder is a Metagross, this item allows it to Mega Evolve in battle.",
+		desc: "If held by a Metagross, this item allows it to Mega Evolve in battle.",
 	},
 	"metalcoat": {
 		id: "metalcoat",
@@ -3316,7 +3316,7 @@ exports.BattleItems = {
 		},
 		num: 257,
 		gen: 2,
-		desc: "If holder is a Ditto that hasn't Transformed, its Defense is doubled.",
+		desc: "If held by a Ditto that hasn't Transformed, its Defense is doubled.",
 	},
 	"metronome": {
 		id: "metronome",
@@ -3365,7 +3365,7 @@ exports.BattleItems = {
 		zMoveUser: ["Mew"],
 		num: 806,
 		gen: 7,
-		desc: "If holder is a Mew with Psychic, it can use Genesis Supernova.",
+		desc: "If held by a Mew with Psychic, it can use Genesis Supernova.",
 	},
 	"mewtwonitex": {
 		id: "mewtwonitex",
@@ -3379,7 +3379,7 @@ exports.BattleItems = {
 		},
 		num: 662,
 		gen: 6,
-		desc: "If holder is a Mewtwo, this item allows it to Mega Evolve in battle.",
+		desc: "If held by a Mewtwo, this item allows it to Mega Evolve in battle.",
 	},
 	"mewtwonitey": {
 		id: "mewtwonitey",
@@ -3393,7 +3393,7 @@ exports.BattleItems = {
 		},
 		num: 663,
 		gen: 6,
-		desc: "If holder is a Mewtwo, this item allows it to Mega Evolve in battle.",
+		desc: "If held by a Mewtwo, this item allows it to Mega Evolve in battle.",
 	},
 	"micleberry": {
 		id: "micleberry",
@@ -3837,7 +3837,7 @@ exports.BattleItems = {
 		},
 		num: 762,
 		gen: 6,
-		desc: "If holder is a Pidgeot, this item allows it to Mega Evolve in battle.",
+		desc: "If held by a Pidgeot, this item allows it to Mega Evolve in battle.",
 	},
 	"pikaniumz": {
 		id: "pikaniumz",
@@ -3849,7 +3849,7 @@ exports.BattleItems = {
 		zMoveUser: ["Pikachu"],
 		num: 794,
 		gen: 7,
-		desc: "If holder is a Pikachu with Volt Tackle, it can use Catastropika.",
+		desc: "If held by a Pikachu with Volt Tackle, it can use Catastropika.",
 	},
 	"pikashuniumz": {
 		id: "pikashuniumz",
@@ -3861,7 +3861,7 @@ exports.BattleItems = {
 		zMoveUser: ["Pikachu-Original", "Pikachu-Hoenn", "Pikachu-Sinnoh", "Pikachu-Unova", "Pikachu-Kalos", "Pikachu-Alola"],
 		num: 836,
 		gen: 7,
-		desc: "If holder is cap Pikachu with Thunderbolt, it can use 10,000,000 Volt Thunderbolt.",
+		desc: "If held by cap Pikachu with Thunderbolt, it can use 10,000,000 Volt Thunderbolt.",
 	},
 	"pinapberry": {
 		id: "pinapberry",
@@ -3889,7 +3889,7 @@ exports.BattleItems = {
 		},
 		num: 671,
 		gen: 6,
-		desc: "If holder is a Pinsir, this item allows it to Mega Evolve in battle.",
+		desc: "If held by a Pinsir, this item allows it to Mega Evolve in battle.",
 	},
 	"pixieplate": {
 		id: "pixieplate",
@@ -4137,7 +4137,7 @@ exports.BattleItems = {
 		zMoveUser: ["Primarina"],
 		num: 800,
 		gen: 7,
-		desc: "If holder is a Primarina with Sparkling Aria, it can use Oceanic Operetta.",
+		desc: "If held by a Primarina with Sparkling Aria, it can use Oceanic Operetta.",
 	},
 	"protectivepads": {
 		id: "protectivepads",
@@ -4271,7 +4271,7 @@ exports.BattleItems = {
 		},
 		num: 274,
 		gen: 4,
-		desc: "If holder is a Ditto that hasn't Transformed, its Speed is doubled.",
+		desc: "If held by a Ditto that hasn't Transformed, its Speed is doubled.",
 	},
 	"rabutaberry": {
 		id: "rabutaberry",
@@ -4427,7 +4427,7 @@ exports.BattleItems = {
 		},
 		num: 534,
 		gen: 6,
-		desc: "If holder is a Groudon, this item triggers its Primal Reversion in battle.",
+		desc: "If held by a Groudon, this item triggers its Primal Reversion in battle.",
 	},
 	"repeatball": {
 		id: "repeatball",
@@ -4639,7 +4639,7 @@ exports.BattleItems = {
 		},
 		num: 754,
 		gen: 6,
-		desc: "If holder is a Sableye, this item allows it to Mega Evolve in battle.",
+		desc: "If held by a Sableye, this item allows it to Mega Evolve in battle.",
 	},
 	"safariball": {
 		id: "safariball",
@@ -4702,7 +4702,7 @@ exports.BattleItems = {
 		},
 		num: 769,
 		gen: 6,
-		desc: "If holder is a Salamence, this item allows it to Mega Evolve in battle.",
+		desc: "If held by a Salamence, this item allows it to Mega Evolve in battle.",
 	},
 	"sceptilite": {
 		id: "sceptilite",
@@ -4716,7 +4716,7 @@ exports.BattleItems = {
 		},
 		num: 753,
 		gen: 6,
-		desc: "If holder is a Sceptile, this item allows it to Mega Evolve in battle.",
+		desc: "If held by a Sceptile, this item allows it to Mega Evolve in battle.",
 	},
 	"scizorite": {
 		id: "scizorite",
@@ -4730,7 +4730,7 @@ exports.BattleItems = {
 		},
 		num: 670,
 		gen: 6,
-		desc: "If holder is a Scizor, this item allows it to Mega Evolve in battle.",
+		desc: "If held by a Scizor, this item allows it to Mega Evolve in battle.",
 	},
 	"scopelens": {
 		id: "scopelens",
@@ -4792,7 +4792,7 @@ exports.BattleItems = {
 		},
 		num: 759,
 		gen: 6,
-		desc: "If holder is a Sharpedo, this item allows it to Mega Evolve in battle.",
+		desc: "If held by a Sharpedo, this item allows it to Mega Evolve in battle.",
 	},
 	"shedshell": {
 		id: "shedshell",
@@ -4968,7 +4968,7 @@ exports.BattleItems = {
 		},
 		num: 760,
 		gen: 6,
-		desc: "If holder is a Slowbro, this item allows it to Mega Evolve in battle.",
+		desc: "If held by a Slowbro, this item allows it to Mega Evolve in battle.",
 	},
 	"smoothrock": {
 		id: "smoothrock",
@@ -4991,7 +4991,7 @@ exports.BattleItems = {
 		zMoveUser: ["Snorlax"],
 		num: 804,
 		gen: 7,
-		desc: "If holder is a Snorlax with Giga Impact, it can use Pulverizing Pancake.",
+		desc: "If held by a Snorlax with Giga Impact, it can use Pulverizing Pancake.",
 	},
 	"snowball": {
 		id: "snowball",
@@ -5041,7 +5041,7 @@ exports.BattleItems = {
 		},
 		num: 225,
 		gen: 3,
-		desc: "If holder's a Latias/Latios, its Dragon- and Psychic-type moves have 1.2x power.",
+		desc: "If held by a Latias/Latios, its Dragon- and Psychic-type moves have 1.2x power.",
 	},
 	"spelltag": {
 		id: "spelltag",
@@ -5171,7 +5171,7 @@ exports.BattleItems = {
 		},
 		num: 761,
 		gen: 6,
-		desc: "If holder is a Steelix, this item allows it to Mega Evolve in battle.",
+		desc: "If held by a Steelix, this item allows it to Mega Evolve in battle.",
 	},
 	"steelgem": {
 		id: "steelgem",
@@ -5235,7 +5235,7 @@ exports.BattleItems = {
 		},
 		num: 259,
 		gen: 2,
-		desc: "If holder is a Farfetch'd, its critical hit ratio is raised by 2 stages.",
+		desc: "If held by a Farfetch'd, its critical hit ratio is raised by 2 stages.",
 	},
 	"stickybarb": {
 		id: "stickybarb",
@@ -5294,7 +5294,7 @@ exports.BattleItems = {
 		},
 		num: 752,
 		gen: 6,
-		desc: "If holder is a Swampert, this item allows it to Mega Evolve in battle.",
+		desc: "If held by a Swampert, this item allows it to Mega Evolve in battle.",
 	},
 	"tamatoberry": {
 		id: "tamatoberry",
@@ -5343,7 +5343,7 @@ exports.BattleItems = {
 		zMoveUser: ["Tapu Koko", "Tapu Lele", "Tapu Bulu", "Tapu Fini"],
 		num: 801,
 		gen: 7,
-		desc: "If holder is a Tapu with Nature's Madness, it can use Guardian of Alola.",
+		desc: "If held by a Tapu with Nature's Madness, it can use Guardian of Alola.",
 	},
 	"terrainextender": {
 		id: "terrainextender",
@@ -5371,7 +5371,7 @@ exports.BattleItems = {
 		},
 		num: 258,
 		gen: 2,
-		desc: "If holder is a Cubone or a Marowak, its Attack is doubled.",
+		desc: "If held by a Cubone or a Marowak, its Attack is doubled.",
 	},
 	"timerball": {
 		id: "timerball",
@@ -5449,7 +5449,7 @@ exports.BattleItems = {
 		},
 		num: 669,
 		gen: 6,
-		desc: "If holder is a Tyranitar, this item allows it to Mega Evolve in battle.",
+		desc: "If held by a Tyranitar, this item allows it to Mega Evolve in battle.",
 	},
 	"ultraball": {
 		id: "ultraball",
@@ -5471,7 +5471,7 @@ exports.BattleItems = {
 		},
 		num: 659,
 		gen: 6,
-		desc: "If holder is a Venusaur, this item allows it to Mega Evolve in battle.",
+		desc: "If held by a Venusaur, this item allows it to Mega Evolve in battle.",
 	},
 	"wacanberry": {
 		id: "wacanberry",
@@ -6111,6 +6111,6 @@ exports.BattleItems = {
 		num: -1,
 		gen: 6,
 		isNonstandard: true,
-		desc: "If holder is a Crucibelle, this item allows it to Mega Evolve in battle.",
+		desc: "If held by a Crucibelle, this item allows it to Mega Evolve in battle.",
 	},
 };
