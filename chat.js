@@ -1151,7 +1151,7 @@ Chat.getDataPokemonHTML = function (template, gen = 7) {
 	buf += '</span> ';
 	if (gen >= 3) {
 		buf += '<span style="float:left;min-height:26px">';
-		if (template.abilities['1']) {
+		if (template.abilities['1'] && (gen >= 4 || Dex.getAbility(template.abilities['1']).gen === 3)) {
 			buf += '<span class="col twoabilitycol">' + template.abilities['0'] + '<br />' + template.abilities['1'] + '</span>';
 		} else {
 			buf += '<span class="col abilitycol">' + template.abilities['0'] + '</span>';
