@@ -3115,6 +3115,14 @@ exports.commands = {
 		room.game.choose(user, 'team ' + target);
 	},
 
+	offerdraw: 'requesttie',
+	requesttie: function (target, room, user) {
+		if (!room.game) return this.errorReply("This room doesn't have an active game.");
+		if (!room.game.requestTie) return this.errorReply("This game doesn't support /requesttie");
+
+		room.game.requestTie(user, room);
+	},
+
 	undo: function (target, room, user) {
 		if (!room.game) return this.errorReply("This room doesn't have an active game.");
 		if (!room.game.undo) return this.errorReply("This game doesn't support /undo");

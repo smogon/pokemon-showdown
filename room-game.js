@@ -123,6 +123,9 @@ class RoomGame {
 	// undo(user, text)
 	//   Called when a user uses /undo [text]
 
+	// requestTie(user, room)
+	//   Called when a user uses /requesttie
+
 	// joinGame(user, text)
 	//   Called when a user uses /joingame [text]
 
