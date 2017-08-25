@@ -1407,6 +1407,38 @@ exports.commands = {
 		return this.sendReply("|raw|" + buf.join("") + "");
 	},
 
+	'!viewbanlist': true,
+	viewruleset: 'viewbanlist',
+	ruleset: 'viewbanlist',
+	banlist: 'viewbanlist',
+	viewbanlist: function (target, room, user, connection, cmd) {
+		if (!this.runBroadcast()) return;
+		if (!target) {
+				return this.sendReply("Usage: " + cmd + " <format>");
+		}
+
+		let targetId = toId(target);
+
+		let format = Dex.getFormat(targetId);
+		if (format.effectType === 'Format') {
+			let html = [];
+			if (format.ruleset && format.ruleset.length) html.push("<b>Ruleset</b> - " + Chat.escapeHTML(format.ruleset.join(", ")));
+			//if (format.removedRules && format.removedRules.length) html.push("<b>Removed rules</b> - " + Chat.escapeHTML(format.removedRules.join(", "))); // No current formats use this, but just in case...
+			if (format.banlist && format.banlist.length) html.push("<b>Bans</b> - " + Chat.escapeHTML(format.banlist.join(", ")));
+			if (format.unbanlist && format.unbanlist.length) html.push("<b>Unbans</b> - " + Chat.escapeHTML(format.unbanlist.join(", ")));
+			if (html.length) {
+				return this.sendReply("Rules for " + targetId + ":<br />" + html.join("<br />"));
+			} else {
+				return this.sendReply("No rules found for " + targetId);
+			}
+		} else if (format.effectType === 'ValidatorRule' || format.effectType === 'Rule') {
+			if (format.desc) {
+				return this.sendReply(format.desc);
+			} else {
+				return this.sendReply("No description found for this rule.");
+		} else {
+	},
+
 	'!roomhelp': true,
 	roomhelp: function (target, room, user) {
 		if (!this.canBroadcast('!htmlbox')) return;
