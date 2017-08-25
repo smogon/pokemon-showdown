@@ -1414,29 +1414,31 @@ exports.commands = {
 	viewbanlist: function (target, room, user, connection, cmd) {
 		if (!this.runBroadcast()) return;
 		if (!target) {
-				return this.sendReply("Usage: " + cmd + " <format>");
+			return this.sendReply("Usage: " + cmd + " <format>");
 		}
 
 		let targetId = toId(target);
 
 		let format = Dex.getFormat(targetId);
-		if (format.effectType === 'Format') {
+		if (format.effectType === 'ValidatorRule' || format.effectType === 'Rule' || format.effectType === 'Format') {
 			let html = [];
+			if (format.effectType !== 'Format') {
+				if (format.desc) {
+					html.push("<b>" + format.name + "</b> - " + format.desc.join("<br />"));
+				} else {
+					html.push("No description found for this rule.");
+				}
+			}
 			if (format.ruleset && format.ruleset.length) html.push("<b>Ruleset</b> - " + Chat.escapeHTML(format.ruleset.join(", ")));
 			//if (format.removedRules && format.removedRules.length) html.push("<b>Removed rules</b> - " + Chat.escapeHTML(format.removedRules.join(", "))); // No current formats use this, but just in case...
 			if (format.banlist && format.banlist.length) html.push("<b>Bans</b> - " + Chat.escapeHTML(format.banlist.join(", ")));
 			if (format.unbanlist && format.unbanlist.length) html.push("<b>Unbans</b> - " + Chat.escapeHTML(format.unbanlist.join(", ")));
-			if (html.length) {
-				return this.sendReply("<b>Rules for " + format.name + ":</b><br />" + html.join("<br />"));
+			if (html.length > (format.effectType !== 'Format' ? 1 : 0)) {
+				return this.sendReply("<b>Ruleset for " + format.name + ":</b><br />" + html.join("<br />"));
 			} else {
-				return this.sendReply("No rules found for " + format.name);
+				return this.sendReply("No ruleset found for " + format.name);
 			}
-		} else if (format.effectType === 'ValidatorRule' || format.effectType === 'Rule') {
-			if (format.desc) {
-				return this.sendReply("<b>" + format.name + "</b> - " format.desc);
-			} else {
-				return this.sendReply("No description found for this rule.");
-		} else {
+		}
 	},
 
 	'!roomhelp': true,
