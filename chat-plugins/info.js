@@ -1427,13 +1427,13 @@ exports.commands = {
 			if (format.banlist && format.banlist.length) html.push("<b>Bans</b> - " + Chat.escapeHTML(format.banlist.join(", ")));
 			if (format.unbanlist && format.unbanlist.length) html.push("<b>Unbans</b> - " + Chat.escapeHTML(format.unbanlist.join(", ")));
 			if (html.length) {
-				return this.sendReply("Rules for " + targetId + ":<br />" + html.join("<br />"));
+				return this.sendReply("<b>Rules for " + format.name + ":</b><br />" + html.join("<br />"));
 			} else {
-				return this.sendReply("No rules found for " + targetId);
+				return this.sendReply("No rules found for " + format.name);
 			}
 		} else if (format.effectType === 'ValidatorRule' || format.effectType === 'Rule') {
 			if (format.desc) {
-				return this.sendReply(format.desc);
+				return this.sendReply("<b>" + format.name + "</b> - " format.desc);
 			} else {
 				return this.sendReply("No description found for this rule.");
 		} else {
