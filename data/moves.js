@@ -12553,7 +12553,7 @@ exports.BattleMovedex = {
 	"punishment": {
 		num: 386,
 		accuracy: 100,
-		basePower: 0,
+		basePower: 60,
 		basePowerCallback: function (pokemon, target) {
 			let power = 60 + 20 * target.positiveBoosts();
 			if (power > 200) power = 200;
