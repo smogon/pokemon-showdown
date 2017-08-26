@@ -87,7 +87,7 @@ In general, use modern features only if they're supported in Node 6 and reasonab
 
 - **let, const: ALWAYS** - Supported in Node 4+, good performance.
 
-- **for-of on Arrays: SOMETIMES** - Poor performance. Acceptable outside of inner loops. For inner loops, use `for (let i = 0; i < array.length; i++)`
+- **for-of on Arrays: ALWAYS** - Supported in Node 4+, good performance in Node 8+.
 
 - **Array#forEach: NEVER** - Worse performance than `for-of` on Arrays. See `for-of`.
 
