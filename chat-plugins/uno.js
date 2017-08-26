@@ -118,7 +118,7 @@ class UNOgame extends Rooms.RoomGame {
 		do {
 			this.topCard = this.drawCard(1)[0];
 			this.discards.unshift(this.topCard);
-		} while (this.topCard.color === 'Black');
+		} while (this.topCard.color === 'Black' || this.topCard.value === 'Reverse' || this.topCard.value === '+2' || this.topCard.value === 'Skip');
 
 		this.sendToRoom(`|raw|The top card is <span style="color: ${textColors[this.topCard.color]}">${this.topCard.name}</span>.`);
 
