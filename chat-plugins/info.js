@@ -1344,7 +1344,8 @@ exports.commands = {
 		}
 
 		const isOMSearch = (cmd === 'om' || cmd === 'othermetas');
-		const isBanlistSearch = (cmd in ['viewruleset', 'viewbanlist', 'ruleset', 'banlist']);
+		const banlistSearches = ['viewruleset', 'viewbanlist', 'ruleset', 'banlist'];
+		const isBanlistSearch = banlistSearches.includes(cmd);
 
 		let targetId = toId(target);
 		if (targetId === 'ladder') targetId = 'search';
@@ -1384,7 +1385,7 @@ exports.commands = {
 				let format = Dex.getFormat(targetId);
 				if (format.effectType === 'ValidatorRule' || format.effectType === 'Rule' || format.effectType === 'Format') {
 					if (format.ruleset && format.ruleset.length) html.push("<b>Ruleset</b> - " + Chat.escapeHTML(format.ruleset.join(", ")));
-					//if (format.removedRules && format.removedRules.length) html.push("<b>Removed rules</b> - " + Chat.escapeHTML(format.removedRules.join(", "))); // No current formats use this, but just in case...
+					// if (format.removedRules && format.removedRules.length) html.push("<b>Removed rules</b> - " + Chat.escapeHTML(format.removedRules.join(", "))); // No current formats use this, but just in case...
 					if (format.banlist && format.banlist.length) html.push("<b>Bans</b> - " + Chat.escapeHTML(format.banlist.join(", ")));
 					if (format.unbanlist && format.unbanlist.length) html.push("<b>Unbans</b> - " + Chat.escapeHTML(format.unbanlist.join(", ")));
 					if (html.length > (format.effectType !== 'Format' ? 1 : 0)) {
@@ -1435,11 +1436,12 @@ exports.commands = {
 	banlist: 'viewbanlist',
 	viewbanlist: function (target, room, user, connection, cmd) {
 		if (!target) {
-			return this.sendReply("Usage: " + cmd + " <format>");
+			this.parse('/help viewbanlist');
 		}
 
 		this.run('formathelp');
 	},
+	viewbanlisthelp: ["/viewbanlist [format or rule name] - Displays the banlist and rulesets associated with a format or rule"],
 
 	'!roomhelp': true,
 	roomhelp: function (target, room, user) {
