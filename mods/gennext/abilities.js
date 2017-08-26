@@ -8,6 +8,7 @@ exports.BattleAbilities = {
 				return this.chainModify(1.5);
 			}
 		},
+		shortDesc: "If Rain Dance is active, this Pokemon's Speed is multiplied by 1.5.",
 	},
 	"chlorophyll": {
 		inherit: true,
@@ -16,6 +17,7 @@ exports.BattleAbilities = {
 				return this.chainModify(1.5);
 			}
 		},
+		shortDesc: "If Sunny Day is active, this Pokemon's Speed is multiplied by 1.5.",
 	},
 	"sandrush": {
 		inherit: true,
@@ -24,6 +26,15 @@ exports.BattleAbilities = {
 				return this.chainModify(1.5);
 			}
 		},
+		shortDesc: "If Sandstorm is active, this Pokemon's Speed is multiplied by 1.5.",
+	},
+	"slushrush": {
+		onModifySpe: function (spe, pokemon) {
+			if (this.isWeather('hail')) {
+				return this.chainModify(1.5);
+			}
+		},
+		shortDesc: "If Hail is active, this Pokemon's Speed is multiplied by 1.5.",
 	},
 	"forecast": {
 		inherit: true,
@@ -38,6 +49,8 @@ exports.BattleAbilities = {
 				move.target = 'self';
 			}
 		},
+		desc: "If this Pokemon is a Castform, its type changes to the current weather condition's type, except Sandstorm. Weather moves last forever.",
+		shortDesc: "Castform's type changes to the current weather condition's type, except Sandstorm; weather moves last forever.",
 	},
 	"thickfat": {
 		inherit: true,
@@ -56,18 +69,19 @@ exports.BattleAbilities = {
 				return this.chainModify(0.5);
 			}
 		},
+		desc: "If a Pokemon uses a Fire- or Ice- or Fighting-type attack against this Pokemon, that Pokemon's attacking stat is halved when calculating the damage to this Pokemon. This Pokemon takes no damage from Hail.",
+		shortDesc: "Fire/Ice/Fighting-type moves against this Pokemon deal damage with a halved attacking stat; immunity to Hail.",
 	},
 	"marvelscale": {
 		inherit: true,
 		onImmunity: function (type, pokemon) {
 			if (type === 'hail') return false;
 		},
+		desc: "If this Pokemon has a major status condition, its Defense is multiplied by 1.5. This Pokemon takes no damage from Hail.",
+		shortDesc: "If this Pokemon is statused, its Defense is 1.5x; immunity to Hail.",
 	},
 	"snowcloak": {
 		inherit: true,
-		onImmunity: function (type, pokemon) {
-			if (type === 'hail') return false;
-		},
 		onSourceBasePower: function (basePower) {
 			if (this.isWeather('hail')) {
 				return basePower * 3 / 4;
@@ -75,12 +89,13 @@ exports.BattleAbilities = {
 			return basePower * 7 / 8;
 		},
 		onModifyAccuracy: function () {},
+		desc: "If Hail is active, attacks against this Pokemon do 25% less than normal. If Hail is not active, attacks against this Pokemon do 12.5% less than normal. This Pokemon takes no damage from Hail.",
+		shortDesc: "If Hail is active, attacks against this Pokemon do 25% less; immunity to Hail.",
 	},
 	"sandveil": {
 		inherit: true,
-		onImmunity: function (type, pokemon) {
-			if (type === 'sandstorm') return false;
-		},
+		desc: "If Sandstorm is active, attacks against this Pokemon do 25% less than normal. If Sandstorm is not active, attacks against this Pokemon do 12.5% less than normal. This Pokemon takes no damage from Sandstorm.",
+		shortDesc: "If Sandstorm is active, attacks against this Pokemon do 25% less; immunity to Sandstorm.",
 		onSourceBasePower: function (basePower) {
 			if (this.isWeather('sandstorm')) {
 				return basePower * 4 / 5;
@@ -96,12 +111,14 @@ exports.BattleAbilities = {
 			}
 			return basePower * 7 / 8;
 		},
+		
+		desc: "If Rain Dance is active, attacks against this Pokemon do 25% less than normal. This Pokemon cannot be burned. Gaining this Ability while burned cures it.",
+		shortDesc: "If Rain Dance is active, attacks against this Pokemon do 25% less; This Pokemon cannot be burned.",
 	},
 	"icebody": {
 		inherit: true,
-		onImmunity: function (type, pokemon) {
-			if (type === 'hail') return false;
-		},
+		desc: "This Pokemon restores 1/16 of its maximum HP, rounded down, at the end of each turn. This Pokemon takes no damage from Hail. There is a 30% chance a Pokemon making contact with this Pokemon will be frozen.",
+		shortDesc: "This Pokemon heals 1/16 of its max HP each turn; immunity to Hail; 30% chance a Pokemon making contact with this Pokemon will be frozen.",
 		onResidual: function (target, source, effect) {
 			this.heal(target.maxhp / 16);
 		},
@@ -119,6 +136,7 @@ exports.BattleAbilities = {
 		onImmunity: function (type, pokemon) {
 			if (type === 'hail') return false;
 		},
+		shortDesc: "30% chance a Pokemon making contact with this Pokemon will be burned; immunity to Hail.",
 	},
 	"static": {
 		inherit: true,
@@ -127,6 +145,7 @@ exports.BattleAbilities = {
 				source.trySetStatus('par', target);
 			}
 		},
+		shortDesc: "100% chance a Pokemon making contact with this Pokemon will be paralyzed.",
 	},
 	"cutecharm": {
 		inherit: true,
@@ -135,6 +154,8 @@ exports.BattleAbilities = {
 				source.addVolatile('Attract', target);
 			}
 		},
+		desc: "There is a 100% chance a Pokemon making contact with this Pokemon will become infatuated if it is of the opposite gender.",
+		shortDesc: "100% chance of infatuating Pokemon of the opposite gender if they make contact.",
 	},
 	"poisonpoint": {
 		inherit: true,
@@ -143,6 +164,7 @@ exports.BattleAbilities = {
 				source.trySetStatus('psn', target);
 			}
 		},
+		shortDesc: "100% chance a Pokemon making contact with this Pokemon will be poisoned.",
 	},
 	"flowergift": {
 		inherit: true,
@@ -179,6 +201,8 @@ exports.BattleAbilities = {
 				target.side.removeSideCondition('flowergift');
 			},
 		},
+		desc: "If this Pokemon is a Cherrim and Sunny Day is active, it changes to Sunshine Form and the Special Defense of it is multiplied by 1.5. The next Pokemon that switches in gets its Special Defense also multiplied by 1.5.",
+		shortDesc: "If user is Cherrim and Sunny Day is active, its Sp. Def is multiplied by 1.5; the next switch-in also gets its SpD multiplied by 1.5.",
 	},
 	"slowstart": {
 		inherit: true,
@@ -205,8 +229,10 @@ exports.BattleAbilities = {
 				this.add('-end', target, 'Slow Start');
 			},
 		},
+		shortDesc: "On switch-in, this Pokemon's Attack and Speed are halved for 3 turns.",
 	},
 	"compoundeyes": {
+		inherit: true,
 		desc: "The accuracy of this Pokemon's moves receives a 60% increase; for example, a 50% accurate move becomes 80% accurate.",
 		shortDesc: "This Pokemon's moves have their Accuracy boosted to 1.6x.",
 		onSourceModifyAccuracy: function (accuracy) {
@@ -214,12 +240,9 @@ exports.BattleAbilities = {
 			this.debug('compoundeyes - enhancing accuracy');
 			return accuracy * 1.6;
 		},
-		id: "compoundeyes",
-		name: "Compound Eyes",
-		rating: 3.5,
-		num: 14,
 	},
 	"keeneye": {
+		inherit: true,
 		desc: "The accuracy of this Pokemon's moves receives a 60% increase; for example, a 50% accurate move becomes 80% accurate.",
 		shortDesc: "This Pokemon's moves have their Accuracy boosted to 1.6x.",
 		onModifyMove: function (move) {
@@ -227,13 +250,10 @@ exports.BattleAbilities = {
 			this.debug('keeneye - enhancing accuracy');
 			move.accuracy *= 1.6;
 		},
-		id: "keeneye",
-		name: "Keen Eye",
-		rating: 3.5,
-		num: 51,
 	},
 	"solidrock": {
 		inherit: true,
+		shortDesc: "This Pokemon receives 1/2 damage from supereffective attacks.",
 		onSourceModifyDamage: function (damage, attacker, defender, move) {
 			if (move.typeMod > 0) {
 				this.add('-message', "The attack was weakened by Solid Rock!");
@@ -243,6 +263,7 @@ exports.BattleAbilities = {
 	},
 	"filter": {
 		inherit: true,
+		shortDesc: "This Pokemon receives 1/2 damage from supereffective attacks.",
 		onSourceModifyDamage: function (damage, attacker, defender, move) {
 			if (move.typeMod > 0) {
 				this.add('-message', "The attack was weakened by Filter!");
@@ -252,6 +273,8 @@ exports.BattleAbilities = {
 	},
 	"heatproof": {
 		inherit: true,
+		desc: "The user is completely immune to Fire-type moves and burn damage.",
+		shortDesc: "The user is immune to Fire type attacks and burn damage.",
 		onImmunity: function (type, pokemon) {
 			if (type === 'Fire' || type === 'brn') return false;
 		},
@@ -264,6 +287,8 @@ exports.BattleAbilities = {
 				return basePower * 12 / 10;
 			}
 		},
+		desc: "This Pokemon's attacks with recoil or crash damage or if the user is holding a Life Orb have their power multiplied by 1.2. Does not affect Struggle.",
+		shortDesc: "This Pokemon's attacks with recoil or crash damage or the user's item is Life Orb have 1.2x power; not Struggle.",
 	},
 	"clearbody": {
 		inherit: true,
@@ -275,6 +300,7 @@ exports.BattleAbilities = {
 				}
 			}
 		},
+		shortDesc: "Prevents any negative stat changes on this Pokemon.",
 	},
 	"whitesmoke": {
 		inherit: true,
@@ -286,12 +312,15 @@ exports.BattleAbilities = {
 				}
 			}
 		},
+		shortDesc: "Prevents any negative stat changes on this Pokemon.",
 	},
 	"rockhead": {
 		inherit: true,
 		onDamage: function (damage, target, source, effect) {
 			if (effect && effect.id in {lifeorb: 1, recoil: 1}) return false;
 		},
+		desc: "This Pokemon does not take recoil damage besides Struggle, and crash damage.",
+		shortDesc: "This Pokemon does not take recoil damage besides Struggle/crash damage.",
 	},
 	"download": {
 		inherit: true,
@@ -313,6 +342,8 @@ exports.BattleAbilities = {
 				this.boost({atk:1});
 			}
 		},
+		desc: "On switch-in, this Pokemon's Attack or Special Attack is raised by 1 stage based on the weaker combined defensive stat of all opposing Pokemon. Attack is raised if their Defense is lower, and Special Attack is raised if their Special Defense is the same or lower. If the user is a Genesect, this will not have effect unless it holds a Drive.",
+		shortDesc: "On switch-in, Attack or Sp. Atk is raised 1 stage based on the foes' weaker Defense; Genesect must hold a plate for the effect to work.",
 	},
 	"victorystar": {
 		inherit: true,
@@ -321,6 +352,7 @@ exports.BattleAbilities = {
 				move.accuracy *= 1.5;
 			}
 		},
+		shortDesc: "This Pokemon's moves' accuracy is multiplied by 1.5.",
 	},
 	"shellarmor": {
 		inherit: true,
