@@ -2130,7 +2130,7 @@ exports.commands = {
 			return this.errorReply(`User '${this.targetUsername}' not found.`);
 		}
 		if (!this.can('forcerename', targetUser)) return false;
-		if (targetUser.namelocked) return this.errorReply(`User '${target}' is already namelocked.`);
+		if (targetUser.namelocked) return this.errorReply(`User '${targetUser.name}' is already namelocked.`);
 
 		let reasonText = reason ? ` (${reason})` : `.`;
 		let lockMessage = `${targetUser.name} was namelocked by ${user.name}${reasonText}`;
