@@ -1332,6 +1332,7 @@ exports.commands = {
 	formats: 'formathelp',
 	tiershelp: 'formathelp',
 	formatshelp: 'formathelp',
+	viewbanlist: 'formathelp',
 	formathelp: function (target, room, user, connection, cmd) {
 		if (!this.runBroadcast()) return;
 		if (!target) {
@@ -1344,8 +1345,6 @@ exports.commands = {
 		}
 
 		const isOMSearch = (cmd === 'om' || cmd === 'othermetas');
-		const banlistSearches = ['viewruleset', 'viewbanlist', 'ruleset', 'banlist'];
-		const isBanlistSearch = banlistSearches.includes(cmd);
 
 		let targetId = toId(target);
 		if (targetId === 'ladder') targetId = 'search';
@@ -1353,7 +1352,7 @@ exports.commands = {
 
 		let formatList;
 		let format = Dex.getFormat(targetId);
-		if (format.effectType === 'Format') formatList = [targetId];
+		if (format.effectType === 'Format' || format.effectType === 'ValidatorRule' || format.effectType === 'Rule') formatList = [targetId];
 		if (!formatList) {
 			formatList = Object.keys(Dex.formats);
 		}
@@ -1381,21 +1380,24 @@ exports.commands = {
 		if (!totalMatches) return this.errorReply("No " + (target ? "matched " : "") + "formats found.");
 		if (totalMatches === 1) {
 			let html = [];
-			if (isBanlistSearch) {
-				let format = Dex.getFormat(targetId);
-				if (format.effectType === 'ValidatorRule' || format.effectType === 'Rule' || format.effectType === 'Format') {
-					if (format.ruleset && format.ruleset.length) html.push("<b>Ruleset</b> - " + Chat.escapeHTML(format.ruleset.join(", ")));
-					// if (format.removedRules && format.removedRules.length) html.push("<b>Removed rules</b> - " + Chat.escapeHTML(format.removedRules.join(", "))); // No current formats use this, but just in case...
-					if (format.banlist && format.banlist.length) html.push("<b>Bans</b> - " + Chat.escapeHTML(format.banlist.join(", ")));
-					if (format.unbanlist && format.unbanlist.length) html.push("<b>Unbans</b> - " + Chat.escapeHTML(format.unbanlist.join(", ")));
-					if (html.length > (format.effectType !== 'Format' ? 1 : 0)) {
-						html.unshift("<b>Ruleset for " + format.name + ":</b><br />" + html.join("<br />"));
-					} else {
-						html.push("No ruleset found for " + format.name);
-					}
+			let format = Dex.getFormat(targetId);
+			if (format.effectType === 'ValidatorRule' || format.effectType === 'Rule' || format.effectType === 'Format') {
+				if (format.ruleset && format.ruleset.length) html.push("<b>Ruleset</b> - " + Chat.escapeHTML(format.ruleset.join(", ")));
+				// if (format.removedRules && format.removedRules.length) html.push("<b>Removed rules</b> - " + Chat.escapeHTML(format.removedRules.join(", "))); // No current formats use this, but just in case...
+				if (format.banlist && format.banlist.length) html.push("<b>Bans</b> - " + Chat.escapeHTML(format.banlist.join(", ")));
+				if (format.unbanlist && format.unbanlist.length) html.push("<b>Unbans</b> - " + Chat.escapeHTML(format.unbanlist.join(", ")));
+				if (html.length > 0) {
+					html.unshift(
+						"<b>Ruleset for " + format.name + ":</b><br />" +
+						"<a href=\"#rules\" class=\"fa fa-list-ul\" data-toggle=\"collapse\">Ruleset/Banilst</a><br />" +
+						"<div id=\"rules\" class=\"collapse\">"
+					);
+					html.push("</div>");
+				} else {
+					html.push("No ruleset found for " + format.name);
 				}
 			}
-			let format = Dex.getFormat(Object.values(sections)[0].formats[0]);
+			format = Dex.getFormat(Object.values(sections)[0].formats[0]);
 			let formatType = (format.gameType || "singles");
 			formatType = formatType.charAt(0).toUpperCase() + formatType.slice(1).toLowerCase();
 			if (!format.desc) {
@@ -1429,19 +1431,6 @@ exports.commands = {
 		buf.push(`</table>`);
 		return this.sendReply("|raw|" + buf.join("") + "");
 	},
-
-	'!viewbanlist': true,
-	viewruleset: 'viewbanlist',
-	ruleset: 'viewbanlist',
-	banlist: 'viewbanlist',
-	viewbanlist: function (target, room, user, connection, cmd) {
-		if (!target) {
-			this.parse('/help viewbanlist');
-		}
-
-		this.run('formathelp');
-	},
-	viewbanlisthelp: ["/viewbanlist [format or rule name] - Displays the banlist and rulesets associated with a format or rule"],
 
 	'!roomhelp': true,
 	roomhelp: function (target, room, user) {
