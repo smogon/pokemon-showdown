@@ -520,6 +520,11 @@ class RandomTeams extends Dex.ModdedDex {
 		}
 
 		let movePool = (template.randomBattleMoves ? template.randomBattleMoves.slice() : Object.keys(template.learnset));
+		if (set && set.moves && set.moves.length) {
+			for (let i = 0; i < set.moves.length; i++) {
+				if (movePool.indexOf(set.moves[i]) >= 0) movePool.splice(movePool.indexOf(set.moves[i]));
+			}
+		}
 		let moves = (set && set.moves) ? set.moves : [];
 		let ability = '';
 		let item = '';
@@ -592,7 +597,7 @@ class RandomTeams extends Dex.ModdedDex {
 				} else {
 					hasMove[moveid] = true;
 				}
-				if (!moves.includes(moveid)) moves.push(moveid);
+				moves.push(moveid);
 			}
 
 			counter = this.queryMoves(moves, hasType, hasAbility, movePool);
@@ -1672,7 +1677,7 @@ class RandomTeams extends Dex.ModdedDex {
 			// Team has Mega/weather/hazards
 			let detailsChanged;
 			let item = this.getItem(set.item);
-			if (item.megaStone) teamDetails['megaStone']= 1;
+			if (item.megaStone) teamDetails['megaStone'] = 1;
 			if (item.zMove) teamDetails['zMove'] = 1;
 			if (set.ability === 'Snow Warning') {
 				teamDetails['hail'] = 1;
@@ -1690,7 +1695,7 @@ class RandomTeams extends Dex.ModdedDex {
 			if (set.moves.includes('stealthrock')) teamDetails['stealthRock'] = 1;
 			if (set.moves.includes('toxicspikes')) teamDetails['toxicSpikes'] = 1;
 			if (set.moves.includes('defog') || set.moves.includes('rapidspin')) teamDetails['hazardClear'] = 1;
-			
+
 			if (!!detailsChanged && pokemon.lenghth > 1) {
 				for (let i = 0; i < pokemon.length - 2; i++) {
 					pokemon[i] = this[this.format.gameType === 'singles' ? 'randomSet' : 'randomDoublesSet'](template, pokemon.length, teamDetails, pokemon[i]);
@@ -1723,6 +1728,11 @@ class RandomTeams extends Dex.ModdedDex {
 
 		let movePool = (template.randomDoubleBattleMoves || template.randomBattleMoves);
 		movePool = movePool ? movePool.slice() : Object.keys(template.learnset);
+		if (set && set.moves && set.moves.length) {
+			for (let i = 0; i < set.moves.length; i++) {
+				if (movePool.indexOf(set.moves[i]) >= 0) movePool.splice(movePool.indexOf(set.moves[i]));
+			}
+		}
 
 		let moves = (set && set.moves) ? set.moves : [];
 		let ability = '';
@@ -1797,7 +1807,7 @@ class RandomTeams extends Dex.ModdedDex {
 				} else {
 					hasMove[moveid] = true;
 				}
-				if (!moves.includes(moveid)) moves.push(moveid);
+				moves.push(moveid);
 			}
 
 			counter = this.queryMoves(moves, hasType, hasAbility);
