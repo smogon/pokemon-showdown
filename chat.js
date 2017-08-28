@@ -164,6 +164,25 @@ Chat.baseCommands = undefined;
 Chat.commands = undefined;
 
 /*********************************************************
+ * Load chat filters
+ *********************************************************/
+Chat.filters = [];
+Chat.filter = function (message, user, room, connection, targetUser) {
+	// Chat filters can choose to:
+	// 1. return false OR null - to not send a user's message
+	// 2. return an altered string - to alter a user's message
+	// 3. return undefined to send the original message through
+	const originalMessage = message;
+	for (const filter of Chat.filters) {
+		const output = filter.call(this, message, user, room, connection, targetUser, originalMessage);
+		if (output !== undefined) message = output;
+		if (!message) return message;
+	}
+
+	return message;
+};
+
+/*********************************************************
  * Parser
  *********************************************************/
 
@@ -721,8 +740,8 @@ class CommandContext {
 				user.lastMessageTime = Date.now();
 			}
 
-			if (Config.chatfilter) {
-				return Config.chatfilter.call(this, message, user, room, connection, targetUser);
+			if (Chat.filters.length) {
+				return Chat.filter.call(this, message, user, room, connection, targetUser);
 			}
 			return message;
 		}
@@ -894,7 +913,7 @@ Chat.CommandContext = CommandContext;
  * @param {Connection} connection - the connection the user sent the message from
  */
 Chat.parse = function (message, room, user, connection) {
-	Chat.loadCommands();
+	Chat.loadPlugins();
 	let context = new CommandContext({message, room, user, connection});
 
 	return context.parse();
@@ -920,7 +939,7 @@ Chat.uncacheTree = function (root) {
 	} while (uncache.length > 0);
 };
 
-Chat.loadCommands = function () {
+Chat.loadPlugins = function () {
 	if (Chat.commands) return;
 
 	FS('package.json').readTextIfExists().then(data => {
@@ -929,15 +948,34 @@ Chat.loadCommands = function () {
 
 	let baseCommands = Chat.baseCommands = require('./chat-commands').commands;
 	let commands = Chat.commands = Object.assign({}, baseCommands);
+	let chatfilters = Chat.filters;
 
-	// Install plug-in commands
+	const baseFilter = Config.chatfilter;
+	if (baseFilter && typeof baseFilter === 'function') chatfilters.push(baseFilter);
+
+	// Install plug-in commands and chat filters
 
 	// info always goes first so other plugins can shadow it
 	Object.assign(commands, require('./chat-plugins/info').commands);
 
 	for (let file of FS('chat-plugins/').readdirSync()) {
 		if (file.substr(-3) !== '.js' || file === 'info.js') continue;
-		Object.assign(commands, require('./chat-plugins/' + file).commands);
+		const plugin = require(`./chat-plugins/${file}`);
+
+		Object.assign(commands, plugin.commands);
+
+		const filter = plugin.chatfilter;
+		if (filter) {
+			if (typeof filter !== 'function') {
+				require('./crashlogger')(new TypeError(`This chatfilter is not a function`), `Loading a chatfilter`, {
+					file: `File location: ../chat-plugins/${file}`,
+					filter: filter,
+					type: typeof filter,
+				});
+			} else {
+				chatfilters.push(filter);
+			}
+		}
 	}
 };
 
