@@ -1298,7 +1298,7 @@ let commands = {
 	},
 };
 
-Chat.loadCommands();
+Chat.loadPlugins();
 Chat.commands.tour = 'tournament';
 Chat.commands.tours = 'tournament';
 Chat.commands.tournaments = 'tournament';
