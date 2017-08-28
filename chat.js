@@ -78,6 +78,8 @@ const hyperlinkRegex = new RegExp(`(.+)&lt;(.+)&gt;`, 'i');
 // http://www.unicode.org/Public/emoji/5.0/emoji-data.txt
 const emojiRegex = /[\u231A\u231B\u23E9-\u23EC\u23F0\u23F3\u25FD\u25FE\u2614\u2615\u2648-\u2653\u267F\u2693\u26A1\u26AA\u26AB\u26BD\u26BE\u26C4\u26C5\u26CE\u26D4\u26EA\u26F2\u26F3\u26F5\u26FA\u26FD\u2705\u270A\u270B\u2728\u274C\u274E\u2753-\u2755\u2757\u2795-\u2797\u27B0\u27BF\u2B1B\u2B1C\u2B50\u2B55\uFE0F\u{1F004}\u{1F0CF}\u{1F18E}\u{1F191}-\u{1F19A}\u{1F1E6}-\u{1F1FF}\u{1F201}\u{1F21A}\u{1F22F}\u{1F232}-\u{1F236}\u{1F238}-\u{1F23A}\u{1F250}\u{1F251}\u{1F300}-\u{1F320}\u{1F32D}-\u{1F335}\u{1F337}-\u{1F37C}\u{1F37E}-\u{1F393}\u{1F3A0}-\u{1F3CA}\u{1F3CF}-\u{1F3D3}\u{1F3E0}-\u{1F3F0}\u{1F3F4}\u{1F3F8}-\u{1F43E}\u{1F440}\u{1F442}-\u{1F4FC}\u{1F4FF}-\u{1F53D}\u{1F54B}-\u{1F54E}\u{1F550}-\u{1F567}\u{1F57A}\u{1F595}\u{1F596}\u{1F5A4}\u{1F5FB}-\u{1F64F}\u{1F680}-\u{1F6C5}\u{1F6CC}\u{1F6D0}-\u{1F6D2}\u{1F6EB}\u{1F6EC}\u{1F6F4}-\u{1F6F8}\u{1F910}-\u{1F93A}\u{1F93C}-\u{1F93E}\u{1F940}-\u{1F945}\u{1F947}-\u{1F94C}\u{1F950}-\u{1F96B}\u{1F980}-\u{1F997}\u{1F9C0}\u{1F9D0}-\u{1F9E6}]/u;
 
+/** @typedef {{token: string, endToken?: string, resolver: (str: string) => string}} Resolver */
+/** @type {Resolver[]} */
 const formattingResolvers = [
 	{token: "**", resolver: str => `<b>${str}</b>`},
 	{token: "__", resolver: str => `<i>${str}</i>`},
@@ -122,10 +124,16 @@ class PatternTester {
 	// However, ES2016 RegExp subclassing is a can of worms, and it wouldn't allow us
 	// to tailor the test method for fast command parsing.
 	constructor() {
+		/** @type {string[]} */
 		this.elements = [];
+		/** @type {Set<string>} */
 		this.fastElements = new Set();
+		/** @type {?RegExp} */
 		this.regexp = null;
 	}
+	/**
+	 * @param {string} elem
+	 */
 	fastNormalize(elem) {
 		return elem.slice(0, -1);
 	}
@@ -135,6 +143,9 @@ class PatternTester {
 			this.regexp = new RegExp('^(' + slowElements.map(elem => '(?:' + elem + ')').join('|') + ')', 'i');
 		}
 	}
+	/**
+	 * @param {string[]} elems
+	 */
 	register(...elems) {
 		for (let elem of elems) {
 			this.elements.push(elem);
@@ -144,6 +155,9 @@ class PatternTester {
 		}
 		this.update();
 	}
+	/**
+	 * @param {string} text
+	 */
 	test(text) {
 		const spaceIndex = text.indexOf(' ');
 		if (this.fastElements.has(spaceIndex >= 0 ? text.slice(0, spaceIndex) : text)) {
@@ -187,6 +201,9 @@ Chat.filter = function (message, user, room, connection, targetUser) {
  *********************************************************/
 
 class CommandContext {
+	/**
+	 * @param {{message: string, room: Room, user: User, connection: Connection, pmTarget?: User, cmd: string, cmdToken: string, target: string, fullCmd: string}} options
+	 */
 	constructor(options) {
 		this.message = options.message || ``;
 		this.recursionDepth = 0;
@@ -209,6 +226,10 @@ class CommandContext {
 		this.inputUsername = "";
 	}
 
+	/**
+	 * @param {any} [message]
+	 * @return {any}
+	 */
 	parse(message) {
 		if (message) {
 			// spawn subcontext
@@ -278,7 +299,12 @@ class CommandContext {
 
 		return message;
 	}
-	splitCommand(message = this.message, recursing) {
+	/**
+	 * @param {string} message
+	 * @param {boolean} recursing
+	 * @return string
+	 */
+	splitCommand(message = this.message, recursing = false) {
 		this.cmd = '';
 		this.cmdToken = '';
 		this.target = '';
