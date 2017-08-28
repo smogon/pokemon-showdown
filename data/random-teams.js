@@ -495,7 +495,7 @@ class RandomTeams extends Dex.ModdedDex {
 
 		return counter;
 	}
-	randomSet(template, slot, teamDetails) {
+	randomSet(template, slot, teamDetails, set) {
 		if (slot === undefined) slot = 1;
 		let baseTemplate = (template = this.getTemplate(template));
 		let species = template.species;
@@ -520,7 +520,7 @@ class RandomTeams extends Dex.ModdedDex {
 		}
 
 		let movePool = (template.randomBattleMoves ? template.randomBattleMoves.slice() : Object.keys(template.learnset));
-		let moves = [];
+		let moves = (set && set.moves) ? set.moves : [];
 		let ability = '';
 		let item = '';
 		let evs = {
@@ -592,7 +592,7 @@ class RandomTeams extends Dex.ModdedDex {
 				} else {
 					hasMove[moveid] = true;
 				}
-				moves.push(moveid);
+				if (!moves.includes(moveid)) moves.push(moveid);
 			}
 
 			counter = this.queryMoves(moves, hasType, hasAbility, movePool);
@@ -1210,8 +1210,17 @@ class RandomTeams extends Dex.ModdedDex {
 			if (abilities.includes('Prankster') && counter.Status > 1) {
 				ability = 'Prankster';
 			}
-			if (abilities.includes('Swift Swim') && hasMove['raindance']) {
+			if (abilities.includes('Swift Swim') && (hasMove['raindance'] || teamDetails['rain'])) {
 				ability = 'Swift Swim';
+			}
+			if (abilities.includes('Sand Rush') && teamDetails['sand']) {
+				ability = 'Sand Rush';
+			}
+			if (abilities.includes('Slush Rush') && teamDetails['hail']) {
+				ability = 'Slush Rush';
+			}
+			if (abilities.includes('Grassy Pelt') && teamDetails['grassyTerrain']) {
+				ability = 'Grassy Pelt';
 			}
 			if (abilities.includes('Triage') && hasMove['drainingkiss']) {
 				ability = 'Triage';
@@ -1661,19 +1670,36 @@ class RandomTeams extends Dex.ModdedDex {
 			}
 
 			// Team has Mega/weather/hazards
+			let detailsChanged;
 			let item = this.getItem(set.item);
-			if (item.megaStone) teamDetails['megaStone'] = 1;
+			if (item.megaStone) teamDetails['megaStone']= 1;
 			if (item.zMove) teamDetails['zMove'] = 1;
-			if (set.ability === 'Snow Warning') teamDetails['hail'] = 1;
-			if (set.ability === 'Drizzle' || set.moves.includes('raindance')) teamDetails['rain'] = 1;
-			if (set.ability === 'Sand Stream') teamDetails['sand'] = 1;
+			if (set.ability === 'Snow Warning') {
+				teamDetails['hail'] = 1;
+				detailsChanged = 'hail';
+			} else if (set.ability === 'Drizzle' || set.moves.includes('raindance')) {
+				teamDetails['rain'] = 1;
+				detailsChanged = 'rain';
+			} else if (set.ability === 'Sand Stream') {
+				teamDetails['sand'] = 1;
+				detailsChanged = 'sand';
+			} else if (set.ability === 'Grassy Surge') {
+				teamDetails['grassyTerrain'] = 1;
+				detailsChanged = 'grassyTerrain';
+			}
 			if (set.moves.includes('stealthrock')) teamDetails['stealthRock'] = 1;
 			if (set.moves.includes('toxicspikes')) teamDetails['toxicSpikes'] = 1;
 			if (set.moves.includes('defog') || set.moves.includes('rapidspin')) teamDetails['hazardClear'] = 1;
+			
+			if (!!detailsChanged && pokemon.lenghth > 1) {
+				for (let i = 0; i < pokemon.length - 2; i++) {
+					pokemon[i] = this[this.format.gameType === 'singles' ? 'randomSet' : 'randomDoublesSet'](template, pokemon.length, teamDetails, pokemon[i]);
+				}
+			}
 		}
 		return pokemon;
 	}
-	randomDoublesSet(template, slot, teamDetails) {
+	randomDoublesSet(template, slot, teamDetails, set) {
 		let baseTemplate = (template = this.getTemplate(template));
 		let species = template.species;
 
@@ -1698,7 +1724,7 @@ class RandomTeams extends Dex.ModdedDex {
 		let movePool = (template.randomDoubleBattleMoves || template.randomBattleMoves);
 		movePool = movePool ? movePool.slice() : Object.keys(template.learnset);
 
-		let moves = [];
+		let moves = (set && set.moves) ? set.moves : [];
 		let ability = '';
 		let item = '';
 		let evs = {
@@ -1771,7 +1797,7 @@ class RandomTeams extends Dex.ModdedDex {
 				} else {
 					hasMove[moveid] = true;
 				}
-				moves.push(moveid);
+				if (!moves.includes(moveid)) moves.push(moveid);
 			}
 
 			counter = this.queryMoves(moves, hasType, hasAbility);
@@ -2254,8 +2280,17 @@ class RandomTeams extends Dex.ModdedDex {
 			if (abilities.includes('Liquid Voice') && hasMove['hypervoice']) {
 				ability = 'Liquid Voice';
 			}
-			if (abilities.includes('Swift Swim') && hasMove['raindance']) {
+			if (abilities.includes('Swift Swim') && (hasMove['raindance'] || teamDetails['rain'])) {
 				ability = 'Swift Swim';
+			}
+			if (abilities.includes('Sand Rush') && teamDetails['sand']) {
+				ability = 'Sand Rush';
+			}
+			if (abilities.includes('Slush Rush') && teamDetails['hail']) {
+				ability = 'Slush Rush';
+			}
+			if (abilities.includes('Grass Pelt') && teamDetails['grassyTerrain']) {
+				ability = 'Grass Pelt';
 			}
 			if (abilities.includes('Water Bubble') && counter['Water']) {
 				ability = 'Water Bubble';
