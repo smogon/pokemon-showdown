@@ -1,6 +1,15 @@
 'use strict';
 
 exports.BattleItems = {
+	brightpowder: {
+		inherit: true,
+		onModifyAccuracy: function (accuracy) {
+			if (typeof accuracy !== 'number') return;
+			this.debug('brightpowder - decreasing accuracy');
+			return accuracy - 20;
+		},
+		desc: "The accuracy of attacks against the holder is reduced slightly.",
+	},
 	berryjuice: {
 		inherit: true,
 		isUnreleased: false,
