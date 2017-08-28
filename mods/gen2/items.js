@@ -8,7 +8,7 @@ exports.BattleItems = {
 			this.debug('brightpowder - decreasing accuracy');
 			return accuracy - 20;
 		},
-		desc: "The accuracy of attacks against the holder is reduced slightly.",
+		desc: "The accuracy value of attacks against the holder is reduced by 20.",
 	},
 	berryjuice: {
 		inherit: true,
