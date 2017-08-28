@@ -117,6 +117,135 @@ exports.BattleScripts = {
 		this.singleEvent('AfterMove', move, null, pokemon, target, move);
 		if (!move.selfSwitch && target.hp > 0) this.runEvent('AfterMoveSelf', pokemon, target, move);
 	},
+	tryMoveHit: function (target, pokemon, move, spreadHit) {
+		let boostTable = [1, 4 / 3, 5 / 3, 2, 7 / 3, 8 / 3, 3];
+		let doSelfDestruct = true;
+		let damage = 0;
+
+		// First, check if the Pokémon is immune to this move.
+		if (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type] && !target.runImmunity(move.type, true)) {
+			if (move.selfdestruct) {
+				this.faint(pokemon, pokemon, move);
+			}
+			return false;
+		}
+
+		// Now, let's calculate the accuracy.
+		let accuracy = move.accuracy;
+
+		// Partial trapping moves: true accuracy while it lasts
+		if (move.volatileStatus === 'partiallytrapped' && pokemon.volatiles['partialtrappinglock'] && target === pokemon.volatiles['partialtrappinglock'].locked) {
+			accuracy = true;
+		}
+
+		// OHKO moves only have a chance to hit if the user is at least as fast as the target
+		if (move.ohko) {
+			if (target.speed > pokemon.speed) {
+				this.add('-immune', target, '[ohko]');
+				return false;
+			}
+		}
+
+		// Calculate true accuracy for gen 2, which uses 0-255.
+		if (accuracy !== true) {
+			accuracy = Math.floor(accuracy * 255 / 100);
+			// Check also for accuracy modifiers.
+			if (!move.ignoreAccuracy) {
+				if (pokemon.boosts.accuracy > 0) {
+					accuracy *= boostTable[pokemon.boosts.accuracy];
+				} else {
+					accuracy = Math.floor(accuracy / boostTable[-pokemon.boosts.accuracy]);
+				}
+			}
+			if (!move.ignoreEvasion) {
+				if (target.boosts.evasion > 0 && !move.ignorePositiveEvasion) {
+					accuracy = Math.floor(accuracy / boostTable[target.boosts.evasion]);
+				} else if (target.boosts.evasion < 0) {
+					accuracy *= boostTable[-target.boosts.evasion];
+				}
+			}
+			accuracy = Math.min(accuracy, 255);
+		}
+		accuracy = this.runEvent('Accuracy', target, pokemon, move, accuracy);
+		
+		
+		if (accuracy !== true || accuracy !== 255 && this.random(255) >= accuracy) {
+			this.attrLastMove('[miss]');
+			this.add('-miss', pokemon);
+			damage = false;
+		}
+
+		// If damage is 0 and not false it means it didn't miss, let's calc.
+		if (damage !== false) {
+			pokemon.lastDamage = 0;
+			if (move.multihit) {
+				let hits = move.multihit;
+				if (hits.length) {
+					// Yes, it's hardcoded... meh
+					if (hits[0] === 2 && hits[1] === 5) {
+						hits = [2, 2, 3, 3, 4, 5][this.random(6)];
+					} else {
+						hits = this.random(hits[0], hits[1] + 1);
+					}
+				}
+				hits = Math.floor(hits);
+				// In gen 1, all the hits have the same damage for multihits move
+				let moveDamage = 0;
+				let firstDamage;
+				let i;
+				for (i = 0; i < hits && target.hp && pokemon.hp; i++) {
+					if (i === 0) {
+						// First hit, we calculate
+						moveDamage = this.moveHit(target, pokemon, move);
+						firstDamage = moveDamage;
+					} else {
+						// We get the previous damage to make it fix damage
+						move.damage = firstDamage;
+						moveDamage = this.moveHit(target, pokemon, move);
+					}
+					if (moveDamage === false) break;
+					damage = (moveDamage || 0);
+					if (target.subFainted) {
+						i++;
+						break;
+					}
+				}
+				move.damage = null;
+				if (i === 0) return true;
+				this.add('-hitcount', target, i);
+			} else {
+				damage = this.moveHit(target, pokemon, move);
+			}
+		}
+
+		if (move.category !== 'Status') {
+			// FIXME: The stored damage should be calculated ignoring Substitute.
+			// https://github.com/Zarel/Pokemon-Showdown/issues/2598
+			target.gotAttacked(move, damage, pokemon);
+		}
+
+		// Checking if substitute fainted
+		if (target.subFainted) doSelfDestruct = false;
+		if (move.selfdestruct && doSelfDestruct) {
+			this.faint(pokemon, pokemon, move);
+		}
+
+		// The move missed.
+		if (!damage && damage !== 0) {
+			// Delete the partial trap lock if necessary.
+			delete pokemon.volatiles['partialtrappinglock'];
+			return false;
+		}
+
+		if (move.ohko) this.add('-ohko');
+
+		if (!move.negateSecondary) {
+			this.singleEvent('AfterMoveSecondary', move, null, target, pokemon, move);
+			this.runEvent('AfterMoveSecondary', target, pokemon, move);
+		}
+
+		return damage;
+	},
 	moveHit: function (target, pokemon, move, moveData, isSecondary, isSelf) {
 		let damage;
 		move = this.getMoveCopy(move);
