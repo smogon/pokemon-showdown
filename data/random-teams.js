@@ -495,7 +495,7 @@ class RandomTeams extends Dex.ModdedDex {
 
 		return counter;
 	}
-	randomSet(template, slot, teamDetails, set) {
+	randomSet(template, slot, teamDetails) {
 		if (slot === undefined) slot = 1;
 		let baseTemplate = (template = this.getTemplate(template));
 		let species = template.species;
@@ -520,12 +520,7 @@ class RandomTeams extends Dex.ModdedDex {
 		}
 
 		let movePool = (template.randomBattleMoves ? template.randomBattleMoves.slice() : Object.keys(template.learnset));
-		if (set && set.moves && set.moves.length) {
-			for (let i = 0; i < set.moves.length; i++) {
-				if (movePool.indexOf(set.moves[i]) >= 0) movePool.splice(movePool.indexOf(set.moves[i]));
-			}
-		}
-		let moves = (set && set.moves) ? set.moves : [];
+		let moves = [];
 		let ability = '';
 		let item = '';
 		let evs = {
@@ -1239,14 +1234,6 @@ class RandomTeams extends Dex.ModdedDex {
 			if (template.id === 'ambipom' && !counter['technician']) {
 				// If it doesn't qualify for Technician, Skill Link is useless on it
 				ability = 'Pickup';
-			} else if (template.id === 'aurorus' && ability === 'Snow Warning' && hasMove['hypervoice']) {
-				for (let i = 0; i < moves.length; i++) {
-					if (moves[i] === 'hypervoice') {
-						moves[i] = 'blizzard';
-						counter['Normal'] = 0;
-						break;
-					}
-				}
 			} else if (template.baseSpecies === 'Basculin') {
 				ability = 'Adaptability';
 			} else if (template.id === 'lilligant' && hasMove['petaldance']) {
@@ -1554,8 +1541,9 @@ class RandomTeams extends Dex.ModdedDex {
 		let uberCount = 0;
 		let puCount = 0;
 		let teamDetails = {};
+		let team = [];
 
-		while (pokemonPool.length && pokemon.length < 6) {
+		while (pokemonPool.length && team.length < 6) {
 			let template = this.getTemplate(this.sampleNoReplace(pokemonPool));
 			if (!template.exists) continue;
 
@@ -1627,28 +1615,39 @@ class RandomTeams extends Dex.ModdedDex {
 				if (skip) continue;
 			}
 
-			let set = this[this.format.gameType === 'singles' ? 'randomSet' : 'randomDoublesSet'](template, pokemon.length, teamDetails);
-
-			// Illusion shouldn't be the last Pokemon of the team
-			if (set.ability === 'Illusion' && pokemon.length > 4) continue;
-
-			// Pokemon shouldn't have Physical and Special setup on the same set
-			let incompatibleMoves = ['bellydrum', 'swordsdance', 'calmmind', 'nastyplot'];
-			let intersectMoves = set.moves.filter(move => incompatibleMoves.includes(move));
-			if (intersectMoves.length > 1) continue;
+			let fieldEffectSetters = {
+				kyogre: 'rain',
+				pelipper: 'rain',
+				// politoed: 'rain', // Politoed isn't always drizzle
+				// charizard: 'sun', // Charizard isn't always
+				groudon: 'sun',
+				ninetales: 'sun',
+				torkoal: 'sun',
+				abomasnow: 'hail',
+				aurorus: 'hail',
+				ninetalesalola: 'hail',
+				vanilluxe: 'hail',
+				gigalith: 'sand',
+				hippowdon: 'sand',
+				tyranitar: 'sand',
+				tapubulu: 'grassyTerrain',
+			};
+			let effect = '';
+			if (toId(template.species) in fieldEffectSetters) effect = fieldEffectSetters[toId(template.species)];
+			if (effect !== '') teamDetails[effect] = 1;
 
 			// Limit 1 of any type combination, 2 in monotype
 			let typeCombo = types.slice().sort().join();
-			if (set.ability === 'Drought' || set.ability === 'Drizzle' || set.ability === 'Sand Stream') {
+			if (effect === 'sun' || effect === 'rain' || effect === 'sand') {
 				// Drought, Drizzle and Sand Stream don't count towards the type combo limit
-				typeCombo = set.ability;
+				typeCombo = effect;
 				if (typeCombo in typeComboCount) continue;
 			} else {
 				if (typeComboCount[typeCombo] >= (isMonotype ? 2 : 1)) continue;
 			}
 
 			// Okay, the set passes, add it to our team
-			pokemon.push(set);
+			team.push(template);
 
 			// Now that our Pokemon has passed all checks, we can increment our counters
 			baseFormes[template.baseSpecies] = 1;
@@ -1673,34 +1672,25 @@ class RandomTeams extends Dex.ModdedDex {
 			} else if (tier === 'PU') {
 				puCount++;
 			}
+		}
+		while (pokemon.length < 6) {
+			let set = this[this.format.gameType === 'singles' ? 'randomSet' : 'randomDoublesSet'](team.pop(), pokemon.length, teamDetails);
+			pokemon.push(set);
+
+			// Illusion shouldn't be the last Pokemon of the team
+			if (set.ability === 'Illusion' && pokemon.length > 4) pokemon[0] = pokemon.splice(pokemon.length - 1, 1, pokemon[0])[0];
 
 			// Team has Mega/weather/hazards
-			let detailsChanged;
 			let item = this.getItem(set.item);
 			if (item.megaStone) teamDetails['megaStone'] = 1;
 			if (item.zMove) teamDetails['zMove'] = 1;
-			if (set.ability === 'Snow Warning') {
-				teamDetails['hail'] = 1;
-				detailsChanged = 'hail';
-			} else if (set.ability === 'Drizzle' || set.moves.includes('raindance')) {
-				teamDetails['rain'] = 1;
-				detailsChanged = 'rain';
-			} else if (set.ability === 'Sand Stream') {
-				teamDetails['sand'] = 1;
-				detailsChanged = 'sand';
-			} else if (set.ability === 'Grassy Surge') {
-				teamDetails['grassyTerrain'] = 1;
-				detailsChanged = 'grassyTerrain';
-			}
+			if (set.ability === 'Snow Warning' || set.moves.includes('hail')) teamDetails['hail'] = 1;
+			if (set.ability === 'Drizzle' || set.moves.includes('raindance')) teamDetails['rain'] = 1;
+			if (set.ability === 'Sand Stream') teamDetails['sand'] = 1;
+			if (set.ability === 'Grassy Surge') teamDetails['grassyTerrain'] = 1;
 			if (set.moves.includes('stealthrock')) teamDetails['stealthRock'] = 1;
 			if (set.moves.includes('toxicspikes')) teamDetails['toxicSpikes'] = 1;
 			if (set.moves.includes('defog') || set.moves.includes('rapidspin')) teamDetails['hazardClear'] = 1;
-
-			if (!!detailsChanged && pokemon.lenghth > 1) {
-				for (let i = 0; i < pokemon.length - 2; i++) {
-					pokemon[i] = this[this.format.gameType === 'singles' ? 'randomSet' : 'randomDoublesSet'](template, pokemon.length, teamDetails, pokemon[i]);
-				}
-			}
 		}
 		return pokemon;
 	}
@@ -2310,14 +2300,6 @@ class RandomTeams extends Dex.ModdedDex {
 				// If it doesn't qualify for Technician, Skill Link is useless on it
 				// Might as well give it Pickup just in case
 				ability = 'Pickup';
-			} else if (template.id === 'aurorus' && ability === 'Snow Warning' && hasMove['hypervoice']) {
-				for (let i = 0; i < moves.length; i++) {
-					if (moves[i] === 'hypervoice') {
-						moves[i] = 'blizzard';
-						counter['Normal'] = 0;
-						break;
-					}
-				}
 			} else if (template.baseSpecies === 'Basculin') {
 				ability = 'Adaptability';
 			} else if (template.id === 'gligar') {

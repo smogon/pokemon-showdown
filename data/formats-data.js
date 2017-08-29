@@ -5656,8 +5656,8 @@ exports.BattleFormatsData = {
 		tier: "LC",
 	},
 	aurorus: {
-		randomBattleMoves: ["ancientpower", "thunderbolt", "encore", "thunderwave", "earthpower", "freezedry", "hypervoice", "stealthrock"],
-		randomDoubleBattleMoves: ["hypervoice", "ancientpower", "thunderbolt", "encore", "thunderwave", "flashcannon", "freezedry", "icywind", "protect"],
+		randomBattleMoves: ["ancientpower", "thunderbolt", "encore", "thunderwave", "earthpower", "freezedry", "stealthrock"],
+		randomDoubleBattleMoves: ["ancientpower", "thunderbolt", "encore", "thunderwave", "flashcannon", "freezedry", "icywind", "protect"],
 		tier: "NU",
 	},
 	sylveon: {
