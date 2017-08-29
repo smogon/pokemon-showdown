@@ -1383,16 +1383,11 @@ exports.commands = {
 			let format = Dex.getFormat(targetId);
 			if (format.effectType === 'ValidatorRule' || format.effectType === 'Rule' || format.effectType === 'Format') {
 				if (format.ruleset && format.ruleset.length) html.push("<b>Ruleset</b> - " + Chat.escapeHTML(format.ruleset.join(", ")));
-				// if (format.removedRules && format.removedRules.length) html.push("<b>Removed rules</b> - " + Chat.escapeHTML(format.removedRules.join(", "))); // No current formats use this, but just in case...
+				if (format.removedRules && format.removedRules.length) html.push("<b>Removed rules</b> - " + Chat.escapeHTML(format.removedRules.join(", ")));
 				if (format.banlist && format.banlist.length) html.push("<b>Bans</b> - " + Chat.escapeHTML(format.banlist.join(", ")));
 				if (format.unbanlist && format.unbanlist.length) html.push("<b>Unbans</b> - " + Chat.escapeHTML(format.unbanlist.join(", ")));
 				if (html.length > 0) {
-					html.unshift(
-						"<b>Ruleset for " + format.name + ":</b><br />" +
-						"<a href=\"#rules\" class=\"fa fa-list-ul\" data-toggle=\"collapse\">Ruleset/Banilst</a><br />" +
-						"<div id=\"rules\" class=\"collapse\">"
-					);
-					html.push("</div>");
+					html = `<details><summary>Banilist/Ruleset</summary>${html.join("<br />")}</details>`;
 				} else {
 					html.push("No ruleset found for " + format.name);
 				}
