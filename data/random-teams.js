@@ -1618,8 +1618,7 @@ class RandomTeams extends Dex.ModdedDex {
 			let fieldEffectSetters = {
 				kyogre: 'rain',
 				pelipper: 'rain',
-				// politoed: 'rain', // Politoed isn't always drizzle
-				// charizard: 'sun', // Charizard isn't always
+				politoed: 'rain',
 				groudon: 'sun',
 				ninetales: 'sun',
 				torkoal: 'sun',
