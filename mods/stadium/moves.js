@@ -1,53 +1,9 @@
 'use strict';
 
 exports.BattleMovedex = {
-	"acid": {
-		inherit: true,
-		secondary: {
-			chance: 33,
-			boosts: {
-				def: -1,
-			},
-		},
-		desc: "Has a 33% chance, rounded down, to lower the target's Defense by 1 stage.",
-		shortDesc: "33% chance to lower the foe(s) Def by 1.",
-	},
-	aurorabeam: {
-		inherit: true,
-		secondary: {
-			chance: 33,
-			boosts: {
-				atk: -1,
-			},
-		},
-		desc: "Has a 33% chance. rounded down, to lower the target's Attack by 1 stage.",
-		shortDesc: "33% chance to lower the foe's Attack by 1.",
-	},
 	bind: {
 		inherit: true,
 		onBeforeMove: function () {},
-	},
-	bubble: {
-		inherit: true,
-		secondary: {
-			chance: 33,
-			boosts: {
-				spe: -1,
-			},
-		},
-		desc: "Has a 33% chance, rounded down, to lower the target's Speed by 1 stage.",
-		shortDesc: "33% chance to lower the foe(s) Speed by 1.",
-	},
-	bubblebeam: {
-		inherit: true,
-		secondary: {
-			chance: 33,
-			boosts: {
-				spe: -1,
-			},
-		},
-		desc: "Has a 33% chance, rounded down, to lower the target's Speed by 1 stage.",
-		shortDesc: "33% chance to lower the foe(s) Speed by 1.",
 	},
 	clamp: {
 		inherit: true,

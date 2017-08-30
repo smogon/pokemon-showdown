@@ -8,6 +8,14 @@
 exports.BattleMovedex = {
 	acid: {
 		inherit: true,
+		desc: "Has a 33% chance to lower the target's Defense by 1 stage.",
+		shortDesc: "33% chance to lower the target's Defense by 1.",
+		secondary: {
+			chance: 33,
+			boosts: {
+				def: -1,
+			},
+		},
 		target: "normal",
 	},
 	amnesia: {
@@ -21,8 +29,10 @@ exports.BattleMovedex = {
 	},
 	aurorabeam: {
 		inherit: true,
+		desc: "Has a 33% chance to lower the target's Attack by 1 stage.",
+		shortDesc: "33% chance to lower the target's Attack by 1.",
 		secondary: {
-			chance: 10,
+			chance: 33,
 			boosts: {
 				atk: -1,
 			},
@@ -146,7 +156,26 @@ exports.BattleMovedex = {
 	},
 	bubble: {
 		inherit: true,
+		desc: "Has a 33% chance to lower the target's Speed by 1 stage.",
+		shortDesc: "33% chance to lower the target's Speed by 1.",
+		secondary: {
+			chance: 33,
+			boosts: {
+				spe: -1,
+			},
+		},
 		target: "normal",
+	},
+	bubblebeam: {
+		inherit: true,
+		desc: "Has a 33% chance to lower the target's Speed by 1 stage.",
+		shortDesc: "33% chance to lower the target's Speed by 1.",
+		secondary: {
+			chance: 33,
+			boosts: {
+				spe: -1,
+			},
+		},
 	},
 	clamp: {
 		inherit: true,
@@ -172,6 +201,17 @@ exports.BattleMovedex = {
 					target.volatiles['partiallytrapped'].duration = 2;
 				}
 			}
+		},
+	},
+	constrict: {
+		inherit: true,
+		desc: "Has a 33% chance to lower the target's Speed by 1 stage.",
+		shortDesc: "33% chance to lower the target's Speed by 1.",
+		secondary: {
+			chance: 33,
+			boosts: {
+				spe: -1,
+			},
 		},
 	},
 	conversion: {
