@@ -9,6 +9,8 @@ exports.BattleMovedex = {
 				def: -1,
 			},
 		},
+		desc: "Has a 33% chance, rounded down, to lower the target's Defense by 1 stage.",
+		shortDesc: "33% chance to lower the foe(s) Def by 1.",
 	},
 	aurorabeam: {
 		inherit: true,
@@ -18,6 +20,8 @@ exports.BattleMovedex = {
 				atk: -1,
 			},
 		},
+		desc: "Has a 33% chance. rounded down, to lower the target's Attack by 1 stage.",
+		shortDesc: "33% chance to lower the foe's Attack by 1.",
 	},
 	bind: {
 		inherit: true,
@@ -31,6 +35,8 @@ exports.BattleMovedex = {
 				spe: -1,
 			},
 		},
+		desc: "Has a 33% chance, rounded down, to lower the target's Speed by 1 stage.",
+		shortDesc: "33% chance to lower the foe(s) Speed by 1.",
 	},
 	bubblebeam: {
 		inherit: true,
@@ -40,6 +46,8 @@ exports.BattleMovedex = {
 				spe: -1,
 			},
 		},
+		desc: "Has a 33% chance, rounded down, to lower the target's Speed by 1 stage.",
+		shortDesc: "33% chance to lower the foe(s) Speed by 1.",
 	},
 	clamp: {
 		inherit: true,
