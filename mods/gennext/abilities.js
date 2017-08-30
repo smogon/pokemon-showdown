@@ -369,6 +369,8 @@ exports.BattleAbilities = {
 				target.setAbility('');
 			}
 		},
+		desc: "This Pokemon cannot be struck by a critical hit. This ability also reduces incoming move damage by 1/10 of the user's max HP.  If the user uses Shell Smash, this ability's effect ends.",
+		shortDesc: "This Pokemon can't be struck critical hit; reduces incoming move damage by 1/10 of the user's max HP.",
 	},
 	"battlearmor": {
 		inherit: true,
@@ -380,6 +382,8 @@ exports.BattleAbilities = {
 				return damage;
 			}
 		},
+		desc: "This Pokemon cannot be struck by a critical hit. This ability also reduces incoming move damage by 1/10 of the user's max HP.",
+		shortDesc: "This Pokemon can't be struck critical hit; reduces incoming move damage by 1/10 of the user's max HP.",
 	},
 	"weakarmor": {
 		inherit: true,
@@ -394,6 +398,8 @@ exports.BattleAbilities = {
 			}
 		},
 		onAfterDamage: function () {},
+		desc: "This ability reduces incoming move damage by 1/10 of the user's max HP and increases the user's Speed for the first hit after switch-in (and does not activate again until the next switch-in).",
+		shortDesc: "Reduces incoming move damage by 1/10 of the user's max HP and increases the user's Spe for the 1st hit after switch-in (doesn't activate until next switch-in).",
 	},
 	"magmaarmor": {
 		inherit: true,
@@ -415,6 +421,8 @@ exports.BattleAbilities = {
 				return damage;
 			}
 		},
+		desc: "This ability reduces incoming move damage by 1/10 of the user's max HP, provides immunity to Hail and freeze, and provides a one-time immunity to Water and Ice (after which it turns into Battle Armor).",
+		shortDesc: "Reduces incoming move damage by 1/10 of the user's max HP, provides immunity to Hail & Frz, and provides a 1 time immunity to Water and Ice.",
 	},
 	"multiscale": {
 		inherit: true,
@@ -424,6 +432,7 @@ exports.BattleAbilities = {
 				return this.chainModify(2 / 3);
 			}
 		},
+		shortDesc: "If this Pokemon is at full HP, damage taken from attacks is lessened by 1/3.",
 	},
 	"ironfist": {
 		inherit: true,
@@ -432,6 +441,8 @@ exports.BattleAbilities = {
 				return basePower * 1.33;
 			}
 		},
+		desc: "This Pokemon's punch-based attacks have their power multiplied by 1.33.",
+		shortDesc: "This Pokemon's punch-based attacks have 1.33x power. Sucker Punch is not boosted.",
 	},
 	"stench": {
 		inherit: true,
@@ -448,6 +459,7 @@ exports.BattleAbilities = {
 				});
 			}
 		},
+		shortDesc: "This Pokemon's attacks without a chance to flinch have a 40% chance to flinch.",
 	},
 	"aftermath": {
 		inherit: true,
@@ -456,6 +468,8 @@ exports.BattleAbilities = {
 				this.damage(source.maxhp / 3, source, target, null, true);
 			}
 		},
+		desc: "If this Pokemon is knocked out, that move's user loses 1/4 of its maximum HP, rounded down. If any active Pokemon has the Ability Damp, this effect is prevented.",
+		shortDesc: "If this Pokemon is KOed, that move's user loses 1/4 its max HP.",
 	},
 	"cursedbody": {
 		desc: "When this Pokemon faints, attacker is Cursed.",
@@ -481,6 +495,7 @@ exports.BattleAbilities = {
 				this.add("-item", pokemon, pokemon.item, '[from] ability: Gluttony');
 			}
 		},
+		shortDesc: "When this Pokemon has 1/2 or less of its maximum HP, it uses certain Berries early. Each berry has 2 uses.",
 	},
 	"guts": {
 		inherit: true,
@@ -489,6 +504,8 @@ exports.BattleAbilities = {
 				return damage / 2;
 			}
 		},
+		desc: "If this Pokemon has a major status condition, its Attack is multiplied by 1.5; burn's physical damage halving is ignored; takes half damage from burn/poison/toxic.",
+		shortDesc: "If this Pokemon is statused, its Attack is 1.5x; ignores burn halving physical damage; takes 1/2 damage from brn/psn/tox.",
 	},
 	"quickfeet": {
 		inherit: true,
@@ -497,6 +514,8 @@ exports.BattleAbilities = {
 				return damage / 2;
 			}
 		},
+		desc: "If this Pokemon has a major status condition, its Speed is multiplied by 1.5; the Speed drop from paralysis is ignored; takes half damage from burn/poison/toxic.",
+		shortDesc: "If this Pokemon is statused, its Speed is 1.5x; ignores Speed drop from paralysis; takes 1/2 damage from brn/psn/tox.",
 	},
 	"toxicboost": {
 		inherit: true,
@@ -505,6 +524,8 @@ exports.BattleAbilities = {
 				return damage / 2;
 			}
 		},
+		desc: "While this Pokemon is poisoned, the power of its physical attacks is multiplied by 1.5; takes half damage from poison/toxic.",
+		shortDesc: "While this Pokemon is poisoned, its physical attacks have 1.5x power; takes 1/2 damage from psn/tox.",
 	},
 	"truant": {
 		inherit: true,
@@ -527,6 +548,7 @@ exports.BattleAbilities = {
 				}
 			},
 		},
+		shortDesc: "This Pokemon will not be able to move the turn after a successful move; heals 1/3 of its max HP on its Truant turn.",
 	},
 	"flareboost": {
 		inherit: true,
@@ -535,6 +557,8 @@ exports.BattleAbilities = {
 				return damage / 2;
 			}
 		},
+		desc: "While this Pokemon is burned, the power of its special attacks is multiplied by 1.5; takes half damage from burns.",
+		shortDesc: "While this Pokemon is burned, its special attacks have 1.5x power; takes 1/2 damage from brn.",
 	},
 	"telepathy": {
 		inherit: true,
@@ -554,6 +578,7 @@ exports.BattleAbilities = {
 				return false;
 			}
 		},
+		shortDesc: "This Pokemon does not take damage from attacks made by its allies; imprisons the target upon entry.",
 	},
 	"speedboost": {
 		inherit: true,
