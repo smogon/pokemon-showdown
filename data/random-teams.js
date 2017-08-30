@@ -1693,7 +1693,7 @@ class RandomTeams extends Dex.ModdedDex {
 		}
 		return pokemon;
 	}
-	randomDoublesSet(template, slot, teamDetails, set) {
+	randomDoublesSet(template, slot, teamDetails) {
 		let baseTemplate = (template = this.getTemplate(template));
 		let species = template.species;
 
@@ -1716,14 +1716,7 @@ class RandomTeams extends Dex.ModdedDex {
 		}
 
 		let movePool = (template.randomDoubleBattleMoves || template.randomBattleMoves);
-		movePool = movePool ? movePool.slice() : Object.keys(template.learnset);
-		if (set && set.moves && set.moves.length) {
-			for (let i = 0; i < set.moves.length; i++) {
-				if (movePool.indexOf(set.moves[i]) >= 0) movePool.splice(movePool.indexOf(set.moves[i]));
-			}
-		}
-
-		let moves = (set && set.moves) ? set.moves : [];
+		let moves = [];
 		let ability = '';
 		let item = '';
 		let evs = {
