@@ -1387,7 +1387,7 @@ exports.commands = {
 				if (format.banlist && format.banlist.length) html.push("<b>Bans</b> - " + Chat.escapeHTML(format.banlist.join(", ")));
 				if (format.unbanlist && format.unbanlist.length) html.push("<b>Unbans</b> - " + Chat.escapeHTML(format.unbanlist.join(", ")));
 				if (html.length > 0) {
-					html = `<details><summary>Banilist/Ruleset</summary>${html.join("<br />")}</details>`;
+					html = `<details><summary>Banlist/Ruleset</summary>${html.join("<br />")}</details>`;
 				} else {
 					html.push("No ruleset found for " + format.name);
 				}
