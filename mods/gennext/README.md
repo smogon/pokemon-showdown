@@ -437,7 +437,7 @@ Minor ability changes:
 
 - Magma Armor reduces incoming move damage by 1/10 of the user's max HP,
   provides immunity to Hail and freeze, and provides a one-time immunity
-  to Water and Ice, after which it turns into Shell Armor
+  to Water and Ice, after which it turns into Battle Armor
 
 - Adaptability is now 1.33x to non-STAB moves instead of to STAB moves
 
@@ -450,7 +450,7 @@ Minor ability changes:
 
 - Telepathy grants Imprison on switch-in
 
-- Compoundeyes and Keen Eye now grant 1.6x accuracy (this replaces Keen
+- Compound Eyes and Keen Eye now grant 1.6x accuracy (this replaces Keen
   Eye's previous effect)
 
 - Victory Star grants 1.5x accuracy (but only for the user)
