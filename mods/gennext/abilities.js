@@ -111,7 +111,6 @@ exports.BattleAbilities = {
 			}
 			return basePower * 7 / 8;
 		},
-		
 		desc: "If Rain Dance is active, attacks against this Pokemon do 25% less than normal. This Pokemon cannot be burned. Gaining this Ability while burned cures it.",
 		shortDesc: "If Rain Dance is active, attacks against this Pokemon do 25% less; This Pokemon cannot be burned.",
 	},
