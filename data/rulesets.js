@@ -22,6 +22,13 @@ exports.BattleFormats = {
 		ruleset: ['Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'HP Percentage Mod', 'Cancel Mod'],
 		banlist: ['Illegal', 'Soul Dew'],
 	},
+	standardubers: {
+		effectType: 'ValidatorRule',
+		name: 'Standard Ubers',
+		desc: ["The standard ruleset for [Gen 5] Ubers"],
+		ruleset: ['Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'Moody Clause', 'OHKO Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod'],
+		banlist: ['Unreleased', 'Illegal'],
+	},
 	standardgbu: {
 		effectType: 'ValidatorRule',
 		name: 'Standard GBU',

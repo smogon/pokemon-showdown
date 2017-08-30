@@ -960,8 +960,7 @@ exports.Formats = [
 		],
 
 		mod: 'gen5',
-		ruleset: ['Pokemon', 'Team Preview', 'Standard'],
-		removedRules: ['Evasion Moves Clause'],
+		ruleset: ['Pokemon', 'Team Preview', 'Standard Ubers'],
 	},
 	{
 		name: "[Gen 5] UU",
