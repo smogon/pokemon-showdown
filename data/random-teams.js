@@ -1096,7 +1096,7 @@ class RandomTeams extends Dex.ModdedDex {
 		} while (moves.length < 4 && movePool.length);
 
 		// Moveset modifications
-		if (hasMove['autotomize'] && hasMove['heavyslam']) {
+		if (hasMove['autotomize'] && hasMove['heavyslam'] && template.id !== 'celesteela') {
 			moves[moves.indexOf('autotomize')] = 'rockpolish';
 		}
 		if (moves[0] === 'conversion') {
