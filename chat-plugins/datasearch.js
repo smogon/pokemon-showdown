@@ -348,7 +348,7 @@ if (process.send && module === process.mainModule) {
 
 function runDexsearch(target, cmd, canAll, message) {
 	let searches = [];
-	let allTiers = {'uber':'Uber', 'ou':'OU', 'bl':"BL", 'uu':'UU', 'bl2':"BL2", 'ru':'RU', 'bl3':"BL3", 'nu':'NU', 'bl4':"BL4", 'pu':'PU', 'nfe':'NFE', 'lc uber':"LC Uber", 'lc':'LC', 'cap':"CAP", 'caplc': "CAP LC", 'capnfe': "CAP NFE"};
+	let allTiers = {'uber':'Uber', 'ubers':'Uber', 'ou':'OU', 'bl':'BL', 'uu':'UU', 'bl2':'BL2', 'ru':'RU', 'bl3':'BL3', 'nu':'NU', 'bl4':'BL4', 'pu':'PU', 'nfe':'NFE', 'lcuber':'LC Uber', 'lcubers':'LC Uber', 'lc':'LC', 'cap':'CAP', 'caplc':'CAP LC', 'capnfe':'CAP NFE'};
 	let allTypes = {};
 	for (let i in Dex.data.TypeChart) {
 		allTypes[toId(i)] = i;
@@ -404,8 +404,8 @@ function runDexsearch(target, cmd, canAll, message) {
 				continue;
 			}
 
-			if (target in allTiers) {
-				target = allTiers[target];
+			if (toId(target) in allTiers) {
+				target = allTiers[toId(target)];
 				if (target.startsWith("CAP")) {
 					if (capSearch === isNotSearch) return {reply: "A search cannot both include and exclude CAP tiers."};
 					capSearch = !isNotSearch;
