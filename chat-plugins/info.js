@@ -1379,17 +1379,18 @@ exports.commands = {
 
 		if (!totalMatches) return this.errorReply("No " + (target ? "matched " : "") + "formats found.");
 		if (totalMatches === 1) {
-			let html = [];
+			let rules = [];
+			let rulesetHtml = '';
 			let format = Dex.getFormat(targetId);
 			if (format.effectType === 'ValidatorRule' || format.effectType === 'Rule' || format.effectType === 'Format') {
-				if (format.ruleset && format.ruleset.length) html.push("<b>Ruleset</b> - " + Chat.escapeHTML(format.ruleset.join(", ")));
-				if (format.removedRules && format.removedRules.length) html.push("<b>Removed rules</b> - " + Chat.escapeHTML(format.removedRules.join(", ")));
-				if (format.banlist && format.banlist.length) html.push("<b>Bans</b> - " + Chat.escapeHTML(format.banlist.join(", ")));
-				if (format.unbanlist && format.unbanlist.length) html.push("<b>Unbans</b> - " + Chat.escapeHTML(format.unbanlist.join(", ")));
-				if (html.length > 0) {
-					html = `<details><summary>Banlist/Ruleset</summary>${html.join("<br />")}</details>`;
+				if (format.ruleset && format.ruleset.length) rules.push("<b>Ruleset</b> - " + Chat.escapeHTML(format.ruleset.join(", ")));
+				if (format.removedRules && format.removedRules.length) rules.push("<b>Removed rules</b> - " + Chat.escapeHTML(format.removedRules.join(", ")));
+				if (format.banlist && format.banlist.length) rules.push("<b>Bans</b> - " + Chat.escapeHTML(format.banlist.join(", ")));
+				if (format.unbanlist && format.unbanlist.length) rules.push("<b>Unbans</b> - " + Chat.escapeHTML(format.unbanlist.join(", ")));
+				if (rules.length > 0) {
+					rulesetHtml = `<details><summary>Banlist/Ruleset</summary>${rules.join("<br />")}</details>`;
 				} else {
-					html.push("No ruleset found for " + format.name);
+					rulesetHtml = "No ruleset found for " + format.name;
 				}
 			}
 			format = Dex.getFormat(Object.values(sections)[0].formats[0]);
@@ -1397,12 +1398,12 @@ exports.commands = {
 			formatType = formatType.charAt(0).toUpperCase() + formatType.slice(1).toLowerCase();
 			if (!format.desc) {
 				if (format.effectType === 'Format') {
-					return this.sendReplyBox("No description found for this " + formatType + " " + format.section + " format." + "<br />" + html.join("<br />"));
+					return this.sendReplyBox("No description found for this " + formatType + " " + format.section + " format." + "<br />" + rulesetHtml);
 				} else {
-					return this.sendReplyBox("No description found for this rule." + "<br />" + html.join("<br />"));
+					return this.sendReplyBox("No description found for this rule." + "<br />" + rulesetHtml);
 				}
 			}
-			return this.sendReplyBox(format.desc.join("<br />") + "<br />" + html.join("<br />"));
+			return this.sendReplyBox(format.desc.join("<br />") + "<br />" + rulesetHtml);
 		}
 
 		let tableStyle = `border:1px solid gray; border-collapse:collapse`;
