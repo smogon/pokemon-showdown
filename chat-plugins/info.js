@@ -1332,6 +1332,7 @@ exports.commands = {
 	formats: 'formathelp',
 	tiershelp: 'formathelp',
 	formatshelp: 'formathelp',
+	viewbanlist: 'formathelp',
 	formathelp: function (target, room, user, connection, cmd) {
 		if (!this.runBroadcast()) return;
 		if (!target) {
@@ -1351,7 +1352,7 @@ exports.commands = {
 
 		let formatList;
 		let format = Dex.getFormat(targetId);
-		if (format.effectType === 'Format') formatList = [targetId];
+		if (format.effectType === 'Format' || format.effectType === 'ValidatorRule' || format.effectType === 'Rule') formatList = [targetId];
 		if (!formatList) {
 			formatList = Object.keys(Dex.formats);
 		}
@@ -1378,11 +1379,30 @@ exports.commands = {
 
 		if (!totalMatches) return this.errorReply("No " + (target ? "matched " : "") + "formats found.");
 		if (totalMatches === 1) {
-			let format = Dex.getFormat(Object.values(sections)[0].formats[0]);
+			let html = [];
+			let format = Dex.getFormat(targetId);
+			if (format.effectType === 'ValidatorRule' || format.effectType === 'Rule' || format.effectType === 'Format') {
+				if (format.ruleset && format.ruleset.length) html.push("<b>Ruleset</b> - " + Chat.escapeHTML(format.ruleset.join(", ")));
+				if (format.removedRules && format.removedRules.length) html.push("<b>Removed rules</b> - " + Chat.escapeHTML(format.removedRules.join(", ")));
+				if (format.banlist && format.banlist.length) html.push("<b>Bans</b> - " + Chat.escapeHTML(format.banlist.join(", ")));
+				if (format.unbanlist && format.unbanlist.length) html.push("<b>Unbans</b> - " + Chat.escapeHTML(format.unbanlist.join(", ")));
+				if (html.length > 0) {
+					html = `<details><summary>Banlist/Ruleset</summary>${html.join("<br />")}</details>`;
+				} else {
+					html.push("No ruleset found for " + format.name);
+				}
+			}
+			format = Dex.getFormat(Object.values(sections)[0].formats[0]);
 			let formatType = (format.gameType || "singles");
 			formatType = formatType.charAt(0).toUpperCase() + formatType.slice(1).toLowerCase();
-			if (!format.desc) return this.sendReplyBox("No description found for this " + formatType + " " + format.section + " format.");
-			return this.sendReplyBox(format.desc.join("<br />"));
+			if (!format.desc) {
+				if (format.effectType === 'Format') {
+					return this.sendReplyBox("No description found for this " + formatType + " " + format.section + " format." + "<br />" + html.join("<br />"));
+				} else {
+					return this.sendReplyBox("No description found for this rule." + "<br />" + html.join("<br />"));
+				}
+			}
+			return this.sendReplyBox(format.desc.join("<br />") + "<br />" + html.join("<br />"));
 		}
 
 		let tableStyle = `border:1px solid gray; border-collapse:collapse`;
