@@ -133,11 +133,6 @@ exports.BattleScripts = {
 		// Now, let's calculate the accuracy.
 		let accuracy = move.accuracy;
 
-		// Partial trapping moves: true accuracy while it lasts
-		if (move.volatileStatus === 'partiallytrapped' && pokemon.volatiles['partialtrappinglock'] && target === pokemon.volatiles['partialtrappinglock'].locked) {
-			accuracy = true;
-		}
-
 		// OHKO moves only have a chance to hit if the user is at least as fast as the target
 		if (move.ohko) {
 			if (target.speed > pokemon.speed) {
@@ -165,7 +160,7 @@ exports.BattleScripts = {
 				}
 			}
 			accuracy = Math.min(accuracy, 255);
-			this.runEvent('ModifyAccuracy', target, pokemon, move, accuracy)
+			this.runEvent('ModifyAccuracy', target, pokemon, move, accuracy);
 		}
 		accuracy = this.runEvent('Accuracy', target, pokemon, move, accuracy);
 
