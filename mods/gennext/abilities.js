@@ -587,6 +587,7 @@ exports.BattleAbilities = {
 				this.boost({spe:1});
 			}
 		},
+		desc: "This Pokemon's Speed is raised by 1 stage at the end of each full turn it has been on the field. This ability does not activate on turns Protect, Detect, Endure, etc are used.",
 	},
 	"parentalbond": {
 		inherit: true,
@@ -604,6 +605,8 @@ exports.BattleAbilities = {
 				return this.chainModify(0.5);
 			},
 		},
+		desc: "This Pokemon's damaging moves become multi-hit moves that hit twice. Both hits' damage are halved. Does not affect multi-hit moves or moves that have multiple targets. The moves that are affected will never miss.",
+		shortDesc: "This Pokemon's damaging moves hit twice. Both hits have their damage halved. Moves affected have -- accuracy.",
 	},
 	"swarm": {
 		inherit: true,
@@ -622,6 +625,8 @@ exports.BattleAbilities = {
 				}
 			}
 		},
+		desc: "When this Pokemon has 1/3 or less of its maximum HP, rounded down, its attacking stat is multiplied by 1.5 while using a Bug-type attack. The user takes half damage from Rock, Ice, Electric moves, and Stealth Rock if they are Flying type.",
+		shortDesc: "When this Pokemon has 1/3 or less of its max HP, its Bug attacks do 1.5x damage. The user takes 1/2 damage from Rock/Ice/Electric moves, and Stealth Rock, if the user is Flying type.",
 	},
 	"adaptability": {
 		inherit: true,
@@ -631,10 +636,13 @@ exports.BattleAbilities = {
 				return this.chainModify(1.33);
 			}
 		},
+		desc: "This Pokemon's moves that don't match one of its types have an attack bonus of 1.33.",
+		shortDesc: "This Pokemon's non-STAB moves is 1.33x.",
 	},
 	"shadowtag": {
 		desc: "For the first turn after this Pokemon switches in, prevent adjacent opposing Pokemon from choosing to switch out unless they are immune to trapping or also have this Ability.",
 		shortDesc: "Prevents adjacent foes from choosing to switch for one turn.",
+		inherit: true,
 		onStart: function (pokemon) {
 			pokemon.addVolatile('shadowtag');
 		},
@@ -656,9 +664,6 @@ exports.BattleAbilities = {
 				pokemon.maybeTrapped = true;
 			}
 		},
-		id: "shadowtag",
-		name: "Shadow Tag",
-		rating: 5,
-		num: 23,
+		onFoeTrapPokemon: function (pokemon) {},
 	},
 };
