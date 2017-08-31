@@ -1219,8 +1219,8 @@ class RandomTeams extends Dex.ModdedDex {
 			if (abilities.includes('Slush Rush') && teamDetails['hail']) {
 				ability = 'Slush Rush';
 			}
-			if (abilities.includes('Grassy Pelt') && teamDetails['grassyTerrain']) {
-				ability = 'Grassy Pelt';
+			if (abilities.includes('Grass Pelt') && teamDetails['grassyTerrain']) {
+				ability = 'Grass Pelt';
 			}
 			if (abilities.includes('Triage') && hasMove['drainingkiss']) {
 				ability = 'Triage';
