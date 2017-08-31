@@ -371,6 +371,19 @@ exports.BattleAbilities = {
 		desc: "This Pokemon cannot be struck by a critical hit. This ability also reduces incoming move damage by 1/10 of the user's max HP.  If the user uses Shell Smash, this ability's effect ends.",
 		shortDesc: "This Pokemon can't be struck critical hit; reduces incoming move damage by 1/10 of the user's max HP.",
 	},
+	"prismarmor": {
+		inherit: true,
+		onDamage: function (damage, target, source, effect) {
+			if (effect && effect.effectType === 'Move') {
+				this.add('-message', "Its damage was reduced by Prism Armor!");
+				damage -= target.maxhp / 10;
+				if (damage < 0) damage = 0;
+				return damage;
+			}
+		},
+		desc: "This Pokemon receives 3/4 damage from supereffective attacks. Moongeist Beam, Sunsteel Strike, and the Abilities Mold Breaker, Teravolt, and Turboblaze cannot ignore this Ability. This ability also reduces incoming move damage by 1/10 of the user's max HP.",
+		shortDesc: "This Pokemon receives 3/4 damage from supereffective attacks; reduces incoming move damage by 1/10 of the user's max HP.",
+	},
 	"battlearmor": {
 		inherit: true,
 		onDamage: function (damage, target, source, effect) {
