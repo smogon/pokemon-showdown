@@ -277,7 +277,7 @@ class UNOgame extends Rooms.RoomGame {
 	}
 
 	onDraw(user) {
-		if (this.currentPlayer !== user.userid || this.state !== 'play') return false;
+		if (this.currentPlayer !== user.userid || this.state !== 'play' || user.userid === this.awaitUno) return false;
 		if (this.players[user.userid].cardLock) return true;
 
 		this.onCheckUno();
@@ -291,7 +291,7 @@ class UNOgame extends Rooms.RoomGame {
 	}
 
 	onPlay(user, cardName) {
-		if (this.currentPlayer !== user.userid || this.state !== 'play') return false;
+		if (this.currentPlayer !== user.userid || this.state !== 'play' || user.userid === this.awaitUno) return false;
 		let player = this.players[user.userid];
 
 		let card = player.hasCard(cardName);
