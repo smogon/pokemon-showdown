@@ -145,7 +145,7 @@ Major changes:
 
 - Twister is now a 80 base power Flying move with a 30% confusion chance
 
-- Floette-Eternal-Flower and Volcanion are released.
+- Floette-Eternal-Flower Flowerare released.
 
 New mechanic: Signature Pokémon:
 
@@ -228,8 +228,6 @@ New mechanic: Intrinsics:
   - Eelektross: Poison Heal
 
   - Flygon: Compoundeyes, Sand Rush
-
-  - Gengar: Cursed Body
 
   - Hydreigon: Sheer Force
 
@@ -437,7 +435,9 @@ Minor ability changes:
 
 - Magma Armor reduces incoming move damage by 1/10 of the user's max HP,
   provides immunity to Hail and freeze, and provides a one-time immunity
-  to Water and Ice, after which it turns into Battle Armor
+  to Water and Ice, after which it turns into Battle Armor
+
+- Prism Armor reduces incoming move damage by 1/10 of the user's max HP in addition to its normal effects.
 
 - Adaptability is now 1.33x to non-STAB moves instead of to STAB moves
 
