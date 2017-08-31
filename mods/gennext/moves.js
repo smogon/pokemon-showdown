@@ -422,12 +422,10 @@ exports.BattleMovedex = {
 		onTryHit: function (target) {
 			target.removeVolatile('substitute');
 		},
-		secondary: {
-			chance: 30,
-			status: 'par',
-		},
 		flags: {contact: 1, charge: 1, mirror: 1, gravity: 1, distance: 1},
 		breaksProtect: true,
+		desc: "Has a 30% chance to paralyze the target. This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks other than Gust, Hurricane, Sky Uppercut, Smack Down, Thousand Arrows, Thunder, and Twister. If the user is holding a Power Herb, the move completes in one turn. This move removes the target's Substitute (if one is active), and bypasses Protect. This move is also a guaranteed critical hit.",
+		shortDesc: "Bounces turn 1. Hits turn 2. 30% paralyze.",
 	},
 	fly: {
 		inherit: true,
@@ -446,6 +444,8 @@ exports.BattleMovedex = {
 		},
 		flags: {contact: 1, charge: 1, mirror: 1, gravity: 1, distance: 1},
 		breaksProtect: true,
+		desc: "This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks other than Gust, Hurricane, Sky Uppercut, Smack Down, Thousand Arrows, Thunder, and Twister. If the user is holding a Power Herb, the move completes in one turn. 100% chance to lower the target's Defense by one stage. This move removes the target's Substitute (if one is active), and bypasses Protect. This move is also a guaranteed critical hit.",
+		shortDesc: "Flies up on first turn, then strikes the next turn. Lowers target's Def by 1 stage.",
 	},
 	dig: {
 		inherit: true,
@@ -462,6 +462,8 @@ exports.BattleMovedex = {
 				def: -1,
 			},
 		},
+		desc: "This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks other than Earthquake and Magnitude but takes double damage from them, and is also unaffected by weather. If the user is holding a Power Herb, the move completes in one turn. 100% chance to lower the target's Defense by one stage. This move removes the target's Substitute (if one is active), and bypasses Protect. This move is also a guaranteed critical hit.",
+		shortDesc: "Digs underground turn 1, strikes turn 2. Lowers target's Def by 1 stage.",
 		flags: {contact: 1, charge: 1, mirror: 1, nonsky: 1},
 		breaksProtect: true,
 	},
@@ -480,6 +482,8 @@ exports.BattleMovedex = {
 				def: -1,
 			},
 		},
+		desc: "This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks other than Surf and Whirlpool but takes double damage from them, and is also unaffected by weather. If the user is holding a Power Herb, the move completes in one turn. 100% chance to lower the target's Defense by one stage. This move removes the target's Substitute (if one is active), and bypasses Protect. This move is also a guaranteed critical hit.",
+		shortDesc: "Dives underwater turn 1, strikes turn 2. Lowers target's Def by 1 stage.",
 		flags: {contact: 1, charge: 1, mirror: 1, nonsky: 1},
 		breaksProtect: true,
 	},
@@ -498,7 +502,8 @@ exports.BattleMovedex = {
 				def: -1,
 			},
 		},
-		breaksProtect: true,
+		desc: "If this move is successful, it breaks through the target's Detect, King's Shield, Protect, or Spiky Shield for this turn, allowing other Pokemon to attack the target normally. If the target's side is protected by Crafty Shield, Mat Block, Quick Guard, or Wide Guard, that protection is also broken for this turn and other Pokemon may attack the target's side normally. This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks. If the user is holding a Power Herb, the move completes in one turn. Damage doubles and no accuracy check is done if the target has used Minimize while active. 100% chance to lower the target's Defense by one stage. This move removes the target's Substitute (if one is active). This move is also a guaranteed critical hit.",
+		shortDesc: "Disappears turn 1. Hits turn 2. Breaks protection. Lowers target's Def by 1 stage.",
 	},
 	shadowforce: {
 		inherit: true,
