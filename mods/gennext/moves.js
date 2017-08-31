@@ -74,6 +74,8 @@ exports.BattleMovedex = {
 				},
 			},
 		},
+		shortDesc: "30% chance of raising user's Atk by 1 stage.",
+		desc: "This move has a 30% chance of raising the user's Attack by one stage.",
 	},
 	cut: {
 		inherit: true,
@@ -84,6 +86,8 @@ exports.BattleMovedex = {
 				def: -1,
 			},
 		},
+		desc: "100% chance of lowering the target's Defense by one stage.",
+		shortDesc: "Lowers the target's Def by 1 stage.",
 	},
 	rocksmash: {
 		inherit: true,
@@ -94,6 +98,8 @@ exports.BattleMovedex = {
 				def: -1,
 			},
 		},
+		desc: "100% chance of lowering the target's Defense by one stage.",
+		shortDesc: "Lowers the target's Def by 1 stage.",
 	},
 	/******************************************************************
 	Weather moves:
@@ -252,6 +258,8 @@ exports.BattleMovedex = {
 		boosts: {
 			evasion: 1,
 		},
+		desc: "Raises the user's evasiveness by 1 stages. Whether or not the user's evasiveness was changed, Body Slam, Dragon Rush, Flying Press, Heat Crash, Heavy Slam, Phantom Force, Shadow Force, Steamroller, and Stomp will not check accuracy and have their damage doubled if used against the user while it is active.",
+		shortDesc: "Raises the user's evasiveness by 1.",
 	},
 	doubleteam: {
 		inherit: true,
@@ -269,6 +277,8 @@ exports.BattleMovedex = {
 		boosts: {
 			evasion: 1,
 		},
+		desc: "Raises the user's evasiveness by 1 stage; the user loses 1/4 of its max HP.",
+		shortDesc: "Raises the user's evasiveness by 1; the user loses 25% of its max HP.",
 	},
 	/******************************************************************
 	Two-turn moves:
@@ -296,6 +306,8 @@ exports.BattleMovedex = {
 				this.heal(pokemon.maxhp / 2);
 			},
 		},
+		desc: "This attack charges on the first turn and executes on the second. Power is halved if the weather is Hail, Rain Dance, or Sandstorm. If the user is holding a Power Herb or the weather is Sunny Day, the move completes in one turn. The user heals 1/2 of its max HP during the charge turn. This move removes the target's Substitute (if one is active), and bypasses Protect. This move is also a guaranteed critical hit.",
+		shortDesc: "Charges turn 1. Hits turn 2. No charge in sunlight. Heals 1/2 of the user's max HP, on charge.",
 		flags: {charge: 1, mirror: 1},
 		breaksProtect: true,
 	},
@@ -312,6 +324,8 @@ exports.BattleMovedex = {
 			chance: 100,
 			volatileStatus: 'confusion',
 		},
+		desc: "Has a higher chance for a critical hit. This attack charges on the first turn and executes on the second. If the user is holding a Power Herb, the move completes in one turn. 100% chance to confuse the target. This move removes the target's Substitute (if one is active), and bypasses Protect. This move is also a guaranteed critical hit.",
+		shortDesc: "Charges, then hits foe(s) turn 2. High crit ratio. Confuses target.",
 		flags: {charge: 1, mirror: 1},
 		breaksProtect: true,
 	},
@@ -340,6 +354,8 @@ exports.BattleMovedex = {
 		},
 		flags: {contact: 1, charge: 1, mirror: 1},
 		breaksProtect: true,
+		desc: "This attack charges on the first turn and executes on the second. Raises the user's Defense, Special Defense, and Accuracy by 1 stage on the first turn. If the user is holding a Power Herb, the move completes in one turn. This move removes the target's Substitute (if one is active), and bypasses Protect. This move is also a guaranteed critical hit.",
+		shortDesc: "Raises user's Def, SpD, Acc by 1 on turn 1. Hits turn 2.",
 	},
 	skyattack: {
 		inherit: true,
@@ -358,6 +374,8 @@ exports.BattleMovedex = {
 		},
 		flags: {charge: 1, mirror: 1, distance: 1},
 		breaksProtect: true,
+		desc: "Has a 30% chance to flinch the target and a higher chance for a critical hit. This attack charges on the first turn and executes on the second. If the user is holding a Power Herb, the move completes in one turn. 100% chance to lower the target's Defense by one stage. This move removes the target's Substitute (if one is active), and bypasses Protect. This move is also a guaranteed critical hit.",
+		shortDesc: "Charges, then hits turn 2. 30% flinch. High crit.",
 	},
 	freezeshock: {
 		inherit: true,
@@ -374,6 +392,8 @@ exports.BattleMovedex = {
 		},
 		flags: {charge: 1, mirror: 1},
 		breaksProtect: true,
+		desc: "Has a 100% chance to paralyze the target. This attack charges on the first turn and executes on the second. If the user is holding a Power Herb, the move completes in one turn. This move removes the target's Substitute (if one is active), and bypasses Protect. This move is also a guaranteed critical hit.",
+		shortDesc: "Charges turn 1. Hits turn 2. 100% paralyze.",
 	},
 	iceburn: {
 		inherit: true,
@@ -390,6 +410,8 @@ exports.BattleMovedex = {
 		},
 		flags: {charge: 1, mirror: 1},
 		breaksProtect: true,
+		desc: "Has a 100% chance to burn the target. This attack charges on the first turn and executes on the second. If the user is holding a Power Herb, the move completes in one turn. This move removes the target's Substitute (if one is active), and bypasses Protect. This move is also a guaranteed critical hit.",
+		shortDesc: "Charges turn 1. Hits turn 2. 100% burn.",
 	},
 	bounce: {
 		inherit: true,
