@@ -2,51 +2,23 @@
 
 exports.BattleItems = {
 	"burndrive": {
-		id: "burndrive",
-		name: "Burn Drive",
-		spritenum: 103,
-		fling: {
-			basePower: 70,
-		},
-		onBasePower: function (basePower, user, target, move) {
-		},
-		onDrive: 'Fire',
+		inherit: true,
+		onBasePower: function (basePower, user, target, move) {},
 		desc: "Changes Genesect to Genesect-Burn.",
 	},
 	"chilldrive": {
-		id: "chilldrive",
-		name: "Chill Drive",
-		spritenum: 103,
-		fling: {
-			basePower: 70,
-		},
-		onBasePower: function (basePower, user, target, move) {
-		},
-		onDrive: 'Ice',
+		inherit: true,
+		onBasePower: function (basePower, user, target, move) {},
 		desc: "Changes Genesect to Genesect-Chill.",
 	},
 	"dousedrive": {
-		id: "dousedrive",
-		name: "Douse Drive",
-		spritenum: 103,
-		fling: {
-			basePower: 70,
-		},
-		onBasePower: function (basePower, user, target, move) {
-		},
-		onDrive: 'Water',
+		inherit: true,
+		onBasePower: function (basePower, user, target, move) {},
 		desc: "Changes Genesect to Genesect-Douse.",
 	},
 	"shockdrive": {
-		id: "shockdrive",
-		name: "Shock Drive",
-		spritenum: 103,
-		fling: {
-			basePower: 70,
-		},
-		onBasePower: function (basePower, user, target, move) {
-		},
-		onDrive: 'Electric',
+		inherit: true,
+		onBasePower: function (basePower, user, target, move) {},
 		desc: "Changes Genesect to Genesect-Shock.",
 	},
 	"widelens": {
