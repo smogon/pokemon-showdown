@@ -10558,7 +10558,7 @@ exports.BattleMovedex = {
 			},
 			onSetStatus: function (status, target, source, effect) {
 				if (!target.isGrounded() || target.isSemiInvulnerable()) return;
-				if (effect.id === 'synchronize' || (effect.effectType === 'Move' && !effect.secondaries)) {
+				if (effect && effect.status) {
 					this.add('-activate', target, 'move: Misty Terrain');
 				}
 				return false;
@@ -10566,7 +10566,7 @@ exports.BattleMovedex = {
 			onTryAddVolatile: function (status, target, source, effect) {
 				if (!target.isGrounded() || target.isSemiInvulnerable()) return;
 				if (status.id === 'confusion') {
-					this.add('-activate', target, 'move: Misty Terrain');
+					if (!effect.secondaries) this.add('-activate', target, 'move: Misty Terrain');
 					return null;
 				}
 			},
