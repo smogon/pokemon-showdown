@@ -9,7 +9,7 @@ let toId = Dex.toId;
 // let Sim = require('../sim');
 
 let LoginServer = require('../loginserver');
-let Ladders = (Config.remoteladder ? '../ladders-remote' : '../ladders');
+let Ladders = require(Config.remoteladder ? '../ladders-remote' : '../ladders');
 let Users = require('../users');
 type Connection = any;
 type User = any;

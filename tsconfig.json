@@ -15,6 +15,7 @@
         "./sim/prng.js",
         "./crashlogger.js",
         "./dnsbl.js",
+        "./ladders-matchmaker.js",
         "./monitor.js",
         "./repl.js",
         "./fs.js",
