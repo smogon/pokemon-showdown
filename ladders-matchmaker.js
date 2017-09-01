@@ -10,44 +10,84 @@
 
 'use strict';
 
+/** @type {number} */
 const PERIODIC_MATCH_INTERVAL = 60 * 1000;
 
+/**
+ * A validated team for a battle format.
+ * @typedef {string | false} ValidatedTeam
+ *
+ * A battle format ID.
+ * @typedef {string} FormatID
+ *
+ * A set containing all pending searches under a given battle format ID.
+ * @typedef {Set<Search>} FormatSearches
+ *
+ * A map containing all SearchSets for all battle format IDs with pending
+ * searches.
+ * @typedef {Map<FormatID, FormatSearches>} Searches
+ */
+
+/**
+ * Represents a user's search for a battle in a format.
+ */
 class Search {
+	/**
+	 * @param {string} userid
+	 * @param {ValidatedTeam} team
+	 * @param {number} [rating = 1000]
+	 */
 	constructor(userid, team, rating = 1000) {
+		/** @type {string} */
 		this.userid = userid;
+		/** @type {ValidatedTeam} */
 		this.team = team;
+		/** @type {number} */
 		this.rating = rating;
-		this.time = Date.now();
-	}
-
-	setRating(rating) {
-		this.rating = rating;
-	}
-
-	setStart() {
+		/** @type {number} */
 		this.time = Date.now();
 	}
 }
 
+/**
+ * Holds a map of all pending searches for battles in all formats at any given
+ * point in time, periodically matching up pairs of searches in each format
+ * within a reasonable rating range of each other.
+ */
 class Matchmaker {
 	constructor() {
+		/** @type {Searches} */
 		this.searches = new Map();
+		/** @type {NodeJS.Timer} */
 		this.periodicMatchInterval = setInterval(
 			() => this.periodicMatch(),
 			PERIODIC_MATCH_INTERVAL
 		);
 	}
 
+	/**
+	 * Cancels a user's search for a battle. If a format is given, cancels the
+	 * search under that specific format, otherwise cancels the first search
+	 * found in the user's search list.
+	 *
+	 * @param {User} user
+	 * @param {FormatID=} format
+	 * @return {boolean}
+	 */
 	cancelSearch(user, format) {
 		if (format && !user.searching[format]) return false;
+
 		let searchedFormats = Object.keys(user.searching);
 		if (!searchedFormats.length) return false;
 
 		for (let searchedFormat of searchedFormats) {
 			if (format && searchedFormat !== format) continue;
+
 			let formatSearches = this.searches.get(searchedFormat);
+			// @ts-ignore
 			for (let search of formatSearches) {
 				if (search.userid !== user.userid) continue;
+				// @ts-ignore
 				formatSearches.delete(search);
 				delete user.searching[searchedFormat];
 				break;
@@ -58,26 +98,49 @@ class Matchmaker {
 		return true;
 	}
 
-	searchBattle(user, formatid) {
+	/**
+	 * Validates a user's team and rating for a given format before creating a
+	 * search for a battle for them.
+	 *
+	 * @param {User} user
+	 * @param {FormatID} format
+	 * @return {Promise<void>}
+	 */
+	async searchBattle(user, format) {
 		if (!user.connected) return;
-		formatid = Dex.getFormat(formatid).id;
 
-		return Promise.all([
-			Promise.resolve(user.userid),
-			user.prepBattle(formatid, 'search', null),
-			Ladders(formatid).getRating(user.userid),
-		]).then(([userId, validTeam, rating]) => {
-			if (userId !== user.userid) return;
-			return this.finishSearchBattle(user, formatid, validTeam, rating);
-		}, err => {
-			// Rejects iff ladders are disabled, or if we
-			// retrieved the rating but the user had changed their name.
+		let formatid = Dex.getFormat(format).id;
+		let userid;
+		let validTeam;
+		let rating;
+		try {
+			[userid, validTeam, rating] = await Promise.all([
+				Promise.resolve(user.userid),
+				user.prepBattle(formatid, 'search', null),
+				Ladders(formatid).getRating(user.userid),
+			]);
+		} catch (e) {
+			// Rejects if ladders are disabled, or if we retrieved the rating
+			// but the user had changed their name.
+			if (Ladders.disabled) user.popup(`The ladder is currently disabled due to high server load.`);
 
-			if (Ladders.disabled) return user.popup(`The ladder is currently disabled due to high server load.`);
 			// User feedback for renames handled elsewhere.
-		});
+			return;
+		}
+
+		if (userid !== user.userid) return;
+		return this.finishSearchBattle(user, formatid, validTeam, rating);
 	}
 
+	/**
+	 * Constructs the search for a battle for a user after validating their
+	 * team and fetching their rating in the given format.
+	 *
+	 * @param {User} user
+	 * @param {FormatID} formatid
+	 * @param {ValidatedTeam} validTeam
+	 * @param {number} rating
+	 */
 	finishSearchBattle(user, formatid, validTeam, rating) {
 		if (validTeam === false) return;
 
@@ -85,6 +148,17 @@ class Matchmaker {
 		this.addSearch(search, user, formatid);
 	}
 
+	/**
+	 * Verifies whether or not a match made between two users' search instances
+	 * is valid.
+	 *
+	 * @param {Search} search1
+	 * @param {Search} search2
+	 * @param {User} user1
+	 * @param {User} user2
+	 * @param {FormatID} formatid
+	 * @return {number | false | void}
+	 */
 	matchmakingOK(search1, search2, user1, user2, formatid) {
 		// This should never happen.
 		if (!user1 || !user2) {
@@ -117,6 +191,13 @@ class Matchmaker {
 		return Math.min(search1.rating, search2.rating) || 1;
 	}
 
+	/**
+	 * Adds a search for a battle under a given format for a user.
+	 *
+	 * @param {Search} newSearch
+	 * @param {User} user
+	 * @param {FormatID} formatid
+	 */
 	addSearch(newSearch, user, formatid) {
 		// Filter racing conditions
 		if (!user.connected || user !== Users.getExact(user.userid)) return;
@@ -145,6 +226,10 @@ class Matchmaker {
 		user.updateSearch();
 	}
 
+	/**
+	 * Performs matchmaking for each format containing any number of searches
+	 * based on PERIODIC_MATCH_INTERVAL.
+	 */
 	periodicMatch() {
 		this.searches.forEach((formatSearches, formatid) => {
 			if (formatSearches.size < 2) return;
@@ -167,6 +252,15 @@ class Matchmaker {
 		});
 	}
 
+	/**
+	 * Verifies whether or not a match made between two users is valid before
+	 * creating their battle room.
+	 *
+	 * @param {User | string} player1
+	 * @param {User | string} player2
+	 * @param {FormatID} format
+	 * @return {boolean}
+	 */
 	verifyPlayers(player1, player2, format) {
 		let p1 = (typeof player1 === 'string') ? Users(player1) : player1;
 		let p2 = (typeof player2 === 'string') ? Users(player2) : player2;
@@ -194,8 +288,21 @@ class Matchmaker {
 		return true;
 	}
 
+	/**
+	 * Creates a battle room for two users after either one user accepts
+	 * another's challenge request or after having been matched together by the
+	 * matchmaker.
+	 *
+	 * @param {User | string} p1
+	 * @param {User | string} p2
+	 * @param {FormatID} format
+	 * @param {ValidatedTeam} p1team
+	 * @param {ValidatedTeam} p2team
+	 * @param {Object} options
+	 * @return {BattleRoom | void}
+	 */
 	startBattle(p1, p2, format, p1team, p2team, options) {
-		if (!this.verifyPlayers(p1, p2, format)) return;
+		if (!this.verifyPlayers(p1, p2, format)) return null;
 
 		let roomid = Rooms.global.prepBattleRoom(format);
 		let room = Rooms.createBattle(roomid, format, p1, p2, options);
