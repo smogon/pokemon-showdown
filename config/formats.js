@@ -688,15 +688,12 @@ exports.Formats = [
 		column: 3,
 	},
 	{
-		name: "[Gen 2] STABmons",
-		desc: [
-			"Pok&eacute;mon can use any move of their typing, in addition to the moves they can normally learn.",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3611000/\">GSC STABmons</a>",
-		],
+		name: "[Gen 3] BL",
+		desc: ["&bullet; <a href=\"http://www.smogon.com/dex/rs/formats/bl/\">ADV BL</a>"],
 
-		mod: 'gen2',
-		ruleset: ['[Gen 2] OU', 'Ignore STAB Moves'],
-		banlist: [],
+		mod: 'gen3',
+		ruleset: ['[Gen 3] OU'],
+		banlist: ['OU'],
 	},
 
 	// ORAS Singles
