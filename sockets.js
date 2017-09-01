@@ -126,7 +126,6 @@ if (cluster.isMaster) {
 		console.log(`${count} connections were lost.`);
 
 		try {
-			worker.disconnect();
 			worker.kill('SIGTERM');
 		} catch (e) {}
 		workers.delete(worker.id);
@@ -314,8 +313,6 @@ if (cluster.isMaster) {
 			socketid = data.substr(1);
 			socket = sockets.get(socketid);
 			if (!socket) return;
-			socket.end();
-			// After sending the FIN packet, we make sure the I/O is totally blocked for this socket
 			socket.destroy();
 			sockets.delete(socketid);
 			channels.forEach(channel => channel.delete(socketid));
@@ -440,7 +437,6 @@ if (cluster.isMaster) {
 	process.once('disconnect', () => {
 		sockets.forEach(socket => {
 			try {
-				socket.end();
 				socket.destroy();
 			} catch (e) {}
 		});
@@ -462,7 +458,7 @@ if (cluster.isMaster) {
 		} else if (!socket.remoteAddress) {
 			// This condition occurs several times per day. It may be a SockJS bug.
 			try {
-				socket.end();
+				socket.destroy();
 			} catch (e) {}
 			return;
 		}
