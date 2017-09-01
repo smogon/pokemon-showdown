@@ -15,6 +15,7 @@
 'use strict';
 
 let Ladders = module.exports = getLadder;
+Object.assign(Ladders, require('./ladders-matchmaker'));
 
 Ladders.get = Ladders;
 Ladders.formatsListPrefix = '';

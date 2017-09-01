@@ -18,7 +18,6 @@ const REPORT_USER_STATS_INTERVAL = 10 * 60 * 1000;
 const CRASH_REPORT_THROTTLE = 60 * 60 * 1000;
 
 const FS = require('./fs');
-const Matchmaker = require('./ladders-matchmaker').matchmaker;
 
 let Rooms = module.exports = getRoom;
 
@@ -1455,8 +1454,8 @@ Rooms.createBattle = function (format, options) {
 	if (p1 === p2) throw new Error(`Players can't battle themselves`);
 	if (!p1) throw new Error(`p1 required`);
 	if (!p2) throw new Error(`p2 required`);
-	Matchmaker.cancelSearch(p1);
-	Matchmaker.cancelSearch(p2);
+	Ladders.matchmaker.cancelSearch(p1);
+	Ladders.matchmaker.cancelSearch(p2);
 
 	if (Rooms.global.lockdown === true) {
 		p1.popup("The server is restarting. Battles will be available again in a few minutes.");

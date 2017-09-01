@@ -18,6 +18,7 @@
 const FS = require('./fs');
 
 let Ladders = module.exports = getLadder;
+Object.assign(Ladders, require('./ladders-matchmaker'));
 
 Ladders.get = Ladders;
 
