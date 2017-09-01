@@ -518,7 +518,8 @@ exports.BattleMovedex = {
 			chance: 100,
 			volatileStatus: 'curse',
 		},
-		breaksProtect: true,
+		desc: "If this move is successful, it breaks through the target's Detect, King's Shield, Protect, or Spiky Shield for this turn, allowing other Pokemon to attack the target normally. If the target's side is protected by Crafty Shield, Mat Block, Quick Guard, or Wide Guard, that protection is also broken for this turn and other Pokemon may attack the target's side normally. This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks. If the user is holding a Power Herb, the move completes in one turn. Damage doubles and no accuracy check is done if the target has used Minimize while active. 100% chance to inflict a curse (ghost type) onto the target. This move removes the target's Substitute (if one is active). This move is also a guaranteed critical hit.",
+		shortDesc: "Disappears turn 1. Hits turn 2. Breaks protection. Curses the target.",
 	},
 	skydrop: {
 		inherit: true,
@@ -531,6 +532,8 @@ exports.BattleMovedex = {
 				def: -1,
 			},
 		},
+		desc: "This attack takes the target into the air with the user on the first turn and executes on the second. Pokemon weighing 200kg or more cannot be lifted. On the first turn, the user and the target avoid all attacks other than Gust, Hurricane, Sky Uppercut, Smack Down, Thousand Arrows, Thunder, and Twister. The user and the target cannot make a move between turns, but the target can select a move to use. This move cannot damage Flying-type Pokemon. Fails on the first turn if the target is an ally or if the target has a substitute. Lowers the target's Defense by one stage. This move is a guaranteed critical hit. This move ignores Protection.",
+		shortDesc: "User and foe fly up turn 1. Damages on turn 2. Lowers target's Def by 1 stage.",
 		flags: {contact: 1, charge: 1, mirror: 1, gravity: 1, distance: 1},
 		breaksProtect: true,
 	},
@@ -545,6 +548,8 @@ exports.BattleMovedex = {
 				source.addVolatile('mustrecharge');
 			}
 		},
+		desc: "If this move is successful, the user must recharge on the following turn and cannot make a move. If the target is knocked out by this move, the user does not have to recharge. This move is a guaranteed critical hit.",
+		shortDesc: "User cannot move next turn, if the target isn't KO'ed.",
 	},
 	gigaimpact: {
 		inherit: true,
@@ -557,6 +562,8 @@ exports.BattleMovedex = {
 				source.addVolatile('mustrecharge');
 			}
 		},
+		desc: "If this move is successful, the user must recharge on the following turn and cannot make a move. If the target is knocked out by this move, the user does not have to recharge. This move is a guaranteed critical hit.",
+		shortDesc: "User cannot move next turn, if the target isn't KO'ed.",
 	},
 	blastburn: {
 		inherit: true,
@@ -569,6 +576,8 @@ exports.BattleMovedex = {
 				source.addVolatile('mustrecharge');
 			}
 		},
+		desc: "If this move is successful, the user must recharge on the following turn and cannot make a move. If the target is knocked out by this move, the user does not have to recharge. This move is a guaranteed critical hit.",
+		shortDesc: "User cannot move next turn, if the target isn't KO'ed.",
 	},
 	frenzyplant: {
 		inherit: true,
@@ -581,6 +590,8 @@ exports.BattleMovedex = {
 				source.addVolatile('mustrecharge');
 			}
 		},
+		desc: "If this move is successful, the user must recharge on the following turn and cannot make a move. If the target is knocked out by this move, the user does not have to recharge. This move is a guaranteed critical hit.",
+		shortDesc: "User cannot move next turn, if the target isn't KO'ed.",
 	},
 	hydrocannon: {
 		inherit: true,
@@ -593,6 +604,8 @@ exports.BattleMovedex = {
 				source.addVolatile('mustrecharge');
 			}
 		},
+		desc: "If this move is successful, the user must recharge on the following turn and cannot make a move. If the target is knocked out by this move, the user does not have to recharge. This move is a guaranteed critical hit.",
+		shortDesc: "User cannot move next turn, if the target isn't KO'ed.",
 	},
 	rockwrecker: {
 		inherit: true,
@@ -605,6 +618,8 @@ exports.BattleMovedex = {
 				source.addVolatile('mustrecharge');
 			}
 		},
+		desc: "If this move is successful, the user must recharge on the following turn and cannot make a move. If the target is knocked out by this move, the user does not have to recharge. This move is a guaranteed critical hit.",
+		shortDesc: "User cannot move next turn, if the target isn't KO'ed.",
 	},
 	roaroftime: {
 		inherit: true,
@@ -617,6 +632,8 @@ exports.BattleMovedex = {
 				source.addVolatile('mustrecharge');
 			}
 		},
+		desc: "If this move is successful, the user must recharge on the following turn and cannot make a move. If the target is knocked out by this move, the user does not have to recharge. This move is a guaranteed critical hit.",
+		shortDesc: "User cannot move next turn, if the target isn't KO'ed.",
 	},
 	bide: {
 		inherit: true,
@@ -684,6 +701,7 @@ exports.BattleMovedex = {
 			if (user.template.id === 'snorlax') return power * 1.5;
 		},
 		ignoreImmunity: true,
+		desc: "Has a 30% chance to flinch the target. Fails if the user is not asleep. If the user is a Snorlax, this move does 1.5x more damage.",
 	},
 	/******************************************************************
 	Sound-based Normal-type moves:
@@ -784,6 +802,7 @@ exports.BattleMovedex = {
 		},
 		priority: 1,
 		secondary: null,
+		desc: "Has a 10% chance to cause the target to fall asleep. If this move is successful on at least one target and the user is a Meloetta, it changes to Pirouette Forme if it is currently in Aria Forme, or changes to Aria Forme if it is currently in Pirouette Forme. This forme change does not happen if the Meloetta has the Ability Sheer Force. The Pirouette Forme reverts to Aria Forme when Meloetta is not active. This move also switches Meloetta's SpA and Atk EVs, boosts, and certain natures, specifically: Modest <-> Adamant, Jolly <-> Timid, other natures are left untouched.",
 	},
 	/******************************************************************
 	Defend Order, Heal Order:
@@ -828,6 +847,8 @@ exports.BattleMovedex = {
 				this.damage(pokemon.maxhp * factor / 16);
 			},
 		},
+		desc: "Sets up a hazard on the foe's side of the field. Flying types take 1/4 of their max HP from this hazard. Everything else takes 1/8 of their max HP. Can be removed from the foe's side if any foe uses Rapid Spin or Defog, or is hit by Defog.",
+		shortDesc: "Hurts foes on switch-in (1/8 for every type except Flying types take 1/4).",
 	},
 	/******************************************************************
 	Silver Wind, Ominous Wind, AncientPower:
@@ -874,6 +895,8 @@ exports.BattleMovedex = {
 				},
 			},
 		},
+		desc: "Has a 100% chance to raise the user's Attack, Defense, Special Attack, Special Defense, and Speed by 1 stage. This attack's base power becomes 90, if the weather is set to Hail.",
+		shortDesc: "Raises all stats by 1 (not acc/eva).",
 	},
 	ominouswind: {
 		inherit: true,
@@ -904,6 +927,8 @@ exports.BattleMovedex = {
 				},
 			},
 		},
+		desc: "Has a 100% chance to raise the user's Attack, Defense, Special Attack, Special Defense, and Speed by 1 stage. This attack's base power becomes 90, if the weather is set to Hail.",
+		shortDesc: "Raises all stats by 1 (not acc/eva).",
 	},
 	ancientpower: {
 		inherit: true,
@@ -928,6 +953,8 @@ exports.BattleMovedex = {
 				},
 			},
 		},
+		desc: "Has a 100% chance to raise the user's Attack, Defense, Special Attack, Special Defense, and Speed by 1 stage.",
+		shortDesc: "Raises all stats by 1 (not acc/eva).",
 	},
 	/******************************************************************
 	Moves relating to Hail:
@@ -945,6 +972,8 @@ exports.BattleMovedex = {
 			}
 			return this.isWeather('hail') ? 90 : 60;
 		},
+		desc: "Power doubles if the user was hit by the target this turn. If the weather is set to hail, this move does 1.5x more damage.",
+		shortDesc: "Power doubles if user is damaged by the target.",
 	},
 	/******************************************************************
 	Direct phazing moves:
@@ -1087,6 +1116,8 @@ exports.BattleMovedex = {
 			chance: 30,
 			volatileStatus: 'confusion',
 		},
+		desc: "Has a 30% chance to flinch the target. Damage doubles if the target is using Bounce, Fly, or Sky Drop. If the user holds the Gossamer Wing, this move does 1.5x more damage.",
+		shortDesc: "30% chance to flinch the foe(s).",
 		pp: 15,
 		type: "Flying",
 	},
@@ -1095,6 +1126,8 @@ exports.BattleMovedex = {
 		basePower: 40,
 		accuracy: true,
 		multihit: [2, 2],
+		desc: "This move hits twice.",
+		shortDesc: "Hits twice.",
 	},
 	/******************************************************************
 	Moves with not enough drawbacks:
@@ -1111,6 +1144,8 @@ exports.BattleMovedex = {
 				spd: -2,
 			},
 		},
+		desc: "Lowers the user's Defense and Special Defense by 2 stage.",
+		shortDesc: "Lowers the user's Defense and Sp. Def by 2.",
 	},
 	/******************************************************************
 	Blizzard:
@@ -1126,6 +1161,8 @@ exports.BattleMovedex = {
 			chance: 30,
 			status: 'frz',
 		},
+		desc: "Has a 30% chance to freeze the target. If the weather is Hail, this move does not check accuracy.",
+		shortDesc: "30% chance to freeze foe(s). Can't miss in hail.",
 	},
 	/******************************************************************
 	Special Ghost and Fighting:
@@ -1149,6 +1186,8 @@ exports.BattleMovedex = {
 				spd: -1,
 			},
 		},
+		desc: "Has a 30% chance to lower the target's Special Defense by 1 stage.",
+		shortDesc: "30% chance to lower the target's Sp. Def by 1.",
 	},
 	/******************************************************************
 	Selfdestruct and Explosion:
@@ -1163,15 +1202,17 @@ exports.BattleMovedex = {
 		basePower: 200,
 		accuracy: true,
 		willCrit: true,
+		desc: "The user faints after using this move, even if this move fails for having no target. This move is prevented from executing if any active Pokemon has the Ability Damp. This move is a guaranteed critical hit.",
 	},
 	explosion: {
 		inherit: true,
 		basePower: 250,
 		accuracy: true,
 		willCrit: true,
+		desc: "The user faints after using this move, even if this move fails for having no target. This move is prevented from executing if any active Pokemon has the Ability Damp. This move is a guaranteed critical hit.",
 	},
 	/******************************************************************
-	Scald and Steam eruption:
+	Scald and Steam Eruption:
 	- base power not affected by weather
 	- 60% burn in sun
 
@@ -1187,6 +1228,7 @@ exports.BattleMovedex = {
 				break;
 			}
 		},
+		desc: "Has a 30% chance to burn the target. The target thaws out if it is frozen. If the weather is set to Sunny Day, there is a 60% chance to burn the target.",
 	},
 	steameruption: {
 		inherit: true,
@@ -1198,6 +1240,7 @@ exports.BattleMovedex = {
 				break;
 			}
 		},
+		desc: "Has a 30% chance to burn the target. The target thaws out if it is frozen. If the weather is set to Sunny Day, there is a 60% chance to burn the target.",
 	},
 	/******************************************************************
 	High Jump Kick:
@@ -1219,14 +1262,11 @@ exports.BattleMovedex = {
 	******************************************************************/
 	echoedvoice: {
 		inherit: true,
-		accuracy: 100,
 		basePower: 80,
 		basePowerCallback: function () {
 			return 80;
 		},
-		category: "Special",
 		isViable: true,
-		priority: 0,
 		ignoreImmunity: true,
 		onHit: function (target, source) {
 			target.side.addSideCondition('futuremove');
@@ -1254,8 +1294,8 @@ exports.BattleMovedex = {
 			this.add('-start', source, 'move: Echoed Voice');
 			return null;
 		},
-		target: "normal",
-		type: "Normal",
+		desc: "Deals damage two turns after this move is used. At the end of that turn, the damage is calculated at that time and dealt to the Pokemon at the position the target had when the move was used. If the user is no longer active at the time, damage is calculated based on the user's natural Special Attack stat, types, and level, with no boosts from its held item or Ability. Fails if this move or Future Sight is already in effect for the target's position.",
+		shortDesc: "Hits two turns after being used.",
 	},
 	/******************************************************************
 	Rapid Spin, Rock Throw:
