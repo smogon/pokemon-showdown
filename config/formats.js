@@ -320,32 +320,53 @@ exports.Formats = [
 		column: 2,
 	},
 	{
-		name: "[Gen 7] 2v2 Doubles",
+		name: "[Gen 7] Tier Shift",
 		desc: [
-			"Double battle where you bring four Pok&eacute;mon to Team Preview and choose only two.",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3606989/\">2v2 Doubles</a>",
+			"Pok&eacute;mon get +10 to each stat per tier below OU they are in. UU gets +10, RU +20, NU +30, and PU +40.",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3610073/\">Tier Shift</a>",
 		],
 
 		mod: 'gen7',
-		gameType: 'doubles',
-		teamLength: {
-			validate: [2, 4],
-			battle: 2,
+		ruleset: ['[Gen 7] OU'],
+		banlist: ['Tangela'],
+		onModifyTemplate: function (template, pokemon) {
+			if (pokemon.tierShifted) return template;
+			let tsTemplate = Object.assign({}, template);
+			const boosts = {'UU': 5, 'BL2': 5, 'RU': 10, 'BL3': 10, 'NU': 15, 'BL4': 15, 'PU': 20, 'NFE': 20, 'LC Uber': 20, 'LC': 20};
+			let tier = template.tier;
+			if (pokemon.set.item) {
+				let item = this.getItem(pokemon.set.item);
+				if (item.megaEvolves === template.species) tier = this.getTemplate(item.megaStone).tier;
+			}
+			if (tier.charAt(0) === '(') tier = tier.slice(1, -1);
+			let boost = (tier in boosts) ? boosts[tier] : 0;
+			for (let statName in template.baseStats) {
+				tsTemplate.baseStats[statName] = this.clampIntRange(template.baseStats[statName] + boost, 1, 255);
+			}
+			pokemon.tierShifted = true;
+			return tsTemplate;
 		},
-		ruleset: ['Gen 7] Doubles OU'],
-		banlist: ['Tapu Lele', 'Focus Sash', 'Perish Song'],
 	},
 	{
-		name: "[Gen 7] Typemons",
-		desc: [
-			"All Pok&eacute;mon on a team get access to all moves of a chosen type. The type is chosen for the entire team, not individual Pok&eacute;mon.",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3606351/\">Typemons</a>",
-		],
+		name: "[Gen 7] AAA Sketchmons",
+		desc: ["Mashup of <a href=\"https://www.smogon.com/forums/threads/3587901/\">Almost Any Ability</a> and <a href=\"https://www.smogon.com/forums/threads/3587743/\">Sketchmons</a>."],
 
 		mod: 'gen7',
 		searchShow: false,
-		ruleset: ['[Gen 7] OU'],
-		banlist: ['Serperior'],
+		ruleset: ['[Gen 7] Almost Any Ability', '[Gen 7] Sketchmons'],
+		banlist: [],
+		noSketch: ['Belly Drum', 'Celebrate', 'Conversion', "Forest's Curse", 'Geomancy', 'Happy Hour', 'Hold Hands', 'Lovely Kiss', 'Purify', 'Shell Smash', 'Shift Gear', 'Sketch', 'Spore', 'Sticky Web', 'Trick-or-Treat'],
+		onValidateSet: function (set) {
+			let bannedAbilities = {'Arena Trap': 1, 'Comatose': 1, 'Contrary': 1, 'Fluffy': 1, 'Fur Coat': 1, 'Huge Power': 1, 'Illusion': 1, 'Imposter': 1, 'Innards Out': 1, 'Parental Bond': 1, 'Protean': 1, 'Pure Power': 1, 'Simple':1, 'Speed Boost': 1, 'Stakeout': 1, 'Water Bubble': 1, 'Wonder Guard': 1};
+			if (set.ability in bannedAbilities) {
+				let template = this.getTemplate(set.species || set.name);
+				let legalAbility = false;
+				for (let i in template.abilities) {
+					if (set.ability === template.abilities[i]) legalAbility = true;
+				}
+				if (!legalAbility) return ['The ability ' + set.ability + ' is banned on Pok\u00e9mon that do not naturally have it.'];
+			}
+		},
 	},
 	{
 		section: "Other Metagames",
@@ -569,17 +590,21 @@ exports.Formats = [
 		},
 	},
 	{
-		name: "[Gen 7] BH Doubles",
+		name: "[Gen 7] 2v2 Doubles",
 		desc: [
-			"Anything that can be hacked in-game and is usable in local battles is allowed.",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3587475/\">Balanced Hackmons</a>",
+			"Double battle where you bring four Pok&eacute;mon to Team Preview and choose only two.",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3606989/\">2v2 Doubles</a>",
 		],
 
 		mod: 'gen7',
 		gameType: 'doubles',
 		searchShow: false,
-		ruleset: ['[Gen 7] Balanced Hackmons'],
-		banlist: [],
+		teamLength: {
+			validate: [2, 4],
+			battle: 2,
+		},
+		ruleset: ['Gen 7] Doubles OU'],
+		banlist: ['Tapu Lele', 'Focus Sash', 'Perish Song'],
 	},
 	{
 		name: "[Gen 6] Gen-NEXT OU",
