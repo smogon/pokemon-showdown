@@ -330,20 +330,20 @@ exports.Formats = [
 		ruleset: ['[Gen 7] OU'],
 		banlist: ['Tangela'],
 		onModifyTemplate: function (template, pokemon) {
-			if (pokemon.tierShifted) return template;
+			if (pokemon.tierShifted) return;
 			let tsTemplate = Object.assign({}, template);
 			const boosts = {'UU': 10, 'BL2': 10, 'RU': 20, 'BL3': 20, 'NU': 30, 'BL4': 30, 'PU': 40, 'NFE': 40, 'LC Uber': 40, 'LC': 40};
-			let tier = template.tier;
+			let tier = tsTemplate.tier;
 			if (pokemon.set.item) {
 				let item = this.getItem(pokemon.set.item);
-				if (item.megaEvolves === template.species) tier = this.getTemplate(item.megaStone).tier;
+				if (item.megaEvolves === tsTemplate.species) tier = this.getTemplate(item.megaStone).tier;
 			}
 			if (tier.charAt(0) === '(') tier = tier.slice(1, -1);
 			let boost = (tier in boosts) ? boosts[tier] : 0;
 			if (boost > 0 && (pokemon.set.ability === 'Drizzle' || pokemon.set.item === 'Mewnium Z')) boost = 0;
 			if (boost > 20 && pokemon.set.ability === 'Drought') boost = 20;
-			for (let statName in template.baseStats) {
-				tsTemplate.baseStats[statName] = this.clampIntRange(template.baseStats[statName] + boost, 1, 255);
+			for (let statName in tsTemplate.baseStats) {
+				tsTemplate.baseStats[statName] = this.clampIntRange(tsTemplate.baseStats[statName] + boost, 1, 255);
 			}
 			pokemon.tierShifted = true;
 			return tsTemplate;
