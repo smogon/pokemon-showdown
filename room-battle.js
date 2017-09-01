@@ -277,7 +277,7 @@ class BattleTimer {
 			const player = this.battle[slot];
 			const isConnected = player && player.active;
 
-			if (isConnected === (this.dcTicksLeft[slotNum] !== NOT_DISCONNECTED)) continue;
+			if (!!isConnected === !!(this.dcTicksLeft[slotNum] === NOT_DISCONNECTED)) continue;
 
 			if (!isConnected) {
 				// player has disconnected: don't wait longer than 6 ticks (1 minute)
