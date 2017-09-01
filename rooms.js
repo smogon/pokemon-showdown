@@ -18,6 +18,7 @@ const REPORT_USER_STATS_INTERVAL = 10 * 60 * 1000;
 const CRASH_REPORT_THROTTLE = 60 * 60 * 1000;
 
 const FS = require('./fs');
+const Matchmaker = require('./ladders-matchmaker').matchmaker;
 
 let Rooms = module.exports = getRoom;
 
@@ -812,12 +813,8 @@ class BattleRoom extends Room {
 			options = {};
 		}
 
-		let rated;
-		if (options.rated && format.rated !== false) {
-			rated = options.rated;
-		} else {
-			rated = false;
-		}
+		if (format.rated === false) options.rated = false;
+		let rated = options.rated || false;
 
 		if (options.tour) {
 			this.tour = options.tour;
@@ -829,7 +826,7 @@ class BattleRoom extends Room {
 		this.p2 = p2 || null;
 
 		this.rated = rated;
-		this.battle = new Rooms.RoomBattle(this, formatid, rated);
+		this.battle = new Rooms.RoomBattle(this, formatid, options);
 		this.game = this.battle;
 
 		this.sideTicksLeft = [21, 21];
@@ -1439,24 +1436,43 @@ Rooms.search = function (name, fallback) {
 	return getRoom(name) || getRoom(toId(name)) || getRoom(Rooms.aliases.get(toId(name)));
 };
 
-Rooms.createBattle = function (roomid, format, p1, p2, options) {
-	if (roomid && roomid.id) return roomid;
-	if (!p1 || !p2) return false;
-	if (!roomid) roomid = 'default';
-	if (!Rooms.rooms.has(roomid)) {
-		// console.log("NEW BATTLE ROOM: " + roomid);
-		Monitor.countBattle(p1.latestIp, p1.name);
-		Monitor.countBattle(p2.latestIp, p2.name);
-		Rooms.rooms.set(roomid, new BattleRoom(roomid, format, p1, p2, options));
-	}
-	return Rooms(roomid);
+Rooms.createBattleRoom = function (roomid, format, p1, p2, options) {
+	if (Rooms.rooms.has(roomid)) throw new Error(`Room ${roomid} already exists`);
+	// console.log("NEW BATTLE ROOM: " + roomid);
+	const room = new BattleRoom(roomid, format, p1, p2, options);
+	Rooms.rooms.set(roomid, room);
+	return room;
 };
 Rooms.createChatRoom = function (roomid, title, data) {
-	let room = Rooms.rooms.get(roomid);
-	if (room) return room;
-
-	room = new ChatRoom(roomid, title, data);
+	if (Rooms.rooms.has(roomid)) throw new Error(`Room ${roomid} already exists`);
+	const room = new ChatRoom(roomid, title, data);
 	Rooms.rooms.set(roomid, room);
+	return room;
+};
+Rooms.createBattle = function (format, options) {
+	const p1 = options.p1;
+	const p2 = options.p2;
+	if (p1 === p2) throw new Error(`Players can't battle themselves`);
+	if (!p1) throw new Error(`p1 required`);
+	if (!p2) throw new Error(`p2 required`);
+	Matchmaker.cancelSearch(p1);
+	Matchmaker.cancelSearch(p2);
+
+	if (Rooms.global.lockdown === true) {
+		p1.popup("The server is restarting. Battles will be available again in a few minutes.");
+		p2.popup("The server is restarting. Battles will be available again in a few minutes.");
+		return;
+	}
+
+	const roomid = Rooms.global.prepBattleRoom(format);
+	const room = Rooms.createBattleRoom(roomid, format, p1, p2, options);
+	room.battle.addPlayer(p1, options.p1team);
+	room.battle.addPlayer(p2, options.p2team);
+	p1.joinRoom(room);
+	p2.joinRoom(room);
+	Monitor.countBattle(p1.latestIp, p1.name);
+	Monitor.countBattle(p2.latestIp, p2.name);
+	Rooms.global.onCreateBattleRoom(p1, p2, room, options);
 	return room;
 };
 

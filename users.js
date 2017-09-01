@@ -1405,7 +1405,13 @@ class User {
 			}
 			return false;
 		}
-		Matchmaker.startBattle(this, user, user.challengeTo.format, team, user.challengeTo.team, {rated: false});
+		Rooms.createBattle(user.challengeTo.format, {
+			p1: this,
+			p1team: team,
+			p2: user,
+			p2team: user.challengeTo.team,
+			rated: false,
+		});
 		delete this.challengesFrom[user.userid];
 		user.challengeTo = null;
 		this.updateChallenges();

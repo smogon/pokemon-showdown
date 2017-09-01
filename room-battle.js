@@ -66,7 +66,9 @@ class BattlePlayer {
 
 		for (let i = 0; i < user.connections.length; i++) {
 			let connection = user.connections[i];
-			Sockets.subchannelMove(connection.worker, this.game.id, this.slotNum + 1, connection.socketid);
+			if (connection.inRooms.has(game.id)) {
+				Sockets.subchannelMove(connection.worker, this.game.id, this.slotNum + 1, connection.socketid);
+			}
 		}
 	}
 	destroy() {
@@ -322,16 +324,16 @@ class BattleTimer {
 }
 
 class Battle {
-	constructor(room, formatid, rated) {
+	constructor(room, formatid, options) {
 		let format = Dex.getFormat(formatid);
 		this.id = room.id;
 		this.room = room;
 		this.title = format.name;
 		if (!this.title.endsWith(" Battle")) this.title += " Battle";
-		this.allowRenames = !rated;
+		this.allowRenames = !options.rated;
 
 		this.format = formatid;
-		this.rated = rated;
+		this.rated = options.rated;
 		this.started = false;
 		this.ended = false;
 		this.active = false;
@@ -361,7 +363,7 @@ class Battle {
 			throw new Error(`Battle with ID ${room.id} already exists.`);
 		}
 
-		this.send('init', this.format, rated ? '1' : '');
+		this.send('init', this.format, this.rated ? '1' : '');
 		this.process.pendingTasks.set(room.id, this);
 	}
 
