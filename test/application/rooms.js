@@ -2,7 +2,6 @@
 
 const assert = require('assert');
 
-const {matchmaker, Matchmaker} = require('../../ladders-matchmaker');
 const {User} = require('../../dev-tools/users-utils');
 
 describe('Rooms features', function () {
@@ -27,11 +26,6 @@ describe('Rooms features', function () {
 		const packedTeam = 'Weavile||lifeorb||swordsdance,knockoff,iceshard,iciclecrash|Jolly|,252,,,4,252|||||';
 
 		let room;
-		before(function () {
-			Rooms.global.ladderIpLog.end();
-			clearInterval(matchmaker.periodicMatchInterval);
-			matchmaker.periodicMatchInterval = null;
-		});
 		afterEach(function () {
 			Users.users.forEach(user => {
 				room.onLeave(user);
@@ -39,9 +33,6 @@ describe('Rooms features', function () {
 				user.destroy();
 			});
 			if (room) room.destroy();
-		});
-		after(function () {
-			Object.assign(matchmaker, new Matchmaker());
 		});
 
 		it('should allow two users to join the battle', function () {

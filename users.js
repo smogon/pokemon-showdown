@@ -34,8 +34,6 @@ const PERMALOCK_CACHE_TIME = 30 * 24 * 60 * 60 * 1000;
 
 const FS = require('./fs');
 
-const Matchmaker = require('./ladders-matchmaker').matchmaker;
-
 let Users = module.exports = getUser;
 
 /*********************************************************
@@ -1343,7 +1341,7 @@ class User {
 		}));
 	}
 	cancelSearch(format) {
-		return Matchmaker.cancelSearch(this, format);
+		return Ladders.matchmaker.cancelSearch(this, format);
 	}
 	makeChallenge(user, format, team/*, isPrivate*/) {
 		user = getUser(user);
