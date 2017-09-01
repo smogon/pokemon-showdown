@@ -3330,6 +3330,9 @@ exports.commands = {
 				return false;
 			}
 		}
+		if (user === targetUser) {
+			return this.popupReply("You can't battle your own account. Please use something like Private Browsing so you can use an alt to battle yourself.");
+		}
 		user.prepBattle(Dex.getFormat(target).id, 'challenge', connection).then(validTeam => {
 			if (validTeam === false) return;
 			user.makeChallenge(targetUser, target, validTeam);
