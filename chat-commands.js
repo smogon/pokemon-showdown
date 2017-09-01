@@ -2467,6 +2467,7 @@ exports.commands = {
 					}
 				}
 
+				let searches = new Map(require('./ladders-matchmaker').matchmaker.searches);
 				Chat.uncacheTree('./chat');
 				delete require.cache[require.resolve('./chat-commands')];
 				delete require.cache[require.resolve('./chat-plugins/info')];
@@ -2476,14 +2477,17 @@ exports.commands = {
 				Chat.uncacheTree('./tournaments');
 				global.Tournaments = require('./tournaments');
 				Tournaments.tournaments = runningTournaments;
+				require('./ladders-matchmaker').matchmaker.searches = searches;
 				this.sendReply("Chat commands have been hot-patched.");
 			} else if (target === 'tournaments') {
 				if (lock['tournaments']) return this.errorReply(`Hot-patching tournaments has been disabled by ${lock['tournaments'].by} (${lock['tournaments'].reason})`);
 
+				let searches = new Map(require('./ladders-matchmaker').matchmaker.searches);
 				let runningTournaments = Tournaments.tournaments;
 				Chat.uncacheTree('./tournaments');
 				global.Tournaments = require('./tournaments');
 				Tournaments.tournaments = runningTournaments;
+				require('./ladders-matchmaker').matchmaker.searches = searches;
 				this.sendReply("Tournaments have been hot-patched.");
 			} else if (target === 'battles') {
 				if (lock['battles']) return this.errorReply(`Hot-patching battles has been disabled by ${lock['battles'].by} (${lock['battles'].reason})`);

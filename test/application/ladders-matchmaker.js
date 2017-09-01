@@ -149,13 +149,13 @@ describe('Matchmaker', function () {
 		it('should prevent battles from starting if either player is no longer a user', function () {
 			this.p2 = destroyPlayer(this.p2);
 			let room = matchmaker.startBattle(this.p1, this.p2, FORMATID, this.s1.team, this.s2.team, {rated: 1000});
-			assert.strictEqual(room, undefined);
+			assert.strictEqual(room, null);
 		});
 
 		it('should prevent battles from starting if both players are identical', function () {
 			Object.assign(this.s2, this.s1);
 			let room = matchmaker.startBattle(this.p1, this.p2, FORMATID, this.s1.team, this.s2.team, {rated: 1000});
-			assert.strictEqual(room, undefined);
+			assert.strictEqual(room, null);
 		});
 
 		before(function () {
@@ -170,7 +170,7 @@ describe('Matchmaker', function () {
 
 		it('should prevent battles from starting if the server is in lockdown', function () {
 			let room = matchmaker.startBattle(this.p1, this.p2, FORMATID, this.s1.team, this.s2.team, {rated: 1000});
-			assert.strictEqual(room, undefined);
+			assert.strictEqual(room, null);
 		});
 	});
 });
