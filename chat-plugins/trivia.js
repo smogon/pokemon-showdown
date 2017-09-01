@@ -1012,7 +1012,7 @@ const commands = {
 
 		let category = toId(target[0]);
 		if (!CATEGORIES[category]) return this.errorReply(`'${target[0].trim()}' is not a valid category. View /trivia help for more information.`);
-		if (this.message.startsWith("/wl") && category === 'pokemon') return this.errorReply("Pokemon questions are not allowed for the Weakest Link");
+		if (this.message.startsWith("/wlink") && category === 'pokemon') return this.errorReply("Pokemon questions are not allowed for the Weakest Link");
 		let question = Chat.escapeHTML(target[1].trim());
 		if (!question) return this.errorReply(`'${target[1]}' is not a valid question.`);
 		if (question.length > MAX_QUESTION_LENGTH) {
@@ -1030,7 +1030,7 @@ const commands = {
 		if (answers.some(answer => answer.length > MAX_ANSWER_LENGTH)) {
 			return this.errorReply(`Some of the answers entered were too long! They must remain under ${MAX_ANSWER_LENGTH} characters.`);
 		}
-		let isWL = this.message.startsWith("/wl");
+		let isWL = this.message.startsWith("/wlink");
 		let submissions = triviaData.submissions;
 		let submission = {
 			category: category,
@@ -1675,6 +1675,7 @@ module.exports = {
 
 	commands: {
 		trivia: commands,
+		wlink: commands,
 		ta: commands.answer,
 		triviahelp: [
 			"Modes:",
