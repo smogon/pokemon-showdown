@@ -285,17 +285,6 @@ class Validator {
 							set.sketchmonsMove = move.id;
 							continue;
 						}
-						// Typemons hack
-						if (format.id.includes('typemons') && move.type !== 'Normal' && !(move.id in {geomancy:1, quiverdance:1, shiftgear:1, stickyweb:1, struggle:1, tailglow:1}) && !move.isZ) {
-							if (!teamHas.typemons) {
-								teamHas.typemons = {type: move.type, moves: [move.id]};
-								continue;
-							}
-							if (teamHas.typemons.type === move.type && teamHas.typemons.moves.indexOf(move.id) < 0) {
-								teamHas.typemons.moves.push(move.id);
-								continue;
-							}
-						}
 						let problemString = `${name} can't learn ${move.name}`;
 						if (problem.type === 'incompatibleAbility') {
 							problemString = problemString.concat(` because it's incompatible with its ability.`);
@@ -847,8 +836,6 @@ class Validator {
 		do {
 			alreadyChecked[template.speciesid] = true;
 			if (dex.gen === 2 && template.gen === 1) tradebackEligible = true;
-			// STABmons hack
-			if (ruleTable.has('ignorestabmoves') && template.types.includes(move.type)) return false;
 			if (!template.learnset) {
 				if (template.baseSpecies !== template.species) {
 					// forme without its own learnset
