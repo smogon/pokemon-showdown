@@ -328,9 +328,8 @@ exports.Formats = [
 
 		mod: 'gen7',
 		ruleset: ['[Gen 7] OU'],
-		banlist: ['Tangela'],
+		banlist: ['Tangela', 'Damp Rock', 'Deep Sea Tooth'],
 		onModifyTemplate: function (template, pokemon) {
-			if (pokemon.tierShifted) return;
 			let tsTemplate = Object.assign({}, template);
 			const boosts = {'UU': 10, 'BL2': 10, 'RU': 20, 'BL3': 20, 'NU': 30, 'BL4': 30, 'PU': 40, 'NFE': 40, 'LC Uber': 40, 'LC': 40};
 			let tier = tsTemplate.tier;
@@ -346,7 +345,6 @@ exports.Formats = [
 			for (let statName in tsTemplate.baseStats) {
 				tsTemplate.baseStats[statName] = this.clampIntRange(tsTemplate.baseStats[statName] + boost, 1, 255);
 			}
-			pokemon.tierShifted = true;
 			return tsTemplate;
 		},
 	},
