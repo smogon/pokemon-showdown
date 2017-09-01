@@ -58,27 +58,24 @@ class Matchmaker {
 		return true;
 	}
 
-	searchBattle(user, formatid) {
+	async searchBattle(user, formatid) {
 		if (!user.connected) return;
 		formatid = Dex.getFormat(formatid).id;
-
-		return Promise.all([
-			Promise.resolve(user.userid),
-			user.prepBattle(formatid, 'search', null),
-			Ladders(formatid).getRating(user.userid),
-		]).then(([userId, validTeam, rating]) => {
-			if (userId !== user.userid) return;
-			return this.finishSearchBattle(user, formatid, validTeam, rating);
-		}, err => {
+		let oldUserid = user.userid;
+		let validTeam, rating;
+		try {
+			[validTeam, rating] = await Promise.all([
+				user.prepBattle(formatid, 'search', null),
+				Ladders(formatid).getRating(user.userid),
+			]);
+		} catch (e) {
 			// Rejects iff ladders are disabled, or if we
 			// retrieved the rating but the user had changed their name.
-
 			if (Ladders.disabled) return user.popup(`The ladder is currently disabled due to high server load.`);
 			// User feedback for renames handled elsewhere.
-		});
-	}
-
-	finishSearchBattle(user, formatid, validTeam, rating) {
+			return;
+		}
+		if (oldUserid !== user.userid) return;
 		if (validTeam === false) return;
 
 		const search = new Search(user.userid, validTeam, rating);
