@@ -534,6 +534,7 @@ class Battle {
 			if (request[3]) data += `\n|sentchoice|${request[3]}`;
 			(connection || user).sendTo(this.id, data);
 		}
+		if (!player.active) this.onJoin(user);
 	}
 	onUpdateConnection(user, connection) {
 		this.onConnect(user, connection);
