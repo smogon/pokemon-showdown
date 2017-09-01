@@ -1,7 +1,5 @@
 'use strict';
 
-const Matchmaker = require('../ladders-matchmaker').matchmaker;
-
 const BRACKET_MINIMUM_UPDATE_INTERVAL = 2 * 1000;
 const AUTO_DISQUALIFY_WARNING_TIMEOUT = 30 * 1000;
 const AUTO_START_MINIMUM_TIMEOUT = 30 * 1000;
@@ -792,7 +790,14 @@ class Tournament {
 		let player = this.players[user.userid];
 		if (!this.pendingChallenges.get(player)) return;
 
-		let room = Matchmaker.startBattle(from, user, this.teambuilderFormat, challenge.team, validTeam, {rated: !Ladders.disabled && this.isRated, tour: this});
+		let room = Rooms.createBattle(this.teambuilderFormat, {
+			p1: from,
+			p1team: challenge.team,
+			p2: user,
+			p2team: validTeam,
+			rated: !Ladders.disabled && this.isRated,
+			tour: this,
+		});
 		if (!room) return;
 
 		this.pendingChallenges.set(challenge.from, null);

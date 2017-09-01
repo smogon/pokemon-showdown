@@ -61,14 +61,9 @@ describe('Matchmaker', function () {
 	});
 
 	it('should matchmake users when appropriate', function () {
-		let {startBattle} = matchmaker;
-		matchmaker.startBattle = () => {
-			matchmaker.startBattle = startBattle;
-			assert.strictEqual(matchmaker.searches.get(FORMATID).size, 0);
-		};
-
 		addSearch(this.p1);
 		addSearch(this.p2);
+		assert.strictEqual(matchmaker.searches.get(FORMATID).size, 0);
 	});
 
 	it('should matchmake users within a reasonable rating range', function () {
@@ -146,15 +141,12 @@ describe('Matchmaker', function () {
 			this.s2 = null;
 		});
 
-		it('should prevent battles from starting if either player is no longer a user', function () {
-			this.p2 = destroyPlayer(this.p2);
-			let room = matchmaker.startBattle(this.p1, this.p2, FORMATID, this.s1.team, this.s2.team, {rated: 1000});
-			assert.strictEqual(room, undefined);
-		});
-
 		it('should prevent battles from starting if both players are identical', function () {
 			Object.assign(this.s2, this.s1);
-			let room = matchmaker.startBattle(this.p1, this.p2, FORMATID, this.s1.team, this.s2.team, {rated: 1000});
+			let room;
+			try {
+				room = Rooms.createBattle(FORMATID, {p1: this.p1, p2: this.p1, p1team: this.s1.team, p2team: this.s2.team, rated: 1000});
+			} catch (e) {}
 			assert.strictEqual(room, undefined);
 		});
 
@@ -169,7 +161,7 @@ describe('Matchmaker', function () {
 		});
 
 		it('should prevent battles from starting if the server is in lockdown', function () {
-			let room = matchmaker.startBattle(this.p1, this.p2, FORMATID, this.s1.team, this.s2.team, {rated: 1000});
+			let room = Rooms.createBattle(FORMATID, {p1: this.p1, p2: this.p2, p1team: this.s1.team, p2team: this.s2.team, rated: 1000});
 			assert.strictEqual(room, undefined);
 		});
 	});

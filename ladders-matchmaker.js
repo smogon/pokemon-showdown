@@ -86,8 +86,8 @@ class Matchmaker {
 	}
 
 	matchmakingOK(search1, search2, user1, user2, formatid) {
-		// This should never happen.
 		if (!user1 || !user2) {
+			// This should never happen.
 			return void require('./crashlogger')(new Error(`Matched user ${user1 ? search2.userid : search1.userid} not found`), "The main process");
 		}
 
@@ -136,7 +136,13 @@ class Matchmaker {
 				delete user.searching[formatid];
 				delete searchUser.searching[formatid];
 				formatSearches.delete(search);
-				this.startBattle(searchUser, user, formatid, search.team, newSearch.team, {rated: !Ladders.disabled && minRating});
+				Rooms.createBattle(formatid, {
+					p1: searchUser,
+					p1team: search.team,
+					p2: user,
+					p2team: newSearch.team,
+					rated: !Ladders.disabled && minRating,
+				});
 				return;
 			}
 		}
@@ -160,54 +166,17 @@ class Matchmaker {
 					delete searchUser.searching[formatid];
 					formatSearches.delete(search);
 					formatSearches.delete(longestSearch);
-					this.startBattle(searchUser, longestSearcher, formatid, search.team, longestSearch.team, {rated: !Ladders.disabled && minRating});
+					Rooms.createBattle(formatid, {
+						p1: searchUser,
+						p1team: search.team,
+						p2: longestSearcher,
+						p2team: longestSearch.team,
+						rated: !Ladders.disabled && minRating,
+					});
 					return;
 				}
 			}
 		});
-	}
-
-	verifyPlayers(player1, player2, format) {
-		let p1 = (typeof player1 === 'string') ? Users(player1) : player1;
-		let p2 = (typeof player2 === 'string') ? Users(player2) : player2;
-		if (!p1 || !p2) {
-			this.cancelSearch(p1, format);
-			this.cancelSearch(p2, format);
-			return false;
-		}
-
-		if (p1 === p2) {
-			this.cancelSearch(p1, format);
-			this.cancelSearch(p2, format);
-			p1.popup("You can't battle your own account. Please use something like Private Browsing to battle yourself.");
-			return false;
-		}
-
-		if (Rooms.global.lockdown === true) {
-			this.cancelSearch(p1, format);
-			this.cancelSearch(p2, format);
-			p1.popup("The server is restarting. Battles will be available again in a few minutes.");
-			p2.popup("The server is restarting. Battles will be available again in a few minutes.");
-			return false;
-		}
-
-		return true;
-	}
-
-	startBattle(p1, p2, format, p1team, p2team, options) {
-		if (!this.verifyPlayers(p1, p2, format)) return;
-
-		let roomid = Rooms.global.prepBattleRoom(format);
-		let room = Rooms.createBattle(roomid, format, p1, p2, options);
-		p1.joinRoom(room);
-		p2.joinRoom(room);
-		room.battle.addPlayer(p1, p1team);
-		room.battle.addPlayer(p2, p2team);
-		this.cancelSearch(p1, format);
-		this.cancelSearch(p2, format);
-		Rooms.global.onCreateBattleRoom(p1, p2, room, options);
-
-		return room;
 	}
 }
 
