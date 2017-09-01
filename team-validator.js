@@ -825,7 +825,7 @@ class Validator {
 		 * The format doesn't allow Pokemon traded from the future
 		 * (This is everything except in Gen 1 Tradeback)
 		 */
-		const noFutureGen = !dex.getRuleTable(format).has('allowtradeback');
+		const noFutureGen = !ruleTable.has('allowtradeback');
 		/**
 		 * If a move can only be learned from a gen 2-5 egg, we have to check chainbreeding validity
 		 * limitedEgg is false if there are any legal non-egg sources for the move, and true otherwise
