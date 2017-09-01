@@ -3330,6 +3330,9 @@ exports.commands = {
 				return false;
 			}
 		}
+		if (targetUser === user) {
+			return this.popupReply("You can't battle yourself. The best you can do is open PS in Private Browsing (or another browser) and log into a different username, and battle that username.");
+		}
 		user.prepBattle(Dex.getFormat(target).id, 'challenge', connection).then(validTeam => {
 			if (validTeam === false) return;
 			user.makeChallenge(targetUser, target, validTeam);
