@@ -1411,7 +1411,7 @@ exports.BattleFormatsData = {
 			{"generation": 3, "level": 10, "abilities":["intimidate"], "moves":["tackle", "tailwhip", "rage", "hornattack"]},
 			{"generation": 3, "level": 46, "abilities":["intimidate"], "moves":["refresh", "earthquake", "tailwhip", "bodyslam"]},
 		],
-		tier: "PU",
+		tier: "BL4",
 	},
 	magikarp: {
 		randomBattleMoves: ["bounce", "flail", "tackle", "hydropump"],
@@ -4852,7 +4852,7 @@ exports.BattleFormatsData = {
 	vanilluxe: {
 		randomBattleMoves: ["blizzard", "explosion", "hiddenpowerground", "flashcannon", "autotomize", "freezedry"],
 		randomDoubleBattleMoves: ["blizzard", "taunt", "hiddenpowerground", "flashcannon", "autotomize", "protect", "freezedry"],
-		tier: "PU",
+		tier: "BL4",
 	},
 	deerling: {
 		randomBattleMoves: ["agility", "batonpass", "seedbomb", "jumpkick", "synthesis", "return", "thunderwave"],
