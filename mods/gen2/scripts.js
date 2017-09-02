@@ -169,18 +169,12 @@ exports.BattleScripts = {
 			target.gotAttacked(move, damage, pokemon);
 		}
 
-		// Checking if substitute fainted
-		if (target.subFainted) doSelfDestruct = false;
+		
 		if (move.selfdestruct && doSelfDestruct) {
 			this.faint(pokemon, pokemon, move);
 		}
 
-		// The move missed.
-		if (!damage && damage !== 0) {
-			// Delete the partial trap lock if necessary.
-			delete pokemon.volatiles['partialtrappinglock'];
-			return false;
-		}
+
 
 		if (move.ohko) this.add('-ohko');
 
