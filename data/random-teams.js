@@ -1,7 +1,7 @@
 'use strict';
 
 const Dex = require('./../sim/dex');
-const PRNG = require('./../sim/prng');evs
+const PRNG = require('./../sim/prng');
 
 const randomBSSFactorySets = require('./bss-factory-sets.json');
 const randomFactorySets = require('./factory-sets.json');
