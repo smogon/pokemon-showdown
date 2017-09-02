@@ -731,36 +731,40 @@ class Validator {
 				problems.push(`${name} can only use Hidden Power Dark/Dragon/Electric/Steel/Ice because it must have at least 5 perfect IVs${etc}.`);
 			}
 		}
-		if (dex.gen <= 5 && eventData.abilities && eventData.abilities.length === 1 && !eventData.isHidden) {
-			if (template.species === eventTemplate.species) {
-				// has not evolved, abilities must match
-				const requiredAbility = dex.getAbility(eventData.abilities[0]).name;
-				if (set.ability !== requiredAbility) {
-					if (fastReturn) return true;
-					problems.push(`${name} must have ${requiredAbility}${etc}.`);
-				}
-			} else {
-				// has evolved
-				let ability1 = dex.getAbility(eventTemplate.abilities['1']);
-				if (ability1.gen && eventData.generation >= ability1.gen) {
-					// pokemon had 2 available abilities in the gen the event happened
-					// ability is restricted to a single ability slot
-					const requiredAbilitySlot = (toId(eventData.abilities[0]) === ability1.id ? 1 : 0);
-					const requiredAbility = dex.getAbility(template.abilities[requiredAbilitySlot] || template.abilities['0']).name;
+		// Event-related ability restrictions only matter if we care about illegal abilities
+		const ruleTable = dex.getRuleTable(this.format);
+		if (!ruleTable.has('ignoreillegalabilities')) {
+			if (dex.gen <= 5 && eventData.abilities && eventData.abilities.length === 1 && !eventData.isHidden) {
+				if (template.species === eventTemplate.species) {
+					// has not evolved, abilities must match
+					const requiredAbility = dex.getAbility(eventData.abilities[0]).name;
 					if (set.ability !== requiredAbility) {
-						const originalAbility = dex.getAbility(eventData.abilities[0]).name;
 						if (fastReturn) return true;
-						problems.push(`${name} must have ${requiredAbility}${because} from a ${originalAbility} ${eventTemplate.species} event.`);
+						problems.push(`${name} must have ${requiredAbility}${etc}.`);
+					}
+				} else {
+					// has evolved
+					let ability1 = dex.getAbility(eventTemplate.abilities['1']);
+					if (ability1.gen && eventData.generation >= ability1.gen) {
+						// pokemon had 2 available abilities in the gen the event happened
+						// ability is restricted to a single ability slot
+						const requiredAbilitySlot = (toId(eventData.abilities[0]) === ability1.id ? 1 : 0);
+						const requiredAbility = dex.getAbility(template.abilities[requiredAbilitySlot] || template.abilities['0']).name;
+						if (set.ability !== requiredAbility) {
+							const originalAbility = dex.getAbility(eventData.abilities[0]).name;
+							if (fastReturn) return true;
+							problems.push(`${name} must have ${requiredAbility}${because} from a ${originalAbility} ${eventTemplate.species} event.`);
+						}
 					}
 				}
 			}
-		}
-		if (eventData.isHidden !== undefined && template.abilities['H']) {
-			const isHidden = (set.ability === template.abilities['H']);
+			if (eventData.isHidden !== undefined && template.abilities['H']) {
+				const isHidden = (set.ability === template.abilities['H']);
 
-			if (isHidden !== eventData.isHidden) {
-				if (fastReturn) return true;
-				problems.push(`${name} must ${eventData.isHidden ? 'have' : 'not have'} its Hidden Ability${etc}.`);
+				if (isHidden !== eventData.isHidden) {
+					if (fastReturn) return true;
+					problems.push(`${name} must ${eventData.isHidden ? 'have' : 'not have'} its Hidden Ability${etc}.`);
+				}
 			}
 		}
 		if (!problems.length) return;
