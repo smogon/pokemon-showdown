@@ -133,14 +133,6 @@ exports.BattleScripts = {
 		// Now, let's calculate the accuracy.
 		let accuracy = move.accuracy;
 
-		// OHKO moves only have a chance to hit if the user is at least as fast as the target
-		if (move.ohko) {
-			if (target.speed > pokemon.speed) {
-				this.add('-immune', target, '[ohko]');
-				return false;
-			}
-		} 
-
 		// Calculate true accuracy for gen 2, which uses 0-255.
 		if (accuracy !== true) {
 			accuracy = Math.floor(accuracy * 255 / 100);
