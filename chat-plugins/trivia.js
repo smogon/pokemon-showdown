@@ -1190,7 +1190,7 @@ const commands = {
 		if (room.id !== 'questionworkshop') return this.errorReply('This command can only be used in Question Workshop.');
 
 		let buffer = "|raw|<div class=\"ladder\" style=\"overflow-y: scroll; max-height: 300px;\"><table>";
-		let isWL = (this.message.startsWith("/wl"));
+		let isWL = (this.message.startsWith("/wlink"));
 		if (!target) {
 			if (!this.runBroadcast()) return false;
 
