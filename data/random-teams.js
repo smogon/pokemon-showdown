@@ -1,7 +1,7 @@
 'use strict';
 
 const Dex = require('./../sim/dex');
-const PRNG = require('./../sim/prng');
+const PRNG = require('./../sim/prng');evs
 
 const randomBSSFactorySets = require('./bss-factory-sets.json');
 const randomFactorySets = require('./factory-sets.json');
@@ -2508,8 +2508,8 @@ class RandomTeams extends Dex.ModdedDex {
 			ivs.atk = 0;
 		}
 		if (!counter['Special'] && !hasMove['copycat'] && !hasMove['transform'] && !hasMove['mirrormove']) {
-			evs.atk = 0;
-			ivs.atk = 0;
+			evs.spa = 0;
+			ivs.spa = 0;
 		}
 
 		return {
