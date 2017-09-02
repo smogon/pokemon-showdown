@@ -162,48 +162,6 @@ exports.BattleScripts = {
 			damage = false;
 		}
 
-		// If damage is 0 and not false it means it didn't miss, let's calc.
-		if (damage !== false) {
-			pokemon.lastDamage = 0;
-			if (move.multihit) {
-				let hits = move.multihit;
-				if (hits.length) {
-					// Yes, it's hardcoded... meh
-					if (hits[0] === 2 && hits[1] === 5) {
-						hits = [2, 2, 3, 3, 4, 5][this.random(6)];
-					} else {
-						hits = this.random(hits[0], hits[1] + 1);
-					}
-				}
-				hits = Math.floor(hits);
-				// In gen 1, all the hits have the same damage for multihits move
-				let moveDamage = 0;
-				let firstDamage;
-				let i;
-				for (i = 0; i < hits && target.hp && pokemon.hp; i++) {
-					if (i === 0) {
-						// First hit, we calculate
-						moveDamage = this.moveHit(target, pokemon, move);
-						firstDamage = moveDamage;
-					} else {
-						// We get the previous damage to make it fix damage
-						move.damage = firstDamage;
-						moveDamage = this.moveHit(target, pokemon, move);
-					}
-					if (moveDamage === false) break;
-					damage = (moveDamage || 0);
-					if (target.subFainted) {
-						i++;
-						break;
-					}
-				}
-				move.damage = null;
-				if (i === 0) return true;
-				this.add('-hitcount', target, i);
-			} else {
-				damage = this.moveHit(target, pokemon, move);
-			}
-		}
 
 		if (move.category !== 'Status') {
 			// FIXME: The stored damage should be calculated ignoring Substitute.
