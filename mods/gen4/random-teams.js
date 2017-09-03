@@ -54,8 +54,7 @@ class RandomGen4Teams extends RandomGen5Teams {
 
 		// These moves can be used even if we aren't setting up to use them:
 		let SetupException = {
-			closecombat:1, extremespeed:1, suckerpunch:1, superpower:1,
-			dracometeor:1, leafstorm:1, overheat:1,
+			suckerpunch:1, dracometeor:1, overheat:1,
 		};
 		let counterAbilities = {
 			'Adaptability':1, 'Hustle':1, 'Iron Fist':1, 'Skill Link':1,
@@ -63,10 +62,10 @@ class RandomGen4Teams extends RandomGen5Teams {
 
 		// Give recovery moves priority over certain other defensive status moves
 		let recoveryMoves = {
-			'healorder':1, 'milkdrink':1, 'moonlight':1, 'morningsun':1, 'recover':1, 'rest':1, 'roost':1, 'slackoff':1, 'softboiled':1, 'synthesis':1, 'wish':1,
+			'healorder':1, 'milkdrink':1, 'moonlight':1, 'morningsun':1, 'painsplit':1, 'recover':1, 'rest':1, 'roost':1, 'slackoff':1, 'softboiled':1, 'synthesis':1, 'wish':1,
 		};
 		let defensiveStatusMoves = {
-			'aromatherapy':1, 'haze':1, 'healbell':1, 'roar':1, 'whirlwind':1, 'yawn':1,
+			'aromatherapy':1, 'haze':1, 'healbell':1, 'roar':1, 'whirlwind':1, 'willowisp':1, 'yawn':1,
 		};
 
 		let hasMove, counter;
@@ -159,8 +158,12 @@ class RandomGen4Teams extends RandomGen5Teams {
 					break;
 
 				// Bad after setup
+				case 'destinybond':
+					if (counter.setupType || hasMove['explosion']) rejected = true;
+					break;
 				case 'explosion': case 'selfdestruct':
-					if (counter.stab < 2 || counter.setupType || !!counter['recovery'] || hasMove['rest'] || hasMove['substitute']) rejected = true;
+					if (hasType['Normal'] && counter.stab < 2 || counter.setupType === 'Special') rejected = true;
+					if (moves.some(id => !!recoveryMoves[id] || !!defensiveStatusMoves[id]) || hasMove['batonpass'] || hasMove['protect'] || hasMove['substitute']) rejected = true;
 					break;
 				case 'foresight': case 'roar': case 'whirlwind':
 					if (counter.setupType && !hasAbility['Speed Boost']) rejected = true;
@@ -178,11 +181,14 @@ class RandomGen4Teams extends RandomGen5Teams {
 				case 'rapidspin':
 					if (teamDetails.rapidSpin || counter.setupType && counter.Physical + counter.Special < 2) rejected = true;
 					break;
-				case 'stealthrock':
-					if (counter.setupType || !!counter['speedsetup'] || hasMove['rest'] || teamDetails.stealthRock) rejected = true;
-					break;
 				case 'reflect': case 'lightscreen': case 'fakeout':
 					if (counter.setupType || !!counter['speedsetup'] || hasMove['substitute']) rejected = true;
+					break;
+				case 'spikes':
+					if (counter.setupType || !!counter['speedsetup'] || hasMove['rest'] || hasMove['substitute']) rejected = true;
+					break;
+				case 'stealthrock':
+					if (counter.setupType || !!counter['speedsetup'] || hasMove['rest'] || hasMove['substitute'] || teamDetails.stealthRock) rejected = true;
 					break;
 				case 'switcheroo': case 'trick':
 					if (counter.Physical + counter.Special < 3 || counter.setupType) rejected = true;
@@ -265,7 +271,7 @@ class RandomGen4Teams extends RandomGen5Teams {
 				case 'aurasphere': case 'drainpunch': case 'focusblast':
 					if (hasMove['closecombat'] && counter.setupType !== 'Special') rejected = true;
 					break;
-				case 'brickbreak': case 'closecombat': case 'crosschop':
+				case 'brickbreak': case 'closecombat': case 'crosschop': case 'lowkick':
 					if (hasMove['substitute'] && hasMove['focuspunch']) rejected = true;
 					break;
 				case 'machpunch':
@@ -274,6 +280,9 @@ class RandomGen4Teams extends RandomGen5Teams {
 					break;
 				case 'seismictoss':
 					if (hasMove['nightshade'] || counter.Physical + counter.Special >= 1) rejected = true;
+					break;
+				case 'superpower':
+					if (hasMove['dragondance']) rejected = true;
 					break;
 				case 'gunkshot':
 					if (hasMove['poisonjab']) rejected = true;
@@ -287,7 +296,7 @@ class RandomGen4Teams extends RandomGen5Teams {
 				case 'zenheadbutt':
 					if (hasMove['psychocut']) rejected = true;
 					break;
-				case 'rockslide':
+				case 'rockblast': case 'rockslide':
 					if (hasMove['stoneedge']) rejected = true;
 					break;
 				case 'shadowclaw':
@@ -317,19 +326,19 @@ class RandomGen4Teams extends RandomGen5Teams {
 					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					break;
 				case 'leechseed': case 'painsplit':
-					if (counter.setupType || !!counter['speedsetup'] || hasMove['moonlight'] || hasMove['rest'] || hasMove['synthesis']) rejected = true;
+					if (counter.setupType || !!counter['speedsetup'] || hasMove['rest']) rejected = true;
 					break;
 				case 'recover': case 'slackoff':
 					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					break;
 				case 'stunspore':
-					if (movePool.includes('sleeppowder') || movePool.includes('spore')) rejected = true;
+					if (counter.setupType || hasMove['toxic'] || movePool.includes('sleeppowder') || movePool.includes('spore')) rejected = true;
 					break;
 				case 'substitute':
 					if (hasMove['pursuit'] || hasMove['rest'] || hasMove['taunt']) rejected = true;
 					break;
 				case 'thunderwave':
-					if (hasMove['toxic'] || hasMove['trickroom'] || hasMove['bodyslam'] && hasAbility['Serene Grace']) rejected = true;
+					if (counter.setupType || hasMove['toxic'] || hasMove['trickroom'] || hasMove['bodyslam'] && hasAbility['Serene Grace']) rejected = true;
 					break;
 				}
 
@@ -343,10 +352,14 @@ class RandomGen4Teams extends RandomGen5Teams {
 					// Reject STABs last in case the setup type changes later on
 					if (!SetupException[moveid] && (!hasType[move.type] || counter.stab > 1 || counter[move.category] < 2)) rejected = true;
 				}
-				if (counter.setupType && !isSetup && move.category !== counter.setupType && counter[counter.setupType] < 2 && !hasMove['batonpass'] && moveid !== 'rest' && moveid !== 'sleeptalk') {
-					// Mono-attacking with setup and RestTalk is allowed
-					// Reject Status moves only if there is nothing else to reject
-					if (move.category !== 'Status' || counter[counter.setupType] + counter.Status > 3 && counter['physicalsetup'] + counter['specialsetup'] < 2) rejected = true;
+				if (counter.setupType && !isSetup && move.category !== counter.setupType && counter[counter.setupType] < 2 && !hasMove['batonpass']) {
+					// Mono-attacking with setup and RestTalk or recovery + status healing is allowed
+					if (moveid !== 'rest' && moveid !== 'sleeptalk' &&
+						!(!!recoveryMoves[moveid] && (hasMove['healbell'] || hasMove['refresh'])) &&
+						!((moveid === 'healbell' || moveid === 'refresh') && moves.some(id => !!recoveryMoves[id]))) {
+						// Reject Status moves only if there is nothing else to reject
+						if (move.category !== 'Status' || counter[counter.setupType] + counter.Status > 3 && counter['physicalsetup'] + counter['specialsetup'] < 2) rejected = true;
+					}
 				}
 				if (counter.setupType === 'Special' && moveid === 'hiddenpower' && template.types.length > 1 && counter['Special'] <= 2 && !hasType[move.type] && !counter['Physical'] && counter['specialpool']) {
 					// Hidden Power isn't good enough
@@ -366,6 +379,7 @@ class RandomGen4Teams extends RandomGen5Teams {
 					(hasType['Fighting'] && !counter['Fighting'] && (counter.setupType || !counter['Status'])) ||
 					(hasType['Fire'] && !counter['Fire']) ||
 					(hasType['Flying'] && !counter['Flying'] && movePool.includes('bravebird')) ||
+					(hasType['Grass'] && !counter['Grass'] && (movePool.includes('leafblade') || movePool.includes('leafstorm') || movePool.includes('seedflare') || movePool.includes('woodhammer'))) ||
 					(hasType['Ground'] && !counter['Ground']) ||
 					(hasType['Ice'] && !counter['Ice'] && (!hasType['Water'] || !counter['Water'])) ||
 					(hasType['Psychic'] && !!counter['Psychic'] && !hasType['Flying'] && template.types.length > 1 && counter.stab < 2) ||
@@ -377,7 +391,7 @@ class RandomGen4Teams extends RandomGen5Teams {
 					(template.requiredMove && movePool.includes(toId(template.requiredMove)))) &&
 					(counter['physicalsetup'] + counter['specialsetup'] < 2 && (!counter.setupType || (move.category !== counter.setupType && move.category !== 'Status') || counter[counter.setupType] + counter.Status > 3))) {
 					// Reject Status or non-STAB
-					if (!isSetup && !move.weather && moveid !== 'judgment' && moveid !== 'rest' && moveid !== 'sleeptalk') {
+					if (!isSetup && !move.weather && moveid !== 'judgment' && !recoveryMoves[moveid] && moveid !== 'sleeptalk') {
 						if (move.category === 'Status' || !hasType[move.type] || (move.basePower && move.basePower < 40 && !move.multihit)) rejected = true;
 					}
 				}
@@ -585,7 +599,7 @@ class RandomGen4Teams extends RandomGen5Teams {
 			let totalBulk = template.baseStats.hp + template.baseStats.def + template.baseStats.spd;
 			item = (!!counter['speedsetup'] || !!counter['priority'] || hasMove['dragondance'] || hasMove['trickroom'] ||
 				totalBulk < 235 || (template.baseStats.spe >= 70 && (totalBulk < 260 || (!!counter['recovery'] && totalBulk < 285)))) ? 'Life Orb' : 'Leftovers';
-		} else if (slot === 0 && !counter['recoil'] && !counter['recovery'] && template.baseStats.hp + template.baseStats.def + template.baseStats.spd < 285) {
+		} else if (slot === 0 && !counter['recoil'] && !counter['recovery'] && template.baseStats.hp + template.baseStats.def + template.baseStats.spd < 260) {
 			item = 'Focus Sash';
 
 		// This is the "REALLY can't think of a good item" cutoff
