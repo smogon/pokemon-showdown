@@ -2075,7 +2075,7 @@ exports.BattleFormatsData = {
 		requiredItem: "Dread Plate",
 	},
 	arceusdragon: {
-		randomBattleMoves: ["swordsdance", "dragonclaw", "earthquake", "recover", "calmmind", "judgment", "fireblast"],
+		randomBattleMoves: ["swordsdance", "dragonclaw", "earthquake", "recover", "overheat"],
 		eventOnly: true,
 		requiredItem: "Draco Plate",
 	},
