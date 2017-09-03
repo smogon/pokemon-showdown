@@ -792,7 +792,7 @@ exports.BattleFormatsData = {
 		tier: "LC",
 	},
 	ledian: {
-		randomBattleMoves: ["roost", "reflect", "lightscreen", "toxic", "u-turn", "encore"],
+		randomBattleMoves: ["roost", "reflect", "lightscreen", "toxic", "uturn", "encore"],
 		tier: "NU",
 	},
 	spinarak: {
@@ -2100,7 +2100,7 @@ exports.BattleFormatsData = {
 		requiredItem: "Sky Plate",
 	},
 	arceusghost: {
-		randomBattleMoves: ["swordsdance", "calmmind", "shadowclaw", "shadowforce", "recover", "brickbreak", "judgment", "flamethrower", "willowisp", "roar"],
+		randomBattleMoves: ["calmmind", "recover", "focusblast", "judgment", "flamethrower", "willowisp", "roar"],
 		eventOnly: true,
 		requiredItem: "Spooky Plate",
 	},
