@@ -225,6 +225,7 @@ class UNOgame extends Rooms.RoomGame {
 		return new Promise((resolve, reject) => {
 			if (!this.awaitUno) return resolve();
 
+			this.state = "uno";
 			// the throttle for sending messages is at 600ms for non-authed users,
 			// wait 750ms before sending the next person's turn.
 			// this allows games to be fairer, so the next player would not spam the pass command blindly
