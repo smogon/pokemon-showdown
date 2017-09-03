@@ -12,7 +12,6 @@ class RandomTeams extends Dex.ModdedDex {
 		super(format.mod);
 		this.randomBSSFactorySets = randomBSSFactorySets;
 		this.randomFactorySets = randomFactorySets;
-
 		this.factoryTier = '';
 		this.format = format;
 		this.prng = new PRNG(seed);
@@ -1398,7 +1397,7 @@ class RandomTeams extends Dex.ModdedDex {
 			item = (template.baseStats.hp + template.baseStats.def + template.baseStats.spd < 285 || !!counter['speedsetup'] || hasMove['trickroom']) ? 'Life Orb' : 'Leftovers';
 		} else if (template.species === 'Palkia' && (hasMove['dracometeor'] || hasMove['spacialrend']) && hasMove['hydropump']) {
 			item = 'Lustrous Orb';
-		} else if (slot === 0 && ability !== 'Regenerator' && ability !== 'Sturdy' && !counter['recoil'] && !counter['recovery'] && !hasMove['leechseed'] && template.baseStats.hp + template.baseStats.def + template.baseStats.spd < 285 && (!counter.setupType || !!counter['speedsetup'])) {
+		} else if (slot === 0 && ability !== 'Regenerator' && ability !== 'Sturdy' && !counter['recoil'] && !counter['recovery'] && !hasMove['leechseed'] && template.baseStats.hp + template.baseStats.def + template.baseStats.spd < 285 && !(counter.setupType && !counter['speedsetup'] && !counter['priority'])) {
 			item = 'Focus Sash';
 
 		// This is the "REALLY can't think of a good item" cutoff
