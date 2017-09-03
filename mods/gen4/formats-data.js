@@ -1099,7 +1099,7 @@ exports.BattleFormatsData = {
 	},
 	tyranitar: {
 		inherit: true,
-		randomBattleMoves: ["crunch", "stoneedge", "pursuit", "superpower", "earthquake", "dragondance", "icepunch", "firepunch", "stealthrock"],
+		randomBattleMoves: ["crunch", "stoneedge", "pursuit", "superpower", "earthquake", "dragondance", "icepunch", "fireblast", "icebeam", "firepunch", "stealthrock"],
 		tier: "OU",
 	},
 	lugia: {
@@ -1990,12 +1990,12 @@ exports.BattleFormatsData = {
 	},
 	mesprit: {
 		inherit: true,
-		randomBattleMoves: ["hiddenpowerfire", "thunderbolt", "icebeam", "psychic", "calmmind", "substitute", "thunderwave", "uturn", "stealthrock", "trick"],
+		randomBattleMoves: ["hiddenpowerfire", "thunderbolt", "icebeam", "psychic", "calmmind", "substitute", "thunderwave", "uturn", "stealthrock"],
 		tier: "UU",
 	},
 	azelf: {
 		inherit: true,
-		randomBattleMoves: ["stealthrock", "fireblast", "psychic", "explosion", "taunt", "uturn", "nastyplot", "flamethrower", "hiddenpowerfighting", "thunderbolt", "trick"],
+		randomBattleMoves: ["stealthrock", "fireblast", "psychic", "explosion", "taunt", "uturn", "nastyplot", "flamethrower", "hiddenpowerfighting", "thunderbolt"],
 		tier: "OU",
 	},
 	dialga: {
