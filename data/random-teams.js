@@ -2502,6 +2502,16 @@ class RandomTeams extends Dex.ModdedDex {
 			if (hp % 4 === 0) evs.hp -= 4;
 		}
 
+		// Minimize unused attack stats
+		if (!counter['Physical'] && !hasMove['copycat'] && !hasMove['transform'] && !hasMove['mirrormove']) {
+			evs.atk = 0;
+			ivs.atk = 0;
+		}
+		if (!counter['Special'] && !hasMove['copycat'] && !hasMove['transform'] && !hasMove['mirrormove']) {
+			evs.spa = 0;
+			ivs.spa = 0;
+		}
+
 		return {
 			name: template.baseSpecies,
 			species: species,
