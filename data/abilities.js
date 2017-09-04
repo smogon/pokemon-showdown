@@ -198,9 +198,9 @@ exports.BattleAbilities = {
 		onStart: function (pokemon) {
 			this.add('-ability', pokemon, 'Aura Break');
 		},
+		onAnyTryPrimaryHitPriority: -1,
 		onAnyTryPrimaryHit: function (target, source, move) {
-			if (target === source || move.category === 'Status') return;
-			move.hasAuraBreak = true;
+			if (move.auraBoost) move.auraBoost = 0x0C00;
 		},
 		id: "aurabreak",
 		name: "Aura Break",
@@ -579,9 +579,14 @@ exports.BattleAbilities = {
 		onStart: function (pokemon) {
 			this.add('-ability', pokemon, 'Dark Aura');
 		},
-		onAnyBasePower: function (basePower, source, target, move) {
+		onAnyTryPrimaryHit: function (target, source, move) {
 			if (target === source || move.category === 'Status' || move.type !== 'Dark') return;
-			return this.chainModify([move.hasAuraBreak ? 0x0C00 : 0x1547, 0x1000]);
+			move.auraBoost = 0x1547;
+		},
+		onAnyBasePower: function (basePower, source, target, move) {
+			if (!move.auraBoost) return;
+			this.chainModify([move.auraBoost, 0x1000]);
+			delete move.auraBoost;
 		},
 		isUnbreakable: true,
 		id: "darkaura",
@@ -884,9 +889,14 @@ exports.BattleAbilities = {
 		onStart: function (pokemon) {
 			this.add('-ability', pokemon, 'Fairy Aura');
 		},
-		onAnyBasePower: function (basePower, source, target, move) {
+		onAnyTryPrimaryHit: function (target, source, move) {
 			if (target === source || move.category === 'Status' || move.type !== 'Fairy') return;
-			return this.chainModify([move.hasAuraBreak ? 0x0C00 : 0x1547, 0x1000]);
+			move.auraBoost = 0x1547;
+		},
+		onAnyBasePower: function (basePower, source, target, move) {
+			if (!move.auraBoost) return;
+			this.chainModify([move.auraBoost, 0x1000]);
+			delete move.auraBoost;
 		},
 		isUnbreakable: true,
 		id: "fairyaura",
