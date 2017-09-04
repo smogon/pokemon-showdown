@@ -124,15 +124,23 @@ exports.BattleScripts = {
 
 		// First, check if the Pokémon is immune to this move.
 		if (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type] && !target.runImmunity(move.type, true)) {
-			if (move.selfdestruct) {
-				this.faint(pokemon, pokemon, move);
-			}
 			return false;
+		}
+		
+		if (move.selfdestruct) {
+			this.faint(pokemon, pokemon, move);
 		}
 
 		// Now, let's calculate the accuracy.
 		let accuracy = move.accuracy;
-
+		if (move.ohko) {
+			if (pokemon.level >= target.level && (move.ohko === true || !target.hasType(move.ohko))) {
+				accuracy = Math.floor((pokemon.level - target.level) * 0.78 + 30);
+			} else {
+				this.add('-immune', target, '[ohko]');
+				return false;
+			}
+		}
 		// Calculate true accuracy for gen 2, which uses 0-255.
 		if (accuracy !== true) {
 			accuracy = Math.floor(accuracy * 255 / 100);
@@ -152,7 +160,6 @@ exports.BattleScripts = {
 				}
 			}
 			accuracy = Math.min(accuracy, 255);
-			this.runEvent('ModifyAccuracy', target, pokemon, move, accuracy);
 		}
 		accuracy = this.runEvent('Accuracy', target, pokemon, move, accuracy);
 
@@ -160,8 +167,7 @@ exports.BattleScripts = {
 			this.attrLastMove('[miss]');
 			this.add('-miss', pokemon);
 			damage = false;
-		}
-
+		} 
 
 		if (move.category !== 'Status') {
 			// FIXME: The stored damage should be calculated ignoring Substitute.
