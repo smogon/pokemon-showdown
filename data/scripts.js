@@ -107,7 +107,7 @@ exports.BattleScripts = {
 			this.singleEvent('ModifyMove', move, null, pokemon, target, move, move);
 			move = this.getZMoveCopy(move, pokemon);
 			if (move.type !== 'Normal') sourceEffect = baseMove;
-		} else if (zMove || (sourceEffect && sourceEffect.isZ)) {
+		} else if (zMove || (sourceEffect && sourceEffect.isZ && sourceEffect.id !== 'instruct')) {
 			move = this.getZMoveCopy(move, pokemon);
 		} else {
 			move = this.getMoveCopy(move);
