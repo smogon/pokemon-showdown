@@ -1332,6 +1332,7 @@ exports.BattleMovedex = {
 			if (doubled) return power * 2;
 		},
 		self: undefined,
+		desc: "If this move is successful the user removes hazards before it attacks, the effects of Leech Seed and partial-trapping moves end for the user, and all hazards are removed from the user's side of the field. This move does double the damage, if a hazard is removed.",
 	},
 	rockthrow: {
 		inherit: true,
@@ -1342,6 +1343,8 @@ exports.BattleMovedex = {
 				return power * 2;
 			}
 		},
+		desc: "This move attempts to remove Stealth Rocks from the user's side, if Stealth Rocks are removed this move does double the damage.",
+		shortDesc: "Frees the user of Stealth Rock, does 2x damage if it does.",
 	},
 	/******************************************************************
 	New feature: Signature Pokemon
@@ -1362,6 +1365,8 @@ exports.BattleMovedex = {
 			{chance:20, status:'brn'},
 			{chance:30, volatileStatus:'flinch'},
 		],
+		desc: "Has a 20% chance to burn the target and a 30% chance to flinch it. If the user is a Flareon, this move does 1.5x more damage.",
+		shortDesc: "20% chance to burn. 30% chance to flinch.",
 	},
 	icefang: {
 		inherit: true,
@@ -1373,6 +1378,8 @@ exports.BattleMovedex = {
 			{chance:20, status:'frz'},
 			{chance:30, volatileStatus:'flinch'},
 		],
+		desc: "Has a 20% chance to freeze the target and a 30% chance to flinch it. If the user is a Walrein, this move does 1.5x more damage.",
+		shortDesc: "20% chance to freeze. 30% chance to flinch.",
 	},
 	thunderfang: {
 		inherit: true,
@@ -1384,6 +1391,8 @@ exports.BattleMovedex = {
 			{chance:20, status:'par'},
 			{chance:30, volatileStatus:'flinch'},
 		],
+		desc: "Has a 20% chance to paralyze the target and a 30% chance to flinch it. If the user is a Luxray, this move does 1.5x more damage.",
+		shortDesc: "20% chance to paralyze. 30% chance to flinch.",
 	},
 	poisonfang: {
 		inherit: true,
@@ -1395,6 +1404,8 @@ exports.BattleMovedex = {
 			{chance:100, status:'tox'},
 			{chance:30, volatileStatus:'flinch'},
 		],
+		desc: "Has a 100% chance to badly poison the target and a 30% chance to flinch it. If the user is a Drapion, this move does 1.5x more damage.",
+		shortDesc: "100% chance to badly poison. 30% chance to flinch.",
 	},
 	poisontail: {
 		inherit: true,
@@ -1407,6 +1418,8 @@ exports.BattleMovedex = {
 			chance: 60,
 			status: 'tox',
 		},
+		desc: "Has a 60% chance to badly poison the target and a higher chance for a critical hit. If the user is a Seviper, this move does 1.5x more damage.",
+		shortDesc: "High critical hit ratio. 60% chance to badly poison.",
 	},
 	slash: {
 		inherit: true,
@@ -1420,6 +1433,8 @@ exports.BattleMovedex = {
 				def: -1,
 			},
 		},
+		desc: "Has a higher chance for a critical hit. 30% chance to lower the target's Defense by one stage. If the user is a Persian, this move does 1.5x more damage.",
+		shortDesc: "High critical hit ratio. 30% chance to lower Def by 1.",
 	},
 	sludge: {
 		inherit: true,
@@ -1431,6 +1446,8 @@ exports.BattleMovedex = {
 			chance: 100,
 			status: 'psn',
 		},
+		desc: "Has a 100% chance to poison the target. If the user is a Muk, this move does 1.5x more damage.",
+		shortDesc: "100% chance to poison the target.",
 	},
 	smog: {
 		inherit: true,
@@ -1443,6 +1460,8 @@ exports.BattleMovedex = {
 			chance: 100,
 			status: 'psn',
 		},
+		desc: "Has a 100% chance to poison the target. If the user is a Weezing, this move does 1.5x more damage.",
+		shortDesc: "100% chance to poison the target.",
 	},
 	flamecharge: {
 		inherit: true,
@@ -1450,18 +1469,21 @@ exports.BattleMovedex = {
 		onBasePower: function (power, user) {
 			if (user.template.id === 'rapidash') return this.chainModify(1.5);
 		},
+		desc: "Has a 100% chance to raise the user's Speed by 1 stage. If the user is a Rapidash, this move does 1.5x more damage.",
 	},
 	flamewheel: {
 		inherit: true,
 		onBasePower: function (power, user) {
 			if (user.template.id === 'darmanitan') return this.chainModify(1.5);
 		},
+		desc: "Has a 10% chance to burn the target. If the user is a Darmanitan, this move does 1.5x more damage.",
 	},
 	spark: {
 		inherit: true,
 		onBasePower: function (power, user) {
 			if (user.template.id === 'eelektross') return this.chainModify(1.5);
 		},
+		desc: "Has a 30% chance to paralyze the target. If the user is an Eelektross, this move does 1.5x more damage.",
 	},
 	triplekick: {
 		inherit: true,
@@ -1469,6 +1491,7 @@ exports.BattleMovedex = {
 			if (user.template.id === 'hitmontop') return this.chainModify(1.5);
 		},
 		accuracy: true,
+		desc: "Hits three times. Power increases to 20 for the second hit and 30 for the third. This move checks accuracy for each hit, and the attack ends if the target avoids any of the hits. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Ability Skill Link, this move will always hit three times. If the user is a Hitmontop, this move does 1.5x more damage.",
 	},
 	bubblebeam: {
 		inherit: true,
@@ -1481,6 +1504,8 @@ exports.BattleMovedex = {
 				spe: -1,
 			},
 		},
+		desc: "Has a 30% chance to lower the target's Speed by 1 stage. If the user is a Kingdra, this move does 1.5x more damage.",
+		shortDesc: "30% chance to lower the target's Speed by 1.",
 	},
 	electroweb: {
 		inherit: true,
@@ -1488,6 +1513,7 @@ exports.BattleMovedex = {
 		onBasePower: function (power, user) {
 			if (user.template.id === 'galvantula') return this.chainModify(1.5);
 		},
+		desc: "Has a 100% chance to lower the target's Speed by 1 stage. If the user is a Galvantula, this move does 1.5x more damage.",
 		accuracy: 100,
 	},
 	gigadrain: {
@@ -1496,6 +1522,7 @@ exports.BattleMovedex = {
 		onBasePower: function (power, user) {
 			if (user.template.id === 'beautifly') return this.chainModify(1.5);
 		},
+		desc: "The user recovers 1/2 the HP lost by the target, rounded half up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down. If the user is a Beautifly, this move does 1.5x more damage.",
 		accuracy: 100,
 	},
 	icywind: {
@@ -1504,6 +1531,7 @@ exports.BattleMovedex = {
 		onBasePower: function (power, user) {
 			if (user.template.id === 'glaceon') return this.chainModify(1.5);
 		},
+		desc: "Has a 100% chance to lower the target's Speed by 1 stage. If the user is a Glaceon, this move does 1.5x more damage.",
 		accuracy: 100,
 	},
 	mudshot: {
@@ -1512,6 +1540,7 @@ exports.BattleMovedex = {
 		onBasePower: function (power, user) {
 			if (user.template.id === 'swampert') return this.chainModify(1.5);
 		},
+		desc: "Has a 100% chance to lower the target's Speed by 1 stage. If the user is a Swampert, this move does 1.5x more damage.",
 		accuracy: 100,
 	},
 	glaciate: {
@@ -1520,6 +1549,7 @@ exports.BattleMovedex = {
 		onBasePower: function (power, user) {
 			if (user.template.id === 'kyurem') return this.chainModify(1.5);
 		},
+		desc: "Has a 100% chance to lower the target's Speed by 1 stage. If the user is a Kyurem, this move does 1.5x more damage.",
 		accuracy: 100,
 	},
 	octazooka: {
@@ -1535,6 +1565,8 @@ exports.BattleMovedex = {
 				accuracy: -1,
 			},
 		},
+		desc: "Has a 100% chance to lower the target's accuracy by 1 stage. If the user is a Octillery, this move does 1.5x more damage.",
+		shortDesc: "100% chance to lower the target's accuracy by 1.",
 	},
 	leaftornado: {
 		inherit: true,
@@ -1549,30 +1581,36 @@ exports.BattleMovedex = {
 				accuracy: -1,
 			},
 		},
+		desc: "Has a 100% chance to lower the target's accuracy by 1 stage. If the user is a Serperior, this move does 1.5x more damage.",
+		shortDesc: "100% chance to lower the target's accuracy by 1.",
 	},
 	iceshard: {
 		inherit: true,
 		onBasePower: function (power, user) {
 			if (user.template.id === 'weavile') return this.chainModify(1.5);
 		},
+		desc: "If the user is a Weavile, this move does 1.5x more damage.",
 	},
 	aquajet: {
 		inherit: true,
 		onBasePower: function (power, user) {
 			if (user.template.id === 'sharpedo') return this.chainModify(1.5);
 		},
+		desc: "If the user is a Sharpedo, this move does 1.5x more damage.",
 	},
 	machpunch: {
 		inherit: true,
 		onBasePower: function (power, user) {
 			if (user.template.id === 'hitmonchan') return this.chainModify(1.5);
 		},
+		desc: "If the user is a Hitmonchan, this move does 1.5x more damage.",
 	},
 	shadowsneak: {
 		inherit: true,
 		onBasePower: function (power, user) {
 			if (user.template.id === 'banette') return this.chainModify(1.5);
 		},
+		desc: "If the user is a Banette, this move does 1.5x more damage.",
 	},
 	steelwing: {
 		inherit: true,
@@ -1589,6 +1627,8 @@ exports.BattleMovedex = {
 				},
 			},
 		},
+		desc: "Has a 50% chance to raise the user's Defense by 1 stage. If the user is a Skarmory, this move does 1.5x more damage.",
+		shortDesc: "50% chance to raise the user's Defense by 1.",
 	},
 	surf: {
 		inherit: true,
@@ -1601,6 +1641,8 @@ exports.BattleMovedex = {
 				spe: -1,
 			},
 		},
+		desc: "Damage doubles if the target is using Dive. 10% chance to lower the target's Speed by one stage. If the user is a Masquerain, this move does 1.5x more damage.",
+		shortDesc: "Power doubles on Dive. 10% chance to lower Spe by 1.",
 	},
 	hiddenpower: {
 		inherit: true,
@@ -1726,6 +1768,8 @@ exports.BattleMovedex = {
 			chance: 30,
 			status: 'par',
 		},
+		desc: "Has a 30% chance to paralyze the target.",
+		shortDesc: "30% chance to paralyze the target.",
 	},
 	blueflare: {
 		inherit: true,
@@ -1734,6 +1778,8 @@ exports.BattleMovedex = {
 			chance: 30,
 			status: 'brn',
 		},
+		desc: "Has a 30% chance to burn the target.",
+		shortDesc: "30% chance to burn the target.",
 	},
 	dragonrush: {
 		inherit: true,
@@ -1750,6 +1796,8 @@ exports.BattleMovedex = {
 			chance: 20,
 			status: 'brn',
 		},
+		desc: "Has a 20% chance to burn the target.",
+		shortDesc: "20% chance to burn the target.",
 	},
 	irontail: {
 		inherit: true,
@@ -1897,6 +1945,8 @@ exports.BattleMovedex = {
 			def: 1,
 			spd: 1,
 		},
+		desc: "Raises the user's Defense and Special Defense by 1 stage.",
+		shortDesc: "Raises the user's Def and SpD by 1.",
 	},
 	paraboliccharge: {
 		inherit: true,
@@ -1914,6 +1964,7 @@ exports.BattleMovedex = {
 				},
 			},
 		},
+		desc: "The user recovers 1/2 the HP lost by the target, rounded half up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down. 100% chance to lower the target's Special Attack and Special Defense by one stage, and boost the user's Special Attack and Special Defense by one stage.",
 	},
 	drainingkiss: {
 		inherit: true,
@@ -1931,6 +1982,7 @@ exports.BattleMovedex = {
 				},
 			},
 		},
+		desc: "The user recovers 3/4 the HP lost by the target, rounded half up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down. 100% chance to lower the target's Special Attack and Special Defense by one stage, and boost the user's Special Attack and Special Defense by one stage.",
 	},
 	stomp: {
 		inherit: true,
@@ -1954,6 +2006,8 @@ exports.BattleMovedex = {
 		boosts: {
 			spe: 3,
 		},
+		desc: "Raises the user's Speed by 3 stages. If the user's Speed was changed, the user's weight is reduced by 100kg as long as it remains active. This effect is stackable but cannot reduce the user's weight to less than 0.1kg.",
+		shortDesc: "Raises the user's Speed by 3; user loses 100 kg.",
 	},
 	dizzypunch: {
 		inherit: true,
@@ -1962,6 +2016,8 @@ exports.BattleMovedex = {
 			chance: 50,
 			volatileStatus: 'confusion',
 		},
+		desc: "Has a 50% chance to confuse the target.",
+		shortDesc: "50% chance to confuse the target.",
 	},
 	nightdaze: {
 		inherit: true,
@@ -1973,23 +2029,20 @@ exports.BattleMovedex = {
 				move.name = this.getMove(illusionMoves[this.random(illusionMoves.length)]).name;
 			}
 		},
+		desc: "Has a 40% chance to lower the target's accuracy by 1 stage. If Illusion is active, displays as a random non-Status move in the copied Pokémon's moveset.",
 	},
 	muddywater: {
 		inherit: true,
 		basePower: 85,
 		accuracy: 100,
-		secondary: {
-			chance: 30,
-			boosts: {
-				accuracy: -1,
-			},
-		},
 	},
 	powergem: {
 		inherit: true,
 		basePower: 40,
 		accuracy: true,
 		multihit: [2, 2],
+		desc: "Hits twice. If the first hit breaks the target's substitute, it will take damage for the second hit.",
+		shortDesc: "Hits 2 times in one turn.",
 	},
 	acid: {
 		inherit: true,
@@ -2004,24 +2057,19 @@ exports.BattleMovedex = {
 		accuracy: 80,
 		basePower: 60,
 		willCrit: true,
+		desc: "This move is always a critical hit unless the target is under the effect of Lucky Chant or has the Abilities Battle Armor or Shell Armor.",
+		shortDesc: "Always results in a critical hit.",
 	},
 	sacredsword: {
 		inherit: true,
 		basePower: 95,
 	},
 	triattack: {
-		num: 161,
+		inherit: true,
 		accuracy: true,
 		basePower: 30,
-		category: "Special",
 		desc: "Hits 3 times. Has a 10% chance to burn, paralyze or freeze the target each time.",
 		shortDesc: "Hits 3x; 10% chance to paralyze/burn/freeze.",
-		id: "triattack",
-		name: "Tri Attack",
-		pp: 10,
-		isViable: true,
-		priority: 0,
-		flags: {protect: 1, mirror: 1},
 		multihit: [3, 3],
 		secondary: {
 			chance: 10,
@@ -2036,7 +2084,5 @@ exports.BattleMovedex = {
 				}
 			},
 		},
-		target: "normal",
-		type: "Normal",
 	},
 };
