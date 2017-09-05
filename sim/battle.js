@@ -2085,7 +2085,7 @@ class Battle extends Dex.ModdedDex {
 					decision.pokemon.switchCopyFlag = decision.pokemon.switchFlag;
 				}
 				decision.pokemon.switchFlag = false;
-				if (!decision.speed && decision.pokemon && decision.pokemon.isActive) decision.speed = decision.pokemon.getDecisionSpeed();
+				if (!decision.speed) decision.speed = decision.pokemon.getDecisionSpeed();
 			}
 		}
 
