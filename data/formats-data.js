@@ -5817,7 +5817,7 @@ exports.BattleFormatsData = {
 		],
 		eventOnly: true,
 		gen: 7,
-		tier: "BL2",
+		tier: "RU",
 	},
 	zygardecomplete: {
 		gen: 7,
