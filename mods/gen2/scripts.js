@@ -127,7 +127,7 @@ exports.BattleScripts = {
 		if (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type] && !target.runImmunity(move.type, true)) {
 			return false;
 		}
-		
+
 		if (move.selfdestruct) {
 			this.faint(pokemon, pokemon, move);
 		}
@@ -164,12 +164,12 @@ exports.BattleScripts = {
 		}
 		accuracy = this.runEvent('ModifyAccuracy', target, pokemon, move, accuracy);
 		accuracy = Math.max(accuracy, 0);
-		
+
 		if (accuracy !== true && accuracy !== 255 && this.random(255) >= accuracy) {
 			this.attrLastMove('[miss]');
 			this.add('-miss', pokemon);
 			damage = false;
-		} 
+		}
 		if (move.category !== 'Status') {
 			// FIXME: The stored damage should be calculated ignoring Substitute.
 			// https://github.com/Zarel/Pokemon-Showdown/issues/2598
