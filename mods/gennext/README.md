@@ -391,7 +391,7 @@ Minor learnset changes:
 
 - Scolipede and Steelix get Coil
 
-- Finneon, Lumineon, Mareep, Ampharos, Chinchou, Lanturn get Tail Glow
+- Lumineon, Ampharos, and Lanturn get Tail Glow
 
 - Rotom formes learn more things:
   - Rotom-Wash: BubbleBeam
