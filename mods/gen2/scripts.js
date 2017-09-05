@@ -133,18 +133,17 @@ exports.BattleScripts = {
 
 		// Now, let's calculate the accuracy.
 		let accuracy = move.accuracy;
-		if (move.ohko) {
-			if (pokemon.level >= target.level && (move.ohko === true || !target.hasType(move.ohko))) {
-				accuracy = Math.floor((pokemon.level - target.level) * 0.78 + 30);
-			} else {
-				this.add('-immune', target, '[ohko]');
-				return false;
-			}
-		}
-		// Calculate true accuracy for gen 2, which uses 0-255.
 		if (accuracy !== true) {
 			accuracy = Math.floor(accuracy * 255 / 100);
-			// Check also for accuracy modifiers.
+			if (move.ohko) {
+				if (pokemon.level >= target.level) {
+					accuracy += (pokemon.level - target.level) * 2;
+					accuracy = Math.min(accuracy, 255);
+				} else {
+					this.add('-immune', target, '[ohko]');
+					return false;
+				}
+			}
 			if (!move.ignoreAccuracy) {
 				if (pokemon.boosts.accuracy > 0) {
 					accuracy *= boostTable[pokemon.boosts.accuracy];
@@ -159,11 +158,11 @@ exports.BattleScripts = {
 					accuracy *= boostTable[-target.boosts.evasion];
 				}
 			}
-			accuracy = Math.min(accuracy, 255);
+			accuracy = Math.min(Math.floor(accuracy), 255);
 		}
-		accuracy = this.runEvent('Accuracy', target, pokemon, move, accuracy);
-
-		if (accuracy !== true && this.random(255) >= accuracy) {
+		accuracy = this.runEvent('ModifyAccuracy', target, pokemon, move, accuracy);
+		
+		if (accuracy !== true && accuracy !== 255 && this.random(255) >= accuracy) {
 			this.attrLastMove('[miss]');
 			this.add('-miss', pokemon);
 			damage = false;
