@@ -11,7 +11,7 @@ describe('Lightning Rod', function () {
 	});
 
 	it('should grant immunity to Electric-type moves and boost Special Attack by 1 stage', function () {
-		battle = common.createBattle();
+		battle = common.gen(6).createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Manectric', ability: 'lightningrod', moves: ['sleeptalk']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Jolteon', ability: 'static', moves: ['thunderbolt']}]);
 		battle.commitDecisions();
@@ -19,12 +19,21 @@ describe('Lightning Rod', function () {
 		assert.statStage(battle.p1.active[0], 'spa', 1);
 	});
 
-	it('should not boost Special Attack if the user is already immune to Electric-type moves', function () {
-		battle = common.createBattle();
+	it('should not boost Special Attack if the user is already immune to Electric-type moves in gen 6-', function () {
+		battle = common.gen(6).createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Rhydon', ability: 'lightningrod', moves: ['sleeptalk']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Jolteon', ability: 'static', moves: ['thunderbolt']}]);
 		battle.commitDecisions();
 		assert.statStage(battle.p1.active[0], 'spa', 0);
+	});
+
+	it('should boost Special Attack if the user is already immune to Electric-type moves in gen 7+', function () {
+		battle = common.createBattle();
+		battle.join('p1', 'Guest 1', 1, [{species: 'Rhydon', ability: 'lightningrod', moves: ['sleeptalk']}]);
+		battle.join('p2', 'Guest 2', 1, [{species: 'Jolteon', ability: 'static', moves: ['thunderbolt']}]);
+		battle.commitDecisions();
+		assert.fullHP(battle.p1.active[0]);
+		assert.statStage(battle.p1.active[0], 'spa', 1);
 	});
 
 	it('should redirect single-target Electric-type attacks to the user if it is a valid target', function () {
