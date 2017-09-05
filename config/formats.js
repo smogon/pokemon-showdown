@@ -103,6 +103,7 @@ exports.Formats = [
 		mod: 'gen7',
 		challengeShow: false,
 		ruleset: ['[Gen 7] RU'],
+		unbanlist: ['Zygarde-10%'],
 	},
 	{
 		name: "[Gen 7] NU",
