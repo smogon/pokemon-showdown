@@ -81,7 +81,8 @@ exports.Formats = [
 		mod: 'gen7',
 		ruleset: ['[Gen 7] UU'],
 		banlist: ['Gallade-Mega', 'Heracross-Mega'],
-		
+	},
+	{
 		name: "[Gen 7] RU",
 		desc: [
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3611512/\">RU Metagame Discussion</a>",
