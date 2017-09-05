@@ -65,26 +65,44 @@ exports.Formats = [
 	{
 		name: "[Gen 7] UU",
 		desc: [
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3612054/\">UU Metagame Discussion</a>",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3603387/\">UU Viability Rankings</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3614035/\">UU Metagame Discussion</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3613279/\">UU Viability Rankings</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3591880/\">UU Sample Teams</a>",
 		],
 
 		mod: 'gen7',
+		searchShow: false,
 		ruleset: ['[Gen 7] OU'],
-		banlist: ['OU', 'BL', 'Drizzle', 'Power Construct', 'Mewnium Z'],
+		banlist: ['OU', 'BL', 'Drizzle', 'Mewnium Z'],
+	},
+	{
+		name: "[Gen 7] UU (suspect test)",
+		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3614035/\">UU Suspect Test</a>"],
+
+		mod: 'gen7',
+		ruleset: ['[Gen 7] UU'],
+		unbanlist: ['Gallade-Mega', 'Heracross-Mega'],
 	},
 	{
 		name: "[Gen 7] RU",
 		desc: [
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3611512/\">RU Metagame Discussion</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3614037/\">RU Metagame Discussion</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3602279/\">RU Viability Rankings</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3598090/\">RU Sample Teams</a>",
 		],
 
 		mod: 'gen7',
+		searchShow: false,
 		ruleset: ['[Gen 7] UU'],
 		banlist: ['UU', 'BL2'],
+	},
+	{
+		name: "[Gen 7] RU (suspect test)",
+		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3614037/\">RU Suspect Test</a>"],
+
+		mod: 'gen7',
+		challengeShow: false,
+		ruleset: ['[Gen 7] RU'],
 	},
 	{
 		name: "[Gen 7] NU",
