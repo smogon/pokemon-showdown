@@ -118,7 +118,8 @@ exports.BattleScripts = {
 		if (!move.selfSwitch && target.hp > 0) this.runEvent('AfterMoveSelf', pokemon, target, move);
 	},
 	tryMoveHit: function (target, pokemon, move, spreadHit) {
-		let boostTable = [1, 4 / 3, 5 / 3, 2, 7 / 3, 8 / 3, 3];
+		let positiveBoostTable = [1, 1.33, 1.66, 2, 2.33, 2.66, 3];
+		let negativeBoostTable = [1, 0.75, 0.6, 0.5, 0.43, 0.36, 0.33];
 		let doSelfDestruct = true;
 		let damage = 0;
 
@@ -146,16 +147,16 @@ exports.BattleScripts = {
 			}
 			if (!move.ignoreAccuracy) {
 				if (pokemon.boosts.accuracy > 0) {
-					accuracy *= boostTable[pokemon.boosts.accuracy];
+					accuracy *= positiveBoostTable[pokemon.boosts.accuracy];
 				} else {
-					accuracy = Math.floor(accuracy / boostTable[-pokemon.boosts.accuracy]);
+					accuracy *= negativeBoostTable[-pokemon.boosts.accuracy]);
 				}
 			}
 			if (!move.ignoreEvasion) {
 				if (target.boosts.evasion > 0 && !move.ignorePositiveEvasion) {
-					accuracy = Math.floor(accuracy / boostTable[target.boosts.evasion]);
+					accuracy /= positiveBoostTable[target.boosts.evasion]);
 				} else if (target.boosts.evasion < 0) {
-					accuracy *= boostTable[-target.boosts.evasion];
+					accuracy /= negativeBoostTable[-target.boosts.evasion];
 				}
 			}
 			accuracy = Math.min(Math.floor(accuracy), 255);
@@ -167,20 +168,14 @@ exports.BattleScripts = {
 			this.add('-miss', pokemon);
 			damage = false;
 		} 
-
 		if (move.category !== 'Status') {
 			// FIXME: The stored damage should be calculated ignoring Substitute.
 			// https://github.com/Zarel/Pokemon-Showdown/issues/2598
 			target.gotAttacked(move, damage, pokemon);
 		}
-
-		
 		if (move.selfdestruct && doSelfDestruct) {
 			this.faint(pokemon, pokemon, move);
 		}
-
-
-
 		if (move.ohko) this.add('-ohko');
 
 		if (!move.negateSecondary) {
