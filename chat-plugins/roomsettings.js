@@ -104,6 +104,14 @@ class RoomSettings {
 			return `${this.button('off', true)} ${this.button('filter emojis', null, 'emojifilter on')}`;
 		}
 	}
+	flooding() {
+		if (!this.user.can('editroom', null, this.room)) return this.button(this.room.filterFlooding ? 'filter flooding' : 'off', true);
+		if (this.room.filterFlooding) {
+			return `${this.button('off', null, 'filterflooding off')} ${this.button('filter flooding', true)}`;
+		} else {
+			return `${this.button('off', true)} ${this.button('filter flooding', null, 'filterflooding on')}`;
+		}
+	}
 	slowchat() {
 		if (!this.user.can('editroom', null, this.room) || (!this.user.can('bypassall') && this.room.userCount < SLOWCHAT_USER_REQUIREMENT)) return this.button(this.room.slowchat ? this.room.slowchat : 'off', true);
 
@@ -156,6 +164,7 @@ class RoomSettings {
 		output += `<strong>Stretch filter:</strong> <br />${this.stretching()}<br />`;
 		output += `<strong>Caps filter:</strong> <br />${this.capitals()}<br />`;
 		output += `<strong>Emoji filter:</strong> <br />${this.emojis()}<br />`;
+		output += `<strong>Flooding filter:</strong> <br />${this.flooding()}<br />`;
 		output += `<strong>Slowchat:</strong> <br />${this.slowchat()}<br />`;
 		output += `<strong>Tournaments:</strong> <br />${this.tourStatus()}<br />`;
 		output += `<strong>UNO:</strong> <br />${this.uno()}<br />`;
@@ -436,6 +445,38 @@ exports.commands = {
 		}
 	},
 	emojifilterhelp: ["/emojifilter [on/off] - Toggles filtering messages in the room for emojis. Requires # & ~"],
+
+	filterflooding: 'floodingfilter',
+	floodingfilter: function (target, room, user) {
+		if (!target) {
+			const settingDisplay = (room.filterFlooding ? "ON" : "OFF");
+			return this.sendReply(`This room's flooding filter is currently: ${settingDisplay}`);
+		}
+		if (!this.canTalk()) return;
+		if (!this.can('editroom', null, room)) return;
+
+		if (target === 'enable' || target === 'on') {
+			if (room.filterFlooding) return this.errorReply(`This room's flooding filter is already ON`);
+			room.filterFlooding = true;
+		} else if (target === 'disable' || target === 'off') {
+			if (!room.filterFlooding) return this.errorReply(`This room's flooding filter is already OFF`);
+			room.filterFlooding = false;
+		} else {
+			return this.parse("/help floodingfilter");
+		}
+		const settingDisplay = (room.filterFlooding ? "ON" : "OFF");
+		this.privateModCommand(`(${user.name} turned the flooding filter ${settingDisplay})`);
+
+		if (room.chatRoomData) {
+			room.chatRoomData.filterFlooding = room.filterFlooding;
+			Rooms.global.writeChatRoomData();
+		}
+	},
+	floodingfilterhelp: [
+		"/floodingfilter - Tells you what the current setting of the flooding filter is in the current room.",
+		"/floodingfilter [on/enable] - Turns the current room's flooding filter on. Requires: # & ~",
+		"/floodingfilter [off/disable] - Turns the current room's flooding filter off. Requires: # & ~",
+	],
 
 	banwords: 'banword',
 	banword: {

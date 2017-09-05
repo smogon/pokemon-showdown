@@ -37,6 +37,7 @@ class Room {
 		this.users = Object.create(null);
 
 		this.log = [];
+		this.chatLog = [];
 
 		this.muteQueue = [];
 		this.muteTimer = null;
@@ -70,6 +71,7 @@ class Room {
 			message = '|c:|' + (~~(Date.now() / 1000)) + '|' + message.substr(3);
 		}
 		this.log.push(message);
+		if (message.startsWith('|c:|')) this.chatLog.push(message);
 		return this;
 	}
 	uhtmlchange(message) {

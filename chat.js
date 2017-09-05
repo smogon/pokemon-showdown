@@ -456,6 +456,27 @@ class CommandContext {
 		return true;
 	}
 
+	checkFlooding(room, user) {
+		if (!room || !room.filterFlooding || !room.chatLog || user.can('mute', null, room)) return true;
+		const latestLogs = 4;
+
+		// get alts and previous names
+		const knownNames = [
+			...user.getAltUsers(true),
+			...Object.keys(user.prevNames),
+			user.userid,
+		].map(toId);
+
+		let count = 0;
+		for (let log of room.chatLog.slice(-latestLogs)) {
+			const logUserId = toId(log.split('|')[3]);
+			if (knownNames.includes(logUserId)) count++;
+		}
+
+		if (count >= latestLogs) return this.errorReply(`This room does not allow flooding - you cannot send more than ${latestLogs} message${Chat.plural(latestLogs)} in a row to this room.`);
+		return true;
+	}
+
 	checkSlowchat(room, user) {
 		if (!room || !room.slowchat) return true;
 		let lastActiveSeconds = (Date.now() - user.lastMessageTime) / 1000;
@@ -732,6 +753,10 @@ class CommandContext {
 			}
 
 			if (!this.checkFormat(room, user, message)) {
+				return false;
+			}
+
+			if (!this.checkFlooding(room, user)) {
 				return false;
 			}
 
