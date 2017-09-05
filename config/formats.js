@@ -742,6 +742,7 @@ exports.Formats = [
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3582473/\">np: UU Stage 7.3</a>",
 			"&bullet; <a href=\"https://www.smogon.com/dex/xy/tags/uu/\">UU Banlist</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3580117/\">UU Viability Ranking</a>",
+			"&bullet; <a href=\"https://http://www.smogon.com/forums/threads/3580885/\">UU Sample Teams</a>",
 		],
 
 		mod: 'gen6',
