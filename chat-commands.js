@@ -3288,7 +3288,6 @@ exports.commands = {
 	 *********************************************************/
 
 	'!search': true,
-	cancelsearch: 'search',
 	search: function (target, room, user) {
 		if (target) {
 			if (Config.laddermodchat) {
@@ -3301,7 +3300,16 @@ exports.commands = {
 			}
 			Ladders.matchmaker.searchBattle(user, target);
 		} else {
+			Ladders.matchmaker.cancelSearches(user);
+		}
+	},
+
+	'!cancelsearch': true,
+	cancelsearch: function (target, room, user) {
+		if (target) {
 			Ladders.matchmaker.cancelSearch(user, target);
+		} else {
+			Ladders.matchmaker.cancelSearches(user);
 		}
 	},
 

@@ -398,7 +398,6 @@ class User {
 		this.games = new Set();
 
 		// searches and challenges
-		this.searching = Object.create(null);
 		this.challengesFrom = {};
 		this.challengeTo = null;
 		this.lastChallenge = 0;
@@ -815,7 +814,7 @@ class User {
 
 		let oldid = this.userid;
 		if (userid !== this.userid) {
-			this.cancelSearch();
+			this.cancelSearches();
 
 			if (!Users.move(this, userid)) {
 				return false;
@@ -860,7 +859,7 @@ class User {
 	}
 	merge(oldUser) {
 		oldUser.cancelChallengeTo();
-		oldUser.cancelSearch();
+		oldUser.cancelSearches();
 		oldUser.inRooms.forEach(roomid => {
 			Rooms(roomid).onLeave(oldUser);
 		});
@@ -1101,7 +1100,7 @@ class User {
 				this.destroy();
 			} else {
 				this.cancelChallengeTo();
-				this.cancelSearch();
+				this.cancelSearches();
 			}
 		}
 	}
@@ -1220,7 +1219,7 @@ class User {
 			// you can't leave the global room except while disconnecting
 			if (!force) return false;
 			this.cancelChallengeTo();
-			this.cancelSearch();
+			this.cancelSearches();
 		}
 		if (!this.inRooms.has(room.id)) {
 			return false;
@@ -1267,10 +1266,6 @@ class User {
 		let format = Dex.getFormat(formatid);
 		if (!format['' + type + 'Show']) {
 			connection.popup(`That format is not available.`);
-			return Promise.resolve(false);
-		}
-		if (type === 'search' && this.searching[formatid]) {
-			connection.popup(`You are already searching a battle in that format.`);
 			return Promise.resolve(false);
 		}
 		return TeamValidator(formatid).prepTeam(this.team, this.locked || this.namelocked).then(result => this.finishPrepBattle(connection, result));
@@ -1333,15 +1328,17 @@ class User {
 			atLeastOne = true;
 		});
 		if (!atLeastOne) games = null;
-		let searching = Object.keys(this.searching);
+		let searching = Ladders.matchmaker.getSearches(this);
 		if (onlyIfExists && !searching.length && !atLeastOne) return;
 		(connection || this).send(`|updatesearch|` + JSON.stringify({
 			searching: searching,
 			games: games,
 		}));
 	}
-	cancelSearch(format) {
-		return Ladders.matchmaker.cancelSearch(this, format);
+	cancelSearches(format) {
+		if (Ladders.matchmaker.cancelSearches(this)) {
+			this.popup(`You are no longer looking for a battle because you changed your username.`);
+		}
 	}
 	makeChallenge(user, format, team/*, isPrivate*/) {
 		user = getUser(user);

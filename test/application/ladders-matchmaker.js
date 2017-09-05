@@ -2,13 +2,14 @@
 
 const assert = require('assert');
 
-const {matchmaker, Matchmaker, Search} = require('../../ladders-matchmaker');
+global.Ladders = require('../../ladders');
 const {Connection, User} = require('../../dev-tools/users-utils');
+let matchmaker = Ladders.matchmaker;
 
 describe('Matchmaker', function () {
 	const FORMATID = 'gen7ou';
 	const addSearch = (player, rating = 1000, formatid = FORMATID) => {
-		let search = new Search(player.userid, player.team, rating);
+		let search = new Ladders.Search(player.userid, player.team, rating);
 		matchmaker.addSearch(search, player, formatid);
 		return search;
 	};
@@ -16,11 +17,10 @@ describe('Matchmaker', function () {
 		player.resetName();
 		player.disconnectAll();
 		player.destroy();
-		return player;
+		return null;
 	};
 
 	before(function () {
-		Rooms.global.ladderIpLog.end();
 		clearInterval(matchmaker.periodicMatchInterval);
 		matchmaker.periodicMatchInterval = null;
 	});
@@ -44,16 +44,12 @@ describe('Matchmaker', function () {
 		this.p2 = destroyPlayer(this.p2);
 	});
 
-	after(function () {
-		Object.assign(matchmaker, new Matchmaker());
-	});
-
 	it('should add a search', function () {
 		let s1 = addSearch(this.p1);
 		assert.ok(matchmaker.searches.has(FORMATID));
 
 		let formatSearches = matchmaker.searches.get(FORMATID);
-		assert.ok(formatSearches instanceof Set);
+		assert.ok(formatSearches instanceof Map);
 		assert.strictEqual(formatSearches.size, 1);
 		assert.strictEqual(s1.userid, this.p1.userid);
 		assert.strictEqual(s1.team, this.p1.team);
@@ -67,29 +63,19 @@ describe('Matchmaker', function () {
 	});
 
 	it('should matchmake users within a reasonable rating range', function () {
-		let {startBattle} = matchmaker;
-		matchmaker.startBattle = () => {
-			matchmaker.startBattle = startBattle;
-			assert.strictEqual(matchmaker.searches.get(FORMATID).size, 2);
-		};
-
 		addSearch(this.p1);
 		addSearch(this.p2, 2000);
-		matchmaker.startBattle();
+		assert.strictEqual(matchmaker.searches.get(FORMATID).size, 2);
 	});
 
 	it('should cancel searches', function () {
 		addSearch(this.p1);
 		matchmaker.cancelSearch(this.p1, FORMATID);
+		matchmaker.cancelSearches(this.p2);
 		assert.strictEqual(matchmaker.searches.get(FORMATID).size, 0);
 	});
 
 	it('should periodically matchmake users when appropriate', function () {
-		let {startBattle} = matchmaker;
-		matchmaker.startBattle = () => {
-			matchmaker.startBattle = startBattle;
-		};
-
 		addSearch(this.p1);
 		let s2 = addSearch(this.p2, 2000);
 		assert.strictEqual(matchmaker.searches.get(FORMATID).size, 2);
@@ -99,28 +85,19 @@ describe('Matchmaker', function () {
 		assert.strictEqual(matchmaker.searches.get(FORMATID).size, 0);
 	});
 
-	// FIXME: a race condition in battles and sockets breaks this test
-	it.skip('should create a new battle room after matchmaking', function () {
-		let {startBattle} = matchmaker;
-		matchmaker.startBattle = (...args) => {
-			matchmaker.startBattle = startBattle;
-			let room = matchmaker.startBattle(...args);
-			assert.ok(room instanceof Rooms.BattleRoom);
-		};
-
+	it('should create a new battle room after matchmaking', function () {
+		assert.strictEqual(this.p1.games.size, 0);
 		addSearch(this.p1);
 		addSearch(this.p2);
+		assert.strictEqual(this.p1.games.size, 1);
+		for (const roomid of this.p1.games) {
+			assert.ok(Rooms(roomid) instanceof Rooms.BattleRoom);
+		}
 	});
 
 	it('should cancel search on disconnect', function () {
 		addSearch(this.p1);
 		this.p1.onDisconnect(this.p1.connections[0]);
-		assert.strictEqual(matchmaker.searches.get(FORMATID).size, 0);
-	});
-
-	it('should cancel search on leaving the global room', function () {
-		addSearch(this.p1);
-		this.p1.leaveRoom(Rooms.global, this.p1.connections[0], true);
 		assert.strictEqual(matchmaker.searches.get(FORMATID).size, 0);
 	});
 
