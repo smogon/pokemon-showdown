@@ -149,7 +149,7 @@ exports.BattleScripts = {
 				if (pokemon.boosts.accuracy > 0) {
 					accuracy *= positiveBoostTable[pokemon.boosts.accuracy];
 				} else {
-					accuracy *= negativeBoostTable[-pokemon.boosts.accuracy]);
+					accuracy *= negativeBoostTable[-pokemon.boosts.accuracy];
 				}
 			}
 			if (!move.ignoreEvasion) {
