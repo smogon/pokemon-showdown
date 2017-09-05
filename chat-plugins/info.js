@@ -148,8 +148,8 @@ exports.commands = {
 		if ((user === targetUser || user.can('alts', targetUser)) && hiddenrooms) {
 			buf += `<br />Hidden rooms: ${hiddenrooms}`;
 		}
-		const lockedAndStaffView = user.can('alts', targetUser) && targetUser.locked;
-		if ((user === targetUser || user.can('makeroom') || lockedAndStaffView) && privaterooms) {
+		const staffViewingLocked = user.can('alts', targetUser) && targetUser.locked;
+		if ((user === targetUser || user.can('makeroom') || staffViewingLocked) && privaterooms) {
 			buf += `<br />Private rooms: ${privaterooms}`;
 		}
 
