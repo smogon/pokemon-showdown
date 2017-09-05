@@ -64,8 +64,9 @@ exports.BattleScripts = {
 		this.modData('Learnsets', 'mimejr').learnset.sketch = ['5E'];
 
 		// Tail Glow :D
-		this.modData('Learnsets', 'raichu').learnset.tailglow = ['5L100'];
+		this.modData('Learnsets', 'finneon').learnset.tailglow = ['5L100'];
 		this.modData('Learnsets', 'lumineon').learnset.tailglow = ['5L100'];
+		this.modData('Learnsets', 'mareep').learnset.tailglow = ['5L100'];
 		this.modData('Learnsets', 'ampharos').learnset.tailglow = ['5L100'];
 		this.modData('Learnsets', 'chinchou').learnset.tailglow = ['5L100'];
 		this.modData('Learnsets', 'lanturn').learnset.tailglow = ['5L100'];
