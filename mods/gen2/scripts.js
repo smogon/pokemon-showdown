@@ -154,9 +154,9 @@ exports.BattleScripts = {
 			}
 			if (!move.ignoreEvasion) {
 				if (target.boosts.evasion > 0 && !move.ignorePositiveEvasion) {
-					accuracy /= positiveBoostTable[target.boosts.evasion]);
+					accuracy *= negativeBoostTable[target.boosts.evasion]);
 				} else if (target.boosts.evasion < 0) {
-					accuracy /= negativeBoostTable[-target.boosts.evasion];
+					accuracy *= positiveBoostTable[-target.boosts.evasion];
 				}
 			}
 			accuracy = Math.min(Math.floor(accuracy), 255);
