@@ -130,7 +130,6 @@ exports.BattleScripts = {
 		if (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type] && !target.runImmunity(move.type, true)) {
 			return false;
 		}
-
 		// Now, let's calculate the accuracy.
 		let accuracy = move.accuracy;
 		if (accuracy !== true) {
@@ -164,7 +163,7 @@ exports.BattleScripts = {
 		accuracy = this.runEvent('ModifyAccuracy', target, pokemon, move, accuracy);
 		if (accuracy !== true) accuracy = Math.max(accuracy, 0);
 
-		if (accuracy !== true && accuracy !== 255 && this.random(255) >= accuracy) {
+		if (accuracy !== true && accuracy !== 255 && this.random(256) >= accuracy) {
 			this.attrLastMove('[miss]');
 			this.add('-miss', pokemon);
 			damage = false;
@@ -180,7 +179,73 @@ exports.BattleScripts = {
 			this.singleEvent('AfterMoveSecondary', move, null, target, pokemon, move);
 			this.runEvent('AfterMoveSecondary', target, pokemon, move);
 		}
+		move.totalDamage = 0;
+		let damage = 0;
+		pokemon.lastDamage = 0;
+		if (move.multihit) {
+			let hits = move.multihit;
+			if (hits.length) {
+				if (hits[0] === 2 && hits[1] === 5) {
+					hits = [2, 2, 2, 3, 3, 3, 4, 5][this.random(8)];
+				} else {
+					hits = this.random(hits[0], hits[1] + 1);
+				}
+			}
+			hits = Math.floor(hits);
+			let nullDamage = true;
+			let moveDamage;
 
+			let isSleepUsable = move.sleepUsable || this.getMove(move.sourceEffect).sleepUsable;
+			let i;
+			for (i = 0; i < hits && target.hp && pokemon.hp; i++) {
+				if (pokemon.status === 'slp' && !isSleepUsable) break;
+
+				if (move.multiaccuracy && i > 0) {
+					accuracy = move.accuracy;
+					if (accuracy !== true) {
+						accuracy = Math.floor(accuracy * 255 / 100);
+						if (!move.ignoreAccuracy) {
+							if (pokemon.boosts.accuracy > 0) {
+								accuracy *= positiveBoostTable[pokemon.boosts.accuracy];
+							} else {
+								accuracy *= negativeBoostTable[-pokemon.boosts.accuracy];
+							}
+						}
+						if (!move.ignoreEvasion) {
+							if (target.boosts.evasion > 0 && !move.ignorePositiveEvasion) {
+								accuracy *= negativeBoostTable[target.boosts.evasion];
+							} else if (target.boosts.evasion < 0) {
+								accuracy *= positiveBoostTable[-target.boosts.evasion];
+							}
+						}
+						accuracy = Math.min(accuracy, 255);
+						accuracy = Math.max(accuracy, 1);
+					}
+					accuracy = this.runEvent('ModifyAccuracy', target, pokemon, move, accuracy);
+					if (accuracy !== true) accuracy = Math.max(accuracy, 0);
+					if (!move.alwaysHit) {
+						accuracy = this.runEvent('Accuracy', target, pokemon, move, accuracy);
+						if (accuracy !== true && accuracy !== 255 && this.random(256) >= accuracy) break;
+					}
+				}
+
+				moveDamage = this.moveHit(target, pokemon, move);
+				if (moveDamage === false) break;
+				if (nullDamage && (moveDamage || moveDamage === 0 || moveDamage === undefined)) nullDamage = false;
+				damage = (moveDamage || 0);
+				move.totalDamage += damage;
+				this.eachEvent('Update');
+			}
+			if (i === 0) return true;
+			if (nullDamage) damage = false;
+			this.add('-hitcount', target, i);
+		} else {
+			damage = this.moveHit(target, pokemon, move);
+			move.totalDamage = damage;
+		}
+		if (move.recoil && move.totalDamage) {
+			this.damage(this.calcRecoilDamage(move.totalDamage, move), pokemon, target, 'recoil');
+		}
 		return damage;
 	},
 	moveHit: function (target, pokemon, move, moveData, isSecondary, isSelf) {
