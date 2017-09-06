@@ -121,7 +121,6 @@ exports.BattleScripts = {
 		let positiveBoostTable = [1, 1.33, 1.66, 2, 2.33, 2.66, 3];
 		let negativeBoostTable = [1, 0.75, 0.6, 0.5, 0.43, 0.36, 0.33];
 		let doSelfDestruct = true;
-		let damage = 0;
 
 		if (move.selfdestruct && doSelfDestruct) {
 			this.faint(pokemon, pokemon, move);
