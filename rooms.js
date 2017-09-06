@@ -296,11 +296,11 @@ class GlobalRoom {
 		this.staffAutojoin = []; // rooms that staff autojoin upon connecting
 		for (let i = 0; i < this.chatRoomData.length; i++) {
 			if (!this.chatRoomData[i] || !this.chatRoomData[i].title) {
-				console.log('ERROR: Room number ' + i + ' has no data.');
+				Monitor.warn(`ERROR: Room number ${i} has no data and could not be loaded.`);
 				continue;
 			}
 			let id = toId(this.chatRoomData[i].title);
-			if (!Config.quietconsole) console.log("NEW CHATROOM: " + id);
+			Monitor.notice("NEW CHATROOM: " + id);
 			let room = Rooms.createChatRoom(id, this.chatRoomData[i].title, this.chatRoomData[i]);
 			if (room.aliases) {
 				for (let a = 0; a < room.aliases.length; a++) {
@@ -1437,7 +1437,7 @@ Rooms.search = function (name, fallback) {
 
 Rooms.createBattleRoom = function (roomid, format, p1, p2, options) {
 	if (Rooms.rooms.has(roomid)) throw new Error(`Room ${roomid} already exists`);
-	// console.log("NEW BATTLE ROOM: " + roomid);
+	Monitor.debug("NEW BATTLE ROOM: " + roomid);
 	const room = new BattleRoom(roomid, format, p1, p2, options);
 	Rooms.rooms.set(roomid, room);
 	return room;
@@ -1496,7 +1496,7 @@ Rooms.SimulatorProcess = require('./room-battle').SimulatorProcess;
 
 // initialize
 
-if (!Config.quietconsole) console.log("NEW GLOBAL: global");
+Monitor.notice("NEW GLOBAL: global");
 Rooms.global = new GlobalRoom('global');
 
 Rooms.rooms.set('global', Rooms.global);

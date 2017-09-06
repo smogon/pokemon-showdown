@@ -1168,7 +1168,7 @@ Punishments.checkIpBanned = function (connection) {
 		let appeal = (Config.appealurl ? `||||Or you can appeal at: ${Config.appealurl}` : ``);
 		connection.send(`|popup||modal|You are banned because you have the same IP (${ip}) as banned user '${banned}'. Your ban will expire in a few days.${appeal}`);
 	}
-	if (!Config.quietconsole) console.log(`CONNECT BLOCKED - IP BANNED: ${ip} (${banned})`);
+	Monitor.notice(`CONNECT BLOCKED - IP BANNED: ${ip} (${banned})`);
 
 	return banned;
 };
