@@ -11511,7 +11511,10 @@ exports.BattleMovedex = {
 			for (let i = 0; i < this.sides.length; i++) {
 				for (let j = 0; j < this.sides[i].active.length; j++) {
 					if (this.sides[i].active[j] && this.sides[i].active[j].isActive) {
-						if (this.runEvent('TryHit', this.sides[i].active[j], source, move) === null) {
+						if (!this.runEvent('Accuracy', this.sides[i].active[j], source, move, true)) {
+							this.add('-miss', source, this.sides[i].active[j]);
+							result = true;
+						} else if (this.runEvent('TryHit', this.sides[i].active[j], source, move) === null) {
 							result = true;
 						} else if (!this.sides[i].active[j].volatiles['perishsong']) {
 							this.sides[i].active[j].addVolatile('perishsong');
