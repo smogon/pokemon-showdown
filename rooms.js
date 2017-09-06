@@ -499,16 +499,30 @@ class GlobalRoom {
 		return roomTable;
 	}
 	getRooms(user) {
-		let roomsData = {official:[], chat:[], userCount: this.userCount, battleCount: this.battleCount};
+		let roomsData = {official:[], pspl:[], chat:[], userCount: this.userCount, battleCount: this.battleCount};
 		for (let i = 0; i < this.chatRooms.length; i++) {
 			let room = this.chatRooms[i];
 			if (!room) continue;
 			if (room.isPrivate && !(room.isPrivate === 'voice' && user.group !== ' ')) continue;
-			(room.isOfficial ? roomsData.official : roomsData.chat).push({
-				title: room.title,
-				desc: room.desc,
-				userCount: room.userCount,
-			});
+			if (room.isOfficial) {
+				roomsData.official.push({
+					title: room.title,
+					desc: room.desc,
+					userCount: room.userCount,
+				});
+			} else if (room.pspl) {
+				roomsData.pspl.push({
+					title: room.title,
+					desc: room.desc,
+					userCount: room.userCount,
+				});
+			} else {
+				roomsData.chat.push({
+					title: room.title,
+					desc: room.desc,
+					userCount: room.userCount,
+				});
+			}
 		}
 		return roomsData;
 	}
