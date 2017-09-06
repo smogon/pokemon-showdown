@@ -123,13 +123,12 @@ exports.BattleScripts = {
 		let doSelfDestruct = true;
 		let damage = 0;
 
+		if (move.selfdestruct && doSelfDestruct) {
+			this.faint(pokemon, pokemon, move);
+		}
 		// First, check if the Pokémon is immune to this move.
 		if (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type] && !target.runImmunity(move.type, true)) {
 			return false;
-		}
-
-		if (move.selfdestruct) {
-			this.faint(pokemon, pokemon, move);
 		}
 
 		// Now, let's calculate the accuracy.
@@ -174,9 +173,6 @@ exports.BattleScripts = {
 			// FIXME: The stored damage should be calculated ignoring Substitute.
 			// https://github.com/Zarel/Pokemon-Showdown/issues/2598
 			target.gotAttacked(move, damage, pokemon);
-		}
-		if (move.selfdestruct && doSelfDestruct) {
-			this.faint(pokemon, pokemon, move);
 		}
 		if (move.ohko) this.add('-ohko');
 
