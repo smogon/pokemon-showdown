@@ -114,7 +114,7 @@ exports.Formats = [
 
 		mod: 'gen7',
 		ruleset: ['[Gen 7] RU'],
-		banlist: ['RU', 'BL3', 'Drought'],
+		banlist: ['RU', 'BL3', 'Drought', 'Aurora Veil'],
 	},
 	{
 		name: "[Gen 7] PU",
@@ -368,7 +368,7 @@ exports.Formats = [
 			if (tier.charAt(0) === '(') tier = tier.slice(1, -1);
 			let boost = (tier in boosts) ? boosts[tier] : 0;
 			if (boost > 0 && (pokemon.set.ability === 'Drizzle' || pokemon.set.item === 'Mewnium Z')) boost = 0;
-			if (boost > 20 && pokemon.set.ability === 'Drought') boost = 20;
+			if (boost > 20 && (pokemon.set.ability === 'Drought' || pokemon.set.moves.includes('auroraveil'))) boost = 20;
 			tsTemplate.baseStats = Object.assign({}, tsTemplate.baseStats);
 			for (let statName in tsTemplate.baseStats) {
 				tsTemplate.baseStats[statName] = this.clampIntRange(tsTemplate.baseStats[statName] + boost, 1, 255);
