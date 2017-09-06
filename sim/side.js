@@ -138,7 +138,7 @@ class Side {
 		};
 		for (let i = 0; i < this.pokemon.length; i++) {
 			let pokemon = this.pokemon[i];
-			data.pokemon.push({
+			let entry = {
 				ident: pokemon.fullname,
 				details: pokemon.details,
 				condition: pokemon.getHealth(pokemon.side),
@@ -159,7 +159,9 @@ class Side {
 				baseAbility: pokemon.baseAbility,
 				item: pokemon.item,
 				pokeball: pokemon.pokeball,
-			});
+			};
+			if (this.battle.gen > 6) entry.ability = pokemon.ability;
+			data.pokemon.push(entry);
 		}
 		return data;
 	}
