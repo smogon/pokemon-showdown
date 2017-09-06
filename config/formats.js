@@ -200,11 +200,9 @@ exports.Formats = [
 			battle: 3,
 		},
 		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview'],
-		banlist: [
-			'Charizard', 'Gengar', 'Gyarados', 'Porygon2', 'Blaziken', 'Salamence', 'Garchomp', 'Lucario', 
-			'Hippowdon', 'Mamoswine', 'Ferrothorn', 'Landorus', 'Landorus-Therian', 'Greninja', 'Aegislash', 
-			'Mimikyu', 'Tapu Koko', 'Tapu Lele', 'Tapu Fini',
-			],
+		banlist: ['Aegislash', 'Blaziken', 'Charizard', 'Ferrothorn', 'Garchomp', 'Gengar', 'Greninja', 'Gyarados', 'Hippowdon', 'Landorus',
+			'Landorus-Therian', 'Lucario', 'Mamoswine', 'Mimikyu', 'Porygon2', 'Salamence', 'Tapu Fini', 'Tapu Koko', 'Tapu Lele',
+		],
 		requirePentagon: true,
 	},
 	{
