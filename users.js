@@ -184,7 +184,7 @@ function cacheGroupData() {
 	if (Config.groups) {
 		// Support for old config groups format.
 		// Should be removed soon.
-		console.log(
+		console.error(
 			`You are using a deprecated version of user group specification in config.\n` +
 			`Support for this will be removed soon.\n` +
 			`Please ensure that you update your config.js to the new format (see config-example.js, line 220).\n`
@@ -1563,11 +1563,11 @@ Users.socketConnect = function (worker, workerid, socketid, ip, protocol) {
 	connection.user = user;
 	Punishments.checkIp(user, connection);
 	// Generate 1024-bit challenge string.
-	require('crypto').randomBytes(128, (ex, buffer) => {
-		if (ex) {
+	require('crypto').randomBytes(128, (err, buffer) => {
+		if (err) {
 			// It's not clear what sort of condition could cause this.
 			// For now, we'll basically assume it can't happen.
-			console.log(`Error in randomBytes: ${ex}`);
+			require('./crashlogger')(err, 'randomBytes');
 			// This is pretty crude, but it's the easiest way to deal
 			// with this case, which should be impossible anyway.
 			user.disconnectAll();

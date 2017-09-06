@@ -273,7 +273,7 @@ class Ladder {
 				this.save();
 
 				if (!room.battle) {
-					console.log(`room expired before ladder update was received`);
+					Monitor.warn(`room expired before ladder update was received`);
 					return;
 				}
 
