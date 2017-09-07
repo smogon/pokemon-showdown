@@ -6567,7 +6567,7 @@ exports.BattleMovedex = {
 				}
 			},
 			onResidualOrder: 5,
-			onResidualSubOrder: 2,
+			onResidualSubOrder: 3,
 			onResidual: function () {
 				this.eachEvent('Terrain');
 			},
