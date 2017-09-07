@@ -875,7 +875,7 @@ exports.commands = {
 		if (target === 'off') {
 			if (!room.pspl) return this.errorReply(`This chat room is already not a PSPL Winner room.`);
 			delete room.pspl;
-			this.addModCommand(`${user.name} made this chat room a PSPL Winner room.`);
+			this.addModCommand(`${user.name} made this chat room no longer a PSPL Winner room.`);
 			delete room.chatRoomData.pspl;
 			Rooms.global.writeChatRoomData();
 		} else {
