@@ -123,7 +123,6 @@ exports.BattleScripts = {
 		this.modData('Pokedex', 'weezing').abilities['1'] = 'Aftermath';
 		this.modData('Pokedex', 'eelektross').abilities['1'] = 'Poison Heal';
 		this.modData('Pokedex', 'claydol').abilities['1'] = 'Filter';
-		this.modData('Pokedex', 'gengar').abilities['1'] = 'Cursed Body';
 		this.modData('Pokedex', 'mismagius').abilities['1'] = 'Cursed Body';
 		this.modData('Pokedex', 'cryogonal').abilities['1'] = 'Ice Body';
 		this.modData('Pokedex', 'mesprit').abilities['1'] = 'Serene Grace';
