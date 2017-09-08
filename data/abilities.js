@@ -354,7 +354,7 @@ exports.BattleAbilities = {
 		},
 		id: "bulletproof",
 		name: "Bulletproof",
-		rating: 3,
+		rating: 3.5,
 		num: 171,
 	},
 	"cheekpouch": {
