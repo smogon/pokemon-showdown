@@ -8843,12 +8843,6 @@ exports.BattleMovedex = {
 			onStart: function (target) {
 				this.add('-singleturn', target, 'Protect');
 			},
-			onSourcePrepareHit: function (source, target, effect) {
-				if (effect.effectType !== 'Move' || !effect.flags['protect'] || effect.category === 'Status') return;
-				if (effect.flags['contact']) {
-					effect.ignoreImmunity = true;
-				}
-			},
 			onTryHitPriority: 3,
 			onTryHit: function (target, source, move) {
 				if (!move.flags['protect'] || move.category === 'Status') {
