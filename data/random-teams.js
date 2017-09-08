@@ -12,7 +12,7 @@ class RandomTeams extends Dex.ModdedDex {
 		super(format.mod);
 		this.randomBSSFactorySets = randomBSSFactorySets;
 		this.randomFactorySets = randomFactorySets;
-		
+
 		this.factoryTier = '';
 		this.format = format;
 		this.prng = new PRNG(seed);
