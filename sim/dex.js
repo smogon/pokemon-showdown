@@ -473,6 +473,9 @@ class ModdedDex {
 			name = this.data.Aliases[id];
 			id = toId(name);
 		}
+		if (this.data.Formats.hasOwnProperty('gen7' + id)) {
+			id = 'gen7' + id;
+		}
 		let effect;
 		/**@type {string[]} */
 		let sanitizedCustomRules = [];
