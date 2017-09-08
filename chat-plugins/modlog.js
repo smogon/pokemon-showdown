@@ -31,35 +31,27 @@ class ModlogManager extends ProcessManager {
 
 	async onMessageDownstream(message) {
 		// protocol:
-		// "[id]|[comma-separated list of room ids]|[searchString]|[exactSearch]|[maxLines]"
-		let pipeIndex = message.indexOf('|');
-		let nextPipeIndex = message.indexOf('|', pipeIndex + 1);
-		let id = message.substr(0, pipeIndex);
-		let rooms = message.substr(pipeIndex + 1, nextPipeIndex - pipeIndex - 1);
+		// "[id]|[comma-separated list of room ids]|[searchString]|[maxLines]"
+		const parts = message.split('|');
 
-		pipeIndex = nextPipeIndex;
-		nextPipeIndex = message.indexOf('|', pipeIndex + 1);
-		let searchString = message.substr(pipeIndex + 1, nextPipeIndex - pipeIndex - 1);
+		const id = parts[0];
+		const rooms = parts[1];
+		const searchString = parts.slice(2, -1).join('|');
+		const maxLines = parts[parts.length - 1];
 
-		pipeIndex = nextPipeIndex;
-		nextPipeIndex = message.indexOf('|', pipeIndex + 1);
-		let exactSearch = message.substr(pipeIndex + 1, nextPipeIndex - pipeIndex - 1);
-		let maxLines = message.substr(nextPipeIndex + 1);
-
-		process.send(id + '|' + await this.receive(rooms, searchString, exactSearch, maxLines));
+		process.send(id + '|' + await this.receive(rooms, searchString, maxLines));
 	}
 
-	async receive(rooms, searchString, exactSearch, maxLines) {
+	async receive(rooms, searchString, maxLines) {
 		let result = '';
-		exactSearch = exactSearch === '1';
 		maxLines = Number(maxLines);
 		try {
-			result = '1|' + await runModlog(rooms.split(','), searchString, exactSearch, maxLines);
+			const searchResults = await runModlog(rooms.split(','), searchString, maxLines);
+			result = `${searchResults.searchType}|${searchResults.text}`;
 		} catch (err) {
 			require('../lib/crashlogger')(err, 'A modlog query', {
 				rooms: rooms,
 				searchString: searchString,
-				exactSearch: exactSearch,
 				maxLines: maxLines,
 			});
 			result = '0';
@@ -136,7 +128,7 @@ function checkRipgrepAvailability() {
 	return Config.ripgrepmodlog;
 }
 
-function getMoreButton(room, search, useExactSearch, lines, maxLines) {
+function getMoreButton(room, search, lines, maxLines) {
 	let newLines = 0;
 	for (let increase of MORE_BUTTON_INCREMENTS) {
 		if (increase > lines) {
@@ -147,12 +139,80 @@ function getMoreButton(room, search, useExactSearch, lines, maxLines) {
 	if (!newLines || lines < maxLines) {
 		return ''; // don't show a button if no more pre-set increments are valid or if the amount of results is already below the max
 	} else {
+<<<<<<< HEAD
 		if (useExactSearch) search = Chat.escapeHTML(`"${search}"`);
 		return `<br /><div style="text-align:center"><button class="button" name="send" value="/modlog ${room}, ${search} ${LINES_SEPARATOR}${newLines}" title="View more results">Older results<br />&#x25bc;</button></div>`;
+=======
+		search = Chat.escapeHTML(`${search}`);
+		return `<br /><div style="float:right"><button class="button" name="send" value="/modlog ${room}, ${search} ${LINES_SEPARATOR}${newLines}" title="View more results">More results...</button></div>`;
+>>>>>>> Modlog: expand searching capabilities
+	}
+}
+function toModlogChar(match) {
+	if (/^\*+$/.test(match)) return '[a-zA-Z0-9]*';
+	return `${match}[^a-zA-Z0-9]*`;
+}
+
+function toModlogId(text) {
+	if (typeof text !== 'string' && typeof text !== 'number') return '';
+	return ('' + text).toLowerCase().replace(/[^a-z0-9*]+/g, '').replace(/(\*+)|./g, toModlogChar);
+}
+
+function escapeRegex(str) {
+	return (str && typeof str === 'string' ? str : '').replace(/[\\.+*?!=()|[\]{}^$#<>]/g, '\\$&');
+}
+
+function formatSingleSearch(string) {
+	const searchType = string.trim().charAt(0) === '!' ? 'negative' : 'positive';
+	const parts = string.split('||');
+	let formattedParts = [];
+
+	for (let p of parts) {
+		p = p.trim();
+		const exactSearch = /^(["']).+\1$/i.test(p);
+		if (exactSearch) {
+			p = p.slice(1, -1);
+			formattedParts.push(escapeRegex(p));
+		} else {
+			formattedParts.push(`[^a-zA-Z0-9]${toModlogId(p)}[^a-zA-Z0-9]`);
+		}
+	}
+
+	const result = {searchType, term: (formattedParts.length > 1 ? `(${formattedParts.join('|')})` : formattedParts[0])};
+	return result;
+}
+
+function formatRegexString(string) {
+	if (!string) return {type: 0, searchRegex: '.'};
+	const parts = string.split('&&');
+	if (parts.length === 1 && string.charAt(0) !== '!' && !string.includes('||')) {
+		// single argument searches
+		if (/^(["']).+\1$/i.test(string)) {
+			// exact search
+			return {type: 1, searchRegex: escapeRegex(string.slice(1, -1))};
+		} else {
+			// userid search
+			return {type: 0, searchRegex: `[^a-zA-Z0-9]${toModlogId(string)}[^a-zA-Z0-9]`};
+		}
+	} else {
+		// searches with multiple arguments
+		let results = {positive: [], negative: []};
+
+		// format each search term
+		for (let p of parts) {
+			const res = formatSingleSearch(p);
+			results[res.searchType].push(res.term);
+		}
+
+		// format the positive searches
+		const positive = results.positive.map(t => `(?=.*${t})`).join('');
+		const negative = results.negative.length ? results.negative.map(t => `(?!${results.negative.join('|')})`) : '';
+		const searchRegex = `^${positive}(?:${negative}.)*$`;
+		return {type: 2, searchRegex};
 	}
 }
 
-async function runModlog(rooms, searchString, exactSearch, maxLines) {
+async function runModlog(rooms, searchString, maxLines) {
 	const useRipgrep = checkRipgrepAvailability();
 	let fileNameList = [];
 	let checkAllRooms = false;
@@ -174,15 +234,8 @@ async function runModlog(rooms, searchString, exactSearch, maxLines) {
 	// searchString with max length MAX_QUERY_LENGTH. Otherwise, the modlog
 	// child process will crash when attempting to execute any RegExp
 	// constructed with it (i.e. when not configured to use ripgrep).
-	let regexString;
-	if (!searchString) {
-		regexString = '.';
-	} else if (exactSearch) {
-		regexString = searchString.replace(/[\\.+*?()|[\]{}^$]/g, '\\$&');
-	} else {
-		searchString = toId(searchString);
-		regexString = `[^a-zA-Z0-9]${searchString.split('').join('[^a-zA-Z0-9]*')}[^a-zA-Z0-9]`;
-	}
+
+	const {searchRegex: regexString, type: searchType = 0} = formatRegexString(searchString);
 
 	let results = new SortedLimitedLengthList(maxLines);
 	if (useRipgrep && searchString) {
@@ -196,7 +249,7 @@ async function runModlog(rooms, searchString, exactSearch, maxLines) {
 		}
 	}
 	const resultData = results.getListClone();
-	return resultData.join('\n');
+	return {text: resultData.join('\n'), searchType};
 }
 
 async function checkRoomModlog(path, regex, results) {
@@ -223,7 +276,7 @@ function runRipgrepModlog(paths, regexString, results) {
 	return results;
 }
 
-function prettifyResults(rawResults, room, searchString, exactSearch, addModlogLinks, hideIps, maxLines) {
+function prettifyResults(rawResults, room, searchString, searchType, addModlogLinks, hideIps, maxLines) {
 	if (rawResults === '0') {
 		return "The modlog query has crashed.";
 	}
@@ -242,8 +295,8 @@ function prettifyResults(rawResults, room, searchString, exactSearch, addModlogL
 	if (pipeIndex < 0) pipeIndex = 0;
 	rawResults = rawResults.substr(pipeIndex + 1, rawResults.length);
 	if (!rawResults) {
-		return `|popup|No moderator actions containing ${searchString} found on ${roomName}.` +
-				(exactSearch ? "" : " Add quotes to the search parameter to search for a phrase, rather than a user.");
+		return `|popup|No moderator actions containing \`${searchString}\` found on ${roomName}.` +
+				(searchType !== '0' ? "" : " Add quotes to the search parameter to search for a phrase, rather than a user.");
 	}
 	const title = `[${room}]` + (searchString ? ` ${searchString}` : ``);
 	const resultArray = rawResults.split('\n');
@@ -383,11 +436,46 @@ exports.commands = {
 		if (!lines) lines = DEFAULT_RESULTS_LENGTH;
 		if (lines > MAX_RESULTS_LENGTH) lines = MAX_RESULTS_LENGTH;
 
+<<<<<<< HEAD
 		getModlog(connection, roomid, target, lines, cmd === 'timedmodlog');
+=======
+		let searchString = '';
+		if (target) searchString = target.trim();
+		if (searchString.length > MAX_QUERY_LENGTH) {
+			this.errorReply(`Your search query must be shorter than ${MAX_QUERY_LENGTH} characters.`);
+			return;
+		}
+
+		let roomIdList;
+		// handle this here so the child process doesn't have to load rooms data
+		if (roomId === 'public') {
+			const isPublicRoom = (room => !(room.isPrivate || room.battle || room.isPersonal || room.id === 'global'));
+			roomIdList = Array.from(Rooms.rooms.values()).filter(isPublicRoom).map(room => room.id);
+		} else {
+			roomIdList = [roomId];
+		}
+
+		PM.send(roomIdList.join(','), searchString, lines).then(response => {
+			connection.send(prettifyResults(response, roomId, searchString, response.charAt(0), addModlogLinks, hideIps, lines));
+			if (cmd === 'timedmodlog') this.sendReply(`The modlog query took ${Date.now() - startTime} ms to complete.`);
+		});
+>>>>>>> Modlog: expand searching capabilities
 	},
-	modloghelp: [
-		"/modlog [roomid], [search] - Searches the moderator log - defaults to the current room unless specified otherwise.",
-		"If you set [roomid] as [all], it searches for [search] on all rooms' moderator logs.",
-		"If you set [roomid] as [public], it searches for [search] in all public rooms' moderator logs, excluding battles. Requires: % @ * # & ~",
-	],
+	modloghelp: function (target, room, user) {
+		if (!this.runBroadcast()) return;
+
+		this.sendReplyBox(
+			`<div class='chat'>` +
+			`/modlog [roomid], [search] - Searches the moderator log - defaults to the current room unless specified otherwise.<br />` +
+			`- If you set [roomid] as [all], it searches for [search] on all rooms' moderator logs.<br />` +
+			`- If you set [roomid] as [public], it searches for [search] in all public rooms' moderator logs, excluding battles. Requires: % @ * # & ~<br />` +
+			`- Put <code style=''>"</code> around any search term to get the exact string, with symbols and spacing included, in any part of the modlog entry.  By default, it will search for complete words or phrases only if quotation marks are not used.<br />` +
+			`- Use <code>&&</code> include additional search terms.  Results will include lines with all the terms.<br />` +
+			`- Use <code>||</code> to include additional search terms. Results will include lines with any or all of the terms.<br />` +
+			`- Use <code>!</code> to exclude any search term.  Results will not include lines containing that term. <br />` +
+			`- Use <code>*</code> as a wildcard within search terms for complete words or phrases. It can represent several characters.<br />` +
+			`- Example: <code>pi*chu || "raichu" && !ash</code> will accept lines that contain complete words or phrases starting with "pi" and ending with "chu", such as "pikachu", "pichu" and "pika and chuchu"; or any word with with the letters "raichu" inside. It will exclude lines that include the complete word "ash".` +
+			`</div>`
+		);
+	},
 };
