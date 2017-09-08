@@ -12,6 +12,7 @@ class RandomTeams extends Dex.ModdedDex {
 		super(format.mod);
 		this.randomBSSFactorySets = randomBSSFactorySets;
 		this.randomFactorySets = randomFactorySets;
+		
 		this.factoryTier = '';
 		this.format = format;
 		this.prng = new PRNG(seed);
@@ -781,7 +782,7 @@ class RandomTeams extends Dex.ModdedDex {
 					if (hasMove['focusblast'] || hasMove['superpower']) rejected = true;
 					break;
 				case 'closecombat': case 'highjumpkick':
-					if ((hasMove['aurasphere'] || hasMove['focusblast'] || movePool.includes('aurasphere')) || counter.setupType === 'Special') rejected = true;
+					if ((hasMove['aurasphere'] || hasMove['focusblast'] || movePool.includes('aurasphere')) && counter.setupType === 'Special') rejected = true;
 					if (hasMove['bulkup'] && hasMove['drainpunch']) rejected = true;
 					break;
 				case 'machpunch':
@@ -1301,8 +1302,6 @@ class RandomTeams extends Dex.ModdedDex {
 			item = hasMove['destinybond'] ? 'Custap Berry' : ['Leftovers', 'Sitrus Berry'][this.random(2)];
 		} else if (template.species === 'Raichu-Alola' && hasMove['thunderbolt'] && !teamDetails.zMove && this.random(4) < 1) {
 			item = 'Aloraichium Z';
-		} else if (template.species === 'Zygarde-10%' && ability === 'Power Construct' && hasMove['Substitute']) {
-			item = 'Sitrus Berry';
 		} else if (ability === 'Imposter') {
 			item = 'Choice Scarf';
 		} else if (ability === 'Klutz' && hasMove['switcheroo']) {
@@ -1399,7 +1398,7 @@ class RandomTeams extends Dex.ModdedDex {
 			item = (template.baseStats.hp + template.baseStats.def + template.baseStats.spd < 285 || !!counter['speedsetup'] || hasMove['trickroom']) ? 'Life Orb' : 'Leftovers';
 		} else if (template.species === 'Palkia' && (hasMove['dracometeor'] || hasMove['spacialrend']) && hasMove['hydropump']) {
 			item = 'Lustrous Orb';
-		} else if (slot === 0 && ability !== 'Regenerator' && ability !== 'Sturdy' && !counter['recoil'] && !counter['recovery'] && !hasMove['leechseed'] && template.baseStats.hp + template.baseStats.def + template.baseStats.spd < 285 && !(counter.setupType && !counter['speedsetup'] && !counter['priority'])) {
+		} else if (slot === 0 && ability !== 'Regenerator' && ability !== 'Sturdy' && !counter['recoil'] && !counter['recovery'] && template.baseStats.hp + template.baseStats.def + template.baseStats.spd < 285) {
 			item = 'Focus Sash';
 
 		// This is the "REALLY can't think of a good item" cutoff
