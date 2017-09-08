@@ -1198,6 +1198,7 @@ class RandomTeams extends Dex.ModdedDex {
 					}
 				}
 			} while (rejectAbility && ability === ability1.name);
+
 			if (abilities.includes('Chlorophyll') && ability !== 'Solar Power' && hasMove['sunnyday']) {
 				ability = 'Chlorophyll';
 			}
