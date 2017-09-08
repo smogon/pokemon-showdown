@@ -313,8 +313,10 @@ exports.commands = {
 		if (target === 'sync' && !room.modchat) this.parse(`/modchat ${Config.groupsranking[1]}`);
 		if (!room.isPrivate) this.parse('/hiddenroom');
 	},
-	modjoinhelp: ["/modjoin [+|%|@|*|&|~|#|off] - Sets modjoin. Users lower than the specified rank can't join this room. Requires: # & ~",
-		"/modjoin [sync|off] - Sets modjoin. Only users who can speak in modchat can join this room. Requires: # & ~"],
+	modjoinhelp: [
+		"/modjoin [+|%|@|*|&|~|#|off] - Sets modjoin. Users lower than the specified rank can't join this room. Requires: # & ~",
+		"/modjoin [+|sync|off] - Sets modjoin. Only users who can speak in modchat can join this room. Requires: \u2606 # & ~",
+	],
 
 	slowchat: function (target, room, user) {
 		if (!target) {
