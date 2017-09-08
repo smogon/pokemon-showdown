@@ -557,10 +557,10 @@ class CommandContext {
 	sendModCommand(data) {
 		this.room.sendModCommand(data);
 	}
-	privateModCommand(data) {
+	privateModCommand(data, logOnlyText) {
 		this.room.sendModCommand(data);
 		this.logEntry(data);
-		this.room.modlog(data);
+		this.room.modlog(data + (logOnlyText || ""));
 	}
 	globalModlog(action, user, text) {
 		let buf = "(" + this.room.id + ") " + action + ": ";
