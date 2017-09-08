@@ -91,7 +91,7 @@ exports.BattleAbilities = {
 		suppressWeather: true,
 		id: "airlock",
 		name: "Air Lock",
-		rating: 3,
+		rating: 2.5,
 		num: 76,
 	},
 	"analytic": {
@@ -377,7 +377,7 @@ exports.BattleAbilities = {
 		},
 		id: "chlorophyll",
 		name: "Chlorophyll",
-		rating: 2.5,
+		rating: 3,
 		num: 34,
 	},
 	"clearbody": {
@@ -406,7 +406,7 @@ exports.BattleAbilities = {
 		suppressWeather: true,
 		id: "cloudnine",
 		name: "Cloud Nine",
-		rating: 3,
+		rating: 2.5,
 		num: 13,
 	},
 	"colorchange": {
@@ -580,8 +580,9 @@ exports.BattleAbilities = {
 			this.add('-ability', pokemon, 'Dark Aura');
 		},
 		onAnyBasePower: function (basePower, source, target, move) {
-			if (target === source || move.category === 'Status' || move.type !== 'Dark') return;
-			return this.chainModify([move.hasAuraBreak ? 0x0C00 : 0x1547, 0x1000]);
+			if (target === source || move.category === 'Status' || move.type !== 'Dark' || move.auraBoost) return;
+			move.auraBoost = move.hasAuraBreak ? 0x0C00 : 0x1547;
+			return this.chainModify([move.auraBoost, 0x1000]);
 		},
 		isUnbreakable: true,
 		id: "darkaura",
@@ -885,8 +886,9 @@ exports.BattleAbilities = {
 			this.add('-ability', pokemon, 'Fairy Aura');
 		},
 		onAnyBasePower: function (basePower, source, target, move) {
-			if (target === source || move.category === 'Status' || move.type !== 'Fairy') return;
-			return this.chainModify([move.hasAuraBreak ? 0x0C00 : 0x1547, 0x1000]);
+			if (target === source || move.category === 'Status' || move.type !== 'Fairy' || move.auraBoost) return;
+			move.auraBoost = move.hasAuraBreak ? 0x0C00 : 0x1547;
+			return this.chainModify([move.auraBoost, 0x1000]);
 		},
 		isUnbreakable: true,
 		id: "fairyaura",
@@ -2771,7 +2773,7 @@ exports.BattleAbilities = {
 		},
 		id: "sandrush",
 		name: "Sand Rush",
-		rating: 2.5,
+		rating: 3,
 		num: 146,
 	},
 	"sandstream": {
@@ -3489,7 +3491,7 @@ exports.BattleAbilities = {
 		},
 		id: "swiftswim",
 		name: "Swift Swim",
-		rating: 2.5,
+		rating: 3,
 		num: 33,
 	},
 	"symbiosis": {

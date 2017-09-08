@@ -74,6 +74,8 @@ exports.BattleMovedex = {
 				},
 			},
 		},
+		shortDesc: "30% chance of raising user's Atk by 1 stage.",
+		desc: "This move has a 30% chance of raising the user's Attack by one stage.",
 	},
 	cut: {
 		inherit: true,
@@ -84,6 +86,8 @@ exports.BattleMovedex = {
 				def: -1,
 			},
 		},
+		desc: "100% chance of lowering the target's Defense by one stage.",
+		shortDesc: "Lowers the target's Def by 1 stage.",
 	},
 	rocksmash: {
 		inherit: true,
@@ -94,6 +98,8 @@ exports.BattleMovedex = {
 				def: -1,
 			},
 		},
+		desc: "100% chance of lowering the target's Defense by one stage.",
+		shortDesc: "Lowers the target's Def by 1 stage.",
 	},
 	/******************************************************************
 	Weather moves:
@@ -252,6 +258,8 @@ exports.BattleMovedex = {
 		boosts: {
 			evasion: 1,
 		},
+		desc: "Raises the user's evasiveness by 1 stages. Whether or not the user's evasiveness was changed, Body Slam, Dragon Rush, Flying Press, Heat Crash, Heavy Slam, Phantom Force, Shadow Force, Steamroller, and Stomp will not check accuracy and have their damage doubled if used against the user while it is active.",
+		shortDesc: "Raises the user's evasiveness by 1.",
 	},
 	doubleteam: {
 		inherit: true,
@@ -269,6 +277,8 @@ exports.BattleMovedex = {
 		boosts: {
 			evasion: 1,
 		},
+		desc: "Raises the user's evasiveness by 1 stage; the user loses 1/4 of its max HP.",
+		shortDesc: "Raises the user's evasiveness by 1; the user loses 25% of its max HP.",
 	},
 	/******************************************************************
 	Two-turn moves:
@@ -296,6 +306,8 @@ exports.BattleMovedex = {
 				this.heal(pokemon.maxhp / 2);
 			},
 		},
+		desc: "This attack charges on the first turn and executes on the second. Power is halved if the weather is Hail, Rain Dance, or Sandstorm. If the user is holding a Power Herb or the weather is Sunny Day, the move completes in one turn. The user heals 1/2 of its max HP during the charge turn. This move removes the target's Substitute (if one is active), and bypasses Protect. This move is also a guaranteed critical hit.",
+		shortDesc: "Charges turn 1. Hits turn 2. No charge in sunlight. Heals 1/2 of the user's max HP, on charge.",
 		flags: {charge: 1, mirror: 1},
 		breaksProtect: true,
 	},
@@ -312,6 +324,8 @@ exports.BattleMovedex = {
 			chance: 100,
 			volatileStatus: 'confusion',
 		},
+		desc: "Has a higher chance for a critical hit. This attack charges on the first turn and executes on the second. If the user is holding a Power Herb, the move completes in one turn. 100% chance to confuse the target. This move removes the target's Substitute (if one is active), and bypasses Protect. This move is also a guaranteed critical hit.",
+		shortDesc: "Charges, then hits foe(s) turn 2. High crit ratio. Confuses target.",
 		flags: {charge: 1, mirror: 1},
 		breaksProtect: true,
 	},
@@ -340,6 +354,8 @@ exports.BattleMovedex = {
 		},
 		flags: {contact: 1, charge: 1, mirror: 1},
 		breaksProtect: true,
+		desc: "This attack charges on the first turn and executes on the second. Raises the user's Defense, Special Defense, and Accuracy by 1 stage on the first turn. If the user is holding a Power Herb, the move completes in one turn. This move removes the target's Substitute (if one is active), and bypasses Protect. This move is also a guaranteed critical hit.",
+		shortDesc: "Raises user's Def, SpD, Acc by 1 on turn 1. Hits turn 2.",
 	},
 	skyattack: {
 		inherit: true,
@@ -358,6 +374,8 @@ exports.BattleMovedex = {
 		},
 		flags: {charge: 1, mirror: 1, distance: 1},
 		breaksProtect: true,
+		desc: "Has a 30% chance to flinch the target and a higher chance for a critical hit. This attack charges on the first turn and executes on the second. If the user is holding a Power Herb, the move completes in one turn. 100% chance to lower the target's Defense by one stage. This move removes the target's Substitute (if one is active), and bypasses Protect. This move is also a guaranteed critical hit.",
+		shortDesc: "Charges, then hits turn 2. 30% flinch. High crit.",
 	},
 	freezeshock: {
 		inherit: true,
@@ -374,6 +392,8 @@ exports.BattleMovedex = {
 		},
 		flags: {charge: 1, mirror: 1},
 		breaksProtect: true,
+		desc: "Has a 100% chance to paralyze the target. This attack charges on the first turn and executes on the second. If the user is holding a Power Herb, the move completes in one turn. This move removes the target's Substitute (if one is active), and bypasses Protect. This move is also a guaranteed critical hit.",
+		shortDesc: "Charges turn 1. Hits turn 2. 100% paralyze.",
 	},
 	iceburn: {
 		inherit: true,
@@ -390,6 +410,8 @@ exports.BattleMovedex = {
 		},
 		flags: {charge: 1, mirror: 1},
 		breaksProtect: true,
+		desc: "Has a 100% chance to burn the target. This attack charges on the first turn and executes on the second. If the user is holding a Power Herb, the move completes in one turn. This move removes the target's Substitute (if one is active), and bypasses Protect. This move is also a guaranteed critical hit.",
+		shortDesc: "Charges turn 1. Hits turn 2. 100% burn.",
 	},
 	bounce: {
 		inherit: true,
@@ -400,12 +422,10 @@ exports.BattleMovedex = {
 		onTryHit: function (target) {
 			target.removeVolatile('substitute');
 		},
-		secondary: {
-			chance: 30,
-			status: 'par',
-		},
 		flags: {contact: 1, charge: 1, mirror: 1, gravity: 1, distance: 1},
 		breaksProtect: true,
+		desc: "Has a 30% chance to paralyze the target. This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks other than Gust, Hurricane, Sky Uppercut, Smack Down, Thousand Arrows, Thunder, and Twister. If the user is holding a Power Herb, the move completes in one turn. This move removes the target's Substitute (if one is active), and bypasses Protect. This move is also a guaranteed critical hit.",
+		shortDesc: "Bounces turn 1. Hits turn 2. 30% paralyze.",
 	},
 	fly: {
 		inherit: true,
@@ -424,6 +444,8 @@ exports.BattleMovedex = {
 		},
 		flags: {contact: 1, charge: 1, mirror: 1, gravity: 1, distance: 1},
 		breaksProtect: true,
+		desc: "This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks other than Gust, Hurricane, Sky Uppercut, Smack Down, Thousand Arrows, Thunder, and Twister. If the user is holding a Power Herb, the move completes in one turn. 100% chance to lower the target's Defense by one stage. This move removes the target's Substitute (if one is active), and bypasses Protect. This move is also a guaranteed critical hit.",
+		shortDesc: "Flies up on first turn, then strikes the next turn. Lowers target's Def by 1 stage.",
 	},
 	dig: {
 		inherit: true,
@@ -440,6 +462,8 @@ exports.BattleMovedex = {
 				def: -1,
 			},
 		},
+		desc: "This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks other than Earthquake and Magnitude but takes double damage from them, and is also unaffected by weather. If the user is holding a Power Herb, the move completes in one turn. 100% chance to lower the target's Defense by one stage. This move removes the target's Substitute (if one is active), and bypasses Protect. This move is also a guaranteed critical hit.",
+		shortDesc: "Digs underground turn 1, strikes turn 2. Lowers target's Def by 1 stage.",
 		flags: {contact: 1, charge: 1, mirror: 1, nonsky: 1},
 		breaksProtect: true,
 	},
@@ -458,6 +482,8 @@ exports.BattleMovedex = {
 				def: -1,
 			},
 		},
+		desc: "This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks other than Surf and Whirlpool but takes double damage from them, and is also unaffected by weather. If the user is holding a Power Herb, the move completes in one turn. 100% chance to lower the target's Defense by one stage. This move removes the target's Substitute (if one is active), and bypasses Protect. This move is also a guaranteed critical hit.",
+		shortDesc: "Dives underwater turn 1, strikes turn 2. Lowers target's Def by 1 stage.",
 		flags: {contact: 1, charge: 1, mirror: 1, nonsky: 1},
 		breaksProtect: true,
 	},
@@ -476,7 +502,8 @@ exports.BattleMovedex = {
 				def: -1,
 			},
 		},
-		breaksProtect: true,
+		desc: "If this move is successful, it breaks through the target's Detect, King's Shield, Protect, or Spiky Shield for this turn, allowing other Pokemon to attack the target normally. If the target's side is protected by Crafty Shield, Mat Block, Quick Guard, or Wide Guard, that protection is also broken for this turn and other Pokemon may attack the target's side normally. This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks. If the user is holding a Power Herb, the move completes in one turn. Damage doubles and no accuracy check is done if the target has used Minimize while active. 100% chance to lower the target's Defense by one stage. This move removes the target's Substitute (if one is active). This move is also a guaranteed critical hit.",
+		shortDesc: "Disappears turn 1. Hits turn 2. Breaks protection. Lowers target's Def by 1 stage.",
 	},
 	shadowforce: {
 		inherit: true,
@@ -491,7 +518,8 @@ exports.BattleMovedex = {
 			chance: 100,
 			volatileStatus: 'curse',
 		},
-		breaksProtect: true,
+		desc: "If this move is successful, it breaks through the target's Detect, King's Shield, Protect, or Spiky Shield for this turn, allowing other Pokemon to attack the target normally. If the target's side is protected by Crafty Shield, Mat Block, Quick Guard, or Wide Guard, that protection is also broken for this turn and other Pokemon may attack the target's side normally. This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks. If the user is holding a Power Herb, the move completes in one turn. Damage doubles and no accuracy check is done if the target has used Minimize while active. 100% chance to inflict a curse (ghost type) onto the target. This move removes the target's Substitute (if one is active). This move is also a guaranteed critical hit.",
+		shortDesc: "Disappears turn 1. Hits turn 2. Breaks protection. Curses the target.",
 	},
 	skydrop: {
 		inherit: true,
@@ -504,6 +532,8 @@ exports.BattleMovedex = {
 				def: -1,
 			},
 		},
+		desc: "This attack takes the target into the air with the user on the first turn and executes on the second. Pokemon weighing 200kg or more cannot be lifted. On the first turn, the user and the target avoid all attacks other than Gust, Hurricane, Sky Uppercut, Smack Down, Thousand Arrows, Thunder, and Twister. The user and the target cannot make a move between turns, but the target can select a move to use. This move cannot damage Flying-type Pokemon. Fails on the first turn if the target is an ally or if the target has a substitute. Lowers the target's Defense by one stage. This move is a guaranteed critical hit. This move ignores Protection.",
+		shortDesc: "User and foe fly up turn 1. Damages on turn 2. Lowers target's Def by 1 stage.",
 		flags: {contact: 1, charge: 1, mirror: 1, gravity: 1, distance: 1},
 		breaksProtect: true,
 	},
@@ -518,6 +548,8 @@ exports.BattleMovedex = {
 				source.addVolatile('mustrecharge');
 			}
 		},
+		desc: "If this move is successful, the user must recharge on the following turn and cannot make a move. If the target is knocked out by this move, the user does not have to recharge. This move is a guaranteed critical hit.",
+		shortDesc: "User cannot move next turn, if the target isn't KO'ed.",
 	},
 	gigaimpact: {
 		inherit: true,
@@ -530,6 +562,8 @@ exports.BattleMovedex = {
 				source.addVolatile('mustrecharge');
 			}
 		},
+		desc: "If this move is successful, the user must recharge on the following turn and cannot make a move. If the target is knocked out by this move, the user does not have to recharge. This move is a guaranteed critical hit.",
+		shortDesc: "User cannot move next turn, if the target isn't KO'ed.",
 	},
 	blastburn: {
 		inherit: true,
@@ -542,6 +576,8 @@ exports.BattleMovedex = {
 				source.addVolatile('mustrecharge');
 			}
 		},
+		desc: "If this move is successful, the user must recharge on the following turn and cannot make a move. If the target is knocked out by this move, the user does not have to recharge. This move is a guaranteed critical hit.",
+		shortDesc: "User cannot move next turn, if the target isn't KO'ed.",
 	},
 	frenzyplant: {
 		inherit: true,
@@ -554,6 +590,8 @@ exports.BattleMovedex = {
 				source.addVolatile('mustrecharge');
 			}
 		},
+		desc: "If this move is successful, the user must recharge on the following turn and cannot make a move. If the target is knocked out by this move, the user does not have to recharge. This move is a guaranteed critical hit.",
+		shortDesc: "User cannot move next turn, if the target isn't KO'ed.",
 	},
 	hydrocannon: {
 		inherit: true,
@@ -566,6 +604,8 @@ exports.BattleMovedex = {
 				source.addVolatile('mustrecharge');
 			}
 		},
+		desc: "If this move is successful, the user must recharge on the following turn and cannot make a move. If the target is knocked out by this move, the user does not have to recharge. This move is a guaranteed critical hit.",
+		shortDesc: "User cannot move next turn, if the target isn't KO'ed.",
 	},
 	rockwrecker: {
 		inherit: true,
@@ -578,6 +618,8 @@ exports.BattleMovedex = {
 				source.addVolatile('mustrecharge');
 			}
 		},
+		desc: "If this move is successful, the user must recharge on the following turn and cannot make a move. If the target is knocked out by this move, the user does not have to recharge. This move is a guaranteed critical hit.",
+		shortDesc: "User cannot move next turn, if the target isn't KO'ed.",
 	},
 	roaroftime: {
 		inherit: true,
@@ -590,6 +632,8 @@ exports.BattleMovedex = {
 				source.addVolatile('mustrecharge');
 			}
 		},
+		desc: "If this move is successful, the user must recharge on the following turn and cannot make a move. If the target is knocked out by this move, the user does not have to recharge. This move is a guaranteed critical hit.",
+		shortDesc: "User cannot move next turn, if the target isn't KO'ed.",
 	},
 	bide: {
 		inherit: true,
@@ -657,6 +701,7 @@ exports.BattleMovedex = {
 			if (user.template.id === 'snorlax') return power * 1.5;
 		},
 		ignoreImmunity: true,
+		desc: "Has a 30% chance to flinch the target. Fails if the user is not asleep. If the user is a Snorlax, this move does 1.5x more damage.",
 	},
 	/******************************************************************
 	Sound-based Normal-type moves:
@@ -757,6 +802,7 @@ exports.BattleMovedex = {
 		},
 		priority: 1,
 		secondary: null,
+		desc: "Has a 10% chance to cause the target to fall asleep. If this move is successful on at least one target and the user is a Meloetta, it changes to Pirouette Forme if it is currently in Aria Forme, or changes to Aria Forme if it is currently in Pirouette Forme. This forme change does not happen if the Meloetta has the Ability Sheer Force. The Pirouette Forme reverts to Aria Forme when Meloetta is not active. This move also switches Meloetta's SpA and Atk EVs, boosts, and certain natures, specifically: Modest <-> Adamant, Jolly <-> Timid, other natures are left untouched.",
 	},
 	/******************************************************************
 	Defend Order, Heal Order:
@@ -801,6 +847,8 @@ exports.BattleMovedex = {
 				this.damage(pokemon.maxhp * factor / 16);
 			},
 		},
+		desc: "Sets up a hazard on the foe's side of the field. Flying types take 1/4 of their max HP from this hazard. Everything else takes 1/8 of their max HP. Can be removed from the foe's side if any foe uses Rapid Spin or Defog, or is hit by Defog.",
+		shortDesc: "Hurts foes on switch-in (1/8 for every type except Flying types take 1/4).",
 	},
 	/******************************************************************
 	Silver Wind, Ominous Wind, AncientPower:
@@ -847,6 +895,8 @@ exports.BattleMovedex = {
 				},
 			},
 		},
+		desc: "Has a 100% chance to raise the user's Attack, Defense, Special Attack, Special Defense, and Speed by 1 stage. This attack's base power becomes 90, if the weather is set to Hail.",
+		shortDesc: "Raises all stats by 1 (not acc/eva).",
 	},
 	ominouswind: {
 		inherit: true,
@@ -877,6 +927,8 @@ exports.BattleMovedex = {
 				},
 			},
 		},
+		desc: "Has a 100% chance to raise the user's Attack, Defense, Special Attack, Special Defense, and Speed by 1 stage. This attack's base power becomes 90, if the weather is set to Hail.",
+		shortDesc: "Raises all stats by 1 (not acc/eva).",
 	},
 	ancientpower: {
 		inherit: true,
@@ -901,6 +953,8 @@ exports.BattleMovedex = {
 				},
 			},
 		},
+		desc: "Has a 100% chance to raise the user's Attack, Defense, Special Attack, Special Defense, and Speed by 1 stage.",
+		shortDesc: "Raises all stats by 1 (not acc/eva).",
 	},
 	/******************************************************************
 	Moves relating to Hail:
@@ -918,6 +972,8 @@ exports.BattleMovedex = {
 			}
 			return this.isWeather('hail') ? 90 : 60;
 		},
+		desc: "Power doubles if the user was hit by the target this turn. If the weather is set to hail, this move does 1.5x more damage.",
+		shortDesc: "Power doubles if user is damaged by the target.",
 	},
 	/******************************************************************
 	Direct phazing moves:
@@ -1060,6 +1116,8 @@ exports.BattleMovedex = {
 			chance: 30,
 			volatileStatus: 'confusion',
 		},
+		desc: "Has a 30% chance to flinch the target. Damage doubles if the target is using Bounce, Fly, or Sky Drop. If the user holds the Gossamer Wing, this move does 1.5x more damage.",
+		shortDesc: "30% chance to flinch the foe(s).",
 		pp: 15,
 		type: "Flying",
 	},
@@ -1068,6 +1126,8 @@ exports.BattleMovedex = {
 		basePower: 40,
 		accuracy: true,
 		multihit: [2, 2],
+		desc: "This move hits twice.",
+		shortDesc: "Hits twice.",
 	},
 	/******************************************************************
 	Moves with not enough drawbacks:
@@ -1084,6 +1144,8 @@ exports.BattleMovedex = {
 				spd: -2,
 			},
 		},
+		desc: "Lowers the user's Defense and Special Defense by 2 stage.",
+		shortDesc: "Lowers the user's Defense and Sp. Def by 2.",
 	},
 	/******************************************************************
 	Blizzard:
@@ -1099,6 +1161,8 @@ exports.BattleMovedex = {
 			chance: 30,
 			status: 'frz',
 		},
+		desc: "Has a 30% chance to freeze the target. If the weather is Hail, this move does not check accuracy.",
+		shortDesc: "30% chance to freeze foe(s). Can't miss in hail.",
 	},
 	/******************************************************************
 	Special Ghost and Fighting:
@@ -1122,6 +1186,8 @@ exports.BattleMovedex = {
 				spd: -1,
 			},
 		},
+		desc: "Has a 30% chance to lower the target's Special Defense by 1 stage.",
+		shortDesc: "30% chance to lower the target's Sp. Def by 1.",
 	},
 	/******************************************************************
 	Selfdestruct and Explosion:
@@ -1136,15 +1202,17 @@ exports.BattleMovedex = {
 		basePower: 200,
 		accuracy: true,
 		willCrit: true,
+		desc: "The user faints after using this move, even if this move fails for having no target. This move is prevented from executing if any active Pokemon has the Ability Damp. This move is a guaranteed critical hit.",
 	},
 	explosion: {
 		inherit: true,
 		basePower: 250,
 		accuracy: true,
 		willCrit: true,
+		desc: "The user faints after using this move, even if this move fails for having no target. This move is prevented from executing if any active Pokemon has the Ability Damp. This move is a guaranteed critical hit.",
 	},
 	/******************************************************************
-	Scald and Steam eruption:
+	Scald and Steam Eruption:
 	- base power not affected by weather
 	- 60% burn in sun
 
@@ -1160,6 +1228,7 @@ exports.BattleMovedex = {
 				break;
 			}
 		},
+		desc: "Has a 30% chance to burn the target. The target thaws out if it is frozen. If the weather is set to Sunny Day, there is a 60% chance to burn the target.",
 	},
 	steameruption: {
 		inherit: true,
@@ -1171,6 +1240,7 @@ exports.BattleMovedex = {
 				break;
 			}
 		},
+		desc: "Has a 30% chance to burn the target. The target thaws out if it is frozen. If the weather is set to Sunny Day, there is a 60% chance to burn the target.",
 	},
 	/******************************************************************
 	High Jump Kick:
@@ -1192,14 +1262,11 @@ exports.BattleMovedex = {
 	******************************************************************/
 	echoedvoice: {
 		inherit: true,
-		accuracy: 100,
 		basePower: 80,
 		basePowerCallback: function () {
 			return 80;
 		},
-		category: "Special",
 		isViable: true,
-		priority: 0,
 		ignoreImmunity: true,
 		onHit: function (target, source) {
 			target.side.addSideCondition('futuremove');
@@ -1227,8 +1294,8 @@ exports.BattleMovedex = {
 			this.add('-start', source, 'move: Echoed Voice');
 			return null;
 		},
-		target: "normal",
-		type: "Normal",
+		desc: "Deals damage two turns after this move is used. At the end of that turn, the damage is calculated at that time and dealt to the Pokemon at the position the target had when the move was used. If the user is no longer active at the time, damage is calculated based on the user's natural Special Attack stat, types, and level, with no boosts from its held item or Ability. Fails if this move or Future Sight is already in effect for the target's position.",
+		shortDesc: "Hits two turns after being used.",
 	},
 	/******************************************************************
 	Rapid Spin, Rock Throw:
@@ -1265,6 +1332,7 @@ exports.BattleMovedex = {
 			if (doubled) return power * 2;
 		},
 		self: undefined,
+		desc: "If this move is successful the user removes hazards before it attacks, the effects of Leech Seed and partial-trapping moves end for the user, and all hazards are removed from the user's side of the field. This move does double the damage, if a hazard is removed.",
 	},
 	rockthrow: {
 		inherit: true,
@@ -1275,6 +1343,8 @@ exports.BattleMovedex = {
 				return power * 2;
 			}
 		},
+		desc: "This move attempts to remove Stealth Rocks from the user's side, if Stealth Rocks are removed this move does double the damage.",
+		shortDesc: "Frees the user of Stealth Rock, does 2x damage if it does.",
 	},
 	/******************************************************************
 	New feature: Signature Pokemon
@@ -1295,6 +1365,8 @@ exports.BattleMovedex = {
 			{chance:20, status:'brn'},
 			{chance:30, volatileStatus:'flinch'},
 		],
+		desc: "Has a 20% chance to burn the target and a 30% chance to flinch it. If the user is a Flareon, this move does 1.5x more damage.",
+		shortDesc: "20% chance to burn. 30% chance to flinch.",
 	},
 	icefang: {
 		inherit: true,
@@ -1306,6 +1378,8 @@ exports.BattleMovedex = {
 			{chance:20, status:'frz'},
 			{chance:30, volatileStatus:'flinch'},
 		],
+		desc: "Has a 20% chance to freeze the target and a 30% chance to flinch it. If the user is a Walrein, this move does 1.5x more damage.",
+		shortDesc: "20% chance to freeze. 30% chance to flinch.",
 	},
 	thunderfang: {
 		inherit: true,
@@ -1317,6 +1391,8 @@ exports.BattleMovedex = {
 			{chance:20, status:'par'},
 			{chance:30, volatileStatus:'flinch'},
 		],
+		desc: "Has a 20% chance to paralyze the target and a 30% chance to flinch it. If the user is a Luxray, this move does 1.5x more damage.",
+		shortDesc: "20% chance to paralyze. 30% chance to flinch.",
 	},
 	poisonfang: {
 		inherit: true,
@@ -1328,6 +1404,8 @@ exports.BattleMovedex = {
 			{chance:100, status:'tox'},
 			{chance:30, volatileStatus:'flinch'},
 		],
+		desc: "Has a 100% chance to badly poison the target and a 30% chance to flinch it. If the user is a Drapion, this move does 1.5x more damage.",
+		shortDesc: "100% chance to badly poison. 30% chance to flinch.",
 	},
 	poisontail: {
 		inherit: true,
@@ -1340,6 +1418,8 @@ exports.BattleMovedex = {
 			chance: 60,
 			status: 'tox',
 		},
+		desc: "Has a 60% chance to badly poison the target and a higher chance for a critical hit. If the user is a Seviper, this move does 1.5x more damage.",
+		shortDesc: "High critical hit ratio. 60% chance to badly poison.",
 	},
 	slash: {
 		inherit: true,
@@ -1353,6 +1433,8 @@ exports.BattleMovedex = {
 				def: -1,
 			},
 		},
+		desc: "Has a higher chance for a critical hit. 30% chance to lower the target's Defense by one stage. If the user is a Persian, this move does 1.5x more damage.",
+		shortDesc: "High critical hit ratio. 30% chance to lower Def by 1.",
 	},
 	sludge: {
 		inherit: true,
@@ -1364,6 +1446,8 @@ exports.BattleMovedex = {
 			chance: 100,
 			status: 'psn',
 		},
+		desc: "Has a 100% chance to poison the target. If the user is a Muk, this move does 1.5x more damage.",
+		shortDesc: "100% chance to poison the target.",
 	},
 	smog: {
 		inherit: true,
@@ -1376,6 +1460,8 @@ exports.BattleMovedex = {
 			chance: 100,
 			status: 'psn',
 		},
+		desc: "Has a 100% chance to poison the target. If the user is a Weezing, this move does 1.5x more damage.",
+		shortDesc: "100% chance to poison the target.",
 	},
 	flamecharge: {
 		inherit: true,
@@ -1383,18 +1469,21 @@ exports.BattleMovedex = {
 		onBasePower: function (power, user) {
 			if (user.template.id === 'rapidash') return this.chainModify(1.5);
 		},
+		desc: "Has a 100% chance to raise the user's Speed by 1 stage. If the user is a Rapidash, this move does 1.5x more damage.",
 	},
 	flamewheel: {
 		inherit: true,
 		onBasePower: function (power, user) {
 			if (user.template.id === 'darmanitan') return this.chainModify(1.5);
 		},
+		desc: "Has a 10% chance to burn the target. If the user is a Darmanitan, this move does 1.5x more damage.",
 	},
 	spark: {
 		inherit: true,
 		onBasePower: function (power, user) {
 			if (user.template.id === 'eelektross') return this.chainModify(1.5);
 		},
+		desc: "Has a 30% chance to paralyze the target. If the user is an Eelektross, this move does 1.5x more damage.",
 	},
 	triplekick: {
 		inherit: true,
@@ -1402,6 +1491,7 @@ exports.BattleMovedex = {
 			if (user.template.id === 'hitmontop') return this.chainModify(1.5);
 		},
 		accuracy: true,
+		desc: "Hits three times. Power increases to 20 for the second hit and 30 for the third. This move checks accuracy for each hit, and the attack ends if the target avoids any of the hits. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Ability Skill Link, this move will always hit three times. If the user is a Hitmontop, this move does 1.5x more damage.",
 	},
 	bubblebeam: {
 		inherit: true,
@@ -1414,6 +1504,8 @@ exports.BattleMovedex = {
 				spe: -1,
 			},
 		},
+		desc: "Has a 30% chance to lower the target's Speed by 1 stage. If the user is a Kingdra, this move does 1.5x more damage.",
+		shortDesc: "30% chance to lower the target's Speed by 1.",
 	},
 	electroweb: {
 		inherit: true,
@@ -1421,6 +1513,7 @@ exports.BattleMovedex = {
 		onBasePower: function (power, user) {
 			if (user.template.id === 'galvantula') return this.chainModify(1.5);
 		},
+		desc: "Has a 100% chance to lower the target's Speed by 1 stage. If the user is a Galvantula, this move does 1.5x more damage.",
 		accuracy: 100,
 	},
 	gigadrain: {
@@ -1429,6 +1522,7 @@ exports.BattleMovedex = {
 		onBasePower: function (power, user) {
 			if (user.template.id === 'beautifly') return this.chainModify(1.5);
 		},
+		desc: "The user recovers 1/2 the HP lost by the target, rounded half up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down. If the user is a Beautifly, this move does 1.5x more damage.",
 		accuracy: 100,
 	},
 	icywind: {
@@ -1437,6 +1531,7 @@ exports.BattleMovedex = {
 		onBasePower: function (power, user) {
 			if (user.template.id === 'glaceon') return this.chainModify(1.5);
 		},
+		desc: "Has a 100% chance to lower the target's Speed by 1 stage. If the user is a Glaceon, this move does 1.5x more damage.",
 		accuracy: 100,
 	},
 	mudshot: {
@@ -1445,6 +1540,7 @@ exports.BattleMovedex = {
 		onBasePower: function (power, user) {
 			if (user.template.id === 'swampert') return this.chainModify(1.5);
 		},
+		desc: "Has a 100% chance to lower the target's Speed by 1 stage. If the user is a Swampert, this move does 1.5x more damage.",
 		accuracy: 100,
 	},
 	glaciate: {
@@ -1453,6 +1549,7 @@ exports.BattleMovedex = {
 		onBasePower: function (power, user) {
 			if (user.template.id === 'kyurem') return this.chainModify(1.5);
 		},
+		desc: "Has a 100% chance to lower the target's Speed by 1 stage. If the user is a Kyurem, this move does 1.5x more damage.",
 		accuracy: 100,
 	},
 	octazooka: {
@@ -1468,6 +1565,8 @@ exports.BattleMovedex = {
 				accuracy: -1,
 			},
 		},
+		desc: "Has a 100% chance to lower the target's accuracy by 1 stage. If the user is a Octillery, this move does 1.5x more damage.",
+		shortDesc: "100% chance to lower the target's accuracy by 1.",
 	},
 	leaftornado: {
 		inherit: true,
@@ -1482,30 +1581,36 @@ exports.BattleMovedex = {
 				accuracy: -1,
 			},
 		},
+		desc: "Has a 100% chance to lower the target's accuracy by 1 stage. If the user is a Serperior, this move does 1.5x more damage.",
+		shortDesc: "100% chance to lower the target's accuracy by 1.",
 	},
 	iceshard: {
 		inherit: true,
 		onBasePower: function (power, user) {
 			if (user.template.id === 'weavile') return this.chainModify(1.5);
 		},
+		desc: "If the user is a Weavile, this move does 1.5x more damage.",
 	},
 	aquajet: {
 		inherit: true,
 		onBasePower: function (power, user) {
 			if (user.template.id === 'sharpedo') return this.chainModify(1.5);
 		},
+		desc: "If the user is a Sharpedo, this move does 1.5x more damage.",
 	},
 	machpunch: {
 		inherit: true,
 		onBasePower: function (power, user) {
 			if (user.template.id === 'hitmonchan') return this.chainModify(1.5);
 		},
+		desc: "If the user is a Hitmonchan, this move does 1.5x more damage.",
 	},
 	shadowsneak: {
 		inherit: true,
 		onBasePower: function (power, user) {
 			if (user.template.id === 'banette') return this.chainModify(1.5);
 		},
+		desc: "If the user is a Banette, this move does 1.5x more damage.",
 	},
 	steelwing: {
 		inherit: true,
@@ -1522,6 +1627,8 @@ exports.BattleMovedex = {
 				},
 			},
 		},
+		desc: "Has a 50% chance to raise the user's Defense by 1 stage. If the user is a Skarmory, this move does 1.5x more damage.",
+		shortDesc: "50% chance to raise the user's Defense by 1.",
 	},
 	surf: {
 		inherit: true,
@@ -1534,6 +1641,8 @@ exports.BattleMovedex = {
 				spe: -1,
 			},
 		},
+		desc: "Damage doubles if the target is using Dive. 10% chance to lower the target's Speed by one stage. If the user is a Masquerain, this move does 1.5x more damage.",
+		shortDesc: "Power doubles on Dive. 10% chance to lower Spe by 1.",
 	},
 	hiddenpower: {
 		inherit: true,
@@ -1659,6 +1768,8 @@ exports.BattleMovedex = {
 			chance: 30,
 			status: 'par',
 		},
+		desc: "Has a 30% chance to paralyze the target.",
+		shortDesc: "30% chance to paralyze the target.",
 	},
 	blueflare: {
 		inherit: true,
@@ -1667,6 +1778,8 @@ exports.BattleMovedex = {
 			chance: 30,
 			status: 'brn',
 		},
+		desc: "Has a 30% chance to burn the target.",
+		shortDesc: "30% chance to burn the target.",
 	},
 	dragonrush: {
 		inherit: true,
@@ -1683,6 +1796,8 @@ exports.BattleMovedex = {
 			chance: 20,
 			status: 'brn',
 		},
+		desc: "Has a 20% chance to burn the target.",
+		shortDesc: "20% chance to burn the target.",
 	},
 	irontail: {
 		inherit: true,
@@ -1830,6 +1945,8 @@ exports.BattleMovedex = {
 			def: 1,
 			spd: 1,
 		},
+		desc: "Raises the user's Defense and Special Defense by 1 stage.",
+		shortDesc: "Raises the user's Def and SpD by 1.",
 	},
 	paraboliccharge: {
 		inherit: true,
@@ -1847,6 +1964,7 @@ exports.BattleMovedex = {
 				},
 			},
 		},
+		desc: "The user recovers 1/2 the HP lost by the target, rounded half up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down. 100% chance to lower the target's Special Attack and Special Defense by one stage, and boost the user's Special Attack and Special Defense by one stage.",
 	},
 	drainingkiss: {
 		inherit: true,
@@ -1864,6 +1982,7 @@ exports.BattleMovedex = {
 				},
 			},
 		},
+		desc: "The user recovers 3/4 the HP lost by the target, rounded half up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down. 100% chance to lower the target's Special Attack and Special Defense by one stage, and boost the user's Special Attack and Special Defense by one stage.",
 	},
 	stomp: {
 		inherit: true,
@@ -1887,6 +2006,8 @@ exports.BattleMovedex = {
 		boosts: {
 			spe: 3,
 		},
+		desc: "Raises the user's Speed by 3 stages. If the user's Speed was changed, the user's weight is reduced by 100kg as long as it remains active. This effect is stackable but cannot reduce the user's weight to less than 0.1kg.",
+		shortDesc: "Raises the user's Speed by 3; user loses 100 kg.",
 	},
 	dizzypunch: {
 		inherit: true,
@@ -1895,6 +2016,8 @@ exports.BattleMovedex = {
 			chance: 50,
 			volatileStatus: 'confusion',
 		},
+		desc: "Has a 50% chance to confuse the target.",
+		shortDesc: "50% chance to confuse the target.",
 	},
 	nightdaze: {
 		inherit: true,
@@ -1906,23 +2029,20 @@ exports.BattleMovedex = {
 				move.name = this.getMove(illusionMoves[this.random(illusionMoves.length)]).name;
 			}
 		},
+		desc: "Has a 40% chance to lower the target's accuracy by 1 stage. If Illusion is active, displays as a random non-Status move in the copied Pokémon's moveset.",
 	},
 	muddywater: {
 		inherit: true,
 		basePower: 85,
 		accuracy: 100,
-		secondary: {
-			chance: 30,
-			boosts: {
-				accuracy: -1,
-			},
-		},
 	},
 	powergem: {
 		inherit: true,
 		basePower: 40,
 		accuracy: true,
 		multihit: [2, 2],
+		desc: "Hits twice. If the first hit breaks the target's substitute, it will take damage for the second hit.",
+		shortDesc: "Hits 2 times in one turn.",
 	},
 	acid: {
 		inherit: true,
@@ -1937,24 +2057,19 @@ exports.BattleMovedex = {
 		accuracy: 80,
 		basePower: 60,
 		willCrit: true,
+		desc: "This move is always a critical hit unless the target is under the effect of Lucky Chant or has the Abilities Battle Armor or Shell Armor.",
+		shortDesc: "Always results in a critical hit.",
 	},
 	sacredsword: {
 		inherit: true,
 		basePower: 95,
 	},
 	triattack: {
-		num: 161,
+		inherit: true,
 		accuracy: true,
 		basePower: 30,
-		category: "Special",
 		desc: "Hits 3 times. Has a 10% chance to burn, paralyze or freeze the target each time.",
 		shortDesc: "Hits 3x; 10% chance to paralyze/burn/freeze.",
-		id: "triattack",
-		name: "Tri Attack",
-		pp: 10,
-		isViable: true,
-		priority: 0,
-		flags: {protect: 1, mirror: 1},
 		multihit: [3, 3],
 		secondary: {
 			chance: 10,
@@ -1969,7 +2084,5 @@ exports.BattleMovedex = {
 				}
 			},
 		},
-		target: "normal",
-		type: "Normal",
 	},
 };
