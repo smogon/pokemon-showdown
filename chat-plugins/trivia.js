@@ -1372,28 +1372,28 @@ const commands = {
 	ugmhelp: ["/trivia ugm [setting] - Enable or disable UGM mode. Requires: # & ~"],
 
 	bank: function (target, room, user) {
-		if (!room.game || room.game.title !== 'Weakest Link') return "This command can only be used for games of the Weakest Link.";
+		if (!room.game || room.game.title !== 'Weakest Link') return this.errorReply("This command can only be used for games of the Weakest Link.");
 		let res = room.game.onBank(user);
 		if (res) return this.sendReply(res);
 	},
 	bankhelp: ["/trivia bank - Bank during a game of the Weakest Link."],
 
 	decide: function (target, room, user) {
-		if (!room.game || room.game.title !== 'Weakest Link') return "This command can only be used for games of the Weakest Link.";
+		if (!room.game || room.game.title !== 'Weakest Link') return this.errorReply("This command can only be used for games of the Weakest Link.");
 		let res = room.game.decide(target, user);
 		if (res) return this.sendReply(res);
 	},
 	decidehelp: ["/trivia decide [user] - If voting ends in a tie, this is used to break the tie by the strongest player."],
 
 	vote: function (target, room, user) {
-		if (!room.game || room.game.title !== 'Weakest Link') return "This command can only be used for games of the Weakest Link.";
+		if (!room.game || room.game.title !== 'Weakest Link') return this.errorReply("This command can only be used for games of the Weakest Link.");
 		let res = room.game.vote(target, user);
 		if (res) return this.sendReply(res);
 	},
 	votehelp: ["/trivia vote [user] - Choose your vote of who to eliminate in the Weakest link"],
 
 	checkvotes: function (target, room, user) {
-		if (!room.game || room.game.title !== 'Weakest Link') return "This command can only be used for games of the Weakest Link.";
+		if (!room.game || room.game.title !== 'Weakest Link') return this.errorReply("This command can only be used for games of the Weakest Link.");
 		if (!this.can('broadcast', null, room)) return;
 		if (!this.runBroadcast()) return;
 		if (room.game.phase !== 'voting') return this.sendReplyBox("The game is not currently in the voting phase");
