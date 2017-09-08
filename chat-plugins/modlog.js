@@ -139,8 +139,71 @@ function getMoreButton(room, search, lines, maxLines) {
 	if (!newLines || lines < maxLines) {
 		return ''; // don't show a button if no more pre-set increments are valid or if the amount of results is already below the max
 	} else {
-		if (useExactSearch) search = Chat.escapeHTML(`"${search}"`);
-		return `<br /><div style="text-align:center"><button class="button" name="send" value="/modlog ${room}, ${search} ${LINES_SEPARATOR}${newLines}" title="View more results">Older results<br />&#x25bc;</button></div>`;
+		search = Chat.escapeHTML(`${search}`);
+		return `<br /><div style="float:right"><button class="button" name="send" value="/modlog ${room}, ${search} ${LINES_SEPARATOR}${newLines}" title="View more results">More results...</button></div>`;
+	}
+}
+function toModlogChar(match) {
+	if (/^\*+$/.test(match)) return '[a-zA-Z0-9]*';
+	return `${match}[^a-zA-Z0-9]*`;
+}
+
+function toModlogId(text) {
+	if (typeof text !== 'string' && typeof text !== 'number') return '';
+	return ('' + text).toLowerCase().replace(/[^a-z0-9*]+/g, '').replace(/(\*+)|./g, toModlogChar);
+}
+
+function escapeRegex(str) {
+	return (str && typeof str === 'string' ? str : '').replace(/[\\.+*?!=()|[\]{}^$#<>]/g, '\\$&');
+}
+
+function formatSingleSearch(string) {
+	const searchType = string.trim().charAt(0) === '!' ? 'negative' : 'positive';
+	const parts = string.split('||');
+	let formattedParts = [];
+
+	for (let p of parts) {
+		p = p.trim();
+		const exactSearch = /^(["']).+\1$/i.test(p);
+		if (exactSearch) {
+			p = p.slice(1, -1);
+			formattedParts.push(escapeRegex(p));
+		} else {
+			formattedParts.push(`[^a-zA-Z0-9]${toModlogId(p)}[^a-zA-Z0-9]`);
+		}
+	}
+
+	const result = {searchType, term: (formattedParts.length > 1 ? `(${formattedParts.join('|')})` : formattedParts[0])};
+	return result;
+}
+
+function formatRegexString(string) {
+	if (!string) return {type: 0, searchRegex: '.'};
+	const parts = string.split('&&');
+	if (parts.length === 1 && string.charAt(0) !== '!' && !string.includes('||')) {
+		// single argument searches
+		if (/^(["']).+\1$/i.test(string)) {
+			// exact search
+			return {type: 1, searchRegex: escapeRegex(string.slice(1, -1))};
+		} else {
+			// userid search
+			return {type: 0, searchRegex: `[^a-zA-Z0-9]${toModlogId(string)}[^a-zA-Z0-9]`};
+		}
+	} else {
+		// searches with multiple arguments
+		let results = {positive: [], negative: []};
+
+		// format each search term
+		for (let p of parts) {
+			const res = formatSingleSearch(p);
+			results[res.searchType].push(res.term);
+		}
+
+		// format the positive searches
+		const positive = results.positive.map(t => `(?=.*${t})`).join('');
+		const negative = results.negative.length ? results.negative.map(t => `(?!${results.negative.join('|')})`) : '';
+		const searchRegex = `^${positive}(?:${negative}.)*$`;
+		return {type: 2, searchRegex};
 	}
 }
 function toModlogChar(match) {
@@ -336,8 +399,14 @@ function prettifyResults(rawResults, room, searchString, searchType, addModlogLi
 	} else {
 		preamble = `>view-modlog-${modlogid}\n|init|html\n|title|[Modlog]${title}\n|pagehtml|<div class="pad"><p>The last ${lines} line${Chat.plural(lines)} of the Moderator Log of ${roomName}.`;
 	}
+	
+	// new
 	let moreButton = getMoreButton(room, searchString, exactSearch, lines, maxLines);
 	return `${preamble}${resultString}${moreButton}</div>`;
+	// old mine
+	preamble +=	`</p><p><small>[${Chat.toTimestamp(new Date(), {hour12: true})}] \u2190 current server time</small></p>`;
+	let moreButton = getMoreButton(room, searchString, lines, maxLines);
+	return `${preamble}${resultString}${moreButton}`;
 }
 
 function getModlog(connection, roomid = 'global', searchString = '', lines = 20, timed = false) {
