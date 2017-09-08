@@ -1113,7 +1113,7 @@ class ModdedDex {
 			// moves
 			j = buf.indexOf('|', i);
 			if (j < 0) return null;
-			set.moves = buf.substring(i, j).split(',', 24);
+			set.moves = buf.substring(i, j).split(',', 24).filter(x => x);
 			i = j + 1;
 
 			// nature
