@@ -121,11 +121,26 @@ class Tournament {
 		}
 		format = Dex.getFormat(this.originalFormat, rules);
 		if (!format.customRules) {
-			output.errorReply("The specified rules are invalid or already included in " + format.name + ".");
+			output.errorReply("The specified rules are invalid.");
 			return false;
 		}
 		this.teambuilderFormat = this.originalFormat + '@@@' + format.customRules.join(',');
-		this.customRules = format.customRules;
+		this.customRules = format.customRules.slice();
+		for (let i = 0; i < this.customRules.length; i++) {
+			if (!this.customRules[i].includes('&')) continue;
+			const parts = this.customRules[i].split('&');
+			let limit = '';
+			if (parts[parts.length - 1].charAt(0) === '>') {
+				limit = ' ' + parts[parts.length - 1];
+				parts.pop();
+			}
+			let separator = '';
+			if (parts[parts.length - 1].charAt(0) === '+') {
+				separator = parts[parts.length - 1].includes('++') ? ' ++ ' : ' + ';
+				parts.pop();
+			}
+			this.customRules[i] = parts.join(separator) + limit;
+		}
 		return true;
 	}
 
