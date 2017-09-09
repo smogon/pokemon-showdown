@@ -4924,8 +4924,8 @@ exports.BattleFormatsData = {
 		tier: "LC",
 	},
 	ferrothorn: {
-		randomBattleMoves: ["spikes", "stealthrock", "leechseed", "powerwhip", "thunderwave", "protect", "knockoff", "gyroball"],
-		randomDoubleBattleMoves: ["gyroball", "stealthrock", "leechseed", "powerwhip", "thunderwave", "knockoff", "protect"],
+		randomBattleMoves: ["spikes", "stealthrock", "leechseed", "powerwhip", "protect", "knockoff", "gyroball"],
+		randomDoubleBattleMoves: ["gyroball", "stealthrock", "leechseed", "powerwhip", "knockoff", "protect"],
 		tier: "OU",
 	},
 	klink: {
@@ -5903,7 +5903,7 @@ exports.BattleFormatsData = {
 		tier: "NFE",
 	},
 	primarina: {
-		randomBattleMoves: ["hydropump", "moonblast", "psychic", "hiddenpowerfire", "calmmind", "scald"],
+		randomBattleMoves: ["hydropump", "moonblast", "scald", "psychic", "hiddenpowerfire"],
 		randomDoubleBattleMoves: ["hypervoice", "moonblast", "substitute", "protect", "icebeam"],
 		unreleasedHidden: true,
 		tier: "UU",
