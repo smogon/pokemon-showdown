@@ -462,6 +462,11 @@ class Side {
 			return this.emitChoiceError(`Can't choose for Team Preview: You're not in a Team Preview phase`);
 		}
 
+		// hack for >6 pokemon Custom Game
+		while (positions.length >= 6 && positions.length < this.maxTeamSize && positions.length < this.pokemon.length) {
+			positions.push(positions.length);
+		}
+
 		for (const pos of positions) {
 			const index = this.choice.actions.length;
 			if (index >= this.maxTeamSize || index >= this.pokemon.length) {
