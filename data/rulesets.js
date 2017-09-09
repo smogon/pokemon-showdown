@@ -66,6 +66,7 @@ exports.BattleFormats = {
 			if (!format || !this.getRuleTable(format).has('-illegal')) return problems;
 			// everything after this line only happens if we're doing legality enforcement
 			let kyurems = 0;
+			if (team.length > 6) problems.push('Your team has more than six Pok\u00E9mon.');
 			for (let i = 0; i < team.length; i++) {
 				if (team[i].species === 'Kyurem-White' || team[i].species === 'Kyurem-Black') {
 					if (kyurems > 0) {
