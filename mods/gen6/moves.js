@@ -28,9 +28,14 @@ exports.BattleMovedex = {
 	},
 	destinybond: {
 		inherit: true,
+		desc: "Until the user's next turn, if an opposing Pokemon's attack knocks the user out, that Pokemon faints as well, unless the attack was Doom Desire or Future Sight.",
 		onPrepareHit: function (pokemon) {
 			pokemon.removeVolatile('destinybond');
 		},
+	},
+	detect: {
+		inherit: true,
+		desc: "The user is protected from most attacks made by other Pokemon during this turn. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails or if the user's last move used is not Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, or Wide Guard. Fails if the user moves last this turn.",
 	},
 	diamondstorm: {
 		inherit: true,
@@ -45,8 +50,18 @@ exports.BattleMovedex = {
 			},
 		},
 	},
+	endure: {
+		inherit: true,
+		desc: "The user will survive attacks made by other Pokemon during this turn with at least 1 HP. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails or if the user's last move used is not Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, or Wide Guard. Fails if the user moves last this turn.",
+	},
+	feint: {
+		inherit: true,
+		desc: "If this move is successful, it breaks through the target's Detect, King's Shield, Protect, or Spiky Shield for this turn, allowing other Pokemon to attack the target normally. If the target's side is protected by Crafty Shield, Mat Block, Quick Guard, or Wide Guard, that protection is also broken for this turn and other Pokemon may attack the target's side normally.",
+	},
 	fellstinger: {
 		inherit: true,
+		desc: "Raises the user's Attack by 2 stages if this move knocks out the target.",
+		shortDesc: "Raises user's Attack by 2 if this KOes the target.",
 		basePower: 30,
 		effect: {
 			duration: 1,
@@ -55,8 +70,6 @@ exports.BattleMovedex = {
 				pokemon.removeVolatile('fellstinger');
 			},
 		},
-		desc: "Raises the user's Attack by 2 stages if this move knocks out the target.",
-		shortDesc: "Raises user's Attack by 2 if this KOes the target.",
 	},
 	flyingpress: {
 		inherit: true,
@@ -65,6 +78,14 @@ exports.BattleMovedex = {
 	heavyslam: {
 		inherit: true,
 		desc: "The power of this move depends on (user's weight / target's weight), rounded down. Power is equal to 120 if the result is 5 or more, 100 if 4, 80 if 3, 60 if 2, and 40 if 1 or less.",
+	},
+	hyperspacefury: {
+		inherit: true,
+		desc: "Lowers the user's Defense by 1 stage. This move cannot be used successfully unless the user's current form, while considering Transform, is Hoopa Unbound. If this move is successful, it breaks through the target's Detect, King's Shield, Protect, or Spiky Shield for this turn, allowing other Pokemon to attack the target normally. If the target's side is protected by Crafty Shield, Mat Block, Quick Guard, or Wide Guard, that protection is also broken for this turn and other Pokemon may attack the target's side normally.",
+	},
+	hyperspacehole: {
+		inherit: true,
+		desc: "If this move is successful, it breaks through the target's Detect, King's Shield, Protect, or Spiky Shield for this turn, allowing other Pokemon to attack the target normally. If the target's side is protected by Crafty Shield, Mat Block, Quick Guard, or Wide Guard, that protection is also broken for this turn and other Pokemon may attack the target's side normally.",
 	},
 	kingsshield: {
 		inherit: true,
@@ -144,12 +165,13 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 50,
 	},
-	rockblast: {
+	phantomforce: {
 		inherit: true,
-		flags: {protect: 1, mirror: 1},
+		desc: "If this move is successful, it breaks through the target's Detect, King's Shield, Protect, or Spiky Shield for this turn, allowing other Pokemon to attack the target normally. If the target's side is protected by Crafty Shield, Mat Block, Quick Guard, or Wide Guard, that protection is also broken for this turn and other Pokemon may attack the target's side normally. This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks. If the user is holding a Power Herb, the move completes in one turn. Damage doubles and no accuracy check is done if the target has used Minimize while active.",
 	},
 	powder: {
 		inherit: true,
+		desc: "If the target uses a Fire-type move this turn, it is prevented from executing and the target loses 1/4 of its maximum HP, rounded half up. This effect happens before the Fire-type move would be prevented by Primordial Sea.",
 		effect: {
 			duration: 1,
 			onStart: function (target) {
@@ -165,15 +187,35 @@ exports.BattleMovedex = {
 			},
 		},
 	},
+	protect: {
+		inherit: true,
+		desc: "The user is protected from most attacks made by other Pokemon during this turn. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails or if the user's last move used is not Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, or Wide Guard. Fails if the user moves last this turn.",
+	},
+	quickguard: {
+		inherit: true,
+		desc: "The user and its party members are protected from attacks with original or altered priority greater than 0 made by other Pokemon, including allies, during this turn. This move modifies the same 1/X chance of being successful used by other protection moves, where X starts at 1 and triples each time this move is successfully used, but does not use the chance to check for failure. X resets to 1 if this move fails or if the user's last move used is not Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, or Wide Guard. Fails if the user moves last this turn or if this move is already in effect for the user's side.",
+	},
 	reflecttype: {
 		inherit: true,
 		desc: "Causes the user's types to become the same as the current types of the target. Fails if the user is an Arceus.",
+	},
+	rockblast: {
+		inherit: true,
+		flags: {protect: 1, mirror: 1},
+	},
+	shadowforce: {
+		inherit: true,
+		desc: "If this move is successful, it breaks through the target's Detect, King's Shield, Protect, or Spiky Shield for this turn, allowing other Pokemon to attack the target normally. If the target's side is protected by Crafty Shield, Mat Block, Quick Guard, or Wide Guard, that protection is also broken for this turn and other Pokemon may attack the target's side normally. This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks. If the user is holding a Power Herb, the move completes in one turn. Damage doubles and no accuracy check is done if the target has used Minimize while active.",
 	},
 	sheercold: {
 		inherit: true,
 		desc: "Deals damage to the target equal to the target's maximum HP. Ignores accuracy and evasiveness modifiers. This attack's accuracy is equal to (user's level - target's level + 30)%, and fails if the target is at a higher level. Pokemon with the Ability Sturdy are immune.",
 		shortDesc: "OHKOs the target. Fails if user is a lower level.",
 		ohko: true,
+	},
+	spikyshield: {
+		inherit: true,
+		desc: "The user is protected from most attacks made by other Pokemon during this turn, and Pokemon making contact with the user lose 1/8 of their maximum HP, rounded down. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails or if the user's last move used is not Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, or Wide Guard. Fails if the user moves last this turn.",
 	},
 	suckerpunch: {
 		inherit: true,
@@ -213,8 +255,8 @@ exports.BattleMovedex = {
 	},
 	watershuriken: {
 		inherit: true,
-		category: "Physical",
 		desc: "Hits two to five times. Has a 1/3 chance to hit two or three times, and a 1/6 chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Ability Skill Link, this move will always hit five times.",
+		category: "Physical",
 	},
 	wideguard: {
 		inherit: true,
