@@ -1120,16 +1120,16 @@ class RandomTeams extends Dex.ModdedDex {
 		let ability0 = this.getAbility(abilities[0]);
 		let ability1 = this.getAbility(abilities[1]);
 		let ability2 = this.getAbility(abilities[2]);
-		ability = ability0.name;
 		if (abilities[1]) {
-			if (abilities[2] && ability2.rating === ability1.rating) {
-				if (this.random(2)) ability1 = ability2;
+			if (abilities[2] && ability1.rating <= ability2.rating && this.random(2)) {
+				[ability1, ability2] = [ability2, ability1];
 			}
-			if (ability0.rating <= ability1.rating) {
-				if (this.random(2)) ability = ability1.name;
-			} else if (ability0.rating - 0.6 <= ability1.rating) {
-				if (!this.random(3)) ability = ability1.name;
+			if (ability0.rating <= ability1.rating && this.random(2)) {
+				[ability0, ability1] = [ability1, ability0];
+			} else if (ability0.rating - 0.6 <= ability1.rating && this.random(3)) {
+				[ability0, ability1] = [ability1, ability0];
 			}
+			ability = ability0.name;
 
 			let rejectAbility;
 			do {
@@ -1151,6 +1151,8 @@ class RandomTeams extends Dex.ModdedDex {
 					rejectAbility = true;
 				} else if (ability === 'Gluttony') {
 					rejectAbility = !hasMove['bellydrum'];
+				} else if (ability === 'Ice Body') {
+					rejectAbility = !teamDetails['hail'];
 				} else if (ability === 'Lightning Rod') {
 					rejectAbility = template.types.includes('Ground');
 				} else if (ability === 'Limber') {
@@ -1163,6 +1165,8 @@ class RandomTeams extends Dex.ModdedDex {
 					rejectAbility = abilities.includes('Technician') && !!counter['technician'];
 				} else if (ability === 'Prankster') {
 					rejectAbility = !counter['Status'];
+				} else if (ability === 'Pressure') {
+					rejectAbility = counter.Status < 1;
 				} else if (ability === 'Quick Feet') {
 					rejectAbility = hasMove['bellydrum'];
 				} else if (ability === 'Reckless' || ability === 'Rock Head') {
@@ -1192,7 +1196,7 @@ class RandomTeams extends Dex.ModdedDex {
 				} else if (ability === 'Technician') {
 					rejectAbility = !counter['technician'] || (abilities.includes('Skill Link') && counter['skilllink'] >= counter['technician']);
 				} else if (ability === 'Tinted Lens') {
-					rejectAbility = counter['damage'] >= counter.damagingMoves.length;
+					rejectAbility = counter['damage'] >= counter.damagingMoves.length || counter.Status > 2 && !counter.setupType;
 				} else if (ability === 'Torrent') {
 					rejectAbility = !counter['Water'];
 				} else if (ability === 'Triage') {
@@ -1200,17 +1204,21 @@ class RandomTeams extends Dex.ModdedDex {
 				} else if (ability === 'Unburden') {
 					rejectAbility = template.isMega || !counter.setupType && !hasMove['acrobatics'];
 				} else if (ability === 'Water Absorb') {
-					rejectAbility = abilities.includes('Volt Absorb') || (abilities.includes('Water Bubble') && counter['Water']);
+					rejectAbility = abilities.includes('Volt Absorb') || (abilities.includes('Water Bubble') && !!counter['Water']);
 				}
 
 				if (rejectAbility) {
-					if (ability === ability1.name) { // or not
-						ability = ability0.name;
-					} else if (ability1.rating > 1) { // only switch if the alternative doesn't suck
+					if (ability === ability0.name && ability1.rating > 1) {
 						ability = ability1.name;
+					} else if (ability === ability1.name && abilities[2] && ability2.rating > 1) {
+						ability = ability2.name;
+					} else {
+						// Default to the highest rated ability if all are rejected
+						ability = abilities[0];
+						rejectAbility = false;
 					}
 				}
-			} while (rejectAbility && ability === ability1.name);
+			} while (rejectAbility);
 
 			if (abilities.includes('Chlorophyll') && ability !== 'Solar Power' && hasMove['sunnyday']) {
 				ability = 'Chlorophyll';
@@ -1261,6 +1269,8 @@ class RandomTeams extends Dex.ModdedDex {
 			} else if (template.id === 'venusaurmega') {
 				ability = 'Chlorophyll';
 			}
+		} else {
+			ability = ability0.name;
 		}
 		if (hasMove['rockclimb'] && ability !== 'Sheer Force') {
 			moves[moves.indexOf('rockclimb')] = 'doubleedge';
