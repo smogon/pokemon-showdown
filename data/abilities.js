@@ -821,7 +821,7 @@ exports.BattleAbilities = {
 		id: "earlybird",
 		name: "Early Bird",
 		// Implemented in statuses.js
-		rating: 2.5,
+		rating: 2,
 		num: 48,
 	},
 	"effectspore": {
