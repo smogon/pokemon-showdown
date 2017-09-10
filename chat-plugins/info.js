@@ -1382,7 +1382,7 @@ exports.commands = {
 		if (totalMatches === 1) {
 			let rules = [];
 			let rulesetHtml = '';
-			let format = Dex.getFormat(targetId);
+			let format = Dex.getFormat(Object.values(sections)[0].formats[0]);
 			if (format.effectType === 'ValidatorRule' || format.effectType === 'Rule' || format.effectType === 'Format') {
 				if (format.ruleset && format.ruleset.length) rules.push("<b>Ruleset</b> - " + Chat.escapeHTML(format.ruleset.join(", ")));
 				if (format.removedRules && format.removedRules.length) rules.push("<b>Removed rules</b> - " + Chat.escapeHTML(format.removedRules.join(", ")));
