@@ -1310,8 +1310,6 @@ class RandomTeams extends Dex.ModdedDex {
 			item = 'Choice Specs';
 		} else if (template.species === 'Wobbuffet') {
 			item = hasMove['destinybond'] ? 'Custap Berry' : ['Leftovers', 'Sitrus Berry'][this.random(2)];
-		} else if (template.species === 'Raichu-Alola' && hasMove['thunderbolt'] && !teamDetails.zMove && this.random(4) < 1) {
-			item = 'Aloraichium Z';
 		} else if (template.species === 'Zygarde-10%' && hasMove['substitute']) {
 			if (!teamDetails.zMove) {
 				item = hasMove['outrage'] ? 'Dragonium Z' : 'Groundium Z';
