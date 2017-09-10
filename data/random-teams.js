@@ -1313,7 +1313,11 @@ class RandomTeams extends Dex.ModdedDex {
 		} else if (template.species === 'Raichu-Alola' && hasMove['thunderbolt'] && !teamDetails.zMove && this.random(4) < 1) {
 			item = 'Aloraichium Z';
 		} else if (template.species === 'Zygarde-10%' && hasMove['substitute']) {
-			item = hasMove['outrage'] ? 'Dragonium Z' : 'Groundium Z';
+			if (!teamDetails.zMove) {
+				item = hasMove['outrage'] ? 'Dragonium Z' : 'Groundium Z';
+			} else {
+				item = hasMove['outrage'] ? 'Lum Berry' : 'Life Orb';
+			}
 		} else if (ability === 'Imposter') {
 			item = 'Choice Scarf';
 		} else if (ability === 'Klutz' && hasMove['switcheroo']) {
@@ -1432,7 +1436,74 @@ class RandomTeams extends Dex.ModdedDex {
 			item = 'Leftovers';
 		}
 
-		// For Trick / Switcheroo
+		// General Z moves
+		if (!teamDetails.zMove && (item === 'Life Orb' || item === 'Expert Belt' || item === 'Assault Vest') && ability !== 'Magic Guard' && ability !== 'Sheer Force' && !this.random(4)) {
+			let zMove;
+			let priority = 0;
+			let specialMoves = {
+				'spiritshackle': 'Decidueye',
+				'darkestlariat': 'Incineroar',
+				'spectralthief': 'Marshadow',
+				'psychic': 'Mew',
+				'psyshock': 'Mew', // Just bear with me here
+				'sparklingaria': 'Primarina',
+				'thunderbolt': 'Raichu-Alola',
+			};
+			for (let k = 0; k < moves.length; k++) {
+				let move = moves[k];
+				if (move.category === 'Status' || move.zMovePower - move.basePower <= 60) {
+					if (move.id === 'Hone Claws' && !!counter['Dark'] && this.random(priority - 3) <= 0) {
+						zMove = move;
+						priority = 4;
+					} else {
+						continue;
+					}
+				} else if (move.id in specialMoves && specialMoves[move.id] === template.species && (move.type === zMove.type || this.random(priority - 2) <= 0)) {
+					zMove = move;
+					priority = 3;
+				} else if (move.type !== zMove.type && move.basePower - (ability === 'No Guard' ? 100 : move.accuracy) + 100 >= 120 && this.random(priority - 1) <= 0) {
+					zMove = move;
+					priority = 2;
+				} else if (move.type !== zMove.type && this.random(priority)) {
+					zMove = move;
+					priority = 1;
+				}
+			}
+
+			// If Psyshock is the chosen Z Move on Mew, replace it with Psychic for Genesis Supernova
+			if (zMove.id === 'psyshock') moves[k] = zMove = 'psychic';
+
+			let zCrystals = {
+				'spiritshackle': 'Decidium Z',
+				'darkestlariat': 'Incinium Z',
+				'spectralthief': 'Marshadium Z',
+				'psychic': 'Mewnium Z',
+				'sparklingaria': 'Primarium Z',
+				'thunderbolt': 'Aloraichium Z',
+				'Bug': 'Buginium Z',
+				'Dark': 'Darkinium Z',
+				'Dragon': 'Dragonium Z',
+				'Electric': 'Electrium Z',
+				'Fairy': 'Fairium Z',
+				'Fighting': 'Fightinium Z',
+				'Fire': 'Firium Z',
+				'Flying': 'Flyinium Z',
+				'Ghost': 'Ghostium Z',
+				'Grass': 'Grassium Z',
+				'Ground': 'Groundium Z',
+				'Ice': 'Icium Z',
+				'Normal': 'Normalium Z',
+				'Poison': 'Poisonium Z',
+				'Psychic': 'Psychium Z',
+				'Rock': 'Rockium Z',
+				'Steel': 'Steelium Z',
+				'Water': 'Waterium Z',
+			};
+			// If the chosen move corresponds to a special Z Move and the matching species, pick that move's Z Crystal; otherwise, pick the one that matches the move's type
+			item = zCrystals[(zMove.id in specialMoves && specialMoves[move.id] === template.species) ? zMove.id : zMove.type];
+		}
+
+		// For Trick / Switchero
 		if (item === 'Leftovers' && hasType['Poison']) {
 			item = 'Black Sludge';
 		}
@@ -1473,6 +1544,7 @@ class RandomTeams extends Dex.ModdedDex {
 		// Custom level based on moveset
 		if (ability === 'Power Construct') level = 73;
 		if (hasMove['batonpass'] && counter.setupType && level > 77) level = 77;
+		if (item === 'Mewnium Z' && level > 76) level = 76;
 		// if (template.name === 'Slurpuff' && !counter.setupType) level = 81;
 		// if (template.name === 'Xerneas' && hasMove['geomancy']) level = 71;
 
