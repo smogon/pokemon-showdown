@@ -1435,7 +1435,7 @@ class RandomTeams extends Dex.ModdedDex {
 		}
 
 		// General Z moves
-		if (!teamDetails.zMove && (item === 'Life Orb' || item === 'Expert Belt' || item === 'Assault Vest') && ability !== 'Magic Guard' && ability !== 'Sheer Force' && !this.random(4)) {
+		if (!teamDetails.zMove && (item === 'Life Orb' && ability !== 'Magic Guard' && ability !== 'Sheer Force') || item === 'Expert Belt' || (item === 'Assault Vest' && ability !== 'Klutz' && ability !== 'Regenerator') && !this.random(4)) {
 			let zMove = moves[0];
 			let priority = 0;
 			let specialMoves = {
@@ -1457,6 +1457,8 @@ class RandomTeams extends Dex.ModdedDex {
 						continue;
 					}
 				} else if (move.id in specialMoves && specialMoves[move.id] === template.species && (move.type === zMove.type || this.random(priority - 2) <= 0)) {
+					// If Psyshock is the chosen Z Move on Mew, replace it with Psychic for Genesis Supernova
+					if (zMove.id === 'psyshock') moves[k] = zMove = 'psychic';
 					zMove = move;
 					priority = 3;
 				} else if (move.type !== zMove.type && move.basePower - (ability === 'No Guard' ? 100 : move.accuracy) + 100 >= 120 && this.random(priority - 1) <= 0) {
@@ -1467,9 +1469,6 @@ class RandomTeams extends Dex.ModdedDex {
 					priority = 1;
 				}
 			}
-
-			// If Psyshock is the chosen Z Move on Mew, replace it with Psychic for Genesis Supernova
-			if (zMove.id === 'psyshock') moves[k] = zMove = 'psychic';
 
 			let zCrystals = {
 				'spiritshackle': 'Decidium Z',
@@ -1498,7 +1497,7 @@ class RandomTeams extends Dex.ModdedDex {
 				'Water': 'Waterium Z',
 			};
 			// If the chosen move corresponds to a special Z Move and the matching species, pick that move's Z Crystal; otherwise, pick the one that matches the move's type
-			item = zCrystals[(zMove.id in specialMoves && specialMoves[move.id] === template.species) ? zMove.id : zMove.type];
+			item = zCrystals[(zMove.id in specialMoves && specialMoves[zMove.id] === template.species) ? zMove.id : zMove.type];
 		}
 
 		// For Trick / Switchero
