@@ -1317,6 +1317,7 @@ class RandomTeams extends Dex.ModdedDex {
 				item = hasMove['outrage'] ? 'Dragonium Z' : 'Groundium Z';
 			} else {
 				item = hasMove['outrage'] ? 'Lum Berry' : 'Life Orb';
+			}
 		} else if (ability === 'Imposter') {
 			item = 'Choice Scarf';
 		} else if (ability === 'Klutz' && hasMove['switcheroo']) {
