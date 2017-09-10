@@ -1464,7 +1464,7 @@ class RandomTeams extends Dex.ModdedDex {
 				} else if (move.type !== zMove.type && move.basePower - (ability === 'No Guard' ? 100 : move.accuracy) + 100 >= 120 && this.random(priority - 1) <= 0) {
 					zMove = move;
 					priority = 2;
-				} else if (move.type !== zMove.type && this.random(priority)) {
+				} else if (move.type !== zMove.type && !this.random(priority)) {
 					zMove = move;
 					priority = 1;
 				}
