@@ -455,7 +455,12 @@ class Side {
 	chooseTeam(data) {
 		const autoFill = !data;
 		if (autoFill) data = `123456`;
-		const positions = ('' + data).split('').map(datum => parseInt(datum) - 1);
+		let positions;
+		if (data.includes(',')) {
+			positions = ('' + data).split(',').map(datum => parseInt(datum) - 1);
+		} else {
+			positions = ('' + data).split('').map(datum => parseInt(datum) - 1);
+		}
 
 		if (autoFill && this.choice.actions.length >= this.maxTeamSize) return true;
 		if (this.currentRequest !== 'teampreview') {
