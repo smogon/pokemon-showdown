@@ -1438,7 +1438,7 @@ class RandomTeams extends Dex.ModdedDex {
 
 		// General Z moves
 		if (!teamDetails.zMove && (item === 'Life Orb' || item === 'Expert Belt' || item === 'Assault Vest') && ability !== 'Magic Guard' && ability !== 'Sheer Force' && !this.random(4)) {
-			let zMove;
+			let zMove = moves[0];
 			let priority = 0;
 			let specialMoves = {
 				'spiritshackle': 'Decidueye',
