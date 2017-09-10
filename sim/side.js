@@ -553,7 +553,7 @@ class Side {
 
 		this.clearChoice();
 
-		const choiceStrings = input.split(',');
+		const choiceStrings = (input.startsWith('team ') ? [input] : input.split(','));
 
 		for (let choiceString of choiceStrings) {
 			let choiceType = '';
