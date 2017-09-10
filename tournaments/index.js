@@ -1051,13 +1051,51 @@ let commands = {
 					if (Config.tourdefaultplayercap && tournament.playerCap > Config.tourdefaultplayercap) {
 						Monitor.log('[TourMonitor] Room ' + tournament.room.id + ' starting a tour over default cap (' + tournament.playerCap + ')');
 					}
+					this.room.send('|tournament|update|' + JSON.stringify({playerCap: tournament.playerCap}));
 				} else if (tournament.playerCap && !playerCap) {
 					tournament.playerCap = 0;
+					this.room.send('|tournament|update|' + JSON.stringify({playerCap: tournament.playerCap}));
 				}
 				const capNote = (tournament.playerCap ? " with a player cap of " + tournament.playerCap : "");
 				this.privateModCommand("(" + user.name + " set tournament type to " + generator.name + capNote + ".)");
 				this.sendReply("Tournament set to " + generator.name + capNote + ".");
 			}
+		},
+		cap: 'setplayercap',
+		playercap: 'setplayercap',
+		setcap: 'setplayercap',
+		setplayercap: function (tournament, user, params, cmd) {
+			if (params.length < 1) {
+				if (tournament.playerCap) {
+					return this.sendReply("Usage: " + cmd + " <cap>; The current player cap is " + tournament.playerCap);
+				} else {
+					return this.sendReply("Usage: " + cmd + " <cap>");
+				}
+			}
+			if (tournament.isTournamentStarted) {
+				return this.errorReply("The player cap cannot be changed once the tournament has started.");
+			}
+			const option = params[0].toLowerCase();
+			if (option === '0' || option === 'infinity' || option === 'off' || option === 'false' || option === 'stop' || option === 'remove') {
+				if (!tournament.playerCap) return this.errorReply("The tournament does not have a player cap.");
+				params[0] = '0';
+			}
+			const playerCap = parseInt(params[0]);
+			if (playerCap === 0) {
+				tournament.playerCap = 0;
+				this.privateModCommand("(" + user.name + " removed the tournament's player cap.)");
+				this.sendReply("Tournament cap removed.");
+			} else {
+				if (isNaN(playerCap) || playerCap < 2) return this.errorReply("The tournament cannot have a player cap less than 2.");
+				if (playerCap === tournament.playerCap) return this.errorReply("The tournament's player cap is already " + playerCap + ".");
+				tournament.playerCap = playerCap;
+				if (Config.tourdefaultplayercap && tournament.playerCap > Config.tourdefaultplayercap) {
+					Monitor.log('[TourMonitor] Room ' + tournament.room.id + ' starting a tour over default cap (' + tournament.playerCap + ')');
+				}
+				this.privateModCommand("(" + user.name + " set the tournament's player cap to " + tournament.playerCap + ".)");
+				this.sendReply("Tournament cap set to " + tournament.playerCap + ".");
+			}
+			this.room.send('|tournament|update|' + JSON.stringify({playerCap: tournament.playerCap}));
 		},
 		end: 'delete',
 		stop: 'delete',
@@ -1452,6 +1490,7 @@ Chat.commands.tournamenthelp = function (target, room, user) {
 	return this.sendReplyBox(
 		"- create/new &lt;format>, &lt;type> [, &lt;comma-separated arguments>]: Creates a new tournament in the current room.<br />" +
 		"- settype &lt;type> [, &lt;comma-separated arguments>]: Modifies the type of tournament after it's been created, but before it has started.<br />" +
+		"- cap/playercap &lt;cap>: Sets the player cap of the tournament before it has started.<br />" +
 		"- rules/banlist &lt;comma-separated arguments>: Sets the custom rules for the tournament before it has started.<br />" +
 		"- viewrules/viewbanlist: Shows the custom rules for the tournament.<br />" +
 		"- clearrules/clearbanlist: Clears the custom rules for the tournament before it has started.<br />" +
