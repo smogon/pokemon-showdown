@@ -1528,12 +1528,14 @@ exports.commands = {
 			return this.errorReply("Error: Room rules link is too long (must be under 100 characters). You can use a URL shortener to shorten the link.");
 		}
 
+		target = target.trim();
+
 		if (target === 'delete' || target === 'remove') {
 			if (!room.rulesLink) return this.errorReply("This room does not have rules set to remove.");
 			delete room.rulesLink;
 			this.privateModCommand(`(${user.name} has removed the room rules link.)`);
 		} else {
-			room.rulesLink = target.trim();
+			room.rulesLink = target;
 			this.privateModCommand(`(${user.name} changed the room rules link to: ${target})`);
 		}
 
