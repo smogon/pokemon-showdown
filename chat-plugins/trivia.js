@@ -57,7 +57,9 @@ try {
 } catch (e) {} // file doesn't exist or contains invalid JSON
 if (!triviaData || typeof triviaData !== 'object') triviaData = {};
 if (typeof triviaData.leaderboard !== 'object') triviaData.leaderboard = {};
+if (typeof triviaData.alltimeleaderboard !== 'object') triviaData.alltimeleaderboard = {};
 if (!Array.isArray(triviaData.ladder)) triviaData.ladder = [];
+if (!Array.isArray(triviaData.alltimeladder)) triviaData.alltimeladder = [];
 if (!Array.isArray(triviaData.questions)) triviaData.questions = [];
 if (!Array.isArray(triviaData.wlquestions)) triviaData.wlquestions = [];
 if (!Array.isArray(triviaData.submissions)) triviaData.submissions = [];
@@ -146,6 +148,33 @@ function sliceCategory(category) {
 	return questions.slice(sliceFrom, sliceUpTo);
 }
 
+function sortLadder(leaderboard) {
+	let leaders = Object.keys(leaderboard);
+	let ladder = [];
+	for (let i = 0; i < 3; i++) {
+		leaders.sort((a, b) => leaderboard[b][i] - leaderboard[a][i]);
+		let max = Infinity;
+		let rank = 0;
+		let rankIdx = i + 3;
+		for (let j = 0; j < leaders.length; j++) {
+			let leader = leaders[j];
+			let score = leaderboard[leader][i];
+			if (max !== score) {
+				if (!i && rank < 15) {
+					if (ladder[rank]) {
+						ladder[rank].push(leader);
+					} else {
+						ladder[rank] = [leader];
+					}
+				}
+				rank++;
+				max = score;
+			}
+			leaderboard[leader][rankIdx] = rank;
+		}
+	}
+	return ladder;
+}
 class TriviaPlayer extends Rooms.RoomGamePlayer {
 	constructor(user, game) {
 		super(user, game);
@@ -507,34 +536,7 @@ class Trivia extends Rooms.RoomGame {
 		}
 
 		if (winner) leaderboard[winner.userid][0] += prize;
-
-		let leaders = Object.keys(leaderboard);
-		let ladder = triviaData.ladder = [];
-		for (let i = 0; i < 3; i++) {
-			leaders.sort((a, b) => leaderboard[b][i] - leaderboard[a][i]);
-
-			let max = Infinity;
-			let rank = 0;
-			let rankIdx = i + 3;
-			for (let j = 0; j < leaders.length; j++) {
-				let leader = leaders[j];
-				let score = leaderboard[leader][i];
-				if (max !== score) {
-					if (!i && rank < 15) {
-						if (ladder[rank]) {
-							ladder[rank].push(leader);
-						} else {
-							ladder[rank] = [leader];
-						}
-					}
-
-					rank++;
-					max = score;
-				}
-				leaderboard[leader][rankIdx] = rank;
-			}
-		}
-
+		triviaData.ladder = sortLadder(leaderboard);
 		for (let i in this.players) {
 			let player = this.players[i];
 			let user = Users.get(player.userid);
@@ -1320,8 +1322,14 @@ const commands = {
 	ladder: function (target, room) {
 		if (room.id !== 'trivia') return this.errorReply('This command can only be used in Trivia.');
 		if (!this.runBroadcast()) return false;
-		let ladder = triviaData.ladder;
-		let leaderboard = triviaData.leaderboard;
+		let ladder, leaderboard;
+		if (toId(target) === "alltime") {
+			ladder = triviaData.alltimeladder;
+			leaderboard = triviaData.alltimeleaderboard;
+		} else {
+			ladder = triviaData.ladder;
+			leaderboard = triviaData.leaderboard;
+		}
 		if (!ladder.length) return this.errorReply("No trivia games have been played yet.");
 
 		let buffer = "|raw|<div class=\"ladder\" style=\"overflow-y: scroll; max-height: 300px;\"><table>" +
@@ -1343,6 +1351,26 @@ const commands = {
 		return this.sendReply(buffer);
 	},
 	ladderhelp: ["/trivia ladder [num] - View information about 100 users on the trivia leaderboard."],
+
+	resetladder:  function (target, room, user) {
+		if (room.id !== 'trivia') return this.errorReply("This command can only be used in Trivia");
+		if (!this.can('declare', null, room)) return false;
+		for (let i in triviaData.leaderboard) {
+			if (i in triviaData.alltimeleaderboard) {
+				for (let j = 0; j < 3; j++) {
+					triviaData.alltimeleaderboard[i][j] += triviaData.leaderboard[i][j];
+				}
+			} else {
+				triviaData.alltimeleaderboard[i] = triviaData.leaderboard[i];
+			}
+		}
+		triviaData.ladder = [];
+		triviaData.leaderboard = {};
+		triviaData.alltimeladder = sortLadder(triviaData.alltimeleaderboard);
+		writeTriviaData();
+		this.privateModCommand(`(${user.name} has reset the Trivia ladder.)`);
+	},
+	resetladderhelp: ["/trivia resetladder - Reset the monthly trivia leaderboardd, and add it to the alltime trivia leaderboard. Requires: # & ~"],
 
 	ugm: function (target, room, user) {
 		if (room.id !== 'trivia') return this.errorReply("This command can only be used in Trivia.");
@@ -1709,8 +1737,9 @@ module.exports = {
 			"- /trivia search [type], [query] - Searches for questions based on their type and their query. Valid types: submissions, subs, questions, qs. Requires: + % @ # & ~",
 			"- /trivia status [player] - lists the player's standings (your own if no player is specified) and the list of players in the current trivia game.",
 			"- /trivia rank [username] - View the rank of the specified user. If none is given, view your own.",
-			"- /trivia ladder - View information about the top 15 users on the trivia leaderboard.",
+			"- /trivia ladder - View information about the top 100 users on the trivia leaderboard. You can also view the alltime leaderboard with /trivia ladder alltime",
 			"- /trivia ugm [setting] - Enable or disable UGM mode. Requires: # & ~",
+			"- /trivia resetladder - Reset the monthly leaderboard. Requires: # & ~",
 			"Weakest Link Game commands:",
 			"- /trivia bank - Bank when it is your turn.",
 			"- /trivia vote [user] - Attempt to vote off a user during the voting phase.",
