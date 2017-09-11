@@ -1313,7 +1313,11 @@ class RandomTeams extends Dex.ModdedDex {
 		} else if (template.species === 'Raichu-Alola' && hasMove['thunderbolt'] && !teamDetails.zMove && this.random(4) < 1) {
 			item = 'Aloraichium Z';
 		} else if (template.species === 'Zygarde-10%' && hasMove['substitute']) {
-			item = hasMove['outrage'] ? 'Dragonium Z' : 'Groundium Z';
+			if (!teamDetails.zMove) {
+				item = hasMove['outrage'] ? 'Dragonium Z' : 'Groundium Z';
+			} else {
+				item = hasMove['outrage'] ? 'Lum Berry' : 'Life Orb';
+			}
 		} else if (ability === 'Imposter') {
 			item = 'Choice Scarf';
 		} else if (ability === 'Klutz' && hasMove['switcheroo']) {
