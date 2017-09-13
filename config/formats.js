@@ -344,7 +344,7 @@ exports.Formats = [
 		defaultLevel: 100,
 		debug: true,
 		teamLength: {
-			validate: [1, 24],
+			validate: [2, 24],
 			battle: 24,
 		},
 		// no restrictions, for serious (other than team preview)
