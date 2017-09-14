@@ -23,6 +23,7 @@ const FS = require('./fs');
 const MAX_REASON_LENGTH = 300;
 const MUTE_LENGTH = 7 * 60 * 1000;
 const HOURMUTE_LENGTH = 60 * 60 * 1000;
+const REPORT_REQUEST_THROTTLE = 1 * 60 * 1000;
 
 exports.commands = {
 
@@ -1408,6 +1409,52 @@ exports.commands = {
 		}
 		user.leaveRoom(targetRoom, connection);
 	},
+
+	getglobal: 'requestglobal',
+	requestglobal: function (target, room, user) {
+		if (!target) return this.parse('/help requestglobal');
+		const staff = Rooms('staff');
+		if (!staff) return this.errorReply("This server does not have a staff room, therefore there is no room to notify of your request.");
+		target = target.trim();
+		const separator = 'answer request id ';
+		const astext = 'text-decoration: underline; color: #0000EE; border: none; background: none; padding: 0; font-family: Verdana,sans-serif; font-size: 12px';
+		if (target.startsWith(separator)) {
+			if (!this.can('lock')) return;
+			const requestNumber = target.substr(separator.length, target.length);
+			if (!staff.requests || !staff.requests[requestNumber]) return this.errorReply("Weird, this request doesn't seem to exist.");
+			const request = staff.requests[requestNumber];
+			user.joinRoom(request.roomId);
+			staff.add(Chat.html`|uhtmlchange|staff-request-${requestNumber}|[Help Request] <span style="color:gray">&lt;&lt;${request.roomId}>> (${user.name} answered)</span> - ${request.by} said: ${request.message}`).update();
+			setTimeout(function () { // wait until deleting request for request throttle
+				if (staff.requests[requestNumber]) delete staff.requests[requestNumber];
+			}, REPORT_REQUEST_THROTTLE);
+		} else {
+			if (!user.trusted) return this.errorReply("Only trusted users are allowed to use this command. If you need help or a global staff member, ask the Help room.");
+			if (room.isPrivate === true || room.battle || room.isPersonal) {
+				return this.errorReply("This command is not meant to be used to report issues in this kind of a room.");
+			}
+			if (!staff.requests) staff.requests = Object.create(null);
+			let latestRoomReport = 0;
+			for (let request of Object.keys(staff.requests)) {
+				request = staff.requests[request];
+				if (request.roomId === room.id && request.submitted > latestRoomReport) {
+					latestRoomReport = request.submitted;
+				}
+			}
+			if (latestRoomReport && Date.now() - latestRoomReport < REPORT_REQUEST_THROTTLE) return this.errorReply("Someone else has already reported an issue in this room very recently, so this is probably already being taken care of.");
+			if (target.length > MAX_REASON_LENGTH) return this.errorReply(`This description is too long; it cannot exceed ${MAX_REASON_LENGTH} characters.`);
+			const id = ++Object.keys(staff.requests).length;
+			staff.requests[id] = {
+				by: user.name,
+				roomId: room.id,
+				message: target,
+				submitted: Date.now(),
+			};
+			staff.add(Chat.html`|uhtml|staff-request-${id}|[Help Request] <button style="${astext}" name="send" value="/getglobal ${separator}${id}">&lt;&lt;${room.id}>></button> - ${user.name} said: ${target}`).update();
+			this.sendReply("Your request for help from a global staff member has been successfully submitted.");
+		}
+	},
+	requestglobalhelp: ["/requestglobal (OR /getglobal) [description of problem/issue] - Requests a global staff join the current room for assistance for a room-related issue. Requires trusted user status"],
 
 	/*********************************************************
 	 * Moderating: Punishments
