@@ -168,17 +168,6 @@ exports.BattleScripts = {
 			this.add('-miss', pokemon);
 			damage = false;
 		}
-		if (move.category !== 'Status') {
-			// FIXME: The stored damage should be calculated ignoring Substitute.
-			// https://github.com/Zarel/Pokemon-Showdown/issues/2598
-			target.gotAttacked(move, damage, pokemon);
-		}
-		if (move.ohko) this.add('-ohko');
-
-		if (!move.negateSecondary) {
-			this.singleEvent('AfterMoveSecondary', move, null, target, pokemon, move);
-			this.runEvent('AfterMoveSecondary', target, pokemon, move);
-		}
 		move.totalDamage = 0;
 		pokemon.lastDamage = 0;
 		if (move.multihit) {
@@ -198,36 +187,6 @@ exports.BattleScripts = {
 			let i;
 			for (i = 0; i < hits && target.hp && pokemon.hp; i++) {
 				if (pokemon.status === 'slp' && !isSleepUsable) break;
-
-				if (move.multiaccuracy && i > 0) {
-					accuracy = move.accuracy;
-					if (accuracy !== true) {
-						accuracy = Math.floor(accuracy * 255 / 100);
-						if (!move.ignoreAccuracy) {
-							if (pokemon.boosts.accuracy > 0) {
-								accuracy *= positiveBoostTable[pokemon.boosts.accuracy];
-							} else {
-								accuracy *= negativeBoostTable[-pokemon.boosts.accuracy];
-							}
-						}
-						if (!move.ignoreEvasion) {
-							if (target.boosts.evasion > 0 && !move.ignorePositiveEvasion) {
-								accuracy *= negativeBoostTable[target.boosts.evasion];
-							} else if (target.boosts.evasion < 0) {
-								accuracy *= positiveBoostTable[-target.boosts.evasion];
-							}
-						}
-						accuracy = Math.min(accuracy, 255);
-						accuracy = Math.max(accuracy, 1);
-					}
-					accuracy = this.runEvent('ModifyAccuracy', target, pokemon, move, accuracy);
-					if (accuracy !== true) accuracy = Math.max(accuracy, 0);
-					if (!move.alwaysHit) {
-						accuracy = this.runEvent('Accuracy', target, pokemon, move, accuracy);
-						if (accuracy !== true && accuracy !== 255 && this.random(256) >= accuracy) break;
-					}
-				}
-
 				moveDamage = this.moveHit(target, pokemon, move);
 				if (moveDamage === false) break;
 				if (nullDamage && (moveDamage || moveDamage === 0 || moveDamage === undefined)) nullDamage = false;
@@ -242,6 +201,18 @@ exports.BattleScripts = {
 			damage = this.moveHit(target, pokemon, move);
 			move.totalDamage = damage;
 		}
+		if (move.category !== 'Status') {
+			// FIXME: The stored damage should be calculated ignoring Substitute.
+			// https://github.com/Zarel/Pokemon-Showdown/issues/2598
+			target.gotAttacked(move, damage, pokemon);
+		}
+		if (move.ohko) this.add('-ohko');
+
+		if (!move.negateSecondary) {
+			this.singleEvent('AfterMoveSecondary', move, null, target, pokemon, move);
+			this.runEvent('AfterMoveSecondary', target, pokemon, move);
+		}
+
 		if (move.recoil && move.totalDamage) {
 			this.damage(this.calcRecoilDamage(move.totalDamage, move), pokemon, target, 'recoil');
 		}
