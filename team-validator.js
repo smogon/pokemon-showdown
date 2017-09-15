@@ -83,10 +83,10 @@ class Validator {
 			}
 			if (limit && count > limit) {
 				const clause = source ? ` by ${source}` : ``;
-				problems.push(`Your team has the combination of ${rule}, which is banned${clause}.`);
+				problems.push(`You are limited to ${limit} of ${rule}${clause}.`);
 			} else if (!limit && count >= bans.length) {
 				const clause = source ? ` by ${source}` : ``;
-				problems.push(`You are limited to ${limit} of ${rule}${clause}.`);
+				problems.push(`Your team has the combination of ${rule}, which is banned${clause}.`);
 			}
 		}
 
