@@ -11,6 +11,11 @@ exports.BattleAbilities = {
 			}
 		},
 	},
+	"infiltrator": {
+		inherit: true,
+		desc: "This Pokemon's moves ignore the opposing side's Reflect, Light Screen, Safeguard, and Mist.",
+		shortDesc: "This Pokemon's moves ignore the foe's Reflect, Light Screen, Safeguard, and Mist.",
+	},
 	"keeneye": {
 		inherit: true,
 		desc: "Prevents other Pokemon from lowering this Pokemon's accuracy stat stage.",
