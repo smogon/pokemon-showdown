@@ -164,12 +164,12 @@ class Matchmaker {
 	 * Verifies whether or not a match made between two users is valid.
 	 * @param {Search} search1
 	 * @param {Search} search2
-	 * @param {?User} [user1 = null]
-	 * @param {?User} [user2 = null]
+	 * @param {User=} user1
+	 * @param {User=} user2
 	 * @param {string} formatid
 	 * @return {number | false | void}
 	 */
-	matchmakingOK(search1, search2, user1 = null, user2 = null, formatid) {
+	matchmakingOK(search1, search2, user1, user2, formatid) {
 		if (!user1 || !user2) {
 			// This should never happen.
 			return void require('./crashlogger')(new Error(`Matched user ${user1 ? search2.userid : search1.userid} not found`), "The main process");
