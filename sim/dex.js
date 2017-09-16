@@ -473,6 +473,9 @@ class ModdedDex {
 			name = this.data.Aliases[id];
 			id = toId(name);
 		}
+		if (this.data.Formats.hasOwnProperty('gen7' + id)) {
+			id = 'gen7' + id;
+		}
 		let effect;
 		/**@type {string[]} */
 		let sanitizedCustomRules = [];
@@ -1110,7 +1113,7 @@ class ModdedDex {
 			// moves
 			j = buf.indexOf('|', i);
 			if (j < 0) return null;
-			set.moves = buf.substring(i, j).split(',', 24);
+			set.moves = buf.substring(i, j).split(',', 24).filter(x => x);
 			i = j + 1;
 
 			// nature

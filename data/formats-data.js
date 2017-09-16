@@ -3497,7 +3497,7 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["calmmind", "dracometeor", "hiddenpowerfire", "psyshock", "roost", "defog"],
 		randomDoubleBattleMoves: ["dracometeor", "dragonpulse", "surf", "thunderbolt", "psyshock", "substitute", "tailwind", "protect", "hiddenpowerfire"],
 		requiredItem: "Latiosite",
-		tier: "OU",
+		tier: "(OU)",
 	},
 	kyogre: {
 		randomBattleMoves: ["waterspout", "originpulse", "scald", "thunder", "icebeam"],
@@ -4924,8 +4924,8 @@ exports.BattleFormatsData = {
 		tier: "LC",
 	},
 	ferrothorn: {
-		randomBattleMoves: ["spikes", "stealthrock", "leechseed", "powerwhip", "thunderwave", "protect", "knockoff", "gyroball"],
-		randomDoubleBattleMoves: ["gyroball", "stealthrock", "leechseed", "powerwhip", "thunderwave", "knockoff", "protect"],
+		randomBattleMoves: ["spikes", "stealthrock", "leechseed", "powerwhip", "protect", "knockoff", "gyroball"],
+		randomDoubleBattleMoves: ["gyroball", "stealthrock", "leechseed", "powerwhip", "knockoff", "protect"],
 		tier: "OU",
 	},
 	klink: {
@@ -5903,7 +5903,7 @@ exports.BattleFormatsData = {
 		tier: "NFE",
 	},
 	primarina: {
-		randomBattleMoves: ["hydropump", "moonblast", "psychic", "hiddenpowerfire", "calmmind", "scald"],
+		randomBattleMoves: ["hydropump", "moonblast", "scald", "psychic", "hiddenpowerfire"],
 		randomDoubleBattleMoves: ["hypervoice", "moonblast", "substitute", "protect", "icebeam"],
 		unreleasedHidden: true,
 		tier: "UU",
@@ -6436,7 +6436,7 @@ exports.BattleFormatsData = {
 		tier: "PU",
 	},
 	necrozma: {
-		randomBattleMoves: ["autotomize", "swordsdance", "stoneedge", "psychocut", "earthquake", "psyshock"],
+		randomBattleMoves: ["calmmind", "psychic", "darkpulse", "moonlight", "stealthrock", "storedpower"],
 		randomDoubleBattleMoves: ["calmmind", "autotomize", "irondefense", "trickroom", "moonlight", "storedpower", "psyshock"],
 		eventPokemon: [
 			{"generation": 7, "level": 75, "moves":["stealthrock", "irondefense", "wringout", "prismaticlaser"]},

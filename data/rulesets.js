@@ -62,6 +62,7 @@ exports.BattleFormats = {
 		desc: ["The foundational rules for any and all formats based on in-game mechanics (everything but Custom Game)"],
 		onValidateTeam: function (team, format) {
 			let problems = [];
+			if (team.length > 6) problems.push('Your team has more than six Pok\u00E9mon.');
 			// ----------- legality line ------------------------------------------
 			if (!format || !this.getRuleTable(format).has('-illegal')) return problems;
 			// everything after this line only happens if we're doing legality enforcement

@@ -48,13 +48,21 @@ class Validator {
 		}
 
 		let lengthRange = format.teamLength && format.teamLength.validate;
-		if (!lengthRange) {
-			lengthRange = [1, 6];
-			if (format.gameType === 'doubles') lengthRange[0] = 2;
-			if (format.gameType === 'triples' || format.gameType === 'rotation') lengthRange[0] = 3;
-		}
+		if (!lengthRange) lengthRange = [1, 6];
+		if (format.gameType === 'doubles' && lengthRange[0] < 2) lengthRange[0] = 2;
+		if ((format.gameType === 'triples' || format.gameType === 'rotation') && lengthRange[0] < 3) lengthRange[0] = 3;
 		if (team.length < lengthRange[0]) problems.push([`You must bring at least ${lengthRange[0]} Pok\u00E9mon.`]);
 		if (team.length > lengthRange[1]) return [`You may only bring up to ${lengthRange[1]} Pok\u00E9mon.`];
+
+		// A limit is imposed here to prevent too much engine strain or
+		// too much layout deformation - to be exact, this is the limit
+		// allowed in Custom Game.
+		// The usual limit of 6 pokemon is handled elsewhere - currently
+		// in the cartridge-compliant set validator: rulesets.js:pokemon
+		if (team.length > 24) {
+			problems.push(`Your team has more than than 24 Pok\u00E9mon, which the simulator can't handle.`);
+			return;
+		}
 
 		let teamHas = {};
 		for (let i = 0; i < team.length; i++) {
@@ -249,11 +257,14 @@ class Validator {
 			problems.push(`${name} has no moves.`);
 		} else {
 			// A limit is imposed here to prevent too much engine strain or
-			// too much layout deformation - to be exact, this is the Debug
-			// Mode limitation.
+			// too much layout deformation - to be exact, this is the limit
+			// allowed in Custom Game.
 			// The usual limit of 4 moves is handled elsewhere - currently
 			// in the cartridge-compliant set validator: rulesets.js:pokemon
-			set.moves = set.moves.slice(0, 24);
+			if (set.moves.length > 24) {
+				problems.push(`${name} has more than 24 moves, which the simulator can't handle.`);
+				return;
+			}
 
 			set.ivs = Validator.fillStats(set.ivs, 31);
 			let maxedIVs = Object.values(set.ivs).every(val => val === 31);

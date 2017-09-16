@@ -2150,9 +2150,9 @@ exports.commands = {
 		if (!this.can('forcerename', targetUser)) return false;
 		if (targetUser.namelocked) return this.errorReply(`User '${targetUser.name}' is already namelocked.`);
 
-		let reasonText = reason ? ` (${reason})` : `.`;
-		let lockMessage = `${targetUser.name} was namelocked by ${user.name}${reasonText}`;
-		this.addModCommand(lockMessage, ` (${targetUser.latestIp})`);
+		const reasonText = reason ? ` (${reason})` : `.`;
+		const lockMessage = `${targetUser.name} was namelocked by ${user.name}${reasonText}`;
+		this.privateModCommand(`(${lockMessage})`, ` (${targetUser.latestIp})`);
 
 		// Notify staff room when a user is locked outside of it.
 		if (room.id !== 'staff' && Rooms('staff')) {

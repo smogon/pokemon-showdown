@@ -92,17 +92,8 @@ exports.Formats = [
 		],
 
 		mod: 'gen7',
-		searchShow: false,
 		ruleset: ['[Gen 7] UU'],
 		banlist: ['UU', 'BL2'],
-	},
-	{
-		name: "[Gen 7] RU (suspect test)",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3614037/\">RU Suspect Test</a>"],
-
-		mod: 'gen7',
-		challengeShow: false,
-		ruleset: ['[Gen 7] RU'],
 	},
 	{
 		name: "[Gen 7] NU",
@@ -190,8 +181,8 @@ exports.Formats = [
 		requirePentagon: true,
 	},
 	{
-		name: "[Gen 7] Battle Spot Special 5",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3608900/\">Battle Spot Special</a>"],
+		name: "[Gen 7] Battle Spot Special 6",
+		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3614104/\">Battle Spot Special</a>"],
 
 		mod: 'gen7',
 		maxForcedLevel: 50,
@@ -199,7 +190,10 @@ exports.Formats = [
 			validate: [3, 6],
 			battle: 3,
 		},
-		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview', 'Inverse Mod'],
+		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview'],
+		banlist: ['Aegislash', 'Blaziken', 'Charizard', 'Ferrothorn', 'Garchomp', 'Gengar', 'Greninja', 'Gyarados', 'Hippowdon', 'Landorus',
+			'Landorus-Therian', 'Lucario', 'Mamoswine', 'Mimikyu', 'Porygon2', 'Salamence', 'Tapu Fini', 'Tapu Koko', 'Tapu Lele',
+		],
 		requirePentagon: true,
 	},
 	{
@@ -229,6 +223,10 @@ exports.Formats = [
 		debug: true,
 		maxLevel: 9999,
 		defaultLevel: 100,
+		teamLength: {
+			validate: [1, 24],
+			battle: 24,
+		},
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview', 'Cancel Mod'],
 	},
@@ -336,6 +334,10 @@ exports.Formats = [
 		maxLevel: 9999,
 		defaultLevel: 100,
 		debug: true,
+		teamLength: {
+			validate: [2, 24],
+			battle: 24,
+		},
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview', 'Cancel Mod'],
 	},
@@ -412,8 +414,18 @@ exports.Formats = [
 		],
 
 		mod: 'gen7',
+		searchShow: false,
 		ruleset: ['Pokemon', 'Ability Clause', 'OHKO Clause', 'Evasion Moves Clause', 'CFZ Clause', 'Endless Battle Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod'],
 		banlist: ['Arena Trap', 'Huge Power', 'Innards Out', 'Magnet Pull', 'Moody', 'Parental Bond', 'Protean', 'Pure Power', 'Shadow Tag', 'Stakeout', 'Water Bubble', 'Wonder Guard', 'Gengarite', 'Chatter', 'Comatose + Sleep Talk'],
+	},
+	{
+		name: "[Gen 7] Balanced Hackmons (suspect test)",
+		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3614555/\">BH7 Suspect #4: Primal Groudon</a>"],
+
+		mod: 'gen7',
+		challengeShow: false,
+		ruleset: ['[Gen 7] Balanced Hackmons'],
+		banlist: ['Groudon-Primal'],
 	},
 	{
 		name: "[Gen 7] 1v1",
@@ -463,7 +475,6 @@ exports.Formats = [
 		],
 
 		mod: 'mixandmega',
-		searchShow: false,
 		ruleset: ['Pokemon', 'Standard', 'Mega Rayquaza Clause', 'Team Preview'],
 		banlist: ['Baton Pass', 'Electrify'],
 		onValidateTeam: function (team) {
@@ -484,57 +495,6 @@ exports.Formats = [
 			if (template.evos.length) return ["" + template.species + " is not allowed to hold " + item.name + " because it's not fully evolved."];
 			let uberStones = ['beedrillite', 'blazikenite', 'gengarite', 'kangaskhanite', 'mawilite', 'medichamite'];
 			if (template.tier === 'Uber' || set.ability === 'Power Construct' || uberStones.includes(item.id)) return ["" + template.species + " is not allowed to hold " + item.name + "."];
-		},
-		onBegin: function () {
-			let allPokemon = this.p1.pokemon.concat(this.p2.pokemon);
-			for (let i = 0, len = allPokemon.length; i < len; i++) {
-				let pokemon = allPokemon[i];
-				pokemon.originalSpecies = pokemon.baseTemplate.species;
-			}
-		},
-		onSwitchIn: function (pokemon) {
-			let oMegaTemplate = this.getTemplate(pokemon.template.originalMega);
-			if (oMegaTemplate.exists && pokemon.originalSpecies !== oMegaTemplate.baseSpecies) {
-				// Place volatiles on the Pokémon to show its mega-evolved condition and details
-				this.add('-start', pokemon, oMegaTemplate.requiredItem || oMegaTemplate.requiredMove, '[silent]');
-				let oTemplate = this.getTemplate(pokemon.originalSpecies);
-				if (oTemplate.types.length !== pokemon.template.types.length || oTemplate.types[1] !== pokemon.template.types[1]) {
-					this.add('-start', pokemon, 'typechange', pokemon.template.types.join('/'), '[silent]');
-				}
-			}
-		},
-		onSwitchOut: function (pokemon) {
-			let oMegaTemplate = this.getTemplate(pokemon.template.originalMega);
-			if (oMegaTemplate.exists && pokemon.originalSpecies !== oMegaTemplate.baseSpecies) {
-				this.add('-end', pokemon, oMegaTemplate.requiredItem || oMegaTemplate.requiredMove, '[silent]');
-			}
-		},
-	},
-	{
-		name: "[Gen 7] Mix and Mega (suspect test)",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3587740/\">Mix and Mega Suspect #5: Marshadow</a>"],
-
-		mod: 'mixandmega',
-		challengeShow: false,
-		ruleset: ['[Gen 7] Mix and Mega'],
-		onValidateTeam: function (team) {
-			let itemTable = {};
-			for (let i = 0; i < team.length; i++) {
-				let item = this.getItem(team[i].item);
-				if (!item) continue;
-				if (itemTable[item] && item.megaStone) return ["You are limited to one of each Mega Stone.", "(You have more than one " + this.getItem(item).name + ")"];
-				if (itemTable[item] && (item.id === 'blueorb' || item.id === 'redorb')) return ["You are limited to one of each Primal Orb.", "(You have more than one " + this.getItem(item).name + ")"];
-				itemTable[item] = true;
-			}
-		},
-		onValidateSet: function (set) {
-			let template = this.getTemplate(set.species || set.name);
-			let item = this.getItem(set.item);
-			if (!item.megaEvolves && item.id !== 'blueorb' && item.id !== 'redorb') return;
-			if (template.baseSpecies === item.megaEvolves || (template.baseSpecies === 'Groudon' && item.id === 'redorb') || (template.baseSpecies === 'Kyogre' && item.id === 'blueorb')) return;
-			if (template.evos.length) return ["" + template.species + " is not allowed to hold " + item.name + " because it's not fully evolved."];
-			let uberStones = ['beedrillite', 'blazikenite', 'gengarite', 'kangaskhanite', 'mawilite', 'medichamite'];
-			if (template.tier === 'Uber' || template.species === 'Marshadow' || set.ability === 'Power Construct' || uberStones.includes(item.id)) return ["" + template.species + " is not allowed to hold " + item.name + "."];
 		},
 		onBegin: function () {
 			let allPokemon = this.p1.pokemon.concat(this.p2.pokemon);
