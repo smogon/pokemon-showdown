@@ -2229,7 +2229,7 @@ exports.commands = {
 	},
 	hidetexthelp: [
 		"/hidetext [username] - Removes a locked or banned user's messages from chat (includes users banned from the room). Requires: % (global only), @ * # & ~",
-		"/hidealtstext OR /hidetextalts [username] - Removes a locked or banned user's messages, and their alternate account's messages from the chat (includes users banned from the room).  Requires: % (global only), @ * # & ~",
+		"/hidealtstext [username] - Removes a locked or banned user's messages, and their alternate account's messages from the chat (includes users banned from the room).  Requires: % (global only), @ * # & ~",
 	],
 
 	ab: 'blacklist',
