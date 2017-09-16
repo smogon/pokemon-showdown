@@ -25,6 +25,11 @@ exports.BattleAbilities = {
 		},
 		rating: 4.5,
 	},
+	"infiltrator": {
+		inherit: true,
+		desc: "This Pokemon's moves ignore substitutes and the opposing side's Reflect, Light Screen, Safeguard, and Mist.",
+		shortDesc: "Moves ignore substitutes and the foe's Reflect, Light Screen, Safeguard, and Mist.",
+	},
 	"ironbarbs": {
 		inherit: true,
 		onAfterDamage: function (damage, target, source, move) {
