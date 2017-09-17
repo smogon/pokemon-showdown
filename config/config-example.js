@@ -3,6 +3,28 @@
 // The server port - the port to run Pokemon Showdown under
 exports.port = 8000;
 
+// The server address - the address at which Pokemon Showdown should be hosting
+//   This should be kept set to 0.0.0.0 unless you know what you're doing.
+exports.bindaddress = '0.0.0.0';
+
+// workers - the number of networking child processes to spawn
+//   This should be no greater than the number of threads available on your
+//   server's CPU. If you're not sure how many you have, you can check from a
+//   terminal by running:
+//
+//   $ node -e "console.log(require('os').cpus().length)"
+//
+//   Using more workers than there are available threads will cause performance
+//   issues. Keeping a couple threads available for use for OS-related work and
+//   other PS processes will likely give you the best performance, if your
+//   server's CPU is capable of multithreading. If you don't know what any of
+//   this means or you are unfamiliar with PS' networking code, leave this set
+//   to 1.
+exports.workers = 1;
+
+// TODO: allow SSL to actually be possible to use for third-party servers at
+// some point.
+
 // proxyip - proxy IPs with trusted X-Forwarded-For headers
 //   This can be either false (meaning not to trust any proxies) or an array
 //   of strings. Each string should be either an IP address or a subnet given
