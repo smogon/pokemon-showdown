@@ -283,7 +283,7 @@ exports.BattleStatuses = {
 	},
 	choicelock: {
 		onStart: function (pokemon) {
-			if (!this.activeMove.id || this.activeMove.sourceEffect && this.activeMove.sourceEffect !== this.activeMove.id) return false;
+			if (!this.activeMove.id || this.activeMove.hasBounced) return false;
 			this.effectData.move = this.activeMove.id;
 		},
 		onBeforeMove: function (pokemon, target, move) {
