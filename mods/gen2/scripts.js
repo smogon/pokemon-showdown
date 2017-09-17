@@ -167,6 +167,7 @@ exports.BattleScripts = {
 			this.attrLastMove('[miss]');
 			this.add('-miss', pokemon);
 			damage = false;
+			return damage;
 		}
 		move.totalDamage = 0;
 		pokemon.lastDamage = 0;
