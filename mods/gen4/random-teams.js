@@ -383,6 +383,7 @@ class RandomGen4Teams extends RandomGen5Teams {
 					(hasType['Ground'] && !counter['Ground']) ||
 					(hasType['Ice'] && !counter['Ice'] && (!hasType['Water'] || !counter['Water'])) ||
 					(hasType['Psychic'] && !!counter['Psychic'] && !hasType['Flying'] && template.types.length > 1 && counter.stab < 2) ||
+					(hasType['Rock'] && !counter['Rock'] && movePool.includes('headsmash')) ||
 					(hasType['Water'] && !counter['Water'] && (!hasType['Ice'] || !counter['Ice'])) ||
 					((hasAbility['Adaptability'] && !counter.setupType && template.types.length > 1 && (!counter[template.types[0]] || !counter[template.types[1]])) ||
 					(hasAbility['Guts'] && hasType['Normal'] && movePool.includes('facade')) ||
@@ -576,9 +577,9 @@ class RandomGen4Teams extends RandomGen5Teams {
 			item = 'Sitrus Berry';
 
 		// Medium priority
-		} else if (counter.Physical >= 4 && !hasMove['fakeout'] && !hasMove['rapidspin'] && !hasMove['suckerpunch']) {
+		} else if (counter.Physical >= 4 && !(hasMove['bodyslam'] && hasAbility['Serene Grace']) && !hasMove['fakeout'] && !hasMove['rapidspin'] && !hasMove['suckerpunch']) {
 			item = template.baseStats.spe >= 60 && template.baseStats.spe <= 108 && !counter['priority'] && !hasMove['bodyslam'] && this.random(3) ? 'Choice Scarf' : 'Choice Band';
-		} else if ((counter.Special >= 4 || (counter.Special >= 3 && (hasMove['batonpass'] || hasMove['uturn']))) && !hasMove['chargebeam']) {
+		} else if ((counter.Special >= 4 || (counter.Special >= 3 && (hasMove['batonpass'] || hasMove['uturn'] || hasMove['waterspout'] && hasMove['selfdestruct']))) && !hasMove['chargebeam']) {
 			item = template.baseStats.spe >= 60 && template.baseStats.spe <= 108 && ability !== 'Speed Boost' && !counter['priority'] && this.random(3) ? 'Choice Scarf' : 'Choice Specs';
 		} else if (hasMove['endeavor'] || hasMove['flail'] || hasMove['reversal']) {
 			item = 'Focus Sash';
@@ -607,7 +608,7 @@ class RandomGen4Teams extends RandomGen5Teams {
 			item = 'Black Sludge';
 		} else if (this.getEffectiveness('Rock', template) >= 1 || hasMove['roar']) {
 			item = 'Leftovers';
-		} else if (counter.Status <= 1 && !hasMove['rapidspin']) {
+		} else if (counter.Status <= 1 && !hasMove['rapidspin'] && !hasMove['superfang']) {
 			item = 'Life Orb';
 		} else {
 			item = 'Leftovers';
