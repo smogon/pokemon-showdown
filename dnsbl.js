@@ -84,9 +84,9 @@ Dnsbl.query = function queryDnsbl(ip) {
 Dnsbl.ipToNumber = function (ip) {
 	let num = 0;
 	let parts = ip.split('.');
-	for (let i = 0, len = parts.length; i < len; i++) {
+	for (let part of parts) {
 		num *= 256;
-		num += parseInt(parts[i]);
+		num += parseInt(part);
 	}
 	return num;
 };
@@ -169,8 +169,7 @@ Dnsbl.rangeToPattern = function (range) {
  * @return {boolean}
  */
 Dnsbl.checkPattern = function (patterns, num) {
-	for (let i = 0; i < patterns.length; ++i) {
-		let pattern = patterns[i];
+	for (let pattern of patterns) {
 		if (num >= pattern[0] && num <= pattern[1]) {
 			return true;
 		}

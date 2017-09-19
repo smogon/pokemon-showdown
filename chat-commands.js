@@ -133,8 +133,8 @@ exports.commands = {
 		if (target.includes(separator)) {
 			const params = target.split(separator);
 			let output = [];
-			for (let i = 0; i < params.length; i++) {
-				output.push(Chat.escapeHTML(params[i]));
+			for (let param of params) {
+				output.push(Chat.escapeHTML(param));
 			}
 			let code = `<div class="chat"><code style="white-space: pre-wrap; display: table">${output.join('<br />')}</code></div>`;
 			if (output.length > 3) code = `<details><summary>See code...</summary>${code}</details>`;
@@ -1275,13 +1275,12 @@ exports.commands = {
 		}
 		if (targetId === user.userid || user.can('makeroom')) {
 			innerBuffer = [];
-			for (let i = 0; i < Rooms.global.chatRooms.length; i++) {
-				let curRoom = Rooms.global.chatRooms[i];
-				if (!curRoom.auth || !curRoom.isPrivate) continue;
-				if (curRoom.isPrivate !== true) continue;
-				let auth = curRoom.auth[targetId];
+			for (let chatRoom of Rooms.global.chatRooms) {
+				if (!chatRoom.auth || !chatRoom.isPrivate) continue;
+				if (chatRoom.isPrivate !== true) continue;
+				let auth = chatRoom.auth[targetId];
 				if (!auth) continue;
-				innerBuffer.push(auth + curRoom.id);
+				innerBuffer.push(auth + chatRoom.id);
 			}
 			if (innerBuffer.length) {
 				buffer.push('Private room auth: ' + innerBuffer.join(', '));
@@ -1376,9 +1375,9 @@ exports.commands = {
 		if (targets.length > 11 || connection.inRooms.size > 1) return;
 		Rooms.global.autojoinRooms(user, connection);
 		let autojoins = [];
-		for (let i = 0; i < targets.length; i++) {
-			if (user.tryJoinRoom(targets[i], connection) === null) {
-				autojoins.push(targets[i]);
+		for (let target of targets) {
+			if (user.tryJoinRoom(target, connection) === null) {
+				autojoins.push(target);
 			}
 		}
 		connection.autojoins = autojoins.join(',');
@@ -2215,11 +2214,11 @@ exports.commands = {
 			this.add(`|unlink|${hidetype}${userid}`);
 
 			const alts = targetUser.getAltUsers(true);
-			for (let i = 0; i < alts.length; ++i) {
-				this.add(`|unlink|${hidetype}${alts[i].name}`);
+			for (let alt of alts) {
+				this.add(`|unlink|${hidetype}${alt.name}`);
 			}
-			for (let i in targetUser.prevNames) {
-				this.add(`|unlink|${hidetype}${targetUser.prevNames[i]}`);
+			for (let name in targetUser.prevNames) {
+				this.add(`|unlink|${hidetype}${targetUser.prevNames[name]}`);
 			}
 		} else {
 			this.addModCommand("" + targetUser.name + "'s messages were cleared from  " + room.title + " by " + user.name + ".");
@@ -2314,9 +2313,7 @@ exports.commands = {
 			return this.errorReply(`[${duplicates.join(', ')}] ${Chat.plural(duplicates, "are", "is")} already blacklisted.`);
 		}
 
-		for (let i = 0; i < targets.length; i++) {
-			let userid = targets[i];
-
+		for (let userid of targets) {
 			Punishments.roomBlacklist(room, null, null, userid, reason);
 
 			let trusted = Users.isTrusted(userid);
@@ -2472,8 +2469,8 @@ exports.commands = {
 				if (lock['all']) return this.errorReply(`Hot-patching all has been disabled by ${lock['all'].by} (${lock['all'].reason})`);
 				if (Config.disablehotpatchall) return this.errorReply("This server does not allow for the use of /hotpatch all");
 
-				for (let i = 0; i < hotpatches.length; i++) {
-					this.parse(`/hotpatch ${hotpatches[i]}`);
+				for (let hotpatch of hotpatches) {
+					this.parse(`/hotpatch ${hotpatch}`);
 				}
 			} else if (target === 'chat' || target === 'commands') {
 				if (lock['chat']) return this.errorReply(`Hot-patching chat has been disabled by ${lock['chat'].by} (${lock['chat'].reason})`);
@@ -2954,9 +2951,9 @@ exports.commands = {
 		let memUsage = process.memoryUsage();
 		let results = [memUsage.rss, memUsage.heapUsed, memUsage.heapTotal];
 		let units = ["B", "KiB", "MiB", "GiB", "TiB"];
-		for (let i = 0; i < results.length; i++) {
-			let unitIndex = Math.floor(Math.log2(results[i]) / 10); // 2^10 base log
-			results[i] = "" + (results[i] / Math.pow(2, 10 * unitIndex)).toFixed(2) + " " + units[unitIndex];
+		for (let result of results) {
+			let unitIndex = Math.floor(Math.log2(result) / 10); // 2^10 base log
+			result = "" + (result / Math.pow(2, 10 * unitIndex)).toFixed(2) + " " + units[unitIndex];
 		}
 		this.sendReply("||[Main process] RSS: " + results[0] + ", Heap: " + results[1] + " / " + results[2]);
 	},
@@ -3593,11 +3590,11 @@ exports.commands = {
 				}
 			} else if (targets.length > 1 && typeof allCommands[targets[0]] === 'object') {
 				// Handle internal namespace commands
-				let helpCmd = targets[targets.length - 1] + 'help';
-				let namespace = allCommands[targets[0]];
-				for (let i = 1; i < targets.length - 1; i++) {
-					if (!namespace[targets[i]]) return this.errorReply("Help for the command '" + target + "' was not found. Try /help for general help");
-					namespace = namespace[targets[i]];
+				let helpCmd = targets.pop() + 'help';
+				let namespace = allCommands[targets.shift()];
+				for (let t of targets) {
+					if (!namespace[t]) return this.errorReply("Help for the command '" + target + "' was not found. Try /help for general help");
+					namespace = namespace[t];
 				}
 				if (typeof namespace[helpCmd] === 'object') return this.sendReply(namespace[helpCmd].join('\n'));
 				if (typeof namespace[helpCmd] === 'function') return this.run(namespace[helpCmd]);

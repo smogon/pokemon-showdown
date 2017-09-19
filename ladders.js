@@ -59,8 +59,8 @@ class Ladder {
 			const data = await FS('config/ladders/' + this.formatid + '.tsv').read('utf8');
 			let ladder = [];
 			let dataLines = data.split('\n');
-			for (let i = 1; i < dataLines.length; i++) {
-				let line = dataLines[i].trim();
+			for (let dataLine of dataLines) {
+				let line = dataLine.trim();
 				if (!line) continue;
 				let row = line.split('\t');
 				ladder.push([toId(row[1]), Number(row[0]), row[1], Number(row[2]), Number(row[3]), Number(row[4]), row[5]]);
@@ -96,8 +96,7 @@ class Ladder {
 		}
 		let stream = FS(`config/ladders/${this.formatid}.tsv`).createWriteStream();
 		stream.write('Elo\tUsername\tW\tL\tT\tLast update\r\n');
-		for (let i = 0; i < this.loadedLadder.length; i++) {
-			let row = this.loadedLadder[i];
+		for (let row of this.loadedLadder) {
 			stream.write(row.slice(1).join('\t') + '\r\n');
 		}
 		stream.end();
