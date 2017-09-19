@@ -469,7 +469,7 @@ class ModdedDex {
 		}
 		name = (name || '').trim();
 		let id = toId(name);
-		if (this.data.Aliases[id]) {
+		if (this.data.Aliases.hasOwnProperty(id)) {
 			name = this.data.Aliases[id];
 			id = toId(name);
 		}
