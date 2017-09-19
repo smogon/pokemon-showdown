@@ -226,7 +226,7 @@ if (cluster.isMaster) {
 			try {
 				key = fs.readFileSync(key);
 			} catch (e) {
-				require('./crashlogger')(`Failed to read the configured SSL private key PEM file:\n${e.stack}`, `Socket process ${cluster.worker.id} (${process.pid})`, true);
+				require('./crashlogger')(new Error(`Failed to read the configured SSL private key PEM file:\n${e.stack}`), `Socket process ${cluster.worker.id} (${process.pid})`, true);
 			}
 		} catch (e) {
 			console.warn('SSL private key config values will not support HTTPS server option values in the future. Please set it to use the absolute path of its PEM file.');
@@ -240,7 +240,7 @@ if (cluster.isMaster) {
 			try {
 				cert = fs.readFileSync(cert);
 			} catch (e) {
-				require('./crashlogger')(`Failed to read the configured SSL certificate PEM file:\n${e.stack}`, `Socket process ${cluster.worker.id} (${process.pid})`, true);
+				require('./crashlogger')(new Error(`Failed to read the configured SSL certificate PEM file:\n${e.stack}`), `Socket process ${cluster.worker.id} (${process.pid})`, true);
 			}
 		} catch (e) {
 			console.warn('SSL certificate config values will not support HTTPS server option values in the future. Please set it to use the absolute path of its PEM file.');
