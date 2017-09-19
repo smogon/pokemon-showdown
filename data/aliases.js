@@ -20,7 +20,6 @@ exports.BattleAliases = {
 	"aaa": "[Gen 7] Almost Any Ability",
 	"ht": "[Gen 7] Hidden Type",
 	"2v2": "[Gen 7] 2v2 Doubles",
-	"theorymon": "[Gen 6] OU Theorymon",
 	"cc1v1": "[Gen 7] Challenge Cup 1v1",
 	"hc": "[Gen 7] Hackmons Cup",
 	"monorandom": "[Gen 7] Monotype Random Battle",
