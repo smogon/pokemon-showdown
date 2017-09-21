@@ -59,10 +59,10 @@ class Ladder {
 			const data = await FS('config/ladders/' + this.formatid + '.tsv').read('utf8');
 			let ladder = [];
 			let dataLines = data.split('\n');
-			for (let i = 1; i < dataLines.length; i++) {
-				let line = dataLines[i].trim();
-				if (!line) continue;
-				let row = line.split('\t');
+			for (const line of dataLines) {
+				let trimmedLine = line.trim();
+				if (!trimmedLine) continue;
+				let row = trimmedLine.split('\t');
 				ladder.push([toId(row[1]), Number(row[0]), row[1], Number(row[2]), Number(row[3]), Number(row[4]), row[5]]);
 			}
 			// console.log('Ladders(' + this.formatid + ') loaded tsv: ' + JSON.stringify(this.loadedLadder));
@@ -96,8 +96,7 @@ class Ladder {
 		}
 		let stream = FS(`config/ladders/${this.formatid}.tsv`).createWriteStream();
 		stream.write('Elo\tUsername\tW\tL\tT\tLast update\r\n');
-		for (let i = 0; i < this.loadedLadder.length; i++) {
-			let row = this.loadedLadder[i];
+		for (const row of this.loadedLadder) {
 			stream.write(row.slice(1).join('\t') + '\r\n');
 		}
 		stream.end();
@@ -112,8 +111,8 @@ class Ladder {
 	 */
 	indexOfUser(username, createIfNeeded) {
 		let userid = toId(username);
-		for (let i = 0; i < this.loadedLadder.length; i++) {
-			if (this.loadedLadder[i][0] === userid) return i;
+		for (const row of this.loadedLadder) {
+			if (row[0] === userid) return i;
 		}
 		if (createIfNeeded) {
 			let index = this.loadedLadder.length;
@@ -135,8 +134,7 @@ class Ladder {
 		let buf = `<h3>${name} Top 100</h3>`;
 		buf += `<table>`;
 		buf += `<tr><th>` + ['', 'Username', '<abbr title="Elo rating">Elo</abbr>', 'W', 'L', 'T'].join(`</th><th>`) + `</th></tr>`;
-		for (let i = 0; i < ladder.length; i++) {
-			let row = ladder[i];
+		for (const row of ladder) {
 			buf += `<tr><td>` + [
 				i + 1, row[2], `<strong>${Math.round(row[1])}</strong>`, row[3], row[4], row[5],
 			].join(`</td><td>`) + `</td></tr>`;
