@@ -8,7 +8,7 @@
   },
   "optionalDependencies": {
     "cloud-env": "0.2.2",
-    "node-static": "0.7.9"
+    "node-static": "0.7.10"
   },
   "nonDefaultDependencies": {
     "nodemailer": "4.0.1",
