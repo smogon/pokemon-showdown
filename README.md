@@ -144,7 +144,7 @@ Owner
 
 Staff
 
-- Chris Monsanto - [chaos] - Sysadmin
+- [Chris Monsanto](https://github.com/monsanto) - [chaos] - Sysadmin
 - [Leonardo Julca](https://github.com/Slayer95) - [Slayer95] - Development
 - [Mathieu Dias-Martins](https://github.com/Marty-D) - [Marty-D] - Research (game mechanics), Development
 - [The Immortal](https://github.com/TheImmortal) - Development
@@ -153,7 +153,7 @@ Retired Staff
 
 - [Bill Meltsner](https://github.com/bmelts) - [bmelts] - Development, Sysadmin
 - [Cathy J. Fitzpatrick](https://github.com/cathyjf) - [cathyjf] - Development, Sysadmin
-- Hugh Gordonc - [V4] - Research (game mechanics), Development
+- Hugh Gordon - [V4] - Research (game mechanics), Development
 - [Juanma Serrano](https://github.com/Joimer) - [Joim] - Development, Sysadmin
 
 Major Contributors
