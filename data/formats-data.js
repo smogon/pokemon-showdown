@@ -4354,7 +4354,7 @@ exports.BattleFormatsData = {
 		requiredItems: ["Splash Plate", "Waterium Z"],
 	},
 	victini: {
-		randomBattleMoves: ["vcreate", "boltstrike", "uturn", "zenheadbutt", "grassknot", "focusblast", "blueflare"],
+		randomBattleMoves: ["vcreate", "boltstrike", "uturn", "zenheadbutt", "grassknot", "focusblast", "blueflare", "celebrate", "storedpower", "psychic"],
 		randomDoubleBattleMoves: ["vcreate", "boltstrike", "uturn", "psychic", "focusblast", "blueflare", "protect"],
 		eventPokemon: [
 			{"generation": 5, "level": 15, "moves":["quickattack", "incinerate", "confusion", "endure"]},
