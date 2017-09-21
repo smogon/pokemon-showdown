@@ -1314,12 +1314,14 @@ class RandomTeams extends Dex.ModdedDex {
 			item = 'Aloraichium Z';
 		} else if (template.species === 'Zygarde-10%' && hasMove['substitute'] && !teamDetails.zMove) {
 			item = hasMove['outrage'] ? 'Dragonium Z' : 'Groundium Z';
+		} else if (template.species === 'Victini' && hasMove['celebrate']) {
+			item = 'Normalium Z';
 		} else if (ability === 'Imposter') {
 			item = 'Choice Scarf';
 		} else if (ability === 'Klutz' && hasMove['switcheroo']) {
 			// To perma-taunt a Pokemon by giving it Assault Vest
 			item = 'Assault Vest';
-		} else if (hasMove['conversion']) {
+		} else if (hasMove['conversion', 'celebrate']) {
 			item = 'Normalium Z';
 		} else if (!teamDetails.zMove && (hasMove['fly'] || hasMove['bounce'] && counter.setupType)) {
 			item = 'Flyinium Z';
