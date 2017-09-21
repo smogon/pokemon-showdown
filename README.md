@@ -140,42 +140,42 @@ Credits
 
 Owner
 
-- Guangcong Luo [Zarel] - Development, Design, Sysadmin
+- [Guangcong Luo](https://github.com/Zarel) - [Zarel] - Development, Design, Sysadmin
 
 Staff
 
-- Chris Monsanto [chaos] - Sysadmin
-- Leonardo Julca [Slayer95] - Development
-- Mathieu Dias-Martins [Marty-D] - Research (game mechanics), Development
-- [The Immortal] - Development
+- Chris Monsanto - [chaos] - Sysadmin
+- [Leonardo Julca](https://github.com/Slayer95) - [Slayer95] - Development
+- [Mathieu Dias-Martins](https://github.com/Marty-D) - [Marty-D] - Research (game mechanics), Development
+- [The Immortal](https://github.com/TheImmortal) - Development
 
 Retired Staff
 
-- Bill Meltsner [bmelts] - Development, Sysadmin
-- Cathy J. Fitzpatrick [cathyjf] - Development, Sysadmin
-- Hugh Gordon [V4] - Research (game mechanics), Development
-- Juanma Serrano [Joim] - Development, Sysadmin
+- [Bill Meltsner](https://github.com/bmelts) - [bmelts] - Development, Sysadmin
+- [Cathy J. Fitzpatrick](https://github.com/cathyjf) - [cathyjf] - Development, Sysadmin
+- Hugh Gordonc - [V4] - Research (game mechanics), Development
+- [Juanma Serrano](https://github.com/Joimer) - [Joim] - Development, Sysadmin
 
 Major Contributors
 
-- Bär Halberkamp [bumbadadabum] - Development
-- Kevin Lau [Ascriptmaster] - Development, Art (battle animations)
-- Konrad Borowski [xfix] - Development
-- Quinton Lee [sirDonovan] - Development
+- [Bär Halberkamp](https://github.com/bumbadadabum) - [bumbadadabum] - Development
+- [Kevin Lau](https://github.com/ascriptmaster) - [Ascriptmaster] - Development, Art (battle animations)
+- [Konrad Borowski](https://github.com/xfix) - [xfix] - Development
+- [Quinton Lee](https://github.com/sirDonovan) - [sirDonovan] - Development
 
 Contributors
 
 - Andrew Goodsell [Zracknel] - Art (battle weather backdrops)
-- Avery Zimmer [Lyren, SolarisFox] - Development
-- Ben Davies [Morfent] - Development
-- Ben Frengley [TalkTakesTime] - Development
-- Cody Thompson [Rising_Dusk] - Development
-- Ian Clail [Layell] - Art (battle graphics, sprites)
-- Jeremy Piemonte [panpawn] - Development
-- Neil Rashbrook [urkerab] - Development
-- Robin Vandenbrande [Quinella] - Development
-- [Ridaz] - Art (battle animations)
-- Tobias Mann [asgdf] - Development
+- [Avery Zimmer](https://github.com/SolarisFox) - [Lyren, SolarisFox] - Development
+- [Ben Davies](https://github.com/Morfent) - [Morfent] - Development
+- [Ben Frengley](https://github.com/TalkTakesTime) - [TalkTakesTime] - Development
+- [Cody Thompson](https://github.com/RisingDusk) - [Rising_Dusk] - Development
+- [Ian Clail](https://github.com/Layell) - [Layell] - Art (battle graphics, sprites)
+- [Jeremy Piemonte](https://github.com/panpawn) - [panpawn] - Development
+- [Neil Rashbrook](https://github.com/urkerab) - [urkerab] - Development
+- Robin Vandenbrande - [Quinella] - Development
+- [Ridaz](https://github.com/Ridaz) - Art (battle animations)
+- [Tobias Mann](https://github.com/asgdf) - [asgdf] - Development
 
 Special thanks
 
