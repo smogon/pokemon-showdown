@@ -165,7 +165,7 @@ Major Contributors
 
 Contributors
 
-- Andrew Goodsell [Zracknel] - Art (battle weather backdrops)
+- Andrew Goodsell - [Zracknel] - Art (battle weather backdrops)
 - [Avery Zimmer](https://github.com/SolarisFox) - [Lyren, SolarisFox] - Development
 - [Ben Davies](https://github.com/Morfent) - [Morfent] - Development
 - [Ben Frengley](https://github.com/TalkTakesTime) - [TalkTakesTime] - Development
@@ -180,3 +180,4 @@ Contributors
 Special thanks
 
 - See http://pokemonshowdown.com/credits
+- [Check out our other contributors](https://github.com/Zarel/Pokemon-Showdown/graphs/contributors)
