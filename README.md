@@ -57,6 +57,8 @@ Now, to start Pokémon Showdown, run the command:
 
 (If you're not on Windows, we recommend doing `./pokemon-showdown` instead.)
 
+(If you're on Ubuntu, use the command `nodejs` instead of `node`. Ubuntu uses `node` for legacy versions of NodeJS)
+
 You can also specify a port:
 
     node pokemon-showdown 8000
