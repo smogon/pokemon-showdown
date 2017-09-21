@@ -137,10 +137,9 @@ exports.BattleAbilities = {
 		desc: "On switch-in, this Pokemon is alerted if any opposing Pokemon has an attack that is super effective on this Pokemon, or an OHKO move. Counter, Metal Burst, and Mirror Coat count as attacking moves of their respective types, while Hidden Power, Judgment, Natural Gift, Techno Blast, and Weather Ball are considered Normal-type moves.",
 		shortDesc: "On switch-in, this Pokemon shudders if any foe has a supereffective or OHKO move.",
 		onStart: function (pokemon) {
-			let targets = pokemon.side.foe.active;
-			for (let target of targets) {
-				if (!target || target.fainted) continue;
-				for (let moveslot of target.moveset) {
+			for (let foeTarget of pokemon.side.foe.active) {
+				if (!foeTarget || foeTarget.fainted) continue;
+				for (let moveslot of foeTarget.moveset) {
 					let move = this.getMove(moveslot.move);
 					if (move.category !== 'Status' && (this.getImmunity(move.type, pokemon) && this.getEffectiveness(move.type, pokemon) > 0 || move.ohko)) {
 						this.add('-ability', pokemon, 'Anticipation');
@@ -213,10 +212,10 @@ exports.BattleAbilities = {
 		onResidualSubOrder: 1,
 		onResidual: function (pokemon) {
 			if (!pokemon.hp) return;
-			for (let target of pokemon.side.foe.active) {
-				if (!target || !target.hp) continue;
-				if (target.status === 'slp' || target.hasAbility('comatose')) {
-					this.damage(target.maxhp / 8, target, pokemon);
+			for (let foeTarget of pokemon.side.foe.active) {
+				if (!foeTarget || !foeTarget.hp) continue;
+				if (foeTarget.status === 'slp' || foeTarget.hasAbility('comatose')) {
+					this.damage(foeTarget.maxhp / 8, foeTarget, pokemon);
 				}
 			}
 		},
@@ -738,10 +737,10 @@ exports.BattleAbilities = {
 		onStart: function (pokemon) {
 			let totaldef = 0;
 			let totalspd = 0;
-			for (let target of pokemon.side.foe.active) {
-				if (!target || target.fainted) continue;
-				totaldef += target.getStat('def', false, true);
-				totalspd += target.getStat('spd', false, true);
+			for (let foeTarget of pokemon.side.foe.active) {
+				if (!foeTarget || foeTarget.fainted) continue;
+				totaldef += foeTarget.getStat('def', false, true);
+				totalspd += foeTarget.getStat('spd', false, true);
 			}
 			if (totaldef && totaldef >= totalspd) {
 				this.boost({spa:1});
@@ -1092,22 +1091,21 @@ exports.BattleAbilities = {
 		desc: "On switch-in, this Pokemon is alerted to the move with the highest power, at random, known by an opposing Pokemon.",
 		shortDesc: "On switch-in, this Pokemon is alerted to the foes' move with the highest power.",
 		onStart: function (pokemon) {
-			let targets = pokemon.side.foe.active;
 			let warnMoves = [];
 			let warnBp = 1;
-			for (let target of targets) {
-				if (target.fainted) continue;
-				for (let moveslot of target.moveset) {
+			for (let foeTarget of pokemon.side.foe.active) {
+				if (foeTarget.fainted) continue;
+				for (let moveslot of foeTarget.moveset) {
 					let move = this.getMove(moveslot.move);
 					let bp = move.basePower;
 					if (move.ohko) bp = 160;
 					if (move.id === 'counter' || move.id === 'metalburst' || move.id === 'mirrorcoat') bp = 120;
 					if (!bp && move.category !== 'Status') bp = 80;
 					if (bp > warnBp) {
-						warnMoves = [[move, target]];
+						warnMoves = [[move, foeTarget]];
 						warnBp = bp;
 					} else if (bp === warnBp) {
-						warnMoves.push([move, target]);
+						warnMoves.push([move, foeTarget]);
 					}
 				}
 			}
@@ -1136,10 +1134,10 @@ exports.BattleAbilities = {
 	"frisk": {
 		shortDesc: "On switch-in, this Pokemon identifies the held items of all opposing Pokemon.",
 		onStart: function (pokemon) {
-			for (let target of pokemon.side.foe.active) {
-				if (!target || target.fainted) continue;
-				if (target.item) {
-					this.add('-item', target, target.getItem().name, '[from] ability: Frisk', '[of] ' + pokemon, '[identify]');
+			for (let foeTarget of pokemon.side.foe.active) {
+				if (!foeTarget || foeTarget.fainted) continue;
+				if (foeTarget.item) {
+					this.add('-item', foeTarget, foeTarget.getItem().name, '[from] ability: Frisk', '[of] ' + pokemon, '[identify]');
 				}
 			}
 		},
