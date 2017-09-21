@@ -9,10 +9,10 @@ true /*
 # can possibly cause a syntax error.
 
 if command -v node > /dev/null 2>&1; then
-	exec node "$0" "$*"
+	exec node "$0" "$@"
 fi
 if command -v nodejs > /dev/null 2>&1; then
-	exec nodejs "$0" "$*"
+	exec nodejs "$0" "$@"
 fi
 echo "We require Node.js version 8 or later; Node.js not found"
 exit 1
