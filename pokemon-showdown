@@ -8,11 +8,8 @@ true /*
 # As shell script parses lines only when they are needed, nothing after exit 1
 # can possibly cause a syntax error.
 
-if command -v node > /dev/null 2>&1; then
-	exec node "$0" "$@"
-fi
-if command -v nodejs > /dev/null 2>&1; then
-	exec nodejs "$0" "$@"
+if nodepath="$(command -v node || command -v nodejs)"; then
+	exec "$nodepath" "$0" "$@"
 fi
 echo "We require Node.js version 8 or later; Node.js not found"
 exit 1
