@@ -101,7 +101,7 @@ exports.BattleAbilities = {
 		onBasePower: function (basePower, pokemon) {
 			let boosted = true;
 			let allActives = pokemon.side.active.concat(pokemon.side.foe.active);
-			for (let target of allActives)
+			for (let target of allActives) {
 				if (target === pokemon) continue;
 				if (this.willMove(target)) {
 					boosted = false;
@@ -682,7 +682,6 @@ exports.BattleAbilities = {
 		},
 		onEnd: function (pokemon) {
 			if (this.weatherData.source !== pokemon) return;
-			for (let i = 0; i < this.sides.length; i++) {
 			for (let side of this.sides) {
 				for (let target of side.active) {
 					if (target === pokemon) continue;
@@ -2918,8 +2917,7 @@ exports.BattleAbilities = {
 		num: 23,
 	},
 	"shedskin": {
-		desc: "This Pokemon has a 33% chance to have its major status condition 
-		d at the end of each turn.",
+		desc: "This Pokemon has a 33% chance to have its major status condition at the end of each turn.",
 		shortDesc: "This Pokemon has a 33% chance to have its status cured at the end of each turn.",
 		onResidualOrder: 5,
 		onResidualSubOrder: 1,

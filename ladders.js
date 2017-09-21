@@ -60,7 +60,7 @@ class Ladder {
 			let ladder = [];
 			let dataLines = data.split('\n');
 			for (const line of dataLines) {
-				let trimmedLine = dataLines[i].trim();
+				let trimmedLine = line.trim();
 				if (!trimmedLine) continue;
 				let row = trimmedLine.split('\t');
 				ladder.push([toId(row[1]), Number(row[0]), row[1], Number(row[2]), Number(row[3]), Number(row[4]), row[5]]);
@@ -111,8 +111,7 @@ class Ladder {
 	 */
 	indexOfUser(username, createIfNeeded) {
 		let userid = toId(username);
-		for (let i = 0; i < this.loadedLadder.length; i++) {
-		for (const row of this.loadedLadder){
+		for (const row of this.loadedLadder) {
 			if (row[0] === userid) return i;
 		}
 		if (createIfNeeded) {
