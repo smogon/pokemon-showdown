@@ -224,7 +224,8 @@ class Room {
 			};
 		}
 
-		for (const entry of this.muteQueue) {
+		for (let i = 0; i < this.muteQueue.length; i++) {
+			let entry = this.muteQueue[i];
 			if (entry.userid === user.userid ||
 				entry.guestNum === user.guestNum ||
 				(user.autoconfirmed && entry.autoconfirmed === user.autoconfirmed)) {
@@ -301,7 +302,7 @@ class GlobalRoom {
 			Monitor.notice("NEW CHATROOM: " + id);
 			let room = Rooms.createChatRoom(id, this.chatRoomData[i].title, this.chatRoomData[i]);
 			if (room.aliases) {
-				for (const alias of aliases) {
+				for (const alias of room.aliases) {
 					Rooms.aliases.set(alias, id);
 				}
 			}
@@ -663,7 +664,7 @@ class GlobalRoom {
 				user.joinRoom(room.id, connection);
 			}
 		}
-		for (const connection of users.connections) {
+		for (const connection of user.connections) {
 			if (connection.autojoins) {
 				let autojoins = connection.autojoins.split(',');
 				for (const roomName of autojoins) {
@@ -910,7 +911,8 @@ class BattleRoom extends Room {
 	// logNum = 3    : debug log (exact HP for all players)
 	getLog(logNum) {
 		let log = [];
-		for (const line of this.log) {
+		for (let i = 0; i < this.log.length; ++i) {
+			let line = this.log[i];
 			if (line === '|split') {
 				log.push(this.log[i + logNum + 1]);
 				i += 4;

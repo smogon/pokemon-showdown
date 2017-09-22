@@ -1292,11 +1292,11 @@ Punishments.getRoomPunishments = function (user, options) {
 			}
 		}
 		if (checkMutes && curRoom.muteQueue) {
-			for (entry of curRoom.muteQueue) {
+			for (const entry of curRoom.muteQueue) {
 				if (userid === entry.userid ||
 					user.guestNum === entry.guestNum ||
 					(user.autoconfirmed && user.autoconfirmed === entry.autoconfirmed)) {
-					punishments.push([curRoom, ['MUTE', entry.userid, curRoom.muteQueue[i].time]]);
+					punishments.push([curRoom, ['MUTE', entry.userid, entry.time]]);
 				}
 			}
 		}

@@ -408,12 +408,12 @@ class Validator {
 					// one limitedEgg move from another egg.
 					let validFatherExists = false;
 					for (const learned of lsetData.sources) {
-						if (learned.charAt(1) === 'S' || source.charAt(1) === 'D') continue;
-						let eggGen = parseInt(source.charAt(0));
+						if (learned.charAt(1) === 'S' || learned.charAt(1) === 'D') continue;
+						let eggGen = parseInt(learned.charAt(0));
 						if (learned.charAt(1) !== 'E' || eggGen === 6) {
 							// (There is a way to obtain this pokemon without past-gen breeding.)
 							// In theory, limitedEgg should not exist in this case.
-							throw new Error(`invalid limitedEgg on ${name}: ${limitedEgg} with ${source}`);
+							throw new Error(`invalid limitedEgg on ${name}: ${limitedEgg} with ${learned}`);
 						}
 						let potentialFather = dex.getTemplate(learned.slice(learned.charAt(2) === 'T' ? 3 : 2));
 						let restrictedSources = 0;
@@ -500,9 +500,9 @@ class Validator {
 					let eventData = eventPokemon[0];
 					const minPastGen = (format.requirePlus ? 7 : format.requirePentagon ? 6 : 1);
 					let eventNum = 1;
-					for (const curEventData of eventPokemon) {
-						if (curEventData.generation <= dex.gen && curEventData.generation >= minPastGen) {
-							eventData = curEventData;
+					for (let i = 0; i < eventPokemon.length; i++) {
+						if (eventPokemon[i].generation <= dex.gen && eventPokemon[i].generation >= minPastGen) {
+							eventData = eventPokemon[i];
 							eventNum = i + 1;
 							break;
 						}
@@ -872,7 +872,7 @@ class Validator {
 				}
 				if (typeof lset === 'string') lset = [lset];
 
-				for (const learned of lset) {
+				for (let learned of lset) {
 					let learnedGen = parseInt(learned.charAt(0));
 					if (learnedGen < minPastGen) continue;
 					if (noFutureGen && learnedGen > dex.gen) continue;
@@ -1071,7 +1071,8 @@ class Validator {
 			// in sources, so we fill the other array in preparation for intersection
 			if (sourcesBefore && lsetData.sources) {
 				if (!sources) sources = [];
-				for (const learned of lsetData.sources) {
+				for (let i = 0, len = lsetData.sources.length; i < len; i++) {
+					let learned = lsetData.sources[i];
 					if (parseInt(learned.charAt(0)) <= sourcesBefore) {
 						sources.push(learned);
 					}
@@ -1080,7 +1081,8 @@ class Validator {
 			}
 			if (lsetData.sourcesBefore && sources) {
 				if (!lsetData.sources) lsetData.sources = [];
-				for (const learned of sources) {
+				for (let i = 0, len = sources.length; i < len; i++) {
+					let learned = sources[i];
 					let sourceGen = parseInt(learned.charAt(0));
 					if (sourceGen <= lsetData.sourcesBefore && sourceGen > sourcesBefore) {
 						lsetData.sources.push(learned);
