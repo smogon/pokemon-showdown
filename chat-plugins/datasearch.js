@@ -640,7 +640,7 @@ function runDexsearch(target, cmd, canAll, message) {
 	for (let pokemon in mod.data.Pokedex) {
 		let template = mod.getTemplate(pokemon);
 		let megaSearchResult = (megaSearch === null || (megaSearch === true && template.isMega) || (megaSearch === false && !template.isMega));
-		if (template.tier !== 'Unreleased' && template.tier !== 'Illegal' && (!template.tier.startsWith("CAP") || capSearch) && megaSearchResult) {
+		if ((maxGen === 0 || template.gen <= maxGen) && template.tier !== 'Unreleased' && template.tier !== 'Illegal' && (!template.tier.startsWith("CAP") || capSearch) && megaSearchResult) {
 			dex[pokemon] = template;
 		}
 	}
