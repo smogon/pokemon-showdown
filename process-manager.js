@@ -126,13 +126,7 @@ class ProcessManager {
 	 * @return {ProcessWrapper}
 	 */
 	acquire() {
-		let process = this.processes[0];
-		for (let i = 1; i < this.processes.length; i++) {
-			if (this.processes[i].load < process.load) {
-				process = this.processes[i];
-			}
-		}
-		return process;
+		return this.processes.reduce((best, current) => current.load < best.load ? current : best); // Not sure if this is too obvious...?
 	}
 
 	/**

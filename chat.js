@@ -147,7 +147,7 @@ class PatternTester {
 	 * @param {string[]} elems
 	 */
 	register(...elems) {
-		for (let elem of elems) {
+		for (const elem of elems) {
 			this.elements.push(elem);
 			if (/^[^ ^$?|()[\]]+ $/.test(elem)) {
 				this.fastElements.add(this.fastNormalize(elem));
@@ -855,7 +855,7 @@ class CommandContext {
 		let tags = html.toLowerCase().match(/<\/?(div|a|button|b|strong|em|i|u|center|font|marquee|blink|details|summary|code|table|td|tr)\b/g);
 		if (tags) {
 			let stack = [];
-			for (let tag of tags) {
+			for (const tag of tags) {
 				if (tag.charAt(1) === '/') {
 					if (!stack.length) {
 						this.errorReply("Extraneous </" + tag.substr(2) + "> without an opening tag.");
@@ -950,7 +950,7 @@ Chat.uncacheTree = function (root) {
 	let uncache = [require.resolve(root)];
 	do {
 		let newuncache = [];
-		for (let i of uncache) {
+		for (const i of uncache) {
 			if (require.cache[i]) {
 				newuncache.push.apply(newuncache,
 					require.cache[i].children
@@ -983,7 +983,7 @@ Chat.loadPlugins = function () {
 	// info always goes first so other plugins can shadow it
 	Object.assign(commands, require('./chat-plugins/info').commands);
 
-	for (let file of FS('chat-plugins/').readdirSync()) {
+	for (const file of FS('chat-plugins/').readdirSync()) {
 		if (file.substr(-3) !== '.js' || file === 'info.js') continue;
 		const plugin = require(`./chat-plugins/${file}`);
 
@@ -1142,7 +1142,7 @@ Chat.parseText = function (str) {
 			continue;
 		}
 
-		for (let formattingResolver of formattingResolvers) {
+		for (const formattingResolver of formattingResolvers) {
 			let start = formattingResolver.token;
 			let end = formattingResolver.endToken || start;
 
@@ -1207,7 +1207,7 @@ Chat.getDataPokemonHTML = function (template, gen = 7) {
 	buf += '<span class="col pokemonnamecol" style="white-space:nowrap"><a href="https://pokemonshowdown.com/dex/pokemon/' + template.id + '" target="_blank">' + template.species + '</a></span> ';
 	buf += '<span class="col typecol">';
 	if (template.types) {
-		for (let type of template.types) {
+		for (const type of template.types) {
 			buf += `<img src="https://play.pokemonshowdown.com/sprites/types/${type}.png" alt="${type}" height="14" width="32">`;
 		}
 	}

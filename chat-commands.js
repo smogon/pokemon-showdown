@@ -133,7 +133,7 @@ exports.commands = {
 		if (target.includes(separator)) {
 			const params = target.split(separator);
 			let output = [];
-			for (let param of params) {
+			for (const param of params) {
 				output.push(Chat.escapeHTML(param));
 			}
 			let code = `<div class="chat"><code style="white-space: pre-wrap; display: table">${output.join('<br />')}</code></div>`;
@@ -1275,7 +1275,7 @@ exports.commands = {
 		}
 		if (targetId === user.userid || user.can('makeroom')) {
 			innerBuffer = [];
-			for (let chatRoom of Rooms.global.chatRooms) {
+			for (const chatRoom of Rooms.global.chatRooms) {
 				if (!chatRoom.auth || !chatRoom.isPrivate) continue;
 				if (chatRoom.isPrivate !== true) continue;
 				let auth = chatRoom.auth[targetId];
@@ -1375,7 +1375,7 @@ exports.commands = {
 		if (targets.length > 11 || connection.inRooms.size > 1) return;
 		Rooms.global.autojoinRooms(user, connection);
 		let autojoins = [];
-		for (let target of targets) {
+		for (const target of targets) {
 			if (user.tryJoinRoom(target, connection) === null) {
 				autojoins.push(target);
 			}
@@ -1743,8 +1743,8 @@ exports.commands = {
 			affected = affected.slice(1).map(user => user.getLastName()).filter(alt => alt.substr(0, 7) !== '[Guest ');
 			guests -= affected.length;
 			this.privateModCommand("(" + name + "'s " + (acAccount ? " ac account: " + acAccount + ", " : "") + "banned alts: " + affected.join(", ") + (guests ? " [" + guests + " guests]" : "") + ")");
-			for (let i = 0; i < affected.length; ++i) {
-				this.add('|unlink|' + toId(affected[i]));
+			for (const user of affected) {
+				this.add('|unlink|' + toId(user));
 			}
 		} else if (acAccount) {
 			this.privateModCommand("(" + name + "'s ac account: " + acAccount + ")");
@@ -2214,10 +2214,10 @@ exports.commands = {
 			this.add(`|unlink|${hidetype}${userid}`);
 
 			const alts = targetUser.getAltUsers(true);
-			for (let alt of alts) {
+			for (const alt of alts) {
 				this.add(`|unlink|${hidetype}${alt.name}`);
 			}
-			for (let name in targetUser.prevNames) {
+			for (const name in targetUser.prevNames) {
 				this.add(`|unlink|${hidetype}${targetUser.prevNames[name]}`);
 			}
 		} else {
@@ -2313,7 +2313,7 @@ exports.commands = {
 			return this.errorReply(`[${duplicates.join(', ')}] ${Chat.plural(duplicates, "are", "is")} already blacklisted.`);
 		}
 
-		for (let userid of targets) {
+		for (const userid of targets) {
 			Punishments.roomBlacklist(room, null, null, userid, reason);
 
 			let trusted = Users.isTrusted(userid);
@@ -2469,7 +2469,7 @@ exports.commands = {
 				if (lock['all']) return this.errorReply(`Hot-patching all has been disabled by ${lock['all'].by} (${lock['all'].reason})`);
 				if (Config.disablehotpatchall) return this.errorReply("This server does not allow for the use of /hotpatch all");
 
-				for (let hotpatch of hotpatches) {
+				for (const hotpatch of hotpatches) {
 					this.parse(`/hotpatch ${hotpatch}`);
 				}
 			} else if (target === 'chat' || target === 'commands') {
@@ -2951,9 +2951,9 @@ exports.commands = {
 		let memUsage = process.memoryUsage();
 		let results = [memUsage.rss, memUsage.heapUsed, memUsage.heapTotal];
 		let units = ["B", "KiB", "MiB", "GiB", "TiB"];
-		for (let result of results) {
-			let unitIndex = Math.floor(Math.log2(result) / 10); // 2^10 base log
-			result = "" + (result / Math.pow(2, 10 * unitIndex)).toFixed(2) + " " + units[unitIndex];
+		for (let i = 0; i < results.length; i++) {
+			let unitIndex = Math.floor(Math.log2(results[i]) / 10); // 2^10 base log
+			results[i] = "" + (results[i] / Math.pow(2, 10 * unitIndex)).toFixed(2) + " " + units[unitIndex];
 		}
 		this.sendReply("||[Main process] RSS: " + results[0] + ", Heap: " + results[1] + " / " + results[2]);
 	},
@@ -3592,7 +3592,7 @@ exports.commands = {
 				// Handle internal namespace commands
 				let helpCmd = targets.pop() + 'help';
 				let namespace = allCommands[targets.shift()];
-				for (let t of targets) {
+				for (const t of targets) {
 					if (!namespace[t]) return this.errorReply("Help for the command '" + target + "' was not found. Try /help for general help");
 					namespace = namespace[t];
 				}

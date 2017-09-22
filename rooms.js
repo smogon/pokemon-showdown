@@ -123,8 +123,7 @@ class Room {
 	isMuted(user) {
 		if (!user) return;
 		if (this.muteQueue) {
-			for (let i = 0; i < this.muteQueue.length; i++) {
-				let entry = this.muteQueue[i];
+			for (const entry of this.muteQueue) {
 				if (user.userid === entry.userid ||
 					user.guestNum === entry.guestNum ||
 					(user.autoconfirmed && user.autoconfirmed === entry.autoconfirmed)) {
