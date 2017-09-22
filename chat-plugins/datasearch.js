@@ -127,6 +127,7 @@ exports.commands = {
 		"Parameters can be excluded through the use of '!', e.g., '!water type' excludes all water types.",
 		"The parameter 'mega' can be added to search for Mega Evolutions only, and the parameter 'NFE' can be added to search not-fully evolved Pok\u00e9mon only.",
 		"Parameters separated with '|' will be searched as alternatives for each other, e.g., 'trick | switcheroo' searches for all Pok\u00e9mon that learn either Trick or Switcheroo.",
+		"You can search for info in a specific generation by appending the generation to ds, e.g. '/ds1 normal' searches for all Pok\u00e9mon that were normal type in Generation I",
 		"The order of the parameters does not matter.",
 	],
 
