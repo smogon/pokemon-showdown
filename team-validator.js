@@ -65,13 +65,13 @@ class Validator {
 		}
 
 		let teamHas = {};
-		for (let i = 0; i < team.length; i++) {
-			if (!team[i]) return [`You sent invalid team data. If you're not using a custom client, please report this as a bug.`];
-			let setProblems = (format.validateSet || this.validateSet).call(this, team[i], teamHas);
+		for (const member of team) {
+			if (!member) return [`You sent invalid team data. If you're not using a custom client, please report this as a bug.`];
+			let setProblems = (format.validateSet || this.validateSet).call(this, member, teamHas);
 			if (setProblems) {
 				problems = problems.concat(setProblems);
 			}
-			if (removeNicknames) team[i].name = team[i].baseSpecies;
+			if (removeNicknames) member.name = member.baseSpecies;
 		}
 
 		for (const [rule, source, limit, bans] of ruleTable.complexTeamBans) {
@@ -269,9 +269,9 @@ class Validator {
 			set.ivs = Validator.fillStats(set.ivs, 31);
 			let maxedIVs = Object.values(set.ivs).every(val => val === 31);
 
-			for (let i = 0; i < set.moves.length; i++) {
-				if (!set.moves[i]) continue;
-				let move = dex.getMove(Dex.getString(set.moves[i]));
+			for (const moveName of set.moves) {
+				if (!moveName) continue;
+				let move = dex.getMove(Dex.getString(moveName));
 				if (!move.exists) return [`"${move.name}" is an invalid move.`];
 				banReason = ruleTable.check(move.id, setHas);
 				if (banReason) {
@@ -407,28 +407,27 @@ class Validator {
 					// They're probably incompatible if all potential fathers learn more than
 					// one limitedEgg move from another egg.
 					let validFatherExists = false;
-					for (let i = 0; i < lsetData.sources.length; i++) {
-						if (lsetData.sources[i].charAt(1) === 'S' || lsetData.sources[i].charAt(1) === 'D') continue;
-						let eggGen = parseInt(lsetData.sources[i].charAt(0));
-						if (lsetData.sources[i].charAt(1) !== 'E' || eggGen === 6) {
+					for (const learned of lsetData.sources) {
+						if (learned.charAt(1) === 'S' || source.charAt(1) === 'D') continue;
+						let eggGen = parseInt(source.charAt(0));
+						if (learned.charAt(1) !== 'E' || eggGen === 6) {
 							// (There is a way to obtain this pokemon without past-gen breeding.)
 							// In theory, limitedEgg should not exist in this case.
-							throw new Error(`invalid limitedEgg on ${name}: ${limitedEgg} with ${lsetData.sources[i]}`);
+							throw new Error(`invalid limitedEgg on ${name}: ${limitedEgg} with ${source}`);
 						}
-						let potentialFather = dex.getTemplate(lsetData.sources[i].slice(lsetData.sources[i].charAt(2) === 'T' ? 3 : 2));
+						let potentialFather = dex.getTemplate(learned.slice(learned.charAt(2) === 'T' ? 3 : 2));
 						let restrictedSources = 0;
-						for (let j = 0; j < limitedEgg.length; j++) {
-							let moveid = limitedEgg[j];
+						for (const moveid of limitedEgg) {
 							let fatherSources = potentialFather.learnset[moveid] || potentialFather.learnset['sketch'];
 							if (!fatherSources) throw new Error(`Egg move father ${potentialFather.id} can't learn ${moveid}`);
 							let hasUnrestrictedSource = false;
 							let hasSource = false;
-							for (let k = 0; k < fatherSources.length; k++) {
+							for (const source of fatherSources) {
 								// Triply nested loop! Fortunately, all the loops are designed
 								// to be as short as possible.
-								if (fatherSources[k].charAt(0) > eggGen) continue;
+								if (source.charAt(0) > eggGen) continue;
 								hasSource = true;
-								if (fatherSources[k].charAt(1) !== 'E' && fatherSources[k].charAt(1) !== 'S') {
+								if (source.charAt(1) !== 'E' && source.charAt(1) !== 'S') {
 									hasUnrestrictedSource = true;
 									break;
 								}
@@ -452,9 +451,9 @@ class Validator {
 						// TODO: hardcode false positives for our heuristic
 						// in theory, this heuristic doesn't have false negatives
 						let newSources = [];
-						for (let i = 0; i < lsetData.sources.length; i++) {
-							if (lsetData.sources[i].charAt(1) === 'S') {
-								newSources.push(lsetData.sources[i]);
+						for (const learned of lsetData.sources) {
+							if (learned.charAt(1) === 'S') {
+								newSources.push(learned);
 							}
 						}
 						lsetData.sources = newSources;
@@ -486,8 +485,7 @@ class Validator {
 				let eventTemplate = !template.learnset && template.baseSpecies !== template.species ? dex.getTemplate(template.baseSpecies) : template;
 				let eventPokemon = eventTemplate.eventPokemon;
 				let legal = false;
-				for (let i = 0; i < eventPokemon.length; i++) {
-					let eventData = eventPokemon[i];
+				for (const eventData of eventPokemon) {
 					if (this.validateEvent(set, eventData, eventTemplate)) continue;
 					legal = true;
 					if (eventData.gender) set.gender = eventData.gender;
@@ -502,9 +500,9 @@ class Validator {
 					let eventData = eventPokemon[0];
 					const minPastGen = (format.requirePlus ? 7 : format.requirePentagon ? 6 : 1);
 					let eventNum = 1;
-					for (let i = 0; i < eventPokemon.length; i++) {
-						if (eventPokemon[i].generation <= dex.gen && eventPokemon[i].generation >= minPastGen) {
-							eventData = eventPokemon[i];
+					for (const curEventData of eventPokemon) {
+						if (curEventData.generation <= dex.gen && curEventData.generation >= minPastGen) {
+							eventData = curEventData;
 							eventNum = i + 1;
 							break;
 						}
@@ -519,8 +517,8 @@ class Validator {
 					problems.push(`${name} has a hidden ability - it can't have moves only learned before gen 5.`);
 				} else if (lsetData.sources && template.gender && template.gender !== 'F' && !{'Nidoran-M':1, 'Nidorino':1, 'Nidoking':1, 'Volbeat':1}[template.species]) {
 					let compatibleSource = false;
-					for (let i = 0, len = lsetData.sources.length; i < len; i++) {
-						if (lsetData.sources[i].charAt(1) === 'E' || (lsetData.sources[i].substr(0, 2) === '5D' && set.level >= 10)) {
+					for (const learned of lsetData.sources) {
+						if (learned.charAt(1) === 'E' || (learned.substr(0, 2) === '5D' && set.level >= 10)) {
 							compatibleSource = true;
 							break;
 						}
@@ -874,8 +872,7 @@ class Validator {
 				}
 				if (typeof lset === 'string') lset = [lset];
 
-				for (let i = 0, len = lset.length; i < len; i++) {
-					let learned = lset[i];
+				for (const learned of lset) {
 					let learnedGen = parseInt(learned.charAt(0));
 					if (learnedGen < minPastGen) continue;
 					if (noFutureGen && learnedGen > dex.gen) continue;
@@ -1074,8 +1071,7 @@ class Validator {
 			// in sources, so we fill the other array in preparation for intersection
 			if (sourcesBefore && lsetData.sources) {
 				if (!sources) sources = [];
-				for (let i = 0, len = lsetData.sources.length; i < len; i++) {
-					let learned = lsetData.sources[i];
+				for (const learned of lsetData.sources) {
 					if (parseInt(learned.charAt(0)) <= sourcesBefore) {
 						sources.push(learned);
 					}
@@ -1084,8 +1080,7 @@ class Validator {
 			}
 			if (lsetData.sourcesBefore && sources) {
 				if (!lsetData.sources) lsetData.sources = [];
-				for (let i = 0, len = sources.length; i < len; i++) {
-					let learned = sources[i];
+				for (const learned of sources) {
 					let sourceGen = parseInt(learned.charAt(0));
 					if (sourceGen <= lsetData.sourcesBefore && sourceGen > sourcesBefore) {
 						lsetData.sources.push(learned);
