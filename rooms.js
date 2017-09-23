@@ -96,6 +96,8 @@ class BasicRoom {
 		this.filterCaps = false;
 		/** @type {Set<string>?} */
 		this.privacySetter = null;
+		/** @type {Map<string, ChatRoom>?} */
+		this.subRooms = null;
 	}
 
 	/**
@@ -643,6 +645,7 @@ class GlobalRoom extends BasicRoom {
 					title: room.title,
 					desc: room.desc,
 					userCount: room.userCount,
+					subRooms: room.getSubRooms(false).map(room => room.title),
 				});
 			// @ts-ignore
 			} else if (room.pspl) {
@@ -650,12 +653,14 @@ class GlobalRoom extends BasicRoom {
 					title: room.title,
 					desc: room.desc,
 					userCount: room.userCount,
+					subRooms: room.getSubRooms(false).map(room => room.title),
 				});
 			} else {
 				roomsData.chat.push({
 					title: room.title,
 					desc: room.desc,
 					userCount: room.userCount,
+					subRooms: room.getSubRooms(false).map(room => room.title),
 				});
 			}
 		}
@@ -1242,6 +1247,20 @@ class ChatRoom extends BasicRoom {
 		this.chatRoomData = (options.isPersonal ? null : options);
 		Object.assign(this, options);
 		if (this.auth) Object.setPrototypeOf(this.auth, null);
+		/** @type {Room?} */
+		this.parent = null;
+		if (this.parent) {
+			/** @type {Room} */
+			let main = Rooms(this.parent);
+
+			if (main && main.subRooms) {
+				main.subRooms.set(this.id, this);
+				this.parent = main;
+			}
+		}
+
+		/** @type {Map<string, ChatRoom>} */
+		this.subRooms = new Map();
 
 		/** @type {'chat'} */
 		this.type = 'chat';
@@ -1452,6 +1471,17 @@ class ChatRoom extends BasicRoom {
 		}
 		if (message) message += '</div>';
 		return message;
+	}
+	/**
+	 * @param {boolean?} showSecret
+	 * @return {ChatRoom[]}
+	 */
+	getSubRooms(showSecret) {
+		return Array.from(this.subRooms.values()).reduce((rooms, room) => {
+			if (!room) return rooms;
+			if (room.isPrivate === true && !showSecret) return rooms;
+			return [...rooms, room];
+		}, []);
 	}
 	/**
 	 * @param {User} user
