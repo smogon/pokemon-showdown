@@ -66,7 +66,7 @@ exports.BattleFormatsData = {
 			{"generation": 7, "level": 40, "gender": "M", "nature": "Jolly", "isHidden": false, "moves":["flareblitz", "dragonclaw", "fly", "dragonrage"], "pokeball": "cherishball"},
 			{"generation": 7, "level": 40, "gender": "M", "nature": "Adamant", "isHidden": false, "moves":["flamethrower", "dragonrage", "slash", "seismictoss"], "pokeball": "pokeball"},
 		],
-		tier: "PU",
+		tier: "BL4",
 	},
 	charizardmegax: {
 		randomBattleMoves: ["dragondance", "flareblitz", "dragonclaw", "earthquake", "roost", "willowisp"],
