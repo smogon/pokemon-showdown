@@ -90,13 +90,12 @@ exports.BattleScripts = {
 		this.runEvent('AfterMove', pokemon, target, move);
 
 		// Dancer's activation order is completely different from any other event, so it's handled separately
-		if (move.flags['dance']) {
+		if (move.flags['dance'] && !move.isExternal) {
 			let dancers = [];
 			for (const side of this.sides) {
-				for (const slot of side.active) {
-					let currentPoke = slot;
-					if (!currentPoke || !currentPoke.hp || pokemon === currentPoke || move.isExternal) continue;
-					if (currentPoke.ability === 'dancer') {
+				for (const currentPoke of side.active) {
+					if (!currentPoke || !currentPoke.hp || pokemon === currentPoke) continue;
+					if (currentPoke.hasAbility('dancer')) {
 						dancers.push(currentPoke);
 					}
 				}
