@@ -828,15 +828,15 @@ Punishments.roomBan = function (room, user, expireTime, userId, ...reason) {
 		curUser.leaveRoom(room.id);
 	}
 
-	if (room.subRooms.size) {
-		room.subRooms.forEach(subroom => {
-			for (let curUser of affected) {
-				if (subroom.game && subroom.game.removeBannedUser) {
-					subroom.game.removeBannedUser(curUser);
+	if (room.subRooms) {
+		for (const subRoom of room.subRooms.values()) {
+			for (const curUser of affected) {
+				if (subRoom.game && subRoom.game.removeBannedUser) {
+					subRoom.game.removeBannedUser(curUser);
 				}
-				curUser.leaveRoom(subroom.id);
+				curUser.leaveRoom(subRoom.id);
 			}
-		});
+		}
 	}
 
 	return affected;
@@ -874,15 +874,15 @@ Punishments.roomBlacklist = function (room, user, expireTime, userId, ...reason)
 		curUser.leaveRoom(room.id);
 	}
 
-	if (room.subRooms.size) {
-		room.subRooms.forEach(subroom => {
-			for (let curUser of affected) {
-				if (subroom.game && subroom.game.removeBannedUser) {
-					subroom.game.removeBannedUser(curUser);
+	if (room.subRooms) {
+		for (const subRoom of room.subRooms.values()) {
+			for (const curUser of affected) {
+				if (subRoom.game && subRoom.game.removeBannedUser) {
+					subRoom.game.removeBannedUser(curUser);
 				}
-				curUser.leaveRoom(subroom.id);
+				curUser.leaveRoom(subRoom.id);
 			}
-		});
+		}
 	}
 
 	return affected;

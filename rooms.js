@@ -639,29 +639,22 @@ class GlobalRoom extends BasicRoom {
 		let roomsData = {official: [], pspl: [], chat: [], userCount: this.userCount, battleCount: this.battleCount};
 		for (const room of this.chatRooms) {
 			if (!room) continue;
+			if (room.parent) continue;
 			if (room.isPrivate && !(room.isPrivate === 'voice' && user.group !== ' ')) continue;
+			let roomData = {
+				title: room.title,
+				desc: room.desc,
+				userCount: room.userCount,
+			};
+			if (room.subRooms && room.subRooms.size) roomData.subRooms = room.getSubRooms().map(room => room.title);
+
 			if (room.isOfficial) {
-				roomsData.official.push({
-					title: room.title,
-					desc: room.desc,
-					userCount: room.userCount,
-					subRooms: room.getSubRooms(false).map(room => room.title),
-				});
+				roomsData.official.push(roomData);
 			// @ts-ignore
 			} else if (room.pspl) {
-				roomsData.pspl.push({
-					title: room.title,
-					desc: room.desc,
-					userCount: room.userCount,
-					subRooms: room.getSubRooms(false).map(room => room.title),
-				});
+				roomsData.pspl.push(roomData);
 			} else {
-				roomsData.chat.push({
-					title: room.title,
-					desc: room.desc,
-					userCount: room.userCount,
-					subRooms: room.getSubRooms(false).map(room => room.title),
-				});
+				roomsData.chat.push(roomData);
 			}
 		}
 		return roomsData;
@@ -1249,18 +1242,18 @@ class ChatRoom extends BasicRoom {
 		if (this.auth) Object.setPrototypeOf(this.auth, null);
 		/** @type {Room?} */
 		this.parent = null;
-		if (this.parent) {
-			/** @type {Room} */
-			let main = Rooms(this.parent);
+		if (options.parentid) {
+			let main = Rooms(options.parentid);
 
-			if (main && main.subRooms) {
+			if (main) {
+				if (!main.subRooms) main.subRooms = new Map();
 				main.subRooms.set(this.id, this);
 				this.parent = main;
 			}
 		}
 
-		/** @type {Map<string, ChatRoom>} */
-		this.subRooms = new Map();
+		/** @type {Map<string, ChatRoom>?} */
+		this.subRooms = null;
 
 		/** @type {'chat'} */
 		this.type = 'chat';
@@ -1473,12 +1466,13 @@ class ChatRoom extends BasicRoom {
 		return message;
 	}
 	/**
-	 * @param {boolean?} showSecret
+	 * @param {boolean} includeSecret
 	 * @return {ChatRoom[]}
 	 */
-	getSubRooms(showSecret) {
+	getSubRooms(includeSecret = false) {
+		if (!this.subRooms) return [];
 		return [...this.subRooms.values()].filter(room =>
-			room.isPrivate !== true || showSecret
+			room.isPrivate !== true || includeSecret
 		);
 	}
 	/**

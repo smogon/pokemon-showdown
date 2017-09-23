@@ -748,9 +748,10 @@ exports.commands = {
 			}
 		}
 
-		if (targetRoom.subRooms && targetRoom.subRooms.size) {
-			targetRoom.subRooms.forEach(function (room) { room.parent = null; });
-		} else if (targetRoom.parent && targetRoom.parent.subRooms) {
+		if (targetRoom.subRooms) {
+			for (const subRoom of targetRoom.subRooms) subRoom.parent = null;
+		}
+		if (targetRoom.parent && targetRoom.parent.subRooms) {
 			targetRoom.parent.subRooms.delete(targetRoom.id);
 		}
 
@@ -802,7 +803,6 @@ exports.commands = {
 				return this.errorReply(`This room is already public.`);
 			}
 			if (room.isPersonal) return this.errorReply(`This room can't be made public.`);
-			if (room.parent) return this.errorReply(`Subrooms cannot be public.`);
 			if (room.privacySetter && user.can('nooverride', null, room) && !user.can('makeroom')) {
 				if (!room.privacySetter.has(user.userid)) {
 					const privacySetters = Array.from(room.privacySetter).join(', ');
@@ -890,7 +890,6 @@ exports.commands = {
 		if (!target) return this.parse('/help subroom');
 
 		if (!room.chatRoomData) return this.errorReply(`Temporary rooms cannot be subrooms.`);
-		if (!room.isPrivate) return this.errorReply(`Public rooms cannot be subrooms.`);
 		if (room.parent) return this.errorReply(`This room is already a subroom. To change which room this subroom belongs to, remove the subroom first.`);
 
 		const main = Rooms(toId(target));
@@ -899,19 +898,20 @@ exports.commands = {
 		if (main.isPrivate || !main.chatRoomData) return this.errorReply(`Only public rooms can have subrooms.`);
 
 		room.parent = main;
+		if (!main.subRooms) main.subRooms = new Map();
 		main.subRooms.set(room.id, room);
 
-		let mainIdx = Rooms.global.chatRoomData.findIndex(r => r.title === main.title);
-		let subIdx = Rooms.global.chatRoomData.findIndex(r => r.title === room.title);
+		let mainIdx = Rooms.global.chatRoomDataList.findIndex(r => r.title === main.title);
+		let subIdx = Rooms.global.chatRoomDataList.findIndex(r => r.title === room.title);
 
 		// This is needed to ensure that the main room gets loaded before the subroom.
 		if (mainIdx > subIdx) {
-			const tmp = Rooms.global.chatRoomData[mainIdx];
-			Rooms.global.chatRoomData[mainIdx] = Rooms.global.chatRoomData[subIdx];
-			Rooms.global.chatRoomData[subIdx] = tmp;
+			const tmp = Rooms.global.chatRoomDataList[mainIdx];
+			Rooms.global.chatRoomDataList[mainIdx] = Rooms.global.chatRoomData[subIdx];
+			Rooms.global.chatRoomDataList[subIdx] = tmp;
 		}
 
-		room.chatRoomData.parent = main.id;
+		room.chatRoomData.parentid = main.id;
 		Rooms.global.writeChatRoomData();
 
 		for (let userid in room.users) {
@@ -921,19 +921,20 @@ exports.commands = {
 		return this.addModCommand(`This room was set as a subroom of ${main.title}.`);
 	},
 
+	removesubroom: 'unsubroom',
 	unsubroom: function (target, room, user) {
 		if (!this.can('makeroom')) return;
 		if (!room.parent || !room.chatRoomData) return this.errorReply(`This room is not currently a subroom of a public room.`);
 
 		const main = Rooms(this.parent);
 
-		if (main) {
+		if (main && main.subRooms) {
 			main.subRooms.delete(room.id);
 		}
 
 		room.parent = null;
 
-		delete room.chatRoomData.parent;
+		delete room.chatRoomData.parentid;
 		Rooms.global.writeChatRoomData();
 
 		for (let userid in room.users) {
@@ -951,11 +952,13 @@ exports.commands = {
 
 		let showSecret = !this.broadcasting && this.can('mute', null, room);
 
-		let subrooms = room.getSubRooms(showSecret).map(room => Chat.html `<a href="/${room.id}">${room.title}</a><br/><small>${room.desc}</small>`);
+		let subRooms = room.getSubRooms(showSecret);
 
-		if (!subrooms.length) return this.sendReply(`This room doesn't have any subrooms.`);
+		if (!subRooms.length) return this.sendReply(`This room doesn't have any subrooms.`);
 
-		return this.sendReplyBox(`<p style="font-weight:bold;">${room.title}'s subroom${Chat.plural(subrooms)}:</p><ul><li>${subrooms.join('</li><br/><li>')}</li></ul></strong>`);
+		let subRoomText = subRooms.map(room => Chat.html `<a href="/${room.id}">${room.title}</a><br/><small>${room.desc}</small>`);
+
+		return this.sendReplyBox(`<p style="font-weight:bold;">${Chat.escapeHTML(room.title)}'s subroom${Chat.plural(subRooms)}:</p><ul><li>${subRoomText.join('</li><br/><li>')}</li></ul></strong>`);
 	},
 
 	subroomhelp: [
@@ -1187,8 +1190,10 @@ exports.commands = {
 		if (targetUser) {
 			targetUser.popup(`You were appointed Room Owner by ${user.name} in ${room.id}.`);
 			room.onUpdateIdentity(targetUser);
-			if (room.subRooms.size) {
-				room.subRooms.forEach(room => room.onUpdateIdentity(targetUser));
+			if (room.subRooms) {
+				for (const subRoom of room.subRooms.values()) {
+					subRoom.onUpdateIdentity(targetUser);
+				}
 			}
 		}
 		Rooms.global.writeChatRoomData();
@@ -1285,8 +1290,10 @@ exports.commands = {
 
 		if (targetUser) {
 			targetUser.updateIdentity(room.id);
-			if (room.subRooms && room.subRooms.size) {
-				room.subRooms.forEach(room => targetUser.updateIdentity(room.id));
+			if (room.subRooms) {
+				for (const subRoom of room.subRooms.values()) {
+					targetUser.updateIdentity(subRoom.id);
+				}
 			}
 		}
 		if (room.chatRoomData) Rooms.global.writeChatRoomData();
@@ -3580,7 +3587,7 @@ exports.commands = {
 				if (!targetRoom) continue; // shouldn't happen
 				let roomData = {};
 				if (targetRoom.isPrivate) {
-					if (!(targetRoom.parent && targetRoom.isPrivate === 'hidden') && !user.inRooms.has(roomid) && !user.games.has(roomid)) continue;
+					if (!user.inRooms.has(roomid) && !user.games.has(roomid)) continue;
 					roomData.isPrivate = true;
 				}
 				if (targetRoom.battle) {
