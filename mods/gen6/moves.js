@@ -67,12 +67,8 @@ exports.BattleMovedex = {
 		desc: "Raises the user's Attack by 2 stages if this move knocks out the target.",
 		shortDesc: "Raises user's Attack by 2 if this KOes the target.",
 		basePower: 30,
-		effect: {
-			duration: 1,
-			onAfterMoveSecondarySelf: function (pokemon, target, move) {
-				if (!target || target.fainted || target.hp <= 0) this.boost({atk:2}, pokemon, pokemon, move);
-				pokemon.removeVolatile('fellstinger');
-			},
+		onAfterMoveSecondarySelf: function (pokemon, target, move) {
+			if (!target || target.fainted || target.hp <= 0) this.boost({atk:2}, pokemon, pokemon, move);
 		},
 	},
 	flyingpress: {
