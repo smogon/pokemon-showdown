@@ -6136,7 +6136,7 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["swordsdance", "return", "doubleedge", "crunch", "flamecharge", "flamethrower", "icebeam", "uturn", "ironhead"],
 		randomDoubleBattleMoves: ["protect", "doubleedge", "uturn", "crunch", "icebeam", "partingshot", "flamecharge", "swordsdance", "explosion"],
 		eventPokemon: [
-			{"generation": 7, "level": 100, "shiny": true, "moves":["multiattack", "partingshot", "punishment", "scaryface"]},
+			{"generation": 7, "level": 100, "shiny": true, "moves":["multiattack", "partingshot", "punishment", "scaryface"], "pokeball": "cherishball"},
 		],
 		tier: "PU",
 	},
@@ -6274,6 +6274,7 @@ exports.BattleFormatsData = {
 		randomDoubleBattleMoves: ["trickroom", "shadowclaw", "playrough", "woodhammer", "willowisp", "shadowsneak", "swordsdance", "protect"],
 		eventPokemon: [
 			{"generation": 7, "level": 10, "moves":["copycat", "babydolleyes", "splash", "astonish"], "pokeball": "cherishball"},
+			{"generation": 7, "level": 10, "moves":["astonish", "playrough", "copycat", "substitute"], "pokeball": "cherishball"},
 		],
 		tier: "OU",
 	},
