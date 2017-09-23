@@ -407,27 +407,27 @@ class Validator {
 					// They're probably incompatible if all potential fathers learn more than
 					// one limitedEgg move from another egg.
 					let validFatherExists = false;
-					for (const learned of lsetData.sources) {
-						if (learned.charAt(1) === 'S' || learned.charAt(1) === 'D') continue;
-						let eggGen = parseInt(learned.charAt(0));
-						if (learned.charAt(1) !== 'E' || eggGen === 6) {
+					for (const source of lsetData.sources) {
+						if (source.charAt(1) === 'S' || source.charAt(1) === 'D') continue;
+						let eggGen = parseInt(source.charAt(0));
+						if (source.charAt(1) !== 'E' || eggGen === 6) {
 							// (There is a way to obtain this pokemon without past-gen breeding.)
 							// In theory, limitedEgg should not exist in this case.
-							throw new Error(`invalid limitedEgg on ${name}: ${limitedEgg} with ${learned}`);
+							throw new Error(`invalid limitedEgg on ${name}: ${limitedEgg} with ${source}`);
 						}
-						let potentialFather = dex.getTemplate(learned.slice(learned.charAt(2) === 'T' ? 3 : 2));
+						let potentialFather = dex.getTemplate(source.slice(source.charAt(2) === 'T' ? 3 : 2));
 						let restrictedSources = 0;
 						for (const moveid of limitedEgg) {
 							let fatherSources = potentialFather.learnset[moveid] || potentialFather.learnset['sketch'];
 							if (!fatherSources) throw new Error(`Egg move father ${potentialFather.id} can't learn ${moveid}`);
 							let hasUnrestrictedSource = false;
 							let hasSource = false;
-							for (const source of fatherSources) {
+							for (const fatherSource of fatherSources) {
 								// Triply nested loop! Fortunately, all the loops are designed
 								// to be as short as possible.
 								if (source.charAt(0) > eggGen) continue;
 								hasSource = true;
-								if (source.charAt(1) !== 'E' && source.charAt(1) !== 'S') {
+								if (fatherSource.charAt(1) !== 'E' && fatherSource.charAt(1) !== 'S') {
 									hasUnrestrictedSource = true;
 									break;
 								}
@@ -451,9 +451,9 @@ class Validator {
 						// TODO: hardcode false positives for our heuristic
 						// in theory, this heuristic doesn't have false negatives
 						let newSources = [];
-						for (const learned of lsetData.sources) {
-							if (learned.charAt(1) === 'S') {
-								newSources.push(learned);
+						for (const source of lsetData.sources) {
+							if (source.charAt(1) === 'S') {
+								newSources.push(source);
 							}
 						}
 						lsetData.sources = newSources;

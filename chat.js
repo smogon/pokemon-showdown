@@ -950,14 +950,14 @@ Chat.uncacheTree = function (root) {
 	let uncache = [require.resolve(root)];
 	do {
 		let newuncache = [];
-		for (const i of uncache) {
-			if (require.cache[i]) {
+		for (let i = 0; i < uncache.length; ++i) {
+			if (require.cache[uncache[i]]) {
 				newuncache.push.apply(newuncache,
-					require.cache[i].children
+					require.cache[uncache[i]].children
 						.filter(cachedModule => !cachedModule.id.endsWith('.node'))
 						.map(cachedModule => cachedModule.id)
 				);
-				delete require.cache[i];
+				delete require.cache[uncache[i]];
 			}
 		}
 		uncache = newuncache;
