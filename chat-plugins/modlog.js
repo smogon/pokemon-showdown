@@ -6,6 +6,7 @@ const ProcessManager = require('./../process-manager');
 const execFileSync = require('child_process').execFileSync;
 
 const MAX_PROCESSES = 1;
+const MAX_QUERY_LENGTH = 2500;
 const DEFAULT_RESULTS_LENGTH = 100;
 const MORE_BUTTON_INCREMENTS = [200, 400, 800, 1600, 3200];
 const LINES_SEPARATOR = 'lines=';
@@ -167,6 +168,11 @@ async function runModlog(rooms, searchString, exactSearch, maxLines) {
 	}
 	fileNameList = fileNameList.map(filename => `${LOG_PATH}${filename}`);
 
+	// Ensure regexString can never be greater than or equal to the value of
+	// RegExpMacroAssembler::kMaxRegister in v8 (currently 1 << 16 - 1) given a
+	// searchString with max length MAX_QUERY_LENGTH. Otherwise, the modlog
+	// child process will crash when attempting to execute any RegExp
+	// constructed with it (i.e. when not configured to use ripgrep).
 	let regexString;
 	if (!searchString) {
 		regexString = '.';
@@ -317,6 +323,10 @@ exports.commands = {
 
 		let searchString = '';
 		if (target) searchString = target.trim();
+		if (searchString.length > MAX_QUERY_LENGTH) {
+			this.errorReply(`Your search query must be shorter than ${MAX_QUERY_LENGTH} characters.`);
+			return;
+		}
 
 		let exactSearch = '0';
 		if (searchString.match(/^["'].+["']$/)) {
