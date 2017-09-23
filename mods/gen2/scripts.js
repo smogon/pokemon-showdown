@@ -500,11 +500,6 @@ exports.BattleScripts = {
 				this.debug('damage event failed');
 				return damage;
 			}
-			if (target.illusion && effect && effect.effectType === 'Move') {
-				this.debug('illusion cleared');
-				target.illusion = null;
-				this.add('replace', target, target.getDetails);
-			}
 		}
 		if (damage !== 0) damage = this.clampIntRange(damage, 1);
 		damage = target.damage(damage, source, effect);
