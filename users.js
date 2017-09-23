@@ -428,7 +428,7 @@ class User {
 	sendTo(roomid, data) {
 		if (roomid && roomid.id) roomid = roomid.id;
 		if (roomid && roomid !== 'global' && roomid !== 'lobby') data = `>${roomid}\n${data}`;
-		for (const connection in this.connection) {
+		for (const connection of this.connections) {
 			if (roomid && !connection.inRooms.has(roomid)) continue;
 			connection.send(data);
 			Monitor.countNetworkUse(data.length);

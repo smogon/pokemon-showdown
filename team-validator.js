@@ -65,13 +65,13 @@ class Validator {
 		}
 
 		let teamHas = {};
-		for (const member of team) {
-			if (!member) return [`You sent invalid team data. If you're not using a custom client, please report this as a bug.`];
-			let setProblems = (format.validateSet || this.validateSet).call(this, member, teamHas);
+		for (let i = 0; i < team.length; i++) { // Changing this loop to for-of would require another loop/map statement to do removeNicknames
+			if (!team[i]) return [`You sent invalid team data. If you're not using a custom client, please report this as a bug.`];
+			let setProblems = (format.validateSet || this.validateSet).call(this, team[i], teamHas);
 			if (setProblems) {
 				problems = problems.concat(setProblems);
 			}
-			if (removeNicknames) member.name = member.baseSpecies;
+			if (removeNicknames) team[i].name = team[i].baseSpecies;
 		}
 
 		for (const [rule, source, limit, bans] of ruleTable.complexTeamBans) {
