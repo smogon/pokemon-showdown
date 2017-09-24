@@ -381,6 +381,8 @@ exports.commands = {
 			mod = Dex.mod(toId(sep[1]));
 		} else if (sep[1] && Dex.getFormat(sep[1]).mod) {
 			mod = Dex.mod(Dex.getFormat(sep[1]).mod);
+		} else if (room && room.battle) {
+			mod = Dex.forFormat(room.battle.format);
 		}
 		let newTargets = mod.dataSearch(target);
 		let showDetails = (cmd === 'dt' || cmd === 'details');
