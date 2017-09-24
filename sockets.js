@@ -355,9 +355,9 @@ if (cluster.isMaster) {
 			socketid = data.substr(1);
 			socket = sockets.get(socketid);
 			if (!socket) return;
-			socket.destroy();
 			sockets.delete(socketid);
 			channels.forEach(channel => channel.delete(socketid));
+			socket.destroy();
 			break;
 
 		case '>':
@@ -549,10 +549,8 @@ if (cluster.isMaster) {
 			process.send(`<${socketid}\n${message}`);
 		});
 
-		socket.once('close', () => {
-			process.send(`!${socketid}`);
-			sockets.delete(socketid);
-			channels.forEach(channel => channel.delete(socketid));
+		socket.on('close', () => {
+			if (sockets.has(socketid)) process.send(`!${socketid}`);
 		});
 	});
 	server.installHandlers(app, {});
