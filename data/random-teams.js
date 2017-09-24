@@ -2738,16 +2738,17 @@ class RandomTeams extends Dex.ModdedDex {
 		let effectivePool, priorityPool;
 		// artificially replicate Item Clause
 		let itemsMax = {
-			aguavberry:1, airballoon:1, alakazite:1, assaultvest:1, beedrillite:1, blacksludge:1, blastoisinite:1, blazikenite:1,
-			buginiumz:1, charizarditex:1, charizarditey:1, chestoberry:1, choiceband:1, choicescarf:1, choicespecs:1, darkiniumz:1,
+			aguavberry:1, airballoon:1, alakazite:1, altarianite:1, assaultvest:1, beedrillite:1, berryjuice:1, blacksludge:1, blastoisinite:1,
+			blazikenite:1, buginiumz:1, charizarditex:1, charizarditey:1, chestoberry:1, choiceband:1, choicescarf:1, choicespecs:1, darkiniumz:1,
 			dragoniumz:1, eeviumz:1, ejectbutton:1, electricmemory:1, electricseed:1, electriumz:1, eviolite:1, expertbelt:1, fairiumz:1,
-			fightingmemory:1, fightiniumz:1, figyberry:1, firiumz:1, fistplate:1, flameorb:1, flyiniumz:1, focussash:1, gengarite:1,
-			ghostiumz:1, glalitite:1, grassiumz:1, groundiumz:1, groundmemory:1, gyaradosite:1, heatrock:1, heracronite:1, iapapaberry:1,
-			iciumz:1, kangaskhanite:1, keeberry:1, kingsrock:1, leftovers:1, lifeorb:1, lightball:1, lightclay:1, lucarionite:1, lumberry:1,
-			magoberry:1, mawilite:1, medichamite:1, mentalherb:1, metagrossite:1, normaliumz:1, occaberry:1, pidgeotite:1, pinsirite:1,
-			poisoniumz:1, primariumz:1, psychiumz:1, redcard:1, rockiumz:1, rockyhelmet:1, safetygoggles:1, salacberry:1, salamencite:1,
+			fightingmemory:1, fightiniumz:1, figyberry:1, firiumz:1, fistplate:1, flameorb:1, flyiniumz:1, focussash:1, gardevoirite:1, gengarite:1,
+			ghostiumz:1, glalitite:1, grassiumz:1, groundiumz:1, groundmemory:1, gyaradosite:1, heatrock:1, heracronite:1, iapapaberry:1, iciumz:1,
+			kangaskhanite:1, keeberry:1, kingsrock:1, latiasite:1, leftovers:1, lifeorb:1, lightball:1, lightclay:1, lopunnite:1, lucarionite:1,
+			lumberry:1, magoberry:1, manectite:1, mawilite:1, medichamite:1, mentalherb:1, metagrossite:1, normaliumz:1, occaberry:1, pidgeotite:1,
+			pinsirite:1, poisoniumz:1, primariumz:1, psychiumz:1, redcard:1, rockiumz:1, rockyhelmet:1, safetygoggles:1, salacberry:1, salamencite:1,
 			scizorite:1, scopelens:1, sharpedonite:1, shucaberry:1, sitrusberry:1, slowbronite:1, smoothrock:1, steeliumz:1, steelixite:1,
-			steelmemory:1, tapuniumz:1, thickclub:1, toxicorb:1, venusaurite:1, wateriumz:1, weaknesspolicy:1, wikiberry:1,
+			steelmemory:1, swampertite:1, tapuniumz:1, thickclub:1, toxicorb:1, tyranitarite:1, venusaurite:1, wateriumz:1, weaknesspolicy:1,
+			wikiberry:1,
 		};
 
 		let movesMax = {'batonpass':1, 'stealthrock':1, 'spikes':1, 'toxicspikes':1, 'doubleedge':1, 'trickroom':1};
@@ -2772,6 +2773,8 @@ class RandomTeams extends Dex.ModdedDex {
 			let abilityData = this.getAbility(curSet.ability);
 			if (weatherAbilitiesRequire[abilityData.id] && teamData.weather !== weatherAbilitiesRequire[abilityData.id]) continue;
 			if (teamData.weather && weatherAbilitiesSet[abilityData.id]) continue; // reject 2+ weather setters
+
+			if (curSet.species === 'aron' && teamData.weather !== 'sandstorm') continue; // reject Aron without a Sand Stream user
 
 			let reject = false;
 			let hasRequiredMove = false;
@@ -2815,7 +2818,7 @@ class RandomTeams extends Dex.ModdedDex {
 			item: setData.set.item || '',
 			ability: setData.set.ability || template.abilities['0'],
 			shiny: typeof setData.set.shiny === 'undefined' ? !this.random(1024) : setData.set.shiny,
-			level: 50,
+			level: setData.set.level || 50,
 			happiness: typeof setData.set.happiness === 'undefined' ? 255 : setData.set.happiness,
 			evs: setData.set.evs || {hp: 84, atk: 84, def: 84, spa: 84, spd: 84, spe: 84},
 			ivs: setData.set.ivs || {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31},
@@ -2833,7 +2836,7 @@ class RandomTeams extends Dex.ModdedDex {
 
 		let pokemonPool = Object.keys(this.randomBSSFactorySets[chosenTier]);
 
-		let teamData = {typeCount: {}, typeComboCount: {}, baseFormes: {}, megaCount: 0, zCount: 0, has: {}, forceResult: forceResult, weaknesses: {}, resistances: {}};
+		let teamData = {typeCount: {}, typeComboCount: {}, baseFormes: {}, megaCount: 0, zCount: 0, eeveeLimCount: 0, has: {}, forceResult: forceResult, weaknesses: {}, resistances: {}};
 		let requiredMoveFamilies = {};
 		let requiredMoves = {};
 		let weatherAbilitiesSet = {'drizzle': 'raindance', 'drought': 'sunnyday', 'snowwarning': 'hail', 'sandstream': 'sandstorm'};
@@ -2867,6 +2870,10 @@ class RandomTeams extends Dex.ModdedDex {
 				}
 			}
 			if (skip) continue;
+
+			// Restrict Eevee with certain Pokemon
+			if (speciesFlags.limEevee) teamData.eeveeLimCount++;
+			if (teamData.eeveeLimCount >= 1 && speciesFlags.limEevee) continue;
 
 			let set = this.randomBSSFactorySet(template, pokemon.length, teamData, chosenTier);
 			if (!set) continue;
