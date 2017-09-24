@@ -287,6 +287,10 @@ exports.BattleStatuses = {
 			this.effectData.move = this.activeMove.id;
 		},
 		onBeforeMove: function (pokemon, target, move) {
+			if (!pokemon.getItem().isChoice || !pokemon.hasMove(this.effectData.move)) {
+				pokemon.removeVolatile('choicelock');
+				return;
+			}
 			if (move.id !== this.effectData.move && move.id !== 'struggle') {
 				// Fails even if the Choice item is being ignored, and no PP is lost
 				this.addMove('move', pokemon, move.name);
