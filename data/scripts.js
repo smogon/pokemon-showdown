@@ -88,6 +88,27 @@ exports.BattleScripts = {
 		this.useMove(baseMove, pokemon, target, sourceEffect, zMove);
 		this.singleEvent('AfterMove', move, null, pokemon, target, move);
 		this.runEvent('AfterMove', pokemon, target, move);
+
+		// Dancer's activation order is completely different from any other event, so it's handled separately
+		if (move.flags['dance'] && !move.isExternal) {
+			let dancers = [];
+			for (const side of this.sides) {
+				for (const currentPoke of side.active) {
+					if (!currentPoke || !currentPoke.hp || pokemon === currentPoke) continue;
+					if (currentPoke.hasAbility('dancer')) {
+						dancers.push(currentPoke);
+					}
+				}
+			}
+			// Dancer activates in order of lowest speed stat to highest
+			// Ties go to whichever Pokemon has had the ability for the least amount of time
+			dancers.sort(function (a, b) { return -(b.stats['spe'] - a.stats['spe']) || b.abilityOrder - a.abilityOrder; });
+			for (const dancer of dancers) {
+				this.faintMessages();
+				this.add('-activate', dancer, 'ability: Dancer');
+				this.runMove(baseMove.id, dancer, 0, this.getAbility('dancer'), undefined, true);
+			}
+		}
 		if (noLock && pokemon.volatiles.lockedmove) delete pokemon.volatiles.lockedmove;
 	},
 	/**
