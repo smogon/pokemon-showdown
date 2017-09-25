@@ -130,8 +130,13 @@ exports.BattleScripts = {
 		if (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type] && !target.runImmunity(move.type, true)) {
 			return false;
 		}
-		// Now, let's calculate the accuracy.
 		let accuracy = move.accuracy;
+		if (move.alwaysHit) {
+			accuracy = true;
+		} else {
+			accuracy = this.runEvent('Accuracy', target, pokemon, move, accuracy);
+		}
+		// Now, let's calculate the accuracy.
 		if (accuracy !== true) {
 			accuracy = Math.floor(accuracy * 255 / 100);
 			if (move.ohko) {
