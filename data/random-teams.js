@@ -2736,20 +2736,6 @@ class RandomTeams extends Dex.ModdedDex {
 		// let flags = this.randomBSSFactorySets[tier][speciesId].flags;
 		let setList = this.randomBSSFactorySets[tier][speciesId].sets;
 		let effectivePool, priorityPool;
-		// artificially replicate Item Clause
-		let itemsMax = {
-			aguavberry:1, airballoon:1, alakazite:1, altarianite:1, assaultvest:1, beedrillite:1, berryjuice:1, blacksludge:1, blastoisinite:1,
-			blazikenite:1, buginiumz:1, charizarditex:1, charizarditey:1, chestoberry:1, choiceband:1, choicescarf:1, choicespecs:1, darkiniumz:1,
-			dragoniumz:1, eeviumz:1, ejectbutton:1, electricmemory:1, electricseed:1, electriumz:1, eviolite:1, expertbelt:1, fairiumz:1,
-			fightingmemory:1, fightiniumz:1, figyberry:1, firiumz:1, fistplate:1, flameorb:1, flyiniumz:1, focussash:1, gardevoirite:1, gengarite:1,
-			ghostiumz:1, glalitite:1, grassiumz:1, groundiumz:1, groundmemory:1, gyaradosite:1, heatrock:1, heracronite:1, iapapaberry:1, iciumz:1,
-			kangaskhanite:1, keeberry:1, kingsrock:1, latiasite:1, leftovers:1, lifeorb:1, lightball:1, lightclay:1, lopunnite:1, lucarionite:1,
-			lumberry:1, magoberry:1, manectite:1, mawilite:1, medichamite:1, mentalherb:1, metagrossite:1, normaliumz:1, occaberry:1, pidgeotite:1,
-			pinsirite:1, poisoniumz:1, primariumz:1, psychiumz:1, redcard:1, rockiumz:1, rockyhelmet:1, safetygoggles:1, salacberry:1, salamencite:1,
-			scizorite:1, scopelens:1, sharpedonite:1, shucaberry:1, sitrusberry:1, slowbronite:1, smoothrock:1, steeliumz:1, steelixite:1,
-			steelmemory:1, swampertite:1, tapuniumz:1, thickclub:1, toxicorb:1, tyranitarite:1, venusaurite:1, wateriumz:1, weaknesspolicy:1,
-			wikiberry:1,
-		};
 
 		let movesMax = {'batonpass':1, 'stealthrock':1, 'spikes':1, 'toxicspikes':1, 'doubleedge':1, 'trickroom':1};
 		let requiredMoves = {};
@@ -2768,7 +2754,7 @@ class RandomTeams extends Dex.ModdedDex {
 			let itemData = this.getItem(curSet.item);
 			if (teamData.megaCount > 1 && itemData.megaStone) continue; // reject 3+ mega stones
 			if (teamData.zCount > 1 && itemData.zMove) continue; // reject 3+ Z stones
-			if (itemsMax[itemData.id] && teamData.has[itemData.id] >= itemsMax[itemData.id]) continue;
+			if (teamData.has[itemData.id]) continue; // Item clause
 
 			let abilityData = this.getAbility(curSet.ability);
 			if (weatherAbilitiesRequire[abilityData.id] && teamData.weather !== weatherAbilitiesRequire[abilityData.id]) continue;
@@ -2904,17 +2890,8 @@ class RandomTeams extends Dex.ModdedDex {
 			// Limit Mega and Z-move
 			let itemData = this.getItem(set.item);
 			if (itemData.megaStone) teamData.megaCount++;
-			if (itemData.id in teamData.has) {
-				teamData.has[itemData.id]++;
-			} else {
-				teamData.has[itemData.id] = 1;
-			}
 			if (itemData.zMove) teamData.zCount++;
-			if (itemData.id in teamData.has) {
-				teamData.has[itemData.id]++;
-			} else {
-				teamData.has[itemData.id] = 1;
-			}
+			teamData.has[itemData.id] = 1;
 
 			let abilityData = this.getAbility(set.ability);
 			if (abilityData.id in weatherAbilitiesSet) {
