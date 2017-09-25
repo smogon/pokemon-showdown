@@ -59,8 +59,8 @@ class Ladder {
 			const data = await FS('config/ladders/' + this.formatid + '.tsv').read('utf8');
 			let ladder = [];
 			let dataLines = data.split('\n');
-			for (const dataLine of dataLines) {
-				let line = dataLine.trim();
+			for (let i = 1; i < dataLines.length; i++) {
+				let line = dataLines[i].trim();
 				if (!line) continue;
 				let row = line.split('\t');
 				ladder.push([toId(row[1]), Number(row[0]), row[1], Number(row[2]), Number(row[3]), Number(row[4]), row[5]]);
