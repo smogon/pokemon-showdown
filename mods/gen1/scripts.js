@@ -285,6 +285,7 @@ exports.BattleScripts = {
 					accuracy *= boostTable[-target.boosts.evasion];
 				}
 			}
+			accuracy = Math.min(accuracy, 255);
 		}
 		accuracy = this.runEvent('Accuracy', target, pokemon, move, accuracy);
 		// Moves that target the user do not suffer from the 1/256 miss chance.

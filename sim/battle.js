@@ -12,12 +12,13 @@ const Sim = require('./');
 
 class Battle extends Dex.ModdedDex {
 	/**
-	 * @param {object} format
+	 * @param {string} formatid
 	 * @param {boolean} rated
 	 * @param {Function} send
 	 * @param {PRNG} [maybePrng]
 	 */
-	constructor(format, rated = false, send = (() => {}), prng = new PRNG()) {
+	constructor(formatid, rated = false, send = (() => {}), prng = new PRNG()) {
+		let format = Dex.getFormat(formatid);
 		super(format.mod);
 		Object.assign(this, this.data.Scripts);
 
@@ -29,8 +30,9 @@ class Battle extends Dex.ModdedDex {
 		this.terrainData = {id:''};
 		this.pseudoWeather = {};
 
-		this.format = toId(format);
-		this.formatData = {id:this.format};
+		this.format = format.id;
+		this.formatid = formatid;
+		this.formatData = {id: format.id};
 
 		this.effect = {id:''};
 		this.effectData = {id:''};
@@ -218,7 +220,7 @@ class Battle extends Dex.ModdedDex {
 	}
 
 	getFormat(format) {
-		return super.getFormat(format || this.format);
+		return super.getFormat(format || this.formatid);
 	}
 	addPseudoWeather(status, source, sourceEffect) {
 		status = this.getEffect(status);
@@ -1412,7 +1414,7 @@ class Battle extends Dex.ModdedDex {
 		if (format.onBegin) {
 			format.onBegin.call(this);
 		}
-		this.getRuleTable(this.getFormat()).forEach((v, rule) => {
+		this.getRuleTable(format).forEach((v, rule) => {
 			if (rule.startsWith('+') || rule.startsWith('-') || rule.startsWith('!')) return;
 			if (this.getFormat(rule).exists) this.addPseudoWeather(rule);
 		});

@@ -460,11 +460,10 @@ class ModdedDex {
 	}
 	/**
 	 * @param {string | Format} name
-	 * @param {string | string[]} [customBanlist]
-	 * @param {string} [customId]
+	 * @param {string | string[]} [customRules]
 	 * @return {Format}
 	 */
-	getFormat(name, customBanlist, customId) {
+	getFormat(name, customRules) {
 		if (name && typeof name !== 'string') {
 			return name;
 		}
@@ -475,38 +474,69 @@ class ModdedDex {
 			id = toId(name);
 		}
 		let effect;
-		if (this.data.Formats.hasOwnProperty(id) || this.data.Formats.hasOwnProperty(name)) {
-			let format = this.data.Formats[this.data.Formats.hasOwnProperty(id) ? id : name];
-			if (customBanlist) {
-				if (typeof customBanlist === 'string') customBanlist = customBanlist.split(',');
-				let customRules = [];
-				for (let ban of customBanlist) {
+		/**@type {string[]} */
+		let sanitizedCustomRules = [];
+		if (name.includes('@@@')) {
+			let parts = name.split('@@@');
+			name = parts[0];
+			id = toId(name);
+			sanitizedCustomRules = parts[1].split(',');
+		}
+		if (this.data.Formats.hasOwnProperty(id)) {
+			let format = this.data.Formats[id];
+			if (customRules) {
+				if (typeof customRules === 'string') customRules = customRules.split(',');
+				const ruleTable = this.getRuleTable(this.getFormat(name));
+				for (let ban of customRules) {
+					ban = ban.trim();
 					let unban = false;
 					if (ban.charAt(0) === '!') {
 						unban = true;
 						ban = ban.substr(1);
 					}
+					let subformat = this.getFormat(ban);
+					if (subformat.effectType === 'ValidatorRule' || subformat.effectType === 'Rule' || subformat.effectType === 'Format') {
+						if (unban) {
+							if (ruleTable.has('!' + subformat.id)) continue;
+						} else {
+							if (ruleTable.has(subformat.id)) continue;
+						}
+						ban = 'Rule:' + subformat.name;
+					} else {
+						ban = ban.toLowerCase();
+						let baseForme = false;
+						if (ban.endsWith('-base')) {
+							baseForme = true;
+							ban = ban.substr(0, ban.length - 5);
+						}
+						let search = this.dataSearch(ban);
+						if (!search || search.length < 1) continue;
+						if (search[0].isInexact || search[0].searchType === 'nature') continue;
+						ban = search[0].name;
+						if (baseForme) ban += '-Base';
+						if (unban) {
+							if (ruleTable.has('+' + ban)) continue;
+						} else {
+							if (ruleTable.has('-' + ban)) continue;
+						}
+					}
 					if (ban.startsWith('Rule:')) {
 						ban = ban.substr(5).trim();
 						if (unban) {
-							customRules.unshift('!' + ban);
+							sanitizedCustomRules.unshift('!' + ban);
 						} else {
-							customRules.push(ban);
+							sanitizedCustomRules.push(ban);
 						}
 					} else {
 						if (unban) {
-							customRules.push('+' + ban);
+							sanitizedCustomRules.push('+' + ban);
 						} else {
-							customRules.push('-' + ban);
+							sanitizedCustomRules.push('-' + ban);
 						}
 					}
 				}
-				effect = new Data.Format({name}, format, {customRules});
-				if (customId === 'pokemon') throw new Error('wtf');
-				if (customId) this.data.Formats[customId] = format;
-			} else {
-				effect = new Data.Format({name}, format);
 			}
+			effect = new Data.Format({name}, format, sanitizedCustomRules.length ? {customRules: sanitizedCustomRules} : null);
 		} else {
 			effect = new Data.Format({name, exists: false});
 		}
@@ -656,7 +686,7 @@ class ModdedDex {
 			const spcDV = Math.floor(ivs.spa / 2);
 			return {
 				type: hpTypes[4 * (atkDV % 4) + (defDV % 4)],
-				power: Math.floor((5 * ((spcDV >> 3) + (2 * (speDV >> 3)) + (4 * (defDV >> 3)) + (8 * (atkDV >> 3))) + (spcDV > 2 ? 3 : spcDV)) / 2 + 31),
+				power: Math.floor((5 * ((spcDV >> 3) + (2 * (speDV >> 3)) + (4 * (defDV >> 3)) + (8 * (atkDV >> 3))) + (spcDV % 4)) / 2 + 31),
 			};
 		} else {
 			// Hidden Power check for gen 3 onwards
@@ -861,7 +891,7 @@ class ModdedDex {
 
 	/**
 	 * @param {string} target
-	 * @param {DataType[] | null=} searchIn
+	 * @param {DataType[] | null} [searchIn]
 	 * @param {boolean=} isInexact
 	 * @return {AnyObject[] | false}
 	 */

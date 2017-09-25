@@ -3,7 +3,6 @@
 exports.BattleAbilities = {
 	"frisk": {
 		inherit: true,
-		desc: "When this Pokemon enters the field, it identifies the opponent's held item; in double battles, the held item of an unrevealed, randomly selected opponent is identified.",
 		shortDesc: "On switch-in, this Pokemon identifies a random foe's held item.",
 		onStart: function (pokemon) {
 			let target = pokemon.side.foe.randomActive();
@@ -14,11 +13,13 @@ exports.BattleAbilities = {
 	},
 	"keeneye": {
 		inherit: true,
+		desc: "Prevents other Pokemon from lowering this Pokemon's accuracy stat stage.",
+		shortDesc: "Prevents other Pokemon from lowering this Pokemon's accuracy stat stage.",
 		onModifyMove: function () {},
 	},
 	"oblivious": {
 		inherit: true,
-		desc: "This Pokemon cannot be infatuated (by Attract or Cute Charm). Gaining this Ability while infatuated cures it.",
+		desc: "This Pokemon cannot be infatuated. Gaining this Ability while infatuated cures it.",
 		shortDesc: "This Pokemon cannot be infatuated. Gaining this Ability while infatuated cures it.",
 		onUpdate: function (pokemon) {
 			if (pokemon.volatiles['attract']) {
@@ -35,11 +36,11 @@ exports.BattleAbilities = {
 	},
 	"overcoat": {
 		inherit: true,
+		shortDesc: "This Pokemon is immune to damage from Sandstorm or Hail.",
 		onTryHit: function () {},
 	},
 	"sapsipper": {
 		inherit: true,
-		desc: "This Pokemon is immune to Grass moves. If hit by a Grass move, its Attack is increased by one stage (once for each hit of Bullet Seed). Does not affect Aromatherapy.",
 		onAllyTryHitSide: function () {},
 	},
 	"serenegrace": {

@@ -19,7 +19,6 @@ const Pokemon = require('./pokemon');
 const PRNG = require('./prng');
 
 exports.construct = function (format, rated, send, prng) {
-	format = Dex.getFormat(format);
 	return new Battle(format, rated, send, prng);
 };
 

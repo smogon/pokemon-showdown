@@ -3,8 +3,8 @@
 exports.BattleAbilities = {
 	"angerpoint": {
 		inherit: true,
-		desc: "If this Pokemon, or its Substitute, is struck by a Critical Hit, its Attack is boosted to six stages.",
-		shortDesc: "If this Pokemon is hit by a critical hit, its Attack is boosted by 12.",
+		desc: "If this Pokemon, or its substitute, is struck by a critical hit, its Attack is raised by 12 stages.",
+		shortDesc: "If this Pokemon or its substitute takes a critical hit, its Attack is raised 12 stages.",
 		onAfterSubDamage: function (damage, target, source, move) {
 			if (!target.hp) return;
 			if (move && move.effectType === 'Move' && move.crit) {
@@ -12,6 +12,7 @@ exports.BattleAbilities = {
 				this.add('-setboost', target, 'atk', 12, '[from] ability: Anger Point');
 			}
 		},
+		rating: 1.5,
 	},
 	"effectspore": {
 		inherit: true,
@@ -48,6 +49,8 @@ exports.BattleAbilities = {
 	},
 	"flowergift": {
 		inherit: true,
+		desc: "If Sunny Day is active, the Attack and Special Defense of this Pokemon and its allies are multiplied by 1.5.",
+		shortDesc: "If Sunny Day is active, Attack and Sp. Def of this Pokemon and its allies are 1.5x.",
 		onAllyModifyAtk: function (atk) {
 			if (this.isWeather('sunnyday')) {
 				return this.chainModify(1.5);
@@ -86,8 +89,14 @@ exports.BattleAbilities = {
 			this.add('-activate', pokemon, 'ability: Forewarn', warnMove);
 		},
 	},
+	"insomnia": {
+		inherit: true,
+		rating: 2.5,
+	},
 	"leafguard": {
 		inherit: true,
+		desc: "If Sunny Day is active, this Pokemon cannot gain a major status condition, but can use Rest normally.",
+		shortDesc: "If Sunny Day is active, this Pokemon cannot be statused, but Rest works normally.",
 		onSetStatus: function (status, target, source, effect) {
 			if (effect && effect.id === 'rest') {
 				return;
@@ -98,14 +107,14 @@ exports.BattleAbilities = {
 	},
 	"lightningrod": {
 		inherit: true,
-		desc: "During double battles, this Pokemon draws any single-target Electric-type attack to itself. If an opponent uses an Electric-type attack that affects multiple Pokemon, those targets will be hit. This ability does not affect Electric Hidden Power or Judgment.",
-		shortDesc: "This Pokemon draws Electric moves to itself.",
+		desc: "If this Pokemon is not the target of a single-target Electric-type move used by another Pokemon, this Pokemon redirects that move to itself.",
+		shortDesc: "This Pokemon draws single-target Electric moves to itself.",
 		onTryHit: function () {},
 		rating: 0,
 	},
 	"magicguard": {
-		//desc: "",
-		shortDesc: "This Pokemon can only be damaged by direct attacks.",
+		desc: "This Pokemon can only be damaged by direct attacks. Curse and Substitute on use, Belly Drum, Pain Split, Struggle recoil, and confusion damage are considered direct damage. This Pokemon cannot lose its turn because of paralysis, and is unaffected by Toxic Spikes on switch-in.",
+		shortDesc: "This Pokemon can only be damaged by direct attacks, and can't be fully paralyzed.",
 		onDamage: function (damage, target, source, effect) {
 			if (effect.effectType !== 'Move') {
 				return false;
@@ -122,8 +131,8 @@ exports.BattleAbilities = {
 		num: 98,
 	},
 	"minus": {
-		desc: "This Pokemon's Special Attack receives a 50% boost in double battles if its partner has the Plus ability.",
-		shortDesc: "If an ally has the Plus Ability, this Pokemon's Sp. Atk is 1.5x.",
+		desc: "If an active ally has the Ability Plus, this Pokemon's Special Attack is multiplied by 1.5.",
+		shortDesc: "If an active ally has the Ability Plus, this Pokemon's Sp. Atk is 1.5x.",
 		onModifySpA: function (spa, pokemon) {
 			let allyActive = pokemon.side.active;
 			if (allyActive.length === 1) {
@@ -162,16 +171,16 @@ exports.BattleAbilities = {
 		},
 	},
 	"pickup": {
-		desc: "No in-battle effect.",
-		shortDesc: "No in-battle effect.",
+		desc: "No competitive use.",
+		shortDesc: "No competitive use.",
 		id: "pickup",
 		name: "Pickup",
 		rating: 0,
 		num: 53,
 	},
 	"plus": {
-		desc: "This Pokemon's Special Attack receives a 50% boost in double battles if its partner has the Minus ability.",
-		shortDesc: "If an ally has the Minus Ability, this Pokemon's Sp. Atk is 1.5x.",
+		desc: "If an active ally has the Ability Minus, this Pokemon's Special Attack is multiplied by 1.5.",
+		shortDesc: "If an active ally has the Ability Minus, this Pokemon's Sp. Atk is 1.5x.",
 		onModifySpA: function (spa, pokemon) {
 			let allyActive = pokemon.side.active;
 			if (allyActive.length === 1) {
@@ -215,7 +224,7 @@ exports.BattleAbilities = {
 		},
 	},
 	"simple": {
-		shortDesc: "If this Pokemon's stat stages are raised or lowered, the effect is doubled instead.",
+		shortDesc: "This Pokemon's stat stages are considered doubled during stat calculations.",
 		onModifyBoost: function (boosts) {
 			for (let key in boosts) {
 				boosts[key] *= 2;
@@ -227,8 +236,8 @@ exports.BattleAbilities = {
 		num: 86,
 	},
 	"stench": {
-		desc: "No in-battle effect.",
-		shortDesc: "No in-battle effect.",
+		desc: "No competitive use.",
+		shortDesc: "No competitive use.",
 		id: "stench",
 		name: "Stench",
 		rating: 0,
@@ -246,18 +255,21 @@ exports.BattleAbilities = {
 	},
 	"stormdrain": {
 		inherit: true,
-		desc: "During double battles, this Pokemon draws any single-target Water-type attack to itself. If an opponent uses an Water-type attack that affects multiple Pokemon, those targets will be hit. This ability does not affect Water Hidden Power, Judgment or Weather Ball.",
-		shortDesc: "This Pokemon draws Water moves to itself.",
+		desc: "If this Pokemon is not the target of a single-target Water-type move used by another Pokemon, this Pokemon redirects that move to itself.",
+		shortDesc: "This Pokemon draws single-target Water moves to itself.",
 		onTryHit: function () {},
 		rating: 0,
 	},
 	"sturdy": {
 		inherit: true,
+		desc: "OHKO moves fail when used against this Pokemon.",
+		shortDesc: "OHKO moves fail when used against this Pokemon.",
 		onDamage: function () {},
 		rating: 0,
 	},
 	"synchronize": {
 		inherit: true,
+		desc: "If another Pokemon burns, paralyzes, or poisons this Pokemon, that Pokemon receives the same major status condition. If another Pokemon badly poisons this Pokemon, that Pokemon becomes poisoned.",
 		onAfterSetStatus: function (status, target, source, effect) {
 			if (!source || source === target) return;
 			if (effect && effect.id === 'toxicspikes') return;
@@ -283,8 +295,13 @@ exports.BattleAbilities = {
 			}
 		},
 	},
+	"vitalspirit": {
+		inherit: true,
+		rating: 2.5,
+	},
 	"wonderguard": {
 		inherit: true,
+		shortDesc: "This Pokemon is only damaged by Fire Fang, supereffective moves, indirect damage.",
 		onTryHit: function (target, source, move) {
 			if (target === source || move.category === 'Status' || move.type === '???' || move.id === 'struggle' || move.id === 'firefang') return;
 			this.debug('Wonder Guard immunity: ' + move.id);

@@ -24,6 +24,8 @@ Ladders.get = Ladders;
 // tells the client to ask the server for format information
 Ladders.formatsListPrefix = '|,LL';
 
+Ladders.disabled = false;
+
 // ladderCaches = {formatid: ladder OR Promise(ladder)}
 // Use Ladders(formatid).ladder to guarantee a Promise(ladder).
 // ladder is basically a 2D array representing the corresponding ladder.tsv
@@ -148,11 +150,14 @@ class Ladder {
 	getRating(userid) {
 		let formatid = this.formatid;
 		let user = Users.getExact(userid);
+		if (Ladders.disabled === true || Ladders.disabled === 'db' && (!user || !user.mmrCache[formatid])) {
+			return Promise.reject(new Error(`Ladders are disabled.`));
+		}
 		if (user && user.mmrCache[formatid]) {
 			return Promise.resolve(user.mmrCache[formatid]);
 		}
 		return this.ladder.then(() => {
-			if (user.userid !== userid) return;
+			if (user.userid !== userid) return Promise.reject(`Expired rating for ${userid}`);
 			let index = this.indexOfUser(userid);
 			if (index < 0) return (user.mmrCache[formatid] = 1000);
 			return (user.mmrCache[formatid] = this.loadedLadder[index][1]);
@@ -206,6 +211,10 @@ class Ladder {
 	 * the results in the passed room.
 	 */
 	updateRating(p1name, p2name, p1score, room) {
+		if (Ladders.disabled) {
+			return room.addRaw(`Ratings not updated. The ladders are currently disabled.`).update();
+		}
+
 		let formatid = this.formatid;
 		let p2score = 1 - p1score;
 		if (p1score < 0) {

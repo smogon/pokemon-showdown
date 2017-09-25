@@ -348,7 +348,7 @@ if (process.send && module === process.mainModule) {
 
 function runDexsearch(target, cmd, canAll, message) {
 	let searches = [];
-	let allTiers = {'uber':'Uber', 'ou':'OU', 'bl':"BL", 'uu':'UU', 'bl2':"BL2", 'ru':'RU', 'bl3':"BL3", 'nu':'NU', 'bl4':"BL4", 'pu':'PU', 'nfe':'NFE', 'lc uber':"LC Uber", 'lc':'LC', 'cap':"CAP"};
+	let allTiers = {'uber':'Uber', 'ou':'OU', 'bl':"BL", 'uu':'UU', 'bl2':"BL2", 'ru':'RU', 'bl3':"BL3", 'nu':'NU', 'bl4':"BL4", 'pu':'PU', 'nfe':'NFE', 'lc uber':"LC Uber", 'lc':'LC', 'cap':"CAP", 'caplc': "CAP LC", 'capnfe': "CAP NFE"};
 	let allTypes = {};
 	for (let i in Dex.data.TypeChart) {
 		allTypes[toId(i)] = i;
@@ -406,9 +406,8 @@ function runDexsearch(target, cmd, canAll, message) {
 
 			if (target in allTiers) {
 				target = allTiers[target];
-				if (target === "CAP") {
-					if (parameters.length > 1) return {reply: "The parameter 'CAP' cannot have alternative parameters"};
-					if (capSearch === isNotSearch) return {reply: "A search cannot both include and exclude 'CAP'."};
+				if (target.startsWith("CAP")) {
+					if (capSearch === isNotSearch) return {reply: "A search cannot both include and exclude CAP tiers."};
 					capSearch = !isNotSearch;
 				}
 				let invalid = validParameter("tiers", target, isNotSearch, target);
@@ -433,25 +432,25 @@ function runDexsearch(target, cmd, canAll, message) {
 				continue;
 			}
 
-			let typeIndex = target.indexOf('type');
-			if (typeIndex === -1) typeIndex = target.length;
-			if (typeIndex !== target.length || toId(target) in allTypes) {
-				target = toId(target.substring(0, typeIndex));
-				if (target in allTypes) {
-					target = allTypes[target];
-					let invalid = validParameter("types", target, isNotSearch, target + ' type');
-					if (invalid) return {reply: invalid};
-					orGroup.types[target] = !isNotSearch;
-					continue;
-				} else {
-					return {reply: `'${target}' is not a recognized type.`};
-				}
+			let targetType;
+			if (target.endsWith('type')) {
+				targetType = toId(target.substring(0, target.indexOf('type')));
+			} else {
+				targetType = toId(target);
 			}
+			if (targetType in allTypes) {
+				target = allTypes[targetType];
+				if ((orGroup.types[target] && isNotSearch) || (orGroup.types[target] === false && !isNotSearch)) return {reply: 'A search cannot both exclude and include a type.'};
+				orGroup.types[target] = !isNotSearch;
+				continue;
+			}
+
 			if (target.substr(0, 6) === 'maxgen') {
 				maxGen = parseInt(target[6]);
 				orGroup.skip = true;
 				continue;
 			}
+
 			let groupIndex = target.indexOf('group');
 			if (groupIndex === -1) groupIndex = target.length;
 			if (groupIndex !== target.length || toId(target) in allEggGroups) {
@@ -815,18 +814,17 @@ function runMovesearch(target, cmd, canAll, message) {
 				isNotSearch = true;
 				target = target.substr(1);
 			}
-			let typeIndex = target.indexOf('type');
-			if (typeIndex === -1) typeIndex = target.length;
-			if (typeIndex !== target.length || toId(target) in allTypes) {
-				target = toId(target.substring(0, typeIndex));
-				if (target in allTypes) {
-					target = allTypes[target];
-					if ((orGroup.types[target] && isNotSearch) || (orGroup.types[target] === false && !isNotSearch)) return {reply: 'A search cannot both exclude and include a type.'};
-					orGroup.types[target] = !isNotSearch;
-					continue;
-				} else {
-					return {reply: `'${target}' is not a recognized type.`};
-				}
+			let targetType;
+			if (target.endsWith('type')) {
+				targetType = toId(target.substring(0, target.indexOf('type')));
+			} else {
+				targetType = toId(target);
+			}
+			if (targetType in allTypes) {
+				target = allTypes[targetType];
+				if ((orGroup.types[target] && isNotSearch) || (orGroup.types[target] === false && !isNotSearch)) return {reply: 'A search cannot both exclude and include a type.'};
+				orGroup.types[target] = !isNotSearch;
+				continue;
 			}
 
 			if (target in allCategories) {
@@ -882,6 +880,7 @@ function runMovesearch(target, cmd, canAll, message) {
 			if (target.substr(0, 6) === 'random' && cmd === 'randmove') {
 				//validation for this is in the /randmove command
 				randomOutput = parseInt(target.substr(6));
+				orGroup.skip = true;
 				continue;
 			}
 
@@ -1072,7 +1071,7 @@ function runMovesearch(target, cmd, canAll, message) {
 	}
 	for (let i = 0; i < searches.length; i++) {
 		let alts = searches[i];
-		if (alts.slip) continue;
+		if (alts.skip) continue;
 		for (let move in dex) {
 			let matched = false;
 			if (Object.keys(alts.types).length) {
@@ -1097,7 +1096,7 @@ function runMovesearch(target, cmd, canAll, message) {
 						break;
 					}
 				} else {
-					if (dex[move].secondary === alts.flags[flag]) {
+					if ((!dex[move].secondary && !dex[move].secondaries) === !alts.flags[flag]) {
 						matched = true;
 						break;
 					}

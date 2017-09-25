@@ -228,6 +228,12 @@ exports.repl = true;
 exports.replsocketprefix = './logs/repl/';
 exports.replsocketmode = 0o600;
 
+// disablehotpatchall - disables `/hotpatch all`. Generally speaking, there's a
+// pretty big need for /hotpatch all - convenience. The only advantage any hotpatch
+// forms other than all is lower RAM use (which is only a problem for Main because
+// Main is huge), and to do pinpoint hotpatching (like /nohotpatch).
+exports.disablehotpatchall = false;
+
 // permissions and groups:
 //   Each entry in `grouplist' is a seperate group. Some of the members are "special"
 //     while the rest is just a normal permission.

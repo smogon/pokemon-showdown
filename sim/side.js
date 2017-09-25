@@ -284,12 +284,12 @@ class Side {
 
 		const moves = pokemon.getMoves();
 		if (autoChoose) {
-			for (let i = 0; i < moves.length; i++) {
-				if (!moves[i].disabled) {
-					moveid = moves[i].id;
-					targetType = requestMoves[i].target;
-					break;
-				}
+			for (let i = 0; i < requestMoves.length; i++) {
+				if (requestMoves[i].disabled) continue;
+				if (i < moves.length && requestMoves[i].id === moves[i].id && moves[i].disabled) continue;
+				moveid = requestMoves[i].id;
+				targetType = requestMoves[i].target;
+				break;
 			}
 		}
 		const move = this.battle.getMove(moveid);
