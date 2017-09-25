@@ -123,8 +123,7 @@ class Room {
 	isMuted(user) {
 		if (!user) return;
 		if (this.muteQueue) {
-			for (let i = 0; i < this.muteQueue.length; i++) {
-				let entry = this.muteQueue[i];
+			for (const entry of this.muteQueue) {
 				if (user.userid === entry.userid ||
 					user.guestNum === entry.guestNum ||
 					(user.autoconfirmed && user.autoconfirmed === entry.autoconfirmed)) {
@@ -136,9 +135,9 @@ class Room {
 	getMuteTime(user) {
 		let userid = this.isMuted(user);
 		if (!userid) return;
-		for (let i = 0; i < this.muteQueue.length; i++) {
-			if (userid === this.muteQueue[i].userid) {
-				return this.muteQueue[i].time - Date.now();
+		for (const entry of this.muteQueue) {
+			if (userid === entry.userid) {
+				return entry.time - Date.now();
 			}
 		}
 	}
@@ -303,8 +302,8 @@ class GlobalRoom {
 			Monitor.notice("NEW CHATROOM: " + id);
 			let room = Rooms.createChatRoom(id, this.chatRoomData[i].title, this.chatRoomData[i]);
 			if (room.aliases) {
-				for (let a = 0; a < room.aliases.length; a++) {
-					Rooms.aliases.set(room.aliases[a], id);
+				for (const alias of room.aliases) {
+					Rooms.aliases.set(alias, id);
 				}
 			}
 			this.chatRooms.push(room);
@@ -500,8 +499,7 @@ class GlobalRoom {
 	}
 	getRooms(user) {
 		let roomsData = {official:[], pspl:[], chat:[], userCount: this.userCount, battleCount: this.battleCount};
-		for (let i = 0; i < this.chatRooms.length; i++) {
-			let room = this.chatRooms[i];
+		for (const room of this.chatrooms) {
 			if (!room) continue;
 			if (room.isPrivate && !(room.isPrivate === 'voice' && user.group !== ' ')) continue;
 			if (room.isOfficial) {
@@ -642,9 +640,9 @@ class GlobalRoom {
 		// we only autojoin regular rooms if the client requests it with /autojoin
 		// note that this restriction doesn't apply to staffAutojoin
 		let includesLobby = false;
-		for (let i = 0; i < this.autojoin.length; i++) {
-			user.joinRoom(this.autojoin[i], connection);
-			if (this.autojoin[i] === 'lobby') includesLobby = true;
+		for (const roomName of this.autojoin) {
+			user.joinRoom(roomName, connection);
+			if (roomName === 'lobby') includesLobby = true;
 		}
 		if (!includesLobby && Config.serverid !== 'showdown') user.send(`>lobby\n|deinit`);
 	}
@@ -666,12 +664,11 @@ class GlobalRoom {
 				user.joinRoom(room.id, connection);
 			}
 		}
-		for (let i = 0; i < user.connections.length; i++) {
-			connection = user.connections[i];
+		for (const connection of user.connections) {
 			if (connection.autojoins) {
 				let autojoins = connection.autojoins.split(',');
-				for (let j = 0; j < autojoins.length; j++) {
-					user.tryJoinRoom(autojoins[j], connection);
+				for (const roomName of autojoins) {
+					user.tryJoinRoom(roomName, connection);
 				}
 				connection.autojoins = '';
 			}
@@ -1394,8 +1391,8 @@ class ChatRoom extends Room {
 		Rooms.global.delistChatRoom(this.id);
 
 		if (this.aliases) {
-			for (let i = 0; i < this.aliases.length; i++) {
-				Rooms.aliases.delete(this.aliases[i]);
+			for (const alias of this.aliases) {
+				Rooms.aliases.delete(alias);
 			}
 		}
 

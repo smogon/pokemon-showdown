@@ -282,10 +282,9 @@ Users.isUsernameKnown = function (name) {
 	let userid = toId(name);
 	if (Users(userid)) return true;
 	if (userid in usergroups) return true;
-	for (let i = 0; i < Rooms.global.chatRooms.length; i++) {
-		let curRoom = Rooms.global.chatRooms[i];
-		if (!curRoom.auth) continue;
-		if (userid in curRoom.auth) return true;
+	for (const room of Rooms.global.chatRooms) {
+		if (!room.auth) continue;
+		if (userid in room.auth) return true;
 	}
 	return false;
 };
@@ -294,9 +293,8 @@ Users.isTrusted = function (name) {
 	if (name.trusted) return name.trusted;
 	let userid = toId(name);
 	if (userid in usergroups) return userid;
-	for (let i = 0; i < Rooms.global.chatRooms.length; i++) {
-		let curRoom = Rooms.global.chatRooms[i];
-		if (!curRoom.isPrivate && !curRoom.isPersonal && curRoom.auth && userid in curRoom.auth && curRoom.auth[userid] !== '+') return userid;
+	for (const room of Rooms.global.chatRooms) {
+		if (!room.isPrivate && !room.isPersonal && room.auth && userid in room.auth && room.auth[userid] !== '+') return userid;
 	}
 	return false;
 };
@@ -430,15 +428,15 @@ class User {
 	sendTo(roomid, data) {
 		if (roomid && roomid.id) roomid = roomid.id;
 		if (roomid && roomid !== 'global' && roomid !== 'lobby') data = `>${roomid}\n${data}`;
-		for (let i = 0; i < this.connections.length; i++) {
-			if (roomid && !this.connections[i].inRooms.has(roomid)) continue;
-			this.connections[i].send(data);
+		for (const connection of this.connections) {
+			if (roomid && !connection.inRooms.has(roomid)) continue;
+			connection.send(data);
 			Monitor.countNetworkUse(data.length);
 		}
 	}
 	send(data) {
-		for (let i = 0; i < this.connections.length; i++) {
-			this.connections[i].send(data);
+		for (const connection of this.connections) {
+			connection.send(data);
 			Monitor.countNetworkUse(data.length);
 		}
 	}
@@ -838,10 +836,10 @@ class User {
 
 		if (this.namelocked) this.named = true;
 
-		for (let i = 0; i < this.connections.length; i++) {
+		for (const connection of this.connections) {
 			//console.log('' + name + ' renaming: socket ' + i + ' of ' + this.connections.length);
 			let initdata = `|updateuser|${this.name}|${this.named ? 1 : 0}|${this.avatar}`;
-			this.connections[i].send(initdata);
+			connection.send(initdata);
 		}
 		this.games.forEach(roomid => {
 			const room = Rooms(roomid);
@@ -871,8 +869,8 @@ class User {
 
 		this.updateGroup(this.registered);
 
-		for (let i = 0; i < oldUser.connections.length; i++) {
-			this.mergeConnection(oldUser.connections[i]);
+		for (const connection of oldUser.connections) {
+			this.mergeConnection(connection);
 		}
 		oldUser.inRooms.clear();
 		oldUser.connections = [];
@@ -1045,8 +1043,7 @@ class User {
 		if (usergroups[userid]) {
 			removed.push(usergroups[userid].charAt(0));
 		}
-		for (let i = 0; i < Rooms.global.chatRooms.length; i++) {
-			let room = Rooms.global.chatRooms[i];
+		for (const room of Rooms.global.chatRooms) {
 			if (!room.isPrivate && room.auth && userid in room.auth && room.auth[userid] !== '+') {
 				removed.push(room.auth[userid] + room.id);
 				room.auth[userid] = '+';
@@ -1193,12 +1190,12 @@ class User {
 			}
 		}
 		if (!connection) {
-			for (let i = 0; i < this.connections.length; i++) {
+			for (const curConnection of this.connections) {
 				// only join full clients, not pop-out single-room
 				// clients
 				// (...no, pop-out rooms haven't been implemented yet)
-				if (this.connections[i].inRooms.has('global')) {
-					this.joinRoom(room, this.connections[i]);
+				if (curConnection.inRooms.has('global')) {
+					this.joinRoom(room, curConnection);
 				}
 			}
 			return true;
@@ -1224,11 +1221,11 @@ class User {
 		if (!this.inRooms.has(room.id)) {
 			return false;
 		}
-		for (let i = 0; i < this.connections.length; i++) {
-			if (connection && this.connections[i] !== connection) continue;
-			if (this.connections[i].inRooms.has(room.id)) {
-				this.connections[i].sendTo(room.id, '|deinit');
-				this.connections[i].leaveRoom(room);
+		for (const curConnection of this.connections) {
+			if (connection && curConnection !== connection) continue;
+			if (curConnection.inRooms.has(room.id)) {
+				curConnection.sendTo(room.id, '|deinit');
+				curConnection.leaveRoom(room);
 			}
 			if (connection) break;
 		}
@@ -1634,8 +1631,8 @@ Users.socketReceive = function (worker, workerid, socketid, message) {
 	}
 
 	let startTime = Date.now();
-	for (let i = 0; i < lines.length; i++) {
-		if (user.chat(lines[i], room, connection) === false) break;
+	for (const line of lines) {
+		if (user.chat(line, room, connection) === false) break;
 	}
 	let deltaTime = Date.now() - startTime;
 	if (deltaTime > 1000) {
