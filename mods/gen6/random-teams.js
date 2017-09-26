@@ -379,7 +379,7 @@ class RandomGen6Teams extends RandomTeams {
 					if (hasMove['rest'] || !counter.stab && counter.damagingMoves.length < 2) rejected = true;
 					break;
 				case 'hypervoice':
-					if (hasMove['naturepower'] || hasMove['return']) rejected = true;
+					if (hasMove['blizzard'] || hasMove['naturepower'] || hasMove['return']) rejected = true;
 					break;
 				case 'judgment':
 					if (counter.setupType !== 'Special' && counter.stab > 1) rejected = true;
@@ -516,7 +516,7 @@ class RandomGen6Teams extends RandomTeams {
 					(hasType['Psychic'] && !!counter['Psychic'] && !hasType['Flying'] && !hasAbility['Pixilate'] && template.types.length > 1 && counter.stab < 2) ||
 					(hasType['Water'] && !counter['Water'] && (!hasType['Ice'] || !counter['Ice']) && !hasAbility['Protean']) ||
 					((hasAbility['Adaptability'] && !counter.setupType && template.types.length > 1 && (!counter[template.types[0]] || !counter[template.types[1]])) ||
-					((hasAbility['Aerilate'] || hasAbility['Pixilate'] || hasAbility['Refrigerate']) && !counter['Normal']) ||
+					((hasAbility['Aerilate'] || hasAbility['Pixilate'] || hasAbility['Refrigerate'] && !hasMove['blizzard']) && !counter['Normal']) ||
 					(hasAbility['Bad Dreams'] && movePool.includes('darkvoid')) ||
 					(hasAbility['Contrary'] && !counter['contrary'] && template.species !== 'Shuckle') ||
 					(hasAbility['Dark Aura'] && !counter['Dark']) ||
@@ -653,10 +653,8 @@ class RandomGen6Teams extends RandomTeams {
 					rejectAbility = !counter['Grass'];
 				} else if (ability === 'Poison Heal') {
 					rejectAbility = abilities.includes('Technician') && !!counter['technician'];
-				} else if (ability === 'Prankster') {
+				} else if (ability === 'Prankster' || ability === 'Pressure') {
 					rejectAbility = !counter['Status'];
-				} else if (ability === 'Pressure') {
-					rejectAbility = counter.Status < 1;
 				} else if (ability === 'Reckless' || ability === 'Rock Head') {
 					rejectAbility = !counter['recoil'];
 				} else if (ability === 'Sand Force' || ability === 'Sand Rush' || ability === 'Sand Veil') {
@@ -669,6 +667,8 @@ class RandomGen6Teams extends RandomTeams {
 					rejectAbility = !counter['sheerforce'] || template.isMega || (abilities.includes('Iron Fist') && counter['ironfist'] > counter['sheerforce']);
 				} else if (ability === 'Simple') {
 					rejectAbility = !counter.setupType && !hasMove['cosmicpower'] && !hasMove['flamecharge'];
+				} else if (ability === 'Snow Warning') {
+					rejectAbility = hasMove['hypervoice'];
 				} else if (ability === 'Solar Power') {
 					rejectAbility = !counter['Special'] || template.isMega;
 				} else if (ability === 'Strong Jaw') {
@@ -722,14 +722,6 @@ class RandomGen6Teams extends RandomTeams {
 			if (template.species === 'Ambipom' && !counter['technician']) {
 				// If it doesn't qualify for Technician, Skill Link is useless on it
 				ability = 'Pickup';
-			} else if (template.species === 'Aurorus' && ability === 'Snow Warning' && hasMove['hypervoice']) {
-				for (let i = 0; i < moves.length; i++) {
-					if (moves[i] === 'hypervoice') {
-						moves[i] = 'blizzard';
-						counter['Normal'] = 0;
-						break;
-					}
-				}
 			} else if (template.baseSpecies === 'Basculin') {
 				ability = 'Adaptability';
 			} else if (template.species === 'Lopunny' && hasMove['switcheroo'] && this.random(3)) {
