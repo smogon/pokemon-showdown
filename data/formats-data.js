@@ -3591,7 +3591,7 @@ exports.BattleFormatsData = {
 			{"generation": 7, "level": 15, "moves":["swift", "wish", "healingwish", "rest"], "pokeball": "cherishball"},
 		],
 		eventOnly: true,
-		tier: "UU",
+		tier: "BL",
 	},
 	deoxys: {
 		randomBattleMoves: ["psychoboost", "stealthrock", "spikes", "firepunch", "superpower", "extremespeed", "knockoff", "taunt"],
