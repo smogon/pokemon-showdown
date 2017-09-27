@@ -3214,7 +3214,7 @@ exports.BattleAbilities = {
 		num: 3,
 	},
 	"stakeout": {
-		shortDesc: "This Pokemon's attacking stat is doubled against the target if it switched in this turn.",
+		shortDesc: "This Pokemon's attacking stat is doubled against a target that switched in this turn.",
 		onModifyAtkPriority: 5,
 		onModifyAtk: function (atk, attacker, defender) {
 			if (!defender.activeTurns) {
