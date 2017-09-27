@@ -561,15 +561,8 @@ exports.BattleAbilities = {
 		desc: "After another Pokemon uses a dance move, this Pokemon uses the same move. Moves used by this Ability cannot be copied again.",
 		shortDesc: "After another Pokemon uses a dance move, this Pokemon uses the same move.",
 		id: "dancer",
-		onAnyAfterMove: function (source, target, move) {
-			if (!this.effectData.target.hp || source === this.effectData.target || move.isExternal) return;
-			if (move.flags['dance']) {
-				this.faintMessages();
-				this.add('-activate', this.effectData.target, 'ability: Dancer');
-				this.runMove(move.id, this.effectData.target, 0, this.getAbility('dancer'), undefined, true);
-			}
-		},
 		name: "Dancer",
+		// implemented in runMove in scripts.js
 		rating: 2.5,
 		num: 216,
 	},
@@ -1048,7 +1041,6 @@ exports.BattleAbilities = {
 	"fluffy": {
 		desc: "This Pokemon receives 1/2 damage from contact moves, but double damage from Fire moves.",
 		shortDesc: "This Pokemon takes 1/2 damage from contact moves, 2x damage from Fire moves.",
-		// TODO: are either of these effects actually base power modifiers?
 		onSourceModifyDamage: function (damage, source, target, move) {
 			let mod = 1;
 			if (move.type === 'Fire') mod *= 2;
@@ -3222,9 +3214,17 @@ exports.BattleAbilities = {
 		num: 3,
 	},
 	"stakeout": {
-		shortDesc: "This Pokemon's attacks deal double damage if the target switched in this turn.",
-		onModifyDamage: function (damage, source, target) {
-			if (!target.activeTurns) {
+		shortDesc: "This Pokemon's attacking stat is doubled against the target if it switched in this turn.",
+		onModifyAtkPriority: 5,
+		onModifyAtk: function (atk, attacker, defender) {
+			if (!defender.activeTurns) {
+				this.debug('Stakeout boost');
+				return this.chainModify(2);
+			}
+		},
+		onModifySpAPriority: 5,
+		onModifySpA: function (atk, attacker, defender) {
+			if (!defender.activeTurns) {
 				this.debug('Stakeout boost');
 				return this.chainModify(2);
 			}
@@ -3298,9 +3298,16 @@ exports.BattleAbilities = {
 		num: 80,
 	},
 	"steelworker": {
-		shortDesc: "This Pokemon's Steel-type attacks have their power multiplied by 1.5.",
-		onBasePowerPriority: 8,
-		onBasePower: function (basePower, attacker, defender, move) {
+		shortDesc: "This Pokemon's attacking stat is multiplied by 1.5 while using a Steel-type attack.",
+		onModifyAtkPriority: 5,
+		onModifyAtk: function (atk, attacker, defender, move) {
+			if (move.type === 'Steel') {
+				this.debug('Steelworker boost');
+				return this.chainModify(1.5);
+			}
+		},
+		onModifySpAPriority: 5,
+		onModifySpA: function (atk, attacker, defender, move) {
 			if (move.type === 'Steel') {
 				this.debug('Steelworker boost');
 				return this.chainModify(1.5);
@@ -3870,15 +3877,26 @@ exports.BattleAbilities = {
 		num: 11,
 	},
 	"waterbubble": {
-		desc: "This Pokemon's Water-type attacks have their power doubled, the power of Fire-type attacks against this Pokemon is halved, and this Pokemon cannot be burned. Gaining this Ability while burned cures it.",
+		desc: "This Pokemon's attacking stat is doubled while using a Water-type attack. If a Pokemon uses a Fire-type attack against this Pokemon, that Pokemon's attacking stat is halved when calculating the damage to this Pokemon. This Pokemon cannot be burned. Gaining this Ability while burned cures it.",
 		shortDesc: "This Pokemon's Water power is 2x; it can't be burned; Fire power against it is halved.",
-		onBasePowerPriority: 7,
-		onSourceBasePower: function (basePower, attacker, defender, move) {
+		onModifyAtkPriority: 5,
+		onSourceModifyAtk: function (atk, attacker, defender, move) {
 			if (move.type === 'Fire') {
 				return this.chainModify(0.5);
 			}
 		},
-		onBasePower: function (basePower, attacker, defender, move) {
+		onModifySpAPriority: 5,
+		onSourceModifySpA: function (atk, attacker, defender, move) {
+			if (move.type === 'Fire') {
+				return this.chainModify(0.5);
+			}
+		},
+		onModifyAtk: function (atk, attacker, defender, move) {
+			if (move.type === 'Water') {
+				return this.chainModify(2);
+			}
+		},
+		onModifySpA: function (atk, attacker, defender, move) {
 			if (move.type === 'Water') {
 				return this.chainModify(2);
 			}

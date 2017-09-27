@@ -452,19 +452,25 @@ exports.commands = {
 
 			words = words.map(word => word.replace(/\n/g, '').trim());
 
-			for (let i = 0; i < words.length; i++) {
-				if (/[\\^$*+?()|{}[\]]/.test(words[i])) {
+			let banwordRegexLen = (room.banwordRegex instanceof RegExp) ? room.banwordRegex.source.length : 30;
+			for (let word of words) {
+				if (/[\\^$*+?()|{}[\]]/.test(word)) {
 					if (!user.can('makeroom')) return this.errorReply("Regex banwords are only allowed for leaders or above.");
 
 					try {
-						let test = new RegExp(words[i]); // eslint-disable-line no-unused-vars
+						let test = new RegExp(word); // eslint-disable-line no-unused-vars
 					} catch (e) {
-						return this.errorReply(e.message.substr(0, 28) === 'Invalid regular expression: ' ? e.message : `Invalid regular expression: /${words[i]}/: ${e.message}`);
+						return this.errorReply(e.message.startsWith('Invalid regular expression: ') ? e.message : `Invalid regular expression: /${word}/: ${e.message}`);
 					}
 				}
-				if (room.banwords.indexOf(words[i]) > -1) {
-					return this.errorReply(`${words[i]} is already a banned phrase.`);
-				}
+				if (room.banwords.includes(word)) return this.errorReply(`${word} is already a banned phrase.`);
+
+				banwordRegexLen += (banwordRegexLen === 30) ? word.length : `|${word}`.length;
+				// RegExp instances whose source is greater than or equal to
+				// v8's RegExpMacroAssembler::kMaxRegister in length will crash
+				// the server on compile. In this case, that would happen each
+				// time a chat message gets tested for any banned phrases.
+				if (banwordRegexLen >= (1 << 16 - 1)) return this.errorReply("This room has too many banned phrases to add the ones given.");
 			}
 
 			room.banwords = room.banwords.concat(words);
@@ -494,10 +500,8 @@ exports.commands = {
 
 			words = words.map(word => word.replace(/\n/g, '').trim());
 
-			for (let i = 0; i < words.length; i++) {
-				let index = room.banwords.indexOf(words[i]);
-
-				if (index < 0) return this.errorReply(`${words[i]} is not a banned phrase in this room.`);
+			for (let word of words) {
+				if (!room.banwords.includes(word)) return this.errorReply(`${word} is not a banned phrase in this room.`);
 			}
 
 			room.banwords = room.banwords.filter(w => !words.includes(w));

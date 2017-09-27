@@ -353,14 +353,12 @@ class Trivia extends Rooms.RoomGame {
 	}
 	// Formats the player list for display when using /trivia players.
 	formatPlayerList() {
-		return Object.keys(this.players)
-			.map(userid => {
-				let player = this.players[userid];
-				let username = player.name;
-				if (player.isAbsent) return `<span style="color: #444444">${username}</span>`;
-				return username;
-			})
-			.join(', ');
+		return Object.values(this.players)
+			.sort(function (p1, p2) {return p2.points - p1.points; })
+			.map(player => {
+				const usernamePoints = `${player.name} (${player.points})`;
+				return player.isAbsent ? `<span style="color: #444444">${usernamePoints}</span>` : usernamePoints;
+			}).join(', ');
 	}
 
 	// Kicks a player from the game, preventing them from joining it again
@@ -1005,8 +1003,10 @@ const commands = {
 	submit: 'add',
 	add: function (target, room, user, connection, cmd) {
 		if (room.id !== 'questionworkshop') return this.errorReply('This command can only be used in Question Workshop.');
-		if (cmd === 'add' && !this.can('mute', null, room) || !target) return false;
-		if (!this.canTalk()) return;
+		if ((cmd === 'add' && !this.can('mute', null, room)) ||
+			(cmd === 'submit' && !this.can('broadcast', null, room)) ||
+			!target) return false;
+		if (!this.canTalk()) return false;
 		target = target.split('|');
 		if (target.length !== 3) return this.errorReply("Invalid arguments specified. View /trivia help for more information.");
 
@@ -1051,7 +1051,7 @@ const commands = {
 		if (!user.can('mute', null, room)) this.sendReply(`Question '${target[1]}' was submitted for review.`);
 		this.privateModCommand(`(${user.name} submitted question '${target[1]}' for review.)`);
 	},
-	submithelp: ["/trivia submit [category] | [question] | [answer1], [answer2] ... [answern] - Add a question to the submission database for staff to review."],
+	submithelp: ["/trivia submit [category] | [question] | [answer1], [answer2] ... [answern] - Add a question to the submission database for staff to review. Requires: + % @ # & ~"],
 	addhelp: ["/trivia add [category] | [question] | [answer1], [answer2], ... [answern] - Add a question to the question database. Requires: % @ # & ~"],
 
 	review: function (target, room) {
