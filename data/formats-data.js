@@ -3521,7 +3521,7 @@ exports.BattleFormatsData = {
 		requiredItem: "Blue Orb",
 	},
 	groudon: {
-		randomBattleMoves: ["precipiceblades", "earthquake", "stealthrock", "lavaplume", "stoneedge", "dragontail", "roar", "toxic", "swordsdance", "rockpolish", "firepunch"],
+		randomBattleMoves: ["earthquake", "stealthrock", "lavaplume", "stoneedge", "roar", "toxic", "thunderwave", "dragonclaw", "firepunch"],
 		randomDoubleBattleMoves: ["precipiceblades", "rockslide", "protect", "stoneedge", "swordsdance", "rockpolish", "dragonclaw", "firepunch"],
 		eventPokemon: [
 			{"generation": 3, "level": 45, "shiny": 1, "moves":["slash", "bulkup", "earthquake", "fireblast"]},
@@ -3536,7 +3536,7 @@ exports.BattleFormatsData = {
 		tier: "Uber",
 	},
 	groudonprimal: {
-		randomBattleMoves: ["stealthrock", "precipiceblades", "earthquake", "lavaplume", "stoneedge", "overheat", "rockpolish", "thunderwave"],
+		randomBattleMoves: ["stealthrock", "precipiceblades", "lavaplume", "stoneedge", "dragontail", "rockpolish", "swordsdance", "firepunch"],
 		randomDoubleBattleMoves: ["precipiceblades", "lavaplume", "rockslide", "stoneedge", "swordsdance", "overheat", "rockpolish", "firepunch", "protect"],
 		requiredItem: "Red Orb",
 	},
