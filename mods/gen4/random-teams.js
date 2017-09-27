@@ -254,10 +254,10 @@ class RandomGen4Teams extends RandomGen5Teams {
 					if (hasMove['thunderbolt']) rejected = true;
 					break;
 				case 'energyball':
-					if (hasMove['grassknot'] || hasMove['leafblade'] || hasMove['woodhammer'] || (hasMove['sunnyday'] && hasMove['solarbeam'])) rejected = true;
+					if (hasMove['leafblade'] || hasMove['woodhammer'] || (hasMove['sunnyday'] && hasMove['solarbeam'])) rejected = true;
 					break;
 				case 'grassknot': case 'seedbomb':
-					if (hasMove['energyball'] || hasMove['woodhammer'] || (hasMove['sunnyday'] && hasMove['solarbeam'])) rejected = true;
+					if (hasMove['woodhammer'] || (hasMove['sunnyday'] && hasMove['solarbeam'])) rejected = true;
 					break;
 				case 'leafstorm':
 					if (counter.setupType || hasMove['batonpass'] || hasMove['powerwhip'] || (hasMove['sunnyday'] && hasMove['solarbeam'])) rejected = true;
@@ -282,7 +282,7 @@ class RandomGen4Teams extends RandomGen5Teams {
 					if (hasMove['nightshade'] || counter.Physical + counter.Special >= 1) rejected = true;
 					break;
 				case 'superpower':
-					if (hasMove['dragondance']) rejected = true;
+					if (hasMove['dragondance'] || !!counter['speedsetup']) rejected = true;
 					break;
 				case 'gunkshot':
 					if (hasMove['poisonjab']) rejected = true;
@@ -540,8 +540,6 @@ class RandomGen4Teams extends RandomGen5Teams {
 			item = 'Stick';
 		} else if (template.species === 'Marowak') {
 			item = 'Thick Club';
-		} else if (template.species === 'Pikachu') {
-			item = 'Light Ball';
 		} else if (template.species === 'Shedinja' || template.species === 'Smeargle') {
 			item = 'Focus Sash';
 		} else if (template.species === 'Unown') {
@@ -629,8 +627,12 @@ class RandomGen4Teams extends RandomGen5Teams {
 			OU: 75,
 			Uber: 71,
 		};
+		let customScale = {
+			Ditto: 99, Unown: 99,
+		};
 		let tier = template.tier;
 		let level = levelScale[tier] || 75;
+		if (customScale[template.name]) level = customScale[template.name];
 
 		// Prepare optimal HP
 		let hp = Math.floor(Math.floor(2 * template.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
