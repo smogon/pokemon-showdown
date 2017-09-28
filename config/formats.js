@@ -234,24 +234,6 @@ exports.Formats = [
 		requirePentagon: true,
 	},
 	{
-		name: "[Gen 7] Mega Melee",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3613480/\">Mega Melee</a>"],
-
-		mod: 'gen7',
-		maxForcedLevel: 50,
-		teamLength: {
-			validate: [3, 6],
-			battle: 1,
-		},
-		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview'],
-		onValidateSet(set, format) {
-			let template = this.getTemplate(set.species || set.name);
-			if (!template.otherFormes || !this.getTemplate(template.otherFormes[0]).isMega) {
-				return [`${set.name || set.species} can't Mega Evolve and is banned in ${format.name}.`];
-			}
-		},
-	},
-	{
 		name: "[Gen 7] Custom Game",
 
 		mod: 'gen7',
