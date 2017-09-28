@@ -437,7 +437,10 @@ class RandomGen3Teams extends RandomGen4Teams {
 			if (hp % 4 === 0) evs.hp -= 4;
 		} else if (hasMove['substitute'] && (item === 'Salac Berry' || item === 'Petaya Berry' || item === 'Liechi Berry')) {
 			// Other pinch berry holders should have berries activate after three Substitutes
-			if (hp % 4 !== 0) evs.hp -= 4;
+			while (hp % 4 > 0) {
+				evs.hp -= 4;
+				hp = Math.floor(Math.floor(2 * template.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
+			}
 		}
 
 		// Minimize confusion damage
