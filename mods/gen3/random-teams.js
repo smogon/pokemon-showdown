@@ -387,6 +387,8 @@ class RandomGen3Teams extends RandomGen4Teams {
 			item = 'Thick Club';
 		} else if (template.species === 'Shedinja') {
 			item = 'Lum Berry';
+		} else if (template.species === 'Slaking') {
+			item = 'Choice Band';
 		} else if (template.species === 'Unown') {
 			item = 'Twisted Spoon';
 		} else if (hasMove['trick']) {
