@@ -675,7 +675,7 @@ function runDexsearch(target, cmd, canAll, message) {
 			}
 
 			if (alts.tiers && Object.keys(alts.tiers).length) {
-				let tier = alts.tiers[dex[mon].tier] || alts.tiers[dex[mon].tier].slice(1,11);
+				let tier = alts.tiers[dex[mon].tier] || alts.tiers[dex[mon].tier].slice(1,-1);
 				if (tier) continue;
 				if (Object.values(alts.tiers).includes(false) && tier !== false) continue;
 				// some LC Pokemon are also in other tiers and need to be handled separately
