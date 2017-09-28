@@ -66,10 +66,8 @@ exports.Formats = [
 		banlist: ['OU', 'BL', 'Drizzle', 'Mewnium Z'],
 	},
 	{
-		name: "[Gen 7] UU (suspect test",
-		desc: [
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3616332/\">UU Suspect Test</a>",
-		],
+		name: "[Gen 7] UU (suspect test)",
+		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3616332/\">UU Suspect Test</a>"],
 
 		mod: 'gen7',
 		challengeShow: false,
