@@ -6,9 +6,26 @@
 
 'use strict';
 
+const FS = require('../fs');
+
 Punishments.roomPunishmentTypes.set('GIVEAWAYBAN', 'banned from giveaways');
 
 const BAN_DURATION = 7 * 24 * 60 * 60 * 1000;
+const RECENT_THRESHOLD = 30 * 24 * 60 * 1000;
+
+const STATS_FILE = 'config/chat-plugins/wifi.json';
+
+let stats = {};
+try {
+	stats = require(`../${STATS_FILE}`);
+} catch (e) {
+	if (e.code !== 'MODULE_NOT_FOUND') throw e;
+}
+if (!stats || typeof stats !== 'object') stats = {};
+
+function saveStats() {
+	FS(STATS_FILE).write(JSON.stringify(stats));
+}
 
 function toPokemonId(str) {
 	return str.toLowerCase().replace(/é/g, 'e').replace(/[^a-z0-9 /]/g, '');
@@ -33,7 +50,7 @@ class Giveaway {
 
 		this.joined = {};
 
-		this.sprite = Giveaway.getSprite(prize);
+		[this.monIds, this.sprite] = Giveaway.getSprite(prize);
 	}
 
 	send(content) {
@@ -92,6 +109,7 @@ class Giveaway {
 		text = toPokemonId(text);
 		let mons = new Map();
 		let output = '';
+		let monIds = new Set();
 		for (let i in Dex.data.Pokedex) {
 			let id = i;
 			if (!Dex.data.Pokedex[i].baseSpecies && (Dex.data.Pokedex[i].species.includes(' '))) {
@@ -137,6 +155,7 @@ class Giveaway {
 						}
 					}
 				}
+				monIds.add(spriteid);
 				if (mons.size > 1) {
 					output += `<psicon pokemon="${spriteid}" />`;
 				} else {
@@ -145,7 +164,17 @@ class Giveaway {
 				}
 			});
 		}
-		return output;
+		return [monIds, output];
+	}
+
+	static updateStats(monIds) {
+		for (let mon of monIds) {
+			if (!stats[mon]) stats[mon] = [];
+
+			stats[mon].push(Date.now());
+		}
+
+		saveStats();
 	}
 
 	generateWindow(rightSide) {
@@ -241,6 +270,7 @@ class QuestionGiveaway extends Giveaway {
 				this.winner.sendTo(this.room, `|raw|You have won the giveaway. PM <b>${Chat.escapeHTML(this.giver.name)}</b> (FC: ${this.fc}) to claim your prize!`);
 				if (this.winner.connected) this.winner.popup(`You have won the giveaway. PM **${Chat.escapeHTML(this.giver.name)}** (FC: ${this.fc}) to claim your prize!`);
 				if (this.giver.connected) this.giver.popup(`${Chat.escapeHTML(this.winner.name)} has won your question giveaway!`);
+				Giveaway.updateStats(this.monIds);
 			}
 		}
 
@@ -353,6 +383,7 @@ class LotteryGiveaway extends Giveaway {
 				if (this.winners[i].connected) this.winners[i].popup(`You have won the lottery giveaway! PM **${this.giver.name}** (FC: ${this.fc}) to claim your prize!`);
 			}
 			if (this.giver.connected) this.giver.popup(`The following users have won your lottery giveaway:\n${Chat.escapeHTML(winnerNames)}`);
+			Giveaway.updateStats(this.monIds);
 		}
 		delete this.room.giveaway;
 	}
@@ -372,7 +403,7 @@ class GtsGiveaway {
 		this.deposit = GtsGiveaway.linkify(Chat.escapeHTML(deposit));
 		this.lookfor = lookfor;
 
-		this.sprite = Giveaway.getSprite(this.summary);
+		[this.monIds, this.sprite] = Giveaway.getSprite(this.summary);
 		this.sent = [];
 		this.noDeposits = false;
 
@@ -442,6 +473,7 @@ class GtsGiveaway {
 			this.changeUhtml(`<p style="text-align:center;font-size:13pt;font-weight:bold;">The GTS giveaway has finished.</p>`);
 			this.room.modlog(`${this.giver.name} has finished their GTS giveaway for "${this.summary}"`);
 			this.send(`<p style="text-align:center;font-size:11pt">The GTS giveaway for a "<strong>${Chat.escapeHTML(this.lookfor)}</strong>" has finished.</p>`);
+			Giveaway.updateStats(this.monIds);
 		}
 		delete this.room.gtsga;
 	}
@@ -698,6 +730,19 @@ let commands = {
 		} else {
 			room.giveaway.display();
 		}
+	},
+	count: function (target, room, user) {
+		if (room.id !== 'wifi') return this.errorReply("This command can only be used in the Wi-Fi room.");
+		target = Array.from(Giveaway.getSprite(target)[0])[0];
+		if (!target) return this.errorReply("No mon entered - /giveaway count pokemon.");
+		if (!this.runBroadcast()) return;
+
+		let count = stats[target];
+
+		if (!count) return this.sendReplyBox("This Pokémon has never been given away.");
+		let recent = count.filter(val => val + RECENT_THRESHOLD > Date.now()).length;
+
+		this.sendReplyBox(`This Pokémon has been given away ${count.length} time${Chat.plural(count)}, a total of ${recent} time${Chat.plural(recent)} in the past month.`);
 	},
 	'': 'help',
 	help: function (target, room, user) {
