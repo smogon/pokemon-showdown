@@ -1279,7 +1279,7 @@ const commands = {
 		let results = triviaData[type].filter(q => q.question.includes(query));
 		if (!results.length) return this.sendReply(`No results found under the ${type} list.`);
 
-		let buffer = "|raw|<div class=\"ladder\"><table><tr><th>#</th><th>Category</th><th>Question</th></tr>" +
+		let buffer = `|raw|<div class="ladder" style="overflow-y: scroll; max-height: 300px;"><table><tr><th>#</th><th>Category</th><th>Question</th></tr>` +
 			`<tr><td colspan="3">There are <strong>${results.length}</strong> matches for your query:</td></tr>`;
 		buffer += results.map((q, i) => {
 			return `<tr><td><strong>${i + 1}</strong></td><td>${q.category}</td><td>${q.question}</td></tr>`;
