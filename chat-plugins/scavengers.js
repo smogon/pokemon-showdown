@@ -557,10 +557,6 @@ class ScavengerHunt extends Rooms.RoomGame {
 
 		for (let i = 0; i < questionArray.length; i++) {
 			if (i % 2) {
-				// This check will likely be removed within a week or so, as having access to a comma
-				// in an answer is actually fairly useful and actually a reason why a separator was changed to
-				// a semicolon. It's just here to give time for people to get used to that change.
-				if (questionArray[i].includes(',')) return {err: "Commas are no longer correct syntax for separating answers - please use semicolons instead."};
 				questionArray[i] = questionArray[i].split(';').map(p => p.trim());
 				if (!questionArray[i].length || questionArray[i].some(a => !toId(a))) return {err: "Empty answer - only alphanumeric characters will count in answers."};
 			} else {
