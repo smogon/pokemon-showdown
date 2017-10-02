@@ -663,12 +663,12 @@ exports.Formats = [
 		column: 3,
 	},
 	{
-		name: "[Gen 3] BL",
-		desc: ["&bullet; <a href=\"http://www.smogon.com/dex/rs/formats/bl/\">ADV BL</a>"],
+		name: "[Gen 4] Doubles OU",
 
-		mod: 'gen3',
-		ruleset: ['[Gen 3] OU'],
-		banlist: ['OU'],
+		mod: 'gen4',
+		gameType: 'doubles',
+		ruleset: ['[Gen 4] OU'],
+		banlist: [],
 	},
 
 	// ORAS Singles
