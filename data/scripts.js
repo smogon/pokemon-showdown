@@ -85,7 +85,7 @@ exports.BattleScripts = {
 			this.add('-zpower', pokemon);
 			pokemon.side.zMoveUsed = true;
 		}
-		this.useMove(baseMove, pokemon, target, sourceEffect, zMove);
+		let moveDidSomething = this.useMove(baseMove, pokemon, target, sourceEffect, zMove);
 		this.singleEvent('AfterMove', move, null, pokemon, target, move);
 		this.runEvent('AfterMove', pokemon, target, move);
 
@@ -212,7 +212,7 @@ exports.BattleScripts = {
 			this.attrLastMove('[notarget]');
 			this.add('-notarget');
 			if (move.target === 'normal') pokemon.isStaleCon = 0;
-			return true;
+			return false;
 		}
 
 		let targets = pokemon.getMoveTargets(move, target);
@@ -231,11 +231,11 @@ exports.BattleScripts = {
 		}
 
 		if (!this.singleEvent('TryMove', move, null, pokemon, target, move)) {
-			return true;
+			return false;
 		}
 
 		if (!this.runEvent('TryMove', pokemon, target, move)) {
-			return true;
+			return false;
 		}
 
 		this.singleEvent('UseMoveMessage', move, null, pokemon, target, move);
@@ -256,10 +256,9 @@ exports.BattleScripts = {
 			if (!targets.length) {
 				this.attrLastMove('[notarget]');
 				this.add('-notarget');
-				return true;
+				return false;
 			}
 			if (targets.length > 1) move.spreadHit = true;
-			damage = 0;
 			let hitTargets = [];
 			for (let i = 0; i < targets.length; i++) {
 				let hitResult = this.tryMoveHit(targets[i], pokemon, move);
@@ -267,7 +266,11 @@ exports.BattleScripts = {
 					moveResult = true;
 					hitTargets.push(targets[i].toString().substr(0, 3));
 				}
-				damage += hitResult || 0;
+				if (damage !== false) {
+					damage += hitResult || 0;
+				} else {
+					damage = hitResult;
+				}
 			}
 			if (move.spreadHit) this.attrLastMove('[spread] ' + hitTargets.join(','));
 		} else {
@@ -282,7 +285,7 @@ exports.BattleScripts = {
 				this.attrLastMove('[notarget]');
 				this.add('-notarget');
 				if (move.target === 'normal') pokemon.isStaleCon = 0;
-				return true;
+				return false;
 			}
 			damage = this.tryMoveHit(target, pokemon, move);
 			if (damage || damage === 0 || damage === undefined) moveResult = true;
@@ -293,7 +296,7 @@ exports.BattleScripts = {
 
 		if (!moveResult) {
 			this.singleEvent('MoveFail', move, null, target, pokemon, move);
-			return true;
+			return false;
 		}
 
 		if (!move.negateSecondary && !(move.hasSheerForce && pokemon.hasAbility('sheerforce'))) {
@@ -325,7 +328,7 @@ exports.BattleScripts = {
 			}
 			if (!hitResult) {
 				if (hitResult === false) this.add('-fail', target);
-				return true;
+				return false;
 			}
 			return this.moveHit(target, pokemon, move);
 		}
@@ -518,7 +521,7 @@ exports.BattleScripts = {
 				move.totalDamage += damage;
 				this.eachEvent('Update');
 			}
-			if (i === 0) return true;
+			if (i === 0) return false;
 			if (nullDamage) damage = false;
 			this.add('-hitcount', target, i);
 		} else {
@@ -759,6 +762,7 @@ exports.BattleScripts = {
 				target.forceSwitchFlag = true;
 			} else if (hitResult === false && move.category === 'Status') {
 				this.add('-fail', target);
+				return false;
 			}
 		}
 		if (move.selfSwitch && pokemon.hp) {
