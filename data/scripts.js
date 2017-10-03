@@ -90,7 +90,7 @@ exports.BattleScripts = {
 		this.runEvent('AfterMove', pokemon, target, move);
 
 		// Dancer's activation order is completely different from any other event, so it's handled separately
-		if (move.flags['dance'] && !move.isExternal) {
+		if (move.flags['dance'] && moveDidSomething && !move.isExternal) {
 			let dancers = [];
 			for (const side of this.sides) {
 				for (const currentPoke of side.active) {
