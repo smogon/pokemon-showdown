@@ -726,7 +726,7 @@ exports.BattleScripts = {
 
 			if (!hitResult && !didSomething && !moveData.self && !moveData.selfdestruct) {
 				if (!isSelf && !isSecondary) {
-					if (hitResult === false || didSomething === false) this.add('-fail', target);
+					if (hitResult === false || didSomething === false) this.add('-fail', pokemon);
 				}
 				this.debug('move failed because it did nothing');
 				return false;
