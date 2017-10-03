@@ -759,7 +759,8 @@ let commands = {
 			        '- changeanswer - Changes the answer of a question giveaway (Requires: giveaway host)<br />' +
 					'- viewanswer - Shows the answer in a question giveaway (only to giveaway host/giver)<br />' +
 					'- ban - Temporarily bans a user from entering giveaways (Requires: % @ * # & ~)<br />' +
-			        '- end - Forcibly ends the current giveaway (Requires: % @ * # & ~)<br />';
+			        '- end - Forcibly ends the current giveaway (Requires: % @ * # & ~)<br />' +
+					'- count <em>Mon</em> - Displays how often a certain mon has been given away. Use <code>!giveaway count</code> to broadcast this to the entire room<br />';
 			break;
 		case 'gts':
 			if (!this.can('broadcast', null, room)) return;
