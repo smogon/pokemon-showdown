@@ -377,7 +377,7 @@ exports.Formats = [
 
 		mod: 'ultimatez',
 		ruleset: ['[Gen 7] OU'],
-		banlist: [],
+		banlist: ['Celebrate', 'Happy Hour'],
 	},
 	{
 		name: "[Gen 6] Balanced Hackmons",
