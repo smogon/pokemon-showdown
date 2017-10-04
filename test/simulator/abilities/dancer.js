@@ -52,4 +52,40 @@ describe('Dancer', function () {
 		assert.fainted(battle.p2.active[0]);
 		assert.fainted(battle.p2.active[1]);
 	});
+
+	it('should not copy a move that did nothing', function () {
+		battle = common.createBattle({gameType: 'doubles'});
+		const p1 = battle.join('p1', 'Guest 1', 1, [
+			{species: 'Oricorio', level: 98, ability: 'dancer', moves: ['dragondance', 'protect', 'teeterdance', 'celebrate']},
+			{species: 'Oricorio', level: 99, ability: 'dancer', moves: ['featherdance']},
+		]);
+		const p2 = battle.join('p2', 'Guest 2', 1, [
+			{species: 'Oricorio', ability: 'dancer', moves: ['fierydance', 'protect', 'teeterdance']},
+			{species: 'Shedinja', ability: 'wonderguard', moves: ['finalgambit']},
+		]);
+		p1.active[0].boostBy({atk: 5, spe: 6});
+		p2.active[0].boostBy({atk: -6});
+		p2.active[1].boostBy({spe: 6});
+		p1.chooseMove(1).chooseMove(1, 1);
+		p2.chooseMove(1, -2).chooseMove(1, 1);
+		assert.fullHP(p2.active[0]);
+		assert.statStage(p1.active[0], 'atk', 6);
+		assert.statStage(p1.active[0], 'spe', 6);
+		assert.statStage(p1.active[1], 'atk', 1);
+		assert.statStage(p2.active[0], 'atk', -5);
+		assert.statStage(p2.active[0], 'spe', 1);
+		// Next turn
+		battle.choose('p1', 'move 2');
+		battle.choose('p2', 'move 2');
+		battle.commitDecisions();
+		assert.statStage(p2.active[0], 'atk', -5);
+		// Next turn: Teeter Dance should be copied as long as it hits one thing
+		battle.choose('p1', 'move 2');
+		battle.choose('p2', 'move 3');
+		battle.commitDecisions();
+		assert.fullHP(p1.active[1]);
+		// Next turn: Teeter Dance should NOT be copied if everything it hits is already confused
+		battle.choose('p1', 'move 3');
+		assert.constant(() => p2.active[0].volatiles['confusion'], () => battle.commitDecisions());
+	});
 });
