@@ -30,7 +30,7 @@ exports.BattleScripts = {
 
 				// On Gen 2 we check modifications here from moves and items
 				let statTable = {atk:'Atk', def:'Def', spa:'SpA', spd:'SpD', spe:'Spe'};
-				stat = this.battle.runEvent('Modify' + statTable[statName], this, null, null, stat);
+				stat = this.battle.runEvent('Modify' + statTable[statName], this, null, this.activeMove, stat);
 			}
 
 			if (!unmodified) {
