@@ -328,6 +328,7 @@ exports.BattleMovedex = {
 	ingrain: {
 		inherit: true,
 		desc: "The user has 1/16 of its maximum HP restored at the end of each turn, but it is prevented from switching out and other Pokemon cannot force the user to switch out. The user can still switch out if it uses Baton Pass, and the replacement will remain trapped and still receive the healing effect.",
+		shortDesc: "User recovers 1/16 max HP per turn. Traps user.",
 	},
 	jumpkick: {
 		inherit: true,
