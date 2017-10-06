@@ -1459,6 +1459,7 @@ exports.BattleMovedex = {
 		onHit: function (target, source, move) {
 			if (!target.addVolatile('trapped', source, move, 'trapper')) {
 				this.add('-fail', target);
+				return false;
 			}
 		},
 		secondary: false,
@@ -5462,11 +5463,13 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, heal: 1, mystery: 1},
 		onHit: function (target) {
+			let healResult = false;
 			if (this.isTerrain('grassyterrain')) {
-				this.heal(this.modify(target.maxhp, 0.667)); // TODO: find out the real value
+				healResult = this.heal(this.modify(target.maxhp, 0.667)); // TODO: find out the real value
 			} else {
-				this.heal(Math.ceil(target.maxhp * 0.5));
+				healResult = this.heal(Math.ceil(target.maxhp * 0.5));
 			}
+			return healResult;
 		},
 		secondary: false,
 		target: "normal",
@@ -7166,11 +7169,13 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, pulse: 1, reflectable: 1, distance: 1, heal: 1, mystery: 1},
 		onHit: function (target, source) {
+			let healResult = false;
 			if (source.hasAbility('megalauncher')) {
-				this.heal(this.modify(target.maxhp, 0.75));
+				healResult = this.heal(this.modify(target.maxhp, 0.75));
 			} else {
-				this.heal(Math.ceil(target.maxhp * 0.5));
+				healResult = this.heal(Math.ceil(target.maxhp * 0.5));
 			}
+			return healResult;
 		},
 		secondary: false,
 		target: "any",
@@ -10607,13 +10612,15 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {snatch: 1, heal: 1},
 		onHit: function (pokemon) {
+			let healResult = false;
 			if (this.isWeather(['sunnyday', 'desolateland'])) {
-				this.heal(this.modify(pokemon.maxhp, 0.667));
+				healResult = this.heal(this.modify(pokemon.maxhp, 0.667));
 			} else if (this.isWeather(['raindance', 'primordialsea', 'sandstorm', 'hail'])) {
-				this.heal(this.modify(pokemon.maxhp, 0.25));
+				healResult = this.heal(this.modify(pokemon.maxhp, 0.25));
 			} else {
-				this.heal(this.modify(pokemon.maxhp, 0.5));
+				healResult = this.heal(this.modify(pokemon.maxhp, 0.5));
 			}
+			return healResult;
 		},
 		secondary: false,
 		target: "self",
@@ -10635,13 +10642,15 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {snatch: 1, heal: 1},
 		onHit: function (pokemon) {
+			let healResult = false;
 			if (this.isWeather(['sunnyday', 'desolateland'])) {
-				this.heal(this.modify(pokemon.maxhp, 0.667));
+				healResult = this.heal(this.modify(pokemon.maxhp, 0.667));
 			} else if (this.isWeather(['raindance', 'primordialsea', 'sandstorm', 'hail'])) {
-				this.heal(this.modify(pokemon.maxhp, 0.25));
+				healResult = this.heal(this.modify(pokemon.maxhp, 0.25));
 			} else {
-				this.heal(this.modify(pokemon.maxhp, 0.5));
+				healResult = this.heal(this.modify(pokemon.maxhp, 0.5));
 			}
+			return healResult;
 		},
 		secondary: false,
 		target: "self",
@@ -14433,11 +14442,13 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {snatch: 1, heal: 1},
 		onHit: function (pokemon) {
+			let healResult = false;
 			if (this.isWeather('sandstorm')) {
-				this.heal(this.modify(pokemon.maxhp, 0.667));
+				healResult = this.heal(this.modify(pokemon.maxhp, 0.667));
 			} else {
-				this.heal(this.modify(pokemon.maxhp, 0.5));
+				healResult =this.heal(this.modify(pokemon.maxhp, 0.5));
 			}
+			return healResult;
 		},
 		secondary: false,
 		target: "self",
@@ -15605,6 +15616,7 @@ exports.BattleMovedex = {
 		onHit: function (target, source, move) {
 			if (!target.addVolatile('trapped', source, move, 'trapper')) {
 				this.add('-fail', target);
+				return false;
 			}
 		},
 		secondary: false,
@@ -16723,13 +16735,15 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {snatch: 1, heal: 1},
 		onHit: function (pokemon) {
+			let healResult = false;
 			if (this.isWeather(['sunnyday', 'desolateland'])) {
-				this.heal(this.modify(pokemon.maxhp, 0.667));
+				healResult = this.heal(this.modify(pokemon.maxhp, 0.667));
 			} else if (this.isWeather(['raindance', 'primordialsea', 'sandstorm', 'hail'])) {
-				this.heal(this.modify(pokemon.maxhp, 0.25));
+				healResult = this.heal(this.modify(pokemon.maxhp, 0.25));
 			} else {
-				this.heal(this.modify(pokemon.maxhp, 0.5));
+				healResult = this.heal(this.modify(pokemon.maxhp, 0.5));
 			}
+			return healResult;
 		},
 		secondary: false,
 		target: "self",
