@@ -14445,7 +14445,7 @@ exports.BattleMovedex = {
 			if (this.isWeather('sandstorm')) {
 				healResult = this.heal(this.modify(pokemon.maxhp, 0.667));
 			} else {
-				healResult =this.heal(this.modify(pokemon.maxhp, 0.5));
+				healResult = this.heal(this.modify(pokemon.maxhp, 0.5));
 			}
 			return healResult;
 		},
