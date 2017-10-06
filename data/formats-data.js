@@ -5608,7 +5608,7 @@ exports.BattleFormatsData = {
 	barbaracle: {
 		randomBattleMoves: ["shellsmash", "stoneedge", "razorshell", "earthquake", "crosschop", "stealthrock"],
 		randomDoubleBattleMoves: ["shellsmash", "razorshell", "earthquake", "crosschop", "rockslide", "protect"],
-		tier: "NU",
+		tier: "BL3",
 	},
 	skrelp: {
 		randomBattleMoves: ["scald", "sludgebomb", "thunderbolt", "shadowball", "toxicspikes", "hydropump"],
