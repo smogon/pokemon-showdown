@@ -1174,8 +1174,9 @@ const commands = {
 		if (!question) return this.errorReply(`'${target}' is not a valid argument. View /trivia help questions for more information.`);
 
 		let questions = triviaData.questions;
+		let questionID = toId(question);
 		for (let i = 0; i < questions.length; i++) {
-			if (questions[i].question === question) {
+			if (toId(questions[i].question) === questionID) {
 				questions.splice(i, 1);
 				writeTriviaData();
 				return this.privateModCommand(`(${user.name} removed question '${target}' from the question database.)`);
