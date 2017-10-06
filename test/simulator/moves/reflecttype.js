@@ -26,9 +26,7 @@ describe('Reflect Type', function () {
 		assert.strictEqual(battle.p1.active[0].getTypes()[0], 'Flying');
 		p1.chooseMove(2, 1).foe.chooseDefault();
 		battle.commitDecisions();
-		assert.strictEqual(battle.p1.active[0].getTypes().length, 2);
-		assert.strictEqual(battle.p1.active[0].getTypes()[0], 'Flying');
-		assert.strictEqual(battle.p1.active[0].getTypes()[1], 'Ghost');
+		assert.strictEqual(battle.p1.active[0].getTypes().join('/'), 'Flying/Ghost');
 	});
 
 	it('should turn the "???" type into "Normal" when used against a Pokemon whose type is only "???" and an added type', function () {
@@ -37,8 +35,6 @@ describe('Reflect Type', function () {
 		battle.join('p2', 'Guest 2', 1, [{species: 'Arcanine', ability: 'intimidate', moves: ['burnup']}]);
 		p1.chooseMove(2, 1).foe.chooseDefault();
 		battle.commitDecisions();
-		assert.strictEqual(battle.p1.active[0].getTypes().length, 2);
-		assert.strictEqual(battle.p1.active[0].getTypes()[0], 'Normal');
-		assert.strictEqual(battle.p1.active[0].getTypes()[1], 'Ghost');
+		assert.strictEqual(battle.p1.active[0].getTypes().join('/'), 'Normal/Ghost');
 	});
 });
