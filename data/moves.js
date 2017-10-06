@@ -1459,7 +1459,6 @@ exports.BattleMovedex = {
 		onHit: function (target, source, move) {
 			if (!target.addVolatile('trapped', source, move, 'trapper')) {
 				this.add('-fail', target);
-				return false;
 			}
 		},
 		secondary: false,
@@ -15616,7 +15615,6 @@ exports.BattleMovedex = {
 		onHit: function (target, source, move) {
 			if (!target.addVolatile('trapped', source, move, 'trapper')) {
 				this.add('-fail', target);
-				return false;
 			}
 		},
 		secondary: false,
