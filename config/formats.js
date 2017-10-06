@@ -291,8 +291,7 @@ exports.Formats = [
 			'Landorus-Therian', 'Ludicolo', 'Marowak-Alola', 'Marshadow', 'Milotic', 'Mimikyu', 'Ninetales-Alola', 'Oranguru',
 			'Pelipper', 'Politoed', 'Porygon2', 'Scrafty', 'Snorlax', 'Suicune', 'Tapu Bulu', 'Tapu Fini', 'Tapu Koko',
 			'Tapu Lele', 'Tyranitar', 'Volcanion', 'Volcarona', 'Weavile', 'Whimsicott', 'Zapdos', 'Zygarde-Base',
-			'Aggronite', 'Altarianite', 'Ampharosite', 'Banettite', 'Cameruptite', 'Charizardite Y', 'Diancite', 'Galladite', 'Gardevoirite',
-			'Gengarite', 'Kangaskhanite', 'Latiasite', 'Latiosite', 'Lopunnite', 'Mawilite', 'Metagrossite', 'Salamencite', 'Swampertite',
+			'Charizardite Y', 'Diancite', 'Gardevoirite', 'Gengarite', 'Kangaskhanite', 'Mawilite', 'Metagrossite', 'Salamencite', 'Swampertite',
 		],
 	},
 	{
