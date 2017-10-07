@@ -6438,7 +6438,7 @@ exports.BattleFormatsData = {
 			{"generation": 7, "level": 70, "moves":["thrash", "gastroacid", "heavyslam", "wringout"]},
 		],
 		eventOnly: true,
-		tier: "PU",
+		tier: "NU",
 	},
 	necrozma: {
 		randomBattleMoves: ["calmmind", "psychic", "darkpulse", "moonlight", "stealthrock", "storedpower"],
