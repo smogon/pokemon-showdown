@@ -218,7 +218,7 @@ function runRipgrepModlog(paths, regexString, results) {
 	}
 	const fileResults = stdout.toString().split('\n').reverse();
 	for (let i = 0; i < fileResults.length; i++) {
-		results.tryInsert(fileResults[i]);
+		if (fileResults[i]) results.tryInsert(fileResults[i]);
 	}
 	return results;
 }
