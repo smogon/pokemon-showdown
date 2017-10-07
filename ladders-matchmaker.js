@@ -10,84 +10,168 @@
 
 'use strict';
 
+/** @type {number} */
 const PERIODIC_MATCH_INTERVAL = 60 * 1000;
 
+/**
+ * This represents a user's search for a battle under a format.
+ */
 class Search {
+	/**
+	 * @param {string} userid
+	 * @param {string} team
+	 * @param {number} [rating = 1000]
+	 */
 	constructor(userid, team, rating = 1000) {
+		/** @type {string} */
 		this.userid = userid;
+		/** @type {string} */
 		this.team = team;
+		/** @type {number} */
 		this.rating = rating;
-		this.time = Date.now();
-	}
-
-	setRating(rating) {
-		this.rating = rating;
-	}
-
-	setStart() {
+		/** @type {number} */
 		this.time = Date.now();
 	}
 }
 
+/**
+ * This keeps track of searches for battles, creating a new battle for a newly
+ * added search if a valid match can be made, otherwise periodically
+ * attempting to make a match with looser restrictions until one can be made.
+ */
 class Matchmaker {
 	constructor() {
+		/**
+		 * formatid:userid:Search
+		 * @type {Map<string, Map<string, Search>>}
+		 */
 		this.searches = new Map();
+		/** @type {?NodeJS.Timer} */
 		this.periodicMatchInterval = setInterval(
 			() => this.periodicMatch(),
 			PERIODIC_MATCH_INTERVAL
 		);
 	}
 
-	cancelSearch(user, format) {
-		if (format && !user.searching[format]) return false;
-		let searchedFormats = Object.keys(user.searching);
-		if (!searchedFormats.length) return false;
+	/**
+	 * @param {User} user
+	 * @param {string} formatid
+	 * @return {boolean}
+	 */
+	cancelSearch(user, formatid) {
+		formatid = toId(formatid);
 
-		for (let searchedFormat of searchedFormats) {
-			if (format && searchedFormat !== format) continue;
-			let formatSearches = this.searches.get(searchedFormat);
-			for (let search of formatSearches) {
-				if (search.userid !== user.userid) continue;
-				formatSearches.delete(search);
-				delete user.searching[searchedFormat];
-				break;
-			}
-		}
+		const formatTable = this.searches.get(formatid);
+		if (!formatTable) return false;
+		if (!formatTable.has(user.userid)) return false;
+		formatTable.delete(user.userid);
 
 		user.updateSearch();
 		return true;
 	}
 
-	searchBattle(user, formatid) {
-		if (!user.connected) return;
-		formatid = Dex.getFormat(formatid).id;
+	/**
+	 * @param {User} user
+	 * @return {number} cancel count
+	 */
+	cancelSearches(user) {
+		let cancelCount = 0;
 
-		return Promise.all([
-			Promise.resolve(user.userid),
-			user.prepBattle(formatid, 'search', null),
-			Ladders(formatid).getRating(user.userid),
-		]).then(([userId, validTeam, rating]) => {
-			if (userId !== user.userid) return;
-			return this.finishSearchBattle(user, formatid, validTeam, rating);
-		}, err => {
-			// Rejects iff ladders are disabled, or if we
-			// retrieved the rating but the user had changed their name.
+		for (let formatTable of this.searches.values()) {
+			const search = formatTable.get(user.userid);
+			if (!search) continue;
+			formatTable.delete(user.userid);
+			cancelCount++;
+		}
 
-			if (Ladders.disabled) return user.popup(`The ladder is currently disabled due to high server load.`);
-			// User feedback for renames handled elsewhere.
-		});
+		user.updateSearch();
+		return cancelCount;
 	}
 
-	finishSearchBattle(user, formatid, validTeam, rating) {
+	/**
+	 * @param {Search} search
+	 * @param {string} formatid
+	 */
+	getSearcher(search, formatid) {
+		const user = Users.get(search.userid);
+		if (!user || !user.connected || user.userid !== search.userid) {
+			const formatTable = this.searches.get(formatid);
+			if (formatTable) formatTable.delete(search.userid);
+			if (user && user.connected) {
+				user.popup(`You changed your name and are no longer looking for a battle in ${formatid}`);
+				user.updateSearch();
+			}
+			return;
+		}
+		return user;
+	}
+
+	/**
+	 * @param {User} user
+	 */
+	getSearches(user) {
+		let searches = [];
+		for (const [formatid, formatTable] of this.searches) {
+			if (formatTable.has(user.userid)) searches.push(formatid);
+		}
+		return searches;
+	}
+	/**
+	 * @param {User} user
+	 * @param {string} formatid
+	 */
+	hasSearch(user, formatid) {
+		const formatTable = this.searches.get(formatid);
+		if (!formatTable) return false;
+		return formatTable.has(user.userid);
+	}
+
+	/**
+	 * Validates a user's team and fetches their rating for a given format
+	 * before creating a search for a battle.
+	 * @param {User} user
+	 * @param {string} format
+	 * @return {Promise<void>}
+	 */
+	async searchBattle(user, format) {
+		if (!user.connected) return;
+
+		let formatid = Dex.getFormat(format).id;
+		let oldUserid = user.userid;
+		let validTeam;
+		let rating;
+		try {
+			[validTeam, rating] = await Promise.all([
+				user.prepBattle(formatid, 'search', null),
+				Ladders(formatid).getRating(user.userid),
+			]);
+		} catch (e) {
+			// Rejects iff ladders are disabled, or if we
+			// retrieved the rating but the user had changed their name.
+			if (Ladders.disabled) return user.popup(`The ladder is currently disabled due to high server load.`);
+			// User feedback for renames handled elsewhere.
+			return;
+		}
+
+		if (oldUserid !== user.userid) return;
 		if (validTeam === false) return;
 
 		const search = new Search(user.userid, validTeam, rating);
 		this.addSearch(search, user, formatid);
 	}
 
+	/**
+	 * Verifies whether or not a match made between two users is valid.
+	 * @param {Search} search1
+	 * @param {Search} search2
+	 * @param {User=} user1
+	 * @param {User=} user2
+	 * @param {string} formatid
+	 * @return {number | false | void}
+	 */
 	matchmakingOK(search1, search2, user1, user2, formatid) {
-		// This should never happen.
 		if (!user1 || !user2) {
+			// This should never happen.
 			return void require('./crashlogger')(new Error(`Matched user ${user1 ? search2.userid : search1.userid} not found`), "The main process");
 		}
 
@@ -101,7 +185,8 @@ class Matchmaker {
 		if (user1.lastMatch === user2.userid || user2.lastMatch === user1.userid) return false;
 
 		// search must be within range
-		let searchRange = 100, elapsed = Date.now() - Math.min(search1.time, search2.time);
+		let searchRange = 100;
+		let elapsed = Date.now() - Math.min(search1.time, search2.time);
 		if (formatid === 'gen7ou' || formatid === 'gen7oucurrent' ||
 				formatid === 'gen7oususpecttest' || formatid === 'gen7randombattle') {
 			searchRange = 50;
@@ -117,97 +202,79 @@ class Matchmaker {
 		return Math.min(search1.rating, search2.rating) || 1;
 	}
 
+	/**
+	 * Atarts a search for a battle for a user under the given format.
+	 * @param {Search} newSearch
+	 * @param {User} user
+	 * @param {string} formatid
+	 */
 	addSearch(newSearch, user, formatid) {
-		// Filter racing conditions
-		if (!user.connected || user !== Users.getExact(user.userid)) return;
-		if (user.searching[formatid]) return;
-
-		// Prioritize players who have been searching for a match the longest.
-		let formatSearches = this.searches.get(formatid);
-		if (!formatSearches) {
-			formatSearches = new Set();
-			this.searches.set(formatid, formatSearches);
+		let formatTable = this.searches.get(formatid);
+		if (!formatTable) {
+			formatTable = new Map();
+			this.searches.set(formatid, formatTable);
+		}
+		if (formatTable.has(user.userid)) {
+			user.popup(`Couldn't search: You are already searching for a ${formatid} battle.`);
+			return;
 		}
 
-		for (let search of formatSearches) {
-			let searchUser = Users.getExact(search.userid);
-			let minRating = this.matchmakingOK(search, newSearch, searchUser, user, formatid);
+		// In order from longest waiting to shortest waiting
+		for (let search of formatTable.values()) {
+			const searcher = this.getSearcher(search, formatid);
+			if (!searcher) continue;
+			let minRating = this.matchmakingOK(search, newSearch, searcher, user, formatid);
 			if (minRating) {
-				delete user.searching[formatid];
-				delete searchUser.searching[formatid];
-				formatSearches.delete(search);
-				this.startBattle(searchUser, user, formatid, search.team, newSearch.team, {rated: !Ladders.disabled && minRating});
+				formatTable.delete(search.userid);
+				Rooms.createBattle(formatid, {
+					p1: searcher,
+					p1team: search.team,
+					p2: user,
+					p2team: newSearch.team,
+					rated: !Ladders.disabled && minRating,
+				});
 				return;
 			}
 		}
-		user.searching[formatid] = 1;
-		formatSearches.add(newSearch);
+
+		formatTable.set(newSearch.userid, newSearch);
 		user.updateSearch();
 	}
 
+	/**
+	 * Creates a match for a new battle for each format in this.searches if a
+	 * valid match can be made. This is run periodically depending on
+	 * PERIODIC_MATCH_INTERVAL.
+	 */
 	periodicMatch() {
-		this.searches.forEach((formatSearches, formatid) => {
-			if (formatSearches.size < 2) return;
+		// In order from longest waiting to shortest waiting
+		for (const [formatid, formatTable] of this.searches) {
+			let longestSearch, longestSearcher;
+			for (let search of formatTable.values()) {
+				if (!longestSearch) {
+					longestSearcher = this.getSearcher(search, formatid);
+					if (!longestSearcher) continue;
+					longestSearch = search;
+					continue;
+				}
+				let searcher = this.getSearcher(search, formatid);
+				if (!searcher) continue;
 
-			// Prioritize players who have been searching for a match the longest.
-			let [longestSearch, ...searches] = formatSearches;
-			let longestSearcher = Users.getExact(longestSearch.userid);
-			for (let search of searches) {
-				let searchUser = Users.getExact(search.userid);
-				let minRating = this.matchmakingOK(search, longestSearch, searchUser, longestSearcher, formatid);
+				let minRating = this.matchmakingOK(search, longestSearch, searcher, longestSearcher, formatid);
 				if (minRating) {
-					delete longestSearcher.searching[formatid];
-					delete searchUser.searching[formatid];
-					formatSearches.delete(search);
-					formatSearches.delete(longestSearch);
-					this.startBattle(searchUser, longestSearcher, formatid, search.team, longestSearch.team, {rated: !Ladders.disabled && minRating});
+					formatTable.delete(search.userid);
+					formatTable.delete(longestSearch.userid);
+					Rooms.createBattle(formatid, {
+						p1: searcher,
+						p1team: search.team,
+						p2: longestSearcher,
+						p2team: longestSearch.team,
+						rated: !Ladders.disabled && minRating,
+					});
 					return;
 				}
 			}
-		});
-	}
-
-	verifyPlayers(player1, player2, format) {
-		let p1 = (typeof player1 === 'string') ? Users(player1) : player1;
-		let p2 = (typeof player2 === 'string') ? Users(player2) : player2;
-		if (!p1 || !p2) {
-			this.cancelSearch(p1, format);
-			this.cancelSearch(p2, format);
-			return false;
 		}
-
-		if (p1 === p2) {
-			this.cancelSearch(p1, format);
-			this.cancelSearch(p2, format);
-			p1.popup("You can't battle your own account. Please use something like Private Browsing to battle yourself.");
-			return false;
-		}
-
-		if (Rooms.global.lockdown === true) {
-			this.cancelSearch(p1, format);
-			this.cancelSearch(p2, format);
-			p1.popup("The server is restarting. Battles will be available again in a few minutes.");
-			p2.popup("The server is restarting. Battles will be available again in a few minutes.");
-			return false;
-		}
-
-		return true;
-	}
-
-	startBattle(p1, p2, format, p1team, p2team, options) {
-		if (!this.verifyPlayers(p1, p2, format)) return;
-
-		let roomid = Rooms.global.prepBattleRoom(format);
-		let room = Rooms.createBattle(roomid, format, p1, p2, options);
-		p1.joinRoom(room);
-		p2.joinRoom(room);
-		room.battle.addPlayer(p1, p1team);
-		room.battle.addPlayer(p2, p2team);
-		this.cancelSearch(p1, format);
-		this.cancelSearch(p2, format);
-		Rooms.global.onCreateBattleRoom(p1, p2, room, options);
-
-		return room;
 	}
 }
 

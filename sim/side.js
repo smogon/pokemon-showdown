@@ -96,7 +96,7 @@ class Side {
 		}
 
 		this.team = team;
-		for (let i = 0; i < this.team.length && i < 6; i++) {
+		for (let i = 0; i < this.team.length && i < 24; i++) {
 			//console.log("NEW POKEMON: " + (this.team[i] ? this.team[i].name : '[unidentified]'));
 			this.pokemon.push(new Sim.Pokemon(this.team[i], this));
 		}
@@ -138,7 +138,7 @@ class Side {
 		};
 		for (let i = 0; i < this.pokemon.length; i++) {
 			let pokemon = this.pokemon[i];
-			data.pokemon.push({
+			let entry = {
 				ident: pokemon.fullname,
 				details: pokemon.details,
 				condition: pokemon.getHealth(pokemon.side),
@@ -159,7 +159,9 @@ class Side {
 				baseAbility: pokemon.baseAbility,
 				item: pokemon.item,
 				pokeball: pokemon.pokeball,
-			});
+			};
+			if (this.battle.gen > 6) entry.ability = pokemon.ability;
+			data.pokemon.push(entry);
 		}
 		return data;
 	}
@@ -453,11 +455,21 @@ class Side {
 	chooseTeam(data) {
 		const autoFill = !data;
 		if (autoFill) data = `123456`;
-		const positions = ('' + data).split('').map(datum => parseInt(datum) - 1);
+		let positions;
+		if (data.includes(',')) {
+			positions = ('' + data).split(',').map(datum => parseInt(datum) - 1);
+		} else {
+			positions = ('' + data).split('').map(datum => parseInt(datum) - 1);
+		}
 
 		if (autoFill && this.choice.actions.length >= this.maxTeamSize) return true;
 		if (this.currentRequest !== 'teampreview') {
 			return this.emitChoiceError(`Can't choose for Team Preview: You're not in a Team Preview phase`);
+		}
+
+		// hack for >6 pokemon Custom Game
+		while (positions.length >= 6 && positions.length < this.maxTeamSize && positions.length < this.pokemon.length) {
+			positions.push(positions.length);
 		}
 
 		for (const pos of positions) {
@@ -541,7 +553,7 @@ class Side {
 
 		this.clearChoice();
 
-		const choiceStrings = input.split(',');
+		const choiceStrings = (input.startsWith('team ') ? [input] : input.split(','));
 
 		for (let choiceString of choiceStrings) {
 			let choiceType = '';

@@ -1,7 +1,7 @@
 /**
 * The Happy Place: Quote of the Day Plugin
 * This is a command that allows a room owner to set an inspirational "quote" of the day.
-* Others may braodcast this at any time to remind the room of such.
+* Others may broadcast this at any time to remind the room of such.
 * Only works in a room with the id "thehappyplace"
 * Credits: panpawn, TalkTakesTime, Morfent, and sirDonovan
 */

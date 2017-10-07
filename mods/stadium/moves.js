@@ -1,45 +1,9 @@
 'use strict';
 
 exports.BattleMovedex = {
-	"acid": {
-		inherit: true,
-		secondary: {
-			chance: 33,
-			boosts: {
-				def: -1,
-			},
-		},
-	},
-	aurorabeam: {
-		inherit: true,
-		secondary: {
-			chance: 33,
-			boosts: {
-				atk: -1,
-			},
-		},
-	},
 	bind: {
 		inherit: true,
 		onBeforeMove: function () {},
-	},
-	bubble: {
-		inherit: true,
-		secondary: {
-			chance: 33,
-			boosts: {
-				spe: -1,
-			},
-		},
-	},
-	bubblebeam: {
-		inherit: true,
-		secondary: {
-			chance: 33,
-			boosts: {
-				spe: -1,
-			},
-		},
 	},
 	clamp: {
 		inherit: true,

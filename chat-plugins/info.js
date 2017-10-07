@@ -148,7 +148,8 @@ exports.commands = {
 		if ((user === targetUser || user.can('alts', targetUser)) && hiddenrooms) {
 			buf += `<br />Hidden rooms: ${hiddenrooms}`;
 		}
-		if ((user === targetUser || user.can('makeroom')) && privaterooms) {
+		const staffViewingLocked = user.can('alts', targetUser) && targetUser.locked;
+		if ((user === targetUser || user.can('makeroom') || staffViewingLocked) && privaterooms) {
 			buf += `<br />Private rooms: ${privaterooms}`;
 		}
 
@@ -380,6 +381,8 @@ exports.commands = {
 			mod = Dex.mod(toId(sep[1]));
 		} else if (sep[1] && Dex.getFormat(sep[1]).mod) {
 			mod = Dex.mod(Dex.getFormat(sep[1]).mod);
+		} else if (room && room.battle) {
+			mod = Dex.forFormat(room.battle.format);
 		}
 		let newTargets = mod.dataSearch(target);
 		let showDetails = (cmd === 'dt' || cmd === 'details');
@@ -1332,6 +1335,7 @@ exports.commands = {
 	formats: 'formathelp',
 	tiershelp: 'formathelp',
 	formatshelp: 'formathelp',
+	viewbanlist: 'formathelp',
 	formathelp: function (target, room, user, connection, cmd) {
 		if (!this.runBroadcast()) return;
 		if (!target) {
@@ -1351,7 +1355,7 @@ exports.commands = {
 
 		let formatList;
 		let format = Dex.getFormat(targetId);
-		if (format.effectType === 'Format') formatList = [targetId];
+		if (format.effectType === 'Format' || format.effectType === 'ValidatorRule' || format.effectType === 'Rule') formatList = [targetId];
 		if (!formatList) {
 			formatList = Object.keys(Dex.formats);
 		}
@@ -1378,11 +1382,30 @@ exports.commands = {
 
 		if (!totalMatches) return this.errorReply("No " + (target ? "matched " : "") + "formats found.");
 		if (totalMatches === 1) {
+			let rules = [];
+			let rulesetHtml = '';
 			let format = Dex.getFormat(Object.values(sections)[0].formats[0]);
+			if (format.effectType === 'ValidatorRule' || format.effectType === 'Rule' || format.effectType === 'Format') {
+				if (format.ruleset && format.ruleset.length) rules.push("<b>Ruleset</b> - " + Chat.escapeHTML(format.ruleset.join(", ")));
+				if (format.removedRules && format.removedRules.length) rules.push("<b>Removed rules</b> - " + Chat.escapeHTML(format.removedRules.join(", ")));
+				if (format.banlist && format.banlist.length) rules.push("<b>Bans</b> - " + Chat.escapeHTML(format.banlist.join(", ")));
+				if (format.unbanlist && format.unbanlist.length) rules.push("<b>Unbans</b> - " + Chat.escapeHTML(format.unbanlist.join(", ")));
+				if (rules.length > 0) {
+					rulesetHtml = `<details><summary>Banlist/Ruleset</summary>${rules.join("<br />")}</details>`;
+				} else {
+					rulesetHtml = "No ruleset found for " + format.name;
+				}
+			}
 			let formatType = (format.gameType || "singles");
 			formatType = formatType.charAt(0).toUpperCase() + formatType.slice(1).toLowerCase();
-			if (!format.desc) return this.sendReplyBox("No description found for this " + formatType + " " + format.section + " format.");
-			return this.sendReplyBox(format.desc.join("<br />"));
+			if (!format.desc) {
+				if (format.effectType === 'Format') {
+					return this.sendReplyBox("No description found for this " + formatType + " " + format.section + " format." + "<br />" + rulesetHtml);
+				} else {
+					return this.sendReplyBox("No description found for this rule." + "<br />" + rulesetHtml);
+				}
+			}
+			return this.sendReplyBox(format.desc.join("<br />") + "<br />" + rulesetHtml);
 		}
 
 		let tableStyle = `border:1px solid gray; border-collapse:collapse`;
@@ -1507,12 +1530,14 @@ exports.commands = {
 			return this.errorReply("Error: Room rules link is too long (must be under 100 characters). You can use a URL shortener to shorten the link.");
 		}
 
+		target = target.trim();
+
 		if (target === 'delete' || target === 'remove') {
 			if (!room.rulesLink) return this.errorReply("This room does not have rules set to remove.");
 			delete room.rulesLink;
 			this.privateModCommand(`(${user.name} has removed the room rules link.)`);
 		} else {
-			room.rulesLink = target.trim();
+			room.rulesLink = target;
 			this.privateModCommand(`(${user.name} changed the room rules link to: ${target})`);
 		}
 

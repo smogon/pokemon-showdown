@@ -371,6 +371,10 @@ class Battle extends Dex.ModdedDex {
 		for (let i = 0; i < actives.length; i++) {
 			this.runEvent(eventid, actives[i], null, effect, relayVar);
 		}
+		if (eventid === 'Weather' && this.gen >= 7) {
+			// TODO: further research when updates happen
+			this.eachEvent('Update');
+		}
 	}
 	residualEvent(eventid, relayVar) {
 		let statuses = this.getRelevantEffectsInner(this, 'on' + eventid, null, null, false, true, 'duration');
@@ -2085,7 +2089,7 @@ class Battle extends Dex.ModdedDex {
 					decision.pokemon.switchCopyFlag = decision.pokemon.switchFlag;
 				}
 				decision.pokemon.switchFlag = false;
-				if (!decision.speed && decision.pokemon && decision.pokemon.isActive) decision.speed = decision.pokemon.getDecisionSpeed();
+				if (!decision.speed) decision.speed = decision.pokemon.getDecisionSpeed();
 			}
 		}
 

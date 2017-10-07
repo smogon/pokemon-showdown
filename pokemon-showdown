@@ -1,5 +1,19 @@
-#!/usr/bin/env node
-'use strict';
+#!/bin/sh
+
+true /*
+# Shell script will interpret above as a command and execute everything after
+# it, while JavaScript will interpret this as beginning of a comment and skip
+# shell script contents.
+#
+# As shell script parses lines only when they are needed, nothing after exit 1
+# can possibly cause a syntax error.
+
+if nodepath="$(command -v node || command -v nodejs)"; then
+	exec "$nodepath" "$0" "$@"
+fi
+echo "We require Node.js version 8 or later; Node.js not found"
+exit 1
+*/;
 
 const child_process = require('child_process');
 const fs = require('fs');
