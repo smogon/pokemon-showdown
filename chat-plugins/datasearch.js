@@ -370,7 +370,7 @@ function runDexsearch(target, cmd, canAll, message) {
 			if (group[cat][param] === undefined) {
 				if (cat in uniqueTraits) {
 					for (let currentParam in group[cat]) {
-						if (group[cat][currentParam] !== isNotSearch) return `A pokemon cannot have multiple ${cat}.`;
+						if (group[cat][currentParam] !== isNotSearch) return `A Pok&eacute;mon cannot have multiple ${cat}.`;
 					}
 				}
 				continue;
