@@ -103,17 +103,8 @@ exports.Formats = [
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3614120/\">PU Metagame Discussion</a>"],
 
 		mod: 'gen7',
-		searchShow: false,
 		ruleset: ['[Gen 7] NU'],
 		banlist: ['NU', 'BL4'],
-	},
-	{
-		name: "[Gen 7] PU (suspect test)",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3614120/\">PU Suspect Test</a>"],
-
-		mod: 'gen7',
-		ruleset: ['[Gen 7] PU'],
-		unbanlist: ['Hariyama'],
 	},
 	{
 		name: "[Gen 7] LC",
