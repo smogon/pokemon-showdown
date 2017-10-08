@@ -27,15 +27,16 @@ exports.BattleScripts = {
 					let numerators = [100, 66, 50, 40, 33, 28, 25];
 					stat = Math.floor(stat * numerators[-boost] / 100);
 				}
+			}
 
-				let statTable = {atk:'Atk', def:'Def', spa:'SpA', spd:'SpD', spe:'Spe'};
-				stat = this.battle.runEvent('Modify' + statTable[statName], this, null, this.activeMove, stat);
+			if (this.status === 'par' && statName === 'spe') {
+				stat = Math.floor(stat / 4);
 			}
 
 			if (!unmodified) {
 				// Burn attack drop is checked when you get the attack stat upon switch in and used until switch out.
 				if (this.status === 'brn' && statName === 'atk') {
-					stat = this.battle.clampIntRange(Math.floor(stat / 2), 1);
+					stat = Math.floor(stat / 2);
 				}
 			}
 
