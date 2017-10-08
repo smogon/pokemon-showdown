@@ -600,6 +600,9 @@ class Battle {
 	tie() {
 		this.send('tie');
 	}
+	tiebreak() {
+		this.send('tiebreak');
+	}
 	forfeit(user, message, side) {
 		if (this.ended || !this.started) return false;
 
