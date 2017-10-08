@@ -27,6 +27,9 @@ exports.BattleScripts = {
 					let numerators = [100, 66, 50, 40, 33, 28, 25];
 					stat = Math.floor(stat * numerators[-boost] / 100);
 				}
+
+				let statTable = {atk:'Atk', def:'Def', spa:'SpA', spd:'SpD', spe:'Spe'};
+				stat = this.battle.runEvent('Modify' + statTable[statName], this, null, this.activeMove, stat);
 			}
 
 			if (!unmodified) {
