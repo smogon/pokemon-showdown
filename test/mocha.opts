@@ -1,3 +1,4 @@
 test/main.js test/simulator/**/*.js test/application/*.js test/dev-tools/**/*.js test/chat-plugins/*.js
 -R dot
 -u bdd
+--exit
