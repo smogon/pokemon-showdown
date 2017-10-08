@@ -3149,12 +3149,15 @@ exports.commands = {
 		let data = room.getLog(logidx).join("\n");
 		let datahash = crypto.createHash('md5').update(data.replace(/[^(\x20-\x7F)]+/g, '')).digest('hex');
 		let players = room.battle.playerNames;
+		let rating = 0;
+		if (room.battle.ended && room.rated) rating = room.rated;
 		LoginServer.request('prepreplay', {
 			id: room.id.substr(7),
 			loghash: datahash,
 			p1: players[0],
 			p2: players[1],
 			format: room.format,
+			rating: rating,
 			hidden: room.isPrivate ? '1' : '',
 		}, success => {
 			if (success && success.errorip) {
