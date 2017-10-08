@@ -354,7 +354,7 @@ class Trivia extends Rooms.RoomGame {
 	// Formats the player list for display when using /trivia players.
 	formatPlayerList() {
 		return Object.values(this.players)
-			.sort(function (p1, p2) {return p2.points - p1.points; })
+			.sort((p1, p2) => p2.points - p1.points)
 			.map(player => {
 				const usernamePoints = `${player.name} (${player.points})`;
 				return player.isAbsent ? `<span style="color: #444444">${usernamePoints}</span>` : usernamePoints;

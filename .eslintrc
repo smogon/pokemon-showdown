@@ -77,7 +77,7 @@
 		"radix": ["warn", "as-needed"],
 		"vars-on-top": "off",
 		"wrap-iife": ["error", "inside"],
-		"yoda": "off",
+		"yoda": ["error", "never", { "exceptRange": true }],
 
 		"strict": ["error", "global"],
 
@@ -103,7 +103,7 @@
 		"no-sync": "off",
 
 		"array-bracket-spacing": ["error", "never"],
-		"block-spacing": "off",
+		"block-spacing": ["error", "always"],
 		"brace-style": ["error", "1tbs", {"allowSingleLine": true}],
 		"camelcase": "off",
 		"comma-spacing": ["error", {"before": false, "after": true}],

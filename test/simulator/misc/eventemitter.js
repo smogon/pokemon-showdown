@@ -58,7 +58,7 @@ describe('Battle#on', function () {
 			[{species: 'Talonflame', ability: 'galewings', moves: ['peck']}],
 		]);
 		assert.throws(battle.onEvent, TypeError);
-		assert.throws(function () {battle.onEvent('Hit');}, TypeError);
-		assert.throws(function () {battle.onEvent('Hit', battle.getFormat());}, TypeError);
+		assert.throws(() => { battle.onEvent('Hit'); }, TypeError);
+		assert.throws(() => { battle.onEvent('Hit', battle.getFormat()); }, TypeError);
 	});
 });
