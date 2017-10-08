@@ -47,10 +47,10 @@
   "private": true,
   "license": "MIT",
   "devDependencies": {
-    "@types/node": "^8.0.1",
+    "@types/node": "^8.0.32",
     "@types/nodemailer": "^3.1.3",
-    "eslint": "^4.0.0",
+    "eslint": "^4.8.0",
     "mocha": "^4.0.1",
-    "typescript": "^2.5.0-dev.20170622"
+    "typescript": "^2.5.3"
   }
 }
