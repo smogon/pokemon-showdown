@@ -1230,7 +1230,7 @@ class RandomTeams extends Dex.ModdedDex {
 			if (abilities.includes('Prankster') && counter.Status > 1) {
 				ability = 'Prankster';
 			}
-			if (abilities.includes('Swift Swim') && (hasMove['raindance'] || teamDetails['rain'])) {
+			if (abilities.includes('Swift Swim') && hasMove['raindance']) {
 				ability = 'Swift Swim';
 			}
 			if (abilities.includes('Triage') && !!counter['drain']) {
@@ -2257,7 +2257,7 @@ class RandomTeams extends Dex.ModdedDex {
 			if (abilities.includes('Liquid Voice') && hasMove['hypervoice']) {
 				ability = 'Liquid Voice';
 			}
-			if (abilities.includes('Swift Swim') && (hasMove['raindance'] || teamDetails['rain'])) {
+			if (abilities.includes('Swift Swim') && hasMove['raindance']) {
 				ability = 'Swift Swim';
 			}
 
@@ -2265,6 +2265,14 @@ class RandomTeams extends Dex.ModdedDex {
 				// If it doesn't qualify for Technician, Skill Link is useless on it
 				// Might as well give it Pickup just in case
 				ability = 'Pickup';
+			} else if (template.id === 'aurorus' && ability === 'Snow Warning' && hasMove['hypervoice']) {
+				for (let i = 0; i < moves.length; i++) {
+					if (moves[i] === 'hypervoice') {
+						moves[i] = 'blizzard';
+						counter['Normal'] = 0;
+						break;
+					}
+				}
 			} else if (template.baseSpecies === 'Basculin') {
 				ability = 'Adaptability';
 			} else if (template.id === 'gligar') {
