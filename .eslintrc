@@ -25,6 +25,7 @@
 		"no-inner-declarations": ["error", "functions"],
 		"valid-jsdoc": "off",
 
+		"eol-last": ["error", "always"],
 		"array-callback-return": "error",
 		"block-scoped-var": "error",
 		"comma-dangle": ["error", "always-multiline"],
