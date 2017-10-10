@@ -1367,7 +1367,7 @@ exports.commands = {
 				this.globalModlog("UNROOMBAN", name, " by " + user.name);
 			}
 		} else {
-			this.errorReply("User '" + target + "' is not banned.");
+			this.errorReply("User '" + target + "' is not banned from this room.");
 		}
 	},
 	unbanhelp: ["/roomunban [username] - Unbans the user from the room you are in. Requires: @ # & ~"],
