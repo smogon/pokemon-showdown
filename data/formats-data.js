@@ -6442,7 +6442,7 @@ exports.BattleFormatsData = {
 	},
 	necrozma: {
 		randomBattleMoves: ["calmmind", "psychic", "darkpulse", "moonlight", "stealthrock", "storedpower"],
-		randomDoubleBattleMoves: ["calmmind", "autotomize", "irondefense", "trickroom", "moonlight", "storedpower", "psyshock"],
+		randomDoubleBattleMoves: ["calmmind", "trickroom", "moonlight", "storedpower", "psyshock", "darkpulse"],
 		eventPokemon: [
 			{"generation": 7, "level": 75, "moves":["stealthrock", "irondefense", "wringout", "prismaticlaser"]},
 		],
