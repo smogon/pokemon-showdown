@@ -406,6 +406,7 @@ class User {
 		this.blockChallenges = false;
 		this.ignorePMs = false;
 		this.lastConnected = 0;
+		this.ioNext = false;
 
 		// chat queue
 		this.chatQueue = null;
