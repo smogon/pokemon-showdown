@@ -644,6 +644,20 @@ class CommandContext {
 
 		return true;
 	}
+	meansYes(text) {
+		switch (text.toLowerCase().trim()) {
+		case 'on': case 'enable': case 'yes': case 'true':
+			return true;
+		}
+		return false;
+	}
+	meansNo(text) {
+		switch (text.toLowerCase().trim()) {
+		case 'off': case 'disable': case 'no': case 'false':
+			return true;
+		}
+		return false;
+	}
 	canTalk(message, room, targetUser) {
 		if (room === undefined) room = this.room;
 		if (targetUser === undefined && this.pmTarget) {
