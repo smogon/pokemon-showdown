@@ -252,6 +252,16 @@ exports.commands = {
 	ioo: function (target, room, user) {
 		return this.parse('/modjoin +');
 	},
+	'!ionext': true,
+	ionext: function (target, room, user) {
+		if (target === 'off' || target === 'false' || target === 'no') {
+			user.ionext = false;
+			this.sendReply("Your next battle will be publicly visible.");
+		} else {
+			user.ioNext = true;
+			this.sendReply("Your next battle will be invite-only.");
+		}
+	},
 
 	inviteonly: function (target, room, user) {
 		if (!target) return this.parse('/help inviteonly');
