@@ -1478,13 +1478,13 @@ Rooms.createBattle = function (format, options) {
 	const room = Rooms.createBattleRoom(roomid, format, p1, p2, options);
 
 	let inviteOnly = (options.inviteOnly || []);
-	if (p1.ioNext) {
+	if (p1.inviteOnlyNextBattle) {
 		inviteOnly.push(p1.userid);
-		p1.ioNext = false;
+		p1.inviteOnlyNextBattle = false;
 	}
-	if (p2.ioNext) {
+	if (p2.inviteOnlyNextBattle) {
 		inviteOnly.push(p2.userid);
-		p2.ioNext = false;
+		p2.inviteOnlyNextBattle = false;
 	}
 	if (inviteOnly.length) {
 		room.modjoin = '+';
