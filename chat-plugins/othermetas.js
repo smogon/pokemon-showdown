@@ -14,8 +14,8 @@ exports.commands = {
 		}
 
 		if (!target || target === 'all') {
-			buffer += "- <a href=\"https://www.smogon.com/forums/forums/other-metagames.394/\">Other Metagames Forum</a><br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/forums/om-analyses.416/\">Other Metagames Analyses</a><br />";
+			buffer += "- <a href=\"http://www.smogon.com/forums/forums/other-metagames.394/\">Other Metagames Forum</a><br />";
+			buffer += "- <a href=\"http://www.smogon.com/forums/forums/om-analyses.416/\">Other Metagames Analyses</a><br />";
 			if (!target) return this.sendReplyBox(buffer);
 		}
 		let showMonthly = (target === 'all' || target === 'omofthemonth' || target === 'omotm' || target === 'month');
