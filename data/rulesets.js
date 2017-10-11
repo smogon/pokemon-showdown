@@ -60,6 +60,13 @@ exports.BattleFormats = {
 		effectType: 'ValidatorRule',
 		name: 'Pokemon',
 		desc: ["The foundational rules for any and all formats based on in-game mechanics (everything but Custom Game)"],
+		onStart: function () {
+			let ruleTable = this.getRuleTable(this.getFormat());
+			let legality = [];
+			if (!ruleTable.has('speciesclause')) legality.push('nospeciesclause');
+			if (ruleTable.has('ignoreillegalabilities') || !ruleTable.has('-illegal')) legality.push('hackmons');
+			if (legality.length) this.add('legality', legality.join(','));
+		},
 		onValidateTeam: function (team, format) {
 			let problems = [];
 			if (team.length > 6) problems.push('Your team has more than six Pok\u00E9mon.');
