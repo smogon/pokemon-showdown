@@ -14,7 +14,7 @@
 'use strict';
 
 /** 10 seconds */
-const TICK_TIME = 10 * 1000;
+const TICK_TIME = 10;
 
 // Timer constants: In seconds, should be multiple of ten
 const STARTING_TIME = 210;
@@ -166,10 +166,10 @@ class BattleTimer {
 			this.settings.maxPerTurn = isChallenge ? MAX_TURN_TIME_CHALLENGE : MAX_TURN_TIME;
 		}
 		if (this.settings.maxPerTurn <= 0) this.settings.maxPerTurn = Infinity;
-		this.settings.perTurnTicks = Math.floor(this.settings.perTurn / 10);
-		this.settings.startingTicks = Math.ceil(this.settings.starting / 10);
-		this.settings.maxPerTurnTicks = Math.ceil(this.settings.maxPerTurn / 10);
-		this.settings.maxFirstTurnTicks = Math.ceil((this.settings.maxFirstTurn || 0) / 10);
+		this.settings.perTurnTicks = Math.floor(this.settings.perTurn / TICK_TIME);
+		this.settings.startingTicks = Math.ceil(this.settings.starting / TICK_TIME);
+		this.settings.maxPerTurnTicks = Math.ceil(this.settings.maxPerTurn / TICK_TIME);
+		this.settings.maxFirstTurnTicks = Math.ceil((this.settings.maxFirstTurn || 0) / TICK_TIME);
 
 		for (let slotNum = 0; slotNum < 2; slotNum++) {
 			this.ticksLeft.push(this.settings.startingTicks);
@@ -234,7 +234,7 @@ class BattleTimer {
 			const ticksLeft = this.turnTicksLeft[slotNum];
 			if (player) player.sendRoom(`|inactive|Time left: ${ticksLeft * 10} sec this turn | ${this.ticksLeft[slotNum] * 10} sec total`);
 		}
-		this.timer = setTimeout(() => this.nextTick(), TICK_TIME);
+		this.timer = setTimeout(() => this.nextTick(), TICK_TIME * 1000);
 	}
 	nextTick() {
 		if (this.timer) clearTimeout(this.timer);
@@ -265,7 +265,7 @@ class BattleTimer {
 			}
 		}
 		if (!this.checkTimeout()) {
-			this.timer = setTimeout(() => this.nextTick(), TICK_TIME);
+			this.timer = setTimeout(() => this.nextTick(), TICK_TIME * 1000);
 		}
 	}
 	checkActivity() {
