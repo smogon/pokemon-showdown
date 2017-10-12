@@ -10520,7 +10520,7 @@ exports.BattleMovedex = {
 			onTryAddVolatile: function (status, target, source, effect) {
 				if (!target.isGrounded() || target.isSemiInvulnerable()) return;
 				if (status.id === 'confusion') {
-					if (!effect.secondaries) this.add('-activate', target, 'move: Misty Terrain');
+					if (effect.effectType === 'Move' && !effect.secondaries) this.add('-activate', target, 'move: Misty Terrain');
 					return null;
 				}
 			},
@@ -13762,7 +13762,7 @@ exports.BattleMovedex = {
 			},
 			onTryAddVolatile: function (status, target, source, effect) {
 				if ((status.id === 'confusion' || status.id === 'yawn') && source && target !== source && effect && (!effect.infiltrates || target.side === source.side)) {
-					if (!effect.secondaries) this.add('-activate', target, 'move: Safeguard');
+					if (effect.effectType === 'Move' && !effect.secondaries) this.add('-activate', target, 'move: Safeguard');
 					return null;
 				}
 			},
