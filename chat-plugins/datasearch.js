@@ -110,6 +110,7 @@ exports.commands = {
 			} else if (response.reply) {
 				this.sendReplyBox(response.reply);
 			} else if (response.dt) {
+				if (targetGen) response.dt += `, gen${targetGen}`;
 				Chat.commands.data.call(this, response.dt, room, user, connection, 'dt');
 			}
 			this.update();
