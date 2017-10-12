@@ -13,17 +13,17 @@
 
 'use strict';
 
-/** 10 seconds */
-const TICK_TIME = 10;
+/** 5 seconds */
+const TICK_TIME = 5;
 
-// Timer constants: In seconds, should be multiple of ten
+// Timer constants: In seconds, should be multiple of TICK_TIME
 const STARTING_TIME = 210;
 const MAX_TURN_TIME = 150;
 const STARTING_TIME_CHALLENGE = 280;
 const MAX_TURN_TIME_CHALLENGE = 300;
 
-const NOT_DISCONNECTED = 10;
-const DISCONNECTION_TICKS = 7;
+const NOT_DISCONNECTED = 100;
+const DISCONNECTION_TICKS = 13;
 
 // time after a player disabling the timer before they can re-enable it
 const TIMER_COOLDOWN = 20 * 1000;
@@ -157,7 +157,7 @@ class BattleTimer {
 		const isChallenge = (!battle.rated && !battle.room.tour);
 		this.settings = Object.assign({}, Dex.getFormat(battle.format).timer);
 		if (this.settings.perTurn === undefined) {
-			this.settings.perTurn = hasLongTurns ? 20 : 10;
+			this.settings.perTurn = hasLongTurns ? 25 : 10;
 		}
 		if (this.settings.starting === undefined) {
 			this.settings.starting = isChallenge ? STARTING_TIME_CHALLENGE : STARTING_TIME;
