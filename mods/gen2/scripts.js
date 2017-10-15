@@ -165,8 +165,7 @@ exports.BattleScripts = {
 				}
 				accuracy = Math.min(Math.floor(accuracy), 255);
 				accuracy = Math.max(accuracy, 1);
-			}
-			else {
+			} else {
 				accuracy = this.runEvent('Accuracy', target, pokemon, move, accuracy);
 			}
 		}
