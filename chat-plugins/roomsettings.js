@@ -214,7 +214,7 @@ exports.commands = {
 		case 'player':
 			target = '\u2606';
 			/* falls through */
-		default: {
+		default:
 			if (!Config.groups[target]) {
 				this.errorReply(`The rank '${target}' was unrecognized as a modchat level.`);
 				return this.parse('/help modchat');
@@ -229,7 +229,6 @@ exports.commands = {
 			}
 			room.modchat = target;
 			break;
-		}
 		}
 		if (currentModchat === room.modchat) {
 			return this.errorReply(`Modchat is already set to ${currentModchat}.`);
