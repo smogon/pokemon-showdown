@@ -636,19 +636,19 @@ exports.commands = {
 					weaknesses.push(type);
 					break;
 				case 2:
-					weaknesses.push("<b>" + type + "</b>");
+					weaknesses.push("<strong>" + type + "</strong>");
 					break;
 				case 3:
-					weaknesses.push("<b><i>" + type + "</i></b>");
+					weaknesses.push("<strong><i>" + type + "</i></strong>");
 					break;
 				case -1:
 					resistances.push(type);
 					break;
 				case -2:
-					resistances.push("<b>" + type + "</b>");
+					resistances.push("<strong>" + type + "</strong>");
 					break;
 				case -3:
-					resistances.push("<b><i>" + type + "</i></b>");
+					resistances.push("<strong><i>" + type + "</i></strong>");
 					break;
 				}
 			} else {
@@ -830,7 +830,7 @@ exports.commands = {
 				}
 			}
 			buffer.push('Coverage for ' + sources.join(' + ') + ':');
-			buffer.push('<b><font color=#559955>Super Effective</font></b>: ' + (superEff.join(', ') || '<font color=#999999>None</font>'));
+			buffer.push('<strong><font color=#559955>Super Effective</font></strong>: ' + (superEff.join(', ') || '<font color=#999999>None</font>'));
 			buffer.push('<span class="message-effect-resist">Neutral</span>: ' + (neutral.join(', ') || '<font color=#999999>None</font>'));
 			buffer.push('<span class="message-effect-weak">Resists</span>: ' + (resists.join(', ') || '<font color=#999999>None</font>'));
 			buffer.push('<span class="message-effect-immune">Immunities</span>: ' + (immune.join(', ') || '<font color=#999999>None</font>'));
@@ -902,7 +902,7 @@ exports.commands = {
 			buffer += '</table></div>';
 
 			if (hasThousandArrows) {
-				buffer += "<br /><b>Thousand Arrows has neutral type effectiveness on Flying-type Pok\u00e9mon if not already smacked down.";
+				buffer += "<br /><strong>Thousand Arrows has neutral type effectiveness on Flying-type Pok\u00e9mon if not already smacked down.";
 			}
 
 			this.sendReplyBox('Coverage for ' + sources.join(' + ') + ':<br />' + buffer);
@@ -1107,7 +1107,7 @@ exports.commands = {
 				output *= 2 / (2 + modifier);
 			}
 		}
-		return this.sendReplyBox('Base ' + statValue + (calcHP ? ' HP ' : ' ') + 'at level ' + level + ' with ' + iv + ' IVs, ' + ev + (nature === 1.1 ? '+' : (nature === 0.9 ? '-' : '')) + ' EVs' + (modifier > 0 && !calcHP ? ' at ' + (positiveMod ? '+' : '-') + modifier : '') + ': <b>' + Math.floor(output) + '</b>.');
+		return this.sendReplyBox('Base ' + statValue + (calcHP ? ' HP ' : ' ') + 'at level ' + level + ' with ' + iv + ' IVs, ' + ev + (nature === 1.1 ? '+' : (nature === 0.9 ? '-' : '')) + ' EVs' + (modifier > 0 && !calcHP ? ' at ' + (positiveMod ? '+' : '-') + modifier : '') + ': <strong>' + Math.floor(output) + '</strong>.');
 	},
 	statcalchelp: ["/statcalc [level] [base stat] [IVs] [nature] [EVs] [modifier] (only base stat is required) - Calculates what the actual stat of a Pokémon is with the given parameters. For example, '/statcalc lv50 100 30iv positive 252ev scarf' calculates the speed of a base 100 scarfer with HP Ice in Battle Spot, and '/statcalc uninvested 90 neutral' calculates the attack of an uninvested Crobat.",
 		"!statcalc [level] [base stat] [IVs] [nature] [EVs] [modifier] (only base stat is required) - Shows this information to everyone.",
@@ -1130,14 +1130,14 @@ exports.commands = {
 		} else {
 			uptimeText = Chat.toDurationString(uptime * 1000);
 		}
-		this.sendReplyBox("Uptime: <b>" + uptimeText + "</b>");
+		this.sendReplyBox("Uptime: <strong>" + uptimeText + "</strong>");
 	},
 
 	'!servertime': true,
 	servertime: function (target, room, user) {
 		if (!this.runBroadcast()) return;
 		let servertime = new Date();
-		this.sendReplyBox(`Server time: <b>${servertime.toLocaleString()}</b>`);
+		this.sendReplyBox(`Server time: <strong>${servertime.toLocaleString()}</strong>`);
 	},
 
 	'!groups': true,
@@ -1386,10 +1386,10 @@ exports.commands = {
 			let rulesetHtml = '';
 			let format = Dex.getFormat(Object.values(sections)[0].formats[0]);
 			if (format.effectType === 'ValidatorRule' || format.effectType === 'Rule' || format.effectType === 'Format') {
-				if (format.ruleset && format.ruleset.length) rules.push("<b>Ruleset</b> - " + Chat.escapeHTML(format.ruleset.join(", ")));
-				if (format.removedRules && format.removedRules.length) rules.push("<b>Removed rules</b> - " + Chat.escapeHTML(format.removedRules.join(", ")));
-				if (format.banlist && format.banlist.length) rules.push("<b>Bans</b> - " + Chat.escapeHTML(format.banlist.join(", ")));
-				if (format.unbanlist && format.unbanlist.length) rules.push("<b>Unbans</b> - " + Chat.escapeHTML(format.unbanlist.join(", ")));
+				if (format.ruleset && format.ruleset.length) rules.push("<strong>Ruleset</strong> - " + Chat.escapeHTML(format.ruleset.join(", ")));
+				if (format.removedRules && format.removedRules.length) rules.push("<strong>Removed rules</strong> - " + Chat.escapeHTML(format.removedRules.join(", ")));
+				if (format.banlist && format.banlist.length) rules.push("<strong>Bans</strong> - " + Chat.escapeHTML(format.banlist.join(", ")));
+				if (format.unbanlist && format.unbanlist.length) rules.push("<strong>Unbans</strong> - " + Chat.escapeHTML(format.unbanlist.join(", ")));
 				if (rules.length > 0) {
 					rulesetHtml = `<details><summary>Banlist/Ruleset</summary>${rules.join("<br />")}</details>`;
 				} else {
@@ -1818,10 +1818,10 @@ exports.commands = {
 		Config.potd = target;
 		Rooms.SimulatorProcess.eval('Config.potd = \'' + toId(target) + '\'');
 		if (target) {
-			if (Rooms.lobby) Rooms.lobby.addRaw("<div class=\"broadcast-blue\"><b>The Pok&eacute;mon of the Day is now " + target + "!</b><br />This Pokemon will be guaranteed to show up in random battles.</div>");
+			if (Rooms.lobby) Rooms.lobby.addRaw("<div class=\"broadcast-blue\"><strong>The Pok&eacute;mon of the Day is now " + target + "!</strong><br />This Pokemon will be guaranteed to show up in random battles.</div>");
 			this.logModCommand("The Pok\u00e9mon of the Day was changed to " + target + " by " + user.name + ".");
 		} else {
-			if (Rooms.lobby) Rooms.lobby.addRaw("<div class=\"broadcast-blue\"><b>The Pok&eacute;mon of the Day was removed!</b><br />No pokemon will be guaranteed in random battles.</div>");
+			if (Rooms.lobby) Rooms.lobby.addRaw("<div class=\"broadcast-blue\"><strong>The Pok&eacute;mon of the Day was removed!</strong><br />No pokemon will be guaranteed in random battles.</div>");
 			this.logModCommand("The Pok\u00e9mon of the Day was removed by " + user.name + ".");
 		}
 	},
