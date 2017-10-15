@@ -640,8 +640,8 @@ let commands = {
 	 * --------------
 	 * Individual game commands for each Scavenger Game
 	 */
-	 game: 'games',
-	 games: {
+	game: 'games',
+	games: {
 		knockoutgames: 'kogames',
 		kogames: function (target, room, user) {
 			if (room.id !== 'scavengers') return this.errorReply("Scavenger games can only be created in the scavengers room.");
