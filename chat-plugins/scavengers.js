@@ -557,10 +557,6 @@ class ScavengerHunt extends Rooms.RoomGame {
 
 		for (let i = 0; i < questionArray.length; i++) {
 			if (i % 2) {
-				// This check will likely be removed within a week or so, as having access to a comma
-				// in an answer is actually fairly useful and actually a reason why a separator was changed to
-				// a semicolon. It's just here to give time for people to get used to that change.
-				if (questionArray[i].includes(',')) return {err: "Commas are no longer correct syntax for separating answers - please use semicolons instead."};
 				questionArray[i] = questionArray[i].split(';').map(p => p.trim());
 				if (!questionArray[i].length || questionArray[i].some(a => !toId(a))) return {err: "Empty answer - only alphanumeric characters will count in answers."};
 			} else {
@@ -644,8 +640,8 @@ let commands = {
 	 * --------------
 	 * Individual game commands for each Scavenger Game
 	 */
-	 game: 'games',
-	 games: {
+	game: 'games',
+	games: {
 		knockoutgames: 'kogames',
 		kogames: function (target, room, user) {
 			if (room.id !== 'scavengers') return this.errorReply("Scavenger games can only be created in the scavengers room.");
@@ -816,7 +812,7 @@ let commands = {
 		if (!this.can('mute', null, room)) return false;
 		if (!room.game || !room.game.scavGame) return this.errorReply(`There is no scavenger game currently running.`);
 
-		let completed = room.game.scavParentGame ? room.game.game.completed : room.game.completed;
+		let completed = room.game.scavParentGame ? room.game.childGame.completed : room.game.completed;
 		if (!this.cmd.includes('force')) {
 			if (!completed.length) {
 				return this.errorReply('No one has finished the hunt yet.  Use /forceendhunt if you want to end the hunt and reveal the answers.');

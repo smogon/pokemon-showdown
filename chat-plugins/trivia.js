@@ -354,7 +354,7 @@ class Trivia extends Rooms.RoomGame {
 	// Formats the player list for display when using /trivia players.
 	formatPlayerList() {
 		return Object.values(this.players)
-			.sort(function (p1, p2) {return p2.points - p1.points; })
+			.sort((p1, p2) => p2.points - p1.points)
 			.map(player => {
 				const usernamePoints = `${player.name} (${player.points})`;
 				return player.isAbsent ? `<span style="color: #444444">${usernamePoints}</span>` : usernamePoints;
@@ -1174,8 +1174,9 @@ const commands = {
 		if (!question) return this.errorReply(`'${target}' is not a valid argument. View /trivia help questions for more information.`);
 
 		let questions = triviaData.questions;
+		let questionID = toId(question);
 		for (let i = 0; i < questions.length; i++) {
-			if (questions[i].question === question) {
+			if (toId(questions[i].question) === questionID) {
 				questions.splice(i, 1);
 				writeTriviaData();
 				return this.privateModCommand(`(${user.name} removed question '${target}' from the question database.)`);

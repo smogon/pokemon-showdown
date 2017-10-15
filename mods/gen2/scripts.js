@@ -27,16 +27,16 @@ exports.BattleScripts = {
 					let numerators = [100, 66, 50, 40, 33, 28, 25];
 					stat = Math.floor(stat * numerators[-boost] / 100);
 				}
+			}
 
-				// On Gen 2 we check modifications here from moves and items
-				let statTable = {atk:'Atk', def:'Def', spa:'SpA', spd:'SpD', spe:'Spe'};
-				stat = this.battle.runEvent('Modify' + statTable[statName], this, null, null, stat);
+			if (this.status === 'par' && statName === 'spe') {
+				stat = Math.floor(stat / 4);
 			}
 
 			if (!unmodified) {
 				// Burn attack drop is checked when you get the attack stat upon switch in and used until switch out.
 				if (this.status === 'brn' && statName === 'atk') {
-					stat = this.battle.clampIntRange(Math.floor(stat / 2), 1);
+					stat = Math.floor(stat / 2);
 				}
 			}
 
@@ -375,6 +375,13 @@ exports.BattleScripts = {
 
 		// We now check for attacker and defender
 		let level = pokemon.level;
+
+		// Using Beat Up
+		if (move.allies) {
+			this.add('-activate', pokemon, 'move: Beat Up', '[of] ' + move.allies[0].name);
+			level = move.allies[0].level;
+		}
+
 		let attacker = pokemon;
 		let defender = target;
 		if (move.useTargetOffensive) attacker = target;
@@ -399,6 +406,12 @@ exports.BattleScripts = {
 		// Get stats now.
 		let attack = attacker.getStat(atkType, unboosted, noburndrop);
 		let defense = defender.getStat(defType, unboosted);
+
+		// Using Beat Up
+		if (move.allies) {
+			attack = move.allies.shift().template.baseStats.atk;
+			defense = defender.template.baseStats.def;
+		}
 
 		// Moves that ignore offense and defense respectively.
 		if (move.ignoreOffensive) {

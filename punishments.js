@@ -1248,13 +1248,13 @@ Punishments.isRoomBanned = function (user, roomid) {
 	for (let ip in user.ips) {
 		punishment = Punishments.roomIps.nestedGet(roomid, ip);
 		if (punishment) {
-			 if (punishment[0] === 'ROOMBAN') {
+			if (punishment[0] === 'ROOMBAN') {
 				return punishment;
-			 } else if (punishment[0] === 'BLACKLIST') {
+			} else if (punishment[0] === 'BLACKLIST') {
 				if (Punishments.sharedIps.has(ip) && user.autoconfirmed) return;
 
 				return punishment;
-			 }
+			}
 		}
 	}
 };

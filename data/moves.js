@@ -4363,7 +4363,7 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
-		desc: "For 3 turns, the target is forced to repeat its last move used. If the affected move runs out of PP, the effect ends. Fails if the target is already under this effect, if it has not made a move, if the move has 0 PP, or if the move is Encore, Mimic, Mirror Move, Sketch, Struggle, or Transform.",
+		desc: "For 3 turns, the target is forced to repeat its last move used. If the affected move runs out of PP, the effect ends. Fails if the target is already under this effect, if it has not made a move, if the move has 0 PP, or if the move is Assist, Copycat, Encore, Me First, Metronome, Mimic, Mirror Move, Nature Power, Sketch, Sleep Talk, Struggle, Transform, or a Z-Move.",
 		shortDesc: "The target repeats its last move for 3 turns.",
 		id: "encore",
 		isViable: true,
@@ -4376,7 +4376,7 @@ exports.BattleMovedex = {
 			duration: 3,
 			noCopy: true, // doesn't get copied by Z-Baton Pass
 			onStart: function (target) {
-				let noEncore = {encore:1, mimic:1, mirrormove:1, sketch:1, struggle:1, transform:1};
+				let noEncore = {assist:1, copycat:1, encore:1, mefirst:1, metronome:1, mimic:1, mirrormove:1, naturepower:1, sketch:1, sleeptalk:1, struggle:1, transform:1};
 				let moveIndex = target.moves.indexOf(target.lastMove);
 				if (!target.lastMove || this.getMove(target.lastMove).isZ || noEncore[target.lastMove] || (target.moveset[moveIndex] && target.moveset[moveIndex].pp <= 0)) {
 					// it failed
@@ -4756,6 +4756,7 @@ exports.BattleMovedex = {
 		flags: {contact: 1, protect: 1, mirror: 1},
 		onTry: function (pokemon, target) {
 			if (pokemon.activeTurns > 1) {
+				this.attrLastMove('[still]');
 				this.add('-fail', pokemon);
 				this.add('-hint', "Fake Out only works on your first turn out.");
 				return null;
@@ -8529,7 +8530,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "The user has 1/16 of its maximum HP restored at the end of each turn, but it is prevented from switching out and other Pokemon cannot force the user to switch out. The user can still switch out if it uses Baton Pass, Parting Shot, U-turn, or Volt Switch. If the user leaves the field using Baton Pass, the replacement will remain trapped and still receive the healing effect. During the effect, the user can be hit normally by Ground-type attacks and be affected by Spikes, Toxic Spikes, and Sticky Web, even if the user is a Flying type or has the Ability Levitate.",
-		shortDesc: "User recovers 1/16 max HP per turn. Traps user.",
+		shortDesc: "Traps/grounds user; heals 1/16 max HP per turn.",
 		id: "ingrain",
 		name: "Ingrain",
 		pp: 20,
@@ -10519,7 +10520,7 @@ exports.BattleMovedex = {
 			onTryAddVolatile: function (status, target, source, effect) {
 				if (!target.isGrounded() || target.isSemiInvulnerable()) return;
 				if (status.id === 'confusion') {
-					if (!effect.secondaries) this.add('-activate', target, 'move: Misty Terrain');
+					if (effect.effectType === 'Move' && !effect.secondaries) this.add('-activate', target, 'move: Misty Terrain');
 					return null;
 				}
 			},
@@ -13038,7 +13039,15 @@ exports.BattleMovedex = {
 		onHit: function (target, source) {
 			if (source.template && (source.template.num === 493 || source.template.num === 773)) return false;
 			this.add('-start', source, 'typechange', '[from] move: Reflect Type', '[of] ' + target);
-			source.types = target.getTypes(true);
+			let newBaseTypes = target.getTypes(true).filter(type => type !== '???');
+			if (!newBaseTypes.length) {
+				if (target.addedType) {
+					newBaseTypes = ['Normal'];
+				} else {
+					return false;
+				}
+			}
+			source.types = newBaseTypes;
 			source.addedType = target.addedType;
 			source.knownType = target.side === source.side && target.knownType;
 		},
@@ -13753,7 +13762,7 @@ exports.BattleMovedex = {
 			},
 			onTryAddVolatile: function (status, target, source, effect) {
 				if ((status.id === 'confusion' || status.id === 'yawn') && source && target !== source && effect && (!effect.infiltrates || target.side === source.side)) {
-					if (!effect.secondaries) this.add('-activate', target, 'move: Safeguard');
+					if (effect.effectType === 'Move' && !effect.secondaries) this.add('-activate', target, 'move: Safeguard');
 					return null;
 				}
 			},

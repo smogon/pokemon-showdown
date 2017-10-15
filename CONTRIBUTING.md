@@ -83,23 +83,23 @@ Unfortunately, since this is not a convention the linter can test for (and also 
 ES5 and ES6
 ------------------------------------------------------------------------
 
-In general, use modern features only if they're supported in Node 6 and reasonably performant in the latest version of Node.
+In general, use modern features; recent versions of V8 have fixed the performance problems they used to have.
 
 - **let, const: ALWAYS** - Supported in Node 4+, good performance.
 
 - **for-of on Arrays: ALWAYS** - Supported in Node 4+, good performance in Node 8+.
 
-- **Array#forEach: NEVER** - Worse performance than `for-of` on Arrays. See `for-of`.
+- **Array#forEach: NEVER** - Poor readability; we prefer `for-of`.
 
 - **for-in on Arrays: NEVER** - Horrible performance, weird bugs due to string keys, poor interaction with Array prototype modification. Everyone tells you never to do it; we're no different. See `for-of`.
 
-- **Map, Set: SOMETIMES** - Much worse write/iteration performance, much better read performance than `Object.create(null)`. Use whatever's faster for your use case.
+- **Map, Set: SOMETIMES** - Worse write/iteration performance, better read performance than `Object.create(null)`. Use whatever's faster for your use case.
 
-- **for-in on Objects: SOMETIMES** - `Object.keys` is apparently a lot faster. Use that if you can.
+- **for-in on Objects: ALWAYS** - More readable; good performance in Node 8+.
 
-- **for-of on Maps: NEVER** - Poor performance. Use `Map#forEach`.
+- **for-of on Maps and Sets: ALWAYS** - Supported in Node 4+, good performance in Node 8+.
 
-- **Map#forEach: ALWAYS** - This is our preferred method of iterating `Map`s.
+- **Map#forEach, Set#forEach: NEVER** - Poor readability; we prefer `for-of`.
 
 - **Object literal functions: ALWAYS** - Supported in Node 4+, good performance.
 
