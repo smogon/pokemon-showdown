@@ -126,6 +126,9 @@ exports.BattleScripts = {
 		if (move.selfdestruct && doSelfDestruct) {
 			this.faint(pokemon, pokemon, move);
 		}
+		if (!this.singleEvent('Try', move, null, pokemon, target, move)) {
+			return false;
+		}
 		// First, check if the Pokémon is immune to this move.
 		if (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type] && !target.runImmunity(move.type, true)) {
 			return false;
