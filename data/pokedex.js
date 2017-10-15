@@ -3160,7 +3160,7 @@ exports.BattlePokedex = {
 		weightkg: 38,
 		color: "Brown",
 		prevo: "bonsly",
-		evoLevel: 1,
+		evoLevel: 2,
 		evoMove: "Mimic",
 		eggGroups: ["Mineral"],
 	},
