@@ -2231,7 +2231,7 @@ exports.BattlePokedex = {
 		weightkg: 54.5,
 		color: "Pink",
 		prevo: "mimejr",
-		evoLevel: 1,
+		evoLevel: 2,
 		evoMove: "Mimic",
 		eggGroups: ["Human-Like"],
 	},
