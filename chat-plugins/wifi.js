@@ -200,7 +200,7 @@ class QuestionGiveaway extends Giveaway {
 	}
 
 	generateQuestion() {
-		return this.generateWindow(`<p style="text-align:center;font-size:13pt;">Giveaway Question: <b>${this.question}</b></p><p style="text-align:center;">use /ga to guess.</p>`);
+		return this.generateWindow(`<p style="text-align:center;font-size:13pt;">Giveaway Question: <strong>${this.question}</strong></p><p style="text-align:center;">use /ga to guess.</p>`);
 	}
 
 	start() {
@@ -265,9 +265,9 @@ class QuestionGiveaway extends Giveaway {
 				this.phase = 'ended';
 				this.clearTimer();
 				this.room.modlog(`${this.winner.name} won ${this.giver.name}'s giveaway for a "${this.prize}" (OT: ${this.ot} TID: ${this.tid} FC: ${this.fc})`);
-				this.send(this.generateWindow(`<p style="text-align:center;font-size:12pt;"><b>${Chat.escapeHTML(this.winner.name)}</b> won the giveaway! Congratulations!</p>` +
+				this.send(this.generateWindow(`<p style="text-align:center;font-size:12pt;"><strong>${Chat.escapeHTML(this.winner.name)}</strong> won the giveaway! Congratulations!</p>` +
 				`<p style="text-align:center;">${this.question}<br />Correct answer${Chat.plural(this.answers)}: ${this.answers.join(', ')}</p>`));
-				this.winner.sendTo(this.room, `|raw|You have won the giveaway. PM <b>${Chat.escapeHTML(this.giver.name)}</b> (FC: ${this.fc}) to claim your prize!`);
+				this.winner.sendTo(this.room, `|raw|You have won the giveaway. PM <strong>${Chat.escapeHTML(this.giver.name)}</strong> (FC: ${this.fc}) to claim your prize!`);
 				if (this.winner.connected) this.winner.popup(`You have won the giveaway. PM **${Chat.escapeHTML(this.giver.name)}** (FC: ${this.fc}) to claim your prize!`);
 				if (this.giver.connected) this.giver.popup(`${this.winner.name} has won your question giveaway!`);
 				Giveaway.updateStats(this.monIds);
@@ -306,7 +306,7 @@ class LotteryGiveaway extends Giveaway {
 
 	generateReminder(joined) {
 		let cmd = (joined ? 'Leave' : 'Join');
-		let button = `<button style="margin:4px;" name="send" value="/giveaway ${toId(cmd)}lottery"><font size=1><b>${cmd}</b></font></button>`;
+		let button = `<button style="margin:4px;" name="send" value="/giveaway ${toId(cmd)}lottery"><font size=1><strong>${cmd}</strong></font></button>`;
 		return this.generateWindow(`The lottery drawing will occur in 2 minutes, and with ${this.maxwinners} winner${Chat.plural(this.maxwinners)}!<br />${button}</p>`);
 	}
 
@@ -377,9 +377,9 @@ class LotteryGiveaway extends Giveaway {
 			this.phase = 'ended';
 			let winnerNames = this.winners.map(winner => winner.name).join(', ');
 			this.room.modlog(`${winnerNames} won ${this.giver.name}'s giveaway for "${this.prize}" (OT: ${this.ot} TID: ${this.tid} FC: ${this.fc})`);
-			this.send(this.generateWindow(`<p style="text-align:center;font-size:10pt;font-weight:bold;">Lottery Draw</p><p style="text-align:center;">${Object.keys(this.joined).length} users joined the giveaway.<br />Our lucky winner${Chat.plural(this.winners)}: <b>${Chat.escapeHTML(winnerNames)}!</b> Congratulations!</p>`));
+			this.send(this.generateWindow(`<p style="text-align:center;font-size:10pt;font-weight:bold;">Lottery Draw</p><p style="text-align:center;">${Object.keys(this.joined).length} users joined the giveaway.<br />Our lucky winner${Chat.plural(this.winners)}: <strong>${Chat.escapeHTML(winnerNames)}!</strong> Congratulations!</p>`));
 			for (let i = 0; i < this.winners.length; i++) {
-				this.winners[i].sendTo(this.room, `|raw|You have won the lottery giveaway! PM <b>${this.giver.name}</b> (FC: ${this.fc}) to claim your prize!`);
+				this.winners[i].sendTo(this.room, `|raw|You have won the lottery giveaway! PM <strong>${this.giver.name}</strong> (FC: ${this.fc}) to claim your prize!`);
 				if (this.winners[i].connected) this.winners[i].popup(`You have won the lottery giveaway! PM **${this.giver.name}** (FC: ${this.fc}) to claim your prize!`);
 			}
 			if (this.giver.connected) this.giver.popup(`The following users have won your lottery giveaway:\n${winnerNames}`);
@@ -432,9 +432,9 @@ class GtsGiveaway {
 		let sentModifier = this.sent.length ? 5 : 0;
 		let rightSide = this.noDeposits ? `<strong>More Pokémon have been deposited than there are prizes in this giveaway and new deposits will not be accepted. If you have already deposited a Pokémon, please be patient, and do not withdraw your Pokémon.</strong>` : `To participate, deposit <strong>${this.deposit}</strong> into the GTS and look for <strong>${Chat.escapeHTML(this.lookfor)}</strong>`;
 		return `<p style="text-align:center;font-size:14pt;font-weight:bold;margin-bottom:2px;">There is a GTS giveaway going on!</p>` +
-			`<p style="text-align:center;font-size:10pt;margin-top:0px;">Hosted by: ${Chat.escapeHTML(this.giver.name)} | Left: <b>${this.left}</b></p>` +
+			`<p style="text-align:center;font-size:10pt;margin-top:0px;">Hosted by: ${Chat.escapeHTML(this.giver.name)} | Left: <strong>${this.left}</strong></p>` +
 			`<table style="margin-left:auto;margin-right:auto;"><tr>` +
-			(sentModifier ? `<td style="text-align:center;width:10%"><b>Last winners:</b><br/>${this.sent.join('<br/>')}</td>` : '') +
+			(sentModifier ? `<td style="text-align:center;width:10%"><strong>Last winners:</strong><br/>${this.sent.join('<br/>')}</td>` : '') +
 			`<td style="text-align:center;width:15%">${this.sprite}</td><td style="text-align:center;width:${40 - sentModifier}%">${Chat.parseText(this.summary)}</td>` +
 			`<td style="text-align:center;width:${35 - sentModifier}%">${rightSide}</td></tr></table>`;
 	}
@@ -784,7 +784,7 @@ let commands = {
 			break;
 		default:
 			if (!this.runBroadcast()) return;
-			reply = '<b>Wi-Fi room Giveaway help and info</b><br />' +
+			reply = '<strong>Wi-Fi room Giveaway help and info</strong><br />' +
 			'- help user - shows list of participation commands<br />' +
 			'- help staff - shows giveaway staff commands (Requires: + % @ * # & ~)<br />' +
 			'- help gts - shows gts giveaway commands (Requires: + % @ * # & ~)';

@@ -148,10 +148,10 @@ class Tournament {
 			}
 		}
 		let html = [];
-		if (bans.length) html.push("<b>Bans</b> - " + Chat.escapeHTML(bans.join(", ")));
-		if (unbans.length) html.push("<b>Unbans</b> - " + Chat.escapeHTML(unbans.join(", ")));
-		if (addedRules.length) html.push("<b>Added rules</b> - " + Chat.escapeHTML(addedRules.join(", ")));
-		if (removedRules.length) html.push("<b>Removed rules</b> - " + Chat.escapeHTML(removedRules.join(", ")));
+		if (bans.length) html.push("<strong>Bans</strong> - " + Chat.escapeHTML(bans.join(", ")));
+		if (unbans.length) html.push("<strong>Unbans</strong> - " + Chat.escapeHTML(unbans.join(", ")));
+		if (addedRules.length) html.push("<strong>Added rules</strong> - " + Chat.escapeHTML(addedRules.join(", ")));
+		if (removedRules.length) html.push("<strong>Removed rules</strong> - " + Chat.escapeHTML(removedRules.join(", ")));
 		return html.join("<br />");
 	}
 
@@ -161,7 +161,7 @@ class Tournament {
 			this.inProgressMatches.forEach(match => {
 				if (match) {
 					delete match.room.tour;
-					match.room.addRaw("<div class=\"broadcast-red\"><b>The tournament was forcefully ended.</b><br />You can finish playing, but this battle is no longer considered a tournament battle.</div>");
+					match.room.addRaw("<div class=\"broadcast-red\"><strong>The tournament was forcefully ended.</strong><br />You can finish playing, but this battle is no longer considered a tournament battle.</div>");
 				}
 			});
 		} else if (this.autoStartTimer) {
@@ -1131,7 +1131,7 @@ let commands = {
 			}
 			tournament.customRules = [];
 			tournament.teambuilderFormat = tournament.originalFormat;
-			this.room.addRaw("<b>The tournament's custom rules were cleared.</b>");
+			this.room.addRaw("<strong>The tournament's custom rules were cleared.</strong>");
 			this.privateModCommand("(" + user.name + " cleared the tournament's custom rules.)");
 		},
 		name: 'setname',

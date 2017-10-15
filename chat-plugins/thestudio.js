@@ -120,7 +120,7 @@ function generateAotd() {
 	if (aotd.image) output += Chat.html `<td><img src="${aotd.image}" width=100 height=100></td>`;
 	output += `<td style="text-align:right;margin:5px;">`;
 	if (aotd.song) {
-		output += `<b>Song:</b> `;
+		output += `<strong>Song:</strong> `;
 		if (aotd.link) {
 			output += Chat.html `<a href="${aotd.link}">${aotd.song}</a>`;
 		} else {
@@ -179,7 +179,7 @@ function generateNomWindow() {
 	}
 
 	nominations.forEach((value, key) => {
-		buffer += Chat.html `<li><b>${value.artist}</b> <i>(Submitted by ${value.name})</i></li>`;
+		buffer += Chat.html `<li><strong>${value.artist}</strong> <i>(Submitted by ${value.name})</i></li>`;
 	});
 
 	buffer += `</ul></div>`;

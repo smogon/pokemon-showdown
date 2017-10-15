@@ -81,7 +81,7 @@ const emojiRegex = /[\u231A\u231B\u23E9-\u23EC\u23F0\u23F3\u25FD\u25FE\u2614\u26
 /** @typedef {{token: string, endToken?: string, resolver: (str: string) => string}} Resolver */
 /** @type {Resolver[]} */
 const formattingResolvers = [
-	{token: "**", resolver: str => `<b>${str}</b>`},
+	{token: "**", resolver: str => `<strong>${str}</strong>`},
 	{token: "__", resolver: str => `<i>${str}</i>`},
 	{token: "``", resolver: str => `<code>${str}</code>`},
 	{token: "~~", resolver: str => `<s>${str}</s>`},
@@ -419,7 +419,7 @@ class CommandContext {
 				message: this.message,
 			});
 			Rooms.global.reportCrash(err);
-			this.sendReply(`|html|<div class="broadcast-red"><b>Pokemon Showdown crashed!</b><br />Don't worry, we're working on fixing it.</div>`);
+			this.sendReply(`|html|<div class="broadcast-red"><strong>Pokemon Showdown crashed!</strong><br />Don't worry, we're working on fixing it.</div>`);
 		}
 		if (result === undefined) result = false;
 

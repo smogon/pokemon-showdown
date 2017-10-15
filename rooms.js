@@ -713,26 +713,26 @@ class GlobalRoom {
 			if (id === 'global') return;
 			if (err) {
 				if (id === 'staff' || id === 'development' || (!devRoom && id === 'lobby')) {
-					curRoom.addRaw(`<div class="broadcast-red"><b>The server needs to restart because of a crash:</b> ${stack}<br />Please restart the server.</div>`);
+					curRoom.addRaw(`<div class="broadcast-red"><strong>The server needs to restart because of a crash:</strong> ${stack}<br />Please restart the server.</div>`);
 					curRoom.addRaw(`<div class="broadcast-red">You will not be able to start new battles until the server restarts.</div>`);
 					curRoom.update();
 				} else {
-					curRoom.addRaw(`<div class="broadcast-red"><b>The server needs to restart because of a crash.</b><br />No new battles can be started until the server is done restarting.</div>`).update();
+					curRoom.addRaw(`<div class="broadcast-red"><strong>The server needs to restart because of a crash.</strong><br />No new battles can be started until the server is done restarting.</div>`).update();
 				}
 			} else {
-				curRoom.addRaw(`<div class="broadcast-red"><b>The server is restarting soon.</b><br />Please finish your battles quickly. No new battles can be started until the server resets in a few minutes.</div>`).update();
+				curRoom.addRaw(`<div class="broadcast-red"><strong>The server is restarting soon.</strong><br />Please finish your battles quickly. No new battles can be started until the server resets in a few minutes.</div>`).update();
 			}
 			const game = curRoom.game;
 			if (!slow && game && game.timer && typeof game.timer.start === 'function' && !game.ended) {
 				game.timer.start();
 				if (curRoom.modchat !== '+') {
 					curRoom.modchat = '+';
-					curRoom.addRaw(`<div class="broadcast-red"><b>Moderated chat was set to +!</b><br />Only users of rank + and higher can talk.</div>`).update();
+					curRoom.addRaw(`<div class="broadcast-red"><strong>Moderated chat was set to +!</strong><br />Only users of rank + and higher can talk.</div>`).update();
 				}
 			}
 		});
 		Users.users.forEach(u => {
-			u.send(`|pm|~|${u.group}${u.name}|/raw <div class="broadcast-red"><b>The server is restarting soon.</b><br />Please finish your battles quickly. No new battles can be started until the server resets in a few minutes.</div>`);
+			u.send(`|pm|~|${u.group}${u.name}|/raw <div class="broadcast-red"><strong>The server is restarting soon.</strong><br />Please finish your battles quickly. No new battles can be started until the server resets in a few minutes.</div>`);
 		});
 
 		this.lockdown = true;
@@ -746,14 +746,14 @@ class GlobalRoom {
 			// The server is in lockdown, the final battle has finished, and the option is set
 			// so we will now automatically kill the server here if it is not updating.
 			if (Chat.updateServerLock) {
-				this.notifyRooms(notifyPlaces, `|html|<div class="broadcast-red"><b>Automatic server lockdown kill canceled.</b><br /><br />The server tried to automatically kill itself upon the final battle finishing, but the server was updating while trying to kill itself.</div>`);
+				this.notifyRooms(notifyPlaces, `|html|<div class="broadcast-red"><strong>Automatic server lockdown kill canceled.</strong><br /><br />The server tried to automatically kill itself upon the final battle finishing, but the server was updating while trying to kill itself.</div>`);
 				return;
 			}
 
 			Sockets.workers.forEach(worker => worker.kill());
 
 			// final warning
-			this.notifyRooms(notifyPlaces, `|html|<div class="broadcast-red"><b>The server is about to automatically kill itself in 10 seconds.</b></div>`);
+			this.notifyRooms(notifyPlaces, `|html|<div class="broadcast-red"><strong>The server is about to automatically kill itself in 10 seconds.</strong></div>`);
 
 			// kill server in 10 seconds if it's still set to
 			setTimeout(() => {
@@ -761,7 +761,7 @@ class GlobalRoom {
 					// finally kill the server
 					process.exit();
 				} else {
-					this.notifyRooms(notifyPlaces, `|html|<div class="broadcsat-red"><b>Automatic server lockdown kill canceled.</b><br /><br />In the last final seconds, the automatic lockdown was manually disabled.</div>`);
+					this.notifyRooms(notifyPlaces, `|html|<div class="broadcsat-red"><strong>Automatic server lockdown kill canceled.</strong><br /><br />In the last final seconds, the automatic lockdown was manually disabled.</div>`);
 				}
 			}, 10 * 1000);
 		}
@@ -781,7 +781,7 @@ class GlobalRoom {
 		}
 		this.lastReportedCrash = time;
 		const stack = (err ? Chat.escapeHTML(err.stack).split(`\n`).slice(0, 2).join(`<br />`) : ``);
-		const crashMessage = `|html|<div class="broadcast-red"><b>The server has crashed:</b> ${stack}</div>`;
+		const crashMessage = `|html|<div class="broadcast-red"><strong>The server has crashed:</strong> ${stack}</div>`;
 		const devRoom = Rooms('development');
 		if (devRoom) {
 			devRoom.add(crashMessage).update();

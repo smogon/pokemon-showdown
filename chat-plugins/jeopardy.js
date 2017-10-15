@@ -136,7 +136,7 @@ class Jeopardy extends Rooms.RoomGame {
 		}
 		for (let userID in this.players) {
 			let player = this.players[userID];
-			buffer += `<center>${this.curPlayer && this.curPlayer.name === player.name ? "<b>" : ""}<font size=4>${Chat.escapeHTML(player.name)}(${(player.points || 0)})${this.curPlayer && this.curPlayer.name === player.name ? "</b>" : ""}</center><br />`;
+			buffer += `<center>${this.curPlayer && this.curPlayer.name === player.name ? "<strong>" : ""}<font size=4>${Chat.escapeHTML(player.name)}(${(player.points || 0)})${this.curPlayer && this.curPlayer.name === player.name ? "</strong>" : ""}</center><br />`;
 		}
 		buffer += "</body></html></div>";
 		return buffer;
