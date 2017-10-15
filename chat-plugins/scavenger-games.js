@@ -154,7 +154,7 @@ class ScavGame extends Rooms.RoomGame {
 		if (this.childGame && this.childGame.leaveGame) this.childGame.leaveGame(...args);
 	}
 	setTimer(...args) {
-		if (this.childGame && this.childGame.setTimer) this.childGame.setTimer(...args);
+		if (this.childGame && this.childGame.setTimer) return this.childGame.setTimer(...args);
 	}
 	onSendQuestion(...args) {
 		if (this.childGame && this.childGame.onSendQuestion) return this.childGame.onSendQuestion(...args);
