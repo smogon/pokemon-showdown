@@ -1112,7 +1112,7 @@ class Battle extends Dex.ModdedDex {
 			if (unnerveEnded) {
 				for (const foe of side.foe.active) {
 					let item = foe.getItem();
-					if ((!item.isBerry && item.id !== 'berryjuice') || foe.ignoringItem()) continue;
+					if (!item.isBerry || foe.ignoringItem()) continue;
 					this.singleEvent('Start', item, foe.itemData, foe, foe, item);
 				}
 			}
@@ -1187,7 +1187,7 @@ class Battle extends Dex.ModdedDex {
 			if (unnerveEnded) {
 				for (const foe of side.foe.active) {
 					let item = foe.getItem();
-					if ((!item.isBerry && item.id !== 'berryjuice') || foe.ignoringItem()) continue;
+					if (!item.isBerry || foe.ignoringItem()) continue;
 					this.singleEvent('Start', item, foe.itemData, foe, foe, item);
 				}
 			}
