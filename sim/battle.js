@@ -255,6 +255,7 @@ class Battle extends Dex.ModdedDex {
 		if (!this.pseudoWeather[status.id]) return false;
 		this.singleEvent('End', status, this.pseudoWeather[status.id], this);
 		delete this.pseudoWeather[status.id];
+		this.singleEvent('AfterEnd', status, null, this);
 		return true;
 	}
 	suppressingAttackEvents() {
@@ -420,7 +421,7 @@ class Battle extends Dex.ModdedDex {
 			this.debug(eventid + ' handler suppressed by Embargo, Klutz or Magic Room');
 			return relayVar;
 		}
-		if (eventid !== 'End' && effect.effectType === 'Ability' && (target instanceof Sim.Pokemon) && target.ignoringAbility()) {
+		if (eventid !== 'End' && eventid !== 'AfterEnd' && effect.effectType === 'Ability' && (target instanceof Sim.Pokemon) && target.ignoringAbility()) {
 			this.debug(eventid + ' handler suppressed by Gastro Acid');
 			return relayVar;
 		}
@@ -638,7 +639,7 @@ class Battle extends Dex.ModdedDex {
 					this.debug(eventid + ' handler suppressed by Embargo, Klutz or Magic Room');
 				}
 				continue;
-			} else if (eventid !== 'End' && status.effectType === 'Ability' && (thing instanceof Sim.Pokemon) && thing.ignoringAbility()) {
+			} else if (eventid !== 'End' && eventid !== 'AfterEnd' && status.effectType === 'Ability' && (thing instanceof Sim.Pokemon) && thing.ignoringAbility()) {
 				if (eventid !== 'Update') {
 					this.debug(eventid + ' handler suppressed by Gastro Acid');
 				}
@@ -1098,6 +1099,7 @@ class Battle extends Dex.ModdedDex {
 		this.runEvent('BeforeSwitchIn', pokemon);
 		if (side.active[pos]) {
 			let oldActive = side.active[pos];
+			let unnerveEnded = oldActive.hasAbility('unnerve');
 			oldActive.isActive = false;
 			oldActive.isStarted = false;
 			oldActive.usedItemThisTurn = false;
@@ -1107,6 +1109,13 @@ class Battle extends Dex.ModdedDex {
 			side.pokemon[oldActive.position] = oldActive;
 			this.cancelMove(oldActive);
 			oldActive.clearVolatile();
+			if (unnerveEnded) {
+				for (const foe of side.foe.active) {
+					let item = foe.getItem();
+					if (!item.isBerry || foe.ignoringItem()) continue;
+					this.singleEvent('Start', item, foe.itemData, foe, foe, item);
+				}
+			}
 		}
 		side.active[pos] = pokemon;
 		pokemon.activeTurns = 0;
@@ -1157,6 +1166,7 @@ class Battle extends Dex.ModdedDex {
 			this.runEvent('SwitchOut', oldActive);
 			oldActive.illusion = null;
 			this.singleEvent('End', this.getAbility(oldActive.ability), oldActive.abilityData, oldActive);
+			let unnerveEnded = oldActive.hasAbility('unnerve');
 			oldActive.isActive = false;
 			oldActive.isStarted = false;
 			oldActive.usedItemThisTurn = false;
@@ -1174,6 +1184,13 @@ class Battle extends Dex.ModdedDex {
 				}
 			}
 			oldActive.clearVolatile();
+			if (unnerveEnded) {
+				for (const foe of side.foe.active) {
+					let item = foe.getItem();
+					if (!item.isBerry || foe.ignoringItem()) continue;
+					this.singleEvent('Start', item, foe.itemData, foe, foe, item);
+				}
+			}
 		}
 		side.active[pos] = pokemon;
 		pokemon.isActive = true;
@@ -1618,7 +1635,11 @@ class Battle extends Dex.ModdedDex {
 			this.add('-damage', target, target.getHealth);
 			break;
 		}
-		if (target.fainted) this.faint(target);
+		if (target.fainted) {
+			this.faint(target);
+		} else {
+			damage = this.runEvent('AfterDamage', target, source, effect, damage);
+		}
 		return damage;
 	}
 	heal(damage, target, source, effect) {

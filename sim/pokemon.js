@@ -1025,12 +1025,14 @@ class Pokemon {
 			if (ability.id in {illusion:1, multitype:1, stancechange:1}) return false;
 			if (oldAbility in {multitype:1, stancechange:1}) return false;
 		}
+
 		this.battle.singleEvent('End', this.battle.getAbility(oldAbility), this.abilityData, this, source, effect);
 		if (!effect && this.battle.effect && this.battle.effect.effectType === 'Move') {
 			this.battle.add('-endability', this, this.battle.getAbility(oldAbility), '[from] move: ' + this.battle.getMove(this.battle.effect.id));
 		}
 		this.ability = ability.id;
 		this.abilityData = {id: ability.id, target: this};
+		this.battle.singleEvent('AfterEnd', this.battle.getAbility(oldAbility), null, this);
 		if (ability.id && this.battle.gen > 3) {
 			this.battle.singleEvent('Start', ability, this.abilityData, this, source, effect);
 		}
@@ -1122,6 +1124,7 @@ class Pokemon {
 		let linkedPokemon = this.volatiles[status.id].linkedPokemon;
 		let linkedStatus = this.volatiles[status.id].linkedStatus;
 		delete this.volatiles[status.id];
+		this.battle.singleEvent('AfterEnd', status, null, this);
 		if (linkedPokemon && linkedPokemon.volatiles[linkedStatus]) {
 			linkedPokemon.removeVolatile(linkedStatus);
 		}
