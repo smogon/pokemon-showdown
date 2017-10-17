@@ -19,7 +19,7 @@ let Chat = require('../chat');
 let Rooms = require('../rooms');
 type Room = any;
 type GlobalRoom = any;
-type BattleRoom = any;
+type GameRoom = any;
 type ChatRoom = any;
 
 let Verifier = require('../verifier');

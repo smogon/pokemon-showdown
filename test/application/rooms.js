@@ -22,7 +22,7 @@ describe('Rooms features', function () {
 		});
 	});
 
-	describe('BattleRoom', function () {
+	describe('GameRoom', function () {
 		const packedTeam = 'Weavile||lifeorb||swordsdance,knockoff,iceshard,iciclecrash|Jolly|,252,,,4,252|||||';
 
 		let room;
