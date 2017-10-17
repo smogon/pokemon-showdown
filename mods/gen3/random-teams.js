@@ -148,7 +148,7 @@ class RandomGen3Teams extends RandomGen4Teams {
 					if (!hasAbility['Speed Boost'] && !hasMove['perishsong'] && !hasMove['toxic'] && !hasMove['wish']) rejected = true;
 					break;
 				case 'roar': case 'whirlwind':
-					if (counter.setupType && !hasAbility['Speed Boost']) rejected = true;
+					if (counter.setupType) rejected = true;
 					break;
 				case 'rapidspin':
 					if (teamDetails.rapidSpin) rejected = true;
