@@ -482,8 +482,10 @@ exports.commands = {
 			if (targetRoom.getAuth(targetUser) !== ' ') {
 				return this.errorReply(`The user "${targetUser.name}" does not have permission to join "${targetRoom.title}".`);
 			}
+			let targetModjoin = targetRoom.modjoin === true ? targetRoom.modchat : targetRoom.modjoin;
+			if (targetModjoin.length !== 1) return this.errorReply(`You do not have permission to invite people into this room.`);
 			this.room = targetRoom;
-			this.parse(`/roomvoice ${targetUser.name}`);
+			this.parse(`/roompromote ${targetUser.name}, ${targetModjoin}`);
 			if (!targetRoom.checkModjoin(targetUser)) {
 				if (targetRoom.getAuth(targetUser) !== ' ') {
 					return this.errorReply(`The user "${targetUser.name}" does not have permission to join "${targetRoom.title}".`);
