@@ -130,20 +130,21 @@ class Matchmaker {
 	 * Validates a user's team and fetches their rating for a given format
 	 * before creating a search for a battle.
 	 * @param {User} user
-	 * @param {string} format
+	 * @param {string} formatid
 	 * @return {Promise<void>}
 	 */
-	async searchBattle(user, format) {
+	async searchBattle(user, formatid) {
 		if (!user.connected) return;
 
-		let formatid = Dex.getFormat(format).id;
+		const format = Dex.getFormat(formatid);
+		formatid = format.id;
 		let oldUserid = user.userid;
 		let validTeam;
 		let rating;
 		try {
 			[validTeam, rating] = await Promise.all([
 				user.prepBattle(formatid, 'search', null),
-				Ladders(formatid).getRating(user.userid),
+				format.rated !== false ? Ladders(formatid).getRating(user.userid) : Promise.resolve(-1),
 			]);
 		} catch (e) {
 			// Rejects iff ladders are disabled, or if we
@@ -161,7 +162,7 @@ class Matchmaker {
 	}
 
 	/**
-	 * Verifies whether or not a match made between two users is valid.
+	 * Verifies whether or not a match made between two users is valid. Returns 
 	 * @param {Search} search1
 	 * @param {Search} search2
 	 * @param {User=} user1
@@ -231,7 +232,7 @@ class Matchmaker {
 					p1team: search.team,
 					p2: user,
 					p2team: newSearch.team,
-					rated: !Ladders.disabled && minRating,
+					rated: minRating,
 				});
 				return;
 			}
@@ -269,7 +270,7 @@ class Matchmaker {
 						p1team: search.team,
 						p2: longestSearcher,
 						p2team: longestSearch.team,
-						rated: !Ladders.disabled && minRating,
+						rated: minRating,
 					});
 					return;
 				}

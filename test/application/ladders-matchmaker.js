@@ -91,7 +91,7 @@ describe('Matchmaker', function () {
 		addSearch(this.p2);
 		assert.strictEqual(this.p1.games.size, 1);
 		for (const roomid of this.p1.games) {
-			assert.ok(Rooms(roomid) instanceof Rooms.BattleRoom);
+			assert.ok(Rooms(roomid).battle);
 		}
 	});
 

@@ -13,6 +13,9 @@
 
 'use strict';
 
+const FS = require('./fs');
+const ProcessManager = require('./process-manager');
+
 /** 5 seconds */
 const TICK_TIME = 5;
 
@@ -29,8 +32,6 @@ const DISCONNECTION_TICKS = 13;
 const TIMER_COOLDOWN = 20 * 1000;
 
 global.Config = require('./config/config');
-
-const ProcessManager = require('./process-manager');
 
 class SimulatorManager extends ProcessManager {
 	onMessageUpstream(message) {
@@ -176,6 +177,7 @@ class BattleTimer {
 			this.turnTicksLeft.push(-1);
 			this.dcTicksLeft.push(10);
 		}
+		if (Config.forcetimer) this.timer.start();
 	}
 	start(requester) {
 		let userid = requester ? requester.userid : 'staff';
@@ -472,7 +474,7 @@ class Battle {
 			this.started = true;
 			if (!this.ended) {
 				this.ended = true;
-				this.room.win(lines[2]);
+				this.onEnd(lines[2]);
 				this.removeAllPlayers();
 			}
 			this.checkActive();
@@ -517,7 +519,92 @@ class Battle {
 		}
 		Monitor.activeIp = null;
 	}
+	onEnd(winner) {
+		// Declare variables here in case we need them for non-rated battles logging.
+		let p1score = 0.5;
+		const winnerid = toId(winner);
 
+		// Check if the battle was rated to update the ladder, return its response, and log the battle.
+		if (this.room.rated) {
+			this.room.rated = false;
+			let p1 = this.p1;
+			let p2 = this.p2;
+
+			if (winnerid === p1.userid) {
+				p1score = 1;
+			} else if (winnerid === p2.userid) {
+				p1score = 0;
+			}
+
+			let p1name = p1.name;
+			let p2name = p2.name;
+
+			winner = Users.get(winnerid);
+			if (winner && !winner.registered) {
+				this.room.sendUser(winner, '|askreg|' + winner.userid);
+			}
+			// update rankings
+			Ladders(this.format).updateRating(p1name, p2name, p1score, this.room);
+		} else if (Config.logchallenges) {
+			// Log challenges if the challenge logging config is enabled.
+			if (winnerid === this.room.p1.userid) {
+				p1score = 1;
+			} else if (winnerid === this.room.p2.userid) {
+				p1score = 0;
+			}
+			this.logBattle(p1score);
+		} else {
+			this.logData = null;
+		}
+		if (Config.autosavereplays) {
+			let uploader = Users.get(winnerid);
+			if (uploader && uploader.connections[0]) {
+				Chat.parse('/savereplay', this.room, uploader, uploader.connections[0]);
+			}
+		}
+		const parentGame = this.room.parent && this.room.parent.game;
+		if (parentGame && parentGame.onBattleWin) {
+			parentGame.onBattleWin(this.room, winnerid);
+		}
+		this.room.update();
+	}
+	async logBattle(p1score, p1rating, p2rating) {
+		let logData = this.logData;
+		if (!logData) return;
+		this.logData = null; // deallocate to save space
+		logData.log = Rooms.GameRoom.prototype.getLog.call(logData, 3); // replay log (exact damage)
+
+		// delete some redundant data
+		if (p1rating) {
+			delete p1rating.formatid;
+			delete p1rating.username;
+			delete p1rating.rpsigma;
+			delete p1rating.sigma;
+		}
+		if (p2rating) {
+			delete p2rating.formatid;
+			delete p2rating.username;
+			delete p2rating.rpsigma;
+			delete p2rating.sigma;
+		}
+
+		logData.p1rating = p1rating;
+		logData.p2rating = p2rating;
+		logData.endType = this.endType;
+		if (!p1rating) logData.ladderError = true;
+		const date = new Date();
+		logData.timestamp = '' + date;
+		logData.id = this.room.id;
+		logData.format = this.room.format;
+
+		const logsubfolder = Chat.toTimestamp(date).split(' ')[0];
+		const logfolder = logsubfolder.split('-', 2).join('-');
+		const tier = this.room.format.toLowerCase().replace(/[^a-z0-9]+/g, '');
+		const logpath = `logs/${logfolder}/${tier}/${logsubfolder}/`;
+		await FS(logpath).mkdirp();
+		await FS(logpath + this.room.id + '.log.json').write(JSON.stringify(logData));
+		//console.log(JSON.stringify(logData));
+	}
 	onConnect(user, connection) {
 		// this handles joining a battle in which a user is a participant,
 		// where the user has already identified before attempting to join
@@ -742,7 +829,7 @@ if (process.send && module === process.mainModule) {
 			const id = data[0];
 			if (!Battles.has(id)) {
 				try {
-					const battle = Sim.construct(data[2], data[3], sendBattleMessage);
+					const battle = Sim.construct(data[2], !!data[3], sendBattleMessage);
 					battle.id = id;
 					Battles.set(id, battle);
 				} catch (err) {
