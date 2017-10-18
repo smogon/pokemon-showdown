@@ -127,7 +127,12 @@ class Room {
 				if (user.userid === entry.userid ||
 					user.guestNum === entry.guestNum ||
 					(user.autoconfirmed && user.autoconfirmed === entry.autoconfirmed)) {
-					return entry.userid;
+					if (entry.time - Date.now() < 0) {
+						this.unmute(user.userid);
+						return;
+					} else {
+						return entry.userid;
+					}
 				}
 			}
 		}
