@@ -362,7 +362,14 @@ class Battle {
 			throw new Error(`Battle with ID ${room.id} already exists.`);
 		}
 
-		this.send('init', this.format, this.rated ? '1' : '');
+		let ratedMessage = '';
+		if (this.rated) {
+			ratedMessage = 'Rated battle';
+		} else if (this.room.tour) {
+			ratedMessage = 'Tournament battle';
+		}
+
+		this.send('init', this.format, ratedMessage);
 		this.process.pendingTasks.set(room.id, this);
 	}
 
