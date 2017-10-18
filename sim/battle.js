@@ -13,7 +13,7 @@ const Sim = require('./');
 class Battle extends Dex.ModdedDex {
 	/**
 	 * @param {string} formatid
-	 * @param {boolean} rated
+	 * @param {boolean | string} rated
 	 * @param {Function} send
 	 * @param {PRNG} [maybePrng]
 	 */
@@ -1467,7 +1467,7 @@ class Battle extends Dex.ModdedDex {
 
 		this.add('tier', format.name);
 		if (this.rated) {
-			this.add('rated');
+			this.add('rated', typeof this.rated === 'string' ? this.rated : '');
 		}
 		this.add('seed', side => Battle.logReplay(this.prngSeed.join(','), side));
 
