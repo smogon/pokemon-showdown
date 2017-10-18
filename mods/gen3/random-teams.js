@@ -98,19 +98,24 @@ class RandomGen3Teams extends RandomGen4Teams {
 				case 'focuspunch':
 					if (!hasMove['substitute'] || counter.damagingMoves.length < 2) rejected = true;
 					break;
+				case 'meanlook': case 'spiderweb':
+					if (!hasMove['batonpass'] && !hasMove['perishsong']) rejected = true;
+					break;
 				case 'perishsong':
 					if (!hasMove['meanlook']) rejected = true;
 					break;
-				case 'rest': {
+				case 'rest':
 					if (movePool.includes('sleeptalk')) rejected = true;
 					break;
-				}
 				case 'sleeptalk':
 					if (!hasMove['rest']) rejected = true;
 					if (movePool.length > 1) {
 						let rest = movePool.indexOf('rest');
 						if (rest >= 0) this.fastPop(movePool, rest);
 					}
+					break;
+				case 'sunnyday':
+					if (!hasMove['solarbeam']) rejected = true;
 					break;
 
 				// Set up once and only if we have the moves for it
@@ -119,26 +124,31 @@ class RandomGen3Teams extends RandomGen4Teams {
 					if (counter.Physical + counter['physicalpool'] < 2 && !hasMove['batonpass'] && (!hasMove['rest'] || !hasMove['sleeptalk'])) rejected = true;
 					isSetup = true;
 					break;
-				case 'calmmind': case 'growth': case 'nastyplot': case 'tailglow':
+				case 'calmmind': case 'growth': case 'tailglow':
 					if (counter.setupType !== 'Special' || counter['specialsetup'] > 1) rejected = true;
 					if (counter.Special + counter['specialpool'] < 2 && !hasMove['batonpass'] && (!hasMove['rest'] || !hasMove['sleeptalk'])) rejected = true;
 					isSetup = true;
 					break;
-				case 'agility': case 'rockpolish':
+				case 'agility':
 					if (counter.damagingMoves.length < 2 && !hasMove['batonpass']) rejected = true;
 					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					if (!counter.setupType) isSetup = true;
 					break;
-				case 'flail':
+				case 'endeavor': case 'flail': case 'reversal':
 					if (!hasMove['substitute'] && !hasMove['endure']) rejected = true;
 					break;
 
 				// Bad after setup
-				case 'explosion':
+				case 'destinybond': case 'explosion': case 'memento': case 'selfdestruct':
 					if (counter.setupType || !!counter['recovery'] || hasMove['rest']) rejected = true;
+					if (moveid === 'destinybond' && (hasMove['explosion'] || hasMove['selfdestruct'])) rejected = true;
+					if (moveid === 'memento' && hasMove['destinybond']) rejected = true;
 					break;
-				case 'foresight': case 'protect': case 'roar':
-					if (counter.setupType && !hasAbility['Speed Boost']) rejected = true;
+				case 'protect':
+					if (!hasAbility['Speed Boost'] && !hasMove['perishsong'] && !hasMove['toxic'] && !hasMove['wish']) rejected = true;
+					break;
+				case 'roar': case 'whirlwind':
+					if (counter.setupType) rejected = true;
 					break;
 				case 'rapidspin':
 					if (teamDetails.rapidSpin) rejected = true;
@@ -146,15 +156,15 @@ class RandomGen3Teams extends RandomGen4Teams {
 				case 'spikes':
 					if (counter.setupType || teamDetails.spikes) rejected = true;
 					break;
-				case 'switcheroo': case 'trick':
+				case 'trick':
 					if (counter.Physical + counter.Special < 3 || counter.setupType) rejected = true;
 					if (hasMove['lightscreen'] || hasMove['reflect']) rejected = true;
 					break;
-				case 'toxic': case 'toxicspikes':
-					if (counter.setupType || teamDetails.toxicSpikes) rejected = true;
+				case 'toxic':
+					if (counter.setupType) rejected = true;
 					break;
 				case 'endure':
-					if (counter.Status >= 3 || counter.recoil) rejected = true;
+					if (counter.Status >= 3 || counter.recoil || hasMove['substitute']) rejected = true;
 					break;
 				case 'counter':
 					if (hasMove['swordsdance']) rejected = true;
@@ -175,24 +185,24 @@ class RandomGen3Teams extends RandomGen4Teams {
 				case 'hydropump':
 					if (hasMove['surf']) rejected = true;
 					break;
-				case 'solarbeam':
-					if (counter.setupType === 'Physical' || !hasMove['sunnyday'] && !movePool.includes('sunnyday')) rejected = true;
-					break;
-				case 'razorleaf': case 'gigadrain':
-					if (hasMove['solarbeam'] || hasMove['hiddenpowergrass']) rejected = true;
+				case 'gigadrain': case 'razorleaf':
+					if (moves.indexOf('hiddenpowergrass') > -1 || hasMove['solarbeam'] && hasMove['sunnyday']) rejected = true;
 					if (moveid === 'gigadrain' && hasMove['razorleaf']) rejected = true;
 					break;
+				case 'hiddenpowergrass':
+					if (hasMove['solarbeam'] && hasMove['sunnyday']) rejected = true;
+					break;
+				case 'solarbeam':
+					if (counter.setupType === 'Physical' || !hasMove['sunnyday']) rejected = true;
+					break;
 				case 'brickbreak':
-					if (hasMove['substitute'] && hasMove['focuspunch']) rejected = true;
+					if (hasMove['reversal'] || hasMove['substitute'] && hasMove['focuspunch']) rejected = true;
 					break;
 				case 'highjumpkick': case 'crosschop':
 					if (hasMove['brickbreak']) rejected = true;
 					break;
 				case 'seismictoss':
 					if (hasMove['nightshade'] || counter.Physical + counter.Special >= 1) rejected = true;
-					break;
-				case 'dragonclaw':
-					if (hasMove['outrage']) rejected = true;
 					break;
 				case 'pursuit':
 					if (counter.setupType) rejected = true;
@@ -219,9 +229,6 @@ class RandomGen3Teams extends RandomGen4Teams {
 					break;
 				case 'substitute':
 					if (hasMove['pursuit'] || hasMove['rest'] || hasMove['taunt']) rejected = true;
-					break;
-				case 'sleeppowder':
-					if (hasMove['spore']) rejected = true;
 					break;
 				case 'thunderwave': case 'stunspore':
 					if (hasMove['toxic'] || hasMove['willowisp'] || hasMove['sleeppowder'] || hasMove['spore']) rejected = true;
@@ -257,14 +264,14 @@ class RandomGen3Teams extends RandomGen4Teams {
 					break;
 				}
 			}
-			if (species === 'Castform' && moves.length <= 4) {
+			if (species === 'Castform' && moves.length === 4) {
 				// Make sure castforms alternate formes have their required moves
 				let reqMove = '';
-				if (template.species === 'Castform-Sunny' && moves.indexOf('sunnyday') === -1) {
+				if (template.species === 'Castform-Sunny' && !hasMove['sunnyday']) {
 					reqMove = 'sunnyday';
-				} else if (template.species === 'Castform-Rainy' && moves.indexOf('raindance') === -1) {
+				} else if (template.species === 'Castform-Rainy' && !hasMove['raindance']) {
 					reqMove = 'raindance';
-				} else if (template.species === 'Castform-Snowy' && moves.indexOf('hail') === -1) {
+				} else if (template.species === 'Castform-Snowy' && !hasMove['hail']) {
 					reqMove = 'hail';
 				}
 				if (reqMove) {
@@ -272,6 +279,8 @@ class RandomGen3Teams extends RandomGen4Teams {
 					for (let m = 0; m < moves.length; m++) {
 						if (moves[m] === 'weatherball' || this.getMove(moves[m]).type in hasType) continue;
 						moves[m] = reqMove;
+						let reqMoveIndex = movePool.indexOf(reqMove);
+						if (reqMoveIndex !== -1) this.fastPop(movePool, reqMoveIndex);
 						break;
 					}
 				}
