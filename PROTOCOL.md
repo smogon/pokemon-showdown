@@ -106,7 +106,7 @@ Some outgoing message types
 `USER` = a user, the first character being their rank (users with no rank are
 represented by a space), and the rest of the string being their username.
 
-####Room initialization
+#### Room initialization
 
 `|init|ROOMTYPE`
 
@@ -118,7 +118,7 @@ represented by a space), and the rest of the string being their username.
 > `USERLIST` is a comma-separated list of `USER`s, sent from chat rooms when
 > they're joined.
 
-####Room messages
+#### Room messages
 
 `||MESSAGE` or `MESSAGE`
 
@@ -175,7 +175,7 @@ represented by a space), and the rest of the string being their username.
 > A battle started between `USER1` and `USER2`, and the battle room has
 > ID `ROOMID`.
 
-####Battle messages
+#### Battle messages
 
 `|player|PLAYER|USERNAME|AVATAR`
 
@@ -239,7 +239,7 @@ represented by a space), and the rest of the string being their username.
 
 > The battle has ended in a tie.
 
-######Major actions
+###### Major actions
 
 In battle, most Pokémon actions come in the form `|ACTION|POKEMON|DETAILS`
 followed by a few messages detailing what happens after the action occurs.
@@ -324,7 +324,7 @@ tags include `|[still]` (suppress animation) and `|[silent]` (suppress message).
 
 > The Pokémon `POKEMON` has fainted.
 
-######Minor actions
+###### Minor actions
 
 Minor actions are less important than major actions. In the official client,
 they're usually displayed in small font if they have a message. Pretty much
@@ -487,7 +487,7 @@ enough to get you started. You can watch the data sent and received from
 the server on a regular connection, or look at the client source code
 for a full list of message types.
 
-######Action requests
+###### Action requests
 
 These are how the client sends the player's decisions to the server. All
 requests except `/undo` can be sent with `|RQID` at the end. `RQID` is
@@ -546,7 +546,7 @@ move.
 
 > Attempts to cancel the last request so a new one can be made.
 
-####Global messages
+#### Global messages
 
 `|popup|MESSAGE`
 
