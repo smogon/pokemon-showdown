@@ -1528,8 +1528,9 @@ class Battle extends Dex.ModdedDex {
 			} else if (!isSecondary && !isSelf) {
 				this.add(msg, target, i, boostBy);
 			}
+			if (!boostBy) delete boost[i];
 		}
-		this.runEvent('AfterBoost', target, source, effect, boost);
+		this.runEvent('AfterBoost', target, source, effect, boost, effect);
 		return success;
 	}
 	damage(damage, target, source, effect, instafaint) {
