@@ -293,7 +293,7 @@ class Ladder {
 			}
 
 			if (!Dex.getFormat(formatid).noLog) {
-				room.logBattle(p1score, p1newElo, p2newElo);
+				room.battle.logBattle(p1score, p1newElo, p2newElo);
 			}
 		});
 	}
