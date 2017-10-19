@@ -892,24 +892,15 @@ class Validator {
 						// Defog and Whirlpool can't be transferred together
 						if (dex.gen >= 5 && moveid in {'defog':1, 'whirlpool':1} && learnedGen <= 4) blockedHM = true;
 					}
-					if (learned.substr(0, 2) in {'4L':1, '5L':1, '6L':1, '7L':1}) {
-						// gen 4-7 level-up moves
-						if (level >= parseInt(learned.substr(2)) || learnedGen === 7 && dex.gen >= 7) {
-							// we're past the required level to learn it
-							return false;
-						}
+					if (learned.substr(0, 2) in {'4L':1, '5L':1, '6L':1} && level < parseInt(learned.substr(2))) {
 						if (!template.gender || template.gender === 'F') {
 							// available as egg move
 							learned = learnedGen + 'Eany';
 							limitedEgg = false;
-						} else {
-							// this move is unavailable, skip it
-							continue;
 						}
-					}
-					if (learned.charAt(1) in {L:1, M:1, T:1}) {
+					} else if (learned.charAt(1) in {L:1, M:1, T:1}) {
 						if (learnedGen === dex.gen) {
-							// current-gen TM or tutor moves:
+							// current-gen level-up, TM, or tutor moves:
 							//   always available
 							return false;
 						}
