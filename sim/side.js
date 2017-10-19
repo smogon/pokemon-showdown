@@ -6,18 +6,22 @@
  */
 'use strict';
 
-const Sim = require('./');
+const Pokemon = require('./pokemon');
 
 /**
  * An object representing a single action that can be chosen.
  *
  * @typedef {Object} Action
  * @property {string} choice - a choice
- * @property {Sim.Pokemon} pokemon - the pokemon making the choice
- * @property {number} targetLoc - location of the target, relative to pokemon's side
- * @property {string} move - a move to use
- * @property {?boolean} mega - true if megaing
- * @property {?boolean} zmove - true if zmoving
+ * @property {Pokemon} [pokemon] - the pokemon making the choice
+ * @property {number} [targetLoc] - location of the target, relative to pokemon's side
+ * @property {string} [move] - a move to use
+ * @property {Pokemon} [target] - the target of the choice
+ * @property {number} [index] - the chosen index in team preview
+ * @property {number} [priority] - priority of the chosen index
+ * @property {Side} [side] - the pokemon's side
+ * @property {?boolean} [mega] - true if megaing
+ * @property {?boolean} [zmove] - true if zmoving
  */
 
 /**
@@ -45,8 +49,9 @@ class Side {
 		let sideScripts = battle.data.Scripts.side;
 		if (sideScripts) Object.assign(this, sideScripts);
 
-		this.getChoice = (side => this.getChoiceInner(side));
+		this.getChoice = (/**@param {Side} side */side => this.getChoiceInner(side));
 
+		/**@type {Battle} */
 		this.battle = battle;
 		this.n = sideNum;
 		this.name = name;
@@ -55,6 +60,7 @@ class Side {
 		/** @type {Pokemon[]} */
 		this.pokemon = [];
 		/** @type {Pokemon[]} */
+		// @ts-ignore
 		this.active = [null];
 		this.sideConditions = {};
 
@@ -81,16 +87,18 @@ class Side {
 		 */
 		this.currentRequest = '';
 		this.maxTeamSize = 6;
-		/** @type {Side} */
-		this.foe = null;
 
 		this.id = sideNum ? 'p2' : 'p1';
+		/**@type {Side} */
+		this.foe = sideNum ? this.battle.sides[0] : this.battle.sides[1];
 
 		switch (this.battle.gameType) {
 		case 'doubles':
+			// @ts-ignore
 			this.active = [null, null];
 			break;
 		case 'triples': case 'rotation':
+			// @ts-ignore
 			this.active = [null, null, null];
 			break;
 		}
@@ -98,7 +106,7 @@ class Side {
 		this.team = team;
 		for (let i = 0; i < this.team.length && i < 24; i++) {
 			//console.log("NEW POKEMON: " + (this.team[i] ? this.team[i].name : '[unidentified]'));
-			this.pokemon.push(new Sim.Pokemon(this.team[i], this));
+			this.pokemon.push(new Pokemon(this.team[i], this));
 		}
 		this.pokemonLeft = this.pokemon.length;
 		for (let i = 0; i < this.pokemon.length; i++) {
@@ -106,6 +114,9 @@ class Side {
 		}
 	}
 
+	/**
+	 * @param {Side | boolean} side
+	 */
 	getChoiceInner(side) {
 		if (side !== this && side !== true) return '';
 		return this.choice.actions.map(action => {
@@ -130,10 +141,12 @@ class Side {
 	toString() {
 		return this.id + ': ' + this.name;
 	}
+
 	getData() {
 		let data = {
 			name: this.name,
 			id: this.id,
+			/**@type {AnyObject[]} */
 			pokemon: [],
 		};
 		for (let i = 0; i < this.pokemon.length; i++) {
@@ -165,12 +178,19 @@ class Side {
 		}
 		return data;
 	}
+
 	randomActive() {
 		let actives = this.active.filter(active => active && !active.fainted);
 		if (!actives.length) return null;
 		let i = Math.floor(Math.random() * actives.length);
 		return actives[i];
 	}
+
+	/**
+	 * @param {string | Effect} status
+	 * @param {Pokemon} source
+	 * @param {Effect} sourceEffect
+	 */
 	addSideCondition(status, source, sourceEffect) {
 		status = this.battle.getEffect(status);
 		if (this.sideConditions[status.id]) {
@@ -195,11 +215,19 @@ class Side {
 		}
 		return true;
 	}
+
+	/**
+	 * @param {string | Effect} status
+	 */
 	getSideCondition(status) {
 		status = this.battle.getEffect(status);
 		if (!this.sideConditions[status.id]) return null;
 		return status;
 	}
+
+	/**
+	 * @param {string | Effect} status
+	 */
 	removeSideCondition(status) {
 		status = this.battle.getEffect(status);
 		if (!this.sideConditions[status.id]) return false;
@@ -207,6 +235,10 @@ class Side {
 		delete this.sideConditions[status.id];
 		return true;
 	}
+
+	/**
+	 * @param {(string | number | Function | AnyObject)[]} parts
+	 */
 	send(...parts) {
 		let sideUpdate = '|' + parts.map(part => {
 			if (typeof part !== 'function') return part;
@@ -214,12 +246,24 @@ class Side {
 		}).join('|');
 		this.battle.send('sideupdate', `${this.id}\n${sideUpdate}`);
 	}
+
+	/**
+	 * @param {(string | number | AnyObject)[]} args
+	 */
 	emitCallback(...args) {
 		this.battle.send('sideupdate', `${this.id}\n|callback|${args.join('|')}`);
 	}
+
+	/**
+	 * @param {AnyObject} update
+	 */
 	emitRequest(update) {
 		this.battle.send('request', `${this.id}\n${JSON.stringify(update)}`);
 	}
+
+	/**
+	 * @param {string} message
+	 */
 	emitChoiceError(message) {
 		this.choice.error = message;
 		this.battle.send('sideupdate', `${this.id}\n|error|[Invalid choice] ${message}`);
@@ -238,6 +282,12 @@ class Side {
 		this.getChoiceIndex(); // auto-pass
 		return this.choice.actions.length >= this.active.length;
 	}
+
+	/**
+	 * @param {string | number} [moveText]
+	 * @param {number} [targetLoc]
+	 * @param {boolean | string} [megaOrZ]
+	 */
 	chooseMove(moveText, targetLoc, megaOrZ) {
 		if (this.currentRequest !== 'move') {
 			return this.emitChoiceError(`Can't move: You need a ${this.currentRequest} response`);
@@ -247,6 +297,8 @@ class Side {
 			return this.emitChoiceError(`Can't move: You do not have a Pokémon in slot ${index + 1}`);
 		}
 		const autoChoose = !moveText;
+		/**@type {Pokemon} */
+		// @ts-ignore
 		const pokemon = this.active[index];
 
 		if (megaOrZ === true) megaOrZ = 'mega';
@@ -298,6 +350,7 @@ class Side {
 
 		// Z-move
 
+		// @ts-ignore - battle script
 		const zMove = megaOrZ === 'zmove' ? this.battle.getZMove(move, pokemon) : undefined;
 		if (megaOrZ === 'zmove' && !zMove) {
 			return this.emitChoiceError(`Can't move: ${pokemon.name} can't use ${move.name} as a Z-move`);
@@ -314,6 +367,7 @@ class Side {
 
 		if (autoChoose) {
 			targetLoc = 0;
+			// @ts-ignore - battle script
 		} else if (this.battle.targetTypeChoices(targetType)) {
 			if (!targetLoc && this.active.length >= 2) {
 				return this.emitChoiceError(`Can't move: ${move.name} needs a target`);
@@ -340,7 +394,7 @@ class Side {
 		} else if (!moves.length && !zMove) {
 			// Override decision and use Struggle if there are no enabled moves with PP
 			// Gen 4 and earlier announce a Pokemon has no moves left before the turn begins, and only to that player's side.
-			if (this.gen <= 4) this.send('-activate', pokemon, 'move: Struggle');
+			if (this.battle.gen <= 4) this.send('-activate', pokemon, 'move: Struggle');
 			moveid = 'struggle';
 		} else if (!zMove) {
 			// Check for disabled moves
@@ -395,6 +449,10 @@ class Side {
 		if (this.battle.LEGACY_API_DO_NOT_USE && !this.battle.checkDecisions()) return this;
 		return true;
 	}
+
+	/**
+	 * @param {string} [slotText]
+	 */
 	chooseSwitch(slotText) {
 		if (this.currentRequest !== 'move' && this.currentRequest !== 'switch') {
 			return this.emitChoiceError(`Can't switch: You need a ${this.currentRequest} response`);
@@ -403,6 +461,8 @@ class Side {
 		if (index >= this.active.length) {
 			return this.emitChoiceError(`Can't switch: You do not have a Pokémon in slot ${index + 1}`);
 		}
+		/**@type {Pokemon} */
+		// @ts-ignore
 		const pokemon = this.active[index];
 		const autoChoose = !slotText;
 		let slot = parseInt(slotText) - 1;
@@ -452,6 +512,10 @@ class Side {
 		if (this.battle.LEGACY_API_DO_NOT_USE && !this.battle.checkDecisions()) return this;
 		return true;
 	}
+
+	/**
+	 * @param {string} [data]
+	 */
 	chooseTeam(data) {
 		const autoFill = !data;
 		if (autoFill) data = `123456`;
@@ -500,7 +564,8 @@ class Side {
 		if (this.battle.LEGACY_API_DO_NOT_USE && !this.battle.checkDecisions()) return this;
 		return true;
 	}
-	chooseShift(dontPlay) {
+
+	chooseShift() {
 		const index = this.getChoiceIndex();
 		if (index >= this.active.length) {
 			return this.emitChoiceError(`Can't shift: You do not have a Pokémon in slot ${index + 1}`);
@@ -511,6 +576,8 @@ class Side {
 		} else if (index === 1) {
 			return this.emitChoiceError(`Can't shift: You can only shift from the edge to the center`);
 		}
+		/**@type {Pokemon} */
+		// @ts-ignore
 		const pokemon = this.active[index];
 
 		this.choice.actions.push({
@@ -542,6 +609,10 @@ class Side {
 			mega: false,
 		};
 	}
+
+	/**
+	 * @param {string} input
+	 */
 	choose(input) {
 		if (!this.currentRequest) {
 			return this.emitChoiceError(this.battle.ended ? `Can't do anything: The game is over` : `Can't do anything: It's not your turn`);
@@ -608,6 +679,10 @@ class Side {
 
 		return true;
 	}
+
+	/**
+	 * @param {boolean} [isPass]
+	 */
 	getChoiceIndex(isPass) {
 		let index = this.choice.actions.length;
 
@@ -615,12 +690,14 @@ class Side {
 			switch (this.currentRequest) {
 			case 'move':
 				// auto-pass
+				// @ts-ignore
 				while (index < this.active.length && this.active[index].fainted) {
 					this.choosePass();
 					index++;
 				}
 				break;
 			case 'switch':
+				// @ts-ignore
 				while (index < this.active.length && !this.active[index].switchFlag) {
 					this.choosePass();
 					index++;
@@ -635,6 +712,8 @@ class Side {
 	choosePass() {
 		const index = this.getChoiceIndex(true);
 		if (index >= this.active.length) return false;
+		/**@type {Pokemon} */
+		// @ts-ignore
 		const pokemon = this.active[index];
 
 		switch (this.currentRequest) {
@@ -661,6 +740,7 @@ class Side {
 		if (this.battle.LEGACY_API_DO_NOT_USE && !this.battle.checkDecisions()) return this;
 		return true;
 	}
+
 	chooseDefault() {
 		if (!this.battle.LEGACY_API_DO_NOT_USE) throw new Error(`This is a legacy API, it's called autoChoose now`);
 		if (this.isChoiceDone()) {
@@ -675,6 +755,7 @@ class Side {
 		}
 		return this;
 	}
+
 	/**
 	 * Automatically finish a choice if not currently complete
 	 */
@@ -695,23 +776,21 @@ class Side {
 		// deallocate children and get rid of references to them
 		for (let i = 0; i < this.pokemon.length; i++) {
 			if (this.pokemon[i]) this.pokemon[i].destroy();
-			this.pokemon[i] = null;
 		}
-		this.pokemon = null;
-		for (let i = 0; i < this.active.length; i++) {
-			this.active[i] = null;
-		}
-		this.active = null;
+		this.pokemon = [];
+		this.active = [];
 
 		this.choice.actions.forEach(action => {
 			delete action.side;
 			delete action.pokemon;
 			delete action.target;
 		});
-		this.choice = null;
+		this.choice.actions = [];
 
 		// get rid of some possibly-circular references
+		// @ts-ignore - prevent type | null
 		this.battle = null;
+		// @ts-ignore - prevent type | null
 		this.foe = null;
 	}
 }

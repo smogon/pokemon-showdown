@@ -110,6 +110,49 @@ class Effect {
 		 * @type {number}
 		 */
 		this.gen = 0;
+		/**
+		 * The duration of the effect.
+		 * @type {?number}
+		 */
+		this.duration = this.duration;
+		/**
+		 * Whether or not the effect is ignored by Baton Pass.
+		 * @type {boolean}
+		 */
+		this.noCopy = this.noCopy;
+		/**
+		 * Whether or not the effect affects fainted Pokemon.
+		 * @type {boolean}
+		 */
+		this.affectsFainted = this.affectsFainted;
+		/**
+		 * The status that the effect may cause.
+		 * @type {string}
+		 */
+		this.status = this.status;
+		/**
+		 * The weather that the effect may cause.
+		 * @type {string}
+		 */
+		this.weather = this.weather;
+
+		/**
+		 * HP that the effect may drain.
+		 * @type {?number[]}
+		 */
+		this.drain = this.drain;
+		/**
+		 * @type {?Function}
+		 */
+		this.onRestart = this.onRestart;
+		/**
+		 * @type {?Function}
+		 */
+		this.durationCallback = this.durationCallback;
+		/**
+		 * @type {AnyObject}
+		 */
+		this.flags = this.flags || {};
 
 		Object.assign(this, data);
 		if (moreData) Object.assign(this, moreData);
@@ -188,8 +231,18 @@ class Format extends Effect {
 		// @ts-ignore
 		this.effectType = Tools.getString(this.effectType) || 'Format';
 		/**
+		 * Whether or not debug battle messages should be shown.
+		 * @type {boolean}
+		 */
+		this.debug = this.debug;
+		/**
+		 * Whether or not a format is played for ladder points.
+		 * @type {boolean}
+		 */
+		this.rated = this.rated;
+		/**
 		 * Game type.
-		 * @type {'singles' | 'doubles' | 'triples'}
+		 * @type {'singles' | 'doubles' | 'triples' | 'rotation'}
 		 */
 		this.gameType = this.gameType || 'singles';
 		/**
@@ -223,6 +276,17 @@ class Format extends Effect {
 		 * @type {?RuleTable}
 		 */
 		this.ruleTable = null;
+		/**
+		 * The number of Pokemon players can bring to battle and
+		 * the number that can actually be used.
+		 * @type {?{battle: number, validate: number[]}}
+		 */
+		this.teamLength = this.teamLength;
+		/**
+		 * An optional function that runs at the start of a battle.
+		 * @type {?Function}
+		 */
+		this.onBegin = this.onBegin;
 	}
 }
 
@@ -279,6 +343,24 @@ class Item extends Effect {
 		 */
 		this.isBerry = !!this.isBerry;
 
+		/**
+		 * Whether or not this item ignores the Klutz ability.
+		 * @type {boolean}
+		 */
+		this.ignoreKlutz = this.ignoreKlutz;
+
+		/**
+		 * The type the holder will change into if it is an Arceus.
+		 * @type {string}
+		 */
+		this.onPlate = this.onPlate;
+
+		/**
+		 * Is this item a Gem?
+		 * @type {boolean}
+		 */
+		this.isGem = this.isGem;
+
 		if (!this.gen) {
 			if (this.num >= 689) {
 				this.gen = 7;
@@ -313,6 +395,12 @@ class Ability extends Effect {
 		this.fullname = 'ability: ' + this.name;
 		/** @type {'Ability'} */
 		this.effectType = 'Ability';
+
+		/**
+		 * Whether or not this ability suppresses weather.
+		 * @type {boolean}
+		 */
+		this.suppressWeather = this.suppressWeather;
 
 		if (!this.gen) {
 			if (this.num >= 192) {
@@ -405,6 +493,18 @@ class Template extends Effect {
 		this.abilities = this.abilities || {0: ""};
 
 		/**
+		 * Types
+		 * @type {string[]}
+		 */
+		this.types = this.types;
+
+		/**
+		 * Added type (used in OMs)
+		 * @type {?string}
+		 */
+		this.addedType = this.addedType;
+
+		/**
 		 * Pre-evolution. '' if nothing evolves into this Pokemon.
 		 * @type {string}
 		 */
@@ -465,6 +565,36 @@ class Template extends Effect {
 		 * @type {?string[]}
 		 */
 		this.requiredItems = this.requiredItems || (this.requiredItem && [this.requiredItem]) || null;
+
+		/**
+		 * Base stats
+		 * @type {AnyObject}
+		 */
+		this.baseStats = this.baseStats;
+
+		/**
+		 * Weight (in kg)
+		 * @type {number}
+		 */
+		this.weightkg = this.weightkg;
+
+		/**
+		 * Height (in m)
+		 * @type {number}
+		 */
+		this.heightm = this.heightm;
+
+		/**
+		 * Does this Pokemon have an unreleased hidden ability?
+		 * @type {boolean}
+		 */
+		this.unreleasedHidden = this.unreleasedHidden;
+
+		/**
+		 * Max HP. Used in the battle engine
+		 * @type {?number}
+		 */
+		this.maxHP = this.maxHP;
 
 		if (!this.gen) {
 			if (this.num >= 722 || this.forme === 'Alola') {
@@ -538,10 +668,40 @@ class Move extends Effect {
 		this.type = Tools.getString(this.type);
 
 		/**
+		 * Move target.
+		 * @type {string}
+		 */
+		this.target = Tools.getString(this.target);
+
+		/**
+		 * Move base power.
+		 * @type {number}
+		 */
+		this.basePower = this.basePower;
+
+		/**
 		 * Critical hit ratio. Defaults to 1.
 		 * @type {number}
 		 */
 		this.critRatio = Number(this.critRatio) || 1;
+
+		/**
+		 * Will this move always be a critical hit?
+		 * @type {boolean}
+		 */
+		this.willCrit = this.willCrit;
+
+		/**
+		 * Is this move a critical hit?
+		 * @type {boolean}
+		 */
+		this.crit = this.crit;
+
+		/**
+		 * Can this move OHKO foes?
+		 * @type {boolean}
+		 */
+		this.ohko = this.ohko;
 
 		/**
 		 * Base move type. This is the move type as specified by the games,
@@ -579,6 +739,49 @@ class Move extends Effect {
 		this.category = this.category;
 
 		/**
+		 * Category that changes which defense to use when calculating
+		 * move damage.
+		 * @type {?'Physical' | 'Special' | 'Status'}
+		 */
+		this.defensiveCategory = this.defensiveCategory;
+
+		/**
+		 * Whether or not this move uses the target's boosts
+		 * @type {boolean}
+		 */
+		this.useTargetOffensive = this.useTargetOffensive;
+
+		/**
+		 * Whether or not this move uses the user's boosts
+		 * @type {boolean}
+		 */
+		this.useSourceDefensive = this.useSourceDefensive;
+
+		/**
+		 * Whether or not this move ignores negative attack boosts
+		 * @type {boolean}
+		 */
+		this.ignoreNegativeOffensive = this.ignoreNegativeOffensive;
+
+		/**
+		 * Whether or not this move ignores positive defense boosts
+		 * @type {boolean}
+		 */
+		this.ignorePositiveDefensive = this.ignorePositiveDefensive;
+
+		/**
+		 * Whether or not this move ignores attack boosts
+		 * @type {boolean}
+		 */
+		this.ignoreOffensive = this.ignoreOffensive;
+
+		/**
+		 * Whether or not this move ignores defense boosts
+		 * @type {boolean}
+		 */
+		this.ignoreDefensive = this.ignoreDefensive;
+
+		/**
 		 * Whether or not this move ignores type immunities. Defaults to
 		 * true for Status moves and false for Physical/Special moves.
 		 * @type {AnyObject | boolean}
@@ -587,10 +790,118 @@ class Move extends Effect {
 		this.ignoreImmunity = (this.ignoreImmunity !== undefined ? this.ignoreImmunity : this.category === 'Status');
 
 		/**
+		 * Base move PP.
+		 * @type {number}
+		 */
+		this.pp = this.pp;
+
+		/**
+		 * Whether or not this move can receive PP boosts.
+		 * @type {boolean}
+		 */
+		this.noPPBoosts = this.noPPBoosts;
+
+		/**
+		 * Is this move a Z-Move?
+		 * @type {boolean}
+		 */
+		this.isZ = this.isZ;
+
+		/**
+		 * Whether or not this move is a Z-Move that broke protect
+		 * (affects damage calculation).
+		 * @type {boolean}
+		 */
+		this.zBrokeProtect = this.zBrokeProtect;
+
+		/**
 		 * @type {MoveFlags}
 		 * @readonly
 		 */
 		this.flags = this.flags || {};
+
+		/**
+		 * Whether or not the user must switch after using this move.
+		 * @type {string | boolean}
+		 */
+		this.selfSwitch = this.selfSwitch;
+
+		/**
+		 * Move target only used by Pressure
+		 * @type {string}
+		 */
+		this.pressureTarget = this.pressureTarget;
+
+		/**
+		 * Move target used if the user is not a Ghost type
+		 * @type {string}
+		 */
+		this.nonGhostTarget = this.nonGhostTarget;
+
+		/**
+		 * Whether or not the move ignores abilities
+		 * @type {boolean}
+		 */
+		this.ignoreAbility = this.ignoreAbility;
+
+		/**
+		 * Move damage against the current target
+		 * @type {string | number | boolean}
+		 */
+		this.damage = this.damage;
+
+		/**
+		 * Whether or not this move hit multiple targets
+		 * @type {boolean}
+		 */
+		this.spreadHit = this.spreadHit;
+
+		/**
+		 * Modifier that affects damage when multiple targets
+		 * are hit
+		 * @type {?number}
+		 */
+		this.spreadModifier = this.spreadModifier;
+
+		/**
+		 * Modifier that affects damage when this move is
+		 * a critical hit
+		 * @type {?number}
+		 */
+		this.critModifier = this.critModifier;
+
+		/**
+		 * Damage modifier based on the user's types
+		 * @type {number}
+		 */
+		this.typeMod = this.typeMod;
+
+		/**
+		 * Whether or not this move gets STAB
+		 * @type {boolean}
+		 */
+		this.hasSTAB = this.hasSTAB;
+
+		/**
+		 * STAB (can be modified by other effects)
+		 * @type {?number}
+		 */
+		this.stab = this.stab;
+
+		/**
+		 * @type {?Function}
+		 */
+		this.damageCallback = this.damageCallback;
+
+		/**
+		 * @type {?Function}
+		 */
+		this.basePowerCallback = this.basePowerCallback;
+
+		/**
+		 * @type {?Function}
+		 */
+		this.beforeTurnCallback = this.beforeTurnCallback;
 
 		if (!this.gen) {
 			if (this.num >= 622) {

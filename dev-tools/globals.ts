@@ -4,10 +4,6 @@ let Config = require('../config/config');
 
 let Monitor = require('../monitor');
 
-let Dex = require('../sim/dex');
-let toId = Dex.toId;
-// let Sim = require('../sim');
-
 let LoginServer = require('../loginserver');
 let Ladders = require(Config.remoteladder ? '../ladders-remote' : '../ladders');
 let Users = require('../users');
