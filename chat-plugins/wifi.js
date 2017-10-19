@@ -268,7 +268,7 @@ class QuestionGiveaway extends Giveaway {
 				this.send(this.generateWindow(`<p style="text-align:center;font-size:12pt;"><b>${Chat.escapeHTML(this.winner.name)}</b> won the giveaway! Congratulations!</p>` +
 				`<p style="text-align:center;">${this.question}<br />Correct answer${Chat.plural(this.answers)}: ${this.answers.join(', ')}</p>`));
 				this.winner.sendTo(this.room, `|raw|You have won the giveaway. PM <b>${Chat.escapeHTML(this.giver.name)}</b> (FC: ${this.fc}) to claim your prize!`);
-				if (this.winner.connected) this.winner.popup(`You have won the giveaway. PM **${Chat.escapeHTML(this.giver.name)}** (FC: ${this.fc}) to claim your prize!`);
+				if (this.winner.connected) this.winner.popup(`You have won the giveaway. PM **${this.giver.name}** (FC: ${this.fc}) to claim your prize!`);
 				if (this.giver.connected) this.giver.popup(`${this.winner.name} has won your question giveaway!`);
 				Giveaway.updateStats(this.monIds);
 			}
