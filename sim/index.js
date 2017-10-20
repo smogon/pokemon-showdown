@@ -18,6 +18,12 @@ const Side = require('./side');
 const Pokemon = require('./pokemon');
 const PRNG = require('./prng');
 
+/**
+ * @param {string} format
+ * @param {boolean | string} rated
+ * @param {Function} send
+ * @param {PRNG} [prng]
+ */
 exports.construct = function (format, rated, send, prng) {
 	return new Battle(format, rated, send, prng);
 };
