@@ -175,7 +175,7 @@ class BattleTimer {
 		for (let slotNum = 0; slotNum < 2; slotNum++) {
 			this.ticksLeft.push(this.settings.startingTicks);
 			this.turnTicksLeft.push(-1);
-			this.dcTicksLeft.push(10);
+			this.dcTicksLeft.push(NOT_DISCONNECTED);
 		}
 		if (Config.forcetimer) this.timer.start();
 	}
@@ -234,7 +234,7 @@ class BattleTimer {
 			this.turnTicksLeft[slotNum] = Math.min(this.ticksLeft[slotNum], maxTurnTicks);
 
 			const ticksLeft = this.turnTicksLeft[slotNum];
-			if (player) player.sendRoom(`|inactive|Time left: ${ticksLeft * 10} sec this turn | ${this.ticksLeft[slotNum] * 10} sec total`);
+			if (player) player.sendRoom(`|inactive|Time left: ${ticksLeft * TICK_TIME} sec this turn | ${this.ticksLeft[slotNum] * TICK_TIME} sec total`);
 		}
 		this.timer = setTimeout(() => this.nextTick(), TICK_TIME * 1000);
 	}
@@ -259,11 +259,11 @@ class BattleTimer {
 			if (ticksLeft < dcTicksLeft) dcTicksLeft = NOT_DISCONNECTED; // turn timer supersedes dc timer
 
 			if (dcTicksLeft <= 4) {
-				this.battle.room.add(`|inactive|${this.battle.playerNames[slotNum]} has ${dcTicksLeft * 10} seconds to reconnect!`).update();
+				this.battle.room.add(`|inactive|${this.battle.playerNames[slotNum]} has ${dcTicksLeft * TICK_TIME} seconds to reconnect!`).update();
 			}
 			if (dcTicksLeft !== NOT_DISCONNECTED) continue;
 			if (ticksLeft % 3 === 0 || ticksLeft <= 4) {
-				this.battle.room.add(`|inactive|${this.battle.playerNames[slotNum]} has ${ticksLeft * 10} seconds left.`).update();
+				this.battle.room.add(`|inactive|${this.battle.playerNames[slotNum]} has ${ticksLeft * TICK_TIME} seconds left.`).update();
 			}
 		}
 		if (!this.checkTimeout()) {
@@ -291,7 +291,7 @@ class BattleTimer {
 					let timeLeft = ``;
 					if (this.waitingForChoice(slot)) {
 						const ticksLeft = this.turnTicksLeft[slotNum];
-						timeLeft = ` and has ${ticksLeft * 10} seconds left`;
+						timeLeft = ` and has ${ticksLeft * TICK_TIME} seconds left`;
 					}
 					this.battle.room.add(`|inactive|${this.battle.playerNames[slotNum]} reconnected${timeLeft}.`).update();
 				}
