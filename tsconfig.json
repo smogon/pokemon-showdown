@@ -3,12 +3,16 @@
         "lib": ["es2015", "es2016.array.include", "es2017.object"],
         "noEmit": true,
         "target": "esnext",
+        "module": "commonjs",
+        "moduleResolution": "node",
         "strict": true,
         "allowJs": true,
         "checkJs": true
     },
     "types": ["node"],
     "include": [
+        "./dev-tools/global.d.ts",
+        "./dev-tools/node.d.ts",
         "./dev-tools/globals.ts",
         "./sim/dex-data.js",
         "./sim/dex.js",
