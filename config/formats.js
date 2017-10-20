@@ -647,7 +647,7 @@ exports.Formats = [
 
 		mod: 'gen6',
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
-		banlist: ['Uber', 'Shadow Tag', 'Soul Dew'],
+		banlist: ['Uber', 'Arena Trap', 'Shadow Tag', 'Soul Dew'],
 	},
 	{
 		name: "[Gen 6] Ubers",
