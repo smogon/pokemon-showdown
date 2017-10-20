@@ -764,4 +764,22 @@ exports.BattleFormats = {
 		desc: ["Allows the use of Pok&eacute;mon, abilities, moves, and items made by the Create-A-Pok&eacute;mon project"],
 		// Implemented in the 'pokemon' ruleset
 	},
+	illegal: {
+		effectType: 'ValidatorBan',
+		name: 'Illegal',
+		desc: ["Prevents Pok&eacute;mon from using moves or abilities they don't have access to in-game"],
+		// Implemented in team-validator.js
+	},
+	unreleased: {
+		effectType: 'ValidatorBan',
+		name: 'Unreleased',
+		desc: ["Prevents the use of unreleased Pok&eacute;mon, moves, items, or abilities"],
+		// Implemented in team-validator.js
+	},
+	mega: {
+		effectType: 'ValidatorBan',
+		name: 'Mega',
+		desc: ["Prevents the use of Mega Pok&eacute;mon"],
+		// Implemented in team-validator.js
+	},
 };

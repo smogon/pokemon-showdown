@@ -489,55 +489,7 @@ class ModdedDex {
 			let format = this.data.Formats[id];
 			if (customRules) {
 				if (typeof customRules === 'string') customRules = customRules.split(',');
-				const ruleTable = this.getRuleTable(this.getFormat(name));
-				for (let ban of customRules) {
-					ban = ban.trim();
-					let unban = false;
-					if (ban.charAt(0) === '!') {
-						unban = true;
-						ban = ban.substr(1);
-					}
-					let subformat = this.getFormat(ban);
-					if (subformat.effectType === 'ValidatorRule' || subformat.effectType === 'Rule' || subformat.effectType === 'Format') {
-						if (unban) {
-							if (ruleTable.has('!' + subformat.id)) continue;
-						} else {
-							if (ruleTable.has(subformat.id)) continue;
-						}
-						ban = 'Rule:' + subformat.name;
-					} else {
-						ban = ban.toLowerCase();
-						let baseForme = false;
-						if (ban.endsWith('-base')) {
-							baseForme = true;
-							ban = ban.substr(0, ban.length - 5);
-						}
-						let search = this.dataSearch(ban);
-						if (!search || search.length < 1) continue;
-						if (search[0].isInexact || search[0].searchType === 'nature') continue;
-						ban = search[0].name;
-						if (baseForme) ban += '-Base';
-						if (unban) {
-							if (ruleTable.has('+' + ban)) continue;
-						} else {
-							if (ruleTable.has('-' + ban)) continue;
-						}
-					}
-					if (ban.startsWith('Rule:')) {
-						ban = ban.substr(5).trim();
-						if (unban) {
-							sanitizedCustomRules.unshift('!' + ban);
-						} else {
-							sanitizedCustomRules.push(ban);
-						}
-					} else {
-						if (unban) {
-							sanitizedCustomRules.push('+' + ban);
-						} else {
-							sanitizedCustomRules.push('-' + ban);
-						}
-					}
-				}
+				sanitizedCustomRules = sanitizedCustomRules.concat(this.parseRules(customRules));
 			}
 			effect = new Data.Format({name}, format, sanitizedCustomRules.length ? {customRules: sanitizedCustomRules} : null);
 		} else {
@@ -709,56 +661,154 @@ class ModdedDex {
 	}
 
 	/**
+	 * @param {string[]} ruleset
+	 * @returns {string[]}
+	 */
+	parseRules(ruleset) {
+		/**@type {string[]} */
+		const parsedRules = [];
+		for (let rule of ruleset) {
+			rule = rule.trim();
+			let limit = 0;
+			let remove = false;
+			if (rule.charAt(0) === '!') {
+				remove = true;
+				rule = rule.substr(1);
+			}
+			let type = '';
+			let subformat = this.getFormat(rule);
+			if (subformat.effectType === 'ValidatorRule' || subformat.effectType === 'Rule' || subformat.effectType === 'Format') {
+				type = 'rule';
+				rule = subformat.name;
+			} else {
+				type = 'ban';
+				rule = rule.toLowerCase();
+				const gtIndex = rule.lastIndexOf('>');
+				if (gtIndex >= 0 && /^[0-9]+$/.test(rule.slice(gtIndex + 1).trim())) {
+					limit = parseInt(rule.slice(gtIndex + 1));
+					rule = rule.slice(0, gtIndex);
+				}
+				let parts = [rule];
+				let separator = '';
+				if (rule.includes('+')) {
+					separator = rule.includes('++') ? '++' : '+';
+					parts = rule.split(separator);
+				}
+				const sanitizedParts = [];
+				for (let i = 0; i < parts.length; i++) {
+					let part = parts[i].trim();
+					let baseForme = false;
+					if (part.endsWith('-base')) {
+						baseForme = true;
+						part = part.substr(0, part.length - 5);
+					}
+					/**@type {Template | Move | Item | Ability | Format} */
+					let effect = this.getTemplate(part);
+					if (!effect.exists) {
+						effect = this.getMove(part);
+						if (!effect.exists) {
+							effect = this.getItem(part);
+							if (!effect.exists) {
+								effect = this.getAbility(part);
+								if (!effect.exists) {
+									effect = this.getFormat(part);
+									if (effect.effectType !== 'ValidatorBan') continue;
+								}
+							}
+						}
+					}
+					part = effect.name;
+					if (baseForme) part += '-Base';
+					sanitizedParts.push(part);
+				}
+				if (sanitizedParts.length !== parts.length) continue;
+				if (separator) sanitizedParts.push(separator);
+				if (limit > 0) sanitizedParts.push('> ' + limit);
+				rule = sanitizedParts.join('&');
+			}
+			if (type === 'rule') {
+				if (remove) {
+					parsedRules.unshift('!' + rule);
+					continue;
+				}
+			} else {
+				if (remove) {
+					rule = '+' + rule;
+				} else {
+					rule = '-' + rule;
+				}
+			}
+			parsedRules.push(rule);
+		}
+		return parsedRules;
+	}
+
+	/**
 	 * @param {Format} format
 	 * @param {number} [depth = 0]
 	 * @return {RuleTable}
 	 */
 	getRuleTable(format, depth = 0) {
 		/** @type {RuleTable} */
-		let ruleTable = new RuleTable();
+		const ruleTable = new RuleTable();
 		if (format.ruleTable) return format.ruleTable;
 
-		const ruleset = format.ruleset.slice();
-		for (const ban of format.banlist) {
-			ruleset.push('-' + ban);
+		if (!format.parsedRules) {
+			const ruleset = format.ruleset.slice();
+			for (const ban of format.banlist) {
+				ruleset.push('-' + ban);
+			}
+			for (const ban of format.unbanlist) {
+				ruleset.push('+' + ban);
+			}
+			format.parsedRules = this.parseRules(ruleset);
 		}
-		for (const ban of format.unbanlist) {
-			ruleset.push('+' + ban);
-		}
+		const rules = format.parsedRules.slice();
 		if (format.customRules) {
 			for (const rule of format.customRules) {
 				if (rule.startsWith('!')) {
-					ruleset.unshift(rule);
+					rules.unshift(rule);
 				} else {
-					ruleset.push(rule);
+					rules.push(rule);
 				}
 			}
 		}
 
-		for (const rule of ruleset) {
+		for (const rule of rules) {
 			if (rule.charAt(0) === '-' || rule.charAt(0) === '+') { // ban or unban
 				const type = rule.charAt(0);
-				let buf = rule.slice(1);
-				const gtIndex = buf.lastIndexOf('>');
-				let limit = 0;
-				if (gtIndex >= 0 && /^[0-9]+$/.test(buf.slice(gtIndex + 1).trim())) {
-					limit = parseInt(buf.slice(gtIndex + 1));
-					buf = buf.slice(0, gtIndex);
-				}
-				let checkTeam = buf.includes('++');
-				const banNames = buf.split(checkTeam ? '++' : '+').map(v => v.trim());
-				if (banNames.length === 1 && limit > 0) checkTeam = true;
-				const innerRule = banNames.join(checkTeam ? ' ++ ' : ' + ');
-				const bans = banNames.map(v => toId(v));
+				let innerRule = rule.slice(1);
+				if (innerRule.includes('&')) {
+					const banNames = innerRule.split('&');
+					let limit = 0;
+					let checkTeam = false;
+					let separator = '';
+					if (banNames[banNames.length - 1].charAt(0) === '>') {
+						limit = parseInt(banNames[banNames.length - 1].slice(2));
+						banNames.pop();
+					}
+					if (banNames[banNames.length - 1].charAt(0) === '+') {
+						separator = ' ' + banNames[banNames.length - 1] + ' ';
+						checkTeam = separator.includes('++');
+						banNames.pop();
+					}
+					const bans = banNames.map(x => toId(x));
+					if (!checkTeam && bans.length === 1 && limit > 0) checkTeam = true;
+					innerRule = banNames.join(separator);
 
-				if (checkTeam) {
-					ruleTable.complexTeamBans.push([innerRule, '', limit, bans]);
-					continue;
+					if (checkTeam) {
+						const index = ruleTable.complexTeamBans.findIndex(ban => ban[0] === innerRule);
+						if (index >= 0) ruleTable.complexTeamBans.splice(index, 1);
+						if (type === '-') ruleTable.complexTeamBans.push([innerRule, '', limit, bans]);
+						continue;
+					}
+					if (bans.length > 1 || limit > 0) {
+						const index = ruleTable.complexBans.findIndex(ban => ban[0] === innerRule);
+						if (index >= 0) ruleTable.complexBans.splice(index, 1);
+						if (type === '-') ruleTable.complexBans.push([innerRule, '', limit, bans]);
+					}
 				}
-				if (bans.length > 1 || limit > 0) {
-					ruleTable.complexBans.push([innerRule, '', limit, bans]);
-				}
-				const ban = toId(buf);
+				const ban = toId(innerRule);
 				ruleTable.delete('+' + ban);
 				ruleTable.delete('-' + ban);
 				ruleTable.set(type + ban, '');
@@ -1372,7 +1422,6 @@ class ModdedDex {
 			if (!format.column) format.column = column;
 			if (this.formatsCache[id]) throw new Error(`Format #${i + 1} has a duplicate ID: '${id}'`);
 			format.effectType = 'Format';
-			format.baseRuleset = format.ruleset ? format.ruleset.slice() : [];
 			if (format.challengeShow === undefined) format.challengeShow = true;
 			if (format.searchShow === undefined) format.searchShow = true;
 			if (format.tournamentShow === undefined) format.tournamentShow = true;

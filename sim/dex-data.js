@@ -84,7 +84,7 @@ class Effect {
 		this.fullname = '';
 		/**
 		 * Effect type.
-		 * @type {'Effect' | 'Pokemon' | 'Move' | 'Item' | 'Ability' | 'Format' | 'Ruleset' | 'Weather' | 'Status' | 'Rule' | 'ValidatorRule'}
+		 * @type {'Effect' | 'Pokemon' | 'Move' | 'Item' | 'Ability' | 'Format' | 'Ruleset' | 'Weather' | 'Status' | 'Rule' | 'ValidatorRule' | 'ValidatorBan'}
 		 */
 		this.effectType = 'Effect';
 		/**
@@ -184,7 +184,7 @@ class Format extends Effect {
 		 * @type {?string}
 		 */
 		this.team = this.team;
-		/** @type {'Format' | 'Ruleset' | 'Rule' | 'ValidatorRule'} */
+		/** @type {'Format' | 'Ruleset' | 'Rule' | 'ValidatorRule' | 'ValidatorBan'} */
 		// @ts-ignore
 		this.effectType = Tools.getString(this.effectType) || 'Format';
 		/**
@@ -198,11 +198,10 @@ class Format extends Effect {
 		 */
 		this.ruleset = this.ruleset || [];
 		/**
-		 * Base list of rule names as specified in "./config/formats.js".
-		 * Used in a custom format to correctly display the altered ruleset.
-		 * @type {string[]}
+		 * List of validated rule names and banned effects.
+		 * @type {?string[]}
 		 */
-		this.baseRuleset = this.baseRuleset || [];
+		this.parsedRules = this.parsedRules || null;
 		/**
 		 * List of banned effects.
 		 * @type {string[]}
@@ -214,7 +213,7 @@ class Format extends Effect {
 		 */
 		this.unbanlist = this.unbanlist || [];
 		/**
-		 * List of ruleset and banlist changes in a custom format.
+		 * List of validated ruleset and banlist changes in a custom format.
 		 * @type {?string[]}
 		 */
 		this.customRules = this.customRules || null;
