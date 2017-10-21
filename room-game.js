@@ -19,6 +19,10 @@
 
 // globally Rooms.RoomGamePlayer
 class RoomGamePlayer {
+	/**
+	 * @param {User} user
+	 * @param {RoomGame} game
+	 */
 	constructor(user, game) {
 		// we explicitly don't hold a reference to the user
 		this.userid = user.userid;
@@ -38,10 +42,16 @@ class RoomGamePlayer {
 	toString() {
 		return this.userid;
 	}
+	/**
+	 * @param {string} data
+	 */
 	send(data) {
 		let user = Users.getExact(this.userid);
 		if (user) user.send(data);
 	}
+	/**
+	 * @param {string} data
+	 */
 	sendRoom(data) {
 		let user = Users.getExact(this.userid);
 		if (user) user.sendTo(this.game.id, data);
@@ -50,6 +60,9 @@ class RoomGamePlayer {
 
 // globally Rooms.RoomGame
 class RoomGame {
+	/**
+	 * @param {Room} room
+	 */
 	constructor(room) {
 		this.id = room.id;
 		this.room = room;
@@ -69,6 +82,10 @@ class RoomGame {
 		}
 	}
 
+	/**
+	 * @param {User} user
+	 * @param {any[]} rest
+	 */
 	addPlayer(user, ...rest) {
 		if (user.userid in this.players) return false;
 		if (this.playerCount >= this.playerCap) return false;
@@ -79,10 +96,16 @@ class RoomGame {
 		return true;
 	}
 
+	/**
+	 * @param {User} user
+	 */
 	makePlayer(user) {
 		return new RoomGamePlayer(user, this);
 	}
 
+	/**
+	 * @param {User} user
+	 */
 	removePlayer(user) {
 		if (!this.allowRenames) return false;
 		if (!(user.userid in this.players)) return false;
@@ -92,6 +115,10 @@ class RoomGame {
 		return true;
 	}
 
+	/**
+	 * @param {User} user
+	 * @param {string} oldUserid
+	 */
 	renamePlayer(user, oldUserid) {
 		if (user.userid === oldUserid) {
 			this.players[user.userid].name = user.name;
@@ -152,12 +179,16 @@ class RoomGame {
 	//   Called when a user leaves the room. (i.e. when the user's last
 	//   connection leaves)
 
-	// onConnect(user, connection)
-	//   Called each time a connection joins a room (after onJoin if
-	//   applicable). By default, this is also called when connection
-	//   is updated in some way (such as by changing user or renaming).
-	//   If you don't want this behavior, override onUpdateConnection
-	//   and/or onRename.
+	/**
+	 * Called each time a connection joins a room (after onJoin if
+	 * applicable). By default, this is also called when connection
+	 * is updated in some way (such as by changing user or renaming).
+	 * If you don't want this behavior, override onUpdateConnection
+	 * and/or onRename.
+	 * @param {User} user
+	 * @param {Connection} connection
+	 */
+	onConnect(user, connection) {}
 
 	// onUpdateConnection(user, connection)
 	//   Called for each connection in a room that changes users by
@@ -168,6 +199,12 @@ class RoomGame {
 	// the game should be sent during `onConnect`. You should rarely
 	// need to handle the other events.
 
+	/**
+	 * @param {User} user
+	 * @param {string} oldUserid
+	 * @param {boolean} isJoining
+	 * @param {boolean} isForceRenamed
+	 */
 	onRename(user, oldUserid, isJoining, isForceRenamed) {
 		if (!this.allowRenames || (!user.named && !isForceRenamed)) {
 			if (!(user.userid in this.players)) {
@@ -180,8 +217,12 @@ class RoomGame {
 		this.renamePlayer(user, oldUserid);
 	}
 
+	/**
+	 * @param {User} user
+	 * @param {Connection} connection
+	 */
 	onUpdateConnection(user, connection) {
-		if (this.onConnect) this.onConnect(user, connection);
+		this.onConnect(user, connection);
 	}
 }
 

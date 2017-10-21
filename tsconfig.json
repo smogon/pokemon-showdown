@@ -21,6 +21,7 @@
         "./monitor.js",
         "./repl.js",
         "./fs.js",
+        "./room-game.js",
         "./process-manager.js",
         "./verifier.js"
     ]
