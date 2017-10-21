@@ -1369,7 +1369,7 @@ Rooms.createBattle = function (formatid, options) {
 	options.rated = Math.max(+options.rated || 0, 0);
 	const room = Rooms.createGameRoom(roomid, "" + p1.name + " vs. " + p2.name, options);
 	room.game = new Rooms.RoomBattle(room, formatid, options);
-	room.p1 = p2;
+	room.p1 = p1;
 	room.p2 = p2;
 	room.battle = room.game;
 
