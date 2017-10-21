@@ -177,7 +177,6 @@ class BattleTimer {
 			this.turnTicksLeft.push(-1);
 			this.dcTicksLeft.push(NOT_DISCONNECTED);
 		}
-		if (Config.forcetimer) this.timer.start();
 	}
 	start(requester) {
 		let userid = requester ? requester.userid : 'staff';
@@ -371,6 +370,7 @@ class Battle {
 
 		this.send('init', this.format, ratedMessage);
 		this.process.pendingTasks.set(room.id, this);
+		if (Config.forcetimer) this.timer.start();
 	}
 
 	send(...args) {
