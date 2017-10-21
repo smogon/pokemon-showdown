@@ -1270,8 +1270,8 @@ exports.BattleAbilities = {
 		onResidual: function (pokemon) {
 			if (this.isWeather(['sunnyday', 'desolateland']) || this.random(2) === 0) {
 				if (pokemon.hp && !pokemon.item && this.getItem(pokemon.lastItem).isBerry) {
-					this.add('-item', pokemon, pokemon.lastItem, '[from] ability: Harvest');
 					pokemon.setItem(pokemon.lastItem);
+					this.add('-item', pokemon, pokemon.getItem(), '[from] ability: Harvest');
 				}
 			}
 		},
@@ -1629,11 +1629,6 @@ exports.BattleAbilities = {
 		desc: "This Pokemon's held item has no effect. This Pokemon cannot use Fling successfully. Macho Brace, Power Anklet, Power Band, Power Belt, Power Bracer, Power Lens, and Power Weight still have their effects.",
 		shortDesc: "This Pokemon's held item has no effect, except Macho Brace. Fling cannot be used.",
 		// Item suppression implemented in Pokemon.ignoringItem() within sim/pokemon.js
-		onAfterEnd: function (pokemon) {
-			let item = pokemon.getItem();
-			if ((!item.isBerry && item.id !== 'berryjuice') || pokemon.ignoringItem()) return;
-			this.singleEvent('Start', item, pokemon.itemData, pokemon, pokemon, item);
-		},
 		id: "klutz",
 		name: "Klutz",
 		rating: -1,

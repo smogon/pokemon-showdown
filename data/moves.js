@@ -4330,11 +4330,6 @@ exports.BattleMovedex = {
 			onEnd: function (pokemon) {
 				this.add('-end', pokemon, 'Embargo');
 			},
-			onAfterEnd: function (pokemon) {
-				let item = pokemon.getItem();
-				if ((!item.isBerry && item.id !== 'berryjuice') || pokemon.ignoringItem()) return;
-				this.singleEvent('Start', item, pokemon.itemData, pokemon, pokemon, item);
-			},
 		},
 		secondary: false,
 		target: "normal",
@@ -6142,7 +6137,6 @@ exports.BattleMovedex = {
 			onStart: function (pokemon) {
 				this.add('-endability', pokemon);
 				this.singleEvent('End', this.getAbility(pokemon.ability), pokemon.abilityData, pokemon, pokemon, 'gastroacid');
-				this.singleEvent('AfterEnd', this.getAbility(pokemon.ability), pokemon.abilityData, pokemon, pokemon, 'gastroacid');
 			},
 		},
 		secondary: false,
@@ -9602,15 +9596,6 @@ exports.BattleMovedex = {
 			onEnd: function () {
 				this.add('-fieldend', 'move: Magic Room', '[of] ' + this.effectData.source);
 			},
-			onAfterEnd: function () {
-				for (const side of this.sides) {
-					for (const pokemon of side.active) {
-						let item = pokemon.getItem();
-						if ((!item.isBerry && item.id !== 'berryjuice') || pokemon.ignoringItem()) continue;
-						this.singleEvent('Start', item, pokemon.itemData, pokemon, pokemon, item);
-					}
-				}
-			},
 		},
 		secondary: false,
 		target: "all",
@@ -12985,8 +12970,8 @@ exports.BattleMovedex = {
 		flags: {snatch: 1},
 		onHit: function (pokemon) {
 			if (pokemon.item || !pokemon.lastItem) return false;
-			this.add('-item', pokemon, pokemon.lastItem, '[from] move: Recycle');
 			pokemon.setItem(pokemon.lastItem);
+			this.add('-item', pokemon, pokemon.getItem(), '[from] move: Recycle');
 		},
 		secondary: false,
 		target: "self",
