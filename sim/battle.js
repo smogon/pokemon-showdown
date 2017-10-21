@@ -1695,6 +1695,7 @@ class Battle extends Dex.ModdedDex {
 
 		this.add('tier', format.name);
 		if (this.rated) {
+			if (this.rated === 'Rated battle') this.rated = true;
 			this.add('rated', typeof this.rated === 'string' ? this.rated : '');
 		}
 		this.add('seed', /**@param {Side} side */side => Battle.logReplay(this.prngSeed.join(','), side));
