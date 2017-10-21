@@ -1848,6 +1848,8 @@ class Battle extends Dex.ModdedDex {
 			this.heal(Math.ceil(damage * effect.drain[0] / effect.drain[1]), source, target, 'drain');
 		}
 
+		if (!effect.flags) effect.flags = {};
+
 		if (instafaint && !target.hp) {
 			this.debug('instafaint: ' + this.faintQueue.map(entry => entry.target).map(pokemon => pokemon.name));
 			this.faintMessages(true);
