@@ -550,10 +550,8 @@ class Battle {
 			if (winner && !winner.registered) {
 				this.room.sendUser(winner, '|askreg|' + winner.userid);
 			}
-			// update rankings
 			Ladders(this.format).updateRating(p1name, p2name, p1score, this.room);
 		} else if (Config.logchallenges) {
-			// Log challenges if the challenge logging config is enabled.
 			if (winnerid === this.room.p1.userid) {
 				p1score = 1;
 			} else if (winnerid === this.room.p2.userid) {
