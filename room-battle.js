@@ -531,7 +531,7 @@ class Battle {
 		}
 		Monitor.activeIp = null;
 	}
-	onEnd(winner) {
+	async onEnd(winner) {
 		// Declare variables here in case we need them for non-rated battles logging.
 		let p1score = 0.5;
 		const winnerid = toId(winner);
@@ -555,7 +555,8 @@ class Battle {
 			if (winner && !winner.registered) {
 				this.room.sendUser(winner, '|askreg|' + winner.userid);
 			}
-			Ladders(this.format).updateRating(p1name, p2name, p1score, this.room);
+			const result = await Ladders(this.format).updateRating(p1name, p2name, p1score, this.room);
+			this.logBattle(...result);
 		} else if (Config.logchallenges) {
 			if (winnerid === this.room.p1.userid) {
 				p1score = 1;
@@ -579,6 +580,7 @@ class Battle {
 		this.room.update();
 	}
 	async logBattle(p1score, p1rating, p2rating) {
+		if (Dex.getFormat(this.room.format).noLog) return;
 		let logData = this.logData;
 		if (!logData) return;
 		this.logData = null; // deallocate to save space

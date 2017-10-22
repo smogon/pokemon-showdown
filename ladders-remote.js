@@ -62,74 +62,76 @@ class Ladder {
 		});
 	}
 
-	updateRating(p1name, p2name, p1score, room) {
+	async updateRating(p1name, p2name, p1score, room) {
 		if (Ladders.disabled) {
-			return room.addRaw(`Ratings not updated. The ladders are currently disabled.`).update();
+			room.addRaw(`Ratings not updated. The ladders are currently disabled.`).update();
+			return [p1score, undefined, undefined];
 		}
 
 		let formatid = this.formatid;
-		let p1rating, p2rating;
 		room.update();
 		room.send(`||Ladder updating...`);
-		LoginServer.request('ladderupdate', {
-			p1: p1name,
-			p2: p2name,
-			score: p1score,
-			format: formatid,
-		}, (data, statusCode, error) => {
-			if (!room.battle) {
-				Monitor.warn(`room expired before ladder update was received`);
-				return;
-			}
-			if (!data) {
-				room.add(`||Ladder (probably) updated, but score could not be retrieved (${error.message}).`);
-				// log the battle anyway
-				if (!Dex.getFormat(room.format).noLog) {
-					room.battle.logBattle(p1score);
-				}
-				return;
-			} else if (data.errorip) {
-				room.add(`||This server's request IP ${data.errorip} is not a registered server.`);
-				room.add(`||We currently only support ladder ratings on registered servers.`);
-				room.update();
-				return;
-			} else {
-				try {
-					p1rating = data.p1rating;
-					p2rating = data.p2rating;
+		let data;
+		try {
+			data = await new Promise((resolve, reject) => {
+				LoginServer.request('ladderupdate', {
+					p1: p1name,
+					p2: p2name,
+					score: p1score,
+					format: formatid,
+				}, (data, statusCode, error) => {
+					if (error) return reject(error);
+					resolve(data);
+				});
+			});
+		} catch (error) {
+			room.add(`||Ladder (probably) updated, but score could not be retrieved (${error.message}).`);
+			return [p1score, undefined, undefined];
+		}
+		if (!room.battle) {
+			Monitor.warn(`room expired before ladder update was received`);
+			return [p1score, undefined, undefined];
+		}
+		if (data.errorip) {
+			room.add(`||This server's request IP ${data.errorip} is not a registered server.`);
+			room.add(`||You should be using ladders.js and not ladders-remote.js for ladder tracking.`);
+			room.update();
+			return [p1score, undefined, undefined];
+		}
 
-					let oldelo = Math.round(p1rating.oldelo);
-					let elo = Math.round(p1rating.elo);
-					let act = (p1score > 0.9 ? `winning` : (p1score < 0.1 ? `losing` : `tying`));
-					let reasons = `${elo - oldelo} for ${act}`;
-					if (reasons.charAt(0) !== '-') reasons = '+' + reasons;
-					room.addRaw(Chat.html`${p1name}'s rating: ${oldelo} &rarr; <strong>${elo}</strong><br />(${reasons})`);
-					let minElo = elo;
+		let p1rating, p2rating;
+		try {
+			p1rating = data.p1rating;
+			p2rating = data.p2rating;
 
-					oldelo = Math.round(p2rating.oldelo);
-					elo = Math.round(p2rating.elo);
-					act = (p1score > 0.9 || p1score < 0 ? `losing` : (p1score < 0.1 ? `winning` : `tying`));
-					reasons = `${elo - oldelo} for ${act}`;
-					if (reasons.charAt(0) !== '-') reasons = '+' + reasons;
-					room.addRaw(Chat.html`${p2name}'s rating: ${oldelo} &rarr; <strong>${elo}</strong><br />(${reasons})`);
-					if (elo < minElo) minElo = elo;
-					room.rated = minElo;
+			let oldelo = Math.round(p1rating.oldelo);
+			let elo = Math.round(p1rating.elo);
+			let act = (p1score > 0.9 ? `winning` : (p1score < 0.1 ? `losing` : `tying`));
+			let reasons = `${elo - oldelo} for ${act}`;
+			if (reasons.charAt(0) !== '-') reasons = '+' + reasons;
+			room.addRaw(Chat.html`${p1name}'s rating: ${oldelo} &rarr; <strong>${elo}</strong><br />(${reasons})`);
+			let minElo = elo;
 
-					let p1 = Users.getExact(p1name);
-					if (p1) p1.mmrCache[formatid] = +p1rating.elo;
-					let p2 = Users.getExact(p2name);
-					if (p2) p2.mmrCache[formatid] = +p2rating.elo;
-					room.update();
-				} catch (e) {
-					room.addRaw(`There was an error calculating rating changes.`);
-					room.update();
-				}
+			oldelo = Math.round(p2rating.oldelo);
+			elo = Math.round(p2rating.elo);
+			act = (p1score > 0.9 || p1score < 0 ? `losing` : (p1score < 0.1 ? `winning` : `tying`));
+			reasons = `${elo - oldelo} for ${act}`;
+			if (reasons.charAt(0) !== '-') reasons = '+' + reasons;
+			room.addRaw(Chat.html`${p2name}'s rating: ${oldelo} &rarr; <strong>${elo}</strong><br />(${reasons})`);
+			if (elo < minElo) minElo = elo;
+			room.rated = minElo;
 
-				if (!Dex.getFormat(formatid).noLog) {
-					room.battle.logBattle(p1score, p1rating, p2rating);
-				}
-			}
-		});
+			let p1 = Users.getExact(p1name);
+			if (p1) p1.mmrCache[formatid] = +p1rating.elo;
+			let p2 = Users.getExact(p2name);
+			if (p2) p2.mmrCache[formatid] = +p2rating.elo;
+			room.update();
+		} catch (e) {
+			room.addRaw(`There was an error calculating rating changes.`);
+			room.update();
+		}
+
+		return [p1score, p1rating, p2rating];
 	}
 }
 
