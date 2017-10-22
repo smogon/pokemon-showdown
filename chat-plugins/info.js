@@ -264,50 +264,56 @@ exports.commands = {
 	ipsearchall: 'ipsearch',
 	hostsearch: 'ipsearch',
 	ipsearch: function (target, room, user, connection, cmd) {
-		if (!target.trim()) return this.parse('/help ipsearch');
+		if (!target.trim()) return this.parse(`/help ipsearch`);
 		if (!this.can('rangeban')) return;
-		let results = [];
 
+		target = this.splitTargetText(target).trim();
+		let targetIp = this.targetUsername;
+		let targetRoom = target.length ? Rooms(target.trim()) : null;
+		if (!targetRoom && targetRoom !== null) return this.errorReply(`The room "${target}" does not exist.`);
+		let results = [];
 		let isAll = (cmd === 'ipsearchall');
 
-		if (/[a-z]/.test(target)) {
+		if (/[a-z]/.test(targetIp)) {
 			// host
-			this.sendReply("Users with host " + target + ":");
+			this.sendReply(`Users with host ${targetIp}${targetRoom ? ` in the room ${targetRoom.title}` : ``}:`);
 			Users.users.forEach(curUser => {
 				if (results.length > 100 && !isAll) return;
-				if (!curUser.latestHost || !curUser.latestHost.endsWith(target)) return;
+				if (!curUser.latestHost || !curUser.latestHost.endsWith(targetIp)) return;
+				if (targetRoom && !curUser.inRooms.has(targetRoom.id)) return;
 				results.push((curUser.connected ? " \u25C9 " : " \u25CC ") + " " + curUser.name);
 			});
 			if (results.length > 100 && !isAll) {
-				return this.sendReply("More than 100 users match the specified IP range. Use /ipsearchall to retrieve the full list.");
+				return this.sendReply(`More than 100 users match the specified IP range. Use /ipsearchall to retrieve the full list.`);
 			}
-		} else if (target.slice(-1) === '*') {
+		} else if (targetIp.slice(-1) === '*') {
 			// IP range
-			this.sendReply("Users in IP range " + target + ":");
-			target = target.slice(0, -1);
+			this.sendReply(`Users in IP range ${targetIp}${targetRoom ? ` in the room ${targetRoom.title}` : ``}:`);
+			targetIp = targetIp.slice(0, -1);
 			Users.users.forEach(curUser => {
 				if (results.length > 100 && !isAll) return;
-				if (!curUser.latestIp.startsWith(target)) return;
+				if (!curUser.latestIp.startsWith(targetIp)) return;
+				if (targetRoom && !curUser.inRooms.has(targetRoom.id)) return;
 				results.push((curUser.connected ? " \u25C9 " : " \u25CC ") + " " + curUser.name);
 			});
 			if (results.length > 100 && !isAll) {
-				return this.sendReply("More than 100 users match the specified IP range. Use /ipsearchall to retrieve the full list.");
+				return this.sendReply(`More than 100 users match the specified IP range. Use /ipsearchall to retrieve the full list.`);
 			}
 		} else {
-			this.sendReply("Users with IP " + target + ":");
+			this.sendReply(`Users with IP ${targetIp}${targetRoom ? ` in the room ${targetRoom.title}` : ``}:`);
 			Users.users.forEach(curUser => {
-				if (curUser.latestIp === target) {
-					results.push((curUser.connected ? " \u25C9 " : " \u25CC ") + " " + curUser.name);
-				}
+				if (curUser.latestIp !== targetIp) return;
+				if (targetRoom && !curUser.inRooms.has(targetRoom.id)) return;
+				results.push((curUser.connected ? " \u25C9 " : " \u25CC ") + " " + curUser.name);
 			});
 		}
 		if (!results.length) {
-			if (!target.includes('.')) return this.errorReply("'" + target + "' is not a valid IP or host.");
-			return this.sendReply("No results found.");
+			if (!targetIp.includes('.')) return this.errorReply(`${targetIp} is not a valid IP or host.`);
+			return this.sendReply(`No results found.`);
 		}
 		return this.sendReply(results.join('; '));
 	},
-	ipsearchhelp: ["/ipsearch [ip|range|host] - Find all users with specified IP, IP range, or host. Requires: & ~"],
+	ipsearchhelp: ["/ipsearch [ip|range|host], (room) - Find all users with specified IP, IP range, or host. If a room is provided only users in the room will be shown. Requires: & ~"],
 
 	checkchallenges: function (target, room, user) {
 		if (!this.can('ban', null, room)) return false;
