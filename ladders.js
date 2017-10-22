@@ -208,9 +208,10 @@ class Ladder {
 	 * Update the Elo rating for two players after a battle, and display
 	 * the results in the passed room.
 	 */
-	updateRating(p1name, p2name, p1score, room) {
+	async updateRating(p1name, p2name, p1score, room) {
 		if (Ladders.disabled) {
-			return room.addRaw(`Ratings not updated. The ladders are currently disabled.`).update();
+			room.addRaw(`Ratings not updated. The ladders are currently disabled.`).update();
+			return [p1score, undefined, undefined];
 		}
 
 		let formatid = this.formatid;
@@ -219,83 +220,80 @@ class Ladder {
 			p1score = 0;
 			p2score = 0;
 		}
-		this.ladder.then(() => {
-			let p1newElo, p2newElo;
-			try {
-				let p1index = this.indexOfUser(p1name, true);
-				let p1elo = this.loadedLadder[p1index][1];
+		await this.ladder;
+		let p1newElo, p2newElo;
+		try {
+			let p1index = this.indexOfUser(p1name, true);
+			let p1elo = this.loadedLadder[p1index][1];
 
-				let p2index = this.indexOfUser(p2name, true);
-				let p2elo = this.loadedLadder[p2index][1];
+			let p2index = this.indexOfUser(p2name, true);
+			let p2elo = this.loadedLadder[p2index][1];
 
-				this.updateRow(this.loadedLadder[p1index], p1score, p2elo);
-				this.updateRow(this.loadedLadder[p2index], p2score, p1elo);
+			this.updateRow(this.loadedLadder[p1index], p1score, p2elo);
+			this.updateRow(this.loadedLadder[p2index], p2score, p1elo);
 
-				p1newElo = this.loadedLadder[p1index][1];
-				p2newElo = this.loadedLadder[p2index][1];
+			p1newElo = this.loadedLadder[p1index][1];
+			p2newElo = this.loadedLadder[p2index][1];
 
-				// console.log('L: ' + this.loadedLadder.map(r => ''+Math.round(r[1])+' '+r[2]).join('\n'));
+			// console.log('L: ' + this.loadedLadder.map(r => ''+Math.round(r[1])+' '+r[2]).join('\n'));
 
-				// move p1 to its new location
-				let newIndex = p1index;
-				while (newIndex > 0 && this.loadedLadder[newIndex - 1][1] <= p1newElo) newIndex--;
-				while (newIndex === p1index || (this.loadedLadder[newIndex] && this.loadedLadder[newIndex][1] > p1newElo)) newIndex++;
-				// console.log('ni='+newIndex+', p1i='+p1index);
-				if (newIndex !== p1index && newIndex !== p1index + 1) {
-					let row = this.loadedLadder.splice(p1index, 1)[0];
-					// adjust for removed row
-					if (newIndex > p1index) newIndex--;
-					if (p2index > p1index) p2index--;
+			// move p1 to its new location
+			let newIndex = p1index;
+			while (newIndex > 0 && this.loadedLadder[newIndex - 1][1] <= p1newElo) newIndex--;
+			while (newIndex === p1index || (this.loadedLadder[newIndex] && this.loadedLadder[newIndex][1] > p1newElo)) newIndex++;
+			// console.log('ni='+newIndex+', p1i='+p1index);
+			if (newIndex !== p1index && newIndex !== p1index + 1) {
+				let row = this.loadedLadder.splice(p1index, 1)[0];
+				// adjust for removed row
+				if (newIndex > p1index) newIndex--;
+				if (p2index > p1index) p2index--;
 
-					this.loadedLadder.splice(newIndex, 0, row);
-					// adjust for inserted row
-					if (p2index >= newIndex) p2index++;
-				}
-
-				// move p2
-				newIndex = p2index;
-				while (newIndex > 0 && this.loadedLadder[newIndex - 1][1] <= p2newElo) newIndex--;
-				while (newIndex === p2index || (this.loadedLadder[newIndex] && this.loadedLadder[newIndex][1] > p2newElo)) newIndex++;
-				// console.log('ni='+newIndex+', p2i='+p2index);
-				if (newIndex !== p2index && newIndex !== p2index + 1) {
-					let row = this.loadedLadder.splice(p2index, 1)[0];
-					// adjust for removed row
-					if (newIndex > p2index) newIndex--;
-
-					this.loadedLadder.splice(newIndex, 0, row);
-				}
-
-				let p1 = Users.getExact(p1name);
-				if (p1) p1.mmrCache[formatid] = +p1newElo;
-				let p2 = Users.getExact(p2name);
-				if (p2) p2.mmrCache[formatid] = +p2newElo;
-				this.save();
-
-				if (!room.battle) {
-					Monitor.warn(`room expired before ladder update was received`);
-					return;
-				}
-
-				let reasons = '' + (Math.round(p1newElo) - Math.round(p1elo)) + ' for ' + (p1score > 0.9 ? 'winning' : (p1score < 0.1 ? 'losing' : 'tying'));
-				if (reasons.charAt(0) !== '-') reasons = '+' + reasons;
-				room.addRaw(Chat.html`${p1name}'s rating: ${Math.round(p1elo)} &rarr; <strong>${Math.round(p1newElo)}</strong><br />(${reasons})`);
-
-				reasons = '' + (Math.round(p2newElo) - Math.round(p2elo)) + ' for ' + (p2score > 0.9 ? 'winning' : (p2score < 0.1 ? 'losing' : 'tying'));
-				if (reasons.charAt(0) !== '-') reasons = '+' + reasons;
-				room.addRaw(Chat.html`${p2name}'s rating: ${Math.round(p2elo)} &rarr; <strong>${Math.round(p2newElo)}</strong><br />(${reasons})`);
-
-				room.update();
-			} catch (e) {
-				if (!room.battle) return;
-				room.addRaw(`There was an error calculating rating changes:`);
-				room.add(e.stack);
-				room.update();
+				this.loadedLadder.splice(newIndex, 0, row);
+				// adjust for inserted row
+				if (p2index >= newIndex) p2index++;
 			}
 
-			if (!Dex.getFormat(formatid).noLog) {
-				room.battle.logBattle(p1score, p1newElo, p2newElo);
+			// move p2
+			newIndex = p2index;
+			while (newIndex > 0 && this.loadedLadder[newIndex - 1][1] <= p2newElo) newIndex--;
+			while (newIndex === p2index || (this.loadedLadder[newIndex] && this.loadedLadder[newIndex][1] > p2newElo)) newIndex++;
+			// console.log('ni='+newIndex+', p2i='+p2index);
+			if (newIndex !== p2index && newIndex !== p2index + 1) {
+				let row = this.loadedLadder.splice(p2index, 1)[0];
+				// adjust for removed row
+				if (newIndex > p2index) newIndex--;
+
+				this.loadedLadder.splice(newIndex, 0, row);
 			}
-		});
+
+			let p1 = Users.getExact(p1name);
+			if (p1) p1.mmrCache[formatid] = +p1newElo;
+			let p2 = Users.getExact(p2name);
+			if (p2) p2.mmrCache[formatid] = +p2newElo;
+			this.save();
+
+			if (!room.battle) {
+				Monitor.warn(`room expired before ladder update was received`);
+				return;
+			}
+
+			let reasons = '' + (Math.round(p1newElo) - Math.round(p1elo)) + ' for ' + (p1score > 0.9 ? 'winning' : (p1score < 0.1 ? 'losing' : 'tying'));
+			if (reasons.charAt(0) !== '-') reasons = '+' + reasons;
+			room.addRaw(Chat.html`${p1name}'s rating: ${Math.round(p1elo)} &rarr; <strong>${Math.round(p1newElo)}</strong><br />(${reasons})`);
+
+			reasons = '' + (Math.round(p2newElo) - Math.round(p2elo)) + ' for ' + (p2score > 0.9 ? 'winning' : (p2score < 0.1 ? 'losing' : 'tying'));
+			if (reasons.charAt(0) !== '-') reasons = '+' + reasons;
+			room.addRaw(Chat.html`${p2name}'s rating: ${Math.round(p2elo)} &rarr; <strong>${Math.round(p2newElo)}</strong><br />(${reasons})`);
+
+			room.update();
+		} catch (e) {
+			if (!room.battle) return;
+			room.addRaw(`There was an error calculating rating changes:`);
+			room.add(e.stack);
+			room.update();
+		}
+
+		return [p1score, p1newElo, p2newElo];
 	}
 
 	/**
