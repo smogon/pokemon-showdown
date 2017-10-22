@@ -328,7 +328,7 @@ class Battle {
 		this.room = room;
 		this.title = format.name;
 		if (!this.title.endsWith(" Battle")) this.title += " Battle";
-		this.allowRenames = !options.rated;
+		this.allowRenames = (!options.rated && !options.tour);
 
 		this.format = formatid;
 		this.rated = options.rated;
@@ -580,7 +580,7 @@ class Battle {
 		this.room.update();
 	}
 	async logBattle(p1score, p1rating, p2rating) {
-		if (Dex.getFormat(this.room.format).noLog) return;
+		if (Dex.getFormat(this.format).noLog) return;
 		let logData = this.logData;
 		if (!logData) return;
 		this.logData = null; // deallocate to save space
