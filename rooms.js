@@ -1367,10 +1367,15 @@ Rooms.createBattle = function (formatid, options) {
 	// options.rated === true is converted to 1 (used in tests sometimes)
 	options.rated = Math.max(+options.rated || 0, 0);
 	const room = Rooms.createGameRoom(roomid, "" + p1.name + " vs. " + p2.name, options);
-	room.game = new Rooms.RoomBattle(room, formatid, options);
+	if (format.bestOf) {
+		options.bestOf = format.bestOf;
+		room.game = new Rooms.BestOfGame(room, format.subformat, options);
+	} else {
+		room.game = new Rooms.RoomBattle(room, formatid, options);
+		room.battle = room.game;
+	}
 	room.p1 = p1;
 	room.p2 = p2;
-	room.battle = room.game;
 
 	let inviteOnly = (options.inviteOnly || []);
 	if (p1.inviteOnlyNextBattle) {
@@ -1411,6 +1416,7 @@ Rooms.ChatRoom = ChatRoom;
 
 Rooms.RoomGame = require('./room-game').RoomGame;
 Rooms.RoomGamePlayer = require('./room-game').RoomGamePlayer;
+Rooms.BestOfGame = require('./room-game').BestOfGame;
 
 Rooms.RoomBattle = require('./room-battle').RoomBattle;
 Rooms.RoomBattlePlayer = require('./room-battle').RoomBattlePlayer;
