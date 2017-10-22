@@ -33,6 +33,7 @@ class Room {
 		this.id = roomid;
 		this.title = (title || roomid);
 		this.reportJoins = Config.reportjoins;
+		this.parent = null;
 
 		this.users = Object.create(null);
 
@@ -147,16 +148,14 @@ class Room {
 		}
 	}
 	getAuth(user) {
-		if (this.auth) {
-			if (user.userid in this.auth) {
-				return this.auth[user.userid];
-			}
-			if (this.parent) {
-				return this.parent.getAuth(user);
-			}
-			if (this.isPrivate === true) {
-				return ' ';
-			}
+		if (this.auth && user.userid in this.auth) {
+			return this.auth[user.userid];
+		}
+		if (this.parent) {
+			return this.parent.getAuth(user);
+		}
+		if (this.auth && this.isPrivate === true) {
+			return ' ';
 		}
 		return user.group;
 	}
