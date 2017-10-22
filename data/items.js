@@ -70,7 +70,7 @@ exports.BattleItems = {
 			basePower: 30,
 		},
 		onAfterBoost: function (boost, target, source, effect) {
-			if (effect.id === 'intimidate' && target.useItem()) {
+			if (effect.id === 'intimidate' && target.boosts.spe < 6 && target.useItem()) {
 				this.boost({spe: 1});
 			}
 		},
@@ -232,7 +232,7 @@ exports.BattleItems = {
 			type: "Ground",
 		},
 		onUpdate: function (pokemon) {
-			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
+			if ((pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) && pokemon.boosts.spd < 6) {
 				pokemon.eatItem();
 			}
 		},
@@ -666,7 +666,7 @@ exports.BattleItems = {
 			basePower: 30,
 		},
 		onAfterDamage: function (damage, target, source, move) {
-			if (move.type === 'Electric' && target.useItem()) {
+			if (move.type === 'Electric' && target.boosts.atk < 6 && target.useItem()) {
 				this.boost({atk: 1});
 			}
 		},
@@ -1460,7 +1460,7 @@ exports.BattleItems = {
 			basePower: 10,
 		},
 		onUpdate: function (pokemon) {
-			if (this.isTerrain('electricterrain') && pokemon.useItem()) {
+			if (this.isTerrain('electricterrain') && pokemon.boosts.def < 6 && pokemon.useItem()) {
 				this.boost({def: 1});
 			}
 		},
@@ -1939,7 +1939,7 @@ exports.BattleItems = {
 			type: "Ice",
 		},
 		onUpdate: function (pokemon) {
-			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
+			if ((pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) && pokemon.boosts.def < 6) {
 				pokemon.eatItem();
 			}
 		},
@@ -2619,7 +2619,7 @@ exports.BattleItems = {
 			type: "Fairy",
 		},
 		onAfterMoveSecondary: function (target, source, move) {
-			if (move.category === 'Physical') {
+			if (move.category === 'Physical' && target.boosts.def < 6) {
 				target.eatItem();
 			}
 		},
@@ -2849,7 +2849,7 @@ exports.BattleItems = {
 			type: "Grass",
 		},
 		onUpdate: function (pokemon) {
-			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
+			if ((pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) && pokemon.boosts.atk < 6) {
 				pokemon.eatItem();
 			}
 		},
@@ -2997,7 +2997,7 @@ exports.BattleItems = {
 			basePower: 30,
 		},
 		onAfterDamage: function (damage, target, source, move) {
-			if (move.type === 'Water' && target.useItem()) {
+			if (move.type === 'Water' && target.boosts.spd < 6 && target.useItem()) {
 				this.boost({spd: 1});
 			}
 		},
@@ -3149,7 +3149,7 @@ exports.BattleItems = {
 			type: "Dark",
 		},
 		onAfterMoveSecondary: function (target, source, move) {
-			if (move.category === 'Special') {
+			if (move.category === 'Special' && target.boosts.spd < 6) {
 				target.eatItem();
 			}
 		},
@@ -3474,7 +3474,7 @@ exports.BattleItems = {
 			basePower: 10,
 		},
 		onUpdate: function (pokemon) {
-			if (this.isTerrain('mistyterrain') && pokemon.useItem()) {
+			if (this.isTerrain('mistyterrain') && pokemon.boosts.spd < 6 && pokemon.useItem()) {
 				this.boost({spd: 1});
 			}
 		},
@@ -3814,7 +3814,7 @@ exports.BattleItems = {
 			type: "Poison",
 		},
 		onUpdate: function (pokemon) {
-			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
+			if ((pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) && pokemon.boosts.spa < 6) {
 				pokemon.eatItem();
 			}
 		},
@@ -4196,7 +4196,7 @@ exports.BattleItems = {
 			basePower: 10,
 		},
 		onUpdate: function (pokemon) {
-			if (this.isTerrain('psychicterrain') && pokemon.useItem()) {
+			if (this.isTerrain('psychicterrain') && pokemon.boosts.spd < 6 && pokemon.useItem()) {
 				this.boost({spd: 1});
 			}
 		},
@@ -4679,7 +4679,7 @@ exports.BattleItems = {
 			type: "Fighting",
 		},
 		onUpdate: function (pokemon) {
-			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
+			if ((pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) && pokemon.boosts.spe < 6) {
 				pokemon.eatItem();
 			}
 		},
@@ -5001,7 +5001,7 @@ exports.BattleItems = {
 			basePower: 30,
 		},
 		onAfterDamage: function (damage, target, source, move) {
-			if (move.type === 'Ice' && target.useItem()) {
+			if (move.type === 'Ice' && target.boosts.atk < 6 && target.useItem()) {
 				this.boost({atk: 1});
 			}
 		},
