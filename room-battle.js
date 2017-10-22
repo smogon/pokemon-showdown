@@ -342,6 +342,11 @@ class Battle {
 		this.p1 = null;
 		this.p2 = null;
 
+		/**
+		 * p1 and p2 may be null in unrated games, but playerNames retains
+		 * the most recent usernames in those slots, for use by various
+		 * functions that need names for the slots.
+		 */
 		this.playerNames = ["Player 1", "Player 2"];
 		/** {playerid: [rqid, request, isWait, choice]} */
 		this.requests = {
@@ -727,7 +732,6 @@ class Battle {
 		let player = this.makePlayer(user, team);
 		if (!player) return false;
 		this.players[user.userid] = player;
-		this.playerNames[this.playerCount] = player.name;
 		this.playerCount++;
 		this.room.auth[user.userid] = '\u2606';
 		if (this.playerCount >= 2) {
@@ -745,12 +749,14 @@ class Battle {
 
 		let player = new BattlePlayer(user, this, slot);
 		this[slot] = player;
+		this.playerNames[slotNum] = player.name;
 
 		let message = '' + user.avatar;
 		if (!this.started) {
 			message += "\n" + team;
 		}
 		player.simSend('join', user.name, message);
+		if (this.started) this.onUpdateConnection(user);
 		if (this.p1 && this.p2) this.started = true;
 		return player;
 	}
