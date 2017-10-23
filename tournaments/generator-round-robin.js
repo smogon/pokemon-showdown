@@ -138,7 +138,7 @@ module.exports = (() => {
 	RoundRobin.prototype.setMatchResult = function (match, result, score) {
 		if (!this.isBracketFrozen) return 'BracketNotFrozen';
 
-		if (!(result in {win:1, loss:1, draw:1})) return 'InvalidMatchResult';
+		if (!['win', 'loss', 'draw'].includes(result)) return 'InvalidMatchResult';
 
 		let userA = match[0];
 		let userB = match[1];

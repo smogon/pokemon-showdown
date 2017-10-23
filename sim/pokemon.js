@@ -449,7 +449,7 @@ class Pokemon {
 	}
 
 	ignoringAbility() {
-		return !!((this.battle.gen >= 5 && !this.isActive) || (this.volatiles['gastroacid'] && !(this.ability in {comatose:1, multitype:1, schooling:1, stancechange:1})));
+		return !!((this.battle.gen >= 5 && !this.isActive) || (this.volatiles['gastroacid'] && !['comatose', 'multitype', 'schooling', 'stancechange'].includes(this.ability)));
 	}
 
 	ignoringItem() {
@@ -1054,7 +1054,7 @@ class Pokemon {
 			return false;
 		}
 
-		if (!ignoreImmunities && status.id && !(source && source.hasAbility('corrosion') && status.id in {'tox': 1, 'psn': 1})) {
+		if (!ignoreImmunities && status.id && !(source && source.hasAbility('corrosion') && ['tox', 'psn'].includes(status.id))) {
 			// the game currently never ignores immunities
 			if (!this.runStatusImmunity(status.id === 'tox' ? 'psn' : status.id)) {
 				this.battle.debug('immune to status');
@@ -1256,8 +1256,8 @@ class Pokemon {
 			return false;
 		}
 		if (!effect || effect.id !== 'transform') {
-			if (ability.id in {illusion:1, multitype:1, stancechange:1}) return false;
-			if (oldAbility in {multitype:1, stancechange:1}) return false;
+			if (['illusion', 'multitype', 'stancechange'].includes(ability.id)) return false;
+			if (['multitype', 'stancechange'].includes(oldAbility)) return false;
 		}
 		this.battle.singleEvent('End', this.battle.getAbility(oldAbility), this.abilityData, this, source, effect);
 		if (!effect && this.battle.effect && this.battle.effect.effectType === 'Move') {

@@ -285,7 +285,7 @@ module.exports = (() => {
 	Elimination.prototype.setMatchResult = function (match, result, score) {
 		if (!this.isBracketFrozen) return 'BracketNotFrozen';
 
-		if (!(result in {win:1, loss:1})) return 'InvalidMatchResult';
+		if (!['win', 'loss'].includes(result)) return 'InvalidMatchResult';
 
 		if (!this.users.has(match[0]) || !this.users.has(match[1])) return 'UserNotAdded';
 

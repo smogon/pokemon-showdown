@@ -515,7 +515,7 @@ class Validator {
 			if (isHidden && lsetData.sourcesBefore) {
 				if (!lsetData.sources && lsetData.sourcesBefore < 5) {
 					problems.push(`${name} has a hidden ability - it can't have moves only learned before gen 5.`);
-				} else if (lsetData.sources && template.gender && template.gender !== 'F' && !{'Nidoran-M':1, 'Nidorino':1, 'Nidoking':1, 'Volbeat':1}[template.species]) {
+				} else if (lsetData.sources && template.gender && template.gender !== 'F' && !['Nidoran-M', 'Nidorino', 'Nidoking', 'Volbeat'].includes(template.species)) {
 					let compatibleSource = false;
 					for (const learned of lsetData.sources) {
 						if (learned.charAt(1) === 'E' || (learned.substr(0, 2) === '5D' && set.level >= 10)) {
@@ -545,7 +545,7 @@ class Validator {
 		if (item.megaEvolves === template.species) {
 			template = dex.getTemplate(item.megaStone);
 		}
-		if (ruleTable.has('-mega') && template.forme in {'Mega': 1, 'Mega-X': 1, 'Mega-Y': 1}) {
+		if (ruleTable.has('-mega') && ['Mega', 'Mega-X', 'Mega-Y'].includes(template.forme)) {
 			problems.push(`Mega evolutions are banned.`);
 		}
 		if (template.tier) {
@@ -1033,9 +1033,9 @@ class Validator {
 			}
 			if (format.mimicGlitch && template.gen < 5) {
 				// include the Mimic Glitch when checking this mon's learnset
-				let glitchMoves = {metronome:1, copycat:1, transform:1, mimic:1, assist:1};
+				let glitchMoves = ['metronome', 'copycat', 'transform', 'mimic', 'assist'];
 				let getGlitch = false;
-				for (let i in glitchMoves) {
+				for (const i of glitchMoves) {
 					if (template.learnset[i]) {
 						if (!(i === 'mimic' && dex.getAbility(set.ability).gen === 4 && !template.prevo)) {
 							getGlitch = true;
