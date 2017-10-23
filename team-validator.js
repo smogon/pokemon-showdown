@@ -912,7 +912,7 @@ class Validator {
 						// gen 4-7 level-up moves
 						if (level >= parseInt(learned.substr(2)) || learnedGen >= 7) {
 							// we're past the required level to learn it
-							// gen 7 level-up moves can be relearnered at any level
+							// gen 7 level-up moves can be relearned at any level
 							// fall through to LMT check below
 						} else if (!template.gender || template.gender === 'F') {
 							// available as egg move
