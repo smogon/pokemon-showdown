@@ -298,7 +298,7 @@ class PureEffect extends Effect {
 	constructor(data, moreData = null) {
 		super(data, moreData);
 		/** @type {'Effect' | 'Weather' | 'Status'} */
-		this.effectType = (this.effectType in {Weather:1, Status:1} ? this.effectType : 'Effect');
+		this.effectType = (['Weather', 'Status'].includes(this.effectType) ? this.effectType : 'Effect');
 	}
 }
 
@@ -599,7 +599,7 @@ class Template extends Effect {
 		if (!this.gen) {
 			if (this.num >= 722 || this.forme === 'Alola') {
 				this.gen = 7;
-			} else if (this.forme && this.forme in {'Mega':1, 'Mega-X':1, 'Mega-Y':1}) {
+			} else if (this.forme && ['Mega', 'Mega-X', 'Mega-Y'].includes(this.forme)) {
 				this.gen = 6;
 				this.isMega = true;
 				this.battleOnly = true;

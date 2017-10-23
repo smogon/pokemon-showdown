@@ -231,7 +231,7 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 50,
 		basePowerCallback: function (target, source, move) {
-			if (move.sourceEffect in {grasspledge:1, waterpledge:1}) {
+			if (['grasspledge', 'waterpledge'].includes(move.sourceEffect)) {
 				this.add('-combine');
 				return 150;
 			}
@@ -316,7 +316,7 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 50,
 		basePowerCallback: function (target, source, move) {
-			if (move.sourceEffect in {waterpledge:1, firepledge:1}) {
+			if (['waterpledge', 'firepledge'].includes(move.sourceEffect)) {
 				this.add('-combine');
 				return 150;
 			}
@@ -547,7 +547,7 @@ exports.BattleMovedex = {
 		effect: {
 			noCopy: true,
 			onSourceModifyDamage: function (damage, source, target, move) {
-				if (move.id in {'stomp':1, 'steamroller':1}) {
+				if (['stomp', 'steamroller'].includes(move.id)) {
 					return this.chainModify(2);
 				}
 			},
@@ -988,7 +988,7 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 50,
 		basePowerCallback: function (target, source, move) {
-			if (move.sourceEffect in {firepledge:1, grasspledge:1}) {
+			if (['firepledge', 'grasspledge'].includes(move.sourceEffect)) {
 				this.add('-combine');
 				return 150;
 			}
