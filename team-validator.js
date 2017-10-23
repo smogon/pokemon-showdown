@@ -873,6 +873,22 @@ class Validator {
 				if (typeof lset === 'string') lset = [lset];
 
 				for (let learned of lset) {
+					// Every `learned` represents a single way a pokemon might
+					// learn a move. This can be handled one of several ways:
+					// `continue`
+					//   means we can't learn it
+					// `return false`
+					//   means we can learn it with no restrictions
+					//   (there's a way to just teach any pokemon of this species
+					//   the move in the current gen, like a TM.)
+					// `sources.push(source)`
+					//   means we can learn it only if obtained that exact way described
+					//   in source
+					// `sourcesBefore = Math.max(sourcesBefore, learnedGen)`
+					//   means we can learn it only if obtained at or before learnedGen
+					//   (i.e. get it however you want, transfer to that gen, teach it,
+					//   and transfer it to the current gen.)
+
 					let learnedGen = parseInt(learned.charAt(0));
 					if (learnedGen < minPastGen) continue;
 					if (noFutureGen && learnedGen > dex.gen) continue;
@@ -894,11 +910,11 @@ class Validator {
 					}
 					if (learned.substr(0, 2) in {'4L':1, '5L':1, '6L':1, '7L':1}) {
 						// gen 4-7 level-up moves
-						if (level >= parseInt(learned.substr(2)) || learnedGen === 7 && dex.gen >= 7) {
+						if (level >= parseInt(learned.substr(2)) || learnedGen >= 7) {
 							// we're past the required level to learn it
-							return false;
-						}
-						if (!template.gender || template.gender === 'F') {
+							// gen 7 level-up moves can be relearnered at any level
+							// fall through to LMT check below
+						} else if (!template.gender || template.gender === 'F') {
 							// available as egg move
 							learned = learnedGen + 'Eany';
 							limitedEgg = false;
@@ -909,7 +925,7 @@ class Validator {
 					}
 					if (learned.charAt(1) in {L:1, M:1, T:1}) {
 						if (learnedGen === dex.gen) {
-							// current-gen TM or tutor moves:
+							// current-gen level-up, TM or tutor moves:
 							//   always available
 							return false;
 						}
