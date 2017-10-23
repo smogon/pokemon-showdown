@@ -2609,11 +2609,11 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		onHit: function (target) {
-			if (target.ability in {multitype:1, stancechange:1}) return;
+			if (['multitype', 'stancechange'].includes(target.ability)) return;
 			if (!this.willMove(target)) target.addVolatile('gastroacid');
 		},
 		onAfterSubDamage: function (target) {
-			if (target.ability in {multitype:1, stancechange:1}) return;
+			if (['multitype', 'stancechange'].includes(target.ability)) return;
 			if (!this.willMove(target)) target.addVolatile('gastroacid');
 		},
 		secondary: false,
@@ -5002,7 +5002,7 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 80,
 		basePowerCallback: function (target, source, move) {
-			if (move.sourceEffect in {grasspledge:1, waterpledge:1}) {
+			if (['grasspledge', 'waterpledge'].includes(move.sourceEffect)) {
 				this.add('-combine');
 				return 150;
 			}
@@ -5020,7 +5020,7 @@ exports.BattleMovedex = {
 			for (let i = 0; i < this.queue.length; i++) {
 				let decision = this.queue[i];
 				if (!decision.move || !decision.pokemon || !decision.pokemon.isActive || decision.pokemon.fainted) continue;
-				if (decision.pokemon.side === source.side && decision.move.id in {grasspledge:1, waterpledge:1}) {
+				if (decision.pokemon.side === source.side && ['grasspledge', 'waterpledge'].includes(decision.move.id)) {
 					this.prioritizeQueue(decision);
 					this.add('-waiting', source, decision.pokemon);
 					return null;
@@ -5755,7 +5755,7 @@ exports.BattleMovedex = {
 				this.add('-start', pokemon, 'Foresight');
 			},
 			onNegateImmunity: function (pokemon, type) {
-				if (pokemon.hasType('Ghost') && type in {'Normal': 1, 'Fighting': 1}) return false;
+				if (pokemon.hasType('Ghost') && ['Normal', 'Fighting'].includes(type)) return false;
 			},
 			onModifyBoost: function (boosts) {
 				if (boosts.evasion && boosts.evasion > 0) {
@@ -6406,7 +6406,7 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 80,
 		basePowerCallback: function (target, source, move) {
-			if (move.sourceEffect in {waterpledge:1, firepledge:1}) {
+			if (['waterpledge', 'firepledge'].includes(move.sourceEffect)) {
 				this.add('-combine');
 				return 150;
 			}
@@ -6424,7 +6424,7 @@ exports.BattleMovedex = {
 			for (let i = 0; i < this.queue.length; i++) {
 				let decision = this.queue[i];
 				if (!decision.move || !decision.pokemon || !decision.pokemon.isActive || decision.pokemon.fainted) continue;
-				if (decision.pokemon.side === source.side && decision.move.id in {waterpledge:1, firepledge:1}) {
+				if (decision.pokemon.side === source.side && ['waterpledge', 'firepledge'].includes(decision.move.id)) {
 					this.prioritizeQueue(decision);
 					this.add('-waiting', source, decision.pokemon);
 					return null;
@@ -6758,9 +6758,9 @@ exports.BattleMovedex = {
 			let targetBoosts = {};
 			let sourceBoosts = {};
 
-			for (let i in {def:1, spd:1}) {
-				targetBoosts[i] = target.boosts[i];
-				sourceBoosts[i] = source.boosts[i];
+			for (const stat of ['def', 'spd']) {
+				targetBoosts[stat] = target.boosts[stat];
+				sourceBoosts[stat] = source.boosts[stat];
 			}
 
 			source.setBoost(targetBoosts);
@@ -10271,12 +10271,12 @@ exports.BattleMovedex = {
 		effect: {
 			noCopy: true,
 			onSourceModifyDamage: function (damage, source, target, move) {
-				if (move.id in {'stomp':1, 'steamroller':1, 'bodyslam':1, 'flyingpress':1, 'dragonrush':1, 'phantomforce':1, 'heatcrash':1, 'shadowforce':1, 'heavyslam':1}) {
+				if (['stomp', 'steamroller', 'bodyslam', 'flyingpress', 'dragonrush', 'phantomforce', 'heatcrash', 'shadowforce', 'heavyslam'].includes(move.id)) {
 					return this.chainModify(2);
 				}
 			},
 			onAccuracy: function (accuracy, target, source, move) {
-				if (move.id in {'stomp':1, 'steamroller':1, 'bodyslam':1, 'flyingpress':1, 'dragonrush':1, 'phantomforce':1, 'heatcrash':1, 'shadowforce':1, 'heavyslam':1}) {
+				if (['stomp', 'steamroller', 'bodyslam', 'flyingpress', 'dragonrush', 'phantomforce', 'heatcrash', 'shadowforce', 'heavyslam'].includes(move.id)) {
 					return true;
 				}
 				return accuracy;
@@ -11946,9 +11946,9 @@ exports.BattleMovedex = {
 			let targetBoosts = {};
 			let sourceBoosts = {};
 
-			for (let i in {atk:1, spa:1}) {
-				targetBoosts[i] = target.boosts[i];
-				sourceBoosts[i] = source.boosts[i];
+			for (const stat of ['atk', 'spa']) {
+				targetBoosts[stat] = target.boosts[stat];
+				sourceBoosts[stat] = source.boosts[stat];
 			}
 
 			source.setBoost(targetBoosts);
@@ -13070,7 +13070,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {snatch: 1},
 		onHit: function (pokemon) {
-			if (pokemon.status in {'': 1, 'slp': 1, 'frz': 1}) return false;
+			if (['', 'slp', 'frz'].includes(pokemon.status)) return false;
 			pokemon.cureStatus();
 		},
 		secondary: false,
@@ -17030,7 +17030,7 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 3,
 			onStart: function (target) {
-				if (target.baseTemplate.baseSpecies in {Diglett: 1, Dugtrio: 1, Palossand: 1, Sandygast: 1} ||
+				if (['Diglett', 'Dugtrio', 'Palossand', 'Sandygast'].includes(target.baseTemplate.baseSpecies) ||
 						target.baseTemplate.species === 'Gengar-Mega') {
 					this.add('-immune', target, '[msg]');
 					return null;
@@ -18185,7 +18185,7 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 80,
 		basePowerCallback: function (target, source, move) {
-			if (move.sourceEffect in {firepledge:1, grasspledge:1}) {
+			if (['firepledge', 'grasspledge'].includes(move.sourceEffect)) {
 				this.add('-combine');
 				return 150;
 			}
@@ -18203,7 +18203,7 @@ exports.BattleMovedex = {
 			for (let i = 0; i < this.queue.length; i++) {
 				let decision = this.queue[i];
 				if (!decision.move || !decision.pokemon || !decision.pokemon.isActive || decision.pokemon.fainted) continue;
-				if (decision.pokemon.side === source.side && decision.move.id in {firepledge:1, grasspledge:1}) {
+				if (decision.pokemon.side === source.side && ['firepledge', 'grasspledge'].includes(decision.move.id)) {
 					this.prioritizeQueue(decision);
 					this.add('-waiting', source, decision.pokemon);
 					return null;

@@ -51,9 +51,9 @@ exports.BattleScripts = {
 			}
 
 			// Treat here the items.
-			if ((this.species in {'Cubone':1, 'Marowak':1} && this.item === 'thickclub' && statName === 'atk') || (this.species === 'Pikachu' && this.item === 'lightball' && statName === 'spa')) {
+			if ((['Cubone', 'Marowak'].includes(this.species) && this.item === 'thickclub' && statName === 'atk') || (this.species === 'Pikachu' && this.item === 'lightball' && statName === 'spa')) {
 				stat *= 2;
-			} else if (this.species === 'Ditto' && this.item === 'metalpowder' && statName in {'def':1, 'spd':1}) {
+			} else if (this.species === 'Ditto' && this.item === 'metalpowder' && ['def', 'spd'].includes(statName)) {
 				// what. the. fuck. stop playing pokémon
 				stat *= 1.5;
 			}
@@ -262,7 +262,7 @@ exports.BattleScripts = {
 				// That means that a move that does not share the type of the target can status it.
 				// This means tri-attack can burn fire-types and freeze ice-types.
 				// Unlike gen 1, though, paralysis works for all unless the target is immune to direct move (ie. ground-types and t-wave).
-				if (!(moveData.secondaries[i].status && moveData.secondaries[i].status in {'brn':1, 'frz':1} && target && target.hasType(move.type))) {
+				if (!(moveData.secondaries[i].status && ['brn', 'frz'].includes(moveData.secondaries[i].status) && target && target.hasType(move.type))) {
 					let effectChance = Math.floor(moveData.secondaries[i].chance * 255 / 100);
 					if (typeof moveData.secondaries[i].chance === 'undefined' || this.random(256) <= effectChance) {
 						this.moveHit(target, pokemon, move, moveData.secondaries[i], true, isSelf);

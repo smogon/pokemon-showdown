@@ -317,7 +317,7 @@ exports.BattleAbilities = {
 	"rockhead": {
 		inherit: true,
 		onDamage: function (damage, target, source, effect) {
-			if (effect && effect.id in {lifeorb: 1, recoil: 1}) return false;
+			if (effect && ['lifeorb', 'recoil'].includes(effect.id)) return false;
 		},
 		desc: "This Pokemon does not take recoil damage besides Struggle, and crash damage.",
 		shortDesc: "This Pokemon does not take recoil damage besides Struggle/crash damage.",
@@ -606,7 +606,7 @@ exports.BattleAbilities = {
 	"parentalbond": {
 		inherit: true,
 		onModifyMove: function (move, pokemon, target) {
-			if (move.category !== 'Status' && !move.selfdestruct && !move.multihit && ((target.side && target.side.active.length < 2) || move.target in {any:1, normal:1, randomNormal:1})) {
+			if (move.category !== 'Status' && !move.selfdestruct && !move.multihit && ((target.side && target.side.active.length < 2) || ['any', 'normal', 'randomNormal'].includes(move.target))) {
 				move.multihit = 2;
 				move.accuracy = true;
 				pokemon.addVolatile('parentalbond');

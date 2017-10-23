@@ -413,12 +413,12 @@ exports.BattleScripts = {
 
 		if (move.breaksProtect) {
 			let broke = false;
-			for (let i in {banefulbunker:1, kingsshield:1, protect:1, spikyshield:1}) {
-				if (target.removeVolatile(i)) broke = true;
+			for (const effectid of ['banefulbunker', 'kingsshield', 'protect', 'spikyshield']) {
+				if (target.removeVolatile(effectid)) broke = true;
 			}
 			if (this.gen >= 6 || target.side !== pokemon.side) {
-				for (let i in {craftyshield:1, matblock:1, quickguard:1, wideguard:1}) {
-					if (target.side.removeSideCondition(i)) broke = true;
+				for (const effectid of ['craftyshield', 'matblock', 'quickguard', 'wideguard']) {
+					if (target.side.removeSideCondition(effectid)) broke = true;
 				}
 			}
 			if (broke) {
