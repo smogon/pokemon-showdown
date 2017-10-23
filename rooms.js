@@ -1393,8 +1393,8 @@ Rooms.createBattle = function (formatid, options) {
 		room.add(`|raw|<div class="broadcast-red"><strong>This battle is invite-only!</strong><br />Users must be rank + or invited with <code>/invite</code> to join</div>`);
 	}
 
-	room.battle.addPlayer(p1, options.p1team);
-	room.battle.addPlayer(p2, options.p2team);
+	room.game.addPlayer(p1, options.p1team);
+	room.game.addPlayer(p2, options.p2team);
 	p1.joinRoom(room);
 	p2.joinRoom(room);
 	Monitor.countBattle(p1.latestIp, p1.name);
