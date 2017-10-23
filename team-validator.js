@@ -886,8 +886,8 @@ class Validator {
 					//   in source
 					// `sourcesBefore = Math.max(sourcesBefore, learnedGen)`
 					//   means we can learn it only if obtained at or before learnedGen
-					//   (i.e. get it however you want, transfer to that gen, teach it,
-					//   and transfer it to the current gen.)
+					//   (i.e. get the pokemon however you want, transfer to that gen,
+					//   teach it, and transfer it to the current gen.)
 
 					let learnedGen = parseInt(learned.charAt(0));
 					if (learnedGen < minPastGen) continue;
@@ -903,27 +903,30 @@ class Validator {
 					}
 					if (!template.isNonstandard) {
 						// HMs can't be transferred
-						if (dex.gen >= 4 && learnedGen <= 3 && moveid in {'cut':1, 'fly':1, 'surf':1, 'strength':1, 'flash':1, 'rocksmash':1, 'waterfall':1, 'dive':1}) continue;
-						if (dex.gen >= 5 && learnedGen <= 4 && moveid in {'cut':1, 'fly':1, 'surf':1, 'strength':1, 'rocksmash':1, 'waterfall':1, 'rockclimb':1}) continue;
+						if (dex.gen >= 4 && learnedGen <= 3 && ['cut', 'fly', 'surf', 'strength', 'flash', 'rocksmash', 'waterfall', 'dive'].includes(moveid)) continue;
+						if (dex.gen >= 5 && learnedGen <= 4 && ['cut', 'fly', 'surf', 'strength', 'rocksmash', 'waterfall', 'rockclimb'].includes(moveid)) continue;
 						// Defog and Whirlpool can't be transferred together
-						if (dex.gen >= 5 && moveid in {'defog':1, 'whirlpool':1} && learnedGen <= 4) blockedHM = true;
+						if (dex.gen >= 5 && ['defog', 'whirlpool'].includes(moveid) && learnedGen <= 4) blockedHM = true;
 					}
-					if (learned.substr(0, 2) in {'4L':1, '5L':1, '6L':1, '7L':1}) {
-						// gen 4-7 level-up moves
+
+					if (learned.charAt(1) === 'L') {
+						// special checking for level-up moves
 						if (level >= parseInt(learned.substr(2)) || learnedGen >= 7) {
 							// we're past the required level to learn it
-							// gen 7 level-up moves can be relearnered at any level
-							// fall through to LMT check below
-						} else if (!template.gender || template.gender === 'F') {
+							// (gen 7 level-up moves can be relearnered at any level)
+							// falls through to LMT check below
+						} else if ((!template.gender || template.gender === 'F') && learnedGen >= 2) {
 							// available as egg move
 							learned = learnedGen + 'Eany';
 							limitedEgg = false;
+							// falls through to E check below
 						} else {
 							// this move is unavailable, skip it
 							continue;
 						}
 					}
-					if (learned.charAt(1) in {L:1, M:1, T:1}) {
+
+					if ('LMT'.includes(learned.charAt(1))) {
 						if (learnedGen === dex.gen) {
 							// current-gen level-up, TM or tutor moves:
 							//   always available
