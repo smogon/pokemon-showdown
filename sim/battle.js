@@ -689,7 +689,7 @@ class Battle extends Dex.ModdedDex {
 	 *   the target, source, and effect of the event. These are the same
 	 *   variables that are passed as arguments to the event handler, but
 	 *   they're useful for functions called by the event handler.
-	 * 
+	 *
 	 * @param {string} eventid
 	 * @param {Pokemon | Side | Battle} target
 	 * @param {?string | Pokemon} [source]
@@ -1063,7 +1063,7 @@ class Battle extends Dex.ModdedDex {
 	 * will set the callback as an event handler for the target when eventid is called with the
 	 * provided priority. Priority can either be a number or an object that contains the priority,
 	 * order, and subOrder for the evend handler as needed (undefined keys will use default values)
-	 * 
+	 *
 	 * @param {string} eventid
 	 * @param {Format} target
 	 * @param {AnyObject[]} rest
@@ -2931,7 +2931,7 @@ class Battle extends Dex.ModdedDex {
 	 *
 	 * You'd normally want the OverrideDecision event (which doesn't
 	 * change priority order).
-	 * 
+	 *
 	 * @param {Pokemon} pokemon
 	 * @param {AnyObject} decision
 	 */
@@ -2944,7 +2944,7 @@ class Battle extends Dex.ModdedDex {
 	/**
 	 * Takes a choice string passed from the client. Starts the next
 	 * turn if all required choices have been made.
-	 * 
+	 *
 	 * @param {string} sideid
 	 * @param {string} input
 	 */

@@ -888,7 +888,7 @@ class Pokemon {
 	 * This function only puts the pokemon in the faint queue;
 	 * actually setting of this.fainted comes later when the
 	 * faint queue is resolved.
-	 * 
+	 *
 	 * Returns the amount of damage actually dealt
 	 * @param {Pokemon} source
 	 * @param {Effect} effect

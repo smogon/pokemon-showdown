@@ -134,7 +134,7 @@
 		"no-new-object": "error",
 		"no-spaced-func": "error",
 		"no-ternary": "off",
-		"no-trailing-spaces": "error",
+		"no-trailing-spaces": ["error", {"ignoreComments": false}],
 		"no-underscore-dangle": "off",
 		"no-unneeded-ternary": "error",
 		"object-curly-spacing": ["error", "never"],
