@@ -162,7 +162,7 @@ class Matchmaker {
 	}
 
 	/**
-	 * Verifies whether or not a match made between two users is valid. Returns 
+	 * Verifies whether or not a match made between two users is valid. Returns
 	 * @param {Search} search1
 	 * @param {Search} search2
 	 * @param {User=} user1
