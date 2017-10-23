@@ -898,7 +898,8 @@ class Validator {
 							learned = learnedGen + 'Eany';
 							limitedEgg = false;
 						}
-					} else if (learned.charAt(1) in {L:1, M:1, T:1}) {
+					}
+					if (learned.charAt(1) in {L:1, M:1, T:1}) {
 						if (learnedGen === dex.gen) {
 							// current-gen level-up, TM, or tutor moves:
 							//   always available
