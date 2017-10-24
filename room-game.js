@@ -258,6 +258,7 @@ class BestOfGame extends RoomGame {
 		if (!this.p1) throw new Error(`Could not add player 1`);
 		this.p2 = /** @type {RoomGamePlayer} */ (this.addPlayer(options.p2));
 		if (!this.p2) throw new Error(`Could not add player 2`);
+		this.battle = this.game;
 
 		options.parent = room;
 		options.rated = 0;
