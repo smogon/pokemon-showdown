@@ -55,14 +55,24 @@ exports.Formats = [
 	{
 		name: "[Gen 7] UU",
 		desc: [
-			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3616332/\">UU Metagame Discussion</a>",
+			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3618821/\">UU Metagame Discussion</a>",
 			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3613279/\">UU Viability Rankings</a>",
 			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3591880/\">UU Sample Teams</a>",
 		],
 
 		mod: 'gen7',
+		searchShow: false,
 		ruleset: ['[Gen 7] OU'],
 		banlist: ['OU', 'BL', 'Drizzle', 'Mewnium Z'],
+	},
+	{
+		name: "[Gen 7] UU (suspect test)",
+		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/3618821/\">UU Suspect Test</a>"],
+
+		mod: 'gen7',
+		challengeShow: false,
+		ruleset: ['[Gen 7] UU'],
+		banlist: [],
 	},
 	{
 		name: "[Gen 7] RU",
