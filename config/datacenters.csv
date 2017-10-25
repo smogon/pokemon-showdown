@@ -16,6 +16,7 @@
 5.79.39.4,5.79.39.5,Rackspace,http://www.rackspace.com/
 5.79.64.0,5.79.123.255,Leaseweb,http://www.leaseweb.com/
 5.100.152.0,5.100.153.255,Confluence Networks Inc,http://confluence-networks.com/
+5.100.254.0,5.100.254.255,Cloud Web Manage,https://cloudwm.com/
 5.101.96.0,5.101.103.255,DigitalOcean Europe,https://www.digitalocean.com/
 5.101.104.0,5.101.111.255,DigitalOcean Europe,https://www.digitalocean.com/
 5.101.142.232,5.101.142.239,Cyberghost,http://www.cyberghostvpn.com/
@@ -156,7 +157,8 @@
 23.253.0.0,23.253.255.255,Rackspace,http://www.rackspace.com/
 23.254.0.0,23.254.127.255,B2 NET Solutions,http://www.servermania.com/
 25.66.8.0,25.66.15.255,Microsoft Azure,http://www.windowsazure.com/en-us/
-27.50.32.0,27.50.39.255,Hurricane Electic,http://www.he.net/
+27.0.232.0,27.0.232.255,OneProvider,https://oneprovider.com/
+27.50.32.0,27.50.39.255,Hurricane Electric,http://www.he.net/
 27.100.36.0,27.100.39.255,Host US,http://hostus.us/
 27.100.37.0,27.100.37.255,Host US,http://hostus.us/
 27.100.38.0,27.100.38.255,Host US,http://hostus.us/
@@ -410,6 +412,7 @@
 46.51.128.0,46.51.207.255,Amazon AWS,http://www.amazon.com/aws/
 46.51.216.0,46.51.255.255,Amazon AWS,http://www.amazon.com/aws/
 46.101.0.0,46.101.127.255,DigitalOcean Great Britain,https://www.digitalocean.com/
+46.101.128.0,46.101.255.255,DigitalOcean Europe,https://www.digitalocean.com/
 46.102.224.0,46.102.231.255,simpliq.com,http://www.simpliq.com/
 46.102.240.0,46.102.247.255,Elvsoft,http://www.elvsoft.com/
 46.102.251.0,46.102.251.255,everhost.ro,http://everhost.ro/
@@ -470,6 +473,7 @@
 50.116.64.0,50.116.127.255,WebsiteWelcome.com,http://www.websitewelcome.com/
 50.117.0.0,50.117.127.255,EGIHosting.com,http://www.egihosting.com/
 50.118.128.0,50.118.255.255,EGIHosting.com,http://www.egihosting.com/
+51.15.0.0,51.15.255.255,Online.net,https://www.online.net/
 51.254.0.0,51.255.255.255,OVH,http://www.ovh.co.uk/
 52.0.0.0,52.13.255.255,Amazon AWS,http://www.amazon.com/aws/
 52.16.0.0,52.43.255.255,Amazon AWS,http://www.amazon.com/aws/
@@ -1043,6 +1047,7 @@
 78.41.200.0,78.41.207.255,Snel Internet Services B.V.,https://www.snelserver.com/
 78.41.232.0,78.41.239.255,euro-web.com,http://fr.euro-web.com/
 78.46.0.0,78.47.255.255,Hetzner Online AG,http://www.hetzner.de/
+78.108.46.0,78.108.46.255,ENAHOST,https://www.enahost.com/
 78.109.16.0,78.109.31.255,hosting.ua,http://hosting.ua/
 78.110.160.0,78.110.175.255,UK Dedicated Servers LTD,http://ukservers.com/
 78.129.128.0,78.129.255.255,iomart Hosting Ltd,http://www.rapidswitch.com/
@@ -1128,6 +1133,7 @@
 82.145.32.0,82.145.63.255,iomart Hosting Ltd,http://www.rapidswitch.com/
 82.146.40.0,82.146.47.255,FirstVDS,http://www.firstvds.ru/
 82.149.64.0,82.149.95.255,IP Exchange GmbH,http://www.ip-exchange.de/
+82.163.78.0,82.163.79.255,UK2,https://www.uk2.net/
 82.165.0.0,82.165.255.255,1&1 Internet,http://www.1and1.com/
 82.192.64.0,82.192.95.255,Leaseweb,http://www.leaseweb.com/
 82.194.64.0,82.194.95.255,acens Technologies S.L.,http://www.acens.com/
@@ -1206,8 +1212,10 @@
 85.232.32.0,85.232.63.255,Titan Internet Ltd,http://www.titaninternet.co.uk/index.cfm
 85.234.128.0,85.234.159.255,BlueConnex,http://www.simplytransit.net/
 85.235.216.0,85.235.219.255,Prometey,http://ptspb.ru/
+85.255.0.0,85.255.15.255,FORPSI,https://www.forpsi.com/
 85.255.192.0,85.255.207.255,Hostbasket,http://www.hostbasket.com/en/
 86.39.128.0,86.39.255.255,easyhost.be,http://easyhost.be/
+86.105.52.0,86.105.52.255,Aruba Cloud,https://www.arubacloud.com/
 86.105.80.0,86.105.87.255,ip.ro,http://ip.ro/
 86.109.0.0,86.109.31.255,Alpha Mega Hosting,http://www.alphamegahosting.com/
 86.109.96.0,86.109.127.255,acens Technologies S.L.,http://www.acens.com/
@@ -1416,9 +1424,10 @@
 94.103.144.0,94.103.159.255,nedzone.nl,https://www.nedzone.nl/
 94.126.176.0,94.126.183.255,Solido Hosting A/S,http://solidohosting.com/
 94.136.32.0,94.136.63.255,Webfusion,http://www.webfusion.com/
-94.140.120.0,94.140.121.255,Makonix Virtual Server Hosting,https://www.makonix.com/
+94.140.120.0,94.140.121.255,Yourserver Sweden,https://www.yourserver.se/
 94.154.112.0,94.154.127.255,justhost.in.ua,http://www.justhost.in.ua/
 94.177.4.0,94.177.5.255,everhost,http://everhost.co/
+94.177.232.0,94.177.239.255,Aruba Cloud,https://www.arubacloud.com/
 94.185.80.0,94.185.87.255,Netrouting,http://www.netrouting.com/
 94.198.56.0,94.198.63.255,Unbelievable Machine,http://www.unbelievable-machine.com/
 94.198.167.64,94.198.167.95,easyhost.be,http://easyhost.be/
@@ -1543,6 +1552,7 @@
 103.207.69.0,103.207.69.255,Host US,http://hostus.us/
 103.207.70.0,103.207.71.255,Host US,http://hostus.us/
 103.207.71.0,103.207.71.255,Host US,http://hostus.us/
+103.212.220.0,103.212.223.255,NeoSilkRoad,http://neosilkroad.com
 103.246.248.0,103.246.248.255,quickweb.co.nz,http://quickweb.co.nz/
 103.246.250.0,103.246.251.255,quickweb.co.nz,http://quickweb.co.nz/
 103.253.144.0,103.253.147.255,DigitalOcean AP,https://www.digitalocean.com/
@@ -1800,6 +1810,7 @@
 151.237.176.0,151.237.177.255,webexxpurts.com,http://webexxpurts.com/
 151.237.181.0,151.237.181.255,webexxpurts.com,http://webexxpurts.com/
 151.237.184.0,151.237.184.255,webexxpurts.com,http://webexxpurts.com/
+154.127.59.0,154.127.59.255,Host1Plus South Africa,https://www.host1plus.com/
 157.55.8.96,157.55.8.175,Microsoft Azure,http://www.windowsazure.com/en-us/
 157.55.24.0,157.55.31.255,Microsoft Azure,http://www.windowsazure.com/en-us/
 157.55.60.224,157.55.60.255,Microsoft Azure,http://www.windowsazure.com/en-us/
@@ -1983,6 +1994,7 @@
 176.65.64.0,176.65.71.255,The Bunker,http://www.thebunker.net/
 176.67.160.0,176.67.175.255,UK2 Group,http://www.uk2.net/
 176.74.160.0,176.74.191.255,PEER 1,http://www.peer1.com/
+176.103.48.0,176.103.63.255,XServer,https://xserver.ua/
 176.126.83.0,176.126.83.255,OneProvider,http://oneprovider.com/
 176.227.192.120,176.227.192.127,Redstation Limited,http://redstation.com/
 176.227.195.0,176.227.195.7,Redstation Limited,http://redstation.com/
@@ -2187,6 +2199,7 @@
 185.45.13.144,185.45.13.159,Cyberghost,http://www.cyberghostvpn.com/
 185.45.13.160,185.45.13.167,Cyberghost,http://www.cyberghostvpn.com/
 185.48.120.0,185.48.123.255,Amazon AWS,http://www.amazon.com/aws/
+185.58.193.0,185.58.193.255,Aruba Cloud,https://www.arubacloud.com/
 185.61.151.0,185.61.151.255,Yourserver Sweden,https://www.yourserver.se/
 185.62.190.0,185.62.191.255,BlazingFast,https://blazingfast.io/
 185.82.216.0,185.82.217.255,Sofia Data Center,http://sdc.bg/
@@ -2346,6 +2359,7 @@
 192.69.88.0,192.69.95.255,Volume Drive,http://volumedrive.com
 192.69.192.0,192.69.223.255,WebNX Internet Services,http://webnx.com/
 192.69.236.0,192.69.239.255,eHostingUSA,http://ehostingusa.com/
+192.71.249.0,192.71.249.255,EDIS,https://www.edis.at/
 192.73.240.0,192.73.255.255,Host Virtual,http://www.vr.org/
 192.80.8.0,192.80.8.255,Packet Host,https://www.packet.net/
 192.81.128.0,192.81.135.255,Linode,http://www.linode.com/
@@ -2367,6 +2381,7 @@
 192.155.80.0,192.155.95.255,Linode,http://www.linode.com/
 192.155.192.0,192.155.255.255,SoftLayer,http://www.softlayer.com/
 192.157.48.0,192.157.63.255,servermania.com,http://www.servermania.com/
+192.160.102.0,192.160.102.255,Hextet Systems,https://hextet.net/
 192.161.48.0,192.161.63.255,QuadraNet,http://quadranet.com/
 192.161.160.0,192.161.191.255,QuadraNet,http://quadranet.com/
 192.162.19.0,192.162.19.255,galahost,http://galahost.net/
@@ -3060,6 +3075,7 @@
 212.45.104.0,212.45.111.255,Unbelievable Machine,http://www.unbelievable-machine.com/
 212.47.224.0,212.47.255.255,Iliad Datacenter,http://iliad-entreprises.fr/
 212.53.64.0,212.53.95.255,NetBenefit,http://www.netbenefit.com/
+212.57.38.0,212.57.39.255,Webglobe Cloud,https://wy.sk/
 212.64.128.0,212.64.159.255,Rackspace,http://www.rackspace.com/
 212.67.192.0,212.67.223.255,Webfusion,http://www.webfusion.com/
 212.68.46.0,212.68.46.255,Sadecehosting Turkey,https://www.sadecehosting.com/en/
