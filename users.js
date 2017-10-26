@@ -32,6 +32,8 @@ const THROTTLE_MULTILINE_WARN_STAFF = 6;
 
 const PERMALOCK_CACHE_TIME = 30 * 24 * 60 * 60 * 1000;
 
+const DEFAULT_TRAINER_SPRITES = [1, 2, 101, 102, 169, 170, 265, 266];
+
 const FS = require('./fs');
 
 let Users = module.exports = getUser;
@@ -373,8 +375,7 @@ class User {
 		this.userid = '';
 		this.group = Config.groupsranking[0];
 
-		let trainersprites = [1, 2, 101, 102, 169, 170, 265, 266];
-		this.avatar = trainersprites[Math.floor(Math.random() * trainersprites.length)];
+		this.avatar = DEFAULT_TRAINER_SPRITES[Math.floor(Math.random() * DEFAULT_TRAINER_SPRITES.length)];
 
 		this.connected = true;
 
