@@ -600,6 +600,18 @@ exports.Formats = [
 		ruleset: ['Pokemon', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
 	},
 	{
+		name: "[Gen 7] Challenge Cup 2v2",
+
+		mod: 'gen7',
+		team: 'randomCC',
+		gameType: 'doubles',
+		teamLength: {
+			battle: 2,
+		},
+		searchShow: false,
+		ruleset: ['Pokemon', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
+	},
+	{
 		name: "[Gen 7] Monotype Random Battle",
 
 		mod: 'gen7',
