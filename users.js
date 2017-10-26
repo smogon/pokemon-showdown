@@ -388,6 +388,7 @@ class User {
 		//       the `ips` object, not just the latest IP.
 		this.latestIp = connection.ip;
 		this.locked = false;
+		this.semilocked = false;
 		this.namelocked = false;
 		this.prevNames = Object.create(null);
 		this.inRooms = new Set();
@@ -459,6 +460,10 @@ class User {
 				return mutedSymbol + this.name;
 			}
 			return room.getAuth(this) + this.name;
+		}
+		if (this.semilocked) {
+			const mutedSymbol = (Config.punishgroups && Config.punishgroups.muted ? Config.punishgroups.muted.symbol : '!');
+			return mutedSymbol + this.name;
 		}
 		return this.group + this.name;
 	}
