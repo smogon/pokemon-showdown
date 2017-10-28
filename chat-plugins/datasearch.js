@@ -256,7 +256,7 @@ exports.commands = {
 		"Inequality ranges use the characters '>' and '<' though they behave as '≥' and '≤', e.g., 'bp > 100' searches for all moves equal to and greater than 100 base power.",
 		"Parameters can be excluded through the use of '!', e.g., !water type' excludes all water type moves.",
 		"Valid flags are: authentic (bypasses substitute), bite, bullet, contact, defrost, powder, pulse, punch, secondary, snatch, and sound.",
-		"Parameters separated with '|' will be searched as alternatives for each other, e.g., 'fire | water' searches for all moves that are either Fire type or Water type."
+		"Parameters separated with '|' will be searched as alternatives for each other, e.g., 'fire | water' searches for all moves that are either Fire type or Water type.",
 		"If a Pok\u00e9mon is included as a parameter, moves will be searched from its movepool.",
 		"The order of the parameters does not matter.",
 	],
