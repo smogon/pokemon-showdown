@@ -140,6 +140,11 @@ exports.monitorminpunishments = 3;
 //   the autolock will only apply to people who pass this threshold.
 exports.punishmentautolock = false;
 
+// restrict sending links to autoconfirmed users only.
+//   If this is set to `true`, only autoconfirmed users can send links to either chatrooms or other users, except for staff members.
+//   This option can be used if your server has trouble with spammers mass PMing links to users, or trolls sending malicious links.
+exports.restrictLinks = false;
+
 // whitelist - prevent users below a certain group from doing things
 //   For the modchat settings, false will allow any user to participate, while a string
 //   with a group symbol will restrict it to that group and above. The string
