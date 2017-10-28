@@ -745,6 +745,14 @@ class CommandContext {
 				return false;
 			}
 
+			// If the corresponding config option is set, non-AC users cannot send links, except to staff.
+			if (Config.restrictLinks && !user.autoconfirmed && message.match(linkRegex)) {
+				if (!(targetUser && targetUser.can('lock'))) {
+					this.errorReply("Your account must be autoconfirmed to send links to other users, except for global staff.");
+					return false;
+				}
+			}
+
 			if (!this.checkFormat(room, user, message)) {
 				return false;
 			}
