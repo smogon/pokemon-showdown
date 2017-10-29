@@ -1247,7 +1247,8 @@ function runItemsearch(target, cmd, canAll, message) {
 	let showAll = false;
 
 	target = target.trim();
-	if (target.substr(target.length - 5) === ', all' || target.substr(target.length - 4) === ',all') {
+	if (target.substr(target.length - 5) === ', all') {
+		if (!canAll) return {reply: "A search ending in ', all' cannot be broadcast."};
 		showAll = true;
 		target = target.substr(0, target.length - 5);
 	}
