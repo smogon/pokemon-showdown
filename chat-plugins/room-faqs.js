@@ -87,7 +87,14 @@ exports.commands = {
 
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(Chat.parseText(roomFaqs[room.id][topic]));
-		if (!this.broadcasting && user.can('declare', null, room)) this.sendReplyBox(`<code>/addfaq ${topic}, ${Chat.escapeHTML(roomFaqs[room.id][topic])}</code>`);
+		if (!this.broadcasting && user.can('declare', null, room)) {
+			let extra = `<code>/addfaq ${topic}, ${Chat.escapeHTML(roomFaqs[room.id][topic])}</code>`;
+			let aliases = Object.keys(roomFaqs[room.id]).filter(val => getAlias(room.id, val) === topic);
+			if (aliases.length) {
+				extra += `<br/><br/>Aliases: ${Object.keys(roomFaqs[room.id]).filter(val => getAlias(room.id, val) === topic).join(', ')}`;
+			}
+			this.sendReplyBox(extra);
+		}
 	},
 	roomfaqhelp: [
 		"/roomfaq - Shows the list of all available FAQ topics",
