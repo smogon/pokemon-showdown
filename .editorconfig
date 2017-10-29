@@ -14,7 +14,7 @@ insert_final_newline = true
 [*.{json,yml,webapp}]
 # npm style
 indent_style = space
-indent_size = 3
+indent_size = 2
 
 [*.md]
 indent_style = space
