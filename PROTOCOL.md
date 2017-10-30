@@ -26,6 +26,7 @@ The official client logs protocol messages in the JavaScript console,
 so opening that (F12 in most browsers) can help tell you what's going
 on.
 
+
 Client-to-server messages
 -------------------------
 
@@ -100,13 +101,14 @@ displayed inline because they happen too often. For instance, the main server
 gets around 5 joins/leaves a second, and showing that inline with chat would
 make it near-impossible to chat.
 
-Some outgoing message types
----------------------------
+
+Server-to-client message types
+------------------------------
 
 `USER` = a user, the first character being their rank (users with no rank are
 represented by a space), and the rest of the string being their username.
 
-#### Room initialization
+### Room initialization
 
 `|init|ROOMTYPE`
 
@@ -118,7 +120,7 @@ represented by a space), and the rest of the string being their username.
 > `USERLIST` is a comma-separated list of `USER`s, sent from chat rooms when
 > they're joined.
 
-#### Room messages
+### Room messages
 
 `||MESSAGE` or `MESSAGE`
 
@@ -175,7 +177,88 @@ represented by a space), and the rest of the string being their username.
 > A battle started between `USER1` and `USER2`, and the battle room has
 > ID `ROOMID`.
 
-#### Battle messages
+### Global messages
+
+`|popup|MESSAGE`
+
+> Show the user a popup containing `MESSAGE`. `||` denotes a newline in
+> the popup.
+
+`|pm|SENDER|RECEIVER|MESSAGE`
+
+> A PM was sent from `SENDER` to `RECEIVER` containing the message
+> `MESSAGE`.
+
+`|usercount|USERCOUNT`
+
+> `USERCOUNT` is the number of users on the server.
+
+`|nametaken|USERNAME|MESSAGE`
+
+> You tried to change your username to `USERNAME` but it failed for the
+> reason described in `MESSAGE`.
+
+`|challstr|CHALLSTR`
+
+> You just connected to the server, and we're giving you some information you'll need to log in.
+>
+> If you're already logged in and have session cookies, you can make an HTTP GET request to
+> `http://play.pokemonshowdown.com/action.php?act=upkeep&challstr=CHALLSTR`
+>
+> Otherwise, you'll need to make an HTTP POST request to `http://play.pokemonshowdown.com/action.php`
+> with the data `act=login&name=USERNAME&pass=PASSWORD&challstr=CHALLSTR`
+>
+> `USERNAME` is your username and `PASSWORD` is your password, and `CHALLSTR`
+> is the value you got from `|challstr|`. Note that `CHALLSTR` contains `|`
+> characters. (Also feel free to make the request to `https://` if your client
+> supports it.)
+>
+> Either way, the response will start with `]` and be followed by a JSON
+> object which we'll call `data`.
+>
+> Finish logging in (or renaming) by sending: `/trn USERNAME,0,ASSERTION`
+> where `USERNAME` is your desired username and `ASSERTION` is `data.assertion`.
+
+`|updateuser|USERNAME|NAMED|AVATAR`
+
+> Your name or avatar was successfully changed. Your username is now `USERNAME`.
+> `NAMED` will be `0` if you are a guest or `1` otherwise. And your avatar is
+> now `AVATAR`.
+
+`|formats|FORMATSLIST`
+
+> This server supports the formats specified in `FORMATSLIST`. `FORMATSLIST`
+> is a `|`-separated list of `FORMAT`s. `FORMAT` is a format name with one or
+> more of these suffixes: `,#` if the format uses random teams, `,,` if the
+> format is only available for searching, and `,` if the format is only
+> available for challenging.
+> Sections are separated by two vertical bars with the number of the column of
+> that section prefixed by `,` in it. After that follows the name of the
+> section and another vertical bar.
+
+`|updatesearch|JSON`
+
+> `JSON` is a JSON object representing the current state of what battles the
+> user is currently searching for.
+
+`|updatechallenges|JSON`
+
+> `JSON` is a JSON object representing the current state of who the user
+> is challenging and who is challenging the user.
+
+`|queryresponse|QUERYTYPE|JSON`
+
+> `JSON` is a JSON object representing containing the data that was requested
+> with `/query QUERYTYPE` or `/query QUERYTYPE DETAILS`.
+>
+> Possible queries include `/query roomlist` and `/query userdetails USERNAME`.
+
+Battle messages
+---------------
+
+In addition to room messages, battles have their own messages.
+
+### Battle initialization
 
 `|player|PLAYER|USERNAME|AVATAR`
 
@@ -212,6 +295,12 @@ represented by a space), and the rest of the string being their username.
 > specified (so Arceus would appear as `Arceus-*` since it's impossible
 > to identify Arceus forme in Team Preview).
 
+`|start`
+
+> Indicates that the game has started.
+
+### Battle progress
+
 `|request|REQUEST`
 
 > Gives a JSON object containing a request for a decision (to move or
@@ -227,9 +316,9 @@ represented by a space), and the rest of the string being their username.
 > `inactive` means that the timer is on at the time the message was sent,
 > while `inactiveoff` means that the timer is off.
 
-`|start`
+`|turn|NUMBER`
 
-> Indicates that the game has started.
+> It is now turn `NUMBER`.
 
 `|win|USER`
 
@@ -239,7 +328,7 @@ represented by a space), and the rest of the string being their username.
 
 > The battle has ended in a tie.
 
-###### Identifying Pokémon
+### Identifying Pokémon
 
 Pokémon can be identified either by a Pokémon ID (generally labeled
 `POKEMON` in this document), or a details string (generally labeled
@@ -280,7 +369,7 @@ Pokémon in that position (`|switch|` switching, `|replace|` illusion dropping,
 `|drag|` phazing, and `|detailschange|` permanent forme changes), and these
 all specify `DETAILS` for you to perform updates with.
 
-###### Major actions
+### Major actions
 
 In battle, most Pokémon actions come in the form `|ACTION|POKEMON|DETAILS`
 followed by a few messages detailing what happens after the action occurs.
@@ -359,7 +448,7 @@ message).
 
 > The Pokémon `POKEMON` has fainted.
 
-###### Minor actions
+### Minor actions
 
 Minor actions are less important than major actions. In the official client,
 they're usually displayed in small font if they have a message. Pretty much
@@ -522,7 +611,7 @@ enough to get you started. You can watch the data sent and received from
 the server on a regular connection, or look at the client source code
 for a full list of message types.
 
-###### Action requests
+### Action requests
 
 These are how the client sends the player's decisions to the server. All
 requests except `/undo` can be sent with `|RQID` at the end. `RQID` is
@@ -580,79 +669,3 @@ move.
 `|/undo`
 
 > Attempts to cancel the last request so a new one can be made.
-
-#### Global messages
-
-`|popup|MESSAGE`
-
-> Show the user a popup containing `MESSAGE`. `||` denotes a newline in
-> the popup.
-
-`|pm|SENDER|RECEIVER|MESSAGE`
-
-> A PM was sent from `SENDER` to `RECEIVER` containing the message
-> `MESSAGE`.
-
-`|usercount|USERCOUNT`
-
-> `USERCOUNT` is the number of users on the server.
-
-`|nametaken|USERNAME|MESSAGE`
-
-> You tried to change your username to `USERNAME` but it failed for the
-> reason described in `MESSAGE`.
-
-`|challstr|CHALLSTR`
-
-> You just connected to the server, and we're giving you some information you'll need to log in.
->
-> If you're already logged in and have session cookies, you can make an HTTP GET request to
-> `http://play.pokemonshowdown.com/action.php?act=upkeep&challstr=CHALLSTR`
->
-> Otherwise, you'll need to make an HTTP POST request to `http://play.pokemonshowdown.com/action.php`
-> with the data `act=login&name=USERNAME&pass=PASSWORD&challstr=CHALLSTR`
->
-> `USERNAME` is your username and `PASSWORD` is your password, and `CHALLSTR`
-> is the value you got from `|challstr|`. Note that `CHALLSTR` contains `|`
-> characters. (Also feel free to make the request to `https://` if your client
-> supports it.)
->
-> Either way, the response will start with `]` and be followed by a JSON
-> object which we'll call `data`.
->
-> Finish logging in (or renaming) by sending: `/trn USERNAME,0,ASSERTION`
-> where `USERNAME` is your desired username and `ASSERTION` is `data.assertion`.
-
-`|updateuser|USERNAME|NAMED|AVATAR`
-
-> Your name or avatar was successfully changed. Your username is now `USERNAME`.
-> `NAMED` will be `0` if you are a guest or `1` otherwise. And your avatar is
-> now `AVATAR`.
-
-`|formats|FORMATSLIST`
-
-> This server supports the formats specified in `FORMATSLIST`. `FORMATSLIST`
-> is a `|`-separated list of `FORMAT`s. `FORMAT` is a format name with one or
-> more of these suffixes: `,#` if the format uses random teams, `,,` if the
-> format is only available for searching, and `,` if the format is only
-> available for challenging.
-> Sections are separated by two vertical bars with the number of the column of
-> that section prefixed by `,` in it. After that follows the name of the
-> section and another vertical bar.
-
-`|updatesearch|JSON`
-
-> `JSON` is a JSON object representing the current state of what battles the
-> user is currently searching for.
-
-`|updatechallenges|JSON`
-
-> `JSON` is a JSON object representing the current state of who the user
-> is challenging and who is challenging the user.
-
-`|queryresponse|QUERYTYPE|JSON`
-
-> `JSON` is a JSON object representing containing the data that was requested
-> with `/query QUERYTYPE` or `/query QUERYTYPE DETAILS`.
->
-> Possible queries include `/query roomlist` and `/query userdetails USERNAME`.
