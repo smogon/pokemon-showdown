@@ -239,25 +239,58 @@ represented by a space), and the rest of the string being their username.
 
 > The battle has ended in a tie.
 
-###### Major actions
+###### Identifying Pokémon
 
-In battle, most Pokémon actions come in the form `|ACTION|POKEMON|DETAILS`
-followed by a few messages detailing what happens after the action occurs.
+Pokémon can be identified either by a Pokémon ID (generally labeled
+`POKEMON` in this document), or a details string (generally labeled
+`DETAILS`).
 
-A Pokémon is always identified in the form `POSITION: NAME`. `POSITION` is
-the spot that the Pokémon is in: it consists of the `PLAYER` of the player
-(see `|player|`), followed by a letter indicating the given Pokémon's
-position, counting from `a`.
+A Pokémon ID is in the form `POSITION: NAME`. `POSITION` is the spot that
+the Pokémon is in: it consists of the `PLAYER` of the player (see
+`|player|`), followed by a letter indicating the given Pokémon's position,
+counting from `a`.
+
+An inactive Pokémon will not have a position letter.
 
 In doubles and triples battles, `a` will refer to the leftmost Pokémon
 on one team and the rightmost Pokémon on the other (so `p1a` faces `p2c`,
 etc). `NAME` is the nickname of the Pokémon performing the action.
 
+For example: `p1a: Sparky` could be a Charizard named Sparky.
+`p1: Dragonite` could be an inactive Dragonite being healed by Heal Bell.
+
+`DETAILS` is a comma-separated list of all information about a pokemon
+visible on the battle screen: species, shininess, gender, and level. So it
+starts with `SPECIES`, adding `, shiny` if it's shiny, `, M` if it's male,
+`, F` if it's female, `, L##` if it's not level 100.
+
+So, for instance, `Deoxys-Speed` is a level 100 non-shiny genderless
+Deoxys (Speed forme). `Sawsbuck, shiny, F, L50` is a level 50 shiny female
+Sawsbuck (Spring form).
+
+In Team Preview, `DETAILS` will not include information not available in
+Team Preview (in particular, level and shininess will be left off), and
+for Pokémon whose forme isn't revealed in Team Preview, it will be given as
+`-*`. So, for instance, an Arceus in Team Preview would have the details
+string `Arceus-*`.
+
+For most commands, you can just use the position information in the
+Pokémon ID to identify the Pokémon. Only a few commands actually change the
+Pokémon in that position (`|switch|` switching, `|replace|` illusion dropping,
+`|drag|` phazing, and `|detailschange|` permanent forme changes), and these
+all specify `DETAILS` for you to perform updates with.
+
+###### Major actions
+
+In battle, most Pokémon actions come in the form `|ACTION|POKEMON|DETAILS`
+followed by a few messages detailing what happens after the action occurs.
+
 Battle actions (especially minor actions) often come with tags such as
 `|[from] EFFECT|[of] SOURCE`. `EFFECT` will be an effect (move, ability,
 item, status, etc), and `SOURCE` will be a Pokémon. These can affect the
 message or animation displayed, but do not affect anything else. Other 
-tags include `|[still]` (suppress animation) and `|[silent]` (suppress message).
+tags include `|[still]` (suppress animation) and `|[silent]` (suppress
+message).
 
 `|move|POKEMON|MOVE|TARGET`
 
@@ -273,22 +306,15 @@ tags include `|[still]` (suppress animation) and `|[silent]` (suppress message).
 
 `|switch|POKEMON|DETAILS|HP STATUS` or `|drag|POKEMON|DETAILS|HP STATUS`
 
-> A Pokémon identified by `POKEMON` has switched in (the old Pokémon, if
-> still there, is switched out).
+> A Pokémon identified by `POKEMON` has switched in (if there was an old
+> Pokémon in that position, it is switched out).
 >
-> `DETAILS` is a comma-separated list of all information about a pokemon
-> visible on the battle screen: species, shininess, gender, and level. So it
-> starts with `SPECIES`, adding `, shiny` if it's shiny, `, M` if it's male,
-> `, F` if it's female, `, L##` if it's not level 100.
+> For the DETAILS format, see "Identifying Pokémon" above.
 >
-> So, for instance, `Deoxys-Speed` is a level 100 non-shiny genderless
-> Deoxys (Speed forme). `Sawsbuck, shiny, F, L50` is a level 50 shiny female
-> Sawsbuck (Spring form).
->
-> `POKEMON|DETAILS` represents all the information that can reliably identify
-> a pokemon in a game. If two pokemon have the same `POKEMON|DETAILS` (which
-> will never happen in any format with Species Clause), you usually won't be
-> able to tell if the same pokemon switched in or a different pokemon switched
+> `POKEMON|DETAILS` represents all the information that can be used to tell
+> Pokémon apart. If two pokemon have the same `POKEMON|DETAILS` (which will
+> never happen in any format with Species Clause), you usually won't be able
+> to tell if the same pokemon switched in or a different pokemon switched
 > in.
 >
 > The switched Pokémon has HP `HP`, and status `STATUS`. `HP` is specified as
@@ -299,20 +325,29 @@ tags include `|[still]` (suppress animation) and `|[silent]` (suppress message).
 > `switch` means it was intentional, while `drag` means it was unintentional
 > (forced by Whirlwind, Roar, etc).
 
-`|swap|POKEMON|POSITION`
-
-> Moves already active `POKEMON` to active field `POSITION` where the
-> leftmost position is 0 and each position to the right counts up by 1.
-
 `|detailschange|POKEMON|DETAILS|HP STATUS` or 
 `|-formechange|POKEMON|SPECIES|HP STATUS`
 
 > The specified Pokémon has changed formes (via Mega Evolution, ability, etc.) 
-> to `SPECIES`. If the forme change cannot be reverted (Mega Evolution or a 
+> to `SPECIES`. If the forme change is permanent (Mega Evolution or a 
 > Shaymin-Sky that is frozen), then `detailschange` will appear; otherwise, 
 > the client will send `-formechange`.
 >
-> For the `DETAILS` format, see the documentation for `|switch|`.
+> Syntax is the same as `|switch|` above.
+
+`|replace|POKEMON|DETAILS|HP STATUS`
+
+> Illusion has ended for the specified Pokémon. Syntax is the same as `|switch|`
+> above, but remember that everything you thought you knew about the previous
+> Pokémon is now wrong.
+>
+> `POKEMON` will be the NEW Pokémon ID - i.e. it will have the nickname of the
+> Zoroark (or other Illusion user).
+
+`|swap|POKEMON|POSITION`
+
+> Moves already active `POKEMON` to active field `POSITION` where the
+> leftmost position is 0 and each position to the right counts up by 1.
 
 `|cant|POKEMON|REASON` or `|cant|POKEMON|REASON|MOVE`
 
@@ -335,9 +370,9 @@ stat boosts are minor actions.
 `|-fail|POKEMON|ACTION`
 
 > The specified `ACTION` has failed against the `POKEMON` targetted. The `ACTION`
->  in question can be a move that fails, or a stat drop blocked by an ability 
-> like Hyper Cutter, in which case `ACTION` will be `unboost|STAT`, where `STAT` 
-> indicates where the ability prevents stat drops. (For abilities that block all 
+>  in question can be a move that fails, or a stat drop blocked by an ability
+> like Hyper Cutter, in which case `ACTION` will be `unboost|STAT`, where `STAT`
+> indicates where the ability prevents stat drops. (For abilities that block all
 > stat drops, like Clear Body, `|STAT` does not appear.) 
 
 `|-damage|POKEMON|HP STATUS`
