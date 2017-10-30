@@ -1244,13 +1244,13 @@ let commands = {
 			}
 
 			let option = params[0].toLowerCase();
-			if (option === 'on' || option === 'true' || option === 'allow' || option === 'allowed') {
+			if (meansYes(option) || option === 'allow' || option === 'allowed') {
 				if (tournament.scouting) return this.errorReply("Scouting for this tournament is already set to allowed.");
 				tournament.scouting = true;
 				tournament.modjoin = false;
 				this.room.add('|tournament|scouting|allow');
 				this.privateModCommand("(The tournament was set to allow scouting by " + user.name + ")");
-			} else if (option === 'off' || option === 'false' || option === 'disallow' || option === 'disallowed') {
+			} else if (meansNo(option) || option === 'disallow' || option === 'disallowed') {
 				if (!tournament.scouting) return this.errorReply("Scouting for this tournament is already disabled.");
 				tournament.scouting = false;
 				tournament.modjoin = true;
@@ -1271,12 +1271,12 @@ let commands = {
 			}
 
 			let option = params[0].toLowerCase();
-			if (option === 'on' || option === 'true' || option === 'allow' || option === 'allowed') {
+			if (meansYes(option) || option === 'allow' || option === 'allowed') {
 				if (tournament.modjoin) return this.errorReply("Modjoining is already allowed for this tournament.");
 				tournament.modjoin = true;
 				this.room.add('Modjoining is now allowed (Players can modjoin their tournament battles).');
 				this.privateModCommand("(The tournament was set to allow modjoin by " + user.name + ")");
-			} else if (option === 'off' || option === 'false' || option === 'disallow' || option === 'disallowed') {
+			} else if (meansNo(option) || option === 'disallow' || option === 'disallowed') {
 				if (!tournament.modjoin) return this.errorReply("Modjoining is already not allowed for this tournament.");
 				tournament.modjoin = false;
 				this.room.add('Modjoining is now banned (Players cannot modjoin their tournament battles).');
@@ -1287,11 +1287,11 @@ let commands = {
 		},
 		forcetimer: function (tournament, user, params, cmd) {
 			let option = params.length ? params[0].toLowerCase() : 'on';
-			if (option === 'on' || option === 'true') {
+			if (meansYes(option)) {
 				tournament.forceTimer = true;
 				this.room.add('Forcetimer is now on for the tournament.');
 				this.privateModCommand("(The timer was turned on for the tournament by " + user.name + ")");
-			} else if (option === 'off' || option === 'false' || option === 'stop') {
+			} else if (meansNo(option) || option === 'stop') {
 				tournament.forceTimer = false;
 				this.room.add('Forcetimer is now off for the tournament.');
 				this.privateModCommand("(The timer was turned off for the tournament by " + user.name + ")");
@@ -1362,7 +1362,7 @@ Chat.commands.tournament = function (paramString, room, user, connection) {
 		})));
 	} else if (cmd === 'help') {
 		return this.parse('/help tournament');
-	} else if (cmd === 'on' || cmd === 'enable') {
+	} else if (meansYes(cmd)) {
 		if (!this.can('tournamentsmanagement', null, room)) return;
 		let rank = params[0];
 		if (rank && rank === '@') {
@@ -1384,7 +1384,7 @@ Chat.commands.tournament = function (paramString, room, user, connection) {
 		} else {
 			return this.errorReply("Tournament enable setting not recognized.  Valid options include [%|@].");
 		}
-	} else if (cmd === 'off' || cmd === 'disable') {
+	} else if (meansNo(cmd)) {
 		if (!this.can('tournamentsmanagement', null, room)) return;
 		if (!room.toursEnabled) {
 			return this.errorReply("Tournaments are already disabled.");
@@ -1409,11 +1409,11 @@ Chat.commands.tournament = function (paramString, room, user, connection) {
 		}
 
 		let option = params[0].toLowerCase();
-		if (option === 'on' || option === 'enable') {
+		if (meansYes(option)) {
 			if (room.tourAnnouncements) return this.errorReply("Tournament announcements are already enabled.");
 			room.tourAnnouncements = true;
 			this.privateModCommand("(Tournament announcements were enabled by " + user.name + ")");
-		} else if (option === 'off' || option === 'disable') {
+		} else if (meansNo(option)) {
 			if (!room.tourAnnouncements) return this.errorReply("Tournament announcements are already disabled.");
 			room.tourAnnouncements = false;
 			this.privateModCommand("(Tournament announcements were disabled by " + user.name + ")");
