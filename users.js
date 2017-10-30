@@ -792,6 +792,10 @@ class User {
 			}
 			if (this.named) user.prevNames[this.userid] = this.name;
 			this.destroy();
+
+			if (user.named) Punishments.checkName(user, registered);
+			if (user.namelocked) user.named = true;
+
 			Rooms.global.checkAutojoin(user);
 			if (Config.loginfilter) Config.loginfilter(user, this, userType);
 			return true;
