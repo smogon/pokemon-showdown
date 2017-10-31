@@ -502,12 +502,13 @@ class Validator {
 					if (eventProblems) problems.push(...eventProblems);
 				}
 			}
-			if (isHidden && lsetData.sourcesBefore) {
-				if (!lsetData.sources && lsetData.sourcesBefore < 5) {
+			if (isHidden && lsetData.sourcesBefore < 5) {
+				if (!lsetData.sources) {
 					problems.push(`${name} has a hidden ability - it can't have moves only learned before gen 5.`);
 				} else if (lsetData.sources && template.gender && template.gender !== 'F' && !['Nidoran-M', 'Nidorino', 'Nidoking', 'Volbeat'].includes(template.species)) {
 					let compatibleSource = false;
 					for (const learned of lsetData.sources) {
+						if (parseInt(learned.charAt(0)) < 5) continue;
 						if (learned.charAt(1) === 'E' || (learned.substr(0, 2) === '5D' && set.level >= 10)) {
 							compatibleSource = true;
 							break;
