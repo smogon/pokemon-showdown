@@ -39,84 +39,9 @@ const FS = require('./fs');
 
 let Chat = module.exports;
 
-// Regex copied from the client
-const domainRegex = '[a-z0-9\\-]+(?:[.][a-z0-9\\-]+)*';
-const parenthesisRegex = '[(](?:[^\\s()<>&]|&amp;)*[)]';
-const linkRegex = new RegExp(
-	'(?:' +
-		'(?:' +
-			// When using www. or http://, allow any-length TLD (like .museum)
-			'(?:https?://|\\bwww[.])' + domainRegex +
-			'|\\b' + domainRegex + '[.]' +
-				// Allow a common TLD, or any 2-3 letter TLD followed by : or /
-				'(?:com?|org|net|edu|info|us|jp|[a-z]{2,3}(?=[:/]))' +
-		')' +
-		'(?:[:][0-9]+)?' +
-		'\\b' +
-		'(?:' +
-			'/' +
-			'(?:' +
-				'(?:' +
-					'[^\\s()&<>]|&amp;|&quot;' +
-					'|' + parenthesisRegex +
-				')*' +
-				// URLs usually don't end with punctuation, so don't allow
-				// punctuation symbols that probably aren't related to URL.
-				'(?:' +
-					'[^\\s`()\\[\\]{}\'".,!?;:&<>*_`^~\\\\]' +
-					'|' + parenthesisRegex +
-				')' +
-			')?' +
-		')?' +
-		'|[a-z0-9.]+\\b@' + domainRegex + '[.][a-z]{2,3}' +
-	')' +
-	'(?!.*&gt;)',
-	'ig'
-);
-const hyperlinkRegex = new RegExp(`(.+)&lt;(.+)&gt;`, 'i');
 // Matches U+FE0F and all Emoji_Presentation characters. More details on
 // http://www.unicode.org/Public/emoji/5.0/emoji-data.txt
 const emojiRegex = /[\u231A\u231B\u23E9-\u23EC\u23F0\u23F3\u25FD\u25FE\u2614\u2615\u2648-\u2653\u267F\u2693\u26A1\u26AA\u26AB\u26BD\u26BE\u26C4\u26C5\u26CE\u26D4\u26EA\u26F2\u26F3\u26F5\u26FA\u26FD\u2705\u270A\u270B\u2728\u274C\u274E\u2753-\u2755\u2757\u2795-\u2797\u27B0\u27BF\u2B1B\u2B1C\u2B50\u2B55\uFE0F\u{1F004}\u{1F0CF}\u{1F18E}\u{1F191}-\u{1F19A}\u{1F1E6}-\u{1F1FF}\u{1F201}\u{1F21A}\u{1F22F}\u{1F232}-\u{1F236}\u{1F238}-\u{1F23A}\u{1F250}\u{1F251}\u{1F300}-\u{1F320}\u{1F32D}-\u{1F335}\u{1F337}-\u{1F37C}\u{1F37E}-\u{1F393}\u{1F3A0}-\u{1F3CA}\u{1F3CF}-\u{1F3D3}\u{1F3E0}-\u{1F3F0}\u{1F3F4}\u{1F3F8}-\u{1F43E}\u{1F440}\u{1F442}-\u{1F4FC}\u{1F4FF}-\u{1F53D}\u{1F54B}-\u{1F54E}\u{1F550}-\u{1F567}\u{1F57A}\u{1F595}\u{1F596}\u{1F5A4}\u{1F5FB}-\u{1F64F}\u{1F680}-\u{1F6C5}\u{1F6CC}\u{1F6D0}-\u{1F6D2}\u{1F6EB}\u{1F6EC}\u{1F6F4}-\u{1F6F8}\u{1F910}-\u{1F93A}\u{1F93C}-\u{1F93E}\u{1F940}-\u{1F945}\u{1F947}-\u{1F94C}\u{1F950}-\u{1F96B}\u{1F980}-\u{1F997}\u{1F9C0}\u{1F9D0}-\u{1F9E6}]/u;
-
-/** @typedef {{token: string, endToken?: string, resolver: (str: string) => string}} Resolver */
-/** @type {Resolver[]} */
-const formattingResolvers = [
-	{token: "**", resolver: str => `<b>${str}</b>`},
-	{token: "__", resolver: str => `<i>${str}</i>`},
-	{token: "``", resolver: str => `<code>${str}</code>`},
-	{token: "~~", resolver: str => `<s>${str}</s>`},
-	{token: "^^", resolver: str => `<sup>${str}</sup>`},
-	{token: "\\", resolver: str => `<sub>${str}</sub>`},
-	{token: "&lt;&lt;", endToken: "&gt;&gt;", resolver: str => str.replace(/[a-z0-9-]/g, '').length ? false : `&laquo;<a href="${str}" target="_blank">${str}</a>&raquo;`},
-	{token: "[[", endToken: "]]", resolver: str => {
-		let hl = hyperlinkRegex.exec(str);
-		if (hl) return `<a href="${hl[2].trim().replace(/^([a-z]*[^a-z:])/g, 'http://$1')}">${hl[1].trim()}</a>`;
-
-		let query = str;
-		let querystr = str;
-		let split = str.split(':');
-		if (split.length > 1) {
-			let opt = toId(split[0]);
-			query = split.slice(1).join(':').trim();
-
-			switch (opt) {
-			case 'wiki':
-			case 'wikipedia':
-				return `<a href="http://en.wikipedia.org/w/index.php?title=Special:Search&search=${encodeURIComponent(query)}" target="_blank">${querystr}</a>`;
-			case 'yt':
-			case 'youtube':
-				query += " site:youtube.com";
-				querystr = `yt: ${query}`;
-				break;
-			case 'pokemon':
-			case 'item':
-				return `<psicon title="${query}" ${opt}="${query}" />`;
-			}
-		}
-
-		return `<a href="http://www.google.com/search?ie=UTF-8&btnI&q=${encodeURIComponent(query)}" target="_blank">${querystr}</a>`;
-	}},
-];
 
 class PatternTester {
 	// This class sounds like a RegExp
@@ -792,7 +717,7 @@ class CommandContext {
 			}
 
 			// If the corresponding config option is set, non-AC users cannot send links, except to staff.
-			if (Config.restrictLinks && !user.autoconfirmed && message.match(linkRegex)) {
+			if (Config.restrictLinks && !user.autoconfirmed && message.match(Chat.linkRegex)) {
 				if (!(targetUser && targetUser.can('lock'))) {
 					this.errorReply("Your account must be autoconfirmed to send links to other users, except for global staff.");
 					return false;
@@ -1177,80 +1102,6 @@ Chat.toDurationString = function (number, options) {
 };
 
 /**
- * Takes a string and converts it to HTML by replacing standard chat formatting with the appropriate HTML tags.
- *
- * @param  {string} str
- * @return {string}
- */
-Chat.parseText = function (str) {
-	// escapeHTML, without escaping /
-	str = ('' + str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;');
-	str = str.replace(linkRegex, uri => `<a href=${uri.replace(/^([a-z]*[^a-z:])/g, 'http://$1')}>${uri}</a>`);
-
-	let output = [''];
-	let stack = [];
-
-	let parse = true;
-
-	let i = 0;
-	mainLoop: while (i < str.length) {
-		let token = str[i];
-
-		// Hardcoded parsing
-		if (parse && token === '`' && str.substr(i, 2) === '``') {
-			stack.push('``');
-			output.push('');
-			parse = false;
-			i += 2;
-			continue;
-		}
-
-		for (const formattingResolver of formattingResolvers) {
-			let start = formattingResolver.token;
-			let end = formattingResolver.endToken || start;
-
-			if (stack.length && end.startsWith(token) && str.substr(i, end.length) === end && output[stack.length].replace(token, '').length) {
-				for (let j = stack.length - 1; j >= 0; j--) {
-					if (stack[j] === start) {
-						parse = true;
-
-						while (stack.length > j + 1) {
-							output[stack.length - 1] += stack.pop() + output.pop();
-						}
-
-						let str = output.pop();
-						let outstr = formattingResolver.resolver(str.trim());
-						if (!outstr) outstr = `${start}${str}${end}`;
-						output[stack.length - 1] += outstr;
-						i += end.length;
-						stack.pop();
-						continue mainLoop;
-					}
-				}
-			}
-
-			if (parse && start.startsWith(token) && str.substr(i, start.length) === start) {
-				stack.push(start);
-				output.push('');
-				i += start.length;
-				continue mainLoop;
-			}
-		}
-
-		output[stack.length] += token;
-		i++;
-	}
-
-	while (stack.length) {
-		output[stack.length - 1] += stack.pop() + output.pop();
-	}
-
-	let result = output[0];
-
-	return result;
-};
-
-/**
  * Takes an array and turns it into a sentence string by adding commas and the word 'and' at the end
  *
  * @param  {array} array
@@ -1346,3 +1197,6 @@ Chat.getDataItemHTML = function (item) {
 	buf += `</a></li><li style="clear:both"></li></ul>`;
 	return buf;
 };
+
+Chat.formatText = require('./chat-formatter').formatText;
+Chat.linkRegex = require('./chat-formatter').linkRegex;

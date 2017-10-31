@@ -409,7 +409,7 @@ class JumpStart extends ScavGame {
 			this.timer = setTimeout(() => {
 				let targetUser = Users(targetUserId);
 				if (targetUser) {
-					targetUser.sendTo(this.room, `|raw|<strong>The first hint to the next hunt is:</strong> ${Chat.parseText(this.hunts[1][4][0])}`);
+					targetUser.sendTo(this.room, `|raw|<strong>The first hint to the next hunt is:</strong> ${Chat.formatText(this.hunts[1][4][0])}`);
 					targetUser.sendTo(this.room, `|notify|Early Hint|The first hint to the next hunt is: ${this.hunts[1][4][0]}`);
 				}
 				this.runJumpStartTimer();
