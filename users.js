@@ -1238,7 +1238,7 @@ class User {
 			connection.popup(`That format is not available.`);
 			return Promise.resolve(false);
 		}
-		return TeamValidator(formatid).prepTeam(this.team, this.locked || this.namelocked).then(result => this.finishPrepBattle(connection, result));
+		return TeamValidatorAsync(formatid).validateTeam(this.team, this.locked || this.namelocked).then(result => this.finishPrepBattle(connection, result));
 	}
 
 	/**
