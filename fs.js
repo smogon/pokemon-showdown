@@ -37,14 +37,14 @@ class Path {
 	parentDir() {
 		return new Path(pathModule.dirname(this.path));
 	}
-	read(options = {}) {
+	read(/** @type {AnyObject | string} */ options = {}) {
 		return new Promise((resolve, reject) => {
 			fs.readFile(this.path, options, (err, data) => {
 				err ? reject(err) : resolve(data);
 			});
 		});
 	}
-	readSync(options = {}) {
+	readSync(/** @type {AnyObject | string} */ options = {}) {
 		return fs.readFileSync(this.path, options);
 	}
 	readTextIfExists() {
@@ -150,6 +150,9 @@ class Path {
 	readdirSync() {
 		return fs.readdirSync(this.path);
 	}
+	/**
+	 * @return {NodeJS.WritableStream}
+	 */
 	createWriteStream(options = {}) {
 		if (Config.nofswriting) {
 			const Writable = require('stream').Writable;
@@ -157,6 +160,9 @@ class Path {
 		}
 		return fs.createWriteStream(this.path, options);
 	}
+	/**
+	 * @return {NodeJS.WritableStream}
+	 */
 	createAppendStream(options = {}) {
 		if (Config.nofswriting) {
 			const Writable = require('stream').Writable;
