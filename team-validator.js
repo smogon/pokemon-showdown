@@ -292,8 +292,9 @@ class Validator {
 					let problem = this.checkLearnset(move, template, lsetData);
 					if (problem) {
 						// Sketchmons hack
+						const allowOneSketch = ruleTable.has('allowonesketch');
 						const noSketch = format.noSketch || dex.getFormat('gen7sketchmons').noSketch;
-						if (ruleTable.has('allowonesketch') && noSketch.indexOf(move.name) < 0 && !set.sketchmonsMove && !move.noSketch && !move.isZ) {
+						if (allowOneSketch && noSketch.indexOf(move.name) < 0 && !set.sketchmonsMove && !move.noSketch && !move.isZ) {
 							set.sketchmonsMove = move.id;
 							continue;
 						}
@@ -309,6 +310,14 @@ class Validator {
 							problemString = problemString.concat(` because it needs to be from generation ${problem.gen} or later.`);
 						} else {
 							problemString = problemString.concat(`.`);
+						}
+						// Sketchmons hack part 2
+						if (allowOneSketch) {
+							if (noSketch.indexOf(move.name) >= 0) {
+								problemString = problemString.concat(` (${move.name} is banned from being sketched in ${format.name}.)`);
+							} else if (set.sketchmonsMove !== move.id) {
+								problemString = problemString.concat(` (You cannot sketch more than one move per Pok\u00E9mon.)`);
+							}
 						}
 						problems.push(problemString);
 					}
