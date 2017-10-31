@@ -1104,7 +1104,8 @@ class Validator {
 			if (lsetData.sources) {
 				let sourcesSet = new Set(sources);
 				let intersectSources = lsetData.sources.filter(source => sourcesSet.has(source));
-				if (!intersectSources.length && !(sourcesBefore && lsetData.sourcesBefore)) {
+				if (!intersectSources.length) intersectSources = null;
+				if (!intersectSources && !(sourcesBefore && lsetData.sourcesBefore)) {
 					return {type:'incompatible'};
 				}
 				lsetData.sources = intersectSources;
