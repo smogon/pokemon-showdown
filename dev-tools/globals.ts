@@ -21,5 +21,5 @@ type ChatRoom = any;
 let Verifier = require('../verifier');
 let Dnsbl = require('../dnsbl');
 let Sockets = require('../sockets');
-let TeamValidator = require('../team-validator');
+let TeamValidator = require('../sim/team-validator');
 let TeamValidatorAsync = require('../team-validator-async');

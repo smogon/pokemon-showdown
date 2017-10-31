@@ -344,7 +344,7 @@ if (process.send && module === process.mainModule) {
 	global.Dex = require('../sim/dex');
 	global.toId = Dex.getId;
 	Dex.includeData();
-	global.TeamValidator = require('../team-validator');
+	global.TeamValidator = require('../sim/team-validator');
 
 	process.on('message', message => PM.onMessageDownstream(message));
 	process.on('disconnect', () => process.exit());

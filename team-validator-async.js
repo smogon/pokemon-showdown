@@ -113,7 +113,7 @@ if (process.send && module === process.mainModule) {
 	// This is a child process!
 
 	global.Config = require('./config/config');
-	global.TeamValidator = require('./team-validator');
+	global.TeamValidator = require('./sim/team-validator');
 
 	if (Config.crashguard) {
 		process.on('uncaughtException', err => {

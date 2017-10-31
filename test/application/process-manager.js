@@ -8,7 +8,7 @@ const ProcessWrapper = ProcessManager.ProcessWrapper;
 
 // const DatasearchManager = require('../../chat-plugins/datasearch.js').DatasearchManager;
 // const SimulatorManager = require('../../room-battle.js').SimulatorManager;
-// const TeamValidatorManager = require('../../team-validator.js').TeamValidatorManager;
+// const TeamValidatorManager = require('../../team-validator-async.js').TeamValidatorManager;
 // const VerifierManager = require('../../verifier.js').VerifierManager;
 
 // DO NOT CLEAR PROCESSMANAGER'S CACHE DURING THESE TESTS
