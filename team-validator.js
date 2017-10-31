@@ -294,7 +294,7 @@ class Validator {
 						// Sketchmons hack
 						const allowOneSketch = ruleTable.has('allowonesketch');
 						const noSketch = format.noSketch || dex.getFormat('gen7sketchmons').noSketch;
-						if (allowOneSketch && noSketch.indexOf(move.name) < 0 && !set.sketchmonsMove && && !move.noSketch && !move.isZ) {
+						if (allowOneSketch && noSketch.indexOf(move.name) < 0 && !set.sketchmonsMove && !move.noSketch && !move.isZ) {
 							set.sketchmonsMove = move.id;
 							continue;
 						}
