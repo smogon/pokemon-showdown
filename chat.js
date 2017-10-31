@@ -1190,7 +1190,7 @@ Chat.getDataPokemonHTML = function (template, gen = 7) {
 Chat.getDataMoveHTML = function (move) {
 	if (typeof move === 'string') move = Object.assign({}, Dex.getMove(move));
 	let buf = `<ul class="utilichart"><li class="result">`;
-	buf += `<a data-entry="move|${move.name}"><span class="col movenamecol"><a href="https://pokemonshowdown.com/dex/moves/${move.name}${move.name}</a></span> `;
+	buf += `<a data-entry="move|${move.name}"><span class="col movenamecol"><a href="https://pokemonshowdown.com/dex/moves/${move.id}">${move.name}</a></span> `;
 	buf += `<span class="col typecol"><img src="//play.pokemonshowdown.com/sprites/types/${move.type}.png" alt="${move.type}" width="32" height="14">`;
 	buf += `<img src="//play.pokemonshowdown.com/sprites/categories/${move.category}.png" alt="${move.category}" width="32" height="14"></span> `;
 	if (move.basePower) buf += `<span class="col labelcol"><em>Power</em><br>${typeof move.basePower === 'number' ? move.basePower : '—'}</span> `;
@@ -1206,7 +1206,7 @@ Chat.getDataMoveHTML = function (move) {
 Chat.getDataAbilityHTML = function (ability) {
 	if (typeof ability === 'string') ability = Object.assign({}, Dex.getAbility(ability));
 	let buf = `<ul class="utilichart"><li class="result">`;
-	buf += `<a data-entry="ability|${ability.name}"><span class="col namecol"><a href="https://pokemonshowdown.com/dex/abilities/${ability.name}${ability.name}</a></span> `;
+	buf += `<a data-entry="ability|${ability.name}"><span class="col namecol"><a href="https://pokemonshowdown.com/dex/abilities/${ability.id}">${ability.name}</a></span> `;
 	buf += `<span class="col abilitydesccol">${ability.shortDesc || ability.desc}</span> `;
 	buf += `</a></li><li style="clear:both"></li></ul>`;
 	return buf;
@@ -1215,7 +1215,7 @@ Chat.getDataAbilityHTML = function (ability) {
 Chat.getDataItemHTML = function (item) {
 	if (typeof item === 'string') item = Object.assign({}, Dex.getItem(item));
 	let buf = `<ul class="utilichart"><li class="result">`;
-	buf += `<a data-entry="item|${item.name}"><span class="col itemiconcol"><psicon item="${item.id}"></span> <span class="col namecol"><a href="https://pokemonshowdown.com/dex/items/${item.name}${item.name}</a></span> `;
+	buf += `<a data-entry="item|${item.name}"><span class="col itemiconcol"><psicon item="${item.id}"></span> <span class="col namecol"><a href="https://pokemonshowdown.com/dex/items/${item.id}">${item.name}</a></span> `;
 	buf += `<span class="col itemdesccol">${item.shortDesc || item.desc}</span> `;
 	buf += `</a></li><li style="clear:both"></li></ul>`;
 	return buf;
