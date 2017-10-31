@@ -54,7 +54,7 @@ describe('Dancer', function () {
 		assert.fainted(battle.p2.active[1]);
 	});
 
-	it('should not copy a move that did nothing', function () {
+	it('should not copy a move that failed or was blocked by Protect', function () {
 		battle = common.createBattle({gameType: 'doubles'}, null, new PRNG([1, 2, 3, 4]));
 		const p1 = battle.join('p1', 'Guest 1', 1, [
 			{species: 'Oricorio', level: 98, ability: 'dancer', item: 'laggingtail', moves: ['dragondance', 'protect', 'teeterdance']},
@@ -88,5 +88,25 @@ describe('Dancer', function () {
 		// Next turn: Teeter Dance should NOT be copied if everything it hits is already confused
 		battle.choose('p1', 'move 3');
 		assert.constant(() => p1.active[0].volatiles['confusion'], () => battle.commitDecisions());
+	});
+	
+	it('should not copy a move that missed'), function () {
+		battle = common.createBattle();
+		const p1 = battle.join('p1', 'Guest 1', 1, [{species: 'Oricorio', ability: 'dancer', item: 'choicescarf', moves: ['revelationdance']}]);
+		const p2 = battle.join('p2', 'Guest 2', 1, [{species: 'Oricorio', ability: 'dancer', item: 'brightpowder', moves: ['dig']}]);
+		p1.active[0].boostBy({accuracy: -6});
+		p2.active[0].boostBy({evasion: 6});
+		battle.commitDecisions();
+		assert.fullHP(p1.active[0]);
+		assert.fullHP(p2.active[0]);
+		battle.commitDecisions();
+		assert.fullHP(p1.active[0]);
+	});
+	
+	it('should copy a move that hit, but did 0 damage'), function () {
+		battle = common.createBattle();
+		const p1 = battle.join('p1', 'Guest 1', 1, [{species: 'Oricorio', ability: 'dancer', moves: ['fierydance']}]);
+		battle.join('p2', 'Guest 2', 1, [{species: 'Shedinja', ability: 'dancer', item: 'focussash', moves: ['meanlook']}]);
+		assert.hurts(p1.active[0], () => battle.commitdecisions());
 	});
 });
