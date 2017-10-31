@@ -5,8 +5,8 @@ const assert = require('assert');
 describe('Chat', function () {
 	it('should run formatText correctly', function () {
 		assert.strictEqual(
-			Chat.formatText(`hi **__bold italics__** bye`),
-			`hi <b><i>bold italics</i></b> bye`
+			Chat.formatText(`hi **__bold italics__** ^^superscript^^ \\\\subscript\\\\ bye`),
+			`hi <b><i>bold italics</i></b> <sup>superscript</sup> <sub>subscript</sub> bye`
 		);
 		assert.strictEqual(
 			Chat.formatText(`hi \`\` \` \`\` bye`),

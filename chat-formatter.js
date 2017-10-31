@@ -53,7 +53,7 @@ const formattingResolvers = [
 	{token: "``", resolver: str => `<code>${str}</code>`},
 	{token: "~~", resolver: str => `<s>${str}</s>`},
 	{token: "^^", resolver: str => `<sup>${str}</sup>`},
-	{token: "\\", resolver: str => `<sub>${str}</sub>`},
+	{token: "\\\\", resolver: str => `<sub>${str}</sub>`},
 	{token: "&lt;&lt;", endToken: "&gt;&gt;", resolver: str => str.replace(/[a-z0-9-]/g, '').length ? false : `&laquo;<a href="${str}" target="_blank">${str}</a>&raquo;`},
 	{token: "[[", endToken: "]]", resolver: str => {
 		let hl = hyperlinkRegex.exec(str);
