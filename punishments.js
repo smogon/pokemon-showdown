@@ -1116,7 +1116,7 @@ Punishments.checkIp = function (user, connection) {
 
 	Dnsbl.reverse(ip).then(host => {
 		if (host) user.latestHost = host;
-		if (Config.hostfilter) Config.hostfilter(host, user, connection);
+		Chat.hostfilter(host, user, connection);
 	});
 
 	if (Config.dnsbl) {
