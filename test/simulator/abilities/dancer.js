@@ -84,21 +84,19 @@ describe('Dancer', function () {
 		battle.choose('p1', 'move 2');
 		battle.choose('p2', 'move 3');
 		battle.commitDecisions();
-		assert.fullHP(p1.active[1]);
 		// Next turn: Teeter Dance should NOT be copied if everything it hits is already confused
 		battle.choose('p1', 'move 3');
 		assert.constant(() => p1.active[0].volatiles['confusion'], () => battle.commitDecisions());
 	});
 
 	it('should not copy a move that missed', function () {
-		battle = common.createBattle();
+		battle = common.createBattle({gameType: 'singles'}, null, new PRNG([1, 2, 3, 4]));
 		const p1 = battle.join('p1', 'Guest 1', 1, [{species: 'Oricorio', ability: 'dancer', item: 'choicescarf', moves: ['revelationdance']}]);
 		const p2 = battle.join('p2', 'Guest 2', 1, [{species: 'Oricorio', ability: 'dancer', item: 'brightpowder', moves: ['dig']}]);
 		p1.active[0].boostBy({accuracy: -6});
 		p2.active[0].boostBy({evasion: 6});
 		battle.commitDecisions();
 		assert.fullHP(p1.active[0]);
-		assert.fullHP(p2.active[0]);
 		battle.commitDecisions();
 		assert.fullHP(p1.active[0]);
 	});
