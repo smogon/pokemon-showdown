@@ -73,9 +73,9 @@ exports.commands = {
 		'': function (target, room, user) {
 			if (room.id !== 'healthfitness') return this.errorReply("This command can only be used in Health & Fitness.");
 			if (!this.runBroadcast()) return;
-			const cardio = Chat.parseText(HF.hfData.cardio || NOT_SET);
-			const gym = Chat.parseText(HF.hfData.gym || NOT_SET);
-			const quote = Chat.parseText(HF.hfData.quote || NOT_SET);
+			const cardio = Chat.formatText(HF.hfData.cardio || NOT_SET);
+			const gym = Chat.formatText(HF.hfData.gym || NOT_SET);
+			const quote = Chat.formatText(HF.hfData.quote || NOT_SET);
 			return this.sendReplyBox(
 				`<strong>Cardio Challenge:</strong> ${cardio}<br />` +
 				`<strong>Gym Challenge:</strong> ${gym}<br />` +
@@ -90,7 +90,7 @@ exports.commands = {
 
 				if (!this.runBroadcast('!healthfitness cardio')) return;
 
-				const cardio = Chat.parseText(HF.hfData.cardio || NOT_SET);
+				const cardio = Chat.formatText(HF.hfData.cardio || NOT_SET);
 				return this.sendReplyBox(`<strong>Cardio Challenge:</strong> ${cardio}`);
 			} else {
 				if (!this.can('broadcast', null, room)) return;
@@ -113,7 +113,7 @@ exports.commands = {
 
 				if (!this.runBroadcast('!healthfitness gym')) return;
 
-				const gym = Chat.parseText(HF.hfData.gym || NOT_SET);
+				const gym = Chat.formatText(HF.hfData.gym || NOT_SET);
 				return this.sendReplyBox(`<strong>Gym Challenge:</strong> ${gym}`);
 			} else {
 				if (!this.can('broadcast', null, room)) return;
@@ -136,7 +136,7 @@ exports.commands = {
 
 				if (!this.runBroadcast('!healthfitness quote')) return;
 
-				const quote = Chat.parseText(HF.hfData.quote || NOT_SET);
+				const quote = Chat.formatText(HF.hfData.quote || NOT_SET);
 				return this.sendReplyBox(`<strong>Quote of the Day:</strong> ${quote}`);
 			} else {
 				if (!this.can('broadcast', null, room)) return;

@@ -22,7 +22,7 @@ exports.commands = {
 			let buff = '<table border="1" cellspacing="0" cellpadding="3">';
 			buff += '<th>Event Name:</th><th>Event Description:</th><th>Event Date:</th>';
 			for (let i in room.events) {
-				buff += `<tr><td>${Chat.escapeHTML(room.events[i].eventName)}</td><td>${Chat.parseText(room.events[i].desc)}</td><td><time>${Chat.escapeHTML(room.events[i].date)}</time></td></tr>`;
+				buff += `<tr><td>${Chat.escapeHTML(room.events[i].eventName)}</td><td>${Chat.formatText(room.events[i].desc)}</td><td><time>${Chat.escapeHTML(room.events[i].date)}</time></td></tr>`;
 			}
 			buff += '</table>';
 			return this.sendReply(`|raw|<div class="infobox-limited">${buff}</div>`);
@@ -93,7 +93,7 @@ exports.commands = {
 			if (!room.events[target]) return this.errorReply(`There is no such event named '${target}'. Check spelling?`);
 
 			if (!this.runBroadcast()) return;
-			this.sendReplyBox(`<table border="1" cellspacing="0" cellpadding="3"><tr><td>${Chat.escapeHTML(room.events[target].eventName)}</td><td>${Chat.parseText(room.events[target].desc)}</td><td>${Chat.escapeHTML(room.events[target].date)}</td></tr></table>`);
+			this.sendReplyBox(`<table border="1" cellspacing="0" cellpadding="3"><tr><td>${Chat.escapeHTML(room.events[target].eventName)}</td><td>${Chat.formatText(room.events[target].desc)}</td><td>${Chat.escapeHTML(room.events[target].date)}</td></tr></table>`);
 			if (!this.broadcasting && user.can('declare', null, room)) this.sendReplyBox(Chat.html`<code>/roomevents add ${room.events[target].eventName} | ${room.events[target].date} | ${room.events[target].desc}</code>`);
 		},
 		help: function (target, room, user) {
