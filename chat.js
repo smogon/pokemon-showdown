@@ -195,6 +195,52 @@ Chat.filter = function (message, user, room, connection, targetUser) {
 
 	return message;
 };
+Chat.namefilters = [];
+Chat.namefilter = function (name, user) {
+	if (!Config.disablebasicnamefilter) {
+		// whitelist
+		// \u00A1-\u00BF\u00D7\u00F7  Latin punctuation/symbols
+		// \u02B9-\u0362              basic combining accents
+		// \u2012-\u2027\u2030-\u205E Latin punctuation/symbols extended
+		// \u2050-\u205F              fractions extended
+		// \u2190-\u23FA\u2500-\u2BD1 misc symbols
+		// \u2E80-\u32FF              CJK symbols
+		// \u3400-\u9FFF              CJK
+		// \uF900-\uFAFF\uFE00-\uFE6F CJK extended
+		name = name.replace(/[^a-zA-Z0-9 /\\.~()<>^*%&=+$@#_'?!"\u00A1-\u00BF\u00D7\u00F7\u02B9-\u0362\u2012-\u2027\u2030-\u205E\u2050-\u205F\u2190-\u23FA\u2500-\u2BD1\u2E80-\u32FF\u3400-\u9FFF\uF900-\uFAFF\uFE00-\uFE6F-]+/g, '');
+
+		// blacklist
+		// \u00a1 upside-down exclamation mark (i)
+		// \u2580-\u2590 black bars
+		// \u25A0\u25Ac\u25AE\u25B0 black bars
+		// \u534d\u5350 swastika
+		// \u2a0d crossed integral (f)
+		name = name.replace(/[\u00a1\u2580-\u2590\u25A0\u25Ac\u25AE\u25B0\u2a0d\u534d\u5350]/g, '');
+		// e-mail address
+		if (name.includes('@') && name.includes('.')) return '';
+	}
+	name = name.replace(/^[^A-Za-z0-9]+/, ""); // remove symbols from start
+
+	// cut name length down to 18 chars
+	if (/[A-Za-z0-9]/.test(name.slice(18))) {
+		name = name.replace(/[^A-Za-z0-9]+/g, "");
+	} else {
+		name = name.slice(0, 18);
+	}
+
+	name = Dex.getName(name);
+	for (const filter of Chat.namefilters) {
+		name = filter(name, this);
+		if (!name) return '';
+	}
+	return name;
+};
+Chat.hostfilters = [];
+Chat.hostfilter = function (host, user, connection) {
+	for (const filter of Chat.hostfilters) {
+		filter(host, user, connection);
+	}
+};
 
 /*********************************************************
  * Parser
@@ -993,36 +1039,29 @@ Chat.loadPlugins = function () {
 		if (data) Chat.package = JSON.parse(data);
 	});
 
-	let baseCommands = Chat.baseCommands = require('./chat-commands').commands;
-	let commands = Chat.commands = Object.assign({}, baseCommands);
-	let chatfilters = Chat.filters;
+	Chat.baseCommands = require('./chat-commands').commands;
+	let commands = Chat.commands = Object.assign({}, Chat.baseCommands);
 
-	const baseFilter = Config.chatfilter;
-	if (baseFilter && typeof baseFilter === 'function') chatfilters.push(baseFilter);
+	if (Config.chatfilter) Chat.filters.push(Config.chatfilter);
+	if (Config.namefilter) Chat.namefilters.push(Config.namefilter);
+	if (Config.hostfilter) Chat.hostfilters.push(Config.hostfilter);
 
 	// Install plug-in commands and chat filters
 
 	// info always goes first so other plugins can shadow it
-	Object.assign(commands, require('./chat-plugins/info').commands);
+	let files = FS('chat-plugins/').readdirSync();
+	files = files.filter(file => file !== 'info.js');
+	files.unshift('info.js');
 
-	for (const file of FS('chat-plugins/').readdirSync()) {
-		if (file.substr(-3) !== '.js' || file === 'info.js') continue;
+	for (const file of files) {
+		if (file.substr(-3) !== '.js') continue;
 		const plugin = require(`./chat-plugins/${file}`);
 
 		Object.assign(commands, plugin.commands);
 
-		const filter = plugin.chatfilter;
-		if (filter) {
-			if (typeof filter !== 'function') {
-				require('./crashlogger')(new TypeError(`This chatfilter is not a function`), `Loading a chatfilter`, {
-					file: `File location: ../chat-plugins/${file}`,
-					filter: filter,
-					type: typeof filter,
-				});
-			} else {
-				chatfilters.push(filter);
-			}
-		}
+		if (plugin.chatfilter) Chat.filters.push(plugin.chatfilter);
+		if (plugin.namefilter) Chat.namefilters.push(plugin.namefilter);
+		if (plugin.hostfilter) Chat.hostfilters.push(plugin.hostfilter);
 	}
 };
 

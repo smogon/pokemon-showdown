@@ -335,6 +335,10 @@ Dnsbl.reverse = function reverseDns(ip) {
 			resolve('anchorfree.proxy-nohost');
 			return;
 		}
+		if (ip === '127.0.0.1') {
+			resolve('localhost');
+			return;
+		}
 		dns.reverse(ip, (err, hosts) => {
 			if (err) {
 				resolve('' + ip.split('.').slice(0, 2).join('.') + '.unknown-nohost');
