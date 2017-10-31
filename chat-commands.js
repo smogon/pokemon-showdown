@@ -2522,7 +2522,7 @@ exports.commands = {
 				// rebuild the formats list
 				delete Rooms.global.formatList;
 				// respawn validator processes
-				TeamValidator.PM.respawn();
+				TeamValidatorAsync.PM.respawn();
 				// respawn simulator processes
 				Rooms.SimulatorProcess.respawn();
 				// broadcast the new formats list to clients
@@ -2538,7 +2538,7 @@ exports.commands = {
 				if (lock['validator']) return this.errorReply(`Hot-patching the validator has been disabled by ${lock['validator'].by} (${lock['validator'].reason})`);
 				if (lock['formats']) return this.errorReply(`Hot-patching formats has been disabled by ${lock['formats'].by} (${lock['formats'].reason})`);
 
-				TeamValidator.PM.respawn();
+				TeamValidatorAsync.PM.respawn();
 				this.sendReply("The team validator has been hot-patched. Any battles started after now will have teams be validated according to the new code.");
 			} else if (target === 'punishments') {
 				if (lock['punishments']) return this.errorReply(`Hot-patching punishments has been disabled by ${lock['punishments'].by} (${lock['punishments'].reason})`);
@@ -3441,7 +3441,7 @@ exports.commands = {
 		let format = originalFormat.effectType === 'Format' ? originalFormat : Dex.getFormat('[Gen 7] Pokebank Anything Goes');
 		if (format.effectType !== 'Format') return this.popupReply("Please provide a valid format.");
 
-		TeamValidator(format.id).prepTeam(user.team).then(result => {
+		TeamValidatorAsync(format.id).validateTeam(user.team).then(result => {
 			let matchMessage = (originalFormat === format ? "" : "The format '" + originalFormat.name + "' was not found.");
 			if (result.charAt(0) === '1') {
 				connection.popup("" + (matchMessage ? matchMessage + "\n\n" : "") + "Your team is valid for " + format.name + ".");

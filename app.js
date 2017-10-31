@@ -152,8 +152,8 @@ if (require.main === module) {
  * Set up our last global
  *********************************************************/
 
-global.TeamValidator = require('./team-validator');
-TeamValidator.PM.spawn();
+global.TeamValidatorAsync = require('./team-validator-async');
+TeamValidatorAsync.PM.spawn();
 
 /*********************************************************
  * Start up the REPL server

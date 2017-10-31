@@ -22,3 +22,4 @@ let Verifier = require('../verifier');
 let Dnsbl = require('../dnsbl');
 let Sockets = require('../sockets');
 let TeamValidator = require('../team-validator');
+let TeamValidatorAsync = require('../team-validator-async');
