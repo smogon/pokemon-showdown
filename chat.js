@@ -1183,7 +1183,9 @@ Chat.toDurationString = function (number, options) {
  * @return {string}
  */
 Chat.parseText = function (str) {
-	str = Chat.escapeHTML(str).replace(/&#x2f;/g, '/').replace(linkRegex, uri => `<a href=${uri.replace(/^([a-z]*[^a-z:])/g, 'http://$1')}>${uri}</a>`);
+	// escapeHTML, without escaping /
+	str = ('' + str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;');
+	str = str.replace(linkRegex, uri => `<a href=${uri.replace(/^([a-z]*[^a-z:])/g, 'http://$1')}>${uri}</a>`);
 
 	let output = [''];
 	let stack = [];
