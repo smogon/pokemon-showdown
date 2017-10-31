@@ -706,7 +706,9 @@ exports.BattleScripts = {
 				if (this.canSwitch(target.side)) didSomething = true; // at least defer the fail message to later
 			}
 			if (moveData.selfSwitch) {
-				if (this.canSwitch(pokemon.side)) didSomething = true; // at least defer the fail message to later
+				// If the move is Parting Shot and it fails to change the target's stats in gen 7, didSomething will be null instead of false.
+				// Leaving didSomething as null will cause this function to return before setting the switch flag, preventing the switch.
+				if (this.canSwitch(pokemon.side) && (didSomething !== null || this.gen < 7)) didSomething = true; // at least defer the fail message to later
 			}
 			// Hit events
 			//   These are like the TryHit events, except we don't need a FieldHit event.
