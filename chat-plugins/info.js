@@ -1220,7 +1220,7 @@ exports.commands = {
 	'!forums': true,
 	forums: function (target, room, user) {
 		if (!this.runBroadcast()) return;
-		this.sendReplyBox("<a href=\"http://www.smogon.com/forums/forums/pok%C3%A9mon-showdown.209\">Pok&eacute;mon Showdown Forums</a>");
+		this.sendReplyBox("<a href=\"http://www.smogon.com/forums/forums/209/\">Pok&eacute;mon Showdown Forums</a>");
 	},
 
 	'!suggestions': true,
@@ -1272,7 +1272,7 @@ exports.commands = {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(
 			"New to competitive Pok&eacute;mon?<br />" +
-			"- <a href=\"http://www.smogon.com/forums/threads/3570628/#post-6774481\">Beginner's Guide to Pok&eacute;mon Showdown</a><br />" +
+			"- <a href=\"http://www.smogon.com/forums/posts/6774481/\">Beginner's Guide to Pok&eacute;mon Showdown</a><br />" +
 			"- <a href=\"http://www.smogon.com/dp/articles/intro_comp_pokemon\">An introduction to competitive Pok&eacute;mon</a><br />" +
 			"- <a href=\"http://www.smogon.com/bw/articles/bw_tiers\">What do 'OU', 'UU', etc mean?</a><br />" +
 			"- <a href=\"http://www.smogon.com/xyhub/tiers\">What are the rules for each format? What is 'Sleep Clause'?</a>"
@@ -1471,7 +1471,7 @@ exports.commands = {
 			"- !showimage <em>[url], [width], [height]</em>: shows an image to the room<br />" +
 			"- /roomsettings: change a variety of room settings, including modchat, capsfilter, etc<br />" +
 			"<br />" +
-			"More detailed help can be found in the <a href=\"http://www.smogon.com/forums/threads/3570628/#post-6774654\">roomauth guide</a><br />" +
+			"More detailed help can be found in the <a href=\"http://www.smogon.com/forums/posts/6774654/\">roomauth guide</a><br />" +
 			"<br />" +
 			"Tournament Help:<br />" +
 			"- /tour create <em>format</em>, elimination: Creates a new single elimination tournament in the current room.<br />" +
@@ -1480,7 +1480,7 @@ exports.commands = {
 			"- /tour start: Starts the tournament in the current room<br />" +
 			"- /tour banlist [pokemon], [talent], [...]: Bans moves, abilities, Pokémon or items from being used in a tournament (it must be created first)<br />" +
 			"<br />" +
-			"More detailed help can be found in the <a href=\"http://www.smogon.com/forums/threads/3570628/#post-6777489\">tournaments guide</a><br />" +
+			"More detailed help can be found in the <a href=\"http://www.smogon.com/forums/posts/6777489/\">tournaments guide</a><br />" +
 			"</div>"
 		);
 	},
@@ -1568,7 +1568,7 @@ exports.commands = {
 
 		let buffer = [];
 		if (showAll || target === 'staff') {
-			buffer.push("<a href=\"http://www.smogon.com/forums/threads/3570628/#post-6774482\">Staff FAQ</a>");
+			buffer.push("<a href=\"http://www.smogon.com/forums/posts/6774482/\">Staff FAQ</a>");
 		}
 		if (showAll || target === 'autoconfirmed' || target === 'ac') {
 			buffer.push("A user is autoconfirmed when they have won at least one rated battle and have been registered for one week or longer.");
@@ -1583,7 +1583,7 @@ exports.commands = {
 			buffer.push("<a href=\"http://www.smogon.com/badge_faq\">Badge FAQ</a>");
 		}
 		if (showAll || !buffer.length) {
-			buffer.unshift("<a href=\"http://www.smogon.com/forums/threads/3570628/#post-6774128\">Frequently Asked Questions</a>");
+			buffer.unshift("<a href=\"http://www.smogon.com/forums/posts/6774128/\">Frequently Asked Questions</a>");
 		}
 		this.sendReplyBox(buffer.join("<br />"));
 	},
