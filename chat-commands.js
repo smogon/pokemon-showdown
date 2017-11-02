@@ -2316,7 +2316,12 @@ exports.commands = {
 			return this.errorReply(`[${duplicates.join(', ')}] ${Chat.plural(duplicates, "are", "is")} already blacklisted.`);
 		}
 
+		const groups = Config.groupsranking;
+		const userIndex = groups.indexOf(room.getAuth(user));
 		for (const userid of targets) {
+			let targetUserAuthIndex = Math.max(groups.indexOf(room.getAuth({userid: userid})), Users.usergroups[userid] ? groups.indexOf(Users.usergroups[userid].charAt(0)) : 0);
+			if (targetUserAuthIndex >= userIndex) return this.errorReply(`You do not have permission to blacklist ${userid} from this room; they are of equal or higher authority than you.`);
+
 			Punishments.roomBlacklist(room, null, null, userid, reason);
 
 			let trusted = Users.isTrusted(userid);
