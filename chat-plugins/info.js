@@ -779,7 +779,7 @@ exports.commands = {
 				continue;
 			}
 			move = mod.getMove(move);
-			if (move.exists) {
+			if (move.exists && move.gen <= mod.gen) {
 				if (!move.basePower && !move.basePowerCallback) continue;
 				if (move.id === 'thousandarrows') hasThousandArrows = true;
 				sources.push(move);

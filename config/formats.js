@@ -671,7 +671,7 @@ exports.Formats = [
 			'Electabuzz', 'Exeggutor', 'Garbodor', 'Gardevoir', 'Golem', 'Golurk', 'Gorebyss', 'Gurdurr', 'Haunter', 'Jynx', 'Kadabra', 'Kangaskhan',
 			'Lickilicky', 'Liepard', 'Linoone', 'Ludicolo', 'Mandibuzz', 'Metang', 'Miltank', 'Misdreavus', 'Musharna', 'Piloswine', 'Pinsir', 'Primeape',
 			'Probopass', 'Regirock', 'Roselia', 'Rotom-Fan', 'Samurott', 'Sawk', 'Sawsbuck', 'Scolipede', 'Seismitoad', 'Serperior', 'Skuntank', 'Swellow',
-			'Tangela', 'Tauros', 'Torkoal', 'Wartortle', 'Zangoose', 'Drizzle', 'Drought', 'Sand Stream', 'Snow Warning', 'Prankster + Assist'
+			'Tangela', 'Tauros', 'Torkoal', 'Wartortle', 'Zangoose', 'Drizzle', 'Drought', 'Sand Stream', 'Snow Warning', 'Prankster + Assist',
 		],
 	},
 
