@@ -602,12 +602,13 @@ exports.commands = {
 		if (!target) return this.parse('/help weakness');
 		if (!this.runBroadcast()) return;
 		target = target.trim();
+		let mod = target.split(',');
+		mod = Dex.mod(toId(mod[mod.length - 1])) || Dex;
 		let targets = target.split(/ ?[,/ ] ?/);
-
-		let pokemon = Dex.getTemplate(target);
-		let type1 = Dex.getType(targets[0]);
-		let type2 = Dex.getType(targets[1]);
-		let type3 = Dex.getType(targets[2]);
+		let pokemon = mod.getTemplate(target);
+		let type1 = mod.getType(targets[0]);
+		let type2 = mod.getType(targets[1]);
+		let type3 = mod.getType(targets[2]);
 
 		if (pokemon.exists) {
 			target = pokemon.species;
@@ -624,7 +625,7 @@ exports.commands = {
 			}
 
 			if (types.length === 0) {
-				return this.sendReplyBox("" + Chat.escapeHTML(target) + " isn't a recognized type or pokemon.");
+				return this.sendReplyBox(`${Chat.escapeHTML(target)} isn't a recognized type or pokemon${Dex.gen > mod.gen ? ` in Gen ${mod.gen}` : ""}.`);
 			}
 			pokemon = {types: types};
 			target = types.join("/");
@@ -633,10 +634,10 @@ exports.commands = {
 		let weaknesses = [];
 		let resistances = [];
 		let immunities = [];
-		for (let type in Dex.data.TypeChart) {
-			let notImmune = Dex.getImmunity(type, pokemon);
+		for (let type in mod.data.TypeChart) {
+			let notImmune = mod.getImmunity(type, pokemon);
 			if (notImmune) {
-				let typeMod = Dex.getEffectiveness(type, pokemon);
+				let typeMod = mod.getEffectiveness(type, pokemon);
 				switch (typeMod) {
 				case 1:
 					weaknesses.push(type);
@@ -746,18 +747,20 @@ exports.commands = {
 
 		let targets = target.split(/[,+]/);
 		let sources = [];
+		let mod = Dex.mod(toId(targets[targets.length - 1])) || Dex;
 
 		let dispTable = false;
 		let bestCoverage = {};
 		let hasThousandArrows = false;
 
-		for (let type in Dex.data.TypeChart) {
+		for (let type in mod.data.TypeChart) {
 			// This command uses -5 to designate immunity
 			bestCoverage[type] = -5;
 		}
 
 		for (let i = 0; i < targets.length; i++) {
 			let move = targets[i].trim();
+			if (toId(move) === mod.currentMod) continue;
 			move = move.charAt(0).toUpperCase() + move.slice(1).toLowerCase();
 			if (move === 'Table' || move === 'All') {
 				if (this.broadcasting) return this.sendReplyBox("The full table cannot be broadcast.");
@@ -766,16 +769,16 @@ exports.commands = {
 			}
 
 			let eff;
-			if (move in Dex.data.TypeChart) {
+			if (move in mod.data.TypeChart) {
 				sources.push(move);
 				for (let type in bestCoverage) {
-					if (!Dex.getImmunity(move, type) && !move.ignoreImmunity) continue;
-					eff = Dex.getEffectiveness(move, type);
+					if (!mod.getImmunity(move, type) && !move.ignoreImmunity) continue;
+					eff = mod.getEffectiveness(move, type);
 					if (eff > bestCoverage[type]) bestCoverage[type] = eff;
 				}
 				continue;
 			}
-			move = Dex.getMove(move);
+			move = mod.getMove(move);
 			if (move.exists) {
 				if (!move.basePower && !move.basePowerCallback) continue;
 				if (move.id === 'thousandarrows') hasThousandArrows = true;
@@ -784,9 +787,9 @@ exports.commands = {
 					if (move.id === "struggle") {
 						eff = 0;
 					} else {
-						if (!Dex.getImmunity(move.type, type) && !move.ignoreImmunity) continue;
-						let baseMod = Dex.getEffectiveness(move, type);
-						let moveMod = move.onEffectiveness && move.onEffectiveness.call(Dex, baseMod, type, move);
+						if (!mod.getImmunity(move.type, type) && !move.ignoreImmunity) continue;
+						let baseMod = mod.getEffectiveness(move, type);
+						let moveMod = move.onEffectiveness && move.onEffectiveness.call(mod, baseMod, type, move);
 						eff = typeof moveMod === 'number' ? moveMod : baseMod;
 					}
 					if (eff > bestCoverage[type]) bestCoverage[type] = eff;
@@ -794,7 +797,7 @@ exports.commands = {
 				continue;
 			}
 
-			return this.errorReply("No type or move '" + targets[i] + "' found.");
+			return this.errorReply(`No type or move '${targets[i]}' found${Dex.gen > mod.gen ? ` in Gen ${mod.gen}` : ""}.`);
 		}
 		if (sources.length === 0) return this.errorReply("No moves using a type table for determining damage were specified.");
 		if (sources.length > 4) return this.errorReply("Specify a maximum of 4 moves or types.");
@@ -844,16 +847,16 @@ exports.commands = {
 		} else {
 			let buffer = '<div class="scrollable"><table cellpadding="1" width="100%"><tr><th></th>';
 			let icon = {};
-			for (let type in Dex.data.TypeChart) {
+			for (let type in mod.data.TypeChart) {
 				icon[type] = '<img src="https://play.pokemonshowdown.com/sprites/types/' + type + '.png" width="32" height="14">';
 				// row of icons at top
 				buffer += '<th>' + icon[type] + '</th>';
 			}
 			buffer += '</tr>';
-			for (let type1 in Dex.data.TypeChart) {
+			for (let type1 in mod.data.TypeChart) {
 				// assembles the rest of the rows
 				buffer += '<tr><th>' + icon[type1] + '</th>';
-				for (let type2 in Dex.data.TypeChart) {
+				for (let type2 in mod.data.TypeChart) {
 					let typing;
 					let cell = '<th ';
 					let bestEff = -5;
@@ -867,11 +870,11 @@ exports.commands = {
 							let move = sources[i];
 
 							let curEff = 0;
-							if ((!Dex.getImmunity((move.type || move), type1) || !Dex.getImmunity((move.type || move), type2)) && !move.ignoreImmunity) continue;
-							let baseMod = Dex.getEffectiveness(move, type1);
+							if ((!mod.getImmunity((move.type || move), type1) || !mod.getImmunity((move.type || move), type2)) && !move.ignoreImmunity) continue;
+							let baseMod = mod.getEffectiveness(move, type1);
 							let moveMod = move.onEffectiveness && move.onEffectiveness.call(Dex, baseMod, type1, move);
 							curEff += typeof moveMod === 'number' ? moveMod : baseMod;
-							baseMod = Dex.getEffectiveness(move, type2);
+							baseMod = mod.getEffectiveness(move, type2);
 							moveMod = move.onEffectiveness && move.onEffectiveness.call(Dex, baseMod, type2, move);
 							curEff += typeof moveMod === 'number' ? moveMod : baseMod;
 
