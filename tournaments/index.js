@@ -873,7 +873,7 @@ class Tournament {
 			this.update();
 			return this.room.update();
 		}
-		if (!(this.generator.users.get(from).isDisqualified || this.generator.users.get(to).isDisqualified)) {
+		if (!(this.disqualifiedUsers.get(from) || this.disqualifiedUsers.get(to))) {
 			// If a player was disqualified, handle the results there
 			let error = this.generator.setMatchResult([from, to], result, score);
 			if (error) {
