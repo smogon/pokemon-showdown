@@ -46,7 +46,6 @@ exports.BattleScripts = {
 
 		if (move.category === 'Status') {
 			zMove = this.getMoveCopy(move);
-			if (!zMove.isZ) zMove.name = 'Z-' + zMove.name;
 			zMove.isZ = true;
 			return zMove;
 		}
