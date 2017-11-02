@@ -608,10 +608,11 @@ class ModdedDex {
 			return name;
 		}
 		let id = toId(name);
+		id = id.charAt(0).toUpperCase() + id.substr(1);
 		let type = this.typeCache.get(id);
 		if (type) return type;
 		if (id && this.data.TypeChart.hasOwnProperty(id)) {
-			type = new Data.TypeInfo({name}, this.data.TypeChart[id]);
+			type = new Data.TypeInfo({id}, this.data.TypeChart[id]);
 		} else {
 			type = new Data.TypeInfo({name, exists: false, effectType: 'EffectType'});
 		}
