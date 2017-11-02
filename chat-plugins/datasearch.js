@@ -751,7 +751,7 @@ function runDexsearch(target, cmd, canAll, message) {
 			if (matched) continue;
 
 			for (let move in alts.moves) {
-				if (!lsetData[mon]) lsetData[mon] = {fastCheck: true, set: {}};
+				if (!lsetData[mon]) lsetData[mon] = {fastCheck: true, sources: [], sourcesBefore: maxGen};
 				if (!TeamValidator(`gen${maxGen}ou`).checkLearnset(move, mon, lsetData[mon]) === alts.moves[move]) {
 					matched = true;
 					break;
@@ -1498,7 +1498,7 @@ function runLearn(target, cmd) {
 	if (!formatid) format = new Dex.Data.Format(format);
 	if (!formatid) formatid = 'gen' + gen + 'ou';
 	if (!formatName) formatName = 'Gen ' + gen;
-	let lsetData = {set: {}, format: format};
+	let lsetData = {set: {}, sources: [], sourcesBefore: gen};
 
 	let template = Dex.getTemplate(targets[0]);
 	let move = {};
