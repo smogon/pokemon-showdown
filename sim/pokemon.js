@@ -854,9 +854,6 @@ class Pokemon {
 		this.hpPower = this.baseHpPower;
 		for (let i in this.volatiles) {
 			if (this.volatiles[i].linkedStatus) {
-				// for (let linkedPoke of this.volatiles[i].linkedPokemon) {
-				// 	linkedPoke.removeVolatile(this.volatiles[i].linkedStatus);
-				// }
 				this.removeLinkedVolatiles(this.volatiles[i].linkedStatus, this.volatiles[i].linkedPokemon);
 			}
 		}
@@ -1325,11 +1322,6 @@ class Pokemon {
 		}
 
 		if (this.volatiles[status.id]) {
-			// if (linkedStatus && this.volatiles[status.id].linkedPokemon) {
-			// 	if (this.volatiles[status.id].linkedPokemon.indexOf(source) < 0) {
-			// 		this.volatiles[status.id].linkedPokemon.push(source);
-			// 	}
-			// }
 			if (!status.onRestart) return false;
 			return this.battle.singleEvent('Restart', status, this.volatiles[status.id], this, source, sourceEffect);
 		}
