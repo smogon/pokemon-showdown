@@ -634,7 +634,7 @@ class Template extends Effect {
 		/**
 		 * Gender. M = always male, F = always female, N = always
 		 * genderless, '' = sometimes male sometimes female.
-		 * @type {'M' | 'F' | 'N' | ''}
+		 * @type {GenderName}
 		 */
 		this.gender = this.gender || '';
 
