@@ -508,7 +508,7 @@ class Validator {
 				}
 			}
 
-			if (!lsetData.sourcesBefore && lsetData.sources.every(source => 'SVD'.includes(source.charAt(1)))) {
+			if (!lsetData.sourcesBefore && lsetData.sources.length && lsetData.sources.every(source => 'SVD'.includes(source.charAt(1)))) {
 				// Every source is restricted
 				let legal = false;
 				for (const source of lsetData.sources) {
