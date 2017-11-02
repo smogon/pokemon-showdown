@@ -358,26 +358,38 @@ exports.Formats = [
 		column: 2,
 	},
 	{
-		name: "[Gen 7] Ultimate Z",
+		name: "[Gen 7] Full Potential",
 		desc: [
-			"Use any type of Z-Crystal on any move and as many times per battle as desired.",
-			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3609393/\">Ultimate Z</a>",
+			"Moves use the Pok&eacute;mon's highest effective stat, barring HP, for damage calculation.",
+			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3596777/\">Full Potential</a>",
 		],
 
-		mod: 'ultimatez',
-		ruleset: ['[Gen 7] OU'],
-		banlist: ['Kyurem-Black', 'Celebrate', 'Conversion', 'Happy Hour', 'Hold Hands'],
+		mod: 'fullpotential',
+		ruleset: ['[Gen 7] OU', 'Item Clause'],
+		banlist: ['Raichu-Alola', 'Shuckle', 'Chlorophyll', 'Sand Rush', 'Slush Rush', 'Speed Boost', 'Swift Swim', 'Unburden', 'Swampertite'],
 	},
 	{
-		name: "[Gen 6] Balanced Hackmons",
-		desc: ["&bullet; <a href=\"http://www.smogon.com/dex/xy/formats/bh/\">ORAS Balanced Hackmons</a>"],
-
-		mod: 'gen6',
-		searchShow: false,
-		ruleset: ['Pokemon', 'Ability Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod'],
-		banlist: ['Groudon-Primal', 'Kyogre-Primal', 'Aerilate + Pixilate + Refrigerate > 1',
-			'Arena Trap', 'Huge Power', 'Moody', 'Parental Bond', 'Protean', 'Pure Power', 'Shadow Tag', 'Wonder Guard', 'Assist', 'Chatter',
+		name: "[Gen 7] Dual Wielding",
+		desc: [
+			"Pok&eacute;mon can forgo their Ability in order to use a second item.",
+			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3608611//\">Dual Wielding</a>",
 		],
+
+		mod: 'dualwielding',
+		ruleset: ['[Gen 7] OU'],
+		banlist: ['Regigigas', 'Slaking'],
+		validateSet: function (set, teamHas) {
+			let dual = this.dex.getItem(set.ability);
+			if (dual.exists) set.ability = this.dex.getTemplate(set.species).abilities['0'];
+			let problems = this.validateSet(set, teamHas);
+			if (dual.exists) set.ability = dual.name;
+			if (problems && problems.length) return problems;
+			let name = set.species;
+			if (set.species !== set.name && set.baseSpecies !== set.name) name = `${set.name} (${set.species})`;
+			if (dual.isUnreleased) return [`${name}'s item ${dual.name} is unreleased.`];
+			if (toId(set.item) === toId(set.ability)) return [`${name} has 2 of ${set.item}, which is banned.`];
+			if (toId(set.item).slice(0, 6) === 'choice' && toId(set.ability).slice(0, 6) === 'choice') return [`${name} has the combination of ${set.item} and ${set.ability}, which is banned.`];
+		},
 	},
 	{
 		section: "Other Metagames",
@@ -504,44 +516,39 @@ exports.Formats = [
 		},
 	},
 	{
-		name: "[Gen 7] Sketchmons",
+		name: "[Gen 7] Camomons",
 		desc: [
-			"Pok&eacute;mon gain access to one Sketched move.",
-			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3587743/\">Sketchmons</a>",
-			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3606633/\">Sketchmons Resources</a>",
-			"&bullet; <a href=\"http://www.smogon.com/tiers/om/analyses/sketchmons/\">Sketchmons Analyses</a>",
+			"Pok&eacute;mon change type to match their first two moves.",
+			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3598418/\">Camomons</a>",
 		],
-
 		mod: 'gen7',
-		searchShow: false,
-		ruleset: ['[Gen 7] OU', 'Allow One Sketch', 'Sketch Clause'],
-		banlist: ['Porygon-Z'],
-		noSketch: ['Belly Drum', 'Celebrate', 'Conversion', "Forest's Curse", 'Geomancy', 'Happy Hour', 'Hold Hands', 'Lovely Kiss', 'Purify', 'Quiver Dance', 'Shell Smash', 'Shift Gear', 'Sketch', 'Spore', 'Sticky Web', 'Trick-or-Treat'],
-	},
-	{
-		name: "[Gen 7] Sketchmons (suspect test)",
-		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/posts/7547342/\">Sketchmons Suspect Test</a>"],
-
-		mod: 'gen7',
-		challengeShow: false,
-		ruleset: ['[Gen 7] Sketchmons'],
-		banlist: [],
-		noSketch: ['Belly Drum', 'Celebrate', 'Conversion', "Forest's Curse", 'Geomancy', 'Happy Hour', 'Hold Hands', 'Lovely Kiss', 'Purify', 'Quiver Dance', 'Shell Smash', 'Shift Gear', 'Sketch', 'Spore', 'Sticky Web', 'Trick-or-Treat'],
-	},
-	{
-		name: "[Gen 7] Hidden Type",
-		desc: [
-			"Pok&eacute;mon have an added type determined by their IVs. Same as the Hidden Power type.",
-			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3591194/\">Hidden Type</a>",
-		],
-
-		mod: 'gen7',
-		searchShow: false,
 		ruleset: ['[Gen 7] OU'],
-		onModifyTemplate: function (template, pokemon) {
-			if (template.types.includes(pokemon.hpType)) return;
-			return Object.assign({addedType: pokemon.hpType}, template);
+		banlist: ['Shedinja'],
+		onModifyTemplate: function (template, target, source) {
+			if (source) return;
+			let types = [...new Set(target.baseMoveset.slice(0, 2).map(move => this.getMove(move.id).type))];
+			return Object.assign({}, template, {types: types});
 		},
+		onSwitchInPriority: 2,
+		onSwitchIn: function (pokemon) {
+			this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[silent]');
+		},
+		onAfterMega: function (pokemon) {
+			this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[silent]');
+		},
+	},
+	{
+		name: "[Gen 7] STABmons",
+		desc: [
+			"Pok&eacute;mon can use any move of their typing, in addition to the moves they can normally learn.",
+			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3587949/\">STABmons</a>",
+		],
+
+		mod: 'gen7',
+		searchShow: false,
+		ruleset: ['Gen 7] OU', 'Ignore STAB Moves'],
+		banlist: ['Kartana', 'Komala', 'Kyurem-Black', 'Silvally-Ghost', 'Tapu Koko', 'Tapu Lele', 'Aerodactylite', 'King\'s Rock', 'Metagrossite', 'Razor Fang'],
+		noLearn: ['Acupressure', 'Belly Drum', 'Chatter', 'Geomancy', 'Shell Smash', 'Shift Gear', 'Thousand Arrows'],
 	},
 	{
 		name: "[Gen 7] 2v2 Doubles",
