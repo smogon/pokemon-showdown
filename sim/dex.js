@@ -126,6 +126,8 @@ class ModdedDex {
 		this.itemCache = new Map();
 		/** @type {Map<string, Ability>} */
 		this.abilityCache = new Map();
+		/** @type {Map<string, TypeInfo>} */
+		this.typeCache = new Map();
 
 		if (!isOriginal) {
 			const original = dexes['base'].mod(mod).includeData();
@@ -581,7 +583,7 @@ class ModdedDex {
 	 * @param {string | Ability} name
 	 * @return {Ability}
 	 */
-	getAbility(name) {
+	getAbility(name = '') {
 		if (name && typeof name !== 'string') {
 			return name;
 		}
@@ -598,28 +600,23 @@ class ModdedDex {
 		return ability;
 	}
 	/**
-	 * @param {string | AnyObject} type
-	 * @return {AnyObject}
+	 * @param {string | TypeInfo} name
+	 * @return {TypeInfo}
 	 */
-	getType(type) {
-		if (!type || typeof type === 'string') {
-			let id = toId(type);
-			id = id.charAt(0).toUpperCase() + id.substr(1);
-			type = {};
-			if (id && id !== 'constructor' && this.data.TypeChart[id]) {
-				type = this.data.TypeChart[id];
-				if (type.cached) return type;
-				type.cached = true;
-				type.exists = true;
-				type.isType = true;
-				type.effectType = 'Type';
-			}
-			if (!type.id) type.id = id;
-			if (!type.effectType) {
-				// man, this is really meta
-				type.effectType = 'EffectType';
-			}
+	getType(name) {
+		if (name && typeof name !== 'string') {
+			return name;
 		}
+		let id = toId(name);
+		let type = this.typeCache.get(id);
+		if (type) return type;
+		if (id && this.data.TypeChart.hasOwnProperty(id)) {
+			type = new Data.TypeInfo({name}, this.data.TypeChart[id]);
+		} else {
+			type = new Data.TypeInfo({name, exists: false, effectType: 'EffectType'});
+		}
+
+		if (type.exists) this.typeCache.set(id, type);
 		return type;
 	}
 	/**
@@ -716,7 +713,7 @@ class ModdedDex {
 		let ruleTable = new Data.RuleTable();
 		if (format.ruleTable) return format.ruleTable;
 
-		const ruleset = format.ruleset.slice();
+		let ruleset = format.ruleset.slice();
 		for (const ban of format.banlist) {
 			ruleset.push('-' + ban);
 		}
@@ -961,7 +958,7 @@ class ModdedDex {
 	}
 
 	/**
-	 * @param {AnyObject[]} team
+	 * @param {PokemonSet[]} team
 	 * @return {string}
 	 */
 	packTeam(team) {
@@ -1068,7 +1065,7 @@ class ModdedDex {
 
 	/**
 	 * @param {string} buf
-	 * @return {?AnyObject[]}
+	 * @return {?PokemonSet[]}
 	 */
 	fastUnpackTeam(buf) {
 		if (!buf) return null;
@@ -1078,7 +1075,7 @@ class ModdedDex {
 
 		// limit to 24
 		for (let count = 0; count < 24; count++) {
-			let set = {};
+			let set = /** @type {any} */ ({});
 			team.push(set);
 
 			// name
