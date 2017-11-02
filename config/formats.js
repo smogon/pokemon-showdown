@@ -361,7 +361,7 @@ exports.Formats = [
 		name: "[Gen 7] Full Potential",
 		desc: [
 			"Moves use the Pok&eacute;mon's highest effective stat, barring HP, for damage calculation.",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3596777/\">Full Potential</a>",
+			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3596777/\">Full Potential</a>",
 		],
 
 		mod: 'fullpotential',
@@ -372,7 +372,7 @@ exports.Formats = [
 		name: "[Gen 7] Dual Wielding",
 		desc: [
 			"Pok&eacute;mon can forgo their Ability in order to use a second item.",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3608611//\">Dual Wielding</a>",
+			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3608611//\">Dual Wielding</a>",
 		],
 
 		mod: 'dualwielding',
@@ -519,7 +519,7 @@ exports.Formats = [
 		name: "[Gen 7] Camomons",
 		desc: [
 			"Pok&eacute;mon change type to match their first two moves.",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3598418/\">Camomons</a>",
+			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3598418/\">Camomons</a>",
 		],
 		mod: 'gen7',
 		ruleset: ['[Gen 7] OU'],
@@ -541,7 +541,7 @@ exports.Formats = [
 		name: "[Gen 7] STABmons",
 		desc: [
 			"Pok&eacute;mon can use any move of their typing, in addition to the moves they can normally learn.",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3587949/\">STABmons</a>",
+			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3587949/\">STABmons</a>",
 		],
 
 		mod: 'gen7',
