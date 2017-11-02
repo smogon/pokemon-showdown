@@ -40,7 +40,7 @@ const MODS_DIR = path.resolve(__dirname, '../mods');
 const FORMATS = path.resolve(__dirname, '../config/formats');
 
 /** @type {{[mod: string]: ModdedDex}} */
-let dexes = {};
+let dexes = Object.create(null);
 
 /** @typedef {'Pokedex' | 'FormatsData' | 'Learnsets' | 'Movedex' | 'Statuses' | 'TypeChart' | 'Scripts' | 'Items' | 'Abilities' | 'Natures' | 'Formats'} DataType */
 /** @type {DataType[]} */
