@@ -9,23 +9,55 @@
 
 'use strict';
 
+/**
+ * Keeps track of how a pokemon with a given set might be obtained.
+ *
+ * `sources` is a list of possible PokemonSources, and a nonzero
+ * sourcesBefore means the Pokemon is compatible with all possible
+ * PokemonSources from that gen or earlier.
+ *
+ * `limitedEgg` tracks moves that can only be obtained from an egg with
+ * another father in gen 2-5. If there are multiple such moves,
+ * potential fathers need to be checked to see if they can actually
+ * learn the move combination in question.
+ *
+ * @typedef {Object} PokemonSources
+ * @property {PokemonSource[]} sources
+ * @property {number} sourcesBefore
+ * @property {string} [sketchMove] limit 1 in fakemon Sketch-as-egg-move formats
+ * @property {string} [hm] limit 1 HM transferred from gen 4 to 5
+ * @property {(string | 'self')[]} [limitedEgg] list of egg moves
+ * @property {true} [fastCheck]
+ */
+
 class Validator {
+	/**
+	 * @param {string | Format} format
+	 */
 	constructor(format) {
 		this.format = Dex.getFormat(format);
 		this.dex = Dex.forFormat(this.format);
 		this.ruleTable = this.dex.getRuleTable(this.format);
 	}
 
-	validateTeam(team, removeNicknames) {
+	/**
+	 * @param {PokemonSet[]} team
+	 * @return {string[] | false}
+	 */
+	validateTeam(team, removeNicknames = false) {
 		if (this.format.validateTeam) return this.format.validateTeam.call(this, team, removeNicknames);
 		return this.baseValidateTeam(team, removeNicknames);
 	}
 
-	baseValidateTeam(team, removeNicknames) {
+	/**
+	 * @param {PokemonSet[]} team
+	 * @return {string[] | false}
+	 */
+	baseValidateTeam(team, removeNicknames = false) {
 		let format = this.format;
 		let dex = this.dex;
 
-		let problems = [];
+		let problems = /** @type {string[]} */ ([]);
 		const ruleTable = this.ruleTable;
 		if (format.team) {
 			return false;
@@ -41,7 +73,7 @@ class Validator {
 		if (!lengthRange) lengthRange = [1, 6];
 		if (format.gameType === 'doubles' && lengthRange[0] < 2) lengthRange[0] = 2;
 		if ((format.gameType === 'triples' || format.gameType === 'rotation') && lengthRange[0] < 3) lengthRange[0] = 3;
-		if (team.length < lengthRange[0]) problems.push([`You must bring at least ${lengthRange[0]} Pok\u00E9mon.`]);
+		if (team.length < lengthRange[0]) problems.push(`You must bring at least ${lengthRange[0]} Pok\u00E9mon.`);
 		if (team.length > lengthRange[1]) return [`You may only bring up to ${lengthRange[1]} Pok\u00E9mon.`];
 
 		// A limit is imposed here to prevent too much engine strain or
@@ -51,7 +83,7 @@ class Validator {
 		// in the cartridge-compliant set validator: rulesets.js:pokemon
 		if (team.length > 24) {
 			problems.push(`Your team has more than than 24 Pok\u00E9mon, which the simulator can't handle.`);
-			return;
+			return problems;
 		}
 
 		let teamHas = {};
@@ -61,7 +93,7 @@ class Validator {
 			if (setProblems) {
 				problems = problems.concat(setProblems);
 			}
-			if (removeNicknames) team[i].name = team[i].baseSpecies;
+			if (removeNicknames) team[i].name = dex.getTemplate(team[i].species).baseSpecies;
 		}
 
 		for (const [rule, source, limit, bans] of ruleTable.complexTeamBans) {
@@ -94,15 +126,21 @@ class Validator {
 		return problems;
 	}
 
-	validateSet(set, teamHas, template) {
+	/**
+	 * @param {PokemonSet} set
+	 * @param {AnyObject} teamHas
+	 * @return {string[] | false}
+	 */
+	validateSet(set, teamHas) {
 		let format = this.format;
 		let dex = this.dex;
 
-		let problems = [];
+		let problems = /** @type {string[]} */ ([]);
 		if (!set) {
 			return [`This is not a Pokemon.`];
 		}
 
+		let template = dex.getTemplate(set.species);
 		set.species = Dex.getSpecies(set.species);
 		set.name = dex.getName(set.name);
 		let item = dex.getItem(Dex.getString(set.item));
@@ -114,27 +152,34 @@ class Validator {
 
 		let maxLevel = format.maxLevel || 100;
 		let maxForcedLevel = format.maxForcedLevel || maxLevel;
+		let forcedLevel = /** @type {number?} */ (null);
 		if (!set.level) {
 			set.level = (format.defaultLevel || maxLevel);
 		}
 		if (format.forcedLevel) {
-			set.forcedLevel = format.forcedLevel;
+			forcedLevel = format.forcedLevel;
 		} else if (set.level >= maxForcedLevel) {
-			set.forcedLevel = maxForcedLevel;
+			forcedLevel = maxForcedLevel;
 		}
-		if (set.level > maxLevel || set.level === set.forcedLevel || set.level === set.maxForcedLevel) {
+		if (set.level > maxLevel || set.level === forcedLevel || set.level === maxForcedLevel) {
+			// Note that we're temporarily setting level 50 pokemon in VGC to level 100
+			// This allows e.g. level 50 Hydreigon even though it doesn't evolve until level 64.
+			// Leveling up can't make an obtainable pokemon unobtainable, so this is safe.
+			// Just remember to set the level back to forcedLevel at the end of the file.
 			set.level = maxLevel;
 		}
 
 		let nameTemplate = dex.getTemplate(set.name);
 		if (toId(format.name) !== 'gen7crossevolution' && nameTemplate.exists && nameTemplate.name.toLowerCase() === set.name.toLowerCase()) {
+			// Name must not be the name of another pokemon
+			// @ts-ignore
 			set.name = null;
 		}
-		set.name = set.name || set.baseSpecies;
+		set.name = set.name || template.baseSpecies;
 		let name = set.species;
-		if (set.species !== set.name && set.baseSpecies !== set.name) name = `${set.name} (${set.species})`;
+		if (set.species !== set.name && template.baseSpecies !== set.name) name = `${set.name} (${set.species})`;
 		let isHidden = false;
-		let lsetData = {set:set, format:format};
+		let lsetData = /** @type {PokemonSources} */ ({sources:[], sourcesBefore:dex.gen});
 
 		let setHas = {};
 		const ruleTable = this.ruleTable;
@@ -149,22 +194,22 @@ class Validator {
 			problems = problems.concat(format.onChangeSet.call(dex, set, format, setHas, teamHas) || []);
 		}
 
-		if (!template) {
-			template = dex.getTemplate(set.species);
-			if (ability.id === 'battlebond' && template.id === 'greninja' && !ruleTable.has('ignoreillegalabilities')) {
-				template = dex.getTemplate('greninjaash');
-				set.gender = 'M';
-			}
+		// onChangeSet can modify set.species, set.item, set.ability
+		template = dex.getTemplate(set.species);
+		item = dex.getItem(set.item);
+		ability = dex.getAbility(set.ability);
+
+		if (ability.id === 'battlebond' && template.id === 'greninja' && !ruleTable.has('ignoreillegalabilities')) {
+			template = dex.getTemplate('greninjaash');
+			set.gender = 'M';
 		}
 		if (!template.exists) {
 			return [`The Pokemon "${set.species}" does not exist.`];
 		}
 
-		item = dex.getItem(set.item);
 		if (item.id && !item.exists) {
 			return [`"${set.item}" is an invalid item.`];
 		}
-		ability = dex.getAbility(set.ability);
 		if (ability.id && !ability.exists) {
 			if (dex.gen < 3) {
 				// gen 1-2 don't have abilities, just silently remove
@@ -253,11 +298,12 @@ class Validator {
 			// in the cartridge-compliant set validator: rulesets.js:pokemon
 			if (set.moves.length > 24) {
 				problems.push(`${name} has more than 24 moves, which the simulator can't handle.`);
-				return;
+				return problems;
 			}
 
 			set.ivs = Validator.fillStats(set.ivs, 31);
-			let maxedIVs = Object.values(set.ivs).every(val => val === 31);
+			let ivs = /** @type {StatsTable} */ (set.ivs);
+			let maxedIVs = Validator.fillStats(null, 31);
 
 			for (const moveName of set.moves) {
 				if (!moveName) continue;
@@ -279,11 +325,14 @@ class Validator {
 				}
 
 				if (ruleTable.has('-illegal')) {
-					let problem = this.checkLearnset(move, template, lsetData);
+					let problem = this.checkLearnset(move, template, lsetData, set);
 					if (problem) {
 						// Sketchmons hack
+						// @ts-ignore
 						const noSketch = format.noSketch || dex.getFormat('gen7sketchmons').noSketch;
+						// @ts-ignore
 						if (ruleTable.has('allowonesketch') && noSketch.indexOf(move.name) < 0 && !set.sketchmonsMove && !move.noSketch && !move.isZ) {
+							// @ts-ignore
 							set.sketchmonsMove = move.id;
 							continue;
 						}
@@ -309,12 +358,13 @@ class Validator {
 			if (set.hpType && maxedIVs && ruleTable.has('pokemon')) {
 				if (dex.gen <= 2) {
 					let HPdvs = dex.getType(set.hpType).HPdvs;
-					set.ivs = {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30};
+					ivs = set.ivs = {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30};
 					for (let i in HPdvs) {
-						set.ivs[i] = HPdvs[i] * 2;
+						// @ts-ignore TypeScript index signature bug
+						ivs[i] = HPdvs[i] * 2;
 					}
 				} else if (!canBottleCap) {
-					set.ivs = Validator.fillStats(dex.getType(set.hpType).HPivs, 31);
+					ivs = set.ivs = Validator.fillStats(dex.getType(set.hpType).HPivs, 31);
 				}
 			}
 			if (set.hpType === 'Fighting' && ruleTable.has('pokemon')) {
@@ -329,20 +379,20 @@ class Validator {
 			}
 			if (dex.gen <= 2) {
 				// validate DVs
-				const hpDV = Math.floor(set.ivs.hp / 2);
-				const atkDV = Math.floor(set.ivs.atk / 2);
-				const defDV = Math.floor(set.ivs.def / 2);
-				const speDV = Math.floor(set.ivs.spe / 2);
-				const spcDV = Math.floor(set.ivs.spa / 2);
+				const hpDV = Math.floor(ivs.hp / 2);
+				const atkDV = Math.floor(ivs.atk / 2);
+				const defDV = Math.floor(ivs.def / 2);
+				const speDV = Math.floor(ivs.spe / 2);
+				const spcDV = Math.floor(ivs.spa / 2);
 				const expectedHpDV = (atkDV % 2) * 8 + (defDV % 2) * 4 + (speDV % 2) * 2 + (spcDV % 2);
 				if (expectedHpDV !== hpDV) {
 					problems.push(`${name} has an HP DV of ${hpDV}, but its Atk, Def, Spe, and Spc DVs give it an HP DV of ${expectedHpDV}.`);
 				}
-				if (set.ivs.spa !== set.ivs.spd) {
+				if (ivs.spa !== ivs.spd) {
 					if (dex.gen === 2) {
 						problems.push(`${name} has different SpA and SpD DVs, which is not possible in Gen 2.`);
 					} else {
-						set.ivs.spd = set.ivs.spa;
+						ivs.spd = ivs.spa;
 					}
 				}
 				if (dex.gen > 1 && !template.gender) {
@@ -375,6 +425,7 @@ class Validator {
 					problems.push(`${name} has exactly 510 EVs, but this format does not restrict you to 510 EVs: you can max out every EV (If this was intentional, add exactly 1 to one of your EVs, which won't change its stats but will tell us that it wasn't a mistake).`);
 				}
 			}
+			// @ts-ignore TypeScript index signature bug
 			if (set.evs && !Object.values(set.evs).some(value => value > 0)) {
 				problems.push(`${name} has exactly 0 EVs - did you forget to EV it? (If this was intentional, add exactly 1 to one of your EVs, which won't change its stats but will tell us that it wasn't a mistake).`);
 			}
@@ -406,6 +457,7 @@ class Validator {
 							throw new Error(`invalid limitedEgg on ${name}: ${limitedEgg} with ${source}`);
 						}
 						let potentialFather = dex.getTemplate(source.slice(source.charAt(2) === 'T' ? 3 : 2));
+						if (!potentialFather.learnset) throw new Error(`${potentialFather.species} has no learnset`);
 						let restrictedSources = 0;
 						for (const moveid of limitedEgg) {
 							let fatherSources = potentialFather.learnset[moveid] || potentialFather.learnset['sketch'];
@@ -415,7 +467,7 @@ class Validator {
 							for (const fatherSource of fatherSources) {
 								// Triply nested loop! Fortunately, all the loops are designed
 								// to be as short as possible.
-								if (source.charAt(0) > eggGen) continue;
+								if (+source.charAt(0) > eggGen) continue;
 								hasSource = true;
 								if (fatherSource.charAt(1) !== 'E' && fatherSource.charAt(1) !== 'S') {
 									hasUnrestrictedSource = true;
@@ -459,6 +511,7 @@ class Validator {
 				// Every source is restricted
 				let legal = false;
 				for (const source of lsetData.sources) {
+					// @ts-ignore TypeScript overload syntax bug
 					if (this.validateSource(set, source, template)) continue;
 					legal = true;
 					break;
@@ -468,12 +521,15 @@ class Validator {
 					if (lsetData.sources.length > 1) {
 						problems.push(`${template.species} has an event-exclusive move that it doesn't qualify for (only one of several ways to get the move will be listed):`);
 					}
+					// @ts-ignore TypeScript overload syntax bug
 					let eventProblems = this.validateSource(set, lsetData.sources[0], template, ` because it has a move only available`);
+					// @ts-ignore TypeScript overload syntax bug
 					if (eventProblems) problems.push(...eventProblems);
 				}
 			} else if (ruleTable.has('-illegal') && template.eventOnly) {
 				let eventTemplate = !template.learnset && template.baseSpecies !== template.species ? dex.getTemplate(template.baseSpecies) : template;
-				let eventPokemon = eventTemplate.eventPokemon;
+				const eventPokemon = eventTemplate.eventPokemon;
+				if (!eventPokemon) throw new Error(`Event-only template ${template.species} has no eventPokemon table`);
 				let legal = false;
 				for (const eventData of eventPokemon) {
 					if (this.validateEvent(set, eventData, eventTemplate)) continue;
@@ -499,6 +555,7 @@ class Validator {
 					}
 					let eventName = eventPokemon.length > 1 ? ` #${eventNum}` : ``;
 					let eventProblems = this.validateEvent(set, eventData, eventTemplate, ` to be`, `from its event${eventName}`);
+					// @ts-ignore TypeScript overload syntax bug
 					if (eventProblems) problems.push(...eventProblems);
 				}
 			}
@@ -519,7 +576,7 @@ class Validator {
 					}
 				}
 			}
-			if (ruleTable.has('-illegal') && set.level < template.evoLevel) {
+			if (ruleTable.has('-illegal') && set.level < (template.evoLevel || 0)) {
 				// FIXME: Event pokemon given at a level under what it normally can be attained at gives a false positive
 				problems.push(`${name} must be at least level ${template.evoLevel} to be evolved.`);
 			}
@@ -534,6 +591,7 @@ class Validator {
 			}
 		}
 		if (item.megaEvolves === template.species) {
+			if (!item.megaStone) throw new Error(`Item ${item.name} has no base form for mega evolution`);
 			template = dex.getTemplate(item.megaStone);
 		}
 		if (ruleTable.has('-mega') && ['Mega', 'Mega-X', 'Mega-Y'].includes(template.forme)) {
@@ -583,7 +641,7 @@ class Validator {
 		}
 
 		if (!problems.length) {
-			if (set.forcedLevel) set.level = set.forcedLevel;
+			if (forcedLevel) set.level = forcedLevel;
 			return false;
 		}
 
@@ -594,9 +652,14 @@ class Validator {
 	 * Returns array of error messages if invalid, undefined if valid
 	 *
 	 * If `because` is not passed, instead returns true if invalid.
+	 * @param {PokemonSet} set
+	 * @param {PokemonSource} source
+	 * @param {Template} template
+	 * @param {string} because
+	 * @param {string} from
 	 */
 	validateSource(set, source, template, because, from) {
-		let eventData;
+		let eventData = /** @type {?EventInfo} */ (null);
 		let eventTemplate = template;
 		if (source.charAt(1) === 'S') {
 			let splitSource = source.substr(source.charAt(2) === 'T' ? 3 : 2).split(' ');
@@ -629,13 +692,16 @@ class Validator {
 	 * Returns array of error messages if invalid, undefined if valid
 	 *
 	 * If `because` is not passed, instead returns true if invalid.
+	 * @param {PokemonSet} set
+	 * @param {EventInfo} eventData
+	 * @param {Template} eventTemplate
 	 */
-	validateEvent(set, eventData, eventTemplate, because, from = `from an event`) {
+	validateEvent(set, eventData, eventTemplate, because = ``, from = `from an event`) {
 		let dex = this.dex;
 		let name = set.species;
 		let template = dex.getTemplate(set.species);
 		if (!eventTemplate) eventTemplate = template;
-		if (set.species !== set.name && set.baseSpecies !== set.name) name = `${set.name} (${set.species})`;
+		if (set.species !== set.name && template.baseSpecies !== set.name) name = `${set.name} (${set.species})`;
 
 		const fastReturn = !because;
 		if (eventData.from) from = `from ${eventData.from}`;
@@ -656,7 +722,7 @@ class Validator {
 			problems.push(`This format is in gen ${dex.gen} and ${name} is from gen ${eventData.generation}${etc}.`);
 		}
 
-		if (eventData.level && set.level < eventData.level) {
+		if (eventData.level && (set.level || 0) < eventData.level) {
 			if (fastReturn) return true;
 			problems.push(`${name} must be at least level ${eventData.level}${etc}.`);
 		}
@@ -684,9 +750,12 @@ class Validator {
 			if (!set.ivs) set.ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
 			let statTable = {hp:'HP', atk:'Attack', def:'Defense', spa:'Special Attack', spd:'Special Defense', spe:'Speed'};
 			for (let statId in eventData.ivs) {
+				// @ts-ignore TypeScript index signature bug
 				if (canBottleCap && set.ivs[statId] === 31) continue;
+				// @ts-ignore TypeScript index signature bug
 				if (set.ivs[statId] !== eventData.ivs[statId]) {
 					if (fastReturn) return true;
+					// @ts-ignore TypeScript index signature bug
 					problems.push(`${name} must have ${eventData.ivs[statId]} ${statTable[statId]} IVs${etc}.`);
 				}
 			}
@@ -713,6 +782,7 @@ class Validator {
 			// Events can also have a certain amount of guaranteed perfect IVs
 			let perfectIVs = 0;
 			for (let i in set.ivs) {
+				// @ts-ignore TypeScript index signature bug
 				if (set.ivs[i] >= 31) perfectIVs++;
 			}
 			if (perfectIVs < requiredIVs) {
@@ -772,17 +842,23 @@ class Validator {
 		return problems;
 	}
 
-	checkLearnset(move, template, lsetData) {
+	/**
+	 * @param {Move} move
+	 * @param {Template} species
+	 * @param {PokemonSources} lsetData
+	 * @param {AnyObject} set
+	 * @return {{type: string, [any: string]: any} | false}
+	 */
+	checkLearnset(move, species, lsetData = {sources: [], sourcesBefore: this.dex.gen}, set = {}) {
 		let dex = this.dex;
 
 		let moveid = toId(move);
-		if (moveid === 'constructor') return true;
+		if (moveid === 'constructor') return {type: 'invalid'};
 		move = dex.getMove(moveid);
-		template = dex.getTemplate(template);
+		/** @type {?Template} */
+		let template = dex.getTemplate(species);
 
-		lsetData = lsetData || {};
-		let set = (lsetData.set || (lsetData.set = {}));
-		let format = (lsetData.format = dex.getFormat(lsetData.format));
+		let format = this.format;
 		let ruleTable = dex.getRuleTable(format);
 		let alreadyChecked = {};
 		let level = set.level || 100;
@@ -812,10 +888,9 @@ class Validator {
 		// source at or before this gen is possible."
 
 		// set of possible sources of a pokemon with this move, represented as an array
-		let sources = [];
+		let sources = /** @type {PokemonSource[]} */ ([]);
 		// the equivalent of adding "every source at or before this gen" to sources
 		let sourcesBefore = 0;
-		if (lsetData.sourcesBefore === undefined) lsetData.sourcesBefore = dex.gen;
 
 		/**
 		 * The minimum past gen the format allows
@@ -838,7 +913,7 @@ class Validator {
 		let limitedEgg = null;
 
 		let tradebackEligible = false;
-		do {
+		while (template && template.species && !alreadyChecked[template.speciesid]) {
 			alreadyChecked[template.speciesid] = true;
 			if (dex.gen === 2 && template.gen === 1) tradebackEligible = true;
 			if (!template.learnset) {
@@ -857,7 +932,7 @@ class Validator {
 				sometimesPossible = true;
 				let lset = template.learnset[moveid];
 				if (moveid === 'sketch' || !lset || template.speciesid === 'smeargle') {
-					if (move.noSketch || move.isZ) return true;
+					if (move.noSketch || move.isZ) return {type: 'invalid'};
 					lset = template.learnset['sketch'];
 					sketch = true;
 				}
@@ -1022,7 +1097,7 @@ class Validator {
 					}
 				}
 			}
-			if (format.mimicGlitch && template.gen < 5) {
+			if (ruleTable.has('mimicglitch') && template.gen < 5) {
 				// include the Mimic Glitch when checking this mon's learnset
 				let glitchMoves = ['metronome', 'copycat', 'transform', 'mimic', 'assist'];
 				let getGlitch = false;
@@ -1053,7 +1128,7 @@ class Validator {
 			} else {
 				template = null;
 			}
-		} while (template && template.species && !alreadyChecked[template.speciesid]);
+		}
 
 		if (limit1 && sketch) {
 			// limit 1 sketch move
@@ -1073,49 +1148,39 @@ class Validator {
 		if (!sourcesBefore && !sources.length) {
 			if (minPastGen > 1 && sometimesPossible) return {type:'pastgen', gen: minPastGen};
 			if (incompatibleAbility) return {type:'incompatibleAbility'};
-			return true;
+			return {type: 'invalid'};
 		}
-		if (!sources.length) sources = null;
 		if (sourcesBefore || lsetData.sourcesBefore) {
 			// having sourcesBefore is the equivalent of having everything before that gen
 			// in sources, so we fill the other array in preparation for intersection
-			if (sourcesBefore && lsetData.sources) {
-				if (!sources) sources = [];
-				for (let i = 0, len = lsetData.sources.length; i < len; i++) {
-					let learned = lsetData.sources[i];
-					if (parseInt(learned.charAt(0)) <= sourcesBefore) {
-						sources.push(learned);
+			if (sourcesBefore > lsetData.sourcesBefore) {
+				for (const oldSource of lsetData.sources) {
+					const oldSourceGen = parseInt(oldSource.charAt(0));
+					if (oldSourceGen <= sourcesBefore) {
+						sources.push(oldSource);
 					}
 				}
-				if (!lsetData.sourcesBefore) sourcesBefore = 0;
-			}
-			if (lsetData.sourcesBefore && sources) {
-				if (!lsetData.sources) lsetData.sources = [];
-				for (let i = 0, len = sources.length; i < len; i++) {
-					let learned = sources[i];
-					let sourceGen = parseInt(learned.charAt(0));
-					if (sourceGen <= lsetData.sourcesBefore && sourceGen > sourcesBefore) {
-						lsetData.sources.push(learned);
+			} else if (lsetData.sourcesBefore > sourcesBefore) {
+				for (const source of sources) {
+					const sourceGen = parseInt(source.charAt(0));
+					if (sourceGen <= lsetData.sourcesBefore) {
+						lsetData.sources.push(source);
 					}
 				}
-				if (!sourcesBefore) lsetData.sourcesBefore = 0;
 			}
+			lsetData.sourcesBefore = sourcesBefore = Math.min(sourcesBefore, lsetData.sourcesBefore);
 		}
-		if (sources) {
-			if (lsetData.sources) {
+		if (lsetData.sources.length) {
+			if (sources.length) {
 				let sourcesSet = new Set(sources);
 				let intersectSources = lsetData.sources.filter(source => sourcesSet.has(source));
-				if (!intersectSources.length && !(sourcesBefore && lsetData.sourcesBefore)) {
+				if (!intersectSources.length && !sourcesBefore) {
 					return {type:'incompatible'};
 				}
 				lsetData.sources = intersectSources;
 			} else {
-				lsetData.sources = Array.from(new Set(sources));
+				lsetData.sources = [];
 			}
-		}
-
-		if (sourcesBefore) {
-			lsetData.sourcesBefore = Math.min(sourcesBefore, lsetData.sourcesBefore);
 		}
 
 		if (limitedEgg) {
@@ -1129,14 +1194,24 @@ class Validator {
 		return false;
 	}
 
+	/**
+	 * @param {Template} template
+	 */
 	static hasLegendaryIVs(template) {
 		return ((template.eggGroups[0] === 'Undiscovered' || template.species === 'Manaphy') && !template.prevo && !template.nfe &&
 			template.species !== 'Unown' && template.baseSpecies !== 'Pikachu');
 	}
+	/**
+	 * @param {SparseStatsTable? | undefined} [stats]
+	 * @param {number} [fillNum]
+	 * @return {StatsTable}
+	 */
 	static fillStats(stats, fillNum = 0) {
+		/** @type {StatsTable} */
 		let filledStats = {hp: fillNum, atk: fillNum, def: fillNum, spa: fillNum, spd: fillNum, spe: fillNum};
 		if (stats) {
 			for (const stat in filledStats) {
+				// @ts-ignore TypeScript index signature bug
 				if (typeof stats[stat] === 'number') filledStats[stat] = stats[stat];
 			}
 		}
@@ -1144,7 +1219,7 @@ class Validator {
 	}
 }
 
-function getValidator(format) {
+function getValidator(/** @type {string | Format} */ format) {
 	return new Validator(format);
 }
 
