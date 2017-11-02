@@ -981,6 +981,8 @@ class Validator {
 							// we're past the required level to learn it
 							// (gen 7 level-up moves can be relearnered at any level)
 							// falls through to LMT check below
+						} else if (level >= 5 && learnedGen === 3 && template.eggGroups && template.eggGroups[0] !== 'Undiscovered') {
+							// Pomeg Glitch
 						} else if ((!template.gender || template.gender === 'F') && learnedGen >= 2) {
 							// available as egg move
 							learned = learnedGen + 'Eany';
