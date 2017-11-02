@@ -111,6 +111,19 @@ class Effect {
 		 */
 		this.gen = 0;
 		/**
+		 * Is this item/move/ability/pokemon unreleased? True if there's
+		 * no known way to get access to it without cheating.
+		 * @type {boolean}
+		 */
+		this.isUnreleased = false;
+		/**
+		 * Is this item/move/ability/pokemon nonstandard? True for effects
+		 * that have no use in standard formats: made-up pokemon (CAP),
+		 * glitches (Missingno etc), and Pokestar pokemon.
+		 * @type {boolean}
+		 */
+		this.isNonstandard = false;
+		/**
 		 * The duration of the effect.
 		 * @type {?number}
 		 */
@@ -287,6 +300,75 @@ class Format extends Effect {
 		 * @type {?Function}
 		 */
 		this.onBegin = this.onBegin;
+
+		/**
+		 * If no team is selected, this format can generate a random team
+		 * for the player.
+		 * @type {boolean}
+		 */
+		this.canUseRandomTeam = !!this.canUseRandomTeam;
+		/**
+		 * Pokemon must be obtained from Gen 6 or later.
+		 * @type {boolean}
+		 */
+		this.requirePentagon = !!this.requirePentagon;
+		/**
+		 * Pokemon must be obtained from Gen 7 or later.
+		 * @type {boolean}
+		 */
+		this.requirePlus = !!this.requirePlus;
+		/**
+		 * Maximum possible level pokemon you can bring. Note that this is
+		 * still 100 in VGC, because you can bring level 100 pokemon,
+		 * they'll just be set to level 50. Can be above 100 in special
+		 * formats.
+		 * @type {number}
+		 */
+		this.maxLevel = this.maxLevel || 100;
+		/**
+		 * Default level of a pokemon without level specified. Mainly
+		 * relevant to Custom Game where the default level is still 100
+		 * even though higher level pokemon can be brought.
+		 * @type {number}
+		 */
+		this.defaultLevel = this.defaultLevel || this.maxLevel;
+		/**
+		 * Forces all pokemon brought in to this level. Certain Game Freak
+		 * formats will change level 1 and level 100 pokemon to level 50,
+		 * which is what you want here. You usually want maxForcedLevel
+		 * instead.
+		 * @type {number?}
+		 */
+		this.forcedLevel = this.forcedLevel;
+		/**
+		 * Forces all pokemon above this level down to this level. This
+		 * will allow e.g. level 50 Hydreigon in Gen 5, which is not
+		 * normally legal because Hydreigon doesn't evolve until level
+		 * 64.
+		 * @type {number?}
+		 */
+		this.maxForcedLevel = this.maxForcedLevel;
+
+		/**
+		 * @type {((this: Validator, set: PokemonSet, teamHas: AnyObject) => string[] | false)?}
+		 */
+		this.validateSet = this.validateSet;
+		/**
+		 * @type {((this: Validator, team: PokemonSet[], removeNicknames: boolean) => string[] | false)?}
+		 */
+		this.validateTeam = this.validateTeam;
+		/**
+		 * @type {((this: Validator, set: PokemonSet, format: Format, setHas: AnyObject, teamHas: AnyObject) => string[] | false)?}
+		 */
+		this.onChangeSet = this.onChangeSet;
+		/**
+		 * @type {((this: Validator, set: PokemonSet, format: Format, setHas: AnyObject, teamHas: AnyObject) => string[] | false)?}
+		 */
+		this.onValidateSet = this.onValidateSet;
+		/**
+		 * @type {((this: Validator, team: PokemonSet[], format: Format, teamHas: AnyObject) => string[] | false)?}
+		 */
+		this.onValidateTeam = this.onValidateTeam;
 	}
 }
 
@@ -337,6 +419,13 @@ class Item extends Effect {
 		 * @type {?string}
 		 */
 		this.megaStone = this.megaStone;
+		/**
+		 * If this is a mega stone: The name (e.g. Charizard) of the
+		 * forme this allows transformation from.
+		 * undefined, if not a mega stone.
+		 * @type {?string}
+		 */
+		this.megaEvolves = this.megaEvolves;
 		/**
 		 * Is this item a Berry?
 		 * @type {boolean}
@@ -524,6 +613,12 @@ class Template extends Effect {
 		this.evos = this.evos || [];
 
 		/**
+		 * Evolution level. falsy if doesn't evolve
+		 * @type {number?}
+		 */
+		this.evoLevel = this.evoLevel || null;
+
+		/**
 		 * Is NFE? True if this Pokemon can evolve (Mega evolution doesn't
 		 * count).
 		 * @type {boolean}
@@ -588,13 +683,36 @@ class Template extends Effect {
 		 * Does this Pokemon have an unreleased hidden ability?
 		 * @type {boolean}
 		 */
-		this.unreleasedHidden = this.unreleasedHidden;
+		this.unreleasedHidden = !!this.unreleasedHidden;
+
+		/**
+		 * Is it only possible to get the hidden ability on a male pokemon?
+		 * This is mainly relevant to Gen 5.
+		 * @type {boolean}
+		 */
+		this.maleOnlyHidden = !!this.maleOnlyHidden;
 
 		/**
 		 * Max HP. Used in the battle engine
 		 * @type {?number}
 		 */
 		this.maxHP = this.maxHP;
+
+		/**
+		 * Keeps track of exactly how a pokemon might learn a move, in the form moveid:sources[]
+		 * @type {?{[moveid: string]: MoveSource[]}}
+		 */
+		this.learnset = this.learnset;
+		/**
+		 * True if the only way to get this pokemon is from events.
+		 * @type {boolean}
+		 */
+		this.eventOnly = !!this.eventOnly;
+		/**
+		 * List of event data for each event.
+		 * @type {?EventInfo[]}
+		 */
+		this.eventPokemon = this.eventPokemon;
 
 		if (!this.gen) {
 			if (this.num >= 722 || this.forme === 'Alola') {
@@ -628,27 +746,27 @@ class Template extends Effect {
  * An object containing possible move flags.
  *
  * @typedef {Object} MoveFlags
- * @property {?1} authentic - Ignores a target's substitute.
- * @property {?1} bite - Power is multiplied by 1.5 when used by a Pokemon with the Ability Strong Jaw.
- * @property {?1} bullet - Has no effect on Pokemon with the Ability Bulletproof.
- * @property {?1} charge - The user is unable to make a move between turns.
- * @property {?1} contact - Makes contact.
- * @property {?1} dance - When used by a Pokemon, other Pokemon with the Ability Dancer can attempt to execute the same move.
- * @property {?1} defrost - Thaws the user if executed successfully while the user is frozen.
- * @property {?1} distance - Can target a Pokemon positioned anywhere in a Triple Battle.
- * @property {?1} gravity - Prevented from being executed or selected during Gravity's effect.
- * @property {?1} heal - Prevented from being executed or selected during Heal Block's effect.
- * @property {?1} mirror - Can be copied by Mirror Move.
- * @property {?1} mystery - Unknown effect.
- * @property {?1} nonsky - Prevented from being executed or selected in a Sky Battle.
- * @property {?1} powder - Has no effect on Grass-type Pokemon, Pokemon with the Ability Overcoat, and Pokemon holding Safety Goggles.
- * @property {?1} protect - Blocked by Detect, Protect, Spiky Shield, and if not a Status move, King's Shield.
- * @property {?1} pulse - Power is multiplied by 1.5 when used by a Pokemon with the Ability Mega Launcher.
- * @property {?1} punch - Power is multiplied by 1.2 when used by a Pokemon with the Ability Iron Fist.
- * @property {?1} recharge - If this move is successful, the user must recharge on the following turn and cannot make a move.
- * @property {?1} reflectable - Bounced back to the original user by Magic Coat or the Ability Magic Bounce.
- * @property {?1} snatch - Can be stolen from the original user and instead used by another Pokemon using Snatch.
- * @property {?1} sound - Has no effect on Pokemon with the Ability Soundproof.
+ * @property {1} [authentic] - Ignores a target's substitute.
+ * @property {1} [bite] - Power is multiplied by 1.5 when used by a Pokemon with the Ability Strong Jaw.
+ * @property {1} [bullet] - Has no effect on Pokemon with the Ability Bulletproof.
+ * @property {1} [charge] - The user is unable to make a move between turns.
+ * @property {1} [contact] - Makes contact.
+ * @property {1} [dance] - When used by a Pokemon, other Pokemon with the Ability Dancer can attempt to execute the same move.
+ * @property {1} [defrost] - Thaws the user if executed successfully while the user is frozen.
+ * @property {1} [distance] - Can target a Pokemon positioned anywhere in a Triple Battle.
+ * @property {1} [gravity] - Prevented from being executed or selected during Gravity's effect.
+ * @property {1} [heal] - Prevented from being executed or selected during Heal Block's effect.
+ * @property {1} [mirror] - Can be copied by Mirror Move.
+ * @property {1} [mystery] - Unknown effect.
+ * @property {1} [nonsky] - Prevented from being executed or selected in a Sky Battle.
+ * @property {1} [powder] - Has no effect on Grass-type Pokemon, Pokemon with the Ability Overcoat, and Pokemon holding Safety Goggles.
+ * @property {1} [protect] - Blocked by Detect, Protect, Spiky Shield, and if not a Status move, King's Shield.
+ * @property {1} [pulse] - Power is multiplied by 1.5 when used by a Pokemon with the Ability Mega Launcher.
+ * @property {1} [punch] - Power is multiplied by 1.2 when used by a Pokemon with the Ability Iron Fist.
+ * @property {1} [recharge] - If this move is successful, the user must recharge on the following turn and cannot make a move.
+ * @property {1} [reflectable] - Bounced back to the original user by Magic Coat or the Ability Magic Bounce.
+ * @property {1} [snatch] - Can be stolen from the original user and instead used by another Pokemon using Snatch.
+ * @property {1} [sound] - Has no effect on Pokemon with the Ability Soundproof.
  */
 class Move extends Effect {
 	/**
@@ -883,6 +1001,12 @@ class Move extends Effect {
 		this.hasSTAB = this.hasSTAB;
 
 		/**
+		 * True if it can't be copied with Sketch
+		 * @type {boolean}
+		 */
+		this.noSketch = !!this.noSketch;
+
+		/**
 		 * STAB (can be modified by other effects)
 		 * @type {?number}
 		 */
@@ -923,6 +1047,71 @@ class Move extends Effect {
 	}
 }
 
+class TypeInfo {
+	/**
+	 * @param {AnyObject} data
+	 * @param {?AnyObject} [moreData]
+	 * @param {?AnyObject} [moreData2]
+	 */
+	constructor(data, moreData = null, moreData2 = null) {
+		/**
+		 * ID. This will be a lowercase version of the name with all the
+		 * non-alphanumeric characters removed. e.g. 'flying'
+		 * @type {string}
+		 */
+		this.id = '';
+		/**
+		 * Name. e.g. 'Flying'
+		 * @type {string}
+		 */
+		this.name = '';
+		/**
+		 * Effect type.
+		 * @type {'Type' | 'EffectType'}
+		 */
+		this.effectType = 'Type';
+		/**
+		 * Does it exist? For historical reasons, when you use an accessor
+		 * for an effect that doesn't exist, you get a dummy effect that
+		 * doesn't do anything, and this field set to false.
+		 * @type {boolean}
+		 */
+		this.exists = true;
+		/**
+		 * The generation of Pokemon game this was INTRODUCED (NOT
+		 * necessarily the current gen being simulated.) Not all effects
+		 * track generation; this will be 0 if not known.
+		 * @type {number}
+		 */
+		this.gen = 0;
+		/**
+		 * Type chart, attackingTypeName:result, effectid:result
+		 * result is: 0 = normal, 1 = weakness, 2 = resistance, 3 = immunity
+		 * @type {{[attackingTypeNameOrEffectid: string]: number}}
+		 */
+		this.damageTaken = {};
+		/**
+		 * The IVs to get this Type Hidden Power (in gen 3 and later)
+		 * @type {SparseStatsTable}
+		 */
+		this.HPivs = {};
+		/**
+		 * The DVs to get this Type Hidden Power (in gen 2)
+		 * @type {SparseStatsTable}
+		 */
+		this.HPdvs = {};
+
+		Object.assign(this, data);
+		if (moreData) Object.assign(this, moreData);
+		if (moreData2) Object.assign(this, moreData2);
+		this.name = Tools.getString(this.name).trim();
+		this.exists = !!(this.exists && this.id);
+	}
+	toString() {
+		return this.name;
+	}
+}
+
 exports.Tools = Tools;
 exports.Effect = Effect;
 exports.PureEffect = PureEffect;
@@ -932,3 +1121,4 @@ exports.Item = Item;
 exports.Template = Template;
 exports.Move = Move;
 exports.Ability = Ability;
+exports.TypeInfo = TypeInfo;

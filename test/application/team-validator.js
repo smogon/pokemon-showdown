@@ -44,7 +44,11 @@ describe('Team Validator features', function () {
 		it('should accept legal movesets', function () {
 			let team = [{species:'pikachu', ability:'static', moves:['agility', 'protect', 'thunder', 'thunderbolt']}];
 			let illegal = TeamValidator('gen7anythinggoes').validateTeam(team);
-			assert(!illegal);
+			assert.strictEqual(illegal, false);
+
+			team = [{species:'meowstic', ability:'prankster', moves:['trick', 'magiccoat']}];
+			illegal = TeamValidator('gen7anythinggoes').validateTeam(team);
+			assert.strictEqual(illegal, false);
 		});
 
 		it('should reject illegal movesets', function () {
@@ -53,16 +57,22 @@ describe('Team Validator features', function () {
 			assert(illegal);
 		});
 
+		it('should reject illegal egg move combinations', function () {
+			let team = [{species:'azumarill', ability:'hugepower', moves:['bellydrum', 'aquajet']}];
+			let illegal = TeamValidator('gen5ou').validateTeam(team);
+			assert(illegal);
+		});
+
 		it('should accept both ability types for Mega Evolutions', function () {
 			// base forme ability
 			let team = [{species:'gyaradosmega', item:'gyaradosite', ability:'intimidate', moves:['dragondance', 'crunch', 'waterfall', 'icefang']}];
 			let illegal = TeamValidator('gen7anythinggoes').validateTeam(team);
-			assert(!illegal);
+			assert.strictEqual(illegal, false);
 
 			// mega forme ability
 			team = [{species:'gyaradosmega', item:'gyaradosite', ability:'moldbreaker', moves:['dragondance', 'crunch', 'waterfall', 'icefang']}];
 			illegal = TeamValidator('gen7anythinggoes').validateTeam(team);
-			assert(!illegal);
+			assert.strictEqual(illegal, false);
 		});
 
 		it('should reject newer Pokemon in older gens', function () {
