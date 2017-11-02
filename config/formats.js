@@ -371,13 +371,13 @@ exports.Formats = [
 	{
 		name: "[Gen 7] Dual Wielding",
 		desc: [
-			"Poe&eacute;mon can forgo their Ability in order to use a second item.",
-			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3608611//\">Dual Wielding</a>",
+			"Pok&eacute;mon can forgo their Ability in order to use a second item.",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3608611//\">Dual Wielding</a>",
 		],
 
 		mod: 'dualwielding',
 		ruleset: ['[Gen 7] OU'],
-		banlist: ['Slaking', 'Regigigas'],
+		banlist: ['Regigigas', 'Slaking'],
 		validateSet: function (set, teamHas) {
 			let dual = this.dex.getItem(set.ability);
 			if (dual.exists) set.ability = this.dex.getTemplate(set.species).abilities['0'];
@@ -548,6 +548,7 @@ exports.Formats = [
 		searchShow: false,
 		ruleset: ['Gen 7] OU', 'Ignore STAB Moves'],
 		banlist: ['Kartana', 'Komala', 'Kyurem-Black', 'Silvally-Ghost', 'Tapu Koko', 'Tapu Lele', 'Aerodactylite', 'King\'s Rock', 'Metagrossite', 'Razor Fang'],
+		noLearn: ['Acupressure', 'Belly Drum', 'Chatter', 'Geomancy', 'Shell Smash', 'Shift Gear', 'Thousand Arrows'],
 	},
 	{
 		name: "[Gen 7] 2v2 Doubles",
