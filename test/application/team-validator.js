@@ -63,6 +63,25 @@ describe('Team Validator features', function () {
 			assert(illegal);
 		});
 
+		it('should accept VC moves only with Hidden ability', function () {
+			let team = [{species:'machamp', ability:'steadfast', moves:['fissure']}];
+			let illegal = TeamValidator('gen7anythinggoes').validateTeam(team);
+			assert.strictEqual(illegal, false);
+			team = [{species:'tauros', ability:'sheerforce', moves:['bodyslam']}];
+			illegal = TeamValidator('gen7anythinggoes').validateTeam(team);
+			assert.strictEqual(illegal, false);
+			team = [{species:'tauros', ability:'intimidate', ivs:{hp:31, atk:31, def:30, spa:30, spd:30, spe:30}, moves:['bodyslam']}];
+			illegal = TeamValidator('gen7anythinggoes').validateTeam(team);
+			assert.strictEqual(illegal, false);
+
+			team = [{species:'machamp', ability:'noguard', moves:['fissure']}];
+			illegal = TeamValidator('gen7anythinggoes').validateTeam(team);
+			assert(illegal);
+			team = [{species:'tauros', ability:'sheerforce', ivs:{hp:31, atk:31, def:30, spa:30, spd:30, spe:30}, moves:['bodyslam']}];
+			illegal = TeamValidator('gen7anythinggoes').validateTeam(team);
+			assert(illegal);
+		});
+
 		it('should accept both ability types for Mega Evolutions', function () {
 			// base forme ability
 			let team = [{species:'gyaradosmega', item:'gyaradosite', ability:'intimidate', moves:['dragondance', 'crunch', 'waterfall', 'icefang']}];
