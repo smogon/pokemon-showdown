@@ -548,7 +548,7 @@ exports.Formats = [
 		searchShow: false,
 		ruleset: ['Gen 7] OU', 'Ignore STAB Moves'],
 		banlist: ['Kartana', 'Komala', 'Kyurem-Black', 'Silvally-Ghost', 'Tapu Koko', 'Tapu Lele', 'Aerodactylite', 'King\'s Rock', 'Metagrossite', 'Razor Fang'],
-		noLearn: ['Acupressure', 'Belly Drum', 'Chatter', 'Geomancy', 'Shell Smash', 'Shift Gear', 'Thousand Arrows'],
+		noLearn: ['acupressure', 'bellydrum', 'chatter', 'geomancy', 'shellsmash', 'shiftgear', 'thousandarrows'],
 	},
 	{
 		name: "[Gen 7] 2v2 Doubles",
