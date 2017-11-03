@@ -901,7 +901,7 @@ class Validator {
 			alreadyChecked[template.speciesid] = true;
 			if (dex.gen === 2 && template.gen === 1) tradebackEligible = true;
 			// STABmons hack to avoid copying all of validateSet to formats
-			let noLearn = format. noLearn || dex.getFormat('gen7stabmons').noLearn;
+			let noLearn = format.noLearn || dex.getFormat('gen7stabmons').noLearn;
 			if (ruleTable.has('ignorestabmoves') && noLearn.indexOf(move.name) < 0 && !move.isZ) {
 				let types = template.types;
 				if (template.baseSpecies === 'Rotom') types = ['Electric', 'Ghost', 'Fire', 'Water', 'Ice', 'Flying', 'Grass'];
