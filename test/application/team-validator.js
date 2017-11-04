@@ -63,7 +63,7 @@ describe('Team Validator features', function () {
 			assert(illegal);
 		});
 
-		it('should accept VC moves only with Hidden ability', function () {
+		it('should accept VC moves only with Hidden ability and correct IVs', function () {
 			let team = [{species:'machamp', ability:'steadfast', moves:['fissure']}];
 			let illegal = TeamValidator('gen7anythinggoes').validateTeam(team);
 			assert.strictEqual(illegal, false);
