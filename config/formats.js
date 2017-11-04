@@ -380,16 +380,10 @@ exports.Formats = [
 		banlist: ['Regigigas', 'Slaking'],
 		validateSet: function (set, teamHas) {
 			let dual = this.dex.getItem(set.ability);
-			if (dual.exists) set.ability = this.dex.getTemplate(set.species).abilities['0'];
-			let problems = this.validateSet(set, teamHas);
-			if (dual.exists) set.ability = dual.name;
-			if (problems && problems.length) return problems;
-			let name = set.species;
-			if (set.species !== set.name && set.baseSpecies !== set.name) name = `${set.name} (${set.species})`;
-			if (dual.isUnreleased) return [`${name}'s item ${dual.name} is unreleased.`];
-			if (toId(set.item) === toId(set.ability)) return [`${name} has 2 of ${set.item}, which is banned.`];
-			if (toId(set.item).slice(0, 6) === 'choice' && toId(set.ability).slice(0, 6) === 'choice') return [`${name} has the combination of ${set.item} and ${set.ability}, which is banned.`];
-		},
+			if (!dual.exists) return this.validateSet(set, teamHas);
+			let validator = new this.constructor(Dex.getFormat(this.format.id, ['Ignore Illegal Abilities']));
+			return validator.validateSet(Object.assign({}, set, {ability: ''}), teamHas) || validator.validateSet(Object.assign({}, set, {ability: '', item: set.ability}, teamHas));
+	  },
 	},
 	{
 		section: "Other Metagames",
