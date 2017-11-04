@@ -380,15 +380,48 @@ exports.Formats = [
 		banlist: ['Regigigas', 'Slaking'],
 		validateSet: function (set, teamHas) {
 			let dual = this.dex.getItem(set.ability);
-			if (dual.exists) set.ability = this.dex.getTemplate(set.species).abilities['0'];
+			let template = this.dex.getTemplate(set.species);
+			if (dual.exists) set.ability = template.abilities['0'];
 			let problems = this.validateSet(set, teamHas);
+			if (problems && problems.length) {
+				if (dual.exists) {
+					let hiddenAbility = template.abilities['H'];
+					if (hiddenAbility) {
+						set.ability = hiddenAbility;
+						problems = this.validateSet(set, teamHas);
+					}
+				} else {
+					return problems;
+				}
+			}
 			if (dual.exists) set.ability = dual.name;
-			if (problems && problems.length) return problems;
+			if (!problems) problems = [];
 			let name = set.species;
 			if (set.species !== set.name && set.baseSpecies !== set.name) name = `${set.name} (${set.species})`;
-			if (dual.isUnreleased) return [`${name}'s item ${dual.name} is unreleased.`];
-			if (toId(set.item) === toId(set.ability)) return [`${name} has 2 of ${set.item}, which is banned.`];
-			if (toId(set.item).slice(0, 6) === 'choice' && toId(set.ability).slice(0, 6) === 'choice') return [`${name} has the combination of ${set.item} and ${set.ability}, which is banned.`];
+			if (dual.isUnreleased) problems.push(`${name}'s item ${dual.name} is unreleased.`);
+			if (dual.isNonstandard) {
+				if (dual.isNonstandard === 'gen2') {
+					problems.push(`${name}'s item ${dual.name} does not exist outside of gen 2.`);
+				} else {
+					problems.push(`${name}'s item ${dual.name} does not exist.`);
+				}
+			}
+			if (!dual.zMove && !!(this.ruleTable.has('evasionmovesclause'))) {
+				for (let i = 0; i < set.moves.length; i++) {
+					let move = this.dex.getMove(set.moves[i]);
+					if (move.type === dual.zMoveType) {
+						if (move.zMoveBoost && move.zMoveBoost.evasion > 0) {
+							problems.push((set.name || set.species) + " can boost Evasion, which is banned by Evasion Clause.");
+							break;
+						}
+					}
+				}
+			}
+			if (toId(set.item) === toId(set.ability)) problems.push(`${name} has 2 of ${set.item}, which is banned.`);
+			if (toId(set.item).slice(0, 6) === 'choice' && toId(set.ability).slice(0, 6) === 'choice') {
+				problems.push(`${name} has the combination of ${set.item} and ${set.ability}, which is banned.`);
+			}
+			if (problems && problems.length) return problems;
 		},
 	},
 	{
