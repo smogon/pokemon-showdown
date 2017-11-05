@@ -510,7 +510,7 @@ exports.Formats = [
 					if (set.ability === template.abilities[i]) legalAbility = true;
 				}
 				if (!legalAbility) return ['The ability ' + set.ability + ' is banned on Pok\u00e9mon that do not naturally have it.'];
- 			}
+			}
 		},
 	},
 	{
