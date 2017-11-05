@@ -303,7 +303,7 @@ class Validator {
 
 			set.ivs = Validator.fillStats(set.ivs, 31);
 			let ivs = /** @type {StatsTable} */ (set.ivs);
-			let maxedIVs = Validator.fillStats(null, 31);
+			let maxedIVs = Object.values(ivs).every(stat => stat === 31);
 
 			for (const moveName of set.moves) {
 				if (!moveName) continue;
@@ -354,6 +354,7 @@ class Validator {
 						// @ts-ignore TypeScript index signature bug
 						ivs[i] = HPdvs[i] * 2;
 					}
+					ivs.hp = -1;
 				} else if (!canBottleCap) {
 					ivs = set.ivs = Validator.fillStats(dex.getType(set.hpType).HPivs, 31);
 				}
@@ -370,12 +371,13 @@ class Validator {
 			}
 			if (dex.gen <= 2) {
 				// validate DVs
-				const hpDV = Math.floor(ivs.hp / 2);
 				const atkDV = Math.floor(ivs.atk / 2);
 				const defDV = Math.floor(ivs.def / 2);
 				const speDV = Math.floor(ivs.spe / 2);
 				const spcDV = Math.floor(ivs.spa / 2);
 				const expectedHpDV = (atkDV % 2) * 8 + (defDV % 2) * 4 + (speDV % 2) * 2 + (spcDV % 2);
+				if (ivs.hp === -1) ivs.hp = expectedHpDV * 2;
+				const hpDV = Math.floor(ivs.hp / 2);
 				if (expectedHpDV !== hpDV) {
 					problems.push(`${name} has an HP DV of ${hpDV}, but its Atk, Def, Spe, and Spc DVs give it an HP DV of ${expectedHpDV}.`);
 				}
