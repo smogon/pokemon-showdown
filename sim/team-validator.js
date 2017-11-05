@@ -199,14 +199,6 @@ class Validator {
 		item = dex.getItem(set.item);
 		ability = dex.getAbility(set.ability);
 
-		let bannedAbilities = format.bannedAbilities || dex.getFormat('gen7almostanyability').bannedAbilities;
-		if (ruleTable.has('ignoreillegalabilities') && bannedAbilities.includes(set.ability)) {
-			let legalAbility = false;
-			for (let i in template.abilities) {
-				if (set.ability === template.abilities[i]) legalAbility = true;
-			}
-			if (!legalAbility) return ['The ability ' + set.ability + ' is banned on Pok\u00e9mon that do not naturally have it.'];
-		}
 		if (ability.id === 'battlebond' && template.id === 'greninja' && !ruleTable.has('ignoreillegalabilities')) {
 			template = dex.getTemplate('greninjaash');
 			set.gender = 'M';

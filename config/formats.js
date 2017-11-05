@@ -497,7 +497,21 @@ exports.Formats = [
 			'Rayquaza', 'Regigigas', 'Reshiram', 'Shaymin-Sky', 'Shedinja', 'Slaking', 'Solgaleo', 'Terrakion', 'Xerneas', 'Yveltal', 'Zekrom',
 			'Arena Trap', 'Power Construct', 'Shadow Tag', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Salamencite', 'Baton Pass',
 		],
-		bannedAbilities: ['Arena Trap', 'Comatose', 'Contrary', 'Fluffy', 'Fur Coat', 'Huge Power', 'Illusion', 'Imposter', 'Innards Out', 'Parental Bond', 'Protean', 'Pure Power', 'Simple', 'Speed Boost', 'Stakeout', 'Water Bubble', 'Wonder Guard'],
+		bannedAbilities: [
+			'Comatose', 'Contrary', 'Fluffy', 'Fur Coat', 'Huge Power', 'Illusion', 'Imposter', 'Innards Out', 'Parental Bond', 'Protean',
+			'Pure Power', 'Simple', 'Speed Boost', 'Stakeout', 'Water Bubble', 'Wonder Guard',
+		],
+		onValidateSet: function (set, format) {
+ 			let ba = format.bannedAbilities || [];
+ 			if (ba.includes(set.ability)) {
+				let template = this.getTemplate(set.species || set.name);
+ 				let legalAbility = false;
+ 				for (let i in template.abilities) {
+ 					if (set.ability === template.abilities[i]) legalAbility = true;
+ 				}
+ 				if (!legalAbility) return ['The ability ' + set.ability + ' is banned on Pok\u00e9mon that do not naturally have it.'];
+ 			}
+ 		},
 	},
 	{
 		name: "[Gen 7] Camomons",
