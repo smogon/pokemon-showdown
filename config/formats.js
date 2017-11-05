@@ -502,8 +502,8 @@ exports.Formats = [
 			'Pure Power', 'Simple', 'Speed Boost', 'Stakeout', 'Water Bubble', 'Wonder Guard',
 		],
 		onValidateSet: function (set, format) {
- 			let ba = format.bannedAbilities || [];
- 			if (ba.includes(set.ability)) {
+ 			let bannedAbilities = format.bannedAbilities || [];
+ 			if (bannedAbilities.includes(set.ability)) {
 				let template = this.getTemplate(set.species || set.name);
  				let legalAbility = false;
  				for (let i in template.abilities) {
