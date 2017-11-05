@@ -75,6 +75,10 @@ describe('Team Validator features', function () {
 			let team = [{species:'azumarill', ability:'hugepower', moves:['bellydrum', 'aquajet']}];
 			let illegal = TeamValidator('gen5ou').validateTeam(team);
 			assert(illegal);
+
+			team = [{species:'cloyster', moves:['rapidspin', 'explosion']}];
+			illegal = TeamValidator('gen2ou').validateTeam(team);
+			assert(illegal);
 		});
 
 		it('should accept VC moves only with Hidden ability and correct IVs', function () {

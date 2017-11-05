@@ -1173,13 +1173,13 @@ class Validator {
 			if (sources.length) {
 				let sourcesSet = new Set(sources);
 				let intersectSources = lsetData.sources.filter(source => sourcesSet.has(source));
-				if (!intersectSources.length && !sourcesBefore) {
-					return {type:'incompatible'};
-				}
 				lsetData.sources = intersectSources;
 			} else {
 				lsetData.sources = [];
 			}
+		}
+		if (!lsetData.sources.length && !sourcesBefore) {
+			return {type:'incompatible'};
 		}
 
 		if (limitedEgg) {
