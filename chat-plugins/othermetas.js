@@ -59,11 +59,12 @@ exports.commands = {
 		if (template.isMega || (template.evos && Object.keys(template.evos).length > 0)) { // Mega Pokemon cannot be mega evolved
 			this.errorReply(`Warning: You cannot mega evolve non-fully evolved Pokemon and Mega Pokemon in Mix and Mega.`);
 		}
-		let bannedStones = {'beedrillite':1, 'blazikenite':1, 'gengarite':1, 'kangaskhanite':1, 'mawilite':1, 'medichamite':1};
-		if (stone.id in bannedStones && template.name !== stone.megaEvolves) {
+		let bannedStones = Dex.getFormat('gen7mixandmega').bannedStones;
+		if (bannedStones.includes(stone.name) && template.name !== stone.megaEvolves) {
 			this.errorReply(`Warning: ${stone.name} is restricted to ${stone.megaEvolves} in Mix and Mega; therefore, ${template.name} cannot use ${stone.name} in actual play.`);
 		}
-		if (Dex.mod("mixandmega").getTemplate(sep[0]).tier === "Uber" && !template.isMega) { // Separate messages because there's a difference between being already mega evolved / NFE and being banned from mega evolving
+		let cannotMega = Dex.getFormat('gen7mixandmega').cannotMega;
+		if (cannotMega.includes(template.name) && !template.isMega) { // Separate messages because there's a difference between being already mega evolved / NFE and being banned from mega evolving
 			this.errorReply(`Warning: ${template.name} is banned from mega evolving with a non-native mega stone in Mix and Mega and therefore cannot use ${toId(sep[1]) === 'dragonascent' ? 'Dragon Ascent' : stone.name} in actual play.`);
 		}
 		if (stone.isUnreleased) {
