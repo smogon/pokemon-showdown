@@ -14,13 +14,14 @@ const fs = require('fs');
 
 const DEFAULT_POINTS = [20, 15, 10, 5, 1];
 const DEFAULT_BLITZ_POINTS = 10;
+const DEFAULT_TIMER_DURATION = 120;
 
 const path = require('path');
 const DATA_FILE = path.resolve(__dirname, '../config/chat-plugins/scavdata.json');
 const HOST_DATA_FILE = path.resolve(__dirname, '../config/chat-plugins/scavhostdata.json');
 const PLAYER_DATA_FILE = path.resolve(__dirname, '../config/chat-plugins/scavplayerdata.json');
 
-const SCAVENGE_REGEX = /^(?:\s)?(?:\/{2,}|\W)?(?:\s)?(?:s\W?cavenge|s\W?cav(?:engers)? guess|d\W?t|d\W?ata|d\W?etails|g\W?(?:uess)?|v)\b/i; // a regex of some of all the possible slips for leaks.
+const SCAVENGE_REGEX = /^((?:\s)?(?:\/{2,}|[^\w/]+)|\s\/)?(?:\s)?(?:s\W?cavenge|s\W?cav(?:engers)? guess|d\W?t|d\W?ata|d\W?etails|g\W?(?:uess)?|v)\b/i; // a regex of some of all the possible slips for leaks.
 const FILTER_LENIENCY = 7;
 
 const HISTORY_PERIOD = 6; // months
@@ -157,9 +158,16 @@ let Leaderboard = new Ladder(DATA_FILE);
 let HostLeaderboard = new PlayerLadder(HOST_DATA_FILE);
 let PlayerLeaderboard = new PlayerLadder(PLAYER_DATA_FILE);
 
-function formatQueue(queue, viewer) {
-	let buf = queue.map((item, index) => `<tr${(!item.hosts.some(h => h.userid === viewer.userid) && viewer.userid !== item.staffHostId ? ` style="background-color: lightgray"` : "")}><td><button name="send" value="/scav dequeue ${index}" style="color: red; background-color: transparent; border: none; padding: 1px;">[x]</button><button name="send" value="/scav next ${index}" style="color: green; background-color: transparent; border: none; padding: 1px;">[start]</button>&nbsp;${Chat.escapeHTML(Chat.toListString(item.hosts.map(h => h.name)))}${item.hosts.every(h => h.userid !== item.staffHostId) ? ` / ${item.staffHostId}` : ''}</td><td>${(item.hosts.some(h => h.userid === viewer.userid) || viewer.userid === item.staffHostId ? item.questions.map((q, i) => i % 2 ? `<span style="color: green"><em>[${Chat.escapeHTML(q.join(' / '))}]</em></span><br />` : Chat.escapeHTML(q)).join(" ") : `[${item.questions.length / 2} hidden questions]`)}</td></tr>`).join("");
-	return `<div class="ladder"><table style="width: 100%"><tr><th>By</th><th>Questions</th></tr>${buf}</table></div><div style="text-align: right;"><button class="button" name="send" value="/scav next 0">Start the next hunt</button></div>`;
+function formatQueue(queue = [], viewer, room) {
+	const queueDisabled = room.scavQueueDisabled;
+	const timerDuration = room.defaultScavTimer || DEFAULT_TIMER_DURATION;
+	let buffer;
+	if (queue.length) {
+		buffer = queue.map((item, index) => `<tr${(!item.hosts.some(h => h.userid === viewer.userid) && viewer.userid !== item.staffHostId ? ` style="background-color: lightgray"` : "")}><td><button name="send" value="/scav dequeue ${index}" style="color: red; background-color: transparent; border: none; padding: 1px;">[x]</button><button name="send" value="/scav next ${index}" style="color: green; background-color: transparent; border: none; padding: 1px;">[start]</button>&nbsp;${Chat.escapeHTML(Chat.toListString(item.hosts.map(h => h.name)))}${item.hosts.every(h => h.userid !== item.staffHostId) ? ` / ${item.staffHostId}` : ''}</td><td>${(item.hosts.some(h => h.userid === viewer.userid) || viewer.userid === item.staffHostId ? item.questions.map((q, i) => i % 2 ? `<span style="color: green"><em>[${Chat.escapeHTML(q.join(' / '))}]</em></span><br />` : Chat.escapeHTML(q)).join(" ") : `[${item.questions.length / 2} hidden questions]`)}</td></tr>`).join("");
+	} else {
+		buffer = `<tr><td colspan=3>The scavenger queue is currently empty.</td></tr>`;
+	}
+	return `<div class="ladder"><table style="width: 100%"><tr><th>By</th><th>Questions</th></tr>${buffer}</table></div><table style="width: 100%"><tr><td style="text-align: left;">Auto Timer Duration: ${timerDuration} minutes</td><td>Auto Dequeue: <button class="button${!queueDisabled ? '" name="send" value="/scav disablequeue"' : ' disabled" style="font-weight:bold; color:#575757; font-weight:bold; background-color:#d3d3d3;"'}>OFF</button>&nbsp;<button class="button${queueDisabled ? '" name="send" value="/scav enablequeue"' : ' disabled" style="font-weight:bold; color:#575757; font-weight:bold; background-color:#d3d3d3;"'}>ON</button></td><td style="text-align: right;"><button class="button" name="send" value="/scav next 0">Start the next hunt</button></td></tr></table>`;
 }
 
 function formatOrder(place) {
@@ -425,7 +433,7 @@ class ScavengerHunt extends Rooms.RoomGame {
 	}
 
 	tryRunQueue(roomid) {
-		if (this.parentGame) return; // don't run the queue for child games.
+		if (this.parentGame || this.room.scavQueueDisabled) return; // don't run the queue for child games.
 		// prepare the next queue'd game
 		if (this.room.scavQueue && this.room.scavQueue.length) {
 			setTimeout(() => {
@@ -433,10 +441,11 @@ class ScavengerHunt extends Rooms.RoomGame {
 				if (!room || room.game || !room.scavQueue.length) return;
 
 				let next = room.scavQueue.shift();
+				let duration = room.defaultScavTimer || DEFAULT_TIMER_DURATION;
 				room.game = new ScavengerHunt(room, {userid: next.staffHostId, name: next.staffHostName}, next.hosts, false, next.questions);
-				room.game.setTimer(120); // auto timer of 2 hours for queue'd games.
+				room.game.setTimer(duration); // auto timer for queue'd games.
 
-				room.add(`|c|~|[ScavengerManager] A scavenger hunt by ${Chat.toListString(next.hosts.map(h => h.name))} has been automatically started. It will automatically end in 2 hours.`).update(); // highlight the users with "hunt by"
+				room.add(`|c|~|[ScavengerManager] A scavenger hunt by ${Chat.toListString(next.hosts.map(h => h.name))} has been automatically started. It will automatically end in ${duration} minutes.`).update(); // highlight the users with "hunt by"
 
 				// update the saved queue.
 				if (room.chatRoomData) {
@@ -829,6 +838,7 @@ let commands = {
 		if (!room.game || !room.game.scavGame) return this.errorReply(`There is no scavenger game currently running.`);
 
 		let game = room.game.childGame || room.game;
+		if (!('onViewHunt' in game)) return this.errorReply('There is currently no hunt to be viewed.');
 
 		game.onViewHunt(user);
 	},
@@ -892,7 +902,7 @@ let commands = {
 
 		let removed = room.scavQueue.splice(id, 1)[0];
 		this.privateModCommand(`(${user.name} has removed a scavenger hunt by [${removed.hosts.map(u => u.name).join(", ")}] from the queue.)`);
-		this.sendReply(`|uhtmlchange|scav-queue|${formatQueue(room.scavQueue, user)}`);
+		this.sendReply(`|uhtmlchange|scav-queue|${formatQueue(room.scavQueue, user, room)}`);
 
 		if (room.chatRoomData) {
 			room.chatRoomData.scavQueue = room.scavQueue;
@@ -904,9 +914,7 @@ let commands = {
 		if (room.id !== 'scavengers') return this.errorReply("This command can only be used in the scavengers room.");
 		if (!this.can('mute', null, room)) return false;
 
-		if (!room.scavQueue || !room.scavQueue.length) return this.sendReplyBox("The scavenger hunt queue is currently empty.");
-
-		this.sendReply(`|uhtml|scav-queue|${formatQueue(room.scavQueue, user)}`);
+		this.sendReply(`|uhtml|scav-queue|${formatQueue(room.scavQueue, user, room)}`);
 	},
 
 	next: function (target, room, user) {
@@ -923,13 +931,47 @@ let commands = {
 		let next = room.scavQueue.splice(target, 1)[0]; // returns [ hunt ]
 		room.game = new ScavengerHunt(room, {userid: next.staffHostId, name: next.staffHostName}, next.hosts, false, next.questions);
 
-		if (target) this.sendReply(`|uhtmlchange|scav-queue|${formatQueue(room.scavQueue, user)}`);
+		if (target) this.sendReply(`|uhtmlchange|scav-queue|${formatQueue(room.scavQueue, user, room)}`);
 
 		// update the saved queue.
 		if (room.chatRoomData) {
 			room.chatRoomData.scavQueue = room.scavQueue;
 			Rooms.global.writeChatRoomData();
 		}
+	},
+
+	enablequeue: 'disablequeue',
+	disablequeue: function (target, room, user) {
+		if (room.id !== 'scavengers') return this.errorReply("This command can only be used in the scavengers room.");
+		if (!this.can('mute', null, room)) return;
+
+		const state = this.cmd === 'disablequeue';
+		if ((room.scavQueueDisabled || false) === state) return this.errorReply(`The queue is already ${state ? 'disabled' : 'enabled'}.`);
+
+		room.scavQueueDisabled = state;
+		if (room.chatRoomData) {
+			room.chatRoomData.scavQueueDisabled = room.scavQueueDisabled;
+			Rooms.global.writeChatRoomData();
+		}
+		this.sendReply(`|uhtmlchange|scav-queue|${formatQueue(room.scavQueue, user, room)}`);
+		this.privateModCommand(`(The queue has been ${state ? 'disabled' : 'enabled'} by ${user.name}.)`);
+	},
+
+	defaulttimer: function (target, room, user) {
+		if (room.id !== 'scavengers') return this.errorReply("This command can only be used in the scavengers room.");
+		if (!this.can('declare', null, room)) return;
+
+		if (!target) return this.sendReply(`The default scavenger timer is currently set at: ${room.defaultScavTimer || DEFAULT_TIMER_DURATION} minutes.`);
+		const duration = parseInt(target);
+
+		if (!duration || duration < 0) return this.errorReply('The default timer must be an integer greater than zero, in minutes.');
+
+		room.defaultScavTimer = duration;
+		if (room.chatRoomData) {
+			room.chatRoomData.defaultScavTimer = room.defaultScavTimer;
+			Rooms.global.writeChatRoomData();
+		}
+		this.privateModCommand(`(The default scavenger timer has been set to ${duration} minutes by ${user.name}.)`);
 	},
 
 	/**
@@ -1230,6 +1272,7 @@ exports.commands = {
 			"- /scav setblitz [value] ... - sets the blitz award to `value`. Use `/scav setblitz` to view what the current blitz value is. (Requires: # & ~)",
 			"- /scav queue <em>[host] | [hint] | [answer] | [hint] | [answer] | [hint] | [answer] | ...</em> - queues a scavenger hunt to be started after the current hunt is finished. (Requires: % @ * # & ~)",
 			"- /scav viewqueue - shows the list of queued scavenger hunts to be automatically started, as well as the option to remove hunts from the queue. (Requires: % @ * # & ~)",
+			"- /scav defaulttimer [value] - sets the default timer applied to automatically started hunts from the queue.",
 			"- /nexthunt - starts the next hunt in the queue.",
 		].join('<br />');
 
