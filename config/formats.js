@@ -416,7 +416,7 @@ exports.Formats = [
 			'Perish Song', 'Focus Sash', 'Chansey + Charm + Seismic Toss', 'Chansey + Charm + Psywave', 'Flash', 'Kinesis', 'Leaf Tornado',
 			'Mirror Shot', 'Mud Bomb', 'Mud-Slap', 'Muddy Water', 'Night Daze', 'Octazooka', 'Sand Attack', 'Smokescreen',
 		],
-		unbanlist: ['Aegislash', 'Blaziken', 'Deoxys-Speed', 'Genesect', 'Landorus', 'Pheromosa', 'Gengarite', 'Lucarionite', 'Metagrossite'],
+		unbanlist: ['Aegislash', 'Blaziken', 'Deoxys-Speed', 'Genesect', 'Landorus', 'Pheromosa', 'Blazikenite', 'Gengarite', 'Lucarionite', 'Metagrossite'],
 	},
 	{
 		name: "[Gen 7] Mix and Mega",
