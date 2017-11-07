@@ -1401,7 +1401,7 @@ class Pokemon {
 		for (let linkedPoke of linkedPokemon) {
 			if (linkedPoke.volatiles[linkedStatus]) {
 				linkedPoke.volatiles[linkedStatus].linkedPokemon.splice(linkedPoke.volatiles[linkedStatus].linkedPokemon.indexOf(this), 1);
-				if (linkedPoke.volatiles[linkedStatus].linkedPokemon. length === 0) {
+				if (linkedPoke.volatiles[linkedStatus].linkedPokemon.length === 0) {
 					linkedPoke.removeVolatile(linkedStatus);
 				}
 			}
