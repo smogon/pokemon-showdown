@@ -12,11 +12,7 @@ type User = any;
 
 let Punishments = require('../punishments');
 let Chat = require('../chat');
-let Rooms = require('../rooms');
-type Room = any;
-type GlobalRoom = any;
-type GameRoom = any;
-type ChatRoom = any;
+type RoomBattle = any;
 
 let Verifier = require('../verifier');
 let Dnsbl = require('../dnsbl');
