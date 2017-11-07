@@ -92,7 +92,7 @@
 		"no-undef": ["error", {"typeof": true}],
 		"no-undefined": "off",
 		"no-unused-vars": ["warn", {"args": "none"}],
-		"no-use-before-define": ["error", {"functions": false, "classes": false}],
+		"no-use-before-define": ["error", {"functions": false, "classes": false, "variables": false}],
 
 		"callback-return": [2, ["callback", "cb", "done"]],
 		"no-mixed-requires": "error",

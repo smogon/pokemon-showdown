@@ -5,6 +5,7 @@ import * as PokemonType from './../sim/pokemon'
 import * as PRNGType from './../sim/prng'
 import * as SideType from './../sim/side'
 import * as TeamValidatorType from './../sim/team-validator'
+import * as RoomsType from './../rooms'
 
 declare global {
 	// modules
@@ -30,4 +31,12 @@ declare global {
 	const Template: typeof DataType.Template
 	const toId: typeof DataType.Tools.getId
 	const Tools: typeof DataType.Tools
+
+	// rooms
+	const GlobalRoom: typeof RoomsType.GlobalRoom
+	const ChatRoom: typeof RoomsType.ChatRoom
+	const GameRoom: typeof RoomsType.GameRoom
+	const RoomGame: typeof RoomsType.RoomGame
+	const RoomBattle: typeof RoomsType.RoomBattle
+	const Rooms: typeof RoomsType
 }
