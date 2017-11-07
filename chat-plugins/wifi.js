@@ -14,6 +14,7 @@ const BAN_DURATION = 7 * 24 * 60 * 60 * 1000;
 const RECENT_THRESHOLD = 30 * 24 * 60 * 60 * 1000;
 
 const STATS_FILE = 'config/chat-plugins/wifi.json';
+const BREEDING_FILE = 'config/chat-plugins/breeding.json';
 
 let stats = {};
 try {
@@ -25,6 +26,18 @@ if (!stats || typeof stats !== 'object') stats = {};
 
 function saveStats() {
 	FS(STATS_FILE).write(JSON.stringify(stats));
+}
+
+let breedingData = {};
+try {
+	breedingData = require(`../${BREEDING_FILE}`);
+} catch (e) {
+	if (e.code !== 'MODULE_NOT_FOUND') throw e;
+}
+if (!breedingData || typeof breedingData !== 'object') breedingData = {};
+
+function saveBreedingData() {
+	FS(BREEDING_FILE).write(JSON.stringify(breedingData));
 }
 
 function toPokemonId(str) {
@@ -793,7 +806,67 @@ let commands = {
 	},
 };
 
+let breedingcontests = {
+	winner: function (target, room, user) {
+		if (room.id !== 'wifi') return this.errorReply("This command can only be used in the Wi-Fi room.");
+		if (!this.can('ban', null, room)) return false;
+		let [contestName, winner, description, comment] = target.split(target.includes('|') ? '|' : ',').map(param => param.trim());
+		if (!(contestName && winner && description)) return this.errorReply("Invalid arguments specified - /setbreeding contest name | winner name | description | breeder's comments");
+
+		let entry = {name: contestName, winner: winner, description: description, comment: comment, time: Date.now()};
+
+		if (!breedingData.winners) breedingData.winners = {};
+		breedingData.winners[toId(contestName)] = entry;
+		breedingData.latest = toId(contestName);
+
+		saveBreedingData();
+		this.privateModCommand(`(A winner for the '${contestName}' breeding contest was set by ${user.name}.)`);
+	},
+	view: function (target, room, user) {
+		if (room.id !== 'wifi') return this.errorReply("This command can only be used in the Wi-Fi room.");
+		let contest = toId(target);
+		if (!contest) contest = breedingData.latest;
+		if (!contest) return this.errorReply("There have been no breeding contests.");
+		if (!(breedingData.winners && breedingData.winners[contest])) return this.errorReply(`Breeding contest '${contest}' couldn't be found in the archive.`);
+		if (!this.runBroadcast()) return false;
+
+		let entry = breedingData.winners[contest];
+		return this.sendReplyBox(`<div class="broadcast-blue"><p style="text-align:center;font-size:14pt;font-weight:bold;margin-bottom:2px;">Breeding contest: <b>${Chat.escapeHTML(entry.name)}</b>. Winner: <b>${Chat.escapeHTML(entry.winner)}</b></p>` +
+			`<table style="margin-left:auto;margin-right:auto;"><tr>` +
+			`<td style="text-align:center;width:15%">${Giveaway.getSprite(entry.description)[1]}</td><td style="text-align:center;width:40%">${Chat.parseText(entry.description)}</td>` +
+			(entry.comment ? `<td style="text-align:center;width:35%"><b>Breeder's comments:</b><br/><i>${Chat.escapeHTML(entry.comment)}</i></td>` : '') +
+			`</tr></table></div>`);
+	},
+	archive: function (target, room, user, connection) {
+		if (room.id !== 'wifi') return this.errorReply("This command can only be used in the Wi-Fi room.");
+		if (!this.canTalk()) return false;
+
+		if (!(breedingData.winners && Object.keys(breedingData.winners).length)) return this.errorReply("There have been no breeding contests.");
+
+		let output = `|wide||html|`;
+		let dateFormat = Intl.DateTimeFormat('en-US', {month: 'long', year: 'numeric'});
+
+		for (let key in breedingData.winners) {
+			let entry = breedingData.winners[key];
+			output += Chat.html `[${dateFormat.format(new Date(entry.time))}] <b>${entry.name}</b>. Winner: ${entry.winner}<br/>`;
+		}
+
+		return connection.popup(output);
+	},
+	help: function (target, room, user) {
+		if (room.id !== 'wifi') return this.errorReply("This command can only be used in the Wi-Fi room.");
+		if (!this.runBroadcast()) return;
+		return this.sendReplyBox('<strong>Breeding contest commands: </strong> (start with /breedingcontest, /breeding or /bc) <br />' +
+			'- winner <em>Contest name | Winner | Mon description [| Breeder\'s comments]</em> - Add a new breeding contest winner (Requires: @ * # & ~)<br />' +
+			'- view [Contest name] - Shows the hall of fame entry for the given contest, or the latest contest if no name is entered.<br />' +
+			'- archive - Shows the archive of all past breeding contests.<br />');
+	},
+};
+
 exports.commands = {
+	'breeding': 'breedingcontest',
+	'bc': 'breedingcontest',
+	'breedingcontest': breedingcontests,
 	'giveaway': commands,
 	'ga': commands.guess,
 	'gh': commands.help,
