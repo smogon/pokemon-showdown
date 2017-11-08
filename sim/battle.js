@@ -3023,7 +3023,7 @@ class Battle extends Dex.ModdedDex {
 	}
 
 	/**
-	 * @param {(string | number | AnyObject)[]} parts
+	 * @param {(string | number | ((side: true | Side | null) => string) | AnyObject)[]} parts
 	 */
 	add(...parts) {
 		if (!parts.some(part => typeof part === 'function')) {
@@ -3031,11 +3031,12 @@ class Battle extends Dex.ModdedDex {
 			return;
 		}
 		this.log.push('|split');
+		/** @type {(true | Side | null)[]} */
 		let sides = [null, this.sides[0], this.sides[1], true];
-		for (let i = 0; i < sides.length; ++i) {
+		for (const side of sides) {
 			let sideUpdate = '|' + parts.map(part => {
 				if (typeof part !== 'function') return part;
-				return part(sides[i]);
+				return part(side);
 			}).join('|');
 			this.log.push(sideUpdate);
 		}

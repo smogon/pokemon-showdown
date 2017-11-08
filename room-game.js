@@ -61,10 +61,11 @@ class RoomGamePlayer {
 // globally Rooms.RoomGame
 class RoomGame {
 	/**
-	 * @param {Room} room
+	 * @param {ChatRoom | GameRoom} room
 	 */
 	constructor(room) {
 		this.id = room.id;
+		/** @type {ChatRoom | GameRoom} */
 		this.room = room;
 		this.gameid = 'game';
 		this.title = 'Game';
@@ -76,7 +77,7 @@ class RoomGame {
 
 	destroy() {
 		this.room.game = null;
-		this.room = null;
+		this.room = /** @type {any} */ (null);
 		for (let i in this.players) {
 			this.players[i].destroy();
 		}

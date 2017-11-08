@@ -10,8 +10,6 @@ let Users = require('../users');
 type Connection = any;
 type User = any;
 
-let Punishments = require('../punishments');
-let Chat = require('../chat');
 type RoomBattle = any;
 
 let Verifier = require('../verifier');

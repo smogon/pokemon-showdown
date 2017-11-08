@@ -1621,7 +1621,7 @@ class ChatRoom extends BasicRoom {
 
 /**
  * @param {string | Room | undefined} roomid
- * @return {Room | undefined}
+ * @return {Room}
  */
 function getRoom(roomid) {
 	// @ts-ignore
@@ -1631,6 +1631,9 @@ function getRoom(roomid) {
 }
 
 /** @typedef {GlobalRoom | GameRoom | ChatRoom} Room */
+
+// workaround to stop TypeScript from checking room-battle
+let roomBattleLoc = './room-battle';
 
 let Rooms = Object.assign(getRoom, {
 	/**
@@ -1646,6 +1649,7 @@ let Rooms = Object.assign(getRoom, {
 	get: getRoom,
 	/**
 	 * @param {string} name
+	 * @return {Room | undefined}
 	 */
 	search(name) {
 		return getRoom(name) || getRoom(toId(name)) || getRoom(Rooms.aliases.get(toId(name)));
@@ -1751,10 +1755,10 @@ let Rooms = Object.assign(getRoom, {
 	RoomGame: require('./room-game').RoomGame,
 	RoomGamePlayer: require('./room-game').RoomGamePlayer,
 
-	RoomBattle: require('./room-battle').RoomBattle,
-	RoomBattlePlayer: require('./room-battle').RoomBattlePlayer,
-	SimulatorManager: require('./room-battle').SimulatorManager,
-	SimulatorProcess: require('./room-battle').SimulatorProcess,
+	RoomBattle: require(roomBattleLoc).RoomBattle,
+	RoomBattlePlayer: require(roomBattleLoc).RoomBattlePlayer,
+	SimulatorManager: require(roomBattleLoc).SimulatorManager,
+	SimulatorProcess: require(roomBattleLoc).SimulatorProcess,
 });
 
 // initialize

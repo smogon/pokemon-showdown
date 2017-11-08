@@ -968,7 +968,9 @@ Chat.loadPlugins = function () {
 		if (data) Chat.package = JSON.parse(data);
 	});
 
-	Chat.baseCommands = require('./chat-commands').commands;
+	// prevent TypeScript from resolving
+	const baseCommands = './chat-commands';
+	Chat.baseCommands = require(baseCommands).commands;
 	let commands = Chat.commands = Object.assign({}, Chat.baseCommands);
 
 	if (Config.chatfilter) Chat.filters.push(Config.chatfilter);
