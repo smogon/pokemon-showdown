@@ -811,7 +811,7 @@ let breedingcontests = {
 		if (room.id !== 'wifi') return this.errorReply("This command can only be used in the Wi-Fi room.");
 		if (!this.can('ban', null, room)) return false;
 		let [contestName, link, winner, description, comment] = target.split(target.includes('|') ? '|' : ',').map(param => param.trim());
-		if (!(contestName && link && winner && description)) return this.errorReply("Invalid arguments specified - /setbreeding contest name | winner name | description | breeder's comments");
+		if (!(contestName && link && winner && description)) return this.errorReply("Invalid arguments specified - /setbreeding contest name | link | winner name | description | breeder's comments");
 
 		let entry = {name: contestName, link: link, winner: winner, description: description, comment: comment, time: Date.now()};
 
@@ -857,7 +857,7 @@ let breedingcontests = {
 		if (room.id !== 'wifi') return this.errorReply("This command can only be used in the Wi-Fi room.");
 		if (!this.runBroadcast()) return;
 		return this.sendReplyBox('<strong>Breeding contest commands: </strong> (start with /breedingcontest, /breeding or /bc) <br />' +
-			'- winner <em>Contest name | Winner | Mon description [| Breeder\'s comments]</em> - Add a new breeding contest winner (Requires: @ * # & ~)<br />' +
+			'- winner <em>Contest name | Link | Winner | Mon description [| Breeder\'s comments]</em> - Add a new breeding contest winner (Requires: @ * # & ~)<br />' +
 			'- view [Contest name] - Shows the hall of fame entry for the given contest, or the latest contest if no name is entered.<br />' +
 			'- archive - Shows the archive of all past breeding contests.<br />');
 	},
