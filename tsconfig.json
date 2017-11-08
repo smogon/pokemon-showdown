@@ -11,7 +11,9 @@
     },
     "types": ["node"],
     "include": [
-        "./dev-tools/*.ts",
+        "./dev-tools/global.d.ts",
+        "./dev-tools/globals.ts",
+        "./dev-tools/node.d.ts",
         "./sim/*.js",
         "./crashlogger.js",
         "./dnsbl.js",
