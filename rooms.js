@@ -626,7 +626,7 @@ class GlobalRoom extends BasicRoom {
 	/**
 	 * @param {string} filter "formatfilter, elofilter"
 	 */
-	getRoomList(filter) {
+	getBattles(filter) {
 		let rooms = /** @type {GameRoom[]} */ ([]);
 		let skipCount = 0;
 		const [formatFilter, eloFilterString] = filter.split(',');
