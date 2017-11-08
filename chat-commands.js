@@ -2316,10 +2316,14 @@ exports.commands = {
 			return this.errorReply(`[${duplicates.join(', ')}] ${Chat.plural(duplicates, "are", "is")} already blacklisted.`);
 		}
 
+		const userRank = Config.groupsranking.indexOf(room.getAuth(user));
 		for (const userid of targets) {
+			const targetRank = Config.groupsranking.indexOf(room.getAuth({userid}));
+			if (targetRank >= userRank) return this.errorReply(`/blacklistname - Access denied: ${userid} is of equal or higher authority than you.`);
+
 			Punishments.roomBlacklist(room, null, null, userid, reason);
 
-			let trusted = Users.isTrusted(userid);
+			const trusted = Users.isTrusted(userid);
 			if (trusted && room.isPrivate !== true) {
 				Monitor.log("[CrisisMonitor] Trusted user " + userid + (trusted !== userid ? " (" + trusted + ")" : "") + " was nameblacklisted from " + room.id + " by " + user.name + ", and should probably be demoted.");
 			}
