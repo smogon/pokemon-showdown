@@ -375,15 +375,13 @@ exports.Formats = [
 		validateSet: function (set, teamHas) {
 			let dual = this.dex.getItem(set.ability);
 			if (!dual.exists) return this.validateSet(set, teamHas);
+			let item = this.dex.getItem(set.item);
 			let validator = new this.constructor(Dex.getFormat(this.format.id, ['Ignore Illegal Abilities']));
-			return validator.validateSet(Object.assign({}, set, {ability: ''}), teamHas) || validator.validateSet(Object.assign({}, set, {ability: '', item: set.ability}, teamHas));
+			let problems = validator.validateSet(Object.assign({}, set, {ability: ''}), teamHas) || validator.validateSet(Object.assign({}, set, {ability: '', item: set.ability}, teamHas)) || [];
+			if (dual.id === item.id) problems.push(`You cannot have two of the same item on a Pokemon. (${set.name || set.species} has two of ${item.name})`);
+			if (item.isChoice && dual.isChoice) problems.push(`You cannot have two choice items on a Pokemon. (${set.name || set.species} has ${item.name} and ${dual.name})`);
+			return problems;
 	  },
-		onValidateSet: function (set) {
-			let item = this.getItem(set.item);
-			let item2 = this.getItem(set.ability);
-			if (item.id === item2.id) return [`You cannot have two of the same item on a Pokemon. (${set.name || set.species} has two of ${this.getItem(set.item).name})`];
-			if (item.isChoice && item2.isChoice) return [`You cannot have two choice items on a Pokemon. (${set.name || set.species} has ${item.name} and ${item2.name})`];
-		},
 	},
 	{
 		section: "Other Metagames",
