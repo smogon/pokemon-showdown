@@ -92,7 +92,6 @@ class BasicRoom {
 		this.filterStretching = false;
 		this.filterEmojis = false;
 		this.filterCaps = false;
-		this.reportJoins = Config.reportbattlejoins;
 		/** @type {Set<string>?} */
 		this.privacySetter = null;
 	}
