@@ -3513,7 +3513,7 @@ exports.commands = {
 		} else if (cmd === 'roomlist') {
 			if (!trustable) return false;
 			connection.send('|queryresponse|roomlist|' + JSON.stringify({
-				rooms: Rooms.global.getRoomList(target),
+				rooms: Rooms.global.getBattles(target),
 			}));
 		} else if (cmd === 'rooms') {
 			if (!trustable) return false;
