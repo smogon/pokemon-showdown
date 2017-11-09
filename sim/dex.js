@@ -1218,7 +1218,7 @@ class ModdedDex {
 			if (!dataObject[key] || typeof dataObject[key] !== 'object') return new TypeError(`${filePath}, if it exists, must export an object whose '${key}' property is a non-null object`);
 			return dataObject[key];
 		} catch (e) {
-			if (e.code !== 'MODULE_NOT_FOUND') {
+			if (e.code !== 'MODULE_NOT_FOUND' && e.code !== 'ENOENT') {
 				throw e;
 			}
 		}
@@ -1351,7 +1351,9 @@ class ModdedDex {
 		try {
 			Formats = require(FORMATS).Formats;
 		} catch (e) {
-			if (e.code !== 'MODULE_NOT_FOUND') throw e;
+			if (e.code !== 'MODULE_NOT_FOUND' && e.code !== 'ENOENT') {
+				throw e;
+			}
 		}
 		if (!Array.isArray(Formats)) throw new TypeError(`Exported property 'Formats' from "./config/formats.js" must be an array`);
 
