@@ -1399,6 +1399,8 @@ exports.commands = {
 				if (format.removedRules && format.removedRules.length) rules.push("<b>Removed rules</b> - " + Chat.escapeHTML(format.removedRules.join(", ")));
 				if (format.banlist && format.banlist.length) rules.push("<b>Bans</b> - " + Chat.escapeHTML(format.banlist.join(", ")));
 				if (format.unbanlist && format.unbanlist.length) rules.push("<b>Unbans</b> - " + Chat.escapeHTML(format.unbanlist.join(", ")));
+				if (format.bannedStones && format.bannedStones.length) rules.push("<b>Banned Mega Stones</b> - " + Chat.escapeHTML(format.bannedStones.join(", ")));
+				if (format.cannotMega && format.cannotMega.length) rules.push("<b>Can't Mega Evolve non-natively</b> - " + Chat.escapeHTML(format.cannotMega.join(", ")));
 				if (format.bannedAbilities && format.bannedAbilities.length) rules.push("<b>Non-usable abilities</b> - " + Chat.escapeHTML(format.bannedAbilities.join(", ")));
 				if (format.noLearn && format.noLearn.length) rules.push("<b>Non-learnable moves</b> - " + Chat.escapeHTML(format.noLearn.join(", ")));
 				if (rules.length > 0) {
