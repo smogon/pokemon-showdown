@@ -529,16 +529,17 @@ class CommandContext {
 		this.logEntry(data);
 		this.room.modlog(data + (logOnlyText || ""));
 	}
-	globalModlog(action, user, text) {
-		let buf = "(" + this.room.id + ") " + action + ": ";
+	globalModlog(action, user, note) {
+		let buf = `(${this.room.id}) ${action}: `;
 		if (typeof user === 'string') {
-			buf += "[" + toId(user) + "]";
+			buf += `[${toId(user)}]`;
 		} else {
 			let userid = user.getLastId();
-			buf += "[" + userid + "]";
-			if (user.autoconfirmed && user.autoconfirmed !== userid) buf += " ac:[" + user.autoconfirmed + "]";
+			buf += `[${userid}]`;
+			if (user.autoconfirmed && user.autoconfirmed !== userid) buf += ` ac:[${user.autoconfirmed}]`;
+			buf += ` [${user.latestIp}]`;
 		}
-		buf += text;
+		buf += note;
 		Rooms.global.modlog(buf);
 	}
 	logEntry(data) {
