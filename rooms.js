@@ -1256,7 +1256,6 @@ class ChatRoom extends BasicRoom {
 	 */
 	constructor(roomid, title, options = {}) {
 		super(roomid, title);
-		if (!this.isPersonal) this.chatRoomData = options;
 
 		this.logTimes = true;
 		this.logFile = null;
@@ -1275,6 +1274,7 @@ class ChatRoom extends BasicRoom {
 		this.staffMessage = '';
 		this.autojoin = false;
 		this.staffAutojoin = /** @type {string | boolean} */ (false);
+		this.chatRoomData = (options.isPersonal ? options : null);
 		Object.assign(this, options);
 		if (this.auth) Object.setPrototypeOf(this.auth, null);
 
