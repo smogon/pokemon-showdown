@@ -79,12 +79,14 @@ exports.BattleMovedex = {
 				this.add('-activate', source, 'move: Trick', '[of] ' + target);
 				if (myDual) {
 					target.setAbility(myDual);
+					target.baseAbility = target.ability;
 					this.add('-item', target, myDual, '[from] move: Switcheroo');
 				} else {
 					this.add('-enditem', target, yourDual, '[silent]', '[from] move: Switcheroo');
 				}
 				if (yourDual) {
 					source.setAbility(yourDual);
+					source.baseAbility = source.ability;
 					this.add('-item', source, yourDual, '[from] move: Switcheroo');
 				} else {
 					this.add('-enditem', source, myDual, '[silent]', '[from] move: Switcheroo');
