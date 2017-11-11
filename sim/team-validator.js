@@ -203,6 +203,10 @@ class Validator {
 			template = dex.getTemplate('greninjaash');
 			set.gender = 'M';
 		}
+		// TODO: Properly implement Rockruff + Happy Hour validation
+		if (template.id === 'rockruffdusk') {
+			template = dex.getTemplate('rockruff');
+		}
 		if (!template.exists) {
 			return [`The Pokemon "${set.species}" does not exist.`];
 		}

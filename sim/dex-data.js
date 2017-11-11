@@ -900,6 +900,12 @@ class Move extends Effect {
 		this.ignoreDefensive = this.ignoreDefensive;
 
 		/**
+		 * Whether or not this move uses the source's highest raw stat.
+		 * @type {boolean}
+		 */
+		this.useBestSourceOffensive = this.useBestSourceOffensive;
+
+		/**
 		 * Whether or not this move ignores type immunities. Defaults to
 		 * true for Status moves and false for Physical/Special moves.
 		 * @type {AnyObject | boolean}
