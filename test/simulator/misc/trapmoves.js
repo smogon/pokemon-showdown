@@ -90,6 +90,33 @@ describe('Trapping Moves', function () {
 			assert.strictEqual(battle.p2.active[0].template.speciesid, 'cradily');
 			assert.strictEqual(battle.p2.active[1].template.speciesid, 'hippowdon');
 		});
+
+		if (i < 3) {
+			// Only test on moves that existed in gen 4
+			it('should be passed when the user uses Baton Pass in Gen 4', function () {
+				battle = common.gen(4).createBattle();
+				battle.join('p1', 'Guest 1', 1, [
+					{species: "Smeargle", ability: 'prankster', moves: [toId(trappers[i]), 'batonpass']},
+					{species: "Shedinja", ability: 'wonderguard', moves: ['rest']},
+				]);
+				battle.join('p2', 'Guest 2', 1, [
+					{species: "Tangrowth", ability: 'leafguard', moves: ['synthesis', 'roar']},
+					{species: "Starmie", ability: 'illuminate', moves: ['reflecttype']},
+				]);
+				battle.commitDecisions();
+				battle.choose('p1', 'move 2');
+				battle.commitDecisions();
+				battle.choose('p1', 'switch 2');
+				battle.choose('p2', 'switch 2');
+				battle.commitDecisions();
+				assert.strictEqual(battle.p2.active[0].template.speciesid, 'tangrowth');
+				battle.choose('p2', 'move 2');
+				battle.commitDecisions();
+				battle.choose('p2', 'switch 2');
+				battle.commitDecisions();
+				assert.strictEqual(battle.p2.active[0].template.speciesid, 'starmie');
+			});
+		}
 	}
 });
 
