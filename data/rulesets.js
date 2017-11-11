@@ -730,33 +730,23 @@ exports.BattleFormats = {
 			return -typeMod;
 		},
 	},
-	sketchclause: {
-		effectType: 'ValidatorRule',
-		name: 'Sketch Clause',
-		desc: ["Prevents multiple Pok&eacute;mon on the same team from Sketching the same move"],
-		onValidateTeam: function (team) {
-			let sketchedMoves = {};
-			for (let i = 0; i < team.length; i++) {
-				let move = team[i].sketchmonsMove;
-				if (!move) continue;
-				if (move in sketchedMoves) {
-					return ["You are limited to sketching one of each move by the Sketch Clause.", "(You have sketched " + this.getMove(move).name + " more than once)"];
-				}
-				sketchedMoves[move] = (team[i].name || team[i].species);
-			}
-		},
-	},
 	ignoreillegalabilities: {
 		effectType: 'ValidatorRule',
 		name: 'Ignore Illegal Abilities',
 		desc: ["Allows Pok&eacute;mon to use any ability"],
-		// Implemented in the 'pokemon' ruleset and in teamvalidator.js
+		// Implemented in the 'pokemon' ruleset and in team-validator.js
+	},
+	ignorestabmoves: {
+		effectType: 'ValidatorRule',
+		name: 'Ignore STAB Moves',
+		desc: ["Allows Pok&eacute;mon to use any move that they or a previous evolution/out-of-battle forme share a type with"],
+		// Implemented in team-validator.js
 	},
 	allowonesketch: {
 		effectType: 'ValidatorRule',
 		name: 'Allow One Sketch',
 		desc: ["Allows each Pok&eacute;mon to use one move they don't normally have access to via Sketch"],
-		// Implemented in teamvalidator.js
+		// Implemented in team-validator.js
 	},
 	allowcap: {
 		effectType: 'ValidatorRule',
