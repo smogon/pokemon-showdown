@@ -496,7 +496,7 @@ class GlobalRoom extends BasicRoom {
 				}
 				writing = true;
 
-				let data = JSON.stringify(this.chatRoomData)
+				let data = JSON.stringify(this.chatRoomDataList)
 					.replace(/\{"title":/g, '\n{"title":')
 					.replace(/\]$/, '\n]');
 
