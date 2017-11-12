@@ -168,6 +168,7 @@ class RandomGen3Teams extends RandomGen4Teams {
 					break;
 				case 'endeavor': case 'flail': case 'reversal':
 					if (!hasMove['substitute'] && !hasMove['endure']) rejected = true;
+					if (moveid === 'flail' && hasMove['extremespeed']) rejected = true;
 					break;
 
 				// Bad after setup
@@ -214,9 +215,6 @@ class RandomGen3Teams extends RandomGen4Teams {
 				case 'bodyslam': case 'doubleedge':
 					if (hasMove['return'] || hasMove['flail'] || hasMove['endure'] && movePool.includes('flail')) rejected = true;
 					if (moveid === 'doubleedge' && hasMove['bodyslam']) rejected = true;
-					break;
-				case 'flail':
-					if (hasMove['extremespeed']) rejected = true;
 					break;
 				case 'headbutt':
 					if (!hasMove['bodyslam'] && !hasMove['thunderwave']) rejected = true;
