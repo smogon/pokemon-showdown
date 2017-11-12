@@ -1306,9 +1306,9 @@ class Pokemon {
 	 * @param {string | Effect} status
 	 * @param {Pokemon} source
 	 * @param {Effect} sourceEffect
-	 * @param {string | Effect} linkedStatus
+	 * @param {string | Effect?} linkedStatus
 	 */
-	addVolatile(status, source, sourceEffect, linkedStatus) {
+	addVolatile(status, source, sourceEffect, linkedStatus = null) {
 		let result;
 		status = this.battle.getEffect(status);
 		if (!this.hp && !status.affectsFainted) return false;
