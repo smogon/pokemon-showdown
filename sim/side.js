@@ -188,10 +188,10 @@ class Side {
 
 	/**
 	 * @param {string | Effect} status
-	 * @param {Pokemon} source
-	 * @param {Effect} sourceEffect
+	 * @param {Pokemon?} source
+	 * @param {Effect?} sourceEffect
 	 */
-	addSideCondition(status, source, sourceEffect) {
+	addSideCondition(status, source = null, sourceEffect = null) {
 		status = this.battle.getEffect(status);
 		if (this.sideConditions[status.id]) {
 			if (!status.onRestart) return false;

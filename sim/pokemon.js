@@ -890,10 +890,10 @@ class Pokemon {
 	 * faint queue is resolved.
 	 *
 	 * Returns the amount of damage actually dealt
-	 * @param {Pokemon} source
-	 * @param {Effect} effect
+	 * @param {Pokemon?} source
+	 * @param {Effect?} effect
 	 */
-	faint(source, effect) {
+	faint(source = null, effect = null) {
 		if (this.fainted || this.faintQueued) return 0;
 		let d = this.hp;
 		this.hp = 0;
@@ -909,10 +909,10 @@ class Pokemon {
 
 	/**
 	 * @param {number} d
-	 * @param {Pokemon} source
-	 * @param {Effect} effect
+	 * @param {Pokemon?} source
+	 * @param {Effect?} effect
 	 */
-	damage(d, source, effect) {
+	damage(d, source = null, effect = null) {
 		if (!this.hp) return 0;
 		if (d < 1 && d > 0) d = 1;
 		d = Math.floor(d);
@@ -975,10 +975,10 @@ class Pokemon {
 	/**
 	 * Returns the amount of damage actually healed
 	 * @param {number} d
-	 * @param {Pokemon} [source]
-	 * @param {Effect} [effect]
+	 * @param {Pokemon?} [source]
+	 * @param {Effect?} [effect]
 	 */
-	heal(d, source, effect) {
+	heal(d, source = null, effect = null) {
 		if (!this.hp) return false;
 		d = Math.floor(d);
 		if (isNaN(d)) return false;
@@ -1012,10 +1012,10 @@ class Pokemon {
 
 	/**
 	 * @param {string} status
-	 * @param {Pokemon} source
-	 * @param {Effect} sourceEffect
+	 * @param {Pokemon?} source
+	 * @param {Effect?} sourceEffect
 	 */
-	trySetStatus(status, source, sourceEffect) {
+	trySetStatus(status, source = null, sourceEffect = null) {
 		return this.setStatus(this.status || status, source, sourceEffect);
 	}
 
@@ -1033,11 +1033,11 @@ class Pokemon {
 
 	/**
 	 * @param {string | Effect} status
-	 * @param {Pokemon} [source]
-	 * @param {Effect} [sourceEffect]
+	 * @param {Pokemon?} [source]
+	 * @param {Effect?} [sourceEffect]
 	 * @param {boolean} [ignoreImmunities]
 	 */
-	setStatus(status, source, sourceEffect, ignoreImmunities) {
+	setStatus(status, source = null, sourceEffect = null, ignoreImmunities = false) {
 		if (!this.hp) return false;
 		status = this.battle.getEffect(status);
 		if (this.battle.event) {
@@ -1304,15 +1304,15 @@ class Pokemon {
 
 	/**
 	 * @param {string | Effect} status
-	 * @param {Pokemon} source
-	 * @param {Effect} sourceEffect
+	 * @param {Pokemon?} source
+	 * @param {Effect?} sourceEffect
 	 * @param {string | Effect?} linkedStatus
 	 */
-	addVolatile(status, source, sourceEffect, linkedStatus = null) {
+	addVolatile(status, source = null, sourceEffect = null, linkedStatus = null) {
 		let result;
 		status = this.battle.getEffect(status);
 		if (!this.hp && !status.affectsFainted) return false;
-		if (linkedStatus && !source.hp) return false;
+		if (linkedStatus && source && !source.hp) return false;
 		if (this.battle.event) {
 			if (!source) source = this.battle.event.source;
 			if (!sourceEffect) sourceEffect = this.battle.effect;
