@@ -1061,8 +1061,12 @@ exports.commands = {
 	roomaliashelp: [
 		"/roomalias - displays a list of all room aliases of the room the command was entered in.",
 		"/roomalias [alias] - adds the given room alias to the room the command was entered in. Requires: & ~",
+		"/removeroomalias [alias] - removes the given room alias of the room the command was entered in. Requires: & ~",
 	],
 
+	deleteroomalias: 'removeroomalias',
+	deroomalias: 'removeroomalias',
+	unroomalias: 'removeroomalias',
 	removeroomalias: function (target, room, user) {
 		if (!room.aliases) return this.errorReply("This room does not have any aliases.");
 		if (!this.can('makeroom')) return false;
