@@ -25,6 +25,8 @@
 
 'use strict';
 
+const PLAYER_SYMBOL = '\u2606';
+
 const THROTTLE_DELAY = 600;
 const THROTTLE_BUFFER_LIMIT = 6;
 const THROTTLE_MULTILINE_WARN = 3;
@@ -1612,3 +1614,5 @@ Users.socketReceive = function (worker, workerid, socketid, message) {
 		Monitor.warn(`[slow] ${deltaTime}ms - ${user.name} <${connection.ip}>: ${roomId}|${message}`);
 	}
 };
+
+Users.PLAYER_SYMBOL = PLAYER_SYMBOL;
