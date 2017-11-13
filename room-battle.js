@@ -735,7 +735,7 @@ class Battle {
 		if (!player) return false;
 		this.players[user.userid] = player;
 		this.playerCount++;
-		this.room.auth[user.userid] = '\u2606';
+		this.room.auth[user.userid] = Users.PLAYER_SYMBOL;
 		if (this.playerCount >= 2) {
 			this.room.title = `${this.p1.name} vs. ${this.p2.name}`;
 			this.room.send(`|title|${this.room.title}`);
