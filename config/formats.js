@@ -1322,7 +1322,7 @@ exports.Formats = [
 
 		mod: 'gen1',
 		team: 'random',
-		ruleset: ['Pokemon', 'Standard',
+		ruleset: ['Pokemon', 'Standard'],
 	},
 	{
 		name: "[Gen 1] Challenge Cup",
