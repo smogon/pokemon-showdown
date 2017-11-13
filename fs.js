@@ -27,7 +27,7 @@ const fs = require('fs');
 
 /*eslint no-unused-expressions: ["error", { "allowTernary": true }]*/
 
-class Path {
+class FSPath {
 	/**
 	 * @param {string} path
 	 */
@@ -35,7 +35,7 @@ class Path {
 		this.path = pathModule.resolve(__dirname, path);
 	}
 	parentDir() {
-		return new Path(pathModule.dirname(this.path));
+		return new FSPath(pathModule.dirname(this.path));
 	}
 	read(/** @type {AnyObject | string} */ options = {}) {
 		return new Promise((resolve, reject) => {
@@ -282,7 +282,7 @@ class Path {
  * @param {string} path
  */
 function getFs(path) {
-	return new Path(path);
+	return new FSPath(path);
 }
 
 module.exports = getFs;
