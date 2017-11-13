@@ -5,7 +5,7 @@
 
 'use strict';
 
-const fs = require('fs');
+const FS = require('../fs');
 
 const CATEGORIES = {
 	ae: 'Arts and Entertainment',
@@ -69,35 +69,11 @@ if (triviaData.ugm) {
 if (triviaData.questions.some(q => !q.type)) { triviaData.questions = triviaData.questions.map(q => Object.assign(q, {type: 'trivia'})); }
 
 
-const writeTriviaData = (() => {
-	let writing = false;
-	let writePending = false;
-	return () => {
-		if (writing) {
-			writePending = true;
-			return;
-		}
-		writing = true;
-
-		let data = JSON.stringify(triviaData, null, 2);
-		let path = 'config/chat-plugins/triviadata.json';
-		let tempPath = `${path}.0`;
-
-		fs.writeFile(tempPath, data, () => {
-			fs.rename(tempPath, path, () => {
-				writing = false;
-				if (writePending) {
-					writePending = false;
-					setImmediate(() => writeTriviaData());
-				}
-
-				data = null;
-				path = null;
-				tempPath = null;
-			});
-		});
-	};
-})();
+function writeTriviaData() {
+	FS('config/chat-plugins/triviadata.json').writeUpdate(() => (
+		JSON.stringify(triviaData, null, 2)
+	));
+}
 
 // Binary search for the index at which to splice in new questions in a category,
 // or the index at which to slice up to for a category's questions

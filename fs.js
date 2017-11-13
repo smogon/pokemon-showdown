@@ -84,6 +84,57 @@ class FSPath {
 		return fs.writeFileSync(this.path, data, options);
 	}
 	/**
+	 * Writes to a new file before renaming to replace an old file. If
+	 * the process crashes while writing, the old file won't be lost.
+	 * Does not protect against simultaneous writing; use writeUpdate
+	 * for that.
+	 *
+	 * @param {string | Buffer} data
+	 * @param {Object} options
+	 */
+	async safeWrite(data, options = {}) {
+		await FS(this.path + '.NEW').write(data, options);
+		await FS(this.path + '.NEW').rename(this.path);
+	}
+	/**
+	 * @param {string | Buffer} data
+	 * @param {Object} options
+	 */
+	safeWriteSync(data, options = {}) {
+		FS(this.path + '.NEW').writeSync(data, options);
+		FS(this.path + '.NEW').renameSync(this.path);
+	}
+	/**
+	 * Safest way to update a file with in-memory state.
+	 *
+	 * Ignore the returned Promise; it's not meaningful.
+	 *
+	 * @param {() => string | Buffer} dataFetcher
+	 * @param {Object} options
+	 */
+	async writeUpdate(dataFetcher, options = {}) {
+		if (Config.nofswriting) return;
+		const pendingUpdate = FS.pendingUpdates.get(this.path);
+		if (pendingUpdate) {
+			pendingUpdate[1] = dataFetcher;
+			pendingUpdate[2] = options;
+			return;
+		}
+		let pendingFetcher = /** @type {(() => string | Buffer)?} */ (dataFetcher);
+		while (pendingFetcher) {
+			let updatePromise = this.safeWrite(pendingFetcher(), options);
+			FS.pendingUpdates.set(this.path, [updatePromise, null, options]);
+			await updatePromise;
+			if (options.throttle) {
+				await new Promise(resolve => setTimeout(resolve, options.throttle));
+			}
+			const pendingUpdate = FS.pendingUpdates.get(this.path);
+			if (!pendingUpdate) return;
+			[updatePromise, pendingFetcher, options] = pendingUpdate;
+		}
+		FS.pendingUpdates.delete(this.path);
+	}
+	/**
 	 * @param {string | Buffer} data
 	 * @param {Object} options
 	 */
@@ -285,4 +336,11 @@ function getFs(path) {
 	return new FSPath(path);
 }
 
-module.exports = getFs;
+const FS = Object.assign(getFs, {
+	/**
+	 * @type {Map<string, [Promise, (() => string | Buffer)?, Object]>}
+	 */
+	pendingUpdates: new Map(),
+});
+
+module.exports = FS;
