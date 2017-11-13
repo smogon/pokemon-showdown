@@ -687,7 +687,10 @@ class Pokemon {
 			if (this.volatiles[i].linkedPokemon) {
 				delete pokemon.volatiles[i].linkedPokemon;
 				delete pokemon.volatiles[i].linkedStatus;
-				this.volatiles[i].linkedPokemon.volatiles[this.volatiles[i].linkedStatus].linkedPokemon = this;
+				for (let linkedPoke of this.volatiles[i].linkedPokemon) {
+					let linkedPokeLinks = linkedPoke.volatiles[this.volatiles[i].linkedStatus].linkedPokemon;
+					linkedPokeLinks[linkedPokeLinks.indexOf(pokemon)] = this;
+				}
 			}
 		}
 		pokemon.clearVolatile();
@@ -851,7 +854,7 @@ class Pokemon {
 		this.hpPower = this.baseHpPower;
 		for (let i in this.volatiles) {
 			if (this.volatiles[i].linkedStatus) {
-				this.volatiles[i].linkedPokemon.removeVolatile(this.volatiles[i].linkedStatus);
+				this.removeLinkedVolatiles(this.volatiles[i].linkedStatus, this.volatiles[i].linkedPokemon);
 			}
 		}
 		this.volatiles = {};
@@ -1349,11 +1352,15 @@ class Pokemon {
 			delete this.volatiles[status.id];
 			return result;
 		}
-		if (linkedStatus && source && !source.volatiles[linkedStatus.toString()]) {
-			source.addVolatile(linkedStatus, this, sourceEffect, status);
-			source.volatiles[linkedStatus.toString()].linkedPokemon = this;
-			source.volatiles[linkedStatus.toString()].linkedStatus = status;
-			this.volatiles[status.toString()].linkedPokemon = source;
+		if (linkedStatus && source) {
+			if (!source.volatiles[linkedStatus.toString()]) {
+				source.addVolatile(linkedStatus, this, sourceEffect);
+				source.volatiles[linkedStatus.toString()].linkedPokemon = [this];
+				source.volatiles[linkedStatus.toString()].linkedStatus = status;
+			} else {
+				source.volatiles[linkedStatus.toString()].linkedPokemon.push(this);
+			}
+			this.volatiles[status.toString()].linkedPokemon = [source];
 			this.volatiles[status.toString()].linkedStatus = linkedStatus;
 		}
 		return true;
@@ -1379,10 +1386,26 @@ class Pokemon {
 		let linkedPokemon = this.volatiles[status.id].linkedPokemon;
 		let linkedStatus = this.volatiles[status.id].linkedStatus;
 		delete this.volatiles[status.id];
-		if (linkedPokemon && linkedPokemon.volatiles[linkedStatus]) {
-			linkedPokemon.removeVolatile(linkedStatus);
+		if (linkedPokemon) {
+			this.removeLinkedVolatiles(linkedStatus, linkedPokemon);
 		}
 		return true;
+	}
+
+	/**
+	 * @param {string | Effect} linkedStatus
+	 * @param {Pokemon[]} linkedPokemon
+	 */
+	removeLinkedVolatiles(linkedStatus, linkedPokemon) {
+		linkedStatus = linkedStatus.toString();
+		for (let linkedPoke of linkedPokemon) {
+			if (linkedPoke.volatiles[linkedStatus]) {
+				linkedPoke.volatiles[linkedStatus].linkedPokemon.splice(linkedPoke.volatiles[linkedStatus].linkedPokemon.indexOf(this), 1);
+				if (linkedPoke.volatiles[linkedStatus].linkedPokemon.length === 0) {
+					linkedPoke.removeVolatile(linkedStatus);
+				}
+			}
+		}
 	}
 
 	/**
