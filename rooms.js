@@ -488,53 +488,6 @@ class GlobalRoom extends BasicRoom {
 		/** @type {number} */
 		this.lastBattle = Number(lastBattle) || 0;
 
-		this.writeChatRoomData = (() => {
-			let writing = false;
-			let writePending = false;
-			return async () => {
-				if (writing) {
-					writePending = true;
-					return;
-				}
-				writing = true;
-
-				let data = JSON.stringify(this.chatRoomDataList)
-					.replace(/\{"title":/g, '\n{"title":')
-					.replace(/\]$/, '\n]');
-
-				await FS('config/chatrooms.json.0').write(data);
-				await FS('config/chatrooms.json.0').rename('config/chatrooms.json');
-				writing = false;
-				if (writePending) {
-					writePending = false;
-					setImmediate(() => this.writeChatRoomData());
-				}
-			};
-		})();
-		if (Config.nofswriting) this.writeChatRoomData = () => {};
-
-		this.writeNumRooms = (() => {
-			let writing = false;
-			let lastBattle = -1; // last lastBattle to be written to file
-			return async () => {
-				if (writing) return;
-
-				// batch writing lastbattle.txt for every 10 battles
-				if (lastBattle >= this.lastBattle) return;
-				lastBattle = this.lastBattle + 10;
-
-				let filename = 'logs/lastbattle.txt';
-				writing = true;
-				await FS(`${filename}.0`).write('' + lastBattle);
-				await FS(`${filename}.0`).rename(filename);
-				writing = false;
-				if (lastBattle < this.lastBattle) {
-					setImmediate(() => this.writeNumRooms());
-				}
-			};
-		})();
-		if (Config.nofswriting) this.writeNumRooms = () => {};
-
 		// init users
 		this.users = Object.create(null);
 		this.userCount = 0; // cache of `size(this.users)`
@@ -548,6 +501,20 @@ class GlobalRoom extends BasicRoom {
 
 		// Create writestream for modlog
 		this.modlogStream = FS('logs/modlog/modlog_global.txt').createAppendStream();
+	}
+
+	writeChatRoomData() {
+		FS('config/chatrooms.json').writeUpdate(() => (
+			JSON.stringify(this.chatRoomDataList)
+				.replace(/\{"title":/g, '\n{"title":')
+				.replace(/\]$/, '\n]')
+		));
+	}
+
+	writeNumRooms() {
+		FS('logs/lastbattle.txt').writeUpdate(() => (
+			`${this.lastBattle}`
+		), {throttle: 10 * 1000});
 	}
 
 	reportUserStats() {
