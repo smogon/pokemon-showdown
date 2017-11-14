@@ -144,7 +144,7 @@ const Monitor = module.exports = {
 	countConnection(ip, name = '') {
 		let [count, duration] = this.connections.increment(ip, 30 * 60 * 1000);
 		if (count === 500) {
-			this.adminlog(`[ResourceMonitor] IP ${ip} banned for cflooding (${count} times in ${Chat.toDurationString(duration)}${name ? `: ${name}` : ''})`);
+			this.adminlog(`[ResourceMonitor] IP ${ip} banned for cflooding (${count} times in ${Chat.toDurationString(duration)}${name ? ': ' + name : ''})`);
 			return true;
 		}
 
@@ -152,7 +152,7 @@ const Monitor = module.exports = {
 			if (count % 500 === 0) {
 				let c = count / 500;
 				if (c === 2 || c === 4 || c === 10 || c === 20 || c % 40 === 0) {
-					this.adminlog(`[ResourceMonitor] IP ${ip} still cflooding (${count} times in ${Chat.toDurationString(duration)}${name ? `: ${name}` : ''})`);
+					this.adminlog(`[ResourceMonitor] IP ${ip} still cflooding (${count} times in ${Chat.toDurationString(duration)}${name ? ': ' + name : ''})`);
 				}
 			}
 			return true;
@@ -172,12 +172,12 @@ const Monitor = module.exports = {
 	countBattle(ip, name = '') {
 		let [count, duration] = this.battles.increment(ip, 30 * 60 * 1000);
 		if (duration < 5 * 60 * 1000 && count % 30 === 0) {
-			this.adminlog(`[ResourceMonitor] IP ${ip} has battled ${count} times in the last ${Chat.toDurationString(duration)}${name ? `: name` : ''})`);
+			this.adminlog(`[ResourceMonitor] IP ${ip} has battled ${count} times in the last ${Chat.toDurationString(duration)}${name ? ': ' + name : ''})`);
 			return true;
 		}
 
 		if (count % 150 === 0) {
-			this.adminlog('[ResourceMonitor] IP ' + ip + ' has battled ' + count + ' times in the last ' + Chat.toDurationString(duration) + name);
+			this.adminlog(`[ResourceMonitor] IP ${ip} has battled ${count} times in the last ${Chat.toDurationString(duration)}${name ? ': ' + name : ''}`);
 			return true;
 		}
 
