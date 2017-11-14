@@ -11354,6 +11354,11 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, sound: 1, authentic: 1},
 		selfSwitch: true,
+		onAfterBoost: function (boost, target, source, move) {
+			if (!Object.keys(boost).length) {
+				move.selfSwitch = false;
+			}
+		},
 		boosts: {
 			atk: -1,
 			spa: -1,
