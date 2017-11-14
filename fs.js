@@ -105,9 +105,18 @@ class FSPath {
 		FS(this.path + '.NEW').renameSync(this.path);
 	}
 	/**
-	 * Safest way to update a file with in-memory state.
+	 * Safest way to update a file with in-memory state. Pass a callback
+	 * that fetches the data to be written. It will write an update,
+	 * avoiding race conditions. The callback may not necessarily be
+	 * called, if `writeUpdate` is called many times in a short period.
 	 *
-	 * Ignore the returned Promise; it's not meaningful.
+	 * `options.throttle`, if it exists, will make sure updates are not
+	 * written more than once every `options.throttle` milliseconds.
+	 *
+	 * No synchronous version because there's no risk of race conditions
+	 * with synchronous code; just use `safeWriteSync`.
+	 *
+	 * DO NOT do anything with the returned Promise; it's not meaningful.
 	 *
 	 * @param {() => string | Buffer} dataFetcher
 	 * @param {Object} options
