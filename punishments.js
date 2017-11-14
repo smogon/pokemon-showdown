@@ -1123,10 +1123,9 @@ Punishments.checkIp = function (user, connection) {
 			if (!user.locked && !user.autoconfirmed) {
 				user.semilocked = '#dnsbl';
 			}
-		} else {
-			throw e;
+			return null;
 		}
-		return null;
+		throw e;
 	}).then(host => {
 		user = connection.user || user;
 		if (host) user.latestHost = host;
