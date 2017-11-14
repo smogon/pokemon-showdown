@@ -26,27 +26,9 @@ class HealthFitness {
 		} catch (error) {
 			if (error.code !== 'MODULE_NOT_FOUND') throw error;
 		}
-
-		this.saveData = (() => {
-			let writing = false;
-			let writePending = false;
-			return async () => {
-				if (writing) {
-					writePending = true;
-					return;
-				}
-				writing = true;
-
-				await FS(`${HF_DATA_PATH}.0`).write(JSON.stringify(this.hfData));
-				await FS(`${HF_DATA_PATH}.0`).rename(HF_DATA_PATH);
-
-				writing = false;
-				if (writePending) {
-					writePending = false;
-					setImmediate(() => this.saveData());
-				}
-			};
-		})();
+	}
+	saveData() {
+		FS(HF_DATA_PATH).writeUpdate(() => JSON.stringify(this.hfData));
 	}
 	setCardio(cardio) {
 		this.hfData.cardio = cardio;
