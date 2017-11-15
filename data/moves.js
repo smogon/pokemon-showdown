@@ -18,7 +18,7 @@ nonsky: Prevented from being executed or selected in a Sky Battle.
 powder: Has no effect on Grass-type Pokemon, Pokemon with the Ability Overcoat, and Pokemon holding Safety Goggles.
 protect: Blocked by Detect, Protect, Spiky Shield, and if not a Status move, King's Shield.
 pulse: Power is multiplied by 1.5 when used by a Pokemon with the Ability Mega Launcher.
-punch: Power is multiplied by 1.2 when used by a Pokemon with the Ability Iron Fist.
+punch: Power is multiplied by b1.2 when used by a Pokemon with the Ability Iron Fist.
 recharge: If this move is successful, the user must recharge on the following turn and cannot make a move.
 reflectable: Bounced back to the original user by Magic Coat or the Ability Magic Bounce.
 snatch: Can be stolen from the original user and instead used by another Pokemon using Snatch.
@@ -1426,6 +1426,7 @@ exports.BattleMovedex = {
 		desc: "Has a 10% chance to freeze the target. If the weather is Hail, this move does not check accuracy.",
 		shortDesc: "10% chance to freeze foe(s). Can't miss in hail.",
 		id: "blizzard",
+		isViable: true,
 		name: "Blizzard",
 		pp: 5,
 		priority: 0,
@@ -17247,6 +17248,7 @@ exports.BattleMovedex = {
 		desc: "Has a 30% chance to paralyze the target. This move can hit a target using Bounce, Fly, or Sky Drop. If the weather is Rain Dance, this move does not check accuracy. If the weather is Sunny Day, this move's accuracy is 50%.",
 		shortDesc: "30% chance to paralyze target. Can't miss in rain.",
 		id: "thunder",
+		isViable: true,
 		name: "Thunder",
 		pp: 10,
 		priority: 0,
