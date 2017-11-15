@@ -166,6 +166,12 @@ Chat.hostfilter = function (host, user, connection) {
 		filter(host, user, connection);
 	}
 };
+Chat.loginfilters = [];
+Chat.loginfilter = function (user, oldUser, usertype) {
+	for (const filter of Chat.loginfilters) {
+		filter(user, oldUser, usertype);
+	}
+};
 
 /*********************************************************
  * Parser
@@ -977,6 +983,7 @@ Chat.loadPlugins = function () {
 	if (Config.chatfilter) Chat.filters.push(Config.chatfilter);
 	if (Config.namefilter) Chat.namefilters.push(Config.namefilter);
 	if (Config.hostfilter) Chat.hostfilters.push(Config.hostfilter);
+	if (Config.loginfilter) Chat.loginfilters.push(Config.loginfilter);
 
 	// Install plug-in commands and chat filters
 
@@ -994,6 +1001,7 @@ Chat.loadPlugins = function () {
 		if (plugin.chatfilter) Chat.filters.push(plugin.chatfilter);
 		if (plugin.namefilter) Chat.namefilters.push(plugin.namefilter);
 		if (plugin.hostfilter) Chat.hostfilters.push(plugin.hostfilter);
+		if (plugin.loginfilter) Chat.loginfilters.push(plugin.loginfilter);
 	}
 };
 
