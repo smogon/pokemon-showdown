@@ -18,7 +18,7 @@ nonsky: Prevented from being executed or selected in a Sky Battle.
 powder: Has no effect on Grass-type Pokemon, Pokemon with the Ability Overcoat, and Pokemon holding Safety Goggles.
 protect: Blocked by Detect, Protect, Spiky Shield, and if not a Status move, King's Shield.
 pulse: Power is multiplied by 1.5 when used by a Pokemon with the Ability Mega Launcher.
-punch: Power is multiplied by b1.2 when used by a Pokemon with the Ability Iron Fist.
+punch: Power is multiplied by 1.2 when used by a Pokemon with the Ability Iron Fist.
 recharge: If this move is successful, the user must recharge on the following turn and cannot make a move.
 reflectable: Bounced back to the original user by Magic Coat or the Ability Magic Bounce.
 snatch: Can be stolen from the original user and instead used by another Pokemon using Snatch.
