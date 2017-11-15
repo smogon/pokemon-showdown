@@ -1464,7 +1464,7 @@ exports.commands = {
 		if (!room.users[targetUser.userid]) {
 			return this.errorReply("User " + this.targetUsername + " is not in the room " + room.id + ".");
 		}
-		if (targetUser.joinRoom(targetRoom.id) === false) return this.errorReply("User " + targetUser.name + " could not be joined to room " + targetRoom.title + ". They could be banned from the room.");
+		if (!targetUser.joinRoom(targetRoom.id)) return this.errorReply("User " + targetUser.name + " could not be joined to room " + targetRoom.title + ". They could be banned from the room.");
 		this.addModCommand("" + targetUser.name + " was redirected to room " + targetRoom.title + " by " + user.name + ".");
 		targetUser.leaveRoom(room);
 	},
