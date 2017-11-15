@@ -79,6 +79,30 @@ Our current convention is to use `'` for IDs; `"` for names (i.e. usernames, mov
 
 Unfortunately, since this is not a convention the linter can test for (and also because our older string standards predate PS), a lot of existing code is wrong on this, so you can't look at surrounding code to get an idea of what the convention should be. Refer to the above paragraph as the definitive rule.
 
+### Optionals: `null` vs `undefined` vs `false`
+
+PS convention is to use `null` for optionals. So a function that retrieves a possible `T` would return `T | null`. This is mostly because TypeScript expands `T?` to `T | null`.
+
+Some old code returns `T | undefined` (our previous convention). This is a relatively common standard (ironically, TypeScript itself uses it). Feel free to convert to `T | null` where you see it.
+
+Some even older code returns `T | false`. This is a very old PHP convention that has no place in modern PS code. Please convert to `T | null` if you see it.
+
+### `false | null | undefined`
+
+The simulator (code in `sim/`, `data/`, and `mods/`) will often have functions with return signatures of the form `T | false | null | undefined`, especially in event handlers. These aren't optionals, they're different sentinel values.
+
+Specifically:
+
+* `false` means "this action failed"
+* `null` means "this action failed silently; suppress any 'But it failed!' messages"
+* `undefined` means "this action should be ignored, and treated as if nothing unexpected happened"
+
+So, if Thunder Wave hits a Ground type, the immunity checker returns `false` to indicate the immunity.
+
+If Volt Absorb absorbs Thunder Wave, Volt Absorb's TryHit handler shows the Volt Absorb message and returns `null` to indicate that no other failure message should be shown.
+
+If Water Absorb doesn't absorb Thunder Wave, Water Absorb's TryHit handler returns `undefined`, to show that Water Absorb does not interact with Thunder Wave.
+
 
 ES5 and ES6
 ------------------------------------------------------------------------
