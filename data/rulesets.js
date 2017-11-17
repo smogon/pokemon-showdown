@@ -225,7 +225,7 @@ exports.BattleFormats = {
 				if (template.requiredMove && set.moves.indexOf(toId(template.requiredMove)) < 0) {
 					problems.push(`${template.species} transforms in-battle with ${template.requiredMove}.`); // Meloetta-Pirouette, Rayquaza-Mega
 				}
-				if (!format.noChangeForme) set.species = template.baseSpecies; // Fix forme
+				if (!format.noChangeForme) set.species = template.baseSpecies; // Fix battle-only forme
 			} else {
 				if (template.requiredAbility && set.ability !== template.requiredAbility) {
 					problems.push(`${(set.name || set.species)} needs the ability ${template.requiredAbility}.`); // No cases currently.
