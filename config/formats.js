@@ -265,7 +265,7 @@ exports.Formats = [
 			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3590391/\">VGC 2017 Sample Teams</a>",
 		],
 
-		mod: 'gen7',
+		mod: 'vgc17',
 		gameType: 'doubles',
 		forcedLevel: 50,
 		teamLength: {
