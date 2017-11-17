@@ -6345,7 +6345,7 @@ exports.BattleFormatsData = {
 		tier: "NFE",
 	},
 	kommoo: {
-		randomBattleMoves: ["dragondance", "outrage", "dragonclaw", "skyuppercut", "poisonjab"],
+		randomBattleMoves: ["dragondance", "outrage", "dragonclaw", "closecombat", "poisonjab"],
 		randomDoubleBattleMoves: ["clangingscales", "focusblast", "flashcannon", "substitute", "protect", "dracometeor"],
 		tier: "RU",
 	},
@@ -6499,6 +6499,7 @@ exports.BattleFormatsData = {
 		tier: "BL3",
 	},
 	necrozmaduskmane: {
+		randomBattleMoves: ["swordsdance", "autotomize", "photongeyser", "sunsteelstrike", "earthquake", "knockoff"],
 		eventPokemon: [
 			{"generation": 7, "level": 65, "moves":["sunsteelstrike"]},
 		],
@@ -6506,6 +6507,7 @@ exports.BattleFormatsData = {
 		tier: "Uber",
 	},
 	necrozmadawnwings: {
+		randomBattleMoves: ["calmmind", "moongeistbeam", "photongeyser", "heatwave", "moonlight"],
 		eventPokemon: [
 			{"generation": 7, "level": 65, "moves":["moongeistbeam"]},
 		],
@@ -6547,9 +6549,11 @@ exports.BattleFormatsData = {
 		tier: "NFE",
 	},
 	naganadel: {
+		randomBattleMoves: ["nastyplot", "dragonpulse", "sludgewave", "fireblast", "dracometeor", "uturn"],
 		tier: "OU",
 	},
 	stakataka: {
+		randomBattleMoves: ["gyroball", "stoneedge", "trickroom", "earthquake", "superpower", "stealthrock"],
 		eventPokemon: [
 			{"generation": 7, "level": 60, "shiny": 1, "moves":["irondefense", "ironhead", "rockblast", "wideguard"]},
 		],
@@ -6557,6 +6561,7 @@ exports.BattleFormatsData = {
 		tier: "OU",
 	},
 	blacephalon: {
+		randomBattleMoves: ["mindblown", "fireblast", "shadowball", "trick", "knockoff", "willowisp", "calmmind"],
 		eventPokemon: [
 			{"generation": 7, "level": 60, "shiny": 1, "moves":["fireblast", "shadowball", "trick", "mindblown"]},
 		],
@@ -6564,6 +6569,7 @@ exports.BattleFormatsData = {
 		tier: "OU",
 	},
 	zeraora: {
+		randomBattleMoves: ["plasmafists", "closecombat", "voltswitch", "hiddenpowerice", "knockoff", "grassknot", "workup"],
 		isUnreleased: true,
 		tier: "Unreleased",
 	},
