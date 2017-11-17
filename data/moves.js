@@ -10340,9 +10340,7 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onHit: function (target, source, move) {
-			this.damage(Math.round(source.maxhp / 2), source, source, null, true);
-		},
+		mindBlownRecoil: true,
 		secondary: false,
 		target: "allAdjacent",
 		type: "Fire",
