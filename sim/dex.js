@@ -331,6 +331,17 @@ class ModdedDex {
 		let template = this.templateCache.get(id);
 		if (template) return template;
 		if (this.data.Aliases.hasOwnProperty(id)) {
+			if (this.data.FormatsData.hasOwnProperty(id)) {
+				// special event ID, like Rockruff-Dusk
+				let baseId = toId(this.data.Aliases[id]);
+				template = new Data.Template({name}, this.data.Pokedex[baseId], this.data.FormatsData[id], this.data.Learnsets[id]);
+				template.name = id;
+				template.species = id;
+				template.speciesid = id;
+				// @ts-ignore
+				template.abilities = {0: template.abilities['S']};
+				return template;
+			}
 			template = this.getTemplate(this.data.Aliases[id]);
 			if (template) {
 				this.templateCache.set(id, template);

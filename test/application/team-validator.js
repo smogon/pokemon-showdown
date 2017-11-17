@@ -100,6 +100,28 @@ describe('Team Validator features', function () {
 			assert(illegal);
 		});
 
+		it('should correctly validate USUM Rockruff', function () {
+			let team = [{species:'rockruff', ability:'owntempo', moves:['happyhour']}];
+			let illegal = TeamValidator('gen7anythinggoes').validateTeam(team);
+			assert.strictEqual(illegal, false);
+			team = [{species:'rockruff', level: 9, ability:'owntempo', moves:['happyhour']}];
+			illegal = TeamValidator('gen7anythinggoes').validateTeam(team);
+			assert(illegal);
+			team = [{species:'rockruff', level: 9, ability:'owntempo', moves:['tackle']}];
+			illegal = TeamValidator('gen7anythinggoes').validateTeam(team);
+			assert.strictEqual(illegal, false);
+			team = [{species:'rockruff', level: 9, ability:'steadfast', moves:['happyhour']}];
+			illegal = TeamValidator('gen7anythinggoes').validateTeam(team);
+			assert(illegal);
+
+			team = [{species:'lycanrocdusk', ability:'toughclaws', moves:['happyhour']}];
+			illegal = TeamValidator('gen7anythinggoes').validateTeam(team);
+			assert.strictEqual(illegal, false);
+			team = [{species:'lycanroc', ability:'steadfast', moves:['happyhour']}];
+			illegal = TeamValidator('gen7anythinggoes').validateTeam(team);
+			assert(illegal);
+		});
+
 		it('should accept both ability types for Mega Evolutions', function () {
 			// base forme ability
 			let team = [{species:'gyaradosmega', item:'gyaradosite', ability:'intimidate', moves:['dragondance', 'crunch', 'waterfall', 'icefang']}];
