@@ -494,9 +494,9 @@ exports.BattleMovedex = {
 	struggle: {
 		inherit: true,
 		accuracy: 100,
-		desc: "Deals typeless damage to one adjacent foe at random. If this move was successful, the user takes damage equal to 1/2 the HP lost by the target, rounded down, but not less than 1 HP; the Ability Rock Head does not prevent this. This move can only be used if none of the user's known moves can be selected.",
-		shortDesc: "User loses 1/2 the HP lost by the target.",
-		recoil: [1, 2],
+		desc: "Deals typeless damage to one adjacent foe at random. If this move was successful, the user takes damage equal to 1/4 the HP lost by the target, rounded down, but not less than 1 HP; the Ability Rock Head does not prevent this. This move can only be used if none of the user's known moves can be selected.",
+		shortDesc: "User loses 1/4 the HP lost by the target.",
+		recoil: [1, 4],
 		struggleRecoil: false,
 	},
 	surf: {
