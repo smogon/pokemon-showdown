@@ -160,8 +160,12 @@ class Pokemon {
 			}
 		}
 
+		/** @type {string?} */
 		// @ts-ignore
 		this.canMegaEvo = this.battle.canMegaEvo(this);
+		/** @type {string?} */
+		// @ts-ignore
+		this.canUltraBurst = this.battle.canUltraBurst(this);
 
 		if (!this.set.evs) {
 			this.set.evs = {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0};
@@ -613,6 +617,7 @@ class Pokemon {
 
 		if (!lockedMove) {
 			if (this.canMegaEvo) data.canMegaEvo = true;
+			if (this.canUltraBurst) data.canUltraBurst = true;
 			// @ts-ignore
 			let canZMove = this.battle.canZMove(this);
 			if (canZMove) data.canZMove = canZMove;
@@ -1277,12 +1282,6 @@ class Pokemon {
 
 	getAbility() {
 		return this.battle.getAbility(this.ability);
-	}
-
-	getMegaAbility() {
-		if (!this.canMegaEvo) return null;
-		const megaTemplate = this.battle.getTemplate(this.canMegaEvo);
-		return this.battle.getAbility(megaTemplate.abilities['0']);
 	}
 
 	/**
