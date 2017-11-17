@@ -20,7 +20,7 @@ let stats = {};
 try {
 	stats = require(`../${STATS_FILE}`);
 } catch (e) {
-	if (e.code !== 'MODULE_NOT_FOUND') throw e;
+	if (e.code !== 'MODULE_NOT_FOUND' && e.code !== 'ENOENT') throw e;
 }
 if (!stats || typeof stats !== 'object') stats = {};
 
@@ -32,7 +32,7 @@ let breedingData = {};
 try {
 	breedingData = require(`../${BREEDING_FILE}`);
 } catch (e) {
-	if (e.code !== 'MODULE_NOT_FOUND') throw e;
+	if (e.code !== 'MODULE_NOT_FOUND' && e.code !== 'ENOENT') throw e;
 }
 if (!breedingData || typeof breedingData !== 'object') breedingData = {};
 

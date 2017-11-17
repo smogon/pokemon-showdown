@@ -24,7 +24,7 @@ class HealthFitness {
 		try {
 			this.hfData = require(`../${HF_DATA_PATH}`);
 		} catch (error) {
-			if (error.code !== 'MODULE_NOT_FOUND') throw error;
+			if (error.code !== 'MODULE_NOT_FOUND' && error.code !== 'ENOENT') throw error;
 		}
 	}
 	saveData() {
