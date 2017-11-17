@@ -20,7 +20,7 @@ const Pokemon = require('./pokemon');
  * @property {number} [index] - the chosen index in team preview
  * @property {number} [priority] - priority of the chosen index
  * @property {Side} [side] - the pokemon's side
- * @property {?boolean} [mega] - true if megaing
+ * @property {?boolean} [mega] - true if megaing or ultra bursting
  * @property {?boolean} [zmove] - true if zmoving
  */
 
@@ -36,6 +36,7 @@ const Pokemon = require('./pokemon');
  * @property {Set<number>} switchIns - indexes of pokemon chosen to switch in
  * @property {boolean} zMove - true if a Z-move has already been selected
  * @property {boolean} mega - true if a mega evolution has already been selected
+ * @property {boolean} ultra - true if an ultra burst has already been selected
  */
 
 class Side {
@@ -77,6 +78,7 @@ class Side {
 			switchIns: new Set(),
 			zMove: false,
 			mega: false,
+			ultra: false,
 		};
 		/**
 		 * Must be one of:
@@ -429,13 +431,22 @@ class Side {
 			this.emitCallback('cantmega', pokemon);
 			return this.emitChoiceError(`Can't move: You can only mega-evolve once per battle`);
 		}
+		const ultra = (megaOrZ === 'ultra');
+		if (ultra && !pokemon.canUltraBurst) {
+			return this.emitChoiceError(`Can't move: ${pokemon.name} can't mega evolve`);
+		}
+		if (ultra && this.choice.ultra) {
+			// TODO: The client shouldn't have sent this request in the first place.
+			this.emitCallback('cantmega', pokemon);
+			return this.emitChoiceError(`Can't move: You can only ultra burst once per battle`);
+		}
 
 		this.choice.actions.push({
 			choice: 'move',
 			pokemon: pokemon,
 			targetLoc: targetLoc,
 			move: moveid,
-			mega: mega,
+			mega: mega || ultra,
 			zmove: zMove,
 		});
 
@@ -444,6 +455,7 @@ class Side {
 		}
 
 		if (mega) this.choice.mega = true;
+		if (ultra) this.choice.ultra = true;
 		if (zMove) this.choice.zMove = true;
 
 		if (this.battle.LEGACY_API_DO_NOT_USE && !this.battle.checkDecisions()) return this;
@@ -607,6 +619,7 @@ class Side {
 			switchIns: new Set(),
 			zMove: false,
 			mega: false,
+			ultra: false,
 		};
 	}
 
@@ -647,9 +660,11 @@ class Side {
 				}
 				const willMega = data.endsWith(' mega') ? 'mega' : '';
 				if (willMega) data = data.slice(0, -5);
+				const willUltra = data.endsWith(' ultra') ? 'ultra' : '';
+				if (willUltra) data = data.slice(0, -6);
 				const willZ = data.endsWith(' zmove') ? 'zmove' : '';
 				if (willZ) data = data.slice(0, -6);
-				this.chooseMove(data, targetLoc, willMega || willZ);
+				this.chooseMove(data, targetLoc, willMega || willUltra || willZ);
 				break;
 			case 'switch':
 				this.chooseSwitch(data);

@@ -12733,27 +12733,26 @@ exports.BattleMovedex = {
 			duration: 1,
 			onBeforeSwitchOut: function (pokemon) {
 				this.debug('Pursuit start');
-				let sources = this.effectData.sources;
 				let alreadyAdded = false;
-				for (let i = 0; i < sources.length; i++) {
-					if (sources[i].moveThisTurn || sources[i].fainted) continue;
+				for (const source of this.effectData.sources) {
+					if (source.moveThisTurn || source.fainted) continue;
 					if (!alreadyAdded) {
 						this.add('-activate', pokemon, 'move: Pursuit');
 						alreadyAdded = true;
 					}
-					this.cancelMove(sources[i]);
+					this.cancelMove(source);
 					// Run through each decision in queue to check if the Pursuit user is supposed to Mega Evolve this turn.
 					// If it is, then Mega Evolve before moving.
-					if (sources[i].canMegaEvo) {
-						for (let j = 0; j < this.queue.length; j++) {
-							if (this.queue[j].pokemon === sources[i] && this.queue[j].choice === 'megaEvo') {
-								this.runMegaEvo(sources[i]);
-								this.queue.splice(j, 1);
+					if (source.canMegaEvo || source.canUltraBurst) {
+						for (const [actionIndex, action] of this.queue.entries()) {
+							if (action.pokemon === source && action.choice === 'megaEvo') {
+								this.runMegaEvo(source);
+								this.queue.splice(actionIndex, 1);
 								break;
 							}
 						}
 					}
-					this.runMove('pursuit', sources[i], this.getTargetLoc(pokemon, sources[i]));
+					this.runMove('pursuit', source, this.getTargetLoc(pokemon, source));
 				}
 			},
 		},

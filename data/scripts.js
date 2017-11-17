@@ -868,18 +868,28 @@ exports.BattleScripts = {
 		let altForme = pokemon.baseTemplate.otherFormes && this.getTemplate(pokemon.baseTemplate.otherFormes[0]);
 		let item = pokemon.getItem();
 		if (altForme && altForme.isMega && altForme.requiredMove && pokemon.moves.includes(toId(altForme.requiredMove)) && !item.zMove) return altForme.species;
-		if (item.megaEvolves !== pokemon.baseTemplate.baseSpecies || item.megaStone === pokemon.species) return false;
+		if (item.megaEvolves !== pokemon.baseTemplate.baseSpecies || item.megaStone === pokemon.species) {
+			return null;
+		}
 		return item.megaStone;
 	},
 
+	canUltraBurst: function (pokemon) {
+		if (['Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane'].includes(pokemon.baseTemplate.species) &&
+			pokemon.getItem().id === 'ultranecroziumz') {
+			return "Necrozma-Ultra";
+		}
+		return null;
+	},
+
 	runMegaEvo: function (pokemon) {
-		let template = this.getTemplate(pokemon.canMegaEvo);
-		let side = pokemon.side;
+		const isUltraBurst = !pokemon.canMegaEvo;
+		const template = this.getTemplate(pokemon.canMegaEvo || pokemon.canUltraBurst);
+		const side = pokemon.side;
 
 		// Pokémon affected by Sky Drop cannot mega evolve. Enforce it here for now.
-		let foeActive = side.foe.active;
-		for (let i = 0; i < foeActive.length; i++) {
-			if (foeActive[i].volatiles['skydrop'] && foeActive[i].volatiles['skydrop'].source === pokemon) {
+		for (const foeActive of side.foe.active) {
+			if (foeActive.volatiles['skydrop'] && foeActive.volatiles['skydrop'].source === pokemon) {
 				return false;
 			}
 		}
@@ -889,17 +899,21 @@ exports.BattleScripts = {
 		pokemon.details = template.species + (pokemon.level === 100 ? '' : ', L' + pokemon.level) + (pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
 		if (pokemon.illusion) {
 			pokemon.ability = ''; // Don't allow Illusion to wear off
-			this.add('-mega', pokemon, pokemon.illusion.template.baseSpecies, template.requiredItem);
+			this.add(isUltraBurst ? '-burst' : '-mega', pokemon, pokemon.illusion.template.baseSpecies, template.requiredItem);
 		} else {
 			this.add('detailschange', pokemon, pokemon.details);
-			this.add('-mega', pokemon, template.baseSpecies, template.requiredItem);
+			this.add(isUltraBurst ? '-burst' : '-mega', pokemon, template.baseSpecies, template.requiredItem);
 		}
 		pokemon.setAbility(template.abilities['0']);
 		pokemon.baseAbility = pokemon.ability;
 
 		// Limit one mega evolution
-		for (let i = 0; i < side.pokemon.length; i++) {
-			side.pokemon[i].canMegaEvo = false;
+		for (const ally of side.pokemon) {
+			if (isUltraBurst) {
+				ally.canUltraBurst = null;
+			} else {
+				ally.canMegaEvo = null;
+			}
 		}
 
 		this.runEvent('AfterMega', pokemon);
