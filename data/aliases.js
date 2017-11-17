@@ -319,6 +319,9 @@ exports.BattleAliases = {
 	"ufof": "Pokestar UFO",
 	"ufoflying": "Pokestar UFO",
 
+	// event formes
+	"rockruffdusk": "Rockruff",
+
 	// cosmetic formes
 	"burmygrass": "Burmy",
 	"burmyplant": "Burmy",

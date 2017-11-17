@@ -5998,7 +5998,6 @@ exports.BattleFormatsData = {
 			{"generation": 7, "level": 10, "moves":["tackle", "bite", "firefang", "happyhour"], "pokeball": "cherishball"},
 			{"generation": 7, "level": 10, "moves":["tackle", "bite", "thunderfang", "happyhour"], "pokeball": "cherishball"},
 		],
-		eventOnly: true,
 		tier: "LC",
 	},
 	lycanroc: {

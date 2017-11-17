@@ -201,11 +201,13 @@ class Validator {
 
 		if (ability.id === 'battlebond' && template.id === 'greninja' && !ruleTable.has('ignoreillegalabilities')) {
 			template = dex.getTemplate('greninjaash');
+			if (set.gender && set.gender !== 'M') {
+				problems.push(`Battle Bond Greninja must be male.`);
+			}
 			set.gender = 'M';
 		}
-		// TODO: Properly implement Rockruff + Happy Hour validation
-		if (template.id === 'rockruffdusk') {
-			template = dex.getTemplate('rockruff');
+		if (ability.id === 'owntempo' && template.id === 'rockruff') {
+			template = dex.getTemplate('rockruffdusk');
 		}
 		if (!template.exists) {
 			return [`The Pokemon "${set.species}" does not exist.`];
@@ -1121,7 +1123,9 @@ class Validator {
 			}
 
 			// also check to see if the mon's prevo or freely switchable formes can learn this move
-			if (template.prevo) {
+			if (template.species === 'Lycanroc-Dusk') {
+				template = dex.getTemplate('Rockruff-Dusk');
+			} else if (template.prevo) {
 				template = dex.getTemplate(template.prevo);
 				if (template.gen > Math.max(2, dex.gen)) template = null;
 				if (template && !template.abilities['H']) isHidden = false;
