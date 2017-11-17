@@ -542,7 +542,7 @@ exports.BattleAbilities = {
 		shortDesc: "While this Pokemon is active, Self-Destruct, Explosion, and Aftermath have no effect.",
 		id: "damp",
 		onAnyTryMove: function (target, source, effect) {
-			if (effect.id === 'selfdestruct' || effect.id === 'explosion') {
+			if (['explosion', 'mindblown', 'selfdestruct'].includes(effect.id)) {
 				this.attrLastMove('[still]');
 				this.add('cant', this.effectData.target, 'ability: Damp', effect, '[of] ' + target);
 				return false;
@@ -2121,6 +2121,18 @@ exports.BattleAbilities = {
 		name: "Natural Cure",
 		rating: 3.5,
 		num: 30,
+	},
+	"neuroforce": {
+		shortDesc: "Super effective moves used by this Pokemon will do 1.2x damage.",
+		onModifyDamage: function (damage, source, target, move) {
+			if (move && move.typeMod > 0) {
+				return this.chainModify([0x1333, 0x1000]);
+			}
+		},
+		id: "neuroforce",
+		name: "Neuroforce",
+		rating: 3.5,
+		num: 233,
 	},
 	"noguard": {
 		shortDesc: "Every move used by or against this Pokemon will always hit.",
