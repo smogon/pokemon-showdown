@@ -215,13 +215,17 @@ exports.BattleFormats = {
 				if (template.requiredAbility && set.ability !== template.requiredAbility) {
 					problems.push("" + template.species + " transforms in-battle with " + template.requiredAbility + "."); // Darmanitan-Zen, Zygarde-Complete
 				}
-				if (template.requiredItems && !template.requiredItems.includes(item.name)) {
-					problems.push("" + template.species + " transforms in-battle with " + Chat.plural(template.requiredItems.length, "either ") + template.requiredItems.join(" or ") + '.'); // Mega, Primal, or Ultra
+				if (template.requiredItems) {
+					if (template.species === 'Necrozma-Ultra') {
+						problems.push("Necrozma-Ultra must start the battle as Necrozma-Dawn-Wings or Necrozma-Dusk-Mane holding Ultranecrozium Z."); // Necrozma-Ultra transforms from one of two formes, and neither one is the base forme
+					} else if (!template.requiredItems.includes(item.name)) {
+						problems.push("" + template.species + " transforms in-battle with " + Chat.plural(template.requiredItems.length, "either ") + template.requiredItems.join(" or ") + '.'); // Mega or Primal
+					}
 				}
 				if (template.requiredMove && set.moves.indexOf(toId(template.requiredMove)) < 0) {
 					problems.push("" + template.species + " transforms in-battle with " + template.requiredMove + "."); // Meloetta-Pirouette, Rayquaza-Mega
 				}
-				if (!format.noChangeForme) set.species = template.baseSpecies; // Fix forme for Aegislash, Castform, etc.
+				if (!format.noChangeForme) set.species = template.baseSpecies; // Fix forme
 			} else {
 				if (template.requiredAbility && set.ability !== template.requiredAbility) {
 					problems.push("" + (set.name || set.species) + " needs the ability " + template.requiredAbility + "."); // No cases currently.
