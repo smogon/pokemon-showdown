@@ -9,7 +9,7 @@ exports.BattleScripts = {
 		}
 	},
 
-	modifyDamage: function (baseDamage, pokemon, target, move, suppressMessages) {
+	modifyDamage: function (baseDamage, pokemon, target, move, attackStat, suppressMessages) {
 		// DPP divides modifiers into several mathematically important stages
 		// The modifiers run earlier than other generations are called with ModifyDamagePhase1 and ModifyDamagePhase2
 
@@ -17,7 +17,7 @@ exports.BattleScripts = {
 		let type = move.type;
 
 		// Burn
-		if (pokemon.status === 'brn' && baseDamage && move.category === 'Physical' && !pokemon.hasAbility('guts')) {
+		if (pokemon.status === 'brn' && baseDamage && attackStat === 'atk' && !pokemon.hasAbility('guts')) {
 			baseDamage = this.modify(baseDamage, 0.5);
 		}
 
