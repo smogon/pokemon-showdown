@@ -649,7 +649,7 @@ exports.BattlePokedex = {
 		types: ["Electric"],
 		gender: "M",
 		baseStats: {hp: 35, atk: 55, def: 40, spa: 50, spd: 50, spe: 90},
-		abilities: {0: "Static", H: "Lightning Rod"},
+		abilities: {0: "Static"},
 		heightm: 0.4,
 		weightkg: 6,
 		color: "Yellow",
