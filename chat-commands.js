@@ -1126,13 +1126,15 @@ exports.commands = {
 		if (!this.canTalk()) return;
 		if (!target) return this.parse('/help roompromote');
 
+		const force = target.startsWith('!!!');
+		if (force) target = target.slice(3);
 		target = this.splitTarget(target, true);
 		let targetUser = this.targetUser;
 		let userid = toId(this.targetUsername);
 		let name = targetUser ? targetUser.name : this.targetUsername;
 
 		if (!userid) return this.parse('/help roompromote');
-		if (!targetUser && !Users.isUsernameKnown(userid)) {
+		if (!targetUser && !Users.isUsernameKnown(userid) && !force) {
 			return this.errorReply(`User '${name}' is offline and unrecognized, and so can't be promoted.`);
 		}
 		if (targetUser && !targetUser.registered) {

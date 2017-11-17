@@ -358,7 +358,6 @@ class CommandContext {
 		if (!commandHandler && !recursing) {
 			for (let g in Config.groups) {
 				let groupid = Config.groups[g].id;
-				target = toId(target);
 				if (cmd === groupid) {
 					return this.splitCommand(`/promote ${target}, ${g}`, true);
 				} else if (cmd === 'global' + groupid) {
@@ -367,6 +366,8 @@ class CommandContext {
 					return this.splitCommand(`/demote ${target}`, true);
 				} else if (cmd === 'room' + groupid) {
 					return this.splitCommand(`/roompromote ${target}, ${g}`, true);
+				} else if (cmd === 'forceroom' + groupid) {
+					return this.splitCommand(`/roompromote !!!${target}, ${g}`, true);
 				} else if (cmd === 'roomde' + groupid || cmd === 'deroom' + groupid || cmd === 'roomun' + groupid) {
 					return this.splitCommand(`/roomdemote ${target}`, true);
 				}
