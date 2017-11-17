@@ -57,6 +57,8 @@ module.exports = function crashlogger(err, description, data = null) {
 			try {
 				require.resolve('nodemailer');
 			} catch (e) {
+				if (e.code !== 'MODULE_NOT_FOUND' && e.code !== 'ENOENT') throw e;
+
 				throw new Error(
 					'nodemailer is not installed, but it is required if Config.crashguardemail is configured! ' +
 					'Run npm install --no-save nodemailer and restart the server.'
