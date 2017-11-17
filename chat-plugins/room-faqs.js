@@ -9,7 +9,7 @@ let roomFaqs = {};
 try {
 	roomFaqs = require(ROOMFAQ_FILE);
 } catch (e) {
-	if (e.code !== 'MODULE_NOT_FOUND') throw e;
+	if (e.code !== 'MODULE_NOT_FOUND' && e.code !== 'ENOENT') throw e;
 }
 if (!roomFaqs || typeof roomFaqs !== 'object') roomFaqs = {};
 
