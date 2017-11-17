@@ -106,7 +106,14 @@ Chat.commands = undefined;
  * Load chat filters
  *********************************************************/
 Chat.filters = [];
-Chat.filter = function (message, user, room, connection, targetUser) {
+/**
+ * @param {string} message
+ * @param {User} user
+ * @param {ChatRoom} room
+ * @param {Connection} connection
+ * @param {User?} [targetUser]
+ */
+Chat.filter = function (message, user, room, connection, targetUser = null) {
 	// Chat filters can choose to:
 	// 1. return false OR null - to not send a user's message
 	// 2. return an altered string - to alter a user's message
