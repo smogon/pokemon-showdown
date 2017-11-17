@@ -1162,7 +1162,8 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 4] Ubers",
-		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/posts/7433831/\">DPP Ubers Information & Resources</a>",
+		desc: [
+			"&bullet; <a href=\"http://www.smogon.com/forums/posts/7433831/\">DPP Ubers Information &amp; Resources</a>",
 			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3505128/\">DPP Ubers Viability Ranking</a>",
 		],
 
@@ -1244,7 +1245,7 @@ exports.Formats = [
 	{
 		name: "[Gen 3] Ubers",
 		desc: [
-			"&bullet; <a href=\"http://www.smogon.com/forums/posts/7433832/\">ADV Ubers Information & Resources</a>",
+			"&bullet; <a href=\"http://www.smogon.com/forums/posts/7433832/\">ADV Ubers Information &amp; Resources</a>",
 			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3536426/\">ADV Ubers Viability Ranking</a>",
 		],
 
@@ -1274,7 +1275,7 @@ exports.Formats = [
 	{
 		name: "[Gen 2] Ubers",
 		desc: [
-			"&bullet; <a href=\"http://www.smogon.com/forums/posts/7433879/\">GSC Ubers Information & Resources</a>",
+			"&bullet; <a href=\"http://www.smogon.com/forums/posts/7433879/\">GSC Ubers Information &amp; Resources</a>",
 			"&bullet; <a href=\"http://www.smogon.com/forums/posts/6431086/\">GSC Sample Teams</a>",
 		],
 
