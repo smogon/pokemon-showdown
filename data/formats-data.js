@@ -301,7 +301,7 @@ exports.BattleFormatsData = {
 			{"generation": 7, "level": 10, "isHidden": false, "moves":["bestow", "holdhands", "return", "playnice"], "pokeball": "cherishball"},
 			{"generation": 7, "level": 10, "isHidden": false, "moves":["holdhands", "playnice", "teeterdance", "happyhour"], "pokeball": "cherishball"},
 			{"generation": 7, "level": 10, "isHidden": false, "moves":["growl", "quickattack", "thundershock", "happyhour"], "pokeball": "cherishball"},
-			{"generation": 7, "level": 40, "ability": "Static", "isHidden": false, "moves":["nuzzle", "discharge", "slam", "surf"]},
+			{"generation": 7, "level": 40, "perfectIVs": 3, "isHidden": false, "moves":["nuzzle", "discharge", "slam", "surf"], "pokeball": "pokeball"},
 		],
 		tier: "NFE",
 	},
@@ -1635,6 +1635,7 @@ exports.BattleFormatsData = {
 			{"generation": 4, "level": 50, "shiny": 1, "moves":["mist", "agility", "mindreader", "icebeam"]},
 			{"generation": 6, "level": 70, "isHidden": false, "moves":["icebeam", "reflect", "hail", "tailwind"]},
 			{"generation": 6, "level": 70, "isHidden": true, "moves":["freezedry", "icebeam", "hail", "reflect"], "pokeball": "cherishball"},
+			{"generation": 7, "level": 60, "shiny": 1, "isHidden": false, "moves":["ancientpower", "freezedry", "reflect", "hail"]},
 		],
 		eventOnly: true,
 		tier: "PU",
@@ -1650,6 +1651,7 @@ exports.BattleFormatsData = {
 			{"generation": 4, "level": 50, "shiny": 1, "moves":["thunderwave", "agility", "detect", "drillpeck"]},
 			{"generation": 6, "level": 70, "isHidden": false, "moves":["agility", "discharge", "raindance", "lightscreen"]},
 			{"generation": 6, "level": 70, "isHidden": true, "moves":["discharge", "thundershock", "raindance", "agility"], "pokeball": "cherishball"},
+			{"generation": 7, "level": 60, "shiny": 1, "isHidden": false, "moves":["ancientpower", "discharge", "pluck", "raindance"]},
 		],
 		eventOnly: true,
 		tier: "OU",
@@ -1665,6 +1667,7 @@ exports.BattleFormatsData = {
 			{"generation": 4, "level": 50, "shiny": 1, "moves":["firespin", "agility", "endure", "flamethrower"]},
 			{"generation": 6, "level": 70, "isHidden": false, "moves":["safeguard", "airslash", "sunnyday", "heatwave"]},
 			{"generation": 6, "level": 70, "isHidden": true, "moves":["skyattack", "heatwave", "sunnyday", "safeguard"], "pokeball": "cherishball"},
+			{"generation": 7, "level": 60, "shiny": 1, "isHidden": false, "moves":["ancientpower", "flamethrower", "airslash", "sunnyday"]},
 		],
 		eventOnly: true,
 		tier: "RU",
@@ -1703,6 +1706,7 @@ exports.BattleFormatsData = {
 			{"generation": 5, "level": 100, "nature": "Timid", "ivs": {"spa": 31, "spe": 31}, "isHidden": true, "moves":["psystrike", "icebeam", "healpulse", "hurricane"], "pokeball": "cherishball"},
 			{"generation": 6, "level": 70, "isHidden": false, "moves":["recover", "psychic", "barrier", "aurasphere"]},
 			{"generation": 6, "level": 100, "shiny": true, "isHidden": true, "moves":["psystrike", "psychic", "recover", "aurasphere"], "pokeball": "cherishball"},
+			{"generation": 7, "level": 60, "shiny": 1, "isHidden": false, "moves":["psychic", "recover", "swift", "psychocut"]},
 		],
 		eventOnly: true,
 		tier: "Uber",
@@ -2313,6 +2317,7 @@ exports.BattleFormatsData = {
 			{"generation": 4, "level": 40, "shiny": 1, "moves":["roar", "quickattack", "spark", "reflect"]},
 			{"generation": 4, "level": 30, "shiny": true, "nature": "Rash", "moves":["zapcannon", "aurasphere", "extremespeed", "weatherball"], "pokeball": "cherishball"},
 			{"generation": 6, "level": 50, "shiny": 1, "moves":["spark", "reflect", "crunch", "thunderfang"]},
+			{"generation": 7, "level": 60, "shiny": 1, "moves":["reflect", "crunch", "thunderfang", "discharge"]},
 		],
 		eventOnly: true,
 		unreleasedHidden: true,
@@ -2327,6 +2332,7 @@ exports.BattleFormatsData = {
 			{"generation": 4, "level": 40, "shiny": 1, "moves":["roar", "firespin", "stomp", "flamethrower"]},
 			{"generation": 4, "level": 30, "shiny": true, "nature": "Adamant", "moves":["flareblitz", "howl", "extremespeed", "crushclaw"], "pokeball": "cherishball"},
 			{"generation": 6, "level": 50, "shiny": 1, "moves":["stomp", "flamethrower", "swagger", "firefang"]},
+			{"generation": 7, "level": 60, "shiny": 1, "moves":["stomp", "bite", "swagger", "lavaplume"]},
 		],
 		eventOnly: true,
 		unreleasedHidden: true,
@@ -2341,6 +2347,7 @@ exports.BattleFormatsData = {
 			{"generation": 4, "level": 40, "shiny": 1, "moves":["raindance", "gust", "aurorabeam", "mist"]},
 			{"generation": 4, "level": 30, "shiny": true, "nature": "Relaxed", "moves":["sheercold", "airslash", "extremespeed", "aquaring"], "pokeball": "cherishball"},
 			{"generation": 6, "level": 50, "shiny": 1, "moves":["aurorabeam", "mist", "mirrorcoat", "icefang"]},
+			{"generation": 7, "level": 60, "shiny": 1, "moves":["bubblebeam", "aurorabeam", "mist", "raindance"]},
 		],
 		eventOnly: true,
 		unreleasedHidden: true,
@@ -2389,6 +2396,7 @@ exports.BattleFormatsData = {
 			{"generation": 5, "level": 5, "isHidden": true, "moves":["whirlwind", "weatherball"], "pokeball": "dreamball"},
 			{"generation": 6, "level": 50, "shiny": 1, "isHidden": false, "moves":["raindance", "hydropump", "aeroblast", "punishment"]},
 			{"generation": 6, "level": 50, "nature": "Timid", "isHidden": false, "moves":["aeroblast", "hydropump", "dragonrush", "icebeam"], "pokeball": "cherishball"},
+			{"generation": 7, "level": 60, "shiny": 1, "isHidden": false, "moves":["skillswap", "aeroblast", "extrasensory", "ancientpower"]},
 		],
 		eventOnly: true,
 		tier: "Uber",
@@ -2404,6 +2412,7 @@ exports.BattleFormatsData = {
 			{"generation": 6, "level": 50, "shiny": 1, "isHidden": false, "moves":["sunnyday", "fireblast", "sacredfire", "punishment"]},
 			{"generation": 6, "level": 50, "shiny": true, "isHidden": false, "moves":["sacredfire", "bravebird", "recover", "celebrate"], "pokeball": "cherishball"},
 			{"generation": 7, "level": 100, "isHidden": false, "moves":["sacredfire", "bravebird", "recover", "safeguard"], "pokeball": "cherishball"},
+			{"generation": 7, "level": 60, "shiny": 1, "isHidden": false, "moves":["burnup", "sacredfire", "extrasensory", "ancientpower"]},
 		],
 		eventOnly: true,
 		tier: "Uber",
@@ -4043,6 +4052,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 5, "level": 10, "nature": "Naughty", "moves":["uproar", "astonish", "trick", "thundershock"], "pokeball": "cherishball"},
 			{"generation": 6, "level": 10, "nature": "Quirky", "moves":["shockwave", "astonish", "trick", "thunderwave"], "pokeball": "cherishball"},
+			{"generation": 7, "level": 10, "moves":["uproar", "confide", "disarmingvoice"], "pokeball": "cherishball"},
 		],
 		tier: "NU",
 	},
@@ -6395,6 +6405,7 @@ exports.BattleFormatsData = {
 		randomDoubleBattleMoves: ["wideguard", "protect", "sunsteelstrike", "morningsun", "zenheadbutt", "flareblitz"],
 		eventPokemon: [
 			{"generation": 7, "level": 55, "moves":["sunsteelstrike", "cosmicpower", "crunch", "zenheadbutt"]},
+			{"generation": 7, "level": 60, "moves":["sunsteelstrike", "cosmicpower", "crunch", "zenheadbutt"]},
 		],
 		tier: "Uber",
 	},
@@ -6403,6 +6414,7 @@ exports.BattleFormatsData = {
 		randomDoubleBattleMoves: ["wideguard", "protect", "roost", "moongeistbeam", "psychic", "focusblast"],
 		eventPokemon: [
 			{"generation": 7, "level": 55, "moves":["moongeistbeam", "cosmicpower", "nightdaze", "shadowball"]},
+			{"generation": 7, "level": 60, "moves":["moongeistbeam", "cosmicpower", "nightdaze", "shadowball"]},
 		],
 		tier: "Uber",
 	},
@@ -6411,6 +6423,7 @@ exports.BattleFormatsData = {
 		randomDoubleBattleMoves: ["powergem", "sludgebomb", "grassknot", "protect", "thunderbolt", "hiddenpowerice"],
 		eventPokemon: [
 			{"generation": 7, "level": 55, "moves":["powergem", "mirrorcoat", "acidspray", "venomdrench"]},
+			{"generation": 7, "level": 60, "shiny": 1, "moves":["powergem", "acidspray", "stealthrock", "mirrorcoat"]},
 		],
 		eventOnly: true,
 		tier: "UU",
@@ -6420,6 +6433,7 @@ exports.BattleFormatsData = {
 		randomDoubleBattleMoves: ["hammerarm", "superpower", "leechlife", "icepunch", "poisonjab"],
 		eventPokemon: [
 			{"generation": 7, "level": 65, "moves":["counter", "hammerarm", "lunge", "dynamicpunch"]},
+			{"generation": 7, "level": 60, "shiny": 1, "moves":["counter", "hammerarm", "lunge", "dynamicpunch"]},
 		],
 		eventOnly: true,
 		tier: "BL",
@@ -6429,6 +6443,7 @@ exports.BattleFormatsData = {
 		randomDoubleBattleMoves: ["highjumpkick", "uturn", "icebeam", "poisonjab", "bugbuzz", "protect", "speedswap"],
 		eventPokemon: [
 			{"generation": 7, "level": 60, "moves":["triplekick", "lunge", "bugbuzz", "mefirst"]},
+			{"generation": 7, "level": 60, "shiny": 1, "moves":["triplekick", "lunge", "bugbuzz", "mefirst"]},
 		],
 		eventOnly: true,
 		tier: "Uber",
@@ -6438,6 +6453,7 @@ exports.BattleFormatsData = {
 		randomDoubleBattleMoves: ["thunderbolt", "hiddenpowerice", "tailglow", "protect", "energyball", "hypnosis"],
 		eventPokemon: [
 			{"generation": 7, "level": 65, "moves":["hypnosis", "discharge", "electricterrain", "powerwhip"]},
+			{"generation": 7, "level": 60, "shiny": 1, "moves":["hypnosis", "discharge", "electricterrain", "powerwhip"]},
 		],
 		eventOnly: true,
 		tier: "BL",
@@ -6447,6 +6463,7 @@ exports.BattleFormatsData = {
 		randomDoubleBattleMoves: ["protect", "heavyslam", "fireblast", "earthquake", "wideguard", "leechseed", "flamethrower", "substitute"],
 		eventPokemon: [
 			{"generation": 7, "level": 65, "moves":["autotomize", "seedbomb", "skullbash", "irondefense"]},
+			{"generation": 7, "level": 60, "shiny": 1, "moves":["autotomize", "seedbomb", "skullbash", "irondefense"]},
 		],
 		eventOnly: true,
 		tier: "OU",
@@ -6456,6 +6473,7 @@ exports.BattleFormatsData = {
 		randomDoubleBattleMoves: ["leafblade", "sacredsword", "smartstrike", "psychocut", "protect", "nightslash"],
 		eventPokemon: [
 			{"generation": 7, "level": 60, "moves":["leafblade", "xscissor", "detect", "airslash"]},
+			{"generation": 7, "level": 60, "shiny": 1, "moves":["leafblade", "xscissor", "detect", "airslash"]},
 		],
 		eventOnly: true,
 		tier: "OU",
@@ -6465,6 +6483,7 @@ exports.BattleFormatsData = {
 		randomDoubleBattleMoves: ["dracometeor", "crunch", "darkpulse", "wideguard", "fireblast", "protect"],
 		eventPokemon: [
 			{"generation": 7, "level": 70, "moves":["thrash", "gastroacid", "heavyslam", "wringout"]},
+			{"generation": 7, "level": 60, "shiny": 1, "moves":["hammerarm", "thrash", "gastroacid", "heavyslam"]},
 		],
 		eventOnly: true,
 		tier: "NU",
@@ -6474,14 +6493,23 @@ exports.BattleFormatsData = {
 		randomDoubleBattleMoves: ["calmmind", "trickroom", "moonlight", "storedpower", "psyshock", "darkpulse"],
 		eventPokemon: [
 			{"generation": 7, "level": 75, "moves":["stealthrock", "irondefense", "wringout", "prismaticlaser"]},
+			{"generation": 7, "level": 65, "moves":["photongeyser", "irondefense", "powergem", "nightslash"]},
 		],
 		eventOnly: true,
 		tier: "BL3",
 	},
 	necrozmaduskmane: {
+		eventPokemon: [
+			{"generation": 7, "level": 65, "moves":["sunsteelstrike"]},
+		],
+		eventOnly: true,
 		tier: "Uber",
 	},
 	necrozmadawnwings: {
+		eventPokemon: [
+			{"generation": 7, "level": 65, "moves":["moongeistbeam"]},
+		],
+		eventOnly: true,
 		tier: "Uber",
 	},
 	necrozmaultra: {
@@ -6513,7 +6541,7 @@ exports.BattleFormatsData = {
 	},
 	poipole: {
 		eventPokemon: [
-			{"generation": 7, "level": 40, "isHidden": false, "moves":["charm", "venomdrench", "nastyplot", "poisonjab"], "pokeball": "pokeball"},
+			{"generation": 7, "level": 40, "shiny": 1, "perfectIVs": 3, "isHidden": false, "moves":["charm", "venomdrench", "nastyplot", "poisonjab"], "pokeball": "pokeball"},
 		],
 		eventOnly: true,
 		tier: "NFE",
@@ -6522,9 +6550,17 @@ exports.BattleFormatsData = {
 		tier: "OU",
 	},
 	stakataka: {
+		eventPokemon: [
+			{"generation": 7, "level": 60, "shiny": 1, "moves":["irondefense", "ironhead", "rockblast", "wideguard"]},
+		],
+		eventOnly: true,
 		tier: "OU",
 	},
 	blacephalon: {
+		eventPokemon: [
+			{"generation": 7, "level": 60, "shiny": 1, "moves":["fireblast", "shadowball", "trick", "mindblown"]},
+		],
+		eventOnly: true,
 		tier: "OU",
 	},
 	zeraora: {
