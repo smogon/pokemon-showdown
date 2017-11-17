@@ -2686,7 +2686,7 @@ exports.BattleItems = {
 	"kommoniumz": {
 		id: "kommoniumz",
 		name: "Kommonium Z",
-		spritenum: 926,
+		spritenum: 690,
 		onTakeItem: false,
 		zMove: "Clangorous Soulblaze",
 		zMoveFrom: "Clanging Scales",
