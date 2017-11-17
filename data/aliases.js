@@ -267,6 +267,7 @@ exports.BattleAliases = {
 	"lycanrocd": "Lycanroc-Dusk",
 	"necrozmadm": "Necrozma-Dusk-Mane",
 	"necrozmadw": "Necrozma-Dawn-Wings",
+	"necrozmau": "Necrozma-Ultra",
 	"ultranecrozma": "Necrozma-Ultra",
 	"ufop": "Pokestar UFO-2",
 	"ufopsychic": "Pokestar UFO-2",
