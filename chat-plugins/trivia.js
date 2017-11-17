@@ -1241,7 +1241,7 @@ const commands = {
 		} else if (isAll) {
 			questions = triviaData.questions.slice();
 			if (triviaData.ugm) questions = questions.filter(q => q.category !== 'ugm');
-		} else if (CATEGORIES.hasOwnProperty(category)) {
+		} else if (CATEGORIES[category]) {
 			questions = sliceCategory(category);
 		} else {
 			return this.errorReply(`"${category}" is an invalid category.`);
