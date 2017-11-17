@@ -270,6 +270,9 @@ exports.BattleScripts = {
 				damage += hitResult || 0;
 			}
 			if (move.spreadHit) this.attrLastMove('[spread] ' + hitTargets.join(','));
+			if (move.mindBlownRecoil && !move.multihit) {
+				this.damage(Math.round(pokemon.maxhp / 2), pokemon, pokemon, null, true);
+			}
 		} else {
 			target = targets[0];
 			let lacksTarget = target.fainted;
@@ -516,6 +519,9 @@ exports.BattleScripts = {
 				damage = (moveDamage || 0);
 				// Total damage dealt is accumulated for the purposes of recoil (Parental Bond).
 				move.totalDamage += damage;
+				if (move.mindBlownRecoil && i === 0) {
+					this.damage(Math.round(pokemon.maxhp / 2), pokemon, pokemon, null, true);
+				}
 				this.eachEvent('Update');
 			}
 			if (i === 0) return true;
