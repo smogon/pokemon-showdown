@@ -719,6 +719,9 @@ exports.BattleFormats = {
 						template = this.getTemplate(item.megaStone);
 						typeTable = typeTable.filter(type => template.types.indexOf(type) >= 0);
 					}
+					if (item.id === "ultranecroziumz" && template.species.baseSpecies && template.species.baseSpecies === "Necrozma") {
+						typeTable = typeTable.filter(type => type === "Psychic");
+					}
 				}
 				if (!typeTable.length) return ["Your team must share a type."];
 			}
