@@ -3027,7 +3027,7 @@ exports.BattleItems = {
 		zMoveUser: ["Lunala", "Necrozma-Dawn-Wings"],
 		num: 922,
 		gen: 7,
-		desc: "Lunala/Necrozma-Dawn-Wings w/ Moongeist Beam: Menacing Moonraze Maelstrom.",
+		desc: "Lunala or Dawn Wings Necrozma with Moongeist Beam can use a special Z-Move.",
 	},
 	"lureball": {
 		id: "lureball",
@@ -3072,7 +3072,7 @@ exports.BattleItems = {
 		zMoveUser: ["Lycanroc", "Lycanroc-Midnight", "Lycanroc-Dusk"],
 		num: 925,
 		gen: 7,
-		desc: "Lycanroc/Lycanroc-Midnight/Lycanroc-Dusk w/ Stone Edge: Splintered Stormshards.",
+		desc: "If held by a Lycanroc forme with Stone Edge, it can use Splintered Stormshards.",
 	},
 	"machobrace": {
 		id: "machobrace",
@@ -5084,7 +5084,7 @@ exports.BattleItems = {
 		zMoveUser: ["Solgaleo", "Necrozma-Dusk-Mane"],
 		num: 921,
 		gen: 7,
-		desc: "Solgaleo/Necrozma-Dusk-Mane w/ Sunsteel Strike: Searing Sunraze Smash.",
+		desc: "Solgaleo or Dusk Mane Necrozma with Sunsteel Strike can use a special Z-Move.",
 	},
 	"souldew": {
 		id: "souldew",
@@ -5529,7 +5529,7 @@ exports.BattleItems = {
 		zMoveUser: ["Necrozma-Ultra"],
 		num: 923,
 		gen: 7,
-		desc: "Necrozma-Dusk-Mane/Dawn-Wings: Ultra Burst. W/ Photon Geyser: can use Z-Move.",
+		desc: "Dusk Mane/Dawn Wings Necrozma: Ultra Burst, then Z-Move w/ Photon Geyser.",
 	},
 	"venusaurite": {
 		id: "venusaurite",
