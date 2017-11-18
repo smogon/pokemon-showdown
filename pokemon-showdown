@@ -28,23 +28,13 @@ try {
 	process.exit(1);
 }
 
-// Make sure our dependencies are available, and install them if they
-// aren't
-
-try {
-	require.resolve('sockjs');
-} catch (e) {
-	console.log('Installing dependencies...');
-	child_process.execSync('npm install --production', {stdio: 'inherit'});
-}
-
 // Make sure config.js exists. If not, copy it over synchronously from
 // config-example.js, since it's needed before we can start the server
 
 try {
 	require.resolve('./config/config');
-} catch (err) {
-	if (err.code !== 'MODULE_NOT_FOUND') throw err; // should never happen
+} catch (e) {
+	if (e.code !== 'MODULE_NOT_FOUND' && e.code !== 'ENOENT') throw e; // should never happen
 
 	console.log('config.js does not exist. Creating one with default settings...');
 	fs.writeFileSync(
@@ -52,6 +42,54 @@ try {
 		fs.readFileSync(path.resolve(__dirname, 'config/config-example.js'))
 	);
 }
+
+const Config = require('./config/config');
+
+/**
+ * Helper for installing missing dependencies.
+ * @param {string} dependency - Package name.
+ * @param {string?} flags - Any flags to be passed to npm on install.
+ * @param {string?} setting - Key for Config setting of optional dependency. Null if mandatory.
+ * @return {boolean}
+ */
+function installDeps(dependency, flags, setting) {
+	if (setting && (!Config.hasOwnProperty(setting) || !Config[setting])) return false;
+
+	try {
+		require.resolve(dependency);
+	} catch (e) {
+		if (e.code !== 'MODULE_NOT_FOUND' && e.code !== 'ENOENT') {
+			console.error('An unknown error occurred when attempting to install ' + dependency + '.');
+			process.exit(-1);
+		}
+
+		let prettyDependency = (setting === null) ? 'dependencies' : 'optional dependency ' + dependency;
+		console.log('Installing ' + prettyDependency + '...');
+		try {
+			let statement = 'npm install ' + flags;
+			if (setting !== null) statement += ' ' + dependency;
+			require('child_process').execSync(statement, {stdio: 'inherit'});
+		} catch (e) {
+			let buf = 'Something went wrong while installing ' + prettyDependency + '. ';
+			buf += 'Please run "npm install ' + flags + prettyDependency + '" manually before attempting to launch the server' + (setting ? '.' : ', or disable Config.' + setting + '.');
+			console.error(buf);
+			process.exit(-1);
+		}
+	}
+
+	return true;
+}
+
+// Make sure our dependencies are available, and install them if they
+// aren't. If config has settings requiring optional dependencies enabled,
+// confirm those are installed as well.
+
+const nodeDeps = [
+	['sockjs', '--production', null],
+	['nodemailer', '--no-save', 'crashguardemail'],
+	['ofe', '--no-save', 'ofe']
+];
+nodeDeps.forEach(dep => installDeps(...dep));
 
 if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 	// Start the server. We manually load app.js so it can be configured to run as

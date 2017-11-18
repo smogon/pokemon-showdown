@@ -189,7 +189,8 @@ if (cluster.isMaster) {
 		try {
 			require.resolve('node-oom-heapdump');
 		} catch (e) {
-			if (e.code !== 'MODULE_NOT_FOUND') throw e; // should never happen
+			if (e.code !== 'MODULE_NOT_FOUND' || e.code !== 'ENOENT') throw e; // should never happen
+
 			throw new Error(
 				'node-oom-heapdump is not installed, but it is a required dependency if Config.ofe is set to true! ' +
 				'Run npm install node-oom-heapdump and restart the server.'
