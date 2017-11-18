@@ -162,7 +162,7 @@ Chat.namefilter = function (name, user) {
 
 	name = Dex.getName(name);
 	for (const filter of Chat.namefilters) {
-		name = filter(name, this);
+		name = filter(name, user);
 		if (!name) return '';
 	}
 	return name;
