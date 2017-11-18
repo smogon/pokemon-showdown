@@ -10,7 +10,7 @@
     "cloud-env": "0.2.2",
     "node-static": "0.7.10",
     "nodemailer": "4.0.1",
-    "ofe": "0.5.1"
+    "node-oom-heapdump": "^1.0.10"
   },
   "engines": {
     "node": ">=7.7.0"
