@@ -187,17 +187,19 @@ if (cluster.isMaster) {
 
 	if (Config.ofe) {
 		try {
-			require.resolve('ofe');
+			require.resolve('node-oom-heapdump');
 		} catch (e) {
 			if (e.code !== 'MODULE_NOT_FOUND') throw e; // should never happen
 			throw new Error(
-				'ofe is not installed, but it is a required dependency if Config.ofe is set to true! ' +
-				'Run npm install ofe and restart the server.'
+				'node-oom-heapdump is not installed, but it is a required dependency if Config.ofe is set to true! ' +
+				'Run npm install node-oom-heapdump and restart the server.'
 			);
 		}
 
 		// Create a heapdump if the process runs out of memory.
-		require('ofe').call();
+		require('node-oom-heapdump')({
+			addTimestamp: true,
+		});
 	}
 
 	// Static HTTP server
