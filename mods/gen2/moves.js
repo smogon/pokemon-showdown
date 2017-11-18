@@ -299,9 +299,9 @@ exports.BattleMovedex = {
 			},
 			onAfterMoveSelfPriority: 2,
 			onAfterMoveSelf: function (pokemon) {
+				if (!pokemon.hp) return;
 				let leecher = pokemon.side.foe.active[pokemon.volatiles['leechseed'].sourcePosition];
 				if (!leecher || leecher.fainted || leecher.hp <= 0) {
-					this.debug('Nothing to leech into');
 					return;
 				}
 				let toLeech = this.clampIntRange(pokemon.maxhp / 8, 1);
