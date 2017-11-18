@@ -862,7 +862,7 @@ exports.BattleScripts = {
 			defense = this.clampIntRange(defense, 1, 1998);
 		}
 
-		// In the event of a critical hit, the ofense and defense changes are ignored.
+		// In the event of a critical hit, the offense and defense changes are ignored.
 		// This includes both boosts and screens.
 		// Also, level is doubled in damage calculation.
 		if (move.crit) {
