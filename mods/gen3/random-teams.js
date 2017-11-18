@@ -153,7 +153,7 @@ class RandomGen3Teams extends RandomGen4Teams {
 				case 'bellydrum': case 'bulkup': case 'curse': case 'dragondance': case 'swordsdance':
 					if (counter.setupType !== 'Physical' || counter['physicalsetup'] > 1) rejected = true;
 					if (counter.Physical + counter['physicalpool'] < 2 && !hasMove['batonpass'] && (!hasMove['rest'] || !hasMove['sleeptalk'])) rejected = true;
-					if (moveid === 'bellydrum' && !hasMove['substitute'] && !hasMove['extremespeed']) rejected = true;
+					if (moveid === 'bellydrum' && !hasMove['substitute'] && !hasMove['extremespeed'] && !hasMove['softboiled']) rejected = true;
 					isSetup = true;
 					break;
 				case 'calmmind': case 'growth': case 'tailglow':
@@ -225,6 +225,9 @@ class RandomGen3Teams extends RandomGen4Teams {
 				case 'quickattack':
 					if (hasMove['thunderwave'] || counter.damagingMoves.length < 3 || hasType['Normal'] && counter['Normal'] < 2) rejected = true;
 					break;
+				case 'superfang':
+					if (hasMove['endeavor']) rejected = true;
+					break;
 				case 'flamethrower':
 					if (hasMove['fireblast']) rejected = true;
 					break;
@@ -275,8 +278,11 @@ class RandomGen3Teams extends RandomGen4Teams {
 					if (hasMove['moonlight'] || hasMove['morningsun'] || hasMove['rest'] || hasMove['softboiled']) rejected = true;
 					break;
 				case 'substitute':
-					if (hasMove['healbell'] || hasMove['pursuit'] || hasMove['rest'] || hasMove['taunt']) rejected = true;
+					if (hasMove['healbell'] || hasMove['pursuit'] || hasMove['rest']) rejected = true;
 					if (counter.damagingMoves.length < 2 && !hasMove['batonpass'] && !hasMove['perishsong']) rejected = true;
+					break;
+				case 'taunt':
+					if (hasMove['hypnosis'] || hasMove['substitute']) rejected = true;
 					break;
 				case 'thunderwave': case 'stunspore':
 					if (!!counter['speedsetup'] || hasMove['dragondance'] || hasMove['toxic'] || hasMove['willowisp'] || movePool.includes('sleeppowder') || hasMove['bodyslam'] && hasAbility['Serene Grace']) rejected = true;
