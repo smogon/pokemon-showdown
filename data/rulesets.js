@@ -707,7 +707,7 @@ exports.BattleFormats = {
 			let typeTable;
 			for (let i = 0; i < team.length; i++) {
 				let template = this.getTemplate(team[i].species);
-				if (!template.types) return ["Your team must share a type."];
+				if (!template.types) return [`Invalid pokemon ${team[i].name || team[i].species}`];
 				if (i === 0) {
 					typeTable = template.types;
 				} else {
@@ -717,13 +717,14 @@ exports.BattleFormats = {
 					let item = this.getItem(team[i].item);
 					if (item.megaStone && template.species === item.megaEvolves) {
 						template = this.getTemplate(item.megaStone);
-						typeTable = typeTable.filter(type => template.types.indexOf(type) >= 0);
+						typeTable = typeTable.filter(type => template.types.includes(type));
 					}
-					if (item.id === "ultranecroziumz" && template.species.baseSpecies && template.species.baseSpecies === "Necrozma") {
-						typeTable = typeTable.filter(type => type === "Psychic");
+					if (item.id === "ultranecroziumz" && template.baseSpecies === "Necrozma") {
+						template = this.getTemplate("Necrozma-Ultra");
+						typeTable = typeTable.filter(type => template.types.includes(type));
 					}
 				}
-				if (!typeTable.length) return ["Your team must share a type."];
+				if (!typeTable.length) return [`Your team must share a type.`];
 			}
 		},
 	},
