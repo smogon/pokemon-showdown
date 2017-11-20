@@ -5,10 +5,10 @@
 
 exports.Formats = [
 
-	// USUM Singles
+	// US/UM Singles
 	///////////////////////////////////////////////////////////////////
 	{
-		section: "USUM Singles",
+		section: "US/UM Singles",
 	},
 	{
 		name: "[Gen 7] Random Battle",
@@ -203,11 +203,11 @@ exports.Formats = [
 		ruleset: ['Team Preview', 'Cancel Mod'],
 	},
 
-	// USUM Doubles
+	// US/UM Doubles
 	///////////////////////////////////////////////////////////////////
 
 	{
-		section: "USUM Doubles",
+		section: "US/UM Doubles",
 	},
 	{
 		name: "[Gen 7] Random Doubles Battle",
@@ -695,11 +695,11 @@ exports.Formats = [
 		],
 	},
 
-	// ORAS Singles
+	// OR/AS Singles
 	///////////////////////////////////////////////////////////////////
 
 	{
-		section: "ORAS Singles",
+		section: "OR/AS Singles",
 		column: 3,
 	},
 	{
@@ -854,11 +854,11 @@ exports.Formats = [
 		ruleset: ['Team Preview', 'Cancel Mod'],
 	},
 
-	// ORAS Doubles/Triples
+	// OR/AS Doubles/Triples
 	///////////////////////////////////////////////////////////////////
 
 	{
-		section: "ORAS Doubles/Triples",
+		section: "OR/AS Doubles/Triples",
 	},
 	{
 		name: "[Gen 6] Doubles OU",
@@ -993,11 +993,11 @@ exports.Formats = [
 		ruleset: ['Team Preview', 'Cancel Mod'],
 	},
 
-	// BW2 Singles
+	// B2/W2 Singles
 	///////////////////////////////////////////////////////////////////
 
 	{
-		section: "BW2 Singles",
+		section: "B2/W2 Singles",
 		column: 4,
 	},
 	{
@@ -1092,11 +1092,11 @@ exports.Formats = [
 		ruleset: ['Team Preview', 'Cancel Mod'],
 	},
 
-	// BW2 Doubles
+	// B2/W2 Doubles
 	///////////////////////////////////////////////////////////////////
 
 	{
-		section: 'BW2 Doubles',
+		section: 'B2/W2 Doubles',
 		column: 4,
 	},
 	{
