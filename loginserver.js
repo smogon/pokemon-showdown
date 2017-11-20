@@ -12,7 +12,7 @@
 const LOGIN_SERVER_TIMEOUT = 30000;
 const LOGIN_SERVER_BATCH_TIME = 1000;
 
-const http = Config.loginserver.startsWith('http:')? require("http") : require("https");
+const http = Config.loginserver.startsWith('http:') ? require("http") : require("https");
 const url = require('url');
 
 const FS = require('./fs');
