@@ -5,10 +5,10 @@
 
 exports.Formats = [
 
-	// USM Singles
+	// USUM Singles
 	///////////////////////////////////////////////////////////////////
 	{
-		section: "USM Singles",
+		section: "USUM Singles",
 	},
 	{
 		name: "[Gen 7] Random Battle",
@@ -203,11 +203,11 @@ exports.Formats = [
 		ruleset: ['Team Preview', 'Cancel Mod'],
 	},
 
-	// USM Doubles
+	// USUM Doubles
 	///////////////////////////////////////////////////////////////////
 
 	{
-		section: "USM Doubles",
+		section: "USUM Doubles",
 	},
 	{
 		name: "[Gen 7] Random Doubles Battle",

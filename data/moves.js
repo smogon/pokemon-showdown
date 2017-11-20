@@ -18686,7 +18686,7 @@ exports.BattleMovedex = {
 			},
 			onTryHitPriority: 4,
 			onTryHit: function (target, source, move) {
-				// USM bug
+				// USUM bug
 				if (move.isZ) {
 					move.zBrokeProtect = true;
 					return;
