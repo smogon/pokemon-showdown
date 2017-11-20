@@ -222,7 +222,7 @@ exports.commands = {
 			}
 		}
 
-		let punishments = Punishments.getRoomPunishments(targetUser);
+		let punishments = Punishments.getRoomPunishments(targetUser || {userid});
 
 		if (punishments && punishments.length) {
 			buf += `<br />Room punishments: `;
@@ -231,7 +231,7 @@ exports.commands = {
 				const [punishType, punishUserid, expireTime, reason] = punishment;
 				let punishDesc = Punishments.roomPunishmentTypes.get(punishType);
 				if (!punishDesc) punishDesc = `punished`;
-				if (punishUserid !== targetUser.userid) punishDesc += ` as ${punishUserid}`;
+				if (punishUserid !== userid) punishDesc += ` as ${punishUserid}`;
 				let expiresIn = new Date(expireTime).getTime() - Date.now();
 				let expireString = Chat.toDurationString(expiresIn, {precision: 1});
 				punishDesc += ` for ${expireString}`;
