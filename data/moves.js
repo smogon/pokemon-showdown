@@ -10332,7 +10332,7 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 150,
 		category: "Special",
-		desc: "If this move is successful, the user loses 1/2 of its maximum HP, rounded up, unless the user has the Ability Magic Guard. This move is prevented from executing if any active Pokemon has the Ability Damp.",
+		desc: "Whether or not this move is successful, the user loses 1/2 of its maximum HP, rounded up, unless the user has the Ability Magic Guard. This move is prevented from executing and the user does not lose HP if any active Pokemon has the Ability Damp, if the user is affected by Powder, or Primordial Sea is in effect.",
 		shortDesc: "User loses 50% max HP. Hits adjacent Pokemon.",
 		id: "mindblown",
 		isViable: true,
@@ -10341,6 +10341,11 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		mindBlownRecoil: true,
+		onAfterMove: function (pokemon, target, move) {
+			if (move.mindBlownRecoil && !move.multihit) {
+				this.damage(Math.round(pokemon.maxhp / 2), pokemon, pokemon, null, true);
+			}
+		},
 		secondary: false,
 		target: "allAdjacent",
 		type: "Fire",
