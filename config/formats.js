@@ -197,6 +197,7 @@ exports.Formats = [
 			battle: 3,
 		},
 		ruleset: ['Pokemon', 'Standard GBU', 'Alola Pokedex', 'Team Preview'],
+		banlist: ['Poipole', 'Naganadel', 'Stakataka', 'Blacephalon'],
 		requirePentagon: true,
 	},
 	{
