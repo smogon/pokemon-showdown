@@ -187,6 +187,19 @@ exports.Formats = [
 		requirePentagon: true,
 	},
 	{
+		name: "[Gen 7] Battle Spot Special 7",
+		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/3621403/\">Battle Spot Special: Season 7</a>"],
+
+		mod: 'gen7',
+		maxForcedLevel: 50,
+		teamLength: {
+			validate: [3, 6],
+			battle: 3,
+		},
+		ruleset: ['Pokemon', 'Standard GBU', 'Alola Pokedex', 'Team Preview'],
+		requirePentagon: true,
+	},
+	{
 		name: "[Gen 7] Custom Game",
 
 		mod: 'gen7',
