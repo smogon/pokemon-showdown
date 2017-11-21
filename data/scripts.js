@@ -231,10 +231,12 @@ exports.BattleScripts = {
 		}
 
 		if (!this.singleEvent('TryMove', move, null, pokemon, target, move)) {
+			move.mindBlownRecoil = false;
 			return false;
 		}
 
 		if (!this.runEvent('TryMove', pokemon, target, move)) {
+			move.mindBlownRecoil = false;
 			return false;
 		}
 
@@ -273,9 +275,6 @@ exports.BattleScripts = {
 				}
 			}
 			if (move.spreadHit) this.attrLastMove('[spread] ' + hitTargets.join(','));
-			if (move.mindBlownRecoil && !move.multihit) {
-				this.damage(Math.round(pokemon.maxhp / 2), pokemon, pokemon, null, true);
-			}
 		} else {
 			target = targets[0];
 			let lacksTarget = target.fainted;
