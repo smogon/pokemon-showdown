@@ -914,11 +914,10 @@ exports.BattleScripts = {
 		} else {
 			if (isUltraBurst) {
 				this.add('-burst', pokemon, template.baseSpecies, template.requiredItem);
-				this.add('detailschange', pokemon, pokemon.details);
 			} else {
-				this.add('detailschange', pokemon, pokemon.details);
 				this.add('-mega', pokemon, template.baseSpecies, template.requiredItem);
 			}
+			this.add('detailschange', pokemon, pokemon.details);
 		}
 		pokemon.setAbility(template.abilities['0']);
 		pokemon.baseAbility = pokemon.ability;
