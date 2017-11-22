@@ -14,13 +14,14 @@ describe('Magic Guard', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [
 			{species: 'Magikarp', ability: 'swiftswim', moves: ['splash']},
-			{species: 'Clefable', ability: 'magicguard', item: 'lifeorb', moves: ['doubleedge']},
+			{species: 'Clefable', ability: 'magicguard', item: 'lifeorb', moves: ['doubleedge', 'mindblown']},
 		]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Crobat', ability: 'roughskin', moves: ['spikes', 'toxic']}]);
 		battle.commitDecisions();
 		battle.p1.chooseSwitch(2).foe.chooseMove('toxic');
 		assert.strictEqual(battle.p1.active[0].status, 'tox');
 		assert.fullHP(battle.p1.active[0]);
+		battle.p1.chooseMove('mindblown').foe.chooseMove('toxic');
 		battle.commitDecisions();
 		assert.fullHP(battle.p1.active[0]);
 	});

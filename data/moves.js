@@ -10343,7 +10343,7 @@ exports.BattleMovedex = {
 		mindBlownRecoil: true,
 		onAfterMove: function (pokemon, target, move) {
 			if (move.mindBlownRecoil && !move.multihit) {
-				this.damage(Math.round(pokemon.maxhp / 2), pokemon, pokemon, null, true);
+				this.damage(Math.round(pokemon.maxhp / 2), pokemon, pokemon, this.getEffect('Mind Blown'), true);
 			}
 		},
 		secondary: false,
