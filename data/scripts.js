@@ -42,14 +42,20 @@ exports.BattleScripts = {
 			this.clearActiveMove(true);
 			return;
 		} */
-		if (!this.runEvent('BeforeMove', pokemon, target, move)) {
+		let willTryMove = this.runEvent('BeforeMove', pokemon, target, move);
+		if (!willTryMove) {
 			this.runEvent('MoveAborted', pokemon, target, move);
 			this.clearActiveMove(true);
+			// The event 'BeforeMove' can return false or null
+			// false indicates that this counts as a move failing for the purpose of calculating Stomping Tantrum's base power
+			// null indicates the opposite
+			if (willTryMove === false) pokemon.moveThisTurnSucceeded = false;
 			return;
 		}
 		if (move.beforeMoveCallback) {
 			if (move.beforeMoveCallback.call(this, pokemon, target, move)) {
 				this.clearActiveMove(true);
+				pokemon.moveThisTurnSucceeded = false;
 				return;
 			}
 		}
@@ -120,6 +126,11 @@ exports.BattleScripts = {
 	 * Dancer.
 	 */
 	useMove: function (move, pokemon, target, sourceEffect, zMove) {
+		let moveSucceeded = this.useMoveHelper(move, pokemon, target, sourceEffect, zMove);
+		pokemon.moveThisTurnSucceeded = moveSucceeded;
+		return moveSucceeded;
+	},
+	useMoveHelper: function (move, pokemon, target, sourceEffect, zMove) {
 		if (!sourceEffect && this.effect.id) sourceEffect = this.effect;
 		if (zMove && move.id === 'weatherball') {
 			let baseMove = move;
@@ -157,12 +168,9 @@ exports.BattleScripts = {
 			// Adjust again
 			target = this.resolveTarget(pokemon, move);
 		}
-		if (!move) return false;
+		if (!move || pokemon.fainted) return false;
 
 		let attrs = '';
-		if (pokemon.fainted) {
-			return false;
-		}
 
 		if (move.flags['charge'] && !pokemon.volatiles[move.id]) {
 			attrs = '|[still]'; // suppress the default move animation

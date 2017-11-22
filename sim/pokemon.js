@@ -89,6 +89,10 @@ class Pokemon {
 		/**@type {string | boolean} */
 		this.moveThisTurn = '';
 
+		// For Stomping Tantrum
+		this.moveLastTurnSucceeded = null;
+		this.moveThisTurnSucceeded = null;
+
 		this.lastDamage = 0;
 		this.lastAttackedBy = null;
 		this.usedItemThisTurn = false;
