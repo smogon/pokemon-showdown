@@ -16225,7 +16225,12 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		// TODO: find out what "failed" means and implement accordingly
+		onBasePowerPriority: 4,
+		onBasePower: function (basePower, pokemon) {
+			if (pokemon.moveLastTurnSucceeded === false) {
+				return this.chainModify(2);
+			}
+		},
 		secondary: false,
 		target: "normal",
 		type: "Ground",
