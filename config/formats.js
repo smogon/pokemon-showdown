@@ -187,6 +187,30 @@ exports.Formats = [
 		requirePentagon: true,
 	},
 	{
+		name: "[Gen 7] Dragon Cup",
+		desc: [
+			`&bullet; <a href="https://3ds.pokemon-gl.com/dl-regulation/6010">Official rules</a>`,
+		],
+
+		mod: 'gen7',
+		maxForcedLevel: 50,
+		teamLength: {
+			validate: [3, 6],
+			battle: 3,
+		},
+		ruleset: ['Pokemon', 'Minimal GBU', 'Team Preview'],
+		onValidateTeam: function (team) {
+			const restrictedLegends = ['Mewtwo', 'Lugia', 'Ho-Oh', 'Kyogre', 'Groudon', 'Rayquaza', 'Dialga', 'Palkia', 'Giratina', 'Reshiram', 'Zekrom', 'Kyurem', 'Xerneas', 'Yveltal', 'Zygarde', 'Cosmog', 'Cosmoem', 'Solgaleo', 'Lunala', 'Necrozma'];
+			let count = 0;
+			for (const set of team) {
+				const baseSpecies = this.getTemplate(set.species).baseSpecies;
+				if (restrictedLegends.includes(baseSpecies)) count++;
+				if (count > 1) return ["You can only use one Restricted Legendary Pok\u00E9mon."];
+			}
+		},
+		requirePentagon: true,
+	},
+	{
 		name: "[Gen 7] Battle Spot Special 7",
 		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/3621403/\">Battle Spot Special: Season 7</a>"],
 

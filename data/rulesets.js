@@ -49,6 +49,26 @@ exports.BattleFormats = {
 			}
 		},
 	},
+	minimalgbu: {
+		effectType: 'ValidatorRule',
+		name: 'Minimal GBU',
+		desc: ["The standard ruleset for official tournaments, but without Restricted Legendary bans"],
+		ruleset: ['Species Clause', 'Nickname Clause', 'Item Clause', 'Cancel Mod'],
+		banlist: ['Unreleased', 'Illegal', 'Battle Bond',
+			'Mew',
+			'Celebi',
+			'Jirachi', 'Deoxys',
+			'Phione', 'Manaphy', 'Darkrai', 'Shaymin', 'Arceus',
+			'Victini', 'Keldeo', 'Meloetta', 'Genesect',
+			'Diancie', 'Hoopa', 'Volcanion',
+			'Magearna', 'Marshadow',
+		],
+		onValidateSet(set, format) {
+			if (this.gen < 7 && toId(set.item) === 'souldew') {
+				return [`${set.name || set.species} has Soul Dew, which is banned in ${format.name}.`];
+			}
+		},
+	},
 	standarddoubles: {
 		effectType: 'ValidatorRule',
 		name: 'Standard Doubles',
