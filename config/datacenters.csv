@@ -1800,6 +1800,7 @@
 149.210.164.0,149.210.164.255,TransIP,https://www.transip.nl/
 149.255.32.0,149.255.39.255,Swiftway,http://swiftway.net/
 151.80.128.0,151.80.159.255,OVH FR,https://www.ovh.ie/
+151.80.179.24,151.80.179.27,OVH FR,https://www.ovh.ie/
 151.236.4.0,151.236.4.255,EDIS,http://www.edis.at/
 151.236.8.0,151.236.8.255,EDIS,http://www.edis.at/
 151.236.13.0,151.236.15.255,EDIS,http://www.edis.at/
