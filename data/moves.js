@@ -10342,7 +10342,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		mindBlownRecoil: true,
 		onAfterMove: function (pokemon, target, move) {
-			if (move.mindBlownRecoil && !move.multihit) {
+			if (move.mindBlownRecoil && !move.multihit && !pokemon.hasAbility('magicguard')) {
 				this.damage(Math.round(pokemon.maxhp / 2), pokemon, pokemon, null, true);
 			}
 		},
