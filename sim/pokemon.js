@@ -1041,11 +1041,10 @@ class Pokemon {
 	 * @param {boolean} silent
 	 */
 	cureStatus(silent) {
-		if (!this.hp) return false;
-		if (this.status) {
-			this.battle.add('-curestatus', this, this.status, silent ? '[silent]' : '[msg]');
-			this.setStatus('');
-		}
+		if (!this.hp || !this.status) return false;
+		this.battle.add('-curestatus', this, this.status, silent ? '[silent]' : '[msg]');
+		this.setStatus('');
+		return true;
 	}
 
 	/**

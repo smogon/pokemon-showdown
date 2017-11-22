@@ -584,13 +584,15 @@ exports.BattleMovedex = {
 		onHit: function (pokemon, source, move) {
 			this.add('-activate', source, 'move: Aromatherapy');
 			let side = pokemon.side;
+			let didSomething = false;
 			for (let i = 0; i < side.pokemon.length; i++) {
 				if (side.pokemon[i] !== source && ((side.pokemon[i].hasAbility('sapsipper')) ||
 						(side.pokemon[i].volatiles['substitute'] && !move.infiltrates))) {
 					continue;
 				}
-				side.pokemon[i].cureStatus();
+				didSomething = side.pokemon[i].cureStatus() || didSomething;
 			}
+			return didSomething;
 		},
 		target: "allyTeam",
 		type: "Grass",
@@ -1456,9 +1458,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {reflectable: 1, mirror: 1},
 		onHit: function (target, source, move) {
-			if (!target.addVolatile('trapped', source, move, 'trapper')) {
-				this.add('-fail', target);
-			}
+			return target.addVolatile('trapped', source, move, 'trapper');
 		},
 		secondary: false,
 		target: "normal",
@@ -2117,7 +2117,6 @@ exports.BattleMovedex = {
 		flags: {},
 		onTryHit: function (target, source) {
 			this.add('-activate', target, 'move: Celebrate');
-			return null;
 		},
 		secondary: false,
 		target: "self",
@@ -3195,17 +3194,21 @@ exports.BattleMovedex = {
 			if (!target.volatiles['substitute'] || move.infiltrates) this.boost({evasion: -1});
 			let removeTarget = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
 			let removeAll = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
+			let didSomething = false;
 			for (let targetCondition of removeTarget) {
 				if (target.side.removeSideCondition(targetCondition)) {
 					if (!removeAll.includes(targetCondition)) continue;
 					this.add('-sideend', target.side, this.getEffect(targetCondition).name, '[from] move: Defog', '[of] ' + target);
+					didSomething = true;
 				}
 			}
 			for (let sideCondition of removeAll) {
 				if (source.side.removeSideCondition(sideCondition)) {
 					this.add('-sideend', source.side, this.getEffect(sideCondition).name, '[from] move: Defog', '[of] ' + source);
+					didSomething = true;
 				}
 			}
+			return didSomething;
 		},
 		secondary: false,
 		target: "normal",
@@ -5535,10 +5538,11 @@ exports.BattleMovedex = {
 					}
 				}
 			}
-			if (!targets.length) return false; // No targets; move fails
-			for (let i = 0; i < targets.length; i++) {
-				this.boost({def: 1}, targets[i], source, this.getMove('Flower Shield'));
+			let didSomething = false;
+			for (const target of targets) {
+				didSomething = this.boost({def: 1}, target, source, this.getMove('Flower Shield')) || didSomething;
 			}
+			return didSomething;
 		},
 		secondary: false,
 		target: "all",
@@ -6977,9 +6981,11 @@ exports.BattleMovedex = {
 		pp: 30,
 		priority: 0,
 		flags: {},
-		onTryHit: function (target, source) {
-			this.add('-activate', target, 'move: Happy Hour');
-			return null;
+		sideCondition: 'happyhour',
+		effect: {
+			onStart: function (side) {
+				this.add('-activate', side, 'move: Happy Hour');
+			},
 		},
 		secondary: false,
 		target: "allySide",
@@ -7112,10 +7118,12 @@ exports.BattleMovedex = {
 		onHit: function (pokemon, source) {
 			this.add('-activate', source, 'move: Heal Bell');
 			let side = pokemon.side;
+			let didSomething = false;
 			for (let i = 0; i < side.pokemon.length; i++) {
 				if (side.pokemon[i].hasAbility('soundproof')) continue;
-				side.pokemon[i].cureStatus();
+				didSomething = side.pokemon[i].cureStatus() || didSomething;
 			}
+			return didSomething;
 		},
 		target: "allyTeam",
 		type: "Normal",
@@ -7846,9 +7854,6 @@ exports.BattleMovedex = {
 		pp: 40,
 		priority: 0,
 		flags: {authentic: 1},
-		onTryHit: function (target, source) {
-			return null;
-		},
 		secondary: false,
 		target: "adjacentAlly",
 		type: "Normal",
@@ -9966,9 +9971,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {reflectable: 1, mirror: 1},
 		onHit: function (target, source, move) {
-			if (!target.addVolatile('trapped', source, move, 'trapper')) {
-				this.add('-fail', target);
-			}
+			return target.addVolatile('trapped', source, move, 'trapper');
 		},
 		secondary: false,
 		target: "normal",
@@ -15802,9 +15805,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1},
 		onHit: function (target, source, move) {
-			if (!target.addVolatile('trapped', source, move, 'trapper')) {
-				this.add('-fail', target);
-			}
+			return target.addVolatile('trapped', source, move, 'trapper');
 		},
 		secondary: false,
 		target: "normal",
@@ -15937,7 +15938,6 @@ exports.BattleMovedex = {
 		flags: {gravity: 1},
 		onTryHit: function (target, source) {
 			this.add('-nothing');
-			return null;
 		},
 		secondary: false,
 		target: "self",
@@ -16348,8 +16348,8 @@ exports.BattleMovedex = {
 		onHit: function (target, source) {
 			if (target.boosts.atk === -6) return false;
 			let atk = target.getStat('atk', false, true);
-			this.boost({atk: -1}, target, source, null, null, true);
-			this.heal(atk, source, target);
+			let didSomething = this.boost({atk: -1}, target, source, null, null, true);
+			return this.heal(atk, source, target) || didSomething;
 		},
 		secondary: false,
 		target: "normal",
@@ -16767,8 +16767,9 @@ exports.BattleMovedex = {
 		},
 		onHit: function (pokemon) {
 			let healAmount = [0.25, 0.5, 1];
-			this.heal(this.modify(pokemon.maxhp, healAmount[(pokemon.volatiles['stockpile'].layers - 1)]));
+			let healedBy = this.heal(this.modify(pokemon.maxhp, healAmount[(pokemon.volatiles['stockpile'].layers - 1)]));
 			pokemon.removeVolatile('stockpile');
+			return healedBy;
 		},
 		secondary: false,
 		target: "self",
