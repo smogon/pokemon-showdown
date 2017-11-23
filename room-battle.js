@@ -156,7 +156,8 @@ class BattleTimer {
 
 		const hasLongTurns = Dex.getFormat(battle.format).gameType !== 'singles';
 		const isChallenge = (!battle.rated && !battle.room.tour);
-		this.settings = Object.assign({}, Dex.getFormat(battle.format).timer);
+		const timerSettings = Dex.getFormat(battle.format).timer;
+		this.settings = Object.assign({}, timerSettings);
 		if (this.settings.perTurn === undefined) {
 			this.settings.perTurn = hasLongTurns ? 25 : 10;
 		}
@@ -171,6 +172,9 @@ class BattleTimer {
 		this.settings.startingTicks = Math.ceil(this.settings.starting / TICK_TIME);
 		this.settings.maxPerTurnTicks = Math.ceil(this.settings.maxPerTurn / TICK_TIME);
 		this.settings.maxFirstTurnTicks = Math.ceil((this.settings.maxFirstTurn || 0) / TICK_TIME);
+		if (this.settings.accelerate === undefined) {
+			this.settings.accelerate = !timerSettings;
+		}
 
 		for (let slotNum = 0; slotNum < 2; slotNum++) {
 			this.ticksLeft.push(this.settings.startingTicks);
@@ -229,6 +233,21 @@ class BattleTimer {
 			const slot = 'p' + (slotNum + 1);
 			const player = this.battle[slot];
 
+			let perTurnTicks = this.settings.perTurnTicks;
+			if (this.timer.accelerate && perTurnTicks) {
+				// after turn 100ish: 15s/turn -> 10s/turn
+				if (this.battle.requestCount > 200) {
+					perTurnTicks--;
+				}
+				// after turn 200ish: 10s/turn -> 7s/turn
+				if (this.battle.requestCount > 400 && this.battle.requestCount % 2) {
+					perTurnTicks = 0;
+				}
+				// after turn 400ish: 7s/turn -> 6s/turn
+				if (this.battle.requestCount > 800 && this.battle.requestCount % 4) {
+					perTurnTicks = 0;
+				}
+			}
 			this.ticksLeft[slotNum] += this.settings.perTurnTicks;
 			this.turnTicksLeft[slotNum] = Math.min(this.ticksLeft[slotNum], maxTurnTicks);
 
@@ -360,6 +379,7 @@ class Battle {
 		this.endType = 'normal';
 
 		this.rqid = 1;
+		this.requestCount = 0;
 
 		this.process = SimulatorProcess.acquire();
 		if (this.process.pendingTasks.has(room.id)) {
@@ -516,6 +536,7 @@ class Battle {
 				request.rqid = this.rqid;
 				const requestJSON = JSON.stringify(request);
 				this.requests[player.slot] = [this.rqid, requestJSON, request.wait ? 'cantUndo' : false, ''];
+				this.requestCount++;
 				player.sendRoom(`|request|${requestJSON}`);
 			}
 			break;
