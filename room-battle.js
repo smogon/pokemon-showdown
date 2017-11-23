@@ -234,7 +234,7 @@ class BattleTimer {
 			const player = this.battle[slot];
 
 			let perTurnTicks = this.settings.perTurnTicks;
-			if (this.timer.accelerate && perTurnTicks) {
+			if (this.settings.accelerate && perTurnTicks) {
 				// after turn 100ish: 15s/turn -> 10s/turn
 				if (this.battle.requestCount > 200) {
 					perTurnTicks--;
