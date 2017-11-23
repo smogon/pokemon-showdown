@@ -1077,21 +1077,21 @@ Chat.plural = function (num, plural = 's', singular = '') {
 /**
  * Returns a timestamp in the form {yyyy}-{MM}-{dd} {hh}:{mm}:{ss}.
  *
- * options.hour12 = true will reports hours in mod-12 format.
+ * options.human = true will reports hours human-readable
  *
  * @param  {Date} date
  * @param  {object} options
  * @return {string}
  */
 Chat.toTimestamp = function (date, options) {
-	const isHour12 = options && options.hour12;
+	const human = options && options.human;
 	let parts = [date.getFullYear(), date.getMonth() + 1, date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()];
-	if (isHour12) {
+	if (human) {
 		parts.push(parts[3] >= 12 ? 'pm' : 'am');
 		parts[3] = parts[3] % 12 || 12;
 	}
 	parts = parts.map(val => val < 10 ? '0' + val : '' + val);
-	return parts.slice(0, 3).join("-") + " " + parts.slice(3, 6).join(":") + (isHour12 ? " " + parts[6] : "");
+	return parts.slice(0, 3).join("-") + " " + parts.slice(3, human ? 5 : 6).join(":") + (human ? "" + parts[6] : "");
 };
 
 /**
