@@ -1027,6 +1027,7 @@ exports.BattleMovedex = {
 					return;
 				}
 				this.add('-activate', target, 'move: Protect');
+				source.moveThisTurnSucceeded = true;
 				let lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
 					// Outrage counter is reset
@@ -2856,6 +2857,7 @@ exports.BattleMovedex = {
 			onTryHit: function (target, source, move) {
 				if (move && (move.target === 'self' || move.category !== 'Status')) return;
 				this.add('-activate', target, 'move: Crafty Shield');
+				source.moveThisTurnSucceeded = true;
 				return null;
 			},
 		},
@@ -8855,6 +8857,7 @@ exports.BattleMovedex = {
 					return;
 				}
 				this.add('-activate', target, 'move: Protect');
+				source.moveThisTurnSucceeded = true;
 				let lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
 					// Outrage counter is reset
@@ -9902,6 +9905,7 @@ exports.BattleMovedex = {
 				}
 				if (move && (move.target === 'self' || move.category === 'Status')) return;
 				this.add('-activate', target, 'move: Mat Block', move.name);
+				source.moveThisTurnSucceeded = true;
 				let lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
 					// Outrage counter is reset
@@ -12346,6 +12350,7 @@ exports.BattleMovedex = {
 					return;
 				}
 				this.add('-activate', target, 'move: Protect');
+				source.moveThisTurnSucceeded = true;
 				let lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
 					// Outrage counter is reset
@@ -12861,6 +12866,7 @@ exports.BattleMovedex = {
 					return;
 				}
 				this.add('-activate', target, 'move: Quick Guard');
+				source.moveThisTurnSucceeded = true;
 				let lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
 					// Outrage counter is reset
@@ -15531,6 +15537,7 @@ exports.BattleMovedex = {
 					return;
 				}
 				this.add('-activate', target, 'move: Protect');
+				source.moveThisTurnSucceeded = true;
 				let lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
 					// Outrage counter is reset
@@ -18716,6 +18723,7 @@ exports.BattleMovedex = {
 					return;
 				}
 				this.add('-activate', target, 'move: Wide Guard');
+				source.moveThisTurnSucceeded = true;
 				let lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
 					// Outrage counter is reset
