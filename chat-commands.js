@@ -2000,6 +2000,7 @@ exports.commands = {
 
 		targetUser.setGroup(Config.groupsranking[0], true);
 		this.sendReply("User '" + name + "' is now trusted.");
+		this.privateModCommand(`${name} was set as a trusted user by ${user.name}`);
 	},
 	trustuserhelp: ["/trustuser [username] - Trusts the user (makes them immune to locks). Requires: & ~"],
 
