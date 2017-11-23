@@ -183,14 +183,26 @@ exports.Formats = [
 			validate: [3, 6],
 			battle: 3,
 		},
-		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview'],
+		ruleset: ['Pokemon', 'Standard GBU'],
 		requirePentagon: true,
 	},
 	{
+		name: "[Gen 7] Battle Spot Special 7",
+		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/3621403/\">Battle Spot Special: Season 7</a>"],
+
+		mod: 'gen7',
+		maxForcedLevel: 50,
+		teamLength: {
+			validate: [3, 6],
+			battle: 3,
+		},
+		ruleset: ['Pokemon', 'Standard GBU', 'Alola Pokedex'],
+		banlist: ['Poipole', 'Naganadel', 'Stakataka', 'Blacephalon'],
+		requirePlus: true,
+	},
+	{
 		name: "[Gen 7] Dragon Cup",
-		desc: [
-			`&bullet; <a href="https://3ds.pokemon-gl.com/dl-regulation/6010">Official rules</a>`,
-		],
+		desc: [`&bullet; <a href="https://3ds.pokemon-gl.com/dl-regulation/6010">Dragon Cup: Official rules</a>`],
 
 		mod: 'gen7',
 		maxForcedLevel: 50,
@@ -208,20 +220,6 @@ exports.Formats = [
 				if (count > 1) return ["You can only use one Restricted Legendary Pok\u00E9mon."];
 			}
 		},
-		requirePentagon: true,
-	},
-	{
-		name: "[Gen 7] Battle Spot Special 7",
-		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/3621403/\">Battle Spot Special: Season 7</a>"],
-
-		mod: 'gen7',
-		maxForcedLevel: 50,
-		teamLength: {
-			validate: [3, 6],
-			battle: 3,
-		},
-		ruleset: ['Pokemon', 'Standard GBU', 'Alola Pokedex', 'Team Preview'],
-		banlist: ['Poipole', 'Naganadel', 'Stakataka', 'Blacephalon'],
 		requirePentagon: true,
 	},
 	{
@@ -306,13 +304,7 @@ exports.Formats = [
 			battle: 4,
 		},
 		timer: {starting: 15 * 60 - 10, perTurn: 10, maxPerTurn: 60, maxFirstTurn: 90, timeoutAutoChoose: true},
-		ruleset: ['Pokemon', 'Species Clause', 'Nickname Clause', 'Item Clause', 'Team Preview', 'Cancel Mod'],
-		banlist: [
-			'Illegal', 'Unreleased', 'Mewtwo', 'Mew', 'Lugia', 'Ho-Oh', 'Celebi', 'Kyogre', 'Groudon', 'Rayquaza', 'Jirachi',
-			'Deoxys', 'Dialga', 'Palkia', 'Giratina', 'Phione', 'Manaphy', 'Darkrai', 'Shaymin', 'Arceus', 'Victini', 'Reshiram',
-			'Zekrom', 'Kyurem', 'Keldeo', 'Meloetta', 'Genesect', 'Xerneas', 'Yveltal', 'Zygarde', 'Diancie', 'Hoopa', 'Volcanion',
-			'Cosmog', 'Cosmoem', 'Solgaleo', 'Lunala', 'Necrozma', 'Magearna', 'Marshadow', 'Zeraora', 'Greninja-Ash',
-		],
+		ruleset: ['Pokemon', 'Standard GBU'],
 		requirePlus: true,
 	},
 	{
@@ -350,7 +342,7 @@ exports.Formats = [
 			validate: [4, 6],
 			battle: 4,
 		},
-		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview'],
+		ruleset: ['Pokemon', 'Standard GBU'],
 		requirePentagon: true,
 	},
 	{
@@ -630,7 +622,7 @@ exports.Formats = [
 			validate: [3, 6],
 			battle: 3,
 		},
-		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview'],
+		ruleset: ['Pokemon', 'Standard GBU'],
 	},
 	{
 		name: "[Gen 7] Monotype Random Battle",
@@ -887,7 +879,7 @@ exports.Formats = [
 			validate: [3, 6],
 			battle: 3,
 		},
-		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview'],
+		ruleset: ['Pokemon', 'Standard GBU'],
 		requirePentagon: true,
 	},
 	{
@@ -1005,7 +997,7 @@ exports.Formats = [
 			validate: [4, 6],
 			battle: 4,
 		},
-		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview'],
+		ruleset: ['Pokemon', 'Standard GBU'],
 		requirePentagon: true,
 	},
 	{
@@ -1034,7 +1026,7 @@ exports.Formats = [
 		teamLength: {
 			validate: [6, 6],
 		},
-		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview'],
+		ruleset: ['Pokemon', 'Standard GBU'],
 		requirePentagon: true,
 	},
 	{
@@ -1134,7 +1126,7 @@ exports.Formats = [
 			validate: [3, 6],
 			battle: 3,
 		},
-		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview'],
+		ruleset: ['Pokemon', 'Standard GBU'],
 		banlist: ['Dark Void', 'Sky Drop'],
 	},
 	{
@@ -1183,7 +1175,7 @@ exports.Formats = [
 			validate: [4, 6],
 			battle: 4,
 		},
-		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview'],
+		ruleset: ['Pokemon', 'Standard GBU'],
 		banlist: ['Dark Void', 'Sky Drop'],
 	},
 	{
