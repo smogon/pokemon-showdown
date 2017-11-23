@@ -1313,6 +1313,15 @@ exports.Formats = [
 		ruleset: ['Pokemon', 'HP Percentage Mod', 'Cancel Mod'],
 	},
 	{
+		name: "[Gen 3] Doubles Custom Game",
+
+		mod: 'gen3',
+		gameType: 'doubles',
+		searchShow: false,
+		debug: true,
+		ruleset: ['Pokemon', 'HP Percentage Mod', 'Cancel Mod'],
+	},
+	{
 		name: "[Gen 2] OU",
 		desc: [
 			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3556533/\">GSC OU Viability Ranking</a>",
