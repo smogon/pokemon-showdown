@@ -110,10 +110,10 @@ exports.BattleScripts = {
 			}
 			return false;
 		},
-		useItem() {
+		useItem(unused, source) {
 			let item = this.battle.effect;
 			if ((!this.hp && !item.isGem) || !this.isActive) return false;
-			let source = this.battle.event.target;
+			if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
 			if (this.battle.runEvent('UseItem', this, null, null, item)) {
 				switch (item.id) {
 				case 'redcard':
