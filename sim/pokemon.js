@@ -1332,7 +1332,11 @@ class Pokemon {
 			if (!status.onRestart) return false;
 			return this.battle.singleEvent('Restart', status, this.volatiles[status.id], this, source, sourceEffect);
 		}
-		if (!this.runStatusImmunity(status.id)) return false;
+		if (!this.runStatusImmunity(status.id)) {
+			this.battle.debug('immune to volatile status');
+			if (sourceEffect && sourceEffect.status) this.battle.add('-immune', this, '[msg]');
+			return false;
+		}
 		result = this.battle.runEvent('TryAddVolatile', this, source, sourceEffect, status);
 		if (!result) {
 			this.battle.debug('add volatile [' + status.id + '] interrupted');
