@@ -227,7 +227,9 @@ exports.BattleScripts = {
 						pokemon.deductPP(move, extraPP);
 					}
 				}
-				if (this.singleEvent('TryMove', move, null, pokemon, target, move) || (this.runEvent('TryMove', pokemon, target, move))) {
+				if (!this.singleEvent('TryMove', move, null, pokemon, target, move) || !(this.runEvent('TryMove', pokemon, target, move))) {
+					move.mindBlownRecoil = false;
+				} else {
 					this.singleEvent('UseMoveMessage', move, null, pokemon, target, move);
 
 					if (move.ignoreImmunity === undefined) {
@@ -280,23 +282,23 @@ exports.BattleScripts = {
 							if (damage || damage === 0 || damage === undefined) moveResult = true;
 						}
 					}
-					if (move.selfBoost && moveResult) this.moveHit(pokemon, pokemon, move, move.selfBoost, false, true);
-					if (!pokemon.hp) {
-						this.faint(pokemon, pokemon, move);
-					}
-
-					if (moveResult) {
-						if (!move.negateSecondary && !(move.hasSheerForce && pokemon.hasAbility('sheerforce'))) {
-							this.singleEvent('AfterMoveSecondarySelf', move, null, pokemon, target, move);
-							this.runEvent('AfterMoveSecondarySelf', pokemon, target, move);
+					if (!noTarget) {
+						if (move.selfBoost && moveResult) this.moveHit(pokemon, pokemon, move, move.selfBoost, false, true);
+						if (!pokemon.hp) {
+							this.faint(pokemon, pokemon, move);
 						}
-						if (pokemon.moveThisTurnSucceeded === oldMoveSucceeded) pokemon.moveThisTurnSucceeded = true;
-						return true;
-					} else {
-						this.singleEvent('MoveFail', move, null, target, pokemon, move);
+
+						if (!moveResult) {
+							this.singleEvent('MoveFail', move, null, target, pokemon, move);
+						} else {
+							if (!move.negateSecondary && !(move.hasSheerForce && pokemon.hasAbility('sheerforce'))) {
+								this.singleEvent('AfterMoveSecondarySelf', move, null, pokemon, target, move);
+								this.runEvent('AfterMoveSecondarySelf', pokemon, target, move);
+							}
+							if (pokemon.moveThisTurnSucceeded === oldMoveSucceeded) pokemon.moveThisTurnSucceeded = true;
+							return true;
+						}
 					}
-				} else {
-					move.mindBlownRecoil = false;
 				}
 			}
 			if (noTarget) {
