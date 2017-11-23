@@ -139,8 +139,8 @@ function getMoreButton(room, search, lines, maxLines) {
 	if (!newLines || lines < maxLines) {
 		return ''; // don't show a button if no more pre-set increments are valid or if the amount of results is already below the max
 	} else {
-		search = Chat.escapeHTML(`${search}`);
-		return `<br /><div style="float:right"><button class="button" name="send" value="/modlog ${room}, ${search} ${LINES_SEPARATOR}${newLines}" title="View more results">More results...</button></div>`;
+		if (useExactSearch) search = Chat.escapeHTML(`"${search}"`);
+		return `<br /><div style="text-align:center"><button class="button" name="send" value="/modlog ${room}, ${search} ${LINES_SEPARATOR}${newLines}" title="View more results">Older results<br />&#x25bc;</button></div>`;
 	}
 }
 function toModlogChar(match) {
@@ -322,7 +322,7 @@ function prettifyResults(rawResults, room, searchString, searchType, addModlogLi
 		let parenIndex = line.indexOf(')');
 		let thisRoomID = line.slice(bracketIndex + 3, parenIndex);
 		if (addModlogLinks) {
-			let url = Config.modloglink(time, thisRoomID);
+			let url = Config.modloglink(timestamp, thisRoomID);
 			if (url) timestamp = `<a href="${url}">${timestamp}</a>`;
 		}
 		return `${date}<small>[${timestamp}] (${thisRoomID})</small>${Chat.escapeHTML(line.slice(parenIndex + 1))}`;
@@ -431,26 +431,7 @@ exports.commands = {
 		if (!lines) lines = DEFAULT_RESULTS_LENGTH;
 		if (lines > MAX_RESULTS_LENGTH) lines = MAX_RESULTS_LENGTH;
 
-		let searchString = '';
-		if (target) searchString = target.trim();
-		if (searchString.length > MAX_QUERY_LENGTH) {
-			this.errorReply(`Your search query must be shorter than ${MAX_QUERY_LENGTH} characters.`);
-			return;
-		}
-
-		let roomIdList;
-		// handle this here so the child process doesn't have to load rooms data
-		if (roomId === 'public') {
-			const isPublicRoom = (room => !(room.isPrivate || room.battle || room.isPersonal || room.id === 'global'));
-			roomIdList = Array.from(Rooms.rooms.values()).filter(isPublicRoom).map(room => room.id);
-		} else {
-			roomIdList = [roomId];
-		}
-
-		PM.send(roomIdList.join(','), searchString, lines).then(response => {
-			connection.send(prettifyResults(response, roomId, searchString, response.charAt(0), addModlogLinks, hideIps, lines));
-			if (cmd === 'timedmodlog') this.sendReply(`The modlog query took ${Date.now() - startTime} ms to complete.`);
-		});
+		getModlog(connection, roomid, target, lines, cmd === 'timedmodlog');
 	},
 	modloghelp: function (target, room, user) {
 		if (!this.runBroadcast()) return;
