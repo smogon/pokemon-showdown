@@ -732,7 +732,7 @@ class CommandContext {
 			// If the corresponding config option is set, non-AC users cannot send links, except to staff.
 			if (Config.restrictLinks && !user.autoconfirmed) {
 				const links = message.match(Chat.linkRegex);
-				const allLinksWhitelisted = links.every(link => {
+				const allLinksWhitelisted = links && links.every(link => {
 					link = link.toLowerCase();
 					const domainMatches = /^(?:http:\/\/|https:\/\/)?(?:[^/]*\.)?([^/.]*\.[^/.]*)\.?($|\/|:)/.exec(link);
 					const domain = domainMatches && domainMatches[1];
@@ -742,7 +742,7 @@ class CommandContext {
 					if (!domain || !host) return false;
 					return LINK_WHITELIST.includes(host) || LINK_WHITELIST.includes(`*.${domain}`);
 				});
-				if (!(targetUser && targetUser.can('lock'))) {
+				if (!allLinksWhitelisted && !(targetUser && targetUser.can('lock'))) {
 					this.errorReply("Your account must be autoconfirmed to send links to other users, except for global staff.");
 					return false;
 				}
