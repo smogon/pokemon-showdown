@@ -701,7 +701,7 @@ exports.BattleAbilities = {
 		shortDesc: "If this Pokemon is a Mimikyu, the first hit it takes in battle deals 0 neutral damage.",
 		onDamagePriority: 1,
 		onDamage: function (damage, target, source, effect) {
-			if (effect && effect.effectType === 'Move' && target.template.speciesid === 'mimikyu' && !target.transformed) {
+			if (effect && effect.effectType === 'Move' && ['mimikyu', 'mimikyutotem'].includes(target.template.speciesid) && !target.transformed) {
 				this.add('-activate', target, 'ability: Disguise');
 				this.effectData.busted = true;
 				return 0;
@@ -710,13 +710,13 @@ exports.BattleAbilities = {
 		onEffectiveness: function (typeMod, target, type, move) {
 			if (!this.activeTarget) return;
 			let pokemon = this.activeTarget;
-			if (pokemon.template.speciesid !== 'mimikyu' || pokemon.transformed || (pokemon.volatiles['substitute'] && !(move.flags['authentic'] || move.infiltrates))) return;
+			if (!['mimikyu', 'mimikyutotem'].includes(pokemon.template.speciesid) || pokemon.transformed || (pokemon.volatiles['substitute'] && !(move.flags['authentic'] || move.infiltrates))) return;
 			if (!pokemon.runImmunity(move.type)) return;
 			return 0;
 		},
 		onUpdate: function (pokemon) {
-			if (pokemon.template.speciesid === 'mimikyu' && this.effectData.busted) {
-				let template = this.getTemplate('Mimikyu-Busted');
+			if (['mimikyu', 'mimikyutotem'].includes(pokemon.template.speciesid) && this.effectData.busted) {
+				let template = this.getTemplate(pokemon.template.speciesid === 'mimikyutotem' ? 'Mimikyu-Busted-Totem' : 'Mimikyu-Busted');
 				pokemon.formeChange(template);
 				pokemon.baseTemplate = template;
 				pokemon.details = template.species + (pokemon.level === 100 ? '' : ', L' + pokemon.level) + (pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');

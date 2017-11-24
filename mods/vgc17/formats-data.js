@@ -6,12 +6,27 @@ exports.BattleFormatsData = {
 		isUnreleased: true,
 		tier: "Unreleased",
 	},
+	marowakalolatotem: {
+		inherit: true,
+		isUnreleased: true,
+		tier: "Unreleased",
+	},
+	ribombeetotem: {
+		inherit: true,
+		isUnreleased: true,
+		tier: "Unreleased",
+	},
 	rockruffdusk: {
 		inherit: true,
 		isUnreleased: true,
 		tier: "Unreleased",
 	},
 	lycanrocdusk: {
+		inherit: true,
+		isUnreleased: true,
+		tier: "Unreleased",
+	},
+	araquanidtotem: {
 		inherit: true,
 		isUnreleased: true,
 		tier: "Unreleased",

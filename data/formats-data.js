@@ -199,6 +199,12 @@ exports.BattleFormatsData = {
 		randomDoubleBattleMoves: ["doubleedge", "suckerpunch", "protect", "crunch", "uturn"],
 		tier: "PU",
 	},
+	raticatealolatotem: {
+		eventPokemon: [
+			{"generation": 7, "level": 20, "perfectIVs": 3, "moves":["bite", "pursuit", "hyperfang", "assurance"], "pokeball": "pokeball"},
+		],
+		eventOnly: true,
+	},
 	spearow: {
 		randomBattleMoves: ["return", "drillpeck", "doubleedge", "uturn", "quickattack", "pursuit", "drillrun", "featherdance"],
 		randomDoubleBattleMoves: ["return", "drillpeck", "doubleedge", "uturn", "quickattack", "drillrun", "protect"],
@@ -1110,6 +1116,12 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["flamecharge", "shadowbone", "bonemerang", "willowisp", "stoneedge", "flareblitz", "substitute"],
 		randomDoubleBattleMoves: ["shadowbone", "bonemerang", "willowisp", "stoneedge", "flareblitz", "protect"],
 		tier: "OU",
+	},
+	marowakalolatotem: {
+		eventPokemon: [
+			{"generation": 7, "level": 25, "perfectIVs": 3, "moves":["leer", "hex", "bonemerang", "willowisp"], "pokeball": "pokeball"},
+		],
+		eventOnly: true,
 	},
 	tyrogue: {
 		randomBattleMoves: ["highjumpkick", "rapidspin", "fakeout", "bulletpunch", "machpunch", "toxic", "counter"],
@@ -5983,6 +5995,12 @@ exports.BattleFormatsData = {
 		randomDoubleBattleMoves: ["uturn", "return", "superfang", "protect", "crunch"],
 		tier: "PU",
 	},
+	gumshoostotem: {
+		eventPokemon: [
+			{"generation": 7, "level": 20, "perfectIVs": 3, "moves":["sandattack", "odorsleuth", "bide", "bite"], "pokeball": "pokeball"},
+		],
+		eventOnly: true,
+	},
 	grubbin: {
 		tier: "LC",
 	},
@@ -5993,6 +6011,12 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["agility", "bugbuzz", "thunderbolt", "voltswitch", "energyball", "hiddenpowerice"],
 		randomDoubleBattleMoves: ["thunderbolt", "bugbuzz", "stringshot", "protect", "voltswitch", "hiddenpowerice"],
 		tier: "NU",
+	},
+	vikavolttotem: {
+		eventPokemon: [
+			{"generation": 7, "level": 35, "perfectIVs": 3, "moves":["spark", "acrobatics", "guillotine", "bugbuzz"], "pokeball": "pokeball"},
+		],
+		eventOnly: true,
 	},
 	crabrawler: {
 		tier: "LC",
@@ -6029,6 +6053,12 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["quiverdance", "bugbuzz", "moonblast", "hiddenpowerfire", "roost", "batonpass"],
 		randomDoubleBattleMoves: ["quiverdance", "pollenpuff", "moonblast", "protect", "batonpass"],
 		tier: "BL3",
+	},
+	ribombeetotem: {
+		eventPokemon: [
+			{"generation": 7, "level": 50, "perfectIVs": 3, "moves":["bugbuzz", "dazzlinggleam", "aromatherapy", "quiverdance"], "pokeball": "pokeball"},
+		],
+		eventOnly: true,
 	},
 	rockruff: {
 		tier: "LC",
@@ -6093,6 +6123,12 @@ exports.BattleFormatsData = {
 		randomDoubleBattleMoves: ["liquidation", "leechlife", "lunge", "poisonjab", "protect", "wideguard"],
 		tier: "RU",
 	},
+	araquanidtotem: {
+		eventPokemon: [
+			{"generation": 7, "level": 25, "perfectIVs": 3, "moves":["spiderweb", "bugbite", "bubblebeam", "bite"], "pokeball": "pokeball"},
+		],
+		eventOnly: true,
+	},
 	fomantis: {
 		tier: "LC",
 	},
@@ -6100,6 +6136,12 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["superpower", "leafblade", "knockoff", "synthesis"],
 		randomDoubleBattleMoves: ["leafstorm", "gigadrain", "hiddenpowerice", "hiddenpowerfire", "protect"],
 		tier: "PU",
+	},
+	lurantistotem: {
+		eventPokemon: [
+			{"generation": 7, "level": 30, "perfectIVs": 3, "moves":["growth", "ingrain", "leafblade", "synthesis"], "pokeball": "pokeball"},
+		],
+		eventOnly: true,
 	},
 	morelull: {
 		tier: "LC",
@@ -6119,6 +6161,12 @@ exports.BattleFormatsData = {
 			{"generation": 7, "level": 50, "isHidden": false, "moves":["fakeout", "toxic", "sludgebomb", "flamethrower"], "pokeball": "cherishball"},
 		],
 		tier: "RU",
+	},
+	salazzletotem: {
+		eventPokemon: [
+			{"generation": 7, "level": 30, "perfectIVs": 3, "moves":["smog", "doubleslap", "flameburst", "toxic"], "pokeball": "pokeball"},
+		],
+		eventOnly: true,
 	},
 	stufful: {
 		tier: "LC",
@@ -6338,6 +6386,12 @@ exports.BattleFormatsData = {
 		randomDoubleBattleMoves: ["zingzap", "nuzzle", "spikyshield", "encore", "fakeout", "uturn"],
 		tier: "PU",
 	},
+	togedemarutotem: {
+		eventPokemon: [
+			{"generation": 7, "level": 30, "perfectIVs": 3, "moves":["nuzzle", "magnetrise", "discharge", "zingzap"], "pokeball": "pokeball"},
+		],
+		eventOnly: true,
+	},
 	mimikyu: {
 		randomBattleMoves: ["swordsdance", "shadowsneak", "playrough", "woodhammer", "shadowclaw"],
 		randomDoubleBattleMoves: ["trickroom", "shadowclaw", "playrough", "woodhammer", "willowisp", "shadowsneak", "swordsdance", "protect"],
@@ -6348,6 +6402,16 @@ exports.BattleFormatsData = {
 		tier: "OU",
 	},
 	mimikyubusted: {
+		requiredAbility: 'Disguise',
+		battleOnly: true,
+	},
+	mimikyutotem: {
+		eventPokemon: [
+			{"generation": 7, "level": 40, "perfectIVs": 3, "moves":["feintattack", "charm", "slash", "shadowclaw"], "pokeball": "pokeball"},
+		],
+		eventOnly: true,
+	},
+	mimikyubustedtotem: {
 		requiredAbility: 'Disguise',
 		battleOnly: true,
 	},
@@ -6379,6 +6443,12 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["dragondance", "outrage", "dragonclaw", "closecombat", "poisonjab"],
 		randomDoubleBattleMoves: ["clangingscales", "focusblast", "flashcannon", "substitute", "protect", "dracometeor"],
 		tier: "RU",
+	},
+	kommoototem: {
+		eventPokemon: [
+			{"generation": 7, "level": 50, "perfectIVs": 3, "moves":["workup", "screech", "irondefense", "dragonclaw"], "pokeball": "pokeball"},
+		],
+		eventOnly: true,
 	},
 	tapukoko: {
 		randomBattleMoves: ["wildcharge", "voltswitch", "naturesmadness", "bravebird", "uturn", "dazzlinggleam"],
