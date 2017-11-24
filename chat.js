@@ -25,6 +25,8 @@ To reload chat commands:
 
 'use strict';
 
+const LINK_WHITELIST = ['*.pokemonshowdown.com', 'psim.us', 'smogtours.psim.us', '*.smogon.com', '*.pastebin.com', '*.hastebin.com'];
+
 const MAX_MESSAGE_LENGTH = 300;
 
 const BROADCAST_COOLDOWN = 20 * 1000;
@@ -728,7 +730,18 @@ class CommandContext {
 			}
 
 			// If the corresponding config option is set, non-AC users cannot send links, except to staff.
-			if (Config.restrictLinks && !user.autoconfirmed && message.match(Chat.linkRegex)) {
+			if (Config.restrictLinks && !user.autoconfirmed) {
+				const links = message.match(Chat.linkRegex);
+				const allLinksWhitelisted = links.every(link => {
+					link = link.toLowerCase();
+					const domainMatches = /^(?:http:\/\/|https:\/\/)?(?:[^/]*\.)?([^/.]*\.[^/.]*)\.?($|\/|:)/.exec(link);
+					const domain = domainMatches && domainMatches[1];
+					const hostMatches = /^(?:http:\/\/|https:\/\/)?([^/]*[^/.])\.?($|\/|:)/.exec(link);
+					let host = hostMatches && hostMatches[1];
+					if (host.startsWith('www.')) host = host.slice(4);
+					if (!domain || !host) return false;
+					return LINK_WHITELIST.includes(host) || LINK_WHITELIST.includes(`*.${domain}`);
+				});
 				if (!(targetUser && targetUser.can('lock'))) {
 					this.errorReply("Your account must be autoconfirmed to send links to other users, except for global staff.");
 					return false;
