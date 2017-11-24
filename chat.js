@@ -732,7 +732,7 @@ class CommandContext {
 			// If the corresponding config option is set, non-AC users cannot send links, except to staff.
 			if (Config.restrictLinks && !user.autoconfirmed) {
 				const links = message.match(Chat.linkRegex);
-				const allLinksWhitelisted = links && links.every(link => {
+				const allLinksWhitelisted = !links || links.every(link => {
 					link = link.toLowerCase();
 					const domainMatches = /^(?:http:\/\/|https:\/\/)?(?:[^/]*\.)?([^/.]*\.[^/.]*)\.?($|\/|:)/.exec(link);
 					const domain = domainMatches && domainMatches[1];
