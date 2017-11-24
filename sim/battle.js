@@ -2063,10 +2063,6 @@ class Battle extends Dex.ModdedDex {
 			return move.damage;
 		}
 
-		if (move.useBestSourceOffensive) {
-			move.category = pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true) ? 'Physical' : 'Special';
-		}
-
 		let category = this.getCategory(move);
 		let defensiveCategory = move.defensiveCategory || category;
 
