@@ -715,7 +715,7 @@ class Template extends Effect {
 		this.eventPokemon = this.eventPokemon;
 
 		if (!this.gen) {
-			if (this.num >= 722 || this.forme === 'Alola') {
+			if (this.num >= 722 || this.forme.startsWith('Alola')) {
 				this.gen = 7;
 			} else if (this.forme && ['Mega', 'Mega-X', 'Mega-Y'].includes(this.forme)) {
 				this.gen = 6;
