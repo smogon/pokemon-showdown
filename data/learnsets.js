@@ -16976,7 +16976,7 @@ exports.BattleLearnsets = {
 		doubleteam: ["7M", "7V", "7V", "6M", "5M", "4M", "3M"],
 		dualchop: ["7T", "6T", "5T"],
 		dynamicpunch: ["7E", "7V", "3T"],
-		ember: ["7L5", "7L1", "7V", "7V", "6L1", "5L1", "4L1", "3L1"],
+		ember: ["7L5", "7L1", "7V", "7V", "6L1", "5L1", "4L1", "3L1", "3S0"],
 		endure: ["7V", "4M", "3T"],
 		facade: ["7M", "6M", "5M", "4M", "3M"],
 		feintattack: ["7L12", "6L12", "5L16", "5S3", "4L16"],
