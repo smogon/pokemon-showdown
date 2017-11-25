@@ -662,10 +662,10 @@ class Validator {
 			}
 		} else if (source.charAt(1) === 'V') {
 			eventData = {
-				generation: 1,
+				generation: 2,
 				perfectIVs: (template.speciesid === 'mew' ? 5 : 3),
 				isHidden: true,
-				from: 'Gen 1 Virtual Console transfer',
+				from: 'Gen 1-2 Virtual Console transfer',
 			};
 		} else if (source.charAt(1) === 'D') {
 			eventData = {
