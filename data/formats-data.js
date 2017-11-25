@@ -2332,7 +2332,6 @@ exports.BattleFormatsData = {
 			{"generation": 7, "level": 60, "shiny": 1, "moves":["reflect", "crunch", "thunderfang", "discharge"]},
 		],
 		eventOnly: true,
-		unreleasedHidden: true,
 		tier: "UU",
 	},
 	entei: {
@@ -2347,7 +2346,6 @@ exports.BattleFormatsData = {
 			{"generation": 7, "level": 60, "shiny": 1, "moves":["stomp", "bite", "swagger", "lavaplume"]},
 		],
 		eventOnly: true,
-		unreleasedHidden: true,
 		tier: "UU",
 	},
 	suicune: {
@@ -2362,7 +2360,6 @@ exports.BattleFormatsData = {
 			{"generation": 7, "level": 60, "shiny": 1, "moves":["bubblebeam", "aurorabeam", "mist", "raindance"]},
 		],
 		eventOnly: true,
-		unreleasedHidden: true,
 		tier: "UU",
 	},
 	larvitar: {
