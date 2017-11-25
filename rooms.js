@@ -1477,11 +1477,9 @@ class ChatRoom extends BasicRoom {
 	 * @return {ChatRoom[]}
 	 */
 	getSubRooms(showSecret) {
-		return Array.from(this.subRooms.values()).reduce((rooms, room) => {
-			if (!room) return rooms;
-			if (room.isPrivate === true && !showSecret) return rooms;
-			return [...rooms, room];
-		}, []);
+		return [...this.subRooms.values()].filter(room =>
+			room.isPrivate !== true || showSecret
+		);
 	}
 	/**
 	 * @param {User} user
