@@ -9291,7 +9291,9 @@ exports.BattleMovedex = {
 		pp: 1,
 		priority: 0,
 		flags: {},
-		useBestSourceOffensive: true,
+		onModifyMove: function (move, pokemon) {
+			if (pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true)) move.category = 'Physical';
+		},
 		ignoreAbility: true,
 		isZ: "ultranecroziumz",
 		secondary: false,
@@ -11707,7 +11709,9 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		useBestSourceOffensive: true,
+		onModifyMove: function (move, pokemon) {
+			if (pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true)) move.category = 'Physical';
+		},
 		ignoreAbility: true,
 		secondary: false,
 		target: "normal",
