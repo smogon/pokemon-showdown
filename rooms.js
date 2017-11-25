@@ -79,6 +79,8 @@ class BasicRoom {
 		/** @type {boolean | 'hidden' | 'voice'} */
 		this.isPrivate = false;
 		this.isPersonal = false;
+		/** @type {string | boolean} */
+		this.isHelp = false;
 		this.isOfficial = false;
 		this.reportJoins = !!Config.reportjoins;
 		this.logTimes = false;
@@ -1427,7 +1429,7 @@ class ChatRoom extends BasicRoom {
 		this.lastUpdate = this.log.length;
 
 		// Set up expire timer to clean up inactive personal rooms.
-		if (this.isPersonal) {
+		if ((this.isPersonal && !this.isHelp) || (this.isHelp && this.isHelp !== 'open')) {
 			if (this.expireTimer) clearTimeout(this.expireTimer);
 			this.expireTimer = setTimeout(() => this.tryExpire(), TIMEOUT_INACTIVE_DEALLOCATE);
 		}

@@ -407,15 +407,6 @@ exports.commands = {
 		user.resetName();
 	},
 
-	requesthelp: 'report',
-	report: function (target, room, user) {
-		if (room.id === 'help') {
-			this.sendReply("Ask one of the Moderators (@) in the Help room.");
-		} else {
-			this.parse('/join help');
-		}
-	},
-
 	r: 'reply',
 	reply: function (target, room, user) {
 		if (!target) return this.parse('/help reply');
