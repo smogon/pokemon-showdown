@@ -56,22 +56,21 @@ exports.commands = {
 		let template = Object.assign({}, Dex.getTemplate(sep[0]));
 		if (!stone.megaEvolves && !stone.onPrimal) return this.errorReply(`Error: Mega Stone not found.`);
 		if (!template.exists) return this.errorReply(`Error: Pokemon not found.`);
-		if (template.isMega || (template.evos && Object.keys(template.evos).length > 0)) { // Mega Pokemon cannot be mega evolved
-			this.errorReply(`Warning: You cannot mega evolve non-fully evolved Pokemon and Mega Pokemon in Mix and Mega.`);
+		if (template.isMega || (template.evos && Object.keys(template.evos).length > 0) || template.name === 'Necrozma-Ultra') { // Mega Pokemon and Ultra Necrozma cannot be mega evolved
+			this.errorReply(`Warning: You cannot mega evolve non-fully evolved Pokemon, Mega Pokemon, and Ultra Necrozma in Mix and Mega.`);
 		}
 		let bannedStones = Dex.getFormat('gen7mixandmega').bannedStones;
 		if (bannedStones.includes(stone.name) && template.name !== stone.megaEvolves) {
 			this.errorReply(`Warning: ${stone.name} is restricted to ${stone.megaEvolves} in Mix and Mega; therefore, ${template.name} cannot use ${stone.name} in actual play.`);
 		}
 		let cannotMega = Dex.getFormat('gen7mixandmega').cannotMega;
-		if (cannotMega.includes(template.name) && !template.isMega) { // Separate messages because there's a difference between being already mega evolved / NFE and being banned from mega evolving
+		if (cannotMega.includes(template.name) && template.name !== stone.megaEvolves && !template.isMega) { // Separate messages because there's a difference between being already mega evolved / NFE and being banned from mega evolving
 			this.errorReply(`Warning: ${template.name} is banned from mega evolving with a non-native mega stone in Mix and Mega and therefore cannot use ${toId(sep[1]) === 'dragonascent' ? 'Dragon Ascent' : stone.name} in actual play.`);
 		}
 		if (stone.isUnreleased) {
 			this.errorReply(`Warning: ${stone.name} is unreleased and is not usable in current Mix and Mega.`);
 		}
-		let dragonAscentUsers = {'smeargle':1, 'rayquaza':1, 'rayquazamega':1};
-		if (toId(sep[1]) === 'dragonascent' && !(toId(sep[0]) in dragonAscentUsers)) {
+		if (toId(sep[1]) === 'dragonascent' && !['smeargle', 'rayquaza', 'rayquazamega'].includes(toId(sep[0]))) {
 			this.errorReply(`Warning: Only Pokemon with access to Dragon Ascent can mega evolve with Mega Rayquaza's traits; therefore, ${template.name} cannot mega evolve with Dragon Ascent.`);
 		}
 		// Fake Pokemon and Mega Stones
