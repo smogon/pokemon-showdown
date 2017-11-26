@@ -230,11 +230,11 @@ class Validator {
 				// gen 1-2 don't have natures, just remove them
 				set.nature = '';
 			} else {
-				return [`${set.species}'s nature is invalid.`];
+				problems.push(`${name}'s nature is invalid.`);
 			}
 		}
 		if (set.happiness !== undefined && isNaN(set.happiness)) {
-			problems.push(`${set.species} has an invalid happiness.`);
+			problems.push(`${name} has an invalid happiness.`);
 		}
 
 		let banReason = ruleTable.check(template.id, setHas) || ruleTable.check(template.id + 'base', setHas);
@@ -528,7 +528,7 @@ class Validator {
 
 				if (!legal) {
 					if (lsetData.sources.length > 1) {
-						problems.push(`${template.species} has an event-exclusive move that it doesn't qualify for (only one of several ways to get the move will be listed):`);
+						problems.push(`${name} has an event-exclusive move that it doesn't qualify for (only one of several ways to get the move will be listed):`);
 					}
 					// @ts-ignore TypeScript overload syntax bug
 					let eventProblems = this.validateSource(set, lsetData.sources[0], template, ` because it has a move only available`);
@@ -693,7 +693,7 @@ class Validator {
 		let name = set.species;
 		let template = dex.getTemplate(set.species);
 		if (!eventTemplate) eventTemplate = template;
-		if (set.species !== set.name && template.baseSpecies !== set.name) name = `${set.name} (${set.species})`;
+		if (set.name && set.species !== set.name && template.baseSpecies !== set.name) name = `${set.name} (${set.species})`;
 
 		const fastReturn = !because;
 		if (eventData.from) from = `from ${eventData.from}`;
