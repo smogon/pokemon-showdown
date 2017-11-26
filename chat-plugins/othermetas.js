@@ -77,8 +77,8 @@ exports.commands = {
 		if (template.isNonstandard) {
 			this.errorReply(`Warning: ${template.name} is not a real Pokemon and is therefore not usable in Mix and Mega.`);
 		}
-		if (toId(sep[1]) === 'crucibellite') {
-			this.errorReply(`Warning: Crucibellite is a fake mega stone created by the CAP Project and is restricted to the CAP Crucibelle.`);
+		if (stone.isNonstandard) {
+			this.errorReply(`Warning: ${stone.name} is a fake mega stone created by the CAP Project and is restricted to the CAP ${stone.megaEvolves}.`);
 		}
 		let baseTemplate = Dex.getTemplate(stone.megaEvolves);
 		let megaTemplate = Dex.getTemplate(stone.megaStone);
@@ -175,8 +175,8 @@ exports.commands = {
 			this.errorReply(`Warning: Only Pokemon with access to Dragon Ascent can mega evolve with Mega Rayquaza's traits.`);
 		}
 		// Fake Mega Stones
-		if (targetid === 'crucibellite') {
-			this.errorReply(`Warning: Crucibellite is a fake mega stone created by the CAP Project and is restricted to the CAP Crucibelle.`);
+		if (stone.isNonstandard) {
+			this.errorReply(`Warning: ${stone.name} is a fake mega stone created by the CAP Project and is restricted to the CAP ${stone.megaEvolves}.`);
 		}
 		let baseTemplate = Dex.getTemplate(stone.megaEvolves);
 		let megaTemplate = Dex.getTemplate(stone.megaStone);
