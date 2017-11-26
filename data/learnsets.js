@@ -23198,7 +23198,6 @@ exports.BattleLearnsets = {
 		psychic: ["7M", "6M", "5M", "4M"],
 		psychoshift: ["7E", "6E", "5E", "4E"],
 		psychup: ["7M", "7V", "6M", "5M", "4M", "3T"],
-		punishment: ["7E"],
 		pursuit: ["7L5", "7V", "6L5", "5L5", "4L5", "3L14"],
 		quash: ["7M", "7L65", "6M", "6L65", "5M", "5L65"],
 		quickattack: ["7V"],
