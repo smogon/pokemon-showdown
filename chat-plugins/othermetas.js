@@ -148,7 +148,6 @@ exports.commands = {
 	mixandmegahelp: ["/mnm <pokemon> @ <mega stone> - Shows the Mix and Mega evolved Pokemon's type and stats."],
 
 	'!stone': true,
-	move: 'stone',
 	orb: 'stone',
 	megastone: 'stone',
 	stone: function (target) {
