@@ -6648,7 +6648,7 @@ exports.BattleFormatsData = {
 	},
 	naganadel: {
 		randomBattleMoves: ["nastyplot", "dragonpulse", "sludgewave", "fireblast", "dracometeor", "uturn"],
-		tier: "OU",
+		tier: "Uber",
 	},
 	stakataka: {
 		randomBattleMoves: ["gyroball", "stoneedge", "trickroom", "earthquake", "superpower", "stealthrock"],
