@@ -340,9 +340,9 @@ class ModdedDex {
 				template.speciesid = id;
 				// @ts-ignore
 				template.abilities = {0: template.abilities['S']};
-				return template;
+			} else {
+				template = this.getTemplate(this.data.Aliases[id]);
 			}
-			template = this.getTemplate(this.data.Aliases[id]);
 			if (template) {
 				this.templateCache.set(id, template);
 			}
