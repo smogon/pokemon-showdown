@@ -14962,6 +14962,9 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 2,
 			onStart: function () {
+				if (this.willMove(this.effectData.source)) {
+					this.effectData.source.activeTurns--;
+				}
 				this.effectData.source.removeVolatile('followme');
 				this.effectData.source.removeVolatile('ragepowder');
 			},
