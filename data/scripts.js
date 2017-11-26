@@ -95,7 +95,7 @@ exports.BattleScripts = {
 			for (const side of this.sides) {
 				for (const currentPoke of side.active) {
 					if (!currentPoke || !currentPoke.hp || pokemon === currentPoke) continue;
-					if (currentPoke.hasAbility('dancer') && !currentPoke.volatiles['twoturnmove']) {
+					if (currentPoke.hasAbility('dancer') && !currentPoke.isSemiInvulnerable()) {
 						dancers.push(currentPoke);
 					}
 				}
