@@ -169,5 +169,6 @@
 		"no-restricted-syntax": ["error", "WithStatement"],
 
 		"validate-conditionals": "error",
+		"no-constant-condition": ["error", {"checkLoops": false}]
 	}
 }
