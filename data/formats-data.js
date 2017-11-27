@@ -1058,7 +1058,7 @@ exports.BattleFormatsData = {
 		tier: "LC",
 	},
 	kingler: {
-		randomBattleMoves: ["crabhammer", "xscissor", "rockslide", "swordsdance", "agility", "superpower", "knockoff"],
+		randomBattleMoves: ["liquidation", "xscissor", "rockslide", "swordsdance", "agility", "superpower", "knockoff"],
 		randomDoubleBattleMoves: ["crabhammer", "xscissor", "rockslide", "substitute", "superpower", "knockoff", "protect", "wideguard"],
 		tier: "PU",
 	},
@@ -3154,7 +3154,7 @@ exports.BattleFormatsData = {
 		tier: "LC",
 	},
 	crawdaunt: {
-		randomBattleMoves: ["dragondance", "liquidation", "superpower", "swordsdance", "knockoff", "aquajet"],
+		randomBattleMoves: ["dragondance", "crabhammer", "superpower", "swordsdance", "knockoff", "aquajet"],
 		randomDoubleBattleMoves: ["dragondance", "liquidation", "crunch", "superpower", "swordsdance", "knockoff", "aquajet", "protect"],
 		eventPokemon: [
 			{"generation": 3, "level": 100, "moves":["taunt", "crabhammer", "swordsdance", "guillotine"], "pokeball": "pokeball"},
@@ -6437,7 +6437,7 @@ exports.BattleFormatsData = {
 		tier: "NFE",
 	},
 	kommoo: {
-		randomBattleMoves: ["dragondance", "outrage", "dragonclaw", "closecombat", "poisonjab"],
+		randomBattleMoves: ["dragondance", "outrage", "closecombat", "poisonjab", "clangingscales"],
 		randomDoubleBattleMoves: ["clangingscales", "focusblast", "flashcannon", "substitute", "protect", "dracometeor"],
 		tier: "RU",
 	},
