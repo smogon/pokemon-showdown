@@ -1842,14 +1842,14 @@ exports.BattleFormatsData = {
 		tier: "PU",
 	},
 	hoothoot: {
-		randomBattleMoves: ["reflect", "toxic", "roost", "whirlwind", "nightshade", "magiccoat", "moonblast", "hurricane", "hypervoice", "heatwave"],
+		randomBattleMoves: ["reflect", "toxic", "roost", "whirlwind", "nightshade", "magiccoat"],
 		eventPokemon: [
 			{"generation": 3, "level": 10, "gender": "M", "moves":["tackle", "growl", "foresight"], "pokeball": "pokeball"},
 		],
 		tier: "LC",
 	},
 	noctowl: {
-		randomBattleMoves: ["roost", "whirlwind", "airslash", "nightshade", "toxic", "defog"],
+		randomBattleMoves: ["roost", "whirlwind", "airslash", "nightshade", "toxic", "defog", "moonblast", "hurricane", "hypervoice", "heatwave"],
 		randomDoubleBattleMoves: ["roost", "tailwind", "airslash", "hypervoice", "heatwave", "protect", "hypnosis"],
 		tier: "PU",
 	},
