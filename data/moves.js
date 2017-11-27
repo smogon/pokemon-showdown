@@ -6983,11 +6983,8 @@ exports.BattleMovedex = {
 		pp: 30,
 		priority: 0,
 		flags: {},
-		sideCondition: 'happyhour',
-		effect: {
-			onStart: function (side) {
-				this.add('-activate', side, 'move: Happy Hour');
-			},
+		onTryHit: function (target, source) {
+			this.add('-activate', target, 'move: Happy Hour');
 		},
 		secondary: false,
 		target: "allySide",
