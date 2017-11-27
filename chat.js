@@ -284,7 +284,7 @@ class CommandContext {
 	/**
 	 * @param {string} message
 	 * @param {boolean} recursing
-	 * @return string
+	 * @return {string}
 	 */
 	splitCommand(message = this.message, recursing = false) {
 		this.cmd = '';
@@ -642,9 +642,14 @@ class CommandContext {
 		}
 		return false;
 	}
+	/**
+	 * @param {string} message
+	 * @param {Room?} [room]
+	 * @param {User?} [targetUser]
+	 */
 	canTalk(message, room, targetUser) {
-		if (room === undefined) room = this.room;
-		if (targetUser === undefined && this.pmTarget) {
+		if (!room) room = this.room;
+		if (!targetUser && this.pmTarget) {
 			room = undefined;
 			targetUser = this.pmTarget;
 		}
