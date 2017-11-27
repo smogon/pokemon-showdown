@@ -445,7 +445,7 @@ exports.BattleFormatsData = {
 		tier: "PU",
 	},
 	sandslashalola: {
-		randomBattleMoves: ["substitute", "swordsdance", "iciclecrash", "ironhead", "earthquake", "rapidspin", "stealthrock", "knockoff"],
+		randomBattleMoves: ["swordsdance", "iciclecrash", "ironhead", "earthquake", "rapidspin", "stealthrock", "knockoff"],
 		randomDoubleBattleMoves: ["protect", "swordsdance", "iciclecrash", "ironhead", "earthquake", "rockslide"],
 		tier: "NU",
 	},
@@ -965,7 +965,7 @@ exports.BattleFormatsData = {
 		tier: "PU",
 	},
 	mukalola: {
-		randomBattleMoves: ["curse", "gunkshot", "knockoff", "poisonjab", "shadowsneak", "stoneedge", "pursuit", "icepunch", "firepunch"],
+		randomBattleMoves: ["curse", "gunkshot", "knockoff", "poisonjab", "shadowsneak", "pursuit", "icepunch", "firepunch"],
 		randomDoubleBattleMoves: ["gunkshot", "knockoff", "stoneedge", "snarl", "protect", "poisonjab", "shadowsneak"],
 		tier: "UU",
 	},
@@ -980,7 +980,7 @@ exports.BattleFormatsData = {
 		tier: "LC",
 	},
 	cloyster: {
-		randomBattleMoves: ["shellsmash", "liquidation", "rockblast", "iciclespear", "iceshard", "rapidspin", "spikes", "toxicspikes"],
+		randomBattleMoves: ["shellsmash", "hydropump", "rockblast", "iciclespear", "iceshard", "rapidspin", "spikes", "toxicspikes"],
 		randomDoubleBattleMoves: ["shellsmash", "hydropump", "liquidation", "rockblast", "iciclespear", "protect"],
 		eventPokemon: [
 			{"generation": 5, "level": 30, "gender": "M", "nature": "Naughty", "isHidden": false, "abilities":["skilllink"], "moves":["iciclespear", "rockblast", "hiddenpower", "razorshell"], "pokeball": "pokeball"},
@@ -1058,7 +1058,7 @@ exports.BattleFormatsData = {
 		tier: "LC",
 	},
 	kingler: {
-		randomBattleMoves: ["liquidation", "xscissor", "rockslide", "swordsdance", "agility", "superpower", "knockoff"],
+		randomBattleMoves: ["crabhammer", "xscissor", "rockslide", "swordsdance", "agility", "superpower", "knockoff"],
 		randomDoubleBattleMoves: ["crabhammer", "xscissor", "rockslide", "substitute", "superpower", "knockoff", "protect", "wideguard"],
 		tier: "PU",
 	},
@@ -1162,7 +1162,7 @@ exports.BattleFormatsData = {
 		tier: "LC",
 	},
 	lickilicky: {
-		randomBattleMoves: ["wish", "protect", "bodyslam", "knockoff", "dragontail", "healbell", "swordsdance", "explosion", "earthquake", "powerwhip", "thrash"],
+		randomBattleMoves: ["wish", "protect", "bodyslam", "knockoff", "dragontail", "healbell", "swordsdance", "explosion", "earthquake", "powerwhip"],
 		randomDoubleBattleMoves: ["wish", "protect", "dragontail", "knockoff", "bodyslam", "rockslide", "powerwhip", "earthquake", "explosion"],
 		tier: "PU",
 	},
@@ -1849,7 +1849,7 @@ exports.BattleFormatsData = {
 		tier: "LC",
 	},
 	noctowl: {
-		randomBattleMoves: ["roost", "whirlwind", "airslash", "nightshade", "toxic", "defog", "moonblast", "hurricane", "hypervoice", "heatwave"],
+		randomBattleMoves: ["roost", "whirlwind", "airslash", "nightshade", "toxic", "defog", "hurricane", "heatwave"],
 		randomDoubleBattleMoves: ["roost", "tailwind", "airslash", "hypervoice", "heatwave", "protect", "hypnosis"],
 		tier: "PU",
 	},
@@ -2959,7 +2959,7 @@ exports.BattleFormatsData = {
 		tier: "LC",
 	},
 	sharpedo: {
-		randomBattleMoves: ["protect", "icebeam", "crunch", "earthquake", "liquidation"],
+		randomBattleMoves: ["protect", "icebeam", "crunch", "earthquake", "waterfall"],
 		randomDoubleBattleMoves: ["protect", "icebeam", "crunch", "earthquake", "liquidation"],
 		eventPokemon: [
 			{"generation": 6, "level": 50, "nature": "Adamant", "isHidden": true, "moves":["aquajet", "crunch", "icefang", "destinybond"], "pokeball": "cherishball"},
@@ -2968,7 +2968,7 @@ exports.BattleFormatsData = {
 		tier: "BL2",
 	},
 	sharpedomega: {
-		randomBattleMoves: ["protect", "crunch", "liquidation", "icefang", "psychicfangs", "destinybond"],
+		randomBattleMoves: ["protect", "crunch", "waterfall", "icefang", "psychicfangs", "destinybond"],
 		randomDoubleBattleMoves: ["protect", "icefang", "crunch", "liquidation", "psychicfangs"],
 		requiredItem: "Sharpedonite",
 		tier: "UU",
@@ -3095,7 +3095,7 @@ exports.BattleFormatsData = {
 		tier: "UU",
 	},
 	zangoose: {
-		randomBattleMoves: ["swordsdance", "closecombat", "knockoff", "quickattack", "facade", "bellydrum"],
+		randomBattleMoves: ["swordsdance", "closecombat", "knockoff", "quickattack", "facade"],
 		randomDoubleBattleMoves: ["protect", "closecombat", "knockoff", "quickattack", "facade"],
 		eventPokemon: [
 			{"generation": 3, "level": 18, "moves":["leer", "quickattack", "swordsdance", "furycutter"], "pokeball": "pokeball"},
