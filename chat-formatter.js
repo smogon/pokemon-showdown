@@ -195,6 +195,13 @@ class TextFormatter {
 		this.pushSlice(end);
 	}
 	/**
+	 * @param {string} html
+	 */
+	toUriComponent(html) {
+		let component = html.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&apos;/g, '\'');
+		return encodeURIComponent(component);
+	}
+	/**
 	 * @param {SpanType} spanType
 	 * @param {number} start
 	 * @return {boolean} success
@@ -245,34 +252,46 @@ class TextFormatter {
 		case '[':
 			{
 				if (this.slice(start, start + 2) !== '[[') return false;
-				let i = start + 8;
-				while (/[^\]\n]/.test(this.at(i))) i++;
+				let i = start + 2;
+				let colonPos = -1; // `:`
+				let anglePos = -1; // `<`
+				while (i < this.str.length) {
+					const char = this.at(i);
+					if (char === ']' || char === '\n') break;
+					if (char === ':' && colonPos < 0) colonPos = i;
+					if (char === '&' && this.slice(i, i + 4) === '&lt;') anglePos = i;
+					i++;
+				}
 				if (this.slice(i, i + 2) !== ']]') return false;
-				const termEnd = i;
-				i += 2;
-				let term = this.slice(start + 2, termEnd);
+				let termEnd = i;
 				let uri = '';
-				if (this.slice(i, i + 4) === '&lt;') { // <
-					let j = i + 4;
-					while (/[^ &\n]/.test(this.at(j))) j++;
-					if (this.slice(j, j + 4) === '&gt;') { // >
-						uri = this.slice(i + 4, j);
-						i = j + 4;
-						// does not require more escaping
-						if (!this.isTrusted) {
-							let shortUri = uri.replace(/^https?:\/\//, '').replace(/^www\./, '').replace(/\/$/, '');
-							term += `<small> &lt;${shortUri}&gt;</small>`;
-						}
-						uri = uri.replace(/^([a-z]*[^a-z:])/g, 'http://$1');
+				if (anglePos >= 0 && this.slice(i - 4, i) === '&gt;') { // `>`
+					uri = this.slice(anglePos + 4, i - 4);
+					termEnd = anglePos;
+					if (this.at(termEnd - 1) === ' ') termEnd--;
+					uri = encodeURI(uri.replace(/^([a-z]*[^a-z:])/g, 'http://$1'));
+				}
+				let term = this.slice(start + 2, termEnd);
+				if (uri && !this.isTrusted) {
+					let shortUri = uri.replace(/^https?:\/\//, '').replace(/^www\./, '').replace(/\/$/, '');
+					term += `<small> &lt;${shortUri}&gt;</small>`;
+				}
+				if (colonPos > 0) {
+					switch (this.slice(start + 2, colonPos)) {
+					case 'w':
+					case 'wiki':
+						term = term.slice(term.charAt(5) === ' ' ? 6 : 5);
+						uri = `http://en.wikipedia.org/w/index.php?title=Special:Search&search=${this.toUriComponent(term)}`;
+						term = `wiki: ${term}`;
+						break;
 					}
 				}
-				this.pushSlice(start);
 				if (!uri) {
-					const encodedTerm = encodeURIComponent(term.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&apos;/g, '\''));
-					uri = `//www.google.com/search?ie=UTF-8&btnI&q=${encodedTerm}`;
+					uri = `//www.google.com/search?ie=UTF-8&btnI&q=${this.toUriComponent(term)}`;
 				}
+				this.pushSlice(start);
 				this.buffers.push(`<a href="${uri}" target="_blank" rel="noopener">${term}</a>`);
-				this.offset = i;
+				this.offset = i + 2;
 			}
 			return true;
 		case '<':
