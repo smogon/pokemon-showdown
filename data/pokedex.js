@@ -3892,7 +3892,7 @@ exports.BattlePokedex = {
 		otherFormes: ["pokestarsmeargle"],
 	},
 	pokestarsmeargle: {
-		num: 235,
+		num: -5000,
 		species: "Pokestar Smeargle",
 		types: ["Normal"],
 		baseStats: {hp: 55, atk: 20, def: 35, spa: 20, spd: 45, spe: 75},
