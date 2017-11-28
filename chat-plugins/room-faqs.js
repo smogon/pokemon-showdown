@@ -44,7 +44,7 @@ exports.commands = {
 		if (!roomFaqs[room.id]) roomFaqs[room.id] = {};
 		roomFaqs[room.id][topic] = text;
 		saveRoomFaqs();
-		this.sendReplyBox(Chat.formatText(text));
+		this.sendReplyBox(Chat.formatText(text, true));
 		this.privateModCommand(`(${user.name} added a FAQ for '${topic}')`);
 	},
 	removefaq: function (target, room, user) {
@@ -86,7 +86,7 @@ exports.commands = {
 		topic = getAlias(room.id, topic) || topic;
 
 		if (!this.runBroadcast()) return;
-		this.sendReplyBox(Chat.formatText(roomFaqs[room.id][topic]));
+		this.sendReplyBox(Chat.formatText(roomFaqs[room.id][topic], true));
 		if (!this.broadcasting && user.can('declare', null, room)) {
 			let extra = `<code>/addfaq ${topic}, ${Chat.escapeHTML(roomFaqs[room.id][topic])}</code>`;
 			let aliases = Object.keys(roomFaqs[room.id]).filter(val => getAlias(room.id, val) === topic);
