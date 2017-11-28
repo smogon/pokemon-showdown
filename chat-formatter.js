@@ -46,7 +46,7 @@ const linkRegex = new RegExp(
 );
 
 /**
- * @typedef {'_' | '*' | '~' | '^' | '\\' | '<' | '[' | '`' | 'a' | 'spoiler' | '>'} SpanType
+ * @typedef {'_' | '*' | '~' | '^' | '\\' | '<' | '[' | '`' | 'a' | 'spoiler' | '>' | '('} SpanType
  */
 /**
  * @typedef {[SpanType, number]} FormatSpan [spanType, buffersIndex]
@@ -121,6 +121,27 @@ class TextFormatter {
 			this.buffers.push(this.slice(this.offset, end));
 			this.offset = end;
 		}
+	}
+	/**
+	 * @param {number} start
+	 * @return {boolean} success
+	 */
+	closeParenSpan(start) {
+		let stackPosition = -1;
+		for (let i = this.stack.length - 1; i >= 0; i--) {
+			const span = this.stack[i];
+			if (span[0] === '(') {
+				stackPosition = i;
+				break;
+			}
+			if (span[0] !== 'spoiler') break;
+		}
+		if (stackPosition === -1) return false;
+
+		this.pushSlice(start);
+		while (this.stack.length > stackPosition) this.popSpan(start);
+		this.offset = start;
+		return true;
 	}
 	/**
 	 * Attempt to close a span.
@@ -342,6 +363,16 @@ class TextFormatter {
 					}
 				}
 				while (this.at(i + 1) === char) i++;
+				break;
+			case '(':
+				this.stack.push(['(', -1]);
+				break;
+			case ')':
+				this.closeParenSpan(i);
+				if (i < this.offset) {
+					i = this.offset - 1;
+					break;
+				}
 				break;
 			case '`':
 				if (this.at(i + 1) === '`') this.runLookahead('`', i);
