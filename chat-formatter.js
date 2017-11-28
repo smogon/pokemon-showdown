@@ -210,9 +210,9 @@ class TextFormatter {
 					i++;
 				}
 				let curDelimLength = 0;
-				while (true) {
+				while (i < this.str.length) {
 					const char = this.at(i);
-					if (char === '\n' || char === '') break;
+					if (char === '\n') break;
 					if (char === '`') {
 						curDelimLength++;
 					} else {
@@ -302,12 +302,9 @@ class TextFormatter {
 	 * @return {string}
 	 */
 	get() {
-		let i = this.offset;
-		let beginningOfLine = i;
+		let beginningOfLine = this.offset;
 		// main loop! i tracks our position
-		// i starts at -1 so loop increment can be at the beginning of the loop so we can use continue to continue
-		while (true) {
-			if (i >= this.str.length) break;
+		for (let i = beginningOfLine; i < this.str.length; i++) {
 			const char = this.at(i);
 			switch (char) {
 			case '_':
@@ -320,30 +317,27 @@ class TextFormatter {
 						if (this.at(i + 2) !== ' ') this.pushSpan(char, i, i + 2);
 					}
 					if (i < this.offset) {
-						i = this.offset;
+						i = this.offset - 1;
 						break;
 					}
 				}
-				i++;
-				while (this.at(i) === char) i++;
+				while (this.at(i + 1) === char) i++;
 				break;
 			case '`':
 				if (this.at(i + 1) === '`') this.runLookahead('`', i);
 				if (i < this.offset) {
-					i = this.offset;
+					i = this.offset - 1;
 					break;
 				}
-				i++;
-				while (this.at(i) === '`') i++;
+				while (this.at(i + 1) === '`') i++;
 				break;
 			case '[':
 				this.runLookahead('[', i);
 				if (i < this.offset) {
-					i = this.offset;
+					i = this.offset - 1;
 					break;
 				}
-				i++;
-				while (this.at(i) === '[') i++;
+				while (this.at(i + 1) === '[') i++;
 				break;
 			case ':':
 				if (i < 7) break;
@@ -351,7 +345,6 @@ class TextFormatter {
 					if (this.at(i + 1) === ' ') i++;
 					this.pushSpan('spoiler', i + 1, i + 1);
 				}
-				i++;
 				break;
 			case '&': // escaped '<' or '>'
 				if (i === beginningOfLine && this.slice(i, i + 4) === '&gt;') {
@@ -362,28 +355,23 @@ class TextFormatter {
 					this.runLookahead('<', i);
 				}
 				if (i < this.offset) {
-					i = this.offset;
+					i = this.offset - 1;
 					break;
 				}
-				i++;
-				while (this.slice(i, i + 4) === 'lt;&') i += 4;
+				while (this.slice(i + 1, i + 5) === 'lt;&') i += 4;
 				break;
 			case '<': // guaranteed to be <a
 				this.runLookahead('a', i);
 				if (i < this.offset) {
-					i = this.offset;
+					i = this.offset - 1;
 					break;
 				}
-				i++; // should never happen
+				// should never happen
 				break;
 			case '\r':
 			case '\n':
 				this.popAllSpans(i);
-				i++;
-				beginningOfLine = i;
-				break;
-			default:
-				i++;
+				beginningOfLine = i + 1;
 				break;
 			}
 		}

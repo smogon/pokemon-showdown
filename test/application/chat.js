@@ -60,5 +60,9 @@ describe('Chat', function () {
 			Chat.formatText(`[[Google]]<google.com>`, true),
 			`<a href="http://google.com" target="_blank" rel="noopener">Google</a>`
 		);
+		assert.strictEqual(
+			Chat.formatText(`:)`, true),
+			`:)`
+		);
 	});
 });
