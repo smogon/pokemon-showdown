@@ -65,6 +65,14 @@ describe('Chat', function () {
 			`<a href="//en.wikipedia.org/w/index.php?title=Special:Search&search=Pokemon" target="_blank" rel="noopener">wiki: Pokemon</a>`
 		);
 		assert.strictEqual(
+			Chat.formatText(`[[pokemon: Oshawott]]`, true),
+			`<a href="//dex.pokemonshowdown.com/pokemon/oshawott" target="_blank" rel="noopener"><psicon pokemon="Oshawott"/></a>`
+		);
+		assert.strictEqual(
+			Chat.formatText(`[[item: Beast ball]]`),
+			`<a href="//dex.pokemonshowdown.com/items/beastball" target="_blank" rel="noopener">[Beast ball]</a>`
+		);
+		assert.strictEqual(
 			Chat.formatText(`:)`, true),
 			`:)`
 		);

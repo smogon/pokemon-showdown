@@ -306,6 +306,22 @@ class TextFormatter {
 						uri = `//en.wikipedia.org/w/index.php?title=Special:Search&search=${this.toUriComponent(term)}`;
 						term = `wiki: ${term}`;
 						break;
+					case 'pokemon':
+					case 'item':
+						term = term.slice(term.charAt(key.length + 1) === ' ' ? key.length + 2 : key.length + 1);
+
+						let display = '';
+						if (this.isTrusted) {
+							display = `<psicon ${key}="${term}"/>`;
+						} else {
+							display = `[${term}]`;
+						}
+
+						let dir = key;
+						if (key === 'item') dir += 's';
+
+						uri = `//dex.pokemonshowdown.com/${dir}/${toId(term)}`;
+						term = display;
 					}
 				}
 				if (!uri) {
