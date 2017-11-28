@@ -277,11 +277,12 @@ class TextFormatter {
 					term += `<small> &lt;${shortUri}&gt;</small>`;
 				}
 				if (colonPos > 0) {
-					switch (this.slice(start + 2, colonPos)) {
+					const key = this.slice(start + 2, colonPos);
+					switch (key) {
 					case 'w':
 					case 'wiki':
-						term = term.slice(term.charAt(5) === ' ' ? 6 : 5);
-						uri = `http://en.wikipedia.org/w/index.php?title=Special:Search&search=${this.toUriComponent(term)}`;
+						term = term.slice(term.charAt(key.length + 1) === ' ' ? key.length + 2 : key.length + 1);
+						uri = `//en.wikipedia.org/w/index.php?title=Special:Search&search=${this.toUriComponent(term)}`;
 						term = `wiki: ${term}`;
 						break;
 					}

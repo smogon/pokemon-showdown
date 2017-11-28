@@ -62,7 +62,7 @@ describe('Chat', function () {
 		);
 		assert.strictEqual(
 			Chat.formatText(`[[wiki: Pokemon]]`, true),
-			`<a href="http://en.wikipedia.org/w/index.php?title=Special:Search&search=%20Pokemon" target="_blank" rel="noopener">wiki: Pokemon</a>`
+			`<a href="//en.wikipedia.org/w/index.php?title=Special:Search&search=Pokemon" target="_blank" rel="noopener">wiki: Pokemon</a>`
 		);
 		assert.strictEqual(
 			Chat.formatText(`:)`, true),
