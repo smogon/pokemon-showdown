@@ -131,14 +131,22 @@ exports.commands = {
 		if ((user.can('ip', targetUser) || user === targetUser)) {
 			let ips = Object.keys(targetUser.ips);
 			ips = ips.map(ip => {
+				let status = [];
+				let punishment = Punishments.ips.get(ip);
+				if (user.can('ip') && punishment) {
+					let [punishType, userid] = punishment;
+					let punishMsg = Punishments.punishmentTypes.get(punishType) || 'punished';
+					if (userid !== targetUser.userid) punishMsg += ` as ${userid}`;
+					status.push(punishMsg);
+				}
 				if (Punishments.sharedIps.has(ip)) {
 					let sharedStr = 'shared';
 					if (Punishments.sharedIps.get(ip)) {
 						sharedStr += `: ${Punishments.sharedIps.get(ip)}`;
 					}
-					return ip + ` (${sharedStr})`;
+					status.push(sharedStr);
 				}
-				return ip;
+				return ip + (status.length ? ` (${status.join('; ')})` : '');
 			});
 			buf += `<br /> IP${Chat.plural(ips)}: ${ips.join(", ")}`;
 			if (user.group !== ' ' && targetUser.latestHost) {
@@ -206,7 +214,7 @@ exports.commands = {
 		let punishment = Punishments.userids.get(userid);
 		if (punishment) {
 			const [punishType, punishUserid, , reason] = punishment;
-			const punishName = {BAN: "BANNED", LOCK: "LOCKED", NAMELOCK: "NAMELOCKED"}[punishType] || punishType;
+			const punishName = (Punishments.punishmentTypes.get(punishType) || punishType).toUpperCase();
 			buf += `${punishName}: ${punishUserid}`;
 			let expiresIn = Punishments.checkLockExpiration(userid);
 			if (expiresIn) buf += expiresIn;
