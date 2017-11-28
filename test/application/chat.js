@@ -38,11 +38,11 @@ describe('Chat', function () {
 		);
 		assert.strictEqual(
 			Chat.formatText(`hi google.com/__a__ bye`),
-			`hi <a href="http://google.com/__a__" target="_blank" rel="noopener">google.com/__a__</a> bye`
+			`hi <a href="http://google.com/__a__" rel="noopener" target="_blank">google.com/__a__</a> bye`
 		);
 		assert.strictEqual(
 			Chat.formatText(`hi email@email.com bye`),
-			`hi <a href="mailto:email@email.com" target="_blank" rel="noopener">email@email.com</a> bye`
+			`hi <a href="mailto:email@email.com" rel="noopener" target="_blank">email@email.com</a> bye`
 		);
 		assert.strictEqual(
 			Chat.formatText(`>greentext`),
@@ -54,23 +54,23 @@ describe('Chat', function () {
 		);
 		assert.strictEqual(
 			Chat.formatText(`[[Google <http://www.google.com/>]]`),
-			`<a href="http://www.google.com/" target="_blank" rel="noopener">Google<small> &lt;google.com&gt;</small></a>`
+			`<a href="http://www.google.com/" rel="noopener" target="_blank">Google<small> &lt;google.com&gt;</small></a>`
 		);
 		assert.strictEqual(
 			Chat.formatText(`[[Google <google.com>]]`, true),
-			`<a href="http://google.com" target="_blank" rel="noopener">Google</a>`
+			`<a href="http://google.com" target="_blank">Google</a>`
 		);
 		assert.strictEqual(
 			Chat.formatText(`[[wiki: Pokemon]]`, true),
-			`<a href="//en.wikipedia.org/w/index.php?title=Special:Search&search=Pokemon" target="_blank" rel="noopener">wiki: Pokemon</a>`
+			`<a href="//en.wikipedia.org/w/index.php?title=Special:Search&search=Pokemon" target="_blank">wiki: Pokemon</a>`
 		);
 		assert.strictEqual(
 			Chat.formatText(`[[pokemon: Oshawott]]`, true),
-			`<a href="//dex.pokemonshowdown.com/pokemon/oshawott" target="_blank" rel="noopener"><psicon pokemon="Oshawott"/></a>`
+			`<a href="//dex.pokemonshowdown.com/pokemon/oshawott" target="_blank"><psicon pokemon="Oshawott"/></a>`
 		);
 		assert.strictEqual(
 			Chat.formatText(`[[item: Beast ball]]`),
-			`<a href="//dex.pokemonshowdown.com/items/beastball" target="_blank" rel="noopener">[Beast ball]</a>`
+			`<a href="//dex.pokemonshowdown.com/items/beastball" target="_blank">[Beast ball]</a>`
 		);
 		assert.strictEqual(
 			Chat.formatText(`:)`, true),

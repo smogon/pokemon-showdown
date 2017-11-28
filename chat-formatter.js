@@ -78,7 +78,7 @@ class TextFormatter {
 					if (slashIndex - 4 > 19 + 3) uri = uri.slice(0, 19) + '<small class="message-overflow">' + uri.slice(19, slashIndex - 4) + '</small>' + uri.slice(slashIndex - 4);
 				}
 			}
-			return `<a href="${fulluri}" target="_blank" rel="noopener">${uri}</a>`;
+			return `<a href="${fulluri}" rel="noopener" target="_blank">${uri}</a>`;
 		});
 		// (links don't have any specific syntax, they're just a pattern, so we detect them in a separate pass)
 
@@ -298,6 +298,7 @@ class TextFormatter {
 				if (uri && !this.isTrusted) {
 					let shortUri = uri.replace(/^https?:\/\//, '').replace(/^www\./, '').replace(/\/$/, '');
 					term += `<small> &lt;${shortUri}&gt;</small>`;
+					uri += '" rel="noopener';
 				}
 				if (colonPos > 0) {
 					const key = this.slice(start + 2, colonPos);
@@ -330,7 +331,7 @@ class TextFormatter {
 					uri = `//www.google.com/search?ie=UTF-8&btnI&q=${this.toUriComponent(term)}`;
 				}
 				this.pushSlice(start);
-				this.buffers.push(`<a href="${uri}" target="_blank" rel="noopener">${term}</a>`);
+				this.buffers.push(`<a href="${uri}" target="_blank">${term}</a>`);
 				this.offset = i + 2;
 			}
 			return true;
