@@ -10,7 +10,7 @@
 'use strict';
 
 // Regex copied from the client
-const domainRegex = '[a-z0-9\\-]+(?:[.][a-z0-9\\-]+)*';
+const domainRegex = '[a-z0-9-]+(?:[.][a-z0-9-]+)*';
 const parenthesisRegex = '[(](?:[^\\s()<>&]|&amp;)*[)]';
 const linkRegex = new RegExp(
 	'(?:' +
@@ -33,7 +33,7 @@ const linkRegex = new RegExp(
 				// URLs usually don't end with punctuation, so don't allow
 				// punctuation symbols that probably aren't related to URL.
 				'(?:' +
-					'[^\\s`()\\[\\]{}\'".,!?;:&<>*`^~\\\\]' +
+					'[^\\s`()[\\]{}\'".,!?;:&<>*`^~\\\\]' +
 					'|' + parenthesisRegex +
 				')' +
 			')?' +
@@ -44,6 +44,8 @@ const linkRegex = new RegExp(
 	'(?!.*&gt;)',
 	'ig'
 );
+// compiled from above
+// const linkRegex = /(?:(?:(?:https?:\/\/|\bwww[.])[a-z0-9-]+(?:[.][a-z0-9-]+)*|\b[a-z0-9-]+(?:[.][a-z0-9-]+)*[.](?:com?|org|net|edu|info|us|jp|[a-z]{2,3}(?=[:/])))(?:[:][0-9]+)?\b(?:\/(?:(?:[^\s()&<>]|&amp;|&quot;|[(](?:[^\s()<>&]|&amp;)*[)])*(?:[^\s`()[\]{}'".,!?;:&<>*`^~\\]|[(](?:[^\s()<>&]|&amp;)*[)]))?)?|[a-z0-9.]+\b@[a-z0-9-]+(?:[.][a-z0-9-]+)*[.][a-z]{2,3})(?!.*&gt;)/ig;
 
 /**
  * @typedef {'_' | '*' | '~' | '^' | '\\' | '<' | '[' | '`' | 'a' | 'spoiler' | '>' | '('} SpanType
