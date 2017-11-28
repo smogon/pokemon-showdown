@@ -128,10 +128,15 @@ Punishments.sharedIps = new Map();
  * Persistence
  *********************************************************/
 
-// punishType is an allcaps string, for global punishments they can be one of the following:
-//   'LOCK'
-//   'BAN'
-//   'NAMELOCK'
+// punishType is an allcaps string, for global punishments they can be anything in the punishmentTypes map.
+// This map can be extended with custom punishments by chat plugins.
+// Keys in the map correspond to punishTypes, values signify the way they should be displayed in /alt
+
+Punishments.punishmentTypes = new Map([
+	['LOCK', 'locked'],
+	['BAN', 'globally banned'],
+	['NAMELOCK', 'namelocked'],
+]);
 
 // For room punishments, they can be anything in the roomPunishmentTypes map.
 // This map can be extended with custom punishments by chat plugins.
