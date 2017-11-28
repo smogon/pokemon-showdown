@@ -13443,6 +13443,17 @@ exports.BattlePokedex = {
 		evoLevel: 2,
 		eggGroups: ["Fairy", "Human-Like"],
 	},
+	pajantom: {
+		num: -12,
+		species: "Pajantom",
+		types: ["Dragon", "Ghost"],
+		baseStats: {hp: 84, atk: 133, def: 71, spa: 51, spd: 111, spe: 101},
+		abilities: {0: "Comatose"},
+		heightm: 1.1,
+		weightkg: 3.1,
+		color: "Purple",
+		eggGroups: ["Dragon", "Monster"],
+	},
 	syclant: {
 		num: -51,
 		species: "Syclant",
