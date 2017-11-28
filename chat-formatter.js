@@ -328,7 +328,7 @@ class TextFormatter {
 				while (this.at(i) === char) i++;
 				break;
 			case '`':
-				this.runLookahead('`', i);
+				if (this.at(i + 1) === '`') this.runLookahead('`', i);
 				if (i < this.offset) {
 					i = this.offset;
 					break;
