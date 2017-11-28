@@ -53,12 +53,16 @@ describe('Chat', function () {
 			`&gt;w&lt; not greentext &gt;also not greentext`
 		);
 		assert.strictEqual(
-			Chat.formatText(`[[Google]]<http://www.google.com/>`),
+			Chat.formatText(`[[Google <http://www.google.com/>]]`),
 			`<a href="http://www.google.com/" target="_blank" rel="noopener">Google<small> &lt;google.com&gt;</small></a>`
 		);
 		assert.strictEqual(
-			Chat.formatText(`[[Google]]<google.com>`, true),
+			Chat.formatText(`[[Google <google.com>]]`, true),
 			`<a href="http://google.com" target="_blank" rel="noopener">Google</a>`
+		);
+		assert.strictEqual(
+			Chat.formatText(`[[wiki: Pokemon]]`, true),
+			`<a href="http://en.wikipedia.org/w/index.php?title=Special:Search&search=%20Pokemon" target="_blank" rel="noopener">wiki: Pokemon</a>`
 		);
 		assert.strictEqual(
 			Chat.formatText(`:)`, true),
