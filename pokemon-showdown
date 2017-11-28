@@ -1,15 +1,31 @@
-#!/usr/bin/env node
-'use strict';
+#!/bin/sh
+
+true /*
+# Shell script will interpret above as a command and execute everything after
+# it, while JavaScript will interpret this as beginning of a comment and skip
+# shell script contents.
+#
+# As shell script parses lines only when they are needed, nothing after exit 1
+# can possibly cause a syntax error.
+
+if nodepath="$(command -v node || command -v nodejs)"; then
+	exec "$nodepath" "$0" "$@"
+fi
+echo "We require Node.js version 8 or later; Node.js not found"
+exit 1
+*/;
 
 const child_process = require('child_process');
+const fs = require('fs');
+const path = require('path');
 
-// Make sure we're Node 6+
+// Make sure we're Node 8+
 
 try {
-	eval('{ let [a] = [1]; }');
+	eval('{ let a = async () => {}; }');
 } catch (e) {
-	console.log("We require Node.js v6 or later; you're using " + process.version);
-	process.exit();
+	console.log("We require Node.js version 8 or later; you're using " + process.version);
+	process.exit(1);
 }
 
 // Make sure our dependencies are available, and install them if they
@@ -22,15 +38,42 @@ try {
 	child_process.execSync('npm install --production', {stdio: 'inherit'});
 }
 
-// Start the server. We manually load app.js so it can be configured to run as
-// the main module, rather than this file being considered the main module.
-// This ensures any dependencies that were just installed can be found when
-// running on Windows and avoids any other potential side effects of the main
-// module not being app.js like it is assumed to be.
-//
-// The port the server should host on can be passed using the second argument
-// when launching with this file the same way app.js normally allows, e.g. to
-// host on port 9000:
-// $ ./pokemon-showdown 9000
+// Make sure config.js exists. If not, copy it over synchronously from
+// config-example.js, since it's needed before we can start the server
 
-require('module')._load('./app', module, true);
+try {
+	require.resolve('./config/config');
+} catch (err) {
+	if (err.code !== 'MODULE_NOT_FOUND') throw err; // should never happen
+
+	console.log('config.js does not exist. Creating one with default settings...');
+	fs.writeFileSync(
+		path.resolve(__dirname, 'config/config.js'),
+		fs.readFileSync(path.resolve(__dirname, 'config/config-example.js'))
+	);
+}
+
+if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
+	// Start the server. We manually load app.js so it can be configured to run as
+	// the main module, rather than this file being considered the main module.
+	// This ensures any dependencies that were just installed can be found when
+	// running on Windows and avoids any other potential side effects of the main
+	// module not being app.js like it is assumed to be.
+	//
+	// The port the server should host on can be passed using the second argument
+	// when launching with this file the same way app.js normally allows, e.g. to
+	// host on port 9000:
+	// $ ./pokemon-showdown 9000
+
+	require('module')._load('./app', module, true);
+} else switch (process.argv[2]) {
+	case 'generate-team':
+		const Dex = require('./sim/dex');
+		global.toId = Dex.getId;
+		const seed = process.argv[4] ? process.argv[4].split(',').map(Number) : undefined;
+		console.log(Dex.packTeam(Dex.generateTeam(process.argv[3], seed)));
+		break;
+	default:
+		console.error('Unrecognized command: ' + process.argv[2]);
+		process.exit(1);
+}

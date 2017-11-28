@@ -3,15 +3,17 @@ Contributing to Pokémon Showdown
 
 In general, we welcome pull requests that fix bugs.
 
-For large projects, please discuss with us at http://psim.us/development first. We'd hate to have to reject a pull request that you spent a long time working on...
+For feature additions and large projects, please discuss with us at http://psim.us/development first. We'd hate to have to reject a pull request that you spent a long time working on...
+
+If you're looking for inspiration for something to do, the Ideas issue is a good place to look: https://github.com/Zarel/Pokemon-Showdown/issues/2444
 
 
 License
 ------------------------------------------------------------------------
 
-Your submitted code should be MIT licensed (for simplicity, it should be MIT licensed even if you're submitting client code). The first time you make a pull request, we'll ask you to explicitly state that you agree to MIT license it, just to be safe.
+Your submitted code should be MIT licensed. The GitHub ToS (and the fact that your fork also contains our LICENSE file) ensures this, so we won't ask when you submit a pull request, but keep this in mind.
 
-Even if we forget, we'll take the fact that your pull request contains a LICENSE file that says "MIT licensed" as evidence that your submitted code is MIT licensed. GitHub's ToS also makes you use the license when you submit a pull request.
+For simplicity (mostly to make relicensing easier), client code should be also be MIT licensed. The first time you make a client pull request, we'll ask you to explicitly state that you agree to MIT license it.
 
 
 Commit standards
@@ -69,10 +71,6 @@ We enforce most of our code standards through `eslint`. Just run `npm test` and 
 
 Looking at your surrounding text is also a way to get a good idea of our coding style.
 
-In particular:
-
-- Tabs, not spaces (sorry! our more opinionated developers like tabs more)
-
 ### Strings
 
 The codebase currently uses a mix of `"` and `'` and `` ` `` for strings.
@@ -81,34 +79,63 @@ Our current convention is to use `'` for IDs; `"` for names (i.e. usernames, mov
 
 Unfortunately, since this is not a convention the linter can test for (and also because our older string standards predate PS), a lot of existing code is wrong on this, so you can't look at surrounding code to get an idea of what the convention should be. Refer to the above paragraph as the definitive rule.
 
+### Optionals: `null` vs `undefined` vs `false`
+
+PS convention is to use `null` for optionals. So a function that retrieves a possible `T` would return `T | null`. This is mostly because TypeScript expands `T?` to `T | null`.
+
+Some old code returns `T | undefined` (our previous convention). This is a relatively common standard (ironically, TypeScript itself uses it). Feel free to convert to `T | null` where you see it.
+
+Some even older code returns `T | false`. This is a very old PHP convention that has no place in modern PS code. Please convert to `T | null` if you see it.
+
+### `false | null | undefined`
+
+The simulator (code in `sim/`, `data/`, and `mods/`) will often have functions with return signatures of the form `T | false | null | undefined`, especially in event handlers. These aren't optionals, they're different sentinel values.
+
+Specifically:
+
+* `false` means "this action failed"
+* `null` means "this action failed silently; suppress any 'But it failed!' messages"
+* `undefined` means "this action should be ignored, and treated as if nothing unexpected happened"
+
+So, if Thunder Wave hits a Ground type, the immunity checker returns `false` to indicate the immunity.
+
+If Volt Absorb absorbs Thunder Wave, Volt Absorb's TryHit handler shows the Volt Absorb message and returns `null` to indicate that no other failure message should be shown.
+
+If Water Absorb doesn't absorb Thunder Wave, Water Absorb's TryHit handler returns `undefined`, to show that Water Absorb does not interact with Thunder Wave.
+
+
 ES5 and ES6
 ------------------------------------------------------------------------
 
-In general, use modern features only if they're supported in Node 6 and reasonably performant in the latest version of Node.
+In general, use modern features; recent versions of V8 have fixed the performance problems they used to have.
 
 - **let, const: ALWAYS** - Supported in Node 4+, good performance.
 
-- **for-of on Arrays: SPARINGLY** - Poor performance. Acceptable outside of inner loops. For inner loops, use `for (let i = 0; i < array.length; i++)`
+- **for-of on Arrays: ALWAYS** - Supported in Node 4+, good performance in Node 8+.
 
-- **Array#forEach: NEVER** - Worse performance than `for-of` on Arrays. See `for-of`.
+- **Array#forEach: NEVER** - Poor readability; we prefer `for-of`.
 
 - **for-in on Arrays: NEVER** - Horrible performance, weird bugs due to string keys, poor interaction with Array prototype modification. Everyone tells you never to do it; we're no different. See `for-of`.
 
-- **Map, Set: SOMETIMES** - Much worse write/iteration performance, much better read performance than `Object.create(null)`. Use whatever's faster for your use case.
+- **Map, Set: SOMETIMES** - Worse write/iteration performance, better read performance than `Object.create(null)`. Use whatever's faster for your use case.
 
-- **for-of on Maps: NEVER** - Poor performance. Use `Map#forEach`.
+- **for-in on Objects: ALWAYS** - More readable; good performance in Node 8+.
 
-- **Map#forEach: ALWAYS** - This is our preferred method of iterating `Map`s.
+- **for-of on Maps and Sets: ALWAYS** - Supported in Node 4+, good performance in Node 8+.
+
+- **Map#forEach, Set#forEach: NEVER** - Poor readability; we prefer `for-of`.
 
 - **Object literal functions: ALWAYS** - Supported in Node 4+, good performance.
 
 - **Arrow functions: ALWAYS** - Supported in Node 4+, good performance. Obviously use only for callbacks; don't use in situations where `this` shouldn't be bound.
 
-- **Promises: ALWAYS** - Supported in Node 4+, great performance.
+- **Promises: ALWAYS** - Supported in Node 4+, poor performance but worth the readability.
+
+- **async/await: ALWAYS** - Supported in Node 8+, good performance.
 
 - **Function#bind: NEVER** - Horrible performance. Use arrow functions.
 
-- **classes and subclasses: ALWAYS** - Supported in Node 4+ and good performance in Node 6+; please start refactoring existing code over.
+- **classes and subclasses: ALWAYS** - Supported in Node 4+ and good performance in Node 6+.
 
 - **String#includes: ALWAYS** - Supported in Node 4+, poor performance, but not really noticeable and worth the better readability.
 

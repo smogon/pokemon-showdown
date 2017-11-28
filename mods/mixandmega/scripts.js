@@ -10,7 +10,7 @@ exports.BattleScripts = {
 	canMegaEvo: function (pokemon) {
 		if (pokemon.template.isMega || pokemon.template.isPrimal) return false;
 
-		let item = pokemon.getItem();
+		const item = pokemon.getItem();
 		if (item.megaStone) {
 			if (item.megaStone === pokemon.species) return false;
 			return item.megaStone;
@@ -22,13 +22,14 @@ exports.BattleScripts = {
 	},
 	runMegaEvo: function (pokemon) {
 		if (pokemon.template.isMega || pokemon.template.isPrimal) return false;
-		let template = this.getMixedTemplate(pokemon.originalSpecies, pokemon.canMegaEvo);
-		let side = pokemon.side;
+
+		const isUltraBurst = !pokemon.canMegaEvo;
+		const template = this.getMixedTemplate(pokemon.originalSpecies, pokemon.canMegaEvo || pokemon.canUltraBurst);
+		const side = pokemon.side;
 
 		// Pokémon affected by Sky Drop cannot Mega Evolve. Enforce it here for now.
-		let foeActive = side.foe.active;
-		for (let i = 0; i < foeActive.length; i++) {
-			if (foeActive[i].volatiles['skydrop'] && foeActive[i].volatiles['skydrop'].source === pokemon) {
+		for (const foeActive of side.foe.active) {
+			if (foeActive.volatiles['skydrop'] && foeActive.volatiles['skydrop'].source === pokemon) {
 				return false;
 			}
 		}
@@ -37,10 +38,10 @@ exports.BattleScripts = {
 		pokemon.baseTemplate = template; // Mega Evolution is permanent
 
 		// Do we have a proper sprite for it?
-		if (this.getTemplate(pokemon.canMegaEvo).baseSpecies === pokemon.originalSpecies) {
+		if (this.getTemplate(pokemon.canMegaEvo).baseSpecies === pokemon.originalSpecies || isUltraBurst) {
 			pokemon.details = template.species + (pokemon.level === 100 ? '' : ', L' + pokemon.level) + (pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
 			this.add('detailschange', pokemon, pokemon.details);
-			this.add('-mega', pokemon, template.baseSpecies, template.requiredItem);
+			this.add((isUltraBurst ? '-burst' : '-mega'), pokemon, template.baseSpecies, template.requiredItem);
 		} else {
 			let oTemplate = this.getTemplate(pokemon.originalSpecies);
 			let oMegaTemplate = this.getTemplate(template.originalMega);
@@ -60,6 +61,7 @@ exports.BattleScripts = {
 		pokemon.setAbility(template.abilities['0']);
 		pokemon.baseAbility = pokemon.ability;
 		pokemon.canMegaEvo = false;
+		if (isUltraBurst) pokemon.canUltraBurst = false;
 		return true;
 	},
 	getMixedTemplate: function (originalSpecies, megaSpecies) {

@@ -8,10 +8,15 @@
  */
 'use strict';
 
-// This PNG is designed to emulate the on-cartridge PRNG for Gen 5 and uses a 64-bit initial seed
+/**
+ * 64-bit, [high -> low]
+ * @typedef {[number, number, number, number]} PRNGSeed
+ */
 
-/** @typedef {[number, number, number, number]} PRNGSeed */
-
+/**
+ * A PRNG intended to emulate the on-cartridge PRNG for Gen 5 with a 64-bit
+ * initial seed.
+ */
 class PRNG {
 	/**
 	 * Creates a new source of randomness for the given seed.
@@ -19,10 +24,9 @@ class PRNG {
 	 * @param {PRNGSeed} [seed]
 	 */
 	constructor(seed = PRNG.generateSeed()) {
-		// We slice() the seed so we get a copy of it instead of the original seed.
 		/** @type {PRNGSeed} */
 		// @ts-ignore TypeScript bug
-		this.initialSeed = seed.slice();
+		this.initialSeed = seed.slice(); // make a copy
 		/** @type {PRNGSeed} */
 		// @ts-ignore TypeScript bug
 		this.seed = seed.slice();
@@ -134,11 +138,14 @@ class PRNG {
 	*/
 	nextFrame(initialSeed, framesToAdvance = 1) {
 		// Use Slice so we don't actually alter the original seed.
+		/** @type {PRNGSeed} */
+		// @ts-ignore TypeScript bug
 		let seed = initialSeed.slice();
 		for (let frame = 0; frame < framesToAdvance; ++frame) {
 			const a = [0x5D58, 0x8B65, 0x6C07, 0x8965];
 			const c = [0, 0, 0x26, 0x9EC3];
 
+			/** @type {PRNGSeed} */
 			const nextSeed = [0, 0, 0, 0];
 			let carry = 0;
 
@@ -166,7 +173,6 @@ class PRNG {
 	 * @return {PRNGSeed}
 	 */
 	static generateSeed() {
-		// use a random initial seed (64-bit, [high -> low])
 		return [
 			Math.floor(Math.random() * 0x10000),
 			Math.floor(Math.random() * 0x10000),

@@ -15,14 +15,17 @@
 
 'use strict';
 
-const fs = require('fs');
+const FS = require('./fs');
 
 let Ladders = module.exports = getLadder;
+Object.assign(Ladders, require('./ladders-matchmaker'));
 
 Ladders.get = Ladders;
 
 // tells the client to ask the server for format information
 Ladders.formatsListPrefix = '|,LL';
+
+Ladders.disabled = false;
 
 // ladderCaches = {formatid: ladder OR Promise(ladder)}
 // Use Ladders(formatid).ladder to guarantee a Promise(ladder).
@@ -42,40 +45,34 @@ class Ladder {
 	/**
 	 * Internal function, returns a Promise for a ladder
 	 */
-	load() {
+	async load() {
 		// ladderCaches[formatid]
 		if (this.formatid in ladderCaches) {
 			let cachedLadder = ladderCaches[this.formatid];
 			if (cachedLadder.then) {
-				return cachedLadder.then(ladder => {
-					this.loadedLadder = ladder;
-					return ladder;
-				});
-			} else {
-				return Promise.resolve(this.loadedLadder = cachedLadder);
+				let ladder = await cachedLadder;
+				return (this.loadedLadder = ladder);
 			}
+			return (this.loadedLadder = cachedLadder);
 		}
-		return (ladderCaches[this.formatid] = new Promise((resolve, reject) => {
-			fs.readFile('config/ladders/' + this.formatid + '.tsv', (err, data) => {
-				if (err) {
-					this.loadedLadder = ladderCaches[this.formatid] = [];
-					// console.log('Ladders(' + this.formatid + ') err loading tsv: ' + JSON.stringify(this.loadedLadder));
-					resolve(this.loadedLadder);
-					return;
-				}
-				let ladder = [];
-				let dataLines = ('' + data).split('\n');
-				for (let i = 1; i < dataLines.length; i++) {
-					let line = dataLines[i].trim();
-					if (!line) continue;
-					let row = line.split('\t');
-					ladder.push([toId(row[1]), Number(row[0]), row[1], Number(row[2]), Number(row[3]), Number(row[4]), row[5]]);
-				}
-				this.loadedLadder = ladderCaches[this.formatid] = ladder;
-				// console.log('Ladders(' + this.formatid + ') loaded tsv: ' + JSON.stringify(this.loadedLadder));
-				resolve(this.loadedLadder);
-			});
-		}));
+		try {
+			const data = await FS('config/ladders/' + this.formatid + '.tsv').read('utf8');
+			let ladder = [];
+			let dataLines = data.split('\n');
+			for (let i = 1; i < dataLines.length; i++) {
+				let line = dataLines[i].trim();
+				if (!line) continue;
+				let row = line.split('\t');
+				ladder.push([toId(row[1]), Number(row[0]), row[1], Number(row[2]), Number(row[3]), Number(row[4]), row[5]]);
+			}
+			// console.log('Ladders(' + this.formatid + ') loaded tsv: ' + JSON.stringify(this.loadedLadder));
+			this.loadedLadder = ladderCaches[this.formatid] = ladder;
+			return this.loadedLadder;
+		} catch (err) {
+			// console.log('Ladders(' + this.formatid + ') err loading tsv: ' + JSON.stringify(this.loadedLadder));
+		}
+		this.loadedLadder = ladderCaches[this.formatid] = [];
+		return this.loadedLadder;
 	}
 
 	/**
@@ -97,10 +94,9 @@ class Ladder {
 			this.saving = false;
 			return;
 		}
-		let stream = fs.createWriteStream('config/ladders/' + this.formatid + '.tsv');
+		let stream = FS(`config/ladders/${this.formatid}.tsv`).createWriteStream();
 		stream.write('Elo\tUsername\tW\tL\tT\tLast update\r\n');
-		for (let i = 0; i < this.loadedLadder.length; i++) {
-			let row = this.loadedLadder[i];
+		for (let row of this.loadedLadder) {
 			stream.write(row.slice(1).join('\t') + '\r\n');
 		}
 		stream.end();
@@ -131,38 +127,39 @@ class Ladder {
 	 * ladder toplist, to be displayed directly in the ladder tab of the
 	 * client.
 	 */
-	getTop() {
+	async getTop() {
 		let formatid = this.formatid;
 		let name = Dex.getFormat(formatid).name;
-		return this.ladder.then(ladder => {
-			let buf = `<h3>${name} Top 100</h3>`;
-			buf += `<table>`;
-			buf += `<tr><th>` + ['', 'Username', '<abbr title="Elo rating">Elo</abbr>', 'W', 'L', 'T'].join(`</th><th>`) + `</th></tr>`;
-			for (let i = 0; i < ladder.length; i++) {
-				let row = ladder[i];
-				buf += `<tr><td>` + [
-					i + 1, row[2], `<strong>${Math.round(row[1])}</strong>`, row[3], row[4], row[5],
-				].join(`</td><td>`) + `</td></tr>`;
-			}
-			return [formatid, buf];
-		});
+		const ladder = await this.ladder;
+		let buf = `<h3>${name} Top 100</h3>`;
+		buf += `<table>`;
+		buf += `<tr><th>` + ['', 'Username', '<abbr title="Elo rating">Elo</abbr>', 'W', 'L', 'T'].join(`</th><th>`) + `</th></tr>`;
+		for (let i = 0; i < ladder.length; i++) {
+			let row = ladder[i];
+			buf += `<tr><td>` + [
+				i + 1, row[2], `<strong>${Math.round(row[1])}</strong>`, row[3], row[4], row[5],
+			].join(`</td><td>`) + `</td></tr>`;
+		}
+		return [formatid, buf];
 	}
 
 	/**
 	 * Returns a Promise for the Elo rating of a user
 	 */
-	getRating(userid) {
+	async getRating(userid) {
 		let formatid = this.formatid;
 		let user = Users.getExact(userid);
-		if (user && user.mmrCache[formatid]) {
-			return Promise.resolve(user.mmrCache[formatid]);
+		if (Ladders.disabled === true || Ladders.disabled === 'db' && (!user || !user.mmrCache[formatid])) {
+			throw new Error(`Ladders are disabled.`);
 		}
-		return this.ladder.then(() => {
-			if (user.userid !== userid) return;
-			let index = this.indexOfUser(userid);
-			if (index < 0) return (user.mmrCache[formatid] = 1000);
-			return (user.mmrCache[formatid] = this.loadedLadder[index][1]);
-		});
+		if (user && user.mmrCache[formatid]) {
+			return user.mmrCache[formatid];
+		}
+		await this.ladder;
+		if (user.userid !== userid) throw new Error(`Expired rating for ${userid}`);
+		let index = this.indexOfUser(userid);
+		if (index < 0) return (user.mmrCache[formatid] = 1000);
+		return (user.mmrCache[formatid] = this.loadedLadder[index][1]);
 	}
 
 	/**
@@ -211,85 +208,92 @@ class Ladder {
 	 * Update the Elo rating for two players after a battle, and display
 	 * the results in the passed room.
 	 */
-	updateRating(p1name, p2name, p1score, room) {
+	async updateRating(p1name, p2name, p1score, room) {
+		if (Ladders.disabled) {
+			room.addRaw(`Ratings not updated. The ladders are currently disabled.`).update();
+			return [p1score, undefined, undefined];
+		}
+
 		let formatid = this.formatid;
-		this.ladder.then(() => {
-			let p1newElo, p2newElo;
-			try {
-				let p1index = this.indexOfUser(p1name, true);
-				let p1elo = this.loadedLadder[p1index][1];
+		let p2score = 1 - p1score;
+		if (p1score < 0) {
+			p1score = 0;
+			p2score = 0;
+		}
+		await this.ladder;
+		let p1newElo, p2newElo;
+		try {
+			let p1index = this.indexOfUser(p1name, true);
+			let p1elo = this.loadedLadder[p1index][1];
 
-				let p2index = this.indexOfUser(p2name, true);
-				let p2elo = this.loadedLadder[p2index][1];
+			let p2index = this.indexOfUser(p2name, true);
+			let p2elo = this.loadedLadder[p2index][1];
 
-				this.updateRow(this.loadedLadder[p1index], p1score, p2elo);
-				this.updateRow(this.loadedLadder[p2index], 1 - p1score, p1elo);
+			this.updateRow(this.loadedLadder[p1index], p1score, p2elo);
+			this.updateRow(this.loadedLadder[p2index], p2score, p1elo);
 
-				p1newElo = this.loadedLadder[p1index][1];
-				p2newElo = this.loadedLadder[p2index][1];
+			p1newElo = this.loadedLadder[p1index][1];
+			p2newElo = this.loadedLadder[p2index][1];
 
-				// console.log('L: ' + this.loadedLadder.map(r => ''+Math.round(r[1])+' '+r[2]).join('\n'));
+			// console.log('L: ' + this.loadedLadder.map(r => ''+Math.round(r[1])+' '+r[2]).join('\n'));
 
-				// move p1 to its new location
-				let newIndex = p1index;
-				while (newIndex > 0 && this.loadedLadder[newIndex - 1][1] <= p1newElo) newIndex--;
-				while (newIndex === p1index || (this.loadedLadder[newIndex] && this.loadedLadder[newIndex][1] > p1newElo)) newIndex++;
-				// console.log('ni='+newIndex+', p1i='+p1index);
-				if (newIndex !== p1index && newIndex !== p1index + 1) {
-					let row = this.loadedLadder.splice(p1index, 1)[0];
-					// adjust for removed row
-					if (newIndex > p1index) newIndex--;
-					if (p2index > p1index) p2index--;
+			// move p1 to its new location
+			let newIndex = p1index;
+			while (newIndex > 0 && this.loadedLadder[newIndex - 1][1] <= p1newElo) newIndex--;
+			while (newIndex === p1index || (this.loadedLadder[newIndex] && this.loadedLadder[newIndex][1] > p1newElo)) newIndex++;
+			// console.log('ni='+newIndex+', p1i='+p1index);
+			if (newIndex !== p1index && newIndex !== p1index + 1) {
+				let row = this.loadedLadder.splice(p1index, 1)[0];
+				// adjust for removed row
+				if (newIndex > p1index) newIndex--;
+				if (p2index > p1index) p2index--;
 
-					this.loadedLadder.splice(newIndex, 0, row);
-					// adjust for inserted row
-					if (p2index >= newIndex) p2index++;
-				}
-
-				// move p2
-				newIndex = p2index;
-				while (newIndex > 0 && this.loadedLadder[newIndex - 1][1] <= p2newElo) newIndex--;
-				while (newIndex === p2index || (this.loadedLadder[newIndex] && this.loadedLadder[newIndex][1] > p2newElo)) newIndex++;
-				// console.log('ni='+newIndex+', p2i='+p2index);
-				if (newIndex !== p2index && newIndex !== p2index + 1) {
-					let row = this.loadedLadder.splice(p2index, 1)[0];
-					// adjust for removed row
-					if (newIndex > p2index) newIndex--;
-
-					this.loadedLadder.splice(newIndex, 0, row);
-				}
-
-				let p1 = Users.getExact(p1name);
-				if (p1) p1.mmrCache[formatid] = +p1newElo;
-				let p2 = Users.getExact(p2name);
-				if (p2) p2.mmrCache[formatid] = +p2newElo;
-				this.save();
-
-				if (!room.battle) {
-					console.log(`room expired before ladder update was received`);
-					return;
-				}
-
-				let reasons = '' + (Math.round(p1newElo) - Math.round(p1elo)) + ' for ' + (p1score > 0.9 ? 'winning' : (p1score < 0.1 ? 'losing' : 'tying'));
-				if (reasons.charAt(0) !== '-') reasons = '+' + reasons;
-				room.addRaw(Chat.html`${p1name}'s rating: ${Math.round(p1elo)} &rarr; <strong>${Math.round(p1newElo)}</strong><br />(${reasons})`);
-
-				reasons = '' + (Math.round(p2newElo) - Math.round(p2elo)) + ' for ' + (p1score > 0.9 ? 'losing' : (p1score < 0.1 ? 'winning' : 'tying'));
-				if (reasons.charAt(0) !== '-') reasons = '+' + reasons;
-				room.addRaw(Chat.html`${p2name}'s rating: ${Math.round(p2elo)} &rarr; <strong>${Math.round(p2newElo)}</strong><br />(${reasons})`);
-
-				room.update();
-			} catch (e) {
-				if (!room.battle) return;
-				room.addRaw(`There was an error calculating rating changes:`);
-				room.add(e.stack);
-				room.update();
+				this.loadedLadder.splice(newIndex, 0, row);
+				// adjust for inserted row
+				if (p2index >= newIndex) p2index++;
 			}
 
-			if (!Dex.getFormat(formatid).noLog) {
-				room.logBattle(p1score, p1newElo, p2newElo);
+			// move p2
+			newIndex = p2index;
+			while (newIndex > 0 && this.loadedLadder[newIndex - 1][1] <= p2newElo) newIndex--;
+			while (newIndex === p2index || (this.loadedLadder[newIndex] && this.loadedLadder[newIndex][1] > p2newElo)) newIndex++;
+			// console.log('ni='+newIndex+', p2i='+p2index);
+			if (newIndex !== p2index && newIndex !== p2index + 1) {
+				let row = this.loadedLadder.splice(p2index, 1)[0];
+				// adjust for removed row
+				if (newIndex > p2index) newIndex--;
+
+				this.loadedLadder.splice(newIndex, 0, row);
 			}
-		});
+
+			let p1 = Users.getExact(p1name);
+			if (p1) p1.mmrCache[formatid] = +p1newElo;
+			let p2 = Users.getExact(p2name);
+			if (p2) p2.mmrCache[formatid] = +p2newElo;
+			this.save();
+
+			if (!room.battle) {
+				Monitor.warn(`room expired before ladder update was received`);
+				return;
+			}
+
+			let reasons = '' + (Math.round(p1newElo) - Math.round(p1elo)) + ' for ' + (p1score > 0.9 ? 'winning' : (p1score < 0.1 ? 'losing' : 'tying'));
+			if (reasons.charAt(0) !== '-') reasons = '+' + reasons;
+			room.addRaw(Chat.html`${p1name}'s rating: ${Math.round(p1elo)} &rarr; <strong>${Math.round(p1newElo)}</strong><br />(${reasons})`);
+
+			reasons = '' + (Math.round(p2newElo) - Math.round(p2elo)) + ' for ' + (p2score > 0.9 ? 'winning' : (p2score < 0.1 ? 'losing' : 'tying'));
+			if (reasons.charAt(0) !== '-') reasons = '+' + reasons;
+			room.addRaw(Chat.html`${p2name}'s rating: ${Math.round(p2elo)} &rarr; <strong>${Math.round(p2newElo)}</strong><br />(${reasons})`);
+
+			room.update();
+		} catch (e) {
+			if (!room.battle) return;
+			room.addRaw(`There was an error calculating rating changes:`);
+			room.add(e.stack);
+			room.update();
+		}
+
+		return [p1score, p1newElo, p2newElo];
 	}
 
 	/**

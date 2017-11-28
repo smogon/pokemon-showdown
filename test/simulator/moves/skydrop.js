@@ -83,7 +83,6 @@ describe('Sky Drop', function () {
 		]);
 		battle.choose('p1', 'move 1 1, move 1 -1');
 		battle.commitDecisions();
-		assert.strictEqual(battle.p1.active[0].lastMove, 'skydrop');
 		assert.strictEqual(battle.p2.active[0].boosts['atk'], 1);
 		assert.strictEqual(battle.p2.active[0].boosts['def'], 1);
 	});

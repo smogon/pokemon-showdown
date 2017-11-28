@@ -171,6 +171,7 @@ exports.BattleStatuses = {
 			if (this.random(3) > 0) {
 				return;
 			}
+			this.activeTarget = pokemon;
 			this.damage(this.getDamage(pokemon, pokemon, 40), pokemon, pokemon, {
 				id: 'confused',
 				effectType: 'Move',
@@ -282,10 +283,14 @@ exports.BattleStatuses = {
 	},
 	choicelock: {
 		onStart: function (pokemon) {
-			if (!this.activeMove.id || this.activeMove.sourceEffect && this.activeMove.sourceEffect !== this.activeMove.id) return false;
+			if (!this.activeMove.id || this.activeMove.hasBounced) return false;
 			this.effectData.move = this.activeMove.id;
 		},
 		onBeforeMove: function (pokemon, target, move) {
+			if (!pokemon.getItem().isChoice || !pokemon.hasMove(this.effectData.move)) {
+				pokemon.removeVolatile('choicelock');
+				return;
+			}
 			if (move.id !== this.effectData.move && move.id !== 'struggle') {
 				// Fails even if the Choice item is being ignored, and no PP is lost
 				this.addMove('move', pokemon, move.name);
@@ -414,19 +419,6 @@ exports.BattleStatuses = {
 		onBasePower: function (basePower, user, target, move) {
 			this.debug('Gem Boost');
 			return this.chainModify([0x14CD, 0x1000]);
-		},
-	},
-	aura: {
-		duration: 1,
-		onBasePowerPriority: 8,
-		onBasePower: function (basePower, user, target, move) {
-			let modifier = 0x1547;
-			this.debug('Aura Boost');
-			if (user.volatiles['aurabreak']) {
-				modifier = 0x0C00;
-				this.debug('Aura Boost reverted by Aura Break');
-			}
-			return this.chainModify([modifier, 0x1000]);
 		},
 	},
 

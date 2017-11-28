@@ -9,7 +9,7 @@ Navigation: [Website][1] | **Server repository** | [Client repository][2] | [Dex
 
 [![Build Status](https://travis-ci.org/Zarel/Pokemon-Showdown.svg)](https://travis-ci.org/Zarel/Pokemon-Showdown)
 [![Dependency Status](https://david-dm.org/zarel/Pokemon-Showdown.svg)](https://david-dm.org/zarel/Pokemon-Showdown)
-[![devDependency Status](https://david-dm.org/zarel/Pokemon-Showdown/dev-status.svg)](https://david-dm.org/zarel/Pokemon-Showdown#info=devDependencies)
+[![devDependency Status](https://david-dm.org/zarel/Pokemon-Showdown/dev-status.svg)](https://david-dm.org/zarel/Pokemon-Showdown?type=dev)
 
 Introduction
 ------------------------------------------------------------------------
@@ -29,13 +29,13 @@ Installing
 
     ./pokemon-showdown
 
-(Requires Node.js 6+)
+(Requires Node.js 8+)
 
 
 Detailed installation instructions
 ------------------------------------------------------------------------
 
-Pokémon Showdown requires you to have [Node.js][6] installed, 6.x or later.
+Pokémon Showdown requires you to have [Node.js][6] installed, 8.x or later (7.7 or later can work, but you might as well be on the latest stable).
 
 Next, obtain a copy of Pokémon Showdown. If you're reading this outside of GitHub, you've probably already done this. If you're reading this in GitHub, there's a "Clone or download" button near the top right (it's green). I recommend the "Open in Desktop" method - you need to install GitHub Desktop which is more work than "Download ZIP", but it makes it much easier to update in the long run (it lets you use the `/updateserver` command).
 
@@ -158,6 +158,7 @@ Retired Staff
 
 Major Contributors
 
+- Bär Halberkamp [bumbadadabum] - Development
 - Kevin Lau [Ascriptmaster] - Development, Art (battle animations)
 - Konrad Borowski [xfix] - Development
 - Quinton Lee [sirDonovan] - Development
@@ -165,16 +166,17 @@ Major Contributors
 Contributors
 
 - Andrew Goodsell [Zracknel] - Art (battle weather backdrops)
-- Bär Halberkamp [bumbadadabum] - Development
+- Avery Zimmer [Lyren, SolarisFox] - Development
 - Ben Davies [Morfent] - Development
 - Ben Frengley [TalkTakesTime] - Development
 - Cody Thompson [Rising_Dusk] - Development
 - Ian Clail [Layell] - Art (battle graphics, sprites)
-- Jacob Zimmer [SolarisFox] - Development
 - Jeremy Piemonte [panpawn] - Development
+- Kris Johnson [Kris] - Development
 - Neil Rashbrook [urkerab] - Development
 - Robin Vandenbrande [Quinella] - Development
 - [Ridaz] - Art (battle animations)
+- Tobias Mann [asgdf] - Development
 
 Special thanks
 

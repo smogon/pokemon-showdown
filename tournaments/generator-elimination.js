@@ -12,8 +12,11 @@ const nameMap = {
 	// Feel free to add more
 };
 
-module.exports = (() => {
-	function Elimination(maxSubtrees) {
+class Elimination {
+	constructor(maxSubtrees) {
+		this.name = "Elimination";
+		this.isDrawingSupported = false;
+
 		maxSubtrees = maxSubtrees || 1;
 		if (typeof maxSubtrees === 'string' && maxSubtrees.toLowerCase() === 'infinity') {
 			maxSubtrees = Infinity;
@@ -36,18 +39,16 @@ module.exports = (() => {
 		}
 	}
 
-	Elimination.prototype.name = "Elimination";
-	Elimination.prototype.isDrawingSupported = false;
-
-	Elimination.prototype.addUser = function (user) {
+	addUser(user) {
 		if (this.isBracketFrozen) return 'BracketFrozen';
 		this.users.set(user, {});
-	};
-	Elimination.prototype.removeUser = function (user) {
+	}
+
+	removeUser(user) {
 		if (this.isBracketFrozen) return 'BracketFrozen';
 		this.users.delete(user);
-	};
-	Elimination.prototype.replaceUser = function (user, replacementUser) {
+	}
+	replaceUser(user, replacementUser) {
 		this.users.delete(user);
 		this.users.set(replacementUser, {});
 
@@ -63,17 +64,18 @@ module.exports = (() => {
 			}
 		}
 		targetNode.getValue().user = replacementUser;
-	};
-	Elimination.prototype.getUsers = function (remaining) {
+	}
+	getUsers(remaining) {
 		let users = [];
 		this.users.forEach((value, key) => {
 			if (remaining && (value.isEliminated || value.isDisqualified)) return;
 			users.push(key);
 		});
 		return users;
-	};
+	}
 
-	Elimination.prototype.generateBracket = function () {
+
+	generateBracket() {
 		Dex.shuffle(this.getUsers()).forEach(user => {
 			if (!this.tree) {
 				this.tree = {
@@ -101,8 +103,8 @@ module.exports = (() => {
 				this.tree.nextLayerLeafNodes = [];
 			}
 		});
-	};
-	Elimination.prototype.getBracketData = function () {
+	}
+	getBracketData() {
 		let rootNode = {children: []};
 		if (this.tree) {
 			let queue = [{fromNode: this.tree.tree, toNode: rootNode}];
@@ -134,8 +136,8 @@ module.exports = (() => {
 		data.type = 'tree';
 		data.rootNode = rootNode.children[0] || null;
 		return data;
-	};
-	Elimination.prototype.freezeBracket = function () {
+	}
+	freezeBracket() {
 		this.isBracketFrozen = true;
 		this.users.forEach(user => {
 			user.isBusy = false;
@@ -227,9 +229,9 @@ module.exports = (() => {
 				node.getValue().state = 'available';
 			}
 		});
-	};
+	}
 
-	Elimination.prototype.disqualifyUser = function (user) {
+	disqualifyUser(user) {
 		if (!this.isBracketFrozen) return 'BracketNotFrozen';
 
 		this.users.get(user).isDisqualified = true;
@@ -257,17 +259,17 @@ module.exports = (() => {
 				throw new Error("Unexpected " + error + " from setMatchResult([" + match.join(", ") + "], " + result + ")");
 			}
 		}
-	};
-	Elimination.prototype.getUserBusy = function (user) {
+	}
+	getUserBusy(user) {
 		if (!this.isBracketFrozen) return 'BracketNotFrozen';
 		return this.users.get(user).isBusy;
-	};
-	Elimination.prototype.setUserBusy = function (user, isBusy) {
+	}
+	setUserBusy(user, isBusy) {
 		if (!this.isBracketFrozen) return 'BracketNotFrozen';
 		this.users.get(user).isBusy = isBusy;
-	};
+	}
 
-	Elimination.prototype.getAvailableMatches = function () {
+	getAvailableMatches() {
 		if (!this.isBracketFrozen) return 'BracketNotFrozen';
 
 		let matches = [];
@@ -281,11 +283,11 @@ module.exports = (() => {
 			}
 		});
 		return matches;
-	};
-	Elimination.prototype.setMatchResult = function (match, result, score) {
+	}
+	setMatchResult(match, result, score) {
 		if (!this.isBracketFrozen) return 'BracketNotFrozen';
 
-		if (!(result in {win:1, loss:1})) return 'InvalidMatchResult';
+		if (!['win', 'loss'].includes(result)) return 'InvalidMatchResult';
 
 		if (!this.users.has(match[0]) || !this.users.has(match[1])) return 'UserNotAdded';
 
@@ -367,13 +369,13 @@ module.exports = (() => {
 				}
 			}
 		}
-	};
+	}
 
-	Elimination.prototype.isTournamentEnded = function () {
+	isTournamentEnded() {
 		return this.tree.tree.getValue().state === 'finished';
-	};
+	}
 
-	Elimination.prototype.getResults = function () {
+	getResults() {
 		if (!this.isTournamentEnded()) return 'TournamentNotEnded';
 
 		let results = [];
@@ -389,7 +391,7 @@ module.exports = (() => {
 		}
 
 		return results;
-	};
+	}
+}
 
-	return Elimination;
-})();
+module.exports = Elimination;

@@ -1,7 +1,7 @@
 {
 	"root": true,
 	"parserOptions": {
-		"ecmaVersion": 6,
+		"ecmaVersion": 8,
 		"sourceType": "script",
 		"ecmaFeatures": {
 			"globalReturn": true
@@ -14,7 +14,8 @@
 	"globals": {
 		"Config": false, "Monitor": false, "toId": false, "Dex": false, "LoginServer": false,
 		"Users": false, "Punishments": false, "Rooms": false, "Verifier": false, "Chat": false,
-		"Tournaments": false, "Dnsbl": false, "Sockets": false, "TeamValidator": false, "Ladders": false
+		"Tournaments": false, "Dnsbl": false, "Sockets": false, "TeamValidator": false,
+		"TeamValidatorAsync": false, "Ladders": false
 	},
 	"extends": "eslint:recommended",
 	"rules": {
@@ -25,6 +26,7 @@
 		"no-inner-declarations": ["error", "functions"],
 		"valid-jsdoc": "off",
 
+		"eol-last": ["error", "always"],
 		"array-callback-return": "error",
 		"block-scoped-var": "error",
 		"comma-dangle": ["error", "always-multiline"],
@@ -76,7 +78,7 @@
 		"radix": ["warn", "as-needed"],
 		"vars-on-top": "off",
 		"wrap-iife": ["error", "inside"],
-		"yoda": "off",
+		"yoda": ["error", "never", { "exceptRange": true }],
 
 		"strict": ["error", "global"],
 
@@ -90,7 +92,7 @@
 		"no-undef": ["error", {"typeof": true}],
 		"no-undefined": "off",
 		"no-unused-vars": ["warn", {"args": "none"}],
-		"no-use-before-define": ["error", {"functions": false, "classes": false}],
+		"no-use-before-define": ["error", {"functions": false, "classes": false, "variables": false}],
 
 		"callback-return": [2, ["callback", "cb", "done"]],
 		"no-mixed-requires": "error",
@@ -102,7 +104,7 @@
 		"no-sync": "off",
 
 		"array-bracket-spacing": ["error", "never"],
-		"block-spacing": "off",
+		"block-spacing": ["error", "always"],
 		"brace-style": ["error", "1tbs", {"allowSingleLine": true}],
 		"camelcase": "off",
 		"comma-spacing": ["error", {"before": false, "after": true}],
@@ -133,7 +135,7 @@
 		"no-new-object": "error",
 		"no-spaced-func": "error",
 		"no-ternary": "off",
-		"no-trailing-spaces": "error",
+		"no-trailing-spaces": ["error", {"ignoreComments": false}],
 		"no-underscore-dangle": "off",
 		"no-unneeded-ternary": "error",
 		"object-curly-spacing": ["error", "never"],
@@ -167,5 +169,6 @@
 		"no-restricted-syntax": ["error", "WithStatement"],
 
 		"validate-conditionals": "error",
+		"no-constant-condition": ["error", {"checkLoops": false}]
 	}
 }

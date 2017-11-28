@@ -154,7 +154,7 @@ class MafiaPlayer extends Rooms.RoomGamePlayer {
 					return;
 				}
 			}
-			this.game.progress();
+			this.game.progress(true);
 		} else {
 			this.sendRoom("Invalid target");
 		}
@@ -175,7 +175,7 @@ class MafiaPlayer extends Rooms.RoomGamePlayer {
 					return;
 				}
 			}
-			this.game.progress();
+			this.game.progress(true);
 		} else {
 			this.sendRoom("You can't vote for that person");
 		}
@@ -427,12 +427,12 @@ class Mafia extends Rooms.RoomGame {
 		let votes = this.parseVotes();
 
 		for (let i in votes) {
-			if (votes[i].num > (Object.keys(this.players).length / 2)) return this.progress();
+			if (votes[i].num > (Object.keys(this.players).length / 2)) return this.progress(true);
 			text += '<b>' + (i === 'none' ? 'Abstain' : Chat.escapeHTML(this.players[i].name)) + '</b>: ';
 			if (this.anonVotes) {
-				text += this.currentVote[i].num + ' votes.';
+				text += votes[i].num + ' votes.';
 			} else {
-				text += this.currentVote[i].voters.join(', ');
+				text += votes[i].voters.join(', ');
 			}
 			text += '<br />';
 		}
@@ -510,10 +510,12 @@ class Mafia extends Rooms.RoomGame {
 		this.destroy();
 	}
 
-	progress() {
-		for (let i in this.players) {
-			if (!this.players[i].done) {
-				this.players[i].eliminate();
+	progress(early) {
+		if (!early) {
+			for (let i in this.players) {
+				if (!this.players[i].done) {
+					this.players[i].eliminate();
+				}
 			}
 		}
 

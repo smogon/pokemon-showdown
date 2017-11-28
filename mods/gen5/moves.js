@@ -19,6 +19,7 @@ exports.BattleMovedex = {
 	},
 	aromatherapy: {
 		inherit: true,
+		desc: "Every Pokemon in the user's party is cured of its major status condition.",
 		onHit: function (target, source) {
 			this.add('-activate', source, 'move: Aromatherapy');
 			source.side.pokemon.forEach(pokemon => pokemon.cureStatus());
@@ -64,6 +65,7 @@ exports.BattleMovedex = {
 	},
 	bestow: {
 		inherit: true,
+		desc: "The target receives the user's held item. Fails if the user has no item or is holding a Mail, if the target is already holding an item, if the user is a Giratina holding a Griseous Orb, an Arceus holding a Plate, a Genesect holding a Drive, or if the target is one of those Pokemon and the user is holding the respective item.",
 		flags: {protect: 1, mirror: 1},
 	},
 	bind: {
@@ -88,7 +90,7 @@ exports.BattleMovedex = {
 	},
 	camouflage: {
 		inherit: true,
-		desc: "The user's type changes based on the battle terrain. Ground-type in Wi-Fi battles. (In-game: Ground-type in puddles, rocky ground, and sand, Water-type on water, Rock-type in caves, Ice-type on snow and ice, and Normal-type everywhere else.) Fails if the user's type cannot be changed or if the user is already purely that type.",
+		desc: "The user's type changes based on the battle terrain. Ground type on the regular Wi-Fi terrain. Fails if the user's type cannot be changed or if the user is already purely that type.",
 		shortDesc: "Changes user's type based on terrain. (Ground)",
 		onHit: function (target) {
 			if (!target.setType('Ground')) return false;
@@ -156,6 +158,7 @@ exports.BattleMovedex = {
 	},
 	covet: {
 		inherit: true,
+		desc: "If this attack was successful and the user has not fainted, it steals the target's held item if the user is not holding one. The target's item is not stolen if it is a Mail, or if the target is a Giratina holding a Griseous Orb, an Arceus holding a Plate, or a Genesect holding a Drive. Items lost to this move cannot be regained with Recycle or the Ability Harvest.",
 		pp: 40,
 	},
 	crabhammer: {
@@ -175,6 +178,10 @@ exports.BattleMovedex = {
 				}
 			}
 		},
+	},
+	detect: {
+		inherit: true,
+		desc: "The user is protected from most attacks made by other Pokemon during this turn. This move has a 1/X chance of being successful, where X starts at 1 and doubles each time this move is successfully used. X resets to 1 if this move fails or if the user's last move used is not Detect, Endure, Protect, Quick Guard, or Wide Guard. Fails if the user moves last this turn.",
 	},
 	dracometeor: {
 		inherit: true,
@@ -196,6 +203,10 @@ exports.BattleMovedex = {
 		inherit: true,
 		flags: {protect: 1, mirror: 1, sound: 1},
 	},
+	endure: {
+		inherit: true,
+		desc: "The user will survive attacks made by other Pokemon during this turn with at least 1 HP. This move has a 1/X chance of being successful, where X starts at 1 and doubles each time this move is successfully used. X resets to 1 if this move fails or if the user's last move used is not Detect, Endure, Protect, Quick Guard, or Wide Guard. Fails if the user moves last this turn.",
+	},
 	energyball: {
 		inherit: true,
 		basePower: 80,
@@ -203,6 +214,10 @@ exports.BattleMovedex = {
 	extrasensory: {
 		inherit: true,
 		pp: 30,
+	},
+	feint: {
+		inherit: true,
+		desc: "If this move is successful, it breaks through the target's Detect or Protect for this turn, allowing other Pokemon to attack the target normally. If the target is an opponent and its side is protected by Quick Guard or Wide Guard, that protection is also broken for this turn and other Pokemon may attack the opponent's side normally.",
 	},
 	finalgambit: {
 		inherit: true,
@@ -216,7 +231,7 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 50,
 		basePowerCallback: function (target, source, move) {
-			if (move.sourceEffect in {grasspledge:1, waterpledge:1}) {
+			if (['grasspledge', 'waterpledge'].includes(move.sourceEffect)) {
 				this.add('-combine');
 				return 150;
 			}
@@ -301,7 +316,7 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 50,
 		basePowerCallback: function (target, source, move) {
-			if (move.sourceEffect in {waterpledge:1, firepledge:1}) {
+			if (['waterpledge', 'firepledge'].includes(move.sourceEffect)) {
 				this.add('-combine');
 				return 150;
 			}
@@ -322,6 +337,7 @@ exports.BattleMovedex = {
 	},
 	healbell: {
 		inherit: true,
+		desc: "Every Pokemon in the user's party is cured of its major status condition. Active Pokemon with the Ability Soundproof are also cured.",
 		flags: {snatch: 1, sound: 1},
 		onHit: function (target, source) {
 			this.add('-activate', source, 'move: Heal Bell');
@@ -449,7 +465,7 @@ exports.BattleMovedex = {
 	knockoff: {
 		inherit: true,
 		basePower: 20,
-		desc: "If the user has not fainted, the target loses its held item. This move cannot cause Pokemon with the Ability Sticky Hold to lose their held item, or force a Giratina, an Arceus, or a Genesect to lose their Griseous Orb, Plate, or Drive, respectively. Items lost to this move cannot be regained with Recycle.",
+		desc: "If the user has not fainted, the target loses its held item. This move cannot cause Pokemon with the Ability Sticky Hold to lose their held item, or force a Giratina, an Arceus, or a Genesect to lose their Griseous Orb, Plate, or Drive, respectively. Items lost to this move cannot be regained with Recycle or the Ability Harvest.",
 		shortDesc: "Removes the target's held item.",
 		onBasePower: function () {},
 	},
@@ -524,27 +540,6 @@ exports.BattleMovedex = {
 		accuracy: 85,
 		basePower: 100,
 	},
-	metronome: {
-		inherit: true,
-		onHit: function (target) {
-			let moves = [];
-			for (let i in exports.BattleMovedex) {
-				let move = exports.BattleMovedex[i];
-				if (i !== move.id) continue;
-				if (move.isNonstandard) continue;
-				let noMetronome = {
-					afteryou:1, assist:1, bestow:1, chatter:1, copycat:1, counter:1, covet:1, destinybond:1, detect:1, endure:1, feint:1, focuspunch:1, followme:1, freezeschok:1, helpinghand:1, iceburn:1, mefirst:1, metronome:1, mimic:1, mirrorcoat:1, mirrormove:1, naturepower:1, protect:1, quash:1, quickguard:1, ragepowder:1, relicsong:1, secretsword:1, sketch:1, sleeptalk:1, snarl:1, snatch:1, snore:1, struggle:1, switcheroo:1, technoblast:1, thief:1, transform:1, trick:1, vcreate:1, wideguard:1,
-				};
-				if (!noMetronome[move.id] && move.num < 560) {
-					moves.push(move.id);
-				}
-			}
-			let randomMove = '';
-			if (moves.length) randomMove = moves[this.random(moves.length)];
-			if (!randomMove) return false;
-			this.useMove(randomMove, target);
-		},
-	},
 	minimize: {
 		inherit: true,
 		desc: "Raises the user's evasiveness by 2 stages. Whether or not the user's evasiveness was changed, Stomp and Steamroller will have their power doubled if used against the user while it is active.",
@@ -552,7 +547,7 @@ exports.BattleMovedex = {
 		effect: {
 			noCopy: true,
 			onSourceModifyDamage: function (damage, source, target, move) {
-				if (move.id in {'stomp':1, 'steamroller':1}) {
+				if (['stomp', 'steamroller'].includes(move.id)) {
 					return this.chainModify(2);
 				}
 			},
@@ -598,7 +593,7 @@ exports.BattleMovedex = {
 	},
 	naturepower: {
 		inherit: true,
-		desc: "This move calls another move for use depending on the battle terrain. Earthquake in Wi-Fi battles.",
+		desc: "This move calls another move for use based on the battle terrain. Earthquake on the regular Wi-Fi terrain.",
 		shortDesc: "Attack changes based on terrain. (Earthquake)",
 		onTryHit: function () {},
 		onHit: function (pokemon) {
@@ -621,6 +616,8 @@ exports.BattleMovedex = {
 	},
 	poisonfang: {
 		inherit: true,
+		desc: "Has a 30% chance to badly poison the target.",
+		shortDesc: "30% chance to badly poison the target.",
 		secondary: {
 			chance: 30,
 			status: 'tox',
@@ -637,6 +634,10 @@ exports.BattleMovedex = {
 	powergem: {
 		inherit: true,
 		basePower: 70,
+	},
+	protect: {
+		inherit: true,
+		desc: "The user is protected from most attacks made by other Pokemon during this turn. This move has a 1/X chance of being successful, where X starts at 1 and doubles each time this move is successfully used. X resets to 1 if this move fails or if the user's last move used is not Detect, Endure, Protect, Quick Guard, or Wide Guard. Fails if the user moves last this turn.",
 	},
 	psychoshift: {
 		inherit: true,
@@ -752,6 +753,8 @@ exports.BattleMovedex = {
 	},
 	secretpower: {
 		inherit: true,
+		desc: "Has a 30% chance to cause a secondary effect on the target based on the battle terrain. Lowers accuracy by 1 stage on the regular Wi-Fi terrain. The secondary effect chance is not affected by the Ability Serene Grace.",
+		shortDesc: "Effect varies with terrain. (30% chance acc -1)",
 		effect: {
 			duration: 1,
 			onAfterMoveSecondarySelf: function (source, target, move) {
@@ -761,6 +764,10 @@ exports.BattleMovedex = {
 				source.removeVolatile('secretpower');
 			},
 		},
+	},
+	shadowforce: {
+		inherit: true,
+		desc: "If this move is successful, it breaks through the target's Detect or Protect for this turn, allowing other Pokemon to attack the target normally. If the target is an opponent and its side is protected by Quick Guard or Wide Guard, that protection is also broken for this turn and other Pokemon may attack the opponent's side normally. This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks. If the user is holding a Power Herb, the move completes in one turn.",
 	},
 	sing: {
 		inherit: true,
@@ -787,7 +794,7 @@ exports.BattleMovedex = {
 	},
 	skydrop: {
 		inherit: true,
-		desc: "This attack takes the target into the air with the user on the first turn and executes on the second. On the first turn, the user and the target avoid all attacks other than Gust, Hurricane, Sky Uppercut, Smack Down, Thousand Arrows, Thunder, and Twister. The user and the target cannot make a move between turns, but the target can select a move to use. This move cannot damage Flying-type Pokemon. Fails on the first turn if the target is an ally or if the target has a substitute.",
+		desc: "This attack takes the target into the air with the user on the first turn and executes on the second. On the first turn, the user and the target avoid all attacks other than Gust, Hurricane, Sky Uppercut, Smack Down, Thunder, and Twister. The user and the target cannot make a move between turns, but the target can select a move to use. This move cannot damage Flying-type Pokemon. Fails on the first turn if the target is an ally or if the target has a substitute.",
 		onTryHit: function (target, source, move) {
 			if (target.fainted) return false;
 			if (source.removeVolatile(move.id)) {
@@ -920,10 +927,14 @@ exports.BattleMovedex = {
 	sweetscent: {
 		inherit: true,
 		desc: "Lowers the target's evasiveness by 1 stage.",
-		shortDesc: "Lowers the foe(s) evasion by 1.",
+		shortDesc: "Lowers the foe(s) evasiveness by 1.",
 		boosts: {
 			evasion: -1,
 		},
+	},
+	switcheroo: {
+		inherit: true,
+		desc: "The user swaps its held item with the target's held item. Fails if either the user or the target is holding a Mail, if neither is holding an item, or if the user is trying to give or take a Griseous Orb, a Plate, or a Drive to or from a Giratina, an Arceus, or a Genesect, respectively. Pokemon with the Ability Sticky Hold are immune.",
 	},
 	swordsdance: {
 		inherit: true,
@@ -944,6 +955,7 @@ exports.BattleMovedex = {
 	},
 	thief: {
 		inherit: true,
+		desc: "If this attack was successful and the user has not fainted, it steals the target's held item if the user is not holding one. The target's item is not stolen if it is a Mail, or if the target is a Giratina holding a Griseous Orb, an Arceus holding a Plate, or a Genesect holding a Drive. Items lost to this move cannot be regained with Recycle or the Ability Harvest.",
 		basePower: 40,
 		pp: 10,
 	},
@@ -954,6 +966,10 @@ exports.BattleMovedex = {
 	thunderbolt: {
 		inherit: true,
 		basePower: 95,
+	},
+	trick: {
+		inherit: true,
+		desc: "The user swaps its held item with the target's held item. Fails if either the user or the target is holding a Mail, if neither is holding an item, or if the user is trying to give or take a Griseous Orb, a Plate, or a Drive to or from a Giratina, an Arceus, or a Genesect, respectively. Pokemon with the Ability Sticky Hold are immune.",
 	},
 	uproar: {
 		inherit: true,
@@ -972,7 +988,7 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 50,
 		basePowerCallback: function (target, source, move) {
-			if (move.sourceEffect in {firepledge:1, grasspledge:1}) {
+			if (['firepledge', 'grasspledge'].includes(move.sourceEffect)) {
 				this.add('-combine');
 				return 150;
 			}

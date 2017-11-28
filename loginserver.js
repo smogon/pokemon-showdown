@@ -12,23 +12,21 @@
 const LOGIN_SERVER_TIMEOUT = 30000;
 const LOGIN_SERVER_BATCH_TIME = 1000;
 
-const http = require("http");
+const http = Config.loginserver.startsWith('http:') ? require("http") : require("https");
 const url = require('url');
 
-let TimeoutError = function (message) {
-	Error.captureStackTrace(this, TimeoutError);
-	this.name = "TimeoutError";
-	this.message = message || "";
-};
-TimeoutError.prototype = Object.create(Error.prototype);
-TimeoutError.prototype.constructor = TimeoutError;
-TimeoutError.prototype.toString = function () {
-	if (!this.message) return this.name;
-	return this.name + ": " + this.message;
-};
+const FS = require('./fs');
+
+const noop = () => null;
+
+/**
+ * A custom error type used when requests to the login server take too long.
+ */
+class TimeoutError extends Error {}
+TimeoutError.prototype.name = TimeoutError.name;
 
 function parseJSON(json) {
-	if (json[0] === ']') json = json.substr(1);
+	if (json.startsWith(']')) json = json.substr(1);
 	let data = {error: null};
 	try {
 		data.json = JSON.parse(json);
@@ -48,6 +46,7 @@ class LoginServerInstance {
 		this.requestLog = '';
 		this.lastRequest = 0;
 		this.openRequests = 0;
+		this.disabled = false;
 	}
 
 	instantRequest(action, data, callback) {
@@ -88,7 +87,12 @@ class LoginServerInstance {
 
 		req.end();
 	}
-	request(action, data, callback) {
+	request(action, data, callback = noop) {
+		if (this.disabled) {
+			setImmediate(callback, null, null, new Error(`Login server connection disabled.`));
+			return;
+		}
+
 		// ladderupdate and mmr are the most common actions
 		// prepreplay is also common
 		if (this[action + 'Server']) {
@@ -98,11 +102,7 @@ class LoginServerInstance {
 			callback = data;
 			data = null;
 		}
-		if (typeof callback === 'undefined') callback = () => {};
-		if (this.disabled) {
-			setImmediate(callback, null, null, new Error("Ladder disabled"));
-			return;
-		}
+
 		if (!data) data = {};
 		data.act = action;
 		data.callback = callback;
@@ -152,8 +152,8 @@ class LoginServerInstance {
 				this.requestTimeoutTimer = null;
 			}
 			req.abort();
-			for (let i = 0, len = requestCallbacks.length; i < len; i++) {
-				setImmediate(requestCallbacks[i], null, null, error);
+			for (const requestCallback of requestCallbacks) {
+				setImmediate(requestCallback, null, null, error);
 			}
 			this.requestEnd(error);
 		};
@@ -234,7 +234,7 @@ LoginServer.TimeoutError = TimeoutError;
 if (Config.remoteladder) LoginServer.ladderupdateServer = new LoginServerInstance();
 LoginServer.prepreplayServer = new LoginServerInstance();
 
-require('fs').watchFile('./config/custom.css', (curr, prev) => {
+FS('./config/custom.css').onModify(() => {
 	LoginServer.request('invalidatecss', {}, () => {});
 });
 LoginServer.request('invalidatecss', {}, () => {});

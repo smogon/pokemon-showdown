@@ -14,7 +14,7 @@
 'use strict';
 
 const cluster = require('cluster');
-global.Config = require('./config/config');
+const fs = require('fs');
 
 if (cluster.isMaster) {
 	cluster.setupMaster({
@@ -62,13 +62,25 @@ if (cluster.isMaster) {
 		return worker;
 	};
 
-	cluster.on('disconnect', worker => {
-		// worker crashed, try our best to clean up
-		require('./crashlogger')(new Error(`Worker ${worker.id} abruptly died`), "The main process");
+	cluster.on('exit', (worker, code, signal) => {
+		if (code === null && signal !== null) {
+			// Worker was killed by Sockets.killWorker or Sockets.killPid, probably.
+			console.log(`Worker ${worker.id} was forcibly killed with status ${signal}.`);
+			workers.delete(worker.id);
+		} else if (code === 0 && signal === null) {
+			// Happens when killing PS with ^C
+			console.log(`Worker ${worker.id} died, but returned a successful exit code.`);
+			workers.delete(worker.id);
+		} else if (code > 0) {
+			// Worker was killed abnormally, likely because of a crash.
+			require('./crashlogger')(new Error(`Worker ${worker.id} abruptly died with code ${code} and signal ${signal}`), "The main process");
+			// Don't delete the worker so it can be inspected if need be.
+		}
 
-		// this could get called during cleanup; prevent it from crashing
-		// note: overwriting Worker#send is unnecessary in Node.js v7.0.0 and above
-		// see https://github.com/nodejs/node/commit/8c53d2fe9f102944cc1889c4efcac7a86224cf0a
+		if (worker.isConnected()) worker.disconnect();
+		// FIXME: this is a bad hack to get around a race condition in
+		// Connection#onDisconnect sending room deinit messages after already
+		// having removed the sockets from their channels.
 		worker.send = () => {};
 
 		let count = 0;
@@ -78,11 +90,9 @@ if (cluster.isMaster) {
 				count++;
 			}
 		});
-		console.error(`${count} connections were lost.`);
+		console.log(`${count} connections were lost.`);
 
-		// don't delete the worker, so we can investigate it if necessary.
-
-		// attempt to recover
+		// Attempt to recover.
 		spawnWorker();
 	});
 
@@ -92,9 +102,10 @@ if (cluster.isMaster) {
 			Config.ssl = null;
 		} else {
 			port = Config.port;
-			// Autoconfigure the app when running in cloud hosting environments:
+
+			// Autoconfigure when running in cloud environments.
 			try {
-				let cloudenv = require('cloud-env');
+				const cloudenv = require('cloud-env');
 				bindAddress = cloudenv.get('IP', bindAddress);
 				port = cloudenv.get('PORT', port);
 			} catch (e) {}
@@ -118,17 +129,18 @@ if (cluster.isMaster) {
 				count++;
 			}
 		});
+		console.log(`${count} connections were lost.`);
+
 		try {
-			worker.kill();
+			worker.kill('SIGTERM');
 		} catch (e) {}
-		workers.delete(worker.id);
+
 		return count;
 	};
 
 	exports.killPid = function (pid) {
-		pid = '' + pid;
 		for (let [workerid, worker] of workers) { // eslint-disable-line no-unused-vars
-			if (pid === '' + worker.process.pid) {
+			if (pid === worker.process.pid) {
 				return this.killWorker(worker);
 			}
 		}
@@ -167,16 +179,28 @@ if (cluster.isMaster) {
 	};
 } else {
 	// is worker
+	global.Config = require('./config/config');
 
 	if (process.env.PSPORT) Config.port = +process.env.PSPORT;
 	if (process.env.PSBINDADDR) Config.bindaddress = process.env.PSBINDADDR;
 	if (+process.env.PSNOSSL) Config.ssl = null;
 
-	// ofe is optional
-	// if installed, it will heap dump if the process runs out of memory
-	try {
-		require('ofe').call();
-	} catch (e) {}
+	if (Config.ofe) {
+		try {
+			require.resolve('node-oom-heapdump');
+		} catch (e) {
+			if (e.code !== 'MODULE_NOT_FOUND') throw e; // should never happen
+			throw new Error(
+				'node-oom-heapdump is not installed, but it is a required dependency if Config.ofe is set to true! ' +
+				'Run npm install node-oom-heapdump and restart the server.'
+			);
+		}
+
+		// Create a heapdump if the process runs out of memory.
+		require('node-oom-heapdump')({
+			addTimestamp: true,
+		});
+	}
 
 	// Static HTTP server
 
@@ -195,49 +219,81 @@ if (cluster.isMaster) {
 	}
 
 	let app = require('http').createServer();
-	let appssl;
+	let appssl = null;
 	if (Config.ssl) {
-		appssl = require('https').createServer(Config.ssl.options);
-	}
-	try {
-		let nodestatic = require('node-static');
-		let cssserver = new nodestatic.Server('./config');
-		let avatarserver = new nodestatic.Server('./config/avatars');
-		let staticserver = new nodestatic.Server('./static');
-		let staticRequestHandler = (request, response) => {
-			// console.log("static rq: " + request.socket.remoteAddress + ":" + request.socket.remotePort + " -> " + request.socket.localAddress + ":" + request.socket.localPort + " - " + request.method + " " + request.url + " " + request.httpVersion + " - " + request.rawHeaders.join('|'));
-			request.resume();
-			request.addListener('end', () => {
-				if (Config.customhttpresponse &&
-						Config.customhttpresponse(request, response)) {
-					return;
-				}
-				let server;
-				if (request.url === '/custom.css') {
-					server = cssserver;
-				} else if (request.url.substr(0, 9) === '/avatars/') {
-					request.url = request.url.substr(8);
-					server = avatarserver;
-				} else {
-					if (/^\/([A-Za-z0-9][A-Za-z0-9-]*)\/?$/.test(request.url)) {
-						request.url = '/';
-					}
-					server = staticserver;
-				}
-				server.serve(request, response, (e, res) => {
-					if (e && (e.status === 404)) {
-						staticserver.serveFile('404.html', 404, {}, request, response);
-					}
-				});
-			});
-		};
-		app.on('request', staticRequestHandler);
-		if (appssl) {
-			appssl.on('request', staticRequestHandler);
+		let key;
+		try {
+			key = require('path').resolve(__dirname, Config.ssl.options.key);
+			if (!fs.lstatSync(key).isFile()) throw new Error();
+			try {
+				key = fs.readFileSync(key);
+			} catch (e) {
+				require('./crashlogger')(new Error(`Failed to read the configured SSL private key PEM file:\n${e.stack}`), `Socket process ${cluster.worker.id} (${process.pid})`, true);
+			}
+		} catch (e) {
+			console.warn('SSL private key config values will not support HTTPS server option values in the future. Please set it to use the absolute path of its PEM file.');
+			key = Config.ssl.options.key;
 		}
-	} catch (e) {
-		console.log('Could not start node-static - try `npm install` if you want to use it');
+
+		let cert;
+		try {
+			cert = require('path').resolve(__dirname, Config.ssl.options.cert);
+			if (!fs.lstatSync(cert).isFile()) throw new Error();
+			try {
+				cert = fs.readFileSync(cert);
+			} catch (e) {
+				require('./crashlogger')(new Error(`Failed to read the configured SSL certificate PEM file:\n${e.stack}`), `Socket process ${cluster.worker.id} (${process.pid})`, true);
+			}
+		} catch (e) {
+			console.warn('SSL certificate config values will not support HTTPS server option values in the future. Please set it to use the absolute path of its PEM file.');
+			cert = Config.ssl.options.cert;
+		}
+
+		if (key && cert) {
+			try {
+				// In case there are additional SSL config settings besides the key and cert...
+				appssl = require('https').createServer(Object.assign({}, Config.ssl.options, {key, cert}));
+			} catch (e) {
+				require('./crashlogger')(`The SSL settings are misconfigured:\n${e.stack}`, `Socket process ${cluster.worker.id} (${process.pid})`, true);
+			}
+		}
 	}
+
+	// Static server
+	const StaticServer = require('node-static').Server;
+	const roomidRegex = /^\/(?:[A-Za-z0-9][A-Za-z0-9-]*)\/?$/;
+	const cssServer = new StaticServer('./config');
+	const avatarServer = new StaticServer('./config/avatars');
+	const staticServer = new StaticServer('./static');
+	const staticRequestHandler = (req, res) => {
+		// console.log(`static rq: ${req.socket.remoteAddress}:${req.socket.remotePort} -> ${req.socket.localAddress}:${req.socket.localPort} - ${req.method} ${req.url} ${req.httpVersion} - ${req.rawHeaders.join('|')}`);
+		req.resume();
+		req.addListener('end', () => {
+			if (Config.customhttpresponse &&
+					Config.customhttpresponse(req, res)) {
+				return;
+			}
+
+			let server = staticServer;
+			if (req.url === '/custom.css') {
+				server = cssServer;
+			} else if (req.url.startsWith('/avatars/')) {
+				req.url = req.url.substr(8);
+				server = avatarServer;
+			} else if (roomidRegex.test(req.url)) {
+				req.url = '/';
+			}
+
+			server.serve(req, res, e => {
+				if (e && (e.status === 404)) {
+					staticServer.serveFile('404.html', 404, {}, req, res);
+				}
+			});
+		});
+	};
+
+	app.on('request', staticRequestHandler);
+	if (appssl) appssl.on('request', staticRequestHandler);
 
 	// SockJS server
 
@@ -245,7 +301,6 @@ if (cluster.isMaster) {
 	// and doing things on our server.
 
 	const sockjs = require('sockjs');
-
 	const server = sockjs.createServer({
 		sockjs_url: "//play.pokemonshowdown.com/js/lib/sockjs-1.1.1-nwjsfix.min.js",
 		log: (severity, message) => {
@@ -259,7 +314,7 @@ if (cluster.isMaster) {
 	const subchannels = new Map();
 
 	// Deal with phantom connections.
-	const sweepClosedSockets = () => {
+	const sweepSocketInterval = setInterval(() => {
 		sockets.forEach(socket => {
 			if (socket.protocol === 'xhr-streaming' &&
 				socket._session &&
@@ -279,8 +334,7 @@ if (cluster.isMaster) {
 				socket._session.timeout_cb();
 			}
 		});
-	};
-	const interval = setInterval(sweepClosedSockets, 1000 * 60 * 10); // eslint-disable-line no-unused-vars
+	}, 1000 * 60 * 10);
 
 	process.on('message', data => {
 		// console.log('worker received: ' + data);
@@ -303,8 +357,6 @@ if (cluster.isMaster) {
 			socketid = data.substr(1);
 			socket = sockets.get(socketid);
 			if (!socket) return;
-			socket.end();
-			// After sending the FIN packet, we make sure the I/O is totally blocked for this socket
 			socket.destroy();
 			sockets.delete(socketid);
 			channels.forEach(channel => channel.delete(socketid));
@@ -423,48 +475,69 @@ if (cluster.isMaster) {
 		}
 	});
 
-	process.on('disconnect', () => {
-		process.exit();
+	// Clean up any remaining connections on disconnect. If this isn't done,
+	// the process will not exit until any remaining connections have been destroyed.
+	// Afterwards, the worker process will die on its own.
+	process.once('disconnect', () => {
+		clearInterval(sweepSocketInterval);
+
+		sockets.forEach(socket => {
+			try {
+				socket.destroy();
+			} catch (e) {}
+		});
+		sockets.clear();
+		channels.clear();
+		subchannels.clear();
+
+		app.close();
+		if (appssl) appssl.close();
+
+		// Let the server(s) finish closing.
+		setImmediate(() => process.exit(0));
 	});
 
 	// this is global so it can be hotpatched if necessary
 	let isTrustedProxyIp = Dnsbl.checker(Config.proxyip);
 	let socketCounter = 0;
 	server.on('connection', socket => {
-		if (!socket) {
-			// For reasons that are not entirely clear, SockJS sometimes triggers
-			// this event with a null `socket` argument.
-			return;
-		} else if (!socket.remoteAddress) {
-			// This condition occurs several times per day. It may be a SockJS bug.
+		// For reasons that are not entirely clear, SockJS sometimes triggers
+		// this event with a null `socket` argument.
+		if (!socket) return;
+
+		if (!socket.remoteAddress) {
+			// SockJS sometimes fails to be able to cache the IP, port, and
+			// address from connection request headers.
 			try {
-				socket.end();
+				socket.destroy();
 			} catch (e) {}
 			return;
 		}
 
-		let socketid = socket.id = '' + (++socketCounter);
+		let socketid = '' + (++socketCounter);
 		sockets.set(socketid, socket);
 
-		if (isTrustedProxyIp(socket.remoteAddress)) {
-			let ips = (socket.headers['x-forwarded-for'] || '').split(',');
-			let ip;
-			while ((ip = ips.pop())) {
-				ip = ip.trim();
-				if (!isTrustedProxyIp(ip)) {
-					socket.remoteAddress = ip;
+		let socketip = socket.remoteAddress;
+		if (isTrustedProxyIp(socketip)) {
+			let ips = (socket.headers['x-forwarded-for'] || '')
+				.split(',')
+				.reverse();
+			for (let ip of ips) {
+				let proxy = ip.trim();
+				if (!isTrustedProxyIp(proxy)) {
+					socketip = proxy;
 					break;
 				}
 			}
 		}
 
-		process.send(`*${socketid}\n${socket.remoteAddress}\n${socket.protocol}`);
+		process.send(`*${socketid}\n${socketip}\n${socket.protocol}`);
 
 		socket.on('data', message => {
 			// drop empty messages (DDoS?)
 			if (!message) return;
 			// drop messages over 100KB
-			if (message.length > 100000) {
+			if (message.length > (100 * 1024)) {
 				console.log(`Dropping client message ${message.length / 1024} KB...`);
 				console.log(message.slice(0, 160));
 				return;
@@ -478,7 +551,7 @@ if (cluster.isMaster) {
 			process.send(`<${socketid}\n${message}`);
 		});
 
-		socket.on('close', () => {
+		socket.once('close', () => {
 			process.send(`!${socketid}`);
 			sockets.delete(socketid);
 			channels.forEach(channel => channel.delete(socketid));
@@ -496,5 +569,5 @@ if (cluster.isMaster) {
 
 	console.log(`Test your server at http://${Config.bindaddress === '0.0.0.0' ? 'localhost' : Config.bindaddress}:${Config.port}`);
 
-	require('./repl').start('sockets-', `${cluster.worker.id}-${process.pid}`, cmd => eval(cmd));
+	require('./repl').start(`sockets-${cluster.worker.id}-${process.pid}`, cmd => eval(cmd));
 }

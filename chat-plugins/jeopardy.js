@@ -31,6 +31,8 @@ class Jeopardy extends Rooms.RoomGame {
 		this.numUpdates = 0;
 		this.buzzedEarly = new Set();
 		this.finalCategory = "";
+		this.answeringTime = 10;
+		this.finalsAnsweringTime = 30;
 		this.setupGrid();
 	}
 
@@ -130,7 +132,7 @@ class Jeopardy extends Rooms.RoomGame {
 		}
 		buffer += "</table><br />";
 		if (this.question && !this.finals) {
-			buffer += `<table align=\"left\"><tr><td bgcolor="${this.canBuzz ? "00FF00" : "0000FF"}" height="30px" width="30px"></td></tr></table>`;
+			buffer += `<table align="left"><tr><td bgcolor="${this.canBuzz ? "00FF00" : "0000FF"}" height="30px" width="30px"></td></tr></table>`;
 		}
 		for (let userID in this.players) {
 			let player = this.players[userID];
@@ -203,7 +205,7 @@ class Jeopardy extends Rooms.RoomGame {
 			this.curPlayer = null;
 		}
 		this.clearbuzzes();
-		this.room.addRaw(`<div class=\"broadcast-blue\">Your question is: ${this.question.question}</div>`);
+		this.room.addRaw(`<div class="broadcast-blue">Your question is: ${this.question.question}</div>`);
 		if (!this.finals) {
 			this.canBuzz = false;
 			this.update(true);
@@ -224,7 +226,7 @@ class Jeopardy extends Rooms.RoomGame {
 	}
 
 	revealAnswer() {
-		this.room.addRaw(`<div class=\"broadcast-blue\">The answer was: ${Chat.escapeHTML(this.question.answer)}</div>`);
+		this.room.addRaw(`<div class="broadcast-blue">The answer was: ${Chat.escapeHTML(this.question.answer)}</div>`);
 		this.question.answered = true;
 	}
 
@@ -244,7 +246,7 @@ class Jeopardy extends Rooms.RoomGame {
 		this.curPlayer.buzzed = true;
 		this.room.add(`${user.name} has buzzed in!`);
 		this.state = "answering";
-		this.timeout = setTimeout(() => this.check(false), 10 * 1000);
+		this.timeout = setTimeout(() => this.check(false), this.answeringTime * 1000);
 	}
 
 	hasRemainingQuestion() {
@@ -262,7 +264,7 @@ class Jeopardy extends Rooms.RoomGame {
 		this.finals = true;
 		this.state = "wagering";
 		this.clearwagers();
-		this.timeout = setTimeout(() => this.finalWagers(), 30 * 1000);
+		this.timeout = setTimeout(() => this.finalWagers(), this.finalsAnsweringTime * 1000);
 	}
 
 	wager(amount, user) {
@@ -296,7 +298,7 @@ class Jeopardy extends Rooms.RoomGame {
 		this.question = this.finalQuestion;
 		this.state = "answering";
 		this.askQuestion();
-		this.timeout = setTimeout(() => this.doFinals(), 30 * 1000);
+		this.timeout = setTimeout(() => this.doFinals(), this.finalsAnsweringTime * 1000);
 	}
 
 	doFinals() {
@@ -731,6 +733,26 @@ exports.commands = {
 			if (user.userid !== room.game.host.userid) return this.errorReply("This command can only be used by the host.");
 			room.game.nextQuestion();
 		},
+
+		timer: function (target, room, user) {
+			if (!room.game || room.game.gameid !== 'jeopardy') return this.errorReply("There is no game of Jeopardy going on in this room.");
+			if (user.userid !== room.game.host.userid) return this.errorReply("This command can only be used by the host.");
+			let amount = parseInt(target);
+			if (!amount || amount < 2 || amount > 120) return this.errorReply("The amount must be a number between 2 and 120.");
+
+			room.game.answeringTime = amount;
+			this.addModCommand(`${user.name} has set the answering window for questions to ${amount} seconds`);
+		},
+
+		finaltimer: function (target, room, user) {
+			if (!room.game || room.game.gameid !== 'jeopardy') return this.errorReply("There is no game of Jeopardy going on in this room.");
+			if (user.userid !== room.game.host.userid) return this.errorReply("This command can only be used by the host.");
+			let amount = parseInt(target);
+			if (!amount || amount < 2 || amount > 300) return this.errorReply("The amount must be a number between 2 and 300.");
+
+			room.game.finalAnsweringTime = amount;
+			this.addModCommand(`${user.name} has set the answering window for the final question to ${amount} seconds`);
+		},
 	},
 	jp: 'jeopardy',
 	jeopardyhelp: [
@@ -752,5 +774,7 @@ exports.commands = {
 		"/jp import [Category Number Start], [Question Number Start], [Question 1 | Answer 1], [Question 2 | Answer 2], etc. - Import questions into the current game of Jeopardy. Must be the host.",
 		"/jp pass - Skip the current question of Jeopardy. Must be the host.",
 		"/jp state - Check the state of the current Jeopardy game. Must be the host",
+		"/jp timer [seconds] - Set the answering window after buzzing for questions",
+		"/jp finaltimer [seconds] - Set the answering window for answering the final question",
 	],
 };

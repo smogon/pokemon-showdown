@@ -59,7 +59,10 @@ class RoomSettings {
 		return modchatOutput.join(' ');
 	}
 	modjoin() {
-		if (!this.user.can('makeroom') && !this.room.isPersonal) return this.button(this.room.modjoin ? this.room.modjoin : 'off', true);
+		if (!this.user.can('makeroom') && !this.room.isPersonal ||
+			!this.user.can('editroom', null, this.room)) {
+			return this.button(this.room.modjoin ? this.room.modjoin : 'off', true);
+		}
 		let modjoinOutput = [];
 		for (let i = 0; i < RANKS.length; i++) {
 			if (RANKS[i] === Config.groupsranking[0] && !this.room.modjoin) {
@@ -69,7 +72,7 @@ class RoomSettings {
 			} else if (RANKS[i] === this.room.modjoin) {
 				modjoinOutput.push(this.button(RANKS[i], true));
 			} else if (RANKS[i]) {
-				// Personal rooms modjoin check
+				// groupchat hosts can set modjoin, but only to +
 				if (this.room.isPersonal && !this.user.can('makeroom') && RANKS[i] !== '+') continue;
 
 				modjoinOutput.push(this.button(RANKS[i], false, `modjoin ${RANKS[i]}`));
@@ -91,6 +94,14 @@ class RoomSettings {
 			return `${this.button('off', null, 'capsfilter off')} ${this.button('filter capitals', true)}`;
 		} else {
 			return `${this.button('off', true)} ${this.button('filter capitals', null, 'capsfilter on')}`;
+		}
+	}
+	emojis() {
+		if (!this.user.can('editroom', null, this.room)) return this.button(this.room.filterEmojis ? 'filter emojis' : 'off', true);
+		if (this.room.filterEmojis) {
+			return `${this.button('off', null, 'emojifilter off')} ${this.button('filter emojis', true)}`;
+		} else {
+			return `${this.button('off', true)} ${this.button('filter emojis', null, 'emojifilter on')}`;
 		}
 	}
 	slowchat() {
@@ -144,6 +155,7 @@ class RoomSettings {
 		output += `<strong>Modjoin:</strong> <br />${this.modjoin()}<br />`;
 		output += `<strong>Stretch filter:</strong> <br />${this.stretching()}<br />`;
 		output += `<strong>Caps filter:</strong> <br />${this.capitals()}<br />`;
+		output += `<strong>Emoji filter:</strong> <br />${this.emojis()}<br />`;
 		output += `<strong>Slowchat:</strong> <br />${this.slowchat()}<br />`;
 		output += `<strong>Tournaments:</strong> <br />${this.tourStatus()}<br />`;
 		output += `<strong>UNO:</strong> <br />${this.uno()}<br />`;
@@ -192,6 +204,7 @@ exports.commands = {
 		case 'off':
 		case 'false':
 		case 'no':
+		case 'disable':
 			room.modchat = false;
 			break;
 		case 'ac':
@@ -199,9 +212,9 @@ exports.commands = {
 			room.modchat = 'autoconfirmed';
 			break;
 		case 'player':
-			target = '\u2606';
+			target = Users.PLAYER_SYMBOL;
 			/* falls through */
-		default: {
+		default:
 			if (!Config.groups[target]) {
 				this.errorReply(`The rank '${target}' was unrecognized as a modchat level.`);
 				return this.parse('/help modchat');
@@ -217,7 +230,6 @@ exports.commands = {
 			room.modchat = target;
 			break;
 		}
-		}
 		if (currentModchat === room.modchat) {
 			return this.errorReply(`Modchat is already set to ${currentModchat}.`);
 		}
@@ -225,7 +237,7 @@ exports.commands = {
 			this.add("|raw|<div class=\"broadcast-blue\"><strong>Moderated chat was disabled!</strong><br />Anyone may talk now.</div>");
 		} else {
 			const modchatSetting = Chat.escapeHTML(room.modchat);
-			this.add(`|raw|<div class=\"broadcast-red\"><strong>Moderated chat was set to ${modchatSetting}!</strong><br />Only users of rank ${modchatSetting} and higher can talk.</div>`);
+			this.add(`|raw|<div class="broadcast-red"><strong>Moderated chat was set to ${modchatSetting}!</strong><br />Only users of rank ${modchatSetting} and higher can talk.</div>`);
 		}
 		if (room.battle && !room.modchat && !user.can('modchat')) room.requestModchat(null);
 		this.privateModCommand(`(${user.name} set modchat to ${room.modchat})`);
@@ -235,15 +247,25 @@ exports.commands = {
 			Rooms.global.writeChatRoomData();
 		}
 	},
-	modchathelp: ["/modchat [off/autoconfirmed/+/%/@/*/#/&/~] - Set the level of moderated chat. Requires: *, @ for off/autoconfirmed/+ options, # & ~ for all the options"],
+	modchathelp: ["/modchat [off/autoconfirmed/+/%/@/*/player/#/&/~] - Set the level of moderated chat. Requires: * @ \u2606 for off/autoconfirmed/+ options, # & ~ for all the options"],
 
 	ioo: function (target, room, user) {
 		return this.parse('/modjoin +');
 	},
+	'!ionext': true,
+	ionext: function (target, room, user) {
+		if (this.meansNo(target)) {
+			user.inviteOnlyNextBattle = false;
+			this.sendReply("Your next battle will be publicly visible.");
+		} else {
+			user.inviteOnlyNextBattle = true;
+			this.sendReply("Your next battle will be invite-only.");
+		}
+	},
 
 	inviteonly: function (target, room, user) {
 		if (!target) return this.parse('/help inviteonly');
-		if (target === 'on' || target === 'true' || target === 'yes') {
+		if (this.meansYes(target)) {
 			return this.parse("/modjoin +");
 		} else {
 			return this.parse(`/modjoin ${target}`);
@@ -263,7 +285,8 @@ exports.commands = {
 			if (!this.can('makeroom')) return;
 		}
 		if (room.tour && !room.tour.modjoin) return this.errorReply(`You can't do this in tournaments where modjoin is prohibited.`);
-		if (target === 'off' || target === 'false') {
+		if (target === 'player') target = Users.PLAYER_SYMBOL;
+		if (this.meansNo(target)) {
 			if (!room.modjoin) return this.errorReply(`Modjoin is already turned off in this room.`);
 			delete room.modjoin;
 			this.add(`|raw|<div class="broadcast-blue"><strong>This room is no longer invite only!</strong><br />Anyone may now join.</div>`);
@@ -301,8 +324,8 @@ exports.commands = {
 		if (target === 'sync' && !room.modchat) this.parse(`/modchat ${Config.groupsranking[1]}`);
 		if (!room.isPrivate) this.parse('/hiddenroom');
 	},
-	modjoinhelp: ["/modjoin [+|%|@|*|&|~|#|off] - Sets modjoin. Users lower than the specified rank can't join this room. Requires: # & ~",
-		"/modjoin [sync|off] - Sets modjoin. Only users who can speak in modchat can join this room. Requires: # & ~"],
+	modjoinhelp: ["/modjoin [+|%|@|*|player|&|~|#|off] - Sets modjoin. Users lower than the specified rank can't join this room. Requires: \u2606 # & ~",
+		"/modjoin [sync|off] - Sets modjoin. Only users who can speak in modchat can join this room. Requires: \u2606 # & ~"],
 
 	slowchat: function (target, room, user) {
 		if (!target) {
@@ -313,7 +336,7 @@ exports.commands = {
 		if (!this.can('modchat', null, room)) return false;
 
 		let targetInt = parseInt(target);
-		if (target === 'off' || target === 'disable' || target === 'false') {
+		if (this.meansNo(target)) {
 			if (!room.slowchat) return this.errorReply(`Slow chat is already disabled in this room.`);
 			room.slowchat = false;
 			this.add("|raw|<div class=\"broadcast-blue\"><strong>Slow chat was disabled!</strong><br />There is no longer a set minimum time between messages.</div>");
@@ -323,7 +346,7 @@ exports.commands = {
 			if (targetInt < SLOWCHAT_MINIMUM) targetInt = SLOWCHAT_MINIMUM;
 			if (targetInt > SLOWCHAT_MAXIMUM) targetInt = SLOWCHAT_MAXIMUM;
 			room.slowchat = targetInt;
-			this.add(`|raw|<div class=\"broadcast-red\"><strong>Slow chat was enabled!</strong><br />Messages must have at least ${room.slowchat} seconds between them.</div>`);
+			this.add(`|raw|<div class="broadcast-red"><strong>Slow chat was enabled!</strong><br />Messages must have at least ${room.slowchat} seconds between them.</div>`);
 		} else {
 			return this.parse("/help slowchat");
 		}
@@ -348,10 +371,10 @@ exports.commands = {
 		if (!this.canTalk()) return;
 		if (!this.can('editroom', null, room)) return false;
 
-		if (target === 'enable' || target === 'on') {
+		if (this.meansYes(target)) {
 			if (room.filterStretching) return this.errorReply(`This room's stretch filter is already ON`);
 			room.filterStretching = true;
-		} else if (target === 'disable' || target === 'off') {
+		} else if (this.meansNo(target)) {
 			if (!room.filterStretching) return this.errorReply(`This room's stretch filter is already OFF`);
 			room.filterStretching = false;
 		} else {
@@ -377,10 +400,10 @@ exports.commands = {
 		if (!this.canTalk()) return;
 		if (!this.can('editroom', null, room)) return false;
 
-		if (target === 'enable' || target === 'on' || target === 'true') {
+		if (this.meansYes(target)) {
 			if (room.filterCaps) return this.errorReply(`This room's caps filter is already ON`);
 			room.filterCaps = true;
-		} else if (target === 'disable' || target === 'off' || target === 'false') {
+		} else if (this.meansNo(target)) {
 			if (!room.filterCaps) return this.errorReply(`This room's caps filter is already OFF`);
 			room.filterCaps = false;
 		} else {
@@ -396,6 +419,35 @@ exports.commands = {
 	},
 	capsfilterhelp: ["/capsfilter [on/off] - Toggles filtering messages in the room for EXCESSIVE CAPS. Requires # & ~"],
 
+	emojis: 'emojifilter',
+	emoji: 'emojifilter',
+	emojifilter : function (target, room, user) {
+		if (!target) {
+			const emojiSetting = (room.filterEmojis ? "ON" : "OFF");
+			return this.sendReply(`This room's emoji filter is currently: ${emojiSetting}`);
+		}
+		if (!this.canTalk()) return;
+		if (!this.can('editroom', null, room)) return false;
+
+		if (this.meansYes(target)) {
+			if (room.filterEmojis) return this.errorReply(`This room's emoji filter is already ON`);
+			room.filterEmojis = true;
+		} else if (this.meansNo(target)) {
+			if (!room.filterEmojis) return this.errorReply(`This room's emoji filter is already OFF`);
+			room.filterEmojis = false;
+		} else {
+			return this.parse("/help emojifilter");
+		}
+		const emojiSetting = (room.filterEmojis ? "ON" : "OFF");
+		this.privateModCommand(`(${user.name} turned the emoji filter ${emojiSetting})`);
+
+		if (room.chatRoomData) {
+			room.chatRoomData.filterEmojis = room.filterEmojis;
+			Rooms.global.writeChatRoomData();
+		}
+	},
+	emojifilterhelp: ["/emojifilter [on/off] - Toggles filtering messages in the room for emojis. Requires # & ~"],
+
 	banwords: 'banword',
 	banword: {
 		add: function (target, room, user) {
@@ -410,19 +462,25 @@ exports.commands = {
 
 			words = words.map(word => word.replace(/\n/g, '').trim());
 
-			for (let i = 0; i < words.length; i++) {
-				if (/[\\^$*+?()|{}[\]]/.test(words[i])) {
+			let banwordRegexLen = (room.banwordRegex instanceof RegExp) ? room.banwordRegex.source.length : 30;
+			for (let word of words) {
+				if (/[\\^$*+?()|{}[\]]/.test(word)) {
 					if (!user.can('makeroom')) return this.errorReply("Regex banwords are only allowed for leaders or above.");
 
 					try {
-						let test = new RegExp(words[i]); // eslint-disable-line no-unused-vars
+						let test = new RegExp(word); // eslint-disable-line no-unused-vars
 					} catch (e) {
-						return this.errorReply(e.message.substr(0, 28) === 'Invalid regular expression: ' ? e.message : `Invalid regular expression: /${words[i]}/: ${e.message}`);
+						return this.errorReply(e.message.startsWith('Invalid regular expression: ') ? e.message : `Invalid regular expression: /${word}/: ${e.message}`);
 					}
 				}
-				if (room.banwords.indexOf(words[i]) > -1) {
-					return this.errorReply(`${words[i]} is already a banned phrase.`);
-				}
+				if (room.banwords.includes(word)) return this.errorReply(`${word} is already a banned phrase.`);
+
+				banwordRegexLen += (banwordRegexLen === 30) ? word.length : `|${word}`.length;
+				// RegExp instances whose source is greater than or equal to
+				// v8's RegExpMacroAssembler::kMaxRegister in length will crash
+				// the server on compile. In this case, that would happen each
+				// time a chat message gets tested for any banned phrases.
+				if (banwordRegexLen >= (1 << 16 - 1)) return this.errorReply("This room has too many banned phrases to add the ones given.");
 			}
 
 			room.banwords = room.banwords.concat(words);
@@ -452,10 +510,8 @@ exports.commands = {
 
 			words = words.map(word => word.replace(/\n/g, '').trim());
 
-			for (let i = 0; i < words.length; i++) {
-				let index = room.banwords.indexOf(words[i]);
-
-				if (index < 0) return this.errorReply(`${words[i]} is not a banned phrase in this room.`);
+			for (let word of words) {
+				if (!room.banwords.includes(word)) return this.errorReply(`${word} is not a banned phrase in this room.`);
 			}
 
 			room.banwords = room.banwords.filter(w => !words.includes(w));

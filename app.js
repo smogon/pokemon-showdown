@@ -42,15 +42,21 @@
 
 'use strict';
 
-const fs = require('fs');
-const path = require('path');
-
-// Check for dependencies
+// Check for version and dependencies
+try {
+	// I've gotten enough reports by people who don't use the launch
+	// script that this is worth repeating here
+	eval('{ let a = async () => {}; }');
+} catch (e) {
+	throw new Error("We require Node.js version 8 or later; you're using " + process.version);
+}
 try {
 	require.resolve('sockjs');
 } catch (e) {
-	throw new Error("Dependencies unmet; run npm install");
+	throw new Error("Dependencies are unmet; run node pokemon-showdown before launching Pokemon Showdown again.");
 }
+
+const FS = require('./fs');
 
 /*********************************************************
  * Load configuration
@@ -60,27 +66,23 @@ try {
 	require.resolve('./config/config');
 } catch (err) {
 	if (err.code !== 'MODULE_NOT_FOUND') throw err; // should never happen
-
-	// Copy it over synchronously from config-example.js since it's needed before we can start the server
-	console.log("config.js doesn't exist - creating one with default settings...");
-	fs.writeFileSync(path.resolve(__dirname, 'config/config.js'),
-		fs.readFileSync(path.resolve(__dirname, 'config/config-example.js'))
-	);
-} finally {
-	global.Config = require('./config/config');
+	throw new Error('config.js does not exist; run node pokemon-showdown to set up the default config file before launching Pokemon Showdown again.');
 }
+
+global.Config = require('./config/config');
+
+global.Monitor = require('./monitor');
 
 if (Config.watchconfig) {
 	let configPath = require.resolve('./config/config');
-	fs.watchFile(configPath, (curr, prev) => {
-		if (curr.mtime <= prev.mtime) return;
+	FS(configPath).onModify(() => {
 		try {
 			delete require.cache[configPath];
 			global.Config = require('./config/config');
 			if (global.Users) Users.cacheGroupData();
-			console.log('Reloaded config/config.js');
+			Monitor.notice('Reloaded config/config.js');
 		} catch (e) {
-			console.log('Error reloading config/config.js: ' + e.stack);
+			Monitor.adminlog(`Error reloading config/config.js: ${e.stack}`);
 		}
 	});
 }
@@ -88,8 +90,6 @@ if (Config.watchconfig) {
 /*********************************************************
  * Set up most of our globals
  *********************************************************/
-
-global.Monitor = require('./monitor');
 
 global.Dex = require('./sim/dex');
 global.toId = Dex.getId;
@@ -152,8 +152,8 @@ if (require.main === module) {
  * Set up our last global
  *********************************************************/
 
-global.TeamValidator = require('./team-validator');
-TeamValidator.PM.spawn();
+global.TeamValidatorAsync = require('./team-validator-async');
+TeamValidatorAsync.PM.spawn();
 
 /*********************************************************
  * Start up the REPL server
