@@ -1,6 +1,10 @@
 'use strict';
 
 exports.BattleMovedex = {
+	"iondeluge": {
+		inherit: true,
+		onTryHitField: function () {},
+	},
 	"wideguard": {
 		inherit: true,
 		effect: {
