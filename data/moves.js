@@ -8643,6 +8643,7 @@ exports.BattleMovedex = {
 		priority: 1,
 		flags: {},
 		pseudoWeather: 'iondeluge',
+		onTryHitField: false,
 		effect: {
 			duration: 1,
 			onStart: function (target) {
