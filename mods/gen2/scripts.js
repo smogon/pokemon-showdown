@@ -424,6 +424,23 @@ exports.BattleScripts = {
 			defense = target.getStat(defType, true, true);
 		}
 
+		// Gen 2 Present has a glitched damage calculation using the secondary types of the Pokemon for the Attacker's Level and Defender's Defense.
+		if (move.id === 'present') {
+			const typeOrder = ["Normal", "Fighting", "Flying", "Poison", "Ground", "Rock", "Bug", "Ghost", "Steel", "Fire", "Water", "Grass", "Electric", "Psychic", "Ice", "Dragon", "Dark"];
+			attack = 10;
+
+			const attackerLastType = attacker.getTypes().slice(-1)[0];
+			const attackerTypeIndex = typeOrder.indexOf(attackerLastType);
+			const defenderLastType = defender.getTypes().slice(-1)[0];
+			const defenderTypeIndex = typeOrder.indexOf(defenderLastType);
+
+			defense = Math.max(attackerTypeIndex, 1);
+			level = Math.max(defenderTypeIndex, 1);
+			if (move.crit) {
+				level *= 2;
+			}
+		}
+
 		// When either attack or defense are higher than 256, they are both divided by 4 and moded by 256.
 		// This is what cuases the roll over bugs.
 		if (attack >= 256 || defense >= 256) {
