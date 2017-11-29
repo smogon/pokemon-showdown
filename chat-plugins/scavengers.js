@@ -191,14 +191,6 @@ class ScavengerHunt extends Rooms.RoomGame {
 		this.gameType = gameType;
 		this.playerCap = Infinity;
 
-		this.hosts = hosts;
-		this.staffHostId = staffHost.userid;
-		this.staffHostName = staffHost.name;
-
-		this.gameid = 'scavengerhunt';
-		this.title = 'Scavenger Hunt';
-		this.scavGame = true;
-
 		this.state = 'signups';
 		this.joinedIps = [];
 
@@ -209,6 +201,16 @@ class ScavengerHunt extends Rooms.RoomGame {
 		this.leftHunt = {};
 
 		this.parentGame = parentGame || null;
+
+		this.hosts = hosts;
+
+		this.staffHostId = staffHost.userid;
+		this.staffHostName = staffHost.name;
+		this.cacheUserIps(staffHost); // store it in case of host subbing
+
+		this.gameid = 'scavengerhunt';
+		this.title = 'Scavenger Hunt';
+		this.scavGame = true;
 
 		this.onLoad(questions);
 	}
@@ -223,10 +225,7 @@ class ScavengerHunt extends Rooms.RoomGame {
 		if (this.hosts.some(h => h.userid === user.userid) || user.userid === this.staffHostId) return user.sendTo(this.room, "You cannot join your own hunt! If you wish to view the check your questions, use /viewhunt instead!");
 		if (Object.keys(user.ips).some(ip => this.joinedIps.includes(ip))) return user.sendTo(this.room, "You already have one alt in the hunt.");
 		if (this.addPlayer(user)) {
-			// limit to 1 IP in every game.
-			for (let ip in user.ips) {
-				this.joinedIps.push(ip);
-			}
+			this.cacheUserIps(user);
 			delete this.leftHunt[user.userid];
 			user.sendTo("You joined the scavenger hunt! Use the command /scavenge to answer.");
 			this.onSendQuestion(user);
@@ -234,6 +233,14 @@ class ScavengerHunt extends Rooms.RoomGame {
 		}
 		user.sendTo(this.room, "You have already joined the hunt.");
 		return false;
+	}
+
+	cacheUserIps(user) {
+		// limit to 1 IP in every game.
+		if (!user.ips) return; // ghost user object cached from queue
+		for (let ip in user.ips) {
+			this.joinedIps.push(ip);
+		}
 	}
 
 	leaveGame(user) {
@@ -528,7 +535,8 @@ class ScavengerHunt extends Rooms.RoomGame {
 
 		let filtered = this.questions.some(q => {
 			return q.answer.some(a => {
-				let md = Math.ceil((a.length - 3) / FILTER_LENIENCY);
+				a = toId(a);
+				let md = Math.ceil((a.length - 5) / FILTER_LENIENCY);
 				if (Dex.levenshtein(msgId, a, md) <= md) return true;
 				return false;
 			});
@@ -788,6 +796,7 @@ let commands = {
 		if (!room.game || !room.game.scavGame) return this.errorReply(`There is no scavenger game currently running.`);
 
 		let game = room.game.childGame || room.game;
+		if (!('questions' in game)) return this.errorReply('There is currently no hunt going on.');
 
 		const elapsedMsg = Chat.toDurationString(Date.now() - game.startTime, {hhmmss: true});
 		const gameTypeMsg = game.gameType ? `<em>${game.gameType}</em> ` : '';
@@ -827,6 +836,25 @@ let commands = {
 
 		room.add(message + '.');
 		this.privateModCommand(`(${message} by ${user.name}.)`);
+	},
+
+	inherit: function (target, room, user) {
+		if (!this.can('mute', null, room)) return false;
+		if (!room.game || !room.game.scavGame) return this.errorReply(`There is no scavenger game currently running.`);
+
+		let game = room.game.childGame || room.game;
+		if (!('questions' in game)) return this.errorReply('There is currently no hunt going on.');
+
+		if (game.staffHostId === user.userid) return this.errorReply('You already have staff permissions for this hunt.');
+
+		game.staffHostId = '' + user.userid;
+		game.staffHostName = '' + user.name;
+
+		// clear user's game progress and prevent user from ever entering again
+		game.eliminate(user.userid);
+		game.cacheUserIps(user);
+
+		this.privateModCommand(`(${user.name} has inherited staff permissions for the current hunt.)`);
 	},
 
 	reset: function (target, room, user) {
@@ -1240,6 +1268,7 @@ exports.commands = {
 	endhunt: commands.end,
 	edithunt: commands.edithunt,
 	viewhunt: commands.viewhunt,
+	inherithunt: commands.inherit,
 	scavengerstatus: commands.status,
 	scavengerhint: commands.hint,
 
@@ -1285,6 +1314,7 @@ exports.commands = {
 			"- /resethunt - resets the current scavenger hunt without revealing the hints and answers. (Requires: % @ * # & ~)",
 			"- /endhunt - ends the current scavenger hunt and announces the winners and the answers. (Requires: % @ * # & ~)",
 			"- /viewhunt - views the current scavenger hunt.  Only the user who started the hunt can use this command. Only the host(s) can view the hunt.",
+			"- /inherithunt - becomes the staff host, gaining staff permissions to the current hunt. (Requires: % @ * # & ~)",
 			"- /scav timer <em>[minutes | off]</em> - sets a timer to automatically end the current hunt. (Requires: % @ * # & ~)",
 			"- /scav addpoints <em>[user], [amount]</em> - gives the user the amount of scavenger points towards the monthly ladder. (Requires: % @ * # & ~)",
 			"- /scav removepoints <em>[user], [amount]</em> - takes the amount of scavenger points from the user towards the monthly ladder. (Requires: % @ * # & ~)",
