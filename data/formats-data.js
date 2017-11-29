@@ -485,7 +485,7 @@ exports.BattleFormatsData = {
 		tier: "UU",
 	},
 	cleffa: {
-		randomBattleMoves: ["grassknot", "fireblast", "psychic", "wish", "protect", "counter"],
+		randomBattleMoves: ["thunderwave", "fireblast", "psychic", "wish", "protect", "counter", "encore", "aromatherapy"],
 		randomDoubleBattleMoves: ["reflect", "thunderwave", "lightscreen", "safeguard", "fireblast", "protect"],
 		tier: "LC",
 	},
@@ -530,7 +530,7 @@ exports.BattleFormatsData = {
 		tier: "OU",
 	},
 	igglybuff: {
-		randomBattleMoves: ["wish", "healbell", "seismictoss", "protect"],
+		randomBattleMoves: ["wish", "healbell", "seismictoss", "protect", "thunderwave"],
 		randomDoubleBattleMoves: ["wish", "thunderwave", "reflect", "lightscreen", "seismictoss", "protect"],
 		eventPokemon: [
 			{"generation": 3, "level": 5, "shiny": 1, "abilities":["cutecharm"], "moves":["sing", "charm", "defensecurl", "tickle"], "pokeball": "pokeball"},
@@ -566,7 +566,7 @@ exports.BattleFormatsData = {
 		tier: "UU",
 	},
 	oddish: {
-		randomBattleMoves: ["gigadrain", "sludgebomb", "strengthsap", "sleeppowder", "hiddenpowerfire", "solarbeam", "sunnyday"],
+		randomBattleMoves: ["gigadrain", "sludgebomb", "synthesis", "sleeppowder", "hiddenpowerfire", "solarbeam", "sunnyday"],
 		randomDoubleBattleMoves: ["gigadrain", "sludgebomb", "sleeppowder", "stunspore", "protect", "hiddenpowerfire", "leechseed", "dazzlinggleam", "sunnyday"],
 		eventPokemon: [
 			{"generation": 3, "level": 26, "gender": "M", "nature": "Quirky", "ivs": {"hp": 23, "atk": 24, "def": 20, "spa": 21, "spd": 9, "spe": 16}, "moves":["poisonpowder", "stunspore", "sleeppowder", "acid"], "pokeball": "pokeball"},
@@ -751,7 +751,7 @@ exports.BattleFormatsData = {
 		tier: "PU",
 	},
 	abra: {
-		randomBattleMoves: ["psychic", "dazzlinggleam", "hiddenpowerfighting", "shadowball", "knockoff", "substitute"],
+		randomBattleMoves: ["psychic", "dazzlinggleam", "hiddenpowerfighting", "shadowball", "energyball", "knockoff", "substitute"],
 		randomDoubleBattleMoves: ["protect", "psychic", "psyshock", "hiddenpowerfighting", "shadowball", "encore", "substitute"],
 		tier: "LC",
 	},
@@ -857,7 +857,7 @@ exports.BattleFormatsData = {
 		tier: "PU",
 	},
 	ponyta: {
-		randomBattleMoves: ["flareblitz", "wildcharge", "morningsun", "hypnosis", "highhorsepower", "willowisp", "fireblast"],
+		randomBattleMoves: ["flareblitz", "wildcharge", "morningsun", "hypnosis", "highhorsepower", "willowisp"],
 		randomDoubleBattleMoves: ["flareblitz", "wildcharge", "protect", "hypnosis", "flamecharge"],
 		tier: "LC",
 	},
@@ -1044,7 +1044,7 @@ exports.BattleFormatsData = {
 		tier: "RU",
 	},
 	drowzee: {
-		randomBattleMoves: ["psychic", "seismictoss", "thunderwave", "wish", "protect", "counter"],
+		randomBattleMoves: ["psychic", "thunderwave", "wish", "protect", "counter"],
 		randomDoubleBattleMoves: ["psychic", "seismictoss", "thunderwave", "wish", "protect", "hypnosis", "shadowball", "trickroom", "calmmind", "dazzlinggleam", "toxic"],
 		eventPokemon: [
 			{"generation": 3, "level": 5, "shiny": 1, "abilities":["insomnia"], "moves":["bellydrum", "wish"], "pokeball": "pokeball"},
@@ -1364,7 +1364,7 @@ exports.BattleFormatsData = {
 		tier: "PU",
 	},
 	elekid: {
-		randomBattleMoves: ["thunderbolt", "crosschop", "voltswitch", "substitute", "wildcharge", "psychic", "hiddenpowergrass"],
+		randomBattleMoves: ["thunderbolt", "crosschop", "voltswitch", "substitute", "wildcharge", "psychic", "hiddenpowerground"],
 		randomDoubleBattleMoves: ["thunderbolt", "crosschop", "voltswitch", "substitute", "icepunch", "psychic", "hiddenpowergrass", "protect"],
 		eventPokemon: [
 			{"generation": 3, "level": 20, "moves":["icepunch", "firepunch", "thunderpunch", "crosschop"], "pokeball": "pokeball"},
@@ -1589,7 +1589,7 @@ exports.BattleFormatsData = {
 		tier: "BL",
 	},
 	omanyte: {
-		randomBattleMoves: ["shellsmash", "icebeam", "earthpower", "spikes", "stealthrock", "hydropump"],
+		randomBattleMoves: ["shellsmash", "icebeam", "earthpower", "spikes", "stealthrock", "hydropump", "surf"],
 		eventPokemon: [
 			{"generation": 5, "level": 15, "gender": "M", "isHidden": false, "abilities":["swiftswim"], "moves":["bubblebeam", "supersonic", "withdraw", "bite"], "pokeball": "cherishball"},
 		],
@@ -1627,7 +1627,7 @@ exports.BattleFormatsData = {
 		tier: "UU",
 	},
 	munchlax: {
-		randomBattleMoves: ["rest", "counter", "sleeptalk", "bodyslam", "earthquake", "return", "recycle", "whirlwind", "pursuit"],
+		randomBattleMoves: ["rest", "counter", "sleeptalk", "bodyslam", "earthquake", "firepunch", "return", "recycle", "whirlwind", "pursuit"],
 		eventPokemon: [
 			{"generation": 4, "level": 5, "moves":["metronome", "tackle", "defensecurl", "selfdestruct"]},
 			{"generation": 4, "level": 5, "gender": "F", "nature": "Relaxed", "abilities":["thickfat"], "moves":["metronome", "odorsleuth", "tackle", "curse"], "pokeball": "cherishball"},
