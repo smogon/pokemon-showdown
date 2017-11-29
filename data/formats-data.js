@@ -899,12 +899,12 @@ exports.BattleFormatsData = {
 		tier: "NU",
 	},
 	magnemite: {
-		randomBattleMoves: ["thunderbolt", "thunderwave", "magnetrise", "substitute", "flashcannon", "hiddenpowerice", "voltswitch"],
+		randomBattleMoves: ["thunderbolt", "endure", "flashcannon", "hiddenpowerground", "voltswitch", "recycle"],
 		randomDoubleBattleMoves: ["thunderbolt", "thunderwave", "magnetrise", "substitute", "flashcannon", "hiddenpowerice", "voltswitch", "protect", "electroweb", "discharge"],
 		tier: "LC",
 	},
 	magneton: {
-		randomBattleMoves: ["thunderbolt", "endure", "flashcannon", "hiddenpowerground", "voltswitch", "recycle"],
+		randomBattleMoves: ["thunderbolt", "substitute", "flashcannon", "hiddenpowerice", "voltswitch", "chargebeam", "hiddenpowerfire"],
 		randomDoubleBattleMoves: ["thunderbolt", "thunderwave", "magnetrise", "substitute", "flashcannon", "hiddenpowerice", "voltswitch", "protect", "electroweb", "discharge", "hiddenpowerfire"],
 		eventPokemon: [
 			{"generation": 3, "level": 30, "moves":["refresh", "doubleedge", "raindance", "thunder"]},
@@ -2549,7 +2549,7 @@ exports.BattleFormatsData = {
 	},
 	linoone: {
 		randomBattleMoves: ["bellydrum", "extremespeed", "stompingtantrum", "shadowclaw"],
-			randomDoubleBattleMoves: ["bellydrum", "extremespeed", "stompingtantrum", "protect", "shadowclaw"],
+		randomDoubleBattleMoves: ["bellydrum", "extremespeed", "stompingtantrum", "protect", "shadowclaw"],
 		eventPokemon: [
 			{"generation": 6, "level": 50, "isHidden": false, "moves":["extremespeed", "helpinghand", "babydolleyes", "protect"], "pokeball": "cherishball"},
 		],
