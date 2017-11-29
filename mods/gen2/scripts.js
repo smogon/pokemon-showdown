@@ -426,16 +426,14 @@ exports.BattleScripts = {
 
 		// Gen 2 Present has a glitched damage calculation using the secondary types of the Pokemon for the Attacker's Level and Defender's Defense.
 		if (move.id === 'present') {
-			const typeOrder = ["Normal", "Fighting", "Flying", "Poison", "Ground", "Rock", "Bug", "Ghost", "Steel", "Fire", "Water", "Grass", "Electric", "Psychic", "Ice", "Dragon", "Dark"];
+			const typeIndexes = {"Normal": 0, "Fighting": 1, "Flying": 2, "Poison": 3, "Ground": 4, "Rock": 5, "Bug": 7, "Ghost": 8, "Steel": 9, "Fire": 20, "Water": 21, "Grass": 22, "Electric": 23, "Psychic": 24, "Ice": 25, "Dragon": 26, "Dark": 27};
 			attack = 10;
 
 			const attackerLastType = attacker.getTypes().slice(-1)[0];
-			const attackerTypeIndex = typeOrder.indexOf(attackerLastType);
 			const defenderLastType = defender.getTypes().slice(-1)[0];
-			const defenderTypeIndex = typeOrder.indexOf(defenderLastType);
 
-			defense = Math.max(attackerTypeIndex, 1);
-			level = Math.max(defenderTypeIndex, 1);
+			defense = typeIndexes[attackerLastType] || 1;
+			level = typeIndexes[defenderLastType] || 1;
 			if (move.crit) {
 				level *= 2;
 			}
