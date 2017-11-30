@@ -2978,6 +2978,21 @@ class Battle extends Dex.ModdedDex {
 		return true;
 	}
 
+	/**
+	 * Convenience method for easily making choices.
+	 *
+	 * @param {string[]} inputs
+	 */
+	makeChoices(...inputs) {
+		const oldFlag = this.LEGACY_API_DO_NOT_USE;
+		this.LEGACY_API_DO_NOT_USE = false;
+		for (const [i, input] of inputs.entries()) {
+			this.sides[i].choose(input);
+		}
+		this.commitDecisions();
+		this.LEGACY_API_DO_NOT_USE = oldFlag;
+	}
+
 	commitDecisions() {
 		this.updateSpeed();
 
@@ -3092,6 +3107,10 @@ class Battle extends Dex.ModdedDex {
 		if (this.getFormat().debug) {
 			this.add('debug', activity);
 		}
+	}
+
+	getDebugLog() {
+		return this.log.join('\n').replace(/\|split\n.*\n.*\n.*\n/g, '');
 	}
 
 	/**
