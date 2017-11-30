@@ -486,7 +486,20 @@ class Side {
 			slot = this.active.length;
 			while (this.choice.switchIns.has(slot) || this.pokemon[slot].fainted) slot++;
 		}
-		if (isNaN(slot) || slot >= this.pokemon.length) {
+		if (isNaN(slot) || slot < 0) {
+			// maybe it's a name!
+			slot = -1;
+			for (const [i, pokemon] of this.pokemon.entries()) {
+				if (slotText === pokemon.name) {
+					slot = i;
+					break;
+				}
+			}
+			if (slot < 0) {
+				return this.emitChoiceError(`Can't switch: You do not have a Pokémon named "${slotText}" to switch to`);
+			}
+		}
+		if (slot >= this.pokemon.length) {
 			return this.emitChoiceError(`Can't switch: You do not have a Pokémon in slot ${slot + 1} to switch to`);
 		} else if (slot < this.active.length) {
 			return this.emitChoiceError(`Can't switch: You can't switch to an active Pokémon`);

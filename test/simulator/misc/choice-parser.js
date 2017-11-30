@@ -52,8 +52,6 @@ describe('Choice parser', function () {
 
 				battle.commitDecisions();
 
-				assert.false(battle.choose('p1', 'switch Rhydon'));
-				assert.false(battle.choose('p1', 'switch Bulbasaur'));
 				assert.false(battle.choose('p1', 'switch first'));
 				assert.false(battle.choose('p1', 'switch second'));
 			});
@@ -75,7 +73,7 @@ describe('Choice parser', function () {
 					assert.false(battle.choose('p1', badDecision), `Decision '${badDecision}' should be rejected`);
 				}
 
-				const validDecision = 'switch 2';
+				const validDecision = 'switch Bulbasaur';
 				assert(battle.choose('p1', validDecision));
 				battle.p1.clearChoice();
 			});
