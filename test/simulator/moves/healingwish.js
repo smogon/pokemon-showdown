@@ -10,7 +10,7 @@ describe('Healing Wish', function () {
 		battle.destroy();
 	});
 
-	it('should heal a switch-in for full at end of turn', function () {
+	it('should heal a switch-in for full before hazards at end of turn', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [
 			{species: 'Caterpie', ability: 'shielddust', moves: ['stringshot']},
@@ -35,7 +35,7 @@ describe('Healing Wish', function () {
 		assert.strictEqual(battle.p1.active[0].moveset[0].pp, 63);
 	});
 
-	it('[Gen 4] should heal a switch-in for full mid-turn', function () {
+	it('[Gen 4] should heal a switch-in for full after hazards mid-turn', function () {
 		battle = common.gen(4).createBattle();
 		battle.join('p1', 'Guest 1', 1, [
 			{species: 'Caterpie', ability: 'shielddust', moves: ['stringshot']},
