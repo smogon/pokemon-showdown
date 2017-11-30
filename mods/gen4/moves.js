@@ -636,7 +636,7 @@ exports.BattleMovedex = {
 			pokemon.switchFlag = true;
 		},
 		effect: {
-			duration: 1,
+			duration: 2,
 			onStart: function (side) {
 				this.debug('Healing Wish started on ' + side.name);
 			},
@@ -744,7 +744,7 @@ exports.BattleMovedex = {
 			pokemon.switchFlag = true;
 		},
 		effect: {
-			duration: 1,
+			duration: 2,
 			onStart: function (side) {
 				this.debug('Lunar Dance started on ' + side.name);
 			},
