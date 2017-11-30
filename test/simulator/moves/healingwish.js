@@ -54,5 +54,4 @@ describe('Healing Wish', function () {
 		assert.strictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 		assert.strictEqual(battle.p1.active[0].moveset[0].pp, 63);
 	});
-
 });

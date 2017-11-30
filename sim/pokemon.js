@@ -831,7 +831,7 @@ class Pokemon {
 		return true;
 	}
 
-	clearVolatile() {
+	clearVolatile(includeSwitchFlags = true) {
 		this.boosts = {
 			atk: 0,
 			def: 0,
@@ -863,8 +863,10 @@ class Pokemon {
 			}
 		}
 		this.volatiles = {};
-		this.switchFlag = false;
-		this.forceSwitchFlag = false;
+		if (includeSwitchFlags) {
+			this.switchFlag = false;
+			this.forceSwitchFlag = false;
+		}
 
 		this.lastMove = '';
 		this.moveThisTurn = '';
