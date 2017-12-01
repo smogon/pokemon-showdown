@@ -691,19 +691,19 @@ exports.commands = {
 		let targets = target.split(/[,/]/).slice(0, 2);
 		if (targets.length !== 2) return this.errorReply("Attacker and defender must be separated with a comma.");
 
-		let searchMethods = {'getType':1, 'getMove':1, 'getTemplate':1};
-		let sourceMethods = {'getType':1, 'getMove':1};
-		let targetMethods = {'getType':1, 'getTemplate':1};
+		let searchMethods = ['getType', 'getMove', 'getTemplate'];
+		let sourceMethods = ['getType', 'getMove'];
+		let targetMethods = ['getType', 'getTemplate'];
 		let source, defender, foundData, atkName, defName;
 
 		for (let i = 0; i < 2; ++i) {
 			let method;
-			for (method in searchMethods) {
+			for (method of searchMethods) {
 				foundData = Dex[method](targets[i]);
 				if (foundData.exists) break;
 			}
 			if (!foundData.exists) return this.parse('/help effectiveness');
-			if (!source && method in sourceMethods) {
+			if (!source && sourceMethods.includes(method)) {
 				if (foundData.type) {
 					source = foundData;
 					atkName = foundData.name;
@@ -712,7 +712,7 @@ exports.commands = {
 					atkName = foundData.id;
 				}
 				searchMethods = targetMethods;
-			} else if (!defender && method in targetMethods) {
+			} else if (!defender && targetMethods.includes(method)) {
 				if (foundData.types) {
 					defender = foundData;
 					defName = foundData.species + " (not counting abilities)";
