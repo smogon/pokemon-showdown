@@ -55,13 +55,8 @@ class RandomGen5Teams extends RandomGen6Teams {
 			if (movePool[i].substr(0, 11) === 'hiddenpower') availableHP++;
 		}
 
-		let SetupException = {
-			extremespeed:1, suckerpunch:1, superpower:1,
-			dracometeor:1, leafstorm:1, overheat:1,
-		};
-		let counterAbilities = {
-			'Adaptability':1, 'Contrary':1, 'Hustle':1, 'Iron Fist':1, 'Sheer Force':1, 'Skill Link':1,
-		};
+		let SetupException = ['extremespeed', 'suckerpunch', 'superpower', 'dracometeor', 'leafstorm', 'overheat'];
+		let counterAbilities = ['Adaptability', 'Contrary', 'Hustle', 'Iron Fist', 'Sheer Force', 'Skill Link'];
 
 		let hasMove, counter;
 
@@ -303,7 +298,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 
 				// This move doesn't satisfy our setup requirements:
 				if ((move.category === 'Physical' && counter.setupType === 'Special') || (move.category === 'Special' && counter.setupType === 'Physical')) {
-					if (!SetupException[moveid] && (!hasType[move.type] || counter.stab > 1 || counter[move.category] < 2)) rejected = true;
+					if (!SetupException.includes(moveid) && (!hasType[move.type] || counter.stab > 1 || counter[move.category] < 2)) rejected = true;
 				}
 				if (counter.setupType && !isSetup && counter.setupType !== 'Mixed' && move.category !== counter.setupType && counter[counter.setupType] < 2 && !hasMove['batonpass'] && moveid !== 'rest' && moveid !== 'sleeptalk') {
 					if (move.category !== 'Status' || counter[counter.setupType] + counter.Status > 3 && counter['physicalsetup'] + counter['specialsetup'] < 2) rejected = true;
@@ -389,7 +384,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 			let rejectAbility;
 			do {
 				rejectAbility = false;
-				if (ability in counterAbilities) {
+				if (counterAbilities.includes(ability)) {
 					// Adaptability, Contrary, Hustle, Iron Fist, Sheer Force, Skill Link
 					rejectAbility = !counter[toId(ability)];
 				} else if (ability === 'Blaze') {
@@ -629,12 +624,12 @@ class RandomGen5Teams extends RandomGen6Teams {
 	randomTeam() {
 		let pokemon = [];
 
-		let allowedNFE = {'Porygon2':1, 'Scyther':1};
+		let allowedNFE = ['Porygon2', 'Scyther'];
 
 		let pokemonPool = [];
 		for (let id in this.data.FormatsData) {
 			let template = this.getTemplate(id);
-			if (template.gen > this.gen || template.isNonstandard || !template.randomBattleMoves || template.nfe && !allowedNFE[template.species]) continue;
+			if (template.gen > this.gen || template.isNonstandard || !template.randomBattleMoves || template.nfe && !allowedNFE.includes(template.species)) continue;
 			pokemonPool.push(id);
 		}
 
