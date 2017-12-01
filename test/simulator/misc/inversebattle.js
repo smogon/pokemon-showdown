@@ -6,7 +6,8 @@ const common = require('./../../common');
 let battle;
 
 describe('Inverse Battle', function () {
-	beforeEach(() => (battle = common.mod('gen6inverse').createBattle()));
+	const format = {effectType: 'Format', ruleset: ['Inverse Mod']};
+	beforeEach(() => (battle = common.mod(format).createBattle()));
 	afterEach(() => battle.destroy());
 
 	it('should change natural resistances into weaknesses', function () {
