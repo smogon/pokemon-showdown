@@ -766,7 +766,7 @@ exports.Formats = [
 			"&bullet; <a href=\"http://www.smogon.com/forums/posts/7258505/\">Balanced Hackmons</a>",
 		],
 
-		mod: 'gen7',
+		mod: 'gen4',
 		ruleset: ['Pokemon', 'Ability Clause', 'OHKO Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod'],
 		banlist: ['Arena Trap', 'Huge Power', 'Pure Power', 'Shadow Tag', 'Wonder Guard', 'Drizzle ++ Swift Swim', 'Drought ++ Chlorophyll', 'Sand Stream ++ Sand Rush'],
 	},
