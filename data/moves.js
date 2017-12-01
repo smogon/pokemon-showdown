@@ -3197,7 +3197,7 @@ exports.BattleMovedex = {
 			let removeAll = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
 			for (let targetCondition of removeTarget) {
 				if (target.side.removeSideCondition(targetCondition)) {
-					if (!removeAll[targetCondition]) continue;
+					if (!removeAll.includes(targetCondition)) continue;
 					this.add('-sideend', target.side, this.getEffect(targetCondition).name, '[from] move: Defog', '[of] ' + target);
 				}
 			}
