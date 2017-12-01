@@ -363,12 +363,13 @@ exports.BattleMovedex = {
 	mirrormove: {
 		inherit: true,
 		onHit: function (pokemon) {
-			let noMirror = {metronome: 1, mimic: 1, mirrormove: 1, sketch: 1, sleeptalk: 1, transform: 1};
-			let foe = pokemon.side.foe.active[0];
-			if (!foe || !foe.lastMove || (!pokemon.activeTurns && !foe.moveThisTurn) || noMirror[foe.lastMove] || pokemon.moves.indexOf(foe.lastMove) >= 0) {
+			let noMirror = ['metronome', 'mimic', 'mirrormove', 'sketch', 'sleeptalk', 'transform'];
+			const target = pokemon.side.foe.active[0];
+			const lastMove = target && target.lastMove;
+			if (!lastMove || (!pokemon.activeTurns && !target.moveThisTurn) || noMirror.includes(lastMove) || pokemon.moves.includes(lastMove)) {
 				return false;
 			}
-			this.useMove(foe.lastMove, pokemon);
+			this.useMove(lastMove, pokemon);
 		},
 		noSketch: true,
 	},
