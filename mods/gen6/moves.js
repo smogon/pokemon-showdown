@@ -112,7 +112,7 @@ exports.BattleMovedex = {
 		shortDesc: "Raises user's Attack by 2 if this KOes the target.",
 		basePower: 30,
 		onAfterMoveSecondarySelf: function (pokemon, target, move) {
-			if (!target || target.fainted || target.hp <= 0) this.boost({atk:2}, pokemon, pokemon, move);
+			if (!target || target.fainted || target.hp <= 0) this.boost({atk: 2}, pokemon, pokemon, move);
 		},
 	},
 	flyingpress: {

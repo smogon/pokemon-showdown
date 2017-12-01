@@ -179,7 +179,7 @@ class Validator {
 		let name = set.species;
 		if (set.species !== set.name && template.baseSpecies !== set.name) name = `${set.name} (${set.species})`;
 		let isHidden = false;
-		let lsetData = /** @type {PokemonSources} */ ({sources:[], sourcesBefore:dex.gen});
+		let lsetData = /** @type {PokemonSources} */ ({sources: [], sourcesBefore: dex.gen});
 
 		let setHas = {};
 		const ruleTable = this.ruleTable;
@@ -740,7 +740,7 @@ class Validator {
 			const canBottleCap = (dex.gen >= 7 && set.level === 100);
 
 			if (!set.ivs) set.ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
-			let statTable = {hp:'HP', atk:'Attack', def:'Defense', spa:'Special Attack', spd:'Special Defense', spe:'Speed'};
+			let statTable = {hp: 'HP', atk: 'Attack', def: 'Defense', spa: 'Special Attack', spd: 'Special Defense', spe: 'Speed'};
 			for (let statId in eventData.ivs) {
 				// @ts-ignore TypeScript index signature bug
 				if (canBottleCap && set.ivs[statId] === 31) continue;
@@ -1140,21 +1140,21 @@ class Validator {
 		if (limit1 && sketch) {
 			// limit 1 sketch move
 			if (lsetData.sketchMove) {
-				return {type:'oversketched', maxSketches: 1};
+				return {type: 'oversketched', maxSketches: 1};
 			}
 			lsetData.sketchMove = moveid;
 		}
 
 		if (blockedHM) {
 			// Limit one of Defog/Whirlpool to be transferred
-			if (lsetData.hm) return {type:'incompatible'};
+			if (lsetData.hm) return {type: 'incompatible'};
 			lsetData.hm = moveid;
 		}
 
 		// Now that we have our list of possible sources, intersect it with the current list
 		if (!sourcesBefore && !sources.length) {
-			if (minPastGen > 1 && sometimesPossible) return {type:'pastgen', gen: minPastGen};
-			if (incompatibleAbility) return {type:'incompatibleAbility'};
+			if (minPastGen > 1 && sometimesPossible) return {type: 'pastgen', gen: minPastGen};
+			if (incompatibleAbility) return {type: 'incompatibleAbility'};
 			return {type: 'invalid'};
 		}
 		if (sourcesBefore || lsetData.sourcesBefore) {
@@ -1187,7 +1187,7 @@ class Validator {
 			}
 		}
 		if (!lsetData.sources.length && !sourcesBefore) {
-			return {type:'incompatible'};
+			return {type: 'incompatible'};
 		}
 
 		if (limitedEgg) {

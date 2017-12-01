@@ -84,7 +84,7 @@ exports.BattleScripts = {
 		let attacker = pokemon;
 		let defender = target;
 		let defenseStat = defensiveCategory === 'Physical' ? 'def' : 'spd';
-		let statTable = {atk:'Atk', def:'Def', spa:'SpA', spd:'SpD', spe:'Spe'};
+		let statTable = {atk: 'Atk', def: 'Def', spa: 'SpA', spd: 'SpD', spe: 'Spe'};
 		let maxAttack = 0;
 		let attack;
 		let defense;

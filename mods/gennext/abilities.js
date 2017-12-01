@@ -185,7 +185,7 @@ exports.BattleAbilities = {
 				if (pokemon.isActive && pokemon.speciesid === 'cherrim' && this.effectData.forme !== 'Sunshine') {
 					this.effectData.forme = 'Sunshine';
 					this.add('-formechange', pokemon, 'Cherrim-Sunshine', '[msg]');
-					this.boost({spd:1});
+					this.boost({spd: 1});
 				}
 			} else if (pokemon.isActive && pokemon.speciesid === 'cherrim' && this.effectData.forme) {
 				delete this.effectData.forme;
@@ -196,7 +196,7 @@ exports.BattleAbilities = {
 			onSwitchInPriority: 1,
 			onSwitchIn: function (target) {
 				if (!target.fainted) {
-					this.boost({spd:1}, target, target, this.getAbility('flowergift'));
+					this.boost({spd: 1}, target, target, this.getAbility('flowergift'));
 				}
 				target.side.removeSideCondition('flowergift');
 			},
@@ -337,9 +337,9 @@ exports.BattleAbilities = {
 				totalspd += foeactive[i].stats.spd;
 			}
 			if (totaldef && totaldef >= totalspd) {
-				this.boost({spa:1});
+				this.boost({spa: 1});
 			} else if (totalspd) {
-				this.boost({atk:1});
+				this.boost({atk: 1});
 			}
 		},
 		desc: "On switch-in, this Pokemon's Attack or Special Attack is raised by 1 stage based on the weaker combined defensive stat of all opposing Pokemon. Attack is raised if their Defense is lower, and Special Attack is raised if their Special Defense is the same or lower. If the user is a Genesect, this will not have effect unless it holds a Drive.",
@@ -598,7 +598,7 @@ exports.BattleAbilities = {
 		onResidualPriority: -1,
 		onResidual: function (pokemon) {
 			if (pokemon.activeTurns && !pokemon.volatiles.stall) {
-				this.boost({spe:1});
+				this.boost({spe: 1});
 			}
 		},
 		desc: "This Pokemon's Speed is raised by 1 stage at the end of each full turn it has been on the field. This ability does not activate on turns Protect, Detect, Endure, etc are used.",

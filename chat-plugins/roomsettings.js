@@ -421,7 +421,7 @@ exports.commands = {
 
 	emojis: 'emojifilter',
 	emoji: 'emojifilter',
-	emojifilter : function (target, room, user) {
+	emojifilter: function (target, room, user) {
 		if (!target) {
 			const emojiSetting = (room.filterEmojis ? "ON" : "OFF");
 			return this.sendReply(`This room's emoji filter is currently: ${emojiSetting}`);

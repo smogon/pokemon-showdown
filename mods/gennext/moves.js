@@ -228,7 +228,7 @@ exports.BattleMovedex = {
 					}
 				}
 				if (move.flags['contact']) {
-					this.boost({atk:-2}, source, target, this.getMove("King's Shield"));
+					this.boost({atk: -2}, source, target, this.getMove("King's Shield"));
 				}
 				return null;
 			},
@@ -1362,8 +1362,8 @@ exports.BattleMovedex = {
 		},
 		accuracy: 100,
 		secondaries: [
-			{chance:20, status:'brn'},
-			{chance:30, volatileStatus:'flinch'},
+			{chance: 20, status: 'brn'},
+			{chance: 30, volatileStatus: 'flinch'},
 		],
 		desc: "Has a 20% chance to burn the target and a 30% chance to flinch it. If the user is a Flareon, this move does 1.5x more damage.",
 		shortDesc: "20% chance to burn. 30% chance to flinch.",
@@ -1375,8 +1375,8 @@ exports.BattleMovedex = {
 		},
 		accuracy: 100,
 		secondaries: [
-			{chance:20, status:'frz'},
-			{chance:30, volatileStatus:'flinch'},
+			{chance: 20, status: 'frz'},
+			{chance: 30, volatileStatus: 'flinch'},
 		],
 		desc: "Has a 20% chance to freeze the target and a 30% chance to flinch it. If the user is a Walrein, this move does 1.5x more damage.",
 		shortDesc: "20% chance to freeze. 30% chance to flinch.",
@@ -1388,8 +1388,8 @@ exports.BattleMovedex = {
 		},
 		accuracy: 100,
 		secondaries: [
-			{chance:20, status:'par'},
-			{chance:30, volatileStatus:'flinch'},
+			{chance: 20, status: 'par'},
+			{chance: 30, volatileStatus: 'flinch'},
 		],
 		desc: "Has a 20% chance to paralyze the target and a 30% chance to flinch it. If the user is a Luxray, this move does 1.5x more damage.",
 		shortDesc: "20% chance to paralyze. 30% chance to flinch.",
@@ -1401,8 +1401,8 @@ exports.BattleMovedex = {
 		},
 		accuracy: 100,
 		secondaries: [
-			{chance: 100, status:'tox'},
-			{chance: 30, volatileStatus:'flinch'},
+			{chance: 100, status: 'tox'},
+			{chance: 30, volatileStatus: 'flinch'},
 		],
 		desc: "Has a 100% chance to badly poison the target and a 30% chance to flinch it. If the user is a Drapion, this move does 1.5x more damage.",
 		shortDesc: "100% chance to badly poison. 30% chance to flinch.",

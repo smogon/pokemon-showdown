@@ -573,7 +573,7 @@ class User {
 	 * Special permission check for promoting and demoting
 	 */
 	canPromote(sourceGroup, targetGroup) {
-		return this.can('promote', {group:sourceGroup}) && this.can('promote', {group:targetGroup});
+		return this.can('promote', {group: sourceGroup}) && this.can('promote', {group: targetGroup});
 	}
 	resetName(isForceRenamed) {
 		return this.forceRename('Guest ' + this.guestNum, false, isForceRenamed);

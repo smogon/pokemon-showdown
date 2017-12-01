@@ -19,16 +19,16 @@ class RandomGen2Teams extends RandomGen3Teams {
 		let tierCount = {};
 		let typeCount = {};
 		let weaknessCount = {
-			'Normal':0, 'Fighting':0, 'Flying':0, 'Poison':0, 'Ground':0, 'Rock':0, 'Bug':0, 'Ghost':0, 'Steel':0,
-			'Fire':0, 'Water':0, 'Grass':0, 'Electric':0, 'Psychic':0, 'Ice':0, 'Dragon':0, 'Dark':0,
+			'Normal': 0, 'Fighting': 0, 'Flying': 0, 'Poison': 0, 'Ground': 0, 'Rock': 0, 'Bug': 0, 'Ghost': 0, 'Steel': 0,
+			'Fire': 0, 'Water': 0, 'Grass': 0, 'Electric': 0, 'Psychic': 0, 'Ice': 0, 'Dragon': 0, 'Dark': 0,
 		};
 		let resistanceCount = {
-			'Normal':0, 'Fighting':0, 'Flying':0, 'Poison':0, 'Ground':0, 'Rock':0, 'Bug':0, 'Ghost':0, 'Steel':0,
-			'Fire':0, 'Water':0, 'Grass':0, 'Electric':0, 'Psychic':0, 'Ice':0, 'Dragon':0, 'Dark':0,
+			'Normal': 0, 'Fighting': 0, 'Flying': 0, 'Poison': 0, 'Ground': 0, 'Rock': 0, 'Bug': 0, 'Ghost': 0, 'Steel': 0,
+			'Fire': 0, 'Water': 0, 'Grass': 0, 'Electric': 0, 'Psychic': 0, 'Ice': 0, 'Dragon': 0, 'Dark': 0,
 		};
 		let restrictMoves = {
-			'reflect':1, 'lightscreen':1, 'rapidspin':1, 'spikes':1, 'bellydrum':1, 'haze':1,
-			'healbell':1, 'thief':1, 'phazing':1, 'sleeptalk':2, 'sleeping':2,
+			'reflect': 1, 'lightscreen': 1, 'rapidspin': 1, 'spikes': 1, 'bellydrum': 1, 'haze': 1,
+			'healbell': 1, 'thief': 1, 'phazing': 1, 'sleeptalk': 2, 'sleeping': 2,
 		};
 
 		while (pokemonPool.length && pokemonLeft > 0) {
