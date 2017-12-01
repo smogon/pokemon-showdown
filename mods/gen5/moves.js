@@ -170,7 +170,7 @@ exports.BattleMovedex = {
 		desc: "Lowers the target's evasiveness by 1 stage. If this move is successful and whether or not the target's evasiveness was affected, the effects of Reflect, Light Screen, Safeguard, Mist, Spikes, Toxic Spikes, and Stealth Rock end for the target's side. Ignores a target's substitute, although a substitute will still block the lowering of evasiveness.",
 		shortDesc: "-1 evasion; clears target side's hazards/screens.",
 		onHit: function (pokemon) {
-			if (!pokemon.volatiles['substitute']) this.boost({evasion:-1});
+			if (!pokemon.volatiles['substitute']) this.boost({evasion: -1});
 			let sideConditions = ['reflect', 'lightscreen', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock'];
 			for (let condition of sideConditions) {
 				if (pokemon.side.removeSideCondition(condition)) {

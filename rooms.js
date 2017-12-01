@@ -632,7 +632,7 @@ class GlobalRoom extends BasicRoom {
 	 */
 	getRooms(user) {
 		/** @type {any} */
-		let roomsData = {official:[], pspl:[], chat:[], userCount: this.userCount, battleCount: this.battleCount};
+		let roomsData = {official: [], pspl: [], chat: [], userCount: this.userCount, battleCount: this.battleCount};
 		for (const room of this.chatRooms) {
 			if (!room) continue;
 			if (room.isPrivate && !(room.isPrivate === 'voice' && user.group !== ' ')) continue;

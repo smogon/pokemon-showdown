@@ -67,31 +67,31 @@ const DATA_FILES = {
 /** @typedef {{Pokedex: DexTable, Movedex: DexTable, Statuses: DexTable, TypeChart: DexTable, Scripts: DexTable, Items: DexTable, Abilities: DexTable, FormatsData: DexTable, Learnsets: DexTable, Aliases: {[id: string]: string}, Natures: DexTable, Formats: DexTable}} DexTableData */
 
 const BattleNatures = {
-	adamant: {name:"Adamant", plus:'atk', minus:'spa'},
-	bashful: {name:"Bashful"},
-	bold: {name:"Bold", plus:'def', minus:'atk'},
-	brave: {name:"Brave", plus:'atk', minus:'spe'},
-	calm: {name:"Calm", plus:'spd', minus:'atk'},
-	careful: {name:"Careful", plus:'spd', minus:'spa'},
-	docile: {name:"Docile"},
-	gentle: {name:"Gentle", plus:'spd', minus:'def'},
-	hardy: {name:"Hardy"},
-	hasty: {name:"Hasty", plus:'spe', minus:'def'},
-	impish: {name:"Impish", plus:'def', minus:'spa'},
-	jolly: {name:"Jolly", plus:'spe', minus:'spa'},
-	lax: {name:"Lax", plus:'def', minus:'spd'},
-	lonely: {name:"Lonely", plus:'atk', minus:'def'},
-	mild: {name:"Mild", plus:'spa', minus:'def'},
-	modest: {name:"Modest", plus:'spa', minus:'atk'},
-	naive: {name:"Naive", plus:'spe', minus:'spd'},
-	naughty: {name:"Naughty", plus:'atk', minus:'spd'},
-	quiet: {name:"Quiet", plus:'spa', minus:'spe'},
-	quirky: {name:"Quirky"},
-	rash: {name:"Rash", plus:'spa', minus:'spd'},
-	relaxed: {name:"Relaxed", plus:'def', minus:'spe'},
-	sassy: {name:"Sassy", plus:'spd', minus:'spe'},
-	serious: {name:"Serious"},
-	timid: {name:"Timid", plus:'spe', minus:'atk'},
+	adamant: {name: "Adamant", plus: 'atk', minus: 'spa'},
+	bashful: {name: "Bashful"},
+	bold: {name: "Bold", plus: 'def', minus: 'atk'},
+	brave: {name: "Brave", plus: 'atk', minus: 'spe'},
+	calm: {name: "Calm", plus: 'spd', minus: 'atk'},
+	careful: {name: "Careful", plus: 'spd', minus: 'spa'},
+	docile: {name: "Docile"},
+	gentle: {name: "Gentle", plus: 'spd', minus: 'def'},
+	hardy: {name: "Hardy"},
+	hasty: {name: "Hasty", plus: 'spe', minus: 'def'},
+	impish: {name: "Impish", plus: 'def', minus: 'spa'},
+	jolly: {name: "Jolly", plus: 'spe', minus: 'spa'},
+	lax: {name: "Lax", plus: 'def', minus: 'spd'},
+	lonely: {name: "Lonely", plus: 'atk', minus: 'def'},
+	mild: {name: "Mild", plus: 'spa', minus: 'def'},
+	modest: {name: "Modest", plus: 'spa', minus: 'atk'},
+	naive: {name: "Naive", plus: 'spe', minus: 'spd'},
+	naughty: {name: "Naughty", plus: 'atk', minus: 'spd'},
+	quiet: {name: "Quiet", plus: 'spa', minus: 'spe'},
+	quirky: {name: "Quirky"},
+	rash: {name: "Rash", plus: 'spa', minus: 'spd'},
+	relaxed: {name: "Relaxed", plus: 'def', minus: 'spe'},
+	sassy: {name: "Sassy", plus: 'spd', minus: 'spe'},
+	serious: {name: "Serious"},
+	timid: {name: "Timid", plus: 'spe', minus: 'atk'},
 };
 
 const toId = Data.Tools.getId;
@@ -666,7 +666,7 @@ class ModdedDex {
 	 * @return {AnyObject}
 	 */
 	spreadModify(stats, set) {
-		const modStats = {atk:10, def:10, spa:10, spd:10, spe:10};
+		const modStats = {atk: 10, def: 10, spa: 10, spd: 10, spe: 10};
 		for (let statName in modStats) {
 			let stat = stats[statName];
 			modStats[statName] = Math.floor(Math.floor(2 * stat + set.ivs[statName] + Math.floor(set.evs[statName] / 4)) * set.level / 100 + 5);

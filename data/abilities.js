@@ -3934,7 +3934,7 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon's Defense is raised 2 stages after it is damaged by a Water-type move.",
 		onAfterDamage: function (damage, target, source, effect) {
 			if (effect && effect.type === 'Water') {
-				this.boost({def:2});
+				this.boost({def: 2});
 			}
 		},
 		id: "watercompaction",
@@ -3966,7 +3966,7 @@ exports.BattleAbilities = {
 		shortDesc: "If a physical attack hits this Pokemon, Defense is lowered by 1, Speed is raised by 2.",
 		onAfterDamage: function (damage, target, source, move) {
 			if (move.category === 'Physical') {
-				this.boost({def:-1, spe:2});
+				this.boost({def: -1, spe: 2});
 			}
 		},
 		id: "weakarmor",
