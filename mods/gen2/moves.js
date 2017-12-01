@@ -166,9 +166,9 @@ exports.BattleMovedex = {
 				return this.random(3, 7);
 			},
 			onStart: function (target) {
-				let noEncore = {encore:1, metronome:1, mimic:1, mirrormove:1, sketch:1, sleeptalk:1, struggle:1, transform:1};
+				let noEncore = ['encore', 'metronome', 'mimic', 'mirrormove', 'sketch', 'sleeptalk', 'struggle', 'transform'];
 				let moveIndex = target.moves.indexOf(target.lastMove);
-				if (!target.lastMove || noEncore[target.lastMove] || (target.moveset[moveIndex] && target.moveset[moveIndex].pp <= 0)) {
+				if (!target.lastMove || noEncore.includes(target.lastMove) || (target.moveset[moveIndex] && target.moveset[moveIndex].pp <= 0)) {
 					// it failed
 					this.add('-fail', target);
 					delete target.volatiles['encore'];
@@ -555,10 +555,8 @@ exports.BattleMovedex = {
 			let moves = [];
 			for (let i = 0; i < pokemon.moveset.length; i++) {
 				let move = pokemon.moveset[i].id;
-				let NoSleepTalk = {
-					bide:1, sleeptalk:1,
-				};
-				if (move && !NoSleepTalk[move] && !this.getMove(move).flags['charge']) {
+				let NoSleepTalk = ['bide', 'sleeptalk'];
+				if (move && !NoSleepTalk.includes(move) && !this.getMove(move).flags['charge']) {
 					moves.push(move);
 				}
 			}
@@ -620,14 +618,12 @@ exports.BattleMovedex = {
 					return null;
 				}
 				if (move.category === 'Status') {
-					let SubBlocked = {
-						leechseed:1, lockon:1, mindreader:1, nightmare:1, painsplit:1, sketch:1,
-					};
+					let SubBlocked = ['leechseed', 'lockon', 'mindreader', 'nightmare', 'painsplit', 'sketch'];
 					if (move.id === 'swagger') {
 						// this is safe, move is a copy
 						delete move.volatileStatus;
 					}
-					if (move.status || (move.boosts && move.id !== 'swagger') || move.volatileStatus === 'confusion' || SubBlocked[move.id]) {
+					if (move.status || (move.boosts && move.id !== 'swagger') || move.volatileStatus === 'confusion' || SubBlocked.includes(move.id)) {
 						this.add('-activate', target, 'Substitute', '[block] ' + move.name);
 						return null;
 					}

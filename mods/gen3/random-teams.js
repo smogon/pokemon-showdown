@@ -580,13 +580,13 @@ class RandomGen3Teams extends RandomGen4Teams {
 	randomTeam(side) {
 		let pokemon = [];
 
-		let allowedNFE = {'Scyther':1, 'Vigoroth':1};
+		let allowedNFE = ['Scyther', 'Vigoroth'];
 
 		let pokemonPool = [];
 		for (let id in this.data.FormatsData) {
 			let template = this.getTemplate(id);
 			if (template.gen > 3 || template.isNonstandard || !template.randomBattleMoves) continue;
-			if (template.evos && !allowedNFE[template.species]) {
+			if (template.evos && !allowedNFE.includes(template.species)) {
 				let invalid = false;
 				for (let i = 0; i < template.evos.length; i++) {
 					if (this.getTemplate(template.evos[i]).gen <= 3) {

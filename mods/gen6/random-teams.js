@@ -66,16 +66,9 @@ class RandomGen6Teams extends RandomTeams {
 		}
 
 		// These moves can be used even if we aren't setting up to use them:
-		let SetupException = {
-			closecombat:1, extremespeed:1, suckerpunch:1, superpower:1,
-			dracometeor:1, leafstorm:1, overheat:1,
-		};
-		let counterAbilities = {
-			'Adaptability':1, 'Contrary':1, 'Hustle':1, 'Iron Fist':1, 'Skill Link':1,
-		};
-		let ateAbilities = {
-			'Aerilate':1, 'Pixilate':1, 'Refrigerate':1,
-		};
+		let SetupException = ['closecombat', 'extremespeed', 'suckerpunch', 'superpower', 'dracometeor', 'leafstorm', 'overheat'];
+		let counterAbilities = ['Adaptability', 'Contrary', 'Hustle', 'Iron Fist', 'Skill Link'];
+		let ateAbilities = ['Aerilate', 'Pixilate', 'Refrigerate'];
 
 		let hasMove, counter;
 
@@ -492,7 +485,7 @@ class RandomGen6Teams extends RandomTeams {
 				// This move doesn't satisfy our setup requirements:
 				if ((move.category === 'Physical' && counter.setupType === 'Special') || (move.category === 'Special' && counter.setupType === 'Physical')) {
 					// Reject STABs last in case the setup type changes later on
-					if (!SetupException[moveid] && (!hasType[move.type] || counter.stab > 1 || counter[move.category] < 2)) rejected = true;
+					if (!SetupException.includes(moveid) && (!hasType[move.type] || counter.stab > 1 || counter[move.category] < 2)) rejected = true;
 				}
 				if (counter.setupType && !isSetup && counter.setupType !== 'Mixed' && move.category !== counter.setupType && counter[counter.setupType] < 2 && !hasMove['batonpass'] && moveid !== 'rest' && moveid !== 'sleeptalk') {
 					// Mono-attacking with setup and RestTalk is allowed
@@ -626,10 +619,10 @@ class RandomGen6Teams extends RandomTeams {
 			let rejectAbility;
 			do {
 				rejectAbility = false;
-				if (ability in counterAbilities) {
+				if (counterAbilities.includes(ability)) {
 					// Adaptability, Contrary, Hustle, Iron Fist, Skill Link
 					rejectAbility = !counter[toId(ability)];
-				} else if (ability in ateAbilities) {
+				} else if (ateAbilities.includes(ability)) {
 					rejectAbility = !counter['Normal'];
 				} else if (ability === 'Blaze') {
 					rejectAbility = !counter['Fire'];
