@@ -526,7 +526,7 @@ exports.BattleMovedex = {
 	},
 	metronome: {
 		inherit: true,
-		noMetronome: {metronome:1, struggle:1},
+		noMetronome: ['metronome', 'struggle'],
 		secondary: false,
 		target: "self",
 		type: "Normal",
