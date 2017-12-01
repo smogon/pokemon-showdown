@@ -148,8 +148,8 @@ exports.BattleItems = {
 			}
 		},
 		onFoeBasePower: function (basePower, attacker, defender, move) {
-			let GossamerWingUsers = {"Butterfree":1, "Masquerain":1, "Beautifly":1, "Mothim":1, "Vivillon":1};
-			if (GossamerWingUsers[defender.template.species]) {
+			let GossamerWingUsers = ["Butterfree", "Masquerain", "Beautifly", "Mothim", "Vivillon"];
+			if (GossamerWingUsers.includes(defender.template.species)) {
 				if (move.type === 'Rock' || move.type === 'Electric' || move.type === 'Ice') {
 					this.add('-message', "The attack was weakened by GoassamerWing!");
 					return basePower / 2;
@@ -157,16 +157,16 @@ exports.BattleItems = {
 			}
 		},
 		onDamage: function (damage, defender, attacker, effect) {
-			let GossamerWingUsers = {"Butterfree":1, "Masquerain":1, "Beautifly":1, "Mothim":1, "Vivillon":1};
-			if (GossamerWingUsers[defender.template.species]) {
+			let GossamerWingUsers = ["Butterfree", "Masquerain", "Beautifly", "Mothim", "Vivillon"];
+			if (GossamerWingUsers.includes(defender.template.species)) {
 				if (effect && effect.id === 'stealthrock') {
 					return damage / 2;
 				}
 			}
 		},
 		onAfterMoveSecondarySelf: function (source, target, move) {
-			let GossamerWingUsers = {"Butterfree":1, "Masquerain":1, "Beautifly":1, "Mothim":1, "Vivillon":1, "Venomoth":1, "Volcarona":1, "Dustox": 1, "Lilligant":1};
-			if (move && move.effectType === 'Move' && move.category === 'Status' && GossamerWingUsers[source.template.species]) {
+			let GossamerWingUsers = ["Butterfree", "Masquerain", "Beautifly", "Mothim", "Vivillon"];
+			if (move && move.effectType === 'Move' && move.category === 'Status' && GossamerWingUsers.includes(source.template.species)) {
 				this.heal(source.maxhp / 16);
 			}
 		},
