@@ -2420,19 +2420,17 @@ class Battle extends Dex.ModdedDex {
 		}
 
 		if (this.gen <= 1) {
-			// in gen 1, fainting skips the rest of the turn, including residuals
+			// in gen 1, fainting skips the rest of the turn
+			// residuals don't exist in gen 1
 			this.queue = [];
 		} else if (this.gen <= 3 && this.gameType === 'singles') {
 			// in gen 3 or earlier, fainting in singles skips to residuals
-			for (let i = 0; i < this.p1.active.length; i++) {
-				this.cancelMove(this.p1.active[i]);
-				// Stop Pursuit from running
-				this.p1.active[i].moveThisTurn = true;
-			}
-			for (let i = 0; i < this.p2.active.length; i++) {
-				this.cancelMove(this.p2.active[i]);
-				// Stop Pursuit from running
-				this.p2.active[i].moveThisTurn = true;
+			for (const side of this.sides) {
+				for (const pokemon of side.active) {
+					this.cancelDecision(pokemon);
+					// Stop Pursuit from running
+					pokemon.moveThisTurn = true;
+				}
 			}
 		}
 
