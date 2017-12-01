@@ -117,6 +117,122 @@ exports.BattleScripts = {
 		this.singleEvent('AfterMove', move, null, pokemon, target, move);
 		if (!move.selfSwitch && target.hp > 0) this.runEvent('AfterMoveSelf', pokemon, target, move);
 	},
+	tryMoveHit: function (target, pokemon, move, spreadHit) {
+		let positiveBoostTable = [1, 1.33, 1.66, 2, 2.33, 2.66, 3];
+		let negativeBoostTable = [1, 0.75, 0.6, 0.5, 0.43, 0.36, 0.33];
+		let doSelfDestruct = true;
+		let damage = 0;
+
+		if (move.selfdestruct && doSelfDestruct) {
+			this.faint(pokemon, pokemon, move);
+		}
+		if (!this.singleEvent('Try', move, null, pokemon, target, move)) {
+			return false;
+		}
+		// First, check if the Pokémon is immune to this move.
+		if (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type] && !target.runImmunity(move.type, true)) {
+			return false;
+		}
+		let accuracy = move.accuracy;
+		if (move.alwaysHit) {
+			accuracy = true;
+		} else {
+			accuracy = this.runEvent('Accuracy', target, pokemon, move, accuracy);
+		}
+		// Now, let's calculate the accuracy.
+		if (accuracy !== true) {
+			accuracy = Math.floor(accuracy * 255 / 100);
+			if (move.ohko) {
+				if (pokemon.level >= target.level) {
+					accuracy += (pokemon.level - target.level) * 2;
+					accuracy = Math.min(accuracy, 255);
+				} else {
+					this.add('-immune', target, '[ohko]');
+					return false;
+				}
+			}
+			if (!move.ignoreAccuracy) {
+				if (pokemon.boosts.accuracy > 0) {
+					accuracy *= positiveBoostTable[pokemon.boosts.accuracy];
+				} else {
+					accuracy *= negativeBoostTable[-pokemon.boosts.accuracy];
+				}
+			}
+			if (!move.ignoreEvasion) {
+				if (target.boosts.evasion > 0 && !move.ignorePositiveEvasion) {
+					accuracy *= negativeBoostTable[target.boosts.evasion];
+				} else if (target.boosts.evasion < 0) {
+					accuracy *= positiveBoostTable[-target.boosts.evasion];
+				}
+			}
+			accuracy = Math.min(Math.floor(accuracy), 255);
+			accuracy = Math.max(accuracy, 1);
+		} else {
+			accuracy = this.runEvent('Accuracy', target, pokemon, move, accuracy);
+		}
+		accuracy = this.runEvent('ModifyAccuracy', target, pokemon, move, accuracy);
+		if (accuracy !== true) accuracy = Math.max(accuracy, 0);
+		if (move.alwaysHit) {
+			accuracy = true;
+		} else {
+			accuracy = this.runEvent('Accuracy', target, pokemon, move, accuracy);
+		}
+		if (accuracy !== true && accuracy !== 255 && this.random(256) >= accuracy) {
+			this.attrLastMove('[miss]');
+			this.add('-miss', pokemon);
+			damage = false;
+			return damage;
+		}
+		move.totalDamage = 0;
+		pokemon.lastDamage = 0;
+		if (move.multihit) {
+			let hits = move.multihit;
+			if (hits.length) {
+				if (hits[0] === 2 && hits[1] === 5) {
+					hits = [2, 2, 2, 3, 3, 3, 4, 5][this.random(8)];
+				} else {
+					hits = this.random(hits[0], hits[1] + 1);
+				}
+			}
+			hits = Math.floor(hits);
+			let nullDamage = true;
+			let moveDamage;
+
+			let isSleepUsable = move.sleepUsable || this.getMove(move.sourceEffect).sleepUsable;
+			let i;
+			for (i = 0; i < hits && target.hp && pokemon.hp; i++) {
+				if (pokemon.status === 'slp' && !isSleepUsable) break;
+				moveDamage = this.moveHit(target, pokemon, move);
+				if (moveDamage === false) break;
+				if (nullDamage && (moveDamage || moveDamage === 0 || moveDamage === undefined)) nullDamage = false;
+				damage = (moveDamage || 0);
+				move.totalDamage += damage;
+				this.eachEvent('Update');
+			}
+			if (i === 0) return true;
+			if (nullDamage) damage = false;
+			this.add('-hitcount', target, i);
+		} else {
+			damage = this.moveHit(target, pokemon, move);
+			move.totalDamage = damage;
+		}
+		if (move.category !== 'Status') {
+			// FIXME: The stored damage should be calculated ignoring Substitute.
+			// https://github.com/Zarel/Pokemon-Showdown/issues/2598
+			target.gotAttacked(move, damage, pokemon);
+		}
+		if (move.ohko) this.add('-ohko');
+
+		if (!move.negateSecondary) {
+			this.singleEvent('AfterMoveSecondary', move, null, target, pokemon, move);
+			this.runEvent('AfterMoveSecondary', target, pokemon, move);
+		}
+
+		if (move.recoil && move.totalDamage) {
+			this.damage(this.calcRecoilDamage(move.totalDamage, move), pokemon, target, 'recoil');
+		}
+		return damage;
+	},
 	moveHit: function (target, pokemon, move, moveData, isSecondary, isSelf) {
 		let damage;
 		move = this.getMoveCopy(move);
