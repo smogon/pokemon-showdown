@@ -46,9 +46,9 @@ exports.BattleScripts = {
 		if (!willTryMove) {
 			this.runEvent('MoveAborted', pokemon, target, move);
 			this.clearActiveMove(true);
-			// The event 'BeforeMove' could have returned false or null
+			// The event 'BeforeMove' could have returned false or undefined
 			// false indicates that this counts as a move failing for the purpose of calculating Stomping Tantrum's base power
-			// null indicates the opposite, as the Pokemon didn't have an option to choose anything
+			// undefined indicates the opposite, as the Pokemon didn't have an option to choose anything
 			pokemon.moveThisTurnSucceeded = willTryMove;
 			return;
 		}

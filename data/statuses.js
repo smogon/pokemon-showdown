@@ -321,7 +321,7 @@ exports.BattleStatuses = {
 		onBeforeMove: function (pokemon) {
 			this.add('cant', pokemon, 'recharge');
 			pokemon.removeVolatile('mustrecharge');
-			return null;
+			return undefined;
 		},
 		onLockMove: function (pokemon) {
 			this.add('-mustrecharge', pokemon);

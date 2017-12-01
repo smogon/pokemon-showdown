@@ -1027,7 +1027,7 @@ exports.BattleMovedex = {
 					return;
 				}
 				this.add('-activate', target, 'move: Protect');
-				source.moveThisTurnSucceeded = true;
+				source.moveThisTurnResult = true;
 				let lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
 					// Outrage counter is reset
@@ -2857,7 +2857,7 @@ exports.BattleMovedex = {
 			onTryHit: function (target, source, move) {
 				if (move && (move.target === 'self' || move.category !== 'Status')) return;
 				this.add('-activate', target, 'move: Crafty Shield');
-				source.moveThisTurnSucceeded = true;
+				source.moveThisTurnResult = true;
 				return null;
 			},
 		},
@@ -8854,7 +8854,7 @@ exports.BattleMovedex = {
 					return;
 				}
 				this.add('-activate', target, 'move: Protect');
-				source.moveThisTurnSucceeded = true;
+				source.moveThisTurnResult = true;
 				let lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
 					// Outrage counter is reset
@@ -9902,7 +9902,7 @@ exports.BattleMovedex = {
 				}
 				if (move && (move.target === 'self' || move.category === 'Status')) return;
 				this.add('-activate', target, 'move: Mat Block', move.name);
-				source.moveThisTurnSucceeded = true;
+				source.moveThisTurnResult = true;
 				let lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
 					// Outrage counter is reset
@@ -12347,7 +12347,7 @@ exports.BattleMovedex = {
 					return;
 				}
 				this.add('-activate', target, 'move: Protect');
-				source.moveThisTurnSucceeded = true;
+				source.moveThisTurnResult = true;
 				let lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
 					// Outrage counter is reset
@@ -12863,7 +12863,7 @@ exports.BattleMovedex = {
 					return;
 				}
 				this.add('-activate', target, 'move: Quick Guard');
-				source.moveThisTurnSucceeded = true;
+				source.moveThisTurnResult = true;
 				let lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
 					// Outrage counter is reset
@@ -15534,7 +15534,7 @@ exports.BattleMovedex = {
 					return;
 				}
 				this.add('-activate', target, 'move: Protect');
-				source.moveThisTurnSucceeded = true;
+				source.moveThisTurnResult = true;
 				let lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
 					// Outrage counter is reset
@@ -16231,7 +16231,7 @@ exports.BattleMovedex = {
 		flags: {contact: 1, protect: 1, mirror: 1},
 		onBasePowerPriority: 4,
 		onBasePower: function (basePower, pokemon) {
-			if (pokemon.moveLastTurnSucceeded === false) {
+			if (pokemon.moveLastTurnResult === false) {
 				return this.chainModify(2);
 			}
 		},
@@ -18720,7 +18720,7 @@ exports.BattleMovedex = {
 					return;
 				}
 				this.add('-activate', target, 'move: Wide Guard');
-				source.moveThisTurnSucceeded = true;
+				source.moveThisTurnResult = true;
 				let lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
 					// Outrage counter is reset

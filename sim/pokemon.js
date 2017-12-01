@@ -90,8 +90,8 @@ class Pokemon {
 		this.moveThisTurn = '';
 
 		// For Stomping Tantrum
-		this.moveLastTurnSucceeded = null;
-		this.moveThisTurnSucceeded = null;
+		this.moveLastTurnResult = undefined;
+		this.moveThisTurnResult = undefined;
 
 		this.lastDamage = 0;
 		this.lastAttackedBy = null;

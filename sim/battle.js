@@ -1527,8 +1527,8 @@ class Battle extends Dex.ModdedDex {
 				pokemon.moveThisTurn = '';
 				pokemon.usedItemThisTurn = false;
 				pokemon.newlySwitched = false;
-				pokemon.moveLastTurnSucceeded = pokemon.moveThisTurnSucceeded;
-				pokemon.moveThisTurnSucceeded = null;
+				pokemon.moveLastTurnResult = pokemon.moveThisTurnResult;
+				pokemon.moveThisTurnResult = undefined;
 
 				pokemon.maybeDisabled = false;
 				for (let entry of pokemon.moveset) {
