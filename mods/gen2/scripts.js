@@ -130,7 +130,8 @@ exports.BattleScripts = {
 			return false;
 		}
 		// First, check if the Pokémon is immune to this move.
-		if (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type] && !target.runImmunity(move.type, true)) {
+		const ignoreImmunity = move.ignoreImmunity === true || (move.ignoreImmunity && move.ignoreImmunity[move.type]);
+		if (!ignoreImmunity && !target.runImmunity(move.type, true)) {
 			return false;
 		}
 		let accuracy = move.accuracy;
