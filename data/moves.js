@@ -12744,12 +12744,11 @@ exports.BattleMovedex = {
 				this.debug('Pursuit start');
 				let alreadyAdded = false;
 				for (const source of this.effectData.sources) {
-					if (!this.willMove(source)) continue;
+					if (!this.cancelMove(source)) continue;
 					if (!alreadyAdded) {
 						this.add('-activate', pokemon, 'move: Pursuit');
 						alreadyAdded = true;
 					}
-					this.cancelMove(source);
 					// Run through each decision in queue to check if the Pursuit user is supposed to Mega Evolve this turn.
 					// If it is, then Mega Evolve before moving.
 					if (source.canMegaEvo || source.canUltraBurst) {
