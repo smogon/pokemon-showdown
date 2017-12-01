@@ -129,11 +129,21 @@ exports.BattleScripts = {
 		if (!this.singleEvent('Try', move, null, pokemon, target, move)) {
 			return false;
 		}
-		// First, check if the Pokémon is immune to this move.
-		const ignoreImmunity = move.ignoreImmunity === true || (move.ignoreImmunity && move.ignoreImmunity[move.type]);
-		if (!ignoreImmunity && !target.runImmunity(move.type, true)) {
+
+		if (move.ignoreImmunity === undefined) {
+			move.ignoreImmunity = (move.category === 'Status');
+		}
+
+		if (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type] && !target.runImmunity(move.type, true)) {
 			return false;
 		}
+
+		let hitResult = this.runEvent('TryHit', target, pokemon, move);
+		if (!hitResult) {
+			if (hitResult === false) this.add('-fail', target);
+			return false;
+		}
+
 		let accuracy = move.accuracy;
 		if (move.alwaysHit) {
 			accuracy = true;
