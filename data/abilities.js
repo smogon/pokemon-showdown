@@ -101,8 +101,7 @@ exports.BattleAbilities = {
 		onBasePower: function (basePower, pokemon) {
 			let boosted = true;
 			let allActives = pokemon.side.active.concat(pokemon.side.foe.active);
-			for (let i = 0; i < allActives.length; i++) {
-				let target = allActives[i];
+			for (const target of allActives) {
 				if (target === pokemon) continue;
 				if (this.willMove(target)) {
 					boosted = false;

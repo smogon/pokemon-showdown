@@ -12744,7 +12744,7 @@ exports.BattleMovedex = {
 				this.debug('Pursuit start');
 				let alreadyAdded = false;
 				for (const source of this.effectData.sources) {
-					if (source.moveThisTurn || source.fainted) continue;
+					if (!this.willMove(source)) continue;
 					if (!alreadyAdded) {
 						this.add('-activate', pokemon, 'move: Pursuit');
 						alreadyAdded = true;

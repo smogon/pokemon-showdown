@@ -44,8 +44,6 @@ exports.BattleScripts = {
 		} */
 		if (!this.runEvent('BeforeMove', pokemon, target, move)) {
 			this.runEvent('MoveAborted', pokemon, target, move);
-			// Prevent Pursuit from running again against a slower U-turn/Volt Switch/Parting Shot
-			pokemon.moveThisTurn = true;
 			this.clearActiveMove(true);
 			return;
 		}
