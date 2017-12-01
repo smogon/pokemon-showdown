@@ -2427,7 +2427,13 @@ class Battle extends Dex.ModdedDex {
 			// in gen 3 or earlier, fainting in singles skips to residuals
 			for (const side of this.sides) {
 				for (const pokemon of side.active) {
-					this.cancelDecision(pokemon);
+					if (this.gen <= 2) {
+						// in gen 2, fainting skips moves only
+						this.cancelMove(pokemon);
+					} else {
+						// in gen 3, fainting skips all moves and switches
+						this.cancelDecision(pokemon);
+					}
 					// Stop Pursuit from running
 					pokemon.moveThisTurn = true;
 				}
