@@ -147,8 +147,8 @@ exports.BattleAbilities = {
 			let target = pokemon.side.foe.randomActive();
 			if (!target || target.fainted) return;
 			let ability = this.getAbility(target.ability);
-			let bannedAbilities = {forecast:1, multitype:1, trace:1};
-			if (bannedAbilities[target.ability]) {
+			let bannedAbilities = ['forecast', 'multitype', 'trace'];
+			if (bannedAbilities.includes(target.ability)) {
 				return;
 			}
 			if (pokemon.setAbility(ability)) {

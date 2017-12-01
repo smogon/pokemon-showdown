@@ -224,9 +224,9 @@ exports.BattleMovedex = {
 				return this.random(3, 7);
 			},
 			onStart: function (target) {
-				let noEncore = {encore:1, mimic:1, mirrormove:1, sketch:1, struggle:1, transform:1};
+				let noEncore = ['encore', 'mimic', 'mirrormove', 'sketch', 'struggle', 'transform'];
 				let moveIndex = target.moves.indexOf(target.lastMove);
-				if (!target.lastMove || noEncore[target.lastMove] || (target.moveset[moveIndex] && target.moveset[moveIndex].pp <= 0)) {
+				if (!target.lastMove || noEncore.includes(target.lastMove) || (target.moveset[moveIndex] && target.moveset[moveIndex].pp <= 0)) {
 					// it failed
 					this.add('-fail', target);
 					delete target.volatiles['encore'];
@@ -305,8 +305,8 @@ exports.BattleMovedex = {
 		category: "Physical",
 		onModifyMove: function (move, pokemon) {
 			move.type = pokemon.hpType || 'Dark';
-			let specialTypes = {Fire:1, Water:1, Grass:1, Ice:1, Electric:1, Dark:1, Psychic:1, Dragon:1};
-			move.category = specialTypes[move.type] ? 'Special' : 'Physical';
+			let specialTypes = ['Fire', 'Water', 'Grass', 'Ice', 'Electric', 'Dark', 'Psychic', 'Dragon'];
+			move.category = specialTypes.includes(move.type) ? 'Special' : 'Physical';
 		},
 	},
 	highjumpkick: {
@@ -377,8 +377,8 @@ exports.BattleMovedex = {
 		inherit: true,
 		onTryHit: function () { },
 		onHit: function (pokemon) {
-			let noMirror = {assist:1, curse:1, doomdesire:1, focuspunch:1, futuresight:1, magiccoat:1, metronome:1, mimic:1, mirrormove:1, naturepower:1, psychup:1, roleplay:1, sketch:1, sleeptalk:1, spikes:1, spitup:1, taunt:1, teeterdance:1, transform:1};
-			if (!pokemon.lastAttackedBy || !pokemon.lastAttackedBy.pokemon.lastMove || noMirror[pokemon.lastAttackedBy.move] || !pokemon.lastAttackedBy.pokemon.hasMove(pokemon.lastAttackedBy.move)) {
+			let noMirror = ['assist', 'curse', 'doomdesire', 'focuspunch', 'futuresight', 'magiccoat', 'metronome', 'mimic', 'mirrormove', 'naturepower', 'psychup', 'roleplay', 'sketch', 'sleeptalk', 'spikes', 'spitup', 'taunt', 'teeterdance', 'transform'];
+			if (!pokemon.lastAttackedBy || !pokemon.lastAttackedBy.pokemon.lastMove || noMirror.includes(pokemon.lastAttackedBy.move) || !pokemon.lastAttackedBy.pokemon.hasMove(pokemon.lastAttackedBy.move)) {
 				return false;
 			}
 			this.useMove(pokemon.lastAttackedBy.move, pokemon);
@@ -437,10 +437,8 @@ exports.BattleMovedex = {
 			for (let i = 0; i < pokemon.moveset.length; i++) {
 				let move = pokemon.moveset[i].id;
 				let pp = pokemon.moveset[i].pp;
-				let NoSleepTalk = {
-					assist:1, bide:1, focuspunch:1, metronome:1, mirrormove:1, sleeptalk:1, uproar:1,
-				};
-				if (move && !(NoSleepTalk[move] || this.getMove(move).flags['charge'])) {
+				let NoSleepTalk = ['assist', 'bide', 'focuspunch', 'metronome', 'mirrormove', 'sleeptalk', 'uproar'];
+				if (move && !(NoSleepTalk.includes(move) || this.getMove(move).flags['charge'])) {
 					moves.push({move: move, pp: pp});
 				}
 			}

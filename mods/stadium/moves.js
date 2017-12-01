@@ -129,10 +129,8 @@ exports.BattleMovedex = {
 					return null;
 				}
 				if (move.category === 'Status') {
-					let SubBlocked = {
-						leechseed:1, lockon:1, mindreader:1, nightmare:1,
-					};
-					if (move.status || move.boosts || move.volatileStatus === 'confusion' || SubBlocked[move.id]) {
+					let SubBlocked = ['leechseed', 'lockon', 'mindreader', 'nightmare'];
+					if (move.status || move.boosts || move.volatileStatus === 'confusion' || SubBlocked.includes(move.id)) {
 						this.add('-activate', target, 'Substitute', '[block] ' + move.name);
 						return null;
 					}

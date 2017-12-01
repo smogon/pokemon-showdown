@@ -119,9 +119,9 @@ class RandomGen1Teams extends RandomGen2Teams {
 		let pokemonLeft = 0;
 		let pokemon = [];
 
-		let handicapMons = {'magikarp':1, 'weedle':1, 'kakuna':1, 'caterpie':1, 'metapod':1};
-		let nuTiers = {'UU':1, 'BL':1, 'NFE':1, 'LC':1, 'NU':1};
-		let uuTiers = {'NFE':1, 'UU':1, 'BL':1, 'NU':1};
+		let handicapMons = ['magikarp', 'weedle', 'kakuna', 'caterpie', 'metapod'];
+		let nuTiers = ['UU', 'BL', 'NFE', 'LC', 'NU'];
+		let uuTiers = ['NFE', 'UU', 'BL', 'NU'];
 
 		let n = 1;
 		let pokemonPool = [];
@@ -144,7 +144,7 @@ class RandomGen1Teams extends RandomGen2Teams {
 
 			// Bias the tiers so you get less shitmons and only one of the two Ubers.
 			// If you have a shitmon, don't get another
-			if ((template.speciesid in handicapMons) && hasShitmon) continue;
+			if (handicapMons.includes(template.speciesid) && hasShitmon) continue;
 
 			let tier = template.tier;
 			switch (tier) {
@@ -160,7 +160,7 @@ class RandomGen1Teams extends RandomGen2Teams {
 				break;
 			default:
 				// OUs are fine. Otherwise 50% chance to skip mon if already 4 or more non-OUs.
-				if (uuTiers[tier] && pokemonPool.length > 1 && (nuCount > 3 && this.random(2) >= 1)) continue;
+				if (uuTiers.includes(tier) && pokemonPool.length > 1 && (nuCount > 3 && this.random(2) >= 1)) continue;
 			}
 
 			let skip = false;
@@ -215,12 +215,12 @@ class RandomGen1Teams extends RandomGen2Teams {
 			// Increment tier bias counters.
 			if (tier === 'Uber') {
 				uberCount++;
-			} else if (nuTiers[tier]) {
+			} else if (nuTiers.includes(tier)) {
 				nuCount++;
 			}
 
 			// Is it Magikarp or one of the useless bugs?
-			if (template.speciesid in handicapMons) hasShitmon = true;
+			if (handicapMons.includes(template.speciesid)) hasShitmon = true;
 		}
 
 		return pokemon;
@@ -241,13 +241,9 @@ class RandomGen1Teams extends RandomGen2Teams {
 		// let setupType = '';
 
 		// Moves that boost Attack:
-		let PhysicalSetup = {
-			swordsdance:1, sharpen:1,
-		};
+		let PhysicalSetup = ['swordsdance', 'sharpen'];
 		// Moves which boost Special Attack:
-		let SpecialSetup = {
-			amnesia:1, growth:1,
-		};
+		let SpecialSetup = ['amnesia', 'growth'];
 
 		// Either add all moves or add none
 		if (template.comboMoves) {
@@ -285,10 +281,10 @@ class RandomGen1Teams extends RandomGen2Teams {
 					if (!move.damage && !move.damageCallback) {
 						counter[move.category]++;
 					}
-					if (PhysicalSetup[moveid]) {
+					if (PhysicalSetup.includes(moveid)) {
 						counter['physicalsetup']++;
 					}
-					if (SpecialSetup[moveid]) {
+					if (SpecialSetup.includes(moveid)) {
 						counter['specialsetup']++;
 					}
 				}

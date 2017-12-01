@@ -526,7 +526,7 @@ exports.BattleMovedex = {
 	},
 	metronome: {
 		inherit: true,
-		noMetronome: {metronome:1, struggle:1},
+		noMetronome: ['metronome', 'struggle'],
 		secondary: false,
 		target: "self",
 		type: "Normal",
@@ -804,10 +804,8 @@ exports.BattleMovedex = {
 				if (move.category === 'Status') {
 					// In gen 1 it only blocks:
 					// poison, confusion, secondary effect confusion, stat reducing moves and Leech Seed.
-					let SubBlocked = {
-						lockon:1, meanlook:1, mindreader:1, nightmare:1,
-					};
-					if (move.status === 'psn' || move.status === 'tox' || (move.boosts && target !== source) || move.volatileStatus === 'confusion' || SubBlocked[move.id]) {
+					let SubBlocked = ['lockon', 'meanlook', 'mindreader', 'nightmare'];
+					if (move.status === 'psn' || move.status === 'tox' || (move.boosts && target !== source) || move.volatileStatus === 'confusion' || SubBlocked.includes(move.id)) {
 						return false;
 					}
 					return;

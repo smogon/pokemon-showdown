@@ -53,20 +53,12 @@ class RandomGen4Teams extends RandomGen5Teams {
 		}
 
 		// These moves can be used even if we aren't setting up to use them:
-		let SetupException = {
-			suckerpunch:1, dracometeor:1, overheat:1,
-		};
-		let counterAbilities = {
-			'Adaptability':1, 'Hustle':1, 'Iron Fist':1, 'Skill Link':1,
-		};
+		let SetupException = ['suckerpunch', 'dracometeor', 'overheat'];
+		let counterAbilities = ['Adaptability', 'Hustle', 'Iron Fist', 'Skill Link'];
 
 		// Give recovery moves priority over certain other defensive status moves
-		let recoveryMoves = {
-			'healorder':1, 'milkdrink':1, 'moonlight':1, 'morningsun':1, 'painsplit':1, 'recover':1, 'rest':1, 'roost':1, 'slackoff':1, 'softboiled':1, 'synthesis':1, 'wish':1,
-		};
-		let defensiveStatusMoves = {
-			'aromatherapy':1, 'haze':1, 'healbell':1, 'roar':1, 'whirlwind':1, 'willowisp':1, 'yawn':1,
-		};
+		let recoveryMoves = ['healorder', 'milkdrink', 'moonlight', 'morningsun', 'painsplit', 'recover', 'rest', 'roost', 'slackoff', 'softboiled', 'synthesis', 'wish'];
+		let defensiveStatusMoves = ['aromatherapy', 'haze', 'healbell', 'roar', 'whirlwind', 'willowisp', 'yawn'];
 
 		let hasMove, counter;
 
@@ -163,7 +155,7 @@ class RandomGen4Teams extends RandomGen5Teams {
 					break;
 				case 'explosion': case 'selfdestruct':
 					if (hasType['Normal'] && counter.stab < 2 || counter.setupType === 'Special') rejected = true;
-					if (moves.some(id => !!recoveryMoves[id] || !!defensiveStatusMoves[id]) || hasMove['batonpass'] || hasMove['protect'] || hasMove['substitute']) rejected = true;
+					if (moves.some(id => recoveryMoves.includes(id) || defensiveStatusMoves.includes(id)) || hasMove['batonpass'] || hasMove['protect'] || hasMove['substitute']) rejected = true;
 					break;
 				case 'foresight': case 'roar': case 'whirlwind':
 					if (counter.setupType && !hasAbility['Speed Boost']) rejected = true;
@@ -350,13 +342,13 @@ class RandomGen4Teams extends RandomGen5Teams {
 				// This move doesn't satisfy our setup requirements:
 				if ((move.category === 'Physical' && counter.setupType === 'Special') || (move.category === 'Special' && counter.setupType === 'Physical')) {
 					// Reject STABs last in case the setup type changes later on
-					if (!SetupException[moveid] && (!hasType[move.type] || counter.stab > 1 || counter[move.category] < 2)) rejected = true;
+					if (!SetupException.includes(moveid) && (!hasType[move.type] || counter.stab > 1 || counter[move.category] < 2)) rejected = true;
 				}
 				if (counter.setupType && !isSetup && move.category !== counter.setupType && counter[counter.setupType] < 2 && !hasMove['batonpass']) {
 					// Mono-attacking with setup and RestTalk or recovery + status healing is allowed
 					if (moveid !== 'rest' && moveid !== 'sleeptalk' &&
-						!(!!recoveryMoves[moveid] && (hasMove['healbell'] || hasMove['refresh'])) &&
-						!((moveid === 'healbell' || moveid === 'refresh') && moves.some(id => !!recoveryMoves[id]))) {
+						!(recoveryMoves.includes(moveid) && (hasMove['healbell'] || hasMove['refresh'])) &&
+						!((moveid === 'healbell' || moveid === 'refresh') && moves.some(id => !!recoveryMoves.includes(id)))) {
 						// Reject Status moves only if there is nothing else to reject
 						if (move.category !== 'Status' || counter[counter.setupType] + counter.Status > 3 && counter['physicalsetup'] + counter['specialsetup'] < 2) rejected = true;
 					}
@@ -368,8 +360,8 @@ class RandomGen4Teams extends RandomGen5Teams {
 
 				// Reject defensive status moves if a reliable recovery move is available but not selected.
 				// Toxic is only defensive if used with another status move other than Protect (Toxic + 3 attacks and Toxic + Protect are ok).
-				if ((!!defensiveStatusMoves[moveid] || moveid === 'toxic' && ((counter.Status > 1 && !hasMove['protect']) || counter.Status > 2)) &&
-					!moves.some(id => !!recoveryMoves[id]) && movePool.some(id => !!recoveryMoves[id])) {
+				if ((defensiveStatusMoves.includes(moveid) || moveid === 'toxic' && ((counter.Status > 1 && !hasMove['protect']) || counter.Status > 2)) &&
+					!moves.some(id => recoveryMoves.includes(id)) && movePool.some(id => recoveryMoves.includes(id))) {
 					rejected = true;
 				}
 
@@ -392,7 +384,7 @@ class RandomGen4Teams extends RandomGen5Teams {
 					(template.requiredMove && movePool.includes(toId(template.requiredMove)))) &&
 					(counter['physicalsetup'] + counter['specialsetup'] < 2 && (!counter.setupType || (move.category !== counter.setupType && move.category !== 'Status') || counter[counter.setupType] + counter.Status > 3))) {
 					// Reject Status or non-STAB
-					if (!isSetup && !move.weather && moveid !== 'judgment' && !recoveryMoves[moveid] && moveid !== 'sleeptalk') {
+					if (!isSetup && !move.weather && moveid !== 'judgment' && !recoveryMoves.includes(moveid) && moveid !== 'sleeptalk') {
 						if (move.category === 'Status' || !hasType[move.type] || (move.basePower && move.basePower < 40 && !move.multihit)) rejected = true;
 					}
 				}
@@ -464,7 +456,7 @@ class RandomGen4Teams extends RandomGen5Teams {
 			}
 
 			let rejectAbility = false;
-			if (ability in counterAbilities) {
+			if (counterAbilities.includes(ability)) {
 				// Adaptability, Hustle, Iron Fist, Skill Link
 				rejectAbility = !counter[toId(ability)];
 			} else if (ability === 'Blaze') {
