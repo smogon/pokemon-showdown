@@ -79,9 +79,15 @@ class Pokemon {
 		this.status = '';
 		this.position = 0;
 
+		/**
+		 * If the switch is called by an effect with a special switch
+		 * message, like U-turn or Baton Pass, this will be the fullname of
+		 * the calling effect.
+		 * @type {boolean | string}
+		 */
 		this.switchFlag = false;
 		this.forceSwitchFlag = false;
-		this.switchCopyFlag = '';
+		this.switchCopyFlag = false;
 		/**@type {?number} */
 		this.draggedIn = null;
 

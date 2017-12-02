@@ -772,7 +772,7 @@ exports.BattleScripts = {
 			}
 		}
 		if (move.selfSwitch && pokemon.hp) {
-			pokemon.switchFlag = move.selfSwitch;
+			pokemon.switchFlag = move.fullname;
 		}
 		return damage;
 	},
