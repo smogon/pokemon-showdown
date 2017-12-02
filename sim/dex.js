@@ -452,6 +452,13 @@ class ModdedDex {
 		if (name && typeof name !== 'string') {
 			return name;
 		}
+		if (name && name.startsWith('move:')) {
+			return this.getMove(name.slice(5));
+		} else if (name && name.startsWith('item:')) {
+			return this.getItem(name.slice(5));
+		} else if (name && name.startsWith('ability:')) {
+			return this.getAbility(name.slice(8));
+		}
 		let id = toId(name);
 		let effect;
 		if (id && this.data.Statuses.hasOwnProperty(id)) {
