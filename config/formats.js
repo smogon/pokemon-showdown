@@ -394,13 +394,14 @@ exports.Formats = [
 	{
 		name: "[Gen 7] Partners in Crime",
 		desc: [
+			"Doubles-based metagame where both active ally Pok&eacute;mon share abilities and moves.",
 			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3618488/\">Partners in Crime</a>",
 		],
 
 		mod: 'pic',
 		gameType: 'doubles',
 		ruleset: ['[Gen 7] Doubles OU'],
-		banlist: ['Kangaskhanite', 'Mawilite', 'Medichamite', 'Huge Power', 'Imposter', 'Parental Bond', 'Pure Power', 'Wonder Guard', 'Mimic', 'Sketch', 'Transform'],
+		banlist: ['Huge Power', 'Imposter', 'Parental Bond', 'Pure Power', 'Wonder Guard', 'Kangaskhanite', 'Mawilite', 'Medichamite', 'Mimic', 'Sketch', 'Transform'],
 		onDisableMovePriority: -1,
 		onDisableMove: function (pokemon) {
 			let ally = pokemon.side.active.find(ally => ally && ally !== pokemon && !ally.fainted);
@@ -631,6 +632,7 @@ exports.Formats = [
 			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3598418/\">Camomons</a>",
 		],
 		mod: 'gen7',
+		searchShow: false,
 		ruleset: ['[Gen 7] OU'],
 		banlist: ['Shedinja'],
 		onModifyTemplate: function (template, target, source) {
@@ -654,7 +656,6 @@ exports.Formats = [
 		],
 
 		mod: 'gen7',
-		searchShow: false,
 		ruleset: ['[Gen 7] OU', 'Ignore STAB Moves'],
 		banlist: ['Kartana', 'Komala', 'Kyurem-Black', 'Silvally', 'Tapu Koko', 'Tapu Lele', 'Aerodactylite', 'King\'s Rock', 'Metagrossite', 'Razor Fang'],
 		noLearn: ['Acupressure', 'Belly Drum', 'Chatter', 'Geomancy', 'Lovely Kiss', 'Shell Smash', 'Shift Gear', 'Thousand Arrows'],
