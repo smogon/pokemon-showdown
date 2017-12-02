@@ -301,7 +301,7 @@ class TextFormatter {
 					uri += '" rel="noopener';
 				}
 				if (colonPos > 0) {
-					const key = this.slice(start + 2, colonPos);
+					const key = this.slice(start + 2, colonPos).toLowerCase();
 					switch (key) {
 					case 'w':
 					case 'wiki':
