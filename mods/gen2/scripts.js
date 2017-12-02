@@ -65,7 +65,7 @@ exports.BattleScripts = {
 	runMove: function (move, pokemon, targetLoc, sourceEffect) {
 		let target = this.getTarget(pokemon, move, targetLoc);
 		if (!sourceEffect && toId(move) !== 'struggle') {
-			let changedMove = this.runEvent('OverrideDecision', pokemon, target, move);
+			let changedMove = this.runEvent('OverrideAction', pokemon, target, move);
 			if (changedMove && changedMove !== true) {
 				move = changedMove;
 				target = null;

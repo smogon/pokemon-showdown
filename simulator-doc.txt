@@ -36,7 +36,7 @@ for every move:
 	[ModifyPriority]
 	move's [BeforeTurn]
 
-runDecision() - runs runSwitch, runAfterSwitch, and runMove in priority order, then residual at end {
+runAction() - runs runSwitch, runAfterSwitch, and runMove in priority order, then residual at end {
 	runSwitch() {
 		[BeforeSwitch]
 		switch

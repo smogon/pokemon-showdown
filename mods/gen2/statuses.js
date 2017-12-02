@@ -165,7 +165,7 @@ exports.BattleStatuses = {
 			let move = this.getMove(this.effectData.move);
 			if (move.id) {
 				this.debug('Forcing into ' + move.id);
-				this.changeDecision(pokemon, {move: move.id});
+				this.changeAction(pokemon, {move: move.id});
 			}
 		},
 	},

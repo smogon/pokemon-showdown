@@ -39,32 +39,32 @@ exports.BattleItems = {
 		onModifyPriority: function () {},
 		onBeforeTurn: function (pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.ability === 'gluttony')) {
-				let decision = this.willMove(pokemon);
-				if (!decision) return;
+				let action = this.willMove(pokemon);
+				if (!action) return;
 				this.insertQueue({
 					choice: 'event',
 					event: 'Custap',
-					priority: decision.priority + 0.1,
-					pokemon: decision.pokemon,
-					move: decision.move,
-					target: decision.target,
+					priority: action.priority + 0.1,
+					pokemon: action.pokemon,
+					move: action.move,
+					target: action.target,
 				});
 			}
 		},
 		onCustap: function (pokemon) {
-			let decision = this.willMove(pokemon);
-			this.debug('custap decision: ' + decision);
-			if (decision) {
+			let action = this.willMove(pokemon);
+			this.debug('custap action: ' + action);
+			if (action) {
 				pokemon.eatItem();
 			}
 		},
 		onEat: function (pokemon) {
-			let decision = this.willMove(pokemon);
-			this.debug('custap eaten: ' + decision);
-			if (decision) {
-				this.cancelDecision(pokemon);
+			let action = this.willMove(pokemon);
+			this.debug('custap eaten: ' + action);
+			if (action) {
+				this.cancelAction(pokemon);
 				this.add('-message', "Custap Berry activated.");
-				this.runDecision(decision);
+				this.runAction(action);
 			}
 		},
 	},

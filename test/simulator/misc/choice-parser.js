@@ -14,15 +14,15 @@ describe('Choice parser', function () {
 				[{species: "Rhydon", ability: 'prankster', moves: ['splash']}],
 			]);
 
-			const validDecision = 'team 1';
-			assert(battle.choose('p1', validDecision));
+			const validChoice = 'team 1';
+			assert(battle.choose('p1', validChoice));
 			battle.p1.clearChoice();
-			assert(battle.choose('p2', validDecision));
+			assert(battle.choose('p2', validChoice));
 			battle.p1.clearChoice();
 
-			const badDecisions = ['move 1', 'move 2 mega', 'switch 1', 'pass', 'shift'];
-			for (const badDecision of badDecisions) {
-				assert.false(battle.choose('p1', badDecision), `Decision '${badDecision}' should be rejected`);
+			const badChoices = ['move 1', 'move 2 mega', 'switch 1', 'pass', 'shift'];
+			for (const badChoice of badChoices) {
+				assert.false(battle.choose('p1', badChoice), `Choice '${badChoice}' should be rejected`);
 			}
 		});
 
@@ -68,13 +68,13 @@ describe('Choice parser', function () {
 
 				battle.commitDecisions();
 
-				const badDecisions = ['move 1', 'move 2 mega', 'team 1', 'pass', 'shift'];
-				for (const badDecision of badDecisions) {
-					assert.false(battle.choose('p1', badDecision), `Decision '${badDecision}' should be rejected`);
+				const badChoices = ['move 1', 'move 2 mega', 'team 1', 'pass', 'shift'];
+				for (const badChoice of badChoices) {
+					assert.false(battle.choose('p1', badChoice), `Choice '${badChoice}' should be rejected`);
 				}
 
-				const validDecision = 'switch Bulbasaur';
-				assert(battle.choose('p1', validDecision));
+				const validChoice = 'switch Bulbasaur';
+				assert(battle.choose('p1', validChoice));
 				battle.p1.clearChoice();
 			});
 		});
@@ -94,12 +94,12 @@ describe('Choice parser', function () {
 				]);
 				battle.commitDecisions(); // Both p1 active Pokémon faint
 
-				const badDecisions = ['move 1', 'move 2 mega', 'team 1', 'shift'];
-				for (const badDecision of badDecisions) {
-					assert.false(battle.choose('p1', badDecision), `Decision '${badDecision}' should be rejected`);
+				const badChoices = ['move 1', 'move 2 mega', 'team 1', 'shift'];
+				for (const badChoice of badChoices) {
+					assert.false(battle.choose('p1', badChoice), `Choice '${badChoice}' should be rejected`);
 				}
 
-				assert(battle.choose('p1', `pass, switch 3`), `Decision 'pass, switch 3' should be valid`);
+				assert(battle.choose('p1', `pass, switch 3`), `Choice 'pass, switch 3' should be valid`);
 			});
 
 			it('should reject choice details for `pass` choices', function () {
@@ -150,15 +150,15 @@ describe('Choice parser', function () {
 					{species: "Charmander", ability: 'blaze', moves: ['tackle', 'growl']},
 				]);
 
-				const validDecisions = ['move 1', 'move 2', 'switch 2'];
-				for (const decision of validDecisions) {
-					assert(battle.choose('p1', decision), `Decision '${decision}' should be valid`);
+				const validChoices = ['move 1', 'move 2', 'switch 2'];
+				for (const action of validChoices) {
+					assert(battle.choose('p1', action), `Choice '${action}' should be valid`);
 					battle.p1.clearChoice();
 				}
 
-				const badDecisions = ['move 1 zmove', 'move 2 mega', 'team 1', 'pass', 'shift'];
-				for (const badDecision of badDecisions) {
-					assert.false(battle.choose('p1', badDecision), `Decision '${badDecision}' should be rejected`);
+				const badChoices = ['move 1 zmove', 'move 2 mega', 'team 1', 'pass', 'shift'];
+				for (const badChoice of badChoices) {
+					assert.false(battle.choose('p1', badChoice), `Choice '${badChoice}' should be rejected`);
 				}
 			});
 		});
@@ -183,7 +183,7 @@ describe('Choice parser', function () {
 				assert.false.fainted(p1.active[1]);
 
 				assert(battle.choose('p1', 'move smog 2'));
-				assert.strictEqual(battle.p1.getChoice(true), `pass, move smog 2`, `Decision mismatch`);
+				assert.strictEqual(battle.p1.getChoice(true), `pass, move smog 2`, `Choice mismatch`);
 			});
 		});
 
@@ -202,18 +202,18 @@ describe('Choice parser', function () {
 					{species: "Golem", ability: 'sturdy', moves: ['defensecurl']},
 				]);
 
-				const validDecisions = ['move 1', 'switch 4'];
+				const validChoices = ['move 1', 'switch 4'];
 
-				validDecisions.forEach(decision => {
-					const choiceString = `move 1, ${decision}, move 1 1`;
-					assert(battle.choose('p1', choiceString), `Decision '${choiceString}' should be valid`);
+				validChoices.forEach(action => {
+					const choiceString = `move 1, ${action}, move 1 1`;
+					assert(battle.choose('p1', choiceString), `Choice '${choiceString}' should be valid`);
 					battle.p1.clearChoice();
 				});
 
-				const badDecisions = ['move 1 zmove', 'move 2 mega', 'team 1', 'pass', 'shift'];
-				for (const badDecision of badDecisions) {
-					const choiceString = `move 1, ${badDecision}, move 1 1`;
-					assert.false(battle.choose('p1', choiceString), `Decision '${choiceString}' should be rejected`);
+				const badChoices = ['move 1 zmove', 'move 2 mega', 'team 1', 'pass', 'shift'];
+				for (const badChoice of badChoices) {
+					const choiceString = `move 1, ${badChoice}, move 1 1`;
+					assert.false(battle.choose('p1', choiceString), `Choice '${choiceString}' should be rejected`);
 				}
 			});
 
@@ -232,18 +232,18 @@ describe('Choice parser', function () {
 					{species: "Magnezone", ability: 'magnetpull', moves: ['discharge']},
 				]);
 
-				const validDecisions = ['move 1', 'switch 4', 'shift'];
+				const validChoices = ['move 1', 'switch 4', 'shift'];
 
-				validDecisions.forEach(decision => {
-					const choiceString = `${decision}, move 1, move 1 1`;
-					assert(battle.choose('p1', choiceString), `Decision '${choiceString}' should be valid`);
+				validChoices.forEach(action => {
+					const choiceString = `${action}, move 1, move 1 1`;
+					assert(battle.choose('p1', choiceString), `Choice '${choiceString}' should be valid`);
 					battle.p1.clearChoice();
 				});
 
-				const badDecisions = ['move 1 zmove', 'move 2 mega', 'team 1', 'pass'];
-				for (const badDecision of badDecisions) {
-					const choiceString = `${badDecision}, move 1, move 1 1`;
-					assert.false(battle.choose('p1', choiceString), `Decision '${choiceString}' should be rejected`);
+				const badChoices = ['move 1 zmove', 'move 2 mega', 'team 1', 'pass'];
+				for (const badChoice of badChoices) {
+					const choiceString = `${badChoice}, move 1, move 1 1`;
+					assert.false(battle.choose('p1', choiceString), `Choice '${choiceString}' should be rejected`);
 				}
 			});
 
@@ -262,18 +262,18 @@ describe('Choice parser', function () {
 					{species: "Magnezone", ability: 'magnetpull', moves: ['discharge']},
 				]);
 
-				const validDecisions = ['move 1 1', 'switch 4', 'shift'];
+				const validChoices = ['move 1 1', 'switch 4', 'shift'];
 
-				validDecisions.forEach(decision => {
-					const choiceString = `move 1, move 1, ${decision}`;
-					assert(battle.choose('p1', choiceString), `Decision '${choiceString}' should be valid`);
+				validChoices.forEach(action => {
+					const choiceString = `move 1, move 1, ${action}`;
+					assert(battle.choose('p1', choiceString), `Choice '${choiceString}' should be valid`);
 					battle.p1.clearChoice();
 				});
 
-				const badDecisions = ['move 1 zmove', 'move 2 mega', 'team 1', 'pass', 'shift blah'];
-				for (const badDecision of badDecisions) {
-					const choiceString = `move 1, move 1, ${badDecision}`;
-					assert.false(battle.choose('p1', choiceString), `Decision '${choiceString}' should be rejected`);
+				const badChoices = ['move 1 zmove', 'move 2 mega', 'team 1', 'pass', 'shift blah'];
+				for (const badChoice of badChoices) {
+					const choiceString = `move 1, move 1, ${badChoice}`;
+					assert.false(battle.choose('p1', choiceString), `Choice '${choiceString}' should be rejected`);
 				}
 			});
 
@@ -295,18 +295,18 @@ describe('Choice parser', function () {
 				p1.choosePass().chooseSwitch(4).chooseDefault(); // Forretress switches in to slot #2
 				assert.species(p1.active[1], 'Forretress');
 
-				const validDecisions = ['move spikes', 'move 1'];
-				validDecisions.forEach(decision => {
-					battle.choose('p1', decision);
+				const validChoices = ['move spikes', 'move 1'];
+				validChoices.forEach(action => {
+					battle.choose('p1', action);
 					assert.strictEqual(battle.p1.getChoice(true), `pass, move spikes, pass`);
 					battle.p1.clearChoice();
-					battle.choose('p1', `pass, ${decision}, pass`);
+					battle.choose('p1', `pass, ${action}, pass`);
 					assert.strictEqual(battle.p1.getChoice(true), `pass, move spikes, pass`);
 					battle.p1.clearChoice();
-					battle.choose('p1', `pass, ${decision}`);
+					battle.choose('p1', `pass, ${action}`);
 					assert.strictEqual(battle.p1.getChoice(true), `pass, move spikes, pass`);
 					battle.p1.clearChoice();
-					battle.choose('p1', `${decision}, pass`);
+					battle.choose('p1', `${action}, pass`);
 					assert.strictEqual(battle.p1.getChoice(true), `pass, move spikes, pass`);
 					battle.p1.clearChoice();
 				});

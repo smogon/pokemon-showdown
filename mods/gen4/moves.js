@@ -413,7 +413,7 @@ exports.BattleMovedex = {
 					this.effectData.duration++;
 				}
 			},
-			onOverrideDecision: function (pokemon) {
+			onOverrideAction: function (pokemon) {
 				return this.effectData.move;
 			},
 			onResidualOrder: 13,
@@ -1094,8 +1094,8 @@ exports.BattleMovedex = {
 		inherit: true,
 		desc: "Fails if the target did not select a physical or special attack for use this turn, or if the target moves before the user.",
 		onTry: function (source, target) {
-			let decision = this.willMove(target);
-			if (!decision || decision.choice !== 'move' || decision.move.category === 'Status' || target.volatiles.mustrecharge) {
+			let action = this.willMove(target);
+			if (!action || action.choice !== 'move' || action.move.category === 'Status' || target.volatiles.mustrecharge) {
 				this.add('-fail', source);
 				return null;
 			}
