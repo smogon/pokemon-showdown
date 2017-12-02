@@ -2623,13 +2623,12 @@ class Battle extends Dex.ModdedDex {
 	 */
 	cancelDecision(pokemon) {
 		let success = false;
-		for (let i = 0; i < this.queue.length; i++) {
-			if (this.queue[i].pokemon === pokemon) {
-				this.queue.splice(i, 1);
-				i--;
+		this.queue = this.queue.filter(action => {
+			if (action.pokemon === pokemon && action.priority >= -100) {
 				success = true;
+				return false;
 			}
-		}
+		});
 		return success;
 	}
 

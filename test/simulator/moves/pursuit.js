@@ -20,6 +20,28 @@ describe(`Pursuit`, function () {
 		assert.fainted(battle.p2.active[0]);
 	});
 
+	it(`should continue the switch in Gen 3`, function () {
+		battle = common.gen(3).createBattle([[
+			{species: "Tyranitar", ability: 'sandstream', moves: ['pursuit']},
+		], [
+			{species: "Alakazam", ability: 'magicguard', moves: ['psyshock']},
+			{species: "Clefable", ability: 'unaware', moves: ['calmmind']},
+		]]);
+		battle.makeChoices('move Pursuit', 'switch 2');
+		assert(battle.p2.active[0].hp);
+	});
+
+	it(`should continue the switch in Gen 4`, function () {
+		battle = common.gen(4).createBattle([[
+			{species: "Tyranitar", ability: 'sandstream', moves: ['pursuit']},
+		], [
+			{species: "Alakazam", ability: 'magicguard', moves: ['psyshock']},
+			{species: "Clefable", ability: 'unaware', moves: ['calmmind']},
+		]]);
+		battle.makeChoices('move Pursuit', 'switch 2');
+		assert(battle.p2.active[0].hp);
+	});
+
 	it(`should not repeat`, function () {
 		battle = common.createBattle([[
 			{species: "Beedrill", ability: 'swarm', item: 'beedrillite', moves: ['pursuit']},
