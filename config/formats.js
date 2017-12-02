@@ -391,36 +391,106 @@ exports.Formats = [
 		column: 2,
 	},
 	{
-		name: "[Gen 7] Full Potential",
+		name: "[Gen 7] Partners in Crime",
 		desc: [
-			"Moves use the Pok&eacute;mon's highest effective stat, barring HP, for damage calculation.",
-			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3596777/\">Full Potential</a>",
+			"Doubles-based metagame where both active ally Pok&eacute;mon share abilities and moves.",
+			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3618488/\">Partners in Crime</a>",
 		],
 
-		mod: 'fullpotential',
-		ruleset: ['[Gen 7] OU', 'Item Clause'],
-		banlist: ['Raichu-Alola', 'Shuckle', 'Tapu Koko', 'Chlorophyll', 'Sand Rush', 'Slush Rush', 'Speed Boost', 'Swift Swim', 'Unburden', 'Swampertite'],
+		mod: 'pic',
+		gameType: 'doubles',
+		ruleset: ['[Gen 7] Doubles OU'],
+		banlist: ['Huge Power', 'Imposter', 'Parental Bond', 'Pure Power', 'Wonder Guard', 'Kangaskhanite', 'Mawilite', 'Medichamite', 'Mimic', 'Sketch', 'Transform'],
+		onDisableMovePriority: -1,
+		onDisableMove: function (pokemon) {
+			let ally = pokemon.side.active.find(ally => ally && ally !== pokemon && !ally.fainted);
+			if (!ally) ally = {baseMoveset: []};
+			pokemon.moveset = pokemon.baseMoveset.concat(ally.baseMoveset);
+		},
+		onResidual: function () {
+			this.eachEvent('ResetMoveset');
+		},
+		onResetMoveset: function (pokemon) {
+			pokemon.moveset = pokemon.baseMoveset;
+		},
+		onSwitchInPriority: 2,
+		onSwitchIn: function (pokemon) {
+			if (this.p1.active.every(ally => ally && !ally.fainted)) {
+				let p1a = this.p1.active[0], p1b = this.p1.active[1];
+				if (p1a.ability !== p1b.ability) {
+					let p1a_innate = 'ability' + p1b.ability;
+					p1a.volatiles[p1a_innate] = {id: p1a_innate, target: p1a};
+					let p1b_innate = 'ability' + p1a.ability;
+					p1b.volatiles[p1b_innate] = {id: p1b_innate, target: p1b};
+				}
+			}
+			if (this.p2.active.every(ally => ally && !ally.fainted)) {
+				let p2a = this.p2.active[0], p2b = this.p2.active[1];
+				if (p2a.ability !== p2b.ability) {
+					let p2a_innate = 'ability' + p2b.ability;
+					p2a.volatiles[p2a_innate] = {id: p2a_innate, target: p2a};
+					let p2b_innate = 'ability' + p2a.ability;
+					p2b.volatiles[p2b_innate] = {id: p2b_innate, target: p2b};
+				}
+			}
+			let ally = pokemon.side.active.find(ally => ally && ally !== pokemon && !ally.fainted);
+			if (ally && ally.ability !== pokemon.ability) {
+				if (!pokemon.innate) {
+					pokemon.innate = 'ability' + ally.ability;
+					delete pokemon.volatiles[pokemon.innate];
+					pokemon.addVolatile(pokemon.innate);
+				}
+				if (!ally.innate) {
+					ally.innate = 'ability' + pokemon.ability;
+					delete ally.volatiles[ally.innate];
+					ally.addVolatile(ally.innate);
+				}
+			}
+		},
+		onSwitchOut: function (pokemon) {
+			if (pokemon.innate) {
+				pokemon.removeVolatile(pokemon.innate);
+				delete pokemon.innate;
+			}
+			let ally = pokemon.side.active.find(ally => ally && ally !== pokemon && !ally.fainted);
+			if (ally && ally.innate) {
+				ally.removeVolatile(ally.innate);
+				delete ally.innate;
+			}
+		},
+		onFaint: function (pokemon) {
+			if (pokemon.innate) {
+				pokemon.removeVolatile(pokemon.innate);
+				delete pokemon.innate;
+			}
+			let ally = pokemon.side.active.find(ally => ally && ally !== pokemon && !ally.fainted);
+			if (ally && ally.innate) {
+				ally.removeVolatile(ally.innate);
+				delete ally.innate;
+			}
+		},
 	},
 	{
-		name: "[Gen 7] Dual Wielding",
+		name: "[Gen 7] Mediocremons",
 		desc: [
-			"Pok&eacute;mon can forgo their Ability in order to use a second item.",
-			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3608611//\">Dual Wielding</a>",
+			"Only Pok&eacute;mon whose stats are all less than 100 are allowed.",
+			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3602094//\">Mediocremons</a>",
 		],
 
-		mod: 'dualwielding',
+		mod: 'gen7',
 		ruleset: ['[Gen 7] OU'],
-		banlist: ['Regigigas', 'Slaking'],
-		validateSet: function (set, teamHas) {
-			let dual = this.dex.getItem(set.ability);
-			if (!dual.exists) return this.validateSet(set, teamHas);
-			let item = this.dex.getItem(set.item);
-			let validator = new this.constructor(Dex.getFormat(this.format.id, ['Ignore Illegal Abilities']));
-			let problems = validator.validateSet(Object.assign({}, set, {ability: ''}), teamHas) || validator.validateSet(Object.assign({}, set, {ability: '', item: set.ability}, teamHas)) || [];
-			if (dual.id === item.id) problems.push(`You cannot have two of the same item on a Pokemon. (${set.name || set.species} has two of ${item.name})`);
-			if (item.isChoice && dual.isChoice) problems.push(`You cannot have two choice items on a Pokemon. (${set.name || set.species} has ${item.name} and ${dual.name})`);
+		banlist: ['Silvally', 'Type: Null', 'Huge Power', 'Pure Power'],
+		onValidateSet: function (set) {
+			let problems = [];
+			let template = this.getTemplate(set.species);
+			let item = this.getItem(set.item);
+			if (item.megaEvolves === template.species) template = this.getTemplate(item.megaStone);
+			let statTable = {hp: 'an HP', atk: 'an Attack', def: 'a Defense', spa: 'a Special Attack', spd: 'a Special Defense', spe: 'a Speed'};
+			for (let stat in statTable) {
+				if (template.baseStats[stat] >= 100) problems.push(template.species + " has " + statTable[stat] + " of " + template.baseStats[stat] + ", which is banned.");
+			}
 			return problems;
-	  },
+		},
 	},
 	{
 		section: "Other Metagames",
@@ -557,6 +627,7 @@ exports.Formats = [
 			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3598418/\">Camomons</a>",
 		],
 		mod: 'gen7',
+		searchShow: false,
 		ruleset: ['[Gen 7] OU'],
 		banlist: ['Shedinja'],
 		onModifyTemplate: function (template, target, source) {
@@ -580,7 +651,6 @@ exports.Formats = [
 		],
 
 		mod: 'gen7',
-		searchShow: false,
 		ruleset: ['[Gen 7] OU', 'Ignore STAB Moves'],
 		banlist: ['Kartana', 'Komala', 'Kyurem-Black', 'Silvally', 'Tapu Koko', 'Tapu Lele', 'Aerodactylite', 'King\'s Rock', 'Metagrossite', 'Razor Fang'],
 		noLearn: ['Acupressure', 'Belly Drum', 'Chatter', 'Geomancy', 'Lovely Kiss', 'Shell Smash', 'Shift Gear', 'Thousand Arrows'],
