@@ -22,20 +22,59 @@ const Pokemon = require('./pokemon');
  */
 
 /**
- * An object representing a single action that can be chosen.
+ * A move action
  *
- * @typedef {Object} Action
- * @property {string} choice - a choice
- * @property {Pokemon} [pokemon] - the pokemon making the choice
- * @property {number} [targetLoc] - location of the target, relative to pokemon's side
- * @property {string} [move] - a move to use
- * @property {Pokemon} [target] - the target of the choice
- * @property {number} [index] - the chosen index in team preview
- * @property {number} [priority] - priority of the chosen index
- * @property {Side} [side] - the pokemon's side
- * @property {?boolean} [mega] - true if megaing or ultra bursting
- * @property {?boolean} [zmove] - true if zmoving
+ * @typedef {Object} MoveAction
+ * @property {'move' | 'beforeTurnMove'} choice - action type
+ * @property {number} priority - priority of the action (lower first)
+ * @property {number} speed - speed of pokemon using move (higher first if priority tie)
+ * @property {Pokemon} pokemon - the pokemon doing the move
+ * @property {number} targetLoc - location of the target, relative to pokemon's side
+ * @property {string} moveid - a move to use (move action only)
+ * @property {Move} move - a move to use (move action only)
+ * @property {boolean | 'done'} mega - true if megaing or ultra bursting
+ * @property {boolean} zmove - true if zmoving
+ * @property {Effect?} sourceEffect - effect that did the action
  */
+/**
+ * A switch action
+ *
+ * @typedef {Object} SwitchAction
+ * @property {'switch' | 'instaswitch'} choice - action type
+ * @property {number} priority - priority of the action (lower first)
+ * @property {number} speed - speed of pokemon switching (higher first if priority tie)
+ * @property {Pokemon} pokemon - the pokemon doing the switch
+ * @property {Pokemon} target - pokemon to switch to
+ */
+/**
+ * A Team Preview choice action
+ *
+ * @typedef {Object} TeamAction
+ * @property {'team'} choice - action type
+ * @property {number} priority - priority of the action (lower first)
+ * @property {1} speed - unused for this action type
+ * @property {Pokemon} pokemon - the pokemon switching
+ * @property {number} index - new index
+ */
+/**
+ * A generic action not done by a pokemon
+ *
+ * @typedef {Object} FieldAction
+ * @property {'start' | 'residual' | 'pass' | 'beforeTurn'} choice - action type
+ * @property {number} priority - priority of the action (lower first)
+ * @property {1} speed - unused for this action type
+ * @property {null} pokemon - unused for this action type
+ */
+/**
+ * A generic action done by a single pokemon
+ *
+ * @typedef {Object} PokemonAction
+ * @property {'megaEvo' | 'shift' | 'runPrimal' | 'runSwitch' | 'event' | 'runUnnerve'} choice - action type
+ * @property {number} priority - priority of the action (lower first)
+ * @property {number} speed - speed of pokemon doing action (higher first if priority tie)
+ * @property {Pokemon} pokemon - the pokemon doing action
+ */
+/** @typedef {MoveAction | SwitchAction | TeamAction | FieldAction | PokemonAction} Action */
 
 class Battle extends Dex.ModdedDex {
 	/**
@@ -77,7 +116,7 @@ class Battle extends Dex.ModdedDex {
 		this.reportExactHP = !!format.debug;
 		this.replayExactHP = !format.team;
 
-		/**@type {AnyObject[]} */
+		/**@type {Action[]} */
 		this.queue = [];
 		/**@type {FaintedPokemon[]} */
 		this.faintQueue = [];
@@ -1730,7 +1769,7 @@ class Battle extends Dex.ModdedDex {
 
 		this.residualEvent('TeamPreview');
 
-		this.addQueue({choice: 'start'});
+		this.addToQueue({choice: 'start'});
 		this.midTurn = true;
 		if (!this.currentRequest) this.go();
 	}
@@ -2432,7 +2471,7 @@ class Battle extends Dex.ModdedDex {
 						this.cancelMove(pokemon);
 					} else {
 						// in gen 3, fainting skips all moves and switches
-						this.cancelDecision(pokemon);
+						this.cancelAction(pokemon);
 					}
 				}
 			}
@@ -2454,15 +2493,20 @@ class Battle extends Dex.ModdedDex {
 	}
 
 	/**
-	 * @param {AnyObject} decision
+	 * Takes an object describing an action, and fills it out into a full
+	 * Action object.
+	 *
+	 * @param {AnyObject} action
 	 * @param {boolean} [midTurn]
+	 * @return {Action}
 	 */
-	resolvePriority(decision, midTurn = false) {
-		if (!decision) return;
+	resolveAction(action, midTurn = false) {
+		if (!action) throw new Error(`Action not passed to resolveAction`);
 
-		if (!decision.side && decision.pokemon) decision.side = decision.pokemon.side;
-		if (!decision.choice && decision.move) decision.choice = 'move';
-		if (!decision.priority && decision.priority !== 0) {
+		if (!action.side && action.pokemon) action.side = action.pokemon.side;
+		if (!action.move && action.moveid) action.move = this.getMoveCopy(action.moveid);
+		if (!action.choice && action.move) action.choice = 'move';
+		if (!action.priority && action.priority !== 0) {
 			let priorities = {
 				'beforeTurn': 100,
 				'beforeTurnMove': 99,
@@ -2476,77 +2520,85 @@ class Battle extends Dex.ModdedDex {
 				'team': 102,
 				'start': 101,
 			};
-			if (decision.choice in priorities) {
-				decision.priority = priorities[decision.choice];
+			if (action.choice in priorities) {
+				action.priority = priorities[action.choice];
 			}
 		}
 		if (!midTurn) {
-			if (decision.choice === 'move') {
-				if (!decision.zmove && this.getMove(decision.move).beforeTurnCallback) {
-					this.addQueue({choice: 'beforeTurnMove', pokemon: decision.pokemon, move: decision.move, targetLoc: decision.targetLoc});
+			if (action.choice === 'move') {
+				if (!action.zmove && action.move.beforeTurnCallback) {
+					this.addToQueue({choice: 'beforeTurnMove', pokemon: action.pokemon, move: action.move, targetLoc: action.targetLoc});
 				}
-				if (decision.mega) {
+				if (action.mega) {
 					// TODO: Check that the Pokémon is not affected by Sky Drop.
 					// (This is currently being done in `runMegaEvo`).
-					this.addQueue({
+					this.addToQueue({
 						choice: 'megaEvo',
-						pokemon: decision.pokemon,
+						pokemon: action.pokemon,
 					});
 				}
-			} else if (decision.choice === 'switch' || decision.choice === 'instaswitch') {
-				if (decision.pokemon.switchFlag && decision.pokemon.switchFlag !== true) {
-					decision.pokemon.switchCopyFlag = decision.pokemon.switchFlag;
+			} else if (action.choice === 'switch' || action.choice === 'instaswitch') {
+				if (action.pokemon.switchFlag && action.pokemon.switchFlag !== true) {
+					action.pokemon.switchCopyFlag = action.pokemon.switchFlag;
 				}
-				decision.pokemon.switchFlag = false;
-				if (!decision.speed) decision.speed = decision.pokemon.getDecisionSpeed();
+				action.pokemon.switchFlag = false;
+				if (!action.speed) action.speed = action.pokemon.getActionSpeed();
 			}
 		}
 
-		let deferPriority = this.gen >= 7 && decision.mega && decision.mega !== 'done';
-		if (decision.move) {
+		let deferPriority = this.gen >= 7 && action.mega && action.mega !== 'done';
+		if (action.move) {
 			let target = null;
+			action.move = this.getMoveCopy(action.move);
 
-			if (!decision.targetLoc) {
-				target = this.resolveTarget(decision.pokemon, decision.move);
-				decision.targetLoc = this.getTargetLoc(target, decision.pokemon);
+			if (!action.targetLoc) {
+				target = this.resolveTarget(action.pokemon, action.move);
+				action.targetLoc = this.getTargetLoc(target, action.pokemon);
 			}
 
-			decision.move = this.getMoveCopy(decision.move);
-			if (!decision.priority && !deferPriority) {
-				let move = decision.move;
-				if (decision.zmove) {
+			if (!action.priority && !deferPriority) {
+				let move = action.move;
+				if (action.zmove) {
 					// @ts-ignore
-					let zMoveName = this.getZMove(decision.move, decision.pokemon, true);
+					let zMoveName = this.getZMove(action.move, action.pokemon, true);
 					let zMove = this.getMove(zMoveName);
 					if (zMove.exists) {
 						move = zMove;
 					}
 				}
-				let priority = this.runEvent('ModifyPriority', decision.pokemon, target, move, move.priority);
-				decision.priority = priority;
+				let priority = this.runEvent('ModifyPriority', action.pokemon, target, move, move.priority);
+				action.priority = priority;
 				// In Gen 6, Quick Guard blocks moves with artificially enhanced priority.
-				if (this.gen > 5) decision.move.priority = priority;
+				if (this.gen > 5) action.move.priority = priority;
 			}
 		}
-		if (!decision.pokemon && !decision.speed) decision.speed = 1;
-		if (!decision.speed && (decision.choice === 'switch' || decision.choice === 'instaswitch') && decision.target) decision.speed = decision.target.getDecisionSpeed();
-		if (!decision.speed && !deferPriority) decision.speed = decision.pokemon.getDecisionSpeed();
+		if (!action.speed) {
+			if ((action.choice === 'switch' || action.choice === 'instaswitch') && action.target) {
+				action.speed = action.target.getActionSpeed();
+			} else if (!action.pokemon) {
+				action.speed = 1;
+			} else if (!deferPriority) {
+				action.speed = action.pokemon.getActionSpeed();
+			}
+		}
+		return /** @type {any} */ (action);
 	}
 
 	/**
+	 * Adds the action last in the queue. Mostly used before sortQueue.
+	 *
 	 * @param {AnyObject | AnyObject[]} action
 	 */
-	addQueue(action) {
+	addToQueue(action) {
 		if (Array.isArray(action)) {
 			for (let i = 0; i < action.length; i++) {
-				this.addQueue(action[i]);
+				this.addToQueue(action[i]);
 			}
 			return;
 		}
 
 		if (action.choice === 'pass') return;
-		this.resolvePriority(action);
-		this.queue.push(action);
+		this.queue.push(this.resolveAction(action));
 	}
 
 	sortQueue() {
@@ -2554,52 +2606,58 @@ class Battle extends Dex.ModdedDex {
 	}
 
 	/**
-	 * @param {AnyObject | AnyObject[]} decision
+	 * Inserts the passed action into the action queue when it normally
+	 * would have happened (sorting by priority/speed), without
+	 * re-sorting the existing actions.
+	 *
+	 * @param {AnyObject | AnyObject[]} chosenAction
 	 * @param {boolean} [midTurn]
 	 */
-	insertQueue(decision, midTurn = false) {
-		if (Array.isArray(decision)) {
-			for (let i = 0; i < decision.length; i++) {
-				this.insertQueue(decision[i]);
+	insertQueue(chosenAction, midTurn = false) {
+		if (Array.isArray(chosenAction)) {
+			for (const subAction of chosenAction) {
+				this.insertQueue(subAction);
 			}
 			return;
 		}
 
-		if (decision.pokemon) decision.pokemon.updateSpeed();
-		this.resolvePriority(decision, midTurn);
+		if (chosenAction.pokemon) chosenAction.pokemon.updateSpeed();
+		const action = this.resolveAction(chosenAction, midTurn);
 		for (let i = 0; i < this.queue.length; i++) {
-			if (Battle.comparePriority(decision, this.queue[i]) < 0) {
-				this.queue.splice(i, 0, decision);
+			if (Battle.comparePriority(action, this.queue[i]) < 0) {
+				this.queue.splice(i, 0, action);
 				return;
 			}
 		}
-		this.queue.push(decision);
+		this.queue.push(action);
 	}
 
 	/**
-	 * @param {AnyObject} decision
+	 * Makes the passed move action happen next (skipping speed order).
+	 *
+	 * @param {MoveAction} action
 	 * @param {Pokemon} [source]
 	 * @param {Effect} [sourceEffect]
 	 */
-	prioritizeQueue(decision, source, sourceEffect) {
+	prioritizeAction(action, source, sourceEffect) {
 		if (this.event) {
 			if (!source) source = this.event.source;
 			if (!sourceEffect) sourceEffect = this.effect;
 		}
-		for (let i = 0; i < this.queue.length; i++) {
-			if (this.queue[i] === decision) {
+		for (const [i, curAction] of this.queue.entries()) {
+			if (curAction === action) {
 				this.queue.splice(i, 1);
 				break;
 			}
 		}
-		decision.sourceEffect = sourceEffect;
-		this.queue.unshift(decision);
+		action.sourceEffect = sourceEffect;
+		this.queue.unshift(action);
 	}
 
 	willAct() {
-		for (let i = 0; i < this.queue.length; i++) {
-			if (this.queue[i].choice === 'move' || this.queue[i].choice === 'switch' || this.queue[i].choice === 'instaswitch' || this.queue[i].choice === 'shift') {
-				return this.queue[i];
+		for (const action of this.queue) {
+			if (action.choice === 'move' || action.choice === 'switch' || action.choice === 'instaswitch' || action.choice === 'shift') {
+				return action;
 			}
 		}
 		return null;
@@ -2610,9 +2668,9 @@ class Battle extends Dex.ModdedDex {
 	 */
 	willMove(pokemon) {
 		if (pokemon.fainted) return false;
-		for (let i = 0; i < this.queue.length; i++) {
-			if (this.queue[i].choice === 'move' && this.queue[i].pokemon === pokemon) {
-				return this.queue[i];
+		for (const action of this.queue) {
+			if (action.choice === 'move' && action.pokemon === pokemon) {
+				return action;
 			}
 		}
 		return null;
@@ -2621,7 +2679,7 @@ class Battle extends Dex.ModdedDex {
 	/**
 	 * @param {Pokemon} pokemon
 	 */
-	cancelDecision(pokemon) {
+	cancelAction(pokemon) {
 		let success = false;
 		this.queue = this.queue.filter(action => {
 			if (action.pokemon === pokemon && action.priority >= -100) {
@@ -2637,8 +2695,8 @@ class Battle extends Dex.ModdedDex {
 	 * @param {Pokemon} pokemon
 	 */
 	cancelMove(pokemon) {
-		for (let i = 0; i < this.queue.length; i++) {
-			if (this.queue[i].choice === 'move' && this.queue[i].pokemon === pokemon) {
+		for (const [i, action] of this.queue.entries()) {
+			if (action.choice === 'move' && action.pokemon === pokemon) {
 				this.queue.splice(i, 1);
 				return true;
 			}
@@ -2650,20 +2708,20 @@ class Battle extends Dex.ModdedDex {
 	 * @param {Pokemon} pokemon
 	 */
 	willSwitch(pokemon) {
-		for (let i = 0; i < this.queue.length; i++) {
-			if ((this.queue[i].choice === 'switch' || this.queue[i].choice === 'instaswitch') && this.queue[i].pokemon === pokemon) {
-				return this.queue[i];
+		for (const action of this.queue) {
+			if ((action.choice === 'switch' || action.choice === 'instaswitch') && action.pokemon === pokemon) {
+				return action;
 			}
 		}
 		return false;
 	}
 
 	/**
-	 * @param {AnyObject} decision
+	 * @param {Action} action
 	 */
-	runDecision(decision) {
+	runAction(action) {
 		// returns whether or not we ended in a callback
-		switch (decision.choice) {
+		switch (action.choice) {
 		case 'start': {
 			// I GIVE UP, WILL WRESTLE WITH EVENT SYSTEM LATER
 			let format = this.getFormat();
@@ -2700,56 +2758,54 @@ class Battle extends Dex.ModdedDex {
 		}
 
 		case 'move':
-			if (!decision.pokemon.isActive) return false;
-			if (decision.pokemon.fainted) return false;
+			if (!action.pokemon.isActive) return false;
+			if (action.pokemon.fainted) return false;
 			// @ts-ignore
-			this.runMove(decision.move, decision.pokemon, decision.targetLoc, decision.sourceEffect, decision.zmove);
+			this.runMove(action.move, action.pokemon, action.targetLoc, action.sourceEffect, action.zmove);
 			break;
 		case 'megaEvo':
 			// @ts-ignore
-			this.runMegaEvo(decision.pokemon);
+			this.runMegaEvo(action.pokemon);
 			break;
 		case 'beforeTurnMove': {
-			if (!decision.pokemon.isActive) return false;
-			if (decision.pokemon.fainted) return false;
-			this.debug('before turn callback: ' + decision.move.id);
-			let target = this.getTarget(decision.pokemon, decision.move, decision.targetLoc);
+			if (!action.pokemon.isActive) return false;
+			if (action.pokemon.fainted) return false;
+			this.debug('before turn callback: ' + action.move.id);
+			let target = this.getTarget(action.pokemon, action.move, action.targetLoc);
 			if (!target) return false;
-			decision.move.beforeTurnCallback.call(this, decision.pokemon, target);
+			if (!action.move.beforeTurnCallback) throw new Error(`beforeTurnMove has no beforeTurnCallback`);
+			action.move.beforeTurnCallback.call(this, action.pokemon, target);
 			break;
 		}
 
 		case 'event':
-			this.runEvent(decision.event, decision.pokemon);
+			// @ts-ignore Easier than defining a custom event attribute tbh
+			this.runEvent(action.event, action.pokemon);
 			break;
 		case 'team': {
-			decision.side.pokemon.splice(decision.index, 0, decision.pokemon);
-			decision.pokemon.position = decision.index;
+			action.pokemon.side.pokemon.splice(action.index, 0, action.pokemon);
+			action.pokemon.position = action.index;
 			// we return here because the update event would crash since there are no active pokemon yet
 			return;
 		}
 
 		case 'pass':
-			if (!decision.priority || decision.priority <= 101) return;
-			if (decision.pokemon) {
-				decision.pokemon.switchFlag = false;
-			}
-			break;
+			return;
 		case 'instaswitch':
 		case 'switch':
-			if (decision.choice === 'switch' && decision.pokemon.status && this.data.Abilities.naturalcure) {
-				this.singleEvent('CheckShow', this.getAbility('naturalcure'), null, decision.pokemon);
+			if (action.choice === 'switch' && action.pokemon.status && this.data.Abilities.naturalcure) {
+				this.singleEvent('CheckShow', this.getAbility('naturalcure'), null, action.pokemon);
 			}
-			if (decision.pokemon.hp) {
-				decision.pokemon.beingCalledBack = true;
-				let lastMove = this.getMove(decision.pokemon.lastMove);
+			if (action.pokemon.hp) {
+				action.pokemon.beingCalledBack = true;
+				let lastMove = this.getMove(action.pokemon.lastMove);
 				if (lastMove.selfSwitch !== 'copyvolatile') {
-					this.runEvent('BeforeSwitchOut', decision.pokemon);
+					this.runEvent('BeforeSwitchOut', action.pokemon);
 					if (this.gen >= 5) {
 						this.eachEvent('Update');
 					}
 				}
-				if (!this.runEvent('SwitchOut', decision.pokemon)) {
+				if (!this.runEvent('SwitchOut', action.pokemon)) {
 					// Warning: DO NOT interrupt a switch-out
 					// if you just want to trap a pokemon.
 					// To trap a pokemon and prevent it from switching out,
@@ -2761,14 +2817,14 @@ class Battle extends Dex.ModdedDex {
 					break;
 				}
 			}
-			decision.pokemon.illusion = null;
-			this.singleEvent('End', this.getAbility(decision.pokemon.ability), decision.pokemon.abilityData, decision.pokemon);
-			if (!decision.pokemon.hp && !decision.pokemon.fainted) {
+			action.pokemon.illusion = null;
+			this.singleEvent('End', this.getAbility(action.pokemon.ability), action.pokemon.abilityData, action.pokemon);
+			if (!action.pokemon.hp && !action.pokemon.fainted) {
 				// a pokemon fainted from Pursuit before it could switch
 				if (this.gen <= 4) {
 					// in gen 2-4, the switch still happens
-					decision.priority = -101;
-					this.queue.unshift(decision);
+					action.priority = -101;
+					this.queue.unshift(action);
 					this.add('-hint', 'Pursuit target fainted, switch continues in gen 2-4');
 					break;
 				}
@@ -2776,51 +2832,51 @@ class Battle extends Dex.ModdedDex {
 				this.debug('A Pokemon can\'t switch between when it runs out of HP and when it faints');
 				break;
 			}
-			if (decision.target.isActive) {
+			if (action.target.isActive) {
 				this.add('-hint', 'Switch failed; switch target is already active');
 				break;
 			}
-			if (decision.choice === 'switch' && decision.pokemon.activeTurns === 1) {
-				let foeActive = decision.pokemon.side.foe.active;
+			if (action.choice === 'switch' && action.pokemon.activeTurns === 1) {
+				let foeActive = action.pokemon.side.foe.active;
 				for (let i = 0; i < foeActive.length; i++) {
 					if (foeActive[i].isStale >= 2) {
-						decision.pokemon.isStaleCon++;
-						decision.pokemon.isStaleSource = 'switch';
+						action.pokemon.isStaleCon++;
+						action.pokemon.isStaleSource = 'switch';
 						break;
 					}
 				}
 			}
 
-			this.switchIn(decision.target, decision.pokemon.position);
+			this.switchIn(action.target, action.pokemon.position);
 			break;
 		case 'runUnnerve':
-			this.singleEvent('PreStart', decision.pokemon.getAbility(), decision.pokemon.abilityData, decision.pokemon);
+			this.singleEvent('PreStart', action.pokemon.getAbility(), action.pokemon.abilityData, action.pokemon);
 			break;
 		case 'runSwitch':
-			this.runEvent('SwitchIn', decision.pokemon);
-			if (this.gen <= 2 && !decision.pokemon.side.faintedThisTurn && decision.pokemon.draggedIn !== this.turn) this.runEvent('AfterSwitchInSelf', decision.pokemon);
-			if (!decision.pokemon.hp) break;
-			decision.pokemon.isStarted = true;
-			if (!decision.pokemon.fainted) {
-				this.singleEvent('Start', decision.pokemon.getAbility(), decision.pokemon.abilityData, decision.pokemon);
-				decision.pokemon.abilityOrder = this.abilityOrder++;
-				this.singleEvent('Start', decision.pokemon.getItem(), decision.pokemon.itemData, decision.pokemon);
+			this.runEvent('SwitchIn', action.pokemon);
+			if (this.gen <= 2 && !action.pokemon.side.faintedThisTurn && action.pokemon.draggedIn !== this.turn) this.runEvent('AfterSwitchInSelf', action.pokemon);
+			if (!action.pokemon.hp) break;
+			action.pokemon.isStarted = true;
+			if (!action.pokemon.fainted) {
+				this.singleEvent('Start', action.pokemon.getAbility(), action.pokemon.abilityData, action.pokemon);
+				action.pokemon.abilityOrder = this.abilityOrder++;
+				this.singleEvent('Start', action.pokemon.getItem(), action.pokemon.itemData, action.pokemon);
 			}
-			delete decision.pokemon.draggedIn;
+			delete action.pokemon.draggedIn;
 			break;
 		case 'runPrimal':
-			if (!decision.pokemon.transformed) this.singleEvent('Primal', decision.pokemon.getItem(), decision.pokemon.itemData, decision.pokemon);
+			if (!action.pokemon.transformed) this.singleEvent('Primal', action.pokemon.getItem(), action.pokemon.itemData, action.pokemon);
 			break;
 		case 'shift': {
-			if (!decision.pokemon.isActive) return false;
-			if (decision.pokemon.fainted) return false;
-			decision.pokemon.activeTurns--;
-			this.swapPosition(decision.pokemon, 1);
-			let foeActive = decision.pokemon.side.foe.active;
+			if (!action.pokemon.isActive) return false;
+			if (action.pokemon.fainted) return false;
+			action.pokemon.activeTurns--;
+			this.swapPosition(action.pokemon, 1);
+			let foeActive = action.pokemon.side.foe.active;
 			for (let i = 0; i < foeActive.length; i++) {
 				if (foeActive[i].isStale >= 2) {
-					decision.pokemon.isStaleCon++;
-					decision.pokemon.isStaleSource = 'switch';
+					action.pokemon.isStaleCon++;
+					action.pokemon.isStaleSource = 'switch';
 					break;
 				}
 			}
@@ -2837,9 +2893,6 @@ class Battle extends Dex.ModdedDex {
 			this.residualEvent('Residual');
 			this.add('upkeep');
 			break;
-
-		case 'skip':
-			throw new Error("Decision illegally skipped!");
 		}
 
 		// phazing (Roar, etc)
@@ -2871,17 +2924,14 @@ class Battle extends Dex.ModdedDex {
 			// in gen 3 or earlier, switching in fainted pokemon is done after
 			// every move, rather than only at the end of the turn.
 			this.checkFainted();
-		} else if (decision.choice === 'pass') {
+		} else if (action.choice === 'megaEvo' && this.gen >= 7) {
 			this.eachEvent('Update');
-			return false;
-		} else if (decision.choice === 'megaEvo' && this.gen >= 7) {
-			this.eachEvent('Update');
-			// In Gen 7, the decision order is recalculated for a Pokémon that mega evolves.
-			const moveIndex = this.queue.findIndex(queuedDecision => queuedDecision.pokemon === decision.pokemon && queuedDecision.choice === 'move');
+			// In Gen 7, the action order is recalculated for a Pokémon that mega evolves.
+			const moveIndex = this.queue.findIndex(queuedAction => queuedAction.pokemon === action.pokemon && queuedAction.choice === 'move');
 			if (moveIndex >= 0) {
-				const moveDecision = this.queue.splice(moveIndex, 1)[0];
-				moveDecision.mega = 'done';
-				this.insertQueue(moveDecision, true);
+				const moveAction = /** @type {MoveAction} */ (this.queue.splice(moveIndex, 1)[0]);
+				moveAction.mega = 'done';
+				this.insertQueue(moveAction, true);
 			}
 			return false;
 		} else if (this.queue.length && this.queue[0].choice === 'instaswitch') {
@@ -2924,16 +2974,16 @@ class Battle extends Dex.ModdedDex {
 		}
 
 		if (!this.midTurn) {
-			this.queue.push({choice: 'residual', priority: -100});
-			this.queue.unshift({choice: 'beforeTurn', priority: 100});
+			this.queue.push(this.resolveAction({choice: 'residual'}));
+			this.queue.unshift(this.resolveAction({choice: 'beforeTurn'}));
 			this.midTurn = true;
 		}
 
 		while (this.queue.length) {
-			let decision = this.queue[0];
+			let action = this.queue[0];
 			this.queue.shift();
 
-			this.runDecision(decision);
+			this.runAction(action);
 
 			if (this.currentRequest) {
 				return;
@@ -2948,19 +2998,19 @@ class Battle extends Dex.ModdedDex {
 	}
 
 	/**
-	 * Changes a pokemon's decision, and inserts its new decision
+	 * Changes a pokemon's action, and inserts its new action
 	 * in priority order.
 	 *
-	 * You'd normally want the OverrideDecision event (which doesn't
+	 * You'd normally want the OverrideAction event (which doesn't
 	 * change priority order).
 	 *
 	 * @param {Pokemon} pokemon
-	 * @param {AnyObject} decision
+	 * @param {AnyObject} action
 	 */
-	changeDecision(pokemon, decision) {
-		this.cancelDecision(pokemon);
-		if (!decision.pokemon) decision.pokemon = pokemon;
-		this.insertQueue(decision);
+	changeAction(pokemon, action) {
+		this.cancelAction(pokemon);
+		if (!action.pokemon) action.pokemon = pokemon;
+		this.insertQueue(action);
 	}
 
 	/**
@@ -2977,7 +3027,7 @@ class Battle extends Dex.ModdedDex {
 
 		if (!side.choose(input)) return false;
 
-		this.checkDecisions();
+		this.checkActions();
 		return true;
 	}
 
@@ -3009,7 +3059,7 @@ class Battle extends Dex.ModdedDex {
 		this.LEGACY_API_DO_NOT_USE = oldFlag;
 		this.add('choice', this.p1.getChoice, this.p2.getChoice);
 		for (const side of this.sides) {
-			this.addQueue(side.choice.actions);
+			this.addToQueue(side.choice.actions);
 		}
 
 		this.sortQueue();
@@ -3042,17 +3092,17 @@ class Battle extends Dex.ModdedDex {
 	/**
 	 * returns true if both decisions are complete
 	 */
-	checkDecisions() {
-		let totalDecisions = 0;
+	checkActions() {
+		let totalActions = 0;
 		if (this.p1.isChoiceDone()) {
 			if (!this.supportCancel) this.p1.choice.cantUndo = true;
-			totalDecisions++;
+			totalActions++;
 		}
 		if (this.p2.isChoiceDone()) {
 			if (!this.supportCancel) this.p2.choice.cantUndo = true;
-			totalDecisions++;
+			totalActions++;
 		}
-		if (totalDecisions >= this.sides.length) {
+		if (totalActions >= this.sides.length) {
 			this.commitDecisions();
 			return true;
 		}
@@ -3277,7 +3327,6 @@ class Battle extends Dex.ModdedDex {
 		this.p2 = null;
 		for (let i = 0; i < this.queue.length; i++) {
 			delete this.queue[i].pokemon;
-			delete this.queue[i].side;
 		}
 		this.queue = [];
 

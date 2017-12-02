@@ -180,7 +180,7 @@ exports.BattleMovedex = {
 					this.effectData.duration++;
 				}
 			},
-			onOverrideDecision: function (pokemon) {
+			onOverrideAction: function (pokemon) {
 				return this.effectData.move;
 			},
 			onResidualOrder: 13,

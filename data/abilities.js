@@ -420,9 +420,9 @@ exports.BattleAbilities = {
 
 				if (target.side.active.length === 2 && target.position === 1) {
 					// Curse Glitch
-					const decision = this.willMove(target);
-					if (decision && decision.move.id === 'curse') {
-						decision.targetLoc = -1;
+					const action = this.willMove(target);
+					if (action && action.move.id === 'curse') {
+						action.targetLoc = -1;
 					}
 				}
 			}

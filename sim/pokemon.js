@@ -243,7 +243,7 @@ class Pokemon {
 	}
 
 	updateSpeed() {
-		this.speed = this.getDecisionSpeed();
+		this.speed = this.getActionSpeed();
 	}
 
 	/**
@@ -346,7 +346,7 @@ class Pokemon {
 		return stat;
 	}
 
-	getDecisionSpeed() {
+	getActionSpeed() {
 		let speed = this.getStat('spe', false, false);
 		if (speed > 10000) speed = 10000;
 		if (this.battle.getPseudoWeather('trickroom')) {
@@ -514,14 +514,17 @@ class Pokemon {
 		};
 	}
 
+	/**
+	 * @return {string | null}
+	 */
 	getLockedMove() {
 		let lockedMove = this.battle.runEvent('LockMove', this);
-		if (lockedMove === true) lockedMove = false;
+		if (lockedMove === true) lockedMove = null;
 		return lockedMove;
 	}
 
 	/**
-	 * @param {string} [lockedMove]
+	 * @param {string?} [lockedMove]
 	 * @param {boolean} [restrictData]
 	 */
 	getMoves(lockedMove, restrictData) {

@@ -73,7 +73,7 @@ exports.BattleMovedex = {
 					this.effectData.duration++;
 				}
 			},
-			onOverrideDecision: function (pokemon, target, move) {
+			onOverrideAction: function (pokemon, target, move) {
 				if (move.id !== this.effectData.move) return this.effectData.move;
 			},
 			onResidualOrder: 13,

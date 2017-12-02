@@ -13,7 +13,6 @@ const RULE_FLAGS = {
 	preview: 4,
 	sleepClause: 8,
 	cancel: 16,
-	partialDecisions: 32,
 };
 
 function capitalize(word) {
@@ -86,7 +85,6 @@ class TestTools {
 		if (options.preview) format.ruleset.push('Team Preview');
 		if (options.sleepClause) format.ruleset.push('Sleep Clause Mod');
 		if (options.cancel) format.ruleset.push('Cancel Mod');
-		// if (options.partialDecisions) format.ruleset.push('Partial Decisions');
 
 		this.dex.installFormat(formatId, format);
 		return format;
@@ -115,7 +113,6 @@ class TestTools {
 			prng
 		);
 		battle.LEGACY_API_DO_NOT_USE = true;
-		if (options && options.partialDecisions) battle.supportPartialDecisions = true;
 		if (teams) {
 			for (let i = 0; i < teams.length; i++) {
 				assert(Array.isArray(teams[i]), "Team provided is not an array");

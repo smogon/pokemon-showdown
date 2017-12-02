@@ -303,7 +303,7 @@ In addition to room messages, battles have their own messages.
 
 `|request|REQUEST`
 
-> Gives a JSON object containing a request for a decision (to move or
+> Gives a JSON object containing a request for a choice (to move or
 > switch). To assist in your decision, `REQUEST.active` has information
 > about your active Pokémon, and `REQUEST.side` has information about your
 > your team as a whole.
