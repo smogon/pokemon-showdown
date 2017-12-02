@@ -15,7 +15,6 @@ exports.commands = {
 
 		if (!target || target === 'all') {
 			buffer += "- <a href=\"http://www.smogon.com/forums/forums/394/\">Other Metagames Forum</a><br />";
-			buffer += "- <a href=\"http://www.smogon.com/forums/forums/442/\">Other Metagames Analyses</a><br />";
 			if (!target) return this.sendReplyBox(buffer);
 		}
 		let showMonthly = (target === 'all' || target === 'omofthemonth' || target === 'omotm' || target === 'month');
