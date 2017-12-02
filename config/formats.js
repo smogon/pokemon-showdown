@@ -479,7 +479,7 @@ exports.Formats = [
 
 		mod: 'gen7',
 		ruleset: ['[Gen 7] OU'],
-		banlist: ['Silvally', 'Type: Null', 'Huge Power', 'Pure Power'],
+		banlist: ['Silvally', 'Type: Null', 'Wishiwashi', 'Huge Power', 'Pure Power'],
 		onValidateSet: function (set) {
 			let problems = [];
 			let template = this.getTemplate(set.species);
