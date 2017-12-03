@@ -680,8 +680,10 @@ function runDexsearch(target, cmd, canAll, message) {
 			}
 
 			if (alts.tiers && Object.keys(alts.tiers).length) {
-				if (alts.tiers[dex[mon].tier]) continue;
-				if (Object.values(alts.tiers).includes(false) && alts.tiers[dex[mon].tier] !== false) continue;
+				let tier = dex[mon].tier;
+				if (tier[0] === '(') tier = tier.slice(1, -1);
+				if (alts.tiers[tier]) continue;
+				if (Object.values(alts.tiers).includes(false) && alts.tiers[tier] !== false) continue;
 				// some LC Pokemon are also in other tiers and need to be handled separately
 				if (alts.tiers.LC && !dex[mon].prevo && dex[mon].nfe && !Dex.formats.gen7lc.banlist.includes(dex[mon].species)) continue;
 			}
