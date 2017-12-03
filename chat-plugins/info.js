@@ -1234,6 +1234,17 @@ exports.commands = {
 		this.sendReplyBox("<a href=\"http://www.smogon.com/forums/forums/209/\">Pok&eacute;mon Showdown Forums</a>");
 	},
 
+	'!privacypolicy': true,
+	privacypolicy: function (target, room, user) {
+		if (!this.runBroadcast()) return;
+		this.sendReplyBox(
+			`- We log PMs so you can report them - staff can't look at them without permission unless there's a law enforcement reason.<br />` +
+			`- We log IPs to enforce bans and mutes.<br />` +
+			`- We use cookies to save your login info and teams, and for Google Analytics and AdSense.<br />` +
+			`- For more information, you can read our <a href="https://pokemonshowdown.com/privacy">full privacy policy.</a>`
+		);
+	},
+
 	'!suggestions': true,
 	suggestions: function (target, room, user) {
 		if (!this.runBroadcast()) return;
