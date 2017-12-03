@@ -402,17 +402,6 @@ exports.Formats = [
 		ruleset: ['[Gen 7] Doubles OU'],
 		banlist: ['Huge Power', 'Imposter', 'Parental Bond', 'Pure Power', 'Wonder Guard', 'Kangaskhanite', 'Mawilite', 'Medichamite', 'Mimic', 'Sketch', 'Transform'],
 		onDisableMovePriority: -1,
-		onDisableMove: function (pokemon) {
-			let ally = pokemon.side.active.find(ally => ally && ally !== pokemon && !ally.fainted);
-			if (!ally) ally = {baseMoveset: []};
-			pokemon.moveset = pokemon.baseMoveset.concat(ally.baseMoveset);
-		},
-		onResidual: function () {
-			this.eachEvent('ResetMoveset');
-		},
-		onResetMoveset: function (pokemon) {
-			pokemon.moveset = pokemon.baseMoveset;
-		},
 		onSwitchInPriority: 2,
 		onSwitchIn: function (pokemon) {
 			if (this.p1.active.every(ally => ally && !ally.fainted)) {
