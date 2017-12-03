@@ -20,13 +20,10 @@ describe('Stomping Tantrum', function () {
 			assert.strictEqual(basePower, 150);
 		});
 
-		battle.commitDecisions();
-		battle.choose('p1', 'move 3');
-		battle.commitDecisions();
-		battle.choose('p1', 'move 2');
-		battle.commitDecisions();
-		battle.choose('p1', 'move 3');
-		battle.commitDecisions();
+		battle.makeChoices('move attract', 'move rest');
+		battle.makeChoices('move stompingtantrum', 'move rest');
+		battle.makeChoices('move spore', 'move rest');
+		battle.makeChoices('move stompingtantrum', 'move rest');
 	});
 
 	it('should not double its Base Power if the last move used on the previous turn hit protect', function () {
@@ -39,7 +36,7 @@ describe('Stomping Tantrum', function () {
 			assert.strictEqual(basePower, 75);
 		});
 
-		battle.commitDecisions();
-		battle.commitDecisions();
+		battle.makeChoices('move stompingtantrum', 'move protect');
+		battle.makeChoices('move stompingtantrum', 'move protect');
 	});
 });
