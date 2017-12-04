@@ -8643,7 +8643,10 @@ exports.BattleMovedex = {
 		priority: 1,
 		flags: {},
 		pseudoWeather: 'iondeluge',
-		onTryHitField: false,
+		onTryHitField: function () {
+			this.add('-hint', "Ion Deluge does not work in Ultra Sun and Ultra Moon.");
+			return false;
+		},
 		effect: {
 			duration: 1,
 			onStart: function (target) {
