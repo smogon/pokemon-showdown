@@ -331,10 +331,10 @@ exports.BattleAbilities = {
 			let foeactive = pokemon.side.foe.active;
 			let totaldef = 0;
 			let totalspd = 0;
-			for (let i = 0; i < foeactive.length; i++) {
-				if (!foeactive[i] || foeactive[i].fainted) continue;
-				totaldef += foeactive[i].stats.def;
-				totalspd += foeactive[i].stats.spd;
+			for (let active of foeactive) {
+				if (!active || active.fainted) continue;
+				totaldef += active.stats.def;
+				totalspd += active.stats.spd;
 			}
 			if (totaldef && totaldef >= totalspd) {
 				this.boost({spa: 1});
@@ -463,8 +463,8 @@ exports.BattleAbilities = {
 			if (move.category !== "Status") {
 				this.debug('Adding Stench flinch');
 				if (!move.secondaries) move.secondaries = [];
-				for (let i = 0; i < move.secondaries.length; i++) {
-					if (move.secondaries[i].volatileStatus === 'flinch') return;
+				for (let secondary of move.secondaries) {
+					if (secondary.volatileStatus === 'flinch') return;
 				}
 				move.secondaries.push({
 					chance: 40,
@@ -580,8 +580,8 @@ exports.BattleAbilities = {
 		},
 		onFoeDisableMove: function (pokemon) {
 			let foeMoves = this.effectData.target.moveset;
-			for (let f = 0; f < foeMoves.length; f++) {
-				pokemon.disableMove(foeMoves[f].id, 'hidden');
+			for (let move of foeMoves) {
+				pokemon.disableMove(move.id, 'hidden');
 			}
 			pokemon.maybeDisabled = true;
 		},

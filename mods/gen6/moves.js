@@ -90,9 +90,9 @@ exports.BattleMovedex = {
 				if (!this.effectData.move || !pokemon.hasMove(this.effectData.move)) {
 					return;
 				}
-				for (let i = 0; i < pokemon.moveset.length; i++) {
-					if (pokemon.moveset[i].id !== this.effectData.move) {
-						pokemon.disableMove(pokemon.moveset[i].id);
+				for (let move of pokemon.moveset) {
+					if (move.id !== this.effectData.move) {
+						pokemon.disableMove(move.id);
 					}
 				}
 			},

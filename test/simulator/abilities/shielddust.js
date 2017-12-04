@@ -35,8 +35,8 @@ describe('Shield Dust', function () {
 		]);
 		battle.onEvent('ModifyMove', battle.getFormat(), function (move) {
 			if (move.secondaries) {
-				for (let i = 0; i < move.secondaries.length; i++) {
-					move.secondaries[i].chance = 100;
+				for (let secondaries of move.secondaries) {
+					secondaries.chance = 100;
 				}
 			}
 		});
