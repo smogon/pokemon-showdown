@@ -700,7 +700,7 @@ class RandomTeams extends Dex.ModdedDex {
 					if (counter.setupType || !!counter['speedsetup'] || hasMove['dragontail']) rejected = true;
 					break;
 				case 'nightshade': case 'seismictoss':
-					if (counter.stab || counter.setupType || counter.damagingMoves.length > 2) rejected = true;
+					if (counter.damagingMoves.length > 1 || counter.setupType) rejected = true;
 					break;
 				case 'protect':
 					if (counter.setupType && (hasAbility['Guts'] || hasAbility['Speed Boost']) && !hasMove['batonpass']) rejected = true;
@@ -819,8 +819,9 @@ class RandomTeams extends Dex.ModdedDex {
 					if ((hasMove['fireblast'] && counter.setupType !== 'Physical') || hasMove['overheat']) rejected = true;
 					break;
 				case 'fireblast':
-					if (hasMove['lavaplume'] && !counter.setupType && !counter['speedsetup']) rejected = true;
 					if (hasMove['flareblitz'] && counter.setupType !== 'Special') rejected = true;
+					if (hasMove['lavaplume'] && !counter.setupType && !counter['speedsetup']) rejected = true;
+					if (hasMove['mindblown'] && counter.setupType) rejected = true;
 					break;
 				case 'firepunch': case 'sacredfire':
 					if (hasMove['fireblast'] || hasMove['flareblitz']) rejected = true;
@@ -945,7 +946,7 @@ class RandomTeams extends Dex.ModdedDex {
 					break;
 				case 'hydropump':
 					if (hasMove['razorshell'] || hasMove['waterfall'] || (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
-					if (hasMove['scald'] && counter.Special < 4) rejected = true;
+					if (hasMove['scald'] && (counter.Special < 4 || template.types.length > 1 && counter.stab < 2)) rejected = true;
 					break;
 				case 'originpulse': case 'surf':
 					if (hasMove['hydropump'] || hasMove['scald']) rejected = true;
@@ -1311,17 +1312,11 @@ class RandomTeams extends Dex.ModdedDex {
 			item = hasMove['outrage'] ? 'Dragonium Z' : 'Groundium Z';
 		} else if (ability === 'Imposter') {
 			item = 'Choice Scarf';
+		} else if (hasMove['geomancy']) {
+			item = 'Power Herb';
 		} else if (ability === 'Klutz' && hasMove['switcheroo']) {
 			// To perma-taunt a Pokemon by giving it Assault Vest
 			item = 'Assault Vest';
-		} else if (hasMove['conversion']) {
-			item = 'Normalium Z';
-		} else if (!teamDetails.zMove && (hasMove['fly'] || hasMove['bounce'] && counter.setupType)) {
-			item = 'Flyinium Z';
-		} else if (hasMove['geomancy']) {
-			item = 'Power Herb';
-		} else if (hasMove['solarbeam'] && !hasAbility['Drought'] && !hasMove['sunnyday'] && !teamDetails['sun']) {
-			item = !teamDetails.zMove ? 'Grassium Z' : 'Power Herb';
 		} else if (hasMove['switcheroo'] || hasMove['trick']) {
 			let randomNum = this.random(3);
 			if (counter.Physical >= 3 && (template.baseStats.spe < 60 || template.baseStats.spe > 108 || randomNum)) {
@@ -1331,6 +1326,14 @@ class RandomTeams extends Dex.ModdedDex {
 			} else {
 				item = 'Choice Scarf';
 			}
+		} else if (hasMove['conversion']) {
+			item = 'Normalium Z';
+		} else if (hasMove['mindblown'] && !!counter['Status'] && !teamDetails.zMove) {
+			item = 'Firium Z';
+		} else if (!teamDetails.zMove && (hasMove['fly'] || hasMove['bounce'] && counter.setupType)) {
+			item = 'Flyinium Z';
+		} else if (hasMove['solarbeam'] && !hasAbility['Drought'] && !hasMove['sunnyday'] && !teamDetails['sun']) {
+			item = !teamDetails.zMove ? 'Grassium Z' : 'Power Herb';
 		} else if (template.evos.length) {
 			item = (ability === 'Technician' && counter.Physical >= 4) ? 'Choice Band' : 'Eviolite';
 		} else if (template.species === 'Latias' || template.species === 'Latios') {
