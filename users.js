@@ -1215,7 +1215,7 @@ class User {
 			this.inRooms.delete(room.id);
 		}
 	}
-	prepBattle(formatid, type, connection) {
+	async prepBattle(formatid, type, connection) {
 		// all validation for a battle goes through here
 		if (!connection) connection = this;
 		if (!type) type = 'challenge';
@@ -1226,44 +1226,31 @@ class User {
 				message = `The server is under attack. Battles cannot be started at this time.`;
 			}
 			connection.popup(message);
-			return Promise.resolve(false);
+			return false;
 		}
 		let gameCount = this.games.size;
 		if (Monitor.countConcurrentBattle(gameCount, connection)) {
-			return Promise.resolve(false);
+			return false;
 		}
 		if (Monitor.countPrepBattle(connection.ip || connection.latestIp, connection)) {
-			return Promise.resolve(false);
+			return false;
 		}
 
 		let format = Dex.getFormat(formatid);
 		if (!format['' + type + 'Show']) {
 			connection.popup(`That format is not available.`);
-			return Promise.resolve(false);
+			return false;
 		}
-		return TeamValidatorAsync(formatid).validateTeam(this.team, this.locked || this.namelocked).then(result => this.finishPrepBattle(connection, result));
-	}
 
-	/**
-	 * Parses the result of a team validation and notifies the user.
-	 *
-	 * @param {Connection} connection - The connection from which the team validation was requested.
-	 * @param {string} result - The raw result received by the team validator.
-	 * @return {string|boolean} - The packed team if the validation was successful. False otherwise.
-	 */
-	finishPrepBattle(connection, result) {
+		const result = await TeamValidatorAsync(formatid).validateTeam(this.team, this.locked || this.namelocked);
 		if (result.charAt(0) !== '1') {
 			connection.popup(`Your team was rejected for the following reasons:\n\n- ` + result.slice(1).replace(/\n/g, `\n- `));
 			return false;
 		}
 
-		if (this !== users.get(this.userid)) {
-			// TODO: User feedback.
-			return false;
-		}
-
 		return result.slice(1);
 	}
+
 	updateChallenges() {
 		let challengeTo = this.challengeTo;
 		if (challengeTo) {
