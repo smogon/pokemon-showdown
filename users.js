@@ -1330,7 +1330,7 @@ class User {
 			time: time,
 			from: this.userid,
 			to: user.userid,
-			format: '' + (format || ''),
+			format: toId(format),
 			//isPrivate: !!isPrivate, // currently unused
 			team: team,
 		};

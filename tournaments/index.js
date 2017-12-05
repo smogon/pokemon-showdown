@@ -116,8 +116,7 @@ class Tournament {
 	setCustomRules(rules, output) {
 		let format = Dex.getFormat(this.originalFormat);
 		if (format.team) {
-			output.errorReply(format.name + " does not support custom rules.");
-			return false;
+			output.errorReply(`WARNING: ${format.name} uses generated teams - only in-battle mod rules (like Sleep Clause Mod) will have any effect.`);
 		}
 		format = Dex.getFormat(this.originalFormat, rules);
 		if (!format.customRules) {

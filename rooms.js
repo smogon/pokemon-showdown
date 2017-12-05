@@ -1666,8 +1666,6 @@ let Rooms = Object.assign(getRoom, {
 		}
 
 		const roomid = Rooms.global.prepBattleRoom(formatid);
-		const format = Dex.getFormat(formatid);
-		formatid = format.id;
 		options.format = formatid;
 		// options.rated is a number representing the lower player rating, for searching purposes
 		// options.rated < 0 or falsy means "unrated", and will be converted to 0 here
