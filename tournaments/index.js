@@ -891,6 +891,12 @@ class Tournament {
 		this.isAvailableMatchesInvalidated = true;
 
 		if (this.generator.isTournamentEnded()) {
+			if (!this.room.isPrivate && this.generator.name.includes('Elimination') && !Config.autosavereplays) {
+				let uploader = Users.get(winnerid);
+				if (uploader && uploader.connections[0]) {
+					Chat.parse('/savereplay', room, uploader, uploader.connections[0]);
+				}
+			}
 			this.onTournamentEnd();
 		} else {
 			if (this.autoDisqualifyTimeout !== Infinity) this.runAutoDisqualify();
