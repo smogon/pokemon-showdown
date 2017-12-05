@@ -48,8 +48,8 @@ class RandomGen3Teams extends RandomGen4Teams {
 			hasAbility[template.abilities[1]] = true;
 		}
 		let availableHP = 0;
-		for (let i = 0, len = movePool.length; i < len; i++) {
-			if (movePool[i].substr(0, 11) === 'hiddenpower') availableHP++;
+		for (let move of movePool) {
+			if (move.substr(0, 11) === 'hiddenpower') availableHP++;
 		}
 
 		let recoveryMoves = [
@@ -80,11 +80,11 @@ class RandomGen3Teams extends RandomGen4Teams {
 		do {
 			// Keep track of all moves we have:
 			hasMove = {};
-			for (let k = 0; k < moves.length; k++) {
-				if (moves[k].substr(0, 11) === 'hiddenpower') {
+			for (let move of moves) {
+				if (move.substr(0, 11) === 'hiddenpower') {
 					hasMove['hiddenpower'] = true;
 				} else {
-					hasMove[moves[k]] = true;
+					hasMove[move] = true;
 				}
 			}
 
@@ -104,8 +104,8 @@ class RandomGen3Teams extends RandomGen4Teams {
 			counter = this.queryMoves(moves, hasType, hasAbility, movePool);
 
 			// Iterate through the moves again, this time to cull them:
-			for (let k = 0; k < moves.length; k++) {
-				let move = this.getMove(moves[k]);
+			for (let move of moves) {
+				move = this.getMove(move);
 				let moveid = move.id;
 				let rejected = false;
 				let isSetup = false;
@@ -333,7 +333,7 @@ class RandomGen3Teams extends RandomGen4Teams {
 
 				// Remove rejected moves from the move list
 				if (rejected && (movePool.length - availableHP || availableHP && (moveid === 'hiddenpower' || !hasMove['hiddenpower']))) {
-					moves.splice(k, 1);
+					moves.splice(moves.indexOf(move), 1);
 					break;
 				}
 			}
@@ -349,9 +349,9 @@ class RandomGen3Teams extends RandomGen4Teams {
 				}
 				if (reqMove) {
 					// reject a move
-					for (let m = 0; m < moves.length; m++) {
-						if (moves[m] === 'weatherball' || this.getMove(moves[m]).type in hasType) continue;
-						moves[m] = reqMove;
+					for (let move of moves) {
+						if (move === 'weatherball' || this.getMove(move).type in hasType) continue;
+						move = reqMove;
 						let reqMoveIndex = movePool.indexOf(reqMove);
 						if (reqMoveIndex !== -1) this.fastPop(movePool, reqMoveIndex);
 						break;
@@ -380,9 +380,9 @@ class RandomGen3Teams extends RandomGen4Teams {
 						// If you have three or more attacks, and none of them are STAB, reject one of them at random.
 						let rejectableMoves = [];
 						let baseDiff = movePool.length - availableHP;
-						for (let l = 0; l < counter.damagingMoves.length; l++) {
-							if (baseDiff || availableHP && (!hasMove['hiddenpower'] || counter.damagingMoves[l].id === 'hiddenpower')) {
-								rejectableMoves.push(counter.damagingMoveIndex[counter.damagingMoves[l].id]);
+						for (let move of counter.damagingMoves) {
+							if (baseDiff || availableHP && (!hasMove['hiddenpower'] || move.id === 'hiddenpower')) {
+								rejectableMoves.push(counter.damagingMoveIndex[move.id]);
 							}
 						}
 						if (rejectableMoves.length) {
@@ -588,8 +588,8 @@ class RandomGen3Teams extends RandomGen4Teams {
 			if (template.gen > 3 || template.isNonstandard || !template.randomBattleMoves) continue;
 			if (template.evos && !allowedNFE.includes(template.species)) {
 				let invalid = false;
-				for (let i = 0; i < template.evos.length; i++) {
-					if (this.getTemplate(template.evos[i]).gen <= 3) {
+				for (let evo of template.evos) {
+					if (this.getTemplate(evo).gen <= 3) {
 						invalid = true;
 						break;
 					}
@@ -633,8 +633,8 @@ class RandomGen3Teams extends RandomGen4Teams {
 			// Limit 2 of any type
 			let types = template.types;
 			let skip = false;
-			for (let t = 0; t < types.length; t++) {
-				if (typeCount[types[t]] > 1 && this.random(5) >= 1) {
+			for (let type of types) {
+				if (typeCount[type] > 1 && this.random(5) >= 1) {
 					skip = true;
 					break;
 				}
@@ -664,11 +664,11 @@ class RandomGen3Teams extends RandomGen4Teams {
 			baseFormes[template.baseSpecies] = 1;
 
 			// Increment type counters
-			for (let t = 0; t < types.length; t++) {
-				if (types[t] in typeCount) {
-					typeCount[types[t]]++;
+			for (let type of types) {
+				if (type in typeCount) {
+					typeCount[type]++;
 				} else {
-					typeCount[types[t]] = 1;
+					typeCount[type] = 1;
 				}
 			}
 			if (typeCombo in typeComboCount) {

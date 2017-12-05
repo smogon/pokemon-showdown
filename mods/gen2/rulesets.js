@@ -24,8 +24,8 @@ exports.BattleFormats = {
 				}
 			}
 			if (set.moves) {
-				for (let i = 0; i < set.moves.length; i++) {
-					let move = this.getMove(set.moves[i]);
+				for (let move of set.moves) {
+					move = this.getMove(move);
 					if (move.gen > this.gen) {
 						problems.push(move.name + ' does not exist in gen ' + this.gen + '.');
 					} else if (move.isNonstandard) {
@@ -72,12 +72,11 @@ exports.BattleFormats = {
 			let moves = [];
 			if (set.moves) {
 				let hasMove = {};
-				for (let i = 0; i < set.moves.length; i++) {
-					let move = this.getMove(set.moves[i]);
-					let moveid = move.id;
+				for (let move of set.moves) {
+					let moveid = this.getMove(move).id;
 					if (hasMove[moveid]) continue;
 					hasMove[moveid] = true;
-					moves.push(set.moves[i]);
+					moves.push(move);
 				}
 			}
 			set.moves = moves;

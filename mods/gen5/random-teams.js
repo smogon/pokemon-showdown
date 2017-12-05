@@ -51,8 +51,8 @@ class RandomGen5Teams extends RandomGen6Teams {
 			hasAbility[template.abilities['H']] = true;
 		}
 		let availableHP = 0;
-		for (let i = 0, len = movePool.length; i < len; i++) {
-			if (movePool[i].substr(0, 11) === 'hiddenpower') availableHP++;
+		for (let move of movePool) {
+			if (move.substr(0, 11) === 'hiddenpower') availableHP++;
 		}
 
 		let SetupException = ['extremespeed', 'suckerpunch', 'superpower', 'dracometeor', 'leafstorm', 'overheat'];
@@ -62,11 +62,11 @@ class RandomGen5Teams extends RandomGen6Teams {
 
 		do {
 			hasMove = {};
-			for (let k = 0; k < moves.length; k++) {
-				if (moves[k].substr(0, 11) === 'hiddenpower') {
+			for (let move of moves) {
+				if (move.substr(0, 11) === 'hiddenpower') {
 					hasMove['hiddenpower'] = true;
 				} else {
-					hasMove[moves[k]] = true;
+					hasMove[move] = true;
 				}
 			}
 
@@ -84,8 +84,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 
 			counter = this.queryMoves(moves, hasType, hasAbility, movePool);
 
-			for (let k = 0; k < moves.length; k++) {
-				let move = this.getMove(moves[k]);
+			for (let move of moves) {
 				let moveid = move.id;
 				let rejected = false;
 				let isSetup = false;
@@ -313,7 +312,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 
 				// Remove rejected moves from the move list
 				if (rejected && (movePool.length - availableHP || availableHP && (moveid === 'hiddenpower' || !hasMove['hiddenpower']))) {
-					moves.splice(k, 1);
+					moves.splice(moves.indexOf(move), 1);
 					break;
 				}
 
@@ -340,10 +339,10 @@ class RandomGen5Teams extends RandomGen6Teams {
 					// If you have three or more attacks, and none of them are STAB, reject one of them at random
 					let rejectableMoves = [];
 					let baseDiff = movePool.length - availableHP;
-					for (let l = 0; l < counter.damagingMoves.length; l++) {
-						if (counter.damagingMoves[l].id === 'technoblast') continue;
-						if (baseDiff || availableHP && (!hasMove['hiddenpower'] || counter.damagingMoves[l].id === 'hiddenpower')) {
-							rejectableMoves.push(counter.damagingMoveIndex[counter.damagingMoves[l].id]);
+					for (let move of counter.damagingMoves) {
+						if (move.id === 'technoblast') continue;
+						if (baseDiff || availableHP && (!hasMove['hiddenpower'] || move.id === 'hiddenpower')) {
+							rejectableMoves.push(counter.damagingMoveIndex[move.id]);
 						}
 					}
 					if (rejectableMoves.length) {
@@ -514,8 +513,8 @@ class RandomGen5Teams extends RandomGen6Teams {
 		} else if (ability === 'Unburden' && (counter['Physical'] || counter['Special'])) {
 			// Give Unburden mons a random Gem of the type of one of their damaging moves
 			let eligibleTypes = [];
-			for (let i = 0; i < moves.length; i++) {
-				let move = this.getMove(moves[i]);
+			for (let move of moves) {
+				move = this.getMove(move);
 				if (!move.basePower && !move.basePowerCallback) continue;
 				eligibleTypes.push(move.type);
 			}
@@ -540,8 +539,8 @@ class RandomGen5Teams extends RandomGen6Teams {
 			item = 'Choice Scarf';
 		} else if (hasMove['substitute'] && hasMove['reversal']) {
 			let eligibleTypes = [];
-			for (let i = 0; i < moves.length; i++) {
-				let move = this.getMove(moves[i]);
+			for (let move of moves) {
+				move = this.getMove(move);
 				if (!move.basePower && !move.basePowerCallback) continue;
 				eligibleTypes.push(move.type);
 			}
@@ -681,8 +680,8 @@ class RandomGen5Teams extends RandomGen6Teams {
 
 			// Limit 2 of any type
 			let skip = false;
-			for (let t = 0; t < types.length; t++) {
-				if (typeCount[types[t]] > 1 && this.random(5) >= 1) {
+			for (let type of types) {
+				if (typeCount[type] > 1 && this.random(5) >= 1) {
 					skip = true;
 					break;
 				}
@@ -708,11 +707,11 @@ class RandomGen5Teams extends RandomGen6Teams {
 			baseFormes[template.baseSpecies] = 1;
 
 			// Increment type counters
-			for (let t = 0; t < types.length; t++) {
-				if (types[t] in typeCount) {
-					typeCount[types[t]]++;
+			for (let type of types) {
+				if (type in typeCount) {
+					typeCount[type]++;
 				} else {
-					typeCount[types[t]] = 1;
+					typeCount[type] = 1;
 				}
 			}
 			if (typeCombo in typeComboCount) {

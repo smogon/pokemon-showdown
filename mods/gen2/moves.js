@@ -198,9 +198,9 @@ exports.BattleMovedex = {
 				if (!this.effectData.move || !pokemon.hasMove(this.effectData.move)) {
 					return;
 				}
-				for (let i = 0; i < pokemon.moveset.length; i++) {
-					if (pokemon.moveset[i].id !== this.effectData.move) {
-						pokemon.disableMove(pokemon.moveset[i].id);
+				for (let move of pokemon.moveset) {
+					if (move.id !== this.effectData.move) {
+						pokemon.disableMove(move.id);
 					}
 				}
 			},
@@ -513,9 +513,9 @@ exports.BattleMovedex = {
 	roar: {
 		inherit: true,
 		onTryHit: function () {
-			for (let i = 0; i < this.queue.length; i++) {
+			for (let action of this.queue) {
 				// Roar only works if it is the last action in a turn, including when it's called by Sleep Talk
-				if (this.queue[i].choice === 'move' || this.queue[i].choice === 'switch') return false;
+				if (['move', 'switch'].includes(action)) return false;
 			}
 		},
 		priority: -1,
@@ -554,11 +554,11 @@ exports.BattleMovedex = {
 		inherit: true,
 		onHit: function (pokemon) {
 			let moves = [];
-			for (let i = 0; i < pokemon.moveset.length; i++) {
-				let move = pokemon.moveset[i].id;
+			for (let move of pokemon.moveset) {
+				let moveid = move.id;
 				let NoSleepTalk = ['bide', 'sleeptalk'];
-				if (move && !NoSleepTalk.includes(move) && !this.getMove(move).flags['charge']) {
-					moves.push(move);
+				if (moveid && !NoSleepTalk.includes(moveid) && !this.getMove(moveid).flags['charge']) {
+					moves.push(moveid);
 				}
 			}
 			let randomMove = '';
@@ -719,9 +719,9 @@ exports.BattleMovedex = {
 	whirlwind: {
 		inherit: true,
 		onTryHit: function () {
-			for (let i = 0; i < this.queue.length; i++) {
+			for (let action of this.queue) {
 				// Whirlwind only works if it is the last action in a turn, including when it's called by Sleep Talk
-				if (this.queue[i].choice === 'move' || this.queue[i].choice === 'switch') return false;
+				if (action.choice === 'move' || action.choice === 'switch') return false;
 			}
 		},
 		priority: -1,

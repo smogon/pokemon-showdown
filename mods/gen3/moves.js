@@ -173,12 +173,12 @@ exports.BattleMovedex = {
 					return false;
 				}
 				let moves = pokemon.moveset;
-				for (let i = 0; i < moves.length; i++) {
-					if (moves[i].id === pokemon.lastMove) {
-						if (!moves[i].pp) {
+				for (let move of moves) {
+					if (move.id === pokemon.lastMove) {
+						if (!move.pp) {
 							return false;
 						} else {
-							this.add('-start', pokemon, 'Disable', moves[i].move);
+							this.add('-start', pokemon, 'Disable', move.move);
 							this.effectData.move = pokemon.lastMove;
 							return;
 						}
@@ -197,9 +197,9 @@ exports.BattleMovedex = {
 			},
 			onDisableMove: function (pokemon) {
 				let moves = pokemon.moveset;
-				for (let i = 0; i < moves.length; i++) {
-					if (moves[i].id === this.effectData.move) {
-						pokemon.disableMove(moves[i].id);
+				for (let move of moves) {
+					if (move.id === this.effectData.move) {
+						pokemon.disableMove(move.id);
 					}
 				}
 			},
@@ -256,9 +256,9 @@ exports.BattleMovedex = {
 				if (!this.effectData.move || !pokemon.hasMove(this.effectData.move)) {
 					return;
 				}
-				for (let i = 0; i < pokemon.moveset.length; i++) {
-					if (pokemon.moveset[i].id !== this.effectData.move) {
-						pokemon.disableMove(pokemon.moveset[i].id);
+				for (let move of pokemon.moveset) {
+					if (move.id !== this.effectData.move) {
+						pokemon.disableMove(move.id);
 					}
 				}
 			},
@@ -434,9 +434,9 @@ exports.BattleMovedex = {
 		},
 		onHit: function (pokemon) {
 			let moves = [];
-			for (let i = 0; i < pokemon.moveset.length; i++) {
-				let move = pokemon.moveset[i].id;
-				let pp = pokemon.moveset[i].pp;
+			for (let move of pokemon.moveset) {
+				move = move.id;
+				let pp = move.pp;
 				let NoSleepTalk = ['assist', 'bide', 'focuspunch', 'metronome', 'mirrormove', 'sleeptalk', 'uproar'];
 				if (move && !(NoSleepTalk.includes(move) || this.getMove(move).flags['charge'])) {
 					moves.push({move: move, pp: pp});
@@ -517,9 +517,9 @@ exports.BattleMovedex = {
 			},
 			onDisableMove: function (pokemon) {
 				let moves = pokemon.moveset;
-				for (let i = 0; i < moves.length; i++) {
-					if (this.getMove(moves[i].move).category === 'Status') {
-						pokemon.disableMove(moves[i].id);
+				for (let move of moves) {
+					if (this.getMove(move.move).category === 'Status') {
+						pokemon.disableMove(move.id);
 					}
 				}
 			},

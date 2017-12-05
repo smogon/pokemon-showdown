@@ -107,9 +107,9 @@ exports.BattleMovedex = {
 					return;
 				}
 				let moves = pokemon.moveset;
-				for (let i = 0; i < moves.length; i++) {
-					if (moves[i].id !== 'bide') {
-						pokemon.disableMove(moves[i].id);
+				for (let move of moves) {
+					if (move.id !== 'bide') {
+						pokemon.disableMove(move.id);
 					}
 				}
 			},
@@ -298,9 +298,9 @@ exports.BattleMovedex = {
 			},
 			onDisableMove: function (pokemon) {
 				let moves = pokemon.moveset;
-				for (let i = 0; i < moves.length; i++) {
-					if (moves[i].id === this.effectData.move) {
-						pokemon.disableMove(moves[i].id);
+				for (let move of moves) {
+					if (move.id === this.effectData.move) {
+						pokemon.disableMove(move.id);
 					}
 				}
 			},
@@ -416,9 +416,8 @@ exports.BattleMovedex = {
 		shortDesc: "Eliminates all stat changes and status.",
 		onHit: function (target, source) {
 			this.add('-clearallboost');
-			for (let i = 0; i < this.sides.length; i++) {
-				for (let j = 0; j < this.sides[i].active.length; j++) {
-					let pokemon = this.sides[i].active[j];
+			for (let side of this.sides) {
+				for (let pokemon of side.active) {
 					pokemon.clearBoosts();
 
 					if (pokemon !== source) {
@@ -429,13 +428,12 @@ exports.BattleMovedex = {
 						pokemon.setStatus('psn');
 					}
 					let volatiles = Object.keys(pokemon.volatiles);
-					for (let n = 0; n < volatiles.length; n++) {
-						let id = volatiles[n];
-						if (id === 'residualdmg') {
-							pokemon.volatiles[id].counter = 0;
+					for (let volatile of volatiles) {
+						if (volatile === 'residualdmg') {
+							volatile.counter = 0;
 						} else {
-							pokemon.removeVolatile(id);
-							this.add('-end', pokemon, id);
+							pokemon.removeVolatile(volatile);
+							this.add('-end', pokemon, volatile);
 						}
 					}
 				}

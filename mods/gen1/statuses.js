@@ -226,9 +226,9 @@ exports.BattleStatuses = {
 				return;
 			}
 			let moves = pokemon.moveset;
-			for (let i = 0; i < moves.length; i++) {
-				if (moves[i].id !== this.effectData.move) {
-					pokemon.disableMove(moves[i].id);
+			for (let move of moves) {
+				if (move.id !== this.effectData.move) {
+					pokemon.disableMove(move.id);
 				}
 			}
 		},

@@ -37,11 +37,9 @@ exports.BattleMovedex = {
 		desc: "A random move among those known by the user's party members is selected for use. Does not select Assist, Chatter, Copycat, Counter, Covet, Destiny Bond, Detect, Endure, Feint, Focus Punch, Follow Me, Helping Hand, Me First, Metronome, Mimic, Mirror Coat, Mirror Move, Protect, Sketch, Sleep Talk, Snatch, Struggle, Switcheroo, Thief or Trick.",
 		onHit: function (target) {
 			let moves = [];
-			for (let j = 0; j < target.side.pokemon.length; j++) {
-				let pokemon = target.side.pokemon[j];
+			for (let pokemon of target.side.pokemon) {
 				if (pokemon === target) continue;
-				for (let i = 0; i < pokemon.moves.length; i++) {
-					let move = pokemon.moves[i];
+				for (let move of pokemon.moves) {
 					let noAssist = [
 						'assist', 'chatter', 'copycat', 'counter', 'covet', 'destinybond', 'detect', 'endure', 'feint', 'focuspunch', 'followme', 'helpinghand', 'mefirst', 'metronome', 'mimic', 'mirrorcoat', 'mirrormove', 'protect', 'sketch', 'sleeptalk', 'snatch', 'struggle', 'switcheroo', 'thief', 'trick',
 					];
@@ -288,12 +286,12 @@ exports.BattleMovedex = {
 					return false;
 				}
 				let moves = pokemon.moveset;
-				for (let i = 0; i < moves.length; i++) {
-					if (moves[i].id === pokemon.lastMove) {
-						if (!moves[i].pp) {
+				for (let move of moves) {
+					if (move.id === pokemon.lastMove) {
+						if (!move.pp) {
 							return false;
 						} else {
-							this.add('-start', pokemon, 'Disable', moves[i].move);
+							this.add('-start', pokemon, 'Disable', move.move);
 							this.effectData.move = pokemon.lastMove;
 							return;
 						}
@@ -313,9 +311,9 @@ exports.BattleMovedex = {
 			},
 			onDisableMove: function (pokemon) {
 				let moves = pokemon.moveset;
-				for (let i = 0; i < moves.length; i++) {
-					if (moves[i].id === this.effectData.move) {
-						pokemon.disableMove(moves[i].id);
+				for (let move of moves) {
+					if (move.id === this.effectData.move) {
+						pokemon.disableMove(move.id);
 					}
 				}
 			},
@@ -431,9 +429,9 @@ exports.BattleMovedex = {
 				if (!this.effectData.move || !pokemon.hasMove(this.effectData.move)) {
 					return;
 				}
-				for (let i = 0; i < pokemon.moveset.length; i++) {
-					if (pokemon.moveset[i].id !== this.effectData.move) {
-						pokemon.disableMove(pokemon.moveset[i].id);
+				for (let move of pokemon.moveset) {
+					if (move.id !== this.effectData.move) {
+						pokemon.disableMove(move.id);
 					}
 				}
 			},
@@ -605,9 +603,9 @@ exports.BattleMovedex = {
 				this.add('-start', pokemon, 'move: Heal Block');
 			},
 			onDisableMove: function (pokemon) {
-				for (let i = 0; i < pokemon.moveset.length; i++) {
-					if (this.getMove(pokemon.moveset[i].id).flags['heal']) {
-						pokemon.disableMove(pokemon.moveset[i].id);
+				for (let move of pokemon.moveset) {
+					if (this.getMove(move.id).flags['heal']) {
+						pokemon.disableMove(move.id);
 					}
 				}
 			},
@@ -679,10 +677,10 @@ exports.BattleMovedex = {
 		flags: {authentic: 1},
 		onTryHit: function (pokemon) {
 			let targets = pokemon.side.foe.active;
-			for (let i = 0; i < targets.length; i++) {
-				if (!targets[i] || targets[i].fainted) continue;
-				for (let j = 0; j < pokemon.moves.length; j++) {
-					if (targets[i].moves.indexOf(pokemon.moves[j]) >= 0) return;
+			for (let target of targets) {
+				if (!target || target.fainted) continue;
+				for (let move of pokemon) {
+					if (target.moves.indexOf(move) >= 0) return;
 				}
 			}
 			return false;
@@ -1169,9 +1167,9 @@ exports.BattleMovedex = {
 			},
 			onDisableMove: function (pokemon) {
 				let moves = pokemon.moveset;
-				for (let i = 0; i < moves.length; i++) {
-					if (this.getMove(moves[i].move).category === 'Status') {
-						pokemon.disableMove(moves[i].id);
+				for (let move of moves) {
+					if (this.getMove(move.move).category === 'Status') {
+						pokemon.disableMove(move.id);
 					}
 				}
 			},
