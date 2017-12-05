@@ -825,10 +825,10 @@ exports.BattleMovedex = {
 		onHit: function (target, source) {
 			let disallowedMoves = ['chatter', 'metronome', 'mimic', 'sketch', 'struggle', 'transform'];
 			if (source.transformed || !target.lastMove || disallowedMoves.includes(target.lastMove) || source.moves.indexOf(target.lastMove) !== -1 || target.volatiles['substitute']) return false;
-			let mimivIndex = source.moves.indexOf('mimic');
-			if (mimivIndex < 0) return false;
+			let mimicIndex = source.moves.indexOf('mimic');
+			if (mimicIndex < 0) return false;
 			let move = this.getMove(target.lastMove);
-			source.moveSlots[mimivIndex] = {
+			source.moveSlots[mimicIndex] = {
 				move: move.name,
 				id: move.id,
 				pp: 5,
