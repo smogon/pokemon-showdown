@@ -106,10 +106,9 @@ exports.BattleMovedex = {
 				if (!pokemon.hasMove('bide')) {
 					return;
 				}
-				let moves = pokemon.moveset;
-				for (let i = 0; i < moves.length; i++) {
-					if (moves[i].id !== 'bide') {
-						pokemon.disableMove(moves[i].id);
+				for (const moveSlot of pokemon.moveSlots) {
+					if (moveSlot.id !== 'bide') {
+						pokemon.disableMove(moveSlot.id);
 					}
 				}
 			},
@@ -297,10 +296,9 @@ exports.BattleMovedex = {
 				}
 			},
 			onDisableMove: function (pokemon) {
-				let moves = pokemon.moveset;
-				for (let i = 0; i < moves.length; i++) {
-					if (moves[i].id === this.effectData.move) {
-						pokemon.disableMove(moves[i].id);
+				for (const moveSlot of pokemon.moveSlots) {
+					if (moveSlot.id === this.effectData.move) {
+						pokemon.disableMove(moveSlot.id);
 					}
 				}
 			},
@@ -533,7 +531,7 @@ exports.BattleMovedex = {
 	},
 	mimic: {
 		inherit: true,
-		desc: "This move is replaced by a random move on target's moveset. The copied move has the maximum PP for that move. Ignores a target's Substitute.",
+		desc: "This move is replaced by a random move on target's moveSlots. The copied move has the maximum PP for that move. Ignores a target's Substitute.",
 		shortDesc: "A random target's move replaces this one.",
 		onHit: function (target, source) {
 			let moveslot = source.moves.indexOf('mimic');
@@ -542,17 +540,16 @@ exports.BattleMovedex = {
 			let move = moves[this.random(moves.length)];
 			if (!move) return false;
 			move = this.getMove(move);
-			source.moveset[moveslot] = {
+			source.moveSlots[moveslot] = {
 				move: move.name,
 				id: move.id,
-				pp: source.moveset[moveslot].pp,
+				pp: source.moveSlots[moveslot].pp,
 				maxpp: move.pp * 8 / 5,
 				target: move.target,
 				disabled: false,
 				used: false,
 				virtual: true,
 			};
-			source.moves[moveslot] = toId(move.name);
 			this.add('-start', source, 'Mimic', move.name);
 		},
 	},

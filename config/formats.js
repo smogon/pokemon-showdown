@@ -630,7 +630,7 @@ exports.Formats = [
 		banlist: ['Shedinja'],
 		onModifyTemplate: function (template, target, source) {
 			if (source) return;
-			let types = [...new Set(target.baseMoveset.slice(0, 2).map(move => this.getMove(move.id).type))];
+			let types = [...new Set(target.baseMoveSlots.slice(0, 2).map(move => this.getMove(move.id).type))];
 			return Object.assign({}, template, {types: types});
 		},
 		onSwitchInPriority: 2,

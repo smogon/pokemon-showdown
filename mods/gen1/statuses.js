@@ -225,10 +225,9 @@ exports.BattleStatuses = {
 			if (!pokemon.hasMove(this.effectData.move)) {
 				return;
 			}
-			let moves = pokemon.moveset;
-			for (let i = 0; i < moves.length; i++) {
-				if (moves[i].id !== this.effectData.move) {
-					pokemon.disableMove(moves[i].id);
+			for (const moveSlot of pokemon.moveSlots) {
+				if (moveSlot.id !== this.effectData.move) {
+					pokemon.disableMove(moveSlot.id);
 				}
 			}
 		},

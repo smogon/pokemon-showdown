@@ -52,11 +52,10 @@ exports.BattleScripts = {
 		},
 		getRequestData: function () {
 			let ally = this.side.active.find(ally => ally && ally !== this && !ally.fainted);
-			if (!ally) ally = {baseMoveset: []};
-			this.moveset = this.baseMoveset.concat(ally.baseMoveset);
-			for (let entry of this.moveset) {
-				entry.disabled = false;
-				entry.disabledSource = '';
+			this.moveSlots = this.baseMoveSlots.concat(ally ? ally.baseMoveSlots : []);
+			for (let moveSlot of this.moveSlots) {
+				moveSlot.disabled = false;
+				moveSlot.disabledSource = '';
 			}
 			this.battle.runEvent('DisableMove', this);
 			if (!this.ateBerry) this.disableMove('belch');

@@ -853,12 +853,12 @@ exports.BattleScripts = {
 		if (item.zMoveUser && !item.zMoveUser.includes(pokemon.template.species)) return;
 		let atLeastOne = false;
 		let zMoves = [];
-		for (let i = 0; i < pokemon.moves.length; i++) {
-			if (pokemon.moveset[i].pp <= 0) {
+		for (const moveSlot of pokemon.moveSlots) {
+			if (moveSlot.pp <= 0) {
 				zMoves.push(null);
 				continue;
 			}
-			let move = this.getMove(pokemon.moves[i]);
+			let move = this.getMove(moveSlot.move);
 			let zMoveName = this.getZMove(move, pokemon, true) || '';
 			if (zMoveName) {
 				let zMove = this.getMove(zMoveName);

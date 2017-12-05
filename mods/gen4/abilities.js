@@ -80,13 +80,12 @@ exports.BattleAbilities = {
 	"forewarn": {
 		inherit: true,
 		onStart: function (pokemon) {
-			let targets = pokemon.side.foe.active;
 			let warnMoves = [];
 			let warnBp = 1;
-			for (let i = 0; i < targets.length; i++) {
-				if (targets[i].fainted) continue;
-				for (let j = 0; j < targets[i].moveset.length; j++) {
-					let move = this.getMove(targets[i].moveset[j].move);
+			for (const target of pokemon.side.foe.active) {
+				if (target.fainted) continue;
+				for (const moveSlot of target.moveSlots) {
+					let move = this.getMove(moveSlot.move);
 					let bp = move.basePower;
 					if (move.ohko) bp = 160;
 					if (move.id === 'counter' || move.id === 'metalburst' || move.id === 'mirrorcoat') bp = 120;

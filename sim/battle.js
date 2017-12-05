@@ -1383,8 +1383,8 @@ class Battle extends Dex.ModdedDex {
 		}
 		side.active[pos] = pokemon;
 		pokemon.activeTurns = 0;
-		for (let m in pokemon.moveset) {
-			pokemon.moveset[m].used = false;
+		for (let m in pokemon.moveSlots) {
+			pokemon.moveSlots[m].used = false;
 		}
 		this.add('switch', pokemon, pokemon.getDetails);
 		if (sourceEffect) this.log[this.log.length - 1] += `|[from]${sourceEffect.fullname}`;
@@ -1466,8 +1466,8 @@ class Battle extends Dex.ModdedDex {
 		pokemon.isActive = true;
 		pokemon.activeTurns = 0;
 		if (this.gen === 2) pokemon.draggedIn = this.turn;
-		for (let m in pokemon.moveset) {
-			pokemon.moveset[m].used = false;
+		for (let m in pokemon.moveSlots) {
+			pokemon.moveSlots[m].used = false;
 		}
 		this.add('drag', pokemon, pokemon.getDetails);
 		if (this.gen >= 5) {
@@ -1523,18 +1523,17 @@ class Battle extends Dex.ModdedDex {
 		let allStale = true;
 		/** @type {?Pokemon} */
 		let oneStale = null;
-		for (let i = 0; i < this.sides.length; i++) {
-			for (let j = 0; j < this.sides[i].active.length; j++) {
-				let pokemon = this.sides[i].active[j];
+		for (const side of this.sides) {
+			for (const pokemon of side.active) {
 				if (!pokemon) continue;
 				pokemon.moveThisTurn = '';
 				pokemon.usedItemThisTurn = false;
 				pokemon.newlySwitched = false;
 
 				pokemon.maybeDisabled = false;
-				for (let entry of pokemon.moveset) {
-					entry.disabled = false;
-					entry.disabledSource = '';
+				for (let moveSlot of pokemon.moveSlots) {
+					moveSlot.disabled = false;
+					moveSlot.disabledSource = '';
 				}
 				this.runEvent('DisableMove', pokemon);
 				if (!pokemon.ateBerry) pokemon.disableMove('belch');
@@ -1553,9 +1552,7 @@ class Battle extends Dex.ModdedDex {
 					this.runEvent('MaybeTrapPokemon', pokemon);
 				}
 				// Disable the faculty to cancel switches if a foe may have a trapping ability
-				let foeSide = pokemon.side.foe;
-				for (let k = 0; k < foeSide.active.length; ++k) {
-					let source = foeSide.active[k];
+				for (const source of pokemon.side.foe.active) {
 					if (!source || source.fainted) continue;
 					let template = (source.illusion || source).template;
 					if (!template.abilities) continue;
@@ -1637,8 +1634,8 @@ class Battle extends Dex.ModdedDex {
 				}
 				pokemon.activeTurns++;
 			}
-			this.sides[i].faintedLastTurn = this.sides[i].faintedThisTurn;
-			this.sides[i].faintedThisTurn = false;
+			side.faintedLastTurn = side.faintedThisTurn;
+			side.faintedThisTurn = false;
 		}
 		const ruleTable = this.getRuleTable(this.getFormat());
 		if (ruleTable.has('endlessbattleclause')) {
@@ -1676,9 +1673,8 @@ class Battle extends Dex.ModdedDex {
 			if (allStale) {
 				this.add('message', "All active Pok\u00e9mon are in an endless loop. Endless Battle Clause activated!");
 				let leppaPokemon = null;
-				for (let i = 0; i < this.sides.length; i++) {
-					for (let j = 0; j < this.sides[i].pokemon.length; j++) {
-						let pokemon = this.sides[i].pokemon[j];
+				for (const side of this.sides) {
+					for (const pokemon of side.pokemon) {
 						if (toId(pokemon.set.item) === 'leppaberry') {
 							if (leppaPokemon) {
 								leppaPokemon = null; // both sides have Leppa
@@ -1711,10 +1707,10 @@ class Battle extends Dex.ModdedDex {
 		if (this.gameType === 'triples' && !this.sides.filter(side => side.pokemonLeft > 1).length) {
 			// If both sides have one Pokemon left in triples and they are not adjacent, they are both moved to the center.
 			let actives = [];
-			for (let i = 0; i < this.sides.length; i++) {
-				for (let j = 0; j < this.sides[i].active.length; j++) {
-					if (!this.sides[i].active[j] || this.sides[i].active[j].fainted) continue;
-					actives.push(this.sides[i].active[j]);
+			for (const side of this.sides) {
+				for (const pokemon of side.active) {
+					if (!pokemon || pokemon.fainted) continue;
+					actives.push(pokemon);
 				}
 			}
 			// @ts-ignore

@@ -172,13 +172,12 @@ exports.BattleMovedex = {
 				if (!pokemon.lastMove) {
 					return false;
 				}
-				let moves = pokemon.moveset;
-				for (let i = 0; i < moves.length; i++) {
-					if (moves[i].id === pokemon.lastMove) {
-						if (!moves[i].pp) {
+				for (const moveSlot of pokemon.moveSlots) {
+					if (moveSlot.id === pokemon.lastMove) {
+						if (!moveSlot.pp) {
 							return false;
 						} else {
-							this.add('-start', pokemon, 'Disable', moves[i].move);
+							this.add('-start', pokemon, 'Disable', moveSlot.move);
 							this.effectData.move = pokemon.lastMove;
 							return;
 						}
@@ -196,10 +195,9 @@ exports.BattleMovedex = {
 				}
 			},
 			onDisableMove: function (pokemon) {
-				let moves = pokemon.moveset;
-				for (let i = 0; i < moves.length; i++) {
-					if (moves[i].id === this.effectData.move) {
-						pokemon.disableMove(moves[i].id);
+				for (const moveSlot of pokemon.moveSlots) {
+					if (moveSlot.id === this.effectData.move) {
+						pokemon.disableMove(moveSlot.id);
 					}
 				}
 			},
@@ -226,7 +224,7 @@ exports.BattleMovedex = {
 			onStart: function (target) {
 				let noEncore = ['encore', 'mimic', 'mirrormove', 'sketch', 'struggle', 'transform'];
 				let moveIndex = target.moves.indexOf(target.lastMove);
-				if (!target.lastMove || noEncore.includes(target.lastMove) || (target.moveset[moveIndex] && target.moveset[moveIndex].pp <= 0)) {
+				if (!target.lastMove || noEncore.includes(target.lastMove) || (target.moveSlots[moveIndex] && target.moveSlots[moveIndex].pp <= 0)) {
 					// it failed
 					this.add('-fail', target);
 					delete target.volatiles['encore'];
@@ -243,7 +241,7 @@ exports.BattleMovedex = {
 			},
 			onResidualOrder: 13,
 			onResidual: function (target) {
-				if (target.moves.indexOf(target.lastMove) >= 0 && target.moveset[target.moves.indexOf(target.lastMove)].pp <= 0) {
+				if (target.moves.indexOf(target.lastMove) >= 0 && target.moveSlots[target.moves.indexOf(target.lastMove)].pp <= 0) {
 					// early termination if you run out of PP
 					delete target.volatiles.encore;
 					this.add('-end', target, 'Encore');
@@ -256,9 +254,9 @@ exports.BattleMovedex = {
 				if (!this.effectData.move || !pokemon.hasMove(this.effectData.move)) {
 					return;
 				}
-				for (let i = 0; i < pokemon.moveset.length; i++) {
-					if (pokemon.moveset[i].id !== this.effectData.move) {
-						pokemon.disableMove(pokemon.moveset[i].id);
+				for (let i = 0; i < pokemon.moveSlots.length; i++) {
+					if (pokemon.moveSlots[i].id !== this.effectData.move) {
+						pokemon.disableMove(pokemon.moveSlots[i].id);
 					}
 				}
 			},
@@ -434,9 +432,9 @@ exports.BattleMovedex = {
 		},
 		onHit: function (pokemon) {
 			let moves = [];
-			for (let i = 0; i < pokemon.moveset.length; i++) {
-				let move = pokemon.moveset[i].id;
-				let pp = pokemon.moveset[i].pp;
+			for (let i = 0; i < pokemon.moveSlots.length; i++) {
+				let move = pokemon.moveSlots[i].id;
+				let pp = pokemon.moveSlots[i].pp;
 				let NoSleepTalk = ['assist', 'bide', 'focuspunch', 'metronome', 'mirrormove', 'sleeptalk', 'uproar'];
 				if (move && !(NoSleepTalk.includes(move) || this.getMove(move).flags['charge'])) {
 					moves.push({move: move, pp: pp});
@@ -516,7 +514,7 @@ exports.BattleMovedex = {
 				this.add('-end', target, 'move: Taunt', '[silent]');
 			},
 			onDisableMove: function (pokemon) {
-				let moves = pokemon.moveset;
+				let moves = pokemon.moveSlots;
 				for (let i = 0; i < moves.length; i++) {
 					if (this.getMove(moves[i].move).category === 'Status') {
 						pokemon.disableMove(moves[i].id);

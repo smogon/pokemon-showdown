@@ -139,9 +139,9 @@ exports.BattleScripts = {
 					// Duration reset thus partially trapped at 2 always.
 					targetVolatile.duration = 2;
 					// We get the move position for the PP change.
-					const moveData = pokemon.moveset.find(moveData => moveData.id === move.id);
-					if (moveData && moveData.pp === 0) {
-						moveData.pp = 63;
+					const moveSlot = pokemon.moveSlots.find(moveSlot => moveSlot.id === move.id);
+					if (moveSlot && moveSlot.pp === 0) {
+						moveSlot.pp = 63;
 						pokemon.isStale = 2;
 						pokemon.isStaleSource = 'ppoverflow';
 					}
