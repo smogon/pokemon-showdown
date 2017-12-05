@@ -32,7 +32,7 @@ describe('Healing Wish', function () {
 		// sand happens after Jirachi faints and before any switch-in
 		battle.makeChoices('switch Caterpie', ''); // Caterpie heals before taking SR damage
 		assert.strictEqual(battle.p1.active[0].hp, 174);
-		assert.strictEqual(battle.p1.active[0].moveset[0].pp, 63);
+		assert.strictEqual(battle.p1.active[0].moveSlots[0].pp, 63);
 	});
 
 	it('[Gen 4] should heal a switch-in for full after hazards mid-turn', function () {
@@ -63,6 +63,6 @@ describe('Healing Wish', function () {
 		battle.makeChoices('switch Raichu', ''); // Raichu fully heals and takes stoss + Sandstorm damage
 		assert.strictEqual(battle.turn, 6);
 		assert.strictEqual(battle.p1.active[0].hp, 145); // after stoss + Sandstorm
-		assert.strictEqual(battle.p1.active[0].moveset[0].pp, 63);
+		assert.strictEqual(battle.p1.active[0].moveSlots[0].pp, 63);
 	});
 });

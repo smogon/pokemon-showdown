@@ -55,13 +55,11 @@ class Pokemon {
 		this.name = set.name.substr(0, 20);
 		this.speciesid = toId(this.species);
 		this.template = this.baseTemplate;
-		this.moves = [];
-		this.baseMoves = this.moves;
 		this.movepp = {};
 		/**@type {MoveSlot[]} */
-		this.moveset = [];
+		this.moveSlots = [];
 		/**@type {MoveSlot[]} */
-		this.baseMoveset = [];
+		this.baseMoveSlots = [];
 		/**@type {AnyObject} */
 		// @ts-ignore - null used for this.formeChange(this.baseTemplate)
 		this.baseStats = null;
@@ -152,7 +150,7 @@ class Pokemon {
 					if (!set.hpType) set.hpType = move.type;
 					move = this.battle.getMove('hiddenpower');
 				}
-				this.baseMoveset.push({
+				this.baseMoveSlots.push({
 					move: move.name,
 					id: move.id,
 					pp: ((move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5),
@@ -162,7 +160,6 @@ class Pokemon {
 					disabledSource: '',
 					used: false,
 				});
-				this.moves.push(move.id);
 			}
 		}
 
@@ -229,6 +226,12 @@ class Pokemon {
 		this.hp = this.hp || this.maxhp;
 
 		this.staleWarned = false;
+	}
+	get moves() {
+		return this.moveSlots.map(moveSlot => moveSlot.id);
+	}
+	get baseMoves() {
+		return this.baseMoveSlots.map(moveSlot => moveSlot.id);
 	}
 
 	toString() {
@@ -373,10 +376,9 @@ class Pokemon {
 	 */
 	getMoveData(move) {
 		move = this.battle.getMove(move);
-		for (let i = 0; i < this.moveset.length; i++) {
-			let moveData = this.moveset[i];
-			if (moveData.id === move.id) {
-				return moveData;
+		for (const moveSlot of this.moveSlots) {
+			if (moveSlot.id === move.id) {
+				return moveSlot;
 			}
 		}
 		return null;
@@ -543,8 +545,8 @@ class Pokemon {
 					id: 'recharge',
 				}];
 			}
-			for (let i = 0; i < this.moveset.length; i++) {
-				let moveEntry = this.moveset[i];
+			for (let i = 0; i < this.moveSlots.length; i++) {
+				let moveEntry = this.moveSlots[i];
 				if (moveEntry.id !== lockedMove) continue;
 				return [{
 					move: moveEntry.move,
@@ -559,8 +561,8 @@ class Pokemon {
 		}
 		let moves = [];
 		let hasValidMove = false;
-		for (let i = 0; i < this.moveset.length; i++) {
-			let moveEntry = this.moveset[i];
+		for (let i = 0; i < this.moveSlots.length; i++) {
+			let moveEntry = this.moveSlots[i];
 
 			let moveName = moveEntry.move;
 			if (moveEntry.id === 'hiddenpower') {
@@ -739,18 +741,17 @@ class Pokemon {
 		for (let statName in this.stats) {
 			this.stats[statName] = pokemon.stats[statName];
 		}
-		this.moveset = [];
-		this.moves = [];
+		this.moveSlots = [];
 		this.set.ivs = (this.battle.gen >= 5 ? this.set.ivs : pokemon.set.ivs);
 		this.hpType = (this.battle.gen >= 5 ? this.hpType : pokemon.hpType);
 		this.hpPower = (this.battle.gen >= 5 ? this.hpPower : pokemon.hpPower);
-		for (let i = 0; i < pokemon.moveset.length; i++) {
-			let moveData = pokemon.moveset[i];
+		for (let i = 0; i < pokemon.moveSlots.length; i++) {
+			let moveData = pokemon.moveSlots[i];
 			let moveName = moveData.move;
 			if (moveData.id === 'hiddenpower') {
 				moveName = 'Hidden Power ' + this.hpType;
 			}
-			this.moveset.push({
+			this.moveSlots.push({
 				move: moveName,
 				id: moveData.id,
 				pp: moveData.maxpp === 1 ? 1 : 5,
@@ -853,13 +854,12 @@ class Pokemon {
 
 		if (this.battle.gen === 1 && this.baseMoves.includes('mimic') && !this.transformed) {
 			let moveslot = this.baseMoves.indexOf('mimic');
-			let mimicPP = this.moveset[moveslot] ? this.moveset[moveslot].pp : 16;
-			this.moveset = this.baseMoveset.slice();
-			this.moveset[moveslot].pp = mimicPP;
+			let mimicPP = this.moveSlots[moveslot] ? this.moveSlots[moveslot].pp : 16;
+			this.moveSlots = this.baseMoveSlots.slice();
+			this.moveSlots[moveslot].pp = mimicPP;
 		} else {
-			this.moveset = this.baseMoveset.slice();
+			this.moveSlots = this.baseMoveSlots.slice();
 		}
-		this.moves = this.moveset.map(move => toId(move.move));
 
 		this.transformed = false;
 		this.ability = this.baseAbility;
@@ -963,8 +963,8 @@ class Pokemon {
 	hasMove(moveid) {
 		moveid = toId(moveid);
 		if (moveid.substr(0, 11) === 'hiddenpower') moveid = 'hiddenpower';
-		for (let i = 0; i < this.moveset.length; i++) {
-			if (moveid === this.battle.getMove(this.moveset[i].move).id) {
+		for (const moveSlot of this.moveSlots) {
+			if (moveid === moveSlot.id) {
 				return moveid;
 			}
 		}
@@ -982,10 +982,10 @@ class Pokemon {
 		}
 		moveid = toId(moveid);
 
-		for (let move of this.moveset) {
-			if (move.id === moveid && move.disabled !== true) {
-				move.disabled = (isHidden || true);
-				move.disabledSource = (sourceEffect ? sourceEffect.fullname : '');
+		for (let moveSlot of this.moveSlots) {
+			if (moveSlot.id === moveid && moveSlot.disabled !== true) {
+				moveSlot.disabled = (isHidden || true);
+				moveSlot.disabledSource = (sourceEffect ? sourceEffect.fullname : '');
 				break;
 			}
 		}
