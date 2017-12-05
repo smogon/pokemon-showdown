@@ -122,10 +122,19 @@ exports.BattleScripts = {
 		let negativeBoostTable = [1, 0.75, 0.6, 0.5, 0.43, 0.36, 0.33];
 		let doSelfDestruct = true;
 		let damage = 0;
+		let hitResult = true;
 
 		if (move.selfdestruct && doSelfDestruct) {
 			this.faint(pokemon, pokemon, move);
 		}
+
+		hitResult = this.singleEvent('PrepareHit', move, {}, target, pokemon, move);
+		if (!hitResult) {
+			if (hitResult === false) this.add('-fail', target);
+			return false;
+		}
+		this.runEvent('PrepareHit', pokemon, target, move);
+
 		if (!this.singleEvent('Try', move, null, pokemon, target, move)) {
 			return false;
 		}
@@ -138,7 +147,7 @@ exports.BattleScripts = {
 			return false;
 		}
 
-		let hitResult = this.runEvent('TryHit', target, pokemon, move);
+		hitResult = this.runEvent('TryHit', target, pokemon, move);
 		if (!hitResult) {
 			if (hitResult === false) this.add('-fail', target);
 			return false;
