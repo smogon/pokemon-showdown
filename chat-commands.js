@@ -1559,7 +1559,7 @@ exports.commands = {
 			name = targetUser.getLastName();
 			userid = targetUser.getLastId();
 
-			if (targetUser.locked && !target) {
+			if (targetUser.locked && !week) {
 				return this.privateModCommand(`(${name} would be locked by ${user.name} but was already locked.)`);
 			}
 
