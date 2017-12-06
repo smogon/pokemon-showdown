@@ -14921,6 +14921,7 @@ exports.BattleMovedex = {
 		onModifyMove: function (move, source) {
 			if (!source.volatiles['skydrop']) {
 				move.accuracy = true;
+				move.flags.contact = 0;
 			}
 		},
 		onMoveFail: function (target, source) {
