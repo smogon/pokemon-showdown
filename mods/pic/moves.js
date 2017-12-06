@@ -29,16 +29,38 @@ exports.BattleMovedex = {
 				source.abilityData = {id: source.ability.id, target: source};
 				target.abilityData = {id: target.ability.id, target: target};
 			}
-			source.battle.singleEvent('Start', targetAbility, source.abilityData, source);
 			if (sourceAlly && sourceAlly.ability !== source.ability) {
-				sourceAlly.innate = 'ability' + source.ability;
-				sourceAlly.addVolatile(sourceAlly.innate);
+				let volatile = sourceAlly.innate = 'ability' + source.ability;
+				sourceAlly.volatiles[volatile] = {id: volatile};
+				sourceAlly.volatiles[volatile].target = sourceAlly;
+				sourceAlly.volatiles[volatile].source = source;
+				sourceAlly.volatiles[volatile].sourcePosition = source.position;
+				if (!source.innate){
+					volatile = source.innate = 'ability' + sourceAlly.ability;
+					source.volatiles[volatile] = {id: volatile};
+					source.volatiles[volatile].target = source;
+					source.volatiles[volatile].source = sourceAlly;
+					source.volatiles[volatile].sourcePosition = sourceAlly.position;
+				}
 			}
-			target.battle.singleEvent('Start', sourceAbility, target.abilityData, target);
 			if (targetAlly && targetAlly.ability !== target.ability) {
-				targetAlly.innate = 'ability' + target.ability;
-				targetAlly.addVolatile(targetAlly.innate);
+				let volatile = targetAlly.innate = 'ability' + target.ability;
+				targetAlly.volatiles[volatile] = {id: volatile};
+				targetAlly.volatiles[volatile].target = targetAlly;
+				targetAlly.volatiles[volatile].source = target;
+				targetAlly.volatiles[volatile].sourcePosition = target.position;
+				if (!target.innate){
+					volatile = target.innate = 'ability' + targetAlly.ability;
+					target.volatiles[volatile] = {id: volatile};
+					target.volatiles[volatile].target = target;
+					target.volatiles[volatile].source = targetAlly;
+					target.volatiles[volatile].sourcePosition = targetAlly.position;
+				}
 			}
+			source.battle.singleEvent('Start', targetAbility, source.abilityData, source);
+			sourceAlly.battle.singleEvent('Start', sourceAlly.innate, sourceAlly.volatiles[sourceAlly.innate], sourceAlly);
+			target.battle.singleEvent('Start', sourceAbility, target.abilityData, target);
+			targetAlly.battle.singleEvent('Start', targetAlly.innate, targetAlly.volatiles[sourceAlly.innate], targetAlly);
 		},
 	},
 };
