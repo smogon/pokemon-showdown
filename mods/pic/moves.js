@@ -35,7 +35,7 @@ exports.BattleMovedex = {
 				sourceAlly.volatiles[volatile].target = sourceAlly;
 				sourceAlly.volatiles[volatile].source = source;
 				sourceAlly.volatiles[volatile].sourcePosition = source.position;
-				if (!source.innate){
+				if (!source.innate) {
 					volatile = source.innate = 'ability' + sourceAlly.ability;
 					source.volatiles[volatile] = {id: volatile};
 					source.volatiles[volatile].target = source;
@@ -49,7 +49,7 @@ exports.BattleMovedex = {
 				targetAlly.volatiles[volatile].target = targetAlly;
 				targetAlly.volatiles[volatile].source = target;
 				targetAlly.volatiles[volatile].sourcePosition = target.position;
-				if (!target.innate){
+				if (!target.innate) {
 					volatile = target.innate = 'ability' + targetAlly.ability;
 					target.volatiles[volatile] = {id: volatile};
 					target.volatiles[volatile].target = target;
