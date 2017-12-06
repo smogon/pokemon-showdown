@@ -98,6 +98,21 @@ describe('Sky Drop', function () {
 		assert.strictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 
+	it('should only make contact on the way down', function () {
+		battle = common.createBattle([[
+			{species: "Aerodactyl", moves: ['skydrop']},
+		], [
+			{species: "Aegislash", moves: ['kingsshield']},
+			{species: "Ferrothorn", ability: 'ironbarbs', moves: ['harden']},
+		]]);
+		battle.makeChoices('move Sky Drop', 'move Kings Shield');
+		assert.strictEqual(battle.p1.active[0].boosts.atk, 0);
+		battle.makeChoices('move Sky Drop', 'switch Ferrothorn');
+		assert.strictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
+		battle.makeChoices('move Sky Drop', 'move Harden');
+		assert.notStrictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
+	});
+
 	it('should fail if the target has a Substitute', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Aerodactyl", ability: 'unnerve', moves: ['honeclaws', 'skydrop']}]);
