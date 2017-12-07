@@ -596,7 +596,6 @@ exports.Formats = [
 		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/3622654/\">Mix and Mega Suspect Test</a>"],
 
 		mod: 'mixandmega',
-		challengeShow: false,
 		ruleset: ['[Gen 7] Mix and Mega'],
 		banlist: ['Shadow Tag'],
 		bannedStones: ['Beedrillite', 'Blazikenite', 'Gengarite', 'Kangaskhanite', 'Mawilite', 'Medichamite', 'Ultranecrozium Z'],
