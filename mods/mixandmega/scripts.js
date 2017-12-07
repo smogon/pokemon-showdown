@@ -14,7 +14,7 @@ exports.BattleScripts = {
 		if (item.megaStone) {
 			if (item.megaStone === pokemon.species) return false;
 			return item.megaStone;
-		} else if (pokemon.set.moves.indexOf('dragonascent') >= 0) {
+		} else if (pokemon.baseMoves.includes('dragonascent')) {
 			return 'Rayquaza-Mega';
 		} else {
 			return false;
