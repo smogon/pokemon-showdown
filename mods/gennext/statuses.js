@@ -22,7 +22,7 @@ exports.BattleStatuses = {
 			}
 		},
 		onEnd: function (target) {
-			this.battle.add('-curestatus', target, 'frz');
+			this.add('-curestatus', target, 'frz');
 		},
 	},
 	lockedmove: {
