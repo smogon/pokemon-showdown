@@ -41,7 +41,7 @@ const linkRegex = new RegExp(
 		// email address
 		'|[a-z0-9.]+\\b@' + domainRegex + '[.][a-z]{2,3}' +
 	')' +
-	'(?!.*&gt;)',
+	'(?![^ ]*&gt;)',
 	'ig'
 );
 // compiled from above
