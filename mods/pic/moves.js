@@ -11,13 +11,13 @@ exports.BattleMovedex = {
 			} else {
 				this.add('-activate', source, 'move: Skill Swap', targetAbility, sourceAbility, '[of] ' + target);
 			}
-			source.battle.singleEvent('End', sourceAbility, source.abilityData, source);
+			this.singleEvent('End', sourceAbility, source.abilityData, source);
 			let sourceAlly = source.side.active.find(ally => ally && ally !== source && !ally.fainted);
 			if (sourceAlly && sourceAlly.innate) {
 				sourceAlly.removeVolatile(sourceAlly.innate);
 				delete sourceAlly.innate;
 			}
-			target.battle.singleEvent('End', targetAbility, target.abilityData, target);
+			this.singleEvent('End', targetAbility, target.abilityData, target);
 			let targetAlly = target.side.active.find(ally => ally && ally !== target && !ally.fainted);
 			if (targetAlly && targetAlly.innate) {
 				targetAlly.removeVolatile(targetAlly.innate);
@@ -57,10 +57,10 @@ exports.BattleMovedex = {
 					target.volatiles[volatile].sourcePosition = targetAlly.position;
 				}
 			}
-			source.battle.singleEvent('Start', targetAbility, source.abilityData, source);
-			sourceAlly.battle.singleEvent('Start', sourceAlly.innate, sourceAlly.volatiles[sourceAlly.innate], sourceAlly);
-			target.battle.singleEvent('Start', sourceAbility, target.abilityData, target);
-			targetAlly.battle.singleEvent('Start', targetAlly.innate, targetAlly.volatiles[sourceAlly.innate], targetAlly);
+			this.singleEvent('Start', targetAbility, source.abilityData, source);
+			this.singleEvent('Start', sourceAlly.innate, sourceAlly.volatiles[sourceAlly.innate], sourceAlly);
+			this.singleEvent('Start', sourceAbility, target.abilityData, target);
+			this.singleEvent('Start', targetAlly.innate, targetAlly.volatiles[sourceAlly.innate], targetAlly);
 		},
 	},
 };

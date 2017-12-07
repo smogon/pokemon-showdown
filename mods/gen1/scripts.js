@@ -215,7 +215,7 @@ exports.BattleScripts = {
 		// This only happens on moves that don't deal damage but call GetDamageVarsForPlayerAttack (disassembly).
 		if (!damage && (move.category !== 'Status' || (move.category === 'Status' && !['psn', 'tox', 'par'].includes(move.status))) &&
 		!['conversion', 'haze', 'mist', 'focusenergy', 'confuseray', 'supersonic', 'transform', 'lightscreen', 'reflect', 'substitute', 'mimic', 'leechseed', 'splash', 'softboiled', 'recover', 'rest'].includes(move.id)) {
-			pokemon.battle.lastDamage = 0;
+			this.lastDamage = 0;
 		}
 
 		// Go ahead with results of the used move.
@@ -653,7 +653,7 @@ exports.BattleScripts = {
 		if (!['recoil', 'drain'].includes(effect.id) && effect.effectType !== 'Status') {
 			// FIXME: The stored damage should be calculated ignoring Substitute.
 			// https://github.com/Zarel/Pokemon-Showdown/issues/2598
-			target.battle.lastDamage = damage;
+			this.lastDamage = damage;
 		}
 		damage = target.damage(damage, source, effect);
 		if (source) source.lastDamage = damage;

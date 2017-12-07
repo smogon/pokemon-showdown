@@ -14823,16 +14823,16 @@ exports.BattleMovedex = {
 			} else {
 				this.add('-activate', source, 'move: Skill Swap', targetAbility, sourceAbility, '[of] ' + target);
 			}
-			source.battle.singleEvent('End', sourceAbility, source.abilityData, source);
-			target.battle.singleEvent('End', targetAbility, target.abilityData, target);
+			this.singleEvent('End', sourceAbility, source.abilityData, source);
+			this.singleEvent('End', targetAbility, target.abilityData, target);
 			if (targetAbility.id !== sourceAbility.id) {
 				source.ability = targetAbility.id;
 				target.ability = sourceAbility.id;
 				source.abilityData = {id: source.ability.id, target: source};
 				target.abilityData = {id: target.ability.id, target: target};
 			}
-			source.battle.singleEvent('Start', targetAbility, source.abilityData, source);
-			target.battle.singleEvent('Start', sourceAbility, target.abilityData, target);
+			this.singleEvent('Start', targetAbility, source.abilityData, source);
+			this.singleEvent('Start', sourceAbility, target.abilityData, target);
 		},
 		secondary: false,
 		target: "normal",
