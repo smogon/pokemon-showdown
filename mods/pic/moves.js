@@ -60,7 +60,7 @@ exports.BattleMovedex = {
 			this.singleEvent('Start', targetAbility, source.abilityData, source);
 			if (sourceAlly) this.singleEvent('Start', sourceAlly.innate, sourceAlly.volatiles[sourceAlly.innate], sourceAlly);
 			this.singleEvent('Start', sourceAbility, target.abilityData, target);
-			if (targetAlly) this.singleEvent('Start', targetAlly.innate, targetAlly.volatiles[sourceAlly.innate], targetAlly);
+			if (targetAlly) this.singleEvent('Start', targetAlly.innate, targetAlly.volatiles[targetAlly.innate], targetAlly);
 		},
 	},
 };
