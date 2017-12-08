@@ -1633,24 +1633,24 @@ exports.commands = {
 		let genNumber = 7;
 		let extraFormat = Dex.getFormat(targets[2]);
 
-		if (generation === 'sm' || generation === 'sumo' || generation === '7' || generation === 'seven') {
+		if (['7', 'gen7', 'seven', 'sm', 'sumo', 'usm', 'usum'].includes(generation)) {
 			generation = 'sm';
-		} else if (generation === 'xy' || generation === 'oras' || generation === '6' || generation === 'six') {
+		} else if (['6', 'gen6', 'oras', 'six', 'xy'].includes(generation)) {
 			generation = 'xy';
 			genNumber = 6;
-		} else if (generation === 'bw' || generation === 'bw2' || generation === '5' || generation === 'five') {
+		} else if (['5', 'b2w2', 'bw', 'bw2', 'five', 'gen5'].includes(generation)) {
 			generation = 'bw';
 			genNumber = 5;
-		} else if (generation === 'dp' || generation === 'dpp' || generation === '4' || generation === 'four') {
+		} else if (['4', 'dp', 'dpp', 'four', 'gen4', 'hgss'].includes(generation)) {
 			generation = 'dp';
 			genNumber = 4;
-		} else if (generation === 'adv' || generation === 'rse' || generation === 'rs' || generation === '3' || generation === 'three') {
+		} else if (['3', 'adv', 'frlg', 'gen3', 'rs', 'rse', 'three'].includes(generation)) {
 			generation = 'rs';
 			genNumber = 3;
-		} else if (generation === 'gsc' || generation === 'gs' || generation === '2' || generation === 'two') {
+		} else if (['2', 'gen2', 'gs', 'gsc', 'two'].includes(generation)) {
 			generation = 'gs';
 			genNumber = 2;
-		} else if (generation === 'rby' || generation === 'rb' || generation === '1' || generation === 'one') {
+		} else if (['1', 'gen1', 'one', 'rb', 'rby', 'rgy'].includes(generation)) {
 			generation = 'rb';
 			genNumber = 1;
 		} else {
@@ -1661,11 +1661,11 @@ exports.commands = {
 		if (pokemon.exists) {
 			atLeastOne = true;
 			if (genNumber < pokemon.gen) {
-				return this.sendReplyBox("" + pokemon.name + " did not exist in " + generation.toUpperCase() + "!");
+				return this.sendReplyBox(`${pokemon.name} did not exist in ${generation.toUpperCase()}!`);
 			}
 			if (pokemon.tier === 'CAP') {
 				generation = 'cap';
-				this.errorReply("CAP is not currently supported by Smogon Strategic Pokedex.");
+				this.errorReply(`CAP is not currently supported by Smogon Strategic Pokedex.`);
 			}
 
 			if ((pokemon.battleOnly && pokemon.baseSpecies !== 'Greninja') || pokemon.baseSpecies === 'Keldeo' || pokemon.baseSpecies === 'Genesect') {
@@ -1674,12 +1674,16 @@ exports.commands = {
 
 			let formatName = extraFormat.name;
 			let formatId = extraFormat.id;
+			if (formatName.startsWith('[Gen ')) {
+				formatName = formatName.replace('[Gen ' + formatName[formatName.indexOf('[') + 5] + '] ', '');
+				formatId = toId(formatName);
+			}
 			if (formatId === 'battlespotdoubles') {
 				formatId = 'battle_spot_doubles';
 			} else if (formatId === 'battlespottriples') {
 				formatId = 'battle_spot_triples';
 				if (genNumber > 6) {
-					this.sendReplyBox("Triples formats are not an available format in Pok&eacute;mon generation " + generation.toUpperCase() + ".");
+					return this.sendReplyBox(`Triples formats are not an available format in Pok&eacute;mon generation ${generation.toUpperCase()}.`);
 				}
 			} else if (formatId === 'doublesou') {
 				formatId = 'doubles';
@@ -1699,28 +1703,28 @@ exports.commands = {
 			// Special case for Meowstic-M
 			if (speciesid === 'meowstic') speciesid = 'meowsticm';
 			if (pokemon.tier === 'CAP') {
-				this.sendReplyBox("<a href=\"http://www.smogon.com/cap/pokemon/strategies/" + speciesid + "\">" + generation.toUpperCase() + " " + Chat.escapeHTML(formatName) + " " + pokemon.name + " analysis preview</a>, brought to you by <a href=\"http://www.smogon.com\">Smogon University</a> <a href=\"https://smogon.com/cap/\">CAP Project</a>");
+				this.sendReplyBox(`<a href="http://www.smogon.com/cap/pokemon/strategies/${speciesid}">${generation.toUpperCase()} ${Chat.escapeHTML(formatName)} ${pokemon.name} analysis preview</a>, brought to you by <a href="http://www.smogon.com">Smogon University</a> <a href="http://smogon.com/cap/">CAP Project</a>`);
 			} else {
-				this.sendReplyBox("<a href=\"http://www.smogon.com/dex/" + generation + "/pokemon/" + speciesid + (formatId ? '/' + formatId : '') + "\">" + generation.toUpperCase() + " " + Chat.escapeHTML(formatName) + " " + pokemon.name + " analysis</a>, brought to you by <a href=\"http://www.smogon.com\">Smogon University</a>");
+				this.sendReplyBox(`<a href="http://www.smogon.com/dex/${generation}/pokemon/${speciesid}${(formatId ? '/' + formatId : '')}">${generation.toUpperCase()} ${Chat.escapeHTML(formatName)} ${pokemon.name} analysis</a>, brought to you by <a href="http://www.smogon.com">Smogon University</a>`);
 			}
 		}
 
 		// Item
 		if (item.exists && genNumber > 1 && item.gen <= genNumber) {
 			atLeastOne = true;
-			this.sendReplyBox("<a href=\"http://www.smogon.com/dex/" + generation + "/items/" + item.id + "\">" + generation.toUpperCase() + " " + item.name + " item analysis</a>, brought to you by <a href=\"http://www.smogon.com\">Smogon University</a>");
+			this.sendReplyBox(`<a href="http://www.smogon.com/dex/${generation}/items/${item.id}">${generation.toUpperCase()} ${item.name} item analysis</a>, brought to you by <a href="http://www.smogon.com">Smogon University</a>`);
 		}
 
 		// Ability
 		if (ability.exists && genNumber > 2 && ability.gen <= genNumber) {
 			atLeastOne = true;
-			this.sendReplyBox("<a href=\"http://www.smogon.com/dex/" + generation + "/abilities/" + ability.id + "\">" + generation.toUpperCase() + " " + ability.name + " ability analysis</a>, brought to you by <a href=\"http://www.smogon.com\">Smogon University</a>");
+			this.sendReplyBox(`<a href="http://www.smogon.com/dex/${generation}/abilities/${ability.id}">${generation.toUpperCase()} ${ability.name} ability analysis</a>, brought to you by <a href="http://www.smogon.com">Smogon University</a>`);
 		}
 
 		// Move
 		if (move.exists && move.gen <= genNumber) {
 			atLeastOne = true;
-			this.sendReplyBox("<a href=\"http://www.smogon.com/dex/" + generation + "/moves/" + toId(move.name) + "\">" + generation.toUpperCase() + " " + move.name + " move analysis</a>, brought to you by <a href=\"http://www.smogon.com\">Smogon University</a>");
+			this.sendReplyBox(`<a href="http://www.smogon.com/dex/${generation}/moves/${toId(move.name)}">${generation.toUpperCase()} ${move.name} move analysis</a>, brought to you by <a href="http://www.smogon.com">Smogon University</a>`);
 		}
 
 		// Format
@@ -1732,7 +1736,7 @@ exports.commands = {
 			} else if (formatId === 'battlespottriples') {
 				formatId = 'battle_spot_triples';
 				if (genNumber > 6) {
-					this.sendReplyBox("Triples formats are not an available format in Pok&eacute;mon generation " + generation.toUpperCase() + ".");
+					return this.sendReplyBox(`Triples formats are not an available format in Pok&eacute;mon generation ${generation.toUpperCase()}.`);
 				}
 			} else if (formatId === 'doublesou') {
 				formatId = 'doubles';
@@ -1750,12 +1754,12 @@ exports.commands = {
 			}
 			if (formatName) {
 				atLeastOne = true;
-				this.sendReplyBox("<a href=\"http://www.smogon.com/dex/" + generation + "/formats/" + formatId + "\">" + generation.toUpperCase() + " " + Chat.escapeHTML(formatName) + " format analysis</a>, brought to you by <a href=\"http://www.smogon.com\">Smogon University</a>");
+				this.sendReplyBox(`<a href="http://www.smogon.com/dex/${generation}/formats/${formatId}">${generation.toUpperCase()} ${Chat.escapeHTML(formatName)} format analysis</a>, brought to you by <a href="http://www.smogon.com">Smogon University</a>`);
 			}
 		}
 
 		if (!atLeastOne) {
-			return this.sendReplyBox("Pok&eacute;mon, item, move, ability, or format not found for generation " + generation.toUpperCase() + ".");
+			return this.sendReplyBox(`Pok&eacute;mon, item, move, ability, or format not found for generation ${generation.toUpperCase()}.`);
 		}
 	},
 	smogdexhelp: ["/analysis [pokemon], [generation], [format] - Links to the Smogon University analysis for this Pok\u00e9mon in the given generation.",
