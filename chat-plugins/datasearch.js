@@ -255,7 +255,8 @@ exports.commands = {
 		"Moves that have a Z-Effect of fully restoring the user's health can be searched for with 'zrecovery'.",
 		"Inequality ranges use the characters '>' and '<' though they behave as '≥' and '≤', e.g., 'bp > 100' searches for all moves equal to and greater than 100 base power.",
 		"Parameters can be excluded through the use of '!', e.g., !water type' excludes all water type moves.",
-		"Valid flags are: authentic (bypasses substitute), bite, bullet, contact, defrost, powder, pulse, punch, secondary, snatch, and sound.",
+		"Valid flags are: authentic (bypasses substitute), bite, bullet, contact, defrost, powder, protect, pulse, punch, secondary, snatch, and sound.",
+		"A search that includes '!protect' will show all moves that break protection.",
 		"Parameters separated with '|' will be searched as alternatives for each other, e.g., 'fire | water' searches for all moves that are either Fire type or Water type.",
 		"If a Pok\u00e9mon is included as a parameter, moves will be searched from its movepool.",
 		"The order of the parameters does not matter.",
@@ -800,7 +801,7 @@ function runMovesearch(target, cmd, canAll, message) {
 	let allCategories = ['physical', 'special', 'status'];
 	let allContestTypes = ['beautiful', 'clever', 'cool', 'cute', 'tough'];
 	let allProperties = ['basePower', 'accuracy', 'priority', 'pp'];
-	let allFlags = ['authentic', 'bite', 'bullet', 'contact', 'defrost', 'powder', 'pulse', 'punch', 'secondary', 'snatch', 'sound'];
+	let allFlags = ['authentic', 'bite', 'bullet', 'contact', 'defrost', 'powder', 'protect', 'pulse', 'punch', 'secondary', 'snatch', 'sound'];
 	let allStatus = ['psn', 'tox', 'brn', 'par', 'frz', 'slp'];
 	let allVolatileStatus = ['flinch', 'confusion', 'partiallytrapped'];
 	let allBoosts = ['hp', 'atk', 'def', 'spa', 'spd', 'spe', 'accuracy', 'evasion'];
@@ -1025,7 +1026,7 @@ function runMovesearch(target, cmd, canAll, message) {
 				case 'evasiveness': target = 'evasion'; break;
 				default: target = target.substr(8);
 				}
-				if (!(target in allBoosts)) return {reply: `'${escapeHTML(target.substr(8))}' is not a recognized stat.`};
+				if (!allBoosts.includes(target)) return {reply: `'${escapeHTML(target.substr(8))}' is not a recognized stat.`};
 				if ((orGroup.zboost[target] && isNotSearch) || (orGroup.zboost[target] === false && !isNotSearch)) return {reply: 'A search cannot both exclude and include a stat boost.'};
 				orGroup.zboost[target] = !isNotSearch;
 				continue;
