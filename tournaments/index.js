@@ -120,7 +120,13 @@ class Tournament {
 		}
 		format = Dex.getFormat(this.originalFormat, rules);
 		if (!format.customRules) {
-			output.errorReply("The specified rules are invalid or already included in " + format.name + ".");
+			output.errorReply(`The specified rules are invalid or already included in ${format.name}.`);
+			return false;
+		}
+		try {
+			Dex.getRuleTable(format);
+		} catch (e) {
+			output.errorReply(`Rule error: ${e.message}`);
 			return false;
 		}
 		this.teambuilderFormat = this.originalFormat + '@@@' + format.customRules.join(',');
