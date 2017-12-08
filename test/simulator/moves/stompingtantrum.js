@@ -39,4 +39,19 @@ describe('Stomping Tantrum', function () {
 		battle.makeChoices('move stompingtantrum', 'move protect');
 		battle.makeChoices('move stompingtantrum', 'move protect');
 	});
+
+	it('should not double its Base Power if the last "move" used was a recharge', function () {
+		battle = common.createBattle([
+			[{species: 'Marowak-Alola', ability: 'rockhead', moves: ['stompingtantrum', 'hyperbeam']}],
+			[{species: 'Lycanroc-Midnight', ability: 'noguard', moves: ['sleeptalk']}],
+		]);
+
+		battle.onEvent('ModifyBasePower', battle.getFormat(), function (basePower) {
+			assert.strictEqual(basePower, 75);
+		});
+
+		battle.makeChoices('move hyperbeam', 'move sleeptalk');
+		battle.makeChoices('move recharge', 'move sleeptalk');
+		battle.makeChoices('move stompingtantrum', 'move sleeptalk');
+	});
 });
