@@ -584,13 +584,15 @@ exports.BattleMovedex = {
 		onHit: function (pokemon, source, move) {
 			this.add('-activate', source, 'move: Aromatherapy');
 			let side = pokemon.side;
-			for (let i = 0; i < side.pokemon.length; i++) {
-				if (side.pokemon[i] !== source && ((side.pokemon[i].hasAbility('sapsipper')) ||
-						(side.pokemon[i].volatiles['substitute'] && !move.infiltrates))) {
+			let success = false;
+			for (const ally of side.pokemon) {
+				if (ally !== source && ((ally.hasAbility('sapsipper')) ||
+						(ally.volatiles['substitute'] && !move.infiltrates))) {
 					continue;
 				}
-				side.pokemon[i].cureStatus();
+				if (ally.cureStatus()) success = true;
 			}
+			return success;
 		},
 		target: "allyTeam",
 		type: "Grass",
@@ -1024,6 +1026,7 @@ exports.BattleMovedex = {
 					return;
 				}
 				this.add('-activate', target, 'move: Protect');
+				source.moveThisTurnResult = true;
 				let lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
 					// Outrage counter is reset
@@ -1455,9 +1458,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {reflectable: 1, mirror: 1},
 		onHit: function (target, source, move) {
-			if (!target.addVolatile('trapped', source, move, 'trapper')) {
-				this.add('-fail', target);
-			}
+			return target.addVolatile('trapped', source, move, 'trapper');
 		},
 		secondary: false,
 		target: "normal",
@@ -2116,7 +2117,6 @@ exports.BattleMovedex = {
 		flags: {},
 		onTryHit: function (target, source) {
 			this.add('-activate', target, 'move: Celebrate');
-			return null;
 		},
 		secondary: false,
 		target: "self",
@@ -2856,6 +2856,7 @@ exports.BattleMovedex = {
 			onTryHit: function (target, source, move) {
 				if (move && (move.target === 'self' || move.category !== 'Status')) return;
 				this.add('-activate', target, 'move: Crafty Shield');
+				source.moveThisTurnResult = true;
 				return null;
 			},
 		},
@@ -3194,17 +3195,21 @@ exports.BattleMovedex = {
 			if (!target.volatiles['substitute'] || move.infiltrates) this.boost({evasion: -1});
 			let removeTarget = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
 			let removeAll = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
+			let success = false;
 			for (let targetCondition of removeTarget) {
 				if (target.side.removeSideCondition(targetCondition)) {
 					if (!removeAll.includes(targetCondition)) continue;
 					this.add('-sideend', target.side, this.getEffect(targetCondition).name, '[from] move: Defog', '[of] ' + target);
+					success = true;
 				}
 			}
 			for (let sideCondition of removeAll) {
 				if (source.side.removeSideCondition(sideCondition)) {
 					this.add('-sideend', source.side, this.getEffect(sideCondition).name, '[from] move: Defog', '[of] ' + source);
+					success = true;
 				}
 			}
+			return success;
 		},
 		secondary: false,
 		target: "normal",
@@ -5532,10 +5537,11 @@ exports.BattleMovedex = {
 					}
 				}
 			}
-			if (!targets.length) return false; // No targets; move fails
-			for (let i = 0; i < targets.length; i++) {
-				this.boost({def: 1}, targets[i], source, this.getMove('Flower Shield'));
+			let success = false;
+			for (const target of targets) {
+				success = this.boost({def: 1}, target, source, this.getMove('Flower Shield')) || success;
 			}
+			return success;
 		},
 		secondary: false,
 		target: "all",
@@ -6976,7 +6982,6 @@ exports.BattleMovedex = {
 		flags: {},
 		onTryHit: function (target, source) {
 			this.add('-activate', target, 'move: Happy Hour');
-			return null;
 		},
 		secondary: false,
 		target: "allySide",
@@ -7109,10 +7114,12 @@ exports.BattleMovedex = {
 		onHit: function (pokemon, source) {
 			this.add('-activate', source, 'move: Heal Bell');
 			let side = pokemon.side;
-			for (let i = 0; i < side.pokemon.length; i++) {
-				if (side.pokemon[i].hasAbility('soundproof')) continue;
-				side.pokemon[i].cureStatus();
+			let success = false;
+			for (const ally of side.pokemon) {
+				if (ally.hasAbility('soundproof')) continue;
+				if (ally.cureStatus()) success = true;
 			}
+			return success;
 		},
 		target: "allyTeam",
 		type: "Normal",
@@ -7843,9 +7850,6 @@ exports.BattleMovedex = {
 		pp: 40,
 		priority: 0,
 		flags: {authentic: 1},
-		onTryHit: function (target, source) {
-			return null;
-		},
 		secondary: false,
 		target: "adjacentAlly",
 		type: "Normal",
@@ -8849,6 +8853,7 @@ exports.BattleMovedex = {
 					return;
 				}
 				this.add('-activate', target, 'move: Protect');
+				source.moveThisTurnResult = true;
 				let lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
 					// Outrage counter is reset
@@ -9896,6 +9901,7 @@ exports.BattleMovedex = {
 				}
 				if (move && (move.target === 'self' || move.category === 'Status')) return;
 				this.add('-activate', target, 'move: Mat Block', move.name);
+				source.moveThisTurnResult = true;
 				let lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
 					// Outrage counter is reset
@@ -9965,9 +9971,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {reflectable: 1, mirror: 1},
 		onHit: function (target, source, move) {
-			if (!target.addVolatile('trapped', source, move, 'trapper')) {
-				this.add('-fail', target);
-			}
+			return target.addVolatile('trapped', source, move, 'trapper');
 		},
 		secondary: false,
 		target: "normal",
@@ -12341,6 +12345,7 @@ exports.BattleMovedex = {
 					return;
 				}
 				this.add('-activate', target, 'move: Protect');
+				source.moveThisTurnResult = true;
 				let lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
 					// Outrage counter is reset
@@ -12692,8 +12697,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, heal: 1},
 		onHit: function (target, source) {
-			if (!target.status) return false;
-			target.cureStatus();
+			if (!target.cureStatus()) return false;
 			this.heal(Math.ceil(source.maxhp * 0.5), source);
 		},
 		secondary: false,
@@ -12856,6 +12860,7 @@ exports.BattleMovedex = {
 					return;
 				}
 				this.add('-activate', target, 'move: Quick Guard');
+				source.moveThisTurnResult = true;
 				let lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
 					// Outrage counter is reset
@@ -15526,6 +15531,7 @@ exports.BattleMovedex = {
 					return;
 				}
 				this.add('-activate', target, 'move: Protect');
+				source.moveThisTurnResult = true;
 				let lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
 					// Outrage counter is reset
@@ -15800,9 +15806,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1},
 		onHit: function (target, source, move) {
-			if (!target.addVolatile('trapped', source, move, 'trapper')) {
-				this.add('-fail', target);
-			}
+			return target.addVolatile('trapped', source, move, 'trapper');
 		},
 		secondary: false,
 		target: "normal",
@@ -15935,7 +15939,6 @@ exports.BattleMovedex = {
 		flags: {gravity: 1},
 		onTryHit: function (target, source) {
 			this.add('-nothing');
-			return null;
 		},
 		secondary: false,
 		target: "self",
@@ -16223,7 +16226,12 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		// TODO: find out what "failed" means and implement accordingly
+		onBasePowerPriority: 4,
+		onBasePower: function (basePower, pokemon) {
+			if (pokemon.moveLastTurnResult === false) {
+				return this.chainModify(2);
+			}
+		},
 		secondary: false,
 		target: "normal",
 		type: "Ground",
@@ -16346,8 +16354,8 @@ exports.BattleMovedex = {
 		onHit: function (target, source) {
 			if (target.boosts.atk === -6) return false;
 			let atk = target.getStat('atk', false, true);
-			this.boost({atk: -1}, target, source, null, null, true);
-			this.heal(atk, source, target);
+			let success = this.boost({atk: -1}, target, source, null, null, true);
+			return this.heal(atk, source, target) || success;
 		},
 		secondary: false,
 		target: "normal",
@@ -16765,8 +16773,9 @@ exports.BattleMovedex = {
 		},
 		onHit: function (pokemon) {
 			let healAmount = [0.25, 0.5, 1];
-			this.heal(this.modify(pokemon.maxhp, healAmount[(pokemon.volatiles['stockpile'].layers - 1)]));
+			let healedBy = this.heal(this.modify(pokemon.maxhp, healAmount[(pokemon.volatiles['stockpile'].layers - 1)]));
 			pokemon.removeVolatile('stockpile');
+			return healedBy;
 		},
 		secondary: false,
 		target: "self",
@@ -18707,6 +18716,7 @@ exports.BattleMovedex = {
 					return;
 				}
 				this.add('-activate', target, 'move: Wide Guard');
+				source.moveThisTurnResult = true;
 				let lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
 					// Outrage counter is reset

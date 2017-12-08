@@ -42,14 +42,20 @@ exports.BattleScripts = {
 			this.clearActiveMove(true);
 			return;
 		} */
-		if (!this.runEvent('BeforeMove', pokemon, target, move)) {
+		let willTryMove = this.runEvent('BeforeMove', pokemon, target, move);
+		if (!willTryMove) {
 			this.runEvent('MoveAborted', pokemon, target, move);
 			this.clearActiveMove(true);
+			// The event 'BeforeMove' could have returned false or null
+			// false indicates that this counts as a move failing for the purpose of calculating Stomping Tantrum's base power
+			// null indicates the opposite, as the Pokemon didn't have an option to choose anything
+			pokemon.moveThisTurnResult = willTryMove;
 			return;
 		}
 		if (move.beforeMoveCallback) {
 			if (move.beforeMoveCallback.call(this, pokemon, target, move)) {
 				this.clearActiveMove(true);
+				pokemon.moveThisTurnResult = false;
 				return;
 			}
 		}
@@ -64,6 +70,7 @@ exports.BattleScripts = {
 					let gameConsole = [null, 'Game Boy', 'Game Boy', 'Game Boy Advance', 'DS', 'DS'][this.gen] || '3DS';
 					this.add('-hint', "This is not a bug, this is really how it works on the " + gameConsole + "; try it yourself if you don't believe us.");
 					this.clearActiveMove(true);
+					pokemon.moveThisTurnResult = false;
 					return;
 				}
 			} else {
@@ -120,6 +127,12 @@ exports.BattleScripts = {
 	 * Dancer.
 	 */
 	useMove: function (move, pokemon, target, sourceEffect, zMove) {
+		let oldMoveResult = pokemon.moveThisTurnResult;
+		let moveResult = this.useMoveInner(move, pokemon, target, sourceEffect, zMove);
+		if (oldMoveResult === pokemon.moveThisTurnResult) pokemon.moveThisTurnResult = moveResult;
+		return moveResult;
+	},
+	useMoveInner: function (move, pokemon, target, sourceEffect, zMove) {
 		if (!sourceEffect && this.effect.id) sourceEffect = this.effect;
 		if (zMove && move.id === 'weatherball') {
 			let baseMove = move;
@@ -157,12 +170,11 @@ exports.BattleScripts = {
 			// Adjust again
 			target = this.resolveTarget(pokemon, move);
 		}
-		if (!move) return false;
-
-		let attrs = '';
-		if (pokemon.fainted) {
+		if (!move || pokemon.fainted) {
 			return false;
 		}
+
+		let attrs = '';
 
 		if (move.flags['charge'] && !pokemon.volatiles[move.id]) {
 			attrs = '|[still]'; // suppress the default move animation
@@ -228,12 +240,8 @@ exports.BattleScripts = {
 			}
 		}
 
-		if (!this.singleEvent('TryMove', move, null, pokemon, target, move)) {
-			move.mindBlownRecoil = false;
-			return false;
-		}
-
-		if (!this.runEvent('TryMove', pokemon, target, move)) {
+		if (!this.singleEvent('TryMove', move, null, pokemon, target, move) ||
+			!this.runEvent('TryMove', pokemon, target, move)) {
 			move.mindBlownRecoil = false;
 			return false;
 		}
@@ -520,9 +528,6 @@ exports.BattleScripts = {
 				damage = (moveDamage || 0);
 				// Total damage dealt is accumulated for the purposes of recoil (Parental Bond).
 				move.totalDamage += damage;
-				if (move.mindBlownRecoil && i === 0) {
-					this.damage(Math.round(pokemon.maxhp / 2), pokemon, pokemon, null, true);
-				}
 				this.eachEvent('Update');
 			}
 			if (i === 0) return false;

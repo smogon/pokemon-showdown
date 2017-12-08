@@ -1118,7 +1118,7 @@ class Battle extends Dex.ModdedDex {
 	 *     this.onEvent(eventid, target, priority, callback)
 	 * will set the callback as an event handler for the target when eventid is called with the
 	 * provided priority. Priority can either be a number or an object that contains the priority,
-	 * order, and subOrder for the evend handler as needed (undefined keys will use default values)
+	 * order, and subOrder for the event handler as needed (undefined keys will use default values)
 	 *
 	 * @param {string} eventid
 	 * @param {Format} target
@@ -1529,6 +1529,8 @@ class Battle extends Dex.ModdedDex {
 				pokemon.moveThisTurn = '';
 				pokemon.usedItemThisTurn = false;
 				pokemon.newlySwitched = false;
+				pokemon.moveLastTurnResult = pokemon.moveThisTurnResult;
+				pokemon.moveThisTurnResult = undefined;
 
 				pokemon.maybeDisabled = false;
 				for (let moveSlot of pokemon.moveSlots) {

@@ -93,6 +93,10 @@ class Pokemon {
 		/**@type {string | boolean} */
 		this.moveThisTurn = '';
 
+		// For Stomping Tantrum
+		this.moveLastTurnResult = undefined;
+		this.moveThisTurnResult = undefined;
+
 		this.lastDamage = 0;
 		this.lastAttackedBy = null;
 		this.usedItemThisTurn = false;
@@ -1043,11 +1047,10 @@ class Pokemon {
 	 * @param {boolean} silent
 	 */
 	cureStatus(silent) {
-		if (!this.hp) return false;
-		if (this.status) {
-			this.battle.add('-curestatus', this, this.status, silent ? '[silent]' : '[msg]');
-			this.setStatus('');
-		}
+		if (!this.hp || !this.status) return false;
+		this.battle.add('-curestatus', this, this.status, silent ? '[silent]' : '[msg]');
+		this.setStatus('');
+		return true;
 	}
 
 	/**
@@ -1335,7 +1338,11 @@ class Pokemon {
 			if (!status.onRestart) return false;
 			return this.battle.singleEvent('Restart', status, this.volatiles[status.id], this, source, sourceEffect);
 		}
-		if (!this.runStatusImmunity(status.id)) return false;
+		if (!this.runStatusImmunity(status.id)) {
+			this.battle.debug('immune to volatile status');
+			if (sourceEffect && sourceEffect.status) this.battle.add('-immune', this, '[msg]');
+			return false;
+		}
 		result = this.battle.runEvent('TryAddVolatile', this, source, sourceEffect, status);
 		if (!result) {
 			this.battle.debug('add volatile [' + status.id + '] interrupted');
