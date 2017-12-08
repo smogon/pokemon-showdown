@@ -408,7 +408,7 @@ exports.Formats = [
 
 		mod: 'pic',
 		gameType: 'doubles',
-		ruleset: ['[Gen 7] Doubles OU'],
+		ruleset: ['[Gen 7] Doubles OU', 'Sleep Clause Mod'],
 		banlist: ['Huge Power', 'Imposter', 'Parental Bond', 'Pure Power', 'Wonder Guard', 'Kangaskhanite', 'Mawilite', 'Medichamite', 'Mimic', 'Sketch', 'Transform'],
 		onDisableMovePriority: -1,
 		onSwitchInPriority: 2,
