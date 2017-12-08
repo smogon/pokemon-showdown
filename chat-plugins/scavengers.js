@@ -520,6 +520,8 @@ class ScavengerHunt extends Rooms.RoomGame {
 		if (!(userid in this.players)) return false;
 		let player = this.players[userid];
 
+		if (player.completed) return true; // do not remove players that have completed - they should still get to see the answers
+
 		player.destroy();
 		delete this.players[userid];
 		return true;
