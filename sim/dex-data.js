@@ -207,18 +207,19 @@ class RuleTable extends Map {
 	}
 	/**
 	 * @param {string} thing
-	 * @param {{[id: string]: true}} setHas
+	 * @param {{[id: string]: true}?} setHas
 	 * @return {string}
 	 */
-	check(thing, setHas) {
-		setHas[thing] = true;
-		return this.getReason(this.get('-' + thing));
+	check(thing, setHas = null) {
+		if (setHas) setHas[thing] = true;
+		return this.getReason('-' + thing);
 	}
 	/**
-	 * @param {string | undefined} source
+	 * @param {string} key
 	 * @return {string}
 	 */
-	getReason(source) {
+	getReason(key) {
+		const source = this.get(key);
 		if (source === undefined) return '';
 		return source ? `banned by ${source}` : `banned`;
 	}
