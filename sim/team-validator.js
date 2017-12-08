@@ -237,32 +237,52 @@ class Validator {
 			problems.push(`${name} has an invalid happiness.`);
 		}
 
-		let banReason = ruleTable.check(template.id, setHas) || ruleTable.check(template.id + 'base', setHas);
+		let banReason = ruleTable.check('pokemon:' + template.id, setHas);
+		let templateOverride = ruleTable.has('+pokemon:' + template.id);
+		if (!templateOverride) {
+			banReason = banReason || ruleTable.check('basepokemon:' + toId(template.baseSpecies), setHas);
+		}
 		if (banReason) {
 			return [`${set.species} is ${banReason}.`];
-		} else {
-			banReason = ruleTable.check(toId(template.baseSpecies), setHas);
+		}
+		templateOverride = templateOverride || ruleTable.has('+basepokemon:' + toId(template.baseSpecies));
+		let postMegaTemplate = template;
+		if (item.megaEvolves === template.species) {
+			if (!item.megaStone) throw new Error(`Item ${item.name} has no base form for mega evolution`);
+			postMegaTemplate = dex.getTemplate(item.megaStone);
+		}
+		if (['Mega', 'Mega-X', 'Mega-Y'].includes(postMegaTemplate.forme)) {
+			banReason = ruleTable.check('pokemontag:mega', setHas);
+			const megaTemplateOverride = ruleTable.has('+pokemon:' + postMegaTemplate.id);
+			if (megaTemplateOverride) templateOverride = true;
+			if (!megaTemplateOverride && banReason) {
+				problems.push(`Mega evolutions are ${banReason}.`);
+			}
+		}
+		if (!templateOverride && postMegaTemplate.tier) {
+			banReason = ruleTable.check('pokemontag:' + toId(postMegaTemplate.tier), setHas);
 			if (banReason) {
-				return [`${template.baseSpecies} is ${banReason}.`];
+				problems.push(`${postMegaTemplate.species} is in ${postMegaTemplate.tier}, which is ${banReason}.`);
+			}
+		}
+		if (!templateOverride && ruleTable.has('-unreleased') && postMegaTemplate.isUnreleased) {
+			if (postMegaTemplate.eggGroups[0] === 'Undiscovered' && !postMegaTemplate.evos) {
+				problems.push(`${name} (${postMegaTemplate.species}) is unreleased.`);
 			}
 		}
 
-		banReason = ruleTable.check(toId(set.ability), setHas);
+		banReason = ruleTable.check('ability:' + toId(set.ability), setHas);
 		if (banReason) {
 			problems.push(`${name}'s ability ${set.ability} is ${banReason}.`);
 		}
-		banReason = ruleTable.check(toId(set.item), setHas);
+		banReason = ruleTable.check('item:' + toId(set.item), setHas);
 		if (banReason) {
 			problems.push(`${name}'s item ${set.item} is ${banReason}.`);
 		}
 		if (ruleTable.has('-unreleased') && item.isUnreleased) {
 			problems.push(`${name}'s item ${set.item} is unreleased.`);
 		}
-		if (ruleTable.has('-unreleased') && template.isUnreleased) {
-			if (template.eggGroups[0] === 'Undiscovered' && !template.evos) {
-				problems.push(`${name} (${template.species}) is unreleased.`);
-			}
-		}
+
 		setHas[toId(set.ability)] = true;
 		if (ruleTable.has('-illegal')) {
 			// Don't check abilities for metagames with All Abilities
@@ -296,303 +316,290 @@ class Validator {
 		}
 		if (!set.moves || !set.moves.length) {
 			problems.push(`${name} has no moves.`);
-		} else {
-			// A limit is imposed here to prevent too much engine strain or
-			// too much layout deformation - to be exact, this is the limit
-			// allowed in Custom Game.
-			// The usual limit of 4 moves is handled elsewhere - currently
-			// in the cartridge-compliant set validator: rulesets.js:pokemon
-			if (set.moves.length > 24) {
-				problems.push(`${name} has more than 24 moves, which the simulator can't handle.`);
-				return problems;
+			set.moves = [];
+		}
+		// A limit is imposed here to prevent too much engine strain or
+		// too much layout deformation - to be exact, this is the limit
+		// allowed in Custom Game.
+		// The usual limit of 4 moves is handled elsewhere - currently
+		// in the cartridge-compliant set validator: rulesets.js:pokemon
+		if (set.moves.length > 24) {
+			problems.push(`${name} has more than 24 moves, which the simulator can't handle.`);
+			return problems;
+		}
+
+		set.ivs = Validator.fillStats(set.ivs, 31);
+		let ivs = /** @type {StatsTable} */ (set.ivs);
+		let maxedIVs = Object.values(ivs).every(stat => stat === 31);
+
+		for (const moveName of set.moves) {
+			if (!moveName) continue;
+			let move = dex.getMove(Dex.getString(moveName));
+			if (!move.exists) return [`"${move.name}" is an invalid move.`];
+			banReason = ruleTable.check('move:' + move.id, setHas);
+			if (banReason) {
+				problems.push(`${name}'s move ${move.name} is ${banReason}.`);
 			}
 
-			set.ivs = Validator.fillStats(set.ivs, 31);
-			let ivs = /** @type {StatsTable} */ (set.ivs);
-			let maxedIVs = Object.values(ivs).every(stat => stat === 31);
+			// Note that we don't error out on multiple Hidden Power types
+			// That is checked in rulesets.js rule Pokemon
+			if (move.id === 'hiddenpower' && move.type !== 'Normal' && !set.hpType) {
+				set.hpType = move.type;
+			}
 
-			for (const moveName of set.moves) {
-				if (!moveName) continue;
-				let move = dex.getMove(Dex.getString(moveName));
-				if (!move.exists) return [`"${move.name}" is an invalid move.`];
-				banReason = ruleTable.check(move.id, setHas);
-				if (banReason) {
-					problems.push(`${name}'s move ${move.name} is ${banReason}.`);
-				}
+			if (ruleTable.has('-unreleased')) {
+				if (move.isUnreleased) problems.push(`${name}'s move ${move.name} is unreleased.`);
+			}
 
-				// Note that we don't error out on multiple Hidden Power types
-				// That is checked in rulesets.js rule Pokemon
-				if (move.id === 'hiddenpower' && move.type !== 'Normal' && !set.hpType) {
-					set.hpType = move.type;
-				}
-
-				if (ruleTable.has('-unreleased')) {
-					if (move.isUnreleased) problems.push(`${name}'s move ${move.name} is unreleased.`);
-				}
-
-				if (ruleTable.has('-illegal')) {
-					let problem = this.checkLearnset(move, template, lsetData, set);
-					if (problem) {
-						let problemString = `${name} can't learn ${move.name}`;
-						if (problem.type === 'incompatibleAbility') {
-							problemString = problemString.concat(` because it's incompatible with its ability.`);
-						} else if (problem.type === 'incompatible') {
-							problemString = problemString.concat(` because it's incompatible with another move.`);
-						} else if (problem.type === 'oversketched') {
-							let plural = (parseInt(problem.maxSketches) === 1 ? '' : 's');
-							problemString = problemString.concat(` because it can only sketch ${problem.maxSketches} move${plural}.`);
-						} else if (problem.type === 'pastgen') {
-							problemString = problemString.concat(` because it needs to be from generation ${problem.gen} or later.`);
-						} else {
-							problemString = problemString.concat(`.`);
-						}
-						problems.push(problemString);
+			if (ruleTable.has('-illegal')) {
+				let problem = this.checkLearnset(move, template, lsetData, set);
+				if (problem) {
+					let problemString = `${name} can't learn ${move.name}`;
+					if (problem.type === 'incompatibleAbility') {
+						problemString = problemString.concat(` because it's incompatible with its ability.`);
+					} else if (problem.type === 'incompatible') {
+						problemString = problemString.concat(` because it's incompatible with another move.`);
+					} else if (problem.type === 'oversketched') {
+						let plural = (parseInt(problem.maxSketches) === 1 ? '' : 's');
+						problemString = problemString.concat(` because it can only sketch ${problem.maxSketches} move${plural}.`);
+					} else if (problem.type === 'pastgen') {
+						problemString = problemString.concat(` because it needs to be from generation ${problem.gen} or later.`);
+					} else {
+						problemString = problemString.concat(`.`);
 					}
+					problems.push(problemString);
 				}
 			}
+		}
 
-			const canBottleCap = (dex.gen >= 7 && set.level === 100);
-			if (set.hpType && maxedIVs && ruleTable.has('pokemon')) {
-				if (dex.gen <= 2) {
-					let HPdvs = dex.getType(set.hpType).HPdvs;
-					ivs = set.ivs = {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30};
-					for (let i in HPdvs) {
-						// @ts-ignore TypeScript index signature bug
-						ivs[i] = HPdvs[i] * 2;
-					}
-					ivs.hp = -1;
-				} else if (!canBottleCap) {
-					ivs = set.ivs = Validator.fillStats(dex.getType(set.hpType).HPivs, 31);
-				}
-			}
-			if (set.hpType === 'Fighting' && ruleTable.has('pokemon')) {
-				if (template.gen >= 6 && template.eggGroups[0] === 'Undiscovered' && !template.nfe && (template.baseSpecies !== 'Diancie' || !set.shiny)) {
-					// Legendary Pokemon must have at least 3 perfect IVs in gen 6+
-					problems.push(`${name} must not have Hidden Power Fighting because it starts with 3 perfect IVs because it's a gen 6+ legendary.`);
-				}
-			}
-			const ivHpType = dex.getHiddenPower(set.ivs).type;
-			if (!canBottleCap && ruleTable.has('pokemon') && set.hpType && set.hpType !== ivHpType) {
-				problems.push(`${name} has Hidden Power ${set.hpType}, but its IVs are for Hidden Power ${ivHpType}.`);
-			}
+		const canBottleCap = (dex.gen >= 7 && set.level === 100);
+		if (set.hpType && maxedIVs && ruleTable.has('pokemon')) {
 			if (dex.gen <= 2) {
-				// validate DVs
-				const atkDV = Math.floor(ivs.atk / 2);
-				const defDV = Math.floor(ivs.def / 2);
-				const speDV = Math.floor(ivs.spe / 2);
-				const spcDV = Math.floor(ivs.spa / 2);
-				const expectedHpDV = (atkDV % 2) * 8 + (defDV % 2) * 4 + (speDV % 2) * 2 + (spcDV % 2);
-				if (ivs.hp === -1) ivs.hp = expectedHpDV * 2;
-				const hpDV = Math.floor(ivs.hp / 2);
-				if (expectedHpDV !== hpDV) {
-					problems.push(`${name} has an HP DV of ${hpDV}, but its Atk, Def, Spe, and Spc DVs give it an HP DV of ${expectedHpDV}.`);
+				let HPdvs = dex.getType(set.hpType).HPdvs;
+				ivs = set.ivs = {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30};
+				for (let i in HPdvs) {
+					// @ts-ignore TypeScript index signature bug
+					ivs[i] = HPdvs[i] * 2;
 				}
-				if (ivs.spa !== ivs.spd) {
-					if (dex.gen === 2) {
-						problems.push(`${name} has different SpA and SpD DVs, which is not possible in Gen 2.`);
-					} else {
-						ivs.spd = ivs.spa;
-					}
-				}
-				if (dex.gen > 1 && !template.gender) {
-					// Gen 2 gender is calculated from the Atk DV.
-					// High Atk DV <-> M. The meaning of "high" depends on the gender ratio.
-					let genderThreshold = template.genderRatio.F * 16;
-					if (genderThreshold === 4) genderThreshold = 5;
-					if (genderThreshold === 8) genderThreshold = 7;
-
-					const expectedGender = (atkDV >= genderThreshold ? 'M' : 'F');
-					if (set.gender && set.gender !== expectedGender) {
-						problems.push(`${name} is ${set.gender}, but it has an Atk DV of ${atkDV}, which makes its gender ${expectedGender}.`);
-					} else {
-						set.gender = expectedGender;
-					}
-				}
-				if (dex.gen > 1) {
-					const expectedShiny = !!(defDV === 10 && speDV === 10 && spcDV === 10 && atkDV % 4 >= 2);
-					if (expectedShiny && !set.shiny) {
-						problems.push(`${name} is not shiny, which does not match its DVs.`);
-					} else if (!expectedShiny && set.shiny) {
-						problems.push(`${name} is shiny, which does not match its DVs (its DVs must all be 10, except Atk which must be 2, 3, 6, 7, 10, 11, 14, or 15).`);
-					}
-				}
+				ivs.hp = -1;
+			} else if (!canBottleCap) {
+				ivs = set.ivs = Validator.fillStats(dex.getType(set.hpType).HPivs, 31);
 			}
-			if (dex.gen <= 2 || dex.gen !== 6 && (format.id.endsWith('hackmons') || format.name.includes('BH'))) {
-				if (!set.evs) set.evs = Validator.fillStats(null, 252);
-				let evTotal = (set.evs.hp || 0) + (set.evs.atk || 0) + (set.evs.def || 0) + (set.evs.spa || 0) + (set.evs.spd || 0) + (set.evs.spe || 0);
-				if (evTotal === 508 || evTotal === 510) {
-					problems.push(`${name} has exactly 510 EVs, but this format does not restrict you to 510 EVs: you can max out every EV (If this was intentional, add exactly 1 to one of your EVs, which won't change its stats but will tell us that it wasn't a mistake).`);
-				}
+		}
+		if (set.hpType === 'Fighting' && ruleTable.has('pokemon')) {
+			if (template.gen >= 6 && template.eggGroups[0] === 'Undiscovered' && !template.nfe && (template.baseSpecies !== 'Diancie' || !set.shiny)) {
+				// Legendary Pokemon must have at least 3 perfect IVs in gen 6+
+				problems.push(`${name} must not have Hidden Power Fighting because it starts with 3 perfect IVs because it's a gen 6+ legendary.`);
 			}
-			// @ts-ignore TypeScript index signature bug
-			if (set.evs && !Object.values(set.evs).some(value => value > 0)) {
-				problems.push(`${name} has exactly 0 EVs - did you forget to EV it? (If this was intentional, add exactly 1 to one of your EVs, which won't change its stats but will tell us that it wasn't a mistake).`);
+		}
+		const ivHpType = dex.getHiddenPower(set.ivs).type;
+		if (!canBottleCap && ruleTable.has('pokemon') && set.hpType && set.hpType !== ivHpType) {
+			problems.push(`${name} has Hidden Power ${set.hpType}, but its IVs are for Hidden Power ${ivHpType}.`);
+		}
+		if (dex.gen <= 2) {
+			// validate DVs
+			const atkDV = Math.floor(ivs.atk / 2);
+			const defDV = Math.floor(ivs.def / 2);
+			const speDV = Math.floor(ivs.spe / 2);
+			const spcDV = Math.floor(ivs.spa / 2);
+			const expectedHpDV = (atkDV % 2) * 8 + (defDV % 2) * 4 + (speDV % 2) * 2 + (spcDV % 2);
+			if (ivs.hp === -1) ivs.hp = expectedHpDV * 2;
+			const hpDV = Math.floor(ivs.hp / 2);
+			if (expectedHpDV !== hpDV) {
+				problems.push(`${name} has an HP DV of ${hpDV}, but its Atk, Def, Spe, and Spc DVs give it an HP DV of ${expectedHpDV}.`);
 			}
-
-			if (lsetData.limitedEgg && lsetData.limitedEgg.length > 1 && !lsetData.sourcesBefore && lsetData.sources) {
-				// console.log("limitedEgg 1: " + lsetData.limitedEgg);
-				// Multiple gen 2-5 egg moves
-				// This code hasn't been closely audited for multi-gen interaction, but
-				// since egg moves don't get removed between gens, it's unlikely to have
-				// any serious problems.
-				let limitedEgg = Array.from(new Set(lsetData.limitedEgg));
-				if (limitedEgg.length <= 1) {
-					// Only one source, can't conflict with anything else
-				} else if (limitedEgg.includes('self')) {
-					// Self-moves are always incompatible with anything else
-					problems.push(`${name}'s egg moves are incompatible.`);
+			if (ivs.spa !== ivs.spd) {
+				if (dex.gen === 2) {
+					problems.push(`${name} has different SpA and SpD DVs, which is not possible in Gen 2.`);
 				} else {
-					// Doing a full validation of the possible egg parents takes way too much
-					// CPU power (and is in NP), so we're just gonna use a heuristic:
-					// They're probably incompatible if all potential fathers learn more than
-					// one limitedEgg move from another egg.
-					let validFatherExists = false;
-					for (const source of lsetData.sources) {
-						if (source.charAt(1) === 'S' || source.charAt(1) === 'D') continue;
-						let eggGen = parseInt(source.charAt(0));
-						if (source.charAt(1) !== 'E' || eggGen === 6) {
-							// (There is a way to obtain this pokemon without past-gen breeding.)
-							// In theory, limitedEgg should not exist in this case.
-							throw new Error(`invalid limitedEgg on ${name}: ${limitedEgg} with ${source}`);
-						}
-						let potentialFather = dex.getTemplate(source.slice(source.charAt(2) === 'T' ? 3 : 2));
-						if (!potentialFather.learnset) throw new Error(`${potentialFather.species} has no learnset`);
-						let restrictedSources = 0;
-						for (const moveid of limitedEgg) {
-							let fatherSources = potentialFather.learnset[moveid] || potentialFather.learnset['sketch'];
-							if (!fatherSources) throw new Error(`Egg move father ${potentialFather.id} can't learn ${moveid}`);
-							let hasUnrestrictedSource = false;
-							let hasSource = false;
-							for (const fatherSource of fatherSources) {
-								// Triply nested loop! Fortunately, all the loops are designed
-								// to be as short as possible.
-								if (+source.charAt(0) > eggGen) continue;
-								hasSource = true;
-								if (fatherSource.charAt(1) !== 'E' && fatherSource.charAt(1) !== 'S') {
-									hasUnrestrictedSource = true;
-									break;
-								}
-							}
-							if (!hasSource) {
-								// no match for the current gen; early escape
-								restrictedSources = 10;
+					ivs.spd = ivs.spa;
+				}
+			}
+			if (dex.gen > 1 && !template.gender) {
+				// Gen 2 gender is calculated from the Atk DV.
+				// High Atk DV <-> M. The meaning of "high" depends on the gender ratio.
+				let genderThreshold = template.genderRatio.F * 16;
+				if (genderThreshold === 4) genderThreshold = 5;
+				if (genderThreshold === 8) genderThreshold = 7;
+
+				const expectedGender = (atkDV >= genderThreshold ? 'M' : 'F');
+				if (set.gender && set.gender !== expectedGender) {
+					problems.push(`${name} is ${set.gender}, but it has an Atk DV of ${atkDV}, which makes its gender ${expectedGender}.`);
+				} else {
+					set.gender = expectedGender;
+				}
+			}
+			if (dex.gen > 1) {
+				const expectedShiny = !!(defDV === 10 && speDV === 10 && spcDV === 10 && atkDV % 4 >= 2);
+				if (expectedShiny && !set.shiny) {
+					problems.push(`${name} is not shiny, which does not match its DVs.`);
+				} else if (!expectedShiny && set.shiny) {
+					problems.push(`${name} is shiny, which does not match its DVs (its DVs must all be 10, except Atk which must be 2, 3, 6, 7, 10, 11, 14, or 15).`);
+				}
+			}
+		}
+		if (dex.gen <= 2 || dex.gen !== 6 && (format.id.endsWith('hackmons') || format.name.includes('BH'))) {
+			if (!set.evs) set.evs = Validator.fillStats(null, 252);
+			let evTotal = (set.evs.hp || 0) + (set.evs.atk || 0) + (set.evs.def || 0) + (set.evs.spa || 0) + (set.evs.spd || 0) + (set.evs.spe || 0);
+			if (evTotal === 508 || evTotal === 510) {
+				problems.push(`${name} has exactly 510 EVs, but this format does not restrict you to 510 EVs: you can max out every EV (If this was intentional, add exactly 1 to one of your EVs, which won't change its stats but will tell us that it wasn't a mistake).`);
+			}
+		}
+		// @ts-ignore TypeScript index signature bug
+		if (set.evs && !Object.values(set.evs).some(value => value > 0)) {
+			problems.push(`${name} has exactly 0 EVs - did you forget to EV it? (If this was intentional, add exactly 1 to one of your EVs, which won't change its stats but will tell us that it wasn't a mistake).`);
+		}
+
+		if (lsetData.limitedEgg && lsetData.limitedEgg.length > 1 && !lsetData.sourcesBefore && lsetData.sources) {
+			// console.log("limitedEgg 1: " + lsetData.limitedEgg);
+			// Multiple gen 2-5 egg moves
+			// This code hasn't been closely audited for multi-gen interaction, but
+			// since egg moves don't get removed between gens, it's unlikely to have
+			// any serious problems.
+			let limitedEgg = Array.from(new Set(lsetData.limitedEgg));
+			if (limitedEgg.length <= 1) {
+				// Only one source, can't conflict with anything else
+			} else if (limitedEgg.includes('self')) {
+				// Self-moves are always incompatible with anything else
+				problems.push(`${name}'s egg moves are incompatible.`);
+			} else {
+				// Doing a full validation of the possible egg parents takes way too much
+				// CPU power (and is in NP), so we're just gonna use a heuristic:
+				// They're probably incompatible if all potential fathers learn more than
+				// one limitedEgg move from another egg.
+				let validFatherExists = false;
+				for (const source of lsetData.sources) {
+					if (source.charAt(1) === 'S' || source.charAt(1) === 'D') continue;
+					let eggGen = parseInt(source.charAt(0));
+					if (source.charAt(1) !== 'E' || eggGen === 6) {
+						// (There is a way to obtain this pokemon without past-gen breeding.)
+						// In theory, limitedEgg should not exist in this case.
+						throw new Error(`invalid limitedEgg on ${name}: ${limitedEgg} with ${source}`);
+					}
+					let potentialFather = dex.getTemplate(source.slice(source.charAt(2) === 'T' ? 3 : 2));
+					if (!potentialFather.learnset) throw new Error(`${potentialFather.species} has no learnset`);
+					let restrictedSources = 0;
+					for (const moveid of limitedEgg) {
+						let fatherSources = potentialFather.learnset[moveid] || potentialFather.learnset['sketch'];
+						if (!fatherSources) throw new Error(`Egg move father ${potentialFather.id} can't learn ${moveid}`);
+						let hasUnrestrictedSource = false;
+						let hasSource = false;
+						for (const fatherSource of fatherSources) {
+							// Triply nested loop! Fortunately, all the loops are designed
+							// to be as short as possible.
+							if (+source.charAt(0) > eggGen) continue;
+							hasSource = true;
+							if (fatherSource.charAt(1) !== 'E' && fatherSource.charAt(1) !== 'S') {
+								hasUnrestrictedSource = true;
 								break;
 							}
-							if (!hasUnrestrictedSource) restrictedSources++;
-							if (restrictedSources > 1) break;
 						}
-						if (restrictedSources <= 1) {
-							validFatherExists = true;
-							// console.log("valid father: " + potentialFather.id);
+						if (!hasSource) {
+							// no match for the current gen; early escape
+							restrictedSources = 10;
 							break;
 						}
+						if (!hasUnrestrictedSource) restrictedSources++;
+						if (restrictedSources > 1) break;
 					}
-					if (!validFatherExists) {
-						// Could not find a valid father using our heuristic.
-						// TODO: hardcode false positives for our heuristic
-						// in theory, this heuristic doesn't have false negatives
-						let newSources = [];
-						for (const source of lsetData.sources) {
-							if (source.charAt(1) === 'S') {
-								newSources.push(source);
-							}
-						}
-						lsetData.sources = newSources;
-						if (!newSources.length) {
-							const moveNames = limitedEgg.map(id => dex.getMove(id).name);
-							problems.push(`${name}'s past gen egg moves ${moveNames.join(', ')} do not have a valid father. (Is this incorrect? If so, post the chainbreeding instructions in Bug Reports)`);
-						}
+					if (restrictedSources <= 1) {
+						validFatherExists = true;
+						// console.log("valid father: " + potentialFather.id);
+						break;
 					}
 				}
-			}
-
-			if (isHidden && lsetData.sourcesBefore < 5) {
-				lsetData.sources = lsetData.sources.filter(source =>
-					parseInt(source.charAt(0)) >= 5
-				);
-				lsetData.sourcesBefore = 0;
-				if (!lsetData.sources.length) {
-					problems.push(`${name} has a hidden ability - it can't have moves only learned before gen 5.`);
-				}
-			}
-
-			if (!lsetData.sourcesBefore && lsetData.sources.length && lsetData.sources.every(source => 'SVD'.includes(source.charAt(1)))) {
-				// Every source is restricted
-				let legal = false;
-				for (const source of lsetData.sources) {
-					// @ts-ignore TypeScript overload syntax bug
-					if (this.validateSource(set, source, template)) continue;
-					legal = true;
-					break;
-				}
-
-				if (!legal) {
-					if (lsetData.sources.length > 1) {
-						problems.push(`${name} has an event-exclusive move that it doesn't qualify for (only one of several ways to get the move will be listed):`);
-					}
-					// @ts-ignore TypeScript overload syntax bug
-					let eventProblems = this.validateSource(set, lsetData.sources[0], template, ` because it has a move only available`);
-					// @ts-ignore TypeScript overload syntax bug
-					if (eventProblems) problems.push(...eventProblems);
-				}
-			} else if (ruleTable.has('-illegal') && template.eventOnly) {
-				let eventTemplate = !template.learnset && template.baseSpecies !== template.species ? dex.getTemplate(template.baseSpecies) : template;
-				const eventPokemon = eventTemplate.eventPokemon;
-				if (!eventPokemon) throw new Error(`Event-only template ${template.species} has no eventPokemon table`);
-				let legal = false;
-				for (const eventData of eventPokemon) {
-					if (this.validateEvent(set, eventData, eventTemplate)) continue;
-					legal = true;
-					if (eventData.gender) set.gender = eventData.gender;
-					break;
-				}
-				if (!legal) {
-					if (eventPokemon.length === 1) {
-						problems.push(`${template.species} is only obtainable from an event - it needs to match its event:`);
-					} else {
-						problems.push(`${template.species} is only obtainable from events - it needs to match one of its events, such as:`);
-					}
-					let eventData = eventPokemon[0];
-					const minPastGen = (format.requirePlus ? 7 : format.requirePentagon ? 6 : 1);
-					let eventNum = 1;
-					for (let i = 0; i < eventPokemon.length; i++) {
-						if (eventPokemon[i].generation <= dex.gen && eventPokemon[i].generation >= minPastGen) {
-							eventData = eventPokemon[i];
-							eventNum = i + 1;
-							break;
+				if (!validFatherExists) {
+					// Could not find a valid father using our heuristic.
+					// TODO: hardcode false positives for our heuristic
+					// in theory, this heuristic doesn't have false negatives
+					let newSources = [];
+					for (const source of lsetData.sources) {
+						if (source.charAt(1) === 'S') {
+							newSources.push(source);
 						}
 					}
-					let eventName = eventPokemon.length > 1 ? ` #${eventNum}` : ``;
-					let eventProblems = this.validateEvent(set, eventData, eventTemplate, ` to be`, `from its event${eventName}`);
-					// @ts-ignore TypeScript overload syntax bug
-					if (eventProblems) problems.push(...eventProblems);
-				}
-			}
-			if (ruleTable.has('-illegal') && set.level < (template.evoLevel || 0)) {
-				// FIXME: Event pokemon given at a level under what it normally can be attained at gives a false positive
-				problems.push(`${name} must be at least level ${template.evoLevel} to be evolved.`);
-			}
-			if (!lsetData.sources && lsetData.sourcesBefore <= 3 && dex.getAbility(set.ability).gen === 4 && !template.prevo && dex.gen <= 5) {
-				problems.push(`${name} has a gen 4 ability and isn't evolved - it can't use anything from gen 3.`);
-			}
-			if (!lsetData.sources && lsetData.sourcesBefore < 6 && lsetData.sourcesBefore >= 3 && (isHidden || dex.gen <= 5) && template.gen <= lsetData.sourcesBefore) {
-				let oldAbilities = dex.mod('gen' + lsetData.sourcesBefore).getTemplate(set.species).abilities;
-				if (ability.name !== oldAbilities['0'] && ability.name !== oldAbilities['1'] && !oldAbilities['H']) {
-					problems.push(`${name} has moves incompatible with its ability.`);
+					lsetData.sources = newSources;
+					if (!newSources.length) {
+						const moveNames = limitedEgg.map(id => dex.getMove(id).name);
+						problems.push(`${name}'s past gen egg moves ${moveNames.join(', ')} do not have a valid father. (Is this incorrect? If so, post the chainbreeding instructions in Bug Reports)`);
+					}
 				}
 			}
 		}
-		if (item.megaEvolves === template.species) {
-			if (!item.megaStone) throw new Error(`Item ${item.name} has no base form for mega evolution`);
-			template = dex.getTemplate(item.megaStone);
+
+		if (isHidden && lsetData.sourcesBefore < 5) {
+			lsetData.sources = lsetData.sources.filter(source =>
+				parseInt(source.charAt(0)) >= 5
+			);
+			lsetData.sourcesBefore = 0;
+			if (!lsetData.sources.length) {
+				problems.push(`${name} has a hidden ability - it can't have moves only learned before gen 5.`);
+			}
 		}
-		if (ruleTable.has('-mega') && ['Mega', 'Mega-X', 'Mega-Y'].includes(template.forme)) {
-			problems.push(`Mega evolutions are banned.`);
+
+		if (!lsetData.sourcesBefore && lsetData.sources.length && lsetData.sources.every(source => 'SVD'.includes(source.charAt(1)))) {
+			// Every source is restricted
+			let legal = false;
+			for (const source of lsetData.sources) {
+				// @ts-ignore TypeScript overload syntax bug
+				if (this.validateSource(set, source, template)) continue;
+				legal = true;
+				break;
+			}
+
+			if (!legal) {
+				if (lsetData.sources.length > 1) {
+					problems.push(`${name} has an event-exclusive move that it doesn't qualify for (only one of several ways to get the move will be listed):`);
+				}
+				// @ts-ignore TypeScript overload syntax bug
+				let eventProblems = this.validateSource(set, lsetData.sources[0], template, ` because it has a move only available`);
+				// @ts-ignore TypeScript overload syntax bug
+				if (eventProblems) problems.push(...eventProblems);
+			}
+		} else if (ruleTable.has('-illegal') && template.eventOnly) {
+			let eventTemplate = !template.learnset && template.baseSpecies !== template.species ? dex.getTemplate(template.baseSpecies) : template;
+			const eventPokemon = eventTemplate.eventPokemon;
+			if (!eventPokemon) throw new Error(`Event-only template ${template.species} has no eventPokemon table`);
+			let legal = false;
+			for (const eventData of eventPokemon) {
+				if (this.validateEvent(set, eventData, eventTemplate)) continue;
+				legal = true;
+				if (eventData.gender) set.gender = eventData.gender;
+				break;
+			}
+			if (!legal) {
+				if (eventPokemon.length === 1) {
+					problems.push(`${template.species} is only obtainable from an event - it needs to match its event:`);
+				} else {
+					problems.push(`${template.species} is only obtainable from events - it needs to match one of its events, such as:`);
+				}
+				let eventData = eventPokemon[0];
+				const minPastGen = (format.requirePlus ? 7 : format.requirePentagon ? 6 : 1);
+				let eventNum = 1;
+				for (let i = 0; i < eventPokemon.length; i++) {
+					if (eventPokemon[i].generation <= dex.gen && eventPokemon[i].generation >= minPastGen) {
+						eventData = eventPokemon[i];
+						eventNum = i + 1;
+						break;
+					}
+				}
+				let eventName = eventPokemon.length > 1 ? ` #${eventNum}` : ``;
+				let eventProblems = this.validateEvent(set, eventData, eventTemplate, ` to be`, `from its event${eventName}`);
+				// @ts-ignore TypeScript overload syntax bug
+				if (eventProblems) problems.push(...eventProblems);
+			}
 		}
-		if (template.tier) {
-			banReason = ruleTable.check(toId(template.tier), setHas);
-			if (banReason && !ruleTable.has('+' + template.id)) {
-				problems.push(`${template.species} is in ${template.tier}, which is ${banReason}.`);
+		if (ruleTable.has('-illegal') && set.level < (template.evoLevel || 0)) {
+			// FIXME: Event pokemon given at a level under what it normally can be attained at gives a false positive
+			problems.push(`${name} must be at least level ${template.evoLevel} to be evolved.`);
+		}
+		if (!lsetData.sources && lsetData.sourcesBefore <= 3 && dex.getAbility(set.ability).gen === 4 && !template.prevo && dex.gen <= 5) {
+			problems.push(`${name} has a gen 4 ability and isn't evolved - it can't use anything from gen 3.`);
+		}
+		if (!lsetData.sources && lsetData.sourcesBefore < 6 && lsetData.sourcesBefore >= 3 && (isHidden || dex.gen <= 5) && template.gen <= lsetData.sourcesBefore) {
+			let oldAbilities = dex.mod('gen' + lsetData.sourcesBefore).getTemplate(set.species).abilities;
+			if (ability.name !== oldAbilities['0'] && ability.name !== oldAbilities['1'] && !oldAbilities['H']) {
+				problems.push(`${name} has moves incompatible with its ability.`);
 			}
 		}
 

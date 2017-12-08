@@ -756,8 +756,57 @@ class ModdedDex {
 		}
 
 		for (const rule of ruleset) {
-			if (rule.charAt(0) === '-' || rule.charAt(0) === '+') { // ban or unban
-				const type = rule.charAt(0);
+			const ruleSpec = this.validateRule(rule);
+			if (typeof ruleSpec !== 'string') {
+				if (ruleSpec[0] === 'complexTeamBan') {
+					ruleTable.complexTeamBans.push(/** @type {any} */ (ruleSpec.slice(1)));
+				} else if (ruleSpec[0] === 'complexBan') {
+					ruleTable.complexBans.push(/** @type {any} */ (ruleSpec.slice(1)));
+				} else {
+					throw new Error(`Unrecognized rule spec ${ruleSpec}`);
+				}
+				continue;
+			}
+			if ("!+-".includes(ruleSpec.charAt(0))) {
+				if (ruleSpec.charAt(0) === '+' && ruleTable.has('-' + ruleSpec.slice(1))) {
+					ruleTable.delete('-' + ruleSpec.slice(1));
+				} else {
+					ruleTable.set(ruleSpec, '');
+				}
+				continue;
+			}
+			const subformat = this.getFormat(ruleSpec);
+			if (ruleTable.has('!' + subformat.id)) continue;
+			ruleTable.set(subformat.id, '');
+			if (!subformat.exists) continue;
+			if (depth > 16) {
+				throw new Error(`Excessive ruleTable recursion in ${format.name}: ${ruleSpec} of ${format.ruleset}`);
+			}
+			const subRuleTable = this.getRuleTable(subformat, depth + 1);
+			for (const [k, v] of subRuleTable) {
+				if (!ruleTable.has('!' + k)) ruleTable.set(k, v || subformat.name);
+			}
+			for (const [rule, source, limit, bans] of subRuleTable.complexBans) {
+				ruleTable.complexBans.push([rule, source || subformat.name, limit, bans]);
+			}
+			for (const [rule, source, limit, bans] of subRuleTable.complexTeamBans) {
+				ruleTable.complexTeamBans.push([rule, source || subformat.name, limit, bans]);
+			}
+		}
+
+		format.ruleTable = ruleTable;
+		return ruleTable;
+	}
+
+	/**
+	 * @param {string} rule
+	 * @param {Format?} format
+	 */
+	validateRule(rule, format = null) {
+		switch (rule.charAt(0)) {
+		case '-':
+		case '+':
+			if (rule.slice(1).includes('>') || rule.slice(1).includes('+')) {
 				let buf = rule.slice(1);
 				const gtIndex = buf.lastIndexOf('>');
 				let limit = 0;
@@ -769,46 +818,88 @@ class ModdedDex {
 				const banNames = buf.split(checkTeam ? '++' : '+').map(v => v.trim());
 				if (banNames.length === 1 && limit > 0) checkTeam = true;
 				const innerRule = banNames.join(checkTeam ? ' ++ ' : ' + ');
-				const bans = banNames.map(v => toId(v));
+				const bans = banNames.map(v => this.validateBanRule(v));
 
 				if (checkTeam) {
-					ruleTable.complexTeamBans.push([innerRule, '', limit, bans]);
-					continue;
+					return ['complexTeamBan', innerRule, '', limit, bans];
 				}
 				if (bans.length > 1 || limit > 0) {
-					ruleTable.complexBans.push([innerRule, '', limit, bans]);
+					return ['complexBan', innerRule, '', limit, bans];
 				}
-				const ban = toId(buf);
-				ruleTable.delete('+' + ban);
-				ruleTable.delete('-' + ban);
-				ruleTable.set(type + ban, '');
-				continue;
+				throw new Error(`Confusing rule ${rule}`);
 			}
-			if (rule.startsWith('!')) {
-				ruleTable.set('!' + toId(rule), '');
-				continue;
+			return rule.charAt(0) + this.validateBanRule(rule.slice(1));
+		default:
+			let id = toId(rule);
+			if (!this.data.Formats.hasOwnProperty(id)) {
+				throw new Error(`Unrecognized rule "${rule}"`);
 			}
-			const subformat = this.getFormat(rule);
-			if (ruleTable.has('!' + subformat.id)) continue;
-			ruleTable.set(subformat.id, '');
-			if (!subformat.exists) continue;
-			if (depth > 16) {
-				throw new Error(`Excessive ruleTable recursion in ${format.name}: ${rule} of ${format.ruleset}`);
-			}
-			const subRuleTable = this.getRuleTable(subformat, depth + 1);
-			subRuleTable.forEach((v, k) => {
-				if (!ruleTable.has('!' + k)) ruleTable.set(k, v || subformat.name);
-			});
-			for (const [rule, source, limit, bans] of subRuleTable.complexBans) {
-				ruleTable.complexBans.push([rule, source || subformat.name, limit, bans]);
-			}
-			for (const [rule, source, limit, bans] of subRuleTable.complexTeamBans) {
-				ruleTable.complexTeamBans.push([rule, source || subformat.name, limit, bans]);
+			if (rule.charAt(0) === '!') return '!' + id;
+			return id;
+		}
+	}
+
+	/**
+	 * @param {string} rule
+	 */
+	validateBanRule(rule) {
+		let id = toId(rule);
+		if (id === 'unreleased') return 'unreleased';
+		if (id === 'illegal') return 'illegal';
+		const matches = [];
+		let matchTypes = ['pokemon', 'move', 'ability', 'item', 'pokemontag'];
+		for (const matchType of matchTypes) {
+			if (rule.slice(0, 1 + matchType.length) === matchType + ':') {
+				matchTypes = [matchType];
+				id = id.slice(matchType.length);
+				break;
 			}
 		}
-
-		format.ruleTable = ruleTable;
-		return ruleTable;
+		const ruleid = id;
+		if (this.data.Aliases.hasOwnProperty(id)) id = toId(this.data.Aliases[id]);
+		for (const matchType of matchTypes) {
+			let table;
+			switch (matchType) {
+			case 'pokemon': table = this.data.Pokedex; break;
+			case 'move': table = this.data.Movedex; break;
+			case 'item': table = this.data.Items; break;
+			case 'ability': table = this.data.Abilities; break;
+			case 'pokemontag':
+				// valid pokemontags
+				const validTags = [
+					// pokemon tiers
+					'uber', 'ou', 'bl', 'uu', 'bl2', 'ru', 'bl3', 'nu', 'bl4', 'pu', 'nfe', 'lcuber', 'lc', 'cap', 'caplc', 'capnfe',
+					// custom tags
+					'mega',
+				];
+				if (validTags.includes(ruleid)) matches.push('pokemontag:' + ruleid);
+				continue;
+			default:
+				throw new Error(`Unrecognized match type.`);
+			}
+			if (table.hasOwnProperty(id)) {
+				if (matchType === 'pokemon') {
+					const template = table[id];
+					if (template.formes) {
+						matches.push('basepokemon:' + id);
+						continue;
+					}
+				}
+				matches.push(matchType + ':' + id);
+			} else if (matchType === 'pokemon' && id.slice(-4) === 'base') {
+				id = id.slice(0, -4);
+				if (table.hasOwnProperty(id)) {
+					matches.push('pokemon:' + id);
+				}
+			}
+		}
+		if (matches.length > 1) {
+			throw new Error(`More than one thing matches "${rule}"; please use something like "-item:metronome" to disambiguate`);
+		}
+		if (matches.length < 1) {
+			throw new Error(`Nothing matches "${rule}"`);
+		}
+		return matches[0];
 	}
 
 	/**
