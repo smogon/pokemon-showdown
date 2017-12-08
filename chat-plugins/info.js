@@ -1476,35 +1476,35 @@ exports.commands = {
 			"- /unmute <em>username</em>: unmute<br />" +
 			"- /announce OR /wall <em>message</em>: make an announcement<br />" +
 			"- /modlog <em>username</em>: search the moderator log of the room<br />" +
-			"- /modnote <em>note</em>: adds a moderator note that can be read through modlog<br />" +
+			"- /modnote <em>note</em>: add a moderator note that can be read through modlog<br />" +
 			"<br />" +
 			"<strong>Room moderators (@)</strong> can also use:<br />" +
-			"- /roomban OR /rb <em>username</em>: bans user from the room<br />" +
-			"- /roomunban <em>username</em>: unbans user from the room<br />" +
+			"- /roomban OR /rb <em>username</em>: ban user from the room<br />" +
+			"- /roomunban <em>username</em>: unban user from the room<br />" +
 			"- /roomvoice <em>username</em>: appoint a room voice<br />" +
 			"- /roomdevoice <em>username</em>: remove a room voice<br />" +
-			"- /staffintro <em>intro</em>: sets the staff introduction that will be displayed for all staff joining the room<br />" +
+			"- /staffintro <em>intro</em>: set the staff introduction that will be displayed for all staff joining the room<br />" +
 			"- /roomsettings: change a variety of room settings, namely modchat<br />" +
 			"<br />" +
 			"<strong>Room owners (#)</strong> can also use:<br />" +
-			"- /roomintro <em>intro</em>: sets the room introduction that will be displayed for all users joining the room<br />" +
+			"- /roomintro <em>intro</em>: set the room introduction that will be displayed for all users joining the room<br />" +
 			"- /rules <em>rules link</em>: set the room rules link seen when using /rules<br />" +
 			"- /roommod, /roomdriver <em>username</em>: appoint a room moderator/driver<br />" +
 			"- /roomdemod, /roomdedriver <em>username</em>: remove a room moderator/driver<br />" +
 			"- /roomdeauth <em>username</em>: remove all room auth from a user<br />" +
 			"- /declare <em>message</em>: make a large blue declaration to the room<br />" +
-			"- !htmlbox <em>HTML code</em>: broadcasts a box of HTML code to the room<br />" +
-			"- !showimage <em>[url], [width], [height]</em>: shows an image to the room<br />" +
+			"- !htmlbox <em>HTML code</em>: broadcast a box of HTML code to the room<br />" +
+			"- !showimage <em>[url], [width], [height]</em>: show an image to the room<br />" +
 			"- /roomsettings: change a variety of room settings, including modchat, capsfilter, etc<br />" +
 			"<br />" +
 			"More detailed help can be found in the <a href=\"http://www.smogon.com/forums/posts/6774654/\">roomauth guide</a><br />" +
 			"<br />" +
 			"Tournament Help:<br />" +
-			"- /tour create <em>format</em>, elimination: Creates a new single elimination tournament in the current room.<br />" +
-			"- /tour create <em>format</em>, roundrobin: Creates a new round robin tournament in the current room.<br />" +
-			"- /tour end: Forcibly ends the tournament in the current room<br />" +
-			"- /tour start: Starts the tournament in the current room<br />" +
-			"- /tour banlist [pokemon], [talent], [...]: Bans moves, abilities, Pokémon or items from being used in a tournament (it must be created first)<br />" +
+			"- /tour create <em>format</em>, elimination: create a new single elimination tournament in the current room.<br />" +
+			"- /tour create <em>format</em>, roundrobin: create a new round robin tournament in the current room.<br />" +
+			"- /tour end: forcibly end the tournament in the current room<br />" +
+			"- /tour start: start the tournament in the current room<br />" +
+			"- /tour banlist [pokemon], [talent], [...]: ban moves, abilities, Pokémon or items from being used in a tournament (it must be created first)<br />" +
 			"<br />" +
 			"More detailed help can be found in the <a href=\"http://www.smogon.com/forums/posts/6777489/\">tournaments guide</a><br />" +
 			"</div>"
