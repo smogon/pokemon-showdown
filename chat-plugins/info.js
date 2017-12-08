@@ -1674,7 +1674,6 @@ exports.commands = {
 
 			let formatName = extraFormat.name;
 			let formatId = extraFormat.id;
-			let reply;
 			if (formatName.startsWith('[Gen ')) {
 				formatName = formatName.replace('[Gen ' + formatName[formatName.indexOf('[') + 5] + '] ', '');
 				formatId = toId(formatName);
