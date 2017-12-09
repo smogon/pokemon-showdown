@@ -14,14 +14,12 @@
 
 'use strict';
 
-const Matchmakers = require('./ladders-matchmaker');
-
-class Ladder {
+class LadderStore {
 	/**
 	 * @param {string} formatid
 	 */
 	constructor(formatid) {
-		this.formatid = toId(formatid);
+		this.formatid = formatid;
 	}
 
 	/**
@@ -160,22 +158,6 @@ class Ladder {
 	}
 }
 
-/**
- * @param {string} formatid
- */
-function getLadder(formatid) {
-	return new Ladder(formatid);
-}
+LadderStore.formatsListPrefix = '';
 
-const Ladders = Object.assign(getLadder, Matchmakers, {
-	Ladder,
-	visualizeAll: Ladder.visualizeAll,
-	cancelSearches: Matchmakers.Matchmaker.cancelSearches,
-	getSearches: Matchmakers.Matchmaker.getSearches,
-
-	formatsListPrefix: '',
-	/** @type {true | false | 'db'} */
-	disabled: false,
-});
-
-module.exports = Ladders;
+module.exports = LadderStore;

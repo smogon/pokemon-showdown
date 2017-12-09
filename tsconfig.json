@@ -17,7 +17,7 @@
         "./sim/*.js",
         "./crashlogger.js",
         "./dnsbl.js",
-        "./ladders-matchmaker.js",
+        "./ladders-local.js",
         "./ladders-remote.js",
         "./ladders.js",
         "./monitor.js",
