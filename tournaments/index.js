@@ -114,23 +114,13 @@ class Tournament {
 	}
 
 	setCustomRules(rules, output) {
-		let format = Dex.getFormat(this.originalFormat);
-		if (format.team) {
-			output.errorReply(`WARNING: ${format.name} uses generated teams - only in-battle mod rules (like Sleep Clause Mod) will have any effect.`);
-		}
-		format = Dex.getFormat(this.originalFormat, rules);
-		if (!format.customRules) {
-			output.errorReply(`The specified rules are invalid or already included in ${format.name}.`);
-			return false;
-		}
 		try {
-			Dex.getRuleTable(format);
+			this.teambuilderFormat = Dex.validateFormat(this.originalFormat + '@@@' + rules);
 		} catch (e) {
-			output.errorReply(`Rule error: ${e.message}`);
+			output.errorReply(`Custom rule error: ${e.message}`);
 			return false;
 		}
-		this.teambuilderFormat = this.originalFormat + '@@@' + format.customRules.join(',');
-		this.customRules = format.customRules;
+		this.customRules = Dex.getFormat(this.teambuilderFormat, true).customRules;
 		return true;
 	}
 
