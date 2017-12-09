@@ -592,6 +592,13 @@ class ModdedDex {
 		let id = toId(name);
 		let ability = this.abilityCache.get(id);
 		if (ability) return ability;
+		if (this.data.Aliases.hasOwnProperty(id)) {
+			ability = this.getAbility(this.data.Aliases[id]);
+			if (ability.exists) {
+				this.abilityCache.set(id, ability);
+			}
+			return ability;
+		}
 		if (id && this.data.Abilities.hasOwnProperty(id)) {
 			ability = new Data.Ability({name}, this.data.Abilities[id]);
 		} else {
