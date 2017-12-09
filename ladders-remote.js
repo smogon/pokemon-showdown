@@ -26,40 +26,39 @@ class Ladder {
 		this.formatid = toId(formatid);
 	}
 
-	getTop() {
-		return Promise.resolve(null);
+	async getTop() {
+		return null;
 	}
 
-	getRating(userid) {
+	async getRating(userid) {
 		let formatid = this.formatid;
 		let user = Users.getExact(userid);
 		if (!user) {
-			return Promise.reject(new Error(`Expired rating for ${userid}`));
+			throw new Error(`Expired rating for ${userid}`);
 		}
 		if (Ladders.disabled === true || Ladders.disabled === 'db' && !user.mmrCache[formatid]) {
-			return Promise.reject(new Error(`Ladders are disabled.`));
+			throw new Error(`Ladders are disabled.`);
 		}
 		if (user.mmrCache[formatid]) {
-			return Promise.resolve(user.mmrCache[formatid]);
+			return user.mmrCache[formatid];
 		}
-		return new Promise((resolve, reject) => {
+		const mmr = await new Promise((resolve, reject) => {
 			LoginServer.request('mmr', {
 				format: formatid,
 				user: userid,
 			}, (data, statusCode, error) => {
-				if (!data) return resolve(1000);
+				if (!data) return resolve(NaN);
 				if (data.errorip) {
-					return resolve(1000);
+					return resolve(NaN);
 				}
-
-				let mmr = parseInt(data);
-				if (isNaN(mmr)) return resolve(1000);
-				if (user.userid !== userid) return reject(new Error(`Expired rating for ${userid}`));
-
-				user.mmrCache[formatid] = mmr;
-				resolve(mmr);
+				return parseInt(data);
 			});
 		});
+		if (isNaN(mmr)) return 1000;
+		if (user.userid !== userid) throw new Error(`Expired rating for ${userid}`);
+
+		user.mmrCache[formatid] = mmr;
+		return mmr;
 	}
 
 	async updateRating(p1name, p2name, p1score, room) {
