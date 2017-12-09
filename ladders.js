@@ -17,52 +17,54 @@
 
 const FS = require('./fs');
 
-let Ladders = module.exports = getLadder;
-Object.assign(Ladders, require('./ladders-matchmaker'));
-
-Ladders.get = Ladders;
-
-// tells the client to ask the server for format information
-Ladders.formatsListPrefix = '|,LL';
-
-Ladders.disabled = false;
+const Matchmakers = require('./ladders-matchmaker');
 
 // ladderCaches = {formatid: ladder OR Promise(ladder)}
 // Use Ladders(formatid).ladder to guarantee a Promise(ladder).
 // ladder is basically a 2D array representing the corresponding ladder.tsv
 //   with userid in front
 /** @typedef {[string, number, string, number, number, number]} LadderRow [userid, elo, username, w, l, t] */
-/** @type {Map<string, LadderRow[] | Promise<LadderRow[]>} formatid: ladder */
-let ladderCaches = Ladders.ladderCaches = new Map();
+/** @type {Map<string, LadderRow[] | Promise<LadderRow[]>>} formatid: ladder */
+let ladderCaches = new Map();
 
-class Ladder {
+class Ladder extends Matchmakers.Matchmaker {
+	/**
+	 * @param {string} formatid
+	 */
 	constructor(formatid) {
-		this.formatid = toId(formatid);
+		super(formatid);
 		/** @type {LadderRow[]?} */
 		this.ladder = null;
+		/** @type {Promise<LadderRow[]>?} */
 		this.ladderPromise = null;
 	}
 
+	/**
+	 * @return {Promise<LadderRow[]>}
+	 */
 	getLadder() {
 		if (!this.ladderPromise) this.ladderPromise = this.load();
 		return this.ladderPromise;
 	}
 	/**
 	 * Internal function, returns a Promise for a ladder
+	 * @return {Promise<LadderRow[]>}
 	 */
 	async load() {
 		// ladderCaches[formatid]
-		if (ladderCaches.has(this.formatid)) {
-			let cachedLadder = ladderCaches.get(this.formatid);
+		const cachedLadder = ladderCaches.get(this.formatid);
+		if (cachedLadder) {
+			// @ts-ignore
 			if (cachedLadder.then) {
 				let ladder = await cachedLadder;
 				return (this.ladder = ladder);
 			}
+			// @ts-ignore
 			return (this.ladder = cachedLadder);
 		}
 		try {
 			const data = await FS('config/ladders/' + this.formatid + '.tsv').read('utf8');
-			let ladder = [];
+			let ladder = /** @type {LadderRow[]} */ ([]);
 			let dataLines = data.split('\n');
 			for (let i = 1; i < dataLines.length; i++) {
 				let line = dataLines[i].trim();
@@ -108,8 +110,10 @@ class Ladder {
 	 *
 	 * If createIfNeeded is true, the user will be created and added to
 	 * the ladder array if it doesn't already exist.
+	 * @param {string} username
 	 */
-	indexOfUser(username, createIfNeeded) {
+	indexOfUser(username, createIfNeeded = false) {
+		if (!this.ladder) throw new Error(`Must be called with ladder loaded`);
 		let userid = toId(username);
 		for (let i = 0; i < this.ladder.length; i++) {
 			if (this.ladder[i][0] === userid) return i;
@@ -126,6 +130,7 @@ class Ladder {
 	 * Returns [formatid, html], where html is an the HTML source of a
 	 * ladder toplist, to be displayed directly in the ladder tab of the
 	 * client.
+	 * @return {Promise<[string, string]?>}
 	 */
 	async getTop() {
 		let formatid = this.formatid;
@@ -145,6 +150,8 @@ class Ladder {
 
 	/**
 	 * Returns a Promise for the Elo rating of a user
+	 * @param {string} userid
+	 * @return {Promise<number>}
 	 */
 	async getRating(userid) {
 		let formatid = this.formatid;
@@ -164,6 +171,9 @@ class Ladder {
 
 	/**
 	 * Internal method. Update the Elo rating of a user.
+	 * @param {LadderRow} row
+	 * @param {number} score
+	 * @param {number} foeElo
 	 */
 	updateRow(row, score, foeElo) {
 		let elo = row[1];
@@ -207,6 +217,10 @@ class Ladder {
 	/**
 	 * Update the Elo rating for two players after a battle, and display
 	 * the results in the passed room.
+	 * @param {string} p1name
+	 * @param {string} p2name
+	 * @param {number} p1score
+	 * @param {GameRoom} room
 	 */
 	async updateRating(p1name, p2name, p1score, room) {
 		if (Ladders.disabled) {
@@ -298,6 +312,7 @@ class Ladder {
 
 	/**
 	 * Returns a promise for a <tr> with all ratings for the current format.
+	 * @param {string} username
 	 */
 	async visualize(username) {
 		const ladder = await this.getLadder();
@@ -313,6 +328,8 @@ class Ladder {
 
 	/**
 	 * Returns a Promise for an array of strings of <tr>s for ladder ratings of the user
+	 * @param {string} username
+	 * @return {Promise<string[]>}
 	 */
 	static visualizeAll(username) {
 		let ratings = [];
@@ -325,9 +342,25 @@ class Ladder {
 	}
 }
 
+/**
+ * @param {string} formatid
+ */
 function getLadder(formatid) {
 	return new Ladder(formatid);
 }
 
-Ladders.Ladder = Ladder;
-Ladders.visualizeAll = Ladder.visualizeAll;
+const Ladders = Object.assign(getLadder, Matchmakers, {
+	Ladder,
+	ladderCaches,
+	visualizeAll: Ladder.visualizeAll,
+	cancelSearches: Matchmakers.Matchmaker.cancelSearches,
+	getSearches: Matchmakers.Matchmaker.getSearches,
+
+	// tells the client to ask the server for format information
+	formatsListPrefix: '|,LL',
+
+	/** @type {true | false | 'db'} */
+	disabled: false,
+});
+
+module.exports = Ladders;

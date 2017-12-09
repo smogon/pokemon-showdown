@@ -18,6 +18,8 @@
         "./crashlogger.js",
         "./dnsbl.js",
         "./ladders-matchmaker.js",
+        "./ladders-remote.js",
+        "./ladders.js",
         "./monitor.js",
         "./repl.js",
         "./rooms.js",

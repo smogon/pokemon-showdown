@@ -6,12 +6,14 @@ import * as PRNGType from './../sim/prng'
 import * as SideType from './../sim/side'
 import * as TeamValidatorType from './../sim/team-validator'
 import * as RoomsType from './../rooms'
+import * as LaddersType from './../ladders-remote'
 
 declare global {
 	// modules
 	const Dex: typeof DexType
 	const Chat: any
 	const Punishments: any
+	const Ladders: typeof LaddersType
 
 	// sim
 	const Battle: typeof BattleType
