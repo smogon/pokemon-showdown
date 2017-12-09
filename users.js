@@ -1300,44 +1300,46 @@ class User {
 			this.popup(`You are no longer looking for a battle because you changed your username.`);
 		}
 	}
-	makeChallenge(user, format, team/*, isPrivate*/) {
-		user = getUser(user);
-		if (!user || this.challengeTo) {
+	async makeChallenge(targetUser, format, connection) {
+		if (this.challengeTo) {
+			connection.popup(`You're already challenging '${this.challengeTo.to}'. Cancel that challenge before challenging someone else.`);
 			return false;
 		}
-		if (user.blockChallenges && !this.can('bypassblocks', user)) {
+		if (targetUser.blockChallenges && !this.can('bypassblocks', targetUser)) {
+			connection.popup(`The user '${targetUser.name}' is not accepting challenges right now.`);
 			return false;
 		}
 		if (new Date().getTime() < this.lastChallenge + 10000) {
 			// 10 seconds ago
 			return false;
 		}
-		let time = new Date().getTime();
+		const ready = await Ladders.matchmaker.prepBattle(connection, format);
+		if (!ready) return false;
+
 		let challenge = {
-			time: time,
+			time: new Date().getTime(),
 			from: this.userid,
-			to: user.userid,
-			format: toId(format),
-			//isPrivate: !!isPrivate, // currently unused
-			team: team,
+			to: targetUser.userid,
+			format: ready.formatid,
+			team: ready.team,
 		};
-		this.lastChallenge = time;
+		this.lastChallenge = challenge.time;
 		this.challengeTo = challenge;
-		user.challengesFrom[this.userid] = challenge;
+		targetUser.challengesFrom[this.userid] = challenge;
 		this.updateChallenges();
-		user.updateChallenges();
+		targetUser.updateChallenges();
 	}
 	cancelChallengeTo() {
 		if (!this.challengeTo) return true;
-		let user = getUser(this.challengeTo.to);
+		let user = Users(this.challengeTo.to);
 		if (user) delete user.challengesFrom[this.userid];
 		this.challengeTo = null;
 		this.updateChallenges();
 		if (user) user.updateChallenges();
 	}
-	rejectChallengeFrom(user) {
-		let userid = toId(user);
-		user = getUser(user);
+	rejectChallengeFrom(userid) {
+		userid = toId(userid);
+		const user = Users(userid);
 		if (this.challengesFrom[userid]) {
 			delete this.challengesFrom[userid];
 		}
@@ -1350,27 +1352,32 @@ class User {
 		}
 		this.updateChallenges();
 	}
-	acceptChallengeFrom(user, team) {
-		let userid = toId(user);
-		user = getUser(user);
-		if (!user || !user.challengeTo || user.challengeTo.to !== this.userid || !this.connected || !user.connected) {
+	async acceptChallengeFrom(targetUser, connection) {
+		const userid = targetUser.userid;
+		if (!targetUser.challengeTo || targetUser.challengeTo.to !== this.userid || !this.connected || !targetUser.connected) {
 			if (this.challengesFrom[userid]) {
 				delete this.challengesFrom[userid];
 				this.updateChallenges();
 			}
+			connection.popup(`${targetUser.name} isn't challenging you - maybe they cancelled before you could accept?`);
 			return false;
 		}
-		Rooms.createBattle(user.challengeTo.format, {
+		const challenge = targetUser.challengeTo;
+
+		const ready = await Ladders.matchmaker.prepBattle(connection, challenge.format);
+		if (!ready) return false;
+
+		Rooms.createBattle(challenge.format, {
 			p1: this,
-			p1team: team,
-			p2: user,
-			p2team: user.challengeTo.team,
+			p1team: ready.team,
+			p2: targetUser,
+			p2team: challenge.team,
 			rated: false,
 		});
-		delete this.challengesFrom[user.userid];
-		user.challengeTo = null;
+		delete this.challengesFrom[targetUser.userid];
+		targetUser.challengeTo = null;
 		this.updateChallenges();
-		user.updateChallenges();
+		targetUser.updateChallenges();
 		return true;
 	}
 	/**

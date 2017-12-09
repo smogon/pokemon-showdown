@@ -3349,32 +3349,23 @@ exports.commands = {
 		target = this.splitTarget(target);
 		let targetUser = this.targetUser;
 		if (!targetUser || !targetUser.connected) {
-			return this.popupReply("The user '" + this.targetUsername + "' was not found.");
+			return this.popupReply(`The user '${this.targetUsername}' was not found.`);
 		}
 		if (user.locked && !targetUser.locked) {
-			return this.popupReply("You are locked and cannot challenge unlocked users.");
-		}
-		if (targetUser.blockChallenges && !user.can('bypassblocks', targetUser)) {
-			return this.popupReply("The user '" + this.targetUsername + "' is not accepting challenges right now.");
-		}
-		if (user.challengeTo) {
-			return this.popupReply("You're already challenging '" + user.challengeTo.to + "'. Cancel that challenge before challenging someone else.");
+			return this.popupReply(`You are locked and cannot challenge unlocked users.`);
 		}
 		if (Config.pmmodchat) {
 			let userGroup = user.group;
 			if (Config.groupsranking.indexOf(userGroup) < Config.groupsranking.indexOf(Config.pmmodchat)) {
 				let groupName = Config.groups[Config.pmmodchat].name || Config.pmmodchat;
-				this.popupReply("Because moderated chat is set, you must be of rank " + groupName + " or higher to challenge users.");
+				this.popupReply(`Because moderated chat is set, you must be of rank ${groupName} or higher to challenge users.`);
 				return false;
 			}
 		}
 		if (targetUser === user) {
-			return this.popupReply("You can't battle yourself. The best you can do is open PS in Private Browsing (or another browser) and log into a different username, and battle that username.");
+			return this.popupReply(`You can't battle yourself. The best you can do is open PS in Private Browsing (or another browser) and log into a different username, and battle that username.`);
 		}
-		user.prepBattle(Dex.getFormat(target).id, 'challenge', connection).then(validTeam => {
-			if (validTeam === false) return;
-			user.makeChallenge(targetUser, target, validTeam);
-		});
+		user.makeChallenge(targetUser, target, connection);
 	},
 
 	'!blockchallenges': true,
@@ -3403,23 +3394,15 @@ exports.commands = {
 	'!cancelchallenge': true,
 	cchall: 'cancelChallenge',
 	cancelchallenge: function (target, room, user) {
-		user.cancelChallengeTo(target);
+		user.cancelChallengeTo();
 	},
 
 	'!accept': true,
 	accept: function (target, room, user, connection) {
-		let userid = toId(target);
-		if (!userid && this.pmTarget) userid = this.pmTarget.userid;
-		let format = '';
-		if (user.challengesFrom[userid]) format = user.challengesFrom[userid].format;
-		if (!format) {
-			this.popupReply(target + " isn't challenging you - maybe they cancelled before you could accept?");
-			return false;
-		}
-		user.prepBattle(Dex.getFormat(format).id, 'challenge', connection).then(validTeam => {
-			if (validTeam === false) return;
-			user.acceptChallengeFrom(userid, validTeam);
-		});
+		target = this.splitTarget(target);
+		const targetUser = this.targetUser || this.pmTarget;
+		if (!targetUser) return this.errorReply(`User "${this.targetUsername}" not found.`);
+		user.acceptChallengeFrom(targetUser, connection);
 	},
 
 	'!reject': true,
