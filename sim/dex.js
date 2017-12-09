@@ -484,11 +484,31 @@ class ModdedDex {
 		return effect;
 	}
 	/**
+	 * Returns a sanitized format ID if valid, or throws if invalid.
+	 * @param {string} name
+	 */
+	validateFormat(name) {
+		const [formatName, customRulesString] = name.split('@@@', 2);
+		const format = this.getFormat(formatName);
+		if (!format.exists) throw new Error(`Unrecognized format "${formatName}"`);
+		if (!customRulesString) return format.id;
+		const ruleTable = this.getRuleTable(format);
+		const customRules = customRulesString.split(',').map(rule => {
+			const ruleSpec = this.validateRule(rule);
+			if (typeof ruleSpec === 'string' && ruleTable.has(ruleSpec)) return null;
+			return rule.replace(/[\r\n|]*/g, '').trim();
+		}).filter(rule => rule);
+		if (!customRules.length) throw new Error(`The format already has your custom rules`);
+		const validatedFormatid = format.id + '@@@' + customRules.join(',');
+		const moddedFormat = this.getFormat(validatedFormatid, true);
+		this.getRuleTable(moddedFormat);
+		return validatedFormatid;
+	}
+	/**
 	 * @param {string | Format} name
-	 * @param {string | string[]} [customRules]
 	 * @return {Format}
 	 */
-	getFormat(name, customRules) {
+	getFormat(name, isTrusted = false) {
 		if (name && typeof name !== 'string') {
 			return name;
 		}
@@ -501,70 +521,25 @@ class ModdedDex {
 		if (this.data.Formats.hasOwnProperty('gen7' + id)) {
 			id = 'gen7' + id;
 		}
-		let effect;
-		/**@type {string[]} */
-		let sanitizedCustomRules = [];
+		let supplementaryAttributes = /** @type {AnyObject?} */ (null);
 		if (name.includes('@@@')) {
-			let parts = name.split('@@@');
-			name = parts[0];
+			if (!isTrusted) {
+				try {
+					name = this.validateFormat(name);
+					isTrusted = true;
+				} catch (e) {}
+			}
+			let [newName, customRulesString] = name.split('@@@', 2);
+			name = newName;
 			id = toId(name);
-			sanitizedCustomRules = parts[1].split(',');
+			if (isTrusted) {
+				supplementaryAttributes = {customRules: customRulesString.split(',')};
+			}
 		}
+		let effect;
 		if (this.data.Formats.hasOwnProperty(id)) {
 			let format = this.data.Formats[id];
-			if (customRules) {
-				if (typeof customRules === 'string') customRules = customRules.split(',');
-				const ruleTable = this.getRuleTable(this.getFormat(name));
-				for (let ban of customRules) {
-					ban = ban.trim();
-					let unban = false;
-					if (ban.charAt(0) === '!') {
-						unban = true;
-						ban = ban.substr(1);
-					}
-					let subformat = this.getFormat(ban);
-					if (subformat.effectType === 'ValidatorRule' || subformat.effectType === 'Rule' || subformat.effectType === 'Format') {
-						if (unban) {
-							if (ruleTable.has('!' + subformat.id)) continue;
-						} else {
-							if (ruleTable.has(subformat.id)) continue;
-						}
-						ban = 'Rule:' + subformat.name;
-					} else {
-						ban = ban.toLowerCase();
-						let baseForme = false;
-						if (ban.endsWith('-base')) {
-							baseForme = true;
-							ban = ban.substr(0, ban.length - 5);
-						}
-						let search = this.dataSearch(ban);
-						if (!search || search.length < 1) continue;
-						if (search[0].isInexact || search[0].searchType === 'nature') continue;
-						ban = search[0].name;
-						if (baseForme) ban += '-Base';
-						if (unban) {
-							if (ruleTable.has('+' + ban)) continue;
-						} else {
-							if (ruleTable.has('-' + ban)) continue;
-						}
-					}
-					if (ban.startsWith('Rule:')) {
-						ban = ban.substr(5).trim();
-						if (unban) {
-							sanitizedCustomRules.unshift('!' + ban);
-						} else {
-							sanitizedCustomRules.push(ban);
-						}
-					} else {
-						if (unban) {
-							sanitizedCustomRules.push('+' + ban);
-						} else {
-							sanitizedCustomRules.push('-' + ban);
-						}
-					}
-				}
-			}
-			effect = new Data.Format({name}, format, sanitizedCustomRules.length ? {customRules: sanitizedCustomRules} : null);
+			effect = new Data.Format({name}, format, supplementaryAttributes);
 		} else {
 			effect = new Data.Format({name, exists: false});
 		}
@@ -756,7 +731,7 @@ class ModdedDex {
 		}
 
 		for (const rule of ruleset) {
-			const ruleSpec = this.validateRule(rule);
+			const ruleSpec = this.validateRule(rule, format);
 			if (typeof ruleSpec !== 'string') {
 				if (ruleSpec[0] === 'complexTeamBan') {
 					ruleTable.complexTeamBans.push(/** @type {any} */ (ruleSpec.slice(1)));
@@ -806,6 +781,7 @@ class ModdedDex {
 		switch (rule.charAt(0)) {
 		case '-':
 		case '+':
+			if (format && format.team) throw new Error(`We don't currently support bans in generated teams`);
 			if (rule.slice(1).includes('>') || rule.slice(1).includes('+')) {
 				let buf = rule.slice(1);
 				const gtIndex = buf.lastIndexOf('>');

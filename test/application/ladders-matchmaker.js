@@ -9,7 +9,7 @@ let matchmaker = Ladders.matchmaker;
 describe('Matchmaker', function () {
 	const FORMATID = 'gen7ou';
 	const addSearch = (player, rating = 1000, formatid = FORMATID) => {
-		let search = new Ladders.Search(player.userid, player.team, rating);
+		let search = new Ladders.BattleReady(player.userid, formatid, player.team, rating);
 		matchmaker.addSearch(search, player, formatid);
 		return search;
 	};
