@@ -5,7 +5,6 @@ let Config = require('../config/config');
 let Monitor = require('../monitor');
 
 let LoginServer = require('../loginserver');
-let Ladders = require(Config.remoteladder ? '../ladders-remote' : '../ladders');
 let Users = require('../users');
 type Connection = any;
 type User = any;

@@ -350,6 +350,13 @@ class Format extends Effect {
 		 */
 		this.maxForcedLevel = this.maxForcedLevel;
 
+		/** @type {boolean | undefined} */
+		this.searchShow = this.searchShow;
+		/** @type {boolean | undefined} */
+		this.challengeShow = this.challengeShow;
+		/** @type {boolean | undefined} */
+		this.tournamentShow = this.tournamentShow;
+
 		/**
 		 * @type {((this: Validator, set: PokemonSet, teamHas: AnyObject) => string[] | false)?}
 		 */
