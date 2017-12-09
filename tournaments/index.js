@@ -672,7 +672,7 @@ class Tournament {
 		if (!this.isEnded) this.autoDisqualifyTimer = setTimeout(() => this.runAutoDisqualify(), this.autoDisqualifyTimeout);
 	}
 
-	challenge(user, targetUserid, output) {
+	async challenge(user, targetUserid, output) {
 		if (!this.isTournamentStarted) {
 			output.sendReply('|tournament|error|NotStarted');
 			return;
@@ -707,11 +707,9 @@ class Tournament {
 		this.isAvailableMatchesInvalidated = true;
 		this.update();
 
-		user.prepBattle(this.teambuilderFormat, 'tournament', user).then(validTeam => this.finishChallenge(user, to, output, validTeam));
-	}
-	finishChallenge(user, to, output, validTeam) {
+		const validTeam = await user.prepBattle(this.teambuilderFormat, 'tournament', user);
 		let from = this.players[user.userid];
-		if (validTeam === false) {
+		if (!validTeam) {
 			this.generator.setUserBusy(from, false);
 			this.generator.setUserBusy(to, false);
 
@@ -755,7 +753,7 @@ class Tournament {
 		this.isAvailableMatchesInvalidated = true;
 		this.update();
 	}
-	acceptChallenge(user, output) {
+	async acceptChallenge(user, output) {
 		if (!this.isTournamentStarted) {
 			output.sendReply('|tournament|error|NotStarted');
 			return;
@@ -770,12 +768,8 @@ class Tournament {
 		let challenge = this.pendingChallenges.get(player);
 		if (!challenge || !challenge.from) return;
 
-		user.prepBattle(this.teambuilderFormat, 'tournament', user).then(validTeam =>
-			this.finishAcceptChallenge(user, challenge, validTeam)
-		);
-	}
-	finishAcceptChallenge(user, challenge, validTeam) {
-		if (validTeam === false) return;
+		const validTeam = await user.prepBattle(this.teambuilderFormat, 'tournament', user);
+		if (!validTeam) return;
 
 		// Prevent battles between offline users from starting
 		let from = Users.get(challenge.from.userid);
