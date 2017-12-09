@@ -31,29 +31,34 @@ Ladders.disabled = false;
 // Use Ladders(formatid).ladder to guarantee a Promise(ladder).
 // ladder is basically a 2D array representing the corresponding ladder.tsv
 //   with userid in front
-// ladder = [ladderRow]
-// ladderRow = [userid, elo, username, w, l, t]
-let ladderCaches = Ladders.ladderCaches = Object.create(null);
+/** @typedef {[string, number, string, number, number, number]} LadderRow [userid, elo, username, w, l, t] */
+/** @type {Map<string, LadderRow[] | Promise<LadderRow[]>} formatid: ladder */
+let ladderCaches = Ladders.ladderCaches = new Map();
 
 class Ladder {
 	constructor(formatid) {
 		this.formatid = toId(formatid);
-		this.loadedLadder = null;
-		this.ladder = this.load();
+		/** @type {LadderRow[]?} */
+		this.ladder = null;
+		this.ladderPromise = null;
 	}
 
+	getLadder() {
+		if (!this.ladderPromise) this.ladderPromise = this.load();
+		return this.ladderPromise;
+	}
 	/**
 	 * Internal function, returns a Promise for a ladder
 	 */
 	async load() {
 		// ladderCaches[formatid]
-		if (this.formatid in ladderCaches) {
-			let cachedLadder = ladderCaches[this.formatid];
+		if (ladderCaches.has(this.formatid)) {
+			let cachedLadder = ladderCaches.get(this.formatid);
 			if (cachedLadder.then) {
 				let ladder = await cachedLadder;
-				return (this.loadedLadder = ladder);
+				return (this.ladder = ladder);
 			}
-			return (this.loadedLadder = cachedLadder);
+			return (this.ladder = cachedLadder);
 		}
 		try {
 			const data = await FS('config/ladders/' + this.formatid + '.tsv').read('utf8');
@@ -65,14 +70,14 @@ class Ladder {
 				let row = line.split('\t');
 				ladder.push([toId(row[1]), Number(row[0]), row[1], Number(row[2]), Number(row[3]), Number(row[4]), row[5]]);
 			}
-			// console.log('Ladders(' + this.formatid + ') loaded tsv: ' + JSON.stringify(this.loadedLadder));
-			this.loadedLadder = ladderCaches[this.formatid] = ladder;
-			return this.loadedLadder;
+			// console.log('Ladders(' + this.formatid + ') loaded tsv: ' + JSON.stringify(this.ladder));
+			ladderCaches.set(this.formatid, (this.ladder = ladder));
+			return this.ladder;
 		} catch (err) {
-			// console.log('Ladders(' + this.formatid + ') err loading tsv: ' + JSON.stringify(this.loadedLadder));
+			// console.log('Ladders(' + this.formatid + ') err loading tsv: ' + JSON.stringify(this.ladder));
 		}
-		this.loadedLadder = ladderCaches[this.formatid] = [];
-		return this.loadedLadder;
+		ladderCaches.set(this.formatid, (this.ladder = []));
+		return this.ladder;
 	}
 
 	/**
@@ -81,22 +86,17 @@ class Ladder {
 	 * Called automatically by updateRating, so you don't need to manually
 	 * call this.
 	 */
-	save() {
+	async save() {
 		if (this.saving) return;
 		this.saving = true;
-		if (!this.loadedLadder) {
-			this.ladder.then(() => {
-				this.save();
-			});
-			return;
-		}
-		if (!this.loadedLadder.length) {
+		const ladder = await this.getLadder();
+		if (!ladder.length) {
 			this.saving = false;
 			return;
 		}
 		let stream = FS(`config/ladders/${this.formatid}.tsv`).createWriteStream();
 		stream.write('Elo\tUsername\tW\tL\tT\tLast update\r\n');
-		for (let row of this.loadedLadder) {
+		for (let row of ladder) {
 			stream.write(row.slice(1).join('\t') + '\r\n');
 		}
 		stream.end();
@@ -111,12 +111,12 @@ class Ladder {
 	 */
 	indexOfUser(username, createIfNeeded) {
 		let userid = toId(username);
-		for (let i = 0; i < this.loadedLadder.length; i++) {
-			if (this.loadedLadder[i][0] === userid) return i;
+		for (let i = 0; i < this.ladder.length; i++) {
+			if (this.ladder[i][0] === userid) return i;
 		}
 		if (createIfNeeded) {
-			let index = this.loadedLadder.length;
-			this.loadedLadder.push([userid, 1000, username, 0, 0, 0]);
+			let index = this.ladder.length;
+			this.ladder.push([userid, 1000, username, 0, 0, 0]);
 			return index;
 		}
 		return -1;
@@ -130,7 +130,7 @@ class Ladder {
 	async getTop() {
 		let formatid = this.formatid;
 		let name = Dex.getFormat(formatid).name;
-		const ladder = await this.ladder;
+		const ladder = await this.getLadder();
 		let buf = `<h3>${name} Top 100</h3>`;
 		buf += `<table>`;
 		buf += `<tr><th>` + ['', 'Username', '<abbr title="Elo rating">Elo</abbr>', 'W', 'L', 'T'].join(`</th><th>`) + `</th></tr>`;
@@ -155,11 +155,11 @@ class Ladder {
 		if (user && user.mmrCache[formatid]) {
 			return user.mmrCache[formatid];
 		}
-		await this.ladder;
+		const ladder = await this.getLadder();
 		if (user.userid !== userid) throw new Error(`Expired rating for ${userid}`);
 		let index = this.indexOfUser(userid);
 		if (index < 0) return (user.mmrCache[formatid] = 1000);
-		return (user.mmrCache[formatid] = this.loadedLadder[index][1]);
+		return (user.mmrCache[formatid] = ladder[index][1]);
 	}
 
 	/**
@@ -220,50 +220,50 @@ class Ladder {
 			p1score = 0;
 			p2score = 0;
 		}
-		await this.ladder;
+		const ladder = await this.getLadder();
 		let p1newElo, p2newElo;
 		try {
 			let p1index = this.indexOfUser(p1name, true);
-			let p1elo = this.loadedLadder[p1index][1];
+			let p1elo = ladder[p1index][1];
 
 			let p2index = this.indexOfUser(p2name, true);
-			let p2elo = this.loadedLadder[p2index][1];
+			let p2elo = ladder[p2index][1];
 
-			this.updateRow(this.loadedLadder[p1index], p1score, p2elo);
-			this.updateRow(this.loadedLadder[p2index], p2score, p1elo);
+			this.updateRow(ladder[p1index], p1score, p2elo);
+			this.updateRow(ladder[p2index], p2score, p1elo);
 
-			p1newElo = this.loadedLadder[p1index][1];
-			p2newElo = this.loadedLadder[p2index][1];
+			p1newElo = ladder[p1index][1];
+			p2newElo = ladder[p2index][1];
 
-			// console.log('L: ' + this.loadedLadder.map(r => ''+Math.round(r[1])+' '+r[2]).join('\n'));
+			// console.log('L: ' + ladder.map(r => ''+Math.round(r[1])+' '+r[2]).join('\n'));
 
 			// move p1 to its new location
 			let newIndex = p1index;
-			while (newIndex > 0 && this.loadedLadder[newIndex - 1][1] <= p1newElo) newIndex--;
-			while (newIndex === p1index || (this.loadedLadder[newIndex] && this.loadedLadder[newIndex][1] > p1newElo)) newIndex++;
+			while (newIndex > 0 && ladder[newIndex - 1][1] <= p1newElo) newIndex--;
+			while (newIndex === p1index || (ladder[newIndex] && ladder[newIndex][1] > p1newElo)) newIndex++;
 			// console.log('ni='+newIndex+', p1i='+p1index);
 			if (newIndex !== p1index && newIndex !== p1index + 1) {
-				let row = this.loadedLadder.splice(p1index, 1)[0];
+				let row = ladder.splice(p1index, 1)[0];
 				// adjust for removed row
 				if (newIndex > p1index) newIndex--;
 				if (p2index > p1index) p2index--;
 
-				this.loadedLadder.splice(newIndex, 0, row);
+				ladder.splice(newIndex, 0, row);
 				// adjust for inserted row
 				if (p2index >= newIndex) p2index++;
 			}
 
 			// move p2
 			newIndex = p2index;
-			while (newIndex > 0 && this.loadedLadder[newIndex - 1][1] <= p2newElo) newIndex--;
-			while (newIndex === p2index || (this.loadedLadder[newIndex] && this.loadedLadder[newIndex][1] > p2newElo)) newIndex++;
+			while (newIndex > 0 && ladder[newIndex - 1][1] <= p2newElo) newIndex--;
+			while (newIndex === p2index || (ladder[newIndex] && ladder[newIndex][1] > p2newElo)) newIndex++;
 			// console.log('ni='+newIndex+', p2i='+p2index);
 			if (newIndex !== p2index && newIndex !== p2index + 1) {
-				let row = this.loadedLadder.splice(p2index, 1)[0];
+				let row = ladder.splice(p2index, 1)[0];
 				// adjust for removed row
 				if (newIndex > p2index) newIndex--;
 
-				this.loadedLadder.splice(newIndex, 0, row);
+				ladder.splice(newIndex, 0, row);
 			}
 
 			let p1 = Users.getExact(p1name);
@@ -299,17 +299,16 @@ class Ladder {
 	/**
 	 * Returns a promise for a <tr> with all ratings for the current format.
 	 */
-	visualize(username) {
-		return this.ladder.then(() => {
-			let index = this.indexOfUser(username, false);
+	async visualize(username) {
+		const ladder = await this.getLadder();
+		let index = this.indexOfUser(username, false);
 
-			if (index < 0) return '';
+		if (index < 0) return '';
 
-			let ratings = this.loadedLadder[index];
+		let ratings = ladder[index];
 
-			let output = `<tr><td>${this.formatid}</td><td><strong>${Math.round(ratings[1])}</strong></td>`;
-			return `${output}<td>${ratings[3]}</td><td>${ratings[4]}</td><td>${ratings[3] + ratings[4]}</td></tr>`;
-		});
+		let output = `<tr><td>${this.formatid}</td><td><strong>${Math.round(ratings[1])}</strong></td>`;
+		return `${output}<td>${ratings[3]}</td><td>${ratings[4]}</td><td>${ratings[3] + ratings[4]}</td></tr>`;
 	}
 
 	/**

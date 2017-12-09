@@ -708,7 +708,6 @@ class Tournament {
 		this.update();
 
 		const validTeam = await user.prepBattle(this.teambuilderFormat, 'tournament', user);
-		let from = this.players[user.userid];
 		if (!validTeam) {
 			this.generator.setUserBusy(from, false);
 			this.generator.setUserBusy(to, false);
@@ -777,7 +776,6 @@ class Tournament {
 
 		// Prevent double accepts and users that have been disqualified while between these two functions
 		if (!this.pendingChallenges.get(challenge.from)) return;
-		let player = this.players[user.userid];
 		if (!this.pendingChallenges.get(player)) return;
 
 		let room = Rooms.createBattle(this.teambuilderFormat, {
