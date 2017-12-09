@@ -16,15 +16,18 @@ const PERIODIC_MATCH_INTERVAL = 60 * 1000;
 /**
  * This represents a user's search for a battle under a format.
  */
-class Search {
+class BattleReady {
 	/**
 	 * @param {string} userid
+	 * @param {string} formatid
 	 * @param {string} team
 	 * @param {number} [rating = 1000]
 	 */
-	constructor(userid, team, rating = 1000) {
+	constructor(userid, formatid, team, rating = 0) {
 		/** @type {string} */
 		this.userid = userid;
+		/** @type {string} */
+		this.formatid = formatid;
 		/** @type {string} */
 		this.team = team;
 		/** @type {number} */
@@ -42,8 +45,8 @@ class Search {
 class Matchmaker {
 	constructor() {
 		/**
-		 * formatid:userid:Search
-		 * @type {Map<string, Map<string, Search>>}
+		 * formatid:userid:BattleReady
+		 * @type {Map<string, Map<string, BattleReady>>}
 		 */
 		this.searches = new Map();
 		/** @type {?NodeJS.Timer} */
@@ -51,6 +54,49 @@ class Matchmaker {
 			() => this.periodicMatch(),
 			PERIODIC_MATCH_INTERVAL
 		);
+	}
+
+	/**
+	 * @param {Connection} connection
+	 * @param {string} formatid
+	 * @param {string?} team
+	 */
+	async prepBattle(connection, formatid, team = null) {
+		// all validation for a battle goes through here
+		const user = connection.user || connection;
+		const userid = user.userid;
+		if (team === null) team = user.team;
+
+		if (Rooms.global.lockdown && Rooms.global.lockdown !== 'pre') {
+			let message = `The server is restarting. Battles will be available again in a few minutes.`;
+			if (Rooms.global.lockdown === 'ddos') {
+				message = `The server is under attack. Battles cannot be started at this time.`;
+			}
+			connection.popup(message);
+			return null;
+		}
+		let gameCount = user.games.size;
+		if (Monitor.countConcurrentBattle(gameCount, connection)) {
+			return null;
+		}
+		if (Monitor.countPrepBattle(connection.ip || connection.latestIp, connection)) {
+			return null;
+		}
+
+		try {
+			formatid = Dex.validateFormat(formatid);
+		} catch (e) {
+			connection.popup(`Your selected format is invalid:\n\n- ${e.message}`);
+			return null;
+		}
+
+		const result = await TeamValidatorAsync(formatid).validateTeam(team, user.locked || user.namelocked);
+		if (result.charAt(0) !== '1') {
+			connection.popup(`Your team was rejected for the following reasons:\n\n- ` + result.slice(1).replace(/\n/g, `\n- `));
+			return null;
+		}
+
+		return new BattleReady(userid, formatid, result.slice(1));
 	}
 
 	/**
@@ -89,7 +135,7 @@ class Matchmaker {
 	}
 
 	/**
-	 * @param {Search} search
+	 * @param {BattleReady} search
 	 * @param {string} formatid
 	 */
 	getSearcher(search, formatid) {
@@ -131,19 +177,20 @@ class Matchmaker {
 	 * before creating a search for a battle.
 	 * @param {User} user
 	 * @param {string} formatid
+	 * @param {Connection} connection
 	 * @return {Promise<void>}
 	 */
-	async searchBattle(user, formatid) {
+	async searchBattle(user, formatid, connection) {
 		if (!user.connected) return;
 
 		const format = Dex.getFormat(formatid);
 		formatid = format.id;
 		let oldUserid = user.userid;
-		let validTeam;
+		let search;
 		let rating;
 		try {
-			[validTeam, rating] = await Promise.all([
-				user.prepBattle(formatid, 'search', null),
+			[search, rating] = await Promise.all([
+				this.prepBattle(connection, formatid, user.team),
 				format.rated !== false ? Ladders(formatid).getRating(user.userid) : Promise.resolve(-1),
 			]);
 		} catch (e) {
@@ -155,16 +202,16 @@ class Matchmaker {
 		}
 
 		if (oldUserid !== user.userid) return;
-		if (validTeam === false) return;
+		if (!search) return;
 
-		const search = new Search(user.userid, validTeam, rating);
+		search.rating = rating;
 		this.addSearch(search, user, formatid);
 	}
 
 	/**
 	 * Verifies whether or not a match made between two users is valid. Returns
-	 * @param {Search} search1
-	 * @param {Search} search2
+	 * @param {BattleReady} search1
+	 * @param {BattleReady} search2
 	 * @param {User=} user1
 	 * @param {User=} user2
 	 * @param {string} formatid
@@ -205,7 +252,7 @@ class Matchmaker {
 
 	/**
 	 * Atarts a search for a battle for a user under the given format.
-	 * @param {Search} newSearch
+	 * @param {BattleReady} newSearch
 	 * @param {User} user
 	 * @param {string} formatid
 	 */
@@ -280,7 +327,7 @@ class Matchmaker {
 }
 
 module.exports = {
-	Search,
+	BattleReady,
 	Matchmaker,
 	matchmaker: new Matchmaker(),
 };
