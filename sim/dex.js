@@ -533,7 +533,10 @@ class ModdedDex {
 			name = newName;
 			id = toId(name);
 			if (isTrusted) {
-				supplementaryAttributes = {customRules: customRulesString.split(',')};
+				supplementaryAttributes = {
+					customRules: customRulesString.split(','),
+					searchShow: false,
+				};
 			}
 		}
 		let effect;
