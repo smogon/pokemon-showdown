@@ -45,11 +45,6 @@ class BattleReady {
  * @type {Map<string, Map<string, BattleReady>>}
  */
 const searches = new Map();
-/** @type {?NodeJS.Timer} */
-const periodicMatchInterval = setInterval(
-	() => Ladder.periodicMatch(),
-	PERIODIC_MATCH_INTERVAL
-);
 
 /**
  * This keeps track of searches for battles, creating a new battle for a newly
@@ -268,12 +263,12 @@ class Ladder extends LadderStore {
 	}
 
 	/**
-	 * Atarts a search for a battle for a user under the given format.
+	 * Starts a search for a battle for a user under the given format.
 	 * @param {BattleReady} newSearch
 	 * @param {User} user
 	 */
 	addSearch(newSearch, user) {
-		const formatid = toId(this.formatid);
+		const formatid = newSearch.formatid;
 		let formatTable = searches.get(formatid);
 		if (!formatTable) {
 			formatTable = new Map();
@@ -350,6 +345,12 @@ class Ladder extends LadderStore {
 function getLadder(formatid) {
 	return new Ladder(formatid);
 }
+
+/** @type {?NodeJS.Timer} */
+let periodicMatchInterval = setInterval(
+	() => Ladder.periodicMatch(),
+	PERIODIC_MATCH_INTERVAL
+);
 
 const Ladders = Object.assign(getLadder, {
 	BattleReady,
