@@ -266,9 +266,7 @@ class Validator {
 			}
 		}
 		if (!templateOverride && ruleTable.has('-unreleased') && postMegaTemplate.isUnreleased) {
-			if (postMegaTemplate.eggGroups[0] === 'Undiscovered' && !postMegaTemplate.evos) {
-				problems.push(`${name} (${postMegaTemplate.species}) is unreleased.`);
-			}
+			problems.push(`${name} (${postMegaTemplate.species}) is unreleased.`);
 		}
 
 		banReason = ruleTable.check('ability:' + toId(set.ability), setHas);
