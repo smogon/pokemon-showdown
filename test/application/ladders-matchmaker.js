@@ -80,7 +80,7 @@ describe('Matchmaker', function () {
 		assert.strictEqual(Ladders.searches.get(FORMATID).size, 2);
 
 		s2.rating = 1000;
-		Ladders.Matchmaker.periodicMatch();
+		Ladders.Ladder.periodicMatch();
 		assert.strictEqual(Ladders.searches.get(FORMATID).size, 0);
 	});
 

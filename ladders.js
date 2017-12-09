@@ -1,344 +1,346 @@
 /**
- * Ladder library
+ * Matchmaker
  * Pokemon Showdown - http://pokemonshowdown.com/
  *
- * This file handles ladders for all servers other than
- * play.pokemonshowdown.com.
+ * This keeps track of challenges to battle made between users, setting up
+ * matches between users looking for a battle, and starting new battles.
  *
- * Specifically, this is the file that handles calculating and keeping
- * track of players' Elo ratings for all formats.
- *
- * Matchmaking is currently still implemented in rooms.js.
- *
- * @license MIT license
+ * @License MIT License
  */
 
 'use strict';
 
-const FS = require('./fs');
+/** @type {typeof LadderStoreT} */
+const LadderStore = require(typeof Config === 'object' && Config.remoteladder ? './ladders-remote' : './ladders-local');
 
-const Matchmakers = require('./ladders-matchmaker');
+/** @type {number} */
+const PERIODIC_MATCH_INTERVAL = 60 * 1000;
 
-// ladderCaches = {formatid: ladder OR Promise(ladder)}
-// Use Ladders(formatid).ladder to guarantee a Promise(ladder).
-// ladder is basically a 2D array representing the corresponding ladder.tsv
-//   with userid in front
-/** @typedef {[string, number, string, number, number, number]} LadderRow [userid, elo, username, w, l, t] */
-/** @type {Map<string, LadderRow[] | Promise<LadderRow[]>>} formatid: ladder */
-let ladderCaches = new Map();
+/**
+ * This represents a user's search for a battle under a format.
+ */
+class BattleReady {
+	/**
+	 * @param {string} userid
+	 * @param {string} formatid
+	 * @param {string} team
+	 * @param {number} [rating = 1000]
+	 */
+	constructor(userid, formatid, team, rating = 0) {
+		/** @type {string} */
+		this.userid = userid;
+		/** @type {string} */
+		this.formatid = formatid;
+		/** @type {string} */
+		this.team = team;
+		/** @type {number} */
+		this.rating = rating;
+		/** @type {number} */
+		this.time = Date.now();
+	}
+}
 
-class Ladder extends Matchmakers.Matchmaker {
+/**
+ * formatid:userid:BattleReady
+ * @type {Map<string, Map<string, BattleReady>>}
+ */
+const searches = new Map();
+/** @type {?NodeJS.Timer} */
+const periodicMatchInterval = setInterval(
+	() => Ladder.periodicMatch(),
+	PERIODIC_MATCH_INTERVAL
+);
+
+/**
+ * This keeps track of searches for battles, creating a new battle for a newly
+ * added search if a valid match can be made, otherwise periodically
+ * attempting to make a match with looser restrictions until one can be made.
+ */
+class Ladder extends LadderStore {
 	/**
 	 * @param {string} formatid
 	 */
 	constructor(formatid) {
 		super(formatid);
-		/** @type {LadderRow[]?} */
-		this.ladder = null;
-		/** @type {Promise<LadderRow[]>?} */
-		this.ladderPromise = null;
 	}
 
 	/**
-	 * @return {Promise<LadderRow[]>}
+	 * @param {Connection} connection
+	 * @param {string?} team
+	 * @return {Promise<BattleReady?>}
 	 */
-	getLadder() {
-		if (!this.ladderPromise) this.ladderPromise = this.load();
-		return this.ladderPromise;
-	}
-	/**
-	 * Internal function, returns a Promise for a ladder
-	 * @return {Promise<LadderRow[]>}
-	 */
-	async load() {
-		// ladderCaches[formatid]
-		const cachedLadder = ladderCaches.get(this.formatid);
-		if (cachedLadder) {
-			// @ts-ignore
-			if (cachedLadder.then) {
-				let ladder = await cachedLadder;
-				return (this.ladder = ladder);
+	async prepBattle(connection, team = null, isRated = false) {
+		// all validation for a battle goes through here
+		const user = connection.user || connection;
+		const userid = user.userid;
+		if (team === null) team = user.team;
+
+		if (Rooms.global.lockdown && Rooms.global.lockdown !== 'pre') {
+			let message = `The server is restarting. Battles will be available again in a few minutes.`;
+			if (Rooms.global.lockdown === 'ddos') {
+				message = `The server is under attack. Battles cannot be started at this time.`;
 			}
-			// @ts-ignore
-			return (this.ladder = cachedLadder);
+			connection.popup(message);
+			return null;
 		}
+		let gameCount = user.games.size;
+		if (Monitor.countConcurrentBattle(gameCount, connection)) {
+			return null;
+		}
+		if (Monitor.countPrepBattle(connection.ip || connection.latestIp, connection)) {
+			return null;
+		}
+
 		try {
-			const data = await FS('config/ladders/' + this.formatid + '.tsv').read('utf8');
-			let ladder = /** @type {LadderRow[]} */ ([]);
-			let dataLines = data.split('\n');
-			for (let i = 1; i < dataLines.length; i++) {
-				let line = dataLines[i].trim();
-				if (!line) continue;
-				let row = line.split('\t');
-				ladder.push([toId(row[1]), Number(row[0]), row[1], Number(row[2]), Number(row[3]), Number(row[4]), row[5]]);
-			}
-			// console.log('Ladders(' + this.formatid + ') loaded tsv: ' + JSON.stringify(this.ladder));
-			ladderCaches.set(this.formatid, (this.ladder = ladder));
-			return this.ladder;
-		} catch (err) {
-			// console.log('Ladders(' + this.formatid + ') err loading tsv: ' + JSON.stringify(this.ladder));
+			// @ts-ignore TypeScript bug: self-reference
+			this.formatid = Dex.validateFormat(this.formatid);
+		} catch (e) {
+			connection.popup(`Your selected format is invalid:\n\n- ${e.message}`);
+			return null;
 		}
-		ladderCaches.set(this.formatid, (this.ladder = []));
-		return this.ladder;
+
+		let rating = 0, valResult;
+		if (isRated) {
+			try {
+				[valResult, rating] = await Promise.all([
+					TeamValidatorAsync(this.formatid).validateTeam(team, user.locked || user.namelocked),
+					this.getRating(user.userid),
+				]);
+			} catch (e) {
+				// Rejects iff ladders are disabled, or if we
+				// retrieved the rating but the user had changed their name.
+				if (Ladders.disabled) {
+					connection.popup(`The ladder is currently disabled due to high server load.`);
+				}
+				// User feedback for renames handled elsewhere.
+				return null;
+			}
+		} else {
+			valResult = await TeamValidatorAsync(this.formatid).validateTeam(team, user.locked || user.namelocked);
+		}
+
+		if (valResult.charAt(0) !== '1') {
+			connection.popup(
+				`Your team was rejected for the following reasons:\n\n` +
+				`- ` + valResult.slice(1).replace(/\n/g, `\n- `)
+			);
+			return null;
+		}
+
+		return new BattleReady(userid, this.formatid, valResult.slice(1), rating);
 	}
 
 	/**
-	 * Saves the ladder in config/ladders/[formatid].tsv
-	 *
-	 * Called automatically by updateRating, so you don't need to manually
-	 * call this.
+	 * @param {User} user
+	 * @return {boolean}
 	 */
-	async save() {
-		if (this.saving) return;
-		this.saving = true;
-		const ladder = await this.getLadder();
-		if (!ladder.length) {
-			this.saving = false;
+	cancelSearch(user) {
+		const formatid = toId(this.formatid);
+
+		const formatTable = searches.get(formatid);
+		if (!formatTable) return false;
+		if (!formatTable.has(user.userid)) return false;
+		formatTable.delete(user.userid);
+
+		user.updateSearch();
+		return true;
+	}
+
+	/**
+	 * @param {User} user
+	 * @return {number} cancel count
+	 */
+	static cancelSearches(user) {
+		let cancelCount = 0;
+
+		for (let formatTable of searches.values()) {
+			const search = formatTable.get(user.userid);
+			if (!search) continue;
+			formatTable.delete(user.userid);
+			cancelCount++;
+		}
+
+		user.updateSearch();
+		return cancelCount;
+	}
+
+	/**
+	 * @param {BattleReady} search
+	 */
+	getSearcher(search) {
+		const formatid = toId(this.formatid);
+		const user = Users.get(search.userid);
+		if (!user || !user.connected || user.userid !== search.userid) {
+			const formatTable = searches.get(formatid);
+			if (formatTable) formatTable.delete(search.userid);
+			if (user && user.connected) {
+				user.popup(`You changed your name and are no longer looking for a battle in ${formatid}`);
+				user.updateSearch();
+			}
 			return;
 		}
-		let stream = FS(`config/ladders/${this.formatid}.tsv`).createWriteStream();
-		stream.write('Elo\tUsername\tW\tL\tT\tLast update\r\n');
-		for (let row of ladder) {
-			stream.write(row.slice(1).join('\t') + '\r\n');
-		}
-		stream.end();
-		this.saving = false;
+		return user;
 	}
 
 	/**
-	 * Gets the index of a user in the ladder array.
-	 *
-	 * If createIfNeeded is true, the user will be created and added to
-	 * the ladder array if it doesn't already exist.
-	 * @param {string} username
+	 * @param {User} user
 	 */
-	indexOfUser(username, createIfNeeded = false) {
-		if (!this.ladder) throw new Error(`Must be called with ladder loaded`);
-		let userid = toId(username);
-		for (let i = 0; i < this.ladder.length; i++) {
-			if (this.ladder[i][0] === userid) return i;
+	static getSearches(user) {
+		let userSearches = [];
+		for (const [formatid, formatTable] of searches) {
+			if (formatTable.has(user.userid)) userSearches.push(formatid);
 		}
-		if (createIfNeeded) {
-			let index = this.ladder.length;
-			this.ladder.push([userid, 1000, username, 0, 0, 0]);
-			return index;
-		}
-		return -1;
+		return userSearches;
+	}
+	/**
+	 * @param {User} user
+	 */
+	hasSearch(user) {
+		const formatid = toId(this.formatid);
+		const formatTable = searches.get(formatid);
+		if (!formatTable) return false;
+		return formatTable.has(user.userid);
 	}
 
 	/**
-	 * Returns [formatid, html], where html is an the HTML source of a
-	 * ladder toplist, to be displayed directly in the ladder tab of the
-	 * client.
-	 * @return {Promise<[string, string]?>}
+	 * Validates a user's team and fetches their rating for a given format
+	 * before creating a search for a battle.
+	 * @param {User} user
+	 * @param {Connection} connection
+	 * @return {Promise<void>}
 	 */
-	async getTop() {
-		let formatid = this.formatid;
-		let name = Dex.getFormat(formatid).name;
-		const ladder = await this.getLadder();
-		let buf = `<h3>${name} Top 100</h3>`;
-		buf += `<table>`;
-		buf += `<tr><th>` + ['', 'Username', '<abbr title="Elo rating">Elo</abbr>', 'W', 'L', 'T'].join(`</th><th>`) + `</th></tr>`;
-		for (let i = 0; i < ladder.length; i++) {
-			let row = ladder[i];
-			buf += `<tr><td>` + [
-				i + 1, row[2], `<strong>${Math.round(row[1])}</strong>`, row[3], row[4], row[5],
-			].join(`</td><td>`) + `</td></tr>`;
+	async searchBattle(user, connection) {
+		if (!user.connected) return;
+
+		const format = Dex.getFormat(this.formatid);
+		if (!format.searchShow) {
+			connection.popup();
 		}
-		return [formatid, buf];
+		let oldUserid = user.userid;
+		const search = await this.prepBattle(connection, user.team, format.rated);
+
+		if (oldUserid !== user.userid) return;
+		if (!search) return;
+
+		this.addSearch(search, user);
 	}
 
 	/**
-	 * Returns a Promise for the Elo rating of a user
-	 * @param {string} userid
-	 * @return {Promise<number>}
+	 * Verifies whether or not a match made between two users is valid. Returns
+	 * @param {BattleReady} search1
+	 * @param {BattleReady} search2
+	 * @param {User=} user1
+	 * @param {User=} user2
+	 * @return {number | false | void}
 	 */
-	async getRating(userid) {
-		let formatid = this.formatid;
-		let user = Users.getExact(userid);
-		if (Ladders.disabled === true || Ladders.disabled === 'db' && (!user || !user.mmrCache[formatid])) {
-			throw new Error(`Ladders are disabled.`);
+	matchmakingOK(search1, search2, user1, user2) {
+		const formatid = toId(this.formatid);
+		if (!user1 || !user2) {
+			// This should never happen.
+			return void require('./crashlogger')(new Error(`Matched user ${user1 ? search2.userid : search1.userid} not found`), "The main process");
 		}
-		if (user && user.mmrCache[formatid]) {
-			return user.mmrCache[formatid];
+
+		// users must be different
+		if (user1 === user2) return false;
+
+		// users must have different IPs
+		if (user1.latestIp === user2.latestIp) return false;
+
+		// users must not have been matched immediately previously
+		if (user1.lastMatch === user2.userid || user2.lastMatch === user1.userid) return false;
+
+		// search must be within range
+		let searchRange = 100;
+		let elapsed = Date.now() - Math.min(search1.time, search2.time);
+		if (formatid === 'gen7ou' || formatid === 'gen7oucurrent' ||
+				formatid === 'gen7oususpecttest' || formatid === 'gen7randombattle') {
+			searchRange = 50;
 		}
-		const ladder = await this.getLadder();
-		if (user.userid !== userid) throw new Error(`Expired rating for ${userid}`);
-		let index = this.indexOfUser(userid);
-		if (index < 0) return (user.mmrCache[formatid] = 1000);
-		return (user.mmrCache[formatid] = ladder[index][1]);
+
+		searchRange += elapsed / 300; // +1 every .3 seconds
+		if (searchRange > 300) searchRange = 300 + (searchRange - 300) / 10; // +1 every 3 sec after 300
+		if (searchRange > 600) searchRange = 600;
+		if (Math.abs(search1.rating - search2.rating) > searchRange) return false;
+
+		user1.lastMatch = user2.userid;
+		user2.lastMatch = user1.userid;
+		return Math.min(search1.rating, search2.rating) || 1;
 	}
 
 	/**
-	 * Internal method. Update the Elo rating of a user.
-	 * @param {LadderRow} row
-	 * @param {number} score
-	 * @param {number} foeElo
+	 * Atarts a search for a battle for a user under the given format.
+	 * @param {BattleReady} newSearch
+	 * @param {User} user
 	 */
-	updateRow(row, score, foeElo) {
-		let elo = row[1];
-
-		// The K factor determines how much your Elo changes when you win or
-		// lose games. Larger K means more change.
-		// In the "original" Elo, K is constant, but it's common for K to
-		// get smaller as your rating goes up
-		let K = 50;
-
-		// dynamic K-scaling (optional)
-		if (elo < 1200) {
-			if (score < 0.5) {
-				K = 10 + (elo - 1000) * 40 / 200;
-			} else if (score > 0.5) {
-				K = 90 - (elo - 1000) * 40 / 200;
-			}
-		} else if (elo > 1350) {
-			K = 40;
-		} else if (elo > 1600) {
-			K = 32;
+	addSearch(newSearch, user) {
+		const formatid = toId(this.formatid);
+		let formatTable = searches.get(formatid);
+		if (!formatTable) {
+			formatTable = new Map();
+			searches.set(formatid, formatTable);
+		}
+		if (formatTable.has(user.userid)) {
+			user.popup(`Couldn't search: You are already searching for a ${formatid} battle.`);
+			return;
 		}
 
-		// main Elo formula
-		let E = 1 / (1 + Math.pow(10, (foeElo - elo) / 400));
-		elo += K * (score - E);
-
-		if (elo < 1000) elo = 1000;
-
-		row[1] = elo;
-		if (score > 0.6) {
-			row[3]++; // win
-		} else if (score < 0.4) {
-			row[4]++; // loss
-		} else {
-			row[5]++; // tie
-		}
-		row[6] = '' + new Date();
-	}
-
-	/**
-	 * Update the Elo rating for two players after a battle, and display
-	 * the results in the passed room.
-	 * @param {string} p1name
-	 * @param {string} p2name
-	 * @param {number} p1score
-	 * @param {GameRoom} room
-	 */
-	async updateRating(p1name, p2name, p1score, room) {
-		if (Ladders.disabled) {
-			room.addRaw(`Ratings not updated. The ladders are currently disabled.`).update();
-			return [p1score, undefined, undefined];
-		}
-
-		let formatid = this.formatid;
-		let p2score = 1 - p1score;
-		if (p1score < 0) {
-			p1score = 0;
-			p2score = 0;
-		}
-		const ladder = await this.getLadder();
-		let p1newElo, p2newElo;
-		try {
-			let p1index = this.indexOfUser(p1name, true);
-			let p1elo = ladder[p1index][1];
-
-			let p2index = this.indexOfUser(p2name, true);
-			let p2elo = ladder[p2index][1];
-
-			this.updateRow(ladder[p1index], p1score, p2elo);
-			this.updateRow(ladder[p2index], p2score, p1elo);
-
-			p1newElo = ladder[p1index][1];
-			p2newElo = ladder[p2index][1];
-
-			// console.log('L: ' + ladder.map(r => ''+Math.round(r[1])+' '+r[2]).join('\n'));
-
-			// move p1 to its new location
-			let newIndex = p1index;
-			while (newIndex > 0 && ladder[newIndex - 1][1] <= p1newElo) newIndex--;
-			while (newIndex === p1index || (ladder[newIndex] && ladder[newIndex][1] > p1newElo)) newIndex++;
-			// console.log('ni='+newIndex+', p1i='+p1index);
-			if (newIndex !== p1index && newIndex !== p1index + 1) {
-				let row = ladder.splice(p1index, 1)[0];
-				// adjust for removed row
-				if (newIndex > p1index) newIndex--;
-				if (p2index > p1index) p2index--;
-
-				ladder.splice(newIndex, 0, row);
-				// adjust for inserted row
-				if (p2index >= newIndex) p2index++;
-			}
-
-			// move p2
-			newIndex = p2index;
-			while (newIndex > 0 && ladder[newIndex - 1][1] <= p2newElo) newIndex--;
-			while (newIndex === p2index || (ladder[newIndex] && ladder[newIndex][1] > p2newElo)) newIndex++;
-			// console.log('ni='+newIndex+', p2i='+p2index);
-			if (newIndex !== p2index && newIndex !== p2index + 1) {
-				let row = ladder.splice(p2index, 1)[0];
-				// adjust for removed row
-				if (newIndex > p2index) newIndex--;
-
-				ladder.splice(newIndex, 0, row);
-			}
-
-			let p1 = Users.getExact(p1name);
-			if (p1) p1.mmrCache[formatid] = +p1newElo;
-			let p2 = Users.getExact(p2name);
-			if (p2) p2.mmrCache[formatid] = +p2newElo;
-			this.save();
-
-			if (!room.battle) {
-				Monitor.warn(`room expired before ladder update was received`);
+		// In order from longest waiting to shortest waiting
+		for (let search of formatTable.values()) {
+			const searcher = this.getSearcher(search);
+			if (!searcher) continue;
+			let minRating = this.matchmakingOK(search, newSearch, searcher, user);
+			if (minRating) {
+				formatTable.delete(search.userid);
+				Rooms.createBattle(formatid, {
+					p1: searcher,
+					p1team: search.team,
+					p2: user,
+					p2team: newSearch.team,
+					rated: minRating,
+				});
 				return;
 			}
-
-			let reasons = '' + (Math.round(p1newElo) - Math.round(p1elo)) + ' for ' + (p1score > 0.9 ? 'winning' : (p1score < 0.1 ? 'losing' : 'tying'));
-			if (reasons.charAt(0) !== '-') reasons = '+' + reasons;
-			room.addRaw(Chat.html`${p1name}'s rating: ${Math.round(p1elo)} &rarr; <strong>${Math.round(p1newElo)}</strong><br />(${reasons})`);
-
-			reasons = '' + (Math.round(p2newElo) - Math.round(p2elo)) + ' for ' + (p2score > 0.9 ? 'winning' : (p2score < 0.1 ? 'losing' : 'tying'));
-			if (reasons.charAt(0) !== '-') reasons = '+' + reasons;
-			room.addRaw(Chat.html`${p2name}'s rating: ${Math.round(p2elo)} &rarr; <strong>${Math.round(p2newElo)}</strong><br />(${reasons})`);
-
-			room.update();
-		} catch (e) {
-			if (!room.battle) return;
-			room.addRaw(`There was an error calculating rating changes:`);
-			room.add(e.stack);
-			room.update();
 		}
 
-		return [p1score, p1newElo, p2newElo];
+		formatTable.set(newSearch.userid, newSearch);
+		user.updateSearch();
 	}
 
 	/**
-	 * Returns a promise for a <tr> with all ratings for the current format.
-	 * @param {string} username
+	 * Creates a match for a new battle for each format in this.searches if a
+	 * valid match can be made. This is run periodically depending on
+	 * PERIODIC_MATCH_INTERVAL.
 	 */
-	async visualize(username) {
-		const ladder = await this.getLadder();
-		let index = this.indexOfUser(username, false);
+	static periodicMatch() {
+		// In order from longest waiting to shortest waiting
+		for (const [formatid, formatTable] of searches) {
+			const matchmaker = Ladders(formatid);
+			let longestSearch, longestSearcher;
+			for (let search of formatTable.values()) {
+				if (!longestSearch) {
+					longestSearcher = matchmaker.getSearcher(search);
+					if (!longestSearcher) continue;
+					longestSearch = search;
+					continue;
+				}
+				let searcher = matchmaker.getSearcher(search);
+				if (!searcher) continue;
 
-		if (index < 0) return '';
-
-		let ratings = ladder[index];
-
-		let output = `<tr><td>${this.formatid}</td><td><strong>${Math.round(ratings[1])}</strong></td>`;
-		return `${output}<td>${ratings[3]}</td><td>${ratings[4]}</td><td>${ratings[3] + ratings[4]}</td></tr>`;
-	}
-
-	/**
-	 * Returns a Promise for an array of strings of <tr>s for ladder ratings of the user
-	 * @param {string} username
-	 * @return {Promise<string[]>}
-	 */
-	static visualizeAll(username) {
-		let ratings = [];
-		for (let i in Dex.formats) {
-			if (Dex.formats[i].searchShow) {
-				ratings.push(Ladders(i).visualize(username));
+				let minRating = matchmaker.matchmakingOK(search, longestSearch, searcher, longestSearcher);
+				if (minRating) {
+					formatTable.delete(search.userid);
+					formatTable.delete(longestSearch.userid);
+					Rooms.createBattle(formatid, {
+						p1: searcher,
+						p1team: search.team,
+						p2: longestSearcher,
+						p2team: longestSearch.team,
+						rated: minRating,
+					});
+					return;
+				}
 			}
 		}
-		return Promise.all(ratings);
 	}
 }
 
@@ -349,15 +351,18 @@ function getLadder(formatid) {
 	return new Ladder(formatid);
 }
 
-const Ladders = Object.assign(getLadder, Matchmakers, {
+const Ladders = Object.assign(getLadder, {
+	BattleReady,
+	LadderStore,
 	Ladder,
-	ladderCaches,
+	searches,
+	periodicMatchInterval,
 	visualizeAll: Ladder.visualizeAll,
-	cancelSearches: Matchmakers.Matchmaker.cancelSearches,
-	getSearches: Matchmakers.Matchmaker.getSearches,
+	cancelSearches: Ladder.cancelSearches,
+	getSearches: Ladder.getSearches,
 
 	// tells the client to ask the server for format information
-	formatsListPrefix: '|,LL',
+	formatsListPrefix: LadderStore.formatsListPrefix,
 
 	/** @type {true | false | 'db'} */
 	disabled: false,
