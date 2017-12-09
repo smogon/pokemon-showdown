@@ -599,7 +599,7 @@ class User {
 			let game = Rooms(roomid).game;
 			if (!game || game.ended) continue; // should never happen
 			if (game.allowRenames || !this.named) continue;
-			this.popup(`You can't change your name right now because you're in the middle of a rated game.`);
+			this.popup(`You can't change your name right now because you're in the middle of a game that doesn't allow renaming`);
 			return false;
 		}
 
