@@ -852,6 +852,7 @@ if (process.send && module === process.mainModule) {
 	// another process.
 	process.on('message', message => {
 		//console.log('CHILD MESSAGE RECV: "' + message + '"');
+		let startTime = Date.now();
 		let nlIndex = message.indexOf("\n");
 		let more = '';
 		if (nlIndex > 0) {
@@ -921,6 +922,10 @@ if (process.send && module === process.mainModule) {
 					eval(data[2]);
 				} catch (e) {}
 			}
+		}
+		let deltaTime = Date.now() - startTime;
+		if (deltaTime > 1000) {
+			console.log(`[slow battle] ${deltaTime}ms - ${message}\\\\${more}`);
 		}
 	});
 
