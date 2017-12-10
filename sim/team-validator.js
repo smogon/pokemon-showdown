@@ -666,7 +666,7 @@ class Validator {
 				throw new Error(`${eventTemplate.species} from ${template.species} doesn't have data for event ${source}`);
 			}
 		} else if (source.charAt(1) === 'V') {
-			const isRestricted = (template.speciesid === 'mew');
+			const isRestricted = (template.speciesid === 'mew' || template.speciesid === 'celebi');
 			eventData = {
 				generation: 2,
 				perfectIVs: isRestricted ? 5 : 3,
@@ -674,10 +674,6 @@ class Validator {
 				shiny: isRestricted ? undefined : 1,
 				from: 'Gen 1-2 Virtual Console transfer',
 			};
-			if (template.speciesid === 'Celebi') {
-				if (!because) return true;
-				return [`${set.name} has a move only learned from Virtual Console, but there haven't been Virtual Console Celebi events yet.`];
-			}
 		} else if (source.charAt(1) === 'D') {
 			eventData = {
 				generation: 5,
