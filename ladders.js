@@ -509,7 +509,7 @@ class Ladder extends LadderStore {
 					p1team: search.team,
 					p2: user,
 					p2team: newSearch.team,
-					rated: minRating,
+					rated: Math.min(search.rating, newSearch.rating),
 				});
 				return;
 			}
