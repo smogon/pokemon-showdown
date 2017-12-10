@@ -3312,7 +3312,7 @@ exports.commands = {
 	 *********************************************************/
 
 	'!search': true,
-	search: function (target, room, user) {
+	search: function (target, room, user, connection) {
 		if (target) {
 			if (Config.laddermodchat) {
 				let userGroup = user.group;
@@ -3322,7 +3322,7 @@ exports.commands = {
 					return false;
 				}
 			}
-			Ladders.searchBattle(user, target);
+			Ladders(target).searchBattle(user, connection);
 		} else {
 			Ladders.cancelSearches(user);
 		}

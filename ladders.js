@@ -209,7 +209,7 @@ class Ladder extends LadderStore {
 
 		const format = Dex.getFormat(this.formatid);
 		if (!format.searchShow) {
-			connection.popup();
+			connection.popup(`Error: Your format ${format.id} is not ladderable.`);
 		}
 		let oldUserid = user.userid;
 		const search = await this.prepBattle(connection, user.team, format.rated);
