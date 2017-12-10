@@ -430,7 +430,7 @@ class Ladder extends LadderStore {
 			connection.popup(`Error: Your format ${format.id} is not ladderable.`);
 		}
 		let oldUserid = user.userid;
-		const search = await this.prepBattle(connection, user.team, format.rated);
+		const search = await this.prepBattle(connection, null, format.rated !== false);
 
 		if (oldUserid !== user.userid) return;
 		if (!search) return;
@@ -561,9 +561,11 @@ class Ladder extends LadderStore {
 		if (!user1 && !user2) return false;
 		if (!user1) {
 			user2.popup(`Sorry, your opponent ${ready1.userid} went offline before your battle could start.`);
+			return false;
 		}
 		if (!user2) {
 			user1.popup(`Sorry, your opponent ${ready2.userid} went offline before your battle could start.`);
+			return false;
 		}
 		Rooms.createBattle(ready1.formatid, {
 			p1: user1,
