@@ -669,7 +669,7 @@ class CommandContext {
 			let lockType = (user.namelocked ? `namelocked` : user.locked ? `locked` : ``);
 			let lockExpiration = Punishments.checkLockExpiration(user.namelocked || user.locked);
 			if (room) {
-				if (lockType) {
+				if (lockType && !room.isHelp) {
 					this.errorReply(`You are ${lockType} and can't talk in chat. ${lockExpiration}`);
 					return false;
 				}
