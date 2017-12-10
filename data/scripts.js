@@ -564,7 +564,6 @@ exports.BattleScripts = {
 	moveHit: function (target, pokemon, move, moveData, isSecondary, isSelf) {
 		let damage;
 		move = this.getMoveCopy(move);
-		move.zBrokeProtect = false;
 
 		if (!moveData) moveData = move;
 		if (!moveData.flags) moveData.flags = {};
