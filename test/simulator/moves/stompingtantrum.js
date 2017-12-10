@@ -40,7 +40,7 @@ describe('Stomping Tantrum', function () {
 		battle.makeChoices('move stompingtantrum', 'move protect');
 	});
 
-	it('should not double its Base Power if the last "move" used was a recharge', function () {
+	it('should not double its Base Power if the last "move" used on the previous turn was a recharge', function () {
 		battle = common.createBattle([
 			[{species: 'Marowak-Alola', ability: 'rockhead', moves: ['stompingtantrum', 'hyperbeam']}],
 			[{species: 'Lycanroc-Midnight', ability: 'noguard', moves: ['sleeptalk']}],
