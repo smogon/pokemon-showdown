@@ -400,9 +400,7 @@ class User {
 		// Set of roomids
 		this.games = new Set();
 
-		// searches and challenges
-		this.challengesFrom = {};
-		this.challengeTo = null;
+		// challenge state
 		this.lastChallenge = 0;
 
 		// settings
@@ -788,7 +786,7 @@ class User {
 
 		let oldid = this.userid;
 		if (userid !== this.userid) {
-			this.cancelSearches();
+			this.cancelReady();
 
 			if (!Users.move(this, userid)) {
 				return false;
@@ -832,8 +830,7 @@ class User {
 		return true;
 	}
 	merge(oldUser) {
-		oldUser.cancelChallengeTo();
-		oldUser.cancelSearches();
+		oldUser.cancelReady();
 		oldUser.inRooms.forEach(roomid => {
 			Rooms(roomid).onLeave(oldUser);
 		});
@@ -910,7 +907,7 @@ class User {
 				room.game.onUpdateConnection(this, connection);
 			}
 		});
-		this.updateSearch(true, connection);
+		this.updateReady(connection);
 	}
 	debugData() {
 		let str = '' + this.group + this.name + ' (' + this.userid + ')';
@@ -1072,8 +1069,7 @@ class User {
 				// immediately deallocate
 				this.destroy();
 			} else {
-				this.cancelChallengeTo();
-				this.cancelSearches();
+				this.cancelReady();
 			}
 		}
 	}
@@ -1191,8 +1187,7 @@ class User {
 		if (room.id === 'global') {
 			// you can't leave the global room except while disconnecting
 			if (!force) return false;
-			this.cancelChallengeTo();
-			this.cancelSearches();
+			this.cancelReady();
 		}
 		if (!this.inRooms.has(room.id)) {
 			return false;
@@ -1216,134 +1211,20 @@ class User {
 		}
 	}
 
-	updateChallenges() {
-		let challengeTo = this.challengeTo;
-		if (challengeTo) {
-			challengeTo = {
-				to: challengeTo.to,
-				format: challengeTo.format,
-			};
-		}
-		let challengesFrom = {};
-		for (let challenger in this.challengesFrom) {
-			challengesFrom[challenger] = this.challengesFrom[challenger].format;
-		}
-		this.send(`|updatechallenges|` + JSON.stringify({
-			challengesFrom: challengesFrom,
-			challengeTo: challengeTo,
-		}));
-	}
-	updateSearch(onlyIfExists, connection) {
-		let games = {};
-		let atLeastOne = false;
-		this.games.forEach(roomid => {
-			const room = Rooms(roomid);
-			if (!room) {
-				Monitor.warn(`while searching, room ${roomid} expired for user ${this.userid} in rooms ${[...this.inRooms]} and games ${[...this.games]}`);
-				this.games.delete(roomid);
-				return;
-			}
-			const game = room.game;
-			if (!game) {
-				Monitor.warn(`while searching, room ${roomid} has no game for user ${this.userid} in rooms ${[...this.inRooms]} and games ${[...this.games]}`);
-				this.games.delete(roomid);
-				return;
-			}
-			games[roomid] = game.title + (game.allowRenames ? '' : '*');
-			atLeastOne = true;
-		});
-		if (!atLeastOne) games = null;
-		let searching = Ladders.getSearches(this);
-		if (onlyIfExists && !searching.length && !atLeastOne) return;
-		(connection || this).send(`|updatesearch|` + JSON.stringify({
-			searching: searching,
-			games: games,
-		}));
-	}
-	cancelSearches(format) {
-		if (Ladders.cancelSearches(this)) {
-			this.popup(`You are no longer looking for a battle because you changed your username.`);
+	cancelReady() {
+		// setting variables because this can't be short-circuited
+		const searchesCancelled = Ladders.cancelSearches(this);
+		const challengesCancelled = Ladders.clearChallenges(this.userid);
+		if (searchesCancelled || challengesCancelled) {
+			this.popup(`Your searches and challenges have been cancelled because you changed your username.`);
 		}
 	}
-	async makeChallenge(targetUser, format, connection) {
-		if (this.challengeTo) {
-			connection.popup(`You're already challenging '${this.challengeTo.to}'. Cancel that challenge before challenging someone else.`);
-			return false;
-		}
-		if (targetUser.blockChallenges && !this.can('bypassblocks', targetUser)) {
-			connection.popup(`The user '${targetUser.name}' is not accepting challenges right now.`);
-			return false;
-		}
-		if (new Date().getTime() < this.lastChallenge + 10000) {
-			// 10 seconds ago
-			return false;
-		}
-		const ready = await Ladders(format).prepBattle(connection);
-		if (!ready) return false;
-
-		let challenge = {
-			time: new Date().getTime(),
-			from: this.userid,
-			to: targetUser.userid,
-			format: ready.formatid,
-			team: ready.team,
-		};
-		this.lastChallenge = challenge.time;
-		this.challengeTo = challenge;
-		targetUser.challengesFrom[this.userid] = challenge;
-		this.updateChallenges();
-		targetUser.updateChallenges();
+	updateReady(connection) {
+		Ladders.updateSearch(this, connection);
+		Ladders.updateChallenges(this, connection);
 	}
-	cancelChallengeTo() {
-		if (!this.challengeTo) return true;
-		let user = Users(this.challengeTo.to);
-		if (user) delete user.challengesFrom[this.userid];
-		this.challengeTo = null;
-		this.updateChallenges();
-		if (user) user.updateChallenges();
-	}
-	rejectChallengeFrom(userid) {
-		userid = toId(userid);
-		const user = Users(userid);
-		if (this.challengesFrom[userid]) {
-			delete this.challengesFrom[userid];
-		}
-		if (user) {
-			delete this.challengesFrom[user.userid];
-			if (user.challengeTo && user.challengeTo.to === this.userid) {
-				user.challengeTo = null;
-				user.updateChallenges();
-			}
-		}
-		this.updateChallenges();
-	}
-	async acceptChallengeFrom(targetUser, connection) {
-		const userid = targetUser.userid;
-		if (!targetUser.challengeTo || targetUser.challengeTo.to !== this.userid || !this.connected || !targetUser.connected) {
-			if (this.challengesFrom[userid]) {
-				delete this.challengesFrom[userid];
-				this.updateChallenges();
-			}
-			connection.popup(`${targetUser.name} isn't challenging you - maybe they cancelled before you could accept?`);
-			return false;
-		}
-		const challenge = targetUser.challengeTo;
-
-		const ready = await Ladders(challenge.format).prepBattle(connection);
-		if (!ready) return false;
-
-		Rooms.createBattle(challenge.format, {
-			p1: this,
-			p1team: ready.team,
-			p2: targetUser,
-			p2team: challenge.team,
-			rated: false,
-		});
-		delete this.challengesFrom[targetUser.userid];
-		targetUser.challengeTo = null;
-		this.updateChallenges();
-		targetUser.updateChallenges();
-		return true;
+	updateSearch(connection) {
+		Ladders.updateSearch(this, connection);
 	}
 	/**
 	 * The user says message in room.

@@ -3356,10 +3356,7 @@ exports.commands = {
 				return false;
 			}
 		}
-		if (targetUser === user) {
-			return this.popupReply(`You can't battle yourself. The best you can do is open PS in Private Browsing (or another browser) and log into a different username, and battle that username.`);
-		}
-		user.makeChallenge(targetUser, target, connection);
+		Ladders(target).makeChallenge(connection, targetUser);
 	},
 
 	'!blockchallenges': true,
@@ -3388,22 +3385,22 @@ exports.commands = {
 	'!cancelchallenge': true,
 	cchall: 'cancelChallenge',
 	cancelchallenge: function (target, room, user) {
-		user.cancelChallengeTo();
+		Ladders.cancelChallenging(user);
 	},
 
 	'!accept': true,
 	accept: function (target, room, user, connection) {
 		target = this.splitTarget(target);
 		const targetUser = this.targetUser || this.pmTarget;
-		if (!targetUser) return this.errorReply(`User "${this.targetUsername}" not found.`);
-		user.acceptChallengeFrom(targetUser, connection);
+		if (!targetUser) return this.popupReply(`User "${this.targetUsername}" not found.`);
+		Ladders.acceptChallenge(connection, targetUser);
 	},
 
 	'!reject': true,
 	reject: function (target, room, user) {
-		let userid = toId(target);
-		if (!userid && this.pmTarget) userid = this.pmTarget.userid;
-		user.rejectChallengeFrom(userid);
+		target = toId(target);
+		if (!target && this.pmTarget) target = this.pmTarget.userid;
+		Ladders.rejectChallenge(user, target);
 	},
 
 	'!useteam': true,
