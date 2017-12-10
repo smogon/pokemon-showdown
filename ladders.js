@@ -40,11 +40,30 @@ class BattleReady {
 	}
 }
 
+
 /**
  * formatid:userid:BattleReady
  * @type {Map<string, Map<string, BattleReady>>}
  */
 const searches = new Map();
+
+class Challenge {
+	/**
+	 * @param {BattleReady} ready
+	 * @param {string} to
+	 */
+	constructor(ready, to) {
+		this.from = ready.userid;
+		this.to = to;
+		this.formatid = ready.formatid;
+		this.ready = ready;
+	}
+}
+/**
+ * formatid:userid:BattleReady
+ * @type {Map<string, Challenge[]>}
+ */
+const challenges = new Map();
 
 /**
  * This keeps track of searches for battles, creating a new battle for a newly
@@ -110,6 +129,7 @@ class Ladder extends LadderStore {
 				// User feedback for renames handled elsewhere.
 				return null;
 			}
+			if (!rating) rating = 1;
 		} else {
 			valResult = await TeamValidatorAsync(this.formatid).validateTeam(team, user.locked || user.namelocked);
 		}
@@ -127,6 +147,174 @@ class Ladder extends LadderStore {
 
 	/**
 	 * @param {User} user
+	 */
+	static cancelChallenging(user) {
+		const chall = Ladder.getChallenging(user.userid);
+		if (chall) {
+			Ladder.removeChallenge(chall);
+			return true;
+		}
+		return false;
+	}
+	/**
+	 * @param {User} user
+	 * @param {User} targetUsername
+	 */
+	static rejectChallenge(user, targetUsername) {
+		const targetUserid = toId(targetUsername);
+		const chall = Ladder.getChallenging(targetUserid);
+		if (chall && chall.to === user.userid) {
+			Ladder.removeChallenge(chall);
+			return true;
+		}
+		return false;
+	}
+	/**
+	 * @param {string} username
+	 */
+	static clearChallenges(username) {
+		const userid = toId(username);
+		const userChalls = challenges.get(userid);
+		if (userChalls) {
+			for (const chall of userChalls) {
+				let otherUserid;
+				if (chall.from === userid) {
+					otherUserid = chall.to;
+				} else {
+					otherUserid = chall.from;
+				}
+				Ladder.removeChallenge(chall, true);
+				const otherUser = Users(otherUserid);
+				if (otherUser) Ladder.updateChallenges(otherUser);
+			}
+			const user = Users(userid);
+			if (user) Ladder.updateChallenges(user);
+			return true;
+		}
+		return false;
+	}
+	/**
+	 * @param {Connection} connection
+	 * @param {User} targetUser
+	 */
+	async makeChallenge(connection, targetUser) {
+		const user = connection.user;
+		if (targetUser === user) {
+			connection.popup(`You can't battle yourself. The best you can do is open PS in Private Browsing (or another browser) and log into a different username, and battle that username.`);
+			return false;
+		}
+		if (Ladder.getChallenging(connection.user.userid)) {
+			connection.popup(`You are already challenging someone. Cancel that challenge before challenging someone else.`);
+			return false;
+		}
+		if (targetUser.blockChallenges && !user.can('bypassblocks', targetUser)) {
+			connection.popup(`The user '${targetUser.name}' is not accepting challenges right now.`);
+			return false;
+		}
+		if (Date.now() < user.lastChallenge + 10000) {
+			// 10 seconds ago, probable misclick
+			connection.popup(`You challenged less than 10 seconds after your last challenge! It's cancelled in case it's a misclick.`);
+			return false;
+		}
+		const ready = await this.prepBattle(connection);
+		if (!ready) return false;
+		Ladder.addChallenge(new Challenge(ready, targetUser.userid));
+		user.lastChallenge = Date.now();
+		return true;
+	}
+	/**
+	 * @param {Connection} connection
+	 * @param {User} targetUser
+	 */
+	static async acceptChallenge(connection, targetUser) {
+		const chall = Ladder.getChallenging(targetUser.userid);
+		if (!chall || chall.to !== connection.user.userid) {
+			connection.popup(`${targetUser.userid} is not challenging you. Maybe they cancelled before you accepted?`);
+			return false;
+		}
+		const ladder = Ladders(chall.formatid);
+		const ready = await ladder.prepBattle(connection);
+		if (!ready) return false;
+		Ladder.removeChallenge(chall);
+		Ladders.match(chall.ready, ready);
+		return true;
+	}
+
+	/**
+	 * @param {string} userid
+	 */
+	static getChallenging(userid) {
+		const userChalls = challenges.get(userid);
+		if (userChalls) {
+			for (const chall of userChalls) {
+				if (chall.from === userid) return chall;
+			}
+		}
+		return null;
+	}
+	/**
+	 * @param {Challenge} challenge
+	 */
+	static addChallenge(challenge, skipUpdate = false) {
+		let challs1 = challenges.get(challenge.from);
+		if (!challs1) challenges.set(challenge.from, challs1 = []);
+		let challs2 = challenges.get(challenge.to);
+		if (!challs2) challenges.set(challenge.to, challs2 = []);
+		challs1.push(challenge);
+		challs2.push(challenge);
+		if (!skipUpdate) {
+			const fromUser = Users(challenge.from);
+			if (fromUser) Ladder.updateChallenges(fromUser);
+			const toUser = Users(challenge.to);
+			if (toUser) Ladder.updateChallenges(toUser);
+		}
+	}
+	/**
+	 * @param {Challenge} challenge
+	 */
+	static removeChallenge(challenge, skipUpdate = false) {
+		const fromChalls = /** @type {Challenge[]} */ (challenges.get(challenge.from));
+		fromChalls.splice(fromChalls.indexOf(challenge), 1);
+		if (!fromChalls.length) challenges.delete(challenge.from);
+		const toChalls = /** @type {Challenge[]} */ (challenges.get(challenge.to));
+		toChalls.splice(toChalls.indexOf(challenge), 1);
+		if (!toChalls.length) challenges.delete(challenge.to);
+		if (!skipUpdate) {
+			const fromUser = Users(challenge.from);
+			if (fromUser) Ladder.updateChallenges(fromUser);
+			const toUser = Users(challenge.to);
+			if (toUser) Ladder.updateChallenges(toUser);
+		}
+	}
+	/**
+	 * @param {User} user
+	 * @param {Connection?} connection
+	 */
+	static updateChallenges(user, connection = null) {
+		if (!user.connected) return;
+		let challengeTo = null;
+		let challengesFrom = {};
+		const userChalls = challenges.get(user.userid);
+		if (userChalls) {
+			for (const chall of userChalls) {
+				if (chall.from === user.userid) {
+					challengeTo = {
+						to: chall.to,
+						format: chall.formatid,
+					};
+				} else {
+					challengesFrom[chall.from] = chall.formatid;
+				}
+			}
+		}
+		(connection || user).send(`|updatechallenges|` + JSON.stringify({
+			challengesFrom: challengesFrom,
+			challengeTo: challengeTo,
+		}));
+	}
+
+	/**
+	 * @param {User} user
 	 * @return {boolean}
 	 */
 	cancelSearch(user) {
@@ -137,7 +325,7 @@ class Ladder extends LadderStore {
 		if (!formatTable.has(user.userid)) return false;
 		formatTable.delete(user.userid);
 
-		user.updateSearch();
+		Ladder.updateSearch(user);
 		return true;
 	}
 
@@ -155,7 +343,7 @@ class Ladder extends LadderStore {
 			cancelCount++;
 		}
 
-		user.updateSearch();
+		Ladder.updateSearch(user);
 		return cancelCount;
 	}
 
@@ -170,7 +358,7 @@ class Ladder extends LadderStore {
 			if (formatTable) formatTable.delete(search.userid);
 			if (user && user.connected) {
 				user.popup(`You changed your name and are no longer looking for a battle in ${formatid}`);
-				user.updateSearch();
+				Ladder.updateSearch(user);
 			}
 			return;
 		}
@@ -186,6 +374,36 @@ class Ladder extends LadderStore {
 			if (formatTable.has(user.userid)) userSearches.push(formatid);
 		}
 		return userSearches;
+	}
+	/**
+	 * @param {User} user
+	 * @param {Connection?} connection
+	 */
+	static updateSearch(user, connection = null) {
+		let games = /** @type {any} */ ({});
+		let atLeastOne = false;
+		for (const roomid of user.games) {
+			const room = Rooms(roomid);
+			if (!room) {
+				Monitor.warn(`while searching, room ${roomid} expired for user ${user.userid} in rooms ${[...user.inRooms]} and games ${[...user.games]}`);
+				user.games.delete(roomid);
+				return;
+			}
+			const game = room.game;
+			if (!game) {
+				Monitor.warn(`while searching, room ${roomid} has no game for user ${user.userid} in rooms ${[...user.inRooms]} and games ${[...user.games]}`);
+				user.games.delete(roomid);
+				return;
+			}
+			games[roomid] = game.title + (game.allowRenames ? '' : '*');
+			atLeastOne = true;
+		}
+		if (!atLeastOne) games = null;
+		let searching = Ladders.getSearches(user);
+		(connection || user).send(`|updatesearch|` + JSON.stringify({
+			searching: searching,
+			games: games,
+		}));
 	}
 	/**
 	 * @param {User} user
@@ -298,7 +516,7 @@ class Ladder extends LadderStore {
 		}
 
 		formatTable.set(newSearch.userid, newSearch);
-		user.updateSearch();
+		Ladder.updateSearch(user);
 	}
 
 	/**
@@ -325,17 +543,35 @@ class Ladder extends LadderStore {
 				if (minRating) {
 					formatTable.delete(search.userid);
 					formatTable.delete(longestSearch.userid);
-					Rooms.createBattle(formatid, {
-						p1: searcher,
-						p1team: search.team,
-						p2: longestSearcher,
-						p2team: longestSearch.team,
-						rated: minRating,
-					});
+					Ladder.match(search, longestSearch);
 					return;
 				}
 			}
 		}
+	}
+
+	/**
+	 * @param {BattleReady} ready1
+	 * @param {BattleReady} ready2
+	 */
+	static match(ready1, ready2) {
+		if (ready1.formatid !== ready2.formatid) throw new Error(`Format IDs don't match`);
+		const user1 = Users(ready1.userid);
+		const user2 = Users(ready2.userid);
+		if (!user1 && !user2) return false;
+		if (!user1) {
+			user2.popup(`Sorry, your opponent ${ready1.userid} went offline before your battle could start.`);
+		}
+		if (!user2) {
+			user1.popup(`Sorry, your opponent ${ready2.userid} went offline before your battle could start.`);
+		}
+		Rooms.createBattle(ready1.formatid, {
+			p1: user1,
+			p1team: ready1.team,
+			p2: user2,
+			p2team: ready2.team,
+			rated: Math.min(ready1.rating, ready2.rating),
+		});
 	}
 }
 
@@ -356,15 +592,23 @@ const Ladders = Object.assign(getLadder, {
 	BattleReady,
 	LadderStore,
 	Ladder,
+
+	cancelSearches: Ladder.cancelSearches,
+	updateSearch: Ladder.updateSearch,
+	rejectChallenge: Ladder.rejectChallenge,
+	acceptChallenge: Ladder.acceptChallenge,
+	cancelChallenging: Ladder.cancelChallenging,
+	clearChallenges: Ladder.clearChallenges,
+	updateChallenges: Ladder.updateChallenges,
+	visualizeAll: Ladder.visualizeAll,
+	getSearches: Ladder.getSearches,
+	match: Ladder.match,
+
 	searches,
 	periodicMatchInterval,
-	visualizeAll: Ladder.visualizeAll,
-	cancelSearches: Ladder.cancelSearches,
-	getSearches: Ladder.getSearches,
 
 	// tells the client to ask the server for format information
 	formatsListPrefix: LadderStore.formatsListPrefix,
-
 	/** @type {true | false | 'db'} */
 	disabled: false,
 });
