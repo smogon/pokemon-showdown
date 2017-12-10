@@ -3142,8 +3142,11 @@ exports.commands = {
 	savereplay: function (target, room, user, connection) {
 		if (!room || !room.battle) return;
 		// retrieve spectator log (0) if there are privacy concerns
-		let logidx = room.battle.ended ? 3 : 0;
-		let data = room.getLog(logidx).join("\n");
+		const format = Dex.getFormat(room.format, true);
+		let hideDetails = !format.id.includes('customgame');
+		if (format.team && room.game.ended) hideDetails = false;
+		let logidx = hideDetails ? 0 : 3;
+		let data = room.getLog(logidx).join("\n").replace(/\n\|choice\|\|\n/g, '').replace(/\n\|seed\|\n/g, '');
 		let datahash = crypto.createHash('md5').update(data.replace(/[^(\x20-\x7F)]+/g, '')).digest('hex');
 		let players = room.battle.playerNames;
 		let rating = 0;
@@ -3158,7 +3161,7 @@ exports.commands = {
 			hidden: room.isPrivate ? '1' : '',
 		}, success => {
 			if (success && success.errorip) {
-				connection.popup("This server's request IP " + success.errorip + " is not a registered server.");
+				connection.popup(`This server's request IP ${success.errorip} is not a registered server.`);
 				return;
 			}
 			connection.send('|queryresponse|savereplay|' + JSON.stringify({
