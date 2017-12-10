@@ -154,9 +154,9 @@ class BattleTimer {
 		this.lastDisabledTime = 0;
 		this.lastDisabledByUser = null;
 
-		const hasLongTurns = Dex.getFormat(battle.format).gameType !== 'singles';
+		const hasLongTurns = Dex.getFormat(battle.format, true).gameType !== 'singles';
 		const isChallenge = (!battle.rated && !battle.room.tour);
-		const timerSettings = Dex.getFormat(battle.format).timer;
+		const timerSettings = Dex.getFormat(battle.format, true).timer;
 		this.settings = Object.assign({}, timerSettings);
 		if (this.settings.perTurn === undefined) {
 			this.settings.perTurn = hasLongTurns ? 25 : 10;
@@ -342,7 +342,7 @@ class BattleTimer {
 
 class Battle {
 	constructor(room, formatid, options) {
-		let format = Dex.getFormat(formatid);
+		let format = Dex.getFormat(formatid, true);
 		this.id = room.id;
 		this.room = room;
 		this.title = format.name;
@@ -601,7 +601,7 @@ class Battle {
 		this.room.update();
 	}
 	async logBattle(p1score, p1rating, p2rating) {
-		if (Dex.getFormat(this.format).noLog) return;
+		if (Dex.getFormat(this.format, true).noLog) return;
 		let logData = this.logData;
 		if (!logData) return;
 		this.logData = null; // deallocate to save space
