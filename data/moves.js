@@ -16219,7 +16219,7 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 75,
 		category: "Physical",
-		desc: "Power doubles if the user's last move, including submoves, on the previous turn failed to do any of its normal effects, not counting recoil from an unsuccessful Mind Blown, Jump Kick, or High Jump Kick, or if the user was prevented from moving by any effect other than recharging or Sky Drop. A move that was blocked by Baneful Bunker, Detect, King's Shield, Protect, Spiky Shield, Crafty Shield, Mat Block, Quick Guard, or Wide Guard will not double Stomping Tantrum's power, nor will Bounce or Fly being ended early by the user being knocked down by Gravity, Smack Down, or Thousand Arrows.",
+		desc: "Power doubles if the user's last move, including moves called by other moves or those used out of turn through Instruct, Snatch, or Magic Coat or the abilities Dancer or Magic Bounce, on the previous turn failed to do any of its normal effects, not counting recoil from an unsuccessful Mind Blown, Jump Kick, or High Jump Kick, or if the user was prevented from moving by any effect other than recharging or Sky Drop. A move that was blocked by Baneful Bunker, Detect, King's Shield, Protect, Spiky Shield, Crafty Shield, Mat Block, Quick Guard, or Wide Guard will not double Stomping Tantrum's power, nor will Bounce or Fly being ended early by the user being knocked down by Gravity, Smack Down, or Thousand Arrows.",
 		shortDesc: "Power doubles if the user's last move failed.",
 		id: "stompingtantrum",
 		name: "Stomping Tantrum",
