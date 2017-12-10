@@ -257,6 +257,7 @@ exports.commands = {
 		},
 		createhelp: ['/ticket create - Creates a new ticket requesting help from global staff.'],
 
+		'!submit': true,
 		submit: function (target, room, user, connection) {
 			if (user.can('lock')) return this.errorReply(`Global staff can't make tickets. They can only use the form for reference.`);
 			if (!user.named) return this.errorReply(`You need to choose a username before doing this.`);
@@ -349,6 +350,7 @@ exports.commands = {
 		},
 		escalatehelp: ['/ticket escalate [user], (upperstaff) - Escalate a ticket. If upperstaff is included, escalate the ticket to upper staff. Requires: % @ * & ~'],
 
+		'!list': true,
 		list: function (target, room, user, connection) {
 			if (!this.can('lock')) return;
 			let buf = `>view-ticket-list\n|init|html\n|title|Ticket List\n`;
@@ -386,6 +388,7 @@ exports.commands = {
 		},
 		listhelp: ['/ticket list - Lists all tickets. Requires: % @ * & ~'],
 
+		'!close': true,
 		close: function (target, room, user) {
 			if (!this.can('lock')) return;
 			if (!target) return this.parse(`/help ticket close`);
