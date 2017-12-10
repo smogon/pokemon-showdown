@@ -1022,7 +1022,7 @@ exports.BattleMovedex = {
 			onTryHitPriority: 3,
 			onTryHit: function (target, source, move) {
 				if (!move.flags['protect']) {
-					if (move.isZ) move.zBrokeProtect = true;
+					if (move.isZ) move.zBrokeProtect.push(target);
 					return;
 				}
 				this.add('-activate', target, 'move: Protect');
@@ -8849,7 +8849,7 @@ exports.BattleMovedex = {
 			onTryHitPriority: 3,
 			onTryHit: function (target, source, move) {
 				if (!move.flags['protect'] || move.category === 'Status') {
-					if (move.isZ) move.zBrokeProtect = true;
+					if (move.isZ) move.zBrokeProtect.push(target);
 					return;
 				}
 				this.add('-activate', target, 'move: Protect');
@@ -9896,7 +9896,7 @@ exports.BattleMovedex = {
 			onTryHitPriority: 3,
 			onTryHit: function (target, source, move) {
 				if (!move.flags['protect']) {
-					if (move.isZ) move.zBrokeProtect = true;
+					if (move.isZ) move.zBrokeProtect.push(target);
 					return;
 				}
 				if (move && (move.target === 'self' || move.category === 'Status')) return;
@@ -12341,7 +12341,7 @@ exports.BattleMovedex = {
 			onTryHitPriority: 3,
 			onTryHit: function (target, source, move) {
 				if (!move.flags['protect']) {
-					if (move.isZ) move.zBrokeProtect = true;
+					if (move.isZ) move.zBrokeProtect.push(target);
 					return;
 				}
 				this.add('-activate', target, 'move: Protect');
@@ -12856,7 +12856,7 @@ exports.BattleMovedex = {
 				// (e.g. it blocks 0 priority moves boosted by Prankster or Gale Wings; Quick Claw/Custap Berry do not count)
 				if (move.priority <= 0.1) return;
 				if (!move.flags['protect']) {
-					if (move.isZ) move.zBrokeProtect = true;
+					if (move.isZ) move.zBrokeProtect.push(target);
 					return;
 				}
 				this.add('-activate', target, 'move: Quick Guard');
@@ -15527,7 +15527,7 @@ exports.BattleMovedex = {
 			onTryHitPriority: 3,
 			onTryHit: function (target, source, move) {
 				if (!move.flags['protect']) {
-					if (move.isZ) move.zBrokeProtect = true;
+					if (move.isZ) move.zBrokeProtect.push(target);
 					return;
 				}
 				this.add('-activate', target, 'move: Protect');
@@ -18708,7 +18708,7 @@ exports.BattleMovedex = {
 			onTryHit: function (target, source, move) {
 				// USUM bug
 				if (move.isZ) {
-					move.zBrokeProtect = true;
+					move.zBrokeProtect.push(target);
 					return;
 				}
 				// Wide Guard blocks all spread moves
