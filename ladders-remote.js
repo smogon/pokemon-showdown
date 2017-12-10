@@ -58,7 +58,7 @@ class LadderStore {
 				if (data.errorip) {
 					return resolve(NaN);
 				}
-				return parseInt(data);
+				return resolve(parseInt(data));
 			});
 		});
 		if (isNaN(mmr)) return 1000;
