@@ -85,7 +85,7 @@ class Battle extends Dex.ModdedDex {
 	 * @param {PRNG} [prng]
 	 */
 	constructor(formatid, rated = false, send = (() => {}), prng = new PRNG()) {
-		let format = Dex.getFormat(formatid);
+		let format = Dex.getFormat(formatid, true);
 		super(format.mod);
 		Object.assign(this, this.data.Scripts);
 
@@ -103,6 +103,7 @@ class Battle extends Dex.ModdedDex {
 
 		this.format = format.id;
 		this.formatid = formatid;
+		this.cachedFormat = format;
 		this.formatData = {id: format.id};
 
 		/**@type {Effect} */
@@ -342,7 +343,8 @@ class Battle extends Dex.ModdedDex {
 	 * @param {string} [format]
 	 */
 	getFormat(format) {
-		return super.getFormat(format || this.formatid);
+		if (!format) return this.cachedFormat;
+		return super.getFormat(format, true);
 	}
 
 	/**
