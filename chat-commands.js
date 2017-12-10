@@ -2515,7 +2515,7 @@ exports.commands = {
 				// uncache the sim/dex.js dependency tree
 				Chat.uncacheTree('./sim/dex');
 				// reload sim/dex.js
-				global.Dex = require('./sim/dex'); // note: this will lock up the server for a few seconds
+				global.Dex = require('./sim/dex');
 				// rebuild the formats list
 				delete Rooms.global.formatList;
 				// respawn validator processes
