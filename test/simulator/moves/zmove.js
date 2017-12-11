@@ -14,7 +14,7 @@ describe('Z-Moves', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Kecleon', ability: 'colorchange', item: 'normaliumz', moves: ['hiddenpower']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Gengar', ability: 'levitate', moves: ['calmmind']}]);
-		battle.p1.chooseMove('hiddenpower', 0, 'zmove').foe.chooseDefault();
+		battle.makeChoices("move hiddenpower zmove", "move calmmind");
 		assert.fullHP(battle.p2.active[0]);
 	});
 
@@ -22,7 +22,16 @@ describe('Z-Moves', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Kecleon', ability: 'colorchange', item: 'ghostiumz', moves: ['shadowsneak']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Starmie', ability: 'naturalcure', moves: ['reflecttype']}]);
-		battle.p1.chooseMove('shadowsneak', 0, 'zmove').foe.chooseDefault();
+		battle.makeChoices("move shadowsneak zmove", "move reflecttype");
 		assert.fullHP(battle.p2.active[0]);
+	});
+
+	it(`should deal reduced damage to protected targets`, function () {
+		battle = common.createBattle();
+		battle.join('p1', 'Guest 1', 1, [{species: 'Mimikyu', ability: 'disguise', item: 'ghostiumz', moves: ['shadowsneak']}]);
+		battle.join('p2', 'Guest 2', 1, [{species: 'Espeon', ability: 'magicbounce', moves: ['protect']}]);
+		battle.makeChoices("move shadowsneak zmove", "move protect");
+		assert.false.fainted(battle.p2.active[0]);
+		assert.false.fullHP(battle.p2.active[0]);
 	});
 });

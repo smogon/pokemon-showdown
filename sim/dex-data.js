@@ -936,9 +936,9 @@ class Move extends Effect {
 		/**
 		 * Whether or not this move is a Z-Move that broke protect
 		 * (affects damage calculation).
-		 * @type {boolean}
+		 * @type {Pokemon[]}
 		 */
-		this.zBrokeProtect = this.zBrokeProtect;
+		this.zBrokeProtect = this.zBrokeProtect || [];
 
 		/**
 		 * @type {MoveFlags}
