@@ -305,13 +305,13 @@ class TextFormatter {
 					switch (key) {
 					case 'w':
 					case 'wiki':
-						term = term.slice(term.charAt(key.length + 1) === ' ' ? key.length + 2 : key.length + 1).replace(/<\/?a(?: [^>]+)?>/g, '');
+						term = term.slice(term.charAt(key.length + 1) === ' ' ? key.length + 2 : key.length + 1);
 						uri = `//en.wikipedia.org/w/index.php?title=Special:Search&search=${this.toUriComponent(term)}`;
 						term = `wiki: ${term}`;
 						break;
 					case 'pokemon':
 					case 'item':
-						term = term.slice(term.charAt(key.length + 1) === ' ' ? key.length + 2 : key.length + 1).replace(/<\/?a(?: [^>]+)?>/g, '');
+						term = term.slice(term.charAt(key.length + 1) === ' ' ? key.length + 2 : key.length + 1);
 
 						let display = '';
 						if (this.isTrusted) {
