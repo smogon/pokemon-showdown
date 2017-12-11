@@ -267,16 +267,16 @@ exports.BattleAliases = {
 	"lycanrocd": "Lycanroc-Dusk",
 	"necrozmadm": "Necrozma-Dusk-Mane",
 	"necrozmadusk": "Necrozma-Dusk-Mane",
+	"duskmane": "Necrozma-Dusk-Mane",
 	"duskmanenecrozma": "Necrozma-Dusk-Mane",
 	"necrozmadw": "Necrozma-Dawn-Wings",
 	"necrozmadawn": "Necrozma-Dawn-Wings",
+	"dawnwings": "Necrozma-Dawn-Wings",
 	"dawnwingsnecrozma": "Necrozma-Dawn-Wings",
 	"necrozmau": "Necrozma-Ultra",
 	"ultranecrozma": "Necrozma-Ultra",
 	"ufop": "Pokestar UFO-2",
 	"ufopsychic": "Pokestar UFO-2",
-	"dawnwings": "Necrozma-Dawn-Wings",
-	"duskmane": "Necrozma-Dusk-Mane",
 
 	// base formes
 	"nidoranfemale": "Nidoran-F",
@@ -537,6 +537,7 @@ exports.BattleAliases = {
 	"bdrill": "Beedrill",
 	"bee": "Beedrill",
 	"birdjesus": "Pidgeot",
+	"blace": "Blacephalon",
 	"bliss": "Blissey",
 	"bulu": "Tapu Bulu",
 	"camel": "Camerupt",
@@ -597,6 +598,7 @@ exports.BattleAliases = {
 	"mence": "Salamence",
 	"milo": "Milotic",
 	"morfentshusbando": "Gengar",
+	"naga": "Naganadel",
 	"nape": "Infernape",
 	"nebby": "Cosmog",
 	"obama": "Abomasnow",
@@ -658,8 +660,6 @@ exports.BattleAliases = {
 	"ubburst": "Blacephalon",
 	"ubassembly": "Stakataka",
 	"ubadhesive": "Poipole",
-	"naga": "Naganadel",
-	"blace": "Blacephalon",
 
 	// moves
 	"bb": "Brave Bird",
