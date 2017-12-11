@@ -176,7 +176,7 @@ class Ladder extends LadderStore {
 		const userid = toId(username);
 		const userChalls = challenges.get(userid);
 		if (userChalls) {
-			for (const chall of userChalls) {
+			for (const chall of userChalls.slice(0)) {
 				let otherUserid;
 				if (chall.from === userid) {
 					otherUserid = chall.to;
@@ -274,11 +274,16 @@ class Ladder extends LadderStore {
 	 */
 	static removeChallenge(challenge, skipUpdate = false) {
 		const fromChalls = /** @type {Challenge[]} */ (challenges.get(challenge.from));
-		fromChalls.splice(fromChalls.indexOf(challenge), 1);
-		if (!fromChalls.length) challenges.delete(challenge.from);
+		if (fromChalls) {
+			fromChalls.splice(fromChalls.indexOf(challenge), 1);
+			if (!fromChalls.length) challenges.delete(challenge.from);
+		}
 		const toChalls = /** @type {Challenge[]} */ (challenges.get(challenge.to));
-		toChalls.splice(toChalls.indexOf(challenge), 1);
-		if (!toChalls.length) challenges.delete(challenge.to);
+		if (toChalls) {
+			toChalls.splice(toChalls.indexOf(challenge), 1);
+
+			if (!toChalls.length) challenges.delete(challenge.to);
+		}
 		if (!skipUpdate) {
 			const fromUser = Users(challenge.from);
 			if (fromUser) Ladder.updateChallenges(fromUser);
