@@ -2277,7 +2277,6 @@ class Battle extends Dex.ModdedDex {
 		if (move.isZ && move.zBrokeProtect) {
 			baseDamage = this.modify(baseDamage, 0.25);
 			this.add('-zbroken', target);
-			move.zBrokeProtect = false;
 		}
 
 		if (this.gen !== 5 && !Math.floor(baseDamage)) {
