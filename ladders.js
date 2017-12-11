@@ -235,8 +235,9 @@ class Ladder extends LadderStore {
 		const ladder = Ladders(chall.formatid);
 		const ready = await ladder.prepBattle(connection);
 		if (!ready) return false;
-		Ladder.removeChallenge(chall);
-		Ladders.match(chall.ready, ready);
+		if (Ladder.removeChallenge(chall)) {
+			Ladders.match(chall.ready, ready);
+		}
 		return true;
 	}
 
