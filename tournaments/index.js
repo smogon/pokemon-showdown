@@ -1108,8 +1108,12 @@ let commands = {
 		banlist: 'customrules',
 		rules: 'customrules',
 		customrules: function (tournament, user, params, cmd) {
+			if (cmd === 'banlist') {
+				return this.errorReply('The new syntax is: /tour rules -bannedthing, +unbannedthing, !removedrule, addedrule');
+			}
 			if (params.length < 1) {
-				this.sendReply("Usage: " + cmd + " <comma-separated arguments>");
+				this.sendReply("Usage: /tour rules <list of rules>");
+				this.sendReply("Rules can be: -bannedthing, +unbannedthing, !removedrule, addedrule");
 				return this.parse('/tour viewrules');
 			}
 			if (tournament.isTournamentStarted) {
