@@ -296,11 +296,13 @@ class Validator {
 					isHidden = true;
 
 					if (template.unreleasedHidden && ruleTable.has('-unreleased')) {
-						problems.push(`${name}'s hidden ability is unreleased.`);
+						problems.push(`${name}'s Hidden Ability is unreleased.`);
+					} else if (['entei', 'suicune', 'raikou'].includes(template.id) && format.requirePlus) {
+						problems.push(`${name}'s Hidden Ability is only available from Virtual Console, which is not allowed in this format.`);
 					} else if (dex.gen === 6 && (set.species.endsWith('Orange') || set.species.endsWith('White')) && ability.name === 'Symbiosis') {
-						problems.push(`${name}'s hidden ability is unreleased for the Orange and White forms.`);
+						problems.push(`${name}'s Hidden Ability is unreleased for the Orange and White forms.`);
 					} else if (dex.gen === 5 && set.level < 10 && (template.maleOnlyHidden || template.gender === 'N')) {
-						problems.push(`${name} must be at least level 10 with its hidden ability.`);
+						problems.push(`${name} must be at least level 10 with its Hidden Ability.`);
 					}
 					if (template.maleOnlyHidden) {
 						set.gender = 'M';
