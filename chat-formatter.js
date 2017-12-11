@@ -294,7 +294,7 @@ class TextFormatter {
 					if (this.at(termEnd - 1) === ' ') termEnd--;
 					uri = encodeURI(uri.replace(/^([a-z]*[^a-z:])/g, 'http://$1'));
 				}
-				let term = this.slice(start + 2, termEnd);
+				let term = this.slice(start + 2, termEnd).replace(/<\/?a(?: [^>]+)?>/g, '');
 				if (uri && !this.isTrusted) {
 					let shortUri = uri.replace(/^https?:\/\//, '').replace(/^www\./, '').replace(/\/$/, '');
 					term += `<small> &lt;${shortUri}&gt;</small>`;
@@ -305,13 +305,13 @@ class TextFormatter {
 					switch (key) {
 					case 'w':
 					case 'wiki':
-						term = term.slice(term.charAt(key.length + 1) === ' ' ? key.length + 2 : key.length + 1);
+						term = term.slice(term.charAt(key.length + 1) === ' ' ? key.length + 2 : key.length + 1).replace(/<\/?a(?: [^>]+)?>/g, '');
 						uri = `//en.wikipedia.org/w/index.php?title=Special:Search&search=${this.toUriComponent(term)}`;
 						term = `wiki: ${term}`;
 						break;
 					case 'pokemon':
 					case 'item':
-						term = term.slice(term.charAt(key.length + 1) === ' ' ? key.length + 2 : key.length + 1);
+						term = term.slice(term.charAt(key.length + 1) === ' ' ? key.length + 2 : key.length + 1).replace(/<\/?a(?: [^>]+)?>/g, '');
 
 						let display = '';
 						if (this.isTrusted) {
