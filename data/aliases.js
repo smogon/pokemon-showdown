@@ -275,6 +275,8 @@ exports.BattleAliases = {
 	"ultranecrozma": "Necrozma-Ultra",
 	"ufop": "Pokestar UFO-2",
 	"ufopsychic": "Pokestar UFO-2",
+	"dawnwings": "Necrozma-Dawn-Wings",
+	"duskmane": "Necrozma-Dusk-Mane",
 
 	// base formes
 	"nidoranfemale": "Nidoran-F",
@@ -643,6 +645,7 @@ exports.BattleAliases = {
 	"zard": "Charizard",
 	"zong": "Bronzong",
 	"zor": "Scizor",
+	"zyg": "Zygarde",
 
 	// ultra beasts
 	"ub01": "Nihilego",
@@ -655,6 +658,8 @@ exports.BattleAliases = {
 	"ubburst": "Blacephalon",
 	"ubassembly": "Stakataka",
 	"ubadhesive": "Poipole",
+	"naga": "Naganadel",
+	"blace": "Blacephalon",
 
 	// moves
 	"bb": "Brave Bird",
