@@ -504,13 +504,7 @@ class Ladder extends LadderStore {
 			let minRating = this.matchmakingOK(search, newSearch, searcher, user);
 			if (minRating) {
 				formatTable.delete(search.userid);
-				Rooms.createBattle(formatid, {
-					p1: searcher,
-					p1team: search.team,
-					p2: user,
-					p2team: newSearch.team,
-					rated: Math.min(search.rating, newSearch.rating),
-				});
+				Ladder.match(search, newSearch);
 				return;
 			}
 		}
