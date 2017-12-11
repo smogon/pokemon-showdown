@@ -316,6 +316,7 @@ exports.BattleScripts = {
 	},
 	tryMoveHit: function (target, pokemon, move) {
 		this.setActiveMove(move, pokemon, target);
+		move.zBrokeProtect = false;
 		let hitResult = true;
 
 		hitResult = this.singleEvent('PrepareHit', move, {}, target, pokemon, move);
