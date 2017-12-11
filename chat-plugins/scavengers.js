@@ -459,7 +459,7 @@ class ScavengerHunt extends Rooms.RoomGame {
 					room.chatRoomData.scavQueue = room.scavQueue;
 					Rooms.global.writeChatRoomData();
 				}
-			}, 2 * 60000); // 1 minute cooldown
+			}, 2 * 60000); // 2 minute cooldown
 		}
 	}
 
