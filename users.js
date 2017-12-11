@@ -1281,8 +1281,14 @@ class User {
 		}
 	}
 	processChatQueue() {
-		if (!this.chatQueue) return; // this should never happen
+		if (!this.chatQueue) return; // desync
 		let [message, roomid, connection] = this.chatQueue.shift();
+		if (!connection.user) {
+			// connection disconnected, chat queue should not be big enough
+			// for recursion to be an issue, also didn't ES6 spec tail
+			// recursion at some point?
+			return this.processChatQueue();
+		}
 
 		this.lastChatMessage = new Date().getTime();
 
