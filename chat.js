@@ -103,6 +103,7 @@ Chat.multiLinePattern = new PatternTester();
 
 Chat.baseCommands = undefined;
 Chat.commands = undefined;
+Chat.pages = undefined;
 
 /*********************************************************
  * Load chat filters
@@ -1005,7 +1006,9 @@ Chat.loadPlugins = function () {
 	// prevent TypeScript from resolving
 	const baseCommands = './chat-commands';
 	Chat.baseCommands = require(baseCommands).commands;
+	Chat.basePages = require(baseCommands).pages;
 	let commands = Chat.commands = Object.assign({}, Chat.baseCommands);
+	let pages = Chat.pages = Object.assign({}, Chat.basePages);
 
 	if (Config.chatfilter) Chat.filters.push(Config.chatfilter);
 	if (Config.namefilter) Chat.namefilters.push(Config.namefilter);
@@ -1024,6 +1027,7 @@ Chat.loadPlugins = function () {
 		const plugin = require(`./chat-plugins/${file}`);
 
 		Object.assign(commands, plugin.commands);
+		Object.assign(pages, plugin.pages);
 
 		if (plugin.chatfilter) Chat.filters.push(plugin.chatfilter);
 		if (plugin.namefilter) Chat.namefilters.push(plugin.namefilter);
