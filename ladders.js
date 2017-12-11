@@ -444,13 +444,14 @@ class Ladder extends LadderStore {
 	 * @param {BattleReady} search2
 	 * @param {User=} user1
 	 * @param {User=} user2
-	 * @return {number | false | void}
+	 * @return {boolean}
 	 */
 	matchmakingOK(search1, search2, user1, user2) {
 		const formatid = toId(this.formatid);
 		if (!user1 || !user2) {
 			// This should never happen.
-			return void require('./crashlogger')(new Error(`Matched user ${user1 ? search2.userid : search1.userid} not found`), "The main process");
+			require('./crashlogger')(new Error(`Matched user ${user1 ? search2.userid : search1.userid} not found`), "The main process");
+			return false;
 		}
 
 		// users must be different
@@ -477,7 +478,7 @@ class Ladder extends LadderStore {
 
 		user1.lastMatch = user2.userid;
 		user2.lastMatch = user1.userid;
-		return Math.min(search1.rating, search2.rating) || 1;
+		return true;
 	}
 
 	/**
@@ -501,16 +502,10 @@ class Ladder extends LadderStore {
 		for (let search of formatTable.values()) {
 			const searcher = this.getSearcher(search);
 			if (!searcher) continue;
-			let minRating = this.matchmakingOK(search, newSearch, searcher, user);
-			if (minRating) {
+			const matched = this.matchmakingOK(search, newSearch, searcher, user);
+			if (matched) {
 				formatTable.delete(search.userid);
-				Rooms.createBattle(formatid, {
-					p1: searcher,
-					p1team: search.team,
-					p2: user,
-					p2team: newSearch.team,
-					rated: minRating,
-				});
+				Ladder.match(search, newSearch);
 				return;
 			}
 		}
@@ -539,11 +534,11 @@ class Ladder extends LadderStore {
 				let searcher = matchmaker.getSearcher(search);
 				if (!searcher) continue;
 
-				let minRating = matchmaker.matchmakingOK(search, longestSearch, searcher, longestSearcher);
-				if (minRating) {
+				let matched = matchmaker.matchmakingOK(search, longestSearch, searcher, longestSearcher);
+				if (matched) {
 					formatTable.delete(search.userid);
 					formatTable.delete(longestSearch.userid);
-					Ladder.match(search, longestSearch);
+					Ladder.match(longestSearch, search);
 					return;
 				}
 			}
