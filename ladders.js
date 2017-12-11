@@ -176,7 +176,7 @@ class Ladder extends LadderStore {
 		const userid = toId(username);
 		const userChalls = challenges.get(userid);
 		if (userChalls) {
-			for (const chall of userChalls) {
+			for (const chall of userChalls.slice()) {
 				let otherUserid;
 				if (chall.from === userid) {
 					otherUserid = chall.to;
