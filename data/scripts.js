@@ -109,7 +109,7 @@ exports.BattleScripts = {
 			// Ties go to whichever Pokemon has had the ability for the least amount of time
 			dancers.sort(function (a, b) { return -(b.stats['spe'] - a.stats['spe']) || b.abilityOrder - a.abilityOrder; });
 			for (const dancer of dancers) {
-				this.faintMessages();
+				if (this.faintMessages()) break;
 				this.add('-activate', dancer, 'ability: Dancer');
 				this.runMove(baseMove.id, dancer, 0, this.getAbility('dancer'), undefined, true);
 			}
