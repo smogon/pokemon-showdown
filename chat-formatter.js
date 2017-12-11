@@ -294,7 +294,7 @@ class TextFormatter {
 					if (this.at(termEnd - 1) === ' ') termEnd--;
 					uri = encodeURI(uri.replace(/^([a-z]*[^a-z:])/g, 'http://$1'));
 				}
-				let term = this.slice(start + 2, termEnd);
+				let term = this.slice(start + 2, termEnd).replace(/<\/?a(?: [^>]+)?>/g, '');
 				if (uri && !this.isTrusted) {
 					let shortUri = uri.replace(/^https?:\/\//, '').replace(/^www\./, '').replace(/\/$/, '');
 					term += `<small> &lt;${shortUri}&gt;</small>`;
