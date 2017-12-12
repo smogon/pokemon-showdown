@@ -187,11 +187,11 @@ for (const room of Rooms.rooms.values()) {
 }
 
 exports.pages = {
-	ticket: {
-		create() {
+	help: {
+		request() {
 			const user = this.user;
 
-			let buf = `|title|Help Ticket\n|pagehtml|<div class="pad"><h2>Request help from global staff</h2>`;
+			let buf = `|title|Request Help\n|pagehtml|<div class="pad"><h2>Request help from global staff</h2>`;
 
 			let banMsg = checkTicketBanned(user);
 			if (banMsg) return this.errorReply(banMsg);
@@ -245,7 +245,7 @@ exports.pages = {
 			buf += `</details></div>`;
 			return buf;
 		},
-		list() {
+		tickets() {
 			let buf = `|title|Ticket List\n`;
 			const user = this.user;
 			if (!user.can('lock')) {
@@ -293,18 +293,18 @@ exports.commands = {
 	helpticket: {
 		'': 'create',
 		create: function (target, room, user, connection) {
-			if (user.can('lock')) return this.parse('/join view-ticket-create'); // Globals automatically get the form for reference.
+			if (user.can('lock')) return this.parse('/join view-help-request'); // Globals automatically get the form for reference.
 			if (!user.named) return this.errorReply(`You need to choose a username before doing this.`);
-			return this.parse('/join view-ticket-create');
+			return this.parse('/join view-help-request');
 		},
 		createhelp: ['/helpticket create - Creates a new ticket requesting help from global staff.'],
 
 		'!submit': true,
 		submit: function (target, room, user, connection) {
-			if (user.can('lock')) return this.errorReply(`Global staff can't make tickets. They can only use the form for reference.`);
-			if (!user.named) return this.errorReply(`You need to choose a username before doing this.`);
+			if (user.can('lock') && !user.can('bypassall')) return this.popupReply(`Global staff can't make tickets. They can only use the form for reference.`);
+			if (!user.named) return this.popupReply(`You need to choose a username before doing this.`);
 			let banMsg = checkTicketBanned(user);
-			if (banMsg) return this.errorReply(banMsg);
+			if (banMsg) return this.popupReply(banMsg);
 			let ticket = tickets[user.userid];
 			let ipTicket = checkIp(user.latestIp);
 			if ((ticket && ticket.open) || ipTicket) {
@@ -317,15 +317,15 @@ exports.commands = {
 				} else {
 					if (!helpRoom.auth[user.userid]) helpRoom.auth[user.userid] = '+';
 					this.parse(`/join help-${ticket.userid}`);
-					return this.sendReply(`You already have an open ticket; please wait for global staff to respond.`);
+					return this.popupReply(`You already have an open ticket; please wait for global staff to respond.`);
 				}
 			}
-			if (Monitor.countTickets(user.latestIp)) return user.popup(`Due to high load, you are limited to creating ${Punishments.sharedIps.has(user.latestIp) ? `50` : `5`} tickets every hour.`);
+			if (Monitor.countTickets(user.latestIp)) return this.popupReply(`Due to high load, you are limited to creating ${Punishments.sharedIps.has(user.latestIp) ? `50` : `5`} tickets every hour.`);
 			if (!['PM Harassment', 'Battle Harassment', 'Chatroom Harassment', 'Inappropriate Content', 'Inappropriate Nickname', 'Inappropriate Pokemon Nicknames', 'Timerstalling', 'Global Staff Complaint', 'Appeal', 'IP-Appeal', 'ISP-Appeal', 'Lost Password', 'Report Last Ticket', 'Room Owner Complaint', 'Other'].includes(target)) return this.parse('/helpticket');
 			let upper = false;
 			if (['Lost Password', 'Room Owner Complaint', 'Global Staff Complaint', 'Report Last Ticket'].includes(target)) upper = true;
 			if (target === 'Report Last Ticket') {
-				if (!ticket) return this.errorReply(`You can't report a ticket that dosen't exist.`);
+				if (!ticket) return this.popupReply(`You can't report a ticket that dosen't exist.`);
 				target = `Report Last Ticket - ${ticket.type}`;
 			}
 			ticket = {
@@ -378,7 +378,7 @@ exports.commands = {
 			tickets[user.userid] = ticket;
 			writeTickets();
 			notifyStaff(upper);
-			connection.send(`>view-ticket-create\n|deinit`);
+			connection.send(`>view-help-request\n|deinit`);
 		},
 
 		escalate: function (target, room, user, connection) {
@@ -399,7 +399,7 @@ exports.commands = {
 		'!list': true,
 		list: function (target, room, user, connection) {
 			if (!this.can('lock')) return;
-			this.parse('/join view-ticket-list');
+			this.parse('/join view-help-tickets');
 		},
 		listhelp: ['/helpticket list - Lists all tickets. Requires: % @ * & ~'],
 
