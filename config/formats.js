@@ -597,7 +597,7 @@ exports.Formats = [
 
 		mod: 'mixandmega',
 		ruleset: ['[Gen 7] Mix and Mega'],
-		banlist: ['Shadow Tag'],
+		banlist: ['Gengarite', 'Shadow Tag'],
 		bannedStones: ['Beedrillite', 'Blazikenite', 'Gengarite', 'Kangaskhanite', 'Mawilite', 'Medichamite', 'Ultranecrozium Z'],
 		cannotMega: [
 			'Arceus', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Dialga', 'Dragonite', 'Giratina', 'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Lugia', 'Lunala', 'Marshadow',
