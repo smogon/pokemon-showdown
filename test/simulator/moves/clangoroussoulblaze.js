@@ -20,7 +20,7 @@ describe('Z-Moves', function () {
 			{species: 'Tapu Lele', ability: 'psychicsurge', moves: ['protect']},
 			{species: 'Zapdos', ability: 'pressure', moves: ['tailwind']},
 		]);
-		battle.makeChoices("move clangingscales zmove move protect", "move protect move tailwind");
+		battle.makeChoices("move clangingscales zmove, move protect", "move protect, move tailwind");
 		assert.false.fainted(battle.p2.active[1]);
 		assert.false.fullHP(battle.p2.active[1]);
 	});
