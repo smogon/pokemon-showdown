@@ -579,22 +579,19 @@ exports.BattleFormats = {
 			this.add('rule', 'Baton Pass Clause: Limit one Baton Passer, can\'t pass Spe and other stats simultaneously');
 		},
 		onValidateSet: function (set, format, setHas) {
-			if (!('batonpass' in setHas)) return;
+			if (!('move:batonpass' in setHas)) return;
 
-			// check if Speed is boosted
+			let item = this.getItem(set.item);
+			let ability = toId(set.ability);
 			let speedBoosted = false;
 			let nonSpeedBoosted = false;
-			if (toId(set.item) === 'eeviumz') {
-				speedBoosted = true;
-				nonSpeedBoosted = true;
-			}
-			let item = this.getItem(set.item);
+
 			for (let i = 0; i < set.moves.length; i++) {
 				let move = this.getMove(set.moves[i]);
-				if (move.boosts && move.boosts.spe > 0) {
+				if (move.id === 'flamecharge' || move.boosts && move.boosts.spe > 0) {
 					speedBoosted = true;
 				}
-				if (move.boosts && (move.boosts.atk > 0 || move.boosts.def > 0 || move.boosts.spa > 0 || move.boosts.spd > 0)) {
+				if (['acupressure', 'bellydrum', 'chargebeam', 'curse', 'diamondstorm', 'fellstinger', 'fierydance', 'flowershield', 'poweruppunch', 'rage', 'rototiller', 'skullbash', 'stockpile'].includes(move.id) || move.boosts && (move.boosts.atk > 0 || move.boosts.def > 0 || move.boosts.spa > 0 || move.boosts.spd > 0)) {
 					nonSpeedBoosted = true;
 				}
 				if (item.zMove && move.type === item.zMoveType) {
@@ -607,28 +604,13 @@ exports.BattleFormats = {
 				}
 			}
 
-			let boostSpeed = ['flamecharge', 'geomancy', 'motordrive', 'rattled', 'speedboost', 'steadfast', 'weakarmor', 'blazikenite', 'salacberry'];
-			if (!speedBoosted) {
-				for (let i = 0; i < boostSpeed.length; i++) {
-					if (boostSpeed[i] in setHas) {
-						speedBoosted = true;
-						break;
-					}
-				}
+			if (['motordrive', 'rattled', 'speedboost', 'steadfast', 'weakarmor'].includes(ability) || ['blazikenite', 'eeviumz', 'kommoniumz', 'salacberry'].includes(item.id)) {
+				speedBoosted = true;
 			}
-			if (!speedBoosted) {
-				return;
-			}
+			if (!speedBoosted) return;
 
-			// check if non-Speed boosted
-			let boostNonSpeed = ['acupressure', 'starfberry', 'curse', 'poweruppunch', 'rage', 'rototiller', 'fellstinger', 'bellydrum', 'download', 'justified', 'moxie', 'sapsipper', 'defiant', 'angerpoint', 'cellbattery', 'liechiberry', 'snowball', 'weaknesspolicy', 'diamondstorm', 'flowershield', 'skullbash', 'stockpile', 'cottonguard', 'ganlonberry', 'keeberry', 'chargebeam', 'fierydance', 'geomancy', 'lightningrod', 'stormdrain', 'competitive', 'absorbbulb', 'petayaberry', 'charge', 'apicotberry', 'luminousmoss', 'marangaberry'];
-			if (!nonSpeedBoosted) {
-				for (let i = 0; i < boostNonSpeed.length; i++) {
-					if (boostNonSpeed[i] in setHas) {
-						nonSpeedBoosted = true;
-						break;
-					}
-				}
+			if (['angerpoint', 'competitive', 'defiant', 'download', 'justified', 'lightningrod', 'moxie', 'sapsipper', 'stormdrain'].includes(ability) || ['absorbbulb', 'apicotberry', 'cellbattery', 'eeviumz', 'ganlonberry', 'keeberry', 'kommoniumz', 'liechiberry', 'luminousmoss', 'marangaberry', 'petayaberry', 'snowball', 'starfberry', 'weaknesspolicy'].includes(item.id)) {
+				nonSpeedBoosted = true;
 			}
 			if (!nonSpeedBoosted) return;
 
