@@ -2,6 +2,7 @@
 
 const FS = require('./../fs');
 const path = require('path');
+const Dashycode = require('../lib/dashycode');
 const ProcessManager = require('./../process-manager');
 const execFileSync = require('child_process').execFileSync;
 
@@ -280,7 +281,7 @@ function prettifyResults(rawResults, room, searchString, exactSearch, addModlogL
 		return `${date}<small>[${timestamp}] (${thisRoomID})</small>${Chat.escapeHTML(line.slice(parenIndex + 1))}`;
 	}).join(`<br />`);
 	let preamble;
-	const modlogid = room + (searchString ? '-' + searchString.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]+/g, '') : '');
+	const modlogid = room + (searchString ? '-' + Dashycode.encode(searchString) : '');
 	if (searchString) {
 		const searchStringDescription = (exactSearch ? `containing the string "${searchString}"` : `matching the username "${searchString}"`);
 		preamble = `>view-modlog-${modlogid}\n|init|html\n|title|[Modlog]${title}\n|pagehtml|<div class="pad"><p>The last ${lines} logged action${Chat.plural(lines)} ${searchStringDescription} on ${roomName}.` +
@@ -292,35 +293,79 @@ function prettifyResults(rawResults, room, searchString, exactSearch, addModlogL
 	return `${preamble}${resultString}${moreButton}</div>`;
 }
 
+function getModlog(connection, roomid = 'global', searchString = '', lines = 20, timed = false) {
+	const startTime = Date.now();
+	const targetRoom = Rooms.search(roomid);
+	const user = connection.user;
+
+	// permission checking
+	if (roomid === 'all' || roomid === 'public') {
+		if (!user.can('modlog')) {
+			return connection.popup("Access denied");
+		}
+	} else {
+		if (!user.can('modlog', null, targetRoom)) {
+			return connection.popup("Access denied");
+		}
+	}
+
+	const hideIps = !user.can('lock');
+	const addModlogLinks = Config.modloglink && (!hideIps || (targetRoom && targetRoom.isPrivate !== true));
+
+	if (searchString.length > MAX_QUERY_LENGTH) {
+		connection.popup(`Your search query must be shorter than ${MAX_QUERY_LENGTH} characters.`);
+		return;
+	}
+
+	let exactSearch = '0';
+	if (searchString.match(/^["'].+["']$/)) {
+		exactSearch = '1';
+		searchString = searchString.substring(1, searchString.length - 1);
+	}
+
+	let roomidList;
+	// handle this here so the child process doesn't have to load rooms data
+	if (roomid === 'public') {
+		const isPublicRoom = (room => !(room.isPrivate || room.battle || room.isPersonal || room.id === 'global'));
+		roomidList = Array.from(Rooms.rooms.values()).filter(isPublicRoom).map(room => room.id);
+	} else {
+		roomidList = [roomid];
+	}
+
+	PM.send(roomidList.join(','), searchString, exactSearch, lines).then(response => {
+		connection.send(prettifyResults(response, roomid, searchString, exactSearch === '1', addModlogLinks, hideIps, lines));
+		if (timed) connection.popup(`The modlog query took ${Date.now() - startTime} ms to complete.`);
+	});
+}
+
+exports.pages = {
+	modlog(args) {
+		const roomid = args[0];
+		const target = Dashycode.decode(args.slice(1).join('-'));
+
+		getModlog(this.connection, roomid, target);
+	},
+};
+
 exports.commands = {
 	'!modlog': true,
 	timedmodlog: 'modlog',
 	modlog: function (target, room, user, connection, cmd) {
-		const startTime = Date.now();
 		if (!room) room = Rooms('global');
-		let roomId = (room.id === 'staff' ? 'global' : room.id);
-		const hideIps = !user.can('lock');
+		let roomid = (room.id === 'staff' ? 'global' : room.id);
 
 		if (target.includes(',')) {
 			let targets = target.split(',');
 			target = targets[1].trim();
-			roomId = toId(targets[0]) || room.id;
+			roomid = toId(targets[0]) || room.id;
 		}
 
-		let targetRoom = Rooms.search(roomId);
+		let targetRoom = Rooms.search(roomid);
 		// if a room alias was used, replace alias with actual id
-		if (targetRoom) roomId = targetRoom.id;
-		if (roomId.startsWith('battle-') || roomId.startsWith('groupchat-')) return this.errorReply("Battles and groupchats don't have individual modlogs.");
+		if (targetRoom) roomid = targetRoom.id;
+		if (roomid.includes('-')) return this.errorReply(`Battles and groupchats (and other rooms with - in their ID) don't have individual modlogs.`);
 
-		// permission checking
-		if (roomId === 'all' || roomId === 'public') {
-			if (!this.can('modlog')) return;
-		} else {
-			if (!this.can('modlog', null, targetRoom)) return;
-		}
-
-		const addModlogLinks = Config.modloglink && (!hideIps || (targetRoom && targetRoom.isPrivate !== true));
-		let lines = 0;
+		let lines;
 		if (target.includes(LINES_SEPARATOR)) { // undocumented line specification
 			const reqIndex = target.indexOf(LINES_SEPARATOR);
 			const requestedLines = parseInt(target.substr(reqIndex + LINES_SEPARATOR.length, target.length));
@@ -338,32 +383,7 @@ exports.commands = {
 		if (!lines) lines = DEFAULT_RESULTS_LENGTH;
 		if (lines > MAX_RESULTS_LENGTH) lines = MAX_RESULTS_LENGTH;
 
-		let searchString = '';
-		if (target) searchString = target.trim();
-		if (searchString.length > MAX_QUERY_LENGTH) {
-			this.errorReply(`Your search query must be shorter than ${MAX_QUERY_LENGTH} characters.`);
-			return;
-		}
-
-		let exactSearch = '0';
-		if (searchString.match(/^["'].+["']$/)) {
-			exactSearch = '1';
-			searchString = searchString.substring(1, searchString.length - 1);
-		}
-
-		let roomIdList;
-		// handle this here so the child process doesn't have to load rooms data
-		if (roomId === 'public') {
-			const isPublicRoom = (room => !(room.isPrivate || room.battle || room.isPersonal || room.id === 'global'));
-			roomIdList = Array.from(Rooms.rooms.values()).filter(isPublicRoom).map(room => room.id);
-		} else {
-			roomIdList = [roomId];
-		}
-
-		PM.send(roomIdList.join(','), searchString, exactSearch, lines).then(response => {
-			connection.send(prettifyResults(response, roomId, searchString, exactSearch === '1', addModlogLinks, hideIps, lines));
-			if (cmd === 'timedmodlog') this.sendReply(`The modlog query took ${Date.now() - startTime} ms to complete.`);
-		});
+		getModlog(connection, roomid, target, lines, cmd === 'timedmodlog');
 	},
 	modloghelp: [
 		"/modlog [roomid], [search] - Searches the moderator log - defaults to the current room unless specified otherwise.",
