@@ -1277,7 +1277,7 @@ class Pokemon {
 		if (noForce && oldAbility === ability.id) {
 			return false;
 		}
-		if (!effect || effect.id !== 'transform') {
+		if (!effect || !(['transform', 'mega', 'burst', 'primal', 'freeze'].includes(effect.id))) {
 			if (['illusion', 'battlebond', 'comatose', 'disguise', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange'].includes(ability.id)) return false;
 			if (['battlebond', 'comatose', 'disguise', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange'].includes(oldAbility)) return false;
 		}

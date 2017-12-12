@@ -58,7 +58,7 @@ exports.BattleScripts = {
 			}
 		}
 
-		pokemon.setAbility(template.abilities['0']);
+		pokemon.setAbility(template.abilities['0'], null, {id: (isUltraBurst ? 'burst' : 'mega')});
 		pokemon.baseAbility = pokemon.ability;
 		pokemon.canMegaEvo = false;
 		if (isUltraBurst) pokemon.canUltraBurst = false;
