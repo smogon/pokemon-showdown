@@ -24,10 +24,10 @@ describe('Sticky Hold', function () {
 		assert.strictEqual(itemHolder.item, 'razzberry', "Shuckle should hold a Razz Berry");
 		battle.p2.chooseSwitch(2).foe.chooseDefault();
 
-		STEAL_MOVES.forEach(moveid => {
+		for (const moveid of STEAL_MOVES) {
 			battle.p2.chooseMove(moveid).foe.chooseDefault();
 			assert.holdsItem(itemHolder, "Shuckle should still hold its Razz Berry");
-		});
+		}
 	});
 
 	it('should be suppressed by Mold Breaker', function () {

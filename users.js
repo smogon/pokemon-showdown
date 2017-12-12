@@ -142,20 +142,20 @@ let getExactUser = Users.getExact = function (name) {
 let findUsers = Users.findUsers = function (userids, ips, options) {
 	let matches = [];
 	if (options && options.forPunishment) ips = ips.filter(ip => !Punishments.sharedIps.has(ip));
-	users.forEach(user => {
-		if (!(options && options.forPunishment) && !user.named && !user.connected) return;
-		if (!(options && options.includeTrusted) && user.trusted) return;
+	for (const user of users.values()) {
+		if (!(options && options.forPunishment) && !user.named && !user.connected) continue;
+		if (!(options && options.includeTrusted) && user.trusted) continue;
 		if (userids.includes(user.userid)) {
 			matches.push(user);
-			return;
+			continue;
 		}
 		for (let myIp of ips) {
 			if (myIp in user.ips) {
 				matches.push(user);
-				return;
+				break;
 			}
 		}
-	});
+	}
 	return matches;
 };
 
@@ -580,9 +580,9 @@ class User {
 		if (roomid) {
 			return Rooms(roomid).onUpdateIdentity(this);
 		}
-		this.inRooms.forEach(roomid => {
+		for (const roomid of this.inRooms) {
 			Rooms(roomid).onUpdateIdentity(this);
-		});
+		}
 	}
 	/**
 	 *
@@ -776,9 +776,9 @@ class User {
 		// skip the login server
 		let userid = toId(name);
 
-		this.inRooms.forEach(roomid => {
+		for (const roomid of this.inRooms) {
 			Punishments.checkNewNameInRoom(this, userid, roomid);
-		});
+		}
 
 		if (users.has(userid) && users.get(userid) !== this) {
 			return false;
@@ -824,16 +824,16 @@ class User {
 			}
 			room.game.onRename(this, oldid, joining, isForceRenamed);
 		});
-		this.inRooms.forEach(roomid => {
+		for (const roomid of this.inRooms) {
 			Rooms(roomid).onRename(this, oldid, joining);
-		});
+		}
 		return true;
 	}
 	merge(oldUser) {
 		oldUser.cancelReady();
-		oldUser.inRooms.forEach(roomid => {
+		for (const roomid of oldUser.inRooms) {
 			Rooms(roomid).onLeave(oldUser);
-		});
+		}
 
 		if (this.locked === '#dnsbl' && !oldUser.locked) this.locked = false;
 		if (!this.locked && oldUser.locked === '#dnsbl') oldUser.locked = false;
@@ -888,14 +888,14 @@ class User {
 		let initdata = `|updateuser|${this.name}|1|${this.avatar}`;
 		connection.send(initdata);
 		connection.user = this;
-		connection.inRooms.forEach(roomid => {
+		for (const roomid of connection.inRooms) {
 			let room = Rooms(roomid);
 			if (!this.inRooms.has(roomid)) {
 				if (Punishments.checkNameInRoom(this, room.id)) {
 					// the connection was in a room that this user is banned from
 					connection.sendTo(room.id, `|deinit`);
 					connection.leaveRoom(room);
-					return;
+					continue;
 				}
 				room.onJoin(this, connection);
 				this.inRooms.add(roomid);
@@ -906,7 +906,7 @@ class User {
 				// don't want this behavior.
 				room.game.onUpdateConnection(this, connection);
 			}
-		});
+		}
 		this.updateReady(connection);
 	}
 	debugData() {
@@ -1047,9 +1047,9 @@ class User {
 				if (this.connections.length <= 1) {
 					this.markInactive();
 				}
-				connection.inRooms.forEach(roomid => {
+				for (const roomid of connection.inRooms) {
 					this.leaveRoom(Rooms(roomid), connection, true);
-				});
+				}
 				--this.ips[connection.ip];
 				this.connections.splice(i, 1);
 				break;
@@ -1057,11 +1057,11 @@ class User {
 		}
 		if (!this.connections.length) {
 			// cleanup
-			this.inRooms.forEach(roomid => {
+			for (const roomid of this.inRooms) {
 				// should never happen.
 				Monitor.debug(`!! room miscount: ${roomid} not left`);
 				Rooms(roomid).onLeave(this);
-			});
+			}
 			this.inRooms.clear();
 			if (!this.named && !Object.keys(this.prevNames).length) {
 				// user never chose a name (and therefore never talked/battled)
@@ -1081,19 +1081,19 @@ class User {
 		for (let i = this.connections.length - 1; i >= 0; i--) {
 			// console.log('DESTROY: ' + this.userid);
 			connection = this.connections[i];
-			connection.inRooms.forEach(roomid => {
+			for (const roomid of connection.inRooms) {
 				this.leaveRoom(Rooms(roomid), connection, true);
-			});
+			}
 			connection.destroy();
 		}
 		if (this.connections.length) {
 			// should never happen
 			throw new Error(`Failed to drop all connections for ${this.userid}`);
 		}
-		this.inRooms.forEach(roomid => {
+		for (const roomid of this.inRooms) {
 			// should never happen.
 			throw new Error(`Room miscount: ${roomid} not left for ${this.userid}`);
-		});
+		}
 		this.inRooms.clear();
 	}
 	getAltUsers(includeTrusted, forPunishment) {
@@ -1349,12 +1349,12 @@ Users.Connection = Connection;
 
 Users.pruneInactive = function (threshold) {
 	let now = Date.now();
-	users.forEach(user => {
-		if (user.connected) return;
+	for (const user of users.values()) {
+		if (user.connected) continue;
 		if ((now - user.lastConnected) > threshold) {
 			user.destroy();
 		}
-	});
+	}
 };
 Users.pruneInactiveTimer = setInterval(() => {
 	Users.pruneInactive(Config.inactiveuserthreshold || 1000 * 60 * 60);
