@@ -880,12 +880,6 @@ class GlobalRoom extends BasicRoom {
 		--this.userCount;
 	}
 	/**
-	 * @param {string} text
-	 */
-	modlog(text) {
-		this.modlogStream.write('[' + (new Date().toJSON()) + '] ' + text + '\n');
-	}
-	/**
 	 * @param {Error} err
 	 * @param {boolean} slow
 	 */
