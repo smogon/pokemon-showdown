@@ -1989,7 +1989,7 @@ exports.BattleFormatsData = {
 		tier: "LC Uber",
 	},
 	ambipom: {
-		randomBattleMoves: ["fakeout", "return", "knockoff", "uturn", "switcheroo", "seedbomb", "lowkick"],
+		randomBattleMoves: ["fakeout", "tailslap", "knockoff", "uturn", "switcheroo", "seedbomb", "lowkick"],
 		randomDoubleBattleMoves: ["fakeout", "return", "knockoff", "uturn", "doublehit", "icepunch", "lowkick", "protect"],
 		tier: "NU",
 	},
@@ -2294,7 +2294,7 @@ exports.BattleFormatsData = {
 		tier: "PU",
 	},
 	smeargle: {
-		randomBattleMoves: ["spore", "spikes", "stealthrock", "destinybond", "whirlwind", "stickyweb"],
+		randomBattleMoves: ["spore", "stealthrock", "destinybond", "whirlwind", "stickyweb"],
 		randomDoubleBattleMoves: ["spore", "fakeout", "wideguard", "helpinghand", "followme", "tailwind", "kingsshield", "transform"],
 		eventPokemon: [
 			{"generation": 3, "level": 10, "gender": "M", "abilities": ["owntempo"], "moves": ["sketch"], "pokeball": "pokeball"},
@@ -4089,7 +4089,7 @@ exports.BattleFormatsData = {
 		tier: "PU",
 	},
 	rotomfan: {
-		randomBattleMoves: ["airslash", "thunderbolt", "voltswitch", "painsplit", "willowisp", "trick"],
+		randomBattleMoves: ["airslash", "thunderbolt", "voltswitch", "painsplit", "willowisp", "defog"],
 		randomDoubleBattleMoves: ["airslash", "thunderbolt", "voltswitch", "substitute", "painsplit", "hiddenpowerice", "willowisp", "electroweb", "discharge", "protect"],
 		tier: "PU",
 	},
@@ -5842,7 +5842,7 @@ exports.BattleFormatsData = {
 		tier: "BL3",
 	},
 	xerneas: {
-		randomBattleMoves: ["geomancy", "moonblast", "thunder", "focusblast", "thunderbolt", "hiddenpowerfire", "psyshock", "rockslide", "closecombat"],
+		randomBattleMoves: ["geomancy", "moonblast", "focusblast", "thunderbolt", "hiddenpowerfire", "psyshock", "rockslide", "closecombat"],
 		randomDoubleBattleMoves: ["geomancy", "dazzlinggleam", "thunder", "focusblast", "thunderbolt", "hiddenpowerfire", "psyshock", "rockslide", "closecombat", "protect"],
 		eventPokemon: [
 			{"generation": 6, "level": 50, "moves": ["gravity", "geomancy", "moonblast", "megahorn"]},
@@ -6111,7 +6111,7 @@ exports.BattleFormatsData = {
 		tier: "LC",
 	},
 	mudsdale: {
-		randomBattleMoves: ["earthquake", "closecombat", "payback", "rockslide", "heavyslam"],
+		randomBattleMoves: ["earthquake", "closecombat", "rockslide", "heavyslam", "stealthrock"],
 		randomDoubleBattleMoves: ["highhorsepower", "heavyslam", "closecombat", "rockslide", "protect", "earthquake", "rocktomb"],
 		tier: "PU",
 	},
@@ -6202,7 +6202,7 @@ exports.BattleFormatsData = {
 		tier: "RU",
 	},
 	oranguru: {
-		randomBattleMoves: ["nastyplot", "psyshock", "focusblast", "thunderbolt"],
+		randomBattleMoves: ["nastyplot", "psyshock", "focusblast", "thunderbolt", "trickroom"],
 		randomDoubleBattleMoves: ["trickroom", "foulplay", "instruct", "psychic", "protect", "lightscreen", "reflect"],
 		eventPokemon: [
 			{"generation": 7, "level": 1, "shiny": 1, "isHidden": false, "abilities": ["telepathy"], "moves": ["instruct", "psychic", "psychicterrain"], "pokeball": "cherishball"},
@@ -6257,7 +6257,7 @@ exports.BattleFormatsData = {
 		tier: "PU",
 	},
 	silvallybug: {
-		randomBattleMoves: ["flamethrower", "icebeam", "thunderbolt", "uturn"],
+		randomBattleMoves: ["flamethrower", "icebeam", "thunderbolt", "uturn", "defog"],
 		randomDoubleBattleMoves: ["protect", "uturn", "flamethrower", "icebeam", "thunderbolt", "thunderwave"],
 		requiredItem: "Bug Memory",
 		tier: "PU",
@@ -6293,7 +6293,7 @@ exports.BattleFormatsData = {
 		tier: "PU",
 	},
 	silvallyfire: {
-		randomBattleMoves: ["multiattack", "icebeam", "thunderbolt", "uturn"],
+		randomBattleMoves: ["multiattack", "icebeam", "thunderbolt", "uturn", "defog"],
 		randomDoubleBattleMoves: ["protect", "flamethrower", "snarl", "uturn", "thunderbolt", "icebeam", "thunderwave"],
 		requiredItem: "Fire Memory",
 		tier: "PU",
@@ -6347,7 +6347,7 @@ exports.BattleFormatsData = {
 		tier: "PU",
 	},
 	silvallysteel: {
-		randomBattleMoves: ["multiattack", "crunch", "flamethrower", "thunderbolt"],
+		randomBattleMoves: ["multiattack", "crunch", "flamethrower", "thunderbolt", "defog"],
 		randomDoubleBattleMoves: ["protect", "multiattack", "swordsdance", "rockslide", "flamecharge", "uturn", "partingshot"],
 		requiredItem: "Steel Memory",
 		tier: "PU",
