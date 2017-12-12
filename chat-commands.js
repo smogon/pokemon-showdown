@@ -3479,7 +3479,7 @@ exports.commands = {
 				return false;
 			}
 			let roomList = {};
-			for (const roomid of targetUser.inRooms) {
+			for (let roomid of targetUser.inRooms) {
 				if (roomid === 'global') continue;
 				let targetRoom = Rooms.get(roomid);
 				if (!targetRoom) continue; // shouldn't happen
