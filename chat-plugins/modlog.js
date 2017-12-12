@@ -275,7 +275,7 @@ function prettifyResults(rawResults, room, searchString, exactSearch, addModlogL
 		let parenIndex = line.indexOf(')');
 		let thisRoomID = line.slice(bracketIndex + 3, parenIndex);
 		if (addModlogLinks) {
-			let url = Config.modloglink(timestamp, thisRoomID);
+			let url = Config.modloglink(time, thisRoomID);
 			if (url) timestamp = `<a href="${url}">${timestamp}</a>`;
 		}
 		return `${date}<small>[${timestamp}] (${thisRoomID})</small>${Chat.escapeHTML(line.slice(parenIndex + 1))}`;
@@ -310,7 +310,7 @@ function getModlog(connection, roomid = 'global', searchString = '', lines = 20,
 	}
 
 	const hideIps = !user.can('lock');
-	const addModlogLinks = Config.modloglink && (!hideIps || (targetRoom && targetRoom.isPrivate !== true));
+	const addModlogLinks = Config.modloglink && (user.group !== ' ' || (targetRoom && targetRoom.isPrivate !== true));
 
 	if (searchString.length > MAX_QUERY_LENGTH) {
 		connection.popup(`Your search query must be shorter than ${MAX_QUERY_LENGTH} characters.`);
