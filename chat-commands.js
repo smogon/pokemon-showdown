@@ -131,6 +131,7 @@ exports.commands = {
 	code: function (target, room, user) {
 		if (!target) return this.parse('/help code');
 		if (!this.canTalk()) return;
+		if (target.startsWith('\n')) target = target.slice(1);
 		const separator = '\n';
 		if (target.includes(separator)) {
 			const params = target.split(separator);
