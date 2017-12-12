@@ -450,14 +450,7 @@ exports.commands = {
 				targetUser.popup(`|modal|${user.name} has banned you from creating help tickets.${(target ? `\n\nReason: ${target}` : ``)}\n\nYour ban will expire in a few days.`);
 			}
 
-			let tbanMessage = `${name} was ticket banned by ${user.name}.${target ? ` (${target})` : ``}`;
-
-			this.addModCommand(tbanMessage, (targetUser ? `(${targetUser.latestIp})` : ''));
-
-			// Notify staff room when a user is ticket banned outside of it.
-			if (room.id !== 'staff' && Rooms('staff')) {
-				Rooms('staff').addLogMessage(user, `<<${room.id}>> ${tbanMessage}`);
-			}
+			this.addModCommand(`${name} was ticket banned by ${user.name}.${target ? ` (${target})` : ``}`, (targetUser ? `(${targetUser.latestIp})` : ''));
 
 			let affected = [];
 			let punishment = {
@@ -534,11 +527,7 @@ exports.commands = {
 			delete tickets[ticket.userid];
 			writeTickets();
 
-			const untbanMessage = `${affected.join(', ')} ${Chat.plural(affected.length, "were", "was")} ticket unbanned by ${user.name}.`;
-			this.addModCommand(untbanMessage);
-			if (room.id !== 'staff' && Rooms('staff')) {
-				Rooms('staff').addLogMessage(user, `<<${room.id}>>${untbanMessage}`);
-			}
+			this.addModCommand(`${affected.join(', ')} ${Chat.plural(affected.length, "were", "was")} ticket unbanned by ${user.name}.`);
 			this.globalModlog("UNTICKETBAN", target, `by ${user.name}`);
 			if (targetUser) targetUser.popup(`${user.name} has ticket unbanned you.`);
 		},
