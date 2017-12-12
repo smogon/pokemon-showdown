@@ -37,8 +37,7 @@ class HelpTicket extends Rooms.RoomGame {
 			this.ticket.claimed = user.name;
 			tickets[this.ticket.userid] = this.ticket;
 			writeTickets();
-			this.room.add(`${user.name} claimed this ticket.`).update();
-			this.modnote(`${user.name} claimed this ticket.`);
+			this.modnote(user, `${user.name} claimed this ticket.`);
 			notifyStaff(this.ticket.escalated);
 		} else {
 			this.claimQueue.push(user.name);
@@ -50,12 +49,10 @@ class HelpTicket extends Rooms.RoomGame {
 		if (toId(this.ticket.claimed) === user.userid) {
 			if (this.claimQueue.length) {
 				this.ticket.claimed = this.claimQueue.shift();
-				this.room.add(`This ticket is now claimed by ${this.claimed}.`).update();
-				this.modnote(`This ticket is now claimed by ${this.claimed}.`);
+				this.modnote(user, `This ticket is now claimed by ${this.claimed}.`);
 			} else {
 				this.ticket.claimed = null;
-				this.room.add(`This ticket is no longer claimed.`).update();
-				this.modnote(`This ticket is no longer claimed.`);
+				this.modnote(user, `This ticket is no longer claimed.`);
 				notifyStaff(this.ticket.escalated);
 			}
 			tickets[this.ticket.userid] = this.ticket;
@@ -72,12 +69,10 @@ class HelpTicket extends Rooms.RoomGame {
 		if (sendUp) {
 			this.ticket.escalated = true;
 			tickets[this.ticket.userid] = this.ticket;
-			this.room.add(`${staff} escalated this ticket to upper staff.`).update();
-			this.modnote(`${staff} escalated this ticket to upper staff.`);
+			this.modnote(staff, `${staff.name} escalated this ticket to upper staff.`);
 			notifyStaff(true);
 		} else {
-			this.room.add(`${staff} escalated this ticket.`).update();
-			this.modnote(`${staff} escalated this ticket.`);
+			this.modnote(staff, `${staff.name} escalated this ticket.`);
 		}
 		this.ticket.escalator = staff;
 		this.ticket.created = Date.now(); // Bump the ticket so it shows as the newest
@@ -85,26 +80,25 @@ class HelpTicket extends Rooms.RoomGame {
 		notifyStaff();
 	}
 
-	modnote(text) {
-		this.room.logEntry(text);
+	modnote(user, text) {
+		this.room.addLogMessage(user, text);
 		this.room.modlog(text);
 	}
 
-	close(staff = 'A staff member') {
+	close(staff) {
 		this.room.isHelp = 'closed';
 		this.ticket.open = false;
 		tickets[this.ticket.userid] = this.ticket;
 		writeTickets();
-		this.room.add(`${staff} closed this ticket.`).update();
-		this.modnote(`${staff} closed this ticket.`);
+		this.modnote(staff, `${staff.name} closed this ticket.`);
 		notifyStaff(this.ticket.escalated);
 		if (this.room.expireTimer) clearTimeout(this.room.expireTimer);
 		this.room.expireTimer = setTimeout(() => this.room.tryExpire(), 40 * 60 * 1000);
 	}
 
-	deleteTicket(staff = 'A staff member') {
+	deleteTicket(staff) {
 		this.close(staff);
-		this.modnote(`${staff} deleted this ticket.`);
+		this.modnote(staff, `${staff.name} deleted this ticket.`);
 		notifyStaff(this.ticket.escalated);
 		delete tickets[this.ticket.userid];
 		writeTickets();
@@ -130,7 +124,7 @@ function notifyStaff(upper) {
 	for (const key of keys) {
 		let ticket = tickets[key];
 		if (count >= 3) break;
-		if (!ticket.open || (upper && !ticket.escalated) || (!upper && ticket.escalated)) continue;
+		if (!ticket.open || ticket.banned || (upper && !ticket.escalated) || (!upper && ticket.escalated)) continue;
 		buf += `<div ${ticket.claimed ? `` : `class="highlighted" `}style="padding: 3px 0 3px 0;">[Ticket] ${ticket.escalator ? `${ticket.escalator} escalated ${ticket.creator}'s ticket.` : `${ticket.creator} opened a new ticket.`} (Type: ${ticket.type}) <button class="button${ticket.claimed ? `` : ` notifying`}" name="send" value="/join help-${ticket.userid}">${ticket.claimed ? `Respond` : `Claim Ticket`}</button></div>`;
 		count++;
 	}
@@ -188,7 +182,7 @@ Rooms.rooms.forEach(r => {
 	let queue = r.game.claimQueue;
 	let ticket = r.game.ticket;
 	r.game.destroy();
-	r.game = new HelpTicket(r, ticket);
+	r.game = new HelpTicket(r, tickets[ticket.userid]);
 	r.game.claimQueue = queue;
 	return;
 });
@@ -346,6 +340,11 @@ exports.commands = {
 				escalated: upper,
 				ip: user.latestIp,
 			};
+			let contexts = {
+				'Battle Harassment': 'Please save a replay of the battle and put it in chat so global staff can check.',
+				'Inappropriate Pokemon Nicknames': 'Please save a replay of the battle and put it in chat so global staff can check.',
+				'Timerstalling': 'Please place the link to the battle in chat so global staff can check.',
+			};
 			let helpRoom = Rooms(`help-${user.userid}`);
 			if (!helpRoom) {
 				helpRoom = Rooms.createChatRoom(`help-${user.userid}`, `[H] ${user.name}`, {
@@ -354,7 +353,7 @@ exports.commands = {
 					isPrivate: 'hidden',
 					modjoin: (upper ? '&' : '%'),
 					auth: {[user.userid]: '+'},
-					introMessage: `<h2 style="margin-top:0">Help Ticket - ${user.name}</h2><p><b>Issue</b>: ${ticket.type}<br />${upper ? `An Upper` : `A Global`} Staff member will be with you shortly.</p>`,
+					introMessage: `<h2 style="margin-top:0">Help Ticket - ${user.name}</h2><p><b>Issue</b>: ${ticket.type}<br />${upper ? `An Upper` : `A Global`} Staff member will be with you shortly.</p>${contexts[target] ? `<p>${contexts[target]}</p>` : ``}`,
 					staffMessage: `${upper ? `<p><h3>Do not post sensitive information in this room.</h3>Drivers and moderators can access this room's logs via the log viewer; please PM the user instead.</p>` : ``}<p><button class="button" name="send" value="/ticket close ${user.userid}">Close Ticket</button> <button class="button" name="send" value="/ticket escalate ${user.userid}">Escalate</button> ${upper ? `` : `<button class="button" name="send" value="/ticket escalate ${user.userid}, upperstaff">Escalate to Upper Staff</button>`}</p><p>To ban this user from creating tickets for two days, please use <code>/ticket ban ${user.userid}</code></p>`,
 				});
 				helpRoom.game = new HelpTicket(helpRoom, ticket);
@@ -373,11 +372,10 @@ exports.commands = {
 				}
 				helpRoom.introMessage = `<h2 style="margin-top:0">Help Ticket - ${user.name}</h2><p><b>Issue</b>: ${ticket.type}<br />${upper ? `An Upper` : `A Global`} staff member will be with you shortly.</p>`;
 				helpRoom.staffMessage = `<p><button class="button" name="send" value="/ticket close ${user.userid}">Close Ticket</button> <button class="button" name="send" value="/ticket escalate ${user.userid}">Escalate</button> ${upper ? `` : `<button class="button" name="send" value="/ticket escalate ${user.userid}, upperstaff">Escalate to Upper Staff</button>`}</p><p>To ban this user from creating tickets for two days, please use <code>/ticket ban ${user.userid}</code></p>`;
-				helpRoom.add(`${user.name} opened a new ticket. Issue: ${ticket.type}`).update();
 				if (helpRoom.game) helpRoom.game.destroy();
 				helpRoom.game = new HelpTicket(helpRoom, ticket);
 			}
-			helpRoom.game.modnote(`${user.name} opened a new ticket. Issue: ${ticket.type}`);
+			helpRoom.game.modnote(user, `${user.name} opened a new ticket. Issue: ${ticket.type}`);
 			this.parse(`/join help-${user.userid}`);
 			tickets[user.userid] = ticket;
 			writeTickets();
@@ -395,7 +393,7 @@ exports.commands = {
 			if (target === 'upperstaff' && ticket.escalated) return this.errorReply(`${ticket.creator}'s ticket is already escalated.`);
 			let helpRoom = Rooms('help-' + ticket.userid);
 			if (!helpRoom) return this.errorReply(`${ticket.creator}'s help room is expired and cannot be escalated.`);
-			helpRoom.game.escalate((toId(target) === 'upperstaff'), user.name);
+			helpRoom.game.escalate((toId(target) === 'upperstaff'), user);
 			return this.sendReply(`${ticket.creator}'s ticket was escalated.`);
 		},
 		escalatehelp: ['/ticket escalate [user], (upperstaff) - Escalate a ticket. If upperstaff is included, escalate the ticket to upper staff. Requires: % @ * & ~'],
@@ -415,7 +413,7 @@ exports.commands = {
 			if (!ticket || !ticket.open) return this.errorReply(`${target} does not have an open ticket.`);
 			if (ticket.escalated && !user.can('declare')) return this.errorReply(`/ticket close - Access denied for closing upper staff tickets.`);
 			if (Rooms('help-' + ticket.userid)) {
-				Rooms('help-' + ticket.userid).game.close(user.name);
+				Rooms('help-' + ticket.userid).game.close(user);
 			} else {
 				ticket.open = false;
 				notifyStaff(ticket.escalated);
@@ -499,20 +497,15 @@ exports.commands = {
 
 			for (let i in affected) {
 				let targetTicket = tickets[(typeof affected[i] !== 'string' ? affected[i].getLastId() : toId(affected[i]))];
-				if (targetTicket) {
-					if (targetTicket.escalated) {
-						if (Rooms('upperstaff')) Rooms('upperstaff').add(`|uhtmlchange|help-ticket-${targetTicket.userid}|`).update();
-					} else {
-						if (Rooms('staff')) Rooms('staff').add(`|uhtmlchange|help-ticket-${targetTicket.userid}|`).update();
-					}
-				}
 				targetTicket = punishment;
 				targetTicket.userid = (typeof affected[i] !== 'string' ? affected[i].getLastId() : toId(affected[i]));
 				targetTicket.name = (typeof affected[i] !== 'string' ? affected[i].getLastName() : `[${toId(affected[i])}]`);
-				if (Rooms('help-' + ticket.userid)) Rooms('help-' + targetTicket.userid).destroy();
+				if (Rooms(`help-${ticket.userid}`)) Rooms(`help-${ticket.userid}`).destroy();
 				tickets[(typeof affected[i] !== 'string' ? affected[i].getLastId() : toId(affected[i]))] = targetTicket;
 			}
 			writeTickets();
+			notifyStaff();
+			notifyStaff(true);
 
 			this.globalModlog(`TICKETBAN`, targetUser || userid, ` by ${user.name}${target}`);
 			return true;
@@ -558,9 +551,9 @@ exports.commands = {
 			if (!this.can('declare')) return;
 			if (!target) return this.parse(`/help ticket delete`);
 			let ticket = tickets[toId(target)];
-			if (!ticket) return this.errorReply(`${target} does not have a ticket.`);
+			if (!ticket || ticket.banned) return this.errorReply(`${target} does not have a ticket.`);
 			if (Rooms(`help-${ticket.userid}`)) {
-				Rooms(`help-${ticket.userid}`).game.deleteTicket(user.name);
+				Rooms(`help-${ticket.userid}`).game.deleteTicket(user);
 			} else {
 				notifyStaff(ticket.escalated);
 				delete tickets[ticket.userid];
