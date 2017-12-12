@@ -182,41 +182,6 @@ function checkTicketBanned(user) {
 	}
 }
 
-function ticketForm(user, ticket) {
-	let buf = `>view-ticket-create\n|init|html\n|title|Help Ticket\n|pagehtml|<div class="pad"><h2>Request help from global staff</h2><b>Whats going on?</b><br />`;
-	if (user.can('lock')) {
-		buf += `<span class="message-error">Global staff cannot make tickets. This form is only for reference.</span>`;
-	} else {
-		buf += `<span class="message-error">Abuse of tickets can result in a punishment.</span>`;
-	}
-	buf += `<br /><details style="margin: 3px"><summary>I want to report someone</summary>`;
-	buf += `<br /><b>What do you want to report someone for?</b><br /><details style="margin: 3px"><summary>Someone is harassing me</summary>If someone is harassing you, click the appropriate button below and a global staff member will take a look. Consider using <code>/ignore [username]</code> if it's minor instead.<br /><br />If you are reporting harassment in a battle, please save a replay of the battle.<br /><button class="button" name="send" value="/ticket submit PM Harassment">Report harassment in a private message (PM)</button> <button class="button" name="send" value="/ticket submit Battle Harassment">Report harassment in a battle</button> <button class="button" name="send" value="/ticket submit Chatroom Harassment">Report harassment in a chatroom</button></details>`;
-	buf += `<details style="margin: 3px"><summary>Someone is being inappropriate</summary>If a user has posted inappropriate content, has an inappropriate name, or has inappropriate Pok&eacute;mon nicknames, click the appropriate button below and a global staff member will take a look.<br /><br /><button class="button" name="send" value="/ticket submit Inappropriate Content">Report inappropriate content</button> <button class="button" name="send" value="/ticket submit Inappropriate Nickname">Report an inappropriate username</button> <button class="button" name="send" value="/ticket submit Inappropriate Pokemon Nicknames">Report inappropriate Pok&eacute;mon nicknames</button></details>`;
-	buf += `<details style="margin: 3px"><summary>Someone is timerstalling</summary>If someone is timerstalling in your battle, and the battle has <b>not</b> ended, click the button below and a global staff member will take a look.<br /><br /><button class="button" name="send" value="/ticket submit Timerstalling">Report timerstalling</button></details>`;
-	buf += `<details style="margin: 3px"><summary>I want to report a staff member</summary>If you have a complaint against a room staff member, please PM a Room Owner (marked with a #) in the room.<br /><br />If you have a complaint against a global staff member or Room Owner, please click the appropriate button below. Alternatively, make a post in <a href="http://www.smogon.com/forums/threads/names-passwords-rooms-and-servers-contacting-upper-staff.3538721/#post-6300151">Admin Requests</a>.<br /><br /><button class="button" name="send" value="/ticket submit Room Owner Complaint">Report a Room Owner</button> <button class="button" name="send" value="/ticket submit Global Staff Complaint">Report a Global Staff Member</button></details>`;
-	buf += `</details><br /><details style="margin: 3px"><summary>I want to appeal a punishment</summary><br /><b>What would you like to appeal?</b><br />`;
-	if (user.locked) {
-		if (user.locked === user.userid) {
-			if (user.permalocked) {
-				buf += `<details style="margin: 3px"><summary>I want to appeal my permalock</summary>Please make a post in the <a href="http://www.smogon.com/forums/threads/discipline-appeal-rules.3583479/">Discipline Appeal Forums</a> to appeal a permalock.</details>`;
-			} else {
-				buf += `<details style="margin: 3px"><summary>I want to appeal my lock</summary>If you want to appeal your lock, click the button below and a global staff member will be with you shortly. Alternatively, make a post in <a href="http://www.smogon.com/forums/threads/discipline-appeal-rules.3583479/">Discipline Appeals</a>.<br /><br /><button class="button" name="send" value="/ticket submit Appeal">Appeal your lock</button></details>`;
-			}
-		} else {
-			buf += `<details style="margin: 3px"><summary>I'm locked because I have the same IP as someone I don't recognize</summary>If you are locked under a name you don't recognize, click the button below to call a global staff member so we can check.<br /><br /><button class="button" name="send" value="/ticket submit IP-Appeal">Appeal IP lock</button></details>`;
-		}
-	} else if (user.semilocked) {
-		buf += `<details style="margin: 3px"><summary>I can't talk in chat because of my ISP</summary>Click the button below, and a global staff member will check. <button class="button" name="send" value="/ticket submit ISP-Appeal">Appeal ISP lock</button></details>`;
-	}
-	buf += `<details style="margin: 3px"><summary>I want to appeal a mute/roomban/blacklist</summary>Please PM the staff member who punished you. If you dont know who punished you, ask another room staff member; they will redirect you to the correct user. If you are banned or blacklisted from the room, use <code>/roomauth [name of room]</code> to get a list of room staff members. Bold names are online.</details>`;
-	buf += `</details><br /><details style="margin: 3px"><summary>Something else</summary><b>Maybe one of these options will be helpful?</b><br />`;
-	buf += `<details style="margin: 3px"><summary>I lost my password</summary>If you lost your password, click the button below to get in touch with an upper staff member so we can help you recover it. We will need to clarify a few pieces of information before resetting the account. Alternatively, make a post in <a href="http://www.smogon.com/forums/threads/names-passwords-rooms-and-servers-contacting-upper-staff.3538721/#post-6300151">admin requests</a>.<br /><br /><button class="button" name="send" value="/ticket submit Lost Password">Request a password reset</button></details>`;
-	if (ticket) buf += `<details style="margin: 3px"><summary>I feel my last ticket shouldn't have been closed</summary>If you feel that staff did not properly help you with your last issue, click the button below to get in touch with an upper staff member.<br /><br /><button class="button" name="send" value="/ticket submit Report Last Ticket">Report last ticket</button></details>`;
-	buf += `<details style="margin: 3px"><summary>Other</summary>If your issue is not handled above, click the button below to ask for a global. Please be ready to explain the situation.<br /><br /><button class="button" name="send" value="/ticket submit Other">Call a global staff member</button></details>`;
-	buf += `</details></div>`;
-	return buf;
-}
-
 // Prevent a desynchronization issue when hotpatching
 Rooms.rooms.forEach(r => {
 	if (!r.isHelp) return;
@@ -228,14 +193,13 @@ Rooms.rooms.forEach(r => {
 	return;
 });
 
-exports.commands = {
-	requesthelp: 'ticket',
-	report: 'ticket',
+exports.pages = {
 	ticket: {
-		'': 'create',
-		create: function (target, room, user, connection) {
-			if (user.can('lock')) return connection.send(ticketForm(user)); // Globals automatically get the form for reference.
-			if (!user.named) return this.errorReply(`You need to choose a username before doing this.`);
+		create() {
+			const user = this.user;
+
+			let buf = `|title|Help Ticket\n|pagehtml|<div class="pad"><h2>Request help from global staff</h2>`;
+
 			let banMsg = checkTicketBanned(user);
 			if (banMsg) return this.errorReply(banMsg);
 			let ticket = tickets[user.userid];
@@ -249,11 +213,97 @@ exports.commands = {
 					writeTickets();
 				} else {
 					if (!helpRoom.auth[user.userid]) helpRoom.auth[user.userid] = '+';
+					this.popupReply(`You already have a Help ticket.`);
 					this.parse(`/join help-${ticket.userid}`);
-					return this.sendReply(`You already have an open ticket; please wait for global staff to respond.`);
+					return `|deinit`;
 				}
 			}
-			return connection.send(ticketForm(user, ticket));
+
+			buf += `<p><b>Whats going on?</b></p>`;
+			if (user.can('lock')) {
+				buf += `<span class="message-error">Global staff cannot make tickets. This form is only for reference.</span>`;
+			} else {
+				buf += `<span class="message-error">Abuse of tickets can result in a punishment.</span>`;
+			}
+			buf += `<br /><details style="margin: 3px"><summary>I want to report someone</summary>`;
+			buf += `<br /><b>What do you want to report someone for?</b><br /><details style="margin: 3px"><summary>Someone is harassing me</summary>If someone is harassing you, click the appropriate button below and a global staff member will take a look. Consider using <code>/ignore [username]</code> if it's minor instead.<br /><br />If you are reporting harassment in a battle, please save a replay of the battle.<br /><button class="button" name="send" value="/ticket submit PM Harassment">Report harassment in a private message (PM)</button> <button class="button" name="send" value="/ticket submit Battle Harassment">Report harassment in a battle</button> <button class="button" name="send" value="/ticket submit Chatroom Harassment">Report harassment in a chatroom</button></details>`;
+			buf += `<details style="margin: 3px"><summary>Someone is being inappropriate</summary>If a user has posted inappropriate content, has an inappropriate name, or has inappropriate Pok&eacute;mon nicknames, click the appropriate button below and a global staff member will take a look.<br /><br /><button class="button" name="send" value="/ticket submit Inappropriate Content">Report inappropriate content</button> <button class="button" name="send" value="/ticket submit Inappropriate Nickname">Report an inappropriate username</button> <button class="button" name="send" value="/ticket submit Inappropriate Pokemon Nicknames">Report inappropriate Pok&eacute;mon nicknames</button></details>`;
+			buf += `<details style="margin: 3px"><summary>Someone is timerstalling</summary>If someone is timerstalling in your battle, and the battle has <b>not</b> ended, click the button below and a global staff member will take a look.<br /><br /><button class="button" name="send" value="/ticket submit Timerstalling">Report timerstalling</button></details>`;
+			buf += `<details style="margin: 3px"><summary>I want to report a staff member</summary>If you have a complaint against a room staff member, please PM a Room Owner (marked with a #) in the room.<br /><br />If you have a complaint against a global staff member or Room Owner, please click the appropriate button below. Alternatively, make a post in <a href="http://www.smogon.com/forums/threads/names-passwords-rooms-and-servers-contacting-upper-staff.3538721/#post-6300151">Admin Requests</a>.<br /><br /><button class="button" name="send" value="/ticket submit Room Owner Complaint">Report a Room Owner</button> <button class="button" name="send" value="/ticket submit Global Staff Complaint">Report a Global Staff Member</button></details>`;
+			buf += `</details><br /><details style="margin: 3px"><summary>I want to appeal a punishment</summary><br /><b>What would you like to appeal?</b><br />`;
+			if (user.locked) {
+				if (user.locked === user.userid) {
+					if (user.permalocked) {
+						buf += `<details style="margin: 3px"><summary>I want to appeal my permalock</summary>Please make a post in the <a href="http://www.smogon.com/forums/threads/discipline-appeal-rules.3583479/">Discipline Appeal Forums</a> to appeal a permalock.</details>`;
+					} else {
+						buf += `<details style="margin: 3px"><summary>I want to appeal my lock</summary>If you want to appeal your lock, click the button below and a global staff member will be with you shortly. Alternatively, make a post in <a href="http://www.smogon.com/forums/threads/discipline-appeal-rules.3583479/">Discipline Appeals</a>.<br /><br /><button class="button" name="send" value="/ticket submit Appeal">Appeal your lock</button></details>`;
+					}
+				} else {
+					buf += `<details style="margin: 3px"><summary>I'm locked because I have the same IP as someone I don't recognize</summary>If you are locked under a name you don't recognize, click the button below to call a global staff member so we can check.<br /><br /><button class="button" name="send" value="/ticket submit IP-Appeal">Appeal IP lock</button></details>`;
+				}
+			} else if (user.semilocked) {
+				buf += `<details style="margin: 3px"><summary>I can't talk in chat because of my ISP</summary>Click the button below, and a global staff member will check. <button class="button" name="send" value="/ticket submit ISP-Appeal">Appeal ISP lock</button></details>`;
+			}
+			buf += `<details style="margin: 3px"><summary>I want to appeal a mute/roomban/blacklist</summary>Please PM the staff member who punished you. If you dont know who punished you, ask another room staff member; they will redirect you to the correct user. If you are banned or blacklisted from the room, use <code>/roomauth [name of room]</code> to get a list of room staff members. Bold names are online.</details>`;
+			buf += `</details><br /><details style="margin: 3px"><summary>Something else</summary><b>Maybe one of these options will be helpful?</b><br />`;
+			buf += `<details style="margin: 3px"><summary>I lost my password</summary>If you lost your password, click the button below to get in touch with an upper staff member so we can help you recover it. We will need to clarify a few pieces of information before resetting the account. Alternatively, make a post in <a href="http://www.smogon.com/forums/threads/names-passwords-rooms-and-servers-contacting-upper-staff.3538721/#post-6300151">admin requests</a>.<br /><br /><button class="button" name="send" value="/ticket submit Lost Password">Request a password reset</button></details>`;
+			if (ticket) buf += `<details style="margin: 3px"><summary>I feel my last ticket shouldn't have been closed</summary>If you feel that staff did not properly help you with your last issue, click the button below to get in touch with an upper staff member.<br /><br /><button class="button" name="send" value="/ticket submit Report Last Ticket">Report last ticket</button></details>`;
+			buf += `<details style="margin: 3px"><summary>Other</summary>If your issue is not handled above, click the button below to ask for a global. Please be ready to explain the situation.<br /><br /><button class="button" name="send" value="/ticket submit Other">Call a global staff member</button></details>`;
+			buf += `</details></div>`;
+			return buf;
+		},
+		list() {
+			let buf = `|title|Ticket List\n`;
+			const user = this.user;
+			if (!user.can('lock')) {
+				return buf + `|pagehtml|Access denied`;
+			}
+			buf += `|pagehtml|<div class="pad" style="text-align:center"><button class="button" name="send" value="/ticket list" style="float:left"><i class="fa fa-refresh"></i> Refresh</button><br /><br /><table style="margin-left: auto; margin-right: auto" border="1" cellspacing="0" cellpadding="3"><tbody><tr><th colspan="5">Ticket List</th></tr><tr><th>Status</th><th>Creator</th><th>Ticket Type</th><th>Claimed by</th><th>Action</th></tr>`;
+			let keys = Object.keys(tickets).sort((a, b) => {
+				a = tickets[a];
+				b = tickets[b];
+				if ((a.banned && !b.banned) || (!a.banned && b.banned)) {
+					return (a.banned ? 1 : -1);
+				}
+				if (a.open !== b.open) {
+					return (a.open ? -1 : 1);
+				} else {
+					if (a.open) return a.created - b.created;
+					return b.created - a.created;
+				}
+			});
+			let hasBanHeader = false;
+			for (const key of keys) {
+				let ticket = tickets[key];
+				if (ticket.banned) {
+					if (ticket.expires <= Date.now()) continue;
+					if (!hasBanHeader) {
+						buf += `<tr><th>Status</th><th>Username</th><th>Banned by</th><th>Expires</th><th>Logs</th></tr>`;
+						hasBanHeader = true;
+					}
+					buf += `<tr><td><span style="color:red"><i class="fa fa-ban"></i> Banned</td><td>${ticket.name}</td><td>${ticket.by}</td><td>${Chat.toDurationString(ticket.expires - Date.now(), {precision: 1})}</td><td><a href="http://logs2.psim.us:8080/help-${ticket.userid}/"><button class="button">View Log</button></a></td></tr>`;
+				} else {
+					if (ticket.escalated && !user.can('declare')) continue;
+					buf += `<tr><td>${ticket.open ? `<span style="color:green"><i class="fa fa-circle-o"></i> Open</span>` : `<span style="color:red"><i class="fa fa-check-circle-o"></i> Closed</span>`}</td><td>${ticket.creator}</td><td>${ticket.type}</td><td>${ticket.claimed ? ticket.claimed : (ticket.open ? `<button class="button" name="send" value="/join help-${ticket.userid}">Claim</button>` : `-`)}</td><td>${ticket.open ? `<button class="button" name="send" value="/ticket close ${ticket.userid}">Close</button>` : ``} <a href="http://logs2.psim.us:8080/help-${ticket.userid}/"><button class="button">View Log</button></a></td></tr>`;
+				}
+			}
+			buf += `</tbody></table></div>`;
+			return buf;
+		},
+	},
+};
+
+exports.commands = {
+	requesthelp: 'helpticket',
+	report: 'helpticket',
+	ht: 'helpticket',
+	ticket: 'helpticket',
+	helpticket: {
+		'': 'create',
+		create: function (target, room, user, connection) {
+			if (user.can('lock')) return this.parse('/join view-ticket-create'); // Globals automatically get the form for reference.
+			if (!user.named) return this.errorReply(`You need to choose a username before doing this.`);
+			return this.parse('/join view-ticket-create');
 		},
 		createhelp: ['/ticket create - Creates a new ticket requesting help from global staff.'],
 
@@ -353,38 +403,7 @@ exports.commands = {
 		'!list': true,
 		list: function (target, room, user, connection) {
 			if (!this.can('lock')) return;
-			let buf = `>view-ticket-list\n|init|html\n|title|Ticket List\n`;
-			buf += `|pagehtml|<div class="pad" style="text-align:center"><button class="button" name="send" value="/ticket list" style="float:left"><i class="fa fa-refresh"></i> Refresh</button><br /><br /><table style="margin-left: auto; margin-right: auto" border="1" cellspacing="0" cellpadding="3"><tbody><tr><th colspan="5">Ticket List</th></tr><tr><th>Status</th><th>Creator</th><th>Ticket Type</th><th>Claimed by</th><th>Action</th></tr>`;
-			let keys = Object.keys(tickets).sort((a, b) => {
-				a = tickets[a];
-				b = tickets[b];
-				if ((a.banned && !b.banned) || (!a.banned && b.banned)) {
-					return (a.banned ? 1 : -1);
-				}
-				if (a.open !== b.open) {
-					return (a.open ? -1 : 1);
-				} else {
-					if (a.open) return a.created - b.created;
-					return b.created - a.created;
-				}
-			});
-			let hasBanHeader = false;
-			for (const key of keys) {
-				let ticket = tickets[key];
-				if (ticket.banned) {
-					if (ticket.expires <= Date.now()) continue;
-					if (!hasBanHeader) {
-						buf += `<tr><th>Status</th><th>Username</th><th>Banned by</th><th>Expires</th><th>Logs</th></tr>`;
-						hasBanHeader = true;
-					}
-					buf += `<tr><td><span style="color:red"><i class="fa fa-ban"></i> Banned</td><td>${ticket.name}</td><td>${ticket.by}</td><td>${Chat.toDurationString(ticket.expires - Date.now(), {precision: 1})}</td><td><a href="http://logs2.psim.us:8080/help-${ticket.userid}/"><button class="button">View Log</button></a></td></tr>`;
-				} else {
-					if (ticket.escalated && !user.can('declare')) continue;
-					buf += `<tr><td>${ticket.open ? `<span style="color:green"><i class="fa fa-circle-o"></i> Open</span>` : `<span style="color:red"><i class="fa fa-check-circle-o"></i> Closed</span>`}</td><td>${ticket.creator}</td><td>${ticket.type}</td><td>${ticket.claimed ? ticket.claimed : (ticket.open ? `<button class="button" name="send" value="/join help-${ticket.userid}">Claim</button>` : `-`)}</td><td>${ticket.open ? `<button class="button" name="send" value="/ticket close ${ticket.userid}">Close</button>` : ``} <a href="http://logs2.psim.us:8080/help-${ticket.userid}/"><button class="button">View Log</button></a></td></tr>`;
-				}
-			}
-			buf += `</tbody></table></div>`;
-			connection.send(buf);
+			this.parse('/join view-ticket-list');
 		},
 		listhelp: ['/ticket list - Lists all tickets. Requires: % @ * & ~'],
 
