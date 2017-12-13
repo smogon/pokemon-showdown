@@ -1552,8 +1552,9 @@ class RandomTeams extends Dex.ModdedDex {
 		let uberCount = 0;
 		let puCount = 0;
 		let teamDetails = {};
+		let team = [];
 
-		while (pokemonPool.length && pokemon.length < 6) {
+		while (pokemonPool.length && team.length < 6) {
 			let template = this.getTemplate(this.sampleNoReplace(pokemonPool));
 			if (!template.exists) continue;
 
@@ -1625,28 +1626,38 @@ class RandomTeams extends Dex.ModdedDex {
 				if (skip) continue;
 			}
 
-			let set = this[this.format.gameType === 'singles' ? 'randomSet' : 'randomDoublesSet'](template, pokemon.length, teamDetails);
-
-			// Illusion shouldn't be the last Pokemon of the team
-			if (set.ability === 'Illusion' && pokemon.length > 4) continue;
-
-			// Pokemon shouldn't have Physical and Special setup on the same set
-			let incompatibleMoves = ['bellydrum', 'swordsdance', 'calmmind', 'nastyplot'];
-			let intersectMoves = set.moves.filter(move => incompatibleMoves.includes(move));
-			if (intersectMoves.length > 1) continue;
+			let fieldEffectSetters = {
+				kyogre: 'rain',
+				pelipper: 'rain',
+				politoed: 'rain',
+				groudon: 'sun',
+				ninetales: 'sun',
+				torkoal: 'sun',
+				abomasnow: 'hail',
+				aurorus: 'hail',
+				ninetalesalola: 'hail',
+				vanilluxe: 'hail',
+				gigalith: 'sand',
+				hippowdon: 'sand',
+				tyranitar: 'sand',
+				tapubulu: 'grassyTerrain',
+			};
+			let effect = '';
+			if (toId(template.species) in fieldEffectSetters) effect = fieldEffectSetters[toId(template.species)];
+			if (effect !== '') teamDetails[effect] = 1;
 
 			// Limit 1 of any type combination, 2 in monotype
 			let typeCombo = types.slice().sort().join();
-			if (set.ability === 'Drought' || set.ability === 'Drizzle' || set.ability === 'Sand Stream') {
+			if (effect === 'sun' || effect === 'rain' || effect === 'sand') {
 				// Drought, Drizzle and Sand Stream don't count towards the type combo limit
-				typeCombo = set.ability;
+				typeCombo = effect;
 				if (typeCombo in typeComboCount) continue;
 			} else {
 				if (typeComboCount[typeCombo] >= (isMonotype ? 2 : 1)) continue;
 			}
 
 			// Okay, the set passes, add it to our team
-			pokemon.push(set);
+			team.push(template);
 
 			// Now that our Pokemon has passed all checks, we can increment our counters
 			baseFormes[template.baseSpecies] = 1;
@@ -1671,6 +1682,13 @@ class RandomTeams extends Dex.ModdedDex {
 			} else if (tier === 'PU') {
 				puCount++;
 			}
+		}
+		while (pokemon.length < 6) {
+			let set = this[this.format.gameType === 'singles' ? 'randomSet' : 'randomDoublesSet'](team.pop(), pokemon.length, teamDetails);
+			pokemon.push(set);
+
+			// Illusion shouldn't be the last Pokemon of the team
+			if (set.ability === 'Illusion' && pokemon.length > 4) pokemon[0] = pokemon.splice(pokemon.length - 1, 1, pokemon[0])[0];
 
 			// Team has Mega/weather/hazards
 			let item = this.getItem(set.item);
@@ -1680,6 +1698,7 @@ class RandomTeams extends Dex.ModdedDex {
 			if (set.moves.includes('raindance') || set.ability === 'Drizzle' && !item.onPrimal) teamDetails['rain'] = 1;
 			if (set.ability === 'Sand Stream') teamDetails['sand'] = 1;
 			if (set.moves.includes('sunnyday') || set.ability === 'Drought' && !item.onPrimal) teamDetails['sun'] = 1;
+			if (set.ability === 'Grassy Surge') teamDetails['grassyTerrain'] = 1;
 			if (set.moves.includes('stealthrock')) teamDetails['stealthRock'] = 1;
 			if (set.moves.includes('toxicspikes')) teamDetails['toxicSpikes'] = 1;
 			if (set.moves.includes('defog') || set.moves.includes('rapidspin')) teamDetails['hazardClear'] = 1;
@@ -1709,8 +1728,6 @@ class RandomTeams extends Dex.ModdedDex {
 		}
 
 		let movePool = (template.randomDoubleBattleMoves || template.randomBattleMoves);
-		movePool = movePool ? movePool.slice() : Object.keys(template.learnset);
-
 		let moves = [];
 		let ability = '';
 		let item = '';
