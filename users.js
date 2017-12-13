@@ -1281,7 +1281,11 @@ class User {
 		}
 	}
 	processChatQueue() {
-		if (!this.chatQueue) return; // desync
+		if (!this.chatQueue) return;
+		if (!this.chatQueue.length) {
+			this.chatQueue = null;
+			return;
+		}
 		let [message, roomid, connection] = this.chatQueue.shift();
 		if (!connection.user) {
 			// connection disconnected, chat queue should not be big enough
