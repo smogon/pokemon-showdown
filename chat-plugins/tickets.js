@@ -33,6 +33,7 @@ class HelpTicket extends Rooms.RoomGame {
 
 	onJoin(user, connection) {
 		if (!user.isStaff || !this.ticket.open) return false;
+		if (user.userid === this.ticket.userid) return false;
 		if (this.ticket.escalated && !user.can('declare')) return false;
 		if (!this.ticket.claimed) {
 			this.ticket.claimed = user.name;
@@ -448,6 +449,7 @@ exports.commands = {
 				notifyStaff(ticket.escalated);
 				writeTickets();
 			}
+			ticket.claimed = user.name;
 			this.sendReply(`You closed ${ticket.creator}'s ticket.`);
 		},
 		closehelp: ['/helpticket close [user] - Closes an open ticket. Requires: % @ * & ~'],
