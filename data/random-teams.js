@@ -746,6 +746,9 @@ class RandomTeams extends Dex.ModdedDex {
 				case 'lunge':
 					if (hasMove['leechlife']) rejected = true;
 					break;
+				case 'darkestlariat':
+					if (hasMove['knockoff']) rejected = true;
+					break;
 				case 'darkpulse':
 					if (hasMove['shadowball']) rejected = true;
 					if ((hasMove['crunch'] || hasMove['hyperspacefury']) && counter.setupType !== 'Special') rejected = true;
