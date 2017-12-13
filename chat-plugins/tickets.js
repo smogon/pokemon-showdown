@@ -4,6 +4,7 @@ const FS = require('../fs');
 const TICKET_FILE = 'config/tickets.json';
 const TICKET_CACHE_TIME = 24 * 60 * 60 * 1000; // 24 hours
 const TICKET_BAN_DURATION = 48 * 60 * 60 * 1000; // 48 hours
+
 let tickets = {};
 
 try {
@@ -257,7 +258,9 @@ exports.pages = {
 			if (!user.can('lock')) {
 				return buf + `|pagehtml|Access denied`;
 			}
-			buf += `|pagehtml|<div class="pad" style="text-align:center"><button class="button" name="send" value="/helpticket list" style="float:left"><i class="fa fa-refresh"></i> Refresh</button><br /><br /><table style="margin-left: auto; margin-right: auto" border="1" cellspacing="0" cellpadding="3"><tbody><tr><th colspan="5">Ticket List</th></tr><tr><th>Status</th><th>Creator</th><th>Ticket Type</th><th>Claimed by</th><th>Action</th></tr>`;
+			buf += `|pagehtml|<div class="pad ladder"><button class="button" name="send" value="/helpticket list" style="float:left"><i class="fa fa-refresh"></i> Refresh</button><br /><br />`;
+			buf += `<table style="margin-left: auto; margin-right: auto"><tbody><tr><th colspan="5"><h2 style="margin: 5px auto">Help tickets</h1></th></tr>`;
+			buf += `<tr><th>Status</th><th>Creator</th><th>Ticket Type</th><th>Claimed by</th><th>Action</th></tr>`;
 			let keys = Object.keys(tickets).sort((a, b) => {
 				a = tickets[a];
 				b = tickets[b];
@@ -273,18 +276,34 @@ exports.pages = {
 			});
 			let hasBanHeader = false;
 			for (const key of keys) {
-				let ticket = tickets[key];
+				const ticket = tickets[key];
 				if (ticket.banned) {
 					if (ticket.expires <= Date.now()) continue;
 					if (!hasBanHeader) {
 						buf += `<tr><th>Status</th><th>Username</th><th>Banned by</th><th>Expires</th><th>Logs</th></tr>`;
 						hasBanHeader = true;
 					}
-					buf += `<tr><td><span style="color:red"><i class="fa fa-ban"></i> Banned</td><td>${ticket.name}</td><td>${ticket.by}</td><td>${Chat.toDurationString(ticket.expires - Date.now(), {precision: 1})}</td><td><a href="http://logs2.psim.us:8080/help-${ticket.userid}/"><button class="button">View Log</button></a></td></tr>`;
+					buf += `<tr><td><span style="color:gray"><i class="fa fa-ban"></i> Banned</td>`;
+					buf += Chat.html`<td>${ticket.name}</td>`;
+					buf += Chat.html`<td>${ticket.by}</td>`;
+					buf += `<td>${Chat.toDurationString(ticket.expires - Date.now(), {precision: 1})}</td>`;
 				} else {
 					if (ticket.escalated && !user.can('declare')) continue;
-					buf += `<tr><td>${ticket.open ? `<span style="color:green"><i class="fa fa-circle-o"></i> Open</span>` : `<span style="color:red"><i class="fa fa-check-circle-o"></i> Closed</span>`}</td><td>${ticket.creator}</td><td>${ticket.type}</td><td>${ticket.claimed ? ticket.claimed : (ticket.open ? `<button class="button" name="send" value="/join help-${ticket.userid}">Claim</button>` : `-`)}</td><td>${ticket.open ? `<button class="button" name="send" value="/helpticket close ${ticket.userid}">Close</button>` : ``} <a href="http://logs2.psim.us:8080/help-${ticket.userid}/"><button class="button">View Log</button></a></td></tr>`;
+					buf += `<tr><td>${!ticket.open ? `<span style="color:gray"><i class="fa fa-check-circle-o"></i> Closed</span>` : ticket.claimed ? `<span style="color:green"><i class="fa fa-circle-o"></i> Claimed</span>` : `<span style="color:orange"><i class="fa fa-circle-o"></i> <strong>Unclaimed</strong></span>`}</td>`;
+					buf += `<td>${ticket.creator}</td>`;
+					buf += `<td>${ticket.type}</td>`;
+					buf += `<td>${ticket.claimed ? ticket.claimed : `-`}</td>`;
 				}
+				buf += `<td>`;
+				const roomid = 'help-' + ticket.userid;
+				const logUrl = Config.modloglink ? Config.modloglink(new Date(ticket.created || (ticket.expires - TICKET_BAN_DURATION)), roomid) : '';
+				if (Rooms(roomid)) {
+					buf += `<a href="/${roomid}"><button class="button">${!ticket.claimed && ticket.open ? 'Claim' : 'View'}</button></a> `;
+				}
+				if (logUrl) {
+					buf += `<a href="${logUrl}"><button class="button">Log</button></a>`;
+				}
+				buf += '</td></tr>';
 			}
 			buf += `</tbody></table></div>`;
 			return buf;
@@ -468,6 +487,7 @@ exports.commands = {
 			let punishment = {
 				banned: name,
 				by: user.name,
+				created: Date.now(),
 				expires: Date.now() + TICKET_BAN_DURATION,
 				reason: target,
 				ip: (targetUser ? targetUser.latestIp : ticket.ip),
