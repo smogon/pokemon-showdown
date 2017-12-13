@@ -294,6 +294,7 @@ exports.pages = {
 
 exports.commands = {
 	requesthelp: 'helpticket',
+	helprequest: 'helpticket',
 	report: 'helpticket',
 	ht: 'helpticket',
 	helpticket: {
