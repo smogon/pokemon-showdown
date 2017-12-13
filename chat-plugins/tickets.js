@@ -298,8 +298,13 @@ exports.commands = {
 	report: 'helpticket',
 	ht: 'helpticket',
 	helpticket: {
+		'!create': true,
 		'': 'create',
 		create: function (target, room, user, connection) {
+			if (!this.runBroadcast()) return;
+			if (this.broadcasting) {
+				return this.sendReply('|html|<button name="joinRoom" value="view-help-request" class="button"><strong>Request help</strong></button>');
+			}
 			if (user.can('lock')) return this.parse('/join view-help-request'); // Globals automatically get the form for reference.
 			if (!user.named) return this.errorReply(`You need to choose a username before doing this.`);
 			return this.parse('/join view-help-request');
