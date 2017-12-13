@@ -109,7 +109,7 @@ class HelpTicket extends Rooms.RoomGame {
 function notifyStaff(upper) {
 	const room = Rooms(upper ? 'upperstaff' : 'staff');
 	if (!room) return;
-	let buf = `|uhtml|latest-tickets|<div class="infobox">`;
+	let buf = ``;
 	let keys = Object.keys(tickets).sort((a, b) => {
 		a = tickets[a];
 		b = tickets[b];
@@ -121,15 +121,21 @@ function notifyStaff(upper) {
 		return 0;
 	});
 	let count = 0;
+	let hasUnclaimed = false;
 	for (const key of keys) {
 		let ticket = tickets[key];
 		if (count >= 3) break;
-		if (!ticket.open || ticket.banned || (upper && !ticket.escalated) || (!upper && ticket.escalated)) continue;
-		buf += `<div ${ticket.claimed ? `` : `class="highlighted" `}style="padding: 3px 0 3px 0;">[Ticket] ${ticket.escalator ? `${ticket.escalator} escalated ${ticket.creator}'s ticket.` : `${ticket.creator} opened a new ticket.`} (Type: ${ticket.type}) <button class="button${ticket.claimed ? `` : ` notifying`}" name="send" value="/join help-${ticket.userid}">${ticket.claimed ? `Respond` : `Claim Ticket`}</button></div>`;
+		if (!ticket.open || ticket.banned) continue;
+		if (!upper !== !ticket.escalated) continue;
+		const escalator = ticket.escalator ? Chat.html` (escalated by ${ticket.escalator}).` : ``;
+		const creator = ticket.claimed ? Chat.html`${ticket.creator}` : Chat.html`<strong>${ticket.creator}</strong>`;
+		const notifying = ticket.claimed ? `` : ` notifying`;
+		if (!ticket.claimed) hasUnclaimed = true;
+		buf += `<button class="button${notifying}" name="send" value="/join help-${ticket.userid}">Help ${creator}: ${ticket.type}${escalator}</button> `;
 		count++;
 	}
-	buf += `${count === 0 ? `There are no open tickets.` : ``}</div>`;
-	room.add(buf).update();
+	buf = `|${hasUnclaimed ? 'uhtml' : 'uhtmlchange'}|latest-tickets|<div style="padding:3px">${buf}${count === 0 ? `There are no more open tickets.` : ``}</div>`;
+	room.send(buf);
 }
 
 function checkIp(ip) {
