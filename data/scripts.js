@@ -918,7 +918,7 @@ exports.BattleScripts = {
 			this.add(effectType, pokemon, template.baseSpecies, template.requiredItem);
 			this.add('detailschange', pokemon, pokemon.details);
 		}
-		pokemon.setAbility(template.abilities['0'], null, {id: effectType.slice(1)});
+		pokemon.setAbility(template.abilities['0'], null, true);
 		pokemon.baseAbility = pokemon.ability;
 
 		// Limit one mega evolution
