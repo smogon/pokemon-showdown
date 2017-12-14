@@ -2635,11 +2635,13 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		onHit: function (target) {
 			if (['battlebond', 'comatose', 'disguise', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange'].includes(target.ability)) return;
-			if (!this.willMove(target)) target.addVolatile('gastroacid');
+			if (target.newlySwitched || this.willMove(target)) return;
+			target.addVolatile('gastroacid');
 		},
 		onAfterSubDamage: function (target) {
 			if (['battlebond', 'comatose', 'disguise', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange'].includes(target.ability)) return;
-			if (!this.willMove(target)) target.addVolatile('gastroacid');
+			if (target.newlySwitched || this.willMove(target)) return;
+			target.addVolatile('gastroacid');
 		},
 		secondary: false,
 		target: "allAdjacentFoes",
