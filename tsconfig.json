@@ -22,7 +22,6 @@
         "./ladders-remote.js",
         "./ladders.js",
         "./monitor.js",
-        "./repl.js",
         "./rooms.js",
         "./chat-formatter.js",
         "./room-game.js",
