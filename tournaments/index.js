@@ -1329,7 +1329,7 @@ let commands = {
 			}
 			tournament.removeBannedUser(targetUser);
 			if (reason) reason = ` (${reason})`;
-			this.privateModCommand(`${targetUser.name || targetUserid} was banned from joining tournaments by ${user.name}.${reason}`);
+			this.privateModCommand(`${targetUser.name || targetUserid} was banned from joining tournaments by ${user.name}.${reason}`, `TOURBAN: [${targetUser ? targetUser.getLastId() : targetUserid}]${targetUser ? ` (${targetUser.latestIp})` : ''} by ${user.userid}`);
 		},
 		unbanuser: function (tournament, user, params, cmd) {
 			if (params.length < 1) {
@@ -1342,7 +1342,7 @@ let commands = {
 
 			Punishments.roomUnpunish(this.room, targetUser, 'TOURBAN');
 			tournament.removeBannedUser(targetUser);
-			this.privateModCommand(`${targetUser.name || targetUserid} was unbanned from joining tournaments by ${user.name}.`);
+			this.privateModCommand(`${targetUser.name || targetUserid} was unbanned from joining tournaments by ${user.name}.`, `TOURUNBAN: [${targetUser ? targetUser.getLastId() : targetUserid}] by ${user.userid}`);
 		},
 	},
 };

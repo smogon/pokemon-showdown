@@ -36,7 +36,7 @@ exports.commands = {
 			"<div class=\"broadcast-blue\"><strong>The Inspirational Quote of the Day has been updated by " + Chat.escapeHTML(user.name) + ".</strong><br />" +
 			"Quote: " + room.chatRoomData.quote + "</div>"
 		);
-		this.logModCommand(Chat.escapeHTML(user.name) + " updated the quote of the day to \"" + room.chatRoomData.quote + "\".");
+		this.logModCommand(user.userid + " updated the quote of the day to \"" + room.chatRoomData.quote + "\".");
 	},
 	quoteofthedayhelp: 'qotdhelp',
 	qotdhelp: [

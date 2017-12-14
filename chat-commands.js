@@ -1007,7 +1007,7 @@ exports.commands = {
 		room.desc = target;
 		this.sendReply(`(The room description is now: ${target})`);
 
-		this.privateModCommand(`(${user.name} changed the roomdesc to: "${target}".)`);
+		this.privateModCommand(`(${user.name} changed the roomdesc to: "${target}".)`, `([${user.userid}] changed the roomdesc to: "${target}".)`); // use a secondary log message to avoid distorting the description.
 
 		if (room.chatRoomData) {
 			room.chatRoomData.desc = room.desc;
@@ -1142,7 +1142,7 @@ exports.commands = {
 		if (room.isPersonal) return this.errorReply("Personal rooms can't have aliases.");
 
 		Rooms.aliases.set(alias, room.id);
-		this.privateModCommand(`(${user.name} added the room alias '${target.trim()}'.)`);
+		this.privateModCommand(`(${user.name} added the room alias '${alias}'.)`);
 
 		if (!room.aliases) room.aliases = [];
 		room.aliases.push(alias);
@@ -1172,7 +1172,7 @@ exports.commands = {
 		if (!alias || !Rooms.aliases.has(alias)) return this.errorReply("Please specify an existing alias.");
 		if (Rooms.aliases.get(alias) !== room.id) return this.errorReply("You may only remove an alias from the current room.");
 
-		this.privateModCommand(`(${user.name} removed the room alias '${target}'.)`);
+		this.privateModCommand(`(${user.name} removed the room alias '${alias}'.)`);
 
 		let aliasIndex = room.aliases.indexOf(alias);
 		if (aliasIndex >= 0) {
@@ -1457,7 +1457,7 @@ exports.commands = {
 		}
 
 		const reason = (target ? ` (${target})` : ``);
-		this.addModCommand(`${name} was banned from ${room.title} by ${user.name}.${reason}`, ` (${targetUser.latestIp})`);
+		this.addModCommand(`${name} was banned from ${room.title} by ${user.name}.${reason}`, `ROOMBAN: [${userid}] (${targetUser.latestIp}) by ${user.userid}${reason}`);
 
 		let affected = Punishments.roomBan(room, targetUser, null, null, target);
 
@@ -1473,7 +1473,7 @@ exports.commands = {
 		if (userid !== toId(this.inputUsername)) this.add('|unlink|hide|' + toId(this.inputUsername));
 
 		if (!room.isPrivate && room.chatRoomData) {
-			this.globalModlog("ROOMBAN", targetUser, " by " + user.name + (target ? ": " + target : ""));
+			this.globalModlog("ROOMBAN", targetUser, " by " + user.userid + (target ? ": " + target : ""));
 		}
 		return true;
 	},
@@ -1488,9 +1488,9 @@ exports.commands = {
 		let name = Punishments.roomUnban(room, target);
 
 		if (name) {
-			this.addModCommand("" + name + " was unbanned from " + room.title + " by " + user.name + ".");
+			this.addModCommand("" + name + " was unbanned from " + room.title + " by " + user.name + ".", `ROOMUNBAN: [${toId(name)}] by ${user.userid}`);
 			if (!room.isPrivate && room.chatRoomData) {
-				this.globalModlog("UNROOMBAN", name, " by " + user.name);
+				this.globalModlog("UNROOMBAN", name, " by " + user.userid);
 			}
 		} else {
 			this.errorReply("User '" + target + "' is not banned from this room.");
@@ -1560,7 +1560,7 @@ exports.commands = {
 		}
 		if (!this.can('warn', targetUser, room)) return false;
 
-		this.addModCommand("" + targetUser.name + " was warned by " + user.name + "." + (target ? " (" + target + ")" : ""));
+		this.addModCommand("" + targetUser.name + " was warned by " + user.name + "." + (target ? " (" + target + ")" : ""), `WARN: [${targetUser.getLastId()}] by ${user.userid}${(target ? " (" + target + ")" : "")}`);
 		targetUser.send('|c|~|/warn ' + target);
 		let userid = targetUser.getLastId();
 		this.add('|unlink|' + userid);
@@ -1594,7 +1594,7 @@ exports.commands = {
 			return this.errorReply("User " + this.targetUsername + " is not in the room " + room.id + ".");
 		}
 		if (!targetUser.joinRoom(targetRoom.id)) return this.errorReply("User " + targetUser.name + " could not be joined to room " + targetRoom.title + ". They could be banned from the room.");
-		this.addModCommand("" + targetUser.name + " was redirected to room " + targetRoom.title + " by " + user.name + ".");
+		this.addModCommand("" + targetUser.name + " was redirected to room " + targetRoom.title + " by " + user.name + ".", `REDIRECT: [${targetUser.getLastId()}] by ${user.userid} to ${targetRoom.id}`);
 		targetUser.leaveRoom(room);
 	},
 	redirhelp: [`/redirect OR /redir [username], [roomname] - Attempts to redirect the user [username] to the room [roomname]. Requires: % @ & ~`],
@@ -1623,7 +1623,7 @@ exports.commands = {
 		}
 
 		if (targetUser in room.users) targetUser.popup("|modal|" + user.name + " has muted you in " + room.id + " for " + Chat.toDurationString(muteDuration) + ". " + target);
-		this.addModCommand("" + targetUser.name + " was muted by " + user.name + " for " + Chat.toDurationString(muteDuration) + "." + (target ? " (" + target + ")" : ""));
+		this.addModCommand("" + targetUser.name + " was muted by " + user.name + " for " + Chat.toDurationString(muteDuration) + "." + (target ? " (" + target + ")" : ""), `MUTE: [${targetUser.getLastId()}] by ${user.userid}${(target ? " (" + target + ")" : "")}`);
 		if (targetUser.autoconfirmed && targetUser.autoconfirmed !== targetUser.userid) this.privateModCommand("(" + targetUser.name + "'s ac account: " + targetUser.autoconfirmed + ")");
 		let userid = targetUser.getLastId();
 		this.add('|unlink|' + userid);
@@ -1740,7 +1740,7 @@ exports.commands = {
 
 		let lockMessage = `${name} was locked from talking${weekMsg} by ${user.name}.` + (userReason ? ` (${userReason})` : "");
 
-		this.addModCommand(lockMessage, ` ${proof}` + (targetUser ? `(${targetUser.latestIp})` : ''));
+		this.addModCommand(lockMessage, `${(week ? 'WEEKLOCK' : 'LOCK')}: [${userid}]${(targetUser ? ` (${targetUser.latestIp})` : '')} by ${user.userid} ${proof}`);
 
 		// Notify staff room when a user is locked outside of it.
 		if (room.id !== 'staff' && Rooms('staff')) {
@@ -1767,10 +1767,7 @@ exports.commands = {
 		if (userid !== toId(this.inputUsername)) this.add(`|unlink|hide|${toId(this.inputUsername)}`);
 
 		const globalReason = (target ? `: ${userReason} ${proof}` : ``);
-		this.globalModlog((week ? "WEEKLOCK" : "LOCK"), targetUser || userid, ` by ${user.name}${globalReason}`);
-
-		// Automatically upload replays as evidence/reference to the punishment
-		if (room.battle) this.parse('/savereplay');
+		this.globalModlog((week ? "WEEKLOCK" : "LOCK"), targetUser || userid, ` by ${user.userid}${globalReason}`);
 		return true;
 	},
 	lockhelp: [
@@ -1797,12 +1794,12 @@ exports.commands = {
 		if (unlocked) {
 			const unlockMessage = unlocked.join(", ") + " " + ((unlocked.length > 1) ? "were" : "was") +
 				" unlocked by " + user.name + "." + reason;
-			this.addModCommand(unlockMessage);
+			this.addModCommand(unlockMessage, `UNLOCK: [${unlocked.map(uid => toId(uid)).join(', ')}] by ${user.userid}${reason}`);
 			// Notify staff room when a user is unlocked outside of it.
 			if (!reason && room.id !== 'staff' && Rooms('staff')) {
 				Rooms('staff').addByUser(user, "<<" + room.id + ">> " + unlockMessage);
 			}
-			if (!reason) this.globalModlog("UNLOCK", target, " by " + user.name);
+			if (!reason) this.globalModlog("UNLOCK", target, " by " + user.userid);
 			if (targetUser) targetUser.popup("" + user.name + " has unlocked you.");
 		} else {
 			this.errorReply("User '" + target + "' is not locked.");
@@ -1862,7 +1859,7 @@ exports.commands = {
 		targetUser.popup("|modal|" + user.name + " has globally banned you." + (userReason ? "\n\nReason: " + userReason : "") + (Config.appealurl ? "\n\nIf you feel that your ban was unjustified, you can appeal:\n" + Config.appealurl : "") + "\n\nYour ban will expire in a few days.");
 
 		let banMessage = "" + name + " was globally banned by " + user.name + "." + (userReason ? " (" + userReason + ")" : "");
-		this.addModCommand(banMessage, ` ${proof}(${targetUser.latestIp})`);
+		this.addModCommand(banMessage, `BAN: [${userid}] (${targetUser.latestIp}) by ${user.userid} ${proof}`);
 
 		// Notify staff room when a user is banned outside of it.
 		if (room.id !== 'staff' && Rooms('staff')) {
@@ -1887,7 +1884,7 @@ exports.commands = {
 		if (userid !== toId(this.inputUsername)) this.add('|unlink|hide|' + toId(this.inputUsername));
 
 		const globalReason = (target ? `: ${userReason} ${proof}` : ``);
-		this.globalModlog("BAN", targetUser, ` by ${user.name}${globalReason}`);
+		this.globalModlog("BAN", targetUser, ` by ${user.userid}${globalReason}`);
 		return true;
 	},
 	globalbanhelp: [
@@ -1905,12 +1902,12 @@ exports.commands = {
 		let unbanMessage = `${name} was globally unbanned by ${user.name}.`;
 
 		if (name) {
-			this.addModCommand(unbanMessage);
+			this.addModCommand(unbanMessage, `UNBAN: [${toId(name)}] by ${user.userid}`);
 			// Notify staff room when a user is unbanned outside of it.
 			if (room.id !== 'staff' && Rooms('staff')) {
 				Rooms('staff').addByUser(user, `<<${room.id}>> ${unbanMessage}`);
 			}
-			this.globalModlog("UNBAN", name, ` by ${user.name}`);
+			this.globalModlog("UNBAN", name, ` by ${user.userid}`);
 		} else {
 			this.errorReply(`User '${target}' is not globally banned.`);
 		}
@@ -2050,7 +2047,7 @@ exports.commands = {
 			return this.errorReply("The note is too long. It cannot exceed " + MAX_REASON_LENGTH + " characters.");
 		}
 		if (!this.can('receiveauthmessages', null, room)) return false;
-		return this.privateModCommand("(" + user.name + " notes: " + target + ")");
+		return this.privateModCommand("(" + user.name + " notes: " + target + ")", "([" + user.userid + "] notes: " + target + ")"); // use secondary message to avoid distorting modnote.
 	},
 	modnotehelp: [`/modnote [note] - Adds a moderator note that can be read through modlog. Requires: % @ * # & ~`],
 
@@ -2184,7 +2181,7 @@ exports.commands = {
 
 		this.add(`|notify|${room.title} announcement!|${target}`);
 		this.add(Chat.html`|raw|<div class="broadcast-blue"><b>${target}</b></div>`);
-		this.logModCommand(`${user.name} declared: ${target}`);
+		this.logModCommand(`[${user.userid}] declared: ${target}`);
 	},
 	declarehelp: [`/declare [message] - Anonymously announces a message. Requires: # * & ~`],
 
@@ -2197,7 +2194,7 @@ exports.commands = {
 
 		this.add(`|notify|${room.title} announcement!|${Chat.stripHTML(target)}`);
 		this.add(`|raw|<div class="broadcast-blue"><b>${target}</b></div>`);
-		this.logModCommand(`${user.name} HTML-declared: ${target}`);
+		this.logModCommand(`[${user.userid}] HTML-declared: ${target}`);
 	},
 	htmldeclarehelp: [`/htmldeclare [message] - Anonymously announces a message using safe HTML. Requires: ~`],
 
@@ -2214,7 +2211,7 @@ exports.commands = {
 		Users.users.forEach(u => {
 			if (u.connected) u.send(`|pm|~|${u.group}${u.name}|/raw <div class="broadcast-blue"><b>${target}</b></div>`);
 		});
-		this.logModCommand(`${user.name} globally declared: ${target}`);
+		this.logModCommand(`[${user.userid}] globally declared: ${target}`);
 	},
 	globaldeclarehelp: [`/globaldeclare [message] - Anonymously announces a message to every room on the server. Requires: ~`],
 
@@ -2228,7 +2225,7 @@ exports.commands = {
 		Rooms.rooms.forEach((curRoom, id) => {
 			if (id !== 'global' && curRoom.type !== 'battle') curRoom.addRaw(`<div class="broadcast-blue"><b>${target}</b></div>`).update();
 		});
-		this.logModCommand(`${user.name} declared to all chat rooms: ${target}`);
+		this.logModCommand(`[${user.userid}] declared to all chat rooms: ${target}`);
 	},
 	chatdeclarehelp: [`/cdeclare [message] - Anonymously announces a message to all chatrooms on the server. Requires: ~`],
 
@@ -2285,15 +2282,15 @@ exports.commands = {
 
 		const reasonText = reason ? ` (${reason})` : `.`;
 		const lockMessage = `${targetUser.name} was namelocked by ${user.name}${reasonText}`;
-		this.privateModCommand(`(${lockMessage})`, ` (${targetUser.latestIp})`);
+		this.privateModCommand(`(${lockMessage})`, `NAMELOCK: ]${targetUser.getLastId()}] (${user.latestIp}) by ${user.userid}`);
 
 		// Notify staff room when a user is locked outside of it.
 		if (room.id !== 'staff' && Rooms('staff')) {
 			Rooms('staff').addByUser(user, "<<" + room.id + ">> " + lockMessage);
 		}
 
-		this.globalModlog("NAMELOCK", targetUser, ` by ${user.name}${reasonText}`);
-		Ladders.cancelSearches(targetUser);
+		this.globalModlog("NAMELOCK", targetUser, ` by ${user.userid}${reasonText}`);
+		Ladders.matchmaker.cancelSearch(targetUser);
 		Punishments.namelock(targetUser, null, null, reason);
 		targetUser.popup(`|modal|${user.name} has locked your name and you can't change names anymore${reasonText}`);
 		return true;
@@ -2314,8 +2311,8 @@ exports.commands = {
 		let unlocked = Punishments.unnamelock(target);
 
 		if (unlocked) {
-			this.addModCommand(unlocked + " was unnamelocked by " + user.name + "." + reason);
-			if (!reason) this.globalModlog("UNNAMELOCK", target, " by " + user.name);
+			this.addModCommand(unlocked + " was unnamelocked by " + user.name + "." + reason, `UNNAMELOCK: [${toId(unlocked)}] by ${user.userid}`);
+			if (!reason) this.globalModlog("UNNAMELOCK", target, " by " + user.userid);
 			if (targetUser) targetUser.popup("" + user.name + " has unnamelocked you.");
 		} else {
 			this.errorReply("User '" + target + "' is not namelocked.");
@@ -2403,7 +2400,7 @@ exports.commands = {
 			);
 		}
 
-		this.addModCommand(`${name} was blacklisted from ${room.title} by ${user.name}. ${(target ? ` (${target})` : ``)}`, ` (${targetUser.latestIp})`);
+		this.addModCommand(`${name} was blacklisted from ${room.title} by ${user.name}. ${(target ? ` (${target})` : ``)}`, `BLACKLIST: [${userid}] (${targetUser.latestIp}) by ${user.userid}${(target ? ` (${target})` : ``)}`);
 
 		let affected = Punishments.roomBlacklist(room, targetUser, null, null, target);
 
@@ -2419,7 +2416,7 @@ exports.commands = {
 		if (userid !== toId(this.inputUsername)) this.add('|unlink|hide|' + toId(this.inputUsername));
 
 		if (!room.isPrivate && room.chatRoomData) {
-			this.globalModlog("BLACKLIST", targetUser, " by " + user.name + (target ? ": " + target : ""));
+			this.globalModlog("BLACKLIST", targetUser, " by " + user.userid + (target ? ": " + target : ""));
 		}
 		return true;
 	},
@@ -2460,7 +2457,7 @@ exports.commands = {
 			}
 		}
 
-		this.addModCommand(`${targets.join(', ')}${(targets.length > 1 ? " were" : " was")} nameblacklisted from ${room.title} by ${user.name}.`);
+		this.addModCommand(`${targets.join(', ')}${(targets.length > 1 ? " were" : " was")} nameblacklisted from ${room.title} by ${user.name}.`, `NAMEBLACKLIST: [${targets.join(', ')}] by ${user.userid}`);
 		return true;
 	},
 	blacklistnamehelp: [`/blacklistname OR /nameblacklist [username1, username2, etc.] | reason - Blacklists the given username(s) from the room you are in for a year. Requires: # & ~`],
@@ -2473,9 +2470,9 @@ exports.commands = {
 		const name = Punishments.roomUnblacklist(room, target);
 
 		if (name) {
-			this.addModCommand("" + name + " was unblacklisted by " + user.name + ".");
+			this.addModCommand("" + name + " was unblacklisted by " + user.name + ".", `UNBLACKLIST: [${toId(name)}] by ${user.userid}`);
 			if (!room.isPrivate && room.chatRoomData) {
-				this.globalModlog("UNBLACKLIST", name, " by " + user.name);
+				this.globalModlog("UNBLACKLIST", name, " by " + user.userid);
 			}
 		} else {
 			this.errorReply("User '" + target + "' is not blacklisted.");
@@ -2858,7 +2855,7 @@ exports.commands = {
 
 		Ladders.disabled = true;
 
-		this.logModCommand(`The ladder was disabled by ${user.name}.`);
+		this.logModCommand(`The ladder was disabled by [${user.userid}].`);
 		Monitor.log(`The ladder was disabled by ${user.name}.`);
 
 		const innerHTML = (
@@ -2882,7 +2879,7 @@ exports.commands = {
 		}
 		Ladders.disabled = false;
 
-		this.logModCommand(`The ladder was enabled by ${user.name}.`);
+		this.logModCommand(`The ladder was enabled by [${user.userid}].`);
 		Monitor.log(`The ladder was enabled by ${user.name}.`);
 
 		const innerHTML = (
@@ -3491,7 +3488,7 @@ exports.commands = {
 		room.battle.endType = 'forced';
 		if (!target) {
 			room.battle.tie();
-			this.logModCommand(user.name + " forced a tie.");
+			this.logModCommand("[" + user.userid + "] forced a tie.");
 			return false;
 		}
 		let targetUser = Users.getExact(target);
@@ -3501,7 +3498,7 @@ exports.commands = {
 
 		if (target) {
 			room.battle.win(targetUser);
-			this.logModCommand(user.name + " forced a win for " + target + ".");
+			this.logModCommand("[" + user.userid + "] forced a win for [" + target + "].");
 		}
 	},
 	forcewinhelp: [

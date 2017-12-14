@@ -492,9 +492,10 @@ class ScavengerHunt extends Rooms.RoomGame {
 
 			// notify staff
 			let staffMsg = `(${player.name} has been caught trying to do their own hunt.)`;
-			this.room.sendMods(staffMsg);
-			this.room.roomlog(staffMsg);
-			this.room.modlog(staffMsg);
+			let logMsg = `([${player.userid}] has been caught trying to do their own hunt.)`;
+			this.room.sendModCommand(staffMsg);
+			this.room.logEntry(staffMsg);
+			this.room.modlog(logMsg);
 
 			PlayerLeaderboard.addPoints(player.name, 'infraction', 1);
 			player.infracted = true;
@@ -507,9 +508,11 @@ class ScavengerHunt extends Rooms.RoomGame {
 
 			// notify staff
 			let staffMsg = `(${player.name} has been caught attempting a hunt with ${uniqueConnections} connections on the account. The user has also been given 1 infraction point on the player leaderboard.)`;
-			this.room.sendMods(staffMsg);
-			this.room.roomlog(staffMsg);
-			this.room.modlog(staffMsg);
+			let logMsg = `([${player.userid}] has been caught attempting a hunt with ${uniqueConnections} connections on the account. The user has also been given 1 infraction point on the player leaderboard.)`;
+
+			this.room.sendModCommand(staffMsg);
+			this.room.logEntry(staffMsg);
+			this.room.modlog(logMsg);
 
 			PlayerLeaderboard.addPoints(player.name, 'infraction', 1);
 			player.infracted = true;
@@ -915,7 +918,7 @@ let commands = {
 
 		let game = room.game.childGame || room.game;
 		let success = game.eliminate(null, targetId);
-		if (success) return this.privateModCommand(`(${user.name} has kicked '${targetId}' from the scavenger hint.)`);
+		if (success) return this.privateModCommand(`(${user.name} has kicked '${targetId}' from the scavenger hunt.)`);
 		this.errorReply(`Unable to kick '${targetId}' from the scavenger hunt.`);
 	},
 
@@ -954,7 +957,7 @@ let commands = {
 		if (!room.scavQueue || isNaN(id) || id < 0 || id >= room.scavQueue.length) return false; // this command should be using the display to manage anyways.
 
 		let removed = room.scavQueue.splice(id, 1)[0];
-		this.privateModCommand(`(${user.name} has removed a scavenger hunt by [${removed.hosts.map(u => u.name).join(", ")}] from the queue.)`);
+		this.privateModCommand(`(${user.name} has removed a scavenger hunt by [${removed.hosts.map(u => u.userid).join(", ")}] from the queue.)`);
 		this.sendReply(`|uhtmlchange|scav-queue|${formatQueue(room.scavQueue, user, room)}`);
 
 		if (room.chatRoomData) {

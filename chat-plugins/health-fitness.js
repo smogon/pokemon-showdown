@@ -83,7 +83,7 @@ exports.commands = {
 				if (!target) return;
 
 				HF.setCardio(target);
-				this.privateModCommand(`(${user.name} has set the cardio challenge to: ${target})`);
+				this.privateModCommand(`(${user.name} has set the cardio challenge to: ${target})`, `([${user.userid}] has set the cardio challenge to: ${target})`);
 				this.sendReply(`The daily cardio challenge has been updated to: ${target}`);
 			}
 		},
@@ -106,7 +106,7 @@ exports.commands = {
 				if (!target) return;
 
 				HF.setGym(target);
-				this.privateModCommand(`(${user.name} has set the gym challenge to: ${target})`);
+				this.privateModCommand(`(${user.name} has set the gym challenge to: ${target})`, `([${user.userid}] has set the gym challenge to: ${target})`);
 				this.sendReply(`The daily gym challenge has been updated to: ${target}`);
 			}
 		},
@@ -129,7 +129,7 @@ exports.commands = {
 				if (!target) return;
 
 				HF.setQuote(target);
-				this.privateModCommand(`(${user.name} has set the daily quote to: ${target})`);
+				this.privateModCommand(`(${user.name} has set the daily quote to: ${target})`, `([${user.userid}] has set the daily quote to: ${target})`);
 				this.sendReply(`The daily quote has been updated to: ${target}`);
 			}
 		},

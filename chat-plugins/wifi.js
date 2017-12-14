@@ -533,7 +533,7 @@ let commands = {
 
 		room.giveaway = new QuestionGiveaway(user, targetUser, room, ot, tid, fc, prize, question, answers);
 
-		this.privateModCommand(`(${user.name} started a question giveaway for ${targetUser.name})`);
+		this.privateModCommand(`(${user.name} started a question giveaway for ${targetUser.name})`, `([${user.userid}] started a question giveaway for [${targetUser.userid}])`);
 	},
 	changeanswer: 'changequestion',
 	changequestion: function (target, room, user, conn, cmd) {
@@ -592,7 +592,7 @@ let commands = {
 
 		room.giveaway = new LotteryGiveaway(user, targetUser, room, ot, tid, fc, prize, numWinners);
 
-		this.privateModCommand(`(${user.name} started a lottery giveaway for ${targetUser.name})`);
+		this.privateModCommand(`(${user.name} started a lottery giveaway for ${targetUser.name})`, `([${user.userid}] started a lottery giveaway for [${targetUser.userid}])`);
 	},
 	leavelotto: 'join',
 	leavelottery: 'join',
@@ -638,7 +638,7 @@ let commands = {
 
 			room.gtsga = new GtsGiveaway(room, targetUser, amount, summary, deposit, lookfor);
 
-			this.privateModCommand(`(${user.name} started a GTS giveaway for ${targetUser.name})`);
+			this.privateModCommand(`(${user.name} started a GTS giveaway for ${targetUser.name})`, `([${user.userid}] started a GTS giveaway for [${targetUser.userid}])`);
 		},
 		left: function (target, room, user) {
 			if (room.id !== 'wifi') return false;
@@ -703,7 +703,7 @@ let commands = {
 		Giveaway.ban(room, targetUser, target);
 		if (room.giveaway) room.giveaway.kickUser(targetUser);
 		if (target) target = ` (${target})`;
-		this.privateModCommand(`(${targetUser.name} was banned from entering giveaways by ${user.name}.${target})`);
+		this.privateModCommand(`(${targetUser.name} was banned from entering giveaways by ${user.name}.${target})`, `GIVEAWAYBAN: [${targetUser.getLastId()}] (${targetUser.latestIp}) by ${user.userid}${target}`);
 	},
 	unban: function (target, room, user) {
 		if (!target) return false;
@@ -716,7 +716,7 @@ let commands = {
 		if (!Giveaway.checkBanned(room, targetUser)) return this.errorReply(`User '${this.targetUsername}' isn't banned from entering giveaways.`);
 
 		Giveaway.unban(room, targetUser);
-		this.privateModCommand(`${targetUser.name} was unbanned from entering giveaways by ${user.name}.`);
+		this.privateModCommand(`${targetUser.name} was unbanned from entering giveaways by ${user.name}.`, `GIVEAWAYUNBAN: [${targetUser.getLastId()}] by ${user.userid}`);
 	},
 	stop: 'end',
 	end: function (target, room, user) {
