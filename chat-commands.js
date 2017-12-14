@@ -894,7 +894,7 @@ exports.commands = {
 		if (!room.chatRoomData) return this.errorReply(`Temporary rooms cannot be subrooms.`);
 		if (room.parent) return this.errorReply(`This room is already a subroom. To change which room this subroom belongs to, remove the subroom first.`);
 
-		const main = Rooms(toId(target));
+		const main = Rooms.search(target);
 
 		if (!main) return this.errorReply(`The room '${target}' does not exist.`);
 		if (main.isPrivate || !main.chatRoomData) return this.errorReply(`Only public rooms can have subrooms.`);
