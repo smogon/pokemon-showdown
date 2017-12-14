@@ -840,7 +840,7 @@ if (process.send && module === process.mainModule) {
 	if (Config.crashguard) {
 		// graceful crash - allow current battles to finish before restarting
 		process.on('uncaughtException', err => {
-			require('./crashlogger')(err, 'A simulator process');
+			require('./lib/crashlogger')(err, 'A simulator process');
 		});
 	}
 
@@ -868,7 +868,7 @@ if (process.send && module === process.mainModule) {
 					battle.id = id;
 					Battles.set(id, battle);
 				} catch (err) {
-					if (require('./crashlogger')(err, 'A battle', {
+					if (require('./lib/crashlogger')(err, 'A battle', {
 						message: message,
 					}) === 'lockdown') {
 						let ministack = Chat.escapeHTML(err.stack).split("\n").slice(0, 2).join("<br />");
@@ -886,7 +886,7 @@ if (process.send && module === process.mainModule) {
 				// remove from battle list
 				Battles.delete(id);
 			} else {
-				require('./crashlogger')(new Error("Invalid dealloc"), 'A battle', {
+				require('./lib/crashlogger')(new Error("Invalid dealloc"), 'A battle', {
 					message: message,
 				});
 			}
@@ -898,7 +898,7 @@ if (process.send && module === process.mainModule) {
 				try {
 					battle.receive(data, more);
 				} catch (err) {
-					require('./crashlogger')(err, 'A battle', {
+					require('./lib/crashlogger')(err, 'A battle', {
 						message: message,
 						currentRequest: prevRequest,
 						log: '\n' + battle.log.join('\n').replace(/\n\|split\n[^\n]*\n[^\n]*\n[^\n]*\n/g, '\n'),

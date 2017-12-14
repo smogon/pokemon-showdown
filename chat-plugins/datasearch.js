@@ -67,7 +67,7 @@ class DatasearchManager extends ProcessManager {
 				result = null;
 			}
 		} catch (err) {
-			require('./../crashlogger')(err, 'A search query', data);
+			require('./../lib/crashlogger')(err, 'A search query', data);
 			result = {error: "Sorry! Our search engine crashed on your query. We've been automatically notified and will fix this crash."};
 		}
 		return result;
@@ -338,7 +338,7 @@ if (process.send && module === process.mainModule) {
 
 	if (Config.crashguard) {
 		process.on('uncaughtException', err => {
-			require('../crashlogger')(err, 'A dexsearch process', true);
+			require('../lib/crashlogger')(err, 'A dexsearch process', true);
 		});
 	}
 

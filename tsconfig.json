@@ -16,7 +16,6 @@
         "./dev-tools/node.d.ts",
         "./sim/*.js",
         "./lib/*.js",
-        "./crashlogger.js",
         "./dnsbl.js",
         "./ladders-local.js",
         "./ladders-remote.js",
