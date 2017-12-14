@@ -22,7 +22,7 @@ exports.BattleItems = {
 				this.add('-start', pokemon, 'Blue Orb', '[silent]');
 			}
 			this.add('-primal', pokemon.illusion || pokemon);
-			pokemon.setAbility(template.abilities['0']);
+			pokemon.setAbility(template.abilities['0'], null, true);
 			pokemon.baseAbility = pokemon.ability;
 		},
 		onTakeItem: function (item) {
@@ -58,7 +58,7 @@ exports.BattleItems = {
 				}
 			}
 			this.add('-primal', pokemon.illusion || pokemon);
-			pokemon.setAbility(template.abilities['0']);
+			pokemon.setAbility(template.abilities['0'], null, true);
 			pokemon.baseAbility = pokemon.ability;
 		},
 		onTakeItem: function (item) {

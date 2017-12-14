@@ -10,18 +10,15 @@ exports.BattleScripts = {
 		return Object.getPrototypeOf(this).getEffect.call(this, name);
 	},
 	pokemon: {
-		setAbility: function (ability, source, effect, noForce) {
+		setAbility: function (ability, source, isFromFormechange) {
 			if (!this.hp) return false;
 			ability = this.battle.getAbility(ability);
 			let oldAbility = this.ability;
-			if (noForce && oldAbility === ability.id) {
-				return false;
+			if (!isFromFormechange) {
+				if (['illusion', 'battlebond', 'comatose', 'disguise', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange'].includes(ability.id)) return false;
+				if (['battlebond', 'comatose', 'disguise', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange'].includes(oldAbility)) return false;
 			}
-			if (!effect || effect.id !== 'transform') {
-				if (['illusion', 'multitype', 'stancechange'].includes(ability.id)) return false;
-				if (['multitype', 'stancechange'].includes(oldAbility)) return false;
-			}
-			this.battle.singleEvent('End', this.battle.getAbility(oldAbility), this.abilityData, this, source, effect);
+			this.battle.singleEvent('End', this.battle.getAbility(oldAbility), this.abilityData, this, source);
 			let ally = this.side.active.find(ally => ally && ally !== this && !ally.fainted);
 			if (ally && ally.innate) {
 				ally.removeVolatile(ally.innate);
@@ -30,7 +27,7 @@ exports.BattleScripts = {
 			this.ability = ability.id;
 			this.abilityData = {id: ability.id, target: this};
 			if (ability.id) {
-				this.battle.singleEvent('Start', ability, this.abilityData, this, source, effect);
+				this.battle.singleEvent('Start', ability, this.abilityData, this, source);
 				if (ally && ally.ability !== this.ability) {
 					ally.innate = 'ability' + ability.id;
 					ally.addVolatile(ally.innate);

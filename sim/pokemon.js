@@ -776,7 +776,7 @@ class Pokemon {
 			this.battle.add('-transform', this, pokemon);
 		}
 		// @ts-ignore
-		this.setAbility(pokemon.ability, this, {id: 'transform'});
+		this.setAbility(pokemon.ability, this, true);
 
 		// Change formes based on held items (for Transform)
 		// Only ever relevant in Generation 4 since Generation 3 didn't have item-based forme changes
@@ -1267,28 +1267,24 @@ class Pokemon {
 	/**
 	 * @param {string} abilityName
 	 * @param {Pokemon} [source]
-	 * @param {Effect} [effect]
-	 * @param {boolean} [noForce]
+	 * @param {boolean} [isFromFormeChange]
 	 */
-	setAbility(abilityName, source, effect, noForce) {
+	setAbility(abilityName, source, isFromFormeChange) {
 		if (!this.hp) return false;
 		let ability = this.battle.getAbility(abilityName);
 		let oldAbility = this.ability;
-		if (noForce && oldAbility === ability.id) {
-			return false;
-		}
-		if (!effect || effect.id !== 'transform') {
+		if (!isFromFormeChange) {
 			if (['illusion', 'battlebond', 'comatose', 'disguise', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange'].includes(ability.id)) return false;
 			if (['battlebond', 'comatose', 'disguise', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange'].includes(oldAbility)) return false;
 		}
-		this.battle.singleEvent('End', this.battle.getAbility(oldAbility), this.abilityData, this, source, effect);
-		if (!effect && this.battle.effect && this.battle.effect.effectType === 'Move') {
+		this.battle.singleEvent('End', this.battle.getAbility(oldAbility), this.abilityData, this, source);
+		if (this.battle.effect && this.battle.effect.effectType === 'Move') {
 			this.battle.add('-endability', this, this.battle.getAbility(oldAbility), '[from] move: ' + this.battle.getMove(this.battle.effect.id));
 		}
 		this.ability = ability.id;
 		this.abilityData = {id: ability.id, target: this};
 		if (ability.id && this.battle.gen > 3) {
-			this.battle.singleEvent('Start', ability, this.abilityData, this, source, effect);
+			this.battle.singleEvent('Start', ability, this.abilityData, this, source);
 		}
 		this.abilityOrder = this.battle.abilityOrder++;
 		return oldAbility;
