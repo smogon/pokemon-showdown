@@ -87,7 +87,7 @@ if (process.send && module === process.mainModule) {
 	global.toId = Dex.getId;
 	process.on('message', message => PM.onMessageDownstream(message));
 	process.on('disconnect', () => process.exit());
-	require('../repl').start('modlog', cmd => eval(cmd));
+	require('../lib/repl').start('modlog', cmd => eval(cmd));
 } else {
 	PM.spawn();
 }

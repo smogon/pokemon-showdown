@@ -29,7 +29,7 @@ before('initialization', function () {
 	config.nofswriting = true;
 
 	// Don't create a REPL
-	require('../repl').start = noop;
+	require('../lib/repl').start = noop;
 
 	// Start the server.
 	require('../app');
