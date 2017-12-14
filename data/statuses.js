@@ -81,7 +81,7 @@ exports.BattleStatuses = {
 				let template = this.getTemplate('Shaymin');
 				target.formeChange(template);
 				target.baseTemplate = template;
-				target.setAbility(template.abilities['0']);
+				target.setAbility(template.abilities['0'], null, true);
 				target.baseAbility = target.ability;
 				target.details = template.species + (target.level === 100 ? '' : ', L' + target.level) + (target.gender === '' ? '' : ', ' + target.gender) + (target.set.shiny ? ', shiny' : '');
 				this.add('detailschange', target, target.details);
