@@ -920,7 +920,7 @@ exports.commands = {
 			room.users[userid].updateIdentity(room.id);
 		}
 
-		return this.addModCommand(`This room was set as a subroom of ${main.title}.`);
+		return this.addModCommand(`This room was set as a subroom of ${main.title} by ${user.name}.`);
 	},
 
 	removesubroom: 'unsubroom',
@@ -943,7 +943,7 @@ exports.commands = {
 			room.users[userid].updateIdentity(room.id);
 		}
 
-		return this.addModCommand(`This room is no longer a subroom.`);
+		return this.addModCommand(`This room was unset as a subroom by ${user.name}.`);
 	},
 
 	subrooms: function (target, room, user) {
