@@ -1330,7 +1330,7 @@ class ChatRoom extends BasicRoom {
 			}
 		}
 
-		this.reportJoins = !!Config.reportjoins;
+		this.reportJoins = !!Config.reportjoins || this.isPersonal;
 		this.reportJoinsQueue = /** @type {(string[])?} */ (null);
 		if (Config.reportjoinsperiod && !this.reportJoins) {
 			this.userList = this.getUserList();
