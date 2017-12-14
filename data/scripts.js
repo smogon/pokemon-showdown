@@ -923,7 +923,7 @@ exports.BattleScripts = {
 
 		// Limit one mega evolution
 		for (const ally of side.pokemon) {
-			if (!pokemon.canMegaEvo) {
+			if (effectType === '-burst') {
 				ally.canUltraBurst = null;
 			} else {
 				ally.canMegaEvo = null;
