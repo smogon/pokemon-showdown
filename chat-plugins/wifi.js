@@ -6,7 +6,7 @@
 
 'use strict';
 
-const FS = require('../fs');
+const FS = require('./../lib/fs');
 
 Punishments.roomPunishmentTypes.set('GIVEAWAYBAN', 'banned from giveaways');
 

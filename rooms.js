@@ -19,7 +19,7 @@ const CRASH_REPORT_THROTTLE = 60 * 60 * 1000;
 
 const RETRY_AFTER_LOGIN = null;
 
-const FS = require('./fs');
+const FS = require('./lib/fs');
 
 /*********************************************************
  * the Room object.

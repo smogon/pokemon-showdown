@@ -8,7 +8,7 @@
  */
 'use strict';
 
-const FS = require('./fs');
+const FS = require('./lib/fs');
 
 const MONITOR_CLEAN_TIMEOUT = 2 * 60 * 60 * 1000;
 

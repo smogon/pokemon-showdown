@@ -24,7 +24,6 @@
         "./monitor.js",
         "./repl.js",
         "./rooms.js",
-        "./fs.js",
         "./chat-formatter.js",
         "./room-game.js",
         "./process-manager.js",

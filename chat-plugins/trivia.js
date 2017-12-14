@@ -5,7 +5,7 @@
 
 'use strict';
 
-const FS = require('../fs');
+const FS = require('./../lib/fs');
 
 const CATEGORIES = {
 	ae: 'Arts and Entertainment',

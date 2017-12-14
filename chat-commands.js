@@ -18,7 +18,7 @@
 /* eslint no-else-return: "error" */
 
 const crypto = require('crypto');
-const FS = require('./fs');
+const FS = require('./lib/fs');
 
 const MAX_REASON_LENGTH = 300;
 const MUTE_LENGTH = 7 * 60 * 1000;
