@@ -897,7 +897,7 @@ exports.BattleScripts = {
 	},
 
 	runMegaEvo: function (pokemon) {
-		const effectType = !pokemon.canMegaEvo ? '-burst' : '-mega';
+		const effectType = pokemon.canMegaEvo ? '-mega' : '-burst';
 		const template = this.getTemplate(pokemon.canMegaEvo || pokemon.canUltraBurst);
 		const side = pokemon.side;
 
