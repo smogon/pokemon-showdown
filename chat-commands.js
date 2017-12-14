@@ -909,7 +909,7 @@ exports.commands = {
 		// This is needed to ensure that the main room gets loaded before the subroom.
 		if (mainIdx > subIdx) {
 			const tmp = Rooms.global.chatRoomDataList[mainIdx];
-			Rooms.global.chatRoomDataList[mainIdx] = Rooms.global.chatRoomData[subIdx];
+			Rooms.global.chatRoomDataList[mainIdx] = Rooms.global.chatRoomDataList[subIdx];
 			Rooms.global.chatRoomDataList[subIdx] = tmp;
 		}
 
