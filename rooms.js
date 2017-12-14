@@ -17,6 +17,8 @@ const REPORT_USER_STATS_INTERVAL = 10 * 60 * 1000;
 
 const CRASH_REPORT_THROTTLE = 60 * 60 * 1000;
 
+const RETRY_AFTER_LOGIN = null;
+
 const FS = require('./fs');
 
 /*********************************************************
@@ -1753,6 +1755,8 @@ let Rooms = Object.assign(getRoom, {
 
 	RoomGame: require('./room-game').RoomGame,
 	RoomGamePlayer: require('./room-game').RoomGamePlayer,
+
+	RETRY_AFTER_LOGIN,
 
 	RoomBattle: require(roomBattleLoc).RoomBattle,
 	RoomBattlePlayer: require(roomBattleLoc).RoomBattlePlayer,

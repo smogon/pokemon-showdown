@@ -325,7 +325,7 @@ class Connection {
 		this.ip = ip || '';
 		this.protocol = protocol || '';
 
-		this.autojoin = '';
+		this.autojoins = '';
 	}
 
 	sendTo(roomid, data) {
@@ -1114,9 +1114,27 @@ class User {
 	tryJoinRoom(room, connection) {
 		let roomid = (room && room.id ? room.id : room);
 		room = Rooms.search(room);
+		if (!room && roomid.startsWith('view-')) {
+			// it's a page!
+			let parts = roomid.split('-');
+			let handler = Chat.pages;
+			parts.shift();
+			while (handler) {
+				if (typeof handler === 'function') {
+					let res = handler(parts, this, connection);
+					if (typeof res === 'string') {
+						if (res !== '|deinit') res = `|init|html\n${res}`;
+						connection.send(`>${roomid}\n${res}`);
+						res = undefined;
+					}
+					return res;
+				}
+				handler = handler[parts.shift() || 'default'];
+			}
+		}
 		if (!room || !room.checkModjoin(this)) {
 			if (!this.named) {
-				return null;
+				return Rooms.RETRY_AFTER_LOGIN;
 			} else {
 				connection.sendTo(roomid, `|noinit|nonexistent|The room "${roomid}" does not exist.`);
 				return false;
@@ -1132,12 +1150,12 @@ class User {
 		}
 		if (room.isPrivate) {
 			if (!this.named) {
-				return null;
+				return Rooms.RETRY_AFTER_LOGIN;
 			}
 		}
 
 		if (Rooms.aliases.get(roomid) === room.id) {
-			connection.send(">" + roomid + "\n|deinit");
+			connection.send(`>${roomid}\n|deinit`);
 		}
 
 		let joinResult = this.joinRoom(room, connection);
@@ -1195,7 +1213,7 @@ class User {
 		for (const curConnection of this.connections) {
 			if (connection && curConnection !== connection) continue;
 			if (curConnection.inRooms.has(room.id)) {
-				curConnection.sendTo(room.id, '|deinit');
+				curConnection.sendTo(room.id, `|deinit`);
 				curConnection.leaveRoom(room);
 			}
 			if (connection) break;

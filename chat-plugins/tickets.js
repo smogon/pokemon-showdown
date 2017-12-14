@@ -196,13 +196,12 @@ for (const room of Rooms.rooms.values()) {
 
 exports.pages = {
 	help: {
-		request() {
-			const user = this.user;
-
+		request(query, user, connection) {
+			if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 			let buf = `|title|Request Help\n|pagehtml|<div class="pad"><h2>Request help from global staff</h2>`;
 
 			let banMsg = checkTicketBanned(user);
-			if (banMsg) return this.errorReply(banMsg);
+			if (banMsg) return connection.popup(banMsg);
 			let ticket = tickets[user.userid];
 			let ipTicket = checkIp(user.latestIp);
 			if ((ticket && ticket.open) || ipTicket) {
@@ -214,8 +213,8 @@ exports.pages = {
 					writeTickets();
 				} else {
 					if (!helpRoom.auth[user.userid]) helpRoom.auth[user.userid] = '+';
-					this.popupReply(`You already have a Help ticket.`);
-					this.parse(`/join help-${ticket.userid}`);
+					connection.popup(`You already have a Help ticket.`);
+					user.joinRoom(`help-${ticket.userid}`);
 					return `|deinit`;
 				}
 			}
@@ -253,9 +252,9 @@ exports.pages = {
 			buf += `</details></div>`;
 			return buf;
 		},
-		tickets() {
+		tickets(query, user, connection) {
+			if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 			let buf = `|title|Ticket List\n`;
-			const user = this.user;
 			if (!user.can('lock')) {
 				return buf + `|pagehtml|Access denied`;
 			}
@@ -323,7 +322,7 @@ exports.commands = {
 		create: function (target, room, user, connection) {
 			if (!this.runBroadcast()) return;
 			if (this.broadcasting) {
-				return this.sendReply('|html|<button name="joinRoom" value="view-help-request" class="button"><strong>Request help</strong></button>');
+				return this.sendReplyBox('|html|<button name="joinRoom" value="view-help-request" class="button"><strong>Request help</strong></button>');
 			}
 			if (user.can('lock')) return this.parse('/join view-help-request'); // Globals automatically get the form for reference.
 			if (!user.named) return this.errorReply(`You need to choose a username before doing this.`);

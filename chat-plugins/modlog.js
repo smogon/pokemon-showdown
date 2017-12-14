@@ -339,11 +339,12 @@ function getModlog(connection, roomid = 'global', searchString = '', lines = 20,
 }
 
 exports.pages = {
-	modlog(args) {
+	modlog(args, user, connection) {
+		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 		const roomid = args[0];
 		const target = Dashycode.decode(args.slice(1).join('-'));
 
-		getModlog(this.connection, roomid, target);
+		getModlog(connection, roomid, target);
 	},
 };
 

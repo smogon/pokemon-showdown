@@ -1474,7 +1474,7 @@ exports.commands = {
 		Rooms.global.autojoinRooms(user, connection);
 		let autojoins = [];
 		for (const target of targets) {
-			if (user.tryJoinRoom(target, connection) === null) {
+			if (user.tryJoinRoom(target, connection) === Rooms.RETRY_AFTER_LOGIN) {
 				autojoins.push(target);
 			}
 		}
@@ -1490,25 +1490,7 @@ exports.commands = {
 		if (target.startsWith('https://')) target = target.slice(8);
 		if (target.startsWith('play.pokemonshowdown.com/')) target = target.slice(25);
 		if (target.startsWith('psim.us/')) target = target.slice(8);
-		if (target.startsWith('view-')) {
-			// it's a page!
-			let parts = target.split('-');
-			let handler = Chat.pages;
-			parts.shift();
-			while (handler) {
-				if (typeof handler === 'function') {
-					let res = handler.call(this, parts);
-					if (typeof res === 'string') {
-						if (res !== '|deinit') res = `|init|html\n${res}`;
-						connection.send(`>${target}\n${res}`);
-						res = undefined;
-					}
-					return res;
-				}
-				handler = handler[parts.shift() || 'default'];
-			}
-		}
-		if (user.tryJoinRoom(target, connection) === null) {
+		if (user.tryJoinRoom(target, connection) === Rooms.RETRY_AFTER_LOGIN) {
 			connection.sendTo(target, "|noinit|namerequired|The room '" + target + "' does not exist or requires a login to join.");
 		}
 	},
