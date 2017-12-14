@@ -327,7 +327,7 @@ class BattleTimer {
 		let didSomething = false;
 		for (const [slotNum, ticks] of this.turnTicksLeft.entries()) {
 			if (ticks) continue;
-			if (this.settings.timeoutAutoChoose && this.ticksLeft[slotNum]) {
+			if (this.settings.timeoutAutoChoose && this.ticksLeft[slotNum] && this.dcTicksLeft[slotNum] === NOT_DISCONNECTED) {
 				const slot = 'p' + (slotNum + 1);
 				this.battle.send('choose', slot, 'default');
 				didSomething = true;
