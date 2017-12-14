@@ -145,7 +145,210 @@ function getMoreButton(room, search, lines, maxLines) {
 =======
 		search = Chat.escapeHTML(`${search}`);
 		return `<br /><div style="float:right"><button class="button" name="send" value="/modlog ${room}, ${search} ${LINES_SEPARATOR}${newLines}" title="View more results">More results...</button></div>`;
->>>>>>> Modlog: expand searching capabilities
+'use strict';
+
+const FS = require('./../lib/fs');
+const path = require('path');
+const Dashycode = require('../lib/dashycode');
+const ProcessManager = require('./../process-manager');
+const execFileSync = require('child_process').execFileSync;
+
+const MAX_PROCESSES = 1;
+const MAX_QUERY_LENGTH = 2500;
+const DEFAULT_RESULTS_LENGTH = 100;
+const MORE_BUTTON_INCREMENTS = [200, 400, 800, 1600, 3200];
+const LINES_SEPARATOR = 'lines=';
+const MAX_RESULTS_LENGTH = MORE_BUTTON_INCREMENTS[MORE_BUTTON_INCREMENTS.length - 1];
+const LOG_PATH = 'logs/modlog/';
+
+class ModlogManager extends ProcessManager {
+	onMessageUpstream(message) {
+		// Protocol:
+		// when crashing: 	  "[id]|0"
+		// when not crashing: "[id]|1|[results]"
+		let pipeIndex = message.indexOf('|');
+		let id = +message.substr(0, pipeIndex);
+
+		if (this.pendingTasks.has(id)) {
+			this.pendingTasks.get(id)(message.slice(pipeIndex + 1));
+			this.pendingTasks.delete(id);
+			this.release();
+		}
+	}
+
+	async onMessageDownstream(message) {
+		// protocol:
+		// "[id]|[comma-separated list of room ids]|[searchString]|[maxLines]"
+		const parts = message.split('|');
+
+		const id = parts[0];
+		const rooms = parts[1];
+		const searchString = parts.slice(2, -1).join('|');
+		const maxLines = parts[parts.length - 1];
+
+		process.send(id + '|' + await this.receive(rooms, searchString, maxLines));
+	}
+
+	async receive(rooms, searchString, maxLines) {
+		let result = '';
+		maxLines = Number(maxLines);
+		try {
+			const searchResults = await runModlog(rooms.split(','), searchString, maxLines);
+			result = `${searchResults.searchType}|${searchResults.text}`;
+		} catch (err) {
+			require('../lib/crashlogger')(err, 'A modlog query', {
+				rooms: rooms,
+				searchString: searchString,
+				maxLines: maxLines,
+			});
+			result = '0';
+		}
+		return result;
+	}
+}
+
+exports.ModlogManager = ModlogManager;
+
+const PM = exports.PM = new ModlogManager({
+	execFile: __filename,
+	maxProcesses: MAX_PROCESSES,
+	isChatBased: true,
+});
+
+if (process.send && module === process.mainModule) {
+	global.Config = require('../config/config');
+	process.on('uncaughtException', err => {
+		if (Config.crashguard) {
+			require('../lib/crashlogger')(err, 'A modlog child process');
+		}
+	});
+	global.Dex = require('../sim/dex');
+	global.toId = Dex.getId;
+	process.on('message', message => PM.onMessageDownstream(message));
+	process.on('disconnect', () => process.exit());
+	require('../lib/repl').start('modlog', cmd => eval(cmd));
+} else {
+	PM.spawn();
+}
+
+class SortedLimitedLengthList {
+	constructor(maxSize) {
+		this.maxSize = maxSize;
+		this.list = [];
+	}
+
+	getListClone() {
+		return this.list.slice(0);
+	}
+
+	tryInsert(element) {
+		let insertedAt = -1;
+		for (let i = this.list.length - 1; i >= 0; i--) {
+			if (element.localeCompare(this.list[i]) < 0) {
+				insertedAt = i + 1;
+				if (i === this.list.length - 1) {
+					this.list.push(element);
+					break;
+				}
+				this.list.splice(i + 1, 0, element);
+				break;
+			}
+		}
+		if (insertedAt < 0) this.list.splice(0, 0, element);
+		if (this.list.length > this.maxSize) {
+			this.list.pop();
+			if (insertedAt === this.list.length) return false;
+		}
+		return true;
+	}
+}
+
+function checkRipgrepAvailability() {
+	if (Config.ripgrepmodlog === undefined) {
+		try {
+			execFileSync('rg', ['--version'], {cwd: path.normalize(`${__dirname}/../`)});
+			Config.ripgrepmodlog = true;
+		} catch (error) {
+			Config.ripgrepmodlog = false;
+		}
+	}
+	return Config.ripgrepmodlog;
+}
+
+function getMoreButton(room, search, lines, maxLines) {
+	let newLines = 0;
+	for (let increase of MORE_BUTTON_INCREMENTS) {
+		if (increase > lines) {
+			newLines = increase;
+			break;
+		}
+	}
+	if (!newLines || lines < maxLines) {
+		return ''; // don't show a button if no more pre-set increments are valid or if the amount of results is already below the max
+	} else {
+<<<<<<< HEAD
+		if (useExactSearch) search = Chat.escapeHTML(`"${search}"`);
+		return `<br /><div style="text-align:center"><button class="button" name="send" value="/modlog ${room}, ${search} ${LINES_SEPARATOR}${newLines}" title="View more results">Older results<br />&#x25bc;</button></div>`;
+=======
+		search = Chat.escapeHTML(`${search}`);
+		return `<br /><div style="float:right"><button class="button" name="send" value="/modlog ${room}, ${search} ${LINES_SEPARATOR}${newLines}" title="View more results">More results...</button></div>`;
+	}
+}
+
+function toModlogId(text) {
+	if (typeof text !== 'string' && typeof text !== 'number') return '';
+	return ('' + text).toLowerCase().replace(/[^a-z0-9*]+/g, '').replace(/\*+/g, '.*');
+}
+
+const escapeRegex = Chat.escapeRegex; // import function to be used in the side process
+
+function formatSingleSearch(string) {
+	const searchType = string.trim().charAt(0) === '!' ? 'negative' : 'positive';
+	const parts = string.split('||');
+	let formattedParts = [];
+
+	for (let p of parts) {
+		p = p.trim();
+		const exactSearch = /^(["']).+\1$/i.test(p);
+		if (exactSearch) {
+			p = p.slice(1, -1);
+			formattedParts.push(escapeRegex(p));
+		} else {
+			formattedParts.push(`[^a-zA-Z0-9]${toModlogId(p)}[^a-zA-Z0-9]`);
+		}
+	}
+
+	const result = {searchType, term: (formattedParts.length > 1 ? `(${formattedParts.join('|')})` : formattedParts[0])};
+	return result;
+}
+
+function formatRegexString(string) {
+	if (!string) return {type: 0, searchRegex: '.'};
+	const parts = string.split('&&');
+	if (parts.length === 1 && string.charAt(0) !== '!' && !string.includes('||')) {
+		// single argument searches
+		if (/^(["']).+\1$/i.test(string)) {
+			// exact search
+			return {type: 1, searchRegex: escapeRegex(string.slice(1, -1))};
+		} else {
+			// userid search
+			return {type: 0, searchRegex: `[^a-zA-Z0-9]${toModlogId(string)}[^a-zA-Z0-9]`};
+		}
+	} else {
+		// searches with multiple arguments
+		let results = {positive: [], negative: []};
+
+		// format each search term
+		for (let p of parts) {
+			const res = formatSingleSearch(p);
+			results[res.searchType].push(res.term);
+		}
+
+		// format the positive searches
+		const positive = results.positive.map(t => `(?=.*${t})`).join('');
+		const negative = results.negative.length ? results.negative.map(t => `(?!${results.negative.join('|')})`) : '';
+		const searchRegex = `^${positive}(?:${negative}.)*$`;
+		return {type: 2, searchRegex};
 	}
 }
 function toModlogChar(match) {
@@ -335,13 +538,14 @@ function prettifyResults(rawResults, room, searchString, searchType, addModlogLi
 	let preamble;
 	const modlogid = room + (searchString ? '-' + Dashycode.encode(searchString) : '');
 	if (searchString) {
-		const searchStringDescription = (exactSearch ? `containing the string "${searchString}"` : `matching the username "${searchString}"`);
+		const searchStringDescription = (searchType === '2' ? `matching the search query \`${searchString}\`` : searchType === '1' ? `containing the string ${searchString}` : `matching the username "${searchString}"`);
 		preamble = `>view-modlog-${modlogid}\n|init|html\n|title|[Modlog]${title}\n|pagehtml|<div class="pad"><p>The last ${lines} logged action${Chat.plural(lines)} ${searchStringDescription} on ${roomName}.` +
-						(exactSearch ? "" : " Add quotes to the search parameter to search for a phrase, rather than a user.");
+						(searchType === '0' ? "" : " Add quotes to the search parameter to search for a phrase, rather than a user.");
 	} else {
 		preamble = `>view-modlog-${modlogid}\n|init|html\n|title|[Modlog]${title}\n|pagehtml|<div class="pad"><p>The last ${lines} line${Chat.plural(lines)} of the Moderator Log of ${roomName}.`;
 	}
-	let moreButton = getMoreButton(room, searchString, exactSearch, lines, maxLines);
+
+	let moreButton = getMoreButton(room, searchString, lines, maxLines);
 	return `${preamble}${resultString}${moreButton}</div>`;
 }
 
@@ -436,9 +640,6 @@ exports.commands = {
 		if (!lines) lines = DEFAULT_RESULTS_LENGTH;
 		if (lines > MAX_RESULTS_LENGTH) lines = MAX_RESULTS_LENGTH;
 
-<<<<<<< HEAD
-		getModlog(connection, roomid, target, lines, cmd === 'timedmodlog');
-=======
 		let searchString = '';
 		if (target) searchString = target.trim();
 		if (searchString.length > MAX_QUERY_LENGTH) {
@@ -459,7 +660,6 @@ exports.commands = {
 			connection.send(prettifyResults(response, roomId, searchString, response.charAt(0), addModlogLinks, hideIps, lines));
 			if (cmd === 'timedmodlog') this.sendReply(`The modlog query took ${Date.now() - startTime} ms to complete.`);
 		});
->>>>>>> Modlog: expand searching capabilities
 	},
 	modloghelp: function (target, room, user) {
 		if (!this.runBroadcast()) return;
