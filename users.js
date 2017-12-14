@@ -1408,7 +1408,7 @@ Users.socketConnect = function (worker, workerid, socketid, ip, protocol) {
 		if (err) {
 			// It's not clear what sort of condition could cause this.
 			// For now, we'll basically assume it can't happen.
-			require('./crashlogger')(err, 'randomBytes');
+			require('./lib/crashlogger')(err, 'randomBytes');
 			// This is pretty crude, but it's the easiest way to deal
 			// with this case, which should be impossible anyway.
 			user.disconnectAll();

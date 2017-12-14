@@ -13,7 +13,7 @@ class RandomGen6Teams extends RandomTeams {
 			template = this.getTemplate('unown');
 
 			let err = new Error('Template incompatible with random battles: ' + species);
-			require('../../crashlogger')(err, 'The randbat set generator');
+			require('../../lib/crashlogger')(err, 'The randbat set generator');
 		}
 
 		if (typeof teamDetails !== 'object') teamDetails = {megaStone: teamDetails};

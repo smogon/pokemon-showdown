@@ -56,7 +56,7 @@ class ModlogManager extends ProcessManager {
 		try {
 			result = '1|' + await runModlog(rooms.split(','), searchString, exactSearch, maxLines);
 		} catch (err) {
-			require('../crashlogger')(err, 'A modlog query', {
+			require('../lib/crashlogger')(err, 'A modlog query', {
 				rooms: rooms,
 				searchString: searchString,
 				exactSearch: exactSearch,
@@ -80,7 +80,7 @@ if (process.send && module === process.mainModule) {
 	global.Config = require('../config/config');
 	process.on('uncaughtException', err => {
 		if (Config.crashguard) {
-			require('../crashlogger')(err, 'A modlog child process');
+			require('../lib/crashlogger')(err, 'A modlog child process');
 		}
 	});
 	global.Dex = require('../sim/dex');
