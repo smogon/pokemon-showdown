@@ -8,7 +8,7 @@
  */
 'use strict';
 
-const FS = require('../fs');
+const FS = require('./../lib/fs');
 
 const HF_DATA_PATH = 'config/chat-plugins/health-fitness.json';
 const MAX_DATA_LENGTH = 500;

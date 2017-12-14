@@ -15,7 +15,7 @@ const LOGIN_SERVER_BATCH_TIME = 1000;
 const http = Config.loginserver.startsWith('http:') ? require("http") : require("https");
 const url = require('url');
 
-const FS = require('./fs');
+const FS = require('./lib/fs');
 
 const noop = () => null;
 

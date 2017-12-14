@@ -19,7 +19,7 @@
 const BLOCKLISTS = ['sbl.spamhaus.org', 'rbl.efnetrbl.org'];
 
 const dns = require('dns');
-const FS = require('./fs');
+const FS = require('./lib/fs');
 
 let Dnsbl = module.exports;
 

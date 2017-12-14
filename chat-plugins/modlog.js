@@ -1,6 +1,6 @@
 'use strict';
 
-const FS = require('./../fs');
+const FS = require('./../lib/fs');
 const path = require('path');
 const Dashycode = require('../lib/dashycode');
 const ProcessManager = require('./../process-manager');
