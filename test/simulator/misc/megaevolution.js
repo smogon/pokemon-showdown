@@ -12,7 +12,7 @@ describe('Mega Evolution', function () {
 
 	it('should overwrite normally immutable abilities', function () {
 		battle = common.createBattle();
-		const p1 = battle.join('p1', 'Guest 1', 1, [{species: "Metagross", ability: 'zenmode', item: 'metagrossite', moves: ['metalclaw']}]);
+		const p1 = battle.join('p1', 'Guest 1', 1, [{species: "Metagross", ability: 'comatose', item: 'metagrossite', moves: ['metalclaw']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Wishiwashi", ability: 'schooling', moves: ['uturn']}]);
 		battle.makeChoices('move metalclaw mega', 'move uturn');
 		assert.equal(p1.active[0].ability, 'toughclaws');
