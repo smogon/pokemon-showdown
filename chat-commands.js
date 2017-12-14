@@ -751,8 +751,10 @@ exports.commands = {
 		if (targetRoom.subRooms) {
 			for (const subRoom of targetRoom.subRooms) subRoom.parent = null;
 		}
-		if (targetRoom.parent && targetRoom.parent.subRooms) {
-			targetRoom.parent.subRooms.delete(targetRoom.id);
+		const parent = targetRoom.parent;
+		if (parent && parent.subRooms) {
+			parent.subRooms.delete(targetRoom.id);
+			if (!parent.subRooms.size) parent.subRooms = null;
 		}
 
 		targetRoom.add("|raw|<div class=\"broadcast-red\"><b>This room has been deleted.</b></div>");
@@ -823,7 +825,7 @@ exports.commands = {
 			}
 		} else {
 			const settingName = (setting === true ? 'secret' : setting);
-			if (room.subRooms && room.subRooms.size) return this.errorReply("Private rooms cannot have subrooms.");
+			if (room.subRooms) return this.errorReply("Private rooms cannot have subrooms.");
 			if (room.isPrivate === setting) {
 				if (room.privacySetter && !room.privacySetter.has(user.userid)) {
 					room.privacySetter.add(user.userid);
@@ -926,10 +928,10 @@ exports.commands = {
 		if (!this.can('makeroom')) return;
 		if (!room.parent || !room.chatRoomData) return this.errorReply(`This room is not currently a subroom of a public room.`);
 
-		const main = Rooms(this.parent);
-
-		if (main && main.subRooms) {
-			main.subRooms.delete(room.id);
+		const parent = room.parent;
+		if (parent && parent.subRooms) {
+			parent.subRooms.delete(room.id);
+			if (!parent.subRooms.size) parent.subRooms = null;
 		}
 
 		room.parent = null;
@@ -1420,7 +1422,7 @@ exports.commands = {
 
 		if (targetUser in room.users || user.can('lock')) {
 			targetUser.popup(
-				"|modal||html|<p>" + Chat.escapeHTML(user.name) + " has banned you from the room " + room.id + (room.subRooms && room.subRooms.size ? " and its subrooms" : "") + ".</p>" + (target ? "<p>Reason: " + Chat.escapeHTML(target) + "</p>" : "") +
+				"|modal||html|<p>" + Chat.escapeHTML(user.name) + " has banned you from the room " + room.id + (room.subRooms ? " and its subrooms" : "") + ".</p>" + (target ? "<p>Reason: " + Chat.escapeHTML(target) + "</p>" : "") +
 				"<p>To appeal the ban, PM the staff member that banned you" + (!room.battle && room.auth ? " or a room owner. </p><p><button name=\"send\" value=\"/roomauth " + room.id + "\">List Room Staff</button></p>" : ".</p>")
 			);
 		}
@@ -2364,7 +2366,7 @@ exports.commands = {
 
 		if (targetUser in room.users || user.can('lock')) {
 			targetUser.popup(
-				"|modal||html|<p>" + Chat.escapeHTML(user.name) + " has blacklisted you from the room " + room.id + (room.subRooms && room.subRooms.size ? " and its subrooms" : "") + ".</p>" + (target ? "<p>Reason: " + Chat.escapeHTML(target) + "</p>" : "") +
+				"|modal||html|<p>" + Chat.escapeHTML(user.name) + " has blacklisted you from the room " + room.id + (room.subRooms ? " and its subrooms" : "") + ".</p>" + (target ? "<p>Reason: " + Chat.escapeHTML(target) + "</p>" : "") +
 				"<p>To appeal the ban, PM the staff member that blacklisted you" + (!room.battle && room.auth ? " or a room owner. </p><p><button name=\"send\" value=\"/roomauth " + room.id + "\">List Room Staff</button></p>" : ".</p>")
 			);
 		}
