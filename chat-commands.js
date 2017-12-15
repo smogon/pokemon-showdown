@@ -954,7 +954,7 @@ exports.commands = {
 
 		if (!this.runBroadcast()) return;
 
-		let showSecret = !this.broadcasting && this.can('mute', null, room);
+		let showSecret = !this.broadcasting && user.can('mute', null, room);
 
 		let subRooms = room.getSubRooms(showSecret);
 
