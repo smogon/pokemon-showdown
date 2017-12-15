@@ -440,7 +440,7 @@ exports.commands = {
 			`- Put <code style=''>"</code> around any search term to get the exact string, with symbols and spacing included, in any part of the modlog entry.  By default, it will search for userids only if quotation marks are not used.<br />` +
 			`- Use <code>&&</code> include additional search terms.  Results will include lines with all the terms.<br />` +
 			`- Use <code>||</code> to include additional search terms. Results will include lines with any or all of the terms.<br />` +
-			`- Use <code>!</code> to exclude any search term.  Results will not include lines containing that term. <br />` +
+			`- Use <code>!</code> to exclude any search term.  Results will not include lines containing that term.<br />` +
 			`- Use <code>*</code> as a wildcard within search terms for userids. It can represent several characters.<br />` +
 			`- Example: <code>pi*chu || "raichu" && !ash</code> will accept lines that contain userids starting with "pi" and ending with "chu", such as "pikachu", "pichu" and "pikaandchuchu"; or any word with with the letters "raichu" inside. It will exclude lines that include the userid "ash".` +
 			`</div>`
