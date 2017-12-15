@@ -90,6 +90,7 @@ class Pokemon {
 		this.draggedIn = null;
 
 		this.lastMove = '';
+		this.lastMoveIsZ = undefined;
 		/**@type {string | boolean} */
 		this.moveThisTurn = '';
 
