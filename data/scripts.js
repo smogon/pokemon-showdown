@@ -60,6 +60,7 @@ exports.BattleScripts = {
 			}
 		}
 		pokemon.lastDamage = 0;
+
 		let lockedMove;
 		if (!externalMove) {
 			lockedMove = this.runEvent('LockMove', pokemon);
@@ -79,6 +80,7 @@ exports.BattleScripts = {
 			pokemon.moveUsed(move, targetLoc);
 		}
 
+		pokemon.lastMoveIsZ = undefined;
 		// Dancer Petal Dance hack
 		// TODO: implement properly
 		let noLock = externalMove && !pokemon.volatiles.lockedmove;
@@ -89,6 +91,7 @@ exports.BattleScripts = {
 			}
 			this.add('-zpower', pokemon);
 			pokemon.side.zMoveUsed = true;
+			pokemon.lastMoveIsZ = true;
 		}
 		let moveDidSomething = this.useMove(baseMove, pokemon, target, sourceEffect, zMove);
 		this.singleEvent('AfterMove', move, null, pokemon, target, move);
