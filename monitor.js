@@ -60,6 +60,11 @@ const Monitor = module.exports = {
 	 * Logging
 	 *********************************************************/
 
+	/** @param {Error} error */
+	crashlog(error, source = 'The main process') {
+		require('./lib/crashlogger')(error, source);
+	},
+
 	/**
 	 * @param {string} text
 	 */
