@@ -305,7 +305,7 @@ if (cluster.isMaster) {
 		sockjs_url: "//play.pokemonshowdown.com/js/lib/sockjs-1.1.1-nwjsfix.min.js",
 		prefix: '/showdown',
 		log(severity, message) {
-			if (severity === 'error') Monitor.warn(`ERROR: ${message}`);
+			if (severity === 'error') console.log(`ERROR: ${message}`);
 		},
 	};
 
