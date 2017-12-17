@@ -338,11 +338,23 @@ exports.commands = {
 			return this.errorReply(`Both users must be in this room.`);
 		}
 		let challenges = [];
-		if (user1.challengeTo && Users.get(user1.challengeTo.to) === user2) {
-			challenges.push(Chat.html`${user1.name} is challenging ${user2.name} in ${Dex.getFormat(user1.challengeTo.format).name}.`);
+		const user1Challs = Ladders.challenges.get(user1.userid);
+		if (user1Challs) {
+			for (const chall of user1Challs) {
+				if (chall.from === user1.userid && Users.get(chall.to) === user2) {
+					challenges.push(Chat.html`${user1.name} is challenging ${user2.name} in ${Dex.getFormat(chall.formatid).name}.`);
+					break;
+				}
+			}
 		}
-		if (user2.challengeTo && Users.get(user2.challengeTo.to) === user1) {
-			challenges.push(Chat.html`${user2.name} is challenging ${user1.name} in ${Dex.getFormat(user2.challengeTo.format).name}.`);
+		const user2Challs = Ladders.challenges.get(user2.userid);
+		if (user2Challs) {
+			for (const chall of user2Challs) {
+				if (chall.from === user2.userid && Users.get(chall.to) === user1) {
+					challenges.push(Chat.html`${user2.name} is challenging ${user1.name} in ${Dex.getFormat(chall.formatid).name}.`);
+					break;
+				}
+			}
 		}
 		if (!challenges.length) {
 			return this.sendReplyBox(Chat.html`${user1.name} and ${user2.name} are not challenging each other.`);
