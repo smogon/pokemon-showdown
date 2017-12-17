@@ -1157,7 +1157,7 @@ class BasicChatRoom extends BasicRoom {
 	 */
 	onJoin(user, connection) {
 		if (!user) return false; // ???
-		if (this.users[user.userid]) return user;
+		if (this.users[user.userid]) return false;
 
 		if (user.named) {
 			this.reportJoin('j', user.getIdentity(this.id));
@@ -1167,7 +1167,7 @@ class BasicChatRoom extends BasicRoom {
 		this.userCount++;
 
 		if (this.game && this.game.onJoin) this.game.onJoin(user, connection);
-		return user;
+		return true;
 	}
 	/**
 	 * @param {User} user
@@ -1175,6 +1175,9 @@ class BasicChatRoom extends BasicRoom {
 	 * @param {boolean} joining
 	 */
 	onRename(user, oldid, joining) {
+		if (user.userid === oldid) {
+			return this.onUpdateIdentity(user);
+		}
 		if (!this.users[oldid]) {
 			Monitor.crashlog(new Error(`user ${oldid} not in room ${this.id}`));
 		}
@@ -1192,7 +1195,7 @@ class BasicChatRoom extends BasicRoom {
 			this.reportJoin('n', user.getIdentity(this.id) + '|' + oldid);
 		}
 		if (this.poll && user.userid in this.poll.voters) this.poll.updateFor(user);
-		return user;
+		return true;
 	}
 	/**
 	 * onRename, but without a userid change
@@ -1203,16 +1206,17 @@ class BasicChatRoom extends BasicRoom {
 			if (!this.users[user.userid]) return false;
 			this.reportJoin('n', user.getIdentity(this.id) + '|' + user.userid);
 		}
+		return true;
 	}
 	/**
 	 * @param {User} user
 	 */
 	onLeave(user) {
-		if (!user) return; // ...
+		if (!user) return false; // ...
 
 		if (!(user.userid in this.users)) {
 			Monitor.crashlog(new Error(`user ${user.userid} already left`));
-			return;
+			return false;
 		}
 		delete this.users[user.userid];
 		this.userCount--;
@@ -1221,6 +1225,7 @@ class BasicChatRoom extends BasicRoom {
 			this.reportJoin('l', user.getIdentity(this.id));
 		}
 		if (this.game && this.game.onLeave) this.game.onLeave(user);
+		return true;
 	}
 	destroy() {
 		// deallocate ourself
