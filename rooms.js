@@ -1175,6 +1175,12 @@ class BasicChatRoom extends BasicRoom {
 	 * @param {boolean} joining
 	 */
 	onRename(user, oldid, joining) {
+		if (!this.users[oldid]) {
+			Monitor.crashlog(new Error(`user ${oldid} not in room ${this.id}`));
+		}
+		if (this.users[user.userid]) {
+			Monitor.crashlog(new Error(`user ${user.userid} already in room ${this.id}`));
+		}
 		delete this.users[oldid];
 		this.users[user.userid] = user;
 		if (joining) {
