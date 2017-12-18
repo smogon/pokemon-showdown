@@ -487,7 +487,7 @@ exports.Formats = [
 
 		mod: 'gen7',
 		ruleset: ['[Gen 7] OU'],
-		banlist: ['Kingdra', 'Nidoqueen', 'Wishiwashi', 'Huge Power', 'Pure Power'],
+		banlist: ['Clefable', 'Kingdra', 'Nidoqueen', 'Silvally', 'Type: Null', 'Venomoth', 'Wishiwashi', 'Huge Power', 'Pure Power'],
 		onValidateSet: function (set) {
 			let problems = [];
 			let template = this.getTemplate(set.species);
