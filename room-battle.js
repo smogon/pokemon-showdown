@@ -496,13 +496,18 @@ class Battle {
 		switch (lines[1]) {
 		case 'update':
 			this.checkActive();
-			this.room.push(lines.slice(2));
+			for (const line of lines.slice(2)) {
+				this.room.add(line);
+			}
 			this.room.update();
 			this.timer.nextRequest();
 			break;
 
 		case 'winupdate':
-			this.room.push(lines.slice(3));
+			lines = lines.slice(3);
+			for (const line of lines.slice(3)) {
+				this.room.add(line);
+			}
 			this.started = true;
 			if (!this.ended) {
 				this.ended = true;
