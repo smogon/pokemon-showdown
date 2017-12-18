@@ -1302,8 +1302,7 @@ Punishments.isRoomBanned = function (user, roomid) {
 		}
 	}
 
-	if (!punishment && Rooms(roomid).parent) punishment = Punishments.isRoomBanned(user, Rooms(roomid).parent.id);
-	return punishment;
+	if (Rooms(roomid).parent) return Punishments.isRoomBanned(user, Rooms(roomid).parent.id);
 };
 
 /**
