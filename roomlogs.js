@@ -82,19 +82,24 @@ class Roomlog {
 	getScrollback(channel = 0) {
 		let log = this.log;
 		if (this.logTimes) log = [`|:|${~~(Date.now() / 1000)}`].concat(log);
-		if (this.isMultichannel) {
-			log = [];
-			for (let i = 0; i < this.log.length; ++i) {
-				let line = this.log[i];
-				if (line === '|split') {
-					log.push(this.log[i + channel + 1]);
-					i += 4;
-				} else {
-					log.push(line);
-				}
+		if (!this.isMultichannel) {
+			return log.join('\n') + '\n';
+		}
+		log = [];
+		for (let i = 0; i < this.log.length; ++i) {
+			let line = this.log[i];
+			if (line === '|split') {
+				log.push(this.log[i + channel + 1]);
+				i += 4;
+			} else {
+				log.push(line);
 			}
 		}
-		return log.join('\n') + '\n';
+		let textLog = log.join('\n') + '\n';
+		if (channel === 0) {
+			return textLog.replace(/\n\|choice\|\|\n/g, '').replace(/\n\|seed\|\n/g, '');
+		}
+		return textLog;
 	}
 	setupModlogStream() {
 		if (this.modlogStream !== undefined) return;
