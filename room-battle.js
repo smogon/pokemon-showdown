@@ -496,7 +496,7 @@ class Battle {
 		switch (lines[1]) {
 		case 'update':
 			this.checkActive();
-			for (let line of lines.slice(2)) {
+			for (const line of lines.slice(2)) {
 				this.room.add(line);
 			}
 			this.room.update();
@@ -505,7 +505,7 @@ class Battle {
 
 		case 'winupdate':
 			lines = lines.slice(3);
-			for (let line of lines.slice(3)) {
+			for (const line of lines.slice(3)) {
 				this.room.add(line);
 			}
 			this.started = true;
