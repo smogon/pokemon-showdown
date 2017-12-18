@@ -154,7 +154,7 @@ class Roomlog {
 	add(message) {
 		if (message.startsWith('|uhtmlchange|')) return this.uhtmlchange(message);
 		this.roomlog(message);
-		if (message.substr(0, 3) === '|c|') {
+		if (this.logTimes && message.startsWith('|c|')) {
 			message = '|c:|' + (~~(Date.now() / 1000)) + '|' + message.substr(3);
 		}
 		this.log.push(message);

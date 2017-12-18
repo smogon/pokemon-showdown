@@ -1305,6 +1305,7 @@ class GameRoom extends BasicChatRoom {
 	constructor(roomid, title, options = {}) {
 		options.logTimes = false;
 		options.autoTruncate = false;
+		options.isMultichannel = true;
 		options.reportJoins = !!Config.reportbattlejoins;
 		options.batchJoins = 0;
 		super(roomid, title, options);
