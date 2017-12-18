@@ -662,6 +662,7 @@
 66.116.96.0,66.116.127.255,SWITCH Communications Group LLC,http://www.switchnap.com/
 66.129.64.0,66.129.127.255,Peak10,http://www.peak10.com/
 66.132.128.0,66.132.255.255,PEER 1,http://www.peer1.com/
+66.133.72.0,66.133.79.255,Micfo,https://www.micfo.com/
 66.135.32.0,66.135.63.255,ServerBeach Dedicated Servers,http://www.serverbeach.com/
 66.147.224.0,66.147.239.255,HostRocket,http://www.hostrocket.com/
 66.147.240.0,66.147.255.255,Bluehost.com,http://www.bluehost.com/
@@ -1624,6 +1625,7 @@
 107.155.0.0,107.155.63.255,Zenlayer,http://www.zenlayer.com/
 107.160.0.0,107.160.255.255,Psychz Networks,http://psychz.net/
 107.164.0.0,107.165.255.255,EGIHosting.com,http://www.egihosting.com/
+107.167.96.0,107.167.127.255,Opera Mini Proxy,https://www.opera.com/
 107.170.0.0,107.170.255.255,DigitalOcean USA,https://www.digitalocean.com/
 107.181.160.0,107.181.191.255,Total Server Solutions,http://totalserversolutions.com/
 107.182.224.0,107.182.239.255,UK2 Group,http://www.uk2.net/
@@ -1762,6 +1764,7 @@
 139.59.0.0,139.59.255.255,DigitalOcean AP,https://www.digitalocean.com/
 138.197.0.0,138.197.255.255,DigitalOcean USA,https://www.digitalocean.com/
 139.59.0.0,139.59.255.255,DigitalOcean AP,https://www.digitalocean.com/
+141.0.8.0,141.0.11.255,Opera Mini Proxy,https://www.opera.com/
 141.0.160.0,141.0.167.255,NuFuture Ltd,http://www.nublue.co.uk/
 141.101.64.0,141.101.127.255,CloudFlare Inc,https://www.cloudflare.com/
 141.105.64.0,141.105.71.255,HostKey,http://www.hostkey.com/
@@ -1867,6 +1870,7 @@
 162.243.0.0,162.243.255.255,DigitalOcean USA,https://www.digitalocean.com/
 162.244.8.0,162.244.15.255,Power Up Hosting,https://poweruphosting.com/
 162.244.24.0,162.244.31.255,KW Datacenter CA,http://www.kwdatacentre.com/
+162.244.80.0,162.244.83.255,Server Room,https://www.serverroom.net/
 162.244.80.243,162.244.80.250,Cyberghost,http://www.cyberghostvpn.com/
 162.246.16.0,162.246.23.255,InterServer.net,http://www.interserver.net/
 162.248.8.0,162.248.11.255,KW Datacenter CA,http://www.kwdatacentre.com/
@@ -1889,6 +1893,7 @@
 167.88.32.0,167.88.47.255,KW Datacenter CA,http://www.kwdatacentre.com/
 167.114.0.0,167.114.255.255,OVH,http://www.ovh.co.uk/
 167.160.32.0,167.160.63.255,Web2Objects,https://web2objects.com/
+168.1.112.64,168.1.112.127,SoftLayer,http://www.softlayer.com/
 168.61.0.0,168.62.63.255,Microsoft Azure,http://www.windowsazure.com/en-us/
 168.62.96.0,168.62.251.255,Microsoft Azure,http://www.windowsazure.com/en-us/
 168.63.0.0,168.63.89.191,Microsoft Azure,http://www.windowsazure.com/en-us/
@@ -2196,6 +2201,7 @@
 185.17.43.56,185.17.43.59,OneProvider,http://oneprovider.com/
 185.17.184.0,185.17.187.255,Leaseweb,http://www.leaseweb.com/
 185.19.218.152,185.19.218.159,Velia,http://www.velia.net/
+185.26.180.0,185.26.181.255,Opera Mini Proxy,https://www.opera.com/
 185.27.236.0,185.27.236.255,3W Infra,https://ccc.3winfra.com/
 185.28.193.0,185.28.193.255,Regtons CZ,https://regtons.com/en/
 185.29.8.0,185.29.8.255,DataClub,https://www.dataclub.biz/
@@ -2235,6 +2241,7 @@
 185.121.120.0,185.121.121.255,Trabia Network,https://www.trabia.com/
 185.137.16.0,185.137.19.255,Surfeasy,https://www.surfeasy.com/
 185.140.114.0,185.140.114.255,OneProvider,http://oneprovider.com/
+185.156.173.32,185.156.173.63,Cyberghost,http://www.cyberghostvpn.com/
 185.186.76.0,185.186.79.255,OneProvider,http://oneprovider.com/
 185.212.168.0,185.212.171.255,M247 Dedicated Servers,https://m247.com/
 186.227.162.128,186.227.162.191,Server Green,http://servergreen.com.br/
@@ -2856,6 +2863,7 @@
 206.223.120.0,206.223.121.255,Limelight Networks Inc,http://www.limelight.com/
 206.225.80.0,206.225.87.255,Codero,http://www.codero.com/
 206.225.92.0,206.225.95.255,Codero,http://www.codero.com/
+206.225.132.0,206.225.135.255,Micfo,https://www.micfo.com/
 206.251.224.0,206.251.255.255,American Internet Services,http://americanis.net/
 206.252.128.0,206.252.159.255,LogicWorks,http://www.logicworks.net/
 207.7.80.0,207.7.95.255,PrivateSystems.net,http://privatesystems.net/
@@ -3285,6 +3293,7 @@
 217.148.178.128,217.148.178.191,serverboost.nl,http://serverboost.nl/
 217.150.240.0,217.150.255.255,nine.ch,http://nine.ch/
 217.160.0.0,217.160.255.255,1&1 Internet,http://www.1and1.com/
+217.170.197.0,217.170.197.255,ServeTheWorld,https://servetheworld.net/
 217.172.128.0,217.172.143.255,host-it.co.uk,http://www.host-it.co.uk/
 217.172.160.0,217.172.191.255,plusserver.de,http://plusserver.de/
 217.174.240.0,217.174.255.255,Fasthosts Internet Ltd,http://www.fasthosts.co.uk/
