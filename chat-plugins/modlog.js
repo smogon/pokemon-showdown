@@ -160,8 +160,8 @@ async function runModlog(rooms, searchString, exactSearch, maxLines) {
 		if (rooms[i] === 'all') {
 			checkAllRooms = true;
 			const fileList = await FS(LOG_PATH).readdir();
-			for (let i = 0; i < fileList.length; i++) {
-				fileNameList.push(fileList[i]);
+			for (const file of fileList) {
+				if (file !== 'README.md') fileNameList.push(file);
 			}
 		} else {
 			fileNameList.push(`modlog_${rooms[i]}.txt`);
