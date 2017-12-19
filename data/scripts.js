@@ -529,6 +529,9 @@ exports.BattleScripts = {
 				damage = (moveDamage || 0);
 				// Total damage dealt is accumulated for the purposes of recoil (Parental Bond).
 				move.totalDamage += damage;
+				if (move.mindBlownRecoil && i === 0) {
+					this.damage(Math.round(pokemon.maxhp / 2), pokemon, pokemon, this.getEffect('Mind Blown'), true);
+				}
 				this.eachEvent('Update');
 			}
 			if (i === 0) return false;
