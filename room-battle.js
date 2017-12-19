@@ -504,7 +504,6 @@ class Battle {
 			break;
 
 		case 'winupdate':
-			lines = lines.slice(3);
 			for (const line of lines.slice(3)) {
 				this.room.add(line);
 			}
