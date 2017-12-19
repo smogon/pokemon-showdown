@@ -2839,7 +2839,7 @@ exports.commands = {
 		Monitor.log(`The ladder was disabled by ${user.name}.`);
 
 		const innerHTML = (
-			`<b>Due to high server load, the ladder has been temporarily disabled.</b><br />` +
+			`<b>Due to technical difficulties, the ladder has been temporarily disabled.</b><br />` +
 			`Rated games will no longer update the ladder. It will be back momentarily.`
 		);
 
