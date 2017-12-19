@@ -232,6 +232,7 @@ class Roomlog {
 				this.roomlogStream = null;
 			}));
 		}
+		Roomlogs.roomlogs.delete(this.id);
 		return Promise.all(promises);
 	}
 }
