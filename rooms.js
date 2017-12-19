@@ -1572,6 +1572,8 @@ let Rooms = Object.assign(getRoom, {
 
 	RETRY_AFTER_LOGIN,
 
+	Roomlogs: Roomlogs,
+
 	RoomBattle: require(roomBattleLoc).RoomBattle,
 	RoomBattlePlayer: require(roomBattleLoc).RoomBattlePlayer,
 	SimulatorManager: require(roomBattleLoc).SimulatorManager,
