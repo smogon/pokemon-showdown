@@ -1454,7 +1454,7 @@ class RandomTeams extends Dex.ModdedDex {
 		};
 		let customScale = {
 			// Banned Abilities
-			Gothitelle: 77, Politoed: 79, Wobbuffet: 77,
+			Dugtrio: 77, Gothitelle: 77, Politoed: 79, Wobbuffet: 77,
 
 			// Holistic judgement
 			Unown: 100,
