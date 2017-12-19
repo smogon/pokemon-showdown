@@ -610,7 +610,7 @@ class Battle {
 		let logData = this.logData;
 		if (!logData) return;
 		this.logData = null; // deallocate to save space
-		logData.log = Rooms.GameRoom.prototype.getLog.call(logData, 3); // replay log (exact damage)
+		logData.log = this.room.getLog(3).split('\n'); // replay log (exact damage)
 
 		// delete some redundant data
 		if (p1rating) {
