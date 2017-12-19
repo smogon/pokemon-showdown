@@ -532,7 +532,7 @@ class ModdedDex {
 			let [newName, customRulesString] = name.split('@@@', 2);
 			name = newName;
 			id = toId(name);
-			if (isTrusted) {
+			if (isTrusted && customRulesString) {
 				supplementaryAttributes = {
 					customRules: customRulesString.split(','),
 					searchShow: false,
