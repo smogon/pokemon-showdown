@@ -216,7 +216,7 @@ exports.commands = {
 			room.poll = new Poll(room, {source: params[0], supportHTML: supportHTML}, options);
 			room.poll.display();
 
-			this.logEntry("" + user.name + " used " + message);
+			this.roomlog("" + user.name + " used " + message);
 			return this.privateModCommand("(A poll was started by " + user.name + ".)");
 		},
 		newhelp: ["/poll create [question], [option1], [option2], [...] - Creates a poll. Requires: % @ * # & ~"],

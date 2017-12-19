@@ -539,12 +539,12 @@ class CommandContext {
 		this.room.send(data);
 	}
 	sendModCommand(data) {
-		this.room.sendModCommand(data);
+		this.room.sendModsByUser(this.user, data);
 	}
 	privateModCommand(data, logOnlyText) {
-		this.room.sendModCommand(data);
-		this.logEntry(data);
-		this.room.modlog(data + (logOnlyText || ""));
+		this.room.sendModsByUser(this.user, data);
+		this.roomlog(data);
+		this.room.modlog('(' + this.room.id + ') ' + data + (logOnlyText || ""));
 	}
 	globalModlog(action, user, note) {
 		let buf = `(${this.room.id}) ${action}: `;
@@ -559,16 +559,16 @@ class CommandContext {
 		buf += note;
 		Rooms.global.modlog(buf);
 	}
-	logEntry(data) {
+	roomlog(data) {
 		if (this.pmTarget) return;
-		this.room.logEntry(data);
+		this.room.roomlog(data);
 	}
 	addModCommand(text, logOnlyText) {
-		this.room.addLogMessage(this.user, text);
-		this.room.modlog(text + (logOnlyText || ""));
+		this.room.addByUser(this.user, text);
+		this.room.modlog('(' + this.room.id + ') ' + text + (logOnlyText || ""));
 	}
 	logModCommand(text) {
-		this.room.modlog(text);
+		this.room.modlog('(' + this.room.id + ') ' + text);
 	}
 	update() {
 		if (this.room) this.room.update();

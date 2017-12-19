@@ -106,7 +106,7 @@ Commands have access to the following functions:
 	up in saved replays.
 	You USUALLY want to use `this.add` instead.
 
-`this.logEntry(message)`
+`this.roomlog(message)`
 *	Log a message to the room's log without sending it to anyone. This is
 	like `this.add`, except no one will see it.
 
