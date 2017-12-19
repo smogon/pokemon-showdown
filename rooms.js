@@ -476,6 +476,13 @@ class GlobalRoom extends BasicRoom {
 		this.modlogStream = FS('logs/modlog/modlog_global.txt').createAppendStream();
 	}
 
+	/**
+	 * @param {string} message
+	 */
+	modlog(message) {
+		this.modlogStream.write(message + '\n');
+	}
+
 	writeChatRoomData() {
 		FS('config/chatrooms.json').writeUpdate(() => (
 			JSON.stringify(this.chatRoomDataList)
