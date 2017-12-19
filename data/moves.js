@@ -9853,8 +9853,8 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 180,
 		category: "Physical",
-		desc: "No additional effect.",
-		shortDesc: "No additional effect.",
+		desc: "Damage doubles and no accuracy check is done if the target has used Minimize while active.",
+		shortDesc: "Damage doubles if the target used Minimize.",
 		id: "maliciousmoonsault",
 		name: "Malicious Moonsault",
 		pp: 1,
@@ -10385,7 +10385,7 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "Raises the user's evasiveness by 2 stages. Whether or not the user's evasiveness was changed, Body Slam, Dragon Rush, Flying Press, Heat Crash, Heavy Slam, Phantom Force, Shadow Force, Steamroller, and Stomp will not check accuracy and have their damage doubled if used against the user while it is active.",
+		desc: "Raises the user's evasiveness by 2 stages. Whether or not the user's evasiveness was changed, Body Slam, Dragon Rush, Flying Press, Heat Crash, Heavy Slam, Malicious Moonsault, Phantom Force, Shadow Force, Steamroller, and Stomp will not check accuracy and have their damage doubled if used against the user while it is active.",
 		shortDesc: "Raises the user's evasiveness by 2.",
 		id: "minimize",
 		name: "Minimize",
@@ -10396,12 +10396,12 @@ exports.BattleMovedex = {
 		effect: {
 			noCopy: true,
 			onSourceModifyDamage: function (damage, source, target, move) {
-				if (['stomp', 'steamroller', 'bodyslam', 'flyingpress', 'dragonrush', 'phantomforce', 'heatcrash', 'shadowforce', 'heavyslam'].includes(move.id)) {
+				if (['stomp', 'steamroller', 'bodyslam', 'flyingpress', 'dragonrush', 'phantomforce', 'heatcrash', 'shadowforce', 'heavyslam', 'maliciousmoonsault'].includes(move.id)) {
 					return this.chainModify(2);
 				}
 			},
 			onAccuracy: function (accuracy, target, source, move) {
-				if (['stomp', 'steamroller', 'bodyslam', 'flyingpress', 'dragonrush', 'phantomforce', 'heatcrash', 'shadowforce', 'heavyslam'].includes(move.id)) {
+				if (['stomp', 'steamroller', 'bodyslam', 'flyingpress', 'dragonrush', 'phantomforce', 'heatcrash', 'shadowforce', 'heavyslam', 'maliciousmoonsault'].includes(move.id)) {
 					return true;
 				}
 				return accuracy;
