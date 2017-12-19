@@ -315,6 +315,10 @@ Dnsbl.reverse = function reverseDns(ip) {
 			resolve('illinois.net.res-nohost');
 			return;
 		}
+		if (ip.startsWith('147.129.')) {
+			resolve('ithaca.edu.res-nohost');
+			return;
+		}
 		if (ip.startsWith('189.204.')) {
 			resolve('bestel.com.mx.res-nohost');
 			return;
