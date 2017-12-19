@@ -173,7 +173,7 @@ class BasicRoom {
 	 * @param {string} text
 	 */
 	addByUser(user, text) {
-		return this.add('|c|' + user.getIdentity(this.id) + '|/log ' + text).update();
+		return this.add('|c|' + user.getIdentity(this) + '|/log ' + text).update();
 	}
 	/**
 	 * Like addByUser, but sends to mods only.
@@ -181,7 +181,7 @@ class BasicRoom {
 	 * @param {string} text
 	 */
 	sendModsByUser(user, text) {
-		return this.sendMods('|c|' + user.getIdentity(this.id) + '|/log ' + text);
+		return this.sendMods('|c|' + user.getIdentity(this) + '|/log ' + text);
 	}
 	update() {}
 

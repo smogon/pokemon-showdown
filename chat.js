@@ -598,18 +598,10 @@ class CommandContext {
 	sendModCommand(data) {
 		this.room.sendModsByUser(this.user, data);
 	}
-	privateModCommand(message, log) {
-		if (!log) {
-			// only a single message provided - format it with userids by grammatically split-parsing the message
-			const {roomMsg, logMsg} = this.splitModCommand(message);
-			this.room.sendModCommand(roomMsg);
-			this.logEntry(roomMsg);
-			this.room.modlog(logMsg);
-		} else {
-			this.room.sendModCommand(message);
-			this.logEntry(message);
-			this.room.modlog(log);
-		}
+	privateModCommand(data, logOnlyText) {
+		this.room.sendModsByUser(this.user, data);
+		this.roomlog(data);
+		this.room.modlog('(' + this.room.id + ') ' + data + (logOnlyText || ""));
 	}
 	/**
 	 * @param {string} action
@@ -629,9 +621,7 @@ class CommandContext {
 		buf += note;
 		Rooms.global.modlog(buf);
 	}
-	/**
-	 * @param {string} data
-	 */
+
 	roomlog(data) {
 		if (this.pmTarget) return;
 		this.room.roomlog(data);
