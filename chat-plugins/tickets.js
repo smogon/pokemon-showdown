@@ -76,7 +76,7 @@ class HelpTicket extends Rooms.RoomGame {
 		} else {
 			this.modnote(staff, `${staff.name} escalated this ticket.`);
 		}
-		this.ticket.escalator = staff;
+		this.ticket.escalator = staff.name;
 		this.ticket.created = Date.now(); // Bump the ticket so it shows as the newest
 		writeTickets();
 		notifyStaff();
