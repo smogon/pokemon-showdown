@@ -152,6 +152,7 @@ class Roomlog {
 			FS(link0).symlinkToSync(relpath); // intentionally a relative link
 			FS(link0).renameSync(basepath + 'today.txt');
 		} catch (e) {} // OS might not support symlinks or atomic rename
+		if (!Roomlogs.rollLogTimer) Roomlogs.rollLogs();
 	}
 	/**
 	 * @param {string} message
@@ -198,13 +199,18 @@ class Roomlog {
 		this.modlogStream.write('[' + (new Date().toJSON()) + '] ' + message + '\n');
 	}
 	static async rollLogs() {
+		if (Roomlogs.rollLogTimer === true) return;
+		if (Roomlogs.rollLogTimer) {
+			clearTimeout(Roomlogs.rollLogTimer);
+		}
+		Roomlogs.rollLogTimer = true;
 		for (const log of Roomlogs.roomlogs.values()) {
 			await log.setupRoomlogStream();
 		}
 		const time = Date.now();
 		const nextMidnight = new Date(time + 24 * 60 * 60 * 1000);
 		nextMidnight.setHours(0, 0, 1);
-		setTimeout(() => Roomlog.rollLogs(), nextMidnight.getTime() - time);
+		Roomlogs.rollLogTimer = setTimeout(() => Roomlog.rollLogs(), nextMidnight.getTime() - time);
 	}
 	truncate() {
 		if (!this.autoTruncate) return;
@@ -259,7 +265,10 @@ const Roomlogs = {
 	Roomlog,
 	roomlogs,
 	sharedModlogs,
-	/** @type {NodeJS.Timer?} */
+
+	rollLogs: Roomlog.rollLogs,
+
+	/** @type {NodeJS.Timer? | true} */
 	rollLogTimer: null,
 };
 
