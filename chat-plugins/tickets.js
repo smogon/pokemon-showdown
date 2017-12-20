@@ -94,8 +94,7 @@ class HelpTicket extends Rooms.RoomGame {
 		writeTickets();
 		this.modnote(staff, `${staff.name} closed this ticket.`);
 		notifyStaff(this.ticket.escalated);
-		if (this.room.expireTimer) clearTimeout(this.room.expireTimer);
-		this.room.expireTimer = setTimeout(() => this.room.expire(), 40 * 60 * 1000);
+		this.room.pokeExpireTimer();
 	}
 
 	deleteTicket(staff) {
