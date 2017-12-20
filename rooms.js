@@ -1091,9 +1091,11 @@ class BasicChatRoom extends BasicRoom {
 		this.pokeExpireTimer();
 	}
 	pokeExpireTimer() {
+		if (this.expireTimer) clearTimeout(this.expireTimer);
 		if ((this.isPersonal && !this.isHelp) || (this.isHelp && this.isHelp !== 'open')) {
-			if (this.expireTimer) clearTimeout(this.expireTimer);
 			this.expireTimer = setTimeout(() => this.expire(), TIMEOUT_INACTIVE_DEALLOCATE);
+		} else {
+			this.expireTimer = null;
 		}
 	}
 	expire() {
