@@ -1243,5 +1243,40 @@ Chat.getDataItemHTML = function (item) {
 	return buf;
 };
 
+/**
+ * Visualizes eval output in a slightly more readable form
+ * @param {string} value
+ */
+Chat.stringify = function (value, depth = 0) {
+	depth++;
+	if (value === undefined) return `undefined`;
+	if (value === null) return `null`;
+	if (typeof value === 'number' || typeof value === 'boolean') {
+		return `${value}`;
+	}
+	if (typeof value === 'string') {
+		return `"${value}"`; // NOT ESCAPED
+	}
+	if (typeof value === 'symbol') {
+		return value.toString();
+	}
+	if (Array.isArray(value)) {
+		if (depth > 10) return `[array]`;
+		return `[` + value.map(elem => Chat.stringify(elem, depth)).join(`, `) + `]`;
+	}
+	if (value instanceof RegExp || value instanceof Date || value instanceof Function) {
+		return `${value}`;
+	}
+	const stringValue = `{${value}}`;
+	if (stringValue !== '{[object Object]}') return stringValue;
+	if (depth > 2) return `{object}`;
+	let buf = '';
+	for (const k in value) {
+		if (buf) buf += `, `;
+		buf += `"${k}": ` + Chat.stringify(value[k], depth);
+	}
+	return `{${buf}}`;
+};
+
 Chat.formatText = require('./chat-formatter').formatText;
 Chat.linkRegex = require('./chat-formatter').linkRegex;

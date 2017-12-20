@@ -3111,10 +3111,10 @@ exports.commands = {
 			/* eslint-disable no-unused-vars */
 			let battle = room.battle;
 			let me = user;
-			this.sendReply('||<< ' + eval(target));
+			this.sendReply('||<< ' + Chat.stringify(eval(target)));
 			/* eslint-enable no-unused-vars */
 		} catch (e) {
-			this.sendReply('|| << ' + ('' + e.stack).replace(/\n *at CommandContext\.exports\.commands(\.[a-z0-9]+)*\.eval [\s\S]*/m, '').replace(/\n/g, '\n||'));
+			this.sendReply('|| << ' + ('' + e.stack).replace(/\n *at CommandContext\.eval [\s\S]*/m, '').replace(/\n/g, '\n||'));
 		}
 	},
 
