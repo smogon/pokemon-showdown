@@ -1248,7 +1248,6 @@ Chat.getDataItemHTML = function (item) {
  * @param {string} value
  */
 Chat.stringify = function (value, depth = 0) {
-	depth++;
 	if (value === undefined) return `undefined`;
 	if (value === null) return `null`;
 	if (typeof value === 'number' || typeof value === 'boolean') {
@@ -1262,20 +1261,40 @@ Chat.stringify = function (value, depth = 0) {
 	}
 	if (Array.isArray(value)) {
 		if (depth > 10) return `[array]`;
-		return `[` + value.map(elem => Chat.stringify(elem, depth)).join(`, `) + `]`;
+		return `[` + value.map(elem => Chat.stringify(elem, depth + 1)).join(`, `) + `]`;
 	}
 	if (value instanceof RegExp || value instanceof Date || value instanceof Function) {
+		if (depth && value instanceof Function) return `Function`;
 		return `${value}`;
 	}
-	const stringValue = `{${value}}`;
-	if (stringValue !== '{[object Object]}') return stringValue;
-	if (depth > 2) return `{object}`;
-	let buf = '';
-	for (const k in value) {
-		if (buf) buf += `, `;
-		buf += `"${k}": ` + Chat.stringify(value[k], depth);
+	let constructor = '';
+	if (value.constructor && value.constructor.name && typeof value.constructor.name === 'string') {
+		constructor = value.constructor.name;
+		if (constructor === 'Object') constructor = '';
+	} else {
+		constructor = 'null';
 	}
-	return `{${buf}}`;
+	if (value.toString) {
+		try {
+			const stringValue = value.toString();
+			if (typeof stringValue === 'string' && stringValue !== '[object Object]' && stringValue !== `[object ${constructor}]`) {
+				return `${constructor}(${stringValue})`;
+			}
+		} catch (e) {}
+	}
+	let buf = '';
+	for (let k in value) {
+		if (!Object.prototype.hasOwnProperty.call(value, k)) continue;
+		if (depth > 2 || (depth && constructor)) {
+			buf = '...';
+			break;
+		}
+		if (buf) buf += `, `;
+		if (!/^[A-Za-z0-9_$]+$/.test(k)) k = JSON.stringify(k);
+		buf += `${k}: ` + Chat.stringify(value[k], depth + 1);
+	}
+	if (constructor && !buf && constructor !== 'null') return constructor;
+	return `${constructor}{${buf}}`;
 };
 
 Chat.formatText = require('./chat-formatter').formatText;
