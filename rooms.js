@@ -480,7 +480,7 @@ class GlobalRoom extends BasicRoom {
 	 * @param {string} message
 	 */
 	modlog(message) {
-		this.modlogStream.write(message + '\n');
+		this.modlogStream.write('[' + (new Date().toJSON()) + '] ' + message + '\n');
 	}
 
 	writeChatRoomData() {
