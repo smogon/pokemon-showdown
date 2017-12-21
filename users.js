@@ -585,16 +585,16 @@ class User {
 		}
 	}
 	/**
+	 * Do a rename, passing and validating a login token.
 	 *
-	 * @param name             The name you want
-	 * @param token            Signed assertion returned from login server
-	 * @param newlyRegistered  Make sure this account will identify as registered
-	 * @param connection       The connection asking for the rename
+	 * @param name The name you want
+	 * @param token Signed assertion returned from login server
+	 * @param newlyRegistered Make sure this account will identify as registered
+	 * @param connection The connection asking for the rename
 	 */
-	rename(name, token, newlyRegistered, connection) {
-		// this needs to be a for-of because it returns...
-		for (let roomid of this.games) {
-			let game = Rooms(roomid).game;
+	async rename(name, token, newlyRegistered, connection) {
+		for (const roomid of this.games) {
+			const game = Rooms(roomid).game;
 			if (!game || game.ended) continue; // should never happen
 			if (game.allowRenames || !this.named) continue;
 			this.popup(`You can't change your name right now because you're in ${Rooms(roomid).title}, which doesn't allow renaming.`);
@@ -642,59 +642,48 @@ class User {
 				return this.forceRename(name, this.registered);
 			}
 		}
-		let conflictUser = users.get(userid);
-		if (conflictUser && !conflictUser.registered && conflictUser.connected && !newlyRegistered) {
-			this.send(`|nametaken|${name}|Someone is already using the name "${conflictUser.name}".`);
+
+		if (!token || token.charAt(0) === ';') {
+			this.send(`|nametaken|${name}|Your authentication token was invalid.`);
 			return false;
 		}
 
-		if (token && token.charAt(0) !== ';') {
-			let tokenSemicolonPos = token.indexOf(';');
-			let tokenData = token.substr(0, tokenSemicolonPos);
-			let tokenSig = token.substr(tokenSemicolonPos + 1);
+		let tokenSemicolonPos = token.indexOf(';');
+		let tokenData = token.substr(0, tokenSemicolonPos);
+		let tokenSig = token.substr(tokenSemicolonPos + 1);
 
-			Verifier.verify(tokenData, tokenSig).then(success => {
-				if (!success) {
-					Monitor.warn(`verify failed: ${token}`);
-					Monitor.warn(`challenge was: ${challenge}`);
-					return;
-				}
-				this.validateRename(name, tokenData, newlyRegistered, challenge);
-			});
-		} else {
-			this.send(`|nametaken|${name}|Your authentication token was invalid.`);
+		let success = await Verifier.verify(tokenData, tokenSig);
+		if (!success) {
+			Monitor.warn(`verify failed: ${token}`);
+			Monitor.warn(`challenge was: ${challenge}`);
+			this.send(`|nametaken|${name}|Your verification signature was invalid.`);
+			return false;
 		}
 
-		return false;
-	}
-	validateRename(name, tokenData, newlyRegistered, challenge) {
-		let userid = toId(name);
-
 		let tokenDataSplit = tokenData.split(',');
+		let [signedChallenge, signedUserid, userType, signedDate] = tokenDataSplit;
 
 		if (tokenDataSplit.length < 5) {
 			Monitor.warn(`outdated assertion format: ${tokenData}`);
 			this.send(`|nametaken|${name}|Your assertion is stale. This usually means that the clock on the server computer is incorrect. If this is your server, please set the clock to the correct time.`);
-			return;
+			return false;
 		}
 
-		if (tokenDataSplit[1] !== userid) {
+		if (signedUserid !== userid) {
 			// userid mismatch
+			this.send(`|nametaken|${name}|Your verification signature doesn't match your new username.`);
 			return;
 		}
 
-		if (tokenDataSplit[0] !== challenge) {
+		if (signedChallenge !== challenge) {
 			// a user sent an invalid token
-			if (tokenDataSplit[0] !== challenge) {
-				Monitor.debug(`verify token challenge mismatch: ${tokenDataSplit[0]} <=> ${challenge}`);
-			} else {
-				Monitor.warn(`verify token mismatch: ${tokenData}`);
-			}
+			Monitor.debug(`verify token challenge mismatch: ${signedChallenge} <=> ${challenge}`);
+			this.send(`|nametaken|${name}|Your verification signature doesn't match your authentication token.`);
 			return;
 		}
 
 		let expiry = Config.tokenexpiry || 25 * 60 * 60;
-		if (Math.abs(parseInt(tokenDataSplit[3]) - Date.now() / 1000) > expiry) {
+		if (Math.abs(parseInt(signedDate) - Date.now() / 1000) > expiry) {
 			Monitor.warn(`stale assertion: ${tokenData}`);
 			this.send(`|nametaken|${name}|Your assertion is stale. This usually means that the clock on the server computer is incorrect. If this is your server, please set the clock to the correct time.`);
 			return;
@@ -705,7 +694,7 @@ class User {
 		this.s2 = tokenDataSplit[6];
 		this.s3 = tokenDataSplit[7];
 
-		this.handleRename(name, userid, newlyRegistered, tokenDataSplit[2]);
+		this.handleRename(name, userid, newlyRegistered, userType);
 	}
 	handleRename(name, userid, newlyRegistered, userType) {
 		let conflictUser = users.get(userid);
@@ -714,7 +703,7 @@ class User {
 				if (conflictUser !== this) conflictUser.resetName();
 			} else {
 				this.send(`|nametaken|${name}|Someone is already using the name "${conflictUser.name}.`);
-				return this;
+				return false;
 			}
 		}
 
@@ -743,6 +732,11 @@ class User {
 			}
 		}
 		let user = users.get(userid);
+		let possibleUser = Users(userid);
+		if (possibleUser && possibleUser.namelocked) {
+			// allows namelocked users to be merged
+			user = possibleUser;
+		}
 		if (user && user !== this) {
 			// This user already exists; let's merge
 			user.merge(this);
@@ -756,29 +750,27 @@ class User {
 			if (this.named) user.prevNames[this.userid] = this.name;
 			this.destroy();
 
-			if (user.named) Punishments.checkName(user, registered);
-			if (user.namelocked) user.named = true;
+			Punishments.checkName(user, userid, registered);
 
 			Rooms.global.checkAutojoin(user);
 			Chat.loginfilter(user, this, userType);
 			return true;
 		}
 
+		Punishments.checkName(this, userid, registered);
+		if (this.namelocked) return false;
+
 		// rename success
-		if (this.forceRename(name, registered)) {
-			Rooms.global.checkAutojoin(this);
-			Chat.loginfilter(this, null, userType);
-			return true;
+		if (!this.forceRename(name, registered)) {
+			return false;
 		}
-		return false;
+		Rooms.global.checkAutojoin(this);
+		Chat.loginfilter(this, null, userType);
+		return true;
 	}
 	forceRename(name, registered, isForceRenamed) {
 		// skip the login server
 		let userid = toId(name);
-
-		for (const roomid of this.inRooms) {
-			Punishments.checkNewNameInRoom(this, userid, roomid);
-		}
 
 		if (users.has(userid) && users.get(userid) !== this) {
 			return false;
@@ -804,26 +796,22 @@ class User {
 		this.name = name;
 
 		let joining = !this.named;
-		this.named = (userid.substr(0, 5) !== 'guest');
-
-		if (this.named) Punishments.checkName(this, registered);
-
-		if (this.namelocked) this.named = true;
+		this.named = !userid.startsWith('guest') || this.namelocked;
 
 		for (const connection of this.connections) {
 			//console.log('' + name + ' renaming: socket ' + i + ' of ' + this.connections.length);
 			let initdata = `|updateuser|${this.name}|${this.named ? 1 : 0}|${this.avatar}`;
 			connection.send(initdata);
 		}
-		this.games.forEach(roomid => {
+		for (const roomid of this.games) {
 			const room = Rooms(roomid);
 			if (!room) {
 				Monitor.warn(`while renaming, room ${roomid} expired for user ${this.userid} in rooms ${[...this.inRooms]} and games ${[...this.games]}`);
 				this.games.delete(roomid);
-				return;
+				continue;
 			}
 			room.game.onRename(this, oldid, joining, isForceRenamed);
-		});
+		}
 		for (const roomid of this.inRooms) {
 			Rooms(roomid).onRename(this, oldid, joining);
 		}

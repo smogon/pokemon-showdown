@@ -39,8 +39,11 @@ const AUTOLOCK_POINT_THRESHOLD = 8;
  * @typedef {[string, string, number, string]} Punishment
  */
 
-class PunishmentMap extends Map/*:: <string, Punishment> */ {
-	get(k) {
+/**
+ * @augments {Map<string, Punishment>}
+ */
+class PunishmentMap extends Map {
+	get(/** @type {string} */ k) {
 		const punishment = super.get(k);
 		if (punishment) {
 			if (Date.now() < punishment[2]) return punishment;
@@ -48,7 +51,7 @@ class PunishmentMap extends Map/*:: <string, Punishment> */ {
 		}
 		return undefined;
 	}
-	has(k) {
+	has(/** @type {string} */ k) {
 		return !!this.get(k);
 	}
 	forEach(callback) {
@@ -70,7 +73,7 @@ Punishments.ips = new PunishmentMap();
 Punishments.userids = new PunishmentMap();
 
 /**
- * @augments {Map<string, Punishment>}
+ * @augments {Map<string, Map<string, Punishment>>}
  */
 class NestedPunishmentMap extends Map {
 	nestedSet(k1, k2, value) {
@@ -132,6 +135,7 @@ Punishments.sharedIps = new Map();
 // This map can be extended with custom punishments by chat plugins.
 // Keys in the map correspond to punishTypes, values signify the way they should be displayed in /alt
 
+/** @type {Map<string, string>} */
 Punishments.punishmentTypes = new Map([
 	['LOCK', 'locked'],
 	['BAN', 'globally banned'],
@@ -146,6 +150,7 @@ Punishments.punishmentTypes = new Map([
 //   'BLACKLIST'
 //   'MUTE' (used by getRoomPunishments)
 
+/** @type {Map<string, string>} */
 Punishments.roomPunishmentTypes = new Map([
 	['ROOMBAN', 'banned'],
 	['BLACKLIST', 'blacklisted'],
@@ -1073,10 +1078,14 @@ Punishments.checkRangeBanned = function () {};
 
 /**
  * @param {User} user
+ * @param {string} userid
  * @param {boolean} registered
  */
-Punishments.checkName = function (user, registered) {
-	let userid = user.userid;
+Punishments.checkName = function (user, userid, registered) {
+	if (userid.startsWith('guest')) return;
+	for (const roomid of user.inRooms) {
+		Punishments.checkNewNameInRoom(user, userid, roomid);
+	}
 	let punishment = Punishments.userids.get(userid);
 	if (!punishment && user.namelocked) {
 		punishment = Punishments.userids.get(user.namelocked);
