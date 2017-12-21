@@ -233,29 +233,28 @@ exports.pages = {
 			buf += `<details style="margin: 3px"><summary>Someone is timerstalling</summary>If someone is timerstalling in your battle, and the battle has <b>not</b> ended, click the button below and a global staff member will take a look.<br /><br /><button class="button" name="send" value="/helpticket submit Timerstalling">Report timerstalling</button></details>`;
 			buf += `<details style="margin: 3px"><summary>I want to report a staff member</summary>If you have a complaint against a room staff member, please PM a Room Owner (marked with a #) in the room.<br /><br />If you have a complaint against a global staff member or Room Owner, please click the appropriate button below. Alternatively, make a post in <a href="http://www.smogon.com/forums/threads/names-passwords-rooms-and-servers-contacting-upper-staff.3538721/#post-6300151">Admin Requests</a>.<br /><br /><button class="button" name="send" value="/helpticket submit Room Owner Complaint">Report a Room Owner</button> <button class="button" name="send" value="/helpticket submit Global Staff Complaint">Report a Global Staff Member</button></details>`;
 			buf += `</details><br /><details style="margin: 3px"><summary>I want to appeal a punishment</summary><br /><b>What would you like to appeal?</b><br />`;
-			if (isStaff) {
-				// Show all for reference
-				buf += `<details style="margin: 3px"><summary>I want to appeal my permalock</summary>Please make a post in the <a href="http://www.smogon.com/forums/threads/discipline-appeal-rules.3583479/">Discipline Appeal Forums</a> to appeal a permalock.</details>`;
-				buf += `<details style="margin: 3px"><summary>I want to appeal my lock</summary>If you want to appeal your lock, click the button below and a global staff member will be with you shortly. Alternatively, make a post in <a href="http://www.smogon.com/forums/threads/discipline-appeal-rules.3583479/">Discipline Appeals</a>.<br /><br /><button class="button" name="send" value="/helpticket submit Appeal">Appeal your lock</button></details>`;
-				buf += `<details style="margin: 3px"><summary>I'm locked because I have the same IP as someone I don't recognize</summary>If you are locked under a name you don't recognize, click the button below to call a global staff member so we can check.<br /><br /><button class="button" name="send" value="/helpticket submit IP-Appeal">Appeal IP lock</button></details>`;
-				buf += `<details style="margin: 3px"><summary>I can't talk in chat because of my ISP</summary>Click the button below, and a global staff member will check. <br /><br /><button class="button" name="send" value="/helpticket submit ISP-Appeal">Appeal ISP lock</button></details>`;
-			} else if (user.locked) {
-				if (user.locked === user.userid) {
-					if (user.permalocked) {
+			if (user.locked || isStaff) {
+				if (user.locked === user.userid || isStaff) {
+					if (user.permalocked || isStaff) {
 						buf += `<details style="margin: 3px"><summary>I want to appeal my permalock</summary>Please make a post in the <a href="http://www.smogon.com/forums/threads/discipline-appeal-rules.3583479/">Discipline Appeal Forums</a> to appeal a permalock.</details>`;
-					} else {
+					}
+					if (!user.permalocked || isStaff) {
 						buf += `<details style="margin: 3px"><summary>I want to appeal my lock</summary>If you want to appeal your lock, click the button below and a global staff member will be with you shortly. Alternatively, make a post in <a href="http://www.smogon.com/forums/threads/discipline-appeal-rules.3583479/">Discipline Appeals</a>.<br /><br /><button class="button" name="send" value="/helpticket submit Appeal">Appeal your lock</button></details>`;
 					}
-				} else {
+				}
+				if (user.locked !== user.userid || isStaff) {
 					buf += `<details style="margin: 3px"><summary>I'm locked because I have the same IP as someone I don't recognize</summary>If you are locked under a name you don't recognize, click the button below to call a global staff member so we can check.<br /><br /><button class="button" name="send" value="/helpticket submit IP-Appeal">Appeal IP lock</button></details>`;
 				}
-			} else if (user.semilocked) {
+			}
+			if (user.semilocked || isStaff) {
 				buf += `<details style="margin: 3px"><summary>I can't talk in chat because of my ISP</summary>Click the button below, and a global staff member will check. <br /><br /><button class="button" name="send" value="/helpticket submit ISP-Appeal">Appeal ISP lock</button></details>`;
 			}
 			buf += `<details style="margin: 3px"><summary>I want to appeal a mute/roomban/blacklist</summary>Please PM the staff member who punished you. If you dont know who punished you, ask another room staff member; they will redirect you to the correct user. If you are banned or blacklisted from the room, use <code>/roomauth [name of room]</code> to get a list of room staff members. Bold names are online.</details>`;
 			buf += `</details><br /><details style="margin: 3px"><summary>Something else</summary><b>Maybe one of these options will be helpful?</b><br />`;
 			buf += `<details style="margin: 3px"><summary>I lost my password</summary>If you lost your password, click the button below to get in touch with an upper staff member so we can help you recover it. We will need to clarify a few pieces of information before resetting the account. Alternatively, make a post in <a href="http://www.smogon.com/forums/threads/names-passwords-rooms-and-servers-contacting-upper-staff.3538721/#post-6300151">admin requests</a>.<br /><br /><button class="button" name="send" value="/helpticket submit Lost Password">Request a password reset</button></details>`;
-			if (ticket || isStaff) buf += `<details style="margin: 3px"><summary>I feel my last ticket shouldn't have been closed</summary>If you feel that staff did not properly help you with your last issue, click the button below to get in touch with an upper staff member.<br /><br /><button class="button" name="send" value="/helpticket submit Report Last Ticket">Report last ticket</button></details>`;
+			if (ticket || isStaff) {
+				buf += `<details style="margin: 3px"><summary>I feel my last ticket shouldn't have been closed</summary>If you feel that staff did not properly help you with your last issue, click the button below to get in touch with an upper staff member.<br /><br /><button class="button" name="send" value="/helpticket submit Report Last Ticket">Report last ticket</button></details>`;
+			}
 			buf += `<details style="margin: 3px"><summary>Other</summary>If your issue is not handled above, click the button below to ask for a global. Please be ready to explain the situation.<br /><br /><button class="button" name="send" value="/helpticket submit Other">Call a global staff member</button></details>`;
 			buf += `</details></div>`;
 			return buf;
