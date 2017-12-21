@@ -185,10 +185,12 @@ function checkTicketBanned(user) {
 
 // Prevent a desynchronization issue when hotpatching
 for (const room of Rooms.rooms.values()) {
-	if (!room.isHelp) continue;
+	if (!room.isHelp || !room.game) continue;
 	const queue = room.game.claimQueue;
 	const ticket = room.game.ticket;
 	room.game.destroy();
+	room.game = null;
+	if (!ticket) continue;
 	room.game = new HelpTicket(room, tickets[ticket.userid]);
 	room.game.claimQueue = queue;
 }
