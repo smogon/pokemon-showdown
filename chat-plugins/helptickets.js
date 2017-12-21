@@ -134,7 +134,7 @@ function notifyStaff(upper) {
 		buf += `<button class="button${notifying}" name="send" value="/join help-${ticket.userid}">Help ${creator}: ${ticket.type}${escalator}</button> `;
 		count++;
 	}
-	buf = `|${hasUnclaimed ? 'uhtml' : 'uhtmlchange'}|latest-tickets|<div style="padding:3px">${buf}${count === 0 ? `There are no more open tickets.` : ``}</div>`;
+	buf = `|${hasUnclaimed ? 'uhtml' : 'uhtmlchange'}|latest-tickets|<div class="infobox">${buf}${count === 0 ? `There were open Help tickets, but they've all been closed now.` : ``}</div>`;
 	room.send(buf);
 }
 
