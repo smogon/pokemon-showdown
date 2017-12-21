@@ -84,7 +84,6 @@ class HelpTicket extends Rooms.RoomGame {
 
 	modnote(user, text) {
 		this.room.addByUser(user, text);
-		this.room.modlog(text);
 	}
 
 	close(staff) {
