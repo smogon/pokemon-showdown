@@ -48,8 +48,8 @@ class RandomGen3Teams extends RandomGen4Teams {
 			hasAbility[template.abilities[1]] = true;
 		}
 		let availableHP = 0;
-		for (let i = 0, len = movePool.length; i < len; i++) {
-			if (movePool[i].substr(0, 11) === 'hiddenpower') availableHP++;
+		for (const setMoveid of movePool) {
+			if (setMoveid.startsWith('hiddenpower')) availableHP++;
 		}
 
 		let recoveryMoves = [
@@ -80,32 +80,32 @@ class RandomGen3Teams extends RandomGen4Teams {
 		do {
 			// Keep track of all moves we have:
 			hasMove = {};
-			for (let k = 0; k < moves.length; k++) {
-				if (moves[k].substr(0, 11) === 'hiddenpower') {
+			for (const setMoveid of moves) {
+				if (setMoveid.startsWith('hiddenpower')) {
 					hasMove['hiddenpower'] = true;
 				} else {
-					hasMove[moves[k]] = true;
+					hasMove[setMoveid] = true;
 				}
 			}
 
 			// Choose next 4 moves from learnset/viable moves and add them to moves list:
 			while (moves.length < 4 && movePool.length) {
-				let moveid = this.sampleNoReplace(movePool);
-				if (moveid.substr(0, 11) === 'hiddenpower') {
+				let setMoveid = this.sampleNoReplace(movePool);
+				if (setMoveid.substr(0, 11) === 'hiddenpower') {
 					availableHP--;
 					if (hasMove['hiddenpower']) continue;
 					hasMove['hiddenpower'] = true;
 				} else {
-					hasMove[moveid] = true;
+					hasMove[setMoveid] = true;
 				}
-				moves.push(moveid);
+				moves.push(setMoveid);
 			}
 
 			counter = this.queryMoves(moves, hasType, hasAbility, movePool);
 
 			// Iterate through the moves again, this time to cull them:
-			for (let k = 0; k < moves.length; k++) {
-				let move = this.getMove(moves[k]);
+			for (const [i, setMoveid] of moves.entries()) {
+				let move = this.getMove(setMoveid);
 				let moveid = move.id;
 				let rejected = false;
 				let isSetup = false;
@@ -333,7 +333,7 @@ class RandomGen3Teams extends RandomGen4Teams {
 
 				// Remove rejected moves from the move list
 				if (rejected && (movePool.length - availableHP || availableHP && (moveid === 'hiddenpower' || !hasMove['hiddenpower']))) {
-					moves.splice(k, 1);
+					moves.splice(i, 1);
 					break;
 				}
 			}
@@ -349,9 +349,9 @@ class RandomGen3Teams extends RandomGen4Teams {
 				}
 				if (reqMove) {
 					// reject a move
-					for (let m = 0; m < moves.length; m++) {
-						if (moves[m] === 'weatherball' || this.getMove(moves[m]).type in hasType) continue;
-						moves[m] = reqMove;
+					for (let move of moves) {
+						if (move === 'weatherball' || this.getMove(move).type in hasType) continue;
+						move = reqMove;
 						let reqMoveIndex = movePool.indexOf(reqMove);
 						if (reqMoveIndex !== -1) this.fastPop(movePool, reqMoveIndex);
 						break;
@@ -380,9 +380,9 @@ class RandomGen3Teams extends RandomGen4Teams {
 						// If you have three or more attacks, and none of them are STAB, reject one of them at random.
 						let rejectableMoves = [];
 						let baseDiff = movePool.length - availableHP;
-						for (let l = 0; l < counter.damagingMoves.length; l++) {
-							if (baseDiff || availableHP && (!hasMove['hiddenpower'] || counter.damagingMoves[l].id === 'hiddenpower')) {
-								rejectableMoves.push(counter.damagingMoveIndex[counter.damagingMoves[l].id]);
+						for (const move of counter.damagingMoves) {
+							if (baseDiff || availableHP && (!hasMove['hiddenpower'] || move.id === 'hiddenpower')) {
+								rejectableMoves.push(counter.damagingMoveIndex[move.id]);
 							}
 						}
 						if (rejectableMoves.length) {
@@ -588,8 +588,8 @@ class RandomGen3Teams extends RandomGen4Teams {
 			if (template.gen > 3 || template.isNonstandard || !template.randomBattleMoves) continue;
 			if (template.evos && !allowedNFE.includes(template.species)) {
 				let invalid = false;
-				for (let i = 0; i < template.evos.length; i++) {
-					if (this.getTemplate(template.evos[i]).gen <= 3) {
+				for (const evo of template.evos) {
+					if (this.getTemplate(evo).gen <= 3) {
 						invalid = true;
 						break;
 					}
@@ -631,10 +631,9 @@ class RandomGen3Teams extends RandomGen4Teams {
 			if (template.baseSpecies === 'Castform' && this.random(4) >= 1) continue;
 
 			// Limit 2 of any type
-			let types = template.types;
 			let skip = false;
-			for (let t = 0; t < types.length; t++) {
-				if (typeCount[types[t]] > 1 && this.random(5) >= 1) {
+			for (const type of template.types) {
+				if (typeCount[type] > 1 && this.random(5) >= 1) {
 					skip = true;
 					break;
 				}
@@ -644,7 +643,7 @@ class RandomGen3Teams extends RandomGen4Teams {
 			let set = this.randomSet(template, pokemon.length, teamDetails);
 
 			// Limit 1 of any type combination
-			let typeCombo = types.slice().sort().join();
+			let typeCombo = template.types.slice().sort().join();
 			if (set.ability === 'Drought' || set.ability === 'Drizzle' || set.ability === 'Sand Stream') {
 				// Drought, Drizzle and Sand Stream don't count towards the type combo limit
 				typeCombo = set.ability;
@@ -664,11 +663,11 @@ class RandomGen3Teams extends RandomGen4Teams {
 			baseFormes[template.baseSpecies] = 1;
 
 			// Increment type counters
-			for (let t = 0; t < types.length; t++) {
-				if (types[t] in typeCount) {
-					typeCount[types[t]]++;
+			for (const type of template.types) {
+				if (type in typeCount) {
+					typeCount[type]++;
 				} else {
-					typeCount[types[t]] = 1;
+					typeCount[type] = 1;
 				}
 			}
 			if (typeCombo in typeComboCount) {
