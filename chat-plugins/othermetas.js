@@ -58,6 +58,10 @@ exports.commands = {
 		if (template.isMega || (template.evos && Object.keys(template.evos).length > 0) || template.name === 'Necrozma-Ultra') { // Mega Pokemon and Ultra Necrozma cannot be mega evolved
 			this.errorReply(`Warning: You cannot mega evolve non-fully evolved Pokemon, Mega Pokemon, and Ultra Necrozma in Mix and Mega.`);
 		}
+		let banlist = Dex.getFormat('gen7mixandmega').banlist;
+		if (banlist.includes(stone.name)) {
+			this.errorReply(`Warning: ${stone.name} is banned from Mix and Mega.`);
+		}
 		let bannedStones = Dex.getFormat('gen7mixandmega').bannedStones;
 		if (bannedStones.includes(stone.name) && template.name !== stone.megaEvolves) {
 			this.errorReply(`Warning: ${stone.name} is restricted to ${stone.megaEvolves} in Mix and Mega; therefore, ${template.name} cannot use ${stone.name} in actual play.`);
@@ -163,6 +167,10 @@ exports.commands = {
 			stone = Dex.getItem(target);
 		}
 		if (!stone.megaEvolves && !stone.onPrimal) return this.errorReply(`Error: Mega Stone not found.`);
+		let banlist = Dex.getFormat('gen7mixandmega').banlist;
+		if (banlist.includes(stone.name)) {
+			this.errorReply(`Warning: ${stone.name} is banned from Mix and Mega.`);
+		}
 		let bannedStones = Dex.getFormat('gen7mixandmega').bannedStones;
 		if (bannedStones.includes(stone.name)) {
 			this.errorReply(`Warning: ${stone.name} is restricted to ${stone.megaEvolves} in Mix and Mega.`);
