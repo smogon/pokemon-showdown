@@ -1121,10 +1121,12 @@ Punishments.checkName = function (user, userid, registered) {
 		user.resetName();
 		user.updateIdentity();
 	} else {
-		if (!user.lockNotified) {
+		if (punishUserid === '#hostfilter') {
+			user.popup(`Due to spam, you can't chat using a proxy. (Your IP ${user.latestIp} appears to be a proxy.)`);
+		} else if (!user.lockNotified) {
 			user.send(`|popup|You are locked${bannedUnder}. Your lock will expire in a few days.${reason}${appeal}`);
-			user.lockNotified = true;
 		}
+		user.lockNotified = true;
 		Punishments.punish(user, punishment);
 		user.locked = punishUserid;
 		user.updateIdentity();
