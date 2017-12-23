@@ -964,10 +964,10 @@ class BasicChatRoom extends BasicRoom {
 		if (options.logTimes === undefined) options.logTimes = true;
 		if (options.autoTruncate === undefined) options.autoTruncate = !options.isHelp;
 		if (options.reportJoins === undefined) {
-			options.reportJoins = !!Config.reportjoins || this.isPersonal;
+			options.reportJoins = !!Config.reportjoins || options.isPersonal;
 		}
 		if (options.batchJoins === undefined) {
-			options.batchJoins = this.isPersonal ? 0 : Config.reportjoinsperiod || 0;
+			options.batchJoins = options.isPersonal ? 0 : Config.reportjoinsperiod || 0;
 		}
 		this.log = Roomlogs.create(this, options);
 
