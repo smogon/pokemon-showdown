@@ -106,6 +106,27 @@ class HelpTicket extends Rooms.RoomGame {
 	}
 }
 
+const NOTIFY_ALL_TIMEOUT = 60 * 1000;
+let unclaimedTicketTimer = {upperstaff: null, staff: null};
+function pokeUnclaimedTicketTimer(upper, hasUnclaimed) {
+	const room = Rooms(upper ? 'upperstaff' : 'staff');
+	if (!room) return;
+	if (hasUnclaimed && !unclaimedTicketTimer[room.id]) {
+		unclaimedTicketTimer[room.id] = setTimeout(() => notifyUnclaimedTicket(upper), NOTIFY_ALL_TIMEOUT);
+	} else if (!hasUnclaimed && unclaimedTicketTimer[room.id]) {
+		clearTimeout(unclaimedTicketTimer[room.id]);
+		unclaimedTicketTimer[room.id] = null;
+	}
+}
+function notifyUnclaimedTicket(upper) {
+	const room = Rooms(upper ? 'upperstaff' : 'staff');
+	if (!room) return;
+	clearTimeout(unclaimedTicketTimer[room.id]);
+	unclaimedTicketTimer[room.id] = null;
+	room.send(`|tempnotify|helptickets|Unclaimed help tickets!|There are unclaimed Help tickets`);
+}
+
+
 function notifyStaff(upper) {
 	const room = Rooms(upper ? 'upperstaff' : 'staff');
 	if (!room) return;
@@ -131,11 +152,20 @@ function notifyStaff(upper) {
 		const creator = ticket.claimed ? Chat.html`${ticket.creator}` : Chat.html`<strong>${ticket.creator}</strong>`;
 		const notifying = ticket.claimed ? `` : ` notifying`;
 		if (!ticket.claimed) hasUnclaimed = true;
-		buf += `<button class="button${notifying}" name="send" value="/join help-${ticket.userid}">Help ${creator}: ${ticket.type}${escalator}</button> `;
+		buf += `<a class="button${notifying}" href="/help-${ticket.userid}">Help ${creator}: ${ticket.type}${escalator}</a> `;
 		count++;
 	}
-	buf = `|${hasUnclaimed ? 'uhtml' : 'uhtmlchange'}|latest-tickets|<div class="infobox">${buf}${count === 0 ? `There were open Help tickets, but they've all been closed now.` : ``}</div>`;
+	buf = `|${hasUnclaimed ? 'uhtml' : 'uhtmlchange'}|latest-tickets|<div class="infobox" style="padding: 6px 4px">${buf}${count === 0 ? `There were open Help tickets, but they've all been closed now.` : ``}</div>`;
 	room.send(buf);
+
+	if (hasUnclaimed) {
+		buf = `|tempnotify|helptickets|Unclaimed help tickets!|There are unclaimed Help tickets`;
+	} else {
+		buf = `|tempnotifyoff|helptickets`;
+	}
+	if (room.userCount) Sockets.channelBroadcast(room.id, `>view-help-tickets\n${buf}`);
+	room.send(`${buf}|There are unclaimed Help tickets`);
+	pokeUnclaimedTicketTimer(upper, hasUnclaimed);
 }
 
 function checkIp(ip) {
