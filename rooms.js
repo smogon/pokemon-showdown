@@ -1009,7 +1009,7 @@ class BasicChatRoom extends BasicRoom {
 		/** @type {?true | RegExp} */
 		this.banwordRegex = null;
 
-		/** @type {Array<String>} */
+		/** @type {string[]} */
 		this.banwords = [];
 
 		/** @type {'chat' | 'battle'} */
