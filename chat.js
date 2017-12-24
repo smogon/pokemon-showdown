@@ -176,7 +176,7 @@ Chat.namefilter = function (name, user) {
 };
 Chat.hostfilters = [];
 /**
- * @param {User} host
+ * @param {string} host
  * @param {User} user
  * @param {Connection} connection
  */
@@ -412,13 +412,11 @@ class CommandContext {
 	 * @param {string | {call: Function}} commandHandler
 	 */
 	run(commandHandler) {
-		let realCommandHandler = typeof commandHandler === 'string' ?
-			                          Chat.commands[commandHandler] :
-			                          commandHandler;
 		if (typeof commandHandler === 'string') commandHandler = Chat.commands[commandHandler];
 		let result;
 		try {
-			result = realCommandHandler.call(this, this.target, this.room, this.user, this.connection, this.cmd, this.message);
+			// @ts-ignore
+			result = commandHandler.call(this, this.target, this.room, this.user, this.connection, this.cmd, this.message);
 		} catch (err) {
 			require('./lib/crashlogger')(err, 'A chat command', {
 				user: this.user.name,
@@ -435,7 +433,7 @@ class CommandContext {
 	}
 
 	/**
-	 * @param {Room} room
+	 * @param {?Room} room
 	 * @param {User} user
 	 * @param {string} message
 	 */
@@ -470,7 +468,7 @@ class CommandContext {
 	}
 
 	/**
-	 * @param {Room} room
+	 * @param {?Room} room
 	 * @param {User} user
 	 */
 	checkSlowchat(room, user) {
@@ -481,7 +479,7 @@ class CommandContext {
 	}
 
 	/**
-	 * @param {Room} room
+	 * @param {?Room} room
 	 * @param {string} message
 	 */
 	checkBanwords(room, message) {
@@ -849,20 +847,22 @@ class CommandContext {
 				}
 			}
 
-			if (room && !this.checkFormat(room, user, message)) {
+			if (!this.checkFormat(room, user, message)) {
 				return false;
 			}
 
-			if (room && !this.checkSlowchat(room, user) && !user.can('mute', null, room)) {
+			if (!this.checkSlowchat(room, user) && !user.can('mute', null, room)) {
+				// @ts-ignore
 				this.errorReply("This room has slow-chat enabled. You can only talk once every " + room.slowchat + " seconds.");
 				return false;
 			}
 
-			if (room && !this.checkBanwords(room, user.name) && !user.can('bypassall')) {
+			if (!this.checkBanwords(room, user.name) && !user.can('bypassall')) {
 				this.errorReply(`Your username contains a phrase banned by this room.`);
 				return false;
 			}
-			if (room && !this.checkBanwords(room, message) && !user.can('mute', null, room)) {
+
+			if (!this.checkBanwords(room, message) && !user.can('mute', null, room)) {
 				this.errorReply("Your message contained banned words.");
 				return false;
 			}
@@ -1078,7 +1078,7 @@ Chat.CommandContext = CommandContext;
  */
 Chat.parse = function (message, room, user, connection) {
 	Chat.loadPlugins();
-	let context = new CommandContext({message: message, room: room, user: user, connection: connection});
+	let context = new CommandContext({message, room, user, connection});
 
 	return context.parse();
 };
@@ -1105,7 +1105,7 @@ Chat.package = {};
 Chat.uncacheTree = function (root) {
 	let uncache = [require.resolve(root)];
 	do {
-		/** @type {Array<string>} */
+		/** @type {string[]} */
 		let newuncache = [];
 		for (let i = 0; i < uncache.length; ++i) {
 			if (require.cache[uncache[i]]) {
@@ -1206,9 +1206,9 @@ Chat.html = function (strings, ...args) {
  * words.
  *
  * @param  {any} num
- * @param  {?string} plural
- * @param  {?string} singular
- * @return {?string}
+ * @param  {string} plural
+ * @param  {string} singular
+ * @return {string}
  */
 Chat.plural = function (num, plural = 's', singular = '') {
 	if (num && typeof num.length === 'number') {
@@ -1232,16 +1232,14 @@ Chat.plural = function (num, plural = 's', singular = '') {
  */
 Chat.toTimestamp = function (date, options) {
 	const human = options && options.human;
-	/** @type {Array<number>} */
+	/** @type {any[]} */
 	let parts = [date.getFullYear(), date.getMonth() + 1, date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()];
-	/** @type{Array<string>} */
-	let strparts = [];
 	if (human) {
-		strparts.push(parts[3] >= 12 ? 'pm' : 'am');
+		parts.push(parts[3] >= 12 ? 'pm' : 'am');
 		parts[3] = parts[3] % 12 || 12;
 	}
-	strparts = parts.map(val => val < 10 ? '0' + val : '' + val).concat(strparts);
-	return strparts.slice(0, 3).join("-") + " " + strparts.slice(3, human ? 5 : 6).join(":") + (human ? "" + strparts[6] : "");
+	parts = parts.map(val => val < 10 ? '0' + val : '' + val);
+	return parts.slice(0, 3).join("-") + " " + parts.slice(3, human ? 5 : 6).join(":") + (human ? "" + parts[6] : "");
 };
 
 /**
