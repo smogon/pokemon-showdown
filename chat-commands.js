@@ -3044,24 +3044,69 @@ exports.commands = {
 
 		Chat.updateServerLock = true;
 
-		function exec(command) {
+		const logRoom = Rooms('staff') || room;
+
+		/** @return {Promise<[number, string, string]>} */
+		function exec(/** @type {string} */ command) {
+			logRoom.roomlog(`$ ${command}`);
 			return new Promise((resolve, reject) => {
 				require('child_process').exec(command, (error, stdout, stderr) => {
-					if (error) return reject(error);
-					resolve([stdout, stderr]);
+					logRoom.roomlog('[o] ' + stdout + '[e] ' + stderr);
+					resolve([error && error.code || 0, stdout, stderr]);
 				});
 			});
 		}
 
-		const logRoom = Rooms('staff') || room;
-		logRoom.roomlog(`${user.name} used /updateserver`);
+		this.sendReply(`Fetching newest version...`);
 
-		connection.sendTo(room, `Updating...`);
+		let [code, stdout, stderr] = await exec(`git fetch`);
+		if (code) throw new Error(`updateserver: Crash while fetching - make sure this is a Git repository`);
+		if (!stdout && !stderr) {
+			return this.sendReply(`There were no updates.`);
+		}
 
-		let [stdout, stderr] = await exec(`git fetch && git rebase --autostash FETCH_HEAD`);
-		for (const line of ("" + stdout + stderr).split("\n")) {
-			connection.sendTo(room, line);
-			logRoom.roomlog(line);
+		[code, stdout, stderr] = await exec(`git rev-parse HEAD`);
+		if (code || stderr) throw new Error(`updateserver: Crash while grabbing hash`);
+		const oldHash = String(stdout).trim();
+
+		[code, stdout, stderr] = await exec(`git stash push -m "PS /updateserver autostash"`);
+		let stashedChanges = true;
+		if (code) throw new Error(`updateserver: Crash while stashing`);
+		if ((stdout + stderr).includes("No local changes")) {
+			stashedChanges = false;
+		} else if (stderr) {
+			throw new Error(`updateserver: Crash while stashing`);
+		} else {
+			this.sendReply(`Saving changes...`);
+		}
+
+		// errors can occur while rebasing or popping the stash; make sure to recover
+		try {
+			this.sendReply(`Rebasing...`);
+			[code, stdout, stderr] = await exec(`git rebase FETCH_HEAD`);
+			if (code) {
+				// conflict while rebasing
+				await exec(`git rebase --abort`);
+				throw new Error(`restore`);
+			}
+
+			if (stashedChanges) {
+				this.sendReply(`Restoring saved changes...`);
+				[code, stdout, stderr] = await exec(`git stash pop`);
+				if (code) {
+					// conflict while popping stash
+					await exec(`git reset HEAD .`);
+					await exec(`git checkout .`);
+					throw new Error(`restore`);
+				}
+			}
+
+			this.sendReply(`SUCCESSFUL, server updated.`);
+		} catch (e) {
+			// failed while rebasing or popping the stash
+			await exec(`git reset --hard ${oldHash}`);
+			await exec(`git stash pop`);
+			this.sendReply(`FAILED, old changes restored.`);
 		}
 		Chat.updateServerLock = false;
 	},
