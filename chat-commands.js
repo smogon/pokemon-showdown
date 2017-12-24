@@ -3033,33 +3033,37 @@ exports.commands = {
 		this.roomlog(user.name + " used /refreshpage");
 	},
 
-	updateserver: function (target, room, user, connection) {
+	updateserver: async function (target, room, user, connection) {
 		if (!user.hasConsoleAccess(connection)) {
-			return this.errorReply("/updateserver - Access denied.");
+			return this.errorReply(`/updateserver - Access denied.`);
 		}
 
 		if (Chat.updateServerLock) {
-			return this.errorReply("/updateserver - Another update is already in progress.");
+			return this.errorReply(`/updateserver - Another update is already in progress.`);
 		}
 
 		Chat.updateServerLock = true;
 
-		let logQueue = [];
-		logQueue.push(user.name + " used /updateserver");
+		function exec(command) {
+			return new Promise((resolve, reject) => {
+				require('child_process').exec(command, (error, stdout, stderr) => {
+					if (error) return reject(error);
+					resolve([stdout, stderr]);
+				});
+			});
+		}
 
-		connection.sendTo(room, "updating...");
+		const logRoom = Rooms('staff') || room;
+		logRoom.roomlog(`${user.name} used /updateserver`);
 
-		let exec = require('child_process').exec;
-		exec(`git fetch && git rebase --autostash FETCH_HEAD`, (error, stdout, stderr) => {
-			for (let s of ("" + stdout + stderr).split("\n")) {
-				connection.sendTo(room, s);
-				logQueue.push(s);
-			}
-			for (let line of logQueue) {
-				room.roomlog(line);
-			}
-			Chat.updateServerLock = false;
-		});
+		connection.sendTo(room, `Updating...`);
+
+		let [stdout, stderr] = await exec(`git fetch && git rebase --autostash FETCH_HEAD`);
+		for (const line of ("" + stdout + stderr).split("\n")) {
+			connection.sendTo(room, line);
+			logRoom.roomlog(line);
+		}
+		Chat.updateServerLock = false;
 	},
 
 	crashfixed: function (target, room, user) {
