@@ -3115,12 +3115,12 @@ exports.commands = {
 			let battle = room.battle;
 			let me = user;
 			let result = eval(target);
-			let promiseString = '';
-			while (result instanceof Promise) {
-				result = await result;
-				promiseString += 'Promise -> ';
+			if (result && result.then) {
+				result = 'Promise -> ' + Chat.stringify(await result);
+			} else {
+				result = Chat.stringify(result);
 			}
-			this.sendReply('||<< ' + promiseString + Chat.stringify(result));
+			this.sendReply('||<< ' + result);
 			/* eslint-enable no-unused-vars */
 		} catch (e) {
 			this.sendReply('|| << ' + ('' + e.stack).replace(/\n *at CommandContext\.eval [\s\S]*/m, '').replace(/\n/g, '\n||'));
