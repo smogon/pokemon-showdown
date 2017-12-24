@@ -3120,6 +3120,7 @@ exports.commands = {
 			} else {
 				result = Chat.stringify(result);
 			}
+			result = result.replace(/\n/g, '\n||');
 			this.sendReply('||<< ' + result);
 			/* eslint-enable no-unused-vars */
 		} catch (e) {
