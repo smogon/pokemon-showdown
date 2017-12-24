@@ -1129,16 +1129,12 @@ class Pokemon {
 	}
 
 	/**
-	 * @param {string} itemId
 	 * @param {Pokemon} source
 	 * @param {Effect} sourceEffect
 	 */
-	eatItem(itemId, source, sourceEffect) {
+	eatItem(source, sourceEffect) {
 		if (!this.hp || !this.isActive) return false;
 		if (!this.item) return false;
-
-		let id = toId(itemId);
-		if (id && this.item !== id) return false;
 
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
 		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
@@ -1161,16 +1157,12 @@ class Pokemon {
 	}
 
 	/**
-	 * @param {string} itemName
 	 * @param {Pokemon} source
 	 * @param {Effect} sourceEffect
 	 */
-	useItem(itemName, source, sourceEffect) {
+	useItem(source, sourceEffect) {
 		if ((!this.hp && !this.getItem().isGem) || !this.isActive) return false;
 		if (!this.item) return false;
-
-		let id = toId(itemName);
-		if (id && this.item !== id) return false;
 
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
 		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
