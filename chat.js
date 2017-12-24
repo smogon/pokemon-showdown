@@ -131,6 +131,10 @@ Chat.filter = function (message, user, room, connection, targetUser = null) {
 	return message;
 };
 Chat.namefilters = [];
+/**
+ * @param {string} name
+ * @param {User} user
+ */
 Chat.namefilter = function (name, user) {
 	if (!Config.disablebasicnamefilter) {
 		// whitelist
@@ -171,12 +175,22 @@ Chat.namefilter = function (name, user) {
 	return name;
 };
 Chat.hostfilters = [];
+/**
+ * @param {User} host
+ * @param {User} user
+ * @param {Connection} connection
+ */
 Chat.hostfilter = function (host, user, connection) {
 	for (const filter of Chat.hostfilters) {
 		filter(host, user, connection);
 	}
 };
 Chat.loginfilters = [];
+/**
+ * @param {User} user
+ * @param {User} oldUser
+ * @param {string} usertype
+ */
 Chat.loginfilter = function (user, oldUser, usertype) {
 	for (const filter of Chat.loginfilters) {
 		filter(user, oldUser, usertype);
@@ -189,7 +203,7 @@ Chat.loginfilter = function (user, oldUser, usertype) {
 
 class CommandContext {
 	/**
-	 * @param {{message: string, room: Room, user: User, connection: Connection, pmTarget?: User, cmd: string, cmdToken: string, target: string, fullCmd: string}} options
+	 * @param {{message: string, room: Room, user: User, connection: Connection, pmTarget?: User, cmd?: string, cmdToken?: string, target?: string, fullCmd?: string}} options
 	 */
 	constructor(options) {
 		this.message = options.message || ``;
@@ -289,7 +303,7 @@ class CommandContext {
 	/**
 	 * @param {string} message
 	 * @param {boolean} recursing
-	 * @return {string}
+	 * @return {string | undefined}
 	 */
 	splitCommand(message = this.message, recursing = false) {
 		this.cmd = '';
@@ -394,11 +408,17 @@ class CommandContext {
 
 		return commandHandler;
 	}
+	/**
+	 * @param {string | {call: Function}} commandHandler
+	 */
 	run(commandHandler) {
+		let realCommandHandler = typeof commandHandler === 'string' ?
+			                          Chat.commands[commandHandler] :
+			                          commandHandler;
 		if (typeof commandHandler === 'string') commandHandler = Chat.commands[commandHandler];
 		let result;
 		try {
-			result = commandHandler.call(this, this.target, this.room, this.user, this.connection, this.cmd, this.message);
+			result = realCommandHandler.call(this, this.target, this.room, this.user, this.connection, this.cmd, this.message);
 		} catch (err) {
 			require('./lib/crashlogger')(err, 'A chat command', {
 				user: this.user.name,
@@ -414,6 +434,11 @@ class CommandContext {
 		return result;
 	}
 
+	/**
+	 * @param {Room} room
+	 * @param {User} user
+	 * @param {string} message
+	 */
 	checkFormat(room, user, message) {
 		if (!room) return true;
 		if (!room.filterStretching && !room.filterCaps && !room.filterEmojis) return true;
@@ -444,6 +469,10 @@ class CommandContext {
 		return true;
 	}
 
+	/**
+	 * @param {Room} room
+	 * @param {User} user
+	 */
 	checkSlowchat(room, user) {
 		if (!room || !room.slowchat) return true;
 		let lastActiveSeconds = (Date.now() - user.lastMessageTime) / 1000;
@@ -451,6 +480,10 @@ class CommandContext {
 		return true;
 	}
 
+	/**
+	 * @param {Room} room
+	 * @param {string} message
+	 */
 	checkBanwords(room, message) {
 		if (!room) return true;
 		if (!room.banwordRegex) {
@@ -470,6 +503,9 @@ class CommandContext {
 		if (!this.room || !this.room.game || !this.room.game.onChatMessage) return false;
 		return this.room.game.onChatMessage(this.message);
 	}
+	/**
+	 * @param {string} message
+	 */
 	pmTransform(message) {
 		let prefix = `|pm|${this.user.getIdentity()}|${this.pmTarget.getIdentity()}|`;
 		return message.split('\n').map(message => {
@@ -487,6 +523,9 @@ class CommandContext {
 			return prefix + '/text ' + message;
 		}).join('\n');
 	}
+	/**
+	 * @param {string} data
+	 */
 	sendReply(data) {
 		if (this.broadcasting && this.broadcastToRoom) {
 			// broadcasting
@@ -501,6 +540,9 @@ class CommandContext {
 			}
 		}
 	}
+	/**
+	 * @param {string} message
+	 */
 	errorReply(message) {
 		if (this.pmTarget) {
 			let prefix = '|pm|' + this.user.getIdentity() + '|' + this.pmTarget.getIdentity() + '|/error ';
@@ -509,15 +551,27 @@ class CommandContext {
 			this.sendReply('|html|<div class="message-error">' + Chat.escapeHTML(message).replace(/\n/g, '<br />') + '</div>');
 		}
 	}
+	/**
+	 * @param {string} html
+	 */
 	addBox(html) {
 		this.add('|html|<div class="infobox">' + html + '</div>');
 	}
+	/**
+	 * @param {string} html
+	 */
 	sendReplyBox(html) {
 		this.sendReply('|html|<div class="infobox">' + html + '</div>');
 	}
+	/**
+	 * @param {string} message
+	 */
 	popupReply(message) {
 		this.connection.popup(message);
 	}
+	/**
+	 * @param {string} data
+	 */
 	add(data) {
 		if (this.pmTarget) {
 			data = this.pmTransform(data);
@@ -527,6 +581,9 @@ class CommandContext {
 		}
 		this.room.add(data);
 	}
+	/**
+	 * @param {string} data
+	 */
 	send(data) {
 		if (this.pmTarget) {
 			data = this.pmTransform(data);
@@ -536,14 +593,26 @@ class CommandContext {
 		}
 		this.room.send(data);
 	}
+	/**
+	 * @param {string} data
+	 */
 	sendModCommand(data) {
 		this.room.sendModsByUser(this.user, data);
 	}
+	/**
+	 * @param {string} data
+	 * @param {?string} logOnlyText
+	 */
 	privateModCommand(data, logOnlyText) {
 		this.room.sendModsByUser(this.user, data);
 		this.roomlog(data);
 		this.room.modlog('(' + this.room.id + ') ' + data + (logOnlyText || ""));
 	}
+	/**
+	 * @param {string} action
+	 * @param {string | User} user
+	 * @param {string} note
+	 */
 	globalModlog(action, user, note) {
 		let buf = `(${this.room.id}) ${action}: `;
 		if (typeof user === 'string') {
@@ -557,20 +626,35 @@ class CommandContext {
 		buf += note;
 		Rooms.global.modlog(buf);
 	}
+	/**
+	 * @param {string} data
+	 */
 	roomlog(data) {
 		if (this.pmTarget) return;
 		this.room.roomlog(data);
 	}
+	/**
+	 * @param {string} text
+	 * @param {?string} logOnlyText
+	 */
 	addModCommand(text, logOnlyText) {
 		this.room.addByUser(this.user, text);
 		this.room.modlog('(' + this.room.id + ') ' + text + (logOnlyText || ""));
 	}
+	/**
+	 * @param {string} text
+	 */
 	logModCommand(text) {
 		this.room.modlog('(' + this.room.id + ') ' + text);
 	}
 	update() {
 		if (this.room) this.room.update();
 	}
+	/**
+	 * @param {string} permission
+	 * @param {string | User} target
+	 * @param {Room} room
+	 */
 	can(permission, target, room) {
 		if (!this.user.can(permission, target, room)) {
 			this.errorReply(this.cmdToken + this.fullCmd + " - Access denied.");
@@ -578,6 +662,9 @@ class CommandContext {
 		}
 		return true;
 	}
+	/**
+	 * @param {?string} suppressMessage
+	 */
 	canBroadcast(suppressMessage) {
 		if (!this.broadcasting && this.cmdToken === BROADCAST_TOKEN) {
 			if (!this.pmTarget && !this.user.can('broadcast', null, this.room)) {
@@ -603,6 +690,9 @@ class CommandContext {
 		}
 		return true;
 	}
+	/**
+	 * @param {?string} suppressMessage
+	 */
 	runBroadcast(suppressMessage) {
 		if (this.broadcasting || this.cmdToken !== BROADCAST_TOKEN) {
 			// Already being broadcast, or the user doesn't intend to broadcast.
@@ -628,6 +718,9 @@ class CommandContext {
 
 		return true;
 	}
+	/**
+	 * @param {string} text
+	 */
 	meansYes(text) {
 		switch (text.toLowerCase().trim()) {
 		case 'on': case 'enable': case 'yes': case 'true':
@@ -635,6 +728,9 @@ class CommandContext {
 		}
 		return false;
 	}
+	/**
+	 * @param {string} text
+	 */
 	meansNo(text) {
 		switch (text.toLowerCase().trim()) {
 		case 'off': case 'disable': case 'no': case 'false':
@@ -650,7 +746,7 @@ class CommandContext {
 	canTalk(message, room, targetUser) {
 		if (!room) room = this.room;
 		if (!targetUser && this.pmTarget) {
-			room = undefined;
+			room = null;
 			targetUser = this.pmTarget;
 		}
 		let user = this.user;
@@ -743,7 +839,7 @@ class CommandContext {
 					const domain = domainMatches && domainMatches[1];
 					const hostMatches = /^(?:http:\/\/|https:\/\/)?([^/]*[^/.])\.?($|\/|:)/.exec(link);
 					let host = hostMatches && hostMatches[1];
-					if (host.startsWith('www.')) host = host.slice(4);
+					if (host && host.startsWith('www.')) host = host.slice(4);
 					if (!domain || !host) return false;
 					return LINK_WHITELIST.includes(host) || LINK_WHITELIST.includes(`*.${domain}`);
 				});
@@ -753,20 +849,20 @@ class CommandContext {
 				}
 			}
 
-			if (!this.checkFormat(room, user, message)) {
+			if (room && !this.checkFormat(room, user, message)) {
 				return false;
 			}
 
-			if (!this.checkSlowchat(room, user) && !user.can('mute', null, room)) {
+			if (room && !this.checkSlowchat(room, user) && !user.can('mute', null, room)) {
 				this.errorReply("This room has slow-chat enabled. You can only talk once every " + room.slowchat + " seconds.");
 				return false;
 			}
 
-			if (!this.checkBanwords(room, user.name) && !user.can('bypassall')) {
+			if (room && !this.checkBanwords(room, user.name) && !user.can('bypassall')) {
 				this.errorReply(`Your username contains a phrase banned by this room.`);
 				return false;
 			}
-			if (!this.checkBanwords(room, message) && !user.can('mute', null, room)) {
+			if (room && !this.checkBanwords(room, message) && !user.can('mute', null, room)) {
 				this.errorReply("Your message contained banned words.");
 				return false;
 			}
@@ -796,6 +892,10 @@ class CommandContext {
 
 		return true;
 	}
+	/**
+	 * @param {string} uri
+	 * @param {boolean} isRelative
+	 */
 	canEmbedURI(uri, isRelative) {
 		if (uri.startsWith('https://')) return uri;
 		if (uri.startsWith('//')) return uri;
@@ -836,6 +936,9 @@ class CommandContext {
 		// unknown URI, allow HTTP to be safe
 		return 'http://' + uri;
 	}
+	/**
+	 * @param {?string} html
+	 */
 	canHTML(html) {
 		html = ('' + (html || '')).trim();
 		if (!html) return '';
@@ -899,6 +1002,10 @@ class CommandContext {
 
 		return html;
 	}
+	/**
+	 * @param {string} target
+	 * @param {boolean} exactName
+	 */
 	targetUserOrSelf(target, exactName) {
 		if (!target) {
 			this.targetUsername = this.user.name;
@@ -908,6 +1015,9 @@ class CommandContext {
 		this.splitTarget(target, exactName);
 		return this.targetUser;
 	}
+	/**
+	 * @param {string} target
+	 */
 	splitOne(target) {
 		let commaIndex = target.indexOf(',');
 		if (commaIndex < 0) {
@@ -915,6 +1025,10 @@ class CommandContext {
 		}
 		return [target.substr(0, commaIndex), target.substr(commaIndex + 1).trim()];
 	}
+	/**
+	 * @param {string} target
+	 * @param {boolean} exactName
+	 */
 	splitTarget(target, exactName) {
 		let [name, rest] = this.splitOne(target);
 
@@ -923,6 +1037,9 @@ class CommandContext {
 		this.targetUsername = this.targetUser ? this.targetUser.name : this.inputUsername;
 		return rest;
 	}
+	/**
+	 * @param {string} target
+	 */
 	splitTargetText(target) {
 		let [first, rest] = this.splitOne(target);
 
@@ -961,11 +1078,16 @@ Chat.CommandContext = CommandContext;
  */
 Chat.parse = function (message, room, user, connection) {
 	Chat.loadPlugins();
-	let context = new CommandContext({message, room, user, connection});
+	let context = new CommandContext({message: message, room: room, user: user, connection: connection});
 
 	return context.parse();
 };
-
+/**
+ * @param {string} message
+ * @param {User} user
+ * @param {User} pmTarget
+ * @param {?User} onlyRecipient
+ */
 Chat.sendPM = function (message, user, pmTarget, onlyRecipient = null) {
 	let buf = `|pm|${user.getIdentity()}|${pmTarget.getIdentity()}|${message}`;
 	if (onlyRecipient) return onlyRecipient.send(buf);
@@ -977,16 +1099,20 @@ Chat.sendPM = function (message, user, pmTarget, onlyRecipient = null) {
 
 Chat.package = {};
 
+/**
+ * @param {string} root
+ */
 Chat.uncacheTree = function (root) {
 	let uncache = [require.resolve(root)];
 	do {
+		/** @type {Array<string>} */
 		let newuncache = [];
 		for (let i = 0; i < uncache.length; ++i) {
 			if (require.cache[uncache[i]]) {
 				newuncache.push.apply(newuncache,
 					require.cache[uncache[i]].children
-						.filter(cachedModule => !cachedModule.id.endsWith('.node'))
-						.map(cachedModule => cachedModule.id)
+						.filter(/** @param {{id: string}} cachedModule */ cachedModule => !cachedModule.id.endsWith('.node'))
+						.map(/** @param {{id: string}} cachedModule */ cachedModule => cachedModule.id)
 				);
 				delete require.cache[uncache[i]];
 			}
@@ -1061,7 +1187,7 @@ Chat.stripHTML = function (html) {
  * Template string tag function for escaping HTML
  *
  * @param  {string[]} strings
- * @param  {...any} values
+ * @param  {...any} args
  * @return {string}
  */
 Chat.html = function (strings, ...args) {
@@ -1082,7 +1208,7 @@ Chat.html = function (strings, ...args) {
  * @param  {any} num
  * @param  {?string} plural
  * @param  {?string} singular
- * @return {string}
+ * @return {?string}
  */
 Chat.plural = function (num, plural = 's', singular = '') {
 	if (num && typeof num.length === 'number') {
@@ -1106,13 +1232,16 @@ Chat.plural = function (num, plural = 's', singular = '') {
  */
 Chat.toTimestamp = function (date, options) {
 	const human = options && options.human;
+	/** @type {Array<number>} */
 	let parts = [date.getFullYear(), date.getMonth() + 1, date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()];
+	/** @type{Array<string>} */
+	let strparts = [];
 	if (human) {
-		parts.push(parts[3] >= 12 ? 'pm' : 'am');
+		strparts.push(parts[3] >= 12 ? 'pm' : 'am');
 		parts[3] = parts[3] % 12 || 12;
 	}
-	parts = parts.map(val => val < 10 ? '0' + val : '' + val);
-	return parts.slice(0, 3).join("-") + " " + parts.slice(3, human ? 5 : 6).join(":") + (human ? "" + parts[6] : "");
+	strparts = parts.map(val => val < 10 ? '0' + val : '' + val).concat(strparts);
+	return strparts.slice(0, 3).join("-") + " " + strparts.slice(3, human ? 5 : 6).join(":") + (human ? "" + strparts[6] : "");
 };
 
 /**
@@ -1157,7 +1286,10 @@ Chat.toListString = function (array) {
 	if (array.length === 1) return array[0];
 	return `${array.slice(0, -1).join(", ")} and ${array.slice(-1)}`;
 };
-
+/**
+ * @param {Template} template
+ * @param {number} gen
+ */
 Chat.getDataPokemonHTML = function (template, gen = 7) {
 	if (typeof template === 'string') template = Object.assign({}, Dex.getTemplate(template));
 	let buf = '<li class="result">';
@@ -1208,7 +1340,9 @@ Chat.getDataPokemonHTML = function (template, gen = 7) {
 	buf += '</li>';
 	return `<div class="message"><ul class="utilichart">${buf}<li style="clear:both"></li></ul></div>`;
 };
-
+/**
+ * @param {Move} move
+ */
 Chat.getDataMoveHTML = function (move) {
 	if (typeof move === 'string') move = Object.assign({}, Dex.getMove(move));
 	let buf = `<ul class="utilichart"><li class="result">`;
@@ -1224,7 +1358,9 @@ Chat.getDataMoveHTML = function (move) {
 	buf += `</li><li style="clear:both"></li></ul>`;
 	return buf;
 };
-
+/**
+ * @param {Ability} ability
+ */
 Chat.getDataAbilityHTML = function (ability) {
 	if (typeof ability === 'string') ability = Object.assign({}, Dex.getAbility(ability));
 	let buf = `<ul class="utilichart"><li class="result">`;
@@ -1233,7 +1369,9 @@ Chat.getDataAbilityHTML = function (ability) {
 	buf += `</li><li style="clear:both"></li></ul>`;
 	return buf;
 };
-
+/**
+ * @param {string | Item} item
+ */
 Chat.getDataItemHTML = function (item) {
 	if (typeof item === 'string') item = Object.assign({}, Dex.getItem(item));
 	let buf = `<ul class="utilichart"><li class="result">`;
@@ -1245,7 +1383,7 @@ Chat.getDataItemHTML = function (item) {
 
 /**
  * Visualizes eval output in a slightly more readable form
- * @param {string} value
+ * @param {any} value
  */
 Chat.stringify = function (value, depth = 0) {
 	if (value === undefined) return `undefined`;
