@@ -3283,6 +3283,7 @@ class Battle extends Dex.ModdedDex {
 				} else {
 					result = Chat.stringify(result);
 				}
+				result = result.replace(/\n/g, '\n||');
 				this.add('', '<<< ' + result);
 			} catch (e) {
 				this.add('', '<<< error: ' + e.message);
