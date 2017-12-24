@@ -152,8 +152,8 @@ exports.BattleAbilities = {
 			if (allyActive.length === 1) {
 				return;
 			}
-			for (let i = 0; i < allyActive.length; i++) {
-				if (allyActive[i] && allyActive[i].position !== pokemon.position && !allyActive[i].fainted && allyActive[i].ability === 'plus') {
+			for (const ally of allyActive) {
+				if (ally && ally.position !== pokemon.position && !ally.fainted && ally.ability === 'plus') {
 					return spa * 1.5;
 				}
 			}
@@ -215,8 +215,8 @@ exports.BattleAbilities = {
 			if (allyActive.length === 1) {
 				return;
 			}
-			for (let i = 0; i < allyActive.length; i++) {
-				if (allyActive[i] && allyActive[i].position !== pokemon.position && !allyActive[i].fainted && allyActive[i].ability === 'minus') {
+			for (const ally of allyActive) {
+				if (ally && ally.position !== pokemon.position && !ally.fainted && ally.ability === 'minus') {
 					return spa * 1.5;
 				}
 			}
@@ -246,8 +246,8 @@ exports.BattleAbilities = {
 		onModifyMove: function (move) {
 			if (move.secondaries) {
 				this.debug('doubling secondary chance');
-				for (let i = 0; i < move.secondaries.length; i++) {
-					move.secondaries[i].chance *= 2;
+				for (const secondary of move.secondaries) {
+					secondary.chance *= 2;
 				}
 			}
 		},

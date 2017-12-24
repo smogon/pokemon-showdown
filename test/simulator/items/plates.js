@@ -11,9 +11,9 @@ let plates = [
 ];
 
 describe('Plates', function () {
-	for (let i = 0; i < plates.length; i++) {
-		describe(plates[i], function () {
-			let id = plates[i].replace(/\W+/g, '').toLowerCase();
+	for (const plate of plates) {
+		describe(plate, function () {
+			let id = plate.replace(/\W+/g, '').toLowerCase();
 
 			afterEach(function () {
 				battle.destroy();

@@ -513,9 +513,9 @@ exports.BattleMovedex = {
 	roar: {
 		inherit: true,
 		onTryHit: function () {
-			for (let i = 0; i < this.queue.length; i++) {
+			for (const action of this.queue) {
 				// Roar only works if it is the last action in a turn, including when it's called by Sleep Talk
-				if (this.queue[i].choice === 'move' || this.queue[i].choice === 'switch') return false;
+				if (action.choice === 'move' || action.choice === 'switch') return false;
 			}
 		},
 		priority: -1,
@@ -719,9 +719,9 @@ exports.BattleMovedex = {
 	whirlwind: {
 		inherit: true,
 		onTryHit: function () {
-			for (let i = 0; i < this.queue.length; i++) {
+			for (const action of this.queue) {
 				// Whirlwind only works if it is the last action in a turn, including when it's called by Sleep Talk
-				if (this.queue[i].choice === 'move' || this.queue[i].choice === 'switch') return false;
+				if (action.choice === 'move' || action.choice === 'switch') return false;
 			}
 		},
 		priority: -1,

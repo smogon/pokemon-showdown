@@ -50,7 +50,7 @@ exports.BattleScripts = {
 		getRequestData: function () {
 			let ally = this.side.active.find(ally => ally && ally !== this && !ally.fainted);
 			this.moveSlots = this.baseMoveSlots.concat(ally ? ally.baseMoveSlots : []);
-			for (let moveSlot of this.moveSlots) {
+			for (const moveSlot of this.moveSlots) {
 				moveSlot.disabled = false;
 				moveSlot.disabledSource = '';
 			}

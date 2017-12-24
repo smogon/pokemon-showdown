@@ -414,9 +414,8 @@ exports.BattleMovedex = {
 		shortDesc: "Eliminates all stat changes and status.",
 		onHit: function (target, source) {
 			this.add('-clearallboost');
-			for (let i = 0; i < this.sides.length; i++) {
-				for (let j = 0; j < this.sides[i].active.length; j++) {
-					let pokemon = this.sides[i].active[j];
+			for (const side of this.sides) {
+				for (const pokemon of side.active) {
 					pokemon.clearBoosts();
 
 					if (pokemon !== source) {
@@ -426,9 +425,7 @@ exports.BattleMovedex = {
 					if (pokemon.status === 'tox') {
 						pokemon.setStatus('psn');
 					}
-					let volatiles = Object.keys(pokemon.volatiles);
-					for (let n = 0; n < volatiles.length; n++) {
-						let id = volatiles[n];
+					for (const id of Object.keys(pokemon.volatiles)) {
 						if (id === 'residualdmg') {
 							pokemon.volatiles[id].counter = 0;
 						} else {

@@ -7,9 +7,9 @@ let battle;
 
 let moves = ['Ice Ball', 'Rollout'];
 
-for (let i = 0; i < moves.length; i++) {
-	describe(moves[i], function () {
-		let id = moves[i].toLowerCase().replace(/\W+/g, '');
+for (const move of moves) {
+	describe(move, function () {
+		let id = move.toLowerCase().replace(/\W+/g, '');
 
 		afterEach(function () {
 			battle.destroy();
@@ -33,7 +33,7 @@ for (let i = 0; i < moves.length; i++) {
 				}
 			});
 
-			for (let j = 0; j < 8; j++) {
+			for (let i = 0; i < 8; i++) {
 				battle.commitDecisions();
 			}
 			assert.strictEqual(count, 8);
@@ -63,7 +63,7 @@ for (let i = 0; i < moves.length; i++) {
 				ebp *= 2;
 			});
 
-			for (let j = 0; j < 5; j++) {
+			for (let i = 0; i < 5; i++) {
 				battle.commitDecisions();
 			}
 			assert.strictEqual(count, 5);
@@ -91,7 +91,7 @@ for (let i = 0; i < moves.length; i++) {
 				ebp *= 2;
 			});
 
-			for (let j = 0; j < 5; j++) {
+			for (let i = 0; i < 5; i++) {
 				battle.commitDecisions();
 			}
 			assert.strictEqual(count, 5);

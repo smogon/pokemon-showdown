@@ -254,9 +254,9 @@ exports.BattleMovedex = {
 				if (!this.effectData.move || !pokemon.hasMove(this.effectData.move)) {
 					return;
 				}
-				for (let i = 0; i < pokemon.moveSlots.length; i++) {
-					if (pokemon.moveSlots[i].id !== this.effectData.move) {
-						pokemon.disableMove(pokemon.moveSlots[i].id);
+				for (const moveSlot of pokemon.moveSlots) {
+					if (moveSlot.id !== this.effectData.move) {
+						pokemon.disableMove(moveSlot.id);
 					}
 				}
 			},
@@ -432,9 +432,9 @@ exports.BattleMovedex = {
 		},
 		onHit: function (pokemon) {
 			let moves = [];
-			for (let i = 0; i < pokemon.moveSlots.length; i++) {
-				let move = pokemon.moveSlots[i].id;
-				let pp = pokemon.moveSlots[i].pp;
+			for (const moveSlot of pokemon.moveSlots) {
+				let move = moveSlot.id;
+				let pp = moveSlot.pp;
 				let NoSleepTalk = ['assist', 'bide', 'focuspunch', 'metronome', 'mirrormove', 'sleeptalk', 'uproar'];
 				if (move && !(NoSleepTalk.includes(move) || this.getMove(move).flags['charge'])) {
 					moves.push({move: move, pp: pp});
@@ -514,10 +514,9 @@ exports.BattleMovedex = {
 				this.add('-end', target, 'move: Taunt', '[silent]');
 			},
 			onDisableMove: function (pokemon) {
-				let moves = pokemon.moveSlots;
-				for (let i = 0; i < moves.length; i++) {
-					if (this.getMove(moves[i].move).category === 'Status') {
-						pokemon.disableMove(moves[i].id);
+				for (const moveSlot of pokemon.moveSlots) {
+					if (this.getMove(moveSlot.move).category === 'Status') {
+						pokemon.disableMove(moveSlot.id);
 					}
 				}
 			},

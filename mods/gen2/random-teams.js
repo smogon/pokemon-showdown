@@ -91,13 +91,12 @@ class RandomGen2Teams extends RandomGen3Teams {
 
 			// Moves counter.
 			restrictMoves = set.other.restrictMoves;
-			let moves = set.moveset.moves;
-			for (let i = 0; i < moves.length; i++) {
-				if (restrictMoves[moves[i]]) restrictMoves[moves[i]]--;
-				if (restrictMoves['phazing'] && (moves[i] === "roar" || moves[i] === "whirlwind")) {
+			for (const moveid of set.moveset.moves) {
+				if (restrictMoves[moveid]) restrictMoves[moveid]--;
+				if (restrictMoves['phazing'] && ['roar', 'whirlwind'].includes(moveid)) {
 					restrictMoves['phazing']--;
 				}
-				if (restrictMoves['sleeping'] && (moves[i] === "sleeppowder" || moves[i] === "lovelykiss" || moves[i] === "sing" || moves[i] === "hypnosis" || moves[i] === "spore")) {
+				if (restrictMoves['sleeping'] && ['hypnosis', 'lovelykiss', 'sing', 'sleeppowder', 'spore'].includes(moveid)) {
 					restrictMoves['sleeping']--;
 				}
 			}
@@ -110,20 +109,20 @@ class RandomGen2Teams extends RandomGen3Teams {
 			}
 
 			// Type counter.
-			for (let i = 0; i < types.length; i++) {
-				if (typeCount[types[i]]) {
-					typeCount[types[i]]++;
+			for (const type of types) {
+				if (typeCount[type]) {
+					typeCount[type]++;
 				} else {
-					typeCount[types[i]] = 1;
+					typeCount[type] = 1;
 				}
 			}
 
 			// Weakness and resistance counter.
-			for (let i = 0; i < weaknesses.length; i++) {
-				weaknessCount[weaknesses[i]]++;
+			for (const weakness of weaknesses) {
+				weaknessCount[weakness]++;
 			}
-			for (let i = 0; i < resistances.length; i++) {
-				resistanceCount[resistances[i]]++;
+			for (const resistance of resistances) {
+				resistanceCount[resistance]++;
 			}
 		}
 
@@ -188,10 +187,10 @@ class RandomGen2Teams extends RandomGen3Teams {
 			// Make sure it's not an undesired moveset according to restrictMoves and the rest of the team
 			rerollsLeft--;
 			discard = false;
-			for (let i = 0; i < moves.length; i++) {
-				if (restrictMoves[moves[i]] === 0) { discard = true; break; }
-				if (isPhazingMove(moves[i]) && restrictMoves['phazing'] === 0) { discard = true; break; }
-				if (isSleepMove(moves[i]) && restrictMoves['sleeping'] === 0) { discard = true; break; }
+			for (const moveid of moves) {
+				if (restrictMoves[moveid] === 0) { discard = true; break; }
+				if (isPhazingMove(moveid) && restrictMoves['phazing'] === 0) { discard = true; break; }
+				if (isSleepMove(moveid) && restrictMoves['sleeping'] === 0) { discard = true; break; }
 			}
 		} while (rerollsLeft > 0 && discard);
 
@@ -200,11 +199,11 @@ class RandomGen2Teams extends RandomGen3Teams {
 		let discourage = false;
 		if (!discard && slot > 3) {
 			discourage = true;
-			for (let i = 0; i < moves.length; i++) {
-				if (moves[i] === "sleeptalk" && restrictMoves['sleeptalk'] > 1) { discourage = false; break; }
-				if (moves[i] !== "bellydrum" && moves[i] !== "haze" && moves[i] !== "thief" && restrictMoves[moves[i]] > 0) { discourage = false; break; }
-				if (isPhazingMove(moves[i]) && restrictMoves['phazing'] > 0) { discourage = false; break; }
-				if (isSleepMove(moves[i]) && restrictMoves['sleeping'] > 1) { discourage = false; break; }
+			for (const moveid of moves) {
+				if (moveid === "sleeptalk" && restrictMoves['sleeptalk'] > 1) { discourage = false; break; }
+				if (moveid !== "bellydrum" && moveid !== "haze" && moveid !== "thief" && restrictMoves[moveid] > 0) { discourage = false; break; }
+				if (isPhazingMove(moveid) && restrictMoves['phazing'] > 0) { discourage = false; break; }
+				if (isSleepMove(moveid) && restrictMoves['sleeping'] > 1) { discourage = false; break; }
 			}
 		}
 		if (discourage && this.random(2) === 0) discard = true;
@@ -214,9 +213,9 @@ class RandomGen2Teams extends RandomGen3Teams {
 		if (set.item) item = set.item[this.random(set.item.length)];
 
 		// Adjust ivs for hiddenpower
-		for (let i = 0; i < moves.length; i++) {
-			if (moves[i].substr(0, 11) !== 'hiddenpower') continue;
-			let hpType = moves[i].substr(11, moves[i].length);
+		for (const setMoveid of moves) {
+			if (!setMoveid.startsWith('hiddenpower')) continue;
+			let hpType = setMoveid.substr(11, setMoveid.length);
 			switch (hpType) {
 			case 'dragon': ivs.def = 28; break;
 			case 'ice': ivs.def = 26; break;
