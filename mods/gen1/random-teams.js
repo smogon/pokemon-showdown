@@ -167,9 +167,8 @@ class RandomGen1Teams extends RandomGen2Teams {
 
 			// Limit 2 of any type as well. Diversity and minor weakness count.
 			// The second of a same type has halved chance of being added.
-			let types = template.types;
-			for (let t = 0; t < types.length; t++) {
-				if (typeCount[types[t]] > 1 || (typeCount[types[t]] === 1 && this.random(2) && pokemonPool.length > 1)) {
+			for (const type of template.types) {
+				if (typeCount[type] > 1 || (typeCount[type] === 1 && this.random(2) && pokemonPool.length > 1)) {
 					skip = true;
 					break;
 				}
@@ -199,17 +198,17 @@ class RandomGen1Teams extends RandomGen2Teams {
 			pokemonLeft++;
 
 			// Type counter.
-			for (let t = 0; t < types.length; t++) {
-				if (typeCount[types[t]]) {
-					typeCount[types[t]]++;
+			for (const type of template.types) {
+				if (typeCount[type]) {
+					typeCount[type]++;
 				} else {
-					typeCount[types[t]] = 1;
+					typeCount[type] = 1;
 				}
 			}
 
 			// Weakness counter.
-			for (let t = 0; t < pokemonWeaknesses.length; t++) {
-				weaknessCount[pokemonWeaknesses[t]]++;
+			for (const weakness of pokemonWeaknesses) {
+				weaknessCount[weakness]++;
 			}
 
 			// Increment tier bias counters.
@@ -274,8 +273,8 @@ class RandomGen1Teams extends RandomGen2Teams {
 			if (movePool.length) {
 				hasMove = {};
 				counter = {Physical: 0, Special: 0, Status: 0, physicalsetup: 0, specialsetup: 0};
-				for (let k = 0; k < moves.length; k++) {
-					let move = this.getMove(moves[k]);
+				for (const setMoveid of moves) {
+					let move = this.getMove(setMoveid);
 					let moveid = move.id;
 					hasMove[moveid] = true;
 					if (!move.damage && !move.damageCallback) {
@@ -295,8 +294,7 @@ class RandomGen1Teams extends RandomGen2Teams {
 				// 	setupType = 'Physical';
 				// }
 
-				for (let k = 0; k < moves.length; k++) {
-					let moveid = moves[k];
+				for (const [i, moveid] of moves.entries()) {
 					if (moveid === template.essentialMove) continue;
 					let move = this.getMove(moveid);
 					let rejected = false;
@@ -332,7 +330,7 @@ class RandomGen1Teams extends RandomGen2Teams {
 						} // End of switch for moveid
 					}
 					if (rejected) {
-						moves.splice(k, 1);
+						moves.splice(i, 1);
 						break;
 					}
 					counter[move.category]++;

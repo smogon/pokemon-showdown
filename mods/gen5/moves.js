@@ -171,7 +171,7 @@ exports.BattleMovedex = {
 		onHit: function (pokemon) {
 			if (!pokemon.volatiles['substitute']) this.boost({evasion: -1});
 			let sideConditions = ['reflect', 'lightscreen', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock'];
-			for (let condition of sideConditions) {
+			for (const condition of sideConditions) {
 				if (pokemon.side.removeSideCondition(condition)) {
 					this.add('-sideend', pokemon.side, this.getEffect(condition).name, '[from] move: Defog', '[of] ' + pokemon);
 				}
