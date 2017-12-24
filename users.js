@@ -733,8 +733,8 @@ class User {
 			}
 		}
 		if (Users.isTrusted(userid)) {
-			this.trusted = this.userid;
-			this.autoconfirmed = this.userid;
+			this.trusted = userid;
+			this.autoconfirmed = userid;
 		}
 		if (this.trusted) {
 			this.locked = null;
