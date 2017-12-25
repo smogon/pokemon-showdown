@@ -280,7 +280,7 @@ exports.pages = {
 			}
 			buf += `<details style="margin: 3px"><summary>I want to appeal a mute/roomban/blacklist</summary>Please PM the staff member who punished you. If you dont know who punished you, ask another room staff member; they will redirect you to the correct user. If you are banned or blacklisted from the room, use <code>/roomauth [name of room]</code> to get a list of room staff members. Bold names are online.</details>`;
 			buf += `</details><br /><details style="margin: 3px"><summary>Something else</summary><b>Maybe one of these options will be helpful?</b><br />`;
-			buf += `<details style="margin: 3px"><summary>I lost my password</summary>If you lost your password, click the button below to get in touch with an upper staff member so we can help you recover it. We will need to clarify a few pieces of information before resetting the account. Alternatively, make a post in <a href="http://www.smogon.com/forums/threads/names-passwords-rooms-and-servers-contacting-upper-staff.3538721/#post-6300151">admin requests</a>.<br /><br /><button class="button" name="send" value="/helpticket submit Lost Password">Request a password reset</button></details>`;
+			buf += `<details style="margin: 3px"><summary>I lost my password</summary>If you lost your password, click the button below to make a post in Admin Requests. We will need to clarify a few pieces of information before resetting the account. Please note that password resets are low priority and may take a while; we recommend using a new account while waiting.<br /><br /><a class="button" href="http://www.smogon.com/forums/forums/other-admin-requests.346/">Request a password reset</a></details>`;
 			if (ticket || isStaff) {
 				buf += `<details style="margin: 3px"><summary>I feel my last ticket shouldn't have been closed</summary>If you feel that staff did not properly help you with your last issue, click the button below to get in touch with an upper staff member.<br /><br /><button class="button" name="send" value="/helpticket submit Report Last Ticket">Report last ticket</button></details>`;
 			}
@@ -388,9 +388,9 @@ exports.commands = {
 				}
 			}
 			if (Monitor.countTickets(user.latestIp)) return this.popupReply(`Due to high load, you are limited to creating ${Punishments.sharedIps.has(user.latestIp) ? `50` : `5`} tickets every hour.`);
-			if (!['PM Harassment', 'Battle Harassment', 'Chatroom Harassment', 'Inappropriate Content', 'Inappropriate Nickname', 'Inappropriate Pokemon Nicknames', 'Timerstalling', 'Global Staff Complaint', 'Appeal', 'IP-Appeal', 'ISP-Appeal', 'Lost Password', 'Report Last Ticket', 'Room Owner Complaint', 'Other'].includes(target)) return this.parse('/helpticket');
+			if (!['PM Harassment', 'Battle Harassment', 'Chatroom Harassment', 'Inappropriate Content', 'Inappropriate Nickname', 'Inappropriate Pokemon Nicknames', 'Timerstalling', 'Global Staff Complaint', 'Appeal', 'IP-Appeal', 'ISP-Appeal', 'Report Last Ticket', 'Room Owner Complaint', 'Other'].includes(target)) return this.parse('/helpticket');
 			let upper = false;
-			if (['Lost Password', 'Room Owner Complaint', 'Global Staff Complaint', 'Report Last Ticket'].includes(target)) upper = true;
+			if (['Room Owner Complaint', 'Global Staff Complaint', 'Report Last Ticket'].includes(target)) upper = true;
 			if (target === 'Report Last Ticket') {
 				if (!ticket) return this.popupReply(`You can't report a ticket that dosen't exist.`);
 				target = `Report Last Ticket - ${ticket.type}`;
