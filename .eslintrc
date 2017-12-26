@@ -157,7 +157,7 @@
 		"space-unary-ops": ["error", {"words": true, "nonwords": false}],
 		"wrap-regex": "off",
 
-		"arrow-parens": ["error", "as-needed"],
+		"arrow-parens": "off",
 		"arrow-spacing": ["error", {"before": true, "after": true}],
 		"no-confusing-arrow": "off",
 		"no-useless-computed-key": "error",

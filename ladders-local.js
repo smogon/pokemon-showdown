@@ -21,7 +21,7 @@ const FS = require('./lib/fs');
 // Use Ladders(formatid).ladder to guarantee a Promise(ladder).
 // ladder is basically a 2D array representing the corresponding ladder.tsv
 //   with userid in front
-/** @typedef {[string, number, string, number, number, number]} LadderRow [userid, elo, username, w, l, t] */
+/** @typedef {[string, number, string, number, number, number, string]} LadderRow [userid, elo, username, w, l, t, lastUpdate] */
 /** @type {Map<string, LadderRow[] | Promise<LadderRow[]>>} formatid: ladder */
 let ladderCaches = new Map();
 
@@ -61,7 +61,7 @@ class LadderStore {
 			return (this.ladder = cachedLadder);
 		}
 		try {
-			const data = await FS('config/ladders/' + this.formatid + '.tsv').read('utf8');
+			const data = await FS('config/ladders/' + this.formatid + '.tsv').readTextIfExists();
 			let ladder = /** @type {LadderRow[]} */ ([]);
 			let dataLines = data.split('\n');
 			for (let i = 1; i < dataLines.length; i++) {
@@ -118,7 +118,7 @@ class LadderStore {
 		}
 		if (createIfNeeded) {
 			let index = this.ladder.length;
-			this.ladder.push([userid, 1000, username, 0, 0, 0]);
+			this.ladder.push([userid, 1000, username, 0, 0, 0, '']);
 			return index;
 		}
 		return -1;
