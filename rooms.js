@@ -504,13 +504,13 @@ class GlobalRoom extends BasicRoom {
 			LoginServer.request('updateuserstats', {
 				date: this.maxUsersDate,
 				users: this.maxUsers,
-			}, () => {});
+			});
 			this.maxUsersDate = 0;
 		}
 		LoginServer.request('updateuserstats', {
 			date: Date.now(),
 			users: this.userCount,
-		}, () => {});
+		});
 	}
 
 	get formatListText() {

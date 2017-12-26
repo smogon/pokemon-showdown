@@ -43,18 +43,14 @@ class LadderStore {
 		if (user && user.mmrCache[formatid]) {
 			return user.mmrCache[formatid];
 		}
-		const mmr = await new Promise((resolve, reject) => {
-			LoginServer.request('mmr', {
-				format: formatid,
-				user: userid,
-			}, (/** @type {any} */ data, /** @type {number} */ statusCode, /** @type {Error?} */ error) => {
-				if (!data) return resolve(NaN);
-				if (data.errorip) {
-					return resolve(NaN);
-				}
-				return resolve(parseInt(data));
-			});
+		const [data] = await LoginServer.request('mmr', {
+			format: formatid,
+			user: userid,
 		});
+		let mmr = NaN;
+		if (data && !data.errorip) {
+			mmr = parseInt(data);
+		}
 		if (isNaN(mmr)) return 1000;
 
 		if (user && user.userid === userid) {
@@ -80,20 +76,13 @@ class LadderStore {
 		let formatid = this.formatid;
 		room.update();
 		room.send(`||Ladder updating...`);
-		let data;
-		try {
-			data = await new Promise((resolve, reject) => {
-				LoginServer.request('ladderupdate', {
-					p1: p1name,
-					p2: p2name,
-					score: p1score,
-					format: formatid,
-				}, (/** @type {any} */ data, /** @type {number} */ statusCode, /** @type {Error?} */ error) => {
-					if (error) return reject(error);
-					resolve(data);
-				});
-			});
-		} catch (error) {
+		let [data, , error] = await LoginServer.request('ladderupdate', {
+			p1: p1name,
+			p2: p2name,
+			score: p1score,
+			format: formatid,
+		});
+		if (error) {
 			room.add(`||Ladder (probably) updated, but score could not be retrieved (${error.message}).`);
 			return [p1score, undefined, undefined];
 		}

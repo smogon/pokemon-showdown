@@ -3333,7 +3333,7 @@ exports.commands = {
 	},
 
 	uploadreplay: 'savereplay',
-	savereplay: function (target, room, user, connection) {
+	savereplay: async function (target, room, user, connection) {
 		if (!room || !room.battle) return;
 		// retrieve spectator log (0) if there are privacy concerns
 		const format = Dex.getFormat(room.format, true);
@@ -3344,7 +3344,7 @@ exports.commands = {
 		let players = room.battle.playerNames;
 		let rating = 0;
 		if (room.battle.ended && room.rated) rating = room.rated;
-		LoginServer.request('prepreplay', {
+		const [success] = await LoginServer.request('prepreplay', {
 			id: room.id.substr(7),
 			loghash: datahash,
 			p1: players[0],
@@ -3352,16 +3352,15 @@ exports.commands = {
 			format: room.format,
 			rating: rating,
 			hidden: room.isPrivate ? '1' : '',
-		}, success => {
-			if (success && success.errorip) {
-				connection.popup(`This server's request IP ${success.errorip} is not a registered server.`);
-				return;
-			}
-			connection.send('|queryresponse|savereplay|' + JSON.stringify({
-				log: data,
-				id: room.id.substr(7),
-			}));
 		});
+		if (success && success.errorip) {
+			connection.popup(`This server's request IP ${success.errorip} is not a registered server.`);
+			return;
+		}
+		connection.send('|queryresponse|savereplay|' + JSON.stringify({
+			log: data,
+			id: room.id.substr(7),
+		}));
 	},
 
 	addplayer: function (target, room, user) {
