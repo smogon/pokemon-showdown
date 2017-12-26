@@ -250,42 +250,137 @@ exports.pages = {
 			}
 
 			const isStaff = user.can('lock');
-			buf += `<p><b>Whats going on?</b></p>`;
-			if (isStaff) {
-				buf += `<span class="message-error">Global staff cannot make tickets. This form is only for reference.</span>`;
-			} else {
-				buf += `<span class="message-error">Abuse of tickets can result in a punishment.</span>`;
-			}
-			buf += `<br /><details style="margin: 3px"><summary>I want to report someone</summary>`;
-			buf += `<br /><b>What do you want to report someone for?</b><br /><details style="margin: 3px"><summary>Someone is harassing me</summary>If someone is harassing you, click the appropriate button below and a global staff member will take a look. Consider using <code>/ignore [username]</code> if it's minor instead.<br /><br />If you are reporting harassment in a battle, please save a replay of the battle.<br /><button class="button" name="send" value="/helpticket submit PM Harassment">Report harassment in a private message (PM)</button> <button class="button" name="send" value="/helpticket submit Battle Harassment">Report harassment in a battle</button> <button class="button" name="send" value="/helpticket submit Chatroom Harassment">Report harassment in a chatroom</button></details>`;
-			buf += `<details style="margin: 3px"><summary>Someone is being inappropriate</summary>If a user has posted inappropriate content, has an inappropriate name, or has inappropriate Pok&eacute;mon nicknames, click the appropriate button below and a global staff member will take a look.<br /><br /><button class="button" name="send" value="/helpticket submit Inappropriate Content">Report inappropriate content</button> <button class="button" name="send" value="/helpticket submit Inappropriate Nickname">Report an inappropriate username</button> <button class="button" name="send" value="/helpticket submit Inappropriate Pokemon Nicknames">Report inappropriate Pok&eacute;mon nicknames</button></details>`;
-			buf += `<details style="margin: 3px"><summary>Someone is timerstalling</summary>If someone is timerstalling in your battle, and the battle has <b>not</b> ended, click the button below and a global staff member will take a look.<br /><br /><button class="button" name="send" value="/helpticket submit Timerstalling">Report timerstalling</button></details>`;
-			buf += `<details style="margin: 3px"><summary>I want to report a staff member</summary>If you have a complaint against a room staff member, please PM a Room Owner (marked with a #) in the room.<br /><br />If you have a complaint against a global staff member or Room Owner, please click the appropriate button below. Alternatively, make a post in <a href="http://www.smogon.com/forums/threads/names-passwords-rooms-and-servers-contacting-upper-staff.3538721/#post-6300151">Admin Requests</a>.<br /><br /><button class="button" name="send" value="/helpticket submit Room Owner Complaint">Report a Room Owner</button> <button class="button" name="send" value="/helpticket submit Global Staff Complaint">Report a Global Staff Member</button></details>`;
-			buf += `</details><br /><details style="margin: 3px"><summary>I want to appeal a punishment</summary><br /><b>What would you like to appeal?</b><br />`;
-			if (user.locked || isStaff) {
-				if (user.locked === user.userid || isStaff) {
-					if (user.permalocked || isStaff) {
-						buf += `<details style="margin: 3px"><summary>I want to appeal my permalock</summary>Please make a post in the <a href="http://www.smogon.com/forums/threads/discipline-appeal-rules.3583479/">Discipline Appeal Forums</a> to appeal a permalock.</details>`;
-					}
-					if (!user.permalocked || isStaff) {
-						buf += `<details style="margin: 3px"><summary>I want to appeal my lock</summary>If you want to appeal your lock, click the button below and a global staff member will be with you shortly. Alternatively, make a post in <a href="http://www.smogon.com/forums/threads/discipline-appeal-rules.3583479/">Discipline Appeals</a>.<br /><br /><button class="button" name="send" value="/helpticket submit Appeal">Appeal your lock</button></details>`;
-					}
+			if (!query.length) query = [''];
+			const pages = {
+				report: `I want to report someone`,
+				harassment: `Someone is harassing me`,
+				inap: `Someone is being inappropriate`,
+				timerstalling: `Someone is timerstalling`,
+				staff: `I want to report a staff member`,
+
+				appeal: `I want to appeal a punishment`,
+				permalock: `I want to appeal my permalock`,
+				lock: `I want to appeal my lock`,
+				ip: `I'm locked because I have the same IP as someone I don't recognize`,
+				semilock: `I can't talk in chat because of my ISP`,
+				appealother: `I want to appeal a mute/roomban/blacklist`,
+
+				misc: `Something else`,
+				ticket: `I feel my last Help request shouldn't have been closed`,
+				password: `I lost my password`,
+				other: `Other`,
+			};
+			for (const [i, page] of query.entries()) {
+				const isLast = (i === query.length - 1);
+				if (page && page in pages) {
+					let prevPageLink = query.slice(0, i).join('-');
+					if (prevPageLink) prevPageLink = `-${prevPageLink}`;
+					buf += `<p><a href="/view-help-request${prevPageLink}" target="replace"><button class="button">Back</button></a> <button class="button disabled" disabled>${pages[page]}</button></p>`;
 				}
-				if (user.locked !== user.userid || isStaff) {
-					buf += `<details style="margin: 3px"><summary>I'm locked because I have the same IP as someone I don't recognize</summary>If you are locked under a name you don't recognize, click the button below to call a global staff member so we can check.<br /><br /><button class="button" name="send" value="/helpticket submit IP-Appeal">Appeal IP lock</button></details>`;
+				switch (page) {
+				case '':
+					buf += `<p><b>What's going on?</b></p>`;
+					if (isStaff) {
+						buf += `<p class="message-error">Global staff cannot make Help requests. This form is only for reference.</p>`;
+					} else {
+						buf += `<p class="message-error">Abuse of Help requests can result in a punishment.</p>`;
+					}
+					if (!isLast) break;
+					buf += `<p><Button>report</Button></p>`;
+					buf += `<p><Button>appeal</Button></p>`;
+					buf += `<p><Button>misc</Button></p>`;
+					break;
+				case 'report':
+					buf += `<p><b>What do you want to report someone for?</b></p>`;
+					if (!isLast) break;
+					buf += `<p><Button>harassment</Button></p>`;
+					buf += `<p><Button>inap</Button></p>`;
+					buf += `<p><Button>timerstalling</Button></p>`;
+					break;
+				case 'harassment':
+					buf += `<p>If someone is harassing you, click the appropriate button below and a global staff member will take a look. Consider using <code>/ignore [username]</code> if it's minor instead.</p>`;
+					buf += `<p>If you are reporting harassment in a battle, please save a replay of the battle.</p>`;
+					buf += `<p><button class="button" name="send" value="/helpticket submit PM Harassment">Report harassment in a private message (PM)</button> <button class="button" name="send" value="/helpticket submit Battle Harassment">Report harassment in a battle</button> <button class="button" name="send" value="/helpticket submit Chatroom Harassment">Report harassment in a chatroom</button></p>`;
+					break;
+				case 'inap':
+					buf += `<p>If a user has posted inappropriate content, has an inappropriate name, or has inappropriate Pok&eacute;mon nicknames, click the appropriate button below and a global staff member will take a look.</p>`;
+					buf += `<p><button class="button" name="send" value="/helpticket submit Inappropriate Content">Report inappropriate content</button> <button class="button" name="send" value="/helpticket submit Inappropriate Nickname">Report an inappropriate username</button> <button class="button" name="send" value="/helpticket submit Inappropriate Pokemon Nicknames">Report inappropriate Pok&eacute;mon nicknames</button></p>`;
+					break;
+				case 'timerstalling':
+					buf += `<p>If someone is timerstalling in your battle, and the battle has <b>not</b> ended, click the button below and a global staff member will take a look.</p>`;
+					buf += `<p><button class="button" name="send" value="/helpticket submit Timerstalling">Report timerstalling</button></p>`;
+					break;
+				case 'staff':
+					buf += `<p>If you have a complaint against a room staff member, please PM a Room Owner (marked with a #) in the room.</p>`;
+					buf += `<p>If you have a complaint against a global staff member or Room Owner, please click the appropriate button below. Alternatively, make a post in <a href="http://www.smogon.com/forums/threads/names-passwords-rooms-and-servers-contacting-upper-staff.3538721/#post-6300151">Admin Requests</a>.</p>`;
+					buf += `<p><button class="button" name="send" value="/helpticket submit Room Owner Complaint">Report a Room Owner</button> <button class="button" name="send" value="/helpticket submit Global Staff Complaint">Report a Global Staff Member</button></p>`;
+					break;
+				case 'appeal':
+					buf += `<p><b>What would you like to appeal?</b></p>`;
+					if (!isLast) break;
+					if (user.locked || isStaff) {
+						if (user.locked === user.userid || isStaff) {
+							if (user.permalocked || isStaff) {
+								buf += `<p><Button>permalock</Button></p>`;
+							}
+							if (!user.permalocked || isStaff) {
+								buf += `<p><Button>lock</Button></p>`;
+							}
+						}
+						if (user.locked !== user.userid || isStaff) {
+							buf += `<p><Button>ip</Button></p>`;
+						}
+					}
+					if (user.semilocked || isStaff) {
+						buf += `<p><Button>semilock</Button></p>`;
+					}
+					break;
+				case 'permalock':
+					buf += `<p>Please make a post in the <a href="http://www.smogon.com/forums/threads/discipline-appeal-rules.3583479/">Discipline Appeal Forums</a> to appeal a permalock.</p>`;
+					break;
+				case 'lock':
+					buf += `<p>If you want to appeal your lock, click the button below and a global staff member will be with you shortly. Alternatively, make a post in <a href="http://www.smogon.com/forums/threads/discipline-appeal-rules.3583479/">Discipline Appeals</a>.</p>`;
+					buf += `<p><button class="button" name="send" value="/helpticket submit Appeal">Appeal your lock</button></p>`;
+					break;
+				case 'ip':
+					buf += `<p>If you are locked under a name you don't recognize, click the button below to call a global staff member so we can check.</p>`;
+					buf += `<p><button class="button" name="send" value="/helpticket submit IP-Appeal">Appeal IP lock</button></p>`;
+					break;
+				case 'semilock':
+					buf += `<p>Click the button below, and a global staff member will check. </p>`;
+					buf += `<p><button class="button" name="send" value="/helpticket submit ISP-Appeal">Appeal ISP lock</button></p>`;
+					break;
+				case 'appealother':
+					buf += `<p>Please PM the staff member who punished you. If you dont know who punished you, ask another room staff member; they will redirect you to the correct user. If you are banned or blacklisted from the room, use <code>/roomauth [name of room]</code> to get a list of room staff members. Bold names are online.</p>`;
+					break;
+				case 'misc':
+					buf += `<p><b>Maybe one of these options will be helpful?</b></p>`;
+					if (!isLast) break;
+					if (ticket || isStaff) {
+						buf += `<p><Button>ticket</Button></p>`;
+					}
+					buf += `<p><Button>password</Button></p>`;
+					buf += `<p><Button>other</Button></p>`;
+					break;
+				case 'ticket':
+					buf += `<p>If you feel that staff did not properly help you with your last issue, click the button below to get in touch with an upper staff member.</p>`;
+					buf += `<p><button class="button" name="send" value="/helpticket submit Report Last Ticket">Report last ticket</button></p>`;
+					break;
+				case 'password':
+					buf += `<p>If you lost your password, click the button below to make a post in Admin Requests. We will need to clarify a few pieces of information before resetting the account. Please note that password resets are low priority and may take a while; we recommend using a new account while waiting.</p>`;
+					buf += `<p><a class="button" href="http://www.smogon.com/forums/forums/other-admin-requests.346/">Request a password reset</a></p>`;
+					break;
+				case 'other':
+					buf += `<p>If your issue is not handled above, click the button below to ask for a global. Please be ready to explain the situation.</p>`;
+					buf += `<p><button class="button" name="send" value="/helpticket submit Other">Call a global staff member</button></p>`;
+					break;
 				}
 			}
-			if (user.semilocked || isStaff) {
-				buf += `<details style="margin: 3px"><summary>I can't talk in chat because of my ISP</summary>Click the button below, and a global staff member will check. <br /><br /><button class="button" name="send" value="/helpticket submit ISP-Appeal">Appeal ISP lock</button></details>`;
-			}
-			buf += `<details style="margin: 3px"><summary>I want to appeal a mute/roomban/blacklist</summary>Please PM the staff member who punished you. If you dont know who punished you, ask another room staff member; they will redirect you to the correct user. If you are banned or blacklisted from the room, use <code>/roomauth [name of room]</code> to get a list of room staff members. Bold names are online.</details>`;
-			buf += `</details><br /><details style="margin: 3px"><summary>Something else</summary><b>Maybe one of these options will be helpful?</b><br />`;
-			buf += `<details style="margin: 3px"><summary>I lost my password</summary>If you lost your password, click the button below to make a post in Admin Requests. We will need to clarify a few pieces of information before resetting the account. Please note that password resets are low priority and may take a while; we recommend using a new account while waiting.<br /><br /><a class="button" href="http://www.smogon.com/forums/forums/other-admin-requests.346/">Request a password reset</a></details>`;
-			if (ticket || isStaff) {
-				buf += `<details style="margin: 3px"><summary>I feel my last ticket shouldn't have been closed</summary>If you feel that staff did not properly help you with your last issue, click the button below to get in touch with an upper staff member.<br /><br /><button class="button" name="send" value="/helpticket submit Report Last Ticket">Report last ticket</button></details>`;
-			}
-			buf += `<details style="margin: 3px"><summary>Other</summary>If your issue is not handled above, click the button below to ask for a global. Please be ready to explain the situation.<br /><br /><button class="button" name="send" value="/helpticket submit Other">Call a global staff member</button></details>`;
-			buf += `</details></div>`;
+			buf += '</div>';
+			const curPageLink = query.length ? '-' + query.join('-') : '';
+			buf = buf.replace(/<Button>([a-z]+)<\/Button>/g, (match, id) =>
+				`<a class="button" href="/view-help-request${curPageLink}-${id}" target="replace">${pages[id]}</a>`
+			);
 			return buf;
 		},
 		tickets(query, user, connection) {
