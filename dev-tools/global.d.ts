@@ -9,6 +9,7 @@ import * as RoomsType from './../rooms'
 import * as RoomlogsType from './../roomlogs'
 import * as LadderStoreType from './../ladders-remote'
 import * as LaddersType from './../ladders'
+import * as UsersType from './../users'
 
 declare global {
 	// modules
@@ -49,4 +50,8 @@ declare global {
 	const Rooms: typeof RoomsType
 	const Roomlogs: typeof RoomlogsType
 	const Roomlog: typeof RoomlogsType.Roomlog
+
+	// users
+	const User: typeof UsersType.User
+	const Connection: typeof UsersType.Connection
 }

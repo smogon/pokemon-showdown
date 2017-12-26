@@ -73,6 +73,7 @@ class RoomGame {
 		this.players = Object.create(null);
 		this.playerCount = 0;
 		this.playerCap = 0;
+		this.ended = false;
 	}
 
 	destroy() {
