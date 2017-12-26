@@ -45,6 +45,7 @@ declare global {
 	const ChatRoom: typeof RoomsType.ChatRoomTypeForTS
 	const GameRoom: typeof RoomsType.GameRoom
 	const Room: typeof RoomsType.ChatRoom
+	const BasicRoom: typeof RoomsType.BasicRoom
 	const RoomGame: typeof RoomsType.RoomGame
 	const RoomBattle: typeof RoomsType.RoomBattle
 	const Rooms: typeof RoomsType
@@ -52,6 +53,7 @@ declare global {
 	const Roomlog: typeof RoomlogsType.Roomlog
 
 	// users
+	const Users: typeof UsersType
 	const User: typeof UsersType.User
 	const Connection: typeof UsersType.Connection
 }

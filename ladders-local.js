@@ -154,17 +154,19 @@ class LadderStore {
 	async getRating(userid) {
 		let formatid = this.formatid;
 		let user = Users.getExact(userid);
-		if (Ladders.disabled === true || Ladders.disabled === 'db' && (!user || !user.mmrCache[formatid])) {
-			throw new Error(`Ladders are disabled.`);
-		}
 		if (user && user.mmrCache[formatid]) {
 			return user.mmrCache[formatid];
 		}
 		const ladder = await this.getLadder();
-		if (user.userid !== userid) throw new Error(`Expired rating for ${userid}`);
 		let index = this.indexOfUser(userid);
-		if (index < 0) return (user.mmrCache[formatid] = 1000);
-		return (user.mmrCache[formatid] = ladder[index][1]);
+		let rating = 1000;
+		if (index >= 0) {
+			rating = ladder[index][1];
+		}
+		if (user && user.userid === userid) {
+			user.mmrCache[formatid] = rating;
+		}
+		return rating;
 	}
 
 	/**

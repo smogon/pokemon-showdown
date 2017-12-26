@@ -27,9 +27,12 @@ const Roomlogs = require('./roomlogs');
  *********************************************************/
 
 /**
- * @typedef {{userid: string, time: number, guestNum: number, autoconfirmed: boolean}} MuteEntry
+ * @typedef {{userid: string, time: number, guestNum: number, autoconfirmed: string}} MuteEntry
  */
 
+/**
+ * @abstract
+ */
 class BasicRoom {
 	/**
 	 * @param {string} roomid
@@ -137,7 +140,7 @@ class BasicRoom {
 	}
 	/**
 	 * Send a room message to a single user.
-	 * @param {User} user
+	 * @param {User | Connection} user
 	 * @param {string} message
 	 */
 	sendUser(user, message) {
@@ -170,7 +173,7 @@ class BasicRoom {
 	 * @param {string} text
 	 */
 	addByUser(user, text) {
-		return this.add('|c|' + user.getIdentity(this) + '|/log ' + text).update();
+		return this.add('|c|' + user.getIdentity(this.id) + '|/log ' + text).update();
 	}
 	/**
 	 * Like addByUser, but sends to mods only.
@@ -178,7 +181,7 @@ class BasicRoom {
 	 * @param {string} text
 	 */
 	sendModsByUser(user, text) {
-		return this.sendMods('|c|' + user.getIdentity(this) + '|/log ' + text);
+		return this.sendMods('|c|' + user.getIdentity(this.id) + '|/log ' + text);
 	}
 	update() {}
 
@@ -338,19 +341,17 @@ class BasicRoom {
 	unmute(userid, notifyText) {
 		let successUserid = '';
 		let user = Users.get(userid);
-		if (!user) {
-			// If the user is not found, construct a dummy user object for them.
-			user = {
-				userid: userid,
-				autoconfirmed: '',
-			};
+		let autoconfirmed = '';
+		if (user) {
+			userid = user.userid;
+			autoconfirmed = user.autoconfirmed;
 		}
 
 		for (let i = 0; i < this.muteQueue.length; i++) {
 			let entry = this.muteQueue[i];
-			if (entry.userid === user.userid ||
-				entry.guestNum === user.guestNum ||
-				(user.autoconfirmed && entry.autoconfirmed === user.autoconfirmed)) {
+			if (entry.userid === userid ||
+				(user && entry.guestNum === user.guestNum) ||
+				(autoconfirmed && entry.autoconfirmed === autoconfirmed)) {
 				if (i === 0) {
 					this.muteQueue.splice(0, 1);
 					this.runMuteTimer(true);
@@ -362,7 +363,7 @@ class BasicRoom {
 			}
 		}
 
-		if (successUserid && user.userid in this.users) {
+		if (user && successUserid && userid in this.users) {
 			user.updateIdentity(this.id);
 			if (notifyText) user.popup(notifyText);
 		}
@@ -393,9 +394,6 @@ class GlobalRoom extends BasicRoom {
 
 		this.battleCount = 0;
 		this.lastReportedCrash = 0;
-
-		//used to keep TypeScript happy
-		this.tour = null;
 
 		/** @type {AnyObject[]} */
 		this.chatRoomDataList = [];
@@ -1270,6 +1268,7 @@ class BasicChatRoom extends BasicRoom {
 
 		// remove references to ourself
 		for (let i in this.users) {
+			// @ts-ignore
 			this.users[i].leaveRoom(this, null, true);
 			delete this.users[i];
 		}
@@ -1383,8 +1382,8 @@ class GameRoom extends BasicChatRoom {
 	 * @param {User} user
 	 */
 	getLogForUser(user) {
-		if (!(user in this.game.players)) return this.getLog();
-		return this.getLog(this.game.players[user].slotNum + 1);
+		if (!(user.userid in this.game.players)) return this.getLog();
+		return this.getLog(this.game.players[user.userid].slotNum + 1);
 	}
 	/**
 	 * @param {User?} excludeUser
@@ -1422,7 +1421,8 @@ class GameRoom extends BasicChatRoom {
 	 * @param {0 | 1} num
 	 */
 	getPlayer(num) {
-		return this.battle['p' + (num + 1)];
+		// @ts-ignore
+		return this.game['p' + (num + 1)];
 	}
 	/**
 	 * @param {User} user
