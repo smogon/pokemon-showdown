@@ -40,13 +40,7 @@ class LadderStore {
 	async getRating(userid) {
 		let formatid = this.formatid;
 		let user = Users.getExact(userid);
-		if (!user) {
-			throw new Error(`Expired rating for ${userid}`);
-		}
-		if (Ladders.disabled === true || Ladders.disabled === 'db' && !user.mmrCache[formatid]) {
-			throw new Error(`Ladders are disabled.`);
-		}
-		if (user.mmrCache[formatid]) {
+		if (user && user.mmrCache[formatid]) {
 			return user.mmrCache[formatid];
 		}
 		const mmr = await new Promise((resolve, reject) => {
@@ -62,9 +56,10 @@ class LadderStore {
 			});
 		});
 		if (isNaN(mmr)) return 1000;
-		if (user.userid !== userid) throw new Error(`Expired rating for ${userid}`);
 
-		user.mmrCache[formatid] = mmr;
+		if (user && user.userid === userid) {
+			user.mmrCache[formatid] = mmr;
+		}
 		return mmr;
 	}
 

@@ -116,7 +116,7 @@ function merge(user1, user2) {
  * @param {boolean} exactName
  * @return {?User}
  */
-function getUser(name, exactName) {
+function getUser(name, exactName = false) {
 	if (!name || name === '!') return null;
 	// @ts-ignore
 	if (name && name.userid) return name;
@@ -314,7 +314,6 @@ function setOfflineGroup(name, group, forceTrusted) {
  */
 function isUsernameKnown(name) {
 	let userid = toId(name);
-	 // @ts-ignore
 	if (Users(userid)) return true;
 	if (userid in usergroups) return true;
 	for (const room of Rooms.global.chatRooms) {
@@ -359,7 +358,14 @@ class Connection {
 		this.worker = worker;
 		this.inRooms = new Set();
 
-		this.user = user;
+		/**
+		 * This can be null during initialization and after disconnecting,
+		 * but we're asserting it non-null for ease of use. The main risk
+		 * is async code, where you need to re-check that it's not null
+		 * before using it.
+		 * @type {User}
+		 */
+		this.user = /** @type {User} */ (user);
 
 		this.ip = ip || '';
 		this.protocol = protocol || '';
@@ -368,8 +374,8 @@ class Connection {
 		this.autojoins = '';
 	}
 	/**
- 	* @param {?string | Room} roomid
- 	* @param {*} data
+ 	* @param {string | BasicRoom?} roomid
+ 	* @param {string} data
  	*/
 	sendTo(roomid, data) {
 		// @ts-ignore
@@ -394,7 +400,7 @@ class Connection {
 	onDisconnect() {
 		connections.delete(this.id);
 		if (this.user) this.user.onDisconnect(this);
-		this.user = null;
+		this.user = /** @type {any} */ (null);
 	}
 
 	/**
@@ -464,8 +470,11 @@ class User {
 		// Set of roomids
 		this.games = new Set();
 
-		// challenge state
+		// misc state
 		this.lastChallenge = 0;
+		this.lastPM = '';
+		this.team = '';
+		this.lastMatch = '';
 
 		// settings
 		this.isSysop = false;
@@ -476,7 +485,7 @@ class User {
 		this.inviteOnlyNextBattle = false;
 
 		// chat queue
-		/** @type {?any[]} */
+		/** @type {[string, string, Connection][]?} */
 		this.chatQueue = null;
 		this.chatQueueTimeout = null;
 		this.lastChatMessage = 0;
@@ -500,7 +509,7 @@ class User {
 	}
 
 	/**
-	 * @param {string | Room} roomid
+	 * @param {string | BasicRoom?} roomid
 	 * @param {string} data
 	 */
 	sendTo(roomid, data) {
@@ -531,7 +540,7 @@ class User {
 	/**
 	 * @param {string} roomid
 	 */
-	getIdentity(roomid) {
+	getIdentity(roomid = '') {
 		if (this.locked || this.namelocked) {
 			const lockedSymbol = (Config.punishgroups && Config.punishgroups.locked ? Config.punishgroups.locked.symbol : '\u203d');
 			return lockedSymbol + this.name;
@@ -555,9 +564,9 @@ class User {
 	}
 	/**
 	 * @param {string} minAuth
-	 * @param {Room} room
+	 * @param {Room?} room
 	 */
-	authAtLeast(minAuth, room) {
+	authAtLeast(minAuth, room = null) {
 		if (!minAuth || minAuth === ' ') return true;
 		if (minAuth === 'trusted' && this.trusted) return true;
 		if (minAuth === 'autoconfirmed' && this.autoconfirmed) return true;
@@ -566,17 +575,16 @@ class User {
 			minAuth = Config.groupsranking[1];
 		}
 		if (!(minAuth in Config.groups)) return false;
-		// @ts-ignore
 		let auth = (room && !this.can('makeroom') ? room.getAuth(this) : this.group);
 		return auth in Config.groups && Config.groups[auth].rank >= Config.groups[minAuth].rank;
 	}
 	/**
 	 * @param {string} permission
-	 * @param {string | User} target
-	 * @param {Room} room
+	 * @param {string | User?} target user or group symbol
+	 * @param {Room?} room
 	 * @return {boolean}
 	 */
-	can(permission, target, room) {
+	can(permission, target = null, room = null) {
 		if (this.hasSysopAccess()) return true;
 
 		let groupData = Config.groups[this.group];
@@ -584,32 +592,33 @@ class User {
 			return true;
 		}
 
-		let group, targetGroup;
+		let group = ' ';
+		let targetGroup = ' ';
+		let targetUser = null;
 
 		if (typeof target === 'string') {
-			// @ts-ignore
-			target = null;
 			targetGroup = target;
+		} else {
+			targetUser = target;
 		}
 
 		if (room && room.auth) {
 			group = room.getAuth(this);
-			if (target) targetGroup = room.getAuth(target);
+			if (targetUser) targetGroup = room.getAuth(targetUser);
 		} else {
 			group = this.group;
-			// @ts-ignore
-			if (target) targetGroup = target.group;
+			if (targetUser) targetGroup = targetUser.group;
 		}
 
 		groupData = Config.groups[group];
 
 		if (groupData && groupData[permission]) {
 			let jurisdiction = groupData[permission];
-			if (!target) {
+			if (!targetUser) {
 				return !!jurisdiction;
 			}
 			if (jurisdiction === true && permission !== 'jurisdiction') {
-				return this.can('jurisdiction', target, room);
+				return this.can('jurisdiction', targetUser, room);
 			}
 			if (typeof jurisdiction !== 'string') {
 				return !!jurisdiction;
@@ -617,7 +626,7 @@ class User {
 			if (jurisdiction.includes(targetGroup)) {
 				return true;
 			}
-			if (jurisdiction.includes('s') && target === this) {
+			if (jurisdiction.includes('s') && targetUser === this) {
 				return true;
 			}
 			if (jurisdiction.includes('u') && Config.groupsranking.indexOf(group) > Config.groupsranking.indexOf(targetGroup)) {
@@ -659,7 +668,6 @@ class User {
 	 */
 	hasConsoleAccess(connection) {
 		if (this.hasSysopAccess()) return true;
-		// @ts-ignore
 		if (!this.can('console')) return false; // normal permission check
 
 		let whitelist = Config.consoleips || ['127.0.0.1'];
@@ -672,8 +680,7 @@ class User {
 	 * @param {string} targetGroup
 	 */
 	canPromote(sourceGroup, targetGroup) {
-		// @ts-ignore
-		return this.can('promote', {group: sourceGroup}) && this.can('promote', {group: targetGroup});
+		return this.can('promote', sourceGroup) && this.can('promote', targetGroup);
 	}
 	/**
 	 * @param {boolean} isForceRenamed
@@ -747,7 +754,6 @@ class User {
 			return false;
 		} else {
 			if (userid === this.userid && !newlyRegistered) {
-				// @ts-ignore
 				return this.forceRename(name, this.registered);
 			}
 		}
@@ -858,7 +864,6 @@ class User {
 		}
 
 		let user = users.get(userid);
-		// @ts-ignore
 		let possibleUser = Users(userid);
 		if (possibleUser && possibleUser.namelocked) {
 			// allows namelocked users to be merged
@@ -888,7 +893,6 @@ class User {
 		if (this.namelocked) return false;
 
 		// rename success
-		// @ts-ignore
 		if (!this.forceRename(name, registered)) {
 			return false;
 		}
@@ -901,7 +905,7 @@ class User {
 	 * @param {boolean} registered
 	 * @param {boolean} isForceRenamed
 	 */
-	forceRename(name, registered, isForceRenamed) {
+	forceRename(name, registered, isForceRenamed = false) {
 		// skip the login server
 		let userid = toId(name);
 
@@ -977,7 +981,6 @@ class User {
 			if (!this.chatQueue) this.chatQueue = [];
 			this.chatQueue.push(...oldUser.chatQueue);
 			oldUser.clearChatQueue();
-			// @ts-ignore
 			if (!this.chatQueueTimeout) this.startChatQueue();
 		}
 
@@ -1104,16 +1107,15 @@ class User {
 				this.semilocked = '#dnsbl.';
 			}
 		}
-		// @ts-ignore
 		if (this.ignorePMs && this.can('lock') && !this.can('bypassall')) this.ignorePMs = false;
 	}
 	/**
 	 * Set a user's group. Pass (' ', true) to force trusted
 	 * status without giving the user a group.
 	 * @param {string} group
-	 * @param {?boolean} forceTrusted
+	 * @param {boolean} forceTrusted
 	 */
-	setGroup(group, forceTrusted) {
+	setGroup(group, forceTrusted = false) {
 		if (!group) throw new Error(`Falsy value passed to setGroup`);
 		this.group = group.charAt(0);
 		this.isStaff = Config.groups[this.group] && (Config.groups[this.group].lock || Config.groups[this.group].root);
@@ -1151,7 +1153,6 @@ class User {
 			}
 		}
 		this.trusted = '';
-		// @ts-ignore
 		this.setGroup(Config.groupsranking[0]);
 		return removed;
 	}
@@ -1248,18 +1249,15 @@ class User {
 		return (prevNames.length ? prevNames[prevNames.length - 1] : this.userid);
 	}
 	/**
-	 * @param {string | GlobalRoom | GameRoom | ChatRoom} room
+	 * @param {string | GlobalRoom | GameRoom | ChatRoom} roomid
 	 * @param {Connection} connection
 	 */
-	tryJoinRoom(room, connection) {
+	tryJoinRoom(roomid, connection) {
 		// @ts-ignore
-		let roomid = (room && room.id ? room.id : room);
-		// @ts-ignore
-		room = Rooms.search(room);
-		// @ts-ignore
+		roomid = /** @type {string} */ (roomid && roomid.id ? roomid.id : roomid);
+		let room = Rooms.search(roomid);
 		if (!room && roomid.startsWith('view-')) {
 			// it's a page!
-			// @ts-ignore
 			let parts = roomid.split('-');
 			let handler = Chat.pages;
 			parts.shift();
@@ -1285,8 +1283,8 @@ class User {
 			}
 		}
 		// @ts-ignore
-		let makeRoom = this.can('makeroom');
-		if (room.tour && !makeRoom) {
+		if (room.tour) {
+			// @ts-ignore
 			let errorMessage = room.tour.onBattleJoin(room, this);
 			if (errorMessage) {
 				connection.sendTo(roomid, `|noinit|joinfailed|${errorMessage}`);
@@ -1321,7 +1319,6 @@ class User {
 	joinRoom(room, connection) {
 		room = Rooms(room);
 		if (!room) return false;
-		// @ts-ignore
 		if (!this.can('bypassall')) {
 			// check if user has permission to join
 			if (room.staffRoom && !this.isStaff) return false;
@@ -1393,16 +1390,16 @@ class User {
 		}
 	}
 	/**
-	 * @param {Connection} connection
+	 * @param {Connection?} connection
 	 */
-	updateReady(connection) {
+	updateReady(connection = null) {
 		Ladders.updateSearch(this, connection);
 		Ladders.updateChallenges(this, connection);
 	}
 	/**
-	 * @param {Connection} connection
+	 * @param {Connection?} connection
 	 */
-	updateSearch(connection) {
+	updateSearch(connection = null) {
 		Ladders.updateSearch(this, connection);
 	}
 	/**
@@ -1438,6 +1435,7 @@ class User {
 				this.chatQueue.push([message, room.id, connection]);
 			}
 		} else if (now < this.lastChatMessage + throttleDelay) {
+			// @ts-ignore TypeScript bug: tuple
 			this.chatQueue = [[message, room.id, connection]];
 			this.startChatQueue(throttleDelay - (now - this.lastChatMessage));
 		} else {
@@ -1448,10 +1446,12 @@ class User {
 		}
 	}
 	/**
-	 * @param {undefined | number} delay
+	 * @param {number?} delay
 	 */
-	startChatQueue(delay) {
-		if (delay === undefined) delay = (this.group !== ' ' ? THROTTLE_DELAY / 2 : THROTTLE_DELAY) - (Date.now() - this.lastChatMessage);
+	startChatQueue(delay = null) {
+		if (delay === null) {
+			delay = (this.group !== ' ' ? THROTTLE_DELAY / 2 : THROTTLE_DELAY) - (Date.now() - this.lastChatMessage);
+		}
 
 		this.chatQueueTimeout = setTimeout(
 			() => this.processChatQueue(),
@@ -1471,12 +1471,12 @@ class User {
 	processChatQueue() {
 		this.chatQueueTimeout = null;
 		if (!this.chatQueue) return;
-		if (!this.chatQueue.length) {
+		const queueElement = this.chatQueue.shift();
+		if (!queueElement) {
 			this.chatQueue = null;
 			return;
 		}
-		// @ts-ignore
-		let [message, roomid, connection] = this.chatQueue.shift();
+		let [message, roomid, connection] = queueElement;
 		if (!connection.user) {
 			// connection disconnected, chat queue should not be big enough
 			// for recursion to be an issue, also didn't ES6 spec tail
@@ -1498,7 +1498,7 @@ class User {
 		let throttleDelay = THROTTLE_DELAY;
 		if (this.group !== ' ') throttleDelay /= 2;
 
-		if (this.chatQueue && this.chatQueue.length) {
+		if (this.chatQueue.length) {
 			this.chatQueueTimeout = setTimeout(
 				() => this.processChatQueue(), throttleDelay);
 		} else {

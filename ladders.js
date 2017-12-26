@@ -85,7 +85,7 @@ class Ladder extends LadderStore {
 	 */
 	async prepBattle(connection, team = null, isRated = false) {
 		// all validation for a battle goes through here
-		const user = connection.user || connection;
+		const user = connection.user;
 		const userid = user.userid;
 		if (team === null) team = user.team;
 
@@ -101,7 +101,7 @@ class Ladder extends LadderStore {
 		if (Monitor.countConcurrentBattle(gameCount, connection)) {
 			return null;
 		}
-		if (Monitor.countPrepBattle(connection.ip || connection.latestIp, connection)) {
+		if (Monitor.countPrepBattle(connection.ip, connection)) {
 			return null;
 		}
 
@@ -114,23 +114,22 @@ class Ladder extends LadderStore {
 		}
 
 		let rating = 0, valResult;
-		if (isRated) {
-			try {
-				[valResult, rating] = await Promise.all([
-					TeamValidatorAsync(this.formatid).validateTeam(team, user.locked || user.namelocked),
-					this.getRating(user.userid),
-				]);
-			} catch (e) {
-				// Rejects iff ladders are disabled, or if we
-				// retrieved the rating but the user had changed their name.
-				if (Ladders.disabled) {
-					connection.popup(`The ladder is currently disabled due to high server load.`);
-				}
+		if (isRated && !Ladders.disabled) {
+			let userid = user.userid;
+			[valResult, rating] = await Promise.all([
+				TeamValidatorAsync(this.formatid).validateTeam(team, user.locked || user.namelocked),
+				this.getRating(userid),
+			]);
+			if (userid !== user.userid) {
 				// User feedback for renames handled elsewhere.
 				return null;
 			}
 			if (!rating) rating = 1;
 		} else {
+			if (Ladders.disabled) {
+				connection.popup(`The ladder is temporarily disabled due to technical difficulties - you will not receive ladder rating for this game.`);
+				rating = 1;
+			}
 			valResult = await TeamValidatorAsync(this.formatid).validateTeam(team, user.locked || user.namelocked);
 		}
 
@@ -203,7 +202,7 @@ class Ladder extends LadderStore {
 			connection.popup(`You can't battle yourself. The best you can do is open PS in Private Browsing (or another browser) and log into a different username, and battle that username.`);
 			return false;
 		}
-		if (Ladder.getChallenging(connection.user.userid)) {
+		if (Ladder.getChallenging(user.userid)) {
 			connection.popup(`You are already challenging someone. Cancel that challenge before challenging someone else.`);
 			return false;
 		}
@@ -366,7 +365,7 @@ class Ladder extends LadderStore {
 				user.popup(`You changed your name and are no longer looking for a battle in ${formatid}`);
 				Ladder.updateSearch(user);
 			}
-			return;
+			return null;
 		}
 		return user;
 	}
@@ -529,17 +528,18 @@ class Ladder extends LadderStore {
 		// In order from longest waiting to shortest waiting
 		for (const [formatid, formatTable] of Ladders.searches) {
 			const matchmaker = Ladders(formatid);
-			let longestSearch, longestSearcher;
+			let longest = /** @type {[BattleReady, User]?} */ (null);
 			for (let search of formatTable.values()) {
-				if (!longestSearch) {
-					longestSearcher = matchmaker.getSearcher(search);
+				if (!longest) {
+					const longestSearcher = matchmaker.getSearcher(search);
 					if (!longestSearcher) continue;
-					longestSearch = search;
+					longest = [search, longestSearcher];
 					continue;
 				}
 				let searcher = matchmaker.getSearcher(search);
 				if (!searcher) continue;
 
+				let [longestSearch, longestSearcher] = longest;
 				let matched = matchmaker.matchmakingOK(search, longestSearch, searcher, longestSearcher);
 				if (matched) {
 					formatTable.delete(search.userid);
@@ -559,8 +559,8 @@ class Ladder extends LadderStore {
 		if (ready1.formatid !== ready2.formatid) throw new Error(`Format IDs don't match`);
 		const user1 = Users(ready1.userid);
 		const user2 = Users(ready2.userid);
-		if (!user1 && !user2) return false;
 		if (!user1) {
+			if (!user2) return false;
 			user2.popup(`Sorry, your opponent ${ready1.userid} went offline before your battle could start.`);
 			return false;
 		}

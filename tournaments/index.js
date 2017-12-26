@@ -826,6 +826,7 @@ class Tournament {
 	}
 	onBattleJoin(room, user) {
 		if (this.scouting || this.isEnded || user.latestIp === room.p1.latestIp || user.latestIp === room.p2.latestIp) return;
+		if (user.can('makeroom')) return;
 		let users = this.generator.getUsers(true);
 		for (let i = 0; i < users.length; i++) {
 			let otherUser = Users.get(users[i].userid);

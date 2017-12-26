@@ -505,6 +505,7 @@ class CommandContext {
 	 * @param {string} message
 	 */
 	pmTransform(message) {
+		if (!this.pmTarget) throw new Error(`Not a PM`);
 		let prefix = `|pm|${this.user.getIdentity()}|${this.pmTarget.getIdentity()}|`;
 		return message.split('\n').map(message => {
 			if (message.startsWith('||')) {

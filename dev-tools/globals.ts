@@ -5,11 +5,8 @@ let Config = require('../config/config');
 let Monitor = require('../monitor');
 
 let LoginServer = require('../loginserver');
-let Users = require('../users');
-type Connection = any;
-type User = any;
 
-type RoomBattle = any;
+type RoomBattle = AnyObject;
 
 let Verifier = require('../verifier');
 let Dnsbl = require('../dnsbl');
