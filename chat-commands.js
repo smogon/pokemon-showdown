@@ -3030,7 +3030,8 @@ exports.commands = {
 	refreshpage: function (target, room, user) {
 		if (!this.can('hotpatch')) return false;
 		Rooms.global.send('|refresh|');
-		this.roomlog(user.name + " used /refreshpage");
+		const logRoom = Rooms('staff') || room;
+		logRoom.roomlog(`${user.name} used /refreshpage`);
 	},
 
 	updateserver: async function (target, room, user, connection) {
@@ -3060,6 +3061,7 @@ exports.commands = {
 		}
 
 		this.sendReply(`Fetching newest version...`);
+		logRoom.roomlog(`${user.name} used /updateserver`);
 
 		let [code, stdout, stderr] = await exec(`git fetch`);
 		if (code) throw new Error(`updateserver: Crash while fetching - make sure this is a Git repository`);
@@ -3125,7 +3127,8 @@ exports.commands = {
 			Rooms.lobby.modchat = false;
 			Rooms.lobby.addRaw("<div class=\"broadcast-green\"><b>We fixed the crash without restarting the server!</b><br />You may resume talking in the lobby and starting new battles.</div>").update();
 		}
-		this.roomlog(user.name + " used /crashfixed");
+		const logRoom = Rooms('staff') || room;
+		logRoom.roomlog(`${user.name} used /crashfixed`);
 	},
 	crashfixedhelp: ["/crashfixed - Ends the active lockdown caused by a crash without the need of a restart. Requires: ~"],
 
