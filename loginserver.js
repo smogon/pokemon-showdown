@@ -17,15 +17,13 @@ const url = require('url');
 
 const FS = require('./lib/fs');
 
-const noop = () => null;
-
 /**
  * A custom error type used when requests to the login server take too long.
  */
 class TimeoutError extends Error {}
 TimeoutError.prototype.name = TimeoutError.name;
 
-function parseJSON(json) {
+function parseJSON(/** @type {string} */ json) {
 	if (json.startsWith(']')) json = json.substr(1);
 	let data = {error: null};
 	try {
@@ -39,24 +37,29 @@ function parseJSON(json) {
 class LoginServerInstance {
 	constructor() {
 		this.uri = Config.loginserver;
+		/**
+		 * @type {[AnyObject, (val: [AnyObject?, number, Error?]) => void][]}
+		 */
 		this.requestQueue = [];
 
 		this.requestTimer = null;
 		this.requestTimeoutTimer = null;
+		/** @type {string} */
 		this.requestLog = '';
 		this.lastRequest = 0;
 		this.openRequests = 0;
 		this.disabled = false;
 	}
 
-	instantRequest(action, data, callback) {
-		if (typeof data === 'function') {
-			callback = data;
-			data = null;
-		}
+	/**
+	 * @param {string} action
+	 * @param {AnyObject?} data
+	 * @return {Promise<[AnyObject?, number, Error?]>}
+	 */
+	instantRequest(action, data = null) {
 		if (this.openRequests > 5) {
-			setImmediate(callback, null, null, new RangeError("Request overflow"));
-			return;
+			// @ts-ignore TypeScript bug: tuple
+			return Promise.resolve([null, 0, new RangeError("Request overflow")]);
 		}
 		this.openRequests++;
 		let dataString = '';
@@ -65,49 +68,57 @@ class LoginServerInstance {
 				dataString += '&' + i + '=' + encodeURIComponent('' + data[i]);
 			}
 		}
-		let req = http.get(url.parse(this.uri + 'action.php?act=' + action + '&serverid=' + Config.serverid + '&servertoken=' + encodeURIComponent(Config.servertoken) + '&nocache=' + new Date().getTime() + dataString), res => {
-			let buffer = '';
-			res.setEncoding('utf8');
+		const urlObject = url.parse(this.uri + 'action.php?act=' + action + '&serverid=' + Config.serverid + '&servertoken=' + encodeURIComponent(Config.servertoken) + '&nocache=' + new Date().getTime() + dataString);
+		return new Promise((resolve, reject) => {
+			// @ts-ignore TypeScript bug: http.get signature
+			let req = http.get(urlObject, res => {
+				let buffer = '';
+				res.setEncoding('utf8');
 
-			res.on('data', chunk => {
-				buffer += chunk;
+				res.on('data', (/** @type {string} */ chunk) => {
+					buffer += chunk;
+				});
+
+				res.on('end', () => {
+					let data = parseJSON(buffer).json || null;
+					resolve([data, res.statusCode, null]);
+					this.openRequests--;
+				});
 			});
 
-			res.on('end', () => {
-				let data = parseJSON(buffer).json;
-				setImmediate(callback, data, res.statusCode);
+			req.on('error', (/** @type {Error} */ error) => {
+				resolve([null, 0, error]);
 				this.openRequests--;
 			});
-		});
 
-		req.on('error', error => {
-			setImmediate(callback, null, null, error);
-			this.openRequests--;
+			req.end();
 		});
-
-		req.end();
 	}
-	request(action, data, callback = noop) {
+	/**
+	 * @param {string} action
+	 * @param {AnyObject?} data
+	 * @return {Promise<[AnyObject?, number, Error?]>}
+	 */
+	request(action, data = null) {
 		if (this.disabled) {
-			setImmediate(callback, null, null, new Error(`Login server connection disabled.`));
-			return;
+			// @ts-ignore TypeScript bug: tuple
+			return Promise.resolve([null, 0, new Error(`Login server connection disabled.`)]);
 		}
 
 		// ladderupdate and mmr are the most common actions
 		// prepreplay is also common
+		// @ts-ignore
 		if (this[action + 'Server']) {
-			return this[action + 'Server'].request(action, data, callback);
-		}
-		if (typeof data === 'function') {
-			callback = data;
-			data = null;
+			// @ts-ignore
+			return this[action + 'Server'].request(action, data);
 		}
 
-		if (!data) data = {};
-		data.act = action;
-		data.callback = callback;
-		this.requestQueue.push(data);
-		this.requestTimerPoke();
+		let actionData = data || {};
+		actionData.action = action;
+		return new Promise(resolve => {
+			this.requestQueue.push([actionData, resolve]);
+			this.requestTimerPoke();
+		});
 	}
 	requestTimerPoke() {
 		// "poke" the request timer, i.e. make sure it knows it should make
@@ -125,26 +136,29 @@ class LoginServerInstance {
 
 		if (!requests.length) return;
 
-		let requestCallbacks = [];
-		for (let i = 0, len = requests.length; i < len; i++) {
-			let request = requests[i];
-			requestCallbacks[i] = request.callback;
-			delete request.callback;
+		/** @type {((val: [AnyObject?, number, Error?]) => void)[]} */
+		let resolvers = [];
+		let dataList = [];
+		for (const [data, resolve] of requests) {
+			resolvers.push(resolve);
+			dataList.push(data);
 		}
 
 		this.requestStart(requests.length);
 		let postData = 'serverid=' + Config.serverid + '&servertoken=' + encodeURIComponent(Config.servertoken) + '&nocache=' + new Date().getTime() + '&json=' + encodeURIComponent(JSON.stringify(requests)) + '\n';
 		let requestOptions = url.parse(this.uri + 'action.php');
+		// @ts-ignore
 		requestOptions.method = 'post';
+		// @ts-ignore
 		requestOptions.headers = {
 			'Content-Type': 'application/x-www-form-urlencoded',
 			'Content-Length': postData.length,
 		};
 
-		let req = null;
+		let req = /** @type {any} */ (null);
 
 		let hadError = false;
-		let onReqError = error => {
+		let onReqError = (/** @type {Error} */ error) => {
 			if (hadError) return;
 			hadError = true;
 			if (this.requestTimeoutTimer) {
@@ -152,12 +166,13 @@ class LoginServerInstance {
 				this.requestTimeoutTimer = null;
 			}
 			req.abort();
-			for (const requestCallback of requestCallbacks) {
-				setImmediate(requestCallback, null, null, error);
+			for (const resolve of resolvers) {
+				resolve([null, 0, error]);
 			}
 			this.requestEnd(error);
 		};
 
+		// @ts-ignore TypeScript bug: http.get signature
 		req = http.request(requestOptions, res => {
 			if (this.requestTimeoutTimer) {
 				clearTimeout(this.requestTimeoutTimer);
@@ -166,7 +181,7 @@ class LoginServerInstance {
 			let buffer = '';
 			res.setEncoding('utf8');
 
-			res.on('data', chunk => {
+			res.on('data', (/** @type {string} */ chunk) => {
 				buffer += chunk;
 			});
 
@@ -180,11 +195,11 @@ class LoginServerInstance {
 				}
 				//console.log('RESPONSE: ' + buffer);
 				let data = parseJSON(buffer).json;
-				for (let i = 0, len = requestCallbacks.length; i < len; i++) {
+				for (const [i, resolve] of resolvers.entries()) {
 					if (data) {
-						setImmediate(requestCallbacks[i], data[i], res.statusCode);
+						resolve([data[i], res.statusCode, null]);
 					} else {
-						setImmediate(requestCallbacks[i], null, res.statusCode, new Error("Corruption"));
+						resolve([null, res.statusCode, new Error("Corruption")]);
 					}
 				}
 				this.requestEnd();
@@ -207,12 +222,12 @@ class LoginServerInstance {
 		req.write(postData);
 		req.end();
 	}
-	requestStart(size) {
+	requestStart(/** @type {number} */ size) {
 		this.lastRequest = Date.now();
 		this.requestLog += ' | ' + size + ' rqs: ';
 		this.openRequests++;
 	}
-	requestEnd(error) {
+	requestEnd(/** @type {Error?} */ error) {
 		this.openRequests = 0;
 		if (error && error instanceof TimeoutError) {
 			this.requestLog += 'TIMEOUT';
@@ -227,14 +242,16 @@ class LoginServerInstance {
 	}
 }
 
-let LoginServer = module.exports = new LoginServerInstance();
+let LoginServer = Object.assign(new LoginServerInstance(), {
+	TimeoutError,
 
-LoginServer.TimeoutError = TimeoutError;
-
-if (Config.remoteladder) LoginServer.ladderupdateServer = new LoginServerInstance();
-LoginServer.prepreplayServer = new LoginServerInstance();
+	ladderupdateServer: new LoginServerInstance(),
+	prepreplayServer: new LoginServerInstance(),
+});
 
 FS('./config/custom.css').onModify(() => {
-	LoginServer.request('invalidatecss', {}, () => {});
+	LoginServer.request('invalidatecss');
 });
-LoginServer.request('invalidatecss', {}, () => {});
+LoginServer.request('invalidatecss');
+
+module.exports = LoginServer;

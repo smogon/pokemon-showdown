@@ -21,6 +21,7 @@
         "./ladders-remote.js",
         "./ladders.js",
         "./monitor.js",
+        "./loginserver.js",
         "./rooms.js",
         "./roomlogs.js",
         "./chat-formatter.js",
