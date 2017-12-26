@@ -394,6 +394,9 @@ class GlobalRoom extends BasicRoom {
 		this.battleCount = 0;
 		this.lastReportedCrash = 0;
 
+		//used to keep TypeScript happy
+		this.tour = null;
+
 		/** @type {AnyObject[]} */
 		this.chatRoomDataList = [];
 		try {
@@ -637,10 +640,10 @@ class GlobalRoom extends BasicRoom {
 		}
 		return roomsData;
 	}
-	checkModjoin() {
+	checkModjoin(/** @type {User} */ user) {
 		return true;
 	}
-	isMuted() {
+	isMuted(/** @type {User} */ user) {
 		return null;
 	}
 	/**

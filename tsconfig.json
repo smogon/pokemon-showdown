@@ -27,6 +27,7 @@
         "./room-game.js",
         "./process-manager.js",
         "./verifier.js",
-        "./chat.js"
+        "./chat.js",
+        "./users.js"
     ]
 }
