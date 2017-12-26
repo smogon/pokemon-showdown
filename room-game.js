@@ -100,8 +100,9 @@ class RoomGame {
 
 	/**
 	 * @param {User} user
+	 * @param {any[]} rest
 	 */
-	makePlayer(user) {
+	makePlayer(user, ...rest) {
 		return new RoomGamePlayer(user, this);
 	}
 
