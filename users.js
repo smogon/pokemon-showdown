@@ -112,7 +112,7 @@ function merge(user1, user2) {
  * Users.get("Some dude") will give you "Some guy"s user object.
  *
  * If this behavior is undesirable, use Users.getExact.
- * @param {string | User} name
+ * @param {?string | User} name
  * @param {boolean} exactName
  * @return {?User}
  */

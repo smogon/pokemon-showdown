@@ -1313,7 +1313,7 @@ Punishments.checkNewNameInRoom = function (user, userid, roomid) {
 };
 
 /**
- * @param {string | boolean} userid
+ * @param {?string | boolean} userid
  * @return {string} Descriptive text for the remaining time until the punishment expires, if any.
  */
 Punishments.checkLockExpiration = function (userid) {
