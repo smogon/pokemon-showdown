@@ -56,7 +56,7 @@ class PunishmentMap extends Map {
 		return !!this.get(k);
 	}
 	/**
-	 * @param {Function} callback
+	 * @param {(punishment: Punishment, id: string) => any} callback
 	 */
 	forEach(callback) {
 		super.forEach((punishment, k) => {
@@ -125,7 +125,7 @@ class NestedPunishmentMap extends Map {
 		if (!subMap.size) this.delete(k1);
 	}
 	/**
-	 * @param {Function} callback
+	 * @param {(punishment: Punishment, roomid: string, userid: string) => any} callback
 	 */
 	nestedForEach(callback) {
 		this.forEach((subMap, k1) => {
