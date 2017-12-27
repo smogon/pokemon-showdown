@@ -170,7 +170,7 @@ class Validator {
 		}
 
 		let nameTemplate = dex.getTemplate(set.name);
-		if (toId(format.name) !== 'gen7crossevolution' && nameTemplate.exists && nameTemplate.name.toLowerCase() === set.name.toLowerCase()) {
+		if (nameTemplate.exists && nameTemplate.name.toLowerCase() === set.name.toLowerCase()) {
 			// Name must not be the name of another pokemon
 			// @ts-ignore
 			set.name = null;
