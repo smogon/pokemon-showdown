@@ -118,7 +118,7 @@ class LoginServerInstance {
 		}
 
 		let actionData = data || {};
-		actionData.action = action;
+		actionData.act = action;
 		return new Promise(resolve => {
 			this.requestQueue.push([actionData, resolve]);
 			this.requestTimerPoke();
@@ -149,7 +149,10 @@ class LoginServerInstance {
 		}
 
 		this.requestStart(requests.length);
-		let postData = 'serverid=' + Config.serverid + '&servertoken=' + encodeURIComponent(Config.servertoken) + '&nocache=' + new Date().getTime() + '&json=' + encodeURIComponent(JSON.stringify(requests)) + '\n';
+		let postData = 'serverid=' + Config.serverid +
+			'&servertoken=' + encodeURIComponent(Config.servertoken) +
+			'&nocache=' + new Date().getTime() +
+			'&json=' + encodeURIComponent(JSON.stringify(dataList)) + '\n';
 		let requestOptions = url.parse(this.uri + 'action.php');
 		// @ts-ignore
 		requestOptions.method = 'post';
@@ -203,7 +206,7 @@ class LoginServerInstance {
 					if (data) {
 						resolve([data[i], res.statusCode, null]);
 					} else {
-						resolve([null, res.statusCode, new Error("Corruption")]);
+						resolve([null, res.statusCode, new Error(buffer)]);
 					}
 				}
 				this.requestEnd();
