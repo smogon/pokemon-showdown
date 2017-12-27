@@ -1225,12 +1225,12 @@ class Battle extends Dex.ModdedDex {
 		}
 
 		case 'teampreview':
-			let maxTeamSize = 6;
 			let teamLengthData = this.getFormat().teamLength;
-			if (teamLengthData && teamLengthData.battle) maxTeamSize = teamLengthData.battle;
+			let maxTeamSize = teamLengthData && teamLengthData.battle;
+			this.add('teampreview' + (maxTeamSize ? '|' + maxTeamSize : ''));
+			if (!maxTeamSize) maxTeamSize = 6;
 			this.p1.maxTeamSize = maxTeamSize;
 			this.p2.maxTeamSize = maxTeamSize;
-			this.add('teampreview' + (maxTeamSize !== 6 ? '|' + maxTeamSize : ''));
 			this.p1.currentRequest = 'teampreview';
 			p1request = {teamPreview: true, maxTeamSize: maxTeamSize, side: this.p1.getData()};
 			this.p2.currentRequest = 'teampreview';
