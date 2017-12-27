@@ -504,6 +504,7 @@ class JeopardyGamePlayer extends Rooms.RoomGamePlayer {
 }
 
 exports.commands = {
+	jp: 'jeopardy',
 	jeopardy: {
 		off: 'disable',
 		disable: function (target, room, user) {
@@ -652,7 +653,7 @@ exports.commands = {
 			}
 		},
 
-		dailydoublehelp: ["/jeopardy dailydouble [category number], [question number] - Set a question to be a daily double."],
+		dailydoublehelp: [`/jeopardy dailydouble [category number], [question number] - Set a question to be a daily double.`],
 		view: function (target, room, user) {
 			if (!room.game || room.game.gameid !== 'jeopardy') return this.errorReply("There is no game of Jeopardy going on in this room.");
 			if (user.userid !== room.game.host.userid) return this.errorReply("This command can only be used by the host.");
@@ -754,27 +755,26 @@ exports.commands = {
 			this.addModCommand(`${user.name} has set the answering window for the final question to ${amount} seconds`);
 		},
 	},
-	jp: 'jeopardy',
 	jeopardyhelp: [
-		"/jp new [number of categories], [number of questions] - Create a new game of jeopardy as the host. Requires: % @ # & ~",
-		"/jp end - End the current game of Jeopardy. Requires: % @ # & ~",
-		"/jp start - Start the game of Jeopardy. Must be the host.",
-		"/jp categories [First Category], [Second Category], etc. - Set the categories of the jeopardy game. Must be the host.",
-		"/jp category [Category Number], [Category Name] - Set a specific category of the jeopardy game. Must be the host.",
-		"/jp select [Category Number], [Question Number] - Select a question of the Jeopardy game.",
-		"/jp buzz - Buzz into the current question.",
-		"/jp answer [answer] - Attempt to answer the current question.",
-		"/jp correct/incorrect - Mark an answer as correct or incorrect. Must be the host.",
-		"/jp dailydouble [Category Number], [Question Number] - Set a question to be a daily double. Must be the host.",
-		"/jp wager [amount] - Wager some money for a daily double or finals. Must be a number or 'all'",
-		"/jp adduser [User] - Add a user to the game of Jeopardy. Must be the host.",
-		"/jp removeuser [User] - Remove a user from the game of Jeopardy. Must be the host.",
-		"/jp view [Category Number], [Question Number] - View a specific question and answer. Must be the host.",
-		"/jp subhost [User] - Sub a new host into the game. Must be the host.",
-		"/jp import [Category Number Start], [Question Number Start], [Question 1 | Answer 1], [Question 2 | Answer 2], etc. - Import questions into the current game of Jeopardy. Must be the host.",
-		"/jp pass - Skip the current question of Jeopardy. Must be the host.",
-		"/jp state - Check the state of the current Jeopardy game. Must be the host",
-		"/jp timer [seconds] - Set the answering window after buzzing for questions",
-		"/jp finaltimer [seconds] - Set the answering window for answering the final question",
+		`/jp new [number of categories], [number of questions] - Create a new game of jeopardy as the host. Requires: % @ # & ~`,
+		`/jp end - End the current game of Jeopardy. Requires: % @ # & ~`,
+		`/jp start - Start the game of Jeopardy. Must be the host.`,
+		`/jp categories [First Category], [Second Category], etc. - Set the categories of the jeopardy game. Must be the host.`,
+		`/jp category [Category Number], [Category Name] - Set a specific category of the jeopardy game. Must be the host.`,
+		`/jp select [Category Number], [Question Number] - Select a question of the Jeopardy game.`,
+		`/jp buzz - Buzz into the current question.`,
+		`/jp answer [answer] - Attempt to answer the current question.`,
+		`/jp correct/incorrect - Mark an answer as correct or incorrect. Must be the host.`,
+		`/jp dailydouble [Category Number], [Question Number] - Set a question to be a daily double. Must be the host.`,
+		`/jp wager [amount] - Wager some money for a daily double or finals. Must be a number or 'all'`,
+		`/jp adduser [User] - Add a user to the game of Jeopardy. Must be the host.`,
+		`/jp removeuser [User] - Remove a user from the game of Jeopardy. Must be the host.`,
+		`/jp view [Category Number], [Question Number] - View a specific question and answer. Must be the host.`,
+		`/jp subhost [User] - Sub a new host into the game. Must be the host.`,
+		`/jp import [Category Number Start], [Question Number Start], [Question 1 | Answer 1], [Question 2 | Answer 2], etc. - Import questions into the current game of Jeopardy. Must be the host.`,
+		`/jp pass - Skip the current question of Jeopardy. Must be the host.`,
+		`/jp state - Check the state of the current Jeopardy game. Must be the host`,
+		`/jp timer [seconds] - Set the answering window after buzzing for questions`,
+		`/jp finaltimer [seconds] - Set the answering window for answering the final question`,
 	],
 };
