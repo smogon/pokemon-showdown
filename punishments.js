@@ -40,9 +40,14 @@ const AUTOLOCK_POINT_THRESHOLD = 8;
  */
 
 /**
+ * TODO: Properly Typescript this.
+ * @typedef {any[]} PunishmentRow
+ */
+
+/**
  * @augments {Map<string, Punishment>}
  */
-// @ts-ignore TypeScript bug
+// @ts-ignore TODO: possible TypeScript bug
 class PunishmentMap extends Map {
 	get(/** @type {string} */ k) {
 		const punishment = super.get(k);
@@ -56,7 +61,7 @@ class PunishmentMap extends Map {
 		return !!this.get(k);
 	}
 	/**
-	 * @param {(punishment: Punishment, id: string) => any} callback
+	 * @param {(punishment: Punishment, id: string) => void} callback
 	 */
 	forEach(callback) {
 		super.forEach((punishment, k) => {
@@ -125,7 +130,7 @@ class NestedPunishmentMap extends Map {
 		if (!subMap.size) this.delete(k1);
 	}
 	/**
-	 * @param {(punishment: Punishment, roomid: string, userid: string) => any} callback
+	 * @param {(punishment: Punishment, roomid: string, userid: string) => void} callback
 	 */
 	nestedForEach(callback) {
 		this.forEach((subMap, k1) => {
@@ -415,8 +420,8 @@ setImmediate(() => {
 /**
  * @param {User} user
  * @param {Punishment} punishment
- * @param {?Set<string>} recursionKeys
- * @return {Array | undefined}
+ * @param {Set<string>?} recursionKeys
+ * @return {PunishmentRow | undefined}
  */
 Punishments.punish = function (user, punishment, recursionKeys) {
 	let existingPunishment = Punishments.userids.get(toId(user.name));
@@ -543,8 +548,8 @@ Punishments.unpunish = function (id, punishType) {
  * @param {Room} room
  * @param {User} user
  * @param {Punishment} punishment
- * @param {?Set<string>} recursionKeys
- * @return {Array | undefined}
+ * @param {Set<string>?} recursionKeys
+ * @return {PunishmentRow | undefined}
  */
 Punishments.roomPunish = function (room, user, punishment, recursionKeys) {
 	let keys = recursionKeys || new Set();
@@ -675,7 +680,7 @@ Punishments.roomUnpunish = function (room, id, punishType, ignoreWrite) {
  * @param {number} expireTime
  * @param {string} id
  * @param {...string} [reason]
- * @return {?Array}
+ * @return {PunishmentRow}
  */
 Punishments.ban = function (user, expireTime, id, ...reason) {
 	if (!id) id = user.getLastId();
@@ -698,11 +703,11 @@ Punishments.unban = function (name) {
 	return Punishments.unpunish(name, 'BAN');
 };
 /**
- * @param {?User | string} user
+ * @param {User? | string} user
  * @param {number} expireTime
  * @param {string} id
  * @param {...string} [reason]
- * @return {?Array}
+ * @return {PunishmentRow}
  */
 Punishments.lock = function (user, expireTime, id, ...reason) {
 	// @ts-ignore
@@ -732,8 +737,8 @@ Punishments.lock = function (user, expireTime, id, ...reason) {
  * @param {Room} room
  * @param {string} source
  * @param {string} reason
- * @param {?string} message
- * @param {?boolean} week
+ * @param {string?} message
+ * @param {boolean?} week
  */
 Punishments.autolock = function (user, room, source, reason, message, week) {
 	if (!message) message = reason;
@@ -787,7 +792,7 @@ Punishments.unlock = function (name) {
  * @param {number} expireTime
  * @param {string} id
  * @param {...string} [reason]
- * @return {?Array}
+ * @return {PunishmentRow}
  */
 Punishments.namelock = function (user, expireTime, id, ...reason) {
 	if (!id) id = user.getLastId();
@@ -862,7 +867,7 @@ Punishments.banRange = function (range, reason) {
  * @param {number} expireTime
  * @param {string} userId
  * @param {...string} [reason]
- * @return {?Array}
+ * @return {PunishmentRow}
  */
 Punishments.roomBan = function (room, user, expireTime, userId, ...reason) {
 	if (!userId) userId = user.getLastId();
@@ -894,11 +899,11 @@ Punishments.roomBan = function (room, user, expireTime, userId, ...reason) {
 
 /**
  * @param {Room} room
- * @param {?User} user
+ * @param {User?} user
  * @param {number} expireTime
  * @param {string} userId
  * @param {...string} [reason]
- * @return {?Array}
+ * @return {PunishmentRow}
  */
 Punishments.roomBlacklist = function (room, user, expireTime, userId, ...reason) {
 	if (!userId && user) userId = user.getLastId();
@@ -1095,7 +1100,7 @@ Punishments.getRoomPunishType = function (room, name) {
  * to any of the keys in table match '1.2.3.4', '1.2.3.*', '1.2.*', or '1.*'
  *
  * @param {string} ip
- * @return {?Array | undefined}
+ * @return {PunishmentRow | undefined}
  */
 Punishments.ipSearch = function (ip) {
 	let punishment = Punishments.ips.get(ip);
@@ -1244,7 +1249,7 @@ let cfloods = Punishments.cfloods = new Set();
  * make a User object if an IP is banned.
  *
  * @param {Connection} connection
- * @return {?string | false}
+ * @return {string? | false}
  */
 Punishments.checkIpBanned = function (connection) {
 	let ip = connection.ip;
@@ -1313,7 +1318,7 @@ Punishments.checkNewNameInRoom = function (user, userid, roomid) {
 };
 
 /**
- * @param {?string | boolean} userid
+ * @param {string? | boolean} userid
  * @return {string} Descriptive text for the remaining time until the punishment expires, if any.
  */
 Punishments.checkLockExpiration = function (userid) {
@@ -1376,7 +1381,7 @@ Punishments.isRoomBanned = function (user, roomid) {
  * options.checkIps will also check the IP of the user for IP-based punishments.
  *
  * @param {User | string} user
- * @param {?Object} options
+ * @param {Object?} options
  * @return {Array | undefined}
  */
 Punishments.getRoomPunishments = function (user, options) {
