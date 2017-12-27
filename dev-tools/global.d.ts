@@ -10,12 +10,13 @@ import * as RoomlogsType from './../roomlogs'
 import * as LadderStoreType from './../ladders-remote'
 import * as LaddersType from './../ladders'
 import * as UsersType from './../users'
+import * as PunishmentsType from './../punishments'
 
 declare global {
 	// modules
 	const Dex: typeof DexType
 	const Chat: any
-	const Punishments: any
+	const Punishments: typeof PunishmentsType
 	const Ladders: typeof LaddersType
 	const LadderStoreT: typeof LadderStoreType
 
