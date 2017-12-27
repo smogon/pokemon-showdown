@@ -47,7 +47,7 @@ const AUTOLOCK_POINT_THRESHOLD = 8;
 /**
  * @augments {Map<string, Punishment>}
  */
-// @ts-ignore TODO: possible TypeScript bug
+
 class PunishmentMap extends Map {
 	get(/** @type {string} */ k) {
 		const punishment = super.get(k);
@@ -247,7 +247,7 @@ Punishments.loadRoomPunishments = async function () {
 Punishments.savePunishments = function () {
 	FS(PUNISHMENT_FILE).writeUpdate(() => {
 		const saveTable = new Map();
-		Punishments.ips.forEach((/** @type {Punishment} */ punishment, /** @type {string} */ ip) => {
+		Punishments.ips.forEach((punishment, ip) => {
 			const [punishType, id, ...rest] = punishment;
 			if (id.charAt(0) === '#') return;
 			let entry = saveTable.get(id);
@@ -463,7 +463,7 @@ Punishments.punish = function (user, punishment, recursionKeys) {
 	if (user.trusted) {
 		Punishments.userids.set(user.trusted, punishment);
 		keys.add(user.trusted);
-		// @ts-ignore
+		// @ts-ignore TODO: investigate if this is a bug
 		if (!PUNISH_TRUSTED) affected.unshift(user);
 	}
 	if (!recursionKeys) {
@@ -577,7 +577,7 @@ Punishments.roomPunish = function (room, user, punishment, recursionKeys) {
 	if (user.trusted) {
 		Punishments.roomUserids.nestedSet(room.id, user.trusted, punishment);
 		keys.add(user.trusted);
-		// @ts-ignore
+		// @ts-ignore TODO: investigate if this is a bug
 		if (!PUNISH_TRUSTED) affected.unshift(user);
 	}
 	if (!recursionKeys) {
