@@ -179,6 +179,13 @@ class RoomGame {
 	onJoin(user, connection) {}
 
 	/**
+	 * Called when a user is banned from the room this game is taking
+	 * place in.
+	 * @param {User} user
+	 */
+	removeBannedUser(user) {}
+
+	/**
 	 * Called when a user in the game is renamed. `isJoining` is true
 	 * if the user was previously a guest, but now has a username.
 	 * Check `!user.named` for the case where a user previously had a
