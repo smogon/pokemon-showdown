@@ -47,7 +47,7 @@ const AUTOLOCK_POINT_THRESHOLD = 8;
 /**
  * @augments {Map<string, Punishment>}
  */
-
+// @ts-ignore TODO: possible TypeScript bug
 class PunishmentMap extends Map {
 	get(/** @type {string} */ k) {
 		const punishment = super.get(k);
@@ -247,7 +247,7 @@ Punishments.loadRoomPunishments = async function () {
 Punishments.savePunishments = function () {
 	FS(PUNISHMENT_FILE).writeUpdate(() => {
 		const saveTable = new Map();
-		Punishments.ips.forEach((punishment, ip) => {
+		Punishments.ips.forEach((/** @type {Punishment} */ punishment, /** @type {string} */ ip) => {
 			const [punishType, id, ...rest] = punishment;
 			if (id.charAt(0) === '#') return;
 			let entry = saveTable.get(id);
