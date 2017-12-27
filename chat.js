@@ -778,7 +778,7 @@ class CommandContext {
 						return false;
 					}
 					if (room.modchat === 'trusted') {
-						this.errorReply(`Because moderated chat is set, your account must be staff in a public room or have global auth to speak in this room.`);
+						this.errorReply(`Because moderated chat is set, your account must be staff in a public room or have a global rank to speak in this room.`);
 						return false;
 					}
 					const groupName = Config.groups[room.modchat] && Config.groups[room.modchat].name || room.modchat;
