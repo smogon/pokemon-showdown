@@ -429,6 +429,8 @@ class Connection {
 	}
 }
 
+/** @typedef {[string, string, Connection]} ChatQueueEntry */
+
 // User
 class User {
 	/**
@@ -485,7 +487,7 @@ class User {
 		this.inviteOnlyNextBattle = false;
 
 		// chat queue
-		/** @type {[string, string, Connection][]?} */
+		/** @type {ChatQueueEntry[]?} */
 		this.chatQueue = null;
 		this.chatQueueTimeout = null;
 		this.lastChatMessage = 0;
@@ -1435,8 +1437,7 @@ class User {
 				this.chatQueue.push([message, room.id, connection]);
 			}
 		} else if (now < this.lastChatMessage + throttleDelay) {
-			// @ts-ignore TypeScript bug: tuple
-			this.chatQueue = [[message, room.id, connection]];
+			this.chatQueue = /** @type {ChatQueueEntry[]} */ ([[message, room.id, connection]]);
 			this.startChatQueue(throttleDelay - (now - this.lastChatMessage));
 		} else {
 			this.lastChatMessage = now;
