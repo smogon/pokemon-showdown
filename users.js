@@ -502,6 +502,10 @@ class User {
 		/**@type {string} */
 		this.s3 = '';
 
+		/** @type {boolean} */
+		this.punishmentNotified = false;
+		/** @type {boolean} */
+		this.lockNotified = false;
 		/**@type {string} */
 		this.autoconfirmed = '';
 		// initialize
@@ -685,13 +689,13 @@ class User {
 	/**
 	 * @param {boolean} isForceRenamed
 	 */
-	resetName(isForceRenamed) {
+	resetName(isForceRenamed = false) {
 		return this.forceRename('Guest ' + this.guestNum, false, isForceRenamed);
 	}
 	/**
 	 * @param {?string} roomid
 	 */
-	updateIdentity(roomid) {
+	updateIdentity(roomid = null) {
 		if (roomid) {
 			return Rooms(roomid).onUpdateIdentity(this);
 		}
@@ -1348,11 +1352,11 @@ class User {
 		return true;
 	}
 	/**
-	 * @param {GlobalRoom | GameRoom | ChatRoom} room
-	 * @param {Connection} connection
+	 * @param {GlobalRoom | GameRoom | ChatRoom | string} room
+	 * @param {?Connection} connection
 	 * @param {boolean} force
 	 */
-	leaveRoom(room, connection, force) {
+	leaveRoom(room, connection = null, force = false) {
 		room = Rooms(room);
 		if (room.id === 'global') {
 			// you can't leave the global room except while disconnecting
@@ -1373,6 +1377,7 @@ class User {
 
 		let stillInRoom = false;
 		if (connection) {
+			// @ts-ignore TypeScript inferring wrong type for room
 			stillInRoom = this.connections.some(connection => connection.inRooms.has(room.id));
 		}
 		if (!stillInRoom) {

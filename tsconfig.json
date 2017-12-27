@@ -29,6 +29,7 @@
         "./process-manager.js",
         "./verifier.js",
         "./chat.js",
-        "./users.js"
+        "./users.js",
+        "./punishments.js"
     ]
 }

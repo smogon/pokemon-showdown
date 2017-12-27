@@ -762,6 +762,7 @@ class CommandContext {
 		}
 		if (!user.can('bypassall')) {
 			let lockType = (user.namelocked ? `namelocked` : user.locked ? `locked` : ``);
+			// @ts-ignore: TypeScript thinks the || can be a boolean
 			let lockExpiration = Punishments.checkLockExpiration(user.namelocked || user.locked);
 			if (room) {
 				if (lockType && !room.isHelp) {
