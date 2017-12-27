@@ -84,7 +84,7 @@ Punishments.userids = new PunishmentMap();
 /**
  * @augments {Map<string, Map<string, Punishment>>}
  */
-// @ts-ignore TypeScript bug
+// @ts-ignore TODO: possible TypeScript bug
 class NestedPunishmentMap extends Map {
 	/**
 	 * @param {string} k1
