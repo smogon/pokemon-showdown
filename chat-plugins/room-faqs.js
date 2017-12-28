@@ -97,10 +97,10 @@ exports.commands = {
 		}
 	},
 	roomfaqhelp: [
-		"/roomfaq - Shows the list of all available FAQ topics",
-		"/roomfaq <topic> - Shows the FAQ for <topic>.",
-		"/addfaq <topic>, <text> - Adds an entry for <topic> in this room or updates it. Requires: # & ~",
-		"/addalias <alias>, <topic> - Adds <alias> as an alias for <topic>, displaying it when users use /roomfaq <alias>. Requires: # & ~",
-		"/removefaq <topic> - Removes the entry for <topic> in this room. If used on an alias, removes the alias. Requires: # & ~",
+		`/roomfaq - Shows the list of all available FAQ topics`,
+		`/roomfaq <topic> - Shows the FAQ for <topic>.`,
+		`/addfaq <topic>, <text> - Adds an entry for <topic> in this room or updates it. Requires: # & ~`,
+		`/addalias <alias>, <topic> - Adds <alias> as an alias for <topic>, displaying it when users use /roomfaq <alias>. Requires: # & ~`,
+		`/removefaq <topic> - Removes the entry for <topic> in this room. If used on an alias, removes the alias. Requires: # & ~`,
 	],
 };

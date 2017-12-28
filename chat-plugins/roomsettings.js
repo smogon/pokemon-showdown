@@ -180,7 +180,7 @@ exports.commands = {
 			settings.updateSetting(target);
 		}
 	},
-	roomsettingshelp: ["/roomsettings - Shows current room settings with buttons to change them (if you can)."],
+	roomsettingshelp: [`/roomsettings - Shows current room settings with buttons to change them (if you can).`],
 
 	modchat: function (target, room, user) {
 		if (!target) {
@@ -250,7 +250,7 @@ exports.commands = {
 			Rooms.global.writeChatRoomData();
 		}
 	},
-	modchathelp: ["/modchat [off/autoconfirmed/+/%/@/*/player/#/&/~] - Set the level of moderated chat. Requires: * @ \u2606 for off/autoconfirmed/+ options, # & ~ for all the options"],
+	modchathelp: [`/modchat [off/autoconfirmed/+/%/@/*/player/#/&/~] - Set the level of moderated chat. Requires: * @ \u2606 for off/autoconfirmed/+ options, # & ~ for all the options`],
 
 	ioo: function (target, room, user) {
 		return this.parse('/modjoin +');
@@ -274,8 +274,10 @@ exports.commands = {
 			return this.parse(`/modjoin ${target}`);
 		}
 	},
-	inviteonlyhelp: ["/inviteonly [on|off] - Sets modjoin +. Users can't join unless invited with /invite. Requires: # & ~",
-		"/ioo - Shortcut for /inviteonly on"],
+	inviteonlyhelp: [
+		`/inviteonly [on|off] - Sets modjoin +. Users can't join unless invited with /invite. Requires: # & ~`,
+		`/ioo - Shortcut for /inviteonly on`,
+	],
 
 	modjoin: function (target, room, user) {
 		if (!target) {
@@ -328,8 +330,10 @@ exports.commands = {
 		if (target === 'sync' && !room.modchat) this.parse(`/modchat ${Config.groupsranking[1]}`);
 		if (!room.isPrivate) this.parse('/hiddenroom');
 	},
-	modjoinhelp: ["/modjoin [+|%|@|*|player|&|~|#|off] - Sets modjoin. Users lower than the specified rank can't join this room. Requires: \u2606 # & ~",
-		"/modjoin [sync|off] - Sets modjoin. Only users who can speak in modchat can join this room. Requires: \u2606 # & ~"],
+	modjoinhelp: [
+		`/modjoin [+|%|@|*|player|&|~|#|off] - Sets modjoin. Users lower than the specified rank can't join this room. Requires: \u2606 # & ~`,
+		`/modjoin [sync|off] - Sets modjoin. Only users who can speak in modchat can join this room. Requires: \u2606 # & ~`,
+	],
 
 	slowchat: function (target, room, user) {
 		if (!target) {
@@ -362,8 +366,10 @@ exports.commands = {
 			Rooms.global.writeChatRoomData();
 		}
 	},
-	slowchathelp: ["/slowchat [number] - Sets a limit on how often users in the room can send messages, between 2 and 60 seconds. Requires @ * # & ~",
-		"/slowchat off - Disables slowchat in the room. Requires @ * # & ~"],
+	slowchathelp: [
+		`/slowchat [number] - Sets a limit on how often users in the room can send messages, between 2 and 60 seconds. Requires @ * # & ~`,
+		`/slowchat off - Disables slowchat in the room. Requires @ * # & ~`,
+	],
 
 	stretching: 'stretchfilter',
 	stretchingfilter: 'stretchfilter',
@@ -392,7 +398,7 @@ exports.commands = {
 			Rooms.global.writeChatRoomData();
 		}
 	},
-	stretchfilterhelp: ["/stretchfilter [on/off] - Toggles filtering messages in the room for stretchingggggggg. Requires # & ~"],
+	stretchfilterhelp: [`/stretchfilter [on/off] - Toggles filtering messages in the room for stretchingggggggg. Requires # & ~`],
 
 	capitals: 'capsfilter',
 	capitalsfilter: 'capsfilter',
@@ -421,7 +427,7 @@ exports.commands = {
 			Rooms.global.writeChatRoomData();
 		}
 	},
-	capsfilterhelp: ["/capsfilter [on/off] - Toggles filtering messages in the room for EXCESSIVE CAPS. Requires # & ~"],
+	capsfilterhelp: [`/capsfilter [on/off] - Toggles filtering messages in the room for EXCESSIVE CAPS. Requires # & ~`],
 
 	emojis: 'emojifilter',
 	emoji: 'emojifilter',
@@ -450,7 +456,7 @@ exports.commands = {
 			Rooms.global.writeChatRoomData();
 		}
 	},
-	emojifilterhelp: ["/emojifilter [on/off] - Toggles filtering messages in the room for emojis. Requires # & ~"],
+	emojifilterhelp: [`/emojifilter [on/off] - Toggles filtering messages in the room for emojis. Requires # & ~`],
 
 	banwords: 'banword',
 	banword: {
@@ -547,8 +553,8 @@ exports.commands = {
 		},
 	},
 	banwordhelp: [
-		"/banword add [words] - Adds the comma-separated list of phrases (& or ~ can also input regex) to the banword list of the current room. Requires: # & ~",
-		"/banword delete [words] - Removes the comma-separated list of phrases from the banword list. Requires: # & ~",
-		"/banword list - Shows the list of banned words in the current room. Requires: % @ * # & ~",
+		`/banword add [words] - Adds the comma-separated list of phrases (& or ~ can also input regex) to the banword list of the current room. Requires: # & ~`,
+		`/banword delete [words] - Removes the comma-separated list of phrases from the banword list. Requires: # & ~`,
+		`/banword list - Shows the list of banned words in the current room. Requires: % @ * # & ~`,
 	],
 };

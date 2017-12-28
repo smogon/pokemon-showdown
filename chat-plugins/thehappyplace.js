@@ -40,7 +40,7 @@ exports.commands = {
 	},
 	quoteofthedayhelp: 'qotdhelp',
 	qotdhelp: [
-		"/qotd - View the current Inspirational Quote of the Day.",
-		"/qotd [quote] - Set the Inspirational Quote of the Day. Requires: @ # & ~",
+		`/qotd - View the current Inspirational Quote of the Day.`,
+		`/qotd [quote] - Set the Inspirational Quote of the Day. Requires: @ # & ~`,
 	],
 };

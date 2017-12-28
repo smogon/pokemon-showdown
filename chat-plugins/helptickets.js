@@ -459,7 +459,7 @@ exports.commands = {
 			if (!user.named) return this.errorReply(`You need to choose a username before doing this.`);
 			return this.parse('/join view-help-request');
 		},
-		createhelp: ['/helpticket create - Creates a new ticket requesting help from global staff.'],
+		createhelp: [`/helpticket create - Creates a new ticket requesting help from global staff.`],
 
 		'!submit': true,
 		submit: function (target, room, user, connection) {
@@ -556,14 +556,14 @@ exports.commands = {
 			helpRoom.game.escalate((toId(target) === 'upperstaff'), user);
 			return this.sendReply(`${ticket.creator}'s ticket was escalated.`);
 		},
-		escalatehelp: ['/helpticket escalate [user], (upperstaff) - Escalate a ticket. If upperstaff is included, escalate the ticket to upper staff. Requires: % @ * & ~'],
+		escalatehelp: [`/helpticket escalate [user], (upperstaff) - Escalate a ticket. If upperstaff is included, escalate the ticket to upper staff. Requires: % @ * & ~`],
 
 		'!list': true,
 		list: function (target, room, user, connection) {
 			if (!this.can('lock')) return;
 			this.parse('/join view-help-tickets');
 		},
-		listhelp: ['/helpticket list - Lists all tickets. Requires: % @ * & ~'],
+		listhelp: [`/helpticket list - Lists all tickets. Requires: % @ * & ~`],
 
 		'!close': true,
 		close: function (target, room, user) {
@@ -582,7 +582,7 @@ exports.commands = {
 			ticket.claimed = user.name;
 			this.sendReply(`You closed ${ticket.creator}'s ticket.`);
 		},
-		closehelp: ['/helpticket close [user] - Closes an open ticket. Requires: % @ * & ~'],
+		closehelp: [`/helpticket close [user] - Closes an open ticket. Requires: % @ * & ~`],
 
 		ban: function (target, room, user) {
 			if (!target) return this.parse('/help helpticket ban');
@@ -665,7 +665,7 @@ exports.commands = {
 			this.globalModlog(`TICKETBAN`, targetUser || userid, ` by ${user.name}${target}`);
 			return true;
 		},
-		banhelp: ['/helpticket ban [user], (reason) - Bans a user from creating tickets for 2 days. Requires: % @ * & ~'],
+		banhelp: [`/helpticket ban [user], (reason) - Bans a user from creating tickets for 2 days. Requires: % @ * & ~`],
 
 		unban: function (target, room, user) {
 			if (!target) return this.parse('/help helpticket unban');
@@ -695,7 +695,7 @@ exports.commands = {
 			this.globalModlog("UNTICKETBAN", target, `by ${user.name}`);
 			if (targetUser) targetUser.popup(`${user.name} has ticket unbanned you.`);
 		},
-		unbanhelp: ['/helpticket unban [user] - Ticket unbans a user. Requires: % @ * & ~'],
+		unbanhelp: [`/helpticket unban [user] - Ticket unbans a user. Requires: % @ * & ~`],
 
 		delete: function (target, room, user) {
 			// This is a utility only to be used if something goes wrong
@@ -712,15 +712,16 @@ exports.commands = {
 			}
 			this.sendReply(`You deleted ${target}'s ticket.`);
 		},
-		deletehelp: ['/helpticket delete [user] - Deletes a users ticket. Requires: & ~'],
+		deletehelp: [`/helpticket delete [user] - Deletes a users ticket. Requires: & ~`],
 
 	},
 	helptickethelp: [
-		'/helpticket create - Creates a new ticket, requesting help from global staff.',
-		'/helpticket list - Lists all tickets. Requires: % @ * & ~',
-		'/helpticket escalate [user], (upperstaff) - Escalates a ticket. If upperstaff is included, the ticket is escalated to upper staff. Requires: % @ * & ~',
-		'/helpticket close [user] - Closes an open ticket. Requires: % @ * & ~',
-		'/helpticket ban [user], (reason) - Bans a user from creating tickets for 2 days. Requires: % @ * & ~',
-		'/helpticket unban [user] - Ticket unbans a user. Requires: % @ * & ~',
-		'/helpticket delete [user] - Deletes a user\'s ticket. Requires: & ~'],
+		`/helpticket create - Creates a new ticket, requesting help from global staff.`,
+		`/helpticket list - Lists all tickets. Requires: % @ * & ~`,
+		`/helpticket escalate [user], (upperstaff) - Escalates a ticket. If upperstaff is included, the ticket is escalated to upper staff. Requires: % @ * & ~`,
+		`/helpticket close [user] - Closes an open ticket. Requires: % @ * & ~`,
+		`/helpticket ban [user], (reason) - Bans a user from creating tickets for 2 days. Requires: % @ * & ~`,
+		`/helpticket unban [user] - Ticket unbans a user. Requires: % @ * & ~`,
+		`/helpticket delete [user] - Deletes a user's ticket. Requires: & ~`,
+	],
 };

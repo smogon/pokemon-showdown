@@ -387,8 +387,8 @@ exports.commands = {
 		getModlog(connection, roomid, target, lines, cmd === 'timedmodlog');
 	},
 	modloghelp: [
-		"/modlog [roomid], [search] - Searches the moderator log - defaults to the current room unless specified otherwise.",
-		"If you set [roomid] as [all], it searches for [search] on all rooms' moderator logs.",
-		"If you set [roomid] as [public], it searches for [search] in all public rooms' moderator logs, excluding battles. Requires: % @ * # & ~",
+		`/modlog [roomid], [search] - Searches the moderator log - defaults to the current room unless specified otherwise.`,
+		`If you set [roomid] as [all], it searches for [search] on all rooms' moderator logs.`,
+		`If you set [roomid] as [public], it searches for [search] in all public rooms' moderator logs, excluding battles. Requires: % @ * # & ~`,
 	],
 };
