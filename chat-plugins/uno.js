@@ -43,8 +43,7 @@ function createDeck() {
 
 	let basic = [];
 
-	for (let i = 0; i < 4; i++) {
-		let color = colors[i];
+	for (const color of colors) {
 		basic.push(...values.map(v => {
 			return {value: v, color: color, name: color + " " + v};
 		}));
@@ -479,8 +478,8 @@ class UNOgamePlayer extends Rooms.RoomGamePlayer {
 	}
 
 	removeCard(cardName) {
-		for (let i = 0; i < this.hand.length; i++) {
-			if (this.hand[i].name === cardName) {
+		for (const [i, card] of this.hand.entries()) {
+			if (card.name === cardName) {
 				this.hand.splice(i, 1);
 				break;
 			}

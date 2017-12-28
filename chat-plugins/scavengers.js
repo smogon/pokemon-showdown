@@ -386,11 +386,11 @@ class ScavengerHunt extends Rooms.RoomGame {
 			let blitzPoints = this.room.blitzPoints || DEFAULT_BLITZ_POINTS;
 
 			if (this.gameType === 'official') {
-				for (let i = 0; i < this.completed.length; i++) {
-					if (!this.completed[i].blitz && i >= winPoints.length) break; // there won't be any more need to keep going
-					let name = this.completed[i].name;
+				for (const [i, completed] of this.completed.entries()) {
+					if (!completed.blitz && i >= winPoints.length) break; // there won't be any more need to keep going
+					let name = completed.name;
 					if (winPoints[i]) Leaderboard.addPoints(name, 'points', winPoints[i]);
-					if (this.completed[i].blitz) Leaderboard.addPoints(name, 'points', blitzPoints);
+					if (completed.blitz) Leaderboard.addPoints(name, 'points', blitzPoints);
 				}
 				Leaderboard.write();
 			}
@@ -432,8 +432,8 @@ class ScavengerHunt extends Rooms.RoomGame {
 			PlayerLeaderboard.addPoints(id, 'join', 1, true);
 		}
 		if (this.gameType !== 'practice') {
-			for (let i = 0; i < this.hosts.length; i++) {
-				HostLeaderboard.addPoints(this.hosts[i].name, 'points', 1, this.hosts[i].noUpdate).write();
+			for (const host of this.hosts) {
+				HostLeaderboard.addPoints(host.name, 'points', 1, host.noUpdate).write();
 			}
 		}
 		PlayerLeaderboard.write();
@@ -574,13 +574,13 @@ class ScavengerHunt extends Rooms.RoomGame {
 		if (questionArray.length % 2 === 1) return {err: "Your final question is missing an answer"};
 		if (questionArray.length < 6) return {err: "You must have at least 3 hints and answers"};
 
-		for (let i = 0; i < questionArray.length; i++) {
+		for (let [i, question] of questionArray.entries()) {
 			if (i % 2) {
-				questionArray[i] = questionArray[i].split(';').map(p => p.trim());
-				if (!questionArray[i].length || questionArray[i].some(a => !toId(a))) return {err: "Empty answer - only alphanumeric characters will count in answers."};
+				question = question.split(';').map(p => p.trim());
+				if (!question.length || question.some(a => !toId(a))) return {err: "Empty answer - only alphanumeric characters will count in answers."};
 			} else {
-				questionArray[i] = questionArray[i].trim();
-				if (!questionArray[i]) return {err: "Empty question."};
+				question = question.trim();
+				if (!question) return {err: "Empty question."};
 			}
 		}
 

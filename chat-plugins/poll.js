@@ -22,8 +22,8 @@ class Poll {
 		this.timeoutMins = 0;
 
 		this.options = new Map();
-		for (let i = 0; i < options.length; i++) {
-			this.options.set(i + 1, {name: options[i], votes: 0});
+		for (const [i, option] of options.entries()) {
+			this.options.set(i + 1, {name: option, votes: 0});
 		}
 	}
 

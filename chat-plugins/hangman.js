@@ -29,11 +29,11 @@ class Hangman extends Rooms.RoomGame {
 		this.lastGuesser = '';
 		this.wordSoFar = [];
 
-		for (let i = 0; i < word.length; i++) {
-			if (/[a-zA-Z]/.test(word[i])) {
+		for (const letter of word) {
+			if (/[a-zA-Z]/.test(letter)) {
 				this.wordSoFar.push('_');
 			} else {
-				this.wordSoFar.push(word[i]);
+				this.wordSoFar.push(letter);
 			}
 		}
 	}
@@ -46,8 +46,8 @@ class Hangman extends Rooms.RoomGame {
 		if (normalized.length < 1) return user.sendTo(this.room, "Guess too short.");
 		if (sanitized.length > 30) return user.sendTo(this.room, "Guess too long.");
 
-		for (let i = 0; i < this.guesses.length; i++) {
-			if (normalized === toId(this.guesses[i])) return user.sendTo(this.room, "Your guess has already been guessed.");
+		for (const guessid of this.guesses) {
+			if (normalized === toId(guessid)) return user.sendTo(this.room, "Your guess has already been guessed.");
 		}
 
 		if (sanitized.length > 1) {
@@ -67,9 +67,9 @@ class Hangman extends Rooms.RoomGame {
 		letter = letter.toUpperCase();
 		if (this.guesses.includes(letter)) return false;
 		if (this.word.toUpperCase().includes(letter)) {
-			for (let i = 0; i < this.word.length; i++) {
-				if (this.word[i].toUpperCase() === letter) {
-					this.wordSoFar[i] = this.word[i];
+			for (const [i, l] of this.word.entries()) {
+				if (l.toUpperCase() === letter) {
+					this.wordSoFar[i] = l;
 				}
 			}
 
@@ -97,9 +97,9 @@ class Hangman extends Rooms.RoomGame {
 		let ourWord = toId(this.word);
 		let guessedWord = toId(word);
 		if (ourWord === guessedWord) {
-			for (let i = 0; i < this.wordSoFar.length; i++) {
-				if (this.wordSoFar[i] === '_') {
-					this.wordSoFar[i] = this.word[i];
+			for (let [i, letter] of this.wordSoFar.entries()) {
+				if (letter === '_') {
+					letter = this.word[i];
 				}
 			}
 			this.incorrectGuesses = -1;

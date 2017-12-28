@@ -366,19 +366,17 @@ class JumpStart extends ScavGame {
 		this.jumpStartTimes = [];
 
 		const MIN_WAIT_TIME = 60; // seconds
-		for (let i = 0; i < timesArray.length; i++) {
-			let diff = timesArray[i];
+		let prevDiff;
+		for (const diff of timesArray) {
 			if (!diff || diff < 0) return "The times must be numbers greater than 0 in seconds.";
-			if (i) {
-				let prevDiff = timesArray[i - 1];
+			if (prevDiff) {
 				this.jumpStartTimes.push(prevDiff - diff); // make the timer call itself as one runs out
-				if (i === timesArray.length - 1) {
-					this.huntWait = diff; // the last wait tme
-				}
 			} else {
 				this.jumpStartTimes.push(MIN_WAIT_TIME); // the first one is always 0 + the minimum wait
 			}
+			prevDiff = diff;
 		}
+		this.huntWait = prevDiff; // the last wait time
 
 		if (this.jumpStartTimes.some(t => t < 0)) {
 			this.jumpStartTimes = null;
@@ -480,11 +478,8 @@ class PointRally extends ScavGame {
 
 	onEndEvent() {
 		// give points
-		let completed = this.childGame.completed.map(e => e.name);
-		let length = completed.length;
-
-		for (let i = 0; i < length; i++) {
-			this.leaderboard.addPoints(completed[i], 'points', this.getPoints(i));
+		for (const [i, completed] of this.childGame.completed.map(e => e.name).entries()) {
+			this.leaderboard.addPoints(completed, 'points', this.getPoints(i));
 		}
 
 		// post leaderboard
