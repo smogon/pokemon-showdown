@@ -1607,7 +1607,7 @@ const commands = {
 
 			let lastCategoryIdx = 0;
 			buffer += "<tr><th>Category</th><th>Question Count</th></tr>";
-			for (const category of CATEGORIES) {
+			for (const category in CATEGORIES) {
 				if (category === 'random') continue;
 				let tally = findEndOfCategory(category, false) - lastCategoryIdx;
 				lastCategoryIdx += tally;
