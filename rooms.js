@@ -860,6 +860,7 @@ class GlobalRoom extends BasicRoom {
 	startLockdown(err, slow = false) {
 		if (this.lockdown && err) return;
 		let devRoom = Rooms('development');
+		// @ts-ignore
 		const stack = (err ? Chat.escapeHTML(err.stack).split(`\n`).slice(0, 2).join(`<br />`) : ``);
 		for (const [id, curRoom] of Rooms.rooms) {
 			if (id === 'global') continue;
@@ -941,6 +942,7 @@ class GlobalRoom extends BasicRoom {
 			return;
 		}
 		this.lastReportedCrash = time;
+		// @ts-ignore
 		const stack = (err ? Chat.escapeHTML(err.stack).split(`\n`).slice(0, 2).join(`<br />`) : ``);
 		const crashMessage = `|html|<div class="broadcast-red"><b>The server has crashed:</b> ${stack}</div>`;
 		const devRoom = Rooms('development');

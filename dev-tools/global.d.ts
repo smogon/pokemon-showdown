@@ -14,11 +14,12 @@ import * as UsersType from './../users'
 import * as PunishmentsType from './../punishments'
 import * as StreamsType from './../lib/streams'
 import * as child_process from 'child_process'
+import * as ChatType from './../chat'
 
 declare global {
 	// modules
 	const Dex: typeof DexType
-	const Chat: any
+	const Chat: typeof ChatType
 	const Punishments: typeof PunishmentsType
 	const Ladders: typeof LaddersType
 	const LadderStoreT: typeof LadderStoreType
@@ -61,8 +62,8 @@ declare global {
 	const GlobalRoom: typeof RoomsType.GlobalRoom
 	const ChatRoom: typeof RoomsType.ChatRoomTypeForTS
 	const GameRoom: typeof RoomsType.GameRoom
-	const Room: typeof RoomsType.ChatRoom
 	const BasicRoom: typeof RoomsType.BasicRoom
+	const BasicChatRoom: typeof RoomsType.ChatRoom
 	const RoomGame: typeof RoomsType.RoomGame
 	const RoomBattle: typeof RoomsType.RoomBattle
 	const Rooms: typeof RoomsType
