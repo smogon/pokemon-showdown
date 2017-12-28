@@ -1498,7 +1498,7 @@ function runLearn(target, cmd) {
 	if (!formatName) formatName = 'Gen ' + gen;
 	let lsetData = {set: {}, sources: [], sourcesBefore: gen};
 
-	let template = Dex.getTemplate(targets[0]);
+	let template = Dex.getTemplate(targets.shift());
 	let move = {};
 	let problem;
 	let all = (cmd === 'learnall');
@@ -1512,12 +1512,11 @@ function runLearn(target, cmd) {
 		return {error: `${template.name} didn't exist yet in generation ${gen}.`};
 	}
 
-	if (targets.length < 2) {
+	if (!targets.length) {
 		return {error: "You must specify at least one move."};
 	}
 
-	let moves = targets.slice(1);
-	for (const arg of moves) {
+	for (const arg of targets) {
 		move = Dex.getMove(arg);
 		if (!move.exists || move.id === 'magikarpsrevenge') {
 			return {error: `Move '${move.id}' not found.`};
@@ -1529,7 +1528,7 @@ function runLearn(target, cmd) {
 		if (problem) break;
 	}
 	let buffer = `In ${formatName}, `;
-	buffer += "" + template.name + (problem ? " <span class=\"message-learn-cannotlearn\">can't</span> learn " : " <span class=\"message-learn-canlearn\">can</span> learn ") + (targets.length > 2 ? "these moves" : move.name);
+	buffer += "" + template.name + (problem ? " <span class=\"message-learn-cannotlearn\">can't</span> learn " : " <span class=\"message-learn-canlearn\">can</span> learn ") + (targets.length > 1 ? "these moves" : move.name);
 	if (!problem) {
 		let sourceNames = {E: "egg", S: "event", D: "dream world", V: "virtual console transfer from gen 1-2", X: "egg, traded back", Y: "event, traded back"};
 		let sourcesBefore = lsetData.sourcesBefore;
