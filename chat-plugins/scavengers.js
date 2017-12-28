@@ -577,9 +577,11 @@ class ScavengerHunt extends Rooms.RoomGame {
 		for (let [i, question] of questionArray.entries()) {
 			if (i % 2) {
 				question = question.split(';').map(p => p.trim());
+				questionArray[i] = question;
 				if (!question.length || question.some(a => !toId(a))) return {err: "Empty answer - only alphanumeric characters will count in answers."};
 			} else {
 				question = question.trim();
+				questionArray[i] = question;
 				if (!question) return {err: "Empty question."};
 			}
 		}

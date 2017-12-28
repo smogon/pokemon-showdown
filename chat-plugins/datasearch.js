@@ -656,8 +656,7 @@ function runDexsearch(target, cmd, canAll, message) {
 	searches.sort((a, b) => Object.values(a).reduce(accumulateKeyCount, 0) - Object.values(b).reduce(accumulateKeyCount, 0));
 
 	let lsetData = {};
-	for (const group of searches) {
-		let alts = searches[group];
+	for (const alts of searches) {
 		if (alts.skip) continue;
 		for (let mon in dex) {
 			let matched = false;
