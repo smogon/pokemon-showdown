@@ -442,8 +442,8 @@ class Jeopardy extends Rooms.RoomGame {
 
 	setCategories(categories) {
 		if (this.state !== "signups" && this.state !== "round2") return;
-		for (let i = 0; i < categories.length; i++) {
-			this.categories[i] = categories[i];
+		for (const [i, category] of categories.entries()) {
+			this.categories[i] = category;
 		}
 		this.update();
 	}

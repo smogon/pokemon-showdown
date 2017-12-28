@@ -82,12 +82,10 @@ exports.commands = {
 		}
 		buf += '<br />';
 		if (user.can('alts', targetUser) || user.can('alts') && user === targetUser) {
-			let alts = targetUser.getAltUsers(true);
 			let prevNames = Object.keys(targetUser.prevNames).join(", ");
 			if (prevNames) buf += Chat.html`<br />Previous names: ${prevNames}`;
 
-			for (let j = 0; j < alts.length; ++j) {
-				let targetAlt = alts[j];
+			for (const targetAlt of targetUser.getAltUsers(true)) {
 				if (!targetAlt.named && !targetAlt.connected) continue;
 				if (targetAlt.group === '~' && user.group !== '~') continue;
 
@@ -415,13 +413,13 @@ exports.commands = {
 		let newTargets = mod.dataSearch(target);
 		let showDetails = (cmd === 'dt' || cmd === 'details');
 		if (newTargets && newTargets.length) {
-			for (let i = 0; i < newTargets.length; ++i) {
-				if (newTargets[i].isInexact && !i) {
+			for (const [i, newTarget] of newTargets.entries()) {
+				if (newTarget.isInexact && !i) {
 					buffer = `No Pok\u00e9mon, item, move, ability or nature named '${target}' was found${Dex.gen > mod.gen ? ` in Gen ${mod.gen}` : ""}. Showing the data of '${newTargets[0].name}' instead.\n`;
 				}
-				switch (newTargets[i].searchType) {
+				switch (newTarget.searchType) {
 				case 'nature':
-					let nature = Dex.getNature(newTargets[i].name);
+					let nature = Dex.getNature(newTarget.name);
 					buffer += "" + nature.name + " nature: ";
 					if (nature.plus) {
 						let statNames = {'atk': "Attack", 'def': "Defense", 'spa': "Special Attack", 'spd': "Special Defense", 'spe': "Speed"};
@@ -431,19 +429,19 @@ exports.commands = {
 					}
 					return this.sendReply(buffer);
 				case 'pokemon':
-					let template = mod.getTemplate(newTargets[i].name);
+					let template = mod.getTemplate(newTarget.name);
 					buffer += `|raw|${Chat.getDataPokemonHTML(template, mod.gen)}\n`;
 					break;
 				case 'item':
-					let item = mod.getItem(newTargets[i].name);
+					let item = mod.getItem(newTarget.name);
 					buffer += `|raw|${Chat.getDataItemHTML(item)}\n`;
 					break;
 				case 'move':
-					let move = mod.getMove(newTargets[i].name);
+					let move = mod.getMove(newTarget.name);
 					buffer += `|raw|${Chat.getDataMoveHTML(move)}\n`;
 					break;
 				case 'ability':
-					let ability = mod.getAbility(newTargets[i].name);
+					let ability = mod.getAbility(newTarget.name);
 					buffer += `|raw|${Chat.getDataAbilityHTML(ability)}\n`;
 					break;
 				default:
@@ -750,9 +748,9 @@ exports.commands = {
 		if (Dex.getImmunity(source, defender) || source.ignoreImmunity && (source.ignoreImmunity === true || source.ignoreImmunity[source.type])) {
 			let totalTypeMod = 0;
 			if (source.effectType !== 'Move' || source.category !== 'Status' && (source.basePower || source.basePowerCallback)) {
-				for (let i = 0; i < defender.types.length; i++) {
-					let baseMod = Dex.getEffectiveness(source, defender.types[i]);
-					let moveMod = source.onEffectiveness && source.onEffectiveness.call(Dex, baseMod, defender.types[i], source);
+				for (const type of defender.types) {
+					let baseMod = Dex.getEffectiveness(source, type);
+					let moveMod = source.onEffectiveness && source.onEffectiveness.call(Dex, baseMod, type, source);
 					totalTypeMod += typeof moveMod === 'number' ? moveMod : baseMod;
 				}
 			}
@@ -788,8 +786,8 @@ exports.commands = {
 			bestCoverage[type] = -5;
 		}
 
-		for (let i = 0; i < targets.length; i++) {
-			let move = targets[i].trim();
+		for (const arg of targets) {
+			let move = arg.trim();
 			if (toId(move) === mod.currentMod) continue;
 			move = move.charAt(0).toUpperCase() + move.slice(1).toLowerCase();
 			if (move === 'Table' || move === 'All') {
@@ -827,7 +825,7 @@ exports.commands = {
 				continue;
 			}
 
-			return this.errorReply(`No type or move '${targets[i]}' found${Dex.gen > mod.gen ? ` in Gen ${mod.gen}` : ""}.`);
+			return this.errorReply(`No type or move '${arg}' found${Dex.gen > mod.gen ? ` in Gen ${mod.gen}` : ""}.`);
 		}
 		if (sources.length === 0) return this.errorReply("No moves using a type table for determining damage were specified.");
 		if (sources.length > 4) return this.errorReply("Specify a maximum of 4 moves or types.");
@@ -896,9 +894,7 @@ exports.commands = {
 						bestEff = bestCoverage[type1];
 					} else {
 						typing = type1 + "/" + type2;
-						for (let i = 0; i < sources.length; i++) {
-							let move = sources[i];
-
+						for (const move of sources) {
 							let curEff = 0;
 							if ((!mod.getImmunity((move.type || move), type1) || !mod.getImmunity((move.type || move), type2)) && !move.ignoreImmunity) continue;
 							let baseMod = mod.getEffectiveness(move, type1);
@@ -974,8 +970,8 @@ exports.commands = {
 		let modifier = 0;
 		let positiveMod = true;
 
-		for (let i = 0; i < targets.length; i++) {
-			let lowercase = targets[i].toLowerCase();
+		for (const arg of targets) {
+			let lowercase = arg.toLowerCase();
 
 			if (!lvlSet) {
 				if (lowercase === 'lc') {
@@ -987,7 +983,7 @@ exports.commands = {
 					lvlSet = true;
 					continue;
 				} else if (lowercase.startsWith('lv') || lowercase.startsWith('level')) {
-					level = parseInt(targets[i].replace(/\D/g, ''));
+					level = parseInt(arg.replace(/\D/g, ''));
 					lvlSet = true;
 					if (level < 1 || level > 9999) {
 						return this.sendReplyBox('Invalid value for level: ' + level);
@@ -1041,11 +1037,11 @@ exports.commands = {
 
 			if (!ivSet) {
 				if (lowercase.endsWith('iv') || lowercase.endsWith('ivs')) {
-					iv = parseInt(targets[i]);
+					iv = parseInt(arg);
 					ivSet = true;
 
 					if (isNaN(iv)) {
-						return this.sendReplyBox('Invalid value for IVs: ' + Chat.escapeHTML(targets[i]));
+						return this.sendReplyBox('Invalid value for IVs: ' + Chat.escapeHTML(arg));
 					}
 
 					continue;
@@ -1063,21 +1059,21 @@ exports.commands = {
 					ev = 0;
 					evSet = true;
 				} else if (lowercase.endsWith('ev') || lowercase.endsWith('evs') || lowercase.endsWith('+') || lowercase.endsWith('-')) {
-					ev = parseInt(targets[i]);
+					ev = parseInt(arg);
 					evSet = true;
 
 					if (isNaN(ev)) {
-						return this.sendReplyBox('Invalid value for EVs: ' + Chat.escapeHTML(targets[i]));
+						return this.sendReplyBox('Invalid value for EVs: ' + Chat.escapeHTML(arg));
 					}
 					if (ev > 255 || ev < 0) {
 						return this.sendReplyBox('The amount of EVs should be between 0 and 255.');
 					}
 
 					if (!natureSet) {
-						if (targets[i].includes('+')) {
+						if (arg.includes('+')) {
 							nature = 1.1;
 							natureSet = true;
-						} else if (targets[i].includes('-')) {
+						} else if (arg.includes('-')) {
 							nature = 0.9;
 							natureSet = true;
 						}
@@ -1088,15 +1084,15 @@ exports.commands = {
 			}
 
 			if (!modSet) {
-				if (targets[i] === 'scarf' || targets[i] === 'specs' || targets[i] === 'band') {
+				if (['band', 'scarf', 'specs'].includes(arg)) {
 					modifier = 1;
 					modSet = true;
-				} else if (targets[i].charAt(0) === '+') {
-					modifier = parseInt(targets[i].charAt(1));
+				} else if (arg.charAt(0) === '+') {
+					modifier = parseInt(arg.charAt(1));
 					modSet = true;
-				} else if (targets[i].charAt(0) === '-') {
+				} else if (arg.charAt(0) === '-') {
 					positiveMod = false;
-					modifier = parseInt(targets[i].charAt(1));
+					modifier = parseInt(arg.charAt(1));
 					modSet = true;
 				}
 				if (isNaN(modifier)) {
@@ -1108,7 +1104,7 @@ exports.commands = {
 			}
 
 			if (!pokemon) {
-				let testPoke = Dex.getTemplate(targets[i]);
+				let testPoke = Dex.getTemplate(arg);
 				if (testPoke.baseStats) {
 					pokemon = testPoke.baseStats;
 					baseSet = true;
@@ -1116,7 +1112,7 @@ exports.commands = {
 				}
 			}
 
-			let tempStat = parseInt(targets[i]);
+			let tempStat = parseInt(arg);
 
 			if (!isNaN(tempStat) && !baseSet && tempStat > 0 && tempStat < 256) {
 				statValue = tempStat;
@@ -1432,12 +1428,12 @@ exports.commands = {
 		let exactMatch = '';
 		let sections = {};
 		let totalMatches = 0;
-		for (let i = 0; i < formatList.length; i++) {
-			let format = Dex.getFormat(formatList[i]);
+		for (const mode of formatList) {
+			let format = Dex.getFormat(mode);
 			let sectionId = toId(format.section);
 			let formatId = format.id;
 			if (!/^gen\d+/.test(targetId)) formatId = formatId.replace(/^gen\d+/, ''); // skip generation prefix if it wasn't provided
-			if (targetId && !format[targetId + 'Show'] && sectionId !== targetId && format.id === formatList[i] && !formatId.startsWith(targetId)) continue;
+			if (targetId && !format[targetId + 'Show'] && sectionId !== targetId && format.id === mode && !formatId.startsWith(targetId)) continue;
 			if (isOMSearch && format.id.startsWith('gen') && ['ou', 'uu', 'ru', 'ubers', 'lc', 'customgame', 'doublescustomgame', 'gbusingles', 'gbudoubles'].includes(format.id.slice(4))) continue;
 			if (isOMSearch && (format.id === 'gen5nu')) continue;
 			totalMatches++;
@@ -1491,8 +1487,8 @@ exports.commands = {
 		for (let sectionId in sections) {
 			if (exactMatch && sectionId !== exactMatch) continue;
 			buf.push(Chat.html`<th style="border:1px solid gray" colspan="2">${sections[sectionId].name}</th>`);
-			for (let i = 0; i < sections[sectionId].formats.length; i++) {
-				let format = Dex.getFormat(sections[sectionId].formats[i]);
+			for (const section of sections[sectionId].formats) {
+				let format = Dex.getFormat(section);
 				let nameHTML = Chat.escapeHTML(format.name);
 				let descHTML = format.desc ? format.desc.join("<br />") : "&mdash;";
 				buf.push(`<tr><td style="border:1px solid gray">${nameHTML}</td><td style="border: 1px solid gray; margin-left:10px">${descHTML}</td></tr>`);
