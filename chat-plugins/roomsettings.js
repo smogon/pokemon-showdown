@@ -35,22 +35,22 @@ class RoomSettings {
 	modchat() {
 		if (!this.user.can('modchat', null, this.room)) return this.button(this.room.modchat ? this.room.modchat : 'off', true);
 		let modchatOutput = [];
-		for (let i = 0; i <= RANKS.length; i++) {
-			if (RANKS[i] === Config.groupsranking[0] && !this.room.modchat) {
+		for (const rank of RANKS) {
+			if (rank === Config.groupsranking[0] && !this.room.modchat) {
 				modchatOutput.push(this.button('off', true));
-			} else if (RANKS[i] === Config.groupsranking[0]) {
+			} else if (rank === Config.groupsranking[0]) {
 				modchatOutput.push(this.button('off', null, 'modchat off'));
-			} else if (RANKS[i] === this.room.modchat) {
-				modchatOutput.push(this.button(RANKS[i], true));
-			} else if (RANKS[i]) {
-				let rankIndex = RANKS.indexOf(RANKS[i]);
+			} else if (rank === this.room.modchat) {
+				modchatOutput.push(this.button(rank, true));
+			} else if (rank) {
+				let rankIndex = RANKS.indexOf(rank);
 				let roomAuth = (this.room.auth && this.room.auth[this.user.userid] ? this.room.auth[this.user.userid] : false);
 				let roomAuthIndex = (roomAuth ? RANKS.indexOf(roomAuth) : false);
 				if (rankIndex > 1 && !this.user.can('modchatall', null, this.room)) continue;
 				if (roomAuth && !this.user.can('bypassall')) {
 					if (rankIndex > roomAuthIndex) continue;
 				}
-				modchatOutput.push(this.button(RANKS[i], null, `modchat ${RANKS[i]}`));
+				modchatOutput.push(this.button(rank, null, `modchat ${rank}`));
 			}
 		}
 		// Since autoconfirmed isn't technically a Config rank...
@@ -64,18 +64,18 @@ class RoomSettings {
 			return this.button(this.room.modjoin ? this.room.modjoin : 'off', true);
 		}
 		let modjoinOutput = [];
-		for (let i = 0; i < RANKS.length; i++) {
-			if (RANKS[i] === Config.groupsranking[0] && !this.room.modjoin) {
+		for (const rank of RANKS) {
+			if (rank === Config.groupsranking[0] && !this.room.modjoin) {
 				modjoinOutput.push(this.button('off', true));
-			} else if (RANKS[i] === Config.groupsranking[0]) {
+			} else if (rank === Config.groupsranking[0]) {
 				modjoinOutput.push(this.button('off', null, 'modjoin off'));
-			} else if (RANKS[i] === this.room.modjoin) {
-				modjoinOutput.push(this.button(RANKS[i], true));
-			} else if (RANKS[i]) {
+			} else if (rank === this.room.modjoin) {
+				modjoinOutput.push(this.button(rank, true));
+			} else if (rank) {
 				// groupchat hosts can set modjoin, but only to +
-				if (this.room.isPersonal && !this.user.can('makeroom') && RANKS[i] !== '+') continue;
+				if (this.room.isPersonal && !this.user.can('makeroom') && rank !== '+') continue;
 
-				modjoinOutput.push(this.button(RANKS[i], false, `modjoin ${RANKS[i]}`));
+				modjoinOutput.push(this.button(rank, false, `modjoin ${rank}`));
 			}
 		}
 		return modjoinOutput.join(' ');

@@ -396,7 +396,7 @@ class Trivia extends Rooms.RoomGame {
 		// Trivia#destroy has already set the instance's room to null.
 		let tarRoom = this.room;
 		if (!tarRoom) {
-			for (let [roomid, room] of Rooms.rooms) { // eslint-disable-line no-unused-vars
+			for (const room of Rooms.rooms.values()) {
 				if (room.game === this)	{
 					return room.addRaw(buffer).update();
 				}
@@ -456,7 +456,7 @@ class Trivia extends Rooms.RoomGame {
 				if (this.kickedUsers.has(id)) return `User ${tarUser.name} has already been kicked from the game.`;
 			}
 
-			for (let kickedUserid of this.kickedUsers) {
+			for (const kickedUserid of this.kickedUsers) {
 				let kickedUser = Users.get(kickedUserid);
 				if (kickedUser) {
 					if (kickedUser.prevNames[tarUser.userid]) {
@@ -624,8 +624,7 @@ class Trivia extends Rooms.RoomGame {
 			let max = Infinity;
 			let rank = 0;
 			let rankIdx = i + 3;
-			for (let j = 0; j < leaders.length; j++) {
-				let leader = leaders[j];
+			for (const leader of leaders) {
 				let score = leaderboard[leader][i];
 				if (max !== score) {
 					if (!i && rank < 15) {
@@ -1169,8 +1168,7 @@ class WeakestLink extends Trivia {
 		if (maxPlayer.length > 1) {
 			let mostBanked = 0;
 			let bankPlayers = [];
-			for (let i = 0, len = maxPlayer.length; i < len; i++) {
-				let player = maxPlayer[i];
+			for (const player of maxPlayer) {
 				if (player.points > mostBanked) {
 					mostBanked = player.points;
 					bankPlayers = [player];
@@ -1494,12 +1492,10 @@ const commands = {
 		let isAccepting = cmd === 'accept';
 		let questions = triviaData.questions;
 		let submissions = triviaData.submissions;
-		let submissionsLen = submissions.length;
 
 		if (toId(target) === 'all') {
 			if (isAccepting) {
-				for (let i = 0; i < submissionsLen; i++) {
-					let submission = submissions[i];
+				for (const submission of submissions) {
 					questions.splice(findEndOfCategory(submission.category, false), 0, submission);
 				}
 			}
@@ -1517,7 +1513,7 @@ const commands = {
 			for (let i = indices.length; i--;) {
 				if (!indices[i].includes('-')) {
 					let index = Number(indices[i]);
-					if (Number.isInteger(index) && index > 0 && index <= submissionsLen) {
+					if (Number.isInteger(index) && index > 0 && index <= submissions.length) {
 						indices[i] = index;
 					} else {
 						indices.splice(i, 1);
@@ -1529,7 +1525,7 @@ const commands = {
 				let left = Number(range[0]);
 				let right = Number(range[1]);
 				if (!Number.isInteger(left) || !Number.isInteger(right) ||
-						left < 1 || right > submissionsLen || left === right) {
+						left < 1 || right > submissions.length || left === right) {
 					indices.splice(i, 1);
 					continue;
 				}
@@ -1580,8 +1576,8 @@ const commands = {
 
 		let questions = triviaData.questions;
 		let questionID = toId(question);
-		for (let i = 0; i < questions.length; i++) {
-			if (toId(questions[i].question) === questionID) {
+		for (const [i, question] of questions.entries()) {
+			if (toId(question.question) === questionID) {
 				questions.splice(i, 1);
 				writeTriviaData();
 				return this.privateModCommand(`(${user.name} removed question '${target}' from the question database.)`);
@@ -1609,14 +1605,13 @@ const commands = {
 			let questionsLen = questions.length;
 			if (!questionsLen) return this.sendReplyBox(`No questions have been submitted for ${isWL ? "Weakest Link" : "Trivia"} yet.`);
 
-			let categories = Object.keys(CATEGORIES);
 			let lastCategoryIdx = 0;
 			buffer += "<tr><th>Category</th><th>Question Count</th></tr>";
-			for (let i = 0; i < categories.length; i++) {
-				if (categories[i] === 'random') continue;
-				let tally = findEndOfCategory(categories[i], false) - lastCategoryIdx;
+			for (const category in CATEGORIES) {
+				if (category === 'random') continue;
+				let tally = findEndOfCategory(category, false) - lastCategoryIdx;
 				lastCategoryIdx += tally;
-				buffer += `<tr><td>${CATEGORIES[categories[i]]}</td><td>${tally} (${((tally * 100) / questionsLen).toFixed(2)}%)</td></tr>`;
+				buffer += `<tr><td>${CATEGORIES[category]}</td><td>${tally} (${((tally * 100) / questionsLen).toFixed(2)}%)</td></tr>`;
 			}
 			buffer += `<tr><td><strong>Total</strong></td><td><strong>${questionsLen}</strong></td></table></div>`;
 
@@ -1635,24 +1630,22 @@ const commands = {
 		} else {
 			list = list.filter(q => q.type === "trivia");
 		}
-		let listLen = list.length;
-		if (!listLen) {
+		if (!list.length) {
 			buffer += `<tr><td>There are no questions in the ${CATEGORIES[target]} category for ${isWL ? "Weakest Link" : "Trivia"}.</td></table></div>`;
 			return this.sendReply(buffer);
 		}
 
 		if (user.can('ban', null, room)) {
-			buffer += `<tr><td colspan="3">There are <strong>${listLen}</strong> questions in the ${CATEGORIES[target]} category for ${isWL ? "Weakest Link" : "Trivia"}.</td></tr>` +
+			buffer += `<tr><td colspan="3">There are <strong>${list.length}</strong> questions in the ${CATEGORIES[target]} category for ${isWL ? "Weakest Link" : "Trivia"}.</td></tr>` +
 				"<tr><th>#</th><th>Question</th><th>Answer(s)</th></tr>";
-			for (let i = 0; i < listLen; i++) {
-				let entry = list[i];
+			for (const [i, entry] of list.entries()) {
 				buffer += `<tr><td><strong>${(i + 1)}</strong></td><td>${entry.question}</td><td>${entry.answers.join(", ")}</td><tr>`;
 			}
 		} else {
-			buffer += `<td colspan="2">There are <strong>${listLen}</strong> questions in the ${target} category.</td></tr>` +
+			buffer += `<td colspan="2">There are <strong>${list.length}</strong> questions in the ${target} category.</td></tr>` +
 				"<tr><th>#</th><th>Question</th></tr>";
-			for (let i = 0; i < listLen; i++) {
-				buffer += `<tr><td><strong>${(i + 1)}</strong></td><td>${list[i].question}</td></tr>`;
+			for (const [i, entry] of list.entries()) {
+				buffer += `<tr><td><strong>${(i + 1)}</strong></td><td>${entry.question}</td></tr>`;
 			}
 		}
 		buffer += "</table></div>";
@@ -1737,11 +1730,11 @@ const commands = {
 		if (num > ladder.length) num = ladder.length;
 		for (let i = Math.max(0, num - 100); i < num; i++) {
 			let leaders = ladder[i];
-			for (let j = 0; j < leaders.length; j++) {
-				let rank = leaderboard[leaders[j]];
-				let leader = Users.getExact(leaders[j]);
-				leader = leader ? Chat.escapeHTML(leader.name) : leaders[j];
-				buffer += `<tr><td><strong>${(i + 1)}</strong></td><td>${leader}</td><td>${rank[0]}</td><td>${rank[1]}</td><td>${rank[2]}</td></tr>`;
+			for (const leader of leaders) {
+				let rank = leaderboard[leader];
+				let leaderid = Users.getExact(leader);
+				leaderid = leaderid ? Chat.escapeHTML(leaderid.name) : leader;
+				buffer += `<tr><td><strong>${(i + 1)}</strong></td><td>${leaderid}</td><td>${rank[0]}</td><td>${rank[1]}</td><td>${rank[2]}</td></tr>`;
 			}
 		}
 		buffer += "</table></div>";

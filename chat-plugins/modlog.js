@@ -156,15 +156,15 @@ async function runModlog(rooms, searchString, exactSearch, maxLines) {
 	const useRipgrep = checkRipgrepAvailability();
 	let fileNameList = [];
 	let checkAllRooms = false;
-	for (let i = 0; i < rooms.length; i++) {
-		if (rooms[i] === 'all') {
+	for (const roomid of rooms) {
+		if (roomid === 'all') {
 			checkAllRooms = true;
 			const fileList = await FS(LOG_PATH).readdir();
 			for (const file of fileList) {
 				if (file !== 'README.md') fileNameList.push(file);
 			}
 		} else {
-			fileNameList.push(`modlog_${rooms[i]}.txt`);
+			fileNameList.push(`modlog_${roomid}.txt`);
 		}
 	}
 	fileNameList = fileNameList.map(filename => `${LOG_PATH}${filename}`);
@@ -191,8 +191,8 @@ async function runModlog(rooms, searchString, exactSearch, maxLines) {
 		runRipgrepModlog(fileNameList, regexString, results);
 	} else {
 		const searchStringRegex = new RegExp(regexString, 'i');
-		for (let i = 0; i < fileNameList.length; i++) {
-			await checkRoomModlog(fileNameList[i], searchStringRegex, results);
+		for (const fileName of fileNameList) {
+			await checkRoomModlog(fileName, searchStringRegex, results);
 		}
 	}
 	const resultData = results.getListClone();
@@ -217,9 +217,8 @@ function runRipgrepModlog(paths, regexString, results) {
 	} catch (error) {
 		return results;
 	}
-	const fileResults = stdout.toString().split('\n').reverse();
-	for (let i = 0; i < fileResults.length; i++) {
-		if (fileResults[i]) results.tryInsert(fileResults[i]);
+	for (const fileName of stdout.toString().split('\n').reverse()) {
+		if (fileName) results.tryInsert(fileName);
 	}
 	return results;
 }

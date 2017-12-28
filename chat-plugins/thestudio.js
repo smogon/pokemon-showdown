@@ -25,9 +25,9 @@ if (theStudio) {
 	fs.readFile(AOTDS_FILE, (err, data) => {
 		if (err) return;
 		data = ('' + data).split("\n");
-		for (let i = 0; i < data.length; i++) {
-			if (!data[i] || data[i] === '\r') continue;
-			let [artist, nominator, quote, song, link, image, time] = data[i].trim().split("\t");
+		for (const arg of data) {
+			if (!arg || arg === '\r') continue;
+			let [artist, nominator, quote, song, link, image, time] = arg.trim().split("\t");
 			if (artist === "Artist") continue;
 			time = Number(time) || 0;
 			winners.push({artist: artist, nominator: nominator, quote: quote, song: song, link: link, image: image, time: time});
@@ -37,8 +37,8 @@ if (theStudio) {
 
 function saveWinners() {
 	let buf = "Artist\tNominator\tQuote\tSong\tLink\tImage\tTimestamp\n";
-	for (let i = 0; i < winners.length; i++) {
-		const {artist, nominator, quote, song, link, image, time} = winners[i];
+	for (const winner of winners) {
+		const {artist, nominator, quote, song, link, image, time} = winner;
 
 		buf += `${artist || ''}\t${nominator || ''}\t${quote || ''}\t${song || ''}\t${link || ''}\t${image || ''}\t${time || 0}\n`;
 	}
@@ -59,13 +59,13 @@ function addNomination(user, artist) {
 
 	if (winners.length && toArtistId(winners[winners.length - 1].artist) === id) return user.sendTo(theStudio, "This artist is already the current Artist of the Day.");
 
-	for (let value of removedNominations.values()) {
+	for (const value of removedNominations.values()) {
 		if (toId(user) in value.userids || user.latestIp in value.ips) return user.sendTo(theStudio, "Since your nomination has been removed by staff, you cannot submit another artist until the next round.");
 	}
 
 	if (nominations.has(toArtistId(artist))) return user.sendTo(theStudio, "This artist has already been nominated.");
 
-	for (let [key, value] of nominations) {
+	for (const [key, value] of nominations) {
 		if (toId(user) in value.userids || user.latestIp in value.ips) {
 			user.sendTo(theStudio, `Your previous vote for ${value.artist} will be removed.`);
 			nominations.delete(key);
@@ -309,9 +309,9 @@ let commands = {
 
 		let changelist = {};
 
-		for (let i = 0; i < params.length; i++) {
-			let [key, ...values] = params[i].split(':');
-			if (!key || !values.length) return this.errorReply(`Syntax error in '${params[i]}'`);
+		for (const param of params) {
+			let [key, ...values] = param.split(':');
+			if (!key || !values.length) return this.errorReply(`Syntax error in '${param}'`);
 
 			key = key.trim();
 			let value = values.join(':').trim();
