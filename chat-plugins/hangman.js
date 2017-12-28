@@ -67,7 +67,7 @@ class Hangman extends Rooms.RoomGame {
 		letter = letter.toUpperCase();
 		if (this.guesses.includes(letter)) return false;
 		if (this.word.toUpperCase().includes(letter)) {
-			for (const [i, l] of this.word.entries()) {
+			for (const [i, l] of this.word.split("").entries()) {
 				if (l.toUpperCase() === letter) {
 					this.wordSoFar[i] = l;
 				}
