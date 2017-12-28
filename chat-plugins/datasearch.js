@@ -1516,7 +1516,8 @@ function runLearn(target, cmd) {
 		return {error: "You must specify at least one move."};
 	}
 
-	for (const arg of targets) {
+	let moves = targets.slice(1);
+	for (const arg of moves) {
 		move = Dex.getMove(arg);
 		if (!move.exists || move.id === 'magikarpsrevenge') {
 			return {error: `Move '${move.id}' not found.`};
