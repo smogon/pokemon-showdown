@@ -3104,7 +3104,7 @@ exports.commands = {
 		if (!this.can('hotpatch')) return false;
 		Rooms.global.send('|refresh|');
 		const logRoom = Rooms('staff') || room;
-		logRoom.roomlog(`${user.name} used /refreshpage`);	
+		logRoom.roomlog(`${user.name} used /refreshpage`);
 	},
 
 	updateserver: async function (target, room, user, connection) {
