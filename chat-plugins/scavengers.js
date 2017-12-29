@@ -512,7 +512,7 @@ class ScavengerHunt extends Rooms.RoomGame {
 
 			this.room.sendMods(staffMsg);
 			this.room.roomlog(staffMsg);
-			this.room.modlog(logMsg);
+			this.room.modlog(`(${this.room.id}) ${logMsg}`);
 
 			PlayerLeaderboard.addPoints(player.name, 'infraction', 1);
 			player.infracted = true;

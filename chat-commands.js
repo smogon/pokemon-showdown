@@ -1805,6 +1805,9 @@ exports.commands = {
 
 		const globalReason = (target ? `: ${userReason} ${proof}` : ``);
 		this.globalModlog((week ? "WEEKLOCK" : "LOCK"), targetUser || userid, ` by ${user.userid}${globalReason}`);
+
+		// Automatically upload replays as evidence/reference to the punishment
+		if (room.battle) this.parse('/savereplay');
 		return true;
 	},
 	lockhelp: [
@@ -2344,7 +2347,7 @@ exports.commands = {
 		}
 
 		this.globalModlog("NAMELOCK", targetUser, ` by ${user.userid}${reasonText}`);
-		Ladders.matchmaker.cancelSearch(targetUser);
+		Ladders.cancelSearches(targetUser);
 		Punishments.namelock(targetUser, null, null, reason);
 		targetUser.popup(`|modal|${user.name} has locked your name and you can't change names anymore${reasonText}`);
 		return true;
@@ -2534,7 +2537,7 @@ exports.commands = {
 		const name = Punishments.roomUnblacklist(room, target);
 
 		if (name) {
-			this.addModAction("" + name + " was unblacklisted by " + user.name + ".", `UNBLACKLIST: [${toId(name)}] by ${user.userid}`);
+			this.addModAction("" + name + " was unblacklisted by " + user.name + ".");
 			if (!room.isPrivate && room.chatRoomData) {
 				this.globalModlog("UNBLACKLIST", name, " by " + user.userid);
 			}
@@ -3100,7 +3103,8 @@ exports.commands = {
 	refreshpage: function (target, room, user) {
 		if (!this.can('hotpatch')) return false;
 		Rooms.global.send('|refresh|');
-		this.roomlog(user.name + " used /refreshpage");
+		const logRoom = Rooms('staff') || room;
+		logRoom.roomlog(`${user.name} used /refreshpage`);	
 	},
 
 	updateserver: async function (target, room, user, connection) {
@@ -3132,15 +3136,9 @@ exports.commands = {
 		this.sendReply(`Fetching newest version...`);
 		logRoom.roomlog(`${user.name} used /updateserver`);
 
-		let exec = require('child_process').exec;
-		exec(`git fetch && git rebase --autostash FETCH_HEAD`, (error, stdout, stderr) => {
-			for (let s of ("" + stdout + stderr).split("\n")) {
-				connection.sendTo(room, s);
-				logQueue.push(s);
-			}
-			for (let line of logQueue) {
-				room.roomlog(line);
-			}
+		let [code, stdout, stderr] = await exec(`git fetch`);
+		if (code) throw new Error(`updateserver: Crash while fetching - make sure this is a Git repository`);
+		if (!stdout && !stderr) {
 			Chat.updateServerLock = false;
 			return this.sendReply(`There were no updates.`);
 		}
@@ -3202,7 +3200,8 @@ exports.commands = {
 			Rooms.lobby.modchat = false;
 			Rooms.lobby.addRaw("<div class=\"broadcast-green\"><b>We fixed the crash without restarting the server!</b><br />You may resume talking in the lobby and starting new battles.</div>").update();
 		}
-		this.roomlog(user.name + " used /crashfixed");
+		const logRoom = Rooms('staff') || room;
+		logRoom.roomlog(`${user.name} used /crashfixed`);
 	},
 	crashfixedhelp: [`/crashfixed - Ends the active lockdown caused by a crash without the need of a restart. Requires: ~`],
 

@@ -1177,16 +1177,6 @@ Chat.loadPlugins = function () {
 };
 
 /**
- * Escapes Regex in a string.
- *
- * @param  {string} str
- * @return {string}
- */
-Chat.escapeRegex = function (str) {
-	return (str && typeof str === 'string' ? str : '').replace(/[\\.+*?!=()|[\]{}^$#<>]/g, '\\$&');
-};
-
-/**
  * Escapes HTML in a string.
  *
  * @param  {string} str
