@@ -599,14 +599,21 @@ class CommandContext {
 		this.room.sendModsByUser(this.user, data);
 	}
 
-	privateModCommand(message, log) {
+	privateModCommand() {
 		throw new Error(`this.privateModCommand has been renamed to this.privateModAction, which no longer writes to modlog.`);
 	}
+	/**
+	 * @param {string} msg
+	 */
 	privateModAction(msg) {
 		this.room.sendMods(msg);
 		this.roomlog(msg);
 	}
-
+	/**
+	 * @param {string} action
+	 * @param {string | User} user
+	 * @param {string} note
+	 */
 	globalModlog(action, user, note) {
 		let buf = `(${this.room.id}) ${action}: `;
 		if (typeof user === 'string') {
@@ -622,7 +629,12 @@ class CommandContext {
 		Rooms.global.modlog(buf);
 		this.logModAction(buf);
 	}
-
+	/**
+	 * @param {string} action
+	 * @param {string | User} user
+	 * @param {string} note
+	 * @param {boolean} noip
+	 */
 	modlog(action, user, note, noip) {
 		let buf = `(${this.room.id}) ${action}: `;
 		if (user) {
@@ -640,7 +652,9 @@ class CommandContext {
 
 		this.logModAction(buf);
 	}
-
+	/**
+	 * @param {string} data
+	 */
 	roomlog(data) {
 		if (this.pmTarget) return;
 		this.room.roomlog(data);
@@ -651,9 +665,15 @@ class CommandContext {
 	addModCommand() {
 		throw new Error(`this.addModCommand has been renamed to this.addModAction, which no longer writes to modlog.`);
 	}
+	/**
+	 * @param {string} msg
+	 */
 	addModAction(msg) {
 		this.room.addByUser(this.user, msg);
 	}
+	/**
+	 * @param {string} text
+	 */
 	logModAction(text) {
 		this.room.modlog('(' + this.room.id + ') ' + text);
 	}
