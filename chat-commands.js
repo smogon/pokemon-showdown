@@ -840,7 +840,7 @@ exports.commands = {
 			}
 			room.isPrivate = setting;
 			this.addModAction(`${user.name} made this room ${settingName}.`);
-			this.modlog(settingName.toUpperCase() + 'ROOM');
+			this.modlog(`${settingName.toUpperCase()}ROOM`);
 			if (room.chatRoomData) {
 				room.chatRoomData.isPrivate = setting;
 				Rooms.global.writeChatRoomData();
@@ -1315,7 +1315,7 @@ exports.commands = {
 			if (needsPopup) targetUser.popup(`You were demoted to Room ${groupName} by ${user.name} in ${room.id}.`);
 		} else if (nextGroup === '#') {
 			this.addModAction(`${'' + name} was promoted to ${groupName} by ${user.name}.`);
-			this.modlog('ROOMOWNER', userid);
+			this.modlog('ROOM OWNER', userid);
 			if (needsPopup) targetUser.popup(`You were promoted to ${groupName} by ${user.name} in ${room.id}.`);
 		} else {
 			this.addModAction(`${'' + name} was promoted to Room ${groupName} by ${user.name}.`);
@@ -1482,7 +1482,7 @@ exports.commands = {
 
 		if (!room.isPrivate && room.chatRoomData) {
 			let acAccount = (targetUser.autoconfirmed !== userid && targetUser.autoconfirmed);
-			let displayMessage;
+			let displayMessage = '';
 			if (affected.length > 1) {
 				displayMessage = "(" + name + "'s " + (acAccount ? " ac account: " + acAccount + ", " : "") + "banned alts: " + affected.slice(1).map(user => user.getLastName()).join(", ") + ")";
 				this.privateModAction(displayMessage);
@@ -1650,7 +1650,7 @@ exports.commands = {
 
 		if (targetUser in room.users) targetUser.popup("|modal|" + user.name + " has muted you in " + room.id + " for " + Chat.toDurationString(muteDuration) + ". " + target);
 		this.addModAction("" + targetUser.name + " was muted by " + user.name + " for " + Chat.toDurationString(muteDuration) + "." + (target ? " (" + target + ")" : ""));
-		this.modlog('MUTE', targetUser, target, true);
+		this.modlog(`${cmd.includes('h') ? 'HOUR' : ''}MUTE`, targetUser, target, true);
 		if (targetUser.autoconfirmed && targetUser.autoconfirmed !== targetUser.userid) {
 			let displayMessage = "(" + targetUser.name + "'s ac account: " + targetUser.autoconfirmed + ")";
 			this.privateModAction(displayMessage);
@@ -1790,7 +1790,7 @@ exports.commands = {
 		}
 
 		let acAccount = (targetUser && targetUser.autoconfirmed !== userid && targetUser.autoconfirmed);
-		let displayMessage;
+		let displayMessage = '';
 		if (affected.length > 1) {
 			displayMessage = `(${name}'s ` + (acAccount ? ` ac account: ${acAccount}, ` : "") + `locked alts: ${affected.slice(1).map(user => user.getLastName()).join(", ")})`;
 			this.privateModAction(displayMessage);
@@ -1908,7 +1908,7 @@ exports.commands = {
 
 		let affected = Punishments.ban(targetUser, null, null, userReason);
 		let acAccount = (targetUser.autoconfirmed !== userid && targetUser.autoconfirmed);
-		let displayMessage;
+		let displayMessage = '';
 		if (affected.length > 1) {
 			let guests = affected.length - 1;
 			affected = affected.slice(1).map(user => user.getLastName()).filter(alt => alt.substr(0, 7) !== '[Guest ');
@@ -2151,11 +2151,11 @@ exports.commands = {
 		Users.setOfflineGroup(name, nextGroup);
 		if (Config.groups[nextGroup].rank < Config.groups[currentGroup].rank) {
 			this.privateModAction(`(${name} was demoted to ${groupName} by ${user.name}.)`);
-			this.modlog(`GLOBAL${groupName.toUpperCase()}`, userid, '(demote)');
+			this.modlog(`GLOBAL ${groupName.toUpperCase()}`, userid, '(demote)');
 			if (targetUser) targetUser.popup(`You were demoted to ${groupName} by ${user.name}.`);
 		} else {
 			this.addModAction(`${name} was promoted to ${groupName} by ${user.name}.`);
-			this.modlog(`GLOBAL${groupName.toUpperCase()}`, userid);
+			this.modlog(`GLOBAL ${groupName.toUpperCase()}`, userid);
 			if (targetUser) targetUser.popup(`You were promoted to ${groupName} by ${user.name}.`);
 		}
 
@@ -2207,7 +2207,7 @@ exports.commands = {
 		Users.setOfflineGroup(name, nextGroup);
 
 		this.addModAction("" + name + " was promoted to " + (Config.groups[nextGroup].name || "regular user") + " by " + user.name + ".");
-		this.modlog(`GLOBAL${(Config.groups[nextGroup].name || "REGULAR").toUpperCase()}`, toId(name));
+		this.modlog(`GLOBAL${(Config.groups[nextGroup].name || "regular").toUpperCase()}`, toId(name));
 	},
 
 	devoice: 'deauth',
@@ -2465,7 +2465,7 @@ exports.commands = {
 
 		if (!room.isPrivate && room.chatRoomData) {
 			let acAccount = (targetUser.autoconfirmed !== userid && targetUser.autoconfirmed);
-			let displayMessage;
+			let displayMessage = '';
 			if (affected.length > 1) {
 				displayMessage = "(" + name + "'s " + (acAccount ? " ac account: " + acAccount + ", " : "") + "blacklisted alts: " + affected.slice(1).map(user => user.getLastName()).join(", ") + ")";
 				this.privateModAction(displayMessage);
@@ -3560,7 +3560,7 @@ exports.commands = {
 		room.battle.endType = 'forced';
 		if (!target) {
 			room.battle.tie();
-			this.modlog("FORCETIE");
+			this.modlog('FORCETIE');
 			return false;
 		}
 		let targetUser = Users.getExact(target);
@@ -3570,7 +3570,7 @@ exports.commands = {
 
 		if (target) {
 			room.battle.win(targetUser);
-			this.modlog(`FORCEWIN`, target);
+			this.modlog('FORCEWIN', target);
 		}
 	},
 	forcewinhelp: [

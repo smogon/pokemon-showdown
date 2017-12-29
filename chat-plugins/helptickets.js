@@ -645,7 +645,7 @@ exports.commands = {
 			}
 
 			let acAccount = (targetUser && targetUser.autoconfirmed !== userid && targetUser.autoconfirmed);
-			let displayMessage;
+			let displayMessage = '';
 			if (affected.length > 1) {
 				displayMessage = `(${name}'s ${acAccount ? ` ac account: ${acAccount}, ` : ""}ticket banned alts: ${affected.slice(1).map(user => user.getLastName()).join(", ")})`;
 				this.privateModAction(displayMessage);

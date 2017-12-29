@@ -84,7 +84,7 @@ exports.commands = {
 
 				HF.setCardio(target);
 				this.privateModAction(`(${user.name} has set the cardio challenge to: ${target})`);
-				this.modlog('CARDIOCHALL', null, target);
+				this.modlog('CARDIO CHALLENGE', null, target);
 				this.sendReply(`The daily cardio challenge has been updated to: ${target}`);
 			}
 		},
@@ -108,7 +108,7 @@ exports.commands = {
 
 				HF.setGym(target);
 				this.privateModAction(`(${user.name} has set the gym challenge to: ${target})`);
-				this.modlog('GYMCHALL', null, target);
+				this.modlog('GYM CHALLENGE', null, target);
 				this.sendReply(`The daily gym challenge has been updated to: ${target}`);
 			}
 		},
@@ -132,7 +132,7 @@ exports.commands = {
 
 				HF.setQuote(target);
 				this.privateModAction(`(${user.name} has set the daily quote to: ${target})`);
-				this.modlog('HFQUOTE', null, target);
+				this.modlog('HF QUOTE', null, target);
 				this.sendReply(`The daily quote has been updated to: ${target}`);
 			}
 		},
