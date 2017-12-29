@@ -680,6 +680,14 @@ exports.BattleFormats = {
 			}
 		},
 	},
+	switchpriorityclausemod: {
+		effectType: 'Rule',
+		name: 'Switch Priority Clause Mod',
+		desc: ["Makes a faster Pokémon switch first when double-switching, unlike in Emerald link battles, where player 1's Pokémon would switch first"],
+		onStart: function () {
+			this.add('rule', 'Switch Priority Clause Mod: Faster Pokémon switch first');
+		},
+	},
 	freezeclausemod: {
 		effectType: 'Rule',
 		name: 'Freeze Clause Mod',
