@@ -254,9 +254,13 @@ class Validator {
 		if (['Mega', 'Mega-X', 'Mega-Y'].includes(postMegaTemplate.forme)) {
 			banReason = ruleTable.check('pokemontag:mega', setHas);
 			const megaTemplateOverride = ruleTable.has('+pokemon:' + postMegaTemplate.id);
-			if (megaTemplateOverride) templateOverride = true;
-			if (!megaTemplateOverride && banReason) {
+			if (megaTemplateOverride) {
+				templateOverride = true;
+			} else if (banReason) {
 				problems.push(`Mega evolutions are ${banReason}.`);
+			} else {
+				banReason = ruleTable.check('pokemon:' + postMegaTemplate.id, setHas);
+				if (banReason) problems.push(`${postMegaTemplate.species} is ${banReason}.`);
 			}
 		}
 		if (!templateOverride && postMegaTemplate.tier) {
