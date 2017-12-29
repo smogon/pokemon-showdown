@@ -1592,13 +1592,13 @@ class Battle extends Dex.ModdedDex {
 							if (this.firstStaleWarned && pokemon.isStale < 2) {
 								switch (pokemon.isStaleSource) {
 								case 'struggle':
-									this.add('html', '<div class="broadcast-red">' + Chat.escapeHTML(pokemon.name) + ' isn\'t losing HP from Struggle. If this continues, it will be classified as being in an endless loop.</div>');
+									this.add('html', Chat.html`<div class="broadcast-red">${pokemon.name} isn\'t losing HP from Struggle. If this continues, it will be classified as being in an endless loop.</div>`);
 									break;
 								case 'drag':
-									this.add('html', '<div class="broadcast-red">' + Chat.escapeHTML(pokemon.name) + ' isn\'t losing PP or HP from being forced to switch. If this continues, it will be classified as being in an endless loop.</div>');
+									this.add('html', Chat.html`<div class="broadcast-red">${pokemon.name} isn\'t losing PP or HP from being forced to switch. If this continues, it will be classified as being in an endless loop.</div>`);
 									break;
 								case 'switch':
-									this.add('html', '<div class="broadcast-red">' + Chat.escapeHTML(pokemon.name) + ' isn\'t losing PP or HP from repeatedly switching. If this continues, it will be classified as being in an endless loop.</div>');
+									this.add('html', Chat.html`<div class="broadcast-red">${pokemon.name} isn\'t losing PP or HP from repeatedly switching. If this continues, it will be classified as being in an endless loop.</div>`);
 									break;
 								}
 							}
@@ -1612,7 +1612,7 @@ class Battle extends Dex.ModdedDex {
 							pokemon.isStale++;
 							pokemon.isStaleSource = 'ppstall';
 							if (this.firstStaleWarned && pokemon.isStale < 2) {
-								this.add('html', '<div class="broadcast-red">' + Chat.escapeHTML(pokemon.name) + ' isn\'t losing PP or HP. If it keeps on not losing PP or HP, it will be classified as being in an endless loop.</div>');
+								this.add('html', Chat.html`<div class="broadcast-red">${pokemon.name} isn\'t losing PP or HP. If it keeps on not losing PP or HP, it will be classified as being in an endless loop.</div>`);
 							}
 						}
 						pokemon.isStaleCon = 0;
@@ -1644,45 +1644,45 @@ class Battle extends Dex.ModdedDex {
 		const ruleTable = this.getRuleTable(this.getFormat());
 		if (ruleTable.has('endlessbattleclause')) {
 			if (oneStale) {
-				let activationWarning = '<br />If all active Pok&eacute;mon go in an endless loop, Endless Battle Clause will activate.';
-				if (allStale) activationWarning = '';
-				let loopReason = '';
+				let activationWarning = `<br />If all active Pok&eacute;mon go in an endless loop, Endless Battle Clause will activate.`;
+				if (allStale) activationWarning = ``;
+				let loopReason = ``;
 				switch (oneStale.isStaleSource) {
 				case 'struggle':
-					loopReason = ": it isn't losing HP from Struggle";
+					loopReason = `: it isn't losing HP from Struggle`;
 					break;
 				case 'drag':
-					loopReason = ": it isn't losing PP or HP from being forced to switch";
+					loopReason = `: it isn't losing PP or HP from being forced to switch`;
 					break;
 				case 'switch':
-					loopReason = ": it isn't losing PP or HP from repeatedly switching";
+					loopReason = `: it isn't losing PP or HP from repeatedly switching`;
 					break;
 				case 'getleppa':
-					loopReason = ": it got a Leppa Berry it didn't start with";
+					loopReason = `: it got a Leppa Berry it didn't start with`;
 					break;
 				case 'useleppa':
-					loopReason = ": it used a Leppa Berry it didn't start with";
+					loopReason = `: it used a Leppa Berry it didn't start with`;
 					break;
 				case 'ppstall':
-					loopReason = ": it isn't losing PP or HP";
+					loopReason = `: it isn't losing PP or HP`;
 					break;
 				case 'ppoverflow':
-					loopReason = ": its PP overflowed";
+					loopReason = `: its PP overflowed`;
 					break;
 				}
-				this.add('html', '<div class="broadcast-red">' + Chat.escapeHTML(oneStale.name) + ' is in an endless loop' + loopReason + '.' + activationWarning + '</div>');
+				this.add('html', Chat.html`<div class="broadcast-red">${oneStale.name} is in an endless loop${loopReason}.${activationWarning}</div>`);
 				oneStale.staleWarned = true;
 				this.firstStaleWarned = true;
 			}
 			if (allStale) {
-				this.add('message', "All active Pok\u00e9mon are in an endless loop. Endless Battle Clause activated!");
+				this.add('message', `All active Pok\u00e9mon are in an endless loop. Endless Battle Clause activated!`);
 				let leppaPokemon = null;
 				for (const side of this.sides) {
 					for (const pokemon of side.pokemon) {
 						if (toId(pokemon.set.item) === 'leppaberry') {
 							if (leppaPokemon) {
 								leppaPokemon = null; // both sides have Leppa
-								this.add('-message', "Both sides started with a Leppa Berry.");
+								this.add('-message', `Both sides started with a Leppa Berry.`);
 							} else {
 								leppaPokemon = pokemon;
 							}
@@ -1691,19 +1691,31 @@ class Battle extends Dex.ModdedDex {
 					}
 				}
 				if (leppaPokemon) {
-					this.add('-message', "" + leppaPokemon.side.name + "'s " + leppaPokemon.name + " started with a Leppa Berry and loses.");
+					this.add('-message', `${leppaPokemon.side.name}'s ${leppaPokemon.name} started with a Leppa Berry and loses.`);
 					this.win(leppaPokemon.side.foe);
 					return;
 				}
 				this.win();
 				return;
 			}
+			if ((this.turn >= 500 && this.turn % 100 === 0) ||
+				(this.turn >= 900 && this.turn % 10 === 0) ||
+				(this.turn >= 990)) {
+				const turnsLeft = 1000 - this.turn;
+				if (turnsLeft < 0) {
+					this.add('message', `It is turn 1000. Endless Battle Clause activated!`);
+					this.tie();
+					return;
+				}
+				const turnsLeftText = (turnsLeft === 1 ? `1 turn` : `${turnsLeft} turns`);
+				this.add('html', `<div class="broadcast-red">You will auto-tie if the battle doesn't end in ${turnsLeftText} (on turn 1000).</div>`);
+			}
 		} else {
 			if (allStale && !this.staleWarned) {
 				this.staleWarned = true;
-				this.add('html', '<div class="broadcast-red">If this format had Endless Battle Clause, it would have activated.</div>');
+				this.add('html', `<div class="broadcast-red">If this format had Endless Battle Clause, it would have activated.</div>`);
 			} else if (oneStale) {
-				this.add('html', '<div class="broadcast-red">' + Chat.escapeHTML(oneStale.name) + ' is in an endless loop.</div>');
+				this.add('html', Chat.html`<div class="broadcast-red">${oneStale.name} is in an endless loop.</div>`);
 				oneStale.staleWarned = true;
 			}
 		}
