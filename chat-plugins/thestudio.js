@@ -234,7 +234,8 @@ let commands = {
 
 		room.aotdVote = new ArtistOfTheDayVote(room);
 		room.aotdVote.display(false);
-		this.privateModCommand(`(${user.name} has started nominations for the Artist of the Day.)`);
+		this.privateModAction(`(${user.name} has started nominations for the Artist of the Day.)`);
+		this.modlog('AOTD START');
 	},
 	starthelp: [`/aotd start - Starts nominations for the Artist of the Day. Requires: % @ # & ~`],
 
@@ -246,7 +247,8 @@ let commands = {
 
 		if (!room.aotdVote.runAotd()) return this.errorReply("Can't select an Artist of the Day without nominations.");
 
-		this.privateModCommand(`(${user.name} has ended nominations for the Artist of the Day.)`);
+		this.privateModAction(`(${user.name} has ended nominations for the Artist of the Day.)`);
+		this.modlog('AOTD END');
 	},
 	endhelp: [`/aotd end - End nominations for the Artist of the Day and set it to a randomly selected artist. Requires: % @ # & ~`],
 
@@ -292,7 +294,8 @@ let commands = {
 		if (!userid) return this.errorReply(`'${name}' is not a valid username.`);
 
 		if (removeNomination(userid)) {
-			this.privateModCommand(`(${user.name} removed ${this.targetUsername}'s nomination for the Artist of the Day.)`);
+			this.privateModAction(`(${user.name} removed ${this.targetUsername}'s nomination for the Artist of the Day.)`);
+			this.modlog('AOTD REMOVENOM', userid);
 		} else {
 			this.sendReply(`User '${name}' has no nomination for the Artist of the Day.`);
 		}
@@ -344,7 +347,8 @@ let commands = {
 
 		if (keys.length) {
 			setWinnerProperty(changelist);
-			return this.privateModCommand(`(${user.name} changed the following propert${Chat.plural(keys, 'ies', 'y')} of the Artist of the Day: ${keys.join(', ')})`);
+			this.modlog('AOTD', null, `changed ${keys.join(', ')}`);
+			return this.privateModAction(`(${user.name} changed the following propert${Chat.plural(keys, 'ies', 'y')} of the Artist of the Day: ${keys.join(', ')})`);
 		}
 	},
 	sethelp: [`/aotd set property: value[, property: value] - Set the artist, quote, song, link or image for the current Artist of the Day. Requires: % @ * # & ~`],

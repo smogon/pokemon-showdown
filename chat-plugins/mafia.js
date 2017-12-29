@@ -790,8 +790,8 @@ exports.commands = {
 
 				room.game = new Mafia(room, params.length, params, defaultSettings);
 			}
-
-			return this.privateModCommand("(A game of mafia was started by " + user.name + ".)");
+			this.modlog('MAFIA');
+			return this.privateModAction("(A game of mafia was started by " + user.name + ".)");
 		},
 
 		display: function (target, room, user) {
@@ -908,7 +908,8 @@ exports.commands = {
 			if (!this.canTalk()) return;
 
 			room.game.forceEnd();
-			return this.privateModCommand("(The game of mafia was forcibly ended by " + user.name + ".)");
+			this.modlog('MAFIAEND');
+			return this.privateModAction("(The game of mafia was forcibly ended by " + user.name + ".)");
 		},
 
 		disable: function (target, room, user) {

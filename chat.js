@@ -600,24 +600,13 @@ class CommandContext {
 	}
 
 	privateModCommand(message, log) {
-		if (!log) {
-			// only a single message provided - format it with userids by grammatically split-parsing the message
-			const {roomMsg, logMsg} = this.splitModCommand(message);
-			this.room.sendModCommand(roomMsg);
-			this.logEntry(roomMsg);
-			this.room.modlog(logMsg);
-		} else {
-			this.room.sendModCommand(message);
-			this.logEntry(message);
-			this.room.modlog(log);
-		}
-
+		throw new Error(`this.privateModCommand has been renamed to this.privateModAction, which no longer writes to modlog.`)
 	}
-	/**
-	 * @param {string} action
-	 * @param {string | User} user
-	 * @param {string} note
-	 */
+	privateModAction(msg) {
+		this.room.sendMods(msg);
+		this.roomlog(msg);
+	}
+	
 	globalModlog(action, user, note) {
 		let buf = `(${this.room.id}) ${action}: `;
 		if (typeof user === 'string') {
@@ -629,43 +618,43 @@ class CommandContext {
 			buf += ` [${user.latestIp}]`;
 		}
 		buf += note;
+		
 		Rooms.global.modlog(buf);
+		this.logModAction(buf);
+	}
+	
+	modlog(action, user, note, noip) {
+		let buf = `(${this.room.id}) ${action}: `;
+		if (user) {
+			if (typeof user === 'string') {
+				buf += `[${toId(user)}]`;
+			} else {
+				let userid = user.getLastId();
+				buf += `[${userid}]`;
+				if (user.autoconfirmed && user.autoconfirmed !== userid) buf += ` ac:[${user.autoconfirmed}]`;
+				if (!noip) buf += ` [${user.latestIp}]`;
+			}
+		}
+		buf += ` by ${this.user.userid}`
+		if (note) buf += `: ${note}`;
+		
+		this.logModAction(buf);
 	}
 
 	roomlog(data) {
 		if (this.pmTarget) return;
 		this.room.roomlog(data);
 	}
-	addModCommand(message, log) {
-		if (!log) {
-			// only a single message provided - format it with userids by grammatically split-parsing the message
-			const {roomMsg, logMsg} = this.splitModCommand(message);
-			this.room.addLogMessage(this.user, roomMsg);
-			this.room.modlog(logMsg);
-		} else {
-			this.room.addLogMessage(this.user, message);
-			this.room.modlog(log);
-		}
+	logEntry() {
+		throw new Error(`this.logEntry has been renamed to this.roomlog.`);
 	}
-	splitModCommand(roomMsg) {
-		const subjectRegex = new RegExp(`^(\\(?)(${this.targetUsername ? Chat.escapeRegex(this.targetUsername) + '|' : ''}${this.targetUser ? Chat.escapeRegex(this.targetUser.getLastName()) + '|' : ''}${Chat.escapeRegex(this.user.name)})\\b`, 'gi');
-		const objectRegex = new RegExp(`(by|to|for) (${this.targetUsername ? Chat.escapeRegex(this.targetUsername) + '|' : ''}${Chat.escapeRegex(this.user.name)})\\b`, 'gi');
-		const possessiveRegex = new RegExp(`(${this.targetUsername ? Chat.escapeRegex(this.targetUsername) + '|' : ''}${Chat.escapeRegex(this.user.name)})'s`, 'gi');
-
-		let logMsg = roomMsg.replace(subjectRegex, m => {
-			let prefix = m.startsWith('(') ? '(' : '';
-			return prefix + `[${toId(m)}]`;
-		}).replace(objectRegex, m => {
-			const [preposition, ...username] = m.split(' ');
-			return `${preposition} [${toId(username.join(''))}]`;
-		}).replace(possessiveRegex, match => `[${match.slice(0, -2)}]'s`);
-
-		return {roomMsg, logMsg};
+	addModCommand() {
+		throw new Error(`this.addModCommand has been renamed to this.addModAction, which no longer writes to modlog.`);
 	}
-	/**
-	 * @param {string} text
-	 */
-	logModCommand(text) {
+	addModAction(msg) {
+		this.room.addByUser(this.user, msg);
+	}
+	logModAction(text) {
 		this.room.modlog('(' + this.room.id + ') ' + text);
 	}
 	update() {
