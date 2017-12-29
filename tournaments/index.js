@@ -1241,7 +1241,7 @@ let commands = {
 			if (timeout === tournament.autoDisqualifyTimeout) return this.errorReply("The automatic tournament disqualify timer is already set to " + params[0] + " minute(s).");
 			if (tournament.setAutoDisqualifyTimeout(timeout, this)) {
 				this.privateModAction("(The tournament auto disqualify timer was set to " + params[0] + " by " + user.name + ")");
-				this.modlog('TOUR AUTODQ', null, timeout === Infinity ? 'off' : params[0])
+				this.modlog('TOUR AUTODQ', null, timeout === Infinity ? 'off' : params[0]);
 			}
 		},
 		runautodq: function (tournament, user) {

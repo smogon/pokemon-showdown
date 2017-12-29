@@ -691,7 +691,7 @@ exports.commands = {
 			room.game.suppressMessages = state;
 
 			this.addModAction(`${user.name} has turned ${(state ? 'on' : 'off')} suppression of UNO game messages.`);
-			this.modlog('UNO SUPRESS', null, (state ? 'ON' : 'OFF'))
+			this.modlog('UNO SUPRESS', null, (state ? 'ON' : 'OFF'));
 		},
 
 		spectate: function (target, room, user) {

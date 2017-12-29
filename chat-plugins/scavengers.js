@@ -846,7 +846,7 @@ let commands = {
 
 		room.add(message + '.');
 		this.privateModAction(`(${message} by ${user.name}.)`);
-		this.modlog('SCAV TIMER', null, (result === 'off' ? 'OFF' : `${result} minutes`))
+		this.modlog('SCAV TIMER', null, (result === 'off' ? 'OFF' : `${result} minutes`));
 	},
 
 	inherit: function (target, room, user) {
@@ -875,7 +875,7 @@ let commands = {
 
 		room.game.onEnd(true, user);
 		this.privateModAction(`(${user.name} has reset the scavenger hunt.)`);
-		this.modlog('SCAV RESET')
+		this.modlog('SCAV RESET');
 	},
 
 	forceend: 'end',
@@ -894,7 +894,7 @@ let commands = {
 
 		room.game.onEnd(null, user);
 		this.privateModAction(`(${user.name} has ended the scavenger hunt.)`);
-		this.modlog('SCAV END')
+		this.modlog('SCAV END');
 	},
 
 	viewhunt: function (target, room, user) {
@@ -998,7 +998,7 @@ let commands = {
 		room.game = new ScavengerHunt(room, {userid: next.staffHostId, name: next.staffHostName}, next.hosts, false, next.questions);
 
 		if (target) this.sendReply(`|uhtmlchange|scav-queue|${formatQueue(room.scavQueue, user, room)}`);
-		this.modlog('SCAV NEW', null, `from queue: creators - ${hosts.map(h => h.userid)}`)
+		this.modlog('SCAV NEW', null, `from queue: creators - ${next.hosts.map(h => h.userid)}`);
 
 		// update the saved queue.
 		if (room.chatRoomData) {

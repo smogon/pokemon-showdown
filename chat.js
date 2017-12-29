@@ -600,13 +600,13 @@ class CommandContext {
 	}
 
 	privateModCommand(message, log) {
-		throw new Error(`this.privateModCommand has been renamed to this.privateModAction, which no longer writes to modlog.`)
+		throw new Error(`this.privateModCommand has been renamed to this.privateModAction, which no longer writes to modlog.`);
 	}
 	privateModAction(msg) {
 		this.room.sendMods(msg);
 		this.roomlog(msg);
 	}
-	
+
 	globalModlog(action, user, note) {
 		let buf = `(${this.room.id}) ${action}: `;
 		if (typeof user === 'string') {
@@ -618,11 +618,11 @@ class CommandContext {
 			buf += ` [${user.latestIp}]`;
 		}
 		buf += note;
-		
+
 		Rooms.global.modlog(buf);
 		this.logModAction(buf);
 	}
-	
+
 	modlog(action, user, note, noip) {
 		let buf = `(${this.room.id}) ${action}: `;
 		if (user) {
@@ -635,9 +635,9 @@ class CommandContext {
 				if (!noip) buf += ` [${user.latestIp}]`;
 			}
 		}
-		buf += ` by ${this.user.userid}`
+		buf += ` by ${this.user.userid}`;
 		if (note) buf += `: ${note}`;
-		
+
 		this.logModAction(buf);
 	}
 

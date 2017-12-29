@@ -864,14 +864,14 @@ exports.commands = {
 			if (!room.isOfficial) return this.errorReply(`This chat room is already unofficial.`);
 			delete room.isOfficial;
 			this.addModAction(`${user.name} made this chat room unofficial.`);
-			this.modlog('UNOFFICIALROOM')
+			this.modlog('UNOFFICIALROOM');
 			delete room.chatRoomData.isOfficial;
 			Rooms.global.writeChatRoomData();
 		} else {
 			if (room.isOfficial) return this.errorReply(`This chat room is already official.`);
 			room.isOfficial = true;
 			this.addModAction(`${user.name} made this chat room official.`);
-			this.modlog('OFFICIALROOM')
+			this.modlog('OFFICIALROOM');
 			room.chatRoomData.isOfficial = true;
 			Rooms.global.writeChatRoomData();
 		}
@@ -886,14 +886,14 @@ exports.commands = {
 			if (!room.pspl) return this.errorReply(`This chat room is already not a PSPL Winner room.`);
 			delete room.pspl;
 			this.addModAction(`${user.name} made this chat room no longer a PSPL Winner room.`);
-			this.modlog('PSPLROOM')
+			this.modlog('PSPLROOM');
 			delete room.chatRoomData.pspl;
 			Rooms.global.writeChatRoomData();
 		} else {
 			if (room.pspl) return this.errorReply("This chat room is already a PSPL Winner room.");
 			room.pspl = true;
 			this.addModAction(`${user.name} made this chat room a PSPL Winner room.`);
-			this.modlog('UNPSPLROOM')
+			this.modlog('UNPSPLROOM');
 			room.chatRoomData.pspl = true;
 			Rooms.global.writeChatRoomData();
 		}
@@ -935,8 +935,8 @@ exports.commands = {
 			room.users[userid].updateIdentity(room.id);
 		}
 
-		return this.addModAction(`This room was set as a subroom of ${main.title} by ${user.name}.`);
 		this.modlog('SUBROOM', null, `of ${main.title}`);
+		return this.addModAction(`This room was set as a subroom of ${main.title} by ${user.name}.`);
 	},
 
 	removesubroom: 'unsubroom',
@@ -960,8 +960,8 @@ exports.commands = {
 			room.users[userid].updateIdentity(room.id);
 		}
 
-		return this.addModAction(`This room was unset as a subroom by ${user.name}.`);
 		this.modlog('UNSUBROOM');
+		return this.addModAction(`This room was unset as a subroom by ${user.name}.`);
 	},
 
 	parentroom: 'subrooms',
@@ -1017,7 +1017,7 @@ exports.commands = {
 
 		this.privateModAction(`(${user.name} changed the roomdesc to: "${target}".)`);
 		this.modlog('ROOMDESC', null, `to "${target}"`);
-	
+
 		if (room.chatRoomData) {
 			room.chatRoomData.desc = room.desc;
 			Rooms.global.writeChatRoomData();
@@ -1070,7 +1070,7 @@ exports.commands = {
 		if (!room.introMessage) return this.errorReply("This room does not have a introduction set.");
 
 		this.privateModAction(`(${user.name} deleted the roomintro.)`);
-		this.modlog('DELETEROOMINTRO')
+		this.modlog('DELETEROOMINTRO');
 		this.roomlog(target);
 
 		delete room.introMessage;
@@ -1905,12 +1905,12 @@ exports.commands = {
 
 		let affected = Punishments.ban(targetUser, null, null, userReason);
 		let acAccount = (targetUser.autoconfirmed !== userid && targetUser.autoconfirmed);
-		let displayMessage
+		let displayMessage;
 		if (affected.length > 1) {
 			let guests = affected.length - 1;
 			affected = affected.slice(1).map(user => user.getLastName()).filter(alt => alt.substr(0, 7) !== '[Guest ');
 			guests -= affected.length;
-			displayMessage = "(" + name + "'s " + (acAccount ? " ac account: " + acAccount + ", " : "") + "banned alts: " + affected.join(", ") + (guests ? " [" + guests + " guests]" : "") + ")"
+			displayMessage = "(" + name + "'s " + (acAccount ? " ac account: " + acAccount + ", " : "") + "banned alts: " + affected.join(", ") + (guests ? " [" + guests + " guests]" : "") + ")";
 			this.privateModAction(displayMessage);
 			this.logModAction(displayMessage);
 			for (const user of affected) {
@@ -1972,7 +1972,7 @@ exports.commands = {
 		Punishments.ips.clear();
 		Punishments.savePunishments();
 		this.addModAction("All bans and locks have been lifted by " + user.name + ".");
-		this.modlog('UNBANALL')
+		this.modlog('UNBANALL');
 	},
 	unbanallhelp: [`/unbanall - Unban all IP addresses. Requires: & ~`],
 
