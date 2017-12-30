@@ -627,9 +627,10 @@ exports.commands = {
 		if (!this.runBroadcast()) return;
 		target = target.trim();
 		let mod = target.split(',');
+		let pokemon = mod[0];
 		mod = Dex.mod(toId(mod[mod.length - 1])) || Dex;
 		let targets = target.split(/ ?[,/ ] ?/);
-		let pokemon = mod.getTemplate(targets[0]);
+		pokemon = mod.getTemplate(pokemon);
 		let type1 = mod.getType(targets[0]);
 		let type2 = mod.getType(targets[1]);
 		let type3 = mod.getType(targets[2]);
