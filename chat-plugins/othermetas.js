@@ -74,7 +74,7 @@ exports.commands = {
 		}
 		let speciesItemCheck = template.baseSpecies === 'Silvally' ? template.requiredItem : 'either ' + template.requiredItems[0] + ' or ' + template.requiredItems[1];
 		if (['Multitype', 'RKS System'].includes(template.abilities['0']) && !['Arceus', 'Silvally'].includes(template.name)) {
-			this.errorReply(`${template.name} is required to hold ${speciesItemCheck}.`);
+			this.errorReply(`Warning: ${template.name} is required to hold ${speciesItemCheck}.`);
 		}
 		if (stone.isUnreleased) {
 			this.errorReply(`Warning: ${stone.name} is unreleased and is not usable in current Mix and Mega.`);
