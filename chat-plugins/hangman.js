@@ -99,7 +99,7 @@ class Hangman extends Rooms.RoomGame {
 		if (ourWord === guessedWord) {
 			for (let [i, letter] of this.wordSoFar.entries()) {
 				if (letter === '_') {
-					letter = this.word[i];
+					this.wordSoFar[i] = this.word[i];
 				}
 			}
 			this.incorrectGuesses = -1;
