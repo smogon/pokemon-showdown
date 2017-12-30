@@ -12,9 +12,11 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 7] Random Battle",
-		desc: ["Randomized teams of level-balanced Pok&eacute;mon with sets that are generated to be competitively viable."],
-
-		mod: 'gen7',
+		desc: ["Randomized teams of level-balanced Pok&eacute;mon with sets that are generated to be competitively viable."
+			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3591157/\">Sets and Suggestions"</a>",
+         "&bullet; <a href=\"http://www.smogon.com/forums/threads/3616946/\">Role Compendium"</a>",
+				],
+      mod: 'gen7',
 		team: 'random',
 		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod'],
 	},
@@ -257,7 +259,9 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 7] Random Doubles Battle",
-
+      desc: [ 
+			 "&bullet; <a href=\"http://www.smogon.com/forums/threads/3601525/\">Sets and Suggestions</a>" 
+            ],
 		mod: 'gen7',
 		gameType: 'doubles',
 		team: 'random',
@@ -704,7 +708,7 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 6] Battle Factory",
-
+      desc: [Randomized teams of Pokémon for a generated Smogon tier with sets that are competitively viable.],
 		mod: 'gen6',
 		team: 'randomFactory',
 		ruleset: ['Pokemon', 'Sleep Clause Mod', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Mega Rayquaza Clause'],
@@ -1512,7 +1516,8 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 1] OU (tradeback)",
-
+      desc: [ Generation 1 OU with movepool additions from the Time Capsule.
+          "&bullet; <a href=\"http://www.smogon.com/articles/rby-tradebacks-ou/\">Information</a>"    
 		mod: 'gen1',
 		searchShow: false,
 		ruleset: ['Pokemon', 'Allow Tradeback', 'Sleep Clause Mod', 'Freeze Clause Mod', 'Species Clause', 'OHKO Clause', 'Evasion Moves Clause', 'HP Percentage Mod', 'Cancel Mod'],
