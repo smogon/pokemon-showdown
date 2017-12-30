@@ -581,7 +581,6 @@
 64.118.80.0,64.118.95.255,4rweb.com,http://4rweb.com/
 64.119.160.0,64.119.191.255,latisys,http://www.latisys.com/
 64.120.0.0,64.120.127.255,Ubiquity Server Solutions,http://www.ubiquityservers.com/
-64.120.128.0,64.120.255.255,hostnoc,http://www.hostnoc.net/
 64.130.0.0,64.130.63.255,Pair Networks,http://www.pair.com/
 64.131.64.0,64.131.95.255,ServInt,http://www.servint.net/
 64.137.128.0,64.137.255.255,KW Datacenter CA,http://www.kwdatacentre.com/
@@ -654,7 +653,6 @@
 66.85.128.0,66.85.191.255,Secure Servers,http://www.securedservers.com/
 66.90.64.0,66.90.127.255,FDC Servers,http://fdcservers.net/
 66.96.128.0,66.96.191.255,The Endurance International Group Inc,http://www.enduranceinternational.com/
-66.96.192.0,66.96.255.255,hostnoc,http://www.hostnoc.net/
 66.98.128.0,66.98.255.255,SoftLayer,http://www.softlayer.com/
 66.111.64.0,66.111.95.255,PEER 1,http://www.peer1.com/
 66.111.96.0,66.111.111.255,Neospire,http://www.neospire.net/
@@ -676,7 +674,6 @@
 66.165.128.0,66.165.159.255,ActiveHost,http://www.activehost.com/
 66.172.0.0,66.172.63.255,Cyberverse,http://www.cyberverse.com/
 66.180.192.0,66.180.207.255,Cyberverse,http://www.cyberverse.com/
-66.197.128.0,66.197.255.255,hostnoc,http://www.hostnoc.net/
 66.199.128.0,66.199.191.255,PEER 1,http://www.peer1.com/
 66.206.32.0,66.206.47.255,Turnkey Internet,http://turnkeyinternet.net/
 66.209.64.0,66.209.95.255,SWITCH Communications Group LLC,http://www.switchnap.com/
@@ -1486,7 +1483,6 @@
 95.215.60.0,95.215.63.255,sologigabit.com,http://www.sologigabit.com/en/Dedicated-Servers
 96.6.0.0,96.7.255.255,Akamai,http://akamai.com/
 96.8.112.0,96.8.127.255,Velocity Servers,http://www.velocity-servers.net/
-96.9.128.0,96.9.191.255,hostnoc,http://www.hostnoc.net/
 96.16.0.0,96.17.255.255,Akamai,http://akamai.com/
 96.30.0.0,96.30.63.255,wiredtree,http://www.wiredtree.com/
 96.31.64.0,96.31.95.255,Hivelocity Hosting,http://www.hivelocity.net/
@@ -1925,7 +1921,6 @@
 173.208.0.0,173.208.127.255,Ubiquity Server Solutions,http://www.ubiquityservers.com/
 173.208.128.0,173.208.255.255,WholeSale Internet Inc,http://www.wholesaleinternet.com/
 173.211.0.0,173.211.127.255,Colocation America Inc,http://www.colocationamerica.com/
-173.212.192.0,173.212.255.255,hostnoc,http://www.hostnoc.net/
 173.213.64.0,173.213.127.255,infinitie.net,http://www.serverhub.com/
 173.213.224.0,173.213.239.255,Edgewebhosting,http://www.edgewebhosting.net/
 173.213.240.0,173.213.255.255,American Internet Services,http://americanis.net/
@@ -2162,13 +2157,11 @@
 182.174.0.0,182.175.255.255,21vianet,http://21vianet.com/
 183.81.160.0,183.81.167.255,IP ServerOne,http://ipserverone.com/
 183.84.0.0,183.85.255.255,21vianet,http://21vianet.com/
-184.22.0.0,184.22.255.255,hostnoc,http://www.hostnoc.net/
 184.24.0.0,184.31.255.255,Akamai,http://akamai.com/
 184.50.0.0,184.51.255.255,Akamai,http://akamai.com/
 184.72.0.0,184.73.255.255,Amazon AWS,http://www.amazon.com/aws/
 184.75.208.0,184.75.223.255,Amanah,https://www.amanah.com/
 184.75.240.0,184.75.255.255,Elvsoft,http://www.elvsoft.com/
-184.82.0.0,184.82.255.255,hostnoc,http://www.hostnoc.net/
 184.84.0.0,184.87.255.255,Akamai,http://akamai.com/
 184.94.144.0,184.94.159.255,MojoHost,http://www.mojohost.com
 184.95.32.0,184.95.63.255,Secure Servers,http://www.securedservers.com/
