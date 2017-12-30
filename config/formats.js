@@ -13,7 +13,7 @@ exports.Formats = [
 	{
 		name: "[Gen 7] Random Battle",
 		desc: ["Randomized teams of level-balanced Pok&eacute;mon with sets that are generated to be competitively viable."
-			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3591157/\">Sets and Suggestions"</a>",
+			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3591157/\">Sets and Suggestions</a>",
          "&bullet; <a href=\"http://www.smogon.com/forums/threads/3616946/\">Role Compendium"</a>"
 				],
       mod: 'gen7',
