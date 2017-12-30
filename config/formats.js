@@ -18,7 +18,7 @@ exports.Formats = [
 			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3616946/\">Role Compendium</a>",
 		],
 
-      mod: 'gen7',
+		mod: 'gen7',
 		team: 'random',
 		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod'],
 	},
