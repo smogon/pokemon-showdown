@@ -31,7 +31,7 @@ exports.BattleStatuses = {
 			return this.random(2, 4);
 		},
 		onResidual: function (target) {
-			let move = this.getMove(target.lastMove);
+			let move = target.lastMove;
 			if (!move.self || move.self.volatileStatus !== 'lockedmove') {
 				// don't lock, and bypass confusion for calming
 				delete target.volatiles['lockedmove'];
@@ -44,7 +44,7 @@ exports.BattleStatuses = {
 			target.addVolatile('confusion');
 		},
 		onLockMove: function (pokemon) {
-			return pokemon.lastMove;
+			return pokemon.lastMove.id;
 		},
 	},
 	confusion: {

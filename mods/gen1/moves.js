@@ -232,7 +232,7 @@ exports.BattleMovedex = {
 			// It will fail if the last move selected by the opponent has base power 0 or is not Normal or Fighting Type.
 			// If both are true, counter will deal twice the last damage dealt in battle, no matter what was the move.
 			// That means that, if opponent switches, counter will use last counter damage * 2.
-			let lastUsedMove = this.getMove(target.side.lastMove);
+			let lastUsedMove = target.side.lastMove && this.getMove(target.side.lastMove.id);
 			if (lastUsedMove && lastUsedMove.basePower > 0 && ['Normal', 'Fighting'].includes(lastUsedMove.type) && this.lastDamage > 0 && !this.willMove(target)) {
 				return 2 * this.lastDamage;
 			}
@@ -554,10 +554,10 @@ exports.BattleMovedex = {
 		inherit: true,
 		onHit: function (pokemon) {
 			let foe = pokemon.side.foe.active[0];
-			if (!foe || !foe.lastMove || foe.lastMove === 'mirrormove') {
+			if (!foe || !foe.lastMove || foe.lastMove.id === 'mirrormove') {
 				return false;
 			}
-			this.useMove(foe.lastMove, pokemon);
+			this.useMove(foe.lastMove.id, pokemon);
 		},
 	},
 	nightshade: {

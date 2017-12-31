@@ -15,7 +15,7 @@ describe('Assault Vest', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: 'Abra', ability: 'synchronize', moves: ['teleport']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Abra', ability: 'synchronize', item: 'assaultvest', moves: ['teleport']}]);
 		battle.commitDecisions();
-		assert.strictEqual(battle.p2.active[0].lastMove, 'struggle');
+		assert.strictEqual(battle.p2.active[0].lastMove.id, 'struggle');
 	});
 
 	it('should not prevent the use of Status moves', function () {

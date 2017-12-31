@@ -143,7 +143,8 @@ class Battle extends Dex.ModdedDex {
 		this.started = false;
 		this.active = false;
 		this.eventDepth = 0;
-		this.lastMove = '';
+		/**@type {?Move} */
+		this.lastMove = null;
 		this.activeMove = null;
 		this.activePokemon = null;
 		this.activeTarget = null;
@@ -433,7 +434,7 @@ class Battle extends Dex.ModdedDex {
 	clearActiveMove(failed) {
 		if (this.activeMove) {
 			if (!failed) {
-				this.lastMove = this.activeMove.id;
+				this.lastMove = this.activeMove;
 			}
 			this.activeMove = null;
 			this.activePokemon = null;

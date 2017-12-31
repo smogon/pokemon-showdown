@@ -89,7 +89,8 @@ class Pokemon {
 		/**@type {?number} */
 		this.draggedIn = null;
 
-		this.lastMove = '';
+		/**@type {?Move} */
+		this.lastMove = null;
 		/**@type {string | boolean} */
 		this.moveThisTurn = '';
 
@@ -501,13 +502,13 @@ class Pokemon {
 	}
 
 	/**
-	 * @param {string | Move} move
+	 * @param {Move} move
 	 * @param {number} targetLoc
 	 */
 	moveUsed(move, targetLoc) {
-		this.lastMove = this.battle.getMove(move).id;
+		this.lastMove = move;
 		this.lastMoveTargetLoc = targetLoc;
-		this.moveThisTurn = this.lastMove;
+		this.moveThisTurn = move.id;
 	}
 
 	/**
@@ -881,7 +882,7 @@ class Pokemon {
 			this.forceSwitchFlag = false;
 		}
 
-		this.lastMove = '';
+		this.lastMove = null;
 		this.moveThisTurn = '';
 
 		this.lastDamage = 0;
