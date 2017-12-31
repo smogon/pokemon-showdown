@@ -1146,8 +1146,9 @@ let commands = {
 			if (params.length < 1) {
 				return this.sendReply("Usage: " + cmd + " <comma-separated arguments>");
 			}
-			const name = Chat.escapeHTML(params[0].trim());
-			if (!name.length) return this.errorReply("The tournament's name cannot be blank.");
+			let name = this.canTalk(params[0].trim());
+			if (!name) return;
+			name = Chat.escapeHTML(name);
 			if (name.length > MAX_CUSTOM_NAME_LENGTH) return this.errorReply("The tournament's name cannot exceed " + MAX_CUSTOM_NAME_LENGTH + " characters.");
 			if (name.includes('|')) return this.errorReply("The tournament's name cannot include the | symbol.");
 			tournament.format = name;
