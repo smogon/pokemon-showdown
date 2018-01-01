@@ -1037,7 +1037,7 @@ exports.BattleItems = {
 		onModifyPriority: function (priority, pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				if (pokemon.eatItem()) {
-					this.add('-activate', pokemon, 'item: Custap Berry');
+					this.add('-activate', pokemon, 'item: Custap Berry', '[consumed]');
 					pokemon.removeVolatile('custapberry');
 					return Math.round(priority) + 0.1;
 				}
@@ -2837,7 +2837,7 @@ exports.BattleItems = {
 			}
 			moveSlot.pp += 10;
 			if (moveSlot.pp > moveSlot.maxpp) moveSlot.pp = moveSlot.maxpp;
-			this.add('-activate', pokemon, 'item: Leppa Berry', moveSlot.move);
+			this.add('-activate', pokemon, 'item: Leppa Berry', moveSlot.move, '[consumed]');
 			if (pokemon.item !== 'leppaberry') {
 				let foeActive = pokemon.side.foe.active;
 				let foeIsStale = false;
