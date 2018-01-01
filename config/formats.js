@@ -831,34 +831,35 @@ exports.Formats = [
 		column: 3,
 	},
 	{
-		name: "[Gen 1] UU",
-		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/3573896/\">RBY UU Discussion</a>"],
+		name: "[Gen 2] UU",
+		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/3576710/\">GSC UU Discussion</a>"],
+
+		mod: 'gen2',
+		ruleset: ['[Gen 2] OU'],
+		banlist: ['OU', 'BL'],
+	},
+	{
+		name: "[Gen 5] RU",
+		desc: [
+			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3473124/\">BW2 RU Viability Ranking</a>",
+			"&bullet; <a href=\"http://www.smogon.com/forums/posts/6431094/\">BW2 Sample Teams</a>",
+		],
+
+		mod: 'gen5',
+		// searchShow: false,
+		ruleset: ['[Gen 5] UU'],
+		banlist: ['UU', 'BL2', 'Shell Smash + Baton Pass', 'Snow Warning'],
+	},
+	{
+		name: "[Gen 1] STABmons",
+		desc: [
+			"Pok&eacute;mon can use any move of their typing, in addition to the moves they can normally learn.",
+			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3587949/\">STABmons</a>",
+		],
 
 		mod: 'gen1',
-		ruleset: ['[Gen 1] OU'],
-		banlist: ['OU'],
-	},
-	{
-		name: "[Gen 4] Balanced Hackmons",
-		desc: [
-			"Anything that can be hacked in-game and is usable in local battles is allowed.",
-			"&bullet; <a href=\"http://www.smogon.com/forums/posts/7258505/\">Balanced Hackmons</a>",
-		],
-
-		mod: 'gen4',
-		ruleset: ['Pokemon', 'Ability Clause', 'OHKO Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod'],
-		banlist: ['Arena Trap', 'Huge Power', 'Pure Power', 'Shadow Tag', 'Wonder Guard', 'Drizzle ++ Swift Swim', 'Drought ++ Chlorophyll', 'Sand Stream ++ Sand Rush'],
-	},
-	{
-		name: "[Gen 6] OU (no Team Preview)",
-		desc: [
-			"&bullet; <a href=\"http://www.smogon.com/dex/xy/tags/ou/\">ORAS OU Banlist</a>",
-			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3596900/\">ORAS OU Viability Rankings</a>",
-		],
-
-		mod: 'gen6',
-		ruleset: ['Pokemon', 'Standard', 'Baton Pass Clause', 'Swagger Clause'],
-		banlist: ['Uber', 'Arena Trap', 'Shadow Tag', 'Soul Dew'],
+		ruleset: ['[Gen 1] OU', 'Ignore STAB Moves'],
+		banlist: [],
 	},
 
 	// Past Gens OU
@@ -1228,18 +1229,6 @@ exports.Formats = [
 		searchShow: false,
 		ruleset: ['[Gen 5] OU'],
 		banlist: ['OU', 'BL', 'Drought', 'Sand Stream', 'Snow Warning'],
-	},
-	{
-		name: "[Gen 5] RU",
-		desc: [
-			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3473124/\">BW2 RU Viability Ranking</a>",
-			"&bullet; <a href=\"http://www.smogon.com/forums/posts/6431094/\">BW2 Sample Teams</a>",
-		],
-
-		mod: 'gen5',
-		searchShow: false,
-		ruleset: ['[Gen 5] UU'],
-		banlist: ['UU', 'BL2', 'Shell Smash + Baton Pass', 'Snow Warning'],
 	},
 	{
 		name: "[Gen 5] NU",
