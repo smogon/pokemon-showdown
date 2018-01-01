@@ -3357,7 +3357,7 @@ exports.commands = {
 			loghash: datahash,
 			p1: players[0],
 			p2: players[1],
-			format: room.format,
+			format: format.id,
 			rating: rating,
 			hidden: room.isPrivate ? '1' : '',
 		});
