@@ -381,94 +381,169 @@ exports.Formats = [
 		column: 2,
 	},
 	{
-		name: "[Gen 7] Partners in Crime",
+		name: "[Gen 7] Inheritance",
 		desc: [
-			"Doubles-based metagame where both active ally Pok&eacute;mon share abilities and moves.",
-			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3618488/\">Partners in Crime</a>",
+			"Pok&eacute;mon may use the ability and moves of another, as long as they forfeit their own learnset.",
+			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3592844/\">Inheritance</a>",
 		],
 
-		mod: 'pic',
-		gameType: 'doubles',
-		ruleset: ['[Gen 7] Doubles OU', 'Sleep Clause Mod'],
-		banlist: ['Huge Power', 'Imposter', 'Parental Bond', 'Pure Power', 'Wonder Guard', 'Kangaskhanite', 'Mawilite', 'Medichamite', 'Mimic', 'Sketch', 'Transform'],
-		onDisableMovePriority: -1,
-		onSwitchInPriority: 2,
+		mod: 'gen7',
+		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
+		banlist: ['Uber', 'Kartana', 'Kyurem-Black', 'Gyarados-Mega', 'Regigigas', 'Shedinja', 'Slaking', 'Arena Trap', 'Huge Power', 'Pure Power', 'Shadow Tag', 'Speed Boost', 'Water Bubble', 'Assist', 'Baton Pass', 'Chatter'],
+		noChangeForme: true,
+		noChangeAbility: true,
+		getEvoFamily: function (species) {
+			let template = Dex.getTemplate(species);
+			while (template.prevo) {
+				template = Dex.getTemplate(template.prevo);
+			}
+			return template.speciesid;
+		},
+		validateSet: function (set, teamHas) {
+			if (!this.format.abilityMap) {
+				let abilityMap = Object.create(null);
+				for (let speciesid in Dex.data.Pokedex) {
+					let pokemon = Dex.data.Pokedex[speciesid];
+					if (pokemon.num < 1 || Dex.data.FormatsData[speciesid].tier === 'Uber' || this.format.banlist.includes(pokemon.species) || pokemon.species === 'Smeargle') continue;
+					if (Dex.data.FormatsData[speciesid].requiredItem || Dex.data.FormatsData[speciesid].requiredMove) continue;
+					for (let key in pokemon.abilities) {
+						let abilityId = toId(pokemon.abilities[key]);
+						if (abilityMap[abilityId]) {
+							abilityMap[abilityId][pokemon.evos ? 'push' : 'unshift'](speciesid);
+						} else {
+							abilityMap[abilityId] = [speciesid];
+						}
+					}
+				}
+				this.format.abilityMap = abilityMap;
+			}
+
+			this.format.noChangeForme = false;
+			let problems = Dex.getFormat('Pokemon').onChangeSet.call(Dex, set, this.format) || [];
+			this.format.noChangeForme = true;
+
+			if (problems.length) return problems;
+
+			let species = toId(set.species);
+			let template = Dex.getTemplate(species);
+			if (!template.exists) return [`The Pokemon "${set.species}" does not exist.`];
+			if (template.isUnreleased) return [`${template.species} is unreleased.`];
+			if (template.tier === 'Uber' || this.format.banlist.includes(template.species)) return [`${template.species} is banned.`];
+
+			let name = set.name;
+
+			let abilityId = toId(set.ability);
+
+			if (!abilityId || !(abilityId in Dex.data.Abilities)) return [`${name} needs to have a valid ability.`];
+			let pokemonWithAbility = this.format.abilityMap[abilityId];
+			if (!pokemonWithAbility) return [`"${set.ability}" is not available on a legal Pokemon.`];
+
+			let canonicalSource = ''; // Specific for the basic implementation of Donor Clause (see onValidateTeam).
+			let validSources = set.abilitySources = []; // Evolution families
+			for (const donor of pokemonWithAbility) {
+				let donorTemplate = Dex.getTemplate(donor);
+				let evoFamily = this.format.getEvoFamily(donorTemplate);
+
+				if (validSources.indexOf(evoFamily) >= 0) continue;
+
+				if (set.name === set.species) delete set.name;
+				set.species = donorTemplate.species;
+				problems = this.validateSet(set, teamHas) || [];
+
+				if (!problems.length) {
+					canonicalSource = donorTemplate.species;
+					validSources.push(evoFamily);
+				}
+				if (validSources.length > 1) {
+					// Specific for the basic implementation of Donor Clause (see onValidateTeam).
+					break;
+				}
+			}
+
+			set.species = template.species;
+			if (!validSources.length && pokemonWithAbility.length > 1) {
+				return [`${template.species}'s set is illegal.`];
+			}
+			if (!validSources.length) {
+				problems.unshift(`${template.species} has an illegal set with an ability from ${Dex.getTemplate(pokemonWithAbility[0]).name}.`);
+				return problems;
+			}
+
+			// Protocol: Include the data of the donor species in the `ability` data slot.
+			// Afterwards, we are going to reset the name to what the user intended. :]
+			set.ability = `${set.ability}0${canonicalSource}`;
+		},
+		onValidateTeam: function (team, format) {
+			// Donor Clause
+			let evoFamilyLists = [];
+			for (let i = 0; i < team.length; i++) {
+				let set = team[i];
+				if (!set.abilitySources) continue;
+				evoFamilyLists.push(set.abilitySources.map(format.getEvoFamily));
+			}
+
+			// Checking actual full incompatibility would require expensive algebra.
+			// Instead, we only check the trivial case of multiple Pokémon only legal for exactly one family. FIXME?
+			// This clause has only gotten more complex over time, so this is probably a won't fix.
+			let requiredFamilies = Object.create(null);
+			for (let i = 0; i < evoFamilyLists.length; i++) {
+				let evoFamilies = evoFamilyLists[i];
+				if (evoFamilies.length !== 1) continue;
+				let [familyId] = evoFamilies;
+				if (!(familyId in requiredFamilies)) requiredFamilies[familyId] = 1;
+				requiredFamilies[familyId]++;
+				if (requiredFamilies[familyId] > 2) return [`You are limited to up to two inheritances from each evolution family by the Donor Clause.`, `(You inherit more than twice from ${this.getTemplate(familyId).species}).`];
+			}
+		},
+		onBegin: function () {
+			for (let pokemon of this.p1.pokemon.concat(this.p2.pokemon)) {
+				if (pokemon.baseAbility.includes('0')) {
+					let donor = pokemon.baseAbility.split('0')[1];
+					pokemon.donor = toId(donor);
+					pokemon.baseAbility = pokemon.baseAbility.split('0')[0];
+					pokemon.ability = pokemon.baseAbility;
+				}
+			}
+		},
 		onSwitchIn: function (pokemon) {
-			if (this.p1.active.every(ally => ally && !ally.fainted)) {
-				let p1a = this.p1.active[0], p1b = this.p1.active[1];
-				if (p1a.ability !== p1b.ability) {
-					let p1a_innate = 'ability' + p1b.ability;
-					p1a.volatiles[p1a_innate] = {id: p1a_innate, target: p1a};
-					let p1b_innate = 'ability' + p1a.ability;
-					p1b.volatiles[p1b_innate] = {id: p1b_innate, target: p1b};
-				}
-			}
-			if (this.p2.active.every(ally => ally && !ally.fainted)) {
-				let p2a = this.p2.active[0], p2b = this.p2.active[1];
-				if (p2a.ability !== p2b.ability) {
-					let p2a_innate = 'ability' + p2b.ability;
-					p2a.volatiles[p2a_innate] = {id: p2a_innate, target: p2a};
-					let p2b_innate = 'ability' + p2a.ability;
-					p2b.volatiles[p2b_innate] = {id: p2b_innate, target: p2b};
-				}
-			}
-			let ally = pokemon.side.active.find(ally => ally && ally !== pokemon && !ally.fainted);
-			if (ally && ally.ability !== pokemon.ability) {
-				if (!pokemon.innate) {
-					pokemon.innate = 'ability' + ally.ability;
-					delete pokemon.volatiles[pokemon.innate];
-					pokemon.addVolatile(pokemon.innate);
-				}
-				if (!ally.innate) {
-					ally.innate = 'ability' + pokemon.ability;
-					delete ally.volatiles[ally.innate];
-					ally.addVolatile(ally.innate);
-				}
-			}
-		},
-		onSwitchOut: function (pokemon) {
-			if (pokemon.innate) {
-				pokemon.removeVolatile(pokemon.innate);
-				delete pokemon.innate;
-			}
-			let ally = pokemon.side.active.find(ally => ally && ally !== pokemon && !ally.fainted);
-			if (ally && ally.innate) {
-				ally.removeVolatile(ally.innate);
-				delete ally.innate;
-			}
-		},
-		onFaint: function (pokemon) {
-			if (pokemon.innate) {
-				pokemon.removeVolatile(pokemon.innate);
-				delete pokemon.innate;
-			}
-			let ally = pokemon.side.active.find(ally => ally && ally !== pokemon && !ally.fainted);
-			if (ally && ally.innate) {
-				ally.removeVolatile(ally.innate);
-				delete ally.innate;
-			}
+			if (!pokemon.donor) return;
+			let donorTemplate = Dex.getTemplate(pokemon.donor);
+			if (!donorTemplate.exists) return;
+			// Place volatiles on the Pokémon to show the donor details.
+			this.add('-start', pokemon, donorTemplate.species, '[silent]');
 		},
 	},
 	{
-		name: "[Gen 7] Mediocremons",
+		name: "[Gen 7] Alphabet Cup",
 		desc: [
-			"Only Pok&eacute;mon whose stats are all less than 100 are allowed.",
-			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3602094/\">Mediocremons</a>",
+			"Pok&eacute;mon can learn any move it shares the first letter of its name with.",
+			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3617977/\">Alphabet Cup</a>",
 		],
 
 		mod: 'gen7',
 		ruleset: ['[Gen 7] OU'],
-		banlist: ['Clefable', 'Kingdra', 'Nidoqueen', 'Silvally', 'Type: Null', 'Venomoth', 'Wishiwashi', 'Huge Power', 'Pure Power'],
-		onValidateSet: function (set) {
-			let problems = [];
-			let template = this.getTemplate(set.species);
-			let item = this.getItem(set.item);
-			if (item.megaEvolves === template.species) template = this.getTemplate(item.megaStone);
-			let statTable = {hp: 'an HP', atk: 'an Attack', def: 'a Defense', spa: 'a Special Attack', spd: 'a Special Defense', spe: 'a Speed'};
-			for (let stat in statTable) {
-				if (template.baseStats[stat] >= 100) problems.push(template.species + " has " + statTable[stat] + " of " + template.baseStats[stat] + ", which is banned.");
+		noLearn: ['Geomancy', 'Shell Smash', 'Sketch'],
+		validateSet: function (set, teamHas) {
+			let template = Dex.getTemplate(set.species);
+			const letter = template.id.slice(0, 1);
+			if (!template.learnset) template = Dex.getTemplate(template.baseSpecies);
+			template = Object.assign({}, template);
+			for (let i = 0; i < set.moves.length; i++) {
+				let move = Dex.getMove(set.moves[i]);
+				if (this.format.noLearn.includes(move.name) || template.evos.length || move.isZ || move.isNonstandard) continue;
+				if (move.id.slice(0, 1) === letter) template.learnset[move.id] = ['7T'];
 			}
-			return problems;
+			return this.validateSet(set, teamHas, template);
+		},
+		onValidateTeam: function (team) {
+			let alphabetTable = {};
+			for (let i = 0; i < team.length; i++) {
+				let letter = toId(team[i].species).slice(0, 1);
+				if (alphabetTable[letter]) {
+					return ["You are limited to one Pokémon per letter.", "(You have more than one Pokémon beginning with " + letter.toUpperCase() + ")"];
+				}
+				alphabetTable[letter] = true;
+			}
 		},
 	},
 	{
@@ -641,7 +716,6 @@ exports.Formats = [
 			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3598418/\">Camomons</a>",
 		],
 		mod: 'gen7',
-		searchShow: false,
 		ruleset: ['[Gen 7] OU'],
 		banlist: ['Shedinja'],
 		onModifyTemplate: function (template, target, source) {
@@ -665,6 +739,7 @@ exports.Formats = [
 		],
 
 		mod: 'gen7',
+		searchShow: false,
 		ruleset: ['[Gen 7] OU', 'Ignore STAB Moves'],
 		banlist: ['Kartana', 'Komala', 'Kyurem-Black', 'Silvally', 'Tapu Koko', 'Tapu Lele', 'Aerodactylite', 'King\'s Rock', 'Metagrossite', 'Razor Fang'],
 		noLearn: ['Acupressure', 'Belly Drum', 'Chatter', 'Geomancy', 'Lovely Kiss', 'Shell Smash', 'Shift Gear', 'Thousand Arrows'],
