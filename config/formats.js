@@ -522,19 +522,6 @@ exports.Formats = [
 
 		mod: 'gen7',
 		ruleset: ['[Gen 7] OU'],
-		noLearn: ['Geomancy', 'Shell Smash', 'Sketch'],
-		validateSet: function (set, teamHas) {
-			let template = Dex.getTemplate(set.species);
-			const letter = template.id.slice(0, 1);
-			if (!template.learnset) template = Dex.getTemplate(template.baseSpecies);
-			template = Object.assign({}, template);
-			for (let i = 0; i < set.moves.length; i++) {
-				let move = Dex.getMove(set.moves[i]);
-				if (this.format.noLearn.includes(move.name) || template.evos.length || move.isZ || move.isNonstandard) continue;
-				if (move.id.slice(0, 1) === letter) template.learnset[move.id] = ['7T'];
-			}
-			return this.validateSet(set, teamHas, template);
-		},
 		onValidateTeam: function (team) {
 			let alphabetTable = {};
 			for (let i = 0; i < team.length; i++) {
