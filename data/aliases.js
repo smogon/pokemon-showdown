@@ -786,7 +786,7 @@ exports.BattleAliases = {
 	"zpikachucap": "10,000,000 Volt Thunderbolt",
 	"zplayrough": "Let's Snuggle Forever",
 	"zpoison": "Acid Downpour",
-	"zprimarina": "Oceanic Operetta
+	"zprimarina": "Oceanic Operetta",
 	"zpsychic": "Shattered Psyche",
 	"zraichu": "Stoked Sparksurfer",
 	"zsnorlax": "Pulverizing Pancake",
