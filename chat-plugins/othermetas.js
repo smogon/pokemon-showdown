@@ -70,7 +70,10 @@ exports.commands = {
 		}
 		let cannotMega = Dex.getFormat('gen7mixandmega').cannotMega;
 		if (cannotMega.includes(template.name) && template.name !== stone.megaEvolves && !template.isMega) { // Separate messages because there's a difference between being already mega evolved / NFE and being banned from mega evolving
-			this.errorReply(`Warning: ${template.name} is banned from mega evolving with a non-native mega stone in Mix and Mega and therefore cannot use ${toId(sep[1]) === 'dragonascent' ? 'Dragon Ascent' : stone.name} in actual play.`);
+			this.errorReply(`Warning: ${template.name} is banned from mega evolving with a non-native mega stone in Mix and Mega.`);
+		}
+		if (['Multitype', 'RKS System'].includes(template.abilities['0']) && !['Arceus', 'Silvally'].includes(template.name)) {
+			this.errorReply(`Warning: ${template.name} is required to hold ${template.baseSpecies === 'Silvally' ? template.requiredItem : 'either ' + template.requiredItems[0] + ' or ' + template.requiredItems[1]}.`);
 		}
 		if (stone.isUnreleased) {
 			this.errorReply(`Warning: ${stone.name} is unreleased and is not usable in current Mix and Mega.`);
