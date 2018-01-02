@@ -405,7 +405,7 @@ exports.Formats = [
 				let abilityMap = Object.create(null);
 				for (let speciesid in Dex.data.Pokedex) {
 					let pokemon = Dex.data.Pokedex[speciesid];
-					if (pokemon.num < 1 || this.format.banlist.includes(pokemon.species) || pokemon.species === 'Smeargle') continue;
+					if (pokemon.num < 1 || pokemon.species === 'Smeargle') continue;
 					if (Dex.data.FormatsData[speciesid].requiredItem || Dex.data.FormatsData[speciesid].requiredMove) continue;
 					for (let key in pokemon.abilities) {
 						let abilityId = toId(pokemon.abilities[key]);
@@ -427,9 +427,10 @@ exports.Formats = [
 
 			let species = toId(set.species);
 			let template = Dex.getTemplate(species);
+			let megaTemplate = Dex.getTemplate(Dex.getItem(set.item).megaStone);
 			if (!template.exists) return [`The Pokemon "${set.species}" does not exist.`];
 			if (template.isUnreleased) return [`${template.species} is unreleased.`];
-			if (template.tier === 'Uber' || this.format.banlist.includes(template.species)) return [`${template.species} is banned.`];
+			if (megaTemplate.tier === 'Uber' || template.tier === 'Uber' || this.format.banlist.includes(template.species)) return [`${megaTemplate.tier === 'Uber' ? megaTemplate.species : template.species} is banned.`];
 
 			let name = set.name;
 
