@@ -18,14 +18,12 @@ exports.BattleAliases = {
 	"bh": "[Gen 7] Balanced Hackmons",
 	"mnm": "[Gen 7] Mix and Mega",
 	"aaa": "[Gen 7] Almost Any Ability",
-	"ht": "[Gen 7] Hidden Type",
 	"2v2": "[Gen 7] 2v2 Doubles",
 	"cc1v1": "[Gen 7] Challenge Cup 1v1",
 	"cc2v2": "[Gen 7] Challenge Cup 2v2",
 	"hc": "[Gen 7] Hackmons Cup",
 	"monorandom": "[Gen 7] Monotype Random Battle",
 	"bf": "[Gen 6] Battle Factory",
-	"gen6inverse": "[Gen 6] Inverse Battle",
 
 	// mega evos
 	"fabio": "Ampharos-Mega",
