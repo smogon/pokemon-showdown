@@ -388,8 +388,8 @@ exports.Formats = [
 		],
 
 		mod: 'gen7',
-		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
-		banlist: ['Uber', 'Kartana', 'Kyurem-Black', 'Gyarados-Mega', 'Regigigas', 'Shedinja', 'Slaking', 'Arena Trap', 'Huge Power', 'Pure Power', 'Shadow Tag', 'Speed Boost', 'Water Bubble', 'Assist', 'Baton Pass', 'Chatter'],
+		ruleset: ['[Gen 7] OU'],
+		banlist: ['Hoopa-Unbound', 'Kartana', 'Kyurem-Black', 'Gyarados-Mega', 'Regigigas', 'Shedinja', 'Slaking', 'Huge Power', 'Imposter', 'Pure Power', 'Speed Boost', 'Water Bubble', 'Assist', 'Chatter'],
 		noChangeForme: true,
 		noChangeAbility: true,
 		getEvoFamily: function (species) {
