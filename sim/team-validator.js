@@ -934,9 +934,8 @@ class Validator {
 				if (template.baseSpecies === 'Arceus' || template.baseSpecies === 'Silvally' || types.includes(move.type)) return false;
 			}
 			if (format.id === 'gen7alphabetcup') {
-				let bans = ['Geomancy', 'Shell Smash', 'Sketch'];
 				const letter = template.id.slice(0, 1);
-				if (move.id.slice(0, 1) === letter && !move.isZ && !bans.includes(move.name)) return false;
+				if (move.id.slice(0, 1) === letter && !move.isZ && !noLearn.includes(move.name)) return false;
 			}
 			if (!template.learnset) {
 				if (template.baseSpecies !== template.species) {
