@@ -405,7 +405,7 @@ exports.Formats = [
 				let abilityMap = Object.create(null);
 				for (let speciesid in Dex.data.Pokedex) {
 					let pokemon = Dex.data.Pokedex[speciesid];
-					if (pokemon.num < 1 || Dex.data.FormatsData[speciesid].tier === 'Uber' || this.format.banlist.includes(pokemon.species) || pokemon.species === 'Smeargle') continue;
+					if (pokemon.num < 1 || this.format.banlist.includes(pokemon.species) || pokemon.species === 'Smeargle') continue;
 					if (Dex.data.FormatsData[speciesid].requiredItem || Dex.data.FormatsData[speciesid].requiredMove) continue;
 					for (let key in pokemon.abilities) {
 						let abilityId = toId(pokemon.abilities[key]);
