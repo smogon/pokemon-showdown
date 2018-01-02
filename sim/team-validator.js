@@ -923,7 +923,7 @@ class Validator {
 			if (dex.gen === 2 && template.gen === 1) tradebackEligible = true;
 			// STABmons hack to avoid copying all of validateSet to formats
 			// @ts-ignore
-			let noLearn = format.noLearn || dex.getFormat('gen7stabmons').noLearn;
+			let noLearn = format.noLearn || [];
 			if (ruleTable.has('ignorestabmoves') && !noLearn.includes(move.name) && !move.isZ) {
 				let types = template.types;
 				if (template.baseSpecies === 'Rotom') types = ['Electric', 'Ghost', 'Fire', 'Water', 'Ice', 'Flying', 'Grass'];
@@ -934,9 +934,8 @@ class Validator {
 				if (template.baseSpecies === 'Arceus' || template.baseSpecies === 'Silvally' || types.includes(move.type)) return false;
 			}
 			if (format.id === 'gen7alphabetcup') {
-				let bans = ['Geomancy', 'Shell Smash', 'Sketch'];
 				const letter = template.id.slice(0, 1);
-				if (move.id.slice(0, 1) === letter && !move.isZ && !bans.includes(move.name)) return false;
+				if (move.id.slice(0, 1) === letter && !move.isZ && !noLearn.includes(move.name)) return false;
 			}
 			if (!template.learnset) {
 				if (template.baseSpecies !== template.species) {

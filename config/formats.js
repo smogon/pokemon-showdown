@@ -476,8 +476,7 @@ exports.Formats = [
 		onValidateTeam: function (team, format) {
 			// Donor Clause
 			let evoFamilyLists = [];
-			for (let i = 0; i < team.length; i++) {
-				let set = team[i];
+			for (const set of team) {
 				if (!set.abilitySources) continue;
 				evoFamilyLists.push(set.abilitySources.map(format.getEvoFamily));
 			}
@@ -486,8 +485,7 @@ exports.Formats = [
 			// Instead, we only check the trivial case of multiple Pokémon only legal for exactly one family. FIXME?
 			// This clause has only gotten more complex over time, so this is probably a won't fix.
 			let requiredFamilies = Object.create(null);
-			for (let i = 0; i < evoFamilyLists.length; i++) {
-				let evoFamilies = evoFamilyLists[i];
+			for (const evoFamilies of evoFamilyLists) {
 				if (evoFamilies.length !== 1) continue;
 				let [familyId] = evoFamilies;
 				if (!(familyId in requiredFamilies)) requiredFamilies[familyId] = 1;
@@ -496,7 +494,7 @@ exports.Formats = [
 			}
 		},
 		onBegin: function () {
-			for (let pokemon of this.p1.pokemon.concat(this.p2.pokemon)) {
+			for (const pokemon of this.p1.pokemon.concat(this.p2.pokemon)) {
 				if (pokemon.baseAbility.includes('0')) {
 					let donor = pokemon.baseAbility.split('0')[1];
 					pokemon.donor = toId(donor);
@@ -522,10 +520,11 @@ exports.Formats = [
 
 		mod: 'gen7',
 		ruleset: ['[Gen 7] OU'],
+		noLearn: ['Geomancy', 'Shell Smash', 'Sketch'],
 		onValidateTeam: function (team) {
 			let alphabetTable = {};
-			for (let i = 0; i < team.length; i++) {
-				let letter = toId(team[i].species).slice(0, 1);
+			for (const set of team) {
+				let letter = toId(set.species).slice(0, 1);
 				if (alphabetTable[letter]) {
 					return ["You are limited to one Pokémon per letter.", "(You have more than one Pokémon beginning with " + letter.toUpperCase() + ")"];
 				}
