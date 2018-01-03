@@ -17,8 +17,7 @@ describe('Clear Body', function () {
 
 		const stats = ['spd', 'def', 'spe', 'atk', 'spa'];
 		stats.forEach((stat, index) => {
-			battle.p2.chooseMove(index + 1).foe.chooseMove(1);
-			assert.statStage(battle.p1.active[0], stat, 0);
+			battle.makeChoices(`move recover`, `move ${index + 1}`);
 		});
 		stats.forEach(stat => assert.statStage(battle.p1.active[0], stat, 0));
 	});
@@ -27,7 +26,7 @@ describe('Clear Body', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Tentacruel', ability: 'clearbody', moves: ['superpower']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Arbok', ability: 'unnerve', moves: ['coil']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move superpower', 'coil');
 		assert.statStage(battle.p1.active[0], 'atk', -1);
 		assert.statStage(battle.p1.active[0], 'def', -1);
 	});
@@ -36,7 +35,7 @@ describe('Clear Body', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Tentacruel', ability: 'clearbody', moves: ['shadowsneak']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Arbok', ability: 'unnerve', moves: ['swagger']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move shadowsneak', 'move swagger');
 		assert.statStage(battle.p1.active[0], 'atk', 2);
 	});
 
@@ -44,7 +43,7 @@ describe('Clear Body', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Tentacruel', ability: 'clearbody', moves: ['coil']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Arbok', ability: 'unnerve', moves: ['topsyturvy']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move coil', 'move topsyturvy');
 		assert.statStage(battle.p1.active[0], 'atk', -1);
 		assert.statStage(battle.p1.active[0], 'def', -1);
 		assert.statStage(battle.p1.active[0], 'accuracy', -1);

@@ -14,7 +14,7 @@ describe('Color Change', function () {
 		battle = common.createBattle();
 		const p1 = battle.join('p1', 'Guest 1', 1, [{species: "Kecleon", ability: 'colorchange', moves: ['recover']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Paras", ability: 'damp', moves: ['absorb']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move recover', 'move absorb');
 		assert.ok(p1.active[0].hasType('Grass'));
 	});
 
@@ -22,7 +22,7 @@ describe('Color Change', function () {
 		battle = common.createBattle();
 		const p1 = battle.join('p1', 'Guest 1', 1, [{species: "Kecleon", ability: 'colorchange', moves: ['substitute']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Machamp", ability: 'purepower', item: 'laggingtail', moves: ['closecombat']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move substitute', 'move closecombat');
 		assert.false(p1.active[0].hasType('Fighting'));
 	});
 });
