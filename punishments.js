@@ -1161,6 +1161,15 @@ Punishments.checkName = function (user, userid, registered) {
 	let bannedUnder = ``;
 	if (punishUserid !== userid) bannedUnder = ` because you have the same IP as banned user: ${punishUserid}`;
 
+	if ((id === 'LOCK' || id === 'NAMELOCK') && punishUserid !== user.userid && Punishments.sharedIps.has(user.latestIp)) {
+		if (!user.autoconfirmed) {
+			user.semilocked = `#sharedip ${user.locked}`;
+		}
+		user.locked = false;
+
+		user.updateIdentity();
+		return;
+	}
 	if (registered && id === 'BAN') {
 		user.send(`|popup|Your username (${user.name}) is banned${bannedUnder}. Your ban will expire in a few days.${reason}${appeal}`);
 		user.punishmentNotified = true;
