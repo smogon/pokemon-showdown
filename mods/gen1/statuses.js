@@ -71,7 +71,7 @@ exports.BattleStatuses = {
 			if (pokemon.statusData.time > 0) {
 				this.add('cant', pokemon, 'slp');
 			}
-			pokemon.lastMove = '';
+			pokemon.lastMove = null;
 			return false;
 		},
 		onAfterMoveSelf: function (pokemon) {
@@ -86,7 +86,7 @@ exports.BattleStatuses = {
 		onBeforeMovePriority: 10,
 		onBeforeMove: function (pokemon, target, move) {
 			this.add('cant', pokemon, 'frz');
-			pokemon.lastMove = '';
+			pokemon.lastMove = null;
 			return false;
 		},
 		onHit: function (target, source, move) {
@@ -214,7 +214,7 @@ exports.BattleStatuses = {
 			return duration;
 		},
 		onResidual: function (target) {
-			if (target.lastMove === 'struggle' || target.status === 'slp') {
+			if (target.lastMove && target.lastMove.id === 'struggle' || target.status === 'slp') {
 				delete target.volatiles['partialtrappinglock'];
 			}
 		},
