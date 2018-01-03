@@ -18,7 +18,7 @@ describe('Taunt', function () {
 		assert.strictEqual(battle.p2.active[0].boosts['spa'], 0);
 		assert.strictEqual(battle.p2.active[0].boosts['spd'], 0);
 		battle.commitDecisions();
-		assert.strictEqual(battle.p2.active[0].lastMove, 'struggle');
+		assert.strictEqual(battle.p2.active[0].lastMove.id, 'struggle');
 	});
 
 	it('should not prevent the target from using Z-Powered Status moves', function () {

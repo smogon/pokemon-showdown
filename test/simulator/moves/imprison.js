@@ -18,6 +18,6 @@ describe('Imprison', function () {
 		assert.strictEqual(battle.p2.active[0].boosts['spa'], 0);
 		assert.strictEqual(battle.p2.active[0].boosts['spd'], 0);
 		battle.commitDecisions();
-		assert.strictEqual(battle.p2.active[0].lastMove, 'confusion');
+		assert.strictEqual(battle.p2.active[0].lastMove.id, 'confusion');
 	});
 });

@@ -135,8 +135,8 @@ describe('Choices', function () {
 					const beforeAtk = activeMons.map(pokemon => pokemon.boosts.atk);
 					battle.p1.chooseMove(i + 1);
 					battle.p2.chooseMove(j + 1);
-					assert.strictEqual(activeMons[0].lastMove, MOVES[0][i]);
-					assert.strictEqual(activeMons[1].lastMove, MOVES[1][j]);
+					assert.strictEqual(activeMons[0].lastMove.id, MOVES[0][i]);
+					assert.strictEqual(activeMons[1].lastMove.id, MOVES[1][j]);
 
 					if (i >= 1) { // p1 used a damaging move
 						assert.atMost(activeMons[1].hp, beforeHP[1] - 1);
@@ -299,11 +299,11 @@ describe('Choices', function () {
 
 			// Implementation-dependent paths
 			if (battle.turn === 3) {
-				assert.strictEqual(battle.p2.active[0].lastMove, 'struggle');
+				assert.strictEqual(battle.p2.active[0].lastMove.id, 'struggle');
 			} else {
 				battle.choose('p2', 'move 1');
 				assert.strictEqual(battle.turn, 3);
-				assert.strictEqual(battle.p2.active[0].lastMove, 'struggle');
+				assert.strictEqual(battle.p2.active[0].lastMove.id, 'struggle');
 			}
 		});
 
@@ -316,7 +316,7 @@ describe('Choices', function () {
 			battle.p2.chooseMove(2);
 
 			assert.strictEqual(battle.turn, 2);
-			assert.notStrictEqual(battle.p2.active[0].lastMove, 'struggle');
+			assert.notStrictEqual(battle.p2.active[0].lastMove.id, 'struggle');
 		});
 
 		it('should not force Struggle usage on move attempt when choosing a disabled move', function () {
@@ -328,11 +328,11 @@ describe('Choices', function () {
 
 			battle.p1.chooseMove(1);
 			assert.strictEqual(battle.turn, 1);
-			assert.notStrictEqual(failingAttacker.lastMove, 'struggle');
+			assert.notStrictEqual(failingAttacker.lastMove && failingAttacker.lastMove.id, 'struggle');
 
 			battle.p1.chooseMove('recover');
 			assert.strictEqual(battle.turn, 1);
-			assert.notStrictEqual(failingAttacker.lastMove, 'struggle');
+			assert.notStrictEqual(failingAttacker.lastMove && failingAttacker.lastMove.id, 'struggle');
 		});
 
 		it('should send meaningful feedback to players if they try to use a disabled move', function () {
@@ -751,8 +751,8 @@ describe('Choice extensions', function () {
 				battle.choose('p1', 'move growl');
 
 				assert.strictEqual(battle.turn, 2);
-				assert.strictEqual(battle.p1.active[0].lastMove, 'tackle');
-				assert.strictEqual(battle.p2.active[0].lastMove, 'growl');
+				assert.strictEqual(battle.p1.active[0].lastMove.id, 'tackle');
+				assert.strictEqual(battle.p2.active[0].lastMove.id, 'growl');
 			});
 
 			it(`should support to ${mode} move decisions`, function () {
@@ -766,7 +766,7 @@ describe('Choice extensions', function () {
 				battle.choose('p2', 'move growl');
 
 				assert.strictEqual(battle.turn, 2);
-				assert.strictEqual(battle.p1.active[0].lastMove, 'growl');
+				assert.strictEqual(battle.p1.active[0].lastMove.id, 'growl');
 			});
 
 			it(`should disallow to ${mode} move decisions for maybe-disabled Pokémon`, function () {
@@ -783,7 +783,7 @@ describe('Choice extensions', function () {
 				battle.choose('p1', 'move growl');
 				battle.choose('p2', 'move scratch');
 
-				assert.strictEqual(target.lastMove, 'tackle');
+				assert.strictEqual(target.lastMove.id, 'tackle');
 			});
 
 			it(`should disallow to ${mode} move decisions by default`, function () {
@@ -797,8 +797,8 @@ describe('Choice extensions', function () {
 				battle.choose('p2', 'move growl');
 
 				assert.strictEqual(battle.turn, 2);
-				assert.strictEqual(battle.p1.active[0].lastMove, 'tackle');
-				assert.strictEqual(battle.p2.active[0].lastMove, 'growl');
+				assert.strictEqual(battle.p1.active[0].lastMove.id, 'tackle');
+				assert.strictEqual(battle.p2.active[0].lastMove.id, 'growl');
 			});
 
 			it(`should support to ${mode} switch decisions on move requests`, function () {
@@ -817,7 +817,7 @@ describe('Choice extensions', function () {
 				battle.choose('p2', 'move 1');
 
 				['Bulbasaur', 'Ivysaur', 'Venusaur'].forEach((species, index) => assert.species(battle.p1.pokemon[index], species));
-				assert.strictEqual(battle.p1.active[0].lastMove, 'synthesis');
+				assert.strictEqual(battle.p1.active[0].lastMove.id, 'synthesis');
 
 				battle.destroy();
 				battle = common.createBattle({cancel: true}, TEAMS);
@@ -931,7 +931,7 @@ describe('Choice extensions', function () {
 				battle.choose('p2', 'move 1, move 1, move 1');
 
 				['Bulbasaur', 'Ivysaur', 'Venusaur'].forEach((species, index) => assert.species(battle.p1.active[index], species));
-				assert.strictEqual(battle.p1.active[0].lastMove, 'synthesis');
+				assert.strictEqual(battle.p1.active[0].lastMove.id, 'synthesis');
 
 				battle.destroy();
 				battle = common.createBattle({gameType: 'triples', cancel: true}, TEAMS);
@@ -942,7 +942,7 @@ describe('Choice extensions', function () {
 				battle.choose('p2', 'move 1, move 1, move 1');
 
 				['Bulbasaur', 'Ivysaur', 'Venusaur'].forEach((species, index) => assert.species(battle.p1.active[index], species));
-				assert.strictEqual(battle.p1.active[2].lastMove, 'synthesis');
+				assert.strictEqual(battle.p1.active[2].lastMove.id, 'synthesis');
 			});
 
 			it(`should disallow to ${mode} shift decisions by default`, function () {
@@ -963,7 +963,7 @@ describe('Choice extensions', function () {
 				battle.choose('p2', 'move 1, move 1, move 1');
 
 				['Ivysaur', 'Bulbasaur', 'Venusaur'].forEach((species, index) => assert.species(battle.p1.active[index], species));
-				assert.strictEqual(battle.p1.active[0].lastMove, 'growth');
+				assert.strictEqual(battle.p1.active[0].lastMove.id, 'growth');
 
 				battle.destroy();
 				battle = common.createBattle({gameType: 'triples'}, TEAMS);
@@ -974,7 +974,7 @@ describe('Choice extensions', function () {
 				battle.choose('p2', 'move 1, move 1, move 1');
 
 				['Bulbasaur', 'Venusaur', 'Ivysaur'].forEach((species, index) => assert.species(battle.p1.active[index], species));
-				assert.strictEqual(battle.p1.active[2].lastMove, 'growth');
+				assert.strictEqual(battle.p1.active[2].lastMove.id, 'growth');
 			});
 
 			it(`should support to ${mode} switch decisions on double switch requests`, function () {

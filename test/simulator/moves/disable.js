@@ -16,6 +16,6 @@ describe('Disable', function () {
 		battle.join('p2', 'Guest 2', 1, [{species: 'Abra', ability: 'synchronize', moves: ['teleport']}]);
 		battle.commitDecisions();
 		battle.commitDecisions();
-		assert.strictEqual(battle.p2.active[0].lastMove, 'struggle');
+		assert.strictEqual(battle.p2.active[0].lastMove.id, 'struggle');
 	});
 });

@@ -32,7 +32,7 @@ describe('Magic Room', function () {
 		battle.join('p2', 'Guest 2', 1, [{species: "Golem", ability: 'noguard', moves: ['magicroom']}]);
 		battle.commitDecisions();
 		battle.commitDecisions();
-		assert.strictEqual(battle.p1.active[0].lastMove, 'protect');
+		assert.strictEqual(battle.p1.active[0].lastMove.id, 'protect');
 	});
 
 	it('should cause Fling to fail', function () {

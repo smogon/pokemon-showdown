@@ -21,7 +21,7 @@ exports.BattleScripts = {
 	// This is because there was actually no side, just Battle and active Pokémon effects.
 	// Side's lastMove is used for Counter and Mirror Move.
 	side: {
-		lastMove: '',
+		lastMove: null,
 	},
 	// BattlePokemon scripts.
 	pokemon: {
@@ -100,8 +100,8 @@ exports.BattleScripts = {
 		if (!lockedMove && (!pokemon.volatiles['partialtrappinglock'] || pokemon.volatiles['partialtrappinglock'].locked !== target)) {
 			pokemon.deductPP(move, null, target);
 			// On gen 1 moves are stored when they are chosen and a PP is deducted.
-			pokemon.side.lastMove = move.id;
-			pokemon.lastMove = move.id;
+			pokemon.side.lastMove = move;
+			pokemon.lastMove = move;
 		} else {
 			sourceEffect = move;
 		}

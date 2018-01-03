@@ -33,7 +33,7 @@ describe('Heal Block', function () {
 		battle.join('p2', 'Guest 2', 1, [{species: 'Cresselia', ability: 'levitate', moves: ['recover']}]);
 		battle.commitDecisions();
 		battle.commitDecisions();
-		assert.strictEqual(battle.p2.active[0].lastMove, 'struggle');
+		assert.strictEqual(battle.p2.active[0].lastMove.id, 'struggle');
 	});
 
 	it('should prevent Pokemon from using draining moves', function () {
@@ -99,7 +99,7 @@ describe('Heal Block [Gen 5]', function () {
 		]);
 		battle.commitDecisions();
 		battle.commitDecisions();
-		assert.strictEqual(battle.p2.active[0].lastMove, 'struggle');
+		assert.strictEqual(battle.p2.active[0].lastMove.id, 'struggle');
 	});
 
 	it('should prevent abilities from recovering HP', function () {
@@ -152,7 +152,7 @@ describe('Heal Block [Gen 4]', function () {
 		]);
 		battle.commitDecisions();
 		battle.commitDecisions();
-		assert.strictEqual(battle.p2.active[0].lastMove, 'struggle');
+		assert.strictEqual(battle.p2.active[0].lastMove.id, 'struggle');
 	});
 
 	it('should block the effect of Wish', function () {

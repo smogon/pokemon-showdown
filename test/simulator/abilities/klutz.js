@@ -32,7 +32,7 @@ describe('Klutz', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: "Lopunny", ability: 'klutz', item: 'assaultvest', moves: ['protect']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Deoxys", ability: 'noguard', moves: ['psychic']}]);
 		battle.commitDecisions();
-		assert.strictEqual(battle.p1.active[0].lastMove, 'protect');
+		assert.strictEqual(battle.p1.active[0].lastMove.id, 'protect');
 	});
 
 	it('should not ignore item effects that prevent item removal', function () {
