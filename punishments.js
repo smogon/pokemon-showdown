@@ -1380,7 +1380,10 @@ Punishments.isRoomBanned = function (user, roomid) {
 		}
 	}
 
-	if (Rooms(roomid).parent) return Punishments.isRoomBanned(user, Rooms(roomid).parent.id);
+	const room = Rooms(roomid);
+	if (!room) throw new Error(`Trying to ban a user from a nonexistent room: ${roomid}`);
+
+	if (room.parent) return Punishments.isRoomBanned(user, room.parent.id);
 };
 
 /**
