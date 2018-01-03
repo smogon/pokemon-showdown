@@ -390,7 +390,7 @@ exports.Formats = [
 
 		mod: 'gen7',
 		ruleset: ['[Gen 7] OU'],
-		banlist: ['Hoopa-Unbound', 'Kartana', 'Kyurem-Black', 'Gyarados-Mega', 'Regigigas', 'Shedinja', 'Slaking', 'Huge Power', 'Imposter', 'Pure Power', 'Speed Boost', 'Water Bubble', 'Assist', 'Chatter'],
+		banlist: ['Hoopa-Unbound', 'Kartana', 'Kyurem-Black', 'Regigigas', 'Shedinja', 'Slaking', 'Huge Power', 'Imposter', 'Pure Power', 'Speed Boost', 'Water Bubble', 'Gyaradosite', 'Assist', 'Chatter'],
 		noChangeForme: true,
 		noChangeAbility: true,
 		getEvoFamily: function (species) {
@@ -427,10 +427,10 @@ exports.Formats = [
 
 			let species = toId(set.species);
 			let template = Dex.getTemplate(species);
-			let megaTemplate = Dex.getTemplate(Dex.getItem(set.item).megaStone);
 			if (!template.exists) return [`The Pokemon "${set.species}" does not exist.`];
 			if (template.isUnreleased) return [`${template.species} is unreleased.`];
-			if (megaTemplate.tier === 'Uber' || template.tier === 'Uber' || this.format.banlist.includes(template.species)) return [`${megaTemplate.tier === 'Uber' ? megaTemplate.species : template.species} is banned.`];
+			let megaTemplate = Dex.getTemplate(Dex.getItem(set.item).megaStone);
+			if (template.tier === 'Uber' || megaTemplate.tier === 'Uber' || this.format.banlist.includes(template.species)) return [`${megaTemplate.tier === 'Uber' ? megaTemplate.species : template.species} is banned.`];
 
 			let name = set.name;
 
