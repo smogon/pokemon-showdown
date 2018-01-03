@@ -315,6 +315,7 @@ exports.Formats = [
 		},
 		timer: {starting: 15 * 60 - 10, perTurn: 10, maxPerTurn: 60, maxFirstTurn: 90, timeoutAutoChoose: true},
 		ruleset: ['Pokemon', 'Standard GBU'],
+		banlist: ['Unown'],
 		requirePlus: true,
 	},
 	{
