@@ -417,7 +417,7 @@ exports.BattleScripts = {
 		} else {
 			accuracy = this.runEvent('Accuracy', target, pokemon, move, accuracy);
 		}
-		if (accuracy !== true && this.random(100) >= accuracy) {
+		if (accuracy !== true && !this.randomChance(accuracy, 100)) {
 			if (!move.spreadHit) this.attrLastMove('[miss]');
 			this.add('-miss', pokemon, target);
 			return false;
@@ -516,7 +516,7 @@ exports.BattleScripts = {
 					accuracy = this.runEvent('ModifyAccuracy', target, pokemon, move, accuracy);
 					if (!move.alwaysHit) {
 						accuracy = this.runEvent('Accuracy', target, pokemon, move, accuracy);
-						if (accuracy !== true && this.random(100) >= accuracy) break;
+						if (accuracy !== true && !this.randomChance(accuracy, 100)) break;
 					}
 				}
 
