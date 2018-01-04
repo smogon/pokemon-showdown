@@ -97,7 +97,7 @@ class Roomlog {
 		}
 		let textLog = log.join('\n') + '\n';
 		if (channel === 0) {
-			return textLog.replace(/\n\|choice\|\|\n/g, '').replace(/\n\|seed\|\n/g, '');
+			return textLog.replace(/\n\|choice\|\|\n/g, '\n').replace(/\n\|seed\|\n/g, '\n');
 		}
 		return textLog;
 	}
