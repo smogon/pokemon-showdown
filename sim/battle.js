@@ -2211,7 +2211,7 @@ class Battle extends Dex.ModdedDex {
 		move.crit = move.willCrit || false;
 		if (move.willCrit === undefined) {
 			if (critRatio) {
-				move.crit = (this.random(critMult[critRatio]) === 0);
+				move.crit = this.randomChance(1, critMult[critRatio]);
 			}
 		}
 

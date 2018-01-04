@@ -168,7 +168,7 @@ exports.BattleStatuses = {
 				return;
 			}
 			this.add('-activate', pokemon, 'confusion');
-			if (this.random(3) > 0) {
+			if (!this.randomChance(1, 3)) {
 				return;
 			}
 			this.activeTarget = pokemon;
@@ -404,7 +404,7 @@ exports.BattleStatuses = {
 			// However, just in case, use 1 if it is undefined.
 			let counter = this.effectData.counter || 1;
 			this.debug("Success chance: " + Math.round(100 / counter) + "%");
-			return (this.random(counter) === 0);
+			return this.randomChance(1, counter);
 		},
 		onRestart: function () {
 			if (this.effectData.counter < this.effect.counterMax) {

@@ -37,7 +37,7 @@ exports.BattleStatuses = {
 				return (this.random() * 4294967296 < 1);
 			}
 			this.debug("Success chance: " + Math.round(100 / counter) + "%");
-			return (this.random(counter) === 0);
+			return this.randomChance(1, counter);
 		},
 		onRestart: function () {
 			if (this.effectData.counter < this.effect.counterMax) {
