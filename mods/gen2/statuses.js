@@ -183,7 +183,7 @@ exports.BattleStatuses = {
 		onStallMove: function () {
 			let counter = Math.floor(this.effectData.counter) || 127;
 			this.debug("Success chance: " + Math.round(counter * 1000 / 255) / 10 + "% (" + counter + "/255)");
-			return (this.random(255) < counter);
+			return this.randomChance(counter, 255);
 		},
 		onRestart: function () {
 			this.effectData.counter /= 2;

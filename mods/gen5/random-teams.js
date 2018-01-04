@@ -371,12 +371,12 @@ class RandomGen5Teams extends RandomGen6Teams {
 		let ability1 = this.getAbility(abilities[1]);
 		let ability2 = this.getAbility(abilities[2]);
 		if (abilities[1]) {
-			if (abilities[2] && ability1.rating <= ability2.rating && this.random(2)) {
+			if (abilities[2] && ability1.rating <= ability2.rating && !this.randomChance(1, 2)) {
 				[ability1, ability2] = [ability2, ability1];
 			}
-			if (ability0.rating <= ability1.rating && this.random(2)) {
+			if (ability0.rating <= ability1.rating && !this.randomChance(1, 2)) {
 				[ability0, ability1] = [ability1, ability0];
-			} else if (ability0.rating - 0.6 <= ability1.rating && this.random(3)) {
+			} else if (ability0.rating - 0.6 <= ability1.rating && !this.randomChance(1, 3)) {
 				[ability0, ability1] = [ability1, ability0];
 			}
 			ability = ability0.name;
@@ -472,7 +472,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 			item = 'Focus Sash';
 		} else if (template.species === 'Unown') {
 			item = 'Choice Specs';
-		} else if (template.species === 'Wobbuffet' && hasMove['destinybond'] && this.random(2)) {
+		} else if (template.species === 'Wobbuffet' && hasMove['destinybond'] && !this.randomChance(1, 2)) {
 			item = 'Custap Berry';
 		} else if (ability === 'Imposter') {
 			item = 'Choice Scarf';
@@ -481,7 +481,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 		} else if (hasMove['trick'] && hasMove['gyroball']) {
 			item = 'Iron Ball';
 		} else if (hasMove['switcheroo'] || hasMove['trick']) {
-			let randomNum = this.random(2);
+			let randomNum = !this.randomChance(1, 2);
 			if (counter.Physical >= 3 && (template.baseStats.spe >= 95 || randomNum)) {
 				item = 'Choice Band';
 			} else if (counter.Special >= 3 && (template.baseStats.spe >= 95 || randomNum)) {
@@ -531,9 +531,9 @@ class RandomGen5Teams extends RandomGen6Teams {
 		} else if (hasMove['lightscreen'] || hasMove['reflect']) {
 			item = 'Light Clay';
 		} else if (counter.Physical >= 4 && !hasMove['fakeout'] && !hasMove['suckerpunch'] && !hasMove['flamecharge'] && !hasMove['rapidspin']) {
-			item = this.random(3) ? 'Choice Band' : 'Expert Belt';
+			item = !this.randomChance(1, 3) ? 'Choice Band' : 'Expert Belt';
 		} else if (counter.Special >= 4) {
-			item = this.random(3) ? 'Choice Specs' : 'Expert Belt';
+			item = !this.randomChance(1, 3) ? 'Choice Specs' : 'Expert Belt';
 		} else if (this.getEffectiveness('Ground', template) >= 2 && ability !== 'Levitate' && !hasMove['magnetrise']) {
 			item = 'Air Balloon';
 		} else if ((hasMove['eruption'] || hasMove['waterspout']) && !counter['Status']) {
