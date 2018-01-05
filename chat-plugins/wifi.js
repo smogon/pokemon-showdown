@@ -722,7 +722,7 @@ let commands = {
 
 		Giveaway.unban(room, targetUser);
 		this.privateModAction(`${targetUser.name} was unbanned from entering giveaways by ${user.name}.`);
-		this.modlog('GIVEAWAYUNBAN', targetUser, null, true);
+		this.modlog('GIVEAWAYUNBAN', targetUser, null, true, true);
 	},
 	stop: 'end',
 	end: function (target, room, user) {

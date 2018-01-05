@@ -1486,11 +1486,9 @@ exports.commands = {
 			if (affected.length > 1) {
 				displayMessage = "(" + name + "'s " + (acAccount ? " ac account: " + acAccount + ", " : "") + "banned alts: " + affected.slice(1).map(user => user.getLastName()).join(", ") + ")";
 				this.privateModAction(displayMessage);
-				this.room.modlog(displayMessage);
 			} else if (acAccount) {
 				displayMessage = "(" + name + "'s ac account: " + acAccount + ")";
 				this.privateModAction(displayMessage);
-				this.room.modlog(displayMessage);
 			}
 		}
 		this.add('|unlink|hide|' + userid);
@@ -1585,7 +1583,7 @@ exports.commands = {
 		if (!this.can('warn', targetUser, room)) return false;
 
 		this.addModAction("" + targetUser.name + " was warned by " + user.name + "." + (target ? " (" + target + ")" : ""));
-		this.modlog('WARN', targetUser, target, true);
+		this.modlog('WARN', targetUser, target, true, true);
 		targetUser.send('|c|~|/warn ' + target);
 		let userid = targetUser.getLastId();
 		this.add('|unlink|' + userid);
@@ -1620,7 +1618,7 @@ exports.commands = {
 		}
 		if (!targetUser.joinRoom(targetRoom.id)) return this.errorReply("User " + targetUser.name + " could not be joined to room " + targetRoom.title + ". They could be banned from the room.");
 		this.addModAction("" + targetUser.name + " was redirected to room " + targetRoom.title + " by " + user.name + ".");
-		this.modlog('REDIRECT', targetUser, `to ${targetRoom.title}`, true);
+		this.modlog('REDIRECT', targetUser, `to ${targetRoom.title}`, true, true);
 		targetUser.leaveRoom(room);
 	},
 	redirhelp: [`/redirect OR /redir [username], [roomname] - Attempts to redirect the user [username] to the room [roomname]. Requires: % @ & ~`],
@@ -1654,7 +1652,6 @@ exports.commands = {
 		if (targetUser.autoconfirmed && targetUser.autoconfirmed !== targetUser.userid) {
 			let displayMessage = "(" + targetUser.name + "'s ac account: " + targetUser.autoconfirmed + ")";
 			this.privateModAction(displayMessage);
-			this.room.modlog(displayMessage);
 		}
 		let userid = targetUser.getLastId();
 		this.add('|unlink|' + userid);
@@ -1683,7 +1680,7 @@ exports.commands = {
 
 		if (successfullyUnmuted) {
 			this.addModAction("" + (targetUser ? targetUser.name : successfullyUnmuted) + " was unmuted by " + user.name + ".");
-			this.modlog('UNMUTE', targetUser, null, true);
+			this.modlog('UNMUTE', targetUser, null, true, true);
 		} else {
 			this.errorReply("" + (targetUser ? targetUser.name : this.targetUsername) + " is not muted.");
 		}
@@ -1794,11 +1791,9 @@ exports.commands = {
 		if (affected.length > 1) {
 			displayMessage = `(${name}'s ` + (acAccount ? ` ac account: ${acAccount}, ` : "") + `locked alts: ${affected.slice(1).map(user => user.getLastName()).join(", ")})`;
 			this.privateModAction(displayMessage);
-			this.room.modlog(displayMessage);
 		} else if (acAccount) {
 			displayMessage = `(${name}'s ac account: ${acAccount})`;
 			this.privateModAction(displayMessage);
-			this.room.modlog(displayMessage);
 		}
 		this.add(`|unlink|hide|${userid}`);
 		if (userid !== toId(this.inputUsername)) this.add(`|unlink|hide|${toId(this.inputUsername)}`);
@@ -1915,14 +1910,12 @@ exports.commands = {
 			guests -= affected.length;
 			displayMessage = "(" + name + "'s " + (acAccount ? " ac account: " + acAccount + ", " : "") + "banned alts: " + affected.join(", ") + (guests ? " [" + guests + " guests]" : "") + ")";
 			this.privateModAction(displayMessage);
-			this.room.modlog(displayMessage);
 			for (const user of affected) {
 				this.add('|unlink|' + toId(user));
 			}
 		} else if (acAccount) {
 			displayMessage = "(" + name + "'s ac account: " + acAccount + ")";
 			this.privateModAction(displayMessage);
-			this.room.modlog(displayMessage);
 		}
 
 		this.add('|unlink|hide|' + userid);
@@ -2316,7 +2309,7 @@ exports.commands = {
 
 		let entry = targetUser.name + " was forced to choose a new name by " + user.name + (reason ? ": " + reason : "");
 		this.privateModAction("(" + entry + ")");
-		this.modlog('FORCERENAME', targetUser, reason, true);
+		this.modlog('FORCERENAME', targetUser, reason, true, true);
 		Ladders.cancelSearches(targetUser);
 		targetUser.resetName(true);
 		targetUser.send("|nametaken||" + user.name + " considers your name inappropriate" + (reason ? ": " + reason : "."));
@@ -2411,7 +2404,7 @@ exports.commands = {
 			}
 		} else {
 			this.addModAction("" + targetUser.name + "'s messages were cleared from  " + room.title + " by " + user.name + ".");
-			this.modlog('HIDETEXT', targetUser, null, true);
+			this.modlog('HIDETEXT', targetUser, null, true, true);
 			this.add('|unlink|' + hidetype + userid);
 			if (userid !== toId(this.inputUsername)) this.add('|unlink|' + hidetype + toId(this.inputUsername));
 		}
@@ -2469,11 +2462,9 @@ exports.commands = {
 			if (affected.length > 1) {
 				displayMessage = "(" + name + "'s " + (acAccount ? " ac account: " + acAccount + ", " : "") + "blacklisted alts: " + affected.slice(1).map(user => user.getLastName()).join(", ") + ")";
 				this.privateModAction(displayMessage);
-				this.room.modlog(displayMessage);
 			} else if (acAccount) {
 				displayMessage = "(" + name + "'s ac account: " + acAccount + ")";
 				this.privateModAction(displayMessage);
-				this.room.modlog(displayMessage);
 			}
 		}
 		this.add('|unlink|hide|' + userid);
@@ -3490,7 +3481,7 @@ exports.commands = {
 
 		if (room.game.leaveGame(targetUser)) {
 			this.addModAction("" + targetUser.name + " was kicked from a battle by " + user.name + (target ? " (" + target + ")" : ""));
-			this.modlog('KICKBATTLE', targetUser, target, true);
+			this.modlog('KICKBATTLE', targetUser, target, true, true);
 		} else {
 			this.errorReply("/kickbattle - User isn't in battle.");
 		}

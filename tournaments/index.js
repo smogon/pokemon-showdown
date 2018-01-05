@@ -1362,7 +1362,7 @@ let commands = {
 			Punishments.roomUnpunish(this.room, targetUser, 'TOURBAN');
 			tournament.removeBannedUser(targetUser);
 			this.privateModAction(`${targetUser.name || targetUserid} was unbanned from joining tournaments by ${user.name}.`, `TOURUNBAN: [${targetUser ? targetUser.getLastId() : targetUserid}] by ${user.userid}`);
-			this.modlog('TOUR UNBAN', targetUser, null, true);
+			this.modlog('TOUR UNBAN', targetUser, null, true, true);
 		},
 	},
 };
