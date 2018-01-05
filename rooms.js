@@ -1097,7 +1097,7 @@ class BasicChatRoom extends BasicRoom {
 		this.log.broadcastBuffer = '';
 		this.log.truncate();
 
-		this.pokeExpireTimer();
+		if (this.isHelp) this.pokeExpireTimer();
 	}
 	pokeExpireTimer() {
 		if (this.expireTimer) clearTimeout(this.expireTimer);
