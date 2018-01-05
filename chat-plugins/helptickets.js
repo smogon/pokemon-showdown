@@ -649,11 +649,11 @@ exports.commands = {
 			if (affected.length > 1) {
 				displayMessage = `(${name}'s ${acAccount ? ` ac account: ${acAccount}, ` : ""}ticket banned alts: ${affected.slice(1).map(user => user.getLastName()).join(", ")})`;
 				this.privateModAction(displayMessage);
-				this.logModAction(displayMessage);
+				this.room.modlog(`(${room.id}) ${displayMessage}`);
 			} else if (acAccount) {
 				displayMessage = `(${name}'s ac account: ${acAccount})`;
 				this.privateModAction(displayMessage);
-				this.logModAction(displayMessage);
+				this.room.modlog(`(${room.id}) ${displayMessage}`);
 			}
 
 			for (let i in affected) {

@@ -1486,11 +1486,11 @@ exports.commands = {
 			if (affected.length > 1) {
 				displayMessage = "(" + name + "'s " + (acAccount ? " ac account: " + acAccount + ", " : "") + "banned alts: " + affected.slice(1).map(user => user.getLastName()).join(", ") + ")";
 				this.privateModAction(displayMessage);
-				this.logModAction(displayMessage);
+				this.room.modlog(displayMessage);
 			} else if (acAccount) {
 				displayMessage = "(" + name + "'s ac account: " + acAccount + ")";
 				this.privateModAction(displayMessage);
-				this.logModAction(displayMessage);
+				this.room.modlog(displayMessage);
 			}
 		}
 		this.add('|unlink|hide|' + userid);
@@ -1654,7 +1654,7 @@ exports.commands = {
 		if (targetUser.autoconfirmed && targetUser.autoconfirmed !== targetUser.userid) {
 			let displayMessage = "(" + targetUser.name + "'s ac account: " + targetUser.autoconfirmed + ")";
 			this.privateModAction(displayMessage);
-			this.logModAction(displayMessage);
+			this.room.modlog(displayMessage);
 		}
 		let userid = targetUser.getLastId();
 		this.add('|unlink|' + userid);
@@ -1794,11 +1794,11 @@ exports.commands = {
 		if (affected.length > 1) {
 			displayMessage = `(${name}'s ` + (acAccount ? ` ac account: ${acAccount}, ` : "") + `locked alts: ${affected.slice(1).map(user => user.getLastName()).join(", ")})`;
 			this.privateModAction(displayMessage);
-			this.logModAction(displayMessage);
+			this.room.modlog(displayMessage);
 		} else if (acAccount) {
 			displayMessage = `(${name}'s ac account: ${acAccount})`;
 			this.privateModAction(displayMessage);
-			this.logModAction(displayMessage);
+			this.room.modlog(displayMessage);
 		}
 		this.add(`|unlink|hide|${userid}`);
 		if (userid !== toId(this.inputUsername)) this.add(`|unlink|hide|${toId(this.inputUsername)}`);
@@ -1915,14 +1915,14 @@ exports.commands = {
 			guests -= affected.length;
 			displayMessage = "(" + name + "'s " + (acAccount ? " ac account: " + acAccount + ", " : "") + "banned alts: " + affected.join(", ") + (guests ? " [" + guests + " guests]" : "") + ")";
 			this.privateModAction(displayMessage);
-			this.logModAction(displayMessage);
+			this.room.modlog(displayMessage);
 			for (const user of affected) {
 				this.add('|unlink|' + toId(user));
 			}
 		} else if (acAccount) {
 			displayMessage = "(" + name + "'s ac account: " + acAccount + ")";
 			this.privateModAction(displayMessage);
-			this.logModAction(displayMessage);
+			this.room.modlog(displayMessage);
 		}
 
 		this.add('|unlink|hide|' + userid);
@@ -2469,11 +2469,11 @@ exports.commands = {
 			if (affected.length > 1) {
 				displayMessage = "(" + name + "'s " + (acAccount ? " ac account: " + acAccount + ", " : "") + "blacklisted alts: " + affected.slice(1).map(user => user.getLastName()).join(", ") + ")";
 				this.privateModAction(displayMessage);
-				this.logModAction(displayMessage);
+				this.room.modlog(displayMessage);
 			} else if (acAccount) {
 				displayMessage = "(" + name + "'s ac account: " + acAccount + ")";
 				this.privateModAction(displayMessage);
-				this.logModAction(displayMessage);
+				this.room.modlog(displayMessage);
 			}
 		}
 		this.add('|unlink|hide|' + userid);

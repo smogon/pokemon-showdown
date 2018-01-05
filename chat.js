@@ -627,7 +627,7 @@ class CommandContext {
 		buf += note;
 
 		Rooms.global.modlog(buf);
-		this.logModAction(buf);
+		this.room.modlog('(' + this.room.id + ') ' + buf);
 	}
 	/**
 	 * @param {string} action
@@ -650,7 +650,7 @@ class CommandContext {
 		buf += ` by ${this.user.userid}`;
 		if (note) buf += `: ${note}`;
 
-		this.logModAction(buf);
+		this.room.modlog('(' + this.room.id + ') ' + buf);
 	}
 	/**
 	 * @param {string} data
@@ -670,12 +670,6 @@ class CommandContext {
 	 */
 	addModAction(msg) {
 		this.room.addByUser(this.user, msg);
-	}
-	/**
-	 * @param {string} text
-	 */
-	logModAction(text) {
-		this.room.modlog('(' + this.room.id + ') ' + text);
 	}
 	update() {
 		if (this.room) this.room.update();
