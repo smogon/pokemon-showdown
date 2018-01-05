@@ -1562,13 +1562,13 @@ function runLearn(target, cmd) {
 				}
 				prevSourceType = source.substr(0, 2);
 				prevSourceCount = source.substr(2) ? 0 : -1;
-				buffer += `<li>gen ${source.charAt(0)} ${sourceNames[source.charAt(1)]}`;
+				buffer += `<li>Gen ${source.charAt(0)} ${sourceNames[source.charAt(1)]}`;
 				if (prevSourceType === '5E' && template.maleOnlyHidden) buffer += " (cannot have hidden ability)";
 				if (source.substr(2)) buffer += `: ${hatchAs + source.substr(2)}`;
 			}
 		}
 		if (sourcesBefore) {
-			buffer += `<li>${(sourcesBefore < gen ? "gen " + sourcesBefore + " or earlier" : "anywhere") + " (all moves are level-up/tutor/TM/HM in gen " + Math.min(gen, sourcesBefore) + (sourcesBefore < gen ? " to " + gen : "")})`;
+			buffer += `<li>${(sourcesBefore < gen ? "Gen " + sourcesBefore + " or earlier" : "anywhere") + " (all moves are level-up/tutor/TM/HM in Gen " + Math.min(gen, sourcesBefore) + (sourcesBefore < gen ? " to " + gen : "")})`;
 		}
 		buffer += "</ul>";
 	}
