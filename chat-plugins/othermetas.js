@@ -64,8 +64,8 @@ exports.commands = {
 		if (banlist.includes(stone.name)) {
 			this.errorReply(`Warning: ${stone.name} is banned from Mix and Mega.`);
 		}
-		let bannedStones = Dex.getFormat('gen7mixandmega').bannedStones;
-		if (bannedStones.includes(stone.name) && template.name !== stone.megaEvolves) {
+		let restrictedStones = Dex.getFormat('gen7mixandmega').restrictedStones;
+		if (restrictedStones.includes(stone.name) && template.name !== stone.megaEvolves) {
 			this.errorReply(`Warning: ${stone.name} is restricted to ${stone.megaEvolves} in Mix and Mega.`);
 		}
 		let cannotMega = Dex.getFormat('gen7mixandmega').cannotMega;
@@ -176,8 +176,8 @@ exports.commands = {
 		if (banlist.includes(stone.name)) {
 			this.errorReply(`Warning: ${stone.name} is banned from Mix and Mega.`);
 		}
-		let bannedStones = Dex.getFormat('gen7mixandmega').bannedStones;
-		if (bannedStones.includes(stone.name)) {
+		let restrictedStones = Dex.getFormat('gen7mixandmega').restrictedStones;
+		if (restrictedStones.includes(stone.name)) {
 			this.errorReply(`Warning: ${stone.name} is restricted to ${stone.megaEvolves} in Mix and Mega.`);
 		}
 		if (stone.isUnreleased) {
