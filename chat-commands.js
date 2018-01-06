@@ -1583,7 +1583,7 @@ exports.commands = {
 		if (!this.can('warn', targetUser, room)) return false;
 
 		this.addModAction("" + targetUser.name + " was warned by " + user.name + "." + (target ? " (" + target + ")" : ""));
-		this.modlog('WARN', targetUser, target, {noip: 1, noalts: 1});
+		this.modlog('WARN', targetUser, target, {noalts: 1});
 		targetUser.send('|c|~|/warn ' + target);
 		let userid = targetUser.getLastId();
 		this.add('|unlink|' + userid);
@@ -1648,7 +1648,7 @@ exports.commands = {
 
 		if (targetUser in room.users) targetUser.popup("|modal|" + user.name + " has muted you in " + room.id + " for " + Chat.toDurationString(muteDuration) + ". " + target);
 		this.addModAction("" + targetUser.name + " was muted by " + user.name + " for " + Chat.toDurationString(muteDuration) + "." + (target ? " (" + target + ")" : ""));
-		this.modlog(`${cmd.includes('h') ? 'HOUR' : ''}MUTE`, targetUser, target, {noip: 1});
+		this.modlog(`${cmd.includes('h') ? 'HOUR' : ''}MUTE`, targetUser, target);
 		if (targetUser.autoconfirmed && targetUser.autoconfirmed !== targetUser.userid) {
 			let displayMessage = "(" + targetUser.name + "'s ac account: " + targetUser.autoconfirmed + ")";
 			this.privateModAction(displayMessage);
