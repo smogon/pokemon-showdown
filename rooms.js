@@ -12,7 +12,7 @@
 'use strict';
 
 const TIMEOUT_EMPTY_DEALLOCATE = 10 * 60 * 1000;
-const TIMEOUT_INACTIVE_DEALLOCATE = 40 * 60 * 1000;
+const TIMEOUT_INACTIVE_DEALLOCATE = .5 * 60 * 1000;
 const REPORT_USER_STATS_INTERVAL = 10 * 60 * 1000;
 
 const CRASH_REPORT_THROTTLE = 60 * 60 * 1000;
@@ -1117,7 +1117,9 @@ class BasicChatRoom extends BasicRoom {
 	 */
 	reportJoin(type, entry) {
 		if (this.reportJoins) {
-			this.add(`|${type}|${entry}`).update();
+			const message = `|${type}|${entry}`;
+			this.send(message);
+			this.roomlog(message);
 			return;
 		}
 		let ucType = '';
