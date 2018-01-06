@@ -1583,7 +1583,7 @@ exports.commands = {
 		if (!this.can('warn', targetUser, room)) return false;
 
 		this.addModAction("" + targetUser.name + " was warned by " + user.name + "." + (target ? " (" + target + ")" : ""));
-		this.modlog('WARN', targetUser, target, true, true);
+		this.modlog('WARN', targetUser, target, {noip: 1, noalts: 1});
 		targetUser.send('|c|~|/warn ' + target);
 		let userid = targetUser.getLastId();
 		this.add('|unlink|' + userid);
@@ -1618,7 +1618,7 @@ exports.commands = {
 		}
 		if (!targetUser.joinRoom(targetRoom.id)) return this.errorReply("User " + targetUser.name + " could not be joined to room " + targetRoom.title + ". They could be banned from the room.");
 		this.addModAction("" + targetUser.name + " was redirected to room " + targetRoom.title + " by " + user.name + ".");
-		this.modlog('REDIRECT', targetUser, `to ${targetRoom.title}`, true, true);
+		this.modlog('REDIRECT', targetUser, `to ${targetRoom.title}`, {noip: 1, noalts: 1});
 		targetUser.leaveRoom(room);
 	},
 	redirhelp: [`/redirect OR /redir [username], [roomname] - Attempts to redirect the user [username] to the room [roomname]. Requires: % @ & ~`],
@@ -1648,7 +1648,7 @@ exports.commands = {
 
 		if (targetUser in room.users) targetUser.popup("|modal|" + user.name + " has muted you in " + room.id + " for " + Chat.toDurationString(muteDuration) + ". " + target);
 		this.addModAction("" + targetUser.name + " was muted by " + user.name + " for " + Chat.toDurationString(muteDuration) + "." + (target ? " (" + target + ")" : ""));
-		this.modlog(`${cmd.includes('h') ? 'HOUR' : ''}MUTE`, targetUser, target, true);
+		this.modlog(`${cmd.includes('h') ? 'HOUR' : ''}MUTE`, targetUser, target, {noip: 1});
 		if (targetUser.autoconfirmed && targetUser.autoconfirmed !== targetUser.userid) {
 			let displayMessage = "(" + targetUser.name + "'s ac account: " + targetUser.autoconfirmed + ")";
 			this.privateModAction(displayMessage);
@@ -1680,7 +1680,7 @@ exports.commands = {
 
 		if (successfullyUnmuted) {
 			this.addModAction("" + (targetUser ? targetUser.name : successfullyUnmuted) + " was unmuted by " + user.name + ".");
-			this.modlog('UNMUTE', targetUser, null, true, true);
+			this.modlog('UNMUTE', targetUser, null, {noip: 1, noalts: 1});
 		} else {
 			this.errorReply("" + (targetUser ? targetUser.name : this.targetUsername) + " is not muted.");
 		}
@@ -2309,7 +2309,7 @@ exports.commands = {
 
 		let entry = targetUser.name + " was forced to choose a new name by " + user.name + (reason ? ": " + reason : "");
 		this.privateModAction("(" + entry + ")");
-		this.modlog('FORCERENAME', targetUser, reason, true, true);
+		this.modlog('FORCERENAME', targetUser, reason, {noip: 1, noalts: 1});
 		Ladders.cancelSearches(targetUser);
 		targetUser.resetName(true);
 		targetUser.send("|nametaken||" + user.name + " considers your name inappropriate" + (reason ? ": " + reason : "."));
@@ -2392,7 +2392,7 @@ exports.commands = {
 
 		if (cmd === 'hidealtstext' || cmd === 'hidetextalts' || cmd === 'hidealttext') {
 			this.addModAction(`${targetUser.name}'s alts' messages were cleared from ${room.title} by ${user.name}.`);
-			this.modlog('HIDEALTSTEXT', targetUser, null, true);
+			this.modlog('HIDEALTSTEXT', targetUser, null, {noip: 1});
 			this.add(`|unlink|${hidetype}${userid}`);
 
 			const alts = targetUser.getAltUsers(true);
@@ -2404,7 +2404,7 @@ exports.commands = {
 			}
 		} else {
 			this.addModAction("" + targetUser.name + "'s messages were cleared from  " + room.title + " by " + user.name + ".");
-			this.modlog('HIDETEXT', targetUser, null, true, true);
+			this.modlog('HIDETEXT', targetUser, null, {noip: 1, noalts: 1});
 			this.add('|unlink|' + hidetype + userid);
 			if (userid !== toId(this.inputUsername)) this.add('|unlink|' + hidetype + toId(this.inputUsername));
 		}
@@ -3481,7 +3481,7 @@ exports.commands = {
 
 		if (room.game.leaveGame(targetUser)) {
 			this.addModAction("" + targetUser.name + " was kicked from a battle by " + user.name + (target ? " (" + target + ")" : ""));
-			this.modlog('KICKBATTLE', targetUser, target, true, true);
+			this.modlog('KICKBATTLE', targetUser, target, {noip: 1, noalts: 1});
 		} else {
 			this.errorReply("/kickbattle - User isn't in battle.");
 		}

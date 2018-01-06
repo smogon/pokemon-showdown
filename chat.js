@@ -635,10 +635,9 @@ class CommandContext {
 	 * @param {string} action
 	 * @param {string | User} user
 	 * @param {string} note
-	 * @param {boolean} noip
-	 * @param {boolean} noalts
+	 * @param {object} options
 	 */
-	modlog(action, user, note, noip, noalts) {
+	modlog(action, user, note, options = {}) {
 		let buf = `(${this.room.id}) ${action}: `;
 		if (user) {
 			if (typeof user === 'string') {
@@ -646,12 +645,12 @@ class CommandContext {
 			} else {
 				let userid = user.getLastId();
 				buf += `[${userid}]`;
-				if (!noalts) {
+				if (!options.noalts) {
 					if (user.autoconfirmed && user.autoconfirmed !== userid) buf += ` ac:[${user.autoconfirmed}]`;
 					const alts = user.getAltUsers(false, true).map(user => user.getLastName()).join(', ');
 					if (alts.length) buf += ` alts:[${alts}]`;
 				}
-				if (!noip) buf += ` [${user.latestIp}]`;
+				if (!options.noip) buf += ` [${user.latestIp}]`;
 			}
 		}
 		buf += ` by ${this.user.userid}`;
