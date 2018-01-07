@@ -1117,7 +1117,9 @@ class BasicChatRoom extends BasicRoom {
 	 */
 	reportJoin(type, entry) {
 		if (this.reportJoins) {
-			this.add(`|${type}|${entry}`).update();
+			const message = `|${type}|${entry}`;
+			this.send(message);
+			this.roomlog(message);
 			return;
 		}
 		let ucType = '';
