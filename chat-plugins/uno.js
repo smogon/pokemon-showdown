@@ -556,13 +556,17 @@ exports.commands = {
 			let suppressMessages = cmd.includes('private') || !(cmd.includes('public') || room.id === 'gamecorner');
 
 			room.game = new UNOgame(room, target, suppressMessages);
-			this.privateModCommand(`(A game of UNO was created by ${user.name}.)`);
+			this.privateModAction(`(A game of UNO was created by ${user.name}.)`);
+			this.modlog('UNO CREATE');
 		},
 
 		start: function (target, room, user) {
 			if (!this.can('minigame', null, room)) return;
 			if (!room.game || room.game.gameid !== 'uno' || room.game.state !== 'signups') return this.errorReply("There is no UNO game in signups phase in this room.");
-			if (room.game.onStart()) this.privateModCommand(`(The game of UNO was started by ${user.name}.)`);
+			if (room.game.onStart()) {
+				this.privateModAction(`(The game of UNO was started by ${user.name}.)`);
+				this.modlog('UNO START');
+			}
 		},
 
 		stop: 'end',
@@ -571,7 +575,8 @@ exports.commands = {
 			if (!room.game || room.game.gameid !== 'uno') return this.errorReply("There is no UNO game going on in this room.");
 			room.game.destroy();
 			room.add("The game of UNO was forcibly ended.").update();
-			this.privateModCommand(`(The game of UNO was ended by ${user.name}.)`);
+			this.privateModAction(`(The game of UNO was ended by ${user.name}.)`);
+			this.modlog('UNO END');
 		},
 
 		timer: function (target, room, user) {
@@ -587,7 +592,8 @@ exports.commands = {
 					room.game.eliminate(room.game.currentPlayer);
 				}, amount * 1000);
 			}
-			this.addModCommand(`${user.name} has set the UNO automatic disqualification timer to ${amount} seconds.`);
+			this.addModAction(`${user.name} has set the UNO automatic disqualification timer to ${amount} seconds.`);
+			this.modlog('UNO TIMER', null, `${amount} seconds`);
 		},
 
 		dq: 'disqualify',
@@ -597,7 +603,8 @@ exports.commands = {
 
 			let disqualified = room.game.eliminate(toId(target));
 			if (disqualified === false) return this.errorReply(`Unable to disqualify ${target}.`);
-			this.privateModCommand(`(${user.name} has disqualified ${disqualified} from the UNO game.)`);
+			this.privateModAction(`(${user.name} has disqualified ${disqualified} from the UNO game.)`);
+			this.modlog('UNO DQ', toId(target));
 			room.add(`${target} has been disqualified from the UNO game.`).update();
 		},
 
@@ -683,7 +690,8 @@ exports.commands = {
 
 			room.game.suppressMessages = state;
 
-			this.addModCommand(`${user.name} has turned ${(state ? 'on' : 'off')} suppression of UNO game messages.`);
+			this.addModAction(`${user.name} has turned ${(state ? 'on' : 'off')} suppression of UNO game messages.`);
+			this.modlog('UNO SUPRESS', null, (state ? 'ON' : 'OFF'));
 		},
 
 		spectate: function (target, room, user) {

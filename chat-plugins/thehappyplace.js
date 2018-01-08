@@ -26,7 +26,7 @@ exports.commands = {
 			if (!room.chatRoomData.quote) return this.sendReply("The Quote of the Day has already been reset.");
 			delete room.chatRoomData.quote;
 			this.sendReply("The Quote of the Day was reset by " + Chat.escapeHTML(user.name) + ".");
-			this.logModCommand(user.name + " reset the Quote of the Day.");
+			this.modlog('QOTD', null, 'RESET');
 			Rooms.global.writeChatRoomData();
 			return;
 		}
@@ -36,7 +36,7 @@ exports.commands = {
 			"<div class=\"broadcast-blue\"><strong>The Inspirational Quote of the Day has been updated by " + Chat.escapeHTML(user.name) + ".</strong><br />" +
 			"Quote: " + room.chatRoomData.quote + "</div>"
 		);
-		this.logModCommand(Chat.escapeHTML(user.name) + " updated the quote of the day to \"" + room.chatRoomData.quote + "\".");
+		this.modlog('QOTD', null, `to "${room.chatRoomData.quote}"`);
 	},
 	quoteofthedayhelp: 'qotdhelp',
 	qotdhelp: [

@@ -657,9 +657,14 @@ class Trivia extends Rooms.RoomGame {
 			` mode trivia under the ${this.category} category with a cap of ` +
 			`${this.cap} points, with ${winner.points} points and ` +
 			`${winner.correctAnswers} correct answers!)`;
+
+		let logbuf = `(User ${winner.userid} won the game of ${this.mode}` +
+			` mode trivia under the ${this.category} category with a cap of ` +
+			`${this.cap} points, with ${winner.points} points and ` +
+			`${winner.correctAnswers} correct answers!)`;
 		this.room.sendMods(buf);
 		this.room.roomlog(buf);
-		this.room.modlog(buf);
+		this.room.modlog(`(${this.room.id}) ${logbuf}`);
 
 		writeTriviaData();
 		this.destroy();
@@ -1446,13 +1451,15 @@ const commands = {
 		if (cmd === 'add') {
 			triviaData.questions.splice(findEndOfCategory(category, false), 0, submission);
 			writeTriviaData();
-			return this.privateModCommand(`(Question '${target[1]}' was added to the ${isWL ? "Weakest Link" : "Trivia"} question database by ${user.name}.)`);
+			this.modlog('TRIVIAQUESTION', null, `added to ${isWL ? "Weakest Link" : "Trivia"} - '${target[1]}'`);
+			return this.privateModAction(`(Question '${target[1]}' was added to the ${isWL ? "Weakest Link" : "Trivia"} question database by ${user.name}.)`);
 		}
 
 		submissions.splice(findEndOfCategory(category, true), 0, submission);
 		writeTriviaData();
 		if (!user.can('mute', null, room)) this.sendReply(`Question '${target[1]}' was submitted for review.`);
-		this.privateModCommand(`(${user.name} submitted question '${target[1]}' for review.)`);
+		this.modlog('TRIVIAQUESTION', null, `submitted '${target[1]}'`);
+		this.privateModAction(`(${user.name} submitted question '${target[1]}' for review.)`);
 	},
 	submithelp: [`/trivia submit [category] | [question] | [answer1], [answer2] ... [answern] - Add a question to the submission database for staff to review. Requires: + % @ # & ~`],
 	addhelp: [`/trivia add [category] | [question] | [answer1], [answer2], ... [answern] - Add a question to the question database. Requires: % @ # & ~`],
@@ -1502,7 +1509,8 @@ const commands = {
 
 			triviaData.submissions = [];
 			writeTriviaData();
-			return this.privateModCommand(`(${user.name} ${(isAccepting ? " added " : " removed ")} all questions from the submission database.)`);
+			this.modlog(`TRIVIAQUESTION`, null, `${(isAccepting ? "added" : "removed")} all from submission database.`);
+			return this.privateModAction(`(${user.name} ${(isAccepting ? " added " : " removed ")} all questions from the submission database.)`);
 		}
 
 		if (/^\d+(?:-\d+)?(?:, ?\d+(?:-\d+)?)*$/.test(target)) {
@@ -1555,7 +1563,8 @@ const commands = {
 			}
 
 			writeTriviaData();
-			return this.privateModCommand(`(${user.name} ${(isAccepting ? "added " : "removed ")}submission number${(indicesLen > 1 ? "s " : " ")}${target} from the submission database.)`);
+			this.modlog('TRIVIAQUESTION', null, `${(isAccepting ? "added " : "removed ")}submission number${(indicesLen > 1 ? "s " : " ")}${target}`);
+			return this.privateModAction(`(${user.name} ${(isAccepting ? "added " : "removed ")}submission number${(indicesLen > 1 ? "s " : " ")}${target} from the submission database.)`);
 		}
 
 		this.errorReply(`'${target}' is an invalid argument. View /trivia help questions for more information.`);
@@ -1580,7 +1589,8 @@ const commands = {
 			if (toId(question.question) === questionID) {
 				questions.splice(i, 1);
 				writeTriviaData();
-				return this.privateModCommand(`(${user.name} removed question '${target}' from the question database.)`);
+				this.modlog('TRIVIAQUESTION', null, `removed '${target}'`);
+				return this.privateModAction(`(${user.name} removed question '${target}' from the question database.)`);
 			}
 		}
 
@@ -1756,7 +1766,8 @@ const commands = {
 			}
 			CATEGORIES.ugm = 'Ultimate Gaming Month';
 			writeTriviaData();
-			return this.privateModCommand(`(${user.name} enabled UGM mode.)`);
+			this.modlog('UGMMODE', null, 'ON');
+			return this.privateModAction(`(${user.name} enabled UGM mode.)`);
 		}
 		if (command === 'disable') {
 			if (!triviaData.ugm) return this.errorReply("UGM mode is already disabled.");
@@ -1764,7 +1775,8 @@ const commands = {
 			delete triviaData.ugm;
 			delete CATEGORIES.ugm;
 			writeTriviaData();
-			return this.privateModCommand(`(${user.name} disabled UGM mode.)`);
+			this.modlog('UGMMODE', null, 'OFF');
+			return this.privateModAction(`(${user.name} disabled UGM mode.)`);
 		}
 		this.errorReply("Invalid target. Valid targets: enable, disable");
 	},
@@ -1864,4 +1876,3 @@ module.exports = {
 		],
 	},
 };
-

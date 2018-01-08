@@ -221,7 +221,8 @@ exports.commands = {
 			room.game = new Hangman(room, user, word, hint);
 			room.game.display(user, true);
 
-			return this.privateModCommand("(A game of hangman was started by " + user.name + ".)");
+			this.modlog('HANGMAN');
+			return this.privateModAction("(A game of hangman was started by " + user.name + ".)");
 		},
 		createhelp: ["/hangman create [word], [hint] - Makes a new hangman game. Requires: % @ * # & ~"],
 
@@ -244,7 +245,8 @@ exports.commands = {
 			if (!room.game || room.game.gameid !== 'hangman') return this.errorReply("There is no game of hangman running in this room.");
 
 			room.game.end();
-			return this.privateModCommand("(The game of hangman was ended by " + user.name + ".)");
+			this.modlog('ENDHANGMAN');
+			return this.privateModAction("(The game of hangman was ended by " + user.name + ".)");
 		},
 		endhelp: ["/hangman end - Ends the game of hangman before the man is hanged or word is guessed. Requires: % @ * # & ~"],
 

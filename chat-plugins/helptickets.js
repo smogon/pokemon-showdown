@@ -84,6 +84,7 @@ class HelpTicket extends Rooms.RoomGame {
 
 	modnote(user, text) {
 		this.room.addByUser(user, text);
+		this.room.modlog(text);
 	}
 
 	close(staff) {
@@ -601,19 +602,19 @@ exports.commands = {
 			if (targetUser) {
 				name = targetUser.getLastName();
 				userid = targetUser.getLastId();
-				if (ticket && ticket.banned && ticket.expires > Date.now()) return this.privateModCommand(`(${name} would be ticket banned by ${user.name} but was already ticket banned.)`);
+				if (ticket && ticket.banned && ticket.expires > Date.now()) return this.privateModAction(`(${name} would be ticket banned by ${user.name} but was already ticket banned.)`);
 				if (targetUser.trusted) Monitor.log(`[CrisisMonitor] Trusted user ${targetUser.name}${(targetUser.trusted !== targetUser.userid ? ` (${targetUser.trusted})` : ``)} was ticket banned by ${user.name}, and should probably be demoted.`);
 			} else {
 				name = this.targetUsername;
 				userid = toId(this.targetUsername);
-				if (ticket && ticket.banned && ticket.expires > Date.now()) return this.privateModCommand(`(${name} would be ticket banned by ${user.name} but was already ticket banned.)`);
+				if (ticket && ticket.banned && ticket.expires > Date.now()) return this.privateModAction(`(${name} would be ticket banned by ${user.name} but was already ticket banned.)`);
 			}
 
 			if (targetUser) {
 				targetUser.popup(`|modal|${user.name} has banned you from creating help tickets.${(target ? `\n\nReason: ${target}` : ``)}\n\nYour ban will expire in a few days.`);
 			}
 
-			this.addModCommand(`${name} was ticket banned by ${user.name}.${target ? ` (${target})` : ``}`, (targetUser ? `(${targetUser.latestIp})` : ''));
+			this.addModAction(`${name} was ticket banned by ${user.name}.${target ? ` (${target})` : ``}`);
 
 			let affected = [];
 			let punishment = {
@@ -644,10 +645,13 @@ exports.commands = {
 			}
 
 			let acAccount = (targetUser && targetUser.autoconfirmed !== userid && targetUser.autoconfirmed);
+			let displayMessage = '';
 			if (affected.length > 1) {
-				this.privateModCommand(`(${name}'s ${acAccount ? ` ac account: ${acAccount}, ` : ""}ticket banned alts: ${affected.slice(1).map(user => user.getLastName()).join(", ")})`);
+				displayMessage = `(${name}'s ${acAccount ? ` ac account: ${acAccount}, ` : ""}ticket banned alts: ${affected.slice(1).map(user => user.getLastName()).join(", ")})`;
+				this.privateModAction(displayMessage);
 			} else if (acAccount) {
-				this.privateModCommand(`(${name}'s ac account: ${acAccount})`);
+				displayMessage = `(${name}'s ac account: ${acAccount})`;
+				this.privateModAction(displayMessage);
 			}
 
 			for (let i in affected) {
@@ -691,7 +695,7 @@ exports.commands = {
 			delete tickets[ticket.userid];
 			writeTickets();
 
-			this.addModCommand(`${affected.join(', ')} ${Chat.plural(affected.length, "were", "was")} ticket unbanned by ${user.name}.`);
+			this.addModAction(`${affected.join(', ')} ${Chat.plural(affected.length, "were", "was")} ticket unbanned by ${user.name}.`);
 			this.globalModlog("UNTICKETBAN", target, `by ${user.name}`);
 			if (targetUser) targetUser.popup(`${user.name} has ticket unbanned you.`);
 		},

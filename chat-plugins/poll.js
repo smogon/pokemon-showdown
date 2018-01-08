@@ -217,7 +217,8 @@ exports.commands = {
 			room.poll.display();
 
 			this.roomlog("" + user.name + " used " + message);
-			return this.privateModCommand("(A poll was started by " + user.name + ".)");
+			this.modlog('POLL');
+			return this.privateModAction("(A poll was started by " + user.name + ".)");
 		},
 		newhelp: [`/poll create [question], [option1], [option2], [...] - Creates a poll. Requires: % @ * # & ~`],
 
@@ -260,7 +261,8 @@ exports.commands = {
 					delete room.poll;
 				}, (timeout * 60000));
 				room.add("The poll timer was turned on: the poll will end in " + timeout + " minute(s).");
-				return this.privateModCommand("(The poll timer was set to " + timeout + " minute(s) by " + user.name + ".)");
+				this.modlog('POLL TIMER', null, `${timeout} minutes`);
+				return this.privateModAction("(The poll timer was set to " + timeout + " minute(s) by " + user.name + ".)");
 			} else {
 				if (!this.runBroadcast()) return;
 				if (room.poll.timeout) {
@@ -292,7 +294,8 @@ exports.commands = {
 
 			room.poll.end();
 			delete room.poll;
-			return this.privateModCommand("(The poll was ended by " + user.name + ".)");
+			this.modlog('POLL END');
+			return this.privateModAction("(The poll was ended by " + user.name + ".)");
 		},
 		endhelp: [`/poll end - Ends a poll and displays the results. Requires: % @ * # & ~`],
 

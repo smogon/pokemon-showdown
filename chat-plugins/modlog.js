@@ -254,7 +254,7 @@ function prettifyResults(rawResults, room, searchString, exactSearch, addModlogL
 		let time;
 		let bracketIndex;
 		if (line) {
-			if (hideIps) line = line.replace(/\([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+\)/g, '');
+			if (hideIps) line = line.replace(/[([][0-9]+\.[0-9]+\.[0-9]+\.[0-9]+[)\]]/g, '');
 			bracketIndex = line.indexOf(']');
 			if (bracketIndex < 0) return Chat.escapeHTML(line);
 			time = new Date(line.slice(1, bracketIndex));

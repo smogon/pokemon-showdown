@@ -492,9 +492,10 @@ class ScavengerHunt extends Rooms.RoomGame {
 
 			// notify staff
 			let staffMsg = `(${player.name} has been caught trying to do their own hunt.)`;
+			let logMsg = `([${player.userid}] has been caught trying to do their own hunt.)`;
 			this.room.sendMods(staffMsg);
 			this.room.roomlog(staffMsg);
-			this.room.modlog(staffMsg);
+			this.room.modlog(`(${this.room.id}) ${logMsg}`);
 
 			PlayerLeaderboard.addPoints(player.name, 'infraction', 1);
 			player.infracted = true;
@@ -507,9 +508,11 @@ class ScavengerHunt extends Rooms.RoomGame {
 
 			// notify staff
 			let staffMsg = `(${player.name} has been caught attempting a hunt with ${uniqueConnections} connections on the account. The user has also been given 1 infraction point on the player leaderboard.)`;
+			let logMsg = `([${player.userid}] has been caught attempting a hunt with ${uniqueConnections} connections on the account. The user has also been given 1 infraction point on the player leaderboard.)`;
+
 			this.room.sendMods(staffMsg);
 			this.room.roomlog(staffMsg);
-			this.room.modlog(staffMsg);
+			this.room.modlog(`(${this.room.id}) ${logMsg}`);
 
 			PlayerLeaderboard.addPoints(player.name, 'infraction', 1);
 			player.infracted = true;
@@ -719,7 +722,8 @@ let commands = {
 			if (!this.can('mute', null, room)) return false;
 			if (!room.game || !room.game.scavParentGame) return this.errorReply(`There is no scavenger game currently running.`);
 
-			this.privateModCommand(`The ${room.game.title} has been forcibly ended by ${user.name}.`);
+			this.privateModAction(`The ${room.game.title} has been forcibly ended by ${user.name}.`);
+			this.modlog('SCAVENGER', null, 'ended the hunt');
 			room.game.announce(`The ${room.game.title} has been forcibly ended.`);
 			room.game.destroy();
 		},
@@ -733,7 +737,8 @@ let commands = {
 
 			let success = room.game.eliminate(targetId);
 			if (success) {
-				this.addModCommand(`User '${targetId}' has been kicked from the ${room.game.title}.`);
+				this.addModAction(`User '${targetId}' has been kicked from the ${room.game.title}.`);
+				this.modlog('SCAVENGERS', target, `kicked from the ${room.game.title}`);
 			} else {
 				this.errorReply(`Unable to kick user '${targetId}'.`);
 			}
@@ -793,7 +798,8 @@ let commands = {
 		} else {
 			room.game = new ScavengerHunt(room, user, hosts, gameType, params.result);
 		}
-		this.privateModCommand(`(A new scavenger hunt was created by ${user.name}.)`);
+		this.privateModAction(`(A new scavenger hunt was created by ${user.name}.)`);
+		this.modlog('SCAV NEW', null, `${gameType ? gameType.toUpperCase() : ''}: creators - ${hosts.map(h => h.userid)}`);
 	},
 
 	status: function (target, room, user) {
@@ -839,7 +845,8 @@ let commands = {
 		let message = `The scavenger timer has been ${(result === 'off' ? "turned off" : `set to ${result} minutes`)}`;
 
 		room.add(message + '.');
-		this.privateModCommand(`(${message} by ${user.name}.)`);
+		this.privateModAction(`(${message} by ${user.name}.)`);
+		this.modlog('SCAV TIMER', null, (result === 'off' ? 'OFF' : `${result} minutes`));
 	},
 
 	inherit: function (target, room, user) {
@@ -858,7 +865,8 @@ let commands = {
 		game.eliminate(user.userid);
 		game.cacheUserIps(user);
 
-		this.privateModCommand(`(${user.name} has inherited staff permissions for the current hunt.)`);
+		this.privateModAction(`(${user.name} has inherited staff permissions for the current hunt.)`);
+		this.modlog('SCAV INHERIT');
 	},
 
 	reset: function (target, room, user) {
@@ -866,7 +874,8 @@ let commands = {
 		if (!room.game || !room.game.scavGame) return this.errorReply(`There is no scavenger game currently running.`);
 
 		room.game.onEnd(true, user);
-		this.privateModCommand(`(${user.name} has reset the scavenger hunt.)`);
+		this.privateModAction(`(${user.name} has reset the scavenger hunt.)`);
+		this.modlog('SCAV RESET');
 	},
 
 	forceend: 'end',
@@ -884,7 +893,8 @@ let commands = {
 		}
 
 		room.game.onEnd(null, user);
-		this.privateModCommand(`(${user.name} has ended the scavenger hunt.)`);
+		this.privateModAction(`(${user.name} has ended the scavenger hunt.)`);
+		this.modlog('SCAV END');
 	},
 
 	viewhunt: function (target, room, user) {
@@ -915,7 +925,10 @@ let commands = {
 
 		let game = room.game.childGame || room.game;
 		let success = game.eliminate(null, targetId);
-		if (success) return this.privateModCommand(`(${user.name} has kicked '${targetId}' from the scavenger hint.)`);
+		if (success) {
+			this.modlog('SCAV KICK', targetId);
+			return this.privateModAction(`(${user.name} has kicked '${targetId}' from the scavenger hunt.)`);
+		}
 		this.errorReply(`Unable to kick '${targetId}' from the scavenger hunt.`);
 	},
 
@@ -938,7 +951,7 @@ let commands = {
 		if (!room.scavQueue) room.scavQueue = [];
 
 		room.scavQueue.push({hosts: hosts, questions: params.result, staffHostId: user.userid, staffHostName: user.name});
-		this.privateModCommand(`(${user.name} has added a scavenger hunt to the queue.)`);
+		this.privateModAction(`(${user.name} has added a scavenger hunt to the queue.)`);
 
 		if (room.chatRoomData) {
 			room.chatRoomData.scavQueue = room.scavQueue;
@@ -954,7 +967,7 @@ let commands = {
 		if (!room.scavQueue || isNaN(id) || id < 0 || id >= room.scavQueue.length) return false; // this command should be using the display to manage anyways.
 
 		let removed = room.scavQueue.splice(id, 1)[0];
-		this.privateModCommand(`(${user.name} has removed a scavenger hunt by [${removed.hosts.map(u => u.name).join(", ")}] from the queue.)`);
+		this.privateModAction(`(${user.name} has removed a scavenger hunt created by [${removed.hosts.map(u => u.userid).join(", ")}] from the queue.)`);
 		this.sendReply(`|uhtmlchange|scav-queue|${formatQueue(room.scavQueue, user, room)}`);
 
 		if (room.chatRoomData) {
@@ -985,6 +998,7 @@ let commands = {
 		room.game = new ScavengerHunt(room, {userid: next.staffHostId, name: next.staffHostName}, next.hosts, false, next.questions);
 
 		if (target) this.sendReply(`|uhtmlchange|scav-queue|${formatQueue(room.scavQueue, user, room)}`);
+		this.modlog('SCAV NEW', null, `from queue: creators - ${next.hosts.map(h => h.userid)}`);
 
 		// update the saved queue.
 		if (room.chatRoomData) {
@@ -1007,7 +1021,8 @@ let commands = {
 			Rooms.global.writeChatRoomData();
 		}
 		this.sendReply(`|uhtmlchange|scav-queue|${formatQueue(room.scavQueue, user, room)}`);
-		this.privateModCommand(`(The queue has been ${state ? 'disabled' : 'enabled'} by ${user.name}.)`);
+		this.privateModAction(`(The queue has been ${state ? 'disabled' : 'enabled'} by ${user.name}.)`);
+		this.modlog('SCAV QUEUE', null, (state ? 'disabled' : 'enabled'));
 	},
 
 	defaulttimer: function (target, room, user) {
@@ -1024,7 +1039,8 @@ let commands = {
 			room.chatRoomData.defaultScavTimer = room.defaultScavTimer;
 			Rooms.global.writeChatRoomData();
 		}
-		this.privateModCommand(`(The default scavenger timer has been set to ${duration} minutes by ${user.name}.)`);
+		this.privateModAction(`(The default scavenger timer has been set to ${duration} minutes by ${user.name}.)`);
+		this.modlog('SCAV DEFAULT TIMER', null, `${duration} minutes`);
 	},
 
 	/**
@@ -1043,7 +1059,8 @@ let commands = {
 
 		Leaderboard.addPoints(targetId, 'points', points, true).write();
 
-		this.privateModCommand(`(${targetId} was given ${points} points on the monthly scavengers ladder by ${user.name}.)`);
+		this.privateModAction(`(${targetId} was given ${points} points on the monthly scavengers ladder by ${user.name}.)`);
+		this.modlog('SCAV ADDPOINTS', targetId, points);
 	},
 
 	removepoints: function (target, room, user) {
@@ -1059,7 +1076,8 @@ let commands = {
 
 		Leaderboard.addPoints(targetId, 'points', -points, true).write();
 
-		this.privateModCommand(`(${user.name} has taken ${points} points from ${targetId} on the monthly scavengers ladder.)`);
+		this.privateModAction(`(${user.name} has taken ${points} points from ${targetId} on the monthly scavengers ladder.)`);
+		this.modlog('SCAV REMOVEPOINTS', targetId, points);
 	},
 
 	resetladder: function (target, room, user) {
@@ -1068,7 +1086,8 @@ let commands = {
 
 		Leaderboard.reset().write();
 
-		this.privateModCommand(`(${user.name} has reset the monthly scavengers ladder.)`);
+		this.privateModAction(`(${user.name} has reset the monthly scavengers ladder.)`);
+		this.modlog('SCAV RESETLADDER');
 	},
 	top: 'ladder',
 	ladder: function (target, room, user) {
@@ -1118,7 +1137,8 @@ let commands = {
 			room.chatRoomData.blitzPoints = room.blitzPoints;
 			Rooms.global.writeChatRoomData();
 		}
-		this.privateModCommand(`(${user.name} has set the points awarded for blitz to ${blitzPoints}.)`);
+		this.privateModAction(`(${user.name} has set the points awarded for blitz to ${blitzPoints}.)`);
+		this.modlog('SCAV BLITZ', null, blitzPoints);
 	},
 
 	setpoints: function (target, room, user) {
@@ -1138,7 +1158,9 @@ let commands = {
 			room.chatRoomData.winPoints = room.winPoints;
 			Rooms.global.writeChatRoomData();
 		}
-		this.privateModCommand(`(${user.name} has set the points awarded for winning an official scavenger hunt to - ${winPoints.map((p, i) => `(${(i + 1)}) ${p}`).join(', ')})`);
+		const pointsDisplay = winPoints.map((p, i) => `(${(i + 1)}) ${p}`).join(', ');
+		this.privateModAction(`(${user.name} has set the points awarded for winning an official scavenger hunt to - ${pointsDisplay})`);
+		this.modlog('SCAV SETPOINTS', null, pointsDisplay);
 	},
 
 	/**
@@ -1153,13 +1175,15 @@ let commands = {
 			if (!this.can('declare', null, room)) return false;
 			HostLeaderboard.softReset().then(() => {
 				HostLeaderboard.write();
-				this.privateModCommand(`(${user.name} has reset the host log leaderboard into the next month.)`);
+				this.privateModAction(`(${user.name} has reset the host log leaderboard into the next month.)`);
+				this.modlog('SCAV HUNTLOGS', null, 'RESET');
 			});
 			return;
 		} else if (target === 'HARD RESET') {
 			if (!this.can('declare', null, room)) return false;
 			HostLeaderboard.hardReset().write();
-			this.privateModCommand(`(${user.name} has hard reset the host log leaderboard.)`);
+			this.privateModAction(`(${user.name} has hard reset the host log leaderboard.)`);
+			this.modlog('SCAV HUNTLOGS', null, 'HARD RESET');
 			return;
 		}
 
@@ -1195,13 +1219,15 @@ let commands = {
 			if (!this.can('declare', null, room)) return false;
 			PlayerLeaderboard.softReset().then(() => {
 				PlayerLeaderboard.write();
-				this.privateModCommand(`(${user.name} has reset the player log leaderboard into the next month.)`);
+				this.privateModAction(`(${user.name} has reset the player log leaderboard into the next month.)`);
+				this.modlog('SCAV PLAYLOGS', null, 'RESET');
 			});
 			return;
 		} else if (target === 'HARD RESET') {
 			if (!this.can('declare', null, room)) return false;
 			PlayerLeaderboard.hardReset().write();
-			this.privateModCommand(`(${user.name} has hard reset the player log leaderboard.)`);
+			this.privateModAction(`(${user.name} has hard reset the player log leaderboard.)`);
+			this.modlog('SCAV PLAYLOGS', null, 'HARD RESET');
 			return;
 		}
 
@@ -1251,7 +1277,8 @@ let commands = {
 
 		PlayerLeaderboard.addPoints(targetId, 'infraction', change, true).write();
 
-		this.privateModCommand(`(${user.name} has ${(change > 0 ? 'given' : 'taken')} one infraction point ${(change > 0 ? 'to' : 'from')} '${targetId}'.)`);
+		this.privateModAction(`(${user.name} has ${(change > 0 ? 'given' : 'taken')} one infraction point ${(change > 0 ? 'to' : 'from')} '${targetId}'.)`);
+		this.modlog(`SCAV ${this.cmd.toUpperCase()}`, user);
 	},
 };
 
