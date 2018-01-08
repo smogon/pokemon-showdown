@@ -533,7 +533,8 @@ let commands = {
 
 		room.giveaway = new QuestionGiveaway(user, targetUser, room, ot, tid, fc, prize, question, answers);
 
-		this.privateModCommand(`(${user.name} started a question giveaway for ${targetUser.name})`);
+		this.privateModAction(`(${user.name} started a question giveaway for ${targetUser.name})`);
+		this.modlog('QUESTION GIVEAWAY', null, `for ${targetUser.getLastId()}`);
 	},
 	changeanswer: 'changequestion',
 	changequestion: function (target, room, user, conn, cmd) {
@@ -592,7 +593,8 @@ let commands = {
 
 		room.giveaway = new LotteryGiveaway(user, targetUser, room, ot, tid, fc, prize, numWinners);
 
-		this.privateModCommand(`(${user.name} started a lottery giveaway for ${targetUser.name})`);
+		this.privateModAction(`(${user.name} started a lottery giveaway for ${targetUser.name})`);
+		this.log('LOTTERY GIVEAWAY', null, `for ${targetUser.getLastId()}`);
 	},
 	leavelotto: 'join',
 	leavelottery: 'join',
@@ -638,7 +640,8 @@ let commands = {
 
 			room.gtsga = new GtsGiveaway(room, targetUser, amount, summary, deposit, lookfor);
 
-			this.privateModCommand(`(${user.name} started a GTS giveaway for ${targetUser.name})`);
+			this.privateModAction(`(${user.name} started a GTS giveaway for ${targetUser.name})`);
+			this.modlog('GTS GIVEAWAY', null, `for ${targetUser.getLastId()}`);
 		},
 		left: function (target, room, user) {
 			if (room.id !== 'wifi') return false;
@@ -682,8 +685,9 @@ let commands = {
 				return this.errorReply("The reason is too long. It cannot exceed 300 characters.");
 			}
 			room.gtsga.end(true);
+			this.modlog('GIVEAWAY END', null, target);
 			if (target) target = `: ${target}`;
-			this.privateModCommand(`(The giveaway was forcibly ended by ${user.name}${target})`);
+			this.privateModAction(`(The giveaway was forcibly ended by ${user.name}${target})`);
 		},
 	},
 	// general.
@@ -702,8 +706,9 @@ let commands = {
 
 		Giveaway.ban(room, targetUser, target);
 		if (room.giveaway) room.giveaway.kickUser(targetUser);
+		this.modlog('GIVEAWAYBAN', targetUser, target);
 		if (target) target = ` (${target})`;
-		this.privateModCommand(`(${targetUser.name} was banned from entering giveaways by ${user.name}.${target})`);
+		this.privateModAction(`(${targetUser.name} was banned from entering giveaways by ${user.name}.${target})`);
 	},
 	unban: function (target, room, user) {
 		if (!target) return false;
@@ -716,7 +721,8 @@ let commands = {
 		if (!Giveaway.checkBanned(room, targetUser)) return this.errorReply(`User '${this.targetUsername}' isn't banned from entering giveaways.`);
 
 		Giveaway.unban(room, targetUser);
-		this.privateModCommand(`${targetUser.name} was unbanned from entering giveaways by ${user.name}.`);
+		this.privateModAction(`${targetUser.name} was unbanned from entering giveaways by ${user.name}.`);
+		this.modlog('GIVEAWAYUNBAN', targetUser, null, {noip: 1, noalts: 1});
 	},
 	stop: 'end',
 	end: function (target, room, user) {
@@ -728,8 +734,9 @@ let commands = {
 			return this.errorReply("The reason is too long. It cannot exceed 300 characters.");
 		}
 		room.giveaway.end(true);
+		this.modlog('GIVEAWAY END', null, target);
 		if (target) target = `: ${target}`;
-		this.privateModCommand(`(The giveaway was forcibly ended by ${user.name}${target})`);
+		this.privateModAction(`(The giveaway was forcibly ended by ${user.name}${target})`);
 	},
 	rm: 'remind',
 	remind: function (target, room, user) {
@@ -820,7 +827,8 @@ let breedingcontests = {
 		breedingData.latest = toId(contestName);
 
 		saveBreedingData();
-		this.privateModCommand(`(A winner for the '${contestName}' breeding contest was set by ${user.name}.)`);
+		this.privateModAction(`(A winner for the '${contestName}' breeding contest was set by ${user.name}.)`);
+		this.modlog('BREEDING WINNER', null, `for the '${contestName}' breeding contest`);
 	},
 	view: function (target, room, user) {
 		if (room.id !== 'wifi') return this.errorReply("This command can only be used in the Wi-Fi room.");

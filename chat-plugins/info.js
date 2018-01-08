@@ -1603,10 +1603,12 @@ exports.commands = {
 		if (target === 'delete' || target === 'remove') {
 			if (!room.rulesLink) return this.errorReply("This room does not have rules set to remove.");
 			delete room.rulesLink;
-			this.privateModCommand(`(${user.name} has removed the room rules link.)`);
+			this.privateModAction(`(${user.name} has removed the room rules link.)`);
+			this.modlog('RULES', null, `removed room rules link`);
 		} else {
 			room.rulesLink = target;
-			this.privateModCommand(`(${user.name} changed the room rules link to: ${target})`);
+			this.privateModAction(`(${user.name} changed the room rules link to: ${target})`);
+			this.modlog('RULES', null, `changed link to: ${target}`);
 		}
 
 		if (room.chatRoomData) {
@@ -1899,10 +1901,10 @@ exports.commands = {
 		Rooms.SimulatorProcess.eval('Config.potd = \'' + toId(target) + '\'');
 		if (target) {
 			if (Rooms.lobby) Rooms.lobby.addRaw("<div class=\"broadcast-blue\"><b>The Pok&eacute;mon of the Day is now " + target + "!</b><br />This Pokemon will be guaranteed to show up in random battles.</div>");
-			this.logModCommand("The Pok\u00e9mon of the Day was changed to " + target + " by " + user.name + ".");
+			this.modlog('POTD', null, target);
 		} else {
 			if (Rooms.lobby) Rooms.lobby.addRaw("<div class=\"broadcast-blue\"><b>The Pok&eacute;mon of the Day was removed!</b><br />No pokemon will be guaranteed in random battles.</div>");
-			this.logModCommand("The Pok\u00e9mon of the Day was removed by " + user.name + ".");
+			this.modlog('POTD', null, 'removed');
 		}
 	},
 
