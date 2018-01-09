@@ -2982,7 +2982,7 @@ exports.commands = {
 			Config.autolockdown = false;
 			this.sendReply("The server is now set to not automatically kill itself upon the final battle finishing.");
 			const logRoom = Rooms('staff') || room;
-			logRoom.roomlog(`${user.name} used /autolockdown kill off`);
+			logRoom.roomlog(`${user.name} used /autolockdownkill off`);
 		} else {
 			return this.parse('/help autolockdownkill');
 		}
