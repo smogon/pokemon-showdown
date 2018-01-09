@@ -532,7 +532,7 @@ exports.commands = {
 					helpRoom.modjoin = '%';
 				}
 				helpRoom.introMessage = `<h2 style="margin-top:0">Help Ticket - ${user.name}</h2><p><b>Issue</b>: ${ticket.type}<br />${upper ? `An Upper` : `A Global`} staff member will be with you shortly.</p>`;
-				helpRoom.staffMessage = `<p><button class="button" name="send" value="/helpticket close ${user.userid}">Close Ticket</button> <button class="button" name="send" value="/helpticket escalate ${user.userid}">Escalate</button> ${upper ? `` : `<button class="button" name="send" value="/helpticket escalate ${user.userid}, upperstaff">Escalate to Upper Staff</button>`}</p><p>To ban this user from creating tickets for two days, please use <code>/helpticket ban ${user.userid}</code></p>`;
+				helpRoom.staffMessage = `<p><button class="button" name="send" value="/helpticket close ${user.userid}">Close Ticket</button> <button class="button" name="send" value="/helpticket escalate ${user.userid}">Escalate</button> ${upper ? `` : `<button class="button" name="send" value="/helpticket escalate ${user.userid}, upperstaff">Escalate to Upper Staff</button>`} <button class="button" name="send" value="/helpticket ban ${user.userid}"><small>Ticketban</small></button></p>`;
 				if (helpRoom.game) helpRoom.game.destroy();
 				helpRoom.game = new HelpTicket(helpRoom, ticket);
 			}
