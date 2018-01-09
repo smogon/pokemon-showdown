@@ -399,7 +399,7 @@ class ScavengerHunt extends Rooms.RoomGame {
 
 			this.announce(
 				`The ${this.gameType ? `${this.gameType} ` : ""}scavenger hunt was ended ${(endedBy ? "by " + Chat.escapeHTML(endedBy.name) : "automatically")}.<br />` +
-				`${this.completed.slice(0, sliceIndex).map((p, i) => `${formatOrder(i + 1)} place: ${Chat.escapeHTML(p.name)}${this.gameType === 'official' ? ` <span style="color: magenta;">[${p.time}]</span>` : ''}.<br />`).join("")}${this.completed.length > sliceIndex ? `Consolation Prize: ${this.completed.slice(sliceIndex).map(e => `${Chat.escapeHTML(e.name)}${this.gameType === 'official' ? ` <span style="color: magenta;">[${e.time}]</span>` : ''}`).join(', ')}<br />` : ''}<br />` +
+				`${this.completed.slice(0, sliceIndex).map((p, i) => `${formatOrder(i + 1)} place: <em>${Chat.escapeHTML(p.name)}</em>${this.gameType === 'official' ? ` <span style="color: lightgreen;">[${p.time}]</span>` : ''}.<br />`).join("")}${this.completed.length > sliceIndex ? `Consolation Prize: ${this.completed.slice(sliceIndex).map(e => `<em>${Chat.escapeHTML(e.name)}</em>${this.gameType === 'official' ? ` <span style="color: lightgreen;">[${e.time}]</span>` : ''}`).join(', ')}<br />` : ''}<br />` +
 				`<details style="cursor: pointer;"><summary>Solution: </summary><br />${this.questions.map((q, i) => `${i + 1}) ${Chat.formatText(q.hint)} <span style="color: lightgreen">[<em>${Chat.escapeHTML(q.answer.join(' / '))}</em>]</span>`).join("<br />")}</details>`
 			);
 
