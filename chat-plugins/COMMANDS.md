@@ -114,8 +114,9 @@ Commands have access to the following functions:
 *	Like this.add, except it logs the message as being sent as the user who used the command.
 	This does not log anything into the modlog
 
-`modlog(action, user, note, options)`
-* adds a log line into the room's modlog, similar to `this.globalModlog`.
+`this.modlog(action, user, note, options)`
+*   Adds a log line into the room's modlog, similar to `this.globalModlog`.
+    The arguments `user` (the targeted user), `note` (details), and `options` (no ip, no alts) are optional.
 
 `this.can(permission)`  
 `this.can(permission, targetUser)`
