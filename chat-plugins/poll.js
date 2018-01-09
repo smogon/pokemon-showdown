@@ -22,8 +22,8 @@ class Poll {
 		this.timeoutMins = 0;
 
 		this.options = new Map();
-		for (let i = 0; i < options.length; i++) {
-			this.options.set(i + 1, {name: options[i], votes: 0});
+		for (const [i, option] of options.entries()) {
+			this.options.set(i + 1, {name: option, votes: 0});
 		}
 	}
 
@@ -216,10 +216,11 @@ exports.commands = {
 			room.poll = new Poll(room, {source: params[0], supportHTML: supportHTML}, options);
 			room.poll.display();
 
-			this.logEntry("" + user.name + " used " + message);
-			return this.privateModCommand("(A poll was started by " + user.name + ".)");
+			this.roomlog("" + user.name + " used " + message);
+			this.modlog('POLL');
+			return this.privateModAction("(A poll was started by " + user.name + ".)");
 		},
-		newhelp: ["/poll create [question], [option1], [option2], [...] - Creates a poll. Requires: % @ * # & ~"],
+		newhelp: [`/poll create [question], [option1], [option2], [...] - Creates a poll. Requires: % @ * # & ~`],
 
 		vote: function (target, room, user) {
 			if (!room.poll) return this.errorReply("There is no poll running in this room.");
@@ -237,7 +238,7 @@ exports.commands = {
 
 			room.poll.vote(user, parsed);
 		},
-		votehelp: ["/poll vote [number] - Votes for option [number]."],
+		votehelp: [`/poll vote [number] - Votes for option [number].`],
 
 		timer: function (target, room, user) {
 			if (!room.poll) return this.errorReply("There is no poll running in this room.");
@@ -260,7 +261,8 @@ exports.commands = {
 					delete room.poll;
 				}, (timeout * 60000));
 				room.add("The poll timer was turned on: the poll will end in " + timeout + " minute(s).");
-				return this.privateModCommand("(The poll timer was set to " + timeout + " minute(s) by " + user.name + ".)");
+				this.modlog('POLL TIMER', null, `${timeout} minutes`);
+				return this.privateModAction("(The poll timer was set to " + timeout + " minute(s) by " + user.name + ".)");
 			} else {
 				if (!this.runBroadcast()) return;
 				if (room.poll.timeout) {
@@ -270,14 +272,17 @@ exports.commands = {
 				}
 			}
 		},
-		timerhelp: ["/poll timer [minutes] - Sets the poll to automatically end after [minutes] minutes. Requires: % @ * # & ~", "/poll timer clear - Clears the poll's timer. Requires: % @ * # & ~"],
+		timerhelp: [
+			`/poll timer [minutes] - Sets the poll to automatically end after [minutes] minutes. Requires: % @ * # & ~`,
+			`/poll timer clear - Clears the poll's timer. Requires: % @ * # & ~`,
+		],
 
 		results: function (target, room, user) {
 			if (!room.poll) return this.errorReply("There is no poll running in this room.");
 
 			return room.poll.blankvote(user);
 		},
-		resultshelp: ["/poll results - Shows the results of the poll without voting. NOTE: you can't go back and vote after using this."],
+		resultshelp: [`/poll results - Shows the results of the poll without voting. NOTE: you can't go back and vote after using this.`],
 
 		close: 'end',
 		stop: 'end',
@@ -289,9 +294,10 @@ exports.commands = {
 
 			room.poll.end();
 			delete room.poll;
-			return this.privateModCommand("(The poll was ended by " + user.name + ".)");
+			this.modlog('POLL END');
+			return this.privateModAction("(The poll was ended by " + user.name + ".)");
 		},
-		endhelp: ["/poll end - Ends a poll and displays the results. Requires: % @ * # & ~"],
+		endhelp: [`/poll end - Ends a poll and displays the results. Requires: % @ * # & ~`],
 
 		show: 'display',
 		display: function (target, room, user, connection) {
@@ -305,22 +311,22 @@ exports.commands = {
 				room.poll.displayTo(user, connection);
 			}
 		},
-		displayhelp: ["/poll display - Displays the poll"],
+		displayhelp: [`/poll display - Displays the poll`],
 
 		'': function (target, room, user) {
 			this.parse('/help poll');
 		},
 	},
 	pollhelp: [
-		"/poll allows rooms to run their own polls. These polls are limited to one poll at a time per room.",
-		"Accepts the following commands:",
-		"/poll create [question], [option1], [option2], [...] - Creates a poll. Requires: % @ * # & ~",
-		"/poll htmlcreate [question], [option1], [option2], [...] - Creates a poll, with HTML allowed in the question and options. Requires: # & ~",
-		"/poll vote [number] - Votes for option [number].",
-		"/poll timer [minutes] - Sets the poll to automatically end after [minutes]. Requires: % @ * # & ~",
-		"/poll results - Shows the results of the poll without voting. NOTE: you can't go back and vote after using this.",
-		"/poll display - Displays the poll",
-		"/poll end - Ends a poll and displays the results. Requires: % @ * # & ~",
+		`/poll allows rooms to run their own polls. These polls are limited to one poll at a time per room.`,
+		`Accepts the following commands:`,
+		`/poll create [question], [option1], [option2], [...] - Creates a poll. Requires: % @ * # & ~`,
+		`/poll htmlcreate [question], [option1], [option2], [...] - Creates a poll, with HTML allowed in the question and options. Requires: # & ~`,
+		`/poll vote [number] - Votes for option [number].`,
+		`/poll timer [minutes] - Sets the poll to automatically end after [minutes]. Requires: % @ * # & ~`,
+		`/poll results - Shows the results of the poll without voting. NOTE: you can't go back and vote after using this.`,
+		`/poll display - Displays the poll`,
+		`/poll end - Ends a poll and displays the results. Requires: % @ * # & ~`,
 	],
 };
 

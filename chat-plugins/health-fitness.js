@@ -8,7 +8,7 @@
  */
 'use strict';
 
-const FS = require('../fs');
+const FS = require('./../lib/fs');
 
 const HF_DATA_PATH = 'config/chat-plugins/health-fitness.json';
 const MAX_DATA_LENGTH = 500;
@@ -83,7 +83,8 @@ exports.commands = {
 				if (!target) return;
 
 				HF.setCardio(target);
-				this.privateModCommand(`(${user.name} has set the cardio challenge to: ${target})`);
+				this.privateModAction(`(${user.name} has set the cardio challenge to: ${target})`);
+				this.modlog('CARDIO CHALLENGE', null, target);
 				this.sendReply(`The daily cardio challenge has been updated to: ${target}`);
 			}
 		},
@@ -106,7 +107,8 @@ exports.commands = {
 				if (!target) return;
 
 				HF.setGym(target);
-				this.privateModCommand(`(${user.name} has set the gym challenge to: ${target})`);
+				this.privateModAction(`(${user.name} has set the gym challenge to: ${target})`);
+				this.modlog('GYM CHALLENGE', null, target);
 				this.sendReply(`The daily gym challenge has been updated to: ${target}`);
 			}
 		},
@@ -129,7 +131,8 @@ exports.commands = {
 				if (!target) return;
 
 				HF.setQuote(target);
-				this.privateModCommand(`(${user.name} has set the daily quote to: ${target})`);
+				this.privateModAction(`(${user.name} has set the daily quote to: ${target})`);
+				this.modlog('HF QUOTE', null, target);
 				this.sendReply(`The daily quote has been updated to: ${target}`);
 			}
 		},
@@ -138,13 +141,13 @@ exports.commands = {
 		},
 	},
 	healthfitnesshelp: [
-		"/healthfitness - Shows the daily cardio challenge, gym challenge, and quote of the day.",
-		"/healthfitness cardio - Shows the cardio challenge of the day.",
-		"/healthfitness cardio [challenge] - Sets the cardio challenge of the day. Requires: + or above",
-		"/healthfitness gym - Shows the gym challenge of the day.",
-		"/healthfitness gym [challenge] - Sets the gym challenge of the day. Requires: + or above",
-		"/healthfitness quote - Shows the quote of the day.",
-		"/healthfitness quote [quote] - Sets the quote of the day. Requires: + or above",
-		"Note: These challenges and quotes support PS formatting (**bold**, __italics__, etc.)",
+		`/healthfitness - Shows the daily cardio challenge, gym challenge, and quote of the day.`,
+		`/healthfitness cardio - Shows the cardio challenge of the day.`,
+		`/healthfitness cardio [challenge] - Sets the cardio challenge of the day. Requires: + or above`,
+		`/healthfitness gym - Shows the gym challenge of the day.`,
+		`/healthfitness gym [challenge] - Sets the gym challenge of the day. Requires: + or above`,
+		`/healthfitness quote - Shows the quote of the day.`,
+		`/healthfitness quote [quote] - Sets the quote of the day. Requires: + or above`,
+		`Note: These challenges and quotes support PS formatting (**bold**, __italics__, etc.)`,
 	],
 };

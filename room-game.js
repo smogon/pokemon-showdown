@@ -73,6 +73,7 @@ class RoomGame {
 		this.players = Object.create(null);
 		this.playerCount = 0;
 		this.playerCap = 0;
+		this.ended = false;
 	}
 
 	destroy() {
@@ -99,8 +100,9 @@ class RoomGame {
 
 	/**
 	 * @param {User} user
+	 * @param {any[]} rest
 	 */
-	makePlayer(user) {
+	makePlayer(user, ...rest) {
 		return new RoomGamePlayer(user, this);
 	}
 
@@ -175,6 +177,13 @@ class RoomGame {
 	 * @param {Connection} connection
 	 */
 	onJoin(user, connection) {}
+
+	/**
+	 * Called when a user is banned from the room this game is taking
+	 * place in.
+	 * @param {User} user
+	 */
+	removeBannedUser(user) {}
 
 	/**
 	 * Called when a user in the game is renamed. `isJoining` is true

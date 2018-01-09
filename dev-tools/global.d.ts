@@ -6,14 +6,17 @@ import * as PRNGType from './../sim/prng'
 import * as SideType from './../sim/side'
 import * as TeamValidatorType from './../sim/team-validator'
 import * as RoomsType from './../rooms'
+import * as RoomlogsType from './../roomlogs'
 import * as LadderStoreType from './../ladders-remote'
 import * as LaddersType from './../ladders'
+import * as UsersType from './../users'
+import * as PunishmentsType from './../punishments'
 
 declare global {
 	// modules
 	const Dex: typeof DexType
 	const Chat: any
-	const Punishments: any
+	const Punishments: typeof PunishmentsType
 	const Ladders: typeof LaddersType
 	const LadderStoreT: typeof LadderStoreType
 
@@ -40,10 +43,18 @@ declare global {
 
 	// rooms
 	const GlobalRoom: typeof RoomsType.GlobalRoom
-	const ChatRoom: typeof RoomsType.ChatRoom
+	const ChatRoom: typeof RoomsType.ChatRoomTypeForTS
 	const GameRoom: typeof RoomsType.GameRoom
-	const Room: typeof RoomsType.GlobalRoom | typeof RoomsType.ChatRoom | typeof RoomsType.GameRoom;
+	const Room: typeof RoomsType.ChatRoom
+	const BasicRoom: typeof RoomsType.BasicRoom
 	const RoomGame: typeof RoomsType.RoomGame
 	const RoomBattle: typeof RoomsType.RoomBattle
 	const Rooms: typeof RoomsType
+	const Roomlogs: typeof RoomlogsType
+	const Roomlog: typeof RoomlogsType.Roomlog
+
+	// users
+	const Users: typeof UsersType
+	const User: typeof UsersType.User
+	const Connection: typeof UsersType.Connection
 }

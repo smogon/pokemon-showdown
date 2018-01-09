@@ -62,7 +62,8 @@ exports.commands = {
 				date: date,
 				desc: desc,
 			};
-			this.privateModCommand(`(${user.name} ${this.cmd}ed ${this.cmd === 'add' ? 'a' : 'the'} roomevent titled "${eventName}".)`);
+			this.privateModAction(`(${user.name} ${this.cmd}ed ${this.cmd === 'add' ? 'a' : 'the'} roomevent titled "${eventName}".)`);
+			this.modlog('ROOMEVENT', null, `${this.cmd}ed "${eventName}"`);
 
 			room.chatRoomData.events = room.events;
 			Rooms.global.writeChatRoomData();
@@ -77,7 +78,8 @@ exports.commands = {
 			target = toId(target);
 			if (!room.events[target]) return this.errorReply(`There is no such event named '${target}'. Check spelling?`);
 			delete room.events[target];
-			this.privateModCommand(`(${user.name} removed a roomevent titled "${target}".)`);
+			this.privateModAction(`(${user.name} removed a roomevent titled "${target}".)`);
+			this.modlog('ROOMEVENT', null, `removed "${target}"`);
 
 			room.chatRoomData.events = room.events;
 			Rooms.global.writeChatRoomData();
@@ -101,9 +103,9 @@ exports.commands = {
 		},
 	},
 	roomeventshelp: [
-		"/roomevents - Displays a list of upcoming room-specific events.",
-		"/roomevents add [event name] | [event date/time] | [event description] - Adds a room event. Requires: # & ~",
-		"/roomevents remove [event name] - Deletes an event. Requires: # & ~",
-		"/roomevents view [event name] - Displays information about a specific event.",
+		`/roomevents - Displays a list of upcoming room-specific events.`,
+		`/roomevents add [event name] | [event date/time] | [event description] - Adds a room event. Requires: # & ~`,
+		`/roomevents remove [event name] - Deletes an event. Requires: # & ~`,
+		`/roomevents view [event name] - Displays information about a specific event.`,
 	],
 };

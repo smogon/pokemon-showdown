@@ -16,18 +16,20 @@
         "./dev-tools/node.d.ts",
         "./sim/*.js",
         "./lib/*.js",
-        "./crashlogger.js",
         "./dnsbl.js",
         "./ladders-local.js",
         "./ladders-remote.js",
         "./ladders.js",
         "./monitor.js",
-        "./repl.js",
+        "./loginserver.js",
         "./rooms.js",
-        "./fs.js",
+        "./roomlogs.js",
         "./chat-formatter.js",
         "./room-game.js",
         "./process-manager.js",
-        "./verifier.js"
+        "./verifier.js",
+        "./chat.js",
+        "./users.js",
+        "./punishments.js"
     ]
 }

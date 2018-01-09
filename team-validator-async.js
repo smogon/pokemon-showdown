@@ -69,7 +69,7 @@ class TeamValidatorManager extends ProcessManager {
 		try {
 			problems = TeamValidator(format).validateTeam(parsedTeam, removeNicknames);
 		} catch (err) {
-			require('./crashlogger')(err, 'A team validation', {
+			require('./lib/crashlogger')(err, 'A team validation', {
 				format: format,
 				team: team,
 			});
@@ -117,7 +117,7 @@ if (process.send && module === process.mainModule) {
 
 	if (Config.crashguard) {
 		process.on('uncaughtException', err => {
-			require('./crashlogger')(err, `A team validator process`, true);
+			require('./lib/crashlogger')(err, `A team validator process`, true);
 		});
 	}
 
@@ -125,7 +125,7 @@ if (process.send && module === process.mainModule) {
 	global.toId = Dex.getId;
 	global.Chat = require('./chat');
 
-	require('./repl').start(`team-validator-${process.pid}`, cmd => eval(cmd));
+	require('./lib/repl').start(`team-validator-${process.pid}`, cmd => eval(cmd));
 
 	process.on('message', message => PM.onMessageDownstream(message));
 	process.on('disconnect', () => process.exit());

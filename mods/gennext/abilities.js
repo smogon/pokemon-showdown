@@ -328,13 +328,12 @@ exports.BattleAbilities = {
 			if (pokemon.template.baseSpecies === 'Genesect') {
 				if (!pokemon.getItem().onDrive) return;
 			}
-			let foeactive = pokemon.side.foe.active;
 			let totaldef = 0;
 			let totalspd = 0;
-			for (let i = 0; i < foeactive.length; i++) {
-				if (!foeactive[i] || foeactive[i].fainted) continue;
-				totaldef += foeactive[i].stats.def;
-				totalspd += foeactive[i].stats.spd;
+			for (const foe of pokemon.side.foe.active) {
+				if (!foe || foe.fainted) continue;
+				totaldef += foe.stats.def;
+				totalspd += foe.stats.spd;
 			}
 			if (totaldef && totaldef >= totalspd) {
 				this.boost({spa: 1});
@@ -463,8 +462,8 @@ exports.BattleAbilities = {
 			if (move.category !== "Status") {
 				this.debug('Adding Stench flinch');
 				if (!move.secondaries) move.secondaries = [];
-				for (let i = 0; i < move.secondaries.length; i++) {
-					if (move.secondaries[i].volatileStatus === 'flinch') return;
+				for (const secondary of move.secondaries) {
+					if (secondary.volatileStatus === 'flinch') return;
 				}
 				move.secondaries.push({
 					chance: 40,

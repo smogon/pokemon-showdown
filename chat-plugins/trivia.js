@@ -5,7 +5,7 @@
 
 'use strict';
 
-const FS = require('../fs');
+const FS = require('./../lib/fs');
 
 const CATEGORIES = {
 	ae: 'Arts and Entertainment',
@@ -396,7 +396,7 @@ class Trivia extends Rooms.RoomGame {
 		// Trivia#destroy has already set the instance's room to null.
 		let tarRoom = this.room;
 		if (!tarRoom) {
-			for (let [roomid, room] of Rooms.rooms) { // eslint-disable-line no-unused-vars
+			for (const room of Rooms.rooms.values()) {
 				if (room.game === this)	{
 					return room.addRaw(buffer).update();
 				}
@@ -456,7 +456,7 @@ class Trivia extends Rooms.RoomGame {
 				if (this.kickedUsers.has(id)) return `User ${tarUser.name} has already been kicked from the game.`;
 			}
 
-			for (let kickedUserid of this.kickedUsers) {
+			for (const kickedUserid of this.kickedUsers) {
 				let kickedUser = Users.get(kickedUserid);
 				if (kickedUser) {
 					if (kickedUser.prevNames[tarUser.userid]) {
@@ -624,8 +624,7 @@ class Trivia extends Rooms.RoomGame {
 			let max = Infinity;
 			let rank = 0;
 			let rankIdx = i + 3;
-			for (let j = 0; j < leaders.length; j++) {
-				let leader = leaders[j];
+			for (const leader of leaders) {
 				let score = leaderboard[leader][i];
 				if (max !== score) {
 					if (!i && rank < 15) {
@@ -658,9 +657,14 @@ class Trivia extends Rooms.RoomGame {
 			` mode trivia under the ${this.category} category with a cap of ` +
 			`${this.cap} points, with ${winner.points} points and ` +
 			`${winner.correctAnswers} correct answers!)`;
-		this.room.sendModCommand(buf);
-		this.room.logEntry(buf);
-		this.room.modlog(buf);
+
+		let logbuf = `(User ${winner.userid} won the game of ${this.mode}` +
+			` mode trivia under the ${this.category} category with a cap of ` +
+			`${this.cap} points, with ${winner.points} points and ` +
+			`${winner.correctAnswers} correct answers!)`;
+		this.room.sendMods(buf);
+		this.room.roomlog(buf);
+		this.room.modlog(`(${this.room.id}) ${logbuf}`);
 
 		writeTriviaData();
 		this.destroy();
@@ -1169,8 +1173,7 @@ class WeakestLink extends Trivia {
 		if (maxPlayer.length > 1) {
 			let mostBanked = 0;
 			let bankPlayers = [];
-			for (let i = 0, len = maxPlayer.length; i < len; i++) {
-				let player = maxPlayer[i];
+			for (const player of maxPlayer) {
 				if (player.points > mostBanked) {
 					mostBanked = player.points;
 					bankPlayers = [player];
@@ -1277,7 +1280,7 @@ const commands = {
 		questions = Dex.shuffle(questions);
 		room.game = new _Trivia(room, mode, category, length, questions);
 	},
-	newhelp: ["/trivia new [mode], [category], [length] - Begin a new trivia game. Requires: + % @ # & ~"],
+	newhelp: [`/trivia new [mode], [category], [length] - Begin a new trivia game. Requires: + % @ # & ~`],
 
 	join: function (target, room, user) {
 		if (room.id !== 'trivia') return this.errorReply("This command can only be used in Trivia.");
@@ -1289,7 +1292,7 @@ const commands = {
 		if (res) return this.errorReply(res);
 		this.sendReply('You are now signed up for this game!');
 	},
-	joinhelp: ["/trivia join - Join the current trivia game."],
+	joinhelp: [`/trivia join - Join the current trivia game.`],
 
 	kick: function (target, room, user) {
 		if (room.id !== 'trivia') return this.errorReply("This command can only be used in Trivia.");
@@ -1308,7 +1311,7 @@ const commands = {
 		if (res) return this.errorReply(res);
 		// ...
 	},
-	kickhelp: ["/trivia kick [username] - Kick players from a trivia game by username. Requires: % @ # & ~"],
+	kickhelp: [`/trivia kick [username] - Kick players from a trivia game by username. Requires: % @ # & ~`],
 
 	leave: function (target, room, user) {
 		if (room.id !== 'trivia') return this.errorReply("This command can only be used in Trivia.");
@@ -1321,7 +1324,7 @@ const commands = {
 		if (typeof res === 'string') return this.errorReply(res);
 		this.sendReply("You have left the current game of trivia.");
 	},
-	leavehelp: ["/trivia leave - Makes the player leave the game."],
+	leavehelp: [`/trivia leave - Makes the player leave the game.`],
 
 	start: function (target, room) {
 		if (room.id !== 'trivia') return this.errorReply("This command can only be used in Trivia.");
@@ -1336,7 +1339,7 @@ const commands = {
 		if (res) return this.errorReply(res);
 		// ...
 	},
-	starthelp: ["/trivia start - Ends the signup phase of a trivia game and begins the game. Requires: + % @ # & ~"],
+	starthelp: [`/trivia start - Ends the signup phase of a trivia game and begins the game. Requires: + % @ # & ~`],
 
 	answer: function (target, room, user) {
 		if (room.id !== 'trivia') return this.errorReply("This command can only be used in Trivia.");
@@ -1352,7 +1355,7 @@ const commands = {
 		if (res) return this.errorReply(res);
 		this.sendReply(`You have selected "${answer}" as your answer.`);
 	},
-	answerhelp: ["/trivia answer OR /ta [answer] - Answer a pending question."],
+	answerhelp: [`/trivia answer OR /ta [answer] - Answer a pending question.`],
 
 	end: function (target, room, user) {
 		if (room.id !== 'trivia') return this.errorReply("This command can only be used in Trivia.");
@@ -1365,7 +1368,7 @@ const commands = {
 
 		room.game.end(user);
 	},
-	endhelp: ["/trivia end - Forcibly end a trivia game. Requires: + % @ # & ~"],
+	endhelp: [`/trivia end - Forcibly end a trivia game. Requires: + % @ # & ~`],
 
 	'': 'status',
 	players: 'status',
@@ -1403,7 +1406,7 @@ const commands = {
 
 		this.sendReplyBox(buffer);
 	},
-	statushelp: ["/trivia status [player] - lists the player's standings (your own if no player is specified) and the list of players in the current trivia game."],
+	statushelp: [`/trivia status [player] - lists the player's standings (your own if no player is specified) and the list of players in the current trivia game.`],
 
 	submit: 'add',
 	add: function (target, room, user, connection, cmd) {
@@ -1448,16 +1451,18 @@ const commands = {
 		if (cmd === 'add') {
 			triviaData.questions.splice(findEndOfCategory(category, false), 0, submission);
 			writeTriviaData();
-			return this.privateModCommand(`(Question '${target[1]}' was added to the ${isWL ? "Weakest Link" : "Trivia"} question database by ${user.name}.)`);
+			this.modlog('TRIVIAQUESTION', null, `added to ${isWL ? "Weakest Link" : "Trivia"} - '${target[1]}'`);
+			return this.privateModAction(`(Question '${target[1]}' was added to the ${isWL ? "Weakest Link" : "Trivia"} question database by ${user.name}.)`);
 		}
 
 		submissions.splice(findEndOfCategory(category, true), 0, submission);
 		writeTriviaData();
 		if (!user.can('mute', null, room)) this.sendReply(`Question '${target[1]}' was submitted for review.`);
-		this.privateModCommand(`(${user.name} submitted question '${target[1]}' for review.)`);
+		this.modlog('TRIVIAQUESTION', null, `submitted '${target[1]}'`);
+		this.privateModAction(`(${user.name} submitted question '${target[1]}' for review.)`);
 	},
-	submithelp: ["/trivia submit [category] | [question] | [answer1], [answer2] ... [answern] - Add a question to the submission database for staff to review. Requires: + % @ # & ~"],
-	addhelp: ["/trivia add [category] | [question] | [answer1], [answer2], ... [answern] - Add a question to the question database. Requires: % @ # & ~"],
+	submithelp: [`/trivia submit [category] | [question] | [answer1], [answer2] ... [answern] - Add a question to the submission database for staff to review. Requires: + % @ # & ~`],
+	addhelp: [`/trivia add [category] | [question] | [answer1], [answer2], ... [answern] - Add a question to the question database. Requires: % @ # & ~`],
 
 	review: function (target, room) {
 		if (room.id !== 'questionworkshop') return this.errorReply('This command can only be used in Question Workshop.');
@@ -1480,7 +1485,7 @@ const commands = {
 
 		this.sendReply(buffer);
 	},
-	reviewhelp: ["/trivia review - View the list of submitted questions. Requires: @ # & ~"],
+	reviewhelp: [`/trivia review - View the list of submitted questions. Requires: @ # & ~`],
 
 	reject: 'accept',
 	accept: function (target, room, user, connection, cmd) {
@@ -1494,19 +1499,18 @@ const commands = {
 		let isAccepting = cmd === 'accept';
 		let questions = triviaData.questions;
 		let submissions = triviaData.submissions;
-		let submissionsLen = submissions.length;
 
 		if (toId(target) === 'all') {
 			if (isAccepting) {
-				for (let i = 0; i < submissionsLen; i++) {
-					let submission = submissions[i];
+				for (const submission of submissions) {
 					questions.splice(findEndOfCategory(submission.category, false), 0, submission);
 				}
 			}
 
 			triviaData.submissions = [];
 			writeTriviaData();
-			return this.privateModCommand(`(${user.name} ${(isAccepting ? " added " : " removed ")} all questions from the submission database.)`);
+			this.modlog(`TRIVIAQUESTION`, null, `${(isAccepting ? "added" : "removed")} all from submission database.`);
+			return this.privateModAction(`(${user.name} ${(isAccepting ? " added " : " removed ")} all questions from the submission database.)`);
 		}
 
 		if (/^\d+(?:-\d+)?(?:, ?\d+(?:-\d+)?)*$/.test(target)) {
@@ -1517,7 +1521,7 @@ const commands = {
 			for (let i = indices.length; i--;) {
 				if (!indices[i].includes('-')) {
 					let index = Number(indices[i]);
-					if (Number.isInteger(index) && index > 0 && index <= submissionsLen) {
+					if (Number.isInteger(index) && index > 0 && index <= submissions.length) {
 						indices[i] = index;
 					} else {
 						indices.splice(i, 1);
@@ -1529,7 +1533,7 @@ const commands = {
 				let left = Number(range[0]);
 				let right = Number(range[1]);
 				if (!Number.isInteger(left) || !Number.isInteger(right) ||
-						left < 1 || right > submissionsLen || left === right) {
+						left < 1 || right > submissions.length || left === right) {
 					indices.splice(i, 1);
 					continue;
 				}
@@ -1559,13 +1563,14 @@ const commands = {
 			}
 
 			writeTriviaData();
-			return this.privateModCommand(`(${user.name} ${(isAccepting ? "added " : "removed ")}submission number${(indicesLen > 1 ? "s " : " ")}${target} from the submission database.)`);
+			this.modlog('TRIVIAQUESTION', null, `${(isAccepting ? "added " : "removed ")}submission number${(indicesLen > 1 ? "s " : " ")}${target}`);
+			return this.privateModAction(`(${user.name} ${(isAccepting ? "added " : "removed ")}submission number${(indicesLen > 1 ? "s " : " ")}${target} from the submission database.)`);
 		}
 
 		this.errorReply(`'${target}' is an invalid argument. View /trivia help questions for more information.`);
 	},
-	accepthelp: ["/trivia accept [index1], [index2], ... [indexn] OR all - Add questions from the submission database to the question database using their index numbers or ranges of them. Requires: @ # & ~"],
-	rejecthelp: ["/trivia reject [index1], [index2], ... [indexn] OR all - Remove questions from the submission database using their index numbers or ranges of them. Requires: @ # & ~"],
+	accepthelp: [`/trivia accept [index1], [index2], ... [indexn] OR all - Add questions from the submission database to the question database using their index numbers or ranges of them. Requires: @ # & ~`],
+	rejecthelp: [`/trivia reject [index1], [index2], ... [indexn] OR all - Remove questions from the submission database using their index numbers or ranges of them. Requires: @ # & ~`],
 
 	delete: function (target, room, user) {
 		if (room.id !== 'questionworkshop') return this.errorReply('This command can only be used in Question Workshop.');
@@ -1580,17 +1585,18 @@ const commands = {
 
 		let questions = triviaData.questions;
 		let questionID = toId(question);
-		for (let i = 0; i < questions.length; i++) {
-			if (toId(questions[i].question) === questionID) {
+		for (const [i, question] of questions.entries()) {
+			if (toId(question.question) === questionID) {
 				questions.splice(i, 1);
 				writeTriviaData();
-				return this.privateModCommand(`(${user.name} removed question '${target}' from the question database.)`);
+				this.modlog('TRIVIAQUESTION', null, `removed '${target}'`);
+				return this.privateModAction(`(${user.name} removed question '${target}' from the question database.)`);
 			}
 		}
 
 		this.errorReply(`Question '${target}' was not found in the question database.`);
 	},
-	deletehelp: ["/trivia delete [question] - Delete a question from the trivia database. Requires: % @ # & ~"],
+	deletehelp: [`/trivia delete [question] - Delete a question from the trivia database. Requires: % @ # & ~`],
 
 	qs: function (target, room, user) {
 		if (room.id !== 'questionworkshop') return this.errorReply('This command can only be used in Question Workshop.');
@@ -1609,14 +1615,13 @@ const commands = {
 			let questionsLen = questions.length;
 			if (!questionsLen) return this.sendReplyBox(`No questions have been submitted for ${isWL ? "Weakest Link" : "Trivia"} yet.`);
 
-			let categories = Object.keys(CATEGORIES);
 			let lastCategoryIdx = 0;
 			buffer += "<tr><th>Category</th><th>Question Count</th></tr>";
-			for (let i = 0; i < categories.length; i++) {
-				if (categories[i] === 'random') continue;
-				let tally = findEndOfCategory(categories[i], false) - lastCategoryIdx;
+			for (const category in CATEGORIES) {
+				if (category === 'random') continue;
+				let tally = findEndOfCategory(category, false) - lastCategoryIdx;
 				lastCategoryIdx += tally;
-				buffer += `<tr><td>${CATEGORIES[categories[i]]}</td><td>${tally} (${((tally * 100) / questionsLen).toFixed(2)}%)</td></tr>`;
+				buffer += `<tr><td>${CATEGORIES[category]}</td><td>${tally} (${((tally * 100) / questionsLen).toFixed(2)}%)</td></tr>`;
 			}
 			buffer += `<tr><td><strong>Total</strong></td><td><strong>${questionsLen}</strong></td></table></div>`;
 
@@ -1635,24 +1640,22 @@ const commands = {
 		} else {
 			list = list.filter(q => q.type === "trivia");
 		}
-		let listLen = list.length;
-		if (!listLen) {
+		if (!list.length) {
 			buffer += `<tr><td>There are no questions in the ${CATEGORIES[target]} category for ${isWL ? "Weakest Link" : "Trivia"}.</td></table></div>`;
 			return this.sendReply(buffer);
 		}
 
 		if (user.can('ban', null, room)) {
-			buffer += `<tr><td colspan="3">There are <strong>${listLen}</strong> questions in the ${CATEGORIES[target]} category for ${isWL ? "Weakest Link" : "Trivia"}.</td></tr>` +
+			buffer += `<tr><td colspan="3">There are <strong>${list.length}</strong> questions in the ${CATEGORIES[target]} category for ${isWL ? "Weakest Link" : "Trivia"}.</td></tr>` +
 				"<tr><th>#</th><th>Question</th><th>Answer(s)</th></tr>";
-			for (let i = 0; i < listLen; i++) {
-				let entry = list[i];
+			for (const [i, entry] of list.entries()) {
 				buffer += `<tr><td><strong>${(i + 1)}</strong></td><td>${entry.question}</td><td>${entry.answers.join(", ")}</td><tr>`;
 			}
 		} else {
-			buffer += `<td colspan="2">There are <strong>${listLen}</strong> questions in the ${target} category.</td></tr>` +
+			buffer += `<td colspan="2">There are <strong>${list.length}</strong> questions in the ${target} category.</td></tr>` +
 				"<tr><th>#</th><th>Question</th></tr>";
-			for (let i = 0; i < listLen; i++) {
-				buffer += `<tr><td><strong>${(i + 1)}</strong></td><td>${list[i].question}</td></tr>`;
+			for (const [i, entry] of list.entries()) {
+				buffer += `<tr><td><strong>${(i + 1)}</strong></td><td>${entry.question}</td></tr>`;
 			}
 		}
 		buffer += "</table></div>";
@@ -1694,7 +1697,7 @@ const commands = {
 
 		this.sendReply(buffer);
 	},
-	searchhelp: ["/trivia search [type], [query] - Searches for questions based on their type and their query. Valid types: submissions, subs, questions, qs. Requires: + % @ * & ~"],
+	searchhelp: [`/trivia search [type], [query] - Searches for questions based on their type and their query. Valid types: submissions, subs, questions, qs. Requires: + % @ * & ~`],
 
 	rank: function (target, room, user) {
 		if (room.id !== 'trivia') return this.errorReply("This command can only be used in Trivia.");
@@ -1721,7 +1724,7 @@ const commands = {
 			(triviaData.ugm ? `<br />UGM points: <strong>${triviaData.ugm[userid]}</strong>` : "")
 		);
 	},
-	rankhelp: ["/trivia rank [username] - View the rank of the specified user. If no name is given, view your own."],
+	rankhelp: [`/trivia rank [username] - View the rank of the specified user. If no name is given, view your own.`],
 
 	ladder: function (target, room) {
 		if (room.id !== 'trivia') return this.errorReply('This command can only be used in Trivia.');
@@ -1737,18 +1740,18 @@ const commands = {
 		if (num > ladder.length) num = ladder.length;
 		for (let i = Math.max(0, num - 100); i < num; i++) {
 			let leaders = ladder[i];
-			for (let j = 0; j < leaders.length; j++) {
-				let rank = leaderboard[leaders[j]];
-				let leader = Users.getExact(leaders[j]);
-				leader = leader ? Chat.escapeHTML(leader.name) : leaders[j];
-				buffer += `<tr><td><strong>${(i + 1)}</strong></td><td>${leader}</td><td>${rank[0]}</td><td>${rank[1]}</td><td>${rank[2]}</td></tr>`;
+			for (const leader of leaders) {
+				let rank = leaderboard[leader];
+				let leaderid = Users.getExact(leader);
+				leaderid = leaderid ? Chat.escapeHTML(leaderid.name) : leader;
+				buffer += `<tr><td><strong>${(i + 1)}</strong></td><td>${leaderid}</td><td>${rank[0]}</td><td>${rank[1]}</td><td>${rank[2]}</td></tr>`;
 			}
 		}
 		buffer += "</table></div>";
 
 		return this.sendReply(buffer);
 	},
-	ladderhelp: ["/trivia ladder [num] - View information about 100 users on the trivia leaderboard."],
+	ladderhelp: [`/trivia ladder [num] - View information about 100 users on the trivia leaderboard.`],
 
 	ugm: function (target, room, user) {
 		if (room.id !== 'trivia') return this.errorReply("This command can only be used in Trivia.");
@@ -1763,7 +1766,8 @@ const commands = {
 			}
 			CATEGORIES.ugm = 'Ultimate Gaming Month';
 			writeTriviaData();
-			return this.privateModCommand(`(${user.name} enabled UGM mode.)`);
+			this.modlog('UGMMODE', null, 'ON');
+			return this.privateModAction(`(${user.name} enabled UGM mode.)`);
 		}
 		if (command === 'disable') {
 			if (!triviaData.ugm) return this.errorReply("UGM mode is already disabled.");
@@ -1771,32 +1775,33 @@ const commands = {
 			delete triviaData.ugm;
 			delete CATEGORIES.ugm;
 			writeTriviaData();
-			return this.privateModCommand(`(${user.name} disabled UGM mode.)`);
+			this.modlog('UGMMODE', null, 'OFF');
+			return this.privateModAction(`(${user.name} disabled UGM mode.)`);
 		}
 		this.errorReply("Invalid target. Valid targets: enable, disable");
 	},
-	ugmhelp: ["/trivia ugm [setting] - Enable or disable UGM mode. Requires: # & ~"],
+	ugmhelp: [`/trivia ugm [setting] - Enable or disable UGM mode. Requires: # & ~`],
 
 	bank: function (target, room, user) {
 		if (!room.game || room.game.title !== 'Weakest Link') return this.errorReply("This command can only be used for games of the Weakest Link.");
 		let res = room.game.onBank(user);
 		if (res) return this.sendReply(res);
 	},
-	bankhelp: ["/trivia bank - Bank during a game of the Weakest Link."],
+	bankhelp: [`/trivia bank - Bank during a game of the Weakest Link.`],
 
 	decide: function (target, room, user) {
 		if (!room.game || room.game.title !== 'Weakest Link') return this.errorReply("This command can only be used for games of the Weakest Link.");
 		let res = room.game.decide(target, user);
 		if (res) return this.sendReply(res);
 	},
-	decidehelp: ["/trivia decide [user] - If voting ends in a tie, this is used to break the tie by the strongest player."],
+	decidehelp: [`/trivia decide [user] - If voting ends in a tie, this is used to break the tie by the strongest player.`],
 
 	vote: function (target, room, user) {
 		if (!room.game || room.game.title !== 'Weakest Link') return this.errorReply("This command can only be used for games of the Weakest Link.");
 		let res = room.game.vote(target, user);
 		if (res) return this.sendReply(res);
 	},
-	votehelp: ["/trivia vote [user] - Choose your vote of who to eliminate in the Weakest link"],
+	votehelp: [`/trivia vote [user] - Choose your vote of who to eliminate in the Weakest link`],
 
 	checkvotes: function (target, room, user) {
 		if (!room.game || room.game.title !== 'Weakest Link') return this.errorReply("This command can only be used for games of the Weakest Link.");
@@ -1805,7 +1810,7 @@ const commands = {
 		if (room.game.phase !== 'voting') return this.sendReplyBox("The game is not currently in the voting phase");
 		return this.sendReplyBox(`The following players have yet to vote: ${Object.values(room.game.players).filter(pl => !pl.vote).map(pl => pl.name).join(", ")}`);
 	},
-	checkvoteshelp: ["/trivia checkvotes - Check which players have not yet voted."],
+	checkvoteshelp: [`/trivia checkvotes - Check which players have not yet voted.`],
 
 	help: function (target, room, user) {
 		return this.parse("/help trivia");
@@ -1830,45 +1835,44 @@ module.exports = {
 		wlink: commands,
 		ta: commands.answer,
 		triviahelp: [
-			"Modes:",
-			"- First: the first correct responder gains 5 points.",
-			"- Timer: each correct responder gains up to 5 points based on how quickly they answer.",
-			"- Number: each correct responder gains up to 5 points based on how many participants are correct.",
-			"- Weakest Link: An elimination game, where every round, players vote off the 'Weakest Link'",
-			"Categories: Arts & Entertainment, Pok\u00e9mon, Science & Geography, Society & Humanities, Random, and All.",
-			"Game lengths:",
-			"- Short: 20 point score cap. The winner gains 3 leaderboard points.",
-			"- Medium: 35 point score cap. The winner gains 4 leaderboard points.",
-			"- Long: 50 point score cap. The winner gains 5 leaderboard points.",
-			"Game commands:",
-			"- /trivia new [mode], [category], [length] - Begin signups for a new trivia game. Requires: + % @ # & ~",
-			"- /trivia join - Join a trivia game during signups.",
-			"- /trivia start - Begin the game once enough users have signed up. Requires: + % @ # & ~",
-			"- /ta [answer] - Answer the current question.",
-			"- /trivia kick [username] - Disqualify a participant from the current trivia game. Requires: % @ # & ~",
-			"- /trivia leave - Makes the player leave the game.",
-			"- /trivia end - End a trivia game. Requires: + % @ # ~",
-			"Question modifying commands:",
-			"- /trivia submit [category] | [question] | [answer1], [answer2] ... [answern] - Add a question to the submission database for staff to review.",
-			"- /trivia review - View the list of submitted questions. Requires: @ # & ~",
-			"- /trivia accept [index1], [index2], ... [indexn] OR all - Add questions from the submission database to the question database using their index numbers or ranges of them. Requires: @ # & ~",
-			"- /trivia reject [index1], [index2], ... [indexn] OR all - Remove questions from the submission database using their index numbers or ranges of them. Requires: @ # & ~",
-			"- /trivia add [category] | [question] | [answer1], [answer2], ... [answern] - Add a question to the question database. Requires: % @ # & ~",
-			"- /trivia delete [question] - Delete a question from the trivia database. Requires: % @ # & ~",
-			"- /trivia qs - View the distribution of questions in the question database.",
-			"- /trivia qs [category] - View the questions in the specified category. Requires: % @ # & ~",
-			"Informational commands:",
-			"- /trivia search [type], [query] - Searches for questions based on their type and their query. Valid types: submissions, subs, questions, qs. Requires: + % @ # & ~",
-			"- /trivia status [player] - lists the player's standings (your own if no player is specified) and the list of players in the current trivia game.",
-			"- /trivia rank [username] - View the rank of the specified user. If none is given, view your own.",
-			"- /trivia ladder - View information about the top 15 users on the trivia leaderboard.",
-			"- /trivia ugm [setting] - Enable or disable UGM mode. Requires: # & ~",
-			"Weakest Link Game commands:",
-			"- /trivia bank - Bank when it is your turn.",
-			"- /trivia vote [user] - Attempt to vote off a user during the voting phase.",
-			"- /trivia decide [user] - If voting ends in a tie, the strongest player can decide who is eliminated.",
-			"- /trivia checkvotes - Check who has not yet voted.",
+			`Modes:`,
+			`- First: the first correct responder gains 5 points.`,
+			`- Timer: each correct responder gains up to 5 points based on how quickly they answer.`,
+			`- Number: each correct responder gains up to 5 points based on how many participants are correct.`,
+			`- Weakest Link: An elimination game, where every round, players vote off the 'Weakest Link'`,
+			`Categories: Arts & Entertainment, Pok\u00e9mon, Science & Geography, Society & Humanities, Random, and All.`,
+			`Game lengths:`,
+			`- Short: 20 point score cap. The winner gains 3 leaderboard points.`,
+			`- Medium: 35 point score cap. The winner gains 4 leaderboard points.`,
+			`- Long: 50 point score cap. The winner gains 5 leaderboard points.`,
+			`Game commands:`,
+			`- /trivia new [mode], [category], [length] - Begin signups for a new trivia game. Requires: + % @ # & ~`,
+			`- /trivia join - Join a trivia game during signups.`,
+			`- /trivia start - Begin the game once enough users have signed up. Requires: + % @ # & ~`,
+			`- /ta [answer] - Answer the current question.`,
+			`- /trivia kick [username] - Disqualify a participant from the current trivia game. Requires: % @ # & ~`,
+			`- /trivia leave - Makes the player leave the game.`,
+			`- /trivia end - End a trivia game. Requires: + % @ # ~`,
+			`Question modifying commands:`,
+			`- /trivia submit [category] | [question] | [answer1], [answer2] ... [answern] - Add a question to the submission database for staff to review.`,
+			`- /trivia review - View the list of submitted questions. Requires: @ # & ~`,
+			`- /trivia accept [index1], [index2], ... [indexn] OR all - Add questions from the submission database to the question database using their index numbers or ranges of them. Requires: @ # & ~`,
+			`- /trivia reject [index1], [index2], ... [indexn] OR all - Remove questions from the submission database using their index numbers or ranges of them. Requires: @ # & ~`,
+			`- /trivia add [category] | [question] | [answer1], [answer2], ... [answern] - Add a question to the question database. Requires: % @ # & ~`,
+			`- /trivia delete [question] - Delete a question from the trivia database. Requires: % @ # & ~`,
+			`- /trivia qs - View the distribution of questions in the question database.`,
+			`- /trivia qs [category] - View the questions in the specified category. Requires: % @ # & ~`,
+			`Informational commands:`,
+			`- /trivia search [type], [query] - Searches for questions based on their type and their query. Valid types: submissions, subs, questions, qs. Requires: + % @ # & ~`,
+			`- /trivia status [player] - lists the player's standings (your own if no player is specified) and the list of players in the current trivia game.`,
+			`- /trivia rank [username] - View the rank of the specified user. If none is given, view your own.`,
+			`- /trivia ladder - View information about the top 15 users on the trivia leaderboard.`,
+			`- /trivia ugm [setting] - Enable or disable UGM mode. Requires: # & ~`,
+			`Weakest Link Game commands:`,
+			`- /trivia bank - Bank when it is your turn.`,
+			`- /trivia vote [user] - Attempt to vote off a user during the voting phase.`,
+			`- /trivia decide [user] - If voting ends in a tie, the strongest player can decide who is eliminated.`,
+			`- /trivia checkvotes - Check who has not yet voted.`,
 		],
 	},
 };
-

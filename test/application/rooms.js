@@ -29,7 +29,6 @@ describe('Rooms features', function () {
 		let parent;
 		afterEach(function () {
 			Users.users.forEach(user => {
-				room.onLeave(user);
 				user.disconnectAll();
 				user.destroy();
 			});
@@ -74,7 +73,7 @@ describe('Rooms features', function () {
 		});
 
 		it('should prevent overriding tournament room auth by a tournament player', function () {
-			parent = Rooms.createChatRoom('parentroom', '', {});
+			parent = Rooms.createChatRoom('parentroom2', '', {});
 			parent.getAuth = () => '%';
 			const p1 = new User();
 			const p2 = new User();

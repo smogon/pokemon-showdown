@@ -170,7 +170,7 @@ class Validator {
 		}
 
 		let nameTemplate = dex.getTemplate(set.name);
-		if (toId(format.name) !== 'gen7crossevolution' && nameTemplate.exists && nameTemplate.name.toLowerCase() === set.name.toLowerCase()) {
+		if (nameTemplate.exists && nameTemplate.name.toLowerCase() === set.name.toLowerCase()) {
 			// Name must not be the name of another pokemon
 			// @ts-ignore
 			set.name = null;
@@ -254,9 +254,13 @@ class Validator {
 		if (['Mega', 'Mega-X', 'Mega-Y'].includes(postMegaTemplate.forme)) {
 			banReason = ruleTable.check('pokemontag:mega', setHas);
 			const megaTemplateOverride = ruleTable.has('+pokemon:' + postMegaTemplate.id);
-			if (megaTemplateOverride) templateOverride = true;
-			if (!megaTemplateOverride && banReason) {
+			if (megaTemplateOverride) {
+				templateOverride = true;
+			} else if (banReason) {
 				problems.push(`Mega evolutions are ${banReason}.`);
+			} else {
+				banReason = ruleTable.check('pokemon:' + postMegaTemplate.id, setHas);
+				if (banReason) problems.push(`${postMegaTemplate.species} is ${banReason}.`);
 			}
 		}
 		if (!templateOverride && postMegaTemplate.tier) {
@@ -919,7 +923,7 @@ class Validator {
 			if (dex.gen === 2 && template.gen === 1) tradebackEligible = true;
 			// STABmons hack to avoid copying all of validateSet to formats
 			// @ts-ignore
-			let noLearn = format.noLearn || dex.getFormat('gen7stabmons').noLearn;
+			let noLearn = format.noLearn || [];
 			if (ruleTable.has('ignorestabmoves') && !noLearn.includes(move.name) && !move.isZ) {
 				let types = template.types;
 				if (template.baseSpecies === 'Rotom') types = ['Electric', 'Ghost', 'Fire', 'Water', 'Ice', 'Flying', 'Grass'];
@@ -928,6 +932,10 @@ class Validator {
 				if (template.baseSpecies === 'Oricorio') types = ['Fire', 'Flying', 'Electric', 'Psychic', 'Ghost'];
 				if (template.baseSpecies === 'Necrozma') types = ['Psychic', 'Steel', 'Ghost'];
 				if (template.baseSpecies === 'Arceus' || template.baseSpecies === 'Silvally' || types.includes(move.type)) return false;
+			}
+			if (format.id === 'gen7alphabetcup' && Object.keys(alreadyChecked).length < 2) {
+				const letter = template.id.slice(0, 1);
+				if (move.id.slice(0, 1) === letter && !move.isZ && !noLearn.includes(move.name)) return false;
 			}
 			if (!template.learnset) {
 				if (template.baseSpecies !== template.species) {

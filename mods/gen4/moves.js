@@ -37,11 +37,9 @@ exports.BattleMovedex = {
 		desc: "A random move among those known by the user's party members is selected for use. Does not select Assist, Chatter, Copycat, Counter, Covet, Destiny Bond, Detect, Endure, Feint, Focus Punch, Follow Me, Helping Hand, Me First, Metronome, Mimic, Mirror Coat, Mirror Move, Protect, Sketch, Sleep Talk, Snatch, Struggle, Switcheroo, Thief or Trick.",
 		onHit: function (target) {
 			let moves = [];
-			for (let j = 0; j < target.side.pokemon.length; j++) {
-				let pokemon = target.side.pokemon[j];
+			for (const pokemon of target.side.pokemon) {
 				if (pokemon === target) continue;
-				for (let i = 0; i < pokemon.moves.length; i++) {
-					let move = pokemon.moves[i];
+				for (const move of pokemon.moves) {
 					let noAssist = [
 						'assist', 'chatter', 'copycat', 'counter', 'covet', 'destinybond', 'detect', 'endure', 'feint', 'focuspunch', 'followme', 'helpinghand', 'mefirst', 'metronome', 'mimic', 'mirrorcoat', 'mirrormove', 'protect', 'sketch', 'sleeptalk', 'snatch', 'struggle', 'switcheroo', 'thief', 'trick',
 					];
@@ -201,10 +199,10 @@ exports.BattleMovedex = {
 		inherit: true,
 		onHit: function (pokemon) {
 			let noCopycat = ['assist', 'chatter', 'copycat', 'counter', 'covet', 'destinybond', 'detect', 'endure', 'feint', 'focuspunch', 'followme', 'helpinghand', 'mefirst', 'metronome', 'mimic', 'mirrorcoat', 'mirrormove', 'protect', 'sketch', 'sleeptalk', 'snatch', 'struggle', 'switcheroo', 'thief', 'trick'];
-			if (!this.lastMove || noCopycat.includes(this.lastMove)) {
+			if (!this.lastMove || noCopycat.includes(this.lastMove.id)) {
 				return false;
 			}
-			this.useMove(this.lastMove, pokemon);
+			this.useMove(this.lastMove.id, pokemon);
 		},
 	},
 	cottonspore: {
@@ -288,12 +286,12 @@ exports.BattleMovedex = {
 					return false;
 				}
 				for (const moveSlot of pokemon.moveSlots) {
-					if (moveSlot.id === pokemon.lastMove) {
+					if (moveSlot.id === pokemon.lastMove.id) {
 						if (!moveSlot.pp) {
 							return false;
 						} else {
 							this.add('-start', pokemon, 'Disable', moveSlot.move);
-							this.effectData.move = pokemon.lastMove;
+							this.effectData.move = pokemon.lastMove.id;
 							return;
 						}
 					}
@@ -398,14 +396,14 @@ exports.BattleMovedex = {
 			},
 			onStart: function (target) {
 				let noEncore = ['encore', 'mimic', 'mirrormove', 'sketch', 'struggle', 'transform'];
-				let moveIndex = target.moves.indexOf(target.lastMove);
-				if (!target.lastMove || noEncore.includes(target.lastMove) || (target.moveSlots[moveIndex] && target.moveSlots[moveIndex].pp <= 0)) {
+				let moveIndex = target.lastMove ? target.moves.indexOf(target.lastMove.id) : -1;
+				if (!target.lastMove || noEncore.includes(target.lastMove.id) || (target.moveSlots[moveIndex] && target.moveSlots[moveIndex].pp <= 0)) {
 					// it failed
 					this.add('-fail', target);
 					delete target.volatiles['encore'];
 					return;
 				}
-				this.effectData.move = target.lastMove;
+				this.effectData.move = target.lastMove.id;
 				this.add('-start', target, 'Encore');
 				if (!this.willMove(target)) {
 					this.effectData.duration++;
@@ -416,7 +414,7 @@ exports.BattleMovedex = {
 			},
 			onResidualOrder: 13,
 			onResidual: function (target) {
-				if (target.moves.indexOf(target.lastMove) >= 0 && target.moveSlots[target.moves.indexOf(target.lastMove)].pp <= 0) {
+				if (target.moves.includes(this.effectData.move) && target.moveSlots[target.moves.indexOf(this.effectData.move)].pp <= 0) {
 					// early termination if you run out of PP
 					delete target.volatiles.encore;
 					this.add('-end', target, 'Encore');
@@ -676,11 +674,10 @@ exports.BattleMovedex = {
 		desc: "The user prevents all of its foes from using any moves that the user also knows as long as the user remains active. Fails if no opponents know any of the user's moves.",
 		flags: {authentic: 1},
 		onTryHit: function (pokemon) {
-			let targets = pokemon.side.foe.active;
-			for (let i = 0; i < targets.length; i++) {
-				if (!targets[i] || targets[i].fainted) continue;
-				for (let j = 0; j < pokemon.moves.length; j++) {
-					if (targets[i].moves.indexOf(pokemon.moves[j]) >= 0) return;
+			for (const target of pokemon.side.foe.active) {
+				if (!target || target.fainted) continue;
+				for (const move of pokemon.moves) {
+					if (target.moves.includes(move)) return;
 				}
 			}
 			return false;
@@ -824,10 +821,10 @@ exports.BattleMovedex = {
 		inherit: true,
 		onHit: function (target, source) {
 			let disallowedMoves = ['chatter', 'metronome', 'mimic', 'sketch', 'struggle', 'transform'];
-			if (source.transformed || !target.lastMove || disallowedMoves.includes(target.lastMove) || source.moves.indexOf(target.lastMove) !== -1 || target.volatiles['substitute']) return false;
+			if (source.transformed || !target.lastMove || disallowedMoves.includes(target.lastMove.id) || source.moves.indexOf(target.lastMove.id) !== -1 || target.volatiles['substitute']) return false;
 			let mimicIndex = source.moves.indexOf('mimic');
 			if (mimicIndex < 0) return false;
-			let move = this.getMove(target.lastMove);
+			let move = this.getMove(target.lastMove.id);
 			source.moveSlots[mimicIndex] = {
 				move: move.name,
 				id: move.id,
@@ -1028,10 +1025,10 @@ exports.BattleMovedex = {
 		inherit: true,
 		onHit: function (target, source) {
 			let disallowedMoves = ['chatter', 'sketch', 'struggle'];
-			if (source.transformed || !target.lastMove || disallowedMoves.includes(target.lastMove) || source.moves.includes(target.lastMove) || target.volatiles['substitute']) return false;
+			if (source.transformed || !target.lastMove || disallowedMoves.includes(target.lastMove.id) || source.moves.includes(target.lastMove.id) || target.volatiles['substitute']) return false;
 			let sketchIndex = source.moves.indexOf('sketch');
 			if (sketchIndex < 0) return false;
-			let move = this.getMove(target.lastMove);
+			let move = this.getMove(target.lastMove.id);
 			let sketchedMove = {
 				move: move.name,
 				id: move.id,

@@ -84,7 +84,7 @@ if (process.send && module === process.mainModule) {
 	process.on('message', message => PM.onMessageDownstream(message));
 	process.on('disconnect', () => process.exit(0));
 
-	require('./repl').start('verifier', /** @param {string} cmd */ cmd => eval(cmd));
+	require('./lib/repl').start('verifier', /** @param {string} cmd */ cmd => eval(cmd));
 }
 
 /**

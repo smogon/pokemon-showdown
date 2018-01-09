@@ -173,12 +173,12 @@ exports.BattleMovedex = {
 					return false;
 				}
 				for (const moveSlot of pokemon.moveSlots) {
-					if (moveSlot.id === pokemon.lastMove) {
+					if (moveSlot.id === pokemon.lastMove.id) {
 						if (!moveSlot.pp) {
 							return false;
 						} else {
 							this.add('-start', pokemon, 'Disable', moveSlot.move);
-							this.effectData.move = pokemon.lastMove;
+							this.effectData.move = pokemon.lastMove.id;
 							return;
 						}
 					}
@@ -223,14 +223,14 @@ exports.BattleMovedex = {
 			},
 			onStart: function (target) {
 				let noEncore = ['encore', 'mimic', 'mirrormove', 'sketch', 'struggle', 'transform'];
-				let moveIndex = target.moves.indexOf(target.lastMove);
-				if (!target.lastMove || noEncore.includes(target.lastMove) || (target.moveSlots[moveIndex] && target.moveSlots[moveIndex].pp <= 0)) {
+				let moveIndex = target.lastMove ? target.moves.indexOf(target.lastMove.id) : -1;
+				if (!target.lastMove || noEncore.includes(target.lastMove.id) || (target.moveSlots[moveIndex] && target.moveSlots[moveIndex].pp <= 0)) {
 					// it failed
 					this.add('-fail', target);
 					delete target.volatiles['encore'];
 					return;
 				}
-				this.effectData.move = target.lastMove;
+				this.effectData.move = target.lastMove.id;
 				this.add('-start', target, 'Encore');
 				if (!this.willMove(target)) {
 					this.effectData.duration++;
@@ -241,7 +241,7 @@ exports.BattleMovedex = {
 			},
 			onResidualOrder: 13,
 			onResidual: function (target) {
-				if (target.moves.indexOf(target.lastMove) >= 0 && target.moveSlots[target.moves.indexOf(target.lastMove)].pp <= 0) {
+				if (target.moves.includes(this.effectData.move) && target.moveSlots[target.moves.indexOf(this.effectData.move)].pp <= 0) {
 					// early termination if you run out of PP
 					delete target.volatiles.encore;
 					this.add('-end', target, 'Encore');
@@ -254,9 +254,9 @@ exports.BattleMovedex = {
 				if (!this.effectData.move || !pokemon.hasMove(this.effectData.move)) {
 					return;
 				}
-				for (let i = 0; i < pokemon.moveSlots.length; i++) {
-					if (pokemon.moveSlots[i].id !== this.effectData.move) {
-						pokemon.disableMove(pokemon.moveSlots[i].id);
+				for (const moveSlot of pokemon.moveSlots) {
+					if (moveSlot.id !== this.effectData.move) {
+						pokemon.disableMove(moveSlot.id);
 					}
 				}
 			},
@@ -432,9 +432,9 @@ exports.BattleMovedex = {
 		},
 		onHit: function (pokemon) {
 			let moves = [];
-			for (let i = 0; i < pokemon.moveSlots.length; i++) {
-				let move = pokemon.moveSlots[i].id;
-				let pp = pokemon.moveSlots[i].pp;
+			for (const moveSlot of pokemon.moveSlots) {
+				let move = moveSlot.id;
+				let pp = moveSlot.pp;
 				let NoSleepTalk = ['assist', 'bide', 'focuspunch', 'metronome', 'mirrormove', 'sleeptalk', 'uproar'];
 				if (move && !(NoSleepTalk.includes(move) || this.getMove(move).flags['charge'])) {
 					moves.push({move: move, pp: pp});
@@ -458,8 +458,8 @@ exports.BattleMovedex = {
 		shortDesc: "Lowers the PP of the target's last move by 2-5.",
 		onHit: function (target) {
 			let roll = this.random(2, 6);
-			if (target.deductPP(target.lastMove, roll)) {
-				this.add("-activate", target, 'move: Spite', target.lastMove, roll);
+			if (target.lastMove && target.deductPP(target.lastMove.id, roll)) {
+				this.add("-activate", target, 'move: Spite', target.lastMove.id, roll);
 				return;
 			}
 			return false;
@@ -514,10 +514,9 @@ exports.BattleMovedex = {
 				this.add('-end', target, 'move: Taunt', '[silent]');
 			},
 			onDisableMove: function (pokemon) {
-				let moves = pokemon.moveSlots;
-				for (let i = 0; i < moves.length; i++) {
-					if (this.getMove(moves[i].move).category === 'Status') {
-						pokemon.disableMove(moves[i].id);
+				for (const moveSlot of pokemon.moveSlots) {
+					if (this.getMove(moveSlot.move).category === 'Status') {
+						pokemon.disableMove(moveSlot.id);
 					}
 				}
 			},

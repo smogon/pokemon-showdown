@@ -15,13 +15,13 @@
 
 'use strict';
 
-const FS = require('./fs');
+const FS = require('./lib/fs');
 
 // ladderCaches = {formatid: ladder OR Promise(ladder)}
 // Use Ladders(formatid).ladder to guarantee a Promise(ladder).
 // ladder is basically a 2D array representing the corresponding ladder.tsv
 //   with userid in front
-/** @typedef {[string, number, string, number, number, number]} LadderRow [userid, elo, username, w, l, t] */
+/** @typedef {[string, number, string, number, number, number, string]} LadderRow [userid, elo, username, w, l, t, lastUpdate] */
 /** @type {Map<string, LadderRow[] | Promise<LadderRow[]>>} formatid: ladder */
 let ladderCaches = new Map();
 
@@ -61,7 +61,7 @@ class LadderStore {
 			return (this.ladder = cachedLadder);
 		}
 		try {
-			const data = await FS('config/ladders/' + this.formatid + '.tsv').read('utf8');
+			const data = await FS('config/ladders/' + this.formatid + '.tsv').readTextIfExists();
 			let ladder = /** @type {LadderRow[]} */ ([]);
 			let dataLines = data.split('\n');
 			for (let i = 1; i < dataLines.length; i++) {
@@ -118,7 +118,7 @@ class LadderStore {
 		}
 		if (createIfNeeded) {
 			let index = this.ladder.length;
-			this.ladder.push([userid, 1000, username, 0, 0, 0]);
+			this.ladder.push([userid, 1000, username, 0, 0, 0, '']);
 			return index;
 		}
 		return -1;
@@ -154,17 +154,19 @@ class LadderStore {
 	async getRating(userid) {
 		let formatid = this.formatid;
 		let user = Users.getExact(userid);
-		if (Ladders.disabled === true || Ladders.disabled === 'db' && (!user || !user.mmrCache[formatid])) {
-			throw new Error(`Ladders are disabled.`);
-		}
 		if (user && user.mmrCache[formatid]) {
 			return user.mmrCache[formatid];
 		}
 		const ladder = await this.getLadder();
-		if (user.userid !== userid) throw new Error(`Expired rating for ${userid}`);
 		let index = this.indexOfUser(userid);
-		if (index < 0) return (user.mmrCache[formatid] = 1000);
-		return (user.mmrCache[formatid] = ladder[index][1]);
+		let rating = 1000;
+		if (index >= 0) {
+			rating = ladder[index][1];
+		}
+		if (user && user.userid === userid) {
+			user.mmrCache[formatid] = rating;
+		}
+		return rating;
 	}
 
 	/**

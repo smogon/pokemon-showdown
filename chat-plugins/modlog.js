@@ -1,6 +1,6 @@
 'use strict';
 
-const FS = require('./../fs');
+const FS = require('./../lib/fs');
 const path = require('path');
 const Dashycode = require('../lib/dashycode');
 const ProcessManager = require('./../process-manager');
@@ -49,7 +49,7 @@ class ModlogManager extends ProcessManager {
 			const searchResults = await runModlog(rooms.split(','), searchString, maxLines);
 			result = `${searchResults.searchType}|${searchResults.text}`;
 		} catch (err) {
-			require('../crashlogger')(err, 'A modlog query', {
+			require('../lib/crashlogger')(err, 'A modlog query', {
 				rooms: rooms,
 				searchString: searchString,
 				maxLines: maxLines,
@@ -72,14 +72,14 @@ if (process.send && module === process.mainModule) {
 	global.Config = require('../config/config');
 	process.on('uncaughtException', err => {
 		if (Config.crashguard) {
-			require('../crashlogger')(err, 'A modlog child process');
+			require('../lib/crashlogger')(err, 'A modlog child process');
 		}
 	});
 	global.Dex = require('../sim/dex');
 	global.toId = Dex.getId;
 	process.on('message', message => PM.onMessageDownstream(message));
 	process.on('disconnect', () => process.exit());
-	require('../repl').start('modlog', cmd => eval(cmd));
+	require('../lib/repl').start('modlog', cmd => eval(cmd));
 } else {
 	PM.spawn();
 }
@@ -211,15 +211,15 @@ async function runModlog(rooms, searchString, maxLines) {
 	const useRipgrep = checkRipgrepAvailability();
 	let fileNameList = [];
 	let checkAllRooms = false;
-	for (let i = 0; i < rooms.length; i++) {
-		if (rooms[i] === 'all') {
+	for (const roomid of rooms) {
+		if (roomid === 'all') {
 			checkAllRooms = true;
 			const fileList = await FS(LOG_PATH).readdir();
-			for (let i = 0; i < fileList.length; i++) {
-				fileNameList.push(fileList[i]);
+			for (const file of fileList) {
+				if (file !== 'README.md') fileNameList.push(file);
 			}
 		} else {
-			fileNameList.push(`modlog_${rooms[i]}.txt`);
+			fileNameList.push(`modlog_${roomid}.txt`);
 		}
 	}
 	fileNameList = fileNameList.map(filename => `${LOG_PATH}${filename}`);
@@ -239,8 +239,8 @@ async function runModlog(rooms, searchString, maxLines) {
 		runRipgrepModlog(fileNameList, regexString, results);
 	} else {
 		const searchStringRegex = new RegExp(regexString, 'i');
-		for (let i = 0; i < fileNameList.length; i++) {
-			await checkRoomModlog(fileNameList[i], searchStringRegex, results);
+		for (const fileName of fileNameList) {
+			await checkRoomModlog(fileName, searchStringRegex, results);
 		}
 	}
 	const resultData = results.getListClone();
@@ -265,9 +265,8 @@ function runRipgrepModlog(paths, regexString, results) {
 	} catch (error) {
 		return results;
 	}
-	const fileResults = stdout.toString().split('\n').reverse();
-	for (let i = 0; i < fileResults.length; i++) {
-		if (fileResults[i]) results.tryInsert(fileResults[i]);
+	for (const fileName of stdout.toString().split('\n').reverse()) {
+		if (fileName) results.tryInsert(fileName);
 	}
 	return results;
 }
@@ -303,7 +302,7 @@ function prettifyResults(rawResults, room, searchString, searchType, addModlogLi
 		let time;
 		let bracketIndex;
 		if (line) {
-			if (hideIps) line = line.replace(/\([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+\)/g, '');
+			if (hideIps) line = line.replace(/[([][0-9]+\.[0-9]+\.[0-9]+\.[0-9]+[)\]]/g, '');
 			bracketIndex = line.indexOf(']');
 			if (bracketIndex < 0) return Chat.escapeHTML(line);
 			time = new Date(line.slice(1, bracketIndex));
@@ -429,6 +428,7 @@ exports.commands = {
 
 		getModlog(connection, roomid, target, lines, cmd === 'timedmodlog');
 	},
+
 	modloghelp: function (target, room, user) {
 		if (!this.runBroadcast()) return;
 

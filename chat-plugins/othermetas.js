@@ -34,8 +34,10 @@ exports.commands = {
 			this.run('formathelp');
 		}
 	},
-	othermetashelp: ["/om - Provides links to information on the Other Metagames.",
-		"!om - Show everyone that information. Requires: + % @ * # & ~"],
+	othermetashelp: [
+		`/om - Provides links to information on the Other Metagames.`,
+		`!om - Show everyone that information. Requires: + % @ * # & ~`,
+	],
 
 	'!mixandmega': true,
 	mnm: 'mixandmega',
@@ -58,19 +60,26 @@ exports.commands = {
 		if (template.isMega || (template.evos && Object.keys(template.evos).length > 0) || template.name === 'Necrozma-Ultra') { // Mega Pokemon and Ultra Necrozma cannot be mega evolved
 			this.errorReply(`Warning: You cannot mega evolve non-fully evolved Pokemon, Mega Pokemon, and Ultra Necrozma in Mix and Mega.`);
 		}
-		let bannedStones = Dex.getFormat('gen7mixandmega').bannedStones;
-		if (bannedStones.includes(stone.name) && template.name !== stone.megaEvolves) {
-			this.errorReply(`Warning: ${stone.name} is restricted to ${stone.megaEvolves} in Mix and Mega; therefore, ${template.name} cannot use ${stone.name} in actual play.`);
+		let banlist = Dex.getFormat('gen7mixandmega').banlist;
+		if (banlist.includes(stone.name)) {
+			this.errorReply(`Warning: ${stone.name} is banned from Mix and Mega.`);
+		}
+		let restrictedStones = Dex.getFormat('gen7mixandmega').restrictedStones;
+		if (restrictedStones.includes(stone.name) && template.name !== stone.megaEvolves) {
+			this.errorReply(`Warning: ${stone.name} is restricted to ${stone.megaEvolves} in Mix and Mega.`);
 		}
 		let cannotMega = Dex.getFormat('gen7mixandmega').cannotMega;
 		if (cannotMega.includes(template.name) && template.name !== stone.megaEvolves && !template.isMega) { // Separate messages because there's a difference between being already mega evolved / NFE and being banned from mega evolving
-			this.errorReply(`Warning: ${template.name} is banned from mega evolving with a non-native mega stone in Mix and Mega and therefore cannot use ${toId(sep[1]) === 'dragonascent' ? 'Dragon Ascent' : stone.name} in actual play.`);
+			this.errorReply(`Warning: ${template.name} is banned from mega evolving with a non-native mega stone in Mix and Mega.`);
+		}
+		if (['Multitype', 'RKS System'].includes(template.abilities['0']) && !['Arceus', 'Silvally'].includes(template.name)) {
+			this.errorReply(`Warning: ${template.name} is required to hold ${template.baseSpecies === 'Silvally' ? template.requiredItem : 'either ' + template.requiredItems[0] + ' or ' + template.requiredItems[1]}.`);
 		}
 		if (stone.isUnreleased) {
 			this.errorReply(`Warning: ${stone.name} is unreleased and is not usable in current Mix and Mega.`);
 		}
 		if (toId(sep[1]) === 'dragonascent' && !['smeargle', 'rayquaza', 'rayquazamega'].includes(toId(sep[0]))) {
-			this.errorReply(`Warning: Only Pokemon with access to Dragon Ascent can mega evolve with Mega Rayquaza's traits; therefore, ${template.name} cannot mega evolve with Dragon Ascent.`);
+			this.errorReply(`Warning: Only Pokemon with access to Dragon Ascent can mega evolve with Mega Rayquaza's traits.`);
 		}
 		// Fake Pokemon and Mega Stones
 		if (template.isNonstandard) {
@@ -144,7 +153,7 @@ exports.commands = {
 			return '<font color="#686868">' + detail + ':</font> ' + details[detail];
 		}).join("&nbsp;|&ThickSpace;") + '</font>');
 	},
-	mixandmegahelp: ["/mnm <pokemon> @ <mega stone> - Shows the Mix and Mega evolved Pokemon's type and stats."],
+	mixandmegahelp: [`/mnm <pokemon> @ <mega stone> - Shows the Mix and Mega evolved Pokemon's type and stats.`],
 
 	'!stone': true,
 	orb: 'stone',
@@ -163,8 +172,12 @@ exports.commands = {
 			stone = Dex.getItem(target);
 		}
 		if (!stone.megaEvolves && !stone.onPrimal) return this.errorReply(`Error: Mega Stone not found.`);
-		let bannedStones = Dex.getFormat('gen7mixandmega').bannedStones;
-		if (bannedStones.includes(stone.name)) {
+		let banlist = Dex.getFormat('gen7mixandmega').banlist;
+		if (banlist.includes(stone.name)) {
+			this.errorReply(`Warning: ${stone.name} is banned from Mix and Mega.`);
+		}
+		let restrictedStones = Dex.getFormat('gen7mixandmega').restrictedStones;
+		if (restrictedStones.includes(stone.name)) {
 			this.errorReply(`Warning: ${stone.name} is restricted to ${stone.megaEvolves} in Mix and Mega.`);
 		}
 		if (stone.isUnreleased) {
@@ -246,7 +259,7 @@ exports.commands = {
 		this.sendReply(`|raw|<div class="message"><ul class="utilichart">${buf}<li style="clear:both"></li></ul></div>`);
 		this.sendReply(`|raw|<font size="1"><font color="#686868">Gen:</font> ${details["Gen"]}&nbsp;|&ThickSpace;<font color="#686868">Weight:</font> ${details["Weight"]}</font>`);
 	},
-	stonehelp: ["/stone <mega stone> - Shows the changes that a mega stone/orb applies to a Pokemon."],
+	stonehelp: [`/stone <mega stone> - Shows the changes that a mega stone/orb applies to a Pokemon.`],
 
 	'!350cup': true,
 	'350': '350cup',
@@ -266,7 +279,7 @@ exports.commands = {
 		template.baseStats = Object.assign({}, newStats);
 		this.sendReply(`|html|${Chat.getDataPokemonHTML(template)}`);
 	},
-	'350cuphelp': ["/350 OR /350cup <pokemon> - Shows the base stats that a Pokemon would have in 350 Cup."],
+	'350cuphelp': [`/350 OR /350cup <pokemon> - Shows the base stats that a Pokemon would have in 350 Cup.`],
 
 	'!tiershift': true,
 	ts: 'tiershift',
@@ -296,5 +309,5 @@ exports.commands = {
 		template.baseStats = Object.assign({}, newStats);
 		this.sendReply(`|raw|${Chat.getDataPokemonHTML(template)}`);
 	},
-	'tiershifthelp': ["/ts OR /tiershift <pokemon> - Shows the base stats that a Pokemon would have in Tier Shift."],
+	tiershifthelp: [`/ts OR /tiershift <pokemon> - Shows the base stats that a Pokemon would have in Tier Shift.`],
 };
