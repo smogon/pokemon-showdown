@@ -110,12 +110,17 @@ Commands have access to the following functions:
 *	Log a message to the room's log without sending it to anyone. This is
 	like `this.add`, except no one will see it.
 
-`this.addModCommand(message)`
-*	Like this.add, but also logs the message to the moderator log which can
-	be seen with `/modlog`.
+`this.addModAction(message)`
+*	Like this.add, except it logs the message as being sent as the user who used the command.
+	This does not log anything into the modlog
 
 `this.logModCommand(message)`
-*	Like `this.addModCommand`, except users in the room won't see it.
+*	Removed - if you have to use this, use `this.room.modlog(message)`.
+	If you want to keep the old functions, please refer to [this](https://pastebin.com/fZvD3C5N).
+	To convert to the old modlog into the new format, please refer to [this](https://pastebin.com/0UfyDmVu).
+
+`modlog(action, user, note, options)`
+* adds a log line into the room's modlog, similar to `this.globalModlog`.
 
 `this.can(permission)`  
 `this.can(permission, targetUser)`
