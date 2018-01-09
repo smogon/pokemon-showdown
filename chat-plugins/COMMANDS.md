@@ -114,11 +114,6 @@ Commands have access to the following functions:
 *	Like this.add, except it logs the message as being sent as the user who used the command.
 	This does not log anything into the modlog
 
-`this.logModCommand(message)`
-*	Removed - if you have to use this, use `this.room.modlog(message)`.
-	If you want to keep the old functions, please refer to [this](https://pastebin.com/fZvD3C5N).
-	To convert to the old modlog into the new format, please refer to [this](https://pastebin.com/0UfyDmVu).
-
 `modlog(action, user, note, options)`
 * adds a log line into the room's modlog, similar to `this.globalModlog`.
 
