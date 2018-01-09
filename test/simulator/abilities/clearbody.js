@@ -27,7 +27,7 @@ describe('Clear Body', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Tentacruel', ability: 'clearbody', moves: ['superpower']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Arbok', ability: 'unnerve', moves: ['coil']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move Superpower', 'move Coil');
 		assert.statStage(battle.p1.active[0], 'atk', -1);
 		assert.statStage(battle.p1.active[0], 'def', -1);
 	});
@@ -36,7 +36,7 @@ describe('Clear Body', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Tentacruel', ability: 'clearbody', moves: ['shadowsneak']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Arbok', ability: 'unnerve', moves: ['swagger']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move Shadowsneak', 'move Swagger');
 		assert.statStage(battle.p1.active[0], 'atk', 2);
 	});
 
@@ -44,7 +44,7 @@ describe('Clear Body', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Tentacruel', ability: 'clearbody', moves: ['coil']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Arbok', ability: 'unnerve', moves: ['topsyturvy']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move Coil', 'move Topsyturvy');
 		assert.statStage(battle.p1.active[0], 'atk', -1);
 		assert.statStage(battle.p1.active[0], 'def', -1);
 		assert.statStage(battle.p1.active[0], 'accuracy', -1);
@@ -54,7 +54,7 @@ describe('Clear Body', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Tentacruel', ability: 'clearbody', moves: ['recover']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Haxorus', ability: 'moldbreaker', moves: ['growl']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move Recover', 'move Growl');
 		assert.statStage(battle.p1.active[0], 'atk', -1);
 	});
 
@@ -65,9 +65,9 @@ describe('Clear Body', function () {
 			{species: 'Metagross', ability: 'clearbody', moves: ['sleeptalk']},
 		]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Haxorus', ability: 'moldbreaker', moves: ['roar', 'stickyweb']}]);
-		battle.choose('p2', 'move 2');
-		battle.commitDecisions();
-		battle.commitDecisions();
+		battle.makeChoices('move Sleeptalk', 'move Stickyweb');
+		battle.makeChoices('move Sleeptalk', 'move Roar');
+		battle.makeChoices('switch Metagross', '');
 		assert.statStage(battle.p1.active[0], 'spe', -1);
 	});
 });
