@@ -2961,7 +2961,8 @@ exports.commands = {
 
 		Rooms.global.startLockdown();
 
-		this.roomlog(user.name + " used /lockdown");
+		const logRoom = Rooms('staff') || room;
+		logRoom.roomlog(`${user.name} used /lockdown`);
 	},
 	lockdownhelp: [`/lockdown - locks down the server, which prevents new battles from starting so that the server can eventually be restarted. Requires: ~`],
 
@@ -2974,12 +2975,14 @@ exports.commands = {
 			if (Config.autolockdown) return this.errorReply("The server is already set to automatically kill itself upon the final battle finishing.");
 			Config.autolockdown = true;
 			this.sendReply("The server is now set to automatically kill itself upon the final battle finishing.");
-			this.roomlog(`${user.name} used /autolockdownkill on`);
+			const logRoom = Rooms('staff') || room;
+			logRoom.roomlog(`${user.name} used /autolockdownkill on`);
 		} else if (this.meansNo(target)) {
 			if (!Config.autolockdown) return this.errorReply("The server is already set to not automatically kill itself upon the final battle finishing.");
 			Config.autolockdown = false;
 			this.sendReply("The server is now set to not automatically kill itself upon the final battle finishing.");
-			this.roomlog(`${user.name} used /autolockdownkill off`);
+			const logRoom = Rooms('staff') || room;
+			logRoom.roomlog(`${user.name} used /autolockdownkill off`);
 		} else {
 			return this.parse('/help autolockdownkill');
 		}
@@ -2993,7 +2996,8 @@ exports.commands = {
 		if (!this.can('lockdown')) return false;
 		Rooms.global.lockdown = 'pre';
 		this.sendReply("Tournaments have been disabled in preparation for the server restart.");
-		this.roomlog(user.name + " used /prelockdown");
+		const logRoom = Rooms('staff') || room;
+		logRoom.roomlog(`${user.name} used /prelockdown`);
 	},
 
 	slowlockdown: function (target, room, user) {
@@ -3001,7 +3005,8 @@ exports.commands = {
 
 		Rooms.global.startLockdown(undefined, true);
 
-		this.roomlog(user.name + " used /slowlockdown");
+		const logRoom = Rooms('staff') || room;
+		logRoom.roomlog(`${user.name} used /slowlockdown`);
 	},
 
 	endlockdown: function (target, room, user) {
@@ -3019,7 +3024,8 @@ exports.commands = {
 		}
 		Rooms.global.lockdown = false;
 
-		this.roomlog(user.name + " used /endlockdown");
+		const logRoom = Rooms('staff') || room;
+		logRoom.roomlog(`${user.name} used /endlockdown`);
 	},
 
 	emergency: function (target, room, user) {
@@ -3033,7 +3039,8 @@ exports.commands = {
 			if (id !== 'global') curRoom.addRaw("<div class=\"broadcast-red\">The server has entered emergency mode. Some features might be disabled or limited.</div>").update();
 		});
 
-		this.roomlog(user.name + " used /emergency");
+		const logRoom = Rooms('staff') || room;
+		logRoom.roomlog(`${user.name} used /emergency`);
 	},
 
 	endemergency: function (target, room, user) {
@@ -3047,7 +3054,8 @@ exports.commands = {
 			if (id !== 'global') curRoom.addRaw("<div class=\"broadcast-green\"><b>The server is no longer in emergency mode.</b></div>").update();
 		});
 
-		this.roomlog(user.name + " used /endemergency");
+		const logRoom = Rooms('staff') || room;
+		logRoom.roomlog(`${user.name} used /endemergency`);
 	},
 
 	kill: function (target, room, user) {
@@ -3067,7 +3075,8 @@ exports.commands = {
 			process.exit();
 			return;
 		}
-		room.roomlog(user.name + " used /kill");
+		const logRoom = Rooms('staff') || room;
+		logRoom.roomlog(`${user.name} used /kill`);
 		room.destroyLog(() => {
 			process.exit();
 		});
@@ -3509,7 +3518,7 @@ exports.commands = {
 		}
 		const force = user.can('timer', null, room);
 		if (!force && !room.game.players[user]) {
-			return this.errorReply(`Access denied`);
+			return this.errorReply(`Access denied.`);
 		}
 		if (this.meansNo(target) || target === 'stop') {
 			if (timer.timerRequesters.size) {
