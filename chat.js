@@ -629,7 +629,7 @@ class CommandContext {
 		buf += note;
 
 		Rooms.global.modlog(buf);
-		this.room.modlog('(' + this.room.id + ') ' + buf);
+		this.room.modlog(buf);
 	}
 	/**
 	 * @param {string} action
@@ -656,7 +656,7 @@ class CommandContext {
 		buf += ` by ${this.user.userid}`;
 		if (note) buf += `: ${note}`;
 
-		this.room.modlog('(' + this.room.id + ') ' + buf);
+		this.room.modlog(buf);
 	}
 	/**
 	 * @param {string} data
