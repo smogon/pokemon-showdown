@@ -301,7 +301,7 @@ exports.Formats = [
 			'Mew', 'Mimikyu', 'Mimikyu-Totem', 'Naganadel', 'Ninetales-Alola', 'Oranguru', 'Pelipper', 'Politoed', 'Porygon2',
 			'Scrafty', 'Snorlax', 'Stakataka', 'Tapu Bulu', 'Tapu Fini', 'Tapu Koko', 'Tapu Lele', 'Torkoal', 'Tyranitar',
 			'Volcanion', 'Volcarona', 'Whimsicott', 'Zapdos', 'Zygarde-Base', 'Cameruptite', 'Charizardite-Y', 'Diancite', 'Gengarite',
-			'Kangaskhanite', 'Metagrossite', 'Salamencite', 'Swamperitite', 'Tyranitarite',
+			'Kangaskhanite', 'Metagrossite', 'Salamencite', 'Swampertite', 'Tyranitarite',
 		],
 	},
 	{
