@@ -298,7 +298,7 @@ exports.Formats = [
 			'Aegislash', 'Amoonguss', 'Arcanine', 'Bronzong', 'Celesteela', 'Deoxys-Attack', 'Diancie',
 			'Excadrill', 'Ferrothorn', 'Garchomp', 'Gastrodon', 'Genesect', 'Heatran', 'Hoopa-Unbound', 'Jirachi',
 			'Kartana', 'Kingdra', 'Kyurem-Black', 'Landorus-Therian', 'Marowak-Alola', 'Marowak-Alola-Totem', 'Marshadow',
-			'Mew,' 'Mimikyu', 'Mimikyu-Totem', 'Naganadel', 'Ninetales-Alola', 'Oranguru', 'Pelipper', 'Politoed', 'Porygon2',
+			'Mew', 'Mimikyu', 'Mimikyu-Totem', 'Naganadel', 'Ninetales-Alola', 'Oranguru', 'Pelipper', 'Politoed', 'Porygon2',
 			'Scrafty', 'Snorlax', 'Stakataka', 'Tapu Bulu', 'Tapu Fini', 'Tapu Koko', 'Tapu Lele', 'Torkoal', 'Tyranitar',
 			'Volcanion', 'Volcarona', 'Whimsicott', 'Zapdos', 'Zygarde-Base', 'Cameruptite', 'Charizardite-Y', 'Diancite', 'Gengarite',
 			'Kangaskhanite', 'Metagrossite', 'Salamencite', 'Swamperitite', 'Tyranitarite',
