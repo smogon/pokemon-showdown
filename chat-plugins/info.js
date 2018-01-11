@@ -1310,6 +1310,7 @@ exports.commands = {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(`<button name="openOptions" class="button"><i style="font-size: 16px; vertical-align: -1px" class="fa fa-cog"></i> Options</button> (The Sound and Options buttons are at the top right, next to your username)`);
 	},
+
 	'!soundbutton': true,
 	soundsbutton: 'soundbutton',
 	volumebutton: 'soundbutton',
@@ -1897,10 +1898,12 @@ exports.commands = {
 	potd: function (target, room, user) {
 		if (!this.can('potd')) return false;
 
-		Config.potd = target;
-		Rooms.SimulatorProcess.eval('Config.potd = \'' + toId(target) + '\'');
+		const template = Dex.getTemplate(target);
+		if (!template.exists) return this.errorReply('Not a Pokemon. Check your spelling?');
+		Config.potd = template.species;
+		Rooms.SimulatorProcess.eval('Config.potd = \'' + toId(template.species) + '\'');
 		if (target) {
-			if (Rooms.lobby) Rooms.lobby.addRaw("<div class=\"broadcast-blue\"><b>The Pok&eacute;mon of the Day is now " + target + "!</b><br />This Pokemon will be guaranteed to show up in random battles.</div>");
+			if (Rooms.lobby) Rooms.lobby.addRaw("<div class=\"broadcast-blue\"><b>The Pok&eacute;mon of the Day is now " + template.species + "!</b><br />This Pokemon will be guaranteed to show up in random battles.</div>");
 			this.modlog('POTD', null, target);
 		} else {
 			if (Rooms.lobby) Rooms.lobby.addRaw("<div class=\"broadcast-blue\"><b>The Pok&eacute;mon of the Day was removed!</b><br />No pokemon will be guaranteed in random battles.</div>");
