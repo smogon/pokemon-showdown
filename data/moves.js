@@ -10855,13 +10855,7 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {nonsky: 1},
-		onHitField: function (target, source, effect) {
-			if (this.pseudoWeather['mudsport']) {
-				return false;
-			} else {
-				this.addPseudoWeather('mudsport', source, effect, '[of] ' + source);
-			}
-		},
+		pseudoWeather: 'mudsport',
 		effect: {
 			duration: 5,
 			onStart: function (side, source) {
@@ -18500,13 +18494,7 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {nonsky: 1},
-		onHitField: function (target, source, effect) {
-			if (this.pseudoWeather['watersport']) {
-				return false;
-			} else {
-				this.addPseudoWeather('watersport', source, effect, '[of] ' + source);
-			}
-		},
+		pseudoWeather: 'watersport',
 		effect: {
 			duration: 5,
 			onStart: function (side, source) {
