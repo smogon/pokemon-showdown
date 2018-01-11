@@ -524,7 +524,7 @@ exports.BattleFormatsData = {
 	ninetalesalola: {
 		randomBattleMoves: ["nastyplot", "blizzard", "moonblast", "substitute", "hiddenpowerfire", "freezedry", "auroraveil"],
 		randomDoubleBattleMoves: ["blizzard", "moonblast", "protect", "hiddenpowerfire", "freezedry", "auroraveil", "encore"],
-		tier: "UU",
+		tier: "BL",
 	},
 	igglybuff: {
 		randomBattleMoves: ["wish", "thunderwave", "reflect", "lightscreen", "healbell", "seismictoss", "counter", "protect"],
