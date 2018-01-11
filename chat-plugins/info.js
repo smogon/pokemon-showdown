@@ -1898,12 +1898,12 @@ exports.commands = {
 	potd: function (target, room, user) {
 		if (!this.can('potd')) return false;
 
-		let pkmn = Dex.getTemplate(target);
-		if (!pkmn.exists) return this.errorReply('Not a Pokemon. Check your spelling?');
-		Config.potd = pkmn.species;
-		Rooms.SimulatorProcess.eval('Config.potd = \'' + toId(pkmn.species) + '\'');
+		const template = Dex.getTemplate(target);
+		if (!template.exists) return this.errorReply('Not a Pokemon. Check your spelling?');
+		Config.potd = template.species;
+		Rooms.SimulatorProcess.eval('Config.potd = \'' + toId(template.species) + '\'');
 		if (target) {
-			if (Rooms.lobby) Rooms.lobby.addRaw("<div class=\"broadcast-blue\"><b>The Pok&eacute;mon of the Day is now " + pkmn.species + "!</b><br />This Pokemon will be guaranteed to show up in random battles.</div>");
+			if (Rooms.lobby) Rooms.lobby.addRaw("<div class=\"broadcast-blue\"><b>The Pok&eacute;mon of the Day is now " + template.species + "!</b><br />This Pokemon will be guaranteed to show up in random battles.</div>");
 			this.modlog('POTD', null, target);
 		} else {
 			if (Rooms.lobby) Rooms.lobby.addRaw("<div class=\"broadcast-blue\"><b>The Pok&eacute;mon of the Day was removed!</b><br />No pokemon will be guaranteed in random battles.</div>");
