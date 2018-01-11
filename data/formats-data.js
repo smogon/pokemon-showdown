@@ -5957,7 +5957,7 @@ exports.BattleFormatsData = {
 		tier: "NFE",
 	},
 	incineroar: {
-		randomBattleMoves: ["fakeout", "darkestlariat", "flareblitz", "uturn", "earthquake"],
+		randomBattleMoves: ["fakeout", "darkestlariat", "flareblitz", "uturn", "earthquake", "knockoff"],
 		randomDoubleBattleMoves: ["fakeout", "darkestlariat", "flareblitz", "crosschop", "willowisp", "taunt", "snarl"],
 		unreleasedHidden: true,
 		tier: "NU",
@@ -6570,8 +6570,8 @@ exports.BattleFormatsData = {
 		tier: "OU",
 	},
 	kartana: {
-		randomBattleMoves: ["leafblade", "sacredsword", "smartstrike", "psychocut", "swordsdance"],
-		randomDoubleBattleMoves: ["leafblade", "sacredsword", "smartstrike", "psychocut", "protect", "nightslash"],
+		randomBattleMoves: ["leafblade", "sacredsword", "smartstrike", "knockoff", "swordsdance"],
+		randomDoubleBattleMoves: ["leafblade", "sacredsword", "smartstrike", "psychocut", "protect", "knockoff"],
 		eventPokemon: [
 			{"generation": 7, "level": 60, "moves": ["leafblade", "xscissor", "detect", "airslash"]},
 			{"generation": 7, "level": 60, "shiny": 1, "moves": ["leafblade", "xscissor", "detect", "airslash"]},
