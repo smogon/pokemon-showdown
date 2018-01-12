@@ -7429,7 +7429,7 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "The power of the target's attack this turn is multiplied by 1.5 (this effect is stackable). Fails if there is no ally adjacent to the user, but does not fail if the ally is using a two-turn move.",
+		desc: "The power of the target's attack this turn is multiplied by 1.5 (this effect is stackable). Fails if there is no ally adjacent to the user or if the ally already moved this turn, but does not fail if the ally is using a two-turn move.",
 		shortDesc: "One adjacent ally's move power is 1.5x this turn.",
 		id: "helpinghand",
 		name: "Helping Hand",
@@ -7437,6 +7437,9 @@ exports.BattleMovedex = {
 		priority: 5,
 		flags: {authentic: 1},
 		volatileStatus: 'helpinghand',
+		onTryHit: function (target) {
+			if (!target.newlySwitched && !this.willMove(target)) return false;
+		},
 		effect: {
 			duration: 1,
 			onStart: function (target, source) {
