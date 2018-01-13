@@ -9658,13 +9658,7 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {mirror: 1},
-		onHitField: function (target, source, effect) {
-			if (this.pseudoWeather['magicroom']) {
-				this.removePseudoWeather('magicroom', source, effect, '[of] ' + source);
-			} else {
-				this.addPseudoWeather('magicroom', source, effect, '[of] ' + source);
-			}
-		},
+		pseudoWeather: 'magicroom',
 		effect: {
 			duration: 5,
 			durationCallback: function (source, effect) {
@@ -9675,6 +9669,9 @@ exports.BattleMovedex = {
 			},
 			onStart: function (target, source) {
 				this.add('-fieldstart', 'move: Magic Room', '[of] ' + source);
+			},
+			onRestart: function (target, source) {
+				this.removePseudoWeather('magicroom');
 			},
 			// Item suppression implemented in Pokemon.ignoringItem() within sim/pokemon.js
 			onResidualOrder: 25,
@@ -17909,13 +17906,7 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: -7,
 		flags: {mirror: 1},
-		onHitField: function (target, source, effect) {
-			if (this.pseudoWeather['trickroom']) {
-				this.removePseudoWeather('trickroom', source, effect, '[of] ' + source);
-			} else {
-				this.addPseudoWeather('trickroom', source, effect, '[of] ' + source);
-			}
-		},
+		pseudoWeather: 'trickroom',
 		effect: {
 			duration: 5,
 			durationCallback: function (source, effect) {
@@ -17926,6 +17917,9 @@ exports.BattleMovedex = {
 			},
 			onStart: function (target, source) {
 				this.add('-fieldstart', 'move: Trick Room', '[of] ' + source);
+			},
+			onRestart: function (target, source) {
+				this.removePseudoWeather('trickroom');
 			},
 			// Speed modification is changed in Pokemon.getActionSpeed() in sim/pokemon.js
 			onResidualOrder: 23,
@@ -18847,13 +18841,7 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {mirror: 1},
-		onHitField: function (target, source, effect) {
-			if (this.pseudoWeather['wonderroom']) {
-				this.removePseudoWeather('wonderroom', source, effect, '[of] ' + source);
-			} else {
-				this.addPseudoWeather('wonderroom', source, effect, '[of] ' + source);
-			}
-		},
+		pseudoWeather: 'wonderroom',
 		effect: {
 			duration: 5,
 			durationCallback: function (source, effect) {
@@ -18864,6 +18852,9 @@ exports.BattleMovedex = {
 			},
 			onStart: function (side, source) {
 				this.add('-fieldstart', 'move: Wonder Room', '[of] ' + source);
+			},
+			onRestart: function (target, source) {
+				this.removePseudoWeather('wonderroom');
 			},
 			// Swapping defenses implemented in sim/pokemon.js:Pokemon#calculateStat and Pokemon#getStat
 			onResidualOrder: 24,
