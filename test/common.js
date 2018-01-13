@@ -95,17 +95,19 @@ class TestTools {
 	 *
 	 * @param {Object} [options]
 	 * @param {Team[]} [teams]
-	 * @param {PRNG} [prng] A pseudo-random number generator. If not provided, a pseudo-random number
-	 * generator will be generated for the user with a seed that is guaranteed to be the same across
-	 * test executions to help with determinism.
 	 * @returns {Sim.Battle} A battle.
 	 */
-	createBattle(options, teams, prng = new PRNG(DEFAULT_SEED)) {
+	createBattle(options, teams) {
 		if (Array.isArray(options)) {
 			teams = options;
 			options = {};
 		}
-		const format = this.getFormat(options || {});
+		if (!options) options = {};
+		// If a seed for the pseudo-random number generator is not provided,
+		// a default seed (guaranteed to be the same across test executions)
+		// will be used. The default seed is intentionally tuned
+		let prng = new PRNG(options.seed || DEFAULT_SEED);
+		const format = this.getFormat(options);
 		const battle = Sim.construct(
 			format.id,
 			undefined,

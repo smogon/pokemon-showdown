@@ -2,7 +2,6 @@
 
 const assert = require('./../../assert');
 const common = require('./../../common');
-const PRNG = require('./../../../sim/prng');
 
 let battle;
 
@@ -55,7 +54,7 @@ describe('Dancer', function () {
 	});
 
 	it('should not copy a move that failed or was blocked by Protect', function () {
-		battle = common.createBattle({gameType: 'doubles'}, null, new PRNG([1, 2, 3, 4]));
+		battle = common.createBattle({gameType: 'doubles', seed: [1, 2, 3, 4]});
 		const p1 = battle.join('p1', 'Guest 1', 1, [
 			{species: 'Oricorio', level: 98, ability: 'dancer', item: 'laggingtail', moves: ['dragondance', 'protect', 'teeterdance']},
 			{species: 'Oricorio', level: 99, ability: 'dancer', moves: ['featherdance']},
@@ -90,7 +89,7 @@ describe('Dancer', function () {
 	});
 
 	it('should not copy a move that missed', function () {
-		battle = common.createBattle({gameType: 'singles'}, null, new PRNG([1, 2, 3, 4]));
+		battle = common.createBattle({gameType: 'singles', seed: [1, 2, 3, 4]});
 		const p1 = battle.join('p1', 'Guest 1', 1, [{species: 'Oricorio', ability: 'dancer', item: 'choicescarf', moves: ['revelationdance']}]);
 		const p2 = battle.join('p2', 'Guest 2', 1, [{species: 'Oricorio', ability: 'dancer', item: 'brightpowder', moves: ['dig']}]);
 		p1.active[0].boostBy({accuracy: -6});
