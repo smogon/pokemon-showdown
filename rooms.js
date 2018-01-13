@@ -453,7 +453,7 @@ class GlobalRoom extends BasicRoom {
 		} else {
 			// Prevent there from being two possible hidden classes an instance
 			// of GlobalRoom can have.
-			this.ladderIpLog = new (require('stream')).Writable();
+			this.ladderIpLog = new (require('./lib/streams')).WriteStream({write() {}});
 		}
 
 		let lastBattle;
