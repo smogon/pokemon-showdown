@@ -11,6 +11,7 @@ import * as LadderStoreType from './../ladders-remote'
 import * as LaddersType from './../ladders'
 import * as UsersType from './../users'
 import * as PunishmentsType from './../punishments'
+import * as StreamsType from './../lib/streams'
 
 declare global {
 	// modules
@@ -19,6 +20,9 @@ declare global {
 	const Punishments: typeof PunishmentsType
 	const Ladders: typeof LaddersType
 	const LadderStoreT: typeof LadderStoreType
+
+	const WriteStream: typeof StreamsType.WriteStream
+	const ReadStream: typeof StreamsType.ReadStream
 
 	// sim
 	const Battle: typeof BattleType
