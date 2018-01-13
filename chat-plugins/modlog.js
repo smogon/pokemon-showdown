@@ -200,7 +200,7 @@ async function runModlog(rooms, searchString, exactSearch, maxLines) {
 }
 
 async function checkRoomModlog(path, regex, results) {
-	const fileContents = await FS(path).readTextIfExists();
+	const fileContents = await FS(path).readIfExists();
 	for (const line of fileContents.toString().split('\n').reverse()) {
 		if (regex.test(line)) {
 			const insertionSuccessful = results.tryInsert(line);

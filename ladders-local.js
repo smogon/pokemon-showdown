@@ -61,7 +61,7 @@ class LadderStore {
 			return (this.ladder = cachedLadder);
 		}
 		try {
-			const data = await FS('config/ladders/' + this.formatid + '.tsv').readTextIfExists();
+			const data = await FS('config/ladders/' + this.formatid + '.tsv').readIfExists();
 			let ladder = /** @type {LadderRow[]} */ ([]);
 			let dataLines = data.split('\n');
 			for (let i = 1; i < dataLines.length; i++) {

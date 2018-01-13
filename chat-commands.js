@@ -2822,7 +2822,7 @@ exports.commands = {
 		// should be in the format: IP, IP, name, URL
 		let widen = (cmd === 'widendatacenters');
 
-		FS('config/datacenters.csv').readTextIfExists().then(data => {
+		FS('config/datacenters.csv').readIfExists().then(data => {
 			let datacenters = [];
 			for (const row of data.split("\n")) {
 				if (!row) continue;
