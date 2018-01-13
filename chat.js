@@ -1159,7 +1159,7 @@ Chat.uncacheTree = function (root) {
 Chat.loadPlugins = function () {
 	if (Chat.commands) return;
 
-	FS('package.json').readTextIfExists().then(data => {
+	FS('package.json').readIfExists().then(data => {
 		if (data) Chat.package = JSON.parse(data);
 	});
 
