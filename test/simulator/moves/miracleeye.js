@@ -11,37 +11,41 @@ describe('Miracle Eye', function () {
 	});
 
 	it('should negate Psychic immunities', function () {
-		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: "Smeargle", ability: 'owntempo', moves: ['miracleeye', 'psychic']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Darkrai", ability: 'baddreams', moves: ['nastyplot']}]);
-		battle.commitDecisions();
-		battle.choose('p1', 'move 2');
-		battle.commitDecisions();
+		battle = common.createBattle({seed: [1, 2, 3, 4]}, [[
+			{species: "Smeargle", moves: ['miracleeye', 'psychic']},
+		], [
+			{species: "Darkrai", moves: ['nastyplot']},
+		]]);
+		battle.makeChoices('move miracle eye', 'move nasty plot');
+		battle.makeChoices('move psychic', 'move nasty plot');
 		assert.notStrictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 
 	it('should ignore the effect of positive evasion stat stages', function () {
-		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: "Smeargle", ability: 'owntempo', moves: ['avalanche', 'miracleeye']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Forretress", ability: 'sturdy', moves: ['synthesis']}]);
-		battle.choose('p1', 'move 2');
-		battle.commitDecisions();
+		battle = common.createBattle({seed: [1, 2, 3, 4]}, [[
+			{species: "Smeargle", moves: ['avalanche', 'miracleeye']},
+		], [
+			{species: "Forretress", moves: ['synthesis']},
+		]]);
+		battle.makeChoices('move miracle eye', 'move synthesis');
 		battle.boost({evasion: 6}, battle.p2.active[0]);
-		for (let i = 0; i < 16; i++) {
-			battle.commitDecisions();
+		for (let i = 0; i < 3; i++) {
+			battle.makeChoices('move avalanche', 'move synthesis');
 			assert.notStrictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 		}
 	});
 
 	it('should not ignore the effect of negative evasion stat stages', function () {
-		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: "Smeargle", ability: 'owntempo', moves: ['zapcannon', 'dynamicpunch', 'miracleeye']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Zapdos", ability: 'owntempo', moves: ['roost']}]);
+		battle = common.createBattle({seed: [1, 2, 3, 4]}, [[
+			{species: "Smeargle", moves: ['zapcannon', 'miracleeye']},
+		], [
+			{species: "Zapdos", moves: ['roost']},
+		]]);
 		battle.choose('p1', 'move 3');
-		battle.commitDecisions();
+		battle.makeChoices('move miracle eye', 'move roost');
 		battle.boost({spe: 6, evasion: -6}, battle.p2.active[0]);
-		for (let i = 0; i < 16; i++) {
-			battle.commitDecisions();
+		for (let i = 0; i < 3; i++) {
+			battle.makeChoices('move zap cannon', 'move roost');
 			assert.notStrictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 		}
 	});
