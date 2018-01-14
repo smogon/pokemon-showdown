@@ -372,6 +372,10 @@ class Format extends Effect {
 		 */
 		this.validateSet = this.validateSet;
 		/**
+		 * @type {((this: Validator, move: Move, template: Template, lsetData: PokemonSources, set: PokemonSet) => string | false)?}
+		 */
+		this.checkLearnset = this.checkLearnset;
+		/**
 		 * @type {((this: Validator, team: PokemonSet[], removeNicknames: boolean) => string[] | false)?}
 		 */
 		this.validateTeam = this.validateTeam;
