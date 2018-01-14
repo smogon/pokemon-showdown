@@ -620,11 +620,11 @@ class User {
 
 		if (groupData && groupData[permission]) {
 			let jurisdiction = groupData[permission];
-			if (!targetUser) {
+			if (!targetUser && !targetGroup) {
 				return !!jurisdiction;
 			}
 			if (jurisdiction === true && permission !== 'jurisdiction') {
-				return this.can('jurisdiction', targetUser, room);
+				return this.can('jurisdiction', (targetUser || targetGroup), room);
 			}
 			if (typeof jurisdiction !== 'string') {
 				return !!jurisdiction;
