@@ -2382,7 +2382,7 @@ exports.commands = {
 		if (!targetUser) return this.errorReply("User '" + name + "' not found.");
 		let userid = targetUser.getLastId();
 		let hidetype = '';
-		if (!user.can('lock', targetUser) && !this.can('ban', targetUser, room)) return false;
+		if (!user.can('mute', targetUser, room) && !this.can('ban', targetUser, room)) return;
 
 		if (targetUser.locked || Punishments.isRoomBanned(targetUser, room.id) || room.isMuted(targetUser) || user.can('rangeban')) {
 			hidetype = 'hide|';
@@ -2410,8 +2410,8 @@ exports.commands = {
 		}
 	},
 	hidetexthelp: [
-		`/hidetext [username] - Removes a locked or muted/banned user's messages from chat (includes users banned from the room). Requires: % (global only), @ * # & ~`,
-		`/hidealtstext [username] - Removes a locked or muted/banned user's messages, and their alternate account's messages from the chat (includes users banned from the room).  Requires: % (global only), @ * # & ~`,
+		`/hidetext [username] - Removes a locked or muted/banned user's messages from chat. Requires: %, @ * # & ~`,
+		`/hidealtstext [username] - Removes a locked or muted/banned user's messages, and their alternate account's messages from the chat.  Requires: %, @ * # & ~`,
 	],
 
 	ab: 'blacklist',
