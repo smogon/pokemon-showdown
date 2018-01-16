@@ -356,7 +356,7 @@ class Validator {
 			}
 
 			if (ruleTable.has('-illegal')) {
-				let problem = this.checkLearnset(move, template, lsetData, set);
+				let problem = (format.checkLearnset || this.checkLearnset).call(this, move, template, lsetData, set);
 				if (problem) {
 					let problemString = `${name} can't learn ${move.name}`;
 					if (problem.type === 'incompatibleAbility') {
@@ -921,22 +921,6 @@ class Validator {
 		while (template && template.species && !alreadyChecked[template.speciesid]) {
 			alreadyChecked[template.speciesid] = true;
 			if (dex.gen === 2 && template.gen === 1) tradebackEligible = true;
-			// STABmons hack to avoid copying all of validateSet to formats
-			// @ts-ignore
-			let noLearn = format.noLearn || [];
-			if (ruleTable.has('ignorestabmoves') && !noLearn.includes(move.name) && !move.isZ) {
-				let types = template.types;
-				if (template.baseSpecies === 'Rotom') types = ['Electric', 'Ghost', 'Fire', 'Water', 'Ice', 'Flying', 'Grass'];
-				if (template.baseSpecies === 'Shaymin') types = ['Grass', 'Flying'];
-				if (template.baseSpecies === 'Hoopa') types = ['Psychic', 'Ghost', 'Dark'];
-				if (template.baseSpecies === 'Oricorio') types = ['Fire', 'Flying', 'Electric', 'Psychic', 'Ghost'];
-				if (template.baseSpecies === 'Necrozma') types = ['Psychic', 'Steel', 'Ghost'];
-				if (template.baseSpecies === 'Arceus' || template.baseSpecies === 'Silvally' || types.includes(move.type)) return false;
-			}
-			if (format.id === 'gen7alphabetcup' && Object.keys(alreadyChecked).length < 2) {
-				const letter = template.id.slice(0, 1);
-				if (move.id.slice(0, 1) === letter && !move.isZ && !noLearn.includes(move.name)) return false;
-			}
 			if (!template.learnset) {
 				if (template.baseSpecies !== template.species) {
 					// forme without its own learnset
