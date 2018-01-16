@@ -524,7 +524,11 @@ exports.Formats = [
 
 		mod: 'gen7',
 		ruleset: ['[Gen 7] OU'],
-		noLearn: ['Geomancy', 'Shell Smash', 'Sketch'],
+		restrictedMoves: ['Geomancy', 'Shell Smash', 'Sketch'],
+		checkLearnset: function (move, template, lsetData, set) {
+			if (!move.isZ && !this.format.restrictedMoves.includes(move.name) && move.id[0] === template.speciesid[0]) return false;
+			return this.checkLearnset(move, template, lsetData, set);
+		},
 		onValidateTeam: function (team) {
 			let alphabetTable = {};
 			for (const set of team) {
@@ -693,9 +697,22 @@ exports.Formats = [
 
 		mod: 'gen7',
 		searchShow: false,
-		ruleset: ['[Gen 7] OU', 'Ignore STAB Moves'],
+		ruleset: ['[Gen 7] OU'],
 		banlist: ['Kartana', 'Komala', 'Kyurem-Black', 'Silvally', 'Tapu Koko', 'Tapu Lele', 'Aerodactylite', 'King\'s Rock', 'Metagrossite', 'Razor Fang'],
-		noLearn: ['Acupressure', 'Belly Drum', 'Chatter', 'Geomancy', 'Lovely Kiss', 'Shell Smash', 'Shift Gear', 'Thousand Arrows'],
+		restrictedMoves: ['Acupressure', 'Belly Drum', 'Chatter', 'Geomancy', 'Lovely Kiss', 'Shell Smash', 'Shift Gear', 'Thousand Arrows'],
+		checkLearnset: function (move, template, lsetData, set) {
+			if (!move.isZ && !this.format.restrictedMoves.includes(move.name)) {
+				let types = template.types;
+				if (template.prevo) types = types.concat(this.dex.getTemplate(this.dex.getTemplate(template.prevo).prevo || template.prevo).types);
+				if (template.baseSpecies === 'Rotom') types = ['Electric', 'Ghost', 'Fire', 'Water', 'Ice', 'Flying', 'Grass'];
+				if (template.baseSpecies === 'Shaymin') types = ['Grass', 'Flying'];
+				if (template.baseSpecies === 'Hoopa') types = ['Psychic', 'Ghost', 'Dark'];
+				if (template.baseSpecies === 'Oricorio') types = ['Fire', 'Flying', 'Electric', 'Psychic', 'Ghost'];
+				if (template.baseSpecies === 'Necrozma') types = ['Psychic', 'Steel', 'Ghost'];
+				if (template.baseSpecies === 'Arceus' || template.baseSpecies === 'Silvally' || types.includes(move.type)) return false;
+			}
+			return this.checkLearnset(move, template, lsetData, set);
+		},
 	},
 	{
 		name: "[Gen 7] 2v2 Doubles",
