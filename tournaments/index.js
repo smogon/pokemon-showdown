@@ -1194,7 +1194,7 @@ let commands = {
 			}
 			if (tournament.disqualifyUser(targetUserid, this, reason)) {
 				this.privateModAction("(" + (targetUser.name || targetUserid) + " was disqualified from the tournament by " + user.name + (reason ? " (" + reason + ")" : "") + ")");
-				this.modlog('TOUR DQ', targetUser, reason, null);
+				this.modlog('TOUR DQ', targetUser, reason);
 			}
 		},
 		autostart: 'setautostart',
