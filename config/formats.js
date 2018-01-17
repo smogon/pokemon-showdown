@@ -202,8 +202,6 @@ exports.Formats = [
 		],
 
 		mod: 'gen7',
-		gameType: 'singles',
-		searchShow: false,
 		maxForcedLevel: 50,
 		teamLength: {
 			validate: [3, 6],
@@ -212,11 +210,13 @@ exports.Formats = [
 		ruleset: ['Pokemon', 'Species Clause', 'Item Clause', 'Team Preview'],
 		onValidateTeam: function (team) {
 			const legends = ['Mewtwo', 'Mew', 'Lugia', 'Ho-Oh', 'Celebi', 'Kyogre', 'Groudon', 'Rayquaza', 'Jirachi', 'Deoxys', 'Dialga', 'Palkia', 'Giratina', 'Phione', 'Manaphy', 'Darkrai', 'Shaymin', 'Arceus', 'Victini', 'Reshiram', 'Zekrom', 'Kyurem', 'Keldeo', 'Meloetta', 'Genesect', 'Xerneas', 'Yveltal', 'Zygarde', 'Diancie', 'Hoopa', 'Volcanion', 'Cosmog', 'Cosmoem', 'Solgaleo', 'Lunala', 'Necrozma', 'Magearna', 'Marshadow'];
-			let n = 0;
+			let hasLegend = false;
 			for (const set of team) {
-				let baseSpecies = this.getTemplate(set.species).baseSpecies;
-				if (legends.includes(baseSpecies)) n++;
-				if (n > 1) return ["You can only use one legendary Pok\u00E9mon."];
+				const pokemon = this.getTemplate(set.species).baseSpecies;
+				if (legends.includes(pokemon)) {
+					if (hasLegend) return ["You can only use one legendary Pok\u00E9mon."];
+					hasLegend = true;
+				}
 			}
 		},
 	},
