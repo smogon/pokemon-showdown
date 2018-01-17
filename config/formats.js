@@ -196,41 +196,29 @@ exports.Formats = [
 		requirePentagon: true,
 	},
 	{
-		name: "[Gen 7] Battle Spot Special 7",
-		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/3621403/\">Battle Spot Special: Season 7</a>"],
+		name: "[Gen 7] Battle Spot Special 8",
+		desc: [
+			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3626059/\">Battle Spot Special 8</a>",
+		],
 
 		mod: 'gen7',
+		gameType: 'singles',
+		searchShow: false,
 		maxForcedLevel: 50,
 		teamLength: {
 			validate: [3, 6],
 			battle: 3,
 		},
-		ruleset: ['Pokemon', 'Standard GBU', 'Alola Pokedex'],
-		banlist: ['Poipole', 'Naganadel', 'Stakataka', 'Blacephalon'],
-		requirePlus: true,
-	},
-	{
-		name: "[Gen 7] Dragon Cup",
-		desc: [`&bullet; <a href="https://3ds.pokemon-gl.com/dl-regulation/6010">Dragon Cup: Official rules</a>`],
-
-		mod: 'gen7',
-		maxForcedLevel: 50,
-		teamLength: {
-			validate: [3, 6],
-			battle: 3,
-		},
-		timer: {starting: 15 * 60 - 10, perTurn: 10, maxPerTurn: 60, maxFirstTurn: 90, timeoutAutoChoose: true},
-		ruleset: ['Pokemon', 'Minimal GBU', 'Team Preview'],
+		ruleset: ['Pokemon', 'Species Clause', 'Item Clause', 'Team Preview'],
 		onValidateTeam: function (team) {
-			const restrictedLegends = ['Mewtwo', 'Lugia', 'Ho-Oh', 'Kyogre', 'Groudon', 'Rayquaza', 'Dialga', 'Palkia', 'Giratina', 'Reshiram', 'Zekrom', 'Kyurem', 'Xerneas', 'Yveltal', 'Zygarde', 'Cosmog', 'Cosmoem', 'Solgaleo', 'Lunala', 'Necrozma'];
-			let count = 0;
+			const legends = ['Mewtwo', 'Mew', 'Lugia', 'Ho-Oh', 'Celebi', 'Kyogre', 'Groudon', 'Rayquaza', 'Jirachi', 'Deoxys', 'Dialga', 'Palkia', 'Giratina', 'Phione', 'Manaphy', 'Darkrai', 'Shaymin', 'Arceus', 'Victini', 'Reshiram', 'Zekrom', 'Kyurem', 'Keldeo', 'Meloetta', 'Genesect', 'Xerneas', 'Yveltal', 'Zygarde', 'Diancie', 'Hoopa', 'Volcanion', 'Cosmog', 'Cosmoem', 'Solgaleo', 'Lunala', 'Necrozma', 'Magearna', 'Marshadow'];
+			let n = 0;
 			for (const set of team) {
-				const baseSpecies = this.getTemplate(set.species).baseSpecies;
-				if (restrictedLegends.includes(baseSpecies)) count++;
-				if (count > 1) return ["You can only use one Restricted Legendary Pok\u00E9mon."];
+				let baseSpecies = this.getTemplate(set.species).baseSpecies;
+				if (legends.includes(baseSpecies)) n++;
+				if (n > 1) return ["You can only use one legendary Pok\u00E9mon."];
 			}
 		},
-		requirePentagon: true,
 	},
 	{
 		name: "[Gen 7] Custom Game",
