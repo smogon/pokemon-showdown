@@ -2138,7 +2138,11 @@ class Battle extends Dex.ModdedDex {
 			critMult = [0, 16, 8, 4, 3, 2];
 		} else {
 			critRatio = this.clampIntRange(critRatio, 0, 4);
-			critMult = [0, 16, 8, 2, 1];
+			if (this.gen === 6) {
+				critMult = [0, 16, 8, 2, 1];
+			} else {
+				critMult = [0, 24, 8, 2, 1];
+			}
 		}
 
 		move.crit = move.willCrit || false;
