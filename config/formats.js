@@ -208,6 +208,7 @@ exports.Formats = [
 			battle: 3,
 		},
 		ruleset: ['Pokemon', 'Species Clause', 'Item Clause', 'Team Preview'],
+		banlist: ['Unreleased', 'Illegal'],
 		onValidateTeam: function (team) {
 			const legends = ['Mewtwo', 'Mew', 'Lugia', 'Ho-Oh', 'Celebi', 'Kyogre', 'Groudon', 'Rayquaza', 'Jirachi', 'Deoxys', 'Dialga', 'Palkia', 'Giratina', 'Phione', 'Manaphy', 'Darkrai', 'Shaymin', 'Arceus', 'Victini', 'Reshiram', 'Zekrom', 'Kyurem', 'Keldeo', 'Meloetta', 'Genesect', 'Xerneas', 'Yveltal', 'Zygarde', 'Diancie', 'Hoopa', 'Volcanion', 'Cosmog', 'Cosmoem', 'Solgaleo', 'Lunala', 'Necrozma', 'Magearna', 'Marshadow'];
 			let hasLegend = false;
