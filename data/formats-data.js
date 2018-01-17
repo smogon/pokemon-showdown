@@ -6604,7 +6604,7 @@ exports.BattleFormatsData = {
 		tier: "RU",
 	},
 	necrozmaduskmane: {
-		randomBattleMoves: ["swordsdance", "autotomize", "photongeyser", "sunsteelstrike", "earthquake", "knockoff"],
+		randomBattleMoves: ["swordsdance", "sunsteelstrike", "photongeyser", "earthquake", "knockoff", "autotomize"],
 		eventPokemon: [
 			{"generation": 7, "level": 65, "moves": ["sunsteelstrike"]},
 		],
@@ -6612,7 +6612,7 @@ exports.BattleFormatsData = {
 		tier: "Uber",
 	},
 	necrozmadawnwings: {
-		randomBattleMoves: ["calmmind", "moongeistbeam", "photongeyser", "heatwave", "moonlight"],
+		randomBattleMoves: ["calmmind", "moongeistbeam", "photongeyser", "heatwave", "powergem", "trickroom"],
 		eventPokemon: [
 			{"generation": 7, "level": 65, "moves": ["moongeistbeam"]},
 		],
