@@ -892,8 +892,14 @@ exports.Formats = [
 		],
 
 		mod: 'gen1',
-		ruleset: ['[Gen 1] OU', 'Ignore STAB Moves'],
+		ruleset: ['[Gen 1] OU'],
 		banlist: [],
+		checkLearnset: function (move, template, lsetData, set) {
+			let types = template.types;
+			if (template.prevo) types = types.concat(this.dex.getTemplate(this.dex.getTemplate(template.prevo).prevo || template.prevo).types);
+			if (types.includes(move.type)) return false;
+			return this.checkLearnset(move, template, lsetData, set);
+		},
 	},
 
 	// Past Gens OU
