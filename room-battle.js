@@ -840,6 +840,10 @@ if (process.send && module === process.mainModule) {
 	const Sim = require('./sim');
 	global.Dex = require('./sim/dex');
 	global.toId = Dex.getId;
+	global.__version = require('child_process')
+		.execSync('git merge-base master HEAD')
+		.toString()
+		.trim();
 
 	if (Config.crashguard) {
 		// graceful crash - allow current battles to finish before restarting

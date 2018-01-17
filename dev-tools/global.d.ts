@@ -61,4 +61,7 @@ declare global {
 	const Users: typeof UsersType
 	const User: typeof UsersType.User
 	const Connection: typeof UsersType.Connection
+
+	// simulator version
+	const __version: string
 }
