@@ -50,7 +50,7 @@ describe('Team Validator', function () {
 	it('should validate Gen 2 IVs', function () {
 		let team = Dex.fastUnpackTeam('|raikou|||hiddenpowerwater||||14,28,26,,,|||');
 		let illegal = TeamValidator('gen2ou').validateTeam(team);
-		assert.strictEqual(illegal, false);
+		assert.strictEqual(illegal, null);
 
 		team = Dex.fastUnpackTeam('|raikou|||hiddenpowerfire||||14,28,26,,,|||');
 		illegal = TeamValidator('gen2ou').validateTeam(team);
@@ -82,13 +82,13 @@ describe('Team Validator', function () {
 			{species: 'pikachu', ability: 'static', moves: ['agility', 'protect', 'thunder', 'thunderbolt']},
 		];
 		let illegal = TeamValidator('gen7anythinggoes').validateTeam(team);
-		assert.strictEqual(illegal, false);
+		assert.strictEqual(illegal, null);
 
 		team = [
 			{species: 'meowstic', ability: 'prankster', moves: ['trick', 'magiccoat']},
 		];
 		illegal = TeamValidator('gen7anythinggoes').validateTeam(team);
-		assert.strictEqual(illegal, false);
+		assert.strictEqual(illegal, null);
 	});
 
 	it('should reject illegal movesets', function () {
@@ -126,17 +126,17 @@ describe('Team Validator', function () {
 			{species: 'machamp', ability: 'steadfast', moves: ['fissure']},
 		];
 		let illegal = TeamValidator('gen7anythinggoes').validateTeam(team);
-		assert.strictEqual(illegal, false);
+		assert.strictEqual(illegal, null);
 		team = [
 			{species: 'tauros', ability: 'sheerforce', moves: ['bodyslam']},
 		];
 		illegal = TeamValidator('gen7anythinggoes').validateTeam(team);
-		assert.strictEqual(illegal, false);
+		assert.strictEqual(illegal, null);
 		team = [
 			{species: 'tauros', ability: 'intimidate', ivs: {hp: 31, atk: 31, def: 30, spa: 30, spd: 30, spe: 30}, moves: ['bodyslam']},
 		];
 		illegal = TeamValidator('gen7anythinggoes').validateTeam(team);
-		assert.strictEqual(illegal, false);
+		assert.strictEqual(illegal, null);
 
 		team = [
 			{species: 'machamp', ability: 'noguard', moves: ['fissure']},
@@ -155,7 +155,7 @@ describe('Team Validator', function () {
 			{species: 'rockruff', ability: 'owntempo', moves: ['happyhour']},
 		];
 		let illegal = TeamValidator('gen7anythinggoes').validateTeam(team);
-		assert.strictEqual(illegal, false);
+		assert.strictEqual(illegal, null);
 		team = [
 			{species: 'rockruff', level: 9, ability: 'owntempo', moves: ['happyhour']},
 		];
@@ -165,7 +165,7 @@ describe('Team Validator', function () {
 			{species: 'rockruff', level: 9, ability: 'owntempo', moves: ['tackle']},
 		];
 		illegal = TeamValidator('gen7anythinggoes').validateTeam(team);
-		assert.strictEqual(illegal, false);
+		assert.strictEqual(illegal, null);
 		team = [
 			{species: 'rockruff', level: 9, ability: 'steadfast', moves: ['happyhour']},
 		];
@@ -176,7 +176,7 @@ describe('Team Validator', function () {
 			{species: 'lycanrocdusk', ability: 'toughclaws', moves: ['happyhour']},
 		];
 		illegal = TeamValidator('gen7anythinggoes').validateTeam(team);
-		assert.strictEqual(illegal, false);
+		assert.strictEqual(illegal, null);
 		team = [
 			{species: 'lycanroc', ability: 'steadfast', moves: ['happyhour']},
 		];
@@ -190,14 +190,14 @@ describe('Team Validator', function () {
 			{species: 'gyaradosmega', item: 'gyaradosite', ability: 'intimidate', moves: ['dragondance', 'crunch', 'waterfall', 'icefang']},
 		];
 		let illegal = TeamValidator('gen7anythinggoes').validateTeam(team);
-		assert.strictEqual(illegal, false);
+		assert.strictEqual(illegal, null);
 
 		// mega forme ability
 		team = [
 			{species: 'gyaradosmega', item: 'gyaradosite', ability: 'moldbreaker', moves: ['dragondance', 'crunch', 'waterfall', 'icefang']},
 		];
 		illegal = TeamValidator('gen7anythinggoes').validateTeam(team);
-		assert.strictEqual(illegal, false);
+		assert.strictEqual(illegal, null);
 	});
 
 	it('should reject newer Pokemon in older gens', function () {
