@@ -25,7 +25,7 @@ exports.BattleScripts = {
 			}
 		}
 		let baseMove = this.getMove(move);
-		move = zMove ? this.getZMoveCopy(move, pokemon) : baseMove;
+		move = zMove ? this.getZMoveCopy(baseMove, pokemon) : baseMove;
 		if (!target && target !== false) target = this.resolveTarget(pokemon, move);
 
 		// copy the priority for Quick Guard
@@ -134,15 +134,14 @@ exports.BattleScripts = {
 	},
 	useMoveInner: function (move, pokemon, target, sourceEffect, zMove) {
 		if (!sourceEffect && this.effect.id) sourceEffect = this.effect;
+		move = this.getMoveCopy(move);
 		if (zMove && move.id === 'weatherball') {
 			let baseMove = move;
 			this.singleEvent('ModifyMove', move, null, pokemon, target, move, move);
 			move = this.getZMoveCopy(move, pokemon);
 			if (move.type !== 'Normal') sourceEffect = baseMove;
-		} else if (zMove || (sourceEffect && sourceEffect.isZ && sourceEffect.id !== 'instruct')) {
+		} else if (zMove || (move.category !== 'Status' && sourceEffect && sourceEffect.isZ && sourceEffect.id !== 'instruct')) {
 			move = this.getZMoveCopy(move, pokemon);
-		} else {
-			move = this.getMoveCopy(move);
 		}
 		if (this.activeMove) {
 			move.priority = this.activeMove.priority;
@@ -835,7 +834,6 @@ exports.BattleScripts = {
 	},
 
 	getZMoveCopy: function (move, pokemon) {
-		move = this.getMove(move);
 		let zMove;
 		if (pokemon) {
 			let item = pokemon.getItem();
