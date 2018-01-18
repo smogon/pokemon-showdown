@@ -343,7 +343,7 @@ const PM = new QueryProcessManager(module, async data => {
 	return null;
 });
 
-if (module === process.mainModule) {
+if (!PM.isParentProcess) {
 	// This is a child process!
 	global.Config = require('../config/config');
 	process.on('uncaughtException', err => {

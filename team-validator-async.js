@@ -58,7 +58,7 @@ const PM = new QueryProcessManager(module, async message => {
 	return '1' + packedTeam;
 });
 
-if (module === process.mainModule) {
+if (!PM.isParentProcess) {
 	// This is a child process!
 
 	global.Config = require('./config/config');
