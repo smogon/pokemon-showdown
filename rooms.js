@@ -1144,21 +1144,23 @@ class BasicChatRoom extends BasicRoom {
 	 * @param {User} user
 	 */
 	getIntroMessage(user) {
+		let roomMessage = `\n|raw|<div class="infobox"> You have joined ${this.title}`;
 		let message = '';
-		if (this.introMessage) message += '\n|raw|<div class="infobox infobox-roomintro"><div' + (!this.isOfficial ? ' class="infobox-limited"' : '') + '>' + this.introMessage.replace(/\n/g, '') + '</div>';
-		if (this.staffMessage && user.can('mute', null, this)) message += (message ? '<br />' : '\n|raw|<div class="infobox">') + '(Staff intro:)<br /><div>' + this.staffMessage.replace(/\n/g, '') + '</div>';
 		if (this.modchat) {
-			message += (message ? '<br />' : '\n|raw|<div class="infobox">') + '<div class="broadcast-red">' +
-				'Must be rank ' + this.modchat + ' or higher to talk right now.' +
-				'</div>';
+			roomMessage += `<br />You must be rank ${this.modchat} or higher to talk right now.`;
+		}
+		if (this.modjoin) {
+			roomMessage += `<br />You must be roomvoice or have room management capabilities to join the room right now.`;
 		}
 		if (this.slowchat && user.can('mute', null, this)) {
-			message += (message ? '<br />' : '\n|raw|<div class="infobox">') + '<div class="broadcast-red">' +
-				'Messages must have at least ' + this.slowchat + ' seconds between them.' +
-				'</div>';
+			roomMessage += `<br />Your messages must have at least ${this.slowchat} seconds between them.`;
 		}
-		if (message) message += '</div>';
-		return message;
+		roomMessage += `</div>`;
+		if (this.introMessage) message += `\n|raw|<div class="infobox infobox-roomintro"><div ${(!this.isOfficial ? 'class="infobox-limited"' : '')}>${this.introMessage.replace(/\n/g, '')}</div>`;
+		if (this.staffMessage && user.can('mute', null, this)) message += `${(message ? '<br />' : '\n|raw|<div class="infobox">')}(Staff intro:)<br /><div>${this.staffMessage.replace(/\n/g, '')}</div>`;
+		if (message) message += `</div>`;
+		let finalMessage = roomMessage + message;
+		return finalMessage;
 	}
 	/**
 	 * @param {boolean} includeSecret
