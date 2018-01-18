@@ -543,9 +543,9 @@ class Battle {
 			let player = /** @type {BattlePlayer?} */ (this[lines[1]]);
 			if (player) {
 				player.sendRoom(lines[2]);
-				if (lines[3].startsWith(`|error|[Invalid choice] Can't do anything`)) {
+				if (lines[2].startsWith(`|error|[Invalid choice] Can't do anything`)) {
 					// ... should not happen
-				} else if (lines[3].startsWith(`|error|[Invalid choice]`)) {
+				} else if (lines[2].startsWith(`|error|[Invalid choice]`)) {
 					let request = this.requests[player.slot];
 					request.isWait = false;
 					request.choice = '';
