@@ -446,7 +446,6 @@ exports.pages = {
 exports.commands = {
 	requesthelp: 'helpticket',
 	helprequest: 'helpticket',
-	report: 'helpticket',
 	ht: 'helpticket',
 	helpticket: {
 		'!create': true,
@@ -728,4 +727,12 @@ exports.commands = {
 		`/helpticket unban [user] - Ticket unbans a user. Requires: % @ * & ~`,
 		`/helpticket delete [user] - Deletes a user's ticket. Requires: & ~`,
 	],
+
+	report: function (target, room, user, connection) {
+		let message = toId(target);
+		if (message.includes('list') || message.includes('escalate') || message.includes('close') || message.includes('ban') || message.includes('delete')) {
+			return this.parse('/helpticket ' + target);
+		}
+		return this.parse('/helpticket');
+	},
 };
