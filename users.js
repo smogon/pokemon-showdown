@@ -599,7 +599,7 @@ class User {
 		}
 
 		let group = ' ';
-		let targetGroup = ' ';
+		let targetGroup = '';
 		let targetUser = null;
 
 		if (typeof target === 'string') {
