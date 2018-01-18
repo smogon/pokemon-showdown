@@ -1,9 +1,21 @@
+/**
+ * Modlog
+ * Pokemon Showdown - http://pokemonshowdown.com/
+ *
+ * Interface for viewing and searching modlog. These run in a
+ * subprocess.
+ *
+ * Actually writing to modlog is handled in chat.js, rooms.js, and
+ * roomlogs.js
+ *
+ * @license MIT
+ */
+
 'use strict';
 
 const FS = require('./../lib/fs');
 const path = require('path');
 const Dashycode = require('../lib/dashycode');
-const ProcessManager = require('./../process-manager');
 const execFileSync = require('child_process').execFileSync;
 
 const MAX_PROCESSES = 1;
@@ -14,84 +26,6 @@ const LINES_SEPARATOR = 'lines=';
 const MAX_RESULTS_LENGTH = MORE_BUTTON_INCREMENTS[MORE_BUTTON_INCREMENTS.length - 1];
 const LOG_PATH = 'logs/modlog/';
 
-class ModlogManager extends ProcessManager {
-	onMessageUpstream(message) {
-		// Protocol:
-		// when crashing: 	  "[id]|0"
-		// when not crashing: "[id]|1|[results]"
-		let pipeIndex = message.indexOf('|');
-		let id = +message.substr(0, pipeIndex);
-
-		if (this.pendingTasks.has(id)) {
-			this.pendingTasks.get(id)(message.slice(pipeIndex + 1));
-			this.pendingTasks.delete(id);
-			this.release();
-		}
-	}
-
-	async onMessageDownstream(message) {
-		// protocol:
-		// "[id]|[comma-separated list of room ids]|[searchString]|[exactSearch]|[maxLines]"
-		let pipeIndex = message.indexOf('|');
-		let nextPipeIndex = message.indexOf('|', pipeIndex + 1);
-		let id = message.substr(0, pipeIndex);
-		let rooms = message.substr(pipeIndex + 1, nextPipeIndex - pipeIndex - 1);
-
-		pipeIndex = nextPipeIndex;
-		nextPipeIndex = message.indexOf('|', pipeIndex + 1);
-		let searchString = message.substr(pipeIndex + 1, nextPipeIndex - pipeIndex - 1);
-
-		pipeIndex = nextPipeIndex;
-		nextPipeIndex = message.indexOf('|', pipeIndex + 1);
-		let exactSearch = message.substr(pipeIndex + 1, nextPipeIndex - pipeIndex - 1);
-		let maxLines = message.substr(nextPipeIndex + 1);
-
-		process.send(id + '|' + await this.receive(rooms, searchString, exactSearch, maxLines));
-	}
-
-	async receive(rooms, searchString, exactSearch, maxLines) {
-		let result = '';
-		exactSearch = exactSearch === '1';
-		maxLines = Number(maxLines);
-		try {
-			result = '1|' + await runModlog(rooms.split(','), searchString, exactSearch, maxLines);
-		} catch (err) {
-			require('../lib/crashlogger')(err, 'A modlog query', {
-				rooms: rooms,
-				searchString: searchString,
-				exactSearch: exactSearch,
-				maxLines: maxLines,
-			});
-			result = '0';
-		}
-		return result;
-	}
-}
-
-exports.ModlogManager = ModlogManager;
-
-const PM = exports.PM = new ModlogManager({
-	execFile: __filename,
-	maxProcesses: MAX_PROCESSES,
-	isChatBased: true,
-});
-
-if (process.send && module === process.mainModule) {
-	global.Config = require('../config/config');
-	process.on('uncaughtException', err => {
-		if (Config.crashguard) {
-			require('../lib/crashlogger')(err, 'A modlog child process');
-		}
-	});
-	global.Dex = require('../sim/dex');
-	global.toId = Dex.getId;
-	process.on('message', message => PM.onMessageDownstream(message));
-	process.on('disconnect', () => process.exit());
-	require('../lib/repl').start('modlog', cmd => eval(cmd));
-} else {
-	PM.spawn();
-}
-
 class SortedLimitedLengthList {
 	constructor(maxSize) {
 		this.maxSize = maxSize;
@@ -99,7 +33,7 @@ class SortedLimitedLengthList {
 	}
 
 	getListClone() {
-		return this.list.slice(0);
+		return this.list.slice();
 	}
 
 	tryInsert(element) {
@@ -152,11 +86,11 @@ function getMoreButton(room, search, useExactSearch, lines, maxLines) {
 	}
 }
 
-async function runModlog(rooms, searchString, exactSearch, maxLines) {
+async function runModlog(roomidList, searchString, exactSearch, maxLines) {
 	const useRipgrep = checkRipgrepAvailability();
 	let fileNameList = [];
 	let checkAllRooms = false;
-	for (const roomid of rooms) {
+	for (const roomid of roomidList) {
 		if (roomid === 'all') {
 			checkAllRooms = true;
 			const fileList = await FS(LOG_PATH).readdir();
@@ -196,7 +130,7 @@ async function runModlog(rooms, searchString, exactSearch, maxLines) {
 		}
 	}
 	const resultData = results.getListClone();
-	return resultData.join('\n');
+	return resultData;
 }
 
 async function checkRoomModlog(path, regex, results) {
@@ -223,8 +157,8 @@ function runRipgrepModlog(paths, regexString, results) {
 	return results;
 }
 
-function prettifyResults(rawResults, room, searchString, exactSearch, addModlogLinks, hideIps, maxLines) {
-	if (rawResults === '0') {
+function prettifyResults(resultArray, room, searchString, exactSearch, addModlogLinks, hideIps, maxLines) {
+	if (resultArray === null) {
 		return "The modlog query has crashed.";
 	}
 	let roomName;
@@ -238,15 +172,11 @@ function prettifyResults(rawResults, room, searchString, exactSearch, addModlogL
 	default:
 		roomName = `room ${room}`;
 	}
-	let pipeIndex = rawResults.indexOf('|');
-	if (pipeIndex < 0) pipeIndex = 0;
-	rawResults = rawResults.substr(pipeIndex + 1, rawResults.length);
-	if (!rawResults) {
+	if (!resultArray.length) {
 		return `|popup|No moderator actions containing ${searchString} found on ${roomName}.` +
 				(exactSearch ? "" : " Add quotes to the search parameter to search for a phrase, rather than a user.");
 	}
 	const title = `[${room}]` + (searchString ? ` ${searchString}` : ``);
-	const resultArray = rawResults.split('\n');
 	let lines = resultArray.length;
 	let curDate = '';
 	resultArray.unshift('');
@@ -316,9 +246,9 @@ function getModlog(connection, roomid = 'global', searchString = '', lines = 20,
 		return;
 	}
 
-	let exactSearch = '0';
+	let exactSearch = false;
 	if (searchString.match(/^["'].+["']$/)) {
-		exactSearch = '1';
+		exactSearch = true;
 		searchString = searchString.substring(1, searchString.length - 1);
 	}
 
@@ -331,8 +261,8 @@ function getModlog(connection, roomid = 'global', searchString = '', lines = 20,
 		roomidList = [roomid];
 	}
 
-	PM.send(roomidList.join(','), searchString, exactSearch, lines).then(response => {
-		connection.send(prettifyResults(response, roomid, searchString, exactSearch === '1', addModlogLinks, hideIps, lines));
+	PM.query({roomidList, searchString, exactSearch, lines}).then(response => {
+		connection.send(prettifyResults(response, roomid, searchString, exactSearch, addModlogLinks, hideIps, lines));
 		if (timed) connection.popup(`The modlog query took ${Date.now() - startTime} ms to complete.`);
 	});
 }
@@ -391,3 +321,43 @@ exports.commands = {
 		`If you set [roomid] as [public], it searches for [search] in all public rooms' moderator logs, excluding battles. Requires: % @ * # & ~`,
 	],
 };
+
+/*********************************************************
+ * Process manager
+ *********************************************************/
+
+const QueryProcessManager = require('./../lib/process-manager').QueryProcessManager;
+
+const PM = new QueryProcessManager(module, async data => {
+	const {roomidList, searchString, exactSearch, maxLines} = data;
+	try {
+		return await runModlog(roomidList, searchString, exactSearch, maxLines);
+	} catch (err) {
+		require('../lib/crashlogger')(err, 'A modlog query', {
+			roomidList,
+			searchString,
+			exactSearch,
+			maxLines,
+		});
+	}
+	return null;
+});
+
+if (module === process.mainModule) {
+	// This is a child process!
+	global.Config = require('../config/config');
+	process.on('uncaughtException', err => {
+		if (Config.crashguard) {
+			require('../lib/crashlogger')(err, 'A modlog child process');
+		}
+	});
+	global.Dex = require('../sim/dex');
+	global.toId = Dex.getId;
+
+	require('../lib/repl').start('modlog', cmd => eval(cmd));
+} else {
+	PM.spawn(MAX_PROCESSES);
+}
+console.log('spawn', module === process.mainModule);
+
+exports.PM = PM;

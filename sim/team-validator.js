@@ -41,7 +41,7 @@ class Validator {
 	}
 
 	/**
-	 * @param {PokemonSet[]} team
+	 * @param {PokemonSet[]?} team
 	 * @return {string[]?}
 	 */
 	validateTeam(team, removeNicknames = false) {
@@ -50,7 +50,7 @@ class Validator {
 	}
 
 	/**
-	 * @param {PokemonSet[]} team
+	 * @param {PokemonSet[]?} team
 	 * @return {string[]?}
 	 */
 	baseValidateTeam(team, removeNicknames = false) {

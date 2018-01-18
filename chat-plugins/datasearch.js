@@ -5,12 +5,10 @@
  * Commands for advanced searching for pokemon, moves, items and learnsets.
  * These commands run on a child process by default.
  *
- * @license MIT license
+ * @license MIT
  */
 
 'use strict';
-
-const ProcessManager = require('./../process-manager');
 
 const MAX_PROCESSES = 1;
 const RESULTS_MAX_LENGTH = 10;
@@ -19,68 +17,6 @@ function escapeHTML(str) {
 	if (!str) return '';
 	return ('' + str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;').replace(/\//g, '&#x2f;');
 }
-
-class DatasearchManager extends ProcessManager {
-	onMessageUpstream(message) {
-		// Protocol:
-		// "[id]|JSON"
-		let pipeIndex = message.indexOf('|');
-		let id = +message.substr(0, pipeIndex);
-		let result = JSON.parse(message.slice(pipeIndex + 1));
-
-		if (this.pendingTasks.has(id)) {
-			this.pendingTasks.get(id)(result);
-			this.pendingTasks.delete(id);
-			this.release();
-		}
-	}
-
-	onMessageDownstream(message) {
-		// protocol:
-		// "[id]|{data, sig}"
-		let pipeIndex = message.indexOf('|');
-		let id = message.substr(0, pipeIndex);
-
-		let data = JSON.parse(message.slice(pipeIndex + 1));
-		process.send(id + '|' + JSON.stringify(this.receive(data)));
-	}
-
-	receive(data) {
-		let result;
-		try {
-			switch (data.cmd) {
-			case 'randpoke':
-			case 'dexsearch':
-				result = runDexsearch(data.target, data.cmd, data.canAll, data.message);
-				break;
-			case 'randmove':
-			case 'movesearch':
-				result = runMovesearch(data.target, data.cmd, data.canAll, data.message);
-				break;
-			case 'itemsearch':
-				result = runItemsearch(data.target, data.cmd, data.canAll, data.message);
-				break;
-			case 'learn':
-				result = runLearn(data.target, data.message);
-				break;
-			default:
-				result = null;
-			}
-		} catch (err) {
-			require('./../lib/crashlogger')(err, 'A search query', data);
-			result = {error: "Sorry! Our search engine crashed on your query. We've been automatically notified and will fix this crash."};
-		}
-		return result;
-	}
-}
-
-exports.DatasearchManager = DatasearchManager;
-
-const PM = exports.PM = new DatasearchManager({
-	execFile: __filename,
-	maxProcesses: MAX_PROCESSES,
-	isChatBased: true,
-});
 
 exports.commands = {
 	'!dexsearch': true,
@@ -330,28 +266,6 @@ exports.commands = {
 		`/learn can also be prefixed by a generation acronym (e.g.: /dpplearn) to indicate which generation is used. Valid options are: rby gsc adv dpp bw2 oras`,
 	],
 };
-
-if (process.send && module === process.mainModule) {
-	// This is a child process!
-
-	global.Config = require('../config/config');
-
-	if (Config.crashguard) {
-		process.on('uncaughtException', err => {
-			require('../lib/crashlogger')(err, 'A dexsearch process', true);
-		});
-	}
-
-	global.Dex = require('../sim/dex');
-	global.toId = Dex.getId;
-	Dex.includeData();
-	global.TeamValidator = require('../sim/team-validator');
-
-	process.on('message', message => PM.onMessageDownstream(message));
-	process.on('disconnect', () => process.exit());
-
-	require('../lib/repl').start('dexsearch', cmd => eval(cmd));
-}
 
 function runDexsearch(target, cmd, canAll, message) {
 	let searches = [];
@@ -1576,9 +1490,55 @@ function runLearn(target, cmd) {
 }
 
 function runSearch(query) {
-	return PM.send(query);
+	return PM.query(query);
 }
 
-if (!process.send) {
-	PM.spawn();
+/*********************************************************
+ * Process manager
+ *********************************************************/
+
+const QueryProcessManager = require('./../lib/process-manager').QueryProcessManager;
+
+const PM = new QueryProcessManager(module, async query => {
+	try {
+		switch (query.cmd) {
+		case 'randpoke':
+		case 'dexsearch':
+			return runDexsearch(query.target, query.cmd, query.canAll, query.message);
+		case 'randmove':
+		case 'movesearch':
+			return runMovesearch(query.target, query.cmd, query.canAll, query.message);
+		case 'itemsearch':
+			return runItemsearch(query.target, query.cmd, query.canAll, query.message);
+		case 'learn':
+			return runLearn(query.target, query.message);
+		default:
+			return null;
+		}
+	} catch (err) {
+		require('./../lib/crashlogger')(err, 'A search query', query);
+	}
+	return {error: "Sorry! Our search engine crashed on your query. We've been automatically notified and will fix this crash."};
+});
+
+if (process.send && module === process.mainModule) {
+	// This is a child process!
+	global.Config = require('../config/config');
+
+	if (Config.crashguard) {
+		process.on('uncaughtException', err => {
+			require('../lib/crashlogger')(err, 'A dexsearch process', true);
+		});
+	}
+
+	global.Dex = require('../sim/dex');
+	global.toId = Dex.getId;
+	Dex.includeData();
+	global.TeamValidator = require('../sim/team-validator');
+
+	require('../lib/repl').start('dexsearch', cmd => eval(cmd));
+} else {
+	PM.spawn(MAX_PROCESSES);
 }
+
+exports.PM = PM;

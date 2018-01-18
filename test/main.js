@@ -34,12 +34,5 @@ before('initialization', function () {
 	// Start the server.
 	require('../app');
 
-	Rooms.RoomBattle.prototype.send = noop;
-	Rooms.RoomBattle.prototype.receive = noop;
-	for (let process of Rooms.SimulatorProcess.processes) {
-		// Don't crash -we don't care of battle child processes.
-		process.process.on('error', noop);
-	}
-
 	LoginServer.disabled = true;
 });

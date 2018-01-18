@@ -367,6 +367,11 @@ class Format extends Effect {
 		/** @type {boolean | undefined} */
 		this.tournamentShow = this.tournamentShow;
 
+		/** @type {AnyObject?} */
+		this.timer = this.timer;
+		/** @type {boolean} */
+		this.noLog = !!this.noLog;
+
 		/**
 		 * @type {((this: Validator, set: PokemonSet, teamHas: AnyObject) => string[] | false)?}
 		 */

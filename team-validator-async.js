@@ -4,23 +4,27 @@
  *
  * Spawns a child process to validate teams.
  *
- * @license MIT license
+ * @license MIT
  */
 
 'use strict';
 
-let PM;
-
 class ValidatorAsync {
+	/**
+	 * @param {string} format
+	 */
 	constructor(format) {
 		this.format = Dex.getFormat(format);
 	}
 
-	validateTeam(team, removeNicknames) {
-		removeNicknames = removeNicknames ? '1' : '0';
-		let id = this.format.id;
-		if (this.format.customRules) id += '@@@' + this.format.customRules.join(',');
-		return PM.send(id, removeNicknames, team);
+	/**
+	 * @param {string} team
+	 * @param {boolean} [removeNicknames]
+	 */
+	validateTeam(team, removeNicknames = false) {
+		let formatid = this.format.id;
+		if (this.format.customRules) formatid += '@@@' + this.format.customRules.join(',');
+		return PM.query({formatid, removeNicknames, team});
 	}
 }
 
@@ -28,88 +32,33 @@ class ValidatorAsync {
  * Process manager
  *********************************************************/
 
-const ProcessManager = require('./process-manager');
+const QueryProcessManager = require('./lib/process-manager').QueryProcessManager;
 
-class TeamValidatorManager extends ProcessManager {
-	onMessageUpstream(message) {
-		// Protocol:
-		// success: "[id]|1[details]"
-		// failure: "[id]|0[details]"
-		let pipeIndex = message.indexOf('|');
-		let id = +message.substr(0, pipeIndex);
+const PM = new QueryProcessManager(module, async message => {
+	let {formatid, removeNicknames, team} = message;
+	let parsedTeam = Dex.fastUnpackTeam(team);
 
-		if (this.pendingTasks.has(id)) {
-			this.pendingTasks.get(id)(message.slice(pipeIndex + 1));
-			this.pendingTasks.delete(id);
-			this.release();
-		}
+	let problems;
+	try {
+		problems = TeamValidator(formatid).validateTeam(parsedTeam, removeNicknames);
+	} catch (err) {
+		require('./lib/crashlogger')(err, 'A team validation', {
+			formatid: formatid,
+			team: team,
+		});
+		problems = [`Your team crashed the team validator. We've been automatically notified and will fix this crash, but you should use a different team for now.`];
 	}
 
-	onMessageDownstream(message) {
-		// protocol:
-		// "[id]|[format]|[removeNicknames]|[team]"
-		let pipeIndex = message.indexOf('|');
-		let nextPipeIndex = message.indexOf('|', pipeIndex + 1);
-		let id = message.substr(0, pipeIndex);
-		let format = message.substr(pipeIndex + 1, nextPipeIndex - pipeIndex - 1);
-
-		pipeIndex = nextPipeIndex;
-		nextPipeIndex = message.indexOf('|', pipeIndex + 1);
-		let removeNicknames = message.substr(pipeIndex + 1, nextPipeIndex - pipeIndex - 1);
-		let team = message.substr(nextPipeIndex + 1);
-
-		process.send(id + '|' + this.receive(format, removeNicknames, team));
+	if (problems && problems.length) {
+		return '0' + problems.join('\n');
 	}
-
-	receive(format, removeNicknames, team) {
-		let parsedTeam = Dex.fastUnpackTeam(team);
-		removeNicknames = removeNicknames === '1';
-
-		let problems;
-		try {
-			problems = TeamValidator(format).validateTeam(parsedTeam, removeNicknames);
-		} catch (err) {
-			require('./lib/crashlogger')(err, 'A team validation', {
-				format: format,
-				team: team,
-			});
-			problems = [`Your team crashed the team validator. We've been automatically notified and will fix this crash, but you should use a different team for now.`];
-		}
-
-		if (problems && problems.length) {
-			return '0' + problems.join('\n');
-		} else {
-			let packedTeam = Dex.packTeam(parsedTeam);
-			// console.log('FROM: ' + message.substr(pipeIndex2 + 1));
-			// console.log('TO: ' + packedTeam);
-			return '1' + packedTeam;
-		}
-	}
-}
-
-/*********************************************************
- * Exports
- *********************************************************/
-
-function getAsyncValidator(format) {
-	return new ValidatorAsync(format);
-}
-
-PM = new TeamValidatorManager({
-	execFile: __filename,
-	maxProcesses: global.Config ? Config.validatorprocesses : 1,
-	isChatBased: false,
+	let packedTeam = Dex.packTeam(parsedTeam);
+	// console.log('FROM: ' + message.substr(pipeIndex2 + 1));
+	// console.log('TO: ' + packedTeam);
+	return '1' + packedTeam;
 });
 
-let TeamValidatorAsync = Object.assign(getAsyncValidator, {
-	ValidatorAsync,
-	TeamValidatorManager,
-	PM,
-});
-
-module.exports = TeamValidatorAsync;
-
-if (process.send && module === process.mainModule) {
+if (module === process.mainModule) {
 	// This is a child process!
 
 	global.Config = require('./config/config');
@@ -126,7 +75,21 @@ if (process.send && module === process.mainModule) {
 	global.Chat = require('./chat');
 
 	require('./lib/repl').start(`team-validator-${process.pid}`, cmd => eval(cmd));
-
-	process.on('message', message => PM.onMessageDownstream(message));
-	process.on('disconnect', () => process.exit());
+} else {
+	PM.spawn(global.Config ? Config.validatorprocesses : 1);
 }
+
+/*********************************************************
+ * Exports
+ *********************************************************/
+
+function getAsyncValidator(/** @type {string} */ format) {
+	return new ValidatorAsync(format);
+}
+
+let TeamValidatorAsync = Object.assign(getAsyncValidator, {
+	ValidatorAsync,
+	PM,
+});
+
+module.exports = TeamValidatorAsync;
