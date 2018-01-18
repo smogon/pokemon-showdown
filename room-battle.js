@@ -891,7 +891,7 @@ class Battle {
 	}
 
 	destroy() {
-		this.send('dealloc');
+		this.stream.destroy();
 		if (this.active) {
 			Rooms.global.battleCount += -1;
 			this.active = false;
@@ -904,7 +904,6 @@ class Battle {
 		this.players = null;
 		// @ts-ignore
 		this.room = null;
-		this.stream.end();
 	}
 }
 

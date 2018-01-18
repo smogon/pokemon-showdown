@@ -89,6 +89,9 @@ class BattleStream extends Streams.ObjectReadWriteStream {
 		}
 	}
 	_end() {
+		this._destroy();
+	}
+	_destroy() {
 		if (this.battle) {
 			this.battle.destroy();
 		}
