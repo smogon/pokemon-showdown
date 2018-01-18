@@ -398,7 +398,7 @@ exports.commands = {
 		}
 		const stretchSetting = (room.filterStretching ? "ON" : "OFF");
 		this.privateModAction(`(${user.name} turned the stretch filter ${stretchSetting})`);
-		this.log('STRETCH FILTER', null, stretchSetting);
+		this.modlog('STRETCH FILTER', null, stretchSetting);
 
 		if (room.chatRoomData) {
 			room.chatRoomData.filterStretching = room.filterStretching;
