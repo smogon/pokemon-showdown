@@ -301,7 +301,7 @@ exports.Formats = [
 			validate: [4, 6],
 			battle: 4,
 		},
-		timer: {starting: 5 * 60 - 10, perTurn: 10, maxPerTurn: 55, maxFirstTurn: 90, timeoutAutoChoose: true},
+		timer: {starting: 6 * 60 + 30 - 10, perTurn: 10, maxPerTurn: 55, maxFirstTurn: 90, timeoutAutoChoose: true},
 		ruleset: ['Pokemon', 'Standard GBU'],
 		banlist: ['Unown'],
 		requirePlus: true,
