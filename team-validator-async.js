@@ -60,7 +60,7 @@ const PM = new QueryProcessManager(module, async message => {
 
 if (!PM.isParentProcess) {
 	// This is a child process!
-
+	// @ts-ignore
 	global.Config = require('./config/config');
 	global.TeamValidator = require('./sim/team-validator');
 
