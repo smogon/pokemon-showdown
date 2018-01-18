@@ -1521,7 +1521,7 @@ const PM = new QueryProcessManager(module, async query => {
 	return {error: "Sorry! Our search engine crashed on your query. We've been automatically notified and will fix this crash."};
 });
 
-if (process.send && module === process.mainModule) {
+if (!PM.isParentProcess) {
 	// This is a child process!
 	global.Config = require('../config/config');
 

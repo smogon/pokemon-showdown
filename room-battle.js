@@ -922,7 +922,7 @@ const PM = new StreamProcessManager(module, () => {
 	return new BattleStream();
 });
 
-if (module === process.mainModule) {
+if (!PM.isParentProcess) {
 	// This is a child process!
 
 	global.Config = require('./config/config');
