@@ -383,8 +383,11 @@ class ModdedDex {
 			}
 			if (!template.tier) template.tier = 'Illegal';
 			if (!template.doublesTier) {
-				if (['CAP', 'CAP NFE', 'CAP LC', 'Unreleased', 'Illegal'].includes(template.tier)) template.doublesTier = 'Illegal';
-				template.doublesTier = 'NFE';
+				if (['CAP', 'CAP NFE', 'CAP LC', 'Unreleased', 'Illegal'].includes(template.tier)) {
+					template.doublesTier = 'Illegal';
+				} else {
+					template.doublesTier = 'NFE';
+				}
 			}
 		} else {
 			template = new Data.Template({name, exists: false});
