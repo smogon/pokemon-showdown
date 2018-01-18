@@ -20,6 +20,7 @@ before('initialization', function () {
 	} finally {
 		config = require('../config/config');
 	}
+	require('./../lib/process-manager').disabled = true;
 
 	// Actually crash if we crash
 	config.crashguard = false;
