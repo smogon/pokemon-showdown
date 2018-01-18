@@ -594,7 +594,7 @@ let commands = {
 		room.giveaway = new LotteryGiveaway(user, targetUser, room, ot, tid, fc, prize, numWinners);
 
 		this.privateModAction(`(${user.name} started a lottery giveaway for ${targetUser.name})`);
-		this.log('LOTTERY GIVEAWAY', null, `for ${targetUser.getLastId()}`);
+		this.modlog('LOTTERY GIVEAWAY', null, `for ${targetUser.getLastId()}`);
 	},
 	leavelotto: 'join',
 	leavelottery: 'join',
