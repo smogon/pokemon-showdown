@@ -358,6 +358,5 @@ if (module === process.mainModule) {
 } else {
 	PM.spawn(MAX_PROCESSES);
 }
-console.log('spawn', module === process.mainModule);
 
 exports.PM = PM;
