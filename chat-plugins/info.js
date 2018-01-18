@@ -12,8 +12,6 @@
 
 'use strict';
 
-const path = require('path');
-
 exports.commands = {
 
 	'!whois': true,
@@ -1569,13 +1567,15 @@ exports.commands = {
 			buf += `<strong>${worker.pid || worker.process.pid}</strong> - Sockets ${worker.id}<br />`;
 		});
 
-		const ProcessManager = require('../process-manager');
-		ProcessManager.cache.forEach((execFile, processManager) => {
-			let i = 0;
-			processManager.processes.forEach(process => {
-				buf += `<strong>${process.process.pid}</strong> - ${path.basename(execFile)} ${i++}<br />`;
-			});
-		});
+		const processManagers = require('../lib/process-manager').processManagers;
+		for (const manager of processManagers) {
+			for (const [i, process] of manager.processes.entries()) {
+				buf += `<strong>${process.process.pid}</strong> - ${manager.basename} ${i} (load ${process.load})<br />`;
+			}
+			for (const [i, process] of manager.releasingProcesses.entries()) {
+				buf += `<strong>${process.process.pid}</strong> - PENDING RELEASE ${manager.basename} ${i} (load ${process.load})<br />`;
+			}
+		}
 
 		this.sendReplyBox(buf);
 	},
@@ -1898,7 +1898,8 @@ exports.commands = {
 		if (!this.can('potd')) return false;
 
 		Config.potd = target;
-		Rooms.SimulatorProcess.eval('Config.potd = \'' + toId(target) + '\'');
+		// TODO: support eval in new PM
+		Rooms.PM.eval('Config.potd = \'' + toId(target) + '\'');
 		if (target) {
 			if (Rooms.lobby) Rooms.lobby.addRaw("<div class=\"broadcast-blue\"><b>The Pok&eacute;mon of the Day is now " + target + "!</b><br />This Pokemon will be guaranteed to show up in random battles.</div>");
 			this.modlog('POTD', null, target);

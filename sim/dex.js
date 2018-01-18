@@ -1060,7 +1060,7 @@ class ModdedDex {
 	}
 
 	/**
-	 * @param {PokemonSet[]} team
+	 * @param {PokemonSet[]?} team
 	 * @return {string}
 	 */
 	packTeam(team) {

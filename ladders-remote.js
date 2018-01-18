@@ -66,11 +66,12 @@ class LadderStore {
 	 * @param {string} p2name
 	 * @param {number} p1score
 	 * @param {GameRoom} room
+	 * @return {Promise<[number, AnyObject?, AnyObject?]>}
 	 */
 	async updateRating(p1name, p2name, p1score, room) {
 		if (Ladders.disabled) {
 			room.addRaw(`Ratings not updated. The ladders are currently disabled.`).update();
-			return [p1score, undefined, undefined];
+			return [p1score, null, null];
 		}
 
 		let formatid = this.formatid;
@@ -84,17 +85,17 @@ class LadderStore {
 		});
 		if (error) {
 			room.add(`||Ladder (probably) updated, but score could not be retrieved (${error.message}).`);
-			return [p1score, undefined, undefined];
+			return [p1score, null, null];
 		}
 		if (!room.battle) {
 			Monitor.warn(`room expired before ladder update was received`);
-			return [p1score, undefined, undefined];
+			return [p1score, null, null];
 		}
 		if (data.errorip) {
 			room.add(`||This server's request IP ${data.errorip} is not a registered server.`);
 			room.add(`||You should be using ladders.js and not ladders-remote.js for ladder tracking.`);
 			room.update();
-			return [p1score, undefined, undefined];
+			return [p1score, null, null];
 		}
 
 		let p1rating, p2rating;
