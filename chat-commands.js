@@ -2479,6 +2479,58 @@ exports.commands = {
 	},
 	blacklisthelp: [`/blacklist [username], [reason] - Blacklists the user from the room you are in for a year. Requires: # & ~`],
 
+	battleban: function (target, room, user, connection) {
+		if (!target) return this.parse(`/help battleban`);
+
+		const reason = this.splitTarget(target);
+		const targetUser = this.targetUser;
+		if (!targetUser) return this.errorReply(`User ${this.targetUsername} not found.`);
+		if (target.length > MAX_REASON_LENGTH) {
+			return this.errorReply(`The reason is too long. It cannot exceed ${MAX_REASON_LENGTH} characters.`);
+		}
+		if (!reason) {
+			return this.errorReply(`Battle bans require a reason.`);
+		}
+		if (!this.can('lock', targetUser)) return;
+		if (Punishments.isBattleBanned(targetUser)) return this.errorReply(`User '${targetUser.name}' is already banned from battling.`);
+
+		const reasonText = reason ? ` (${reason})` : `.`;
+		const battlebanMessage = `${targetUser.name} was banned from starting new battles by ${user.name}${reasonText}`;
+		this.privateModAction(`(${battlebanMessage})`);
+
+		// Notify staff room when a user is banned from battling outside of it.
+		if (room.id !== 'staff' && Rooms('staff')) {
+			Rooms('staff').addByUser(user, `<<${room.id}>>${battlebanMessage}`);
+		}
+		if (targetUser.trusted) {
+			Monitor.log(`[CrisisMonitor] Trusted user ${targetUser.name} was banned from battling by ${user.name}, and should probably be demoted.`);
+		}
+
+		this.globalModlog("BATTLEBAN", targetUser, ` by ${user.userid}${reasonText}`);
+		Ladders.cancelSearches(targetUser);
+		Punishments.battleban(targetUser, null, null, reason);
+		targetUser.popup(`|modal|${user.name} has prevented you from starting new battles for 2 days${reasonText}`);
+		return true;
+	},
+	battlebanhelp: [`/battleban [username], [reason] - Prevents the user from starting new battles for 2 days and shows them the [reason]. Requires: % @ * & ~`],
+
+	unbattleban: function (target, room, user) {
+		if (!target) return this.parse('/help unbattleban');
+		if (!this.can('lock')) return;
+
+		const targetUser = Users.get(target);
+		const unbanned = Punishments.unbattleban(target);
+
+		if (unbanned) {
+			this.addModAction(`${unbanned} was allowed to battle again by ${user.name}.`);
+			this.globalModlog("UNBATTLEBAN", target, `by ${user.name}`);
+			if (targetUser) targetUser.popup(`${user.name} has allowed you to battle again.`);
+		} else {
+			this.errorReply(`User ${target} is not banned from battling.`);
+		}
+	},
+	unbattlebanhelp: [`/unbattleban [username] - Allows a user to battle again. Requires: % @ * & ~`],
+
 	nameblacklist: 'blacklistname',
 	blacklistname: function (target, room, user) {
 		if (!target) return this.parse('/help blacklistname');
@@ -3623,6 +3675,9 @@ exports.commands = {
 		if (user.locked && !targetUser.locked) {
 			return this.popupReply(`You are locked and cannot challenge unlocked users.`);
 		}
+		if (Punishments.isBattleBanned(user)) {
+			return this.popupReply(`You are banned from battling and cannot challenge users.`);
+		}
 		if (Config.pmmodchat) {
 			let userGroup = user.group;
 			if (Config.groupsranking.indexOf(userGroup) < Config.groupsranking.indexOf(Config.pmmodchat)) {
@@ -3830,7 +3885,7 @@ exports.commands = {
 			this.sendReply("OPTION COMMANDS: /nick, /avatar, /ignore, /away, /back, /timestamps, /highlight");
 			this.sendReply("INFORMATIONAL COMMANDS: /data, /dexsearch, /movesearch, /itemsearch, /groups, /faq, /rules, /intro, /formatshelp, /othermetas, /learn, /analysis, /calc (replace / with ! to broadcast. Broadcasting requires: + % @ * # & ~)");
 			if (user.group !== Config.groupsranking[0]) {
-				this.sendReply("DRIVER COMMANDS: /warn, /mute, /hourmute, /unmute, /alts, /forcerename, /modlog, /modnote, /lock, /unlock, /announce, /redirect");
+				this.sendReply("DRIVER COMMANDS: /warn, /mute, /hourmute, /unmute, /alts, /forcerename, /modlog, /modnote, /lock, /unlock, /battleban, /unbattleban, /announce, /redirect");
 				this.sendReply("MODERATOR COMMANDS: /ban, /unban, /ip, /modchat");
 				this.sendReply("LEADER COMMANDS: /declare, /forcetie, /forcewin, /promote, /demote, /banip, /host, /unbanall");
 			}
