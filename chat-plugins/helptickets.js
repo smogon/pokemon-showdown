@@ -444,9 +444,17 @@ exports.pages = {
 };
 
 exports.commands = {
+	report: function (target, room, user, connection) {
+		if (!this.runBroadcast()) return;
+		if (this.broadcasting) {
+			return this.sendReplyBox('<button name="joinRoom" value="view-help-request--report" class="button"><strong>Report someone</strong></button>');
+		}
+
+		return this.parse('/join view-help-request--report');
+	},
+
 	requesthelp: 'helpticket',
 	helprequest: 'helpticket',
-	report: 'helpticket',
 	ht: 'helpticket',
 	helpticket: {
 		'!create': true,
