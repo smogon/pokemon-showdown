@@ -22,7 +22,7 @@ Buffer stream methods often take an "override encoding" parameter. Normally, you
 However, if for some reason you need to change which encoding you use on a per-read or per-write basis, you can pass the relevant encoding to the individual methods.
 
 
-## Class: WriteStream
+## Interface: WriteStream
 
 A `WriteStream` can be written to.
 
@@ -51,7 +51,7 @@ Ends the write stream.
 This tells the write stream that you're done writing to it. In the Buffer/string analogy, it means you've reached the end of the Buffer/string. Certain write streams require this.
 
 
-## Class: ReadStream
+## Interface: ReadStream
 
 A `ReadStream` can be read from.
 
