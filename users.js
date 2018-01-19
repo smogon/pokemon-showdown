@@ -158,7 +158,7 @@ function getExactUser(name) {
  * @param {{forPunishment: boolean, includeTrusted: boolean}} options
  */
 function findUsers(userids, ips, options) {
-	let matches = [];
+	let matches = /** @type {User[]} */ ([]);
 	if (options && options.forPunishment) ips = ips.filter(ip => !Punishments.sharedIps.has(ip));
 	for (const user of users.values()) {
 		if (!(options && options.forPunishment) && !user.named && !user.connected) continue;
