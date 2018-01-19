@@ -2412,8 +2412,8 @@ exports.commands = {
 		}
 	},
 	hidetexthelp: [
-		`/hidetext [username] - Removes a locked or muted/banned user's messages from chat. Requires: %, @ * # & ~`,
-		`/hidealtstext [username] - Removes a locked or muted/banned user's messages, and their alternate account's messages from the chat.  Requires: %, @ * # & ~`,
+		`/hidetext [username] - Removes a locked or muted/banned user's messages from chat. Requires: % @ * # & ~`,
+		`/hidealtstext [username] - Removes a locked or muted/banned user's messages, and their alternate account's messages from the chat.  Requires: % @ * # & ~`,
 	],
 
 	ab: 'blacklist',
