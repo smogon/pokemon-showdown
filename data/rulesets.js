@@ -779,7 +779,8 @@ exports.BattleFormats = {
 		name: 'STABmons Move Legality',
 		desc: ["Allows Pok&eacute;mon to use any move that they or a previous evolution/out-of-battle forme share a type with"],
 		checkLearnset: function (move, template, lsetData, set) {
-			if (!move.isZ && !this.format.restrictedMoves.includes(move.name)) {
+			const restrictedMoves = this.format.restrictedMoves || [];
+			if (!move.isZ && !restrictedMoves.includes(move.name)) {
 				let dex = this.dex;
 				let types = template.types;
 				let baseTemplate = dex.getTemplate(template.baseSpecies);
@@ -792,7 +793,7 @@ exports.BattleFormats = {
 						}
 					}
 				}
-				if (types.includes(move.type)) return false;
+				if (types.includes(move.type)) return null;
 			}
 			return this.checkLearnset(move, template, lsetData, set);
 		},
