@@ -273,7 +273,7 @@ exports.commands = {
 		if (!target.trim()) return this.parse(`/help ipsearch`);
 		if (!this.can('rangeban')) return;
 
-		const [ip, roomid] = this.splitOne(target);
+		let [ip, roomid] = this.splitOne(target);
 		let targetRoom = target.length ? Rooms(target.trim()) : null;
 		if (!targetRoom && targetRoom !== null) return this.errorReply(`The room "${roomid}" does not exist.`);
 		let results = [];
