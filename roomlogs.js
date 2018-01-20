@@ -168,6 +168,22 @@ class Roomlog {
 		return this;
 	}
 	/**
+	 * @param {string} username
+	 */
+	hasUsername(username) {
+		const userid = toId(username);
+		for (const line of this.log) {
+			if (line.startsWith('|c:|')) {
+				const curUserid = toId(line.split('|', 4)[3]);
+				if (curUserid === userid) return true;
+			} else if (line.startsWith('|c|')) {
+				const curUserid = toId(line.split('|', 3)[2]);
+				if (curUserid === userid) return true;
+			}
+		}
+		return false;
+	}
+	/**
 	 * @param {string} message
 	 */
 	uhtmlchange(message) {
