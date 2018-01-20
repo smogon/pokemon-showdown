@@ -1061,6 +1061,20 @@ class CommandContext {
 		return [target.substr(0, commaIndex), target.substr(commaIndex + 1).trim()];
 	}
 	/**
+	 * Given a message in the form "USERNAME" or "USERNAME, MORE", splits
+	 * it apart:
+	 *
+	 * - `this.targetUser` will be the User corresponding to USERNAME
+	 *   (or null, if not found)
+	 *
+	 * - `this.inputUsername` will be the text of USERNAME, unmodified
+	 *
+	 * - `this.targetUsername` will be the username, if found, or
+	 *   this.inputUsername otherwise
+	 *
+	 * - and the text of MORE will be returned (empty string, if the
+	 *   message has no comma)
+	 *
 	 * @param {string} target
 	 * @param {boolean} exactName
 	 */
