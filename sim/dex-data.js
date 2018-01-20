@@ -214,6 +214,8 @@ class RuleTable extends Map {
 		 * @type {[string, string, number, string[]][]}
 		 */
 		this.complexTeamBans = [];
+		/** @type {[Function, string]?} */
+		this.checkLearnset = null;
 	}
 	/**
 	 * @param {string} thing

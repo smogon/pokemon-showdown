@@ -739,6 +739,9 @@ class ModdedDex {
 				}
 			}
 		}
+		if (format.checkLearnset) {
+			ruleTable.checkLearnset = [format.checkLearnset, format.name];
+		}
 
 		for (const rule of ruleset) {
 			const ruleSpec = this.validateRule(rule, format);
@@ -776,6 +779,12 @@ class ModdedDex {
 			}
 			for (const [rule, source, limit, bans] of subRuleTable.complexTeamBans) {
 				ruleTable.complexTeamBans.push([rule, source || subformat.name, limit, bans]);
+			}
+			if (subRuleTable.checkLearnset) {
+				if (ruleTable.checkLearnset) {
+					throw new Error(`"${format.name}" has conflicting move validation rules from "${ruleTable.checkLearnset[1]}" and "${subRuleTable.checkLearnset[1]}"`);
+				}
+				ruleTable.checkLearnset = subRuleTable.checkLearnset;
 			}
 		}
 
