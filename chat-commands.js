@@ -2397,7 +2397,7 @@ exports.commands = {
 
 			const alts = targetUser.getAltUsers(true);
 			for (const alt of alts) {
-				this.add(`|unlink|${hidetype}${alt.name}`);
+				this.add(`|unlink|${hidetype}${alt.getLastId()}`);
 			}
 			for (const prevName in targetUser.prevNames) {
 				this.add(`|unlink|${hidetype}${targetUser.prevNames[prevName]}`);
@@ -2406,7 +2406,7 @@ exports.commands = {
 			this.addModAction(`${name}'s messages were cleared from ${room.title} by ${user.name}.`);
 			this.modlog('HIDETEXT', targetUser, null, {noip: 1, noalts: 1});
 			this.add(`|unlink|${hidetype}${userid}`);
-			if (userid !== toId(this.inputUsername)) this.add('|unlink|' + hidetype + toId(this.inputUsername));
+			if (userid !== toId(this.inputUsername)) this.add(`|unlink|${hidetype}${toId(this.inputUsername)}`);
 		}
 	},
 	hidetexthelp: [
