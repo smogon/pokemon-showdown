@@ -774,9 +774,9 @@ exports.BattleFormats = {
 		desc: ["Allows Pok&eacute;mon to use any ability"],
 		// Implemented in the 'pokemon' ruleset and in team-validator.js
 	},
-	ignorestabmoves: {
+	stabmonsmovelegality: {
 		effectType: 'ValidatorRule',
-		name: 'Ignore STAB Moves',
+		name: 'STABmons Move Legality',
 		desc: ["Allows Pok&eacute;mon to use any move that they or a previous evolution/out-of-battle forme share a type with"],
 		// Implemented in team-validator.js
 	},

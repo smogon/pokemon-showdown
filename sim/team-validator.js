@@ -921,6 +921,22 @@ class Validator {
 		while (template && template.species && !alreadyChecked[template.speciesid]) {
 			alreadyChecked[template.speciesid] = true;
 			if (dex.gen === 2 && template.gen === 1) tradebackEligible = true;
+			// STABmons Move Legality (for tournaments)
+			// @ts-ignore
+			let restrictedMoves = format.restrictedMoves || [];
+			if (ruleTable.has('stabmonsmovelegality') && !restrictedMoves.includes(move.name) && !move.isZ) {
+				let types = template.types;
+				let baseTemplate = dex.getTemplate(template.baseSpecies);
+				if (baseTemplate.otherFormes) {
+					for (const formeid of baseTemplate.otherFormes) {
+						let forme = dex.getTemplate(formeid);
+						if (!forme.battleOnly && forme.forme !== 'Alola' && forme.forme !== 'Alola-Totem') {
+							types = types.concat(forme.types).concat(baseTemplate.types);
+						}
+					}
+				}
+				if (types.includes(move.type)) return null;
+			}
 			if (!template.learnset) {
 				if (template.baseSpecies !== template.species) {
 					// forme without its own learnset
