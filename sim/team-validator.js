@@ -356,7 +356,8 @@ class Validator {
 			}
 
 			if (ruleTable.has('-illegal')) {
-				let problem = (format.checkLearnset || this.checkLearnset).call(this, move, template, lsetData, set);
+				const checkLearnset = (ruleTable.checkLearnset && ruleTable.checkLearnset[0] || this.checkLearnset);
+				let problem = checkLearnset.call(this, move, template, lsetData, set);
 				if (problem) {
 					let problemString = `${name} can't learn ${move.name}`;
 					if (problem.type === 'incompatibleAbility') {

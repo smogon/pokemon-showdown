@@ -758,27 +758,9 @@ exports.Formats = [
 
 		mod: 'gen7',
 		searchShow: false,
-		ruleset: ['[Gen 7] OU'],
+		ruleset: ['[Gen 7] OU', 'STABmons Move Legality'],
 		banlist: ['Kartana', 'Komala', 'Kyurem-Black', 'Silvally', 'Tapu Koko', 'Tapu Lele', 'Aerodactylite', 'King\'s Rock', 'Metagrossite', 'Razor Fang'],
 		restrictedMoves: ['Acupressure', 'Belly Drum', 'Chatter', 'Geomancy', 'Lovely Kiss', 'Shell Smash', 'Shift Gear', 'Thousand Arrows'],
-		checkLearnset: function (move, template, lsetData, set) {
-			if (!move.isZ && !this.format.restrictedMoves.includes(move.name)) {
-				let dex = this.dex;
-				let types = template.types;
-				let baseTemplate = dex.getTemplate(template.baseSpecies);
-				if (template.prevo) types = types.concat(dex.getTemplate(dex.getTemplate(template.prevo).prevo || template.prevo).types);
-				for (let i in baseTemplate.otherFormes) {
-					let forme = dex.getTemplate(baseTemplate.otherFormes[i]);
-					if (baseTemplate.otherFormes && !forme.battleOnly) {
-						if (forme.forme !== 'Alola' && forme.forme !== 'Alola-Totem') {
-							types = types.concat(forme.types).concat(baseTemplate.types);
-						}
-					}
-				}
-				if (types.includes(move.type)) return false;
-			}
-			return this.checkLearnset(move, template, lsetData, set);
-		},
 	},
 	{
 		name: "[Gen 7] 2v2 Doubles",
