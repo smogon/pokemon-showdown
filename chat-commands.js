@@ -2374,14 +2374,14 @@ exports.commands = {
 	hidealttext: 'hidetext',
 	hidealtstext: 'hidetext',
 	hidetext: function (target, room, user, connection, cmd) {
-		if (!target) return this.parse('/help hidetext');
-		if (!room.log.hasUsername(target)) return this.errorReply(`User ${target} not found or has no roomlogs.`);
+		if (!target) return this.parse(`/help hidetext`);
 
 		this.splitTarget(target);
 		let targetUser = this.targetUser;
 		let name = this.targetUsername;
+		if (!targetUser && !room.log.hasUsername(target)) return this.errorReply(`User ${target} not found or has no roomlogs.`);
 		if (!targetUser && !user.can('lock')) return this.errorReply(`User ${name} not found.`);
-		let userid = targetUser ? targetUser.getLastId() : "";
+		let userid = toId(this.inputUsername);
 		let hidetype = '';
 		if (!user.can('mute', targetUser, room) && !this.can('ban', targetUser, room)) return;
 
@@ -2394,31 +2394,26 @@ exports.commands = {
 		}
 
 		if (cmd === 'hidealtstext' || cmd === 'hidetextalts' || cmd === 'hidealttext') {
-			this.addModAction(`${targetUser.name}'s alts' messages were cleared from ${room.title} by ${user.name}.`);
+			this.addModAction(`${name}'s alts' messages were cleared from ${room.title} by ${user.name}.`);
 			this.modlog('HIDEALTSTEXT', targetUser, null, {noip: 1});
 			this.add(`|unlink|${hidetype}${userid}`);
 
 			const alts = targetUser.getAltUsers(true);
 			for (const alt of alts) {
-				this.add(`|unlink|${hidetype}${alt.name}`);
+				this.add(`|unlink|${hidetype}${alt.getLastId()}`);
 			}
 			for (const prevName in targetUser.prevNames) {
 				this.add(`|unlink|${hidetype}${targetUser.prevNames[prevName]}`);
 			}
 		} else {
-			if (targetUser) {
-				this.addModAction(`${targetUser.name}'s messages were cleared from ${room.title} by ${user.name}.`);
-			} else {
-				this.addModAction(`${target}'s messages were cleared from ${room.title} by ${user.name}.`);
-			}
-			userid = toId(this.inputUsername);
+			this.addModAction(`${name}'s messages were cleared from ${room.title} by ${user.name}.`);
 			this.modlog('HIDETEXT', targetUser, null, {noip: 1, noalts: 1});
 			this.add(`|unlink|${hidetype}${userid}`);
 		}
 	},
 	hidetexthelp: [
-		`/hidetext [username] - Removes a locked or muted/banned user's messages from chat. Requires: %, @ * # & ~`,
-		`/hidealtstext [username] - Removes a locked or muted/banned user's messages, and their alternate account's messages from the chat.  Requires: %, @ * # & ~`,
+		`/hidetext [username] - Removes a locked or muted/banned user's messages from chat. Requires: % @ * # & ~`,
+		`/hidealtstext [username] - Removes a locked or muted/banned user's messages, and their alternate account's messages from the chat.  Requires: % @ * # & ~`,
 	],
 
 	ab: 'blacklist',
