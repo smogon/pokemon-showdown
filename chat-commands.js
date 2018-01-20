@@ -2377,12 +2377,12 @@ exports.commands = {
 	hidealtstext: 'hidetext',
 	hidetext: function (target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help hidetext');
-		if (!room.log.hasUsername(target)) return false;
+		if (!room.log.hasUsername(target)) return this.errorReply(`User ${target} not found or has no roomlogs.`);
 
 		this.splitTarget(target);
 		let targetUser = this.targetUser;
 		let name = this.targetUsername;
-		if (!targetUser && !user.can('lock')) return this.errorReply("User '" + name + "' not found.");
+		if (!targetUser && !user.can('lock')) return this.errorReply(`User ${name} not found.`);
 		let userid = targetUser ? targetUser.getLastId() : "";
 		let hidetype = '';
 		if (!user.can('mute', targetUser, room) && !this.can('ban', targetUser, room)) return;
@@ -2404,8 +2404,8 @@ exports.commands = {
 			for (const alt of alts) {
 				this.add(`|unlink|${hidetype}${alt.name}`);
 			}
-			for (const name in targetUser.prevNames) {
-				this.add(`|unlink|${hidetype}${targetUser.prevNames[name]}`);
+			for (const prevName in targetUser.prevNames) {
+				this.add(`|unlink|${hidetype}${targetUser.prevNames[prevName]}`);
 			}
 		} else {
 			if (targetUser) {
@@ -2413,9 +2413,9 @@ exports.commands = {
 			} else {
 				this.addModAction(`${target}'s messages were cleared from ${room.title} by ${user.name}.`);
 			}
+			userid = toId(this.inputUsername);
 			this.modlog('HIDETEXT', targetUser, null, {noip: 1, noalts: 1});
-			this.add('|unlink|' + hidetype + userid);
-			if (userid !== toId(this.inputUsername)) this.add('|unlink|' + hidetype + toId(this.inputUsername));
+			this.add(`|unlink|${hidetype}${userid}`);
 		}
 	},
 	hidetexthelp: [
