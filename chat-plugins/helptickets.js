@@ -489,6 +489,7 @@ exports.pages = {
 };
 
 exports.commands = {
+	'!report': true,
 	report: function (target, room, user, connection) {
 		if (!this.runBroadcast()) return;
 		if (this.broadcasting) {

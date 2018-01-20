@@ -774,11 +774,29 @@ exports.BattleFormats = {
 		desc: ["Allows Pok&eacute;mon to use any ability"],
 		// Implemented in the 'pokemon' ruleset and in team-validator.js
 	},
-	ignorestabmoves: {
+	stabmonsmovelegality: {
 		effectType: 'ValidatorRule',
-		name: 'Ignore STAB Moves',
+		name: 'STABmons Move Legality',
 		desc: ["Allows Pok&eacute;mon to use any move that they or a previous evolution/out-of-battle forme share a type with"],
-		// Implemented in team-validator.js
+		checkLearnset: function (move, template, lsetData, set) {
+			const restrictedMoves = this.format.restrictedMoves || [];
+			if (!move.isZ && !restrictedMoves.includes(move.name)) {
+				let dex = this.dex;
+				let types = template.types;
+				let baseTemplate = dex.getTemplate(template.baseSpecies);
+				if (template.prevo) types = types.concat(dex.getTemplate(dex.getTemplate(template.prevo).prevo || template.prevo).types);
+				for (let i in baseTemplate.otherFormes) {
+					let forme = dex.getTemplate(baseTemplate.otherFormes[i]);
+					if (baseTemplate.otherFormes && !forme.battleOnly) {
+						if (forme.forme !== 'Alola' && forme.forme !== 'Alola-Totem') {
+							types = types.concat(forme.types).concat(baseTemplate.types);
+						}
+					}
+				}
+				if (types.includes(move.type)) return null;
+			}
+			return this.checkLearnset(move, template, lsetData, set);
+		},
 	},
 	allowonesketch: {
 		effectType: 'ValidatorRule',

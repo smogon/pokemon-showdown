@@ -222,7 +222,7 @@ function prettifyResults(resultArray, room, searchString, exactSearch, addModlog
 	return `${preamble}${resultString}${moreButton}</div>`;
 }
 
-function getModlog(connection, roomid = 'global', searchString = '', lines = 20, timed = false) {
+function getModlog(connection, roomid = 'global', searchString = '', maxLines = 20, timed = false) {
 	const startTime = Date.now();
 	const targetRoom = Rooms.search(roomid);
 	const user = connection.user;
@@ -261,8 +261,8 @@ function getModlog(connection, roomid = 'global', searchString = '', lines = 20,
 		roomidList = [roomid];
 	}
 
-	PM.query({roomidList, searchString, exactSearch, lines}).then(response => {
-		connection.send(prettifyResults(response, roomid, searchString, exactSearch, addModlogLinks, hideIps, lines));
+	PM.query({roomidList, searchString, exactSearch, maxLines}).then(response => {
+		connection.send(prettifyResults(response, roomid, searchString, exactSearch, addModlogLinks, hideIps, maxLines));
 		if (timed) connection.popup(`The modlog query took ${Date.now() - startTime} ms to complete.`);
 	});
 }

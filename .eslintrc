@@ -168,7 +168,6 @@
 		"template-curly-spacing": ["error", "never"],
 		"no-restricted-syntax": ["error", "WithStatement"],
 
-		"validate-conditionals": "error",
 		"no-constant-condition": ["error", {"checkLoops": false}]
 	}
 }
