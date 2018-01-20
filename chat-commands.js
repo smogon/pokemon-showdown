@@ -2374,12 +2374,12 @@ exports.commands = {
 	hidealttext: 'hidetext',
 	hidealtstext: 'hidetext',
 	hidetext: function (target, room, user, connection, cmd) {
-		if (!target) return this.parse('/help hidetext');
+		if (!target) return this.parse(`/help hidetext`);
 
 		this.splitTarget(target);
 		let targetUser = this.targetUser;
 		let name = this.targetUsername;
-		if (!targetUser) return this.errorReply("User '" + name + "' not found.");
+		if (!targetUser) return this.errorReply(`User "${name}" not found.`);
 		let userid = targetUser.getLastId();
 		let hidetype = '';
 		if (!user.can('mute', targetUser, room) && !this.can('ban', targetUser, room)) return;
@@ -2387,11 +2387,11 @@ exports.commands = {
 		if (targetUser.locked || Punishments.isRoomBanned(targetUser, room.id) || room.isMuted(targetUser) || user.can('rangeban')) {
 			hidetype = 'hide|';
 		} else {
-			return this.errorReply("User '" + name + "' is not muted/banned from this room or locked.");
+			return this.errorReply(`User "${name}" is not muted/banned from this room or locked.`);
 		}
 
 		if (cmd === 'hidealtstext' || cmd === 'hidetextalts' || cmd === 'hidealttext') {
-			this.addModAction(`${targetUser.name}'s alts' messages were cleared from ${room.title} by ${user.name}.`);
+			this.addModAction(`${name}'s alts' messages were cleared from ${room.title} by ${user.name}.`);
 			this.modlog('HIDEALTSTEXT', targetUser, null, {noip: 1});
 			this.add(`|unlink|${hidetype}${userid}`);
 
@@ -2399,13 +2399,13 @@ exports.commands = {
 			for (const alt of alts) {
 				this.add(`|unlink|${hidetype}${alt.name}`);
 			}
-			for (const name in targetUser.prevNames) {
-				this.add(`|unlink|${hidetype}${targetUser.prevNames[name]}`);
+			for (const prevName in targetUser.prevNames) {
+				this.add(`|unlink|${hidetype}${targetUser.prevNames[prevName]}`);
 			}
 		} else {
-			this.addModAction("" + targetUser.name + "'s messages were cleared from  " + room.title + " by " + user.name + ".");
+			this.addModAction(`${name}'s messages were cleared from ${room.title} by ${user.name}.`);
 			this.modlog('HIDETEXT', targetUser, null, {noip: 1, noalts: 1});
-			this.add('|unlink|' + hidetype + userid);
+			this.add(`|unlink|${hidetype}${userid}`);
 			if (userid !== toId(this.inputUsername)) this.add('|unlink|' + hidetype + toId(this.inputUsername));
 		}
 	},
