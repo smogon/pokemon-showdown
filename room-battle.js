@@ -801,7 +801,7 @@ class Battle {
 		let slotNum = -1;
 		if (user.userid in this.players) slotNum = this.players[user.userid].slotNum;
 		if (slotNum === -1) return false;
-		this.forfeitSlot(slotNum, message);
+		return this.forfeitSlot(slotNum, message);
 	}
 
 	/**
