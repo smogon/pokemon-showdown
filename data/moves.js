@@ -18030,7 +18030,7 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		multihit: [2, 2],
+		multihit: 2,
 		secondary: {
 			chance: 20,
 			status: 'psn',
