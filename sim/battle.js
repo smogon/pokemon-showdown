@@ -181,7 +181,7 @@ class Battle extends Dex.ModdedDex {
 	}
 
 	/**
-	 * @param {number} m
+	 * @param {number} [m]
 	 * @param {number} [n]
 	 */
 	random(m, n) {
@@ -539,7 +539,7 @@ class Battle extends Dex.ModdedDex {
 			if (b.speed - a.speed) {
 				return b.speed - a.speed;
 			}
-			return Math.random() - 0.5;
+			return this.random() - 0.5;
 		});
 		for (let i = 0; i < actives.length; i++) {
 			this.runEvent(eventid, actives[i], null, effect, relayVar);
@@ -2414,7 +2414,7 @@ class Battle extends Dex.ModdedDex {
 			let allyActives = pokemon.side.active;
 			let adjacentAllies = [allyActives[pokemon.position - 1], allyActives[pokemon.position + 1]];
 			adjacentAllies = adjacentAllies.filter(active => active && !active.fainted);
-			if (adjacentAllies.length) return adjacentAllies[Math.floor(Math.random() * adjacentAllies.length)];
+			if (adjacentAllies.length) return adjacentAllies[Math.floor(this.random() * adjacentAllies.length)];
 			return pokemon;
 		}
 		if (move.target === 'self' || move.target === 'all' || move.target === 'allySide' || move.target === 'allyTeam' || move.target === 'adjacentAllyOrSelf') {
@@ -2426,7 +2426,7 @@ class Battle extends Dex.ModdedDex {
 				let frontPosition = foeActives.length - 1 - pokemon.position;
 				let adjacentFoes = foeActives.slice(frontPosition < 1 ? 0 : frontPosition - 1, frontPosition + 2);
 				adjacentFoes = adjacentFoes.filter(active => active && !active.fainted);
-				if (adjacentFoes.length) return adjacentFoes[Math.floor(Math.random() * adjacentFoes.length)];
+				if (adjacentFoes.length) return adjacentFoes[Math.floor(this.random() * adjacentFoes.length)];
 				// no valid target at all, return a foe for any possible redirection
 			}
 		}
