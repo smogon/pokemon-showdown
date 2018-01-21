@@ -54,14 +54,7 @@ exports.BattleItems = {
 		onCustap: function (pokemon) {
 			let action = this.willMove(pokemon);
 			this.debug('custap action: ' + action);
-			if (action) {
-				pokemon.eatItem();
-			}
-		},
-		onEat: function (pokemon) {
-			let action = this.willMove(pokemon);
-			this.debug('custap eaten: ' + action);
-			if (action) {
+			if (action && pokemon.eatItem()) {
 				this.cancelAction(pokemon);
 				this.add('-message', "Custap Berry activated.");
 				this.runAction(action);
