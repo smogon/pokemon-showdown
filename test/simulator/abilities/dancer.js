@@ -54,7 +54,7 @@ describe('Dancer', function () {
 	});
 
 	it('should not copy a move that failed or was blocked by Protect', function () {
-		battle = common.createBattle({gameType: 'doubles', seed: [1, 2, 3, 4]});
+		battle = common.createBattle({gameType: 'doubles', seed: [1, 2, 3, 5]});
 		const p1 = battle.join('p1', 'Guest 1', 1, [
 			{species: 'Oricorio', level: 98, ability: 'dancer', item: 'laggingtail', moves: ['dragondance', 'protect', 'teeterdance']},
 			{species: 'Oricorio', level: 99, ability: 'dancer', moves: ['featherdance']},

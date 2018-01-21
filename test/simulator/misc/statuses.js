@@ -28,6 +28,7 @@ describe('Burn', function () {
 		battle.commitDecisions();
 		const baseDamage = target.maxhp - target.hp;
 		battle.resetRNG();
+		battle.random(); // Simulate a roll for gender selection
 		battle.p2.chooseMove('willowisp');
 		assert.hurtsBy(target, battle.modify(baseDamage, 0.5), () => battle.commitDecisions());
 	});
