@@ -2706,7 +2706,7 @@ exports.BattleFormatsData = {
 		tier: "NFE",
 	},
 	slaking: {
-		randomBattleMoves: ["earthquake", "pursuit", "nightslash", "doubleedge", "retaliate"],
+		randomBattleMoves: ["earthquake", "pursuit", "nightslash", "doubleedge", "gigaimpact"],
 		randomDoubleBattleMoves: ["earthquake", "nightslash", "doubleedge", "retaliate", "hammerarm", "rockslide"],
 		eventPokemon: [
 			{"generation": 4, "level": 50, "gender": "M", "nature": "Adamant", "moves": ["gigaimpact", "return", "shadowclaw", "aerialace"], "pokeball": "cherishball"},
