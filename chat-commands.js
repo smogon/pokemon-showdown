@@ -2714,6 +2714,7 @@ exports.commands = {
 				Chat.uncacheDir('./sim');
 				Chat.uncacheDir('./data');
 				Chat.uncacheDir('./mods');
+				Chat.uncache('./config/formats');
 				// reload sim/dex.js
 				global.Dex = require('./sim/dex');
 				// rebuild the formats list
