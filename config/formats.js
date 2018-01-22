@@ -303,7 +303,7 @@ exports.Formats = [
 		},
 		timer: {starting: 6 * 60 + 30 - 10, perTurn: 10, maxPerTurn: 55, maxFirstTurn: 90, timeoutAutoChoose: true},
 		ruleset: ['Pokemon', 'Standard GBU'],
-		banlist: ['Unown'],
+		banlist: ['Unown', 'Curse', 'String Shot', 'Forests Curse', 'Power Trick'],
 		requirePlus: true,
 	},
 	{
