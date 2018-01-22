@@ -459,7 +459,7 @@ class Battle extends Dex.ModdedDex {
 	 * @param {AnyObject} a
 	 * @param {AnyObject} b
 	 */
-	static comparePriority(a, b) {
+	comparePriority(a, b) {
 		a.priority = a.priority || 0;
 		a.subPriority = a.subPriority || 0;
 		a.speed = a.speed || 0;
@@ -486,7 +486,7 @@ class Battle extends Dex.ModdedDex {
 		if (b.subOrder - a.subOrder) {
 			return -(b.subOrder - a.subOrder);
 		}
-		return Math.random() - 0.5;
+		return this.random() - 0.5;
 	}
 
 	/**
@@ -516,7 +516,7 @@ class Battle extends Dex.ModdedDex {
 	 */
 	getResidualStatuses(thing, callbackType) {
 		let statuses = this.getRelevantEffectsInner(thing || this, callbackType || 'residualCallback', null, null, false, true, 'duration');
-		statuses.sort(Battle.comparePriority);
+		statuses.sort((a, b) => this.comparePriority(a, b));
 		//if (statuses[0]) this.debug('match ' + (callbackType || 'residualCallback') + ': ' + statuses[0].status.id);
 		return statuses;
 	}
@@ -556,7 +556,7 @@ class Battle extends Dex.ModdedDex {
 	 */
 	residualEvent(eventid, relayVar) {
 		let statuses = this.getRelevantEffectsInner(this, 'on' + eventid, null, null, false, true, 'duration');
-		statuses.sort(Battle.comparePriority);
+		statuses.sort((a, b) => this.comparePriority(a, b));
 		while (statuses.length) {
 			let statusObj = statuses[0];
 			statuses.shift();
@@ -777,7 +777,7 @@ class Battle extends Dex.ModdedDex {
 		if (fastExit) {
 			statuses.sort(Battle.compareRedirectOrder);
 		} else {
-			statuses.sort(Battle.comparePriority);
+			statuses.sort((a, b) => this.comparePriority(a, b));
 		}
 		let hasRelayVar = true;
 		effect = this.getEffect(effect);
@@ -2622,7 +2622,7 @@ class Battle extends Dex.ModdedDex {
 	}
 
 	sortQueue() {
-		this.queue.sort(Battle.comparePriority);
+		this.queue.sort((a, b) => this.comparePriority(a, b));
 	}
 
 	/**
@@ -2644,7 +2644,7 @@ class Battle extends Dex.ModdedDex {
 		if (chosenAction.pokemon) chosenAction.pokemon.updateSpeed();
 		const action = this.resolveAction(chosenAction, midTurn);
 		for (let i = 0; i < this.queue.length; i++) {
-			if (Battle.comparePriority(action, this.queue[i]) < 0) {
+			if (this.comparePriority(action, this.queue[i]) < 0) {
 				this.queue.splice(i, 0, action);
 				return;
 			}
