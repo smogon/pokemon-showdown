@@ -1507,6 +1507,7 @@ exports.commands = {
 			"- /mute OR /m <em>username</em>: 7 minute mute<br />" +
 			"- /hourmute OR /hm <em>username</em>: 60 minute mute<br />" +
 			"- /unmute <em>username</em>: unmute<br />" +
+			"- /hidetext <em>username</em>: Removes a users messages from the room<br />" +
 			"- /announce OR /wall <em>message</em>: make an announcement<br />" +
 			"- /modlog <em>username</em>: search the moderator log of the room<br />" +
 			"- /modnote <em>note</em>: add a moderator note that can be read through modlog<br />" +
