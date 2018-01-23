@@ -26,10 +26,9 @@ describe('Burn', function () {
 		]);
 		const target = battle.p2.active[0];
 		battle.commitDecisions();
-		battle.resetRNG();
 		battle.p2.chooseMove('willowisp');
 		// hardcoded to RNG
-		assert.hurtsBy(target, 43, () => battle.commitDecisions());
+		assert.hurtsBy(target, 64, () => battle.commitDecisions());
 	});
 
 	it('should not halve damage from moves with set damage', function () {
