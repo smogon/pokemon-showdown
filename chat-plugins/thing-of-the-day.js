@@ -509,7 +509,7 @@ exports.commands = {
 	aotd: commands,
 	fotd: commands,
 	botd: commands,
-	sotd, commands,
+	sotd: commands,
 	otdhelp: [
 		`Thing of the Day plugin commands (aotd, fotd, botd, sotd):`,
 		`- /-otd - View the current Thing of the Day.`,
