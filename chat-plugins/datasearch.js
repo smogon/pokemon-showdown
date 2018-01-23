@@ -498,7 +498,7 @@ function runDexsearch(target, cmd, canAll, message) {
 					return {reply: `'${targetResist}' is not a recognized type.`};
 				}
 			}
-			
+
 			if (target.substr(0, 5) === 'weak ') {
 				let targetWeak = target.substr(5, 1).toUpperCase() + target.substr(6);
 				if (targetWeak in Dex.data.TypeChart) {
@@ -632,7 +632,7 @@ function runDexsearch(target, cmd, canAll, message) {
 				}
 			}
 			if (matched) continue;
-			
+
 			for (let type in alts.weak) {
 				let effectiveness = 0;
 				let notImmune = Dex.getImmunity(type, dex[mon]);
