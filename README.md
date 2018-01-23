@@ -165,6 +165,7 @@ Major Contributors
 
 Contributors
 
+- [Amplitude] - Development
 - Andrew Goodsell [Zracknel] - Art (battle weather backdrops)
 - Avery Zimmer [Lyren, SolarisFox] - Development
 - Ben Davies [Morfent] - Development
@@ -172,7 +173,6 @@ Contributors
 - Cody Thompson [Rising_Dusk] - Development
 - Ian Clail [Layell] - Art (battle graphics, sprites)
 - Jeremy Piemonte [panpawn] - Development
-- Kris Johnson [Kris] - Development
 - Neil Rashbrook [urkerab] - Development
 - Robin Vandenbrande [Quinella] - Development
 - [Ridaz] - Art (battle animations)
