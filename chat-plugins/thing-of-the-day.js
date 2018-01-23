@@ -407,7 +407,7 @@ let commands = {
 
 		this.privateModAction(`(${user.name} disabled the ${handler.name} of the Day timer.)`);
 	},
-	delayhelp: [`/-otd delay - Turns of the automatic 20 minute timer for Thing of the Day voting rounds. Requires: % @ # & ~`],
+	delayhelp: [`/-otd delay - Turns off the automatic 20 minute timer for Thing of the Day voting rounds. Requires: % @ # & ~`],
 
 	set: function (target, room, user) {
 		if (this.message.substring(1, 5) === 'aotd') {
@@ -518,7 +518,7 @@ exports.commands = {
 		`- /-otd remove [username] - Remove a user's nomination for the Thing of the Day and prevent them from voting again until the next round. Requires: % @ * # & ~`,
 		`- /-otd end - End nominations for the Thing of the Day and set it to a randomly selected nomination. Requires: % @ # & ~`,
 		`- /-otd force [nomination] - Forcibly sets the Thing of the Day without a nomination round. Requires: # & ~`,
-		`- /-otd delay - Turns of the automatic 20 minute timer for Thing of the Day voting rounds. Requires: % @ # & ~`,
+		`- /-otd delay - Turns off the automatic 20 minute timer for Thing of the Day voting rounds. Requires: % @ # & ~`,
 		`- /-otd set property: value[, property: value] - Set the winner, quote, song, link or image for the current Thing of the Day. Requires: % @ * # & ~`,
 		`- /-otd winners [year] - Displays a list of previous things of the day of the past year. Optionally, specify a year to see all winners in that year.`,
 	],
