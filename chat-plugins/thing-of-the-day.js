@@ -270,7 +270,7 @@ function selectHandler(message) {
 
 let commands = {
 	start: function (target, room, user, connection, cmd) {
-		if (this.message.substring(1, 5) === 'aotd') {
+		if (toId(this.message.substring(1, 5)) === 'aotd') {
 			if (room !== theStudio) return this.errorReply('This command can only be used in The Studio.');
 		} else {
 			if (room !== tvbf) return this.errorReply('This command can only be used in TV, Books & Films.');
@@ -289,7 +289,7 @@ let commands = {
 	starthelp: [`/-otd start - Starts nominations for the Thing of the Day. Requires: % @ # & ~`],
 
 	end: function (target, room, user) {
-		if (this.message.substring(1, 5) === 'aotd') {
+		if (toId(this.message.substring(1, 5)) === 'aotd') {
 			if (room !== theStudio) return this.errorReply('This command can only be used in The Studio.');
 		} else {
 			if (room !== tvbf) return this.errorReply('This command can only be used in TV, Books & Films.');
@@ -311,7 +311,7 @@ let commands = {
 	endhelp: [`/-otd end - End nominations for the Thing of the Day and set it to a randomly selected nomination. Requires: % @ # & ~`],
 
 	nom: function (target, room, user) {
-		if (this.message.substring(1, 5) === 'aotd') {
+		if (toId(this.message.substring(1, 5)) === 'aotd') {
 			if (room !== theStudio) return this.errorReply('This command can only be used in The Studio.');
 		} else {
 			if (room !== tvbf) return this.errorReply('This command can only be used in TV, Books & Films.');
@@ -328,7 +328,7 @@ let commands = {
 	nomhelp: [`/-otd nom [nomination] - Nominate something for Thing of the Day.`],
 
 	view: function (target, room, user, connection) {
-		if (this.message.substring(1, 5) === 'aotd') {
+		if (toId(this.message.substring(1, 5)) === 'aotd') {
 			if (room !== theStudio) return this.errorReply('This command can only be used in The Studio.');
 		} else {
 			if (room !== tvbf) return this.errorReply('This command can only be used in TV, Books & Films.');
@@ -345,7 +345,7 @@ let commands = {
 	viewhelp: [`/-otd view - View the current nominations for the Thing of the Day.`],
 
 	remove: function (target, room, user) {
-		if (this.message.substring(1, 5) === 'aotd') {
+		if (toId(this.message.substring(1, 5)) === 'aotd') {
 			if (room !== theStudio) return this.errorReply('This command can only be used in The Studio.');
 		} else {
 			if (room !== tvbf) return this.errorReply('This command can only be used in TV, Books & Films.');
@@ -370,7 +370,7 @@ let commands = {
 	removehelp: [`/-otd remove [username] - Remove a user's nomination for the Thing of the Day and prevent them from voting again until the next round. Requires: % @ * # & ~`],
 
 	force: function (target, room, user) {
-		if (this.message.substring(1, 5) === 'aotd') {
+		if (toId(this.message.substring(1, 5)) === 'aotd') {
 			if (room !== theStudio) return this.errorReply('This command can only be used in The Studio.');
 		} else {
 			if (room !== tvbf) return this.errorReply('This command can only be used in TV, Books & Films.');
@@ -391,7 +391,7 @@ let commands = {
 	forcehelp: [`/-otd force [nomination] - Forcibly sets the Thing of the Day without a nomination round. Requires: # & ~`],
 
 	delay: function (target, room, user) {
-		if (this.message.substring(1, 5) === 'aotd') {
+		if (toId(this.message.substring(1, 5)) === 'aotd') {
 			if (room !== theStudio) return this.errorReply('This command can only be used in The Studio.');
 		} else {
 			if (room !== tvbf) return this.errorReply('This command can only be used in TV, Books & Films.');
@@ -410,7 +410,7 @@ let commands = {
 	delayhelp: [`/-otd delay - Turns off the automatic 20 minute timer for Thing of the Day voting rounds. Requires: % @ # & ~`],
 
 	set: function (target, room, user) {
-		if (this.message.substring(1, 5) === 'aotd') {
+		if (toId(this.message.substring(1, 5)) === 'aotd') {
 			if (room !== theStudio) return this.errorReply('This command can only be used in The Studio.');
 		} else {
 			if (room !== tvbf) return this.errorReply('This command can only be used in TV, Books & Films.');
@@ -470,7 +470,7 @@ let commands = {
 	sethelp: [`/-otd set property: value[, property: value] - Set the winner, quote, song, link or image for the current Thing of the Day. Requires: % @ * # & ~`],
 
 	winners: function (target, room, user, connection) {
-		if (this.message.substring(1, 5) === 'aotd') {
+		if (toId(this.message.substring(1, 5)) === 'aotd') {
 			if (room !== theStudio) return this.errorReply('This command can only be used in The Studio.');
 		} else {
 			if (room !== tvbf) return this.errorReply('This command can only be used in TV, Books & Films.');
@@ -482,7 +482,7 @@ let commands = {
 	winnershelp: [`/-otd winners [year] - Displays a list of previous things of the day of the past year. Optionally, specify a year to see all winners in that year.`],
 
 	'': function (target, room) {
-		if (this.message.substring(1, 5) === 'aotd') {
+		if (toId(this.message.substring(1, 5)) === 'aotd') {
 			if (room !== theStudio) return this.errorReply('This command can only be used in The Studio.');
 		} else {
 			if (room !== tvbf) return this.errorReply('This command can only be used in TV, Books & Films.');
@@ -495,7 +495,7 @@ let commands = {
 	},
 
 	help: function (target, room) {
-		if (this.message.substring(1, 5) === 'aotd') {
+		if (toId(this.message.substring(1, 5)) === 'aotd') {
 			if (room !== theStudio) return this.errorReply('This command can only be used in The Studio.');
 		} else {
 			if (room !== tvbf) return this.errorReply('This command can only be used in TV, Books & Films.');
