@@ -4207,12 +4207,45 @@ exports.BattleItems = {
 		fling: {
 			basePower: 30,
 		},
-		onModifyMove: function (move) {
-			delete move.flags['contact'];
+		onAttractPriority: -1,
+		onAttract: function (target, source, effect) {
+			if (target !== source && target === this.activePokemon && this.activeMove.flags['contact']) return false;
+		},
+		onBoostPriority: -1,
+		onBoost: function (boost, target, source, effect) {
+			if (target !== source && target === this.activePokemon && this.activeMove.flags['contact']) {
+				if (effect && effect.effectType === 'Ability') {
+					// Ability activation always happens for boosts
+					this.add('-activate', target, 'item: Protective Pads');
+				}
+				return false;
+			}
+		},
+		onDamagePriority: -1,
+		onDamage: function (damage, target, source, effect) {
+			if (target !== source && target === this.activePokemon && this.activeMove.flags['contact']) {
+				if (effect && effect.effectType === 'Ability') {
+					this.add('-activate', source, effect.fullname);
+					this.add('-activate', target, 'item: Protective Pads');
+				}
+				return false;
+			}
+		},
+		onSetAbility: function (ability, target, source, effect) {
+			if (target !== source && target === this.activePokemon && this.activeMove.flags['contact']) {
+				if (effect && effect.effectType === 'Ability') {
+					this.add('-activate', source, effect.fullname);
+					this.add('-activate', target, 'item: Protective Pads');
+				}
+				return false;
+			}
+		},
+		onSetStatus: function (status, target, source, effect) {
+			if (target !== source && target === this.activePokemon && this.activeMove.flags['contact']) return false;
 		},
 		num: 880,
 		gen: 7,
-		desc: "Holder's attacks do not make contact with the target.",
+		desc: "Holder's moves are protected from adverse contact effects, except Pickpocket.",
 	},
 	"psychicgem": {
 		id: "psychicgem",
