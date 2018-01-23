@@ -1657,7 +1657,7 @@ function socketReceive(worker, workerid, socketid, message) {
 
 	const lines = message.split('\n');
 	if (!lines[lines.length - 1]) lines.pop();
-	if (lines.length > (user.isStaff ? THROTTLE_MULTILINE_WARN_STAFF : THROTTLE_MULTILINE_WARN)) {
+	if (lines.length > (user.isStaff || (room.auth && room.auth[user.userid] && room.auth[user.userid] !== '+') ? THROTTLE_MULTILINE_WARN_STAFF : THROTTLE_MULTILINE_WARN)) {
 		connection.popup(`You're sending too many lines at once. Try using a paste service like [[Pastebin]].`);
 		return;
 	}
