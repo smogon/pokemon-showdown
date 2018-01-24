@@ -12,7 +12,11 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 7] Random Battle",
-		desc: ["Randomized teams of level-balanced Pok&eacute;mon with sets that are generated to be competitively viable."],
+		desc: [
+			"Randomized teams of level-balanced Pok&eacute;mon with sets that are generated to be competitively viable.",
+			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3591157/\">Sets and Suggestions</a>",
+			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3616946/\">Role Compendium</a>",
+		],
 
 		mod: 'gen7',
 		team: 'random',
@@ -237,6 +241,7 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 7] Random Doubles Battle",
+		desc: ["&bullet; <a href=\"http://www.smogon.com/forums/threads/3601525/\">Sets and Suggestions</a>"],
 
 		mod: 'gen7',
 		gameType: 'doubles',
@@ -788,6 +793,7 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 6] Battle Factory",
+		desc: ["Randomized teams of Pok&eacute;mon for a generated Smogon tier with sets that are competitively viable."],
 
 		mod: 'gen6',
 		team: 'randomFactory',
@@ -796,7 +802,7 @@ exports.Formats = [
 	{
 		name: "[Gen 7] BSS Factory",
 		desc: [
-			"Randomised 3v3 Singles featuring Pok&eacute;mon and movesets popular in Battle Spot Singles.",
+			"Randomized 3v3 Singles featuring Pok&eacute;mon and movesets popular in Battle Spot Singles.",
 			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3604845/\">Information and Suggestions Thread</a>",
 		],
 
@@ -1603,6 +1609,10 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 1] OU (tradeback)",
+		desc: [
+			"RBY OU with movepool additions from the Time Capsule.",
+			"&bullet; <a href=\"http://www.smogon.com/articles/rby-tradebacks-ou/\">Information</a>",
+		],
 
 		mod: 'gen1',
 		searchShow: false,
