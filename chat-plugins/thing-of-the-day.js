@@ -56,7 +56,7 @@ class OtdHandler {
 
 	startVote() {
 		this.voting = true;
-		this.timer = setTimeout(() => this.rollWinner, 20 * MINUTE);
+		this.timer = setTimeout(() => this.rollWinner(), 20 * MINUTE);
 		this.display();
 	}
 
@@ -129,7 +129,8 @@ class OtdHandler {
 		let winner = this.nominations.get(keys[Math.floor(Math.random() * keys.length)]);
 		this.appendWinner(winner.nomination, winner.name);
 
-		this.room.add(Chat.html `|html|<div class="broadcast-blue"><p style="font-weight:bold;text-align:center;font-size:12pt;">Nominations for ${this.name} of the Day are over!</p><p style="tex-align:center;font-size:10pt;">Out of ${keys.length} nominations, we randomly selected <strong>${winner.nomination}</strong> as the winner! (Nomination by ${winner.name})</p></div>`);
+		this.room.add(Chat.html `|uhtml|otd|<div class="broadcast-blue"><p style="font-weight:bold;text-align:center;font-size:12pt;">Nominations for ${this.name} of the Day are over!</p><p style="tex-align:center;font-size:10pt;">Out of ${keys.length} nominations, we randomly selected <strong>${winner.nomination}</strong> as the winner! (Nomination by ${winner.name})</p></div>`);
+		this.room.update();
 
 		this.finish();
 		return true;
