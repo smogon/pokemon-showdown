@@ -3293,7 +3293,7 @@ class Battle extends Dex.ModdedDex {
 			let p2 = this.p2;
 			let p1active = p1 ? p1.active[0] : null;
 			let p2active = p2 ? p2.active[0] : null;
-			let target = data.slice(2).join('|').replace(/\f/g, '\n');
+			let target = data.slice(1).join('|').replace(/\f/g, '\n');
 			this.add('', '>>> ' + target);
 			try {
 				let result = eval(target);
