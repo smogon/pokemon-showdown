@@ -14,9 +14,10 @@ describe('Snarl', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Deoxys-Attack", ability: 'victorystar', item: 'laggingtail', moves: ['splash', 'snarl']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Caterpie", level: 2, ability: 'naturalcure', item: 'focussash', moves: ['substitute', 'rest']}]);
-		battle.commitDecisions();
-		battle.choose('p1', 'move 2');
-		battle.choose('p2', 'move 2');
+
+		battle.makeChoices('move Snarl', 'move Rest');
+		battle.makeChoices('move Rest', 'move Snarl');
+
 		assert.strictEqual(battle.p2.active[0].item, '');
 	});
 });
@@ -31,9 +32,10 @@ describe('Snarl [Gen 5]', function () {
 			[{species: "Deoxys-Attack", ability: 'victorystar', item: 'laggingtail', moves: ['splash', 'snarl']}],
 			[{species: "Caterpie", level: 2, ability: 'naturalcure', item: 'focussash', moves: ['substitute', 'rest']}],
 		]);
-		battle.commitDecisions();
-		battle.choose('p1', 'move 2');
-		battle.choose('p2', 'move 2');
+
+		battle.makeChoices('move Splash', 'move Substitute');
+		battle.makeChoices('move Snarl', 'move Rest');
+
 		assert.strictEqual(battle.p2.active[0].item, 'focussash');
 	});
 });
