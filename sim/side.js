@@ -184,7 +184,7 @@ class Side {
 	randomActive() {
 		let actives = this.active.filter(active => active && !active.fainted);
 		if (!actives.length) return null;
-		let i = Math.floor(Math.random() * actives.length);
+		let i = Math.floor(this.battle.random() * actives.length);
 		return actives[i];
 	}
 
