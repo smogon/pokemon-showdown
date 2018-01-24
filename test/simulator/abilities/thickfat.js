@@ -15,6 +15,8 @@ describe('Thick Fat', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: "Hariyama", ability: 'thickfat', moves: ['splash']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Nidoking", ability: 'sheerforce', moves: ['incinerate', 'icebeam']}]);
 		const target = battle.p1.active[0];
+		// If we don't mess with the RNG there is a crit in the second turn
+		battle.resetRNG();
 		battle.p2.chooseMove('incinerate').foe.chooseDefault();
 		assert.bounded(target.maxhp - target.hp, [29, 35]);
 		battle.heal(target.maxhp, target, target, battle.getFormat());
