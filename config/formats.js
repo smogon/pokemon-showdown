@@ -1543,6 +1543,18 @@ exports.Formats = [
 		banlist: ['Wobbuffet + Leftovers'],
 	},
 	{
+		name: "[Gen 3] UU",
+		desc: [
+			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3585923/\">ADV UU Metagame Discussion</a>",
+			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3548578/\">ADV UU Viability Rankings</a>",
+		],
+
+		mod: 'gen3',
+		searchShow: false,
+		ruleset: ['[Gen 3] OU'],
+		banlist: ['OU', 'BL'],
+	},
+	{
 		name: "[Gen 3] Custom Game",
 
 		mod: 'gen3',
