@@ -184,6 +184,7 @@ exports.commands = {
 		new: function (target, room, user, connection, cmd, message) {
 			if (!target) return this.parse('/help poll new');
 			if (target.length > 1024) return this.errorReply("Poll too long.");
+			if (room.battle) return this.errorReply("This command cannot be used in battle rooms.");
 
 			const supportHTML = cmd === 'htmlcreate';
 			let separator = '';
