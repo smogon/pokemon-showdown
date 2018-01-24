@@ -253,7 +253,7 @@ const botd = new OtdHandler('botd', 'Book', tvbf, BOTDS_FILE, ['book', 'nominato
 const sotd = new OtdHandler('sotd', 'Show', tvbf, SOTDS_FILE, ['show', 'nominator', 'quote', 'link', 'image', 'time'], ['Show', 'Nominator', 'Quote', 'Link', 'Image', 'Timestamp']);
 
 function selectHandler(message) {
-	let id = message.substring(1, 5);
+	let id = toId(message.substring(1, 5));
 	switch (id) {
 	case 'aotd':
 		return aotd;
