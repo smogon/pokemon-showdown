@@ -54,6 +54,7 @@ describe('Dancer', function () {
 	});
 
 	it('should not copy a move that failed or was blocked by Protect', function () {
+		// hardcoded to RNG seed
 		battle = common.createBattle({gameType: 'doubles', seed: [1, 2, 3, 4]});
 		const p1 = battle.join('p1', 'Guest 1', 1, [
 			{species: 'Oricorio', level: 98, ability: 'dancer', item: 'laggingtail', moves: ['dragondance', 'protect', 'teeterdance']},
@@ -63,6 +64,7 @@ describe('Dancer', function () {
 			{species: 'Oricorio', ability: 'dancer', moves: ['fierydance', 'protect', 'teeterdance']},
 			{species: 'Shedinja', ability: 'wonderguard', moves: ['finalgambit']},
 		]);
+		battle.resetRNG();
 		p1.active[0].boostBy({atk: 6, spe: 6});
 		p2.active[0].boostBy({atk: -6});
 		p2.active[1].boostBy({spe: 6});

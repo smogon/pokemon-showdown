@@ -14,6 +14,7 @@ describe('Unaware', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Clefable', ability: 'unaware', moves: ['softboiled']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Hariyama', ability: 'thickfat', moves: ['vitalthrow', 'bellydrum']}]);
+		battle.resetRNG();
 		battle.commitDecisions();
 		let pokemon = battle.p1.active[0];
 		let damage = pokemon.maxhp - pokemon.hp;
@@ -43,6 +44,7 @@ describe('Unaware', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Clefable', ability: 'unaware', moves: ['moonblast']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Hariyama', ability: 'thickfat', item: 'laggingtail', moves: ['amnesia']}]);
+		battle.resetRNG();
 		battle.commitDecisions();
 		let pokemon = battle.p2.active[0];
 		let damage = pokemon.maxhp - pokemon.hp;
