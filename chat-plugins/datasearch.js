@@ -60,6 +60,7 @@ exports.commands = {
 		`Valid tiers are: Uber/OU/BL/UU/BL2/RU/BL3/NU/BL4/PU/NFE/LC/CAP/CAP NFE/CAP LC.`,
 		`Types can be searched for by either having the type precede 'type' or just using the type itself as a parameter, e.g., both 'fire type' and 'fire' show all Fire types; however, using 'psychic' as a parameter will show all Pok\u00e9mon that learn the move Psychic and not Psychic types.`,
 		`'resists' followed by a type will show Pok\u00e9mon that resist that typing, e.g., 'resists normal'.`,
+		`'weak' followed by a type will show Pok\u00e9mon that are weak to that typing, e.g., 'weak fire'.`,
 		`Inequality ranges use the characters '>=' for '≥' and '<=' for '≤', e.g., 'hp <= 95' searches all Pok\u00e9mon with HP less than or equal to 95.`,
 		`Parameters can be excluded through the use of '!', e.g., '!water type' excludes all water types.`,
 		`The parameter 'mega' can be added to search for Mega Evolutions only, and the parameter 'NFE' can be added to search not-fully evolved Pok\u00e9mon only.`,
@@ -304,7 +305,7 @@ function runDexsearch(target, cmd, canAll, message) {
 	};
 
 	for (const andGroup of target.split(',')) {
-		let orGroup = {abilities: {}, tiers: {}, colors: {}, 'egg groups': {}, gens: {}, moves: {}, types: {}, resists: {}, stats: {}, skip: false};
+		let orGroup = {abilities: {}, tiers: {}, colors: {}, 'egg groups': {}, gens: {}, moves: {}, types: {}, resists: {}, weak: {}, stats: {}, skip: false};
 		let parameters = andGroup.split("|");
 		if (parameters.length > 3) return {reply: "No more than 3 alternatives for each parameter may be used."};
 		for (const parameter of parameters) {
@@ -498,6 +499,18 @@ function runDexsearch(target, cmd, canAll, message) {
 				}
 			}
 
+			if (target.substr(0, 5) === 'weak ') {
+				let targetWeak = target.substr(5, 1).toUpperCase() + target.substr(6);
+				if (targetWeak in Dex.data.TypeChart) {
+					let invalid = validParameter("weak", targetWeak, isNotSearch, target);
+					if (invalid) return {reply: invalid};
+					orGroup.weak[targetWeak] = !isNotSearch;
+					continue;
+				} else {
+					return {reply: `'${targetWeak}' is not a recognized type.`};
+				}
+			}
+
 			let inequality = target.search(/>|<|=/);
 			if (inequality >= 0) {
 				if (isNotSearch) return {reply: "You cannot use the negation symbol '!' in stat ranges."};
@@ -617,6 +630,14 @@ function runDexsearch(target, cmd, canAll, message) {
 				} else {
 					if (!notImmune || effectiveness < 0) matched = true;
 				}
+			}
+			if (matched) continue;
+
+			for (let type in alts.weak) {
+				let effectiveness = 0;
+				let notImmune = Dex.getImmunity(type, dex[mon]);
+				if (notImmune) effectiveness = Dex.getEffectiveness(type, dex[mon]);
+				if (alts.weak[type] && notImmune && effectiveness >= 1) matched = true;
 			}
 			if (matched) continue;
 
