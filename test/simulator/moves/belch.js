@@ -42,14 +42,16 @@ describe('Belch', function () {
 	it('should still count berries as consumed after switch out', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [
-			{species: 'Swalot', ability: 'gluttony', item: 'lumberry', moves: ['belch', 'uturn']},
-			{species: 'Swalot', ability: 'gluttony', moves: ['toxic']},
+			{species: 'Swalot', item: 'lumberry', moves: ['belch', 'uturn']},
+			{species: 'Swalot', moves: ['toxic']},
 		]);
-		battle.join('p2', 'Guest 2', 1, [{species: 'Registeel', ability: 'prankster', moves: ['rest', 'thunderwave']}]);
-		battle.makeChoices('move Uturn', 'move Thunderwave');
+		battle.join('p2', 'Guest 2', 1, [{
+			species: 'Rotom', moves: ['rest', 'willowisp'],
+		}]);
+		battle.makeChoices('move Uturn', 'move Will-o-Wisp');
 		battle.makeChoices('switch 2', ''); // For U-Turn
-		battle.makeChoices('switch 2', 'move Thunderwave');
-		battle.makeChoices('move Belch', 'move Thunderwave');
+		battle.makeChoices('switch 2', 'move Will-o-Wisp');
+		battle.makeChoices('move Belch', 'move Will-o-Wisp');
 		assert.strictEqual(battle.p1.active[0].lastMove.id, 'belch');
 	});
 });
