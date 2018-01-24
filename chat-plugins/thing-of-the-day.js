@@ -61,6 +61,7 @@ class OtdHandler {
 	}
 
 	finish() {
+		this.voting = false;
 		this.nominations = new Map();
 		this.removedNominations = new Map();
 		clearTimeout(this.timer);
