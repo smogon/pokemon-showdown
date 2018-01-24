@@ -7,25 +7,25 @@ exports.commands = {
 	othermetas: function (target, room, user) {
 		if (!this.runBroadcast()) return;
 		target = toId(target);
-		let buffer = "";
+		let buffer = ``;
 
 		if (target === 'all' && this.broadcasting) {
-			return this.sendReplyBox("You cannot broadcast information about all Other Metagames at once.");
+			return this.sendReplyBox(`You cannot broadcast information about all Other Metagames at once.`);
 		}
 
 		if (!target || target === 'all') {
-			buffer += "- <a href=\"http://www.smogon.com/forums/forums/394/\">Other Metagames Forum</a><br />";
+			buffer += `- <a href="http://www.smogon.com/forums/forums/394/">Other Metagames Forum</a><br />`;
 			if (!target) return this.sendReplyBox(buffer);
 		}
 		let showMonthly = (target === 'all' || target === 'omofthemonth' || target === 'omotm' || target === 'month');
 
 		if (target === 'all') {
 			// Display OMotM formats, with forum thread links as caption
-			this.parse('/formathelp omofthemonth');
+			this.parse(`/formathelp omofthemonth`);
 
 			// Display the rest of OM formats, with OM hub/index forum links as caption
-			this.parse('/formathelp othermetagames');
-			return this.sendReply('|raw|<center>' + buffer + '</center>');
+			this.parse(`/formathelp othermetagames`);
+			return this.sendReply(`|raw|<center>${buffer}</center>`);
 		}
 		if (showMonthly) {
 			this.target = 'omofthemonth';
