@@ -34,7 +34,7 @@ describe('Anger Point', function () {
 		const p1 = battle.join('p1', 'Guest 1', 1, [{species: "Cryogonal", ability: 'noguard', moves: ['endure']}]);
 		const p2 = battle.join('p2', 'Guest 2', 1, [{species: "Primeape", ability: 'angerpoint', moves: ['stormthrow']}]);
 
-		battle.makeChoices('move endude', 'move stormthrow');
+		battle.makeChoices('move endure', 'move stormthrow');
 		assert.statStage(p1.active[0], 'atk', 0);
 		assert.statStage(p2.active[0], 'atk', 0);
 	});

@@ -33,7 +33,8 @@ describe('Snarl [Gen 5]', function () {
 			[{species: "Caterpie", level: 2, ability: 'naturalcure', item: 'focussash', moves: ['substitute', 'rest']}],
 		]);
 
-		battle.makeChoices('move Snarl', '');
+		battle.makeChoices('move Splash', 'move Substitute');
+		battle.makeChoices('move Snarl', 'move Rest');
 
 		assert.strictEqual(battle.p2.active[0].item, 'focussash');
 	});
