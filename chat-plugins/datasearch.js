@@ -637,7 +637,11 @@ function runDexsearch(target, cmd, canAll, message) {
 				let effectiveness = 0;
 				let notImmune = Dex.getImmunity(type, dex[mon]);
 				if (notImmune) effectiveness = Dex.getEffectiveness(type, dex[mon]);
-				if (alts.weak[type] && notImmune && effectiveness >= 1) matched = true;
+				if (alts.weak[type]) {
+					if (notImmune && effectiveness >= 1) matched = true;
+				} else {
+					if (!notImmune || effectiveness < 1) matched = true;
+				}
 			}
 			if (matched) continue;
 
