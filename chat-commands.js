@@ -712,12 +712,22 @@ exports.commands = {
 		let targetRoom = Rooms.search(id);
 		if (!targetRoom) return this.errorReply("The room '" + target + "' doesn't exist.");
 		target = targetRoom.title || targetRoom.id;
+		const isPrivate = targetRoom.isPrivate;
+		const staffRoom = Rooms('staff');
+		const upperStaffRoom = Rooms('upperstaff');
 		if (Rooms.global.deregisterChatRoom(id)) {
 			this.sendReply("The room '" + target + "' was deregistered.");
 			this.sendReply("It will be deleted as of the next server restart.");
+			target = Chat.escapeHTML(target);
+			if (isPrivate) {
+				if (upperStaffRoom) upperStaffRoom.add(`|raw|<div class="broadcast-red">Private chat room deregistered by ${user.userid}: <b>${target}</b></div>`).update();
+			} else {
+				if (staffRoom) staffRoom.add(`|raw|<div class="broadcast-red">Public chat room deregistered: <b>${target}</b></div>`).update();
+				if (upperStaffRoom) upperStaffRoom.add(`|raw|<div class="broadcast-red">Public chat room deregistered by ${user.userid}: <b>${target}</b></div>`).update();
+			}
 			return;
 		}
-		return this.errorReply("The room '" + target + "' isn't registered.");
+		return this.errorReply(`The room "${target}" isn't registered.`);
 	},
 	deregisterchatroomhelp: [`/deregisterchatroom [roomname] - Deletes room [roomname] after the next server restart. Requires: & ~`],
 
