@@ -643,6 +643,13 @@ class Template extends Effect {
 		this.tier = this.tier || '';
 
 		/**
+		 * Doubles Tier. The Pokemon's location in the Smogon doubles tier system.
+		 * Do not use for LC bans.
+		 * @type {string}
+		 */
+		this.doublesTier = this.doublesTier || '';
+
+		/**
 		 * Evolutions. Array because many Pokemon have multiple evolutions.
 		 * @type {string[]}
 		 */
