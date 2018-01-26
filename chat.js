@@ -1378,10 +1378,10 @@ Chat.toListString = function (array) {
  * @param {Template} template
  * @param {number} gen
  */
-Chat.getDataPokemonHTML = function (template, gen = 7) {
+Chat.getDataPokemonHTML = function (template, gen = 7, tier = '') {
 	if (typeof template === 'string') template = Object.assign({}, Dex.getTemplate(template));
 	let buf = '<li class="result">';
-	buf += '<span class="col numcol">' + (template.tier) + '</span> ';
+	buf += '<span class="col numcol">' + (tier || template.tier) + '</span> ';
 	buf += `<span class="col iconcol"><psicon pokemon="${template.id}"/></span> `;
 	buf += '<span class="col pokemonnamecol" style="white-space:nowrap"><a href="https://pokemonshowdown.com/dex/pokemon/' + template.id + '" target="_blank">' + template.species + '</a></span> ';
 	buf += '<span class="col typecol">';
