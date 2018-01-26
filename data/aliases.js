@@ -576,6 +576,7 @@ exports.BattleAliases = {
 	"honch": "Honchkrow",
 	"kanga": "Kangaskhan",
 	"karp": "Magikarp",
+	"kart": "Kartana",
 	"keld": "Keldeo",
 	"klef": "Klefki",
 	"koko": "Tapu Koko",
@@ -586,6 +587,7 @@ exports.BattleAliases = {
 	"lando": "Landorus",
 	"landoi": "Landorus",
 	"landot": "Landorus-Therian",
+	"lego": "Nihilego",
 	"lele": "Tapu Lele",
 	"linda": "Fletchinder",
 	"luke": "Lucario",
@@ -625,7 +627,10 @@ exports.BattleAliases = {
 	"skarm": "Skarmory",
 	"smogon": "Koffing",
 	"smogonbird": "Talonflame",
+	"staka": "Stakataka",
+	"steela": "Celesteela",
 	"sui": "Suicune",
+	"swole": "Buzzwole",
 	"talon": "Talonflame",
 	"tang": "Tangrowth",
 	"terra": "Terrakion",
@@ -647,7 +652,7 @@ exports.BattleAliases = {
 	"zor": "Scizor",
 	"zyg": "Zygarde",
 
-	// ultra beasts
+	// ultra beast codenames
 	"ub01": "Nihilego",
 	"ub02a": "Buzzwole",
 	"ub02b": "Pheromosa",
