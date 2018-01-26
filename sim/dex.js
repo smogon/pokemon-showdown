@@ -384,7 +384,7 @@ class ModdedDex {
 			if (!template.tier) template.tier = 'Illegal';
 			if (!template.doublesTier) {
 				if (['CAP', 'CAP NFE', 'CAP LC', 'Unreleased', 'Illegal'].includes(template.tier)) {
-					template.doublesTier = 'Illegal';
+					template.doublesTier = template.tier;
 				} else {
 					template.doublesTier = 'NFE';
 				}
