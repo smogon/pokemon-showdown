@@ -648,6 +648,12 @@ exports.BattleAliases = {
 	"zyg": "Zygarde",
 
 	// ultra beasts
+	"kart": "Kartana",
+	"lego": "Nihilego",
+	"phero": "Pheromosa",
+	"staka": "Stakataka",
+	"steela": "Celesteela",
+	"swole": "Buzzwole",
 	"ub01": "Nihilego",
 	"ub02a": "Buzzwole",
 	"ub02b": "Pheromosa",
