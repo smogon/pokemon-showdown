@@ -269,6 +269,12 @@ class Validator {
 				problems.push(`${postMegaTemplate.species} is in ${postMegaTemplate.tier}, which is ${banReason}.`);
 			}
 		}
+		if (!templateOverride && postMegaTemplate.doublesTier) {
+			banReason = ruleTable.check('pokemontag:' + toId(postMegaTemplate.doublesTier), setHas);
+			if (banReason) {
+				problems.push(`${postMegaTemplate.species} is in ${postMegaTemplate.doublesTier}, which is ${banReason}.`);
+			}
+		}
 		if (!templateOverride && ruleTable.has('-unreleased') && postMegaTemplate.isUnreleased) {
 			problems.push(`${name} (${postMegaTemplate.species}) is unreleased.`);
 		}
@@ -1056,7 +1062,7 @@ class Validator {
 							// detect unavailable egg moves
 							if (noPastGenBreeding) {
 								const fatherLatestMoveGen = fatherSources[0].charAt(0);
-								if (father.tier.startsWith('Bank') || fatherLatestMoveGen !== '7') continue;
+								if (father.tier.startsWith('Bank') || father.doublesTier.startsWith('Bank') || fatherLatestMoveGen !== '7') continue;
 								atLeastOne = true;
 								break;
 							}
