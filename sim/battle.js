@@ -77,29 +77,36 @@ const Pokemon = require('./pokemon');
  */
 /** @typedef {MoveAction | SwitchAction | TeamAction | FieldAction | PokemonAction} Action */
 
+/**
+ * @typedef {Object} BattleOptions
+ * @property {(type: string, data: string | string[]) => void} [send] Output callback
+ * @property {PRNG} [prng] PRNG override (you usually don't need this, just pass a seed)
+ * @property {[number, number, number, number]} [seed] PRNG seed
+ * @property {boolean | string} [rated] Rated string
+ */
+
 class Battle extends Dex.ModdedDex {
 	/**
 	 * @param {string} formatid
-	 * @param {boolean | string} rated
-	 * @param {Function} send
-	 * @param {PRNG} [prng]
+	 * @param {BattleOptions} options
 	 */
-	constructor(formatid, rated = false, send = (() => {}), prng = new PRNG()) {
+	constructor(formatid, options = {}) {
 		let format = Dex.getFormat(formatid, true);
 		super(format.mod);
 		Object.assign(this, this.data.Scripts);
 
 		this.id = '';
 
-		/**@type {string[]} */
+		/** @type {string[]} */
 		this.log = [];
 		/** @type {Side[]} */
 		// @ts-ignore
 		this.sides = [null, null];
-		this.rated = rated;
-		/**@type {AnyObject} */
+		/** @type {boolean | string} */
+		this.rated = options.rated;
+		/** @type {AnyObject} */
 		this.weatherData = {id: ''};
-		/**@type {AnyObject} */
+		/** @type {AnyObject} */
 		this.terrainData = {id: ''};
 		this.pseudoWeather = {};
 
@@ -108,26 +115,27 @@ class Battle extends Dex.ModdedDex {
 		this.cachedFormat = format;
 		this.formatData = {id: format.id};
 
-		/**@type {Effect} */
+		/** @type {Effect} */
 		// @ts-ignore
 		this.effect = {id: ''};
-		/**@type {AnyObject} */
+		/** @type {AnyObject} */
 		this.effectData = {id: ''};
-		/**@type {AnyObject} */
+		/** @type {AnyObject} */
 		this.event = {id: ''};
 
 		this.gameType = (format.gameType || 'singles');
 		this.reportExactHP = !!format.debug;
 		this.replayExactHP = !format.team;
 
-		/**@type {Action[]} */
+		/** @type {Action[]} */
 		this.queue = [];
-		/**@type {FaintedPokemon[]} */
+		/** @type {FaintedPokemon[]} */
 		this.faintQueue = [];
-		/**@type {string[]} */
+		/** @type {string[]} */
 		this.messageLog = [];
 
-		this.send = send;
+		/** @type {(type: string, data: string | string[]) => void} */
+		this.send = options.send || (() => {});
 
 		this.turn = 0;
 		/** @type {Side} */
@@ -137,15 +145,15 @@ class Battle extends Dex.ModdedDex {
 		// @ts-ignore
 		this.p2 = null;
 		this.lastUpdate = 0;
-		/**@type {string} */
+		/** @type {string} */
 		this.weather = '';
-		/**@type {string} */
+		/** @type {string} */
 		this.terrain = '';
 		this.ended = false;
 		this.started = false;
 		this.active = false;
 		this.eventDepth = 0;
-		/**@type {?Move} */
+		/** @type {?Move} */
 		this.lastMove = null;
 		this.activeMove = null;
 		this.activePokemon = null;
@@ -158,11 +166,11 @@ class Battle extends Dex.ModdedDex {
 		this.events = null;
 
 		this.abilityOrder = 0;
-		/**@type {boolean} */
+		/** @type {boolean} */
 		this.LEGACY_API_DO_NOT_USE = false;
 
-		/**@type {PRNG} */
-		this.prng = prng;
+		/** @type {PRNG} */
+		this.prng = options.prng || new PRNG(options.seed || undefined);
 		this.prngSeed = this.prng.startingSeed.slice();
 		this.teamGenerator = null;
 	}
@@ -3218,7 +3226,7 @@ class Battle extends Dex.ModdedDex {
 	}
 
 	/**
-	 * @param {string} slot
+	 * @param {'p1' | 'p2'} slot
 	 * @param {string} name
 	 * @param {string} avatar
 	 * @param {?AnyObject[]} team
@@ -3231,17 +3239,13 @@ class Battle extends Dex.ModdedDex {
 		if (slot !== 'p1' && slot !== 'p2') slot = (this.p1 ? 'p2' : 'p1');
 		let slotNum = (slot === 'p2' ? 1 : 0);
 		if (this.started) {
-			// @ts-ignore
 			this[slot].name = name;
 		} else {
 			//console.log("NEW SIDE: " + name);
 			team = this.getTeam(team);
-			// @ts-ignore
 			this[slot] = new Side(name, this, slotNum, team);
-			// @ts-ignore
 			this.sides[slotNum] = this[slot];
 		}
-		// @ts-ignore
 		player = this[slot];
 
 		if (avatar) player.avatar = avatar;
@@ -3265,7 +3269,7 @@ class Battle extends Dex.ModdedDex {
 		case 'join': {
 			let team = null;
 			if (more) team = Dex.fastUnpackTeam(more);
-			this.join(data[1], data[2], data[3], team);
+			this.join(/** @type {PlayerSlot} */ (data[1]), data[2], data[3], team);
 			break;
 		}
 

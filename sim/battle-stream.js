@@ -35,9 +35,12 @@ class BattleStream extends Streams.ObjectReadWriteStream {
 		if (data[0] === 'init') {
 			const id = data[1];
 			try {
-				const battle = new Battle(data[2], data[3], (/** @type {string} */ type, /** @type {any} */ data) => {
-					if (Array.isArray(data)) data = data.join("\n");
-					this.push(`${type}\n${data}`);
+				const battle = new Battle(data[2], {
+					rated: data[3],
+					send: (type, data) => {
+						if (Array.isArray(data)) data = data.join("\n");
+						this.push(`${type}\n${data}`);
+					},
 				});
 				battle.id = id;
 				this.battle = battle;
