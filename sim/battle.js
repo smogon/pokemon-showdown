@@ -3329,22 +3329,19 @@ class Battle extends Dex.ModdedDex {
 	sendUpdates(logPos, alreadyEnded = false) {
 		if (this.log.length > logPos) {
 			if (alreadyEnded !== undefined && this.ended && !alreadyEnded) {
-				if (this.rated || Config.logchallenges) {
-					let log = {
-						seed: this.prngSeed,
-						turns: this.turn,
-						p1: this.p1.name,
-						p2: this.p2.name,
-						p1team: this.p1.team,
-						p2team: this.p2.team,
-						score: [this.p1.pokemonLeft, this.p2.pokemonLeft],
-					};
-					this.send('log', JSON.stringify(log));
-				}
-				this.send('winupdate', [this.winner || '-'].concat(this.log.slice(logPos)));
-			} else {
-				this.send('update', this.log.slice(logPos));
+				let log = {
+					winner: this.winner,
+					seed: this.prngSeed,
+					turns: this.turn,
+					p1: this.p1.name,
+					p2: this.p2.name,
+					p1team: this.p1.team,
+					p2team: this.p2.team,
+					score: [this.p1.pokemonLeft, this.p2.pokemonLeft],
+				};
+				this.send('log', JSON.stringify(log));
 			}
+			this.send('update', this.log.slice(logPos));
 		}
 	}
 

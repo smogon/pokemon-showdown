@@ -519,44 +519,22 @@ class Battle {
 				this.room.add(line);
 			}
 			this.room.update();
-			this.timer.nextRequest();
-			break;
-
-		case 'winupdate':
-			for (const line of lines.slice(2)) {
-				this.room.add(line);
-			}
-			this.started = true;
-			if (!this.ended) {
-				this.ended = true;
-				this.onEnd(lines[1]);
-				this.removeAllPlayers();
-			}
-			this.checkActive();
+			if (!this.ended) this.timer.nextRequest();
 			break;
 
 		case 'sideupdate': {
 			// @ts-ignore
 			let player = /** @type {BattlePlayer?} */ (this[lines[1]]);
-			if (player) {
-				player.sendRoom(lines[2]);
-				if (lines[2].startsWith(`|error|[Invalid choice] Can't do anything`)) {
-					// ... should not happen
-				} else if (lines[2].startsWith(`|error|[Invalid choice]`)) {
-					let request = this.requests[player.slot];
-					request.isWait = false;
-					request.choice = '';
-				}
-			}
-			break;
-		}
-
-		case 'request': {
-			// @ts-ignore
-			let player = /** @type {BattlePlayer?} */ (this[lines[1]]);
-
-			this.rqid++;
-			if (player) {
+			if (!player) break;
+			player.sendRoom(lines[2]);
+			if (lines[2].startsWith(`|error|[Invalid choice] Can't do anything`)) {
+				// ... should not happen
+			} else if (lines[2].startsWith(`|error|[Invalid choice]`)) {
+				let request = this.requests[player.slot];
+				request.isWait = false;
+				request.choice = '';
+			} else if (lines[2].startsWith(`|request|`)) {
+				this.rqid++;
 				let request = JSON.parse(lines[2]);
 				request.rqid = this.rqid;
 				const requestJSON = JSON.stringify(request);
@@ -572,9 +550,15 @@ class Battle {
 			break;
 		}
 
-		case 'log':
+		case 'end':
 			this.logData = JSON.parse(lines[1]);
 			this.score = this.logData.score;
+			this.started = true;
+			if (!this.ended) {
+				this.ended = true;
+				this.onEnd(this.logData.winnerid);
+				this.removeAllPlayers();
+			}
 			break;
 		}
 		Monitor.activeIp = null;
