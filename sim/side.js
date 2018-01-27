@@ -260,7 +260,7 @@ class Side {
 	 * @param {AnyObject} update
 	 */
 	emitRequest(update) {
-		this.battle.send('request', `${this.id}\n${JSON.stringify(update)}`);
+		this.battle.send('sideupdate', `${this.id}\n|request|${JSON.stringify(update)}`);
 	}
 
 	/**
