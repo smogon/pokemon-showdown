@@ -1603,13 +1603,13 @@ class Battle extends Dex.ModdedDex {
 							if (this.firstStaleWarned && pokemon.isStale < 2) {
 								switch (pokemon.isStaleSource) {
 								case 'struggle':
-									this.add('html', Chat.html`<div class="broadcast-red">${pokemon.name} isn\'t losing HP from Struggle. If this continues, it will be classified as being in an endless loop.</div>`);
+									this.add('bigerror', `${pokemon.name} isn't losing HP from Struggle. If this continues, it will be classified as being in an endless loop`);
 									break;
 								case 'drag':
-									this.add('html', Chat.html`<div class="broadcast-red">${pokemon.name} isn\'t losing PP or HP from being forced to switch. If this continues, it will be classified as being in an endless loop.</div>`);
+									this.add('bigerror', `${pokemon.name} isn't losing PP or HP from being forced to switch. If this continues, it will be classified as being in an endless loop`);
 									break;
 								case 'switch':
-									this.add('html', Chat.html`<div class="broadcast-red">${pokemon.name} isn\'t losing PP or HP from repeatedly switching. If this continues, it will be classified as being in an endless loop.</div>`);
+									this.add('bigerror', `${pokemon.name} isn't losing PP or HP from repeatedly switching. If this continues, it will be classified as being in an endless loop`);
 									break;
 								}
 							}
@@ -1623,7 +1623,7 @@ class Battle extends Dex.ModdedDex {
 							pokemon.isStale++;
 							pokemon.isStaleSource = 'ppstall';
 							if (this.firstStaleWarned && pokemon.isStale < 2) {
-								this.add('html', Chat.html`<div class="broadcast-red">${pokemon.name} isn\'t losing PP or HP. If it keeps on not losing PP or HP, it will be classified as being in an endless loop.</div>`);
+								this.add('bigerror', `${pokemon.name} isn't losing PP or HP. If it keeps on not losing PP or HP, it will be classified as being in an endless loop.`);
 							}
 						}
 						pokemon.isStaleCon = 0;
@@ -1655,7 +1655,7 @@ class Battle extends Dex.ModdedDex {
 		const ruleTable = this.getRuleTable(this.getFormat());
 		if (ruleTable.has('endlessbattleclause')) {
 			if (oneStale) {
-				let activationWarning = `<br />If all active Pok&eacute;mon go in an endless loop, Endless Battle Clause will activate.`;
+				let activationWarning = ` - If all active Pok&eacute;mon go in an endless loop, Endless Battle Clause will activate.`;
 				if (allStale) activationWarning = ``;
 				let loopReason = ``;
 				switch (oneStale.isStaleSource) {
@@ -1681,7 +1681,7 @@ class Battle extends Dex.ModdedDex {
 					loopReason = `: its PP overflowed`;
 					break;
 				}
-				this.add('html', Chat.html`<div class="broadcast-red">${oneStale.name} is in an endless loop${loopReason}.${activationWarning}</div>`);
+				this.add('bigerror', `${oneStale.name} is in an endless loop${loopReason}.${activationWarning}`);
 				oneStale.staleWarned = true;
 				this.firstStaleWarned = true;
 			}
@@ -1719,14 +1719,14 @@ class Battle extends Dex.ModdedDex {
 					return;
 				}
 				const turnsLeftText = (turnsLeft === 1 ? `1 turn` : `${turnsLeft} turns`);
-				this.add('html', `<div class="broadcast-red">You will auto-tie if the battle doesn't end in ${turnsLeftText} (on turn 1000).</div>`);
+				this.add('bigerror', `You will auto-tie if the battle doesn't end in ${turnsLeftText} (on turn 1000).`);
 			}
 		} else {
 			if (allStale && !this.staleWarned) {
 				this.staleWarned = true;
-				this.add('html', `<div class="broadcast-red">If this format had Endless Battle Clause, it would have activated.</div>`);
+				this.add('bigerror', `If this format had Endless Battle Clause, it would have activated.`);
 			} else if (oneStale) {
-				this.add('html', Chat.html`<div class="broadcast-red">${oneStale.name} is in an endless loop.</div>`);
+				this.add('bigerror', `${oneStale.name} is in an endless loop.`);
 				oneStale.staleWarned = true;
 			}
 		}
