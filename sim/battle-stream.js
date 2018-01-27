@@ -48,10 +48,10 @@ class BattleStream extends Streams.ObjectReadWriteStream {
 				if (require('./../lib/crashlogger')(err, 'A battle', {
 					message: message,
 				}) === 'lockdown') {
-					let ministack = Chat.escapeHTML(err.stack).split("\n").slice(0, 2).join("<br />");
-					this.push(`update\n|html|<div class="broadcast-red"><b>A BATTLE PROCESS HAS CRASHED:</b> ${ministack}</div>`);
+					let ministack = ('' + err.stack).split("\n").slice(0, 2).join("|");
+					this.push(`update\n|bigerror|A BATTLE PROCESS HAS CRASHED: ${ministack}`);
 				} else {
-					this.push(`update\n|html|<div class="broadcast-red"><b>The battle crashed!</b><br />Don't worry, we're working on fixing it.</div>`);
+					this.push(`update\n|bigerror|The battle crashed!|Don't worry, we're working on fixing it.`);
 				}
 			}
 		} else {
