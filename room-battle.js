@@ -326,9 +326,6 @@ class BattleTimer {
 }
 
 /**
- * @typedef {'p1' | 'p2'} PlayerSlot
- */
-/**
  * @typedef {{rqid: number, request: string, isWait: 'cantUndo' | true | false, choice: string}} BattleRequestTracker
  */
 

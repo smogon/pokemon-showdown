@@ -2,7 +2,6 @@
 
 const assert = require('assert');
 const Dex = require('./../sim/dex');
-const PRNG = require('./../sim/prng');
 const Sim = require('./../sim');
 
 const cache = new Map();
@@ -103,17 +102,13 @@ class TestTools {
 			options = {};
 		}
 		if (!options) options = {};
-		// If a seed for the pseudo-random number generator is not provided,
-		// a default seed (guaranteed to be the same across test executions)
-		// will be used. The default seed is intentionally tuned
-		let prng = new PRNG(options.seed || DEFAULT_SEED);
 		const format = this.getFormat(options);
-		const battle = Sim.construct(
-			format.id,
-			undefined,
-			undefined,
-			prng
-		);
+		const battle = new Sim.Battle(format.id, {
+			// If a seed for the pseudo-random number generator is not provided,
+			// a default seed (guaranteed to be the same across test executions)
+			// will be used.
+			seed: options.seed || DEFAULT_SEED,
+		});
 		battle.LEGACY_API_DO_NOT_USE = true;
 		if (teams) {
 			for (let i = 0; i < teams.length; i++) {

@@ -24,12 +24,9 @@ class PRNG {
 	 * @param {PRNGSeed} [seed]
 	 */
 	constructor(seed = PRNG.generateSeed()) {
-		/** @type {PRNGSeed} */
-		// @ts-ignore TypeScript bug
-		this.initialSeed = seed.slice(); // make a copy
-		/** @type {PRNGSeed} */
-		// @ts-ignore TypeScript bug
-		this.seed = seed.slice();
+		this.initialSeed = /** @type {PRNGSeed} */ (seed.slice()); // make a copy
+		/** @type {PRNGSeed} */ // TypeScript bug: can't infer type
+		this.seed = /** @type {PRNGSeed} */ (seed.slice());
 	}
 
 	/**

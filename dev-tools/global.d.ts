@@ -32,6 +32,7 @@ declare global {
 	type ChildProcess = child_process.ChildProcess
 
 	// sim
+	type PlayerSlot = 'p1' | 'p2'
 	const Battle: typeof BattleType
 	const ModdedDex: typeof DexType
 	const Pokemon: typeof PokemonType
