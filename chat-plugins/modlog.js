@@ -233,7 +233,7 @@ function getModlog(connection, roomid = 'global', searchString = '', maxLines = 
 			return connection.popup("Access denied");
 		}
 	} else {
-		if (!user.can('modlog', null, targetRoom)) {
+		if (!user.can('modlog', null, targetRoom) && !user.can('modlog')) {
 			return connection.popup("Access denied");
 		}
 	}
