@@ -574,10 +574,7 @@ class Battle {
 
 		case 'log':
 			this.logData = JSON.parse(lines[1]);
-			break;
-
-		case 'score':
-			this.score = [parseInt(lines[1]), parseInt(lines[2])];
+			this.score = this.logData.score;
 			break;
 		}
 		Monitor.activeIp = null;
