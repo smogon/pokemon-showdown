@@ -888,7 +888,7 @@ class Validator {
 					if (sourceSpeciesid !== babyid) return false;
 				}
 				if (source.startsWith('7E') || source.startsWith('6E')) {
-					if (source.slice(2) !== babyid) return false;
+					if (source.length > 2 && source.slice(2) !== babyid) return false;
 				}
 				return true;
 			});
@@ -989,7 +989,7 @@ class Validator {
 				break;
 			}
 			const checkingPrevo = template.baseSpecies !== species.baseSpecies;
-			if (!babyOnly && checkingPrevo && !sources.length && !sourcesBefore) {
+			if (checkingPrevo && !sources.length && !sourcesBefore) {
 				if (!lsetData.babyOnly || !template.prevo) {
 					babyOnly = template.speciesid;
 				}

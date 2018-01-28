@@ -1531,11 +1531,11 @@ function runLearn(target, cmd) {
 		if (sourcesBefore) {
 			buffer += `<li>${(sourcesBefore < gen ? "Gen " + sourcesBefore + " or earlier" : "anywhere") + " (all moves are level-up/tutor/TM/HM in Gen " + Math.min(gen, sourcesBefore) + (sourcesBefore < gen ? " to " + gen : "")})`;
 		}
-		if (lsetData.babyOnly) {
+		if (lsetData.babyOnly && sourcesBefore) {
 			buffer += `<li>must be obtained as ` + Dex.getTemplate(lsetData.babyOnly).species;
 		}
 		buffer += "</ul>";
-	} else if (targets.length > 1) {
+	} else if (targets.length > 1 || problems.length > 1) {
 		buffer += ` because:<ul class="message-learn-list">`;
 		buffer += `<li>` + problems.join(`</li><li>`) + `</li>`;
 		buffer += `</ul>`;
