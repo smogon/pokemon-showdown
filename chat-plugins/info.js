@@ -428,7 +428,10 @@ exports.commands = {
 				case 'pokemon':
 					let template = mod.getTemplate(newTarget.name);
 					let tier = template.tier;
-					if (room.id === 'smogondoubles' || ['gen7doublesou', 'gen7doublesubers', 'gen7doublesuu'].includes(Dex.getFormat(room.battle).id)) tier = template.doublesTier;
+					if (room && (room.id === 'smogondoubles' ||
+						['gen7doublesou', 'gen7doublesubers', 'gen7doublesuu'].includes(room.battle && room.battle.format))) {
+						tier = template.doublesTier;
+					}
 					buffer += `|raw|${Chat.getDataPokemonHTML(template, mod.gen, tier)}\n`;
 					break;
 				case 'item':
