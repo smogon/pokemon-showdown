@@ -939,9 +939,9 @@ function createTournament(room, format, generator, playerCap, isRated, args, out
 		output.errorReply("Valid formats: " + Object.values(Dex.formats).filter(f => f.tournamentShow).map(format => format.name).join(", "));
 		return;
 	}
-		switch (generator) {
-		case 'elim': generator = 'elimination'; break;
-		case 'rr': generator = 'roundrobin'; break;
+	switch (generator) {
+	case 'elim': generator = 'elimination'; break;
+	case 'rr': generator = 'roundrobin'; break;
 	}
 	if (!TournamentGenerators[toId(generator)]) {
 		output.errorReply(generator + " is not a valid type.");
