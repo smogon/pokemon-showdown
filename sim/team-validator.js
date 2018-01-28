@@ -552,7 +552,6 @@ class Validator {
 			// Every source is restricted
 			let legal = false;
 			for (const source of lsetData.sources) {
-				// @ts-ignore TypeScript overload syntax bug
 				if (this.validateSource(set, source, template)) continue;
 				legal = true;
 				break;
@@ -562,7 +561,6 @@ class Validator {
 				if (lsetData.sources.length > 1) {
 					problems.push(`${name} has an event-exclusive move that it doesn't qualify for (only one of several ways to get the move will be listed):`);
 				}
-				// @ts-ignore TypeScript overload syntax bug
 				let eventProblems = this.validateSource(set, lsetData.sources[0], template, ` because it has a move only available`);
 				// @ts-ignore TypeScript overload syntax bug
 				if (eventProblems) problems.push(...eventProblems);
@@ -577,6 +575,9 @@ class Validator {
 				legal = true;
 				if (eventData.gender) set.gender = eventData.gender;
 				break;
+			}
+			if (!legal && template.id === 'celebi' && dex.gen >= 7 && !this.validateSource(set, '7V', template)) {
+				legal = true;
 			}
 			if (!legal) {
 				if (eventPokemon.length === 1) {
@@ -665,8 +666,8 @@ class Validator {
 	 * @param {PokemonSet} set
 	 * @param {PokemonSource} source
 	 * @param {Template} template
-	 * @param {string} because
-	 * @param {string} from
+	 * @param {string} [because]
+	 * @param {string} [from]
 	 */
 	validateSource(set, source, template, because, from) {
 		let eventData = /** @type {?EventInfo} */ (null);
@@ -684,7 +685,7 @@ class Validator {
 				generation: 2,
 				perfectIVs: isRestricted ? 5 : 3,
 				isHidden: true,
-				shiny: isRestricted ? undefined : 1,
+				shiny: template.speciesid === 'mew' ? undefined : 1,
 				from: 'Gen 1-2 Virtual Console transfer',
 			};
 		} else if (source.charAt(1) === 'D') {
