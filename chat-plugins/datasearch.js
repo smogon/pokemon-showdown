@@ -1456,7 +1456,6 @@ function runLearn(target, cmd) {
 
 	let template = Dex.getTemplate(targets.shift());
 	let move = {};
-	let problem;
 	let all = (cmd === 'learnall');
 	if (cmd === 'learn5') lsetData.set.level = 5;
 
@@ -1472,6 +1471,8 @@ function runLearn(target, cmd) {
 		return {error: "You must specify at least one move."};
 	}
 
+	const validator = TeamValidator(formatid);
+	let lsetProblem;
 	for (const arg of targets) {
 		move = Dex.getMove(arg);
 		if (!move.exists || move.id === 'magikarpsrevenge') {
@@ -1480,12 +1481,16 @@ function runLearn(target, cmd) {
 		if (move.gen > gen) {
 			return {error: `${move.name} didn't exist yet in generation ${gen}.`};
 		}
-		problem = TeamValidator(formatid).checkLearnset(move, template.species, lsetData);
-		if (problem) break;
+		lsetProblem = validator.checkLearnset(move, template, lsetData);
+		if (lsetProblem) {
+			lsetProblem.moveName = move.name;
+			break;
+		}
 	}
+	let problems = validator.reconcileLearnset(template, lsetData, lsetProblem);
 	let buffer = `In ${formatName}, `;
-	buffer += "" + template.name + (problem ? " <span class=\"message-learn-cannotlearn\">can't</span> learn " : " <span class=\"message-learn-canlearn\">can</span> learn ") + (targets.length > 1 ? "these moves" : move.name);
-	if (!problem) {
+	buffer += "" + template.name + (problems ? " <span class=\"message-learn-cannotlearn\">can't</span> learn " : " <span class=\"message-learn-canlearn\">can</span> learn ") + (targets.length > 1 ? "these moves" : move.name);
+	if (!problems) {
 		let sourceNames = {E: "egg", S: "event", D: "dream world", V: "virtual console transfer from gen 1-2", X: "egg, traded back", Y: "event, traded back"};
 		let sourcesBefore = lsetData.sourcesBefore;
 		if (lsetData.sources || sourcesBefore < gen) buffer += " only when obtained";
@@ -1526,7 +1531,14 @@ function runLearn(target, cmd) {
 		if (sourcesBefore) {
 			buffer += `<li>${(sourcesBefore < gen ? "Gen " + sourcesBefore + " or earlier" : "anywhere") + " (all moves are level-up/tutor/TM/HM in Gen " + Math.min(gen, sourcesBefore) + (sourcesBefore < gen ? " to " + gen : "")})`;
 		}
+		if (lsetData.babyOnly) {
+			buffer += `<li>must be obtained as ` + Dex.getTemplate(lsetData.babyOnly).species;
+		}
 		buffer += "</ul>";
+	} else if (targets.length > 1) {
+		buffer += ` because:<ul class="message-learn-list">`;
+		buffer += `<li>` + problems.join(`</li><li>`) + `</li>`;
+		buffer += `</ul>`;
 	}
 	return {reply: buffer};
 }
