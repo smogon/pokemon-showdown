@@ -19,7 +19,7 @@ const child_process = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
-// Make sure we're Node 8+
+// # Make sure we're Node 8+
 
 try {
 	eval('{ let a = async () => {}; }');
@@ -28,8 +28,8 @@ try {
 	process.exit(1);
 }
 
-// Make sure our dependencies are available, and install them if they
-// aren't
+// # Make sure our dependencies are available, and install them if they
+// # aren't
 
 try {
 	require.resolve('sockjs');
@@ -38,8 +38,8 @@ try {
 	child_process.execSync('npm install --production', {stdio: 'inherit'});
 }
 
-// Make sure config.js exists. If not, copy it over synchronously from
-// config-example.js, since it's needed before we can start the server
+// # Make sure config.js exists. If not, copy it over synchronously from
+// # config-example.js, since it's needed before we can start the server
 
 try {
 	require.resolve('./config/config');
@@ -67,13 +67,114 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 
 	require('module')._load('./app', module, true);
 } else switch (process.argv[2]) {
+	case 'help':
+	case 'h':
+	case '?':
+	case '-h':
+	case '--help':
+	case '-?':
+		console.log('pokemon-showdown [PORT]');
+		console.log('');
+		console.log('  Starts a PS server on the specified port');
+		console.log('  (Defaults to the port setting in config/config.js)');
+		console.log('  (The port setting in config/config.js defaults to 8000)');
+		console.log('');
+		console.log('pokemon-showdown generate-team [FORMAT-ID [RANDOM-SEED]]');
+		console.log('');
+		console.log('  Generates a random team, and writes it to stdout in packed team format');
+		console.log('  (Format defaults to "gen7randombattle")');
+		console.log('');
+		console.log('pokemon-showdown validate-team [FORMAT-ID]');
+		console.log('');
+		console.log('  Reads a team from stdin, and validates it');
+		console.log('  If valid: exits with code 0');
+		console.log('  If invalid: writes errors to stderr, exits with code 1');
+		console.log('');
+		console.log('pokemon-showdown unpack-team');
+		console.log('');
+		console.log('  Reads a team from stdin, writes the unpacked JSON to stdout');
+		console.log('');
+		console.log('pokemon-showdown pack-team');
+		console.log('');
+		console.log('  Reads a JSON team from stdin, writes the packed team to stdout');
+		console.log('  NOTE for all team-processing functions: We can only handle JSON teams');
+		console.log('  and packed teams; the PS server is incapable of processing exported');
+		console.log('  teams.');
+		console.log('');
+		console.log('pokemon-showdown help');
+		console.log('');
+		console.log('  Displays this reference');
+		break;
 	case 'generate-team':
-		const Dex = require('./sim/dex');
-		global.toId = Dex.getId;
-		const seed = process.argv[4] ? process.argv[4].split(',').map(Number) : undefined;
-		console.log(Dex.packTeam(Dex.generateTeam(process.argv[3], seed)));
+		{
+			const Dex = require('./sim/dex');
+			global.toId = Dex.getId;
+			const seed = process.argv[4] ? process.argv[4].split(',').map(Number) : undefined;
+			console.log(Dex.packTeam(Dex.generateTeam(process.argv[3], seed)));
+		}
+		break;
+	case 'validate-team':
+		{
+			const Dex = require('./sim/dex');
+			const TeamValidator = require('./sim/team-validator');
+			const validator = TeamValidator(process.argv[3]);
+			const Streams = require('./lib/streams');
+			const stdin = new Streams.ReadStream(process.stdin);
+
+			stdin.readLine().then(function (textTeam) {
+				try {
+					const team = Dex.fastUnpackTeam(textTeam);
+					const result = validator.validateTeam(team);
+					if (result) {
+						console.error(result.join('\n'));
+						process.exit(1);
+					}
+					process.exit(0);
+				} catch (e) {
+					console.error(e);
+					process.exit(1);
+				}
+			});
+		}
+		break;
+	case 'unpack-team':
+		{
+			const Dex = require('./sim/dex');
+			const Streams = require('./lib/streams');
+			const stdin = new Streams.ReadStream(process.stdin);
+
+			stdin.readLine().then(function (packedTeam) {
+				try {
+					const unpackedTeam = Dex.fastUnpackTeam(packedTeam);
+					console.log(JSON.stringify(unpackedTeam));
+					process.exit(0);
+				} catch (e) {
+					console.error(e);
+					process.exit(1);
+				}
+			});
+		}
+		break;
+	case 'pack-team':
+		{
+			const Dex = require('./sim/dex');
+			const Streams = require('./lib/streams');
+			const stdin = new Streams.ReadStream(process.stdin);
+
+			stdin.readLine().then(function (unpackedTeam) {
+				try {
+					const packedTeam = Dex.packTeam(JSON.parse(unpackedTeam));
+					console.log(packedTeam);
+					process.exit(0);
+				} catch (e) {
+					console.error(e);
+					process.exit(1);
+				}
+			});
+		}
 		break;
 	default:
 		console.error('Unrecognized command: ' + process.argv[2]);
+		console.error('Use `pokemon-showdown help` for help');
 		process.exit(1);
 }

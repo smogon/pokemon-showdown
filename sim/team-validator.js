@@ -8,6 +8,8 @@
  */
 
 'use strict';
+const Dex = require('./dex');
+const toId = Dex.getId;
 
 /**
  * Keeps track of how a pokemon with a given set might be obtained.
