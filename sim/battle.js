@@ -7,6 +7,7 @@
 'use strict';
 
 const Dex = require('./dex');
+global.toId = Dex.getId;
 const Data = require('./dex-data');
 const PRNG = require('./prng');
 const Side = require('./side');
@@ -77,21 +78,30 @@ const Pokemon = require('./pokemon');
  */
 /** @typedef {MoveAction | SwitchAction | TeamAction | FieldAction | PokemonAction} Action */
 
+
+/**
+ * @typedef {Object} PlayerOptions
+ * @property {string} [name]
+ * @property {string} [avatar]
+ * @property {string | PokemonSet[]?} [team]
+ */
 /**
  * @typedef {Object} BattleOptions
+ * @property {string} formatid Format ID
  * @property {(type: string, data: string | string[]) => void} [send] Output callback
  * @property {PRNG} [prng] PRNG override (you usually don't need this, just pass a seed)
  * @property {[number, number, number, number]} [seed] PRNG seed
  * @property {boolean | string} [rated] Rated string
+ * @property {PlayerOptions} [p1] Player 1 data
+ * @property {PlayerOptions} [p2] Player 2 data
  */
 
 class Battle extends Dex.ModdedDex {
 	/**
-	 * @param {string} formatid
 	 * @param {BattleOptions} options
 	 */
-	constructor(formatid, options = {}) {
-		let format = Dex.getFormat(formatid, true);
+	constructor(options) {
+		let format = Dex.getFormat(options.formatid, true);
 		super(format.mod);
 		Object.assign(this, this.data.Scripts);
 
@@ -99,6 +109,8 @@ class Battle extends Dex.ModdedDex {
 
 		/** @type {string[]} */
 		this.log = [];
+		this.sentLogPos = 0;
+		this.sentEnd = false;
 		/** @type {Side[]} */
 		// @ts-ignore
 		this.sides = [null, null];
@@ -111,7 +123,7 @@ class Battle extends Dex.ModdedDex {
 		this.pseudoWeather = {};
 
 		this.format = format.id;
-		this.formatid = formatid;
+		this.formatid = options.formatid;
 		this.cachedFormat = format;
 		this.formatData = {id: format.id};
 
@@ -125,7 +137,6 @@ class Battle extends Dex.ModdedDex {
 
 		this.gameType = (format.gameType || 'singles');
 		this.reportExactHP = !!format.debug;
-		this.replayExactHP = !format.team;
 
 		/** @type {Action[]} */
 		this.queue = [];
@@ -173,6 +184,13 @@ class Battle extends Dex.ModdedDex {
 		this.prng = options.prng || new PRNG(options.seed || undefined);
 		this.prngSeed = this.prng.startingSeed.slice();
 		this.teamGenerator = null;
+
+		if (options.p1) {
+			this.setPlayer('p1', options.p1);
+		}
+		if (options.p2) {
+			this.setPlayer('p2', options.p2);
+		}
 	}
 
 	/**
@@ -1769,6 +1787,10 @@ class Battle extends Dex.ModdedDex {
 		this.p2.foe = this.p1;
 		this.p1.foe = this.p2;
 
+		for (const side of this.sides) {
+			this.add('teamsize', side.id, side.pokemon.length);
+		}
+
 		this.add('gametype', this.gameType);
 		this.add('gen', this.gen);
 
@@ -3142,16 +3164,24 @@ class Battle extends Dex.ModdedDex {
 	}
 
 	/**
-	 * @param {(string | number | ((side: true | Side | null) => string) | AnyObject)[]} parts
+	 * @param {(string | number | ((side: Side | boolean) => string) | AnyObject)[]} parts
 	 */
 	add(...parts) {
 		if (!parts.some(part => typeof part === 'function')) {
 			this.log.push(`|${parts.join('|')}`);
 			return;
 		}
+		if (this.reportExactHP) {
+			parts = parts.map(part => {
+				if (typeof part !== 'function') return part;
+				return part(true);
+			});
+			this.log.push(`|${parts.join('|')}`);
+			return;
+		}
 		this.log.push('|split');
-		/** @type {(true | Side | null)[]} */
-		let sides = [null, this.sides[0], this.sides[1], true];
+		/** @type {(Side | boolean)[]} */
+		let sides = [false, this.sides[0], this.sides[1], true];
 		for (const side of sides) {
 			let sideUpdate = '|' + parts.map(part => {
 				if (typeof part !== 'function') return part;
@@ -3208,18 +3238,22 @@ class Battle extends Dex.ModdedDex {
 	// players
 
 	/**
-	 * @param {?AnyObject[]} team
+	 * @param {?PokemonSet[] | string} team
+	 * @return {PokemonSet[]}
 	 */
 	getTeam(team) {
 		const format = this.getFormat();
-		if (!format.team && team) return team;
+		if (typeof team === 'string') team = Dex.fastUnpackTeam(team);
+		if (!format.team && team) {
+			return team;
+		}
 
 		if (!this.teamGenerator) {
 			this.teamGenerator = this.getTeamGenerator(format);
 		} else {
 			this.teamGenerator.prng = new PRNG();
 		}
-		team = this.teamGenerator.generateTeam();
+		team = /** @type {PokemonSet[]} */ (this.teamGenerator.generateTeam());
 		this.prngSeed.push(...this.teamGenerator.prng.startingSeed);
 
 		return team;
@@ -3227,121 +3261,73 @@ class Battle extends Dex.ModdedDex {
 
 	/**
 	 * @param {'p1' | 'p2'} slot
+	 * @param {PlayerOptions} options
+	 */
+	setPlayer(slot, options) {
+		let side;
+		let didSomething = true;
+		if (!this[slot]) {
+			// create player
+			const slotNum = (slot === 'p2' ? 1 : 0);
+			const team = this.getTeam(options.team || null);
+			side = new Side(options.name || `Player ${slotNum + 1}`, this, slotNum, team);
+			if (options.avatar) side.avatar = '' + options.avatar;
+			this[slot] = side;
+			this.sides[slotNum] = side;
+		} else {
+			// edit player
+			side = this[slot];
+			didSomething = false;
+			if (options.name && side.name !== options.name) {
+				side.name = options.name;
+				didSomething = true;
+			}
+			if (options.avatar && side.avatar !== '' + options.avatar) {
+				side.avatar = '' + options.avatar;
+				didSomething = true;
+			}
+			if (options.team) throw new Error(`Player ${slot} already has a team!`);
+		}
+		if (!didSomething) return;
+		this.add('player', side.id, side.name, side.avatar);
+		this.start();
+	}
+
+	/**
+	 * @deprecated
+	 * @param {'p1' | 'p2'} slot
 	 * @param {string} name
 	 * @param {string} avatar
-	 * @param {?AnyObject[]} team
+	 * @param {?PokemonSet[] | string} team
 	 */
 	join(slot, name, avatar, team) {
-		if (this.p1 && this.p2) return false;
-		if ((this.p1 && this.p1.name === name) || (this.p2 && this.p2.name === name)) return false;
+		this.setPlayer(slot, {
+			name: name,
+			avatar: avatar,
+			team: team,
+		});
 
-		let player = null;
-		if (slot !== 'p1' && slot !== 'p2') slot = (this.p1 ? 'p2' : 'p1');
-		let slotNum = (slot === 'p2' ? 1 : 0);
-		if (this.started) {
-			this[slot].name = name;
-		} else {
-			//console.log("NEW SIDE: " + name);
-			team = this.getTeam(team);
-			this[slot] = new Side(name, this, slotNum, team);
-			this.sides[slotNum] = this[slot];
-		}
-		player = this[slot];
-
-		if (avatar) player.avatar = avatar;
-		this.add('player', player.id, player.name, avatar);
-		if (!this.started) this.add('teamsize', player.id, player.pokemon.length);
-
-		this.start();
-		return player;
+		return this[slot];
 	}
 
-	/**
-	 * This function is called by this process's 'message' event.
-	 * @param {string[]} data
-	 * @param {string} [more]
-	 */
-	async receive(data, more) {
-		this.messageLog.push(data.join(' '));
-		let logPos = this.log.length;
-		let alreadyEnded = this.ended;
-		switch (data[0]) {
-		case 'join': {
-			let team = null;
-			if (more) team = Dex.fastUnpackTeam(more);
-			this.join(/** @type {PlayerSlot} */ (data[1]), data[2], data[3], team);
-			break;
-		}
+	sendUpdates() {
+		if (this.sentLogPos >= this.log.length) return;
+		this.send('update', this.log.slice(this.sentLogPos));
+		this.sentLogPos = this.log.length;
 
-		case 'win':
-		case 'tie':
-			this.win(data[1]);
-			break;
-
-		case 'tiebreak':
-			this.tiebreak();
-			break;
-
-		case 'choose':
-			this.choose(data[1], data[2]);
-			break;
-
-		case 'undo':
-			this.undoChoice(data[1]);
-			break;
-
-		case 'eval': {
-			/* eslint-disable no-eval, no-unused-vars */
-			let battle = this;
-			let p1 = this.p1;
-			let p2 = this.p2;
-			let p1active = p1 ? p1.active[0] : null;
-			let p2active = p2 ? p2.active[0] : null;
-			let target = data.slice(1).join('|').replace(/\f/g, '\n');
-			this.add('', '>>> ' + target);
-			try {
-				let result = eval(target);
-				if (result && result.then) {
-					result = 'Promise -> ' + Chat.stringify(await result);
-				} else {
-					result = Chat.stringify(result);
-				}
-				result = result.replace(/\n/g, '\n||');
-				this.add('', '<<< ' + result);
-			} catch (e) {
-				this.add('', '<<< error: ' + e.message);
-			}
-			/* eslint-enable no-eval, no-unused-vars */
-			break;
-		}
-
-		default:
-		// unhandled
-		}
-
-		this.sendUpdates(logPos, alreadyEnded);
-	}
-
-	/**
-	 * @param {number} logPos
-	 * @param {boolean} [alreadyEnded]
-	 */
-	sendUpdates(logPos, alreadyEnded = false) {
-		if (this.log.length > logPos) {
-			if (alreadyEnded !== undefined && this.ended && !alreadyEnded) {
-				let log = {
-					winner: this.winner,
-					seed: this.prngSeed,
-					turns: this.turn,
-					p1: this.p1.name,
-					p2: this.p2.name,
-					p1team: this.p1.team,
-					p2team: this.p2.team,
-					score: [this.p1.pokemonLeft, this.p2.pokemonLeft],
-				};
-				this.send('log', JSON.stringify(log));
-			}
-			this.send('update', this.log.slice(logPos));
+		if (!this.sentEnd && this.ended) {
+			let log = {
+				winner: this.winner,
+				seed: this.prngSeed,
+				turns: this.turn,
+				p1: this.p1.name,
+				p2: this.p2.name,
+				p1team: this.p1.team,
+				p2team: this.p2.team,
+				score: [this.p1.pokemonLeft, this.p2.pokemonLeft],
+			};
+			this.send('end', JSON.stringify(log));
+			this.sentEnd = true;
 		}
 	}
 

@@ -1186,10 +1186,14 @@ class ModdedDex {
 
 	/**
 	 * @param {string} buf
-	 * @return {?PokemonSet[]}
+	 * @return {PokemonSet[]?}
 	 */
 	fastUnpackTeam(buf) {
 		if (!buf) return null;
+		if (typeof buf !== 'string') return buf;
+		if (buf.charAt(0) === '[' && buf.charAt(buf.length - 1) === ']') {
+			buf = this.packTeam(JSON.parse(buf));
+		}
 
 		let team = [];
 		let i = 0, j = 0;

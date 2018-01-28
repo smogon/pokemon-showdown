@@ -1,4 +1,5 @@
 import * as BattleType from './../sim/battle'
+import * as BattleStreamType from './../sim/battle-stream'
 import * as DataType from './../sim/dex-data'
 import * as DexType from './../sim/dex'
 import * as PokemonType from './../sim/pokemon'
@@ -40,6 +41,7 @@ declare global {
 	const Side: typeof SideType
 	const TeamValidator: typeof TeamValidatorType
 	const Validator: typeof TeamValidatorType.Validator
+	const BattleStream: typeof BattleStreamType.BattleStream
 
 	// dex data
 	const Ability: typeof DataType.Ability
