@@ -600,7 +600,7 @@ class Validator {
 			const isCelebi = template.speciesid === 'celebi';
 			eventData = {
 				generation: 2,
-				level: isMew ? 5 : isCelebi ? 30 : undefined),
+				level: isMew ? 5 : isCelebi ? 30 : undefined,
 				perfectIVs: isMew || isCelebi ? 5 : 3,
 				isHidden: true,
 				shiny: isMew ? undefined : 1,
