@@ -934,6 +934,7 @@ exports.BattleFormatsData = {
 	gligar: {
 		inherit: true,
 		tier: "NU",
+		doublesTier: "LC",
 	},
 	gliscor: {
 		randomBattleMoves: ["swordsdance", "earthquake", "roost", "stoneedge", "taunt", "uturn", "toxic", "stealthrock"],
