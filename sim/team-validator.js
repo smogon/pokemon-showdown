@@ -599,9 +599,11 @@ class Validator {
 			const isRestricted = (template.speciesid === 'mew' || template.speciesid === 'celebi');
 			eventData = {
 				generation: 2,
+				level: template.speciesid === 'mew' ? 5 : (template.speciesid === 'celebi' ? 30 : undefined),
 				perfectIVs: isRestricted ? 5 : 3,
 				isHidden: true,
 				shiny: template.speciesid === 'mew' ? undefined : 1,
+				pokeball: 'pokeball',
 				from: 'Gen 1-2 Virtual Console transfer',
 			};
 		} else if (source.charAt(1) === 'D') {
