@@ -1583,7 +1583,7 @@ exports.BattleFormatsData = {
 	carvanha: {
 		inherit: true,
 		randomBattleMoves: ["protect", "hydropump", "icebeam", "waterfall", "crunch", "hiddenpowergrass", "aquajet"],
-		tier: "LC Uber",
+		tier: "LC",
 	},
 	sharpedo: {
 		randomBattleMoves: ["protect", "hydropump", "icebeam", "crunch", "earthquake", "waterfall", "hiddenpowergrass", "aquajet"],
