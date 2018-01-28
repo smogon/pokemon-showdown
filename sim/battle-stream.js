@@ -14,10 +14,41 @@
 const Streams = require('./../lib/streams');
 const Battle = require('./battle');
 
+/**
+ * Like string.split(delimiter), but only recognizes the first `limit`
+ * delimiters (default 1).
+ *
+ * `"1 2 3 4".split(" ", 2) => ["1", "2"]`
+ *
+ * `Chat.splitFirst("1 2 3 4", " ", 1) => ["1", "2 3 4"]`
+ *
+ * Returns an array of length exactly limit + 1.
+ *
+ * @param {string} str
+ * @param {string} delimiter
+ * @param {number} [limit]
+ */
+function splitFirst(str, delimiter, limit = 1) {
+	let splitStr = /** @type {string[]} */ ([]);
+	while (splitStr.length < limit) {
+		let delimiterIndex = str.indexOf(delimiter);
+		if (delimiterIndex >= 0) {
+			splitStr.push(str.slice(0, delimiterIndex));
+			str = str.slice(delimiterIndex + delimiter.length);
+		} else {
+			splitStr.push(str);
+			str = '';
+		}
+	}
+	splitStr.push(str);
+	return splitStr;
+}
+
 class BattleStream extends Streams.ObjectReadWriteStream {
 	constructor() {
 		super();
-		/** @type {Battle?} */
+		/** @type {Battle} */
+		// @ts-ignore
 		this.battle = null;
 	}
 	/**
@@ -25,83 +56,128 @@ class BattleStream extends Streams.ObjectReadWriteStream {
 	 */
 	_write(message) {
 		let startTime = Date.now();
-		let nlIndex = message.indexOf("\n");
-		let more = '';
-		if (nlIndex > 0) {
-			more = message.substr(nlIndex + 1);
-			message = message.substr(0, nlIndex);
+		for (const line of message.split('\n')) {
+			if (line.charAt(0) === '>') this._writeLine(line.slice(1));
 		}
-		let data = message.split('|');
-		if (data[0] === 'init') {
-			const id = data[1];
-			try {
-				const battle = new Battle(data[2], {
-					rated: data[3],
-					send: (type, data) => {
-						if (Array.isArray(data)) data = data.join("\n");
-						this.push(`${type}\n${data}`);
-					},
-				});
-				battle.id = id;
-				this.battle = battle;
-			} catch (err) {
-				if (require('./../lib/crashlogger')(err, 'A battle', {
-					message: message,
-				}) === 'lockdown') {
-					let ministack = ('' + err.stack).split("\n").slice(0, 2).join("|");
-					this.push(`update\n|bigerror|A BATTLE PROCESS HAS CRASHED: ${ministack}`);
-				} else {
-					this.push(`update\n|bigerror|The battle crashed!|Don't worry, we're working on fixing it.`);
-				}
-			}
-		} else {
-			let battle = this.battle;
-			if (battle) {
-				let prevRequest = battle.currentRequest;
-				try {
-					battle.receive(data, more);
-				} catch (err) {
-					require('./../lib/crashlogger')(err, 'A battle', {
-						message: message,
-						currentRequest: prevRequest,
-						log: '\n' + battle.log.join('\n').replace(/\n\|split\n[^\n]*\n[^\n]*\n[^\n]*\n/g, '\n'),
-					});
-
-					let logPos = battle.log.length;
-					battle.add('html', `<div class="broadcast-red"><b>The battle crashed</b><br />You can keep playing but it might crash again.</div>`);
-					let nestedError;
-					try {
-						battle.makeRequest(prevRequest);
-					} catch (e) {
-						nestedError = e;
-					}
-					battle.sendUpdates(logPos);
-					if (nestedError) {
-						throw nestedError;
-					}
-				}
-			} else if (data[1] === 'eval') {
-				try {
-					eval(data[2]);
-				} catch (e) {}
-			}
-		}
+		if (this.battle) this.battle.sendUpdates();
 		let deltaTime = Date.now() - startTime;
 		if (deltaTime > 1000) {
-			console.log(`[slow battle] ${deltaTime}ms - ${message}\\\\${more}`);
+			console.log(`[slow battle] ${deltaTime}ms - ${message}`);
+		}
+	}
+	/**
+	 * @param {string} line
+	 */
+	_writeLine(line) {
+		let [type, message] = splitFirst(line, ' ');
+		switch (type) {
+		case 'start':
+			const options = JSON.parse(message);
+			options.send = (/** @type {string} */ type, /** @type {any} */ data) => {
+				if (Array.isArray(data)) data = data.join("\n");
+				this.push(`${type}\n${data}`);
+			};
+			this.battle = new Battle(options);
+			break;
+		case 'player':
+			const [slot, optionsText] = splitFirst(message, ' ');
+			this.battle.setPlayer(/** @type {PlayerSlot} */ (slot), JSON.parse(optionsText));
+			break;
+		case 'p1':
+		case 'p2':
+			if (message === 'undo') {
+				this.battle.undoChoice(type);
+			} else {
+				this.battle.choose(type, message);
+			}
+			break;
+		case 'forcewin':
+		case 'forcetie':
+			this.battle.win(message);
+			break;
+		case 'tiebreak':
+			this.battle.tiebreak();
+			break;
+		case 'eval':
+			/* eslint-disable no-eval, no-unused-vars */
+			let battle = this.battle;
+			let p1 = battle && battle.p1;
+			let p2 = battle && battle.p2;
+			let p1active = p1 && p1.active[0];
+			let p2active = p2 && p2.active[0];
+			message = message.replace(/\f/g, '\n');
+			battle.add('', '>>> ' + message.replace(/\n/g, '\n||'));
+			try {
+				let result = eval(message);
+				if (result && result.then) {
+					result.then((/** @type {any} */ unwrappedResult) => {
+						unwrappedResult = Chat.stringify(unwrappedResult);
+						battle.add('', 'Promise -> ' + unwrappedResult);
+						battle.sendUpdates();
+					}, (/** @type {Error} */ error) => {
+						battle.add('', '<<< error: ' + error.message);
+						battle.sendUpdates();
+					});
+				} else {
+					result = Chat.stringify(result);
+					result = result.replace(/\n/g, '\n||');
+					battle.add('', '<<< ' + result);
+				}
+			} catch (e) {
+				battle.add('', '<<< error: ' + e.message);
+			}
+			/* eslint-enable no-eval, no-unused-vars */
+			break;
 		}
 	}
 	_end() {
+		// this is in theory synchronous...
+		this.push(null);
 		this._destroy();
 	}
 	_destroy() {
 		if (this.battle) {
 			this.battle.destroy();
 		}
+		// @ts-ignore
 		this.battle = null;
+	}
+}
+
+class BattleTextStream extends Streams.ReadWriteStream {
+	constructor() {
+		super();
+		this.battleStream = new BattleStream();
+		/** @type {string} */
+		this.currentMessage = '';
+		this._listen();
+	}
+	/**
+	 * @param {string | Buffer} message
+	 */
+	_write(message) {
+		this.currentMessage += '' + message;
+		let index = this.currentMessage.lastIndexOf('\n');
+		if (index >= 0) {
+			this.battleStream.write(this.currentMessage.slice(0, index));
+			this.currentMessage = this.currentMessage.slice(index + 1);
+		}
+	}
+	_end() {
+		this.battleStream.end();
+	}
+	async _listen() {
+		/** @type {string?} */
+		let message;
+		while ((message = await this.battleStream.read())) {
+			if (!message.endsWith('\n')) message += '\n';
+			this.push(message + '\n');
+		}
+		this.push(null);
 	}
 }
 
 module.exports = {
 	BattleStream,
+	BattleTextStream,
 };

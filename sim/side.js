@@ -44,13 +44,13 @@ class Side {
 	 * @param {string} name
 	 * @param {Battle} battle
 	 * @param {number} sideNum
-	 * @param {any} team
+	 * @param {PokemonSet[]} team
 	 */
 	constructor(name, battle, sideNum, team) {
 		let sideScripts = battle.data.Scripts.side;
 		if (sideScripts) Object.assign(this, sideScripts);
 
-		this.getChoice = (/**@param {Side} side */side => this.getChoiceInner(side));
+		this.getChoice = (/**@param {Side | boolean} side */side => this.getChoiceInner(side));
 
 		/**@type {Battle} */
 		this.battle = battle;

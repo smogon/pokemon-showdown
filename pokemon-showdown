@@ -9,7 +9,7 @@ true /*
 # can possibly cause a syntax error.
 
 if nodepath="$(command -v node || command -v nodejs)"; then
-	exec "$nodepath" "$0" "$@"
+	exec "$nodepath" "--trace-warnings" "$0" "$@"
 fi
 echo "We require Node.js version 8 or later; Node.js not found"
 exit 1
@@ -90,6 +90,11 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 		console.log('  If valid: exits with code 0');
 		console.log('  If invalid: writes errors to stderr, exits with code 1');
 		console.log('');
+		console.log('pokemon-showdown simulate-battle');
+		console.log('');
+		console.log('  Simulates a battle, taking input to stdin and writing output to stdout');
+		console.log('  Protocol is documented in ');
+		console.log('');
 		console.log('pokemon-showdown unpack-team');
 		console.log('');
 		console.log('  Reads a team from stdin, writes the unpacked JSON to stdout');
@@ -135,6 +140,18 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 					process.exit(1);
 				}
 			});
+		}
+		break;
+	case 'simulate-battle':
+		{
+			const BattleTextStream = require('./sim/battle-stream').BattleTextStream;
+			const Streams = require('./lib/streams');
+			const stdin = new Streams.ReadStream(process.stdin);
+			const stdout = new Streams.WriteStream(process.stdout);
+
+			const battleStream = new BattleTextStream();
+			stdin.pipeTo(battleStream);
+			battleStream.pipeTo(stdout);
 		}
 		break;
 	case 'unpack-team':

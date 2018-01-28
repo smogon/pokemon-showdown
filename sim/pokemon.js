@@ -48,7 +48,7 @@ class Pokemon {
 		if (!this.baseTemplate.exists) {
 			throw new Error(`Unidentified species: ${this.baseTemplate.name}`);
 		}
-		this.species = Dex.getSpecies(set.species);
+		this.species = this.battle.getSpecies(set.species);
 		if (set.name === set.species || !set.name) {
 			set.name = this.baseTemplate.baseSpecies;
 		}
@@ -1420,7 +1420,7 @@ class Pokemon {
 		if (!this.hp) return '0 fnt';
 		let hpstring;
 		// side === true in replays
-		if (side === this.side || this.battle.reportExactHP || (side === true && this.battle.replayExactHP)) {
+		if (side === this.side || side === true) {
 			hpstring = '' + this.hp + '/' + this.maxhp;
 		} else {
 			let ratio = this.hp / this.maxhp;

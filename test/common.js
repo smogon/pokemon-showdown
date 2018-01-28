@@ -103,7 +103,8 @@ class TestTools {
 		}
 		if (!options) options = {};
 		const format = this.getFormat(options);
-		const battle = new Sim.Battle(format.id, {
+		const battle = new Sim.Battle({
+			formatid: format.id,
 			// If a seed for the pseudo-random number generator is not provided,
 			// a default seed (guaranteed to be the same across test executions)
 			// will be used.
