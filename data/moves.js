@@ -16920,7 +16920,10 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		onTryHit: function (target, source) {
-			return target.hasType(source.getTypes());
+			if (!target.hasType(source.getTypes())) {
+				this.add('-immune', target, '[msg]');
+				return null;
+			}
 		},
 		secondary: false,
 		target: "allAdjacent",
