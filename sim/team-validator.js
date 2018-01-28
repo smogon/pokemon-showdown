@@ -596,13 +596,14 @@ class Validator {
 				throw new Error(`${eventTemplate.species} from ${template.species} doesn't have data for event ${source}`);
 			}
 		} else if (source.charAt(1) === 'V') {
-			const isRestricted = (template.speciesid === 'mew' || template.speciesid === 'celebi');
+			const isMew = template.speciesid === 'mew';
+			const isCelebi = template.speciesid === 'celebi';
 			eventData = {
 				generation: 2,
-				level: template.speciesid === 'mew' ? 5 : (template.speciesid === 'celebi' ? 30 : undefined),
-				perfectIVs: isRestricted ? 5 : 3,
+				level: isMew ? 5 : isCelebi ? 30 : undefined),
+				perfectIVs: isMew || isCelebi ? 5 : 3,
 				isHidden: true,
-				shiny: template.speciesid === 'mew' ? undefined : 1,
+				shiny: isMew ? undefined : 1,
 				pokeball: 'pokeball',
 				from: 'Gen 1-2 Virtual Console transfer',
 			};
