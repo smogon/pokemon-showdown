@@ -990,7 +990,7 @@ class Validator {
 			}
 			const checkingPrevo = template.baseSpecies !== species.baseSpecies;
 			if (!babyOnly && checkingPrevo && !sources.length && !sourcesBefore) {
-				if (!lsetBaby.babyOnly || !template.prevo) {
+				if (!lsetData.babyOnly || !template.prevo) {
 					babyOnly = template.speciesid;
 				}
 			}
