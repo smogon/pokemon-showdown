@@ -504,6 +504,7 @@ exports.BattleAbilities = {
 			if (!pokemon.gluttonyFlag && !pokemon.item && this.getItem(pokemon.lastItem).isBerry) {
 				pokemon.gluttonyFlag = true;
 				pokemon.setItem(pokemon.lastItem);
+				pokemon.lastItem = '';
 				this.add("-item", pokemon, pokemon.item, '[from] ability: Gluttony');
 			}
 		},
