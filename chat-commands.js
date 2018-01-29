@@ -3388,6 +3388,27 @@ exports.commands = {
 		`[player] must be a username or number, [pokemon] must be species name or number (not nickname), [move] must be move name`,
 	],
 
+	exportinputlog(/** @type {string} */ target, /** @type {Room?} */ room, /** @type {User} */ user) {
+		if (!room.battle) return this.errorReply(`This command only works in battle rooms`);
+		if (!this.can('forcewin')) return;
+		if (!room.battle.inputLog) {
+			return this.errorReply(`This command only works when the battle has ended. You can end battles with /forcewin`);
+		}
+		room.add(`|bigerror|WARNING: ${user.name} is extracting your teams and choice information.`);
+		const inputLog = room.battle.inputLog.join(`\n`);
+		this.parse(`/code ${inputLog}`);
+	},
+
+	importinputlog(/** @type {string} */ target, /** @type {Room?} */ room, /** @type {User} */ user) {
+		if (!this.can('forcewin')) return;
+		const formatIndex = target.indexOf('"formatid":"');
+		const nextQuoteIndex = target.indexOf('"', formatIndex + 12);
+		if (formatIndex < 0 || nextQuoteIndex < 0) return this.errorReply(`Invalid input log`);
+		const formatid = target.slice(formatIndex + 12, nextQuoteIndex);
+		const battleRoom = Rooms.createBattle(formatid, {inputLog: target});
+		this.parse(`/join ${battleRoom.id}`);
+	},
+
 	/*********************************************************
 	 * Battle commands
 	 *********************************************************/
@@ -3910,6 +3931,7 @@ exports.commands = {
 process.nextTick(() => {
 	// We might want to migrate most of this to a JSON schema of command attributes.
 	Chat.multiLinePattern.register(
-		'>>>? ', '/(?:room|staff)intro ', '/(?:staff)?topic ', '/(?:add|widen)datacenters ', '/bash ', '!code ', '/code '
+		'>>>? ', '/(?:room|staff)intro ', '/(?:staff)?topic ', '/(?:add|widen)datacenters ', '/bash ', '!code ', '/code ',
+		'/importinputlog '
 	);
 });

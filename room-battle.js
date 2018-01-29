@@ -373,6 +373,8 @@ class Battle {
 		// data to be logged
 		this.logData = null;
 		this.endType = 'normal';
+		this.score;
+		this.inputLog;
 
 		this.rqid = 1;
 		this.requestCount = 0;
@@ -392,10 +394,17 @@ class Battle {
 			rated: ratedMessage,
 			seed: options.seed,
 		};
-		this.stream.write(`>start ` + JSON.stringify(battleOptions));
+		if (options.inputLog) {
+			this.stream.write(options.inputLog);
+		} else {
+			this.stream.write(`>start ` + JSON.stringify(battleOptions));
+		}
 		if (Config.forcetimer) this.timer.start();
 
 		this.listen();
+
+		if (options.p1) this.addPlayer(options.p1, options.p1team);
+		if (options.p2) this.addPlayer(options.p2, options.p2team);
 	}
 
 	checkActive() {
@@ -543,6 +552,7 @@ class Battle {
 		case 'end':
 			this.logData = JSON.parse(lines[1]);
 			this.score = this.logData.score;
+			this.inputLog = this.logData.inputLog;
 			this.started = true;
 			if (!this.ended) {
 				this.ended = true;
@@ -794,9 +804,10 @@ class Battle {
 
 	/**
 	 * @param {User} user
+	 * @param {PlayerSlot} slot
 	 * @param {string} team
 	 */
-	addPlayer(user, team) {
+	addPlayer(user, slot, team) {
 		if (user.userid in this.players) return false;
 		if (this.playerCount >= this.playerCap) return false;
 		let player = this.makePlayer(user, team);
@@ -818,9 +829,8 @@ class Battle {
 	 */
 	makePlayer(user, team) {
 		let slotNum = 0;
-		// @ts-ignore
-		while (this['p' + (slotNum + 1)]) slotNum++;
-		let slot = /** @type {PlayerSlot} */ ('p' + (slotNum + 1));
+		while (this[Dex.getSlot(slotNum)]) slotNum++;
+		let slot = Dex.getSlot(slotNum);
 		// console.log('joining: ' + user.name + ' ' + slot);
 
 		let player = new BattlePlayer(user, this, slot);

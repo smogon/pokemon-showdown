@@ -1354,8 +1354,8 @@ class GameRoom extends BasicChatRoom {
 		this.tour = options.tour || null;
 		this.parent = options.parent || (this.tour && this.tour.room) || null;
 
-		this.p1 = null;
-		this.p2 = null;
+		this.p1 = options.p1 || null;
+		this.p2 = options.p2 || null;
 
 		/**
 		 * The lower player's rating, for searching purposes.
@@ -1509,17 +1509,15 @@ let Rooms = Object.assign(getRoom, {
 	 * @param {AnyObject} options
 	 */
 	createBattle(formatid, options) {
-		const p1 = options.p1;
-		const p2 = options.p2;
-		if (p1 === p2) throw new Error(`Players can't battle themselves`);
-		if (!p1) throw new Error(`p1 required`);
-		if (!p2) throw new Error(`p2 required`);
-		Ladders.cancelSearches(p1);
-		Ladders.cancelSearches(p2);
+		const p1 = /** @type {User?} */ (options.p1);
+		const p2 = /** @type {User?} */ (options.p2);
+		if (p1 && p1 === p2) throw new Error(`Players can't battle themselves`);
+		if (p1) Ladders.cancelSearches(p1);
+		if (p2) Ladders.cancelSearches(p2);
 
 		if (Rooms.global.lockdown === true) {
-			p1.popup("The server is restarting. Battles will be available again in a few minutes.");
-			p2.popup("The server is restarting. Battles will be available again in a few minutes.");
+			if (p1) p1.popup("The server is restarting. Battles will be available again in a few minutes.");
+			if (p2) p2.popup("The server is restarting. Battles will be available again in a few minutes.");
 			return;
 		}
 
@@ -1529,19 +1527,19 @@ let Rooms = Object.assign(getRoom, {
 		// options.rated < 0 or falsy means "unrated", and will be converted to 0 here
 		// options.rated === true is converted to 1 (used in tests sometimes)
 		options.rated = Math.max(+options.rated || 0, 0);
-		const room = Rooms.createGameRoom(roomid, "" + p1.name + " vs. " + p2.name, options);
+		const p1name = p1 ? p1.name : "Player 1";
+		const p2name = p2 ? p2.name : "Player 1";
+		const room = Rooms.createGameRoom(roomid, "" + p1name + " vs. " + p2name, options);
 		// @ts-ignore TODO: make RoomBattle a subclass of RoomGame
 		const game = room.game = new Rooms.RoomBattle(room, formatid, options);
-		room.p1 = p1;
-		room.p2 = p2;
 		room.battle = room.game;
 
 		let inviteOnly = (options.inviteOnly || []);
-		if (p1.inviteOnlyNextBattle) {
+		if (p1 && p1.inviteOnlyNextBattle) {
 			inviteOnly.push(p1.userid);
 			p1.inviteOnlyNextBattle = false;
 		}
-		if (p2.inviteOnlyNextBattle) {
+		if (p2 && p2.inviteOnlyNextBattle) {
 			inviteOnly.push(p2.userid);
 			p2.inviteOnlyNextBattle = false;
 		}
@@ -1553,21 +1551,18 @@ let Rooms = Object.assign(getRoom, {
 			room.add(`|raw|<div class="broadcast-red"><strong>This battle is invite-only!</strong><br />Users must be rank + or invited with <code>/invite</code> to join</div>`);
 		}
 
-		game.addPlayer(p1, options.p1team);
-		game.addPlayer(p2, options.p2team);
-		p1.joinRoom(room);
-		p2.joinRoom(room);
-		Monitor.countBattle(p1.latestIp, p1.name);
-		Monitor.countBattle(p2.latestIp, p2.name);
-		Rooms.global.onCreateBattleRoom(p1, p2, room, options);
+		if (p1) p1.joinRoom(room);
+		if (p2) p2.joinRoom(room);
+		if (p1) Monitor.countBattle(p1.latestIp, p1.name);
+		if (p2) Monitor.countBattle(p2.latestIp, p2.name);
+		if (p1 && p2) Rooms.global.onCreateBattleRoom(p1, p2, room, options);
 		return room;
 	},
 
 	battleModlogStream: FS('logs/modlog/modlog_battle.txt').createAppendStream(),
 	groupchatModlogStream: FS('logs/modlog/modlog_groupchat.txt').createAppendStream(),
 
-	/** @type {GlobalRoom} */
-	global: /** @type {any} */ (null),
+	global: /** @type {GlobalRoom} */ (/** @type {any} */ (null)),
 	/** @type {?ChatRoom} */
 	lobby: null,
 
