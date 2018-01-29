@@ -498,7 +498,9 @@ class CommandContext {
 		return true;
 	}
 	checkGameFilter() {
+		// @ts-ignore
 		if (!this.room || !this.room.game || !this.room.game.onChatMessage) return false;
+		// @ts-ignore
 		return this.room.game.onChatMessage(this.message);
 	}
 	/**

@@ -333,6 +333,7 @@ class Battle {
 	 */
 	constructor(room, formatid, options) {
 		let format = Dex.getFormat(formatid, true);
+		this.gameid = 'battle';
 		this.id = room.id;
 		/** @type {GameRoom} */
 		this.room = room;
@@ -373,8 +374,8 @@ class Battle {
 		// data to be logged
 		this.logData = null;
 		this.endType = 'normal';
-		this.score;
-		this.inputLog;
+		this.score = null;
+		this.inputLog = null;
 
 		this.rqid = 1;
 		this.requestCount = 0;
@@ -387,6 +388,10 @@ class Battle {
 		} else if (this.room.tour) {
 			ratedMessage = 'Tournament battle';
 		}
+
+		// @ts-ignore
+		this.room.game = this;
+		this.room.battle = this;
 
 		let battleOptions = {
 			formatid: this.format,
@@ -403,8 +408,8 @@ class Battle {
 
 		this.listen();
 
-		if (options.p1) this.addPlayer(options.p1, options.p1team);
-		if (options.p2) this.addPlayer(options.p2, options.p2team);
+		if (options.p1) this.addPlayer(options.p1, 'p1', options.p1team);
+		if (options.p2) this.addPlayer(options.p2, 'p2', options.p2team);
 	}
 
 	checkActive() {
@@ -468,9 +473,8 @@ class Battle {
 	}
 	/**
 	 * @param {User} user
-	 * @param {string} team
 	 */
-	joinGame(user, team) {
+	joinGame(user) {
 		if (this.playerCount >= 2) {
 			user.popup(`This battle already has two players.`);
 			return false;
@@ -480,7 +484,7 @@ class Battle {
 			return false;
 		}
 
-		if (!this.addPlayer(user, team)) {
+		if (!this.addPlayer(user)) {
 			user.popup(`Failed to join battle.`);
 			return false;
 		}
@@ -804,13 +808,13 @@ class Battle {
 
 	/**
 	 * @param {User} user
-	 * @param {PlayerSlot} slot
+	 * @param {PlayerSlot?} slot
 	 * @param {string} team
 	 */
-	addPlayer(user, slot, team) {
+	addPlayer(user, slot = null, team = '') {
 		if (user.userid in this.players) return false;
 		if (this.playerCount >= this.playerCap) return false;
-		let player = this.makePlayer(user, team);
+		let player = this.makePlayer(user, slot, team);
 		if (!player) return false;
 		this.players[user.userid] = player;
 		this.playerCount++;
@@ -825,14 +829,19 @@ class Battle {
 
 	/**
 	 * @param {User} user
+	 * @param {PlayerSlot?} slot
 	 * @param {string} team
 	 */
-	makePlayer(user, team) {
-		let slotNum = 0;
-		while (this[Dex.getSlot(slotNum)]) slotNum++;
-		let slot = Dex.getSlot(slotNum);
+	makePlayer(user, slot = null, team = '') {
+		if (!slot) {
+			let slotNum = 0;
+			while (this[/** @type {PlayerSlot} */ ('p' + (slotNum + 1))]) slotNum++;
+			slot = /** @type {PlayerSlot} */ ('p' + (slotNum + 1));
+		}
 		// console.log('joining: ' + user.name + ' ' + slot);
 
+		if (this[slot]) throw new Error(`Player already exists in ${slot} in ${this.id}`);
+		let slotNum = parseInt(slot.charAt(1)) - 1;
 		let player = new BattlePlayer(user, this, slot);
 		this[slot] = player;
 		this.playerNames[slotNum] = player.name;
