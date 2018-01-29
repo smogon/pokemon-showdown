@@ -93,7 +93,7 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 		console.log('pokemon-showdown simulate-battle');
 		console.log('');
 		console.log('  Simulates a battle, taking input to stdin and writing output to stdout');
-		console.log('  Protocol is documented in ');
+		console.log('  Protocol is documented in ./sim/README.md');
 		console.log('');
 		console.log('pokemon-showdown unpack-team');
 		console.log('');
