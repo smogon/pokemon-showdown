@@ -3497,8 +3497,11 @@ exports.commands = {
 		if (!room.battle) return this.errorReply("You can only do this in battle rooms.");
 		if (room.rated) return this.errorReply("You can only add a Player to unrated battles.");
 
-		target = this.splitTarget(target, true);
-		if (target !== 'p1' || target !== 'p2') return this.parse('/help addplayer');
+		target = this.splitTarget(target, true).trim();
+		if (target !== 'p1' && target !== 'p2') {
+			this.errorReply(`Player must be set to "p1" or "p2", not "${target}"`);
+			return this.parse('/help addplayer');
+		}
 
 		let targetUser = this.targetUser;
 		let name = this.targetUsername;
@@ -3514,7 +3517,7 @@ exports.commands = {
 
 		room.auth[targetUser.userid] = Users.PLAYER_SYMBOL;
 		room.battle.addPlayer(targetUser, target);
-		this.addModAction(`${name} was promoted to Player by ${user.name}.`);
+		this.addModAction(`${name} was added to the battle as Player ${target.slice(1)} by ${user.name}.`);
 		this.modlog('ROOMPLAYER', targetUser.getLastId());
 	},
 	addplayerhelp: [
