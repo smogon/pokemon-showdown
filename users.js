@@ -1320,9 +1320,9 @@ class User {
 	}
 	/**
 	 * @param {string | GlobalRoom | GameRoom | ChatRoom} room
-	 * @param {Connection} connection
+	 * @param {Connection?} connection
 	 */
-	joinRoom(room, connection) {
+	joinRoom(room, connection = null) {
 		room = Rooms(room);
 		if (!room) return false;
 		if (!this.can('bypassall')) {
