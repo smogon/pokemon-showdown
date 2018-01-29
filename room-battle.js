@@ -408,8 +408,8 @@ class Battle {
 
 		this.listen();
 
-		if (options.p1) this.addPlayer(options.p1, 'p1', options.p1team);
-		if (options.p2) this.addPlayer(options.p2, 'p2', options.p2team);
+		if (options.p1) this.addPlayer(options.p1, 'p1', options.p1team, true);
+		if (options.p2) this.addPlayer(options.p2, 'p2', options.p2team, true);
 	}
 
 	checkActive() {
@@ -527,13 +527,12 @@ class Battle {
 			break;
 
 		case 'sideupdate': {
-			let player = this[/** @type {PlayerSlot} */ (lines[1])];
-			if (!player) break;
-			player.sendRoom(lines[2]);
+			let slot = /** @type {PlayerSlot} */ (lines[1]);
+			let player = this[slot];
 			if (lines[2].startsWith(`|error|[Invalid choice] Can't do anything`)) {
 				// ... should not happen
 			} else if (lines[2].startsWith(`|error|[Invalid choice]`)) {
-				let request = this.requests[player.slot];
+				let request = this.requests[slot];
 				request.isWait = false;
 				request.choice = '';
 			} else if (lines[2].startsWith(`|request|`)) {
@@ -541,15 +540,17 @@ class Battle {
 				let request = JSON.parse(lines[2].slice(9));
 				request.rqid = this.rqid;
 				const requestJSON = JSON.stringify(request);
-				this.requests[player.slot] = {
+				this.requests[slot] = {
 					rqid: this.rqid,
 					request: requestJSON,
 					isWait: request.wait ? 'cantUndo' : false,
 					choice: '',
 				};
 				this.requestCount++;
-				player.sendRoom(`|request|${requestJSON}`);
+				if (player) player.sendRoom(`|request|${requestJSON}`);
+				break;
 			}
+			if (player) player.sendRoom(lines[2]);
 			break;
 		}
 
@@ -811,7 +812,7 @@ class Battle {
 	 * @param {PlayerSlot?} slot
 	 * @param {string} team
 	 */
-	addPlayer(user, slot = null, team = '') {
+	addPlayer(user, slot = null, team = '', initializing = false) {
 		if (user.userid in this.players) return false;
 		if (this.playerCount >= this.playerCap) return false;
 		let player = this.makePlayer(user, slot, team);
@@ -819,10 +820,14 @@ class Battle {
 		this.players[user.userid] = player;
 		this.playerCount++;
 		this.room.auth[user.userid] = Users.PLAYER_SYMBOL;
+		if (user.inRooms.has(this.id)) this.onConnect(user);
 		if (this.playerCount >= 2) {
 			// @ts-ignore
 			this.room.title = `${this.p1.name} vs. ${this.p2.name}`;
 			this.room.send(`|title|${this.room.title}`);
+		}
+		if (!initializing) {
+			this.room.add(`|player|${player.slot}|${user.name}|${user.avatar}`);
 		}
 		return true;
 	}
