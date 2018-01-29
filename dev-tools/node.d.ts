@@ -5,5 +5,6 @@ declare namespace NodeJS {
 		Config: any
 		TeamValidator: any
 		Chat: any
+		__version: string
 	}
 }

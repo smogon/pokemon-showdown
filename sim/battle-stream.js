@@ -105,6 +105,7 @@ class BattleStream extends Streams.ObjectReadWriteStream {
 			let p2 = battle && battle.p2;
 			let p1active = p1 && p1.active[0];
 			let p2active = p2 && p2.active[0];
+			battle.inputLog.push(line);
 			message = message.replace(/\f/g, '\n');
 			battle.add('', '>>> ' + message.replace(/\n/g, '\n||'));
 			try {

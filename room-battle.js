@@ -900,6 +900,10 @@ if (!PM.isParentProcess) {
 	// This is a child process!
 	global.Config = require('./config/config');
 	global.Chat = require('./chat');
+	global.__version = require('child_process')
+		.execSync('git merge-base master HEAD')
+		.toString()
+		.trim();
 
 	if (Config.crashguard) {
 		// graceful crash - allow current battles to finish before restarting

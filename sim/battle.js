@@ -109,6 +109,8 @@ class Battle extends Dex.ModdedDex {
 
 		/** @type {string[]} */
 		this.log = [];
+		/** @type {string[]} */
+		this.inputLog = [];
 		this.sentLogPos = 0;
 		this.sentEnd = false;
 		/** @type {Side[]} */
@@ -185,6 +187,12 @@ class Battle extends Dex.ModdedDex {
 		this.prngSeed = this.prng.startingSeed.slice();
 		this.teamGenerator = null;
 
+		const inputOptions = {formatid: options.formatid, seed: this.prng.seed};
+		if (this.rated) inputOptions.rated = this.rated;
+		if (global.__version !== undefined) {
+			this.inputLog.push(`>version ${global.__version}`);
+		}
+		this.inputLog.push(`>start ` + JSON.stringify(inputOptions));
 		if (options.p1) {
 			this.setPlayer('p1', options.p1);
 		}
@@ -1298,6 +1306,7 @@ class Battle extends Dex.ModdedDex {
 	}
 
 	tiebreak() {
+		this.inputLog.push(`>tiebreak`);
 		this.add('message', "Time's up! Going to tiebreaker...");
 		const notFainted = this.sides.map(side => (
 			side.pokemon.filter(pokemon => !pokemon.fainted).length
@@ -1335,6 +1344,18 @@ class Battle extends Dex.ModdedDex {
 			return this.win(tiedSides[0]);
 		}
 		this.tie();
+	}
+
+	/**
+	 * @param {PlayerSlot?} [side]
+	 */
+	forceWin(side = null) {
+		if (side) {
+			this.inputLog.push(`>forcewin ${side}`);
+		} else {
+			this.inputLog.push(`>forcetie`);
+		}
+		this.win(side);
 	}
 
 	tie() {
@@ -3111,7 +3132,10 @@ class Battle extends Dex.ModdedDex {
 			side.autoChoose();
 		}
 		this.LEGACY_API_DO_NOT_USE = oldFlag;
-		this.add('choice', this.p1.getChoice, this.p2.getChoice);
+		let p1choice = this.p1.getChoice(true);
+		if (p1choice) this.inputLog.push(`>p1 ${p1choice}`);
+		let p2choice = this.p2.getChoice(true);
+		if (p2choice) this.inputLog.push(`>p2 ${p2choice}`);
 		for (const side of this.sides) {
 			this.addToQueue(side.choice.actions);
 		}
@@ -3249,12 +3273,9 @@ class Battle extends Dex.ModdedDex {
 		}
 
 		if (!this.teamGenerator) {
-			this.teamGenerator = this.getTeamGenerator(format);
-		} else {
-			this.teamGenerator.prng = new PRNG();
+			this.teamGenerator = this.getTeamGenerator(format, this.prng);
 		}
 		team = /** @type {PokemonSet[]} */ (this.teamGenerator.generateTeam());
-		this.prngSeed.push(...this.teamGenerator.prng.startingSeed);
 
 		return team;
 	}
@@ -3288,7 +3309,11 @@ class Battle extends Dex.ModdedDex {
 			}
 			if (options.team) throw new Error(`Player ${slot} already has a team!`);
 		}
+		if (options.team && typeof options.team !== 'string') {
+			options.team = this.packTeam(options.team);
+		}
 		if (!didSomething) return;
+		this.inputLog.push(`>player ${slot} ` + JSON.stringify(options));
 		this.add('player', side.id, side.name, side.avatar);
 		this.start();
 	}
@@ -3325,6 +3350,7 @@ class Battle extends Dex.ModdedDex {
 				p1team: this.p1.team,
 				p2team: this.p2.team,
 				score: [this.p1.pokemonLeft, this.p2.pokemonLeft],
+				inputLog: this.inputLog,
 			};
 			this.send('end', JSON.stringify(log));
 			this.sentEnd = true;

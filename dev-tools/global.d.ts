@@ -34,6 +34,7 @@ declare global {
 
 	// sim
 	type PlayerSlot = 'p1' | 'p2'
+	type PRNGSeed = [number, number, number, number]
 	const Battle: typeof BattleType
 	const ModdedDex: typeof DexType
 	const Pokemon: typeof PokemonType

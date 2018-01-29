@@ -582,9 +582,8 @@ describe('Choices', function () {
 			battle.p1.chooseMove(1);
 			battle.p2.chooseMove('growl');
 
-			const logText = battle.log.join('\n');
-			const logs = ['|choice||', '|choice|move tackle|', '|choice||move growl', '|choice|move tackle|move growl'];
-			const subString = '|split\n' + logs.join('\n');
+			const logText = battle.inputLog.join('\n');
+			const subString = '>p1 move tackle\n>p2 move growl';
 			assert(logText.includes(subString), `${logText} does not include ${subString}`);
 		});
 
@@ -599,9 +598,8 @@ describe('Choices', function () {
 			battle.p1.chooseMove(1, 1).chooseMove(1, 2);
 			battle.p2.chooseMove(1, 2).chooseMove(1, 1);
 
-			const logText = battle.log.join('\n');
-			const logs = ['|choice||', '|choice|move tackle 1, move tackle 2|', '|choice||move scratch 2, move scratch 1', '|choice|move tackle 1, move tackle 2|move scratch 2, move scratch 1'];
-			const subString = '|split\n' + logs.join('\n');
+			const logText = battle.inputLog.join('\n');
+			const subString = '>p1 move tackle 1, move tackle 2\n>p2 move scratch 2, move scratch 1';
 			assert(logText.includes(subString), `${logText} does not include ${subString}`);
 		});
 
@@ -616,9 +614,8 @@ describe('Choices', function () {
 			battle.p1.chooseMove(1).chooseMove(1);
 			battle.p2.chooseMove(1, 1).chooseMove(1, 1);
 
-			const logText = battle.log.join('\n');
-			const logs = ['|choice||', '|choice|move magnitude, move rockslide|', '|choice||move scratch 1, move scratch 1', '|choice|move magnitude, move rockslide|move scratch 1, move scratch 1'];
-			const subString = '|split\n' + logs.join('\n');
+			const logText = battle.inputLog.join('\n');
+			const subString = '>p1 move magnitude, move rockslide\n>p2 move scratch 1, move scratch 1';
 			assert(logText.includes(subString), `${logText} does not include ${subString}`);
 		});
 
@@ -630,9 +627,8 @@ describe('Choices', function () {
 			battle.p1.chooseMove(1, null, true);
 			battle.p2.chooseMove(1, null, true);
 
-			const logText = battle.log.join('\n');
-			const logs = ['|choice||', '|choice|move tackle mega|', '|choice||move tailwhip mega', '|choice|move tackle mega|move tailwhip mega'];
-			const subString = '|split\n' + logs.join('\n');
+			const logText = battle.inputLog.join('\n');
+			const subString = '>p1 move tackle mega\n>p2 move tailwhip mega';
 			assert(logText.includes(subString), `${logText} does not include ${subString}`);
 		});
 
@@ -644,9 +640,8 @@ describe('Choices', function () {
 			battle.p1.chooseMove(1, null, true);
 			battle.p2.chooseMove(1, null, true);
 
-			const logText = battle.log.join('\n');
-			const logs = ['|choice||', '|choice|move scratch mega|', '|choice||move ember mega', '|choice|move scratch mega|move ember mega'];
-			const subString = '|split\n' + logs.join('\n');
+			const logText = battle.inputLog.join('\n');
+			const subString = '>p1 move scratch mega\n>p2 move ember mega';
 			assert(logText.includes(subString), `${logText} does not include ${subString}`);
 		});
 
@@ -664,9 +659,8 @@ describe('Choices', function () {
 			battle.p1.chooseSwitch(2);
 			battle.p2.chooseSwitch(3);
 
-			const logText = battle.log.join('\n');
-			const logs = ['|choice||', '|choice|switch 2|', '|choice||switch 3', '|choice|switch 2|switch 3'];
-			const subString = '|split\n' + logs.join('\n');
+			const logText = battle.inputLog.join('\n');
+			const subString = '>p1 switch 2\n>p2 switch 3';
 			assert(logText.includes(subString), `${logText} does not include ${subString}`);
 		});
 
@@ -686,9 +680,8 @@ describe('Choices', function () {
 			battle.p1.chooseTeam('1342');
 			battle.p2.chooseTeam('1234');
 
-			const logText = battle.log.join('\n');
-			const logs = ['|choice||', '|choice|team 1, team 3, team 4, team 2|', '|choice||team 1, team 2, team 3, team 4', '|choice|team 1, team 3, team 4, team 2|team 1, team 2, team 3, team 4'];
-			const subString = '|split\n' + logs.join('\n');
+			const logText = battle.inputLog.join('\n');
+			const subString = '>p1 team 1, team 3, team 4, team 2\n>p2 team 1, team 2, team 3, team 4';
 			assert(logText.includes(subString), `${logText} does not include ${subString}`);
 		});
 
@@ -707,9 +700,8 @@ describe('Choices', function () {
 			p1.chooseShift().chooseMove(1).chooseMove(1);
 			p2.chooseMove(1).chooseMove(1).chooseMove(1);
 
-			const logText = battle.log.join('\n');
-			const logs = ['|choice||', '|choice|shift, move defensecurl, move haze|', '|choice||move roost, move irondefense, move defensecurl', '|choice|shift, move defensecurl, move haze|move roost, move irondefense, move defensecurl'];
-			const subString = '|split\n' + logs.join('\n');
+			const logText = battle.inputLog.join('\n');
+			const subString = '>p1 shift, move defensecurl, move haze\n>p2 move roost, move irondefense, move defensecurl';
 			assert(logText.includes(subString), `${logText} does not include ${subString}`);
 		});
 
@@ -728,9 +720,8 @@ describe('Choices', function () {
 			p1.chooseMove(1).chooseMove(1).chooseShift();
 			p2.chooseMove(1).chooseMove(1).chooseMove(1);
 
-			const logText = battle.log.join('\n');
-			const logs = ['|choice||', '|choice|move harden, move defensecurl, shift|', '|choice||move roost, move irondefense, move defensecurl', '|choice|move harden, move defensecurl, shift|move roost, move irondefense, move defensecurl'];
-			const subString = '|split\n' + logs.join('\n');
+			const logText = battle.inputLog.join('\n');
+			const subString = '>p1 move harden, move defensecurl, shift\n>p2 move roost, move irondefense, move defensecurl';
 			assert(logText.includes(subString), `${logText} does not include ${subString}`);
 		});
 	});
