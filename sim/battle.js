@@ -1756,6 +1756,11 @@ class Battle extends Dex.ModdedDex {
 		if (this.started) {
 			return;
 		}
+
+		if (typeof __version !== 'undefined') {
+			this.log.push(`>version|${__version}`);
+		}
+
 		this.activeTurns = 0;
 		this.started = true;
 		this.p2.foe = this.p1;
