@@ -3498,20 +3498,29 @@ exports.commands = {
 		if (room.rated) return this.errorReply("You can only add a Player to unrated battles.");
 
 		target = this.splitTarget(target, true);
+		if (target !== 'p1' || target !== 'p2') return this.parse('/help addplayer');
+
 		let targetUser = this.targetUser;
 		let name = this.targetUsername;
 
-		if (!targetUser) return this.errorReply("User " + name + " not found.");
-		if (targetUser.can('joinbattle', null, room)) {
-			return this.sendReply("" + name + " can already join battles as a Player.");
+		if (!targetUser) return this.errorReply(`User ${name} not found.`);
+		if (!targetUser.inRooms.has(room.id)) {
+			return this.errorReply(`User ${name} must be in the battle room already.`);
 		}
 		if (!this.can('joinbattle', null, room)) return;
+		if (room.battle[target]) {
+			return this.errorReply(`This room already has a player in slot ${target}.`);
+		}
 
 		room.auth[targetUser.userid] = Users.PLAYER_SYMBOL;
-		this.addModAction("" + name + " was promoted to Player by " + user.name + ".");
+		room.battle.addPlayer(targetUser, target);
+		this.addModAction(`${name} was promoted to Player by ${user.name}.`);
 		this.modlog('ROOMPLAYER', targetUser.getLastId());
 	},
-	addplayerhelp: [`/addplayer [username] - Allow the specified user to join the battle as a player.`],
+	addplayerhelp: [
+		`/addplayer [username], p1 - Allow the specified user to join the battle as Player 1.`,
+		`/addplayer [username], p2 - Allow the specified user to join the battle as Player 2.`,
+	],
 
 	joinbattle: 'joingame',
 	joingame: function (target, room, user) {

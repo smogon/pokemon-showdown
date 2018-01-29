@@ -1531,8 +1531,7 @@ let Rooms = Object.assign(getRoom, {
 		const p2name = p2 ? p2.name : "Player 1";
 		const room = Rooms.createGameRoom(roomid, "" + p1name + " vs. " + p2name, options);
 		// @ts-ignore TODO: make RoomBattle a subclass of RoomGame
-		const game = room.game = new Rooms.RoomBattle(room, formatid, options);
-		room.battle = room.game;
+		room.game = new Rooms.RoomBattle(room, formatid, options);
 
 		let inviteOnly = (options.inviteOnly || []);
 		if (p1 && p1.inviteOnlyNextBattle) {
@@ -1562,7 +1561,7 @@ let Rooms = Object.assign(getRoom, {
 	battleModlogStream: FS('logs/modlog/modlog_battle.txt').createAppendStream(),
 	groupchatModlogStream: FS('logs/modlog/modlog_groupchat.txt').createAppendStream(),
 
-	global: /** @type {GlobalRoom} */ (/** @type {any} */ (null)),
+	global: (/** @type {any} */ (null)),
 	/** @type {?ChatRoom} */
 	lobby: null,
 
