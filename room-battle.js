@@ -898,6 +898,7 @@ const PM = new StreamProcessManager(module, () => {
 
 if (!PM.isParentProcess) {
 	// This is a child process!
+	// @ts-ignore
 	global.Config = require('./config/config');
 	global.Chat = require('./chat');
 	global.__version = require('child_process')
