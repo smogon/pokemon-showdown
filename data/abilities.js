@@ -1268,6 +1268,7 @@ exports.BattleAbilities = {
 			if (this.isWeather(['sunnyday', 'desolateland']) || this.random(2) === 0) {
 				if (pokemon.hp && !pokemon.item && this.getItem(pokemon.lastItem).isBerry) {
 					pokemon.setItem(pokemon.lastItem);
+					pokemon.lastItem = '';
 					this.add('-item', pokemon, pokemon.getItem(), '[from] ability: Harvest');
 				}
 			}

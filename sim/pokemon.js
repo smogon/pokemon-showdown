@@ -1227,13 +1227,11 @@ class Pokemon {
 			this.isStale = 2;
 			this.isStaleSource = 'getleppa';
 		}
-		this.lastItem = this.item;
 		this.item = item.id;
 		this.itemData = {id: item.id, target: this};
 		if (item.id) {
 			this.battle.singleEvent('Start', item, this.itemData, this, source, effect);
 		}
-		if (this.lastItem) this.usedItemThisTurn = true;
 		return true;
 	}
 
