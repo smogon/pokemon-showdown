@@ -5,24 +5,30 @@ Pokémon Showdown's new simulator API is designed to be relatively more straight
 
 It is implemented as a `ReadWriteStream`. You write to it player choices, and you read protocol messages from it.
 
-    const Sim = require('Pokemon-Showdown/sim');
-    stream = new Sim.BattleStream();
-    stream.write(`>start {"format":"gen7randombattle"}`);
-    stream.write(`>player p1 {"name":"Alice"}`);
-    stream.write(`>player p2 {"name":"Bob"}`);
-    (async () => {
-        let output;
-        while (output = await stream.read()) {
-            console.log(output);
-        }
-    })();
+```js
+const Sim = require('Pokemon-Showdown/sim');
+stream = new Sim.BattleStream();
+
+stream.write(`>start {"format":"gen7randombattle"}`);
+stream.write(`>player p1 {"name":"Alice"}`);
+stream.write(`>player p2 {"name":"Bob"}`);
+
+(async () => {
+    let output;
+    while (output = await stream.read()) {
+        console.log(output);
+    }
+})();
+```
 
 The stream can be accessed from other programming languages using standard IO:
 
-    echo '>start {"formatid":"gen7randombattle"}
-    >player p1 {"name":"Alice"}
-    >player p2 {"name":"Bob"}
-    ' | ./pokemon-showdown simulate-battle
+```bash
+echo '>start {"formatid":"gen7randombattle"}
+>player p1 {"name":"Alice"}
+>player p2 {"name":"Bob"}
+' | ./pokemon-showdown simulate-battle
+```
 
 
 Writing to the simulator
@@ -30,25 +36,29 @@ Writing to the simulator
 
 In a standard battle, what you write to the simulator looks something like this:
 
-    >start {"format":"gen7ou"}
-    >player p1 {"name":"Alice","team":"insert packed team here"}
-    >player p2 {"name":"Bob","team":"insert packed team here"}
-    >p1 team 123456
-    >p2 team 123456
-    >p1 move 1
-    >p2 switch 3
-    >p1 move 3
-    >p2 move 2
+```
+>start {"format":"gen7ou"}
+>player p1 {"name":"Alice","team":"insert packed team here"}
+>player p2 {"name":"Bob","team":"insert packed team here"}
+>p1 team 123456
+>p2 team 123456
+>p1 move 1
+>p2 switch 3
+>p1 move 3
+>p2 move 2
+```
 
 (In a data stream, messages should be delimited by `\n`; in an object stream, `\n` will be implicitly added after every message.)
 
-Notice that every line starts with `>`.
+Notice that every line starts with `>`. Lines not starting with `>` are comments, so that input logs can be mixed with output logs and/or normal text easily.
 
 Note that the text after `>p1` or `>p2` can be untrusted input directly from the player, and should be treated accordingly.
 
 Possible message types include:
 
-    >start OPTIONS
+```
+>start OPTIONS
+```
 
 Starts a battle:
 
@@ -66,7 +76,9 @@ If `p1` and `p2` are specified, the battle will begin immediately. Otherwise, th
 
 See documentation of `>player` (below) for `PLAYEROPTIONS`.
 
-    >player PLAYERID PLAYEROPTIONS
+```
+>player PLAYERID PLAYEROPTIONS
+```
 
 Sets player information:
 
@@ -80,8 +92,10 @@ Sets player information:
 
 - `team` is a team (either in JSON or a string in packed format)
 
-    >p1 CHOICE
-    >p2 CHOICE
+```
+>p1 CHOICE
+>p2 CHOICE
+```
 
 Makes a choice for a player (see "Choice specification")
 
