@@ -132,12 +132,6 @@ class BattleTimer {
 		 */
 		this.lastTick = 0;
 
-		/**
-		 * Has this player consented to input log export? If so, set this
-		 * to the userid allowed to export.
-		 */
-		this.allowExtraction = '';
-
 		this.lastDisabledTime = 0;
 		this.lastDisabledByUser = null;
 
@@ -385,6 +379,13 @@ class Battle {
 		this.timer = new BattleTimer(this);
 
 		// data to be logged
+		/**
+		 * Has this player consented to input log export? If so, set this
+		 * to the userid allowed to export.
+		 * @type {[string, string]?}
+		 */
+		this.allowExtraction = null;
+
 		this.logData = null;
 		this.endType = 'normal';
 		this.score = null;

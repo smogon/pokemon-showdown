@@ -1528,7 +1528,7 @@ let Rooms = Object.assign(getRoom, {
 		// options.rated === true is converted to 1 (used in tests sometimes)
 		options.rated = Math.max(+options.rated || 0, 0);
 		const p1name = p1 ? p1.name : "Player 1";
-		const p2name = p2 ? p2.name : "Player 1";
+		const p2name = p2 ? p2.name : "Player 2";
 		const room = Rooms.createGameRoom(roomid, "" + p1name + " vs. " + p2name, options);
 		// @ts-ignore TODO: make RoomBattle a subclass of RoomGame
 		room.game = new Rooms.RoomBattle(room, formatid, options);

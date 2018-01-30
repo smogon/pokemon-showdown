@@ -3391,24 +3391,22 @@ exports.commands = {
 	allowexportinputlog(/** @type {string} */ target, /** @type {Room?} */ room, /** @type {User} */ user) {
 		const battle = room.battle;
 		if (!battle) return this.errorReply(`Must be in a battle`);
-		const player = battle.players[user.userid];
-		if (!player) return this.errorReply(`Must be a player in a battle`);
+		if (!battle.allowExtraction) return this.errorReply(`Someone must have requested extraction`);
 		const targetUser = Users.getExact(target);
-		player.allowExtraction = targetUser.userid;
-		this.addModAction(`${user.userid} consents to sharing battle team and choices with ${targetUser.userid}`);
 
-		let allowed = true;
-		if (battle.p1 && battle.p1.allowExtraction !== targetUser.userid) {
-			allowed = false;
+		if (toId(battle.playerNames[0]) === user.userid) {
+			battle.allowExtraction[0] = targetUser.userid;
+		} else if (toId(battle.playerNames[1]) === user.userid) {
+			battle.allowExtraction[1] = targetUser.userid;
+		} else {
+			return this.errorReply(`Must be a player in the battle.`);
 		}
-		if (battle.p2 && battle.p1.allowExtraction !== targetUser.userid) {
-			allowed = false;
-		}
-		if (!allowed) return;
+		this.addModAction(`${user.userid} consents to sharing battle team and choices with ${targetUser.userid}`);
+		if (battle.allowExtraction.join(',') !== `${targetUser.userid},${targetUser.userid}`) return;
 
 		this.addModAction(`${targetUser.name} has extracted the battle input log.`);
 		const inputLog = battle.inputLog.map(Chat.escapeHTML).join(`<br />`);
-		targetUser.sendTo(room, `|html|<div class="chat"><code style="white-space: pre-wrap; display: table">${inputLog}</code></div>`);
+		targetUser.sendTo(room, `|html|<div class="chat"><code style="white-space: pre-wrap; overflow-wrap: break-word; display: block">${inputLog}</code></div>`);
 	},
 
 	exportinputlog(/** @type {string} */ target, /** @type {Room?} */ room, /** @type {User} */ user) {
@@ -3422,24 +3420,26 @@ exports.commands = {
 		if (!user.can('broadcast', null, room)) {
 			return this.errorReply(`You must be at least roomvoice. Players can roomvoice you if necessary.`);
 		}
-		let allowed = true;
-		if (battle.p1 && battle.p1.allowExtraction !== user.userid) {
-			allowed = false;
-			battle.p1.sendRoom(Chat.html`|html|${user.name} wants to extract the battle input log. <button name="send" value="/allowexportinputlog ${user.userid}">Share your team and choices with "${user.name}"</button>`);
+		if (!battle.allowExtraction) {
+			battle.allowExtraction = ['', ''];
 		}
-		if (battle.p2 && battle.p1.allowExtraction !== user.userid) {
-			allowed = false;
-			battle.p2.sendRoom(Chat.html`|html|${user.name} wants to extract the battle input log. <button name="send" value="/allowexportinputlog ${user.userid}">Share your team and choices with "${user.name}"</button>`);
+		if (battle.allowExtraction[0] !== user.userid) {
+			const p1 = Users(battle.playerNames[0]);
+			if (p1) p1.sendTo(room, Chat.html`|html|${user.name} wants to extract the battle input log. <button name="send" value="/allowexportinputlog ${user.userid}">Share your team and choices with "${user.name}"</button>`);
+		}
+		if (battle.allowExtraction[1] !== user.userid) {
+			const p2 = Users(battle.playerNames[1]);
+			if (p2) p2.sendTo(room, Chat.html`|html|${user.name} wants to extract the battle input log. <button name="send" value="/allowexportinputlog ${user.userid}">Share your team and choices with "${user.name}"</button>`);
 		}
 
-		if (!allowed) {
+		if (battle.allowExtraction.join(',') !== `${user.userid},${user.userid}`) {
 			this.addModAction(`${user.name} wants to extract the battle input log.`);
 			return;
 		}
 
 		this.addModAction(`${user.name} has extracted the battle input log.`);
 		const inputLog = battle.inputLog.map(Chat.escapeHTML).join(`<br />`);
-		user.sendTo(room, `|html|<div class="chat"><code style="white-space: pre-wrap; display: table">${inputLog}</code></div>`);
+		user.sendTo(room, `|html|<div class="chat"><code style="white-space: pre-wrap; overflow-wrap: break-word; display: block">${inputLog}</code></div>`);
 	},
 
 	importinputlog(/** @type {string} */ target, /** @type {Room?} */ room, /** @type {User} */ user, /** @type {Connection} */ connection) {
