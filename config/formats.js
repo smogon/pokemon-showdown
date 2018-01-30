@@ -496,7 +496,7 @@ exports.Formats = [
 		},
 		onSwitchIn: function (pokemon) {
 			if (!pokemon.donor) return;
-			let donorTemplate = Dex.getTemplate(pokemon.donor);
+			let donorTemplate = this.getTemplate(pokemon.donor);
 			if (!donorTemplate.exists) return;
 			// Place volatiles on the Pokémon to show the donor details.
 			this.add('-start', pokemon, donorTemplate.species, '[silent]');
