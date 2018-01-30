@@ -3442,11 +3442,14 @@ exports.commands = {
 		user.sendTo(room, `|html|<div class="chat"><code style="white-space: pre-wrap; display: table">${inputLog}</code></div>`);
 	},
 
-	importinputlog(/** @type {string} */ target, /** @type {Room?} */ room, /** @type {User} */ user) {
+	importinputlog(/** @type {string} */ target, /** @type {Room?} */ room, /** @type {User} */ user, /** @type {Connection} */ connection) {
 		if (!this.can('broadcast')) return;
-		const formatIndex = target.indexOf('"formatid":"');
-		const nextQuoteIndex = target.indexOf('"', formatIndex + 12);
+		const formatIndex = target.indexOf(`"formatid":"`);
+		const nextQuoteIndex = target.indexOf(`"`, formatIndex + 12);
 		if (formatIndex < 0 || nextQuoteIndex < 0) return this.errorReply(`Invalid input log`);
+		if ((`\n` + target).includes(`\n>eval `) && !user.hasConsoleAccess(connection)) {
+			return this.errorReply(`Your input log contains untrusted code - you must have console access to use it`);
+		}
 		const formatid = target.slice(formatIndex + 12, nextQuoteIndex);
 		const battleRoom = Rooms.createBattle(formatid, {inputLog: target});
 		this.parse(`/join ${battleRoom.id}`);
