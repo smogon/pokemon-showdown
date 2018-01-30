@@ -2896,7 +2896,7 @@ exports.BattleItems = {
 			return this.chainModify([0x14CC, 0x1000]);
 		},
 		onAfterMoveSecondarySelf: function (source, target, move) {
-			if (source && source !== target && move && move.category !== 'Status' && !move.ohko) {
+			if (source && source !== target && move && move.category !== 'Status') {
 				this.damage(source.maxhp / 10, source, source, this.getItem('lifeorb'));
 			}
 		},
