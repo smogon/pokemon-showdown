@@ -455,7 +455,7 @@ exports.BattleScripts = {
 			if (stolen) {
 				this.attrLastMove('[still]');
 				this.add('-clearpositiveboost', target, pokemon, 'move: ' + move.name);
-				this.boost(boosts, pokemon);
+				this.boost(boosts, pokemon, pokemon);
 
 				for (let statName in boosts) {
 					boosts[statName] = 0;
