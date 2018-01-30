@@ -3454,6 +3454,10 @@ exports.commands = {
 		const battleRoom = Rooms.createBattle(formatid, {inputLog: target});
 		this.parse(`/join ${battleRoom.id}`);
 		battleRoom.auth[user.userid] = Users.PLAYER_SYMBOL;
+		setTimeout(() => {
+			// timer to make sure this goes under the battle
+			battleRoom.add(`|html|<div class="broadcast broadcast-blue"><strong>This is an imported replay</strong><br />Players will need to be manually added with <code>/addplayer USERNAME, SLOT</code></div>`);
+		}, 500);
 	},
 
 	/*********************************************************
