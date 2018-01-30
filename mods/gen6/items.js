@@ -81,6 +81,14 @@ exports.BattleItems = {
 			}
 		},
 	},
+	lifeorb: {
+		inherit: true,
+		onAfterMoveSecondarySelf: function (source, target, move) {
+			if (source && source !== target && move && move.category !== 'Status' && !move.ohko) {
+				this.damage(source.maxhp / 10, source, source, this.getItem('lifeorb'));
+			}
+		},
+	},
 	lightclay: {
 		inherit: true,
 		desc: "Holder's use of Light Screen or Reflect lasts 8 turns instead of 5.",
