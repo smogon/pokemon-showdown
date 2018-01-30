@@ -132,6 +132,12 @@ class BattleTimer {
 		 */
 		this.lastTick = 0;
 
+		/**
+		 * Has this player consented to input log export? If so, set this
+		 * to the userid allowed to export.
+		 */
+		this.allowExtraction = '';
+
 		this.lastDisabledTime = 0;
 		this.lastDisabledByUser = null;
 
