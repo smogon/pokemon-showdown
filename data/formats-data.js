@@ -6960,6 +6960,8 @@ exports.BattleFormatsData = {
 	mimikyubustedtotem: {
 		requiredAbility: 'Disguise',
 		battleOnly: true,
+		tier: "OU",
+		doublesTier: "OU",
 	},
 	bruxish: {
 		randomBattleMoves: ["psychicfangs", "crunch", "liquidation", "icefang", "aquajet", "swordsdance"],
