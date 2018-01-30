@@ -156,6 +156,7 @@ class BattleTimer {
 		if (this.settings.accelerate === undefined) {
 			this.settings.accelerate = !timerSettings;
 		}
+		this.settings.dcTimer = !isChallenge;
 
 		for (let slotNum = 0; slotNum < 2; slotNum++) {
 			this.ticksLeft.push(this.settings.startingTicks);
@@ -270,6 +271,7 @@ class BattleTimer {
 		}
 	}
 	checkActivity() {
+		if (!this.settings.dcTimer) return;
 		for (const slotNum of this.ticksLeft.keys()) {
 			const slot = /** @type {PlayerSlot} */ ('p' + (slotNum + 1));
 			const player = this.battle[slot];
@@ -342,7 +344,12 @@ class Battle {
 		this.allowRenames = (!options.rated && !options.tour);
 
 		this.format = formatid;
-		this.rated = options.rated;
+		/**
+		 * The lower player's rating, for searching purposes.
+		 * 0 for unrated battles. 1 for unknown ratings.
+		 * @type {number}
+		 */
+		this.rated = options.rated || 0;
 		this.started = false;
 		this.ended = false;
 		this.active = false;
