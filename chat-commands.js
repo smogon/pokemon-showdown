@@ -3388,25 +3388,69 @@ exports.commands = {
 		`[player] must be a username or number, [pokemon] must be species name or number (not nickname), [move] must be move name`,
 	],
 
-	exportinputlog(/** @type {string} */ target, /** @type {Room?} */ room, /** @type {User} */ user) {
-		if (!room.battle) return this.errorReply(`This command only works in battle rooms`);
-		if (!this.can('forcewin')) return;
-		if (!room.battle.inputLog) {
-			return this.errorReply(`This command only works when the battle has ended. You can end battles with /forcewin`);
+	allowexportinputlog(/** @type {string} */ target, /** @type {Room?} */ room, /** @type {User} */ user) {
+		const battle = room.battle;
+		if (!battle) return this.errorReply(`Must be in a battle`);
+		const player = battle.players[user.userid];
+		if (!player) return this.errorReply(`Must be a player in a battle`);
+		const targetUser = Users.getExact(target);
+		player.allowExtraction = targetUser.userid;
+		this.addModAction(`${user.userid} consents to sharing battle team and choices with ${targetUser.userid}`);
+
+		let allowed = true;
+		if (battle.p1 && battle.p1.allowExtraction !== targetUser.userid) {
+			allowed = false;
 		}
-		room.add(`|bigerror|WARNING: ${user.name} is extracting your teams and choice information.`);
-		const inputLog = room.battle.inputLog.join(`\n`);
-		this.parse(`/code ${inputLog}`);
+		if (battle.p2 && battle.p1.allowExtraction !== targetUser.userid) {
+			allowed = false;
+		}
+		if (!allowed) return;
+
+		this.addModAction(`${targetUser.name} has extracted the battle input log.`);
+		const inputLog = battle.inputLog.map(Chat.escapeHTML).join(`<br />`);
+		targetUser.sendTo(room, `|html|<div class="chat"><code style="white-space: pre-wrap; display: table">${inputLog}</code></div>`);
+	},
+
+	exportinputlog(/** @type {string} */ target, /** @type {Room?} */ room, /** @type {User} */ user) {
+		const battle = room.battle;
+		if (!battle) return this.errorReply(`This command only works in battle rooms`);
+		if (!battle.inputLog) {
+			this.errorReply(`This command only works when the battle has ended - if the battle has stalled, ask players to forfeit.`);
+			if (user.can('forcewin')) this.errorReply(`Alternatively, you can end the battle with /forcetie`);
+			return;
+		}
+		if (!user.can('broadcast', null, room)) {
+			return this.errorReply(`You must be at least roomvoice. Players can roomvoice you if necessary.`);
+		}
+		let allowed = true;
+		if (battle.p1 && battle.p1.allowExtraction !== user.userid) {
+			allowed = false;
+			battle.p1.sendRoom(Chat.html`|html|${user.name} wants to extract the battle input log. <button name="send" value="/allowexportinputlog ${user.userid}">Share your team and choices with "${user.name}"</button>`);
+		}
+		if (battle.p2 && battle.p1.allowExtraction !== user.userid) {
+			allowed = false;
+			battle.p2.sendRoom(Chat.html`|html|${user.name} wants to extract the battle input log. <button name="send" value="/allowexportinputlog ${user.userid}">Share your team and choices with "${user.name}"</button>`);
+		}
+
+		if (!allowed) {
+			this.addModAction(`${user.name} wants to extract the battle input log.`);
+			return;
+		}
+
+		this.addModAction(`${user.name} has extracted the battle input log.`);
+		const inputLog = battle.inputLog.map(Chat.escapeHTML).join(`<br />`);
+		user.sendTo(room, `|html|<div class="chat"><code style="white-space: pre-wrap; display: table">${inputLog}</code></div>`);
 	},
 
 	importinputlog(/** @type {string} */ target, /** @type {Room?} */ room, /** @type {User} */ user) {
-		if (!this.can('forcewin')) return;
+		if (!this.can('broadcast')) return;
 		const formatIndex = target.indexOf('"formatid":"');
 		const nextQuoteIndex = target.indexOf('"', formatIndex + 12);
 		if (formatIndex < 0 || nextQuoteIndex < 0) return this.errorReply(`Invalid input log`);
 		const formatid = target.slice(formatIndex + 12, nextQuoteIndex);
 		const battleRoom = Rooms.createBattle(formatid, {inputLog: target});
 		this.parse(`/join ${battleRoom.id}`);
+		battleRoom.auth[user.userid] = Users.PLAYER_SYMBOL;
 	},
 
 	/*********************************************************
