@@ -910,9 +910,16 @@ class Tournament {
 	}
 }
 
-function createTournamentGenerator(generator, args, output) {
+function getGenerator(generator) {
 	generator = toId(generator);
-	let Generator = TournamentGenerators[generator];
+	switch (generator) {
+	case 'elim': generator = 'elimination'; break;
+	case 'rr': generator = 'roundrobin'; break;
+	}
+	return TournamentGenerators[generator];
+}
+function createTournamentGenerator(generator, args, output) {
+	let Generator = getGenerator(generator);
 	if (!Generator) {
 		output.errorReply(generator + " is not a valid type.");
 		output.errorReply("Valid types: " + Object.keys(TournamentGenerators).join(", "));
@@ -940,11 +947,7 @@ function createTournament(room, format, generator, playerCap, isRated, args, out
 		output.errorReply("Valid formats: " + Object.values(Dex.formats).filter(f => f.tournamentShow).map(format => format.name).join(", "));
 		return;
 	}
-	switch (generator) {
-	case 'elim': generator = 'elimination'; break;
-	case 'rr': generator = 'roundrobin'; break;
-	}
-	if (!TournamentGenerators[generator]) {
+	if (!getGenerator(generator)) {
 		output.errorReply(generator + " is not a valid type.");
 		output.errorReply("Valid types: " + Object.keys(TournamentGenerators).join(", "));
 		return;
