@@ -183,7 +183,7 @@ describe('Choice parser', function () {
 				assert.false.fainted(p1.active[1]);
 
 				assert(battle.choose('p1', 'move smog 2'));
-				assert.strictEqual(battle.p1.getChoice(true), `pass, move smog 2`, `Choice mismatch`);
+				assert.strictEqual(battle.p1.getChoice(), `pass, move smog 2`, `Choice mismatch`);
 			});
 		});
 
@@ -298,16 +298,16 @@ describe('Choice parser', function () {
 				const validChoices = ['move spikes', 'move 1'];
 				validChoices.forEach(action => {
 					battle.choose('p1', action);
-					assert.strictEqual(battle.p1.getChoice(true), `pass, move spikes, pass`);
+					assert.strictEqual(battle.p1.getChoice(), `pass, move spikes, pass`);
 					battle.p1.clearChoice();
 					battle.choose('p1', `pass, ${action}, pass`);
-					assert.strictEqual(battle.p1.getChoice(true), `pass, move spikes, pass`);
+					assert.strictEqual(battle.p1.getChoice(), `pass, move spikes, pass`);
 					battle.p1.clearChoice();
 					battle.choose('p1', `pass, ${action}`);
-					assert.strictEqual(battle.p1.getChoice(true), `pass, move spikes, pass`);
+					assert.strictEqual(battle.p1.getChoice(), `pass, move spikes, pass`);
 					battle.p1.clearChoice();
 					battle.choose('p1', `${action}, pass`);
-					assert.strictEqual(battle.p1.getChoice(true), `pass, move spikes, pass`);
+					assert.strictEqual(battle.p1.getChoice(), `pass, move spikes, pass`);
 					battle.p1.clearChoice();
 				});
 			});

@@ -3132,9 +3132,9 @@ class Battle extends Dex.ModdedDex {
 			side.autoChoose();
 		}
 		this.LEGACY_API_DO_NOT_USE = oldFlag;
-		let p1choice = this.p1.getChoice(true);
+		let p1choice = this.p1.getChoice();
 		if (p1choice) this.inputLog.push(`>p1 ${p1choice}`);
-		let p2choice = this.p2.getChoice(true);
+		let p2choice = this.p2.getChoice();
 		if (p2choice) this.inputLog.push(`>p2 ${p2choice}`);
 		for (const side of this.sides) {
 			this.addToQueue(side.choice.actions);

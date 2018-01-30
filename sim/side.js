@@ -50,8 +50,6 @@ class Side {
 		let sideScripts = battle.data.Scripts.side;
 		if (sideScripts) Object.assign(this, sideScripts);
 
-		this.getChoice = (/**@param {Side | boolean} side */side => this.getChoiceInner(side));
-
 		/**@type {Battle} */
 		this.battle = battle;
 		this.n = sideNum;
@@ -116,11 +114,10 @@ class Side {
 		}
 	}
 
-	/**
-	 * @param {Side | boolean} side
-	 */
-	getChoiceInner(side) {
-		if (side !== this && side !== true) return '';
+	getChoice() {
+		if (this.choice.actions.length > 1 && this.choice.actions.every(action => action.choice === 'team')) {
+			return `team ` + this.choice.actions.map(action => action.pokemon.position + 1).join(', ');
+		}
 		return this.choice.actions.map(action => {
 			switch (action.choice) {
 			case 'move':
