@@ -681,7 +681,7 @@ describe('Choices', function () {
 			battle.p2.chooseTeam('1234');
 
 			const logText = battle.inputLog.join('\n');
-			const subString = '>p1 team 1, team 3, team 4, team 2\n>p2 team 1, team 2, team 3, team 4';
+			const subString = '>p1 team 1, 3, 4, 2\n>p2 team 1, 2, 3, 4';
 			assert(logText.includes(subString), `${logText} does not include ${subString}`);
 		});
 
