@@ -251,7 +251,7 @@ class Tournament {
 		if (!(user.userid in this.players)) return;
 		if (this.isTournamentStarted) {
 			if (!this.disqualifiedUsers.get(this.players[user.userid])) {
-				this.disqualifyUser(user.userid, user, null);
+				this.disqualifyUser(user.userid);
 			}
 		} else {
 			this.removeUser(user);
