@@ -382,9 +382,7 @@ class ModdedDex {
 				}
 			}
 			if (!template.tier) template.tier = 'Illegal';
-			if (!template.doublesTier) {
-				template.doublesTier = template.tier;
-			}
+			if (!template.doublesTier) template.doublesTier = template.tier;
 		} else {
 			template = new Data.Template({name, exists: false});
 		}
