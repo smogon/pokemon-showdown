@@ -950,7 +950,7 @@ if (!PM.isParentProcess) {
 			require('./lib/crashlogger')(err, 'A simulator process');
 		});
 		process.on('unhandledRejection', err => {
-			throw err;
+			require('./lib/crashlogger')(err, 'A simulator process Promise');
 		});
 	}
 
