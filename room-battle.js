@@ -949,6 +949,9 @@ if (!PM.isParentProcess) {
 		process.on('uncaughtException', err => {
 			require('./lib/crashlogger')(err, 'A simulator process');
 		});
+		process.on('unhandledRejection', err => {
+			throw err;
+		});
 	}
 
 	require('./lib/repl').start(`sim-${process.pid}`, cmd => eval(cmd));
