@@ -680,6 +680,16 @@ exports.BattleMovedex = {
 			},
 		},
 	},
+	swagger: {
+		inherit: true,
+		desc: "Raises the target's Attack by 2 stages and confuses it. This move will miss if the target's Attack cannot be raised.",
+		onTryHit: function (target, pokemon) {
+			if (target.boosts.atk >= 6 || target.getStat('atk', false, true) === 999) {
+				this.add('-miss', pokemon);
+				return null;
+			}
+		},
+	},
 	synthesis: {
 		inherit: true,
 		onHit: function (pokemon) {
