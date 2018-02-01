@@ -1454,7 +1454,8 @@ function runLearn(target, cmd) {
 	if (!formatName) formatName = 'Gen ' + gen;
 	let lsetData = {set: {}, sources: [], sourcesBefore: gen};
 
-	let template = Dex.getTemplate(targets.shift());
+	const validator = TeamValidator(formatid);
+	let template = validator.dex.getTemplate(targets.shift());
 	let move = {};
 	let all = (cmd === 'learnall');
 	if (cmd === 'learn5') lsetData.set.level = 5;
@@ -1471,10 +1472,9 @@ function runLearn(target, cmd) {
 		return {error: "You must specify at least one move."};
 	}
 
-	const validator = TeamValidator(formatid);
 	let lsetProblem;
 	for (const arg of targets) {
-		move = Dex.getMove(arg);
+		move = validator.dex.getMove(arg);
 		if (!move.exists || move.id === 'magikarpsrevenge') {
 			return {error: `Move '${move.id}' not found.`};
 		}
@@ -1489,7 +1489,7 @@ function runLearn(target, cmd) {
 	}
 	let problems = validator.reconcileLearnset(template, lsetData, lsetProblem);
 	let buffer = `In ${formatName}, `;
-	buffer += "" + template.name + (problems ? " <span class=\"message-learn-cannotlearn\">can't</span> learn " : " <span class=\"message-learn-canlearn\">can</span> learn ") + (targets.length > 1 ? "these moves" : move.name);
+	buffer += `${template.name}` + (problems ? ` <span class="message-learn-cannotlearn">can't</span> learn ` : ` <span class="message-learn-canlearn">can</span> learn `) + (targets.length > 1 ? `these moves` : move.name);
 	if (!problems) {
 		let sourceNames = {E: "egg", S: "event", D: "dream world", V: "virtual console transfer from gen 1-2", X: "egg, traded back", Y: "event, traded back"};
 		let sourcesBefore = lsetData.sourcesBefore;
