@@ -575,7 +575,7 @@ class Battle {
 			this.started = true;
 			if (!this.ended) {
 				this.ended = true;
-				this.onEnd(this.logData.winnerid);
+				this.onEnd(this.logData.winner);
 				this.removeAllPlayers();
 			}
 			this.checkActive();
