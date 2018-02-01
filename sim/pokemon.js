@@ -794,7 +794,7 @@ class Pokemon {
 			}
 			if (this.template.num === 493) {
 				// Arceus formes
-				let item = Dex.getItem(this.item);
+				let item = this.getItem();
 				let targetForme = (item && item.onPlate ? 'Arceus-' + item.onPlate : 'Arceus');
 				if (this.template.species !== targetForme) {
 					this.formeChange(targetForme);
