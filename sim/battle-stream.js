@@ -56,8 +56,25 @@ class BattleStream extends Streams.ObjectReadWriteStream {
 	 */
 	_write(message) {
 		let startTime = Date.now();
-		for (const line of message.split('\n')) {
-			if (line.charAt(0) === '>') this._writeLine(line.slice(1));
+		try {
+			for (const line of message.split('\n')) {
+				if (line.charAt(0) === '>') this._writeLine(line.slice(1));
+			}
+		} catch (err) {
+			const battle = this.battle;
+			require('./../lib/crashlogger')(err, 'A battle', {
+				message: message,
+				inputLog: '\n' + battle && battle.inputLog.join('\n'),
+				log: '\n' + battle && battle.getDebugLog(),
+			});
+
+			this.push(`update\n|html|<div class="broadcast-red"><b>The battle crashed</b><br />Don't worry, we're working on fixing it.</div>`);
+			if (battle && battle.p1 && battle.p1.currentRequest) {
+				this.push(`sideupdate\np1\n|error|[Invalid choice] The battle crashed`);
+			}
+			if (battle && battle.p2 && battle.p2.currentRequest) {
+				this.push(`sideupdate\np2\n|error|[Invalid choice] The battle crashed`);
+			}
 		}
 		if (this.battle) this.battle.sendUpdates();
 		let deltaTime = Date.now() - startTime;
