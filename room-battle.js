@@ -532,12 +532,12 @@ class Battle {
 	receive(/** @type {string[]} */ lines) {
 		switch (lines[0]) {
 		case 'update':
-			this.checkActive();
 			for (const line of lines.slice(1)) {
 				this.room.add(line);
 			}
 			this.room.update();
 			if (!this.ended) this.timer.nextRequest();
+			this.checkActive();
 			break;
 
 		case 'sideupdate': {
@@ -578,6 +578,7 @@ class Battle {
 				this.onEnd(this.logData.winnerid);
 				this.removeAllPlayers();
 			}
+			this.checkActive();
 			break;
 		}
 	}
