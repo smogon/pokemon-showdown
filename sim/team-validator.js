@@ -835,32 +835,51 @@ class Validator {
 						throw new Error(`invalid limitedEgg on ${name}: ${limitedEgg} with ${source}`);
 					}
 					let potentialFather = dex.getTemplate(source.slice(source.charAt(2) === 'T' ? 3 : 2));
+					if (potentialFather.id === 'smeargle') {
+						validFatherExists = true;
+						break;
+					}
 					if (!potentialFather.learnset) throw new Error(`${potentialFather.species} has no learnset`);
-					let restrictedSources = 0;
+					/**
+					 * '' = no sources to worry about
+					 * [source string] = one restricted move
+					 * '!' = incompatible restricted moves
+					 * @type {string}
+					 */
+					let restrictedSource = '';
+					// fathers that can't breed with Smeargle might have incompatible egg moves
+					const eggsRestricted = !potentialFather.eggGroups.includes('Field');
 					for (const moveid of limitedEgg) {
 						let fatherSources = potentialFather.learnset[moveid] || potentialFather.learnset['sketch'];
 						if (!fatherSources) throw new Error(`Egg move father ${potentialFather.id} can't learn ${moveid}`);
-						let hasUnrestrictedSource = false;
 						let hasSource = false;
 						for (const fatherSource of fatherSources) {
 							// Triply nested loop! Fortunately, all the loops are designed
 							// to be as short as possible.
 							if (+source.charAt(0) > eggGen) continue;
 							hasSource = true;
-							if (fatherSource.charAt(1) !== 'E' && fatherSource.charAt(1) !== 'S') {
-								hasUnrestrictedSource = true;
-								break;
+							if (fatherSource.charAt(1) === 'E') {
+								if (restrictedSource && (restrictedSource !== fatherSource || eggsRestricted)) {
+									restrictedSource = '!';
+									break;
+								}
+								restrictedSource = fatherSource;
+							} else if (fatherSource.charAt(1) === 'S') {
+								if (restrictedSource && restrictedSource !== fatherSource) {
+									restrictedSource = '!';
+									break;
+								}
+								restrictedSource = fatherSource;
 							}
 						}
 						if (!hasSource) {
 							// no match for the current gen; early escape
-							restrictedSources = 10;
+							restrictedSource = '!';
 							break;
 						}
-						if (!hasUnrestrictedSource) restrictedSources++;
-						if (restrictedSources > 1) break;
+						if (restrictedSource === '!') break;
 					}
-					if (restrictedSources <= 1) {
+					if (restrictedSource !== '!') {
 						validFatherExists = true;
 						// console.log("valid father: " + potentialFather.id);
 						break;
