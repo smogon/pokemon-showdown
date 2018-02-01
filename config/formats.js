@@ -231,7 +231,7 @@ exports.Formats = [
 		desc: [`&bullet; <a href="http://www.smogon.com/forums/threads/3627404/">Ultra Sinnoh Classic Discussion</a>`],
 
 		mod: 'gen7',
-		maxForcedLevel: 50,
+		forcedLevel: 50,
 		teamLength: {
 			validate: [3, 6],
 			battle: 3,
