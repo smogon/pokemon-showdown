@@ -1522,7 +1522,7 @@ exports.commands = {
 		this.add('|unlink|hide|' + userid);
 		if (userid !== toId(this.inputUsername)) this.add('|unlink|hide|' + toId(this.inputUsername));
 
-		if (!room.isPrivate && room.chatRoomData) {
+		if (room.isPrivate !== true && room.chatRoomData) {
 			this.globalModlog("ROOMBAN", targetUser, " by " + user.userid + (target ? ": " + target : ""));
 		}
 		return true;
