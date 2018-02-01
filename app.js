@@ -48,12 +48,12 @@ try {
 	// script that this is worth repeating here
 	eval('{ let a = async () => {}; }');
 } catch (e) {
-	throw new Error("We require Node.js version 8 or later; you're using " + process.version);
+	throw new Error(`We require Node.js version 8 or later; you're using ${process.version}`);
 }
 try {
 	require.resolve('sockjs');
 } catch (e) {
-	throw new Error("Dependencies are unmet; run node pokemon-showdown before launching Pokemon Showdown again.");
+	throw new Error(`Dependencies are unmet; run node pokemon-showdown before launching Pokemon Showdown again.`);
 }
 
 const FS = require('./lib/fs');
@@ -66,7 +66,7 @@ try {
 	require.resolve('./config/config');
 } catch (err) {
 	if (err.code !== 'MODULE_NOT_FOUND') throw err; // should never happen
-	throw new Error('config.js does not exist; run node pokemon-showdown to set up the default config file before launching Pokemon Showdown again.');
+	throw new Error(`config.js does not exist; run node pokemon-showdown to set up the default config file before launching Pokemon Showdown again.`);
 }
 
 global.Config = require('./config/config');
@@ -117,7 +117,7 @@ Dnsbl.loadDatacenters();
 if (Config.crashguard) {
 	// graceful crash - allow current battles to finish before restarting
 	process.on('uncaughtException', err => {
-		let crashType = require('./lib/crashlogger')(err, 'The main process');
+		let crashType = require('./lib/crashlogger')(err, `The main process`);
 		if (crashType === 'lockdown') {
 			Rooms.global.startLockdown(err);
 		} else {
@@ -125,7 +125,7 @@ if (Config.crashguard) {
 		}
 	});
 	process.on('unhandledRejection', err => {
-		let crashType = require('./lib/crashlogger')(err, 'A main process Promise');
+		let crashType = require('./lib/crashlogger')(err, `A main process Promise`);
 		if (crashType === 'lockdown') {
 			Rooms.global.startLockdown(err);
 		} else {
