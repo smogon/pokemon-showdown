@@ -228,9 +228,7 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 7] Ultra Sinnoh Classic",
-		desc: [
-			'&bullet; <a href="http://www.smogon.com/forums/threads/3627404/">Ultra Sinnoh Classic Discussion</a>',
-		],
+		desc: [`&bullet; <a href="http://www.smogon.com/forums/threads/3627404/">Ultra Sinnoh Classic Discussion</a>`],
 
 		mod: 'gen7',
 		maxForcedLevel: 50,
@@ -238,17 +236,14 @@ exports.Formats = [
 			validate: [3, 6],
 			battle: 3,
 		},
-		ruleset: ['Pokemon', 'Standard GBU'],
+		ruleset: ['Pokemon', 'Standard GBU', 'Sinnoh Pokedex'],
 		onValidateSet: function (set) {
-			const sinnohDex = ["Turtwig", "Grotle", "Torterra", "Chimchar", "Monferno", "Infernape", "Piplup", "Prinplup", "Empoleon", "Starly", "Staravia", "Staraptor", "Bidoof", "Bibarel", "Kricketot", "Kricketune", "Shinx", "Luxio", "Luxray", "Abra", "Kadabra", "Alakazam", "Magikarp", "Gyarados", "Budew", "Roselia", "Roserade", "Zubat", "Golbat", "Crobat", "Geodude", "Graveler", "Golem", "Onix", "Steelix", "Cranidos", "Rampardos", "Shieldon", "Bastiodon", "Machop", "Machoke", "Machamp", "Psyduck", "Golduck", "Burmy", "Wormadam", "Wormadam-Trash", "Wormadam-Sandy", "Mothim", "Wurmple", "Silcoon", "Beautifly", "Cascoon", "Dustox", "Combee", "Vespiquen", "Pachirisu", "Buizel", "Floatzel", "Cherubi", "Cherrim", "Shellos", "Gastrodon", "Heracross", "Aipom", "Ambipom", "Drifloon", "Drifblim", "Buneary", "Lopunny", "Gastly", "Haunter", "Gengar", "Misdreavus", "Mismagius", "Murkrow", "Honchkrow", "Glameow", "Purugly", "Goldeen", "Seaking", "Barboach", "Whiscash", "Chingling", "Chimecho", "Stunky", "Skuntank", "Meditite", "Medicham", "Bronzor", "Bronzong", "Ponyta", "Rapidash", "Bonsly", "Sudowoodo", "Mime Jr.", "Mr. Mime", "Happiny", "Chansey", "Blissey", "Cleffa", "Clefairy", "Clefable", "Chatot", "Pichu", "Pikachu", "Raichu", "Hoothoot", "Noctowl", "Spiritomb", "Gible", "Gabite", "Garchomp", "Munchlax", "Snorlax", "Unown", "Riolu", "Lucario", "Wooper", "Quagsire", "Wingull", "Pelipper", "Girafarig", "Hippopotas", "Hippowdon", "Azurill", "Marill", "Azumarill", "Skorupi", "Drapion", "Croagunk", "Toxicroak", "Carnivine", "Remoraid", "Octillery", "Finneon", "Lumineon", "Tentacool", "Tentacruel", "Feebas", "Milotic", "Mantyke", "Mantine", "Snover", "Abomasnow", "Sneasel", "Weavile", "Uxie", "Mesprit", "Azelf", "Dialga", "Palkia", "Manaphy", "Rotom", "Rotom-Heat", "Rotom-Wash", "Rotom-Frost", "Rotom-Fan", "Rotom-Mow", "Gligar", "Gliscor", "Nosepass", "Probopass", "Ralts", "Kirlia", "Gardevoir", "Gallade", "Lickitung", "Lickilicky", "Eevee", "Vaporeon", "Jolteon", "Flareon", "Espeon", "Umbreon", "Leafeon", "Glaceon", "Swablu", "Altaria", "Togepi", "Togetic", "Togekiss", "Houndour", "Houndoom", "Magnemite", "Magneton", "Magnezone", "Tangela", "Tangrowth", "Yanma", "Yanmega", "Tropius", "Rhyhorn", "Rhydon", "Rhyperior", "Duskull", "Dusclops", "Dusknoir", "Porygon", "Porygon2", "Porygon-Z", "Scyther", "Scizor", "Elekid", "Electabuzz", "Electivire", "Magby", "Magmar", "Magmortar", "Swinub", "Piloswine", "Mamoswine", "Snorunt", "Glalie", "Froslass", "Absol"];
-			if (!sinnohDex.includes(set.species)) {
-				return [`${set.name || set.species} is not in the Sinnoh Pokédex.`];
+			const item = this.getItem(set.item);
+			if (item.megaStone) {
+				return [`(${set.name} is holding ${item.name})`, `Mega Stones are banned in Ultra Sinnoh Classic.`];
 			}
-			if (this.getItem(set.item).megaStone) {
-				return [`(${set.name} is holding ${this.getItem(set.item).name})`, `Mega Stones are banned in Ultra Sinnoh Classic.`];
-			}
-			if (this.getItem(set.item).zMove) {
-				return [`(${set.name} is holding ${this.getItem(set.item).name})`, `Z Crystals are banned in Ultra Sinnoh Classic.`];
+			if (item.zMove) {
+				return [`(${set.name} is holding ${item.name})`, `Z-Crystals are banned in Ultra Sinnoh Classic.`];
 			}
 		},
 	},
