@@ -121,7 +121,7 @@ describe('Team Validator', function () {
 		assert(illegal);
 
 		team = [
-			{species: 'blissey', moves: ['present', 'healbell']}
+			{species: 'blissey', moves: ['present', 'healbell']},
 		];
 		illegal = TeamValidator('gen2ou').validateTeam(team);
 		assert.strictEqual(illegal, null);
