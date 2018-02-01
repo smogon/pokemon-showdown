@@ -125,7 +125,7 @@ if (Config.crashguard) {
 		}
 	});
 	process.on('unhandledRejection', err => {
-		let crashType = require('./lib/crashlogger')(err, 'A Promise in the main process');
+		let crashType = require('./lib/crashlogger')(err, 'A main process Promise');
 		if (crashType === 'lockdown') {
 			Rooms.global.startLockdown(err);
 		} else {
