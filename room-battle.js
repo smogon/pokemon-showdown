@@ -621,7 +621,7 @@ class Battle {
 			this.logData = null;
 		}
 		if (Config.autosavereplays) {
-			let uploader = Users.get(winnerid);
+			let uploader = Users.get(winnerid || p1id);
 			if (uploader && uploader.connections[0]) {
 				Chat.parse('/savereplay', this.room, uploader, uploader.connections[0]);
 			}
