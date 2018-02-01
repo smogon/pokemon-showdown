@@ -54,7 +54,7 @@ exports.BattleFormats = {
 	standard: {
 		effectType: 'ValidatorRule',
 		name: 'Standard',
-		ruleset: ['Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'Evasion Moves Clause', 'HP Percentage Mod', 'Cancel Mod'],
+		ruleset: ['Sleep Clause Mod', 'Freeze Clause Mod', 'Species Clause', 'OHKO Clause', 'Evasion Moves Clause', 'HP Percentage Mod', 'Cancel Mod'],
 		banlist: ['Unreleased', 'Illegal',
 			'Hypnosis + Perish Song + Mean Look',
 			'Hypnosis + Perish Song + Spider Web',
