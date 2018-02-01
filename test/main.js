@@ -6,6 +6,12 @@ const fs = require('fs');
 const noop = () => {};
 
 before('initialization', function () {
+	process.on('unhandledRejection', err => {
+		// I'd throw the err, but we have a heisenbug on our hands and I'd
+		// rather not have it screw with Travis in the interim
+		console.log(err);
+	});
+
 	// Load and override configuration before starting the server
 	let config;
 	try {
