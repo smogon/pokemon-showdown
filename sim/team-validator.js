@@ -797,7 +797,7 @@ class Validator {
 				let plural = (parseInt(problem.maxSketches) === 1 ? '' : 's');
 				problemString += ` can't be Sketched because it can only Sketch ${problem.maxSketches} move${plural}.`;
 			} else if (problem.type === 'pastgen') {
-				problemString += ` is only available in generation ${problem.gen} or later.`;
+				problemString += ` is not available in generation ${problem.gen} or later.`;
 			} else if (problem.type === 'invalid') {
 				problemString = `${name} can't learn ${problem.moveName}.`;
 			} else {
