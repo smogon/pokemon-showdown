@@ -389,163 +389,68 @@ exports.Formats = [
 		column: 2,
 	},
 	{
-		name: "[Gen 7] Inheritance",
+		name: "[Gen 7] Shared Power",
 		desc: [
-			`Pok&eacute;mon may use the ability and moves of another, as long as they forfeit their own learnset.`,
-			`&bullet; <a href="http://www.smogon.com/forums/threads/3592844/">Inheritance</a>`,
+			`All of the team's abilities are active at once, except those that are restricted.`,
+			`&bullet; <a href="http://www.smogon.com/forums/threads/3623341/">Shared Power</a>`,
 		],
 
-		mod: 'gen7',
-		ruleset: ['[Gen 7] OU'],
-		banlist: [
-			'Blacephalon', 'Hoopa-Unbound', 'Kartana', 'Kyurem-Black', 'Regigigas', 'Shedinja', 'Slaking', 'Gyaradosite',
-			'Huge Power', 'Imposter', 'Innards Out', 'Pure Power', 'Speed Boost', 'Water Bubble', 'Assist', 'Chatter', 'Shell Smash',
+		mod: 'sharedpower',
+		ruleset: ['[Gen 7] OU', 'Evasion Abilities Clause'],
+		banlist: ['Gyarados-Mega', 'Shedinja', 'Electric Seed ++ Grassy Seed ++ Misty Seed ++ Psychic Seed > 1'],
+		unbanlist: ['Aegislash', 'Blaziken', 'Blaziken-Mega', 'Deoxys-Defense'],
+		restrictedAbilities: [
+			'Chlorophyll', 'Comatose', 'Fluffy', 'Fur Coat', 'Huge Power', 'Illusion', 'Imposter',
+			'Mold Breaker', 'Protean', 'Pure Power', 'Sand Rush', 'Simple', 'Slush Rush', 'Speed Boost',
+			'Surge Surfer', 'Swift Swim', 'Teravolt', 'Tinted Lens', 'Trace', 'Water Bubble',
 		],
-		noChangeForme: true,
-		noChangeAbility: true,
-		getEvoFamily: function (species) {
-			let template = Dex.getTemplate(species);
-			while (template.prevo) {
-				template = Dex.getTemplate(template.prevo);
-			}
-			return template.speciesid;
-		},
-		validateSet: function (set, teamHas) {
-			if (!this.format.abilityMap) {
-				let abilityMap = Object.create(null);
-				for (let speciesid in Dex.data.Pokedex) {
-					let pokemon = Dex.data.Pokedex[speciesid];
-					if (pokemon.num < 1 || pokemon.species === 'Smeargle') continue;
-					if (Dex.data.FormatsData[speciesid].requiredItem || Dex.data.FormatsData[speciesid].requiredMove) continue;
-					for (let key in pokemon.abilities) {
-						let abilityId = toId(pokemon.abilities[key]);
-						if (abilityMap[abilityId]) {
-							abilityMap[abilityId][pokemon.evos ? 'push' : 'unshift'](speciesid);
-						} else {
-							abilityMap[abilityId] = [speciesid];
-						}
-					}
+		onBeforeSwitchIn: function (pokemon) {
+			let restrictedAbilities = this.getFormat().restrictedAbilities.map(toId);
+			pokemon.side.pokemon.forEach(ally => {
+				if (ally.baseAbility !== pokemon.baseAbility && !restrictedAbilities.includes(ally.baseAbility)) {
+					let effect = 'ability' + ally.baseAbility;
+					pokemon.volatiles[effect] = {id: effect, target: pokemon};
 				}
-				this.format.abilityMap = abilityMap;
-			}
-
-			this.format.noChangeForme = false;
-			let problems = Dex.getFormat('Pokemon').onChangeSet.call(Dex, set, this.format) || [];
-			this.format.noChangeForme = true;
-
-			if (problems.length) return problems;
-
-			let species = toId(set.species);
-			let template = Dex.getTemplate(species);
-			if (!template.exists) return [`The Pokemon "${set.species}" does not exist.`];
-			if (template.isUnreleased) return [`${template.species} is unreleased.`];
-			let megaTemplate = Dex.getTemplate(Dex.getItem(set.item).megaStone);
-			if (template.tier === 'Uber' || megaTemplate.tier === 'Uber' || this.format.banlist.includes(template.species)) return [`${megaTemplate.tier === 'Uber' ? megaTemplate.species : template.species} is banned.`];
-
-			let name = set.name;
-
-			let abilityId = toId(set.ability);
-
-			if (!abilityId || !(abilityId in Dex.data.Abilities)) return [`${name} needs to have a valid ability.`];
-			let pokemonWithAbility = this.format.abilityMap[abilityId];
-			if (!pokemonWithAbility) return [`"${set.ability}" is not available on a legal Pokemon.`];
-
-			let canonicalSource = ''; // Specific for the basic implementation of Donor Clause (see onValidateTeam).
-			let validSources = set.abilitySources = []; // Evolution families
-			for (const donor of pokemonWithAbility) {
-				let donorTemplate = Dex.getTemplate(donor);
-				let evoFamily = this.format.getEvoFamily(donorTemplate);
-
-				if (validSources.indexOf(evoFamily) >= 0) continue;
-
-				if (set.name === set.species) delete set.name;
-				set.species = donorTemplate.species;
-				problems = this.validateSet(set, teamHas) || [];
-
-				if (!problems.length) {
-					canonicalSource = donorTemplate.species;
-					validSources.push(evoFamily);
-				}
-				if (validSources.length > 1) {
-					// Specific for the basic implementation of Donor Clause (see onValidateTeam).
-					break;
-				}
-			}
-
-			set.species = template.species;
-			if (!validSources.length && pokemonWithAbility.length > 1) {
-				return [`${template.species}'s set is illegal.`];
-			}
-			if (!validSources.length) {
-				problems.unshift(`${template.species} has an illegal set with an ability from ${Dex.getTemplate(pokemonWithAbility[0]).name}.`);
-				return problems;
-			}
-
-			// Protocol: Include the data of the donor species in the `ability` data slot.
-			// Afterwards, we are going to reset the name to what the user intended. :]
-			set.ability = `${set.ability}0${canonicalSource}`;
+			});
 		},
-		onValidateTeam: function (team, format) {
-			// Donor Clause
-			let evoFamilyLists = [];
-			for (const set of team) {
-				if (!set.abilitySources) continue;
-				evoFamilyLists.push(set.abilitySources.map(format.getEvoFamily));
-			}
-
-			// Checking actual full incompatibility would require expensive algebra.
-			// Instead, we only check the trivial case of multiple Pokémon only legal for exactly one family. FIXME?
-			// This clause has only gotten more complex over time, so this is probably a won't fix.
-			let requiredFamilies = Object.create(null);
-			for (const evoFamilies of evoFamilyLists) {
-				if (evoFamilies.length !== 1) continue;
-				let [familyId] = evoFamilies;
-				if (!(familyId in requiredFamilies)) requiredFamilies[familyId] = 1;
-				requiredFamilies[familyId]++;
-				if (requiredFamilies[familyId] > 2) return [`You are limited to up to two inheritances from each evolution family by the Donor Clause.`, `(You inherit more than twice from ${this.getTemplate(familyId).species}).`];
-			}
-		},
-		onBegin: function () {
-			for (const pokemon of this.p1.pokemon.concat(this.p2.pokemon)) {
-				if (pokemon.baseAbility.includes('0')) {
-					let donor = pokemon.baseAbility.split('0')[1];
-					pokemon.donor = toId(donor);
-					pokemon.baseAbility = pokemon.baseAbility.split('0')[0];
-					pokemon.ability = pokemon.baseAbility;
-				}
-			}
-		},
+		onSwitchInPriority: 2,
 		onSwitchIn: function (pokemon) {
-			if (!pokemon.donor) return;
-			let donorTemplate = this.getTemplate(pokemon.donor);
-			if (!donorTemplate.exists) return;
-			// Place volatiles on the Pokémon to show the donor details.
-			this.add('-start', pokemon, donorTemplate.species, '[silent]');
+			let restrictedAbilities = this.getFormat().restrictedAbilities.map(toId);
+			pokemon.side.pokemon.forEach(ally => {
+				if (ally.baseAbility !== pokemon.baseAbility && !restrictedAbilities.includes(ally.baseAbility)) {
+					let effect = 'ability' + ally.baseAbility;
+					delete pokemon.volatiles[effect];
+					pokemon.addVolatile(effect);
+				}
+			});
+		},
+		onAfterMega: function (pokemon) {
+			let restrictedAbilities = this.getFormat().restrictedAbilities.map(toId);
+			pokemon.removeVolatile('ability' + pokemon.baseAbility);
+			pokemon.side.pokemon.forEach(ally => {
+				if (ally.baseAbility !== pokemon.baseAbility && !restrictedAbilities.includes(ally.baseAbility)) {
+					let effect = 'ability' + ally.baseAbility;
+					pokemon.addVolatile(effect);
+				}
+			});
 		},
 	},
 	{
-		name: "[Gen 7] Alphabet Cup",
+		name: "[Gen 7] Middle Cup",
 		desc: [
-			`Pok&eacute;mon can learn any move it shares the first letter of its name with.`,
-			`&bullet; <a href="http://www.smogon.com/forums/threads/3617977/">Alphabet Cup</a>`,
+			`Only Pok&eacute;mon that are in the middle stage of an evolutionary line are allowed.`,
+			`&bullet; <a href="http://www.smogon.com/forums/threads/3588047/">Middle Cup</a>`,
 		],
 
 		mod: 'gen7',
+		maxLevel: 50,
+		defaultLevel: 50,
 		ruleset: ['[Gen 7] OU'],
-		restrictedMoves: ['Geomancy', 'Shell Smash', 'Sketch'],
-		checkLearnset: function (move, template, lsetData, set) {
-			if (!move.isZ && !this.format.restrictedMoves.includes(move.name) && move.id[0] === template.speciesid[0]) return false;
-			return this.checkLearnset(move, template, lsetData, set);
-		},
-		onValidateTeam: function (team) {
-			let alphabetTable = {};
-			for (const set of team) {
-				let letter = toId(set.species).slice(0, 1);
-				if (alphabetTable[letter]) {
-					return ["You are limited to one Pokémon per letter.", "(You have more than one Pokémon beginning with " + letter.toUpperCase() + ")"];
-				}
-				alphabetTable[letter] = true;
-			}
+		banlist: ['Combusken', 'Eviolite', 'Light Ball'],
+		onValidateSet: function (set) {
+			let template = this.getTemplate(set.species);
+			if (!template.prevo) return [set.species + " is not an evolved Pokemon."];
+			if (!template.nfe) return [set.species + " does not have an evolution."];
 		},
 	},
 	{
