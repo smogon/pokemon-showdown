@@ -391,8 +391,8 @@ exports.Formats = [
 	{
 		name: "[Gen 7] Shared Power",
 		desc: [
-			"All of the team's abilities are active at once, except those that are restricted.",
-			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3623341/\">Shared Power</a>",
+			`All of the team's abilities are active at once, except those that are restricted.`,
+			`&bullet; <a href="http://www.smogon.com/forums/threads/3623341/">Shared Power</a>`,
 		],
 
 		mod: 'sharedpower',
@@ -438,8 +438,8 @@ exports.Formats = [
 	{
 		name: "[Gen 7] Middle Cup",
 		desc: [
-			"Only Pok&eacute;mon that are in the middle stage of an evolutionary line are allowed.",
-			"&bullet; <a href=\"http://www.smogon.com/forums/threads/3588047/\">Middle Cup</a>",
+			`Only Pok&eacute;mon that are in the middle stage of an evolutionary line are allowed.`,
+			`&bullet; <a href="http://www.smogon.com/forums/threads/3588047/">Middle Cup</a>`,
 		],
 
 		mod: 'gen7',
