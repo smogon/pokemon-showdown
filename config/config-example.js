@@ -389,6 +389,7 @@ exports.grouplist = [
 		roomonly: true,
 		tournamentsmanagement: true,
 		gamemanagement: true,
+		joinbattle: true,
 	},
 	{
 		symbol: '\u2606',
