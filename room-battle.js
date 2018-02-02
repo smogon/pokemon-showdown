@@ -271,7 +271,6 @@ class BattleTimer {
 		}
 	}
 	checkActivity() {
-		if (!this.settings.dcTimer) return;
 		for (const slotNum of this.ticksLeft.keys()) {
 			const slot = /** @type {PlayerSlot} */ ('p' + (slotNum + 1));
 			const player = this.battle[slot];
@@ -281,9 +280,17 @@ class BattleTimer {
 
 			if (!isConnected) {
 				// player has disconnected: don't wait longer than 6 ticks (1 minute)
-				this.dcTicksLeft[slotNum] = DISCONNECTION_TICKS;
+				if (this.settings.dcTimer) {
+					this.dcTicksLeft[slotNum] = DISCONNECTION_TICKS;
+				} else {
+					this.dcTicksLeft[slotNum] = NOT_DISCONNECTED - 1;
+				}
 				if (this.timerRequesters.size) {
-					this.battle.room.add(`|inactive|${this.battle.playerNames[slotNum]} disconnected and has a minute to reconnect!`).update();
+					if (this.settings.dcTimer) {
+						this.battle.room.add(`|inactive|${this.battle.playerNames[slotNum]} disconnected and has a minute to reconnect!`).update();
+					} else {
+						this.battle.room.add(`|inactive|${this.battle.playerNames[slotNum]} disconnected!`).update();
+					}
 				}
 			} else {
 				// player has reconnected
