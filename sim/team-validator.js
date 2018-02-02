@@ -852,32 +852,35 @@ class Validator {
 					for (const moveid of limitedEgg) {
 						let fatherSources = potentialFather.learnset[moveid] || potentialFather.learnset['sketch'];
 						if (!fatherSources) throw new Error(`Egg move father ${potentialFather.id} can't learn ${moveid}`);
-						let hasSource = false;
+						let bestSource = '!';
 						for (const fatherSource of fatherSources) {
 							// Triply nested loop! Fortunately, all the loops are designed
 							// to be as short as possible.
 							if (+source.charAt(0) > eggGen) continue;
-							hasSource = true;
 							if (fatherSource.charAt(1) === 'E') {
 								if (restrictedSource && (restrictedSource !== fatherSource || eggsRestricted)) {
-									restrictedSource = '!';
-									break;
+									continue;
+								} else {
+									bestSource = fatherSource;
 								}
-								restrictedSource = fatherSource;
 							} else if (fatherSource.charAt(1) === 'S') {
 								if (restrictedSource && restrictedSource !== fatherSource) {
-									restrictedSource = '!';
-									break;
+									continue;
+								} else {
+									bestSource = fatherSource;
 								}
-								restrictedSource = fatherSource;
+							} else {
+								bestSource = '';
+								break;
 							}
 						}
-						if (!hasSource) {
+						if (bestSource === '!') {
 							// no match for the current gen; early escape
 							restrictedSource = '!';
 							break;
+						} else if (bestSource !== '') {
+							restrictedSource = bestSource;
 						}
-						if (restrictedSource === '!') break;
 					}
 					if (restrictedSource !== '!') {
 						validFatherExists = true;
