@@ -249,16 +249,11 @@ const Monitor = module.exports = {
 	 */
 	countNetworkUse(size) {
 		if (!Config.emergency || typeof this.activeIp !== 'string') return;
-		// @ts-ignore
 		if (this.activeIp in this.networkUse) {
-			// @ts-ignore
 			this.networkUse[this.activeIp] += size;
-			// @ts-ignore
 			this.networkCount[this.activeIp]++;
 		} else {
-			// @ts-ignore
 			this.networkUse[this.activeIp] = size;
-			// @ts-ignore
 			this.networkCount[this.activeIp] = 1;
 		}
 	},
