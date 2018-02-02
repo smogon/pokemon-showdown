@@ -3482,29 +3482,17 @@ exports.commands = {
 
 		room.game.choose(user, target);
 	},
-
 	mv: 'move',
 	attack: 'move',
 	move: function (target, room, user) {
-		if (!room.game) return this.errorReply("This room doesn't have an active game.");
-		if (!room.game.choose) return this.errorReply("This game doesn't support /choose");
-
-		room.game.choose(user, 'move ' + target);
+		this.parse(`/choose move ${target}`);
 	},
-
 	sw: 'switch',
 	switch: function (target, room, user) {
-		if (!room.game) return this.errorReply("This room doesn't have an active game.");
-		if (!room.game.choose) return this.errorReply("This game doesn't support /choose");
-
-		room.game.choose(user, 'switch ' + parseInt(target));
+		this.parse(`/choose switch ${target}`);
 	},
-
 	team: function (target, room, user) {
-		if (!room.game) return this.errorReply("This room doesn't have an active game.");
-		if (!room.game.choose) return this.errorReply("This game doesn't support /choose");
-
-		room.game.choose(user, 'team ' + target);
+		this.parse(`/choose team ${target}`);
 	},
 
 	undo: function (target, room, user) {
