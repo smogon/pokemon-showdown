@@ -3449,16 +3449,29 @@ exports.commands = {
 		const formatIndex = target.indexOf(`"formatid":"`);
 		const nextQuoteIndex = target.indexOf(`"`, formatIndex + 12);
 		if (formatIndex < 0 || nextQuoteIndex < 0) return this.errorReply(`Invalid input log`);
+		target = target.replace(/\r/g, '');
 		if ((`\n` + target).includes(`\n>eval `) && !user.hasConsoleAccess(connection)) {
 			return this.errorReply(`Your input log contains untrusted code - you must have console access to use it`);
 		}
+
 		const formatid = target.slice(formatIndex + 12, nextQuoteIndex);
 		const battleRoom = Rooms.createBattle(formatid, {inputLog: target});
+
+		const nameIndex1 = target.indexOf(`"name":"`);
+		const nameNextQuoteIndex1 = target.indexOf(`"`, nameIndex1 + 8);
+		const nameIndex2 = target.indexOf(`"name":"`, nameNextQuoteIndex1 + 1);
+		const nameNextQuoteIndex2 = target.indexOf(`"`, nameIndex2 + 8);
+		if (nameIndex1 >= 0 && nameNextQuoteIndex1 >= 0 && nameIndex2 >= 0 && nameNextQuoteIndex2 >= 0) {
+			const name1 = target.slice(nameIndex1 + 8, nameNextQuoteIndex1);
+			const name2 = target.slice(nameIndex2 + 8, nameNextQuoteIndex2);
+			battleRoom.battle.playerNames = [name1, name2];
+		}
+
 		this.parse(`/join ${battleRoom.id}`);
 		battleRoom.auth[user.userid] = Users.HOST_SYMBOL;
 		setTimeout(() => {
 			// timer to make sure this goes under the battle
-			battleRoom.add(`|html|<div class="broadcast broadcast-blue"><strong>This is an imported replay</strong><br />Players will need to be manually added with <code>/addplayer USERNAME, SLOT</code></div>`);
+			battleRoom.add(`|html|<div class="broadcast broadcast-blue"><strong>This is an imported replay</strong><br />Players will need to be manually added with <code>/addplayer</code> or <code>/restoreplayers</code></div>`);
 		}, 500);
 	},
 
@@ -3556,7 +3569,6 @@ exports.commands = {
 			return this.errorReply(`This room already has a player in slot ${target}.`);
 		}
 
-		room.auth[targetUser.userid] = Users.PLAYER_SYMBOL;
 		room.battle.addPlayer(targetUser, target);
 		this.addModAction(`${name} was added to the battle as Player ${target.slice(1)} by ${user.name}.`);
 		this.modlog('ROOMPLAYER', targetUser.getLastId());
@@ -3564,6 +3576,26 @@ exports.commands = {
 	addplayerhelp: [
 		`/addplayer [username], p1 - Allow the specified user to join the battle as Player 1.`,
 		`/addplayer [username], p2 - Allow the specified user to join the battle as Player 2.`,
+	],
+
+	restoreplayers: function (target, room, user) {
+		if (!room.battle) return this.errorReply("You can only do this in battle rooms.");
+		if (room.rated) return this.errorReply("You can only add a Player to unrated battles.");
+
+		let didSomething = false;
+		if (!room.battle.p1 && room.battle.playerNames[0] !== 'Player 1') {
+			this.parse(`/addplayer ${room.battle.playerNames[0]}, p1`);
+			didSomething = true;
+		}
+		if (!room.battle.p2 && room.battle.playerNames[1] !== 'Player 2') {
+			this.parse(`/addplayer ${room.battle.playerNames[1]}, p2`);
+			didSomething = true;
+		}
+
+		if (!didSomething) return this.errorReply(`Players could not be restored (maybe this battle already has two players?)`);
+	},
+	restoreplayershelp: [
+		`/restoreplayers - Restore previous players in an imported input log.`,
 	],
 
 	joinbattle: 'joingame',
