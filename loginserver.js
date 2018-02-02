@@ -183,6 +183,10 @@ class LoginServerInstance {
 			this.requestEnd(error);
 		});
 
+		req.on('error', (/** @type {Error} */ error) => {
+			// ignore; will be handled by the 'close' handler
+		});
+
 		req.setTimeout(LOGIN_SERVER_TIMEOUT, () => {
 			req.abort();
 		});
