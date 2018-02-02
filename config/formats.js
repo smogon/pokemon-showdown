@@ -657,6 +657,7 @@ exports.Formats = [
 			`&bullet; <a href="http://www.smogon.com/forums/threads/3598418/">Camomons</a>`,
 		],
 		mod: 'gen7',
+		searchShow: false,
 		ruleset: ['[Gen 7] OU'],
 		banlist: ['Shedinja'],
 		onModifyTemplate: function (template, target, source) {
@@ -680,7 +681,6 @@ exports.Formats = [
 		],
 
 		mod: 'gen7',
-		searchShow: false,
 		ruleset: ['[Gen 7] OU', 'STABmons Move Legality'],
 		banlist: ['Kartana', 'Komala', 'Kyurem-Black', 'Silvally', 'Tapu Koko', 'Tapu Lele', 'Aerodactylite', 'King\'s Rock', 'Metagrossite', 'Razor Fang'],
 		restrictedMoves: ['Acupressure', 'Belly Drum', 'Chatter', 'Geomancy', 'Lovely Kiss', 'Shell Smash', 'Shift Gear', 'Thousand Arrows'],
