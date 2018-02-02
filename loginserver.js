@@ -224,6 +224,8 @@ let LoginServer = Object.assign(new LoginServerInstance(), {
 FS('./config/custom.css').onModify(() => {
 	LoginServer.request('invalidatecss');
 });
-LoginServer.request('invalidatecss');
+if (!Config.nofswriting) {
+	LoginServer.request('invalidatecss');
+}
 
 module.exports = LoginServer;
