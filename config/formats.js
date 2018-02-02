@@ -445,12 +445,12 @@ exports.Formats = [
 		mod: 'gen7',
 		maxLevel: 50,
 		defaultLevel: 50,
-		ruleset: ['[Gen 7] OU'],
-		banlist: ['Combusken', 'Eviolite', 'Light Ball'],
+		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
+		banlist: ['Combusken', 'Eviolite', 'Light Ball', 'Shadow Tag'],
 		onValidateSet: function (set) {
 			let template = this.getTemplate(set.species);
-			if (!template.prevo) return [set.species + " is not an evolved Pokemon."];
-			if (!template.nfe) return [set.species + " does not have an evolution."];
+			if (!template.prevo) return [`${set.species} is not an evolved Pokemon.`];
+			if (!template.nfe) return [`${set.species} does not have an evolution.`];
 		},
 	},
 	{
