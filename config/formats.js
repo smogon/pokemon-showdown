@@ -37,7 +37,7 @@ exports.Formats = [
 			`&bullet; <a href="http://www.smogon.com/forums/threads/3621042/">OU Metagame Discussion</a>`,
 			`&bullet; <a href="http://www.smogon.com/forums/threads/3587177/">OU Banlist</a>`,
 			`&bullet; <a href="http://www.smogon.com/forums/threads/3621329/">OU Viability Rankings</a>`,
-			`&bullet; <a href="http://www.smogon.com/forums/threads/3606650/">OU Sample Teams</a>`,
+			`&bullet; <a href="http://www.smogon.com/forums/threads/3626219/">OU Sample Teams</a>`,
 		],
 
 		mod: 'gen7',
