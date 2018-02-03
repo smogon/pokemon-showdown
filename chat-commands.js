@@ -2456,7 +2456,7 @@ exports.commands = {
 		const targetUser = this.targetUser;
 		if (!targetUser) {
 			this.errorReply(`User ${this.targetUsername} not found.`);
-			return this.errorReply(`If you are trying to blacklist an offline account use /blacklistname.`);
+			return this.errorReply(`If you want to blacklist an offline account by name (not IP), consider /blacklistname`);
 		}
 		if (!this.can('editroom', targetUser, room)) return false;
 		if (!room.chatRoomData) {
