@@ -406,33 +406,33 @@ exports.Formats = [
 		],
 		onBeforeSwitchIn: function (pokemon) {
 			let restrictedAbilities = this.getFormat().restrictedAbilities.map(toId);
-			pokemon.side.pokemon.forEach(ally => {
+			for (const ally of pokemon.side.pokemon) {
 				if (ally.baseAbility !== pokemon.baseAbility && !restrictedAbilities.includes(ally.baseAbility)) {
 					let effect = 'ability' + ally.baseAbility;
 					pokemon.volatiles[effect] = {id: effect, target: pokemon};
 				}
-			});
+			}
 		},
 		onSwitchInPriority: 2,
 		onSwitchIn: function (pokemon) {
 			let restrictedAbilities = this.getFormat().restrictedAbilities.map(toId);
-			pokemon.side.pokemon.forEach(ally => {
+			for (const ally of pokemon.side.pokemon) {
 				if (ally.baseAbility !== pokemon.baseAbility && !restrictedAbilities.includes(ally.baseAbility)) {
 					let effect = 'ability' + ally.baseAbility;
 					delete pokemon.volatiles[effect];
 					pokemon.addVolatile(effect);
 				}
-			});
+			}
 		},
 		onAfterMega: function (pokemon) {
 			let restrictedAbilities = this.getFormat().restrictedAbilities.map(toId);
 			pokemon.removeVolatile('ability' + pokemon.baseAbility);
-			pokemon.side.pokemon.forEach(ally => {
+			for (const ally of pokemon.side.pokemon) {
 				if (ally.baseAbility !== pokemon.baseAbility && !restrictedAbilities.includes(ally.baseAbility)) {
 					let effect = 'ability' + ally.baseAbility;
 					pokemon.addVolatile(effect);
 				}
-			});
+			}
 		},
 	},
 	{
