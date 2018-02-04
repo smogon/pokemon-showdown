@@ -397,12 +397,12 @@ exports.Formats = [
 
 		mod: 'sharedpower',
 		ruleset: ['[Gen 7] OU', 'Evasion Abilities Clause'],
-		banlist: ['Gyarados-Mega', 'Shedinja', 'Electric Seed ++ Grassy Seed ++ Misty Seed ++ Psychic Seed > 1'],
+		banlist: ['Gyarados-Mega', 'Shedinja'],
 		unbanlist: ['Aegislash', 'Blaziken', 'Blaziken-Mega', 'Deoxys-Defense'],
 		restrictedAbilities: [
-			'Chlorophyll', 'Comatose', 'Fluffy', 'Fur Coat', 'Huge Power', 'Illusion', 'Imposter',
-			'Mold Breaker', 'Protean', 'Pure Power', 'Sand Rush', 'Simple', 'Slush Rush', 'Speed Boost',
-			'Surge Surfer', 'Swift Swim', 'Teravolt', 'Tinted Lens', 'Trace', 'Water Bubble',
+			'Chlorophyll', 'Comatose', 'Fluffy', 'Fur Coat', 'Huge Power', 'Illusion', 'Imposter', 'Mold Breaker',
+			'Protean', 'Pure Power', 'Quick Feet', 'Rattled', 'Sand Rush', 'Simple', 'Slush Rush', 'Speed Boost',
+			'Surge Surfer', 'Swift Swim', 'Teravolt', 'Tinted Lens', 'Trace', 'Unburden', 'Water Bubble', 'Weak Armor',
 		],
 		onBeforeSwitchIn: function (pokemon) {
 			let restrictedAbilities = this.getFormat().restrictedAbilities.map(toId);
