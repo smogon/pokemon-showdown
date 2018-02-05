@@ -111,6 +111,16 @@ exports.Formats = [
 		],
 
 		mod: 'gen7',
+		searchShow: false,
+		ruleset: ['[Gen 7] NU'],
+		banlist: ['NU', 'BL4'],
+	},
+	{
+		name: "[Gen 7] PU (suspect test)",
+		desc: [`&bullet; <a href="http://www.smogon.com/forums/threads/3625646/">PU Suspect Test</a>`],
+
+		mod: 'gen7',
+		challengeShow: false,
 		ruleset: ['[Gen 7] NU'],
 		banlist: ['NU', 'BL4'],
 	},
