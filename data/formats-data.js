@@ -2903,7 +2903,7 @@ exports.BattleFormatsData = {
 	breloom: {
 		randomBattleMoves: ["spore", "machpunch", "bulletseed", "rocktomb", "swordsdance"],
 		randomDoubleBattleMoves: ["spore", "helpinghand", "machpunch", "bulletseed", "rocktomb", "protect", "drainpunch"],
-		tier: "BL",
+		tier: "UU",
 		doublesTier: "DUU",
 	},
 	slakoth: {
