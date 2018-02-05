@@ -10,10 +10,8 @@ exports.BattleScripts = {
 		return Object.getPrototypeOf(this).getEffect.call(this, name);
 	},
 	suppressingWeather() {
-		let pokemon;
-		for (let i = 0; i < this.sides.length; i++) {
-			for (let j = 0; j < this.sides[i].active.length; j++) {
-				pokemon = this.sides[i].active[j];
+		for (const side of this.sides) {
+			for (const pokemon of side.active) {
 				if (pokemon && !pokemon.ignoringAbility() && pokemon.hasAbility('Cloud Nine')) {
 					return true;
 				}
