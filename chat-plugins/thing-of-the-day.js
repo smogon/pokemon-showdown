@@ -110,7 +110,7 @@ class OtdHandler {
 		let obj = {};
 		obj[user.userid] = user.name;
 
-		let nomObj = {nomination: nomination, name: user.name, userids: Object.assign(obj, user.prevNames), ips: Object.assign({}, user.ips)}
+		let nomObj = {nomination: nomination, name: user.name, userids: Object.assign(obj, user.prevNames), ips: Object.assign({}, user.ips)};
 
 		this.nominations.set(id, nomObj);
 
