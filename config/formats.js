@@ -590,7 +590,7 @@ exports.Formats = [
 		mod: 'gen7',
 		searchShow: false,
 		ruleset: ['[Gen 7] OU'],
-		banlist: ['Shedinja'],
+		banlist: ['Kartana', 'Kyurem-Black', 'Shedinja'],
 		onModifyTemplate: function (template, target, source) {
 			if (source) return;
 			let types = [...new Set(target.baseMoveSlots.slice(0, 2).map(move => this.getMove(move.id).type))];
