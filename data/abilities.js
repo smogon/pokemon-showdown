@@ -260,6 +260,7 @@ exports.BattleAbilities = {
 				this.add('detailschange', source, source.details);
 			}
 		},
+		onModifyMovePriority: -1,
 		onModifyMove: function (move, attacker) {
 			if (move.id === 'watershuriken' && attacker.template.species === 'Greninja-Ash') {
 				move.multihit = 3;
