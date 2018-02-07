@@ -431,7 +431,7 @@ exports.BattleFormatsData = {
 	},
 	pikachupartner: {
 		eventPokemon: [
-			{"generation": 7, "level": 21, "nature": "Hardy", "moves": ["thunderbolt", "quickattack", "thunder", "irontail"], "pokeball": "pokeball"},
+			{"generation": 7, "level": 21, "shiny": 1, "nature": "Hardy", "moves": ["thunderbolt", "quickattack", "thunder", "irontail"], "pokeball": "pokeball"},
 		],
 		eventOnly: true,
 		gen: 7,
