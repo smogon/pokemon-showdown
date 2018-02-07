@@ -19252,7 +19252,7 @@ exports.BattleLearnsets = {
 		dragonrush: ["7L41", "7E", "6L41", "6E", "5L41", "5E", "4L35", "4E"],
 		dragontail: ["7M", "7L31", "6M", "6L31", "5M", "5L31"],
 		endure: ["7V", "4M", "3T"],
-		extremespeed: ["7E", "6E", "5E", "4E"],
+		extremespeed: ["7E", "7V", "6E", "5E", "4E"],
 		facade: ["7M", "6M", "5M", "4M", "3M"],
 		fireblast: ["7M", "7V", "7V", "6M", "5M", "4M", "3M"],
 		flamethrower: ["7M", "6M", "5M", "4M", "3M"],
