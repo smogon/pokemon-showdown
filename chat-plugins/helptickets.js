@@ -124,7 +124,10 @@ function notifyUnclaimedTicket(upper) {
 	if (!room) return;
 	clearTimeout(unclaimedTicketTimer[room.id]);
 	unclaimedTicketTimer[room.id] = null;
-	room.send(`|tempnotify|helptickets|Unclaimed help tickets!|There are unclaimed Help tickets`);
+	for (let i in room.users) {
+		let user = room.users[i];
+		if (user.can('mute', null, room)) user.sendTo(room, `|tempnotify|helptickets|Unclaimed help tickets!|There are unclaimed Help tickets`);
+	}
 }
 
 
@@ -165,7 +168,10 @@ function notifyStaff(upper) {
 		buf = `|tempnotifyoff|helptickets`;
 	}
 	if (room.userCount) Sockets.channelBroadcast(room.id, `>view-help-tickets\n${buf}`);
-	room.send(`${buf}|There are unclaimed Help tickets`);
+	for (let i in room.users) {
+		let user = room.users[i];
+		if (user.can('mute', null, room)) user.sendTo(room, `${buf}|There are unclaimed Help tickets`);
+	}
 	pokeUnclaimedTicketTimer(upper, hasUnclaimed);
 }
 
