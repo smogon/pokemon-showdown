@@ -789,6 +789,7 @@
 68.171.208.0,68.171.223.255,Acenet,http://www.ace-host.net/
 68.178.128.0,68.178.255.255,GoDaddy.com Inc,http://www.godaddy.com/
 68.233.224.0,68.233.255.255,Hivelocity Hosting,http://www.hivelocity.net/
+68.235.32.0,68.235.63.255,Tzulo,https://www.tzulo.com/
 69.0.128.0,69.0.255.255,PEER 1,http://www.peer1.com/
 69.1.128.0,69.1.159.255,Indiana Data Center LLC,http://inddc.com/
 69.1.192.0,69.1.223.255,YourColo,http://yourcolo.com/
@@ -1569,6 +1570,7 @@
 104.45.0.0,104.46.255.255,Microsoft Azure,http://www.windowsazure.com/en-us/
 104.47.128.0,104.47.191.255,Microsoft Azure,http://www.windowsazure.com/en-us/
 104.47.200.0,104.47.215.255,Microsoft Azure,http://www.windowsazure.com/en-us/
+104.129.0.0,104.129.63.255,QuadraNet,https://www.quadranet.com/
 104.130.64.0,104.130.223.255,Rackspace,http://www.rackspace.com/
 104.131.0.0,104.131.255.255,DigitalOcean USA,https://www.digitalocean.com/
 104.143.0.0,104.143.15.255,VersaWeb,https://www.versaweb.com/
@@ -1769,7 +1771,7 @@
 142.4.32.0,142.4.63.255,WebNX Internet Services,http://webnx.com/
 142.4.192.0,142.4.223.255,OVH,http://www.ovh.co.uk/
 142.11.192.0,142.11.255.255,hostwinds.com,http://www.hostwinds.com/
-142.111.0.0,142.111.255.255,EGIHosting.com,http://www.egihosting.com/
+142.44.128.0,142.44.255.255,OVH CA,https://www.ovh.com/ca/en/
 142.54.160.0,142.54.191.255,Data Shack,https://www.datashack.net/
 142.91.0.0,142.91.255.255,Ubiquity Server Solutions,http://www.ubiquityservers.com/
 142.111.0.0,142.111.255.255,EGIHosting.com,http://www.egihosting.com/
@@ -1779,6 +1781,7 @@
 146.0.229.24,146.0.229.31,Surfeasy,https://www.surfeasy.com/
 146.0.237.48,146.0.237.55,Surfeasy,https://www.surfeasy.com/
 146.0.237.56,146.0.237.63,Surfeasy,https://www.surfeasy.com/
+146.88.192.0,146.88.195.255,Micfo,https://www.micfo.com/
 146.185.16.0,146.185.31.255,UK2 Group,http://www.100tb.com/
 146.185.128.0,146.185.135.255,DigitalOcean Europe,https://www.digitalocean.com/
 146.185.136.0,146.185.143.255,DigitalOcean Europe,https://www.digitalocean.com/
@@ -2362,6 +2365,7 @@
 192.34.108.0,192.34.111.255,WoW Technologies,http://wowrack.com/
 192.40.56.0,192.40.59.255,Total Server Solutions,http://totalserversolutions.com/
 192.40.112.0,192.40.115.255,ihnetworks.net,http://ihnetworks.net/
+192.64.24.0,192.64.27.255,Micfo,https://www.micfo.com/
 192.64.80.0,192.64.87.255,InterServer.net,http://www.interserver.net/
 192.65.240.0,192.65.243.255,ionity,http://ionity.com/
 192.69.88.0,192.69.95.255,Volume Drive,http://volumedrive.com
@@ -2774,6 +2778,7 @@
 202.60.64.0,202.60.95.255,Dedicated Servers,http://dedicatedservers.net.au/
 202.65.128.0,202.65.159.255,CtrlS,http://www.ctrls.in/
 202.74.64.0,202.74.71.255,Conetix,http://conetix.com.au/
+202.130.32.0,202.130.33.255,Servers Australia,https://www.serversaustralia.com.au/
 202.131.88.0,202.131.91.255,Dedicated Servers,http://dedicatedservers.net.au/
 202.131.94.0,202.131.94.255,Dedicated Servers,http://dedicatedservers.net.au/
 202.157.128.0,202.157.191.255,webvisions.com,http://webvisions.com/
