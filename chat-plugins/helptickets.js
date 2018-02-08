@@ -505,6 +505,16 @@ exports.commands = {
 		return this.parse('/join view-help-request--report');
 	},
 
+	'!appeal': true,
+	appeal: function (target, room, user, connection) {
+		if (!this.runBroadcast()) return;
+		if (this.broadcasting) {
+			return this.sendReplyBox('<button name="joinRoom" value="view-help-request--appeal" class="button"><strong>Appeal a punishment</strong></button>');
+		}
+
+		return this.parse('/join view-help-request--appeal');
+	},
+
 	requesthelp: 'helpticket',
 	helprequest: 'helpticket',
 	ht: 'helpticket',
