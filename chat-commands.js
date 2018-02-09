@@ -3422,9 +3422,7 @@ exports.commands = {
 			if (user.can('forcewin')) this.errorReply(`Alternatively, you can end the battle with /forcetie`);
 			return;
 		}
-		if (!user.can('broadcast', null, room)) {
-			return this.errorReply(`You must be at least roomvoice. Players can roomvoice you if necessary.`);
-		}
+		if (!this.can('exportinputlog', null, room)) return;
 		if (!battle.allowExtraction) {
 			battle.allowExtraction = ['', ''];
 		}

@@ -358,6 +358,7 @@ exports.grouplist = [
 		globalonly: true,
 		tournamentsmanagement: true,
 		gamemanagement: true,
+		exportinputlog: true,
 	},
 	{
 		symbol: '#',
