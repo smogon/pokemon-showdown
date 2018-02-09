@@ -1627,7 +1627,7 @@ class Battle extends Dex.ModdedDex {
 							continue;
 						}
 						let ability = this.getAbility(abilityName);
-						if (ruleTable.has('-' + ability.id)) continue;
+						if (ruleTable.has('-ability:' + ability.id)) continue;
 						if (pokemon.knownType && !this.getImmunity('trapped', pokemon)) continue;
 						this.singleEvent('FoeMaybeTrapPokemon',
 							ability, {}, pokemon, source);
