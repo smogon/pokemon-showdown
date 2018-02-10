@@ -1440,7 +1440,7 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 2] UU",
-		desc: [`&bullet; <a href="http://www.smogon.com/forums/posts/3576710/">GSC UU</a>`],
+		desc: [`&bullet; <a href="http://www.smogon.com/forums/threads/3576710/">GSC UU</a>`],
 
 		mod: 'gen2',
 		searchShow: false,
