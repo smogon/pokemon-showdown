@@ -349,8 +349,8 @@ exports.BattleScripts = {
 		if (this.gen < 7 && move.ignoreImmunity !== true && !move.ignoreImmunity[move.type] && !target.runImmunity(move.type, true)) {
 			return false;
 		}
-		
-		if (this.gen != 4) {
+
+		if (this.gen !== 4) {
 			hitResult = this.runEvent('TryHit', target, pokemon, move);
 			if (!hitResult) {
 				if (hitResult === false) this.add('-fail', target);
@@ -424,8 +424,8 @@ exports.BattleScripts = {
 			this.add('-miss', pokemon, target);
 			return false;
 		}
-		
-		if (this.gen == 4) {
+
+		if (this.gen === 4) {
 			hitResult = this.runEvent('TryHit', target, pokemon, move);
 			if (!hitResult) {
 				if (hitResult === false) this.add('-fail', target);
