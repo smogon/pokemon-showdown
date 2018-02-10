@@ -456,7 +456,7 @@ exports.Formats = [
 		maxLevel: 50,
 		defaultLevel: 50,
 		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
-		banlist: ['Combusken', 'Eviolite', 'Light Ball', 'Shadow Tag'],
+		banlist: ['Combusken', 'Eviolite', 'Light Ball', 'Shadow Tag', 'Conversion'],
 		onValidateSet: function (set) {
 			let template = this.getTemplate(set.species);
 			if (!template.prevo) return [`${set.species} is not an evolved Pokemon.`];
