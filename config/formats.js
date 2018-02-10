@@ -836,7 +836,7 @@ exports.Formats = [
 		name: "[Gen 6] OU",
 		desc: [
 			`&bullet; <a href="http://www.smogon.com/dex/xy/tags/ou/">ORAS OU Banlist</a>`,
-			`&bullet; <a href="http://www.smogon.com/forums/threads/3596900/">ORAS OU Viability Rankings</a>`,
+			`&bullet; <a href="http://www.smogon.com/forums/threads/2.3623399/">ORAS OU Viability Rankings</a>`,
 		],
 
 		mod: 'gen6',
