@@ -145,7 +145,7 @@ exports.BattleStatuses = {
 			return this.random(2, 4);
 		},
 		onResidual: function (target) {
-			if (target.lastMove === 'struggle' || target.status === 'slp') {
+			if ((target.lastMove.id === 'struggle') || target.status === 'slp') {
 				// don't lock, and bypass confusion for calming
 				delete target.volatiles['lockedmove'];
 			}
@@ -165,7 +165,7 @@ exports.BattleStatuses = {
 			let move = this.getMove(this.effectData.move);
 			if (move.id) {
 				this.debug('Forcing into ' + move.id);
-				this.changeDecision(pokemon, {move: move.id});
+				this.changeAction(pokemon, {move: move.id});
 			}
 		},
 	},

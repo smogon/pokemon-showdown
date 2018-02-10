@@ -21,15 +21,13 @@ class PRNG {
 	/**
 	 * Creates a new source of randomness for the given seed.
 	 *
-	 * @param {PRNGSeed} [seed]
+	 * @param {PRNGSeed?} [seed]
 	 */
-	constructor(seed = PRNG.generateSeed()) {
-		/** @type {PRNGSeed} */
-		// @ts-ignore TypeScript bug
-		this.initialSeed = seed.slice(); // make a copy
-		/** @type {PRNGSeed} */
-		// @ts-ignore TypeScript bug
-		this.seed = seed.slice();
+	constructor(seed = null) {
+		if (!seed) seed = PRNG.generateSeed();
+		this.initialSeed = /** @type {PRNGSeed} */ (seed.slice()); // make a copy
+		/** @type {PRNGSeed} */ // TypeScript bug: can't infer type
+		this.seed = /** @type {PRNGSeed} */ (seed.slice());
 	}
 
 	/**

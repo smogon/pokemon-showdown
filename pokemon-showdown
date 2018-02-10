@@ -1,11 +1,25 @@
-#!/usr/bin/env node
-'use strict';
+#!/bin/sh
+
+true /*
+# Shell script will interpret above as a command and execute everything after
+# it, while JavaScript will interpret this as beginning of a comment and skip
+# shell script contents.
+#
+# As shell script parses lines only when they are needed, nothing after exit 1
+# can possibly cause a syntax error.
+
+if nodepath="$(command -v node || command -v nodejs)"; then
+	exec "$nodepath" "--trace-warnings" "$0" "$@"
+fi
+echo "We require Node.js version 8 or later; Node.js not found"
+exit 1
+*/;
 
 const child_process = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
-// Make sure we're Node 8+
+// # Make sure we're Node 8+
 
 try {
 	eval('{ let a = async () => {}; }');
@@ -14,8 +28,8 @@ try {
 	process.exit(1);
 }
 
-// Make sure our dependencies are available, and install them if they
-// aren't
+// # Make sure our dependencies are available, and install them if they
+// # aren't
 
 try {
 	require.resolve('sockjs');
@@ -24,8 +38,8 @@ try {
 	child_process.execSync('npm install --production', {stdio: 'inherit'});
 }
 
-// Make sure config.js exists. If not, copy it over synchronously from
-// config-example.js, since it's needed before we can start the server
+// # Make sure config.js exists. If not, copy it over synchronously from
+// # config-example.js, since it's needed before we can start the server
 
 try {
 	require.resolve('./config/config');
@@ -53,13 +67,131 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 
 	require('module')._load('./app', module, true);
 } else switch (process.argv[2]) {
+	case 'help':
+	case 'h':
+	case '?':
+	case '-h':
+	case '--help':
+	case '-?':
+		console.log('pokemon-showdown [PORT]');
+		console.log('');
+		console.log('  Starts a PS server on the specified port');
+		console.log('  (Defaults to the port setting in config/config.js)');
+		console.log('  (The port setting in config/config.js defaults to 8000)');
+		console.log('');
+		console.log('pokemon-showdown generate-team [FORMAT-ID [RANDOM-SEED]]');
+		console.log('');
+		console.log('  Generates a random team, and writes it to stdout in packed team format');
+		console.log('  (Format defaults to "gen7randombattle")');
+		console.log('');
+		console.log('pokemon-showdown validate-team [FORMAT-ID]');
+		console.log('');
+		console.log('  Reads a team from stdin, and validates it');
+		console.log('  If valid: exits with code 0');
+		console.log('  If invalid: writes errors to stderr, exits with code 1');
+		console.log('');
+		console.log('pokemon-showdown simulate-battle');
+		console.log('');
+		console.log('  Simulates a battle, taking input to stdin and writing output to stdout');
+		console.log('  Protocol is documented in ./sim/README.md');
+		console.log('');
+		console.log('pokemon-showdown unpack-team');
+		console.log('');
+		console.log('  Reads a team from stdin, writes the unpacked JSON to stdout');
+		console.log('');
+		console.log('pokemon-showdown pack-team');
+		console.log('');
+		console.log('  Reads a JSON team from stdin, writes the packed team to stdout');
+		console.log('  NOTE for all team-processing functions: We can only handle JSON teams');
+		console.log('  and packed teams; the PS server is incapable of processing exported');
+		console.log('  teams.');
+		console.log('');
+		console.log('pokemon-showdown help');
+		console.log('');
+		console.log('  Displays this reference');
+		break;
 	case 'generate-team':
-		const Dex = require('./sim/dex');
-		global.toId = Dex.getId;
-		const seed = process.argv[4] ? process.argv[4].split(',').map(Number) : undefined;
-		console.log(Dex.packTeam(Dex.generateTeam(process.argv[3], seed)));
+		{
+			const Dex = require('./sim/dex');
+			global.toId = Dex.getId;
+			const seed = process.argv[4] ? process.argv[4].split(',').map(Number) : undefined;
+			console.log(Dex.packTeam(Dex.generateTeam(process.argv[3], seed)));
+		}
+		break;
+	case 'validate-team':
+		{
+			const Dex = require('./sim/dex');
+			const TeamValidator = require('./sim/team-validator');
+			const validator = TeamValidator(process.argv[3]);
+			const Streams = require('./lib/streams');
+			const stdin = new Streams.ReadStream(process.stdin);
+
+			stdin.readLine().then(function (textTeam) {
+				try {
+					const team = Dex.fastUnpackTeam(textTeam);
+					const result = validator.validateTeam(team);
+					if (result) {
+						console.error(result.join('\n'));
+						process.exit(1);
+					}
+					process.exit(0);
+				} catch (e) {
+					console.error(e);
+					process.exit(1);
+				}
+			});
+		}
+		break;
+	case 'simulate-battle':
+		{
+			const BattleTextStream = require('./sim/battle-stream').BattleTextStream;
+			const Streams = require('./lib/streams');
+			const stdin = new Streams.ReadStream(process.stdin);
+			const stdout = new Streams.WriteStream(process.stdout);
+
+			const battleStream = new BattleTextStream();
+			stdin.pipeTo(battleStream);
+			battleStream.pipeTo(stdout);
+		}
+		break;
+	case 'unpack-team':
+		{
+			const Dex = require('./sim/dex');
+			const Streams = require('./lib/streams');
+			const stdin = new Streams.ReadStream(process.stdin);
+
+			stdin.readLine().then(function (packedTeam) {
+				try {
+					const unpackedTeam = Dex.fastUnpackTeam(packedTeam);
+					console.log(JSON.stringify(unpackedTeam));
+					process.exit(0);
+				} catch (e) {
+					console.error(e);
+					process.exit(1);
+				}
+			});
+		}
+		break;
+	case 'pack-team':
+		{
+			const Dex = require('./sim/dex');
+			const Streams = require('./lib/streams');
+			const stdin = new Streams.ReadStream(process.stdin);
+
+			stdin.readLine().then(function (unpackedTeam) {
+				try {
+					const packedTeam = Dex.packTeam(JSON.parse(unpackedTeam));
+					console.log(packedTeam);
+					process.exit(0);
+				} catch (e) {
+					console.error(e);
+					process.exit(1);
+				}
+			});
+		}
 		break;
 	default:
 		console.error('Unrecognized command: ' + process.argv[2]);
+		console.error('Use `pokemon-showdown help` for help');
 		process.exit(1);
 }

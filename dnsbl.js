@@ -19,7 +19,7 @@
 const BLOCKLISTS = ['sbl.spamhaus.org', 'rbl.efnetrbl.org'];
 
 const dns = require('dns');
-const FS = require('./fs');
+const FS = require('./lib/fs');
 
 let Dnsbl = module.exports;
 
@@ -84,9 +84,9 @@ Dnsbl.query = function queryDnsbl(ip) {
 Dnsbl.ipToNumber = function (ip) {
 	let num = 0;
 	let parts = ip.split('.');
-	for (let i = 0, len = parts.length; i < len; i++) {
+	for (const part of parts) {
 		num *= 256;
-		num += parseInt(parts[i]);
+		num += parseInt(part);
 	}
 	return num;
 };
@@ -169,8 +169,7 @@ Dnsbl.rangeToPattern = function (range) {
  * @return {boolean}
  */
 Dnsbl.checkPattern = function (patterns, num) {
-	for (let i = 0; i < patterns.length; ++i) {
-		let pattern = patterns[i];
+	for (const pattern of patterns) {
 		if (num >= pattern[0] && num <= pattern[1]) {
 			return true;
 		}
@@ -217,7 +216,7 @@ Dnsbl.urlToHost = function (url) {
 
 Dnsbl.datacenters = [];
 Dnsbl.loadDatacenters = async function () {
-	const data = await FS('config/datacenters.csv').readTextIfExists();
+	const data = await FS('config/datacenters.csv').readIfExists();
 	const rows = data.split('\n');
 	let datacenters = [];
 	for (const row of rows) {
@@ -238,7 +237,7 @@ let rangeCenet = Dnsbl.cidrToPattern('27.111.64.0/21');
 let rangeQlded = Dnsbl.cidrToPattern('203.104.0.0/20');
 let rangeCathednet = Dnsbl.cidrToPattern('180.95.40.0/21');
 let rangeTelefonica = Dnsbl.cidrToPattern('181.64.0.0/14');
-let rangeStarhub = Dnsbl.cidrToPattern(['27.125.128.0/18', '101.127.0.0/17', '116.88.0.0/17', '122.11.192.0/18', '182.19.128.0/17', '182.55.0.0/16', '183.90.0.0/17', '203.116.122.0/23']);
+let rangeStarhub = Dnsbl.cidrToPattern(['27.125.128.0/18', '58.96.192.0/18', '101.127.0.0/17', '116.88.0.0/17', '122.11.192.0/18', '182.19.128.0/17', '182.55.0.0/16', '183.90.0.0/17', '203.116.122.0/23']);
 let rangeTelstra = Dnsbl.cidrToPattern('101.160.0.0/11');
 
 let rangeOVHres = Dnsbl.rangeToPattern(['109.190.0.0 - 109.190.63.255', '109.190.64.0 - 109.190.127.255', '109.190.128.0 - 109.190.191.255', '109.190.192.0 - 109.190.255.255', '151.80.228.0 - 151.80.228.255', '178.32.37.0 - 178.32.37.255', '178.33.101.0 - 178.33.101.255', '185.15.68.0 - 185.15.69.255', '185.15.70.0 - 185.15.71.255']);
@@ -262,7 +261,7 @@ Dnsbl.reverse = function reverseDns(ip) {
 			resolve('ovh.fr.res-nohost');
 			return;
 		}
-		for (let row of Dnsbl.datacenters) {
+		for (const row of Dnsbl.datacenters) {
 			if (ipNumber >= row[0] && ipNumber <= row[1]) {
 				resolve(row[2] + '.proxy-nohost');
 				return;
@@ -316,6 +315,10 @@ Dnsbl.reverse = function reverseDns(ip) {
 			resolve('illinois.net.res-nohost');
 			return;
 		}
+		if (ip.startsWith('147.129.')) {
+			resolve('ithaca.edu.res-nohost');
+			return;
+		}
 		if (ip.startsWith('189.204.')) {
 			resolve('bestel.com.mx.res-nohost');
 			return;
@@ -334,6 +337,10 @@ Dnsbl.reverse = function reverseDns(ip) {
 		}
 		if (ip.startsWith('198.144.104.') || ip.startsWith('198.47.115.') || ip.startsWith('199.255.215.') || ip.startsWith('204.14.76.') || ip.startsWith('204.14.77.') || ip.startsWith('204.14.78.') || ip.startsWith('204.14.79.') || ip.startsWith('205.164.32.') || ip.startsWith('209.73.132.') || ip.startsWith('209.73.151.') || ip.startsWith('216.172.135.') || ip.startsWith('46.16.34.') || ip.startsWith('46.16.35.') || ip.startsWith('50.117.45.') || ip.startsWith('63.141.198.') || ip.startsWith('63.141.199.') || ip.startsWith('74.115.1.') || ip.startsWith('74.115.5.') || ip.startsWith('85.237.197.') || ip.startsWith('85.237.222.')) {
 			resolve('anchorfree.proxy-nohost');
+			return;
+		}
+		if (ip === '127.0.0.1') {
+			resolve('localhost');
 			return;
 		}
 		dns.reverse(ip, (err, hosts) => {

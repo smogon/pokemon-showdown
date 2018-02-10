@@ -26,10 +26,9 @@ describe('Burn', function () {
 		]);
 		const target = battle.p2.active[0];
 		battle.commitDecisions();
-		const baseDamage = target.maxhp - target.hp;
-		battle.resetRNG();
 		battle.p2.chooseMove('willowisp');
-		assert.hurtsBy(target, battle.modify(baseDamage, 0.5), () => battle.commitDecisions());
+		// hardcoded to RNG
+		assert.hurtsBy(target, 64, () => battle.commitDecisions());
 	});
 
 	it('should not halve damage from moves with set damage', function () {
@@ -53,6 +52,24 @@ describe('Paralysis', function () {
 		let speed = battle.p1.active[0].getStat('spe');
 		battle.commitDecisions();
 		assert.strictEqual(battle.p1.active[0].getStat('spe'), battle.modify(speed, 0.5));
+	});
+
+	it('should reduce speed to 25% of its original value in Gen 6', function () {
+		battle = common.gen(6).createBattle();
+		battle.join('p1', 'Guest 1', 1, [{species: 'Vaporeon', ability: 'waterabsorb', moves: ['aquaring']}]);
+		battle.join('p2', 'Guest 2', 1, [{species: 'Jolteon', ability: 'voltabsorb', moves: ['thunderwave']}]);
+		let speed = battle.p1.active[0].getStat('spe');
+		battle.commitDecisions();
+		assert.strictEqual(battle.p1.active[0].getStat('spe'), battle.modify(speed, 0.25));
+	});
+
+	it('should reduce speed to 25% of its original value in Gen 2', function () {
+		battle = common.gen(2).createBattle();
+		battle.join('p1', 'Guest 1', 1, [{species: 'Vaporeon', ability: 'waterabsorb', moves: ['aquaring']}]);
+		battle.join('p2', 'Guest 2', 1, [{species: 'Jolteon', ability: 'voltabsorb', moves: ['thunderwave']}]);
+		let speed = battle.p1.active[0].getStat('spe');
+		battle.commitDecisions();
+		assert.strictEqual(battle.p1.active[0].getStat('spe'), battle.modify(speed, 0.25));
 	});
 });
 
@@ -100,21 +117,6 @@ describe('Burn [Gen 6]', function () {
 		]);
 		const target = battle.p1.active[0];
 		assert.hurtsBy(target, Math.floor(target.maxhp / 8), () => battle.commitDecisions());
-	});
-});
-
-describe('Paralysis [Gen 6]', function () {
-	afterEach(function () {
-		battle.destroy();
-	});
-
-	it('should reduce speed to 25% of its original value', function () {
-		battle = common.gen(6).createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: 'Vaporeon', ability: 'waterabsorb', moves: ['aquaring']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: 'Jolteon', ability: 'voltabsorb', moves: ['thunderwave']}]);
-		let speed = battle.p1.active[0].getStat('spe');
-		battle.commitDecisions();
-		assert.strictEqual(battle.p1.active[0].getStat('spe'), battle.modify(speed, 0.25));
 	});
 });
 

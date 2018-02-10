@@ -381,15 +381,15 @@ exports.BattleScripts = {
 
 		// Apply move secondaries.
 		if (moveData.secondaries) {
-			for (let i = 0; i < moveData.secondaries.length; i++) {
+			for (const secondary of moveData.secondaries) {
 				// We check here whether to negate the probable secondary status if it's para, burn, or freeze.
 				// In the game, this is checked and if true, the random number generator is not called.
 				// That means that a move that does not share the type of the target can status it.
 				// If a move that was not fire-type would exist on Gen 1, it could burn a Pokémon.
-				if (!(moveData.secondaries[i].status && moveData.secondaries[i].status in {'par':1, 'brn':1, 'frz':1} && target && target.hasType(move.type))) {
-					let effectChance = Math.floor(moveData.secondaries[i].chance * 255 / 100);
-					if (typeof moveData.secondaries[i].chance === 'undefined' || this.random(256) < effectChance) {
-						this.moveHit(target, pokemon, move, moveData.secondaries[i], true, isSelf);
+				if (!(secondary.status && ['par', 'brn', 'frz'].includes(secondary.status) && target && target.hasType(move.type))) {
+					let effectChance = Math.floor(secondary.chance * 255 / 100);
+					if (typeof secondary.chance === 'undefined' || this.random(256) <= effectChance) {
+						this.moveHit(target, pokemon, move, secondary, true, isSelf);
 					}
 				}
 			}
@@ -542,7 +542,7 @@ exports.BattleScripts = {
 			defense = this.clampIntRange(defense, 1, 1998);
 		}
 
-		// In the event of a critical hit, the ofense and defense changes are ignored.
+		// In the event of a critical hit, the offense and defense changes are ignored.
 		// This includes both boosts and screens.
 		// Also, level is doubled in damage calculation.
 		if (move.crit) {
@@ -646,7 +646,7 @@ exports.BattleScripts = {
 			}
 		}
 		if (damage !== 0) damage = this.clampIntRange(damage, 1);
-		target.battle.lastDamage = damage;
+		this.lastDamage = damage;
 		damage = target.damage(damage, source, effect);
 		if (source) source.lastDamage = damage;
 		let name = effect.fullname;

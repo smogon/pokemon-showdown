@@ -12,17 +12,18 @@
 'use strict';
 
 const Dex = require('./dex');
-global.toId = Dex.getId;
 const Battle = require('./battle');
 const Side = require('./side');
 const Pokemon = require('./pokemon');
 const PRNG = require('./prng');
+const {BattleStream} = require('./battle-stream');
 
-exports.construct = function (format, rated, send, prng) {
-	return new Battle(format, rated, send, prng);
+module.exports = {
+	Pokemon,
+	Side,
+	Battle,
+	PRNG,
+	Dex,
+
+	BattleStream,
 };
-
-exports.Pokemon = Pokemon;
-exports.Side = Side;
-exports.Battle = Battle;
-exports.PRNG = PRNG;

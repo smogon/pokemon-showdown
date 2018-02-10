@@ -79,27 +79,51 @@ Our current convention is to use `'` for IDs; `"` for names (i.e. usernames, mov
 
 Unfortunately, since this is not a convention the linter can test for (and also because our older string standards predate PS), a lot of existing code is wrong on this, so you can't look at surrounding code to get an idea of what the convention should be. Refer to the above paragraph as the definitive rule.
 
+### Optionals: `null` vs `undefined` vs `false`
+
+PS convention is to use `null` for optionals. So a function that retrieves a possible `T` would return `T | null`. This is mostly because TypeScript expands `T?` to `T | null`.
+
+Some old code returns `T | undefined` (our previous convention). This is a relatively common standard (ironically, TypeScript itself uses it). Feel free to convert to `T | null` where you see it.
+
+Some even older code returns `T | false`. This is a very old PHP convention that has no place in modern PS code. Please convert to `T | null` if you see it.
+
+### `false | null | undefined`
+
+The simulator (code in `sim/`, `data/`, and `mods/`) will often have functions with return signatures of the form `T | false | null | undefined`, especially in event handlers. These aren't optionals, they're different sentinel values.
+
+Specifically:
+
+* `false` means "this action failed"
+* `null` means "this action failed silently; suppress any 'But it failed!' messages"
+* `undefined` means "this action should be ignored, and treated as if nothing unexpected happened"
+
+So, if Thunder Wave hits a Ground type, the immunity checker returns `false` to indicate the immunity.
+
+If Volt Absorb absorbs Thunder Wave, Volt Absorb's TryHit handler shows the Volt Absorb message and returns `null` to indicate that no other failure message should be shown.
+
+If Water Absorb doesn't absorb Thunder Wave, Water Absorb's TryHit handler returns `undefined`, to show that Water Absorb does not interact with Thunder Wave.
+
 
 ES5 and ES6
 ------------------------------------------------------------------------
 
-In general, use modern features only if they're supported in Node 6 and reasonably performant in the latest version of Node.
+In general, use modern features; recent versions of V8 have fixed the performance problems they used to have.
 
 - **let, const: ALWAYS** - Supported in Node 4+, good performance.
 
 - **for-of on Arrays: ALWAYS** - Supported in Node 4+, good performance in Node 8+.
 
-- **Array#forEach: NEVER** - Worse performance than `for-of` on Arrays. See `for-of`.
+- **Array#forEach: NEVER** - Poor readability; we prefer `for-of`.
 
 - **for-in on Arrays: NEVER** - Horrible performance, weird bugs due to string keys, poor interaction with Array prototype modification. Everyone tells you never to do it; we're no different. See `for-of`.
 
-- **Map, Set: SOMETIMES** - Much worse write/iteration performance, much better read performance than `Object.create(null)`. Use whatever's faster for your use case.
+- **Map, Set: SOMETIMES** - Worse write/iteration performance, better read performance than `Object.create(null)`. Use whatever's faster for your use case.
 
-- **for-in on Objects: SOMETIMES** - `Object.keys` is apparently a lot faster. Use that if you can.
+- **for-in on Objects: ALWAYS** - More readable; good performance in Node 8+.
 
-- **for-of on Maps: NEVER** - Poor performance. Use `Map#forEach`.
+- **for-of on Maps and Sets: ALWAYS** - Supported in Node 4+, good performance in Node 8+.
 
-- **Map#forEach: ALWAYS** - This is our preferred method of iterating `Map`s.
+- **Map#forEach, Set#forEach: NEVER** - Poor readability; we prefer `for-of`.
 
 - **Object literal functions: ALWAYS** - Supported in Node 4+, good performance.
 

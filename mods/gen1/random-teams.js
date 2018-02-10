@@ -119,9 +119,9 @@ class RandomGen1Teams extends RandomGen2Teams {
 		let pokemonLeft = 0;
 		let pokemon = [];
 
-		let handicapMons = {'magikarp':1, 'weedle':1, 'kakuna':1, 'caterpie':1, 'metapod':1};
-		let nuTiers = {'UU':1, 'BL':1, 'NFE':1, 'LC':1, 'NU':1};
-		let uuTiers = {'NFE':1, 'UU':1, 'BL':1, 'NU':1};
+		let handicapMons = ['magikarp', 'weedle', 'kakuna', 'caterpie', 'metapod'];
+		let nuTiers = ['UU', 'BL', 'NFE', 'LC', 'NU'];
+		let uuTiers = ['NFE', 'UU', 'BL', 'NU'];
 
 		let n = 1;
 		let pokemonPool = [];
@@ -133,7 +133,7 @@ class RandomGen1Teams extends RandomGen2Teams {
 
 		// Now let's store what we are getting.
 		let typeCount = {};
-		let weaknessCount = {'Electric':0, 'Psychic':0, 'Water':0, 'Ice':0, 'Ground':0};
+		let weaknessCount = {'Electric': 0, 'Psychic': 0, 'Water': 0, 'Ice': 0, 'Ground': 0};
 		let uberCount = 0;
 		let nuCount = 0;
 		let hasShitmon = false;
@@ -144,7 +144,7 @@ class RandomGen1Teams extends RandomGen2Teams {
 
 			// Bias the tiers so you get less shitmons and only one of the two Ubers.
 			// If you have a shitmon, don't get another
-			if ((template.speciesid in handicapMons) && hasShitmon) continue;
+			if (handicapMons.includes(template.speciesid) && hasShitmon) continue;
 
 			let tier = template.tier;
 			switch (tier) {
@@ -160,16 +160,15 @@ class RandomGen1Teams extends RandomGen2Teams {
 				break;
 			default:
 				// OUs are fine. Otherwise 50% chance to skip mon if already 4 or more non-OUs.
-				if (uuTiers[tier] && pokemonPool.length > 1 && (nuCount > 3 && this.random(2) >= 1)) continue;
+				if (uuTiers.includes(tier) && pokemonPool.length > 1 && (nuCount > 3 && this.random(2) >= 1)) continue;
 			}
 
 			let skip = false;
 
 			// Limit 2 of any type as well. Diversity and minor weakness count.
 			// The second of a same type has halved chance of being added.
-			let types = template.types;
-			for (let t = 0; t < types.length; t++) {
-				if (typeCount[types[t]] > 1 || (typeCount[types[t]] === 1 && this.random(2) && pokemonPool.length > 1)) {
+			for (const type of template.types) {
+				if (typeCount[type] > 1 || (typeCount[type] === 1 && this.random(2) && pokemonPool.length > 1)) {
 					skip = true;
 					break;
 				}
@@ -199,28 +198,28 @@ class RandomGen1Teams extends RandomGen2Teams {
 			pokemonLeft++;
 
 			// Type counter.
-			for (let t = 0; t < types.length; t++) {
-				if (typeCount[types[t]]) {
-					typeCount[types[t]]++;
+			for (const type of template.types) {
+				if (typeCount[type]) {
+					typeCount[type]++;
 				} else {
-					typeCount[types[t]] = 1;
+					typeCount[type] = 1;
 				}
 			}
 
 			// Weakness counter.
-			for (let t = 0; t < pokemonWeaknesses.length; t++) {
-				weaknessCount[pokemonWeaknesses[t]]++;
+			for (const weakness of pokemonWeaknesses) {
+				weaknessCount[weakness]++;
 			}
 
 			// Increment tier bias counters.
 			if (tier === 'Uber') {
 				uberCount++;
-			} else if (nuTiers[tier]) {
+			} else if (nuTiers.includes(tier)) {
 				nuCount++;
 			}
 
 			// Is it Magikarp or one of the useless bugs?
-			if (template.speciesid in handicapMons) hasShitmon = true;
+			if (handicapMons.includes(template.speciesid)) hasShitmon = true;
 		}
 
 		return pokemon;
@@ -241,13 +240,9 @@ class RandomGen1Teams extends RandomGen2Teams {
 		// let setupType = '';
 
 		// Moves that boost Attack:
-		let PhysicalSetup = {
-			swordsdance:1, sharpen:1,
-		};
+		let PhysicalSetup = ['swordsdance', 'sharpen'];
 		// Moves which boost Special Attack:
-		let SpecialSetup = {
-			amnesia:1, growth:1,
-		};
+		let SpecialSetup = ['amnesia', 'growth'];
 
 		// Either add all moves or add none
 		if (template.comboMoves) {
@@ -278,17 +273,17 @@ class RandomGen1Teams extends RandomGen2Teams {
 			if (movePool.length) {
 				hasMove = {};
 				counter = {Physical: 0, Special: 0, Status: 0, physicalsetup: 0, specialsetup: 0};
-				for (let k = 0; k < moves.length; k++) {
-					let move = this.getMove(moves[k]);
+				for (const setMoveid of moves) {
+					let move = this.getMove(setMoveid);
 					let moveid = move.id;
 					hasMove[moveid] = true;
 					if (!move.damage && !move.damageCallback) {
 						counter[move.category]++;
 					}
-					if (PhysicalSetup[moveid]) {
+					if (PhysicalSetup.includes(moveid)) {
 						counter['physicalsetup']++;
 					}
-					if (SpecialSetup[moveid]) {
+					if (SpecialSetup.includes(moveid)) {
 						counter['specialsetup']++;
 					}
 				}
@@ -299,8 +294,7 @@ class RandomGen1Teams extends RandomGen2Teams {
 				// 	setupType = 'Physical';
 				// }
 
-				for (let k = 0; k < moves.length; k++) {
-					let moveid = moves[k];
+				for (const [i, moveid] of moves.entries()) {
 					if (moveid === template.essentialMove) continue;
 					let move = this.getMove(moveid);
 					let rejected = false;
@@ -336,7 +330,7 @@ class RandomGen1Teams extends RandomGen2Teams {
 						} // End of switch for moveid
 					}
 					if (rejected) {
-						moves.splice(k, 1);
+						moves.splice(i, 1);
 						break;
 					}
 					counter[move.category]++;

@@ -172,14 +172,13 @@ exports.BattleMovedex = {
 				if (!pokemon.lastMove) {
 					return false;
 				}
-				let moves = pokemon.moveset;
-				for (let i = 0; i < moves.length; i++) {
-					if (moves[i].id === pokemon.lastMove) {
-						if (!moves[i].pp) {
+				for (const moveSlot of pokemon.moveSlots) {
+					if (moveSlot.id === pokemon.lastMove.id) {
+						if (!moveSlot.pp) {
 							return false;
 						} else {
-							this.add('-start', pokemon, 'Disable', moves[i].move);
-							this.effectData.move = pokemon.lastMove;
+							this.add('-start', pokemon, 'Disable', moveSlot.move);
+							this.effectData.move = pokemon.lastMove.id;
 							return;
 						}
 					}
@@ -196,10 +195,9 @@ exports.BattleMovedex = {
 				}
 			},
 			onDisableMove: function (pokemon) {
-				let moves = pokemon.moveset;
-				for (let i = 0; i < moves.length; i++) {
-					if (moves[i].id === this.effectData.move) {
-						pokemon.disableMove(moves[i].id);
+				for (const moveSlot of pokemon.moveSlots) {
+					if (moveSlot.id === this.effectData.move) {
+						pokemon.disableMove(moveSlot.id);
 					}
 				}
 			},
@@ -224,26 +222,26 @@ exports.BattleMovedex = {
 				return this.random(3, 7);
 			},
 			onStart: function (target) {
-				let noEncore = {encore:1, mimic:1, mirrormove:1, sketch:1, struggle:1, transform:1};
-				let moveIndex = target.moves.indexOf(target.lastMove);
-				if (!target.lastMove || noEncore[target.lastMove] || (target.moveset[moveIndex] && target.moveset[moveIndex].pp <= 0)) {
+				let noEncore = ['encore', 'mimic', 'mirrormove', 'sketch', 'struggle', 'transform'];
+				let moveIndex = target.lastMove ? target.moves.indexOf(target.lastMove.id) : -1;
+				if (!target.lastMove || noEncore.includes(target.lastMove.id) || (target.moveSlots[moveIndex] && target.moveSlots[moveIndex].pp <= 0)) {
 					// it failed
 					this.add('-fail', target);
 					delete target.volatiles['encore'];
 					return;
 				}
-				this.effectData.move = target.lastMove;
+				this.effectData.move = target.lastMove.id;
 				this.add('-start', target, 'Encore');
 				if (!this.willMove(target)) {
 					this.effectData.duration++;
 				}
 			},
-			onOverrideDecision: function (pokemon) {
+			onOverrideAction: function (pokemon) {
 				return this.effectData.move;
 			},
 			onResidualOrder: 13,
 			onResidual: function (target) {
-				if (target.moves.indexOf(target.lastMove) >= 0 && target.moveset[target.moves.indexOf(target.lastMove)].pp <= 0) {
+				if (target.moves.includes(this.effectData.move) && target.moveSlots[target.moves.indexOf(this.effectData.move)].pp <= 0) {
 					// early termination if you run out of PP
 					delete target.volatiles.encore;
 					this.add('-end', target, 'Encore');
@@ -256,9 +254,9 @@ exports.BattleMovedex = {
 				if (!this.effectData.move || !pokemon.hasMove(this.effectData.move)) {
 					return;
 				}
-				for (let i = 0; i < pokemon.moveset.length; i++) {
-					if (pokemon.moveset[i].id !== this.effectData.move) {
-						pokemon.disableMove(pokemon.moveset[i].id);
+				for (const moveSlot of pokemon.moveSlots) {
+					if (moveSlot.id !== this.effectData.move) {
+						pokemon.disableMove(moveSlot.id);
 					}
 				}
 			},
@@ -305,8 +303,8 @@ exports.BattleMovedex = {
 		category: "Physical",
 		onModifyMove: function (move, pokemon) {
 			move.type = pokemon.hpType || 'Dark';
-			let specialTypes = {Fire:1, Water:1, Grass:1, Ice:1, Electric:1, Dark:1, Psychic:1, Dragon:1};
-			move.category = specialTypes[move.type] ? 'Special' : 'Physical';
+			let specialTypes = ['Fire', 'Water', 'Grass', 'Ice', 'Electric', 'Dark', 'Psychic', 'Dragon'];
+			move.category = specialTypes.includes(move.type) ? 'Special' : 'Physical';
 		},
 	},
 	highjumpkick: {
@@ -328,6 +326,7 @@ exports.BattleMovedex = {
 	ingrain: {
 		inherit: true,
 		desc: "The user has 1/16 of its maximum HP restored at the end of each turn, but it is prevented from switching out and other Pokemon cannot force the user to switch out. The user can still switch out if it uses Baton Pass, and the replacement will remain trapped and still receive the healing effect.",
+		shortDesc: "User recovers 1/16 max HP per turn. Traps user.",
 	},
 	jumpkick: {
 		inherit: true,
@@ -376,8 +375,8 @@ exports.BattleMovedex = {
 		inherit: true,
 		onTryHit: function () { },
 		onHit: function (pokemon) {
-			let noMirror = {assist:1, curse:1, doomdesire:1, focuspunch:1, futuresight:1, magiccoat:1, metronome:1, mimic:1, mirrormove:1, naturepower:1, psychup:1, roleplay:1, sketch:1, sleeptalk:1, spikes:1, spitup:1, taunt:1, teeterdance:1, transform:1};
-			if (!pokemon.lastAttackedBy || !pokemon.lastAttackedBy.pokemon.lastMove || noMirror[pokemon.lastAttackedBy.move] || !pokemon.lastAttackedBy.pokemon.hasMove(pokemon.lastAttackedBy.move)) {
+			let noMirror = ['assist', 'curse', 'doomdesire', 'focuspunch', 'futuresight', 'magiccoat', 'metronome', 'mimic', 'mirrormove', 'naturepower', 'psychup', 'roleplay', 'sketch', 'sleeptalk', 'spikes', 'spitup', 'taunt', 'teeterdance', 'transform'];
+			if (!pokemon.lastAttackedBy || !pokemon.lastAttackedBy.pokemon.lastMove || noMirror.includes(pokemon.lastAttackedBy.move) || !pokemon.lastAttackedBy.pokemon.hasMove(pokemon.lastAttackedBy.move)) {
 				return false;
 			}
 			this.useMove(pokemon.lastAttackedBy.move, pokemon);
@@ -433,13 +432,11 @@ exports.BattleMovedex = {
 		},
 		onHit: function (pokemon) {
 			let moves = [];
-			for (let i = 0; i < pokemon.moveset.length; i++) {
-				let move = pokemon.moveset[i].id;
-				let pp = pokemon.moveset[i].pp;
-				let NoSleepTalk = {
-					assist:1, bide:1, focuspunch:1, metronome:1, mirrormove:1, sleeptalk:1, uproar:1,
-				};
-				if (move && !(NoSleepTalk[move] || this.getMove(move).flags['charge'])) {
+			for (const moveSlot of pokemon.moveSlots) {
+				let move = moveSlot.id;
+				let pp = moveSlot.pp;
+				let NoSleepTalk = ['assist', 'bide', 'focuspunch', 'metronome', 'mirrormove', 'sleeptalk', 'uproar'];
+				if (move && !(NoSleepTalk.includes(move) || this.getMove(move).flags['charge'])) {
 					moves.push({move: move, pp: pp});
 				}
 			}
@@ -461,8 +458,8 @@ exports.BattleMovedex = {
 		shortDesc: "Lowers the PP of the target's last move by 2-5.",
 		onHit: function (target) {
 			let roll = this.random(2, 6);
-			if (target.deductPP(target.lastMove, roll)) {
-				this.add("-activate", target, 'move: Spite', target.lastMove, roll);
+			if (target.lastMove && target.deductPP(target.lastMove.id, roll)) {
+				this.add("-activate", target, 'move: Spite', target.lastMove.id, roll);
 				return;
 			}
 			return false;
@@ -493,9 +490,9 @@ exports.BattleMovedex = {
 	struggle: {
 		inherit: true,
 		accuracy: 100,
-		desc: "Deals typeless damage to one adjacent foe at random. If this move was successful, the user takes damage equal to 1/2 the HP lost by the target, rounded down, but not less than 1 HP; the Ability Rock Head does not prevent this. This move can only be used if none of the user's known moves can be selected.",
-		shortDesc: "User loses 1/2 the HP lost by the target.",
-		recoil: [1, 2],
+		desc: "Deals typeless damage to one adjacent foe at random. If this move was successful, the user takes damage equal to 1/4 the HP lost by the target, rounded down, but not less than 1 HP; the Ability Rock Head does not prevent this. This move can only be used if none of the user's known moves can be selected.",
+		shortDesc: "User loses 1/4 the HP lost by the target.",
+		recoil: [1, 4],
 		struggleRecoil: false,
 	},
 	surf: {
@@ -517,10 +514,9 @@ exports.BattleMovedex = {
 				this.add('-end', target, 'move: Taunt', '[silent]');
 			},
 			onDisableMove: function (pokemon) {
-				let moves = pokemon.moveset;
-				for (let i = 0; i < moves.length; i++) {
-					if (this.getMove(moves[i].move).category === 'Status') {
-						pokemon.disableMove(moves[i].id);
+				for (const moveSlot of pokemon.moveSlots) {
+					if (this.getMove(moveSlot.move).category === 'Status') {
+						pokemon.disableMove(moveSlot.id);
 					}
 				}
 			},

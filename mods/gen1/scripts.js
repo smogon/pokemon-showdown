@@ -21,7 +21,7 @@ exports.BattleScripts = {
 	// This is because there was actually no side, just Battle and active Pokémon effects.
 	// Side's lastMove is used for Counter and Mirror Move.
 	side: {
-		lastMove: '',
+		lastMove: null,
 	},
 	// BattlePokemon scripts.
 	pokemon: {
@@ -100,8 +100,8 @@ exports.BattleScripts = {
 		if (!lockedMove && (!pokemon.volatiles['partialtrappinglock'] || pokemon.volatiles['partialtrappinglock'].locked !== target)) {
 			pokemon.deductPP(move, null, target);
 			// On gen 1 moves are stored when they are chosen and a PP is deducted.
-			pokemon.side.lastMove = move.id;
-			pokemon.lastMove = move.id;
+			pokemon.side.lastMove = move;
+			pokemon.lastMove = move;
 		} else {
 			sourceEffect = move;
 		}
@@ -139,9 +139,9 @@ exports.BattleScripts = {
 					// Duration reset thus partially trapped at 2 always.
 					targetVolatile.duration = 2;
 					// We get the move position for the PP change.
-					const moveData = pokemon.moveset.find(moveData => moveData.id === move.id);
-					if (moveData && moveData.pp === 0) {
-						moveData.pp = 63;
+					const moveSlot = pokemon.moveSlots.find(moveSlot => moveSlot.id === move.id);
+					if (moveSlot && moveSlot.pp === 0) {
+						moveSlot.pp = 63;
 						pokemon.isStale = 2;
 						pokemon.isStaleSource = 'ppoverflow';
 					}
@@ -213,9 +213,9 @@ exports.BattleScripts = {
 
 		// Store 0 damage for last damage if move failed or dealt 0 damage.
 		// This only happens on moves that don't deal damage but call GetDamageVarsForPlayerAttack (disassembly).
-		if (!damage && (move.category !== 'Status' || (move.category === 'Status' && !(move.status in {'psn':1, 'tox':1, 'par':1}))) &&
-		!(move.id in {'conversion':1, 'haze':1, 'mist':1, 'focusenergy':1, 'confuseray':1, 'supersonic':1, 'transform':1, 'lightscreen':1, 'reflect':1, 'substitute':1, 'mimic':1, 'leechseed':1, 'splash':1, 'softboiled':1, 'recover':1, 'rest':1})) {
-			pokemon.battle.lastDamage = 0;
+		if (!damage && (move.category !== 'Status' || (move.category === 'Status' && !['psn', 'tox', 'par'].includes(move.status))) &&
+		!['conversion', 'haze', 'mist', 'focusenergy', 'confuseray', 'supersonic', 'transform', 'lightscreen', 'reflect', 'substitute', 'mimic', 'leechseed', 'splash', 'softboiled', 'recover', 'rest'].includes(move.id)) {
+			this.lastDamage = 0;
 		}
 
 		// Go ahead with results of the used move.
@@ -564,15 +564,15 @@ exports.BattleScripts = {
 
 		// Apply move secondaries.
 		if (moveData.secondaries) {
-			for (let i = 0; i < moveData.secondaries.length; i++) {
+			for (const secondary of moveData.secondaries) {
 				// We check here whether to negate the probable secondary status if it's para, burn, or freeze.
 				// In the game, this is checked and if true, the random number generator is not called.
 				// That means that a move that does not share the type of the target can status it.
 				// If a move that was not fire-type would exist on Gen 1, it could burn a Pokémon.
-				if (!(moveData.secondaries[i].status && moveData.secondaries[i].status in {'par':1, 'brn':1, 'frz':1} && target && target.hasType(move.type))) {
-					let effectChance = Math.floor(moveData.secondaries[i].chance * 255 / 100);
-					if (typeof moveData.secondaries[i].chance === 'undefined' || this.random(256) < effectChance) {
-						this.moveHit(target, pokemon, move, moveData.secondaries[i], true, isSelf);
+				if (!(secondary.status && ['par', 'brn', 'frz'].includes(secondary.status) && target && target.hasType(move.type))) {
+					let effectChance = Math.floor(secondary.chance * 255 / 100);
+					if (typeof secondary.chance === 'undefined' || this.random(256) <= effectChance) {
+						this.moveHit(target, pokemon, move, secondary, true, isSelf);
 					}
 				}
 			}
@@ -650,10 +650,10 @@ exports.BattleScripts = {
 			}
 		}
 		if (damage !== 0) damage = this.clampIntRange(damage, 1);
-		if (!(effect.id in {'recoil':1, 'drain':1}) && effect.effectType !== 'Status') {
+		if (!['recoil', 'drain'].includes(effect.id) && effect.effectType !== 'Status') {
 			// FIXME: The stored damage should be calculated ignoring Substitute.
 			// https://github.com/Zarel/Pokemon-Showdown/issues/2598
-			target.battle.lastDamage = damage;
+			this.lastDamage = damage;
 		}
 		damage = target.damage(damage, source, effect);
 		if (source) source.lastDamage = damage;
@@ -704,7 +704,7 @@ exports.BattleScripts = {
 		damage = this.clampIntRange(damage, 1);
 		// Check here for Substitute on confusion since it's not exactly a move that causes the damage and thus it can't TryMoveHit.
 		// The hi jump kick recoil also hits the sub.
-		if (effect.id in {'confusion': 1, 'highjumpkick': 1} && target.volatiles['substitute']) {
+		if (['confusion', 'highjumpkick'].includes(effect.id) && target.volatiles['substitute']) {
 			target.volatiles['substitute'].hp -= damage;
 			if (target.volatiles['substitute'].hp <= 0) {
 				target.removeVolatile('substitute');
@@ -863,7 +863,7 @@ exports.BattleScripts = {
 			defense = this.clampIntRange(defense, 1, 1998);
 		}
 
-		// In the event of a critical hit, the ofense and defense changes are ignored.
+		// In the event of a critical hit, the offense and defense changes are ignored.
 		// This includes both boosts and screens.
 		// Also, level is doubled in damage calculation.
 		if (move.crit) {

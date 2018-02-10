@@ -3,6 +3,44 @@
 // The server port - the port to run Pokemon Showdown under
 exports.port = 8000;
 
+// The server address - the address at which Pokemon Showdown should be hosting
+//   This should be kept set to 0.0.0.0 unless you know what you're doing.
+exports.bindaddress = '0.0.0.0';
+
+// workers - the number of networking child processes to spawn
+//   This should be no greater than the number of threads available on your
+//   server's CPU. If you're not sure how many you have, you can check from a
+//   terminal by running:
+//
+//   $ node -e "console.log(require('os').cpus().length)"
+//
+//   Using more workers than there are available threads will cause performance
+//   issues. Keeping a couple threads available for use for OS-related work and
+//   other PS processes will likely give you the best performance, if your
+//   server's CPU is capable of multithreading. If you don't know what any of
+//   this means or you are unfamiliar with PS' networking code, leave this set
+//   to 1.
+exports.workers = 1;
+
+// wsdeflate - compresses WebSocket messages
+//	 Toggles use of the Sec-WebSocket-Extension permessage-deflate extension.
+//	 This compresses messages sent and received over a WebSocket connection
+//	 using the zlib compression algorithm. As a caveat, message compression
+//	 may make messages take longer to procress.
+exports.wsdeflate = null;
+/**exports.wsdeflate = {
+	level: 5,
+	memLevel: 8,
+	strategy: 0,
+	noContextTakeover: true,
+	requestNoContextTakeover: true,
+	maxWindowBits: 15,
+	requestMaxWindowBits: 15,
+};**/
+
+// TODO: allow SSL to actually be possible to use for third-party servers at
+// some point.
+
 // proxyip - proxy IPs with trusted X-Forwarded-For headers
 //   This can be either false (meaning not to trust any proxies) or an array
 //   of strings. Each string should be either an IP address or a subnet given
@@ -11,9 +49,9 @@ exports.port = 8000;
 exports.proxyip = false;
 
 // ofe - write heapdumps if sockets.js workers run out of memory.
-//   If you wish to enable this, you will need to install ofe, as it is not a
-//   installed by default:
-//     $ npm install --no-save ofe
+//   If you wish to enable this, you will need to install node-oom-heapdump,
+//   as it is sometimes not installed by default:
+//     $ npm install node-oom-heapdump
 exports.ofe = false;
 
 // Pokemon of the Day - put a pokemon's name here to make it Pokemon of the Day
@@ -56,7 +94,7 @@ Y929lRybWEiKUr+4Yw2O1W0CAwEAAQ==
 //   otherwise, all crashes will lock down the server. If you wish to enable
 //   this setting, you will need to install nodemailer, as it is not installed
 //   by default:
-//     $ npm install --no-save nodemailer
+//     $ npm install nodemailer
 /**exports.crashguardemail = {
 	options: {
 		host: 'mail.example.com',
@@ -117,6 +155,11 @@ exports.monitorminpunishments = 3;
 //   option to be set to a number greater than zero. If `monitorminpunishments` is set to a value greater than 3,
 //   the autolock will only apply to people who pass this threshold.
 exports.punishmentautolock = false;
+
+// restrict sending links to autoconfirmed users only.
+//   If this is set to `true`, only autoconfirmed users can send links to either chatrooms or other users, except for staff members.
+//   This option can be used if your server has trouble with spammers mass PMing links to users, or trolls sending malicious links.
+exports.restrictLinks = false;
 
 // whitelist - prevent users below a certain group from doing things
 //   For the modchat settings, false will allow any user to participate, while a string
@@ -298,7 +341,7 @@ exports.grouplist = [
 		id: "leader",
 		name: "Leader",
 		inherit: '@',
-		jurisdiction: '@u',
+		jurisdiction: 'u',
 		promote: 'u',
 		roomowner: true,
 		roombot: true,
@@ -315,6 +358,7 @@ exports.grouplist = [
 		globalonly: true,
 		tournamentsmanagement: true,
 		gamemanagement: true,
+		exportinputlog: true,
 	},
 	{
 		symbol: '#',
@@ -331,6 +375,22 @@ exports.grouplist = [
 		roomonly: true,
 		tournamentsmanagement: true,
 		gamemanagement: true,
+	},
+	{
+		symbol: '\u2605',
+		id: "host",
+		name: "Host",
+		inherit: '@',
+		jurisdiction: 'u',
+		roommod: true,
+		roomdriver: true,
+		editroom: true,
+		declare: true,
+		modchat: true,
+		roomonly: true,
+		tournamentsmanagement: true,
+		gamemanagement: true,
+		joinbattle: true,
 	},
 	{
 		symbol: '\u2606',
@@ -405,7 +465,7 @@ exports.grouplist = [
 	{
 		name: 'Locked',
 		id: 'locked',
-		symbol: '‽',
+		symbol: '\u203d',
 		punishgroup: 'LOCK',
 	},
 	{

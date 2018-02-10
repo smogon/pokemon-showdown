@@ -41,6 +41,16 @@ exports.BattleItems = {
 			}
 		},
 	},
+	"enigmaberry": {
+		id: "enigmaberry",
+		name: "Enigma Berry",
+		desc: "No competitive use.",
+		isUnreleased: true,
+		spritenum: 124,
+		isBerry: true,
+		num: 208,
+		gen: 3,
+	},
 	"hardstone": {
 		inherit: true,
 		desc: "Holder's Rock-type attacks have 1.1x power.",

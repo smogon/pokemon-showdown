@@ -3,7 +3,7 @@
 exports.BattleFormatsData = {
 	bulbasaur: {
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["tackle", "growl", "ancientpower"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["tackle", "growl", "ancientpower"]},
 		],
 		tier: "LC",
 	},
@@ -41,13 +41,13 @@ exports.BattleFormatsData = {
 			fillerMoves2: ["sleeppowder", "sleeppowder", "synthesis"],
 		},
 		eventPokemon: [
-			{"generation": 2, "level": 40, "shiny": true, "moves":["poisonpowder", "sleeppowder", "razorleaf", "sweetscent"]},
+			{"generation": 2, "level": 40, "shiny": true, "moves": ["poisonpowder", "sleeppowder", "razorleaf", "sweetscent"]},
 		],
 		tier: "BL",
 	},
 	charmander: {
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["scratch", "growl", "crunch"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["scratch", "growl", "crunch"]},
 		],
 		tier: "LC",
 	},
@@ -73,13 +73,13 @@ exports.BattleFormatsData = {
 			baseMove1: "fireblast", baseMove2: "earthquake", baseMove3: "rest", baseMove4: "sleeptalk",
 		},
 		eventPokemon: [
-			{"generation": 2, "level": 40, "shiny": true, "moves":["rage", "scaryface", "flamethrower", "wingattack"]},
+			{"generation": 2, "level": 40, "shiny": true, "moves": ["rage", "scaryface", "flamethrower", "wingattack"]},
 		],
 		tier: "BL",
 	},
 	squirtle: {
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["tackle", "tailwhip", "zapcannon"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["tackle", "tailwhip", "zapcannon"]},
 		],
 		tier: "LC",
 	},
@@ -113,7 +113,7 @@ exports.BattleFormatsData = {
 			fillerMoves2: ["earthquake", "zapcannon"],
 		},
 		eventPokemon: [
-			{"generation": 2, "level": 40, "shiny": true, "moves":["watergun", "bite", "rapidspin", "protect"]},
+			{"generation": 2, "level": 40, "shiny": true, "moves": ["watergun", "bite", "rapidspin", "protect"]},
 		],
 		tier: "UU",
 	},
@@ -223,7 +223,7 @@ exports.BattleFormatsData = {
 	},
 	spearow: {
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["peck", "growl", "sonicboom"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["peck", "growl", "sonicboom"]},
 		],
 		tier: "LC",
 	},
@@ -254,7 +254,7 @@ exports.BattleFormatsData = {
 			fillerMoves1: ["return", "return", "doubleedge"],
 		},
 		eventPokemon: [
-			{"generation": 1, "level": 20, "moves":["growl", "leer", "furyattack", "payday"]},
+			{"generation": 1, "level": 20, "moves": ["growl", "leer", "furyattack", "payday"]},
 		],
 		tier: "NU",
 	},
@@ -277,18 +277,18 @@ exports.BattleFormatsData = {
 	},
 	pichu: {
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["thundershock", "charm", "dizzypunch"]},
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["thundershock", "charm", "petaldance"]},
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["thundershock", "charm", "scaryface"]},
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["thundershock", "charm", "sing"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["thundershock", "charm", "dizzypunch"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["thundershock", "charm", "petaldance"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["thundershock", "charm", "scaryface"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["thundershock", "charm", "sing"]},
 		],
 		tier: "LC",
 	},
 	pikachu: {
 		eventPokemon: [
-			{"generation": 1, "level": 5, "moves":["surf"]},
-			{"generation": 1, "level": 5, "moves":["fly"]},
-			{"generation": 1, "level": 5, "moves":["thundershock", "growl", "surf"]},
+			{"generation": 1, "level": 5, "moves": ["surf"]},
+			{"generation": 1, "level": 5, "moves": ["fly"]},
+			{"generation": 1, "level": 5, "moves": ["thundershock", "growl", "surf"]},
 		],
 		tier: "NFE",
 	},
@@ -321,9 +321,9 @@ exports.BattleFormatsData = {
 	},
 	nidoranf: {
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["growl", "tackle", "lovelykiss"]},
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["growl", "tackle", "moonlight"]},
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["growl", "tackle", "sweetkiss"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["growl", "tackle", "lovelykiss"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["growl", "tackle", "moonlight"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["growl", "tackle", "sweetkiss"]},
 		],
 		tier: "LC",
 	},
@@ -356,9 +356,9 @@ exports.BattleFormatsData = {
 	},
 	nidoranm: {
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["leer", "tackle", "lovelykiss"]},
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["leer", "tackle", "morningsun"]},
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["leer", "tackle", "sweetkiss"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["leer", "tackle", "lovelykiss"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["leer", "tackle", "morningsun"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["leer", "tackle", "sweetkiss"]},
 		],
 		tier: "LC",
 	},
@@ -378,10 +378,10 @@ exports.BattleFormatsData = {
 	},
 	cleffa: {
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["pound", "charm", "encore", "petaldance"]},
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["pound", "charm", "encore", "scaryface"]},
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["pound", "charm", "encore", "swift"]},
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["pound", "charm", "encore", "dizzypunch"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["pound", "charm", "encore", "petaldance"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["pound", "charm", "encore", "scaryface"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["pound", "charm", "encore", "swift"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["pound", "charm", "encore", "dizzypunch"]},
 		],
 		tier: "LC",
 	},
@@ -440,10 +440,10 @@ exports.BattleFormatsData = {
 	},
 	igglybuff: {
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["sing", "charm", "defensecurl", "mimic"]},
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["sing", "charm", "defensecurl", "petaldance"]},
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["sing", "charm", "defensecurl", "scaryface"]},
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["sing", "charm", "defensecurl", "dizzypunch"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["sing", "charm", "defensecurl", "mimic"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["sing", "charm", "defensecurl", "petaldance"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["sing", "charm", "defensecurl", "scaryface"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["sing", "charm", "defensecurl", "dizzypunch"]},
 		],
 		tier: "LC",
 	},
@@ -476,7 +476,7 @@ exports.BattleFormatsData = {
 	},
 	zubat: {
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["leechlife", "flail"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["leechlife", "flail"]},
 		],
 		tier: "LC",
 	},
@@ -513,7 +513,7 @@ exports.BattleFormatsData = {
 	},
 	oddish: {
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["absorb", "leechseed"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["absorb", "leechseed"]},
 		],
 		tier: "LC",
 	},
@@ -562,7 +562,7 @@ exports.BattleFormatsData = {
 	},
 	paras: {
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["scratch", "synthesis"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["scratch", "synthesis"]},
 		],
 		tier: "LC",
 	},
@@ -661,9 +661,9 @@ exports.BattleFormatsData = {
 	},
 	psyduck: {
 		eventPokemon: [
-			{"generation": 1, "level": 15, "moves":["scratch", "amnesia"]},
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["scratch", "tailwhip", "petaldance"]},
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["scratch", "tailwhip", "triattack"]},
+			{"generation": 1, "level": 15, "moves": ["scratch", "amnesia"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["scratch", "tailwhip", "petaldance"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["scratch", "tailwhip", "triattack"]},
 		],
 		tier: "LC",
 	},
@@ -730,9 +730,9 @@ exports.BattleFormatsData = {
 	},
 	poliwag: {
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["bubble", "growth"]},
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["bubble", "lovelykiss"]},
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["bubble", "sweetkiss"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["bubble", "growth"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["bubble", "lovelykiss"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["bubble", "sweetkiss"]},
 		],
 		tier: "LC",
 	},
@@ -794,7 +794,7 @@ exports.BattleFormatsData = {
 	},
 	abra: {
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["teleport", "foresight"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["teleport", "foresight"]},
 		],
 		tier: "LC",
 	},
@@ -820,8 +820,8 @@ exports.BattleFormatsData = {
 	},
 	machop: {
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["lowkick", "leer", "falseswipe"]},
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["lowkick", "leer", "thrash"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["lowkick", "leer", "falseswipe"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["lowkick", "leer", "thrash"]},
 		],
 		tier: "LC",
 	},
@@ -850,8 +850,8 @@ exports.BattleFormatsData = {
 	},
 	bellsprout: {
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["vinewhip", "lovelykiss"]},
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["vinewhip", "sweetkiss"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["vinewhip", "lovelykiss"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["vinewhip", "sweetkiss"]},
 		],
 		tier: "LC",
 	},
@@ -870,7 +870,7 @@ exports.BattleFormatsData = {
 	},
 	tentacool: {
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["poisonsting", "confuseray"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["poisonsting", "confuseray"]},
 		],
 		tier: "LC",
 	},
@@ -899,7 +899,7 @@ exports.BattleFormatsData = {
 	},
 	geodude: {
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["tackle", "rapidspin"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["tackle", "rapidspin"]},
 		],
 		tier: "LC",
 	},
@@ -917,7 +917,7 @@ exports.BattleFormatsData = {
 	},
 	ponyta: {
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["tackle", "growl", "lowkick"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["tackle", "growl", "lowkick"]},
 		],
 		tier: "LC",
 	},
@@ -941,7 +941,7 @@ exports.BattleFormatsData = {
 			baseMove1: "rest", baseMove2: "sleeptalk", baseMove3: "fireblast", baseMove4: "bodyslam",
 		},
 		eventPokemon: [
-			{"generation": 1, "level": 40, "moves":["ember", "firespin", "stomp", "payday"]},
+			{"generation": 1, "level": 40, "moves": ["ember", "firespin", "stomp", "payday"]},
 		],
 		tier: "NU",
 	},
@@ -992,7 +992,7 @@ exports.BattleFormatsData = {
 	},
 	magnemite: {
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["tackle", "agility"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["tackle", "agility"]},
 		],
 		tier: "LC",
 	},
@@ -1039,14 +1039,14 @@ exports.BattleFormatsData = {
 			baseMove1: "swordsdance", baseMove2: "agility", baseMove3: "endure", baseMove4: "flail",
 		},
 		eventPokemon: [
-			{"generation": 2, "level": 5, "moves":["batonpass", "swordsdance", "agility", "slash"]},
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["peck", "furycutter"]},
+			{"generation": 2, "level": 5, "moves": ["batonpass", "swordsdance", "agility", "slash"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["peck", "furycutter"]},
 		],
 		tier: "NU",
 	},
 	doduo: {
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["peck", "growl", "lowkick"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["peck", "growl", "lowkick"]},
 		],
 		tier: "LC",
 	},
@@ -1081,7 +1081,7 @@ exports.BattleFormatsData = {
 	},
 	seel: {
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["headbutt", "growl", "flail"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["headbutt", "growl", "flail"]},
 		],
 		tier: "LC",
 	},
@@ -1172,7 +1172,7 @@ exports.BattleFormatsData = {
 	},
 	onix: {
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["tackle", "screech", "sharpen"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["tackle", "screech", "sharpen"]},
 		],
 		tier: "LC",
 	},
@@ -1199,7 +1199,7 @@ exports.BattleFormatsData = {
 	},
 	drowzee: {
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["pound", "hypnosis", "amnesia"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["pound", "hypnosis", "amnesia"]},
 		],
 		tier: "LC",
 	},
@@ -1234,7 +1234,7 @@ exports.BattleFormatsData = {
 	},
 	krabby: {
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["bubble", "leer", "metalclaw"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["bubble", "leer", "metalclaw"]},
 		],
 		tier: "LC",
 	},
@@ -1249,7 +1249,7 @@ exports.BattleFormatsData = {
 	},
 	voltorb: {
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["tackle", "agility"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["tackle", "agility"]},
 		],
 		tier: "LC",
 	},
@@ -1277,7 +1277,7 @@ exports.BattleFormatsData = {
 	},
 	exeggcute: {
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["barrage", "hypnosis", "sweetscent"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["barrage", "hypnosis", "sweetscent"]},
 		],
 		tier: "LC",
 	},
@@ -1313,7 +1313,7 @@ exports.BattleFormatsData = {
 	},
 	cubone: {
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["growl", "tailwhip", "furyattack"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["growl", "tailwhip", "furyattack"]},
 		],
 		tier: "LC",
 	},
@@ -1330,8 +1330,8 @@ exports.BattleFormatsData = {
 	},
 	tyrogue: {
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["tackle", "rage"]},
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["tackle", "dizzypunch"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["tackle", "rage"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["tackle", "dizzypunch"]},
 		],
 		tier: "LC",
 	},
@@ -1427,7 +1427,7 @@ exports.BattleFormatsData = {
 			fillerMoves4: ["fireblast", "earthquake", "counter", "rest"],
 		},
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["lick", "doubleslap"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["lick", "doubleslap"]},
 		],
 		tier: "NU",
 	},
@@ -1469,7 +1469,7 @@ exports.BattleFormatsData = {
 	},
 	chansey: {
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["pound", "sweetscent"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["pound", "sweetscent"]},
 		],
 		tier: "UU",
 	},
@@ -1521,7 +1521,7 @@ exports.BattleFormatsData = {
 			baseMove1: "sleeppowder", baseMove2: "swordsdance", baseMove3: "gigadrain", baseMove4: "bodyslam",
 		},
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["constrict", "sleeppowder", "synthesis"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["constrict", "sleeppowder", "synthesis"]},
 		],
 		tier: "NU",
 	},
@@ -1547,13 +1547,13 @@ exports.BattleFormatsData = {
 			fillerMoves2: ["shadowball", "counter", "dynamicpunch", "doubleedge", "substitute"],
 		},
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["cometpunch", "feintattack"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["cometpunch", "feintattack"]},
 		],
 		tier: "BL",
 	},
 	horsea: {
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["bubble", "haze"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["bubble", "haze"]},
 		],
 		tier: "LC",
 	},
@@ -1589,7 +1589,7 @@ exports.BattleFormatsData = {
 	},
 	goldeen: {
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["peck", "tailwhip", "swordsdance"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["peck", "tailwhip", "swordsdance"]},
 		],
 		tier: "LC",
 	},
@@ -1617,7 +1617,7 @@ exports.BattleFormatsData = {
 	},
 	staryu: {
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["tackle", "harden", "twister"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["tackle", "harden", "twister"]},
 		],
 		tier: "LC",
 	},
@@ -1674,7 +1674,7 @@ exports.BattleFormatsData = {
 			fillerMoves1: ["icepunch", "firepunch", "hypnosis", "thunderwave", "encore"],
 		},
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["barrier", "mindreader"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["barrier", "mindreader"]},
 		],
 		tier: "NU",
 	},
@@ -1713,7 +1713,7 @@ exports.BattleFormatsData = {
 			fillerMoves1: ["wingattack", "hiddenpowerrock", "hiddenpowerrock"],
 		},
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["quickattack", "leer", "sonicboom"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["quickattack", "leer", "sonicboom"]},
 		],
 		tier: "UU",
 	},
@@ -1755,9 +1755,9 @@ exports.BattleFormatsData = {
 	},
 	smoochum: {
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["pound", "lick", "metronome"]},
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["pound", "lick", "petaldance"]},
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["pound", "lick", "dizzypunch"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["pound", "lick", "metronome"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["pound", "lick", "petaldance"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["pound", "lick", "dizzypunch"]},
 		],
 		tier: "LC",
 	},
@@ -1788,8 +1788,8 @@ exports.BattleFormatsData = {
 	},
 	elekid: {
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["quickattack", "leer", "dizzypunch"]},
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["quickattack", "leer", "pursuit"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["quickattack", "leer", "dizzypunch"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["quickattack", "leer", "pursuit"]},
 		],
 		tier: "LC",
 	},
@@ -1818,8 +1818,8 @@ exports.BattleFormatsData = {
 	},
 	magby: {
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["ember", "feintattack"]},
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["ember", "dizzypunch"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["ember", "feintattack"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["ember", "dizzypunch"]},
 		],
 		tier: "LC",
 	},
@@ -1863,7 +1863,7 @@ exports.BattleFormatsData = {
 			fillerMoves2: ["hiddenpowerbug", "hiddenpowerrock", "hiddenpowerground"],
 		},
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["vicegrip", "rockthrow"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["vicegrip", "rockthrow"]},
 		],
 		tier: "UU",
 	},
@@ -1893,15 +1893,15 @@ exports.BattleFormatsData = {
 			fillerMoves1: ["hiddenpowerbug", "irontail", "quickattack"],
 		},
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["tackle", "tailwhip", "quickattack"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["tackle", "tailwhip", "quickattack"]},
 		],
 		tier: "BL",
 	},
 	magikarp: {
 		eventPokemon: [
-			{"generation": 1, "level": 5, "moves":["dragonrage"]},
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["splash", "bubble"]},
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["splash", "reversal"]},
+			{"generation": 1, "level": 5, "moves": ["dragonrage"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["splash", "bubble"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["splash", "reversal"]},
 		],
 		tier: "LC",
 	},
@@ -1961,8 +1961,8 @@ exports.BattleFormatsData = {
 			fillerMoves3: ["rest", "sing", "confuseray", "reflect"],
 		},
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["watergun", "growl", "sing", "bite"]},
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["watergun", "growl", "sing", "futuresight"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["watergun", "growl", "sing", "bite"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["watergun", "growl", "sing", "futuresight"]},
 		],
 		tier: "BL",
 	},
@@ -1976,7 +1976,7 @@ exports.BattleFormatsData = {
 	},
 	eevee: {
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["tackle", "tailwhip", "growth"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["tackle", "tailwhip", "growth"]},
 		],
 		tier: "LC",
 	},
@@ -2133,7 +2133,7 @@ exports.BattleFormatsData = {
 	},
 	porygon: {
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["tackle", "conversion", "barrier"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["tackle", "conversion", "barrier"]},
 		],
 		tier: "LC",
 	},
@@ -2155,7 +2155,7 @@ exports.BattleFormatsData = {
 	},
 	omanyte: {
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["constrict", "withdraw", "rockthrow"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["constrict", "withdraw", "rockthrow"]},
 		],
 		tier: "LC",
 	},
@@ -2185,7 +2185,7 @@ exports.BattleFormatsData = {
 	},
 	kabuto: {
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["scratch", "harden", "rockthrow"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["scratch", "harden", "rockthrow"]},
 		],
 		tier: "LC",
 	},
@@ -2223,7 +2223,7 @@ exports.BattleFormatsData = {
 			fillerMoves1: ["hiddenpowerflying", "whirlwind"],
 		},
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["wingattack", "rockthrow"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["wingattack", "rockthrow"]},
 		],
 		tier: "BL",
 	},
@@ -2255,9 +2255,9 @@ exports.BattleFormatsData = {
 			baseMove1: "bellydrum", baseMove2: "return", baseMove3: "earthquake", baseMove4: "lovelykiss",
 		},
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["tackle", "lovelykiss"]},
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["tackle", "splash"]},
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["tackle", "sweetkiss"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["tackle", "lovelykiss"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["tackle", "splash"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["tackle", "sweetkiss"]},
 		],
 		tier: "OU",
 	},
@@ -2276,7 +2276,7 @@ exports.BattleFormatsData = {
 			fillerMoves1: ["toxic", "toxic", "toxic", "hiddenpowerelectric", "hiddenpowerflying", "return"],
 		},
 		eventPokemon: [
-			{"generation": 2, "level": 50, "shiny": true, "moves":["mist", "agility", "mindreader", "icebeam"]},
+			{"generation": 2, "level": 50, "shiny": true, "moves": ["mist", "agility", "mindreader", "icebeam"]},
 		],
 		tier: "BL",
 	},
@@ -2317,7 +2317,7 @@ exports.BattleFormatsData = {
 			fillerMoves2: ["thunderwave", "thunderwave", "thunderwave", "toxic", "lightscreen", "reflect"],
 		},
 		eventPokemon: [
-			{"generation": 2, "level": 50, "shiny": true, "moves":["thunderwave", "agility", "detect", "drillpeck"]},
+			{"generation": 2, "level": 50, "shiny": true, "moves": ["thunderwave", "agility", "detect", "drillpeck"]},
 		],
 		tier: "OU",
 	},
@@ -2340,14 +2340,14 @@ exports.BattleFormatsData = {
 			fillerMoves1: ["hiddenpowergrass", "hiddenpowergrass", "return"],
 		},
 		eventPokemon: [
-			{"generation": 2, "level": 50, "shiny": true, "moves":["firespin", "agility", "endure", "flamethrower"]},
+			{"generation": 2, "level": 50, "shiny": true, "moves": ["firespin", "agility", "endure", "flamethrower"]},
 		],
 		tier: "BL",
 	},
 	dratini: {
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["wrap", "leer", "hydropump"]},
-			{"generation": 2, "level": 15, "shiny": 1, "moves":["wrap", "thunderwave", "twister", "extremespeed"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["wrap", "leer", "hydropump"]},
+			{"generation": 2, "level": 15, "shiny": 1, "moves": ["wrap", "thunderwave", "twister", "extremespeed"]},
 		],
 		tier: "LC",
 	},
@@ -2403,7 +2403,7 @@ exports.BattleFormatsData = {
 			fillerMoves2: ["reflect", "reflect", "icebeam", "thunderbolt", "fireblast"],
 		},
 		eventPokemon: [
-			{"generation": 2, "level": 70, "shiny": true, "moves":["psychup", "futuresight", "mist", "psychic"]},
+			{"generation": 2, "level": 70, "shiny": true, "moves": ["psychup", "futuresight", "mist", "psychic"]},
 		],
 		tier: "Uber",
 	},
@@ -2431,15 +2431,15 @@ exports.BattleFormatsData = {
 			fillerMoves2: ["reflect", "reflect", "reflect", "reflect", "earthquake", "icebeam", "thunderbolt", "fireblast"],
 		},
 		eventPokemon: [
-			{"generation": 1, "level": 5, "moves":["pound"]},
-			{"generation": 2, "level": 5, "moves":["pound"]},
+			{"generation": 1, "level": 5, "moves": ["pound"]},
+			{"generation": 2, "level": 5, "moves": ["pound"]},
 		],
 		eventOnly: true,
 		tier: "Uber",
 	},
 	chikorita: {
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["tackle", "growl", "petaldance"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["tackle", "growl", "petaldance"]},
 		],
 		tier: "LC",
 	},
@@ -2470,13 +2470,13 @@ exports.BattleFormatsData = {
 			fillerMoves4: ["synthesis", "synthesis", "synthesis", "leechseed", "leechseed"],
 		},
 		eventPokemon: [
-			{"generation": 2, "level": 40, "shiny": true, "moves":["reflect", "poisonpowder", "synthesis", "bodyslam"]},
+			{"generation": 2, "level": 40, "shiny": true, "moves": ["reflect", "poisonpowder", "synthesis", "bodyslam"]},
 		],
 		tier: "BL",
 	},
 	cyndaquil: {
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["tackle", "leer", "doubleedge"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["tackle", "leer", "doubleedge"]},
 		],
 		tier: "LC",
 	},
@@ -2502,13 +2502,13 @@ exports.BattleFormatsData = {
 			fillerMoves1: ["earthquake", "thunderpunch"],
 		},
 		eventPokemon: [
-			{"generation": 2, "level": 40, "shiny": true, "moves":["smokescreen", "ember", "quickattack", "flamewheel"]},
+			{"generation": 2, "level": 40, "shiny": true, "moves": ["smokescreen", "ember", "quickattack", "flamewheel"]},
 		],
 		tier: "BL",
 	},
 	totodile: {
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["scratch", "leer", "submission"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["scratch", "leer", "submission"]},
 		],
 		tier: "LC",
 	},
@@ -2544,13 +2544,13 @@ exports.BattleFormatsData = {
 			fillerMoves2: ["earthquake", "icebeam"],
 		},
 		eventPokemon: [
-			{"generation": 2, "level": 40, "shiny": true, "moves":["watergun", "bite", "scaryface", "slash"]},
+			{"generation": 2, "level": 40, "shiny": true, "moves": ["watergun", "bite", "scaryface", "slash"]},
 		],
 		tier: "UU",
 	},
 	sentret: {
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["tackle", "defensecurl", "dizzypunch"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["tackle", "defensecurl", "dizzypunch"]},
 		],
 		tier: "LC",
 	},
@@ -2593,7 +2593,7 @@ exports.BattleFormatsData = {
 	},
 	hoothoot: {
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["tackle", "growl", "nightshade"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["tackle", "growl", "nightshade"]},
 		],
 		tier: "LC",
 	},
@@ -2623,7 +2623,7 @@ exports.BattleFormatsData = {
 	},
 	ledyba: {
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["tackle", "barrier"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["tackle", "barrier"]},
 		],
 		tier: "LC",
 	},
@@ -2660,7 +2660,7 @@ exports.BattleFormatsData = {
 	},
 	spinarak: {
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["poisonsting", "stringshot", "growth"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["poisonsting", "stringshot", "growth"]},
 		],
 		tier: "LC",
 	},
@@ -2688,7 +2688,7 @@ exports.BattleFormatsData = {
 	},
 	chinchou: {
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["bubble", "thunderwave", "supersonic", "lightscreen"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["bubble", "thunderwave", "supersonic", "lightscreen"]},
 		],
 		tier: "LC",
 	},
@@ -2742,7 +2742,7 @@ exports.BattleFormatsData = {
 	},
 	natu: {
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["peck", "leer", "safeguard"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["peck", "leer", "safeguard"]},
 		],
 		tier: "LC",
 	},
@@ -2791,9 +2791,9 @@ exports.BattleFormatsData = {
 	},
 	marill: {
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["tackle", "defensecurl", "dizzypunch"]},
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["tackle", "defensecurl", "hydropump"]},
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["tackle", "defensecurl", "scaryface"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["tackle", "defensecurl", "dizzypunch"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["tackle", "defensecurl", "hydropump"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["tackle", "defensecurl", "scaryface"]},
 		],
 		tier: "LC",
 	},
@@ -2836,13 +2836,13 @@ exports.BattleFormatsData = {
 			baseMove1: "rockslide", baseMove2: "earthquake", baseMove3: "rest", baseMove4: "sleeptalk",
 		},
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["rockthrow", "mimic", "substitute"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["rockthrow", "mimic", "substitute"]},
 		],
 		tier: "NU",
 	},
 	hoppip: {
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["splash", "synthesis", "tailwhip", "agility"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["splash", "synthesis", "tailwhip", "agility"]},
 		],
 		tier: "LC",
 	},
@@ -2895,13 +2895,13 @@ exports.BattleFormatsData = {
 			fillerMoves3: ["hiddenpowerground", "shadowball", "irontail", "thunderbolt", "thunder"],
 		},
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["scratch", "tailwhip", "mimic"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["scratch", "tailwhip", "mimic"]},
 		],
 		tier: "NU",
 	},
 	sunkern: {
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["absorb", "growth", "splash"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["absorb", "growth", "splash"]},
 		],
 		tier: "LC",
 	},
@@ -2938,15 +2938,15 @@ exports.BattleFormatsData = {
 			fillerMoves3: ["whirlwind", "whirlwind", "sweetkiss"],
 		},
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["tackle", "foresight", "steelwing"]},
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["tackle", "foresight", "sweetkiss"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["tackle", "foresight", "steelwing"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["tackle", "foresight", "sweetkiss"]},
 		],
 		tier: "NU",
 	},
 	wooper: {
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["watergun", "tailwhip", "bellydrum"]},
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["watergun", "tailwhip", "scaryface"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["watergun", "tailwhip", "bellydrum"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["watergun", "tailwhip", "scaryface"]},
 		],
 		tier: "LC",
 	},
@@ -2988,7 +2988,7 @@ exports.BattleFormatsData = {
 			fillerMoves2: ["pursuit", "nightshade"],
 		},
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["peck", "beatup"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["peck", "beatup"]},
 		],
 		tier: "NU",
 	},
@@ -3008,7 +3008,7 @@ exports.BattleFormatsData = {
 			fillerMoves4: ["destinybond", "rest", "painsplit", "painsplit"],
 		},
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["growl", "hypnosis"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["growl", "hypnosis"]},
 		],
 		tier: "OU",
 	},
@@ -3044,7 +3044,7 @@ exports.BattleFormatsData = {
 			fillerMoves2: ["mimic", "mimic", "safeguard", "safeguard", "destinybond"],
 		},
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["mirrorcoat", "safeguard", "destinybond", "mimic"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["mirrorcoat", "safeguard", "destinybond", "mimic"]},
 		],
 		tier: "NU",
 	},
@@ -3075,7 +3075,7 @@ exports.BattleFormatsData = {
 	},
 	pineco: {
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["tackle", "protect", "substitute"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["tackle", "protect", "substitute"]},
 		],
 		tier: "LC",
 	},
@@ -3119,8 +3119,8 @@ exports.BattleFormatsData = {
 			fillerMoves1: ["thunderbolt", "thunder", "curse", "curse", "flamethrower", "irontail"],
 		},
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["rage", "defensecurl", "furyattack"]},
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["rage", "defensecurl", "horndrill"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["rage", "defensecurl", "furyattack"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["rage", "defensecurl", "horndrill"]},
 		],
 		tier: "NU",
 	},
@@ -3137,13 +3137,13 @@ exports.BattleFormatsData = {
 			baseMove1: "earthquake", baseMove2: "wingattack", baseMove3: "hiddenpowerrock", baseMove4: "thief",
 		},
 		eventPokemon: [
-			{"generation": 2, "level": 5, "moves":["earthquake", "poisonsting", "counter", "wingattack"]},
+			{"generation": 2, "level": 5, "moves": ["earthquake", "poisonsting", "counter", "wingattack"]},
 		],
 		tier: "UU",
 	},
 	snubbull: {
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["tackle", "scaryface", "tailwhip", "lovelykiss"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["tackle", "scaryface", "tailwhip", "lovelykiss"]},
 		],
 		tier: "LC",
 	},
@@ -3184,7 +3184,7 @@ exports.BattleFormatsData = {
 			fillerMoves2: ["curse", "curse", "curse", "haze"],
 		},
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["tackle", "poisonsting", "doubleedge"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["tackle", "poisonsting", "doubleedge"]},
 		],
 		tier: "UU",
 	},
@@ -3216,7 +3216,7 @@ exports.BattleFormatsData = {
 			fillerMoves1: ["earthquake", "earthquake", "curse"],
 		},
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["tackle", "leer", "seismictoss"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["tackle", "leer", "seismictoss"]},
 		],
 		tier: "OU",
 	},
@@ -3228,13 +3228,13 @@ exports.BattleFormatsData = {
 			fillerMoves1: ["irontail", "irontail", "dynamicpunch", "dynamicpunch", "counter", "curse"],
 		},
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["scratch", "leer", "moonlight"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["scratch", "leer", "moonlight"]},
 		],
 		tier: "NU",
 	},
 	teddiursa: {
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["scratch", "leer", "sweetscent"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["scratch", "leer", "sweetscent"]},
 		],
 		tier: "LC",
 	},
@@ -3289,7 +3289,7 @@ exports.BattleFormatsData = {
 	},
 	swinub: {
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["tackle", "whirlwind"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["tackle", "whirlwind"]},
 		],
 		tier: "LC",
 	},
@@ -3328,8 +3328,8 @@ exports.BattleFormatsData = {
 	},
 	remoraid: {
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["watergun", "amnesia"]},
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["watergun", "mist"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["watergun", "amnesia"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["watergun", "mist"]},
 		],
 		tier: "LC",
 	},
@@ -3360,8 +3360,8 @@ exports.BattleFormatsData = {
 			fillerMoves1: ["hiddenpowerelectric", "hiddenpowergrass", "hiddenpowerflying", "present", "sleeptalk"],
 		},
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["present", "payday"]},
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["present", "spikes"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["present", "payday"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["present", "spikes"]},
 		],
 		tier: "NU",
 	},
@@ -3381,7 +3381,7 @@ exports.BattleFormatsData = {
 			fillerMoves3: ["confuseray", "haze", "rest", "toxic"],
 		},
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["tackle", "bubble", "gust"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["tackle", "bubble", "gust"]},
 		],
 		tier: "NU",
 	},
@@ -3398,7 +3398,7 @@ exports.BattleFormatsData = {
 			baseMove1: "drillpeck", baseMove2: "whirlwind", baseMove3: "rest", baseMove4: "thief",
 		},
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["leer", "peck", "furycutter"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["leer", "peck", "furycutter"]},
 		],
 		tier: "OU",
 	},
@@ -3434,8 +3434,8 @@ exports.BattleFormatsData = {
 	},
 	phanpy: {
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["tackle", "growl", "absorb"]},
-			{"generation": 2, "level": 5, "moves":["tackle", "growl", "encore"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["tackle", "growl", "absorb"]},
+			{"generation": 2, "level": 5, "moves": ["tackle", "growl", "encore"]},
 		],
 		tier: "LC",
 	},
@@ -3486,7 +3486,7 @@ exports.BattleFormatsData = {
 			baseMove1: "return", baseMove2: "earthquake", baseMove3: "rest", baseMove4: "sleeptalk",
 		},
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["tackle", "safeguard"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["tackle", "safeguard"]},
 		],
 		tier: "NU",
 	},
@@ -3521,7 +3521,7 @@ exports.BattleFormatsData = {
 			fillerMoves1: ["earthquake", "earthquake", "curse", "toxic"],
 		},
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["tackle", "growl", "megakick"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["tackle", "growl", "megakick"]},
 		],
 		tier: "OU",
 	},
@@ -3545,7 +3545,7 @@ exports.BattleFormatsData = {
 			fillerMoves1: ["rest", "roar", "reflect", "toxic"],
 		},
 		eventPokemon: [
-			{"generation": 2, "level": 40, "shiny": true, "moves":["leer", "thundershock", "roar", "quickattack"]},
+			{"generation": 2, "level": 40, "shiny": true, "moves": ["leer", "thundershock", "roar", "quickattack"]},
 		],
 		tier: "OU",
 	},
@@ -3566,7 +3566,7 @@ exports.BattleFormatsData = {
 			baseMove1: "fireblast", baseMove2: "return", baseMove3: "sunnyday", baseMove4: "solarbeam",
 		},
 		eventPokemon: [
-			{"generation": 2, "level": 40, "shiny": true, "moves":["leer", "ember", "roar", "firespin"]},
+			{"generation": 2, "level": 40, "shiny": true, "moves": ["leer", "ember", "roar", "firespin"]},
 		],
 		tier: "BL",
 	},
@@ -3585,13 +3585,13 @@ exports.BattleFormatsData = {
 			fillerMoves2: ["roar", "roar", "mirrorcoat"],
 		},
 		eventPokemon: [
-			{"generation": 2, "level": 40, "shiny": true, "moves":["leer", "watergun", "roar", "gust"]},
+			{"generation": 2, "level": 40, "shiny": true, "moves": ["leer", "watergun", "roar", "gust"]},
 		],
 		tier: "OU",
 	},
 	larvitar: {
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["bite", "leer", "rage"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["bite", "leer", "rage"]},
 		],
 		tier: "LC",
 	},
@@ -3637,7 +3637,7 @@ exports.BattleFormatsData = {
 			fillerMoves3: ["recover", "recover", "rest"],
 		},
 		eventPokemon: [
-			{"generation": 2, "level": 40, "shiny": true, "moves":["aeroblast", "safeguard", "gust", "recover"]},
+			{"generation": 2, "level": 40, "shiny": true, "moves": ["aeroblast", "safeguard", "gust", "recover"]},
 		],
 		tier: "Uber",
 	},
@@ -3650,7 +3650,7 @@ exports.BattleFormatsData = {
 			fillerMoves2: ["thunderbolt", "thunder"],
 		},
 		eventPokemon: [
-			{"generation": 2, "level": 40, "shiny": true, "moves":["sacredfire", "safeguard", "gust", "recover"]},
+			{"generation": 2, "level": 40, "shiny": true, "moves": ["sacredfire", "safeguard", "gust", "recover"]},
 		],
 		tier: "Uber",
 	},
@@ -3667,7 +3667,7 @@ exports.BattleFormatsData = {
 			baseMove1: "healbell", baseMove2: "recover", baseMove3: "curse", baseMove4: "batonpass",
 		},
 		eventPokemon: [
-			{"generation": 2, "level": 5, "shiny": 1, "moves":["leechseed", "confusion", "healbell", "recover"]},
+			{"generation": 2, "level": 5, "shiny": 1, "moves": ["leechseed", "confusion", "healbell", "recover"]},
 		],
 		eventOnly: true,
 		tier: "Uber",

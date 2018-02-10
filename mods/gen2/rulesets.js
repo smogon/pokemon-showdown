@@ -24,8 +24,8 @@ exports.BattleFormats = {
 				}
 			}
 			if (set.moves) {
-				for (let i = 0; i < set.moves.length; i++) {
-					let move = this.getMove(set.moves[i]);
+				for (const setMoveid of set.moves) {
+					let move = this.getMove(setMoveid);
 					if (move.gen > this.gen) {
 						problems.push(move.name + ' does not exist in gen ' + this.gen + '.');
 					} else if (move.isNonstandard) {
@@ -54,7 +54,7 @@ exports.BattleFormats = {
 	standard: {
 		effectType: 'ValidatorRule',
 		name: 'Standard',
-		ruleset: ['Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'Evasion Moves Clause', 'HP Percentage Mod', 'Cancel Mod'],
+		ruleset: ['Sleep Clause Mod', 'Freeze Clause Mod', 'Species Clause', 'OHKO Clause', 'Evasion Moves Clause', 'HP Percentage Mod', 'Cancel Mod'],
 		banlist: ['Unreleased', 'Illegal',
 			'Hypnosis + Perish Song + Mean Look',
 			'Hypnosis + Perish Song + Spider Web',
@@ -72,12 +72,12 @@ exports.BattleFormats = {
 			let moves = [];
 			if (set.moves) {
 				let hasMove = {};
-				for (let i = 0; i < set.moves.length; i++) {
-					let move = this.getMove(set.moves[i]);
+				for (const setMoveid of set.moves) {
+					let move = this.getMove(setMoveid);
 					let moveid = move.id;
 					if (hasMove[moveid]) continue;
 					hasMove[moveid] = true;
-					moves.push(set.moves[i]);
+					moves.push(setMoveid);
 				}
 			}
 			set.moves = moves;

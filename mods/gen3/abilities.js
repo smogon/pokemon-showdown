@@ -76,8 +76,8 @@ exports.BattleAbilities = {
 		shortDesc: "If an active Pokemon has the Ability Plus, this Pokemon's Sp. Atk is 1.5x.",
 		onModifySpA: function (spa, pokemon) {
 			let allActives = pokemon.side.active.concat(pokemon.side.foe.active);
-			for (let i = 0; i < allActives.length; i++) {
-				if (!allActives[i].fainted && allActives[i].hasAbility('plus')) {
+			for (const active of allActives) {
+				if (!active.fainted && active.hasAbility('plus')) {
 					return this.chainModify(1.5);
 				}
 			}
@@ -89,8 +89,8 @@ exports.BattleAbilities = {
 		shortDesc: "If an active Pokemon has the Ability Minus, this Pokemon's Sp. Atk is 1.5x.",
 		onModifySpA: function (spa, pokemon) {
 			let allActives = pokemon.side.active.concat(pokemon.side.foe.active);
-			for (let i = 0; i < allActives.length; i++) {
-				if (!allActives[i].fainted && allActives[i].hasAbility('minus')) {
+			for (const active of allActives) {
+				if (!active.fainted && active.hasAbility('minus')) {
 					return this.chainModify(1.5);
 				}
 			}
@@ -147,8 +147,8 @@ exports.BattleAbilities = {
 			let target = pokemon.side.foe.randomActive();
 			if (!target || target.fainted) return;
 			let ability = this.getAbility(target.ability);
-			let bannedAbilities = {forecast:1, multitype:1, trace:1};
-			if (bannedAbilities[target.ability]) {
+			let bannedAbilities = ['forecast', 'multitype', 'trace'];
+			if (bannedAbilities.includes(target.ability)) {
 				return;
 			}
 			if (pokemon.setAbility(ability)) {

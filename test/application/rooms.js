@@ -2,7 +2,6 @@
 
 const assert = require('assert');
 
-const {matchmaker, Matchmaker} = require('../../ladders-matchmaker');
 const {User} = require('../../dev-tools/users-utils');
 
 describe('Rooms features', function () {
@@ -23,25 +22,18 @@ describe('Rooms features', function () {
 		});
 	});
 
-	describe('BattleRoom', function () {
+	describe('GameRoom', function () {
 		const packedTeam = 'Weavile||lifeorb||swordsdance,knockoff,iceshard,iciclecrash|Jolly|,252,,,4,252|||||';
 
 		let room;
-		before(function () {
-			Rooms.global.ladderIpLog.end();
-			clearInterval(matchmaker.periodicMatchInterval);
-			matchmaker.periodicMatchInterval = null;
-		});
+		let parent;
 		afterEach(function () {
 			Users.users.forEach(user => {
-				room.onLeave(user);
 				user.disconnectAll();
 				user.destroy();
 			});
 			if (room) room.destroy();
-		});
-		after(function () {
-			Object.assign(matchmaker, new Matchmaker());
+			if (parent) parent.destroy();
 		});
 
 		it('should allow two users to join the battle', function () {
@@ -49,29 +41,40 @@ describe('Rooms features', function () {
 			let p2 = new User();
 			let options = [{rated: false, tour: false}, {rated: false, tour: {onBattleWin() {}}}, {rated: true, tour: false}, {rated: true, tour: {onBattleWin() {}}}];
 			for (let option of options) {
-				room = matchmaker.startBattle(p1, p2, 'customgame', packedTeam, packedTeam, option);
+				room = Rooms.createBattle('customgame', Object.assign({
+					p1,
+					p2,
+					p1team: packedTeam,
+					p2team: packedTeam,
+				}, option));
 				assert.ok(room.battle.p1 && room.battle.p2); // Automatically joined
 			}
 		});
 
 		it('should copy auth from tournament', function () {
+			parent = Rooms.createChatRoom('parentroom', '', {});
+			parent.getAuth = () => '%';
 			const p1 = new User();
 			const p2 = new User();
 			const options = {
+				p1,
+				p2,
+				p1team: packedTeam,
+				p2team: packedTeam,
 				rated: false,
 				auth: {},
 				tour: {
 					onBattleWin() {},
-					room: {getAuth() {
-						return '%';
-					}},
+					room: parent,
 				},
 			};
-			room = matchmaker.startBattle(p1, p2, 'customgame', packedTeam, packedTeam, options);
+			room = Rooms.createBattle('customgame', options);
 			assert.strictEqual(room.getAuth(new User()), '%');
 		});
 
 		it('should prevent overriding tournament room auth by a tournament player', function () {
+			parent = Rooms.createChatRoom('parentroom2', '', {});
+			parent.getAuth = () => '%';
 			const p1 = new User();
 			const p2 = new User();
 			const roomStaff = new User();
@@ -80,16 +83,18 @@ describe('Rooms features', function () {
 			administrator.forceRename("Admin", true);
 			administrator.group = '~';
 			const options = {
+				p1,
+				p2,
+				p1team: packedTeam,
+				p2team: packedTeam,
 				rated: false,
 				auth: {},
 				tour: {
 					onBattleWin() {},
-					room: {getAuth(user) {
-						return '%';
-					}},
+					room: parent,
 				},
 			};
-			room = matchmaker.startBattle(p1, p2, 'customgame', packedTeam, packedTeam, options);
+			room = Rooms.createBattle('customgame', options);
 			roomStaff.joinRoom(room);
 			administrator.joinRoom(room);
 			assert.strictEqual(room.getAuth(roomStaff), '%', 'before promotion attempt');

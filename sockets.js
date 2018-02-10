@@ -14,7 +14,7 @@
 'use strict';
 
 const cluster = require('cluster');
-global.Config = require('./config/config');
+const fs = require('fs');
 
 if (cluster.isMaster) {
 	cluster.setupMaster({
@@ -63,30 +63,36 @@ if (cluster.isMaster) {
 	};
 
 	cluster.on('exit', (worker, code, signal) => {
-		if (code === null && signal === 'SIGTERM') {
-			// worker was killed by Sockets.killWorker or Sockets.killPid
-		} else {
-			// worker crashed, try our best to clean up
-			require('./crashlogger')(new Error(`Worker ${worker.id} abruptly died`), "The main process");
-
-			// this could get called during cleanup; prevent it from crashing
-			// note: overwriting Worker#send is unnecessary in Node.js v7.0.0 and above
-			// see https://github.com/nodejs/node/commit/8c53d2fe9f102944cc1889c4efcac7a86224cf0a
-			worker.send = () => {};
-
-			let count = 0;
-			Users.connections.forEach(connection => {
-				if (connection.worker === worker) {
-					Users.socketDisconnect(worker, worker.id, connection.socketid);
-					count++;
-				}
-			});
-			console.error(`${count} connections were lost.`);
+		if (code === null && signal !== null) {
+			// Worker was killed by Sockets.killWorker or Sockets.killPid, probably.
+			console.log(`Worker ${worker.id} was forcibly killed with status ${signal}.`);
+			workers.delete(worker.id);
+		} else if (code === 0 && signal === null) {
+			// Happens when killing PS with ^C
+			console.log(`Worker ${worker.id} died, but returned a successful exit code.`);
+			workers.delete(worker.id);
+		} else if (code > 0) {
+			// Worker was killed abnormally, likely because of a crash.
+			require('./lib/crashlogger')(new Error(`Worker ${worker.id} abruptly died with code ${code} and signal ${signal}`), "The main process");
+			// Don't delete the worker so it can be inspected if need be.
 		}
 
-		// don't delete the worker, so we can investigate it if necessary.
+		if (worker.isConnected()) worker.disconnect();
+		// FIXME: this is a bad hack to get around a race condition in
+		// Connection#onDisconnect sending room deinit messages after already
+		// having removed the sockets from their channels.
+		worker.send = () => {};
 
-		// attempt to recover
+		let count = 0;
+		Users.connections.forEach(connection => {
+			if (connection.worker === worker) {
+				Users.socketDisconnect(worker, worker.id, connection.socketid);
+				count++;
+			}
+		});
+		console.log(`${count} connections were lost.`);
+
+		// Attempt to recover.
 		spawnWorker();
 	});
 
@@ -126,18 +132,15 @@ if (cluster.isMaster) {
 		console.log(`${count} connections were lost.`);
 
 		try {
-			worker.disconnect();
 			worker.kill('SIGTERM');
 		} catch (e) {}
-		workers.delete(worker.id);
 
 		return count;
 	};
 
 	exports.killPid = function (pid) {
-		pid = '' + pid;
 		for (let [workerid, worker] of workers) { // eslint-disable-line no-unused-vars
-			if (pid === '' + worker.process.pid) {
+			if (pid === worker.process.pid) {
 				return this.killWorker(worker);
 			}
 		}
@@ -176,6 +179,7 @@ if (cluster.isMaster) {
 	};
 } else {
 	// is worker
+	global.Config = require('./config/config');
 
 	if (process.env.PSPORT) Config.port = +process.env.PSPORT;
 	if (process.env.PSBINDADDR) Config.bindaddress = process.env.PSBINDADDR;
@@ -183,17 +187,19 @@ if (cluster.isMaster) {
 
 	if (Config.ofe) {
 		try {
-			require.resolve('ofe');
+			require.resolve('node-oom-heapdump');
 		} catch (e) {
 			if (e.code !== 'MODULE_NOT_FOUND') throw e; // should never happen
 			throw new Error(
-				'ofe is not installed, but it is a required dependency if Config.ofe is set to true! ' +
-				'Run npm install ofe and restart the server.'
+				'node-oom-heapdump is not installed, but it is a required dependency if Config.ofe is set to true! ' +
+				'Run npm install node-oom-heapdump and restart the server.'
 			);
 		}
 
 		// Create a heapdump if the process runs out of memory.
-		require('ofe').call();
+		require('node-oom-heapdump')({
+			addTimestamp: true,
+		});
 	}
 
 	// Static HTTP server
@@ -208,12 +214,50 @@ if (cluster.isMaster) {
 	if (Config.crashguard) {
 		// graceful crash
 		process.on('uncaughtException', err => {
-			require('./crashlogger')(err, `Socket process ${cluster.worker.id} (${process.pid})`, true);
+			require('./lib/crashlogger')(err, `Socket process ${cluster.worker.id} (${process.pid})`, true);
 		});
 	}
 
 	let app = require('http').createServer();
-	let appssl = Config.ssl ? require('https').createServer(Config.ssl.options) : null;
+	let appssl = null;
+	if (Config.ssl) {
+		let key;
+		try {
+			key = require('path').resolve(__dirname, Config.ssl.options.key);
+			if (!fs.lstatSync(key).isFile()) throw new Error();
+			try {
+				key = fs.readFileSync(key);
+			} catch (e) {
+				require('./lib/crashlogger')(new Error(`Failed to read the configured SSL private key PEM file:\n${e.stack}`), `Socket process ${cluster.worker.id} (${process.pid})`, true);
+			}
+		} catch (e) {
+			console.warn('SSL private key config values will not support HTTPS server option values in the future. Please set it to use the absolute path of its PEM file.');
+			key = Config.ssl.options.key;
+		}
+
+		let cert;
+		try {
+			cert = require('path').resolve(__dirname, Config.ssl.options.cert);
+			if (!fs.lstatSync(cert).isFile()) throw new Error();
+			try {
+				cert = fs.readFileSync(cert);
+			} catch (e) {
+				require('./lib/crashlogger')(new Error(`Failed to read the configured SSL certificate PEM file:\n${e.stack}`), `Socket process ${cluster.worker.id} (${process.pid})`, true);
+			}
+		} catch (e) {
+			console.warn('SSL certificate config values will not support HTTPS server option values in the future. Please set it to use the absolute path of its PEM file.');
+			cert = Config.ssl.options.cert;
+		}
+
+		if (key && cert) {
+			try {
+				// In case there are additional SSL config settings besides the key and cert...
+				appssl = require('https').createServer(Object.assign({}, Config.ssl.options, {key, cert}));
+			} catch (e) {
+				require('./lib/crashlogger')(`The SSL settings are misconfigured:\n${e.stack}`, `Socket process ${cluster.worker.id} (${process.pid})`, true);
+			}
+		}
+	}
 
 	// Static server
 	const StaticServer = require('node-static').Server;
@@ -257,20 +301,30 @@ if (cluster.isMaster) {
 	// and doing things on our server.
 
 	const sockjs = require('sockjs');
-	const server = sockjs.createServer({
+	const options = {
 		sockjs_url: "//play.pokemonshowdown.com/js/lib/sockjs-1.1.1-nwjsfix.min.js",
-		log: (severity, message) => {
-			if (severity === 'error') console.log('ERROR: ' + message);
-		},
 		prefix: '/showdown',
-	});
+		log(severity, message) {
+			if (severity === 'error') console.log(`ERROR: ${message}`);
+		},
+	};
 
+	if (Config.wsdeflate) {
+		try {
+			const deflate = require('permessage-deflate').configure(Config.wsdeflate);
+			options.faye_server_options = {extensions: [deflate]};
+		} catch (e) {
+			require('./lib/crashlogger')(new Error("Dependency permessage-deflate is not installed or is otherwise unaccessable. No message compression will take place until server restart."), "Sockets");
+		}
+	}
+
+	const server = sockjs.createServer(options);
 	const sockets = new Map();
 	const channels = new Map();
 	const subchannels = new Map();
 
 	// Deal with phantom connections.
-	const sweepClosedSockets = () => {
+	const sweepSocketInterval = setInterval(() => {
 		sockets.forEach(socket => {
 			if (socket.protocol === 'xhr-streaming' &&
 				socket._session &&
@@ -290,8 +344,7 @@ if (cluster.isMaster) {
 				socket._session.timeout_cb();
 			}
 		});
-	};
-	const interval = setInterval(sweepClosedSockets, 1000 * 60 * 10); // eslint-disable-line no-unused-vars
+	}, 1000 * 60 * 10);
 
 	process.on('message', data => {
 		// console.log('worker received: ' + data);
@@ -314,8 +367,6 @@ if (cluster.isMaster) {
 			socketid = data.substr(1);
 			socket = sockets.get(socketid);
 			if (!socket) return;
-			socket.end();
-			// After sending the FIN packet, we make sure the I/O is totally blocked for this socket
 			socket.destroy();
 			sockets.delete(socketid);
 			channels.forEach(channel => channel.delete(socketid));
@@ -438,57 +489,65 @@ if (cluster.isMaster) {
 	// the process will not exit until any remaining connections have been destroyed.
 	// Afterwards, the worker process will die on its own.
 	process.once('disconnect', () => {
+		clearInterval(sweepSocketInterval);
+
 		sockets.forEach(socket => {
 			try {
-				socket.end();
 				socket.destroy();
 			} catch (e) {}
 		});
 		sockets.clear();
 		channels.clear();
 		subchannels.clear();
+
 		app.close();
 		if (appssl) appssl.close();
+
+		// Let the server(s) finish closing.
+		setImmediate(() => process.exit(0));
 	});
 
 	// this is global so it can be hotpatched if necessary
 	let isTrustedProxyIp = Dnsbl.checker(Config.proxyip);
 	let socketCounter = 0;
 	server.on('connection', socket => {
-		if (!socket) {
-			// For reasons that are not entirely clear, SockJS sometimes triggers
-			// this event with a null `socket` argument.
-			return;
-		} else if (!socket.remoteAddress) {
-			// This condition occurs several times per day. It may be a SockJS bug.
+		// For reasons that are not entirely clear, SockJS sometimes triggers
+		// this event with a null `socket` argument.
+		if (!socket) return;
+
+		if (!socket.remoteAddress) {
+			// SockJS sometimes fails to be able to cache the IP, port, and
+			// address from connection request headers.
 			try {
-				socket.end();
+				socket.destroy();
 			} catch (e) {}
 			return;
 		}
 
-		let socketid = socket.id = '' + (++socketCounter);
+		let socketid = '' + (++socketCounter);
 		sockets.set(socketid, socket);
 
-		if (isTrustedProxyIp(socket.remoteAddress)) {
-			let ips = (socket.headers['x-forwarded-for'] || '').split(',');
-			let ip;
-			while ((ip = ips.pop())) {
-				ip = ip.trim();
-				if (!isTrustedProxyIp(ip)) {
-					socket.remoteAddress = ip;
+		let socketip = socket.remoteAddress;
+		if (isTrustedProxyIp(socketip)) {
+			let ips = (socket.headers['x-forwarded-for'] || '')
+				.split(',')
+				.reverse();
+			for (let ip of ips) {
+				let proxy = ip.trim();
+				if (!isTrustedProxyIp(proxy)) {
+					socketip = proxy;
 					break;
 				}
 			}
 		}
 
-		process.send(`*${socketid}\n${socket.remoteAddress}\n${socket.protocol}`);
+		process.send(`*${socketid}\n${socketip}\n${socket.protocol}`);
 
 		socket.on('data', message => {
 			// drop empty messages (DDoS?)
 			if (!message) return;
 			// drop messages over 100KB
-			if (message.length > 100000) {
+			if (message.length > (100 * 1024)) {
 				console.log(`Dropping client message ${message.length / 1024} KB...`);
 				console.log(message.slice(0, 160));
 				return;
@@ -502,7 +561,7 @@ if (cluster.isMaster) {
 			process.send(`<${socketid}\n${message}`);
 		});
 
-		socket.on('close', () => {
+		socket.once('close', () => {
 			process.send(`!${socketid}`);
 			sockets.delete(socketid);
 			channels.forEach(channel => channel.delete(socketid));
@@ -520,5 +579,5 @@ if (cluster.isMaster) {
 
 	console.log(`Test your server at http://${Config.bindaddress === '0.0.0.0' ? 'localhost' : Config.bindaddress}:${Config.port}`);
 
-	require('./repl').start(`sockets-${cluster.worker.id}-${process.pid}`, cmd => eval(cmd));
+	require('./lib/repl').start(`sockets-${cluster.worker.id}-${process.pid}`, cmd => eval(cmd));
 }

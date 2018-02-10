@@ -26,6 +26,7 @@ The official client logs protocol messages in the JavaScript console,
 so opening that (F12 in most browsers) can help tell you what's going
 on.
 
+
 Client-to-server messages
 -------------------------
 
@@ -100,13 +101,14 @@ displayed inline because they happen too often. For instance, the main server
 gets around 5 joins/leaves a second, and showing that inline with chat would
 make it near-impossible to chat.
 
-Some outgoing message types
----------------------------
+
+Server-to-client message types
+------------------------------
 
 `USER` = a user, the first character being their rank (users with no rank are
 represented by a space), and the rest of the string being their username.
 
-####Room initialization
+### Room initialization
 
 `|init|ROOMTYPE`
 
@@ -118,7 +120,7 @@ represented by a space), and the rest of the string being their username.
 > `USERLIST` is a comma-separated list of `USER`s, sent from chat rooms when
 > they're joined.
 
-####Room messages
+### Room messages
 
 `||MESSAGE` or `MESSAGE`
 
@@ -175,7 +177,88 @@ represented by a space), and the rest of the string being their username.
 > A battle started between `USER1` and `USER2`, and the battle room has
 > ID `ROOMID`.
 
-####Battle messages
+### Global messages
+
+`|popup|MESSAGE`
+
+> Show the user a popup containing `MESSAGE`. `||` denotes a newline in
+> the popup.
+
+`|pm|SENDER|RECEIVER|MESSAGE`
+
+> A PM was sent from `SENDER` to `RECEIVER` containing the message
+> `MESSAGE`.
+
+`|usercount|USERCOUNT`
+
+> `USERCOUNT` is the number of users on the server.
+
+`|nametaken|USERNAME|MESSAGE`
+
+> You tried to change your username to `USERNAME` but it failed for the
+> reason described in `MESSAGE`.
+
+`|challstr|CHALLSTR`
+
+> You just connected to the server, and we're giving you some information you'll need to log in.
+>
+> If you're already logged in and have session cookies, you can make an HTTP GET request to
+> `http://play.pokemonshowdown.com/action.php?act=upkeep&challstr=CHALLSTR`
+>
+> Otherwise, you'll need to make an HTTP POST request to `http://play.pokemonshowdown.com/action.php`
+> with the data `act=login&name=USERNAME&pass=PASSWORD&challstr=CHALLSTR`
+>
+> `USERNAME` is your username and `PASSWORD` is your password, and `CHALLSTR`
+> is the value you got from `|challstr|`. Note that `CHALLSTR` contains `|`
+> characters. (Also feel free to make the request to `https://` if your client
+> supports it.)
+>
+> Either way, the response will start with `]` and be followed by a JSON
+> object which we'll call `data`.
+>
+> Finish logging in (or renaming) by sending: `/trn USERNAME,0,ASSERTION`
+> where `USERNAME` is your desired username and `ASSERTION` is `data.assertion`.
+
+`|updateuser|USERNAME|NAMED|AVATAR`
+
+> Your name or avatar was successfully changed. Your username is now `USERNAME`.
+> `NAMED` will be `0` if you are a guest or `1` otherwise. And your avatar is
+> now `AVATAR`.
+
+`|formats|FORMATSLIST`
+
+> This server supports the formats specified in `FORMATSLIST`. `FORMATSLIST`
+> is a `|`-separated list of `FORMAT`s. `FORMAT` is a format name with one or
+> more of these suffixes: `,#` if the format uses random teams, `,,` if the
+> format is only available for searching, and `,` if the format is only
+> available for challenging.
+> Sections are separated by two vertical bars with the number of the column of
+> that section prefixed by `,` in it. After that follows the name of the
+> section and another vertical bar.
+
+`|updatesearch|JSON`
+
+> `JSON` is a JSON object representing the current state of what battles the
+> user is currently searching for.
+
+`|updatechallenges|JSON`
+
+> `JSON` is a JSON object representing the current state of who the user
+> is challenging and who is challenging the user.
+
+`|queryresponse|QUERYTYPE|JSON`
+
+> `JSON` is a JSON object representing containing the data that was requested
+> with `/query QUERYTYPE` or `/query QUERYTYPE DETAILS`.
+>
+> Possible queries include `/query roomlist` and `/query userdetails USERNAME`.
+
+Battle messages
+---------------
+
+In addition to room messages, battles have their own messages.
+
+### Battle initialization
 
 `|player|PLAYER|USERNAME|AVATAR`
 
@@ -212,9 +295,15 @@ represented by a space), and the rest of the string being their username.
 > specified (so Arceus would appear as `Arceus-*` since it's impossible
 > to identify Arceus forme in Team Preview).
 
+`|start`
+
+> Indicates that the game has started.
+
+### Battle progress
+
 `|request|REQUEST`
 
-> Gives a JSON object containing a request for a decision (to move or
+> Gives a JSON object containing a request for a choice (to move or
 > switch). To assist in your decision, `REQUEST.active` has information
 > about your active Pokémon, and `REQUEST.side` has information about your
 > your team as a whole.
@@ -227,9 +316,9 @@ represented by a space), and the rest of the string being their username.
 > `inactive` means that the timer is on at the time the message was sent,
 > while `inactiveoff` means that the timer is off.
 
-`|start`
+`|turn|NUMBER`
 
-> Indicates that the game has started.
+> It is now turn `NUMBER`.
 
 `|win|USER`
 
@@ -239,25 +328,58 @@ represented by a space), and the rest of the string being their username.
 
 > The battle has ended in a tie.
 
-######Major actions
+### Identifying Pokémon
 
-In battle, most Pokémon actions come in the form `|ACTION|POKEMON|DETAILS`
-followed by a few messages detailing what happens after the action occurs.
+Pokémon can be identified either by a Pokémon ID (generally labeled
+`POKEMON` in this document), or a details string (generally labeled
+`DETAILS`).
 
-A Pokémon is always identified in the form `POSITION: NAME`. `POSITION` is
-the spot that the Pokémon is in: it consists of the `PLAYER` of the player
-(see `|player|`), followed by a letter indicating the given Pokémon's
-position, counting from `a`.
+A Pokémon ID is in the form `POSITION: NAME`. `POSITION` is the spot that
+the Pokémon is in: it consists of the `PLAYER` of the player (see
+`|player|`), followed by a letter indicating the given Pokémon's position,
+counting from `a`.
+
+An inactive Pokémon will not have a position letter.
 
 In doubles and triples battles, `a` will refer to the leftmost Pokémon
 on one team and the rightmost Pokémon on the other (so `p1a` faces `p2c`,
 etc). `NAME` is the nickname of the Pokémon performing the action.
 
+For example: `p1a: Sparky` could be a Charizard named Sparky.
+`p1: Dragonite` could be an inactive Dragonite being healed by Heal Bell.
+
+`DETAILS` is a comma-separated list of all information about a pokemon
+visible on the battle screen: species, shininess, gender, and level. So it
+starts with `SPECIES`, adding `, shiny` if it's shiny, `, M` if it's male,
+`, F` if it's female, `, L##` if it's not level 100.
+
+So, for instance, `Deoxys-Speed` is a level 100 non-shiny genderless
+Deoxys (Speed forme). `Sawsbuck, shiny, F, L50` is a level 50 shiny female
+Sawsbuck (Spring form).
+
+In Team Preview, `DETAILS` will not include information not available in
+Team Preview (in particular, level and shininess will be left off), and
+for Pokémon whose forme isn't revealed in Team Preview, it will be given as
+`-*`. So, for instance, an Arceus in Team Preview would have the details
+string `Arceus-*`.
+
+For most commands, you can just use the position information in the
+Pokémon ID to identify the Pokémon. Only a few commands actually change the
+Pokémon in that position (`|switch|` switching, `|replace|` illusion dropping,
+`|drag|` phazing, and `|detailschange|` permanent forme changes), and these
+all specify `DETAILS` for you to perform updates with.
+
+### Major actions
+
+In battle, most Pokémon actions come in the form `|ACTION|POKEMON|DETAILS`
+followed by a few messages detailing what happens after the action occurs.
+
 Battle actions (especially minor actions) often come with tags such as
 `|[from] EFFECT|[of] SOURCE`. `EFFECT` will be an effect (move, ability,
 item, status, etc), and `SOURCE` will be a Pokémon. These can affect the
 message or animation displayed, but do not affect anything else. Other 
-tags include `|[still]` (suppress animation) and `|[silent]` (suppress message).
+tags include `|[still]` (suppress animation) and `|[silent]` (suppress
+message).
 
 `|move|POKEMON|MOVE|TARGET`
 
@@ -273,22 +395,15 @@ tags include `|[still]` (suppress animation) and `|[silent]` (suppress message).
 
 `|switch|POKEMON|DETAILS|HP STATUS` or `|drag|POKEMON|DETAILS|HP STATUS`
 
-> A Pokémon identified by `POKEMON` has switched in (the old Pokémon, if
-> still there, is switched out).
+> A Pokémon identified by `POKEMON` has switched in (if there was an old
+> Pokémon in that position, it is switched out).
 >
-> `DETAILS` is a comma-separated list of all information about a pokemon
-> visible on the battle screen: species, shininess, gender, and level. So it
-> starts with `SPECIES`, adding `, shiny` if it's shiny, `, M` if it's male,
-> `, F` if it's female, `, L##` if it's not level 100.
+> For the DETAILS format, see "Identifying Pokémon" above.
 >
-> So, for instance, `Deoxys-Speed` is a level 100 non-shiny genderless
-> Deoxys (Speed forme). `Sawsbuck, shiny, F, L50` is a level 50 shiny female
-> Sawsbuck (Spring form).
->
-> `POKEMON|DETAILS` represents all the information that can reliably identify
-> a pokemon in a game. If two pokemon have the same `POKEMON|DETAILS` (which
-> will never happen in any format with Species Clause), you usually won't be
-> able to tell if the same pokemon switched in or a different pokemon switched
+> `POKEMON|DETAILS` represents all the information that can be used to tell
+> Pokémon apart. If two pokemon have the same `POKEMON|DETAILS` (which will
+> never happen in any format with Species Clause), you usually won't be able
+> to tell if the same pokemon switched in or a different pokemon switched
 > in.
 >
 > The switched Pokémon has HP `HP`, and status `STATUS`. `HP` is specified as
@@ -299,20 +414,29 @@ tags include `|[still]` (suppress animation) and `|[silent]` (suppress message).
 > `switch` means it was intentional, while `drag` means it was unintentional
 > (forced by Whirlwind, Roar, etc).
 
-`|swap|POKEMON|POSITION`
-
-> Moves already active `POKEMON` to active field `POSITION` where the
-> leftmost position is 0 and each position to the right counts up by 1.
-
 `|detailschange|POKEMON|DETAILS|HP STATUS` or 
 `|-formechange|POKEMON|SPECIES|HP STATUS`
 
 > The specified Pokémon has changed formes (via Mega Evolution, ability, etc.) 
-> to `SPECIES`. If the forme change cannot be reverted (Mega Evolution or a 
+> to `SPECIES`. If the forme change is permanent (Mega Evolution or a 
 > Shaymin-Sky that is frozen), then `detailschange` will appear; otherwise, 
 > the client will send `-formechange`.
 >
-> For the `DETAILS` format, see the documentation for `|switch|`.
+> Syntax is the same as `|switch|` above.
+
+`|replace|POKEMON|DETAILS|HP STATUS`
+
+> Illusion has ended for the specified Pokémon. Syntax is the same as `|switch|`
+> above, but remember that everything you thought you knew about the previous
+> Pokémon is now wrong.
+>
+> `POKEMON` will be the NEW Pokémon ID - i.e. it will have the nickname of the
+> Zoroark (or other Illusion user).
+
+`|swap|POKEMON|POSITION`
+
+> Moves already active `POKEMON` to active field `POSITION` where the
+> leftmost position is 0 and each position to the right counts up by 1.
 
 `|cant|POKEMON|REASON` or `|cant|POKEMON|REASON|MOVE`
 
@@ -324,7 +448,7 @@ tags include `|[still]` (suppress animation) and `|[silent]` (suppress message).
 
 > The Pokémon `POKEMON` has fainted.
 
-######Minor actions
+### Minor actions
 
 Minor actions are less important than major actions. In the official client,
 they're usually displayed in small font if they have a message. Pretty much
@@ -335,9 +459,9 @@ stat boosts are minor actions.
 `|-fail|POKEMON|ACTION`
 
 > The specified `ACTION` has failed against the `POKEMON` targetted. The `ACTION`
->  in question can be a move that fails, or a stat drop blocked by an ability 
-> like Hyper Cutter, in which case `ACTION` will be `unboost|STAT`, where `STAT` 
-> indicates where the ability prevents stat drops. (For abilities that block all 
+>  in question can be a move that fails, or a stat drop blocked by an ability
+> like Hyper Cutter, in which case `ACTION` will be `unboost|STAT`, where `STAT`
+> indicates where the ability prevents stat drops. (For abilities that block all
 > stat drops, like Clear Body, `|STAT` does not appear.) 
 
 `|-damage|POKEMON|HP STATUS`
@@ -487,7 +611,7 @@ enough to get you started. You can watch the data sent and received from
 the server on a regular connection, or look at the client source code
 for a full list of message types.
 
-######Action requests
+### Action requests
 
 These are how the client sends the player's decisions to the server. All
 requests except `/undo` can be sent with `|RQID` at the end. `RQID` is
@@ -545,79 +669,3 @@ move.
 `|/undo`
 
 > Attempts to cancel the last request so a new one can be made.
-
-####Global messages
-
-`|popup|MESSAGE`
-
-> Show the user a popup containing `MESSAGE`. `||` denotes a newline in
-> the popup.
-
-`|pm|SENDER|RECEIVER|MESSAGE`
-
-> A PM was sent from `SENDER` to `RECEIVER` containing the message
-> `MESSAGE`.
-
-`|usercount|USERCOUNT`
-
-> `USERCOUNT` is the number of users on the server.
-
-`|nametaken|USERNAME|MESSAGE`
-
-> You tried to change your username to `USERNAME` but it failed for the
-> reason described in `MESSAGE`.
-
-`|challstr|CHALLSTR`
-
-> You just connected to the server, and we're giving you some information you'll need to log in.
->
-> If you're already logged in and have session cookies, you can make an HTTP GET request to
-> `http://play.pokemonshowdown.com/action.php?act=upkeep&challstr=CHALLSTR`
->
-> Otherwise, you'll need to make an HTTP POST request to `http://play.pokemonshowdown.com/action.php`
-> with the data `act=login&name=USERNAME&pass=PASSWORD&challstr=CHALLSTR`
->
-> `USERNAME` is your username and `PASSWORD` is your password, and `CHALLSTR`
-> is the value you got from `|challstr|`. Note that `CHALLSTR` contains `|`
-> characters. (Also feel free to make the request to `https://` if your client
-> supports it.)
->
-> Either way, the response will start with `]` and be followed by a JSON
-> object which we'll call `data`.
->
-> Finish logging in (or renaming) by sending: `/trn USERNAME,0,ASSERTION`
-> where `USERNAME` is your desired username and `ASSERTION` is `data.assertion`.
-
-`|updateuser|USERNAME|NAMED|AVATAR`
-
-> Your name or avatar was successfully changed. Your username is now `USERNAME`.
-> `NAMED` will be `0` if you are a guest or `1` otherwise. And your avatar is
-> now `AVATAR`.
-
-`|formats|FORMATSLIST`
-
-> This server supports the formats specified in `FORMATSLIST`. `FORMATSLIST`
-> is a `|`-separated list of `FORMAT`s. `FORMAT` is a format name with one or
-> more of these suffixes: `,#` if the format uses random teams, `,,` if the
-> format is only available for searching, and `,` if the format is only
-> available for challenging.
-> Sections are separated by two vertical bars with the number of the column of
-> that section prefixed by `,` in it. After that follows the name of the
-> section and another vertical bar.
-
-`|updatesearch|JSON`
-
-> `JSON` is a JSON object representing the current state of what battles the
-> user is currently searching for.
-
-`|updatechallenges|JSON`
-
-> `JSON` is a JSON object representing the current state of who the user
-> is challenging and who is challenging the user.
-
-`|queryresponse|QUERYTYPE|JSON`
-
-> `JSON` is a JSON object representing containing the data that was requested
-> with `/query QUERYTYPE` or `/query QUERYTYPE DETAILS`.
->
-> Possible queries include `/query roomlist` and `/query userdetails USERNAME`.

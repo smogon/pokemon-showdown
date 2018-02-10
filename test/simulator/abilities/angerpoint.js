@@ -15,17 +15,17 @@ describe('Anger Point', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: "Cryogonal", ability: 'noguard', moves: ['frostbreath']}]);
 		const p2 = battle.join('p2', 'Guest 2', 1, [{species: "Primeape", ability: 'angerpoint', moves: ['endure']}]);
 
-		battle.commitDecisions();
+		battle.makeChoices('move frostbreath', 'move endure');
 		assert.statStage(p2.active[0], 'atk', 6);
 	});
 
 	it('should maximize Attack when hit by a critical hit even if the foe has Mold Breaker', function () {
 		battle = common.createBattle();
-		const p1 = battle.join('p1', 'Guest 1', 1, [{species: "Haxorus", ability: 'moldbreaker', item: 'scopelens', moves: ['focusenergy', 'falseswipe']}]);
+		battle.join('p1', 'Guest 1', 1, [{species: "Haxorus", ability: 'moldbreaker', item: 'scopelens', moves: ['focusenergy', 'falseswipe']}]);
 		const p2 = battle.join('p2', 'Guest 2', 1, [{species: "Primeape", ability: 'angerpoint', moves: ['defensecurl']}]);
 
-		battle.commitDecisions();
-		p1.chooseMove(2).foe.chooseMove(1);
+		battle.makeChoices('move focusenergy', 'defensecurl');
+		battle.makeChoices('move falseswipe', 'defensecurl');
 		assert.statStage(p2.active[0], 'atk', 6);
 	});
 
@@ -34,7 +34,7 @@ describe('Anger Point', function () {
 		const p1 = battle.join('p1', 'Guest 1', 1, [{species: "Cryogonal", ability: 'noguard', moves: ['endure']}]);
 		const p2 = battle.join('p2', 'Guest 2', 1, [{species: "Primeape", ability: 'angerpoint', moves: ['stormthrow']}]);
 
-		battle.commitDecisions();
+		battle.makeChoices('move endure', 'move stormthrow');
 		assert.statStage(p1.active[0], 'atk', 0);
 		assert.statStage(p2.active[0], 'atk', 0);
 	});
@@ -44,7 +44,7 @@ describe('Anger Point', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: "Cryogonal", ability: 'noguard', item: 'laggingtail', moves: ['frostbreath']}]);
 		const p2 = battle.join('p2', 'Guest 2', 1, [{species: "Primeape", ability: 'angerpoint', moves: ['substitute']}]);
 
-		battle.commitDecisions();
+		battle.makeChoices('move frostbreath', 'move substitute');
 		assert.statStage(p2.active[0], 'atk', 0);
 	});
 });

@@ -3,7 +3,8 @@
 exports.BattleFormats = {
 	pokemon: {
 		inherit: true,
-		onValidateSet: function (set) {
+		onValidateSet: function (set, format) {
+			if (!format || !this.getRuleTable(format).has('-illegal')) return;
 			let template = this.getTemplate(set.species);
 			let item = this.getItem(set.item);
 			if (item && item.id === 'griseousorb' && template.num !== 487) {

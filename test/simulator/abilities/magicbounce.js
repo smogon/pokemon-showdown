@@ -39,7 +39,7 @@ describe('Magic Bounce', function () {
 		battle.join('p2', 'Guest 2', 1, [{species: "Espeon", ability: 'magicbounce', moves: ['growl', 'recover']}]);
 		battle.p1.chooseSwitch(2).foe.chooseDefault();
 		battle.p2.chooseMove(2).foe.chooseDefault();
-		assert.notStrictEqual(battle.p1.active[0].lastMove, 'growl');
+		assert.notStrictEqual(battle.p1.active[0].lastMove.id, 'growl');
 	});
 
 	it('should be suppressed by Mold Breaker', function () {

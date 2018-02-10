@@ -8,9 +8,9 @@ const drives = ['Burn Drive', 'Chill Drive', 'Douse Drive', 'Shock Drive'];
 let battle;
 
 describe('Drives', function () {
-	for (let i = 0; i < drives.length; i++) {
-		describe(drives[i], function () {
-			let id = drives[i].replace(/\W+/g, '').toLowerCase();
+	for (const drive of drives) {
+		describe(drive, function () {
+			let id = drive.replace(/\W+/g, '').toLowerCase();
 
 			afterEach(function () {
 				battle.destroy();

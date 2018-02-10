@@ -22,7 +22,7 @@ exports.commands = {
 			let buff = '<table border="1" cellspacing="0" cellpadding="3">';
 			buff += '<th>Event Name:</th><th>Event Description:</th><th>Event Date:</th>';
 			for (let i in room.events) {
-				buff += `<tr><td>${Chat.escapeHTML(room.events[i].eventName)}</td><td>${Chat.parseText(room.events[i].desc)}</td><td><time>${Chat.escapeHTML(room.events[i].date)}</time></td></tr>`;
+				buff += `<tr><td>${Chat.escapeHTML(room.events[i].eventName)}</td><td>${Chat.formatText(room.events[i].desc, true)}</td><td><time>${Chat.escapeHTML(room.events[i].date)}</time></td></tr>`;
 			}
 			buff += '</table>';
 			return this.sendReply(`|raw|<div class="infobox-limited">${buff}</div>`);
@@ -62,7 +62,8 @@ exports.commands = {
 				date: date,
 				desc: desc,
 			};
-			this.privateModCommand(`(${user.name} ${this.cmd}ed ${this.cmd === 'add' ? 'a' : 'the'} roomevent titled "${eventName}".)`);
+			this.privateModAction(`(${user.name} ${this.cmd}ed ${this.cmd === 'add' ? 'a' : 'the'} roomevent titled "${eventName}".)`);
+			this.modlog('ROOMEVENT', null, `${this.cmd}ed "${eventName}"`);
 
 			room.chatRoomData.events = room.events;
 			Rooms.global.writeChatRoomData();
@@ -77,7 +78,8 @@ exports.commands = {
 			target = toId(target);
 			if (!room.events[target]) return this.errorReply(`There is no such event named '${target}'. Check spelling?`);
 			delete room.events[target];
-			this.privateModCommand(`(${user.name} removed a roomevent titled "${target}".)`);
+			this.privateModAction(`(${user.name} removed a roomevent titled "${target}".)`);
+			this.modlog('ROOMEVENT', null, `removed "${target}"`);
 
 			room.chatRoomData.events = room.events;
 			Rooms.global.writeChatRoomData();
@@ -93,7 +95,7 @@ exports.commands = {
 			if (!room.events[target]) return this.errorReply(`There is no such event named '${target}'. Check spelling?`);
 
 			if (!this.runBroadcast()) return;
-			this.sendReplyBox(`<table border="1" cellspacing="0" cellpadding="3"><tr><td>${Chat.escapeHTML(room.events[target].eventName)}</td><td>${Chat.parseText(room.events[target].desc)}</td><td>${Chat.escapeHTML(room.events[target].date)}</td></tr></table>`);
+			this.sendReplyBox(`<table border="1" cellspacing="0" cellpadding="3"><tr><td>${Chat.escapeHTML(room.events[target].eventName)}</td><td>${Chat.formatText(room.events[target].desc, true)}</td><td>${Chat.escapeHTML(room.events[target].date)}</td></tr></table>`);
 			if (!this.broadcasting && user.can('declare', null, room)) this.sendReplyBox(Chat.html`<code>/roomevents add ${room.events[target].eventName} | ${room.events[target].date} | ${room.events[target].desc}</code>`);
 		},
 		help: function (target, room, user) {
@@ -101,9 +103,9 @@ exports.commands = {
 		},
 	},
 	roomeventshelp: [
-		"/roomevents - Displays a list of upcoming room-specific events.",
-		"/roomevents add [event name] | [event date/time] | [event description] - Adds a room event. Requires: # & ~",
-		"/roomevents remove [event name] - Deletes an event. Requires: # & ~",
-		"/roomevents view [event name] - Displays information about a specific event.",
+		`/roomevents - Displays a list of upcoming room-specific events.`,
+		`/roomevents add [event name] | [event date/time] | [event description] - Adds a room event. Requires: # & ~`,
+		`/roomevents remove [event name] - Deletes an event. Requires: # & ~`,
+		`/roomevents view [event name] - Displays information about a specific event.`,
 	],
 };

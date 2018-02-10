@@ -33,6 +33,6 @@ describe('Gravity', function () {
 		battle.commitDecisions();
 		assert.ok(!battle.p2.active[0].volatiles['twoturnmove']);
 		battle.commitDecisions();
-		assert.strictEqual(battle.p2.active[0].lastMove, 'struggle');
+		assert.strictEqual(battle.p2.active[0].lastMove.id, 'struggle');
 	});
 });

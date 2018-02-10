@@ -6,10 +6,10 @@
 
 'use strict';
 
-const http = require('http');
+const https = require('https');
 
 function apiRequest(url, onEnd, onError) {
-	http.get(url, res => {
+	https.get(url, res => {
 		let buffer = '';
 		res.setEncoding('utf8');
 		res.on('data', data => {
@@ -25,7 +25,7 @@ function apiRequest(url, onEnd, onError) {
 
 function mediawikiSearch(domain, query) {
 	return new Promise(function (resolve, reject) {
-		apiRequest(`http://${domain}/w/api.php?action=query&list=search&format=json&srsearch=${encodeURIComponent(query)}&srwhat=nearmatch`, res => {
+		apiRequest(`https://${domain}/w/api.php?action=query&list=search&format=json&srsearch=${encodeURIComponent(query)}&srwhat=nearmatch`, res => {
 			let result;
 			try {
 				result = JSON.parse(res);
@@ -44,7 +44,7 @@ function mediawikiSearch(domain, query) {
 
 function wikiaSearch(subdomain, query) {
 	return new Promise(function (resolve, reject) {
-		apiRequest(`http://${subdomain}.wikia.com/api/v1/Search/List/?query=${encodeURIComponent(query)}&limit=1`, res => {
+		apiRequest(`https://${subdomain}.wikia.com/api/v1/Search/List/?query=${encodeURIComponent(query)}&limit=1`, res => {
 			let result;
 			try {
 				result = JSON.parse(res);
@@ -61,7 +61,7 @@ function wikiaSearch(subdomain, query) {
 }
 function getCardDetails(subdomain, id) {
 	return new Promise(function (resolve, reject) {
-		apiRequest(`http://${subdomain}.wikia.com/api/v1/Articles/Details?ids=${encodeURIComponent(id)}&abstract=0&width=80&height=115`, res => {
+		apiRequest(`https://${subdomain}.wikia.com/api/v1/Articles/Details?ids=${encodeURIComponent(id)}&abstract=0&width=80&height=115`, res => {
 			let result;
 			try {
 				result = JSON.parse(res);

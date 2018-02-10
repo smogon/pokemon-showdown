@@ -29,11 +29,11 @@ class Hangman extends Rooms.RoomGame {
 		this.lastGuesser = '';
 		this.wordSoFar = [];
 
-		for (let i = 0; i < word.length; i++) {
-			if (/[a-zA-Z]/.test(word[i])) {
+		for (const letter of word) {
+			if (/[a-zA-Z]/.test(letter)) {
 				this.wordSoFar.push('_');
 			} else {
-				this.wordSoFar.push(word[i]);
+				this.wordSoFar.push(letter);
 			}
 		}
 	}
@@ -46,8 +46,8 @@ class Hangman extends Rooms.RoomGame {
 		if (normalized.length < 1) return user.sendTo(this.room, "Guess too short.");
 		if (sanitized.length > 30) return user.sendTo(this.room, "Guess too long.");
 
-		for (let i = 0; i < this.guesses.length; i++) {
-			if (normalized === toId(this.guesses[i])) return user.sendTo(this.room, "Your guess has already been guessed.");
+		for (const guessid of this.guesses) {
+			if (normalized === toId(guessid)) return user.sendTo(this.room, "Your guess has already been guessed.");
 		}
 
 		if (sanitized.length > 1) {
@@ -97,8 +97,8 @@ class Hangman extends Rooms.RoomGame {
 		let ourWord = toId(this.word);
 		let guessedWord = toId(word);
 		if (ourWord === guessedWord) {
-			for (let i = 0; i < this.wordSoFar.length; i++) {
-				if (this.wordSoFar[i] === '_') {
+			for (let [i, letter] of this.wordSoFar.entries()) {
+				if (letter === '_') {
 					this.wordSoFar[i] = this.word[i];
 				}
 			}
@@ -221,7 +221,8 @@ exports.commands = {
 			room.game = new Hangman(room, user, word, hint);
 			room.game.display(user, true);
 
-			return this.privateModCommand("(A game of hangman was started by " + user.name + ".)");
+			this.modlog('HANGMAN');
+			return this.privateModAction("(A game of hangman was started by " + user.name + ".)");
 		},
 		createhelp: ["/hangman create [word], [hint] - Makes a new hangman game. Requires: % @ * # & ~"],
 
@@ -233,8 +234,8 @@ exports.commands = {
 			room.game.guess(target, user);
 		},
 		guesshelp: [
-			"/hangman guess [letter] - Makes a guess for the letter entered.",
-			"/hangman guess [word] - Same as a letter, but guesses an entire word.",
+			`/hangman guess [letter] - Makes a guess for the letter entered.`,
+			`/hangman guess [word] - Same as a letter, but guesses an entire word.`,
 		],
 
 		stop: 'end',
@@ -244,7 +245,8 @@ exports.commands = {
 			if (!room.game || room.game.gameid !== 'hangman') return this.errorReply("There is no game of hangman running in this room.");
 
 			room.game.end();
-			return this.privateModCommand("(The game of hangman was ended by " + user.name + ".)");
+			this.modlog('ENDHANGMAN');
+			return this.privateModAction("(The game of hangman was ended by " + user.name + ".)");
 		},
 		endhelp: ["/hangman end - Ends the game of hangman before the man is hanged or word is guessed. Requires: % @ * # & ~"],
 
@@ -288,14 +290,14 @@ exports.commands = {
 	},
 
 	hangmanhelp: [
-		"/hangman allows users to play the popular game hangman in PS rooms.",
-		"Accepts the following commands:",
-		"/hangman create [word], [hint] - Makes a new hangman game. Requires: % @ * # & ~",
-		"/hangman guess [letter] - Makes a guess for the letter entered.",
-		"/hangman guess [word] - Same as a letter, but guesses an entire word.",
-		"/hangman display - Displays the game.",
-		"/hangman end - Ends the game of hangman before the man is hanged or word is guessed. Requires: % @ * # & ~",
-		"/hangman [enable/disable] - Enables or disables hangman from being started in a room. Requires: # & ~",
+		`/hangman allows users to play the popular game hangman in PS rooms.`,
+		`Accepts the following commands:`,
+		`/hangman create [word], [hint] - Makes a new hangman game. Requires: % @ * # & ~`,
+		`/hangman guess [letter] - Makes a guess for the letter entered.`,
+		`/hangman guess [word] - Same as a letter, but guesses an entire word.`,
+		`/hangman display - Displays the game.`,
+		`/hangman end - Ends the game of hangman before the man is hanged or word is guessed. Requires: % @ * # & ~`,
+		`/hangman [enable/disable] - Enables or disables hangman from being started in a room. Requires: # & ~`,
 	],
 
 	guess: function (target, room, user) {
@@ -306,8 +308,8 @@ exports.commands = {
 		room.game.guess(target, user);
 	},
 	guesshelp: [
-		"/guess - Shortcut for /hangman guess.",
-		"/hangman guess [letter] - Makes a guess for the letter entered.",
-		"/hangman guess [word] - Same as a letter, but guesses an entire word.",
+		`/guess - Shortcut for /hangman guess.`,
+		`/hangman guess [letter] - Makes a guess for the letter entered.`,
+		`/hangman guess [word] - Same as a letter, but guesses an entire word.`,
 	],
 };

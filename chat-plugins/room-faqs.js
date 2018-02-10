@@ -9,7 +9,7 @@ let roomFaqs = {};
 try {
 	roomFaqs = require(ROOMFAQ_FILE);
 } catch (e) {
-	if (e.code !== 'MODULE_NOT_FOUND') throw e;
+	if (e.code !== 'MODULE_NOT_FOUND' && e.code !== 'ENOENT') throw e;
 }
 if (!roomFaqs || typeof roomFaqs !== 'object') roomFaqs = {};
 
@@ -44,8 +44,9 @@ exports.commands = {
 		if (!roomFaqs[room.id]) roomFaqs[room.id] = {};
 		roomFaqs[room.id][topic] = text;
 		saveRoomFaqs();
-		this.sendReplyBox(Chat.parseText(text));
-		this.privateModCommand(`(${user.name} added a FAQ for '${topic}')`);
+		this.sendReplyBox(Chat.formatText(text, true));
+		this.privateModAction(`(${user.name} added a FAQ for '${topic}')`);
+		this.modlog('RFAQ', null, `added '${topic}'`);
 	},
 	removefaq: function (target, room, user) {
 		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
@@ -59,7 +60,8 @@ exports.commands = {
 		Object.keys(roomFaqs[room.id]).filter(val => getAlias(room.id, val) === topic).map(val => delete roomFaqs[room.id][val]);
 		if (!Object.keys(roomFaqs[room.id]).length) delete roomFaqs[room.id];
 		saveRoomFaqs();
-		this.privateModCommand(`(${user.name} removed the FAQ for '${topic}')`);
+		this.privateModAction(`(${user.name} removed the FAQ for '${topic}')`);
+		this.modlog('ROOMFAQ', null, `removed ${topic}`);
 	},
 	addalias: function (target, room, user) {
 		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
@@ -74,7 +76,8 @@ exports.commands = {
 		if (getAlias(room.id, topic)) return this.errorReply(`You cannot make an alias of an alias. Use /addalias ${alias}, ${getAlias(room.id, topic)} instead.`);
 		roomFaqs[room.id][alias] = `>${topic}`;
 		saveRoomFaqs();
-		this.privateModCommand(`(${user.name} added an alias for '${topic}': ${alias})`);
+		this.privateModAction(`(${user.name} added an alias for '${topic}': ${alias})`);
+		this.modlog('ROOMFAQ', null, `alias for '${topic}' - ${alias}`);
 	},
 	rfaq: 'roomfaq',
 	roomfaq: function (target, room, user) {
@@ -86,14 +89,21 @@ exports.commands = {
 		topic = getAlias(room.id, topic) || topic;
 
 		if (!this.runBroadcast()) return;
-		this.sendReplyBox(Chat.parseText(roomFaqs[room.id][topic]));
-		if (!this.broadcasting && user.can('declare', null, room)) this.sendReplyBox(`<code>/addfaq ${topic}, ${Chat.escapeHTML(roomFaqs[room.id][topic])}</code>`);
+		this.sendReplyBox(Chat.formatText(roomFaqs[room.id][topic], true));
+		if (!this.broadcasting && user.can('declare', null, room)) {
+			let extra = `<code>/addfaq ${topic}, ${Chat.escapeHTML(roomFaqs[room.id][topic])}</code>`;
+			let aliases = Object.keys(roomFaqs[room.id]).filter(val => getAlias(room.id, val) === topic);
+			if (aliases.length) {
+				extra += `<br/><br/>Aliases: ${Object.keys(roomFaqs[room.id]).filter(val => getAlias(room.id, val) === topic).join(', ')}`;
+			}
+			this.sendReplyBox(extra);
+		}
 	},
 	roomfaqhelp: [
-		"/roomfaq - Shows the list of all available FAQ topics",
-		"/roomfaq <topic> - Shows the FAQ for <topic>.",
-		"/addfaq <topic>, <text> - Adds an entry for <topic> in this room or updates it. Requires: # & ~",
-		"/addalias <alias>, <topic> - Adds <alias> as an alias for <topic>, displaying it when users use /roomfaq <alias>. Requires: # & ~",
-		"/removefaq <topic> - Removes the entry for <topic> in this room. If used on an alias, removes the alias. Requires: # & ~",
+		`/roomfaq - Shows the list of all available FAQ topics`,
+		`/roomfaq <topic> - Shows the FAQ for <topic>.`,
+		`/addfaq <topic>, <text> - Adds an entry for <topic> in this room or updates it. Requires: # & ~`,
+		`/addalias <alias>, <topic> - Adds <alias> as an alias for <topic>, displaying it when users use /roomfaq <alias>. Requires: # & ~`,
+		`/removefaq <topic> - Removes the entry for <topic> in this room. If used on an alias, removes the alias. Requires: # & ~`,
 	],
 };

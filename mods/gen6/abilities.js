@@ -17,6 +17,11 @@ exports.BattleAbilities = {
 			}
 		},
 	},
+	"damp": {
+		inherit: true,
+		desc: "While this Pokemon is active, Explosion, Self-Destruct, and the Ability Aftermath are prevented from having an effect.",
+		shortDesc: "Prevents Explosion/Self-Destruct/Aftermath while this Pokemon is active.",
+	},
 	"galewings": {
 		inherit: true,
 		shortDesc: "This Pokemon's Flying-type moves have their priority increased by 1.",
@@ -24,6 +29,11 @@ exports.BattleAbilities = {
 			if (move && move.type === 'Flying') return priority + 1;
 		},
 		rating: 4.5,
+	},
+	"infiltrator": {
+		inherit: true,
+		desc: "This Pokemon's moves ignore substitutes and the opposing side's Reflect, Light Screen, Safeguard, and Mist.",
+		shortDesc: "Moves ignore substitutes and the foe's Reflect, Light Screen, Safeguard, and Mist.",
 	},
 	"ironbarbs": {
 		inherit: true,
@@ -107,7 +117,7 @@ exports.BattleAbilities = {
 		shortDesc: "If a physical attack hits this Pokemon, Defense is lowered by 1, Speed is raised by 1.",
 		onAfterDamage: function (damage, target, source, move) {
 			if (move.category === 'Physical') {
-				this.boost({def:-1, spe:1});
+				this.boost({def: -1, spe: 1});
 			}
 		},
 		rating: 0.5,
