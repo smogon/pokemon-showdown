@@ -317,6 +317,7 @@ exports.BattleScripts = {
 		this.setActiveMove(move, pokemon, target);
 		move.zBrokeProtect = false;
 		let hitResult = true;
+		let boostTable = [1, 4 / 3, 5 / 3, 2, 7 / 3, 8 / 3, 3];
 		
 		if (this.gen == 4) {
 			//Gen 4's Accuracy Checks go before Immunity Checks
@@ -422,8 +423,6 @@ exports.BattleScripts = {
 			this.add('-immune', target, '[msg]');
 			return false;
 		}
-
-		let boostTable = [1, 4 / 3, 5 / 3, 2, 7 / 3, 8 / 3, 3];
 		
 		if (this.gen !=4) {
 			// calculate true accuracy
