@@ -1343,8 +1343,8 @@ exports.Formats = [
 
 		mod: 'gen4',
 		searchShow: false,
-		ruleset: ['Pokemon', 'Standard'],
-		banlist: ['Uber', 'OU', 'BL', 'UU', 'BL2'],
+		ruleset: ['[Gen 4] UU'],
+		banlist: ['UU', 'BL2'],
 	},
 	{
 		name: "[Gen 4] Custom Game",
@@ -1437,6 +1437,15 @@ exports.Formats = [
 		mod: 'gen2',
 		searchShow: false,
 		ruleset: ['Pokemon', 'Standard'],
+	},
+	{
+		name: "[Gen 2] UU",
+		desc: [`&bullet; <a href="http://www.smogon.com/forums/posts/3576710/">GSC UU</a>`],
+
+		mod: 'gen2',
+		searchShow: false,
+		ruleset: ['[Gen 2] OU'],
+		banlist: ['OU', 'BL'],
 	},
 	{
 		name: "[Gen 2] Custom Game",
