@@ -88,7 +88,6 @@ exports.BattleScripts = {
 
 		return Math.floor(baseDamage);
 	},
-	
 	tryMoveHit: function (target, pokemon, move) {
 		this.setActiveMove(move, pokemon, target);
 		let hitResult = true;
@@ -182,7 +181,6 @@ exports.BattleScripts = {
 			this.add('-miss', pokemon, target);
 			return false;
 		}
-			
 		hitResult = this.runEvent('TryHit', target, pokemon, move);
 		if (!hitResult) {
 			if (hitResult === false) this.add('-fail', target);
