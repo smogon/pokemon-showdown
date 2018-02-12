@@ -317,7 +317,7 @@ exports.BattleScripts = {
 		this.setActiveMove(move, pokemon, target);
 		move.zBrokeProtect = false;
 		let hitResult = true;
-		
+
 		hitResult = this.singleEvent('PrepareHit', move, {}, target, pokemon, move);
 		if (!hitResult) {
 			if (hitResult === false) this.add('-fail', target);
@@ -349,8 +349,8 @@ exports.BattleScripts = {
 		if (this.gen < 7 && move.ignoreImmunity !== true && !move.ignoreImmunity[move.type] && !target.runImmunity(move.type, true)) {
 			return false;
 		}
-		
-		if (this.gen != 4) {
+
+		if (this.gen !== 4) {
 			hitResult = this.runEvent('TryHit', target, pokemon, move);
 			if (!hitResult) {
 				if (hitResult === false) this.add('-fail', target);
@@ -372,9 +372,9 @@ exports.BattleScripts = {
 			this.add('-immune', target, '[msg]');
 			return false;
 		}
-		
+
 		let boostTable = [1, 4 / 3, 5 / 3, 2, 7 / 3, 8 / 3, 3];
-		
+
 		// calculate true accuracy
 		let accuracy = move.accuracy;
 		let boosts, boost;
@@ -424,8 +424,8 @@ exports.BattleScripts = {
 			this.add('-miss', pokemon, target);
 			return false;
 		}
-		
-		if (this.gen == 4) {
+
+		if (this.gen === 4) {
 			hitResult = this.runEvent('TryHit', target, pokemon, move);
 			if (!hitResult) {
 				if (hitResult === false) this.add('-fail', target);
