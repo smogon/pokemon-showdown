@@ -116,7 +116,7 @@ exports.BattleScripts = {
 			return false;
 		}
 
-		if(naturalImmunity === true){
+		if (naturalImmunity === true) {
 			return false;
 		}
 
