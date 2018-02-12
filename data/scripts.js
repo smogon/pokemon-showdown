@@ -350,12 +350,10 @@ exports.BattleScripts = {
 			return false;
 		}
 
-		if (this.gen !== 4) {
-			hitResult = this.runEvent('TryHit', target, pokemon, move);
-			if (!hitResult) {
-				if (hitResult === false) this.add('-fail', target);
-				return false;
-			}
+		hitResult = this.runEvent('TryHit', target, pokemon, move);
+		if (!hitResult) {
+			if (hitResult === false) this.add('-fail', target);
+			return false;
 		}
 
 		if (this.gen >= 7 && move.ignoreImmunity !== true && !move.ignoreImmunity[move.type] && !target.runImmunity(move.type, true)) {
@@ -423,14 +421,6 @@ exports.BattleScripts = {
 			if (!move.spreadHit) this.attrLastMove('[miss]');
 			this.add('-miss', pokemon, target);
 			return false;
-		}
-
-		if (this.gen === 4) {
-			hitResult = this.runEvent('TryHit', target, pokemon, move);
-			if (!hitResult) {
-				if (hitResult === false) this.add('-fail', target);
-				return false;
-			}
 		}
 
 		if (move.breaksProtect) {
