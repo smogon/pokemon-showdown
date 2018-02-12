@@ -21,6 +21,7 @@ exports.BattleScripts = {
 	tryMoveHit: function (target, pokemon, move) {
 		this.setActiveMove(move, pokemon, target);
 		let hitResult = true;
+		let naturalImmunity = false;
 
 		hitResult = this.singleEvent('PrepareHit', move, {}, target, pokemon, move);
 		if (!hitResult) {
@@ -51,7 +52,7 @@ exports.BattleScripts = {
 		}
 
 		if (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type] && !target.runImmunity(move.type, true)) {
-			return false;
+			naturalImmunity = true;
 		}
 
 		if (move.flags['powder'] && target !== pokemon && !this.getImmunity('powder', target)) {
@@ -112,6 +113,10 @@ exports.BattleScripts = {
 		hitResult = this.runEvent('TryHit', target, pokemon, move);
 		if (!hitResult) {
 			if (hitResult === false) this.add('-fail', target);
+			return false;
+		}
+
+		if(naturalImmunity === true){
 			return false;
 		}
 
