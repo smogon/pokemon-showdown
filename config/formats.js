@@ -407,12 +407,12 @@ exports.Formats = [
 
 		mod: 'sharedpower',
 		ruleset: ['[Gen 7] OU', 'Evasion Abilities Clause'],
-		banlist: ['Beedrill-Mega', 'Gyarados-Mega', 'Shedinja', 'Emergency Exit ++ Regenerator', 'Wimp Out ++ Regenerator'],
+		banlist: ['Gyarados-Mega', 'Shedinja', 'Emergency Exit ++ Regenerator', 'Wimp Out ++ Regenerator', 'Prankster ++ Substitute'],
 		unbanlist: ['Aegislash', 'Blaziken', 'Blaziken-Mega', 'Deoxys-Defense'],
 		restrictedAbilities: [
-			'Chlorophyll', 'Comatose', 'Fluffy', 'Fur Coat', 'Harvest', 'Huge Power', 'Illusion', 'Imposter', 'Mold Breaker',
-			'Multiscale', 'Protean', 'Pure Power', 'Quick Feet', 'Rattled', 'Sand Rush', 'Simple', 'Slush Rush', 'Speed Boost',
-			'Surge Surfer', 'Swift Swim', 'Teravolt', 'Tinted Lens', 'Trace', 'Unburden', 'Water Bubble', 'Weak Armor',
+			'Chlorophyll', 'Comatose', 'Fluffy', 'Fur Coat', 'Huge Power', 'Illusion', 'Imposter', 'Innards Out', 'Magic Guard',
+			'Mold Breaker', 'Protean', 'Pure Power', 'Quick Feet', 'Rattled', 'Sand Rush', 'Simple', 'Skill Link', 'Slush Rush',
+			'Speed Boost', 'Surge Surfer', 'Swift Swim', 'Teravolt', 'Tinted Lens', 'Trace', 'Unburden', 'Water Bubble', 'Weak Armor',
 		],
 		onBeforeSwitchIn: function (pokemon) {
 			let restrictedAbilities = this.getFormat().restrictedAbilities.map(toId);
