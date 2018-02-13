@@ -31,6 +31,7 @@ const toId = Dex.getId;
  * @property {string} [hm] limit 1 HM transferred from gen 4 to 5
  * @property {string[]} [restrictiveMoves]
  * @property {(string | 'self')[]} [limitedEgg] list of egg moves
+ * @property {boolean} [isHidden]
  * @property {true} [fastCheck]
  */
 
@@ -454,18 +455,9 @@ class Validator {
 			problems.push(`${name} has exactly 0 EVs - did you forget to EV it? (If this was intentional, add exactly 1 to one of your EVs, which won't change its stats but will tell us that it wasn't a mistake).`);
 		}
 
+		lsetData.isHidden = isHidden;
 		let lsetProblems = this.reconcileLearnset(template, lsetData, lsetProblem, name);
 		if (lsetProblems) problems.push(...lsetProblems);
-
-		if (isHidden && lsetData.sourcesBefore < 5) {
-			lsetData.sources = lsetData.sources.filter(source =>
-				parseInt(source.charAt(0)) >= 5
-			);
-			lsetData.sourcesBefore = 0;
-			if (!lsetData.sources.length) {
-				problems.push(`${name} has a hidden ability - it can't have moves only learned before gen 5.`);
-			}
-		}
 
 		if (!lsetData.sourcesBefore && lsetData.sources.length && lsetData.sources.every(source => 'SVD'.includes(source.charAt(1)))) {
 			// Every source is restricted
@@ -807,6 +799,17 @@ class Validator {
 		}
 
 		if (problems.length) return problems;
+
+		if (lsetData.isHidden) {
+			lsetData.sources = lsetData.sources.filter(source =>
+				parseInt(source.charAt(0)) >= 5
+			);
+			if (lsetData.sourcesBefore < 5) lsetData.sourcesBefore = 0;
+			if (!lsetData.sourcesBefore && !lsetData.sources.length) {
+				problems.push(`${name} has a hidden ability - it can't have moves only learned before gen 5.`);
+				return problems;
+			}
+		}
 
 		if (lsetData.limitedEgg && lsetData.limitedEgg.length > 1 && !lsetData.sourcesBefore && lsetData.sources) {
 			// console.log("limitedEgg 1: " + lsetData.limitedEgg);
