@@ -841,7 +841,7 @@ let breedingcontests = {
 		let entry = breedingData.winners[contest];
 		return this.sendReplyBox(`<div class="broadcast-blue"><p style="text-align:center;font-size:14pt;font-weight:bold;margin-bottom:2px;">Breeding contest: <a href="${entry.link}"><b>${Chat.escapeHTML(entry.name)}</b></a>. Winner: <b>${Chat.escapeHTML(entry.winner)}</b></p>` +
 			`<table style="margin-left:auto;margin-right:auto;"><tr>` +
-			`<td style="text-align:center;width:15%">${Giveaway.getSprite(entry.description)[1]}</td><td style="text-align:center;width:40%">${Chat.parseText(entry.description)}</td>` +
+			`<td style="text-align:center;width:15%">${Giveaway.getSprite(entry.description)[1]}</td><td style="text-align:center;width:40%">${Chat.formatText(entry.description)}</td>` +
 			(entry.comment ? `<td style="text-align:center;width:35%"><b>Breeder's comments:</b><br/><i>${Chat.escapeHTML(entry.comment)}</i></td>` : '') +
 			`</tr></table></div>`);
 	},
