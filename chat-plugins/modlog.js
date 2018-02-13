@@ -142,6 +142,7 @@ async function checkRoomModlog(path, regex, results) {
 			if (!insertionSuccessful) break;
 		}
 	}
+	fileStream.destroy();
 	return results;
 }
 
