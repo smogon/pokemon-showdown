@@ -124,12 +124,6 @@ exports.BattleScripts = {
 			return false;
 		}
 
-		if (move.flags['powder'] && target !== pokemon && !this.getImmunity('powder', target)) {
-			this.debug('natural powder immunity');
-			this.add('-immune', target, '[msg]');
-			return false;
-		}
-
 		let boostTable = [1, 4 / 3, 5 / 3, 2, 7 / 3, 8 / 3, 3];
 
 		// calculate true accuracy
@@ -195,29 +189,6 @@ exports.BattleScripts = {
 				} else {
 					this.add('-activate', target, 'move: ' + move.name, '[broken]');
 				}
-			}
-		}
-
-		if (move.stealsBoosts) {
-			let boosts = {};
-			let stolen = false;
-			for (let statName in target.boosts) {
-				let stage = target.boosts[statName];
-				if (stage > 0) {
-					boosts[statName] = stage;
-					stolen = true;
-				}
-			}
-			if (stolen) {
-				this.attrLastMove('[still]');
-				this.add('-clearpositiveboost', target, pokemon, 'move: ' + move.name);
-				this.boost(boosts, pokemon, pokemon);
-
-				for (let statName in boosts) {
-					boosts[statName] = 0;
-				}
-				target.setBoost(boosts);
-				this.add('-anim', pokemon, "Spectral Thief", target);
 			}
 		}
 
