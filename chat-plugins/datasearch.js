@@ -1474,6 +1474,10 @@ function runLearn(target, cmd) {
 
 	let lsetProblem;
 	for (const arg of targets) {
+		if (['ha', 'hidden', 'hiddenability'].includes(toId(arg))) {
+			lsetData.isHidden = true;
+			continue;
+		}
 		move = validator.dex.getMove(arg);
 		if (!move.exists || move.id === 'magikarpsrevenge') {
 			return {error: `Move '${move.id}' not found.`};
