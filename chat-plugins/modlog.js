@@ -134,8 +134,9 @@ async function runModlog(roomidList, searchString, exactSearch, maxLines) {
 }
 
 async function checkRoomModlog(path, regex, results) {
-	const fileContents = await FS(path).readIfExists();
-	for (const line of fileContents.toString().split('\n').reverse()) {
+	const fileStream = await FS(path).createReadStream();
+	let line;
+	while ((line = await fileStream.readLine()) !== null) {
 		if (regex.test(line)) {
 			const insertionSuccessful = results.tryInsert(line);
 			if (!insertionSuccessful) break;
