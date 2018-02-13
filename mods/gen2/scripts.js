@@ -400,7 +400,7 @@ exports.BattleScripts = {
 				// Unlike gen 1, though, paralysis works for all unless the target is immune to direct move (ie. ground-types and t-wave).
 				if (!(secondary.status && ['brn', 'frz'].includes(secondary.status) && target && target.hasType(move.type))) {
 					let effectChance = Math.floor(secondary.chance * 255 / 100);
-					if (typeof secondary.chance === 'undefined' || this.random(256) <= effectChance) {
+					if (typeof secondary.chance === 'undefined' || this.random(256) < effectChance) {
 						this.moveHit(target, pokemon, move, secondary, true, isSelf);
 					}
 				}
