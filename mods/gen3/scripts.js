@@ -22,6 +22,7 @@ exports.BattleScripts = {
 		this.setActiveMove(move, pokemon, target);
 		let hitResult = true;
 		let naturalImmunity = false;
+		let accPass = true;
 
 		hitResult = this.singleEvent('PrepareHit', move, {}, target, pokemon, move);
 		if (!hitResult) {
@@ -53,12 +54,6 @@ exports.BattleScripts = {
 
 		if (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type] && !target.runImmunity(move.type, true)) {
 			naturalImmunity = true;
-		}
-
-		if (move.flags['powder'] && target !== pokemon && !this.getImmunity('powder', target)) {
-			this.debug('natural powder immunity');
-			this.add('-immune', target, '[msg]');
-			return false;
 		}
 
 		let boostTable = [1, 4 / 3, 5 / 3, 2, 7 / 3, 8 / 3, 3];
@@ -106,54 +101,22 @@ exports.BattleScripts = {
 		}
 		if (accuracy !== true && this.random(100) >= accuracy) {
 			if (!move.spreadHit) this.attrLastMove('[miss]');
-			this.add('-miss', pokemon, target);
-			return false;
+			//this.add('-miss', pokemon, target);
+			accPass = false;
 		}
 
 		hitResult = this.runEvent('TryHit', target, pokemon, move);
-		if (!hitResult) {
+		if (!hitResult && accPass) {
 			if (hitResult === false) this.add('-fail', target);
 			return false;
 		}
 
-		if (naturalImmunity === true) {
-			return false;
-		}
-
-		if (move.breaksProtect) {
-			let broke = false;
-			for (const effectid of ['banefulbunker', 'kingsshield', 'protect', 'spikyshield']) {
-				if (target.removeVolatile(effectid)) broke = true;
-			}
-			if (broke) {
-				if (move.id === 'feint') {
-					this.add('-activate', target, 'move: Feint');
-				} else {
-					this.add('-activate', target, 'move: ' + move.name, '[broken]');
-				}
-			}
-		}
-
-		if (move.stealsBoosts) {
-			let boosts = {};
-			let stolen = false;
-			for (let statName in target.boosts) {
-				let stage = target.boosts[statName];
-				if (stage > 0) {
-					boosts[statName] = stage;
-					stolen = true;
-				}
-			}
-			if (stolen) {
-				this.attrLastMove('[still]');
-				this.add('-clearpositiveboost', target, pokemon, 'move: ' + move.name);
-				this.boost(boosts, pokemon, pokemon);
-
-				for (let statName in boosts) {
-					boosts[statName] = 0;
-				}
-				target.setBoost(boosts);
-				this.add('-anim', pokemon, "Spectral Thief", target);
+		if (!accPass) {
+			if (naturalImmunity === true){
+				return false;
+			} else {
+				this.add('-miss', pokemon, target);
+				return false;
 			}
 		}
 
