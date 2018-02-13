@@ -87,7 +87,7 @@ function getMoreButton(room, search, useExactSearch, lines, maxLines) {
 }
 
 async function runModlog(roomidList, searchString, exactSearch, maxLines) {
-	const useRipgrep = checkRipgrepAvailability();
+	const useRipgrep = checkRipgrepAvailability() && searchString;
 	let fileNameList = [];
 	let checkAllRooms = false;
 	for (const roomid of roomidList) {
@@ -119,12 +119,12 @@ async function runModlog(roomidList, searchString, exactSearch, maxLines) {
 	}
 
 	let results = new SortedLimitedLengthList(maxLines);
-	if (useRipgrep && searchString) {
+	if (useRipgrep) {
 		// the entire directory is searched by default, no need to list every file manually
 		if (checkAllRooms) fileNameList = [LOG_PATH];
 		runRipgrepModlog(fileNameList, regexString, results);
 	} else {
-		const searchStringRegex = new RegExp(regexString, 'i');
+		const searchStringRegex = searchString ? new RegExp(regexString, 'i') : null;
 		for (const fileName of fileNameList) {
 			await checkRoomModlog(fileName, searchStringRegex, results);
 		}
@@ -137,7 +137,7 @@ async function checkRoomModlog(path, regex, results) {
 	const fileStream = await FS(path).createReadStream();
 	let line;
 	while ((line = await fileStream.readLine()) !== null) {
-		if (regex.test(line)) {
+		if (!regex || regex.test(line)) {
 			const insertionSuccessful = results.tryInsert(line);
 			if (!insertionSuccessful) break;
 		}
