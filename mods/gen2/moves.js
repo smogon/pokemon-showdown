@@ -702,6 +702,27 @@ exports.BattleMovedex = {
 			}
 		},
 	},
+	thief: {
+		inherit: true,
+		onAfterHit: function () {},
+		secondary: {
+			chance: 100,
+			onAfterHit: function (target, source) {
+				if (source.item || source.volatiles['gem']) {
+					return;
+				}
+				let yourItem = target.takeItem(source);
+				if (!yourItem) {
+					return;
+				}
+				if (!source.setItem(yourItem)) {
+					target.item = yourItem.id; // bypass setItem so we don't break choicelock or anything
+					return;
+				}
+				this.add('-item', source, yourItem, '[from] move: Thief', '[of] ' + target);
+			},
+		},
+	},
 	thrash: {
 		inherit: true,
 		onMoveFail: function (target, source, move) {
