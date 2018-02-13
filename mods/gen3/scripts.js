@@ -112,7 +112,7 @@ exports.BattleScripts = {
 		}
 
 		if (!accPass) {
-			if (naturalImmunity === true){
+			if (naturalImmunity === true) {
 				return false;
 			} else {
 				this.add('-miss', pokemon, target);
