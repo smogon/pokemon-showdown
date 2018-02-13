@@ -163,6 +163,9 @@ class LoginServerInstance {
 			Streams.readAll(res).then(buffer => {
 				//console.log('RESPONSE: ' + buffer);
 				let data = parseJSON(buffer).json;
+				if (buffer.startsWith(`[{"actionsuccess":true,`)) {
+					buffer = 'stream interrupt';
+				}
 				for (const [i, resolve] of resolvers.entries()) {
 					if (data) {
 						resolve([data[i], res.statusCode, null]);
