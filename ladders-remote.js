@@ -84,7 +84,11 @@ class LadderStore {
 			format: formatid,
 		});
 		if (error) {
-			room.add(`||Ladder (probably) updated, but score could not be retrieved (${error.message}).`);
+			if (error.message === 'stream interrupt') {
+				room.add(`||Ladder updated, but score could not be retrieved.`);
+			} else {
+				room.add(`||Ladder (probably) updated, but score could not be retrieved (${error.message}).`);
+			}
 			return [p1score, null, null];
 		}
 		if (!room.battle) {
