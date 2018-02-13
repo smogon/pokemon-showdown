@@ -570,8 +570,8 @@ exports.BattleScripts = {
 				// That means that a move that does not share the type of the target can status it.
 				// If a move that was not fire-type would exist on Gen 1, it could burn a Pokémon.
 				if (!(secondary.status && ['par', 'brn', 'frz'].includes(secondary.status) && target && target.hasType(move.type))) {
-					let effectChance = Math.floor(secondary.chance * 255 / 100);
-					if (typeof secondary.chance === 'undefined' || this.random(256) <= effectChance) {
+					let effectChance = Math.ceil(secondary.chance * 256 / 100);
+					if (typeof secondary.chance === 'undefined' || this.random(256) < effectChance) {
 						this.moveHit(target, pokemon, move, secondary, true, isSelf);
 					}
 				}
