@@ -347,7 +347,9 @@ exports.pages = {
 					buf += `<p><Button>confirminap</Button> <Button>confirminapname</Button> <Button>confirminappokemon</Button></p>`;
 					break;
 				case 'timerstalling':
-					buf += `<p>If someone is timerstalling in your battle, and the battle has <b>not</b> ended, click the button below and a global staff member will take a look.</p>`;
+					buf += `<p>Timerstalling is the act of intentionally using up almost all the time on the timer, and then moving.</p>`;
+					buf += `<p>Please make sure your opponent is using up most of the timer each turn, has been doing this for at least two turns, and the battle has NOT ended.</p>`;
+					buf += `<p>If the above is true, please click the button below to call a global staff member.</p>`;
 					if (!isLast) break;
 					buf += `<p><Button>confirmtimerstalling</Button></p>`;
 					break;
