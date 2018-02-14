@@ -189,7 +189,7 @@ class Battle extends Dex.ModdedDex {
 
 		const inputOptions = {formatid: options.formatid, seed: this.prng.seed};
 		if (this.rated) inputOptions.rated = this.rated;
-		if (global.__version !== undefined) {
+		if (global.__version) {
 			this.inputLog.push(`>version ${global.__version}`);
 		}
 		this.inputLog.push(`>start ` + JSON.stringify(inputOptions));
