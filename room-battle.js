@@ -947,10 +947,15 @@ if (!PM.isParentProcess) {
 	// @ts-ignore
 	global.Config = require('./config/config');
 	global.Chat = require('./chat');
-	global.__version = require('child_process')
-		.execSync('git merge-base master HEAD')
-		.toString()
-		.trim();
+	global.__version = '';
+	try {
+		const execSync = require('child_process').execSync;
+		const out = execSync('git merge-base master HEAD', {
+			stdio: ['ignore', 'pipe', 'ignore'],
+		});
+		global.__version = ('' + out).trim();
+	} catch (e) {}
+	console.log('v:' + global.__version);
 
 	if (Config.crashguard) {
 		// graceful crash - allow current battles to finish before restarting
