@@ -188,8 +188,6 @@ class RandomTeams extends Dex.ModdedDex {
 				level++;
 			}
 
-			// Random gender--already handled by PS
-
 			// Random happiness
 			let happiness = this.random(256);
 
@@ -199,6 +197,7 @@ class RandomTeams extends Dex.ModdedDex {
 			team.push({
 				name: template.baseSpecies,
 				species: template.species,
+				gender: template.gender,
 				item: item,
 				ability: ability,
 				moves: moves,
@@ -335,6 +334,7 @@ class RandomTeams extends Dex.ModdedDex {
 			team.push({
 				name: template.baseSpecies,
 				species: template.species,
+				gender: template.gender,
 				item: item,
 				ability: ability,
 				moves: m,
@@ -1515,6 +1515,7 @@ class RandomTeams extends Dex.ModdedDex {
 		return {
 			name: template.baseSpecies,
 			species: species,
+			gender: template.gender,
 			moves: moves,
 			ability: ability,
 			evs: evs,
@@ -2512,6 +2513,7 @@ class RandomTeams extends Dex.ModdedDex {
 		return {
 			name: template.baseSpecies,
 			species: species,
+			gender: template.gender,
 			moves: moves,
 			ability: ability,
 			evs: evs,
