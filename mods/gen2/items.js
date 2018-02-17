@@ -19,6 +19,16 @@ exports.BattleItems = {
 		desc: "No competitive use.",
 		onBasePower: function () {},
 	},
+	focusband: {
+		inherit: true,
+		desc: "Holder has a ~11.7% chance to survive an attack that would KO it with 1 HP.",
+		onDamage: function (damage, target, source, effect) {
+			if (this.random(256) < 30 && damage >= target.hp && effect && effect.effectType === 'Move') {
+				this.add('-activate', target, 'item: Focus Band');
+				return target.hp - 1;
+			}
+		},
+	},
 	metalpowder: {
 		inherit: true,
 		desc: "If held by a Ditto, its Defense and Sp. Def are 1.5x, even while Transformed.",
@@ -38,6 +48,15 @@ exports.BattleItems = {
 		onModifyCritRatio: function (critRatio, user) {
 			if (user.template.species === 'Chansey') {
 				return 3;
+			}
+		},
+	},
+	quickclaw: {
+		inherit: true,
+		desc: "Each turn, holder has a ~23.4% chance to move first in its priority bracket.",
+		onModifyPriority: function (priority, pokemon) {
+			if (this.random(256) < 60) {
+				return Math.round(priority) + 0.1;
 			}
 		},
 	},
