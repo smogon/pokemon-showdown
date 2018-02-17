@@ -782,7 +782,7 @@ let commands = {
 		if (room.id !== 'scavengers') return this.errorReply("Scavenger hunts can only be created in the scavengers room.");
 		if (!this.can('mute', null, room)) return false;
 		if (room.game && !room.game.scavParentGame) return this.errorReply(`There is already a game in this room - ${room.game.title}.`);
-
+		if (cmd === 'starthunt' && room.scavQueue.length) return this.errorReply("There are currently hunts in the queue! If you would like to start the hunt anyways, use /forcestarthunt.");
 		let gameType = cmd.includes('official') ? 'official' : cmd.includes('practice') ? 'practice' : null;
 
 		let [hostsArray, ...params] = target.split('|');
@@ -1291,6 +1291,7 @@ exports.commands = {
 	scavenge: commands.guess,
 	startpracticehunt: 'starthunt',
 	startofficialhunt: 'starthunt',
+	forcestarthunt: 'starthunt',
 	starthunt: commands.create,
 	joinhunt: commands.join,
 	leavehunt: commands.leave,
