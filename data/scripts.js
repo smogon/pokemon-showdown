@@ -542,7 +542,7 @@ exports.BattleScripts = {
 		}
 
 		if (move.recoil && move.totalDamage) {
-			this.damage(this.calcRecoilDamage(move.totalDamage, move), pokemon, target, 'recoil');
+			this.damage(this.calcRecoilDamage(move.totalDamage, move), pokemon, pokemon, 'recoil');
 		}
 
 		if (move.struggleRecoil) {
