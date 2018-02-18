@@ -1605,32 +1605,34 @@ class Battle extends Dex.ModdedDex {
 				if (!pokemon.knownType || this.getImmunity('trapped', pokemon)) {
 					this.runEvent('MaybeTrapPokemon', pokemon);
 				}
-				// Disable the faculty to cancel switches if a foe may have a trapping ability
-				for (const source of pokemon.side.foe.active) {
-					if (!source || source.fainted) continue;
-					let template = (source.illusion || source).template;
-					if (!template.abilities) continue;
-					for (let abilitySlot in template.abilities) {
-						// @ts-ignore
-						let abilityName = template.abilities[abilitySlot];
-						if (abilityName === source.ability) {
-							// pokemon event was already run above so we don't need
-							// to run it again.
-							continue;
+				// canceling switches would leak information
+				// if a foe might have a trapping ability
+				if (this.gen > 2) {
+					for (const source of pokemon.side.foe.active) {
+						if (!source || source.fainted) continue;
+						let template = (source.illusion || source).template;
+						if (!template.abilities) continue;
+						for (let abilitySlot in template.abilities) {
+							// @ts-ignore
+							let abilityName = template.abilities[abilitySlot];
+							if (abilityName === source.ability) {
+								// pokemon event was already run above so we don't need
+								// to run it again.
+								continue;
+							}
+							const ruleTable = this.getRuleTable(this.getFormat());
+							if (!ruleTable.has('-illegal') && !this.getFormat().team) {
+								// hackmons format
+								continue;
+							} else if (abilitySlot === 'H' && template.unreleasedHidden) {
+								// unreleased hidden ability
+								continue;
+							}
+							let ability = this.getAbility(abilityName);
+							if (ruleTable.has('-ability:' + ability.id)) continue;
+							if (pokemon.knownType && !this.getImmunity('trapped', pokemon)) continue;
+							this.singleEvent('FoeMaybeTrapPokemon', ability, {}, pokemon, source);
 						}
-						const ruleTable = this.getRuleTable(this.getFormat());
-						if (!ruleTable.has('-illegal') && !this.getFormat().team) {
-							// hackmons format
-							continue;
-						} else if (abilitySlot === 'H' && template.unreleasedHidden) {
-							// unreleased hidden ability
-							continue;
-						}
-						let ability = this.getAbility(abilityName);
-						if (ruleTable.has('-ability:' + ability.id)) continue;
-						if (pokemon.knownType && !this.getImmunity('trapped', pokemon)) continue;
-						this.singleEvent('FoeMaybeTrapPokemon',
-							ability, {}, pokemon, source);
 					}
 				}
 
