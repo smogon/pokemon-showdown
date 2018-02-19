@@ -10782,6 +10782,7 @@ exports.BattlePokedex = {
 		weightkg: 28,
 		color: "White",
 		eggGroups: ["Field"],
+		otherForms: ["furfroudandy", "furfroudebutante", "furfroudiamond", "furfrouheart", "furfroukabuki", "furfroulareine", "furfroumatron", "furfroupharaoh", "furfroustar"],
 	},
 	espurr: {
 		num: 677,
