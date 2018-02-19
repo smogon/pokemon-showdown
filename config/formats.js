@@ -410,9 +410,9 @@ exports.Formats = [
 		banlist: ['Banette-Mega', 'Gyarados-Mega', 'Shedinja', 'Emergency Exit ++ Regenerator', 'Wimp Out ++ Regenerator'],
 		unbanlist: ['Aegislash', 'Blaziken', 'Blaziken-Mega', 'Deoxys-Defense'],
 		restrictedAbilities: [
-			'Chlorophyll', 'Comatose', 'Fluffy', 'Fur Coat', 'Huge Power', 'Illusion', 'Imposter', 'Innards Out', 'Magic Guard',
-			'Mold Breaker', 'Protean', 'Pure Power', 'Quick Feet', 'Rattled', 'Sand Rush', 'Simple', 'Skill Link', 'Slush Rush',
-			'Speed Boost', 'Surge Surfer', 'Swift Swim', 'Teravolt', 'Tinted Lens', 'Trace', 'Unburden', 'Water Bubble', 'Weak Armor',
+			'Chlorophyll', 'Comatose', 'Fluffy', 'Fur Coat', 'Huge Power', 'Illusion', 'Imposter', 'Innards Out', 'Magic Guard', 'Mold Breaker',
+			'Multiscale', 'Protean', 'Pure Power', 'Quick Feet', 'Rattled', 'Regenerator', 'Sand Rush', 'Simple', 'Skill Link', 'Slush Rush',
+			'Speed Boost', 'Sturdy', 'Surge Surfer', 'Swift Swim', 'Teravolt', 'Tinted Lens', 'Trace', 'Unburden', 'Water Bubble', 'Weak Armor',
 		],
 		getSharedPower: function (pokemon) {
 			let sharedPower = new Set();
