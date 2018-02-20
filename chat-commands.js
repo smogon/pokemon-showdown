@@ -1866,7 +1866,7 @@ exports.commands = {
 			if (!reason && room.id !== 'staff' && Rooms('staff')) {
 				Rooms('staff').addByUser(user, "<<" + room.id + ">> " + unlockMessage);
 			}
-			if (!reason) this.globalModlog("UNLOCK", target, " by " + user.userid);
+			if (!reason) this.globalModlog("UNLOCK", toId(target), " by " + user.userid);
 			if (targetUser) targetUser.popup("" + user.name + " has unlocked you.");
 		} else {
 			this.errorReply("User '" + target + "' is not locked.");
@@ -2392,7 +2392,7 @@ exports.commands = {
 
 		if (unlocked) {
 			this.addModAction(unlocked + " was unnamelocked by " + user.name + "." + reason);
-			if (!reason) this.globalModlog("UNNAMELOCK", target, " by " + user.userid);
+			if (!reason) this.globalModlog("UNNAMELOCK", toId(target), " by " + user.userid);
 			if (targetUser) targetUser.popup("" + user.name + " has unnamelocked you.");
 		} else {
 			this.errorReply("User '" + target + "' is not namelocked.");
@@ -2556,7 +2556,7 @@ exports.commands = {
 
 		if (unbanned) {
 			this.addModAction(`${unbanned} was allowed to battle again by ${user.name}.`);
-			this.globalModlog("UNBATTLEBAN", target, `by ${user.name}`);
+			this.globalModlog("UNBATTLEBAN", toId(target), `by ${user.name}`);
 			if (targetUser) targetUser.popup(`${user.name} has allowed you to battle again.`);
 		} else {
 			this.errorReply(`User ${target} is not banned from battling.`);
@@ -2718,7 +2718,7 @@ exports.commands = {
 
 		Punishments.addSharedIp(ip, note);
 		if (note) note = ` (${note})`;
-		this.modlog('SHAREDIP', null, ip + note);
+		this.globalModlog('SHAREDIP', ip, ` by ${user.name}${note}`);
 		return this.addModAction(`The IP '${ip}' was marked as shared by ${user.name}.${note}`);
 	},
 	marksharedhelp: [`/markshared [ip] - Marks an IP address as shared. Requires @, &, ~`],
@@ -2731,7 +2731,7 @@ exports.commands = {
 		if (!Punishments.sharedIps.has(target)) return this.errorReply("This IP isn't marked as shared.");
 
 		Punishments.removeSharedIp(target);
-		this.modlog('UNSHAREIP', null, target);
+		this.globalModlog('UNSHAREIP', target, ` by ${user.name}`);
 		return this.addModAction(`The IP '${target}' was unmarked as shared by ${user.name}.`);
 	},
 	unmarksharedhelp: [`/unmarkshared [ip] - Unmarks a shared IP address. Requires @, &, ~`],

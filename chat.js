@@ -619,7 +619,7 @@ class CommandContext {
 	globalModlog(action, user, note) {
 		let buf = `(${this.room.id}) ${action}: `;
 		if (typeof user === 'string') {
-			buf += `[${toId(user)}]`;
+			buf += `[${user}]`;
 		} else {
 			let userid = user.getLastId();
 			buf += `[${userid}]`;
