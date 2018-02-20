@@ -1303,35 +1303,25 @@ class User {
 			}
 		}
 
+		if (!this.can('bypassall') && Punishments.isRoomBanned(this, room.id)) {
+			connection.sendTo(roomid, `|noinit|joinfailed|You are banned from the room "${roomid}".`);
+			return false;
+		}
+
 		if (Rooms.aliases.get(roomid) === room.id) {
 			connection.send(`>${roomid}\n|deinit`);
 		}
 
-		let joinResult = this.joinRoom(room, connection);
-		if (!joinResult) {
-			if (joinResult === null) {
-				connection.sendTo(roomid, `|noinit|joinfailed|You are banned from the room "${roomid}".`);
-				return false;
-			}
-			connection.sendTo(roomid, `|noinit|joinfailed|You do not have permission to join "${roomid}".`);
-			return false;
-		}
+		this.joinRoom(room, connection);
 		return true;
 	}
 	/**
-	 * @param {string | GlobalRoom | GameRoom | ChatRoom} room
+	 * @param {string | GlobalRoom | GameRoom | ChatRoom} roomid
 	 * @param {Connection?} connection
 	 */
-	joinRoom(room, connection = null) {
-		room = Rooms(room);
-		if (!room) return false;
-		if (!this.can('bypassall')) {
-			// check if user has permission to join
-			if (room.staffRoom && !this.isStaff) return false;
-			if (Punishments.isRoomBanned(this, room.id)) {
-				return null;
-			}
-		}
+	joinRoom(roomid, connection = null) {
+		const room = Rooms(roomid);
+		if (!room) throw new Error(`Room not found: ${roomid}`);
 		if (!connection) {
 			for (const curConnection of this.connections) {
 				// only join full clients, not pop-out single-room
@@ -1341,7 +1331,7 @@ class User {
 					this.joinRoom(room, curConnection);
 				}
 			}
-			return true;
+			return;
 		}
 		if (!connection.inRooms.has(room.id)) {
 			if (!this.inRooms.has(room.id)) {
@@ -1351,7 +1341,6 @@ class User {
 			connection.joinRoom(room);
 			room.onConnect(this, connection);
 		}
-		return true;
 	}
 	/**
 	 * @param {GlobalRoom | GameRoom | ChatRoom | string} room

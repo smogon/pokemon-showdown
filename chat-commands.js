@@ -1630,25 +1630,26 @@ exports.commands = {
 		target = this.splitTarget(target);
 		let targetUser = this.targetUser;
 		let targetRoom = Rooms.search(target);
-		if (!targetRoom || targetRoom.modjoin) {
-			return this.errorReply("The room '" + target + "' does not exist.");
+		if (!targetRoom || targetRoom.modjoin || targetRoom.staffRoom) {
+			return this.errorReply(`The room "${target}" does not exist.`);
 		}
 		if (!this.can('warn', targetUser, room) || !this.can('warn', targetUser, targetRoom)) return false;
 		if (!targetUser || !targetUser.connected) {
-			return this.errorReply("User " + this.targetUsername + " not found.");
+			return this.errorReply(`User ${this.targetUsername} not found.`);
 		}
-		if (targetRoom.id === "global") return this.errorReply("Users cannot be redirected to the global room.");
+		if (targetRoom.id === "global") return this.errorReply(`Users cannot be redirected to the global room.`);
 		if (targetRoom.isPrivate || targetRoom.isPersonal) {
-			return this.parse('/msg ' + this.targetUsername + ', /invite ' + targetRoom.id);
+			return this.errorReply(`The room "${target}" is not public.`);
 		}
-		if (targetRoom.users[targetUser.userid]) {
-			return this.errorReply("User " + targetUser.name + " is already in the room " + targetRoom.title + "!");
+		if (targetUser.inRooms.has(targetRoom.id)) {
+			return this.errorReply(`User ${targetUser.name} is already in the room ${targetRoom.title}!`);
 		}
-		if (!room.users[targetUser.userid]) {
-			return this.errorReply("User " + this.targetUsername + " is not in the room " + room.id + ".");
+		if (!targetUser.inRooms.has(room.id)) {
+			return this.errorReply(`User ${this.targetUsername} is not in the room ${room.id}.`);
 		}
-		if (!targetUser.joinRoom(targetRoom.id)) return this.errorReply("User " + targetUser.name + " could not be joined to room " + targetRoom.title + ". They could be banned from the room.");
-		this.addModAction("" + targetUser.name + " was redirected to room " + targetRoom.title + " by " + user.name + ".");
+		targetUser.leaveRoom(room.id);
+		targetUser.popup(`You are in the wrong room; please go to <<${targetRoom.id}>> instead`);
+		this.addModAction(`${targetUser.name} was redirected to room ${targetRoom.title} by ${user.name}.`);
 		this.modlog('REDIRECT', targetUser, `to ${targetRoom.title}`, {noip: 1, noalts: 1});
 		targetUser.leaveRoom(room);
 	},
