@@ -6756,7 +6756,7 @@ exports.BattleFormatsData = {
 			{"generation": 7, "level": 1, "shiny": 1, "isHidden": false, "moves": ["bestow", "fling", "feint"], "pokeball": "cherishball"},
 		],
 		unreleasedHidden: true,
-		tier: "PU",
+		tier: "BL4",
 		doublesTier: "DUU",
 	},
 	wimpod: {
