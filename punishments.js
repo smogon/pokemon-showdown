@@ -62,11 +62,11 @@ class PunishmentMap extends Map {
 		return !!this.get(k);
 	}
 	/**
-	 * @param {(punishment: Punishment, id: string) => void} callback
+	 * @param {(punishment: Punishment, id: string, map: PunishmentMap) => void} callback
 	 */
 	forEach(callback) {
 		super.forEach((punishment, k) => {
-			if (Date.now() < punishment[2]) return callback(punishment, k);
+			if (Date.now() < punishment[2]) return callback(punishment, k, this);
 			this.delete(k);
 		});
 	}
