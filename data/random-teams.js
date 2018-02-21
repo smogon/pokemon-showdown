@@ -1297,10 +1297,22 @@ class RandomTeams extends Dex.ModdedDex {
 			item = 'Stick';
 		} else if (template.species === 'Kommo-o' && !teamDetails.zMove) {
 			item = hasMove['clangingscales'] ? 'Kommonium Z' : 'Dragonium Z';
-		} else if (template.species === 'Necrozma-Dusk-Mane' && !teamDetails.zMove) {
-			item = hasMove['autotomize'] && hasMove['sunsteelstrike'] ? 'Solganium Z' : 'Ultranecrozium Z';
-		} else if (template.species === 'Necrozma-Dawn-Wings' && !teamDetails.zMove) {
-			item = hasMove['trickroom'] && hasMove['moongeistbeam'] ? 'Lunalium Z' : 'Ultranecrozium Z';
+		} else if ((template.species === 'Necrozma-Dusk-Mane' || template.species === 'Necrozma-Dawn-Wings') && !teamDetails.zMove) {
+			if (hasMove['autotomize'] && hasMove['sunsteelstrike']) {
+				item = 'Solganium Z';
+			} else if (hasMove['trickroom'] && hasMove['moongeistbeam']) {
+				item = 'Lunalium Z';
+			} else {
+				item = 'Ultranecrozium Z';
+				if (!hasMove['photongeyser']) {
+					for (let i = 0; i < moves.length; i++) {
+						let move = this.getMove(moves[i]);
+						if (move.category === 'Status' || hasType[move.type]) continue;
+						moves[i] = 'photongeyser';
+						break;
+					}
+				}
+			}
 		} else if (template.baseSpecies === 'Pikachu') {
 			item = 'Light Ball';
 		} else if (template.species === 'Shedinja' || template.species === 'Smeargle') {
