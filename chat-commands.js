@@ -1331,7 +1331,7 @@ exports.commands = {
 		if (this.pmTarget && targetUser) {
 			const text = `${targetUser.name} was invited (and promoted to Room ${groupName}) by ${user.name}`;
 			room.add(`|c|${user.getIdentity(room)}|/log ${text}`).update();
-			room.modlog(text);
+			this.modlog('INVITE', targetUser, null, {noip: 1, noalts: 1});
 		} else if (nextGroup in Config.groups && currentGroup in Config.groups && Config.groups[nextGroup].rank < Config.groups[currentGroup].rank) {
 			if (targetUser && room.users[targetUser.userid] && !Config.groups[nextGroup].modlog) {
 				// if the user can't see the demotion message (i.e. rank < %), it is shown in the chat
