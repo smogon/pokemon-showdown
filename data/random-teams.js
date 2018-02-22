@@ -216,7 +216,7 @@ class RandomTeams extends Dex.ModdedDex {
 		// Pick six random pokemon--no repeats, even among formes
 		// Also need to either normalize for formes or select formes at random
 		// Unreleased are okay but no CAP
-		let last = [0, 151, 251, 386, 493, 649, 721, 802][this.gen];
+		let last = [0, 151, 251, 386, 493, 649, 721, 807][this.gen];
 		let hasDexNumber = {};
 		for (let i = 0; i < 6; i++) {
 			let num;
