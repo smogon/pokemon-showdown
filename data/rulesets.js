@@ -786,7 +786,7 @@ exports.BattleFormats = {
 				for (let i in baseTemplate.otherFormes) {
 					let forme = dex.getTemplate(baseTemplate.otherFormes[i]);
 					if (baseTemplate.otherFormes && !forme.battleOnly) {
-						if (forme.forme !== 'Alola' && forme.forme !== 'Alola-Totem') {
+						if (forme.forme !== 'Alola' && forme.forme !== 'Alola-Totem' && forme.baseSpecies !== 'Wormadam') {
 							types = types.concat(forme.types).concat(baseTemplate.types);
 						}
 					}
