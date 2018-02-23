@@ -1696,7 +1696,7 @@ class Battle extends Dex.ModdedDex {
 		const ruleTable = this.getRuleTable(this.getFormat());
 		if (ruleTable.has('endlessbattleclause')) {
 			if (oneStale) {
-				let activationWarning = ` - If all active Pok&eacute;mon go in an endless loop, Endless Battle Clause will activate.`;
+				let activationWarning = ` - If all active Pokemon go in an endless loop, Endless Battle Clause will activate.`;
 				if (allStale) activationWarning = ``;
 				let loopReason = ``;
 				switch (oneStale.isStaleSource) {
@@ -1727,7 +1727,7 @@ class Battle extends Dex.ModdedDex {
 				this.firstStaleWarned = true;
 			}
 			if (allStale) {
-				this.add('message', `All active Pok\u00e9mon are in an endless loop. Endless Battle Clause activated!`);
+				this.add('message', `All active Pokemon are in an endless loop. Endless Battle Clause activated!`);
 				let leppaPokemon = null;
 				for (const side of this.sides) {
 					for (const pokemon of side.pokemon) {
