@@ -7288,7 +7288,6 @@ exports.BattleMovedex = {
 		desc: "Has a 30% chance to flinch the target.",
 		shortDesc: "30% chance to flinch the target.",
 		id: "heartstamp",
-		isViable: true,
 		name: "Heart Stamp",
 		pp: 25,
 		priority: 0,
