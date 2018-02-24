@@ -1195,6 +1195,7 @@ class BasicChatRoom extends BasicRoom {
 		this.users[user.userid] = user;
 		this.userCount++;
 
+		if (this.poll) this.poll.onConnect(user, connection);
 		if (this.game && this.game.onJoin) this.game.onJoin(user, connection);
 		return true;
 	}
