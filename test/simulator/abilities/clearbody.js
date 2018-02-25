@@ -17,7 +17,7 @@ describe('Clear Body', function () {
 
 		const stats = ['spd', 'def', 'spe', 'atk', 'spa'];
 		stats.forEach((stat, index) => {
-			battle.p2.chooseMove(index + 1).foe.chooseMove(1);
+			battle.makeChoices('move recover', 'move ' + (index + 1));
 			assert.statStage(battle.p1.active[0], stat, 0);
 		});
 		stats.forEach(stat => assert.statStage(battle.p1.active[0], stat, 0));

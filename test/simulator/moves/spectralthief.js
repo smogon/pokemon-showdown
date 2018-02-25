@@ -15,18 +15,16 @@ describe(`Spectral Thief`, function () {
 		]);
 		const [thief, victim] = battle.sides.map(s => s.active[0]);
 
-		battle.p1.chooseMove('spectralthief');
-		battle.commitDecisions();
+		battle.makeChoices('move spectralthief', 'move swordsdance');
 		const minusOneDmg = victim.maxhp - victim.hp;
 
-		battle.commitDecisions();
-		battle.commitDecisions();
+		battle.makeChoices('move calmmind', 'move swordsdance');
+		battle.makeChoices('move calmmind', 'move swordsdance');
 
 		assert.statStage(thief, 'atk', -1);
 		assert.statStage(victim, 'atk', 6);
 
-		battle.p1.chooseMove('spectralthief');
-		battle.p2.chooseMove('roar');
+		battle.makeChoices('move spectralthief', 'move roar');
 		assert.statStage(thief, 'atk', 5);
 		assert.statStage(victim, 'atk', 0);
 
@@ -40,12 +38,11 @@ describe(`Spectral Thief`, function () {
 		]);
 		const [thief, victim] = battle.sides.map(s => s.active[0]);
 
-		battle.commitDecisions();
+		battle.makeChoices('move calmmind', 'move swordsdance');
 		assert.statStage(thief, 'atk', 0);
 		assert.statStage(victim, 'atk', 2);
 
-		battle.p1.chooseMove('spectralthief');
-		battle.p2.chooseMove('roar');
+		battle.makeChoices('move spectralthief', 'move roar');
 		assert.statStage(thief, 'atk', 4);
 		assert.statStage(victim, 'atk', 0);
 	});
@@ -57,12 +54,11 @@ describe(`Spectral Thief`, function () {
 		]);
 		const [thief, victim] = battle.sides.map(s => s.active[0]);
 
-		battle.commitDecisions();
+		battle.makeChoices('move calmmind', 'move swordsdance');
 		assert.statStage(thief, 'atk', 0);
 		assert.statStage(victim, 'atk', 2);
 
-		battle.p1.chooseMove('spectralthief');
-		battle.p2.chooseMove('roar');
+		battle.makeChoices('move spectralthief', 'move roar');
 		assert.false.holdsItem(victim); // Weakness Policy activated!
 		assert.statStage(thief, 'atk', 2);
 		assert.statStage(victim, 'atk', 2);
@@ -75,7 +71,7 @@ describe(`Spectral Thief`, function () {
 		]);
 		const [thief, victim] = battle.sides.map(s => s.active[0]);
 
-		battle.commitDecisions();
+		battle.makeChoices('move spectralthief', 'move swordsdance');
 		assert.statStage(thief, 'atk', 0);
 		assert.statStage(victim, 'atk', 2);
 	});
@@ -86,7 +82,7 @@ describe(`Spectral Thief`, function () {
 			[{species: "Serperior", ability: 'contrary', moves: ['leafstorm']}],
 		]);
 		const victim = battle.p2.active[0];
-		battle.commitDecisions();
+		battle.makeChoices('move spectralthief', 'move leafstorm');
 		assert.statStage(victim, 'spa', 0);
 		assert.false.fainted(victim);
 	});
@@ -97,7 +93,7 @@ describe(`Spectral Thief`, function () {
 			[{species: "Tentacruel", ability: 'clearbody', moves: ['swordsdance']}],
 		]);
 		const victim = battle.p2.active[0];
-		battle.commitDecisions();
+		battle.makeChoices('move spectralthief', 'move swordsdance');
 		assert.statStage(victim, 'atk', 0);
 		assert.false.fainted(victim);
 	});
@@ -108,7 +104,7 @@ describe(`Spectral Thief`, function () {
 			[{species: "Swoobat", ability: 'simple', moves: ['amnesia']}],
 		]);
 		const victim = battle.p2.active[0];
-		battle.commitDecisions();
+		battle.makeChoices('move spectralthief', 'move amnesia');
 		assert.statStage(victim, 'spd', 0);
 		assert.false.fainted(victim);
 	});

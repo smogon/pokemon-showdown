@@ -16,7 +16,7 @@ describe('Burn', function () {
 			[{species: 'Sableye', ability: 'prankster', moves: ['willowisp']}],
 		]);
 		const target = battle.p1.active[0];
-		assert.hurtsBy(target, Math.floor(target.maxhp / 16), () => battle.commitDecisions());
+		assert.hurtsBy(target, Math.floor(target.maxhp / 16), () => battle.makeChoices('move bulkup', 'move willowisp'));
 	});
 
 	it('should halve damage from most Physical attacks', function () {
@@ -25,10 +25,9 @@ describe('Burn', function () {
 			[{species: 'Sableye', ability: 'prankster', moves: ['splash', 'willowisp']}],
 		]);
 		const target = battle.p2.active[0];
-		battle.commitDecisions();
-		battle.p2.chooseMove('willowisp');
+		battle.makeChoices('move boneclub', 'move splash');
 		// hardcoded to RNG
-		assert.hurtsBy(target, 64, () => battle.commitDecisions());
+		assert.hurtsBy(target, 64, () => battle.makeChoices('move boneclub', 'move willowisp'));
 	});
 
 	it('should not halve damage from moves with set damage', function () {
@@ -36,7 +35,7 @@ describe('Burn', function () {
 			[{species: 'Machamp', ability: 'noguard', moves: ['seismictoss']}],
 			[{species: 'Talonflame', ability: 'galewings', moves: ['willowisp']}],
 		]);
-		assert.hurtsBy(battle.p2.active[0], 100, () => battle.commitDecisions());
+		assert.hurtsBy(battle.p2.active[0], 100, () => battle.makeChoices('move seismictoss', 'move willowisp'));
 	});
 });
 
@@ -50,7 +49,7 @@ describe('Paralysis', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: 'Vaporeon', ability: 'waterabsorb', moves: ['aquaring']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Jolteon', ability: 'voltabsorb', moves: ['thunderwave']}]);
 		let speed = battle.p1.active[0].getStat('spe');
-		battle.commitDecisions();
+		battle.makeChoices('move aquaring', 'move thunderwave');
 		assert.strictEqual(battle.p1.active[0].getStat('spe'), battle.modify(speed, 0.5));
 	});
 
@@ -59,7 +58,7 @@ describe('Paralysis', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: 'Vaporeon', ability: 'waterabsorb', moves: ['aquaring']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Jolteon', ability: 'voltabsorb', moves: ['thunderwave']}]);
 		let speed = battle.p1.active[0].getStat('spe');
-		battle.commitDecisions();
+		battle.makeChoices('move aquaring', 'move thunderwave');
 		assert.strictEqual(battle.p1.active[0].getStat('spe'), battle.modify(speed, 0.25));
 	});
 
@@ -68,7 +67,7 @@ describe('Paralysis', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: 'Vaporeon', ability: 'waterabsorb', moves: ['aquaring']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Jolteon', ability: 'voltabsorb', moves: ['thunderwave']}]);
 		let speed = battle.p1.active[0].getStat('spe');
-		battle.commitDecisions();
+		battle.makeChoices('move aquaring', 'move thunderwave');
 		assert.strictEqual(battle.p1.active[0].getStat('spe'), battle.modify(speed, 0.25));
 	});
 });
@@ -85,7 +84,7 @@ describe('Toxic Poison', function () {
 		]);
 		const target = battle.p1.active[0];
 		for (let i = 1; i <= 8; i++) {
-			battle.commitDecisions();
+			battle.makeChoices('move softboiled', 'move toxic');
 			assert.strictEqual(target.maxhp - target.hp, Math.floor(target.maxhp / 16) * i);
 		}
 	});
@@ -96,11 +95,11 @@ describe('Toxic Poison', function () {
 			[{species: 'Crobat', ability: 'infiltrator', moves: ['toxic', 'whirlwind']}],
 		]);
 		for (let i = 0; i < 4; i++) {
-			battle.commitDecisions();
+			battle.makeChoices('move curse', 'move toxic');
 		}
 		let pokemon = battle.p1.active[0];
 		pokemon.hp = pokemon.maxhp;
-		battle.p1.chooseSwitch(2).foe.chooseMove('whirlwind');
+		battle.makeChoices('switch 2', 'move whirlwind');
 		assert.strictEqual(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 16));
 	});
 });
@@ -116,7 +115,7 @@ describe('Burn [Gen 6]', function () {
 			[{species: 'Sableye', ability: 'prankster', moves: ['willowisp']}],
 		]);
 		const target = battle.p1.active[0];
-		assert.hurtsBy(target, Math.floor(target.maxhp / 8), () => battle.commitDecisions());
+		assert.hurtsBy(target, Math.floor(target.maxhp / 8), () => battle.makeChoices('move bulkup', 'move willowisp'));
 	});
 });
 
@@ -130,11 +129,10 @@ describe('Toxic Poison [Gen 1]', function () {
 			[{species: 'Venusaur', moves: ['toxic', 'leechseed']}],
 			[{species: 'Chansey', moves: ['splash']}],
 		]);
-		battle.commitDecisions();
+		battle.makeChoices('move toxic', 'move splash');
 		let pokemon = battle.p2.active[0];
 		assert.strictEqual(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 16));
-		battle.choose('p1', 'move 2');
-		battle.commitDecisions();
+		battle.makeChoices('move leechseed', 'move splash');
 		// (1/16) + (2/16) + (3/16) = (6/16)
 		assert.strictEqual(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 16) * 6);
 	});

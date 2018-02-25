@@ -17,7 +17,7 @@ describe('Weather damage calculation', function () {
 		battle.join('p2', 'Guest 2', 1, [{species: 'Cryogonal', ability: 'levitate', moves: ['splash']}]);
 		const attacker = battle.p1.active[0];
 		const defender = battle.p2.active[0];
-		assert.hurtsBy(defender, 152, () => battle.commitDecisions());
+		assert.hurtsBy(defender, 152, () => battle.makeChoices('move incinerate', 'move splash'));
 		const move = Dex.getMove('incinerate');
 		const basePower = battle.runEvent('BasePower', attacker, defender, move, move.basePower, true);
 		assert.strictEqual(basePower, move.basePower);
@@ -30,7 +30,7 @@ describe('Weather damage calculation', function () {
 		battle.join('p2', 'Guest 2', 1, [{species: 'Cryogonal', ability: 'levitate', moves: ['splash']}]);
 		const attacker = battle.p1.active[0];
 		const defender = battle.p2.active[0];
-		assert.hurtsBy(defender, 50, () => battle.commitDecisions());
+		assert.hurtsBy(defender, 50, () => battle.makeChoices('move incinerate', 'move splash'));
 		const move = Dex.getMove('incinerate');
 		const basePower = battle.runEvent('BasePower', attacker, defender, move, move.basePower, true);
 		assert.strictEqual(basePower, move.basePower);
@@ -41,7 +41,7 @@ describe('Weather damage calculation', function () {
 		battle.randomizer = dmg => dmg; // max damage
 		battle.join('p1', 'Guest 1', 1, [{species: 'Abomasnow', ability: 'snowwarning', moves: ['protect']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Sandslash', ability: 'sandveil', moves: ['protect']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move protect', 'move protect');
 		const p1active = battle.p1.active[0];
 		const p2active = battle.p2.active[0];
 		assert.strictEqual(p1active.hp, p1active.maxhp);

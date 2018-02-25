@@ -21,7 +21,7 @@ describe('Heavy Metal', function () {
 				basePower = bp;
 			}
 		});
-		battle.commitDecisions();
+		battle.makeChoices('move nastyplot', 'move grassknot');
 		assert.strictEqual(basePower, 80);
 	});
 
@@ -36,7 +36,7 @@ describe('Heavy Metal', function () {
 				basePower = bp;
 			}
 		});
-		battle.commitDecisions();
+		battle.makeChoices('move nastyplot', 'move grassknot');
 		assert.strictEqual(basePower, 60);
 	});
 });
@@ -57,7 +57,7 @@ describe('Light Metal', function () {
 				basePower = bp;
 			}
 		});
-		battle.commitDecisions();
+		battle.makeChoices('move curse', 'move grassknot');
 		assert.strictEqual(basePower, 100);
 	});
 
@@ -72,7 +72,7 @@ describe('Light Metal', function () {
 				basePower = bp;
 			}
 		});
-		battle.commitDecisions();
+		battle.makeChoices('move splash', 'move grassknot');
 		assert.strictEqual(basePower, 120);
 	});
 });
@@ -93,7 +93,7 @@ describe('Float Stone', function () {
 				basePower = bp;
 			}
 		});
-		battle.commitDecisions();
+		battle.makeChoices('move curse', 'move grassknot');
 		assert.strictEqual(basePower, 100);
 	});
 });
@@ -114,9 +114,9 @@ describe('Autotomize', function () {
 				basePower = bp;
 			}
 		});
-		battle.commitDecisions();
+		battle.makeChoices('move autotomize', 'move grassknot');
 		assert.strictEqual(basePower, 100);
-		battle.commitDecisions();
+		battle.makeChoices('move autotomize', 'move grassknot');
 		assert.strictEqual(basePower, 20);
 	});
 
@@ -131,7 +131,7 @@ describe('Autotomize', function () {
 				basePower = bp;
 			}
 		});
-		battle.commitDecisions();
+		battle.makeChoices('move autotomize', 'move grassknot');
 		assert.strictEqual(basePower, 60);
 	});
 });

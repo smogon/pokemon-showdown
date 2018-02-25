@@ -19,13 +19,11 @@ describe('Mail', function () {
 			{species: 'Lopunny', ability: 'klutz', moves: ['switcheroo']},
 		]);
 		const holder = battle.p1.active[0];
-		assert.constant(() => holder.item, () => battle.commitDecisions());
-		battle.p2.chooseSwitch(2).foe.chooseDefault();
-		battle.p2.chooseMove('trick');
-		assert.constant(() => holder.item, () => battle.commitDecisions());
-		battle.p2.chooseSwitch(2).foe.chooseDefault();
-		battle.p2.chooseMove('switcheroo');
-		assert.constant(() => holder.item, () => battle.commitDecisions());
+		assert.constant(() => holder.item, () => battle.makeChoices('move softboiled', 'move grassknot'));
+		battle.makeChoices('move softboiled', 'switch 2');
+		assert.constant(() => holder.item, () => battle.makeChoices('move softboiled', 'move trick'));
+		battle.makeChoices('move softboiled', 'switch 2');
+		assert.constant(() => holder.item, () => battle.makeChoices('move softboild', 'move switcheroo'));
 	});
 
 	it('should not be removed by Fling', function () {
@@ -33,7 +31,7 @@ describe('Mail', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: 'Pangoro', ability: 'ironfist', moves: ['swordsdance']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Abra', ability: 'synchronize', item: 'mail', moves: ['fling']}]);
 		const holder = battle.p2.active[0];
-		assert.constant(() => holder.item, () => battle.commitDecisions());
+		assert.constant(() => holder.item, () => battle.makeChoices('move swordsdance', 'move fling'));
 	});
 
 	it('should be removed by Knock Off', function () {
@@ -41,7 +39,7 @@ describe('Mail', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: 'Pangoro', ability: 'ironfist', item: 'mail', moves: ['swordsdance']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Abra', ability: 'synchronize', moves: ['knockoff']}]);
 		const holder = battle.p1.active[0];
-		assert.false.constant(() => holder.item, () => battle.commitDecisions());
+		assert.false.constant(() => holder.item, () => battle.makeChoices('move swordsdance', 'move knockoff'));
 	});
 
 	it('should be stolen by Thief', function () {
@@ -49,6 +47,6 @@ describe('Mail', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: 'Pangoro', ability: 'ironfist', item: 'mail', moves: ['swordsdance']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Abra', ability: 'synchronize', moves: ['thief']}]);
 		const holder = battle.p1.active[0];
-		assert.false.constant(() => holder.item, () => battle.commitDecisions());
+		assert.false.constant(() => holder.item, () => battle.makeChoices('move swordsdance', 'move thief'));
 	});
 });

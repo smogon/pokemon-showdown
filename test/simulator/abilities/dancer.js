@@ -14,7 +14,7 @@ describe('Dancer', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Oricorio', ability: 'dancer', moves: ['swordsdance']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Oricorio', ability: 'dancer', moves: ['howl']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move swordsdance', 'move howl');
 		assert.statStage(battle.p1.active[0], 'atk', 2);
 		assert.statStage(battle.p2.active[0], 'atk', 3);
 	});
@@ -30,7 +30,7 @@ describe('Dancer', function () {
 			{species: 'Shedinja', ability: 'dancer', moves: ['sleeptalk']},
 		]);
 		p1.active[1].boostBy({spe: 6});
-		p1.chooseMove(1).chooseMove(1).foe.chooseMove(1, 1).chooseMove(1);
+		battle.makeChoices('move sleeptalk, move sleeptalk', 'move fierydance 1, move sleeptalk');
 		assert.fainted(battle.p2.active[0]);
 		assert.fainted(battle.p2.active[1]);
 	});
@@ -46,9 +46,8 @@ describe('Dancer', function () {
 			{species: 'Shedinja', ability: 'dancer', moves: ['sleeptalk']},
 		]);
 		p1.active[1].boostBy({spe: 6});
-		battle.choose('p2', 'move 2');
-		battle.commitDecisions();
-		p1.chooseMove(1).chooseMove(1).foe.chooseMove(1, 1).chooseMove(1);
+		battle.makeChoices('move sleeptalk, move sleeptalk', 'move trickroom, move sleeptalk');
+		battle.makeChoices('move sleeptalk, move sleeptalk', 'move fierydance 1, move sleeptalk');
 		assert.fainted(battle.p2.active[0]);
 		assert.fainted(battle.p2.active[1]);
 	});
@@ -68,26 +67,20 @@ describe('Dancer', function () {
 		p1.active[0].boostBy({atk: 6, spe: 6});
 		p2.active[0].boostBy({atk: -6});
 		p2.active[1].boostBy({spe: 6});
-		p1.chooseMove(1).chooseMove(1, 1);
-		p2.chooseMove(1, -2).chooseMove(1, 1);
+		battle.makeChoices('move dragondance, move featherdance 1', 'move fierydance -2, move finalgambit 1');
 		assert.fullHP(p2.active[0]);
 		assert.statStage(p1.active[0], 'atk', 6);
 		assert.statStage(p1.active[1], 'atk', 0);
 		assert.statStage(p2.active[0], 'atk', -6);
 		assert.statStage(p2.active[0], 'spe', 0);
 		// Next turn
-		battle.choose('p1', 'move 1');
-		battle.choose('p2', 'move 2');
-		battle.commitDecisions();
+		battle.makeChoices('move dragondance, move featherdance', 'move protect');
 		assert.statStage(p1.active[0], 'atk', 6);
 		assert.statStage(p1.active[1], 'atk', 0);
 		// Next turn: Teeter Dance should be copied as long as it hits one thing
-		battle.choose('p1', 'move 2');
-		battle.choose('p2', 'move 3');
-		battle.commitDecisions();
+		battle.makeChoices('move protect, move featherdance', 'move teeterdance');
 		// Next turn: Teeter Dance should NOT be copied if everything it hits is already confused
-		battle.choose('p1', 'move 3');
-		assert.constant(() => p1.active[0].volatiles['confusion'], () => battle.commitDecisions());
+		assert.constant(() => p1.active[0].volatiles['confusion'], () => battle.makeChoices('move teeterdance, move featherdance', 'move fierydance'));
 	});
 
 	it('should not copy a move that missed', function () {
@@ -96,9 +89,9 @@ describe('Dancer', function () {
 		const p2 = battle.join('p2', 'Guest 2', 1, [{species: 'Oricorio', ability: 'dancer', item: 'brightpowder', moves: ['dig']}]);
 		p1.active[0].boostBy({accuracy: -6});
 		p2.active[0].boostBy({evasion: 6});
-		battle.commitDecisions();
+		battle.makeChoices('move revelationdance', 'move dig');
 		assert.fullHP(p1.active[0]);
-		battle.commitDecisions();
+		battle.makeChoices('move revelationdance', 'move dig');
 		assert.fullHP(p1.active[0]);
 	});
 
@@ -106,6 +99,6 @@ describe('Dancer', function () {
 		battle = common.createBattle();
 		const p1 = battle.join('p1', 'Guest 1', 1, [{species: 'Oricorio', ability: 'dancer', moves: ['fierydance']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Shedinja', ability: 'dancer', item: 'focussash', moves: ['meanlook']}]);
-		assert.hurts(p1.active[0], () => battle.commitDecisions());
+		assert.hurts(p1.active[0], () => battle.makeChoices('move fierydance', 'move meanlook'));
 	});
 });
