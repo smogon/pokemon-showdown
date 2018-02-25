@@ -5500,7 +5500,6 @@ exports.BattleMovedex = {
 		desc: "The target restores 1/2 of its maximum HP, rounded half up. If the terrain is Grassy Terrain, the target instead restores 2/3 of its maximum HP, rounded half down.",
 		shortDesc: "Heals the target by 50% of its max HP.",
 		id: "floralhealing",
-		isViable: true,
 		name: "Floral Healing",
 		pp: 10,
 		priority: 0,
