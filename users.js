@@ -24,6 +24,7 @@
  */
 
 'use strict';
+/** @typedef {GlobalRoom | GameRoom | ChatRoom} Room */
 
 const PLAYER_SYMBOL = '\u2606';
 const HOST_SYMBOL = '\u2605';
@@ -570,7 +571,7 @@ class User {
 	}
 	/**
 	 * @param {string} minAuth
-	 * @param {Room?} room
+	 * @param {BasicChatRoom?} room
 	 */
 	authAtLeast(minAuth, room = null) {
 		if (!minAuth || minAuth === ' ') return true;
@@ -587,7 +588,7 @@ class User {
 	/**
 	 * @param {string} permission
 	 * @param {string | User?} target user or group symbol
-	 * @param {Room?} room
+	 * @param {BasicChatRoom?} room
 	 * @return {boolean}
 	 */
 	can(permission, target = null, room = null) {
@@ -1265,6 +1266,7 @@ class User {
 		if (!room && roomid.startsWith('view-')) {
 			// it's a page!
 			let parts = roomid.split('-');
+			/** @type {any} */
 			let handler = Chat.pages;
 			parts.shift();
 			while (handler) {
@@ -1316,7 +1318,7 @@ class User {
 		return true;
 	}
 	/**
-	 * @param {string | GlobalRoom | GameRoom | ChatRoom} roomid
+	 * @param {string | Room} roomid
 	 * @param {Connection?} connection
 	 */
 	joinRoom(roomid, connection = null) {
@@ -1344,7 +1346,7 @@ class User {
 	}
 	/**
 	 * @param {GlobalRoom | GameRoom | ChatRoom | string} room
-	 * @param {?Connection} connection
+	 * @param {Connection?} connection
 	 * @param {boolean} force
 	 */
 	leaveRoom(room, connection = null, force = false) {
