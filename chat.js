@@ -501,7 +501,7 @@ class CommandContext {
 		// @ts-ignore
 		if (!this.room || !this.room.game || !this.room.game.onChatMessage) return false;
 		// @ts-ignore
-		return this.room.game.onChatMessage(this.message);
+		return this.room.game.onChatMessage(this.message, this.user);
 	}
 	/**
 	 * @param {string} message
