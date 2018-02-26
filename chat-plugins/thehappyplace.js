@@ -11,36 +11,46 @@
 exports.commands = {
 	quoteoftheday: 'qotd',
 	qotd: function (target, room, user) {
-		if (room.id !== 'thehappyplace') return this.errorReply("This command can only be used in The Happy Place.");
+		if (room.id !== 'thehappyplace') return this.errorReply(`This command can only be used in The Happy Place.`);
 		if (!room.chatRoomData) return;
 		if (!target) {
 			if (!this.runBroadcast()) return;
-			if (!room.chatRoomData.quote) return this.sendReplyBox("The Quote of the Day has not been set.");
+			if (!room.chatRoomData.quote) return this.sendReplyBox(`The Quote of the Day has not been set.`);
+			const quote = (typeof room.quote === 'object' ? `"${room.quote.quote}" - ${room.quote.author}` : `${room.quote}`);
 			return this.sendReplyBox(
-				"The current <strong>Inspirational Quote of the Day</strong> is:<br />" +
-				"\"" + room.chatRoomData.quote + "\""
+				`The current <strong>Inspirational Quote of the Day</strong> is:<br />` +
+				quote
 			);
 		}
-		if (!this.can('ban', null, room)) return false;
-		if (target === 'off' || target === 'disable' || target === 'reset') {
-			if (!room.chatRoomData.quote) return this.sendReply("The Quote of the Day has already been reset.");
+		if (!this.can('mute', null, room)) return;
+		if (this.meansNo(target) || target === 'reset') {
+			if (!room.chatRoomData.quote) return this.sendReply(`The Quote of the Day has already been reset.`);
 			delete room.chatRoomData.quote;
-			this.sendReply("The Quote of the Day was reset by " + Chat.escapeHTML(user.name) + ".");
+			this.sendReply(Chat.html`The Quote of the Day was reset by ${user.name}.`);
 			this.modlog('QOTD', null, 'RESET');
 			Rooms.global.writeChatRoomData();
 			return;
 		}
-		room.chatRoomData.quote = Chat.escapeHTML(target);
+		const quote = target.split('|')[0].replace('"', '');
+		const author = target.split('|')[1];
+		if (!quote) return;
+		if (!author) {
+			this.errorReply(`You have to specify the author of this quote.`);
+			this.parse(`/help qotd`);
+			return;
+		}
+		room.quote = {quote: Chat.escapeHTML(quote.trim()), author: Chat.escapeHTML(author.trim())};
+		room.chatRoomData.quote = room.quote;
 		Rooms.global.writeChatRoomData();
 		room.addRaw(
-			"<div class=\"broadcast-blue\"><strong>The Inspirational Quote of the Day has been updated by " + Chat.escapeHTML(user.name) + ".</strong><br />" +
-			"Quote: " + room.chatRoomData.quote + "</div>"
+			Chat.html`<div class="broadcast-blue"><strong>The Inspirational Quote of the Day has been updated by ${user.name}.</strong><br />` +
+			Chat.html`Quote: "${quote}" - ${author}`
 		);
-		this.modlog('QOTD', null, `to "${room.chatRoomData.quote}"`);
+		this.modlog('QOTD', null, `to "${quote}" - ${author}`);
 	},
 	quoteofthedayhelp: 'qotdhelp',
 	qotdhelp: [
 		`/qotd - View the current Inspirational Quote of the Day.`,
-		`/qotd [quote] - Set the Inspirational Quote of the Day. Requires: @ # & ~`,
+		`/qotd [quote] | [author] - Set the Inspirational Quote of the Day. Requires: % @ # & ~`,
 	],
 };
