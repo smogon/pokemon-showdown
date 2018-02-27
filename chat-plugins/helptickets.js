@@ -277,9 +277,9 @@ exports.pages = {
 				password: `I lost my password`,
 				other: `Other`,
 
-				confirmpmharrasment: `Report harassment in a private message (PM)`,
-				confirmbattleharrasment: `Report harassment in a battle`,
-				confirmchatharrasment: `Report harassment in a chatroom`,
+				confirmpmharassment: `Report harassment in a private message (PM)`,
+				confirmbattleharassment: `Report harassment in a battle`,
+				confirmchatharassment: `Report harassment in a chatroom`,
 				confirminap: `Report inappropriate content`,
 				confirminapname: `Report an inappropriate username`,
 				confirminappokemon: `Report inappropriate Pok&eacute;mon nicknames`,
@@ -293,9 +293,9 @@ exports.pages = {
 				confirmother: `Call a Global Staff member`,
 			};
 			const ticketTitles = {
-				pmharrasment: `PM Harassment`,
-				battleharrasment: `Battle Harassment`,
-				chatharrasment: `Chatroom Harassment`,
+				pmharassment: `PM Harassment`,
+				battleharassment: `Battle Harassment`,
+				chatharassment: `Chatroom Harassment`,
 				inap: `Inappropriate Content`,
 				inapname: `Inappropriate Username`,
 				inappokemon: `Inappropriate Pokemon Nicknames`,
@@ -339,7 +339,7 @@ exports.pages = {
 					buf += `<p>If someone is harassing you, click the appropriate button below and a global staff member will take a look. Consider using <code>/ignore [username]</code> if it's minor instead.</p>`;
 					buf += `<p>If you are reporting harassment in a battle, please save a replay of the battle.</p>`;
 					if (!isLast) break;
-					buf += `<p><Button>confirmpmharrasment</Button> <Button>confirmbattleharrasment</Button> <Button>confirmchatharrasment</Button></p>`;
+					buf += `<p><Button>confirmpmharassment</Button> <Button>confirmbattleharassment</Button> <Button>confirmchatharassment</Button></p>`;
 					break;
 				case 'inap':
 					buf += `<p>If a user has posted inappropriate content, has an inappropriate name, or has inappropriate Pok&eacute;mon nicknames, click the appropriate button below and a global staff member will take a look.</p>`;
