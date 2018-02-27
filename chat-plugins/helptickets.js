@@ -378,6 +378,7 @@ exports.pages = {
 					if (user.semilocked || isStaff) {
 						buf += `<p><Button>semilock</Button></p>`;
 					}
+					buf += `<p><Button>appealother</Button></p>`;
 					break;
 				case 'permalock':
 					buf += `<p>Please make a post in the <a href="http://www.smogon.com/forums/threads/discipline-appeal-rules.3583479/">Discipline Appeal Forums</a> to appeal a permalock.</p>`;
