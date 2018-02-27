@@ -399,7 +399,7 @@ exports.pages = {
 					buf += `<p><Button>confirmappealsemi</Button></p>`;
 					break;
 				case 'appealother':
-					buf += `<p>Please PM the staff member who punished you. If you dont know who punished you, ask another room staff member; they will redirect you to the correct user. If you are banned or blacklisted from the room, use <code>/roomauth [name of room]</code> to get a list of room staff members. Bold names are online.</p>`;
+					buf += `<p>Please PM the staff member who punished you. If you don't know who punished you, ask another room staff member; they will redirect you to the correct user. If you are banned or blacklisted from the room, use <code>/roomauth [name of room]</code> to get a list of room staff members. Bold names are online.</p>`;
 					break;
 				case 'misc':
 					buf += `<p><b>Maybe one of these options will be helpful?</b></p>`;
