@@ -882,7 +882,10 @@ class Battle {
 		}
 		this.stream.write(`>player ${slot} ` + JSON.stringify(options));
 		if (this.started) this.onUpdateConnection(user);
-		if (this.p1 && this.p2) this.started = true;
+		if (this.p1 && this.p2) {
+			this.started = true;
+			Rooms.global.onCreateBattleRoom(Users(this.p1.userid), Users(this.p2.userid), this.room, {rated: this.rated});
+		}
 		return player;
 	}
 
