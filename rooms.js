@@ -1557,7 +1557,6 @@ let Rooms = Object.assign(getRoom, {
 		if (p2) p2.joinRoom(room);
 		if (p1) Monitor.countBattle(p1.latestIp, p1.name);
 		if (p2) Monitor.countBattle(p2.latestIp, p2.name);
-		if (p1 && p2) Rooms.global.onCreateBattleRoom(p1, p2, room, options);
 		return room;
 	},
 
