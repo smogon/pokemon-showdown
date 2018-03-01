@@ -754,6 +754,7 @@ exports.Formats = [
 		banlist: [
 			'Flash', 'Kinesis', 'Sand Attack', 'Smokescreen',
 			'Bind', 'Clamp', 'Fire Spin', 'Wrap',
+			'Explosion', 'Self-Destruct',
 			'Hypnosis', 'Lovely Kiss', 'Sing', 'Sleep Powder', 'Spore',
 		],
 	},
