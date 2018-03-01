@@ -1,208 +1,118 @@
-// Data for the mafia chat plugin.
-
 'use strict';
 
-// This object contains all functions that execute in the callback function of any mafia class. Executed from the context of the executing player.
-// Target is a MafiaPlayer object.
-let MafiaFunctions = {
-	copReport: function (target) {
-		let side = target.class.appearAs || target.class.side;
+// TODO more roles, ect
 
-		if (side === 'town') {
-			return 'After investigating ' + target.name + ' you find out they\'re sided with the village.';
-		} else if (side === 'mafia') {
-			return 'After investigating ' + target.name + ' you find out they\'re sided with the mafia.';
-		} else {
-			return 'After investigating ' + target.name + ' you find out they\'re not sided with the village or mafia.';
-		}
+exports.alignments = {
+	town: {
+		name: 'Town',
+		plural: 'Town',
+		id: 'town',
+		color: '#060',
+		memo: ['You are aligned with the <span style="color:#060;font-weight:bold">Town</span>. You win when all threats to the Town are eliminated and at least one Town-aligned player is still alive, or nothing can prevent the same.'],
+		image: '<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-villager.png"/>',
 	},
-	naiveReport: function (target) {
-		return 'After investigating ' + target.name + ' you find out they\'re sided with the village.';
+	mafia: {
+		name: 'Mafia',
+		plural: 'Mafia',
+		id: 'mafia',
+		color: '#F00',
+		memo: [
+			'Factional Communication: If there are other Mafia-aligned players, you may PM them during the game.',
+			'Factional Kill: The Mafia may kill one player per night.',
+			'You are aligned with the <span style="color:#F00;font-weight:bold">Mafia</span>. You win when all players without a Mafia wincon are eliminated and at least one Mafia-aligned player is still alive (or nothing can prevent the same).',
+		],
+		image: '<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-mafia.png"/>',
 	},
-	paranoidReport: function (target) {
-		return 'After investigating ' + target.name + ' you find out they\'re sided with the mafia.';
+	werewolf: {
+		name: 'Werewolf',
+		plural: 'Werewolves',
+		id: 'werewolf',
+		color: '#FFA500',
+		memo: [
+			'Factional Communication: If there are other Werewolf-aligned players, you may PM them during the game.',
+			'Factional Kill: The Werewolves may kill one player per Night.',
+			'You are aligned with the <span style="color:$FFA500;font-weight:bold">Werewolves</span>. You win when all players without a Werewolf wincon are eliminated and at least one Werewolf-aligned player is still alive (or nothing can prevent the same).',
+		],
+		image: '<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-werewolf.png"/>',
 	},
-	insaneReport: function (target) {
-		let side = target.class.appearAs || target.class.side;
-
-		if (side === 'mafia') {
-			return 'After investigating ' + target.name + ' you find out they\'re sided with the village.';
-		} else if (side === 'town') {
-			return 'After investigating ' + target.name + ' you find out they\'re sided with the mafia.';
-		} else {
-			return 'After investigating ' + target.name + ' you find out they\'re not sided with the village or mafia.';
-		}
+	alien: {
+		name: 'Alien',
+		plural: 'Aliens',
+		id: 'alien',
+		color: '#F0F',
+		memo: [
+			'Factional Communication: If there are other Alien-aligned players, you may PM them during the game.',
+			'Factional Kill: The Aliens may kill one player <span style="text-decoration:underline">once during the game</span>.',
+			'You are aligned with the <span style="color:#F0F;font-weight:bold">Aliens</span>. You win when all players without a Alien wincon are eliminated and at least one Alien-aligned player is still alive (or nothing can prevent the same).',
+		],
+		// TODO image for alien faction
+		image: '<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-villager.png"/>',
 	},
-	roleBlock: function (target) {
-		target.roleBlocked = true;
-		return 'You visit ' + target.name + ' during the night.';
+	cult: {
+		name: 'Cult',
+		plural: 'Cultists',
+		id: 'cult',
+		color: '#000',
+		memo: [
+			// TODO cult is a bit tricky and rare... confirm details of abilities before adding more memo (if any).
+			'You are aligned with the <span style="color:#000;font-weight:bold">Cult</span>. You win when all players without a Cult wincon are eliminated and at least one Cult-aligned player is still alive (or nothing can prevent the same).',
+		],
+		// TODO image for cult faction
+		image: '<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-villager.png"/>',
 	},
-	protect: function (target) {
-		target.invincible = true;
-		return 'You give ' + target.name + ' their daily dose of medicine to keep them safe and sound.';
-	},
-	killTarget: function (target) {
-		target.kill('The werewolf has eaten a tasty snack!');
-	},
-	goonKill: function (target) {
-		target.kill('The goon has killed someone!');
-	},
-	foolWin: function () {
-		this.game.end('<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-fool.png" />', "The fool has been lynched and is victorious!");
+	solo: {
+		// Special alignment for all roles that are on their own.
+		name: 'Solo',
+		plural: 'Solos',
+		id: 'solo',
+		image: '<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-goon.png"/>',
 	},
 };
 
-// Every role has a side they belong to, as well as all functions they have. These functions are objects with the targeting mechanics and a callback.
-// events are atStart, onNight, onDay, onLynch.
-exports.MafiaClasses = {
-	__proto__: null,
-
+exports.roles = {
+	vt: 'villager',
+	villy: 'villager',
+	townie: 'villager',
 	villager: {
-		name: "Villager",
-		side: 'town',
-		image: '<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-villager.png" />',
-		flavorText: 'You are a villager. You live peacefully in the town, which with the mafia activity hasn\'t been all too peaceful, actually.',
+		name: 'Villager',
+		id: 'villager',
+		image: '<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-villager.png"/>',
 	},
-
-	mafia: {
-		name: "Mafia",
-		side: 'mafia',
-		image: '<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-mafia.png" />',
-		flavorText: 'You are a member of the mafia. Every night, you get together with the other mafia members to eliminate someone in the town. The townsfolk aren\'t all that happy with that, however.',
-	},
-
-	hooker: {
-		name: "Hooker",
-		side: 'town',
-		image: '<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-hooker.png" />',
-		flavorText: 'You are the hooker. Every night, you can visit someone in the town. The person you visit can\'t execute any actions that night.',
-
-		onNight: {
-			target: {side: 'any', count: 'single'},
-			priority: 5,
-			callback: MafiaFunctions.roleBlock,
-		},
-	},
-
-	doctor: {
-		name: "Doctor",
-		side: 'town',
-		image: '<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-doctor.png" />',
-		flavorText: 'You are the doctor. Every night, you can visit someone in the town. This person can\'t die that night.',
-
-		onNight: {
-			target: {side: 'any', count: 'single'},
-			priority: 4,
-			callback: MafiaFunctions.protect,
-		},
-	},
-
-	cop: {
-		name: "Cop",
-		side: 'town',
-		image: '<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-cop.png" />',
-		flavorText: 'You are the cop. Every night, you can visit someone in town. When the night is over, you\'ll receive a report with that person\'s alignment.',
-
-		onNight: {
-			target: {side: 'any', count: 'single'},
-			priority: -1,
-			callback: MafiaFunctions.copReport,
-		},
-	},
-
-	paranoidcop: {
-		name: "Cop",
-		pregameName: "Paranoid Cop",
-		side: 'town',
-		image: '<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-cop.png" />',
-		flavorText: 'You are the cop. Every night, you can visit someone in town. When the night is over, you\'ll receive a report with that person\'s alignment.',
-
-		onNight: {
-			target: {side: 'any', count: 'single'},
-			priority: -1,
-			callback: MafiaFunctions.paranoidReport,
-		},
-	},
-
-	insanecop: {
-		name: "Cop",
-		pregameName: "Insane Cop",
-		side: 'town',
-		image: '<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-cop.png" />',
-		flavorText: 'You are the cop. Every night, you can visit someone in town. When the night is over, you\'ll receive a report with that person\'s alignment.',
-
-		onNight: {
-			target: {side: 'any', count: 'single'},
-			priority: -1,
-			callback: MafiaFunctions.insaneReport,
-		},
-	},
-
-	naivecop: {
-		name: "Cop",
-		pregameName: "Naive Cop",
-		side: 'town',
-		image: '<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-cop.png" />',
-		flavorText: 'You are the cop. Every night, you can visit someone in town. When the night is over, you\'ll receive a report with that person\'s alignment.',
-
-		onNight: {
-			target: {side: 'any', count: 'single'},
-			priority: -1,
-			callback: MafiaFunctions.naiveReport,
-		},
-	},
-
-	werewolf: {
-		name: "Werewolf",
-		side: 'solo',
-		image: '<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-werewolf.png" />',
-		flavorText: 'You are the werewolf. You\'re not aligned with either town or mafia, and instead kill someone every night. You win if you\'re the only remaining player.',
-		victoryText: 'The wolf howls victorious, knowing he came out of this mess alive, and with some lunch as well.',
-
-		onNight: {
-			target: {side: 'any', count: 'single'},
-			priority: 2,
-			callback: MafiaFunctions.killTarget,
-		},
-	},
-
-	fool: {
-		name: "Fool",
-		side: 'town',
-		image: '<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-fool.png" />',
-		flavorText: 'You are the fool. You\'re sided with the town, but only truly win if you get lynched.',
-
-		onLynch: MafiaFunctions.foolWin,
-	},
-
-	godfather: {
-		name: "Godfather",
-		side: 'mafia',
-		image: '<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-godfather.png" />',
-		flavorText: 'You are the godfather. You\'re sided with the mafia, but appear as a villager on cop reports.',
-		appearAs: 'town',
-	},
-
-	mayor: {
-		name: "Mayor",
-		side: 'town',
-		image: '<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-mayor.png" />',
-		flavorText: 'You are the mayor. You\'re sided with the town, but your votes count twice during town meetings.',
-	},
-
 	goon: {
-		name: "Goon",
-		side: 'solo',
-		image: '<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-goon.png" />',
-		flavorText: 'You are the goon. You appear as mafia on cop reports, and can kill someone once in the game. You win if you\'re the only person left alive.',
-		appearAs: 'mafia',
-		victoryText: 'The goon is victorious!',
+		name: 'Goon',
+		id: 'goon',
+	},
+	cop: {
+		name: 'Cop',
+		id: 'cop',
+		memo: ['Cop: Each night you can PM the host the name of another player. You will be told if they are MAFIA or NOT MAFIA, or receive NO RESULT if your investigation failed.'],
+		image: '<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-cop.png"/>',
+	},
+	doc: 'doctor',
+	doctor: {
+		name: 'Doctor',
+		id: 'doctor',
+		memo: ['Doctor: During the Night, you may PM the host the name of another player. This player will be protected from all nightkills for that Night.'],
+		image: '<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-doctor.png"/>',
+	},
+};
 
-		onNight: {
-			target: {side: 'any', count: 'single'},
-			priority: 1,
-			oneshot: true,
-			callback: MafiaFunctions.goonKill,
-		},
+exports.modifiers = {
+	// To support "Vanilla Townie"
+	vanilla: {
+		name: "Vanilla",
+		id: "vanilla",
+	},
+	bp: 'bulletproof',
+	bulletproof: {
+		name: 'Bulletproof',
+		id: 'bulletproof',
+		memo: ['Bulletproof: You cannot be nightkilled.'],
+	},
+	xshot: {
+		// Role generator will change X to the number of shots the player gets
+		name: 'X-Shot',
+		id: 'xshot',
+		memo: ['X-Shot: You may only use this ability X times during the game.'],
 	},
 };
