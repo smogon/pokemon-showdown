@@ -31,7 +31,7 @@ exports.alignments = {
 		memo: [
 			'Factional Communication: If there are other Werewolf-aligned players, you may PM them during the game.',
 			'Factional Kill: The Werewolves may kill one player per Night.',
-			'You are aligned with the <span style="color:$FFA500;font-weight:bold">Werewolves</span>. You win when all players without a Werewolf wincon are eliminated and at least one Werewolf-aligned player is still alive (or nothing can prevent the same).',
+			'You are aligned with the <span style="color:#FFA500;font-weight:bold">Werewolves</span>. You win when all players without a Werewolf wincon are eliminated and at least one Werewolf-aligned player is still alive (or nothing can prevent the same).',
 		],
 		image: '<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-werewolf.png"/>',
 	},
@@ -72,6 +72,7 @@ exports.alignments = {
 exports.roles = {
 	vt: 'villager',
 	villy: 'villager',
+	'vanilla_townie': 'villager',
 	townie: 'villager',
 	villager: {
 		name: 'Villager',
@@ -98,11 +99,6 @@ exports.roles = {
 };
 
 exports.modifiers = {
-	// To support "Vanilla Townie"
-	vanilla: {
-		name: "Vanilla",
-		id: "vanilla",
-	},
 	bp: 'bulletproof',
 	bulletproof: {
 		name: 'Bulletproof',
