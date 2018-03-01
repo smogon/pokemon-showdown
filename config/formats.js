@@ -747,6 +747,9 @@ exports.Formats = [
 		desc: [`&bullet; <a href="http://www.smogon.com/forums/posts/7523781/">RBY 1v1</a>`],
 
 		mod: 'gen1',
+		teamLength: {
+			battle: 1,
+		},
 		ruleset: ['[Gen 1] OU'],
 		banlist: [
 			'Flash', 'Kinesis', 'Sand Attack', 'Smokescreen',
