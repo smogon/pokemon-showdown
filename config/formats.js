@@ -398,7 +398,7 @@ exports.Formats = [
 
 		mod: 'gen7',
 		gameType: 'doubles',
-		searchShow: false,
+		// searchShow: false,
 		teamLength: {
 			validate: [2, 4],
 			battle: 2,
