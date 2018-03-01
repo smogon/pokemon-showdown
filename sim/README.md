@@ -9,16 +9,16 @@ It is implemented as a `ReadWriteStream`. You write to it player choices, and yo
 const Sim = require('Pokemon-Showdown/sim');
 stream = new Sim.BattleStream();
 
-stream.write(`>start {"format":"gen7randombattle"}`);
-stream.write(`>player p1 {"name":"Alice"}`);
-stream.write(`>player p2 {"name":"Bob"}`);
-
 (async () => {
     let output;
-    while (output = await stream.read()) {
+    while ((output = await stream.read())) {
         console.log(output);
     }
 })();
+
+stream.write(`>start {"format":"gen7randombattle"}`);
+stream.write(`>player p1 {"name":"Alice"}`);
+stream.write(`>player p2 {"name":"Bob"}`);
 ```
 
 The stream can be accessed from other programming languages using standard IO:
