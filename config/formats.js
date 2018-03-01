@@ -788,6 +788,7 @@ exports.Formats = [
 
 		mod: 'gen6',
 		team: 'randomGen6Factory',
+		searchShow: false,
 		ruleset: ['Pokemon', 'Sleep Clause Mod', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Mega Rayquaza Clause'],
 	},
 	{
