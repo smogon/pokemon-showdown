@@ -114,7 +114,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		if (user.userid === this.hostid) return user.sendTo(this.room, `|error|You cannot host and play!`);
 		let alts = user.getAltUsers(true);
 		for (let alt of alts) {
-			if (Object.keys(this.players).includes(alt)) return user.sendTo(this.room, `|error|You already have an alt in the game.`);
+			if (Object.keys(this.players).includes(alt.userid)) return user.sendTo(this.room, `|error|You already have an alt in the game.`);
 		}
 		if (this.addPlayer(user)) {
 			this.updatePlayers();
@@ -128,6 +128,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		if (this.phase !== 'signups') return user.sendTo(this.room, `|error|The game of ${this.title} has already started.`);
 		this.players[user.userid].destroy();
 		delete this.players[user.userid];
+		this.playerCount--;
 		this.updatePlayers();
 		user.send(`>view-mafia-${this.room.id}\n|init|html\n${Chat.pages.mafia([this.room.id], user)}`);
 	}
@@ -313,15 +314,20 @@ class MafiaTracker extends Rooms.RoomGame {
 		return partners.join(", ");
 	}
 
-	day(extention, initial) {
+	day(extension, initial) {
 		if (this.phase !== 'night' && !initial) return false;
 		if (this.timer) this.setDeadline('off');
-		this.lynches = {};
-		this.hasPlurality = null;
+		if (!extension) {
+			this.lynches = {};
+			this.hasPlurality = null;
+			for (const player of Object.values(this.players)) {
+				player.lynching = '';
+			}
+		}
 		this.phase = 'day';
-		if (extention && !initial) {
+		if (extension && !initial) {
 			// Day stays same
-			this.setDeadline(extention);
+			this.setDeadline(extension);
 		} else {
 			this.dayNum++;
 		}
@@ -856,7 +862,7 @@ exports.commands = {
 			targetRoom.game.closedSetup = action === 'on';
 			targetRoom.game.updateHost();
 		},
-		closesetuphelp: ['/mafia closedsetup [on|off] - '],
+		closedsetuphelp: [`/mafia closedsetup [on|off] - Sets if the game is a closed setup. Closed setups don't show the role list to players.`],
 
 		'!reveal': true,
 		reveal: function (target, room, user) {
@@ -871,7 +877,7 @@ exports.commands = {
 			targetRoom.game.noReveal = action === 'on';
 			targetRoom.game.updatePlayers();
 		},
-		revealhelp: ['/mafia reveal [on|off] - '],
+		revealhelp: ['/mafia reveal [on|off] - Sets if roles reveal on death or not.'],
 
 		forcesetroles: 'setroles',
 		setroles: function (target, room, user, connection, cmd) {
@@ -996,6 +1002,7 @@ exports.commands = {
 					user.sendTo(room, `|error|You have cancelled your request to sub out.`);
 					game.players[user.userid].updateHtmlRoom();
 				} else {
+					if (game.hostid === user.userid) return user.sendTo(targetRoom, `|error|The host cannot sub into the game.`);
 					if (game.subs.includes(user.userid)) return user.sendTo(targetRoom, `|error|You are already on the sub list.`);
 					if (game.played.includes(user.userid)) return user.sendTo(targetRoom, `|error|You cannot sub back into the game.`);
 					if (game.subs.includes(user.userid)) return user.sendTo(targetRoom, `|error|You have already requested to be subbed in.`);
@@ -1012,6 +1019,7 @@ exports.commands = {
 					game.players[user.userid].updateHtmlRoom();
 					game.nextSub();
 				} else {
+					if (game.hostid === user.userid) return user.sendTo(targetRoom, `|error|The host cannot sub out of the game.`);
 					if (!game.subs.includes(user.userid)) return user.sendTo(targetRoom, `|error|You are not on the sub list.`);
 					game.subs.splice(game.subs.indexOf(user.userid), 1);
 					// Update spectator's view
@@ -1028,6 +1036,29 @@ exports.commands = {
 			}
 			game.updateHost();
 		},
+
+		subhost: function (target, room, user) {
+			if (!this.canTalk()) return;
+			if (!target) return this.parse('/help mafia subhost');
+			if (!this.can('mute', null, room)) return false;
+			this.splitTarget(target);
+			let targetUser = this.targetUser;
+			if (!targetUser || !targetUser.connected) return this.errorReply(`The user "${this.targetUsername}" was not found.`);
+			if (!room.users[targetUser.userid]) return this.errorReply(`${targetUser.name} is not in this room, and cannot be hosted.`);
+			if (Object.keys(room.game.players).includes(targetUser.userid) || Object.keys(room.game.dead).includes(targetUser.userid)) return this.errorReply(`You cannot subhost to a user in the game or a user that could be revived.`);
+			if (room.game.hostid === targetUser.userid) return this.errorReply(`${targetUser.name} is already the host.`);
+
+			const oldHostid = room.game.hostid;
+			if (Users(room.game.hostid)) Users(room.game.hostid).send(`>view-mafia-${room.id}\n|deinit`);
+			if (room.game.subs.includes(targetUser.userid)) room.game.subs.splice(room.game.subs.indexOf(targetUser.userid), 1);
+			room.game.host = Chat.escapeHTML(targetUser.name);
+			room.game.hostid = targetUser.userid;
+			room.game.played.push(targetUser.userid);
+			targetUser.send(`>view-mafia-${room.id}\n|init|html\n${Chat.pages.mafia([room.id], targetUser)}`);
+			room.game.sendRoom(`${targetUser.name} has been substituted as the new host, replacing ${oldHostid}.`, {declare: true});
+			this.modlog('MAFIASUBHOST', targetUser, `replacing ${oldHostid}`, {noalts: true, noip: true});
+		},
+		subhosthelp: [`/mafia subhost [user] - Substitues the user as the new game host.`],
 
 		'!end': true,
 		end: function (target, room, user) {
