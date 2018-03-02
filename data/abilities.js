@@ -2027,7 +2027,7 @@ exports.BattleAbilities = {
 		name: "Mummy",
 		onAfterDamage: function (damage, target, source, move) {
 			if (source && source !== target && move && move.flags['contact'] && source.ability !== 'mummy') {
-				let oldAbility = source.setAbility('mummy');
+				let oldAbility = source.setAbility('mummy', target);
 				if (oldAbility) {
 					this.add('-activate', target, 'ability: Mummy', this.getAbility(oldAbility).name, '[of] ' + source);
 				}
