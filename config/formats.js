@@ -751,7 +751,7 @@ exports.Formats = [
 			validate: [1, 3],
 			battle: 1,
 		},
-		ruleset: ['[Gen 1] OU'],
+		ruleset: ['[Gen 1] OU', 'Team Preview'],
 		banlist: [
 			'Flash', 'Kinesis', 'Sand Attack', 'Smokescreen',
 			'Bind', 'Clamp', 'Fire Spin', 'Wrap',
