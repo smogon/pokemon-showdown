@@ -61,7 +61,6 @@ exports.BattleAbilities = {
 		inherit: true,
 		onTryHit: function (target, source, move) {
 			if (target !== source && move.type === 'Fire') {
-				move.accuracy = true;
 				if (target.status === 'frz') {
 					return;
 				}
