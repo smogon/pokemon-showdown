@@ -59,6 +59,17 @@ exports.BattleAbilities = {
 	},
 	"flashfire": {
 		inherit: true,
+		onTryHit: function (target, source, move) {
+			if (target !== source && move.type === 'Fire') {
+				if (target.status === 'frz') {
+					return;
+				}
+				if (!target.addVolatile('flashfire')) {
+					this.add('-immune', target, '[msg]', '[from] ability: Flash Fire');
+				}
+				return null;
+			}
+		},
 		effect: {
 			noCopy: true, // doesn't get copied by Baton Pass
 			onStart: function (target) {
