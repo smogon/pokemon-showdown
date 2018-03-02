@@ -49,6 +49,9 @@ exports.BattleAbilities = {
 				if (move.id === 'willowisp' && (target.hasType('Fire') || target.status || target.volatiles['substitute'])) {
 					return;
 				}
+				if (target.status === 'frz') {
+					return;
+				}
 				if (!target.addVolatile('flashfire')) {
 					this.add('-immune', target, '[msg]');
 				}
