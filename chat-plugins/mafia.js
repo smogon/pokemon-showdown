@@ -443,7 +443,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		default:
 			msg += ` was eliminated`;
 		}
-		this.sendRoom(`${msg}! ${!this.noReveal ? `${player.name}'s role was ${player.getRole()}.` : ''}`, {declare: true});
+		this.sendRoom(`${msg}! ${!this.noReveal && toId(ability) === 'kill' ? `${player.name}'s role was ${player.getRole()}.` : ''}`, {declare: true});
 		for (let role of this.roles) {
 			if (role.id === player.role.id) {
 				this.roles.splice(this.roles.indexOf(role), 1);
