@@ -114,7 +114,7 @@ describe(`Factory sets`, function () {
 							assert(Dex.getItem(itemName).exists, `invalid item "${itemName}" of ${species}`);
 						}
 
-						for (const abilityName of [].concat(set.item)) {
+						for (const abilityName of [].concat(set.ability)) {
 							assert(Dex.getAbility(abilityName).exists, `invalid ability "${abilityName}" of ${species}`);
 						}
 
