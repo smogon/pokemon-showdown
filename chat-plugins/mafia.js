@@ -150,7 +150,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		if (force) {
 			this.originalRoles = roles.map(r => {
 				return {
-					name: r,
+					name: Chat.escapeHTML(r),
 					id: toId(r),
 					alignment: 'solo',
 					memo: [`To learn more about your role, PM the host (${this.host}).`],
@@ -166,7 +166,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		for (let r = 0; r < roles.length; r++) {
 			let target = roles[r].slice();
 			let role = {
-				name: roleNames[r].split(' ').map(p => { return toId(p) === 'solo' ? '' : p; }).join(' '),
+				name: Chat.escapeHTML(roleNames[r].split(' ').map(p => { return toId(p) === 'solo' ? '' : p; }).join(' ')),
 				memo: ['During the Day, you may vote for whomever you want lynched.'],
 			};
 			role.id = toId(role.name);
