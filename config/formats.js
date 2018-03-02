@@ -748,6 +748,7 @@ exports.Formats = [
 
 		mod: 'gen1',
 		teamLength: {
+			validate: [1, 3],
 			battle: 1,
 		},
 		ruleset: ['[Gen 1] OU'],
