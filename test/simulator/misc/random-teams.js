@@ -1,5 +1,7 @@
 'use strict';
 
+const assert = require('./../../assert');
+
 const TOTAL_TEAMS = 10;
 const ALL_GENS = [1, 2, 3, 4, 5, 6, 7];
 
@@ -87,6 +89,41 @@ describe(`Hackmons Cup Team generator`, function () {
 				} catch (err) {
 					err.message += ` (seed ${seed})`;
 					throw err;
+				}
+			}
+		});
+	}
+});
+
+describe(`Factory sets`, function () {
+	for (const filename of ['bss-factory-sets', 'factory-sets', 'gen-6-factory-sets']) {
+		it(`should have valid sets in ${filename}.json`, function () {
+			const setsJSON = require(`../../../data/${filename}.json`);
+
+			for (const type in setsJSON) {
+				const typeTable = setsJSON[type];
+				for (const species in typeTable) {
+					const speciesData = typeTable[species];
+					for (const set of speciesData.sets) {
+						assert(Dex.getTemplate(set.species).exists, `invalid species "${set.species}" of ${species}`);
+
+						assert(!Dex.getTemplate(set.species).battleOnly, `invalid battle-only forme "${set.species}" of ${species}`);
+
+						for (const itemName of [].concat(set.item)) {
+							if (!itemName && [].concat(...set.moves).includes("Acrobatics")) continue;
+							assert(Dex.getItem(itemName).exists, `invalid item "${itemName}" of ${species}`);
+						}
+
+						for (const abilityName of [].concat(set.item)) {
+							assert(Dex.getAbility(abilityName).exists, `invalid ability "${abilityName}" of ${species}`);
+						}
+
+						for (const moveSpec of set.moves) {
+							for (const moveName of [].concat(moveSpec)) {
+								assert(Dex.getMove(moveName).exists, `invalid move "${moveName}" of ${species}`);
+							}
+						}
+					}
 				}
 			}
 		});
