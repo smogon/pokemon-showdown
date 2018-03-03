@@ -354,7 +354,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		if (!player && this.dead[user.userid] && this.dead[user.userid].restless) player = this.dead[user.userid];
 		if (!(target in this.players) && target !== 'nolynch') return false;
 		if (player.lynching || (target === player.userid && !this.selfEnabled)) return false;
-		if (target === player.userid && this.lynches[target].count < this.getHammer() - 1 && this.selfEnabled === 'hammer') return false;
+		if (target === player.userid && this.lynches[target] && this.lynches[target].count < this.getHammer() - 1 && this.selfEnabled === 'hammer') return false;
 		let lynch = this.lynches[target];
 		if (!lynch) {
 			this.lynches[target] = {count: 1, lastLynch: Date.now(), dir: 'up', lynchers: [user.userid]};
@@ -980,12 +980,12 @@ exports.commands = {
 
 		'!selflynch': true,
 		enableself: 'selflynch',
-		selflynch: function (target, room, user) {
+		selflynch: function (target, room, user, connection, cmd) {
 			let targetRoom = room;
 			target = target.split(',');
 			if (Rooms(target[0]) && Rooms(target[0]).users[user.userid]) targetRoom = Rooms(target.shift());
 			if (!targetRoom || !targetRoom.game || targetRoom.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
-			if (!user.can('mute', null, room) && targetRoom.game.hostid !== user.userid) return user.sendTo(targetRoom, `|error|/mafia selflynch - Access denied.`);
+			if (!user.can('mute', null, room) && targetRoom.game.hostid !== user.userid) return user.sendTo(targetRoom, `|error|/mafia ${cmd} - Access denied.`);
 			let action = toId(target.shift()), game = targetRoom.game;
 			if (!action) return this.parse(`/help mafia selflynch`);
 			if (this.meansYes(action)) {
