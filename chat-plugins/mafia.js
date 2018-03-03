@@ -1028,7 +1028,7 @@ exports.commands = {
 			}
 		},
 		selflynchhelp: [
-			`/mafia selflynch [on|hammer|off] - Allows players to self lynch themselves either at hammer or anytime. Requires host % @ * # & ~`]
+			`/mafia selflynch [on|hammer|off] - Allows players to self lynch themselves either at hammer or anytime. Requires host % @ * # & ~`
 		],
 
 		'!kill': true,
