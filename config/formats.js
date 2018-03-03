@@ -108,7 +108,7 @@ exports.Formats = [
 	{
 		name: "[Gen 7] LC",
 		desc: [
-			`&bullet; <a href="http://www.smogon.com/forums/threads/3587196/">LC Metagame Discussion</a>`,
+			`&bullet; <a href="http://www.smogon.com/forums/threads/3629645/">LC Metagame Discussion</a>`,
 			`&bullet; <a href="http://www.smogon.com/dex/sm/formats/lc/">LC Banlist</a>`,
 			`&bullet; <a href="http://www.smogon.com/forums/threads/3621440/">LC Viability Rankings</a>`,
 			`&bullet; <a href="http://www.smogon.com/forums/threads/3588679/">LC Sample Teams</a>`,
@@ -116,11 +116,21 @@ exports.Formats = [
 
 		mod: 'gen7',
 		maxLevel: 5,
+		searchShow: false,
 		ruleset: ['Pokemon', 'Standard', 'Swagger Clause', 'Team Preview', 'Little Cup'],
 		banlist: [
 			'Aipom', 'Cutiefly', 'Drifloon', 'Gligar', 'Gothita', 'Meditite', 'Misdreavus', 'Murkrow', 'Porygon', 'Scyther', 'Sneasel', 'Swirlix', 'Tangela', 'Vulpix-Base', 'Yanma',
 			'Eevium Z', 'Dragon Rage', 'Sonic Boom',
 		],
+	},
+	{
+		name: "[Gen 7] LC (suspect test)",
+		desc: [`&bullet; <a href="http://www.smogon.com/forums/threads/3629645/">LC Suspect Test</a>`],
+
+		mod: 'gen7',
+		maxLevel: 5,
+		challengeShow: false,
+		ruleset: ['[Gen 7] LC'],
 	},
 	{
 		name: "[Gen 7] Monotype",
