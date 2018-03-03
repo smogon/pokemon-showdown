@@ -2,7 +2,7 @@
 
 // TODO more roles, ect
 
-exports.alignments = {
+exports.alignments = Object.assign(Object.create(null), {
 	town: {
 		name: 'Town',
 		plural: 'Town',
@@ -67,9 +67,9 @@ exports.alignments = {
 		id: 'solo',
 		image: '<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-goon.png"/>',
 	},
-};
+});
 
-exports.roles = {
+exports.roles = Object.assign(Object.create(null), {
 	vt: 'villager',
 	villy: 'villager',
 	'vanilla_townie': 'villager',
@@ -96,9 +96,9 @@ exports.roles = {
 		memo: ['Doctor: During the Night, you may PM the host the name of another player. This player will be protected from all nightkills for that Night.'],
 		image: '<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-doctor.png"/>',
 	},
-};
+});
 
-exports.modifiers = {
+exports.modifiers = Object.assign(Object.create(null), {
 	bp: 'bulletproof',
 	bulletproof: {
 		name: 'Bulletproof',
@@ -111,4 +111,4 @@ exports.modifiers = {
 		id: 'xshot',
 		memo: ['X-Shot: You may only use this ability X times during the game.'],
 	},
-};
+});
