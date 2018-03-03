@@ -354,7 +354,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		if (!player && this.dead[user.userid] && this.dead[user.userid].restless) player = this.dead[user.userid];
 		if (!(target in this.players) && target !== 'nolynch') return false;
 		if (player.lynching || (target === player.userid && !this.selfEnabled)) return false;
-		if (player.lynching || (target === player.userid && this.lynches[target].count < this.getHammer() - 1 && this.selfEnabled === 'hammer')) return false;
+		if (target === player.userid && this.lynches[target].count < this.getHammer() - 1 && this.selfEnabled === 'hammer') return false;
 		let lynch = this.lynches[target];
 		if (!lynch) {
 			this.lynches[target] = {count: 1, lastLynch: Date.now(), dir: 'up', lynchers: [user.userid]};
@@ -733,7 +733,7 @@ exports.pages = {
 			} else if (room.game.phase === 'night') {
 				buf += `<button class="button" name="send" value="/mafia day ${room.id}">Go to Day ${room.game.dayNum + 1}</button> <button class="button" name="send" value="/mafia extend ${room.id}">Return to Day ${room.game.dayNum}</button>`;
 			}
-			buf += ` <button class="button" name="send" value="/mafia reveal ${room.id}, ${room.game.noReveal ? 'off' : 'on'}">${room.game.noReveal ? 'Enable' : 'Disable'} revlealing of roles</button> <button class="button" name="send" value="/mafia end ${room.id}">End Game</button>`;
+			buf += ` <button class="button" name="send" value="/mafia selflynch ${room.id}, ${room.game.selfEnabled === true ? 'off' : 'on'}">${room.game.selfEnabled === true ? 'Disable' : 'Enable'} self lynching</button> <button class="button" name="send" value="/mafia selflynch ${room.id}, ${room.game.selfEnabled === 'hammer' ? 'off' : 'hammer'}">${room.game.selfEnabled === 'hammer' ? 'Disable' : 'Enable'} self hammer</button> <button class="button" name="send" value="/mafia reveal ${room.id}, ${room.game.noReveal ? 'off' : 'on'}">${room.game.noReveal ? 'Enable' : 'Disable'} revlealing of roles</button> <button class="button" name="send" value="/mafia end ${room.id}">End Game</button>`;
 			buf += `<p>To set a deadline, use <strong>/mafia deadline [minutes]</strong>.<br />To clear the deadline use <strong>/mafia deadline off</strong>.</p><hr/></details></p>`;
 			buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">Player Options</summary>`;
 			buf += `<h3>Player Options</h3>`;
@@ -988,48 +988,41 @@ exports.commands = {
 			if (!user.can('mute', null, room) && targetRoom.game.hostid !== user.userid) return user.sendTo(targetRoom, `|error|/mafia selflynch - Access denied.`);
 			let action = toId(target.shift()), game = targetRoom.game;
 			if (!action) return this.parse(`/help mafia selflynch`);
-			switch (action) {
-				case 'true':
-				case 'on':
-				case 'allow':
-					if (game.selfEnabled === 'hammer') {
-						game.sendRoom(`Selfhammering has been changed to Selflynching.`,{declare: true});
-					} else if (!game.selfEnabled) {
-						game.sendRoom(`Selflynching has been enabled.`,{declare: true});
-					} else {
-						return user.sendTo(targetRoom, `|error|Selflynching is already set.`);
-					}
-					game.selfEnabled = true;
-					break;
-				case 'hammer':
-					if (game.selfEnabled === true) {
-						game.sendRoom(`Selflynching has been changed to Selfhammering.`,{declare: true});
-					} else if (!game.selfEnabled) {
-						game.sendRoom(`Selfhammer has been enabled.`,{declare: true});
-					} else {
-						return user.sendTo(targetRoom, `|error|Selfhammer is already set.`);
-					}
-					game.selfEnabled = 'hammer';
-					break;
-				case 'false':
-				case 'off':
-				case 'disallow':
-					if (game.selfEnabled === 'hammer') {
-						game.sendRoom(`Selfhammer has been disabled.`,{declare: true});
-					} else if (game.selfEnabled === true) {
-						game.sendRoom(`Selflynch has been disabled.`,{declare: true});
-					} else {
-						return user.sendTo(targetRoom, `|error|Selflynching and hammering is already set to false.`);
-					}
-					game.selfEnabled = false;
-					break;
-				default:
-					return this.parse(`/help mafia selflynch`);
+			if (this.meansYes(action)) {
+				if (game.selfEnabled === 'hammer') {
+					game.sendRoom(`Selfhammering has been changed to Selflynching.`, {declare: true});
+				} else if (!game.selfEnabled) {
+					game.sendRoom(`Selflynching has been enabled.`, {declare: true});
+				} else {
+					return user.sendTo(targetRoom, `|error|Selflynching is already set.`);
+				}
+				game.selfEnabled = true;
+				game.updateHost();
+			} else if (action === 'hammer') {
+				if (game.selfEnabled === true) {
+					game.sendRoom(`Selflynching has been changed to Selfhammering.`, {declare: true});
+				} else if (!game.selfEnabled) {
+					game.sendRoom(`Selfhammer has been enabled.`, {declare: true});
+				} else {
+					return user.sendTo(targetRoom, `|error|Selfhammer is already set.`);
+				}
+				game.selfEnabled = 'hammer';
+				game.updateHost();
+			} else if (this.meansNo(action)) {
+				if (game.selfEnabled === 'hammer') {
+					game.sendRoom(`Selfhammer has been disabled.`, {declare: true});
+				} else if (game.selfEnabled === true) {
+					game.sendRoom(`Selflynch has been disabled.`, {declare: true});
+				} else {
+					return user.sendTo(targetRoom, `|error|Selflynching and hammering is already set to false.`);
+				}
+				game.selfEnabled = false;
+				game.updateHost();
+			} else {
+				return this.parse(`/help mafia selflynch`);
 			}
 		},
-		selflynchhelp: [
-			`/mafia selflynch [on|hammer|off] - Allows players to self lynch themselves either at hammer or anytime. Requires host % @ * # & ~`
-		],
+		selflynchhelp: [`/mafia selflynch [on|hammer|off] - Allows players to self lynch themselves either at hammer or anytime. Requires host % @ * # & ~`],
 
 		'!kill': true,
 		treestump: 'kill',
