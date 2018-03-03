@@ -85,13 +85,13 @@ class MafiaTracker extends Rooms.RoomGame {
 		this.hostid = host.userid;
 		this.host = Chat.escapeHTML(host.name);
 
-		this.players = {};
-		this.dead = {};
+		this.players = Object.create(null);
+		this.dead = Object.create(null);
 		this.subs = [];
 		this.requestedSub = [];
 		this.played = [];
 
-		this.lynches = {};
+		this.lynches = Object.create(null);
 		this.hasPlurality = null;
 
 		this.originalRoles = [];
@@ -318,7 +318,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		if (this.phase !== 'night' && !initial) return false;
 		if (this.timer) this.setDeadline('off');
 		if (!extension) {
-			this.lynches = {};
+			this.lynches = Object.create(null);
 			this.hasPlurality = null;
 			for (const player of Object.values(this.players)) {
 				player.lynching = '';
@@ -340,8 +340,6 @@ class MafiaTracker extends Rooms.RoomGame {
 		if (this.phase !== 'day') return false;
 		if (this.timer) this.setDeadline('off', true);
 		this.phase = 'night';
-		this.lynches = {};
-		this.hasPlurality = null;
 		this.sendRoom(`Night ${this.dayNum}. PM the host your action, or idle.`, {declare: true});
 		if (!early && this.getPlurality()) this.sendRoom(`Plurality is on ${this.players[this.getPlurality()].name}`);
 		this.updatePlayers();
