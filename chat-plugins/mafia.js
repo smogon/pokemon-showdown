@@ -354,6 +354,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		if (!player && this.dead[user.userid] && this.dead[user.userid].restless) player = this.dead[user.userid];
 		if (!(target in this.players) && target !== 'nolynch') return false;
 		if (player.lynching || (target === player.userid && !this.selfEnabled)) return false;
+		if (player.lynching || (target === player.userid && this.lynches[target].count < this.getHammer() - 1 && this.selfEnabled === 'hammer')) return false;
 		let lynch = this.lynches[target];
 		if (!lynch) {
 			this.lynches[target] = {count: 1, lastLynch: Date.now(), dir: 'up', lynchers: [user.userid]};
@@ -977,6 +978,59 @@ exports.commands = {
 		},
 		unlynchhelp: [`/mafia unlynch - Withdraw your lynch vote. Fails if your not voting to lynch anyone`],
 
+		'!selflynch': true,
+		enableself: 'selflynch',
+		selflynch: function (target, room, user) {
+			let targetRoom = room;
+			target = target.split(',');
+			if (Rooms(target[0]) && Rooms(target[0]).users[user.userid]) targetRoom = Rooms(target.shift());
+			if (!targetRoom || !targetRoom.game || targetRoom.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
+			if (!user.can('mute', null, room) && targetRoom.game.hostid !== user.userid) return user.sendTo(targetRoom, `|error|/mafia selflynch - Access denied.`);
+			let action = toId(target.shift()), game = targetRoom.game;
+			if (!action) return this.parse(`/help mafia selflynch`);
+			switch (action) {
+				case 'true':
+				case 'on':
+				case 'allow':
+					if (game.selfEnabled === 'hammer') {
+						game.sendRoom(`Selfhammering has been changed to Selflynching.`,{declare: true});
+					} else if (!game.selfEnabled) {
+						game.sendRoom(`Selflynching has been enabled.`,{declare: true});
+					} else {
+						return user.sendTo(targetRoom, `|error|Selflynching is already set.`);
+					}
+					game.selfEnabled = true;
+					break;
+				case 'hammer':
+					if (game.selfEnabled === true) {
+						game.sendRoom(`Selflynching has been changed to Selfhammering.`,{declare: true});
+					} else if (!game.selfEnabled) {
+						game.sendRoom(`Selfhammer has been enabled.`,{declare: true});
+					} else {
+						return user.sendTo(targetRoom, `|error|Selfhammer is already set.`);
+					}
+					game.selfEnabled = 'hammer';
+					break;
+				case 'false':
+				case 'off':
+				case 'disallow':
+					if (game.selfEnabled === 'hammer') {
+						game.sendRoom(`Selfhammer has been disabled.`,{declare: true});
+					} else if (game.selfEnabled === true) {
+						game.sendRoom(`Selflynch has been disabled.`,{declare: true});
+					} else {
+						return user.sendTo(targetRoom, `|error|Selflynching and hammering is already set to false.`);
+					}
+					game.selfEnabled = false;
+					break;
+				default:
+					return this.parse(`/help mafia selflynch`);
+			}
+		},
+		selflynchhelp: [
+			`/mafia selflynch [on|hammer|off] - Allows players to self lynch themselves either at hammer or anytime. Requires host % @ * # & ~`]
+		],
+
 		'!kill': true,
 		treestump: 'kill',
 		spirit: 'kill',
@@ -1245,6 +1299,7 @@ exports.commands = {
 		`/mafia close - Closes signups for the current game. Requires: host % @ * # & ~`,
 		`/mafia closedsetup [on|off] - Sets if the game is a closed setup. Closed setups don't show the role list to players. Requires host % @ * # & ~`,
 		`/mafia reveal [on|off] - Sets if roles reveal on death or not. Requires host % @ * # & ~`,
+		`/mafia selflynch [on|hammer|off] - Allows players to self lynch themselves either at hammer or anytime. Requires host % @ * # & ~`,
 		`/mafia setroles [comma seperated roles] - Set the roles for a game of mafia. You need to provide one role per player.`,
 		`/mafia forcesetroles [comma seperated roles] - Forcibly set the roles for a game of mafia. No role PM information or alignment will be set.`,
 		`/mafia start - Start the game of mafia. Signups must be closed. Requires host % @ * # & ~`,
