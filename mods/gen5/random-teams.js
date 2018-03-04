@@ -617,7 +617,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 			ivs: ivs,
 			item: item,
 			level: level,
-			shiny: !this.random(1024),
+			shiny: this.randomChance(1, 1024),
 		};
 	}
 
@@ -651,36 +651,36 @@ class RandomGen5Teams extends RandomGen6Teams {
 			switch (tier) {
 			case 'Uber':
 				// Ubers are limited to 2 but have a 20% chance of being added anyway.
-				if (uberCount > 1 && this.random(5) >= 1) continue;
+				if (uberCount > 1 && !this.randomChance(1, 5)) continue;
 				break;
 			case 'NU':
 				// NUs are limited to 2 but have a 20% chance of being added anyway.
-				if (nuCount > 1 && this.random(5) >= 1) continue;
+				if (nuCount > 1 && !this.randomChance(1, 5)) continue;
 			}
 
 			// Adjust rate for species with multiple formes
 			switch (template.baseSpecies) {
 			case 'Arceus':
-				if (this.random(17) >= 1) continue;
+				if (!this.randomChance(1, 17)) continue;
 				break;
 			case 'Rotom':
-				if (this.random(6) >= 1) continue;
+				if (!this.randomChance(1, 6)) continue;
 				break;
 			case 'Genesect':
-				if (this.random(5) >= 1) continue;
+				if (!this.randomChance(1, 5)) continue;
 				break;
 			case 'Castform':
-				if (this.random(4) >= 1) continue;
+				if (!this.randomChance(1, 4)) continue;
 				break;
 			case 'Basculin': case 'Cherrim': case 'Meloetta':
-				if (this.random(2) >= 1) continue;
+				if (!this.randomChance(1, 2)) continue;
 				break;
 			}
 
 			// Limit 2 of any type
 			let skip = false;
 			for (const type of template.types) {
-				if (typeCount[type] > 1 && this.random(5) >= 1) {
+				if (typeCount[type] > 1 && !this.randomChance(1, 5)) {
 					skip = true;
 					break;
 				}

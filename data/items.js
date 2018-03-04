@@ -1874,7 +1874,7 @@ exports.BattleItems = {
 			basePower: 10,
 		},
 		onDamage: function (damage, target, source, effect) {
-			if (this.random(10) === 0 && damage >= target.hp && effect && effect.effectType === 'Move') {
+			if (this.randomChance(1, 10) && damage >= target.hp && effect && effect.effectType === 'Move') {
 				this.add("-activate", target, "item: Focus Band");
 				return target.hp - 1;
 			}
@@ -4337,7 +4337,7 @@ exports.BattleItems = {
 		id: "quickclaw",
 		onModifyPriorityPriority: -1,
 		onModifyPriority: function (priority, pokemon) {
-			if (this.random(5) === 0) {
+			if (this.randomChance(1, 5)) {
 				this.add('-activate', pokemon, 'item: Quick Claw');
 				return Math.round(priority) + 0.1;
 			}

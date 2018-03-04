@@ -222,6 +222,14 @@ class Battle extends Dex.ModdedDex {
 		return this.prng.next(m, n);
 	}
 
+	/**
+	 * @param {number} numerator
+	 * @param {number} denominator
+	 */
+	randomChance(numerator, denominator) {
+		return this.prng.randomChance(numerator, denominator);
+	}
+
 	resetRNG() {
 		this.prng = new PRNG(this.prng.startingSeed);
 	}

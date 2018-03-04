@@ -757,7 +757,7 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 1,
 			onAfterMoveSecondarySelf: function (source, target, move) {
-				if (this.random(10) < 3) {
+				if (this.randomChance(3, 10)) {
 					this.boost({accuracy: -1}, target, source);
 				}
 				source.removeVolatile('secretpower');

@@ -124,7 +124,7 @@ exports.BattleAbilities = {
 		},
 		onAfterDamage: function (damage, target, source, move) {
 			if (move && move.flags['contact'] && this.isWeather('hail')) {
-				if (this.random(10) < 3) {
+				if (this.randomChance(3, 10)) {
 					source.trySetStatus('frz', target);
 				}
 			}
