@@ -1467,7 +1467,7 @@ Punishments.isRoomBanned = function (user, roomid) {
  *
  * @param {User | string} user
  * @param {Object?} options
- * @return {Array | undefined}
+ * @return {Array}
  */
 Punishments.getRoomPunishments = function (user, options) {
 	if (!user) return [];
