@@ -1470,7 +1470,7 @@ Punishments.isRoomBanned = function (user, roomid) {
  * @return {Array | undefined}
  */
 Punishments.getRoomPunishments = function (user, options) {
-	if (!user) return;
+	if (!user) return [];
 	let userid = toId(user);
 	let checkMutes = typeof user !== 'string';
 
