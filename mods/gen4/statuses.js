@@ -4,7 +4,7 @@ exports.BattleStatuses = {
 	par: {
 		inherit: true,
 		onBeforeMove: function (pokemon) {
-			if (!pokemon.hasAbility('magicguard') && this.random(4) === 0) {
+			if (!pokemon.hasAbility('magicguard') && this.randomChance(1, 4)) {
 				this.add('cant', pokemon, 'par');
 				return false;
 			}
@@ -37,7 +37,7 @@ exports.BattleStatuses = {
 	frz: {
 		inherit: true,
 		onBeforeMove: function (pokemon, target, move) {
-			if (this.random(5) === 0) {
+			if (this.randomChance(1, 5)) {
 				pokemon.cureStatus();
 				return;
 			}

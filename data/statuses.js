@@ -34,7 +34,7 @@ exports.BattleStatuses = {
 		},
 		onBeforeMovePriority: 1,
 		onBeforeMove: function (pokemon) {
-			if (this.random(4) === 0) {
+			if (this.randomChance(1, 4)) {
 				this.add('cant', pokemon, 'par');
 				return false;
 			}
@@ -91,7 +91,7 @@ exports.BattleStatuses = {
 		onBeforeMovePriority: 10,
 		onBeforeMove: function (pokemon, target, move) {
 			if (move.flags['defrost']) return;
-			if (this.random(5) === 0) {
+			if (this.randomChance(1, 5)) {
 				pokemon.cureStatus();
 				return;
 			}

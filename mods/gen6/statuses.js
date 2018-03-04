@@ -24,7 +24,7 @@ exports.BattleStatuses = {
 				return;
 			}
 			this.add('-activate', pokemon, 'confusion');
-			if (this.random(2) === 0) {
+			if (this.randomChance(1, 2)) {
 				return;
 			}
 			this.damage(this.getDamage(pokemon, pokemon, 40), pokemon, pokemon, {
