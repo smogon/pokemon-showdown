@@ -53,7 +53,7 @@ class RandomGen2Teams extends RandomGen3Teams {
 			let types = template.types;
 			if (types.length === 1) {
 				if (typeCount[types[0]] > 1) skip = true;
-				if (typeCount[types[0]] && this.random(3) === 0) skip = true;
+				if (typeCount[types[0]] && this.randomChance(1, 3)) skip = true;
 			} else if (types.length === 2) {
 				if (typeCount[types[0]] > 1 || typeCount[types[1]] > 1) skip = true;
 				if (typeCount[types[0]] && typeCount[types[1]] && this.random(3) > 0) skip = true;
@@ -206,7 +206,7 @@ class RandomGen2Teams extends RandomGen3Teams {
 				if (isSleepMove(moveid) && restrictMoves['sleeping'] > 1) { discourage = false; break; }
 			}
 		}
-		if (discourage && this.random(2) === 0) discard = true;
+		if (discourage && this.randomChance(1, 2)) discard = true;
 
 		// Add the held item
 		// TODO: for some reason, items like Thick Club are not working in randbats

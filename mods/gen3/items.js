@@ -143,7 +143,7 @@ exports.BattleItems = {
 	"quickclaw": {
 		inherit: true,
 		onModifyPriority: function (priority, pokemon) {
-			if (this.random(5) === 0) {
+			if (this.randomChance(1, 5)) {
 				return Math.round(priority) + 0.1;
 			}
 		},

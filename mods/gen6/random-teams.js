@@ -948,7 +948,7 @@ class RandomGen6Teams extends RandomTeams {
 			ivs: ivs,
 			item: item,
 			level: level,
-			shiny: !this.random(1024),
+			shiny: this.randomChance(1, 1024),
 		};
 	}
 }

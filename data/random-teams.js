@@ -23,6 +23,9 @@ class RandomTeams extends Dex.ModdedDex {
 		const generatorName = typeof this.format.team === 'string' && this.format.team.startsWith('random') ? this.format.team + 'Team' : '';
 		return this[generatorName || 'randomTeam']();
 	}
+	randomChance(numerator, denominator) {
+		return this.prng.randomChance(numerator, denominator);
+	}
 	random(m, n) {
 		return this.prng.next(m, n);
 	}
@@ -194,7 +197,7 @@ class RandomTeams extends Dex.ModdedDex {
 			let happiness = this.random(256);
 
 			// Random shininess
-			let shiny = !this.random(1024);
+			let shiny = this.randomChance(1, 1024);
 
 			team.push({
 				name: template.baseSpecies,
@@ -331,7 +334,7 @@ class RandomTeams extends Dex.ModdedDex {
 			let happiness = this.random(256);
 
 			// Random shininess
-			let shiny = !this.random(1024);
+			let shiny = this.randomChance(1, 1024);
 
 			team.push({
 				name: template.baseSpecies,
@@ -1325,7 +1328,7 @@ class RandomTeams extends Dex.ModdedDex {
 			item = 'Choice Specs';
 		} else if (template.species === 'Wobbuffet') {
 			item = hasMove['destinybond'] ? 'Custap Berry' : ['Leftovers', 'Sitrus Berry'][this.random(2)];
-		} else if (template.species === 'Raichu-Alola' && hasMove['thunderbolt'] && !teamDetails.zMove && this.random(4) < 1) {
+		} else if (template.species === 'Raichu-Alola' && hasMove['thunderbolt'] && !teamDetails.zMove && this.randomChance(1, 4)) {
 			item = 'Aloraichium Z';
 		} else if (template.species === 'Zygarde-10%' && hasMove['substitute'] && !teamDetails.zMove) {
 			item = hasMove['outrage'] ? 'Dragonium Z' : 'Groundium Z';
@@ -1535,7 +1538,7 @@ class RandomTeams extends Dex.ModdedDex {
 			ivs: ivs,
 			item: item,
 			level: level,
-			shiny: !this.random(1024),
+			shiny: this.randomChance(1, 1024),
 		};
 	}
 	randomTeam() {
@@ -1589,33 +1592,33 @@ class RandomTeams extends Dex.ModdedDex {
 			switch (tier) {
 			case 'Uber':
 				// Ubers are limited to 2 but have a 20% chance of being added anyway.
-				if (uberCount > 1 && this.random(5) >= 1) continue;
+				if (uberCount > 1 && !this.randomChance(1, 5)) continue;
 				break;
 			case 'PU':
 				// PUs are limited to 2 but have a 20% chance of being added anyway.
-				if (puCount > 1 && this.random(5) >= 1) continue;
+				if (puCount > 1 && !this.randomChance(1, 5)) continue;
 				break;
 			case 'Unreleased': case 'CAP':
 				// Unreleased and CAP have 20% the normal rate
-				if (this.random(5) >= 1) continue;
+				if (!this.randomChance(1, 5)) continue;
 			}
 
 			// Adjust rate for species with multiple formes
 			switch (template.baseSpecies) {
 			case 'Arceus': case 'Silvally':
-				if (this.random(18) >= 1) continue;
+				if (!this.randomChance(1, 18)) continue;
 				break;
 			case 'Pikachu':
-				if (this.random(7) >= 1) continue;
+				if (!this.randomChance(1, 7)) continue;
 				continue;
 			case 'Genesect':
-				if (this.random(5) >= 1) continue;
+				if (!this.randomChance(1, 5)) continue;
 				break;
 			case 'Castform': case 'Gourgeist': case 'Oricorio':
-				if (this.random(4) >= 1) continue;
+				if (!this.randomChance(1, 4)) continue;
 				break;
 			case 'Basculin': case 'Cherrim': case 'Greninja': case 'Hoopa': case 'Meloetta': case 'Meowstic':
-				if (this.random(2) >= 1) continue;
+				if (!this.randomChance(1, 2)) continue;
 				break;
 			}
 
@@ -1639,7 +1642,7 @@ class RandomTeams extends Dex.ModdedDex {
 				// Limit 2 of any type
 				let skip = false;
 				for (let t = 0; t < types.length; t++) {
-					if (typeCount[types[t]] > 1 && this.random(5) >= 1) {
+					if (typeCount[types[t]] > 1 && !this.randomChance(1, 5)) {
 						skip = true;
 						break;
 					}
@@ -2185,7 +2188,7 @@ class RandomTeams extends Dex.ModdedDex {
 			if (ability0.rating <= ability1.rating) {
 				if (this.random(2)) ability = ability1.name;
 			} else if (ability0.rating - 0.6 <= ability1.rating) {
-				if (!this.random(3)) ability = ability1.name;
+				if (this.randomChance(1, 3)) ability = ability1.name;
 			}
 
 			let rejectAbility = false;
@@ -2369,7 +2372,7 @@ class RandomTeams extends Dex.ModdedDex {
 			item = 'Petaya Berry';
 		} else if (template.species === 'Wobbuffet') {
 			item = hasMove['destinybond'] ? 'Custap Berry' : 'Sitrus Berry';
-		} else if (template.species === 'Raichu-Alola' && hasMove['thunderbolt'] && !teamDetails.zMove && this.random(4) < 1) {
+		} else if (template.species === 'Raichu-Alola' && hasMove['thunderbolt'] && !teamDetails.zMove && this.randomChance(1, 4)) {
 			item = 'Aloraichium Z';
 		} else if (hasMove['focusenergy'] || (template.species === 'Unfezant' && counter['Physical'] >= 2)) {
 			item = 'Scope Lens';
@@ -2625,7 +2628,7 @@ class RandomTeams extends Dex.ModdedDex {
 			gender: setData.set.gender || template.gender || (this.random(2) ? 'M' : 'F'),
 			item: items + '' || setData.set.item || '',
 			ability: abilities + '' || setData.set.ability || template.abilities['0'],
-			shiny: typeof setData.set.shiny === 'undefined' ? !this.random(1024) : setData.set.shiny,
+			shiny: typeof setData.set.shiny === 'undefined' ? this.randomChance(1, 1024) : setData.set.shiny,
 			level: setData.set.level || 100,
 			happiness: typeof setData.set.happiness === 'undefined' ? 255 : setData.set.happiness,
 			evs: setData.set.evs || {hp: 84, atk: 84, def: 84, spa: 84, spd: 84, spe: 84},
@@ -2849,7 +2852,7 @@ class RandomTeams extends Dex.ModdedDex {
 			gender: setData.set.gender || template.gender || (this.random(2) ? 'M' : 'F'),
 			item: setData.set.item || '',
 			ability: setData.set.ability || template.abilities['0'],
-			shiny: typeof setData.set.shiny === 'undefined' ? !this.random(1024) : setData.set.shiny,
+			shiny: typeof setData.set.shiny === 'undefined' ? this.randomChance(1, 1024) : setData.set.shiny,
 			level: 100,
 			happiness: typeof setData.set.happiness === 'undefined' ? 255 : setData.set.happiness,
 			evs: setData.set.evs || {hp: 84, atk: 84, def: 84, spa: 84, spd: 84, spe: 84},
@@ -3062,7 +3065,7 @@ class RandomTeams extends Dex.ModdedDex {
 			gender: setData.set.gender || template.gender || (this.random(2) ? 'M' : 'F'),
 			item: setData.set.item || '',
 			ability: setData.set.ability || template.abilities['0'],
-			shiny: typeof setData.set.shiny === 'undefined' ? !this.random(1024) : setData.set.shiny,
+			shiny: typeof setData.set.shiny === 'undefined' ? this.randomChance(1, 1024) : setData.set.shiny,
 			level: setData.set.level || 50,
 			happiness: typeof setData.set.happiness === 'undefined' ? 255 : setData.set.happiness,
 			evs: setData.set.evs || {hp: 84, atk: 84, def: 84, spa: 84, spd: 84, spe: 84},
