@@ -371,12 +371,12 @@ class RandomGen5Teams extends RandomGen6Teams {
 		let ability1 = this.getAbility(abilities[1]);
 		let ability2 = this.getAbility(abilities[2]);
 		if (abilities[1]) {
-			if (abilities[2] && ability1.rating <= ability2.rating && !this.randomChance(1, 2)) {
+			if (abilities[2] && ability1.rating <= ability2.rating && this.randomChance(1, 2)) {
 				[ability1, ability2] = [ability2, ability1];
 			}
-			if (ability0.rating <= ability1.rating && !this.randomChance(1, 2)) {
+			if (ability0.rating <= ability1.rating && this.randomChance(1, 2)) {
 				[ability0, ability1] = [ability1, ability0];
-			} else if (ability0.rating - 0.6 <= ability1.rating && !this.randomChance(1, 3)) {
+			} else if (ability0.rating - 0.6 <= ability1.rating && this.randomChance(2, 3)) {
 				[ability0, ability1] = [ability1, ability0];
 			}
 			ability = ability0.name;
@@ -472,7 +472,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 			item = 'Focus Sash';
 		} else if (template.species === 'Unown') {
 			item = 'Choice Specs';
-		} else if (template.species === 'Wobbuffet' && hasMove['destinybond'] && !this.randomChance(1, 2)) {
+		} else if (template.species === 'Wobbuffet' && hasMove['destinybond'] && this.randomChance(1, 2)) {
 			item = 'Custap Berry';
 		} else if (ability === 'Imposter') {
 			item = 'Choice Scarf';
@@ -481,7 +481,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 		} else if (hasMove['trick'] && hasMove['gyroball']) {
 			item = 'Iron Ball';
 		} else if (hasMove['switcheroo'] || hasMove['trick']) {
-			let randomBool = !this.randomChance(1, 2);
+			let randomBool = this.randomChance(1, 2);
 			if (counter.Physical >= 3 && (template.baseStats.spe >= 95 || randomBool)) {
 				item = 'Choice Band';
 			} else if (counter.Special >= 3 && (template.baseStats.spe >= 95 || randomBool)) {
@@ -531,9 +531,9 @@ class RandomGen5Teams extends RandomGen6Teams {
 		} else if (hasMove['lightscreen'] || hasMove['reflect']) {
 			item = 'Light Clay';
 		} else if (counter.Physical >= 4 && !hasMove['fakeout'] && !hasMove['suckerpunch'] && !hasMove['flamecharge'] && !hasMove['rapidspin']) {
-			item = !this.randomChance(1, 3) ? 'Choice Band' : 'Expert Belt';
+			item = this.randomChance(2, 3) ? 'Choice Band' : 'Expert Belt';
 		} else if (counter.Special >= 4) {
-			item = !this.randomChance(1, 3) ? 'Choice Specs' : 'Expert Belt';
+			item = this.randomChance(2, 3) ? 'Choice Specs' : 'Expert Belt';
 		} else if (this.getEffectiveness('Ground', template) >= 2 && ability !== 'Levitate' && !hasMove['magnetrise']) {
 			item = 'Air Balloon';
 		} else if ((hasMove['eruption'] || hasMove['waterspout']) && !counter['Status']) {
@@ -651,36 +651,36 @@ class RandomGen5Teams extends RandomGen6Teams {
 			switch (tier) {
 			case 'Uber':
 				// Ubers are limited to 2 but have a 20% chance of being added anyway.
-				if (uberCount > 1 && !this.randomChance(1, 5)) continue;
+				if (uberCount > 1 && this.randomChance(4, 5)) continue;
 				break;
 			case 'NU':
 				// NUs are limited to 2 but have a 20% chance of being added anyway.
-				if (nuCount > 1 && !this.randomChance(1, 5)) continue;
+				if (nuCount > 1 && this.randomChance(4, 5)) continue;
 			}
 
 			// Adjust rate for species with multiple formes
 			switch (template.baseSpecies) {
 			case 'Arceus':
-				if (!this.randomChance(1, 17)) continue;
+				if (this.randomChance(16, 17)) continue;
 				break;
 			case 'Rotom':
-				if (!this.randomChance(1, 6)) continue;
+				if (this.randomChance(5, 6)) continue;
 				break;
 			case 'Genesect':
-				if (!this.randomChance(1, 5)) continue;
+				if (this.randomChance(4, 5)) continue;
 				break;
 			case 'Castform':
-				if (!this.randomChance(1, 4)) continue;
+				if (this.randomChance(3, 4)) continue;
 				break;
 			case 'Basculin': case 'Cherrim': case 'Meloetta':
-				if (!this.randomChance(1, 2)) continue;
+				if (this.randomChance(1, 2)) continue;
 				break;
 			}
 
 			// Limit 2 of any type
 			let skip = false;
 			for (const type of template.types) {
-				if (typeCount[type] > 1 && !this.randomChance(1, 5)) {
+				if (typeCount[type] > 1 && this.randomChance(4, 5)) {
 					skip = true;
 					break;
 				}

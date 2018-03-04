@@ -430,7 +430,7 @@ class RandomGen3Teams extends RandomGen4Teams {
 		if (ability0.gen !== 3) ability = ability1.name;
 		if (ability0.gen === 3 && ability1.gen === 3) {
 			if (ability0.rating <= ability1.rating) {
-				if (!this.randomChance(1, 2)) ability = ability1.name;
+				if (this.randomChance(1, 2)) ability = ability1.name;
 			} else if (ability0.rating - 0.6 <= ability1.rating) {
 				if (this.randomChance(1, 3)) ability = ability1.name;
 			}
@@ -512,15 +512,15 @@ class RandomGen3Teams extends RandomGen4Teams {
 		} else if (hasMove['leechseed']) {
 			item = 'Leftovers';
 		} else if (hasMove['endeavor'] || hasMove['flail'] || hasMove['reversal'] || hasMove['endure'] ||
-			hasMove['substitute'] && counter.Status < 3 && template.baseStats.hp + template.baseStats.def + template.baseStats.spd < 250 && !this.randomChance(1, 2)) {
+			hasMove['substitute'] && counter.Status < 3 && template.baseStats.hp + template.baseStats.def + template.baseStats.spd < 250 && this.randomChance(1, 2)) {
 			if (template.baseStats.spe <= 90 && !counter['speedsetup'] && !hasMove['focuspunch']) {
 				item = 'Salac Berry';
-			} else if (counter.Physical > counter.Special || counter.Physical === counter.Special && !this.randomChance(1, 2)) {
+			} else if (counter.Physical > counter.Special || counter.Physical === counter.Special && this.randomChance(1, 2)) {
 				item = 'Liechi Berry';
 			} else {
 				item = 'Petaya Berry';
 			}
-		} else if ((counter.Physical >= 4 || counter.Physical >= 3 && counter.Special === 1 && !this.randomChance(1, 2)) && !(hasMove['bodyslam'] && hasAbility['Serene Grace']) && !hasMove['fakeout'] && !hasMove['rapidspin']) {
+		} else if ((counter.Physical >= 4 || counter.Physical >= 3 && counter.Special === 1 && this.randomChance(1, 2)) && !(hasMove['bodyslam'] && hasAbility['Serene Grace']) && !hasMove['fakeout'] && !hasMove['rapidspin']) {
 			item = 'Choice Band';
 		} else if (hasMove['curse'] || hasMove['protect'] || hasMove['sleeptalk'] || hasMove['substitute']) {
 			item = 'Leftovers';
@@ -620,20 +620,20 @@ class RandomGen3Teams extends RandomGen4Teams {
 			switch (tier) {
 			case 'Uber':
 				// Ubers are limited to 2 but have a 20% chance of being added anyway.
-				if (uberCount > 1 && !this.randomChance(1, 5)) continue;
+				if (uberCount > 1 && this.randomChance(4, 5)) continue;
 				break;
 			case 'NU':
 				// NUs are limited to 2 but have a 20% chance of being added anyway.
-				if (nuCount > 1 && !this.randomChance(1, 5)) continue;
+				if (nuCount > 1 && this.randomChance(4, 5)) continue;
 			}
 
 			// Adjust rate for castform
-			if (template.baseSpecies === 'Castform' && !this.randomChance(1, 4)) continue;
+			if (template.baseSpecies === 'Castform' && this.randomChance(3, 4)) continue;
 
 			// Limit 2 of any type
 			let skip = false;
 			for (const type of template.types) {
-				if (typeCount[type] > 1 && !this.randomChance(1, 5)) {
+				if (typeCount[type] > 1 && this.randomChance(4, 5)) {
 					skip = true;
 					break;
 				}

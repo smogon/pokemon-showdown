@@ -56,7 +56,7 @@ class RandomGen2Teams extends RandomGen3Teams {
 				if (typeCount[types[0]] && this.randomChance(1, 3)) skip = true;
 			} else if (types.length === 2) {
 				if (typeCount[types[0]] > 1 || typeCount[types[1]] > 1) skip = true;
-				if (typeCount[types[0]] && typeCount[types[1]] && !this.randomChance(1, 3)) skip = true;
+				if (typeCount[types[0]] && typeCount[types[1]] && this.randomChance(2, 3)) skip = true;
 			}
 
 			// Ensure the weakness-resistance balance is 2 points or lower for all types,
