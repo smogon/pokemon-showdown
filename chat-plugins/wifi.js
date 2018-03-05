@@ -41,7 +41,7 @@ function saveBreedingData() {
 }
 
 function toPokemonId(str) {
-	return str.toLowerCase().replace(/é/g, 'e').replace(/[^a-z0-9 /]/g, '');
+	return str.toLowerCase().replace(/é/g, 'e').replace(/[^a-z0-9 -/]/g, '');
 }
 
 class Giveaway {
