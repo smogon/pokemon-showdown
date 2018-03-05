@@ -61,6 +61,8 @@ const DATA_FILES = {
 	'Natures': 'natures',
 };
 
+const nullEffect = new Data.PureEffect({name: '', exists: false});
+
 /** @typedef {{id: string, name: string, [k: string]: any}} DexTemplate */
 /** @typedef {{[id: string]: AnyObject}} DexTable */
 
@@ -460,30 +462,33 @@ class ModdedDex {
 	 * @return {Effect}
 	 */
 	getEffect(name) {
-		if (name && typeof name !== 'string') {
+		if (!name) {
+			return nullEffect;
+		}
+		if (typeof name !== 'string') {
 			return name;
 		}
-		if (name && name.startsWith('move:')) {
+		if (name.startsWith('move:')) {
 			return this.getMove(name.slice(5));
-		} else if (name && name.startsWith('item:')) {
+		} else if (name.startsWith('item:')) {
 			return this.getItem(name.slice(5));
-		} else if (name && name.startsWith('ability:')) {
+		} else if (name.startsWith('ability:')) {
 			return this.getAbility(name.slice(8));
 		}
 		let id = toId(name);
 		let effect;
-		if (id && this.data.Statuses.hasOwnProperty(id)) {
+		if (this.data.Statuses.hasOwnProperty(id)) {
 			effect = new Data.PureEffect({name}, this.data.Statuses[id]);
-		} else if (id && this.data.Movedex.hasOwnProperty(id) && this.data.Movedex[id].effect) {
+		} else if (this.data.Movedex.hasOwnProperty(id) && this.data.Movedex[id].effect) {
 			name = this.data.Movedex[id].name || name;
 			effect = new Data.PureEffect({name}, this.data.Movedex[id].effect);
-		} else if (id && this.data.Abilities.hasOwnProperty(id) && this.data.Abilities[id].effect) {
+		} else if (this.data.Abilities.hasOwnProperty(id) && this.data.Abilities[id].effect) {
 			name = this.data.Abilities[id].name || name;
 			effect = new Data.PureEffect({name}, this.data.Abilities[id].effect);
-		} else if (id && this.data.Items.hasOwnProperty(id) && this.data.Items[id].effect) {
+		} else if (this.data.Items.hasOwnProperty(id) && this.data.Items[id].effect) {
 			name = this.data.Items[id].name || name;
 			effect = new Data.PureEffect({name}, this.data.Items[id].effect);
-		} else if (id && this.data.Formats.hasOwnProperty(id)) {
+		} else if (this.data.Formats.hasOwnProperty(id)) {
 			effect = new Data.Format({name}, this.data.Formats[id]);
 		} else if (id === 'recoil') {
 			effect = new Data.PureEffect({name: 'Recoil', effectType: 'Recoil'});
