@@ -398,7 +398,7 @@ class UNOgame extends Rooms.RoomGame {
 
 		let player = this.players[user.userid];
 		player.hand.push(...drawnCards);
-		player.sendRoom(`|raw|You have drawn the following card${drawnCards.length > 1 ? 's' : ''}: ${drawnCards.map(card => `<span style="color: ${textColors[card.color]}">${card.name}</span>`).join(', ')}.`);
+		player.sendRoom(`|raw|You have drawn the following card${Chat.plural(drawnCards)}: ${drawnCards.map(card => `<span style="color: ${textColors[card.color]}">${card.name}</span>`).join(', ')}.`);
 		return drawnCards;
 	}
 

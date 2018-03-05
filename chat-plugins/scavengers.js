@@ -889,7 +889,7 @@ let commands = {
 				return this.errorReply('No one has finished the hunt yet.  Use /forceendhunt if you want to end the hunt and reveal the answers.');
 			}
 		} else if (completed.length) {
-			return this.errorReply(`This hunt has ${completed.length} finisher${Chat.plural(completed.length)}; use /endhunt`);
+			return this.errorReply(`This hunt has ${Chat.count(completed, "finisher")}; use /endhunt`);
 		}
 
 		room.game.onEnd(null, user);

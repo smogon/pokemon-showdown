@@ -944,7 +944,7 @@ class NumberModeTrivia extends Trivia {
 
 			if (winner) return this.win(winner, buffer);
 
-			buffer += `${(innerBuffer.length > 1 ? 'Each of them' : 'They')} gained <strong>${points}</strong> point(s)!`;
+			buffer += `${Chat.plural(innerBuffer, "Each of them", "They")} gained <strong>${points}</strong> point(s)!`;
 		} else {
 			for (let i in this.players) {
 				let player = this.players[i];
@@ -1473,7 +1473,7 @@ const commands = {
 		if (!submissionsLen) return this.sendReply("No questions await review.");
 
 		let buffer = "|raw|<div class=\"ladder\"><table>" +
-			`<tr><td colspan="6"><strong>${submissionsLen}</strong> question${submissionsLen > 1 ? "s await" : " awaits"} review:</td></tr>` +
+			`<tr><td colspan="6"><strong>${Chat.count(submissionsLen, "</strong> questions await", "</strong> question awaits")} review:</td></tr>` +
 			"<tr><th>#</th><th>Category</th><th>Question</th><th>Answer(s)</th><th>Submitted By</th><th>Type</th></tr>";
 
 		let i = 0;

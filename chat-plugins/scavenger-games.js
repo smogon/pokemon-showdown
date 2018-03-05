@@ -273,7 +273,7 @@ class KOGame extends ScavGame {
 			return;
 		}
 
-		this.announce(`${Chat.toListString(eliminated.map(n => `<em>${n}</em>`))} ${(eliminated.length > 1 ? 'have' : 'has')} been eliminated! ${Chat.toListString(Object.keys(this.players).map(p => `<em>${this.players[p].name}</em>`))} have successfully completed the last hunt and have moved on to the next round!`);
+		this.announce(`${Chat.toListString(eliminated.map(n => `<em>${n}</em>`))} ${Chat.plural(eliminated, 'have', 'has')} been eliminated! ${Chat.toListString(Object.keys(this.players).map(p => `<em>${this.players[p].name}</em>`))} have successfully completed the last hunt and have moved on to the next round!`);
 	}
 }
 
@@ -332,7 +332,7 @@ class ScavengerGames extends ScavGame {
 			return;
 		}
 
-		this.announce(`${Chat.toListString(eliminated.map(n => `<em>${n}</em>`))} ${(eliminated.length > 1 ? 'have' : 'has')} been eliminated! ${Chat.toListString(Object.keys(this.players).map(p => `<em>${this.players[p].name}</em>`))} have successfully completed the last hunt and have moved on to the next round!`);
+		this.announce(`${Chat.toListString(eliminated.map(n => `<em>${n}</em>`))} ${Chat.plural(eliminated, 'have', 'has')} been eliminated! ${Chat.toListString(Object.keys(this.players).map(p => `<em>${this.players[p].name}</em>`))} have successfully completed the last hunt and have moved on to the next round!`);
 	}
 }
 

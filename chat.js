@@ -1285,6 +1285,26 @@ Chat.plural = function (num, plural = 's', singular = '') {
 };
 
 /**
+ * Counts the thing passed. `singular` and `plural`.
+ *
+ * @param  {any} num
+ * @param  {string} singular
+ * @param  {string} plural
+ * @return {string}
+ */
+Chat.count = function (num, singular, plural = singular + "s") {
+	if (num && typeof num.length === 'number') {
+		num = num.length;
+	} else if (num && typeof num.size === 'number') {
+		num = num.size;
+	} else {
+		num = Number(num);
+	}
+	const space = singular.startsWith('<') ? '' : ' ';
+	return `${num}${space}${Chat.plural(num, plural, singular)}`;
+};
+
+/**
  * Like string.split(delimiter), but only recognizes the first `limit`
  * delimiters (default 1).
  *
