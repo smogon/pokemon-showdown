@@ -1285,14 +1285,18 @@ Chat.plural = function (num, plural = 's', singular = '') {
 };
 
 /**
- * Counts the thing passed. `singular` and `plural`.
+ * Counts the thing passed.
+ *
+ *     Chat.count(2, "days") === "2 days"
+ *     Chat.count(1, "days") === "1 day"
+ *     Chat.count(["foo"], "things are") === "1 thing is"
  *
  * @param  {any} num
  * @param  {string} singular
  * @param  {string} plural
  * @return {string}
  */
-Chat.count = function (num, singular, plural = singular + "s") {
+Chat.count = function (num, plural, singular = "") {
 	if (num && typeof num.length === 'number') {
 		num = num.length;
 	} else if (num && typeof num.size === 'number') {
@@ -1300,8 +1304,17 @@ Chat.count = function (num, singular, plural = singular + "s") {
 	} else {
 		num = Number(num);
 	}
+	if (!singular) {
+		if (plural.endsWith("s")) {
+			singular = plural.slice(0, -1);
+		} else if (plural.endsWith("s have")) {
+			singular = plural.slice(0, -6) + " has";
+		} else if (plural.endsWith("s were")) {
+			singular = plural.slice(0, -6) + " was";
+		}
+	}
 	const space = singular.startsWith('<') ? '' : ' ';
-	return `${num}${space}${Chat.plural(num, plural, singular)}`;
+	return `${num}${space}${num > 1 ? plural : singular}`;
 };
 
 /**

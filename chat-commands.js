@@ -83,7 +83,7 @@ exports.commands = {
 			userList.push(Chat.escapeHTML(curUser.getIdentity(room.id)));
 		}
 
-		let output = `There ${Chat.plural(userList.length, "are", "is")} <strong style="color:#24678d">${Chat.count(userList, "</strong> user")} in this room:<br />`;
+		let output = `There ${Chat.plural(userList, "are", "is")} <strong style="color:#24678d">${Chat.count(userList, "</strong> users")} in this room:<br />`;
 		output += userList.join(`, `);
 
 		this.sendReplyBox(output);
@@ -2698,7 +2698,7 @@ exports.commands = {
 			if (soonExpiring && expireTime > Date.now() + SOON_EXPIRING_TIME) return;
 			const expiresIn = new Date(expireTime).getTime() - Date.now();
 			const expiresDays = Math.round(expiresIn / 1000 / 60 / 60 / 24);
-			buf += `- <strong>${userid}</strong>, for ${Chat.count(expiresDays, "day")}`;
+			buf += `- <strong>${userid}</strong>, for ${Chat.count(expiresDays, "days")}`;
 			if (alts.length) buf += `, alts${ips}: ${alts.join(', ')}`;
 			buf += `<br />`;
 		});

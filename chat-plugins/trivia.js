@@ -1472,8 +1472,8 @@ const commands = {
 		let submissionsLen = submissions.length;
 		if (!submissionsLen) return this.sendReply("No questions await review.");
 
-		let buffer = "|raw|<div class=\"ladder\"><table>" +
-			`<tr><td colspan="6"><strong>${Chat.count(submissionsLen, "</strong> questions await", "</strong> question awaits")} review:</td></tr>` +
+		let buffer = `|raw|<div class="ladder"><table>` +
+			`<tr><td colspan="6"><strong>${Chat.count(submissionsLen, "</strong> questions")} awaiting review:</td></tr>` +
 			"<tr><th>#</th><th>Category</th><th>Question</th><th>Answer(s)</th><th>Submitted By</th><th>Type</th></tr>";
 
 		let i = 0;
