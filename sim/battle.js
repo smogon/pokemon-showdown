@@ -1098,11 +1098,11 @@ class Battle extends Dex.ModdedDex {
 			statuses.push({status: item, callback: item[callbackType], statusData: thing.itemData, end: thing.clearItem, thing: thing});
 			this.resolveLastPriority(statuses, callbackType);
 		}
-		let baseSpecies = this.getEffect(thing.template.baseSpecies);
+		let species = thing.baseTemplate;
 		// @ts-ignore
-		if (baseSpecies[callbackType] !== undefined) {
+		if (species[callbackType] !== undefined) {
 			// @ts-ignore
-			statuses.push({status: baseSpecies, callback: baseSpecies[callbackType], statusData: thing.speciesData, end: function () {}, thing: thing});
+			statuses.push({status: species, callback: species[callbackType], statusData: thing.speciesData, end: function () {}, thing: thing});
 			this.resolveLastPriority(statuses, callbackType);
 		}
 

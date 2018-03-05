@@ -369,6 +369,11 @@ class ModdedDex {
 		}
 		if (id && this.data.Pokedex.hasOwnProperty(id)) {
 			template = new Data.Template({name}, this.data.Pokedex[id], this.data.FormatsData[id], this.data.Learnsets[id]);
+			// Inherit any statuses from the base species (Arceus, Silvally).
+			const baseSpeciesStatuses = this.data.Statuses[toId(template.baseSpecies)];
+			if (baseSpeciesStatuses !== undefined) {
+				Object.assign(template, baseSpeciesStatuses);
+			}
 			if (!template.tier && !template.doublesTier && template.baseSpecies !== template.species) {
 				if (template.baseSpecies === 'Mimikyu') {
 					template.tier = this.data.FormatsData[toId(template.baseSpecies)].tier;
