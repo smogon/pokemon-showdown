@@ -848,87 +848,86 @@ class CommandContext {
 			}
 		}
 
-		if (typeof message === 'string') {
-			if (!message) {
-				connection.popup("Your message can't be blank.");
-				return false;
-			}
-			let length = message.length;
-			length += 10 * message.replace(/[^\ufdfd]*/g, '').length;
-			if (length > MAX_MESSAGE_LENGTH && !user.can('ignorelimits')) {
-				this.errorReply("Your message is too long: " + message);
-				return false;
-			}
+		if (typeof message !== 'string') return true;
 
-			// remove zalgo
-			message = message.replace(/[\u0300-\u036f\u0483-\u0489\u0610-\u0615\u064B-\u065F\u0670\u06D6-\u06DC\u06DF-\u06ED\u0E31\u0E34-\u0E3A\u0E47-\u0E4E]{3,}/g, '');
-			if (/[\u115f\u1160\u239b-\u23b9]/.test(message)) {
-				this.errorReply("Your message contains banned characters.");
-				return false;
-			}
-
-			// If the corresponding config option is set, non-AC users cannot send links, except to staff.
-			if (Config.restrictLinks && !user.autoconfirmed) {
-				const links = message.match(Chat.linkRegex);
-				const allLinksWhitelisted = !links || links.every(link => {
-					link = link.toLowerCase();
-					const domainMatches = /^(?:http:\/\/|https:\/\/)?(?:[^/]*\.)?([^/.]*\.[^/.]*)\.?($|\/|:)/.exec(link);
-					const domain = domainMatches && domainMatches[1];
-					const hostMatches = /^(?:http:\/\/|https:\/\/)?([^/]*[^/.])\.?($|\/|:)/.exec(link);
-					let host = hostMatches && hostMatches[1];
-					if (host && host.startsWith('www.')) host = host.slice(4);
-					if (!domain || !host) return false;
-					return LINK_WHITELIST.includes(host) || LINK_WHITELIST.includes(`*.${domain}`);
-				});
-				if (!allLinksWhitelisted && !(targetUser && targetUser.can('lock'))) {
-					this.errorReply("Your account must be autoconfirmed to send links to other users, except for global staff.");
-					return false;
-				}
-			}
-
-			if (!this.checkFormat(room, user, message)) {
-				return false;
-			}
-
-			if (!this.checkSlowchat(room, user) && !user.can('mute', null, room)) {
-				// @ts-ignore
-				this.errorReply("This room has slow-chat enabled. You can only talk once every " + room.slowchat + " seconds.");
-				return false;
-			}
-
-			if (!this.checkBanwords(room, user.name) && !user.can('bypassall')) {
-				this.errorReply(`Your username contains a phrase banned by this room.`);
-				return false;
-			}
-			if (!this.checkBanwords(room, message) && !user.can('mute', null, room)) {
-				this.errorReply("Your message contained banned words.");
-				return false;
-			}
-
-			let gameFilter = this.checkGameFilter();
-			if (gameFilter && !user.can('bypassall')) {
-				this.errorReply(gameFilter);
-				return false;
-			}
-
-			if (room) {
-				let normalized = message.trim();
-				if (!user.can('bypassall') && (room.id === 'lobby' || room.id === 'help') && (normalized === user.lastMessage) &&
-						((Date.now() - user.lastMessageTime) < MESSAGE_COOLDOWN)) {
-					this.errorReply("You can't send the same message again so soon.");
-					return false;
-				}
-				user.lastMessage = message;
-				user.lastMessageTime = Date.now();
-			}
-
-			if (Chat.filters.length) {
-				return Chat.filter.call(this, message, user, room, connection, targetUser);
-			}
-			return message;
+		if (!message) {
+			connection.popup("Your message can't be blank.");
+			return false;
+		}
+		let length = message.length;
+		length += 10 * message.replace(/[^\ufdfd]*/g, '').length;
+		if (length > MAX_MESSAGE_LENGTH && !user.can('ignorelimits')) {
+			this.errorReply("Your message is too long: " + message);
+			return false;
 		}
 
-		return true;
+		// remove zalgo
+		message = message.replace(/[\u0300-\u036f\u0483-\u0489\u0610-\u0615\u064B-\u065F\u0670\u06D6-\u06DC\u06DF-\u06ED\u0E31\u0E34-\u0E3A\u0E47-\u0E4E]{3,}/g, '');
+		if (/[\u115f\u1160\u239b-\u23b9]/.test(message)) {
+			this.errorReply("Your message contains banned characters.");
+			return false;
+		}
+
+		// If the corresponding config option is set, non-AC users cannot send links, except to staff.
+		if (Config.restrictLinks && !user.autoconfirmed) {
+			const links = message.match(Chat.linkRegex);
+			const allLinksWhitelisted = !links || links.every(link => {
+				link = link.toLowerCase();
+				const domainMatches = /^(?:http:\/\/|https:\/\/)?(?:[^/]*\.)?([^/.]*\.[^/.]*)\.?($|\/|:)/.exec(link);
+				const domain = domainMatches && domainMatches[1];
+				const hostMatches = /^(?:http:\/\/|https:\/\/)?([^/]*[^/.])\.?($|\/|:)/.exec(link);
+				let host = hostMatches && hostMatches[1];
+				if (host && host.startsWith('www.')) host = host.slice(4);
+				if (!domain || !host) return false;
+				return LINK_WHITELIST.includes(host) || LINK_WHITELIST.includes(`*.${domain}`);
+			});
+			if (!allLinksWhitelisted && !(targetUser && targetUser.can('lock'))) {
+				this.errorReply("Your account must be autoconfirmed to send links to other users, except for global staff.");
+				return false;
+			}
+		}
+
+		if (!this.checkFormat(room, user, message)) {
+			return false;
+		}
+
+		if (!this.checkSlowchat(room, user) && !user.can('mute', null, room)) {
+			// @ts-ignore
+			this.errorReply("This room has slow-chat enabled. You can only talk once every " + room.slowchat + " seconds.");
+			return false;
+		}
+
+		if (!this.checkBanwords(room, user.name) && !user.can('bypassall')) {
+			this.errorReply(`Your username contains a phrase banned by this room.`);
+			return false;
+		}
+		if (!this.checkBanwords(room, message) && !user.can('mute', null, room)) {
+			this.errorReply("Your message contained banned words.");
+			return false;
+		}
+
+		let gameFilter = this.checkGameFilter();
+		if (gameFilter && !user.can('bypassall')) {
+			this.errorReply(gameFilter);
+			return false;
+		}
+
+		if (room) {
+			let normalized = message.trim();
+			if (!user.can('bypassall') && (room.id === 'lobby' || room.id === 'help') && (normalized === user.lastMessage) &&
+					((Date.now() - user.lastMessageTime) < MESSAGE_COOLDOWN)) {
+				this.errorReply("You can't send the same message again so soon.");
+				return false;
+			}
+			user.lastMessage = message;
+			user.lastMessageTime = Date.now();
+		}
+
+		if (Chat.filters.length) {
+			return Chat.filter.call(this, message, user, room, connection, targetUser);
+		}
+
+		return message;
 	}
 	/**
 	 * @param {string} uri
