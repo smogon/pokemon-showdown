@@ -800,6 +800,7 @@ class CommandContext {
 			if (room) {
 				if (lockType && !room.isHelp) {
 					this.errorReply(`You are ${lockType} and can't talk in chat. ${lockExpiration}`);
+					this.sendReply(`|html|<a href="view-help-request-appeal-lock" class="button">Get help with this</a>`);
 					return false;
 				}
 				if (room.isMuted(user)) {
