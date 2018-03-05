@@ -6,7 +6,15 @@ exports.BattleScripts = {
 		let nature = this.getNature(set.nature);
 		for (let statName in modStats) {
 			let stat = stats[statName];
-			modStats[statName] = Math.floor(Math.floor(2 * stat + (nature.plus && statName === nature.minus ? set.ivs[nature.plus] : set.ivs[statName]) + Math.floor((nature.plus && statName === nature.minus ? set.evs[nature.plus] : set.evs[statName]) / 4)) * set.level / 100 + 5);
+			let usedStat = statName;
+			if (nature.plus) {
+				if (statName === nature.minus) {
+					usedStat = nature.plus;
+				} else if (statName === nature.plus) {
+					usedStat = nature.minus;
+				}
+			}
+			modStats[statName] = Math.floor(Math.floor(2 * stat + set.ivs[usedStat] + Math.floor(set.evs[usedStat] / 4)) * set.level / 100 + 5);
 		}
 		if ('hp' in stats) {
 			let stat = stats['hp'];
