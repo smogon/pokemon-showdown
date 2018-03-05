@@ -1414,7 +1414,7 @@ Punishments.checkLockExpiration = function (userid) {
 		let expiresDays = Math.round(expiresIn / 1000 / 60 / 60 / 24);
 		let expiresText = '';
 		if (expiresDays >= 1) {
-			expiresText = `in around ${Chat.count(expiresDays, "day")}`;
+			expiresText = `in around ${Chat.count(expiresDays, "days")}`;
 		} else {
 			expiresText = `soon`;
 		}
