@@ -320,7 +320,7 @@ class LotteryGiveaway extends Giveaway {
 	generateReminder(joined) {
 		let cmd = (joined ? 'Leave' : 'Join');
 		let button = `<button style="margin:4px;" name="send" value="/giveaway ${toId(cmd)}lottery"><font size=1><b>${cmd}</b></font></button>`;
-		return this.generateWindow(`The lottery drawing will occur in 2 minutes, and with ${this.maxwinners} winner${Chat.plural(this.maxwinners)}!<br />${button}</p>`);
+		return this.generateWindow(`The lottery drawing will occur in 2 minutes, and with ${Chat.count(this.maxwinners, "winner")}!<br />${button}</p>`);
 	}
 
 	display() {
@@ -762,7 +762,7 @@ let commands = {
 		if (!count) return this.sendReplyBox("This Pokémon has never been given away.");
 		let recent = count.filter(val => val + RECENT_THRESHOLD > Date.now()).length;
 
-		this.sendReplyBox(`This Pokémon has been given away ${count.length} time${Chat.plural(count)}, a total of ${recent} time${Chat.plural(recent)} in the past month.`);
+		this.sendReplyBox(`This Pokémon has been given away ${Chat.count(count, "time")}, a total of ${Chat.count(recent, "time")} in the past month.`);
 	},
 	'': 'help',
 	help: function (target, room, user) {

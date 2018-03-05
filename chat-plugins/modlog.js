@@ -215,10 +215,10 @@ function prettifyResults(resultArray, room, searchString, exactSearch, addModlog
 	const modlogid = room + (searchString ? '-' + Dashycode.encode(searchString) : '');
 	if (searchString) {
 		const searchStringDescription = (exactSearch ? `containing the string "${searchString}"` : `matching the username "${searchString}"`);
-		preamble = `>view-modlog-${modlogid}\n|init|html\n|title|[Modlog]${title}\n|pagehtml|<div class="pad"><p>The last ${lines} logged action${Chat.plural(lines)} ${searchStringDescription} on ${roomName}.` +
-						(exactSearch ? "" : " Add quotes to the search parameter to search for a phrase, rather than a user.");
+		preamble = `>view-modlog-${modlogid}\n|init|html\n|title|[Modlog]${title}\n|pagehtml|<div class="pad"><p>The last ${Chat.count(lines, "logged action")} ${searchStringDescription} on ${roomName}.` +
+			(exactSearch ? "" : " Add quotes to the search parameter to search for a phrase, rather than a user.");
 	} else {
-		preamble = `>view-modlog-${modlogid}\n|init|html\n|title|[Modlog]${title}\n|pagehtml|<div class="pad"><p>The last ${lines} line${Chat.plural(lines)} of the Moderator Log of ${roomName}.`;
+		preamble = `>view-modlog-${modlogid}\n|init|html\n|title|[Modlog]${title}\n|pagehtml|<div class="pad"><p>The last ${Chat.count(lines, "line")} of the Moderator Log of ${roomName}.`;
 	}
 	let moreButton = getMoreButton(room, searchString, exactSearch, lines, maxLines);
 	return `${preamble}${resultString}${moreButton}</div>`;
