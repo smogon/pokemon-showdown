@@ -12,8 +12,6 @@ exports.BattleScripts = {
 					usedStat = nature.plus;
 				} else if (statName === nature.plus) {
 					usedStat = nature.minus;
-				} else {
-					usedStat = statName;
 				}
 			}
 			modStats[statName] = Math.floor(Math.floor(2 * stat + set.ivs[usedStat] + Math.floor(set.evs[usedStat] / 4)) * set.level / 100 + 5);
