@@ -994,30 +994,30 @@ exports.commands = {
 				} else if (!game.selfEnabled) {
 					game.sendRoom(`Selflynching has been enabled.`, {declare: true});
 				} else {
-					return user.sendTo(targetRoom, `|error|Selflynching is already set.`);
+					return user.sendTo(targetRoom, `|error|Selflynching is already enabled.`);
 				}
 				game.selfEnabled = true;
-				game.updateHost();
+				game.updatePlayers();
 			} else if (action === 'hammer') {
 				if (game.selfEnabled === true) {
 					game.sendRoom(`Selflynching has been changed to Selfhammering.`, {declare: true});
 				} else if (!game.selfEnabled) {
 					game.sendRoom(`Selfhammer has been enabled.`, {declare: true});
 				} else {
-					return user.sendTo(targetRoom, `|error|Selfhammer is already set.`);
+					return user.sendTo(targetRoom, `|error|Selfhammer is already enabled.`);
 				}
 				game.selfEnabled = 'hammer';
-				game.updateHost();
+				game.updatePlayers();
 			} else if (this.meansNo(action)) {
 				if (game.selfEnabled === 'hammer') {
 					game.sendRoom(`Selfhammer has been disabled.`, {declare: true});
 				} else if (game.selfEnabled === true) {
 					game.sendRoom(`Selflynch has been disabled.`, {declare: true});
 				} else {
-					return user.sendTo(targetRoom, `|error|Selflynching and hammering is already set to false.`);
+					return user.sendTo(targetRoom, `|error|Selflynching and hammering is already disabled.`);
 				}
 				game.selfEnabled = false;
-				game.updateHost();
+				game.updatePlayers();
 			} else {
 				return this.parse(`/help mafia selflynch`);
 			}
