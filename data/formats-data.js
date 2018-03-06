@@ -1761,7 +1761,7 @@ exports.BattleFormatsData = {
 			{"generation": 3, "level": 43, "moves": ["refresh", "fissure", "curse", "bodyslam"]},
 		],
 		tier: "RU",
-		doublesTier: "DOU",
+		doublesTier: "DUber",
 	},
 	articuno: {
 		randomBattleMoves: ["icebeam", "roost", "freezedry", "toxic", "substitute", "hurricane"],
