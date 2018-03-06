@@ -36,6 +36,7 @@ class Tournament {
 		this.id = room.id;
 		this.room = room;
 		this.title = Dex.getFormat(format).name + ' tournament';
+		this.isTournament = true;
 		this.allowRenames = false;
 		this.players = Object.create(null);
 		this.playerCount = 0;
