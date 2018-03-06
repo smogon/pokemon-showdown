@@ -228,27 +228,6 @@ exports.Formats = [
 		},
 	},
 	{
-		name: "[Gen 7] Ultra Sinnoh Classic",
-		desc: [`&bullet; <a href="http://www.smogon.com/forums/threads/3627404/">Ultra Sinnoh Classic Discussion</a>`],
-
-		mod: 'gen7',
-		forcedLevel: 50,
-		teamLength: {
-			validate: [3, 6],
-			battle: 3,
-		},
-		ruleset: ['Pokemon', 'Standard GBU', 'Sinnoh Pokedex'],
-		onValidateSet: function (set) {
-			const item = this.getItem(set.item);
-			if (item.megaStone) {
-				return [`(${set.name} is holding ${item.name})`, `Mega Stones are banned in Ultra Sinnoh Classic.`];
-			}
-			if (item.zMove) {
-				return [`(${set.name} is holding ${item.name})`, `Z-Crystals are banned in Ultra Sinnoh Classic.`];
-			}
-		},
-	},
-	{
 		name: "[Gen 7] Custom Game",
 
 		mod: 'gen7',
