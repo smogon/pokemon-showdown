@@ -91,6 +91,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		this.requestedSub = [];
 		this.played = [];
 
+		this.hammerCount = 0;
 		this.lynches = Object.create(null);
 		this.hasPlurality = null;
 
@@ -115,6 +116,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		let alts = user.getAltUsers(true);
 		for (let alt of alts) {
 			if (Object.keys(this.players).includes(alt.userid)) return user.sendTo(this.room, `|error|You already have an alt in the game.`);
+			if (this.hostid === alt.userid) return user.sendTo(this.room, `|error|You cannot join a game with an alt as the host.`);
 		}
 		if (this.addPlayer(user)) {
 			this.updatePlayers();
@@ -318,6 +320,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		if (this.phase !== 'night' && !initial) return false;
 		if (this.timer) this.setDeadline('off');
 		if (!extension) {
+			this.hammerCount = Math.floor(Object.keys(this.players).length / 2) + 1;
 			this.lynches = Object.create(null);
 			this.hasPlurality = null;
 			for (const player of Object.values(this.players)) {
@@ -331,7 +334,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		} else {
 			this.dayNum++;
 		}
-		this.sendRoom(`Day ${this.dayNum}. The hammer count is set at ${this.getHammer()}`, {declare: true});
+		this.sendRoom(`Day ${this.dayNum}. The hammer count is set at ${this.hammerCount}`, {declare: true});
 		this.updatePlayers();
 		return true;
 	}
@@ -365,7 +368,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		}
 		player.lynching = target;
 		this.sendRoom(`${user.name} has lynched ${player.lynching}.`, {timestamp: true, user: user});
-		if (this.getHammer() <= lynch.count) {
+		if (this.hammerCount <= lynch.count) {
 			// HAMMER
 			this.sendRoom(`Hammer! ${target === 'nolynch' ? 'Nobody' : this.players[target].name} was lynched!`, {declare: true});
 			if (target !== 'nolynch') this.eliminate(target);
@@ -397,8 +400,31 @@ class MafiaTracker extends Rooms.RoomGame {
 		return true;
 	}
 
-	getHammer() {
-		return Math.floor(Object.keys(this.players).length / 2) + 1;
+	resetHammer() {
+		this.setHammer(Math.floor(Object.keys(this.players).length / 2) + 1);
+	}
+
+	setHammer(count) {
+		this.hammerCount = count;
+		this.sendRoom(`The hammer count has been set at ${this.hammerCount}, and lynches have been reset.`, {declare: true});
+		this.lynches = Object.create(null);
+		this.hasPlurality = null;
+		for (const player of Object.values(this.players)) {
+			player.lynching = '';
+		}
+	}
+
+	shiftHammer(count) {
+		this.hammerCount = count;
+		this.sendRoom(`The hammer count has been shifted to ${this.hammerCount}. Lynches have not been reset.`, {declare: true});
+		let hammered = [];
+		for (const lynch in this.lynches) {
+			if (this.lynches[lynch].count >= this.hammerCount) hammered.push(lynch === 'nolynch' ? 'Nobody' : lynch);
+		}
+		if (hammered.length) {
+			this.sendRoom(`${Chat.count(hammered, "players have")} been hammered: ${hammered.join(', ')}`, {declare: true});
+			this.night(true);
+		}
 	}
 
 	getPlurality() {
@@ -694,7 +720,7 @@ exports.pages = {
 			}
 		}
 		if (room.game.phase === "day") {
-			buf += `<h3>Lynches (Hammer: ${room.game.getHammer()}) <button class="button" name="send" value="/join view-mafia-${room.id}"><i class="fa fa-refresh"></i> Refresh</button></h3>`;
+			buf += `<h3>Lynches (Hammer: ${room.game.hammerCount}) <button class="button" name="send" value="/join view-mafia-${room.id}"><i class="fa fa-refresh"></i> Refresh</button></h3>`;
 			let plur = room.game.hasPlurality;
 			let list = Object.keys(room.game.players).concat(['nolynch']);
 			for (let key of list) {
@@ -1071,6 +1097,32 @@ exports.commands = {
 			}
 		},
 		deadlinehelp: [`/mafia deadline [minutes|off] - Sets or removes the deadline for the game. Cannot be more than 20 minutes.`],
+
+		shifthammer: 'hammer',
+		resethammer: 'hammer',
+		hammer: function (target, room, user, connection, cmd) {
+			if (!room.game || room.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
+			if (!user.can('mute', null, room) && room.game.hostid !== user.userid) return this.errorReply(`/mafia ${cmd} - Access denied.`);
+			if (!room.game.started) return this.errorReply(`The game has not started yet.`);
+			const hammer = parseInt(target);
+			if (!hammer && cmd.toLowerCase() !== `resethammer`) return this.errorReply(`${target} is not a valid hammer count.`);
+			switch (cmd.toLowerCase()) {
+			case 'shifthammer':
+				room.game.shiftHammer(hammer);
+				break;
+			case 'hammer':
+				room.game.setHammer(hammer);
+				break;
+			default:
+				room.game.resetHammer();
+				break;
+			}
+		},
+		hammerhelp: [
+			`/mafia hammer (hammer) - sets the hammer count to (hammer) and resets lynches`,
+			`/mafia shifthammer (hammer) - sets the hammer count to (hammer) without resetting lynches`,
+			`/mafia resethammer - sets the hammer to the default, resetting lynches`,
+		],
 
 		'!sub': true,
 		sub: function (target, room, user) {
