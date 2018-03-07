@@ -415,17 +415,8 @@ exports.Formats = [
 		],
 
 		mod: 'gen7',
-		searchShow: false,
 		ruleset: ['Pokemon', 'Ability Clause', 'OHKO Clause', 'Evasion Moves Clause', 'CFZ Clause', 'Endless Battle Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod'],
 		banlist: ['Groudon-Primal', 'Arena Trap', 'Huge Power', 'Innards Out', 'Magnet Pull', 'Moody', 'Parental Bond', 'Protean', 'Pure Power', 'Shadow Tag', 'Stakeout', 'Water Bubble', 'Wonder Guard', 'Gengarite', 'Chatter', 'Comatose + Sleep Talk'],
-	},
-	{
-		name: "[Gen 7] Balanced Hackmons (suspect test)",
-		desc: [`&bullet; <a href="http://www.smogon.com/forums/threads/3628905/">Balanced Hackmons Suspect Test</a>`],
-
-		mod: 'gen7',
-		ruleset: ['[Gen 7] Balanced Hackmons'],
-		banlist: ['Psychic Surge'],
 	},
 	{
 		name: "[Gen 7] 1v1",
