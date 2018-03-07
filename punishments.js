@@ -861,6 +861,24 @@ Punishments.battleban = function (user, expireTime, id, ...reason) {
 	if (!expireTime) expireTime = Date.now() + BATTLEBAN_DURATION;
 	let punishment = ['BATTLEBAN', id, expireTime, ...reason];
 
+	// Handle tournaments the user was in before being battle banned
+	for (let games of user.games.keys()) {
+		const gameRoom = Rooms(games).game;
+		if (!gameRoom) continue; // this should never happen
+		// @ts-ignore
+		if (gameRoom.isTournament) {
+			// @ts-ignore
+			if (gameRoom.isTournamentStarted) {
+				// @ts-ignore
+				gameRoom.disqualifyUser(id, null, null);
+				// @ts-ignore
+			} else if (!gameRoom.isTournamentStarted) {
+				// @ts-ignore
+				gameRoom.removeUser(user);
+			}
+		}
+	}
+
 	return Punishments.roomPunish("battle", user, punishment);
 };
 /**
