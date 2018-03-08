@@ -6452,47 +6452,38 @@ exports.BattleFormatsData = {
 		doublesTier: "DOU",
 	},
 	rowlet: {
-		unreleasedHidden: true,
 		tier: "LC",
 	},
 	dartrix: {
-		unreleasedHidden: true,
 		tier: "NFE",
 	},
 	decidueye: {
 		randomBattleMoves: ["spiritshackle", "uturn", "leafblade", "roost", "swordsdance", "suckerpunch"],
 		randomDoubleBattleMoves: ["spiritshackle", "leafblade", "bravebird", "protect", "suckerpunch"],
-		unreleasedHidden: true,
 		tier: "RU",
 		doublesTier: "DUU",
 	},
 	litten: {
-		unreleasedHidden: true,
 		tier: "LC",
 	},
 	torracat: {
-		unreleasedHidden: true,
 		tier: "NFE",
 	},
 	incineroar: {
 		randomBattleMoves: ["fakeout", "darkestlariat", "flareblitz", "uturn", "earthquake", "knockoff"],
 		randomDoubleBattleMoves: ["fakeout", "darkestlariat", "flareblitz", "crosschop", "willowisp", "taunt", "snarl"],
-		unreleasedHidden: true,
 		tier: "NU",
 		doublesTier: "DUU",
 	},
 	popplio: {
-		unreleasedHidden: true,
 		tier: "LC",
 	},
 	brionne: {
-		unreleasedHidden: true,
 		tier: "NFE",
 	},
 	primarina: {
 		randomBattleMoves: ["hydropump", "moonblast", "scald", "psychic", "hiddenpowerfire"],
 		randomDoubleBattleMoves: ["hypervoice", "moonblast", "substitute", "protect", "icebeam"],
-		unreleasedHidden: true,
 		tier: "UU",
 		doublesTier: "DUU",
 	},
