@@ -6460,6 +6460,9 @@ exports.BattleFormatsData = {
 	decidueye: {
 		randomBattleMoves: ["spiritshackle", "uturn", "leafblade", "roost", "swordsdance", "suckerpunch"],
 		randomDoubleBattleMoves: ["spiritshackle", "leafblade", "bravebird", "protect", "suckerpunch"],
+		eventPokemon: [
+			{"generation": 7, "level": 50, "isHidden": true, "moves": ["leafblade", "phantomforce", "shadowsneak", "bravebird"], "pokeball": "pokeball"},
+		],
 		tier: "RU",
 		doublesTier: "DUU",
 	},
@@ -6472,6 +6475,9 @@ exports.BattleFormatsData = {
 	incineroar: {
 		randomBattleMoves: ["fakeout", "darkestlariat", "flareblitz", "uturn", "earthquake", "knockoff"],
 		randomDoubleBattleMoves: ["fakeout", "darkestlariat", "flareblitz", "crosschop", "willowisp", "taunt", "snarl"],
+		eventPokemon: [
+			{"generation": 7, "level": 50, "isHidden": true, "moves": ["fakeout", "uturn", "darkestlariat", "flareblitz"], "pokeball": "pokeball"},
+		],
 		tier: "NU",
 		doublesTier: "DUU",
 	},
@@ -6484,6 +6490,9 @@ exports.BattleFormatsData = {
 	primarina: {
 		randomBattleMoves: ["hydropump", "moonblast", "scald", "psychic", "hiddenpowerfire"],
 		randomDoubleBattleMoves: ["hypervoice", "moonblast", "substitute", "protect", "icebeam"],
+		eventPokemon: [
+			{"generation": 7, "level": 50, "isHidden": true, "moves": ["hypervoice", "moonblast", "icywind", "perishsong"], "pokeball": "pokeball"},
+		],
 		tier: "UU",
 		doublesTier: "DUU",
 	},
