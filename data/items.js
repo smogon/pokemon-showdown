@@ -2560,7 +2560,7 @@ exports.BattleItems = {
 			type: "Dragon",
 		},
 		onAfterDamage: function (damage, target, source, move) {
-			if (source && source !== target && move && move.category === 'Physical') {
+			if (source && source.hp && source !== target && move && move.category === 'Physical') {
 				if (target.eatItem()) {
 					this.damage(source.maxhp / 8, source, target);
 				}
@@ -4710,7 +4710,7 @@ exports.BattleItems = {
 			type: "Dark",
 		},
 		onAfterDamage: function (damage, target, source, move) {
-			if (source && source !== target && move && move.category === 'Special') {
+			if (source && source.hp && source !== target && move && move.category === 'Special') {
 				if (target.eatItem()) {
 					this.damage(source.maxhp / 8, source, target);
 				}
