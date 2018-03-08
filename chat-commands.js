@@ -2544,6 +2544,9 @@ exports.commands = {
 		Ladders.cancelSearches(targetUser);
 		Punishments.battleban(targetUser, null, null, reason);
 		targetUser.popup(`|modal|${user.name} has prevented you from starting new battles for 2 days${reasonText}`);
+
+		// Automatically upload replays as evidence/reference to the punishment
+		if (room.battle) this.parse('/savereplay');
 		return true;
 	},
 	battlebanhelp: [`/battleban [username], [reason] - Prevents the user from starting new battles for 2 days and shows them the [reason]. Requires: % @ * & ~`],
