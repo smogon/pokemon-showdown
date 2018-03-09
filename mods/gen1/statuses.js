@@ -210,7 +210,7 @@ exports.BattleStatuses = {
 	},
 	partialtrappinglock: {
 		durationCallback: function () {
-			let duration = [2, 2, 2, 3, 3, 3, 4, 5][this.random(8)];
+			let duration = this.sample([2, 2, 2, 3, 3, 3, 4, 5]);
 			return duration;
 		},
 		onResidual: function (target) {
