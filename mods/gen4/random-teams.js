@@ -537,7 +537,7 @@ class RandomGen4Teams extends RandomGen5Teams {
 		} else if (template.species === 'Unown') {
 			item = 'Choice Specs';
 		} else if (template.species === 'Wobbuffet') {
-			item = hasMove['destinybond'] ? 'Custap Berry' : ['Leftovers', 'Sitrus Berry'][this.random(2)];
+			item = hasMove['destinybond'] ? 'Custap Berry' : this.sample(['Leftovers', 'Sitrus Berry']);
 		} else if (hasMove['switcheroo'] || hasMove['trick']) {
 			let randomBool = this.randomChance(1, 3);
 			if (counter.Physical >= 3 && (template.baseStats.spe < 60 || template.baseStats.spe > 108 || randomBool)) {
