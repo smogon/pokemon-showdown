@@ -376,7 +376,7 @@ exports.Formats = [
 			battle: 2,
 		},
 		ruleset: ['Gen 7] Doubles OU'],
-		banlist: ['Tapu Lele', 'Focus Sash', 'Perish Song'],
+		banlist: ['Salamence-Mega', 'Tapu Lele', 'Focus Sash', 'Perish Song'],
 	},
 	{
 		name: "[Gen 7] Nature Swap",
