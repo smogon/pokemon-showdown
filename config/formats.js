@@ -75,6 +75,7 @@ exports.Formats = [
 		mod: 'gen7',
 		challengeShow: false,
 		ruleset: ['[Gen 7] UU'],
+		unbanlist: ['Slowbro-Mega'],
 	},
 	{
 		name: "[Gen 7] RU",
