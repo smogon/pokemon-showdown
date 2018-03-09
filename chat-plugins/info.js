@@ -1340,7 +1340,7 @@ exports.commands = {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(
 			`New to competitive Pok&eacute;mon?<br />` +
-			`- <a href="http://www.smogon.com/forums/posts/6774481/">Beginner's Guide to Pok&eacute;mon Showdown</a><br />` +
+			`- <a href="http://www.smogon.com/forums/threads/the-beginners-guide-to-pokémon-showdown.3496279/">Beginner's Guide to Pok&eacute;mon Showdown</a><br />` +
 			`- <a href="http://www.smogon.com/dp/articles/intro_comp_pokemon">An introduction to competitive Pok&eacute;mon</a><br />` +
 			`- <a href="http://www.smogon.com/bw/articles/bw_tiers">What do 'OU', 'UU', etc mean?</a><br />` +
 			`- <a href="http://www.smogon.com/xyhub/tiers">What are the rules for each format? What is 'Sleep Clause'?</a>`
