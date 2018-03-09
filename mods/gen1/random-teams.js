@@ -254,7 +254,7 @@ class RandomGen1Teams extends RandomGen2Teams {
 		// Add one of the semi-mandatory moves
 		// Often, these are used so that the Pokemon only gets one of the less useful moves
 		if (moves.length < 4 && template.exclusiveMoves) {
-			moves.push(template.exclusiveMoves[this.random(template.exclusiveMoves.length)]);
+			moves.push(this.sample(template.exclusiveMoves));
 		}
 
 		// Add the mandatory move. SD Mew and Amnesia Snorlax are exceptions.

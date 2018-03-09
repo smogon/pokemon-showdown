@@ -210,7 +210,7 @@ class RandomGen2Teams extends RandomGen3Teams {
 
 		// Add the held item
 		// TODO: for some reason, items like Thick Club are not working in randbats
-		if (set.item) item = set.item[this.random(set.item.length)];
+		if (set.item) item = this.sample(set.item);
 
 		// Adjust ivs for hiddenpower
 		for (const setMoveid of moves) {
