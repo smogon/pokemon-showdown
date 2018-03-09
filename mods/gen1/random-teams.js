@@ -33,7 +33,7 @@ class RandomGen1Teams extends RandomGen2Teams {
 
 		for (let i = 0; i < 6; i++) {
 			// Choose forme.
-			let poke = formes[i][this.random(formes[i].length)];
+			let poke = this.sample(formes[i]);
 			let template = this.getTemplate(poke);
 
 			// Level balance: calculate directly from stats rather than using some silly lookup table.

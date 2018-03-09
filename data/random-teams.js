@@ -248,7 +248,7 @@ class RandomTeams extends Dex.ModdedDex {
 			if (!formes[i].length) {
 				throw new Error("Invalid pokemon gen " + this.gen + ": " + JSON.stringify(formes) + " numbers " + JSON.stringify(hasDexNumber));
 			}
-			sixPokemon.push(formes[i][this.random(formes[i].length)]);
+			sixPokemon.push(this.sample(formes[i]));
 		}
 		return sixPokemon;
 	}
@@ -1331,7 +1331,7 @@ class RandomTeams extends Dex.ModdedDex {
 		} else if (template.species === 'Unown') {
 			item = 'Choice Specs';
 		} else if (template.species === 'Wobbuffet') {
-			item = hasMove['destinybond'] ? 'Custap Berry' : ['Leftovers', 'Sitrus Berry'][this.random(2)];
+			item = hasMove['destinybond'] ? 'Custap Berry' : this.sample(['Leftovers', 'Sitrus Berry']);
 		} else if (template.species === 'Raichu-Alola' && hasMove['thunderbolt'] && !teamDetails.zMove && this.randomChance(1, 4)) {
 			item = 'Aloraichium Z';
 		} else if (template.species === 'Zygarde-10%' && hasMove['substitute'] && !teamDetails.zMove) {
@@ -1366,7 +1366,7 @@ class RandomTeams extends Dex.ModdedDex {
 			item = 'Soul Dew';
 		} else if (hasMove['bellydrum']) {
 			if (ability === 'Gluttony') {
-				item = ['Aguav', 'Figy', 'Iapapa', 'Mago', 'Wiki'][this.random(5)] + ' Berry';
+				item = this.sample(['Aguav', 'Figy', 'Iapapa', 'Mago', 'Wiki']) + ' Berry';
 			} else if (template.baseStats.spe <= 50 && !teamDetails.zMove && this.randomChance(1, 2)) {
 				item = 'Normalium Z';
 			} else {
@@ -2341,7 +2341,7 @@ class RandomTeams extends Dex.ModdedDex {
 				item = 'Choice Scarf';
 			}
 		} else if (ability === 'Gluttony' || ability === 'Schooling') {
-			item = ['Aguav', 'Figy', 'Iapapa', 'Mago', 'Wiki'][this.random(5)] + ' Berry';
+			item = this.sample(['Aguav', 'Figy', 'Iapapa', 'Mago', 'Wiki']) + ' Berry';
 		} else if (hasMove['bellydrum']) {
 			if (template.baseStats.spe <= 50 && !teamDetails.zMove && this.randomChance(1, 2)) {
 				item = 'Normalium Z';

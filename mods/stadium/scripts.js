@@ -186,7 +186,7 @@ exports.BattleScripts = {
 				if (hits.length) {
 					// Yes, it's hardcoded... meh
 					if (hits[0] === 2 && hits[1] === 5) {
-						hits = [2, 2, 3, 3, 4, 5][this.random(6)];
+						hits = this.sample([2, 2, 3, 3, 4, 5]);
 					} else {
 						hits = this.random(hits[0], hits[1] + 1);
 					}

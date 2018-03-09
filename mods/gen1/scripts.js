@@ -133,7 +133,7 @@ exports.BattleScripts = {
 					sourceVolatile.locked = target;
 				} else if (target !== pokemon && target !== sourceVolatile.locked) {
 					// Our target switched out! Re-roll the duration, damage, and accuracy.
-					const duration = [2, 2, 2, 3, 3, 3, 4, 5][this.random(8)];
+					const duration = this.sample([2, 2, 2, 3, 3, 3, 4, 5]);
 					sourceVolatile.duration = duration;
 					sourceVolatile.locked = target;
 					// Duration reset thus partially trapped at 2 always.
@@ -306,7 +306,7 @@ exports.BattleScripts = {
 				if (hits.length) {
 					// Yes, it's hardcoded... meh
 					if (hits[0] === 2 && hits[1] === 5) {
-						hits = [2, 2, 3, 3, 4, 5][this.random(6)];
+						hits = this.sample([2, 2, 3, 3, 4, 5]);
 					} else {
 						hits = this.random(hits[0], hits[1] + 1);
 					}
