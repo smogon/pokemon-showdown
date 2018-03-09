@@ -386,7 +386,7 @@ class RandomGen3Teams extends RandomGen4Teams {
 							}
 						}
 						if (rejectableMoves.length) {
-							moves.splice(rejectableMoves[this.random(rejectableMoves.length)], 1);
+							moves.splice(this.sample(rejectableMoves), 1);
 						}
 					}
 				}
@@ -488,7 +488,7 @@ class RandomGen3Teams extends RandomGen4Teams {
 
 		item = 'Leftovers';
 		if (template.requiredItems) {
-			item = template.requiredItems[this.random(template.requiredItems.length)];
+			item = this.sample(template.requiredItems);
 
 		// First, the extra high-priority items
 		} else if (template.species === 'Farfetch\'d') {

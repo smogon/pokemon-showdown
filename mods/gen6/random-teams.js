@@ -24,7 +24,7 @@ class RandomGen6Teams extends RandomTeams {
 		}
 		let battleForme = this.checkBattleForme(template);
 		if (battleForme && battleForme.tier !== 'AG' && (battleForme.isMega ? !teamDetails.megaStone : this.randomChance(1, 2))) {
-			template = this.getTemplate(template.otherFormes.length >= 2 ? template.otherFormes[this.random(template.otherFormes.length)] : template.otherFormes[0]);
+			template = this.getTemplate(template.otherFormes.length >= 2 ? this.sample(template.otherFormes) : template.otherFormes[0]);
 		}
 
 		let movePool = (template.randomBattleMoves ? template.randomBattleMoves.slice() : Object.keys(template.learnset));
@@ -582,7 +582,7 @@ class RandomGen6Teams extends RandomTeams {
 						}
 					}
 					if (rejectableMoves.length) {
-						moves.splice(rejectableMoves[this.random(rejectableMoves.length)], 1);
+						moves.splice(this.sample(rejectableMoves), 1);
 					}
 				}
 			}
@@ -731,7 +731,7 @@ class RandomGen6Teams extends RandomTeams {
 
 		item = 'Leftovers';
 		if (template.requiredItems) {
-			item = template.requiredItems[this.random(template.requiredItems.length)];
+			item = this.sample(template.requiredItems);
 
 		// First, the extra high-priority items
 		} else if (template.species === 'Marowak') {

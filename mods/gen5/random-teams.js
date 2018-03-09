@@ -347,7 +347,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 						}
 					}
 					if (rejectableMoves.length) {
-						moves.splice(rejectableMoves[this.random(rejectableMoves.length)], 1);
+						moves.splice(this.sample(rejectableMoves), 1);
 					}
 				}
 			}
@@ -457,7 +457,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 
 		item = 'Leftovers';
 		if (template.requiredItems) {
-			item = template.requiredItems[this.random(template.requiredItems.length)];
+			item = this.sample(template.requiredItems);
 
 		// First, the extra high-priority items
 		} else if (template.species === 'Marowak') {
@@ -519,7 +519,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 				if (!move.basePower && !move.basePowerCallback) continue;
 				eligibleTypes.push(move.type);
 			}
-			item = eligibleTypes[this.random(eligibleTypes.length)] + ' Gem';
+			item = this.sample(eligibleTypes) + ' Gem';
 		} else if (ability === 'Guts') {
 			if (hasMove['drainpunch']) {
 				item = 'Flame Orb';
@@ -545,7 +545,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 				if (!move.basePower && !move.basePowerCallback) continue;
 				eligibleTypes.push(move.type);
 			}
-			item = eligibleTypes[this.random(eligibleTypes.length)] + ' Gem';
+			item = this.sample(eligibleTypes) + ' Gem';
 		} else if (hasMove['detect'] || hasMove['protect'] || hasMove['substitute']) {
 			item = 'Leftovers';
 		} else if ((hasMove['flail'] || hasMove['reversal']) && ability !== 'Sturdy') {

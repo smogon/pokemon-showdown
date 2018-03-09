@@ -218,7 +218,7 @@ exports.BattleMovedex = {
 				}
 			}
 			if (stats.length) {
-				let randomStat = stats[this.random(stats.length)];
+				let randomStat = this.sample(stats);
 				let boost = {};
 				boost[randomStat] = 2;
 				this.boost(boost);
@@ -647,7 +647,7 @@ exports.BattleMovedex = {
 				}
 			}
 			let randomMove = '';
-			if (moves.length) randomMove = moves[this.random(moves.length)];
+			if (moves.length) randomMove = this.sample(moves);
 			if (!randomMove) {
 				return false;
 			}
@@ -2584,7 +2584,7 @@ exports.BattleMovedex = {
 			if (!possibleTypes.length) {
 				return false;
 			}
-			let randomType = possibleTypes[this.random(possibleTypes.length)];
+			let randomType = this.sample(possibleTypes);
 
 			if (!source.setType(randomType)) return false;
 			this.add('-start', source, 'typechange', randomType);
@@ -10263,7 +10263,7 @@ exports.BattleMovedex = {
 			let randomMove = '';
 			if (moves.length) {
 				moves.sort((a, b) => a.num - b.num);
-				randomMove = moves[this.random(moves.length)].id;
+				randomMove = this.sample(moves).id;
 			}
 			if (!randomMove) {
 				return false;
@@ -15156,7 +15156,7 @@ exports.BattleMovedex = {
 				}
 			}
 			let randomMove = '';
-			if (moves.length) randomMove = moves[this.random(moves.length)];
+			if (moves.length) randomMove = this.sample(moves);
 			if (!randomMove) {
 				return false;
 			}

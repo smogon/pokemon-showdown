@@ -230,6 +230,15 @@ class Battle extends Dex.ModdedDex {
 		return this.prng.randomChance(numerator, denominator);
 	}
 
+	/**
+	 * @param {ReadonlyArray<T>} items
+	 * @return {T}
+	 * @template T
+	 */
+	sample(items) {
+		return this.prng.sample(items);
+	}
+
 	resetRNG() {
 		this.prng = new PRNG(this.prng.startingSeed);
 	}
@@ -1469,7 +1478,7 @@ class Battle extends Dex.ModdedDex {
 		if (!canSwitchIn.length) {
 			return null;
 		}
-		return canSwitchIn[this.random(canSwitchIn.length)];
+		return this.sample(canSwitchIn);
 	}
 
 	/**

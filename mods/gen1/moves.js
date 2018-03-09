@@ -280,7 +280,7 @@ exports.BattleMovedex = {
 					this.effectData.duration++;
 				}
 				let moves = pokemon.moves;
-				let move = this.getMove(moves[this.random(moves.length)]);
+				let move = this.getMove(this.sample(moves));
 				this.add('-start', pokemon, 'Disable', move.name);
 				this.effectData.move = move.id;
 				return;
@@ -534,7 +534,7 @@ exports.BattleMovedex = {
 			let moveslot = source.moves.indexOf('mimic');
 			if (moveslot < 0) return false;
 			let moves = target.moves;
-			let move = moves[this.random(moves.length)];
+			let move = this.sample(moves);
 			if (!move) return false;
 			move = this.getMove(move);
 			source.moveSlots[moveslot] = {
