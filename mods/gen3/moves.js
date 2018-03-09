@@ -441,7 +441,7 @@ exports.BattleMovedex = {
 				}
 			}
 			let randomMove = '';
-			if (moves.length) randomMove = moves[this.random(moves.length)];
+			if (moves.length) randomMove = this.sample(moves);
 			if (!randomMove) {
 				return false;
 			}

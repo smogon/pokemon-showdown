@@ -885,7 +885,7 @@ exports.BattleMovedex = {
 						}
 					}
 					if (stats.length) {
-						let randomStat = stats[this.random(stats.length)];
+						let randomStat = this.sample(stats);
 						let boost = {};
 						boost[randomStat] = 1;
 						this.boost(boost);
@@ -917,7 +917,7 @@ exports.BattleMovedex = {
 						}
 					}
 					if (stats.length) {
-						let randomStat = stats[this.random(stats.length)];
+						let randomStat = this.sample(stats);
 						let boost = {};
 						boost[randomStat] = 1;
 						this.boost(boost);
@@ -943,7 +943,7 @@ exports.BattleMovedex = {
 						}
 					}
 					if (stats.length) {
-						let randomStat = stats[this.random(stats.length)];
+						let randomStat = this.sample(stats);
 						let boost = {};
 						boost[randomStat] = 1;
 						this.boost(boost);
@@ -2026,7 +2026,7 @@ exports.BattleMovedex = {
 			if (user.illusion) {
 				let illusionMoves = user.illusion.moves.filter(move => this.getMove(move).category !== 'Status');
 				if (!illusionMoves.length) return;
-				move.name = this.getMove(illusionMoves[this.random(illusionMoves.length)]).name;
+				move.name = this.getMove(this.sample(illusionMoves)).name;
 			}
 		},
 		desc: "Has a 40% chance to lower the target's accuracy by 1 stage. If Illusion is active, displays as a random non-Status move in the copied Pokémon's moveset.",

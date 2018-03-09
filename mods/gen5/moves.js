@@ -43,7 +43,7 @@ exports.BattleMovedex = {
 				}
 			}
 			let randomMove = '';
-			if (moves.length) randomMove = moves[this.random(moves.length)];
+			if (moves.length) randomMove = this.sample(moves);
 			if (!randomMove) {
 				return false;
 			}
@@ -133,7 +133,7 @@ exports.BattleMovedex = {
 			if (!possibleTypes.length) {
 				return false;
 			}
-			let type = possibleTypes[this.random(possibleTypes.length)];
+			let type = this.sample(possibleTypes);
 
 			if (!target.setType(type)) return false;
 			this.add('-start', target, 'typechange', type);
