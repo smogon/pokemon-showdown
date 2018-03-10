@@ -1152,7 +1152,8 @@ function runMovesearch(target, cmd, canAll, message) {
 
 			for (let searchStatus in alts.volatileStatus) {
 				let canStatus = !!((dex[move].secondary && dex[move].secondary.volatileStatus === searchStatus) ||
-								   (dex[move].secondaries && dex[move].secondaries.some(entry => entry.volatileStatus === searchStatus)));
+								   (dex[move].secondaries && dex[move].secondaries.some(entry => entry.volatileStatus === searchStatus)) ||
+								   (dex[move].volatileStatus === searchStatus));
 				if (canStatus === alts.volatileStatus[searchStatus]) {
 					matched = true;
 					break;
