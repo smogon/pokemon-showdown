@@ -553,17 +553,6 @@ class Battle extends Dex.ModdedDex {
 	}
 
 	/**
-	 * @param {Pokemon | Side} [thing]
-	 * @param {string} [callbackType]
-	 */
-	getResidualStatuses(thing, callbackType) {
-		let statuses = this.getRelevantEffectsInner(thing || this, callbackType || 'residualCallback', null, null, false, true, 'duration');
-		statuses.sort((a, b) => this.comparePriority(a, b));
-		//if (statuses[0]) this.debug('match ' + (callbackType || 'residualCallback') + ': ' + statuses[0].status.id);
-		return statuses;
-	}
-
-	/**
 	 * @param {string} eventid
 	 * @param {Effect} [effect]
 	 * @param {boolean} [relayVar]
