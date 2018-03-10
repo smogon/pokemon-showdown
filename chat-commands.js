@@ -2720,13 +2720,18 @@ exports.commands = {
 		if (!/^[0-9.*]+$/.test(ip)) return this.errorReply("Please enter a valid IP address.");
 
 		if (Punishments.sharedIps.has(ip)) return this.errorReply("This IP is already marked as shared.");
+		if (!note) {
+			this.errorReply(`You must specify who owns this shared IP.`);
+			this.parse(`/help markshared`);
+			return;
+		}
 
 		Punishments.addSharedIp(ip, note);
-		if (note) note = ` (${note})`;
+		note = ` (${note})`;
 		this.globalModlog('SHAREDIP', ip, ` by ${user.name}${note}`);
 		return this.addModAction(`The IP '${ip}' was marked as shared by ${user.name}.${note}`);
 	},
-	marksharedhelp: [`/markshared [ip] - Marks an IP address as shared. Requires @, &, ~`],
+	marksharedhelp: [`/markshared [IP], [owner/organization of IP] - Marks an IP address as shared. Note: the owner/organization (i.e., University of Minnesota) of the shared IP is required. Requires @, &, ~`],
 
 	unmarkshared: function (target, room, user) {
 		if (!target) return this.parse('/help unmarkshared');
