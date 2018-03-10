@@ -565,12 +565,9 @@ class Battle extends Dex.ModdedDex {
 
 	/**
 	 * @param {string} eventid
-	 * @param {Effect} [effect]
-	 * @param {boolean} [relayVar]
 	 */
-	eachEvent(eventid, effect, relayVar) {
+	eachEvent(eventid) {
 		let actives = [];
-		if (!effect && this.effect) effect = this.effect;
 		for (let i = 0; i < this.sides.length; i++) {
 			let side = this.sides[i];
 			for (let j = 0; j < side.active.length; j++) {
@@ -584,7 +581,7 @@ class Battle extends Dex.ModdedDex {
 			return this.random() - 0.5;
 		});
 		for (let i = 0; i < actives.length; i++) {
-			this.runEvent(eventid, actives[i], null, effect, relayVar);
+			this.runEvent(eventid, actives[i], null, this.effect);
 		}
 		if (eventid === 'Weather' && this.gen >= 7) {
 			// TODO: further research when updates happen
