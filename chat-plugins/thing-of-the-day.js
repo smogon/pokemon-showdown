@@ -85,7 +85,7 @@ class OtdHandler {
 	addNomination(user, nomination) {
 		const id = toNominationId(nomination);
 
-		if (this.winners.slice(-30).some(entry => toNominationId(entry[this.keys[0]]) === id)) return user.sendTo(this.room, `This ${this.name.toLowerCase()} has already been ${this.id} in the past month.`);
+		if (this.winners.slice(this.room === tvbf ? -10 : -30).some(entry => toNominationId(entry[this.keys[0]]) === id)) return user.sendTo(this.room, `This ${this.name.toLowerCase()} has already been ${this.id} in the past month.`);
 
 		for (const value of this.removedNominations.values()) {
 			if (toId(user) in value.userids || user.latestIp in value.ips) return user.sendTo(this.room, `Since your nomination has been removed by staff, you cannot submit another ${this.name.toLowerCase()} until the next round.`);
