@@ -73,7 +73,6 @@ exports.Formats = [
 		desc: [`&bullet; <a href="http://www.smogon.com/forums/threads/3630113/">UU Suspect Test</a>`],
 
 		mod: 'gen7',
-		challengeShow: false,
 		ruleset: ['[Gen 7] UU'],
 		unbanlist: ['Slowbro-Mega'],
 	},
