@@ -355,7 +355,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		if (!player && this.dead[user.userid] && this.dead[user.userid].restless) player = this.dead[user.userid];
 		if (!(target in this.players) && target !== 'nolynch') return false;
 		if (player.lynching || (target === player.userid && !this.selfEnabled)) return false;
-		if (target === player.userid && (this.lynches[target] && this.getHammer() - 1 > this.lynches[target].count) && this.selfEnabled === 'hammer') return false;
+		if (target === player.userid && (this.lynches[target] && this.hammerCount - 1 > this.lynches[target].count) && this.selfEnabled === 'hammer') return false;
 		let lynch = this.lynches[target];
 		if (!lynch) {
 			this.lynches[target] = {count: 1, lastLynch: Date.now(), dir: 'up', lynchers: [user.userid]};
