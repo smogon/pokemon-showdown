@@ -2534,7 +2534,7 @@ exports.commands = {
 
 		// Notify staff room when a user is banned from battling outside of it.
 		if (room.id !== 'staff' && Rooms('staff')) {
-			Rooms('staff').addByUser(user, `<<${room.id}>>${battlebanMessage}`);
+			Rooms('staff').addByUser(user, `<<${room.id}>> ${battlebanMessage}`);
 		}
 		if (targetUser.trusted) {
 			Monitor.log(`[CrisisMonitor] Trusted user ${targetUser.name} was banned from battling by ${user.name}, and should probably be demoted.`);
