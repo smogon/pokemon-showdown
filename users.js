@@ -1237,12 +1237,14 @@ class User {
 		this.inRooms.clear();
 	}
 	/**
+	 * If this user is included in the returned list of alts (i.e. when forPunishment is true), they will always be the first element of that list.
 	 * @param {boolean} includeTrusted
 	 * @param {boolean} forPunishment
 	 */
 	getAltUsers(includeTrusted, forPunishment) {
 		let alts = findUsers([this.getLastId()], Object.keys(this.ips), {includeTrusted: includeTrusted, forPunishment: forPunishment});
-		if (!forPunishment) alts = alts.filter(user => user !== this);
+		alts = alts.filter(user => user !== this);
+		if (forPunishment) alts.unshift(this);
 		return alts;
 	}
 	getLastName() {
