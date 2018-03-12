@@ -499,7 +499,7 @@ exports.pages = {
 
 exports.commands = {
 	'!report': true,
-	report: function (target, room, user, connection) {
+	report: function (target, room, user) {
 		if (!this.runBroadcast()) return;
 		if (this.broadcasting) {
 			return this.sendReplyBox('<button name="joinRoom" value="view-help-request--report" class="button"><strong>Report someone</strong></button>');
@@ -509,7 +509,7 @@ exports.commands = {
 	},
 
 	'!appeal': true,
-	appeal: function (target, room, user, connection) {
+	appeal: function (target, room, user) {
 		if (!this.runBroadcast()) return;
 		if (this.broadcasting) {
 			return this.sendReplyBox('<button name="joinRoom" value="view-help-request--appeal" class="button"><strong>Appeal a punishment</strong></button>');
@@ -524,7 +524,7 @@ exports.commands = {
 	helpticket: {
 		'!create': true,
 		'': 'create',
-		create: function (target, room, user, connection) {
+		create: function (target, room, user) {
 			if (!this.runBroadcast()) return;
 			if (this.broadcasting) {
 				return this.sendReplyBox('<button name="joinRoom" value="view-help-request" class="button"><strong>Request help</strong></button>');
@@ -633,7 +633,7 @@ exports.commands = {
 		escalatehelp: [`/helpticket escalate [user], (upperstaff) - Escalate a ticket. If upperstaff is included, escalate the ticket to upper staff. Requires: % @ * & ~`],
 
 		'!list': true,
-		list: function (target, room, user, connection) {
+		list: function (target, room, user) {
 			if (!this.can('lock')) return;
 			this.parse('/join view-help-tickets');
 		},
