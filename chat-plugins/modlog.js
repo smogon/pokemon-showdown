@@ -281,6 +281,7 @@ exports.pages = {
 
 exports.commands = {
 	'!modlog': true,
+	ml: 'modlog',
 	timedmodlog: 'modlog',
 	modlog: function (target, room, user, connection, cmd) {
 		if (!room) room = Rooms('global');
