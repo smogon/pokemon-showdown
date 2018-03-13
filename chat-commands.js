@@ -3403,41 +3403,41 @@ exports.commands = {
 		switch (cmd) {
 		case 'hp':
 		case 'h':
-			room.battle.send('eval', "let p=" + getPlayer(targets[0]) + getPokemon(targets[1]) + ";p.sethp(" + parseInt(targets[2]) + ");if (p.isActive)battle.add('-damage',p,p.getHealth);");
+			room.battle.stream.write(`>eval let p=${getPlayer(targets[0]) + getPokemon(targets[1])};p.sethp(${parseInt(targets[2])});if (p.isActive)battle.add('-damage',p,p.getHealth);`);
 			break;
 		case 'status':
 		case 's':
-			room.battle.send('eval', "let pl=" + getPlayer(targets[0]) + ";let p=pl" + getPokemon(targets[1]) + ";p.setStatus('" + toId(targets[2]) + "');if (!p.isActive){battle.add('','please ignore the above');battle.add('-status',pl.active[0],pl.active[0].status,'[silent]');}");
+			room.battle.stream.write(`>eval let pl=${getPlayer(targets[0])};let p=pl${getPokemon(targets[1])};p.setStatus('${toId(targets[2])}');if (!p.isActive){battle.add('','please ignore the above');battle.add('-status',pl.active[0],pl.active[0].status,'[silent]');}`);
 			break;
 		case 'pp':
-			room.battle.send('eval', "let pl=" + getPlayer(targets[0]) + ";let p=pl" + getPokemon(targets[1]) + ";p.moveSlots[p.moves.indexOf('" + toId(targets[2]) + "')].pp = " + parseInt(targets[3]));
+			room.battle.stream.write(`>eval let pl=${getPlayer(targets[0])};let p=pl${getPokemon(targets[1])};p.moveSlots[p.moves.indexOf('${toId(targets[2])}')].pp = ${parseInt(targets[3])};`);
 			break;
 		case 'boost':
 		case 'b':
-			room.battle.send('eval', "let p=" + getPlayer(targets[0]) + getPokemon(targets[1]) + ";battle.boost({" + toId(targets[2]) + ":" + parseInt(targets[3]) + "},p)");
+			room.battle.stream.write(`>eval let p=${getPlayer(targets[0]) + getPokemon(targets[1])};battle.boost({${toId(targets[2])}:${parseInt(targets[3])}},p)`);
 			break;
 		case 'volatile':
 		case 'v':
-			room.battle.send('eval', "let p=" + getPlayer(targets[0]) + getPokemon(targets[1]) + ";p.addVolatile('" + toId(targets[2]) + "')");
+			room.battle.stream.write(`>eval let p=${getPlayer(targets[0]) + getPokemon(targets[1])};p.addVolatile('${toId(targets[2])}')`);
 			break;
 		case 'sidecondition':
 		case 'sc':
-			room.battle.send('eval', "let p=" + getPlayer(targets[0]) + ".addSideCondition('" + toId(targets[1]) + "')");
+			room.battle.stream.write(`>eval let p=${getPlayer(targets[0])}.addSideCondition('${toId(targets[1])}')`);
 			break;
 		case 'fieldcondition': case 'pseudoweather':
 		case 'fc':
-			room.battle.send('eval', "battle.addPseudoWeather('" + toId(targets[0]) + "')");
+			room.battle.stream.write(`>eval battle.addPseudoWeather('${toId(targets[0])}')`);
 			break;
 		case 'weather':
 		case 'w':
-			room.battle.send('eval', "battle.setWeather('" + toId(targets[0]) + "')");
+			room.battle.stream.write(`>eval battle.setWeather('${toId(targets[0])}')`);
 			break;
 		case 'terrain':
 		case 't':
-			room.battle.send('eval', "battle.setTerrain('" + toId(targets[0]) + "')");
+			room.battle.stream.write(`>eval battle.setTerrain('${toId(targets[0])}')`);
 			break;
 		default:
-			this.errorReply("Unknown editbattle command: " + cmd);
+			this.errorReply(`Unknown editbattle command: ${cmd}`);
 			break;
 		}
 	},
