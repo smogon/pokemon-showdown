@@ -355,7 +355,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		if (!player && this.dead[user.userid] && this.dead[user.userid].restless) player = this.dead[user.userid];
 		if (!(target in this.players) && target !== 'nolynch') return false;
 		if (player.lynching || (target === player.userid && !this.selfEnabled)) return false;
-		if (target === player.userid && (this.lynches[target] && this.hammerCount - 1 > this.lynches[target].count) && this.selfEnabled === 'hammer') return false;
+		if (target === player.userid && (this.lynches[target] && this.hammerCount - 1 > this.lynches[target] ? this.lynches[target].count : 0) && this.selfEnabled === 'hammer') return false;
 		let lynch = this.lynches[target];
 		if (!lynch) {
 			this.lynches[target] = {count: 1, lastLynch: Date.now(), dir: 'up', lynchers: [user.userid]};
@@ -514,19 +514,21 @@ class MafiaTracker extends Rooms.RoomGame {
 		} else {
 			const targetUser = Users(deadPlayer);
 			if (!targetUser || !targetUser.connected) return user.sendTo(this.room, `|error|The user "${deadPlayer}" was not found.`);
-			if (!this.room.users[targetUser.userid]) return this.errorReply(`${targetUser.name} is not in this room, and cannot be hosted.`);
+			if (!this.room.users[targetUser.userid]) return this.errorReply(`${targetUser.name} is not in this room, and cannot be added to the game.`);
 			let player = this.makePlayer(targetUser);
 			if (this.started) {
-				player.lynching = '';
 				player.role = {
-					name: `No set role`,
-					id: `nosetrole`,
+					name: `Unknown`,
+					id: `unknown`,
 					alignment: 'solo',
 					memo: [`You were added to the game after it had started. To learn about your role, PM the host (${this.host}).`],
 				};
 				this.roles.push(player.role);
 			} else {
+				this.originalRoles = [];
+				this.originalRoleString = '';
 				this.roles = [];
+				this.roleString = '';
 			}
 			this.players[targetUser.userid] = player;
 			this.sendRoom(`${targetUser.name} has been added to the game!`, {declare: true});
@@ -669,7 +671,7 @@ class MafiaTracker extends Rooms.RoomGame {
 	}
 
 	forfeit(user) {
-		if (!(user.userid in this.players)) return user.sendTo(this.room, `|error|You are not a player in the game.`);
+		if (!(user.userid in this.players)) return false;
 		// Treat it as if the user was banned (force sub)
 		return this.removeBannedUser(user);
 	}
