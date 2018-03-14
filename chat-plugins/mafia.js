@@ -355,7 +355,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		if (!player && this.dead[user.userid] && this.dead[user.userid].restless) player = this.dead[user.userid];
 		if (!(target in this.players) && target !== 'nolynch') return false;
 		if (player.lynching || (target === player.userid && !this.selfEnabled)) return false;
-		if (target === player.userid && (this.lynches[target] && this.getHammer() - 1 > this.lynches[target].count) && this.selfEnabled === 'hammer') return false;
+		if (target === player.userid && (this.lynches[target] && this.hammerCount - 1 > this.lynches[target] ? this.lynches[target].count : 0) && this.selfEnabled === 'hammer') return false;
 		let lynch = this.lynches[target];
 		if (!lynch) {
 			this.lynches[target] = {count: 1, lastLynch: Date.now(), dir: 'up', lynchers: [user.userid]};
@@ -371,10 +371,10 @@ class MafiaTracker extends Rooms.RoomGame {
 		if (this.hammerCount <= lynch.count) {
 			// HAMMER
 			this.sendRoom(`Hammer! ${target === 'nolynch' ? 'Nobody' : this.players[target].name} was lynched!`, {declare: true});
-			if (target !== 'nolynch') this.eliminate(target);
+			if (target !== 'nolynch') this.eliminate(target, 'kill');
 			return this.night(true);
 		}
-		if (this.getPlurality() !== this.hasPlurality) this.hasPlurality = this.getPlurality();
+		this.hasPlurality = null;
 		player.updateHtmlRoom();
 		return true;
 	}
@@ -395,7 +395,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		}
 		this.sendRoom(`${user.name} has unlynched ${player.lynching}.`, {timestamp: true, user: user});
 		player.lynching = '';
-		if (this.getPlurality() !== this.hasPlurality) this.hasPlurality = this.getPlurality();
+		this.hasPlurality = null;
 		player.updateHtmlRoom();
 		return true;
 	}
@@ -428,6 +428,7 @@ class MafiaTracker extends Rooms.RoomGame {
 	}
 
 	getPlurality() {
+		if (this.hasPlurality) return this.hasPlurality;
 		if (!Object.keys(this.lynches).length) return null;
 		let max = 0;
 		let topLynches = [];
@@ -450,7 +451,8 @@ class MafiaTracker extends Rooms.RoomGame {
 				return (l1.lastLynch > l2.lastLynch ? -1 : 1);
 			}
 		});
-		return topLynches[0];
+		this.hasPlurality = topLynches[0];
+		return this.hasPlurality;
 	}
 
 	eliminate(player, ability) {
@@ -460,6 +462,7 @@ class MafiaTracker extends Rooms.RoomGame {
 			// Game has not started, simply kick the player
 			player.destroy();
 			delete this.players[toId(player)];
+			this.playerCount--;
 			return this.updatePlayers();
 		}
 		this.dead[player.userid] = player;
@@ -478,6 +481,9 @@ class MafiaTracker extends Rooms.RoomGame {
 			this.dead[player.userid].restless = true;
 			msg += ` became a restless treestump`;
 			break;
+		case 'kick':
+			msg += ` was kicked from the game`;
+			break;
 		default:
 			msg += ` was eliminated`;
 		}
@@ -495,16 +501,38 @@ class MafiaTracker extends Rooms.RoomGame {
 		return true;
 	}
 
-	revive(deadPlayer) {
-		if (!this.started) return false;
-		if (!(deadPlayer in this.dead)) return false;
-		deadPlayer = this.dead[deadPlayer];
-		if (deadPlayer.treestump) delete deadPlayer.treestump;
-		if (deadPlayer.restless) delete deadPlayer.restless;
-		this.sendRoom(`${deadPlayer.name} was revived!`, {declare: true});
-		this.players[deadPlayer.userid] = deadPlayer;
-		this.roles.push(deadPlayer.role);
-		delete this.dead[deadPlayer.userid];
+	revive(user, deadPlayer) {
+		if (deadPlayer in this.players) return user.sendTo(this.room, `|error|The user ${deadPlayer} is already a living player.`);
+		if (deadPlayer in this.dead) {
+			deadPlayer = this.dead[deadPlayer];
+			if (deadPlayer.treestump) delete deadPlayer.treestump;
+			if (deadPlayer.restless) delete deadPlayer.restless;
+			this.sendRoom(`${deadPlayer.name} was revived!`, {declare: true});
+			this.players[deadPlayer.userid] = deadPlayer;
+			this.roles.push(deadPlayer.role);
+			delete this.dead[deadPlayer.userid];
+		} else {
+			const targetUser = Users(deadPlayer);
+			if (!targetUser || !targetUser.connected) return user.sendTo(this.room, `|error|The user "${deadPlayer}" was not found.`);
+			if (!this.room.users[targetUser.userid]) return this.errorReply(`${targetUser.name} is not in this room, and cannot be added to the game.`);
+			let player = this.makePlayer(targetUser);
+			if (this.started) {
+				player.role = {
+					name: `Unknown`,
+					id: `unknown`,
+					alignment: 'solo',
+					memo: [`You were added to the game after it had started. To learn about your role, PM the host (${this.host}).`],
+				};
+				this.roles.push(player.role);
+			} else {
+				this.originalRoles = [];
+				this.originalRoleString = '';
+				this.roles = [];
+				this.roleString = '';
+			}
+			this.players[targetUser.userid] = player;
+			this.sendRoom(`${targetUser.name} has been added to the game!`, {declare: true});
+		}
 		this.playerCount++;
 		this.updateRoleString();
 		this.updatePlayers();
@@ -635,17 +663,6 @@ class MafiaTracker extends Rooms.RoomGame {
 		if (this.subs.includes(user.userid)) this.subs.splice(this.subs.indexOf(user.userid), 1);
 	}
 
-	renamePlayer(user, oldUserid) {
-		if (user.userid === oldUserid) {
-			this.players[user.userid].name = user.name;
-		} else {
-			this.players[user.userid] = this.players[oldUserid];
-			this.players[user.userid].userid = user.userid;
-			this.players[user.userid].name = user.name;
-			delete this.players[oldUserid];
-		}
-	}
-
 	removeBannedUser(user) {
 		// Player was banned, attempt to sub now
 		// If we can't sub now, make subbing them out the top priority
@@ -654,6 +671,7 @@ class MafiaTracker extends Rooms.RoomGame {
 	}
 
 	forfeit(user) {
+		if (!(user.userid in this.players)) return false;
 		// Treat it as if the user was banned (force sub)
 		return this.removeBannedUser(user);
 	}
@@ -721,7 +739,7 @@ exports.pages = {
 		}
 		if (room.game.phase === "day") {
 			buf += `<h3>Lynches (Hammer: ${room.game.hammerCount}) <button class="button" name="send" value="/join view-mafia-${room.id}"><i class="fa fa-refresh"></i> Refresh</button></h3>`;
-			let plur = room.game.hasPlurality;
+			let plur = room.game.getPlurality();
 			let list = Object.keys(room.game.players).concat(['nolynch']);
 			for (let key of list) {
 				if (room.game.lynches[key]) {
@@ -918,8 +936,8 @@ exports.commands = {
 			if (!user.can('mute', null, targetRoom) && targetRoom.game.hostid !== user.userid) return user.sendTo(targetRoom, `|error|/mafia reveal - Access denied.`);
 			let action = targetRoom.id === room.id ? toId(target.join('')) : toId(target[1]);
 			if (!['on', 'off'].includes(action)) return this.parse('/help mafia reveal');
-			if ((action === 'on' && targetRoom.game.noReveal) || (action === 'off' && !targetRoom.game.noReveal)) return user.sendTo(targetRoom, `|error|Revealing of roles is already ${targetRoom.game.noReveal ? 'disabled' : 'enabled'}.`);
-			targetRoom.game.noReveal = action === 'on';
+			if ((action === 'off' && targetRoom.game.noReveal) || (action === 'on' && !targetRoom.game.noReveal)) return user.sendTo(targetRoom, `|error|Revealing of roles is already ${targetRoom.game.noReveal ? 'enabled' : 'disabled'}.`);
+			targetRoom.game.noReveal = action === 'off';
 			targetRoom.game.updatePlayers();
 		},
 		revealhelp: [`/mafia reveal [on|off] - Sets if roles reveal on death or not. Requires host % @ * # & ~`],
@@ -1052,6 +1070,7 @@ exports.commands = {
 		treestump: 'kill',
 		spirit: 'kill',
 		spiritstump: 'kill',
+		kick: 'kill',
 		kill: function (target, room, user, connection, cmd) {
 			let targetRoom = room;
 			target = target.split(',');
@@ -1075,7 +1094,7 @@ exports.commands = {
 			if (Rooms(target[0]) && Rooms(target[0]).users[user.userid]) targetRoom = Rooms(target.shift());
 			if (!targetRoom || !targetRoom.game || targetRoom.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
 			if (!user.can('mute', null, room) && targetRoom.game.hostid !== user.userid) return user.sendTo(targetRoom, `|error|/mafia revive - Access denied.`);
-			targetRoom.game.revive(toId(target.join('')));
+			targetRoom.game.revive(user, toId(target.join('')));
 		},
 		revivehelp: [`/mafia revive [player] - Revive a player who died. Requires host % @ * # & ~`],
 
