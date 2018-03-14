@@ -55,6 +55,7 @@ class MafiaPlayer extends Rooms.RoomGamePlayer {
 		this.name = Chat.escapeHTML(this.name);
 		this.role = null;
 		this.lynching = '';
+		this.lastLynch = 0;
 	}
 
 	getRole() {
@@ -118,11 +119,8 @@ class MafiaTracker extends Rooms.RoomGame {
 			if (Object.keys(this.players).includes(alt.userid)) return user.sendTo(this.room, `|error|You already have an alt in the game.`);
 			if (this.hostid === alt.userid) return user.sendTo(this.room, `|error|You cannot join a game with an alt as the host.`);
 		}
-		if (this.addPlayer(user)) {
-			this.updatePlayers();
-		} else {
-			return user.sendTo(this.room, `|error|You have already joined the game of ${this.title}.`);
-		}
+		if (!this.addPlayer(user)) return user.sendTo(this.room, `|error|You have already joined the game of ${this.title}.`);
+		this.players[user.userid].updateHtmlRoom();
 	}
 
 	leave(user) {
@@ -131,7 +129,6 @@ class MafiaTracker extends Rooms.RoomGame {
 		this.players[user.userid].destroy();
 		delete this.players[user.userid];
 		this.playerCount--;
-		this.updatePlayers();
 		user.send(`>view-mafia-${this.room.id}\n|init|html\n${Chat.pages.mafia([this.room.id], user)}`);
 	}
 
@@ -353,9 +350,11 @@ class MafiaTracker extends Rooms.RoomGame {
 		if (this.phase !== 'day') return false;
 		let player = this.players[user.userid];
 		if (!player && this.dead[user.userid] && this.dead[user.userid].restless) player = this.dead[user.userid];
+		if (!player) return false;
 		if (!(target in this.players) && target !== 'nolynch') return false;
 		if (player.lynching || (target === player.userid && !this.selfEnabled)) return false;
-		if (target === player.userid && (this.lynches[target] && this.hammerCount - 1 > this.lynches[target] ? this.lynches[target].count : 0) && this.selfEnabled === 'hammer') return false;
+		if (target === player.userid && (this.hammerCount - 1 > (this.lynches[target] ? this.lynches[target].count : 0)) && this.selfEnabled === 'hammer') return false;
+		if (player.lastLynch + 2000 >= Date.now()) return user.sendTo(this.room, `|error|You must wait another ${Chat.toDurationString((player.lastLynch + 2000) - Date.now()) || '0 seconds'} before you can change your lynch.`);
 		let lynch = this.lynches[target];
 		if (!lynch) {
 			this.lynches[target] = {count: 1, lastLynch: Date.now(), dir: 'up', lynchers: [user.userid]};
@@ -367,10 +366,12 @@ class MafiaTracker extends Rooms.RoomGame {
 			lynch.lynchers.push(user.userid);
 		}
 		player.lynching = target;
-		this.sendRoom(`${user.name} has lynched ${player.lynching}.`, {timestamp: true, user: user});
+		let name = player.lynching === 'nolynch' ? 'No Lynch' : this.players[player.lynching].name;
+		this.sendRoom(`${user.name} has lynched ${name}.`, {timestamp: true, user: user});
+		player.lastLynch = Date.now();
 		if (this.hammerCount <= lynch.count) {
 			// HAMMER
-			this.sendRoom(`Hammer! ${target === 'nolynch' ? 'Nobody' : this.players[target].name} was lynched!`, {declare: true});
+			this.sendRoom(`Hammer! ${target === 'nolynch' ? 'Nobody' : name} was lynched!`, {declare: true});
 			if (target !== 'nolynch') this.eliminate(target, 'kill');
 			return this.night(true);
 		}
@@ -383,7 +384,8 @@ class MafiaTracker extends Rooms.RoomGame {
 		if (this.phase !== 'day') return false;
 		let player = this.players[user.userid];
 		if (!player && this.dead[user.userid] && this.dead[user.userid].restless) player = this.dead[user.userid];
-		if (!player.lynching) return false;
+		if (!player || !player.lynching) return false;
+		if (player.lastLynch + 2000 >= Date.now()) return user.sendTo(this.room, `|error|You must wait another ${Chat.toDurationString((player.lastLynch + 2000) - Date.now()) || '0 seconds'} before you can change your lynch.`);
 		let lynch = this.lynches[player.lynching];
 		lynch.count--;
 		if (lynch.count <= 0) {
@@ -393,8 +395,9 @@ class MafiaTracker extends Rooms.RoomGame {
 			lynch.dir = 'down';
 			lynch.lynchers.splice(lynch.lynchers.indexOf(user.userid), 1);
 		}
-		this.sendRoom(`${user.name} has unlynched ${player.lynching}.`, {timestamp: true, user: user});
+		this.sendRoom(`${user.name} has unlynched ${player.lynching === 'nolynch' ? 'No Lynch' : this.players[player.lynching].name}.`, {timestamp: true, user: user});
 		player.lynching = '';
+		player.lastLynch = Date.now();
 		this.hasPlurality = null;
 		player.updateHtmlRoom();
 		return true;
@@ -433,14 +436,17 @@ class MafiaTracker extends Rooms.RoomGame {
 		let max = 0;
 		let topLynches = [];
 		for (let key in this.lynches) {
-			if (this.lynches[key].num > max) {
-				max = this.lynches[key].num;
+			if (this.lynches[key].count > max) {
+				max = this.lynches[key].count;
 				topLynches = [key];
-			} else if (this.lynches[key].num === max) {
+			} else if (this.lynches[key].count === max) {
 				topLynches.push(key);
 			}
 		}
-		if (topLynches.length === 1) return topLynches[0];
+		if (topLynches.length <= 1) {
+			this.hasPlurality = topLynches[0];
+			return this.hasPlurality;
+		}
 		topLynches = topLynches.sort((l1, l2) => {
 			l1 = this.lynches[l1];
 			l2 = this.lynches[l2];
@@ -455,15 +461,15 @@ class MafiaTracker extends Rooms.RoomGame {
 		return this.hasPlurality;
 	}
 
-	eliminate(player, ability) {
+	eliminate(player, ability = 'kill') {
 		player = this.players[toId(player)];
 		if (!player) return false;
 		if (!this.started) {
 			// Game has not started, simply kick the player
 			player.destroy();
-			delete this.players[toId(player)];
+			delete this.players[player.userid];
 			this.playerCount--;
-			return this.updatePlayers();
+			player.updateHtmlRoom();
 		}
 		this.dead[player.userid] = player;
 		let msg = `${player.name}`;
@@ -498,6 +504,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		this.playerCount--;
 		this.updateRoleString();
 		this.updatePlayers();
+		player.updateHtmlRoom();
 		return true;
 	}
 
@@ -659,6 +666,13 @@ class MafiaTracker extends Rooms.RoomGame {
 		user.sendTo(this.room, `|uhtml|mafia|${this.roomWindow()}`);
 	}
 
+	onJoin(user) {
+		if (user.userid in this.players) {
+			return this.players[user.userid].updateHtmlRoom();
+		}
+		if (user.userid === this.hostid) return this.updateHost();
+	}
+
 	onLeave(user) {
 		if (this.subs.includes(user.userid)) this.subs.splice(this.subs.indexOf(user.userid), 1);
 	}
@@ -697,6 +711,18 @@ class MafiaTracker extends Rooms.RoomGame {
 		}
 		this.destroy();
 		return true;
+	}
+
+	destroy() {
+		// Slightly modified to handle dead players
+		this.room.game = null;
+		this.room = /** @type {any} */ (null);
+		for (let i in this.players) {
+			this.players[i].destroy();
+		}
+		for (let i in this.dead) {
+			this.dead[i].destroy();
+		}
 	}
 }
 
@@ -1094,9 +1120,10 @@ exports.commands = {
 			if (Rooms(target[0]) && Rooms(target[0]).users[user.userid]) targetRoom = Rooms(target.shift());
 			if (!targetRoom || !targetRoom.game || targetRoom.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
 			if (!user.can('mute', null, room) && targetRoom.game.hostid !== user.userid) return user.sendTo(targetRoom, `|error|/mafia revive - Access denied.`);
+			if (!toId(target.join(''))) return this.parse('/help mafia revive');
 			targetRoom.game.revive(user, toId(target.join('')));
 		},
-		revivehelp: [`/mafia revive [player] - Revive a player who died. Requires host % @ * # & ~`],
+		revivehelp: [`/mafia revive [player] - Revive a player who died or add a new player to the game. Requires host % @ * # & ~`],
 
 		dl: 'deadline',
 		deadline: function (target, room, user) {
@@ -1159,6 +1186,7 @@ exports.commands = {
 					user.sendTo(room, `|error|You have cancelled your request to sub out.`);
 					game.players[user.userid].updateHtmlRoom();
 				} else {
+					if (!this.canTalk(null, targetRoom)) return;
 					if (game.hostid === user.userid) return user.sendTo(targetRoom, `|error|The host cannot sub into the game.`);
 					if (game.subs.includes(user.userid)) return user.sendTo(targetRoom, `|error|You are already on the sub list.`);
 					if (game.played.includes(user.userid)) return user.sendTo(targetRoom, `|error|You cannot sub back into the game.`);
@@ -1191,7 +1219,6 @@ exports.commands = {
 				game.nextSub(toId(toSub));
 				break;
 			}
-			game.updateHost();
 		},
 		subhelp: [
 			`/mafia sub in - Request to sub into the game, or cancel a request to sub out.`,
@@ -1374,7 +1401,7 @@ exports.commands = {
 		`/mafia treestump [player] - Kills a player, but allows them to talk during the day still.`,
 		`/mafia spirit [player] - Kills a player, but allows them to vote on the lynch still.`,
 		`/mafia spiritstump [player] Kills a player, but allows them to talk during the day, and vote on the lynch.`,
-		`/mafia revive [player] - Revive a player who died. Requires host % @ * # & ~`,
+		`/mafia revive [player] - Revive a player who died or add a new player to the game. Requires host % @ * # & ~`,
 		`/mafia deadline [minutes|off] - Sets or removes the deadline for the game. Cannot be more than 20 minutes.`,
 		`/mafia sub in - Request to sub into the game, or cancel a request to sub out.`,
 		`/mafia sub out - Request to sub out of the game, or cancel a request to sub in.`,
