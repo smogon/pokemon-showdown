@@ -523,7 +523,7 @@ class MafiaTracker extends Rooms.RoomGame {
 			const targetUser = Users(deadPlayer);
 			if (!targetUser || !targetUser.connected) return user.sendTo(this.room, `|error|The user "${deadPlayer}" was not found.`);
 			if (!this.room.users[targetUser.userid]) return user.sendTo(this.room, `|error|${targetUser.name} is not in this room, and cannot be added to the game.`);
-			if (targetUser.userid === this.hostid) return user.sendTo(this.room, `|error|You cannot host and play!`);
+			if (targetUser.userid === this.hostid) return user.sendTo(this.room, `|error|${targetUser.name} cannot host and play!`);
 			let alts = targetUser.getAltUsers(true);
 			for (let alt of alts) {
 				if (Object.keys(this.players).includes(alt.userid)) return user.sendTo(this.room, `|error|${targetUser.name} already has an alt in the game.`);
