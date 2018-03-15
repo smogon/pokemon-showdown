@@ -524,7 +524,7 @@ class MafiaTracker extends Rooms.RoomGame {
 			if (!targetUser || !targetUser.connected) return user.sendTo(this.room, `|error|The user "${deadPlayer}" was not found.`);
 			if (!this.room.users[targetUser.userid]) return user.sendTo(this.room, `|error|${targetUser.name} is not in this room, and cannot be added to the game.`);
 			if (targetUser.userid === this.hostid) return user.sendTo(this.room, `|error|You cannot host and play!`);
-			let alts = targetUser.getAltUsers(true);
+			let alts = []//targetUser.getAltUsers(true);
 			for (let alt of alts) {
 				if (Object.keys(this.players).includes(alt.userid)) return user.sendTo(this.room, `|error|${targetUser.name} already has an alt in the game.`);
 				if (this.hostid === alt.userid) return user.sendTo(this.room, `|error|${targetUser.name} has an alt as the host.`);
@@ -607,6 +607,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		let newPlayer = this.makePlayer(Users(this.subs.shift()));
 		newPlayer.role = oldPlayer.role;
 		this.players[newPlayer.userid] = newPlayer;
+		this.players[userid].destroy();
 		delete this.players[userid];
 		// Transfer lynches on the old player to the new one
 		if (this.lynches[userid]) {
