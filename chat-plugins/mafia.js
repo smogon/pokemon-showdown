@@ -373,7 +373,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		}
 		player.lynching = target;
 		let name = player.lynching === 'nolynch' ? 'No Lynch' : this.players[player.lynching].name;
-		this.sendRoom(name === 'No Lynch' ? `${user.name} has abstain from lynching.` : `${user.name} has lynched ${name}.`, {timestamp: true, user: user});
+		this.sendRoom(name === 'No Lynch' ? `${user.name} has abstained from lynching.` : `${user.name} has lynched ${name}.`, {timestamp: true, user: user});
 		player.lastLynch = Date.now();
 		if (this.hammerCount <= lynch.count) {
 			// HAMMER
@@ -1209,7 +1209,7 @@ exports.commands = {
 			if (!user.can('mute', null, room) && targetRoom.game.hostid !== user.userid) return user.sendTo(targetRoom, `|error|/mafia ${cmd} - Access denied.`);
 			if (cmd === 'disablenl') {
 				targetRoom.game.enableNL = false;
-				targetRoom.game.sendRoom(`No Lynching is now set to false.`, {declare: true});
+				targetRoom.game.sendRoom(`No-Lynch has been disabled.`, {declare: true});
 				// Remove everyone's lynches from No Lynch
 				if (targetRoom.game.lynches['nolynch']) delete targetRoom.game.lynches['nolynch'];
 				for (const player of Object.values(targetRoom.game.players)) {
@@ -1219,7 +1219,7 @@ exports.commands = {
 				targetRoom.game.updatePlayers();
 			} else {
 				targetRoom.game.enableNL = true;
-				targetRoom.game.sendRoom(`No Lynching is now set to true.`, {declare: true});
+				targetRoom.game.sendRoom(`No-Lynch has been enabled.`, {declare: true});
 			}
 		},
 		setnolynchhelp: [
