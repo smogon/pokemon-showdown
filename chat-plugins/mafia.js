@@ -1193,12 +1193,7 @@ exports.commands = {
 			for (const key of list) {
 				if (key in room.game.lynches) buf += `${room.game.lynches[key].count}${plur === key ? '*' : ''} ${room.game.players[key] ? room.game.players[key].name : 'No-Lynch'} (${room.game.lynches[key].lynchers.join(', ')})`;
 			}
-
-			if (this.broadcasting) {
-				room.add(`|uhtml|mafialynches|<div class="infobox">${buf}</div>`).update();
-			} else {
-				this.sendReplyBox(room.game.buildLynchInfo());
-			}
+			this.sendReplyBox(buf);
 		},
 
 		players: function (target, room, user) {
