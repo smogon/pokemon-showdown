@@ -33,7 +33,7 @@ try {
 				if (parseInt(a[0]) < parseInt(b[0])) return -1;
 				return 1;
 			});
-			while (keys.length > 1) {
+			while (keys.length > 2) {
 				delete logs[section][keys.shift()];
 			}
 		}
@@ -121,6 +121,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		}
 		if (!this.addPlayer(user)) return user.sendTo(this.room, `|error|You have already joined the game of ${this.title}.`);
 		this.players[user.userid].updateHtmlRoom();
+		this.sendRoom(`${this.players[user.userid].name} has joined the game.`);
 	}
 
 	leave(user) {
@@ -129,6 +130,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		this.players[user.userid].destroy();
 		delete this.players[user.userid];
 		this.playerCount--;
+		this.sendRoom(`${Chat.escapeHTML(user.name)} has left the game.`);
 		user.send(`>view-mafia-${this.room.id}\n|init|html\n${Chat.pages.mafia([this.room.id], user)}`);
 	}
 
@@ -467,10 +469,12 @@ class MafiaTracker extends Rooms.RoomGame {
 		if (!player) return false;
 		if (!this.started) {
 			// Game has not started, simply kick the player
+			this.sendRoom(`${player.name} was kicked from the game!`, {declare: true});
 			player.destroy();
 			delete this.players[player.userid];
 			this.playerCount--;
 			player.updateHtmlRoom();
+			return true;
 		}
 		this.dead[player.userid] = player;
 		let msg = `${player.name}`;
@@ -742,7 +746,9 @@ exports.pages = {
 	mafia: function (query, user) {
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 		if (!query.length) return `|deinit`;
-		const room = Rooms(query.shift());
+		let roomid = query.shift();
+		if (roomid === 'groupchat') roomid += `-${query.shift()}-${query.shift()}`;
+		const room = Rooms(roomid);
 		if (!room || !room.users[user.userid] || !room.game || room.game.gameid !== 'mafia' || room.game.ended) return `|deinit`;
 		const isPlayer = user.userid in room.game.players;
 		const isHost = user.userid === room.game.hostid;
