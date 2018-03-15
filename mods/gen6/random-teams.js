@@ -936,8 +936,7 @@ class RandomGen6Teams extends RandomTeams {
 		// Also keep track of sets with moves the team requires
 		effectivePool = [];
 		priorityPool = [];
-		for (let i = 0, l = setList.length; i < l; i++) {
-			let curSet = setList[i];
+		for (const curSet of setList) {
 			let itemData = this.getItem(curSet.item);
 			if (teamData.megaCount > 0 && itemData.megaStone) continue; // reject 2+ mega stones
 			if (itemsMax[itemData.id] && teamData.has[itemData.id] >= itemsMax[itemData.id]) continue;
@@ -949,9 +948,9 @@ class RandomGen6Teams extends RandomTeams {
 			let reject = false;
 			let hasRequiredMove = false;
 			let curSetVariants = [];
-			for (let j = 0, m = curSet.moves.length; j < m; j++) {
-				let variantIndex = this.random(curSet.moves[j].length);
-				let moveId = toId(curSet.moves[j][variantIndex]);
+			for (const move of curSet.moves) {
+				let variantIndex = this.random(move.length);
+				let moveId = toId(move[variantIndex]);
 				if (movesMax[moveId] && teamData.has[moveId] >= movesMax[moveId]) {
 					reject = true;
 					break;
@@ -969,15 +968,14 @@ class RandomGen6Teams extends RandomTeams {
 
 		if (!effectivePool.length) {
 			if (!teamData.forceResult) return false;
-			for (let i = 0; i < setList.length; i++) {
-				effectivePool.push({set: setList[i]});
+			for (const curSet of setList) {
+				effectivePool.push({set: curSet});
 			}
 		}
 
 		let setData = this.sample(effectivePool);
 		let moves = [];
-		for (let i = 0; i < setData.set.moves.length; i++) {
-			let moveSlot = setData.set.moves[i];
+		for (const [i, moveSlot] of setData.set.moves.entries()) {
 			moves.push(setData.moveVariants ? moveSlot[setData.moveVariants[i]] : this.sample(moveSlot));
 		}
 
@@ -1001,8 +999,7 @@ class RandomGen6Teams extends RandomTeams {
 
 		// The teams generated depend on the tier choice in such a way that
 		// no exploitable information is leaked from rolling the tier in getTeam(p1).
-		let availableTiers = ['Uber', 'OU', 'UU', 'RU', 'NU', 'PU'];
-		if (!this.FactoryTier) this.FactoryTier = this.sample(availableTiers);
+		if (!this.FactoryTier) this.FactoryTier = this.sample(['Uber', 'OU', 'UU', 'RU', 'NU', 'PU']);
 		const chosenTier = this.FactoryTier;
 
 		let pokemon = [];
@@ -1037,8 +1034,8 @@ class RandomGen6Teams extends RandomTeams {
 			// Limit 2 of any type
 			let types = template.types;
 			let skip = false;
-			for (let t = 0; t < types.length; t++) {
-				if (teamData.typeCount[types[t]] > 1 && this.randomChance(4, 5)) {
+			for (const type of types) {
+				if (teamData.typeCount[type] > 1 && this.randomChance(4, 5)) {
 					skip = true;
 					break;
 				}
@@ -1060,11 +1057,11 @@ class RandomGen6Teams extends RandomTeams {
 			pokemon.push(set);
 
 			// Now that our Pokemon has passed all checks, we can update team data:
-			for (let t = 0; t < types.length; t++) {
-				if (types[t] in teamData.typeCount) {
-					teamData.typeCount[types[t]]++;
+			for (const type of types) {
+				if (type in teamData.typeCount) {
+					teamData.typeCount[type]++;
 				} else {
-					teamData.typeCount[types[t]] = 1;
+					teamData.typeCount[type] = 1;
 				}
 			}
 			teamData.typeComboCount[typeCombo] = 1;
@@ -1084,8 +1081,8 @@ class RandomGen6Teams extends RandomTeams {
 				teamData.weather = weatherAbilitiesSet[abilityData.id];
 			}
 
-			for (let m = 0; m < set.moves.length; m++) {
-				let moveId = toId(set.moves[m]);
+			for (const move of set.moves) {
+				let moveId = toId(move);
 				if (moveId in teamData.has) {
 					teamData.has[moveId]++;
 				} else {
@@ -1118,7 +1115,7 @@ class RandomGen6Teams extends RandomTeams {
 
 		// Quality control
 		if (!teamData.forceResult) {
-			for (let requiredFamily of requiredMoveFamilies) {
+			for (const requiredFamily of requiredMoveFamilies) {
 				if (!teamData.has[requiredFamily]) return this.randomFactoryTeam(++depth);
 			}
 			for (let type in teamData.weaknesses) {

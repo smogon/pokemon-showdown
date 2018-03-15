@@ -14,7 +14,7 @@ try {
 	} else {
 		logs = JSON.parse(logs);
 	}
-	for (let section of ['leaderboard', 'mvps', 'hosts', 'plays']) {
+	for (const section of ['leaderboard', 'mvps', 'hosts', 'plays']) {
 		// Check to see if we need to eliminate an old month's data.
 		const month = new Date().toLocaleString("en-us", {month: "numeric", year: "numeric"});
 		if (!logs[section]) logs[section] = {};
@@ -116,8 +116,7 @@ class MafiaTracker extends Rooms.RoomGame {
 	join(user) {
 		if (this.phase !== 'signups') return user.sendTo(this.room, `|error|The game of ${this.title} has already started.`);
 		if (user.userid === this.hostid) return user.sendTo(this.room, `|error|You cannot host and play!`);
-		let alts = user.getAltUsers(true);
-		for (let alt of alts) {
+		for (const alt of user.getAltUsers(true)) {
 			if (Object.keys(this.players).includes(alt.userid)) return user.sendTo(this.room, `|error|You already have an alt in the game.`);
 			if (this.hostid === alt.userid) return user.sendTo(this.room, `|error|You cannot join a game with an alt as the host.`);
 		}
@@ -169,8 +168,8 @@ class MafiaTracker extends Rooms.RoomGame {
 		}
 		let problems = [];
 		let alignments = [];
-		for (let r = 0; r < roles.length; r++) {
-			let target = roles[r].slice();
+		for (const [r, roleId] of roles.entries()) {
+			let target = roleId.slice();
 			let role = {
 				name: roleNames[r].split(' ').map(p => { return toId(p) === 'solo' ? '' : p; }).join(' '),
 				memo: ['During the Day, you may vote for whomever you want lynched.'],
@@ -209,9 +208,9 @@ class MafiaTracker extends Rooms.RoomGame {
 					}
 				} else if (key === 'xshot') {
 					// Special case for X-Shot modifier
-					for (let i = 0; i < target.length; i++) {
-						if (toId(target[i]).endsWith('shot')) {
-							let num = parseInt(toId(target[i]).substring(0, toId(target[i]).length - 4));
+					for (let [i, xModifier] of target.entries()) {
+						if (toId(xModifier).endsWith('shot')) {
+							let num = parseInt(toId(xModifier).substring(0, toId(xModifier).length - 4));
 							if (isNaN(num)) continue;
 							let memo = MafiaData.modifiers.xshot.memo.slice();
 							memo = memo.map(m => { return m.replace(/X/g, num); });
@@ -229,10 +228,10 @@ class MafiaTracker extends Rooms.RoomGame {
 				}
 			}
 			// Determine the role's alignment
-			for (let j = 0; j < target.length; j++) {
-				let id = toId(target[j]);
+			for (let [j, targetId] of target.entries()) {
+				let id = toId(targetId);
 				if (MafiaData.alignments[id]) {
-					if (typeof MafiaData.alignments[id] === 'string') target[j] = MafiaData.alignments[id];
+					if (typeof MafiaData.alignments[id] === 'string') id = MafiaData.alignments[id];
 					if (role.alignment) {
 						// A role cant have multiple alignments
 						problems.push(`The role "${role.name}" has multiple possible alignments (${MafiaData.alignments[id].id} or ${role.alignment})`);
@@ -300,7 +299,7 @@ class MafiaTracker extends Rooms.RoomGame {
 			}
 		}
 		for (let a in alignments) {
-			for (let p of alignments[a]) {
+			for (const p of alignments[a]) {
 				this.players[p].alliedPlayers = alignments[a];
 			}
 		}
@@ -506,9 +505,9 @@ class MafiaTracker extends Rooms.RoomGame {
 		}
 		if (player.lynching) this.unlynch(Users(player.userid), true);
 		this.sendRoom(`${msg}! ${!this.noReveal && toId(ability) === 'kill' ? `${player.safeName}'s role was ${player.getRole()}.` : ''}`, {declare: true});
-		for (let role of this.roles) {
+		for (const [roleIndex, role] of this.roles.entries()) {
 			if (role.id === player.role.id) {
-				this.roles.splice(this.roles.indexOf(role), 1);
+				this.roles.splice(roleIndex, 1);
 				break;
 			}
 		}
@@ -540,8 +539,7 @@ class MafiaTracker extends Rooms.RoomGame {
 			if (!this.room.users[targetUser.userid]) return user.sendTo(this.room, `|error|${targetUser.name} is not in this room, and cannot be added to the game.`);
 			if (targetUser.userid === this.hostid) return user.sendTo(this.room, `|error|${targetUser.name} cannot host and play!`);
 			if (!force) {
-				let alts = targetUser.getAltUsers(true);
-				for (let alt of alts) {
+				for (const alt of targetUser.getAltUsers(true)) {
 					if (Object.keys(this.players).includes(alt.userid)) return user.sendTo(this.room, `|error|${targetUser.name} already has an alt in the game. Use /mafia forceadd ${targetUser.name} to forcibly add them.`);
 					if (this.hostid === alt.userid) return user.sendTo(this.room, `|error|${targetUser.name} has an alt as the host. Use /mafia forceadd ${targetUser.name} to forcibly add them.`);
 				}
@@ -737,7 +735,7 @@ class MafiaTracker extends Rooms.RoomGame {
 			const played = Object.keys(this.players).concat(Object.keys(this.dead));
 			const month = new Date().toLocaleString("en-us", {month: "numeric", year: "numeric"});
 			if (!logs.plays[month]) logs.plays[month] = {};
-			for (let player of played) {
+			for (const player of played) {
 				if (!logs.plays[month][player]) logs.plays[month][player] = 0;
 				logs.plays[month][player]++;
 			}
@@ -799,8 +797,7 @@ exports.pages = {
 		if (room.game.phase === "day") {
 			buf += `<h3>Lynches (Hammer: ${room.game.hammerCount}) <button class="button" name="send" value="/join view-mafia-${room.id}"><i class="fa fa-refresh"></i> Refresh</button></h3>`;
 			let plur = room.game.getPlurality();
-			let list = Object.keys(room.game.players).concat((room.game.enableNL ? ['nolynch'] : []));
-			for (let key of list) {
+			for (const key of Object.keys(room.game.players).concat((room.game.enableNL ? ['nolynch'] : []))) {
 				if (room.game.lynches[key]) {
 					buf += `<p style="font-weight:bold">${room.game.lynches[key].count}${plur === key ? '*' : ''} ${room.game.players[key] ? room.game.players[key].safeName : 'No-Lynch'} (${room.game.lynches[key].lynchers.map(a => { return room.game.players[a] ? room.game.players[a].safeName : a; }).join(', ')}) `;
 				} else {
@@ -1294,8 +1291,7 @@ exports.commands = {
 					if (game.subs.includes(user.userid)) return user.sendTo(targetRoom, `|error|You are already on the sub list.`);
 					if (game.played.includes(user.userid)) return user.sendTo(targetRoom, `|error|You cannot sub back into the game.`);
 					if (game.subs.includes(user.userid)) return user.sendTo(targetRoom, `|error|You have already requested to be subbed in.`);
-					let alts = user.getAltUsers(true);
-					for (let alt of alts) {
+					for (const alt of user.getAltUsers(true)) {
 						if (Object.keys(game.players).includes(alt.userid)) return user.sendTo(targetRoom, `|error|You already have an alt in the game.`);
 						if (game.hostid === alt.userid) return user.sendTo(targetRoom, `|error|You cannot join a game with an alt as the host.`);
 					}

@@ -228,8 +228,8 @@ exports.BattleScripts = {
 
 		if (!sourceEffect || sourceEffect.id === 'pursuit') {
 			let extraPP = 0;
-			for (let i = 0; i < targets.length; i++) {
-				let ppDrop = this.runEvent('DeductPP', targets[i], pokemon, move);
+			for (const source of targets) {
+				let ppDrop = this.runEvent('DeductPP', source, pokemon, move);
 				if (ppDrop !== true) {
 					extraPP += ppDrop || 0;
 				}
@@ -267,11 +267,11 @@ exports.BattleScripts = {
 			}
 			if (targets.length > 1) move.spreadHit = true;
 			let hitTargets = [];
-			for (let i = 0; i < targets.length; i++) {
-				let hitResult = this.tryMoveHit(targets[i], pokemon, move);
+			for (const source of targets) {
+				let hitResult = this.tryMoveHit(source, pokemon, move);
 				if (hitResult || hitResult === 0 || hitResult === undefined) {
 					moveResult = true;
-					hitTargets.push(targets[i].toString().substr(0, 3));
+					hitTargets.push(source.toString().substr(0, 3));
 				}
 				if (damage !== false) {
 					damage += hitResult || 0;
@@ -763,10 +763,10 @@ exports.BattleScripts = {
 		if (moveData.secondaries) {
 			let secondaryRoll;
 			let secondaries = this.runEvent('ModifySecondaries', target, pokemon, moveData, moveData.secondaries.slice());
-			for (let i = 0; i < secondaries.length; i++) {
+			for (const secondary of secondaries) {
 				secondaryRoll = this.random(100);
-				if (typeof secondaries[i].chance === 'undefined' || secondaryRoll < secondaries[i].chance) {
-					this.moveHit(target, pokemon, move, secondaries[i], true, isSelf);
+				if (typeof secondary.chance === 'undefined' || secondaryRoll < secondary.chance) {
+					this.moveHit(target, pokemon, move, secondary, true, isSelf);
 				}
 			}
 		}

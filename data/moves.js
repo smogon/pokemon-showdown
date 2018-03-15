@@ -583,9 +583,8 @@ exports.BattleMovedex = {
 		flags: {snatch: 1, distance: 1},
 		onHit: function (pokemon, source, move) {
 			this.add('-activate', source, 'move: Aromatherapy');
-			let side = pokemon.side;
 			let success = false;
-			for (const ally of side.pokemon) {
+			for (const ally of pokemon.side.pokemon) {
 				if (ally !== source && ((ally.hasAbility('sapsipper')) ||
 						(ally.volatiles['substitute'] && !move.infiltrates))) {
 					continue;
@@ -3198,14 +3197,14 @@ exports.BattleMovedex = {
 			let removeTarget = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
 			let removeAll = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
 			let success = false;
-			for (let targetCondition of removeTarget) {
+			for (const targetCondition of removeTarget) {
 				if (target.side.removeSideCondition(targetCondition)) {
 					if (!removeAll.includes(targetCondition)) continue;
 					this.add('-sideend', target.side, this.getEffect(targetCondition).name, '[from] move: Defog', '[of] ' + target);
 					success = true;
 				}
 			}
-			for (let sideCondition of removeAll) {
+			for (const sideCondition of removeAll) {
 				if (source.side.removeSideCondition(sideCondition)) {
 					this.add('-sideend', source.side, this.getEffect(sideCondition).name, '[from] move: Defog', '[of] ' + source);
 					success = true;
@@ -5048,8 +5047,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1, nonsky: 1},
 		onPrepareHit: function (target, source, move) {
-			for (let i = 0; i < this.queue.length; i++) {
-				let action = this.queue[i];
+			for (const action of this.queue) {
 				if (!action.move || !action.pokemon || !action.pokemon.isActive || action.pokemon.fainted) continue;
 				if (action.pokemon.side === source.side && ['grasspledge', 'waterpledge'].includes(action.move.id)) {
 					this.prioritizeAction(action);
@@ -5085,8 +5083,7 @@ exports.BattleMovedex = {
 				this.add('-sideend', targetSide, 'Fire Pledge');
 			},
 			onResidual: function (side) {
-				for (let i = 0; i < side.active.length; i++) {
-					let pokemon = side.active[i];
+				for (const pokemon of side.active) {
 					if (pokemon && !pokemon.hasType('Fire')) {
 						this.damage(pokemon.maxhp / 8, pokemon);
 					}
@@ -5235,22 +5232,20 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		onHit: function (target, source) {
-			let allyActive = target.side.active;
-			if (allyActive.length === 1) {
+			if (target.side.active.length === 1) {
 				return;
 			}
-			for (let ally of allyActive) {
+			for (const ally of target.side.active) {
 				if (ally && this.isAdjacent(target, ally)) {
 					this.damage(ally.maxhp / 16, ally, source, 'flameburst');
 				}
 			}
 		},
 		onAfterSubDamage: function (target, source) {
-			let allyActive = target.side.active;
-			if (allyActive.length === 1) {
+			if (target.side.active.length === 1) {
 				return;
 			}
-			for (let ally of allyActive) {
+			for (const ally of target.side.active) {
 				if (ally && this.isAdjacent(target, ally)) {
 					this.damage(ally.maxhp / 16, ally, source, 'flameburst');
 				}
@@ -5531,12 +5526,11 @@ exports.BattleMovedex = {
 		flags: {distance: 1},
 		onHitField: function (target, source) {
 			let targets = [];
-			for (let sideSlot = 0; sideSlot < this.sides.length; sideSlot++) {
-				let sideActive = this.sides[sideSlot].active;
-				for (let activeSlot = 0; activeSlot < sideActive.length; activeSlot++) {
-					if (sideActive[activeSlot] && sideActive[activeSlot].isActive && sideActive[activeSlot].hasType('Grass')) {
+			for (const side of this.sides) {
+				for (const pokemon of side.active) {
+					if (pokemon && pokemon.isActive && pokemon.hasType('Grass')) {
 						// This move affects every Grass-type Pokemon in play.
-						targets.push(sideActive[activeSlot]);
+						targets.push(pokemon);
 					}
 				}
 			}
@@ -6069,9 +6063,8 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		onBasePowerPriority: 4,
 		onBasePower: function (basePower, pokemon) {
-			let actives = pokemon.side.active;
-			for (let i = 0; i < actives.length; i++) {
-				if (actives[i] && actives[i].moveThisTurn === 'fusionflare') {
+			for (const active of pokemon.side.active) {
+				if (active && active.moveThisTurn === 'fusionflare') {
 					this.debug('double power');
 					return this.chainModify(2);
 				}
@@ -6098,9 +6091,8 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1, defrost: 1},
 		onBasePowerPriority: 4,
 		onBasePower: function (basePower, pokemon) {
-			let actives = pokemon.side.active;
-			for (let i = 0; i < actives.length; i++) {
-				if (actives[i] && actives[i].moveThisTurn === 'fusionbolt') {
+			for (const active of pokemon.side.active) {
+				if (active && active.moveThisTurn === 'fusionbolt') {
 					this.debug('double power');
 					return this.chainModify(2);
 				}
@@ -6230,7 +6222,9 @@ exports.BattleMovedex = {
 				}
 			}
 			if (!targets.length) return false;
-			for (let i = 0; i < targets.length; i++) this.boost({atk: 1, spa: 1}, targets[i], source, 'move: Gear Up');
+			for (const target of targets) {
+				this.boost({atk: 1, spa: 1}, target, source, 'move: Gear Up');
+			}
 		},
 		secondary: false,
 		target: "allySide",
@@ -6466,8 +6460,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1, nonsky: 1},
 		onPrepareHit: function (target, source, move) {
-			for (let i = 0; i < this.queue.length; i++) {
-				let action = this.queue[i];
+			for (const action of this.queue) {
 				if (!action.move || !action.pokemon || !action.pokemon.isActive || action.pokemon.fainted) continue;
 				if (action.pokemon.side === source.side && ['waterpledge', 'firepledge'].includes(action.move.id)) {
 					this.prioritizeAction(action);
@@ -6615,8 +6608,7 @@ exports.BattleMovedex = {
 			},
 			onStart: function () {
 				this.add('-fieldstart', 'move: Gravity');
-				const allActivePokemon = this.sides[0].active.concat(this.sides[1].active);
-				for (let pokemon of allActivePokemon) {
+				for (const pokemon of this.sides[0].active.concat(this.sides[1].active)) {
 					let applies = false;
 					if (pokemon.removeVolatile('bounce') || pokemon.removeVolatile('fly')) {
 						applies = true;
@@ -7028,9 +7020,9 @@ exports.BattleMovedex = {
 		flags: {authentic: 1},
 		onHitField: function () {
 			this.add('-clearallboost');
-			for (let i = 0; i < this.sides.length; i++) {
-				for (let j = 0; j < this.sides[i].active.length; j++) {
-					if (this.sides[i].active[j] && this.sides[i].active[j].isActive) this.sides[i].active[j].clearBoosts();
+			for (const side of this.sides) {
+				for (const pokemon of side.active) {
+					if (pokemon && pokemon.isActive) pokemon.clearBoosts();
 				}
 			}
 		},
@@ -9762,7 +9754,9 @@ exports.BattleMovedex = {
 				}
 			}
 			if (!targets.length) return false;
-			for (let i = 0; i < targets.length; i++) this.boost({def: 1, spd: 1}, targets[i], source, 'move: Magnetic Flux');
+			for (const target of targets) {
+				this.boost({def: 1, spd: 1}, target, source, 'move: Magnetic Flux');
+			}
 		},
 		secondary: false,
 		target: "allySide",
@@ -11567,17 +11561,17 @@ exports.BattleMovedex = {
 		onHitField: function (target, source, move) {
 			let result = false;
 			let message = false;
-			for (let i = 0; i < this.sides.length; i++) {
-				for (let j = 0; j < this.sides[i].active.length; j++) {
-					if (this.sides[i].active[j] && this.sides[i].active[j].isActive) {
-						if (!this.runEvent('Accuracy', this.sides[i].active[j], source, move, true)) {
-							this.add('-miss', source, this.sides[i].active[j]);
+			for (const side of this.sides) {
+				for (const pokemon of side.active) {
+					if (pokemon && pokemon.isActive) {
+						if (!this.runEvent('Accuracy', pokemon, source, move, true)) {
+							this.add('-miss', source, pokemon);
 							result = true;
-						} else if (this.runEvent('TryHit', this.sides[i].active[j], source, move) === null) {
+						} else if (this.runEvent('TryHit', pokemon, source, move) === null) {
 							result = true;
-						} else if (!this.sides[i].active[j].volatiles['perishsong']) {
-							this.sides[i].active[j].addVolatile('perishsong');
-							this.add('-start', this.sides[i].active[j], 'perish3', '[silent]');
+						} else if (!pokemon.volatiles['perishsong']) {
+							pokemon.addVolatile('perishsong');
+							this.add('-start', pokemon, 'perish3', '[silent]');
 							result = true;
 							message = true;
 						}
@@ -13797,23 +13791,24 @@ exports.BattleMovedex = {
 		onHitField: function (target, source) {
 			let targets = [];
 			let anyAirborne = false;
-			for (let sideSlot = 0; sideSlot < this.sides.length; sideSlot++) {
-				let sideActive = this.sides[sideSlot].active;
-				for (let activeSlot = 0; activeSlot < sideActive.length; activeSlot++) {
-					if (!sideActive[activeSlot] || !sideActive[activeSlot].isActive) continue;
-					if (!sideActive[activeSlot].runImmunity('Ground')) {
-						this.add('-immune', sideActive[activeSlot], '[msg]');
+			for (const side of this.sides) {
+				for (const pokemon of side.active) {
+					if (!pokemon || !pokemon.isActive) continue;
+					if (!pokemon.runImmunity('Ground')) {
+						this.add('-immune', pokemon, '[msg]');
 						anyAirborne = true;
 						continue;
 					}
-					if (sideActive[activeSlot].hasType('Grass')) {
+					if (pokemon.hasType('Grass')) {
 						// This move affects every grounded Grass-type Pokemon in play.
-						targets.push(sideActive[activeSlot]);
+						targets.push(pokemon);
 					}
 				}
 			}
 			if (!targets.length && !anyAirborne) return false; // Fails when there are no grounded Grass types or airborne Pokemon
-			for (let i = 0; i < targets.length; i++) this.boost({atk: 1, spa: 1}, targets[i], source);
+			for (const pokemon of targets) {
+				this.boost({atk: 1, spa: 1}, pokemon, source);
+			}
 		},
 		secondary: false,
 		target: "all",
@@ -13840,8 +13835,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1, sound: 1, authentic: 1},
 		onTry: function () {
-			for (let i = 0; i < this.queue.length; i++) {
-				let action = this.queue[i];
+			for (const action of this.queue) {
 				if (!action.pokemon || !action.move) continue;
 				if (action.move.id === 'round') {
 					this.prioritizeAction(action);
@@ -18122,8 +18116,7 @@ exports.BattleMovedex = {
 			volatileStatus: 'uproar',
 		},
 		onTryHit: function (target) {
-			for (let i = 0; i < target.side.active.length; i++) {
-				let allyActive = target.side.active[i];
+			for (const [i, allyActive] of target.side.active.entries()) {
 				if (allyActive && allyActive.status === 'slp') allyActive.cureStatus();
 				let foeActive = target.side.foe.active[i];
 				if (foeActive && foeActive.status === 'slp') foeActive.cureStatus();
@@ -18414,8 +18407,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1, nonsky: 1},
 		onPrepareHit: function (target, source, move) {
-			for (let i = 0; i < this.queue.length; i++) {
-				let action = this.queue[i];
+			for (const action of this.queue) {
 				if (!action.move || !action.pokemon || !action.pokemon.isActive || action.pokemon.fainted) continue;
 				if (action.pokemon.side === source.side && ['firepledge', 'grasspledge'].includes(action.move.id)) {
 					this.prioritizeAction(action);
@@ -18453,8 +18445,8 @@ exports.BattleMovedex = {
 			onModifyMove: function (move) {
 				if (move.secondaries && move.id !== 'secretpower') {
 					this.debug('doubling secondary chance');
-					for (let i = 0; i < move.secondaries.length; i++) {
-						move.secondaries[i].chance *= 2;
+					for (const secondary of move.secondaries) {
+						secondary.chance *= 2;
 					}
 				}
 			},
