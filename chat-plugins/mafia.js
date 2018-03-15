@@ -770,7 +770,7 @@ exports.pages = {
 		}
 		if (isPlayer) {
 			if (room.game.players[user.userid].role) {
-				buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">Role PM</summary>`;
+				buf += `<p><details open><summary class="button" style="text-align:left; display:inline-block">Role PM</summary>`;
 				buf += `<h3>${room.game.players[user.userid].name}, you are a ${room.game.players[user.userid].getRole()}</h3>`;
 				buf += `<table><tr><td style="text-align:center;">${room.game.players[user.userid].role.image || `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-villager.png"/>`}</td><td style="text-align:left;width:100%"><ul>${room.game.players[user.userid].role.memo.map(m => { return `<li>${m}</li>`; }).join('')}</ul></td></tr></table>`;
 				if (!['town', 'solo'].includes(room.game.players[user.userid].role.alignement)) buf += `<p><span style="font-weight:bold">Partners</span>: ${room.game.getPartners(room.game.players[user.userid].role.alignement, room.game.players[user.userid])}</p>`;
