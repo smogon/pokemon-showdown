@@ -1165,7 +1165,7 @@ exports.commands = {
 					if (targetRoom.game.dlAt > 0) {
 						return this.sendReply(`Deadline reaches at ${Chat.toDurationString(targetRoom.game.dlAt) || '0 seconds'}.`);
 					} else {
-						return this.parse(`/help mafia deadline`);	
+						return this.parse(`/help mafia deadline`);
 					}
 				}
 				if (target < 1 || target > 20) return user.sendTo(targetRoom, `|error|The deadline must be between 1 and 20 minutes.`);
@@ -1199,9 +1199,9 @@ exports.commands = {
 			`/mafia shifthammer (hammer) - sets the hammer count to (hammer) without resetting lynches`,
 			`/mafia resethammer - sets the hammer to the default, resetting lynches`,
 		],
-		
+
 		disablenl: 'enablenl',
-		enablenl: function (target, room, user) {
+		enablenl: function (target, room, user, connection, cmd) {
 			let targetRoom = room;
 			target = target.split(',');
 			if (Rooms(target[0]) && Rooms(target[0]).users[user.userid]) targetRoom = Rooms(target.shift());
