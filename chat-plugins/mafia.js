@@ -95,6 +95,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		this.hammerCount = 0;
 		this.lynches = Object.create(null);
 		this.hasPlurality = null;
+		this.enableNL = true;
 
 		this.originalRoles = [];
 		this.originalRoleString = '';
@@ -107,6 +108,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		this.noReveal = false;
 		this.selfEnabled = false;
 		this.timer = null;
+		this.dlAt = 0;
 
 		this.sendRoom(this.roomWindow(), {uhtml: true});
 	}
@@ -355,6 +357,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		if (!player && this.dead[user.userid] && this.dead[user.userid].restless) player = this.dead[user.userid];
 		if (!player) return false;
 		if (!(target in this.players) && target !== 'nolynch') return false;
+		if (!this.enableNL && target === 'nolynch') return false;
 		if (player.lynching || (target === player.userid && !this.selfEnabled)) return false;
 		if (target === player.userid && (this.hammerCount - 1 > (this.lynches[target] ? this.lynches[target].count : 0)) && this.selfEnabled === 'hammer') return false;
 		if (player.lastLynch + 2000 >= Date.now()) return user.sendTo(this.room, `|error|You must wait another ${Chat.toDurationString((player.lastLynch + 2000) - Date.now()) || '0 seconds'} before you can change your lynch.`);
@@ -370,7 +373,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		}
 		player.lynching = target;
 		let name = player.lynching === 'nolynch' ? 'No Lynch' : this.players[player.lynching].name;
-		this.sendRoom(`${user.name} has lynched ${name}.`, {timestamp: true, user: user});
+		this.sendRoom(name === 'No Lynch' ? `${user.name} has abstain from lynching.` : `${user.name} has lynched ${name}.`, {timestamp: true, user: user});
 		player.lastLynch = Date.now();
 		if (this.hammerCount <= lynch.count) {
 			// HAMMER
@@ -398,7 +401,7 @@ class MafiaTracker extends Rooms.RoomGame {
 			lynch.dir = 'down';
 			lynch.lynchers.splice(lynch.lynchers.indexOf(user.userid), 1);
 		}
-		this.sendRoom(`${user.name} has unlynched ${player.lynching === 'nolynch' ? 'No Lynch' : this.players[player.lynching].name}.`, {timestamp: true, user: user});
+		this.sendRoom(player.lynching === 'nolynch' ? `${user.name} is no longer abstaining from lynching.` : `${user.name} has unlynched ${this.players[player.lynching].name}.`, {timestamp: true, user: user});
 		player.lynching = '';
 		player.lastLynch = Date.now();
 		this.hasPlurality = null;
@@ -562,12 +565,14 @@ class MafiaTracker extends Rooms.RoomGame {
 			if (!this.timer) return false;
 			clearTimeout(this.timer);
 			this.timer = null;
+			this.dlAt = 0;
 			if (!silent) this.sendRoom(`The deadline has been cleared.`);
 			return true;
 		}
 		minutes = parseInt(minutes);
 		if (isNaN(minutes) || minutes < 1 || minutes > 20) return false;
 		if (this.timer) clearTimeout(this.timer);
+		this.dlAt = minutes * 60000;
 		if (minutes > 3) {
 			this.timer = setTimeout(() => {
 				this.sendRoom(`3 minutes left!`);
@@ -784,7 +789,7 @@ exports.pages = {
 		if (room.game.phase === "day") {
 			buf += `<h3>Lynches (Hammer: ${room.game.hammerCount}) <button class="button" name="send" value="/join view-mafia-${room.id}"><i class="fa fa-refresh"></i> Refresh</button></h3>`;
 			let plur = room.game.getPlurality();
-			let list = Object.keys(room.game.players).concat(['nolynch']);
+			let list = Object.keys(room.game.players).concat((room.game.enableNL ? ['nolynch'] : []));
 			for (let key of list) {
 				if (room.game.lynches[key]) {
 					buf += `<p style="font-weight:bold">${room.game.lynches[key].count}${plur === key ? '*' : ''} ${room.game.players[key] ? room.game.players[key].name : 'No-Lynch'} (${room.game.lynches[key].lynchers.join(', ')}) `;
@@ -1155,7 +1160,14 @@ exports.commands = {
 				return targetRoom.game.setDeadline('off');
 			} else {
 				target = parseInt(target);
-				if (isNaN(target)) return this.parse(`/help mafia deadline`);
+				if (isNaN(target)) {
+					if (!this.runBroadcast()) return;
+					if (targetRoom.game.dlAt > 0) {
+						return this.sendReply(`Deadline reaches at ${Chat.toDurationString(targetRoom.game.dlAt) || '0 seconds'}.`);
+					} else {
+						return this.parse(`/help mafia deadline`);	
+					}
+				}
 				if (target < 1 || target > 20) return user.sendTo(targetRoom, `|error|The deadline must be between 1 and 20 minutes.`);
 				return targetRoom.game.setDeadline(target);
 			}
@@ -1186,6 +1198,33 @@ exports.commands = {
 			`/mafia hammer (hammer) - sets the hammer count to (hammer) and resets lynches`,
 			`/mafia shifthammer (hammer) - sets the hammer count to (hammer) without resetting lynches`,
 			`/mafia resethammer - sets the hammer to the default, resetting lynches`,
+		],
+		
+		disablenl: 'enablenl',
+		enablenl: function (target, room, user) {
+			let targetRoom = room;
+			target = target.split(',');
+			if (Rooms(target[0]) && Rooms(target[0]).users[user.userid]) targetRoom = Rooms(target.shift());
+			if (!targetRoom || !targetRoom.game || targetRoom.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
+			if (!user.can('mute', null, room) && targetRoom.game.hostid !== user.userid) return user.sendTo(targetRoom, `|error|/mafia ${cmd} - Access denied.`);
+			if (cmd === 'disablenl') {
+				targetRoom.game.enableNL = false;
+				targetRoom.game.sendRoom(`No Lynching is now set to false.`, {declare: true});
+				// Remove everyone's lynches from No Lynch
+				if (targetRoom.game.lynches['nolynch']) delete targetRoom.game.lynches['nolynch'];
+				for (const player of Object.values(targetRoom.game.players)) {
+					if (player.lynching === 'nolynch') player.lynching = '';
+				}
+				targetRoom.game.getPlurality();
+				targetRoom.game.updatePlayers();
+			} else {
+				targetRoom.game.enableNL = true;
+				targetRoom.game.sendRoom(`No Lynching is now set to true.`, {declare: true});
+			}
+		},
+		setnolynchhelp: [
+			`/mafia enablenl - allows players to nolynch (is on by default)`,
+			`/mafia disablenl - disallows players to nolynch.`,
 		],
 
 		lynches: function (target, room, user) {
