@@ -572,7 +572,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		minutes = parseInt(minutes);
 		if (isNaN(minutes) || minutes < 1 || minutes > 20) return false;
 		if (this.timer) clearTimeout(this.timer);
-		this.dlAt = minutes * 60000;
+		this.dlAt = Date.now() + (minutes * 60000);
 		if (minutes > 3) {
 			this.timer = setTimeout(() => {
 				this.sendRoom(`3 minutes left!`);
@@ -1163,7 +1163,7 @@ exports.commands = {
 				if (isNaN(target)) {
 					if (!this.runBroadcast()) return;
 					if (targetRoom.game.dlAt > 0) {
-						return this.sendReply(`Deadline reaches at ${Chat.toDurationString(targetRoom.game.dlAt) || '0 seconds'}.`);
+						return this.sendReply(`Deadline reaches at ${Chat.toDurationString(targetRoom.game.dlAt - Date.now()) || '0 seconds'}.`);
 					} else {
 						return this.parse(`/help mafia deadline`);
 					}
