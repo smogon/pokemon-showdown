@@ -332,6 +332,7 @@ class MafiaTracker extends Rooms.RoomGame {
 			this.dayNum++;
 		}
 		this.sendRoom(`Day ${this.dayNum}. The hammer count is set at ${this.hammerCount}`, {declare: true});
+		this.sendPlayerList();
 		this.updatePlayers();
 		return true;
 	}
@@ -521,7 +522,13 @@ class MafiaTracker extends Rooms.RoomGame {
 		} else {
 			const targetUser = Users(deadPlayer);
 			if (!targetUser || !targetUser.connected) return user.sendTo(this.room, `|error|The user "${deadPlayer}" was not found.`);
-			if (!this.room.users[targetUser.userid]) return this.errorReply(`${targetUser.name} is not in this room, and cannot be added to the game.`);
+			if (!this.room.users[targetUser.userid]) return user.sendTo(this.room, `|error|${targetUser.name} is not in this room, and cannot be added to the game.`);
+			if (targetUser.userid === this.hostid) return user.sendTo(this.room, `|error|You cannot host and play!`);
+			let alts = targetUser.getAltUsers(true);
+			for (let alt of alts) {
+				if (Object.keys(this.players).includes(alt.userid)) return user.sendTo(this.room, `|error|${targetUser.name} already has an alt in the game.`);
+				if (this.hostid === alt.userid) return user.sendTo(this.room, `|error|${targetUser.name} has an alt as the host.`);
+			}
 			let player = this.makePlayer(targetUser);
 			if (this.started) {
 				player.role = {
@@ -614,6 +621,10 @@ class MafiaTracker extends Rooms.RoomGame {
 		if (this.started) this.played.push(newPlayer.userid);
 		this.sendRoom(`${oldPlayer.name} has been subbed out. ${newPlayer.name} has joined the game.`, {declare: true});
 		this.updatePlayers();
+	}
+
+	sendPlayerList() {
+		this.room.add(`|c:|${(Math.floor(Date.now() / 1000))}|~|**Players (${this.playerCount})**: ${Object.keys(this.players).map(p => { return this.players[p].name; }).join(', ')}`).update();
 	}
 
 	updatePlayers() {
@@ -863,8 +874,8 @@ exports.pages = {
 			return buf;
 		}
 		const keys = Object.keys(logs[ladder.section][month]).sort((a, b) => {
-			a = logs[ladder.section][a];
-			b = logs[ladder.section][b];
+			a = logs[ladder.section][month][a];
+			b = logs[ladder.section][month][b];
 			return b - a;
 		});
 		for (const key of keys) {
@@ -1170,6 +1181,36 @@ exports.commands = {
 			`/mafia resethammer - sets the hammer to the default, resetting lynches`,
 		],
 
+		lynches: function (target, room, user) {
+			if (!room.game || room.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
+			if (!room.game.started) return this.errorReply(`The game of mafia has not started yet.`);
+			if (!this.runBroadcast()) return false;
+
+			let buf = `<h3>Lynches (Hammer: ${room.game.hammerCount})</h3>`;
+			const plur = room.game.getPlurality();
+			const list = Object.keys(room.game.players).concat(['nolynch']);
+			for (const key of list) {
+				if (key in room.game.lynches) buf += `${room.game.lynches[key].count}${plur === key ? '*' : ''} ${room.game.players[key] ? room.game.players[key].name : 'No-Lynch'} (${room.game.lynches[key].lynchers.join(', ')})`;
+			}
+
+			if (this.broadcasting) {
+				room.add(`|uhtml|mafialynches|<div class="infobox">${buf}</div>`).update();
+			} else {
+				this.sendReplyBox(room.game.buildLynchInfo());
+			}
+		},
+
+		players: function (target, room, user) {
+			if (!room.game || room.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
+			if (!this.runBroadcast()) return false;
+
+			if (this.broadcasting) {
+				room.game.sendPlayerList();
+			} else {
+				this.sendReplyBox(`Players (${room.game.playerCount}): ${Object.keys(room.game.players).map(p => { return room.game.players[p].name; }).join(', ')}`);
+			}
+		},
+
 		'!sub': true,
 		sub: function (target, room, user) {
 			let targetRoom = room;
@@ -1227,6 +1268,7 @@ exports.commands = {
 		],
 
 		subhost: function (target, room, user) {
+			if (!room.game || room.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
 			if (!this.canTalk()) return;
 			if (!target) return this.parse('/help mafia subhost');
 			if (!this.can('mute', null, room)) return false;
