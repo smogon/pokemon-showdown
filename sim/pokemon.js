@@ -1509,9 +1509,14 @@ class Pokemon {
 	}
 
 	isSemiInvulnerable() {
-		if (this.volatiles['fly'] || this.volatiles['bounce'] || this.volatiles['skydrop'] || this.volatiles['dive'] || this.volatiles['dig'] || this.volatiles['phantomforce'] || this.volatiles['shadowforce']) {
+		if (this.volatiles['fly'] || this.volatiles['bounce'] || this.volatiles['dive'] || this.volatiles['dig'] || this.volatiles['phantomforce'] || this.volatiles['shadowforce'] || this.isSkyDropped()) {
 			return true;
 		}
+		return false;
+	}
+
+	isSkyDropped() {
+		if (this.volatiles['skydrop']) return true;
 		for (let i = 0; i < this.side.foe.active.length; i++) {
 			if (this.side.foe.active[i].volatiles['skydrop'] && this.side.foe.active[i].volatiles['skydrop'].source === this) {
 				return true;

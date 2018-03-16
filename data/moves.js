@@ -5745,7 +5745,7 @@ exports.BattleMovedex = {
 			},
 			onFoeRedirectTargetPriority: 1,
 			onFoeRedirectTarget: function (target, source, source2, move) {
-				if (this.validTarget(this.effectData.target, source, move.target)) {
+				if (!this.effectData.target.isSkyDropped() && this.validTarget(this.effectData.target, source, move.target)) {
 					this.debug("Follow Me redirected target of move");
 					return this.effectData.target;
 				}
@@ -12955,7 +12955,7 @@ exports.BattleMovedex = {
 			},
 			onFoeRedirectTargetPriority: 1,
 			onFoeRedirectTarget: function (target, source, source2, move) {
-				if (source.runStatusImmunity('powder') && this.validTarget(this.effectData.target, source, move.target)) {
+				if (!this.effectData.target.isSkyDropped() && source.runStatusImmunity('powder') && this.validTarget(this.effectData.target, source, move.target)) {
 					this.debug("Rage Powder redirected target of move");
 					return this.effectData.target;
 				}
@@ -14966,8 +14966,6 @@ exports.BattleMovedex = {
 				if (this.willMove(this.effectData.source)) {
 					this.effectData.source.activeTurns--;
 				}
-				this.effectData.source.removeVolatile('followme');
-				this.effectData.source.removeVolatile('ragepowder');
 			},
 			onAnyDragOut: function (pokemon) {
 				if (pokemon === this.effectData.target || pokemon === this.effectData.source) return false;
@@ -15409,8 +15407,9 @@ exports.BattleMovedex = {
 				this.add('-singleturn', pokemon, 'Snatch');
 			},
 			onAnyTryMove: function (source, target, move) {
+				let snatchUser = this.effectData.source;
+				if (snatchUser.isSkyDropped()) return;
 				if (move && move.flags['snatch'] && move.sourceEffect !== 'snatch') {
-					let snatchUser = this.effectData.source;
 					snatchUser.removeVolatile('snatch');
 					this.add('-activate', snatchUser, 'move: Snatch', '[of] ' + source);
 					this.useMove(move.id, snatchUser);
