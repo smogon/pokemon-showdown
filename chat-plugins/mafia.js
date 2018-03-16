@@ -824,7 +824,7 @@ exports.pages = {
 			} else if (room.game.phase === 'night') {
 				buf += `<button class="button" name="send" value="/mafia day ${room.id}">Go to Day ${room.game.dayNum + 1}</button> <button class="button" name="send" value="/mafia extend ${room.id}">Return to Day ${room.game.dayNum}</button>`;
 			}
-			buf += ` <button class="button" name="send" value="/mafia selflynch ${room.id}, ${room.game.selfEnabled === true ? 'off' : 'on'}">${room.game.selfEnabled === true ? 'Disable' : 'Enable'} self lynching</button> <button class="button" name="send" value="/mafia selflynch ${room.id}, ${room.game.selfEnabled === 'hammer' ? 'off' : 'hammer'}">${room.game.selfEnabled === 'hammer' ? 'Disable' : 'Enable'} self hammer</button> <button class="button" name="send" value="/mafia reveal ${room.id}, ${room.game.noReveal ? 'off' : 'on'}">${room.game.noReveal ? 'Enable' : 'Disable'} revealing of roles</button> <button class="button" name="send" value="/mafia end ${room.id}">End Game</button>`;
+			buf += ` <button class="button" name="send" value="/mafia selflynch ${room.id}, ${room.game.selfEnabled === true ? 'off' : 'on'}">${room.game.selfEnabled === true ? 'Disable' : 'Enable'} self lynching</button> <button class="button" name="send" value="/mafia ${room.game.enableNL ? 'disable' : 'enable'}nl ${room.id}">${room.game.enableNL ? 'Disable' : 'Enable'} No-Lynch</button> <button class="button" name="send" value="/mafia reveal ${room.id}, ${room.game.noReveal ? 'off' : 'on'}">${room.game.noReveal ? 'Enable' : 'Disable'} revealing of roles</button> <button class="button" name="send" value="/mafia end ${room.id}">End Game</button>`;
 			buf += `<p>To set a deadline, use <strong>/mafia deadline [minutes]</strong>.<br />To clear the deadline use <strong>/mafia deadline off</strong>.</p><hr/></details></p>`;
 			buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">Player Options</summary>`;
 			buf += `<h3>Player Options</h3>`;
@@ -1208,7 +1208,7 @@ exports.commands = {
 			if (!targetRoom || !targetRoom.game || targetRoom.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
 			if (!user.can('mute', null, room) && targetRoom.game.hostid !== user.userid) return user.sendTo(targetRoom, `|error|/mafia ${cmd} - Access denied.`);
 			if (cmd === 'disablenl') {
-				if (!targetRoom.game.enableNL) return this.errorReply(`No-Lynch has already been disabled`);
+				if (!targetRoom.game.enableNL) return user.sendTo(targetRoom, `|error|No-Lynch has already been disabled.`);
 				targetRoom.game.enableNL = false;
 				targetRoom.game.sendRoom(`No-Lynch has been disabled.`, {declare: true});
 				// Remove everyone's lynches from No Lynch
@@ -1219,12 +1219,12 @@ exports.commands = {
 				targetRoom.game.getPlurality();
 				targetRoom.game.updatePlayers();
 			} else {
-				if (targetRoom.game.enableNL) return this.errorReply(`No-Lynch has already been enabled`);
+				if (targetRoom.game.enableNL) return user.sendTo(`|error|No-Lynch has already been enabled.`);
 				targetRoom.game.enableNL = true;
 				targetRoom.game.sendRoom(`No-Lynch has been enabled.`, {declare: true});
 			}
 		},
-		enablenlhelp: [`/mafia enablenl OR disablenl - allows or disallows players to nolynch (is on by default)`],
+		enablenlhelp: [`/mafia enablenl OR /mafia disablenl - allows or disallows players to nolynch (is on by default).`],
 
 		lynches: function (target, room, user) {
 			if (!room.game || room.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
