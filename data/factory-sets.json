@@ -14,7 +14,7 @@
 				"species": "Groudon",
 				"gender": "",
 				"item": ["Red Orb"],
-				"ability": ["Desolate Land"],
+				"ability": ["Drought"],
 				"evs": {"hp": 180, "atk": 0, "def": 0, "spa": 252, "spd": 0, "spe": 76},
 				"nature": "Mild",
 				"moves": [["Overheat"], ["Stealth Rock"], ["Precipice Blades"], ["Toxic"]]
@@ -38,7 +38,7 @@
 				"species": "Groudon",
 				"gender": "",
 				"item": ["Red Orb"],
-				"ability": ["Desolate Land"],
+				"ability": ["Drought"],
 				"evs": {"hp": 0, "atk": 168, "def": 0, "spa": 0, "spd": 144, "spe": 196},
 				"nature": "Jolly",
 				"moves": [["Swords Dance"], ["Precipice Blades"], ["Stone Edge"], ["Stealth Rock"]]
@@ -247,11 +247,7 @@
 				"evs": {"hp": 184, "atk": 136, "def": 0, "spa": 0, "spd": 0, "spe": 188},
 				"nature": "Adamant",
 				"moves": [["Dragon Dance"], ["Double-Edge"], ["Roost"], ["Facade", "Earthquake"]]
-			}]
-		},
-		"salamence": {
-			"flags": {},
-			"sets": [{
+			}, {
 				"species": "Salamence",
 				"gender": "",
 				"item": ["Salamencite"],
@@ -939,9 +935,7 @@
 			}]
 		},
 		"mewtwo": {
-			"flags": {
-				"megaOnly": 1
-			},
+			"flags": {},
 			"sets": [{
 				"species": "Mewtwo",
 				"gender": "",
@@ -1053,9 +1047,7 @@
 			}]
 		},
 		"tyranitar": {
-			"flags": {
-				"megaOnly": 1
-			},
+			"flags": {},
 			"sets": [{
 				"species": "Tyranitar",
 				"gender": "",
@@ -1196,9 +1188,7 @@
 			}]
 		},
 		"blaziken": {
-			"flags": {
-				"megaOnly": 1
-			},
+			"flags": {},
 			"sets": [{
 				"species": "Blaziken",
 				"gender": "",
@@ -2067,9 +2057,7 @@
 	},
 	"OU": {
 		"alakazam": {
-			"flags": {
-				"megaOnly": 1
-			},
+			"flags": {},
 			"sets": [{
 				"species": "Alakazam",
 				"gender": "",
@@ -2313,9 +2301,7 @@
 			}]
 		},
 		"garchomp": {
-			"flags": {
-				"megaOnly": 1
-			},
+			"flags": {},
 			"sets": [{
 				"species": "Garchomp",
 				"gender": "",
@@ -2390,7 +2376,7 @@
 			"flags": {},
 			"sets": [{
 				"species": "Greninja",
-				"gender": "",
+				"gender": "M",
 				"item": ["Choice Scarf"],
 				"ability": ["Protean"],
 				"evs": {"hp": 0, "atk": 176, "def": 0, "spa": 80, "spd": 0, "spe": 252},
@@ -2398,7 +2384,7 @@
 				"moves": [["Rock Slide", "Gunk Shot"], ["U-turn"], ["Ice Beam"], ["Low Kick"]]
 			}, {
 				"species": "Greninja",
-				"gender": "",
+				"gender": "M",
 				"item": ["Choice Scarf"],
 				"ability": ["Protean"],
 				"evs": {"hp": 0, "atk": 176, "def": 0, "spa": 80, "spd": 0, "spe": 252},
@@ -2406,7 +2392,7 @@
 				"moves": [["Rock Slide", "Gunk Shot"], ["U-turn"], ["Ice Beam"], ["Spikes"]]
 			}, {
 				"species": "Greninja",
-				"gender": "",
+				"gender": "M",
 				"item": ["Focus Sash"],
 				"ability": ["Protean"],
 				"evs": {"hp": 0, "atk": 0, "def": 0, "spa": 252, "spd": 4, "spe": 252},
@@ -2414,7 +2400,7 @@
 				"moves": [["Spikes"], ["Toxic Spikes"], ["Taunt"], ["Ice Beam"]]
 			}, {
 				"species": "Greninja",
-				"gender": "",
+				"gender": "M",
 				"item": ["Expert Belt", "Life Orb"],
 				"ability": ["Protean"],
 				"evs": {"hp": 0, "atk": 0, "def": 4, "spa": 252, "spd": 0, "spe": 252},
@@ -2422,7 +2408,7 @@
 				"moves": [["Spikes"], ["Hydro Pump"], ["Dark Pulse"], ["Ice Beam"]]
 			}, {
 				"species": "Greninja",
-				"gender": "",
+				"gender": "M",
 				"item": ["Expert Belt", "Life Orb"],
 				"ability": ["Protean"],
 				"evs": {"hp": 0, "atk": 0, "def": 4, "spa": 252, "spd": 0, "spe": 252},
@@ -2430,7 +2416,7 @@
 				"moves": [["Spikes"], ["Hydro Pump"], ["Gunk Shot"], ["Ice Beam"]]
 			}, {
 				"species": "Greninja",
-				"gender": "",
+				"gender": "M",
 				"item": ["Life Orb", "Expert Belt"],
 				"ability": ["Protean"],
 				"evs": {"hp": 0, "atk": 4, "def": 0, "spa": 252, "spd": 0, "spe": 252},
@@ -2438,7 +2424,7 @@
 				"moves": [["Hydro Pump"], ["Extrasensory"], ["Gunk Shot"], ["Dark Pulse"]]
 			}, {
 				"species": "Greninja",
-				"gender": "",
+				"gender": "M",
 				"item": ["Life Orb", "Expert Belt"],
 				"ability": ["Protean"],
 				"evs": {"hp": 0, "atk": 4, "def": 0, "spa": 252, "spd": 0, "spe": 252},
@@ -2446,7 +2432,7 @@
 				"moves": [["Hydro Pump"], ["Extrasensory"], ["Gunk Shot"], ["Hidden Power Fire"]]
 			}, {
 				"species": "Greninja",
-				"gender": "",
+				"gender": "M",
 				"item": ["Life Orb", "Expert Belt"],
 				"ability": ["Protean"],
 				"evs": {"hp": 0, "atk": 4, "def": 0, "spa": 252, "spd": 0, "spe": 252},
@@ -2454,7 +2440,7 @@
 				"moves": [["Hydro Pump"], ["Extrasensory"], ["Ice Beam"], ["Dark Pulse"]]
 			}, {
 				"species": "Greninja",
-				"gender": "",
+				"gender": "M",
 				"item": ["Life Orb", "Expert Belt"],
 				"ability": ["Protean"],
 				"evs": {"hp": 0, "atk": 4, "def": 0, "spa": 252, "spd": 0, "spe": 252},
@@ -2466,7 +2452,7 @@
 			"flags": {},
 			"sets": [{
 				"species": "Greninja",
-				"gender": "",
+				"gender": "M",
 				"item": ["Choice Specs", "Waterium Z"],
 				"ability": ["Battle Bond"],
 				"evs": {"hp": 0, "atk": 0, "def": 4, "spa": 252, "spd": 0, "spe": 252},
@@ -2687,9 +2673,7 @@
 			}]
 		},
 		"latios": {
-			"flags": {
-				"megaOnly": 1
-			},
+			"flags": {},
 			"sets": [{
 				"species": "Latios",
 				"gender": "",
@@ -3930,9 +3914,7 @@
 			}]
 		},
 		"gyarados": {
-			"flags": {
-				"megaOnly": 1
-			},
+			"flags": {},
 			"sets": [{
 				"species": "Gyarados",
 				"gender": "",
@@ -3952,9 +3934,7 @@
 			}]
 		},
 		"latias": {
-			"flags": {
-				"megaOnly": 1
-			},
+			"flags": {},
 			"sets": [{
 				"species": "Latias",
 				"gender": "",
@@ -4242,7 +4222,7 @@
 				"ability": ["Technician"],
 				"evs": {"hp": 0, "atk": 252, "def": 0, "spa": 0, "spd": 4, "spe": 252},
 				"nature": "Adamant",
-				"moves": [["Swords Dance"], ["Bullet Punch"], ["Bug Bite"], ["Bug Bite", "Knock Off"]]
+				"moves": [["Swords Dance"], ["Bullet Punch"], ["Bug Bite"], ["Knock Off"]]
 			}, {
 				"species": "Scizor",
 				"gender": "",
@@ -4288,7 +4268,7 @@
 				"ability": ["Unnerve"],
 				"evs": {"hp": 0, "atk": 252, "def": 0, "spa": 0, "spd": 4, "spe": 252},
 				"nature": "Jolly",
-				"moves": [["Stone Edge"], ["Wing Attack", "Ice Fang"], ["Earthquake", "Fire Fang"], ["Pursuit", "Roost", "Ice Fang", "Aqua Tail"]]
+				"moves": [["Stone Edge"], ["Wing Attack"], ["Earthquake", "Fire Fang"], ["Pursuit", "Roost", "Ice Fang", "Aqua Tail"]]
 			}]
 		},
 		"altaria": {
@@ -4431,7 +4411,7 @@
 				"ability": ["Levitate"],
 				"evs": {"hp": 4, "atk": 0, "def": 0, "spa": 252, "spd": 0, "spe": 252},
 				"nature": "Timid",
-				"moves": [["Psychic"], ["Draco Meteor"], ["Healing Wish", "Trick", "Defog"], ["Hidden Power Fire", "Ice Beam", "Healing Wish"]]
+				"moves": [["Psychic"], ["Draco Meteor"], ["Trick", "Defog"], ["Hidden Power Fire", "Ice Beam", "Healing Wish"]]
 			}]
 		},
 		"manectric": {
@@ -7260,9 +7240,9 @@
 			}, {
 				"species": "Moltres",
 				"gender": "",
-				"item": ["Life Orb", "Flyinium Z", "Grassium Z"],
+				"item": ["Life Orb", "Flyinium Z"],
 				"ability": ["Flame Body"],
-				"evs": {"hp": 0, "atk": 0, "def": 4, "spa": 0, "spd": 0, "spe": 252},
+				"evs": {"hp": 0, "atk": 0, "def": 4, "spa": 252, "spd": 0, "spe": 252},
 				"nature": "Timid",
 				"moves": [["Fire Blast"], ["Hurricane"], ["Hidden Power Grass"], ["Roost", "U-turn"]]
 			}]
@@ -8008,11 +7988,19 @@
 			}, {
 				"species": "Drapion",
 				"gender": "",
-				"item": ["Groundium Z", "Waterium Z"],
+				"item": ["Groundium Z"],
 				"ability": ["Sniper"],
 				"evs": {"hp": 0, "atk": 252, "def": 4, "spa": 0, "spd": 0, "spe": 252},
 				"nature": "Jolly",
-				"moves": [["Swords Dance"], ["Knock Off"], ["Poison Jab"], ["Earthquake", "Aqua Tail"]]
+				"moves": [["Swords Dance"], ["Knock Off"], ["Poison Jab"], ["Earthquake"]]
+			}, {
+				"species": "Drapion",
+				"gender": "",
+				"item": ["Waterium Z"],
+				"ability": ["Sniper"],
+				"evs": {"hp": 0, "atk": 252, "def": 4, "spa": 0, "spd": 0, "spe": 252},
+				"nature": "Jolly",
+				"moves": [["Swords Dance"], ["Knock Off"], ["Poison Jab"], ["Aqua Tail"]]
 			}]
 		},
 		"golisopod": {
@@ -14295,9 +14283,7 @@
 			}]
 		},
 		"heracross": {
-			"flags": {
-				"megaOnly": 1
-			},
+			"flags": {},
 			"sets": [{
 				"species": "Heracross",
 				"gender": "",
@@ -14349,9 +14335,7 @@
 			}]
 		},
 		"scizor": {
-			"flags": {
-				"megaOnly": 1
-			},
+			"flags": {},
 			"sets": [{
 				"species": "Scizor",
 				"gender": "",
@@ -15058,9 +15042,7 @@
 			}]
 		},
 		"tyranitar": {
-			"flags": {
-				"megaOnly": 1
-			},
+			"flags": {},
 			"sets": [{
 				"species": "Tyranitar",
 				"gender": "",
@@ -15500,9 +15482,7 @@
 			}]
 		},
 		"garchomp": {
-			"flags": {
-				"megaOnly": 1
-			},
+			"flags": {},
 			"sets": [{
 				"species": "Garchomp",
 				"gender": "",
@@ -15594,9 +15574,7 @@
 			}]
 		},
 		"latios": {
-			"flags": {
-				"megaOnly": 1
-			},
+			"flags": {},
 			"sets": [{
 				"species": "Latios",
 				"gender": "",
@@ -15760,9 +15738,7 @@
 			}]
 		},
 		"latias": {
-			"flags": {
-				"megaOnly": 1
-			},
+			"flags": {},
 			"sets": [{
 				"species": "Latias",
 				"gender": "",
@@ -16542,9 +16518,7 @@
 			}]
 		},
 		"diancie": {
-			"flags": {
-				"megaOnly": 1
-			},
+			"flags": {},
 			"sets": [{
 				"species": "Diancie",
 				"gender": "",
@@ -16772,9 +16746,7 @@
 			}]
 		},
 		"gardevoir": {
-			"flags": {
-				"megaOnly": 1
-			},
+			"flags": {},
 			"sets": [{
 				"species": "Gardevoir",
 				"gender": "",
@@ -17032,9 +17004,7 @@
 			}]
 		},
 		"gallade": {
-			"flags": {
-				"megaOnly": 1
-			},
+			"flags": {},
 			"sets": [{
 				"species": "Gallade",
 				"gender": "",
@@ -18146,9 +18116,7 @@
 			}]
 		},
 		"aerodactyl": {
-			"flags": {
-				"megaOnly": 1
-			},
+			"flags": {},
 			"sets": [{
 				"species": "Aerodactyl",
 				"gender": "",
@@ -18213,9 +18181,7 @@
 			}]
 		},
 		"gyarados": {
-			"flags": {
-				"megaOnly": 1
-			},
+			"flags": {},
 			"sets": [{
 				"species": "Gyarados",
 				"gender": "",
@@ -20311,9 +20277,7 @@
 			}]
 		},
 		"alakazam": {
-			"flags": {
-				"megaOnly": 1
-			},
+			"flags": {},
 			"sets": [{
 				"species": "Alakazam",
 				"gender": "",
@@ -20424,9 +20388,7 @@
 			}]
 		},
 		"slowbro": {
-			"flags": {
-				"megaOnly": 1
-			},
+			"flags": {},
 			"sets": [{
 				"species": "Slowbro",
 				"gender": "",
@@ -20726,9 +20688,7 @@
 			}]
 		},
 		"swampert": {
-			"flags": {
-				"megaOnly": 1
-			},
+			"flags": {},
 			"sets": [{
 				"species": "Swampert",
 				"gender": "",
