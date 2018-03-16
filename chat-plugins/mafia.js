@@ -1145,6 +1145,7 @@ exports.commands = {
 			if (!user.can('mute', null, room) && targetRoom.game.hostid !== user.userid) return user.sendTo(targetRoom, `|error|/mafia revive - Access denied.`);
 			if (!toId(target.join(''))) return this.parse('/help mafia revive');
 			targetRoom.game.revive(user, toId(target.join('')));
+			if (targetRoom.game.subs.includes(toId(target.join('')))) targetRoom.game.subs.splice(targetRoom.game.subs.indexOf(toId(target.join(''))), 1);
 		},
 		revivehelp: [`/mafia revive [player] - Revive a player who died or add a new player to the game. Requires host % @ * # & ~`],
 
