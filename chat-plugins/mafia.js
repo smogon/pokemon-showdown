@@ -1224,7 +1224,7 @@ exports.commands = {
 				targetRoom.game.sendRoom(`No-Lynch has been enabled.`, {declare: true});
 			}
 		},
-		enablenlhelp: [`/mafia enablenl OR /mafia disablenl - allows or disallows players to nolynch (is on by default).`],
+		enablenlhelp: [`/mafia enablenl OR /mafia disablenl - Allows or disallows players abstain from lynching. Requires host % @ # & ~`],
 
 		lynches: function (target, room, user) {
 			if (!room.game || room.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
@@ -1471,6 +1471,7 @@ exports.commands = {
 		`/mafia closedsetup [on|off] - Sets if the game is a closed setup. Closed setups don't show the role list to players. Requires host % @ * # & ~`,
 		`/mafia reveal [on|off] - Sets if roles reveal on death or not. Requires host % @ * # & ~`,
 		`/mafia selflynch [on|hammer|off] - Allows players to self lynch themselves either at hammer or anytime. Requires host % @ * # & ~`,
+		`/mafia enablenl OR /mafia disablenl - Allows or disallows players abstain from lynching. Requires host % @ # & ~`,
 		`/mafia setroles [comma seperated roles] - Set the roles for a game of mafia. You need to provide one role per player.`,
 		`/mafia forcesetroles [comma seperated roles] - Forcibly set the roles for a game of mafia. No role PM information or alignment will be set.`,
 		`/mafia start - Start the game of mafia. Signups must be closed. Requires host % @ * # & ~`,
