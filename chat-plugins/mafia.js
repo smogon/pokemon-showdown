@@ -1162,7 +1162,7 @@ exports.commands = {
 				target = parseInt(target);
 				if (isNaN(target)) {
 					if (!this.runBroadcast()) return;
-					if (targetRoom.game.dlAt > 0) {
+					if ((targetRoom.game.dlAt - Date.now()) > 0) {
 						return this.sendReply(`Deadline reaches at ${Chat.toDurationString(targetRoom.game.dlAt - Date.now()) || '0 seconds'}.`);
 					} else {
 						return this.parse(`/help mafia deadline`);
@@ -1208,6 +1208,7 @@ exports.commands = {
 			if (!targetRoom || !targetRoom.game || targetRoom.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
 			if (!user.can('mute', null, room) && targetRoom.game.hostid !== user.userid) return user.sendTo(targetRoom, `|error|/mafia ${cmd} - Access denied.`);
 			if (cmd === 'disablenl') {
+				if (!targetRoom.game.enableNL) return this.errorReply(`No-Lynch has already been disabled`);
 				targetRoom.game.enableNL = false;
 				targetRoom.game.sendRoom(`No-Lynch has been disabled.`, {declare: true});
 				// Remove everyone's lynches from No Lynch
@@ -1218,14 +1219,12 @@ exports.commands = {
 				targetRoom.game.getPlurality();
 				targetRoom.game.updatePlayers();
 			} else {
+				if (targetRoom.game.enableNL) return this.errorReply(`No-Lynch has already been enabled`);
 				targetRoom.game.enableNL = true;
 				targetRoom.game.sendRoom(`No-Lynch has been enabled.`, {declare: true});
 			}
 		},
-		setnolynchhelp: [
-			`/mafia enablenl - allows players to nolynch (is on by default)`,
-			`/mafia disablenl - disallows players to nolynch.`,
-		],
+		enablenlhelp: [`/mafia enablenl OR disablenl - allows or disallows players to nolynch (is on by default)`],
 
 		lynches: function (target, room, user) {
 			if (!room.game || room.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
