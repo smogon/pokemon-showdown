@@ -53,7 +53,7 @@ exports.BattleAbilities = {
 					return;
 				}
 				if (!target.addVolatile('flashfire')) {
-					this.add('-immune', target, '[msg]');
+					this.add('-immune', target, '[msg]', '[from] ability: Flash Fire');
 				}
 				return null;
 			}
@@ -166,7 +166,7 @@ exports.BattleAbilities = {
 		onTryHit: function (target, source, move) {
 			if (target !== source && move.type === 'Electric' && move.id !== 'thunderwave') {
 				if (!this.heal(target.maxhp / 4)) {
-					this.add('-immune', target, '[msg]');
+					this.add('-immune', target, '[msg]', '[from] ability: Volt Absorb');
 				}
 				return null;
 			}
