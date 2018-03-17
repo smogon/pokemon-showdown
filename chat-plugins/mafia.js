@@ -1289,6 +1289,7 @@ exports.commands = {
 			if (targetUser.userid in room.game.players) return this.errorReply(`You cannot subhost to a user in the game.`);
 			if (targetUser.userid in room.game.dead) {
 				if (cmd !== 'forcesubhost') return this.errorReply(`${targetUser.name} could potentially be revived. To subhost anyway, use /mafia forcesubhost ${target}.`);
+				room.game.dead[targetUser.userid].destroy();
 				delete room.game.dead[targetUser.userid];
 			}
 			const oldHostid = room.game.hostid;
