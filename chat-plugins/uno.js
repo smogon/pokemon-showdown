@@ -104,6 +104,7 @@ class UNOgame extends Rooms.RoomGame {
 
 	onStart() {
 		if (this.playerCount < 2) return false;
+		if (this.autostartTimer) clearTimeout(this.autostartTimer);
 		this.sendToRoom(`|uhtmlchange|uno-${this.room.gameNumber}|<div class="infobox"><p>The game of UNO has started.</p>${(this.suppressMessages ? `<p style="font-size: 6pt">Game messages will be shown to only players.  If you would like to spectate the game, use <strong>/uno spectate</strong></p>` : '')}</div>`, true);
 		this.state = 'play';
 
@@ -451,6 +452,7 @@ class UNOgame extends Rooms.RoomGame {
 
 	destroy() {
 		clearTimeout(this.timer);
+		if (this.autostartTimer) clearTimeout(this.autostartTimer);
 		this.sendToRoom(`|uhtmlchange|uno-${this.room.gameNumber}|<div class="infobox">The game of UNO has ended.</div>`, true);
 
 		// deallocate games for each player.
