@@ -163,7 +163,7 @@ class MafiaTracker extends Rooms.RoomGame {
 				};
 			});
 			this.roles = this.originalRoles;
-			this.originalRoleString = this.originalRoles.slice().map(r => { return `<span style="font-weight:bold;color:${MafiaData.alignments[r.alignment].color || '#FFF'}">${r.name}</span>`; }).join(', ');
+			this.originalRoleString = this.originalRoles.slice().map(r => { return `<span style="font-weight:bold;color:${MafiaData.alignments[r.alignment].color || '#FFF'}">${r.safeName}</span>`; }).join(', ');
 			this.roleString = this.originalRoleString;
 			return [];
 		}
@@ -519,7 +519,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		return true;
 	}
 
-	revive(user, deadPlayer) {
+	revive(user, deadPlayer, force) {
 		if (deadPlayer in this.players) return user.sendTo(this.room, `|error|The user ${deadPlayer} is already a living player.`);
 		if (deadPlayer in this.dead) {
 			deadPlayer = this.dead[deadPlayer];
@@ -534,11 +534,14 @@ class MafiaTracker extends Rooms.RoomGame {
 			if (!targetUser || !targetUser.connected) return user.sendTo(this.room, `|error|The user "${deadPlayer}" was not found.`);
 			if (!this.room.users[targetUser.userid]) return user.sendTo(this.room, `|error|${targetUser.name} is not in this room, and cannot be added to the game.`);
 			if (targetUser.userid === this.hostid) return user.sendTo(this.room, `|error|${targetUser.name} cannot host and play!`);
-			let alts = targetUser.getAltUsers(true);
-			for (let alt of alts) {
-				if (Object.keys(this.players).includes(alt.userid)) return user.sendTo(this.room, `|error|${targetUser.name} already has an alt in the game.`);
-				if (this.hostid === alt.userid) return user.sendTo(this.room, `|error|${targetUser.name} has an alt as the host.`);
+			if (!force) {
+				let alts = targetUser.getAltUsers(true);
+				for (let alt of alts) {
+					if (Object.keys(this.players).includes(alt.userid)) return user.sendTo(this.room, `|error|${targetUser.name} already has an alt in the game. Use /mafia forceadd ${targetUser.name} to forcibly add them.`);
+					if (this.hostid === alt.userid) return user.sendTo(this.room, `|error|${targetUser.name} has an alt as the host. Use /mafia forceadd ${targetUser.name} to forcibly add them.`);
+				}
 			}
+			if (this.subs.includes(targetUser.userid)) this.subs.splice(this.subs.indexOf(targetUser.userid), 1);
 			let player = this.makePlayer(targetUser);
 			if (this.started) {
 				player.role = {
@@ -614,7 +617,10 @@ class MafiaTracker extends Rooms.RoomGame {
 			if (!(userid in this.players)) return;
 			oldPlayer = this.players[userid];
 		} else {
-			userid = this.requestedSub.shift();
+			do {
+				userid = this.requestedSub.shift();
+			} while (!(userid in this.players) && this.requestedSub.length > 0);
+			if (!(userid in this.players)) return;
 			oldPlayer = this.players[userid];
 		}
 		if (oldPlayer.lynching) this.unlynch(Users(userid));
@@ -735,6 +741,10 @@ class MafiaTracker extends Rooms.RoomGame {
 			logs.hosts[month][this.hostid]++;
 			writeLogs();
 		}
+		if (this.timer) {
+			clearTimeout(this.timer);
+			this.timer = null;
+		}
 		this.destroy();
 		return true;
 	}
@@ -773,23 +783,12 @@ exports.pages = {
 				buf += `<p><span style="font-weight:bold;">Rolelist</span>: ${room.game.roleString}</p>`;
 			}
 		}
-		if (isPlayer) {
-			if (room.game.players[user.userid].role) {
-				buf += `<p><details open><summary class="button" style="text-align:left; display:inline-block">Role PM</summary>`;
-				buf += `<h3>${room.game.players[user.userid].safeName}, you are a ${room.game.players[user.userid].getRole()}</h3>`;
-				buf += `<table><tr><td style="text-align:center;">${room.game.players[user.userid].role.image || `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-villager.png"/>`}</td><td style="text-align:left;width:100%"><ul>${room.game.players[user.userid].role.memo.map(m => { return `<li>${m}</li>`; }).join('')}</ul></td></tr></table>`;
-				if (!['town', 'solo'].includes(room.game.players[user.userid].role.alignement)) buf += `<p><span style="font-weight:bold">Partners</span>: ${room.game.getPartners(room.game.players[user.userid].role.alignement, room.game.players[user.userid])}</p>`;
-				buf += `</details></p>`;
-			}
-			if (room.game.phase === 'signups') {
-				buf += `<p><button class="button" name="send" value="/mafia leave ${room.id}">Leave game</button></p>`;
-			} else {
-				if (!room.game.requestedSub.includes(user.userid)) {
-					buf += `<p><button class="button" name="send" value="/mafia sub ${room.id}, out">Request to be subbed out</button></p>`;
-				} else {
-					buf += `<p><button class="button" name="send" value="/mafia sub ${room.id}, in">Cancel sub request</button></p>`;
-				}
-			}
+		if (isPlayer && room.game.players[user.userid].role) {
+			buf += `<h3>${room.game.players[user.userid].safeName}, you are a ${room.game.players[user.userid].getRole()}</h3>`;
+			buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">Role Details</summary>`;
+			buf += `<table><tr><td style="text-align:center;">${room.game.players[user.userid].role.image || `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-villager.png"/>`}</td><td style="text-align:left;width:100%"><ul>${room.game.players[user.userid].role.memo.map(m => { return `<li>${m}</li>`; }).join('')}</ul></td></tr></table>`;
+			if (!['town', 'solo'].includes(room.game.players[user.userid].role.alignement)) buf += `<p><span style="font-weight:bold">Partners</span>: ${room.game.getPartners(room.game.players[user.userid].role.alignement, room.game.players[user.userid])}</p>`;
+			buf += `</details></p>`;
 		}
 		if (room.game.phase === "day") {
 			buf += `<h3>Lynches (Hammer: ${room.game.hammerCount}) <button class="button" name="send" value="/join view-mafia-${room.id}"><i class="fa fa-refresh"></i> Refresh</button></h3>`;
@@ -797,7 +796,7 @@ exports.pages = {
 			let list = Object.keys(room.game.players).concat((room.game.enableNL ? ['nolynch'] : []));
 			for (let key of list) {
 				if (room.game.lynches[key]) {
-					buf += `<p style="font-weight:bold">${room.game.lynches[key].count}${plur === key ? '*' : ''} ${room.game.players[key] ? room.game.players[key].safeName : 'No-Lynch'} (${room.game.lynches[key].lynchers.map(a => { return room.game.players[a].safeName; }).join(', ')}) `;
+					buf += `<p style="font-weight:bold">${room.game.lynches[key].count}${plur === key ? '*' : ''} ${room.game.players[key] ? room.game.players[key].safeName : 'No-Lynch'} (${room.game.lynches[key].lynchers.map(a => { return room.game.players[a] ? room.game.players[a].safeName : a; }).join(', ')}) `;
 				} else {
 					buf += `<p style="font-weight:bold">0 ${room.game.players[key] ? room.game.players[key].safeName : 'No-Lynch'} `;
 				}
@@ -856,13 +855,17 @@ exports.pages = {
 			buf += `<p style="font-weight:bold;">Sub List: ${room.game.subs.join(', ')}</p>`;
 			buf += `<p style="font-weight:bold;">Players who are requesting a sub: ${room.game.requestedSub.join(', ')}</p>`;
 		}
-		if (!isPlayer && !isHost) {
-			if (!room.game.started) {
-				buf += `<p><button class="button" name="send" value="/mafia join ${room.id}">Join game</button></p>`;
-			} else if (room.game.subs.includes(user.userid)) {
-				buf += `<p><button class="button" name="send" value="/mafia sub ${room.id}, out">Cancel sub request</button></p>`;
+		if (!isHost) {
+			if (room.game.phase === 'signups') {
+				if (isPlayer) {
+					buf += `<p><button class="button" name="send" value="/mafia leave ${room.id}">Leave game</button></p>`;
+				} else {
+					buf += `<p><button class="button" name="send" value="/mafia join ${room.id}">Join game</button></p>`;
+				}
+			} else if ((!isPlayer && room.game.subs.includes(user.userid)) || (isPlayer && !room.game.requestedSub.includes(user.userid))) {
+				buf += `<p><button class="button" name="send" value="/mafia sub ${room.id}, out">${isPlayer ? 'Request to be subbed out' : 'Cancel sub request'}</button></p>`;
 			} else {
-				buf += `<p><button class="button" name="send" value="/mafia sub ${room.id}, in">Join the game as a sub</button></p>`;
+				buf += `<p><button class="button" name="send" value="/mafia sub ${room.id}, in">${isPlayer ? 'Cancel sub request' : 'Join the game as a sub'}</button></p>`;
 			}
 		}
 		buf += `</div>`;
@@ -927,6 +930,8 @@ exports.commands = {
 			room.game = new MafiaTracker(room, targetUser);
 			targetUser.send(`>view-mafia-${room.id}\n|init|html\n${Chat.pages.mafia([room.id], targetUser)}`);
 			this.privateModAction(`(${targetUser.name} was appointed the mafia host by ${user.name}.)`);
+			room.addByUser(user, `${targetUser.name} was appointed the mafia host by ${user.name}.`);
+			room.add(`|c:|${(Math.floor(Date.now() / 1000))}|~|**Mafiasignup!**`).update();
 			this.modlog('MAFIAHOST', targetUser, null, {noalts: true, noip: true});
 		},
 		hosthelp: [`/mafia host [user] - Create a game of Mafia with [user] as the host. Requires + % @ * # & ~, voice can only host themselves.`],
@@ -990,8 +995,9 @@ exports.commands = {
 			if (!user.can('mute', null, targetRoom) && targetRoom.game.hostid !== user.userid) return user.sendTo(targetRoom, `|error|/mafia reveal - Access denied.`);
 			let action = targetRoom.id === room.id ? toId(target.join('')) : toId(target[1]);
 			if (!['on', 'off'].includes(action)) return this.parse('/help mafia reveal');
-			if ((action === 'off' && targetRoom.game.noReveal) || (action === 'on' && !targetRoom.game.noReveal)) return user.sendTo(targetRoom, `|error|Revealing of roles is already ${targetRoom.game.noReveal ? 'enabled' : 'disabled'}.`);
-			targetRoom.game.noReveal = action === 'off';
+			if ((action === 'off' && !targetRoom.game.noReveal) || (action === 'on' && targetRoom.game.noReveal)) return user.sendTo(targetRoom, `|error|Revealing of roles is already ${targetRoom.game.noReveal ? 'enabled' : 'disabled'}.`);
+			targetRoom.game.noReveal = action === 'on';
+			targetRoom.game.sendRoom(`Revealing of roles has been ${action === 'off' ? 'disabled' : 'enabled'}.`, {declare: true});
 			targetRoom.game.updatePlayers();
 		},
 		revealhelp: [`/mafia reveal [on|off] - Sets if roles reveal on death or not. Requires host % @ * # & ~`],
@@ -1141,15 +1147,16 @@ exports.commands = {
 		],
 
 		'!revive': true,
+		forceadd: 'revive',
 		add: 'revive',
-		revive: function (target, room, user) {
+		revive: function (target, room, user, connection, cmd) {
 			let targetRoom = room;
 			target = target.split(',');
 			if (Rooms(target[0]) && Rooms(target[0]).users[user.userid]) targetRoom = Rooms(target.shift());
 			if (!targetRoom || !targetRoom.game || targetRoom.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
 			if (!user.can('mute', null, room) && targetRoom.game.hostid !== user.userid) return user.sendTo(targetRoom, `|error|/mafia revive - Access denied.`);
 			if (!toId(target.join(''))) return this.parse('/help mafia revive');
-			targetRoom.game.revive(user, toId(target.join('')));
+			targetRoom.game.revive(user, toId(target.join('')), cmd === 'forceadd');
 		},
 		revivehelp: [`/mafia revive [player] - Revive a player who died or add a new player to the game. Requires host % @ * # & ~`],
 
@@ -1244,7 +1251,7 @@ exports.commands = {
 				return room.game.lynches[b].count - room.game.lynches[a].count;
 			});
 			for (const key of list) {
-				buf += `${room.game.lynches[key].count}${plur === key ? '*' : ''} ${room.game.players[key] ? room.game.players[key].safeName : 'No-Lynch'} (${room.game.lynches[key].lynchers.map(a => { return room.game.players[a].safeName; }).join(', ')})`;
+				buf += `${room.game.lynches[key].count}${plur === key ? '*' : ''} ${room.game.players[key] ? room.game.players[key].safeName : 'No-Lynch'} (${room.game.lynches[key].lynchers.map(a => { return room.game.players[a] ? room.game.players[a].safeName : a; }).join(', ')})<br />`;
 			}
 			this.sendReplyBox(buf);
 		},
@@ -1281,6 +1288,11 @@ exports.commands = {
 					if (game.subs.includes(user.userid)) return user.sendTo(targetRoom, `|error|You are already on the sub list.`);
 					if (game.played.includes(user.userid)) return user.sendTo(targetRoom, `|error|You cannot sub back into the game.`);
 					if (game.subs.includes(user.userid)) return user.sendTo(targetRoom, `|error|You have already requested to be subbed in.`);
+					let alts = user.getAltUsers(true);
+					for (let alt of alts) {
+						if (Object.keys(game.players).includes(alt.userid)) return user.sendTo(targetRoom, `|error|You already have an alt in the game.`);
+						if (game.hostid === alt.userid) return user.sendTo(targetRoom, `|error|You cannot join a game with an alt as the host.`);
+					}
 					game.subs.push(user.userid);
 					game.nextSub();
 					// Update spectator's view
