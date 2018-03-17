@@ -23,7 +23,8 @@ exports.BattleAliases = {
 	"cc2v2": "[Gen 7] Challenge Cup 2v2",
 	"hc": "[Gen 7] Hackmons Cup",
 	"monorandom": "[Gen 7] Monotype Random Battle",
-	"bf": "[Gen 6] Battle Factory",
+	"bf": "[Gen 7] Battle Factory",
+	"gen6bf": "[Gen 6] Battle Factory",
 
 	// mega evos
 	"fabio": "Ampharos-Mega",
