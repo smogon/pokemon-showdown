@@ -122,6 +122,7 @@ class MafiaTracker extends Rooms.RoomGame {
 			if (this.hostid === alt.userid) return user.sendTo(this.room, `|error|You cannot join a game with an alt as the host.`);
 		}
 		if (!this.addPlayer(user)) return user.sendTo(this.room, `|error|You have already joined the game of ${this.title}.`);
+		if (this.subs.includes(user.userid)) this.subs.splice(this.subs.indexOf(user.userid), 1);
 		this.players[user.userid].updateHtmlRoom();
 		this.sendRoom(`${this.players[user.userid].name} has joined the game.`);
 	}
@@ -554,6 +555,7 @@ class MafiaTracker extends Rooms.RoomGame {
 				this.roles = [];
 				this.roleString = '';
 			}
+			if (this.subs.includes(targetUser.userid)) this.subs.splice(this.subs.indexOf(targetUser.userid), 1);
 			this.players[targetUser.userid] = player;
 			this.sendRoom(`${Chat.escapeHTML(targetUser.name)} has been added to the game!`, {declare: true});
 		}
@@ -763,7 +765,7 @@ exports.pages = {
 		let buf = `|title|${room.game.title}\n|pagehtml|<div class="pad broadcast-blue">`;
 		buf += `<button class="button" name="send" value="/join view-mafia-${room.id}" style="float:left"><i class="fa fa-refresh"></i> Refresh</button>`;
 		buf += `<br/><br/><h1 style="text-align:center;">${room.game.title}</h1><h3>Host: ${room.game.host}</h3>`;
-		buf += `<p style="font-weight:bold;">Players (${room.game.playerCount}): ${Object.keys(room.game.players).map(p => { return room.game.players[p].safeName; }).join(', ')}</p><hr/>`;
+		buf += `<p style="font-weight:bold;">Players (${room.game.playerCount}): ${Object.keys(room.game.players).sort().map(p => { return room.game.players[p].safeName; }).join(', ')}</p><hr/>`;
 		if (!room.game.closedSetup) {
 			if (room.game.noReveal) {
 				buf += `<p><span style="font-weight:bold;">Original Rolelist</span>: ${room.game.originalRoleString}</p>`;
@@ -1234,11 +1236,15 @@ exports.commands = {
 			if (!room.game.started) return this.errorReply(`The game of mafia has not started yet.`);
 			if (!this.runBroadcast()) return false;
 
-			let buf = `<h3>Lynches (Hammer: ${room.game.hammerCount})</h3>`;
+			let buf = `<strong>Lynches (Hammer: ${room.game.hammerCount})</strong><br />`;
 			const plur = room.game.getPlurality();
-			const list = Object.keys(room.game.players).concat(['nolynch']);
+			const list = Object.keys(room.game.lynches).sort((a, b) => {
+				if (a === plur) return -1;
+				if (b === plur) return 1;
+				return room.game.lynches[b].count - room.game.lynches[a].count;
+			});
 			for (const key of list) {
-				if (key in room.game.lynches) buf += `${room.game.lynches[key].count}${plur === key ? '*' : ''} ${room.game.players[key] ? room.game.players[key].safeName : 'No-Lynch'} (${room.game.lynches[key].lynchers.map(a => { return room.game.players[a].safeName; }).join(', ')})`;
+				buf += `${room.game.lynches[key].count}${plur === key ? '*' : ''} ${room.game.players[key] ? room.game.players[key].safeName : 'No-Lynch'} (${room.game.lynches[key].lynchers.map(a => { return room.game.players[a].safeName; }).join(', ')})`;
 			}
 			this.sendReplyBox(buf);
 		},
@@ -1310,7 +1316,8 @@ exports.commands = {
 			`/mafia sub next [player] - Forcibly sub [player] out of the game. Requires host % @ * # & ~`,
 		],
 
-		subhost: function (target, room, user) {
+		forcesubhost: 'subhost',
+		subhost: function (target, room, user, connection, cmd) {
 			if (!room.game || room.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
 			if (!this.canTalk()) return;
 			if (!target) return this.parse('/help mafia subhost');
@@ -1319,9 +1326,13 @@ exports.commands = {
 			let targetUser = this.targetUser;
 			if (!targetUser || !targetUser.connected) return this.errorReply(`The user "${this.targetUsername}" was not found.`);
 			if (!room.users[targetUser.userid]) return this.errorReply(`${targetUser.name} is not in this room, and cannot be hosted.`);
-			if (Object.keys(room.game.players).includes(targetUser.userid) || Object.keys(room.game.dead).includes(targetUser.userid)) return this.errorReply(`You cannot subhost to a user in the game or a user that could be revived.`);
 			if (room.game.hostid === targetUser.userid) return this.errorReply(`${targetUser.name} is already the host.`);
-
+			if (targetUser.userid in room.game.players) return this.errorReply(`You cannot subhost to a user in the game.`);
+			if (targetUser.userid in room.game.dead) {
+				if (cmd !== 'forcesubhost') return this.errorReply(`${targetUser.name} could potentially be revived. To subhost anyway, use /mafia forcesubhost ${target}.`);
+				room.game.dead[targetUser.userid].destroy();
+				delete room.game.dead[targetUser.userid];
+			}
 			const oldHostid = room.game.hostid;
 			if (Users(room.game.hostid)) Users(room.game.hostid).send(`>view-mafia-${room.id}\n|deinit`);
 			if (room.game.subs.includes(targetUser.userid)) room.game.subs.splice(room.game.subs.indexOf(targetUser.userid), 1);
