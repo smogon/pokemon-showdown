@@ -171,9 +171,10 @@ class MafiaTracker extends Rooms.RoomGame {
 		for (let r = 0; r < roles.length; r++) {
 			let target = roles[r].slice();
 			let role = {
-				name: Chat.escapeHTML(roleNames[r].split(' ').map(p => { return toId(p) === 'solo' ? '' : p; }).join(' ')),
+				name: roleNames[r].split(' ').map(p => { return toId(p) === 'solo' ? '' : p; }).join(' '),
 				memo: ['During the Day, you may vote for whomever you want lynched.'],
 			};
+			role.safeName = Chat.escapeHTML(role.name);
 			role.id = toId(role.name);
 			for (let key in MafiaData.roles) {
 				if (key.includes('_')) {
@@ -261,7 +262,7 @@ class MafiaTracker extends Rooms.RoomGame {
 			return problems;
 		}
 		this.roles = this.originalRoles.slice();
-		this.originalRoleString = this.originalRoles.slice().map(r => { return `<span style="font-weight:bold;color:${MafiaData.alignments[r.alignment].color || '#FFF'}">${r.name}</span>`; }).join(', ');
+		this.originalRoleString = this.originalRoles.slice().map(r => { return `<span style="font-weight:bold;color:${MafiaData.alignments[r.alignment].color || '#FFF'}">${r.safeName}</span>`; }).join(', ');
 		this.roleString = this.originalRoleString;
 		this.updatePlayers();
 		return [];
@@ -378,7 +379,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		player.lastLynch = Date.now();
 		if (this.hammerCount <= lynch.count) {
 			// HAMMER
-			this.sendRoom(`Hammer! ${target === 'nolynch' ? 'Nobody' : name} was lynched!`, {declare: true});
+			this.sendRoom(`Hammer! ${target === 'nolynch' ? 'Nobody' : Chat.escapeHTML(name)} was lynched!`, {declare: true});
 			if (target !== 'nolynch') this.eliminate(target, 'kill');
 			return this.night(true);
 		}
@@ -473,7 +474,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		if (!player) return false;
 		if (!this.started) {
 			// Game has not started, simply kick the player
-			this.sendRoom(`${player.name} was kicked from the game!`, {declare: true});
+			this.sendRoom(`${player.safeName} was kicked from the game!`, {declare: true});
 			player.destroy();
 			delete this.players[player.userid];
 			this.playerCount--;
@@ -481,7 +482,7 @@ class MafiaTracker extends Rooms.RoomGame {
 			return true;
 		}
 		this.dead[player.userid] = player;
-		let msg = `${player.name}`;
+		let msg = `${player.safeName}`;
 		switch (ability) {
 		case 'treestump':
 			this.dead[player.userid].treestump = true;
@@ -502,7 +503,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		default:
 			msg += ` was eliminated`;
 		}
-		this.sendRoom(`${msg}! ${!this.noReveal && toId(ability) === 'kill' ? `${player.name}'s role was ${player.getRole()}.` : ''}`, {declare: true});
+		this.sendRoom(`${msg}! ${!this.noReveal && toId(ability) === 'kill' ? `${player.safeName}'s role was ${player.getRole()}.` : ''}`, {declare: true});
 		for (let role of this.roles) {
 			if (role.id === player.role.id) {
 				this.roles.splice(this.roles.indexOf(role), 1);
@@ -523,7 +524,7 @@ class MafiaTracker extends Rooms.RoomGame {
 			deadPlayer = this.dead[deadPlayer];
 			if (deadPlayer.treestump) delete deadPlayer.treestump;
 			if (deadPlayer.restless) delete deadPlayer.restless;
-			this.sendRoom(`${deadPlayer.name} was revived!`, {declare: true});
+			this.sendRoom(`${deadPlayer.safeName} was revived!`, {declare: true});
 			this.players[deadPlayer.userid] = deadPlayer;
 			this.roles.push(deadPlayer.role);
 			delete this.dead[deadPlayer.userid];
@@ -541,6 +542,7 @@ class MafiaTracker extends Rooms.RoomGame {
 			if (this.started) {
 				player.role = {
 					name: `Unknown`,
+					safeName: `Unknown`,
 					id: `unknown`,
 					alignment: 'solo',
 					memo: [`You were added to the game after it had started. To learn about your role, PM the host (${this.host}).`],
@@ -553,7 +555,7 @@ class MafiaTracker extends Rooms.RoomGame {
 				this.roleString = '';
 			}
 			this.players[targetUser.userid] = player;
-			this.sendRoom(`${targetUser.name} has been added to the game!`, {declare: true});
+			this.sendRoom(`${Chat.escapeHTML(targetUser.name)} has been added to the game!`, {declare: true});
 		}
 		this.playerCount++;
 		this.updateRoleString();
@@ -630,7 +632,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		let u = Users(userid);
 		if (u && u.connected) u.send(`>view-mafia-${this.room.id}\n|init|html\n${Chat.pages.mafia([this.room.id], u)}`);
 		if (this.started) this.played.push(newPlayer.userid);
-		this.sendRoom(`${oldPlayer.name} has been subbed out. ${newPlayer.name} has joined the game.`, {declare: true});
+		this.sendRoom(`${oldPlayer.safeName} has been subbed out. ${newPlayer.safeName} has joined the game.`, {declare: true});
 		this.updatePlayers();
 	}
 
@@ -655,7 +657,7 @@ class MafiaTracker extends Rooms.RoomGame {
 	}
 
 	updateRoleString() {
-		this.roleString = this.roles.slice().map(r => { return `<span style="font-weight:bold;color:${MafiaData.alignments[r.alignment].color || '#FFF'}">${r.name}</span>`; }).join(', ');
+		this.roleString = this.roles.slice().map(r => { return `<span style="font-weight:bold;color:${MafiaData.alignments[r.alignment].color || '#FFF'}">${r.safeName}</span>`; }).join(', ');
 	}
 
 	sendRoom(message, options = {}) {
@@ -793,7 +795,7 @@ exports.pages = {
 			let list = Object.keys(room.game.players).concat((room.game.enableNL ? ['nolynch'] : []));
 			for (let key of list) {
 				if (room.game.lynches[key]) {
-					buf += `<p style="font-weight:bold">${room.game.lynches[key].count}${plur === key ? '*' : ''} ${room.game.players[key] ? room.game.players[key].name : 'No-Lynch'} (${room.game.lynches[key].lynchers.map(a => { return room.game.players[a].safeName; }).join(', ')}) `;
+					buf += `<p style="font-weight:bold">${room.game.lynches[key].count}${plur === key ? '*' : ''} ${room.game.players[key] ? room.game.players[key].safeName : 'No-Lynch'} (${room.game.lynches[key].lynchers.map(a => { return room.game.players[a].safeName; }).join(', ')}) `;
 				} else {
 					buf += `<p style="font-weight:bold">0 ${room.game.players[key] ? room.game.players[key].safeName : 'No-Lynch'} `;
 				}
@@ -1236,7 +1238,7 @@ exports.commands = {
 			const plur = room.game.getPlurality();
 			const list = Object.keys(room.game.players).concat(['nolynch']);
 			for (const key of list) {
-				if (key in room.game.lynches) buf += `${room.game.lynches[key].count}${plur === key ? '*' : ''} ${room.game.players[key] ? room.game.players[key].name : 'No-Lynch'} (${room.game.lynches[key].lynchers.join(', ')})`;
+				if (key in room.game.lynches) buf += `${room.game.lynches[key].count}${plur === key ? '*' : ''} ${room.game.players[key] ? room.game.players[key].safeName : 'No-Lynch'} (${room.game.lynches[key].lynchers.map(a => { return room.game.players[a].safeName;}).join(', ')})`;
 			}
 			this.sendReplyBox(buf);
 		},
@@ -1248,7 +1250,7 @@ exports.commands = {
 			if (this.broadcasting) {
 				room.game.sendPlayerList();
 			} else {
-				this.sendReplyBox(`Players (${room.game.playerCount}): ${Object.keys(room.game.players).map(p => { return room.game.players[p].name; }).join(', ')}`);
+				this.sendReplyBox(`Players (${room.game.playerCount}): ${Object.keys(room.game.players).map(p => { return room.game.players[p].safeName; }).join(', ')}`);
 			}
 		},
 
@@ -1327,7 +1329,7 @@ exports.commands = {
 			room.game.hostid = targetUser.userid;
 			room.game.played.push(targetUser.userid);
 			targetUser.send(`>view-mafia-${room.id}\n|init|html\n${Chat.pages.mafia([room.id], targetUser)}`);
-			room.game.sendRoom(`${targetUser.name} has been substituted as the new host, replacing ${oldHostid}.`, {declare: true});
+			room.game.sendRoom(`${Chat.escapeHTML(targetUser.name)} has been substituted as the new host, replacing ${oldHostid}.`, {declare: true});
 			this.modlog('MAFIASUBHOST', targetUser, `replacing ${oldHostid}`, {noalts: true, noip: true});
 		},
 		subhosthelp: [`/mafia subhost [user] - Substitues the user as the new game host.`],
