@@ -281,6 +281,7 @@ exports.pages = {
 
 exports.commands = {
 	'!modlog': true,
+	ml: 'modlog',
 	timedmodlog: 'modlog',
 	modlog: function (target, room, user, connection, cmd) {
 		if (!room) room = Rooms('global');
@@ -318,7 +319,7 @@ exports.commands = {
 		getModlog(connection, roomid, target, lines, cmd === 'timedmodlog');
 	},
 	modloghelp: [
-		`/modlog [roomid], [search] - Searches the moderator log - defaults to the current room unless specified otherwise.`,
+		`/modlog OR /ml [roomid], [search] - Searches the moderator log - defaults to the current room unless specified otherwise.`,
 		`If you set [roomid] as [all], it searches for [search] on all rooms' moderator logs.`,
 		`If you set [roomid] as [public], it searches for [search] in all public rooms' moderator logs, excluding battles. Requires: % @ * # & ~`,
 	],
