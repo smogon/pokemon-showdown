@@ -609,7 +609,6 @@ exports.commands = {
 				clearTimeout(room.game.autostartTimer);
 			}
 			room.game.autostartTimer = setTimeout(() => {
-				if (!room.game || room.game.state !== 'signups') return false;
 				room.game.onStart();
 			}, amount * 1000);
 			this.addModAction(`${user.name} has set the autostart timer to ${amount} seconds.`);
