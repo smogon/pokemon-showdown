@@ -602,8 +602,9 @@ exports.commands = {
 		autostart: function (target, room, user) {
 			if (!this.can('minigame', null, room)) return;
 			if (!room.game || room.game.gameid !== 'uno') return this.errorReply("There is no UNO game going on in this room right now.");
-			let amount = parseInt(target);
+			const amount = parseInt(target);
 			if (!amount || amount < 30 || amount > 600) return this.errorReply("The amount must be a number between 30 and 600.");
+			if (room.game.state !== 'signups') return this.errorReply("The game of UNO has already started.");
 			room.game.autostartTimer = amount;
 			if (room.game.autostartTimer) {
 				clearTimeout(room.game.autostartTimer);
