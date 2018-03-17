@@ -1238,7 +1238,7 @@ exports.commands = {
 			const plur = room.game.getPlurality();
 			const list = Object.keys(room.game.players).concat(['nolynch']);
 			for (const key of list) {
-				if (key in room.game.lynches) buf += `${room.game.lynches[key].count}${plur === key ? '*' : ''} ${room.game.players[key] ? room.game.players[key].safeName : 'No-Lynch'} (${room.game.lynches[key].lynchers.map(a => { return room.game.players[a].safeName;}).join(', ')})`;
+				if (key in room.game.lynches) buf += `${room.game.lynches[key].count}${plur === key ? '*' : ''} ${room.game.players[key] ? room.game.players[key].safeName : 'No-Lynch'} (${room.game.lynches[key].lynchers.map(a => { return room.game.players[a].safeName; }).join(', ')})`;
 			}
 			this.sendReplyBox(buf);
 		},
