@@ -72,6 +72,7 @@ class UNOgame extends Rooms.RoomGame {
 		this.playerCap = cap;
 		this.allowRenames = true;
 		this.maxTime = maxTime;
+		this.autostartTimer = null;
 
 		this.gameid = 'uno';
 		this.title = 'UNO';
@@ -594,6 +595,22 @@ exports.commands = {
 			}
 			this.addModAction(`${user.name} has set the UNO automatic disqualification timer to ${amount} seconds.`);
 			this.modlog('UNO TIMER', null, `${amount} seconds`);
+		},
+
+		autostart: function (target, room, user) {
+			if (!this.can('minigame', null, room)) return;
+			if (!room.game || room.game.gameid !== 'uno') return this.errorReply("There is no UNO game going on in this room right now.");
+			let amount = parseInt(target);
+			if (!amount || amount < 30 || amount > 600) return this.errorReply("The amount must be a number between 30 and 600.");
+			room.game.autostartTimer = amount;
+			if (room.game.autostartTimer) {
+				clearTimeout(room.game.autostartTimer);
+			}
+			room.game.autostartTimer = setTimeout(() => {
+				room.game.onStart();
+			}, amount * 1000);
+			this.addModAction(`${user.name} has set the autostart timer to ${amount} seconds.`);
+			this.modlog('UNO AUTOSTART', null, `${amount} seconds.`);
 		},
 
 		dq: 'disqualify',
