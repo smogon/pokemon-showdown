@@ -1648,14 +1648,6 @@
 				"evs": {"hp": 252, "atk": 4, "def": 0, "spa": 0, "spd": 252, "spe": 0},
 				"nature": "Sassy",
 				"moves": [["King's Shield"], ["Gyro Ball"], ["Shadow Ball"], ["Toxic"]]
-			}, {
-				"species": "Aegislash",
-				"gender": "",
-				"item": ["Choice Specs"],
-				"ability": ["Stance Change"],
-				"evs": {"hp": 252, "atk": 4, "def": 0, "spa": 252, "spd": 0, "spe": 0},
-				"nature": "Quiet",
-				"moves": [["Flash Cannon"], ["Shadow Ball"], ["Gyro Ball"], ["Rock Slide"]]
 			}]
 		},
 		"landorus": {
@@ -7538,7 +7530,7 @@
 				"gender": "",
 				"item": ["Figy Berry"],
 				"ability": ["Gluttony"],
-				"evs": {"hp": 128, "atk": 252, "def": 0, "spa": 0, "spd": 0, "spe": 128},
+				"evs": {"hp": 148, "atk": 252, "def": 0, "spa": 0, "spd": 0, "spe": 108},
 				"nature": "Adamant",
 				"moves": [["Belly Drum"], ["Extreme Speed"], ["Seed Bomb"], ["Stomping Tantrum", "Throat Chop"]]
 			}]
@@ -11062,10 +11054,18 @@
 				"species": "Aurorus",
 				"gender": "",
 				"item": ["Choice Specs"],
-				"ability": ["Snow Warning", "Refrigerate"],
+				"ability": ["Snow Warning"],
 				"evs": {"hp": 0, "atk": 0, "def": 0, "spa": 252, "spd": 4, "spe": 252},
 				"nature": "Modest",
-				"moves": [["Blizzard", "Hyper Voice"], ["Freeze-Dry"], ["Earth Power"], ["Ancient Power"]]
+				"moves": [["Blizzard"], ["Freeze-Dry"], ["Earth Power"], ["Ancient Power"]]
+			}, {
+				"species": "Aurorus",
+				"gender": "",
+				"item": ["Choice Specs"],
+				"ability": ["Refrigerate"],
+				"evs": {"hp": 0, "atk": 0, "def": 0, "spa": 252, "spd": 4, "spe": 252},
+				"nature": "Modest",
+				"moves": [["Hyper Voice"], ["Freeze-Dry"], ["Earth Power"], ["Ancient Power"]]
 			}, {
 				"species": "Aurorus",
 				"gender": "",
@@ -12389,7 +12389,7 @@
 				"item": ["Eviolite"],
 				"ability": ["Shell Armor"],
 				"level": 5,
-				"evs": {"hp": 76, "atk": 0, "def": 0, "spa": 196, "spd": 0, "spe": 236},
+				"evs": {"hp": 0, "atk": 0, "def": 36, "spa": 200, "spd": 0, "spe": 236},
 				"nature": "Modest",
 				"moves": [["Shell Smash"], ["Hydro Pump"], ["Ice Beam"], ["Earth Power", "Hidden Power Grass"]]
 			}]
@@ -13124,6 +13124,7 @@
 				"ability": ["Sturdy"],
 				"level": 5,
 				"evs": {"hp": 0, "atk": 204, "def": 0, "spa": 0, "spd": 76, "spe": 212},
+				"ivs": {"hp": 23, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31},
 				"nature": "Jolly",
 				"moves": [["Dragon Dance"], ["Outrage"], ["Stone Edge"], ["Earthquake"]]
 			}, {
