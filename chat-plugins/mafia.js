@@ -349,7 +349,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		if (this.timer) this.setDeadline('off', true);
 		this.phase = 'night';
 		this.sendRoom(`Night ${this.dayNum}. PM the host your action, or idle.`, {declare: true});
-		if (!early && this.getPlurality() && this.getPlurality() !== 'nolynch') this.sendRoom(`Plurality is on ${this.players[this.getPlurality()].name}`);
+		if (!early && this.getPlurality()) this.sendRoom(`Plurality is on ${this.players[this.getPlurality()] ? this.players[this.getPlurality()].name : 'No Lynch'}`);
 		this.updatePlayers();
 		return true;
 	}
@@ -511,7 +511,7 @@ class MafiaTracker extends Rooms.RoomGame {
 				break;
 			}
 		}
-		if (let p in this.players) {
+		if (const p of Object.keys(this.players)) {
 			if (this.players[p].lynching === player.userid) this.players[p].lynching = '';	
 		}
 		delete this.lynches[player.userid];
