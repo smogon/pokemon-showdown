@@ -648,7 +648,7 @@ exports.Formats = [
 		desc: [`Randomized teams of Pok&eacute;mon for a generated Smogon tier with sets that are competitively viable.`],
 
 		mod: 'gen6',
-		team: 'randomGen6Factory',
+		team: 'randomFactory',
 		searchShow: false,
 		ruleset: ['Pokemon', 'Sleep Clause Mod', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Mega Rayquaza Clause'],
 	},
