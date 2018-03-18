@@ -389,12 +389,12 @@ class MafiaTracker extends Rooms.RoomGame {
 		return true;
 	}
 
-	unlynch(user) {
-		if (this.phase !== 'day') return false;
+	unlynch(user, force) {
+		if (this.phase !== 'day' && !force) return false;
 		let player = this.players[user.userid];
 		if (!player && this.dead[user.userid] && this.dead[user.userid].restless) player = this.dead[user.userid];
 		if (!player || !player.lynching) return false;
-		if (player.lastLynch + 2000 >= Date.now()) return user.sendTo(this.room, `|error|You must wait another ${Chat.toDurationString((player.lastLynch + 2000) - Date.now()) || '0 seconds'} before you can change your lynch.`);
+		if (player.lastLynch + 2000 >= Date.now() && !force) return user.sendTo(this.room, `|error|You must wait another ${Chat.toDurationString((player.lastLynch + 2000) - Date.now()) || '0 seconds'} before you can change your lynch.`);
 		let lynch = this.lynches[player.lynching];
 		lynch.count--;
 		if (lynch.count <= 0) {
@@ -434,7 +434,7 @@ class MafiaTracker extends Rooms.RoomGame {
 			if (this.lynches[lynch].count >= this.hammerCount) hammered.push(lynch === 'nolynch' ? 'Nobody' : lynch);
 		}
 		if (hammered.length) {
-			this.sendRoom(`${Chat.count(hammered, "players have")} been hammered: ${hammered.join(', ')}`, {declare: true});
+			this.sendRoom(`${Chat.count(hammered, "players have")} been hammered: ${hammered.join(', ')}. They have not been removed from the game.`, {declare: true});
 			this.night(true);
 		}
 	}
@@ -504,6 +504,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		default:
 			msg += ` was eliminated`;
 		}
+		if (player.lynching) this.unlynch(Users(player.userid), true);
 		this.sendRoom(`${msg}! ${!this.noReveal && toId(ability) === 'kill' ? `${player.safeName}'s role was ${player.getRole()}.` : ''}`, {declare: true});
 		for (let role of this.roles) {
 			if (role.id === player.role.id) {
@@ -623,7 +624,7 @@ class MafiaTracker extends Rooms.RoomGame {
 			if (!(userid in this.players)) return;
 			oldPlayer = this.players[userid];
 		}
-		if (oldPlayer.lynching) this.unlynch(Users(userid));
+		if (oldPlayer.lynching) this.unlynch(Users(userid), true);
 		let newPlayer = this.makePlayer(Users(this.subs.shift()));
 		newPlayer.role = oldPlayer.role;
 		this.players[newPlayer.userid] = newPlayer;
@@ -751,6 +752,7 @@ class MafiaTracker extends Rooms.RoomGame {
 
 	destroy() {
 		// Slightly modified to handle dead players
+		if (this.timer) clearTimeout(this.timer);
 		this.room.game = null;
 		this.room = /** @type {any} */ (null);
 		for (let i in this.players) {
