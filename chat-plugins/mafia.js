@@ -512,7 +512,7 @@ class MafiaTracker extends Rooms.RoomGame {
 			}
 		}
 		for (const p of Object.keys(this.players)) {
-			if (this.players[p].lynching === player.userid) this.players[p].lynching = '';	
+			if (this.players[p].lynching === player.userid) this.players[p].lynching = '';
 		}
 		delete this.lynches[player.userid];
 		delete this.players[player.userid];
