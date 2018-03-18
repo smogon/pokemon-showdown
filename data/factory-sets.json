@@ -11905,28 +11905,6 @@
 				"moves": [["High Jump Kick"], ["Drain Punch"], ["Knock Off"], ["Poison Jab", "Zen Headbutt"]]
 			}]
 		},
-		"torchic": {
-			"flags": {},
-			"sets": [{
-				"species": "Torchic",
-				"gender": "",
-				"item": ["Life Orb", "Firium Z"],
-				"ability": ["Speed Boost"],
-				"level": 5,
-				"evs": {"hp": 0, "atk": 0, "def": 36, "spa": 200, "spd": 36, "spe": 236},
-				"nature": "Modest",
-				"moves": [["Protect"], ["Fire Blast"], ["Hidden Power Grass"], ["Baton Pass"]]
-			}, {
-				"species": "Torchic",
-				"gender": "",
-				"item": ["Eviolite", "Berry Juice"],
-				"ability": ["Speed Boost"],
-				"level": 5,
-				"evs": {"hp": 0, "atk": 0, "def": 196, "spa": 0, "spd": 36, "spe": 236},
-				"nature": "Bold",
-				"moves": [["Protect"], ["Swords Dance", "Curse"], ["Will-O-Wisp", "Substitute"], ["Baton Pass"]]
-			}]
-		},
 		"carvanha": {
 			"flags": {},
 			"sets": [{
