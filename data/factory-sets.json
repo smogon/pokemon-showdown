@@ -8329,7 +8329,7 @@
 			"sets": [{
 				"species": "Klinklang",
 				"gender": "",
-				"item": ["Steelium-Z", "Leftovers"],
+				"item": ["Steelium Z", "Leftovers"],
 				"ability": ["Clear Body"],
 				"happiness": 0,
 				"evs": {"hp": 104, "atk": 252, "def": 0, "spa": 0, "spd": 0, "spe": 152},
@@ -8338,7 +8338,7 @@
 			}, {
 				"species": "Klinklang",
 				"gender": "",
-				"item": ["Electrium-Z", "Lum Berry"],
+				"item": ["Electrium Z", "Lum Berry"],
 				"ability": ["Clear Body"],
 				"happiness": 0,
 				"evs": {"hp": 104, "atk": 252, "def": 0, "spa": 0, "spd": 0, "spe": 152},
@@ -8406,8 +8406,17 @@
 				"gender": "",
 				"item": ["Ghostium Z"],
 				"ability": ["Levitate"],
+				"evs": {"hp": 0, "atk": 0, "def": 0, "spa": 252, "spd": 4, "spe": 252},
 				"nature": "Timid",
 				"moves": [["Shadow Ball"], ["Dazzling Gleam"], ["Nasty Plot"], ["Taunt"]]
+			}, {
+				"species": "Mismagius",
+				"gender": "",
+				"item": ["Colbur Berry", "Ghostium Z"],
+				"ability": ["Levitate"],
+				"evs": {"hp": 0, "atk": 0, "def": 0, "spa": 252, "spd": 4, "spe": 252},
+				"nature": "Timid",
+				"moves": [["Hex"], ["Dazzling Gleam"], ["Nasty Plot"], ["Will-O-Wisp"]]
 			}]
 		},
 		"omastar": {
@@ -8492,7 +8501,7 @@
 			}, {
 				"species": "Rotom",
 				"gender": "",
-				"item": ["Iapapa Berry", "Ghostium-Z"],
+				"item": ["Iapapa Berry", "Ghostium Z"],
 				"ability": ["Levitate"],
 				"evs": {"hp": 252, "atk": 0, "def": 88, "spa": 0, "spd": 0, "spe": 168},
 				"ivs": {"hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31},
@@ -8649,7 +8658,7 @@
 			"sets": [{
 				"species": "Slowbro",
 				"gender": "",
-				"item": ["Colbur Berry", "Psychium-Z"],
+				"item": ["Colbur Berry", "Psychium Z"],
 				"ability": ["Regenerator"],
 				"evs": {"hp": 252, "atk": 0, "def": 252, "spa": 0, "spd": 0, "spe": 4},
 				"ivs": {"hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31},
@@ -9163,7 +9172,7 @@
 			}, {
 				"species": "Magmortar",
 				"gender": "",
-				"item": ["Fightinium-Z"],
+				"item": ["Fightinium Z"],
 				"ability": ["Vital Spirit"],
 				"evs": {"hp": 0, "atk": 0, "def": 0, "spa": 252, "spd": 4, "spe": 252},
 				"nature": "Mild",
@@ -18069,7 +18078,7 @@
 				"gender": "",
 				"item": ["Leftovers"],
 				"ability": ["Iron Barbs"],
-				":evs": {"hp": 252, "atk": 0, "def": 252, "spa": 0, "spd": 4, "spe": 0},
+				"evs": {"hp": 252, "atk": 0, "def": 252, "spa": 0, "spd": 4, "spe": 0},
 				"nature": "Relaxed",
 				"moves": [["Gyro Ball"], ["Stealth Rock"], ["Leech Seed"], ["Protect"]]
 			}, {
