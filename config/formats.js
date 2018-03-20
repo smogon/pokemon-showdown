@@ -562,7 +562,22 @@ let Formats = [
 
 	// Other Metagames
 	///////////////////////////////////////////////////////////////////
+	{
+		section: "AFD Metagames",
+		column: 2,
+	},
+	{
+		name: "[Gen 7] Digimon Showdown",
+		desc: [
+			"Use Digimon in this battle instead of Pokemon!",
+			`&bullet; <a href="dank memes">Digimon Showdown</a>`,
+		],
 
+		mod: "digimon",
+		gameType: 'triples',
+		team: "randomDigimon",
+		ruleset: ['Cancel Mod', 'HP Percentage Mod'],
+	},
 	{
 		section: "OM of the Month",
 		column: 2,
