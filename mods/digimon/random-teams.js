@@ -751,7 +751,7 @@ class RandomDigimonTeams extends RandomTeams {
 				baseSignatureMove: "coldflame",
 				signatureMove: "Cold Flame",
 			},
-			"DigiTamamon": {
+			"Digitamamon": {
 				species: "DigiTamamon",
 				ability: "Data",
 				moves: ['hailspear', 'blackout', 'bug', 'shadowfall', 'firetower', 'poopattackfield', 'poopfling', 'upgrade'],
@@ -865,13 +865,13 @@ class RandomDigimonTeams extends RandomTeams {
 				signatureMove: "Berserk Thinking",
 			},
 			"MetalGreymon": {
-				species: "metalgreymonvaccine",
+				species: "metalgreymon",
 				ability: "Vaccine",
 				moves: ['burningheart', 'heatbreath', 'firetower', 'infinityburn', 'musclecharge', 'sonicjab', 'reboundstrike', 'busterdrive', 'mechanicalclaw', 'gigawattlaser', 'deleteprogram'],
 				baseSignatureMove: "gigadestroyer",
 				signatureMove: "Giga Destroyer",
 			},
-			"MetalGreymonVir": {
+			"MetalGreymonV": {
 				name: "MetalGreymon",
 				species: "metalgreymonvirus",
 				ability: "Virus",

@@ -1322,7 +1322,7 @@ exports.BattlePokedex = {
 	},
 	digitamamon: {
 		num: -2110,
-		species: "DigiTamamon",
+		species: "Digitamamon",
 		types: ["Filth", "Evil"],
 		gender: "N",
 		baseStats: {hp: 222, atk: 119, def: 130, spa: 88, spd: 117, spe: 86},

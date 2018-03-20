@@ -1556,7 +1556,7 @@ exports.BattleMovedex = {
 		desc: "50% chance of raising user's Attack and Sp.Attack 2 stages.",
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
-			this.add('-anim', source, "roost", target);
+			this.add('-anim', source, "roost", source);
 			this.add('-anim', source, "flameburst", target);
 		},
 		flags: {protect: 1, mirror: 1},
@@ -2017,7 +2017,7 @@ exports.BattleMovedex = {
 	},
 	"nightmaresyndrome": {
 		name: "Nightmare Syndrome",
-		id: "nightmaresyndrom",
+		id: "nightmaresyndrome",
 		priority: 0,
 		basePower: 0,
 		damageCallback: function (pokemon, target) {
@@ -2704,7 +2704,7 @@ exports.BattleMovedex = {
 		desc: "Hits 2-5 times.",
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
-			this.add('-anim', source, "swordsdance", target);
+			this.add('-anim', source, "swordsdance", source);
 			this.add('-anim', source, "sacredsword", target);
 		},
 		flags: {protect: 1, mirror: 1},
@@ -3196,7 +3196,7 @@ exports.BattleMovedex = {
 		pp: 3,
 		drain: [1, 2],
 		secondary: {
-			chance: 25,
+			chance: 50,
 			status: 'par',
 		},
 	},
@@ -4331,7 +4331,7 @@ exports.BattleMovedex = {
 		name: "Rebound Strike",
 		id: "reboundstrike",
 		basePower: 95,
-		priority: -7,
+		priority: -3,
 		pp: 20,
 		category: "Physical",
 		type: "Battle",
