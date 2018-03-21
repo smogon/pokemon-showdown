@@ -2096,11 +2096,9 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		accuracy: 90,
 		pp: 5,
-		secondary: {
-			chance: 100,
-			self: {
-				boosts: {spe: 1},
-			},
+		secondary: false,
+		onAfterMoveSecondarySelf: function (pokemon, target, move) {
+			this.boost({spe: 1}, pokemon, pokemon, move);
 		},
 	},
 	"energyshot": {
@@ -2164,25 +2162,6 @@ exports.BattleMovedex = {
 			volatileStatus: 'flinch',
 		},
 	},
-	"darknesswave": {
-		name: "Darkness Wave",
-		id: "darknesswave",
-		priority: 0,
-		basePower: 60,
-		category: "Special",
-		type: "Evil",
-		target: "allAdjacentFoes",
-		desc: "Hits 2 times.",
-		onPrepareHit: function (source, target, move) {
-			this.attrLastMove('[still]');
-			this.add('-anim', target, "octazooka", source);
-			this.add('-anim', target, "ominouswind", source);
-		},
-		flags: {protect: 1, mirror: 1},
-		accuracy: 90,
-		pp: 3,
-		multihit: 2,
-	},
 	"flowercannon": {
 		name: "Flower Cannon",
 		id: "flowercannon",
@@ -2226,6 +2205,25 @@ exports.BattleMovedex = {
 				this.faint(target, source, move);
 			},
 		},
+	},
+	"darknesswave": {
+		accuracy: 90,
+		basePower: 60,
+		category: "Special",
+		desc: "Hits 2 times.",
+		id: "darknesswave",
+		name: "Darkness Wave",
+		target: "allAdjacentFoes",
+		pp: 3,
+		priority: 0,
+		onPrepareHit: function (target, source, move) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "octazooka", target);
+			this.add('-anim', source, "ominouswind", target);
+		},
+		flags: {protect: 1, mirror: 1},
+		secondary: false,
+		type: "Evil",
 	},
 	"smilebomber": {
 		name: "Smile Bomber",
@@ -4170,11 +4168,9 @@ exports.BattleMovedex = {
 		},
 		flags: {protect: 1, mirror: 1, authentic: 1},
 		accuracy: 90,
-		secondary: {
-			chance: 70,
-			self: {
-				boosts: {spa: 1},
-			},
+		secondary: false,
+		onAfterMoveSecondarySelf: function (pokemon, target, move) {
+			if (this.random(100) < 70) this.boost({spe: 1}, pokemon, pokemon, move);
 		},
 	},
 	"saintray": {
