@@ -62,6 +62,40 @@ exports.BattleStatuses = {
 		},
 		// Interaction coded in abilities.js
 	},
+	stall: {
+	   inherit: true,
+	   onStart: function(target) {
+			if (target.side.sideConditions['sidestall']) {
+				this.effectData.counter = target.side.sideConditions['sidestall'].counter * 3;
+			} else {
+				this.effectData.counter = 3;
+			}
+		}
+	},
+	sidestall: {
+	    //this is a side condition
+	    duration: 2,
+	    counterMax: 729,
+	    onStart: function(side, source) {
+			 if (source.volatiles['stall']) {
+				 this.effectData.counter = source.volatiles['stall'].counter * 3;
+			 } else {
+				 this.effectData.counter = 3;
+			 }
+		 },
+	    onStallMove: function(target) {
+			 let counter = this.effectData.counter || 1;
+			 this.debug("Success chance: " + Math.round(100 / counter) + "%");
+			 return !this.random(counter);
+	    },
+	    onRestart: function () {
+			 if (this.effectData.counter < this.effect.counterMax) {
+				 this.effectData.counter *= 3;
+			 }
+			 this.effectData.duration = 2;
+		 },
+	},
+	
 	raindance: {
 		inherit: true,
 		onWeatherModifyDamage: function (damage, attacker, defender, move) {

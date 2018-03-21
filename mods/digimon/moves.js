@@ -1,6 +1,5 @@
 'use strict';
-// MOVES THAT STILL NEED CLARIFICATION:
-// https://pastebin.com/FNUY31xc
+
 exports.BattleMovedex = {
 	"acidbubble": {
 		accuracy: 90,
@@ -3098,10 +3097,9 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1, heal: 1, authentic: 1},
 		accuracy: 100,
 		pp: 3,
-		onAfterMoveSecondarySelf: function (pokemon, target, source, move) {
-			for (let i = 0; i < target.side.active.length; i++) {
-				let allyActive = target.side.foe.active[i];
-				if (allyActive) this.heal(allyActive.maxhp / 2, allyActive);
+		onAfterMoveSecondarySelf: function (source, target, move) {
+			for (let pokemon of source.side.active) {
+				if (pokemon) this.heal(pokemon.maxhp / 2, pokemon, source);
 			}
 		},
 	},
@@ -3636,7 +3634,7 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		onHitSide: function (side) {
 			for (let pokemon of side.active) {
-				this.boost({spe: 1}, pokemon);
+				if (pokemon) this.boost({spe: 1}, pokemon);
 			}
 		},
 	},
@@ -3777,8 +3775,10 @@ exports.BattleMovedex = {
 		pp: 10,
 		onHitSide: function (side) {
 			for (let pokemon of side.active) {
-				this.boost({spd: 1}, pokemon);
-				pokemon.cureStatus();
+				if (pokemon) {
+					this.boost({spd: 1}, pokemon);
+					pokemon.cureStatus();
+				}
 			}
 		},
 	},
@@ -4078,7 +4078,7 @@ exports.BattleMovedex = {
 		onHitSide: function (side) {
 			let didSomething = false;
 			for (let pokemon of side.active) {
-				if (this.heal(pokemon.maxhp * 4 / 10, pokemon)) didSomething = true;
+				if (pokemon && this.heal(pokemon.maxhp * 4 / 10, pokemon)) didSomething = true;
 			}
 			return didSomething;
 		},
@@ -4510,10 +4510,9 @@ exports.BattleMovedex = {
 		},
 		flags: {protect: 1, mirror: 1},
 		accuracy: 100,
-		onAfterMoveSecondarySelf: function (pokemon, target, source, move) {
-			for (let i = 0; i < target.side.active.length; i++) {
-				let allyActive = target.side.foe.active[i];
-				if (allyActive) this.boost({def: 1}, allyActive);
+		onAfterMoveSecondarySelf: function (source, target, move) {
+			for (let pokemon of source.side.active) {
+				if (pokemon) this.boost({def: 1}, pokemon, source);
 			}
 		},
 	},

@@ -8,10 +8,10 @@ exports.BattleAbilities = {
 		onModifyDamage: function (damage, source, target, move) {
 			if (target.volatiles['bug'] || source.volatiles['bug']) {
 				if (target.hasAbility('virus')) {
-					this.debug('Data boost');
+					this.debug('Data boost (Bug active)');
 					return this.chainModify(1.5);
 				} else if (target.hasAbility('vaccine')) {
-					this.debug('Data weaken');
+					this.debug('Data weaken (Bug active)');
 					return this.chainModify(0.5);
 				}
 			} else {
@@ -44,10 +44,10 @@ exports.BattleAbilities = {
 		onModifyDamage: function (damage, source, target, move) {
 			if (target.volatiles['bug'] || source.volatiles['bug']) {
 				if (target.hasAbility('vaccine')) {
-					this.debug('Virus boost');
+					this.debug('Virus boost (Bug active)');
 					return this.chainModify(1.5);
 				} else if (target.hasAbility('data')) {
-					this.debug('Virus weaken');
+					this.debug('Virus weaken (Bug active)');
 					return this.chainModify(0.5);
 				}
 			} else {
@@ -80,10 +80,10 @@ exports.BattleAbilities = {
 		onModifyDamage: function (damage, source, target, move) {
 			if (target.volatiles['bug'] || source.volatiles['bug']) {
 				if (target.hasAbility('data')) {
-					this.debug('Vaccine boost');
+					this.debug('Vaccine boost (Bug active)');
 					return this.chainModify(1.5);
 				} else if (target.hasAbility('virus')) {
-					this.debug('Vaccine weaken');
+					this.debug('Vaccine weaken (Bug active)');
 					return this.chainModify(0.5);
 				}
 			} else {
