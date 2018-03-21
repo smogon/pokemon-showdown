@@ -1285,7 +1285,7 @@ exports.commands = {
 
 			if (this.broadcasting) {
 				room.game.sendPlayerList();
-			} else { // HTML colours can be unreadable with PS's background, get the role name directly
+			} else {
 				this.sendReplyBox(`Players (${room.game.playerCount}): ${Object.keys(room.game.players).map(p => { return room.game.players[p].safeName; }).join(', ')}`);
 			}
 		},
