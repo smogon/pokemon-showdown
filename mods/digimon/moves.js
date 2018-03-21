@@ -1644,11 +1644,9 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1, sound: 1, authentic: 1},
 		accuracy: 95,
 		pp: 5,
-		secondary: {
-			chance: 100,
-			self: {
-				boosts: {spe: 1},
-			},
+		secondary: false,
+		onAfterMoveSecondarySelf: function (pokemon, target, move) {
+			this.boost({spe: 1}, pokemon, pokemon, move);
 		},
 	},
 	"stunray": {
@@ -2177,8 +2175,8 @@ exports.BattleMovedex = {
 		desc: "Hits 2 times.",
 		onPrepareHit: function (source, target, move) {
 			this.attrLastMove('[still]');
-			this.add('-anim', source, "octazooka", target);
-			this.add('-anim', source, "ominouswind", target);
+			this.add('-anim', target, "octazooka", source);
+			this.add('-anim', target, "ominouswind", source);
 		},
 		flags: {protect: 1, mirror: 1},
 		accuracy: 90,
