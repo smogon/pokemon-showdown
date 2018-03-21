@@ -2971,7 +2971,7 @@ exports.BattleMovedex = {
 		name: "Ocean Love",
 		id: "oceanlove",
 		priority: 0,
-		basePower: true,
+		basePower: 0,
 		category: "Status",
 		type: "Aqua",
 		target: "allySide",
@@ -3321,7 +3321,7 @@ exports.BattleMovedex = {
 			this.add('-anim', source, "tailglow", target);
 		},
 		flags: {defrost: 1, snatch: 1},
-		accuracy: 100,
+		accuracy: true,
 		pp: 20,
 		boosts: {atk: 2},
 	},
@@ -3376,7 +3376,7 @@ exports.BattleMovedex = {
 			this.add('-anim', source, "protect", source);
 		},
 		flags: {protect: 1, mirror: 1, defrost: 1},
-		accuracy: 100,
+		accuracy: true,
 		pp: 10,
 		//mostly copy-paste from Spiky Shield
 		stallingMove: true,
@@ -3634,7 +3634,7 @@ exports.BattleMovedex = {
 		},
 		flags: {},
 		pp: 15,
-		accuracy: 100,
+		accuracy: true,
 		onHitSide: function (side) {
 			for (let pokemon of side.active) {
 				if (pokemon) this.boost({spe: 1}, pokemon);
@@ -3774,7 +3774,7 @@ exports.BattleMovedex = {
 			this.add('-anim', source, "mudsport", target);
 		},
 		flags: {snatch: 1},
-		accuracy: 100,
+		accuracy: true,
 		pp: 10,
 		onHitSide: function (side) {
 			for (let pokemon of side.active) {
@@ -3800,7 +3800,7 @@ exports.BattleMovedex = {
 			this.add('-anim', source, "coil", target);
 		},
 		flags: {snatch: 1},
-		accuracy: 100,
+		accuracy: true,
 		boosts: {
 			def: 2,
 			atk: 1,
@@ -4259,7 +4259,7 @@ exports.BattleMovedex = {
 			this.add('-anim', source, "growth", target);
 		},
 		flags: {snatch: 1},
-		accuracy: 100,
+		accuracy: true,
 		pp: 20,
 		boosts: {
 			atk: 1,
@@ -4282,7 +4282,7 @@ exports.BattleMovedex = {
 			this.add('-anim', source, "encore", target);
 		},
 		flags: {snatch: 1},
-		accuracy: 100,
+		accuracy: true,
 		boosts: {
 			atk: 2,
 			spa: 2,
