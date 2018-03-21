@@ -1125,7 +1125,7 @@ exports.BattleMovedex = {
 		category: "Physical",
 		desc: "No additional effects.",
 		id: "snowpunch",
-		name: "snow Punch",
+		name: "Snow Punch",
 		pp: 3,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
