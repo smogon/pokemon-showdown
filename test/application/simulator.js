@@ -26,7 +26,7 @@ describe('Simulator abstraction layer features', function () {
 				p1 = new User();
 				p2 = new User();
 				p1.forceRename("Missingno."); // Don't do this at home
-				room = Rooms.createBattle('', {p1, p2, p1team: packedTeam, p2team: packedTeam, rated: true});
+				room = Rooms.createBattle('', {p1, p2, p1team: packedTeam, p2team: packedTeam, allowRenames: false});
 				p1.resetName();
 				for (const [i, playerName] of room.battle.playerNames.entries()) {
 					const player = room.battle['p' + (i + 1)];
