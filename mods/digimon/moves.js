@@ -10,6 +10,7 @@ exports.BattleMovedex = {
 		id: "acidbubble",
 		name: "Acid Bubble",
 		pp: 45,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -31,6 +32,7 @@ exports.BattleMovedex = {
 		id: "pepperbreath",
 		name: "Pepper Breath",
 		pp: 5,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -50,6 +52,7 @@ exports.BattleMovedex = {
 		id: "nemesisivy",
 		name: "Nemesis Ivy",
 		pp: 3,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -70,6 +73,7 @@ exports.BattleMovedex = {
 		id: "electricshock",
 		name: "Electric Shock",
 		pp: 3,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -92,6 +96,7 @@ exports.BattleMovedex = {
 		id: "spiraltwister",
 		name: "Spiral Twister",
 		pp: 5,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -116,6 +121,7 @@ exports.BattleMovedex = {
 		id: "preciousflame",
 		name: "Precious Flame",
 		pp: 3,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -138,6 +144,7 @@ exports.BattleMovedex = {
 		id: "demidart",
 		name: "Demi Dart",
 		pp: 3,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -159,6 +166,7 @@ exports.BattleMovedex = {
 		id: "wormvenom",
 		name: "Worm Venom",
 		pp: 5,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -178,6 +186,7 @@ exports.BattleMovedex = {
 		id: "metalcannon",
 		name: "Metal Cannon",
 		pp: 2,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -201,6 +210,7 @@ exports.BattleMovedex = {
 		id: "superthunderstrike",
 		name: "Super Thunder Strike",
 		pp: 3,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -220,6 +230,7 @@ exports.BattleMovedex = {
 		id: "blueblaster",
 		name: "Blue Blaster",
 		pp: 3,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -242,6 +253,7 @@ exports.BattleMovedex = {
 		id: "goblinstrike",
 		name: "Goblin Strike",
 		pp: 3,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -264,6 +276,7 @@ exports.BattleMovedex = {
 		id: "marchingfishes",
 		name: "Marching Fishes",
 		pp: 5,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -283,6 +296,7 @@ exports.BattleMovedex = {
 		id: "rockfist",
 		name: "Rock Fist",
 		pp: 5,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -307,6 +321,7 @@ exports.BattleMovedex = {
 		id: "electricthread",
 		name: "Electric Thread",
 		pp: 5,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -326,6 +341,7 @@ exports.BattleMovedex = {
 		id: "aquatower",
 		name: "Aqua Tower",
 		pp: 3,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -356,6 +372,7 @@ exports.BattleMovedex = {
 		id: "tropicalbeak",
 		name: "Tropical Beak",
 		pp: 3,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -375,6 +392,7 @@ exports.BattleMovedex = {
 		id: "lullabybubble",
 		name: "Lullaby Bubble",
 		pp: 5,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -398,6 +416,7 @@ exports.BattleMovedex = {
 		id: "poisonivy",
 		name: "Poison Ivy",
 		pp: 3,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -420,6 +439,7 @@ exports.BattleMovedex = {
 		id: "boombubble",
 		name: "Boom Bubble",
 		pp: 5,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -443,6 +463,7 @@ exports.BattleMovedex = {
 		id: "eternalslapping",
 		name: "Eternal Slapping",
 		pp: 3,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -462,6 +483,7 @@ exports.BattleMovedex = {
 		id: "coloredsparkle",
 		name: "Colored Sparkle",
 		pp: 3,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -484,6 +506,7 @@ exports.BattleMovedex = {
 		id: "puppyhowl",
 		name: "Puppy Howl",
 		pp: 2,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -508,6 +531,7 @@ exports.BattleMovedex = {
 		id: "dancingbone",
 		name: "Dancing Bone",
 		pp: 3,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -530,6 +554,7 @@ exports.BattleMovedex = {
 		id: "littleblizzard",
 		name: "Little Blizzard",
 		pp: 3,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -548,6 +573,7 @@ exports.BattleMovedex = {
 		id: "snowgobbolt",
 		name: "Snowgob Bolt",
 		pp: 3,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -569,6 +595,7 @@ exports.BattleMovedex = {
 		id: "supershocker",
 		name: "Super Shocker",
 		pp: 3,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -587,6 +614,7 @@ exports.BattleMovedex = {
 		id: "plasticblaze",
 		name: "Plastic Blaze",
 		pp: 3,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -609,6 +637,7 @@ exports.BattleMovedex = {
 		id: "evilspell",
 		name: "Evil Spell",
 		pp: 5,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -633,6 +662,7 @@ exports.BattleMovedex = {
 		id: "spinningneedle",
 		name: "Spinning Needle",
 		pp: 5,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -657,6 +687,7 @@ exports.BattleMovedex = {
 		id: "scarredeye",
 		name: "Scar-Red Eye",
 		pp: 3,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -680,6 +711,7 @@ exports.BattleMovedex = {
 		id: "handoffate",
 		name: "Hand Of fate",
 		pp: 3,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -706,6 +738,7 @@ exports.BattleMovedex = {
 		id: "evilcharm",
 		name: "Evil Charm",
 		pp: 3,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -723,6 +756,7 @@ exports.BattleMovedex = {
 		id: "meteorwing",
 		name: "Meteor Wing",
 		pp: 5,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -746,6 +780,7 @@ exports.BattleMovedex = {
 		id: "darkpaw",
 		name: "Dark Paw",
 		pp: 3,
+		noPPBoosts: true,
 		priority: 1,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -767,6 +802,7 @@ exports.BattleMovedex = {
 		id: "solarray",
 		name: "Solar Ray",
 		pp: 3,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -785,6 +821,7 @@ exports.BattleMovedex = {
 		id: "variabledarts",
 		name: "Variable Darts",
 		pp: 3,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -808,6 +845,7 @@ exports.BattleMovedex = {
 		id: "dreadfire",
 		name: "Dread Fire",
 		pp: 5,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -829,6 +867,7 @@ exports.BattleMovedex = {
 		id: "deathclaw",
 		name: "Death Claw",
 		pp: 2,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -848,6 +887,7 @@ exports.BattleMovedex = {
 		id: "pulseblast",
 		name: "Pulse Blast",
 		pp: 3,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -869,6 +909,7 @@ exports.BattleMovedex = {
 		id: "powermetal",
 		name: "Power Metal",
 		pp: 2,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -892,6 +933,7 @@ exports.BattleMovedex = {
 		id: "drillspin",
 		name: "Drill Spin",
 		pp: 3,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -912,6 +954,7 @@ exports.BattleMovedex = {
 		id: "blazebuster",
 		name: "Blaze Buster",
 		pp: 5,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -933,6 +976,7 @@ exports.BattleMovedex = {
 		id: "subzeroicepunch",
 		name: "Sub Zero Ice Punch",
 		pp: 3,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -954,6 +998,7 @@ exports.BattleMovedex = {
 		id: "evilhurricane",
 		name: "Evil Hurricane",
 		pp: 3,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -974,6 +1019,7 @@ exports.BattleMovedex = {
 		id: "howlingblaster",
 		name: "Howling Blaster",
 		pp: 3,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -998,6 +1044,7 @@ exports.BattleMovedex = {
 		id: "lightningpaw",
 		name: "Lightning Paw",
 		pp: 3,
+		noPPBoosts: true,
 		priority: 1,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -1019,6 +1066,7 @@ exports.BattleMovedex = {
 		id: "symphonycrusher",
 		name: "Symphony Crusher",
 		pp: 3,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -1040,6 +1088,7 @@ exports.BattleMovedex = {
 		id: "hypersmell",
 		name: "Hyper Smell",
 		pp: 5,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -1068,6 +1117,7 @@ exports.BattleMovedex = {
 		id: "megaflame",
 		name: "Mega Flame",
 		pp: 3,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -1086,6 +1136,7 @@ exports.BattleMovedex = {
 		id: "guardianbarrage",
 		name: "Guardian Barrage",
 		pp: 3,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -1105,6 +1156,7 @@ exports.BattleMovedex = {
 		id: "chaosblaster",
 		name: "Chaos Blaster",
 		pp: 3,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -1128,6 +1180,7 @@ exports.BattleMovedex = {
 		id: "snowpunch",
 		name: "Snow Punch",
 		pp: 3,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -1146,6 +1199,7 @@ exports.BattleMovedex = {
 		id: "frozenclaw",
 		name: "Frozen Claw",
 		pp: 2,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -1168,6 +1222,7 @@ exports.BattleMovedex = {
 		id: "iceballbomb",
 		name: "Iceball Bomb",
 		pp: 5,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -1191,6 +1246,7 @@ exports.BattleMovedex = {
 		id: "harpoontorpedo",
 		name: "Harpoon Torpedo",
 		pp: 3,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -1210,6 +1266,7 @@ exports.BattleMovedex = {
 		id: "junglebone",
 		name: "Jungle Bone",
 		pp: 3,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -1229,6 +1286,7 @@ exports.BattleMovedex = {
 		id: "electroshocker",
 		name: "Electro Shocker",
 		pp: 3,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -1247,6 +1305,7 @@ exports.BattleMovedex = {
 		id: "frozenfireshot",
 		name: "Frozen Fire Shot",
 		pp: 3,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -1266,6 +1325,7 @@ exports.BattleMovedex = {
 		id: "scissorclaw",
 		name: "Scissor Claw",
 		pp: 2,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -1286,6 +1346,7 @@ exports.BattleMovedex = {
 		id: "fistofthebeastking",
 		name: "Fist of the Beast King",
 		pp: 3,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -1309,6 +1370,7 @@ exports.BattleMovedex = {
 		id: "xscratch",
 		name: "X Scratch",
 		pp: 3,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -1328,6 +1390,7 @@ exports.BattleMovedex = {
 		id: "burningfist",
 		name: "Burning Fist",
 		pp: 3,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -1352,6 +1415,7 @@ exports.BattleMovedex = {
 		id: "catclaw",
 		name: "Cat Claw",
 		pp: 3,
+		noPPBoosts: true,
 		priority: 1,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -1373,6 +1437,7 @@ exports.BattleMovedex = {
 		id: "boneboomerang",
 		name: "Bone Boomerang",
 		pp: 3,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -1392,6 +1457,7 @@ exports.BattleMovedex = {
 		id: "volcanicstrike",
 		name: "Volcanic Strike",
 		pp: 3,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -1410,6 +1476,7 @@ exports.BattleMovedex = {
 		id: "mindfog",
 		name: "Mind Fog",
 		pp: 3,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -1432,6 +1499,7 @@ exports.BattleMovedex = {
 		id: "mudball",
 		name: "Mud Ball",
 		pp: 3,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -1453,6 +1521,7 @@ exports.BattleMovedex = {
 		id: "poopdunk",
 		name: "Poop Dunk",
 		pp: 5,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -1475,6 +1544,7 @@ exports.BattleMovedex = {
 		id: "dancingleaves",
 		name: "Dancing Leaves",
 		pp: 3,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -1496,6 +1566,7 @@ exports.BattleMovedex = {
 		id: "fakedrillspin",
 		name: "Fake Drill Spin",
 		pp: 3,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -1516,6 +1587,7 @@ exports.BattleMovedex = {
 		id: "numesludge",
 		name: "Nume Sludge",
 		pp: 5,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -1545,6 +1617,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		accuracy: 95,
 		pp: 3,
+		noPPBoosts: true,
 	},
 	"firefeather": {
 		name: "Fire Feather",
@@ -1569,6 +1642,7 @@ exports.BattleMovedex = {
 		},
 		accuracy: 90,
 		pp: 3,
+		noPPBoosts: true,
 	},
 	"raremetalpoop": {
 		name: "Rare Metal Poop",
@@ -1588,6 +1662,7 @@ exports.BattleMovedex = {
 		forceSwitch: true,
 		accuracy: 95,
 		pp: 5,
+		noPPBoosts: true,
 	},
 	"chilipepperpummel": {
 		name: "Chili Pepper Pummel",
@@ -1609,6 +1684,7 @@ exports.BattleMovedex = {
 		},
 		accuracy: 95,
 		pp: 5,
+		noPPBoosts: true,
 	},
 	"antidigibeam": {
 		name: "Anti-Digi Beam",
@@ -1627,6 +1703,7 @@ exports.BattleMovedex = {
 		volatileStatus: "dot",
 		accuracy: 90,
 		pp: 2,
+		noPPBoosts: true,
 	},
 	"nightroar": {
 		name: "Night Roar",
@@ -1644,6 +1721,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1, sound: 1, authentic: 1},
 		accuracy: 95,
 		pp: 5,
+		noPPBoosts: true,
 		secondary: false,
 		onAfterMoveSecondarySelf: function (pokemon, target, move) {
 			this.boost({spe: 1}, pokemon, pokemon, move);
@@ -1665,6 +1743,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		accuracy: 100,
 		pp: 3,
+		noPPBoosts: true,
 		secondary: {
 			chance: 30,
 			volatileStatus: 'flinch',
@@ -1686,6 +1765,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		accuracy: 100,
 		pp: 3,
+		noPPBoosts: true,
 		secondary: {
 			chance: 100,
 			boosts: {spe: -1},
@@ -1707,6 +1787,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		accuracy: 95,
 		pp: 3,
+		noPPBoosts: true,
 	},
 	"lustershot": {
 		name: "Luster Shot",
@@ -1724,6 +1805,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1, authentic: 1},
 		accuracy: true,
 		pp: 3,
+		noPPBoosts: true,
 	},
 	"necromagic": {
 		name: "Necro Magic",
@@ -1742,6 +1824,7 @@ exports.BattleMovedex = {
 		ohko: true,
 		accuracy: 30,
 		pp: 3,
+		noPPBoosts: true,
 	},
 	"poop": {
 		name: "Poop",
@@ -1759,6 +1842,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		accuracy: 95,
 		pp: 5,
+		noPPBoosts: true,
 		secondary: {
 			chance: 100,
 			boosts: {spe: -2},
@@ -1783,6 +1867,7 @@ exports.BattleMovedex = {
 		},
 		accuracy: 90,
 		pp: 2,
+		noPPBoosts: true,
 	},
 	"needlespray": {
 		name: "Needle Spray",
@@ -1800,6 +1885,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		accuracy: 100,
 		pp: 5,
+		noPPBoosts: true,
 		secondary: {
 			chance: 30,
 			status: 'par',
@@ -1821,6 +1907,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1, defrost: 1},
 		accuracy: 100,
 		pp: 3,
+		noPPBoosts: true,
 		critRatio: 2,
 	},
 	"aerialattack": {
@@ -1839,6 +1926,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		accuracy: 90,
 		pp: 3,
+		noPPBoosts: true,
 		critRatio: 2,
 	},
 	"sweetbreath": {
@@ -1857,6 +1945,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1, authentic: 1},
 		accuracy: 95,
 		pp: 5,
+		noPPBoosts: true,
 		secondary: {
 			chance: 100,
 			boosts: {evasion: -2},
@@ -1878,6 +1967,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		accuracy: 95,
 		pp: 5,
+		noPPBoosts: true,
 		secondary: {
 			chance: 50,
 			boosts: {spe: -2, accuracy: -2},
@@ -1899,6 +1989,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		accuracy: 100,
 		pp: 3,
+		noPPBoosts: true,
 		secondary: {
 			chance: 30,
 			status: 'par',
@@ -1921,6 +2012,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		accuracy: 90,
 		pp: 3,
+		noPPBoosts: true,
 		critRatio: 2,
 	},
 	"celestialarrow": {
@@ -1940,6 +2032,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		accuracy: true,
 		pp: 3,
+		noPPBoosts: true,
 		ignoreDefensive: true,
 		ignoreEvasion: true,
 	},
@@ -1960,6 +2053,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1, heal: 1},
 		accuracy: 100,
 		pp: 3,
+		noPPBoosts: true,
 		drain: [1, 2],
 		secondary: {
 			chance: 50,
@@ -1983,6 +2077,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1, contact: 1},
 		accuracy: 95,
 		pp: 2,
+		noPPBoosts: true,
 		secondary: {
 			chance: 100,
 			self: {
@@ -2007,6 +2102,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		accuracy: 90,
 		pp: 2,
+		noPPBoosts: true,
 		secondary: {
 			chance: 100,
 			self: {
@@ -2034,6 +2130,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		accuracy: 100,
 		pp: 3,
+		noPPBoosts: true,
 		secondary: {
 			chance: 50,
 			status: 'slp',
@@ -2055,6 +2152,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		accuracy: 90,
 		pp: 3,
+		noPPBoosts: true,
 	},
 	"loveserenade": {
 		name: "Love Serenade",
@@ -2073,6 +2171,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1, sound: 1, authentic: 1},
 		accuracy: 95,
 		pp: 2,
+		noPPBoosts: true,
 		ignoreDefensive: true,
 		ignoreEvasion: true,
 		secondary: {
@@ -2096,6 +2195,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		accuracy: 90,
 		pp: 5,
+		noPPBoosts: true,
 		secondary: false,
 		onAfterMoveSecondarySelf: function (pokemon, target, move) {
 			this.boost({spe: 1}, pokemon, pokemon, move);
@@ -2117,6 +2217,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		accuracy: 90,
 		pp: 3,
+		noPPBoosts: true,
 		secondary: {
 			chance: 100,
 			volatileStatus: 'bug',
@@ -2138,6 +2239,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		accuracy: 100,
 		pp: 2,
+		noPPBoosts: true,
 		selfdestruct: "always",
 	},
 	"fistofice": {
@@ -2157,6 +2259,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1, contact: 1, punch: 1},
 		accuracy: 95,
 		pp: 3,
+		noPPBoosts: true,
 		secondary: {
 			chance: 80,
 			volatileStatus: 'flinch',
@@ -2178,6 +2281,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		accuracy: 95,
 		pp: 3,
+		noPPBoosts: true,
 	},
 	"gateofdestiny": {
 		name: "Gate of Destiny",
@@ -2196,6 +2300,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		accuracy: 100,
 		pp: 2,
+		noPPBoosts: true,
 		secondary: {
 			chance: 25,
 			onHit: function (target, source, move) {
@@ -2215,6 +2320,7 @@ exports.BattleMovedex = {
 		name: "Darkness Wave",
 		target: "allAdjacentFoes",
 		pp: 3,
+		noPPBoosts: true,
 		priority: 0,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
@@ -2241,6 +2347,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		accuracy: true,
 		pp: 5,
+		noPPBoosts: true,
 	},
 	"genocideattack": {
 		name: "Genocide Attack",
@@ -2259,6 +2366,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1, contact: 1},
 		accuracy: 100,
 		pp: 3,
+		noPPBoosts: true,
 		critRatio: 2,
 	},
 	"hornbuster": {
@@ -2278,6 +2386,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1, contact: 1},
 		accuracy: 95,
 		pp: 2,
+		noPPBoosts: true,
 		ignoreDefensive: true,
 		ignoreEvasion: true,
 	},
@@ -2297,6 +2406,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		accuracy: 100,
 		pp: 3,
+		noPPBoosts: true,
 	},
 	"modestlystun": {
 		name: "Modestly Stun",
@@ -2314,6 +2424,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		accuracy: 90,
 		pp: 2,
+		noPPBoosts: true,
 		secondary: {
 			chance: 80,
 			status: 'par',
@@ -2335,6 +2446,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		accuracy: 90,
 		pp: 3,
+		noPPBoosts: true,
 		multihit: [2, 4],
 	},
 	"gigadestroyer": {
@@ -2353,6 +2465,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		accuracy: 100,
 		pp: 3,
+		noPPBoosts: true,
 	},
 	"revengeflame": {
 		name: "Revenge Flame",
@@ -2370,6 +2483,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1, defrost: 1},
 		accuracy: 100,
 		pp: 5,
+		noPPBoosts: true,
 		basePowerCallback: function (pokemon, target, move) {
 			//copied from Revenge
 			if (target.lastDamage > 0 && pokemon.lastAttackedBy && pokemon.lastAttackedBy.thisTurn && pokemon.lastAttackedBy.pokemon === target) {
@@ -2395,6 +2509,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		accuracy: true,
 		pp: 5,
+		noPPBoosts: true,
 	},
 	"galacticflare": {
 		name: "Galactic Flare",
@@ -2412,6 +2527,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		accuracy: 100,
 		pp: 5,
+		noPPBoosts: true,
 		secondary: {
 			chance: 50,
 			self: {
@@ -2436,6 +2552,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		accuracy: 100,
 		pp: 2,
+		noPPBoosts: true,
 		ignoreDefensive: true,
 		ignoreEvasion: true,
 		secondary: {
@@ -2460,6 +2577,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1, heal: 1},
 		accuracy: 100,
 		pp: 3,
+		noPPBoosts: true,
 		drain: [1, 2],
 	},
 	"pitbomb": {
@@ -2477,6 +2595,7 @@ exports.BattleMovedex = {
 		},
 		accuracy: 95,
 		pp: 3,
+		noPPBoosts: true,
 	},
 	"musicalfist": {
 		name: "Musical Fist",
@@ -2494,6 +2613,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1, sound: 1, punch: 1, contact: 1},
 		accuracy: 95,
 		pp: 3,
+		noPPBoosts: true,
 		secondaries: [
 			{
 				chance: 30,
@@ -2525,6 +2645,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		accuracy: 90,
 		pp: 2,
+		noPPBoosts: true,
 		secondary: {
 			chance: 100,
 			boosts: {def: -1},
@@ -2547,6 +2668,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		accuracy: 100,
 		pp: 2,
+		noPPBoosts: true,
 		selfdestruct: 'always',
 	},
 	"unidentifiedflyingkiss": {
@@ -2566,6 +2688,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1, contact: 1},
 		accuracy: 100,
 		pp: 3,
+		noPPBoosts: true,
 		secondary: {
 			chance: 50,
 			volatileStatus: 'dot',
@@ -2587,6 +2710,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1, defrost: 1},
 		accuracy: 90,
 		pp: 3,
+		noPPBoosts: true,
 	},
 	"heartbreakattack": {
 		name: "Heartbreak Attack",
@@ -2605,6 +2729,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		accuracy: 100,
 		pp: 2,
+		noPPBoosts: true,
 		ignoreDefensive: true,
 		ignoreEvasion: true,
 		secondary: {
@@ -2629,6 +2754,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		accuracy: 100,
 		pp: 3,
+		noPPBoosts: true,
 	},
 	"wolfclaw": {
 		name: "Wolf Claw",
@@ -2647,6 +2773,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1, distance: 1, contact: 1},
 		accuracy: 95,
 		pp: 2,
+		noPPBoosts: true,
 		secondary: {
 			chance: 100,
 			self: {
@@ -2670,6 +2797,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		accuracy: 100,
 		pp: 3,
+		noPPBoosts: true,
 	},
 	"vulcanshammer": {
 		name: "Vulcan's Hammer",
@@ -2687,6 +2815,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		accuracy: 90,
 		pp: 2,
+		noPPBoosts: true,
 		ignoreDefensive: true,
 		ignoreEvasion: true,
 	},
@@ -2707,6 +2836,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		accuracy: 85,
 		pp: 2,
+		noPPBoosts: true,
 		multihit: [2, 5],
 	},
 	"garurutomahawk": {
@@ -2726,6 +2856,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		accuracy: true,
 		pp: 3,
+		noPPBoosts: true,
 	},
 	"blacktornado": {
 		name: "Black Tornado",
@@ -2744,6 +2875,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		accuracy: 90,
 		pp: 2,
+		noPPBoosts: true,
 		ignoreDefensive: true,
 		ignoreEvasion: true,
 	},
@@ -2764,6 +2896,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		accuracy: 95,
 		pp: 5,
+		noPPBoosts: true,
 		secondary: {
 			chance: 30,
 			volatileStatus: 'confusion',
@@ -2785,6 +2918,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		accuracy: 90,
 		pp: 2,
+		noPPBoosts: true,
 		ignoreDefensive: true,
 		ignoreEvasion: true,
 		critRatio: 2,
@@ -2805,6 +2939,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		accuracy: 95,
 		pp: 3,
+		noPPBoosts: true,
 		critRatio: 2,
 	},
 	"blackdeathcloud": {
@@ -2824,6 +2959,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1, authentic: 1},
 		accuracy: 100,
 		pp: 3,
+		noPPBoosts: true,
 		secondary: {
 			chance: 50,
 			status: 'slp',
@@ -2845,6 +2981,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1, contact: 1},
 		accuracy: 95,
 		pp: 2,
+		noPPBoosts: true,
 	},
 	"brainrupture": {
 		name: "Brain Rupture",
@@ -2862,6 +2999,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		accuracy: 90,
 		pp: 3,
+		noPPBoosts: true,
 		secondary: {
 			chance: 50,
 			volatileStatus: 'confusion',
@@ -2883,6 +3021,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		accuracy: true,
 		pp: 3,
+		noPPBoosts: true,
 	},
 	"atomicray": {
 		name: "Atomic Ray",
@@ -2901,6 +3040,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		accuracy: 90,
 		pp: 3,
+		noPPBoosts: true,
 		secondary: {
 			chance: 80,
 			volatileStatus: 'flinch',
@@ -2923,6 +3063,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1, heal: 1, contact: 1},
 		accuracy: 95,
 		pp: 2,
+		noPPBoosts: true,
 		ignoreDefensive: true,
 		ignoreEvasion: true,
 		drain: [1, 2],
@@ -2943,6 +3084,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		accuracy: 75,
 		pp: 2,
+		noPPBoosts: true,
 		multihit: [1, 2],
 	},
 	"firetornado": {
@@ -2962,6 +3104,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		accuracy: 100,
 		pp: 5,
+		noPPBoosts: true,
 	},
 	"oceanlove": {
 		name: "Ocean Love",
@@ -2980,6 +3123,7 @@ exports.BattleMovedex = {
 		flags: {heal: 1, snatch: 1},
 		accuracy: true,
 		pp: 5,
+		noPPBoosts: true,
 		onHitSide: function (side) {
 			let didSomething = false;
 			for (let pokemon of side.active) {
@@ -3006,6 +3150,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1, sound: 1, authentic: 1},
 		accuracy: 100,
 		pp: 2,
+		noPPBoosts: true,
 		secondary: {
 			chance: 100,
 			volatileStatus: 'flinch',
@@ -3028,6 +3173,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1, contact: 1},
 		accuracy: 90,
 		pp: 2,
+		noPPBoosts: true,
 		multihit: 2,
 		secondary: {
 			chance: 80,
@@ -3050,6 +3196,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		accuracy: 100,
 		pp: 3,
+		noPPBoosts: true,
 		secondary: {
 			chance: 100,
 			boosts: {spd: -2},
@@ -3071,6 +3218,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		accuracy: 100,
 		pp: 2,
+		noPPBoosts: true,
 		secondary: {
 			chance: 100,
 			self: {
@@ -3095,6 +3243,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1, heal: 1, authentic: 1},
 		accuracy: 100,
 		pp: 3,
+		noPPBoosts: true,
 		onAfterMoveSecondarySelf: function (pokemon, target, source, move) {
 			for (let i = 0; i < target.side.active.length; i++) {
 				let allyActive = target.side.foe.active[i];
@@ -3118,6 +3267,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1, contact: 1},
 		accuracy: 95,
 		pp: 3,
+		noPPBoosts: true,
 		forceSwitch: true,
 	},
 	"darknesszone": {
@@ -3136,6 +3286,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1, authentic: 1},
 		accuracy: 95,
 		pp: 3,
+		noPPBoosts: true,
 		multihit: 3,
 		onAfterMoveSecondary: function (target, source, move) {
 			this.boost({def: -1});
@@ -3145,7 +3296,7 @@ exports.BattleMovedex = {
 		name: "Knowledge Stream",
 		id: "knowledgestream",
 		priority: 0,
-		basePower: 40,
+		basePower: 120,
 		category: "Special",
 		type: "Holy",
 		target: "normal",
@@ -3158,6 +3309,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		accuracy: 95,
 		pp: 3,
+		noPPBoosts: true,
 		secondary: {
 			chance: 20,
 			onHit: function (target) {
@@ -3191,6 +3343,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1, heal: 1, contact: 1},
 		accuracy: 90,
 		pp: 3,
+		noPPBoosts: true,
 		drain: [1, 2],
 		secondary: {
 			chance: 50,
@@ -3214,6 +3367,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1, contact: 1},
 		accuracy: 95,
 		pp: 3,
+		noPPBoosts: true,
 		multihit: 2,
 		critRatio: 2,
 	},
@@ -3234,6 +3388,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		accuracy: 90,
 		pp: 3,
+		noPPBoosts: true,
 		multihit: 7,
 	},
 	"venominfusion": {
@@ -3253,6 +3408,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1, heal: 1},
 		accuracy: 95,
 		pp: 2,
+		noPPBoosts: true,
 		drain: [1, 2],
 		secondary: {
 			chance: 100,
@@ -3275,6 +3431,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		accuracy: 90,
 		pp: 2,
+		noPPBoosts: true,
 		secondary: {
 			chance: 100,
 			volatileStatus: 'flinch',
@@ -3296,6 +3453,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		accuracy: 100,
 		pp: 3,
+		noPPBoosts: true,
 		secondary: {
 			chance: 100,
 			self: {
