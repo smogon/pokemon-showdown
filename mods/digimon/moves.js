@@ -4950,4 +4950,191 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Mech",
 	},
+	//Pokemon x Digimon move altercations
+	"watersport": {
+		inherit: true,
+		desc: "For 5 turns, all Fire-type and Flame-type attacks used by any active Pokemon have their power reduced to 0.33x. Fails if this move is already in effect.",
+		shortDesc: "For 5 turns, Fire-type and Flame-type attacks have 1/3 power.",
+		effect: {
+			duration: 5,
+			onStart: function (side, source) {
+				this.add('-fieldstart', 'move: Water Sport', '[of] ' + source);
+			},
+			onBasePowerPriority: 1,
+			onBasePower: function (basePower, attacker, defender, move) {
+				if (move.type === 'Fire' || move.type === 'Flame') {
+					this.debug('water sport weaken');
+					return this.chainModify([0x548, 0x1000]);
+				}
+			},
+			onResidualOrder: 21,
+			onEnd: function () {
+				this.add('-fieldend', 'move: Water Sport');
+			},
+		},
+	},
+	"mudsport": {
+		inherit: true,
+		desc: "For 5 turns, all Electric-type and Air-type attacks used by any active Pokemon have their power reduced to 0.33x. Fails if this move is already in effect.",
+		shortDesc: "For 5 turns, Electric-type znd Air-type attacks have 1/3 power.",
+		effect: {
+			duration: 5,
+			onStart: function (side, source) {
+				this.add('-fieldstart', 'move: Mud Sport', '[of] ' + source);
+			},
+			onBasePowerPriority: 1,
+			onBasePower: function (basePower, attacker, defender, move) {
+				if (move.type === 'Electric' || move.type === 'Air') {
+					this.debug('mud sport weaken');
+					return this.chainModify([0x548, 0x1000]);
+				}
+			},
+			onResidualOrder: 21,
+			onEnd: function () {
+				this.add('-fieldend', 'move: Mud Sport');
+			},
+		},
+	},
+	"electricterrain": {
+		inherit: true,
+		desc: "For 5 turns, the terrain becomes Electric Terrain. During the effect, the power of Electric-type and Air-type attacks made by grounded Pokemon is multiplied by 1.5 and grounded Pokemon cannot fall asleep; Pokemon already asleep do not wake up. Camouflage transforms the user into an Electric type, Nature Power becomes Thunderbolt, and Secret Power has a 30% chance to cause paralysis. Fails if the current terrain is Electric Terrain.",
+		shortDesc: "5 turns. Grounded: +Electric power, +Air power, can't sleep.",
+		effect: {
+			duration: 5,
+			durationCallback: function (source, effect) {
+				if (source && source.hasItem('terrainextender')) {
+					return 8;
+				}
+				return 5;
+			},
+			onSetStatus: function (status, target, source, effect) {
+				if (status.id === 'slp' && target.isGrounded() && !target.isSemiInvulnerable()) {
+					if (effect.effectType === 'Move' && !effect.secondaries) {
+						this.add('-activate', target, 'move: Electric Terrain');
+					}
+					return false;
+				}
+			},
+			onTryAddVolatile: function (status, target) {
+				if (!target.isGrounded() || target.isSemiInvulnerable()) return;
+				if (status.id === 'yawn') {
+					this.add('-activate', target, 'move: Electric Terrain');
+					return null;
+				}
+			},
+			onBasePower: function (basePower, attacker, defender, move) {
+				if ((move.type === 'Electric' || move.type === 'Air') && attacker.isGrounded() && !attacker.isSemiInvulnerable()) {
+					this.debug('electric terrain boost');
+					return this.chainModify(1.5);
+				}
+			},
+			onStart: function (battle, source, effect) {
+				if (effect && effect.effectType === 'Ability') {
+					this.add('-fieldstart', 'move: Electric Terrain', '[from] ability: ' + effect, '[of] ' + source);
+				} else {
+					this.add('-fieldstart', 'move: Electric Terrain');
+				}
+			},
+			onResidualOrder: 21,
+			onResidualSubOrder: 2,
+			onEnd: function () {
+				this.add('-fieldend', 'move: Electric Terrain');
+			},
+		},
+	},
+	"rototiller": {
+		inherit: true,
+		desc: "Raises the Attack and Special Attack of all grounded Grass-type and Nature-type Pokemon on the field by 1 stage.",
+		shortDesc: "Raises Atk, Sp. Atk of grounded Grass and Nature types by 1.",
+		onHitField: function (target, source) {
+			let targets = [];
+			let anyAirborne = false;
+			for (let sideSlot = 0; sideSlot < this.sides.length; sideSlot++) {
+				let sideActive = this.sides[sideSlot].active;
+				for (let activeSlot = 0; activeSlot < sideActive.length; activeSlot++) {
+					if (!sideActive[activeSlot] || !sideActive[activeSlot].isActive) continue;
+					if (!sideActive[activeSlot].runImmunity('Ground')) {
+						this.add('-immune', sideActive[activeSlot], '[msg]');
+						anyAirborne = true;
+						continue;
+					}
+					if (sideActive[activeSlot].hasType('Grass') || sideActive[activeSlot].hasType('Nature')) {
+						// This move affects every grounded Grass-type Pokemon in play.
+						targets.push(sideActive[activeSlot]);
+					}
+				}
+			}
+			if (!targets.length && !anyAirborne) return false; // Fails when there are no grounded Grass types or airborne Pokemon
+			for (let i = 0; i < targets.length; i++) this.boost({atk: 1, spa: 1}, targets[i], source);
+		},
+	},
+	"grassyterrain": {
+		inherit: true,
+		desc: "For 5 turns, the terrain becomes Grassy Terrain. During the effect, the power of Grass-type and Nature-type attacks used by grounded Pokemon is multiplied by 1.5, the power of Bulldoze, Earthquake, and Magnitude used against grounded Pokemon is multiplied by 0.5, and grounded Pokemon have 1/16 of their maximum HP, rounded down, restored at the end of each turn, including the last turn. Camouflage transforms the user into a Grass type, Nature Power becomes Energy Ball, and Secret Power has a 30% chance to cause sleep. Fails if the current terrain is Grassy Terrain.",
+		shortDesc: "5 turns. Grounded: +Grass power,+Nature Power,+1/16 max HP.",
+		effect: {
+			duration: 5,
+			durationCallback: function (source, effect) {
+				if (source && source.hasItem('terrainextender')) {
+					return 8;
+				}
+				return 5;
+			},
+			onBasePower: function (basePower, attacker, defender, move) {
+				let weakenedMoves = ['earthquake', 'bulldoze', 'magnitude'];
+				if (weakenedMoves.includes(move.id)) {
+					this.debug('move weakened by grassy terrain');
+					return this.chainModify(0.5);
+				}
+				if ((move.type === 'Grass' || move.type === 'Nature') && attacker.isGrounded()) {
+					this.debug('grassy terrain boost');
+					return this.chainModify(1.5);
+				}
+			},
+			onStart: function (battle, source, effect) {
+				if (effect && effect.effectType === 'Ability') {
+					this.add('-fieldstart', 'move: Grassy Terrain', '[from] ability: ' + effect, '[of] ' + source);
+				} else {
+					this.add('-fieldstart', 'move: Grassy Terrain');
+				}
+			},
+			onResidualOrder: 5,
+			onResidualSubOrder: 3,
+			onResidual: function () {
+				this.eachEvent('Terrain');
+			},
+			onTerrain: function (pokemon) {
+				if (pokemon.isGrounded() && !pokemon.isSemiInvulnerable()) {
+					this.debug('Pokemon is grounded, healing through Grassy Terrain.');
+					this.heal(pokemon.maxhp / 16, pokemon, pokemon);
+				}
+			},
+			onEnd: function () {
+				this.eachEvent('Terrain');
+				this.add('-fieldend', 'move: Grassy Terrain');
+			},
+		},
+	},
+	"flowershield": {
+		inherit: true,
+		desc: "Raises the Defense of all Grass-type and Nature-type Pokemon on the field by 1 stage.",
+		shortDesc: "Raises Defense by 1 of all active Grass and Nature types.",
+		onHitField: function (target, source) {
+			let targets = [];
+			for (let sideSlot = 0; sideSlot < this.sides.length; sideSlot++) {
+				let sideActive = this.sides[sideSlot].active;
+				for (let activeSlot = 0; activeSlot < sideActive.length; activeSlot++) {
+					if (sideActive[activeSlot] && sideActive[activeSlot].isActive && (sideActive[activeSlot].hasType('Grass') || sideActive[activeSlot].hasType('Nature'))) {
+						// This move affects every Grass-type Pokemon in play.
+						targets.push(sideActive[activeSlot]);
+					}
+				}
+			}
+			let success = false;
+			for (const target of targets) {
+				success = this.boost({def: 1}, target, source, this.getMove('Flower Shield')) || success;
+			}
+			return success;
+		},
+	},
 };
