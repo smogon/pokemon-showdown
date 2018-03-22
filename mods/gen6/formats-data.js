@@ -799,7 +799,7 @@ exports.BattleFormatsData = {
 	},
 	hitmontop: {
 		inherit: true,
-		randomBattleMoves: ["suckerpunch", "machpunch", "rapidspin", "closecombat", "toxic"],
+		randomBattleMoves: ["suckerpunch", "stoneedge", "rapidspin", "closecombat", "toxic"],
 		randomDoubleBattleMoves: ["fakeout", "feint", "suckerpunch", "closecombat", "helpinghand", "machpunch", "wideguard"],
 		tier: "RU",
 		doublesTier: "DOU",
