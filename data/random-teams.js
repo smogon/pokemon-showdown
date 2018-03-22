@@ -360,7 +360,7 @@ class RandomTeams extends Dex.ModdedDex {
 		let counter = {
 			Physical: 0, Special: 0, Status: 0, damage: 0, recovery: 0, stab: 0, inaccurate: 0, priority: 0, recoil: 0, drain: 0,
 			adaptability: 0, bite: 0, contrary: 0, hustle: 0, ironfist: 0, serenegrace: 0, sheerforce: 0, skilllink: 0, technician: 0,
-			physicalsetup: 0, specialsetup: 0, mixedsetup: 0, defensesetup: 0, speedsetup: 0, physicalpool: 0, specialpool: 0,
+			physicalsetup: 0, specialsetup: 0, mixedsetup: 0, speedsetup: 0, physicalpool: 0, specialpool: 0,
 			damagingMoves: [],
 			damagingMoveIndex: {},
 			setupType: '',
@@ -394,10 +394,6 @@ class RandomTeams extends Dex.ModdedDex {
 		// Moves which boost Attack AND Special Attack:
 		let MixedSetup = [
 			'conversion', 'growth', 'shellsmash', 'workup',
-		];
-		// Moves which boost Defense and/or Special Defense:
-		let DefenseSetup = [
-			'cosmicpower', 'cottonguard', 'defendorder',
 		];
 		// Moves which boost Speed:
 		let SpeedSetup = [
@@ -465,7 +461,6 @@ class RandomTeams extends Dex.ModdedDex {
 			if (PhysicalSetup.includes(moveid)) counter['physicalsetup']++;
 			if (SpecialSetup.includes(moveid)) counter['specialsetup']++;
 			if (MixedSetup.includes(moveid)) counter['mixedsetup']++;
-			if (DefenseSetup.includes(moveid)) counter['defensesetup']++;
 			if (SpeedSetup.includes(moveid)) counter['speedsetup']++;
 		}
 
@@ -617,6 +612,9 @@ class RandomTeams extends Dex.ModdedDex {
 					break;
 				case 'clangingscales':
 					if (teamDetails.zMove) rejected = true;
+					break;
+				case 'cottonguard': case 'defendorder':
+					if (!counter['recovery'] && !hasMove['rest']) rejected = true;
 					break;
 				case 'focuspunch':
 					if (!hasMove['substitute'] || counter.damagingMoves.length < 2) rejected = true;
@@ -819,19 +817,12 @@ class RandomTeams extends Dex.ModdedDex {
 				case 'vacuumwave':
 					if ((hasMove['closecombat'] || hasMove['machpunch']) && counter.setupType !== 'Special') rejected = true;
 					break;
-				case 'blazekick':
-					if (hasMove['flamethrower'] && counter.setupType !== 'Physical') rejected = true;
-					break;
-				case 'fierydance': case 'firefang': case 'flamethrower':
-					if ((hasMove['fireblast'] && counter.setupType !== 'Physical') || hasMove['overheat']) rejected = true;
+				case 'fierydance': case 'firefang': case 'flamethrower': case 'flareblitz':
+					if (hasMove['blazekick'] || (hasMove['fireblast'] && counter.setupType !== 'Physical') || hasMove['overheat'] || hasMove['sacredfire']) rejected = true;
 					break;
 				case 'fireblast':
-					if (hasMove['flareblitz'] && counter.setupType !== 'Special') rejected = true;
 					if (hasMove['lavaplume'] && !counter.setupType && !counter['speedsetup']) rejected = true;
 					if (hasMove['mindblown'] && counter.setupType) rejected = true;
-					break;
-				case 'firepunch': case 'sacredfire':
-					if (hasMove['fireblast'] || hasMove['flareblitz']) rejected = true;
 					break;
 				case 'lavaplume':
 					if (hasMove['firepunch'] || hasMove['fireblast'] && (counter.setupType || !!counter['speedsetup'])) rejected = true;
@@ -861,9 +852,6 @@ class RandomTeams extends Dex.ModdedDex {
 					if (hasType['Ghost'] && template.types.length > 1 && counter.stab < 2) rejected = true;
 					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					break;
-				case 'solarbeam':
-					if ((!hasAbility['Drought'] && !hasMove['sunnyday']) || hasMove['gigadrain'] || hasMove['leafstorm']) rejected = true;
-					break;
 				case 'gigadrain':
 					if (hasMove['seedbomb'] || hasMove['petaldance'] || counter.Special < 4 && !counter.setupType && hasMove['leafstorm']) rejected = true;
 					break;
@@ -872,6 +860,9 @@ class RandomTeams extends Dex.ModdedDex {
 					break;
 				case 'leafstorm':
 					if (counter['Grass'] > 1 && counter.setupType) rejected = true;
+					break;
+				case 'solarbeam':
+					if ((!hasAbility['Drought'] && !hasMove['sunnyday']) || hasMove['gigadrain'] || hasMove['leafstorm']) rejected = true;
 					break;
 				case 'bonemerang': case 'precipiceblades':
 					if (hasMove['earthquake']) rejected = true;
@@ -949,7 +940,7 @@ class RandomTeams extends Dex.ModdedDex {
 					if (hasType['Steel'] && counter.stab < 2 && !hasAbility['Adaptability'] && !hasAbility['Technician']) rejected = true;
 					break;
 				case 'flashcannon':
-					if (hasMove['ironhead']) rejected = true;
+					if (hasMove['ironhead'] || hasMove['meteormash']) rejected = true;
 					break;
 				case 'hydropump':
 					if (hasMove['razorshell'] || hasMove['waterfall'] || (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
@@ -1028,8 +1019,10 @@ class RandomTeams extends Dex.ModdedDex {
 					rejected = true;
 				}
 
-				// Pokemon should have moves that benefit their Ability/Type/Weather, as well as moves required by its forme
-				if ((hasType['Bug'] && !hasMove['batonpass'] && (movePool.includes('megahorn') || movePool.includes('pinmissile') || (hasType['Flying'] && !hasMove['hurricane'] && movePool.includes('bugbuzz')))) ||
+				// Pokemon should have moves that benefit their Type/Ability/Weather, as well as moves required by its forme
+				if (!rejected && (counter['physicalsetup'] + counter['specialsetup'] < 2 && (!counter.setupType || counter.setupType === 'Mixed' || (move.category !== counter.setupType && move.category !== 'Status') || counter[counter.setupType] + counter.Status > 3)) &&
+					(((counter.damagingMoves.length === 0 || (!counter.stab && (template.types.length > 1 || !hasMove['icebeam']) && !hasMove['metalburst'])) && (counter['physicalpool'] || counter['specialpool'])) ||
+					(hasType['Bug'] && !hasMove['batonpass'] && (movePool.includes('megahorn') || movePool.includes('pinmissile') || (hasType['Flying'] && !hasMove['hurricane'] && movePool.includes('bugbuzz')))) ||
 					(hasType['Dark'] && hasMove['suckerpunch'] && counter.stab < template.types.length) ||
 					(hasType['Dragon'] && !counter['Dragon'] && !hasAbility['Aerilate'] && !hasAbility['Pixilate'] && !hasMove['rest'] && !hasMove['sleeptalk']) ||
 					(hasType['Electric'] && !counter['Electric'] && !hasAbility['Galvanize']) ||
@@ -1050,10 +1043,7 @@ class RandomTeams extends Dex.ModdedDex {
 					(hasAbility['Slow Start'] && movePool.includes('substitute')) ||
 					(hasAbility['Stance Change'] && !counter.setupType && movePool.includes('kingsshield')) ||
 					(hasAbility['Technician'] && movePool.includes('bulletpunch')) ||
-					(hasAbility['Water Bubble'] && !counter['Water']) ||
-					(counter['defensesetup'] && !counter.recovery && !hasMove['rest']) ||
-					(movePool.includes('technoblast') || template.requiredMove && movePool.includes(toId(template.requiredMove)))) &&
-					(counter['physicalsetup'] + counter['specialsetup'] < 2 && (!counter.setupType || counter.setupType === 'Mixed' || (move.category !== counter.setupType && move.category !== 'Status') || counter[counter.setupType] + counter.Status > 3))) {
+					(movePool.includes('technoblast') || template.requiredMove && movePool.includes(toId(template.requiredMove)))))) {
 					// Reject Status or non-STAB
 					if (!isSetup && !move.weather && moveid !== 'judgment' && moveid !== 'rest' && moveid !== 'sleeptalk') {
 						if (move.category === 'Status' || !hasType[move.type] || move.selfSwitch || move.basePower && move.basePower < 40 && !move.multihit) rejected = true;
@@ -1076,42 +1066,6 @@ class RandomTeams extends Dex.ModdedDex {
 				if (rejected && (movePool.length - availableHP || availableHP && (moveid === 'hiddenpower' || !hasMove['hiddenpower']))) {
 					moves.splice(k, 1);
 					break;
-				}
-			}
-			if (moves.length === 4 && !counter.stab && !hasMove['metalburst'] && (counter['physicalpool'] || counter['specialpool'])) {
-				// Move post-processing:
-				if (counter.damagingMoves.length === 0) {
-					// A set shouldn't have no attacking moves
-					moves.splice(this.random(moves.length), 1);
-				} else if (counter.damagingMoves.length === 1) {
-					// In most cases, a set shouldn't have no STAB
-					let damagingid = counter.damagingMoves[0].id;
-					if (movePool.length - availableHP || availableHP && (damagingid === 'hiddenpower' || !hasMove['hiddenpower'])) {
-						let replace = false;
-						if (!counter.damagingMoves[0].damage && template.species !== 'Porygon2') {
-							let damagingType = counter.damagingMoves[0].type;
-							if (damagingType === 'Fairy') {
-								// Mono-Fairy is acceptable for Psychic types
-								if (counter.setupType !== 'Special' || template.types.length > 1 || !hasType['Psychic']) replace = true;
-							} else {
-								replace = true;
-							}
-						}
-						if (replace) moves.splice(counter.damagingMoveIndex[damagingid], 1);
-					}
-				} else if (!counter.damagingMoves[0].damage && !counter.damagingMoves[1].damage && template.species !== 'Porygon2') {
-					// If you have three or more attacks, and none of them are STAB, reject one of them at random.
-					let rejectableMoves = [];
-					let baseDiff = movePool.length - availableHP;
-					for (let l = 0; l < counter.damagingMoves.length; l++) {
-						if (counter.damagingMoves[l].id === 'technoblast') continue;
-						if (baseDiff || availableHP && (!hasMove['hiddenpower'] || counter.damagingMoves[l].id === 'hiddenpower')) {
-							rejectableMoves.push(counter.damagingMoveIndex[counter.damagingMoves[l].id]);
-						}
-					}
-					if (rejectableMoves.length) {
-						moves.splice(this.sample(rejectableMoves), 1);
-					}
 				}
 			}
 		} while (moves.length < 4 && movePool.length);
@@ -1374,8 +1328,8 @@ class RandomTeams extends Dex.ModdedDex {
 			item = (ability === 'Solid Rock' && counter['priority']) ? 'Weakness Policy' : 'White Herb';
 		} else if (ability === 'Harvest') {
 			item = hasMove['rest'] ? 'Lum Berry' : 'Sitrus Berry';
-		} else if (ability === 'Magic Guard' || ability === 'Sheer Force') {
-			item = hasMove['psychoshift'] ? 'Flame Orb' : 'Life Orb';
+		} else if ((ability === 'Magic Guard' || ability === 'Sheer Force') && counter.damagingMoves.length > 1) {
+			item = 'Life Orb';
 		} else if (ability === 'Poison Heal' || ability === 'Toxic Boost') {
 			item = 'Toxic Orb';
 		} else if (hasMove['rest'] && !hasMove['sleeptalk'] && ability !== 'Natural Cure' && ability !== 'Shed Skin') {
@@ -1386,7 +1340,7 @@ class RandomTeams extends Dex.ModdedDex {
 			item = (ability === 'Chlorophyll' && counter.Status < 2) ? 'Life Orb' : 'Heat Rock';
 		} else if (hasMove['auroraveil'] || hasMove['lightscreen'] && hasMove['reflect']) {
 			item = 'Light Clay';
-		} else if ((ability === 'Guts' || hasMove['facade']) && !hasMove['sleeptalk']) {
+		} else if (hasMove['psychoshift'] || (ability === 'Guts' || hasMove['facade']) && !hasMove['sleeptalk']) {
 			item = (hasType['Fire'] || ability === 'Quick Feet') ? 'Toxic Orb' : 'Flame Orb';
 		} else if (ability === 'Unburden') {
 			if (hasMove['fakeout']) {
@@ -1406,7 +1360,7 @@ class RandomTeams extends Dex.ModdedDex {
 			item = template.baseStats.atk >= 100 && template.baseStats.spe >= 60 && template.baseStats.spe <= 108 && !counter['priority'] && this.randomChance(2, 3) ? 'Choice Scarf' : 'Choice Band';
 		} else if (counter.Special >= 4 && !hasMove['acidspray'] && !hasMove['chargebeam'] && !hasMove['clearsmog'] && !hasMove['fierydance']) {
 			item = template.baseStats.spa >= 100 && template.baseStats.spe >= 60 && template.baseStats.spe <= 108 && !counter['priority'] && this.randomChance(2, 3) ? 'Choice Scarf' : 'Choice Specs';
-		} else if (((counter.Physical >= 3 && hasMove['defog']) || (counter.Special >= 3 && hasMove['uturn'])) && template.baseStats.spe >= 60 && template.baseStats.spe <= 108 && !counter['priority'] && this.randomChance(2, 3)) {
+		} else if (((counter.Physical >= 3 && hasMove['defog']) || (counter.Special >= 3 && hasMove['uturn'])) && template.baseStats.spe >= 60 && template.baseStats.spe <= 108 && !counter['priority'] && !hasMove['foulplay'] && this.randomChance(2, 3)) {
 			item = 'Choice Scarf';
 		} else if (ability === 'Defeatist' || hasMove['eruption'] || hasMove['waterspout']) {
 			item = counter.Status <= 1 ? 'Expert Belt' : 'Leftovers';
@@ -1479,7 +1433,7 @@ class RandomTeams extends Dex.ModdedDex {
 		};
 		let customScale = {
 			// Banned Abilities
-			Dugtrio: 77, Gothitelle: 77, Politoed: 79, Wobbuffet: 77,
+			Dugtrio: 77, Gothitelle: 77, Pelipper: 79, Politoed: 79, Wobbuffet: 77,
 
 			// Holistic judgement
 			Unown: 100,
@@ -2111,7 +2065,6 @@ class RandomTeams extends Dex.ModdedDex {
 					(hasAbility['Slow Start'] && movePool.includes('substitute')) ||
 					(hasAbility['Stance Change'] && !counter.setupType && movePool.includes('kingsshield')) ||
 					(hasAbility['Water Bubble'] && !counter['Water']) ||
-					(counter['defensesetup'] && !counter.recovery && !hasMove['rest']) ||
 					(movePool.includes('technoblast') || template.requiredMove && movePool.includes(toId(template.requiredMove)))) &&
 					(counter['physicalsetup'] + counter['specialsetup'] < 2 && (!counter.setupType || counter.setupType === 'Mixed' || (move.category !== counter.setupType && move.category !== 'Status') || counter[counter.setupType] + counter.Status > 3))) {
 					// Reject Status or non-STAB
