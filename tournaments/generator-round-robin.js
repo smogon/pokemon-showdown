@@ -1,31 +1,48 @@
 'use strict';
 
+/** @typedef {{state: string, score?: number[], result?: string}} Match */
 class RoundRobin {
+	/**
+	 * @param {string} isDoubles
+	 */
 	constructor(isDoubles) {
+		/** @type {string} */
 		this.name = "Round Robin";
 		this.isDrawingSupported = true;
 
 		this.isDoubles = !!isDoubles;
 		this.isBracketFrozen = false;
+		/** @type {User[]} */
 		this.users = [];
-		this.isUsersBusy = null;
-		this.matches = null;
-		this.userScores = null;
+		this.isUsersBusy = [];
+		/** @type {(?Match)[][]} */
+		this.matches = [];
+		this.userScores = [];
 		this.pendingMatches = new Map();
 		this.totalPendingMatches = 0;
 
 		if (isDoubles) this.name = "Double " + this.name;
 	}
+	/**
+	 * @param {User} user
+	 */
 	addUser(user) {
 		if (this.isBracketFrozen) return 'BracketFrozen';
 		this.users.push(user);
 		this.pendingMatches.set(user, 0);
 	}
+	/**
+	 * @param {User} user
+	 */
 	removeUser(user) {
 		if (this.isBracketFrozen) return 'BracketFrozen';
 		this.users.splice(this.users.indexOf(user), 1);
 		this.pendingMatches.delete(user);
 	}
+	/**
+	 * @param {User} user
+	 * @param {User} replacementUser
+	 */
 	replaceUser(user, replacementUser) {
 		this.users[this.users.indexOf(user)] = replacementUser;
 		let pendingMatches = this.pendingMatches.get(user);
@@ -53,8 +70,9 @@ class RoundRobin {
 					cell.state = 'unavailable';
 				} else {
 					let match = this.matches[row][col];
+					if (!match) return null;
 					cell.state = match.state;
-					if (match.state === 'finished') {
+					if (match.state === 'finished' && match.score) {
 						cell.result = match.result;
 						cell.score = match.score.slice(0);
 					}
@@ -85,6 +103,9 @@ class RoundRobin {
 		this.userScores = this.users.map(() => 0);
 	}
 
+	/**
+	 * @param {User} user
+	 */
 	disqualifyUser(user) {
 		if (!this.isBracketFrozen) return 'BracketNotFrozen';
 
@@ -111,10 +132,17 @@ class RoundRobin {
 
 		user.destroy();
 	}
+	/**
+	 * @param {User} user
+	 */
 	getUserBusy(user) {
 		if (!this.isBracketFrozen) return 'BracketNotFrozen';
 		return this.isUsersBusy[this.users.indexOf(user)];
 	}
+	/**
+	 * @param {User} user
+	 * @param {boolean} isBusy
+	 */
 	setUserBusy(user, isBusy) {
 		if (!this.isBracketFrozen) return 'BracketNotFrozen';
 		this.isUsersBusy[this.users.indexOf(user)] = isBusy;
@@ -123,6 +151,7 @@ class RoundRobin {
 	getAvailableMatches() {
 		if (!this.isBracketFrozen) return 'BracketNotFrozen';
 
+		/** @type {[User, User][]} */
 		let matches = [];
 		this.matches.forEach((challenges, row) => {
 			challenges.forEach((match, col) => {
@@ -134,18 +163,23 @@ class RoundRobin {
 		});
 		return matches;
 	}
-	setMatchResult(match, result, score) {
+	/**
+	 * @param {[User, User]} matchResult
+	 * @param {string} result
+	 * @param {number[]} score
+	 */
+	setMatchResult(matchResult, result, score) {
 		if (!this.isBracketFrozen) return 'BracketNotFrozen';
 
 		if (!['win', 'loss', 'draw'].includes(result)) return 'InvalidMatchResult';
 
-		let userA = match[0];
-		let userB = match[1];
+		let userA = matchResult[0];
+		let userB = matchResult[1];
 		let userIndexA = this.users.indexOf(userA);
 		let userIndexB = this.users.indexOf(userB);
 		if (userIndexA < 0 || userIndexB < 0) return 'UserNotAdded';
 
-		match = this.matches[userIndexA][userIndexB];
+		let match = this.matches[userIndexA][userIndexB];
 		if (!match || match.state !== 'available') return 'InvalidMatch';
 
 		let virtualScore;
@@ -184,8 +218,10 @@ class RoundRobin {
 			({userIndex: userIndex, score: score})
 		).sort((a, b) => b.score - a.score);
 
+		/** @type {User[][]} */
 		let results = [];
 		let currentScore = sortedScores[0].score;
+		/** @type {User[]} */
 		let currentRank = [];
 		results.push(currentRank);
 		sortedScores.forEach(score => {
