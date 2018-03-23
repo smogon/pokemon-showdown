@@ -364,7 +364,8 @@ class MafiaTracker extends Rooms.RoomGame {
 		if (target === player.userid && !this.selfEnabled) return false;
 		if (target === player.userid && (this.hammerCount - 1 > (this.lynches[target] ? this.lynches[target].count : 0)) && this.selfEnabled === 'hammer') return false;
 		if (player.lastLynch + 2000 >= Date.now()) return user.sendTo(this.room, `|error|You must wait another ${Chat.toDurationString((player.lastLynch + 2000) - Date.now()) || '1 second'} before you can change your lynch.`);
-		if (player.lynching) this.unlynch(Users(player.userid), true);
+		const previousLynch = player.lynching;
+		if (previousLynch) this.unlynch(Users(player.userid), true);
 		let lynch = this.lynches[target];
 		if (!lynch) {
 			this.lynches[target] = {count: 1, lastLynch: Date.now(), dir: 'up', lynchers: [user.userid]};
@@ -377,7 +378,11 @@ class MafiaTracker extends Rooms.RoomGame {
 		}
 		player.lynching = target;
 		let name = player.lynching === 'nolynch' ? 'No Lynch' : this.players[player.lynching].name;
-		this.sendRoom(name === 'No Lynch' ? `${user.name} has abstained from lynching.` : `${user.name} has lynched ${name}.`, {timestamp: true, user: user});
+		if (previousLynch) {
+			this.sendRoom(`${user.name} has shifted their lynch from ${previousLynch === 'nolynch' ? 'No Lynch' : this.players[previousLynch].name} to ${name}`, {timestamp: true, user: user});
+		} else {
+			this.sendRoom(name === 'No Lynch' ? `${user.name} has abstained from lynching.` : `${user.name} has lynched ${name}.`, {timestamp: true, user: user});
+		}
 		player.lastLynch = Date.now();
 		if (this.hammerCount <= lynch.count) {
 			// HAMMER
@@ -405,7 +410,7 @@ class MafiaTracker extends Rooms.RoomGame {
 			lynch.dir = 'down';
 			lynch.lynchers.splice(lynch.lynchers.indexOf(user.userid), 1);
 		}
-		this.sendRoom(player.lynching === 'nolynch' ? `${user.name} is no longer abstaining from lynching.` : `${user.name} has unlynched ${this.players[player.lynching].name}.`, {timestamp: true, user: user});
+		if (!force) this.sendRoom(player.lynching === 'nolynch' ? `${user.name} is no longer abstaining from lynching.` : `${user.name} has unlynched ${this.players[player.lynching].name}.`, {timestamp: true, user: user});
 		player.lynching = '';
 		player.lastLynch = Date.now();
 		this.hasPlurality = null;
@@ -1176,8 +1181,8 @@ exports.commands = {
 			if (!targetRoom || !targetRoom.game || targetRoom.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
 			if (!user.can('mute', null, room) && targetRoom.game.hostid !== user.userid) return user.sendTo(targetRoom, `|error|/mafia revive - Access denied.`);
 			if (!toId(target.join(''))) return this.parse('/help mafia revive');
-			for (const user of target) {
-				targetRoom.game.revive(user, target, cmd === 'forceadd');
+			for (const targetUser of target) {
+				targetRoom.game.revive(user, targetUser, cmd === 'forceadd');
 			}
 		},
 		revivehelp: [`/mafia revive [player] - Revive a player who died or add a new player to the game. Requires host % @ * # & ~`],
