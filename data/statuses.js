@@ -399,12 +399,14 @@ exports.BattleStatuses = {
 		onStart: function () {
 			this.effectData.counter = 3;
 		},
-		onStallMove: function () {
+		onStallMove: function (pokemon) {
 			// this.effectData.counter should never be undefined here.
 			// However, just in case, use 1 if it is undefined.
 			let counter = this.effectData.counter || 1;
 			this.debug("Success chance: " + Math.round(100 / counter) + "%");
-			return this.randomChance(1, counter);
+			let success = this.randomChance(1, counter);
+			if (!success) delete pokemon.volatiles['stall'];
+			return success;
 		},
 		onRestart: function () {
 			if (this.effectData.counter < this.effect.counterMax) {
