@@ -298,6 +298,8 @@ class MafiaTracker extends Rooms.RoomGame {
 				if (!alignments[role.alignment]) alignments[role.alignment] = [];
 				alignments[role.alignment].push(this.players[p].userid);
 			}
+			let u = Users(p);
+			if (u && u.connected) u.send(`>${this.room.id}\n|notify|Your role is ${role.safeName}. For more details of your role, check your Role PMs.`);
 		}
 		for (let a in alignments) {
 			for (let p of alignments[a]) {
