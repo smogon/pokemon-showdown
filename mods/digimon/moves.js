@@ -4976,7 +4976,7 @@ exports.BattleMovedex = {
 	"mudsport": {
 		inherit: true,
 		desc: "For 5 turns, all Electric-type and Air-type attacks used by any active Pokemon have their power reduced to 0.33x. Fails if this move is already in effect.",
-		shortDesc: "For 5 turns, Electric-type znd Air-type attacks have 1/3 power.",
+		shortDesc: "For 5 turns, Electric-type and Air-type attacks have 1/3 power.",
 		effect: {
 			duration: 5,
 			onStart: function (side, source) {
@@ -5136,5 +5136,16 @@ exports.BattleMovedex = {
 			}
 			return success;
 		},
+	},
+	//Move description changes
+	"raindance": {
+		inherit: true,
+		desc: "For 5 turns, the weather becomes Rain Dance. The damage of Water- and Aqua-type attacks is multiplied by 1.5 and the damage of Fire- and Flame-type attacks is multiplied by 0.5 during the effect. Lasts for 8 turns if the user is holding Damp Rock. Fails if the current weather is Rain Dance.",
+		shortDesc: "For 5 turns, rain powers Water/Aqua moves.",
+	},
+	"sunnyday": {
+		inherit: true,
+		desc: "For 5 turns, the weather becomes Sunny Day. The damage of Fire- and Flame-type attacks is multiplied by 1.5 and the damage of Water- and Aqua-type attacks is multiplied by 0.5 during the effect. Lasts for 8 turns if the user is holding Heat Rock. Fails if the current weather is Sunny Day.",
+		shortDesc: "For 5 turns, sunlight powers Fire/Flame moves.",
 	},
 };
