@@ -77,13 +77,13 @@ exports.BattleStatuses = {
 		duration: 2,
 		counterMax: 729,
 		onStart: function (side) {
-			for (let u in side.active) {
-				if (side.active[u].volatiles['stall']) {
-					this.effectData.counter = side.active[u].volatiles['stall'].counter * 3;
-				} else {
-					this.effectData.counter = 3;
+			let counter = 3;
+			for (let pokemon of side.active) {
+				if (pokemon && pokemon.volatiles['stall'] && pokemon.volatiles['stall'].counter >= counter) {
+					counter = pokemon.volatiles['stall'].counter * 3;
 				}
 			}
+			this.effectData.counter = counter;
 		},
 		onStallMove: function (target) {
 			let counter = this.effectData.counter || 1;
