@@ -338,7 +338,7 @@ exports.BattleStatuses = {
 		onResidualOrder: 3,
 		onResidual: function (side) {
 			let finished = true;
-			for (let i = 0; i < side.active.length; i++) {
+			for (const [i, target] of side.active.entries()) {
 				let posData = this.effectData.positions[i];
 				if (!posData) continue;
 
@@ -350,7 +350,6 @@ exports.BattleStatuses = {
 				}
 
 				// time's up; time to hit! :D
-				let target = side.active[i];
 				const move = this.getMove(posData.move);
 				if (target.fainted) {
 					this.add('-hint', '' + move.name + ' did not hit because the target is fainted.');
