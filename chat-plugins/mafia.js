@@ -593,7 +593,7 @@ class MafiaTracker extends Rooms.RoomGame {
 						this.sendRoom(`Time is up!`);
 						this.night();
 					}, 60000);
-				}, 3 * 60000);
+				}, 2 * 60000);
 			}, (minutes - 3) * 60000);
 		} else if (minutes > 1) {
 			this.timer = setTimeout(() => {
