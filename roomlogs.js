@@ -86,8 +86,7 @@ class Roomlog {
 			return log.join('\n') + '\n';
 		}
 		log = [];
-		for (let i = 0; i < this.log.length; ++i) {
-			let line = this.log[i];
+		for (let [i, line] of this.log.entries()) {
 			if (line === '|split') {
 				log.push(this.log[i + channel + 1]);
 				i += 4;
@@ -189,9 +188,9 @@ class Roomlog {
 	uhtmlchange(message) {
 		let thirdPipe = message.indexOf('|', 13);
 		let originalStart = '|uhtml|' + message.slice(13, thirdPipe + 1);
-		for (let i = 0; i < this.log.length; i++) {
-			if (this.log[i].startsWith(originalStart)) {
-				this.log[i] = originalStart + message.slice(thirdPipe + 1);
+		for (let line of this.log) {
+			if (line.startsWith(originalStart)) {
+				line = originalStart + message.slice(thirdPipe + 1);
 				break;
 			}
 		}

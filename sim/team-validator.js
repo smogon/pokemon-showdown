@@ -92,13 +92,13 @@ class Validator {
 		}
 
 		let teamHas = {};
-		for (let i = 0; i < team.length; i++) { // Changing this loop to for-of would require another loop/map statement to do removeNicknames
-			if (!team[i]) return [`You sent invalid team data. If you're not using a custom client, please report this as a bug.`];
-			let setProblems = (format.validateSet || this.validateSet).call(this, team[i], teamHas);
+		for (const set of team) { // Changing this loop to for-of would require another loop/map statement to do removeNicknames
+			if (!set) return [`You sent invalid team data. If you're not using a custom client, please report this as a bug.`];
+			let setProblems = (format.validateSet || this.validateSet).call(this, set, teamHas);
 			if (setProblems) {
 				problems = problems.concat(setProblems);
 			}
-			if (removeNicknames) team[i].name = dex.getTemplate(team[i].species).baseSpecies;
+			if (removeNicknames) set.name = dex.getTemplate(set.species).baseSpecies;
 		}
 
 		for (const [rule, source, limit, bans] of ruleTable.complexTeamBans) {
@@ -494,18 +494,18 @@ class Validator {
 				} else {
 					problems.push(`${template.species} is only obtainable from events - it needs to match one of its events, such as:`);
 				}
-				let eventData = eventPokemon[0];
+				let eventInfo = eventPokemon[0];
 				const minPastGen = (format.requirePlus ? 7 : format.requirePentagon ? 6 : 1);
 				let eventNum = 1;
-				for (let i = 0; i < eventPokemon.length; i++) {
-					if (eventPokemon[i].generation <= dex.gen && eventPokemon[i].generation >= minPastGen) {
-						eventData = eventPokemon[i];
+				for (const [i, eventData] of eventPokemon.entries()) {
+					if (eventData.generation <= dex.gen && eventData.generation >= minPastGen) {
+						eventInfo = eventData;
 						eventNum = i + 1;
 						break;
 					}
 				}
 				let eventName = eventPokemon.length > 1 ? ` #${eventNum}` : ``;
-				let eventProblems = this.validateEvent(set, eventData, eventTemplate, ` to be`, `from its event${eventName}`);
+				let eventProblems = this.validateEvent(set, eventInfo, eventTemplate, ` to be`, `from its event${eventName}`);
 				// @ts-ignore TypeScript overload syntax bug
 				if (eventProblems) problems.push(...eventProblems);
 			}

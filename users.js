@@ -1050,11 +1050,10 @@ class User {
 	}
 	debugData() {
 		let str = '' + this.group + this.name + ' (' + this.userid + ')';
-		for (let i = 0; i < this.connections.length; i++) {
-			let connection = this.connections[i];
+		for (const [i, connection] of this.connections.entries()) {
 			str += ' socket' + i + '[';
 			let first = true;
-			for (let j of connection.inRooms) {
+			for (const j of connection.inRooms) {
 				if (first) {
 					first = false;
 				} else {
@@ -1181,8 +1180,8 @@ class User {
 	 * @param {Connection} connection
 	 */
 	onDisconnect(connection) {
-		for (let i = 0; i < this.connections.length; i++) {
-			if (this.connections[i] === connection) {
+		for (const [i, connected] of this.connections.entries()) {
+			if (connected === connection) {
 				// console.log('DISCONNECT: ' + this.userid);
 				if (this.connections.length <= 1) {
 					this.markInactive();

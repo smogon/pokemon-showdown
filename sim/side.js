@@ -109,8 +109,8 @@ class Side {
 			this.pokemon.push(new Pokemon(this.team[i], this));
 		}
 		this.pokemonLeft = this.pokemon.length;
-		for (let i = 0; i < this.pokemon.length; i++) {
-			this.pokemon[i].position = i;
+		for (const [i, pokemon] of this.pokemon.entries()) {
+			pokemon.position = i;
 		}
 	}
 
@@ -148,8 +148,7 @@ class Side {
 			/**@type {AnyObject[]} */
 			pokemon: [],
 		};
-		for (let i = 0; i < this.pokemon.length; i++) {
-			let pokemon = this.pokemon[i];
+		for (const pokemon of this.pokemon) {
 			let entry = {
 				ident: pokemon.fullname,
 				details: pokemon.details,
@@ -324,9 +323,9 @@ class Side {
 			if (moveid.startsWith('hiddenpower')) {
 				moveid = 'hiddenpower';
 			}
-			for (let i = 0; i < requestMoves.length; i++) {
-				if (requestMoves[i].id !== moveid) continue;
-				targetType = requestMoves[i].target || 'normal';
+			for (const move of requestMoves) {
+				if (move.id !== moveid) continue;
+				targetType = move.target || 'normal';
 				break;
 			}
 			if (!targetType) {
@@ -336,11 +335,11 @@ class Side {
 
 		const moves = pokemon.getMoves();
 		if (autoChoose) {
-			for (let i = 0; i < requestMoves.length; i++) {
-				if (requestMoves[i].disabled) continue;
-				if (i < moves.length && requestMoves[i].id === moves[i].id && moves[i].disabled) continue;
-				moveid = requestMoves[i].id;
-				targetType = requestMoves[i].target;
+			for (const [i, move] of requestMoves.entries()) {
+				if (move.disabled) continue;
+				if (i < moves.length && move.id === moves[i].id && moves[i].disabled) continue;
+				moveid = move.id;
+				targetType = move.target;
 				break;
 			}
 		}
@@ -398,13 +397,13 @@ class Side {
 			// Check for disabled moves
 			let isEnabled = false;
 			let disabledSource = '';
-			for (let i = 0; i < moves.length; i++) {
-				if (moves[i].id !== moveid) continue;
-				if (!moves[i].disabled) {
+			for (const moveId of moves) {
+				if (moveId.id !== moveid) continue;
+				if (!moveId.disabled) {
 					isEnabled = true;
 					break;
-				} else if (moves[i].disabledSource) {
-					disabledSource = moves[i].disabledSource;
+				} else if (moveId.disabledSource) {
+					disabledSource = moveId.disabledSource;
 				}
 			}
 			if (!isEnabled) {
@@ -798,8 +797,8 @@ class Side {
 		// deallocate ourself
 
 		// deallocate children and get rid of references to them
-		for (let i = 0; i < this.pokemon.length; i++) {
-			if (this.pokemon[i]) this.pokemon[i].destroy();
+		for (const pokemon of this.pokemon) {
+			if (pokemon) pokemon.destroy();
 		}
 		this.pokemon = [];
 		this.active = [];
