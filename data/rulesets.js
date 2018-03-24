@@ -89,22 +89,22 @@ exports.BattleFormats = {
 			let kyurems = 0;
 			let ndm = 0;
 			let ndw = 0;
-			for (let i = 0; i < team.length; i++) {
-				if (team[i].species === 'Kyurem-White' || team[i].species === 'Kyurem-Black') {
+			for (const set of team) {
+				if (set.species === 'Kyurem-White' || set.species === 'Kyurem-Black') {
 					if (kyurems > 0) {
 						problems.push('You cannot have more than one Kyurem-Black/Kyurem-White.');
 						break;
 					}
 					kyurems++;
 				}
-				if (team[i].species === 'Necrozma-Dusk-Mane') {
+				if (set.species === 'Necrozma-Dusk-Mane') {
 					if (ndm > 0) {
 						problems.push('You cannot have more than one Necrozma-Dusk-Mane.');
 						break;
 					}
 					ndm++;
 				}
-				if (team[i].species === 'Necrozma-Dawn-Wings') {
+				if (set.species === 'Necrozma-Dawn-Wings') {
 					if (ndw > 0) {
 						problems.push('You cannot have more than one Necrozma-Dawn-Wings.');
 						break;
@@ -136,8 +136,8 @@ exports.BattleFormats = {
 				}
 			}
 			if (set.moves) {
-				for (let i = 0; i < set.moves.length; i++) {
-					let move = this.getMove(set.moves[i]);
+				for (const moveid of set.moves) {
+					let move = this.getMove(moveid);
 					if (move.gen > this.gen) {
 						problems.push(move.name + ' does not exist in gen ' + this.gen + '.');
 					} else if (!allowCAP && move.isNonstandard) {
@@ -224,12 +224,12 @@ exports.BattleFormats = {
 			let moves = [];
 			if (set.moves) {
 				let hasMove = {};
-				for (let i = 0; i < set.moves.length; i++) {
-					let move = this.getMove(set.moves[i]);
+				for (const moveId of set.moves) {
+					let move = this.getMove(moveId);
 					let moveid = move.id;
 					if (hasMove[moveid]) continue;
 					hasMove[moveid] = true;
-					moves.push(set.moves[i]);
+					moves.push(moveId);
 				}
 			}
 			set.moves = moves;
@@ -270,9 +270,9 @@ exports.BattleFormats = {
 
 			if (template.species === 'Pikachu-Cosplay') {
 				let cosplay = {meteormash: 'Pikachu-Rock-Star', iciclecrash: 'Pikachu-Belle', drainingkiss: 'Pikachu-Pop-Star', electricterrain: 'Pikachu-PhD', flyingpress: 'Pikachu-Libre'};
-				for (let i = 0; i < set.moves.length; i++) {
-					if (set.moves[i] in cosplay) {
-						set.species = cosplay[set.moves[i]];
+				for (const moveid of set.moves) {
+					if (moveid in cosplay) {
+						set.species = cosplay[moveid];
 						break;
 					}
 				}
@@ -357,15 +357,11 @@ exports.BattleFormats = {
 		onStartPriority: -10,
 		onStart: function () {
 			this.add('clearpoke');
-			for (let i = 0; i < this.sides[0].pokemon.length; i++) {
-				let pokemon = this.sides[0].pokemon[i];
-				let details = pokemon.details.replace(/(Arceus|Gourgeist|Genesect|Pumpkaboo|Silvally)(-[a-zA-Z?]+)?/g, '$1-*').replace(', shiny', '');
-				this.add('poke', pokemon.side.id, details, pokemon.item ? 'item' : '');
-			}
-			for (let i = 0; i < this.sides[1].pokemon.length; i++) {
-				let pokemon = this.sides[1].pokemon[i];
-				let details = pokemon.details.replace(/(Arceus|Gourgeist|Genesect|Pumpkaboo|Silvally)(-[a-zA-Z?]+)?/g, '$1-*').replace(', shiny', '');
-				this.add('poke', pokemon.side.id, details, pokemon.item ? 'item' : '');
+			for (const side of this.sides) {
+				for (const pokemon of side.pokemon) {
+					let details = pokemon.details.replace(/(Arceus|Gourgeist|Genesect|Pumpkaboo|Silvally)(-[a-zA-Z?]+)?/g, '$1-*').replace(', shiny', '');
+					this.add('poke', pokemon.side.id, details, pokemon.item ? 'item' : '');
+				}
 			}
 		},
 		onTeamPreview: function () {
@@ -395,8 +391,8 @@ exports.BattleFormats = {
 		},
 		onValidateTeam: function (team, format) {
 			let speciesTable = {};
-			for (let i = 0; i < team.length; i++) {
-				let template = this.getTemplate(team[i].species);
+			for (const set of team) {
+				let template = this.getTemplate(set.species);
 				if (speciesTable[template.num]) {
 					return ["You are limited to one of each Pokémon by Species Clause.", "(You have more than one " + template.baseSpecies + ")"];
 				}
@@ -410,10 +406,10 @@ exports.BattleFormats = {
 		desc: ["Prevents teams from having more than one Pok&eacute;mon with the same nickname"],
 		onValidateTeam: function (team, format) {
 			let nameTable = {};
-			for (let i = 0; i < team.length; i++) {
-				let name = team[i].name;
+			for (const set of team) {
+				let name = set.name;
 				if (name) {
-					if (name === team[i].species) continue;
+					if (name === set.species) continue;
 					if (nameTable[name]) {
 						return ["Your Pokémon must have different nicknames.", "(You have more than one " + name + ")"];
 					}
@@ -433,8 +429,8 @@ exports.BattleFormats = {
 		},
 		onValidateTeam: function (team, format) {
 			let itemTable = {};
-			for (let i = 0; i < team.length; i++) {
-				let item = toId(team[i].item);
+			for (const set of team) {
+				let item = toId(set.item);
 				if (!item) continue;
 				if (itemTable[item]) {
 					return ["You are limited to one of each item by Item Clause.", "(You have more than one " + this.getItem(item).name + ")"];
@@ -467,8 +463,8 @@ exports.BattleFormats = {
 				teravolt: 'moldbreaker',
 				turboblaze: 'moldbreaker',
 			};
-			for (let i = 0; i < team.length; i++) {
-				let ability = toId(team[i].ability);
+			for (const set of team) {
+				let ability = toId(set.ability);
 				if (!ability) continue;
 				if (ability in base) ability = base[ability];
 				if (ability in abilityTable) {
@@ -492,8 +488,8 @@ exports.BattleFormats = {
 		onValidateSet: function (set) {
 			let problems = [];
 			if (set.moves) {
-				for (let i = 0; i < set.moves.length; i++) {
-					let move = this.getMove(set.moves[i]);
+				for (const moveId of set.moves) {
+					let move = this.getMove(moveId);
 					if (move.ohko) problems.push(move.name + ' is banned by OHKO Clause.');
 				}
 			}
@@ -584,8 +580,8 @@ exports.BattleFormats = {
 			let speedBoosted = false;
 			let nonSpeedBoosted = false;
 
-			for (let i = 0; i < set.moves.length; i++) {
-				let move = this.getMove(set.moves[i]);
+			for (const moveId of set.moves) {
+				let move = this.getMove(moveId);
 				if (move.id === 'flamecharge' || move.boosts && move.boosts.spe > 0) {
 					speedBoosted = true;
 				}
@@ -666,8 +662,7 @@ exports.BattleFormats = {
 				return;
 			}
 			if (status.id === 'slp') {
-				for (let i = 0; i < target.side.pokemon.length; i++) {
-					let pokemon = target.side.pokemon[i];
+				for (const pokemon of target.side.pokemon) {
 					if (pokemon.hp && pokemon.status === 'slp') {
 						if (!pokemon.statusData.source || pokemon.statusData.source.side !== pokemon.side) {
 							this.add('-message', 'Sleep Clause Mod activated.');
@@ -698,8 +693,7 @@ exports.BattleFormats = {
 				return;
 			}
 			if (status.id === 'frz') {
-				for (let i = 0; i < target.side.pokemon.length; i++) {
-					let pokemon = target.side.pokemon[i];
+				for (const pokemon of target.side.pokemon) {
 					if (pokemon.status === 'frz') {
 						this.add('-message', 'Freeze Clause activated.');
 						return false;
@@ -717,16 +711,16 @@ exports.BattleFormats = {
 		},
 		onValidateTeam: function (team) {
 			let typeTable;
-			for (let i = 0; i < team.length; i++) {
-				let template = this.getTemplate(team[i].species);
-				if (!template.types) return [`Invalid pokemon ${team[i].name || team[i].species}`];
+			for (const [i, set] of team.entries()) {
+				let template = this.getTemplate(set.species);
+				if (!template.types) return [`Invalid pokemon ${set.name || set.species}`];
 				if (i === 0) {
 					typeTable = template.types;
 				} else {
-					typeTable = typeTable.filter(type => template.types.indexOf(type) >= 0);
+					typeTable = typeTable.filter(type => template.types.includes(type));
 				}
 				if (this.gen >= 7) {
-					let item = this.getItem(team[i].item);
+					let item = this.getItem(set.item);
 					if (item.megaStone && template.species === item.megaEvolves) {
 						template = this.getTemplate(item.megaStone);
 						typeTable = typeTable.filter(type => template.types.includes(type));
@@ -746,11 +740,10 @@ exports.BattleFormats = {
 		desc: ["Prevents Rayquaza from mega evolving"],
 		onStart: function () {
 			this.add('rule', 'Mega Rayquaza Clause: You cannot mega evolve Rayquaza');
-			for (let i = 0; i < this.sides[0].pokemon.length; i++) {
-				if (this.sides[0].pokemon[i].speciesid === 'rayquaza') this.sides[0].pokemon[i].canMegaEvo = false;
-			}
-			for (let i = 0; i < this.sides[1].pokemon.length; i++) {
-				if (this.sides[1].pokemon[i].speciesid === 'rayquaza') this.sides[1].pokemon[i].canMegaEvo = false;
+			for (const side of this.sides) {
+				for (const pokemon of side.pokemon) {
+					if (pokemon.speciesid === 'rayquaza') pokemon.canMegaEvo = false;
+				}
 			}
 		},
 	},
@@ -783,11 +776,13 @@ exports.BattleFormats = {
 				let types = template.types;
 				let baseTemplate = dex.getTemplate(template.baseSpecies);
 				if (template.prevo) types = types.concat(dex.getTemplate(dex.getTemplate(template.prevo).prevo || template.prevo).types);
-				for (let i in baseTemplate.otherFormes) {
-					let forme = dex.getTemplate(baseTemplate.otherFormes[i]);
-					if (baseTemplate.otherFormes && !forme.battleOnly) {
-						if (forme.forme !== 'Alola' && forme.forme !== 'Alola-Totem' && forme.baseSpecies !== 'Wormadam') {
-							types = types.concat(forme.types).concat(baseTemplate.types);
+				if (baseTemplate.otherFormes) {
+					for (const formeid of baseTemplate.otherFormes) {
+						let forme = dex.getTemplate(formeid);
+						if (!forme.battleOnly) {
+							if (forme.forme !== 'Alola' && forme.forme !== 'Alola-Totem' && forme.baseSpecies !== 'Wormadam') {
+								types = types.concat(forme.types).concat(baseTemplate.types);
+							}
 						}
 					}
 				}
