@@ -1448,7 +1448,7 @@ exports.commands = {
 			if (!gavePoints) return this.parse('/help mafia win');
 			writeLogs();
 			this.modlog(`MAFIAPOINTS`, null, `${points} points were awarded to ${Chat.toListString(target)}`);
-			room.sendMods(`(${points} points were awarded to: ${Chat.toListString(target)})`);
+			this.addModAction(`${points} points were awarded to: ${Chat.toListString(target)}`);
 		},
 		winhelp: [`/mafia win (points) [user1], [user2], [user3], ... - Award the specified users points to the mafia leaderboard for this month. The amount of points can be negative to take points. Defaults to 10 points.`],
 
@@ -1482,7 +1482,7 @@ exports.commands = {
 			if (!gavePoints) return this.parse('/help mafia mvp');
 			writeLogs();
 			this.modlog(`MAFIA${cmd.toUpperCase()}`, null, `MVP and 5 points were ${cmd === 'unmvp' ? 'taken from' : 'awarded to'} ${Chat.toListString(target)}`);
-			room.sendMods(`(MVP and 5 points were ${cmd === 'unmvp' ? 'taken from' : 'awarded to'}: ${Chat.toListString(target)})`);
+			this.addModAction(`MVP and 5 points were ${cmd === 'unmvp' ? 'taken from' : 'awarded to'}: ${Chat.toListString(target)}`);
 		},
 		mvphelp: [
 			`/mafia mvp [user1], [user2], ... - Gives a MVP point and 5 leaderboard points to the users specified.`,
