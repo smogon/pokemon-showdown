@@ -291,7 +291,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Akatorimon": {
 				species: "Akatorimon",
 				ability: "Data",
-				moves: ['heatbreath', 'firewall', 'wingshoes', 'windcutter', 'megalospark', 'icestatue', 'guerillapoop'],
+				moves: ['heatbreath', 'firewall', 'wingshoes', 'windcutter', 'megalospark', 'icestatue', 'guerrillapoop'],
 				baseSignatureMove: "scarredeye",
 				signatureMove: "Scar-Red Eye",
 			},
@@ -348,8 +348,8 @@ class RandomDigimonTeams extends RandomTeams {
 				species: "Devimon",
 				ability: "Virus",
 				moves: ['darkspirit', 'windcutter', 'evilfantasy', 'chaoscloud', 'aurorafreeze', 'evilsquall', 'confusedstorm', 'wingshoes'],
-				baseSignatureMove: "deathclaw",
-				signatureMove: "Death Claw",
+				baseSignatureMove: "deathhand",
+				signatureMove: "Death Hand",
 			},
 			"Dolphmon": {
 				species: "Dolphmon",
@@ -417,7 +417,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Geremon": {
 				species: "Geremon",
 				ability: "Virus",
-				moves: ['gigafreeze', 'earthcoat', 'bug', 'venomdisaster', 'warcry', 'superstinkyjet', 'poopattackfield', 'guerillapoop', 'extremepoopdeath'],
+				moves: ['gigafreeze', 'earthcoat', 'bug', 'venomdisaster', 'warcry', 'superstinkyjet', 'poopattackfield', 'guerrillapoop', 'extremepoopdeath'],
 				baseSignatureMove: "hypersmell",
 				signatureMove: "Hyper Smell",
 			},
@@ -487,7 +487,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Kokatorimon": {
 				species: "Kokatorimon",
 				ability: "Vaccine",
-				moves: ['wingshoes', 'windcutter', 'megalospark', 'icestatue', 'cootieskick', 'pooptoss', 'guerillapoop'],
+				moves: ['wingshoes', 'windcutter', 'megalospark', 'icestatue', 'cootieskick', 'pooptoss', 'guerrillapoop'],
 				baseSignatureMove: "frozenfireshot",
 				signatureMove: "Frozen Fire Shot",
 			},
@@ -578,7 +578,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Numemon": {
 				species: "Numemon",
 				ability: "Virus",
-				moves: ['oceanwave', 'earthcoat', 'bug', 'icestatue', 'warcry', 'cootieskick', 'pooptoss', 'guerillapoop', 'extremepoopdeath'],
+				moves: ['oceanwave', 'earthcoat', 'bug', 'icestatue', 'warcry', 'cootieskick', 'pooptoss', 'guerrillapoop', 'extremepoopdeath'],
 				baseSignatureMove: "numesludge",
 				signatureMove: "Nume-Sludge",
 			},
@@ -599,7 +599,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"PlatinumSukamon": {
 				species: "PlatinumSukamon",
 				ability: "Vaccine",
-				moves: ['earthcoat', 'rockfall', 'holyflash', 'mechanicalclaw', 'reverseprogram', 'deleteprogram', 'cootieskick', 'superstinkyjet', 'guerillapoop', 'extremepoopdeath'],
+				moves: ['earthcoat', 'rockfall', 'holyflash', 'mechanicalclaw', 'reverseprogram', 'deleteprogram', 'cootieskick', 'superstinkyjet', 'guerrillapoop', 'extremepoopdeath'],
 				baseSignatureMove: "raremetalpoop",
 				signatureMove: "Rare Metal Poop",
 			},
@@ -662,7 +662,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Sukamon": {
 				species: "Sukamon",
 				ability: "Virus",
-				moves: ['earthcoat', 'bug', 'rockfall', 'warcry', 'cootieskick', 'superstinkyjet', 'guerillapoop', 'extremepoopdeath', 'hideandseek'],
+				moves: ['earthcoat', 'bug', 'rockfall', 'warcry', 'cootieskick', 'superstinkyjet', 'guerrillapoop', 'extremepoopdeath', 'hideandseek'],
 				baseSignatureMove: "poop",
 				signatureMove: "Poop",
 			},
@@ -768,7 +768,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Etemon": {
 				species: "Etemon",
 				ability: "Virus",
-				moves: ['earthcoat', 'rockfall', 'sonicjab', 'megatonpunch', 'charmperfume', 'bug', 'guerillapoop', 'extremepoopdeath'],
+				moves: ['earthcoat', 'rockfall', 'sonicjab', 'megatonpunch', 'charmperfume', 'bug', 'guerrillapoop', 'extremepoopdeath'],
 				baseSignatureMove: "loveserenade",
 				signatureMove: "Love Serenade",
 			},
@@ -1094,7 +1094,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"MetalEtemon": {
 				species: "MetalEtemon",
 				ability: "Virus",
-				moves: ['reverseprogram', 'dgdimension', 'upgrade', 'gigawattlaser', 'charmperfume', 'holyflash', 'guerillapoop', 'extremepoopdeath'],
+				moves: ['reverseprogram', 'dgdimension', 'upgrade', 'gigawattlaser', 'charmperfume', 'holyflash', 'guerrillapoop', 'extremepoopdeath'],
 				baseSignatureMove: "darkrecital",
 				signatureMove: "Dark Recital",
 			},
