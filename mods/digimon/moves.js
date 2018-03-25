@@ -3643,31 +3643,29 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		type: "Flame",
-		target: "self",
+		target: "allySide",
 		desc: "Priority +4. User is immune to moves for one turn. If opponent targets user this turn, the attacker receives 1/8 max HP damage. (Spiky Shield desc, but Flame and Fire type, and doesn't care about 'contact'.)",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit: function (pokemon, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "firespin", source);
 			this.add('-anim', source, "protect", source);
+			return !!this.willAct() && this.runEvent('StallMove', pokemon);
 		},
-		flags: {protect: 1, mirror: 1, defrost: 1},
+		flags: {defrost: 1},
 		accuracy: true,
 		pp: 10,
-		//mostly copy-paste from Spiky Shield
 		secondary: false,
 		stallingMove: true,
-		volatileStatus: 'firewall',
-		onTryHit: function (target, source, move) {
-			return !!this.willAct() && this.runEvent('StallMove', target);
-		},
-		onHit: function (pokemon, source) {
-			pokemon.addVolatile('stall');
+		sideCondition: 'firewall',
+		onHitSide: function (side, source) {
+			side.addSideCondition('sidestall');
 			this.add('-message', source.name + ' is hidden behind a firewall!');
 		},
 		effect: {
 			duration: 1,
-			onStart: function (target) {
-				this.add('-singleturn', target, 'move: Firewall'); //this might not work if the client doesn't support it
+			//this is a side condition
+			onStart: function (target, source) {
+				this.add('-singleturn', source, 'move: Firewall');
 			},
 			onTryHitPriority: 3,
 			onTryHit: function (target, source, move) {
