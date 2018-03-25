@@ -816,7 +816,7 @@ exports.pages = {
 					buf += `<p style="font-weight:bold">0 ${room.game.players[key] ? room.game.players[key].safeName : 'No Lynch'} `;
 				}
 				const isSpirit = (room.game.dead[user.userid] && room.game.dead[user.userid].restless);
-				if (isPlayer) {
+				if (isPlayer || isSpirit) {
 					if (isPlayer && room.game.players[user.userid].lynching === key || isSpirit && room.game.dead[user.userid].lynching === key) {
 						buf += `<button class="button" name="send" value="/mafia unlynch ${room.id}">Unlynch ${room.game.players[key] ? room.game.players[key].safeName : 'No Lynch'}</button>`;
 					} else if ((room.game.selfEnabled && !isSpirit) || user.userid !== key) {
@@ -1297,7 +1297,7 @@ exports.commands = {
 
 		role: function (target, room, user) {
 			if (!room.game || room.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
-			if (!(user.userid in room.game.players)) return false;
+			if (!(user.userid in room.game.players)) return this.errorReply(`You are not in the game of mafia.`);
 			this.sendReplyBox(`Your role is: ${room.game.players[user.userid].role.safeName}`);
 		},
 
@@ -1448,7 +1448,7 @@ exports.commands = {
 			if (!gavePoints) return this.parse('/help mafia win');
 			writeLogs();
 			this.modlog(`MAFIAPOINTS`, null, `${points} points were awarded to ${Chat.toListString(target)}`);
-			this.addModAction(`${points} points were awarded to: ${Chat.toListString(target)}`);
+			room.sendMods(`(${points} points were awarded to: ${Chat.toListString(target)})`);
 		},
 		winhelp: [`/mafia win (points) [user1], [user2], [user3], ... - Award the specified users points to the mafia leaderboard for this month. The amount of points can be negative to take points. Defaults to 10 points.`],
 
@@ -1482,7 +1482,7 @@ exports.commands = {
 			if (!gavePoints) return this.parse('/help mafia mvp');
 			writeLogs();
 			this.modlog(`MAFIA${cmd.toUpperCase()}`, null, `MVP and 5 points were ${cmd === 'unmvp' ? 'taken from' : 'awarded to'} ${Chat.toListString(target)}`);
-			this.addModAction(`MVP and 5 points were ${cmd === 'unmvp' ? 'taken from' : 'awarded to'}: ${Chat.toListString(target)}`);
+			room.sendMods(`(MVP and 5 points were ${cmd === 'unmvp' ? 'taken from' : 'awarded to'}: ${Chat.toListString(target)})`);
 		},
 		mvphelp: [
 			`/mafia mvp [user1], [user2], ... - Gives a MVP point and 5 leaderboard points to the users specified.`,
