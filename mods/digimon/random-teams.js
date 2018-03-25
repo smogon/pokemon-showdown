@@ -697,7 +697,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Vegiemon": {
 				species: "Vegiemon",
 				ability: "Virus",
-				moves: ['waterblitz', 'gigafreeze', 'oceanwave', 'massmorph', 'charmeperfume', 'venomdisaster', 'earthcoat'],
+				moves: ['waterblitz', 'gigafreeze', 'oceanwave', 'massmorph', 'charmperfume', 'venomdisaster', 'earthcoat'],
 				baseSignatureMove: "sweetbreath",
 				signatureMove: "Sweet Breath",
 			},
