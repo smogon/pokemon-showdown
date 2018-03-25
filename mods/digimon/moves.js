@@ -4411,7 +4411,7 @@ exports.BattleMovedex = {
 		secondary: false,
 		stallingMove: true,
 		sideCondition: 'saintshield',
-		onPrepareHit: function (target, source, move, pokemon) {
+		onPrepareHit: function (pokemon, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "moonlight", source);
 			this.add('-anim', source, "protect", source);
