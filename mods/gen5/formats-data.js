@@ -1,6 +1,7 @@
 'use strict';
 
-exports.BattleFormatsData = {
+/**@type {{[k: string]: ModdedTemplateFormatsData}} */
+let BattleFormatsData = {
 	bulbasaur: {
 		inherit: true,
 		randomBattleMoves: ["sleeppowder", "gigadrain", "hiddenpowerfire", "hiddenpowerice", "sludgebomb", "powerwhip", "leechseed", "synthesis"],
@@ -3131,3 +3132,5 @@ exports.BattleFormatsData = {
 		requiredItem: "Shock Drive",
 	},
 };
+
+exports.BattleFormatsData = BattleFormatsData;
