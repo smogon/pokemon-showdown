@@ -282,6 +282,7 @@ exports.BattleStatuses = {
 		},
 	},
 	choicelock: {
+		noCopy: true,
 		onStart: function (pokemon) {
 			if (!this.activeMove.id || this.activeMove.hasBounced) return false;
 			this.effectData.move = this.activeMove.id;

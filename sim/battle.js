@@ -1399,8 +1399,12 @@ class Battle extends Dex.ModdedDex {
 		if (pos >= side.active.length) {
 			throw new Error("Invalid switch position");
 		}
+		let newMove = null;
 		if (side.active[pos]) {
 			let oldActive = side.active[pos];
+			if (this.gen === 4 && sourceEffect) {
+				newMove = oldActive.lastMove;
+			}
 			if (this.cancelMove(oldActive)) {
 				for (const foeActive of side.foe.active) {
 					if (foeActive.isStale >= 2) {
@@ -1415,6 +1419,7 @@ class Battle extends Dex.ModdedDex {
 				pokemon.copyVolatileFrom(oldActive);
 			}
 		}
+		if (newMove) pokemon.lastMove = newMove;
 		pokemon.isActive = true;
 		this.runEvent('BeforeSwitchIn', pokemon);
 		if (side.active[pos]) {
