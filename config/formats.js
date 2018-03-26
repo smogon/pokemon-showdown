@@ -869,9 +869,8 @@ exports.Formats = [
 
 		mod: 'gen6',
 		searchShow: false,
-		ruleset: ['[Gen 6] NU', 'Baton Pass Clause'],
+		ruleset: ['[Gen 6] NU'],
 		banlist: ['NU', 'BL4', 'Chatter'],
-		unbanlist: ['Baton Pass'],
 	},
 	{
 		name: "[Gen 6] LC",
