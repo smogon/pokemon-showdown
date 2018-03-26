@@ -350,6 +350,8 @@ class MafiaTracker extends Rooms.RoomGame {
 		if (this.phase !== 'day') return false;
 		if (this.timer) this.setDeadline('off', true);
 		this.phase = 'night';
+		let host = Users(this.hostid);
+		if (host && host.connected) host.send(`>${this.room.id}\n|notify|It's night in your game of Mafia!`);
 		this.sendRoom(`Night ${this.dayNum}. PM the host your action, or idle.`, {declare: true});
 		if (!early && this.getPlurality()) this.sendRoom(`Plurality is on ${this.players[this.getPlurality()] ? this.players[this.getPlurality()].name : 'No Lynch'}`);
 		this.updatePlayers();
