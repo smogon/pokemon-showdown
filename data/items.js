@@ -1,6 +1,7 @@
 'use strict';
 
-exports.BattleItems = {
+/**@type {{[k: string]: ItemData}} */
+let BattleItems = {
 	"abomasite": {
 		id: "abomasite",
 		name: "Abomasite",
@@ -2516,7 +2517,9 @@ exports.BattleItems = {
 			basePower: 130,
 		},
 		onEffectiveness: function (typeMod, target, type, move) {
+			// @ts-ignore
 			if (target.volatiles['ingrain'] || target.volatiles['smackdown'] || this.getPseudoWeather('gravity')) return;
+			// @ts-ignore
 			if (move.type === 'Ground' && target.hasType('Flying')) return 0;
 		},
 		// airborneness negation implemented in sim/pokemon.js:Pokemon#isGrounded
@@ -3170,6 +3173,7 @@ exports.BattleItems = {
 			if (this.activeMove.id !== 'knockoff' && this.activeMove.id !== 'thief' && this.activeMove.id !== 'covet') return false;
 		},
 		isUnreleased: true,
+		num: 0,
 		gen: 2,
 		desc: "Cannot be given to or taken from a Pokemon, except by Covet/Knock Off/Thief.",
 	},
@@ -4208,10 +4212,12 @@ exports.BattleItems = {
 		},
 		onAttractPriority: -1,
 		onAttract: function (target, source, effect) {
+			if (!this.activeMove) throw new Error("Battle.activeMove is null");
 			if (target !== source && target === this.activePokemon && this.activeMove.flags['contact']) return false;
 		},
 		onBoostPriority: -1,
 		onBoost: function (boost, target, source, effect) {
+			if (!this.activeMove) throw new Error("Battle.activeMove is null");
 			if (target !== source && target === this.activePokemon && this.activeMove.flags['contact']) {
 				if (effect && effect.effectType === 'Ability') {
 					// Ability activation always happens for boosts
@@ -4222,6 +4228,7 @@ exports.BattleItems = {
 		},
 		onDamagePriority: -1,
 		onDamage: function (damage, target, source, effect) {
+			if (!this.activeMove) throw new Error("Battle.activeMove is null");
 			if (target !== source && target === this.activePokemon && this.activeMove.flags['contact']) {
 				if (effect && effect.effectType === 'Ability') {
 					this.add('-activate', source, effect.fullname);
@@ -4231,6 +4238,7 @@ exports.BattleItems = {
 			}
 		},
 		onSetAbility: function (ability, target, source, effect) {
+			if (!this.activeMove) throw new Error("Battle.activeMove is null");
 			if (target !== source && target === this.activePokemon && this.activeMove.flags['contact']) {
 				if (effect && effect.effectType === 'Ability') {
 					this.add('-activate', source, effect.fullname);
@@ -4240,6 +4248,7 @@ exports.BattleItems = {
 			}
 		},
 		onSetStatus: function (status, target, source, effect) {
+			if (!this.activeMove) throw new Error("Battle.activeMove is null");
 			if (target !== source && target === this.activePokemon && this.activeMove.flags['contact']) return false;
 		},
 		num: 880,
@@ -5357,6 +5366,7 @@ exports.BattleItems = {
 		onHit: function (target, source, move) {
 			if (source && source !== target && !source.item && move && move.flags['contact']) {
 				let barb = target.takeItem();
+				// @ts-ignore
 				source.setItem(barb);
 				// no message for Sticky Barb changing hands
 			}
@@ -5898,6 +5908,7 @@ exports.BattleItems = {
 			pokemon.addVolatile('confusion');
 			pokemon.setItem('');
 		},
+		num: 0,
 		gen: 2,
 		isNonstandard: 'gen2',
 		desc: "(Gen 2) On switch-in, raises holder's Attack by 2 and confuses it. Single use.",
@@ -6120,8 +6131,8 @@ exports.BattleItems = {
 			if (pokemon.item !== 'leppaberry') {
 				let foeActive = pokemon.side.foe.active;
 				let foeIsStale = false;
-				for (let i = 0; i < 1; i++) {
-					if (foeActive.isStale >= 2) {
+				for (let i = 0; i < foeActive.length; i++) {
+					if (foeActive[i].isStale >= 2) {
 						foeIsStale = true;
 						break;
 					}
@@ -6231,3 +6242,5 @@ exports.BattleItems = {
 		desc: "If held by a Crucibelle, this item allows it to Mega Evolve in battle.",
 	},
 };
+
+exports.BattleItems = BattleItems;
