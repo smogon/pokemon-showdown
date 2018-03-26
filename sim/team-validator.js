@@ -11,30 +11,6 @@
 const Dex = require('./dex');
 const toId = Dex.getId;
 
-/**
- * Keeps track of how a pokemon with a given set might be obtained.
- *
- * `sources` is a list of possible PokemonSources, and a nonzero
- * sourcesBefore means the Pokemon is compatible with all possible
- * PokemonSources from that gen or earlier.
- *
- * `limitedEgg` tracks moves that can only be obtained from an egg with
- * another father in gen 2-5. If there are multiple such moves,
- * potential fathers need to be checked to see if they can actually
- * learn the move combination in question.
- *
- * @typedef {Object} PokemonSources
- * @property {PokemonSource[]} sources
- * @property {number} sourcesBefore
- * @property {string} [babyOnly]
- * @property {string} [sketchMove] limit 1 in fakemon Sketch-as-egg-move formats
- * @property {string} [hm] limit 1 HM transferred from gen 4 to 5
- * @property {string[]} [restrictiveMoves]
- * @property {(string | 'self')[]} [limitedEgg] list of egg moves
- * @property {boolean} [isHidden]
- * @property {true} [fastCheck]
- */
-
 class Validator {
 	/**
 	 * @param {string | Format} format
@@ -782,7 +758,7 @@ class Validator {
 			if (problem.type === 'incompatibleAbility') {
 				problemString += ` can only be learned in past gens without Hidden Abilities.`;
 			} else if (problem.type === 'incompatible') {
-				problemString = `${name}'s moves ${lsetData.restrictiveMoves.join(', ')} are incompatible.`;
+				problemString = `${name}'s moves ${(lsetData.restrictiveMoves || []).join(', ')} are incompatible.`;
 			} else if (problem.type === 'oversketched') {
 				let plural = (parseInt(problem.maxSketches) === 1 ? '' : 's');
 				problemString += ` can't be Sketched because it can only Sketch ${problem.maxSketches} move${plural}.`;

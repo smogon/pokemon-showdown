@@ -2,7 +2,8 @@
 
 const CHOOSABLE_TARGETS = new Set(['normal', 'any', 'adjacentAlly', 'adjacentAllyOrSelf', 'adjacentFoe']);
 
-exports.BattleScripts = {
+/**@type {BattleScriptsData} */
+let BattleScripts = {
 	gen: 7,
 	/**
 	 * runMove is the "outside" move caller. It handles deducting PP,
@@ -191,8 +192,10 @@ exports.BattleScripts = {
 		if (zMove && move.category !== 'Status') {
 			this.attrLastMove('[zeffect]');
 		} else if (zMove && move.zMoveBoost) {
+			// @ts-ignore
 			this.boost(move.zMoveBoost, pokemon, pokemon, {id: 'zpower'});
 		} else if (zMove && move.zMoveEffect === 'heal') {
+			// @ts-ignore
 			this.heal(pokemon.maxhp, pokemon, pokemon, {id: 'zpower'});
 		} else if (zMove && move.zMoveEffect === 'healreplacement') {
 			move.self = {sideCondition: 'healreplacement'};
@@ -206,13 +209,17 @@ exports.BattleScripts = {
 			pokemon.setBoost(boosts);
 			this.add('-clearnegativeboost', pokemon, '[zeffect]');
 		} else if (zMove && move.zMoveEffect === 'redirect') {
+			// @ts-ignore
 			pokemon.addVolatile('followme', pokemon, {id: 'zpower'});
 		} else if (zMove && move.zMoveEffect === 'crit2') {
+			// @ts-ignore
 			pokemon.addVolatile('focusenergy', pokemon, {id: 'zpower'});
 		} else if (zMove && move.zMoveEffect === 'curse') {
 			if (pokemon.hasType('Ghost')) {
+				// @ts-ignore
 				this.heal(pokemon.maxhp, pokemon, pokemon, {id: 'zpower'});
 			} else {
+				// @ts-ignore
 				this.boost({atk: 1}, pokemon, pokemon, {id: 'zpower'});
 			}
 		}
@@ -255,6 +262,7 @@ exports.BattleScripts = {
 			this.faint(pokemon, pokemon, move);
 		}
 
+		/**@type {number | false} */
 		let damage = false;
 		if (move.target === 'all' || move.target === 'foeSide' || move.target === 'allySide' || move.target === 'allyTeam') {
 			damage = this.tryMoveHit(target, pokemon, move);
@@ -297,6 +305,7 @@ exports.BattleScripts = {
 			damage = this.tryMoveHit(target, pokemon, move);
 			if (damage || damage === 0 || damage === undefined) moveResult = true;
 		}
+		// @ts-ignore
 		if (move.selfBoost && moveResult) this.moveHit(pokemon, pokemon, move, move.selfBoost, false, true);
 		if (!pokemon.hp) {
 			this.faint(pokemon, pokemon, move);
@@ -346,7 +355,7 @@ exports.BattleScripts = {
 			move.ignoreImmunity = (move.category === 'Status');
 		}
 
-		if (this.gen < 7 && move.ignoreImmunity !== true && !move.ignoreImmunity[move.type] && !target.runImmunity(move.type, true)) {
+		if (this.gen < 7 && (!move.ignoreImmunity || (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type])) && !target.runImmunity(move.type, true)) {
 			return false;
 		}
 
@@ -356,7 +365,7 @@ exports.BattleScripts = {
 			return false;
 		}
 
-		if (this.gen >= 7 && move.ignoreImmunity !== true && !move.ignoreImmunity[move.type] && !target.runImmunity(move.type, true)) {
+		if (this.gen >= 7 && (!move.ignoreImmunity || (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type])) && !target.runImmunity(move.type, true)) {
 			return false;
 		}
 		if (move.flags['powder'] && target !== pokemon && !this.getImmunity('powder', target)) {
@@ -417,6 +426,7 @@ exports.BattleScripts = {
 		} else {
 			accuracy = this.runEvent('Accuracy', target, pokemon, move, accuracy);
 		}
+		// @ts-ignore
 		if (accuracy !== true && !this.randomChance(accuracy, 100)) {
 			if (!move.spreadHit) this.attrLastMove('[miss]');
 			this.add('-miss', pokemon, target);
@@ -466,11 +476,12 @@ exports.BattleScripts = {
 		}
 
 		move.totalDamage = 0;
+		/**@type {number | false} */
 		let damage = 0;
 		pokemon.lastDamage = 0;
 		if (move.multihit) {
 			let hits = move.multihit;
-			if (hits.length) {
+			if (Array.isArray(hits)) {
 				// yes, it's hardcoded... meh
 				if (hits[0] === 2 && hits[1] === 5) {
 					if (this.gen >= 5) {
@@ -484,6 +495,7 @@ exports.BattleScripts = {
 			}
 			hits = Math.floor(hits);
 			let nullDamage = true;
+			/**@type {number | false} */
 			let moveDamage;
 			// There is no need to recursively check the ´sleepUsable´ flag as Sleep Talk can only be used while asleep.
 			let isSleepUsable = move.sleepUsable || this.getMove(move.sourceEffect).sleepUsable;
@@ -516,6 +528,7 @@ exports.BattleScripts = {
 					accuracy = this.runEvent('ModifyAccuracy', target, pokemon, move, accuracy);
 					if (!move.alwaysHit) {
 						accuracy = this.runEvent('Accuracy', target, pokemon, move, accuracy);
+						// @ts-ignore
 						if (accuracy !== true && !this.randomChance(accuracy, 100)) break;
 					}
 				}
@@ -546,6 +559,7 @@ exports.BattleScripts = {
 		}
 
 		if (move.struggleRecoil) {
+			// @ts-ignore
 			this.directDamage(this.clampIntRange(Math.round(pokemon.maxhp / 4), 1), pokemon, pokemon, {id: 'strugglerecoil'});
 		}
 
@@ -568,8 +582,10 @@ exports.BattleScripts = {
 		let damage;
 		move = this.getMoveCopy(move);
 
+		// @ts-ignore
 		if (!moveData) moveData = move;
 		if (!moveData.flags) moveData.flags = {};
+		/**@type {?boolean | number} */
 		let hitResult = true;
 
 		// TryHit events:
@@ -605,7 +621,7 @@ exports.BattleScripts = {
 		if (move.target === 'all' && !isSelf) {
 			hitResult = this.singleEvent('TryHitField', moveData, {}, target, pokemon, move);
 		} else if ((move.target === 'foeSide' || move.target === 'allySide') && !isSelf) {
-			hitResult = this.singleEvent('TryHitSide', moveData, {}, target.side, pokemon, move);
+			hitResult = this.singleEvent('TryHitSide', moveData, {}, (target ? target.side : null), pokemon, move);
 		} else if (target) {
 			hitResult = this.singleEvent('TryHit', moveData, {}, target, pokemon, move);
 		}
@@ -632,6 +648,7 @@ exports.BattleScripts = {
 		}
 
 		if (target) {
+			/**@type {?boolean | number} */
 			let didSomething = false;
 
 			damage = this.getDamage(pokemon, target, moveData);
@@ -751,12 +768,15 @@ exports.BattleScripts = {
 		}
 		if (moveData.self && !move.selfDropped) {
 			let selfRoll;
+			// @ts-ignore
 			if (!isSecondary && moveData.self.boosts) {
 				selfRoll = this.random(100);
 				if (!move.multihit) move.selfDropped = true;
 			}
 			// This is done solely to mimic in-game RNG behaviour. All self drops have a 100% chance of happening but still grab a random number.
+			// @ts-ignore
 			if (typeof moveData.self.chance === 'undefined' || selfRoll < moveData.self.chance) {
+				// @ts-ignore
 				this.moveHit(pokemon, pokemon, move, moveData.self, isSecondary, true);
 			}
 		}
@@ -786,6 +806,7 @@ exports.BattleScripts = {
 	},
 
 	calcRecoilDamage: function (damageDealt, move) {
+		// @ts-ignore
 		return this.clampIntRange(Math.round(damageDealt * move.recoil[0] / move.recoil[1]), 1);
 	},
 
@@ -838,6 +859,7 @@ exports.BattleScripts = {
 		if (pokemon) {
 			let item = pokemon.getItem();
 			if (move.name === item.zMoveFrom) {
+				// @ts-ignore
 				return this.getMoveCopy(item.zMove);
 			}
 		}
@@ -848,6 +870,7 @@ exports.BattleScripts = {
 			return zMove;
 		}
 		zMove = this.getMoveCopy(this.zMoveTable[move.type]);
+		// @ts-ignore
 		zMove.basePower = move.zMovePower;
 		zMove.category = move.category;
 		return zMove;
@@ -859,6 +882,7 @@ exports.BattleScripts = {
 		if (!item.zMove) return;
 		if (item.zMoveUser && !item.zMoveUser.includes(pokemon.template.species)) return;
 		let atLeastOne = false;
+		/**@type {AnyObject?[]} */
 		let zMoves = [];
 		for (const moveSlot of pokemon.moveSlots) {
 			if (moveSlot.pp <= 0) {
@@ -899,6 +923,7 @@ exports.BattleScripts = {
 
 	runMegaEvo: function (pokemon) {
 		const effectType = pokemon.canMegaEvo ? '-mega' : '-burst';
+		// @ts-ignore
 		const template = this.getTemplate(pokemon.canMegaEvo || pokemon.canUltraBurst);
 		const side = pokemon.side;
 
@@ -914,8 +939,10 @@ exports.BattleScripts = {
 		pokemon.details = template.species + (pokemon.level === 100 ? '' : ', L' + pokemon.level) + (pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
 		if (pokemon.illusion) {
 			pokemon.ability = ''; // Don't allow Illusion to wear off
+			// @ts-ignore
 			this.add(effectType, pokemon, pokemon.illusion.template.baseSpecies, template.requiredItem);
 		} else {
+			// @ts-ignore
 			this.add(effectType, pokemon, template.baseSpecies, template.requiredItem);
 			this.add('detailschange', pokemon, pokemon.details);
 		}
@@ -945,3 +972,5 @@ exports.BattleScripts = {
 		return CHOOSABLE_TARGETS.has(targetType);
 	},
 };
+
+exports.BattleScripts = BattleScripts;

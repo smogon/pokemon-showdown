@@ -34,7 +34,7 @@ const Pokemon = require('./pokemon');
  * @property {string} moveid - a move to use (move action only)
  * @property {Move} move - a move to use (move action only)
  * @property {boolean | 'done'} mega - true if megaing or ultra bursting
- * @property {boolean} zmove - true if zmoving
+ * @property {string | undefined} zmove - if zmoving, the name of the zmove
  * @property {Effect?} sourceEffect - effect that called the move (eg Instruct) if any
  */
 /**
@@ -103,6 +103,7 @@ class Battle extends Dex.ModdedDex {
 	constructor(options) {
 		let format = Dex.getFormat(options.formatid, true);
 		super(format.mod);
+		this.zMoveTable = {};
 		Object.assign(this, this.data.Scripts);
 
 		this.id = '';
@@ -136,6 +137,8 @@ class Battle extends Dex.ModdedDex {
 		this.effectData = {id: ''};
 		/** @type {AnyObject} */
 		this.event = {id: ''};
+		/** @type {AnyObject} */
+		this.itemData = {id: ''};
 
 		this.gameType = (format.gameType || 'singles');
 		this.reportExactHP = !!format.debug;
@@ -468,7 +471,7 @@ class Battle extends Dex.ModdedDex {
 	/**
 	 * @param {?Move} [move]
 	 * @param {?Pokemon} [pokemon]
-	 * @param {?Pokemon} [target]
+	 * @param {?Pokemon | false} [target]
 	 */
 	setActiveMove(move, pokemon, target) {
 		if (!move) move = null;
@@ -614,11 +617,11 @@ class Battle extends Dex.ModdedDex {
 	 * The entire event system revolves around this function
 	 * (and its helper functions, getRelevant * )
 	 * @param {string} eventid
-	 * @param {Effect} effect
+	 * @param {?string | Effect} effect
 	 * @param {?AnyObject} effectData
-	 * @param {string | Pokemon | Side | Battle} target
-	 * @param {Pokemon | Effect?} [source]
-	 * @param {?Effect} [sourceEffect]
+	 * @param {?string | Pokemon | Side | Battle} target
+	 * @param {string | Pokemon | Effect | false?} [source]
+	 * @param {?Effect | string} [sourceEffect]
 	 * @param {any} [relayVar]
 	 */
 	singleEvent(eventid, effect, effectData, target, source, sourceEffect, relayVar) {
@@ -789,9 +792,9 @@ class Battle extends Dex.ModdedDex {
 	 *   they're useful for functions called by the event handler.
 	 *
 	 * @param {string} eventid
-	 * @param {Pokemon | Side | Battle} target
-	 * @param {?string | Pokemon} [source]
-	 * @param {?Effect} [effect]
+	 * @param {?Pokemon | Side | Battle} target
+	 * @param {?string | Pokemon | false} [source]
+	 * @param {?Effect | string} [effect]
 	 * @param {any} [relayVar]
 	 * @param {boolean} [onEffect]
 	 * @param {boolean} [fastExit]
@@ -967,7 +970,7 @@ class Battle extends Dex.ModdedDex {
 	 * @param {Pokemon | Side | Battle} thing
 	 * @param {string} callbackType
 	 * @param {string} foeCallbackType
-	 * @param {?string | Pokemon | Side | Battle} foeThing
+	 * @param {?string | Pokemon | Side | Battle | false} foeThing
 	 */
 	getRelevantEffects(thing, callbackType, foeCallbackType, foeThing) {
 		let statuses = this.getRelevantEffectsInner(thing, callbackType, foeCallbackType, foeThing, true, false);
@@ -979,7 +982,7 @@ class Battle extends Dex.ModdedDex {
 	 * @param {string | Pokemon | Side | Battle} thing
 	 * @param {string} callbackType
 	 * @param {?string} foeCallbackType
-	 * @param {?string | Pokemon | Side | Battle} foeThing
+	 * @param {?string | Pokemon | Side | Battle | false} foeThing
 	 * @param {boolean} bubbleUp
 	 * @param {boolean} bubbleDown
 	 * @param {string} [getAll]
@@ -1777,7 +1780,6 @@ class Battle extends Dex.ModdedDex {
 					actives.push(pokemon);
 				}
 			}
-			// @ts-ignore
 			if (actives.length > 1 && !this.isAdjacent(actives[0], actives[1])) {
 				this.swapPosition(actives[0], 1, '[silent]');
 				this.swapPosition(actives[1], 1, '[silent]');
@@ -1845,7 +1847,7 @@ class Battle extends Dex.ModdedDex {
 	 * @param {AnyObject} boost
 	 * @param {Pokemon} [target]
 	 * @param {Pokemon?} [source]
-	 * @param {Effect?} [effect]
+	 * @param {Effect | string?} [effect]
 	 * @param {boolean} [isSecondary]
 	 * @param {boolean} isSelf
 	 */
@@ -1914,7 +1916,7 @@ class Battle extends Dex.ModdedDex {
 	 * @param {number} damage
 	 * @param {Pokemon} [target]
 	 * @param {Pokemon?} [source]
-	 * @param {Effect?} [effect]
+	 * @param {Effect | string?} [effect]
 	 * @param {boolean} [instafaint]
 	 */
 	damage(damage, target, source = null, effect = null, instafaint = false) {
@@ -2085,7 +2087,7 @@ class Battle extends Dex.ModdedDex {
 
 	/**
 	 * @param {number | number[]} numerator
-	 * @param {number} denominator
+	 * @param {number} [denominator]
 	 */
 	chainModify(numerator, denominator) {
 		let previousMod = Math.floor(this.event.modifier * 4096);
@@ -2418,6 +2420,7 @@ class Battle extends Dex.ModdedDex {
 	 * @param {Pokemon} pokemon
 	 * @param {string | Move} move
 	 * @param {number} targetLoc
+	 * @return {?Pokemon | false}
 	 */
 	getTarget(pokemon, move, targetLoc) {
 		move = this.getMove(move);
@@ -2626,7 +2629,6 @@ class Battle extends Dex.ModdedDex {
 			if (!action.priority && !deferPriority) {
 				let move = action.move;
 				if (action.zmove) {
-					// @ts-ignore
 					let zMoveName = this.getZMove(action.move, action.pokemon, true);
 					let zMove = this.getMove(zMoveName);
 					if (zMove.exists) {
@@ -2825,7 +2827,6 @@ class Battle extends Dex.ModdedDex {
 		case 'move':
 			if (!action.pokemon.isActive) return false;
 			if (action.pokemon.fainted) return false;
-			// @ts-ignore
 			this.runMove(action.move, action.pokemon, action.targetLoc, action.sourceEffect, action.zmove);
 			break;
 		case 'megaEvo':
@@ -3178,7 +3179,7 @@ class Battle extends Dex.ModdedDex {
 	}
 
 	/**
-	 * @param {(string | number | ((side: Side | boolean) => string) | AnyObject)[]} parts
+	 * @param {(string | number | boolean | ((side: Side | boolean) => string) | AnyObject | null | undefined)[]} parts
 	 */
 	add(...parts) {
 		if (!parts.some(part => typeof part === 'function')) {
@@ -3345,6 +3346,142 @@ class Battle extends Dex.ModdedDex {
 			this.send('end', JSON.stringify(log));
 			this.sentEnd = true;
 		}
+	}
+
+	/**
+	 * @param {string | Move} move
+	 * @param {Pokemon} target
+	 * @param {number | undefined} [targetLoc]
+	 * @param {?Effect | undefined} [sourceEffect]
+	 * @param {string | undefined} [zMove]
+	 * @param {boolean | undefined} [externalMove]
+	 */
+	runMove(move, target, targetLoc, sourceEffect, zMove, externalMove) {
+		throw new Error(`The runMove function needs to be implemented in scripts.js or the battle format.`);
+	}
+
+	/**
+	 * @param {string | Move} move
+	 * @param {Pokemon} target
+	 * @param {Pokemon | false | undefined} [source]
+	 * @param {?Effect | undefined} [sourceEffect]
+	 * @param {string | undefined} [zMove]
+	 * @return {boolean}
+	 */
+	useMove(move, target, source, sourceEffect, zMove) {
+		throw new Error(`The useMove function needs to be implemented in scripts.js or the battle format.`);
+	}
+
+	/**
+	 * @param {string | Move} move
+	 * @param {Pokemon} target
+	 * @param {Pokemon | false | undefined} [source]
+	 * @param {?Effect | undefined} [sourceEffect]
+	 * @param {string | undefined} [zMove]
+	 * @return {boolean}
+	 */
+	useMoveInner(move, target, source, sourceEffect, zMove) {
+		throw new Error(`The useMoveInner function needs to be implemented in scripts.js or the battle format.`);
+	}
+
+	/**
+	 * @param {Pokemon} target
+	 * @param {Pokemon} pokemon
+	 * @param {Move} move
+	 * @return {number | false}
+	 */
+	tryMoveHit(target, pokemon, move) {
+		throw new Error(`The tryMoveHit function needs to be implemented in scripts.js or the battle format.`);
+	}
+
+	/**
+	 * @param {?Pokemon} target
+	 * @param {Pokemon} pokemon
+	 * @param {Move} move
+	 * @param {MoveData | undefined} [moveData]
+	 * @param {boolean | undefined} [isSecondary]
+	 * @param {boolean | undefined} [isSelf]
+	 * @return {number | false}
+	 */
+	moveHit(target, pokemon, move, moveData, isSecondary, isSelf) {
+		throw new Error(`The tryMoveHit function needs to be implemented in scripts.js or the battle format.`);
+	}
+
+	/**
+	 * @param {any} damage
+	 * @param {Move} move
+	 * @return {number}
+	 */
+	calcRecoilDamage(damage, move) {
+		throw new Error(`The calcRecoilDamage function needs to be implemented in scripts.js or the battle format.`);
+	}
+
+	/**
+	 * @param {Pokemon} pokemon
+	 * @return {(AnyObject | null)[] | void}
+	 */
+	canZMove(pokemon) {
+		throw new Error(`The canZMove function needs to be implemented in scripts.js or the battle format.`);
+	}
+
+	/**
+	 * @param {Pokemon} pokemon
+	 * @return {?string}
+	 */
+	canUltraBurst(pokemon) {
+		throw new Error(`The canUltraBurst function needs to be implemented in scripts.js or the battle format.`);
+	}
+
+	/**
+	 * @param {Pokemon} pokemon
+	 * @return {?string | undefined}
+	 */
+	canMegaEvo(pokemon) {
+		throw new Error(`The canMegaEvo function needs to be implemented in scripts.js or the battle format.`);
+	}
+
+	/**
+	 * @param {Pokemon} pokemon
+	 * @return {boolean}
+	 */
+	runMegaEvo(pokemon) {
+		throw new Error(`The runMegaEvo function needs to be implemented in scripts.js or the battle format.`);
+	}
+
+	/**
+	 * @param {Move} move
+	 * @param {Pokemon} pokemon
+	 * @param {boolean | undefined} [skipChecks]
+	 * @return {string | undefined}
+	 */
+	getZMove(move, pokemon, skipChecks) {
+		throw new Error(`The getZMove function needs to be implemented in scripts.js or the battle format.`);
+	}
+
+	/**
+	 * @param {string | Move} move
+	 * @param {Pokemon} pokemon
+	 * @return {Move}
+	 */
+	getZMoveCopy(move, pokemon) {
+		throw new Error(`The getZMoveCopy function needs to be implemented in scripts.js or the battle format.`);
+	}
+
+	/**
+	 * @param {Pokemon} pokemon
+	 * @param {Pokemon} target
+	 * @return {boolean}
+	 */
+	isAdjacent(pokemon, target) {
+		throw new Error(`The isAdjacent function needs to be implemented in scripts.js or the battle format.`);
+	}
+
+	/**
+	 * @param {string} targetType
+	 * @return {boolean}
+	 */
+	targetTypeChoices(targetType) {
+		throw new Error(`The targetTypeChoices function needs to be implemented in scripts.js or the battle format.`);
 	}
 
 	destroy() {

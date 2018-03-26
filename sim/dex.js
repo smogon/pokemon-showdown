@@ -316,7 +316,7 @@ class ModdedDex {
 	}
 
 	/**
-	 * @param {string | Template} name
+	 * @param {string | Template | undefined} [name]
 	 * @return {Template}
 	 */
 	getTemplate(name) {
@@ -406,7 +406,7 @@ class ModdedDex {
 		return this.data.Learnsets[id].learnset;
 	}
 	/**
-	 * @param {string | Move} name
+	 * @param {string | Move | undefined} [name]
 	 * @return {Move}
 	 */
 	getMove(name) {
@@ -521,7 +521,7 @@ class ModdedDex {
 		return validatedFormatid;
 	}
 	/**
-	 * @param {string | Format} name
+	 * @param {string | Format | undefined} [name]
 	 * @return {Format}
 	 */
 	getFormat(name, isTrusted = false) {
@@ -565,7 +565,7 @@ class ModdedDex {
 		return effect;
 	}
 	/**
-	 * @param {string | Item} name
+	 * @param {string | Item | undefined} [name]
 	 * @return {Item}
 	 */
 	getItem(name) {
@@ -598,7 +598,7 @@ class ModdedDex {
 		return item;
 	}
 	/**
-	 * @param {string | Ability} name
+	 * @param {string | Ability | undefined} [name]
 	 * @return {Ability}
 	 */
 	getAbility(name = '') {

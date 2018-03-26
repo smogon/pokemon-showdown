@@ -1,6 +1,7 @@
 'use strict';
 
-exports.BattleTypeChart = {
+/**@type {{[k: string]: TypeData}} */
+let BattleTypeChart = {
 	"Bug": {
 		damageTaken: {
 			"Bug": 0,
@@ -443,3 +444,5 @@ exports.BattleTypeChart = {
 		HPdvs: {"atk": 14, "def": 13},
 	},
 };
+
+exports.BattleTypeChart = BattleTypeChart;

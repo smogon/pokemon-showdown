@@ -38,7 +38,8 @@ Ratings and how they work:
 
 'use strict';
 
-exports.BattleAbilities = {
+/**@type {{[k: string]: AbilityData}} */
+let BattleAbilities = {
 	"adaptability": {
 		desc: "This Pokemon's moves that match one of its types have a same-type attack bonus (STAB) of 2 instead of 1.5.",
 		shortDesc: "This Pokemon's same-type attack bonus (STAB) is 2 instead of 1.5.",
@@ -309,8 +310,8 @@ exports.BattleAbilities = {
 		shortDesc: "Prevents other Pokemon from lowering this Pokemon's Defense stat stage.",
 		onBoost: function (boost, target, source, effect) {
 			if (source && target === source) return;
-			if (boost['def'] && boost['def'] < 0) {
-				delete boost['def'];
+			if (boost.def && boost.def < 0) {
+				delete boost.def;
 				if (!effect.secondaries) this.add("-fail", target, "unboost", "Defense", "[from] ability: Big Pecks", "[of] " + target);
 			}
 		},
@@ -384,7 +385,9 @@ exports.BattleAbilities = {
 			if (source && target === source) return;
 			let showMsg = false;
 			for (let i in boost) {
+				// @ts-ignore
 				if (boost[i] < 0) {
+					// @ts-ignore
 					delete boost[i];
 					showMsg = true;
 				}
@@ -458,6 +461,7 @@ exports.BattleAbilities = {
 			}
 			let statsLowered = false;
 			for (let i in boost) {
+				// @ts-ignore
 				if (boost[i] < 0) {
 					statsLowered = true;
 				}
@@ -488,6 +492,7 @@ exports.BattleAbilities = {
 		onBoost: function (boost, target, source, effect) {
 			if (effect && effect.id === 'zpower') return;
 			for (let i in boost) {
+				// @ts-ignore
 				boost[i] *= -1;
 			}
 		},
@@ -625,6 +630,7 @@ exports.BattleAbilities = {
 			}
 			let statsLowered = false;
 			for (let i in boost) {
+				// @ts-ignore
 				if (boost[i] < 0) {
 					statsLowered = true;
 				}
@@ -1014,7 +1020,9 @@ exports.BattleAbilities = {
 			if ((source && target === source) || !target.hasType('Grass')) return;
 			let showMsg = false;
 			for (let i in boost) {
+				// @ts-ignore
 				if (boost[i] < 0) {
+					// @ts-ignore
 					delete boost[i];
 					showMsg = true;
 				}
@@ -1083,6 +1091,7 @@ exports.BattleAbilities = {
 		desc: "On switch-in, this Pokemon is alerted to the move with the highest power, at random, known by an opposing Pokemon.",
 		shortDesc: "On switch-in, this Pokemon is alerted to the foes' move with the highest power.",
 		onStart: function (pokemon) {
+			/**@type {(Move|Pokemon)[][]} */
 			let warnMoves = [];
 			let warnBp = 1;
 			for (const target of pokemon.side.foe.active) {
@@ -1145,7 +1154,9 @@ exports.BattleAbilities = {
 			if (source && target === source) return;
 			let showMsg = false;
 			for (let i in boost) {
+				// @ts-ignore
 				if (boost[i] < 0) {
+					// @ts-ignore
 					delete boost[i];
 					showMsg = true;
 				}
@@ -1380,8 +1391,8 @@ exports.BattleAbilities = {
 		shortDesc: "Prevents other Pokemon from lowering this Pokemon's Attack stat stage.",
 		onBoost: function (boost, target, source, effect) {
 			if (source && target === source) return;
-			if (boost['atk'] && boost['atk'] < 0) {
-				delete boost['atk'];
+			if (boost.atk && boost.atk < 0) {
+				delete boost.atk;
 				if (!effect.secondaries) this.add("-fail", target, "unboost", "Attack", "[from] ability: Hyper Cutter", "[of] " + target);
 			}
 		},
@@ -1605,8 +1616,8 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon's accuracy can't be lowered by others; ignores their evasiveness stat.",
 		onBoost: function (boost, target, source, effect) {
 			if (source && target === source) return;
-			if (boost['accuracy'] && boost['accuracy'] < 0) {
-				delete boost['accuracy'];
+			if (boost.accuracy && boost.accuracy < 0) {
+				delete boost.accuracy;
 				if (!effect.secondaries) this.add("-fail", target, "unboost", "accuracy", "[from] ability: Keen Eye", "[of] " + target);
 			}
 		},
@@ -2258,9 +2269,11 @@ exports.BattleAbilities = {
 		},
 		onBasePowerPriority: 8,
 		onBasePower: function (basePower, pokemon, target, move) {
+			// @ts-ignore
 			if (move.hasParentalBond && ++move.hit > 1) return this.chainModify(0.25);
 		},
 		onSourceModifySecondaries: function (secondaries, target, source, move) {
+			// @ts-ignore
 			if (move.hasParentalBond && move.id === 'secretpower' && move.hit < 2) {
 				// hack to prevent accidentally suppressing King's Rock/Razor Fang
 				return secondaries.filter(effect => effect.volatileStatus === 'flinch');
@@ -2703,6 +2716,7 @@ exports.BattleAbilities = {
 		desc: "This Pokemon does not take recoil damage besides Struggle, Life Orb, and crash damage.",
 		shortDesc: "This Pokemon does not take recoil damage besides Struggle/Life Orb/crash damage.",
 		onDamage: function (damage, target, source, effect) {
+			if (!this.activeMove) throw new Error("Battle.activeMove is null");
 			if (effect.id === 'recoil' && this.activeMove.id !== 'struggle') return null;
 		},
 		id: "rockhead",
@@ -2877,6 +2891,7 @@ exports.BattleAbilities = {
 			if (move.secondaries) {
 				this.debug('doubling secondary chance');
 				for (const secondary of move.secondaries) {
+					// @ts-ignore
 					secondary.chance *= 2;
 				}
 			}
@@ -3030,6 +3045,7 @@ exports.BattleAbilities = {
 		onBoost: function (boost, target, source, effect) {
 			if (effect && effect.id === 'zpower') return;
 			for (let i in boost) {
+				// @ts-ignore
 				boost[i] *= 2;
 			}
 		},
@@ -3041,7 +3057,7 @@ exports.BattleAbilities = {
 	"skilllink": {
 		shortDesc: "This Pokemon's multi-hit attacks always hit the maximum number of times.",
 		onModifyMove: function (move) {
-			if (move.multihit && move.multihit.length) {
+			if (move.multihit && Array.isArray(move.multihit) && move.multihit.length) {
 				move.multihit = move.multihit[1];
 			}
 			if (move.multiaccuracy) {
@@ -3342,6 +3358,7 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon cannot lose its held item due to another Pokemon's attack.",
 		onTakeItem: function (item, pokemon, source) {
 			if (this.suppressingAttackEvents() && pokemon !== this.activePokemon || !pokemon.hp || pokemon.item === 'stickybarb') return;
+			if (!this.activeMove) throw new Error("Battle.activeMove is null");
 			if ((source && source !== pokemon) || this.activeMove.id === 'knockoff') {
 				this.add('-activate', pokemon, 'ability: Sticky Hold');
 				return false;
@@ -3507,6 +3524,7 @@ exports.BattleAbilities = {
 		onAllyAfterUseItem: function (item, pokemon) {
 			let sourceItem = this.effectData.target.getItem();
 			if (!sourceItem) return;
+			// @ts-ignore
 			if (!this.singleEvent('TakeItem', item, this.effectData.target.itemData, this.effectData.target, pokemon, this.effectData, item)) return;
 			sourceItem = this.effectData.target.takeItem();
 			if (!sourceItem) {
@@ -3529,6 +3547,7 @@ exports.BattleAbilities = {
 			if (effect && effect.id === 'toxicspikes') return;
 			if (status.id === 'slp' || status.id === 'frz') return;
 			this.add('-activate', target, 'ability: Synchronize');
+			// @ts-ignore
 			source.trySetStatus(status, target, {status: status.id, id: 'synchronize'});
 		},
 		id: "synchronize",
@@ -3555,7 +3574,7 @@ exports.BattleAbilities = {
 		onAfterDamage: function (damage, target, source, effect) {
 			if (effect && effect.flags['contact']) {
 				this.add('-ability', target, 'Tangling Hair');
-				this.boost({spe: -1}, source, target, null, null, true);
+				this.boost({spe: -1}, source, target, null, false, true);
 			}
 		},
 		id: "tanglinghair",
@@ -3968,7 +3987,9 @@ exports.BattleAbilities = {
 			if (source && target === source) return;
 			let showMsg = false;
 			for (let i in boost) {
+				// @ts-ignore
 				if (boost[i] < 0) {
+					// @ts-ignore
 					delete boost[i];
 					showMsg = true;
 				}
@@ -4139,3 +4160,5 @@ exports.BattleAbilities = {
 		num: -4,
 	},
 };
+
+exports.BattleAbilities = BattleAbilities;

@@ -20,7 +20,7 @@ const Pokemon = require('./pokemon');
  * @property {number} [index] - the chosen index in Team Preview
  * @property {Side} [side] - the action's side
  * @property {?boolean} [mega] - true if megaing or ultra bursting
- * @property {?boolean} [zmove] - true if zmoving
+ * @property {string | undefined} [zmove] - if zmoving, the name of the zmove
  * @property {number} [priority] - priority of the action
  */
 
@@ -66,6 +66,7 @@ class Side {
 		this.pokemonLeft = 0;
 		this.faintedLastTurn = false;
 		this.faintedThisTurn = false;
+		this.zMoveUsed = false;
 		/** @type {Choice} */
 		this.choice = {
 			cantUndo: false,
@@ -347,7 +348,6 @@ class Side {
 
 		// Z-move
 
-		// @ts-ignore - battle script
 		const zMove = megaOrZ === 'zmove' ? this.battle.getZMove(move, pokemon) : undefined;
 		if (megaOrZ === 'zmove' && !zMove) {
 			return this.emitChoiceError(`Can't move: ${pokemon.name} can't use ${move.name} as a Z-move`);
@@ -364,7 +364,6 @@ class Side {
 
 		if (autoChoose) {
 			targetLoc = 0;
-			// @ts-ignore - battle script
 		} else if (this.battle.targetTypeChoices(targetType)) {
 			if (!targetLoc && this.active.length >= 2) {
 				return this.emitChoiceError(`Can't move: ${move.name} needs a target`);
@@ -399,10 +398,13 @@ class Side {
 			let disabledSource = '';
 			for (const moveId of moves) {
 				if (moveId.id !== moveid) continue;
+				// @ts-ignore
 				if (!moveId.disabled) {
 					isEnabled = true;
 					break;
+				// @ts-ignore
 				} else if (moveId.disabledSource) {
+					// @ts-ignore
 					disabledSource = moveId.disabledSource;
 				}
 			}
