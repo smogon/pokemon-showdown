@@ -5,6 +5,8 @@
  * Interface for viewing and searching modlog. These run in a
  * subprocess.
  *
+ * Also handles searching battle logs.
+ *
  * Actually writing to modlog is handled in chat.js, rooms.js, and
  * roomlogs.js
  *
@@ -57,6 +59,10 @@ class SortedLimitedLengthList {
 		return true;
 	}
 }
+
+/*********************************************************
+ * Modlog Functions
+ *********************************************************/
 
 function checkRipgrepAvailability() {
 	if (Config.ripgrepmodlog === undefined) {
@@ -263,9 +269,96 @@ function getModlog(connection, roomid = 'global', searchString = '', maxLines = 
 		roomidList = [roomid];
 	}
 
-	PM.query({roomidList, searchString, exactSearch, maxLines}).then(response => {
+	PM.query({cmd: 'modlog', roomidList, searchString, exactSearch, maxLines}).then(response => {
 		connection.send(prettifyResults(response, roomid, searchString, exactSearch, addModlogLinks, hideIps, maxLines));
 		if (timed) connection.popup(`The modlog query took ${Date.now() - startTime} ms to complete.`);
+	});
+}
+
+/*********************************************************
+ * Battle Search Functions
+ *********************************************************/
+
+async function runBattleSearch(userid, tierid, turnLimit) {
+	let dirs = await FS('logs/').readdir();
+	dirs = dirs.filter(f => f.length === 7 && f.includes('-'));
+	let results = {
+		totalBattles: 0,
+		totalWins: 0,
+		totalLosses: 0,
+		totalTies: 0,
+	};
+	for (const month of dirs) {
+		let days = [];
+		try {
+			days = await FS(`logs/${month}/${tierid}`).readdir();
+		} catch (err) {
+			if (err.code === 'ENOENT') continue;
+			throw err;
+		}
+		for (const day of days) {
+			const out = await readBattleDir(`logs/${month}/${tierid}/${day}`, userid, turnLimit);
+			for (const key in out) {
+				if (!results[key]) {
+					results[key] = out[key];
+				} else {
+					results[key] += out[key];
+				}
+			}
+		}
+	}
+	return results;
+}
+
+async function readBattleDir(path, userid, turnLimit) {
+	const files = await FS(path).readdir();
+	let out = {
+		totalBattles: 0,
+		totalWins: 0,
+		totalLosses: 0,
+		totalTies: 0,
+	};
+	for (const file of files) {
+		let data = await FS(`${path}/${file}`).readIfExists();
+		data = JSON.parse(data);
+		if (toId(data.p1) !== userid && toId(data.p2) !== userid) continue;
+		if (data.turns > turnLimit) continue;
+		out.totalBattles++;
+		if (toId(data.winner) === userid) {
+			out.totalWins++;
+		} else if (toId(data.winner)) {
+			out.totalLosses++;
+		} else {
+			out.totalTies++;
+		}
+		const foe = toId(data.p1) === userid ? toId(data.p2) : toId(data.p1);
+		if (!out[foe]) out[foe] = 0;
+		out[foe]++;
+	}
+	return out;
+}
+
+function buildResults(data, userid, tierid, turnLimit) {
+	const format = Dex.getFormat(tierid);
+	let buf = `>view-battlesearch-${userid}-${format.id}-${turnLimit}\n|init|html\n|title|[Battle Search][${userid}][${format.id}]\n`;
+	buf += `|pagehtml|<div class="pad ladder">Results for ${Chat.escapeHTML(format.name)} where ${userid} was a player and the battle ended in ${turnLimit} or less turns:<br /><br />`;
+	buf += `<table style="margin-left: auto; margin-right: auto"><tbody><tr><th colspan="2"><h2 style="margin: 5px auto">${userid}'s ${Chat.escapeHTML(format.name)} Battles</h1></th></tr><tr><th>Category</th><th>Number</th></tr>`;
+	buf += `<tr><td>Total Battles</td><td>${data.totalBattles}</td></tr><tr><td>Total Wins</td><td>${data.totalWins}</td></tr><tr><td>Total Losses</td><td>${data.totalLosses}</td></tr><tr><td>Total Ties</td><td>${data.totalTies}</td></tr>`;
+	buf += `<tr><th>Opponent</th><th>Times Battled</th></tr>`;
+	for (let foe in data) {
+		if (['totalBattles', 'totalWins', 'totalLosses', 'totalTies'].includes(foe)) continue;
+		buf += `<tr><td>${foe}</td><td>${data[foe]}</td></tr>`;
+	}
+	buf += `</tbody></table></div>`;
+	return buf;
+}
+
+function getBattleSearch(connection, userid, tierid, turnLimit = 1) {
+	const user = connection.user;
+	if (!user.can('forcewin')) return connection.popup(`Access Denied`);
+
+	PM.query({cmd: 'battlesearch', userid, tierid, turnLimit}).then(response => {
+		connection.send(buildResults(response, userid, tierid, turnLimit));
 	});
 }
 
@@ -276,6 +369,21 @@ exports.pages = {
 		const target = Dashycode.decode(args.slice(1).join('-'));
 
 		getModlog(connection, roomid, target);
+	},
+	battlesearch(args, user, connection) {
+		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
+		let [userid, tierid, turnLimit] = args.map(x => { return toId(x); });
+		if (!userid || !tierid) return;
+		const format = Dex.getFormat(tierid);
+		if (format.exists) tierid = format.id;
+		if (!turnLimit) {
+			turnLimit = 1;
+		} else {
+			turnLimit = parseInt(turnLimit);
+			if (isNaN(turnLimit)) turnLimit = 1;
+		}
+
+		getBattleSearch(connection, userid, tierid, turnLimit);
 	},
 };
 
@@ -323,6 +431,24 @@ exports.commands = {
 		`If you set [roomid] as [all], it searches for [search] on all rooms' moderator logs.`,
 		`If you set [roomid] as [public], it searches for [search] in all public rooms' moderator logs, excluding battles. Requires: % @ * # & ~`,
 	],
+
+	battlesearch: function (target, room, user, connection) {
+		if (!target.trim()) return this.parse('/help battlesearch');
+
+		let [userid, tierid, turnLimit] = target.split(',').map(x => { return toId(x); });
+		if (!userid || !tierid) return this.parse('/help battlesearch');
+		const format = Dex.getFormat(tierid);
+		if (format.exists) tierid = format.id;
+		if (!turnLimit) {
+			turnLimit = 1;
+		} else {
+			turnLimit = parseInt(turnLimit);
+			if (isNaN(turnLimit) || turnLimit < 1) turnLimit = 1;
+		}
+
+		getBattleSearch(connection, userid, tierid, turnLimit);
+	},
+	battlesearchhelp: ['/battlesearch [user], [tier], (turn limit) - Searches a users rated battle history and returns information on battles that ended in (turn limit or 1) turns or less. Requires &, ~'],
 };
 
 /*********************************************************
@@ -332,16 +458,32 @@ exports.commands = {
 const QueryProcessManager = require('./../lib/process-manager').QueryProcessManager;
 
 const PM = new QueryProcessManager(module, async data => {
-	const {roomidList, searchString, exactSearch, maxLines} = data;
-	try {
-		return await runModlog(roomidList, searchString, exactSearch, maxLines);
-	} catch (err) {
-		require('../lib/crashlogger')(err, 'A modlog query', {
-			roomidList,
-			searchString,
-			exactSearch,
-			maxLines,
-		});
+	switch (data.cmd) {
+	case 'modlog':
+		const {roomidList, searchString, exactSearch, maxLines} = data;
+		try {
+			return await runModlog(roomidList, searchString, exactSearch, maxLines);
+		} catch (err) {
+			require('../lib/crashlogger')(err, 'A modlog query', {
+				roomidList,
+				searchString,
+				exactSearch,
+				maxLines,
+			});
+		}
+		break;
+	case 'battlesearch':
+		const {userid, tierid, turnLimit} = data;
+		try {
+			return await runBattleSearch(userid, tierid, turnLimit);
+		} catch (err) {
+			require('../lib/crashlogger')(err, 'A battle search query', {
+				userid,
+				tierid,
+				turnLimit,
+			});
+		}
+		break;
 	}
 	return null;
 });
