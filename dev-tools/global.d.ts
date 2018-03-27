@@ -2,6 +2,7 @@ import * as BattleType from './../sim/battle'
 import * as BattleStreamType from './../sim/battle-stream'
 import * as DataType from './../sim/dex-data'
 import * as DexType from './../sim/dex'
+import * as SimType from './../sim/index'
 import * as PokemonType from './../sim/pokemon'
 import * as PRNGType from './../sim/prng'
 import * as SideType from './../sim/side'
@@ -41,6 +42,7 @@ declare global {
 	const Pokemon: typeof PokemonType
 	const PRNG: typeof PRNGType
 	const Side: typeof SideType
+	const Sim: typeof SimType
 	const TeamValidator: typeof TeamValidatorType
 	const Validator: typeof TeamValidatorType.Validator
 	const BattleStream: typeof BattleStreamType.BattleStream

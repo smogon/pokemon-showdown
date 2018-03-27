@@ -11,6 +11,8 @@
     },
     "types": ["node"],
     "include": [
+        "./config/formats.js",
+        "./data/*",
         "./dev-tools/global.d.ts",
         "./dev-tools/globals.ts",
         "./dev-tools/node.d.ts",

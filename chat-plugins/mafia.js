@@ -297,6 +297,8 @@ class MafiaTracker extends Rooms.RoomGame {
 				if (!alignments[role.alignment]) alignments[role.alignment] = [];
 				alignments[role.alignment].push(this.players[p].userid);
 			}
+			let u = Users(p);
+			if (u && u.connected) u.send(`>${this.room.id}\n|notify|Your role is ${role.safeName}. For more details of your role, check your Role PM.`);
 		}
 		for (let a in alignments) {
 			for (const p of alignments[a]) {
@@ -347,6 +349,8 @@ class MafiaTracker extends Rooms.RoomGame {
 		if (this.phase !== 'day') return false;
 		if (this.timer) this.setDeadline('off', true);
 		this.phase = 'night';
+		let host = Users(this.hostid);
+		if (host && host.connected) host.send(`>${this.room.id}\n|notify|It's night in your game of Mafia!`);
 		this.sendRoom(`Night ${this.dayNum}. PM the host your action, or idle.`, {declare: true});
 		if (!early && this.getPlurality()) this.sendRoom(`Plurality is on ${this.players[this.getPlurality()] ? this.players[this.getPlurality()].name : 'No Lynch'}`);
 		this.updatePlayers();
@@ -641,7 +645,10 @@ class MafiaTracker extends Rooms.RoomGame {
 			}
 		}
 		let u = Users(userid);
-		if (u && u.connected) u.send(`>view-mafia-${this.room.id}\n|init|html\n${Chat.pages.mafia([this.room.id], u)}`);
+		if (u && u.connected) {
+			u.send(`>view-mafia-${this.room.id}\n|init|html\n${Chat.pages.mafia([this.room.id], u)}`);
+			u.send(`>${this.room.id}\n|notify|You have been substituted in the mafia game for ${oldPlayer.safeName}.`);
+		}
 		if (this.started) this.played.push(newPlayer.userid);
 		this.sendRoom(`${oldPlayer.safeName} has been subbed out. ${newPlayer.safeName} has joined the game.`, {declare: true});
 		this.updatePlayers();

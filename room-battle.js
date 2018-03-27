@@ -138,6 +138,8 @@ class BattleTimer {
 		const hasLongTurns = Dex.getFormat(battle.format, true).gameType !== 'singles';
 		const isChallenge = (!battle.rated && !battle.room.tour);
 		const timerSettings = Dex.getFormat(battle.format, true).timer;
+		/**@type {{perTurnTicks: number, startingTicks: number, maxPerTurnTicks: number, maxFirstTurnTicks: number, dcTimer: boolean, starting?: number, perTurn?: number, maxPerTurn?: number, maxFirstTurn?: number, timeoutAutoChoose?: boolean, accelerate?: boolean}} */
+		// @ts-ignore
 		this.settings = Object.assign({}, timerSettings);
 		if (this.settings.perTurn === undefined) {
 			this.settings.perTurn = hasLongTurns ? 25 : 10;

@@ -1,6 +1,7 @@
 'use strict';
 
-exports.BattleLearnsets = {
+/**@type {{[k: string]: {learnset: {[k: string]: MoveSource[]}}}} */
+let BattleLearnsets = {
 	missingno: {learnset: {
 		blizzard: ["5L1"],
 		bubblebeam: ["5L1"],
@@ -64132,3 +64133,5 @@ exports.BattleLearnsets = {
 		workup: ["7M"],
 	}},
 };
+
+exports.BattleLearnsets = BattleLearnsets;
