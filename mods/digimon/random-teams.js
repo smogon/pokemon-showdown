@@ -10,99 +10,99 @@ class RandomDigimonTeams extends RandomTeams {
 			"Botamon": {
 				species: "Botamon",
 				ability: "Data",
-				rarity: 3,
+				
 				moves: ['acidbubble'],
 			},
 			"Dodomon": {
 				species: "Dodomon",
 				ability: "Data",
-				rarity: 3,
+				
 				moves: ['acidbubble'],
 			},
 			"Kuramon": {
 				species: "Kuramon",
 				ability: "Virus",
-				rarity: 3,
+				
 				moves: ['acidbubble'],
 			},
 			"Poyomon": {
 				species: "Poyomon",
 				ability: "Data",
-				rarity: 3,
+				
 				moves: ['acidbubble'],
 			},
 			"Punimon": {
 				species: "Punimon",
 				ability: "Data",
-				rarity: 3,
+				
 				moves: ['acidbubble'],
 			},
 			"Yuramon": {
 				species: "Yuramon",
 				ability: "Data",
-				rarity: 3,
+				
 				moves: ['acidbubble'],
 			},
 			//In-Traning//
 			"Bukamon": {
 				species: "Bukamon",
 				ability: "Data",
-				rarity: 3,
+				
 				moves: ['acidbubble'],
 			},
 			"Dorimon": {
 				species: "Dorimon",
 				ability: "Data",
-				rarity: 3,
+				
 				moves: ['acidbubble'],
 			},
 			"Koromon": {
 				species: "Koromon",
 				ability: "Data",
-				rarity: 3,
+				
 				moves: ['acidbubble'],
 			},
 			"Motimon": {
 				species: "Motimon",
 				ability: "Data",
-				rarity: 3,
+				
 				moves: ['acidbubble'],
 			},
 			"Nyaromon": {
 				species: "Nyaromon",
 				ability: "Vaccine",
-				rarity: 3,
+				
 				moves: ['acidbubble'],
 			},
 			"Tanemon": {
 				species: "Tanemon",
 				ability: "Data",
-				rarity: 3,
+				
 				moves: ['acidbubble'],
 			},
 			"Tokomon": {
 				species: "Tokomon",
 				ability: "Data",
-				rarity: 3,
+				
 				moves: ['acidbubble'],
 			},
 			"Tsumemon": {
 				species: "Tsumemon",
 				ability: "Virus",
-				rarity: 3,
+				
 				moves: ['acidbubble'],
 			},
 			"Tsunomon": {
 				species: "Tsunomon",
 				ability: "Data",
-				rarity: 3,
+				
 				moves: ['acidbubble'],
 			},
 			//Rookies//
 			"Agumon": {
 				species: "Agumon",
 				ability: "Vaccine",
-				rarity: 2,
+				
 				moves: ['burningheart', 'heatbreath', 'firetower', 'infinityburn', 'musclecharge', 'sonicjab', 'windcutter'],
 				baseSignatureMove: "pepperbreath",
 				signatureMove: "Pepper Breath",
@@ -110,7 +110,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Aruramon": {
 				species: "Aruramon",
 				ability: "Virus",
-				rarity: 2,
+				
 				moves: ['charmperfume', 'rootbind', 'venomdisaster', 'waterblitz', 'superstinkyjet', 'shadowfall', 'blackout'],
 				baseSignatureMove: "nemesisivy",
 				signatureMove: "Nemesis Ivy",
@@ -118,7 +118,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Betamon": {
 				species: "Betamon",
 				ability: "Virus",
-				rarity: 2,
+				
 				moves: ['staticelectricity', 'electriccloud', 'megalospark', 'hailspear', 'waterblitz', 'oceanwave'],
 				baseSignatureMove: "electricshock",
 				signatureMove: "Electric Shock",
@@ -126,7 +126,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Biyomon": {
 				species: "Biyomon",
 				ability: "Vaccine",
-				rarity: 2,
+				
 				moves: ['wingshoes', 'windcutter', 'burningheart', 'heatbreath', 'firetower', 'meltdown', 'warcry', 'holyflash', 'rootbind'],
 				baseSignatureMove: "spiraltwister",
 				signatureMove: "Spiral Twister",
@@ -134,7 +134,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"ClearAgumon": {
 				species: "ClearAgumon",
 				ability: "Vaccine",
-				rarity: 2,
+				
 				moves: ['heatbreath', 'saintshield', 'saintray', 'holyflash', 'mechanicalclaw', 'upgrade', 'gigawattlaser'],
 				baseSignatureMove: "preciousflame",
 				signatureMove: "Precious Flame",
@@ -142,7 +142,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"DemiDevimon": {
 				species: "DemiDevimon",
 				ability: "Virus",
-				rarity: 2,
+				
 				moves: ['blackout', 'evilfantasy', 'shadowfall', 'hideandseek', 'windcutter', 'confusedstorm', 'cootieskick'],
 				baseSignatureMove: "demidart",
 				signatureMove: "Demi Dart",
@@ -150,7 +150,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Dokunemon": {
 				species: "Dokunemon",
 				ability: "Virus",
-				rarity: 2,
+				
 				moves: ['staticelectricity', 'shadowfall', 'earthcoat', 'massmorph', 'bug', 'venomdisaster', 'blackout'],
 				baseSignatureMove: "wormvenom",
 				signatureMove: "Worm Venom",
@@ -158,7 +158,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Dorumon": {
 				species: "Dorumon",
 				ability: "Data",
-				rarity: 2,
+				
 				moves: ['burningheart', 'megalospark', 'musclecharge', 'sonicjab', 'fightingaura', 'busterdrive', 'mechanicalclaw', 'antiattackfield'],
 				baseSignatureMove: "metalcannon",
 				signatureMove: "Metal Cannon",
@@ -166,7 +166,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Elecmon": {
 				species: "Elecmon",
 				ability: "Data",
-				rarity: 2,
+				
 				moves: ['staticelectricity', 'electriccloud', 'megalospark', 'thunderjustice', 'saintheal', 'warcry', 'fightingaura'],
 				baseSignatureMove: "superthunderstrike",
 				signatureMove: "Super Thunder Strike",
@@ -174,7 +174,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Gabumon": {
 				species: "Gabumon",
 				ability: "Data",
-				rarity: 2,
+				
 				moves: ['heatbreath', 'firetower', 'hailspear', 'winterblast', 'gigafreeze', 'icestatue', 'musclecharge', 'sonicjab'],
 				baseSignatureMove: "blueblaster",
 				signatureMove: "Blue Blaster",
@@ -182,7 +182,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Goburimon": {
 				species: "Goburimon",
 				ability: "Virus",
-				rarity: 2,
+				
 				moves: ['heatbreath', 'firetower', 'infinityburn', 'musclecharge', 'burningheart', 'reboundstrike', 'megatonpunch', 'shadowfall', 'pooptoss'],
 				baseSignatureMove: "goblinstrike",
 				signatureMove: "Goblin Strike",
@@ -190,7 +190,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Gomamon": {
 				species: "Gomamon",
 				ability: "Vaccine",
-				rarity: 2,
+				
 				moves: ['mechanicalclaw', 'waterblitz', 'oceanwave', 'icestatue', 'aurorafreeze', 'warcry', 'reboundstrike'],
 				baseSignatureMove: "marchingfishes",
 				signatureMove: "Marching Fishes",
@@ -198,7 +198,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Gotsumon": {
 				species: "Gotsumon",
 				ability: "Data",
-				rarity: 2,
+				
 				moves: ['earthcoat', 'rockfall', 'charmperfume', 'venomdisaster', 'bug', 'megatonpunch', 'fightingaura'],
 				baseSignatureMove: "rockfist",
 				signatureMove: "Rock Fist",
@@ -206,7 +206,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Kunemon": {
 				species: "Kunemon",
 				ability: "Virus",
-				rarity: 2,
+				
 				moves: ['staticelectricity', 'megalospark', 'earthcoat', 'massmorph', 'bug', 'venomdisaster', 'superstinkyjet'],
 				baseSignatureMove: "electricthread",
 				signatureMove: "Electric Thread",
@@ -214,7 +214,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"ModokiBetamon": {
 				species: "ModokiBetamon",
 				ability: "Vaccine",
-				rarity: 2,
+				
 				moves: ['staticelectricity', 'electriccloud', 'confusedstorm', 'hailspear', 'icestatue', 'rootbind', 'waterblitz'],
 				baseSignatureMove: "aquatower",
 				signatureMove: "Aqua Tower",
@@ -222,7 +222,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Muchomon": {
 				species: "Muchomon",
 				ability: "Data",
-				rarity: 2,
+				
 				moves: ['burningheart', 'hailspear', 'waterblitz', 'icestatue', 'windcutter', 'infinityburn', 'firewall'],
 				baseSignatureMove: "tropicalbeak",
 				signatureMove: "Tropical Beak",
@@ -230,7 +230,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Otamamon": {
 				species: "Otamamon",
 				ability: "Data",
-				rarity: 2,
+				
 				moves: ['hailspear', 'waterblitz', 'oceanwave', 'icestatue', 'bug', 'charmperfume', 'warcry'],
 				baseSignatureMove: "lullabybubble",
 				signatureMove: "Lullaby Bubble",
@@ -238,7 +238,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Palmon": {
 				species: "Palmon",
 				ability: "Vaccine",
-				rarity: 2,
+				
 				moves: ['charmperfume', 'rootbind', 'venomdisaster', 'waterblitz', 'superstinkyjet', 'burningheart', 'confusedstorm'],
 				baseSignatureMove: "poisonivy",
 				signatureMove: "Poison Ivy",
@@ -246,7 +246,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Patamon": {
 				species: "Patamon",
 				ability: "Data",
-				rarity: 2,
+				
 				moves: ['wingshoes', 'windcutter', 'sonicjab', 'busterdrive', 'saintheal', 'holybreath', 'holyflash'],
 				baseSignatureMove: "boombubble",
 				signatureMove: "Boom Bubble",
@@ -254,7 +254,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Penguinmon": {
 				species: "Penguinmon",
 				ability: "Data",
-				rarity: 2,
+				
 				moves: ['musclecharge', 'hailspear', 'waterblitz', 'icestatue', 'windcutter', 'megalospark', 'earthcoat'],
 				baseSignatureMove: "eternalslapping",
 				signatureMove: "Eternal Slapping",
@@ -262,7 +262,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Psychemon": {
 				species: "Psychemon",
 				ability: "Vaccine",
-				rarity: 2,
+				
 				moves: ['heatbreath', 'firetower', 'staticelectricity', 'winterblast', 'confusedstorm', 'icestatue', 'musclecharge', 'sonicjab'],
 				baseSignatureMove: "coloredsparkle",
 				signatureMove: "Colored Sparkle",
@@ -270,7 +270,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Salamon": {
 				species: "Salamon",
 				ability: "Vaccine",
-				rarity: 2,
+				
 				moves: ['saintheal', 'holybreath', 'holyflash', 'saintray', 'warcry', 'antiattackfield', 'fightingaura'],
 				baseSignatureMove: "puppyhowl",
 				signatureMove: "Puppy Howl",
@@ -278,7 +278,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Shamamon": {
 				species: "Shamamon",
 				ability: "Virus",
-				rarity: 2,
+				
 				moves: ['charmperfume', 'rootbind', 'rockfall', 'musclecharge', 'warcry', 'reboundstrike', 'megatonpunch', 'shadowfall', 'pooptoss'],
 				baseSignatureMove: "dancingbone",
 				signatureMove: "Dancing Bone",
@@ -286,7 +286,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"SnowAgumon": {
 				species: "SnowAgumon",
 				ability: "Vaccine",
-				rarity: 2,
+				
 				moves: ['burningheart', 'hailspear', 'winterblast', 'icestatue', 'musclecharge', 'sonicjab', 'windcutter'],
 				baseSignatureMove: "littleblizzard",
 				signatureMove: "Little Blizzard",
@@ -294,7 +294,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"SnowGoburimon": {
 				species: "SnowGoburimon",
 				ability: "Virus",
-				rarity: 2,
+				
 				moves: ['hailspear', 'winterblast', 'icestatue', 'musclecharge', 'warcry', 'reboundstrike', 'megatonpunch', 'shadowfall', 'pooptoss'],
 				baseSignatureMove: "snowgobbolt",
 				signatureMove: "SnowGob Bolt",
@@ -302,7 +302,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Tentomon": {
 				species: "Tentomon",
 				ability: "Data",
-				rarity: 2,
+				
 				moves: ['staticelectricity', 'confusedstorm', 'electriccloud', 'megalospark', 'massmorph', 'bug', 'rockfall', 'fightingaura'],
 				baseSignatureMove: "supershocker",
 				signatureMove: "Super Shocker",
@@ -310,7 +310,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"ToyAgumon": {
 				species: "ToyAgumon",
 				ability: "Data",
-				rarity: 2,
+				
 				moves: ['heatbreath', 'firewall', 'prominencebeam', 'sonicjab', 'mechanicalclaw', 'upgrade', 'gigawattlaser'],
 				baseSignatureMove: "plasticblaze",
 				signatureMove: "Plastic Blaze",
@@ -318,7 +318,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Tsukaimon": {
 				species: "Tsukaimon",
 				ability: "Virus",
-				rarity: 2,
+				
 				moves: ['wingshoes', 'windcutter', 'sonicjab', 'darkspirit', 'blackout', 'evilfantasy', 'chaoscloud'],
 				baseSignatureMove: "evilspell",
 				signatureMove: "Evil Spell",
@@ -327,7 +327,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Airdramon": {
 				species: "Airdramon",
 				ability: "Vaccine",
-				rarity: 1,
+				
 				moves: ['heatbreath', 'firetower', 'meltdown', 'infinityburn', 'wingshoes', 'windcutter', 'confusedstorm', 'holybreath'],
 				baseSignatureMove: "spinningneedle",
 				signatureMove: "Spinning Needle",
@@ -335,7 +335,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Akatorimon": {
 				species: "Akatorimon",
 				ability: "Data",
-				rarity: 1,
+				
 				moves: ['heatbreath', 'firewall', 'wingshoes', 'windcutter', 'megalospark', 'icestatue', 'guerrillapoop'],
 				baseSignatureMove: "scarredeye",
 				signatureMove: "Scar-Red Eye",
@@ -343,7 +343,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Angemon": {
 				species: "Angemon",
 				ability: "Vaccine",
-				rarity: 1,
+				
 				moves: ['wingshoes', 'windcutter', 'sonicjab', 'busterdrive', 'saintheal', 'holybreath', 'holyflash', 'saintray', 'holyjudgment'],
 				baseSignatureMove: "handoffate",
 				signatureMove: "Hand of Fate",
@@ -351,7 +351,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Bakemon": {
 				species: "Bakemon",
 				ability: "Virus",
-				rarity: 1,
+				
 				moves: ['darkspirit', 'blackout', 'evilfantasy', 'shadowfall', 'massmorph', 'icestatue', 'staticelectricity', 'electriccloud', 'thunderjustice'],
 				baseSignatureMove: "evilcharm",
 				signatureMove: "Evil Charm",
@@ -359,7 +359,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Birdramon": {
 				species: "Birdramon",
 				ability: "Vaccine",
-				rarity: 1,
+				
 				moves: ['wingshoes', 'windcutter', 'burningheart', 'heatbreath', 'firetower', 'meltdown', 'infinityburn', 'warcry', 'holyflash'],
 				baseSignatureMove: "meteorwing",
 				signatureMove: "Meteor Wing",
@@ -367,7 +367,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"BlackGatomon": {
 				species: "BlackGatomon",
 				ability: "Virus",
-				rarity: 1,
+				
 				moves: ['warcry', 'sonicjab', 'fightingaura', 'evilsquall', 'evilfantasy', 'hideandseek', 'gigafreeze'],
 				baseSignatureMove: "darkpaw",
 				signatureMove: "Dark Paw",
@@ -375,7 +375,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Centarumon": {
 				species: "Centarumon",
 				ability: "Data",
-				rarity: 1,
+				
 				moves: ['firetower', 'firewall', 'prominencebeam', 'saintheal', 'saintray', 'fightingaura', 'upgrade', 'gigawattlaser'],
 				baseSignatureMove: "solarray",
 				signatureMove: "Solar Ray",
@@ -383,7 +383,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Coelamon": {
 				species: "Coelamon",
 				ability: "Data",
-				rarity: 1,
+				
 				moves: ['waterblitz', 'icestatue', 'mechanicalclaw', 'upgrade', 'antiattackfield', 'massmorph', 'staticelectricity', 'deleteprogram'],
 				baseSignatureMove: "variabledarts",
 				signatureMove: "Variable Darts",
@@ -391,7 +391,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Darkrizamon": {
 				species: "Darkrizamon",
 				ability: "Virus",
-				rarity: 1,
+				
 				moves: ['heatbreath', 'firetower', 'firewall', 'meltdown', 'darkspirit', 'evilfantasy', 'shadowfall', 'mechanicalclaw'],
 				baseSignatureMove: "dreadfire",
 				signatureMove: "Dread Fire",
@@ -399,7 +399,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Devimon": {
 				species: "Devimon",
 				ability: "Virus",
-				rarity: 1,
+				
 				moves: ['darkspirit', 'windcutter', 'evilfantasy', 'chaoscloud', 'aurorafreeze', 'evilsquall', 'confusedstorm', 'wingshoes'],
 				baseSignatureMove: "deathhand",
 				signatureMove: "Death Hand",
@@ -407,7 +407,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Dolphmon": {
 				species: "Dolphmon",
 				ability: "Vaccine",
-				rarity: 1,
+				
 				moves: ['waterblitz', 'gigafreeze', 'oceanwave', 'icestatue', 'warcry', 'sonicjab', 'fightingaura', 'holybreath', 'saintheal'],
 				baseSignatureMove: "pulseblast",
 				signatureMove: "Pulse Blast",
@@ -415,7 +415,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Dorugamon": {
 				species: "Dorugamon",
 				ability: "Data",
-				rarity: 1,
+				
 				moves: ['burningheart', 'winterblast', 'megalospark', 'musclecharge', 'sonicjab', 'fightingaura', 'busterdrive', 'mechanicalclaw', 'antiattackfield'],
 				baseSignatureMove: "powermetal",
 				signatureMove: "Power Metal",
@@ -423,7 +423,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Drimogemon": {
 				species: "Drimogemon",
 				ability: "Data",
-				rarity: 1,
+				
 				moves: ['mechanicalclaw', 'deleteprogram', 'earthcoat', 'massmorph', 'rootbind', 'rockfall'],
 				baseSignatureMove: "drillspin",
 				signatureMove: "Drill Spin",
@@ -431,7 +431,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Flarerizamon": {
 				species: "Flarerizamon",
 				ability: "Data",
-				rarity: 1,
+				
 				moves: ['heatbreath', 'firetower', 'firewall', 'meltdown', 'sonicjab', 'warcry', 'megatonpunch', 'mechanicalclaw'],
 				baseSignatureMove: "blazebuster",
 				signatureMove: "Blaze Buster",
@@ -439,7 +439,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Frigimon": {
 				species: "Frigimon",
 				ability: "Vaccine",
-				rarity: 1,
+				
 				moves: ['hailspear', 'icestatue', 'aurorafreeze', 'waterblitz', 'sonicjab', 'musclecharge', 'fightingaura'],
 				baseSignatureMove: "subzeroicepunch",
 				signatureMove: "Sub Zero Ice Punch",
@@ -447,15 +447,15 @@ class RandomDigimonTeams extends RandomTeams {
 			"Fugamon": {
 				species: "Fugamon",
 				ability: "Virus",
-				rarity: 1,
+				
 				moves: ['staticelectricity', 'windcutter', 'megalospark', 'blackout', 'musclecharge', 'warcry', 'reboundstrike', 'megatonpunch'],
-				baseSignatureMove: "subzeroicepunch",
-				signatureMove: "Sub Zero Ice Punch",
+				baseSignatureMove: "evilhurricane",
+				signatureMove: "Evil Hurricane",
 			},
 			"Garurumon": {
 				species: "Garurumon",
 				ability: "Data",
-				rarity: 1,
+				
 				moves: ['warcry', 'waterblitz', 'fightingaura', 'burningheart', 'heatbreath', 'gigafreeze', 'hailspear', 'meltdown', 'aurorafreeze'],
 				baseSignatureMove: "howlingblaster",
 				signatureMove: "Howling Blaster",
@@ -463,7 +463,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Gatomon": {
 				species: "Gatomon",
 				ability: "Vaccine",
-				rarity: 1,
+				
 				moves: ['holybreath', 'sonicjab', 'fightingaura', 'saintray', 'saintheal', 'holyflash', 'confusedstorm'],
 				baseSignatureMove: "lightningpaw",
 				signatureMove: "Lightning Paw",
@@ -471,7 +471,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Gekomon": {
 				species: "Gekomon",
 				ability: "Data",
-				rarity: 1,
+				
 				moves: ['hailspear', 'confusedstorm', 'oceanwave', 'icestatue', 'gigafreeze', 'warcry', 'charmperfume'],
 				baseSignatureMove: "symphonycrusher",
 				signatureMove: "Symphony Crusher",
@@ -479,7 +479,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Geremon": {
 				species: "Geremon",
 				ability: "Virus",
-				rarity: 1,
+				
 				moves: ['gigafreeze', 'earthcoat', 'bug', 'venomdisaster', 'warcry', 'superstinkyjet', 'poopattackfield', 'guerrillapoop', 'extremepoopdeath'],
 				baseSignatureMove: "hypersmell",
 				signatureMove: "Hyper Smell",
@@ -487,7 +487,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Greymon": {
 				species: "Greymon",
 				ability: "Vaccine",
-				rarity: 1,
+				
 				moves: ['burningheart', 'heatbreath', 'firetower', 'infinityburn', 'musclecharge', 'sonicjab', 'megalospark'],
 				baseSignatureMove: "megaflame",
 				signatureMove: "Mega Flame",
@@ -495,7 +495,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Guardromon": {
 				species: "Guardromon",
 				ability: "Vaccine",
-				rarity: 1,
+				
 				moves: ['upgrade', 'reverseprogram', 'antiattackfield', 'gigawattlaser', 'megalospark', 'saintshield', 'firetower', 'firewall', 'thunderjustice'],
 				baseSignatureMove: "guardianbarrage",
 				signatureMove: "Guardian Barrage",
@@ -503,7 +503,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Gururumon": {
 				species: "Gururumon",
 				ability: "Vaccine",
-				rarity: 1,
+				
 				moves: ['warcry', 'waterblitz', 'fightingaura', 'burningheart', 'blackout', 'gigafreeze', 'darkspirit', 'evilfantasy', 'aurorafreeze'],
 				baseSignatureMove: "chaosblaster",
 				signatureMove: "Chaos Blaster",
@@ -511,7 +511,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Hyogamon": {
 				species: "Hyogamon",
 				ability: "Virus",
-				rarity: 1,
+				
 				moves: ['hailspear', 'winterblast', 'icestatue', 'blackout', 'musclecharge', 'warcry', 'reboundstrike', 'megatonpunch'],
 				baseSignatureMove: "snowpunch",
 				signatureMove: "snowpunch",
@@ -519,7 +519,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"IceDevimon": {
 				species: "IceDevimon",
 				ability: "Virus",
-				rarity: 1,
+				
 				moves: ['darkspirit', 'blackout', 'evilfantasy', 'chaoscloud', 'shadowfall', 'evilsquall', 'winterblast', 'gigafreeze'],
 				baseSignatureMove: "frozenclaw",
 				signatureMove: "Frozen Claw",
@@ -527,7 +527,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Icemon": {
 				species: "Icemon",
 				ability: "Data",
-				rarity: 1,
+				
 				moves: ['earthcoat', 'rockfall', 'hailspear', 'aurorafreeze', 'gigafreeze', 'megatonpunch', 'fightingaura'],
 				baseSignatureMove: "iceballbomb",
 				signatureMove: "Iceball Bomb",
@@ -535,7 +535,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Ikkakumon": {
 				species: "Ikkakumon",
 				ability: "Vaccine",
-				rarity: 1,
+				
 				moves: ['hailspear', 'oceanwave', 'icestatue', 'aurorafreeze', 'mechanicalclaw', 'warcry', 'reboundstrike'],
 				baseSignatureMove: "harpoontorpedo",
 				signatureMove: "Harpoon Torpedo",
@@ -543,7 +543,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"JungleMojyamon": {
 				species: "JungleMojyamon",
 				ability: "Vaccine",
-				rarity: 1,
+				
 				moves: ['earthcoat', 'rootbind', 'warcry', 'musclecharge', 'sonicjab', 'fightingaura', 'superstinkyjet', 'poopfling'],
 				baseSignatureMove: "junglebone",
 				signatureMove: "Jungle Bone",
@@ -551,7 +551,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Kabuterimon": {
 				species: "Kabuterimon",
 				ability: "Vaccine",
-				rarity: 1,
+				
 				moves: ['confusedstorm', 'electriccloud', 'megalospark', 'thunderjustice', 'massmorph', 'bug', 'rockfall', 'fightingaura'],
 				baseSignatureMove: "electroshocker",
 				signatureMove: "Electro Shocker",
@@ -559,7 +559,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Kokatorimon": {
 				species: "Kokatorimon",
 				ability: "Vaccine",
-				rarity: 1,
+				
 				moves: ['wingshoes', 'windcutter', 'megalospark', 'icestatue', 'cootieskick', 'pooptoss', 'guerrillapoop'],
 				baseSignatureMove: "frozenfireshot",
 				signatureMove: "Frozen Fire Shot",
@@ -567,7 +567,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Kuwagamon": {
 				species: "Kuwagamon",
 				ability: "Virus",
-				rarity: 1,
+				
 				moves: ['sonicjab', 'busterdrive', 'massmorph', 'bug', 'venomdisaster', 'windcutter', 'blackout'],
 				baseSignatureMove: "scissorclaw",
 				signatureMove: "Scissor Claw",
@@ -575,7 +575,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Leomon": {
 				species: "Leomon",
 				ability: "Vaccine",
-				rarity: 1,
+				
 				moves: ['musclecharge', 'warcry', 'sonicjab', 'meltdown', 'infinityburn', 'megatonpunch', 'earthcoat', 'saintshield', 'burningheart'],
 				baseSignatureMove: "fistofthebeastking",
 				signatureMove: "Fist of the Beast King",
@@ -583,7 +583,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Meicoomon": {
 				species: "Meicoomon",
 				ability: "Data",
-				rarity: 1,
+				
 				moves: ['warcry', 'windcutter', 'fightingaura', 'megatonpunch', 'mechanicalclaw', 'venomdisaster', 'shadowfall', 'saintray'],
 				baseSignatureMove: "xscratch",
 				signatureMove: "X Scratch",
@@ -591,7 +591,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Meramon": {
 				species: "Meramon",
 				ability: "Data",
-				rarity: 1,
+				
 				moves: ['burningheart', 'firewall', 'firetower', 'infinityburn', 'holyflash', 'fightingaura', 'sonicjab', 'megatonpunch'],
 				baseSignatureMove: "burningfist",
 				signatureMove: "Burning Fist",
@@ -599,7 +599,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Mikemon": {
 				species: "Mikemon",
 				ability: "Data",
-				rarity: 1,
+				
 				moves: ['warcry', 'sonicjab', 'fightingaura', 'venomdisaster', 'evilfantasy', 'holyflash', 'bug'],
 				baseSignatureMove: "catclaw",
 				signatureMove: "Cat Claw",
@@ -607,7 +607,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Mojyamon": {
 				species: "Mojyamon",
 				ability: "Vaccine",
-				rarity: 1,
+				
 				moves: ['warcry', 'musclecharge', 'sonicjab', 'fightingaura', 'hailspear', 'winterblast', 'superstinkyjet', 'poopfling'],
 				baseSignatureMove: "boneboomerang",
 				signatureMove: "Bone Boomerang",
@@ -615,7 +615,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Monochromon": {
 				species: "Monochromon",
 				ability: "Data",
-				rarity: 1,
+				
 				moves: ['heatbreath', 'firetower', 'infinityburn', 'earthcoat', 'rockfall', 'musclecharge', 'busterdrive'],
 				baseSignatureMove: "volcanicstrike",
 				signatureMove: "Volcanic Strike",
@@ -623,7 +623,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"MoriShellmon": {
 				species: "MoriShellmon",
 				ability: "Data",
-				rarity: 1,
+				
 				moves: ['waterblitz', 'oceanwave', 'earthcoat', 'charmperfume', 'rootbind', 'venomdisaster', 'sonicjab'],
 				baseSignatureMove: "mindfog",
 				signatureMove: "Mind Fog",
@@ -631,7 +631,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"MudFrigimon": {
 				species: "MudFrigimon",
 				ability: "Vaccine",
-				rarity: 1,
+				
 				moves: ['rootbind', 'bug', 'rockfall', 'massmorph', 'sonicjab', 'earthcoat', 'fightingaura'],
 				baseSignatureMove: "mudball",
 				signatureMove: "Mud Ball",
@@ -639,7 +639,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Nanimon": {
 				species: "Nanimon",
 				ability: "Virus",
-				rarity: 1,
+				
 				moves: ['musclecharge', 'sonicjab', 'fightingaura', 'pooptoss', 'poopattackfield', 'superstinkyjet', 'evilfantasy', 'blackout'],
 				baseSignatureMove: "poopdunk",
 				signatureMove: "Poop Dunk",
@@ -647,7 +647,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Ninjamon": {
 				species: "Ninjamon",
 				ability: "Data",
-				rarity: 1,
+				
 				moves: ['warcry', 'sonicjab', 'musclecharge', 'charmperfume', 'rootbind', 'earthcoat', 'reboundstrike'],
 				baseSignatureMove: "dancingleaves",
 				signatureMove: "Dancing Leaves",
@@ -655,7 +655,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"NiseDrimogemon": {
 				species: "NiseDrimogemon",
 				ability: "Vaccine",
-				rarity: 1,
+				
 				moves: ['warcry', 'sonicjab', 'busterdrive', 'reboundstrike', 'mechanicalclaw', 'upgrade', 'deleteprogram', 'reverseprogram'],
 				baseSignatureMove: "fakedrillspin",
 				signatureMove: "Fake Drill Spin",
@@ -663,7 +663,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Numemon": {
 				species: "Numemon",
 				ability: "Virus",
-				rarity: 1,
+				
 				moves: ['oceanwave', 'earthcoat', 'bug', 'icestatue', 'warcry', 'cootieskick', 'pooptoss', 'guerrillapoop', 'extremepoopdeath'],
 				baseSignatureMove: "numesludge",
 				signatureMove: "Nume-Sludge",
@@ -671,7 +671,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Ogremon": {
 				species: "Ogremon",
 				ability: "Virus",
-				rarity: 1,
+				
 				moves: ['firetower', 'infinityburn', 'heatbreath', 'blackout', 'musclecharge', 'warcry', 'reboundstrike', 'megatonpunch'],
 				baseSignatureMove: "pummelwhack",
 				signatureMove: "Pummel Whack",
@@ -679,7 +679,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Piddomon": {
 				species: "Piddomon",
 				ability: "Vaccine",
-				rarity: 1,
+				
 				moves: ['burningheart', 'firewall', 'infinityburn', 'holybreath', 'windcutter', 'sonicjab', 'saintheal', 'saintray', 'holyjudgment'],
 				baseSignatureMove: "firefeather",
 				signatureMove: "Fire Feather",
@@ -687,7 +687,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"PlatinumSukamon": {
 				species: "PlatinumSukamon",
 				ability: "Vaccine",
-				rarity: 1,
+				
 				moves: ['earthcoat', 'rockfall', 'holyflash', 'mechanicalclaw', 'reverseprogram', 'deleteprogram', 'cootieskick', 'superstinkyjet', 'guerrillapoop', 'extremepoopdeath'],
 				baseSignatureMove: "raremetalpoop",
 				signatureMove: "Rare Metal Poop",
@@ -695,7 +695,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"RedVegiemon": {
 				species: "RedVegiemon",
 				ability: "Virus",
-				rarity: 1,
+				
 				moves: ['heatbreath', 'meltdown', 'prominencebeam', 'massmorph', 'charmeperfume', 'venomdisaster', 'earthcoat'],
 				baseSignatureMove: "chilipepperpummel",
 				signatureMove: "Chili Pepper Pummel",
@@ -703,7 +703,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Rockmon": {
 				species: "Rockmon",
 				ability: "Virus",
-				rarity: 1,
+				
 				moves: ['mechanicalclaw', 'winterblast', 'gigafreeze', 'gigawattlaser', 'dgdimension', 'upgrade', 'sonicjab'],
 				baseSignatureMove: "antidigibeam",
 				signatureMove: "Anti-Digi Beam",
@@ -711,7 +711,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Saberdramon": {
 				species: "Saberdramon",
 				ability: "Virus",
-				rarity: 1,
+				
 				moves: ['wingshoes', 'windcutter', 'burningheart', 'blackout', 'firetower', 'shadowfall', 'infinityburn', 'evilfantasy'],
 				baseSignatureMove: "nightroar",
 				signatureMove: "Night Roar",
@@ -719,7 +719,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"SandYanmamon": {
 				species: "SandYanmamon",
 				ability: "Virus",
-				rarity: 1,
+				
 				moves: ['electriccloud', 'windcutter', 'confusedstorm', 'thunderjustice', 'earthcoat', 'massmorph', 'charmperfume', 'bug', 'holyflash'],
 				baseSignatureMove: "stunray",
 				signatureMove: "Stun Ray",
@@ -727,7 +727,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Seadramon": {
 				species: "Seadramon",
 				ability: "Data",
-				rarity: 1,
+				
 				moves: ['hailspear', 'waterblitz', 'gigafreeze', 'aurorafreeze', 'heatbreath', 'meltdown', 'holybreath'],
 				baseSignatureMove: "iceblast",
 				signatureMove: "Ice Blast",
@@ -735,7 +735,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Shellmon": {
 				species: "Shellmon",
 				ability: "Data",
-				rarity: 1,
+				
 				moves: ['waterblitz', 'winterblast', 'oceanwave', 'aurorafreeze', 'massmorph', 'rockfall', 'sonicjab'],
 				baseSignatureMove: "hydropressure",
 				signatureMove: "Hydro Pressure",
@@ -743,7 +743,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"ShimaUnimon": {
 				species: "ShimaUnimon",
 				ability: "Data",
-				rarity: 1,
+				
 				moves: ['holybreath', 'electriccloud', 'confusedstorm', 'saintheal', 'holyflash', 'saintray', 'warcry', 'fightingaura', 'sonicjab', 'busterdrive'],
 				baseSignatureMove: "lustershot",
 				signatureMove: "Luster Shot",
@@ -751,7 +751,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Soulmon": {
 				species: "Soulmon",
 				ability: "Virus",
-				rarity: 1,
+				
 				moves: ['darkspirit', 'blackout', 'evilfantasy', 'shadowfall', 'massmorph', 'staticelectricity', 'electriccloud', 'aurorafreeze'],
 				baseSignatureMove: "necromagic",
 				signatureMove: "Necro Magic",
@@ -759,7 +759,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Sukamon": {
 				species: "Sukamon",
 				ability: "Virus",
-				rarity: 1,
+				
 				moves: ['earthcoat', 'bug', 'rockfall', 'warcry', 'cootieskick', 'superstinkyjet', 'guerrillapoop', 'extremepoopdeath', 'hideandseek'],
 				baseSignatureMove: "poop",
 				signatureMove: "Poop",
@@ -767,7 +767,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Tankmon": {
 				species: "Tankmon",
 				ability: "Data",
-				rarity: 1,
+				
 				moves: ['burningheart', 'heatbreath', 'infinityburn', 'prominencebeam', 'earthcoat', 'antiattackfield', 'gigawattlaser', 'deleteprogram', 'upgrade'],
 				baseSignatureMove: "hypercannon",
 				signatureMove: "Hyper Cannon",
@@ -775,7 +775,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Togemon": {
 				species: "Togemon",
 				ability: "Data",
-				rarity: 1,
+				
 				moves: ['massmorph', 'charmperfume', 'rootbind', 'venomdisaster', 'waterblitz', 'musclecharge', 'sonicjab', 'fightingaura', 'megatonpunch'],
 				baseSignatureMove: "needlespray",
 				signatureMove: "Needle Spray",
@@ -783,15 +783,15 @@ class RandomDigimonTeams extends RandomTeams {
 			"Tyrannomon": {
 				species: "Tyrannomon",
 				ability: "Data",
-				rarity: 1,
-				moves: ['burningheart', 'heatbreath', 'firetower', 'prominencebeam', 'musclechage', 'sonicjab', 'reboundstrike', 'rockfall'],
+				
+				moves: ['burningheart', 'heatbreath', 'firetower', 'prominencebeam', 'musclecharge', 'sonicjab', 'reboundstrike', 'rockfall'],
 				baseSignatureMove: "blazeblaster",
 				signatureMove: "Blaze Blaster",
 			},
 			"Unimon": {
 				species: "Unimon",
 				ability: "Vaccine",
-				rarity: 1,
+				
 				moves: ['wingshoes', 'megalospark', 'thunderjustice', 'confusedstorm', 'rockfall', 'saintheal', 'holyjudgement', 'saintray', 'musclecharge'],
 				baseSignatureMove: "aerialattack",
 				signatureMove: "Aerial Attack",
@@ -799,7 +799,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Vegiemon": {
 				species: "Vegiemon",
 				ability: "Virus",
-				rarity: 1,
+				
 				moves: ['waterblitz', 'gigafreeze', 'oceanwave', 'massmorph', 'charmperfume', 'venomdisaster', 'earthcoat'],
 				baseSignatureMove: "sweetbreath",
 				signatureMove: "Sweet Breath",
@@ -807,7 +807,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Weedmon": {
 				species: "Weedmon",
 				ability: "Virus",
-				rarity: 1,
+				
 				moves: ['superstinkyjet', 'poopattackfield', 'extremepoopdeath', 'massmorph', 'charmeperfume', 'venomdisaster', 'earthcoat'],
 				baseSignatureMove: "deadlyweed",
 				signatureMove: "Deadly Weed",
@@ -815,7 +815,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Yanmamon": {
 				species: "Yanmamon",
 				ability: "Virus",
-				rarity: 1,
+				
 				moves: ['electriccloud', 'windcutter', 'confusedstorm', 'thunderjustice', 'earthcoat', 'massmorph', 'charmperfume', 'bug', 'holyflash'],
 				baseSignatureMove: "thunderray",
 				signatureMove: "Thunder Ray",
@@ -824,7 +824,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Andromon": {
 				species: "Andromon",
 				ability: "Vaccine",
-				rarity: 2,
+				
 				moves: ['windcutter', 'electriccloud', 'megalospark', 'thunderjustice', 'upgrade', 'antiattackfield', 'deleteprogram', 'gigawattlaser', 'bug'],
 				baseSignatureMove: "spiralsword",
 				signatureMove: "Spiral Sword",
@@ -832,7 +832,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Angewomon": {
 				species: "Angewomon",
 				ability: "Vaccine",
-				rarity: 2,
+				
 				moves: ['wingshoes', 'windcutter', 'thunderjustice', 'fightingaura', 'electriccloud', 'saintheal', 'holybreath', 'holyflash', 'saintray', 'warcry'],
 				baseSignatureMove: "celestialarrow",
 				signatureMove: "Celestial Arrow",
@@ -840,7 +840,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Beastmon": {
 				species: "Beastmon",
 				ability: "Virus",
-				rarity: 2,
+				
 				moves: ['warcry', 'sonicjab', 'megatonpunch', 'venomdisaster', 'shadowfall', 'gigafreeze', 'bug', 'icestatue'],
 				baseSignatureMove: "vampirewave",
 				signatureMove: "Vampire Wave",
@@ -848,7 +848,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"BlackWereGarurumon": {
 				species: "BlackWereGarurumon",
 				ability: "Virus",
-				rarity: 2,
+				
 				moves: ['warcry', 'musclecharge', 'sonicjab', 'megatonpunch', 'rockfall', 'burningheart', 'heatbreath', 'evilsquall', 'hideandseek', 'winterblast', 'gigafreeze'],
 				baseSignatureMove: "fullmoonkick",
 				signatureMove: "Full Moon Kick",
@@ -856,7 +856,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"BlueMeramon": {
 				species: "BlueMeramon",
 				ability: "Vaccine",
-				rarity: 2,
+				
 				moves: ['burningheart', 'firewall', 'meltdown', 'infinityburn', 'aurorafreeze', 'holyflash', 'fightingaura', 'gigafreeze'],
 				baseSignatureMove: "coldflame",
 				signatureMove: "Cold Flame",
@@ -864,7 +864,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Digitamamon": {
 				species: "DigiTamamon",
 				ability: "Data",
-				rarity: 2,
+				
 				moves: ['hailspear', 'blackout', 'bug', 'shadowfall', 'firetower', 'poopattackfield', 'poopfling', 'upgrade'],
 				baseSignatureMove: "nightmaresyndrome",
 				signatureMove: "Nightmare Syndrome",
@@ -872,7 +872,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"DoruGreymon": {
 				species: "DoruGreymon",
 				ability: "Data",
-				rarity: 2,
+				
 				moves: ['burningheart', 'infinityburn', 'megalospark', 'musclecharge', 'sonicjab', 'fightingaura', 'busterdrive', 'mechanicalclaw', 'antiattackfield'],
 				baseSignatureMove: "metalmeteor",
 				signatureMove: "Metal Meteor",
@@ -880,7 +880,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Etemon": {
 				species: "Etemon",
 				ability: "Virus",
-				rarity: 2,
+				
 				moves: ['earthcoat', 'rockfall', 'sonicjab', 'megatonpunch', 'charmperfume', 'bug', 'guerrillapoop', 'extremepoopdeath'],
 				baseSignatureMove: "loveserenade",
 				signatureMove: "Love Serenade",
@@ -888,7 +888,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Garudamon": {
 				species: "Garudamon",
 				ability: "Vaccine",
-				rarity: 2,
+				
 				moves: ['wingshoes', 'windcutter', 'burningheart', 'firetower', 'meltdown', 'infinityburn', 'warcry', 'busterdrive', 'holyflash'],
 				baseSignatureMove: "shadowwing",
 				signatureMove: "Shadow Wing",
@@ -896,7 +896,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Gigadramon": {
 				species: "Gigadramon",
 				ability: "Data",
-				rarity: 2,
+				
 				moves: ['upgrade', 'gigawattlaser', 'dgdimension', 'darkspirit', 'hideandseek', 'windcutter', 'electriccloud', 'gigafreeze'],
 				baseSignatureMove: "energyshot",
 				signatureMove: "Energy Shot",
@@ -904,7 +904,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Giromon": {
 				species: "Giromon",
 				ability: "Vaccine",
-				rarity: 2,
+				
 				moves: ['upgrade', 'deleteprogram', 'reverseprogram', 'reboundstrike', 'megatonpunch', 'staticelectricity', 'megalospark', 'firewall'],
 				baseSignatureMove: "deadlybomb",
 				signatureMove: "Deadly Bomb",
@@ -912,7 +912,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"IceLeomon": {
 				species: "IceLeomon",
 				ability: "Data",
-				rarity: 2,
+				
 				moves: ['musclecharge', 'warcry', 'gigafreeze', 'icestatue', 'megatonpunch', 'winterblast', 'aurorafreeze', 'saintshield', 'burningheart'],
 				baseSignatureMove: "fistofice",
 				signatureMove: "Fist of Ice",
@@ -920,7 +920,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"LadyDevimon": {
 				species: "LadyDevimon",
 				ability: "Virus",
-				rarity: 2,
+				
 				moves: ['wingshoes', 'windcutter', 'evilsquall', 'fightingaura', 'electriccloud', 'evilfantasy', 'charmperfume', 'darkspirit', 'chaoscloud', 'warcry'],
 				baseSignatureMove: "darknesswave",
 				signatureMove: "Darkness Wave",
@@ -928,7 +928,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Lillymon": {
 				species: "Lillymon",
 				ability: "Data",
-				rarity: 2,
+				
 				moves: ['earthcoat', 'charmperfume', 'rootbind', 'venomdisaster', 'wingshoes', 'windcutter', 'confusedstorm', 'saintheal', 'holybreath'],
 				baseSignatureMove: "flowercannon",
 				signatureMove: "Flower Cannon",
@@ -936,7 +936,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"MagnaAngemon": {
 				species: "MagnaAngemon",
 				ability: "Vaccine",
-				rarity: 2,
+				
 				moves: ['saintheal', 'saintshield', 'shiningnova', 'thunderjustice', 'antiattackfield', 'gigawattlaser', 'deleteprogram', 'sonicjab', 'megalospark', 'reboundstrike', 'holyjudgment', 'wingshoes'],
 				baseSignatureMove: "gateofdestiny",
 				signatureMove: "Gate of Destiny",
@@ -944,7 +944,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Mamemon": {
 				species: "Mamemon",
 				ability: "Data",
-				rarity: 2,
+				
 				moves: ['musclecharge', 'sonicjab', 'fightingaura', 'reboundstrike', 'antiattackfield', 'upgrade', 'reverseprogram', 'gigawattlaser', 'gigafreeze', 'burningheart'],
 				baseSignatureMove: "smilebomber",
 				signatureMove: "Smile Bomber",
@@ -952,7 +952,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Megadramon": {
 				species: "Megadramon",
 				ability: "Virus",
-				rarity: 2,
+				
 				moves: ['mechanicalclaw', 'upgrade', 'deleteprogram', 'blackout', 'shadowfall', 'staticelectricity', 'megalospark', 'firetower'],
 				baseSignatureMove: "genocideattack",
 				signatureMove: "Genocide Attack",
@@ -960,7 +960,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"MegaKabuterimon": {
 				species: "MegaKabuterimon",
 				ability: "Vaccine",
-				rarity: 2,
+				
 				moves: ['staticelectricity', 'rockfall', 'megatonpunch', 'megalospark', 'reboundstrike', 'earthcoat', 'massmorph', 'bug'],
 				baseSignatureMove: "hornbuster",
 				signatureMove: "Horn Buster",
@@ -968,7 +968,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"MegaSeadramon": {
 				species: "MegaSeadramon",
 				ability: "Data",
-				rarity: 2,
+				
 				moves: ['hailspear', 'waterblitz', 'gigafreeze', 'aurorafreeze', 'heatbreath', 'meltdown', 'shiningnova', 'staticelectricity', 'megalospark'],
 				baseSignatureMove: "lightningjavelin",
 				signatureMove: "Lightning Javelin",
@@ -976,7 +976,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Meicrackmon": {
 				species: "meicrackmon",
 				ability: "Vaccine",
-				rarity: 2,
+				
 				moves: ['warcry', 'windcutter', 'fightingaura', 'megatonpunch', 'mechanicalclaw', 'venomdisaster', 'holyjudgment', 'saintray', 'holybreath'],
 				baseSignatureMove: "modestlystun",
 				signatureMove: "Modestly Stun",
@@ -985,7 +985,7 @@ class RandomDigimonTeams extends RandomTeams {
 				name: "Meicrackmon",
 				species: "meicrackmonvm",
 				ability: "Virus",
-				rarity: 2,
+				
 				moves: ['warcry', 'windcutter', 'fightingaura', 'megatonpunch', 'mechanicalclaw', 'venomdisaster', 'shadowfall', 'evilsquall', 'blackout'],
 				baseSignatureMove: "berserkthinking",
 				signatureMove: "Berserk Thinking",
@@ -993,7 +993,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"MetalGreymon": {
 				species: "metalgreymon",
 				ability: "Vaccine",
-				rarity: 2,
+				
 				moves: ['burningheart', 'heatbreath', 'firetower', 'infinityburn', 'musclecharge', 'sonicjab', 'reboundstrike', 'busterdrive', 'mechanicalclaw', 'gigawattlaser', 'deleteprogram'],
 				baseSignatureMove: "gigadestroyer",
 				signatureMove: "Giga Destroyer",
@@ -1002,7 +1002,7 @@ class RandomDigimonTeams extends RandomTeams {
 				name: "MetalGreymon",
 				species: "metalgreymonvirus",
 				ability: "Virus",
-				rarity: 2,
+				
 				moves: ['burningheart', 'heatbreath', 'firetower', 'infinityburn', 'musclecharge', 'sonicjab', 'blackout', 'shadowfall', 'mechanicalclaw', 'gigawattlaser', 'deleteprogram'],
 				baseSignatureMove: "revengeflame",
 				signatureMove: "Revenge Flame",
@@ -1010,7 +1010,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"MetalMamemon": {
 				species: "MetalMamemon",
 				ability: "Data",
-				rarity: 2,
+				
 				moves: ['musclecharge', 'mechanicalclaw', 'fightingaura', 'reboundstrike', 'deleteprogram', 'upgrade', 'reverseprogram', 'megalospark', 'winterblast', 'burningheart'],
 				baseSignatureMove: "energybomb",
 				signatureMove: "Energy Bomb",
@@ -1018,7 +1018,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Meteormon": {
 				species: "Meteormon",
 				ability: "Data",
-				rarity: 2,
+				
 				moves: ['earthcoat', 'rockfall', 'heatbreath', 'prominencebeam', 'gigafreeze', 'megatonpunch', 'fightingaura'],
 				baseSignatureMove: "galacticflare",
 				signatureMove: "Galactic Flare",
@@ -1026,7 +1026,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Monzaemon": {
 				species: "Monzaemon",
 				ability: "Vaccine",
-				rarity: 2,
+				
 				moves: ['fightingaura', 'poopattackfield', 'reboundstrike', 'megatonpunch', 'saintheal', 'holybreath', 'saintshield', 'saintray', 'charmperfume'],
 				baseSignatureMove: "heartattack",
 				signatureMove: "Heart Attack",
@@ -1034,7 +1034,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Myotismon": {
 				species: "Myotismon",
 				ability: "Virus",
-				rarity: 2,
+				
 				moves: ['darkspirit', 'blackout', 'evilfantasy', 'electriccloud', 'aurorafreeze', 'evilsquall', 'wingshoes', 'confusedstorm', 'venomdisaster', 'reverseprogram'],
 				baseSignatureMove: "grislywing",
 				signatureMove: "Grisly Wing",
@@ -1042,7 +1042,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Piximon": {
 				species: "Piximon",
 				ability: "Data",
-				rarity: 2,
+				
 				moves: ['saintheal', 'holybreath', 'saintshield', 'fightingaura', 'shiningnova', 'wingshoes', 'windcutter', 'electriccloud', 'antiattackfield', 'earthcoat', 'bug'],
 				baseSignatureMove: "pitbomb",
 				signatureMove: "Pit Bomb",
@@ -1050,7 +1050,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"ShogunGekomon": {
 				species: "ShogunGekomon",
 				ability: "Data",
-				rarity: 2,
+				
 				moves: ['earthcoat', 'confusedstorm', 'oceanwave', 'icestatue', 'gigafreeze', 'aurorafreeze', 'warcry', 'fightingaura', 'charmperfume'],
 				baseSignatureMove: "musicalfist",
 				signatureMove: "Musical Fist",
@@ -1058,7 +1058,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"SkullGreymon": {
 				species: "SkullGreymon",
 				ability: "Virus",
-				rarity: 2,
+				
 				moves: ['blackout', 'shadowfall', 'evilfantasy', 'evilsquall', 'heatbreath', 'firetower', 'infinityburn', 'sonicjab', 'reboundstrike', 'busterdrive', 'mechanicalclaw', 'deleteprogram'],
 				baseSignatureMove: "oblivionbird",
 				signatureMove: "Oblivion Bird",
@@ -1066,7 +1066,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Tekkamon": {
 				species: "Tekkamon",
 				ability: "Virus",
-				rarity: 2,
+				
 				moves: ['upgrade', 'deleteprogram', 'reverseprogram', 'reboundstrike', 'megatonpunch', 'staticelectricity', 'shadowfall', 'firewall'],
 				baseSignatureMove: "fragbomb",
 				signatureMove: "Frag Bomb",
@@ -1074,7 +1074,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Vademon": {
 				species: "Vademon",
 				ability: "Virus",
-				rarity: 2,
+				
 				moves: ['massmorph', 'charmperfume', 'bug', 'rockfall', 'upgrade', 'deleteprogram', 'dgdimension', 'cootieskick'],
 				baseSignatureMove: "unidentifiedflyingkiss",
 				signatureMove: "Unidentified Flying Kiss",
@@ -1082,7 +1082,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Vermilimon": {
 				species: "Vermilimon",
 				ability: "Data",
-				rarity: 2,
+				
 				moves: ['heatbreath', 'firetower', 'infinityburn', 'prominencebeam', 'earthcoat', 'rockfall', 'musclecharge', 'busterdrive'],
 				baseSignatureMove: "volcanicstrikes",
 				signatureMove: "Volcanic Strike S",
@@ -1090,7 +1090,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"WaruMonzaemon": {
 				species: "WaruMonzaemon",
 				ability: "Virus",
-				rarity: 2,
+				
 				moves: ['fightingaura', 'poopattackfield', 'reboundstrike', 'megatonpunch', 'darkspirit', 'evilfantasy', 'hideandseek', 'charmperfume'],
 				baseSignatureMove: "heartbreakattack",
 				signatureMove: "Heartbreak Attack",
@@ -1098,7 +1098,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"WaruSeadramon": {
 				species: "WaruSeadramon",
 				ability: "Virus",
-				rarity: 2,
+				
 				moves: ['hailspear', 'waterblitz', 'gigafreeze', 'aurorafreeze', 'heatbreath', 'meltdown', 'staticelectricity', 'megalospark', 'evilsquall'],
 				baseSignatureMove: "evilicicle",
 				signatureMove: "Evil Icicle",
@@ -1106,7 +1106,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"WereGarurumon": {
 				species: "WereGarurumon",
 				ability: "Data",
-				rarity: 2,
+				
 				moves: ['warcry', 'musclecharge', 'sonicjab', 'megatonpunch', 'rockfall', 'burningheart', 'heatbreath', 'icestatue', 'aurorafreeze', 'winterblast', 'gigafreeze'],
 				baseSignatureMove: "wolfclaw",
 				signatureMove: "Wolf Claw",
@@ -1114,7 +1114,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Whamon": {
 				species: "Whamon",
 				ability: "Vaccine",
-				rarity: 2,
+				
 				moves: ['waterblitz', 'oceanwave', 'icestatue', 'aurorafreeze', 'massmorph', 'charmperfume', 'saintshield', 'confusedstorm', 'busterdrive', 'saintheal'],
 				baseSignatureMove: "tidalwave",
 				signatureMove: "Tidal Wave",
@@ -1122,7 +1122,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Zudomon": {
 				species: "Zudomon",
 				ability: "Vaccine",
-				rarity: 2,
+				
 				moves: ['electriccloud', 'thunderjustice', 'hailspear', 'icestatue', 'mechanicalclaw', 'aurorafreeze', 'antiattackfield', 'warcry', 'reboundstrike'],
 				baseSignatureMove: "vulcanshammer",
 				signatureMove: "Vulcan's Hammer",
@@ -1131,7 +1131,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Alphamon": {
 				species: "Alphamon",
 				ability: "Vaccine",
-				rarity: 3,
+				
 				moves: ['saintshield', 'saintray', 'holyjudgment', 'shiningnova', 'warcry', 'sonicjab', 'reboundstrike', 'upgrade', 'deleteprogram', 'dgdimension', 'burningheart', 'thunderjustice'],
 				baseSignatureMove: "bladeofthedragonking",
 				signatureMove: "Blade of the Dragon King",
@@ -1139,7 +1139,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"BlackMetalGarurumon": {
 				species: "BlackMetalGarurumon",
 				ability: "Virus",
-				rarity: 3,
+				
 				moves: ['warcry', 'mechanicalclaw', 'megalospark', 'winterblast', 'gigafreeze', 'icestatue', 'shadowfall', 'evilfantasy', 'aurorafreeze'],
 				baseSignatureMove: "garurutomahawk",
 				signatureMove: "Garuru Tomahawk",
@@ -1147,7 +1147,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"BlackWarGreymon": {
 				species: "BlackWarGreymon",
 				ability: "Virus",
-				rarity: 3,
+				
 				moves: ['burningheart', 'firetower', 'firewall', 'shadowfall', 'musclecharge', 'blackout', 'busterdrive', 'mechanicalclaw', 'antiattackfield', 'deleteprogram', 'evilfantasy'],
 				baseSignatureMove: "blacktornado",
 				signatureMove: "Black Tornado",
@@ -1155,7 +1155,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Boltmon": {
 				species: "Boltmon",
 				ability: "Data",
-				rarity: 3,
+				
 				moves: ['electriccloud', 'megalospark', 'fightingaura', 'megatonpunch', 'mechanicalclaw', 'gigawattlaser', 'meltdown', 'infinityburn'],
 				baseSignatureMove: "tomahawkstinger",
 				signatureMove: "Tomahawk Stinger",
@@ -1163,7 +1163,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Cherubimon": {
 				species: "Cherubimonevil",
 				ability: "Virus",
-				rarity: 3,
+				
 				moves: ['wingshoes', 'thunderjustice', 'megalospark', 'megatonpunch', 'blackout', 'chaoscloud', 'shadowfall', 'evilsquall', 'dgdimension', 'gigawattlaser'],
 				baseSignatureMove: "lightningspear",
 				signatureMove: "Lightning Spear",
@@ -1172,7 +1172,7 @@ class RandomDigimonTeams extends RandomTeams {
 				name: "Cherubimon",
 				species: "Cherubimongood",
 				ability: "Vaccine",
-				rarity: 3,
+				
 				moves: ['wingshoes', 'thunderjustice', 'megalospark', 'megatonpunch', 'holybreath', 'saintray', 'holyjudgment', 'shiningnova', 'dgdimension', 'gigawattlaser'],
 				baseSignatureMove: "heavensjudgment",
 				signatureMove: "Heaven's Judgment",
@@ -1180,7 +1180,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Devitamamon": {
 				species: "Devitamamon",
 				ability: "Data",
-				rarity: 3,
+				
 				moves: ['hailspear', 'blackout', 'evilfantasy', 'shadowfall', 'evilsquall', 'poopattackfield', 'extremepoopdeath', 'firetower'],
 				baseSignatureMove: "blackdeathcloud",
 				signatureMove: "Black Death Cloud",
@@ -1188,7 +1188,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Dorugoramon": {
 				species: "Dorugoramon",
 				ability: "Data",
-				rarity: 3,
+				
 				moves: ['burningheart', 'infinityburn', 'prominencebeam', 'megalospark', 'thunderjustice', 'fightingaura', 'busterdrive', 'sonicjab', 'mechanicalclaw', 'antiattackfield', 'deleteprogram', 'gigawattlaser'],
 				baseSignatureMove: "bravemetal",
 				signatureMove: "Brave Metal",
@@ -1196,7 +1196,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Ebemon": {
 				species: "Ebemon",
 				ability: "Virus",
-				rarity: 3,
+				
 				moves: ['confusedstorm', 'electriccloud', 'massmorph', 'bug', 'upgrade', 'gigawattlaser', 'dgdimension', 'cootieskick'],
 				baseSignatureMove: "brainrupture",
 				signatureMove: "Brain Rupture",
@@ -1204,7 +1204,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"HerculesKabuterimon": {
 				species: "HerculesKabuterimon",
 				ability: "Data",
-				rarity: 3,
+				
 				moves: ['confusedstorm', 'electriccloud', 'megalospark', 'thunderjustice', 'charmperfume', 'massmorph', 'bug', 'saintshield', 'holyflash', 'fightingaura'],
 				baseSignatureMove: "gigablaster",
 				signatureMove: "Giga Blaster",
@@ -1212,7 +1212,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"HiAndromon": {
 				species: "HiAndromon",
 				ability: "Vaccine",
-				rarity: 3,
+				
 				moves: ['sonicjab', 'electriccloud', 'megalospark', 'thunderjustice', 'saintheal', 'upgrade', 'antiattackfield', 'deleteprogram', 'gigawattlaser', 'bug', 'busterdrive', 'megatonpunch'],
 				baseSignatureMove: "atomicray",
 				signatureMove: "Atomic Ray",
@@ -1220,7 +1220,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Lilithmon": {
 				species: "Lilithmon",
 				ability: "Virus",
-				rarity: 3,
+				
 				moves: ['evilfantasy', 'chaoscloud', 'shadowfall', 'windcutter', 'confusedstorm', 'charmperfume', 'venomdisaster', 'bug', 'aurorafreeze', 'mechanicalclaw'],
 				baseSignatureMove: "phantompain",
 				signatureMove: "Phantom Pain",
@@ -1228,7 +1228,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Machinedramon": {
 				species: "Machinedramon",
 				ability: "Virus",
-				rarity: 3,
+				
 				moves: ['mechanicalclaw', 'upgrade', 'gigawattlaser', 'dgdimension', 'megalospark', 'thunderjustice', 'electricloud', 'hideandseek', 'firewall', 'gigafreeze'],
 				baseSignatureMove: "infinitycannon",
 				signatureMove: "Infinity Cannon",
@@ -1236,7 +1236,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Magnadramon": {
 				species: "Magnadramon",
 				ability: "Vaccine",
-				rarity: 3,
+				
 				moves: ['saintheal', 'holybreath', 'holyflash', 'holyjudgment', 'burningheart', 'firetower', 'prominencebeam', 'wingshoes', 'busterdrive', 'fightingaura'],
 				baseSignatureMove: "firetornado",
 				signatureMove: "Fire Tornado",
@@ -1244,7 +1244,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"MarineAngemon": {
 				species: "MarineAngemon",
 				ability: "Vaccine",
-				rarity: 3,
+				
 				moves: ['waterblitz', 'oceanwave', 'aurorafreeze', 'icestatue', 'saintheal', 'holybreath', 'saintshield', 'shiningnova', 'confusedstorm', 'wingshoes', 'antiattackfield', 'earthcoat'],
 				baseSignatureMove: "oceanlove",
 				signatureMove: "Ocean Love",
@@ -1252,7 +1252,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"MetalEtemon": {
 				species: "MetalEtemon",
 				ability: "Virus",
-				rarity: 3,
+				
 				moves: ['reverseprogram', 'dgdimension', 'upgrade', 'gigawattlaser', 'charmperfume', 'holyflash', 'guerrillapoop', 'extremepoopdeath'],
 				baseSignatureMove: "darkrecital",
 				signatureMove: "Dark Recital",
@@ -1260,7 +1260,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"MetalGarurumon": {
 				species: "MetalGarurumon",
 				ability: "Data",
-				rarity: 3,
+				
 				moves: ['warcry', 'mechanicalclaw', 'busterdrive', 'winterblast', 'gigafreeze', 'icestatue', 'rockfall', 'meltdown', 'aurorafreeze'],
 				baseSignatureMove: "icewolfclaw",
 				signatureMove: "Ice Wolf Claw",
@@ -1268,7 +1268,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"MetalSeadramon": {
 				species: "MetalSeadramon",
 				ability: "Data",
-				rarity: 3,
+				
 				moves: ['waterblitz', 'winterblast', 'oceanwave', 'icestatue', 'infinityburn', 'staticelectricity', 'megalospark', 'upgrade', 'deleteprogram'],
 				baseSignatureMove: "riverofpower",
 				signatureMove: "River of Power",
@@ -1276,7 +1276,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Ophanimon": {
 				species: "Ophanimon",
 				ability: "Vaccine",
-				rarity: 3,
+				
 				moves: ['wingshoes', 'windcutter', 'thunderjustice', 'fightingaura', 'aurorafreeze', 'saintheal', 'holybreath', 'saintshield', 'saintray', 'warcry'],
 				baseSignatureMove: "edensjavelin",
 				signatureMove: "Eden's Javelin",
@@ -1284,7 +1284,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Phoenixmon": {
 				species: "Phoenixmon",
 				ability: "Vaccine",
-				rarity: 3,
+				
 				moves: ['wingshoes', 'windcutter', 'thunderjustice', 'burningheart', 'meltdown', 'prominencebeam', 'warcry', 'busterdrive', 'holyjudgment', 'shiningnova', 'infinityburn'],
 				baseSignatureMove: "starlightexplosion",
 				signatureMove: "Starlight Explosion",
@@ -1292,7 +1292,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"PrinceMamemon": {
 				species: "PrinceMamemon",
 				ability: "Data",
-				rarity: 3,
+				
 				moves: ['musclecharge', 'sonicjab', 'megatonpunch', 'fightingaura', 'upgrade', 'reverseprogram', 'deleteprogram', 'dgdimension', 'holyflash', 'poopattackfield'],
 				baseSignatureMove: "smilewarhead",
 				signatureMove: "Smile Warhead",
@@ -1300,7 +1300,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Raguelmon": {
 				species: "Raguelmon",
 				ability: "Virus",
-				rarity: 3,
+				
 				moves: ['warcry', 'windcutter', 'fightingaura', 'megatonpunch', 'mechanicalclaw', 'venomdisaster', 'shadowfall', 'evilsquall', 'blackout', 'deleteprogram'],
 				baseSignatureMove: "darknesszone",
 				signatureMove: "Darkness Zone",
@@ -1308,7 +1308,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Rasielmon": {
 				species: "Rasielmon",
 				ability: "Vaccine",
-				rarity: 3,
+				
 				moves: ['warcry', 'windcutter', 'fightingaura', 'megatonpunch', 'mechanicalclaw', 'venomdisaster', 'holyjudgment', 'saintray', 'holybreath', 'dgdimension'],
 				baseSignatureMove: "knowledgestream",
 				signatureMove: "Knowledge Stream",
@@ -1316,7 +1316,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Rosemon": {
 				species: "Rosemon",
 				ability: "Data",
-				rarity: 3,
+				
 				moves: ['earthcoat', 'charmperfume', 'rootbind', 'venomdisaster', 'wingshoes', 'confusedstorm', 'evilfantasy', 'saintheal', 'shiningnova'],
 				baseSignatureMove: "thornwhip",
 				signatureMove: "Thorn Whip",
@@ -1324,7 +1324,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"SaberLeomon": {
 				species: "SaberLeomon",
 				ability: "Data",
-				rarity: 3,
+				
 				moves: ['musclecharge', 'warcry', 'fightingaura', 'busterdrive', 'earthcoat', 'venomdisaster', 'saintshield', 'holyjudgment', 'mechanicalclaw', 'burningheart', 'infinityburn', 'shiningnova'],
 				baseSignatureMove: "howlingcrusher",
 				signatureMove: "Howling Crusher",
@@ -1332,7 +1332,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Seraphimon": {
 				species: "Seraphimon",
 				ability: "Vaccine",
-				rarity: 3,
+				
 				moves: ['saintheal', 'saintshield', 'shiningnova', 'thunderjustice', 'antiattackfield', 'gigawattlaser', 'deleteprogram', 'sonicjab', 'megalospark', 'reboundstrike', 'holyjudgment', 'wingshoes'],
 				baseSignatureMove: "strikeofthesevenstars",
 				signatureMove: "Strike of the Seven Stars",
@@ -1340,7 +1340,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"VenomMyotismon": {
 				species: "VenomMyotismon",
 				ability: "Virus",
-				rarity: 3,
+				
 				moves: ['darkspirit', 'blackout', 'evilfantasy', 'megalospark', 'icestatue', 'shadowfall', 'wingshoes', 'staticelectricity', 'venomdisaster', 'deleteprogram'],
 				baseSignatureMove: "venominfusion",
 				signatureMove: "Venom Infusion",
@@ -1348,7 +1348,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Vikemon": {
 				species: "Vikemon",
 				ability: "Vaccine",
-				rarity: 3,
+				
 				moves: ['hailspear', 'winterblast', 'icestatue', 'aurorafreeze', 'mechanicalclaw', 'antiattackfield', 'warcry', 'reboundstrike', 'megatonpunch', 'holyflash'],
 				baseSignatureMove: "arcticblizzard",
 				signatureMove: "Arctic Blizzard",
@@ -1356,7 +1356,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"WarGreymon": {
 				species: "WarGreymon",
 				ability: "Vaccine",
-				rarity: 3,
+				
 				moves: ['burningheart', 'firetower', 'firewall', 'infinityburn', 'musclecharge', 'sonicjab', 'busterdrive', 'mechanicalclaw', 'antiattackfield', 'deleteprogram', 'fightingaura'],
 				baseSignatureMove: "terraforce",
 				signatureMove: "Terra Force",
@@ -1368,12 +1368,7 @@ class RandomDigimonTeams extends RandomTeams {
 		for (let i = 0; i < 6; i++) {
 			let name = this.sampleNoReplace(pool);
 			let set = sets[name];
-			if (!(this.random(set.rarity) === 0)) {
-				// Skip this digimon
-				i--;
-				continue;
-			}
-			if (set.moves.includes('bubble')) {
+			if (set.moves.includes('acidbubble')) {
 				if (weakmonclause === true) {
 					// Skip this digimon
 					i--;
@@ -1382,8 +1377,41 @@ class RandomDigimonTeams extends RandomTeams {
 					weakmonclause = true;
 				}
 			}
-			set.level = 100;
 			if (!set.name) set.name = name;
+
+			// Inherit how pokemon does it with Kuramon instead of sunkern
+			let mbstmin = 1381;
+
+			let template = this.getTemplate(set.species);
+			let stats = template.baseStats;
+			// Modified base stat total assumes 31 IVs, 85 EVs in every stat
+			let mbst = (stats["hp"] * 2 + 31 + 21 + 100) + 10;
+			mbst += (stats["atk"] * 2 + 31 + 21 + 100) + 5;
+			mbst += (stats["def"] * 2 + 31 + 21 + 100) + 5;
+			mbst += (stats["spa"] * 2 + 31 + 21 + 100) + 5;
+			mbst += (stats["spd"] * 2 + 31 + 21 + 100) + 5;
+			mbst += (stats["spe"] * 2 + 31 + 21 + 100) + 5;
+
+			let level = Math.floor(100 * mbstmin / mbst); // Initial level guess will underestimate
+
+			while (level < 100) {
+				mbst = Math.floor((stats["hp"] * 2 + 31 + 21 + 100) * level / 100 + 10);
+				mbst += Math.floor(((stats["atk"] * 2 + 31 + 21 + 100) * level / 100 + 5) * level / 100); // Since damage is roughly proportional to level
+				mbst += Math.floor((stats["def"] * 2 + 31 + 21 + 100) * level / 100 + 5);
+				mbst += Math.floor(((stats["spa"] * 2 + 31 + 21 + 100) * level / 100 + 5) * level / 100);
+				mbst += Math.floor((stats["spd"] * 2 + 31 + 21 + 100) * level / 100 + 5);
+				mbst += Math.floor((stats["spe"] * 2 + 31 + 21 + 100) * level / 100 + 5);
+
+				if (mbst >= mbstmin) break;
+				level++;
+			}
+			level = level + 20; //Add 20. It lessens the level gap
+			if (level > 100) {
+				level = 100;
+			} else {
+				level = (level % 5) >= 2.5 ? parseInt(level / 5) * 5 + 5 : parseInt(level / 5) * 5; //Rounds to the Nearest 5 for simplicity
+			}
+			set.level = level;
 			set.nature = "Serious";
 			set.moves = [this.sampleNoReplace(set.moves), this.sampleNoReplace(set.moves), this.sampleNoReplace(set.moves), 'Protect', set.signatureMove];
 			team.push(set);

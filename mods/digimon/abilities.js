@@ -3,25 +3,25 @@ exports.BattleAbilities = {
 	"data": {
 		id: "data",
 		name: "Data",
-		desc: "Attacks are stronger against Vaccine and weaker against Virus, Has a 30% chance to cure status conditions at the end of each turn",
+		desc: "Attacks are stronger against Vaccine and weaker against Virus. 30% chance to cure status conditions",
 		onModifyDamagePriority: 8,
 		onModifyDamage: function (damage, source, target, move) {
 			if (target.volatiles['bug'] || source.volatiles['bug']) {
 				if (target.hasAbility('virus')) {
 					this.debug('Data boost (Bug active)');
-					return this.chainModify(1.5);
+					return this.chainModify(1.2);
 				} else if (target.hasAbility('vaccine')) {
 					this.debug('Data weaken (Bug active)');
-					return this.chainModify(0.5);
+					return this.chainModify(0.8);
 				}
 			} else {
 				if (target.hasAbility('vaccine')) {
 					this.debug('Data boost');
-					return this.chainModify(1.5);
+					return this.chainModify(1.2);
 				} else {
 					if (target.hasAbility('virus')) {
 						this.debug('Data weaken');
-						return this.chainModify(0.5);
+						return this.chainModify(0.8);
 					}
 				}
 			}
@@ -39,25 +39,25 @@ exports.BattleAbilities = {
 	"virus": {
 		id: "virus",
 		name: "Virus",
-		desc: "Attacks are stronger against Virus and weaker against Data, Has a 30% chance to cure status conditions at the end of each turn.",
+		desc: "Attacks are stronger against Virus and weaker against Data, 30% chance to cure status conditions",
 		onModifyDamagePriority: 8,
 		onModifyDamage: function (damage, source, target, move) {
 			if (target.volatiles['bug'] || source.volatiles['bug']) {
 				if (target.hasAbility('vaccine')) {
 					this.debug('Virus boost (Bug active)');
-					return this.chainModify(1.5);
+					return this.chainModify(1.2);
 				} else if (target.hasAbility('data')) {
 					this.debug('Virus weaken (Bug active)');
-					return this.chainModify(0.5);
+					return this.chainModify(0.8);
 				}
 			} else {
 				if (target.hasAbility('data')) {
 					this.debug('Virus boost');
-					return this.chainModify(1.5);
+					return this.chainModify(1.2);
 				} else {
 					if (target.hasAbility('vaccine')) {
 						this.debug('Virus weaken');
-						return this.chainModify(0.5);
+						return this.chainModify(0.8);
 					}
 				}
 			}
@@ -75,25 +75,25 @@ exports.BattleAbilities = {
 	"vaccine": {
 		id: "vaccine",
 		name: "Vaccine",
-		desc: "Attacks are stronger against Data and weaker against Vaccine, Has a 30% chance to cure status conditions at the end of each turn.",
+		desc: "Attacks are stronger against Data and weaker against Vaccine, 30% chance to cure status conditions.",
 		onModifyDamagePriority: 8,
 		onModifyDamage: function (damage, source, target, move) {
 			if (target.volatiles['bug'] || source.volatiles['bug']) {
 				if (target.hasAbility('data')) {
 					this.debug('Vaccine boost (Bug active)');
-					return this.chainModify(1.5);
+					return this.chainModify(1.2);
 				} else if (target.hasAbility('virus')) {
 					this.debug('Vaccine weaken (Bug active)');
-					return this.chainModify(0.5);
+					return this.chainModify(0.8);
 				}
 			} else {
 				if (target.hasAbility('virus')) {
 					this.debug('Vaccine boost');
-					return this.chainModify(1.5);
+					return this.chainModify(1.2);
 				} else {
 					if (target.hasAbility('data')) {
 						this.debug('Vaccine weaken');
-						return this.chainModify(0.5);
+						return this.chainModify(0.8);
 					}
 				}
 			}

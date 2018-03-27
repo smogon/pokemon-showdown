@@ -3,7 +3,7 @@
 exports.BattleMovedex = {
 	"acidbubble": {
 		accuracy: 90,
-		basePower: 80,
+		basePower: 60,
 		category: "Special",
 		desc: "25% chance to flinch the target.",
 		shortDesc: "25% chance to flinch the target.",
@@ -42,7 +42,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		secondary: false,
 		target: "normal",
-		type: "flame",
+		type: "Flame",
 	},
 	"nemesisivy": {
 		accuracy: 100,
@@ -694,6 +694,7 @@ exports.BattleMovedex = {
 		onTryHit: function (target, source, move) {
 			//this is implemented solely to have a failure message. since flinch doesn't already have one
 			if (!this.willMove(target)) return false;
+			this.add('-message', target.name + ' is disrupted!');
 		},
 		target: "normal",
 		type: "Flame",
@@ -4029,7 +4030,7 @@ exports.BattleMovedex = {
 		target: "any",
 		desc: "Priority -1. 25% chance to lower target’s Speed by 1.",
 		shortDesc: "Priority -1, 25% chance to lower target’s Speed by 1.",
-		pp: 16,
+		pp: 15,
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "discharge", target);
@@ -4699,7 +4700,7 @@ exports.BattleMovedex = {
 		type: "Battle",
 		target: "scripted",
 		desc: "If hit by a physical or special attack aim for the attacker. 20% chance to confuse the target.",
-		shortDesc: "If hit by a physical or special attack aim for the attacker. 20% chance to confuse the target.",
+		shortDesc: "Returns damage dealt. 20% confuse chance.",
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "frustration", target);
@@ -4827,7 +4828,7 @@ exports.BattleMovedex = {
 		type: "Mech",
 		target: "self",
 		desc: "Priority -1. Raises user’s Attack, Defense, Special Attack and Speed by 1.",
-		shortDesc: "Priority -1. Raises user’s Atk, Def, SpA and Speed by 1.",
+		shortDesc: "Priority -1. Raises user’s Atk, Def, SpA and Spe by 1.",
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "gearup", target);
@@ -4941,7 +4942,7 @@ exports.BattleMovedex = {
 		type: "Mech",
 		target: "allAdjacentFoes",
 		desc: "Priority -1. 10% chance to dot the foe(s). Hits all adjacent foes.",
-		shortDesc: "Priority -1. 10% chance to dot the foe(s).",
+		shortDesc: "Priority-1. 10% chance to dot.",
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "searingsunrazesmash", target);
@@ -5104,7 +5105,7 @@ exports.BattleMovedex = {
 		type: "Filth",
 		target: "allAdjacentFoes",
 		desc: "20% lower foe(s) Speed by 1. 5% chance of flinch. 10% chance of poison. Hits all adjacent foes.",
-		shortDesc: "20% lower foe(s) Speed by 1. 5% chance of flinch. 10% chance of poison.",
+		shortDesc: "20% chance -1 spe. 5% flinch. 10% psn.",
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "nastyplot", source);
