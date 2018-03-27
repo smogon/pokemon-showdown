@@ -3251,8 +3251,8 @@ exports.BattleMovedex = {
 		onHitSide: function (side) {
 			let didSomething = false;
 			for (let pokemon of side.active) {
-				if (pokemon.heal(pokemon.maxhp / 2)) didSomething = true;
-				if (pokemon.cureStatus()) didSomething = true;
+				if (pokemon && this.heal(pokemon.maxhp / 2, pokemon)) didSomething = true;
+				if (pokemon && pokemon.cureStatus()) didSomething = true;
 			}
 			return didSomething;
 		},
