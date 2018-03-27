@@ -3626,7 +3626,7 @@ exports.BattleMovedex = {
 		name: "Heat Breath",
 		id: "heatbreath",
 		priority: 1,
-		basePower: 50,
+		basePower: 75,
 		category: "Special",
 		type: "Flame",
 		target: "any",
@@ -3644,7 +3644,7 @@ exports.BattleMovedex = {
 	"firetower": {
 		name: "Fire Tower",
 		id: "firetower",
-		basePower: 60,
+		basePower: 90,
 		category: "Physical",
 		priority: 0,
 		type: "Flame",
@@ -3718,7 +3718,7 @@ exports.BattleMovedex = {
 		name: "Meltdown",
 		id: "meltdown",
 		priority: 0,
-		basePower: 75,
+		basePower: 112,
 		category: "Special",
 		type: "Flame",
 		target: "any",
@@ -3740,7 +3740,7 @@ exports.BattleMovedex = {
 		name: "Infinity Burn",
 		id: "infinityburn",
 		priority: 0,
-		basePower: 95,
+		basePower: 142,
 		category: "Physical",
 		type: "Flame",
 		target: "normal",
@@ -3759,7 +3759,7 @@ exports.BattleMovedex = {
 		name: "Prominence Beam",
 		id: "prominencebeam",
 		priority: 0,
-		basePower: 100,
+		basePower: 150,
 		category: "Special",
 		type: "Flame",
 		target: "any",
@@ -3777,7 +3777,7 @@ exports.BattleMovedex = {
 	"hailspear": {
 		name: "Hail Spear",
 		id: "hailspear",
-		basePower: 45,
+		basePower: 67,
 		priority: 1,
 		category: "Physical",
 		type: "Aqua",
@@ -3799,7 +3799,7 @@ exports.BattleMovedex = {
 	"waterblitz": {
 		name: "Water Blitz",
 		id: "waterblitz",
-		basePower: 50,
+		basePower: 75,
 		priority: 0,
 		category: "Special",
 		type: "Aqua",
@@ -3821,7 +3821,7 @@ exports.BattleMovedex = {
 	"winterblast": {
 		name: "Winter Blast",
 		id: "winterblast",
-		basePower: 65,
+		basePower: 97,
 		priority: 0,
 		category: "Physical",
 		type: "Aqua",
@@ -3844,7 +3844,7 @@ exports.BattleMovedex = {
 	"gigafreeze": {
 		name: "Giga Freeze",
 		id: "gigafreeze",
-		basePower: 70,
+		basePower: 105,
 		priority: 0,
 		category: "Special",
 		type: "Aqua",
@@ -3867,7 +3867,7 @@ exports.BattleMovedex = {
 		name: "Ocean Wave",
 		id: "oceanwave",
 		priority: 0,
-		basePower: 80,
+		basePower: 120,
 		category: "Special",
 		type: "Aqua",
 		target: "allAdjacent",
@@ -3889,7 +3889,7 @@ exports.BattleMovedex = {
 		name: "Ice Statue",
 		id: "icestatue",
 		priority: 0,
-		basePower: 80,
+		basePower: 120,
 		category: "Physical",
 		type: "Aqua",
 		target: "normal",
@@ -3911,7 +3911,7 @@ exports.BattleMovedex = {
 		name: "Aurora Freeze",
 		id: "aurorafreeze",
 		priority: 0,
-		basePower: 90,
+		basePower: 135,
 		category: "Special",
 		type: "Aqua",
 		target: "allAdjacentFoes",
@@ -3960,7 +3960,7 @@ exports.BattleMovedex = {
 		name: "Static Electricity",
 		id: "staticelectricity",
 		priority: 1,
-		basePower: 40,
+		basePower: 60,
 		category: "Physical",
 		type: "Air",
 		target: "normal",
@@ -3982,7 +3982,7 @@ exports.BattleMovedex = {
 		name: "Wind Cutter",
 		id: "windcutter",
 		priority: 0,
-		basePower: 50,
+		basePower: 75,
 		category: "Special",
 		type: "Air",
 		target: "any",
@@ -4001,7 +4001,7 @@ exports.BattleMovedex = {
 		name: "Confused Storm",
 		id: "confusedstorm",
 		priority: 0,
-		basePower: 65,
+		basePower: 97,
 		category: "Special",
 		type: "Air",
 		target: "allAdjacent",
@@ -4024,7 +4024,7 @@ exports.BattleMovedex = {
 		name: "Electric Cloud",
 		id: "electriccloud",
 		priority: -1,
-		basePower: 80,
+		basePower: 120,
 		category: "Special",
 		type: "Air",
 		target: "any",
@@ -4045,7 +4045,7 @@ exports.BattleMovedex = {
 	"megalospark": {
 		name: "Megalo Spark",
 		id: "megalospark",
-		basePower: 85,
+		basePower: 127,
 		priority: 0,
 		category: "Physical",
 		type: "Air",
@@ -4068,7 +4068,7 @@ exports.BattleMovedex = {
 		name: "Thunder Justice",
 		id: "thunderjustice",
 		priority: 0,
-		basePower: 90,
+		basePower: 135,
 		pp: 10,
 		category: "Special",
 		type: "Air",
@@ -4137,7 +4137,7 @@ exports.BattleMovedex = {
 		name: "Charm Perfume",
 		id: "charmperfume",
 		flags: {protect: 1, mirror: 1},
-		basePower: 45,
+		basePower: 67,
 		basePowerCallback: function (pokemon, target, move) {
 			if (target.status === 'psn' || target.status === 'tox') {
 				return move.basePower * 2;
@@ -4164,7 +4164,7 @@ exports.BattleMovedex = {
 	"rootbind": {
 		name: "Root Bind",
 		id: "rootbind",
-		basePower: 65,
+		basePower: 97,
 		pp: 10,
 		priority: 0,
 		category: "Physical",
@@ -4195,7 +4195,7 @@ exports.BattleMovedex = {
 		name: "Bug",
 		id: "bug",
 		pp: 20,
-		basePower: 70,
+		basePower: 105,
 		priority: 0,
 		category: "Physical",
 		type: "Nature",
@@ -4215,7 +4215,7 @@ exports.BattleMovedex = {
 	"rockfall": {
 		name: "Rock Fall",
 		id: "rockfall",
-		basePower: 95,
+		basePower: 142,
 		priority: 0,
 		pp: 20,
 		category: "Physical",
@@ -4234,7 +4234,7 @@ exports.BattleMovedex = {
 	"venomdisaster": {
 		name: "Venom Disaster",
 		id: "venomdisaster",
-		basePower: 95,
+		basePower: 142,
 		priority: 0,
 		pp: 10,
 		category: "Special",
@@ -4256,7 +4256,7 @@ exports.BattleMovedex = {
 	"darkspirit": {
 		name: "Dark Spirit",
 		id: "darkspirit",
-		basePower: 55,
+		basePower: 82,
 		pp: 20,
 		priority: 0,
 		category: "Special",
@@ -4275,7 +4275,7 @@ exports.BattleMovedex = {
 	"blackout": {
 		name: "Blackout",
 		id: "blackout",
-		basePower: 60,
+		basePower: 90,
 		priority: 0,
 		category: "Physical",
 		type: "Evil",
@@ -4297,7 +4297,7 @@ exports.BattleMovedex = {
 	"evilfantasy": {
 		name: "Evil Fantasy",
 		id: "evilfantasy",
-		basePower: 70,
+		basePower: 105,
 		priority: 0,
 		category: "Special",
 		type: "Evil",
@@ -4322,7 +4322,7 @@ exports.BattleMovedex = {
 	"chaoscloud": {
 		name: "Chaos Cloud",
 		id: "chaoscloud",
-		basePower: 80,
+		basePower: 120,
 		pp: 15,
 		priority: -1,
 		category: "Special",
@@ -4344,7 +4344,7 @@ exports.BattleMovedex = {
 	"shadowfall": {
 		name: "Shadow Fall",
 		id: "shadowfall",
-		basePower: 90,
+		basePower: 135,
 		priority: 0,
 		pp: 5,
 		category: "Physical",
@@ -4364,7 +4364,7 @@ exports.BattleMovedex = {
 	"hideandseek": {
 		name: "Hide and Seek",
 		id: "hideandseek",
-		basePower: 100,
+		basePower: 150,
 		priority: 0,
 		pp: 10,
 		category: "Special",
@@ -4386,7 +4386,7 @@ exports.BattleMovedex = {
 	"evilsquall": {
 		name: "Evil Squall",
 		id: "evilsquall",
-		basePower: 100,
+		basePower: 150,
 		pp: 5,
 		priority: 0,
 		category: "Special",
@@ -4508,7 +4508,7 @@ exports.BattleMovedex = {
 	"holyflash": {
 		name: "Holy Flash",
 		id: "holyflash",
-		basePower: 55,
+		basePower: 82,
 		pp: 30,
 		priority: 1,
 		category: "Special",
@@ -4530,7 +4530,7 @@ exports.BattleMovedex = {
 	"saintray": {
 		name: "Saint Ray",
 		id: "saintray",
-		basePower: 90,
+		basePower: 135,
 		priority: 0,
 		pp: 15,
 		category: "Special",
@@ -4549,7 +4549,7 @@ exports.BattleMovedex = {
 	"holyjudgment": {
 		name: "Holy Judgment",
 		id: "holyjudgment",
-		basePower: 100,
+		basePower: 150,
 		pp: 15,
 		priority: 0,
 		category: "Physical",
@@ -4577,7 +4577,7 @@ exports.BattleMovedex = {
 	"shiningnova": {
 		name: "Shining Nova",
 		id: "shiningnova",
-		basePower: 100,
+		basePower: 150,
 		priority: 0,
 		pp: 10,
 		category: "Special",
@@ -4650,7 +4650,7 @@ exports.BattleMovedex = {
 	"sonicjab": {
 		name: "Sonic Jab",
 		id: "sonicjab",
-		basePower: 65,
+		basePower: 97,
 		priority: 1,
 		pp: 30,
 		category: "Physical",
@@ -4669,7 +4669,7 @@ exports.BattleMovedex = {
 	"fightingaura": {
 		name: "Fighting Aura",
 		id: "fightingaura",
-		basePower: 70,
+		basePower: 105,
 		priority: 0,
 		pp: 15,
 		category: "Special",
@@ -4693,7 +4693,7 @@ exports.BattleMovedex = {
 	"reboundstrike": {
 		name: "Rebound Strike",
 		id: "reboundstrike",
-		basePower: 95,
+		basePower: 142,
 		priority: -3,
 		pp: 20,
 		category: "Physical",
@@ -4740,7 +4740,7 @@ exports.BattleMovedex = {
 	"busterdrive": {
 		name: "Buster Drive",
 		id: "busterdrive",
-		basePower: 100,
+		basePower: 150,
 		priority: 0,
 		pp: 10,
 		category: "Physical",
@@ -4778,7 +4778,7 @@ exports.BattleMovedex = {
 	"megatonpunch": {
 		name: "Megaton Punch",
 		id: "megatonpunch",
-		basePower: 100,
+		basePower: 150,
 		priority: 0,
 		pp: 15,
 		category: "Physical",
@@ -4800,7 +4800,7 @@ exports.BattleMovedex = {
 	"mechanicalclaw": {
 		name: "Mechanical Claw",
 		id: "mechanicalclaw",
-		basePower: 15,
+		basePower: 22,
 		priority: 0,
 		pp: 30,
 		category: "Physical",
@@ -4867,7 +4867,7 @@ exports.BattleMovedex = {
 	"antiattackfield": {
 		name: "Anti-Attack Field",
 		id: "antiattackfield",
-		basePower: 70,
+		basePower: 105,
 		priority: 0,
 		pp: 10,
 		category: "Special",
@@ -4891,7 +4891,7 @@ exports.BattleMovedex = {
 	"gigawattlaser": {
 		name: "Gigawatt Laser",
 		id: "gigawattlaser",
-		basePower: 80,
+		basePower: 120,
 		priority: 1,
 		pp: 30,
 		category: "Special",
@@ -4913,7 +4913,7 @@ exports.BattleMovedex = {
 	"deleteprogram": {
 		name: "Delete Program",
 		id: "deleteprogram",
-		basePower: 90,
+		basePower: 135,
 		priority: 0,
 		pp: 10,
 		category: "Physical",
@@ -4935,7 +4935,7 @@ exports.BattleMovedex = {
 	"dgdimension": {
 		name: "DG Dimension",
 		id: "dgdimension",
-		basePower: 90,
+		basePower: 135,
 		priority: -1,
 		pp: 15,
 		category: "Special",
@@ -4957,7 +4957,7 @@ exports.BattleMovedex = {
 	"cootieskick": {
 		name: "Cooties Kick",
 		id: "cootieskick",
-		basePower: 10,
+		basePower: 15,
 		priority: 0,
 		pp: 30,
 		category: "Physical",
@@ -4980,7 +4980,7 @@ exports.BattleMovedex = {
 	"superstinkyjet": {
 		name: "Super Stinky Jet",
 		id: "superstinkyjet",
-		basePower: 30,
+		basePower: 45,
 		priority: 0,
 		pp: 20,
 		category: "Special",
@@ -5002,7 +5002,7 @@ exports.BattleMovedex = {
 	},
 	"pooptoss": {
 		accuracy: 95,
-		basePower: 35,
+		basePower: 52,
 		category: "Physical",
 		desc: "Next turn the target can't use status moves.",
 		shortDesc: "Next turn the target can't use status moves.",
@@ -5026,7 +5026,7 @@ exports.BattleMovedex = {
 	"poopattackfield": {
 		name: "Poop Attack Field",
 		id: "poopattackfield",
-		basePower: 50,
+		basePower: 75,
 		priority: 0,
 		pp: 20,
 		category: "Special",
@@ -5051,7 +5051,7 @@ exports.BattleMovedex = {
 	"poopfling": {
 		name: "Poop Fling",
 		id: "poopfling",
-		basePower: 15,
+		basePower: 22,
 		priority: 0,
 		pp: 30,
 		category: "Physical",
@@ -5075,7 +5075,7 @@ exports.BattleMovedex = {
 	"guerrillapoop": {
 		name: "Guerrilla Poop",
 		id: "guerrillapoop",
-		basePower: 75,
+		basePower: 112,
 		priority: 0,
 		pp: 15,
 		category: "Physical",
@@ -5098,7 +5098,7 @@ exports.BattleMovedex = {
 	"extremepoopdeath": {
 		name: "Extreme Poop Death",
 		id: "extremepoopdeath",
-		basePower: 85,
+		basePower: 127,
 		priority: 0,
 		pp: 5,
 		category: "Special",
