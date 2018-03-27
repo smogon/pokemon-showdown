@@ -557,7 +557,7 @@ Punishments.unpunish = function (id, punishType) {
 Punishments.roomPunish = function (room, user, punishment, recursionKeys) {
 	let roomid = typeof room === 'string' ? room : room.id;
 	let keys = recursionKeys || new Set();
-	/** @type {User[]} */
+	/** @type {User[] | undefined} */
 	let affected;
 
 	if (!recursionKeys) {
@@ -581,8 +581,10 @@ Punishments.roomPunish = function (room, user, punishment, recursionKeys) {
 	if (user.trusted) {
 		Punishments.roomUserids.nestedSet(roomid, user.trusted, punishment);
 		keys.add(user.trusted);
-		// @ts-ignore TODO: investigate if this is a bug
-		if (!PUNISH_TRUSTED) affected.unshift(user);
+		if (!PUNISH_TRUSTED) {
+			if (!affected) affected = [];
+			affected.unshift(user);
+		}
 	}
 	if (!recursionKeys) {
 		const [punishType, id, ...rest] = punishment;
