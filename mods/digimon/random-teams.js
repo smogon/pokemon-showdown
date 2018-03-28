@@ -690,7 +690,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Unimon": {
 				species: "Unimon",
 				ability: "Vaccine",
-				moves: ['wingshoes', 'megalospark', 'thunderjustice', 'confusedstorm', 'rockfall', 'saintheal', 'holyjudgement', 'saintray', 'musclecharge'],
+				moves: ['wingshoes', 'megalospark', 'thunderjustice', 'confusedstorm', 'rockfall', 'saintheal', 'holyjudgment', 'saintray', 'musclecharge'],
 				baseSignatureMove: "aerialattack",
 				signatureMove: "Aerial Attack",
 			},
@@ -752,7 +752,7 @@ class RandomDigimonTeams extends RandomTeams {
 				signatureMove: "Cold Flame",
 			},
 			"Digitamamon": {
-				species: "DigiTamamon",
+				species: "Digitamamon",
 				ability: "Data",
 				moves: ['hailspear', 'blackout', 'bug', 'shadowfall', 'firetower', 'poopattackfield', 'poopfling', 'upgrade'],
 				baseSignatureMove: "nightmaresyndrome",
@@ -897,8 +897,8 @@ class RandomDigimonTeams extends RandomTeams {
 				species: "Monzaemon",
 				ability: "Vaccine",
 				moves: ['fightingaura', 'poopattackfield', 'reboundstrike', 'megatonpunch', 'saintheal', 'holybreath', 'saintshield', 'saintray', 'charmperfume'],
-				baseSignatureMove: "heartattack",
-				signatureMove: "Heart Attack",
+				baseSignatureMove: "heartsattack",
+				signatureMove: "Hearts Attack",
 			},
 			"Myotismon": {
 				species: "Myotismon",
