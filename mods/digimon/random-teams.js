@@ -606,7 +606,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"RedVegiemon": {
 				species: "RedVegiemon",
 				ability: "Virus",
-				moves: ['heatbreath', 'meltdown', 'prominencebeam', 'massmorph', 'charmeperfume', 'venomdisaster', 'earthcoat'],
+				moves: ['heatbreath', 'meltdown', 'prominencebeam', 'massmorph', 'charmperfume', 'venomdisaster', 'earthcoat'],
 				baseSignatureMove: "chilipepperpummel",
 				signatureMove: "Chili Pepper Pummel",
 			},
@@ -704,7 +704,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Weedmon": {
 				species: "Weedmon",
 				ability: "Virus",
-				moves: ['superstinkyjet', 'poopattackfield', 'extremepoopdeath', 'massmorph', 'charmeperfume', 'venomdisaster', 'earthcoat'],
+				moves: ['superstinkyjet', 'poopattackfield', 'extremepoopdeath', 'massmorph', 'charmperfume', 'venomdisaster', 'earthcoat'],
 				baseSignatureMove: "deadlyweed",
 				signatureMove: "Deadly Weed",
 			},
@@ -1073,7 +1073,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"Machinedramon": {
 				species: "Machinedramon",
 				ability: "Virus",
-				moves: ['mechanicalclaw', 'upgrade', 'gigawattlaser', 'dgdimension', 'megalospark', 'thunderjustice', 'electricloud', 'hideandseek', 'firewall', 'gigafreeze'],
+				moves: ['mechanicalclaw', 'upgrade', 'gigawattlaser', 'dgdimension', 'megalospark', 'thunderjustice', 'electriccloud', 'hideandseek', 'firewall', 'gigafreeze'],
 				baseSignatureMove: "infinitycannon",
 				signatureMove: "Infinity Cannon",
 			},
