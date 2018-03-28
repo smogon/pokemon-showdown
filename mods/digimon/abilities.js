@@ -3,7 +3,7 @@ exports.BattleAbilities = {
 	"data": {
 		id: "data",
 		name: "Data",
-		desc: "Attacks are stronger against Vaccine and weaker against Virus. 30% chance to cure status conditions",
+		desc: "1.2x against Vaccine; 0.8x against Virus. 30% chance to cure status conditions.",
 		onModifyDamagePriority: 8,
 		onModifyDamage: function (damage, source, target, move) {
 			if (target.volatiles['bug'] || source.volatiles['bug']) {
@@ -39,7 +39,7 @@ exports.BattleAbilities = {
 	"virus": {
 		id: "virus",
 		name: "Virus",
-		desc: "Attacks are stronger against Virus and weaker against Data, 30% chance to cure status conditions",
+		desc: "1.2x against Data; 0.8x against Vaccine. 30% chance to cure status conditions.",
 		onModifyDamagePriority: 8,
 		onModifyDamage: function (damage, source, target, move) {
 			if (target.volatiles['bug'] || source.volatiles['bug']) {
@@ -75,7 +75,7 @@ exports.BattleAbilities = {
 	"vaccine": {
 		id: "vaccine",
 		name: "Vaccine",
-		desc: "Attacks are stronger against Data and weaker against Vaccine, 30% chance to cure status conditions.",
+		desc: "1.2x against Virus; 0.8x against Data. 30% chance to cure status conditions.",
 		onModifyDamagePriority: 8,
 		onModifyDamage: function (damage, source, target, move) {
 			if (target.volatiles['bug'] || source.volatiles['bug']) {
