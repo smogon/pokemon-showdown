@@ -326,6 +326,7 @@ let BattleStatuses = {
 		name: 'choicelock',
 		id: 'choicelock',
 		num: 0,
+		noCopy: true,
 		onStart: function (pokemon) {
 			if (!this.activeMove) throw new Error("Battle.activeMove is null");
 			if (!this.activeMove.id || this.activeMove.hasBounced) return false;

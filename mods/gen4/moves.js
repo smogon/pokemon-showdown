@@ -646,6 +646,7 @@ exports.BattleMovedex = {
 					target.setStatus('');
 					this.add('-heal', target, target.getHealth, '[from] move: Healing Wish');
 					target.side.removeSideCondition('healingwish');
+					target.lastMove = this.lastMove;
 				} else {
 					target.switchFlag = true;
 				}
@@ -756,6 +757,7 @@ exports.BattleMovedex = {
 					}
 					this.add('-heal', target, target.getHealth, '[from] move: Lunar Dance');
 					target.side.removeSideCondition('lunardance');
+					target.lastMove = this.lastMove;
 				} else {
 					target.switchFlag = true;
 				}
