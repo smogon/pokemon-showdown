@@ -258,12 +258,12 @@ class Format extends Effect {
 		 * Whether or not debug battle messages should be shown.
 		 * @type {boolean}
 		 */
-		this.debug = !!this.debug;
+		this.debug = this.debug;
 		/**
 		 * Whether or not a format is played for ladder points.
 		 * @type {boolean}
 		 */
-		this.rated = !!this.rated;
+		this.rated = this.rated;
 		/**
 		 * Game type.
 		 * @type {GameType}
