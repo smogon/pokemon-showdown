@@ -4212,44 +4212,54 @@ let BattleItems = {
 		},
 		onAttractPriority: -1,
 		onAttract: function (target, source, effect) {
-			if (!this.activeMove) throw new Error("Battle.activeMove is null");
-			if (target !== source && target === this.activePokemon && this.activeMove.flags['contact']) return false;
+			if (this.activePokemon) {
+				if (!this.activeMove) throw new Error("Battle.activeMove is null");
+				if (target !== source && target === this.activePokemon && this.activeMove.flags['contact']) return false;
+			}
 		},
 		onBoostPriority: -1,
 		onBoost: function (boost, target, source, effect) {
-			if (!this.activeMove) throw new Error("Battle.activeMove is null");
-			if (target !== source && target === this.activePokemon && this.activeMove.flags['contact']) {
-				if (effect && effect.effectType === 'Ability') {
-					// Ability activation always happens for boosts
-					this.add('-activate', target, 'item: Protective Pads');
+			if (this.activePokemon) {
+				if (!this.activeMove) throw new Error("Battle.activeMove is null");
+				if (target !== source && target === this.activePokemon && this.activeMove.flags['contact']) {
+					if (effect && effect.effectType === 'Ability') {
+						// Ability activation always happens for boosts
+						this.add('-activate', target, 'item: Protective Pads');
+					}
+					return false;
 				}
-				return false;
 			}
 		},
 		onDamagePriority: -1,
 		onDamage: function (damage, target, source, effect) {
-			if (!this.activeMove) throw new Error("Battle.activeMove is null");
-			if (target !== source && target === this.activePokemon && this.activeMove.flags['contact']) {
-				if (effect && effect.effectType === 'Ability') {
-					this.add('-activate', source, effect.fullname);
-					this.add('-activate', target, 'item: Protective Pads');
+			if (this.activePokemon) {
+				if (!this.activeMove) throw new Error("Battle.activeMove is null");
+				if (target !== source && target === this.activePokemon && this.activeMove.flags['contact']) {
+					if (effect && effect.effectType === 'Ability') {
+						this.add('-activate', source, effect.fullname);
+						this.add('-activate', target, 'item: Protective Pads');
+					}
+					return false;
 				}
-				return false;
 			}
 		},
 		onSetAbility: function (ability, target, source, effect) {
-			if (!this.activeMove) throw new Error("Battle.activeMove is null");
-			if (target !== source && target === this.activePokemon && this.activeMove.flags['contact']) {
-				if (effect && effect.effectType === 'Ability') {
-					this.add('-activate', source, effect.fullname);
-					this.add('-activate', target, 'item: Protective Pads');
+			if (this.activePokemon) {
+				if (!this.activeMove) throw new Error("Battle.activeMove is null");
+				if (target !== source && target === this.activePokemon && this.activeMove.flags['contact']) {
+					if (effect && effect.effectType === 'Ability') {
+						this.add('-activate', source, effect.fullname);
+						this.add('-activate', target, 'item: Protective Pads');
+					}
+					return false;
 				}
-				return false;
 			}
 		},
 		onSetStatus: function (status, target, source, effect) {
-			if (!this.activeMove) throw new Error("Battle.activeMove is null");
-			if (target !== source && target === this.activePokemon && this.activeMove.flags['contact']) return false;
+			if (this.activePokemon) {
+				if (!this.activeMove) throw new Error("Battle.activeMove is null");
+				if (target !== source && target === this.activePokemon && this.activeMove.flags['contact']) return false;
+			}
 		},
 		num: 880,
 		gen: 7,
