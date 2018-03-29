@@ -139,7 +139,7 @@ if (cluster.isMaster) {
 	};
 
 	exports.killPid = function (pid) {
-		for (let [workerid, worker] of workers) { // eslint-disable-line no-unused-vars
+		for (const worker of workers.values()) {
 			if (pid === worker.process.pid) {
 				return this.killWorker(worker);
 			}
