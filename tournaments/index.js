@@ -779,6 +779,7 @@ class Tournament {
 		if (!this.pendingChallenges.get(player)) return;
 
 		let room = Rooms.createBattle(this.teambuilderFormat, {
+			isPrivate: this.room.isPrivate,
 			p1: from,
 			p1team: challenge.team,
 			p2: user,
@@ -835,6 +836,9 @@ class Tournament {
 		}
 	}
 	onBattleWin(room, winnerid) {
+		delete room.tour;
+		delete room.parent;
+
 		let from = this.players[room.p1.userid];
 		let to = this.players[room.p2.userid];
 		let winner = this.players[winnerid];
