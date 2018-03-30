@@ -104,7 +104,7 @@ describe('Choices', function () {
 	});
 
 	describe('Generic', function () {
-		it('should wait for players to send their choicess and run them as soon as they are all received', function (done) {
+		it('should wait for players to send their choices and run them as soon as they are all received', function (done) {
 			battle = common.createBattle();
 			battle.join('p1', 'Guest 1', 1, [{species: "Mew", ability: 'synchronize', moves: ['recover']}]);
 			battle.join('p2', 'Guest 2', 1, [{species: "Rhydon", ability: 'prankster', moves: ['sketch']}]);
@@ -133,8 +133,7 @@ describe('Choices', function () {
 				for (let j = 0; j < 2; j++) {
 					const beforeHP = activeMons.map(pokemon => pokemon.hp);
 					const beforeAtk = activeMons.map(pokemon => pokemon.boosts.atk);
-					battle.p1.chooseMove(i + 1);
-					battle.p2.chooseMove(j + 1);
+					battle.makeChoices('move ' + (i + 1), 'move ' + (j + 1));
 					assert.strictEqual(activeMons[0].lastMove.id, MOVES[0][i]);
 					assert.strictEqual(activeMons[1].lastMove.id, MOVES[1][j]);
 
@@ -163,8 +162,7 @@ describe('Choices', function () {
 			]);
 			const p2active = battle.p2.active;
 
-			battle.p1.chooseMove(1, 1).chooseMove(1, 2);
-			battle.p2.chooseMove(1, -2).chooseMove(1, -1);
+			battle.makeChoices('move gastroacid 1, move leechseed 2', 'move knockoff -2, move thunderwave -1');
 			assert.strictEqual(battle.turn, 2);
 
 			assert(p2active[0].volatiles['gastroacid']);
@@ -266,19 +264,17 @@ describe('Choices', function () {
 
 		it('should allow shifting the Pokémon on the right to the center', function () {
 			battle = common.createBattle({gameType: 'triples'});
-			const p1 = battle.join('p1', 'Guest 1', 1, [
+			battle.join('p1', 'Guest 1', 1, [
 				{species: "Pineco", ability: 'sturdy', moves: ['harden']},
 				{species: "Geodude", ability: 'sturdy', moves: ['defensecurl']},
 				{species: "Gastly", ability: 'levitate', moves: ['spite']},
 			]);
-			const p2 = battle.join('p2', 'Guest 2', 1, [
+			battle.join('p2', 'Guest 2', 1, [
 				{species: "Skarmory", ability: 'sturdy', moves: ['roost']},
 				{species: "Aggron", ability: 'sturdy', moves: ['irondefense']},
 				{species: "Golem", ability: 'sturdy', moves: ['defensecurl']},
 			]);
-			p1.chooseShift();
-			p2.chooseShift();
-			battle.commitDecisions();
+			battle.makeChoices('shift, move harden, move defensecurl', 'shift, move roost, move irondefense');
 
 			['Geodude', 'Pineco', 'Gastly'].forEach((species, index) => assert.species(battle.p1.active[index], species));
 			['Aggron', 'Skarmory', 'Golem'].forEach((species, index) => assert.species(battle.p2.active[index], species));
@@ -340,7 +336,7 @@ describe('Choices', function () {
 			battle.join('p1', 'Guest 1', 1, [{species: "Skarmory", ability: 'sturdy', moves: ['spikes', 'roost']}]);
 			battle.join('p2', 'Guest 2', 1, [{species: "Smeargle", ability: 'owntempo', moves: ['imprison', 'spikes']}]);
 
-			battle.commitDecisions();
+			battle.makeChoices('move spikes', 'move imprison');
 
 			const buffer = [];
 			battle.send = (type, data) => {
@@ -385,7 +381,7 @@ describe('Choices', function () {
 				{species: 'Charizard', ability: 'blaze', moves: ['scratch']},
 			]]);
 
-			battle.commitDecisions();
+			battle.makeChoices('move lunardance', 'move lunardance');
 			battle.p1.chooseSwitch(2);
 			battle.p2.chooseSwitch(3);
 
@@ -404,7 +400,7 @@ describe('Choices', function () {
 				{species: 'Charizard', ability: 'blaze', moves: ['scratch']},
 			]]);
 
-			battle.commitDecisions();
+			battle.makeChoices('move lunardance, move lunardance', 'move lunardance, move lunardance');
 			battle.sides.forEach(side => side.active.forEach(pokemon => assert.fainted(pokemon)));
 
 			battle.p1.choosePass();
@@ -432,7 +428,7 @@ describe('Choices', function () {
 				{species: 'Charizard', ability: 'blaze', moves: ['scratch']},
 			]]);
 
-			battle.commitDecisions();
+			battle.makeChoices('move tackle, move healingwish, move lunardance', 'move scratch, move healingwish, move lunardance');
 			assert.sets(() => battle.turn, battle.turn + 1, () => {
 				battle.p1.choosePass();
 				battle.p1.choosePass();
@@ -459,7 +455,7 @@ describe('Choices', function () {
 				{species: 'Charizard', ability: 'blaze', moves: ['scratch']},
 			]]);
 
-			battle.commitDecisions();
+			battle.makeChoices('move lunardance, move lunardance', 'move lunardance, move lunardance');
 			battle.sides.forEach(side => side.active.forEach(pokemon => assert.fainted(pokemon)));
 
 			assert.constant(() => battle.turn, () => {
@@ -980,7 +976,7 @@ describe('Choice extensions', function () {
 					{species: "Charmander", ability: 'blaze', moves: ['tackle']},
 				]);
 
-				battle.commitDecisions();
+				battle.makeChoices('move explosion', 'move tackle');
 
 				battle.choose('p1', 'switch 2');
 				if (mode === 'revoke') battle.undoChoice('p1');
@@ -1005,7 +1001,7 @@ describe('Choice extensions', function () {
 					{species: "Cyndaquil", ability: 'blaze', moves: ['tackle']},
 				]);
 
-				battle.commitDecisions();
+				battle.makeChoices('move explosion, move tackle', 'move tackle, move tackle');
 
 				battle.choose('p1', 'pass, switch 3');
 				if (mode === 'revoke') battle.undoChoice('p1');
@@ -1028,7 +1024,7 @@ describe('Choice extensions', function () {
 				]];
 
 				battle = common.createBattle({gameType: 'doubles', cancel: true}, TEAMS);
-				battle.commitDecisions();
+				battle.makeChoices('move lunardance, move healingwish', 'move scratch, move scratch');
 
 				battle.choose('p1', 'switch 3, switch 4');
 				if (mode === 'revoke') battle.undoChoice('p1');
@@ -1049,7 +1045,7 @@ describe('Choice extensions', function () {
 				]];
 
 				battle = common.createBattle({gameType: 'doubles'}, TEAMS);
-				battle.commitDecisions();
+				battle.makeChoices('move lunardance, move healingwish', 'move scratch, move scratch');
 
 				battle.choose('p1', 'pass, switch 3');
 				if (mode === 'revoke') battle.undoChoice('p1');
@@ -1070,7 +1066,7 @@ describe('Choice extensions', function () {
 					{species: "Charmander", ability: 'blaze', moves: ['tackle']},
 				]);
 
-				battle.commitDecisions();
+				battle.makeChoices('move explosion', 'move tackle');
 
 				battle.choose('p1', 'switch 2');
 				if (mode === 'revoke') battle.undoChoice('p1');
@@ -1094,7 +1090,7 @@ describe('Choice extensions', function () {
 					{species: "Cyndaquil", ability: 'blaze', moves: ['tackle']},
 				]);
 
-				battle.commitDecisions();
+				battle.makeChoices('move explosion, move tackle', 'move tackle, move tackle');
 
 				battle.choose('p1', 'pass, switch 3');
 				if (mode === 'revoke') battle.undoChoice('p1');
@@ -1274,7 +1270,7 @@ describe('Choice internals', function () {
 			{species: "Aggron", ability: 'sturdy', moves: ['irondefense']},
 		]);
 
-		battle.commitDecisions();
+		battle.makeChoices('move selfdestruct, move selfdestruct', 'move roost, move irondefense');
 
 		p1.chooseSwitch(3);
 		assert(p1.choice.actions.length > 0);
@@ -1298,7 +1294,7 @@ describe('Choice internals', function () {
 			{species: "Aggron", ability: 'sturdy', moves: ['irondefense']},
 		]);
 
-		battle.commitDecisions();
+		battle.makeChoices('move selfdestruct, move selfdestruct', 'move roost, move irondefense');
 
 		p1.choosePass();
 		assert(p1.choice.actions.length > 0);

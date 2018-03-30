@@ -14,7 +14,7 @@ describe('Focus Punch', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Chansey', ability: 'naturalcure', moves: ['focuspunch']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Venusaur', ability: 'overgrow', moves: ['magicalleaf']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move focuspunch', 'move magicalleaf');
 		assert.strictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 
@@ -22,7 +22,7 @@ describe('Focus Punch', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Chansey', ability: 'naturalcure', moves: ['focuspunch']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Venusaur', ability: 'overgrow', moves: ['toxic']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move focuspunch', 'move toxic');
 		assert.notStrictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 
@@ -30,9 +30,8 @@ describe('Focus Punch', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Chansey', ability: 'naturalcure', moves: ['substitute', 'focuspunch']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Venusaur', ability: 'overgrow', moves: ['magicalleaf']}]);
-		battle.commitDecisions();
-		battle.choose('p1', 'move 2');
-		battle.commitDecisions();
+		battle.makeChoices('move substitute', 'move magicalleaf');
+		battle.makeChoices('move focuspunch', 'move magicalleaf');
 		assert.notStrictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 
@@ -40,7 +39,7 @@ describe('Focus Punch', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Chansey', ability: 'naturalcure', moves: ['focuspunch']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Venusaur', ability: 'overgrow', moves: ['naturepower']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move focuspunch', 'move naturepower');
 		assert.strictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 
@@ -48,10 +47,9 @@ describe('Focus Punch', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Chansey', ability: 'naturalcure', moves: ['focuspunch']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Venusaur', ability: 'overgrow', moves: ['magicalleaf', 'toxic']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move focuspunch', 'move magicalleaf');
 		assert.strictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
-		battle.choose('p2', 'move 2');
-		battle.commitDecisions();
+		battle.makeChoices('move focuspunch', 'move toxic');
 		assert.notStrictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 
@@ -60,8 +58,7 @@ describe('Focus Punch', function () {
 			[{species: 'Chansey', ability: 'naturalcure', moves: ['focuspunch']}, {species: 'Blissey', ability: 'naturalcure', moves: ['softboiled']}],
 			[{species: 'Venusaur', ability: 'overgrow', moves: ['magicalleaf']}, {species: 'Ivysaur', ability: 'overgrow', moves: ['toxic']}],
 		]);
-		battle.choose('p1', 'move 1 1, move 1');
-		battle.choose('p2', 'move 1 1, move 1 1');
+		battle.makeChoices('move focuspunch 1, move softboiled', 'move magicalleaf 1, move toxic 1');
 		assert.strictEqual(battle.p1.active[0].status, 'tox');
 		assert.strictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});

@@ -26,8 +26,8 @@ describe('Intimidate', function () {
 			{species: "Greninja", item: 'laggingtail', ability: 'protean', moves: ['uturn']},
 			{species: "Gyarados", item: 'leftovers', ability: 'intimidate', moves: ['splash']},
 		]);
-		battle.commitDecisions(); // Team Preview
-		battle.p2.chooseSwitch(2);
+		battle.makeChoices('move substitute', 'move uturn');
+		battle.makeChoices('move substitute', 'switch gyarados');
 		assert.statStage(battle.p1.active[0], 'atk', 0);
 	});
 
@@ -58,7 +58,7 @@ describe('Intimidate', function () {
 			assert.species(source, intimidateCount === 0 ? 'Arcanine' : 'Gyarados');
 			intimidateCount++;
 		});
-		battle.commitDecisions(); // Finish Team Preview, switch both Pokemon in
+		battle.makeChoices('teampreview', 'teampreview'); // Finish Team Preview, switch both Pokemon in
 		assert.strictEqual(intimidateCount, 2);
 		assert.statStage(p1.active[0], 'atk', -1);
 		assert.statStage(p2.active[0], 'atk', -1);
@@ -73,7 +73,7 @@ describe('Intimidate', function () {
 			assert.species(source, intimidateCount === 0 ? 'Arcanine' : 'Gyarados');
 			intimidateCount++;
 		});
-		battle.commitDecisions(); // Finish Team Preview, switch both Pokemon in
+		battle.makeChoices('teampreview', 'teampreview'); // Finish Team Preview, switch both Pokemon in
 		assert.strictEqual(intimidateCount, 2);
 		assert.statStage(p1.active[0], 'atk', -1);
 		assert.statStage(p2.active[0], 'atk', -1);
@@ -96,17 +96,18 @@ describe('Intimidate', function () {
 			assert.species(source, intimidateCount % 2 === 0 ? 'Arcanine' : 'Gyarados');
 			intimidateCount++;
 		});
-		battle.commitDecisions(); // Team Preview
+		battle.makeChoices('teampreview', 'teampreview'); // Team Preview
 
-		battle.commitDecisions();
-		p1.chooseSwitch(2).foe.chooseSwitch(2);
+		battle.makeChoices('move healingwish', 'move healingwish');
+
+		battle.makeChoices('switch arcanine', 'switch gyarados');
 		// Both Pokemon switched in at the same time
 		assert.strictEqual(intimidateCount, 2);
 		assert.statStage(p1.active[0], 'atk', -1);
 		assert.statStage(p2.active[0], 'atk', -1);
 		// Do it again with the Pokemon in reverse order
-		battle.commitDecisions();
-		p1.chooseSwitch(3).foe.chooseSwitch(3);
+		battle.makeChoices('move healingwish', 'move healingwish');
+		battle.makeChoices('switch gyarados', 'switch arcanine');
 		assert.strictEqual(intimidateCount, 4);
 		assert.statStage(p1.active[0], 'atk', -1);
 		assert.statStage(p2.active[0], 'atk', -1);

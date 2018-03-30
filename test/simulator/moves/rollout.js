@@ -34,7 +34,7 @@ for (const move of moves) {
 			});
 
 			for (let i = 0; i < 8; i++) {
-				battle.commitDecisions();
+				battle.makeChoices('move ' + id, 'move recover');
 			}
 			assert.strictEqual(count, 8);
 		});
@@ -64,7 +64,7 @@ for (const move of moves) {
 			});
 
 			for (let i = 0; i < 5; i++) {
-				battle.commitDecisions();
+				battle.makeChoices('move ' + id, 'move recover');
 			}
 			assert.strictEqual(count, 5);
 		});
@@ -92,7 +92,7 @@ for (const move of moves) {
 			});
 
 			for (let i = 0; i < 5; i++) {
-				battle.commitDecisions();
+				battle.makeChoices('move ' + id, 'move recover');
 			}
 			assert.strictEqual(count, 5);
 		});
@@ -109,9 +109,8 @@ for (const move of moves) {
 				runCount++;
 			});
 
-			battle.choose('p1', 'move 2');
-			battle.commitDecisions();
-			battle.commitDecisions();
+			battle.makeChoices('move defensecurl', 'move recover');
+			battle.makeChoices('move ' + id, 'move recover');
 			assert.strictEqual(runCount, 1);
 		});
 
@@ -127,7 +126,7 @@ for (const move of moves) {
 				hitCount++;
 			});
 
-			battle.commitDecisions();
+			battle.makeChoices('move ' + id, 'move recover');
 			assert.strictEqual(hitCount, 1);
 		});
 	});

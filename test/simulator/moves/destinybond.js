@@ -13,8 +13,8 @@ describe(`Destiny Bond`, function () {
 			[{species: "Gastly", ability: 'levitate', moves: ['destinybond']}, {species: "Clefable", ability: 'unaware', moves: ['calmmind']}],
 			[{species: "Metagross", ability: 'clearbody', moves: ['psychic', 'calmmind']}, {species: "Clefable", ability: 'unaware', moves: ['calmmind']}],
 		]);
-		battle.p1.chooseMove('destinybond').foe.chooseMove('calmmind');
-		battle.p1.chooseMove('destinybond').foe.chooseMove('psychic');
+		battle.makeChoices('move destinybond', 'move calmmind');
+		battle.makeChoices('move destinybond', 'move psychic');
 		assert.fainted(battle.p1.active[0]);
 		assert.false.fainted(battle.p2.active[0]);
 
@@ -23,8 +23,8 @@ describe(`Destiny Bond`, function () {
 			[{species: "Gastly", ability: 'levitate', moves: ['destinybond']}, {species: "Clefable", ability: 'unaware', moves: ['calmmind']}],
 			[{species: "Metagross", ability: 'clearbody', moves: ['psychic', 'calmmind']}, {species: "Clefable", ability: 'unaware', moves: ['calmmind']}],
 		]);
-		battle.p1.chooseMove('destinybond').foe.chooseMove('calmmind');
-		battle.p1.chooseMove('destinybond').foe.chooseMove('psychic');
+		battle.makeChoices('move destinybond', 'move calmmind');
+		battle.makeChoices('move destinybond', 'move psychic');
 		assert.fainted(battle.p1.active[0]);
 		assert.false.fainted(battle.p2.active[0]);
 	});
@@ -34,8 +34,8 @@ describe(`Destiny Bond`, function () {
 			[{species: "Gastly", ability: 'levitate', moves: ['destinybond', 'protect']}, {species: "Clefable", ability: 'unaware', moves: ['calmmind']}],
 			[{species: "Metagross", ability: 'clearbody', moves: ['psychic', 'calmmind']}, {species: "Clefable", ability: 'unaware', moves: ['calmmind']}],
 		]);
-		battle.p1.chooseMove('protect').foe.chooseMove('calmmind');
-		battle.p1.chooseMove('destinybond').foe.chooseMove('psychic');
+		battle.makeChoices('move protect', 'move calmmind');
+		battle.makeChoices('move destinybond', 'move psychic');
 		assert.fainted(battle.p1.active[0]);
 		assert.fainted(battle.p2.active[0]);
 	});
@@ -45,8 +45,8 @@ describe(`Destiny Bond`, function () {
 			[{species: "Gastly", ability: 'levitate', item: '', moves: ['destinybond', 'spite']}, {species: "Clefable", ability: 'unaware', moves: ['calmmind']}],
 			[{species: "Hypno", ability: 'insomnia', item: 'laggingtail', moves: ['psychic', 'hypnosis']}, {species: "Clefable", ability: 'unaware', moves: ['calmmind']}],
 		]);
-		battle.p1.chooseMove('destinybond').foe.chooseMove('hypnosis');
-		battle.commitDecisions();
+		battle.makeChoices('move destinybond', 'move hypnosis');
+		battle.makeChoices('move destinybond', 'move psychic');
 		assert.fainted(battle.p1.active[0]);
 		assert.false.fainted(battle.p2.active[0]);
 	});
@@ -60,8 +60,8 @@ describe(`Destiny Bond [Gen 6]`, function () {
 			[{species: "Gastly", ability: 'levitate', moves: ['destinybond']}, {species: "Clefable", ability: 'unaware', moves: ['calmmind']}],
 			[{species: "Metagross", ability: 'clearbody', moves: ['psychic', 'calmmind']}, {species: "Clefable", ability: 'unaware', moves: ['calmmind']}],
 		]);
-		battle.p1.chooseMove('destinybond').foe.chooseMove('calmmind');
-		battle.p1.chooseMove('destinybond').foe.chooseMove('psychic');
+		battle.makeChoices('move destinybond', 'move calmmind');
+		battle.makeChoices('move destinybond', 'move psychic');
 		assert.fainted(battle.p1.active[0]);
 		assert.fainted(battle.p2.active[0]);
 
@@ -70,8 +70,8 @@ describe(`Destiny Bond [Gen 6]`, function () {
 			[{species: "Gastly", ability: 'levitate', moves: ['destinybond']}, {species: "Clefable", ability: 'unaware', moves: ['calmmind']}],
 			[{species: "Metagross", ability: 'clearbody', moves: ['psychic', 'calmmind']}, {species: "Clefable", ability: 'unaware', moves: ['calmmind']}],
 		]);
-		battle.p1.chooseMove('destinybond').foe.chooseMove('calmmind');
-		battle.p1.chooseMove('destinybond').foe.chooseMove('psychic');
+		battle.makeChoices('move destinybond', 'move calmmind');
+		battle.makeChoices('move destinybond', 'move psychic');
 		assert.fainted(battle.p1.active[0]);
 		assert.fainted(battle.p2.active[0]);
 	});

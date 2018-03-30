@@ -14,7 +14,7 @@ describe('Pickup', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Gourgeist', ability: 'pickup', moves: ['flamethrower']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Paras', ability: 'dryskin', item: 'sitrusberry', moves: ['endure']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move flamethrower', 'move endure');
 		assert.holdsItem(battle.p1.active[0], "Pick Up should retrieve consumed Sitrus Berry");
 	});
 
@@ -22,7 +22,7 @@ describe('Pickup', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Gourgeist', ability: 'pickup', moves: ['endure']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Clefairy', ability: 'unaware', item: 'airballoon', moves: ['fling']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move endure', 'move fling');
 		assert.holdsItem(battle.p1.active[0], "Pick Up should retrieve flung Air Balloon");
 	});
 
@@ -30,7 +30,7 @@ describe('Pickup', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Ambipom', ability: 'pickup', moves: ['knockoff']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Machamp', ability: 'noguard', item: 'choicescarf', moves: ['bulkup']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move knockoff', 'move bulkup');
 		assert.false.holdsItem(battle.p1.active[0], "Pick Up should not retrieve knocked off Choice Scarf");
 	});
 
@@ -38,7 +38,7 @@ describe('Pickup', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Ambipom', ability: 'pickup', moves: ['fakeout']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Scizor', ability: 'swarm', item: 'airballoon', moves: ['roost']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move fakeout', 'move roost');
 		assert.false.holdsItem(battle.p1.active[0], "Pick Up should not retrieve popped Air Balloon");
 	});
 
@@ -53,9 +53,9 @@ describe('Pickup', function () {
 			{species: 'Clefable', ability: 'unaware', item: 'ejectbutton', moves: ['followme']},
 			{species: 'Magikarp', ability: 'rattled', moves: ['splash']},
 		]);
-		battle.commitDecisions();
-		battle.p2.chooseSwitch(3); // Eject Button activated
-		battle.p2.chooseSwitch(3);
+		battle.makeChoices('move shadowsneak, move rest', 'move uturn, move followme');
+		battle.makeChoices('move shadowsneak, move rest', 'switch 3'); // Eject Button activated
+		battle.makeChoices('move shadowsneak, move rest', 'switch 3');
 		assert.false.holdsItem(battle.p1.active[0], "Pick Up should not retrieve Eject Button of returned Clefable");
 	});
 
@@ -66,11 +66,11 @@ describe('Pickup', function () {
 			{species: 'Ambipom', ability: 'swarm', item: 'buggem', moves: ['uturn']},
 			{species: 'Dusknoir', ability: 'pressure', item: 'ejectbutton', moves: ['painsplit']},
 		]);
-		battle.p1.chooseMove('synthesis').foe.chooseMove('uturn');
-		battle.p2.chooseSwitch(2);
+		battle.makeChoices('move synthesis', 'move uturn');
+		battle.makeChoices('move shadowsneak', 'switch 2');
 		assert.false.holdsItem(battle.p1.active[0]);
-		battle.commitDecisions();
-		battle.choose('p2', 'switch 2');
+		battle.makeChoices('move shadowsneak', 'move painsplit');
+		battle.makeChoices('move shadowsneak', 'switch 2');
 		assert.false.holdsItem(battle.p1.active[0]);
 	});
 
@@ -78,7 +78,7 @@ describe('Pickup', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Ambipom', ability: 'pickup', moves: ['return']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Aron', level: 1, ability: 'sturdy', item: 'berryjuice', moves: ['recycle']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move return', 'move recycle');
 		assert.false.holdsItem(battle.p1.active[0]);
 	});
 
@@ -87,7 +87,7 @@ describe('Pickup', function () {
 			[{species: 'Ambipom', ability: 'pickup', moves: ['protect']}, {species: 'Aron', level: 1, ability: 'sturdy', item: 'berryjuice', moves: ['followme']}],
 			[{species: 'Ambipom', ability: 'technician', moves: ['return']}, {species: 'Arcanine', ability: 'flashfire', moves: ['protect']}],
 		]);
-		battle.commitDecisions();
+		battle.makeChoices('move protect, move followme', 'move return, move protect');
 		assert.holdsItem(battle.p1.active[0]);
 	});
 
@@ -103,7 +103,7 @@ describe('Pickup', function () {
 			{species: 'Aggron', ability: 'sturdy', moves: ['rest']},
 			{species: 'Magikarp', ability: 'swiftswim', moves: ['splash']},
 		]);
-		battle.commitDecisions();
+		battle.makeChoices('move protect, move curse, move extremespeed', 'move flamecharge, move rest, move splash');
 		assert.false.holdsItem(battle.p1.active[0]);
 	});
 });

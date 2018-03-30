@@ -14,7 +14,7 @@ describe('Stealth Rock', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Smeargle", moves: ['stealthrock']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Ninjask", moves: ['substitute']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move stealthrock', 'move substitute');
 		assert(battle.p2.sideConditions['stealthrock']);
 	});
 
@@ -29,12 +29,10 @@ describe('Stealth Rock', function () {
 			{species: "Hitmonchan", moves: ['rest']},
 			{species: "Steelix", moves: ['rest']},
 		]);
-		battle.choose('p1', 'move 2');
-		battle.commitDecisions();
+		battle.makeChoices('move stealthrock', 'move protect');
 		let pokemon;
 		for (let i = 2; i <= 6; i++) {
-			battle.choose('p2', 'switch ' + i);
-			battle.commitDecisions();
+			battle.makeChoices('move splash', 'switch ' + i);
 			pokemon = battle.p2.active[0];
 			assert.strictEqual(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp * Math.pow(0.5, i - 1)));
 		}

@@ -38,8 +38,7 @@ describe('Rage Powder', function () {
 			hitCount[2]++;
 			return Sim.Pokemon.prototype.damage.apply(this, args);
 		};
-		battle.choose('p2', 'move 1 2, move 1 2, move 1 2');
-		battle.commitDecisions();
+		battle.makeChoices('move ragepowder, move growth, move growth', 'move absorb, move absorb, move absorb');
 		assert.strictEqual(hitCount[0], 2);
 		assert.strictEqual(hitCount[1], 1);
 		assert.strictEqual(hitCount[2], 0);
@@ -70,8 +69,7 @@ describe('Rage Powder', function () {
 			hitCount[2]++;
 			return Sim.Pokemon.prototype.damage.apply(this, args);
 		};
-		battle.choose('p2', 'move 1 3, move 1 1, move 1 1');
-		battle.commitDecisions();
+		battle.makeChoices('move growth, move ragepowder, move growth', 'move absorb 3, move absorb 1, move absorb 1');
 		assert.strictEqual(hitCount[0], 2);
 		assert.strictEqual(hitCount[1], 1);
 		assert.strictEqual(hitCount[2], 0);
