@@ -10785,18 +10785,6 @@
 				"happiness": 255
 			}]
 		},
-		"altaria": {
-			"flags": {},
-			"sets": [{
-				"species": "Altaria",
-				"gender": "",
-				"item": ["Leftovers"],
-				"ability": ["Natural Cure"],
-				"evs": {"hp": 248, "atk": 0, "def": 0, "spa": 8, "spd": 252, "spe": 0},
-				"nature": "Calm",
-				"moves": [["Defog"], ["Flamethrower"], ["Roost"], ["Toxic"]]
-			}]
-		},
 		"aurorus": {
 			"flags": {},
 			"sets": [{
