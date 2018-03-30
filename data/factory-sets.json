@@ -3135,19 +3135,19 @@
 			}, {
 				"species": "Tapu Koko",
 				"gender": "",
-				"item": ["Electrium Z", "Fairium Z"],
+				"item": ["Electrium Z"],
 				"ability": ["Electric Surge"],
 				"evs": {"hp": 0, "atk": 0, "def": 0, "spa": 252, "spd": 4, "spe": 252},
 				"nature": "Timid",
-				"moves": [["Thunderbolt"], ["Roost", "Calm Mind"], ["Hidden Power Ice"], ["U-turn", "Dazzling Gleam"]]
+				"moves": [["Thunderbolt"], ["Roost"], ["Hidden Power Ice"], ["U-turn"]]
 			}, {
 				"species": "Tapu Koko",
 				"gender": "",
-				"item": ["Electrium Z", "Fairium Z"],
+				"item": ["Fairium Z"],
 				"ability": ["Electric Surge"],
 				"evs": {"hp": 0, "atk": 0, "def": 0, "spa": 252, "spd": 4, "spe": 252},
 				"nature": "Timid",
-				"moves": [["Thunderbolt"], ["Roost", "Calm Mind"], ["Hidden Power Fire"], ["U-turn", "Dazzling Gleam"]]
+				"moves": [["Thunderbolt"], ["Calm Mind"], ["Hidden Power Fire"], ["Dazzling Gleam"]]
 			}, {
 				"species": "Tapu Koko",
 				"gender": "",
